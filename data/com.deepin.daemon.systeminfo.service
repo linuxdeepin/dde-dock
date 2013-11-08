@@ -1,3 +1,0 @@
-[D-BUS Service]
-Name=com.deepin.daemon.systeminfo
-Exec=/usr/lib/deepin-daemon/system-info
