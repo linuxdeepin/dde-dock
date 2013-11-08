@@ -1,0 +1,1 @@
+../../../../go/src/github.com/Alexoner/go-pulse/pulse.go
