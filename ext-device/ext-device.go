@@ -30,9 +30,9 @@ type TPadSettings struct {
 
 func (ext *ExtDevice) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		"com.deepin.dss.ExtDevice",
-		"/com/deepin/dss/ExtDevice",
-		"com.deepin.dss.ExtDevice",
+		"com.deepin.daemon.ExtDevice",
+		"/com/deepin/daemon/ExtDevice",
+		"com.deepin.daemon.ExtDevice",
 	}
 }
 

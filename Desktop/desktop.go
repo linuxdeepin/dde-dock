@@ -12,9 +12,9 @@ type DesktopManager struct {
 
 func (desk *DesktopManager) GetDBusInfo () dbus.DBusInfo {
         return dbus.DBusInfo {
-                "com.deepin.dss.desktop",
-                "/com/deepin/dss/desktop",
-                "com.deepin.dss.desktop",
+                "com.deepin.daemon.desktop",
+                "/com/deepin/daemon/desktop",
+                "com.deepin.daemon.desktop",
         }
 }
 

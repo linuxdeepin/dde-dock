@@ -14,9 +14,9 @@ type UserInfo struct {
 
 func (info *UserInfo) GetDBusInfo () dbus.DBusInfo {
 	return dbus.DBusInfo {
-		"com.deepin.dss.userinfo",
-		"/com/deepin/dss/userinfo",
-		"com.deepin.dss.userinfo",
+		"com.deepin.daemon.userinfo",
+		"/com/deepin/daemon/userinfo",
+		"com.deepin.daemon.userinfo",
 	}
 }
 

@@ -18,9 +18,9 @@ type KeyBinding struct {
 
 func (keybind *KeyBinding) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		"com.deepin.dss.keybind",
-		"/com/deepin/dss/keybind",
-		"com.deepin.dss.keybind",
+		"com.deepin.daemon.keybind",
+		"/com/deepin/daemon/keybind",
+		"com.deepin.daemon.keybind",
 	}
 }
 
