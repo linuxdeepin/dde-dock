@@ -12,9 +12,9 @@ type DesktopManager struct {
 
 func (desk *DesktopManager) GetDBusInfo () dbus.DBusInfo {
         return dbus.DBusInfo {
-                "com.deepin.daemon.desktop",
-                "/com/deepin/daemon/desktop",
-                "com.deepin.daemon.desktop",
+                "com.deepin.daemon.Desktop",
+                "/com/deepin/daemon/Desktop",
+                "com.deepin.daemon.Desktop",
         }
 }
 
@@ -23,10 +23,6 @@ func (desk *DesktopManager) GetDesktopShowList() []string {
 }
 
 func (desk *DesktopManager) SetDesktopShowIcon(iconName string, show bool) bool {
-        return true
-}
-
-func (desk *DesktopManager) SetDockShowMode(modeName string) bool {
         return true
 }
 

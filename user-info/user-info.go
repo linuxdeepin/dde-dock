@@ -14,30 +14,14 @@ type UserInfo struct {
 
 func (info *UserInfo) GetDBusInfo () dbus.DBusInfo {
 	return dbus.DBusInfo {
-		"com.deepin.daemon.userinfo",
-		"/com/deepin/daemon/userinfo",
-		"com.deepin.daemon.userinfo",
+		"com.deepin.daemon.UserInfo",
+		"/com/deepin/daemon/UserInfo",
+		"com.deepin.daemon.UserInfo",
 	}
-}
-
-func (info *UserInfo) SetAccountType (user, accountType string) bool {
-	return true
-}
-
-func (info *UserInfo) SetAutoLogin (user string, autoLogin bool) bool {
-	return true
-}
-
-func (info *UserInfo) SetFaceRecog (user string, aceRecog bool) bool {
-	return true
 }
 
 func (info *UserInfo) SetUserPasswd (user, passwd string) bool {
 	return true
-}
-
-func (info *UserInfo) GetUserInfo (user string) map[string]string {
-	return nil
 }
 
 func main () {

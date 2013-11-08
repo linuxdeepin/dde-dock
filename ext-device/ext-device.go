@@ -1,10 +1,20 @@
 package main
 
-/*import "fmt"*/
-/*import "time"*/
 import "dlib/dbus"
 
-type ExtDevice struct {
+type ExtDevManager struct {
+	ExtDevs []*ExtDevEntry
+}
+
+type ExtDevEntry struct {
+	UseHabit       string
+	MoveSpeed      float64
+	MoveAccuracy   float64
+	ClickFrequency float64
+	DragDelay      float64
+	DevType        string
+	DbusID         string
+
 	UseHabitChanged       func(string, string)
 	MoveSpeedChanged      func(string, float64)
 	MoveAccuracyChanged   func(string, float64)
@@ -12,105 +22,37 @@ type ExtDevice struct {
 	DragDelayChanged      func(string, float64)
 }
 
-type ExtProp struct {
-	UseHabit       string
-	MoveSpeed      float64
-	MoveAccuracy   float64
-	ClickFrequency float64
-}
-
-type MouseSettings struct {
-	Prop ExtProp
-}
-
-type TPadSettings struct {
-	Prop      ExtProp
-	DragDelay float64
-}
-
-func (ext *ExtDevice) GetDBusInfo() dbus.DBusInfo {
+func (ext *ExtDevManager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		"com.deepin.daemon.ExtDevice",
-		"/com/deepin/daemon/ExtDevice",
-		"com.deepin.daemon.ExtDevice",
+		"com.deepin.daemon.ExtDevManager",
+		"/com/deepin/daemon/ExtDevManager",
+		"com.deepin.daemon.ExtDevManager",
 	}
 }
 
-func (ext *ExtDevice) SetUseHabit(device, value string) bool {
-	if device == "mouse" {
-		//set mouse UseHabit
-	} else if device == "touchpad" {
-		//set touchpad UseHabit
+func (ext *ExtDevManager) GetDevEntryById(id string) *ExtDevEntry {
+	return NewExtDevEntry(id)
+}
+
+func (entry *ExtDevEntry) GetDBusInfo() dbus.DBusInfo {
+	return dbus.DBusInfo{
+		"com.deepin.daemon.ExtDevManager",
+		"/com/deepin/daemon/ExtDevManager/Dev" + entry.DbusID,
+		"com.deepin.daemon.ExtDevManager.DevEntry",
 	}
-	return true
 }
 
-func (ext *ExtDevice) SetMoveSpeed(device string, spd float64) bool {
-	if device == "mouse" {
-		//set mouse MoveSpeed
-	} else if device == "touchpad" {
-		//set touchpad MoveSpeed
+func NewExtDevEntry(id string) *ExtDevEntry {
+	return &ExtDevEntry{
+		DbusID: id,
 	}
-	return true
-}
-
-func (ext *ExtDevice) SetMoveAccuracy(device string, acy float64) bool {
-	if device == "mouse" {
-		//set mouse MoveAccuracy
-	} else if device == "touchpad" {
-		//set touchpad MoveAccuracy
-	}
-	return true
-}
-
-func (ext *ExtDevice) SetClickFrequency(device string, f float64) bool {
-	if device == "mouse" {
-		//set mouse ClickFrequency
-	} else if device == "touchpad" {
-		//set touchpad ClickFrequency
-	}
-	return true
-}
-
-func (ext *ExtDevice) SetDragDelay(device string, delay float64) bool {
-	if device == "touchpad" {
-		//set touchpad DragDelay
-	}
-
-	return true
-}
-
-func (ext *ExtDevice) GetUseHabit(device string) string {
-
-	return ""
-}
-
-func (ext *ExtDevice) GetMoveSpeed(device string) float64 {
-
-	return 0
-}
-
-func (ext *ExtDevice) GetMoveAccuracy(device string) float64 {
-
-	return 0
-}
-
-func (ext *ExtDevice) GetClickFrequency(device string) float64 {
-
-	return 0
-}
-
-func (ext *ExtDevice) GetDragDelay(device string) float64 {
-	if device != "touchpad" {
-		return 0
-	}
-
-	return 0
 }
 
 func main() {
-	m := ExtDevice{}
+	m := ExtDevManager{}
 	dbus.InstallOnSession(&m)
+	e := m.GetDevEntryById("0")
+	dbus.InstallOnSession(e)
 	select {}
 	/*timer := time.NewTimer (time.Second * 20)*/
 	/*<-timer.C*/

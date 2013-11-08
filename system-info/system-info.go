@@ -12,32 +12,21 @@ type SystemInfo struct {
 
 func (sys *SystemInfo) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		"com.deepin.daemon.systeminfo",
-		"/com/deepin/daemon/systeminfo",
-		"com.deepin.daemon.systeminfo",
+		"com.deepin.daemon.SystemInfo",
+		"/com/deepin/daemon/SystemInfo",
+		"com.deepin.daemon.SystemInfo",
 	}
 }
 
-func (sys *SystemInfo) GetSystemInfo() map[string]string {
-	m := make (map[string]string)
+func main() {
+	sys := SystemInfo{}
 
-	sys.Version = "Version"
-	sys.Processor = "CPU"
-	sys.MemorySize = "Memory"
-	sys.SystemType = "System Type"
-	sys.DiskCap = "Disk Capacity"
+	sys.Version =		"2013"
+	sys.Processor =		"i3 310M"
+	sys.MemorySize =	"4G"
+	sys.SystemType =	"64 bit"
+	sys.DiskCap =		"500G"
 
-	m[sys.Version]		= "2013"
-	m[sys.Processor]	= "i3 310M"
-	m[sys.MemorySize]	= "4G"
-	m[sys.SystemType]	= "64 bit"
-	m[sys.DiskCap]		= "500G"
-
-	return m
-}
-
-func main () {
-        sys := SystemInfo {}
-        dbus.InstallOnSession (&sys)
-        select {}
+	dbus.InstallOnSession(&sys)
+	select {}
 }
