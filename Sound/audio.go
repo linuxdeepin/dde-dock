@@ -2,6 +2,7 @@ package main
 
 import (
 	"dlib/dbus"
+	"strconv"
 )
 
 type Audio struct {
@@ -100,7 +101,7 @@ type Volume struct {
 func (sink *Sink)GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo {
 		"com.deepin.daemon.Audio",
-		"/com/deepin/daemon/Audio/Output"+sink.Index,
+		"/com/deepin/daemon/Audio/Output"+strconv.FormatInt(int64(sink.Index),10),
 		"com.deepin.daemon.Audio.Output",
 	}
 }
@@ -120,7 +121,7 @@ func (sink *Sink)SetSinkMute(mute int32) int32 {
 func (source *Source)GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo {
 		"com.deepin.daemon.Audio",
-		"/com/deepin/daemon/Audio/Input"+source.Index,
+		"/com/deepin/daemon/Audio/Input"+strconv.FormatInt(int64(source.Index),10),
 		"com.deepin.daemon.Audio.Input",
 	}
 }
@@ -140,7 +141,7 @@ func (source *Source)SetSourceMute(mute int32)  int32 {
 func (sink_input *Sink_input)GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo {
 		"com.deepin.daemon.Audio",
-		"/com/deepin/daemon/Audio/Application"+sink_input.Index,
+		"/com/deepin/daemon/Audio/Application"+strconv.FormatInt(int64(sink_input.Index),10),
 		"com.deepin.daemon.Audio.Application",
 	}
 }
@@ -160,7 +161,7 @@ func (sink_input *Sink_input) SetSink_input_mute(mute int32) int32 {
 func (source_output *Source_output) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo {
 		"com.deepin.daemon.Audio",
-		"/com/deepin/daemon/Audio/Application"+source_output.Index,
+		"/com/deepin/daemon/Audio/Application"+strconv.FormatInt(int64(source_output.Index),10),
 		"com.deepin.daemon.Audio.Application",
 	}
 }
@@ -177,12 +178,22 @@ func (source_output *Source_output) SetSource_output_mute(mute int32) int32 {
 	return 1
 }
 
-func (client *Client)GetClients(params) []Client {
-	var clients =[2]Client
-	clients[0].Index=0
-	clients[1].Index=1
-	return {clients[0],clients[1]}
+func (client *Client) GetDBusInfo() dbus.DBusInfo {
+	return dbus.DBusInfo {
+		"com.deepin.daemon.Audio",
+		"/com/deepin/daemon/Audio/Client"+strconv.FormatInt(int64(client.Index),10),
+		"com.deepin.daemon.Audio.Client",
+	}
 }
+
+func (card *Card)GetDBusInfo() dbus.DBusInfo {
+	return dbus.DBusInfo {
+		"com.deepin.daemon.Card",
+		"/com/deepin/daemon/Audio/Card"+strconv.FormatInt(int64(card.Index),10),
+		"com.deepin.daemon.Card",
+	}
+}
+
 
 func (audio *Audio) GetSink() *Sink {
 	return &Sink {}
@@ -200,6 +211,28 @@ func (audio *Audio) Get_source_output() *Source_output {
 	return &Source_output {}
 }
 
+/*
+func (audio *Audio)GetClients() [2]*Client {
+	var clients =[2]*Client{}
+	clients[0]=new(Client)
+	clients[0].Index=0
+	clients[1]=new(Client)
+	clients[1].Index=1
+	return clients
+}
+*/
+
+
+func (audio *Audio)GetClients() *Client {
+	var client=new(Client)
+	client.Index=123
+	return client
+}
+
+func (audio *Audio) GetVolume() *Volume {
+	return &Volume{}
+}
+
 func (o *Audio) IsRunning() uint32 {
 	a := 3999
 	return uint32(a)
@@ -212,6 +245,8 @@ func (o *Audio) GetDBusInfo() dbus.DBusInfo {
 		"com.deepin.daemon.Audio",
 	}
 }
+
+	
 
 func main() {
 	dbus.InstallOnSession(&Audio{})
