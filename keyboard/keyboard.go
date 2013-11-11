@@ -18,30 +18,10 @@ type KeyBinding struct {
 
 func (keybind *KeyBinding) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		"com.deepin.daemon.keybind",
-		"/com/deepin/daemon/keybind",
-		"com.deepin.daemon.keybind",
+		"com.deepin.daemon.KeyBinding",
+		"/com/deepin/daemon/KeyBinding",
+		"com.deepin.daemon.KeyBinding",
 	}
-}
-
-func (keybind *KeyBinding) SetRepeatDelay(value float64) bool {
-	return true
-}
-
-func (keybind *KeyBinding) SetRepeatSpeed(value float64) bool {
-	return true
-}
-
-func (keybind *KeyBinding) SetCursorFlash(value float64) bool {
-	return true
-}
-
-func (keybind *KeyBinding) SetForbiddenTPad(value bool) bool {
-	return true
-}
-
-func (keybind *KeyBinding) SetKeyboardLayout(value string) bool {
-	return true
 }
 
 func (keybind *KeyBinding) GetKeybindList(value string) map[string]string {
