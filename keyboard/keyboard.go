@@ -8,12 +8,6 @@ type KeyBinding struct {
 	CursorFlash    float64
 	ForbiddenTPad  float64
 	KeyboardLayout string
-
-	RepeatDelayChanged    func(float64)
-	RepeatSpeedChanged    func(float64)
-	CursorFlashChanged    func(float64)
-	ForbiddenTPadChanged  func(float64)
-	KeyboardLayoutChanged func(string)
 }
 
 func (keybind *KeyBinding) GetDBusInfo() dbus.DBusInfo {
@@ -22,6 +16,9 @@ func (keybind *KeyBinding) GetDBusInfo() dbus.DBusInfo {
 		"/com/deepin/daemon/KeyBinding",
 		"com.deepin.daemon.KeyBinding",
 	}
+}
+
+func (keybind *KeyBinding) reset(propName string) {
 }
 
 func (keybind *KeyBinding) GetKeybindList(value string) map[string]string {

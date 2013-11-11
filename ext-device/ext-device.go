@@ -3,7 +3,8 @@ package main
 import "dlib/dbus"
 
 type ExtDevManager struct {
-	ExtDevs []*ExtDevEntry
+	cnt     int32
+	ExtDevs [10]*ExtDevEntry
 }
 
 type ExtDevEntry struct {
@@ -49,10 +50,12 @@ func NewExtDevEntry(id string) *ExtDevEntry {
 }
 
 func main() {
-	m := ExtDevManager{}
+	m := ExtDevManager{cnt: 0}
 	dbus.InstallOnSession(&m)
 	e := m.GetDevEntryById("0")
 	dbus.InstallOnSession(e)
+	m.ExtDevs[m.cnt] = e
+	m.cnt += 1
 	select {}
 	/*timer := time.NewTimer (time.Second * 20)*/
 	/*<-timer.C*/

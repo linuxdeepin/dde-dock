@@ -8,12 +8,6 @@ type DateTime struct {
 	AutoSetTime     bool
 	TimeShowFormat  string
 	CurrentTimeZone string
-
-	CurrentDateChanged     func(curDate string)
-	CurrentTimeChanged     func(curTime string)
-	AutoSetTimeChanged     func(autoSet bool)
-	TimeShowFormatChanged  func(format string)
-	CurrentTimeZoneChanged func(curZone string)
 }
 
 func (date *DateTime) GetDBusInfo() dbus.DBusInfo {
@@ -22,6 +16,9 @@ func (date *DateTime) GetDBusInfo() dbus.DBusInfo {
 		"/com/deepin/daemon/DateAndTime",
 		"com.deepin.daemon.DateAndTime",
 	}
+}
+
+func (date *DateTime) reset(propName string) {
 }
 
 func main() {
