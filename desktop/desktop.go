@@ -3,140 +3,84 @@ package main
 import (
 	"dlib"
 	"dlib/dbus"
+	"dlib/dbus/property"
 )
 
+const (
+	_DESKTOP_DEST = "com.deepin.daemon.Desktop"
+	_DESKTOP_PATH = "/com/deepin/daemon/Desktop"
+	_DESKTOP_IFC  = "com.deepin.daemon.Desktop"
+
+	_DESKTOP_SCHEMA = "com.deepin.dde.desktop"
+	_DOCK_SCHEMA    = "com.deepin.dde.dock"
+)
+
+/*var defaults DesktopManager*/
+
 type DesktopManager struct {
-	ShowComputerIcon bool
-	ShowHomeIcon     bool
-	ShowTrashIcon    bool
-	ShowDSCIcon      bool
-
-	DockShowMode int32
-	LeftTop      int32
-	RightBottom  int32
+	ShowComputerIcon *property.GSettingsProperty
+	ShowHomeIcon     *property.GSettingsProperty
+	ShowTrashIcon    *property.GSettingsProperty
+	ShowDSCIcon      *property.GSettingsProperty
+	LeftEdgeAction   *property.GSettingsProperty
+	RightEdgeAction  *property.GSettingsProperty
+	DockMode         *property.GSettingsProperty
 }
-
-var defaults DesktopManager
 
 func (desk *DesktopManager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		"com.deepin.daemon.Desktop",
-		"/com/deepin/daemon/Desktop",
-		"com.deepin.daemon.Desktop",
-	}
+	return dbus.DBusInfo{_DESKTOP_DEST, _DESKTOP_PATH, _DESKTOP_IFC}
 }
 
-func (desk *DesktopManager) OnPropertiesChanged(name string, old interface{}) {
-	switch name {
-	case "ShowComputerIcon":
-		SetShowIconBoolean(name, desk.ShowComputerIcon)
-	case "ShowHomeIcon":
-		SetShowIconBoolean(name, desk.ShowHomeIcon)
-	case "ShowTrashIcon":
-		SetShowIconBoolean(name, desk.ShowTrashIcon)
-	case "ShowDSCIcon":
-		SetShowIconBoolean(name, desk.ShowDSCIcon)
-	case "DockShowMode":
-		SetDockInt(name, desk.DockShowMode)
-	case "LeftTop":
-		SetPlaceAction(name, desk.LeftTop)
-	case "RightBottom":
-		SetPlaceAction(name, desk.RightBottom)
-	}
-}
+/*func (desk *DesktopManager) reset(propName string) {*/
+/*}*/
 
-func (desk *DesktopManager) reset(propName string) {
-}
-
+/*
 func InitDefaults() {
 	defaults.ShowComputerIcon = true
 	defaults.ShowHomeIcon = true
 	defaults.ShowTrashIcon = true
 	defaults.ShowDSCIcon = true
-	defaults.DockShowMode = 0
-	defaults.LeftTop = 2
-	defaults.RightBottom = 1
-}
-
-func InitListenSignal(desk *DesktopManager) {
-	deskSettings := dlib.NewSettings("com.deepin.dde.desktop")
-	deskSettings.Connect("changed", func(s *dlib.Settings, name string) {
-		value := deskSettings.GetBoolean(name)
-		switch name {
-		case "show-computer-icon":
-			desk.ShowComputerIcon = value
-		case "show-home-icon":
-			desk.ShowHomeIcon = value
-		case "show-trash-icon":
-			desk.ShowTrashIcon = value
-		case "show-dsc-icon":
-			desk.ShowDSCIcon = value
-		}
-	})
-
-	dockSettings := dlib.NewSettings("com.deepin.dde.dock")
-	dockSettings.Connect("changed", func(s *dlib.Settings, name string) {
-		if name == "hide-mode" {
-			value := dockSettings.GetString(name)
-			switch value {
-			case "default":
-				desk.DockShowMode = 0
-			case "autohide":
-				desk.DockShowMode = 1
-			case "keephidden":
-				desk.DockShowMode = 2
-			}
-		}
-	})
-}
+	defaults.DockMode = 0
+	defaults.LeftEdgeAction = 10
+	defaults.RightEdgeAction = 10
+}*/
 
 func GetDesktopSettings() DesktopManager {
 	desk := DesktopManager{}
+	busType, _ := dbus.SessionBus()
 
-	gs := dlib.NewSettings("com.deepin.dde.desktop")
-	desk.ShowComputerIcon = gs.GetBoolean("show-computer-icon")
-	desk.ShowHomeIcon = gs.GetBoolean("show-home-icon")
-	desk.ShowTrashIcon = gs.GetBoolean("show-trash-icon")
-	desk.ShowDSCIcon = gs.GetBoolean("show-dsc-icon")
+	deskSettings := dlib.NewSettings(_DESKTOP_SCHEMA)
+	desk.ShowComputerIcon = property.NewGSettingsPropertyFull(
+		deskSettings, "show-computer-icon", true, busType,
+		_DESKTOP_PATH, _DESKTOP_IFC, "ShowComputerIcon")
+	desk.ShowHomeIcon = property.NewGSettingsPropertyFull(
+		deskSettings, "show-home-icon", true, busType, _DESKTOP_PATH,
+		_DESKTOP_IFC, "ShowHomeIcon")
+	desk.ShowTrashIcon = property.NewGSettingsPropertyFull(
+		deskSettings, "show-trash-icon", true, busType, _DESKTOP_PATH,
+		_DESKTOP_IFC, "ShowTrashIcon")
+	desk.ShowDSCIcon = property.NewGSettingsPropertyFull(
+		deskSettings, "show-dsc-icon", true, busType, _DESKTOP_PATH,
+		_DESKTOP_IFC, "ShowDSCIcon")
 
-	dock := dlib.NewSettings("com.deepin.dde.dock")
-	mode := dock.GetString("hide-mode")
-	switch mode {
-	case "default":
-		desk.DockShowMode = 0
-	case "autohide":
-		desk.DockShowMode = 1
-	case "keephidden":
-		desk.DockShowMode = 2
-	}
+	dockSettings := dlib.NewSettings(_DOCK_SCHEMA)
+	desk.DockMode = property.NewGSettingsPropertyFull(dockSettings,
+		"hide-mode", "", busType, _DESKTOP_PATH, _DESKTOP_IFC, "DockMode")
+
+	gridSettings := dlib.NewSettingsWithPath("org.compiz.grid",
+		"/org/compiz/profiles/deepin/plugins/grid/")
+	desk.LeftEdgeAction = property.NewGSettingsPropertyFull(gridSettings,
+		"left-edge-action", int32(0), busType, _DESKTOP_PATH,
+		_DESKTOP_IFC, "LeftEdgeAction")
+	desk.RightEdgeAction = property.NewGSettingsPropertyFull(gridSettings,
+		"right-edge-action", int32(0), busType, _DESKTOP_PATH,
+		_DESKTOP_IFC, "RightEdgeAction")
 
 	return desk
 }
 
-func SetShowIconBoolean(propName string, propValue bool) {
-	show := dlib.NewSettings("com.deepin.dde.desktop")
-	show.SetBoolean(propName, propValue)
-}
-
-func SetDockInt(propName string, propValue int32) {
-	dock := dlib.NewSettings("com.deepin.dde.dock")
-
-	switch propValue {
-	case 0:
-		dock.SetString(propName, "default")
-	case 1:
-		dock.SetString(propName, "autohide")
-	case 2:
-		dock.SetString(propName, "keephidden")
-	}
-}
-
-func SetPlaceAction(propName string, propValue int32) {
-}
-
 func main() {
 	desk := GetDesktopSettings()
-	InitListenSignal(&desk)
 	dbus.InstallOnSession(&desk)
 	select {}
 }

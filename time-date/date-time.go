@@ -1,13 +1,14 @@
 package main
 
-import "dlib/dbus"
+import (
+	"dlib"
+	"dlib/dbus"
+)
 
 type DateTime struct {
-	CurrentDate     string
-	CurrentTime     string
 	AutoSetTime     bool
-	TimeShowFormat  string
-	CurrentTimeZone string
+	TimeShowFormat  bool
+	CurrentTimeZone bool
 }
 
 func (date *DateTime) GetDBusInfo() dbus.DBusInfo {
@@ -18,11 +19,21 @@ func (date *DateTime) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
+func GetTimeSettings() DateTime {
+	dt := DateTime{}
+
+	dtSettings := dlib.NewSettings("com.deepin.dde.datetime")
+	dt.AutoSetTime = dtSettings.GetBoolean("is-auto-set")
+	dt.TimeShowFormat = dtSettings.GetBoolean("is-24hour")
+
+	return dt
+}
+
 func (date *DateTime) reset(propName string) {
 }
 
 func main() {
-	date := DateTime{}
+	date := GetTimeSettings()
 	dbus.InstallOnSession(&date)
 	select {}
 }
