@@ -2,9 +2,9 @@
 package main
 
 import (
-	"dlib"
+	//"dlib"
 	"dlib/dbus"
-	"os"
+	//"os"
 )
 
 type upower struct {
@@ -56,10 +56,10 @@ type Power struct {
 	HandleClosedLid   []string
 }
 
-var BAT0 = battery{
+/*var BAT0 = battery{
 	"org.freedesktop.UPower", //bus name
 	"org/freedesktop/UPower/devices/battery_BAT0",
-}
+}*/
 
 func (p *Power) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
@@ -70,13 +70,14 @@ func (p *Power) GetDBusInfo() dbus.DBusInfo {
 
 }
 
-func (p *power) Refresh() int32 {
+/*func (p *Power) Refresh() int32 {
 	conn, err := dbus.SystemBus()
 
 	if err != nil {
 		panic(err)
 	}
-}
+	return 1
+}*/
 
 func main() {
 	dbus.InstallOnSession(&Power{})
