@@ -88,14 +88,20 @@ func GetMemoryCap() (memCap uint64) {
 }
 
 func GetSystemType() (sysType int64) {
-	cmd := exec.Command("arch")
+	cmd := exec.Command("uname", "-m")
 	out, err := cmd.Output()
 	if err != nil {
 		return int64(0)
 	}
 
-	ts := strings.Split(string(out), "_")
-	sysType, _ = strconv.ParseInt(strings.TrimSpace(ts[1]), 10, 64)
+	t := strings.TrimSpace(string(out))
+	switch t {
+	case "i386", "i586", "i686":
+		sysType = 32
+	case "x86_64":
+		sysType = 64
+	}
+
 	return sysType
 }
 

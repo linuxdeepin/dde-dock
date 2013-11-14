@@ -5,35 +5,40 @@ import (
 	"dlib/dbus"
 )
 
+const (
+	_DATE_TIME_DEST = "com.deepin.daemon.DataAndTime"
+	_DATE_TIME_PATH = "/com/deepin/daemon/DateAndTime"
+	_DATA_TIME_IFC  = "com.deepin.daemon.DataAndTime"
+
+	_DATE_TIME_SCHEMA = "com.deepin.dde.datetime"
+)
+
 type DateTime struct {
-	AutoSetTime     bool
-	TimeShowFormat  bool
+	AutoSetTime     dbus.Property
+	TimeShowFormat  dbus.Property
 	CurrentTimeZone bool
 }
 
 func (date *DateTime) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		"com.deepin.daemon.DateAndTime",
-		"/com/deepin/daemon/DateAndTime",
-		"com.deepin.daemon.DateAndTime",
-	}
+	return dbus.DBusInfo{_DATE_TIME_DEST, _DATE_TIME_PATH, _DATA_TIME_IFC}
 }
 
-func GetTimeSettings() DateTime {
-	dt := DateTime{}
+func GetDateAndTime() (dt DateTime) {
+	busType, _ := dbus.SystemBus()
+	dtSettings := dlib.NewSettings(_DATE_TIME_SCHEMA)
 
-	dtSettings := dlib.NewSettings("com.deepin.dde.datetime")
-	dt.AutoSetTime = dtSettings.GetBoolean("is-auto-set")
-	dt.TimeShowFormat = dtSettings.GetBoolean("is-24hour")
+	dt.AutoSetTime = property.NewGSettingsPropertyFull(dtSettings,
+		"is-auto-set", true, busType, _DATE_TIME_PATH, _DATA_TIME_IFC,
+		"AutoSetTime")
+	dt.TimeShowFormat = property.NewGSettingsPropertyFull(dtSettings,
+		"is-24hour", true, busType, _DATE_TIME_DEST, _DATA_TIME_IFC,
+		"TimeShowFormat")
 
 	return dt
 }
 
-func (date *DateTime) reset(propName string) {
-}
-
 func main() {
-	date := GetTimeSettings()
+	date := GetDateAndTime()
 	dbus.InstallOnSession(&date)
 	select {}
 }
