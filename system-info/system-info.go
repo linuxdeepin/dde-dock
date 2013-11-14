@@ -10,11 +10,11 @@ import (
 )
 
 type SystemInfo struct {
-	Version    int32
-	Processor  string
-	MemoryCap  uint64
-	SystemType int64
-	DiskCap    uint64
+	Version    int32	`access:"read"`
+	Processor  string	`access:"read"`
+	MemoryCap  uint64	`access:"read"`
+	SystemType int64	`access:"read"`
+	DiskCap    uint64	`access:"read"`
 }
 
 func (sys *SystemInfo) GetDBusInfo() dbus.DBusInfo {
