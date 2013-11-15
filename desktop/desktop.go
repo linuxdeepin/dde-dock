@@ -21,10 +21,12 @@ const (
 	_COMPIZ_SCALE_PATH        = "/org/compiz/profiles/deepin/plugins/scale/"
 
 	_LAUNCHER_CMD = "launcher"
+)
 
-	_ACTION_NONE           = int32(0)
-	_ACTION_OPENED_WINDOWS = int32(1)
-	_ACTION_LAUNCHER       = int32(2)
+const (
+	ACTION_NONE           = int32(0)
+	ACTION_OPENED_WINDOWS = int32(1)
+	ACTION_LAUNCHER       = int32(2)
 )
 
 var (
@@ -54,17 +56,17 @@ func (desk *DesktopManager) GetDBusInfo() dbus.DBusInfo {
 }
 
 func (desk *DesktopManager) SetTopLeftAction(index int32) {
-	if index == _ACTION_NONE {
+	if index == ACTION_NONE {
 		compizIntegrated.SetString("command-11", "")
 		compizCommand.SetString("run-command10-edge", "")
 		compizScale.SetString("initiate-edge", "")
 
-		if desk.BottomRight == _ACTION_OPENED_WINDOWS {
+		if desk.BottomRight == ACTION_OPENED_WINDOWS {
 			compizScale.SetString("initiate-edge", "BottomRight")
 		}
-	} else if index == _ACTION_OPENED_WINDOWS {
-		if desk.BottomRight == _ACTION_OPENED_WINDOWS {
-			desk.BottomRight = _ACTION_LAUNCHER
+	} else if index == ACTION_OPENED_WINDOWS {
+		if desk.BottomRight == ACTION_OPENED_WINDOWS {
+			desk.BottomRight = ACTION_LAUNCHER
 			compizIntegrated.SetString("command-12", _LAUNCHER_CMD)
 			compizCommand.SetString("run-command11-edge", "BottomRight")
 		}
@@ -72,9 +74,9 @@ func (desk *DesktopManager) SetTopLeftAction(index int32) {
 		compizIntegrated.SetString("command-11", "")
 		compizCommand.SetString("run-command10-edge", "")
 		compizScale.SetString("initiate-edge", "TopLeft")
-	} else if index == _ACTION_LAUNCHER {
-		if desk.BottomRight == _ACTION_LAUNCHER {
-			desk.BottomRight = _ACTION_OPENED_WINDOWS
+	} else if index == ACTION_LAUNCHER {
+		if desk.BottomRight == ACTION_LAUNCHER {
+			desk.BottomRight = ACTION_OPENED_WINDOWS
 			compizIntegrated.SetString("command-12", "")
 			compizCommand.SetString("run-command11-edge", "")
 			compizScale.SetString("initiate-edge", "BottomRight")
@@ -86,17 +88,17 @@ func (desk *DesktopManager) SetTopLeftAction(index int32) {
 }
 
 func (desk *DesktopManager) SetBottomRightAction(index int32) {
-	if index == _ACTION_NONE {
+	if index == ACTION_NONE {
 		compizIntegrated.SetString("command-12", "")
 		compizCommand.SetString("run-command11-edge", "")
 		compizScale.SetString("initiate-edge", "")
 
-		if desk.TopLeft == _ACTION_OPENED_WINDOWS {
+		if desk.TopLeft == ACTION_OPENED_WINDOWS {
 			compizScale.SetString("initiate-edge", "TopLeft")
 		}
-	} else if index == _ACTION_OPENED_WINDOWS {
-		if desk.TopLeft == _ACTION_OPENED_WINDOWS {
-			desk.TopLeft = _ACTION_LAUNCHER
+	} else if index == ACTION_OPENED_WINDOWS {
+		if desk.TopLeft == ACTION_OPENED_WINDOWS {
+			desk.TopLeft = ACTION_LAUNCHER
 			compizIntegrated.SetString("command-11", _LAUNCHER_CMD)
 			compizCommand.SetString("run-command10-edge", "TopLeft")
 		}
@@ -104,9 +106,9 @@ func (desk *DesktopManager) SetBottomRightAction(index int32) {
 		compizIntegrated.SetString("command-12", "")
 		compizCommand.SetString("run-command11-edge", "")
 		compizScale.SetString("initiate-edge", "BottomRight")
-	} else if index == _ACTION_LAUNCHER {
-		if desk.TopLeft == _ACTION_LAUNCHER {
-			desk.TopLeft = _ACTION_OPENED_WINDOWS
+	} else if index == ACTION_LAUNCHER {
+		if desk.TopLeft == ACTION_LAUNCHER {
+			desk.TopLeft = ACTION_OPENED_WINDOWS
 			compizIntegrated.SetString("command-11", "")
 			compizCommand.SetString("run-command10-edge", "")
 			compizScale.SetString("initiate-edge", "TopLeft")
@@ -117,9 +119,12 @@ func (desk *DesktopManager) SetBottomRightAction(index int32) {
 	}
 }
 
-func GetDesktopSettings() DesktopManager {
+func NewDesktopManager() (*DesktopManager, error) {
 	desk := DesktopManager{}
-	busType, _ := dbus.SessionBus()
+	busType, err := dbus.SessionBus()
+	if err != nil {
+		return nil, err
+	}
 
 	deskSettings := dlib.NewSettings(_DESKTOP_SCHEMA)
 	desk.ShowComputerIcon = property.NewGSettingsPropertyFull(
@@ -142,7 +147,7 @@ func GetDesktopSettings() DesktopManager {
 	ListenCompizGSettings(&desk)
 	desk.TopLeft, desk.BottomRight = GetEdgeAction()
 
-	return desk
+	return &desk, nil
 }
 
 func InitCompizGSettings() {
@@ -184,19 +189,19 @@ func ListenCompizGSettings(desk *DesktopManager) {
 
 func GetEdgeAction() (topLeft, bottomRight int32) {
 	if runCommand11 == "" && runCommandEdge10 == "" && scale == "" {
-		topLeft = _ACTION_NONE
+		topLeft = ACTION_NONE
 	} else if scale == "TopLeft" && runCommandEdge10 == "" {
-		topLeft = _ACTION_OPENED_WINDOWS
+		topLeft = ACTION_OPENED_WINDOWS
 	} else if runCommand11 == "launcher" && runCommandEdge10 == "TopLeft" {
-		topLeft = _ACTION_LAUNCHER
+		topLeft = ACTION_LAUNCHER
 	}
 
 	if runCommand12 == "" && runCommandEdge11 == "" && scale == "" {
-		bottomRight = _ACTION_NONE
+		bottomRight = ACTION_NONE
 	} else if scale == "BottomRight" && runCommand12 == "" {
-		bottomRight = _ACTION_OPENED_WINDOWS
+		bottomRight = ACTION_OPENED_WINDOWS
 	} else if runCommand12 == "launcher" && runCommandEdge11 == "BottomRight" {
-		bottomRight = _ACTION_LAUNCHER
+		bottomRight = ACTION_LAUNCHER
 	}
 
 	return topLeft, bottomRight
@@ -204,7 +209,10 @@ func GetEdgeAction() (topLeft, bottomRight int32) {
 
 func main() {
 	go dlib.StartLoop()
-	desk := GetDesktopSettings()
-	dbus.InstallOnSession(&desk)
+	desk, err := NewDesktopManager()
+	if err != nil {
+		return
+	}
+	dbus.InstallOnSession(desk)
 	select {}
 }
