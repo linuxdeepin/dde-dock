@@ -8,6 +8,7 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
+	"udisks2"
 )
 
 type SystemInfo struct {
@@ -138,8 +139,41 @@ func GetSystemType() (sysType int64) {
 	return sysType
 }
 
-func GetDiskCap() (disCcap uint64) {
-	return uint64(512000)
+func GetDiskCap() (diskCap uint64) {
+	driList := []dbus.ObjectPath{}
+	obj := udisks2.GetObjectManager("/org/freedesktop/UDisks2")
+	managers := obj.GetManagedObjects()
+
+	for _, value := range managers {
+		if _, ok := value["org.freedesktop.UDisks2.Block"]; ok {
+			v := value["org.freedesktop.UDisks2.Block"]["Drive"]
+			path := v.Value().(dbus.ObjectPath)
+			if path != dbus.ObjectPath("/") {
+				flag := false
+				l := len(driList)
+				for i := 0; i < l; i++ {
+					if driList[i] == path {
+						flag = true
+						break
+					}
+				}
+				if !flag {
+					driList = append(driList, path)
+				}
+			}
+		}
+	}
+
+	for _, driver := range driList {
+		_, driExist := managers[driver]
+		rm, _ := managers[driver]["org.freedesktop.UDisks2.Drive"]["Removable"]
+		if driExist && !(rm.Value().(bool)) {
+			size := managers[driver]["org.freedesktop.UDisks2.Drive"]["Size"]
+			diskCap += size.Value().(uint64)
+		}
+	}
+	
+	return diskCap
 }
 
 func main() {
