@@ -4,17 +4,18 @@ import (
 	"dlib/dbus"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"os/exec"
 	"strconv"
 	"strings"
 )
 
 type SystemInfo struct {
-	Version    int32	`access:"read"`
-	Processor  string	`access:"read"`
-	MemoryCap  uint64	`access:"read"`
-	SystemType int64	`access:"read"`
-	DiskCap    uint64	`access:"read"`
+	Version    int32  `access:"read"`
+	Processor  string `access:"read"`
+	MemoryCap  uint64 `access:"read"`
+	SystemType int64  `access:"read"`
+	DiskCap    uint64 `access:"read"`
 }
 
 func (sys *SystemInfo) GetDBusInfo() dbus.DBusInfo {
@@ -25,7 +26,19 @@ func (sys *SystemInfo) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
+func IsFileNotExist(filename string) bool {
+	_, err := os.Stat(filename)
+	if os.IsNotExist(err) {
+		return true
+	}
+
+	return false
+}
+
 func GetVersion() int32 {
+	if IsFileNotExist("/etc/lsb-release") {
+		return 0
+	}
 	contents, err := ioutil.ReadFile("/etc/lsb-release")
 	if err != nil {
 		return 0
@@ -35,6 +48,10 @@ func GetVersion() int32 {
 	version := int32(0)
 	for _, line := range lines {
 		vars := strings.Split(line, "=")
+		l := len(vars)
+		if l < 2 {
+			break
+		}
 		if vars[0] == "DISTRIB_RELEASE" {
 			num, _ := strconv.ParseUint(vars[1], 10, 64)
 			version = int32(num)
@@ -46,6 +63,9 @@ func GetVersion() int32 {
 }
 
 func GetCpuInfo() string {
+	if IsFileNotExist("/proc/cpuinfo") {
+		return "Unknown"
+	}
 	contents, err := ioutil.ReadFile("/proc/cpuinfo")
 	if err != nil {
 		return ""
@@ -56,6 +76,10 @@ func GetCpuInfo() string {
 	lines := strings.Split(string(contents), "\n")
 	for _, line := range lines {
 		vars := strings.Split(line, ":")
+		l := len(vars)
+		if l < 2 {
+			break
+		}
 		if strings.Contains(vars[0], "model name") {
 			cnt++
 			if info == "" {
@@ -70,6 +94,9 @@ func GetCpuInfo() string {
 }
 
 func GetMemoryCap() (memCap uint64) {
+	if IsFileNotExist("/proc/meminfo") {
+		return 0
+	}
 	contents, err := ioutil.ReadFile("/proc/meminfo")
 	if err != nil {
 		return 0
@@ -78,6 +105,10 @@ func GetMemoryCap() (memCap uint64) {
 	lines := strings.Split(string(contents), "\n")
 	for _, line := range lines {
 		fields := strings.Fields(line)
+		l := len(fields)
+		if l < 2 {
+			break
+		}
 		if fields[0] == "MemTotal:" {
 			memCap, _ = strconv.ParseUint(fields[1], 10, 64)
 			break
@@ -94,12 +125,14 @@ func GetSystemType() (sysType int64) {
 		return int64(0)
 	}
 
-	t := strings.TrimSpace(string(out))
-	switch t {
-	case "i386", "i586", "i686":
+	if strings.Contains(string(out), "i386") ||
+		strings.Contains(string(out), "i586") ||
+		strings.Contains(string(out), "i686") {
 		sysType = 32
-	case "x86_64":
+	} else if strings.Contains(string(out), "x86_64") {
 		sysType = 64
+	} else {
+		sysType = 0
 	}
 
 	return sysType
