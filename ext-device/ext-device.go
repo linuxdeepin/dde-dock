@@ -1,62 +1,179 @@
 package main
 
-import "dlib/dbus"
+import (
+	"dlib"
+	"dlib/dbus"
+	"dlib/dbus/property"
+)
 
 type ExtDevManager struct {
-	cnt     int32
-	ExtDevs [10]*ExtDevEntry
+	DevInfoList []ExtDeviceInfo
 }
 
-type ExtDevEntry struct {
-	UseHabit       string
-	MoveSpeed      float64
-	MoveAccuracy   float64
-	ClickFrequency float64
-	DragDelay      float64
-	DevType        string
-	DbusID         string
-
-	UseHabitChanged       func(string, string)
-	MoveSpeedChanged      func(string, float64)
-	MoveAccuracyChanged   func(string, float64)
-	ClickFrequencyChanged func(string, float64)
-	DragDelayChanged      func(string, float64)
+type ExtDeviceInfo struct {
+	DevicePath string
+	DeviceType string
 }
 
-func (ext *ExtDevManager) GetDBusInfo() dbus.DBusInfo {
+type MouseEntry struct {
+	UseHabit       dbus.Property
+	MoveSpeed      dbus.Property
+	MoveAccuracy   dbus.Property
+	ClickFrequency dbus.Property
+	DeviceID       string
+}
+
+type TPadEntry struct {
+	UseHabit       dbus.Property
+	MoveSpeed      dbus.Property
+	MoveAccuracy   dbus.Property
+	ClickFrequency dbus.Property
+	DragDelay      dbus.Property
+	DeviceID       string
+}
+
+type KeyboardEntry struct {
+	RepeatDelay    dbus.Property
+	RepeatSpeed    dbus.Property
+	CursorBlink    dbus.Property
+	DisableTPad    dbus.Property
+	KeyboardLayout dbus.Property
+	DeviceID       string
+}
+
+const (
+	_EXT_DEV_NAME = "com.deepin.daemon.ExtDevManager"
+	_EXT_DEV_PATH = "/com/deepin/daemon/ExtDevManager"
+	_EXT_DEV_IFC  = "com.deepin.daemon.ExtDevManager"
+
+	_EXT_ENTRY_PATH = "/com/deepin/daemon/ExtDevManager/"
+	_EXT_ENTRY_IFC  = "com.deepin.daemon.ExtDevManager."
+
+	_KEYBOARD_REPEAT_SCHEMA = "org.gnome.settings-daemon.peripherals.keyboard"
+	_LAYOUT_SCHEMA          = "org.gnome.libgnomekbd.keyboard"
+	_DESKTOP_INFACE_SCHEMA  = "org.gnome.desktop.interface"
+	_MOUSE_SCHEMA           = "org.gnome.settings-daemon.peripherals.mouse"
+	_TPAD_SCHEMA            = "org.gnome.settings-daemon.peripherals.touchpad"
+)
+
+var (
+	dbusType           *dbus.Conn
+	dbusError          error
+	mouseGSettings     *dlib.Settings
+	tpadGSettings      *dlib.Settings
+	infaceGSettings    *dlib.Settings
+	layoutGSettings    *dlib.Settings
+	keyRepeatGSettings *dlib.Settings
+)
+
+func InitGSettings() bool {
+	dbusType, dbusError = dbus.SessionBus()
+	if dbusError != nil {
+		return false
+	}
+	mouseGSettings = dlib.NewSettings(_MOUSE_SCHEMA)
+	tpadGSettings = dlib.NewSettings(_TPAD_SCHEMA)
+	infaceGSettings = dlib.NewSettings(_DESKTOP_INFACE_SCHEMA)
+	layoutGSettings = dlib.NewSettings(_LAYOUT_SCHEMA)
+	keyRepeatGSettings = dlib.NewSettings(_KEYBOARD_REPEAT_SCHEMA)
+	return true
+}
+
+func NewKeyboardEntry() *KeyboardEntry {
+	keyboard := KeyboardEntry{}
+
+	keyboard.DeviceID = "Keyboard"
+	keyboard.RepeatDelay = property.NewGSettingsPropertyFull(
+		keyRepeatGSettings, "delay", uint32(0), dbusType,
+		_EXT_DEV_PATH, _EXT_DEV_IFC, "RepeatDelay")
+	keyboard.RepeatSpeed = property.NewGSettingsPropertyFull(
+		keyRepeatGSettings, "repeat-interval", uint32(0), dbusType,
+		_EXT_DEV_PATH, _EXT_DEV_IFC, "RepeatSpeed")
+	keyboard.DisableTPad = property.NewGSettingsPropertyFull(
+		tpadGSettings, "disable-while-typing", true, dbusType,
+		_EXT_DEV_PATH, _EXT_DEV_IFC, "DisableTPad")
+	keyboard.CursorBlink = property.NewGSettingsPropertyFull(
+		infaceGSettings, "cursor-blink-time", int32(0), dbusType,
+		_EXT_DEV_PATH, _EXT_DEV_IFC, "CursorBlink")
+	keyboard.KeyboardLayout = property.NewGSettingsPropertyFull(
+		layoutGSettings, "layouts", []string{}, dbusType,
+		_EXT_DEV_PATH, _EXT_DEV_IFC, "KeyboardLayout")
+	return &keyboard
+}
+
+func (keyboard *KeyboardEntry) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		"com.deepin.daemon.ExtDevManager",
-		"/com/deepin/daemon/ExtDevManager",
-		"com.deepin.daemon.ExtDevManager",
+		_EXT_DEV_NAME,
+		_EXT_ENTRY_PATH + keyboard.DeviceID,
+		_EXT_ENTRY_IFC + keyboard.DeviceID,
 	}
 }
 
-func (ext *ExtDevManager) GetDevEntryById(id string) *ExtDevEntry {
-	return NewExtDevEntry(id)
+func NewMouseEntry() *MouseEntry {
+	mouse := MouseEntry{}
+
+	mouse.DeviceID = "Mouse"
+	mouse.UseHabit = property.NewGSettingsPropertyFull(mouseGSettings,
+		"left-handed", false, dbusType, _EXT_DEV_PATH, _EXT_DEV_IFC,
+		"UseHabit")
+	mouse.MoveSpeed = property.NewGSettingsPropertyFull(mouseGSettings,
+		"motion-acceleration", float64(0), dbusType, _EXT_DEV_PATH,
+		_EXT_DEV_IFC, "MoveSpeed")
+	mouse.MoveAccuracy = property.NewGSettingsPropertyFull(mouseGSettings,
+		"motion-threshold", int64(0), dbusType, _EXT_DEV_PATH,
+		_EXT_DEV_IFC, "MoveAccuracy")
+	mouse.ClickFrequency = property.NewGSettingsPropertyFull(mouseGSettings,
+		"double-click", int64(0), dbusType, _EXT_DEV_PATH, _EXT_DEV_IFC,
+		"ClickFrequency")
+
+	return &mouse
 }
 
-func (entry *ExtDevEntry) GetDBusInfo() dbus.DBusInfo {
+func (mouse *MouseEntry) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		"com.deepin.daemon.ExtDevManager",
-		"/com/deepin/daemon/ExtDevManager/Dev" + entry.DbusID,
-		"com.deepin.daemon.ExtDevManager.DevEntry",
+		_EXT_DEV_NAME,
+		_EXT_ENTRY_PATH + mouse.DeviceID,
+		_EXT_ENTRY_IFC + mouse.DeviceID,
 	}
 }
 
-func NewExtDevEntry(id string) *ExtDevEntry {
-	return &ExtDevEntry{
-		DbusID: id,
+func NewTPadEntry() *TPadEntry {
+	tpad := TPadEntry{}
+
+	tpad.DeviceID = "TouchPad"
+	tpad.UseHabit = property.NewGSettingsPropertyFull(tpadGSettings,
+		"left-handed", "", dbusType, _EXT_DEV_PATH, _EXT_DEV_IFC,
+		"UseHabit")
+	tpad.MoveSpeed = property.NewGSettingsPropertyFull(tpadGSettings,
+		"motion-acceleration", float64(0), dbusType, _EXT_DEV_PATH,
+		_EXT_DEV_IFC, "MoveSpeed")
+	tpad.MoveAccuracy = property.NewGSettingsPropertyFull(tpadGSettings,
+		"motion-threshold", int64(0), dbusType, _EXT_DEV_PATH,
+		_EXT_DEV_IFC, "MoveAccuracy")
+	tpad.DragDelay = property.NewGSettingsPropertyFull(mouseGSettings,
+		"drag-threshold", int64(0), dbusType, _EXT_DEV_PATH,
+		_EXT_DEV_IFC, "DragDelay")
+	tpad.ClickFrequency = property.NewGSettingsPropertyFull(mouseGSettings,
+		"double-click", int64(0), dbusType, _EXT_DEV_PATH, _EXT_DEV_IFC,
+		"ClickFrequency")
+
+	return &tpad
+}
+
+func (tpad *TPadEntry) GetDBusInfo() dbus.DBusInfo {
+	return dbus.DBusInfo{
+		_EXT_DEV_NAME,
+		_EXT_ENTRY_PATH + tpad.DeviceID,
+		_EXT_ENTRY_IFC + tpad.DeviceID,
 	}
 }
 
-func main() {
-	m := ExtDevManager{cnt: 0}
-	dbus.InstallOnSession(&m)
-	e := m.GetDevEntryById("0")
-	dbus.InstallOnSession(e)
-	m.ExtDevs[m.cnt] = e
-	m.cnt += 1
-	select {}
-	/*timer := time.NewTimer (time.Second * 20)*/
-	/*<-timer.C*/
+func NewExtDevManager() *ExtDevManager {
+	dev := ExtDevManager{}
+
+	return &dev
+}
+
+func (dev *ExtDevManager) GetDBusInfo() dbus.DBusInfo {
+	return dbus.DBusInfo{_EXT_DEV_NAME, _EXT_DEV_PATH, _EXT_DEV_IFC}
 }
