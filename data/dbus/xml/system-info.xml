@@ -1,0 +1,9 @@
+<node>
+     <interface name="com.deepin.daemon.SystemInfo">
+          <property name="Version" type="i" access="read"></property>
+          <property name="Processor" type="s" access="read"></property>
+          <property name="MemoryCap" type="t" access="read"></property>
+          <property name="SystemType" type="x" access="read"></property>
+          <property name="DiskCap" type="t" access="read"></property>
+     </interface>
+</node>

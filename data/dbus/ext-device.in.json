@@ -1,0 +1,36 @@
+{
+	"Config": {
+		"Target": "GoLang",
+		"OutputDir": ".",
+		"InputDir": "xml",
+		"PkgName": "ExtDevManager",
+		"BusType": "Session",
+		"DestName": "com.deepin.daemon.ExtDevManager"
+	},
+	"Interfaces": [
+		{
+			"Interface": "com.deepin.daemon.ExtDevManager",
+			"OutFile": "dbus-ext-manager",
+			"XMLFile": "ext-device.xml",
+			"ObjectName": "ExtDevManager"
+		},
+		{
+			"Interface": "com.deepin.daemon.ExtDevManager.Keyboard",
+			"OutFile": "dbus-ext-keyboard",
+			"XMLFile": "ext-keyboard.xml",
+			"ObjectName": "Keyboard"
+		},
+		{
+			"Interface": "com.deepin.daemon.ExtDevManager.Mouse",
+			"OutFile": "dbus-ext-mouse",
+			"XMLFile": "ext-mouse.xml",
+			"ObjectName": "Mouse"
+		},
+		{
+			"Interface": "com.deepin.daemon.ExtDevManager.TouchPad",
+			"OutFile": "dbus-ext-tpad",
+			"XMLFile": "ext-tpad.xml",
+			"ObjectName": "TouchPad"
+		}
+	]
+}

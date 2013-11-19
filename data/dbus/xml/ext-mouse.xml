@@ -1,0 +1,9 @@
+<node>
+     <interface name="com.deepin.daemon.ExtDevManager.Mouse">
+          <property name="UseHabit" type="b" access="readwrite"></property>
+          <property name="MoveSpeed" type="d" access="readwrite"></property>
+          <property name="MoveAccuracy" type="x" access="readwrite"></property>
+          <property name="ClickFrequency" type="x" access="readwrite"></property>
+          <property name="DeviceID" type="s" access="readwrite"></property>
+     </interface>
+</node>
