@@ -1,0 +1,13 @@
+<node>
+     <interface name="com.deepin.daemon.ExtDevManager">
+          <property name="DevInfoList" type="a(ss)" access="readwrite"></property>
+     </interface>
+     <interface name="org.freedesktop.DBus.Introspectable">
+          <method name="Introspect">
+               <arg type="s" direction="out"></arg>
+          </method>
+          <method name="String">
+               <arg type="s" direction="out"></arg>
+          </method>
+     </interface>
+</node>

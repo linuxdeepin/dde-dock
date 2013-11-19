@@ -57,7 +57,7 @@ const (
 )
 
 var (
-	busConn           *dbus.Conn
+	busConn            *dbus.Conn
 	mouseGSettings     *dlib.Settings
 	tpadGSettings      *dlib.Settings
 	infaceGSettings    *dlib.Settings

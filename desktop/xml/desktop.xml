@@ -1,0 +1,17 @@
+<node>
+     <interface name="com.deepin.daemon.Desktop">
+          <method name="SetBottomRightAction">
+               <arg type="i" direction="in"></arg>
+          </method>
+          <method name="SetTopLeftAction">
+               <arg type="i" direction="in"></arg>
+          </method>
+          <property name="ShowComputerIcon" type="b" access="readwrite"></property>
+          <property name="ShowHomeIcon" type="b" access="readwrite"></property>
+          <property name="ShowTrashIcon" type="b" access="readwrite"></property>
+          <property name="ShowDSCIcon" type="b" access="readwrite"></property>
+          <property name="DockMode" type="s" access="readwrite"></property>
+          <property name="TopLeft" type="i" access="readwrite"></property>
+          <property name="BottomRight" type="i" access="readwrite"></property>
+     </interface>
+</node>
