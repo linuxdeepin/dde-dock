@@ -1,0 +1,39 @@
+<node>
+     <interface name="com.deepin.daemon.Power">
+          <property name="BatteryIsPresent" type="b" access="read"></property>
+          <property name="BatteryPercentage" type="d" access="read"></property>
+          <property name="PluginedIn" type="i" access="read"></property>
+          <property name="SuspendTime" type="ai" access="readwrite"></property>
+          <property name="HandleLowPower" type="as" access="readwrite"></property>
+          <property name="HandleClosedLid" type="as" access="readwrite"></property>
+     </interface>
+     <interface name="org.freedesktop.DBus.Introspectable">
+          <method name="Introspect">
+               <arg type="s" direction="out"></arg>
+          </method>
+          <method name="String">
+               <arg type="s" direction="out"></arg>
+          </method>
+     </interface>
+     <interface name="org.freedesktop.DBus.Properties">
+          <method name="Get">
+               <arg type="s" direction="in"></arg>
+               <arg type="s" direction="in"></arg>
+               <arg type="v" direction="out"></arg>
+          </method>
+          <method name="GetAll">
+               <arg type="s" direction="in"></arg>
+               <arg type="a{sv}" direction="out"></arg>
+          </method>
+          <method name="Set">
+               <arg type="s" direction="in"></arg>
+               <arg type="s" direction="in"></arg>
+               <arg type="v" direction="in"></arg>
+          </method>
+          <signal name="PropertiesChanged">
+               <arg type="s"></arg>
+               <arg type="a{sv}"></arg>
+               <arg type="as"></arg>
+          </signal>
+     </interface>
+</node>
