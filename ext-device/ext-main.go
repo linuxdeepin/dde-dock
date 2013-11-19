@@ -2,11 +2,13 @@ package main
 
 // #cgo pkg-config: glib-2.0 gdk-3.0
 // #include "get-devices.h"
+// #include <stdlib.h>
 // #include <gdk/gdk.h>
 import "C"
 import (
 	"dlib/dbus"
 	"fmt"
+	"unsafe"
 )
 
 func main() {
@@ -20,7 +22,9 @@ func main() {
 	}
 	dbus.InstallOnSession(dev)
 
-	if C.DeviceIsExist(C.CString("Mouse")) == 1 {
+	m := C.CString("Mouse")
+	defer C.free(unsafe.Pointer(m))
+	if C.DeviceIsExist(m) == 1 {
 		mouse := NewMouseEntry()
 		if mouse != nil {
 			dbus.InstallOnSession(mouse)
@@ -32,7 +36,9 @@ func main() {
 		}
 	}
 
-	if C.DeviceIsExist(C.CString("TouchPad")) == 1 {
+	t := C.CString("TouchPad")
+	defer C.free(unsafe.Pointer(t))
+	if C.DeviceIsExist(t) == 1 {
 		tpad := NewTPadEntry()
 		if tpad != nil {
 			dbus.InstallOnSession(tpad)
@@ -44,7 +50,9 @@ func main() {
 		}
 	}
 
-	if C.DeviceIsExist(C.CString("keyboard")) == 1 {
+	k := C.CString("keyboard")
+	defer C.free(unsafe.Pointer(k))
+	if C.DeviceIsExist(k) == 1 {
 		keyboard := NewKeyboardEntry()
 		if keyboard != nil {
 			dbus.InstallOnSession(keyboard)
