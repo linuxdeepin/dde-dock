@@ -1,7 +1,6 @@
 package main
 
 import (
-	"datetime"
 	"dlib"
 	"dlib/dbus"
 	"dlib/dbus/property"
@@ -23,37 +22,6 @@ type DateTime struct {
 
 func (date *DateTime) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{_DATE_TIME_DEST, _DATE_TIME_PATH, _DATA_TIME_IFC}
-}
-
-func (date *DateTime) SetDate(day, month, year uint32) {
-	d := datetime.GetDateTimeMechanism("/")
-	d.SetDate(day, month, year)
-}
-
-func (date *DateTime) SyncTime() {
-	d := datetime.GetDateTimeMechanism("/")
-	d.SyncTime()
-	d.SetUsingNtp(true)
-}
-
-func (date *DateTime) SetTime(secondSinceEpoch int64) bool {
-	d := datetime.GetDateTimeMechanism("/")
-	b := d.CanSetTime()
-	if b != 2 {
-		return false
-	}
-	d.SetTime(secondSinceEpoch)
-	return true
-}
-
-func (date *DateTime) SetTimeZone(tz string) bool {
-	d := datetime.GetDateTimeMechanism("/")
-	b := d.CanSetTimezone()
-	if b != 2 {
-		return false
-	}
-	d.SetTimezone(tz)
-	return true
 }
 
 func NewDateAndTime() *DateTime {

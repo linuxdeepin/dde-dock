@@ -30,6 +30,7 @@ const (
 )
 
 var (
+	busConn          *dbus.Conn
 	compizIntegrated *dlib.Settings
 	compizCommand    *dlib.Settings
 	compizScale      *dlib.Settings
@@ -121,31 +122,32 @@ func (desk *DesktopManager) SetBottomRightAction(index int32) {
 
 func NewDesktopManager() (*DesktopManager, error) {
 	desk := DesktopManager{}
-	busType, err := dbus.SessionBus()
+	var err error
+	busConn, err = dbus.SessionBus()
 	if err != nil {
 		return nil, err
 	}
 
 	deskSettings := dlib.NewSettings(_DESKTOP_SCHEMA)
 	desk.ShowComputerIcon = property.NewGSettingsPropertyFull(
-		deskSettings, "show-computer-icon", true, busType,
+		deskSettings, "show-computer-icon", true, busConn,
 		_DESKTOP_PATH, _DESKTOP_IFC, "ShowComputerIcon")
 	desk.ShowHomeIcon = property.NewGSettingsPropertyFull(
-		deskSettings, "show-home-icon", true, busType, _DESKTOP_PATH,
+		deskSettings, "show-home-icon", true, busConn, _DESKTOP_PATH,
 		_DESKTOP_IFC, "ShowHomeIcon")
 	desk.ShowTrashIcon = property.NewGSettingsPropertyFull(
-		deskSettings, "show-trash-icon", true, busType, _DESKTOP_PATH,
+		deskSettings, "show-trash-icon", true, busConn, _DESKTOP_PATH,
 		_DESKTOP_IFC, "ShowTrashIcon")
 	desk.ShowDSCIcon = property.NewGSettingsPropertyFull(
-		deskSettings, "show-dsc-icon", true, busType, _DESKTOP_PATH,
+		deskSettings, "show-dsc-icon", true, busConn, _DESKTOP_PATH,
 		_DESKTOP_IFC, "ShowDSCIcon")
 
 	dockSettings := dlib.NewSettings(_DOCK_SCHEMA)
 	desk.DockMode = property.NewGSettingsPropertyFull(dockSettings,
-		"hide-mode", "", busType, _DESKTOP_PATH, _DESKTOP_IFC, "DockMode")
+		"hide-mode", "", busConn, _DESKTOP_PATH, _DESKTOP_IFC, "DockMode")
 	InitCompizGSettings()
 	ListenCompizGSettings(&desk)
-	desk.TopLeft, desk.BottomRight = GetEdgeAction()
+	GetEdgeAction(&desk)
 
 	return &desk, nil
 }
@@ -167,44 +169,45 @@ func InitCompizGSettings() {
 func ListenCompizGSettings(desk *DesktopManager) {
 	compizIntegrated.Connect("changed::command-11", func(s *dlib.Settings, name string) {
 		runCommand11 = s.GetString("command-11")
-		desk.TopLeft, desk.BottomRight = GetEdgeAction()
+		GetEdgeAction(desk)
 	})
 	compizIntegrated.Connect("changed::command-12", func(s *dlib.Settings, name string) {
 		runCommand12 = s.GetString("command-12")
-		desk.TopLeft, desk.BottomRight = GetEdgeAction()
+		GetEdgeAction(desk)
 	})
 	compizCommand.Connect("changed::run-command10-edge", func(s *dlib.Settings, name string) {
 		runCommandEdge10 = s.GetString("run-command10-edge")
-		desk.TopLeft, desk.BottomRight = GetEdgeAction()
+		GetEdgeAction(desk)
 	})
 	compizCommand.Connect("changed::run-command11-edge", func(s *dlib.Settings, name string) {
 		runCommandEdge11 = s.GetString("run-command11-edge")
-		desk.TopLeft, desk.BottomRight = GetEdgeAction()
+		GetEdgeAction(desk)
 	})
 	compizScale.Connect("changed::initiate-edge", func(s *dlib.Settings, name string) {
 		scale = s.GetString("initiate-edge")
-		desk.TopLeft, desk.BottomRight = GetEdgeAction()
+		GetEdgeAction(desk)
 	})
 }
 
-func GetEdgeAction() (topLeft, bottomRight int32) {
+func GetEdgeAction(desk *DesktopManager) {
 	if runCommand11 == "" && runCommandEdge10 == "" && scale == "" {
-		topLeft = ACTION_NONE
+		desk.TopLeft = ACTION_NONE
 	} else if scale == "TopLeft" && runCommandEdge10 == "" {
-		topLeft = ACTION_OPENED_WINDOWS
+		desk.TopLeft = ACTION_OPENED_WINDOWS
 	} else if runCommand11 == "launcher" && runCommandEdge10 == "TopLeft" {
-		topLeft = ACTION_LAUNCHER
+		desk.TopLeft = ACTION_LAUNCHER
 	}
 
 	if runCommand12 == "" && runCommandEdge11 == "" && scale == "" {
-		bottomRight = ACTION_NONE
+		desk.BottomRight = ACTION_NONE
 	} else if scale == "BottomRight" && runCommand12 == "" {
-		bottomRight = ACTION_OPENED_WINDOWS
+		desk.BottomRight = ACTION_OPENED_WINDOWS
 	} else if runCommand12 == "launcher" && runCommandEdge11 == "BottomRight" {
-		bottomRight = ACTION_LAUNCHER
+		desk.BottomRight = ACTION_LAUNCHER
 	}
 
-	return topLeft, bottomRight
+	dbus.NotifyChange(busConn, desk, "TopLeft")
+	dbus.NotifyChange(busConn, desk, "BottomRight")
 }
 
 func main() {
