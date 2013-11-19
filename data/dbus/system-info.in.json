@@ -11,7 +11,7 @@
 		{
 			"Interface": "com.deepin.daemon.SystemInfo",
 			"OutFile": "dbus-system-info",
-			"XMLFile": "system-info",
+			"XMLFile": "system-info.xml",
 			"ObjectName": "SystemInfo"
 		}
 	]
