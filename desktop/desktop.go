@@ -211,11 +211,10 @@ func GetEdgeAction(desk *DesktopManager) {
 }
 
 func main() {
-	go dlib.StartLoop()
 	desk, err := NewDesktopManager()
 	if err != nil {
 		return
 	}
 	dbus.InstallOnSession(desk)
-	select {}
+	dlib.StartLoop()
 }
