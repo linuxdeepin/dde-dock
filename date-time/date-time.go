@@ -2,6 +2,7 @@ package main
 
 import (
 	"dlib"
+	"dbus-gen/datetime"
 	"dlib/dbus"
 	"dlib/dbus/property"
 )

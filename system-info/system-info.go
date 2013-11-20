@@ -8,7 +8,7 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
-	"udisks2"
+	"dbus-gen/udisks2"
 )
 
 type SystemInfo struct {
