@@ -1,0 +1,18 @@
+{
+	"Config": {
+	    "Target": "GoLang",
+		"OutputDir": ".",
+		"InputDir": "xml",
+		"PkgName": "gdatetime",
+		"BusType": "System",
+		"DestName": "org.gnome.SettingsDaemon.DateTimeMechanism"
+	},
+	"Interfaces": [
+		{
+			"Interface": "org.gnome.SettingsDaemon.DateTimeMechanism",
+			"OutFile": "gdatetime",
+			"XMLFile": "gdatetime.xml",
+			"ObjectName": "DateTimeMechanism"
+		}
+	]
+}
