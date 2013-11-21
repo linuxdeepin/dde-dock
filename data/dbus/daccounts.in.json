@@ -1,0 +1,24 @@
+{
+	"Config": {
+		"Target": "GoLang",
+		"OutputDir": ".",
+		"InputDir": "xml",
+		"PkgName": "daccounts",
+		"BusType": "System",
+		"DestName": "org.freedesktop.Accounts"
+	},
+	"Interfaces": [
+		{
+			"Interface": "org.freedesktop.Accounts",
+			"OutFile": "daccounts",
+			"XMLFile": "org.freedesktop.Accounts.xml",
+			"ObjectName": "Accounts"
+		},
+		{
+			"Interface": "org.freedesktop.Accounts.User",
+			"OutFile": "daccounts-user",
+			"XMLFile": "org.freedesktop.Accounts.User.xml",
+			"ObjectName": "User"
+		}
+	]
+}

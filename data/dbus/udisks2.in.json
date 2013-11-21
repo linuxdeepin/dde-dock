@@ -1,0 +1,90 @@
+{
+	"Config": {
+	"Target":"GoLang",
+	"OutputDir": ".",
+	"InputDir": "xml",
+	"PkgName": "udisks2",
+	"BusType": "System",
+	"DestName": "org.freedesktop.UDisks2"
+	},
+	"Interfaces": [
+		{
+		"Interface": "org.freedesktop.DBus.ObjectManager",
+		"OutFile": "udisks2",
+		"XMLFile": "udisks.xml",
+		"ObjectName": "ObjectManager"
+		},
+		{
+		"Interface": "org.freedesktop.UDisks2.Manager",
+		"OutFile": "udisks2-manager",
+		"XMLFile": "udisks2.xml",
+		"ObjectName": "Manager"
+		},
+		{
+		"Interface": "org.freedesktop.UDisks2.Drive",
+		"OutFile": "udisks2-drive",
+		"XMLFile": "udisks2.xml",
+		"ObjectName": "Drive"
+		},
+		{
+		"Interface": "org.freedesktop.UDisks2.Drive.Ata",
+		"OutFile": "udisks2-drive-ata",
+		"XMLFile": "udisks2.xml",
+		"ObjectName": "Ata"
+		},
+		{
+		"Interface": "org.freedesktop.UDisks2.Block",
+		"OutFile": "udisks2-block",
+		"XMLFile": "udisks2.xml",
+		"ObjectName": "Block"
+		},
+		{
+		"Interface": "org.freedesktop.UDisks2.PartitionTable",
+		"OutFile": "udisks2-partition-table",
+		"XMLFile": "udisks2.xml",
+		"ObjectName": "PartitionTable"
+		},
+		{
+		"Interface": "org.freedesktop.UDisks2.Partition",
+		"OutFile": "udisks2-partition",
+		"XMLFile": "udisks2.xml",
+		"ObjectName": "Partition"
+		},
+		{
+		"Interface": "org.freedesktop.UDisks2.Filesystem",
+		"OutFile": "udisks2-file-system",
+		"XMLFile": "udisks2.xml",
+		"ObjectName": "Filesystem"
+		},
+		{
+		"Interface": "org.freedesktop.UDisks2.Swapspace",
+		"OutFile": "udisks2-swap-space",
+		"XMLFile": "udisks2.xml",
+		"ObjectName": "Swapspace"
+		},
+		{
+		"Interface": "org.freedesktop.UDisks2.Encrypted",
+		"OutFile": "udisks2-encrypted",
+		"XMLFile": "udisks2.xml",
+		"ObjectName": "Encrypted"
+		},
+		{
+		"Interface": "org.freedesktop.UDisks2.Loop",
+		"OutFile": "udisks2-loop",
+		"XMLFile": "udisks2.xml",
+		"ObjectName": "Loop"
+		},
+		{
+		"Interface": "org.freedesktop.UDisks2.MDRaid",
+		"OutFile": "udisks2-mdraid",
+		"XMLFile": "udisks2.xml",
+		"ObjectName": "MDRaid"
+		},
+		{
+		"Interface": "org.freedesktop.UDisks2.Job",
+		"OutFile": "udisks2-job",
+		"XMLFile": "udisks2.xml",
+		"ObjectName": "Job"
+		}
+	]
+}
