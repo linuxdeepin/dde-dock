@@ -98,5 +98,5 @@ func main() {
 		setDT.SetNtpUsing(true)
 	}
 	fmt.Println("Start Loop ...")
-	/*dlib.StartLoop()*/
+	dlib.StartLoop()
 }

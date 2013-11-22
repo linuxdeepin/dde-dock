@@ -4,7 +4,6 @@ import (
 	"dlib/dbus"
 	"fmt"
 	"net"
-	"os"
 	"os/exec"
 	"strconv"
 	"time"
@@ -40,7 +39,6 @@ func (sdt *SetDateTime) SetCurrentDate(d string) bool {
 		return false
 	}
 
-	fmt.Println("Set Date Now ...")
 	sysTime := time.Now()
 	sysTmp := &sysTime
 	_, tStr := GetDateTimeAny(sysTmp)
@@ -61,7 +59,6 @@ func (sdt *SetDateTime) SetCurrentTime(t string) bool {
 		return false
 	}
 
-	fmt.Println("Set Time Now ...")
 	cmd := exec.Command("date", "+%T", "-s", t)
 	_, err := cmd.Output()
 	if err != nil {
@@ -80,7 +77,6 @@ func (sdt *SetDateTime) SyncNtpTime() bool {
 
 	_, tStr := GetDateTimeAny(t)
 	sdt.SetCurrentTime(tStr)
-	fmt.Println("SyncNtpTime Success!!!")
 	return true
 }
 
@@ -100,22 +96,18 @@ func (sdt *SetDateTime) SetNtpUsing(using bool) bool {
 			quitChan <- true
 		}
 
-		fmt.Println("No using ntp ...")
 		sdt.NtpRunFlag = false
 	}
-	fmt.Println("SetNtpUsing success ...")
 	return true
 }
 
 func SetNtpThread(sdt *SetDateTime) {
-	fmt.Println("SetNtpThread Start ...")
 	for {
 		sdt.SyncNtpTime()
 		timer := time.NewTimer(time.Minute * 1)
 		select {
 		case <-timer.C:
 		case <-quitChan:
-			fmt.Println("SetNtpThread Quit ...")
 			return
 		}
 	}
@@ -147,7 +139,6 @@ func GetDateTimeAny(t *time.Time) (dStr, tStr string) {
 	dStr += strconv.FormatInt(int64(t.Year()), 10) + "-" + strconv.FormatInt(int64(t.Month()), 10) + "-" + strconv.FormatInt(int64(t.Day()), 10)
 	tStr += strconv.FormatInt(int64(t.Hour()), 10) + ":" + strconv.FormatInt(int64(t.Minute()), 10) + ":" + strconv.FormatInt(int64(t.Second()), 10)
 
-	fmt.Println("Current:", dStr, tStr)
 	return dStr, tStr
 }
 
@@ -195,11 +186,6 @@ func GetNtpNow() (*time.Time, error) {
 }
 
 func main() {
-	f, err1 := os.Create("/tmp/out1")
-	if err1 != nil {
-		fmt.Println("create file failed:", err1)
-	}
-	f.Close()
 	quitChan = make(chan bool)
 	sdt := NewSetDateTime()
 	err := dbus.InstallOnSystem(sdt)
