@@ -33,12 +33,14 @@ func (date *DateTime) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{_DATE_TIME_DEST, _DATE_TIME_PATH, _DATA_TIME_IFC}
 }
 
-func (date *DateTime) SetDate(d string) {
-	setDT.SetCurrentDate(d)
+func (date *DateTime) SetDate(d string) bool {
+	ret := setDT.SetCurrentDate(d)
+	return ret
 }
 
-func (date *DateTime) SetTime(t string) {
-	setDT.SetCurrentTime(t)
+func (date *DateTime) SetTime(t string) bool {
+	ret := setDT.SetCurrentTime(t)
+	return ret
 }
 
 func (date *DateTime) SetTimeZone(zone string) {
@@ -47,18 +49,21 @@ func (date *DateTime) SetTimeZone(zone string) {
 	date.CurrentTimeZone = zone
 }
 
-func (date *DateTime) SetAutoSetTime(auto bool) {
+func (date *DateTime) SetAutoSetTime(auto bool) bool {
+	var ret bool
 	if auto {
 		date.AutoSetTime = true
-		setDT.SetNtpUsing(true)
+		ret = setDT.SetNtpUsing(true)
 	} else {
 		date.AutoSetTime = false
-		setDT.SetNtpUsing(false)
+		ret = setDT.SetNtpUsing(false)
 	}
+	return ret
 }
 
-func (date *DateTime) SyncNtpTime() {
-	setDT.SyncNtpTime()
+func (date *DateTime) SyncNtpTime() bool {
+	ret := setDT.SyncNtpTime()
+	return ret
 }
 
 func NewDateAndTime() *DateTime {
@@ -95,7 +100,7 @@ func main() {
 	}
 
 	if date.AutoSetTime {
-		setDT.SetNtpUsing(true)
+		go setDT.SetNtpUsing(true)
 	}
 	fmt.Println("Start Loop ...")
 	dlib.StartLoop()

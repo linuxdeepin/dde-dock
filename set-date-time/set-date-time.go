@@ -21,7 +21,7 @@ var (
 )
 
 type SetDateTime struct {
-	NtpRunFlag bool
+	NtpRunFlag bool `access:"read"`
 }
 
 func (sdt *SetDateTime) GetDBusInfo() dbus.DBusInfo {
@@ -42,7 +42,7 @@ func (sdt *SetDateTime) SetCurrentDate(d string) bool {
 	sysTime := time.Now()
 	sysTmp := &sysTime
 	_, tStr := GetDateTimeAny(sysTmp)
-	cmd := exec.Command("date", "--set", d)
+	cmd := exec.Command("/bin/date", "--set", d)
 	_, err := cmd.Output()
 	if err != nil {
 		fmt.Println("Set Date error:", err)
@@ -59,7 +59,7 @@ func (sdt *SetDateTime) SetCurrentTime(t string) bool {
 		return false
 	}
 
-	cmd := exec.Command("date", "+%T", "-s", t)
+	cmd := exec.Command("/bin/date", "+%T", "-s", t)
 	_, err := cmd.Output()
 	if err != nil {
 		fmt.Println("Set time error:", err)
