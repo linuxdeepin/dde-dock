@@ -1,0 +1,11 @@
+<node>
+     <interface name="com.deepin.daemon.DShutdown">
+          <method name="Hibernate"></method>
+          <method name="Logout"></method>
+          <method name="Reboot"></method>
+          <method name="Shutdown">
+               <arg type="b" direction="out"></arg>
+          </method>
+          <method name="Suspend"></method>
+     </interface>
+</node>
