@@ -2,7 +2,7 @@ package main
 
 import (
 	"dbus-gen/SetDateTime"
-	"dbus-gen/datetime"
+	"dbus-gen/gdatetime"
 	"dlib"
 	"dlib/dbus"
 	"dlib/dbus/property"
@@ -44,7 +44,7 @@ func (date *DateTime) SetTime(t string) bool {
 }
 
 func (date *DateTime) SetTimeZone(zone string) {
-	gdate := datetime.GetDateTimeMechanism("/")
+	gdate := gdatetime.GetDateTimeMechanism("/")
 	gdate.SetTimezone(zone)
 	date.CurrentTimeZone = zone
 }
@@ -73,7 +73,7 @@ func NewDateAndTime() *DateTime {
 	dt.TimeShowFormat = property.NewGSettingsPropertyFull(dtGSettings,
 		"is-24hour", true, busConn, _DATE_TIME_DEST, _DATA_TIME_IFC,
 		"TimeShowFormat")
-	d := datetime.GetDateTimeMechanism("/")
+	d := gdatetime.GetDateTimeMechanism("/")
 	dt.CurrentTimeZone = d.GetTimezone()
 
 	dt.AutoSetTime = dtGSettings.GetBoolean("is-auto-set")
@@ -102,6 +102,5 @@ func main() {
 	if date.AutoSetTime {
 		go setDT.SetNtpUsing(true)
 	}
-	fmt.Println("Start Loop ...")
 	dlib.StartLoop()
 }

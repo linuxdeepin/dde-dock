@@ -1,21 +1,25 @@
 <node>
      <interface name="com.deepin.daemon.DateAndTime">
+          <method name="SetAutoSetTime">
+               <arg type="b" direction="in"></arg>
+               <arg type="b" direction="out"></arg>
+          </method>
           <method name="SetDate">
-               <arg type="u" direction="in"></arg>
-               <arg type="u" direction="in"></arg>
-               <arg type="u" direction="in"></arg>
+               <arg type="s" direction="in"></arg>
+               <arg type="b" direction="out"></arg>
           </method>
           <method name="SetTime">
-               <arg type="x" direction="in"></arg>
+               <arg type="s" direction="in"></arg>
                <arg type="b" direction="out"></arg>
           </method>
           <method name="SetTimeZone">
                <arg type="s" direction="in"></arg>
+          </method>
+          <method name="SyncNtpTime">
                <arg type="b" direction="out"></arg>
           </method>
-          <method name="SyncTime"></method>
-          <property name="AutoSetTime" type="b" access="readwrite"></property>
+          <property name="AutoSetTime" type="b" access="read"></property>
           <property name="TimeShowFormat" type="b" access="readwrite"></property>
-          <property name="CurrentTimeZone" type="s" access="readwrite"></property>
+          <property name="CurrentTimeZone" type="s" access="read"></property>
      </interface>
 </node>
