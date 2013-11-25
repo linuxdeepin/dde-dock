@@ -6,8 +6,15 @@ import (
 	"fmt"
 )
 
-type DefaultApps struct {
-	AppID string
+type DefaultApps struct{}
+
+type DAppInfo struct {
+	AppID          string
+	AppName        string
+	AppDisplayName string
+	AppDesc        string
+	AppExec        string
+	AppCommand     string
 }
 
 const (
@@ -24,6 +31,18 @@ const (
 	_VIDEO_CONTENT_TYPE    = "video/mp4"
 )
 
+func NewDAppInfo(gioApp *gio.AppInfo) DAppInfo {
+	dappInfo := DAppInfo{}
+
+	dappInfo.AppID = gioApp.GetId()
+	dappInfo.AppName = gioApp.GetName()
+	dappInfo.AppDisplayName = gioApp.GetDisplayName()
+	dappInfo.AppDesc = gioApp.GetDescription()
+	dappInfo.AppExec = gioApp.GetExecutable()
+	dappInfo.AppCommand = gioApp.GetCommandline()
+	return dappInfo
+}
+
 func (dapp *DefaultApps) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		_DEFAULT_APPS_DEST,
@@ -32,29 +51,41 @@ func (dapp *DefaultApps) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (dapp *DefaultApps) GetAppsListViaType(typeName string) []string {
-	var defaultAppsList []string
+func (dapp *DefaultApps) GetAppsListViaType(typeName string) []DAppInfo {
+	var defaultAppsList []DAppInfo
 	gioAppsList := gio.AppInfoGetAllForType(typeName)
 	for _, gioApp := range gioAppsList {
-		defaultAppsList = append(defaultAppsList, gioApp.GetName())
+		defaultAppsList = append(defaultAppsList, NewDAppInfo(gioApp))
 	}
 	return defaultAppsList
 }
 
 func (dapp *DefaultApps) GetDefaultAppViaType(typeName string,
-	supportUris bool) string {
+	supportUris bool) DAppInfo {
 	gioApp := gio.AppInfoGetDefaultForType(typeName, supportUris)
-	return gioApp.GetName()
+	return NewDAppInfo(gioApp)
 }
 
-func (dapp *DefaultApps) SetDefaultAppViaType(typeName string) bool {
+func (dapp *DefaultApps) SetDefaultAppViaType(typeName,
+	appID string) (bool, error) {
 	gio.AppInfoResetTypeAssociations(typeName)
-	/*success := gio.*/
-	return true
+	gioAppsList := gio.AppInfoGetAllForType(typeName)
+	for _, gioApp := range gioAppsList {
+		if gioApp.GetId() == appID {
+			success, err := gioApp.SetAsDefaultForType(typeName)
+			if err != nil {
+				fmt.Println(err)
+				return success, err
+			}
+			break
+		}
+	}
+
+	return true, nil
 }
 
 func main() {
-	dapp := DefaultApps{AppID: "1"}
+	dapp := DefaultApps{}
 	dbus.InstallOnSession(&dapp)
 	fmt.Println(dapp.GetAppsListViaType(_HTTP_CONTENT_TYPE))
 	fmt.Println(dapp.GetDefaultAppViaType(_HTTP_CONTENT_TYPE, false))
