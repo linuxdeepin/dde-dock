@@ -1,7 +1,7 @@
 package main
 
 import (
-	"dlib"
+	"dlib/gio-2.0"
 	"dlib/dbus"
 	"dlib/dbus/property"
 )
@@ -58,11 +58,11 @@ const (
 
 var (
 	busConn            *dbus.Conn
-	mouseGSettings     *dlib.Settings
-	tpadGSettings      *dlib.Settings
-	infaceGSettings    *dlib.Settings
-	layoutGSettings    *dlib.Settings
-	keyRepeatGSettings *dlib.Settings
+	mouseGSettings     *gio.Settings
+	tpadGSettings      *gio.Settings
+	infaceGSettings    *gio.Settings
+	layoutGSettings    *gio.Settings
+	keyRepeatGSettings *gio.Settings
 )
 
 func InitGSettings() bool {
@@ -71,11 +71,11 @@ func InitGSettings() bool {
 	if dbusError != nil {
 		return false
 	}
-	mouseGSettings = dlib.NewSettings(_MOUSE_SCHEMA)
-	tpadGSettings = dlib.NewSettings(_TPAD_SCHEMA)
-	infaceGSettings = dlib.NewSettings(_DESKTOP_INFACE_SCHEMA)
-	layoutGSettings = dlib.NewSettings(_LAYOUT_SCHEMA)
-	keyRepeatGSettings = dlib.NewSettings(_KEYBOARD_REPEAT_SCHEMA)
+	mouseGSettings = gio.NewSettings(_MOUSE_SCHEMA)
+	tpadGSettings = gio.NewSettings(_TPAD_SCHEMA)
+	infaceGSettings = gio.NewSettings(_DESKTOP_INFACE_SCHEMA)
+	layoutGSettings = gio.NewSettings(_LAYOUT_SCHEMA)
+	keyRepeatGSettings = gio.NewSettings(_KEYBOARD_REPEAT_SCHEMA)
 	return true
 }
 

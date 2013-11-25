@@ -6,6 +6,7 @@ import (
 	"dlib"
 	"dlib/dbus"
 	"dlib/dbus/property"
+	"dlib/gio-2.0"
 	"fmt"
 )
 
@@ -18,7 +19,7 @@ const (
 )
 
 var (
-	dtGSettings *dlib.Settings
+	dtGSettings *gio.Settings
 	busConn     *dbus.Conn
 	setDT       *SetDateTime.SetDateTime
 )
@@ -68,7 +69,7 @@ func (date *DateTime) SyncNtpTime() bool {
 
 func NewDateAndTime() *DateTime {
 	dt := DateTime{}
-	dtGSettings = dlib.NewSettings(_DATE_TIME_SCHEMA)
+	dtGSettings = gio.NewSettings(_DATE_TIME_SCHEMA)
 
 	dt.TimeShowFormat = property.NewGSettingsPropertyFull(dtGSettings,
 		"is-24hour", true, busConn, _DATE_TIME_DEST, _DATA_TIME_IFC,
@@ -77,7 +78,7 @@ func NewDateAndTime() *DateTime {
 	dt.CurrentTimeZone = d.GetTimezone()
 
 	dt.AutoSetTime = dtGSettings.GetBoolean("is-auto-set")
-	dtGSettings.Connect("changed::is-auto-set", func(s *dlib.Settings, name string) {
+	dtGSettings.Connect("changed::is-auto-set", func(s *gio.Settings, name string) {
 		fmt.Println("is-auto-set changed:", s.GetBoolean("is-auto-set"))
 		dt.SetAutoSetTime(s.GetBoolean("is-auto-set"))
 	})

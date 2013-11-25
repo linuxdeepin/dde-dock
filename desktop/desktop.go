@@ -4,6 +4,7 @@ import (
 	"dlib"
 	"dlib/dbus"
 	"dlib/dbus/property"
+	"dlib/gio-2.0"
 )
 
 const (
@@ -31,9 +32,9 @@ const (
 
 var (
 	busConn          *dbus.Conn
-	compizIntegrated *dlib.Settings
-	compizCommand    *dlib.Settings
-	compizScale      *dlib.Settings
+	compizIntegrated *gio.Settings
+	compizCommand    *gio.Settings
+	compizScale      *gio.Settings
 
 	runCommand11     string
 	runCommand12     string
@@ -128,7 +129,7 @@ func NewDesktopManager() (*DesktopManager, error) {
 		return nil, err
 	}
 
-	deskSettings := dlib.NewSettings(_DESKTOP_SCHEMA)
+	deskSettings := gio.NewSettings(_DESKTOP_SCHEMA)
 	desk.ShowComputerIcon = property.NewGSettingsPropertyFull(
 		deskSettings, "show-computer-icon", true, busConn,
 		_DESKTOP_PATH, _DESKTOP_IFC, "ShowComputerIcon")
@@ -142,7 +143,7 @@ func NewDesktopManager() (*DesktopManager, error) {
 		deskSettings, "show-dsc-icon", true, busConn, _DESKTOP_PATH,
 		_DESKTOP_IFC, "ShowDSCIcon")
 
-	dockSettings := dlib.NewSettings(_DOCK_SCHEMA)
+	dockSettings := gio.NewSettings(_DOCK_SCHEMA)
 	desk.DockMode = property.NewGSettingsPropertyFull(dockSettings,
 		"hide-mode", "", busConn, _DESKTOP_PATH, _DESKTOP_IFC, "DockMode")
 	InitCompizGSettings()
@@ -153,10 +154,10 @@ func NewDesktopManager() (*DesktopManager, error) {
 }
 
 func InitCompizGSettings() {
-	compizIntegrated = dlib.NewSettings(_COMPIZ_INTEGRATED_SCHEMA)
-	compizCommand = dlib.NewSettingsWithPath(_COMPIZ_COMMANDS_SCHEMA,
+	compizIntegrated = gio.NewSettings(_COMPIZ_INTEGRATED_SCHEMA)
+	compizCommand = gio.NewSettingsWithPath(_COMPIZ_COMMANDS_SCHEMA,
 		_COMPIZ_COMMAND_PATH)
-	compizScale = dlib.NewSettingsWithPath(_COMPIZ_SCALE_SCHEMA,
+	compizScale = gio.NewSettingsWithPath(_COMPIZ_SCALE_SCHEMA,
 		_COMPIZ_SCALE_PATH)
 
 	runCommand11 = compizIntegrated.GetString("command-11")
@@ -167,23 +168,23 @@ func InitCompizGSettings() {
 }
 
 func ListenCompizGSettings(desk *DesktopManager) {
-	compizIntegrated.Connect("changed::command-11", func(s *dlib.Settings, name string) {
+	compizIntegrated.Connect("changed::command-11", func(s *gio.Settings, name string) {
 		runCommand11 = s.GetString("command-11")
 		GetEdgeAction(desk)
 	})
-	compizIntegrated.Connect("changed::command-12", func(s *dlib.Settings, name string) {
+	compizIntegrated.Connect("changed::command-12", func(s *gio.Settings, name string) {
 		runCommand12 = s.GetString("command-12")
 		GetEdgeAction(desk)
 	})
-	compizCommand.Connect("changed::run-command10-edge", func(s *dlib.Settings, name string) {
+	compizCommand.Connect("changed::run-command10-edge", func(s *gio.Settings, name string) {
 		runCommandEdge10 = s.GetString("run-command10-edge")
 		GetEdgeAction(desk)
 	})
-	compizCommand.Connect("changed::run-command11-edge", func(s *dlib.Settings, name string) {
+	compizCommand.Connect("changed::run-command11-edge", func(s *gio.Settings, name string) {
 		runCommandEdge11 = s.GetString("run-command11-edge")
 		GetEdgeAction(desk)
 	})
-	compizScale.Connect("changed::initiate-edge", func(s *dlib.Settings, name string) {
+	compizScale.Connect("changed::initiate-edge", func(s *gio.Settings, name string) {
 		scale = s.GetString("initiate-edge")
 		GetEdgeAction(desk)
 	})
