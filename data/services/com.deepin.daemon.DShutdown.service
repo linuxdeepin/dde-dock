@@ -1,0 +1,3 @@
+[D-BUS Service]
+Name=com.deepin.daemon.DShutdown
+Exec=/usr/lib/deepin-daemon/shutdown
