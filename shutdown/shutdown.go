@@ -38,12 +38,20 @@ func (shutdown *DShutdown) Reboot() {
 	dShut.RequestReboot()
 }
 
-func (shutdown *DShutdown) Suspend() {
+func (shutdown *DShutdown) Suspend() bool {
+	if !dPower.SuspendAllowed() {
+		return false
+	}
 	dPower.Suspend()
+	return true
 }
 
-func (shutdown *DShutdown) Hibernate() {
+func (shutdown *DShutdown) Hibernate() bool {
+	if !dPower.HibernateAllowed() {
+		return false
+	}
 	dPower.Hibernate()
+	return true
 }
 
 func NewShutdown() *DShutdown {
