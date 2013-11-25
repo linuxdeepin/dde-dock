@@ -1,14 +1,13 @@
 package main
 
 import (
+	"dbus-gen/udisks2"
 	"dlib/dbus"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"strconv"
 	"strings"
-	"dbus-gen/udisks2"
 )
 
 type SystemInfo struct {
@@ -172,7 +171,7 @@ func GetDiskCap() (diskCap uint64) {
 			diskCap += size.Value().(uint64)
 		}
 	}
-	
+
 	return diskCap
 }
 
@@ -187,10 +186,5 @@ func main() {
 
 	dbus.InstallOnSession(&sys)
 
-	fmt.Println("Version:", sys.Version)
-	fmt.Println("CPU:", sys.Processor)
-	fmt.Println("Memory:", sys.MemoryCap)
-	fmt.Println("System Type:", sys.SystemType)
-	fmt.Println("Disk:", sys.DiskCap)
 	select {}
 }
