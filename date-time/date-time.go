@@ -21,7 +21,9 @@ const (
 var (
 	dtGSettings *gio.Settings
 	busConn     *dbus.Conn
-	setDT       *SetDateTime.SetDateTime
+
+	setDT = SetDateTime.GetSetDateTime("/com/deepin/daemon/SetDateTime")
+	gdate = gdatetime.GetDateTimeMechanism("/")
 )
 
 type DateTime struct {
@@ -45,7 +47,6 @@ func (date *DateTime) SetTime(t string) bool {
 }
 
 func (date *DateTime) SetTimeZone(zone string) {
-	gdate := gdatetime.GetDateTimeMechanism("/")
 	gdate.SetTimezone(zone)
 	date.CurrentTimeZone = zone
 }
@@ -74,8 +75,7 @@ func NewDateAndTime() *DateTime {
 	dt.TimeShowFormat = property.NewGSettingsPropertyFull(dtGSettings,
 		"is-24hour", true, busConn, _DATE_TIME_DEST, _DATA_TIME_IFC,
 		"TimeShowFormat")
-	d := gdatetime.GetDateTimeMechanism("/")
-	dt.CurrentTimeZone = d.GetTimezone()
+	dt.CurrentTimeZone = gdate.GetTimezone()
 
 	dt.AutoSetTime = dtGSettings.GetBoolean("is-auto-set")
 	dtGSettings.Connect("changed::is-auto-set", func(s *gio.Settings, name string) {
@@ -93,7 +93,6 @@ func main() {
 		panic(err)
 	}
 
-	setDT = SetDateTime.GetSetDateTime("/com/deepin/daemon/SetDateTime")
 	date := NewDateAndTime()
 	err = dbus.InstallOnAny(busConn, date)
 	if err != nil {
