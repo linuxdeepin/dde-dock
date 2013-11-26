@@ -69,6 +69,12 @@ func (date *DateTime) SyncNtpTime() bool {
 }
 
 func NewDateAndTime() *DateTime {
+	var err error
+	busConn, err = dbus.SessionBus()
+	if err != nil {
+		panic(err)
+	}
+
 	dt := DateTime{}
 	dtGSettings = gio.NewSettings(_DATE_TIME_SCHEMA)
 
@@ -87,12 +93,6 @@ func NewDateAndTime() *DateTime {
 }
 
 func main() {
-	var err error
-	busConn, err = dbus.SessionBus()
-	if err != nil {
-		panic(err)
-	}
-
 	date := NewDateAndTime()
 	err = dbus.InstallOnAny(busConn, date)
 	if err != nil {
