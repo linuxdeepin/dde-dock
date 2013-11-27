@@ -1,15 +1,15 @@
 package main
 
 import (
-	"dbus-gen/gsession"
-	"dbus-gen/upower"
+	"dbus/org/gnome/sessionmanager"
+	"dbus/org/freedesktop/upower"
 	"dlib/dbus"
 )
 
 type DShutdown struct{}
 
 var (
-	dShut  = gsession.GetSessionManager("/org/gnome/SessionManager")
+	dShut  = sessionmanager.GetSessionManager("/org/gnome/SessionManager")
 	dPower = upower.GetUpower("/org/freedesktop/UPower")
 )
 

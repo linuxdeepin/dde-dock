@@ -1,7 +1,7 @@
 package main
 
 import (
-	"dbus-gen/udisks2"
+	"dbus/org/freedesktop/udisks2"
 	"dlib/dbus"
 	"io/ioutil"
 	"os"

@@ -207,8 +207,8 @@ func GetEdgeAction(desk *DesktopManager) {
 		desk.BottomRight = ACTION_LAUNCHER
 	}
 
-	dbus.NotifyChange(busConn, desk, "TopLeft")
-	dbus.NotifyChange(busConn, desk, "BottomRight")
+	dbus.NotifyChange(desk, "TopLeft")
+	dbus.NotifyChange(desk, "BottomRight")
 }
 
 func main() {

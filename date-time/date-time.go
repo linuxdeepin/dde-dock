@@ -1,8 +1,8 @@
 package main
 
 import (
-	"dbus-gen/SetDateTime"
-	"dbus-gen/gdatetime"
+	"dbus/com/deepin/daemon/setdatetime"
+	"dbus/org/gnome/settingsdaemon/datetimemechanism"
 	"dlib"
 	"dlib/dbus"
 	"dlib/dbus/property"
@@ -22,8 +22,8 @@ var (
 	dtGSettings *gio.Settings
 	busConn     *dbus.Conn
 
-	setDT = SetDateTime.GetSetDateTime("/com/deepin/daemon/SetDateTime")
-	gdate = gdatetime.GetDateTimeMechanism("/")
+	setDT = setdatetime.GetSetDateTime("/com/deepin/daemon/setdatetime")
+	gdate = datetimemechanism.GetDateTimeMechanism("/")
 )
 
 type DateTime struct {
@@ -49,6 +49,7 @@ func (date *DateTime) SetTime(t string) bool {
 func (date *DateTime) SetTimeZone(zone string) {
 	gdate.SetTimezone(zone)
 	date.CurrentTimeZone = zone
+	dbus.NotifyChange(date, "CurrentTimeZone")
 }
 
 func (date *DateTime) SetAutoSetTime(auto bool) bool {
@@ -60,6 +61,7 @@ func (date *DateTime) SetAutoSetTime(auto bool) bool {
 		date.AutoSetTime = false
 		ret = setDT.SetNtpUsing(false)
 	}
+	dbus.NotifyChange(date, "AutoSetTime")
 	return ret
 }
 
@@ -94,7 +96,7 @@ func NewDateAndTime() *DateTime {
 
 func main() {
 	date := NewDateAndTime()
-	err = dbus.InstallOnAny(busConn, date)
+	err := dbus.InstallOnAny(busConn, date)
 	if err != nil {
 		panic(err)
 	}
