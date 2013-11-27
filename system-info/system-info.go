@@ -115,7 +115,7 @@ func GetMemoryCap() (memCap uint64) {
 		}
 	}
 
-	return memCap
+	return (memCap * 1024)
 }
 
 func GetSystemType() (sysType int64) {
