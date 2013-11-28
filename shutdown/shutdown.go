@@ -1,16 +1,16 @@
 package main
 
 import (
-	"dbus-gen/gsession"
-	"dbus-gen/upower"
+	"dbus/org/gnome/sessionmanager"
+	"dbus/org/freedesktop/upower"
 	"dlib/dbus"
 )
 
 type DShutdown struct{}
 
 var (
-	dShut  *gsession.SessionManager
-	dPower *upower.Upower
+	dShut  = sessionmanager.GetSessionManager("/org/gnome/SessionManager")
+	dPower = upower.GetUpower("/org/freedesktop/UPower")
 )
 
 func (shutdown *DShutdown) GetDBusInfo() dbus.DBusInfo {
@@ -38,23 +38,27 @@ func (shutdown *DShutdown) Reboot() {
 	dShut.RequestReboot()
 }
 
-func (shutdown *DShutdown) Suspend() {
+func (shutdown *DShutdown) Suspend() bool {
+	if !dPower.SuspendAllowed() {
+		return false
+	}
 	dPower.Suspend()
+	return true
 }
 
-func (shutdown *DShutdown) Hibernate() {
+func (shutdown *DShutdown) Hibernate() bool {
+	if !dPower.HibernateAllowed() {
+		return false
+	}
 	dPower.Hibernate()
+	return true
 }
 
 func NewShutdown() *DShutdown {
-	shutdown := DShutdown{}
-	return &shutdown
+	return &DShutdown{}
 }
 
 func main() {
-	dShut = gsession.GetSessionManager("/org/gnome/SessionManager")
-	dPower = upower.GetUpower("/org/freedesktop/UPower")
-
 	shutdown := NewShutdown()
 	dbus.InstallOnSession(shutdown)
 	select {}

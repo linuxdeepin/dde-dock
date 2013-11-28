@@ -6,8 +6,8 @@ package main
 // #include <gdk/gdk.h>
 import "C"
 import (
+	"dlib"
 	"dlib/dbus"
-	"fmt"
 	"unsafe"
 )
 
@@ -63,6 +63,5 @@ func main() {
 			dev.DevInfoList = append(dev.DevInfoList, tmp)
 		}
 	}
-	fmt.Println(dev.DevInfoList)
-	select {}
+	dlib.StartLoop()
 }

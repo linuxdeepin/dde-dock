@@ -1,8 +1,8 @@
 package main
 
 import (
-	"dbus-gen/SetDateTime"
-	"dbus-gen/gdatetime"
+	"dbus/com/deepin/daemon/setdatetime"
+	"dbus/org/gnome/settingsdaemon/datetimemechanism"
 	"dlib"
 	"dlib/dbus"
 	"dlib/dbus/property"
@@ -21,7 +21,9 @@ const (
 var (
 	dtGSettings *gio.Settings
 	busConn     *dbus.Conn
-	setDT       *SetDateTime.SetDateTime
+
+	setDT = setdatetime.GetSetDateTime("/com/deepin/daemon/setdatetime")
+	gdate = datetimemechanism.GetDateTimeMechanism("/")
 )
 
 type DateTime struct {
@@ -45,9 +47,9 @@ func (date *DateTime) SetTime(t string) bool {
 }
 
 func (date *DateTime) SetTimeZone(zone string) {
-	gdate := gdatetime.GetDateTimeMechanism("/")
 	gdate.SetTimezone(zone)
 	date.CurrentTimeZone = zone
+	dbus.NotifyChange(date, "CurrentTimeZone")
 }
 
 func (date *DateTime) SetAutoSetTime(auto bool) bool {
@@ -59,6 +61,7 @@ func (date *DateTime) SetAutoSetTime(auto bool) bool {
 		date.AutoSetTime = false
 		ret = setDT.SetNtpUsing(false)
 	}
+	dbus.NotifyChange(date, "AutoSetTime")
 	return ret
 }
 
@@ -68,14 +71,19 @@ func (date *DateTime) SyncNtpTime() bool {
 }
 
 func NewDateAndTime() *DateTime {
+	var err error
+	busConn, err = dbus.SessionBus()
+	if err != nil {
+		panic(err)
+	}
+
 	dt := DateTime{}
 	dtGSettings = gio.NewSettings(_DATE_TIME_SCHEMA)
 
 	dt.TimeShowFormat = property.NewGSettingsPropertyFull(dtGSettings,
 		"is-24hour", true, busConn, _DATE_TIME_DEST, _DATA_TIME_IFC,
 		"TimeShowFormat")
-	d := gdatetime.GetDateTimeMechanism("/")
-	dt.CurrentTimeZone = d.GetTimezone()
+	dt.CurrentTimeZone = gdate.GetTimezone()
 
 	dt.AutoSetTime = dtGSettings.GetBoolean("is-auto-set")
 	dtGSettings.Connect("changed::is-auto-set", func(s *gio.Settings, name string) {
@@ -87,15 +95,8 @@ func NewDateAndTime() *DateTime {
 }
 
 func main() {
-	var err error
-	busConn, err = dbus.SessionBus()
-	if err != nil {
-		panic(err)
-	}
-
-	setDT = SetDateTime.GetSetDateTime("/com/deepin/daemon/SetDateTime")
 	date := NewDateAndTime()
-	err = dbus.InstallOnAny(busConn, date)
+	err := dbus.InstallOnAny(busConn, date)
 	if err != nil {
 		panic(err)
 	}
