@@ -71,12 +71,12 @@ func ListenGSettingsChanged(media *MediaMount) {
 	mediaGSettings.Connect("changed::automount",
 		func(s *gio.Settings, name string) {
 			media.AllowAutoMount = GetAllowAutoMount()
-			dbus.NotifyChange(busConn, media, "AllowAutoMount")
+			dbus.NotifyChange(media, "AllowAutoMount")
 		})
 
 		mediaGSettings.Connect("changed::automount-open",
 		func(s *gio.Settings, name string) {
 			media.AllowAutoMount = GetAllowAutoMount()
-			dbus.NotifyChange(busConn, media, "AllowAutoMount")
+			dbus.NotifyChange(media, "AllowAutoMount")
 		})
 }
