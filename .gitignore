@@ -4,3 +4,5 @@ Test
 test-*
 test_*
 *.*~
+*.cfg
+*.ini
