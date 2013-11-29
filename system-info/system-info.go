@@ -47,12 +47,12 @@ func GetVersion() int32 {
 	lines := strings.Split(string(contents), "\n")
 	version := int32(0)
 	for _, line := range lines {
-		vars := strings.Split(line, "=")
-		l := len(vars)
-		if l < 2 {
-			break
-		}
-		if vars[0] == "DISTRIB_RELEASE" {
+		if strings.Contains(line, "DISTRIB_RELEASE") {
+			vars := strings.Split(line, "=")
+			l := len(vars)
+			if l < 2 {
+				break
+			}
 			num, _ := strconv.ParseUint(vars[1], 10, 64)
 			version = int32(num)
 			break
@@ -75,12 +75,12 @@ func GetCpuInfo() string {
 	cnt := 0
 	lines := strings.Split(string(contents), "\n")
 	for _, line := range lines {
-		vars := strings.Split(line, ":")
-		l := len(vars)
-		if l < 2 {
-			break
-		}
-		if strings.Contains(vars[0], "model name") {
+		if strings.Contains(line, "model name") {
+			vars := strings.Split(line, ":")
+			l := len(vars)
+			if l < 2 {
+				break
+			}
 			cnt++
 			if info == "" {
 				info += vars[1]
@@ -104,12 +104,12 @@ func GetMemoryCap() (memCap uint64) {
 
 	lines := strings.Split(string(contents), "\n")
 	for _, line := range lines {
-		fields := strings.Fields(line)
-		l := len(fields)
-		if l < 2 {
-			break
-		}
-		if fields[0] == "MemTotal:" {
+		if strings.Contains(line, "MemTotal") {
+			fields := strings.Fields(line)
+			l := len(fields)
+			if l < 2 {
+				break
+			}
 			memCap, _ = strconv.ParseUint(fields[1], 10, 64)
 			break
 		}
