@@ -1,8 +1,8 @@
 package main
 
 import (
-	"dbus/org/gnome/sessionmanager"
 	"dbus/org/freedesktop/upower"
+	"dbus/org/gnome/sessionmanager"
 	"dlib/dbus"
 )
 
@@ -21,37 +21,48 @@ func (shutdown *DShutdown) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (shutdown *DShutdown) Logout() {
+func (shutdown *DShutdown) RequestLogout() {
 	dShut.Logout(1)
 }
 
-func (shutdown *DShutdown) Shutdown() bool {
-	if !dShut.CanShutdown() {
-		return false
-	}
+func (shutdown *DShutdown) Logout() {
+	dShut.Logout(0)
+}
 
+func (shudown *DShutdown) CanShutdown() bool {
+	return dShut.CanShutdown()
+}
+
+func (shutdown *DShutdown) Shutdown() {
+	dShut.Shutdown()
+}
+
+func (shutdown *DShutdown) RequestShutdown() {
 	dShut.RequestShutdown()
-	return true
 }
 
 func (shutdown *DShutdown) Reboot() {
+	dShut.Reboot()
+}
+
+func (shutdown *DShutdown) RequestReboot() {
 	dShut.RequestReboot()
 }
 
-func (shutdown *DShutdown) Suspend() bool {
-	if !dPower.SuspendAllowed() {
-		return false
-	}
-	dPower.Suspend()
-	return true
+func (shutdown *DShutdown) CanSuspend() bool {
+	return dPower.SuspendAllowed()
 }
 
-func (shutdown *DShutdown) Hibernate() bool {
-	if !dPower.HibernateAllowed() {
-		return false
-	}
+func (shutdown *DShutdown) RequestSuspend() bool {
+	dPower.Suspend()
+}
+
+func (shutdown *DShutdown) CanHibernate() bool {
+	return HibernateAllowed()
+}
+
+func (shutdown *DShutdown) RequestHibernate() bool {
 	dPower.Hibernate()
-	return true
 }
 
 func NewShutdown() *DShutdown {
