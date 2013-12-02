@@ -27,9 +27,9 @@ var (
 )
 
 type DateTime struct {
-	AutoSetTime     bool `access:"read"`
-	TimeShowFormat  dbus.Property
-	CurrentTimeZone string `access:"read"`
+	AutoSetTime      bool `access:"read"`
+	Use24HourDisplay dbus.Property
+	CurrentTimeZone  string `access:"read"`
 }
 
 func (date *DateTime) GetDBusInfo() dbus.DBusInfo {
@@ -80,9 +80,9 @@ func NewDateAndTime() *DateTime {
 	dt := DateTime{}
 	dtGSettings = gio.NewSettings(_DATE_TIME_SCHEMA)
 
-	dt.TimeShowFormat = property.NewGSettingsPropertyFull(dtGSettings,
+	dt.Use24HourDisplay = property.NewGSettingsPropertyFull(dtGSettings,
 		"is-24hour", true, busConn, _DATE_TIME_DEST, _DATA_TIME_IFC,
-		"TimeShowFormat")
+		"Use24HourDisplay")
 	dt.CurrentTimeZone = gdate.GetTimezone()
 
 	dt.AutoSetTime = dtGSettings.GetBoolean("is-auto-set")

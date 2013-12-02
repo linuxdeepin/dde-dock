@@ -53,15 +53,15 @@ func (shutdown *DShutdown) CanSuspend() bool {
 	return dPower.SuspendAllowed()
 }
 
-func (shutdown *DShutdown) RequestSuspend() bool {
+func (shutdown *DShutdown) RequestSuspend() {
 	dPower.Suspend()
 }
 
 func (shutdown *DShutdown) CanHibernate() bool {
-	return HibernateAllowed()
+	return dPower.HibernateAllowed()
 }
 
-func (shutdown *DShutdown) RequestHibernate() bool {
+func (shutdown *DShutdown) RequestHibernate() {
 	dPower.Hibernate()
 }
 
