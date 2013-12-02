@@ -1,11 +1,11 @@
 package main
 
 import (
-	"testing"
 	"fmt"
+	"testing"
 )
 
-func TestSystem (t *testing.T) {
+func TestSystem(t *testing.T) {
 	sys := SystemInfo{}
 
 	sys.Version = GetVersion()
@@ -29,7 +29,7 @@ func TestSystem (t *testing.T) {
 	}
 
 	sys.DiskCap = GetDiskCap()
-	if sys.MemoryCap == uint64(0) {
+	if sys.DiskCap == uint64(0) {
 		t.Error("get disk info failed")
 	}
 
