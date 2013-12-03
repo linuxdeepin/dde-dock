@@ -81,7 +81,7 @@ func NewDateAndTime() *DateTime {
 	dtGSettings = gio.NewSettings(_DATE_TIME_SCHEMA)
 
 	dt.Use24HourDisplay = property.NewGSettingsPropertyFull(dtGSettings,
-		"is-24hour", true, busConn, _DATE_TIME_DEST, _DATA_TIME_IFC,
+		"is-24hour", true, busConn, _DATE_TIME_PATH, _DATA_TIME_IFC,
 		"Use24HourDisplay")
 	dt.CurrentTimeZone = gdate.GetTimezone()
 
