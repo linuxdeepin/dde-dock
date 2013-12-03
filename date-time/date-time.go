@@ -19,8 +19,8 @@ const (
 )
 
 var (
-	dtGSettings *gio.Settings
 	busConn     *dbus.Conn
+	dtGSettings = gio.NewSettings(_DATE_TIME_SCHEMA)
 
 	setDT = setdatetime.GetSetDateTime("/com/deepin/daemon/setdatetime")
 	gdate = datetimemechanism.GetDateTimeMechanism("/")
@@ -78,7 +78,6 @@ func NewDateAndTime() *DateTime {
 	}
 
 	dt := DateTime{}
-	dtGSettings = gio.NewSettings(_DATE_TIME_SCHEMA)
 
 	dt.Use24HourDisplay = property.NewGSettingsPropertyFull(dtGSettings,
 		"is-24hour", true, busConn, _DATE_TIME_PATH, _DATA_TIME_IFC,
