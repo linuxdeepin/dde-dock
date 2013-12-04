@@ -13,10 +13,10 @@ var (
 )
 
 type MediaMount struct {
-	AllowAutoMount     bool `access:"read"`
-	TypeIgnoreList     dbus.Property
-	TypeOpenFolderList dbus.Property
-	TypeExecList       dbus.Property
+	AllowAutoMount     bool
+	TypeIgnoreList     dbus.Property	`access:"readwrite"`
+	TypeOpenFolderList dbus.Property	`access:"readwrite"`
+	TypeExecList       dbus.Property	`access:"readwrite"`
 }
 
 func (media *MediaMount) SetAllowAutoRun(allow bool) {
