@@ -1,6 +1,6 @@
 package main
 
-import nm "networkmanager"
+import nm "dbus/org/freedesktop/networkmanager"
 import "dlib/dbus"
 
 const (
@@ -38,7 +38,7 @@ const (
 
 func (this *Manager) updateDeviceManage() {
 	this.devices = make(map[string]*nm.Device)
-	_Manager.ConnectDeviceAdded(func(path dbus.ObjectPath) {
+	_Manager.ConnectDeviceAdded(func(path string) {
 		this.handleDeviceChanged(OP_ADDED, string(path))
 	})
 	_Manager.ConnectDeviceRemoved(func(path dbus.ObjectPath) {

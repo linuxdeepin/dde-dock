@@ -1,7 +1,7 @@
 package main
 
 import "dlib/dbus"
-import nm "networkmanager"
+import nm "dbus/org/freedesktop/networkmanager"
 
 const (
 	DBUS_DEST = "com.deepin.daemon.Network"

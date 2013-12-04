@@ -1,6 +1,6 @@
 package main
 
-import nm "networkmanager"
+import nm "dbus/org/freedesktop/networkmanager"
 import "dlib/dbus"
 
 type Connection struct {
