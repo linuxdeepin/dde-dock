@@ -5,7 +5,7 @@ import (
 	"dlib/dbus"
 	"dlib/dbus/property"
 	"dlib/gio-2.0"
-	"upower"
+	"dbus/org/freedesktop/upower"
 )
 
 type dbusBattery struct {
