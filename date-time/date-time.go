@@ -27,9 +27,9 @@ var (
 )
 
 type DateTime struct {
-	AutoSetTime      bool `access:"read"`
-	Use24HourDisplay dbus.Property
-	CurrentTimeZone  string `access:"read"`
+	AutoSetTime      bool
+	Use24HourDisplay dbus.Property	`access:"readwrite"`
+	CurrentTimeZone  string
 }
 
 func (date *DateTime) GetDBusInfo() dbus.DBusInfo {
