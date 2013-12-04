@@ -9,7 +9,7 @@ import (
 )
 
 type KeyBinding struct {
-	KeyBindingCount int32 `access:"read"`
+	KeyBindingCount int32
 }
 
 const (
@@ -18,7 +18,7 @@ const (
 	_KEY_BINDING_IFC  = "com.deepin.daemon.KeyBinding"
 
 	_KEY_BINDING_ID       = "com.deepin.daemon.key-binding"
-	_KEY_BINDING_ADD_ID   = "com.deepin.daemon.key-binding.key"
+	_KEY_BINDING_ADD_ID   = "com.deepin.daemon.key-binding.custom"
 	_KEY_BINDING_ADD_PATH = "/com/deepin/daemon/key-binding/profiles/"
 
 	_KEY_COUNT    = "count"
