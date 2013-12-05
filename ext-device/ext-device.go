@@ -24,6 +24,7 @@ type MouseEntry struct {
 }
 
 type TPadEntry struct {
+	TPadEnable     dbus.Property `access:"readwrite"`
 	UseHabit       dbus.Property `access:"readwrite"`
 	MoveSpeed      dbus.Property `access:"readwrite"`
 	MoveAccuracy   dbus.Property `access:"readwrite"`
@@ -126,6 +127,8 @@ func NewTPadEntry() *TPadEntry {
 	tpad := &TPadEntry{}
 
 	tpad.DeviceID = "TouchPad"
+	tpad.TPadEnable = property.NewGSettingsProperty(tpad,
+		"TPadEnable", tpadGSettings, "touchpad-enabled")
 	tpad.UseHabit = property.NewGSettingsProperty(tpad,
 		"UseHabit", tpadGSettings, "left-handed")
 	tpad.MoveSpeed = property.NewGSettingsProperty(tpad,
