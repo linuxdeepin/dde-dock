@@ -54,7 +54,7 @@ func (this *Manager) handleDeviceChanged(operation int32, path string) {
 	switch operation {
 	case OP_ADDED:
 		dev := nm.GetDevice(path)
-		if dev.GetDeviceType() == NM_DEVICE_TYPE_WIFI {
+		if dev.DeviceType.Get() == NM_DEVICE_TYPE_WIFI {
 		}
 		this.devices[path] = dev
 		this.updateDeviceInfo()
@@ -71,7 +71,7 @@ func (this *Manager) updateDeviceInfo() {
 	hasWireless := false
 	this.APs = this.APs[0:0]
 	for _, dev := range this.devices {
-		switch dev.GetDeviceType() {
+		switch dev.DeviceType.Get() {
 		case NM_DEVICE_TYPE_WIFI:
 			hasWireless = true
 			this.updateAccessPoint(nm.GetDeviceWireless(string(dev.Path)))
@@ -92,8 +92,8 @@ func (this *Manager) updateDeviceInfo() {
 
 func (this *Manager) updateAccessPoint(dev *nm.DeviceWireless) {
 	for _, d := range dev.GetAccessPoints() {
-		ssid := nm.GetAccessPoint(string(d)).GetSsid()
-		this.APs = append(this.APs, AccessPoint{string(ssid)})
+		ssid := nm.GetAccessPoint(string(d)).Ssid.Get().(string)
+		this.APs = append(this.APs, AccessPoint{ssid})
 	}
 	return
 }
