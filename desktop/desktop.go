@@ -31,7 +31,6 @@ const (
 )
 
 var (
-	busConn          *dbus.Conn
 	compizIntegrated *gio.Settings
 	compizCommand    *gio.Settings
 	compizScale      *gio.Settings
@@ -124,35 +123,20 @@ func (desk *DesktopManager) SetBottomRightAction(index int32) {
 }
 
 func NewDesktopManager() (*DesktopManager, error) {
-	desk := DesktopManager{}
-	var err error
-	busConn, err = dbus.SessionBus()
-	if err != nil {
-		return nil, err
-	}
+	desk := &DesktopManager{}
 
 	deskSettings := gio.NewSettings(_DESKTOP_SCHEMA)
-	desk.ShowComputerIcon = property.NewGSettingsPropertyFull(
-		deskSettings, "show-computer-icon", true, busConn,
-		_DESKTOP_PATH, _DESKTOP_IFC, "ShowComputerIcon")
-	desk.ShowHomeIcon = property.NewGSettingsPropertyFull(
-		deskSettings, "show-home-icon", true, busConn, _DESKTOP_PATH,
-		_DESKTOP_IFC, "ShowHomeIcon")
-	desk.ShowTrashIcon = property.NewGSettingsPropertyFull(
-		deskSettings, "show-trash-icon", true, busConn, _DESKTOP_PATH,
-		_DESKTOP_IFC, "ShowTrashIcon")
-	desk.ShowDSCIcon = property.NewGSettingsPropertyFull(
-		deskSettings, "show-dsc-icon", true, busConn, _DESKTOP_PATH,
-		_DESKTOP_IFC, "ShowDSCIcon")
+	desk.ShowComputerIcon = property.NewGSettingsProperty(desk, "ShowComputerIcon", deskSettings, "show-computer-icon")
+	desk.ShowHomeIcon = property.NewGSettingsProperty(desk, "ShowHomeIcon", deskSettings, "show-home-icon")
+	desk.ShowTrashIcon = property.NewGSettingsProperty(desk, "ShowTrashIcon", deskSettings, "show-trash-icon")
+	desk.ShowDSCIcon = property.NewGSettingsProperty(desk, "ShowDSCIcon", deskSettings, "show-dsc-icon")
+	desk.DockMode = property.NewGSettingsProperty(desk, "DockMode", gio.NewSettings(_DOCK_SCHEMA), "hide-mode")
 
-	dockSettings := gio.NewSettings(_DOCK_SCHEMA)
-	desk.DockMode = property.NewGSettingsPropertyFull(dockSettings,
-		"hide-mode", "", busConn, _DESKTOP_PATH, _DESKTOP_IFC, "DockMode")
 	InitCompizGSettings()
-	ListenCompizGSettings(&desk)
-	GetEdgeAction(&desk)
+	ListenCompizGSettings(desk)
+	GetEdgeAction(desk)
 
-	return &desk, nil
+	return desk, nil
 }
 
 func InitCompizGSettings() {
