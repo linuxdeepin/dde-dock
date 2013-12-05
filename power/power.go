@@ -5,7 +5,7 @@ import (
 	"dlib/dbus"
 	"dlib/dbus/property"
 	"dlib/gio-2.0"
-	"upower"
+	"dbus/org/freedesktop/upower"
 )
 
 type dbusBattery struct {
@@ -38,6 +38,8 @@ type Power struct {
 	LidCloseAcAcAction		    dbus.Property
 	LidCloseBatteryAction	    dbus.Property
 
+	ShowTray                    dbus.Property
+
 	SleepDisplayAc              dbus.Property
 	SleepDisplayBattery         dbus.Property
 
@@ -55,7 +57,6 @@ type Power struct {
 	PlugedIn          int32    `access:"read"`       //1 for in,2 for out
 	TimeToEmpty       int64    `access:"read"`       //
 	TimeToFull        int64    `access:"read"`       //time to fully charged
-	SuspendTime       []int32  `access:"read/write"` //with or without battery
 }
 
 var device *upower.Device = nil
@@ -93,6 +94,9 @@ func NewPower() (*Power, error) {
 	power.LidCloseBatteryAction = property.NewGSettingsPropertyFull(
 		powerSettings, "lid-close-battery-action", "", busConn,
 		power_object_path, power_interface, "LidCloseBatteryAction")
+	power.ShowTray=property.NewGSettingsPropertyFull(
+		powerSettings,"show-tray",true,busConn,
+		power_object_path,power_interface,"ShowTray")
 	power.SleepInactiveAcTimeout=property.NewGSettingsPropertyFull(
 		powerSettings,"sleep-inactive-ac-timeout",int32(0),busConn,
 		power_object_path,power_interface,"SleepInactiveAcTimeout")
