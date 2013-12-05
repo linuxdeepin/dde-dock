@@ -21,11 +21,12 @@ const (
 	_KEY_BINDING_ADD_ID   = "com.deepin.daemon.key-binding.custom"
 	_KEY_BINDING_ADD_PATH = "/com/deepin/daemon/key-binding/profiles/"
 
-	_KEY_COUNT    = "count"
-	_KEY_ID       = "id"
-	_KEY_NAME     = "name"
-	_KEY_SHORTCUT = "shortcut"
-	_KEY_ACTION   = "action"
+	_KEY_COUNT_BASE = 1000
+	_KEY_COUNT      = "count"
+	_KEY_ID         = "id"
+	_KEY_NAME       = "name"
+	_KEY_SHORTCUT   = "shortcut"
+	_KEY_ACTION     = "action"
 )
 
 var (
@@ -80,7 +81,7 @@ func (binding *KeyBinding) DeleteKeyBinding(id int32) {
 
 func (binding *KeyBinding) AddCustomBinding(name, shortcut, action string) int32 {
 	count := binding.KeyBindingCount
-	id := 1000 + count
+	id := _KEY_COUNT_BASE + count
 	gs := NewCustomGSettings(id)
 	SetGSettings(gs, id, name, shortcut, action)
 
@@ -130,7 +131,7 @@ func ModifyGSetingsKey(gs *gio.Settings, key, value string) {
 }
 
 func UpdateBindingList(id int32) {
-	cnt := bindingGSettings.GetInt(_KEY_COUNT) + int(id)
+	cnt := bindingGSettings.GetInt(_KEY_COUNT) + _KEY_COUNT_BASE
 	fmt.Println("id:", id)
 	fmt.Println("cnt:", cnt)
 
@@ -148,7 +149,7 @@ func UpdateBindingList(id int32) {
 
 func ReplaceGSettings(src, dest *gio.Settings) {
 	SetGSettings(src,
-		int32(dest.GetInt(_KEY_ID)),
+		int32(src.GetInt(_KEY_ID)),
 		dest.GetString(_KEY_NAME),
 		dest.GetString(_KEY_SHORTCUT),
 		dest.GetString(_KEY_ACTION),
