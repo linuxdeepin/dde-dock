@@ -195,7 +195,10 @@ func main() {
 	sys.SystemType = GetSystemType()
 	sys.DiskCap = GetDiskCap()
 
-	dbus.InstallOnSession(&sys)
+	err := dbus.InstallOnSystem(&sys)
+	if err != nil {
+		panic(err)
+	}
 
 	select {}
 }
