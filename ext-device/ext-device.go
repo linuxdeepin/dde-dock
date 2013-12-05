@@ -16,28 +16,28 @@ type ExtDeviceInfo struct {
 }
 
 type MouseEntry struct {
-	UseHabit       dbus.Property	`access:"readwrite"`
-	MoveSpeed      dbus.Property	`access:"readwrite"`
-	MoveAccuracy   dbus.Property	`access:"readwrite"`
-	ClickFrequency dbus.Property	`access:"readwrite"`
+	UseHabit       dbus.Property `access:"readwrite"`
+	MoveSpeed      dbus.Property `access:"readwrite"`
+	MoveAccuracy   dbus.Property `access:"readwrite"`
+	ClickFrequency dbus.Property `access:"readwrite"`
 	DeviceID       string
 }
 
 type TPadEntry struct {
-	UseHabit       dbus.Property	`access:"readwrite"`
-	MoveSpeed      dbus.Property	`access:"readwrite"`
-	MoveAccuracy   dbus.Property	`access:"readwrite"`
-	ClickFrequency dbus.Property	`access:"readwrite"`
-	DragDelay      dbus.Property	`access:"readwrite"`
+	UseHabit       dbus.Property `access:"readwrite"`
+	MoveSpeed      dbus.Property `access:"readwrite"`
+	MoveAccuracy   dbus.Property `access:"readwrite"`
+	ClickFrequency dbus.Property `access:"readwrite"`
+	DragDelay      dbus.Property `access:"readwrite"`
 	DeviceID       string
 }
 
 type KeyboardEntry struct {
-	RepeatDelay    dbus.Property	`access:"readwrite"`
-	RepeatSpeed    dbus.Property	`access:"readwrite"`
-	CursorBlink    dbus.Property	`access:"readwrite"`
-	DisableTPad    dbus.Property	`access:"readwrite"`
-	KeyboardLayout dbus.Property	`access:"readwrite"`
+	RepeatDelay    dbus.Property `access:"readwrite"`
+	RepeatSpeed    dbus.Property `access:"readwrite"`
+	CursorBlink    dbus.Property `access:"readwrite"`
+	DisableTPad    dbus.Property `access:"readwrite"`
+	KeyboardLayout dbus.Property `access:"readwrite"`
 	DeviceID       string
 }
 
@@ -57,7 +57,6 @@ const (
 )
 
 var (
-	busConn            *dbus.Conn
 	mouseGSettings     *gio.Settings
 	tpadGSettings      *gio.Settings
 	infaceGSettings    *gio.Settings
@@ -66,11 +65,6 @@ var (
 )
 
 func InitGSettings() bool {
-	var dbusError error
-	busConn, dbusError = dbus.SessionBus()
-	if dbusError != nil {
-		return false
-	}
 	mouseGSettings = gio.NewSettings(_MOUSE_SCHEMA)
 	tpadGSettings = gio.NewSettings(_TPAD_SCHEMA)
 	infaceGSettings = gio.NewSettings(_DESKTOP_INFACE_SCHEMA)
@@ -80,30 +74,20 @@ func InitGSettings() bool {
 }
 
 func NewKeyboardEntry() *KeyboardEntry {
-	keyboard := KeyboardEntry{}
+	keyboard := &KeyboardEntry{}
 
 	keyboard.DeviceID = "Keyboard"
-	keyboard.RepeatDelay = property.NewGSettingsPropertyFull(
-		keyRepeatGSettings, "delay", uint32(0), busConn,
-		_EXT_ENTRY_PATH+keyboard.DeviceID,
-		_EXT_ENTRY_IFC+keyboard.DeviceID, "RepeatDelay")
-	keyboard.RepeatSpeed = property.NewGSettingsPropertyFull(
-		keyRepeatGSettings, "repeat-interval", uint32(0), busConn,
-		_EXT_ENTRY_PATH+keyboard.DeviceID,
-		_EXT_ENTRY_IFC+keyboard.DeviceID, "RepeatSpeed")
-	keyboard.DisableTPad = property.NewGSettingsPropertyFull(
-		tpadGSettings, "disable-while-typing", true, busConn,
-		_EXT_ENTRY_PATH+keyboard.DeviceID,
-		_EXT_ENTRY_IFC+keyboard.DeviceID, "DisableTPad")
-	keyboard.CursorBlink = property.NewGSettingsPropertyFull(
-		infaceGSettings, "cursor-blink-time", int32(0), busConn,
-		_EXT_ENTRY_PATH+keyboard.DeviceID,
-		_EXT_ENTRY_IFC+keyboard.DeviceID, "CursorBlink")
-	keyboard.KeyboardLayout = property.NewGSettingsPropertyFull(
-		layoutGSettings, "layouts", []string{}, busConn,
-		_EXT_ENTRY_PATH+keyboard.DeviceID,
-		_EXT_ENTRY_IFC+keyboard.DeviceID, "KeyboardLayout")
-	return &keyboard
+	keyboard.RepeatDelay = property.NewGSettingsProperty(keyboard,
+		"RepeatDelay", keyRepeatGSettings, "delay")
+	keyboard.RepeatSpeed = property.NewGSettingsProperty(keyboard,
+		"RepeatSpeed", keyRepeatGSettings, "repeat-interval")
+	keyboard.DisableTPad = property.NewGSettingsProperty(keyboard,
+		"DisableTPad", tpadGSettings, "disable-while-typing")
+	keyboard.CursorBlink = property.NewGSettingsProperty(keyboard,
+		"CursorBlink", infaceGSettings, "cursor-blink-time")
+	keyboard.KeyboardLayout = property.NewGSettingsProperty(keyboard,
+		"KeyboardLayout", layoutGSettings, "layouts")
+	return keyboard
 }
 
 func (keyboard *KeyboardEntry) GetDBusInfo() dbus.DBusInfo {
@@ -115,28 +99,19 @@ func (keyboard *KeyboardEntry) GetDBusInfo() dbus.DBusInfo {
 }
 
 func NewMouseEntry() *MouseEntry {
-	mouse := MouseEntry{}
+	mouse := &MouseEntry{}
 
 	mouse.DeviceID = "Mouse"
-	mouse.UseHabit = property.NewGSettingsPropertyFull(mouseGSettings,
-		"left-handed", false, busConn, 
-		_EXT_ENTRY_PATH+mouse.DeviceID,
-		_EXT_ENTRY_IFC+mouse.DeviceID, "UseHabit")
-	mouse.MoveSpeed = property.NewGSettingsPropertyFull(mouseGSettings,
-		"motion-acceleration", float64(0), busConn,
-		_EXT_ENTRY_PATH+mouse.DeviceID,
-		_EXT_ENTRY_IFC+mouse.DeviceID, "MoveSpeed")
-	mouse.MoveAccuracy = property.NewGSettingsPropertyFull(mouseGSettings,
-		"motion-threshold", int64(0), busConn,
-		_EXT_ENTRY_PATH+mouse.DeviceID,
-		_EXT_ENTRY_IFC+mouse.DeviceID, "MoveAccuracy")
-	mouse.ClickFrequency = property.NewGSettingsPropertyFull(mouseGSettings,
-		"double-click", int64(0), busConn,
-		_EXT_ENTRY_PATH+mouse.DeviceID,
-		_EXT_ENTRY_IFC+mouse.DeviceID,
-		"ClickFrequency")
+	mouse.UseHabit = property.NewGSettingsProperty(mouse,
+		"UseHabit", mouseGSettings, "left-handed")
+	mouse.MoveSpeed = property.NewGSettingsProperty(mouse,
+		"MoveSpeed", mouseGSettings, "motion-acceleration")
+	mouse.MoveAccuracy = property.NewGSettingsProperty(mouse,
+		"MoveAccuracy", mouseGSettings, "motion-threshold")
+	mouse.ClickFrequency = property.NewGSettingsProperty(mouse,
+		"ClickFrequency", mouseGSettings, "double-click")
 
-	return &mouse
+	return mouse
 }
 
 func (mouse *MouseEntry) GetDBusInfo() dbus.DBusInfo {
@@ -148,31 +123,21 @@ func (mouse *MouseEntry) GetDBusInfo() dbus.DBusInfo {
 }
 
 func NewTPadEntry() *TPadEntry {
-	tpad := TPadEntry{}
+	tpad := &TPadEntry{}
 
 	tpad.DeviceID = "TouchPad"
-	tpad.UseHabit = property.NewGSettingsPropertyFull(tpadGSettings,
-		"left-handed", "", busConn,
-		_EXT_ENTRY_PATH+tpad.DeviceID,
-		_EXT_ENTRY_IFC+tpad.DeviceID, "UseHabit")
-	tpad.MoveSpeed = property.NewGSettingsPropertyFull(tpadGSettings,
-		"motion-acceleration", float64(0), busConn,
-		_EXT_ENTRY_PATH+tpad.DeviceID,
-		_EXT_ENTRY_IFC+tpad.DeviceID, "MoveSpeed")
-	tpad.MoveAccuracy = property.NewGSettingsPropertyFull(tpadGSettings,
-		"motion-threshold", int64(0), busConn,
-		_EXT_ENTRY_PATH+tpad.DeviceID,
-		_EXT_ENTRY_IFC+tpad.DeviceID, "MoveAccuracy")
-	tpad.DragDelay = property.NewGSettingsPropertyFull(mouseGSettings,
-		"drag-threshold", int64(0), busConn,
-		_EXT_ENTRY_PATH+tpad.DeviceID,
-		_EXT_ENTRY_IFC+tpad.DeviceID, "DragDelay")
-	tpad.ClickFrequency = property.NewGSettingsPropertyFull(mouseGSettings,
-		"double-click", int64(0), busConn,
-		_EXT_ENTRY_PATH+tpad.DeviceID,
-		_EXT_ENTRY_IFC+tpad.DeviceID, "ClickFrequency")
+	tpad.UseHabit = property.NewGSettingsProperty(tpad,
+		"UseHabit", tpadGSettings, "left-handed")
+	tpad.MoveSpeed = property.NewGSettingsProperty(tpad,
+		"MoveSpeed", tpadGSettings, "motion-acceleration")
+	tpad.MoveAccuracy = property.NewGSettingsProperty(tpad,
+		"MoveAccuracy", tpadGSettings, "motion-threshold")
+	tpad.DragDelay = property.NewGSettingsProperty(tpad,
+		"DragDelay", mouseGSettings, "drag-threshold")
+	tpad.ClickFrequency = property.NewGSettingsProperty(tpad,
+		"ClickFrequency", mouseGSettings, "double-click")
 
-	return &tpad
+	return tpad
 }
 
 func (tpad *TPadEntry) GetDBusInfo() dbus.DBusInfo {
