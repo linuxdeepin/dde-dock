@@ -63,5 +63,7 @@ func main() {
 			dev.DevInfoList = append(dev.DevInfoList, tmp)
 		}
 	}
+
+	dbus.NotifyChange(dev, "DevInfoList")
 	dlib.StartLoop()
 }
