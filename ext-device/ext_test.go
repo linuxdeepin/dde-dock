@@ -64,3 +64,23 @@ func TestTPad(t *testing.T) {
 
 	fmt.Println(tpad)
 }
+
+func TestProcDevice (t *testing.T) {
+	success, list := GetProcDeviceNameList ()
+	if !success {
+		t.Errorf("get proc device list failed\n")
+		return
+	}
+
+	if DeviceIsExist (list, "Mouse") {
+		fmt.Println ("Mouse Exist")
+	}
+
+	if DeviceIsExist (list, "TouchPad") {
+		fmt.Println ("TouchPad Exist")
+	}
+
+	if DeviceIsExist (list, "keyboard") {
+		fmt.Println ("keyboard Exist")
+	}
+}
