@@ -110,7 +110,7 @@ func NewPower() (*Power, error) {
 		&power, "SleepInactiveBatteryType", power.powerSettings, "sleep-inactive-battery-type")
 
 	power.LockEnabled = property.NewGSettingsProperty(
-		&power, "WakePassword", power.screensaverSettings, "lock-enabled")
+		&power, "LockEnabled", power.screensaverSettings, "lock-enabled")
 
 	power.upowerDevice = upower.GetDevice("/org/freedesktop/UPower/devices/battery_BAT0")
 
