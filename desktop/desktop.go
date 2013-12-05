@@ -44,11 +44,11 @@ var (
 )
 
 type DesktopManager struct {
-	ShowComputerIcon dbus.Property
-	ShowHomeIcon     dbus.Property
-	ShowTrashIcon    dbus.Property
-	ShowDSCIcon      dbus.Property
-	DockMode         dbus.Property
+	ShowComputerIcon dbus.Property `access:"readwrite"`
+	ShowHomeIcon     dbus.Property `access:"readwrite"`
+	ShowTrashIcon    dbus.Property `access:"readwrite"`
+	ShowDSCIcon      dbus.Property `access:"readwrite"`
+	DockMode         dbus.Property `access:"readwrite"`
 	TopLeft          int32
 	BottomRight      int32
 }
@@ -59,11 +59,12 @@ func (desk *DesktopManager) GetDBusInfo() dbus.DBusInfo {
 
 func (desk *DesktopManager) SetTopLeftAction(index int32) {
 	if index == ACTION_NONE {
+		rightTmp := desk.BottomRight
 		compizIntegrated.SetString("command-11", "")
 		compizCommand.SetString("run-command10-edge", "")
 		compizScale.SetString("initiate-edge", "")
 
-		if desk.BottomRight == ACTION_OPENED_WINDOWS {
+		if rightTmp == ACTION_OPENED_WINDOWS {
 			compizScale.SetString("initiate-edge", "BottomRight")
 		}
 	} else if index == ACTION_OPENED_WINDOWS {
@@ -91,11 +92,12 @@ func (desk *DesktopManager) SetTopLeftAction(index int32) {
 
 func (desk *DesktopManager) SetBottomRightAction(index int32) {
 	if index == ACTION_NONE {
+		leftTmp := desk.TopLeft
 		compizIntegrated.SetString("command-12", "")
 		compizCommand.SetString("run-command11-edge", "")
 		compizScale.SetString("initiate-edge", "")
 
-		if desk.TopLeft == ACTION_OPENED_WINDOWS {
+		if leftTmp == ACTION_OPENED_WINDOWS {
 			compizScale.SetString("initiate-edge", "TopLeft")
 		}
 	} else if index == ACTION_OPENED_WINDOWS {

@@ -21,7 +21,7 @@ var (
 )
 
 type SetDateTime struct {
-	NtpRunFlag bool `access:"read"`
+	NtpRunFlag bool
 }
 
 func (sdt *SetDateTime) GetDBusInfo() dbus.DBusInfo {

@@ -7,7 +7,7 @@ import (
 )
 
 type ExtDevManager struct {
-	DevInfoList []ExtDeviceInfo `access:"read"`
+	DevInfoList []ExtDeviceInfo
 }
 
 type ExtDeviceInfo struct {
@@ -16,29 +16,29 @@ type ExtDeviceInfo struct {
 }
 
 type MouseEntry struct {
-	UseHabit       dbus.Property
-	MoveSpeed      dbus.Property
-	MoveAccuracy   dbus.Property
-	ClickFrequency dbus.Property
-	DeviceID       string `access:"read"`
+	UseHabit       dbus.Property	`access:"readwrite"`
+	MoveSpeed      dbus.Property	`access:"readwrite"`
+	MoveAccuracy   dbus.Property	`access:"readwrite"`
+	ClickFrequency dbus.Property	`access:"readwrite"`
+	DeviceID       string
 }
 
 type TPadEntry struct {
-	UseHabit       dbus.Property
-	MoveSpeed      dbus.Property
-	MoveAccuracy   dbus.Property
-	ClickFrequency dbus.Property
-	DragDelay      dbus.Property
-	DeviceID       string `access:"read"`
+	UseHabit       dbus.Property	`access:"readwrite"`
+	MoveSpeed      dbus.Property	`access:"readwrite"`
+	MoveAccuracy   dbus.Property	`access:"readwrite"`
+	ClickFrequency dbus.Property	`access:"readwrite"`
+	DragDelay      dbus.Property	`access:"readwrite"`
+	DeviceID       string
 }
 
 type KeyboardEntry struct {
-	RepeatDelay    dbus.Property
-	RepeatSpeed    dbus.Property
-	CursorBlink    dbus.Property
-	DisableTPad    dbus.Property
-	KeyboardLayout dbus.Property
-	DeviceID       string `access:"read"`
+	RepeatDelay    dbus.Property	`access:"readwrite"`
+	RepeatSpeed    dbus.Property	`access:"readwrite"`
+	CursorBlink    dbus.Property	`access:"readwrite"`
+	DisableTPad    dbus.Property	`access:"readwrite"`
+	KeyboardLayout dbus.Property	`access:"readwrite"`
+	DeviceID       string
 }
 
 const (

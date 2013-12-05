@@ -1,0 +1,3 @@
+[D-BUS Service]
+Name=com.deepin.daemon.DefaultApps
+Exec=/usr/lib/deepin-daemon/default-app
