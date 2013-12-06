@@ -31,6 +31,7 @@ const (
 
 type Power struct {
 	//plugins.power keys
+	powerSettings       *gio.Settings
 	ButtonHibernate dbus.Property
 	ButtonPower     dbus.Property
 	ButtonSleep     dbus.Property
@@ -52,22 +53,25 @@ type Power struct {
 	SleepInactiveBatteryType dbus.Property
 
 	CurrentPlan dbus.Property
-
+	
 	//upower interface
-	BatteryIsPresent  dbus.Property    `access:"read"` //battery present
-	BatteryPercentage dbus.Property `access:"read"` //batter voltage
-	charging          dbus.Property   `access:"read"` //charging or discharging
-	PlugedIn          dbus.Property   `access:"read"` //1 for in,2 for out
+	upower           *upower.Upower
+
+	//upower battery interface
+	upowerBattery	  *upower.Device
+	IsPresent		  dbus.Property    `access:"read"` //battery present
+	IsRechargable     dbus.Property  `access:"read"`
+	BatteryPercentage dbus.Property `access:"read"` //
+	Model             dbus.Property   `access:"read"`
+	Vendor            dbus.Property	  `access:"read"`
 	TimeToEmpty       dbus.Property   `access:"read"` //
 	TimeToFull        dbus.Property   `access:"read"` //time to fully charged
+	State			  dbus.Property   `access:"read"` //1 for in,2 for out
+	Type              dbus.Property   `access:"read"` //type,2
 
 	//gnome.desktop.screensaver keys
-	LockEnabled dbus.Property
-
-	powerSettings       *gio.Settings
 	screensaverSettings *gio.Settings
-
-	upowerDevice *upower.Device
+	LockEnabled dbus.Property
 }
 
 func NewPower() (*Power, error) {
@@ -75,45 +79,10 @@ func NewPower() (*Power, error) {
 
 	power.powerSettings = gio.NewSettings(schema_gsettings_power)
 	power.screensaverSettings = gio.NewSettings(schema_gsettings_screensaver)
+	power.getGsettingsProperty()
 
-	power.CurrentPlan = property.NewGSettingsProperty(
-		&power, "CurrentPlan", power.powerSettings, "current-plan")
-	power.ButtonHibernate = property.NewGSettingsProperty(
-		&power, "ButtonHibernate", power.powerSettings, "button-hibernate")
-	power.ButtonPower = property.NewGSettingsProperty(
-		&power, "ButtonPower", power.powerSettings, "button-power")
-	power.ButtonSleep = property.NewGSettingsProperty(
-		&power, "ButtonSleep", power.powerSettings, "button-sleep")
-	power.ButtonSuspend = property.NewGSettingsProperty(
-		&power, "ButtonSuspend", power.powerSettings, "button-suspend")
-
-	power.CriticalBatteryAction = property.NewGSettingsProperty(
-		&power, "CriticalBatteryAction", power.powerSettings, "critical-battery-action")
-	power.LidCloseAcAction = property.NewGSettingsProperty(
-		&power, "LidCloseAction", power.powerSettings, "lid-close-ac-action")
-	power.LidCloseBatteryAction = property.NewGSettingsProperty(
-		&power, "LidCloseBatteryAction", power.powerSettings, "lid-close-battery-action")
-	power.ShowTray = property.NewGSettingsProperty(
-		&power, "ShowTray", power.powerSettings, "show-tray")
-	power.SleepInactiveAcTimeout = property.NewGSettingsProperty(
-		&power, "SleepInactiveAcTimeout", power.powerSettings, "sleep-inactive-ac-timeout")
-	power.SleepInactiveBatteryTimeout = property.NewGSettingsProperty(
-		&power, "SleepInactiveBatteryTimeout", power.powerSettings, "sleep-inactive-battery-timeout")
-	power.SleepDisplayAc = property.NewGSettingsProperty(
-		&power, "SleepDisplayAc", power.powerSettings, "sleep-display-ac")
-	power.SleepDisplayBattery = property.NewGSettingsProperty(
-		&power, "SleepDisplayBattery", power.powerSettings, "sleep-display-battery")
-
-	power.SleepInactiveAcType = property.NewGSettingsProperty(
-		&power, "SleepInactiveAcType", power.powerSettings, "sleep-inactive-ac-type")
-	power.SleepInactiveBatteryType = property.NewGSettingsProperty(
-		&power, "SleepInactiveBatteryType", power.powerSettings, "sleep-inactive-battery-type")
-
-	power.LockEnabled = property.NewGSettingsProperty(
-		&power, "LockEnabled", power.screensaverSettings, "lock-enabled")
-
-	power.upowerDevice = upower.GetDevice("/org/freedesktop/UPower/devices/battery_BAT0")
-	power.GetDBusInfo()
+	power.upowerBattery = upower.GetDevice("/org/freedesktop/UPower/devices/battery_BAT0")
+	power.getUPowerProperty()
 
 	return &power, nil
 }
@@ -126,14 +95,59 @@ func (p *Power) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
+func (power *Power) getGsettingsProperty()int32 {
+	power.CurrentPlan = property.NewGSettingsProperty(
+		power, "CurrentPlan", power.powerSettings, "current-plan")
+	power.ButtonHibernate = property.NewGSettingsProperty(
+		power, "ButtonHibernate", power.powerSettings, "button-hibernate")
+	power.ButtonPower = property.NewGSettingsProperty(
+		power, "ButtonPower", power.powerSettings, "button-power")
+	power.ButtonSleep = property.NewGSettingsProperty(
+		power, "ButtonSleep", power.powerSettings, "button-sleep")
+	power.ButtonSuspend = property.NewGSettingsProperty(
+		power, "ButtonSuspend", power.powerSettings, "button-suspend")
+
+	power.CriticalBatteryAction = property.NewGSettingsProperty(
+		power, "CriticalBatteryAction", power.powerSettings, "critical-battery-action")
+	power.LidCloseAcAction = property.NewGSettingsProperty(
+		power, "LidCloseAction", power.powerSettings, "lid-close-ac-action")
+	power.LidCloseBatteryAction = property.NewGSettingsProperty(
+		power, "LidCloseBatteryAction", power.powerSettings, "lid-close-battery-action")
+	power.ShowTray = property.NewGSettingsProperty(
+		power, "ShowTray", power.powerSettings, "show-tray")
+	power.SleepInactiveAcTimeout = property.NewGSettingsProperty(
+		power, "SleepInactiveAcTimeout", power.powerSettings, "sleep-inactive-ac-timeout")
+	power.SleepInactiveBatteryTimeout = property.NewGSettingsProperty(
+		power, "SleepInactiveBatteryTimeout", power.powerSettings, "sleep-inactive-battery-timeout")
+	power.SleepDisplayAc = property.NewGSettingsProperty(
+		power, "SleepDisplayAc", power.powerSettings, "sleep-display-ac")
+	power.SleepDisplayBattery = property.NewGSettingsProperty(
+		power, "SleepDisplayBattery", power.powerSettings, "sleep-display-battery")
+
+	power.SleepInactiveAcType = property.NewGSettingsProperty(
+		power, "SleepInactiveAcType", power.powerSettings, "sleep-inactive-ac-type")
+	power.SleepInactiveBatteryType = property.NewGSettingsProperty(
+		power, "SleepInactiveBatteryType", power.powerSettings, "sleep-inactive-battery-type")
+
+	power.LockEnabled = property.NewGSettingsProperty(
+		power, "LockEnabled", power.screensaverSettings, "lock-enabled")
+	
+		return 0
+}
+
 func (p *Power) getUPowerProperty() int32 {
-	if p.upowerDevice == nil {
+	if p.upowerBattery == nil {
 		return -1
 	}
-	//p.BatteryPercentage=property.NewWrapProperty(p,"BatteryPercentage",p.upowerDevice.BatteryPercentage)
-	//p.TimeToEmpty = property.NewWrapProperty(p,"TimeToEmpty",p.TimeToEmpty)
-	//p.TimeToFull = property.NewWrapProperty(p,"TimeToFull",p.TimeToFull)
-
+	p.IsPresent=property.NewWrapProperty(p,"IsPresent",p.upowerBattery.IsPresent)
+	p.IsRechargable=property.NewWrapProperty(p,"IsRechargable",p.upowerBattery.IsRechargeable)
+	p.BatteryPercentage=property.NewWrapProperty(p,"BatteryPercentage",p.upowerBattery.Percentage)
+	p.TimeToEmpty = property.NewWrapProperty(p,"TimeToEmpty",p.upowerBattery.TimeToEmpty)
+	p.TimeToFull = property.NewWrapProperty(p,"TimeToFull",p.upowerBattery.TimeToFull)
+	p.Model=property.NewWrapProperty(p,"Model",p.upowerBattery.Model)
+	p.Vendor=property.NewWrapProperty(p,"Vendor",p.upowerBattery.Vendor)
+	p.State=property.NewWrapProperty(p,"State",p.upowerBattery.State)
+	p.Type=property.NewWrapProperty(p,"Type",p.upowerBattery.Type)
 	return 1
 }
 
