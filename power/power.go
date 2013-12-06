@@ -23,11 +23,6 @@ const (
 	schema_gsettings_screensaver = "org.gnome.desktop.screensaver"
 )
 
-const (
-	operation_suspend   = "suspend"
-	operation_poweroff  = "poweroff"
-	operation_hibernate = "hibernate"
-)
 
 type Power struct {
 	//plugins.power keys
@@ -81,6 +76,7 @@ func NewPower() (*Power, error) {
 	power.screensaverSettings = gio.NewSettings(schema_gsettings_screensaver)
 	power.getGsettingsProperty()
 
+	power.upower=upower.GetUpower("/org/freedesktop/UPower")
 	power.upowerBattery = upower.GetDevice("/org/freedesktop/UPower/devices/battery_BAT0")
 	power.getUPowerProperty()
 
@@ -149,6 +145,14 @@ func (p *Power) getUPowerProperty() int32 {
 	p.State=property.NewWrapProperty(p,"State",p.upowerBattery.State)
 	p.Type=property.NewWrapProperty(p,"Type",p.upowerBattery.Type)
 	return 1
+}
+
+func (power *Power) EnumerateDevices() []dbus.ObjectPath{
+	devices:=power.upower.EnumerateDevices()
+	for _,v:= range devices {
+		println(v)
+	}
+	return devices
 }
 
 func main() {
