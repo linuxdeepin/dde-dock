@@ -23,10 +23,9 @@ const (
 	schema_gsettings_screensaver = "org.gnome.desktop.screensaver"
 )
 
-
 type Power struct {
 	//plugins.power keys
-	powerSettings       *gio.Settings
+	powerSettings   *gio.Settings
 	ButtonHibernate dbus.Property
 	ButtonPower     dbus.Property
 	ButtonSleep     dbus.Property
@@ -48,25 +47,25 @@ type Power struct {
 	SleepInactiveBatteryType dbus.Property
 
 	CurrentPlan dbus.Property
-	
+
 	//upower interface
-	upower           *upower.Upower
+	upower *upower.Upower
 
 	//upower battery interface
-	upowerBattery	  *upower.Device
-	IsPresent		  dbus.Property    `access:"read"` //battery present
-	IsRechargable     dbus.Property  `access:"read"`
+	upowerBattery     *upower.Device
+	IsPresent         dbus.Property `access:"read"` //battery present
+	IsRechargable     dbus.Property `access:"read"`
 	BatteryPercentage dbus.Property `access:"read"` //
-	Model             dbus.Property   `access:"read"`
-	Vendor            dbus.Property	  `access:"read"`
-	TimeToEmpty       dbus.Property   `access:"read"` //
-	TimeToFull        dbus.Property   `access:"read"` //time to fully charged
-	State			  dbus.Property   `access:"read"` //1 for in,2 for out
-	Type              dbus.Property   `access:"read"` //type,2
+	Model             dbus.Property `access:"read"`
+	Vendor            dbus.Property `access:"read"`
+	TimeToEmpty       dbus.Property `access:"read"` //
+	TimeToFull        dbus.Property `access:"read"` //time to fully charged
+	State             dbus.Property `access:"read"` //1 for in,2 for out
+	Type              dbus.Property `access:"read"` //type,2
 
 	//gnome.desktop.screensaver keys
 	screensaverSettings *gio.Settings
-	LockEnabled dbus.Property
+	LockEnabled         dbus.Property
 }
 
 func NewPower() (*Power, error) {
@@ -76,7 +75,7 @@ func NewPower() (*Power, error) {
 	power.screensaverSettings = gio.NewSettings(schema_gsettings_screensaver)
 	power.getGsettingsProperty()
 
-	power.upower=upower.GetUpower("/org/freedesktop/UPower")
+	power.upower = upower.GetUpower("/org/freedesktop/UPower")
 	power.upowerBattery = upower.GetDevice("/org/freedesktop/UPower/devices/battery_BAT0")
 	power.getUPowerProperty()
 
@@ -91,7 +90,7 @@ func (p *Power) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (power *Power) getGsettingsProperty()int32 {
+func (power *Power) getGsettingsProperty() int32 {
 	power.CurrentPlan = property.NewGSettingsProperty(
 		power, "CurrentPlan", power.powerSettings, "current-plan")
 	power.ButtonHibernate = property.NewGSettingsProperty(
@@ -127,29 +126,29 @@ func (power *Power) getGsettingsProperty()int32 {
 
 	power.LockEnabled = property.NewGSettingsProperty(
 		power, "LockEnabled", power.screensaverSettings, "lock-enabled")
-	
-		return 0
+
+	return 0
 }
 
 func (p *Power) getUPowerProperty() int32 {
 	if p.upowerBattery == nil {
 		return -1
 	}
-	p.IsPresent=property.NewWrapProperty(p,"IsPresent",p.upowerBattery.IsPresent)
-	p.IsRechargable=property.NewWrapProperty(p,"IsRechargable",p.upowerBattery.IsRechargeable)
-	p.BatteryPercentage=property.NewWrapProperty(p,"BatteryPercentage",p.upowerBattery.Percentage)
-	p.TimeToEmpty = property.NewWrapProperty(p,"TimeToEmpty",p.upowerBattery.TimeToEmpty)
-	p.TimeToFull = property.NewWrapProperty(p,"TimeToFull",p.upowerBattery.TimeToFull)
-	p.Model=property.NewWrapProperty(p,"Model",p.upowerBattery.Model)
-	p.Vendor=property.NewWrapProperty(p,"Vendor",p.upowerBattery.Vendor)
-	p.State=property.NewWrapProperty(p,"State",p.upowerBattery.State)
-	p.Type=property.NewWrapProperty(p,"Type",p.upowerBattery.Type)
+	p.IsPresent = property.NewWrapProperty(p, "IsPresent", p.upowerBattery.IsPresent)
+	p.IsRechargable = property.NewWrapProperty(p, "IsRechargable", p.upowerBattery.IsRechargeable)
+	p.BatteryPercentage = property.NewWrapProperty(p, "BatteryPercentage", p.upowerBattery.Percentage)
+	p.TimeToEmpty = property.NewWrapProperty(p, "TimeToEmpty", p.upowerBattery.TimeToEmpty)
+	p.TimeToFull = property.NewWrapProperty(p, "TimeToFull", p.upowerBattery.TimeToFull)
+	p.Model = property.NewWrapProperty(p, "Model", p.upowerBattery.Model)
+	p.Vendor = property.NewWrapProperty(p, "Vendor", p.upowerBattery.Vendor)
+	p.State = property.NewWrapProperty(p, "State", p.upowerBattery.State)
+	p.Type = property.NewWrapProperty(p, "Type", p.upowerBattery.Type)
 	return 1
 }
 
-func (power *Power) EnumerateDevices() []dbus.ObjectPath{
-	devices:=power.upower.EnumerateDevices()
-	for _,v:= range devices {
+func (power *Power) EnumerateDevices() []dbus.ObjectPath {
+	devices := power.upower.EnumerateDevices()
+	for _, v := range devices {
 		println(v)
 	}
 	return devices
