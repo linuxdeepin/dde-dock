@@ -6,6 +6,7 @@ import (
 	"dlib/gio-2.0"
 	"fmt"
 	"strconv"
+	"strings"
 )
 
 type KeyBinding struct {
@@ -21,6 +22,10 @@ const (
 	_KEY_BINDING_ADD_ID   = "com.deepin.daemon.key-binding.custom"
 	_KEY_BINDING_ADD_PATH = "/com/deepin/daemon/key-binding/profiles/"
 
+	_WM_BINDING_ID     = "org.gnome.desktop.wm.keybindings"
+	_PRESET_BINDING_ID = "org.gnome.settings-daemon.plugins.key-bindings"
+	_MEDIA_BINDING_ID  = "org.gnome.settings-daemon.plugins.media-keys"
+
 	_KEY_COUNT_BASE = 1000
 	_KEY_COUNT      = "count"
 	_KEY_ID         = "id"
@@ -32,6 +37,9 @@ const (
 var (
 	busConn          *dbus.Conn
 	bindingGSettings = gio.NewSettings(_KEY_BINDING_ID)
+	presetGSettings  = gio.NewSettings(_PRESET_BINDING_ID)
+	mediaGSettings   = gio.NewSettings(_MEDIA_BINDING_ID)
+	wmGSettings      = gio.NewSettings(_WM_BINDING_ID)
 )
 
 func (binding *KeyBinding) GetDBusInfo() dbus.DBusInfo {
@@ -43,11 +51,25 @@ func (binding *KeyBinding) GetDBusInfo() dbus.DBusInfo {
 }
 
 func (binding *KeyBinding) GetSystemList() []int32 {
-	return nil
+	sysIDList := []int32{}
+
+	for k, _ := range currentSystemBindings {
+		sysIDList = append(sysIDList, int32(k))
+	}
+
+	return sysIDList
 }
 
 func (binding *KeyBinding) GetCustomList() []int32 {
-	return nil
+	customIDList := []int32{}
+
+	count := bindingGSettings.GetInt(_KEY_COUNT)
+	for i := 0; i < count; i++ {
+		customIDList = append(customIDList,
+			int32(_KEY_COUNT_BASE+i))
+	}
+
+	return customIDList
 }
 
 func (binding *KeyBinding) HasOwnerID(id int32) bool {
@@ -55,26 +77,54 @@ func (binding *KeyBinding) HasOwnerID(id int32) bool {
 }
 
 func (binding *KeyBinding) GetBindingName(id int32) string {
+	if id >= 0 && id < _KEY_COUNT_BASE {
+		return currentSystemBindings[id]
+	} else {
+		gs := NewCustomGSettings(id)
+		return gs.GetString(_KEY_NAME)
+	}
 	return ""
 }
 
 func (binding *KeyBinding) GetBindingExec(id int32) string {
+	if id >= _KEY_COUNT_BASE {
+		gs := NewCustomGSettings(id)
+		return gs.GetString(_KEY_ACTION)
+	} else if id >= 0 && id < 300 {
+		values := PresetGetValue(id)
+		strArray := strings.Split(values, ";")
+		if len(strArray) == 2 {
+			return strArray[0]
+		}
+	}
+
 	return ""
 }
 
 func (binding *KeyBinding) GetBindingAccel(id int32) string {
+	if id > _KEY_COUNT_BASE {
+		gs := NewCustomGSettings(id)
+		return gs.GetString(_KEY_SHORTCUT)
+	} else if id >= 0 && id < 300 {
+		values := PresetGetValue(id)
+		strArray := strings.Split(values, ";")
+		if len(strArray) == 2 {
+			return strArray[1]
+		}
+	} else if id >= 300 && id < 600 {
+		return MediaGetValue(id)
+	} else if id >= 600 && id < 1000 {
+		return WMGetValue(id)
+	}
+
 	return ""
 }
 
-func (binding *KeyBinding) AddKeyBinding(name, exec string) int32 {
-	return 0
-}
-
 func (binding *KeyBinding) ChangeKeyBinding(id int32, accel string) (bool, int32) {
+	if id >= _KEY_COUNT_BASE {
+		ModifyCustomKey(binding, id, _KEY_SHORTCUT, accel)
+	}
 	return true, 0
-}
-
-func (binding *KeyBinding) DeleteKeyBinding(id int32) {
 }
 
 func (binding *KeyBinding) AddCustomBinding(name, shortcut, action string) int32 {
@@ -89,21 +139,21 @@ func (binding *KeyBinding) AddCustomBinding(name, shortcut, action string) int32
 	return id
 }
 
-func (binding *KeyBinding) ModifyCustomKey(id int32, key, value string) bool {
-	gs := NewCustomGSettings(id)
-
-	ModifyGSetingsKey(gs, key, value)
-
-	return true
-}
-
 func (binding *KeyBinding) DeleteCustomBinding(id int32) {
+	if id < _KEY_COUNT_BASE {
+		return
+	}
 	UpdateBindingList(id)
 
 	cnt := binding.KeyBindingCount
 	if cnt > 0 {
 		bindingGSettings.SetInt(_KEY_COUNT, int(cnt-1))
 	}
+}
+
+func ModifyCustomKey(binding *KeyBinding, id int32, key, value string) {
+	gs := NewCustomGSettings(id)
+	ModifyGSetingsKey(gs, key, value)
 }
 
 func NewCustomGSettings(id int32) *gio.Settings {
@@ -124,7 +174,6 @@ func SetGSettings(gs *gio.Settings, id int32, name, shortcut, action string) {
 
 func ModifyGSetingsKey(gs *gio.Settings, key, value string) {
 	gs.SetString(key, value)
-
 	gio.SettingsSync()
 }
 
@@ -161,6 +210,71 @@ func ResetGSettings(gs *gio.Settings) {
 	gs.Reset(_KEY_ACTION)
 
 	gio.SettingsSync()
+}
+
+func GetKeyAccelList() []string {
+	accelList := []string{}
+
+	for k, _ := range currentSystemBindings {
+		if k >= 0 && k < 300 {
+			values := PresetGetValue(k)
+			strArray := strings.Split(values, ";")
+			if len(strArray) == 2 {
+				accelList = append(accelList, strArray[1])
+			}
+		} else if k >= 300 && k < 600 {
+			values := MediaGetValue(k)
+			accelList = append(accelList, values)
+		} else if k >= 600 && k < 1000 {
+			values := WMGetValue(k)
+			accelList = append(accelList, values)
+		}
+	}
+
+	count := bindingGSettings.GetInt(_KEY_COUNT)
+	for i := 0; i < count; i++ {
+		gs := NewCustomGSettings(int32(_KEY_COUNT_BASE + i))
+		values := gs.GetString(_KEY_SHORTCUT)
+		accelList = append(accelList, values)
+	}
+
+	return accelList
+}
+
+func PresetGetValue(id int32) string {
+	if id >= 0 && id < 300 {
+		keyName := currentSystemBindings[id]
+
+		return presetGSettings.GetString(keyName)
+	}
+
+	return ""
+}
+
+func MediaGetValue(id int32) string {
+	if id >= 300 && id < 600 {
+		keyName := currentSystemBindings[id]
+
+		return mediaGSettings.GetString(keyName)
+	}
+
+	return ""
+}
+
+func WMGetValue(id int32) string {
+	if id >= 600 && id < 1000 {
+		keyName := currentSystemBindings[id]
+
+		values := wmGSettings.GetStrv(keyName)
+		strRet := ""
+
+		for _, v := range values {
+			strRet += v
+		}
+		return strRet
+	}
+
+	return ""
 }
 
 func NewKeyBinding() *KeyBinding {

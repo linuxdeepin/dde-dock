@@ -92,7 +92,7 @@ func (this *Manager) updateDeviceInfo() {
 
 func (this *Manager) updateAccessPoint(dev *nm.DeviceWireless) {
 	for _, d := range dev.GetAccessPoints() {
-		ssid := nm.GetAccessPoint(string(d)).Ssid.Get().(string)
+		ssid := string(nm.GetAccessPoint(string(d)).Ssid.Get())
 		this.APs = append(this.APs, AccessPoint{ssid})
 	}
 	return
