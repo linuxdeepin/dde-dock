@@ -130,7 +130,7 @@ func GetMemoryCap() (memCap uint64) {
 }
 
 func GetSystemType() (sysType int64) {
-	cmd := exec.Command("uname", "-m")
+	cmd := exec.Command("/bin/uname", "-m")
 	out, err := cmd.Output()
 	if err != nil {
 		return int64(0)
