@@ -28,7 +28,7 @@ var (
 
 type DateTime struct {
 	AutoSetTime      bool
-	Use24HourDisplay dbus.Property	`access:"readwrite"`
+	Use24HourDisplay dbus.Property `access:"readwrite"`
 	CurrentTimeZone  string
 }
 
@@ -71,17 +71,9 @@ func (date *DateTime) SyncNtpTime() bool {
 }
 
 func NewDateAndTime() *DateTime {
-	var err error
-	busConn, err = dbus.SessionBus()
-	if err != nil {
-		panic(err)
-	}
+	dt := &DateTime{}
 
-	dt := DateTime{}
-
-	dt.Use24HourDisplay = property.NewGSettingsPropertyFull(dtGSettings,
-		"is-24hour", true, busConn, _DATE_TIME_PATH, _DATA_TIME_IFC,
-		"Use24HourDisplay")
+	dt.Use24HourDisplay = property.NewGSettingsProperty(dt, "Use24HourDisplay", dtGSettings, "is-24hour")
 	dt.CurrentTimeZone = gdate.GetTimezone()
 
 	dt.AutoSetTime = dtGSettings.GetBoolean("is-auto-set")
@@ -90,12 +82,12 @@ func NewDateAndTime() *DateTime {
 		dt.SetAutoSetTime(s.GetBoolean("is-auto-set"))
 	})
 
-	return &dt
+	return dt
 }
 
 func main() {
 	date := NewDateAndTime()
-	err := dbus.InstallOnAny(busConn, date)
+	err := dbus.InstallOnSession(date)
 	if err != nil {
 		panic(err)
 	}

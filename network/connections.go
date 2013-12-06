@@ -20,7 +20,7 @@ func (this *Connection) GetDBusInfo_() dbus.DBusInfo {
 
 func (this *Connection) ActiveAccessPoint(path string) {
 	settings := this.core.GetSettings()
-	settings["802-11-wireless"]["ssid"] = dbus.MakeVariant(nm.GetAccessPoint(path).GetSsid())
+	settings["802-11-wireless"]["ssid"] = dbus.MakeVariant(nm.GetAccessPoint(path).Ssid.Get())
 }
 
 func (this *Manager) updateConnectionManage() {

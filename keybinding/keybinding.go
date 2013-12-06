@@ -42,7 +42,6 @@ func (binding *KeyBinding) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-/*
 func (binding *KeyBinding) GetSystemList() []int32 {
 	return nil
 }
@@ -77,7 +76,6 @@ func (binding *KeyBinding) ChangeKeyBinding(id int32, accel string) (bool, int32
 
 func (binding *KeyBinding) DeleteKeyBinding(id int32) {
 }
-*/
 
 func (binding *KeyBinding) AddCustomBinding(name, shortcut, action string) int32 {
 	count := binding.KeyBindingCount

@@ -1,6 +1,7 @@
 package main
 
 import "dlib/dbus"
+import "dlib/dbus/property"
 import nm "dbus/org/freedesktop/networkmanager"
 
 const (
@@ -25,10 +26,10 @@ type AccessPoint struct {
 
 type Manager struct {
 	//update by manager.go
-	WiredEnabled      bool `access:"readwrite"`
-	WirelessEnabled   bool `access:"readwrite"`
-	VPNEnabled        bool `access:"readwrite"`
-	NetworkingEnabled bool `access:"readwrite"`
+	WiredEnabled      bool          `access:"readwrite"`
+	VPNEnabled        bool          `access:"readwrite"`
+	WirelessEnabled   dbus.Property `access:"readwrite"`
+	NetworkingEnabled dbus.Property `access:"readwrite"`
 
 	//update by devices.go
 	APs         []AccessPoint
@@ -48,8 +49,6 @@ func (this *Manager) GetDBusInfo() dbus.DBusInfo {
 
 func (this *Manager) updateManager() {
 	this.WiredEnabled = true
-	this.WirelessEnabled = _Manager.GetWirelessEnabled()
-	this.NetworkingEnabled = _Manager.GetNetworkingEnabled()
 
 	this.updateDeviceManage()
 	this.updateConnectionManage()
@@ -58,15 +57,8 @@ func (this *Manager) updateManager() {
 func NewManager() (m *Manager) {
 	this := &Manager{}
 	this.updateManager()
-	_Manager.ConnectPropertiesChanged(func(props map[string]dbus.Variant) {
-		this.updateManager()
-		if _, ok := props["WirelessEnabled"]; ok {
-			dbus.NotifyChange(this, "WirelessEnabled")
-		}
-		if _, ok := props["NetworkingEnabled"]; ok {
-			dbus.NotifyChange(this, "NetworkingEnabled")
-		}
-	})
+	this.WirelessEnabled = property.NewWrapProperty(this, "WirelessEnabled", _Manager.WirelessEnabled)
+	this.NetworkingEnabled = property.NewWrapProperty(this, "NetworkingEnabled", _Manager.NetworkingEnabled)
 
 	_Settings.ConnectNewConnection(func(path dbus.ObjectPath) {
 		this.handleConnectionChanged(OP_ADDED, string(path))

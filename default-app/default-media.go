@@ -4,19 +4,17 @@ import (
 	"dlib/dbus"
 	"dlib/dbus/property"
 	"dlib/gio-2.0"
-	"fmt"
 )
 
 var (
-	busConn        *dbus.Conn
 	mediaGSettings = gio.NewSettings("org.gnome.desktop.media-handling")
 )
 
 type MediaMount struct {
 	AllowAutoMount     bool
-	TypeIgnoreList     dbus.Property	`access:"readwrite"`
-	TypeOpenFolderList dbus.Property	`access:"readwrite"`
-	TypeExecList       dbus.Property	`access:"readwrite"`
+	TypeIgnoreList     dbus.Property `access:"readwrite"`
+	TypeOpenFolderList dbus.Property `access:"readwrite"`
+	TypeExecList       dbus.Property `access:"readwrite"`
 }
 
 func (media *MediaMount) SetAllowAutoRun(allow bool) {
@@ -25,30 +23,21 @@ func (media *MediaMount) SetAllowAutoRun(allow bool) {
 }
 
 func NewMediaMount() *MediaMount {
-	var err error
-
-	media := MediaMount{}
-	busConn, err = dbus.SessionBus()
-	if err != nil {
-		fmt.Println(err)
-		return nil
-	}
-
+	media := &MediaMount{}
 	media.AllowAutoMount = GetAllowAutoMount()
-	media.TypeIgnoreList = property.NewGSettingsPropertyFull(
-		mediaGSettings, "autorun-x-content-ignore", []string{},
-		busConn, _MEDIA_MOUNT_PATH, _MEDIA_MOUNT_IFC, "TypeIgnoreList")
-	media.TypeOpenFolderList = property.NewGSettingsPropertyFull(
-		mediaGSettings, "autorun-x-content-open-folder", []string{},
-		busConn, _MEDIA_MOUNT_PATH, _MEDIA_MOUNT_IFC,
-		"TypeOpenFolderList")
-	media.TypeExecList = property.NewGSettingsPropertyFull(
-		mediaGSettings, "autorun-x-content-start-app", []string{},
-		busConn, _MEDIA_MOUNT_PATH, _MEDIA_MOUNT_IFC, "TypeExecList")
+	media.TypeIgnoreList = property.NewGSettingsProperty(media,
+		"TypeIgnoreList", mediaGSettings,
+		"autorun-x-content-ignore")
+	media.TypeOpenFolderList = property.NewGSettingsProperty(media,
+		"TypeOpenFolderList", mediaGSettings,
+		"autorun-x-content-open-folder")
+	media.TypeExecList = property.NewGSettingsProperty(media,
+		"TypeExecList", mediaGSettings,
+		"autorun-x-content-start-app")
 
-	ListenGSettingsChanged(&media)
+	ListenGSettingsChanged(media)
 
-	return &media
+	return media
 }
 
 func GetAllowAutoMount() bool {
@@ -74,7 +63,7 @@ func ListenGSettingsChanged(media *MediaMount) {
 			dbus.NotifyChange(media, "AllowAutoMount")
 		})
 
-		mediaGSettings.Connect("changed::automount-open",
+	mediaGSettings.Connect("changed::automount-open",
 		func(s *gio.Settings, name string) {
 			media.AllowAutoMount = GetAllowAutoMount()
 			dbus.NotifyChange(media, "AllowAutoMount")
