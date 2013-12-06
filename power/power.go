@@ -54,12 +54,12 @@ type Power struct {
 	CurrentPlan dbus.Property
 
 	//upower interface
-	BatteryIsPresent  bool    `access:"read"` //battery present
-	BatteryPercentage float64 `access:"read"` //batter voltage
-	charging          int32   `access:"read"` //charging or discharging
-	PlugedIn          int32   `access:"read"` //1 for in,2 for out
-	TimeToEmpty       int64   `access:"read"` //
-	TimeToFull        int64   `access:"read"` //time to fully charged
+	BatteryIsPresent  dbus.Property    `access:"read"` //battery present
+	BatteryPercentage dbus.Property `access:"read"` //batter voltage
+	charging          dbus.Property   `access:"read"` //charging or discharging
+	PlugedIn          dbus.Property   `access:"read"` //1 for in,2 for out
+	TimeToEmpty       dbus.Property   `access:"read"` //
+	TimeToFull        dbus.Property   `access:"read"` //time to fully charged
 
 	//gnome.desktop.screensaver keys
 	LockEnabled dbus.Property
@@ -113,6 +113,7 @@ func NewPower() (*Power, error) {
 		&power, "LockEnabled", power.screensaverSettings, "lock-enabled")
 
 	power.upowerDevice = upower.GetDevice("/org/freedesktop/UPower/devices/battery_BAT0")
+	power.GetDBusInfo()
 
 	return &power, nil
 }
@@ -125,15 +126,13 @@ func (p *Power) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (p *Power) Refresh() int32 {
+func (p *Power) getUPowerProperty() int32 {
 	if p.upowerDevice == nil {
 		return -1
 	}
-	p.BatteryPercentage = p.upowerDevice.GetPercentage()
-	//p.charging=
-	p.PlugedIn = int32(p.upowerDevice.GetState())
-	p.TimeToEmpty = p.upowerDevice.GetTimeToEmpty()
-	p.TimeToFull = p.upowerDevice.GetTimeToFull()
+	//p.BatteryPercentage=property.NewWrapProperty(p,"BatteryPercentage",p.upowerDevice.BatteryPercentage)
+	//p.TimeToEmpty = property.NewWrapProperty(p,"TimeToEmpty",p.TimeToEmpty)
+	//p.TimeToFull = property.NewWrapProperty(p,"TimeToFull",p.TimeToFull)
 
 	return 1
 }
