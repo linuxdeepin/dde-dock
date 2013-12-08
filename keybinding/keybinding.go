@@ -13,6 +13,11 @@ type KeyBinding struct {
 	KeyBindingCount int32
 }
 
+type KeyOwnerRet struct {
+	success bool
+	id      int32
+}
+
 const (
 	_KEY_BINDING_NAME = "com.deepin.daemon.KeyBinding"
 	_KEY_BINDING_PATH = "/com/deepin/daemon/KeyBinding"
@@ -72,8 +77,37 @@ func (binding *KeyBinding) GetCustomList() []int32 {
 	return customIDList
 }
 
-func (binding *KeyBinding) HasOwnerID(id int32) bool {
-	return true
+func (binding *KeyBinding) HasOwnerID(id int32) KeyOwnerRet {
+	accel := ""
+	if id >= _KEY_COUNT_BASE {
+		gs := NewCustomGSettings(id)
+		accel += gs.GetString(_KEY_SHORTCUT)
+	} else if id >= 0 && id < 300 {
+		values := PresetGetValue(id)
+		strArray := strings.Split(values, ";")
+		if len(strArray) == 2 {
+			accel += strArray[1]
+		}
+	} else if id >= 300 && id < 600 {
+		values := MediaGetValue(id)
+		accel += values
+	} else if id >= 600 && id < _KEY_COUNT_BASE {
+		values := WMGetValue(id)
+		accel += values
+	}
+
+	fmt.Println(accel)
+	accelList := GetKeyAccelList()
+	for k, v := range accelList {
+		if accel == v {
+			fmt.Println("v:", v)
+			ret := KeyOwnerRet{success: true, id: k}
+			fmt.Println(ret)
+			return ret
+		}
+	}
+
+	return KeyOwnerRet{success: false, id: -1}
 }
 
 func (binding *KeyBinding) GetBindingName(id int32) string {
@@ -120,11 +154,18 @@ func (binding *KeyBinding) GetBindingAccel(id int32) string {
 	return ""
 }
 
-func (binding *KeyBinding) ChangeKeyBinding(id int32, accel string) (bool, int32) {
+func (binding *KeyBinding) ChangeKeyBinding(id int32, accel string) KeyOwnerRet {
+	/*
+	 *ret := binding.HasOwnerID(id)
+	 *if ret.success {
+	 *        return ret
+	 *}
+	 */
+
 	if id >= _KEY_COUNT_BASE {
 		ModifyCustomKey(binding, id, _KEY_SHORTCUT, accel)
 	}
-	return true, 0
+	return KeyOwnerRet{success: true, id: -1}
 }
 
 func (binding *KeyBinding) AddCustomBinding(name, shortcut, action string) int32 {
@@ -212,30 +253,31 @@ func ResetGSettings(gs *gio.Settings) {
 	gio.SettingsSync()
 }
 
-func GetKeyAccelList() []string {
-	accelList := []string{}
+func GetKeyAccelList() map[int32]string {
+	accelList := make(map[int32]string)
 
 	for k, _ := range currentSystemBindings {
 		if k >= 0 && k < 300 {
 			values := PresetGetValue(k)
 			strArray := strings.Split(values, ";")
 			if len(strArray) == 2 {
-				accelList = append(accelList, strArray[1])
+				accelList[k] = strArray[1]
 			}
 		} else if k >= 300 && k < 600 {
 			values := MediaGetValue(k)
-			accelList = append(accelList, values)
+			accelList[k] = values
 		} else if k >= 600 && k < 1000 {
 			values := WMGetValue(k)
-			accelList = append(accelList, values)
+			accelList[k] = values
 		}
 	}
 
 	count := bindingGSettings.GetInt(_KEY_COUNT)
 	for i := 0; i < count; i++ {
-		gs := NewCustomGSettings(int32(_KEY_COUNT_BASE + i))
+		id := int32(_KEY_COUNT_BASE + i)
+		gs := NewCustomGSettings(id)
 		values := gs.GetString(_KEY_SHORTCUT)
-		accelList = append(accelList, values)
+		accelList[id] = values
 	}
 
 	return accelList
