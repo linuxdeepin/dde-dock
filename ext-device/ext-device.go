@@ -78,15 +78,15 @@ func NewKeyboardEntry() *KeyboardEntry {
 	keyboard := &KeyboardEntry{}
 
 	keyboard.DeviceID = "Keyboard"
-	keyboard.RepeatDelay = property.NewGSettingsProperty(keyboard,
+	keyboard.RepeatDelay = property.NewGSettingsUintProperty(keyboard,
 		"RepeatDelay", keyRepeatGSettings, "delay")
-	keyboard.RepeatSpeed = property.NewGSettingsProperty(keyboard,
+	keyboard.RepeatSpeed = property.NewGSettingsUintProperty(keyboard,
 		"RepeatSpeed", keyRepeatGSettings, "repeat-interval")
-	keyboard.DisableTPad = property.NewGSettingsProperty(keyboard,
+	keyboard.DisableTPad = property.NewGSettingsBoolProperty(keyboard,
 		"DisableTPad", tpadGSettings, "disable-while-typing")
-	keyboard.CursorBlink = property.NewGSettingsProperty(keyboard,
+	keyboard.CursorBlink = property.NewGSettingsIntProperty(keyboard,
 		"CursorBlink", infaceGSettings, "cursor-blink-time")
-	keyboard.KeyboardLayout = property.NewGSettingsProperty(keyboard,
+	keyboard.KeyboardLayout = property.NewGSettingsStrvProperty(keyboard,
 		"KeyboardLayout", layoutGSettings, "layouts")
 	return keyboard
 }
@@ -103,13 +103,13 @@ func NewMouseEntry() *MouseEntry {
 	mouse := &MouseEntry{}
 
 	mouse.DeviceID = "Mouse"
-	mouse.UseHabit = property.NewGSettingsProperty(mouse,
+	mouse.UseHabit = property.NewGSettingsBoolProperty(mouse,
 		"UseHabit", mouseGSettings, "left-handed")
-	mouse.MoveSpeed = property.NewGSettingsProperty(mouse,
+	mouse.MoveSpeed = property.NewGSettingsFloatProperty(mouse,
 		"MoveSpeed", mouseGSettings, "motion-acceleration")
-	mouse.MoveAccuracy = property.NewGSettingsProperty(mouse,
+	mouse.MoveAccuracy = property.NewGSettingsFloatProperty(mouse,
 		"MoveAccuracy", mouseGSettings, "motion-threshold")
-	mouse.ClickFrequency = property.NewGSettingsProperty(mouse,
+	mouse.ClickFrequency = property.NewGSettingsIntProperty(mouse,
 		"ClickFrequency", mouseGSettings, "double-click")
 
 	return mouse
@@ -127,17 +127,17 @@ func NewTPadEntry() *TPadEntry {
 	tpad := &TPadEntry{}
 
 	tpad.DeviceID = "TouchPad"
-	tpad.TPadEnable = property.NewGSettingsProperty(tpad,
+	tpad.TPadEnable = property.NewGSettingsBoolProperty(tpad,
 		"TPadEnable", tpadGSettings, "touchpad-enabled")
-	tpad.UseHabit = property.NewGSettingsProperty(tpad,
+	tpad.UseHabit = property.NewGSettingsStringProperty(tpad,
 		"UseHabit", tpadGSettings, "left-handed")
-	tpad.MoveSpeed = property.NewGSettingsProperty(tpad,
+	tpad.MoveSpeed = property.NewGSettingsFloatProperty(tpad,
 		"MoveSpeed", tpadGSettings, "motion-acceleration")
-	tpad.MoveAccuracy = property.NewGSettingsProperty(tpad,
+	tpad.MoveAccuracy = property.NewGSettingsFloatProperty(tpad,
 		"MoveAccuracy", tpadGSettings, "motion-threshold")
-	tpad.DragDelay = property.NewGSettingsProperty(tpad,
+	tpad.DragDelay = property.NewGSettingsIntProperty(tpad,
 		"DragDelay", mouseGSettings, "drag-threshold")
-	tpad.ClickFrequency = property.NewGSettingsProperty(tpad,
+	tpad.ClickFrequency = property.NewGSettingsIntProperty(tpad,
 		"ClickFrequency", mouseGSettings, "double-click")
 
 	return tpad

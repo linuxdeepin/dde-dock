@@ -73,7 +73,7 @@ func (date *DateTime) SyncNtpTime() bool {
 func NewDateAndTime() *DateTime {
 	dt := &DateTime{}
 
-	dt.Use24HourDisplay = property.NewGSettingsProperty(dt, "Use24HourDisplay", dtGSettings, "is-24hour")
+	dt.Use24HourDisplay = property.NewGSettingsBoolProperty(dt, "Use24HourDisplay", dtGSettings, "is-24hour")
 	dt.CurrentTimeZone = gdate.GetTimezone()
 
 	dt.AutoSetTime = dtGSettings.GetBoolean("is-auto-set")

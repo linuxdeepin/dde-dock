@@ -126,11 +126,11 @@ func NewDesktopManager() (*DesktopManager, error) {
 	desk := &DesktopManager{}
 
 	deskSettings := gio.NewSettings(_DESKTOP_SCHEMA)
-	desk.ShowComputerIcon = property.NewGSettingsProperty(desk, "ShowComputerIcon", deskSettings, "show-computer-icon")
-	desk.ShowHomeIcon = property.NewGSettingsProperty(desk, "ShowHomeIcon", deskSettings, "show-home-icon")
-	desk.ShowTrashIcon = property.NewGSettingsProperty(desk, "ShowTrashIcon", deskSettings, "show-trash-icon")
-	desk.ShowDSCIcon = property.NewGSettingsProperty(desk, "ShowDSCIcon", deskSettings, "show-dsc-icon")
-	desk.DockMode = property.NewGSettingsProperty(desk, "DockMode", gio.NewSettings(_DOCK_SCHEMA), "hide-mode")
+	desk.ShowComputerIcon = property.NewGSettingsBoolProperty(desk, "ShowComputerIcon", deskSettings, "show-computer-icon")
+	desk.ShowHomeIcon = property.NewGSettingsBoolProperty(desk, "ShowHomeIcon", deskSettings, "show-home-icon")
+	desk.ShowTrashIcon = property.NewGSettingsBoolProperty(desk, "ShowTrashIcon", deskSettings, "show-trash-icon")
+	desk.ShowDSCIcon = property.NewGSettingsBoolProperty(desk, "ShowDSCIcon", deskSettings, "show-dsc-icon")
+	desk.DockMode = property.NewGSettingsStringProperty(desk, "DockMode", gio.NewSettings(_DOCK_SCHEMA), "hide-mode")
 
 	InitCompizGSettings()
 	ListenCompizGSettings(desk)

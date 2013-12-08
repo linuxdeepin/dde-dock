@@ -25,13 +25,13 @@ func (media *MediaMount) SetAllowAutoRun(allow bool) {
 func NewMediaMount() *MediaMount {
 	media := &MediaMount{}
 	media.AllowAutoMount = GetAllowAutoMount()
-	media.TypeIgnoreList = property.NewGSettingsProperty(media,
+	media.TypeIgnoreList = property.NewGSettingsStrvProperty(media,
 		"TypeIgnoreList", mediaGSettings,
 		"autorun-x-content-ignore")
-	media.TypeOpenFolderList = property.NewGSettingsProperty(media,
+	media.TypeOpenFolderList = property.NewGSettingsStrvProperty(media,
 		"TypeOpenFolderList", mediaGSettings,
 		"autorun-x-content-open-folder")
-	media.TypeExecList = property.NewGSettingsProperty(media,
+	media.TypeExecList = property.NewGSettingsStrvProperty(media,
 		"TypeExecList", mediaGSettings,
 		"autorun-x-content-start-app")
 
