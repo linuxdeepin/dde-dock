@@ -43,11 +43,11 @@ var (
 )
 
 type DesktopManager struct {
-	ShowComputerIcon dbus.Property `access:"readwrite"`
-	ShowHomeIcon     dbus.Property `access:"readwrite"`
-	ShowTrashIcon    dbus.Property `access:"readwrite"`
-	ShowDSCIcon      dbus.Property `access:"readwrite"`
-	DockMode         dbus.Property `access:"readwrite"`
+	ShowComputerIcon *property.GSettingsBoolProperty   `access:"readwrite"`
+	ShowHomeIcon     *property.GSettingsBoolProperty   `access:"readwrite"`
+	ShowTrashIcon    *property.GSettingsBoolProperty   `access:"readwrite"`
+	ShowDSCIcon      *property.GSettingsBoolProperty   `access:"readwrite"`
+	DockMode         *property.GSettingsStringProperty `access:"readwrite"`
 	TopLeft          int32
 	BottomRight      int32
 }

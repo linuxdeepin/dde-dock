@@ -28,7 +28,7 @@ var (
 
 type DateTime struct {
 	AutoSetTime      bool
-	Use24HourDisplay dbus.Property `access:"readwrite"`
+	Use24HourDisplay *property.GSettingsBoolProperty `access:"readwrite"`
 	CurrentTimeZone  string
 }
 

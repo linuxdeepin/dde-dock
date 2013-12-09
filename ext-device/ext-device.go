@@ -16,29 +16,29 @@ type ExtDeviceInfo struct {
 }
 
 type MouseEntry struct {
-	UseHabit       dbus.Property `access:"readwrite"`
-	MoveSpeed      dbus.Property `access:"readwrite"`
-	MoveAccuracy   dbus.Property `access:"readwrite"`
-	ClickFrequency dbus.Property `access:"readwrite"`
+	UseHabit       *property.GSettingsBoolProperty  `access:"readwrite"`
+	MoveSpeed      *property.GSettingsFloatProperty `access:"readwrite"`
+	MoveAccuracy   *property.GSettingsIntProperty   `access:"readwrite"`
+	ClickFrequency *property.GSettingsIntProperty   `access:"readwrite"`
 	DeviceID       string
 }
 
 type TPadEntry struct {
-	TPadEnable     dbus.Property `access:"readwrite"`
-	UseHabit       dbus.Property `access:"readwrite"`
-	MoveSpeed      dbus.Property `access:"readwrite"`
-	MoveAccuracy   dbus.Property `access:"readwrite"`
-	ClickFrequency dbus.Property `access:"readwrite"`
-	DragDelay      dbus.Property `access:"readwrite"`
+	TPadEnable     *property.GSettingsBoolProperty   `access:"readwrite"`
+	UseHabit       *property.GSettingsStringProperty `access:"readwrite"`
+	MoveSpeed      *property.GSettingsFloatProperty  `access:"readwrite"`
+	MoveAccuracy   *property.GSettingsIntProperty    `access:"readwrite"`
+	ClickFrequency *property.GSettingsIntProperty    `access:"readwrite"`
+	DragDelay      *property.GSettingsIntProperty    `access:"readwrite"`
 	DeviceID       string
 }
 
 type KeyboardEntry struct {
-	RepeatDelay    dbus.Property `access:"readwrite"`
-	RepeatSpeed    dbus.Property `access:"readwrite"`
-	CursorBlink    dbus.Property `access:"readwrite"`
-	DisableTPad    dbus.Property `access:"readwrite"`
-	KeyboardLayout dbus.Property `access:"readwrite"`
+	RepeatDelay    *property.GSettingsUintProperty `access:"readwrite"`
+	RepeatSpeed    *property.GSettingsUintProperty `access:"readwrite"`
+	CursorBlink    *property.GSettingsIntProperty  `access:"readwrite"`
+	DisableTPad    *property.GSettingsBoolProperty `access:"readwrite"`
+	KeyboardLayout *property.GSettingsStrvProperty `access:"readwrite"`
 	DeviceID       string
 }
 

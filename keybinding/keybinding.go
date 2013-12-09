@@ -77,25 +77,19 @@ func (binding *KeyBinding) GetCustomList() []int32 {
 	return customIDList
 }
 
-func (binding *KeyBinding) HasOwnerID(id int32) KeyOwnerRet {
-	accel := ""
-	if id >= _KEY_COUNT_BASE {
-		gs := NewCustomGSettings(id)
-		accel += gs.GetString(_KEY_SHORTCUT)
-	} else if id >= 0 && id < 300 {
-		values := PresetGetValue(id)
-		strArray := strings.Split(values, ";")
-		if len(strArray) == 2 {
-			accel += strArray[1]
+func (binding *KeyBinding) HasOwnID(id int32) bool {
+	/*sysIDList := binding.GetSystemList ()*/
+	/*customIDList := binding.GetCustomList ()*/
+	for i, _ := range currentSystemBindings {
+		if id == i {
+			return true
 		}
-	} else if id >= 300 && id < 600 {
-		values := MediaGetValue(id)
-		accel += values
-	} else if id >= 600 && id < _KEY_COUNT_BASE {
-		values := WMGetValue(id)
-		accel += values
 	}
 
+	return false
+}
+
+func (binding *KeyBinding) HasOwnShortcut(accel string) *KeyOwnerRet {
 	fmt.Println(accel)
 	accelList := GetKeyAccelList()
 	for k, v := range accelList {
@@ -103,11 +97,11 @@ func (binding *KeyBinding) HasOwnerID(id int32) KeyOwnerRet {
 			fmt.Println("v:", v)
 			ret := KeyOwnerRet{success: true, id: k}
 			fmt.Println(ret)
-			return ret
+			return &ret
 		}
 	}
 
-	return KeyOwnerRet{success: false, id: -1}
+	return &KeyOwnerRet{success: false, id: -1}
 }
 
 func (binding *KeyBinding) GetBindingName(id int32) string {
