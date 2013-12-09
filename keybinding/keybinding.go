@@ -14,8 +14,8 @@ type KeyBinding struct {
 }
 
 type KeyOwnerRet struct {
-	success bool
-	id      int32
+	Success bool
+	ID      int32
 }
 
 const (
@@ -90,18 +90,14 @@ func (binding *KeyBinding) HasOwnID(id int32) bool {
 }
 
 func (binding *KeyBinding) HasOwnShortcut(accel string) *KeyOwnerRet {
-	fmt.Println(accel)
 	accelList := GetKeyAccelList()
 	for k, v := range accelList {
 		if accel == v {
-			fmt.Println("v:", v)
-			ret := KeyOwnerRet{success: true, id: k}
-			fmt.Println(ret)
-			return &ret
+			return &KeyOwnerRet{Success: true, ID: k}
 		}
 	}
 
-	return &KeyOwnerRet{success: false, id: -1}
+	return &KeyOwnerRet{Success: false, ID: -1}
 }
 
 func (binding *KeyBinding) GetBindingName(id int32) string {
@@ -148,18 +144,16 @@ func (binding *KeyBinding) GetBindingAccel(id int32) string {
 	return ""
 }
 
-func (binding *KeyBinding) ChangeKeyBinding(id int32, accel string) KeyOwnerRet {
-	/*
-	 *ret := binding.HasOwnerID(id)
-	 *if ret.success {
-	 *        return ret
-	 *}
-	 */
+func (binding *KeyBinding) ChangeKeyBinding(id int32, accel string) *KeyOwnerRet {
+	ret := binding.HasOwnShortcut(accel)
+	if ret.Success {
+		return &KeyOwnerRet{Success: false, ID: ret.ID}
+	}
 
 	if id >= _KEY_COUNT_BASE {
 		ModifyCustomKey(binding, id, _KEY_SHORTCUT, accel)
 	}
-	return KeyOwnerRet{success: true, id: -1}
+	return &KeyOwnerRet{Success: true, ID: -1}
 }
 
 func (binding *KeyBinding) AddCustomBinding(name, shortcut, action string) int32 {
