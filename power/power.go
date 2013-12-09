@@ -6,6 +6,7 @@ import (
 	"dlib/dbus"
 	"dlib/dbus/property"
 	"dlib/gio-2.0"
+	"regexp"
 )
 
 type dbusBattery struct {
@@ -76,9 +77,21 @@ func NewPower() (*Power, error) {
 	power.getGsettingsProperty()
 
 	power.upower = upower.GetUpower("/org/freedesktop/UPower")
-	power.upowerBattery = upower.GetDevice("/org/freedesktop/UPower/devices/battery_BAT0")
-	if power.upowerBattery != nil {
-		power.getUPowerProperty()
+	if power.upower == nil {
+		println("WARNING:UPower not provided by dbus\n")
+	} else {
+		println("enumerating devices\n")
+		devices := power.upower.EnumerateDevices()
+		paths := getUpowerDeviceObjectPath(devices)
+		println(paths)
+		if len(paths) >= 1 {
+			power.upowerBattery = upower.GetDevice(string(paths[0]))
+			if power.upowerBattery != nil {
+				power.getUPowerProperty()
+			}
+		} else {
+			println("upower battery interface not found\n")
+		}
 	}
 	return &power, nil
 }
@@ -149,11 +162,48 @@ func (p *Power) getUPowerProperty() int32 {
 }
 
 func (power *Power) EnumerateDevices() []dbus.ObjectPath {
+	if power.upower == nil {
+		println("WARNING:Upower object it nil\n")
+	}
 	devices := power.upower.EnumerateDevices()
 	for _, v := range devices {
 		println(v)
 	}
 	return devices
+}
+
+func getUpowerDeviceObjectPath(devices []dbus.ObjectPath) []dbus.ObjectPath {
+	paths := make([]dbus.ObjectPath, len(devices))
+	batPattern, err := regexp.Compile(
+		"/org/freedesktop/UPower/devices/battery_BAT[[:digit:]]+")
+	if err != nil {
+		panic(err)
+	}
+	linePattern, err := regexp.Compile(
+		"org/freedesktop/UPower/devices/line_power_ADP[[:digit:]]+")
+	if err != nil {
+		panic(err)
+	}
+
+	i := 0
+	for _, path := range devices {
+		ret := batPattern.FindString(string(path))
+		println("findString " + ret)
+		if ret == "" {
+			ret = linePattern.FindString(string(path))
+			if ret == "" {
+				continue
+			} else {
+				println("findString " + ret)
+				paths[1] = path
+				i = i + 1
+			}
+		} else {
+			paths[0] = path
+			i = i + 1
+		}
+	}
+	return paths[0:i]
 }
 
 func main() {
