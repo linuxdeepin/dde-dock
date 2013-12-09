@@ -53,7 +53,7 @@ type Power struct {
 
 	//upower battery interface
 	upowerBattery     *upower.Device
-	IsPresent         dbus.Property `access:"read"` //battery present
+	BatteryIsPresent  dbus.Property `access:"read"` //battery present
 	IsRechargable     dbus.Property `access:"read"`
 	BatteryPercentage dbus.Property `access:"read"` //
 	Model             dbus.Property `access:"read"`
@@ -77,8 +77,9 @@ func NewPower() (*Power, error) {
 
 	power.upower = upower.GetUpower("/org/freedesktop/UPower")
 	power.upowerBattery = upower.GetDevice("/org/freedesktop/UPower/devices/battery_BAT0")
-	power.getUPowerProperty()
-
+	if power.upowerBattery != nil {
+		power.getUPowerProperty()
+	}
 	return &power, nil
 }
 
@@ -135,7 +136,7 @@ func (p *Power) getUPowerProperty() int32 {
 	if p.upowerBattery == nil {
 		return -1
 	}
-	p.IsPresent = property.NewWrapProperty(p, "IsPresent", p.upowerBattery.IsPresent)
+	p.BatteryIsPresent = property.NewWrapProperty(p, "IsPresent", p.upowerBattery.IsPresent)
 	p.IsRechargable = property.NewWrapProperty(p, "IsRechargable", p.upowerBattery.IsRechargeable)
 	p.BatteryPercentage = property.NewWrapProperty(p, "BatteryPercentage", p.upowerBattery.Percentage)
 	p.TimeToEmpty = property.NewWrapProperty(p, "TimeToEmpty", p.upowerBattery.TimeToEmpty)
