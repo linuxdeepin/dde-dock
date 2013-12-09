@@ -26,27 +26,27 @@ const (
 type Power struct {
 	//plugins.power keys
 	powerSettings   *gio.Settings
-	ButtonHibernate dbus.Property
-	ButtonPower     dbus.Property
-	ButtonSleep     dbus.Property
-	ButtonSuspend   dbus.Property
+	ButtonHibernate *property.GSettingsStringProperty
+	ButtonPower     *property.GSettingsStringProperty
+	ButtonSleep     *property.GSettingsStringProperty
+	ButtonSuspend   *property.GSettingsStringProperty
 
-	CriticalBatteryAction dbus.Property
-	LidCloseAcAction      dbus.Property
-	LidCloseBatteryAction dbus.Property
+	CriticalBatteryAction *property.GSettingsStringProperty
+	LidCloseAcAction      *property.GSettingsStringProperty
+	LidCloseBatteryAction *property.GSettingsStringProperty
 
-	ShowTray dbus.Property
+	ShowTray *property.GSettingsBoolProperty
 
-	SleepDisplayAc      dbus.Property
-	SleepDisplayBattery dbus.Property
+	SleepDisplayAc      *property.GSettingsIntProperty
+	SleepDisplayBattery *property.GSettingsIntProperty
 
-	SleepInactiveAcTimeout      dbus.Property
-	SleepInactiveBatteryTimeout dbus.Property
+	SleepInactiveAcTimeout      *property.GSettingsIntProperty
+	SleepInactiveBatteryTimeout *property.GSettingsIntProperty
 
-	SleepInactiveAcType      dbus.Property
-	SleepInactiveBatteryType dbus.Property
+	SleepInactiveAcType      *property.GSettingsStringProperty
+	SleepInactiveBatteryType *property.GSettingsStringProperty
 
-	CurrentPlan dbus.Property
+	CurrentPlan *property.GSettingsStringProperty
 
 	//upower interface
 	upower *upower.Upower
@@ -65,7 +65,7 @@ type Power struct {
 
 	//gnome.desktop.screensaver keys
 	screensaverSettings *gio.Settings
-	LockEnabled         dbus.Property
+	LockEnabled         *property.GSettingsBoolProperty
 }
 
 func NewPower() (*Power, error) {
@@ -91,40 +91,41 @@ func (p *Power) GetDBusInfo() dbus.DBusInfo {
 }
 
 func (power *Power) getGsettingsProperty() int32 {
-	power.CurrentPlan = property.NewGSettingsProperty(
+	power.CurrentPlan = property.NewGSettingsStringProperty(
 		power, "CurrentPlan", power.powerSettings, "current-plan")
-	power.ButtonHibernate = property.NewGSettingsProperty(
+	power.ButtonHibernate = property.NewGSettingsStringProperty(
 		power, "ButtonHibernate", power.powerSettings, "button-hibernate")
-	power.ButtonPower = property.NewGSettingsProperty(
+	power.ButtonPower = property.NewGSettingsStringProperty(
 		power, "ButtonPower", power.powerSettings, "button-power")
-	power.ButtonSleep = property.NewGSettingsProperty(
+	power.ButtonSleep = property.NewGSettingsStringProperty(
 		power, "ButtonSleep", power.powerSettings, "button-sleep")
-	power.ButtonSuspend = property.NewGSettingsProperty(
+	power.ButtonSuspend = property.NewGSettingsStringProperty(
 		power, "ButtonSuspend", power.powerSettings, "button-suspend")
 
-	power.CriticalBatteryAction = property.NewGSettingsProperty(
+	power.CriticalBatteryAction = property.NewGSettingsStringProperty(
 		power, "CriticalBatteryAction", power.powerSettings, "critical-battery-action")
-	power.LidCloseAcAction = property.NewGSettingsProperty(
+	power.LidCloseAcAction = property.NewGSettingsStringProperty(
 		power, "LidCloseAction", power.powerSettings, "lid-close-ac-action")
-	power.LidCloseBatteryAction = property.NewGSettingsProperty(
+	power.LidCloseBatteryAction = property.NewGSettingsStringProperty(
 		power, "LidCloseBatteryAction", power.powerSettings, "lid-close-battery-action")
-	power.ShowTray = property.NewGSettingsProperty(
+	power.ShowTray = property.NewGSettingsBoolProperty(
 		power, "ShowTray", power.powerSettings, "show-tray")
-	power.SleepInactiveAcTimeout = property.NewGSettingsProperty(
+	power.SleepInactiveAcTimeout = property.NewGSettingsIntProperty(
 		power, "SleepInactiveAcTimeout", power.powerSettings, "sleep-inactive-ac-timeout")
-	power.SleepInactiveBatteryTimeout = property.NewGSettingsProperty(
+	power.SleepInactiveBatteryTimeout = property.NewGSettingsIntProperty(
 		power, "SleepInactiveBatteryTimeout", power.powerSettings, "sleep-inactive-battery-timeout")
-	power.SleepDisplayAc = property.NewGSettingsProperty(
+	power.SleepDisplayAc = property.NewGSettingsIntProperty(
 		power, "SleepDisplayAc", power.powerSettings, "sleep-display-ac")
-	power.SleepDisplayBattery = property.NewGSettingsProperty(
+	power.SleepDisplayBattery = property.NewGSettingsIntProperty(
 		power, "SleepDisplayBattery", power.powerSettings, "sleep-display-battery")
 
-	power.SleepInactiveAcType = property.NewGSettingsProperty(
-		power, "SleepInactiveAcType", power.powerSettings, "sleep-inactive-ac-type")
-	power.SleepInactiveBatteryType = property.NewGSettingsProperty(
+	power.SleepInactiveAcType = property.NewGSettingsStringProperty(
+		power, "SleepInactiveAcType", power.powerSettings,
+		"sleep-inactive-ac-type")
+	power.SleepInactiveBatteryType = property.NewGSettingsStringProperty(
 		power, "SleepInactiveBatteryType", power.powerSettings, "sleep-inactive-battery-type")
 
-	power.LockEnabled = property.NewGSettingsProperty(
+	power.LockEnabled = property.NewGSettingsBoolProperty(
 		power, "LockEnabled", power.screensaverSettings, "lock-enabled")
 
 	return 0
