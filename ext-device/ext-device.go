@@ -107,7 +107,7 @@ func NewMouseEntry() *MouseEntry {
 		"UseHabit", mouseGSettings, "left-handed")
 	mouse.MoveSpeed = property.NewGSettingsFloatProperty(mouse,
 		"MoveSpeed", mouseGSettings, "motion-acceleration")
-	mouse.MoveAccuracy = property.NewGSettingsFloatProperty(mouse,
+	mouse.MoveAccuracy = property.NewGSettingsIntProperty(mouse,
 		"MoveAccuracy", mouseGSettings, "motion-threshold")
 	mouse.ClickFrequency = property.NewGSettingsIntProperty(mouse,
 		"ClickFrequency", mouseGSettings, "double-click")
@@ -133,7 +133,7 @@ func NewTPadEntry() *TPadEntry {
 		"UseHabit", tpadGSettings, "left-handed")
 	tpad.MoveSpeed = property.NewGSettingsFloatProperty(tpad,
 		"MoveSpeed", tpadGSettings, "motion-acceleration")
-	tpad.MoveAccuracy = property.NewGSettingsFloatProperty(tpad,
+	tpad.MoveAccuracy = property.NewGSettingsIntProperty(tpad,
 		"MoveAccuracy", tpadGSettings, "motion-threshold")
 	tpad.DragDelay = property.NewGSettingsIntProperty(tpad,
 		"DragDelay", mouseGSettings, "drag-threshold")
