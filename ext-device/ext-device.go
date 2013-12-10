@@ -18,7 +18,7 @@ type ExtDeviceInfo struct {
 type MouseEntry struct {
 	UseHabit       *property.GSettingsBoolProperty  `access:"readwrite"`
 	MoveSpeed      *property.GSettingsFloatProperty `access:"readwrite"`
-	MoveAccuracy   *property.GSettingsIntProperty   `access:"readwrite"`
+	MoveAccuracy   *property.GSettingsFloatProperty   `access:"readwrite"`
 	ClickFrequency *property.GSettingsIntProperty   `access:"readwrite"`
 	DeviceID       string
 }
@@ -27,7 +27,7 @@ type TPadEntry struct {
 	TPadEnable     *property.GSettingsBoolProperty   `access:"readwrite"`
 	UseHabit       *property.GSettingsStringProperty `access:"readwrite"`
 	MoveSpeed      *property.GSettingsFloatProperty  `access:"readwrite"`
-	MoveAccuracy   *property.GSettingsIntProperty    `access:"readwrite"`
+	MoveAccuracy   *property.GSettingsFloatProperty    `access:"readwrite"`
 	ClickFrequency *property.GSettingsIntProperty    `access:"readwrite"`
 	DragDelay      *property.GSettingsIntProperty    `access:"readwrite"`
 	DeviceID       string
@@ -107,7 +107,7 @@ func NewMouseEntry() *MouseEntry {
 		"UseHabit", mouseGSettings, "left-handed")
 	mouse.MoveSpeed = property.NewGSettingsFloatProperty(mouse,
 		"MoveSpeed", mouseGSettings, "motion-acceleration")
-	mouse.MoveAccuracy = property.NewGSettingsIntProperty(mouse,
+	mouse.MoveAccuracy = property.NewGSettingsFloatProperty(mouse,
 		"MoveAccuracy", mouseGSettings, "motion-threshold")
 	mouse.ClickFrequency = property.NewGSettingsIntProperty(mouse,
 		"ClickFrequency", mouseGSettings, "double-click")
@@ -133,7 +133,7 @@ func NewTPadEntry() *TPadEntry {
 		"UseHabit", tpadGSettings, "left-handed")
 	tpad.MoveSpeed = property.NewGSettingsFloatProperty(tpad,
 		"MoveSpeed", tpadGSettings, "motion-acceleration")
-	tpad.MoveAccuracy = property.NewGSettingsIntProperty(tpad,
+	tpad.MoveAccuracy = property.NewGSettingsFloatProperty(tpad,
 		"MoveAccuracy", tpadGSettings, "motion-threshold")
 	tpad.DragDelay = property.NewGSettingsIntProperty(tpad,
 		"DragDelay", mouseGSettings, "drag-threshold")
