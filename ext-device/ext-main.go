@@ -27,11 +27,11 @@ func main() {
 
 	success, nameList := GetProcDeviceNameList()
 	if success {
-		if DeviceIsExist(nameList, "Mouse") {
+		if DeviceIsExist(nameList, "mouse") {
 			mouseFlag = true
 		}
 
-		if DeviceIsExist(nameList, "TouchPad") {
+		if DeviceIsExist(nameList, "touchpad") {
 			tpadFlag = true
 		}
 
