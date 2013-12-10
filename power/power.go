@@ -27,46 +27,46 @@ const (
 type Power struct {
 	//plugins.power keys
 	powerSettings   *gio.Settings
-	ButtonHibernate *property.GSettingsStringProperty
-	ButtonPower     *property.GSettingsStringProperty
-	ButtonSleep     *property.GSettingsStringProperty
-	ButtonSuspend   *property.GSettingsStringProperty
+	ButtonHibernate *property.GSettingsStringProperty `access:"readwrite"`
+	ButtonPower     *property.GSettingsStringProperty `access:"readwrite"`
+	ButtonSleep     *property.GSettingsStringProperty `access:"readwrite"`
+	ButtonSuspend   *property.GSettingsStringProperty `access:"readwrite"`
 
-	CriticalBatteryAction *property.GSettingsStringProperty
-	LidCloseAcAction      *property.GSettingsStringProperty
-	LidCloseBatteryAction *property.GSettingsStringProperty
+	CriticalBatteryAction *property.GSettingsStringProperty `access:"readwrite"`
+	LidCloseAcAction      *property.GSettingsStringProperty `access:"readwrite"`
+	LidCloseBatteryAction *property.GSettingsStringProperty `access:"readwrite"`
 
-	ShowTray *property.GSettingsBoolProperty
+	ShowTray *property.GSettingsBoolProperty `access:"readwrite"`
 
-	SleepDisplayAc      *property.GSettingsIntProperty
-	SleepDisplayBattery *property.GSettingsIntProperty
+	SleepDisplayAc      *property.GSettingsIntProperty `access:"readwrite"`
+	SleepDisplayBattery *property.GSettingsIntProperty `access:"readwrite"`
 
-	SleepInactiveAcTimeout      *property.GSettingsIntProperty
-	SleepInactiveBatteryTimeout *property.GSettingsIntProperty
+	SleepInactiveAcTimeout      *property.GSettingsIntProperty `access:"readwrite"`
+	SleepInactiveBatteryTimeout *property.GSettingsIntProperty `access:"readwrite"`
 
-	SleepInactiveAcType      *property.GSettingsStringProperty
-	SleepInactiveBatteryType *property.GSettingsStringProperty
+	SleepInactiveAcType      *property.GSettingsStringProperty `access:"readwrite"`
+	SleepInactiveBatteryType *property.GSettingsStringProperty `access:"readwrite"`
 
-	CurrentPlan *property.GSettingsStringProperty
+	CurrentPlan *property.GSettingsStringProperty `access:"readwrite"`
 
 	//upower interface
 	upower *upower.Upower
 
 	//upower battery interface
 	upowerBattery     *upower.Device
-	BatteryIsPresent  dbus.Property `access:"read"` //battery present
-	IsRechargable     dbus.Property `access:"read"`
-	BatteryPercentage dbus.Property `access:"read"` //
-	Model             dbus.Property `access:"read"`
-	Vendor            dbus.Property `access:"read"`
-	TimeToEmpty       dbus.Property `access:"read"` //
-	TimeToFull        dbus.Property `access:"read"` //time to fully charged
-	State             dbus.Property `access:"read"` //1 for in,2 for out
-	Type              dbus.Property `access:"read"` //type,2
+	BatteryIsPresent  dbus.Property `access:"read` //battery present
+	IsRechargable     dbus.Property `access:"read`
+	BatteryPercentage dbus.Property `access:"read` //
+	Model             dbus.Property `access:"read`
+	Vendor            dbus.Property `access:"read`
+	TimeToEmpty       dbus.Property `access:"read` //
+	TimeToFull        dbus.Property `access:"read` //time to fully charged
+	State             dbus.Property `access:"read` //1 for in,2 for out
+	Type              dbus.Property `access:"read` //type,2
 
 	//gnome.desktop.screensaver keys
 	screensaverSettings *gio.Settings
-	LockEnabled         *property.GSettingsBoolProperty
+	LockEnabled         *property.GSettingsBoolProperty `access:"readwrite"`
 }
 
 func NewPower() (*Power, error) {
