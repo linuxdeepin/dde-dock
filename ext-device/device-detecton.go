@@ -58,7 +58,7 @@ func GetProcDeviceNameList() (bool, []string) {
 	nameList := []string{}
 	for _, line := range lines {
 		if strings.Contains(line, _PROC_DEV_KEY) {
-			nameList = append(nameList, line)
+			nameList = append(nameList, strings.ToLower(line))
 		}
 	}
 

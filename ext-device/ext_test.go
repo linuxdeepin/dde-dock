@@ -72,11 +72,12 @@ func TestProcDevice (t *testing.T) {
 		return
 	}
 
-	if DeviceIsExist (list, "Mouse") {
+	fmt.Println(list)
+	if DeviceIsExist (list, "mouse") {
 		fmt.Println ("Mouse Exist")
 	}
 
-	if DeviceIsExist (list, "TouchPad") {
+	if DeviceIsExist (list, "touchpad") {
 		fmt.Println ("TouchPad Exist")
 	}
 
