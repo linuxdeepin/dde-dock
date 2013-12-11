@@ -42,20 +42,19 @@ func (dapp *DefaultApps) GetDefaultAppViaType(typeName string) *DAppInfo {
 	return NewDAppInfo(gioApp)
 }
 
-func (dapp *DefaultApps) SetDefaultAppViaType(typeName,
-	appID string) (bool, error) {
+func (dapp *DefaultApps) SetDefaultAppViaType(typeName, appID string) bool {
 	gio.AppInfoResetTypeAssociations(typeName)
 	gioAppsList := gio.AppInfoGetAllForType(typeName)
 	for _, gioApp := range gioAppsList {
 		if gioApp.GetId() == appID {
-			success, err := gioApp.SetAsDefaultForType(typeName)
+			_, err := gioApp.SetAsDefaultForType(typeName)
 			if err != nil {
 				fmt.Println(err)
-				return success, err
+				return false
 			}
 			break
 		}
 	}
 
-	return true, nil
+	return true
 }
