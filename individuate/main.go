@@ -17,7 +17,32 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
- *
- * Function:  switch, add, delete theme
  **/
 
+package main
+
+import (
+	"dlib"
+	"dlib/dbus"
+	/*"fmt"*/
+)
+
+/*type IndividuateManager struct {}*/
+
+const (
+	_INDIVI_DEST     = "com.deepin.daemon.IndividuateManager"
+	_BG_MANAGER_PATH = "/com/deepin/Individuate/BackgroundManager"
+	_BG_MANAGER_IFC  = "com.deepin.daemon.Individuate.BackgroundManager"
+)
+
+func (bgManager *BackgroundManager) GetDBusInfo() dbus.DBusInfo {
+	return dbus.DBusInfo{
+		_INDIVI_DEST,
+		_BG_MANAGER_PATH,
+		_BG_MANAGER_IFC,
+	}
+}
+
+func main() {
+	dlib.StartLoop()
+}

@@ -48,15 +48,15 @@ type _BlurResult struct {
 }
 
 const (
-	_BLUR_PICT_DEST = "com.deepin.daemon.BlurPictManager"
-	_BLUR_PICT_PATH = "/com/deepin/daemon/BlurPictManager"
-	_BLUR_PICT_IFC  = "com.deepin.daemon.BlurPictManager"
+	_BLUR_PICT_DEST = "com.deepin.Accounts"
+	_BLUR_PICT_PATH = "/com/deepin/Accounts"
+	_BLUR_PICT_IFC  = "com.deepin.Accounts"
 
 	_ACCOUNTS_PATH          = "/org/freedesktop/Accounts/User"
 	_BG_BLUR_PICT_CACHE_DIR = "gaussian-background"
 )
 
-func (blur *BlurPictManager) BlurPictDestPath(uid string, sigma float64, numsteps int64) *_BlurResult {
+func (blur *BlurPictManager) BackgroundBlurPictPath(uid string) *_BlurResult {
 	homeDir, err := GetHomeDirById(uid)
 	if err != nil {
 		fmt.Println("get home dir failed")
@@ -69,7 +69,7 @@ func (blur *BlurPictManager) BlurPictDestPath(uid string, sigma float64, numstep
 		return &_BlurResult{Success: true, PictPath: destPath}
 	}
 
-	go GenerateBlurPict(blur, srcPath, destPath, uid, sigma, numsteps)
+	go GenerateBlurPict(blur, srcPath, destPath, uid)
 
 	return &_BlurResult{Success: false, PictPath: srcPath}
 }
@@ -101,7 +101,7 @@ func GetCurrentSrcPath(uid string) string {
 	return srcPath
 }
 
-func GenerateBlurPict(blur *BlurPictManager, srcPath, destPath, uid string, sigma float64, numsteps int64) bool {
+func GenerateBlurPict(blur *BlurPictManager, srcPath, destPath, uid string) bool {
 	if len(uid) <= 0 && len(srcPath) <= 0 && len(destPath) <= 0 {
 		fmt.Println("args failed")
 		return false
@@ -125,7 +125,7 @@ func GenerateBlurPict(blur *BlurPictManager, srcPath, destPath, uid string, sigm
 		return false
 	}
 
-	is_ok := C.generate_blur_pict(src, dest, C.double(sigma), C.long(numsteps))
+	is_ok := C.generate_blur_pict(src, dest, C.double(10), C.long(10))
 	if is_ok == 0 {
 		fmt.Println("generate gaussian picture failed")
 		return false

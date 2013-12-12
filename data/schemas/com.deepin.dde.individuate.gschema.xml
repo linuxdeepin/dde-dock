@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+    <enum id="com.deepin.dde.individuate.draw-mode">
+	<value nick="Scaling" value="1"/>
+	<value nick="Tiling"  value="2"/>
+    </enum>
+    <enum id="com.deepin.dde.individuate.xfade-auto-mode">
+	<value nick="Sequential" value="1"/>
+	<value nick="Random"	 value="2"/>
+    </enum>
+    <schema path="/com/deepin/dde/individuate/" id="com.deepin.dde.individuate" gettext-domain="DDE">
+    <key type="b" name="active">
+      <default>true</default>
+      <summary>Activation of this plugin</summary>
+      <description>Whether this plugin would be activated by gnome-settings-daemon or not</description>
+    </key>
+    <key type="i" name="priority">
+      <default>1</default>
+      <summary>Priority to use for this plugin</summary>
+      <description>Priority to use for this plugin in gnome-settings-daemon startup queue</description>
+    </key>
+    <key type="s" name="current-picture">
+      <default>'file:///usr/share/backgrounds/default_background.jpg'</default>
+      <summary>Current picture URI</summary>
+      <description>Current picture being rendered on the screen</description>
+    </key>
+    <key name="draw-mode" enum="com.deepin.dde.individuate.draw-mode">
+      <default>"Scaling"</default>
+      <summary>how the background is drawed on the screen</summary>
+      <description>enumerations represent how the background is drawed on the screen. e.g. scaling or tiling</description>
+    </key>
+    <key type="s" name="picture-uris">
+      <default>'file:///usr/share/backgrounds/default_background.jpg'</default>
+      <summary>Picture URIs</summary>
+      <description>Background image URIs delimited by semicolons. Note that the backend only supports local (file://) URIs.</description>
+    </key>
+	<key type="b" name="auto-switch">
+		<default>false</default>
+		<summary>Auto Switch Pictures</summary>
+		<description>Auto switch background pictures</description>
+	</key>
+    <key name="cross-fade-auto-mode" enum="com.deepin.dde.individuate.xfade-auto-mode">
+      <default>"Sequential"</default>
+      <summary>How pictures are chosen to draw</summary>
+      <description>enumerations represent how pictures are chose to drawn. e.g. in random or in sequence</description>
+    </key>
+    <key type="i" name="background-duration">
+      <default>0</default>
+      <summary>Background retention duration</summary>
+      <description>The unit is second, if less or equal to zero, do not change the background; if more than 0, change the background after background-duration time</description>
+    </key>
+    <key type="i" name="cross-fade-manual-interval">
+      <default>1000</default>
+      <summary>Manual switch two backgrounds duration</summary>
+      <description>The unit is millisecond, two backgrounds switching duration</description>
+    </key>
+    <key type="i" name="cross-fade-auto-interval">
+      <default>1000</default>
+      <summary>Auto change background animation two frames duration</summary>
+      <description>The unit is millisecond, change background animation two frames duration</description>
+    </key>
+  </schema>
+</schemalist>

@@ -23,15 +23,15 @@ const (
 	_KEY_BINDING_PATH = "/com/deepin/daemon/KeyBinding"
 	_KEY_BINDING_IFC  = "com.deepin.daemon.KeyBinding"
 
-	_KEY_BINDING_ID       = "com.deepin.daemon.key-binding"
-	_KEY_BINDING_ADD_ID   = "com.deepin.daemon.key-binding.custom"
-	_KEY_BINDING_ADD_PATH = "/com/deepin/daemon/key-binding/profiles/"
+	_KEY_BINDING_ID       = "com.deepin.dde.key-binding"
+	_KEY_BINDING_ADD_ID   = "com.deepin.dde.key-binding.custom"
+	_KEY_BINDING_ADD_PATH = "/com/deepin/dde/key-binding/profiles/"
 
 	_WM_BINDING_ID     = "org.gnome.desktop.wm.keybindings"
 	_PRESET_BINDING_ID = "org.gnome.settings-daemon.plugins.key-bindings"
 	_MEDIA_BINDING_ID  = "org.gnome.settings-daemon.plugins.media-keys"
 
-	_KEY_COUNT_BASE = 1000
+	_KEY_COUNT_BASE = 10000
 	_KEY_COUNT      = "count"
 	_KEY_ID         = "id"
 	_KEY_NAME       = "name"

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-	<schema id="com.deepin.daemon.key-binding" path="/com/deepin/daemon/key-binding/">
+	<schema id="com.deepin.dde.key-binding" path="/com/deepin/dde/key-binding/">
 	<key type="i" name="count">
 		<default>0</default>
 		<summary>key count</summary>
