@@ -1,9 +1,5 @@
 package main
 
-// #cgo pkg-config: gnome-desktop-3.0
-// #include "is-laptop.h"
-import "C"
-
 import (
 	"dbus/org/freedesktop/udisks2"
 	"dlib/dbus"
@@ -20,7 +16,6 @@ type SystemInfo struct {
 	MemoryCap  uint64
 	SystemType int64
 	DiskCap    uint64
-	IsLaptop   bool
 }
 
 const (
@@ -191,16 +186,6 @@ func GetDiskCap() (diskCap uint64) {
 	return diskCap
 }
 
-func CheckIsLaptop() bool {
-	C.gdk_init(nil, nil)
-	s := C.IsLaptop()
-	if s == 1 {
-		return true
-	}
-
-	return false
-}
-
 func main() {
 	sys := SystemInfo{}
 
@@ -209,7 +194,6 @@ func main() {
 	sys.MemoryCap = GetMemoryCap()
 	sys.SystemType = GetSystemType()
 	sys.DiskCap = GetDiskCap()
-	sys.IsLaptop = CheckIsLaptop()
 
 	err := dbus.InstallOnSystem(&sys)
 	if err != nil {
