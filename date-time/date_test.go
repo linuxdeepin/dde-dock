@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestDateTime (t *testing.T) {
+func TestDateTime(t *testing.T) {
 	date := NewDateAndTime()
 	if date == nil {
 		t.Errorf("create date time failed\n")
@@ -14,12 +14,12 @@ func TestDateTime (t *testing.T) {
 
 	fmt.Println(date.AutoSetTime)
 	fmt.Println(date.CurrentTimeZone)
-	fmt.Println(date.TimeShowFormat)
+	fmt.Println(date.Use24HourDisplay)
 
 	date.SetAutoSetTime(true)
-	date.SetDate("2013-11-27")
+	fmt.Println(date.SetDate("2013-11-27"))
 	date.SetTimeZone("Asia/Shanghai")
-	date.SetTime("12:11:11")
+	fmt.Println(date.SetTime("12:11:11"))
 	date.SyncNtpTime()
 	date.SetAutoSetTime(false)
 }

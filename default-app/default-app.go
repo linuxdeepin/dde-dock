@@ -7,29 +7,29 @@ import (
 
 type DefaultApps struct{}
 
-type DAppInfo struct {
-	AppID          string
-	AppName        string
-	AppDisplayName string
-	AppDesc        string
-	AppExec        string
-	AppCommand     string
+type AppInfo struct {
+	ID          string
+	Name        string
+	DisplayName string
+	Desc        string
+	Exec        string
+	Command     string
 }
 
-func NewDAppInfo(gioApp *gio.AppInfo) DAppInfo {
-	dappInfo := DAppInfo{}
+func NewDAppInfo(gioApp *gio.AppInfo) *AppInfo {
+	dappInfo := AppInfo{}
 
-	dappInfo.AppID = gioApp.GetId()
-	dappInfo.AppName = gioApp.GetName()
-	dappInfo.AppDisplayName = gioApp.GetDisplayName()
-	dappInfo.AppDesc = gioApp.GetDescription()
-	dappInfo.AppExec = gioApp.GetExecutable()
-	dappInfo.AppCommand = gioApp.GetCommandline()
-	return dappInfo
+	dappInfo.ID = gioApp.GetId()
+	dappInfo.Name = gioApp.GetName()
+	dappInfo.DisplayName = gioApp.GetDisplayName()
+	dappInfo.Desc = gioApp.GetDescription()
+	dappInfo.Exec = gioApp.GetExecutable()
+	dappInfo.Command = gioApp.GetCommandline()
+	return &dappInfo
 }
 
-func (dapp *DefaultApps) GetAppsListViaType(typeName string) []DAppInfo {
-	var defaultAppsList []DAppInfo
+func (dapp *DefaultApps) AppsListViaType(typeName string) []*AppInfo {
+	var defaultAppsList []*AppInfo
 	gioAppsList := gio.AppInfoGetAllForType(typeName)
 	for _, gioApp := range gioAppsList {
 		defaultAppsList = append(defaultAppsList, NewDAppInfo(gioApp))
@@ -37,26 +37,24 @@ func (dapp *DefaultApps) GetAppsListViaType(typeName string) []DAppInfo {
 	return defaultAppsList
 }
 
-func (dapp *DefaultApps) GetDefaultAppViaType(typeName string,
-	supportUris bool) DAppInfo {
-	gioApp := gio.AppInfoGetDefaultForType(typeName, supportUris)
+func (dapp *DefaultApps) DefaultAppViaType(typeName string) *AppInfo {
+	gioApp := gio.AppInfoGetDefaultForType(typeName, false)
 	return NewDAppInfo(gioApp)
 }
 
-func (dapp *DefaultApps) SetDefaultAppViaType(typeName,
-	appID string) (bool, error) {
+func (dapp *DefaultApps) SetDefaultAppViaType(typeName, appID string) bool {
 	gio.AppInfoResetTypeAssociations(typeName)
 	gioAppsList := gio.AppInfoGetAllForType(typeName)
 	for _, gioApp := range gioAppsList {
 		if gioApp.GetId() == appID {
-			success, err := gioApp.SetAsDefaultForType(typeName)
+			_, err := gioApp.SetAsDefaultForType(typeName)
 			if err != nil {
 				fmt.Println(err)
-				return success, err
+				return false
 			}
 			break
 		}
 	}
 
-	return true, nil
+	return true
 }
