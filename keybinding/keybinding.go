@@ -40,11 +40,10 @@ const (
 )
 
 var (
-	busConn          *dbus.Conn
-	bindingGSettings = gio.NewSettings(_KEY_BINDING_ID)
-	presetGSettings  = gio.NewSettings(_PRESET_BINDING_ID)
-	mediaGSettings   = gio.NewSettings(_MEDIA_BINDING_ID)
-	wmGSettings      = gio.NewSettings(_WM_BINDING_ID)
+	_bindingGSettings = gio.NewSettings(_KEY_BINDING_ID)
+	_presetGSettings  = gio.NewSettings(_PRESET_BINDING_ID)
+	_mediaGSettings   = gio.NewSettings(_MEDIA_BINDING_ID)
+	_wmGSettings      = gio.NewSettings(_WM_BINDING_ID)
 )
 
 func (binding *KeyBinding) GetDBusInfo() dbus.DBusInfo {
@@ -68,7 +67,7 @@ func (binding *KeyBinding) GetSystemList() []int32 {
 func (binding *KeyBinding) GetCustomList() []int32 {
 	customIDList := []int32{}
 
-	count := bindingGSettings.GetInt(_KEY_COUNT)
+	count := _bindingGSettings.GetInt(_KEY_COUNT)
 	for i := 0; i < count; i++ {
 		customIDList = append(customIDList,
 			int32(_KEY_COUNT_BASE+i))
@@ -163,7 +162,7 @@ func (binding *KeyBinding) AddCustomBinding(name, shortcut, action string) int32
 	SetGSettings(gs, id, name, shortcut, action)
 
 	count++
-	bindingGSettings.SetInt(_KEY_COUNT, int(count))
+	_bindingGSettings.SetInt(_KEY_COUNT, int(count))
 
 	return id
 }
@@ -176,7 +175,7 @@ func (binding *KeyBinding) DeleteCustomBinding(id int32) {
 
 	cnt := binding.KeyBindingCount
 	if cnt > 0 {
-		bindingGSettings.SetInt(_KEY_COUNT, int(cnt-1))
+		_bindingGSettings.SetInt(_KEY_COUNT, int(cnt-1))
 	}
 }
 
@@ -207,7 +206,7 @@ func ModifyGSetingsKey(gs *gio.Settings, key, value string) {
 }
 
 func UpdateBindingList(id int32) {
-	cnt := bindingGSettings.GetInt(_KEY_COUNT) + _KEY_COUNT_BASE
+	cnt := _bindingGSettings.GetInt(_KEY_COUNT) + _KEY_COUNT_BASE
 	fmt.Println("id:", id)
 	fmt.Println("cnt:", cnt)
 
@@ -260,7 +259,7 @@ func GetKeyAccelList() map[int32]string {
 		}
 	}
 
-	count := bindingGSettings.GetInt(_KEY_COUNT)
+	count := _bindingGSettings.GetInt(_KEY_COUNT)
 	for i := 0; i < count; i++ {
 		id := int32(_KEY_COUNT_BASE + i)
 		gs := NewCustomGSettings(id)
@@ -275,7 +274,7 @@ func PresetGetValue(id int32) string {
 	if id >= 0 && id < 300 {
 		keyName := currentSystemBindings[id]
 
-		return presetGSettings.GetString(keyName)
+		return _presetGSettings.GetString(keyName)
 	}
 
 	return ""
@@ -285,7 +284,7 @@ func MediaGetValue(id int32) string {
 	if id >= 300 && id < 600 {
 		keyName := currentSystemBindings[id]
 
-		return mediaGSettings.GetString(keyName)
+		return _mediaGSettings.GetString(keyName)
 	}
 
 	return ""
@@ -295,7 +294,7 @@ func WMGetValue(id int32) string {
 	if id >= 600 && id < 1000 {
 		keyName := currentSystemBindings[id]
 
-		values := wmGSettings.GetStrv(keyName)
+		values := _wmGSettings.GetStrv(keyName)
 		strRet := ""
 
 		for _, v := range values {
@@ -308,16 +307,10 @@ func WMGetValue(id int32) string {
 }
 
 func NewKeyBinding() *KeyBinding {
-	var err error
-	busConn, err = dbus.SessionBus()
-	if err != nil {
-		panic("Get Session Bus Connect Failed")
-	}
-
 	binding := KeyBinding{}
-	binding.KeyBindingCount = int32(bindingGSettings.GetInt(_KEY_COUNT))
+	binding.KeyBindingCount = int32(_bindingGSettings.GetInt(_KEY_COUNT))
 
-	bindingGSettings.Connect("changed::count", func(s *gio.Settings, name string) {
+	_bindingGSettings.Connect("changed::count", func(s *gio.Settings, name string) {
 		binding.KeyBindingCount = int32(s.GetInt(name))
 		dbus.NotifyChange(&binding, "KeyBindingCount")
 	})
@@ -327,6 +320,9 @@ func NewKeyBinding() *KeyBinding {
 
 func main() {
 	binding := NewKeyBinding()
-	dbus.InstallOnAny(busConn, binding)
+	err := dbus.InstallOnSession(binding)
+	if err != nil {
+		panic("Get Session Bus Connect Failed")
+	}
 	dlib.StartLoop()
 }

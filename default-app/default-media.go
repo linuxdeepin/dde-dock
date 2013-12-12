@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	mediaGSettings = gio.NewSettings("org.gnome.desktop.media-handling")
+	_mediaGSettings = gio.NewSettings("org.gnome.desktop.media-handling")
 )
 
 type MediaMount struct {
@@ -18,21 +18,21 @@ type MediaMount struct {
 }
 
 func (media *MediaMount) SetAllowAutoRun(allow bool) {
-	mediaGSettings.SetBoolean("automount", allow)
-	mediaGSettings.SetBoolean("automount-open", allow)
+	_mediaGSettings.SetBoolean("automount", allow)
+	_mediaGSettings.SetBoolean("automount-open", allow)
 }
 
 func NewMediaMount() *MediaMount {
 	media := &MediaMount{}
 	media.AllowAutoMount = GetAllowAutoMount()
 	media.TypeIgnoreList = property.NewGSettingsStrvProperty(media,
-		"TypeIgnoreList", mediaGSettings,
+		"TypeIgnoreList", _mediaGSettings,
 		"autorun-x-content-ignore")
 	media.TypeOpenFolderList = property.NewGSettingsStrvProperty(media,
-		"TypeOpenFolderList", mediaGSettings,
+		"TypeOpenFolderList", _mediaGSettings,
 		"autorun-x-content-open-folder")
 	media.TypeExecList = property.NewGSettingsStrvProperty(media,
-		"TypeExecList", mediaGSettings,
+		"TypeExecList", _mediaGSettings,
 		"autorun-x-content-start-app")
 
 	ListenGSettingsChanged(media)
@@ -49,21 +49,21 @@ func GetAllowAutoMount() bool {
 }
 
 func GetAutoMount() bool {
-	return mediaGSettings.GetBoolean("automount")
+	return _mediaGSettings.GetBoolean("automount")
 }
 
 func GetAutoMountOpen() bool {
-	return mediaGSettings.GetBoolean("automount-open")
+	return _mediaGSettings.GetBoolean("automount-open")
 }
 
 func ListenGSettingsChanged(media *MediaMount) {
-	mediaGSettings.Connect("changed::automount",
+	_mediaGSettings.Connect("changed::automount",
 		func(s *gio.Settings, name string) {
 			media.AllowAutoMount = GetAllowAutoMount()
 			dbus.NotifyChange(media, "AllowAutoMount")
 		})
 
-	mediaGSettings.Connect("changed::automount-open",
+	_mediaGSettings.Connect("changed::automount-open",
 		func(s *gio.Settings, name string) {
 			media.AllowAutoMount = GetAllowAutoMount()
 			dbus.NotifyChange(media, "AllowAutoMount")

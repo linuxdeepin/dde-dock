@@ -42,7 +42,7 @@ type BlurPictManager struct {
 	BlurPictChanged func(string, string)
 }
 
-type BlurResult struct {
+type _BlurResult struct {
 	Success  bool
 	PictPath string
 }
@@ -56,22 +56,22 @@ const (
 	_BG_BLUR_PICT_CACHE_DIR = "gaussian-background"
 )
 
-func (blur *BlurPictManager) BlurPictDestPath(uid string, sigma float64, numsteps int64) *BlurResult {
+func (blur *BlurPictManager) BlurPictDestPath(uid string, sigma float64, numsteps int64) *_BlurResult {
 	homeDir, err := GetHomeDirById(uid)
 	if err != nil {
 		fmt.Println("get home dir failed")
-		return &BlurResult{Success: false, PictPath: ""}
+		return &_BlurResult{Success: false, PictPath: ""}
 	}
 
 	srcPath := GetCurrentSrcPath(uid)
 	destPath := GenerateDestPath(srcPath, homeDir)
 	if IsFileValid(srcPath, destPath) {
-		return &BlurResult{Success: true, PictPath: destPath}
+		return &_BlurResult{Success: true, PictPath: destPath}
 	}
 
 	go GenerateBlurPict(blur, srcPath, destPath, uid, sigma, numsteps)
 
-	return &BlurResult{Success: false, PictPath: srcPath}
+	return &_BlurResult{Success: false, PictPath: srcPath}
 }
 
 func (blur *BlurPictManager) GetDBusInfo() dbus.DBusInfo {

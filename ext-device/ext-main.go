@@ -64,8 +64,8 @@ func main() {
 		if mouse != nil {
 			dbus.InstallOnSession(mouse)
 			tmp := ExtDeviceInfo{
-				DevicePath: _EXT_ENTRY_PATH + mouse.DeviceID,
-				DeviceType: "mouse",
+				Path: _EXT_ENTRY_PATH + mouse.DeviceID,
+				Type: "mouse",
 			}
 			dev.DevInfoList = append(dev.DevInfoList, tmp)
 		}
@@ -76,8 +76,8 @@ func main() {
 		if tpad != nil {
 			dbus.InstallOnSession(tpad)
 			tmp := ExtDeviceInfo{
-				DevicePath: _EXT_ENTRY_PATH + tpad.DeviceID,
-				DeviceType: "TouchPad",
+				Path: _EXT_ENTRY_PATH + tpad.DeviceID,
+				Type: "TouchPad",
 			}
 			dev.DevInfoList = append(dev.DevInfoList, tmp)
 		}
@@ -88,8 +88,8 @@ func main() {
 		if keyboard != nil {
 			dbus.InstallOnSession(keyboard)
 			tmp := ExtDeviceInfo{
-				DevicePath: _EXT_ENTRY_PATH + keyboard.DeviceID,
-				DeviceType: "keyboard",
+				Path: _EXT_ENTRY_PATH + keyboard.DeviceID,
+				Type: "keyboard",
 			}
 			dev.DevInfoList = append(dev.DevInfoList, tmp)
 		}
