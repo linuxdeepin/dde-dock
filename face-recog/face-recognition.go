@@ -28,7 +28,7 @@ func (info *FaceRecogManager) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (info *FaceRecogManager) GetCanFaceRecognition(userName string) FaceRecogInfo {
+func (info *FaceRecogManager) CanFaceRecognition(userName string) FaceRecogInfo {
 	var err error
 	faceInfo := FaceRecogInfo{}
 

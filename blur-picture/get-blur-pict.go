@@ -52,8 +52,8 @@ const (
 	_BLUR_PICT_PATH = "/com/deepin/daemon/BlurPictManager"
 	_BLUR_PICT_IFC  = "com.deepin.daemon.BlurPictManager"
 
-	_ACCOUNTS_PATH         = "/org/freedesktop/Accounts/User"
-	BG_BLUR_PICT_CACHE_DIR = "gaussian-background"
+	_ACCOUNTS_PATH          = "/org/freedesktop/Accounts/User"
+	_BG_BLUR_PICT_CACHE_DIR = "gaussian-background"
 )
 
 func (blur *BlurPictManager) BlurPictDestPath(uid string, sigma float64, numsteps int64) *BlurResult {
@@ -65,7 +65,7 @@ func (blur *BlurPictManager) BlurPictDestPath(uid string, sigma float64, numstep
 
 	srcPath := GetCurrentSrcPath(uid)
 	destPath := GenerateDestPath(srcPath, homeDir)
-	if IsFileValid(srcPath, destPath, homeDir) {
+	if IsFileValid(srcPath, destPath) {
 		return &BlurResult{Success: true, PictPath: destPath}
 	}
 
@@ -118,7 +118,7 @@ func GenerateBlurPict(blur *BlurPictManager, srcPath, destPath, uid string, sigm
 	dest := C.CString(destPath)
 	defer C.free(unsafe.Pointer(dest))
 
-	pictPath := homeDir + "/.cache/" + BG_BLUR_PICT_CACHE_DIR
+	pictPath := homeDir + "/.cache/" + _BG_BLUR_PICT_CACHE_DIR
 	err = os.MkdirAll(pictPath, os.FileMode(0700))
 	if err != nil {
 		fmt.Println(err)
@@ -152,12 +152,12 @@ func GenerateDestPath(srcPath, homeDir string) string {
 		}
 	}
 
-	destPath := homeDir + "/.cache/" + BG_BLUR_PICT_CACHE_DIR + "/" + md5Str + ".png"
+	destPath := homeDir + "/.cache/" + _BG_BLUR_PICT_CACHE_DIR + "/" + md5Str + ".png"
 	return destPath
 }
 
-func IsFileValid(srcPath, destPath, homeDir string) bool {
-	if len(homeDir) <= 0 && len(srcPath) <= 0 && len(destPath) <= 0 {
+func IsFileValid(srcPath, destPath string) bool {
+	if len(srcPath) <= 0 && len(destPath) <= 0 {
 		fmt.Println("args failed")
 		return false
 	}

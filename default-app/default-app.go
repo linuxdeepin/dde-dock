@@ -7,29 +7,29 @@ import (
 
 type DefaultApps struct{}
 
-type DAppInfo struct {
-	AppID          string
-	AppName        string
-	AppDisplayName string
-	AppDesc        string
-	AppExec        string
-	AppCommand     string
+type AppInfo struct {
+	ID          string
+	Name        string
+	DisplayName string
+	Desc        string
+	Exec        string
+	Command     string
 }
 
-func NewDAppInfo(gioApp *gio.AppInfo) *DAppInfo {
-	dappInfo := DAppInfo{}
+func NewDAppInfo(gioApp *gio.AppInfo) *AppInfo {
+	dappInfo := AppInfo{}
 
-	dappInfo.AppID = gioApp.GetId()
-	dappInfo.AppName = gioApp.GetName()
-	dappInfo.AppDisplayName = gioApp.GetDisplayName()
-	dappInfo.AppDesc = gioApp.GetDescription()
-	dappInfo.AppExec = gioApp.GetExecutable()
-	dappInfo.AppCommand = gioApp.GetCommandline()
+	dappInfo.ID = gioApp.GetId()
+	dappInfo.Name = gioApp.GetName()
+	dappInfo.DisplayName = gioApp.GetDisplayName()
+	dappInfo.Desc = gioApp.GetDescription()
+	dappInfo.Exec = gioApp.GetExecutable()
+	dappInfo.Command = gioApp.GetCommandline()
 	return &dappInfo
 }
 
-func (dapp *DefaultApps) GetAppsListViaType(typeName string) []*DAppInfo {
-	var defaultAppsList []*DAppInfo
+func (dapp *DefaultApps) AppsListViaType(typeName string) []*AppInfo {
+	var defaultAppsList []*AppInfo
 	gioAppsList := gio.AppInfoGetAllForType(typeName)
 	for _, gioApp := range gioAppsList {
 		defaultAppsList = append(defaultAppsList, NewDAppInfo(gioApp))
@@ -37,7 +37,7 @@ func (dapp *DefaultApps) GetAppsListViaType(typeName string) []*DAppInfo {
 	return defaultAppsList
 }
 
-func (dapp *DefaultApps) GetDefaultAppViaType(typeName string) *DAppInfo {
+func (dapp *DefaultApps) DefaultAppViaType(typeName string) *AppInfo {
 	gioApp := gio.AppInfoGetDefaultForType(typeName, false)
 	return NewDAppInfo(gioApp)
 }
