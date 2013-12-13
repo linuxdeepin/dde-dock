@@ -24,8 +24,7 @@ package main
 import (
 	"dlib"
 	"dlib/dbus"
-	/*"fmt"*/
-)
+	/*"fmt"*/)
 
 /*type IndividuateManager struct {}*/
 
@@ -44,5 +43,11 @@ func (bgManager *BackgroundManager) GetDBusInfo() dbus.DBusInfo {
 }
 
 func main() {
+	bgManager := NewBackgroundManager()
+	err := dbus.InstallOnSession(bgManager)
+	if err != nil {
+		panic(err)
+	}
+
 	dlib.StartLoop()
 }
