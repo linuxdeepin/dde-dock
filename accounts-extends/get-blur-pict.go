@@ -182,7 +182,10 @@ func IsFileValid(srcPath, destPath string) bool {
 
 func main() {
 	blur := &BlurPictManager{}
-	dbus.InstallOnSession(blur)
+	err := dbus.InstallOnSystem(blur)
+	if err != nil {
+		panic (err)
+	}
 
 	select {}
 }
