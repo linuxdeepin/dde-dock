@@ -29,11 +29,16 @@
       <summary>how the background is drawed on the screen</summary>
       <description>enumerations represent how the background is drawed on the screen. e.g. scaling or tiling</description>
     </key>
-    <key type="s" name="picture-uris">
-      <default>'file:///usr/share/backgrounds/default_background.jpg'</default>
+    <key type="as" name="picture-uris">
+      <default>['file:///usr/share/backgrounds/default_background.jpg']</default>
       <summary>Picture URIs</summary>
       <description>Background image URIs delimited by semicolons. Note that the backend only supports local (file://) URIs.</description>
     </key>
+	<key type="i" name="index">
+		<default>0</default>
+		<summary>Pictures Index</summary>
+		<description>The picture index in uris</description>
+	</key>
 	<key type="b" name="auto-switch">
 		<default>false</default>
 		<summary>Auto Switch Pictures</summary>
