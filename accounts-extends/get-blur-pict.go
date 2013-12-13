@@ -56,20 +56,34 @@ const (
 	_BG_BLUR_PICT_CACHE_DIR = "gaussian-background"
 )
 
-func (blur *BlurPictManager) BackgroundBlurPictPath(uid string) *_BlurResult {
+func (blur *BlurPictManager) BackgroundBlurPictPath(uid, srcPath string) *_BlurResult {
+	if len(uid) <= 0 {
+		return &_BlurResult{Success: false, PictPath: ""}
+	}
 	homeDir, err := GetHomeDirById(uid)
 	if err != nil {
 		fmt.Println("get home dir failed")
 		return &_BlurResult{Success: false, PictPath: ""}
 	}
 
-	srcPath := GetCurrentSrcPath(uid)
+	srcFlag := true
+	if len(srcPath) <= 0 {
+		srcFlag = false
+		srcPath = GetCurrentSrcPath(uid)
+	}
 	destPath := GenerateDestPath(srcPath, homeDir)
 	if IsFileValid(srcPath, destPath) {
 		return &_BlurResult{Success: true, PictPath: destPath}
 	}
 
-	go GenerateBlurPict(blur, srcPath, destPath, uid)
+	if MkGaussianCacheDir(homeDir) {
+		go func() {
+			success := GenerateBlurPict(srcPath, destPath)
+			if success && !srcFlag {
+				blur.BlurPictChanged(uid, destPath)
+			}
+		}()
+	}
 
 	return &_BlurResult{Success: false, PictPath: srcPath}
 }
@@ -101,15 +115,25 @@ func GetCurrentSrcPath(uid string) string {
 	return srcPath
 }
 
-func GenerateBlurPict(blur *BlurPictManager, srcPath, destPath, uid string) bool {
-	if len(uid) <= 0 && len(srcPath) <= 0 && len(destPath) <= 0 {
-		fmt.Println("args failed")
+func MkGaussianCacheDir(homeDir string) bool {
+	if len(homeDir) <= 0 {
 		return false
 	}
 
-	homeDir, err := GetHomeDirById(uid)
+	pictPath := homeDir + "/.cache/" + _BG_BLUR_PICT_CACHE_DIR
+	err := os.MkdirAll(pictPath, os.FileMode(0700))
 	if err != nil {
-		fmt.Println("get home dir failed")
+		fmt.Println(err)
+		return false
+	}
+
+	return true
+
+}
+
+func GenerateBlurPict(srcPath, destPath string) bool {
+	if len(srcPath) <= 0 && len(destPath) <= 0 {
+		fmt.Println("args failed")
 		return false
 	}
 
@@ -118,19 +142,11 @@ func GenerateBlurPict(blur *BlurPictManager, srcPath, destPath, uid string) bool
 	dest := C.CString(destPath)
 	defer C.free(unsafe.Pointer(dest))
 
-	pictPath := homeDir + "/.cache/" + _BG_BLUR_PICT_CACHE_DIR
-	err = os.MkdirAll(pictPath, os.FileMode(0700))
-	if err != nil {
-		fmt.Println(err)
-		return false
-	}
-
 	is_ok := C.generate_blur_pict(src, dest, C.double(10), C.long(10))
 	if is_ok == 0 {
 		fmt.Println("generate gaussian picture failed")
 		return false
 	}
-	blur.BlurPictChanged(uid, destPath)
 
 	return true
 }
@@ -184,7 +200,7 @@ func main() {
 	blur := &BlurPictManager{}
 	err := dbus.InstallOnSystem(blur)
 	if err != nil {
-		panic (err)
+		panic(err)
 	}
 
 	select {}

@@ -26,15 +26,15 @@ package main
 import (
 	"dlib/dbus/property"
 	"dlib/gio-2.0"
-	/*"fmt"*/
-)
+	/*"fmt"*/)
 
 type BackgroundManager struct {
 	AutoSwitch     *property.GSettingsBoolProperty   `access:"readwrite"`
 	SwitchDuration *property.GSettingsIntProperty    `access:"readwrite"`
 	CrossFadeMode  *property.GSettingsStringProperty `access:"readwrite"`
-	CurrentPicture string
-	PictureURIS    []string
+	CurrentPicture *property.GSettingsStringProperty
+	PictureURIS    *property.GSettingsStrvProperty
+	PictureIndex   *property.GSettingsIntProperty
 }
 
 const (
@@ -50,14 +50,16 @@ func (bgManager *BackgroundManager) SetBackgroundPicture(path string, replace bo
 	if replace {
 		/* use 'path' replace 'PictureURIS' */
 		pictStrv = append(pictStrv, path)
+		indiviGSettings.SetInt("index", 0)
 	} else {
 		/* append 'path' to 'PictureURIS' */
 		pictStrv = indiviGSettings.GetStrv("picture-uris")
+		l := len(pictStrv)
 		pictStrv = append(pictStrv, path)
+		indiviGSettings.SetInt("index", l)
 	}
 
 	indiviGSettings.SetStrv("picture-uris", pictStrv)
-	indiviGSettings.SetString("current-picture", path)
 }
 
 func NewBackgroundManager() *BackgroundManager {
@@ -72,9 +74,15 @@ func NewBackgroundManager() *BackgroundManager {
 	bgManager.CrossFadeMode = property.NewGSettingsStringProperty(
 		bgManager, "CrossFadeMode",
 		indiviGSettings, "cross-fade-auto-mode")
-
-	bgManager.CurrentPicture = indiviGSettings.GetString("current-picture")
-	bgManager.PictureURIS = indiviGSettings.GetStrv("picture-uris")
+	bgManager.CurrentPicture = property.NewGSettingsStringProperty(
+		bgManager, "CurrentPicture",
+		indiviGSettings, "current-picture")
+	bgManager.PictureURIS = property.NewGSettingsStrvProperty(
+		bgManager, "PictureURIS",
+		indiviGSettings, "picture-uris")
+	bgManager.PictureIndex = property.NewGSettingsIntProperty(
+		bgManager, "PictureIndex",
+		indiviGSettings, "index")
 
 	ListenGSetting(bgManager)
 
@@ -82,11 +90,16 @@ func NewBackgroundManager() *BackgroundManager {
 }
 
 func ListenGSetting(bgManager *BackgroundManager) {
-	indiviGSettings.Connect("changed::current-picture", func(s *gio.Settings, key string) {
-		bgManager.CurrentPicture = s.GetString(key)
+	indiviGSettings.Connect("changed::picture-uris", func(s *gio.Settings, key string) {
+		/* generate bg blur picture */
 	})
 
-	indiviGSettings.Connect("changed::picture-uris", func(s *gio.Settings, key string) {
-		bgManager.PictureURIS = s.GetStrv(key)
+	indiviGSettings.Connect("changed::index", func(s *gio.Settings, key string) {
+		i := s.GetInt(key)
+		uris := s.GetStrv("picture-uris")
+		s.SetString("current-picture", uris[i])
 	})
+}
+
+func AutoSwitchPicture() {
 }
