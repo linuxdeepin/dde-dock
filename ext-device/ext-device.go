@@ -99,6 +99,13 @@ func (keyboard *KeyboardEntry) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
+func (keyboard *KeyboardEntry) LayoutList () map[string]string {
+	datas := ParseXML(_LAYOUT_XML_PATH)
+	layouts := GetLayoutList(datas)
+
+	return layouts
+}
+
 func NewMouseEntry() *MouseEntry {
 	mouse := &MouseEntry{}
 
