@@ -4,7 +4,6 @@ import (
 	"dlib"
 	"dlib/dbus"
 	"dlib/gio-2.0"
-	"fmt"
 	"strconv"
 	"strings"
 )
@@ -69,6 +68,10 @@ func (binding *KeyBinding) GetCustomList() []int32 {
 
 	count := _bindingGSettings.GetInt(_KEY_COUNT)
 	for i := 0; i < count; i++ {
+		gs := NewCustomGSettings(int32(_KEY_COUNT_BASE + i))
+		if gs.GetString(_KEY_NAME) == "" {
+			continue
+		}
 		customIDList = append(customIDList,
 			int32(_KEY_COUNT_BASE+i))
 	}
@@ -77,10 +80,15 @@ func (binding *KeyBinding) GetCustomList() []int32 {
 }
 
 func (binding *KeyBinding) HasOwnID(id int32) bool {
-	/*sysIDList := binding.GetSystemList ()*/
-	/*customIDList := binding.GetCustomList ()*/
 	for i, _ := range currentSystemBindings {
 		if id == i {
+			return true
+		}
+	}
+
+	customIDList := binding.GetCustomList()
+	for _, v := range customIDList {
+		if id == v {
 			return true
 		}
 	}
@@ -171,12 +179,10 @@ func (binding *KeyBinding) DeleteCustomBinding(id int32) {
 	if id < _KEY_COUNT_BASE {
 		return
 	}
-	UpdateBindingList(id)
 
-	cnt := binding.KeyBindingCount
-	if cnt > 0 {
-		_bindingGSettings.SetInt(_KEY_COUNT, int(cnt-1))
-	}
+	gs := NewCustomGSettings(id)
+	ModifyGSetingsKey(gs, _KEY_NAME, "")
+	ModifyGSetingsKey(gs, _KEY_SHORTCUT, "")
 }
 
 func ModifyCustomKey(binding *KeyBinding, id int32, key, value string) {
@@ -205,41 +211,6 @@ func ModifyGSetingsKey(gs *gio.Settings, key, value string) {
 	gio.SettingsSync()
 }
 
-func UpdateBindingList(id int32) {
-	cnt := _bindingGSettings.GetInt(_KEY_COUNT) + _KEY_COUNT_BASE
-	fmt.Println("id:", id)
-	fmt.Println("cnt:", cnt)
-
-	i := id
-	for ; i < int32(cnt-1); i++ {
-		gsSrc := NewCustomGSettings(i)
-		gsDest := NewCustomGSettings(i + 1)
-		ReplaceGSettings(gsSrc, gsDest)
-	}
-
-	fmt.Println("i:", i)
-	gs := NewCustomGSettings(i)
-	ResetGSettings(gs)
-}
-
-func ReplaceGSettings(src, dest *gio.Settings) {
-	SetGSettings(src,
-		int32(src.GetInt(_KEY_ID)),
-		dest.GetString(_KEY_NAME),
-		dest.GetString(_KEY_SHORTCUT),
-		dest.GetString(_KEY_ACTION),
-	)
-}
-
-func ResetGSettings(gs *gio.Settings) {
-	gs.Reset(_KEY_ID)
-	gs.Reset(_KEY_NAME)
-	gs.Reset(_KEY_SHORTCUT)
-	gs.Reset(_KEY_ACTION)
-
-	gio.SettingsSync()
-}
-
 func GetKeyAccelList() map[int32]string {
 	accelList := make(map[int32]string)
 
@@ -263,6 +234,9 @@ func GetKeyAccelList() map[int32]string {
 	for i := 0; i < count; i++ {
 		id := int32(_KEY_COUNT_BASE + i)
 		gs := NewCustomGSettings(id)
+		if gs.GetString(_KEY_NAME) == "" {
+			continue
+		}
 		values := gs.GetString(_KEY_SHORTCUT)
 		accelList[id] = values
 	}
