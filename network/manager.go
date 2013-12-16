@@ -5,24 +5,20 @@ import "dlib/dbus/property"
 import nm "dbus/org/freedesktop/networkmanager"
 
 const (
-	DBUS_DEST = "com.deepin.daemon.Network"
-	DBUS_PATH = "/com/deepin/daemon/Network"
-	DBUS_IFC  = "com.deepin.daemon.Network"
+	DBusDest = "com.deepin.daemon.Network"
+	DBusPath = "/com/deepin/daemon/Network"
+	DBusIFC  = "com.deepin.daemon.Network"
 )
 
 const (
-	OP_ADDED = iota
-	OP_REMOVED
+	OpAdded = iota
+	OpRemoved
 )
 
 var (
 	_Manager  = nm.GetManager("/org/freedesktop/NetworkManager")
 	_Settings = nm.GetSettings("/org/freedesktop/NetworkManager/Settings")
 )
-
-type AccessPoint struct {
-	Uuid string
-}
 
 type Manager struct {
 	//update by manager.go
@@ -32,10 +28,10 @@ type Manager struct {
 	NetworkingEnabled dbus.Property `access:"readwrite"`
 
 	//update by devices.go
-	APs         []AccessPoint
-	HasWireless bool
-	HasWired    bool
-	devices     map[string]*nm.Device
+	APs             []*AccessPoint
+	WirelessDevices []*Device
+	WiredDevices    []*Device
+	OtherDevices    []*Device
 
 	//update by connections.go
 	WiredConnections    []*Connection
@@ -44,25 +40,20 @@ type Manager struct {
 }
 
 func (this *Manager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{DBUS_DEST, DBUS_PATH, DBUS_IFC}
+	return dbus.DBusInfo{DBusDest, DBusPath, DBusIFC}
 }
 
-func (this *Manager) updateManager() {
+func (this *Manager) initManager() {
 	this.WiredEnabled = true
-
-	this.updateDeviceManage()
-	this.updateConnectionManage()
+	this.WirelessEnabled = property.NewWrapProperty(this, "WirelessEnabled", _Manager.WirelessEnabled)
+	this.NetworkingEnabled = property.NewWrapProperty(this, "NetworkingEnabled", _Manager.NetworkingEnabled)
+	this.initDeviceManage()
+	this.initConnectionManage()
 }
 
 func NewManager() (m *Manager) {
 	this := &Manager{}
-	this.updateManager()
-	this.WirelessEnabled = property.NewWrapProperty(this, "WirelessEnabled", _Manager.WirelessEnabled)
-	this.NetworkingEnabled = property.NewWrapProperty(this, "NetworkingEnabled", _Manager.NetworkingEnabled)
-
-	_Settings.ConnectNewConnection(func(path dbus.ObjectPath) {
-		this.handleConnectionChanged(OP_ADDED, string(path))
-	})
+	this.initManager()
 	return this
 }
 
