@@ -12,9 +12,7 @@ import (
 )
 
 func main() {
-	mouseFlag := false
 	tpadFlag := false
-	keyboardFlag := false
 
 	if !InitGSettings() {
 		return
@@ -27,48 +25,25 @@ func main() {
 
 	success, nameList := GetProcDeviceNameList()
 	if success {
-		if DeviceIsExist(nameList, "mouse") {
-			mouseFlag = true
-		}
-
 		if DeviceIsExist(nameList, "touchpad") {
 			tpadFlag = true
 		}
-
-		if DeviceIsExist(nameList, "keyboard") {
-			keyboardFlag = true
-		}
 	} else {
-		C.gdk_init(nil, nil)
-		m := C.CString("Mouse")
-		defer C.free(unsafe.Pointer(m))
-		if C.DeviceIsExist(m) == 1 {
-			mouseFlag = true
-		}
-
 		t := C.CString("TouchPad")
 		defer C.free(unsafe.Pointer(t))
 		if C.DeviceIsExist(t) == 1 {
 			tpadFlag = true
 		}
-
-		k := C.CString("keyboard")
-		defer C.free(unsafe.Pointer(k))
-		if C.DeviceIsExist(k) == 1 {
-			keyboardFlag = true
-		}
 	}
 
-	if mouseFlag {
-		mouse := NewMouseEntry()
-		if mouse != nil {
-			dbus.InstallOnSession(mouse)
-			tmp := ExtDeviceInfo{
-				Path: _EXT_ENTRY_PATH + mouse.DeviceID,
-				Type: "mouse",
-			}
-			dev.DevInfoList = append(dev.DevInfoList, tmp)
+	mouse := NewMouseEntry()
+	if mouse != nil {
+		dbus.InstallOnSession(mouse)
+		tmp := ExtDeviceInfo{
+			Path: _EXT_ENTRY_PATH + mouse.DeviceID,
+			Type: "mouse",
 		}
+		dev.DevInfoList = append(dev.DevInfoList, tmp)
 	}
 
 	if tpadFlag {
@@ -83,16 +58,14 @@ func main() {
 		}
 	}
 
-	if keyboardFlag {
-		keyboard := NewKeyboardEntry()
-		if keyboard != nil {
-			dbus.InstallOnSession(keyboard)
-			tmp := ExtDeviceInfo{
-				Path: _EXT_ENTRY_PATH + keyboard.DeviceID,
-				Type: "keyboard",
-			}
-			dev.DevInfoList = append(dev.DevInfoList, tmp)
+	keyboard := NewKeyboardEntry()
+	if keyboard != nil {
+		dbus.InstallOnSession(keyboard)
+		tmp := ExtDeviceInfo{
+			Path: _EXT_ENTRY_PATH + keyboard.DeviceID,
+			Type: "keyboard",
 		}
+		dev.DevInfoList = append(dev.DevInfoList, tmp)
 	}
 
 	dbus.NotifyChange(dev, "DevInfoList")
