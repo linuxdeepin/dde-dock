@@ -9,6 +9,7 @@
 
 #include <pulse/pulseaudio.h>
 #include <pulse/mainloop-api.h>
+#include <pulse/sample.h>
 
 #define MAX_SINKS 4
 #define MAX_CARDS 4
@@ -37,18 +38,67 @@ typedef struct sink_s
     int index;
     char name[512];
     char description[512];
+    char driver[512];
     int mute;
     int nvolumesteps;
     int card;
     pa_cvolume volume;
 }sink_t;
 
-typedef struct card_info_s
+typedef struct source_s
+{
+    int index;
+    char name[512];
+    char description[512];
+    char driver[512];
+    int mute;
+    int nvolumesteps;
+    int card;
+    pa_cvolume volume;
+}source_t;
+
+typedef struct sink_input_s
 {
     int index;
     char name[512];
     int owner_module;
-}card_info_t;
+    int client;
+    int sink;
+    pa_cvolume volume;
+    char driver[512];
+    int mute;
+    int has_volume;
+    int volume_writable;
+}sink_input_t;
+
+typedef struct source_output_s
+{
+    int index;
+    char name[512];
+    int owner_module;
+    int client;
+    int sink;
+    pa_cvolume volume;
+    char driver[512];
+    int mute;
+    int has_volume;
+    int volume_writable;
+}source_output_t;
+
+typedef struct client_s
+{
+    int index;
+    char name[512];
+    int owner_module; char driver[512];
+}client_t;
+
+typedef struct card_s
+{
+    int index;
+    char name[512];
+    int owner_module;
+    char driver[512];
+}card_t;
 
 typedef struct pa_s
 {
@@ -58,22 +108,18 @@ typedef struct pa_s
     pa_operation   *pa_op;
 
     server_info_t *server_info;
-    pa_card_info *cards;
+    card_t cards[MAX_CARDS];
     int  n_cards;
-    pa_sink_info *sinks;
+    sink_t sinks[MAX_SINKS];
     int  n_sinks;
-    pa_source_info *sources;
+    source_t sources[MAX_SOURCES];
     int  n_sources;
-    pa_client_info *clients;
+    client_t clients[MAX_CLIENTS];
     int  n_clients;
-    pa_sink_input_info *sink_inputs;
+    sink_input_t sink_inputs[MAX_SINK_INPUTS];
     int  n_sink_inputs;
-    pa_source_output_info *source_outputs;
+    source_output_t source_outputs[MAX_SOURCE_OUTPUTS];
     int  n_source_outputs;
-    void *input_ports;
-    int  n_input_ports;
-    void *output_ports;
-    int  n_output_ports;
 
     struct_dealloc_t dealloc;
 } pa;

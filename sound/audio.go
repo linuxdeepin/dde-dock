@@ -13,7 +13,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
-	//"unsafe"
+	"unsafe"
 )
 
 type Audio struct {
@@ -32,8 +32,6 @@ type Sink struct {
 	Mute         string
 	NVolumeSteps int32
 	Card         int32
-	udPorts      int32
-	NFormats     int32
 	Cvolume      Volume
 }
 
@@ -59,10 +57,8 @@ type Sink_input struct {
 	Client          int32
 	Sink            int32
 	Cvolume         Volume
-	Resample_method string
 	Driver          string
 	Mute            int32
-	Corked          int32
 	Has_volume      int32
 	Volume_writable int32
 }
@@ -74,10 +70,8 @@ type Source_output struct {
 	Client          int32
 	Sink            int32
 	Cvolume         Volume
-	Resample_method string
 	Driver          string
 	Mute            int32
-	Corked          int32
 	Has_volume      int32
 	Volume_writable int32
 }
@@ -96,11 +90,6 @@ type Card struct {
 	Name         string
 	Owner_module int32
 	Driver       string
-	N_profiles   int32
-	//pa_card_profile_info* profiles
-	//pa_card_profile_info*  active_profile
-	//pa_proplist *proplist
-	n_ports int32
 }
 
 type Module struct {
@@ -108,7 +97,7 @@ type Module struct {
 
 type Volume struct {
 	Channels uint32
-	Values   [2]uint32 `access:"read"`
+	Values   [320]uint32 `access:"read"`
 }
 
 func NewAudio() (*Audio, error) {
@@ -141,23 +130,38 @@ func (audio *Audio) GetServerInfo() *Audio {
 	return audio
 }
 
-func (audio *Audio) GetCards() *Audio {
+func (audio *Audio) GetCards() []*Card {
 	C.pa_get_card_list(audio.pa)
-	return audio
+	n := int(audio.pa.n_cards)
+	cards := make([]*Card, n)
+	for i := 0; i < n; {
+		cards[i] = &Card{}
+		cards[i].Index = int32(audio.pa.cards[i].index)
+		cards[i].Name = C.GoString(&audio.pa.cards[i].name[0])
+		cards[i].Driver = C.GoString(&audio.pa.cards[i].driver[0])
+		cards[i].Owner_module = int32(audio.pa.cards[i].owner_module)
+		i = i + 1
+	}
+	return cards
 }
 
 func (audio *Audio) GetSinks() []*Sink {
-	sinks := make([]*Sink, 2)
-	sinks[0] = &Sink{}
-	sinks[0].Index = 2
-	sinks[1] = &Sink{}
-	sinks[1].Index = 3
-
-	/*data, err := p.PulseCtl("list-sinks")
-	if err != nil {
-		println(err.Error())
-		return nil
-	}*/
+	C.pa_get_device_list(audio.pa)
+	n := int(audio.pa.n_sinks)
+	sinks := make([]*Sink, n)
+	for i := 0; i < n; i = i + 1 {
+		sinks[i] = &Sink{}
+		sinks[i].Index = int32(audio.pa.sinks[i].index)
+		sinks[i].Card = int32(audio.pa.sinks[i].index)
+		sinks[i].Description = C.GoString(&audio.pa.sinks[i].description[0])
+		sinks[i].Driver = C.GoString(&audio.pa.sinks[i].driver[0])
+		sinks[i].Name = C.GoString(&audio.pa.sinks[i].name[0])
+		sinks[i].Cvolume.Channels = uint32(audio.pa.sinks[i].volume.channels)
+		for i = 0; i < int(sinks[i].Cvolume.Channels); i = i + 1 {
+			sinks[i].Cvolume.Values[i] =
+				*((*uint32)(unsafe.Pointer(&audio.pa.sinks[i].volume.values[i])))
+		}
+	}
 
 	return sinks
 }

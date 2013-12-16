@@ -72,13 +72,14 @@ pa* pa_alloc(pa* self)
 	}
 
 	//allocate memory for members
-	self->cards=(pa_card_info*)malloc(sizeof(pa_card_info)*MAX_CARDS);
-	self->sinks=(pa_sink_info*)malloc(sizeof(pa_sink_info)*MAX_SINKS);
-	self->sources=(pa_source_info*)malloc(sizeof(pa_source_info)*MAX_SOURCES);
-	self->clients=(pa_client_info*)malloc(sizeof(pa_source_info)*MAX_CLIENTS);
-	self->sink_inputs=(pa_sink_input_info*)malloc(sizeof(pa_sink_input_info)*MAX_SINK_INPUTS);
-	self->source_outputs=(pa_source_output_info*)malloc(sizeof(pa_source_output_info)*
+	//self->cards=(card_t*)malloc(sizeof(card_t)*MAX_CARDS);
+	/*self->sinks=(sink_t*)malloc(sizeof(sink_t)*MAX_SINKS);
+	self->sources=(source_t*)malloc(sizeof(source_t)*MAX_SOURCES);
+	self->clients=(client_t*)malloc(sizeof(client_t)*MAX_CLIENTS);
+	self->sink_inputs=(sink_input_t*)malloc(sizeof(sink_input_t)*MAX_SINK_INPUTS);
+	self->source_outputs=(source_output_t*)malloc(sizeof(source_output_t)*
 			MAX_SOURCE_OUTPUTS);
+	*/
 
 
 	return self;
@@ -2264,7 +2265,7 @@ void pa_get_source_output_volume_cb(pa_context *c,
 void pa_get_cards_cb(pa_context *c, const pa_card_info*i, int eol, void *userdata)
 {
     pa *self=userdata;
-	pa_card_info *card=self->cards+self->n_cards-1;
+	card_t *card;
     if(!self)
     {
         fprintf(stderr,"NULL object pointer\n");
@@ -2275,13 +2276,17 @@ void pa_get_cards_cb(pa_context *c, const pa_card_info*i, int eol, void *userdat
         printf("End of source outputs list.\n");
         return;
     }
-	if(self->n_cards<MAX_CARDS)
+	if(self->n_cards>=MAX_CARDS)
 	{
-		self->n_cards++;
+		fprintf(stderr,"Too many cards returned,droped due to insufficient array\n");
+		return;
 	}
-
+	self->n_cards++;
+	card=self->cards+self->n_cards-1;
 	card->index=i->index;
-	strncpy(self->cards[self->n_cards-1].name,i->name,strlen(i->name)+1);
+	strncpy(card->name,i->name,strlen(i->name)+1);
+	card->owner_module=i->owner_module;
+	strncpy(card->driver,i->driver,strlen(i->driver)+1);
 
     return;
 }
