@@ -54,21 +54,40 @@ void pa_dealloc(pa *self)
     return;
 }
 
-pa* pa_alloc()
+pa* pa_alloc(pa* self)
 {
-	pa *self=(pa*)malloc(sizeof(pa));
+	if (self==NULL)
+	{
+		self=(pa*)malloc(sizeof(pa));
+	}
+	else
+	{
+		free(self);
+		self=(pa*)malloc(sizeof(pa));
+	}
 	if(self==NULL)
 	{
 		fprintf(stderr,"running out of virtual memory!\n");
 		exit(-1);
 	}
+
+	//allocate memory for members
+	self->cards=(pa_card_info*)malloc(sizeof(pa_card_info)*MAX_CARDS);
+	self->sinks=(pa_sink_info*)malloc(sizeof(pa_sink_info)*MAX_SINKS);
+	self->sources=(pa_source_info*)malloc(sizeof(pa_source_info)*MAX_SOURCES);
+	self->clients=(pa_client_info*)malloc(sizeof(pa_source_info)*MAX_CLIENTS);
+	self->sink_inputs=(pa_sink_input_info*)malloc(sizeof(pa_sink_input_info)*MAX_SINK_INPUTS);
+	self->source_outputs=(pa_source_output_info*)malloc(sizeof(pa_source_output_info)*
+			MAX_SOURCE_OUTPUTS);
+
+
 	return self;
 }
 
 pa* pa_new()
 {
-    pa *self;
-    self=pa_alloc();
+    pa *self=NULL;
+    self=pa_alloc(self);
     if(self!=NULL)
     {
 		memset(self,0,sizeof(*self));
@@ -103,7 +122,7 @@ int pa_init(pa *self,void *args,void *kwds)
         return -1;
     }
 
-    self->pa_ctx=pa_context_new(self->pa_mlapi,"python-pulseaudio");
+    self->pa_ctx=pa_context_new(self->pa_mlapi,"dde-pulseaudio");
     if(!self->pa_ctx)
     {
         perror("pa_context_new()");
@@ -114,6 +133,33 @@ int pa_init(pa *self,void *args,void *kwds)
     return 0;
 }
 
+server_info_t * serverinfo_new(server_info_t *self)
+{
+	if(self)
+	{
+		free(self);
+	}
+	self=(server_info_t*)malloc(sizeof(server_info_t));
+	memset(self,0,sizeof(*self));
+	self->dealloc=(struct_dealloc_t)serverinfo_dealloc;
+	return self;
+}
+
+void serverinfo_dealloc(server_info_t *self)
+{
+	if(self)
+	{
+		if(self->user_name)
+		{
+			free(self->user_name);
+		}
+		if(self->host_name)
+		{
+			free(self->host_name);
+		}
+		free(self);
+	}
+}
 
 void *pa_get_server_info(pa *self)
 {
@@ -199,6 +245,7 @@ void *pa_get_card_list(pa *self)
         switch (state)
         {
         case 0:
+			self->n_cards=0;
             self->pa_op = pa_context_get_card_info_list(self->pa_ctx, pa_get_cards_cb, self);
             state++;
             break;
@@ -1942,7 +1989,7 @@ void pa_get_serverinfo_cb(pa_context *c, const pa_server_info*i, void *userdata)
 	{
 		if(!self->server_info)
 		{
-			self->server_info=(server_info_t*)malloc(sizeof(server_info_t));
+			self->server_info=(server_info_t*)serverinfo_new(NULL);
 		}
 		if(self->server_info==NULL)
 		{
@@ -1952,7 +1999,10 @@ void pa_get_serverinfo_cb(pa_context *c, const pa_server_info*i, void *userdata)
 		else
 		{
 			//memcpy(self->server_info,i,sizeof(*i));
-			memcpy(self->server_info->host_name,i->host_name,strlen(i->host_name));
+			self->server_info->host_name=(char*)malloc(strlen(i->host_name)+1);
+			strncpy(self->server_info->host_name,i->host_name,strlen(i->host_name)+1);
+			self->server_info->user_name=(char*)malloc(strlen(i->host_name)+1);
+			strncpy(self->server_info->user_name,i->user_name,strlen(i->user_name)+1);
 		}
 
 
@@ -1976,6 +2026,18 @@ void pa_get_sinklist_cb(pa_context *c, const pa_sink_info *l, int eol, void *use
     {
         return;
     }
+	else
+	{
+		if(self->n_sink_inputs<MAX_SINKS)
+		{
+			self->n_sink_inputs++;
+		}
+		else
+		{
+			fprintf(stderr,"sinks number exceeds the MAX_SINKS\n");
+			return;
+		}
+	}
 
     // We know we've allocated 16 slots to hold devices.  Loop through our
     // structure and find the first one that's "uninitialized."  Copy the
@@ -1985,6 +2047,8 @@ void pa_get_sinklist_cb(pa_context *c, const pa_sink_info *l, int eol, void *use
 
     //const char *prop_key=NULL;
     //void *prop_state=NULL;
+
+	//strncpy((self->sinks)[self->n_sinks-1],l->);
 
 
     for (i = 0; i < l->channel_map.channels; i++)
@@ -2200,6 +2264,7 @@ void pa_get_source_output_volume_cb(pa_context *c,
 void pa_get_cards_cb(pa_context *c, const pa_card_info*i, int eol, void *userdata)
 {
     pa *self=userdata;
+	pa_card_info *card=self->cards+self->n_cards-1;
     if(!self)
     {
         fprintf(stderr,"NULL object pointer\n");
@@ -2210,8 +2275,13 @@ void pa_get_cards_cb(pa_context *c, const pa_card_info*i, int eol, void *userdat
         printf("End of source outputs list.\n");
         return;
     }
-    const char *prop_key = NULL;
-    void *prop_state = NULL;
+	if(self->n_cards<MAX_CARDS)
+	{
+		self->n_cards++;
+	}
+
+	card->index=i->index;
+	strncpy(self->cards[self->n_cards-1].name,i->name,strlen(i->name)+1);
 
     return;
 }

@@ -16,15 +16,41 @@
 #define MAX_SINKS 4
 #define MAX_CLIENTS 128
 #define MAX_SINK_INPUTS 128
-#define MAX_SOURCE_OUPUTS 128
+#define MAX_SOURCE_OUTPUTS 128
+
+typedef void (*struct_dealloc_t)(void* self);
+
+typedef struct method_s
+{
+
+}method_t;
 
 typedef struct server_info_s
 {
-    char user_name[32];
-    char host_name[32];
+    char *user_name;
+    char *host_name;
+    struct_dealloc_t dealloc;
 }server_info_t;
 
-typedef struct _pa
+typedef struct sink_s
+{
+    int index;
+    char name[512];
+    char description[512];
+    int mute;
+    int nvolumesteps;
+    int card;
+    pa_cvolume volume;
+}sink_t;
+
+typedef struct card_info_s
+{
+    int index;
+    char name[512];
+    int owner_module;
+}card_info_t;
+
+typedef struct pa_s
 {
     pa_mainloop *pa_ml;
     pa_mainloop_api *pa_mlapi;
@@ -49,7 +75,7 @@ typedef struct _pa
     void *output_ports;
     int  n_output_ports;
 
-    char *data;
+    struct_dealloc_t dealloc;
 } pa;
 
 typedef struct pa_devicelist
@@ -61,9 +87,13 @@ typedef struct pa_devicelist
 } pa_devicelist_t;
 
 int pa_clear(pa *self);
+pa* pa_alloc();
 void pa_dealloc(pa *self);
 pa* pa_new();
 int pa_init(pa *self,void *args,void *kwds);
+
+server_info_t * serverinfo_new(server_info_t *self);
+void serverinfo_dealloc(server_info_t *self);
 
 void *pa_get_server_info(pa *self);
 void *pa_get_card_list(pa *self);

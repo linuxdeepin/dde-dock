@@ -1,42 +1,55 @@
 // +build ignore
+
 package main
+
+// #cgo amd64 386 CFLAGS: -g -Wall
+// #cgo LDFLAGS: -L. -ldde-pulse -lpulse -lc
+// #include "stdio.h"
+// #include "dde-pulse.h"
+import "C"
 
 import (
 	"dlib/dbus"
+	"fmt"
+	"os"
 	"strconv"
+	//"unsafe"
 )
 
 type Audio struct {
 	NumDevics int32
+	pa        *C.pa
+	HostName  string
+	UserName  string
 	//Change func(int32)
 }
 
 type Sink struct {
-	Index          int32
-	Name           string
-	Description    string
-	Driver         string
-	Mute           string
-	N_volume_steps int32
-	Card           int32
-	N_ports        int32
-	N_formats      int32
-	Cvolume        Volume
+	Index        int32
+	Name         string
+	Description  string
+	Driver       string
+	Mute         string
+	NVolumeSteps int32
+	Card         int32
+	udPorts      int32
+	NFormats     int32
+	Cvolume      Volume
 }
 
 //Only capitalized first character in Capitalized structure can be exposed
 
 type Source struct {
-	Index          int32
-	Name           string
-	Description    string
-	Driver         string
-	Mute           int32
-	N_volume_steps int32
-	Card           int32
-	C_ports        int32
-	N_formates     int32
-	Cvolume        Volume
+	Index        int32
+	Name         string
+	Description  string
+	Driver       string
+	Mute         int32
+	NVolumeSteps int32
+	Card         int32
+	C_ports      int32
+	N_formates   int32
+	Cvolume      Volume
 }
 
 type Sink_input struct {
@@ -96,6 +109,87 @@ type Module struct {
 type Volume struct {
 	Channels uint32
 	Values   [2]uint32 `access:"read"`
+}
+
+func NewAudio() (*Audio, error) {
+	audio := Audio{}
+	audio.pa = C.pa_new()
+	if audio.pa == nil {
+		fmt.Fprintln(os.Stderr,
+			"unable to connect to the pulseaudio server,exiting\n")
+		os.Exit(-1)
+	}
+	fmt.Println("module started\n")
+	return &audio, nil
+}
+
+func (o *Audio) GetDBusInfo() dbus.DBusInfo {
+	return dbus.DBusInfo{
+		"com.deepin.daemon.Audio",
+		"/com/deepin/daemon/Audio",
+		"com.deepin.daemon.Audio",
+	}
+}
+
+func (audio *Audio) GetServerInfo() *Audio {
+	C.pa_get_server_info(audio.pa)
+	audio.HostName = C.GoString(audio.pa.server_info.host_name)
+	audio.UserName = C.GoString(audio.pa.server_info.user_name)
+	//fmt.Print("go: " + audio.HostName + "\n")
+	fmt.Print("go: " + C.GoString((audio.pa.server_info.host_name)) + "\n")
+
+	return audio
+}
+
+func (audio *Audio) GetCards() *Audio {
+	C.pa_get_card_list(audio.pa)
+	return audio
+}
+
+func (audio *Audio) GetSinks() []*Sink {
+	sinks := make([]*Sink, 2)
+	sinks[0] = &Sink{}
+	sinks[0].Index = 2
+	sinks[1] = &Sink{}
+	sinks[1].Index = 3
+
+	/*data, err := p.PulseCtl("list-sinks")
+	if err != nil {
+		println(err.Error())
+		return nil
+	}*/
+
+	return sinks
+}
+
+func (audio *Audio) GetSources() *Source {
+	return &Source{}
+}
+
+func (audio *Audio) GetSinkInputs() *Sink_input {
+	return &Sink_input{}
+}
+
+func (audio *Audio) GetSourceOutput() *Source_output {
+	return &Source_output{}
+}
+
+func (audio *Audio) GetClients() [2]*Client {
+	var clients = [2]*Client{}
+	clients[0] = new(Client)
+	clients[0].Index = 0
+	clients[1] = new(Client)
+	clients[1].Index = 1
+	return clients
+}
+
+func (audio *Audio) GetVolume() *Volume {
+	return &Volume{}
+}
+
+func (o *Audio) IsRunning() uint32 {
+	a := 3999
+	return uint32(a)
 }
 
 func (sink *Sink) GetDBusInfo() dbus.DBusInfo {
@@ -194,57 +288,12 @@ func (card *Card) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (audio *Audio) GetSink() *Sink {
-	return &Sink{}
-}
-
-func (audio *Audio) GetSource() *Source {
-	return &Source{}
-}
-
-func (audio *Audio) Get_sink_inputs() *Sink_input {
-	return &Sink_input{}
-}
-
-func (audio *Audio) Get_source_output() *Source_output {
-	return &Source_output{}
-}
-
-/*
-func (audio *Audio)GetClients() [2]*Client {
-	var clients =[2]*Client{}
-	clients[0]=new(Client)
-	clients[0].Index=0
-	clients[1]=new(Client)
-	clients[1].Index=1
-	return clients
-}
-*/
-
-func (audio *Audio) GetClients() *Client {
-	var client = new(Client)
-	client.Index = 123
-	return client
-}
-
-func (audio *Audio) GetVolume() *Volume {
-	return &Volume{}
-}
-
-func (o *Audio) IsRunning() uint32 {
-	a := 3999
-	return uint32(a)
-}
-
-func (o *Audio) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		"com.deepin.daemon.Audio",
-		"/com/deepin/daemon/Audio",
-		"com.deepin.daemon.Audio",
-	}
-}
-
 func main() {
-	dbus.InstallOnSession(&Audio{})
+	pulse, err := NewAudio()
+	if err != nil {
+		panic(err)
+		os.Exit(-1)
+	}
+	dbus.InstallOnSession(pulse)
 	select {}
 }
