@@ -2,98 +2,120 @@ package main
 
 import nm "dbus/org/freedesktop/networkmanager"
 import "dlib/dbus"
+import "fmt"
 
-const (
-	NM_DEVICE_TYPE_UNKNOWN    = 0
-	NM_DEVICE_TYPE_ETHERNET   = 1
-	NM_DEVICE_TYPE_WIFI       = 2
-	NM_DEVICE_TYPE_UNUSED1    = 3
-	NM_DEVICE_TYPE_UNUSED2    = 4
-	NM_DEVICE_TYPE_BT         = 5
-	NM_DEVICE_TYPE_OLPC_MESH  = 6
-	NM_DEVICE_TYPE_WIMAX      = 7
-	NM_DEVICE_TYPE_MODEM      = 8
-	NM_DEVICE_TYPE_INFINIBAND = 9
-	NM_DEVICE_TYPE_BOND       = 10
-	NM_DEVICE_TYPE_VLAN       = 11
-	NM_DEVICE_TYPE_ADSL       = 12
-	NM_DEVICE_TYPE_BRIDGE     = 13
-)
-
-const (
-	NM_DEVICE_STATE_UNKNOWN      = 0
-	NM_DEVICE_STATE_UNMANAGED    = 10
-	NM_DEVICE_STATE_UNAVAILABLE  = 20
-	NM_DEVICE_STATE_DISCONNECTED = 30
-	NM_DEVICE_STATE_PREPARE      = 40
-	NM_DEVICE_STATE_CONFIG       = 50
-	NM_DEVICE_STATE_NEED_AUTH    = 60
-	NM_DEVICE_STATE_IP_CONFIG    = 70
-	NM_DEVICE_STATE_IP_CHECK     = 80
-	NM_DEVICE_STATE_SECONDARIES  = 90
-	NM_DEVICE_STATE_ACTIVATED    = 100
-	NM_DEVICE_STATE_DEACTIVATING = 110
-	NM_DEVICE_STATE_FAILED       = 120
-)
-
-func (this *Manager) updateDeviceManage() {
-	this.devices = make(map[string]*nm.Device)
-	_Manager.ConnectDeviceAdded(func(path string) {
-		this.handleDeviceChanged(OP_ADDED, string(path))
-	})
-	_Manager.ConnectDeviceRemoved(func(path dbus.ObjectPath) {
-		this.handleDeviceChanged(OP_REMOVED, string(path))
-	})
-	for _, p := range _Manager.GetDevices() {
-		this.handleDeviceChanged(OP_ADDED, string(p))
-	}
-	this.updateDeviceInfo()
+type AccessPoint struct {
+	Ssid     string
+	NeedKey  bool
+	Strength uint8
 }
 
-func (this *Manager) handleDeviceChanged(operation int32, path string) {
-	switch operation {
-	case OP_ADDED:
-		dev := nm.GetDevice(path)
-		if dev.DeviceType.Get() == NM_DEVICE_TYPE_WIFI {
+type Device struct {
+	Path  dbus.ObjectPath
+	State uint32
+}
+
+func NewDevice(core *nm.Device) *Device {
+	return &Device{core.Path, core.State.Get()}
+}
+
+func (this *Manager) ActiveWiredDevice(active bool, path dbus.ObjectPath) {
+	dev := nm.GetDevice(string(path))
+	if active && dev.State.Get() == NM_DEVICE_STATE_DISCONNECTED {
+		for _, c := range dev.AvailableConnections.Get() {
+			_Manager.ActivateConnection(c, path, dbus.ObjectPath("/"))
 		}
-		this.devices[path] = dev
-		this.updateDeviceInfo()
-	case OP_REMOVED:
-		delete(this.devices, path)
-		this.updateDeviceInfo()
+	} else if !active && dev.State.Get() == NM_DEVICE_STATE_ACTIVATED {
+		nm.GetDevice(string(path)).Disconnect()
+	}
+}
+
+func (this *Manager) initDeviceManage() {
+	_Manager.ConnectDeviceAdded(func(path dbus.ObjectPath) {
+		this.handleDeviceChanged(OpAdded, path)
+	})
+	_Manager.ConnectDeviceRemoved(func(path dbus.ObjectPath) {
+		this.handleDeviceChanged(OpRemoved, path)
+	})
+	for _, p := range _Manager.GetDevices() {
+		this.handleDeviceChanged(OpAdded, p)
+	}
+}
+
+func tryRemoveDevice(path dbus.ObjectPath, devices []*Device) ([]*Device, bool) {
+	var newDevices []*Device
+	found := false
+	for _, dev := range devices {
+		if dev.Path != path {
+			newDevices = append(newDevices, dev)
+		} else {
+			found = true
+		}
+	}
+	return newDevices, found
+}
+
+func (this *Manager) addWirelessDevice(path dbus.ObjectPath) {
+	dev := nm.GetDevice(string(path))
+	wirelessDevice := NewDevice(dev)
+	dev.ConnectStateChanged(func(new_state uint32, old_state uint32, reason uint32) {
+	wirelessDevice.State = dev.State.Get()
+	dbus.NotifyChange(this, "WirelessDevices")
+	})
+	this.WirelessDevices = append(this.WirelessDevices, wirelessDevice)
+	dbus.NotifyChange(this, "WirelessDevices")
+
+	nmWirelessDev := nm.GetDeviceWireless(string(path))
+	nmWirelessDev.ConnectAccessPointAdded(func(p dbus.ObjectPath) {
+		fmt.Println("Ap add...", p, this.GetAccessPoints(path))
+		dbus.NotifyChange(this, "WirelessDevices")
+	})
+	nmWirelessDev.ConnectAccessPointRemoved(func(p dbus.ObjectPath) {
+		fmt.Println("Ap removed...", p)
+		dbus.NotifyChange(this, "WirelessDevices")
+		dbus.NotifyChange(this, "WirelessDevices")
+	})
+}
+
+func (this *Manager) handleDeviceChanged(operation int32, path dbus.ObjectPath) {
+	switch operation {
+	case OpAdded:
+		dev := nm.GetDevice(string(path))
+		switch dev.DeviceType.Get() {
+		case NM_DEVICE_TYPE_WIFI:
+			this.addWirelessDevice(path)
+		case NM_DEVICE_TYPE_ETHERNET:
+			wiredDevice := NewDevice(dev)
+			dev.ConnectStateChanged(func(new_state uint32, old_state uint32, reason uint32) {
+				wiredDevice.State = dev.State.Get()
+				dbus.NotifyChange(this, "WiredDevices")
+			})
+			this.WiredDevices = append(this.WiredDevices, wiredDevice)
+			dbus.NotifyChange(this, "WiredDevices")
+		default:
+			this.OtherDevices = append(this.OtherDevices, NewDevice(dev))
+		}
+	case OpRemoved:
+		var removed bool
+		if this.WirelessDevices, removed = tryRemoveDevice(path, this.WirelessDevices); removed {
+			dbus.NotifyChange(this, "WirelessDevices")
+			fmt.Println("WirelessRemoved..")
+		}
+		if this.WiredDevices, removed = tryRemoveDevice(path, this.WiredDevices); removed {
+			dbus.NotifyChange(this, "WiredDevices")
+		}
 	default:
 		panic("Didn't support operation")
 	}
 }
 
-func (this *Manager) updateDeviceInfo() {
-	hasWired := false
-	hasWireless := false
-	this.APs = this.APs[0:0]
-	for _, dev := range this.devices {
-		switch dev.DeviceType.Get() {
-		case NM_DEVICE_TYPE_WIFI:
-			hasWireless = true
-			this.updateAccessPoint(nm.GetDeviceWireless(string(dev.Path)))
-		case NM_DEVICE_TYPE_ETHERNET:
-			hasWired = true
-		}
+func (this *Manager) GetAccessPoints(path dbus.ObjectPath) []AccessPoint {
+	aps := make([]AccessPoint, 0)
+	dev := nm.GetDeviceWireless(string(path))
+	for _, apPath := range dev.GetAccessPoints() {
+		ap := nm.GetAccessPoint(string(apPath))
+		aps = append(aps, AccessPoint{string(ap.Ssid.Get()), false, ap.Strength.Get()})
 	}
-	dbus.NotifyChange(this, "APs")
-	if hasWired != this.HasWired {
-		this.HasWired = hasWired
-		dbus.NotifyChange(this, "HasWired")
-	}
-	if hasWireless != this.HasWireless {
-		this.HasWireless = hasWireless
-		dbus.NotifyChange(this, "HasWireless")
-	}
-}
-
-func (this *Manager) updateAccessPoint(dev *nm.DeviceWireless) {
-	for _, d := range dev.GetAccessPoints() {
-		ssid := string(nm.GetAccessPoint(string(d)).Ssid.Get())
-		this.APs = append(this.APs, AccessPoint{ssid})
-	}
-	return
+	fmt.Println("APS:", aps)
+	return aps
 }
