@@ -1,10 +1,3 @@
-/*************************************************************************
-    > File Name: mainloop.c
-    > Author: onerhao
-    > Mail: haodu@hustunique.com
-    > Created Time: 2013年 星期五 14时46分06秒
- ************************************************************************/
-
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -344,6 +337,8 @@ void *pa_get_device_list(pa *self)
             // our callback function and a pointer to our devicelist will
             // be passed to the callback The operation ID is stored in the
             // pa_op variable
+
+			self->n_sinks=0;
             self->pa_op = pa_context_get_sink_info_list(self->pa_ctx,
                           pa_get_sinklist_cb,
                           self);
@@ -354,6 +349,8 @@ void *pa_get_device_list(pa *self)
             // Now we wait for our operation to complete.  When it's
             // complete our pa_output_devicelist is filled out, and we move
             // along to the next state
+
+			self->n_sources=0;
             if (pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
             {
                 pa_operation_unref(self->pa_op);
@@ -452,6 +449,8 @@ void *pa_get_client_list(pa *self)
             // our callback function and a pointer to our devicelist will
             // be passed to the callback The operation ID is stored in the
             // pa_op variable
+
+			self->n_clients=0;
             self->pa_op = pa_context_get_client_info_list(self->pa_ctx,
                           pa_get_clientlist_cb,
                           self);
@@ -520,6 +519,7 @@ void *pa_get_sink_input_list(pa *self)
         switch (state)
         {
         case 0:
+			self->n_sink_inputs=0;
             self->pa_op = pa_context_get_sink_input_info_list(self->pa_ctx, pa_get_sink_input_list_cb, self);
             state++;
             break;
@@ -578,6 +578,7 @@ void *pa_get_source_output_list(pa *self)
         switch (state)
         {
         case 0:
+			self->n_source_outputs=0;
             self->pa_op = pa_context_get_source_output_info_list(self->pa_ctx,
                           pa_get_source_output_list_cb, self);
             state++;
@@ -635,12 +636,16 @@ void* pa_get_sink_input_index_by_pid(pa *self,void *args)
     return NULL;
 }
 
-void *pa_set_sink_mute_by_index(pa *self,void *args)
+int pa_set_sink_mute_by_index(pa *self,int index,int mute)
 {
     int pa_ready = 0;
     int state = 0;
-    int index=0,mute;
 
+	if(!self)
+	{
+		fprintf(stderr,"self is NULL pointer !\n");
+		return -1;
+	}
 
     pa_context_connect(self->pa_ctx, NULL, 0, NULL);
     pa_context_set_state_callback(self->pa_ctx, pa_state_cb, &pa_ready);
@@ -663,7 +668,7 @@ void *pa_set_sink_mute_by_index(pa *self,void *args)
             self->pa_ml=NULL;
             pa_init_context(self);
 
-            return NULL;
+            return -1;
         }
         switch (state)
         {
@@ -683,19 +688,20 @@ void *pa_set_sink_mute_by_index(pa *self,void *args)
                 self->pa_mlapi=NULL;
                 self->pa_ml=NULL;
                 pa_init_context(self);
-                return NULL;
+		fprintf(stderr, "in state %d\n", state);
+                return 0;
             }
             break;
         default:
             fprintf(stderr, "in state %d\n", state);
-            return NULL;
+            return 0;
         }
         pa_mainloop_iterate(self->pa_ml, 1, NULL);
     }
-    return NULL;
+    return 0;
 }
 
-void *pa_set_sink_volume_by_index(pa *self,void *args)
+int pa_set_sink_volume_by_index(pa *self,void *args)
 {
     int pa_ready=0;//CRITICAL!,initialize pa_ready to zero
     int state=0;
@@ -704,7 +710,7 @@ void *pa_set_sink_volume_by_index(pa *self,void *args)
     if(!self)
     {
         fprintf(stderr,"NULL object pointer\n");
-        return NULL;
+        return -1;
     }
 
 
@@ -714,7 +720,7 @@ void *pa_set_sink_volume_by_index(pa *self,void *args)
     if(!pa_cvolume_valid(&cvolume))
     {
         fprintf(stderr,"Invalid volume %d provided,please choose another one\n",volume);
-        return NULL;
+        return -1;
     }
 
     pa_context_connect(self->pa_ctx, NULL, 0, NULL);
@@ -736,7 +742,7 @@ void *pa_set_sink_volume_by_index(pa *self,void *args)
             self->pa_ctx=NULL;
             self->pa_mlapi=NULL;
             self->pa_ml=NULL;
-            return NULL;
+            return  -1;
         }
         switch (state)
         {
@@ -757,20 +763,20 @@ void *pa_set_sink_volume_by_index(pa *self,void *args)
                 self->pa_mlapi=NULL;
                 self->pa_ml=NULL;
                 pa_init_context(self);
-                return NULL;
+                return 0;
             }
             break;
         default:
             fprintf(stderr, "in state %d\n", state);
-            return NULL;
+            return 0;
         }
         pa_mainloop_iterate(self->pa_ml, 1, NULL);
     }
 
-    return NULL;
+    return 0;
 }
 
-void *pa_inc_sink_volume_by_index(pa *self,void *args)
+int pa_inc_sink_volume_by_index(pa *self,void *args)
 {
     int pa_ready = 0,state = 0;
     int index, volume=0;
@@ -2018,8 +2024,7 @@ void pa_get_serverinfo_cb(pa_context *c, const pa_server_info*i, void *userdata)
 void pa_get_sinklist_cb(pa_context *c, const pa_sink_info *l, int eol, void *userdata)
 {
     pa *self= (pa*)userdata;
-    pa_sink_port_info **ports  = NULL;
-    pa_sink_port_info *port = NULL;
+	sink_t *sink=NULL;
     int i = 0;
 
     // If eol is set to a positive number, you're at the end of the list
@@ -2029,9 +2034,9 @@ void pa_get_sinklist_cb(pa_context *c, const pa_sink_info *l, int eol, void *use
     }
 	else
 	{
-		if(self->n_sink_inputs<MAX_SINKS)
+		if(self->n_sinks<MAX_SINKS)
 		{
-			self->n_sink_inputs++;
+			self->n_sinks++;
 		}
 		else
 		{
@@ -2039,6 +2044,14 @@ void pa_get_sinklist_cb(pa_context *c, const pa_sink_info *l, int eol, void *use
 			return;
 		}
 	}
+	sink=self->sinks+self->n_sinks-1;
+	sink->index=l->index;
+	sink->volume=l->volume;
+	sink->mute=l->mute;
+	sink->nvolumesteps=l->n_volume_steps;
+	strncpy(sink->name,l->name,strlen(l->name)+1);
+	strncpy(sink->driver,l->driver,strlen(l->driver)+1);
+	strncpy(sink->description,l->description,strlen(l->description)+1);
 
     // We know we've allocated 16 slots to hold devices.  Loop through our
     // structure and find the first one that's "uninitialized."  Copy the
@@ -2052,17 +2065,7 @@ void pa_get_sinklist_cb(pa_context *c, const pa_sink_info *l, int eol, void *use
 	//strncpy((self->sinks)[self->n_sinks-1],l->);
 
 
-    for (i = 0; i < l->channel_map.channels; i++)
-    {
-        printf("DEBUG channel map %d, volume:%d\n", l->channel_map.map[i], l->volume.values[i]);
-    }
-    ports = l->ports;
-    for (i = 0; i < l->n_ports; i++)
-    {
-        port = ports[i];
-        printf("DEBUG %s %s\n", port->name, port->description);
-    }
-    printf("sink------------------------------\n");
+    printf("sink %s------------------------------\n",l->name);
 }
 
 void pa_get_sink_volume_cb(pa_context *c, const pa_sink_info *i, int eol, void *userdata)
@@ -2086,37 +2089,36 @@ void pa_get_sink_volume_cb(pa_context *c, const pa_sink_info *i, int eol, void *
 void pa_get_sourcelist_cb(pa_context *c, const pa_source_info *l, int eol, void *userdata)
 {
     pa *self= userdata;
-    const char *prop_key=NULL;
-    void *prop_state=NULL;
-    pa_source_port_info **ports = NULL;
-    pa_source_port_info *port = NULL;
+	source_t *source=NULL;
     int i = 0;
 
     if (eol > 0)
     {
         return;
     }
-    /*PyDict_SetItemString(dict,"index",PyInt_FromLong(l->index));
-    PyDict_SetItemString(dict,"name",PYSTRING_FROMSTRING(l->name));
-    PyDict_SetItemString(dict,"description",PYSTRING_FROMSTRING(l->description));
-    PyDict_SetItemString(dict,"driver",PYSTRING_FROMSTRING(l->driver));
-    PyDict_SetItemString(dict,"mute",PyInt_FromLong(l->mute));
-    PyDict_SetItemString(dict,"n_volume_steps",PyInt_FromLong(l->n_volume_steps));
-    PyDict_SetItemString(dict,"card",PyInt_FromLong(l->card));
-    PyDict_SetItemString(dict,"n_ports",PyInt_FromLong(l->n_ports));
-    PyDict_SetItemString(dict,"n_formats",PyInt_FromLong(l->n_formats));
-    PyDict_SetItemString(dict,"cvolume",pa_dict_from_cvolume(l->volume));
-    */
+	else
+	{
+		if(self->n_sources<MAX_SOURCES)
+		{
+			self->n_sources++;
+		}
+		else
+		{
+			fprintf(stderr,"sources number exceeds the MAX_SOURCES\n");
+		}
+	}
 
+	source=self->sources+self->n_sources-1;
+	source->nvolumesteps=l->n_volume_steps;
+	source->card=l->card;
+	source->index=l->index;
+	source->mute=l->mute;
+	source->volume=l->volume;
+	strncpy(source->name,l->name,sizeof(source->name)-1);
+	strncpy(source->driver,l->driver,sizeof(source->driver)-1);
+	strncpy(source->description,l->description,sizeof(source->description)-1);
 
-    ports = l->ports;
-    printf("map can balance %d\n", pa_channel_map_can_balance(&l->channel_map));
-    for (i = 0; i < (int)l->n_ports; i++)
-    {
-        port = ports[i];
-        printf("DEBUG %s %s\n", port->name, port->description);
-    }
-    printf("source------------------------------\n");
+    printf("source %s------------------------------\n",l->name);
 }
 
 void pa_get_source_volume_cb(pa_context *c, const pa_source_info *i, int eol, void *userdata)
@@ -2139,39 +2141,44 @@ void pa_get_source_volume_cb(pa_context *c, const pa_source_info *i, int eol, vo
 void pa_get_clientlist_cb(pa_context *c, const pa_client_info *i,
                           int eol, void *userdata)
 {
-    if (eol > 0)
-    {
-        printf("End of sinks\n");
-        return;
-    }
-    const char *prop_key = NULL;
-    void *prop_state = NULL;
-
     pa *self= userdata;
+	client_t *client=NULL;
     if(!self)
     {
         fprintf(stderr,"NULL object pointer\n");
         return;
     }
 
-    if(!self->clients)
+    if (eol > 0)
     {
-        fprintf(stderr,"error in PyDict_New()\n");
+        printf("End of clients\n");
         return;
     }
+	else
+	{
+		if(self->n_clients<MAX_CLIENTS)
+		{
+			self->n_clients++;
+		}
+		else
+		{
+			fprintf(stderr,"clients number exceeds the MAX_CLIENTS\n");
+			return;
+		}
+	}
 
-    /*PyDict_SetItemString(dict,"index",PyInt_FromLong(i->index));
-    PyDict_SetItemString(dict,"name",PYSTRING_FROMSTRING(i->name));
-    PyDict_SetItemString(dict,"module",PyInt_FromLong(i->owner_module));
-    PyDict_SetItemString(dict,"driver",PYSTRING_FROMSTRING(i->driver));
-    */
-
+	client=self->clients+self->n_clients-1;
+	client->index=i->index;
+	client->owner_module=i->owner_module;
+	strncpy(client->name,i->name,sizeof(client->name)-1);
+	strncpy(client->driver,i->driver,sizeof(client->driver)-1);
     return;
 }
 
 void pa_get_sink_input_list_cb(pa_context *c, const pa_sink_input_info *i, int eol, void *userdata)
 {
     pa *self=userdata;
+	sink_input_t *sink_input=NULL;
     if(!self)
     {
         fprintf(stderr,"NULL object pointer\n");
@@ -2182,6 +2189,28 @@ void pa_get_sink_input_list_cb(pa_context *c, const pa_sink_input_info *i, int e
         printf("End of sink inputs list.\n");
         return;
     }
+	else
+	{
+		if(self->n_sink_inputs<MAX_SINK_INPUTS)
+		{
+			self->n_sink_inputs++;
+		}
+		else
+		{
+			fprintf(stderr,"sink inputs number exceeds the MAX_SINK_INPUTS\n");
+			return;
+		}
+	}
+
+	sink_input=self->sink_inputs+self->n_sink_inputs-1;
+	sink_input->volume=i->volume;
+	sink_input->owner_module=i->owner_module;
+	sink_input->client=i->client;
+	sink_input->index=i->index;
+	sink_input->mute=i->mute;
+	sink_input->has_volume=i->has_volume;
+	strncpy(sink_input->name,i->name,sizeof(sink_input->name)-1);
+	strncpy(sink_input->driver,i->driver,sizeof(i->driver)-1);
 
     char buf[1024];
     const char *prop_key = NULL;
@@ -2190,19 +2219,11 @@ void pa_get_sink_input_list_cb(pa_context *c, const pa_sink_input_info *i, int e
     printf("------------------------------\n");
     printf("index: %d\n", i->index);
     printf("name: %s\n", i->name);
-    printf("module: %d\n", i->owner_module);
-    printf("client: %d\n", i->client);
-    printf("sink: %d\n", i->sink);
     printf("volume: channels:%d, min:%d, max:%d\n",
            i->volume.channels,
            pa_cvolume_min(&i->volume),
            pa_cvolume_max(&i->volume));
-    printf("resample_method: %s", i->resample_method);
-    printf("driver: %s\n", i->driver);
     printf("mute: %d\n", i->mute);
-    printf("corked: %d\n", i->corked);
-    printf("has_volume: %d\n", i->has_volume);
-    printf("volume_writable: %d\n", i->volume_writable);
 
     /*while ((prop_key=pa_proplist_iterate(i->proplist, &prop_state)))
     {
@@ -2236,12 +2257,38 @@ void pa_get_source_output_list_cb(pa_context *c,
                                   const pa_source_output_info *o,int eol,void *userdata)
 {
     pa *self=userdata;
+	source_output_t *source_output=NULL;
+	if(!self)
+	{
+		fprintf(stderr,"NULL pointer!\n");
+		return;
+	}
     if (eol > 0)
     {
         printf("End of source outputs list.\n");
         return;
     }
+	else
+	{
+		if (self->n_source_outputs<MAX_SOURCE_OUTPUTS)
+		{
+			self->n_source_outputs++;
+		}
+		else
+		{
+			fprintf(stderr,"source outputs number exceeds the MAX_SOURCE_OUTPUT\n");
+			return ;
+		}
+	}
 
+	source_output=self->source_outputs+self->n_source_outputs-1;
+	source_output->index=o->index;
+	source_output->source=o->source;
+	source_output->mute=o->mute;
+	source_output->client=o->mute;
+	source_output->client=o->client;
+	strncpy(source_output->name,o->name,sizeof(source_output->name)-1);
+	strncpy(source_output->driver,o->driver,sizeof(source_output->driver)-1);
     const char *prop_key = NULL;
     void *prop_state = NULL;
 }
@@ -2298,6 +2345,10 @@ void pa_context_success_cb(pa_context *c,int success,void *userdata)
         fprintf(stderr,"Setting failed\n");
         return;
     }
+	else
+	{
+		printf("operation successfully completed!\n");
+	}
 }
 
 void pa_set_sink_input_mute_cb(pa_context *c,int success,void *userdata)
@@ -2374,28 +2425,4 @@ void *pa_dict_from_cvolume(pa_cvolume cv)
 }
 
 
-//END of higher level apis for manipulating pulseaudio
 
-/*PyMODINIT_FUNC
-initpulseaudio(void)
-{
-    void *m;
-    if(PyType_Ready(&paType)<0)
-    {
-        fprintf(stderr,"Type not ready\n");
-        return;
-    }
-    m = Py_InitModule3("pulseaudio",module_methods,
-                       "Python bindings for pulseaudio of version 4.0.0.");
-    //the second parameter,must be in accordance to its module name,file name
-
-    if(m==NULL)
-    {
-        fprintf(stderr,"Py_InitModule3 error\n");
-        return;
-    }
-    printf("initializing...\n");
-    Py_INCREF(&paType);
-    PyModule_AddObject(m,"pa",(void *)&paType);
-}
-*/

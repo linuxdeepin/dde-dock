@@ -77,7 +77,7 @@ typedef struct source_output_s
     char name[512];
     int owner_module;
     int client;
-    int sink;
+    int source;
     pa_cvolume volume;
     char driver[512];
     int mute;
@@ -89,7 +89,8 @@ typedef struct client_s
 {
     int index;
     char name[512];
-    int owner_module; char driver[512];
+    int owner_module;
+    char driver[512];
 }client_t;
 
 typedef struct card_s
@@ -149,9 +150,9 @@ void *pa_get_sink_input_list(pa *self);
 void *pa_get_source_output_list(pa *self);
 void* pa_get_sink_input_index_by_pid(pa *self,void *args);
 
-void *pa_set_sink_mute_by_index(pa *self,void *args);
-void *pa_set_sink_volume_by_index(pa *self,void *args);
-void *pa_inc_sink_volume_by_index(pa *self,void *args);
+int  pa_set_sink_mute_by_index(pa *self,int index,int mute);
+int pa_set_sink_volume_by_index(pa *self,void *args);
+int pa_inc_sink_volume_by_index(pa *self,void *args);
 void *pa_dec_sink_volume_by_index(pa *self,void *args);
 
 void *pa_set_source_mute_by_index(pa *self,void *args);
