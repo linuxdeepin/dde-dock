@@ -54,7 +54,7 @@ func (dapp *DefaultApps) AppsListViaType(typeName string) []*AppInfo {
 
 		for _, v := range lists {
 			defaultAppsList = append(defaultAppsList,
-				NewAppInfoByID(_DESKTOP_PATH+v))
+				NewAppInfoByID(v))
 		}
 
 		return defaultAppsList
@@ -87,7 +87,7 @@ func (dapp *DefaultApps) DefaultAppViaType(typeName string) *AppInfo {
 
 func (dapp *DefaultApps) SetDefaultAppViaType(typeName, appID string) bool {
 	if typeName == "terminal" {
-		appInfo := NewAppInfoByID(_DESKTOP_PATH + appID)
+		appInfo := NewAppInfoByID(appID)
 		if appInfo == nil {
 			return false
 		}
@@ -116,7 +116,7 @@ func NewAppInfoByID(id string) *AppInfo {
 	keyFile := glib.NewKeyFile()
 	lang := GetLocalLang()
 
-	_, err1 := keyFile.LoadFromFile(id, glib.KeyFileFlagsNone)
+	_, err1 := keyFile.LoadFromFile(_DESKTOP_PATH+id, glib.KeyFileFlagsNone)
 	if err1 != nil {
 		fmt.Println("Load File Failed:", err1)
 		return nil
