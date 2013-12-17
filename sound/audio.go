@@ -3,7 +3,7 @@
 package main
 
 // #cgo amd64 386 CFLAGS: -g -Wall
-// #cgo LDFLAGS: -L. -ldde-pulse -lpulse -lc
+// #cgo LDFLAGS: -L. -lpulse -lc
 // #include "stdio.h"
 // #include "dde-pulse.h"
 import "C"
