@@ -59,8 +59,8 @@ func (this *Manager) addWirelessDevice(path dbus.ObjectPath) {
 	dev := nm.GetDevice(string(path))
 	wirelessDevice := NewDevice(dev)
 	dev.ConnectStateChanged(func(new_state uint32, old_state uint32, reason uint32) {
-	wirelessDevice.State = dev.State.Get()
-	dbus.NotifyChange(this, "WirelessDevices")
+		wirelessDevice.State = new_state
+		dbus.NotifyChange(this, "WirelessDevices")
 	})
 	this.WirelessDevices = append(this.WirelessDevices, wirelessDevice)
 	dbus.NotifyChange(this, "WirelessDevices")
