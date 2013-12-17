@@ -1,5 +1,3 @@
-// +build ignore
-
 package main
 
 // #cgo amd64 386 CFLAGS: -g -Wall
@@ -50,7 +48,7 @@ type Source struct {
 	Cvolume      Volume
 }
 
-type Sink_input struct {
+type SinkInput struct {
 	Index           int32
 	Name            string
 	Owner_module    int32
@@ -63,12 +61,12 @@ type Sink_input struct {
 	Volume_writable int32
 }
 
-type Source_output struct {
+type SourceOutput struct {
 	Index           int32
 	Name            string
 	Owner_module    int32
 	Client          int32
-	Sink            int32
+	Source          int32
 	Cvolume         Volume
 	Driver          string
 	Mute            int32
@@ -97,7 +95,7 @@ type Module struct {
 
 type Volume struct {
 	Channels uint32
-	Values   [320]uint32 `access:"read"`
+	Values   [320]uint32
 }
 
 func NewAudio() (*Audio, error) {
@@ -149,41 +147,112 @@ func (audio *Audio) GetSinks() []*Sink {
 	C.pa_get_device_list(audio.pa)
 	n := int(audio.pa.n_sinks)
 	sinks := make([]*Sink, n)
-	for i := 0; i < n; i = i + 1 {
+	for i := 0; i < 1; i = i + 1 {
 		sinks[i] = &Sink{}
 		sinks[i].Index = int32(audio.pa.sinks[i].index)
-		sinks[i].Card = int32(audio.pa.sinks[i].index)
-		sinks[i].Description = C.GoString(&audio.pa.sinks[i].description[0])
+		sinks[i].Card = int32(audio.pa.sinks[i].card)
+		sinks[i].Description =
+			C.GoString((*C.char)(unsafe.Pointer(&audio.pa.sinks[i].description[0])))
 		sinks[i].Driver = C.GoString(&audio.pa.sinks[i].driver[0])
 		sinks[i].Name = C.GoString(&audio.pa.sinks[i].name[0])
 		sinks[i].Cvolume.Channels = uint32(audio.pa.sinks[i].volume.channels)
-		for i = 0; i < int(sinks[i].Cvolume.Channels); i = i + 1 {
-			sinks[i].Cvolume.Values[i] =
-				*((*uint32)(unsafe.Pointer(&audio.pa.sinks[i].volume.values[i])))
+		for j := 0; j < int(sinks[i].Cvolume.Channels); j = j + 1 {
+			sinks[i].Cvolume.Values[j] =
+				*((*uint32)(unsafe.Pointer(&audio.pa.sinks[i].volume.values[j])))
 		}
+		fmt.Println("Index: " + strconv.Itoa(int((sinks[i].Index))) + " Card:" + strconv.Itoa(int(sinks[i].Card)))
 	}
 
 	return sinks
 }
 
-func (audio *Audio) GetSources() *Source {
-	return &Source{}
+func (audio *Audio) GetSources() []*Source {
+	C.pa_get_device_list(audio.pa)
+	n := int(audio.pa.n_sources)
+	sources := make([]*Source, n)
+
+	for i := 0; i < n; i = i + 1 {
+		sources[i] = &Source{}
+		sources[i].Index = int32(audio.pa.sources[i].index)
+		sources[i].Card = int32(audio.pa.sources[i].card)
+		sources[i].Mute = int32(audio.pa.sources[i].mute)
+		sources[i].Name = C.GoString((*C.char)(unsafe.Pointer(&audio.pa.sources[i].name[0])))
+		sources[i].Description = C.GoString(&audio.pa.sources[i].description[0])
+
+		sources[i].Cvolume.Channels = uint32(audio.pa.sources[i].volume.channels)
+		for j := uint32(0); j < sources[i].Cvolume.Channels; j = j + 1 {
+			sources[i].Cvolume.Values[j] =
+				*((*uint32)(unsafe.Pointer(&audio.pa.sources[i].volume.values[j])))
+		}
+	}
+	return sources
 }
 
-func (audio *Audio) GetSinkInputs() *Sink_input {
-	return &Sink_input{}
+func (audio *Audio) GetSinkInputs() []*SinkInput {
+	C.pa_get_sink_input_list(audio.pa)
+	n := int(audio.pa.n_sink_inputs)
+	sinkInputs := make([]*SinkInput, n)
+
+	fmt.Fprint(os.Stderr, audio.pa.sink_inputs[0].index)
+
+	for i := 0; i < n; i = i + 1 {
+		sinkInputs[i] = &SinkInput{}
+		sinkInputs[i].Index = int32(audio.pa.sink_inputs[i].index)
+		sinkInputs[i].Client = int32(audio.pa.sink_inputs[i].client)
+		sinkInputs[i].Sink = int32(audio.pa.sink_inputs[i].sink)
+		sinkInputs[i].Mute = int32(audio.pa.sink_inputs[i].mute)
+		sinkInputs[i].Has_volume = int32(audio.pa.sink_inputs[i].has_volume)
+		sinkInputs[i].Volume_writable = int32(audio.pa.sink_inputs[i].volume_writable)
+		sinkInputs[i].Cvolume.Channels = uint32(audio.pa.sink_inputs[i].volume.channels)
+		for j := uint32(0); j < sinkInputs[i].Cvolume.Channels; j = j + 1 {
+			sinkInputs[i].Cvolume.Values[j] =
+				*(*uint32)(unsafe.Pointer(&audio.pa.sink_inputs[i].volume.values[j]))
+		}
+	}
+	return sinkInputs
 }
 
-func (audio *Audio) GetSourceOutput() *Source_output {
-	return &Source_output{}
+func (audio *Audio) GetSourceOutputs() []*SourceOutput {
+	C.pa_get_source_output_list(audio.pa)
+	n := int(audio.pa.n_source_outputs)
+	var sourceOutputs = make([]*SourceOutput, n)
+
+	fmt.Print(len(sourceOutputs))
+	/*if n < 0 {
+		return nil
+	}*/
+
+	for i := 0; i < n; i = i + 1 {
+		sourceOutputs[i] = &SourceOutput{}
+		sourceOutputs[i].Index = int32(audio.pa.source_outputs[i].index)
+		sourceOutputs[i].Name = C.GoString(&audio.pa.source_outputs[i].name[0])
+		sourceOutputs[i].Owner_module = int32(audio.pa.source_outputs[i].owner_module)
+		sourceOutputs[i].Client = int32(audio.pa.source_outputs[i].client)
+		sourceOutputs[i].Source = int32(audio.pa.source_outputs[i].source)
+		sourceOutputs[i].Driver = C.GoString(&audio.pa.source_outputs[i].driver[0])
+		sourceOutputs[i].Mute = int32(audio.pa.source_outputs[i].mute)
+		sourceOutputs[i].Cvolume.Channels = uint32(audio.pa.source_outputs[i].volume.channels)
+
+		for j := uint32(0); j < sourceOutputs[i].Cvolume.Channels; j = j + 1 {
+			sourceOutputs[i].Cvolume.Values[j] =
+				*((*uint32)(unsafe.Pointer(&audio.pa.source_outputs[i].volume.values[j])))
+		}
+	}
+	return sourceOutputs
 }
 
-func (audio *Audio) GetClients() [2]*Client {
-	var clients = [2]*Client{}
-	clients[0] = new(Client)
-	clients[0].Index = 0
-	clients[1] = new(Client)
-	clients[1].Index = 1
+func (audio *Audio) GetClients() []*Client {
+	C.pa_get_client_list(audio.pa)
+	n := int(audio.pa.n_clients)
+	var clients = make([]*Client, n)
+
+	for i := 0; i < n; i = i + 1 {
+		clients[i] = &Client{}
+		clients[i].Index = int32(audio.pa.clients[i].index)
+		clients[i].Owner_module = int32(audio.pa.clients[i].owner_module)
+		clients[i].Name = C.GoString((*C.char)(unsafe.Pointer(&audio.pa.clients[i].name[0])))
+		clients[i].Driver = C.GoString((*C.char)(unsafe.Pointer(&audio.pa.clients[i].driver[0])))
+	}
 	return clients
 }
 
@@ -200,7 +269,7 @@ func (sink *Sink) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		"com.deepin.daemon.Audio",
 		"/com/deepin/daemon/Audio/Output" + strconv.FormatInt(int64(sink.Index), 10),
-		"com.deepin.daemon.Audio.Output",
+		"com.deepin.daemon.Audio.Device",
 	}
 }
 
@@ -220,7 +289,7 @@ func (source *Source) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		"com.deepin.daemon.Audio",
 		"/com/deepin/daemon/Audio/Input" + strconv.FormatInt(int64(source.Index), 10),
-		"com.deepin.daemon.Audio.Input",
+		"com.deepin.daemon.Audio.Device",
 	}
 }
 
@@ -236,7 +305,7 @@ func (source *Source) SetSourceMute(mute int32) int32 {
 	return 1
 }
 
-func (sink_input *Sink_input) GetDBusInfo() dbus.DBusInfo {
+func (sink_input *SinkInput) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		"com.deepin.daemon.Audio",
 		"/com/deepin/daemon/Audio/Application" + strconv.FormatInt(int64(sink_input.Index), 10),
@@ -244,19 +313,19 @@ func (sink_input *Sink_input) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (sink_input *Sink_input) GetSink_input_volume() Volume {
+func (sink_input *SinkInput) GetSink_input_volume() Volume {
 	return Volume{}
 }
 
-func (sink_input *Sink_input) SetSink_input_volume(volume Volume) int32 {
+func (sink_input *SinkInput) SetSink_input_volume(volume Volume) int32 {
 	return 1
 }
 
-func (sink_input *Sink_input) SetSink_input_mute(mute int32) int32 {
+func (sink_input *SinkInput) SetSink_input_mute(mute int32) int32 {
 	return 1
 }
 
-func (source_output *Source_output) GetDBusInfo() dbus.DBusInfo {
+func (source_output *SourceOutput) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		"com.deepin.daemon.Audio",
 		"/com/deepin/daemon/Audio/Application" + strconv.FormatInt(int64(source_output.Index), 10),
@@ -264,15 +333,15 @@ func (source_output *Source_output) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (source_output *Source_output) GetSource_ouput_volume() Volume {
+func (source_output *SourceOutput) GetSource_ouput_volume() Volume {
 	return Volume{}
 }
 
-func (source_output *Source_output) SetSource_output_volume(volume Volume) Volume {
+func (source_output *SourceOutput) SetSource_output_volume(volume Volume) Volume {
 	return Volume{}
 }
 
-func (source_output *Source_output) SetSource_output_mute(mute int32) int32 {
+func (source_output *SourceOutput) SetSource_output_mute(mute int32) int32 {
 	return 1
 }
 

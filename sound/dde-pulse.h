@@ -77,7 +77,7 @@ typedef struct source_output_s
     char name[512];
     int owner_module;
     int client;
-    int sink;
+    int source;
     pa_cvolume volume;
     char driver[512];
     int mute;
@@ -89,7 +89,8 @@ typedef struct client_s
 {
     int index;
     char name[512];
-    int owner_module; char driver[512];
+    int owner_module;
+    char driver[512];
 }client_t;
 
 typedef struct card_s
