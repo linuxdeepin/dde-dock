@@ -1,5 +1,3 @@
-// +build ignore
-
 package main
 
 // #cgo amd64 386 CFLAGS: -g -Wall
