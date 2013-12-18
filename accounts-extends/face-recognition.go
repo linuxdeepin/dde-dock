@@ -1,11 +1,11 @@
 package main
 
 import (
-	"dlib/dbus"
 	"dlib/glib-2.0"
 	"fmt"
 	"os"
 	"os/user"
+	"strconv"
 )
 
 type FaceRecogInfo struct {
@@ -16,6 +16,7 @@ type FaceRecogInfo struct {
 const (
 	_ENABLE      = "enable"
 	_PERSON_NAME = "person_name"
+	_CONFIG_DIR  = "/.config/deepin-system-settings/account/"
 	_CONFIG_FILE = "/.config/deepin-system-settings/account/face_recognition.cfg"
 )
 
@@ -64,6 +65,7 @@ func (info *AccountExtendsManager) CanFaceRecognition(id string) *FaceRecogInfo 
 func (info *AccountExtendsManager) SetFaceRecognition(id string, enable bool) bool {
 	var (
 		userName string
+		uuidStr  string
 		data     string
 		err      error
 	)
@@ -75,44 +77,89 @@ func (info *AccountExtendsManager) SetFaceRecognition(id string, enable bool) bo
 	}
 
 	homeDir, _ := GetHomeDirById(id)
+	if !DirIsExist(homeDir + _CONFIG_DIR) {
+		return false
+	}
+
+	if !FileIsExist(homeDir + _CONFIG_FILE) {
+		f, err1 := os.Create(homeDir + _CONFIG_FILE)
+		if err1 != nil {
+			fmt.Println("Create face config file failed:", err1)
+			return false
+		}
+		userInfo, _ := user.LookupId(id)
+		uid, _ := strconv.ParseInt(userInfo.Uid, 10, 64)
+		gid, _ := strconv.ParseInt(userInfo.Gid, 10, 64)
+		f.Chown(int(uid), int(gid))
+
+		f.Close()
+	}
+
 	configFile := glib.NewKeyFile()
 	_, err = configFile.LoadFromFile(homeDir+_CONFIG_FILE,
 		glib.KeyFileFlagsNone)
 	if err != nil {
 		fmt.Println(err)
-		return
+		return false
 	}
 
 	configFile.SetBoolean(userName, _ENABLE, enable)
+	uuidStr, err = configFile.GetString(userName, _PERSON_NAME)
+	if err != nil || uuidStr == "" {
+		uuid := CreateUUID()
+		configFile.SetString(userName, _PERSON_NAME, uuid)
+	}
 
 	_, data, err = configFile.ToData()
 	if err != nil {
 		fmt.Println(err)
-		return
+		return false
 	}
-	WriteKeyFile(userName, data)
+	if !WriteKeyFile(homeDir+_CONFIG_FILE, data) {
+		return false
+	}
+
+	return true
 }
 
-func CreateFaceRecognition(userName string) (bool, string) {
+func (info *AccountExtendsManager) CreateConfigFile(id string) bool {
 	var (
-		f   *os.File
-		err error
+		f        *os.File
+		err      error
+		homeDir  string
+		userName string
 	)
 
-	filename := GetFaceRecogPath(userName)
-	f, err = os.Create(filename)
-	defer f.Close()
+	userInfo, err := user.LookupId(id)
 	if err != nil {
 		fmt.Println(err)
-		return false, ""
+		return false
 	}
 
+	homeDir = userInfo.HomeDir
+	if !DirIsExist(homeDir + _CONFIG_DIR) {
+		return false
+	}
+
+	userName = userInfo.Username
+	filename := homeDir + _CONFIG_FILE
+	f, err = os.Create(filename)
+	if err != nil {
+		fmt.Println(err)
+		return false
+	}
+	defer f.Close()
+
+	uid, _ := strconv.ParseInt(userInfo.Uid, 10, 64)
+	gid, _ := strconv.ParseInt(userInfo.Gid, 10, 64)
+	f.Chown(int(uid), int(gid))
+
 	configFile := glib.NewKeyFile()
-	_, err = configFile.LoadFromFile(GetFaceRecogPath(userName),
+	_, err = configFile.LoadFromFile(filename,
 		glib.KeyFileFlagsNone)
 	if err != nil {
 		fmt.Println(err)
-		return false, ""
+		return false
 	}
 	configFile.SetBoolean(userName, _ENABLE, false)
 	uuid := CreateUUID()
@@ -121,36 +168,32 @@ func CreateFaceRecognition(userName string) (bool, string) {
 	_, err = f.WriteString(data)
 	if err != nil {
 		fmt.Println(err)
-		return false, ""
+		return false
 	}
 
-	return false, uuid
+	return true
 }
 
-func WriteKeyFile(userName, data string) {
+func WriteKeyFile(filename, data string) bool {
 	var (
 		f   *os.File
 		err error
 	)
-	f, err = os.Create(GetFaceRecogPath(userName))
-	defer f.Close()
+	f, err = os.OpenFile(filename, os.O_WRONLY|os.O_TRUNC|os.O_CREATE,
+		0664)
 	if err != nil {
 		fmt.Println(err)
-		return
+		return false
 	}
+	defer f.Close()
+
 	_, err = f.WriteString(data)
 	if err != nil {
 		fmt.Println(err)
-		return
+		return false
 	}
-	return
-}
 
-func GetFaceRecogPath(userName string) string {
-	path := ""
-	path += "/home/" + userName + _CONFIG_FILE
-
-	return path
+	return true
 }
 
 func CreateUUID() string {
@@ -177,4 +220,14 @@ func GetUserNameById(id string) (string, error) {
 	}
 
 	return userInfo.Username, nil
+}
+
+func DirIsExist(path string) bool {
+	err := os.MkdirAll(path, 0666)
+	if err != nil {
+		fmt.Printf("Dir '%s' failed: %s\n", err)
+		return false
+	}
+
+	return true
 }
