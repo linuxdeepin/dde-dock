@@ -4,9 +4,18 @@ import (
 	"dbus/org/freedesktop/upower"
 	"dbus/org/gnome/sessionmanager"
 	"dlib/dbus"
+	"os/exec"
 )
 
 type DShutdown struct{}
+
+const (
+	_LOCK_EXEC         = "/usr/bin/dlock"
+	_REBOOT_EXEC       = "/usr/lib/deepin-daemon/dreboot"
+	_LOGOUT_EXEC       = "/usr/lib/deepin-daemon/dlogout"
+	_SHUTDOWN_EXEC     = "/usr/lib/deepin-daemon/dshutdown"
+	_POWER_CHOOSE_EXEC = "/usr/lib/deepin-daemon/dpowerchoose"
+)
 
 var (
 	dShut  = sessionmanager.GetSessionManager("/org/gnome/SessionManager")
@@ -26,7 +35,7 @@ func (shutdown *DShutdown) RequestLogout() {
 }
 
 func (shutdown *DShutdown) Logout() {
-	dShut.Logout(0)
+	ExecCommand(_LOGOUT_EXEC)
 }
 
 func (shudown *DShutdown) CanShutdown() bool {
@@ -34,7 +43,7 @@ func (shudown *DShutdown) CanShutdown() bool {
 }
 
 func (shutdown *DShutdown) Shutdown() {
-	dShut.Shutdown()
+	ExecCommand(_SHUTDOWN_EXEC)
 }
 
 func (shutdown *DShutdown) RequestShutdown() {
@@ -42,7 +51,7 @@ func (shutdown *DShutdown) RequestShutdown() {
 }
 
 func (shutdown *DShutdown) Reboot() {
-	dShut.Reboot()
+	ExecCommand(_REBOOT_EXEC)
 }
 
 func (shutdown *DShutdown) RequestReboot() {
@@ -65,8 +74,21 @@ func (shutdown *DShutdown) RequestHibernate() {
 	dPower.Hibernate()
 }
 
+func (shutdown *DShutdown) RequestLock() {
+	ExecCommand(_LOCK_EXEC)
+}
+
+func (shutdown *DShutdown) PowerOffChoose() {
+	ExecCommand(_POWER_CHOOSE_EXEC)
+}
+
 func NewShutdown() *DShutdown {
 	return &DShutdown{}
+}
+
+func ExecCommand(cmd string) {
+	cmdExec := exec.Command(cmd)
+	cmdExec.Run()
 }
 
 func main() {
