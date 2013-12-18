@@ -31,16 +31,10 @@ import "unsafe"
 import (
 	"crypto/md5"
 	"dbus/org/freedesktop/accounts"
-	"dlib/dbus"
 	"fmt"
 	"os"
-	"os/user"
 	"strconv"
 )
-
-type BlurPictManager struct {
-	BlurPictChanged func(string, string)
-}
 
 type _BlurResult struct {
 	Success  bool
@@ -48,15 +42,11 @@ type _BlurResult struct {
 }
 
 const (
-	_BLUR_PICT_DEST = "com.deepin.Accounts"
-	_BLUR_PICT_PATH = "/com/deepin/Accounts"
-	_BLUR_PICT_IFC  = "com.deepin.Accounts"
-
 	_ACCOUNTS_PATH          = "/org/freedesktop/Accounts/User"
 	_BG_BLUR_PICT_CACHE_DIR = "gaussian-background"
 )
 
-func (blur *BlurPictManager) BackgroundBlurPictPath(uid, srcPath string) *_BlurResult {
+func (blur *AccountExtendsManager) BackgroundBlurPictPath(uid, srcPath string) *_BlurResult {
 	if len(uid) <= 0 {
 		return &_BlurResult{Success: false, PictPath: ""}
 	}
@@ -88,29 +78,10 @@ func (blur *BlurPictManager) BackgroundBlurPictPath(uid, srcPath string) *_BlurR
 	return &_BlurResult{Success: false, PictPath: srcPath}
 }
 
-func (blur *BlurPictManager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		_BLUR_PICT_DEST,
-		_BLUR_PICT_PATH,
-		_BLUR_PICT_IFC,
-	}
-}
-
-func GetHomeDirById(uid string) (string, error) {
-	users, err := user.LookupId(uid)
-	if err != nil {
-		fmt.Println(err)
-		return "", err
-	}
-
-	return users.HomeDir, nil
-}
-
 func GetCurrentSrcPath(uid string) string {
 	userPath := _ACCOUNTS_PATH + uid
 	accountsUser := accounts.GetUser(userPath)
-	bgPath := accountsUser.BackgroundFile
-	srcPath := bgPath.GetValue().(string)
+	srcPath := accountsUser.GetSetBackgroundFile_()
 
 	return srcPath
 }
@@ -178,9 +149,7 @@ func IsFileValid(srcPath, destPath string) bool {
 		return false
 	}
 
-	_, err := os.Stat(destPath)
-	if os.IsNotExist(err) {
-		fmt.Println("file is not exist")
+	if !FileIsExist(destPath) {
 		return false
 	}
 
@@ -194,14 +163,4 @@ func IsFileValid(srcPath, destPath string) bool {
 	}
 
 	return true
-}
-
-func main() {
-	blur := &BlurPictManager{}
-	err := dbus.InstallOnSystem(blur)
-	if err != nil {
-		panic(err)
-	}
-
-	select {}
 }
