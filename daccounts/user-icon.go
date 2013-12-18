@@ -22,8 +22,6 @@
 package main
 
 import (
-	/*"dbus/org/freedesktop/accounts"*/
-	"dlib/dbus"
 	"dlib/glib-2.0"
 	"fmt"
 	"io"
@@ -32,28 +30,14 @@ import (
 	"strings"
 )
 
-type AccountsManager struct{}
-
 const (
-	_ACCOUNTS_DEST = "com.deepin.daemon.Accounts"
-	_ACCOUNTS_PATH = "/com/deepin/daemon/Accounts"
-	_ACCOUNTS_IFC  = "com.deepin.daemon.Accounts"
-
 	_SYSTEM_ICON_PATH  = "/var/lib/AccountsService/icons/"
 	_USER_ICON_PATH    = "/.config/deepin-system-settings/account/icons/"
 	_ICON_HISTORY_FILE = "/.config/deepin-system-settings/account/account_icon_history.ini"
 	_GROUP_KEY         = "Icon History"
 )
 
-func (dam *AccountsManager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		_ACCOUNTS_DEST,
-		_ACCOUNTS_PATH,
-		_ACCOUNTS_IFC,
-	}
-}
-
-func (dam *AccountsManager) AllAccountsIcons() []string {
+func (dam *AccountUserManager) AllAccountsIcons() []string {
 	icons := AllSystemIcons()
 	tmp := AllUserIcons()
 
@@ -64,7 +48,7 @@ func (dam *AccountsManager) AllAccountsIcons() []string {
 	return icons
 }
 
-func (dam *AccountsManager) AllHistoryIcons() []string {
+func (dam *AccountUserManager) AllHistoryIcons() []string {
 	homeDir := os.Getenv("HOME")
 	if !CheckDirExist(homeDir + _USER_ICON_PATH) {
 		return nil
@@ -105,7 +89,7 @@ func (dam *AccountsManager) AllHistoryIcons() []string {
 	return icons
 }
 
-func (dam *AccountsManager) AddIconToUserDir(filename string) bool {
+func (dam *AccountUserManager) AddIconToUserDir(filename string) bool {
 	if len(filename) <= 0 {
 		return false
 	}
@@ -133,7 +117,7 @@ func (dam *AccountsManager) AddIconToUserDir(filename string) bool {
 	return true
 }
 
-func (dam *AccountsManager) DeleteUserIcon(filename string) bool {
+func (dam *AccountUserManager) DeleteUserIcon(filename string) bool {
 	homeDir := os.Getenv("HOME")
 	keyFile := glib.NewKeyFile()
 	_, err := keyFile.LoadFromFile(homeDir+_ICON_HISTORY_FILE,
@@ -165,7 +149,7 @@ func (dam *AccountsManager) DeleteUserIcon(filename string) bool {
 	return true
 }
 
-func (dam *AccountsManager) AddIconToHistory(filename string) bool {
+func (dam *AccountUserManager) AddIconToHistory(filename string) bool {
 	if len(filename) <= 0 {
 		return false
 	}
@@ -309,14 +293,4 @@ func CopyFile(src, dest string) (int64, error) {
 	defer destFile.Close()
 
 	return io.Copy(destFile, srcFile)
-}
-
-func main() {
-	dam := &AccountsManager{}
-	err := dbus.InstallOnSession(dam)
-	if err != nil {
-		panic(err)
-	}
-
-	select {}
 }
