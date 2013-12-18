@@ -257,7 +257,7 @@ func (sink *Sink) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		"com.deepin.daemon.Audio",
 		"/com/deepin/daemon/Audio/Output" + strconv.FormatInt(int64(sink.Index), 10),
-		"com.deepin.daemon.Audio.Output",
+		"com.deepin.daemon.Audio.Device",
 	}
 }
 
@@ -283,7 +283,7 @@ func (source *Source) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		"com.deepin.daemon.Audio",
 		"/com/deepin/daemon/Audio/Input" + strconv.FormatInt(int64(source.Index), 10),
-		"com.deepin.daemon.Audio.Input",
+		"com.deepin.daemon.Audio.Device",
 	}
 }
 
