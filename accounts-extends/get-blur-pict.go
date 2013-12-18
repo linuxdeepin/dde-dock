@@ -81,7 +81,8 @@ func (blur *AccountExtendsManager) BackgroundBlurPictPath(uid, srcPath string) *
 func GetCurrentSrcPath(uid string) string {
 	userPath := _ACCOUNTS_PATH + uid
 	accountsUser := accounts.GetUser(userPath)
-	srcPath := accountsUser.GetSetBackgroundFile_()
+	bgPath := accountsUser.BackgroundFile
+	srcPath := bgPath.Get()
 
 	return srcPath
 }

@@ -59,7 +59,7 @@ func (bgManager *BackgroundManager) SetBackgroundPicture(uri string, replace boo
 		index = 0
 	} else {
 		/* append 'uri' to 'PictureURIS' */
-		pictStrv = bgManager.PictureURIS.GetValue().([]string)
+		pictStrv = bgManager.PictureURIS.Get()
 		success, i := IsURIExist(uri, pictStrv)
 		if success {
 			indiviGSettings.SetInt("index", i)
@@ -82,9 +82,9 @@ func (bgManager *BackgroundManager) DeletePictureFromURIS(uri string) {
 	}
 
 	tempURIS := []string{}
-	uris := bgManager.PictureURIS.GetValue().([]string)
-	index := int(bgManager.PictureIndex.GetValue().(int32))
-	currentURI := bgManager.CurrentPicture.GetValue().(string)
+	uris := bgManager.PictureURIS.Get()
+	index := int(bgManager.PictureIndex.Get())
+	currentURI := bgManager.CurrentPicture.Get()
 
 	fmt.Println("del: uris ", uris)
 	for _, v := range uris {
@@ -199,14 +199,14 @@ func SwitchPictureThread(bgManager *BackgroundManager) {
 }
 
 func AutoSwitchPicture(bgManager *BackgroundManager) {
-	uris := bgManager.PictureURIS.GetValue().([]string)
+	uris := bgManager.PictureURIS.Get()
 	l := len(uris)
 	if l <= 1 {
 		return
 	}
-	index := int(bgManager.PictureIndex.GetValue().(int32))
+	index := int(bgManager.PictureIndex.Get())
 
-	crossMode := bgManager.CrossFadeMode.GetValue().(string)
+	crossMode := bgManager.CrossFadeMode.Get()
 	if crossMode == "Sequential" {
 		index += 1
 		if index > l {
