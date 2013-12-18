@@ -134,23 +134,32 @@ func (dam *AccountsManager) AddIconToUserDir(filename string) bool {
 }
 
 func (dam *AccountsManager) DeleteUserIcon(filename string) bool {
-	err := os.Remove(filename)
-	if err != nil {
-		fmt.Printf("Remove '%s' failed: %s\n", filename, err)
-		return false
-	}
-
+	homeDir := os.Getenv("HOME")
 	keyFile := glib.NewKeyFile()
-	_, err = keyFile.LoadFromFile(filename, glib.KeyFileFlagsNone)
+	_, err := keyFile.LoadFromFile(homeDir+_ICON_HISTORY_FILE,
+		glib.KeyFileFlagsNone)
 	if err != nil {
 		fmt.Println("Load Icon History File Failed:", err)
 		return false
 	}
 
-	_, err = keyFile.RemoveKey(_GROUP_KEY, filename)
-	if err != nil {
-		fmt.Printf("RemoveKey '%s' failed: %s\n", filename, err)
+	keyFile.SetInteger(_GROUP_KEY, filename, 0)
+	_, data, err2 := keyFile.ToData()
+	if err2 != nil {
+		fmt.Println("Key File To Data Failed:", err2)
 		return false
+	}
+
+	if !WriteKeyFile(homeDir+_ICON_HISTORY_FILE, data) {
+		return false
+	}
+
+	if !strings.Contains(filename, _SYSTEM_ICON_PATH) {
+		err := os.Remove(filename)
+		if err != nil {
+			fmt.Printf("Remove '%s' failed: %s\n", filename, err)
+			return false
+		}
 	}
 
 	return true
@@ -246,7 +255,7 @@ func WriteKeyFile(filename, data string) bool {
 		return false
 	}
 
-	f, err := os.OpenFile(filename, os.O_WRONLY | os.O_CREATE, 0664)
+	f, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE, 0664)
 	if err != nil {
 		fmt.Println("Open History File Failed:", err)
 		return false
