@@ -606,7 +606,7 @@ void *pa_get_source_output_list(pa *self)
     return NULL;
 }
 
-void* pa_get_sink_input_index_by_pid(pa *self,void *args)
+/*int pa_get_sink_input_index_by_pid(pa *self,int index,int )
 {
     if(!self)
     {
@@ -614,11 +614,6 @@ void* pa_get_sink_input_index_by_pid(pa *self,void *args)
         return NULL;
     }
 
-    /*if(!PyArg_ParseTuple(args,"ii",&kpid,&i))
-    {
-    	fprintf(stderr,"Expect a integer argument!\n");
-    	return Py_BuildValue("i",-1);
-    }*/
 
     if(!self->sink_inputs)
     {
@@ -635,6 +630,7 @@ void* pa_get_sink_input_index_by_pid(pa *self,void *args)
     fprintf(stderr,"No matching pid detected\n");
     return NULL;
 }
+*/
 
 int pa_set_sink_mute_by_index(pa *self,int index,int mute)
 {
@@ -701,12 +697,14 @@ int pa_set_sink_mute_by_index(pa *self,int index,int mute)
     return 0;
 }
 
+<<<<<<< HEAD
 int pa_set_sink_volume_by_index(pa *self,void *args)
+=======
+int pa_set_sink_volume_by_index(pa *self,int index,pa_cvolume *cvolume)
+>>>>>>> develop
 {
     int pa_ready=0;//CRITICAL!,initialize pa_ready to zero
     int state=0;
-    int index,volume;
-    pa_cvolume cvolume;
     if(!self)
     {
         fprintf(stderr,"NULL object pointer\n");
@@ -714,10 +712,325 @@ int pa_set_sink_volume_by_index(pa *self,void *args)
     }
 
 
+<<<<<<< HEAD
     memset(&cvolume,0,sizeof(cvolume));
     cvolume.channels=2;
     pa_cvolume_set(&cvolume,cvolume.channels,volume);
     if(!pa_cvolume_valid(&cvolume))
+    {
+        fprintf(stderr,"Invalid volume %d provided,please choose another one\n",volume);
+=======
+    //pa_cvolume_set(&cvolume,cvolume.channels,volume);
+    if(!pa_cvolume_valid(cvolume))
+	{
+		fprintf(stderr,"Invalid volume provided\n");
+>>>>>>> develop
+        return -1;
+    }
+
+    pa_context_connect(self->pa_ctx, NULL, 0, NULL);
+    pa_context_set_state_callback(self->pa_ctx, pa_state_cb, &pa_ready);
+
+    for (;;)
+    {
+        if (pa_ready == 0)
+        {
+            pa_mainloop_iterate(self->pa_ml, 1, NULL);
+            continue;
+        }
+        if (pa_ready == 2)
+        {
+            pa_context_disconnect(self->pa_ctx);
+            pa_context_unref(self->pa_ctx);
+            pa_mainloop_free(self->pa_ml);
+            self->pa_op=NULL;
+            self->pa_ctx=NULL;
+            self->pa_mlapi=NULL;
+            self->pa_ml=NULL;
+            return  -1;
+        }
+        switch (state)
+        {
+        case 0:
+            self->pa_op=pa_context_set_sink_volume_by_index( self->pa_ctx,
+					index, cvolume, pa_context_success_cb,self);
+            state++;
+            break;
+        case 1:
+            if (pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
+            {
+                pa_operation_unref(self->pa_op);
+                pa_context_disconnect(self->pa_ctx);
+                pa_context_unref(self->pa_ctx);
+                pa_mainloop_free(self->pa_ml);
+                self->pa_op=NULL;
+                self->pa_ctx=NULL;
+                self->pa_mlapi=NULL;
+                self->pa_ml=NULL;
+                pa_init_context(self);
+                return 0;
+            }
+            break;
+        default:
+            fprintf(stderr, "in state %d\n", state);
+            return 0;
+        }
+        pa_mainloop_iterate(self->pa_ml, 1, NULL);
+    }
+
+    return 0;
+}
+
+<<<<<<< HEAD
+int pa_inc_sink_volume_by_index(pa *self,void *args)
+=======
+int pa_inc_sink_volume_by_index(pa *self,int index,int volume)
+>>>>>>> develop
+{
+    int pa_ready = 0,state = 0;
+	pa_cvolume cvolume;
+
+
+    pa_context_connect(self->pa_ctx, NULL, 0, NULL);
+    pa_context_set_state_callback(self->pa_ctx, pa_state_cb, &pa_ready);
+
+    for (;;)
+    {
+        if (pa_ready == 0)
+        {
+            pa_mainloop_iterate(self->pa_ml, 1, NULL);
+            continue;
+        }
+        if (pa_ready == 2)
+        {
+            pa_context_disconnect(self->pa_ctx);
+            pa_context_unref(self->pa_ctx);
+            pa_mainloop_free(self->pa_ml);
+            self->pa_op=NULL;
+            self->pa_ctx=NULL;
+            self->pa_mlapi=NULL;
+            self->pa_ml=NULL;
+            pa_init_context(self);
+            return 0;
+        }
+        switch (state)
+        {
+        case 0:
+            self->pa_op=pa_context_get_sink_info_by_index(self->pa_ctx,index,
+                        pa_get_sink_volume_cb,&cvolume);
+            state++;
+            break;
+        case 1:
+            if(pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
+            {
+                pa_cvolume_inc(&cvolume,volume);
+                if(!pa_cvolume_valid(&cvolume))
+                {
+                    fprintf(stderr,"Invalid increased volume\n");
+                    pa_operation_unref(self->pa_op);
+                    pa_context_disconnect(self->pa_ctx);
+                    pa_context_unref(self->pa_ctx);
+                    pa_mainloop_free(self->pa_ml);
+                    self->pa_op=NULL;
+                    self->pa_ctx=NULL;
+                    self->pa_ml=NULL;
+                    self->pa_mlapi=NULL;
+                    pa_init_context(self);
+                    return 0;
+                }
+                else
+                {
+                    pa_context_set_sink_volume_by_index(self->pa_ctx,index,&cvolume,
+                                                        pa_set_sink_input_volume_cb,self);
+                    state++;
+                    break;
+                }
+            }
+            break;
+        case 2:
+            if (pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
+            {
+                pa_operation_unref(self->pa_op);
+                pa_context_disconnect(self->pa_ctx);
+                pa_context_unref(self->pa_ctx);
+                pa_mainloop_free(self->pa_ml);
+                self->pa_op=NULL;
+                self->pa_ctx=NULL;
+                self->pa_mlapi=NULL;
+                self->pa_ml=NULL;
+                pa_init_context(self);
+                return 0;
+            }
+            break;
+        default:
+            fprintf(stderr, "in state %d\n", state);
+            return 0;
+        }
+        pa_mainloop_iterate(self->pa_ml, 1, NULL);
+    }
+    return 0;
+}
+
+int pa_dec_sink_volume_by_index(pa *self,int index,int volume)
+{
+    int pa_ready = 0;
+    int state = 0;
+
+    pa_cvolume cvolume;
+    memset(&cvolume,0,sizeof(cvolume));
+    pa_context_connect(self->pa_ctx, NULL, 0, NULL);
+    pa_context_set_state_callback(self->pa_ctx, pa_state_cb, &pa_ready);
+
+    for (;;)
+    {
+        if (pa_ready == 0)
+        {
+            pa_mainloop_iterate(self->pa_ml, 1, NULL);
+            continue;
+        }
+        if (pa_ready == 2)
+        {
+            pa_context_disconnect(self->pa_ctx);
+            pa_context_unref(self->pa_ctx);
+            pa_mainloop_free(self->pa_ml);
+            self->pa_op=NULL;
+            self->pa_ctx=NULL;
+            self->pa_mlapi=NULL;
+            self->pa_ml=NULL;
+            pa_init_context(self);
+            return -1;
+        }
+        switch (state)
+        {
+        case 0:
+            self->pa_op=pa_context_get_sink_info_by_index(self->pa_ctx,index,
+                        pa_get_sink_volume_cb,&cvolume);
+            state++;
+            break;
+        case 1:
+            if(pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
+            {
+                pa_cvolume_dec(&cvolume,volume);
+                if(!pa_cvolume_valid(&cvolume))
+                {
+                    fprintf(stderr,"Invalid decreased volume\n");
+                    pa_operation_unref(self->pa_op);
+                    pa_context_disconnect(self->pa_ctx);
+                    pa_context_unref(self->pa_ctx);
+                    pa_mainloop_free(self->pa_ml);
+                    self->pa_op=NULL;
+                    self->pa_ctx=NULL;
+                    self->pa_ml=NULL;
+                    self->pa_mlapi=NULL;
+                    pa_init_context(self);
+                    return -1;
+                }
+                else
+                {
+                    pa_context_set_sink_volume_by_index(self->pa_ctx,index,&cvolume,
+                                                        pa_set_sink_input_volume_cb,self);
+                    state++;
+                    break;
+                }
+            }
+            break;
+        case 2:
+            if (pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
+            {
+                pa_operation_unref(self->pa_op);
+                pa_context_disconnect(self->pa_ctx);
+                pa_context_unref(self->pa_ctx);
+                pa_mainloop_free(self->pa_ml);
+                self->pa_op=NULL;
+                self->pa_ctx=NULL;
+                self->pa_mlapi=NULL;
+                self->pa_ml=NULL;
+                pa_init_context(self);
+                return -1;
+            }
+            break;
+        default:
+            fprintf(stderr, "in state %d\n", state);
+            return -1;
+        }
+        pa_mainloop_iterate(self->pa_ml, 1, NULL);
+    }
+    return -1;
+}
+
+
+int pa_set_source_mute_by_index(pa *self,int index,int mute)
+{
+    int pa_ready = 0;
+    int state = 0;
+
+    pa_context_connect(self->pa_ctx, NULL, 0, NULL);
+    pa_context_set_state_callback(self->pa_ctx, pa_state_cb, &pa_ready);
+
+    for (;;)
+    {
+        if (pa_ready == 0)
+        {
+            pa_mainloop_iterate(self->pa_ml, 1, NULL);
+            continue;
+        }
+        if (pa_ready == 2)
+        {
+            pa_context_disconnect(self->pa_ctx);
+            pa_context_unref(self->pa_ctx);
+            pa_mainloop_free(self->pa_ml);
+            self->pa_op=NULL;
+            self->pa_ctx=NULL;
+            self->pa_mlapi=NULL;
+            self->pa_ml=NULL;
+            pa_init_context(self);
+
+            return -1;
+        }
+        switch (state)
+        {
+        case 0:
+            self->pa_op=pa_context_set_source_mute_by_index(self->pa_ctx,index,mute,
+                        pa_context_success_cb,self);
+            state++;
+            break;
+        case 1:
+            if (pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
+            {
+                pa_operation_unref(self->pa_op);
+                pa_context_disconnect(self->pa_ctx);
+                pa_context_unref(self->pa_ctx);
+                pa_mainloop_free(self->pa_ml);
+                self->pa_op=NULL;
+                self->pa_ctx=NULL;
+                self->pa_mlapi=NULL;
+                self->pa_ml=NULL;
+                pa_init_context(self);
+                return 0;
+            }
+            break;
+        default:
+            fprintf(stderr, "in state %d\n", state);
+            return -1;
+        }
+        pa_mainloop_iterate(self->pa_ml, 1, NULL);
+    }
+    return -1;
+}
+
+int pa_set_source_volume_by_index(pa *self,int index,pa_cvolume *cvolume)
+{
+    int pa_ready=0;//CRITICAL!,initialize pa_ready to zero
+    int state=0;
+    int volume;
+
+    if(!self)
+    {
+        fprintf(stderr,"NULL object pointer\n");
+        return -1;
+    }
+
+    if(!pa_cvolume_valid(cvolume))
     {
         fprintf(stderr,"Invalid volume %d provided,please choose another one\n",volume);
         return -1;
@@ -747,8 +1060,250 @@ int pa_set_sink_volume_by_index(pa *self,void *args)
         switch (state)
         {
         case 0:
-            self->pa_op=pa_context_set_sink_volume_by_index(self->pa_ctx,index,&cvolume,
-                        pa_context_success_cb,self);
+            self->pa_op=pa_context_set_source_volume_by_index(
+					self->pa_ctx,index,cvolume,pa_context_success_cb,self);
+            state++;
+            break;
+        case 1:
+            if (pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
+            {
+                pa_operation_unref(self->pa_op);
+                pa_context_disconnect(self->pa_ctx);
+                pa_context_unref(self->pa_ctx);
+                pa_mainloop_free(self->pa_ml);
+                self->pa_op=NULL;
+                self->pa_ctx=NULL;
+                self->pa_mlapi=NULL;
+                self->pa_ml=NULL;
+                pa_init_context(self);
+                return 0;
+            }
+            break;
+        default:
+            fprintf(stderr, "in state %d\n", state);
+            return -1;
+        }
+        pa_mainloop_iterate(self->pa_ml, 1, NULL);
+    }
+
+    return 0;
+}
+
+int pa_inc_source_volume_by_index(pa *self,int index,int volume)
+{
+    int pa_ready = 0;
+    int state = 0;
+
+    pa_cvolume cvolume;
+    memset(&cvolume,0,sizeof(cvolume));
+    if(!pa_cvolume_valid(&cvolume))
+    {
+        //check if the volume increase is valid
+        fprintf(stderr,"Invalid volume!\n");
+        return -1;
+    }
+
+
+    pa_context_connect(self->pa_ctx, NULL, 0, NULL);
+    pa_context_set_state_callback(self->pa_ctx, pa_state_cb, &pa_ready);
+
+    for (;;)
+    {
+        if (pa_ready == 0)
+        {
+            pa_mainloop_iterate(self->pa_ml, 1, NULL);
+            continue;
+        }
+        if (pa_ready == 2)
+        {
+            pa_context_disconnect(self->pa_ctx);
+            pa_context_unref(self->pa_ctx);
+            pa_mainloop_free(self->pa_ml);
+            self->pa_op=NULL;
+            self->pa_ctx=NULL;
+            self->pa_mlapi=NULL;
+            self->pa_ml=NULL;
+            pa_init_context(self);
+            return 0;
+        }
+        switch (state)
+        {
+        case 0:
+            self->pa_op=pa_context_get_source_info_by_index(self->pa_ctx,index,
+                        pa_get_source_volume_cb,&cvolume);
+            state++;
+            break;
+        case 1:
+            if(pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
+            {
+                pa_cvolume_inc(&cvolume,volume);
+                if(!pa_cvolume_valid(&cvolume))
+                {
+                    fprintf(stderr,"Invalid increased volume\n");
+                    pa_operation_unref(self->pa_op);
+                    pa_context_disconnect(self->pa_ctx);
+                    pa_context_unref(self->pa_ctx);
+                    pa_mainloop_free(self->pa_ml);
+                    self->pa_op=NULL;
+                    self->pa_ctx=NULL;
+                    self->pa_ml=NULL;
+                    self->pa_mlapi=NULL;
+                    pa_init_context(self);
+                    return 0;
+                }
+                else
+                {
+                    pa_context_set_source_volume_by_index(self->pa_ctx,index,&cvolume,
+                                                          pa_context_success_cb,self);
+                    state++;
+                    break;
+                }
+            }
+            break;
+        case 2:
+            if (pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
+            {
+                pa_operation_unref(self->pa_op);
+                pa_context_disconnect(self->pa_ctx);
+                pa_context_unref(self->pa_ctx);
+                pa_mainloop_free(self->pa_ml);
+                self->pa_op=NULL;
+                self->pa_ctx=NULL;
+                self->pa_mlapi=NULL;
+                self->pa_ml=NULL;
+                pa_init_context(self);
+                return 0;
+            }
+            break;
+        default:
+            fprintf(stderr, "in state %d\n", state);
+            return -1;
+        }
+        pa_mainloop_iterate(self->pa_ml, 1, NULL);
+    }
+    return 0;
+}
+
+int pa_dec_source_volume_by_index(pa *self,int index,int volume)
+{
+    int pa_ready = 0;
+    int state = 0;
+
+    pa_cvolume cvolume;
+    memset(&cvolume,0,sizeof(cvolume));
+    pa_context_connect(self->pa_ctx, NULL, 0, NULL);
+    pa_context_set_state_callback(self->pa_ctx, pa_state_cb, &pa_ready);
+
+    for (;;)
+    {
+        if (pa_ready == 0)
+        {
+            pa_mainloop_iterate(self->pa_ml, 1, NULL);
+            continue;
+        }
+        if (pa_ready == 2)
+        {
+            pa_context_disconnect(self->pa_ctx);
+            pa_context_unref(self->pa_ctx);
+            pa_mainloop_free(self->pa_ml);
+            self->pa_op=NULL;
+            self->pa_ctx=NULL;
+            self->pa_mlapi=NULL;
+            self->pa_ml=NULL;
+            pa_init_context(self);
+            return -1;
+        }
+        switch (state)
+        {
+        case 0:
+            self->pa_op=pa_context_get_source_info_by_index(self->pa_ctx,index,
+                        pa_get_source_volume_cb,&cvolume);
+            state++;
+            break;
+        case 1:
+            if(pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
+            {
+                pa_cvolume_dec(&cvolume,volume);
+                if(!pa_cvolume_valid(&cvolume))
+                {
+                    fprintf(stderr,"Invalid increased volume\n");
+                    pa_operation_unref(self->pa_op);
+                    pa_context_disconnect(self->pa_ctx);
+                    pa_context_unref(self->pa_ctx);
+                    pa_mainloop_free(self->pa_ml);
+                    self->pa_op=NULL;
+                    self->pa_ctx=NULL;
+                    self->pa_ml=NULL;
+                    self->pa_mlapi=NULL;
+                    pa_init_context(self);
+                    return 0;
+                }
+                else
+                {
+                    pa_context_set_source_volume_by_index(self->pa_ctx,index,&cvolume,
+                                                          pa_set_sink_input_volume_cb,self);
+                    state++;
+                    break;
+                }
+            }
+            break;
+        case 2:
+            if (pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
+            {
+                pa_operation_unref(self->pa_op);
+                pa_context_disconnect(self->pa_ctx);
+                pa_context_unref(self->pa_ctx);
+                pa_mainloop_free(self->pa_ml);
+                self->pa_op=NULL;
+                self->pa_ctx=NULL;
+                self->pa_mlapi=NULL;
+                self->pa_ml=NULL;
+                pa_init_context(self);
+                return 0;
+            }
+            break;
+        default:
+            fprintf(stderr, "in state %d\n", state);
+            return -1;
+        }
+        pa_mainloop_iterate(self->pa_ml, 1, NULL);
+    }
+    return 0;
+}
+
+
+int pa_set_sink_input_mute(pa *self,int index,int mute)
+{
+    int pa_ready = 0;
+    int state = 0;
+
+    pa_context_connect(self->pa_ctx, NULL, 0, NULL);
+    pa_context_set_state_callback(self->pa_ctx, pa_state_cb, &pa_ready);
+
+    for (;;)
+    {
+        if (pa_ready == 0)
+        {
+            pa_mainloop_iterate(self->pa_ml, 1, NULL);
+            continue;
+        }
+        if (pa_ready == 2)
+        {
+            pa_context_disconnect(self->pa_ctx);
+            pa_context_unref(self->pa_ctx);
+            pa_mainloop_free(self->pa_ml);
+            self->pa_op=NULL;
+            self->pa_ctx=NULL;
+            self->pa_mlapi=NULL;
+            self->pa_ml=NULL;
+            pa_init_context(self);
+
+            return -1;
+        }
+        switch (state)
+        {
+        case 0:
+            self->pa_op=pa_context_set_sink_input_mute(self->pa_ctx,index,mute,pa_set_sink_input_mute_cb,self);
             state++;
             break;
         case 1:
@@ -772,270 +1327,37 @@ int pa_set_sink_volume_by_index(pa *self,void *args)
         }
         pa_mainloop_iterate(self->pa_ml, 1, NULL);
     }
+    return 0;
+}
+
+int pa_set_sink_input_mute_by_pid(pa *self,int index,int mute)
+{
+    if(!self)
+    {
+        fprintf(stderr,"NULL object pointer\n");
+        return -1;
+    }
+
+    //pa_get_sink_input_index_by_pid(self,index,mute);
 
     return 0;
 }
 
-int pa_inc_sink_volume_by_index(pa *self,void *args)
-{
-    int pa_ready = 0,state = 0;
-    int index, volume=0;
-
-
-    pa_cvolume cvolume;
-    memset(&cvolume,0,sizeof(cvolume));
-
-    pa_context_connect(self->pa_ctx, NULL, 0, NULL);
-    pa_context_set_state_callback(self->pa_ctx, pa_state_cb, &pa_ready);
-
-    for (;;)
-    {
-        if (pa_ready == 0)
-        {
-            pa_mainloop_iterate(self->pa_ml, 1, NULL);
-            continue;
-        }
-        if (pa_ready == 2)
-        {
-            pa_context_disconnect(self->pa_ctx);
-            pa_context_unref(self->pa_ctx);
-            pa_mainloop_free(self->pa_ml);
-            self->pa_op=NULL;
-            self->pa_ctx=NULL;
-            self->pa_mlapi=NULL;
-            self->pa_ml=NULL;
-            pa_init_context(self);
-            return NULL;
-        }
-        switch (state)
-        {
-        case 0:
-            self->pa_op=pa_context_get_sink_info_by_index(self->pa_ctx,index,
-                        pa_get_sink_volume_cb,&cvolume);
-            state++;
-            break;
-        case 1:
-            if(pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
-            {
-                pa_cvolume_inc(&cvolume,volume);
-                if(!pa_cvolume_valid(&cvolume))
-                {
-                    fprintf(stderr,"Invalid increased volume\n");
-                    pa_operation_unref(self->pa_op);
-                    pa_context_disconnect(self->pa_ctx);
-                    pa_context_unref(self->pa_ctx);
-                    pa_mainloop_free(self->pa_ml);
-                    self->pa_op=NULL;
-                    self->pa_ctx=NULL;
-                    self->pa_ml=NULL;
-                    self->pa_mlapi=NULL;
-                    pa_init_context(self);
-                    return NULL;
-                }
-                else
-                {
-                    pa_context_set_sink_volume_by_index(self->pa_ctx,index,&cvolume,
-                                                        pa_set_sink_input_volume_cb,self);
-                    state++;
-                    break;
-                }
-            }
-            break;
-        case 2:
-            if (pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
-            {
-                pa_operation_unref(self->pa_op);
-                pa_context_disconnect(self->pa_ctx);
-                pa_context_unref(self->pa_ctx);
-                pa_mainloop_free(self->pa_ml);
-                self->pa_op=NULL;
-                self->pa_ctx=NULL;
-                self->pa_mlapi=NULL;
-                self->pa_ml=NULL;
-                pa_init_context(self);
-                return NULL;
-            }
-            break;
-        default:
-            fprintf(stderr, "in state %d\n", state);
-            return NULL;
-        }
-        pa_mainloop_iterate(self->pa_ml, 1, NULL);
-    }
-    return NULL;
-}
-
-void *pa_dec_sink_volume_by_index(pa *self,void *args)
-{
-    int pa_ready = 0;
-    int state = 0;
-    int index;
-    int volume=0;
-
-    pa_cvolume cvolume;
-    memset(&cvolume,0,sizeof(cvolume));
-    pa_context_connect(self->pa_ctx, NULL, 0, NULL);
-    pa_context_set_state_callback(self->pa_ctx, pa_state_cb, &pa_ready);
-
-    for (;;)
-    {
-        if (pa_ready == 0)
-        {
-            pa_mainloop_iterate(self->pa_ml, 1, NULL);
-            continue;
-        }
-        if (pa_ready == 2)
-        {
-            pa_context_disconnect(self->pa_ctx);
-            pa_context_unref(self->pa_ctx);
-            pa_mainloop_free(self->pa_ml);
-            self->pa_op=NULL;
-            self->pa_ctx=NULL;
-            self->pa_mlapi=NULL;
-            self->pa_ml=NULL;
-            pa_init_context(self);
-            return NULL;
-        }
-        switch (state)
-        {
-        case 0:
-            self->pa_op=pa_context_get_sink_info_by_index(self->pa_ctx,index,
-                        pa_get_sink_volume_cb,&cvolume);
-            state++;
-            break;
-        case 1:
-            if(pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
-            {
-                pa_cvolume_dec(&cvolume,volume);
-                if(!pa_cvolume_valid(&cvolume))
-                {
-                    fprintf(stderr,"Invalid decreased volume\n");
-                    pa_operation_unref(self->pa_op);
-                    pa_context_disconnect(self->pa_ctx);
-                    pa_context_unref(self->pa_ctx);
-                    pa_mainloop_free(self->pa_ml);
-                    self->pa_op=NULL;
-                    self->pa_ctx=NULL;
-                    self->pa_ml=NULL;
-                    self->pa_mlapi=NULL;
-                    pa_init_context(self);
-                    return NULL;
-                }
-                else
-                {
-                    pa_context_set_sink_volume_by_index(self->pa_ctx,index,&cvolume,
-                                                        pa_set_sink_input_volume_cb,self);
-                    state++;
-                    break;
-                }
-            }
-            break;
-        case 2:
-            if (pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
-            {
-                pa_operation_unref(self->pa_op);
-                pa_context_disconnect(self->pa_ctx);
-                pa_context_unref(self->pa_ctx);
-                pa_mainloop_free(self->pa_ml);
-                self->pa_op=NULL;
-                self->pa_ctx=NULL;
-                self->pa_mlapi=NULL;
-                self->pa_ml=NULL;
-                pa_init_context(self);
-                return NULL;
-            }
-            break;
-        default:
-            fprintf(stderr, "in state %d\n", state);
-            return NULL;
-        }
-        pa_mainloop_iterate(self->pa_ml, 1, NULL);
-    }
-    return NULL;
-}
-
-
-void *pa_set_source_mute_by_index(pa *self,void *args)
-{
-    int pa_ready = 0;
-    int state = 0;
-    int index,mute;
-
-    pa_context_connect(self->pa_ctx, NULL, 0, NULL);
-    pa_context_set_state_callback(self->pa_ctx, pa_state_cb, &pa_ready);
-
-    for (;;)
-    {
-        if (pa_ready == 0)
-        {
-            pa_mainloop_iterate(self->pa_ml, 1, NULL);
-            continue;
-        }
-        if (pa_ready == 2)
-        {
-            pa_context_disconnect(self->pa_ctx);
-            pa_context_unref(self->pa_ctx);
-            pa_mainloop_free(self->pa_ml);
-            self->pa_op=NULL;
-            self->pa_ctx=NULL;
-            self->pa_mlapi=NULL;
-            self->pa_ml=NULL;
-            pa_init_context(self);
-
-            return NULL;
-        }
-        switch (state)
-        {
-        case 0:
-            self->pa_op=pa_context_set_source_mute_by_index(self->pa_ctx,index,mute,
-                        pa_context_success_cb,self);
-            state++;
-            break;
-        case 1:
-            if (pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
-            {
-                pa_operation_unref(self->pa_op);
-                pa_context_disconnect(self->pa_ctx);
-                pa_context_unref(self->pa_ctx);
-                pa_mainloop_free(self->pa_ml);
-                self->pa_op=NULL;
-                self->pa_ctx=NULL;
-                self->pa_mlapi=NULL;
-                self->pa_ml=NULL;
-                pa_init_context(self);
-                return NULL;
-            }
-            break;
-        default:
-            fprintf(stderr, "in state %d\n", state);
-            return NULL;
-        }
-        pa_mainloop_iterate(self->pa_ml, 1, NULL);
-    }
-    return NULL;
-}
-
-void *pa_set_source_volume_by_index(pa *self,void *args)
+int pa_set_sink_input_volume(pa *self,int index,pa_cvolume *cvolume)
 {
     int pa_ready=0;//CRITICAL!,initialize pa_ready to zero
     int state=0;
-    int index,volume;
-
-    pa_cvolume cvolume;
+    //float tmp=0;
     if(!self)
     {
         fprintf(stderr,"NULL object pointer\n");
-        return NULL;
+        return -1;
     }
 
-
-
-    memset(&cvolume,0,sizeof(cvolume));
-    pa_cvolume_set(&cvolume,cvolume.channels,volume);
-    if(!pa_cvolume_valid(&cvolume))
+    if(!pa_cvolume_valid(cvolume))
     {
-        fprintf(stderr,"Invalid volume %d provided,please choose another one\n",volume);
-        return NULL;
+        fprintf(stderr,"Invalid volume provided\n");
+        return -1;
     }
 
     pa_context_connect(self->pa_ctx, NULL, 0, NULL);
@@ -1057,349 +1379,12 @@ void *pa_set_source_volume_by_index(pa *self,void *args)
             self->pa_ctx=NULL;
             self->pa_mlapi=NULL;
             self->pa_ml=NULL;
-            return  NULL;
+            return 0;
         }
         switch (state)
         {
         case 0:
-            self->pa_op=pa_context_set_source_volume_by_index(self->pa_ctx,index,&cvolume,
-                        pa_context_success_cb,self);
-            state++;
-            break;
-        case 1:
-            if (pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
-            {
-                pa_operation_unref(self->pa_op);
-                pa_context_disconnect(self->pa_ctx);
-                pa_context_unref(self->pa_ctx);
-                pa_mainloop_free(self->pa_ml);
-                self->pa_op=NULL;
-                self->pa_ctx=NULL;
-                self->pa_mlapi=NULL;
-                self->pa_ml=NULL;
-                pa_init_context(self);
-                return NULL;
-            }
-            break;
-        default:
-            fprintf(stderr, "in state %d\n", state);
-            return NULL;
-        }
-        pa_mainloop_iterate(self->pa_ml, 1, NULL);
-    }
-
-    return NULL;
-}
-
-void *pa_inc_source_volume_by_index(pa *self,void *args)
-{
-    int pa_ready = 0;
-    int state = 0;
-    int index;
-    int volume=0;
-
-    pa_cvolume cvolume;
-    memset(&cvolume,0,sizeof(cvolume));
-    if(!pa_cvolume_valid(&cvolume))
-    {
-        //check if the volume increase is valid
-        fprintf(stderr,"Invalid volume!\n");
-        return NULL;
-    }
-
-
-    pa_context_connect(self->pa_ctx, NULL, 0, NULL);
-    pa_context_set_state_callback(self->pa_ctx, pa_state_cb, &pa_ready);
-
-    for (;;)
-    {
-        if (pa_ready == 0)
-        {
-            pa_mainloop_iterate(self->pa_ml, 1, NULL);
-            continue;
-        }
-        if (pa_ready == 2)
-        {
-            pa_context_disconnect(self->pa_ctx);
-            pa_context_unref(self->pa_ctx);
-            pa_mainloop_free(self->pa_ml);
-            self->pa_op=NULL;
-            self->pa_ctx=NULL;
-            self->pa_mlapi=NULL;
-            self->pa_ml=NULL;
-            pa_init_context(self);
-            return NULL;
-        }
-        switch (state)
-        {
-        case 0:
-            self->pa_op=pa_context_get_source_info_by_index(self->pa_ctx,index,
-                        pa_get_source_volume_cb,&cvolume);
-            state++;
-            break;
-        case 1:
-            if(pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
-            {
-                pa_cvolume_inc(&cvolume,volume);
-                if(!pa_cvolume_valid(&cvolume))
-                {
-                    fprintf(stderr,"Invalid increased volume\n");
-                    pa_operation_unref(self->pa_op);
-                    pa_context_disconnect(self->pa_ctx);
-                    pa_context_unref(self->pa_ctx);
-                    pa_mainloop_free(self->pa_ml);
-                    self->pa_op=NULL;
-                    self->pa_ctx=NULL;
-                    self->pa_ml=NULL;
-                    self->pa_mlapi=NULL;
-                    pa_init_context(self);
-                    return NULL;
-                }
-                else
-                {
-                    pa_context_set_source_volume_by_index(self->pa_ctx,index,&cvolume,
-                                                          pa_context_success_cb,self);
-                    state++;
-                    break;
-                }
-            }
-            break;
-        case 2:
-            if (pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
-            {
-                pa_operation_unref(self->pa_op);
-                pa_context_disconnect(self->pa_ctx);
-                pa_context_unref(self->pa_ctx);
-                pa_mainloop_free(self->pa_ml);
-                self->pa_op=NULL;
-                self->pa_ctx=NULL;
-                self->pa_mlapi=NULL;
-                self->pa_ml=NULL;
-                pa_init_context(self);
-                return NULL;
-            }
-            break;
-        default:
-            fprintf(stderr, "in state %d\n", state);
-            return NULL;
-        }
-        pa_mainloop_iterate(self->pa_ml, 1, NULL);
-    }
-    return NULL;
-}
-
-void *pa_dec_source_volume_by_index(pa *self,void *args)
-{
-    int pa_ready = 0;
-    int state = 0;
-    int index;
-    int volume=0;
-
-
-    pa_cvolume cvolume;
-    memset(&cvolume,0,sizeof(cvolume));
-    pa_context_connect(self->pa_ctx, NULL, 0, NULL);
-    pa_context_set_state_callback(self->pa_ctx, pa_state_cb, &pa_ready);
-
-    for (;;)
-    {
-        if (pa_ready == 0)
-        {
-            pa_mainloop_iterate(self->pa_ml, 1, NULL);
-            continue;
-        }
-        if (pa_ready == 2)
-        {
-            pa_context_disconnect(self->pa_ctx);
-            pa_context_unref(self->pa_ctx);
-            pa_mainloop_free(self->pa_ml);
-            self->pa_op=NULL;
-            self->pa_ctx=NULL;
-            self->pa_mlapi=NULL;
-            self->pa_ml=NULL;
-            pa_init_context(self);
-            return NULL;
-        }
-        switch (state)
-        {
-        case 0:
-            self->pa_op=pa_context_get_source_info_by_index(self->pa_ctx,index,
-                        pa_get_source_volume_cb,&cvolume);
-            state++;
-            break;
-        case 1:
-            if(pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
-            {
-                pa_cvolume_dec(&cvolume,volume);
-                if(!pa_cvolume_valid(&cvolume))
-                {
-                    fprintf(stderr,"Invalid increased volume\n");
-                    pa_operation_unref(self->pa_op);
-                    pa_context_disconnect(self->pa_ctx);
-                    pa_context_unref(self->pa_ctx);
-                    pa_mainloop_free(self->pa_ml);
-                    self->pa_op=NULL;
-                    self->pa_ctx=NULL;
-                    self->pa_ml=NULL;
-                    self->pa_mlapi=NULL;
-                    pa_init_context(self);
-                    return NULL;
-                }
-                else
-                {
-                    pa_context_set_source_volume_by_index(self->pa_ctx,index,&cvolume,
-                                                          pa_set_sink_input_volume_cb,self);
-                    state++;
-                    break;
-                }
-            }
-            break;
-        case 2:
-            if (pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
-            {
-                pa_operation_unref(self->pa_op);
-                pa_context_disconnect(self->pa_ctx);
-                pa_context_unref(self->pa_ctx);
-                pa_mainloop_free(self->pa_ml);
-                self->pa_op=NULL;
-                self->pa_ctx=NULL;
-                self->pa_mlapi=NULL;
-                self->pa_ml=NULL;
-                pa_init_context(self);
-                return NULL;
-            }
-            break;
-        default:
-            fprintf(stderr, "in state %d\n", state);
-            return NULL;
-        }
-        pa_mainloop_iterate(self->pa_ml, 1, NULL);
-    }
-    return NULL;
-}
-
-
-void *pa_set_sink_input_mute(pa *self,void *args)
-{
-    int pa_ready = 0;
-    int state = 0;
-    int index,mute;
-
-    pa_context_connect(self->pa_ctx, NULL, 0, NULL);
-    pa_context_set_state_callback(self->pa_ctx, pa_state_cb, &pa_ready);
-
-    for (;;)
-    {
-        if (pa_ready == 0)
-        {
-            pa_mainloop_iterate(self->pa_ml, 1, NULL);
-            continue;
-        }
-        if (pa_ready == 2)
-        {
-            pa_context_disconnect(self->pa_ctx);
-            pa_context_unref(self->pa_ctx);
-            pa_mainloop_free(self->pa_ml);
-            self->pa_op=NULL;
-            self->pa_ctx=NULL;
-            self->pa_mlapi=NULL;
-            self->pa_ml=NULL;
-            pa_init_context(self);
-
-            return NULL;
-        }
-        switch (state)
-        {
-        case 0:
-            self->pa_op=pa_context_set_sink_input_mute(self->pa_ctx,index,mute,pa_set_sink_input_mute_cb,self);
-            state++;
-            break;
-        case 1:
-            if (pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
-            {
-                pa_operation_unref(self->pa_op);
-                pa_context_disconnect(self->pa_ctx);
-                pa_context_unref(self->pa_ctx);
-                pa_mainloop_free(self->pa_ml);
-                self->pa_op=NULL;
-                self->pa_ctx=NULL;
-                self->pa_mlapi=NULL;
-                self->pa_ml=NULL;
-                pa_init_context(self);
-                return NULL;
-            }
-            break;
-        default:
-            fprintf(stderr, "in state %d\n", state);
-            return NULL;
-        }
-        pa_mainloop_iterate(self->pa_ml, 1, NULL);
-    }
-    return NULL;
-}
-
-void* pa_set_sink_input_mute_by_pid(pa *self,void *args)
-{
-    void *index_py;
-    if(!self)
-    {
-        fprintf(stderr,"NULL object pointer\n");
-        return NULL;
-    }
-
-    index_py=pa_get_sink_input_index_by_pid(self,args);
-
-    return NULL;
-}
-
-void *pa_set_sink_input_volume(pa *self,void *args)
-{
-    int pa_ready=0;//CRITICAL!,initialize pa_ready to zero
-    int state=0;
-    int index,volume;
-    float tmp=0;
-    pa_cvolume cvolume;
-    if(!self)
-    {
-        fprintf(stderr,"NULL object pointer\n");
-        return NULL;
-    }
-
-
-    memset(&cvolume,0,sizeof(cvolume));
-    cvolume.channels=2;
-    pa_cvolume_set(&cvolume,cvolume.channels,volume);
-    if(!pa_cvolume_valid(&cvolume))
-    {
-        fprintf(stderr,"Invalid volume %d provided,please choose another one\n",volume);
-        return NULL;
-    }
-
-    pa_context_connect(self->pa_ctx, NULL, 0, NULL);
-    pa_context_set_state_callback(self->pa_ctx, pa_state_cb, &pa_ready);
-
-    for (;;)
-    {
-        if (pa_ready == 0)
-        {
-            pa_mainloop_iterate(self->pa_ml, 1, NULL);
-            continue;
-        }
-        if (pa_ready == 2)
-        {
-            pa_context_disconnect(self->pa_ctx);
-            pa_context_unref(self->pa_ctx);
-            pa_mainloop_free(self->pa_ml);
-            self->pa_op=NULL;
-            self->pa_ctx=NULL;
-            self->pa_mlapi=NULL;
-            self->pa_ml=NULL;
-            return NULL;
-        }
-        switch (state)
-        {
-        case 0:
-            self->pa_op=pa_context_set_sink_input_volume(self->pa_ctx,index,&cvolume,
+            self->pa_op=pa_context_set_sink_input_volume(self->pa_ctx,index,cvolume,
                         pa_set_sink_input_volume_cb,self);
             state++;
             break;
@@ -1415,27 +1400,25 @@ void *pa_set_sink_input_volume(pa *self,void *args)
                 self->pa_mlapi=NULL;
                 self->pa_ml=NULL;
                 pa_init_context(self);
-                return NULL;
+                return 0;
             }
             break;
         default:
             fprintf(stderr, "in state %d\n", state);
-            return NULL;
+            return -1;
         }
         pa_mainloop_iterate(self->pa_ml, 1, NULL);
     }
 
 
-    return NULL;
+    return 0;
 }
 
-void *pa_inc_sink_input_volume(pa *self,void *args)
+int pa_inc_sink_input_volume(pa *self,int index,int volume)
 {
     int pa_ready = 0;
     int state = 0;
-    int index;
-    int volume=0;
-    float tmp=0;
+    //float tmp=0;
 
 
     pa_cvolume cvolume;
@@ -1446,7 +1429,7 @@ void *pa_inc_sink_input_volume(pa *self,void *args)
     {
         //check if the volume increase is valid
         fprintf(stderr,"Invalid volume!\n");
-        return NULL;
+        return -1;
     }
 
 
@@ -1470,7 +1453,7 @@ void *pa_inc_sink_input_volume(pa *self,void *args)
             self->pa_mlapi=NULL;
             self->pa_ml=NULL;
             pa_init_context(self);
-            return NULL;
+            return 0;
         }
         switch (state)
         {
@@ -1496,7 +1479,7 @@ void *pa_inc_sink_input_volume(pa *self,void *args)
                     self->pa_ml=NULL;
                     self->pa_mlapi=NULL;
                     pa_init_context(self);
-                    return NULL;
+                    return 0;
                 }
                 else
                 {
@@ -1519,25 +1502,23 @@ void *pa_inc_sink_input_volume(pa *self,void *args)
                 self->pa_mlapi=NULL;
                 self->pa_ml=NULL;
                 pa_init_context(self);
-                return NULL;
+                return 0;
             }
             break;
         default:
             fprintf(stderr, "in state %d\n", state);
-            return NULL;
+            return -1;
         }
         pa_mainloop_iterate(self->pa_ml, 1, NULL);
     }
-    return  NULL;
+    return  0;
 }
 
-void *pa_dec_sink_input_volume(pa *self,void *args)
+int pa_dec_sink_input_volume(pa *self, int index,int volume)
 {
     int pa_ready = 0;
     int state = 0;
-    int index;
-    int volume=0;
-    float tmp=0;
+    //float tmp=0;
 
     pa_cvolume cvolume;
     memset(&cvolume,0,sizeof(cvolume));
@@ -1561,7 +1542,7 @@ void *pa_dec_sink_input_volume(pa *self,void *args)
             self->pa_mlapi=NULL;
             self->pa_ml=NULL;
             pa_init_context(self);
-            return NULL;
+            return -1;
         }
         switch (state)
         {
@@ -1586,7 +1567,7 @@ void *pa_dec_sink_input_volume(pa *self,void *args)
                     self->pa_ml=NULL;
                     self->pa_mlapi=NULL;
                     pa_init_context(self);
-                    return NULL;
+                    return -1;
                 }
                 else
                 {
@@ -1609,24 +1590,23 @@ void *pa_dec_sink_input_volume(pa *self,void *args)
                 self->pa_mlapi=NULL;
                 self->pa_ml=NULL;
                 pa_init_context(self);
-                return NULL;
+                return -1;
             }
             break;
         default:
             fprintf(stderr, "in state %d\n", state);
-            return NULL;
+            return -1;
         }
         pa_mainloop_iterate(self->pa_ml, 1, NULL);
     }
-    return NULL;
+    return 0;
 }
 
 
-void *pa_set_source_output_mute(pa *self,void *args)
+int pa_set_source_output_mute(pa *self,int index,int mute)
 {
     int pa_ready = 0;
     int state = 0;
-    int index,mute;
 
     pa_context_connect(self->pa_ctx, NULL, 0, NULL);
     pa_context_set_state_callback(self->pa_ctx, pa_state_cb, &pa_ready);
@@ -1649,7 +1629,7 @@ void *pa_set_source_output_mute(pa *self,void *args)
             self->pa_ml=NULL;
             pa_init_context(self);
 
-            return NULL;
+            return -1;
         }
         switch (state)
         {
@@ -1670,39 +1650,33 @@ void *pa_set_source_output_mute(pa *self,void *args)
                 self->pa_mlapi=NULL;
                 self->pa_ml=NULL;
                 pa_init_context(self);
-                return NULL;
+                return 0;
             }
             break;
         default:
             fprintf(stderr, "in state %d\n", state);
-            return NULL;
+            return -1;
         }
         pa_mainloop_iterate(self->pa_ml, 1, NULL);
     }
-    return NULL;
+    return 0;
 }
 
-void *pa_set_source_output_volume(pa *self,void *args)
+int pa_set_source_output_volume(pa *self,int index,pa_cvolume *cvolume)
 {
     int pa_ready=0;//CRITICAL!,initialize pa_ready to zero
     int state=0;
-    int index,volume;
-    float tmp=0;
-    pa_cvolume cvolume;
+    //float tmp=0;
     if(!self)
     {
         fprintf(stderr,"NULL object pointer\n");
-        return NULL;
+        return -1;
     }
 
-
-    memset(&cvolume,0,sizeof(cvolume));
-    cvolume.channels=2;
-    pa_cvolume_set(&cvolume,cvolume.channels,volume);
-    if(!pa_cvolume_valid(&cvolume))
+    if(!pa_cvolume_valid(cvolume))
     {
-        fprintf(stderr,"Invalid volume %d provided,please choose another one\n",volume);
-        return NULL;
+        fprintf(stderr,"Invalid volume provided\n");
+        return -1;
     }
 
     pa_context_connect(self->pa_ctx, NULL, 0, NULL);
@@ -1724,13 +1698,13 @@ void *pa_set_source_output_volume(pa *self,void *args)
             self->pa_ctx=NULL;
             self->pa_mlapi=NULL;
             self->pa_ml=NULL;
-            return NULL;
+            return -1;
         }
         switch (state)
         {
         case 0:
-            self->pa_op=pa_context_set_source_output_volume(self->pa_ctx,index,&cvolume,
-                        pa_context_success_cb,self);
+            self->pa_op=pa_context_set_source_output_volume(
+					self->pa_ctx,index,cvolume,pa_context_success_cb,self);
             state++;
             break;
         case 1:
@@ -1745,27 +1719,24 @@ void *pa_set_source_output_volume(pa *self,void *args)
                 self->pa_mlapi=NULL;
                 self->pa_ml=NULL;
                 pa_init_context(self);
-                return NULL;
+                return 0;
             }
             break;
         default:
             fprintf(stderr, "in state %d\n", state);
-            return NULL;
+            return -1;
         }
         pa_mainloop_iterate(self->pa_ml, 1, NULL);
     }
 
-
-    return NULL;
+    return 0;
 }
 
-void *pa_inc_source_output_volume(pa *self,void *args)
+int pa_inc_source_output_volume(pa *self,int index,int volume)
 {
     int pa_ready = 0;
     int state = 0;
-    int index;
-    int volume=0;
-    float tmp=0;
+    //float tmp=0;
 
 
     pa_cvolume cvolume;
@@ -1776,7 +1747,7 @@ void *pa_inc_source_output_volume(pa *self,void *args)
     {
         //check if the volume increase is valid
         fprintf(stderr,"Invalid volume!\n");
-        return NULL;
+        return -1;
     }
 
 
@@ -1800,7 +1771,7 @@ void *pa_inc_source_output_volume(pa *self,void *args)
             self->pa_mlapi=NULL;
             self->pa_ml=NULL;
             pa_init_context(self);
-            return NULL;
+            return -1;
         }
         switch (state)
         {
@@ -1825,7 +1796,7 @@ void *pa_inc_source_output_volume(pa *self,void *args)
                     self->pa_ml=NULL;
                     self->pa_mlapi=NULL;
                     pa_init_context(self);
-                    return NULL;
+                    return -1;
                 }
                 else
                 {
@@ -1848,25 +1819,23 @@ void *pa_inc_source_output_volume(pa *self,void *args)
                 self->pa_mlapi=NULL;
                 self->pa_ml=NULL;
                 pa_init_context(self);
-                return NULL;
+                return 0;
             }
             break;
         default:
             fprintf(stderr, "in state %d\n", state);
-            return NULL;
+            return -1;
         }
         pa_mainloop_iterate(self->pa_ml, 1, NULL);
     }
-    return NULL;
+    return 0;
 }
 
-void *pa_dec_source_output_volume(pa *self,void *args)
+int pa_dec_source_output_volume(pa *self,int index,int volume)
 {
     int pa_ready = 0;
     int state = 0;
-    int index;
-    int volume=0;
-    float tmp=0;
+    //float tmp=0;
 
     pa_cvolume cvolume;
     memset(&cvolume,0,sizeof(cvolume));
@@ -1890,7 +1859,7 @@ void *pa_dec_source_output_volume(pa *self,void *args)
             self->pa_mlapi=NULL;
             self->pa_ml=NULL;
             pa_init_context(self);
-            return NULL;
+            return -1;
         }
         switch (state)
         {
@@ -1915,7 +1884,7 @@ void *pa_dec_source_output_volume(pa *self,void *args)
                     self->pa_ml=NULL;
                     self->pa_mlapi=NULL;
                     pa_init_context(self);
-                    return NULL;
+                    return -1;
                 }
                 else
                 {
@@ -1938,16 +1907,16 @@ void *pa_dec_source_output_volume(pa *self,void *args)
                 self->pa_mlapi=NULL;
                 self->pa_ml=NULL;
                 pa_init_context(self);
-                return NULL;
+                return 0;
             }
             break;
         default:
             fprintf(stderr, "in state %d\n", state);
-            return NULL;
+            return -1;
         }
         pa_mainloop_iterate(self->pa_ml, 1, NULL);
     }
-    return NULL;
+    return 0;
 }
 
 //higher level apis for manipulating pulseaudio
@@ -2025,7 +1994,6 @@ void pa_get_sinklist_cb(pa_context *c, const pa_sink_info *l, int eol, void *use
 {
     pa *self= (pa*)userdata;
 	sink_t *sink=NULL;
-    int i = 0;
 
     // If eol is set to a positive number, you're at the end of the list
     if (eol > 0)
@@ -2090,7 +2058,6 @@ void pa_get_sourcelist_cb(pa_context *c, const pa_source_info *l, int eol, void 
 {
     pa *self= userdata;
 	source_t *source=NULL;
-    int i = 0;
 
     if (eol > 0)
     {
@@ -2289,8 +2256,8 @@ void pa_get_source_output_list_cb(pa_context *c,
 	source_output->client=o->client;
 	strncpy(source_output->name,o->name,sizeof(source_output->name)-1);
 	strncpy(source_output->driver,o->driver,sizeof(source_output->driver)-1);
-    const char *prop_key = NULL;
-    void *prop_state = NULL;
+    //const char *prop_key = NULL;
+    //void *prop_state = NULL;
 }
 
 void pa_get_source_output_volume_cb(pa_context *c,
