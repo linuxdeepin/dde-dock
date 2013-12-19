@@ -25,7 +25,7 @@ import (
 	"dlib/dbus"
 )
 
-func (accountManager *AccountManager) ListCachedUsers() []string {
+func (m *Manager) ListCachedUsers() []string {
 	objects := _accountInface.ListCachedUsers()
 
 	userList := []string{}
@@ -36,28 +36,28 @@ func (accountManager *AccountManager) ListCachedUsers() []string {
 	return userList
 }
 
-func (accountManager *AccountManager) CreateUser(name, fullname string, accountType int32) string {
+func (m *Manager) CreateUser(name, fullname string, accountType int32) string {
 	path := _accountInface.CreateUser(name, fullname, accountType)
 
 	return string(path)
 }
 
-func (accountManager *AccountManager) DeleteUser(id int64, removeFiles bool) {
+func (m *Manager) DeleteUser(id int64, removeFiles bool) {
 	_accountInface.DeleteUser(id, removeFiles)
 }
 
-func NewAccountManager() *AccountManager {
-	accountManager := &AccountManager{}
+func NewAccountManager() *Manager {
+	m := &Manager{}
 
 	_accountInface.ConnectUserAdded(func(user dbus.ObjectPath) {
 		NewAccountUserManager(string(user))
-		accountManager.UserAdded(string(user))
+		m.UserAdded(string(user))
 	})
 
 	_accountInface.ConnectUserDeleted(func(user dbus.ObjectPath) {
 		DeleteUserManager(string(user))
-		accountManager.UserDeleted(string(user))
+		m.UserDeleted(string(user))
 	})
 
-	return accountManager
+	return m
 }

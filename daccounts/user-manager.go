@@ -26,142 +26,132 @@ import (
 	"dlib/dbus"
 )
 
-func (userManager *AccountUserManager) SetAccountType(accountType int32) {
-	userInface := _infaceMap[userManager.ObjectPath]
-	if userInface == nil {
-		return
-	}
-	userInface.SetAccountType(accountType)
+func (u *User) SetPassword(passwd, hint string) {
+	u.userInface.SetPassword(passwd, hint)
 }
 
-func (userManager *AccountUserManager) SetAutomaticLogin(enabled bool) {
-	userInface := _infaceMap[userManager.ObjectPath]
-	if userInface == nil {
-		return
+func (u *User) OnPropertiesChanged(propName string, old interface{}) {
+	switch propName {
+	case "AccountType":
+		if v, ok := old.(int32); ok {
+			if v != u.AccountType {
+				u.userInface.SetAccountType(u.AccountType)
+			}
+		}
+	case "AutomaticLogin":
+		if v, ok := old.(bool); ok {
+			if v != u.AutomaticLogin {
+				u.userInface.SetAutomaticLogin(u.AutomaticLogin)
+			}
+		}
+	case "IconFile":
+		if v, ok := old.(string); ok {
+			if v != u.IconFile {
+				u.userInface.SetIconFile(u.IconFile)
+			}
+		}
+	case "Locked":
+		if v, ok := old.(bool); ok {
+			if v != u.Locked {
+				u.userInface.SetLocked(u.Locked)
+			}
+		}
+	case "PasswordMode":
+		if v, ok := old.(int32); ok {
+			if v != u.PasswordMode {
+				u.userInface.SetPasswordMode(u.PasswordMode)
+			}
+		}
+	case "UserName":
+		if v, ok := old.(string); ok {
+			if v != u.UserName {
+				u.userInface.SetUserName(u.UserName)
+			}
+		}
 	}
-	userInface.SetAutomaticLogin(enabled)
 }
 
-func (userManager *AccountUserManager) SetIconFile(filename string) {
-	userInface := _infaceMap[userManager.ObjectPath]
-	if userInface == nil {
-		return
-	}
-	userInface.SetIconFile(filename)
-	userManager.AddIconToHistory(filename)
-}
+func NewAccountUserManager(path string) *User {
+	u := &User{}
 
-func (userManager *AccountUserManager) SetLocked(locked bool) {
-	userInface := _infaceMap[userManager.ObjectPath]
-	if userInface == nil {
-		return
-	}
-	userInface.SetLocked(locked)
-}
+	u.objectPath = path
+	u.userInface = accounts.GetUser(path)
 
-func (userManager *AccountUserManager) SetPassword(passwd, hint string) {
-	userInface := _infaceMap[userManager.ObjectPath]
-	if userInface == nil {
-		return
-	}
-	userInface.SetPassword(passwd, hint)
-}
-
-func (userManager *AccountUserManager) SetPasswordMode(mode int32) {
-	userInface := _infaceMap[userManager.ObjectPath]
-	if userInface == nil {
-		return
-	}
-	userInface.SetPasswordMode(mode)
-}
-
-func (userManager *AccountUserManager) SetUserName(name string) {
-	userInface := _infaceMap[userManager.ObjectPath]
-	if userInface == nil {
-		return
-	}
-	userInface.SetUserName(name)
-}
-
-func NewAccountUserManager(path string) *AccountUserManager {
-	userManager := &AccountUserManager{}
-
-	userManager.ObjectPath = path
-	userInface := accounts.GetUser(path)
-	_infaceMap[path] = userInface
-
-	GetUserProperties(userManager)
-	userInface.ConnectChanged(func() {
-		tmpUser := &AccountUserManager{}
-		tmpUser.ObjectPath = userManager.ObjectPath
+	GetUserProperties(u)
+	u.userInface.ConnectChanged(func() {
+		tmpUser := &User{}
+		tmpUser.objectPath = u.objectPath
+		tmpUser.userInface = u.userInface
 		GetUserProperties(tmpUser)
-		CompareUserManager(userManager, tmpUser)
+		CompareUserManager(u, tmpUser)
 	})
 
-	_userMap[path] = userManager
-	return userManager
+	_userMap[path] = u
+	return u
 }
 
-func GetUserProperties(userManager *AccountUserManager) {
-	userInface := _infaceMap[userManager.ObjectPath]
+func GetUserProperties(u *User) {
+	userInface := u.userInface
 	if userInface == nil {
 		return
 	}
-	userManager.AccountType = userInface.AccountType.Get()
-	userManager.AutomaticLogin = userInface.AutomaticLogin.Get()
-	userManager.IconFile = userInface.IconFile.Get()
-	userManager.Locked = userInface.Locked.Get()
-	userManager.LoginTime = userInface.LoginTime.Get()
-	userManager.PasswordMode = userInface.PasswordMode.Get()
-	userManager.UserName = userInface.UserName.Get()
+	u.AccountType = userInface.AccountType.Get()
+	u.AutomaticLogin = userInface.AutomaticLogin.Get()
+	u.IconFile = userInface.IconFile.Get()
+	u.Locked = userInface.Locked.Get()
+	u.LoginTime = userInface.LoginTime.Get()
+	u.PasswordMode = userInface.PasswordMode.Get()
+	u.UserName = userInface.UserName.Get()
 }
 
-func CompareUserManager(src, tmp *AccountUserManager) {
+func CompareUserManager(src, tmp *User) {
 	if src == nil || tmp == nil {
 		return
 	}
 
 	if src.AccountType != tmp.AccountType {
 		src.AccountType = tmp.AccountType
-		src.PropertyChanged("AccountType")
+		dbus.NotifyChange(src, "AccountType")
 	}
 
 	if src.AutomaticLogin != tmp.AutomaticLogin {
 		src.AutomaticLogin = tmp.AutomaticLogin
-		src.PropertyChanged("AutomaticLogin")
+		dbus.NotifyChange(src, "AutomaticLogin")
 	}
 
 	if src.IconFile != tmp.IconFile {
 		src.IconFile = tmp.IconFile
-		src.PropertyChanged("IconFile")
+		AddIconToHistory(src.IconFile)
+		dbus.NotifyChange(src, "IconFile")
 	}
 
 	if src.Locked != tmp.Locked {
 		src.Locked = tmp.Locked
-		src.PropertyChanged("Locked")
+		dbus.NotifyChange(src, "Locked")
 	}
 
 	if src.LoginTime != tmp.LoginTime {
 		src.LoginTime = tmp.LoginTime
-		src.PropertyChanged("LoginTime")
+		dbus.NotifyChange(src, "LoginTime")
 	}
 
 	if src.PasswordMode != tmp.PasswordMode {
 		src.PasswordMode = tmp.PasswordMode
-		src.PropertyChanged("PasswordMode")
+		dbus.NotifyChange(src, "PasswordMode")
 	}
 
 	if src.UserName != tmp.UserName {
 		src.UserName = tmp.UserName
-		src.PropertyChanged("UserName")
+		dbus.NotifyChange(src, "UserName")
 	}
 }
 
 func DeleteUserManager(path string) {
-	userManager := _userMap[path]
-	if userManager != nil {
+	u := _userMap[path]
+	if u != nil {
 		return
 	}
 
-	dbus.UnInstallObject(userManager)
+	accounts.DestroyUser(u.userInface)
+	dbus.UnInstallObject(u)
 }

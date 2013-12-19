@@ -37,7 +37,7 @@ const (
 	_GROUP_KEY         = "Icon History"
 )
 
-func (dam *AccountUserManager) AllAccountsIcons() []string {
+func (u *User) AllAccountsIcons() []string {
 	icons := AllSystemIcons()
 	tmp := AllUserIcons()
 
@@ -48,7 +48,7 @@ func (dam *AccountUserManager) AllAccountsIcons() []string {
 	return icons
 }
 
-func (dam *AccountUserManager) AllHistoryIcons() []string {
+func (u *User) AllHistoryIcons() []string {
 	homeDir := os.Getenv("HOME")
 	if !CheckDirExist(homeDir + _USER_ICON_PATH) {
 		return nil
@@ -89,7 +89,7 @@ func (dam *AccountUserManager) AllHistoryIcons() []string {
 	return icons
 }
 
-func (dam *AccountUserManager) AddIconToUserDir(filename string) bool {
+func (u *User) AddIconToUserDir(filename string) bool {
 	if len(filename) <= 0 {
 		return false
 	}
@@ -112,12 +112,12 @@ func (dam *AccountUserManager) AddIconToUserDir(filename string) bool {
 		return false
 	}
 
-	dam.AddIconToHistory(destFile)
+	AddIconToHistory(destFile)
 
 	return true
 }
 
-func (dam *AccountUserManager) DeleteUserIcon(filename string) bool {
+func (u *User) DeleteUserIcon(filename string) bool {
 	homeDir := os.Getenv("HOME")
 	keyFile := glib.NewKeyFile()
 	_, err := keyFile.LoadFromFile(homeDir+_ICON_HISTORY_FILE,
@@ -149,7 +149,7 @@ func (dam *AccountUserManager) DeleteUserIcon(filename string) bool {
 	return true
 }
 
-func (dam *AccountUserManager) AddIconToHistory(filename string) bool {
+func AddIconToHistory(filename string) bool {
 	if len(filename) <= 0 {
 		return false
 	}
