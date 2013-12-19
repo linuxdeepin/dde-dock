@@ -1,6 +1,14 @@
 package main
 
 const (
+	fieldConnection       = "connection"
+	fieldWireless         = "802-11-wireless"
+	fieldWirelessSecurity = "802-11-wireless-security"
+	fieldIPv4             = "ipv4"
+	fieldIPv6             = "ipv6"
+)
+
+const (
 	NM_DEVICE_TYPE_UNKNOWN    = uint32(0)
 	NM_DEVICE_TYPE_ETHERNET   = uint32(1)
 	NM_DEVICE_TYPE_WIFI       = uint32(2)
@@ -47,11 +55,7 @@ const (
 	NM_802_11_AP_SEC_KEY_MGMT_PSK    = uint32(0x100)
 	NM_802_11_AP_SEC_KEY_MGMT_802_1X = uint32(0x200)
 )
-
 const (
-	fieldConnection       = "connection"
-	fieldWireless         = "802-11-wireless"
-	fieldWirelessSecurity = "802-11-wireless-security"
-	fieldIPv4             = "ipv4"
-	fieldIPv6             = "ipv6"
+	NM_802_11_AP_FLAGS_NONE    = uint32(0x0)
+	NM_802_11_AP_FLAGS_PRIVACY = uint32(0x1)
 )

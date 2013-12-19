@@ -8,6 +8,8 @@ type AccessPoint struct {
 	Ssid     string
 	NeedKey  bool
 	Strength uint8
+	Path     dbus.ObjectPath
+	Actived  bool
 }
 
 type Device struct {
@@ -67,14 +69,13 @@ func (this *Manager) addWirelessDevice(path dbus.ObjectPath) {
 
 	nmWirelessDev := nm.GetDeviceWireless(string(path))
 	nmWirelessDev.ConnectAccessPointAdded(func(p dbus.ObjectPath) {
-		fmt.Println("Ap add...", p, this.GetAccessPoints(path))
 		dbus.NotifyChange(this, "WirelessDevices")
 	})
 	nmWirelessDev.ConnectAccessPointRemoved(func(p dbus.ObjectPath) {
-		fmt.Println("Ap removed...", p)
 		dbus.NotifyChange(this, "WirelessDevices")
 		dbus.NotifyChange(this, "WirelessDevices")
 	})
+	this.GetAccessPoints((path))
 }
 
 func (this *Manager) handleDeviceChanged(operation int32, path dbus.ObjectPath) {
@@ -109,13 +110,81 @@ func (this *Manager) handleDeviceChanged(operation int32, path dbus.ObjectPath) 
 	}
 }
 
+const (
+	ApKeyNone = iota
+	ApKeyWep
+	ApKeyPsk
+	ApKeyEap
+)
+
+func parseFlags(flags, wpaFlags, rsnFlags uint32) int {
+	r := ApKeyNone
+
+	if (flags&NM_802_11_AP_FLAGS_PRIVACY != 0) && (wpaFlags == NM_802_11_AP_SEC_NONE) && (rsnFlags == NM_802_11_AP_SEC_NONE) {
+		r = ApKeyWep
+	}
+	if wpaFlags != NM_802_11_AP_SEC_NONE {
+		r = ApKeyPsk
+	}
+	if rsnFlags != NM_802_11_AP_SEC_NONE {
+		r = ApKeyPsk
+	}
+	if (wpaFlags&NM_802_11_AP_SEC_KEY_MGMT_802_1X != 0) || (rsnFlags&NM_802_11_AP_SEC_KEY_MGMT_802_1X != 0) {
+		r = ApKeyEap
+	}
+	return r
+}
+
+func parseFlags_(flag uint32) string {
+	r := ""
+	if flag&NM_802_11_AP_SEC_PAIR_WEP40 != 0 {
+		r += " PAIR_WEP40"
+	}
+	if flag&NM_802_11_AP_SEC_PAIR_WEP104 != 0 {
+		r += " PAIR_WEP104"
+	}
+	if flag&NM_802_11_AP_SEC_PAIR_TKIP != 0 {
+		r += " PAIR_TKIP"
+	}
+	if flag&NM_802_11_AP_SEC_PAIR_CCMP != 0 {
+		r += " PAIR_CCMP"
+	}
+	if flag&NM_802_11_AP_SEC_GROUP_WEP40 != 0 {
+		r += " GROUP_WEP40"
+	}
+	if flag&NM_802_11_AP_SEC_GROUP_WEP104 != 0 {
+		r += " GROUP_WEP40"
+	}
+	if flag&NM_802_11_AP_SEC_GROUP_TKIP != 0 {
+		r += " GROUP_WEP40"
+	}
+	if flag&NM_802_11_AP_SEC_GROUP_CCMP != 0 {
+		r += " GROUP_WEP40"
+	}
+	if flag&NM_802_11_AP_SEC_KEY_MGMT_PSK != 0 {
+		r += " MGMT_PSK"
+	}
+	if flag&NM_802_11_AP_SEC_KEY_MGMT_802_1X != 0 {
+		r += " MGMT_802.1X"
+	}
+	return r
+}
+
 func (this *Manager) GetAccessPoints(path dbus.ObjectPath) []AccessPoint {
 	aps := make([]AccessPoint, 0)
 	dev := nm.GetDeviceWireless(string(path))
-	for _, apPath := range dev.GetAccessPoints() {
+	/*ac := nm.GetActiveConnection(string(nm.GetDevice(string(path)).ActiveConnection.Get())).Connection.Get()*/
+	for i, apPath := range dev.GetAccessPoints() {
 		ap := nm.GetAccessPoint(string(apPath))
-		aps = append(aps, AccessPoint{string(ap.Ssid.Get()), false, ap.Strength.Get()})
+		/*actived := string(nm.GetSettingsConnection(string(ac)).GetSettings()[fieldWireless]["ssid"].Value().([]uint8)) == string(ap.Ssid.Get())*/
+		actived := false
+		aps = append(aps, AccessPoint{string(ap.Ssid.Get()),
+			parseFlags(ap.Flags.Get(), ap.WpaFlags.Get(), ap.RsnFlags.Get()) != ApKeyNone,
+			ap.Strength.Get(),
+			ap.Path,
+			actived,
+		})
+		fmt.Printf("%s %s %s %s\n", ap.Path, aps[i].Ssid, parseFlags(ap.Flags.Get(), ap.WpaFlags.Get(), ap.RsnFlags.Get()), parseFlags_(ap.WpaFlags.Get()))
 	}
-	fmt.Println("APS:", aps)
 	return aps
 }

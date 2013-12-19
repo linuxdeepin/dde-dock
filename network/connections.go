@@ -2,12 +2,14 @@ package main
 
 import nm "dbus/org/freedesktop/networkmanager"
 import "dlib/dbus"
+import "fmt"
 
 type _ConnectionData map[string]map[string]dbus.Variant
 
 type Connection struct {
-	core           *nm.SettingsConnection
-	data           _ConnectionData
+	core *nm.SettingsConnection
+	data _ConnectionData
+
 	Uuid           string
 	Name           string
 	ConnectionType string
@@ -60,36 +62,56 @@ func NewConnection(core *nm.SettingsConnection) *Connection {
 	c.Name = settings["connection"]["id"].Value().(string)
 	c.Uuid = settings["connection"]["uuid"].Value().(string)
 	c.ConnectionType = settings["connection"]["type"].Value().(string)
+	c.data = core.GetSettings()
 	return c
 }
-func NewWirelessConnection(id string, ssid string) *Connection {
+
+func NewWirelessConnection(id string, ssid string, keyFlag int) *Connection {
 	data := make(_ConnectionData)
 	data[fieldConnection] = make(map[string]dbus.Variant)
 	data[fieldIPv4] = make(map[string]dbus.Variant)
 	data[fieldIPv6] = make(map[string]dbus.Variant)
 	data[fieldWireless] = make(map[string]dbus.Variant)
-	data[fieldWirelessSecurity] = make(map[string]dbus.Variant)
 
 	data[fieldConnection]["id"] = dbus.MakeVariant(id)
-	data[fieldConnection]["uuid"] = dbus.MakeVariant(newUUID())
+	uuid := newUUID()
+	data[fieldConnection]["uuid"] = dbus.MakeVariant(uuid)
 	data[fieldConnection]["type"] = dbus.MakeVariant(fieldWireless)
 
 	data[fieldWireless]["ssid"] = dbus.MakeVariant([]uint8(ssid))
 
-	data[fieldWirelessSecurity]["key-mgmt"] = dbus.MakeVariant("none")
+	if keyFlag != ApKeyNone {
+		data[fieldWirelessSecurity] = make(map[string]dbus.Variant)
+		data[fieldWireless]["security"] = dbus.MakeVariant(fieldWirelessSecurity)
+		switch keyFlag {
+		case ApKeyWep:
+			data[fieldWirelessSecurity]["key-mgmt"] = dbus.MakeVariant("none")
+		case ApKeyPsk:
+			data[fieldWirelessSecurity]["key-mgmt"] = dbus.MakeVariant("wpa-psk")
+			data[fieldWirelessSecurity]["auth-alg"] = dbus.MakeVariant("open")
+		case ApKeyEap:
+			data[fieldWirelessSecurity]["key-mgmt"] = dbus.MakeVariant("wpa-eap")
+			data[fieldWirelessSecurity]["auth-alg"] = dbus.MakeVariant("open")
+		}
+	}
 
 	data[fieldIPv4]["method"] = dbus.MakeVariant("auto")
 
 	data[fieldIPv6]["method"] = dbus.MakeVariant("auto")
 
-	return &Connection{data: data}
+	core := nm.GetSettingsConnection(string(_Settings.AddConnection(data)))
+
+	return &Connection{core, data, uuid, id, fieldWireless}
 }
 
-func (this *Manager) GetConnectionByAccessPoint(ap AccessPoint) *Connection {
+func (this *Manager) GetConnectionByAccessPoint(path dbus.ObjectPath) *Connection {
+	ap := nm.GetAccessPoint(string(path))
 	for _, c := range this.WirelessConnections {
-		if string(c.data[fieldWireless]["ssid"].Value().([]uint8)) == ap.Ssid {
+		fmt.Println(c.data)
+		if c.ConnectionType == fieldWireless && string(c.data[fieldWireless]["ssid"].Value().([]uint8)) == string(ap.Ssid.Get()) {
 			return c
 		}
 	}
-	return nil
+	fmt.Println("CCC:", path, string(ap.Ssid.Get()))
+	return NewWirelessConnection(string(ap.Ssid.Get()), string(ap.Ssid.Get()), parseFlags(ap.Flags.Get(), ap.WpaFlags.Get(), ap.RsnFlags.Get()))
 }
