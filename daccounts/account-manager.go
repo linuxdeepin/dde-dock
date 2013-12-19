@@ -26,16 +26,12 @@ import (
 	"strings"
 )
 
-const (
-	_USER_PATH = "/com/deepin/daemon/Accounts/"
-)
-
 func (m *Manager) ListCachedUsers() []string {
 	objects := _accountInface.ListCachedUsers()
 
 	userList := []string{}
 	for _, v := range objects {
-		userList = append(userList, ConvertPath(string(v)))
+		userList = append(userList, string(v))
 	}
 
 	return userList

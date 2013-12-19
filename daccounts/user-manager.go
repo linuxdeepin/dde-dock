@@ -29,6 +29,7 @@ import (
 
 const (
 	_DEFAULT_USER_ICON = "/var/lib/AccountsService/icons/guest.jpg"
+	_USER_PATH         = "/com/deepin/daemon/Accounts/"
 )
 
 func (u *User) SetPassword(passwd, hint string) {
@@ -67,7 +68,7 @@ func (u *User) OnPropertiesChanged(propName string, old interface{}) {
 func NewAccountUserManager(path string) *User {
 	u := &User{}
 
-	u.objectPath = path
+	u.objectPath = ConvertPath(path)
 	u.userInface = accounts.GetUser(path)
 
 	GetUserProperties(u)
@@ -79,7 +80,7 @@ func NewAccountUserManager(path string) *User {
 		CompareUserManager(u, tmpUser)
 	})
 
-	_userMap[path] = u
+	_userMap[u.objectPath] = u
 	dbus.InstallOnSession(u)
 	return u
 }
