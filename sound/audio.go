@@ -372,7 +372,7 @@ func (card *Card) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		"com.deepin.daemon.Card",
 		"/com/deepin/daemon/Audio/Card" + strconv.FormatInt(int64(card.Index), 10),
-		"com.deepin.daemon.Card",
+		"com.deepin.daemon.Audio.Card",
 	}
 }
 
