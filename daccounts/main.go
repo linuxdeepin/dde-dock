@@ -40,6 +40,7 @@ type User struct {
 	PasswordMode   int32  `access:"readwrite"`
 	UserName       string `access:"readwrite"`
 	LoginTime      int64
+	Uid            uint64
 	objectPath     string
 	userInface     *accounts.User
 }
@@ -82,8 +83,7 @@ func main() {
 	}
 	userList := account.ListCachedUsers()
 	for _, v := range userList {
-		u := NewAccountUserManager(v)
-		dbus.InstallOnSession(u)
+		NewAccountUserManager(v)
 	}
 
 	select {}

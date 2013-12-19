@@ -31,42 +31,31 @@ func (u *User) SetPassword(passwd, hint string) {
 }
 
 func (u *User) OnPropertiesChanged(propName string, old interface{}) {
+	print("Property Changed\n")
 	switch propName {
 	case "AccountType":
-		if v, ok := old.(int32); ok {
-			if v != u.AccountType {
-				u.userInface.SetAccountType(u.AccountType)
-			}
+		if v, ok := old.(int32); ok && v != u.AccountType {
+			u.userInface.SetAccountType(u.AccountType)
 		}
 	case "AutomaticLogin":
-		if v, ok := old.(bool); ok {
-			if v != u.AutomaticLogin {
-				u.userInface.SetAutomaticLogin(u.AutomaticLogin)
-			}
+		if v, ok := old.(bool); ok && v != u.AutomaticLogin {
+			u.userInface.SetAutomaticLogin(u.AutomaticLogin)
 		}
 	case "IconFile":
-		if v, ok := old.(string); ok {
-			if v != u.IconFile {
-				u.userInface.SetIconFile(u.IconFile)
-			}
+		if v, ok := old.(string); ok && v != u.IconFile {
+			u.userInface.SetIconFile(u.IconFile)
 		}
 	case "Locked":
-		if v, ok := old.(bool); ok {
-			if v != u.Locked {
-				u.userInface.SetLocked(u.Locked)
-			}
+		if v, ok := old.(bool); ok && v != u.Locked {
+			u.userInface.SetLocked(u.Locked)
 		}
 	case "PasswordMode":
-		if v, ok := old.(int32); ok {
-			if v != u.PasswordMode {
-				u.userInface.SetPasswordMode(u.PasswordMode)
-			}
+		if v, ok := old.(int32); ok && v != u.PasswordMode {
+			u.userInface.SetPasswordMode(u.PasswordMode)
 		}
 	case "UserName":
-		if v, ok := old.(string); ok {
-			if v != u.UserName {
-				u.userInface.SetUserName(u.UserName)
-			}
+		if v, ok := old.(string); ok && v != u.UserName {
+			u.userInface.SetUserName(u.UserName)
 		}
 	}
 }
@@ -87,6 +76,7 @@ func NewAccountUserManager(path string) *User {
 	})
 
 	_userMap[path] = u
+	dbus.InstallOnSession(u)
 	return u
 }
 
@@ -102,6 +92,7 @@ func GetUserProperties(u *User) {
 	u.LoginTime = userInface.LoginTime.Get()
 	u.PasswordMode = userInface.PasswordMode.Get()
 	u.UserName = userInface.UserName.Get()
+	u.Uid = userInface.Uid.Get()
 }
 
 func CompareUserManager(src, tmp *User) {
@@ -148,7 +139,7 @@ func CompareUserManager(src, tmp *User) {
 
 func DeleteUserManager(path string) {
 	u := _userMap[path]
-	if u != nil {
+	if u == nil {
 		return
 	}
 
