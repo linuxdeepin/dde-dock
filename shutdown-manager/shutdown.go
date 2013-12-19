@@ -7,7 +7,7 @@ import (
 	"os/exec"
 )
 
-type DShutdown struct{}
+type Manager struct{}
 
 const (
 	_LOCK_EXEC         = "/usr/bin/dlock"
@@ -22,68 +22,68 @@ var (
 	dPower = upower.GetUpower("/org/freedesktop/UPower")
 )
 
-func (shutdown *DShutdown) GetDBusInfo() dbus.DBusInfo {
+func (m *Manager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		"com.deepin.daemon.DShutdown",
-		"/com/deepin/daemon/DShutdown",
-		"com.deepin.daemon.DShutdown",
+		"com.deepin.daemon.ShutdownManager",
+		"/com/deepin/daemon/ShutdownManager",
+		"com.deepin.daemon.ShutdownManager",
 	}
 }
 
-func (shutdown *DShutdown) RequestLogout() {
+func (m *Manager) RequestLogout() {
 	dShut.Logout(1)
 }
 
-func (shutdown *DShutdown) Logout() {
+func (m *Manager) Logout() {
 	ExecCommand(_LOGOUT_EXEC)
 }
 
-func (shudown *DShutdown) CanShutdown() bool {
+func (shudown *Manager) CanShutdown() bool {
 	return dShut.CanShutdown()
 }
 
-func (shutdown *DShutdown) Shutdown() {
+func (m *Manager) Shutdown() {
 	ExecCommand(_SHUTDOWN_EXEC)
 }
 
-func (shutdown *DShutdown) RequestShutdown() {
+func (m *Manager) RequestShutdown() {
 	dShut.RequestShutdown()
 }
 
-func (shutdown *DShutdown) Reboot() {
+func (m *Manager) Reboot() {
 	ExecCommand(_REBOOT_EXEC)
 }
 
-func (shutdown *DShutdown) RequestReboot() {
+func (m *Manager) RequestReboot() {
 	dShut.RequestReboot()
 }
 
-func (shutdown *DShutdown) CanSuspend() bool {
+func (m *Manager) CanSuspend() bool {
 	return dPower.SuspendAllowed()
 }
 
-func (shutdown *DShutdown) RequestSuspend() {
+func (m *Manager) RequestSuspend() {
 	dPower.Suspend()
 }
 
-func (shutdown *DShutdown) CanHibernate() bool {
+func (m *Manager) CanHibernate() bool {
 	return dPower.HibernateAllowed()
 }
 
-func (shutdown *DShutdown) RequestHibernate() {
+func (m *Manager) RequestHibernate() {
 	dPower.Hibernate()
 }
 
-func (shutdown *DShutdown) RequestLock() {
+func (m *Manager) RequestLock() {
 	ExecCommand(_LOCK_EXEC)
 }
 
-func (shutdown *DShutdown) PowerOffChoose() {
+func (m *Manager) PowerOffChoose() {
 	ExecCommand(_POWER_CHOOSE_EXEC)
 }
 
-func NewShutdown() *DShutdown {
-	return &DShutdown{}
+func NewManager() *Manager {
+	return &Manager{}
 }
 
 func ExecCommand(cmd string) {
@@ -92,7 +92,7 @@ func ExecCommand(cmd string) {
 }
 
 func main() {
-	shutdown := NewShutdown()
+	shutdown := NewManager()
 	dbus.InstallOnSession(shutdown)
 	select {}
 }

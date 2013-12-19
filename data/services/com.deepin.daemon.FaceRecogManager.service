@@ -1,3 +1,0 @@
-[D-BUS Service]
-Name=com.deepin.daemon.FaceRecogManager
-Exec=/usr/lib/deepin-daemon/face-recog
