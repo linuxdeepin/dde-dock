@@ -112,7 +112,7 @@ func (u *User) AddIconToUserDir(filename string) bool {
 		return false
 	}
 
-	u.AddIconToHistory(destFile)
+	AddIconToHistory(destFile)
 
 	return true
 }
@@ -149,7 +149,7 @@ func (u *User) DeleteUserIcon(filename string) bool {
 	return true
 }
 
-func (u *User) AddIconToHistory(filename string) bool {
+func AddIconToHistory(filename string) bool {
 	if len(filename) <= 0 {
 		return false
 	}

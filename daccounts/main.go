@@ -40,8 +40,8 @@ type User struct {
 	PasswordMode   int32  `access:"readwrite"`
 	UserName       string `access:"readwrite"`
 	LoginTime      int64
-	ObjectPath     string
-	UserInface     *accounts.User
+	objectPath     string
+	userInface     *accounts.User
 }
 
 const (
@@ -68,7 +68,7 @@ func (dam *Manager) GetDBusInfo() dbus.DBusInfo {
 func (u *User) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		_ACCOUNTS_DEST,
-		u.ObjectPath,
+		u.objectPath,
 		_ACCOUNTS_USER_IFC,
 	}
 }

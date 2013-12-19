@@ -27,7 +27,7 @@ import (
 )
 
 func (u *User) SetPassword(passwd, hint string) {
-	u.UserInface.SetPassword(passwd, hint)
+	u.userInface.SetPassword(passwd, hint)
 }
 
 func (u *User) OnPropertiesChanged(propName string, old interface{}) {
@@ -35,37 +35,37 @@ func (u *User) OnPropertiesChanged(propName string, old interface{}) {
 	case "AccountType":
 		if v, ok := old.(int32); ok {
 			if v != u.AccountType {
-				u.UserInface.SetAccountType(u.AccountType)
+				u.userInface.SetAccountType(u.AccountType)
 			}
 		}
 	case "AutomaticLogin":
 		if v, ok := old.(bool); ok {
 			if v != u.AutomaticLogin {
-				u.UserInface.SetAutomaticLogin(u.AutomaticLogin)
+				u.userInface.SetAutomaticLogin(u.AutomaticLogin)
 			}
 		}
 	case "IconFile":
 		if v, ok := old.(string); ok {
 			if v != u.IconFile {
-				u.UserInface.SetIconFile(u.IconFile)
+				u.userInface.SetIconFile(u.IconFile)
 			}
 		}
 	case "Locked":
 		if v, ok := old.(bool); ok {
 			if v != u.Locked {
-				u.UserInface.SetLocked(u.Locked)
+				u.userInface.SetLocked(u.Locked)
 			}
 		}
 	case "PasswordMode":
 		if v, ok := old.(int32); ok {
 			if v != u.PasswordMode {
-				u.UserInface.SetPasswordMode(u.PasswordMode)
+				u.userInface.SetPasswordMode(u.PasswordMode)
 			}
 		}
 	case "UserName":
 		if v, ok := old.(string); ok {
 			if v != u.UserName {
-				u.UserInface.SetUserName(u.UserName)
+				u.userInface.SetUserName(u.UserName)
 			}
 		}
 	}
@@ -74,14 +74,14 @@ func (u *User) OnPropertiesChanged(propName string, old interface{}) {
 func NewAccountUserManager(path string) *User {
 	u := &User{}
 
-	u.ObjectPath = path
-	u.UserInface = accounts.GetUser(path)
+	u.objectPath = path
+	u.userInface = accounts.GetUser(path)
 
 	GetUserProperties(u)
-	u.UserInface.ConnectChanged(func() {
+	u.userInface.ConnectChanged(func() {
 		tmpUser := &User{}
-		tmpUser.ObjectPath = u.ObjectPath
-		tmpUser.UserInface = u.UserInface
+		tmpUser.objectPath = u.objectPath
+		tmpUser.userInface = u.userInface
 		GetUserProperties(tmpUser)
 		CompareUserManager(u, tmpUser)
 	})
@@ -91,7 +91,7 @@ func NewAccountUserManager(path string) *User {
 }
 
 func GetUserProperties(u *User) {
-	userInface := u.UserInface
+	userInface := u.userInface
 	if userInface == nil {
 		return
 	}
@@ -121,6 +121,7 @@ func CompareUserManager(src, tmp *User) {
 
 	if src.IconFile != tmp.IconFile {
 		src.IconFile = tmp.IconFile
+		AddIconToHistory(src.IconFile)
 		dbus.NotifyChange(src, "IconFile")
 	}
 
@@ -151,6 +152,6 @@ func DeleteUserManager(path string) {
 		return
 	}
 
-	accounts.DestroyUser(u.UserInface)
+	accounts.DestroyUser(u.userInface)
 	dbus.UnInstallObject(u)
 }
