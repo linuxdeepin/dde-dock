@@ -24,6 +24,11 @@ package main
 import (
 	"dbus/org/freedesktop/accounts"
 	"dlib/dbus"
+	"strings"
+)
+
+const (
+	_DEFAULT_USER_ICON = "/var/lib/AccountsService/icons/guest.jpg"
 )
 
 func (u *User) SetPassword(passwd, hint string) {
@@ -31,7 +36,6 @@ func (u *User) SetPassword(passwd, hint string) {
 }
 
 func (u *User) OnPropertiesChanged(propName string, old interface{}) {
-	print("Property Changed\n")
 	switch propName {
 	case "AccountType":
 		if v, ok := old.(int32); ok && v != u.AccountType {
@@ -88,6 +92,10 @@ func GetUserProperties(u *User) {
 	u.AccountType = userInface.AccountType.Get()
 	u.AutomaticLogin = userInface.AutomaticLogin.Get()
 	u.IconFile = userInface.IconFile.Get()
+	if !strings.Contains(u.IconFile, _SYSTEM_ICON_PATH) ||
+		!strings.Contains(u.IconFile, _USER_ICON_PATH) {
+		u.IconFile = _DEFAULT_USER_ICON
+	}
 	u.Locked = userInface.Locked.Get()
 	u.LoginTime = userInface.LoginTime.Get()
 	u.PasswordMode = userInface.PasswordMode.Get()

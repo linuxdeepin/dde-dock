@@ -23,6 +23,11 @@ package main
 
 import (
 	"dlib/dbus"
+	"strings"
+)
+
+const (
+	_USER_PATH = "/com/deepin/daemon/Accounts/"
 )
 
 func (m *Manager) ListCachedUsers() []string {
@@ -30,7 +35,7 @@ func (m *Manager) ListCachedUsers() []string {
 
 	userList := []string{}
 	for _, v := range objects {
-		userList = append(userList, string(v))
+		userList = append(userList, ConvertPath(string(v)))
 	}
 
 	return userList
@@ -39,7 +44,7 @@ func (m *Manager) ListCachedUsers() []string {
 func (m *Manager) CreateUser(name, fullname string, accountType int32) string {
 	path := _accountInface.CreateUser(name, fullname, accountType)
 
-	return string(path)
+	return ConvertPath(string(path))
 }
 
 func (m *Manager) DeleteUser(id int64, removeFiles bool) {
@@ -60,4 +65,17 @@ func NewAccountManager() *Manager {
 	})
 
 	return m
+}
+
+/* Convert freedesktop path to deepin path */
+func ConvertPath(path string) string {
+	strs := strings.Split(path, "/")
+	l := len(strs)
+	if l <= 0 {
+		return ""
+	}
+
+	userID := strs[l-1]
+
+	return _USER_PATH + userID
 }
