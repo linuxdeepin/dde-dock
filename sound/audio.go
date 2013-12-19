@@ -285,18 +285,9 @@ func (sink *Sink) SetSinkVolumeInt(volume int32) int32 {
 		audio.pa, C.int(sink.Index), &cvolume))
 }
 
-func (sink *Sink) SetSinkVolumeInt() int32 {
-	return 0
-}
-
 func (sink *Sink) SetSinkMute(mute int32) int32 {
-<<<<<<< HEAD
-	fmt.Print("executed SetSinkMute\n")
-	ret := C.pa_set_sink_mute_by_index(pulse.pa, C.int(sink.Index), C.int(mute))
-=======
 	ret := C.pa_set_sink_mute_by_index(
 		audio.pa, C.int(sink.Index), C.int(mute))
->>>>>>> develop
 	return int32(ret)
 }
 
@@ -385,19 +376,11 @@ func (card *Card) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-<<<<<<< HEAD
-var pulse *Audio
-
-func main() {
-	var err error
-	pulse, err = NewAudio()
-=======
 var audio *Audio
 
 func main() {
 	var err error
 	audio, err = NewAudio()
->>>>>>> develop
 	if err != nil {
 		panic(err)
 		os.Exit(-1)

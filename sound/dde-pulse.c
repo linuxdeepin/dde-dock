@@ -697,11 +697,7 @@ int pa_set_sink_mute_by_index(pa *self,int index,int mute)
     return 0;
 }
 
-<<<<<<< HEAD
-int pa_set_sink_volume_by_index(pa *self,void *args)
-=======
 int pa_set_sink_volume_by_index(pa *self,int index,pa_cvolume *cvolume)
->>>>>>> develop
 {
     int pa_ready=0;//CRITICAL!,initialize pa_ready to zero
     int state=0;
@@ -712,19 +708,10 @@ int pa_set_sink_volume_by_index(pa *self,int index,pa_cvolume *cvolume)
     }
 
 
-<<<<<<< HEAD
-    memset(&cvolume,0,sizeof(cvolume));
-    cvolume.channels=2;
-    pa_cvolume_set(&cvolume,cvolume.channels,volume);
-    if(!pa_cvolume_valid(&cvolume))
-    {
-        fprintf(stderr,"Invalid volume %d provided,please choose another one\n",volume);
-=======
     //pa_cvolume_set(&cvolume,cvolume.channels,volume);
     if(!pa_cvolume_valid(cvolume))
 	{
 		fprintf(stderr,"Invalid volume provided\n");
->>>>>>> develop
         return -1;
     }
 
@@ -781,11 +768,7 @@ int pa_set_sink_volume_by_index(pa *self,int index,pa_cvolume *cvolume)
     return 0;
 }
 
-<<<<<<< HEAD
-int pa_inc_sink_volume_by_index(pa *self,void *args)
-=======
 int pa_inc_sink_volume_by_index(pa *self,int index,int volume)
->>>>>>> develop
 {
     int pa_ready = 0,state = 0;
 	pa_cvolume cvolume;

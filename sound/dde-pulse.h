@@ -148,30 +148,6 @@ void *pa_get_device_list(pa *self);
 void *pa_get_client_list(pa *self);
 void *pa_get_sink_input_list(pa *self);
 void *pa_get_source_output_list(pa *self);
-<<<<<<< HEAD
-void* pa_get_sink_input_index_by_pid(pa *self,void *args);
-
-int  pa_set_sink_mute_by_index(pa *self,int index,int mute);
-int pa_set_sink_volume_by_index(pa *self,void *args);
-int pa_inc_sink_volume_by_index(pa *self,void *args);
-void *pa_dec_sink_volume_by_index(pa *self,void *args);
-
-void *pa_set_source_mute_by_index(pa *self,void *args);
-void *pa_set_source_volume_by_index(pa *self,void *args);
-void *pa_inc_source_volume_by_index(pa *self,void *args);
-void *pa_dec_source_volume_by_index(pa *self,void *args);
-
-void *pa_set_sink_input_mute(pa *self,void *args);
-void* pa_set_sink_input_mute_by_pid(pa *self,void *args);
-void *pa_set_sink_input_volume(pa *self,void *args);
-void *pa_inc_sink_input_volume(pa *self,void *args);
-void *pa_dec_sink_input_volume(pa *self,void *args);
-
-void *pa_set_source_output_mute(pa *self,void *args);
-void *pa_set_source_output_volume(pa *self,void *args);
-void *pa_inc_source_output_volume(pa *self,void *args);
-void *pa_dec_source_output_volume(pa *self,void *args);
-=======
 //void* pa_get_sink_input_index_by_pid(pa *self,int index,int pid);
 
 int  pa_set_sink_mute_by_index(pa *self,int index,int mute);
@@ -194,7 +170,6 @@ int pa_set_source_output_mute(pa *self,int index,int mute);
 int pa_set_source_output_volume(pa *self,int index,pa_cvolume *volume);
 int pa_inc_source_output_volume(pa *self,int index,int volume);
 int pa_dec_source_output_volume(pa *self,int index,int volume);
->>>>>>> develop
 
 void pa_state_cb(pa_context *c,void *userdata);
 void pa_get_serverinfo_cb(pa_context *c, const pa_server_info*i, void *userdata);
