@@ -27,22 +27,21 @@ import (
 	"fmt"
 )
 
-type AccountManager struct {
+type Manager struct {
 	UserAdded   func(string)
 	UserDeleted func(string)
 }
 
-type AccountUserManager struct {
-	AccountType    int32
-	AutomaticLogin bool
-	IconFile       string
-	Locked         bool
-	PasswordMode   int32
-	UserName       string
+type User struct {
+	AccountType    int32  `access:"readwrite"`
+	AutomaticLogin bool   `access:"readwrite"`
+	IconFile       string `access:"readwrite"`
+	Locked         bool   `access:"readwrite"`
+	PasswordMode   int32  `access:"readwrite"`
+	UserName       string `access:"readwrite"`
 	LoginTime      int64
-	ObjectPath     string
-
-	PropertyChanged func(string)
+	objectPath     string
+	userInface     *accounts.User
 }
 
 const (
@@ -55,11 +54,10 @@ const (
 
 var (
 	_accountInface = accounts.GetAccounts("/org/freedesktop/Accounts")
-	_userMap       = make(map[string]*AccountUserManager)
-	_infaceMap     = make(map[string]*accounts.User)
+	_userMap       = make(map[string]*User)
 )
 
-func (dam *AccountManager) GetDBusInfo() dbus.DBusInfo {
+func (dam *Manager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		_ACCOUNTS_DEST,
 		_ACCOUNTS_PATH,
@@ -67,10 +65,10 @@ func (dam *AccountManager) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (userManager *AccountUserManager) GetDBusInfo() dbus.DBusInfo {
+func (u *User) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		_ACCOUNTS_DEST,
-		userManager.ObjectPath,
+		u.objectPath,
 		_ACCOUNTS_USER_IFC,
 	}
 }
@@ -79,13 +77,13 @@ func main() {
 	account := NewAccountManager()
 	err := dbus.InstallOnSession(account)
 	if err != nil {
-		fmt.Println("Install AccountManager DBus Failed")
+		fmt.Println("Install Manager DBus Failed")
 		panic(err)
 	}
 	userList := account.ListCachedUsers()
 	for _, v := range userList {
-		userManager := NewAccountUserManager(v)
-		dbus.InstallOnSession(userManager)
+		u := NewAccountUserManager(v)
+		dbus.InstallOnSession(u)
 	}
 
 	select {}
