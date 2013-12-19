@@ -90,9 +90,6 @@ type Card struct {
 	Driver       string
 }
 
-type Module struct {
-}
-
 type Volume struct {
 	Channels uint32
 	Values   [320]uint32
@@ -256,53 +253,71 @@ func (audio *Audio) GetClients() []*Client {
 	return clients
 }
 
-func (audio *Audio) GetVolume() *Volume {
-	return &Volume{}
-}
-
-func (o *Audio) IsRunning() uint32 {
-	a := 3999
-	return uint32(a)
-}
-
 func (sink *Sink) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		"com.deepin.daemon.Audio",
 		"/com/deepin/daemon/Audio/Output" + strconv.FormatInt(int64(sink.Index), 10),
-		"com.deepin.daemon.Audio.Device",
+		"com.deepin.daemon.Audio.Output",
 	}
 }
 
 func (sink *Sink) GetSinkVolume() Volume {
-	return Volume{}
+	return sink.Cvolume
 }
 
-func (sink *Sink) SetSinkVolume() Volume {
-	return Volume{}
+func (sink *Sink) SetSinkVolume(volume Volume) int32 {
+	var cvolume C.pa_cvolume
+	cvolume.channels = C.uint8_t(volume.Channels)
+	for i := uint32(0); i < volume.Channels; i = i + 1 {
+		cvolume.values[i] = *((*C.pa_volume_t)(unsafe.Pointer(&volume.Values[i])))
+	}
+	return int32(C.pa_set_sink_volume_by_index(
+		audio.pa, C.int(sink.Index), &cvolume))
+}
+
+func (sink *Sink) SetSinkVolumeInt(volume int32) int32 {
+	var cvolume C.pa_cvolume
+	cvolume.channels = C.uint8_t(2)
+	for i := 0; i < 2; i = i + 1 {
+		cvolume.values[i] = C.pa_volume_t(volume)
+	}
+	return int32(C.pa_set_sink_volume_by_index(
+		audio.pa, C.int(sink.Index), &cvolume))
 }
 
 func (sink *Sink) SetSinkMute(mute int32) int32 {
-	return 1
+	ret := C.pa_set_sink_mute_by_index(
+		audio.pa, C.int(sink.Index), C.int(mute))
+	return int32(ret)
 }
 
 func (source *Source) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		"com.deepin.daemon.Audio",
 		"/com/deepin/daemon/Audio/Input" + strconv.FormatInt(int64(source.Index), 10),
-		"com.deepin.daemon.Audio.Device",
+		"com.deepin.daemon.Audio.Input",
 	}
 }
 
 func (source *Source) GetSourceVolume() Volume {
-	return Volume{}
+	return source.Cvolume
 }
 
-func (source *Source) SetSourceVolume(volume Volume) Volume {
-	return Volume{}
+func (source *Source) SetSourceVolume(volume Volume) int32 {
+	var cvolume C.pa_cvolume
+	cvolume.channels = C.uint8_t(volume.Channels)
+	for i := uint32(0); i < volume.Channels; i = i + 1 {
+		cvolume.values[i] =
+			*((*C.pa_volume_t)(unsafe.Pointer(&volume.Values[i])))
+	}
+	return int32(C.pa_set_source_volume_by_index(
+		audio.pa, C.int(source.Index), &cvolume))
 }
 
 func (source *Source) SetSourceMute(mute int32) int32 {
-	return 1
+	ret := C.pa_set_source_mute_by_index(
+		audio.pa, C.int(source.Index), C.int(mute))
+	return int32(ret)
 }
 
 func (sink_input *SinkInput) GetDBusInfo() dbus.DBusInfo {
@@ -334,7 +349,7 @@ func (source_output *SourceOutput) GetDBusInfo() dbus.DBusInfo {
 }
 
 func (source_output *SourceOutput) GetSource_ouput_volume() Volume {
-	return Volume{}
+	return source_output.Cvolume
 }
 
 func (source_output *SourceOutput) SetSource_output_volume(volume Volume) Volume {
@@ -361,12 +376,15 @@ func (card *Card) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
+var audio *Audio
+
 func main() {
-	pulse, err := NewAudio()
+	var err error
+	audio, err = NewAudio()
 	if err != nil {
 		panic(err)
 		os.Exit(-1)
 	}
-	dbus.InstallOnSession(pulse)
+	dbus.InstallOnSession(audio)
 	select {}
 }
