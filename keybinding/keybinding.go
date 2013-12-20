@@ -4,6 +4,7 @@ import (
 	"dlib"
 	"dlib/dbus"
 	"dlib/gio-2.0"
+	"fmt"
 	"strconv"
 	"strings"
 )
@@ -29,9 +30,14 @@ const (
 	_WM_BINDING_ID     = "org.gnome.desktop.wm.keybindings"
 	_PRESET_BINDING_ID = "org.gnome.settings-daemon.plugins.key-bindings"
 	_MEDIA_BINDING_ID  = "org.gnome.settings-daemon.plugins.media-keys"
+	_COMPIZ_SHIFT_ID   = "org.compiz.shift"
+	_COMPIZ_SHIFT_PATH = "/org/compiz/profiles/shift/"
+	_COMPIZ_PUT_ID     = "org.compiz.put"
+	_COMPIZ_PUT_PATH   = "/org/compiz/profiles/put/"
 
 	_KEY_COUNT_BASE = 10000
 	_KEY_COUNT      = "count"
+	_KEY_LIST       = "key-list"
 	_KEY_ID         = "id"
 	_KEY_NAME       = "name"
 	_KEY_SHORTCUT   = "shortcut"
@@ -43,6 +49,10 @@ var (
 	_presetGSettings  = gio.NewSettings(_PRESET_BINDING_ID)
 	_mediaGSettings   = gio.NewSettings(_MEDIA_BINDING_ID)
 	_wmGSettings      = gio.NewSettings(_WM_BINDING_ID)
+	_shiftGSettings   = gio.NewSettingsWithPath(_COMPIZ_SHIFT_ID,
+		_COMPIZ_SHIFT_PATH)
+	_putGSettings = gio.NewSettingsWithPath(_COMPIZ_PUT_ID,
+		_COMPIZ_PUT_PATH)
 )
 
 func (binding *KeyBinding) GetDBusInfo() dbus.DBusInfo {
@@ -64,19 +74,7 @@ func (binding *KeyBinding) GetSystemList() []int32 {
 }
 
 func (binding *KeyBinding) GetCustomList() []int32 {
-	customIDList := []int32{}
-
-	count := _bindingGSettings.GetInt(_KEY_COUNT)
-	for i := 0; i < count; i++ {
-		gs := NewCustomGSettings(int32(_KEY_COUNT_BASE + i))
-		if gs.GetString(_KEY_NAME) == "" {
-			continue
-		}
-		customIDList = append(customIDList,
-			int32(_KEY_COUNT_BASE+i))
-	}
-
-	return customIDList
+	return GetCustomList()
 }
 
 func (binding *KeyBinding) HasOwnID(id int32) bool {
@@ -86,7 +84,7 @@ func (binding *KeyBinding) HasOwnID(id int32) bool {
 		}
 	}
 
-	customIDList := binding.GetCustomList()
+	customIDList := GetCustomList()
 	for _, v := range customIDList {
 		if id == v {
 			return true
@@ -144,8 +142,12 @@ func (binding *KeyBinding) GetBindingAccel(id int32) string {
 		}
 	} else if id >= 300 && id < 600 {
 		return MediaGetValue(id)
-	} else if id >= 600 && id < 1000 {
+	} else if id >= 600 && id < 800 {
 		return WMGetValue(id)
+	} else if id >= 800 && id < 900 {
+		return CompizShiftValue(id)
+	} else if id >= 900 && id < 1000 {
+		return CompizPutValue(id)
 	}
 
 	return ""
@@ -211,6 +213,19 @@ func ModifyGSetingsKey(gs *gio.Settings, key, value string) {
 	gio.SettingsSync()
 }
 
+func GetMaxIdFromCustom() int32 {
+	customList := GetCustomList()
+	max := int32(0)
+
+	for _, v := range customList {
+		if max < v {
+			max = v
+		}
+	}
+
+	return max
+}
+
 func GetKeyAccelList() map[int32]string {
 	accelList := make(map[int32]string)
 
@@ -224,8 +239,14 @@ func GetKeyAccelList() map[int32]string {
 		} else if k >= 300 && k < 600 {
 			values := MediaGetValue(k)
 			accelList[k] = values
-		} else if k >= 600 && k < 1000 {
+		} else if k >= 600 && k < 800 {
 			values := WMGetValue(k)
+			accelList[k] = values
+		} else if k >= 800 && k < 900 {
+			values := CompizShiftValue(k)
+			accelList[k] = values
+		} else if k >= 900 && k < 1000 {
+			values := CompizPutValue(k)
 			accelList[k] = values
 		}
 	}
@@ -242,6 +263,22 @@ func GetKeyAccelList() map[int32]string {
 	}
 
 	return accelList
+}
+
+func GetCustomList() []int32 {
+	customIDList := []int32{}
+	strList := _bindingGSettings.GetStrv(_KEY_LIST)
+
+	for _, v := range strList {
+		id, err := strconv.ParseInt(v, 10, 64)
+		if err != nil {
+			fmt.Println("get custom list failed:", err)
+			continue
+		}
+		customIDList = append(customIDList, int32(id))
+	}
+
+	return customIDList
 }
 
 func PresetGetValue(id int32) string {
@@ -265,7 +302,7 @@ func MediaGetValue(id int32) string {
 }
 
 func WMGetValue(id int32) string {
-	if id >= 600 && id < 1000 {
+	if id >= 600 && id < 800 {
 		keyName := currentSystemBindings[id]
 
 		values := _wmGSettings.GetStrv(keyName)
@@ -275,6 +312,28 @@ func WMGetValue(id int32) string {
 			strRet += v
 		}
 		return strRet
+	}
+
+	return ""
+}
+
+func CompizShiftValue(id int32) string {
+	if id >= 800 && id < 900 {
+		keyName := currentSystemBindings[id]
+		values := _shiftGSettings.GetString(keyName)
+
+		return values
+	}
+
+	return ""
+}
+
+func CompizPutValue(id int32) string {
+	if id >= 900 && id < 1000 {
+		keyName := currentSystemBindings[id]
+		values := _putGSettings.GetString(keyName)
+
+		return values
 	}
 
 	return ""

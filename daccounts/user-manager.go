@@ -93,9 +93,10 @@ func GetUserProperties(u *User) {
 	u.AccountType = userInface.AccountType.Get()
 	u.AutomaticLogin = userInface.AutomaticLogin.Get()
 	u.IconFile = userInface.IconFile.Get()
-	if !strings.Contains(u.IconFile, _SYSTEM_ICON_PATH) ||
-		!strings.Contains(u.IconFile, _USER_ICON_PATH) {
-		u.IconFile = _DEFAULT_USER_ICON
+	if !strings.Contains(u.IconFile, _SYSTEM_ICON_PATH) {
+		if !strings.Contains(u.IconFile, _USER_ICON_PATH) {
+			u.IconFile = _DEFAULT_USER_ICON
+		}
 	}
 	u.Locked = userInface.Locked.Get()
 	u.LoginTime = userInface.LoginTime.Get()

@@ -23,6 +23,7 @@ package main
 
 import (
 	"dlib/dbus"
+	"sort"
 	"strings"
 )
 
@@ -34,6 +35,7 @@ func (m *Manager) ListCachedUsers() []string {
 		userList = append(userList, ConvertPath(string(v)))
 	}
 
+	sort.Strings(userList)
 	return userList
 }
 

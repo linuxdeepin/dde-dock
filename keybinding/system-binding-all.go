@@ -21,6 +21,13 @@
 
 package main
 
+/*
+ * 0 ~ 299: org.gnome-settings-daemon.plugins.key-bindings
+ * 300 ~ 599: org.gnome-settings-daemon.plugins.media-keys
+ * 600 ~ 799: org.gnome.desktop.wm.keybindings
+ * 800 ~ 899: org.compiz.shift; path: /org/compiz/profiles/shift/
+ * 900 ~ 999: org.compiz.put; path: /org/compiz/profiles/put/
+ */
 var currentSystemBindings = map[int32]string{
 	0:   "key1",
 	1:   "key2",
@@ -36,8 +43,6 @@ var currentSystemBindings = map[int32]string{
 	645: "show-desktop",
 	670: "switch-windows",
 	671: "switch-windows-backward",
-	646: "switch-applications",
-	647: "switch-applications-backward",
 	302: "calculator",
 	305: "eject",
 	306: "email",
@@ -67,14 +72,16 @@ var currentSystemBindings = map[int32]string{
 	667: "switch-to-workspace-left",
 	668: "switch-to-workspace-right",
 	669: "switch-to-workspace-up",
-	624: "move-to-workspace-1",
-	625: "move-to-workspace-2",
-	626: "move-to-workspace-3",
-	627: "move-to-workspace-4",
 	636: "move-to-workspace-down",
 	637: "move-to-workspace-left",
 	638: "move-to-workspace-right",
 	639: "move-to-workspace-up",
+	800: "prev-key",           //switch apps with 3D
+	801: "next-key",           //reverse switch apps with 3D
+	900: "put-viewport-1-key", //Move window to workspace 1
+	901: "put-viewport-2-key",
+	902: "put-viewport-3-key",
+	903: "put-viewport-4-key",
 }
 
 /* 0 ~ 299 */
