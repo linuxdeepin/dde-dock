@@ -63,12 +63,12 @@ func NewAccountManager() *Manager {
 
 	_accountInface.ConnectUserAdded(func(user dbus.ObjectPath) {
 		/*NewAccountUserManager(user)*/
-		m.UserAdded(string(user))
+		m.UserAdded(ConvertPath(string(user)))
 	})
 
 	_accountInface.ConnectUserDeleted(func(user dbus.ObjectPath) {
 		DeleteUserManager(user)
-		m.UserDeleted(string(user))
+		m.UserDeleted(ConvertPath(string(user)))
 	})
 
 	return m
