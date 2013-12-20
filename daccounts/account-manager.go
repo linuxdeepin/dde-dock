@@ -27,6 +27,10 @@ import (
 	"strings"
 )
 
+const (
+	_USER_VALID_PATH = "/com/deepin/daemon/Accounts/User"
+)
+
 func (m *Manager) ListCachedUsers() []string {
 	objects := _accountInface.ListCachedUsers()
 
@@ -42,7 +46,12 @@ func (m *Manager) ListCachedUsers() []string {
 func (m *Manager) CreateUser(name, fullname string, accountType int32) string {
 	path := _accountInface.CreateUser(name, fullname, accountType)
 
-	return ConvertPath(string(path))
+	userPath := ConvertPath(string(path))
+	if strings.Contains(userPath, _USER_VALID_PATH) {
+		NewAccountUserManager(path)
+	}
+
+	return userPath
 }
 
 func (m *Manager) DeleteUser(id int64, removeFiles bool) {
@@ -53,7 +62,7 @@ func NewAccountManager() *Manager {
 	m := &Manager{}
 
 	_accountInface.ConnectUserAdded(func(user dbus.ObjectPath) {
-		NewAccountUserManager(user)
+		/*NewAccountUserManager(user)*/
 		m.UserAdded(string(user))
 	})
 
