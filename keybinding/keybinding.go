@@ -10,7 +10,7 @@ import (
 )
 
 type KeyBinding struct {
-	KeyBindingCount int32
+	KeyBindingList []int32
 }
 
 type KeyOwnerRet struct {
@@ -74,7 +74,7 @@ func (binding *KeyBinding) GetSystemList() []int32 {
 }
 
 func (binding *KeyBinding) GetCustomList() []int32 {
-	return GetCustomList()
+	return GetCustomIdList()
 }
 
 func (binding *KeyBinding) HasOwnID(id int32) bool {
@@ -84,7 +84,7 @@ func (binding *KeyBinding) HasOwnID(id int32) bool {
 		}
 	}
 
-	customIDList := GetCustomList()
+	customIDList := GetCustomIdList()
 	for _, v := range customIDList {
 		if id == v {
 			return true
@@ -166,13 +166,13 @@ func (binding *KeyBinding) ChangeKeyBinding(id int32, accel string) *KeyOwnerRet
 }
 
 func (binding *KeyBinding) AddCustomBinding(name, shortcut, action string) int32 {
-	count := binding.KeyBindingCount
-	id := _KEY_COUNT_BASE + count
+	id := GetMaxIdFromCustom() + 1
 	gs := NewCustomGSettings(id)
 	SetGSettings(gs, id, name, shortcut, action)
 
-	count++
-	_bindingGSettings.SetInt(_KEY_COUNT, int(count))
+	customList := GetCustomIdList()
+	customList = append(customList, id)
+	SetCustomList(customList)
 
 	return id
 }
@@ -183,8 +183,17 @@ func (binding *KeyBinding) DeleteCustomBinding(id int32) {
 	}
 
 	gs := NewCustomGSettings(id)
-	ModifyGSetingsKey(gs, _KEY_NAME, "")
-	ModifyGSetingsKey(gs, _KEY_SHORTCUT, "")
+	ResetCustomGSettings(gs)
+
+	tmpList := []int32{}
+	customList := GetCustomIdList()
+	for _, v := range customList {
+		if v == id {
+			continue
+		}
+		tmpList = append(tmpList, v)
+	}
+	SetCustomList(tmpList)
 }
 
 func ModifyCustomKey(binding *KeyBinding, id int32, key, value string) {
@@ -197,6 +206,12 @@ func NewCustomGSettings(id int32) *gio.Settings {
 	gs := gio.NewSettingsWithPath(_KEY_BINDING_ADD_ID, _KEY_BINDING_ADD_PATH+customId)
 
 	return gs
+}
+
+func ResetCustomGSettings(gs *gio.Settings) {
+	gs.Reset(_KEY_NAME)
+	gs.Reset(_KEY_SHORTCUT)
+	gs.Reset(_KEY_ACTION)
 }
 
 func SetGSettings(gs *gio.Settings, id int32, name, shortcut, action string) {
@@ -213,8 +228,19 @@ func ModifyGSetingsKey(gs *gio.Settings, key, value string) {
 	gio.SettingsSync()
 }
 
+func SetCustomList(customList []int32) {
+	strList := []string{}
+	for _, v := range customList {
+		str := strconv.FormatInt(int64(v), 10)
+		strList = append(strList, str)
+	}
+
+	_bindingGSettings.SetStrv(_KEY_LIST, strList)
+	gio.SettingsSync()
+}
+
 func GetMaxIdFromCustom() int32 {
-	customList := GetCustomList()
+	customList := GetCustomIdList()
 	max := int32(0)
 
 	for _, v := range customList {
@@ -251,21 +277,17 @@ func GetKeyAccelList() map[int32]string {
 		}
 	}
 
-	count := _bindingGSettings.GetInt(_KEY_COUNT)
-	for i := 0; i < count; i++ {
-		id := int32(_KEY_COUNT_BASE + i)
-		gs := NewCustomGSettings(id)
-		if gs.GetString(_KEY_NAME) == "" {
-			continue
-		}
+	customList := GetCustomIdList()
+	for _, v := range customList {
+		gs := NewCustomGSettings(v)
 		values := gs.GetString(_KEY_SHORTCUT)
-		accelList[id] = values
+		accelList[v] = values
 	}
 
 	return accelList
 }
 
-func GetCustomList() []int32 {
+func GetCustomIdList() []int32 {
 	customIDList := []int32{}
 	strList := _bindingGSettings.GetStrv(_KEY_LIST)
 
@@ -341,11 +363,11 @@ func CompizPutValue(id int32) string {
 
 func NewKeyBinding() *KeyBinding {
 	binding := KeyBinding{}
-	binding.KeyBindingCount = int32(_bindingGSettings.GetInt(_KEY_COUNT))
+	binding.KeyBindingList = GetCustomIdList()
 
-	_bindingGSettings.Connect("changed::count", func(s *gio.Settings, name string) {
-		binding.KeyBindingCount = int32(s.GetInt(name))
-		dbus.NotifyChange(&binding, "KeyBindingCount")
+	_bindingGSettings.Connect("changed::key-list", func(s *gio.Settings, name string) {
+		binding.KeyBindingList = GetCustomIdList()
+		dbus.NotifyChange(&binding, "KeyBindingList")
 	})
 
 	return &binding
