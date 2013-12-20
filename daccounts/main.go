@@ -55,7 +55,7 @@ const (
 
 var (
 	_accountInface = accounts.GetAccounts("/org/freedesktop/Accounts")
-	_userMap       = make(map[string]*User)
+	_userMap       = make(map[dbus.ObjectPath]*User)
 )
 
 func (dam *Manager) GetDBusInfo() dbus.DBusInfo {
@@ -81,7 +81,7 @@ func main() {
 		fmt.Println("Install Manager DBus Failed")
 		panic(err)
 	}
-	userList := account.ListCachedUsers()
+	userList := _accountInface.ListCachedUsers()
 	for _, v := range userList {
 		NewAccountUserManager(v)
 	}

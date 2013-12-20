@@ -31,7 +31,7 @@ func (m *Manager) ListCachedUsers() []string {
 
 	userList := []string{}
 	for _, v := range objects {
-		userList = append(userList, string(v))
+		userList = append(userList, ConvertPath(string(v)))
 	}
 
 	return userList
@@ -51,12 +51,12 @@ func NewAccountManager() *Manager {
 	m := &Manager{}
 
 	_accountInface.ConnectUserAdded(func(user dbus.ObjectPath) {
-		NewAccountUserManager(string(user))
+		NewAccountUserManager(user)
 		m.UserAdded(string(user))
 	})
 
 	_accountInface.ConnectUserDeleted(func(user dbus.ObjectPath) {
-		DeleteUserManager(string(user))
+		DeleteUserManager(user)
 		m.UserDeleted(string(user))
 	})
 

@@ -65,11 +65,11 @@ func (u *User) OnPropertiesChanged(propName string, old interface{}) {
 	}
 }
 
-func NewAccountUserManager(path string) *User {
+func NewAccountUserManager(path dbus.ObjectPath) *User {
 	u := &User{}
 
-	u.objectPath = ConvertPath(path)
-	u.userInface = accounts.GetUser(path)
+	u.objectPath = ConvertPath(string(path))
+	u.userInface = accounts.GetUser(string(path))
 
 	GetUserProperties(u)
 	u.userInface.ConnectChanged(func() {
@@ -80,7 +80,7 @@ func NewAccountUserManager(path string) *User {
 		CompareUserManager(u, tmpUser)
 	})
 
-	_userMap[u.objectPath] = u
+	_userMap[path] = u
 	dbus.InstallOnSession(u)
 	return u
 }
@@ -146,11 +146,12 @@ func CompareUserManager(src, tmp *User) {
 	}
 }
 
-func DeleteUserManager(path string) {
+func DeleteUserManager(path dbus.ObjectPath) {
 	u := _userMap[path]
 	if u == nil {
 		return
 	}
+	delete(_userMap, path)
 
 	accounts.DestroyUser(u.userInface)
 	dbus.UnInstallObject(u)
