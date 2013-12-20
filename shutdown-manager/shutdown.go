@@ -1,6 +1,7 @@
 package main
 
 import (
+	"dbus/org/freedesktop/consolekit"
 	"dbus/org/freedesktop/upower"
 	"dbus/org/gnome/sessionmanager"
 	"dlib/dbus"
@@ -18,8 +19,9 @@ const (
 )
 
 var (
-	dShut  = sessionmanager.GetSessionManager("/org/gnome/SessionManager")
-	dPower = upower.GetUpower("/org/freedesktop/UPower")
+	dShut    = sessionmanager.GetSessionManager("/org/gnome/SessionManager")
+	dConsole = consolekit.GetManager("/org/freedesktop/ConsoleKit/Manager")
+	dPower   = upower.GetUpower("/org/freedesktop/UPower")
 )
 
 func (m *Manager) GetDBusInfo() dbus.DBusInfo {
@@ -30,16 +32,32 @@ func (m *Manager) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (m *Manager) RequestLogout() {
-	dShut.Logout(1)
+func (m *Manager) CanLogout() bool {
+	if IsInhibited(1) {
+		return false
+	}
+
+	return true
 }
 
 func (m *Manager) Logout() {
 	ExecCommand(_LOGOUT_EXEC)
 }
 
+func (m *Manager) RequestLogout() {
+	dShut.Logout(1)
+}
+
+func (m *Manager) ForceLogout() {
+	dShut.Logout(2)
+}
+
 func (shudown *Manager) CanShutdown() bool {
-	return dShut.CanShutdown()
+	if IsInhibited(1) {
+		return false
+	}
+
+	return true
 }
 
 func (m *Manager) Shutdown() {
@@ -50,6 +68,18 @@ func (m *Manager) RequestShutdown() {
 	dShut.RequestShutdown()
 }
 
+func (m *Manager) ForceShutdown() {
+	dConsole.Stop()
+}
+
+func (shudown *Manager) CanReboot() bool {
+	if IsInhibited(1) {
+		return false
+	}
+
+	return true
+}
+
 func (m *Manager) Reboot() {
 	ExecCommand(_REBOOT_EXEC)
 }
@@ -58,8 +88,16 @@ func (m *Manager) RequestReboot() {
 	dShut.RequestReboot()
 }
 
+func (m *Manager) ForceReboot() {
+	dConsole.Restart()
+}
+
 func (m *Manager) CanSuspend() bool {
-	return dPower.SuspendAllowed()
+	if IsInhibited(4) {
+		return false
+	}
+
+	return true
 }
 
 func (m *Manager) RequestSuspend() {
@@ -89,6 +127,10 @@ func NewManager() *Manager {
 func ExecCommand(cmd string) {
 	cmdExec := exec.Command(cmd)
 	cmdExec.Run()
+}
+
+func IsInhibited(action uint32) bool {
+	return dShut.IsInhibited(action)
 }
 
 func main() {
