@@ -16,8 +16,9 @@ const (
 )
 
 var (
-	_Manager  = nm.GetManager("/org/freedesktop/NetworkManager")
-	_Settings = nm.GetSettings("/org/freedesktop/NetworkManager/Settings")
+	_NMManager  = nm.GetManager("/org/freedesktop/NetworkManager")
+	_NMSettings = nm.GetSettings("/org/freedesktop/NetworkManager/Settings")
+	_Manager    = _NewManager()
 )
 
 type Manager struct {
@@ -37,6 +38,10 @@ type Manager struct {
 	WiredConnections    []*Connection
 	WirelessConnections []*Connection
 	VPNConnections      []*Connection
+
+	NeedMoreConfigure func(string, string)
+
+	agent *Agent
 }
 
 func (this *Manager) GetDBusInfo() dbus.DBusInfo {
@@ -45,21 +50,20 @@ func (this *Manager) GetDBusInfo() dbus.DBusInfo {
 
 func (this *Manager) initManager() {
 	this.WiredEnabled = true
-	this.WirelessEnabled = property.NewWrapProperty(this, "WirelessEnabled", _Manager.WirelessEnabled)
-	this.NetworkingEnabled = property.NewWrapProperty(this, "NetworkingEnabled", _Manager.NetworkingEnabled)
+	this.WirelessEnabled = property.NewWrapProperty(this, "WirelessEnabled", _NMManager.WirelessEnabled)
+	this.NetworkingEnabled = property.NewWrapProperty(this, "NetworkingEnabled", _NMManager.NetworkingEnabled)
 	this.initDeviceManage()
 	this.initConnectionManage()
 }
 
-func NewManager() (m *Manager) {
+func _NewManager() (m *Manager) {
 	this := &Manager{}
 	this.initManager()
+	this.agent = NewAgent("org.snyh.agent")
 	return this
 }
 
 func main() {
-	manager := NewManager()
-	dbus.InstallOnSession(manager)
-
+	dbus.InstallOnSession(_Manager)
 	select {}
 }

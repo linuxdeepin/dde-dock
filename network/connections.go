@@ -7,20 +7,12 @@ import "fmt"
 type _ConnectionData map[string]map[string]dbus.Variant
 
 type Connection struct {
-	core *nm.SettingsConnection
 	data _ConnectionData
 
+	Path           dbus.ObjectPath
 	Uuid           string
 	Name           string
 	ConnectionType string
-}
-
-func (this *Connection) GetDBusInfo_() dbus.DBusInfo {
-	if this.core != nil {
-		return dbus.DBusInfo{DBusDest, string(this.core.Path), DBusIFC + ".Connection"}
-	} else {
-		return dbus.DBusInfo{DBusDest, "/", DBusIFC + ".Connection"}
-	}
 }
 
 func (this *Manager) initConnectionManage() {
@@ -28,18 +20,36 @@ func (this *Manager) initConnectionManage() {
 	this.WiredConnections = make([]*Connection, 0)
 	this.WirelessConnections = make([]*Connection, 0)
 
-	for _, c := range _Settings.ListConnections() {
+	for _, c := range _NMSettings.ListConnections() {
 		this.handleConnectionChanged(OpAdded, string(c))
 	}
-	_Settings.ConnectNewConnection(func(path dbus.ObjectPath) {
+	_NMSettings.ConnectNewConnection(func(path dbus.ObjectPath) {
 		this.handleConnectionChanged(OpAdded, string(path))
 	})
+}
+
+func tryRemoveConnection(path dbus.ObjectPath, conns []*Connection) ([]*Connection, bool) {
+	var newConns []*Connection
+	found := false
+	for _, conn := range conns {
+		if conn.Path != path {
+			newConns = append(newConns, conn)
+		} else {
+			found = true
+		}
+	}
+	return newConns, found
 }
 
 func (this *Manager) handleConnectionChanged(operation int32, path string) {
 	switch operation {
 	case OpAdded:
-		c := NewConnection(nm.GetSettingsConnection(path))
+		nmConn := nm.GetSettingsConnection(path)
+		nmConn.ConnectRemoved(func() {
+			this.handleConnectionChanged(OpRemoved, path)
+			nm.DestroySettingsConnection(nmConn)
+		})
+		c := NewConnection(nmConn)
 		switch c.ConnectionType {
 		case "802-11-wireless":
 			this.WirelessConnections = append(this.WirelessConnections, c)
@@ -53,12 +63,23 @@ func (this *Manager) handleConnectionChanged(operation int32, path string) {
 			dbus.NotifyChange(this, "VPNConnections")
 		case "cdma":
 		}
+	case OpRemoved:
+		removed := false
+		if this.WirelessConnections, removed = tryRemoveConnection(dbus.ObjectPath(path), this.WirelessConnections); removed {
+			dbus.NotifyChange(this, "WirelessConnections")
+		} else if this.WiredConnections, removed = tryRemoveConnection(dbus.ObjectPath(path), this.WiredConnections); removed {
+			dbus.NotifyChange(this, "WiredConnections")
+		} else if this.VPNConnections, removed = tryRemoveConnection(dbus.ObjectPath(path), this.VPNConnections); removed {
+			dbus.NotifyChange(this, "VPNConnections")
+		}
 	}
+
 }
 
 func NewConnection(core *nm.SettingsConnection) *Connection {
-	c := &Connection{core: core}
+	c := &Connection{}
 	settings := core.GetSettings()
+	c.Path = core.Path
 	c.Name = settings["connection"]["id"].Value().(string)
 	c.Uuid = settings["connection"]["uuid"].Value().(string)
 	c.ConnectionType = settings["connection"]["type"].Value().(string)
@@ -99,15 +120,13 @@ func NewWirelessConnection(id string, ssid string, keyFlag int) *Connection {
 
 	data[fieldIPv6]["method"] = dbus.MakeVariant("auto")
 
-	core := nm.GetSettingsConnection(string(_Settings.AddConnection(data)))
-
-	return &Connection{core, data, uuid, id, fieldWireless}
+	core := nm.GetSettingsConnection(string(_NMSettings.AddConnection(data)))
+	return &Connection{data, core.Path, uuid, id, fieldWireless}
 }
 
 func (this *Manager) GetConnectionByAccessPoint(path dbus.ObjectPath) *Connection {
 	ap := nm.GetAccessPoint(string(path))
 	for _, c := range this.WirelessConnections {
-		fmt.Println(c.data)
 		if c.ConnectionType == fieldWireless && string(c.data[fieldWireless]["ssid"].Value().([]uint8)) == string(ap.Ssid.Get()) {
 			return c
 		}
