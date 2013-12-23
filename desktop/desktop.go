@@ -17,7 +17,7 @@ const (
 
 	_COMPIZ_INTEGRATED_SCHEMA = "org.compiz.integrated"
 	_COMPIZ_COMMANDS_SCHEMA   = "org.compiz.commands"
-	_COMPIZ_SCALE_SCHEMA      = "org.compiz._scale"
+	_COMPIZ_SCALE_SCHEMA      = "org.compiz.scale"
 	_COMPIZ_COMMAND_PATH      = "/org/compiz/profiles/deepin/plugins/commands/"
 	_COMPIZ_SCALE_PATH        = "/org/compiz/profiles/deepin/plugins/_scale/"
 
