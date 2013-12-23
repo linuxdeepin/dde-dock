@@ -29,7 +29,6 @@ type Manager struct {
 	NetworkingEnabled dbus.Property `access:"readwrite"`
 
 	//update by devices.go
-	APs             []*AccessPoint
 	WirelessDevices []*Device
 	WiredDevices    []*Device
 	OtherDevices    []*Device

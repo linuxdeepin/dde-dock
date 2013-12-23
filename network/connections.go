@@ -134,3 +134,42 @@ func (this *Manager) GetConnectionByAccessPoint(path dbus.ObjectPath) *Connectio
 	fmt.Println("CCC:", path, string(ap.Ssid.Get()))
 	return NewWirelessConnection(string(ap.Ssid.Get()), string(ap.Ssid.Get()), parseFlags(ap.Flags.Get(), ap.WpaFlags.Get(), ap.RsnFlags.Get()))
 }
+
+func (this *Manager) GetActiveConnection(devPath dbus.ObjectPath) ActiveConnection {
+	dev := nm.GetDevice(string(devPath))
+	if string(dev.ActiveConnection.Get()) == "/" {
+		return ActiveConnection{}
+	}
+	ac := nm.GetActiveConnection(string(dev.ActiveConnection.Get()))
+	conn := NewConnection(nm.GetSettingsConnection(string(ac.Connection.Get())))
+
+	ip, mask, route := parseDHCP4(dev.Dhcp4Config.Get())
+	defer func() {
+		nm.DestroyDevice(dev)
+		nm.DestroyActiveConnection(ac)
+	}()
+
+	var macaddress = "0:0:0:0:0:0"
+	var speed = "-"
+	switch dev.DeviceType.Get() {
+	case NM_DEVICE_TYPE_ETHERNET:
+		_dev := nm.GetDeviceWired(string(devPath))
+		macaddress = _dev.HwAddress.Get()
+		speed = fmt.Sprintf("%d", _dev.Speed.Get())
+		nm.DestroyDeviceWired(_dev)
+	case NM_DEVICE_TYPE_WIFI:
+		_dev := nm.GetDeviceWireless(string(devPath))
+		macaddress = _dev.HwAddress.Get()
+		speed = fmt.Sprintf("%d", _dev.Bitrate.Get()/1024)
+		nm.DestroyDeviceWireless(_dev)
+	}
+
+	return ActiveConnection{
+		Interface:    conn.Name,
+		HWAddress:    macaddress,
+		IPAddress:    ip,
+		SubnetMask:   mask,
+		RouteAddress: route,
+		Speed:        speed,
+	}
+}

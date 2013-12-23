@@ -157,6 +157,16 @@ func (this *Manager) GetAccessPoints(path dbus.ObjectPath) []AccessPoint {
 	return aps
 }
 
+func (this *Manager) getDeviceAddress(devPath dbus.ObjectPath, devType uint32) string {
+	switch devType {
+	case NM_DEVICE_TYPE_ETHERNET:
+		return nm.GetDeviceWired(string(devPath)).HwAddress.Get()
+	case NM_DEVICE_TYPE_WIFI:
+		return nm.GetDeviceWireless(string(devPath)).HwAddress.Get()
+	}
+	return ""
+}
+
 func (this *Manager) ActiveAccessPoint(dev dbus.ObjectPath, ap dbus.ObjectPath) {
 	con := this.GetConnectionByAccessPoint(ap)
 	/*fmt.Println("DEV:", dev, "AP:", ap, "CON:", con.GetDBusInfo_().ObjectPath)*/
