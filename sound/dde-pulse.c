@@ -92,13 +92,13 @@ pa* pa_new()
         return NULL;
     }
 
-	pa_init(self,NULL,NULL);
+	pa_init(self);
 
     return self;
 }
 
 
-int pa_init(pa *self,void *args,void *kwds)
+int pa_init(pa *self)
 {
 	pa_clear(self);
 
@@ -606,6 +606,76 @@ void *pa_get_source_output_list(pa *self)
     return NULL;
 }
 
+int pa_set_card_profile(pa *self,int index,const char *profile)
+{
+    int pa_ready = 0;
+    int state = 0;
+
+	if(!self)
+	{
+		fprintf(stderr,"self is NULL pointer !\n");
+		return -1;
+	}
+
+    pa_context_connect(self->pa_ctx, NULL, 0, NULL);
+    pa_context_set_state_callback(self->pa_ctx, pa_state_cb, &pa_ready);
+
+    for (;;)
+    {
+        if (pa_ready == 0)
+        {
+            pa_mainloop_iterate(self->pa_ml, 1, NULL);
+            continue;
+        }
+        if (pa_ready == 2)
+        {
+            pa_context_disconnect(self->pa_ctx);
+            pa_context_unref(self->pa_ctx);
+            pa_mainloop_free(self->pa_ml);
+            self->pa_op=NULL;
+            self->pa_ctx=NULL;
+            self->pa_mlapi=NULL;
+            self->pa_ml=NULL;
+            pa_init_context(self);
+
+            return -1;
+        }
+        switch (state)
+        {
+        case 0:
+            self->pa_op=pa_context_set_card_profile_by_index(self->pa_ctx,
+                    index,
+                    profile,
+                    pa_context_success_cb,
+                    self);
+            state++;
+            break;
+        case 1:
+            if (pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
+            {
+                pa_operation_unref(self->pa_op);
+                pa_context_disconnect(self->pa_ctx);
+                pa_context_unref(self->pa_ctx);
+                pa_mainloop_free(self->pa_ml);
+                self->pa_op=NULL;
+                self->pa_ctx=NULL;
+                self->pa_mlapi=NULL;
+                self->pa_ml=NULL;
+                pa_init_context(self);
+		fprintf(stderr, "in state %d\n", state);
+                return 0;
+            }
+            break;
+        default:
+            fprintf(stderr, "in state %d\n", state);
+            return 0;
+        }
+        pa_mainloop_iterate(self->pa_ml, 1, NULL);
+    }
+    return 0;
+
+}
+
 /*int pa_get_sink_input_index_by_pid(pa *self,int index,int )
 {
     if(!self)
@@ -631,6 +701,74 @@ void *pa_get_source_output_list(pa *self)
     return NULL;
 }
 */
+
+int pa_set_sintk_port_by_index(pa *self,int index,const char *port)
+{
+    int pa_ready = 0;
+    int state = 0;
+
+	if(!self)
+	{
+		fprintf(stderr,"self is NULL pointer !\n");
+		return -1;
+	}
+
+    pa_context_connect(self->pa_ctx, NULL, 0, NULL);
+    pa_context_set_state_callback(self->pa_ctx, pa_state_cb, &pa_ready);
+
+    for (;;)
+    {
+        if (pa_ready == 0)
+        {
+            pa_mainloop_iterate(self->pa_ml, 1, NULL);
+            continue;
+        }
+        if (pa_ready == 2)
+        {
+            pa_context_disconnect(self->pa_ctx);
+            pa_context_unref(self->pa_ctx);
+            pa_mainloop_free(self->pa_ml);
+            self->pa_op=NULL;
+            self->pa_ctx=NULL;
+            self->pa_mlapi=NULL;
+            self->pa_ml=NULL;
+            pa_init_context(self);
+
+            return -1;
+        }
+        switch (state)
+        {
+        case 0:
+            self->pa_op=pa_context_set_sink_port_by_index(self->pa_ctx,
+                    index,
+                    port,
+                    pa_context_success_cb,
+                    self);
+            state++;
+            break;
+        case 1:
+            if (pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
+            {
+                pa_operation_unref(self->pa_op);
+                pa_context_disconnect(self->pa_ctx);
+                pa_context_unref(self->pa_ctx);
+                pa_mainloop_free(self->pa_ml);
+                self->pa_op=NULL;
+                self->pa_ctx=NULL;
+                self->pa_mlapi=NULL;
+                self->pa_ml=NULL;
+                pa_init_context(self);
+                return 0;
+            }
+            break;
+        default:
+            fprintf(stderr, "in state %d\n", state);
+            return 0;
+        }
+        pa_mainloop_iterate(self->pa_ml, 1, NULL);
+    }
+    return 0;
+}
 
 int pa_set_sink_mute_by_index(pa *self,int index,int mute)
 {
@@ -941,6 +1079,68 @@ int pa_dec_sink_volume_by_index(pa *self,int index,int volume)
     return -1;
 }
 
+int pa_set_source_port_by_index(pa *self,int index,const char *port)
+{
+    int pa_ready = 0;
+    int state = 0;
+
+    pa_context_connect(self->pa_ctx, NULL, 0, NULL);
+    pa_context_set_state_callback(self->pa_ctx, pa_state_cb, &pa_ready);
+
+    for (;;)
+    {
+        if (pa_ready == 0)
+        {
+            pa_mainloop_iterate(self->pa_ml, 1, NULL);
+            continue;
+        }
+        if (pa_ready == 2)
+        {
+            pa_context_disconnect(self->pa_ctx);
+            pa_context_unref(self->pa_ctx);
+            pa_mainloop_free(self->pa_ml);
+            self->pa_op=NULL;
+            self->pa_ctx=NULL;
+            self->pa_mlapi=NULL;
+            self->pa_ml=NULL;
+            pa_init_context(self);
+
+            return -1;
+        }
+        switch (state)
+        {
+        case 0:
+            self->pa_op=pa_context_set_source_port_by_index(self->pa_ctx,
+                    index,
+                    port,
+                    pa_context_success_cb,
+                    self);
+            state++;
+            break;
+        case 1:
+            if (pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
+            {
+                pa_operation_unref(self->pa_op);
+                pa_context_disconnect(self->pa_ctx);
+                pa_context_unref(self->pa_ctx);
+                pa_mainloop_free(self->pa_ml);
+                self->pa_op=NULL;
+                self->pa_ctx=NULL;
+                self->pa_mlapi=NULL;
+                self->pa_ml=NULL;
+                pa_init_context(self);
+                return 0;
+            }
+            break;
+        default:
+            fprintf(stderr, "in state %d\n", state);
+            return -1;
+        }
+        pa_mainloop_iterate(self->pa_ml, 1, NULL);
+    }
+    return -1;
+
+}
 
 int pa_set_source_mute_by_index(pa *self,int index,int mute)
 {
@@ -1005,7 +1205,6 @@ int pa_set_source_volume_by_index(pa *self,int index,pa_cvolume *cvolume)
 {
     int pa_ready=0;//CRITICAL!,initialize pa_ready to zero
     int state=0;
-    int volume;
 
     if(!self)
     {
@@ -1015,7 +1214,7 @@ int pa_set_source_volume_by_index(pa *self,int index,pa_cvolume *cvolume)
 
     if(!pa_cvolume_valid(cvolume))
     {
-        fprintf(stderr,"Invalid volume %d provided,please choose another one\n",volume);
+        fprintf(stderr,"Invalid volume provided\n");
         return -1;
     }
 
@@ -1977,6 +2176,7 @@ void pa_get_sinklist_cb(pa_context *c, const pa_sink_info *l, int eol, void *use
 {
     pa *self= (pa*)userdata;
 	sink_t *sink=NULL;
+    int i=0;
 
     // If eol is set to a positive number, you're at the end of the list
     if (eol > 0)
@@ -2002,7 +2202,21 @@ void pa_get_sinklist_cb(pa_context *c, const pa_sink_info *l, int eol, void *use
 	sink->nvolumesteps=l->n_volume_steps;
 	strncpy(sink->name,l->name,strlen(l->name)+1);
 	strncpy(sink->driver,l->driver,strlen(l->driver)+1);
-	strncpy(sink->description,l->description,strlen(l->description)+1);
+    strncpy(sink->description,l->description,strlen(l->description)+1);
+    sink->n_ports=l->n_ports;
+    for (i=0;i<l->n_ports;i++)
+    {
+        strncpy( sink->ports[i].name,
+                l->ports[i]->name,sizeof(sink->ports[i].name)-1);
+        strncpy(sink->ports[i].description,
+                l->ports[i]->description,
+                sizeof(sink->ports[i].description)-1);
+        sink->ports[i].available=l->ports[i]->available;
+        if(strcmp(l->ports[i]->name,l->active_port->name)==0)
+        {
+            sink->active_port=sink->ports+i;
+        }
+    }
 
     // We know we've allocated 16 slots to hold devices.  Loop through our
     // structure and find the first one that's "uninitialized."  Copy the
@@ -2042,8 +2256,10 @@ void pa_get_sourcelist_cb(pa_context *c, const pa_source_info *l, int eol, void 
     pa *self= userdata;
 	source_t *source=NULL;
 
+    int i=0;
     if (eol > 0)
     {
+        fprintf(stderr,"End of list of sources");
         return;
     }
 	else
@@ -2055,6 +2271,7 @@ void pa_get_sourcelist_cb(pa_context *c, const pa_source_info *l, int eol, void 
 		else
 		{
 			fprintf(stderr,"sources number exceeds the MAX_SOURCES\n");
+            return;
 		}
 	}
 
@@ -2067,6 +2284,22 @@ void pa_get_sourcelist_cb(pa_context *c, const pa_source_info *l, int eol, void 
 	strncpy(source->name,l->name,sizeof(source->name)-1);
 	strncpy(source->driver,l->driver,sizeof(source->driver)-1);
 	strncpy(source->description,l->description,sizeof(source->description)-1);
+    source->n_ports=l->n_ports;
+    for(i=0;i<l->n_ports;i++)
+    {
+        strncpy(source->ports[i].name,
+                l->ports[i]->name,
+                sizeof(source->ports[i].name-1));
+        strncpy(source->ports[i].description,
+                l->ports[i]->description,
+                sizeof(source->ports[i].description)-1);
+        source->ports[i].available=l->ports[i]->available;
+        if(strcmp(l->ports[i]->name,
+                    l->active_port->name)==0)
+        {
+            source->active_port=source->ports+i;
+        }
+    }
 
     printf("source %s------------------------------\n",l->name);
 }
@@ -2263,6 +2496,7 @@ void pa_get_cards_cb(pa_context *c, const pa_card_info*i, int eol, void *userdat
 {
     pa *self=userdata;
 	card_t *card;
+    int j=0;
     if(!self)
     {
         fprintf(stderr,"NULL object pointer\n");
@@ -2284,7 +2518,21 @@ void pa_get_cards_cb(pa_context *c, const pa_card_info*i, int eol, void *userdat
 	strncpy(card->name,i->name,strlen(i->name)+1);
 	card->owner_module=i->owner_module;
 	strncpy(card->driver,i->driver,strlen(i->driver)+1);
-
+    card->n_profiles=i->n_profiles;
+    for(j=0;j<i->n_profiles;j++)
+    {
+        strncpy(card->profiles[j].name,
+                i->profiles[j].name,
+                sizeof(card->profiles[j].name));
+        strncpy(card->profiles[j].description,
+                i->profiles[j].description,
+                sizeof(card->profiles[j].name)-1);
+        if(strcmp(i->profiles[j].name,
+                  i->active_profile->name)==0)
+        {
+            card->active_profile=card->profiles+j;
+        }
+    }
     return;
 }
 
