@@ -128,15 +128,18 @@ type Volume struct {
 }
 
 func NewAudio() (*Audio, error) {
-	audio := Audio{}
+	audio = &Audio{}
 	audio.pa = C.pa_new()
 	if audio.pa == nil {
 		fmt.Fprintln(os.Stderr,
 			"unable to connect to the pulseaudio server,exiting\n")
 		os.Exit(-1)
 	}
+	audio.cards = audio.getCards()
+	audio.sinks = audio.getsinks()
+	audio.sources = audio.getSources()
 	fmt.Println("module started\n")
-	return &audio, nil
+	return audio, nil
 }
 
 func (o *Audio) GetDBusInfo() dbus.DBusInfo {
@@ -173,8 +176,8 @@ func (audio *Audio) getCards() []*Card {
 		audio.cards[i].Owner_module = int32(audio.pa.cards[i].owner_module)
 		audio.cards[i].NProfiles = int32(audio.pa.cards[i].n_profiles)
 
+		audio.cards[i].Profiles = make([]CardProfileInfo, audio.cards[i].NProfiles)
 		for j := 0; j < int(audio.cards[i].NProfiles); j = j + 1 {
-			audio.cards[i].Profiles = make([]CardProfileInfo, audio.cards[i].NProfiles)
 			audio.cards[i].Profiles[j].Name = C.GoString(&audio.pa.cards[i].profiles[j].name[0])
 			audio.cards[i].Profiles[j].Description = C.GoString(&audio.pa.cards[i].profiles[j].description[0])
 			ret := C.strcmp((*C.char)(&audio.pa.cards[i].active_profile.name[0]),
@@ -210,6 +213,7 @@ func (audio *Audio) getsinks() []*Sink {
 				*((*uint32)(unsafe.Pointer(&audio.pa.sinks[i].volume.values[j])))
 		}
 		sinks[i].NPorts = int32(audio.pa.sinks[i].n_ports)
+		sinks[i].Ports = make([]SinkPortInfo, sinks[i].NPorts)
 		for j := 0; j < int(sinks[i].NPorts); j = j + 1 {
 			sinks[i].Ports[j].Available = int32(audio.pa.sinks[i].ports[j].available)
 			sinks[i].Ports[j].Name = C.GoString(&audio.pa.sinks[i].ports[j].name[0])
@@ -231,7 +235,7 @@ func (audio *Audio) GetSinks() []*Sink {
 	return audio.getsinks()
 }
 
-func (audio *Audio) getSource() []*Source {
+func (audio *Audio) getSources() []*Source {
 	C.pa_get_device_list(audio.pa)
 	n := int(audio.pa.n_sources)
 	sources := make([]*Source, n)
@@ -252,12 +256,13 @@ func (audio *Audio) getSource() []*Source {
 
 		sources[i].NPorts = int32(audio.pa.sources[i].n_ports)
 
+		sources[i].Ports = make([]SourcePortInfo, sources[i].NPorts)
 		for j := 0; j < int(sources[i].NPorts); j = j + 1 {
 			sources[i].Ports[j].Available = int32(audio.pa.sources[i].ports[j].available)
 			sources[i].Ports[j].Name = C.GoString(&audio.pa.sources[i].ports[j].name[0])
 			sources[i].Ports[j].Description = C.GoString(&audio.pa.sources[i].ports[j].description[0])
 			ret := C.strcmp(&audio.pa.sinks[i].ports[j].name[0],
-				&audio.pa.sinks[i].active_port.name[0])
+				&audio.pa.sources[i].active_port.name[0])
 			if ret == 0 {
 				sources[i].ActivePort = &sources[i].Ports[j]
 			}
@@ -267,7 +272,7 @@ func (audio *Audio) getSource() []*Source {
 }
 
 func (audio *Audio) GetSources() []*Source {
-	return audio.getSource()
+	return audio.getSources()
 }
 
 func (audio *Audio) getSinkInputs() []*SinkInput {
@@ -347,9 +352,8 @@ func (sink *Sink) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (card *Card) GetCardProfile() *CardProfileInfo {
-	fmt.Print("description: " + card.Profiles[2].Description)
-	return &card.Profiles[2]
+func (card *Card) GetCardProfile() []CardProfileInfo {
+	return card.Profiles
 }
 
 func (card *Card) setCardProfile(index int32, port string) int32 {
