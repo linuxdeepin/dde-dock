@@ -2,8 +2,7 @@ package main
 
 import "dlib/dbus"
 import nm "dbus/org/freedesktop/networkmanager"
-
-import "fmt"
+import "log"
 
 type Agent struct {
 	keys map[string]chan string
@@ -18,12 +17,12 @@ func (c *Agent) GetDBusInfo() dbus.DBusInfo {
 }
 
 func (a *Agent) GetSecrets(connection map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath, settingName string, hints []string, flags uint32) map[string]map[string]dbus.Variant {
-	fmt.Println("GetSecrtes:", connectionPath, settingName, hints, flags)
+	log.Println("GetSecrtes:", connectionPath, settingName, hints, flags)
 	r := make(map[string]map[string]dbus.Variant)
 	if uuid, ok := connection[fieldConnection]["uuid"].Value().(string); ok {
 		r["802-11-wireless-security"] = make(map[string]dbus.Variant)
 		_Manager.NeedMoreConfigure(uuid, "PASSWORD")
-		fmt.Println("Begin getsecrtes...", connection[fieldConnection]["id"], uuid)
+		log.Println("Begin getsecrtes...", connection[fieldConnection]["id"], uuid)
 		if _, ok := a.keys[uuid]; !ok {
 			//only wait the key when there is no other GetSecrtes runing with this uuid
 			a.keys[uuid] = make(chan string)
@@ -31,27 +30,30 @@ func (a *Agent) GetSecrets(connection map[string]map[string]dbus.Variant, connec
 			if ok {
 				r["802-11-wireless-security"]["psk"] = dbus.MakeVariant(key)
 			}
-			fmt.Println("End getsecrtes...", connection[fieldConnection]["id"])
+			log.Println("End getsecrtes...", connection[fieldConnection]["id"])
 		}
 	}
 	return r
 }
 
 func (a *Agent) CancelGetSecrtes(connectionPath dbus.ObjectPath, settingName string) {
-	uuid, ok := nm.GetSettingsConnection(string(connectionPath)).GetSettings()[fieldConnection]["uuid"].Value().(string)
-	if ok {
-		close(a.keys[uuid])
-		delete(a.keys, uuid)
+	if setting, err := nm.NewSettingsConnection(connectionPath); err == nil {
+		uuid, ok := setting.GetSettings()[fieldConnection]["uuid"].Value().(string)
+		if ok {
+			close(a.keys[uuid])
+			delete(a.keys, uuid)
+		}
+	} else {
+		log.Println("CancelGetSecrtes Failed:", err)
 	}
-	fmt.Println("CancelGetSecrtes")
 }
 
 func (a *Agent) SaveSecrets(connection map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath) {
-	fmt.Println("SaveSecretes")
+	log.Println("SaveSecretes")
 }
 
 func (a *Agent) DeleteSecrets(connection map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath) {
-	fmt.Println("DeleteSecretes")
+	log.Println("DeleteSecretes")
 }
 
 func (a *Agent) handleNewKeys(uuid string, key string) {
@@ -63,11 +65,15 @@ func (a *Agent) handleNewKeys(uuid string, key string) {
 	}
 }
 
-func NewAgent(identify string) *Agent {
+func newAgent(identify string) *Agent {
 	c := &Agent{}
 	c.keys = make(map[string]chan string)
 	dbus.InstallOnSystem(c)
-	nm.GetAgentManager("/org/freedesktop/NetworkManager/AgentManager").Register("org.snyh.test")
+	manager, err := nm.NewAgentManager("/org/freedesktop/NetworkManager/AgentManager")
+	if err != nil {
+		panic(err)
+	}
+	manager.Register("org.snyh.test")
 	return c
 }
 
