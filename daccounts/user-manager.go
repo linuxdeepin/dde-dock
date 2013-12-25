@@ -69,7 +69,7 @@ func NewAccountUserManager(path dbus.ObjectPath) *User {
 	u := &User{}
 
 	u.objectPath = ConvertPath(string(path))
-	u.userInface = accounts.GetUser(string(path))
+	u.userInface, _ = accounts.NewUser(path)
 
 	GetUserProperties(u)
 	u.userInface.ConnectChanged(func() {

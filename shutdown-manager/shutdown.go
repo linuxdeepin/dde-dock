@@ -19,9 +19,9 @@ const (
 )
 
 var (
-	dShut    = sessionmanager.GetSessionManager("/org/gnome/SessionManager")
-	dConsole = consolekit.GetManager("/org/freedesktop/ConsoleKit/Manager")
-	dPower   = upower.GetUpower("/org/freedesktop/UPower")
+	dShut, _    = sessionmanager.NewSessionManager("/org/gnome/SessionManager")
+	dConsole, _ = consolekit.NewManager("/org/freedesktop/ConsoleKit/Manager")
+	dPower, _   = upower.NewUpower("/org/freedesktop/UPower")
 )
 
 func (m *Manager) GetDBusInfo() dbus.DBusInfo {
