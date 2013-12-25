@@ -135,10 +135,9 @@ func NewAudio() (*Audio, error) {
 			"unable to connect to the pulseaudio server,exiting\n")
 		os.Exit(-1)
 	}
-	audio.cards = audio.getCards()
-	audio.sinks = audio.getsinks()
-	audio.sources = audio.getSources()
-	fmt.Println("module started\n")
+	//audio.cards = audio.getCards()
+	//audio.sinks = audio.getsinks()
+	//audio.sources = audio.getSources()
 	return audio, nil
 }
 
@@ -224,6 +223,9 @@ func (audio *Audio) getsinks() []*Sink {
 				sinks[i].ActivePort = &sinks[i].Ports[j]
 			}
 		}
+		if sinks[i].NPorts == 0 {
+			sinks[i].ActivePort = &SinkPortInfo{"", "", 0}
+		}
 		fmt.Println("Index: " + strconv.Itoa(int((sinks[i].Index))) + " Card:" + strconv.Itoa(int(sinks[i].Card)))
 	}
 
@@ -261,11 +263,14 @@ func (audio *Audio) getSources() []*Source {
 			sources[i].Ports[j].Available = int32(audio.pa.sources[i].ports[j].available)
 			sources[i].Ports[j].Name = C.GoString(&audio.pa.sources[i].ports[j].name[0])
 			sources[i].Ports[j].Description = C.GoString(&audio.pa.sources[i].ports[j].description[0])
-			ret := C.strcmp(&audio.pa.sinks[i].ports[j].name[0],
+			ret := C.strcmp(&audio.pa.sources[i].ports[j].name[0],
 				&audio.pa.sources[i].active_port.name[0])
 			if ret == 0 {
 				sources[i].ActivePort = &sources[i].Ports[j]
 			}
+		}
+		if sources[i].NPorts == 0 {
+			sources[i].ActivePort = &SourcePortInfo{"", "", 0}
 		}
 	}
 	return sources
@@ -471,7 +476,7 @@ func (client *Client) GetDBusInfo() dbus.DBusInfo {
 
 func (card *Card) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		"com.deepin.daemon.Card",
+		"com.deepin.daemon.Audio",
 		"/com/deepin/daemon/Audio/Card" + strconv.FormatInt(int64(card.Index), 10),
 		"com.deepin.daemon.Audio.Card",
 	}
@@ -487,5 +492,16 @@ func main() {
 		os.Exit(-1)
 	}
 	dbus.InstallOnSession(audio)
+	/*for i := 0; i < len(audio.cards); i = i + 1 {
+		dbus.InstallOnSession(audio.cards[i])
+	}
+	for i := 0; i < len(audio.sinks); i = i + 1 {
+		dbus.InstallOnSession(audio.sinks[i])
+	}
+	for i := 0; i < len(audio.sources); i = i + 1 {
+		dbus.InstallOnSession(audio.sources[i])
+	}*/
+	fmt.Println("module started\n")
+	//C.pa_subscribe(audio.pa)
 	select {}
 }
