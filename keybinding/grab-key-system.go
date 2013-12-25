@@ -22,38 +22,15 @@
 package main
 
 import (
-	/*"dlib"*/
-	"dlib/dbus"
-	"github.com/BurntSushi/xgbutil/xevent"
+	"dlib/gio-2.0"
 )
 
-func NewKeyBinding() *Manager {
-	m := &Manager{}
-	m.CustomBindList = GetCustomIdList()
-	m.gsdAccelMap = GetGSDPairs()
-	m.customAccelMap = GetCustomPairs()
-
-	ListenKeyList(m)
-	ListenCustomKey(m)
-	/*ListenGSDKeyChanged(m)*/
-
-	return m
-}
-
-func main() {
-	binding := NewKeyBinding()
-	err := dbus.InstallOnSession(binding)
-	if err != nil {
-		panic("Binding Get Session Bus Connect Failed")
-	}
-
-	kbd := &GrabManager{}
-	err = dbus.InstallOnSession(kbd)
-	if err != nil {
-		panic("kbd Get Session Bus Connect Failed")
-	}
-
-	InitGrabKey()
-
-	xevent.Main(X)
+func ListenGSDKeyChanged(m *Manager) {
+	gsdGSettings.Connect("changed",
+		func(s *gio.Settings, key string) {
+			tmpPairs := GetGSDPairs()
+			BindingKeysPairs(m.gsdAccelMap, false)
+			BindingKeysPairs(tmpPairs, true)
+			m.gsdAccelMap = tmpPairs
+		})
 }

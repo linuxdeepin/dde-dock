@@ -31,20 +31,63 @@ import (
 	"strings"
 )
 
+func InitGrabKey() {
+	var err error
+
+	X, err = xgbutil.NewConn()
+	if err != nil {
+		fmt.Println("Get New Connection Failed:", err)
+		return
+	}
+	keybind.Initialize(X)
+
+	GrabKeyBinds = make(map[*GrabKeyInfo]string)
+
+	BindingKeysPairs(GetCustomPairs(), true)
+	ListenKeyPressEvent()
+	/*BindingKeysPairs(GetGSDPairs(), true)*/
+}
+
+func BindingKeysPairs(accelPairs map[string]string, grab bool) {
+	for k, v := range accelPairs {
+		key := GetXGBShortcut(k)
+		mod, keycodes, _ := keybind.ParseString(X, key)
+		if len(keycodes) <= 0 {
+			continue
+		}
+		keyInfo := NewKeyInfo(mod, keycodes[0])
+		if grab {
+			if GrabKeyPress(X.RootWin(), key) {
+				/*fmt.Println("grab mod:", mod)*/
+				/*fmt.Println("grab keycodes:", keycodes)*/
+				fmt.Println("grab key:", key)
+				GrabKeyBinds[keyInfo] = v
+			}
+		} else {
+			/*fmt.Println("ungrab mod:", mod)*/
+			/*fmt.Println("ungrab keycodes:", keycodes)*/
+			fmt.Println("ungrab key:", key)
+			UngrabKey(X.RootWin(), key)
+			delete(GrabKeyBinds, keyInfo)
+		}
+	}
+}
+
 func GrabKeyPress(wid xproto.Window, shortcut string) bool {
 	if len(shortcut) <= 0 {
+		fmt.Println("grab key args failed...")
 		return false
 	}
 
-	err := keybind.KeyPressFun(
-		func(X *xgbutil.XUtil, ev xevent.KeyPressEvent) {
-			tmpInfo := NewKeyInfo(ev.State, ev.Detail)
-			if ok, v := GetExecAction(tmpInfo); ok {
-				ExecCommand(v)
-			}
-		}).Connect(X, wid, shortcut, true)
+	mod, keys, err := keybind.ParseString(X, shortcut)
 	if err != nil {
-		fmt.Println("Binding key failed:", err)
+		fmt.Printf("grab parse shortcut string failed: %s\n", err)
+		return false
+	}
+
+	err = keybind.GrabChecked(X, wid, mod, keys[0])
+	if err != nil {
+		fmt.Printf("Grab '%s' Failed: %s\n", shortcut, err)
 		return false
 	}
 
@@ -58,13 +101,26 @@ func UngrabKey(wid xproto.Window, shortcut string) bool {
 
 	mod, keys, err := keybind.ParseString(X, shortcut)
 	if err != nil {
-		fmt.Println("Get key info failed:", err)
+		fmt.Printf("ungrab parse shortcut string failed: %s\n", err)
 		return false
 	}
 
 	keybind.Ungrab(X, wid, mod, keys[0])
 
 	return true
+}
+
+func ListenKeyPressEvent() {
+	xevent.KeyPressFun(
+		func(X *xgbutil.XUtil, e xevent.KeyPressEvent) {
+			fmt.Printf("State: %d, Detail: %d\n",
+				e.State, e.Detail)
+			tmpInfo := NewKeyInfo(e.State, e.Detail)
+			if ok, v := GetExecAction(tmpInfo); ok {
+				// 不然按键会阻塞，直到程序推出
+				go ExecCommand(v)
+			}
+		}).Connect(X, X.RootWin())
 }
 
 func ExecCommand(value string) {
@@ -107,7 +163,7 @@ func FormatShortcut(shortcut string) string {
 	l := len(shortcut)
 
 	if l <= 0 {
-		fmt.Println("args null")
+		fmt.Println("format args null")
 		return ""
 	}
 
@@ -152,6 +208,10 @@ func FormatShortcut(shortcut string) string {
 	for i, v := range array {
 		if v == "primary" || v == "control" {
 			if !strings.Contains(value, "control") {
+				if i != 0 {
+					value += "-"
+				}
+
 				value += "control"
 			}
 			continue
@@ -168,15 +228,22 @@ func FormatShortcut(shortcut string) string {
 }
 
 func NewKeyInfo(state uint16, keycode xproto.Keycode) *GrabKeyInfo {
-	return &GrabKeyInfo{State: state, Detail: keycode}
+	mod, key := keybind.DeduceKeyInfo(state, keycode)
+	return &GrabKeyInfo{State: mod, Detail: key}
+}
+
+func CompareKeyInfo(t1, t2 *GrabKeyInfo) bool {
+	if t1.State == t2.State && t1.Detail == t2.Detail {
+		return true
+	}
+
+	return false
 }
 
 func GetExecAction(k1 *GrabKeyInfo) (bool, string) {
 	for k, v := range GrabKeyBinds {
-		if k1.State == k.State || k1.State == (k.State+2) {
-			if k.Detail == k1.Detail {
-				return true, v
-			}
+		if k1.State == k.State && k.Detail == k1.Detail {
+			return true, v
 		}
 	}
 
