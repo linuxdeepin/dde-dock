@@ -28,7 +28,7 @@ import (
 )
 
 type Manager struct {
-	customBindList []int32
+	CustomBindList []int32
 	customAccelMap map[string]string
 	gsdAccelMap    map[string]string
 	/*wmAccelMap     map[string]string*/
@@ -37,7 +37,9 @@ type Manager struct {
 	/*putAccelMap    map[string]string*/
 }
 
-type GrabManager struct{}
+type GrabManager struct {
+	GrabKeyEvent func(string)
+}
 
 type GrabKeyInfo struct {
 	State  uint16
@@ -53,8 +55,8 @@ const (
 	_KEY_BINDING_NAME = "com.deepin.daemon.KeyBinding"
 	_KEY_BINDING_PATH = "/com/deepin/daemon/KeyBinding"
 	_KEY_BINDING_IFC  = "com.deepin.daemon.KeyBinding"
-	_GRAB_KEY_PATH    = "/com/deepin/daemon/GrabKeyManager"
-	_GRAB_KEY_IFC     = "com.deepin.daemon.GrabKeyManager"
+	_GRAB_KEY_PATH    = "/com/deepin/daemon/GrabManager"
+	_GRAB_KEY_IFC     = "com.deepin.daemon.GrabManager"
 
 	_CUSTOM_SCHEMA_ID       = "com.deepin.dde.key-binding"
 	_CUSTOM_SCHEMA_ADD_ID   = "com.deepin.dde.key-binding.custom"
@@ -163,21 +165,17 @@ var currentSystemBindings = map[int32]string{
 }
 
 var gsdMap = map[int32]string{
-	0:   "key1",
-	1:   "key2",
-	2:   "key3",
-	3:   "key4",
-	4:   "key5",
-	5:   "key6",
-	6:   "key7",
-	7:   "key8",
-	8:   "key9",
-	9:   "key10",
-	10:  "key11",
-	621: "switch-windows",
-	622: "switch-windows-backward",
-	800: "prev-key", //switch apps with 3D
-	801: "next-key", //reverse switch apps with 3D
+	0:  "key1",
+	1:  "key2",
+	2:  "key3",
+	3:  "key4",
+	4:  "key5",
+	5:  "key6",
+	6:  "key7",
+	7:  "key8",
+	8:  "key9",
+	9:  "key10",
+	10: "key11",
 }
 
 var mediaMap = map[int32]string{
@@ -196,19 +194,16 @@ var mediaMap = map[int32]string{
 	313: "next",
 }
 
-var windowMap = map[int32]string{
-	600: "activate-window-menu",
+var wmMap = map[int32]string{
+	600: "activate-window-menu", //window
 	601: "begin-move",
 	602: "begin-resize",
 	603: "close",
 	604: "maximize",
 	605: "minimize",
 	606: "toggle-shaded",
-	607: "unmaximize",
-}
-
-var workspaceMap = map[int32]string{
-	608: "switch-to-workspace-1",
+	607: "unmaximize",            //window
+	608: "switch-to-workspace-1", //workspace
 	609: "switch-to-workspace-2",
 	610: "switch-to-workspace-3",
 	611: "switch-to-workspace-4",
@@ -219,7 +214,19 @@ var workspaceMap = map[int32]string{
 	616: "move-to-workspace-down",
 	617: "move-to-workspace-left",
 	618: "move-to-workspace-right",
-	619: "move-to-workspace-up",
+	619: "move-to-workspace-up",    //workspace
+	621: "switch-windows",          // gsd
+	622: "switch-windows-backward", // gsd
+}
+
+//gsd
+var shiftMap = map[int32]string{
+	800: "prev-key", //switch apps with 3D
+	801: "next-key", //reverse switch apps with 3D
+}
+
+//workspace
+var putMap = map[int32]string{
 	900: "put-viewport-1-key", //Move window to workspace 1
 	901: "put-viewport-2-key",
 	902: "put-viewport-3-key",

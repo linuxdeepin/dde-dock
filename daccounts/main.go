@@ -54,7 +54,7 @@ const (
 )
 
 var (
-	_accountInface = accounts.GetAccounts("/org/freedesktop/Accounts")
+	_accountInface, _ = accounts.NewAccounts("/org/freedesktop/Accounts")
 	_userMap       = make(map[dbus.ObjectPath]*User)
 )
 

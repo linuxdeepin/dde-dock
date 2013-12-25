@@ -22,8 +22,8 @@ var (
 	_busConn     *dbus.Conn
 	_dtGSettings = gio.NewSettings(_DATE_TIME_SCHEMA)
 
-	_setDT = setdatetime.GetSetDateTime("/com/deepin/daemon/setdatetime")
-	_gdate = datetimemechanism.GetDateTimeMechanism("/")
+	_setDT, _ = setdatetime.NewSetDateTime("/com/deepin/daemon/setdatetime")
+	_gdate, _ = datetimemechanism.NewDateTimeMechanism("/")
 )
 
 type DateTime struct {

@@ -21,11 +21,16 @@
 
 package main
 
-var _ModifierMap = map[string]string{
-	"caps_lock": "lock",
-	"alt":       "mod1",
-	"meta":      "mod1",
-	"num_lock":  "mod2",
-	"super":     "mod4",
-	"hyper":     "mod4",
+import (
+	"dlib/gio-2.0"
+)
+
+func ListenGSDKeyChanged(m *Manager) {
+	gsdGSettings.Connect("changed",
+		func(s *gio.Settings, key string) {
+			tmpPairs := GetGSDPairs()
+			BindingKeysPairs(m.gsdAccelMap, false)
+			BindingKeysPairs(tmpPairs, true)
+			m.gsdAccelMap = tmpPairs
+		})
 }

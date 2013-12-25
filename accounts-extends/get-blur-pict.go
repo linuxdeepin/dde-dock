@@ -34,6 +34,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"dlib/dbus"
 )
 
 type _BlurResult struct {
@@ -60,6 +61,9 @@ func (blur *AccountExtendsManager) BackgroundBlurPictPath(uid, srcPath string) *
 	if len(srcPath) <= 0 {
 		srcFlag = false
 		srcPath = GetCurrentSrcPath(uid)
+		if len(srcPath) <= 0 {
+			return &_BlurResult{Success: false, PictPath: ""}
+		}
 	}
 	destPath := GenerateDestPath(srcPath, homeDir)
 	if IsFileValid(srcPath, destPath) {
@@ -80,7 +84,11 @@ func (blur *AccountExtendsManager) BackgroundBlurPictPath(uid, srcPath string) *
 
 func GetCurrentSrcPath(uid string) string {
 	userPath := _ACCOUNTS_PATH + uid
-	accountsUser := accounts.GetUser(userPath)
+	accountsUser, err := accounts.NewUser(dbus.ObjectPath(userPath))
+	if err != nil {
+		fmt.Println("New User Failed:", err)
+		return ""
+	}
 	bgPath := accountsUser.BackgroundFile
 	srcPath := bgPath.Get()
 

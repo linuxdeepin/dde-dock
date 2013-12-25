@@ -29,12 +29,13 @@ import (
 
 func NewKeyBinding() *Manager {
 	m := &Manager{}
-	m.customBindList = GetCustomIdList()
+	m.CustomBindList = GetCustomIdList()
 	m.gsdAccelMap = GetGSDPairs()
 	m.customAccelMap = GetCustomPairs()
 
 	ListenKeyList(m)
 	ListenCustomKey(m)
+	/*ListenGSDKeyChanged(m)*/
 
 	return m
 }
@@ -43,12 +44,16 @@ func main() {
 	binding := NewKeyBinding()
 	err := dbus.InstallOnSession(binding)
 	if err != nil {
-		panic("Get Session Bus Connect Failed")
+		panic("Binding Get Session Bus Connect Failed")
+	}
+
+	kbd := &GrabManager{}
+	err = dbus.InstallOnSession(kbd)
+	if err != nil {
+		panic("kbd Get Session Bus Connect Failed")
 	}
 
 	InitGrabKey()
-	/*BindingCustomKeys(GetGSDPairs(), true)*/
+
 	xevent.Main(X)
-	/*go xevent.Main(X)*/
-	/*dlib.StartLoop()*/
 }

@@ -24,6 +24,7 @@ package main
 import (
 	"dlib/gio-2.0"
 	"fmt"
+	"github.com/BurntSushi/xgbutil/keybind"
 	"strconv"
 	"strings"
 )
@@ -78,9 +79,11 @@ func GetCustomPairs() map[string]string {
 	return customPairs
 }
 
-func GetKeyAccelList() map[int32]string {
-	accelList := make(map[int32]string)
+func GetKeyAccelList() map[int32]*GrabKeyInfo {
+	accelList := make(map[int32]*GrabKeyInfo)
 
+	value := ""
+	flag := false
 	for k, _ := range currentSystemBindings {
 		/*else if k >= 300 && k < 600 {
 			values := MediaGetValue(k)
@@ -90,21 +93,51 @@ func GetKeyAccelList() map[int32]string {
 			values := GSDGetValue(k)
 			strArray := strings.Split(values, ";")
 			if len(strArray) == 2 {
-				accelList[k] = FormatShortcut(strArray[1])
+				value = strArray[1]
+				flag = true
 			}
 		} else if k >= 600 && k < 800 {
-			values := WMGetValue(k)
-			accelList[k] = FormatShortcut(values)
+			value = WMGetValue(k)
+			flag = true
 		} else if k >= 800 && k < 900 {
-			values := CompizShiftValue(k)
-			accelList[k] = FormatShortcut(values)
+			value = CompizShiftValue(k)
+			flag = true
 		} else if k >= 900 && k < 1000 {
-			values := CompizPutValue(k)
-			accelList[k] = FormatShortcut(values)
+			value = CompizPutValue(k)
+			flag = true
+		}
+		if flag {
+			flag = false
+			tmp := GenericKeyInfo(value)
+			if tmp == nil {
+				continue
+			}
+			accelList[k] = tmp
 		}
 	}
 
+	customList := GetCustomIdList()
+	for _, k := range customList {
+		value = GetCustomValue(k, _CUSTOM_KEY_SHORTCUT)
+		tmp := GenericKeyInfo(value)
+		if tmp == nil {
+			continue
+		}
+		accelList[k] = tmp
+	}
+
 	return accelList
+}
+
+func GenericKeyInfo(shortcut string) *GrabKeyInfo {
+	tmp1 := FormatShortcut(strings.ToLower(shortcut))
+	tmp2 := GetXGBShortcut(tmp1)
+	mod, keys, _ := keybind.ParseString(X, tmp2)
+	if len(keys) <= 0 {
+		return nil
+	}
+
+	return NewKeyInfo(mod, keys[0])
 }
 
 func GetCustomIdList() []int32 {
@@ -124,7 +157,7 @@ func GetCustomIdList() []int32 {
 }
 
 func GSDGetValue(id int32) string {
-	if id >= 0 && id < 300 {
+	if _, ok := gsdMap[id]; ok {
 		keyName := currentSystemBindings[id]
 
 		return gsdGSettings.GetString(keyName)
@@ -134,7 +167,7 @@ func GSDGetValue(id int32) string {
 }
 
 func MediaGetValue(id int32) string {
-	if id >= 300 && id < 600 {
+	if _, ok := mediaMap[id]; ok {
 		keyName := currentSystemBindings[id]
 
 		return mediaGSettings.GetString(keyName)
@@ -144,7 +177,7 @@ func MediaGetValue(id int32) string {
 }
 
 func WMGetValue(id int32) string {
-	if id >= 600 && id < 800 {
+	if _, ok := wmMap[id]; ok {
 		keyName := currentSystemBindings[id]
 
 		values := wmGSettings.GetStrv(keyName)
@@ -160,7 +193,7 @@ func WMGetValue(id int32) string {
 }
 
 func CompizShiftValue(id int32) string {
-	if id >= 800 && id < 900 {
+	if _, ok := shiftMap[id]; ok {
 		keyName := currentSystemBindings[id]
 		values := shiftGSettings.GetString(keyName)
 
@@ -171,7 +204,7 @@ func CompizShiftValue(id int32) string {
 }
 
 func CompizPutValue(id int32) string {
-	if id >= 900 && id < 1000 {
+	if _, ok := putMap[id]; ok {
 		keyName := currentSystemBindings[id]
 		values := putGSettings.GetString(keyName)
 
