@@ -1,9 +1,8 @@
 package main
 
-// #cgo pkg-config: glib-2.0 gdk-3.0
-// #include "get-devices.h"
+// #cgo pkg-config: x11 xi glib-2.0
+// #include "list-devices-info.h"
 // #include <stdlib.h>
-// #include <gdk/gdk.h>
 import "C"
 import (
 	"dlib"
@@ -29,9 +28,9 @@ func main() {
 			tpadFlag = true
 		}
 	} else {
-		t := C.CString("TouchPad")
+		t := C.CString("TOUCHPAD")
 		defer C.free(unsafe.Pointer(t))
-		if C.DeviceIsExist(t) == 1 {
+		if C.find_device_by_name(t) == 1 {
 			tpadFlag = true
 		}
 	}
