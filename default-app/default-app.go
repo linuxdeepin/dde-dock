@@ -18,7 +18,7 @@ type AppInfo struct {
 }
 
 const (
-	_TERMINAL_SCHEMA = "org.gnome.desktop.default-applications.terminal"
+	_TERMINAL_SCHEMA = "com.deepin.desktop.default-applications.terminal"
 	_DESKTOP_PATH    = "/usr/share/applications/"
 
 	_TERMINAL_EMULATOR   = "TerminalEmulator"
@@ -92,7 +92,11 @@ func (dapp *DefaultApps) SetDefaultAppViaType(typeName, appID string) bool {
 			return false
 		}
 
-		return _TerminalGSettings.SetString("exec", appInfo.Exec)
+		if _TerminalGSettings.SetString("exec", appInfo.Exec) {
+			gio.SettingsSync()
+			return true
+		}
+		return false
 	}
 
 	gio.AppInfoResetTypeAssociations(typeName)
