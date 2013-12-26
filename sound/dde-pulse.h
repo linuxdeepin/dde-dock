@@ -213,19 +213,19 @@ void pa_state_cb(pa_context *c,void *userdata);
 void pa_context_subscribe_cb(pa_context *c, pa_subscription_event_type_t t,
         uint32_t index, void *userdata);
 void pa_get_serverinfo_cb(pa_context *c, const pa_server_info*i, void *userdata);
-void pa_get_cards_cb(pa_context *c, const pa_card_info*i, int eol, void *userdata);
-void pa_get_sinklist_cb(pa_context *c, const pa_sink_info *l, int eol, void *userdata);
+void pa_card_info_cb(pa_context *c, const pa_card_info*i, int eol, void *userdata);
+void pa_sink_info_cb(pa_context *c, const pa_sink_info *l, int eol, void *userdata);
 void pa_get_sink_volume_cb(pa_context *c, const pa_sink_info *i, int eol, void *userdata);
-void pa_get_sourcelist_cb(pa_context *c, const pa_source_info *l,
+void pa_source_info_cb(pa_context *c, const pa_source_info *l,
                           int eol, void *userdata);
 void pa_get_source_volume_cb(pa_context *c,const pa_source_info *l,int eol,void *userdata);
-void pa_get_clientlist_cb(pa_context *c, const pa_client_info*i,
+void pa_get_client_info_cb(pa_context *c, const pa_client_info*i,
                           int eol, void *userdata);
 void pa_client_info_cb(pa_context *c,
                               const pa_client_info *i,
                               int eol,
                               void *userdata);
-void pa_get_sink_input_list_cb(pa_context *c,const pa_sink_input_info *i,
+void pa_get_sink_input_info_cb(pa_context *c,const pa_sink_input_info *i,
                                int eol,void *userdata);
 void pa_get_sink_input_info_cb(pa_context *c, const pa_sink_input_info *i, int eol, void *userdata);
 void pa_sink_info_cb(pa_context *c,
@@ -233,7 +233,7 @@ void pa_sink_info_cb(pa_context *c,
                        int eol,
                        void *userdata);
 void pa_get_sink_input_volume_cb(pa_context *c, const pa_sink_input_info *i, int eol, void *userdata);
-void pa_get_source_output_list_cb(pa_context *c, const pa_source_output_info *i, int eol, void *userdata);
+void pa_get_source_output_info_cb(pa_context *c, const pa_source_output_info *i, int eol, void *userdata);
 void pa_get_source_output_volume_cb(pa_context *c, const pa_source_output_info *o,int eol,void *userdata);
 
 
