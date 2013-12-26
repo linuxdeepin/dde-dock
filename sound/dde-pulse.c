@@ -356,6 +356,7 @@ void *pa_get_card_list(pa *self)
             {
                 pa_operation_unref(self->pa_op);
                 self->pa_op = NULL;
+                /*self->pa_ready = 0;*/
                 return NULL;
             }
             break;
