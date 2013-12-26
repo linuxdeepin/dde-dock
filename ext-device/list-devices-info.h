@@ -19,11 +19,16 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-#ifndef __TEST_H__
-#define __TEST_H__
+#ifndef __LIST_DEVICES_INFO_H__
+#define __LIST_DEVICES_INFO_H__
 
+#include <X11/Xlib.h>
+#include <X11/extensions/XInput.h>
+#ifdef HAVE_XI2
+#include <X11/extensions/XInput2.h>
+#endif
 #include <glib.h>
 
-int DeviceIsExist (const char *deviceName);
+int find_device_by_name (char *name);
 
 #endif
