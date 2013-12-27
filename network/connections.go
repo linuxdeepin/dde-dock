@@ -145,7 +145,6 @@ func (this *Manager) GetConnectionByAccessPoint(path dbus.ObjectPath) (*Connecti
 		fmt.Println("CCC:", path, string(ap.Ssid.Get()))
 		return newWirelessConnection(string(ap.Ssid.Get()), string(ap.Ssid.Get()), parseFlags(ap.Flags.Get(), ap.WpaFlags.Get(), ap.RsnFlags.Get())), nil
 	} else {
-		fmt.Println("AccessPoint is invalid!")
 		return nil, dbus.NewNoObjectError(path)
 	}
 }

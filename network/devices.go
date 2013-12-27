@@ -3,7 +3,6 @@ package main
 import nm "dbus/org/freedesktop/networkmanager"
 import "dlib/dbus"
 import "fmt"
-import "log"
 
 type AccessPoint struct {
 	Ssid     string
@@ -22,15 +21,20 @@ func NewDevice(core *nm.Device) *Device {
 	return &Device{core.Path, core.State.Get()}
 }
 
-func (this *Manager) DisconnectDevice(path dbus.ObjectPath) {
+func (this *Manager) DisconnectDevice(path dbus.ObjectPath) error {
 	if dev, err := nm.NewDevice(path); err == nil {
 		dev.Disconnect()
 		nm.DestroyDevice(dev)
+		return nil
+	} else {
+		return err
 	}
 }
 
-func (this *Manager) ActiveWiredDevice(active bool, path dbus.ObjectPath) {
-	if dev, err := nm.NewDevice(path); err == nil {
+func (this *Manager) ActiveWiredDevice(active bool, path dbus.ObjectPath) error {
+	if dev, err := nm.NewDevice(path); err != nil {
+		return err
+	} else {
 		if active && dev.State.Get() == NM_DEVICE_STATE_DISCONNECTED {
 			for _, c := range dev.AvailableConnections.Get() {
 				_NMManager.ActivateConnection(c, path, dbus.ObjectPath("/"))
@@ -39,6 +43,7 @@ func (this *Manager) ActiveWiredDevice(active bool, path dbus.ObjectPath) {
 			dev.Disconnect()
 		}
 		nm.DestroyDevice(dev)
+		return nil
 	}
 }
 
@@ -96,7 +101,6 @@ func (this *Manager) addWirelessDevice(path dbus.ObjectPath) {
 		dbus.NotifyChange(this, "WirelessDevices")
 		dbus.NotifyChange(this, "WirelessDevices")
 	})
-	this.GetAccessPoints(path)
 }
 
 func (this *Manager) handleDeviceChanged(operation int32, path dbus.ObjectPath) {
@@ -159,13 +163,12 @@ func parseFlags(flags, wpaFlags, rsnFlags uint32) int {
 	return r
 }
 
-func (this *Manager) GetAccessPoints(path dbus.ObjectPath) []AccessPoint {
+func (this *Manager) GetAccessPoints(path dbus.ObjectPath) ([]AccessPoint, error) {
 	aps := make([]AccessPoint, 0)
 	if dev, err := nm.NewDeviceWireless(path); err == nil {
 		nmAps, err := dev.GetAccessPoints()
 		if err != nil {
-			log.Println(err)
-			return aps
+			return nil, err
 		}
 		for _, apPath := range nmAps {
 			if ap, err := nm.NewAccessPoint(apPath); err == nil {
@@ -178,8 +181,10 @@ func (this *Manager) GetAccessPoints(path dbus.ObjectPath) []AccessPoint {
 				})
 			}
 		}
+		return aps, nil
+	} else {
+		return nil, err
 	}
-	return aps
 }
 
 func (this *Manager) getDeviceAddress(devPath dbus.ObjectPath, devType uint32) string {
@@ -202,10 +207,12 @@ func (this *Manager) getDeviceAddress(devPath dbus.ObjectPath, devType uint32) s
 	return ""
 }
 
-func (this *Manager) ActiveAccessPoint(dev dbus.ObjectPath, ap dbus.ObjectPath) {
+func (this *Manager) ActiveAccessPoint(dev dbus.ObjectPath, ap dbus.ObjectPath) error {
 	con, err := this.GetConnectionByAccessPoint(ap)
-	if err == nil {
-		fmt.Println("DEV:", dev, "AP:", ap, "CON:", con.Path)
-		_NMManager.ActivateConnection(con.Path, dev, ap)
+	if err != nil {
+		return err
 	}
+	fmt.Println("DEV:", dev, "AP:", ap, "CON:", con.Path)
+	_NMManager.ActivateConnection(con.Path, dev, ap)
+	return nil
 }
