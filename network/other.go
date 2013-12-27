@@ -18,8 +18,11 @@ func parseIP4address(v uint32) string {
 	return fmt.Sprintf("%d.%d.%d.%d", byte(v), byte(v>>8), byte(v>>16), byte(v>>24))
 }
 
-func parseDHCP4(path dbus.ObjectPath) (string,string,string) {
-	dhcp4 := nm.GetDHCP4Config(string(path))
+func parseDHCP4(path dbus.ObjectPath) (string, string, string) {
+	dhcp4, err := nm.NewDHCP4Config(path)
+	if err != nil {
+		panic(err)
+	}
 	options := dhcp4.Options.Get()
 	route, _ := options["routers"].Value().(string)
 	ip, _ := options["ip_address"].Value().(string)
