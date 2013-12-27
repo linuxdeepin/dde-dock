@@ -3,6 +3,7 @@ package main
 import nm "dbus/org/freedesktop/networkmanager"
 import "dlib/dbus"
 import "fmt"
+import "log"
 
 type AccessPoint struct {
 	Ssid     string
@@ -48,7 +49,11 @@ func (this *Manager) initDeviceManage() {
 	_NMManager.ConnectDeviceRemoved(func(path dbus.ObjectPath) {
 		this.handleDeviceChanged(OpRemoved, path)
 	})
-	for _, p := range _NMManager.GetDevices() {
+	devs, err := _NMManager.GetDevices()
+	if err != nil {
+		panic(err)
+	}
+	for _, p := range devs {
 		this.handleDeviceChanged(OpAdded, p)
 	}
 }
@@ -157,7 +162,12 @@ func parseFlags(flags, wpaFlags, rsnFlags uint32) int {
 func (this *Manager) GetAccessPoints(path dbus.ObjectPath) []AccessPoint {
 	aps := make([]AccessPoint, 0)
 	if dev, err := nm.NewDeviceWireless(path); err == nil {
-		for _, apPath := range dev.GetAccessPoints() {
+		nmAps, err := dev.GetAccessPoints()
+		if err != nil {
+			log.Println(err)
+			return aps
+		}
+		for _, apPath := range nmAps {
 			if ap, err := nm.NewAccessPoint(apPath); err == nil {
 				actived := dev.ActiveAccessPoint.Get() == apPath
 				aps = append(aps, AccessPoint{string(ap.Ssid.Get()),

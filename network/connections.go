@@ -20,7 +20,11 @@ func (this *Manager) initConnectionManage() {
 	this.WiredConnections = make([]*Connection, 0)
 	this.WirelessConnections = make([]*Connection, 0)
 
-	for _, c := range _NMSettings.ListConnections() {
+	conns, err := _NMSettings.ListConnections()
+	if err != nil {
+		panic(err)
+	}
+	for _, c := range conns {
 		this.handleConnectionChanged(OpAdded, c)
 	}
 	_NMSettings.ConnectNewConnection(func(path dbus.ObjectPath) {
@@ -78,12 +82,15 @@ func (this *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPa
 
 func NewConnection(core *nm.SettingsConnection) *Connection {
 	c := &Connection{}
-	settings := core.GetSettings()
+	settings, err := core.GetSettings()
+	if err != nil {
+		return c
+	}
 	c.Path = core.Path
 	c.Name = settings["connection"]["id"].Value().(string)
 	c.Uuid = settings["connection"]["uuid"].Value().(string)
 	c.ConnectionType = settings["connection"]["type"].Value().(string)
-	c.Data = core.GetSettings()
+	c.Data, err = core.GetSettings()
 	return c
 }
 
@@ -120,33 +127,33 @@ func newWirelessConnection(id string, ssid string, keyFlag int) *Connection {
 
 	data[fieldIPv6]["method"] = dbus.MakeVariant("auto")
 
-	core, err := nm.NewSettingsConnection(_NMSettings.AddConnection(data))
+	newConn, err := _NMSettings.AddConnection(data)
+	core, err := nm.NewSettingsConnection(newConn)
 	if err != nil {
 		panic(err)
 	}
 	return &Connection{data, core.Path, uuid, id, fieldWireless}
 }
 
-func (this *Manager) GetConnectionByAccessPoint(path dbus.ObjectPath) (*Connection, *dbus.Error) {
-	ap, _ := nm.NewAccessPoint(path)
-	id := string(ap.Ssid.Get())
-	if id != "" {
+func (this *Manager) GetConnectionByAccessPoint(path dbus.ObjectPath) (*Connection, error) {
+	if ap, err := nm.NewAccessPoint(path); err == nil {
 		for _, c := range this.WirelessConnections {
 			if c.ConnectionType == fieldWireless && string(c.Data[fieldWireless]["ssid"].Value().([]uint8)) == string(ap.Ssid.Get()) {
 				return c, nil
 			}
 		}
 		fmt.Println("CCC:", path, string(ap.Ssid.Get()))
+		return newWirelessConnection(string(ap.Ssid.Get()), string(ap.Ssid.Get()), parseFlags(ap.Flags.Get(), ap.WpaFlags.Get(), ap.RsnFlags.Get())), nil
 	} else {
-		return nil, &dbus.Error{}
+		fmt.Println("AccessPoint is invalid!")
+		return nil, dbus.NewNoObjectError(path)
 	}
-	return newWirelessConnection(string(ap.Ssid.Get()), string(ap.Ssid.Get()), parseFlags(ap.Flags.Get(), ap.WpaFlags.Get(), ap.RsnFlags.Get())), nil
 }
 
-func (this *Manager) GetActiveConnection(devPath dbus.ObjectPath) ActiveConnection {
-	dev, _ := nm.NewDevice(devPath)
-	if string(dev.ActiveConnection.Get()) == "/" {
-		return ActiveConnection{}
+func (this *Manager) GetActiveConnection(devPath dbus.ObjectPath) (ActiveConnection, error) {
+	dev, err := nm.NewDevice(devPath)
+	if err != nil {
+		return ActiveConnection{}, err
 	}
 	ac, _ := nm.NewActiveConnection(dev.ActiveConnection.Get())
 	name := ""
@@ -182,7 +189,7 @@ func (this *Manager) GetActiveConnection(devPath dbus.ObjectPath) ActiveConnecti
 		SubnetMask:   mask,
 		RouteAddress: route,
 		Speed:        speed,
-	}
+	}, nil
 }
 
 func (this *Manager) UpdateConnection(data map[string]map[string]string) {
