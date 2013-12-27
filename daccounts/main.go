@@ -81,7 +81,7 @@ func main() {
 		fmt.Println("Install Manager DBus Failed")
 		panic(err)
 	}
-	userList := _accountInface.ListCachedUsers()
+	userList, _ := _accountInface.ListCachedUsers()
 	for _, v := range userList {
 		NewAccountUserManager(v)
 	}

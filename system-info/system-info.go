@@ -152,7 +152,7 @@ func GetSystemType() (sysType int64) {
 func GetDiskCap() (diskCap uint64) {
 	driList := []dbus.ObjectPath{}
 	obj, _ := udisks2.NewObjectManager("/org/freedesktop/UDisks2")
-	managers := obj.GetManagedObjects()
+	managers, _ := obj.GetManagedObjects()
 
 	for _, value := range managers {
 		if _, ok := value["org.freedesktop.UDisks2.Block"]; ok {

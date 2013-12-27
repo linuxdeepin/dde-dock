@@ -32,7 +32,7 @@ const (
 )
 
 func (m *Manager) ListCachedUsers() []string {
-	objects := _accountInface.ListCachedUsers()
+	objects, _ := _accountInface.ListCachedUsers()
 
 	userList := []string{}
 	for _, v := range objects {
@@ -44,7 +44,7 @@ func (m *Manager) ListCachedUsers() []string {
 }
 
 func (m *Manager) CreateUser(name, fullname string, accountType int32) string {
-	path := _accountInface.CreateUser(name, fullname, accountType)
+	path, _ := _accountInface.CreateUser(name, fullname, accountType)
 
 	userPath := ConvertPath(string(path))
 	if strings.Contains(userPath, _USER_VALID_PATH) {
