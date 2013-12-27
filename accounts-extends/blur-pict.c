@@ -25,6 +25,7 @@
 #include <glib.h>
 #include <glib/gstdio.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
+#include "gaussianiir2d.h"
 #include "blur-pict.h"
 
 #define	BG_BLUR_PICT_CACHE_DIR	"gaussian-background"
@@ -34,8 +35,7 @@
 static time_t get_file_mtime (const char *file);
 
 int
-generate_blur_pict (const char *src_path, const char *dest_path,
-                    double sigma, long numsteps)
+generate_blur_pict (const char *src_path, const char *dest_path)
 {
     GError *error = NULL;
     GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file (src_path, &error);
@@ -54,7 +54,7 @@ generate_blur_pict (const char *src_path, const char *dest_path,
 
     clock_t start = clock ();
     gaussianiir2d_pixbuf_c(image_data, width, height,
-                           rowstride, n_channels, sigma, numsteps);
+                           rowstride, n_channels, 15, 15);
     clock_t end = clock ();
     g_debug ("time : %f", (end - start) / (float)CLOCKS_PER_SEC);
 
@@ -89,7 +89,7 @@ generate_blur_pict (const char *src_path, const char *dest_path,
     g_free (src_uri_bs64);
 
     if (saved_ok) {
-        g_chmod (tmp_path, 0600);
+        g_chmod (tmp_path, 0664);
         g_rename (tmp_path, dest_path);
     } else {
         g_debug ("save pixbuf failed: %s", error->message);

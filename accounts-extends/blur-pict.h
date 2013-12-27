@@ -22,8 +22,7 @@
 #ifndef __BLUR_PICT_H__
 #define __BLUR_PICT_H__
 
-int generate_blur_pict (const char *src_path, const char *dest_path, 
-		double sigma, long numsteps);
+int generate_blur_pict (const char *src_path, const char *dest_path);
 int blur_pict_is_valid (const char *src_path, const char *dest_path);
 
 #endif
