@@ -15,7 +15,7 @@ type Grub2Settings struct {
 	simple_parser *SimpleParser
 }
 
-func NewGrub2Settings () *Grub2Settings {
+func NewGrub2Settings() *Grub2Settings {
 	settings := &Grub2Settings{}
 	settings.simple_parser = &SimpleParser{}
 	return settings
@@ -33,6 +33,8 @@ func main() {
 	grub := NewGrub2Settings()
 	grub.simple_parser.Parse()
 	fmt.Println(grub.simple_parser.timeout)
+	fmt.Println(grub.simple_parser.resolution)
+	fmt.Println(grub.simple_parser.theme)
 	err := dbus.InstallOnSession(grub)
 	if err != nil {
 		panic(err)
