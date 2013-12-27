@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type = Application
+Exec = /usr/lib/deepin-daemon/keybinding &
+Terminal=false
+Hidden = false
+Name = keybinding
+Comment = keybind daemon
+X-GNOME-Autostart-enabled = true
