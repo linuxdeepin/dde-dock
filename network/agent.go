@@ -38,10 +38,15 @@ func (a *Agent) GetSecrets(connection map[string]map[string]dbus.Variant, connec
 
 func (a *Agent) CancelGetSecrtes(connectionPath dbus.ObjectPath, settingName string) {
 	if setting, err := nm.NewSettingsConnection(connectionPath); err == nil {
-		uuid, ok := setting.GetSettings()[fieldConnection]["uuid"].Value().(string)
-		if ok {
-			close(a.keys[uuid])
-			delete(a.keys, uuid)
+		s, err := setting.GetSettings()
+		if err == nil {
+			uuid, ok := s[fieldConnection]["uuid"].Value().(string)
+			if ok {
+				close(a.keys[uuid])
+				delete(a.keys, uuid)
+			}
+		} else {
+			log.Println("CancelGetSecrtes Error:", err)
 		}
 	} else {
 		log.Println("CancelGetSecrtes Failed:", err)
