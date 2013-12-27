@@ -16,9 +16,9 @@ const (
 )
 
 var (
-	_NMManager  = nm.GetManager("/org/freedesktop/NetworkManager")
-	_NMSettings = nm.GetSettings("/org/freedesktop/NetworkManager/Settings")
-	_Manager    = _NewManager()
+	_NMManager, _  = nm.NewManager("/org/freedesktop/NetworkManager")
+	_NMSettings, _ = nm.NewSettings("/org/freedesktop/NetworkManager/Settings")
+	_Manager       = _NewManager()
 )
 
 type Manager struct {
@@ -58,7 +58,7 @@ func (this *Manager) initManager() {
 func _NewManager() (m *Manager) {
 	this := &Manager{}
 	this.initManager()
-	this.agent = NewAgent("org.snyh.agent")
+	this.agent = newAgent("org.snyh.agent")
 	return this
 }
 

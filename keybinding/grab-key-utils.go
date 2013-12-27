@@ -45,13 +45,26 @@ func InitGrabKey() {
 
 	BindingKeysPairs(GetCustomPairs(), true)
 	ListenKeyPressEvent()
-	/*BindingKeysPairs(GetGSDPairs(), true)*/
+	BindingKeysPairs(GetGSDPairs(), true)
 }
 
 func BindingKeysPairs(accelPairs map[string]string, grab bool) {
 	for k, v := range accelPairs {
+		/*fmt.Printf("Binding Pairs: key -- %s, value -- %s\n", k, v)*/
+		if k == "super" {
+			if grab {
+				GrabXRecordKey("Super_L", v)
+				GrabXRecordKey("Super_R", v)
+			} else {
+				UngrabXRecordKey("Super_L")
+				UngrabXRecordKey("Super_R")
+			}
+			continue
+		}
+
 		key := GetXGBShortcut(k)
 		mod, keycodes, _ := keybind.ParseString(X, key)
+		/*fmt.Printf("grab mod: %d, key: %d\n", mod, keycodes[0])*/
 		if len(keycodes) <= 0 {
 			continue
 		}
@@ -124,8 +137,24 @@ func ListenKeyPressEvent() {
 }
 
 func ExecCommand(value string) {
-	cmd := exec.Command(value)
-	cmd.Run()
+	var cmd *exec.Cmd
+	vals := strings.Split(value, " ")
+	l := len(vals)
+
+	if l > 0 {
+		args := []string{}
+		for i := 1; i < l; i++ {
+			args = append(args, vals[i])
+		}
+		/*fmt.Println("args: ", args)*/
+		cmd = exec.Command(vals[0], args...)
+	} else {
+		cmd = exec.Command(value)
+	}
+	_, err := cmd.Output()
+	if err != nil {
+		fmt.Println("Exec command failed:", err)
+	}
 }
 
 func GetXGBShortcut(shortcut string) string {
