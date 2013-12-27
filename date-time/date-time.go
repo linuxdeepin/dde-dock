@@ -37,12 +37,12 @@ func (date *DateTime) GetDBusInfo() dbus.DBusInfo {
 }
 
 func (date *DateTime) SetDate(d string) bool {
-	ret := _setDT.SetCurrentDate(d)
+	ret, _ := _setDT.SetCurrentDate(d)
 	return ret
 }
 
 func (date *DateTime) SetTime(t string) bool {
-	ret := _setDT.SetCurrentTime(t)
+	ret, _ := _setDT.SetCurrentTime(t)
 	return ret
 }
 
@@ -56,17 +56,17 @@ func (date *DateTime) SetAutoSetTime(auto bool) bool {
 	var ret bool
 	if auto {
 		date.AutoSetTime = true
-		ret = _setDT.SetNtpUsing(true)
+		ret, _ = _setDT.SetNtpUsing(true)
 	} else {
 		date.AutoSetTime = false
-		ret = _setDT.SetNtpUsing(false)
+		ret, _ = _setDT.SetNtpUsing(false)
 	}
 	dbus.NotifyChange(date, "AutoSetTime")
 	return ret
 }
 
 func (date *DateTime) SyncNtpTime() bool {
-	ret := _setDT.SyncNtpTime()
+	ret, _ := _setDT.SyncNtpTime()
 	return ret
 }
 
@@ -74,7 +74,7 @@ func NewDateAndTime() *DateTime {
 	dt := &DateTime{}
 
 	dt.Use24HourDisplay = property.NewGSettingsBoolProperty(dt, "Use24HourDisplay", _dtGSettings, "is-24hour")
-	dt.CurrentTimeZone = _gdate.GetTimezone()
+	dt.CurrentTimeZone, _ = _gdate.GetTimezone()
 
 	dt.AutoSetTime = _dtGSettings.GetBoolean("is-auto-set")
 	_dtGSettings.Connect("changed::is-auto-set", func(s *gio.Settings, name string) {

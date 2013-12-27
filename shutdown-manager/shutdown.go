@@ -105,7 +105,8 @@ func (m *Manager) RequestSuspend() {
 }
 
 func (m *Manager) CanHibernate() bool {
-	return dPower.HibernateAllowed()
+	ok, _ := dPower.HibernateAllowed()
+	return ok
 }
 
 func (m *Manager) RequestHibernate() {
@@ -130,7 +131,8 @@ func ExecCommand(cmd string) {
 }
 
 func IsInhibited(action uint32) bool {
-	return dShut.IsInhibited(action)
+	ok, _:= dShut.IsInhibited(action)
+	return ok
 }
 
 func main() {
