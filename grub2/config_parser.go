@@ -3,6 +3,7 @@ package main
 import (
 	"io/ioutil"
 	"regexp"
+	"strconv"
 )
 
 const (
@@ -19,16 +20,20 @@ func NewSimpleParser() *SimpleParser {
 	return &SimpleParser {}
 }
 
-func (sp *SimpleParser) Parse(path string) (*SimpleParser, error) {
-	file_content, err := ioutil.ReadFile(path)
+func (sp *SimpleParser) Parse() (error) {
+	file_content, err := ioutil.ReadFile(_SIMPLE_CONFIG_PATH)
 	if (err != nil) {
-		return sp, err
+		return err
 	}
-	timeout_pattern := regexp.MustCompile(_TIMEOUT_REGEX)
-	matches := timeout_pattern.FindStringSubmatch(file_content)
-	if matches.len = 0 {
-		sp.timeout = matches[0]
+	timeout_pattern := regexp.MustCompile(_TIMEOUT_REGEXP)
+	matches := timeout_pattern.FindStringSubmatch(string(file_content))
+	if len(matches) == 0 {
+		timeout, err := strconv.Atoi(matches[0])
+		sp.timeout = int32(timeout)
+		if (err != nil) {
+			return err
+		}
 	}
 	
-	return sp
+	return nil
 }
