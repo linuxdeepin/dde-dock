@@ -81,7 +81,7 @@ func NewPower() (*Power, error) {
 		println("WARNING:UPower not provided by dbus\n")
 	} else {
 		println("enumerating devices\n")
-		devices := power.upower.EnumerateDevices()
+		devices, _ := power.upower.EnumerateDevices()
 		paths := getUpowerDeviceObjectPath(devices)
 		println(paths)
 		if len(paths) >= 1 {
@@ -165,7 +165,7 @@ func (power *Power) EnumerateDevices() []dbus.ObjectPath {
 	if power.upower == nil {
 		println("WARNING:Upower object it nil\n")
 	}
-	devices := power.upower.EnumerateDevices()
+	devices, _ := power.upower.EnumerateDevices()
 	for _, v := range devices {
 		println(v)
 	}
