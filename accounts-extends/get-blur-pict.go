@@ -31,10 +31,10 @@ import "unsafe"
 import (
 	"crypto/md5"
 	"dbus/org/freedesktop/accounts"
+	"dlib/dbus"
 	"fmt"
 	"os"
 	"strconv"
-	"dlib/dbus"
 )
 
 type _BlurResult struct {
@@ -122,7 +122,7 @@ func GenerateBlurPict(srcPath, destPath string) bool {
 	dest := C.CString(destPath)
 	defer C.free(unsafe.Pointer(dest))
 
-	is_ok := C.generate_blur_pict(src, dest, C.double(10), C.long(10))
+	is_ok := C.generate_blur_pict(src, dest)
 	if is_ok == 0 {
 		fmt.Println("generate gaussian picture failed")
 		return false

@@ -19,10 +19,17 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-#ifndef __BLUR_PICT_H__
-#define __BLUR_PICT_H__
+#ifndef __GRAB_XRECORD_H__
+#define __GRAB_XRECORD_H__
 
-int generate_blur_pict (const char *src_path, const char *dest_path);
-int blur_pict_is_valid (const char *src_path, const char *dest_path);
+#include <glib.h>
+#include <X11/Xlib.h>
+#include <X11/extensions/record.h>
+
+void grab_xrecord_init ();
+void grab_xrecord_finalize();
+
+void grab_xrecord_key (int keycode, const char *action);
+void ungrab_xrecord_key (int keycode);
 
 #endif

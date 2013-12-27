@@ -21,9 +21,15 @@
 
 package main
 
+// #cgo pkg-config: x11 xtst glib-2.0
+// #include "grab-xrecord.h"
+// #include <stdlib.h>
+import "C"
+
 import (
 	/*"dlib"*/
 	"dlib/dbus"
+	"fmt"
 	"github.com/BurntSushi/xgbutil/xevent"
 )
 
@@ -35,7 +41,7 @@ func NewKeyBinding() *Manager {
 
 	ListenKeyList(m)
 	ListenCustomKey(m)
-	/*ListenGSDKeyChanged(m)*/
+	ListenGSDKeyChanged(m)
 
 	return m
 }
@@ -44,15 +50,19 @@ func main() {
 	binding := NewKeyBinding()
 	err := dbus.InstallOnSession(binding)
 	if err != nil {
-		panic("Binding Get Session Bus Connect Failed")
+		fmt.Println("Binding Get Session Bus Connect Failed:", err)
+		return
 	}
 
 	kbd := &GrabManager{}
 	err = dbus.InstallOnSession(kbd)
 	if err != nil {
-		panic("kbd Get Session Bus Connect Failed")
+		fmt.Println("kbd Get Session Bus Connect Failed:", err)
+		return
 	}
 
+	C.grab_xrecord_init()
+	defer C.grab_xrecord_finalize()
 	InitGrabKey()
 
 	xevent.Main(X)
