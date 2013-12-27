@@ -19,51 +19,17 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package main
+#ifndef __GRAB_XRECORD_H__
+#define __GRAB_XRECORD_H__
 
-// #cgo pkg-config: x11 xtst glib-2.0
-// #include "grab-xrecord.h"
-// #include <stdlib.h>
-import "C"
+#include <glib.h>
+#include <X11/Xlib.h>
+#include <X11/extensions/record.h>
 
-import (
-	/*"dlib"*/
-	"dlib/dbus"
-	"fmt"
-	"github.com/BurntSushi/xgbutil/xevent"
-)
+void grab_xrecord_init ();
+void grab_xrecord_finalize();
 
-func NewKeyBinding() *Manager {
-	m := &Manager{}
-	m.CustomBindList = GetCustomIdList()
-	m.gsdAccelMap = GetGSDPairs()
-	m.customAccelMap = GetCustomPairs()
+void grab_xrecord_key (int keycode, const char *action);
+void ungrab_xrecord_key (int keycode);
 
-	ListenKeyList(m)
-	ListenCustomKey(m)
-	ListenGSDKeyChanged(m)
-
-	return m
-}
-
-func main() {
-	binding := NewKeyBinding()
-	err := dbus.InstallOnSession(binding)
-	if err != nil {
-		fmt.Println("Binding Get Session Bus Connect Failed:", err)
-		return
-	}
-
-	kbd := &GrabManager{}
-	err = dbus.InstallOnSession(kbd)
-	if err != nil {
-		fmt.Println("kbd Get Session Bus Connect Failed:", err)
-		return
-	}
-
-	C.grab_xrecord_init()
-	defer C.grab_xrecord_finalize()
-	InitGrabKey()
-
-	xevent.Main(X)
-}
+#endif

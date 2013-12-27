@@ -21,6 +21,11 @@
 
 package main
 
+// #cgo pkg-config: x11 xtst glib-2.0
+// #include "grab-xrecord.h"
+// #include <stdlib.h>
+import "C"
+
 import (
 	"dlib/dbus"
 	"fmt"
@@ -28,6 +33,7 @@ import (
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/keybind"
 	"github.com/BurntSushi/xgbutil/xevent"
+	"unsafe"
 )
 
 func (m *GrabManager) GetDBusInfo() dbus.DBusInfo {
@@ -98,4 +104,54 @@ func (m *GrabManager) GrabKeyboard() {
 		}).Connect(X, X.RootWin())
 
 	xevent.Main(X)
+}
+
+func (m *GrabManager) GrabSingleKey(key, action string) {
+	GrabXRecordKey(key, action)
+}
+
+func GrabXRecordKey(key, action string) {
+	if len(action) <= 0 {
+		fmt.Println("action is null")
+		return
+	}
+
+	mod, keys, err := keybind.ParseString(X, key)
+	if err != nil {
+		fmt.Println("ParseString Failed:", err)
+		return
+	}
+
+	fmt.Printf("mod: %d, key: %d\n", mod, keys[0])
+	if mod > 0 {
+		fmt.Printf("Not single key\n")
+		return
+	}
+
+	tmp := C.CString(action)
+	defer C.free(unsafe.Pointer(tmp))
+	C.grab_xrecord_key(C.int(keys[0]), tmp)
+}
+
+func (m *GrabManager) UngrabSingleKey(key string) {
+	UngrabXRecordKey (key)
+}
+
+func UngrabXRecordKey(key string) {
+	mod, keys, err := keybind.ParseString(X, key)
+	if err != nil {
+		fmt.Println("ParseString Failed:", err)
+		return
+	}
+
+	if mod > 0 {
+		fmt.Printf("Not single key\n")
+		return
+	}
+
+	C.ungrab_xrecord_key(C.int(keys[0]))
+}
+
+func (m GrabManager) GrabSingleFinalize() {
+	C.grab_xrecord_finalize()
 }
