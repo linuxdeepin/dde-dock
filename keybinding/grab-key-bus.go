@@ -32,7 +32,9 @@ import (
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/keybind"
+	"github.com/BurntSushi/xgbutil/mousebind"
 	"github.com/BurntSushi/xgbutil/xevent"
+	"strings"
 	"unsafe"
 )
 
@@ -80,6 +82,7 @@ func (m *GrabManager) GrabKeyboard() {
 		return
 	}
 	keybind.Initialize(X)
+	mousebind.Initialize(X)
 
 	err = keybind.GrabKeyboard(X, X.RootWin())
 	if err != nil {
@@ -87,23 +90,67 @@ func (m *GrabManager) GrabKeyboard() {
 		return
 	}
 
+	GrabAllButton(X)
+
+	xevent.ButtonPressFun(
+		func(X *xgbutil.XUtil, e xevent.ButtonPressEvent) {
+			m.GrabKeyEvent("")
+			UngrabAllButton(X)
+			keybind.UngrabKeyboard(X)
+			fmt.Println("Button Press Event")
+			xevent.Quit(X)
+		}).Connect(X, X.RootWin())
+
 	xevent.KeyReleaseFun(
 		func(X *xgbutil.XUtil, e xevent.KeyReleaseEvent) {
 			modStr := keybind.ModifierString(e.State)
 			keyStr := keybind.LookupString(X, e.State, e.Detail)
 			value := ""
 			if len(modStr) > 0 {
-				value = modStr + "-" + keyStr
+				value = ConvertKeyFromMod(modStr) + keyStr
 			} else {
 				value = keyStr
 			}
 			m.GrabKeyEvent(value)
+			UngrabAllButton(X)
 			keybind.UngrabKeyboard(X)
 			fmt.Printf("Key: %s\n", value)
 			xevent.Quit(X)
 		}).Connect(X, X.RootWin())
 
 	xevent.Main(X)
+}
+
+func GrabAllButton (X *xgbutil.XUtil) {
+	mousebind.Grab(X, X.RootWin(), 0, 1, false)
+	mousebind.Grab(X, X.RootWin(), 0, 2, false)
+	mousebind.Grab(X, X.RootWin(), 0, 3, false)
+}
+
+func UngrabAllButton (X *xgbutil.XUtil) {
+			mousebind.Ungrab(X, X.RootWin(), 0, 1)
+			mousebind.Ungrab(X, X.RootWin(), 0, 2)
+			mousebind.Ungrab(X, X.RootWin(), 0, 3)
+}
+
+func ConvertKeyFromMod(mod string) string {
+	values := ""
+	vals := strings.Split(mod, "-")
+	for _, v := range vals {
+		if v == "mod1" || v == "mod2" ||
+			v == "mod4" || v == "lock" {
+			t, ok := _ModKeyMap[v]
+			if !ok {
+				fmt.Println("Get Key Failed From Modify")
+				return ""
+			}
+			values += t + "-"
+		} else {
+			values += v + "-"
+		}
+	}
+
+	return values
 }
 
 func (m *GrabManager) GrabSingleKey(key, action string) {
@@ -134,7 +181,7 @@ func GrabXRecordKey(key, action string) {
 }
 
 func (m *GrabManager) UngrabSingleKey(key string) {
-	UngrabXRecordKey (key)
+	UngrabXRecordKey(key)
 }
 
 func UngrabXRecordKey(key string) {
