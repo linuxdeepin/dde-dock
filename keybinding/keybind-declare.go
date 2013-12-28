@@ -101,6 +101,13 @@ var _ModifierMap = map[string]string{
 	"hyper":     "mod4",
 }
 
+var _ModKeyMap = map[string]string{
+	"mod1": "alt",
+	"mod4": "super",
+	"lock": "caps_lock",
+	"mod2": "num_lock",
+}
+
 /*
  * 0 ~ 299: org.gnome-settings-daemon.plugins.key-bindings
  * 300 ~ 599: org.gnome-settings-daemon.plugins.media-keys
