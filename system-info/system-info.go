@@ -8,6 +8,7 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
+	"fmt"
 )
 
 type SystemInfo struct {
@@ -151,7 +152,11 @@ func GetSystemType() (sysType int64) {
 
 func GetDiskCap() (diskCap uint64) {
 	driList := []dbus.ObjectPath{}
-	obj, _ := udisks2.NewObjectManager("/org/freedesktop/UDisks2")
+	obj, err := udisks2.NewObjectManager("/org/freedesktop/UDisks2")
+	if err != nil {
+		fmt.Println("udisks2: New ObjectManager Failed:", err)
+		return 0
+	}
 	managers, _ := obj.GetManagedObjects()
 
 	for _, value := range managers {

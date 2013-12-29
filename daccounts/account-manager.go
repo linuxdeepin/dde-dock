@@ -25,6 +25,7 @@ import (
 	"dlib/dbus"
 	"sort"
 	"strings"
+	"fmt"
 )
 
 const (
@@ -32,7 +33,11 @@ const (
 )
 
 func (m *Manager) ListCachedUsers() []string {
-	objects, _ := _accountInface.ListCachedUsers()
+	objects, err := _accountInface.ListCachedUsers()
+	if err != nil {
+		fmt.Println("List Users Failed:", err)
+		return nil
+	}
 
 	userList := []string{}
 	for _, v := range objects {
@@ -44,7 +49,11 @@ func (m *Manager) ListCachedUsers() []string {
 }
 
 func (m *Manager) CreateUser(name, fullname string, accountType int32) string {
-	path, _ := _accountInface.CreateUser(name, fullname, accountType)
+	path, err := _accountInface.CreateUser(name, fullname, accountType)
+	if err != nil {
+		fmt.Println("Create User Failed: ", err)
+		return ""
+	}
 
 	userPath := ConvertPath(string(path))
 	if strings.Contains(userPath, _USER_VALID_PATH) {

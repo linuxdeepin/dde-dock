@@ -5,6 +5,7 @@ import (
 	"dbus/org/freedesktop/upower"
 	"dbus/org/gnome/sessionmanager"
 	"dlib/dbus"
+	"fmt"
 	"os/exec"
 )
 
@@ -19,9 +20,9 @@ const (
 )
 
 var (
-	dShut, _    = sessionmanager.NewSessionManager("/org/gnome/SessionManager")
-	dConsole, _ = consolekit.NewManager("/org/freedesktop/ConsoleKit/Manager")
-	dPower, _   = upower.NewUpower("/org/freedesktop/UPower")
+	dShut    *sessionmanager.SessionManager
+	dConsole *consolekit.Manager
+	dPower   *upower.Upower
 )
 
 func (m *Manager) GetDBusInfo() dbus.DBusInfo {
@@ -131,11 +132,39 @@ func ExecCommand(cmd string) {
 }
 
 func IsInhibited(action uint32) bool {
-	ok, _:= dShut.IsInhibited(action)
+	ok, err := dShut.IsInhibited(action)
+	if err != nil {
+		fmt.Println("IsInhibited Failed:", err)
+		return true
+	}
+
 	return ok
 }
 
+func Init() {
+	var err error
+
+	dShut, err = sessionmanager.NewSessionManager("/org/gnome/SessionManager")
+	if err != nil {
+		fmt.Println("session: New SessionManager Failed:", err)
+		return
+	}
+
+	dConsole, err = consolekit.NewManager("/org/freedesktop/ConsoleKit/Manager")
+	if err != nil {
+		fmt.Println("consolekit: New Manager Failed:", err)
+		return
+	}
+
+	dPower, err = upower.NewUpower("/org/freedesktop/UPower")
+	if err != nil {
+		fmt.Println("upower: New Upower Failed:", err)
+		return
+	}
+}
+
 func main() {
+	Init()
 	shutdown := NewManager()
 	dbus.InstallOnSession(shutdown)
 	select {}

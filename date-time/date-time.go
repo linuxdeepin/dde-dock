@@ -22,8 +22,8 @@ var (
 	_busConn     *dbus.Conn
 	_dtGSettings = gio.NewSettings(_DATE_TIME_SCHEMA)
 
-	_setDT, _ = setdatetime.NewSetDateTime("/com/deepin/daemon/setdatetime")
-	_gdate, _ = datetimemechanism.NewDateTimeMechanism("/")
+	_setDT *setdatetime.SetDateTime
+	_gdate *datetimemechanism.DateTimeMechanism
 )
 
 type DateTime struct {
@@ -85,7 +85,24 @@ func NewDateAndTime() *DateTime {
 	return dt
 }
 
+func Init () {
+	var err error
+
+	_setDT, err = setdatetime.NewSetDateTime("/com/deepin/daemon/setdatetime")
+	if err != nil {
+		fmt.Println("New SetDateTime Failed:", err)
+		return
+	}
+
+	_gdate, err = datetimemechanism.NewDateTimeMechanism("/")
+	if err != nil {
+		fmt.Println("New DateTimeMechanism Failed:", err)
+		return
+	}
+}
+
 func main() {
+	Init()
 	date := NewDateAndTime()
 	err := dbus.InstallOnSession(date)
 	if err != nil {
