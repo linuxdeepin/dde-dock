@@ -14,8 +14,7 @@ func TestInvalid(t *testing.T) {
 
 	_Manager.DisconnectDevice("/")
 
-	_Manager.ActiveWiredDevice(false, "/")
-	_Manager.ActiveWiredDevice(true, "/")
+	_Manager.ActiveWiredDevice("/")
 
 	_Manager.GetAccessPoints("/")
 
@@ -49,11 +48,8 @@ func TestDBusFailed(t *testing.T) {
 	if err = m.DisconnectDevice("/"); err == nil {
 		t.Fatal("DisconnectDevice")
 	}
-	if err = m.ActiveWiredDevice(false, "/"); err == nil {
-		t.Fatal("ActiveWiredDevice false")
-	}
-	if err = m.ActiveWiredDevice(true, "/"); err == nil {
-		t.Fatal("ActiveWiredDevice true")
+	if err = m.ActiveWiredDevice("/"); err == nil {
+		t.Fatal("ActiveWiredDevice")
 	}
 	if _, err = m.GetAccessPoints("/"); err == nil {
 		t.Fatal("GetAccessPoints")
@@ -75,6 +71,13 @@ func TestDBusSuccess(t *testing.T) {
 		t.Fatal("Create NetworkManager failed")
 	}
 	for _, d := range m.WirelessDevices.Get() {
-		fmt.Println(d)
+		path := d[0].(dbus.ObjectPath)
+		aps, err := m.GetAccessPoints(path)
+		if err != nil {
+			t.Fatal(err)
+		}
+		for _, ap := range aps {
+			fmt.Println(ap)
+		}
 	}
 }

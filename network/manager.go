@@ -64,5 +64,6 @@ func _NewManager() (m *Manager) {
 
 func main() {
 	dbus.InstallOnSession(_Manager)
+	dbus.DealWithUnhandledMessage()
 	select {}
 }
