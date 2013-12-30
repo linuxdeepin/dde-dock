@@ -222,6 +222,7 @@ var wmMap = map[int32]string{
 	617: "move-to-workspace-left",
 	618: "move-to-workspace-right",
 	619: "move-to-workspace-up",    //workspace
+	620: "show-desktop",
 	621: "switch-windows",          // gsd
 	622: "switch-windows-backward", // gsd
 }
