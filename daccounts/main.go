@@ -75,11 +75,13 @@ func (u *User) GetDBusInfo() dbus.DBusInfo {
 }
 
 func main() {
-	_accountInface, err := accounts.NewAccounts("/org/freedesktop/Accounts")
+	var err error
+	_accountInface, err = accounts.NewAccounts("/org/freedesktop/Accounts")
 	if err != nil {
 		fmt.Println("New Accounts Failed From Freedesktop:", err)
 		return
 	}
+
 	account := NewAccountManager()
 	err = dbus.InstallOnSession(account)
 	if err != nil {

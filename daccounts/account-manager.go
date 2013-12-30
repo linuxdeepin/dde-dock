@@ -23,9 +23,9 @@ package main
 
 import (
 	"dlib/dbus"
+	"fmt"
 	"sort"
 	"strings"
-	"fmt"
 )
 
 const (
