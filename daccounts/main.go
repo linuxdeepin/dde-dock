@@ -90,6 +90,7 @@ func main() {
 	for _, v := range userList {
 		NewAccountUserManager(v)
 	}
+	dbus.DealWithUnhandledMessage()
 
 	select {}
 }

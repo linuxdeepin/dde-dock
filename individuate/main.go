@@ -49,5 +49,6 @@ func main() {
 		panic(err)
 	}
 
+	dbus.DealWithUnhandledMessage()
 	dlib.StartLoop()
 }

@@ -167,5 +167,6 @@ func main() {
 	Init()
 	shutdown := NewManager()
 	dbus.InstallOnSession(shutdown)
+	dbus.DealWithUnhandledMessage()
 	select {}
 }

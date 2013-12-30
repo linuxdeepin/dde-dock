@@ -112,5 +112,6 @@ func main() {
 	if date.AutoSetTime {
 		go _setDT.SetNtpUsing(true)
 	}
+	dbus.DealWithUnhandledMessage()
 	dlib.StartLoop()
 }

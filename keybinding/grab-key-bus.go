@@ -199,6 +199,8 @@ func UngrabXRecordKey(key string) {
 	C.ungrab_xrecord_key(C.int(keys[0]))
 }
 
-func (m GrabManager) GrabSingleFinalize() {
+/*
+func (m *GrabManager) GrabSingleFinalize() {
 	C.grab_xrecord_finalize()
 }
+*/

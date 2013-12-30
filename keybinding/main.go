@@ -60,6 +60,7 @@ func main() {
 		fmt.Println("kbd Get Session Bus Connect Failed:", err)
 		return
 	}
+	dbus.DealWithUnhandledMessage()
 
 	C.grab_xrecord_init()
 	defer C.grab_xrecord_finalize()
