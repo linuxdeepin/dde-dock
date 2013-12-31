@@ -2659,7 +2659,7 @@ sink_t *pa2sink(sink_t *sink, const pa_sink_info *l)
     sink->index = l->index;
     sink->volume = l->volume;
     sink->mute = l->mute;
-    sink->nvolumesteps = l->n_volume_steps;
+    sink->n_volume_steps = l->n_volume_steps;
     strncpy(sink->name, l->name, strlen(l->name) + 1);
     strncpy(sink->driver, l->driver, strlen(l->driver) + 1);
     strncpy(sink->description, l->description, strlen(l->description) + 1);
@@ -2683,7 +2683,7 @@ sink_t *pa2sink(sink_t *sink, const pa_sink_info *l)
 source_t *pa2source(source_t *source, const pa_source_info *l)
 {
     int i;
-    source->nvolumesteps = l->n_volume_steps;
+    source->n_volume_steps = l->n_volume_steps;
     source->card = l->card;
     source->index = l->index;
     source->mute = l->mute;
@@ -2696,7 +2696,7 @@ source_t *pa2source(source_t *source, const pa_source_info *l)
     {
         strncpy(source->ports[i].name,
                 l->ports[i]->name,
-                sizeof(source->ports[i].name - 1));
+                sizeof(source->ports[i].name) - 1);
         strncpy(source->ports[i].description,
                 l->ports[i]->description,
                 sizeof(source->ports[i].description) - 1);

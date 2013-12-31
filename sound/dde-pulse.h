@@ -63,7 +63,7 @@ typedef struct sink_s
     char description[MAX_STRING];
     char driver[MAX_STRING];
     int mute;
-    int nvolumesteps;
+    int n_volume_steps;
     int card;
     pa_cvolume volume;
 
@@ -86,7 +86,7 @@ typedef struct source_s
     char description[MAX_STRING];
     char driver[MAX_STRING];
     int mute;
-    int nvolumesteps;
+    int n_volume_steps;
     int card;
     pa_cvolume volume;
 

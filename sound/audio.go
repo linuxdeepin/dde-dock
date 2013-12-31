@@ -52,7 +52,7 @@ type Sink struct {
 	Name         string
 	Description  string
 	Driver       string
-	Mute         string
+	Mute         int32
 	NVolumeSteps int32
 	Card         int32
 	Volume       int32
@@ -155,8 +155,10 @@ func getSinkFromC(_sink C.sink_t) *Sink {
 	sink.Description =
 		C.GoString((*C.char)(unsafe.Pointer(&_sink.description[0])))
 	sink.Driver = C.GoString(&_sink.driver[0])
+	sink.Mute = int32(_sink.mute)
 	sink.Name = C.GoString(&_sink.name[0])
 	sink.Volume = int32(C.pa_cvolume_avg(&_sink.volume) * 100 / C.PA_VOLUME_NORM)
+	sink.NVolumeSteps = int32(_sink.n_volume_steps)
 	//sink.Cvolume.Channels = uint32(_sink.volume.channels)
 	//for j := 0; j < int(sink.Cvolume.Channels); j = j + 1 {
 	//sink.Cvolume.Values[j] =
@@ -190,6 +192,7 @@ func getSourceFromC(_source C.source_t) *Source {
 	source.Description = C.GoString(&_source.description[0])
 
 	source.Volume = int32(100 * C.pa_cvolume_avg(&_source.volume) / C.PA_VOLUME_NORM)
+	source.NVolumeSteps = int32(_source.n_volume_steps)
 	//source.Cvolume.Channels = uint32(_source.volume.channels)
 	//for j := uint32(0); j < source.Cvolume.Channels; j = j + 1 {
 	//source.Cvolume.Values[j] =
@@ -197,7 +200,6 @@ func getSourceFromC(_source C.source_t) *Source {
 	//}
 
 	source.NPorts = int32(_source.n_ports)
-
 	source.Ports = make([]SourcePortInfo, source.NPorts)
 	for j := 0; j < int(source.NPorts); j = j + 1 {
 		source.Ports[j].Available = int32(_source.ports[j].available)
@@ -295,6 +297,7 @@ func updateSink(index int,
 		//}
 		//}
 		audio.sinks[index] = getSinkFromC(audio.pa.sinks[0])
+		fmt.Println("Sink.mute:  \n", audio.sinks[index].Mute)
 		dbus.InstallOnSession(audio.sinks[index])
 
 	case C.PA_SUBSCRIPTION_EVENT_REMOVE:
