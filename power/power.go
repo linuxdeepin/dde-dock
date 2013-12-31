@@ -212,6 +212,7 @@ func main() {
 		return
 	}
 	dbus.InstallOnSession(power)
+	dbus.DealWithUnhandledMessage()
 	dlib.StartLoop()
 	//select {}
 }
