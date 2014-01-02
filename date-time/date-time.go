@@ -85,19 +85,19 @@ func NewDateAndTime() *DateTime {
 	return dt
 }
 
-func Init () {
+func Init() {
 	var err error
 
-	_setDT, err = setdatetime.NewSetDateTime("/com/deepin/daemon/setdatetime")
+	_setDT, err = setdatetime.NewSetDateTime("/com/deepin/daemon/SetDateTime")
 	if err != nil {
-		fmt.Println("New SetDateTime Failed:", err)
-		return
+		fmt.Println("New SetDateTime Failed.")
+		panic(err)
 	}
 
 	_gdate, err = datetimemechanism.NewDateTimeMechanism("/")
 	if err != nil {
-		fmt.Println("New DateTimeMechanism Failed:", err)
-		return
+		fmt.Println("New DateTimeMechanism Failed.")
+		panic(err)
 	}
 }
 
