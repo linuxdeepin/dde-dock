@@ -2,10 +2,10 @@ package main
 
 import (
 	"dlib/dbus"
+	"fmt"
 	"github.com/BurntSushi/xgb"
 	"github.com/BurntSushi/xgb/randr"
 	"github.com/BurntSushi/xgb/xproto"
-	"fmt"
 	"math"
 )
 
@@ -23,7 +23,7 @@ func getAtom(c *xgb.Conn, name string) xproto.Atom {
 	return r.Atom
 }
 
-func getOutputName(edid []byte) string {
+func getOutputName(edid []byte, defaultName string) string {
 	if len(edid) == 128 {
 		timingDescriptor := edid[36:]
 		for i := 0; i < 4; i++ {
@@ -38,7 +38,7 @@ func getOutputName(edid []byte) string {
 			}
 		}
 	}
-	return "Unknow"
+	return defaultName
 }
 
 type Mode struct {
@@ -57,13 +57,13 @@ func NewOutput(display *Display, core randr.Output) *Output {
 	if err != nil {
 		panic(err)
 	}
-	if len(info.Modes) == 0 {
+	if info.Connection != randr.ConnectionConnected {
 		return nil
 	}
 
 	r, _ := randr.GetOutputProperty(X, core, atomEDID, xproto.AtomInteger, 0, 1024, false, false).Reply()
 
-	ret := &Output{core, getOutputName(r.Data), nil}
+	ret := &Output{core, getOutputName(r.Data, string(info.Name)), nil}
 	for _, m := range info.Modes {
 		info := display.modes[m]
 		vTotal := info.Vtotal
@@ -81,11 +81,6 @@ func NewOutput(display *Display, core randr.Output) *Output {
 	}
 	fmt.Println("OutputMode:", info)
 	return ret
-}
-
-func (output *Output) MonitorName() string {
-	r, _ := randr.GetOutputProperty(X, output.core, atomEDID, xproto.AtomInteger, 0, 1024, false, false).Reply()
-	return getOutputName(r.Data)
 }
 
 type Display struct {
