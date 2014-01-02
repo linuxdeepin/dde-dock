@@ -61,6 +61,11 @@ func NewOutput(display *Display, core randr.Output) *Output {
 		return nil
 	}
 
+	// Nvidia driver which support Randr 1.4 will show an additional connected output which I didn't know it's exactly function. So simply filter it.
+	if info.MmWidth == 0 || info.MmHeight == 0 {
+		return nil
+	}
+
 	r, _ := randr.GetOutputProperty(X, core, atomEDID, xproto.AtomInteger, 0, 1024, false, false).Reply()
 
 	ret := &Output{core, getOutputName(r.Data, string(info.Name)), nil}
