@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+	<schema id="com.deepin.dde.key-binding.system" path="/com/deepin/dde/key-binding/system/">
+	<key type="s" name="launcher">
+		<default>'Super'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="terminal">
+		<default>'&lt;Control&gt;&lt;Alt&gt;T'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="lock-screen">
+		<default>'&lt;Super&gt;L'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="show-dock">
+		<default>'&lt;Super&gt;D'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="logout">
+		<default>'&lt;Control&gt;&lt;Alt&gt;Delete'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="terminal-quake">
+		<default>'F12'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="screenshot">
+		<default>'&lt;Control&gt;&lt;Alt&gt;A'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="screenshot-full-screen">
+		<default>'Print'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="screenshot-window">
+		<default>'&lt;Alt&gt;Print'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="screenshot-delayed">
+		<default>'&lt;Control&gt;Print'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="file-manager">
+		<default>'&lt;Super&gt;E'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="show-desktop">
+		<default>'&lt;Super&gt;D'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="switch-apps">
+		<default>'&lt;Alt&gt;Tab'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="reverse-switch-apps">
+		<default>'&lt;Shift&gt;&lt;Alt&gt;Tab'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="switch-apps-3d">
+		<default>'&lt;Super&gt;Tab'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="reverse-switch-apps-3d">
+		<default>'&lt;Shift&gt;&lt;Super&gt;Tab'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="calculator">
+		<default>'XF86Calculator'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="eject">
+		<default>'XF86Eject'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="email">
+		<default>'XF86Mail'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="browser">
+		<default>'XF86WWW'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="media-player">
+		<default>'XF86AudioMedia'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="play-pause">
+		<default>'XF86AudioPlay'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="pause-playback">
+		<default>'XF86AudioPause'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="stop-playback">
+		<default>'XF86AudioStop'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="volume-down">
+		<default>'XF86AudioLowerVolume'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="volume-mute">
+		<default>'XF86AudioMute'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="volume-up">
+		<default>'XF86AudioRaiseVolume'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="previous-track">
+		<default>'XF86AudioPrev'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="next-track">
+		<default>'XF86AudioNext'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="activate-window-menu">
+		<default>'&lt;Alt&gt;Space'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="move-window">
+		<default>'&lt;Alt&gt;F7'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="resize-window">
+		<default>'&lt;Alt&gt;F8'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="close-window">
+		<default>'&lt;Alt&gt;F4'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="maximize-window">
+		<default>'&lt;Control&gt;&lt;Super&gt;Up'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="minimize-window">
+		<default>'&lt;Control&gt;&lt;Alt&gt;0'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="toggle-shaded-state">
+		<default>'&lt;Control&gt;&lt;Alt&gt;S'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="restore-window">
+		<default>'&lt;Control&gt;&lt;Super&gt;Down'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="switch-to-workspace1">
+		<default>'&lt;Control&gt;1'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="switch-to-workspace2">
+		<default>'&lt;Control&gt;2'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="switch-to-workspace3">
+		<default>'&lt;Control&gt;3'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="switch-to-workspace4">
+		<default>'&lt;Control&gt;4'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="switch-to-workspace-down">
+		<default>'&lt;Control&gt;&lt;Alt&gt;Down'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="switch-to-workspace-left">
+		<default>'&lt;Control&gt;&lt;Alt&gt;Left'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="switch-to-workspace-right">
+		<default>'&lt;Control&gt;&lt;Alt&gt;Right'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="switch-to-workspace-up">
+		<default>'&lt;Control&gt;&lt;Alt&gt;Up'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="move-to-workspace1">
+		<default>'&lt;Alt&gt;1'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="move-to-workspace2">
+		<default>'&lt;Alt&gt;2'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="move-to-workspace3">
+		<default>'&lt;Alt&gt;3'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="move-to-workspace4">
+		<default>'&lt;Alt&gt;4'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="move-to-workspace-down">
+		<default>'&lt;Shift&gt;&lt;Control&gt;&lt;Alt&gt;Down'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="move-to-workspace-left">
+		<default>'&lt;Shift&gt;&lt;Control&gt;&lt;Alt&gt;Left'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="move-to-workspace-right">
+		<default>'&lt;Shift&gt;&lt;Control&gt;&lt;Alt&gt;Right'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	<key type="s" name="move-to-workspace-up">
+		<default>'&lt;Shift&gt;&lt;Control&gt;&lt;Alt&gt;Up'</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
+	</schema>
+</schemalist>

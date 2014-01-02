@@ -54,7 +54,7 @@ generate_blur_pict (const char *src_path, const char *dest_path)
 
     clock_t start = clock ();
     gaussianiir2d_pixbuf_c(image_data, width, height,
-                           rowstride, n_channels, 30, 30);
+                           rowstride, n_channels, 50, 50);
     clock_t end = clock ();
     g_debug ("time : %f", (end - start) / (float)CLOCKS_PER_SEC);
 
