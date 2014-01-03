@@ -13,6 +13,7 @@ var (
 	_        = fmt.Println
 	X, _     = xgb.NewConn()
 	atomEDID = getAtom(X, "EDID")
+	Root     = xproto.Setup(X).DefaultScreen(X).Root
 )
 
 func getAtom(c *xgb.Conn, name string) xproto.Atom {
@@ -65,27 +66,31 @@ func NewOutput(display *Display, core randr.Output) *Output {
 	if info.MmWidth == 0 || info.MmHeight == 0 {
 		return nil
 	}
+	fmt.Println("Output:", core)
 
 	r, _ := randr.GetOutputProperty(X, core, atomEDID, xproto.AtomInteger, 0, 1024, false, false).Reply()
 
 	ret := &Output{core, getOutputName(r.Data, string(info.Name)), nil}
 	for _, m := range info.Modes {
 		info := display.modes[m]
-		vTotal := info.Vtotal
-
-		if info.ModeFlags&randr.ModeFlagDoubleScan != 0 {
-			vTotal *= 2
-		}
-		if info.ModeFlags&randr.ModeFlagInterlace != 0 {
-			vTotal /= 2
-		}
-
-		rate := float64(info.DotClock) / float64(uint32(info.Htotal)*uint32(vTotal))
-		rate = math.Floor(rate + 0.5)
-		ret.Modes = append(ret.Modes, Mode{info.Width, info.Height, uint16(rate)})
+		ret.Modes = append(ret.Modes, buildMode(info))
 	}
 	fmt.Println("OutputMode:", info)
 	return ret
+}
+func buildMode(info randr.ModeInfo) Mode {
+	vTotal := info.Vtotal
+
+	if info.ModeFlags&randr.ModeFlagDoubleScan != 0 {
+		vTotal *= 2
+	}
+	if info.ModeFlags&randr.ModeFlagInterlace != 0 {
+		vTotal /= 2
+	}
+
+	rate := float64(info.DotClock) / float64(uint32(info.Htotal)*uint32(vTotal))
+	rate = math.Floor(rate + 0.5)
+	return Mode{info.Width, info.Height, uint16(rate)}
 }
 
 type Display struct {
@@ -94,6 +99,28 @@ type Display struct {
 	SupportRotations []uint32
 	CurrentRotation  uint32
 	CurrentMode      Mode
+
+	PrimaryRect    xproto.Rectangle
+	PrimaryChanged func(xproto.Rectangle)
+}
+
+func (display *Display) updatePrimary() {
+	r, _ := randr.GetOutputPrimary(X, Root).Reply()
+	if r.Output == 0 {
+		display.PrimaryRect = xproto.Rectangle{0, 0, display.CurrentMode.Width, display.CurrentMode.Height}
+	} else {
+		oinfo, err := randr.GetOutputInfo(X, r.Output, 0).Reply()
+		if err == nil {
+			cinfo, err := randr.GetCrtcInfo(X, oinfo.Crtc, 0).Reply()
+			if err == nil {
+				display.PrimaryRect = xproto.Rectangle{cinfo.X, cinfo.Y, cinfo.Width, cinfo.Height}
+			}
+		}
+	}
+	if display.PrimaryChanged != nil {
+		display.PrimaryChanged(display.PrimaryRect)
+	}
+	fmt.Println("PrimaryMode", display.PrimaryRect)
 }
 
 func (display *Display) GetOutpus() []*Output {
@@ -116,8 +143,7 @@ func (display *Display) GetDBusInfo() dbus.DBusInfo {
 }
 
 func (display *Display) updateOutput() {
-	root := xproto.Setup(X).DefaultScreen(X).Root
-	resources, err := randr.GetScreenResources(X, root).Reply()
+	resources, err := randr.GetScreenResources(X, Root).Reply()
 	if err != nil {
 		panic(err)
 	}
@@ -128,6 +154,9 @@ func (display *Display) updateOutput() {
 			display.outputs = append(display.outputs, o)
 		}
 	}
+}
+func (dispaly *Display) SetPrimary(output uint32) {
+	randr.SetOutputPrimary(X, Root, randr.Output(output))
 }
 
 // xgb/randr.GetScreenInfo will panic at this moment.( https://github.com/BurntSushi/xgb/issues/20)
@@ -189,11 +218,11 @@ func NewDisplay() *Display {
 	randr.Init(X)
 	randr.QueryVersion(X, 1, 13)
 	r := &Display{}
+
 	r.modes = make(map[randr.Mode]randr.ModeInfo)
 
-	root := xproto.Setup(X).DefaultScreen(X).Root
-	resources, err := randr.GetScreenResources(X, root).Reply()
-	sinfo, err := getScreenInfo(root)
+	resources, err := randr.GetScreenResources(X, Root).Reply()
+	sinfo, err := getScreenInfo(Root)
 	size := sinfo.Sizes[sinfo.SizeID]
 	r.CurrentMode = Mode{size.Width, size.Height, sinfo.Rate}
 	fmt.Println("CurrentRate:", sinfo.Rate, sinfo.SizeID, sinfo.Sizes)
@@ -224,12 +253,39 @@ func NewDisplay() *Display {
 		r.modes[randr.Mode(m.Id)] = m
 	}
 	r.updateOutput()
+	r.updatePrimary()
 	return r
+}
+
+func (dpy *Display) listener() {
+	for {
+		e, err := X.WaitForEvent()
+		if err != nil {
+			continue
+		}
+		switch e.(type) {
+		case randr.NotifyEvent:
+			ee := e.(randr.NotifyEvent)
+			switch ee.SubCode {
+			case randr.NotifyOutputChange:
+				fmt.Println("OC:", ee.U.Oc)
+				dpy.updatePrimary()
+				dpy.updateOutput()
+			case randr.NotifyOutputProperty:
+				fmt.Println("OC:", ee.U.Op)
+				dpy.updatePrimary()
+				dpy.updateOutput()
+			}
+		}
+	}
 }
 
 func main() {
 	dpy := NewDisplay()
 	dbus.InstallOnSession(dpy)
 	dbus.DealWithUnhandledMessage()
+
+	randr.SelectInput(X, Root, randr.NotifyMaskOutputChange|randr.NotifyMaskOutputProperty|randr.NotifyMaskScreenChange)
+	go dpy.listener()
 	select {}
 }
