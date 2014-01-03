@@ -1,0 +1,3 @@
+[D-BUS Service]
+Name=com.deepin.daemon.Display
+Exec=/usr/lib/deepin-daemon/display
