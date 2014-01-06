@@ -21,50 +21,48 @@
 
 package main
 
-// #cgo pkg-config: x11 xtst glib-2.0
-// #include "grab-xrecord.h"
-// #include <stdlib.h>
-import "C"
-
 import (
-	/*"dlib"*/
 	"dlib/dbus"
-	"fmt"
-	"github.com/BurntSushi/xgbutil/xevent"
+	"strings"
 )
 
-func NewKeyBinding() *Manager {
-	m := &Manager{}
-	m.CustomBindList = GetCustomIdList()
-	m.gsdAccelMap = GetGSDPairs()
-	m.customAccelMap = GetCustomPairs()
+type CityPinyin struct{}
 
-	ListenKeyList(m)
-	ListenCustomKey(m)
-	ListenGSDKeyChanged(m)
+const (
+	_CITY_PINYIN_DEST = "com.deepin.daemon.CityPinyin"
+	_CITY_PINYIN_PATH = "/com/deepin/daemon/CityPinyin"
+	_CITY_PINYIN_IFC  = "com.deepin.daemon.CityPinyin"
+)
 
-	return m
+func (cp *CityPinyin) GetDBusInfo() dbus.DBusInfo {
+	return dbus.DBusInfo{
+		_CITY_PINYIN_DEST,
+		_CITY_PINYIN_PATH,
+		_CITY_PINYIN_IFC,
+	}
+}
+
+func (cp *CityPinyin) GetValuesByKey(key string) map[string][]string {
+	if len(key) < 2 {
+		return nil
+	}
+
+	values := make(map[string][]string)
+	tmp := strings.ToLower(key)
+
+	for k, v := range CityPinyinMap {
+		if strings.Contains(k, tmp) {
+			values[k] = append(values[k], v...)
+		}
+	}
+
+	return values
 }
 
 func main() {
-	binding := NewKeyBinding()
-	err := dbus.InstallOnSession(binding)
-	if err != nil {
-		fmt.Println("Binding Get Session Bus Connect Failed:", err)
-		return
-	}
-
-	kbd := &GrabManager{}
-	err = dbus.InstallOnSession(kbd)
-	if err != nil {
-		fmt.Println("kbd Get Session Bus Connect Failed:", err)
-		return
-	}
+	cp := &CityPinyin{}
+	dbus.InstallOnSession(cp)
 	dbus.DealWithUnhandledMessage()
 
-	C.grab_xrecord_init()
-	defer C.grab_xrecord_finalize()
-	InitGrabKey()
-
-	xevent.Main(X)
+	select {}
 }

@@ -30,6 +30,7 @@ typedef struct _XRecordGrabInfo {
 
 static void grab_key_event_cb (XPointer user_data, XRecordInterceptData *hook);
 static gpointer enable_ctx_thread (gpointer user_data);
+static gboolean is_grabbed ();
 static void exec_action (int code);
 
 static XRecordGrabInfo *grab_info = NULL;
@@ -77,7 +78,7 @@ grab_xrecord_init ()
     }
 
     grab_info->range->device_events.first = KeyPress;
-    grab_info->range->device_events.last = KeyRelease;
+    grab_info->range->device_events.last = ButtonRelease;
 
     XRecordClientSpec spec = XRecordAllClients;
     grab_info->context = XRecordCreateContext (
@@ -172,13 +173,16 @@ grab_key_event_cb (XPointer user_data, XRecordInterceptData *hook)
             g_debug ("key_press_cnt: %d\n", key_press_cnt);
 
             if (key_press_cnt == 1) {
-                exec_action (keycode);
+                if ( !is_grabbed() ) {
+                    exec_action (keycode);
+                }
             }
 
             key_press_cnt = 0;
             break;
 
         default:
+            key_press_cnt++;
             break;
     }
 }
@@ -217,4 +221,32 @@ exec_action (int code)
     if (action) {
         g_spawn_command_line_sync (action, NULL, NULL, NULL, NULL);
     }
+}
+
+/*
+ * check keyboard && mouse whether has grabbed
+ */
+static gboolean
+is_grabbed ()
+{
+    Display *dpy;
+    Window root;
+    int ret;
+
+    dpy = XOpenDisplay (0);
+    root = DefaultRootWindow (dpy);
+
+    ret = XGrabKeyboard (dpy, root, False,
+                         GrabModeSync, GrabModeSync, CurrentTime);
+
+    if ( ret == AlreadyGrabbed ) {
+        g_debug ("AlreadyGrabbed!\n");
+        /*XUngrabKeyboard (dpy, CurrentTime);*/
+        XCloseDisplay(dpy);
+        return True;
+    }
+
+    XUngrabKeyboard (dpy, CurrentTime);
+    XCloseDisplay(dpy);
+    return False;
 }

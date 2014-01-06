@@ -38,11 +38,21 @@ import (
 	"unsafe"
 )
 
+type GrabManager struct {
+	KeyReleaseEvent func(string)
+}
+
+const (
+	_GRAB_DEST = "com.deepin.daemon.GrabManager"
+	_GRAB_PATH = "/com/deepin/daemon/GrabManager"
+	_GRAB_IFC  = "com.deepin.daemon.GrabManager"
+)
+
 func (m *GrabManager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		_KEY_BINDING_NAME,
-		_GRAB_KEY_PATH,
-		_GRAB_KEY_IFC,
+		_BINDING_DEST,
+		_GRAB_PATH,
+		_GRAB_IFC,
 	}
 }
 
@@ -52,15 +62,14 @@ func (m *GrabManager) GrabShortcut(wid xproto.Window,
 		wid = X.RootWin()
 	}
 
-	key := GetXGBShortcut(shortcut)
-	mod, keycodes, _ := keybind.ParseString(X, key)
-	if len(keycodes) <= 0 {
+	key := GetXGBShortcut(FormatShortcut(shortcut))
+	if len(key) <= 0 {
 		return false
 	}
-	if !GrabKeyPress(wid, shortcut) {
+	if !GrabKeyPress(wid, key) {
 		return false
 	}
-	keyInfo := NewKeyInfo(mod, keycodes[0])
+	keyInfo := NewKeyCodeInfo(key)
 	GrabKeyBinds[keyInfo] = action
 
 	return true
@@ -72,7 +81,8 @@ func (m *GrabManager) UngrabShortcut(wid xproto.Window,
 		wid = X.RootWin()
 	}
 
-	return UngrabKey(wid, shortcut)
+	key := GetXGBShortcut(FormatShortcut(shortcut))
+	return UngrabKey(wid, key)
 }
 
 func (m *GrabManager) GrabKeyboard() {
@@ -95,7 +105,7 @@ func (m *GrabManager) GrabKeyboard() {
 
 		xevent.ButtonPressFun(
 			func(X *xgbutil.XUtil, e xevent.ButtonPressEvent) {
-				m.GrabKeyEvent("")
+				m.KeyReleaseEvent("")
 				UngrabAllButton(X)
 				keybind.UngrabKeyboard(X)
 				fmt.Println("Button Press Event")
@@ -105,7 +115,9 @@ func (m *GrabManager) GrabKeyboard() {
 		xevent.KeyReleaseFun(
 			func(X *xgbutil.XUtil, e xevent.KeyReleaseEvent) {
 				modStr := keybind.ModifierString(e.State)
-				keyStr := keybind.LookupString(X, e.State, e.Detail)
+				keyStr := strings.ToLower(
+					keybind.LookupString(X,
+						e.State, e.Detail))
 				if e.Detail == 65 {
 					keyStr = "space"
 				}
@@ -113,9 +125,17 @@ func (m *GrabManager) GrabKeyboard() {
 				if len(modStr) > 0 {
 					value = ConvertKeyFromMod(modStr) + keyStr
 				} else {
-					value = keyStr
+					m.KeyReleaseEvent("")
+					return
 				}
-				m.GrabKeyEvent(value)
+				if strings.Contains(keyStr, "control") ||
+					strings.Contains(keyStr, "alt") ||
+					strings.Contains(keyStr, "shift") ||
+					strings.Contains(keyStr, "super") {
+					m.KeyReleaseEvent("")
+					return
+				}
+				m.KeyReleaseEvent(value)
 				UngrabAllButton(X)
 				keybind.UngrabKeyboard(X)
 				fmt.Printf("Key: %s\n", value)

@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type = Application
-Exec = /usr/lib/deepin-daemon/keybinding &
+Exec = /usr/lib/deepin-daemon/binding-manager
 Terminal=false
 Hidden = false
 Name = keybinding

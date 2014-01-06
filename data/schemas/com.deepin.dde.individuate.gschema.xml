@@ -54,6 +54,11 @@
       <summary>Background retention duration</summary>
       <description>The unit is second, if less or equal to zero, do not change the background; if more than 0, change the background after background-duration time</description>
     </key>
+    <key type="i" name="cross-fade-interval">
+      <default>1000</default>
+      <summary>Switch two backgrounds duration</summary>
+      <description>The unit is millisecond, two backgrounds switching duration</description>
+    </key>
     <key type="i" name="cross-fade-manual-interval">
       <default>1000</default>
       <summary>Manual switch two backgrounds duration</summary>

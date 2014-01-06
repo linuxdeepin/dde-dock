@@ -9,7 +9,7 @@ all:
 	cd display/ && $(run)
 	cd ext-device/ && $(run)
 	cd individuate/ && $(run)
-	cd keybinding/ && $(run)
+	cd binding-manager/ && $(run)
 	cd network/ && $(run)
 	cd power/ && $(run)
 	cd set-date-time/ && $(run)
