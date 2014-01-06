@@ -317,10 +317,22 @@ int pa_subscribe(pa *self)
         // Iterate the main loop and go again.  The second argument is whether
         // or not the iteration should block until something is ready to be
         // done.  Set it to zero for non-blocking.
-        /*fprintf(stderr, "case 1,before unlocking\n");*/
-        pa_mainloop_iterate(self->pa_ml, 0, NULL);
+        ret = pa_mainloop_iterate(self->pa_ml, 0, NULL);
+        if (ret < 0)
+        {
+            //ppoll return value is negtive
+            if (ret == -2)
+            {
+                //mainloop quit indicated
+                //reinitialize the pulseaudio context
+                pa_init_context(self);
+            }
+            pthread_mutex_unlock(&self->pa_mutex);
+            usleep(1000);
+            fprintf(stderr, "mainloop quit indicated\n");
+            continue;
+        }
         pthread_mutex_unlock(&self->pa_mutex);
-        /*fprintf(stderr, "case 1,after unlocking\n");*/
     }
     return 0;
 }
@@ -495,6 +507,7 @@ void *pa_get_client_list(pa *self)
     // We'll need these state variables to keep track of our requests
     int state = 0;
 
+    pthread_mutex_lock(&self->pa_mutex);
     for (;;)
     {
         // We can't do anything until PA is ready, so just iterate the mainloop
@@ -507,12 +520,6 @@ void *pa_get_client_list(pa *self)
         // We couldn't get a connection to the server, so exit out
         if (self->pa_ready == 2)
         {
-            pa_context_disconnect(self->pa_ctx);
-            pa_context_unref(self->pa_ctx);
-            pa_mainloop_free(self->pa_ml);
-            self->pa_ctx = NULL;
-            self->pa_mlapi = NULL;
-            self->pa_ml = NULL;
             pa_init_context(self);
 
             return NULL;
@@ -543,6 +550,7 @@ void *pa_get_client_list(pa *self)
                 // Now we're done, clean up and disconnect and return
                 pa_operation_unref(self->pa_op);
                 self->pa_op = NULL;
+                pthread_mutex_unlock(&self->pa_mutex);
                 return NULL;
             }
             break;
@@ -564,11 +572,7 @@ void *pa_get_sink_input_list(pa *self)
 {
     int state = 0;
 
-    pa_context_connect(self->pa_ctx, NULL, 0, NULL);
-    pa_context_set_state_callback(self->pa_ctx,
-                                  pa_state_cb,
-                                  &self->pa_ready);
-
+    pthread_mutex_lock(&self->pa_mutex);
     for (;;)
     {
         if (self->pa_ready == 0)
@@ -578,22 +582,21 @@ void *pa_get_sink_input_list(pa *self)
         }
         if (self->pa_ready == 2)
         {
-            pa_context_disconnect(self->pa_ctx);
-            pa_context_unref(self->pa_ctx);
-            pa_mainloop_free(self->pa_ml);
-            self->pa_op = NULL;
-            self->pa_ctx = NULL;
-            self->pa_mlapi = NULL;
-            self->pa_ml = NULL;
             pa_init_context(self);
 
+            pthread_mutex_unlock(&self->pa_mutex);
+            usleep(100);
+            pthread_mutex_lock(&self->pa_mutex);
             return NULL;
         }
         switch (state)
         {
         case 0:
             self->n_sink_inputs = 0;
-            self->pa_op = pa_context_get_sink_input_info_list(self->pa_ctx, pa_get_sink_input_info_cb, self);
+            self->pa_op = pa_context_get_sink_input_info_list(
+                              self->pa_ctx,
+                              pa_sink_input_info_cb,
+                              self);
             state++;
             break;
         case 1:
@@ -601,6 +604,7 @@ void *pa_get_sink_input_list(pa *self)
             {
                 pa_operation_unref(self->pa_op);
                 self->pa_op = NULL;
+                pthread_mutex_unlock(&self->pa_mutex);
                 return NULL;
             }
             break;
@@ -617,6 +621,7 @@ void *pa_get_source_output_list(pa *self)
 {
     int state = 0;
 
+    pthread_mutex_lock(&self->pa_mutex);
     for (;;)
     {
         if (self->pa_ready == 0)
@@ -626,13 +631,6 @@ void *pa_get_source_output_list(pa *self)
         }
         if (self->pa_ready == 2)
         {
-            pa_context_disconnect(self->pa_ctx);
-            pa_context_unref(self->pa_ctx);
-            pa_mainloop_free(self->pa_ml);
-            self->pa_op = NULL;
-            self->pa_ctx = NULL;
-            self->pa_mlapi = NULL;
-            self->pa_ml = NULL;
             pa_init_context(self);
             return NULL;
         }
@@ -641,7 +639,7 @@ void *pa_get_source_output_list(pa *self)
         case 0:
             self->n_source_outputs = 0;
             self->pa_op = pa_context_get_source_output_info_list(self->pa_ctx,
-                          pa_get_source_output_info_cb, self);
+                          pa_source_output_info_cb, self);
             state++;
             break;
         case 1:
@@ -649,12 +647,7 @@ void *pa_get_source_output_list(pa *self)
             {
                 pa_operation_unref(self->pa_op);
                 self->pa_op = NULL;
-                pa_context_disconnect(self->pa_ctx);
-                self->pa_op = NULL;
-                self->pa_ctx = NULL;
-                self->pa_mlapi = NULL;
-                self->pa_ml = NULL;
-                pa_init_context(self);
+                pthread_mutex_unlock(&self->pa_mutex);
                 return NULL;
             }
             break;
@@ -687,13 +680,6 @@ int pa_set_card_profile_by_index(pa *self, int index, const char *profile)
         }
         if (self->pa_ready == 2)
         {
-            pa_context_disconnect(self->pa_ctx);
-            pa_context_unref(self->pa_ctx);
-            pa_mainloop_free(self->pa_ml);
-            self->pa_op = NULL;
-            self->pa_ctx = NULL;
-            self->pa_mlapi = NULL;
-            self->pa_ml = NULL;
             pa_init_context(self);
 
             continue;
@@ -714,7 +700,6 @@ int pa_set_card_profile_by_index(pa *self, int index, const char *profile)
                 pa_operation_unref(self->pa_op);
                 self->pa_op = NULL;
                 pthread_mutex_unlock(&self->pa_mutex);
-                fprintf(stderr, "in state %d\n", state);
                 return 0;
             }
             break;
@@ -1219,6 +1204,7 @@ int pa_inc_source_volume_by_index(pa *self, int index, int volume)
         return -1;
     }
 
+    pthread_mutex_lock(&self->pa_mutex);
     for (;;)
     {
         if (self->pa_ready == 0)
@@ -1253,14 +1239,8 @@ int pa_inc_source_volume_by_index(pa *self, int index, int volume)
                 {
                     fprintf(stderr, "Invalid increased volume\n");
                     pa_operation_unref(self->pa_op);
-                    pa_context_disconnect(self->pa_ctx);
-                    pa_context_unref(self->pa_ctx);
-                    pa_mainloop_free(self->pa_ml);
                     self->pa_op = NULL;
-                    self->pa_ctx = NULL;
-                    self->pa_ml = NULL;
-                    self->pa_mlapi = NULL;
-                    pa_init_context(self);
+                    pthread_mutex_unlock(&self->pa_mutex);
                     return 0;
                 }
                 else
@@ -1276,14 +1256,8 @@ int pa_inc_source_volume_by_index(pa *self, int index, int volume)
             if (pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
             {
                 pa_operation_unref(self->pa_op);
-                pa_context_disconnect(self->pa_ctx);
-                pa_context_unref(self->pa_ctx);
-                pa_mainloop_free(self->pa_ml);
                 self->pa_op = NULL;
-                self->pa_ctx = NULL;
-                self->pa_mlapi = NULL;
-                self->pa_ml = NULL;
-                pa_init_context(self);
+                pthread_mutex_unlock(&self->pa_mutex);
                 return 0;
             }
             break;
@@ -1303,6 +1277,7 @@ int pa_dec_source_volume_by_index(pa *self, int index, int volume)
     pa_cvolume cvolume;
     memset(&cvolume, 0, sizeof(cvolume));
 
+    pthread_mutex_lock(&self->pa_mutex);
     for (;;)
     {
         if (self->pa_ready == 0)
@@ -1337,14 +1312,8 @@ int pa_dec_source_volume_by_index(pa *self, int index, int volume)
                 {
                     fprintf(stderr, "Invalid increased volume\n");
                     pa_operation_unref(self->pa_op);
-                    pa_context_disconnect(self->pa_ctx);
-                    pa_context_unref(self->pa_ctx);
-                    pa_mainloop_free(self->pa_ml);
                     self->pa_op = NULL;
-                    self->pa_ctx = NULL;
-                    self->pa_ml = NULL;
-                    self->pa_mlapi = NULL;
-                    pa_init_context(self);
+                    pthread_mutex_unlock(&self->pa_mutex);
                     return 0;
                 }
                 else
@@ -1360,14 +1329,9 @@ int pa_dec_source_volume_by_index(pa *self, int index, int volume)
             if (pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
             {
                 pa_operation_unref(self->pa_op);
-                pa_context_disconnect(self->pa_ctx);
-                pa_context_unref(self->pa_ctx);
-                pa_mainloop_free(self->pa_ml);
+
                 self->pa_op = NULL;
-                self->pa_ctx = NULL;
-                self->pa_mlapi = NULL;
-                self->pa_ml = NULL;
-                pa_init_context(self);
+                pthread_mutex_unlock(&self->pa_mutex);
                 return 0;
             }
             break;
@@ -1385,9 +1349,7 @@ int pa_set_sink_input_mute(pa *self, int index, int mute)
 {
     int state = 0;
 
-    pa_context_connect(self->pa_ctx, NULL, 0, NULL);
-    pa_context_set_state_callback(self->pa_ctx, pa_state_cb, &self->pa_ready);
-
+    pthread_mutex_lock(&self->pa_mutex);
     for (;;)
     {
         if (self->pa_ready == 0)
@@ -1397,15 +1359,9 @@ int pa_set_sink_input_mute(pa *self, int index, int mute)
         }
         if (self->pa_ready == 2)
         {
-            pa_context_disconnect(self->pa_ctx);
-            pa_context_unref(self->pa_ctx);
-            pa_mainloop_free(self->pa_ml);
-            self->pa_op = NULL;
-            self->pa_ctx = NULL;
-            self->pa_mlapi = NULL;
-            self->pa_ml = NULL;
             pa_init_context(self);
 
+            pthread_mutex_unlock(&self->pa_mutex);
             return -1;
         }
         switch (state)
@@ -1418,14 +1374,8 @@ int pa_set_sink_input_mute(pa *self, int index, int mute)
             if (pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
             {
                 pa_operation_unref(self->pa_op);
-                pa_context_disconnect(self->pa_ctx);
-                pa_context_unref(self->pa_ctx);
-                pa_mainloop_free(self->pa_ml);
                 self->pa_op = NULL;
-                self->pa_ctx = NULL;
-                self->pa_mlapi = NULL;
-                self->pa_ml = NULL;
-                pa_init_context(self);
+                pthread_mutex_unlock(&self->pa_mutex);
                 return 0;
             }
             break;
@@ -1445,7 +1395,6 @@ int pa_set_sink_input_mute_by_pid(pa *self, int index, int mute)
         fprintf(stderr, "NULL object pointer\n");
         return -1;
     }
-
     //pa_get_sink_input_index_by_pid(self,index,mute);
 
     return 0;
@@ -1467,9 +1416,7 @@ int pa_set_sink_input_volume(pa *self, int index, pa_cvolume *cvolume)
         return -1;
     }
 
-    pa_context_connect(self->pa_ctx, NULL, 0, NULL);
-    pa_context_set_state_callback(self->pa_ctx, pa_state_cb, &self->pa_ready);
-
+    pthread_mutex_lock(&self->pa_mutex);
     for (;;)
     {
         if (self->pa_ready == 0)
@@ -1486,6 +1433,7 @@ int pa_set_sink_input_volume(pa *self, int index, pa_cvolume *cvolume)
             self->pa_ctx = NULL;
             self->pa_mlapi = NULL;
             self->pa_ml = NULL;
+            pthread_mutex_unlock(&self->pa_mutex);
             return 0;
         }
         switch (state)
@@ -1499,14 +1447,9 @@ int pa_set_sink_input_volume(pa *self, int index, pa_cvolume *cvolume)
             if (pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
             {
                 pa_operation_unref(self->pa_op);
-                pa_context_disconnect(self->pa_ctx);
-                pa_context_unref(self->pa_ctx);
-                pa_mainloop_free(self->pa_ml);
+
                 self->pa_op = NULL;
-                self->pa_ctx = NULL;
-                self->pa_mlapi = NULL;
-                self->pa_ml = NULL;
-                pa_init_context(self);
+                pthread_mutex_unlock(&self->pa_mutex);
                 return 0;
             }
             break;
@@ -2106,21 +2049,24 @@ void pa_context_subscribe_cb(pa_context *c,
         break;
     case PA_SUBSCRIPTION_EVENT_SOURCE :
         self->n_sources = 0;
-        if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) == PA_SUBSCRIPTION_EVENT_NEW)
+        if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) ==
+                PA_SUBSCRIPTION_EVENT_NEW)
         {
             printf("DEBUG source %d new\n", idx);
             pa_context_get_source_info_by_index(c, idx,
                                                 pa_source_update_info_cb,
                                                 self);
         }
-        else if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) == PA_SUBSCRIPTION_EVENT_CHANGE)
+        else if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) ==
+                 PA_SUBSCRIPTION_EVENT_CHANGE)
         {
             printf("DEBUG source %d changed\n", idx);
             pa_context_get_source_info_by_index(c, idx,
                                                 pa_source_update_info_cb,
                                                 self);
         }
-        else if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) == PA_SUBSCRIPTION_EVENT_REMOVE)
+        else if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) ==
+                 PA_SUBSCRIPTION_EVENT_REMOVE)
         {
             printf("DEBUG source %d removed\n", idx);
             updateSource(idx, t & PA_SUBSCRIPTION_EVENT_TYPE_MASK);
@@ -2141,8 +2087,61 @@ void pa_context_subscribe_cb(pa_context *c,
     case PA_SUBSCRIPTION_EVENT_SERVER:
         printf("DEBUG server\n");
         break;
+    case PA_SUBSCRIPTION_EVENT_SINK_INPUT:
+        self->n_sink_inputs = 0;
+        if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) ==
+                PA_SUBSCRIPTION_EVENT_NEW)
+        {
+            printf("DEBUG sink input %d new\n", idx);
+            pa_context_get_sink_input_info(c, idx,
+                                           pa_sink_input_update_info_cb,
+                                           self);
+        }
+        else if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) ==
+                 PA_SUBSCRIPTION_EVENT_CHANGE)
+        {
+            printf("DEBUG sink input %d changed\n", idx);
+            pa_context_get_sink_input_info(c, idx,
+                                           pa_sink_input_update_info_cb,
+                                           self);
+        }
+        else if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) ==
+                 PA_SUBSCRIPTION_EVENT_REMOVE)
+        {
+            printf("DEBUG sink input %d removed\n", idx);
+            updateSinkInput(idx,
+                            t & PA_SUBSCRIPTION_EVENT_TYPE_MASK);
+        }
+        break;
+    case PA_SUBSCRIPTION_EVENT_SOURCE_OUTPUT:
+        self->n_source_outputs = 0;
+        if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) ==
+                PA_SUBSCRIPTION_EVENT_NEW)
+        {
+            printf("DEBUG source output %d new\n", idx);
+            pa_context_get_source_output_info(c, idx,
+                                              pa_source_output_update_info_cb,
+                                              self);
+        }
+        else if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) ==
+                 PA_SUBSCRIPTION_EVENT_CHANGE)
+        {
+            printf("DEBUG source output %d changed\n", idx);
+            pa_context_get_source_output_info(c, idx,
+                                              pa_source_output_update_info_cb,
+                                              self);
+        }
+        else if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) ==
+                 PA_SUBSCRIPTION_EVENT_REMOVE)
+        {
+            printf("DEBUG source output %d removed\n", idx);
+            updateSinkInput(idx,
+                            t & PA_SUBSCRIPTION_EVENT_TYPE_MASK);
+        }
+        break;
     }
 }
+
 void pa_get_serverinfo_cb(pa_context *c, const pa_server_info*i, void *userdata)
 {
     pa *self = userdata;
@@ -2410,7 +2409,7 @@ void pa_client_info_cb(pa_context *c,
     printf("DEBUG client info %s\n", i ? i->name : NULL);
 }
 
-void pa_get_sink_input_info_cb(pa_context *c, const pa_sink_input_info *i, int eol, void *userdata)
+void pa_sink_input_info_cb(pa_context *c, const pa_sink_input_info *i, int eol, void *userdata)
 {
     pa *self = userdata;
     sink_input_t *sink_input = NULL;
@@ -2446,6 +2445,7 @@ void pa_get_sink_input_info_cb(pa_context *c, const pa_sink_input_info *i, int e
     sink_input->has_volume = i->has_volume;
     strncpy(sink_input->name, i->name, sizeof(sink_input->name) - 1);
     strncpy(sink_input->driver, i->driver, sizeof(i->driver) - 1);
+    sink_input->proplist = pa_proplist_copy(i->proplist);
 
     char buf[1024];
     const char *prop_key = NULL;
@@ -2465,15 +2465,39 @@ void pa_get_sink_input_info_cb(pa_context *c, const pa_sink_input_info *i, int e
         PyDict_SetItemString(dict,prop_key, PYSTRING_FROMSTRING(pa_proplist_gets(i->proplist, prop_key)));
     }*/
 
-    while ((prop_key = pa_proplist_iterate(i->proplist, &prop_state)))
+    while ((prop_key = pa_proplist_iterate(sink_input->proplist, &prop_state)))
     {
-        printf("  %s: %s\n", prop_key, pa_proplist_gets(i->proplist, prop_key));
+        printf("  %s: %s\n",
+               prop_key,
+               pa_proplist_gets(sink_input->proplist, prop_key));
     }
     printf("format_info: %s\n", pa_format_info_snprint(buf, 1000, i->format));
     printf("------------------------------\n");
 }
 
-void pa_get_sink_input_volume_cb(pa_context *c, const pa_sink_input_info *i, int eol, void *userdata)
+void pa_sink_input_update_info_cb(pa_context *c,
+                                  const pa_sink_input_info *i,
+                                  int eol,
+                                  void *userdata
+                                 )
+{
+    pa *self = userdata;
+    if (i)
+    {
+        pa_sink_input_info_cb(c, i, eol, userdata);
+        updateSinkInput(i->index,
+                        self->subscription_event & PA_SUBSCRIPTION_EVENT_TYPE_MASK);
+    }
+    else
+    {
+        return;
+    }
+}
+
+void pa_get_sink_input_volume_cb(pa_context *c,
+                                 const pa_sink_input_info *i,
+                                 int eol,
+                                 void *userdata)
 {
     if (eol > 0)
     {
@@ -2488,8 +2512,8 @@ void pa_get_sink_input_volume_cb(pa_context *c, const pa_sink_input_info *i, int
     return;
 }
 
-void pa_get_source_output_info_cb(pa_context *c,
-                                  const pa_source_output_info *o, int eol, void *userdata)
+void pa_source_output_info_cb(pa_context *c,
+                              const pa_source_output_info *o, int eol, void *userdata)
 {
     pa *self = userdata;
     source_output_t *source_output = NULL;
@@ -2528,8 +2552,27 @@ void pa_get_source_output_info_cb(pa_context *c,
     //void *prop_state = NULL;
 }
 
+void pa_source_output_update_info_cb(pa_context *c,
+                                     const pa_source_output_info *o,
+                                     int eol,
+                                     void *userdata)
+{
+    pa *self = userdata;
+    if (o)
+    {
+        pa_source_output_info_cb(c, o, eol, userdata);
+        updateSourceOutput(o->index,
+                           self->subscription_event & PA_SUBSCRIPTION_EVENT_TYPE_MASK);
+    }
+    else
+    {
+        return;
+    }
+}
+
 void pa_get_source_output_volume_cb(pa_context *c,
-                                    const pa_source_output_info *o, int eol, void *userdata)
+                                    const pa_source_output_info *o,
+                                    int eol, void *userdata)
 {
     if (eol > 0)
     {
@@ -2575,7 +2618,7 @@ void pa_set_sink_input_volume_cb(pa_context *c, int success, void *userdata)
     }
 }
 
-int print_card(pa_card_info *l)
+int print_card(const pa_card_info *l)
 {
     if (l)
     {
@@ -2590,7 +2633,7 @@ int print_card(pa_card_info *l)
     }
 }
 
-int print_sink(pa_sink_info *l)
+int print_sink(const pa_sink_info *l)
 {
     if (l)
     {
@@ -2610,7 +2653,7 @@ int print_sink(pa_sink_info *l)
     return 0;
 }
 
-int print_source(pa_source_info *l)
+int print_source(const pa_source_info *l)
 {
     if (l)
     {

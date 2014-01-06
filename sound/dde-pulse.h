@@ -107,6 +107,7 @@ typedef struct sink_input_s
     int mute;
     int has_volume;
     int volume_writable;
+    pa_proplist *proplist;
 } sink_input_t;
 
 typedef struct source_output_s
@@ -232,13 +233,11 @@ void pa_client_info_cb(pa_context *c,
                        void *userdata);
 void pa_get_sink_input_info_cb(pa_context *c, const pa_sink_input_info *i,
                                int eol, void *userdata);
-void pa_get_sink_input_info_cb(pa_context *c, const pa_sink_input_info *i, int eol, void *userdata);
-void pa_sink_info_cb(pa_context *c,
-                     const pa_sink_info *i,
-                     int eol,
-                     void *userdata);
+void pa_sink_input_info_cb(pa_context *c, const pa_sink_input_info *i, int eol, void *userdata);
+void pa_sink_input_update_info_cb(pa_context *c, const pa_sink_input_info *i, int eol, void *userdata);
 void pa_get_sink_input_volume_cb(pa_context *c, const pa_sink_input_info *i, int eol, void *userdata);
-void pa_get_source_output_info_cb(pa_context *c, const pa_source_output_info *i, int eol, void *userdata);
+void pa_source_output_info_cb(pa_context *c, const pa_source_output_info *i, int eol, void *userdata);
+void pa_source_output_update_info_cb(pa_context *c, const pa_source_output_info *i, int eol, void *userdata);
 void pa_get_source_output_volume_cb(pa_context *c, const pa_source_output_info *o, int eol, void *userdata);
 
 
@@ -249,6 +248,10 @@ void pa_set_sink_input_volume_cb(pa_context *c, int success, void *userdata);
 card_t *pa2card(card_t *card, const pa_card_info *l);
 sink_t *pa2sink(sink_t *sink, const pa_sink_info *l);
 source_t *pa2source(source_t *source, const pa_source_info *l);
+
+int print_card(const pa_card_info *l);
+int print_sink(const pa_sink_info *l);
+int print_source(const pa_source_info *l);
 
 
 //utils
