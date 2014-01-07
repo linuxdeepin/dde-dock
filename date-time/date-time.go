@@ -88,7 +88,7 @@ func NewDateAndTime() *DateTime {
 func Init() {
 	var err error
 
-	_setDT, err = setdatetime.NewSetDateTime("/com/deepin/daemon/SetDateTime")
+	_setDT, err = setdatetime.NewSetDateTime("/com/deepin/dde/api/SetDateTime")
 	if err != nil {
 		fmt.Println("New SetDateTime Failed.")
 		panic(err)
