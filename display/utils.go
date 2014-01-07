@@ -144,3 +144,22 @@ func parseReflects(rotations uint16) (ret []uint16) {
 	}
 	return
 }
+
+func isCrtcConnected(c *xgb.Conn, crtc randr.Crtc) bool {
+	cinfo, err := randr.GetCrtcInfo(c, crtc, 0).Reply()
+	if err != nil {
+		panic(err)
+	}
+	if cinfo.Mode == 0 {
+		return false
+	}
+	return true
+}
+
+func parseRotationSize(rotation, width, height uint16) (uint16, uint16) {
+	if rotation == randr.RotationRotate90 || rotation == randr.RotationRotate270 {
+		return height, width
+	} else {
+		return width, height
+	}
+}

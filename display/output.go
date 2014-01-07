@@ -55,14 +55,15 @@ func (op *Output) updateCrtc(dpy *Display) {
 			panic(err)
 		}
 		op.rotations = info.Rotations
-		op.Rotation = info.Rotation
+		op.Rotation = info.Rotation & 0xf
+		op.Reflect = (info.Rotation >> 4) & 0xf
 
 		op.Allocation = xproto.Rectangle{info.X, info.Y, info.Width, info.Height}
-		fmt.Println("UpdateCrtc To", op.Allocation)
 
 		op.Mode = buildMode(dpy.modes[info.Mode])
 	} else {
 		op.Rotation = 0
+		op.Reflect = 0
 		op.Allocation = xproto.Rectangle{0, 0, 0, 0}
 
 		op.Mode = Mode{0, 0, 0}
@@ -84,16 +85,24 @@ func (op *Output) update(dpy *Display, info *randr.GetOutputInfoReply) {
 }
 
 func (op *Output) setRotation(rotation uint16) {
-	s, err := randr.SetCrtcConfig(X, op.crtc, 0, 0, op.Allocation.X, op.Allocation.Y, op.bestMode, rotation|op.Reflect, []randr.Output{op.Identify}).Reply()
+	v := op.Opened
+	defer func() { op.setOpened(v) }()
+	op.setOpened(false)
+
+	_, err := randr.SetCrtcConfig(X, op.crtc, 0, 0, op.Allocation.X, op.Allocation.Y, op.bestMode, rotation|op.Reflect, []randr.Output{op.Identify}).Reply()
 	if err != nil {
 		panic(err)
 	}
 	op.Rotation = rotation
-	fmt.Println("Rotation....:", s, err, op.crtc, op.Allocation, op.bestMode, rotation)
 }
 
 func (op *Output) setReflect(reflect uint16) {
+	v := op.Opened
+	defer func() { op.setOpened(v) }()
+	op.setOpened(false)
+
 	_, err := randr.SetCrtcConfig(X, op.crtc, 0, 0, op.Allocation.X, op.Allocation.Y, op.bestMode, op.Rotation|reflect, []randr.Output{op.Identify}).Reply()
+	op.setOpened(true)
 	if err != nil {
 		panic(err)
 	}
@@ -108,18 +117,28 @@ func (op *Output) setOpened(v bool) {
 				panic(err)
 			}
 			for _, crtc := range oinfo.Crtcs {
+				if isCrtcConnected(X, crtc) {
+					fmt.Println("crtc:", crtc, "Is used for ", op.Name)
+					continue
+				}
 				s, err := randr.SetCrtcConfig(X, crtc, 0, 0, op.Allocation.X, op.Allocation.Y, op.bestMode, 1, []randr.Output{op.Identify}).Reply()
 				if err == nil {
+					fmt.Println("Crtc:", crtc, "for", op.Name, " is ok")
 					break
 				}
 				fmt.Println("AAAA:", s, err, crtc, op.bestMode, op.Rotation, op.Identify)
 			}
 		} else {
-			fmt.Println("OXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
-			s, err := randr.SetCrtcConfig(X, op.crtc, 0, 0, op.Allocation.X, op.Allocation.Y, 0, op.Rotation, nil).Reply()
-			fmt.Println(s, err)
+			_, err := randr.SetCrtcConfig(X, op.crtc, 0, 0, op.Allocation.X, op.Allocation.Y, 0, op.Rotation, nil).Reply()
+			if err != nil {
+				panic(err)
+			}
 		}
 	}
+}
+
+func (op *Output) Debug() string {
+	return fmt.Sprintf("Allocation:%v Rotation:%d", op.Allocation, op.Rotation)
 }
 
 func NewOutput(dpy *Display, core randr.Output) *Output {
@@ -145,5 +164,6 @@ func NewOutput(dpy *Display, core randr.Output) *Output {
 	}
 	op.update(dpy, info)
 	op.updateCrtc(dpy)
+	dbus.InstallOnSession(op)
 	return op
 }

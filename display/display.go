@@ -57,7 +57,7 @@ func NewDisplay() *Display {
 
 	sinfo, err := getScreenInfo(Root)
 	dpy.rotations = uint16(sinfo.Rotations)
-	dpy.Rotation = sinfo.Rotation
+	dpy.updateRotationAndRelfect(sinfo.Rotation)
 
 	if err != nil {
 		panic(err)
@@ -168,8 +168,21 @@ func (dpy *Display) listener() {
 			}
 		case randr.ScreenChangeNotifyEvent:
 			ee := e.(randr.ScreenChangeNotifyEvent)
-			dpy.updateScreenSize(ee.Width, ee.Height)
-			dpy.updateRotation(uint16(ee.Rotation))
+			DefaultScreen = xproto.Setup(X).DefaultScreen(X)
+			width, height := parseRotationSize(uint16(ee.Rotation), ee.Width, ee.Height)
+			dpy.updateRotationAndRelfect(uint16(ee.Rotation))
+			for _, op := range dpy.Outputs {
+				op.updateCrtc(dpy)
+				opWidth := uint16(op.Allocation.X + int16(op.Allocation.Width))
+				opHeight := uint16(op.Allocation.Y + int16(op.Allocation.Height))
+				if width < opWidth {
+					width = opWidth
+				}
+				if height < opHeight {
+					height = opHeight
+				}
+			}
+			dpy.updateScreenSize(width, height)
 			dpy.updatePrimary() //depend on updateScreenSize when there hasn't an primary output
 		}
 	}
@@ -185,10 +198,17 @@ func (dpy *Display) updateScreenSize(width uint16, height uint16) {
 		dbus.NotifyChange(dpy, "Height")
 	}
 }
-func (dpy *Display) updateRotation(rotation uint16) {
+func (dpy *Display) updateRotationAndRelfect(randr uint16) {
+	rotation := randr & 0xf
+	reflect := (randr >> 4) & 0xf
+
 	if dpy.Rotation != rotation {
 		dpy.Rotation = rotation
 		dbus.NotifyChange(dpy, "Rotation")
+	}
+	if dpy.Reflect != reflect {
+		dpy.Reflect = reflect
+		dbus.NotifyChange(dpy, "Reflect")
 	}
 }
 

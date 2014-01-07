@@ -1,10 +1,15 @@
 package main
 
+/*import fmtp "github.com/kr/pretty"*/
 import "fmt"
 import "testing"
 import "time"
 import "github.com/BurntSushi/xgb/randr"
 import . "launchpad.net/gocheck"
+
+func delay() {
+	<-time.After(time.Millisecond * 500)
+}
 
 func Test(t *testing.T) { TestingT(t) }
 
@@ -16,10 +21,15 @@ func init() {
 	for _, op := range dpy.Outputs {
 		Suite(op)
 	}
+	for _, op := range dpy.Outputs {
+		xx, _ := randr.GetOutputInfo(X, op.Identify, 0).Reply()
+		fmt.Println(op.Name, " : ", op.crtc, xx.Crtcs)
+	}
 }
 
 func (dpy *Display) TestScreenInfo(c *C) {
-	c.Check(dpy.Width, Equals, DefaultScreen.WhitePixel)
+	delay()
+	c.Check(dpy.Width, Equals, DefaultScreen.WidthInPixels)
 	c.Check(dpy.Height, Equals, DefaultScreen.HeightInPixels)
 
 	for _, r := range dpy.ListRotations() {
@@ -41,29 +51,31 @@ func (dpy *Display) TestOutputList(c *C) {
 
 func (dpy *Display) TestPrimaryOutput(c *C) {
 	po := dpy.PrimaryOutput
+	savedIdentify := uint32(0)
+	if po != nil {
+		savedIdentify = uint32(po.Identify)
+	}
 	defer func() {
-		if po == nil {
-			dpy.SetPrimary(0)
-		} else {
-			dpy.SetPrimary(uint32(po.Identify))
-		}
+		dpy.SetPrimary(savedIdentify)
 	}()
 
 	for _, op := range dpy.Outputs {
-		dpy.SetPrimary(uint32(op.Identify))
-		<-time.After(time.Millisecond * 50)
-		c.Check(dpy.PrimaryRect.Width, Equals, op.Allocation.Width)
-		c.Check(dpy.PrimaryRect.Height, Equals, op.Allocation.Height)
+		if op.Opened {
+			dpy.SetPrimary(uint32(op.Identify))
+			delay()
+			c.Check(dpy.PrimaryRect.Width, Equals, op.Allocation.Width)
+			c.Check(dpy.PrimaryRect.Height, Equals, op.Allocation.Height)
+		}
 	}
 
 	if po != nil {
 		dpy.SetPrimary(uint32(po.Identify))
-		<-time.After(time.Millisecond * 100)
+		delay()
 		c.Check(dpy.PrimaryOutput, Equals, po)
 	}
 
 	dpy.SetPrimary(0)
-	<-time.After(time.Millisecond * 50)
+	delay()
 	c.Check(dpy.PrimaryRect.Width, Equals, dpy.Width)
 	c.Check(dpy.PrimaryRect.Height, Equals, dpy.Height)
 }
@@ -71,21 +83,31 @@ func (dpy *Display) TestPrimaryOutput(c *C) {
 func (op *Output) TestInfo(c *C) {
 	c.Check(op.Brightness >= 0 && op.Brightness <= 1, Equals, true)
 
+	delay()
 	find := false
 	for _, r := range op.ListModes() {
 		if r == op.Mode {
 			find = true
 		}
 	}
-	c.Check(find, Equals, true)
+	if op.Opened {
+		c.Check(find, Equals, true)
+	} else {
+		fmt.Println("OP:", op.Name, "Mode:", op.Mode)
+		c.Check(find, Equals, false)
+	}
 
 	crtcInfo, err := randr.GetCrtcInfo(X, op.crtc, 0).Reply()
+	if op.Opened {
+		c.Assert(err, Equals, nil)
+		c.Check(op.Mode, Equals, buildMode(dpy.modes[crtcInfo.Mode]))
+		c.Check(op.Rotation, Equals, uint16(crtcInfo.Rotation))
+	} else {
+		c.Assert(err, NotNil)
+	}
 
-	c.Assert(err, Equals, nil)
-	c.Check(op.Mode, Equals, buildMode(dpy.modes[crtcInfo.Mode]))
-
-	c.Check(op.Rotation, Equals, uint16(crtcInfo.Rotation))
 	c.Check(op.Opened, Equals, op.crtc != 0)
+
 	_, err = randr.GetOutputInfo(X, op.Identify, 0).Reply()
 	c.Check(err, Equals, nil)
 
@@ -94,39 +116,49 @@ func (op *Output) TestInfo(c *C) {
 	op.updateCrtc(dpy)
 }
 
-func (op *Output) TestRotation(c *C) {
-	oi, _ := randr.GetOutputInfo(X, op.Identify, 0).Reply()
-	/*ci, _ := randr.GetCrtcInfo(X, op.crtc, 0).Reply()*/
-	if op.Name == "LVDS1" {
-		return
-	}
-	return
-
-	s, err := randr.SetCrtcConfig(X, op.crtc, 0, 0, op.Allocation.X, op.Allocation.Y, op.bestMode, 2, []randr.Output{op.Identify}).Reply()
-	fmt.Println("Rotation....:", s, err, op.crtc, op.Allocation, op.bestMode)
-	fmt.Println("SupportCrtcs:", oi.Crtcs, op.crtc)
-	fmt.Println("SupportModes:", oi.Modes, op.bestMode)
-	fmt.Println("DPY:", dpy.Width, dpy.Height)
-
-	return
-	for _, reflect := range op.ListReflect() {
-		op.setReflect(reflect)
-		for _, rotation := range op.ListRotations() {
-			op.setRotation(uint16(rotation))
-			<-time.After(time.Millisecond * 2000)
-		}
-	}
-	op.setRotation(1)
-	op.setReflect(0)
-}
-
 func (op *Output) TestClose(c *C) {
 	return
-	/*op.setOpened(false)*/
-	/*<-time.After(time.Millisecond * 800)*/
-	/*op.setOpened(true)*/
-	oinfo, err := randr.GetOutputInfo(X, op.Identify, 0).Reply()
-	s, err := randr.SetCrtcConfig(X, oinfo.Crtcs[1], 0, 0, op.Allocation.X, op.Allocation.Y, op.bestMode, 1, []randr.Output{op.Identify}).Reply()
-	fmt.Println(s, err, oinfo.Crtcs[0])
-	<-time.After(time.Millisecond * 100)
+	delay()
+
+	v := op.Opened
+	op.setOpened(false)
+	delay()
+	op.setOpened(true)
+
+	delay()
+	op.setOpened(v)
+	delay()
+	c.Check(op.Opened, Equals, v)
+
+	return
+}
+
+func (op *Output) TestAllocation(c *C) {
+	rv := op.Rotation
+	fv := op.Reflect
+
+	for _, reflect := range op.ListReflect() {
+		op.setReflect(reflect)
+		delay()
+		for _, r := range op.ListRotations() {
+			op.setRotation(r)
+			delay()
+			cinfo, err := randr.GetCrtcInfo(X, op.crtc, 0).Reply()
+			if err != nil {
+				panic(err)
+			}
+			c.Check(op.Allocation.X, Equals, cinfo.X)
+			c.Check(op.Allocation.Y, Equals, cinfo.Y)
+			c.Check(op.Allocation.Width, Equals, cinfo.Width)
+			c.Check(op.Allocation.Height, Equals, cinfo.Height)
+		}
+	}
+	delay()
+
+	op.setRotation(rv)
+	delay()
+	op.setReflect(fv)
+	delay()
+	c.Check(rv, Equals, op.Rotation)
+	c.Check(fv, Equals, op.Reflect)
 }
