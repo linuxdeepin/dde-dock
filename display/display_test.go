@@ -19,9 +19,16 @@ func init() {
 }
 
 func (dpy *Display) TestScreenInfo(c *C) {
+	c.Check(dpy.Width, Equals, DefaultScreen.WhitePixel)
+	c.Check(dpy.Height, Equals, DefaultScreen.HeightInPixels)
+
 	for _, r := range dpy.ListRotations() {
 		if r == dpy.Rotation {
-			c.Succeed()
+			return
+		}
+	}
+	for _, r := range dpy.ListReflect() {
+		if r == dpy.Reflect {
 			return
 		}
 	}
@@ -49,19 +56,17 @@ func (dpy *Display) TestPrimaryOutput(c *C) {
 		c.Check(dpy.PrimaryRect.Height, Equals, op.Allocation.Height)
 	}
 
-	dpy.SetPrimary(uint32(po.Identify))
-	<-time.After(time.Millisecond * 100)
-	c.Check(dpy.PrimaryOutput, Equals, po)
+	if po != nil {
+		dpy.SetPrimary(uint32(po.Identify))
+		<-time.After(time.Millisecond * 100)
+		c.Check(dpy.PrimaryOutput, Equals, po)
+	}
 
 	dpy.SetPrimary(0)
 	<-time.After(time.Millisecond * 50)
 	c.Check(dpy.PrimaryRect.Width, Equals, dpy.Width)
 	c.Check(dpy.PrimaryRect.Height, Equals, dpy.Height)
 }
-
-func (dpy *Display) TestScreenSize() {
-}
-
 
 func (op *Output) TestInfo(c *C) {
 	c.Check(op.Brightness >= 0 && op.Brightness <= 1, Equals, true)
@@ -87,15 +92,6 @@ func (op *Output) TestInfo(c *C) {
 	op.ListModes()
 	op.ListRotations()
 	op.updateCrtc(dpy)
-}
-
-
-func (op *Output) TestOther(c *C) {
-	if op.Name == "LVDS1" {
-		return
-	}
-	ci, _ := randr.GetCrtcInfo(X, op.crtc, 0).Reply()
-	fmt.Println(ci.X, ci.Y, ci.Width, ci.Height)
 }
 
 func (op *Output) TestRotation(c *C) {

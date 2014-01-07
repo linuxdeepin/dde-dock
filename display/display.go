@@ -9,10 +9,11 @@ import (
 )
 
 var (
-	_        = fmt.Println
-	X, _     = xgb.NewConn()
-	Root     = xproto.Setup(X).DefaultScreen(X).Root
-	atomEDID = getAtom(X, "EDID")
+	_             = fmt.Println
+	X, _          = xgb.NewConn()
+	DefaultScreen = xproto.Setup(X).DefaultScreen(X)
+	Root          = DefaultScreen.Root
+	atomEDID      = getAtom(X, "EDID")
 )
 
 func init() {
@@ -29,6 +30,7 @@ type Display struct {
 	Height uint16
 
 	Rotation  uint16 `access:readwrite`
+	Reflect   uint16 `access:readwrite`
 	rotations uint16
 
 	PrimaryOutput *Output `access:readwrite`
@@ -71,9 +73,7 @@ func NewDisplay() *Display {
 		dpy.updateOutputList(output)
 	}
 
-	size := sinfo.Sizes[sinfo.SizeID]
-	dpy.Width = size.Width
-	dpy.Height = size.Height
+	dpy.updateScreenSize(DefaultScreen.WidthInPixels, DefaultScreen.HeightInPixels)
 
 	dpy.updatePrimary()
 
@@ -96,8 +96,11 @@ func (dpy *Display) updatePrimary() {
 	if r.Output == 0 {
 		dpy.PrimaryOutput = nil
 		dpy.PrimaryRect = xproto.Rectangle{0, 0, dpy.Width, dpy.Height}
+	} else if dpy.PrimaryOutput = queryOutput(dpy, r.Output); dpy.PrimaryOutput == nil {
+		//this output is invalid or disconnected, so set OutputPrimary to None
+		randr.SetOutputPrimary(X, Root, 0)
+		return
 	} else {
-		dpy.PrimaryOutput = queryOutput(dpy, r.Output)
 		dpy.PrimaryRect = dpy.PrimaryOutput.Allocation
 	}
 
@@ -118,6 +121,20 @@ func (dpy *Display) updateOutputList(output randr.Output) {
 			panic(err)
 		}
 		op.update(dpy, info)
+	}
+}
+func (dpy *Display) removeOutput(output randr.Output) {
+	var newOutput []*Output
+	for _, op := range dpy.Outputs {
+		if op.Identify != output {
+			newOutput = append(newOutput, op)
+		} else {
+			dbus.UnInstallObject(op)
+		}
+	}
+	if len(newOutput) != len(dpy.Outputs) {
+		dpy.Outputs = newOutput
+		dbus.NotifyChange(dpy, "Outputs")
 	}
 }
 
@@ -142,20 +159,18 @@ func (dpy *Display) listener() {
 				}
 			case randr.NotifyOutputChange:
 				info := ee.U.Oc
-				if op := queryOutput(dpy, info.Output); op != nil {
-					outputInfo, err := randr.GetOutputInfo(X, info.Output, xproto.TimeCurrentTime).Reply()
-					if err != nil {
-						fmt.Println(err)
-						continue
-					}
-					op.update(dpy, outputInfo)
+				switch info.Connection {
+				case randr.ConnectionConnected:
+					dpy.updateOutputList(info.Output)
+				case randr.ConnectionDisconnected, randr.ConnectionUnknown:
+					dpy.removeOutput(info.Output)
 				}
 			}
 		case randr.ScreenChangeNotifyEvent:
 			ee := e.(randr.ScreenChangeNotifyEvent)
-			dpy.updatePrimary()
 			dpy.updateScreenSize(ee.Width, ee.Height)
 			dpy.updateRotation(uint16(ee.Rotation))
+			dpy.updatePrimary() //depend on updateScreenSize when there hasn't an primary output
 		}
 	}
 }
