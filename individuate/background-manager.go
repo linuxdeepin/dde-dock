@@ -28,6 +28,7 @@ import (
 	"dlib/gio-2.0"
 	"fmt"
 	"math/rand"
+	"os/user"
 	"time"
 )
 
@@ -42,7 +43,8 @@ type BackgroundManager struct {
 }
 
 const (
-	INDIVIDUATE_ID = "com.deepin.dde.individuate"
+	INDIVIDUATE_ID     = "com.deepin.dde.individuate"
+	DEFAULT_BG_PICTURE = "/usr/share/backgrounds/default_background.jpg"
 )
 
 var (
@@ -153,6 +155,14 @@ func NewBackgroundManager() *BackgroundManager {
 func ListenGSetting(bgManager *BackgroundManager) {
 	indiviGSettings.Connect("changed::picture-uris", func(s *gio.Settings, key string) {
 		/* generate bg blur picture */
+		userInfo, _ := user.Current()
+		uid := userInfo.Uid
+
+		uris := bgManager.PictureURIS.Get()
+		for _, v := range uris {
+			go accountsExtends.BackgroundBlurPictPath(uid,
+				GetPathFromURI(v))
+		}
 	})
 
 	indiviGSettings.Connect("changed::index", func(s *gio.Settings, key string) {
@@ -173,6 +183,10 @@ func ListenGSetting(bgManager *BackgroundManager) {
 			i = 0
 		}
 		fmt.Println("signal: index ", i)
+		if !IsFileExist(GetPathFromURI(uris[i])) {
+			ParseFileNotExist(bgManager)
+			return
+		}
 		s.SetString("current-picture", uris[i])
 		s.SetInt("index", i)
 		gio.SettingsSync()
@@ -235,4 +249,15 @@ func AutoSwitchPicture(bgManager *BackgroundManager) {
 	}
 	indiviGSettings.SetInt("index", index)
 	gio.SettingsSync()
+}
+
+/*
+ * get default picture when picture not exist
+ */
+func ParseFileNotExist(bgManager *BackgroundManager) {
+	l := len(bgManager.PictureURIS.Get())
+	if l <= 0 {
+		bgManager.PictureURIS.Set([]string{DEFAULT_BG_PICTURE})
+	}
+	bgManager.PictureIndex.Set(0)
 }

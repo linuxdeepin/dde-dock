@@ -22,49 +22,19 @@
 package main
 
 import (
-	accext "dbus/com/deepin/dde/api/accounts"
-	"dlib"
-	"dlib/dbus"
-	"fmt"
+	"os"
+        "strings"
 )
 
-/*type IndividuateManager struct {}*/
-
-const (
-	_INDIVI_DEST     = "com.deepin.daemon.IndividuateManager"
-	_BG_MANAGER_PATH = "/com/deepin/Individuate/BackgroundManager"
-	_BG_MANAGER_IFC  = "com.deepin.daemon.Individuate.BackgroundManager"
-)
-
-var (
-        accountsExtends *accext.Accounts
-)
-
-func (bgManager *BackgroundManager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		_INDIVI_DEST,
-		_BG_MANAGER_PATH,
-		_BG_MANAGER_IFC,
+func IsFileExist(filename string) bool {
+	_, err := os.Stat(filename)
+	if os.IsNotExist(err) {
+		return false
 	}
+
+	return true
 }
 
-func InitVariable() {
-	var err error
-
-	accountsExtends, err = accext.NewAccounts("com.deepin.dde.api.Accounts")
-	if err != nil {
-		fmt.Println("New Accounts Extends Failed.")
-		panic(err)
-	}
-}
-
-func main() {
-	bgManager := NewBackgroundManager()
-	err := dbus.InstallOnSession(bgManager)
-	if err != nil {
-		panic(err)
-	}
-
-	dbus.DealWithUnhandledMessage()
-	dlib.StartLoop()
+func GetPathFromURI (uri string) string {
+        return strings.TrimLeft(uri, "file://")
 }
