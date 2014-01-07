@@ -29,3 +29,28 @@ func parseDHCP4(path dbus.ObjectPath) (string, string, string) {
 	mask, _ := options["subnet_mask"].Value().(string)
 	return ip, mask, route
 }
+
+func tryRemoveDevice(path dbus.ObjectPath, devices []*Device) ([]*Device, bool) {
+	var newDevices []*Device
+	found := false
+	for _, dev := range devices {
+		if dev.Path != path {
+			newDevices = append(newDevices, dev)
+		} else {
+			found = true
+		}
+	}
+	return newDevices, found
+}
+func tryRemoveConnection(path dbus.ObjectPath, conns []*Connection) ([]*Connection, bool) {
+	var newConns []*Connection
+	found := false
+	for _, conn := range conns {
+		if conn.Path != path {
+			newConns = append(newConns, conn)
+		} else {
+			found = true
+		}
+	}
+	return newConns, found
+}

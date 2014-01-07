@@ -19,18 +19,17 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package main
+#ifndef __GRAB_XRECORD_H__
+#define __GRAB_XRECORD_H__
 
-import (
-	"dlib/gio-2.0"
-)
+#include <glib.h>
+#include <X11/Xlib.h>
+#include <X11/extensions/record.h>
 
-func ListenGSDKeyChanged(m *Manager) {
-	gsdGSettings.Connect("changed",
-		func(s *gio.Settings, key string) {
-			tmpPairs := GetGSDPairs()
-			BindingKeysPairs(m.gsdAccelMap, false)
-			BindingKeysPairs(tmpPairs, true)
-			m.gsdAccelMap = tmpPairs
-		})
-}
+void grab_xrecord_init ();
+void grab_xrecord_finalize();
+
+void grab_xrecord_key (int keycode, const char *action);
+void ungrab_xrecord_key (int keycode);
+
+#endif

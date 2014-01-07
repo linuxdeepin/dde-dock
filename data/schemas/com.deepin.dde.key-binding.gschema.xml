@@ -6,6 +6,21 @@
 		<summary>key list</summary>
 		<description>custom key binding list</description>
 	</key>
+	<key type="as" name="custom-list">
+		<default>[]</default>
+		<summary>key list</summary>
+		<description>custom key binding list</description>
+	</key>
+	<key type="as" name="conflict-valid">
+		<default>[]</default>
+		<summary>valid list</summary>
+		<description>conflict valid list</description>
+	</key>
+	<key type="as" name="conflict-invalid">
+		<default>[]</default>
+		<summary>invalid list</summary>
+		<description>conflict invalid list</description>
+	</key>
 	<key type="i" name="count">
 		<default>0</default>
 		<summary>key count</summary>

@@ -35,6 +35,7 @@ type BackgroundManager struct {
 	AutoSwitch     *property.GSettingsBoolProperty   `access:"readwrite"`
 	SwitchDuration *property.GSettingsIntProperty    `access:"readwrite"`
 	CrossFadeMode  *property.GSettingsStringProperty `access:"readwrite"`
+	CrossInterval  *property.GSettingsIntProperty    `access:"readwrite"`
 	CurrentPicture *property.GSettingsStringProperty
 	PictureURIS    *property.GSettingsStrvProperty
 	PictureIndex   *property.GSettingsIntProperty
@@ -74,6 +75,7 @@ func (bgManager *BackgroundManager) SetBackgroundPicture(uri string, replace boo
 
 	indiviGSettings.SetStrv("picture-uris", pictStrv)
 	indiviGSettings.SetInt("index", index)
+	gio.SettingsSync()
 }
 
 func (bgManager *BackgroundManager) DeletePictureFromURIS(uri string) {
@@ -127,6 +129,9 @@ func NewBackgroundManager() *BackgroundManager {
 	bgManager.CrossFadeMode = property.NewGSettingsStringProperty(
 		bgManager, "CrossFadeMode",
 		indiviGSettings, "cross-fade-auto-mode")
+	bgManager.CrossInterval = property.NewGSettingsIntProperty(
+		bgManager, "CrossInterval",
+		indiviGSettings, "cross-fade-interval")
 	bgManager.CurrentPicture = property.NewGSettingsStringProperty(
 		bgManager, "CurrentPicture",
 		indiviGSettings, "current-picture")
@@ -138,6 +143,9 @@ func NewBackgroundManager() *BackgroundManager {
 		indiviGSettings, "index")
 
 	ListenGSetting(bgManager)
+	if bgManager.AutoSwitch.Get() {
+		go SwitchPictureThread(bgManager)
+	}
 
 	return bgManager
 }
@@ -149,16 +157,25 @@ func ListenGSetting(bgManager *BackgroundManager) {
 
 	indiviGSettings.Connect("changed::index", func(s *gio.Settings, key string) {
 		i := s.GetInt(key)
-		uris := s.GetStrv("picture-uris")
+		uris := bgManager.PictureURIS.Get()
+		ok, cur_index := IsURIExist(bgManager.CurrentPicture.Get(), uris)
+		if ok {
+			if i == cur_index {
+				return
+			}
+		}
+
 		if len(uris) <= 0 {
 			s.Reset("current-picture")
 			return
 		}
-		if i > len(uris) {
+		if i >= len(uris) {
 			i = 0
 		}
 		fmt.Println("signal: index ", i)
 		s.SetString("current-picture", uris[i])
+		s.SetInt("index", i)
+		gio.SettingsSync()
 	})
 
 	indiviGSettings.Connect("changed::auto-switch", func(s *gio.Settings, key string) {
@@ -187,8 +204,8 @@ func IsURIExist(uri string, uris []string) (bool, int) {
 
 func SwitchPictureThread(bgManager *BackgroundManager) {
 	for {
-		secondNums := bgManager.SwitchDuration.GetValue().(time.Duration)
-		timer := time.NewTimer(time.Second * secondNums)
+		secondNums := bgManager.SwitchDuration.Get()
+		timer := time.NewTimer(time.Second * time.Duration(secondNums))
 		select {
 		case <-timer.C:
 			AutoSwitchPicture(bgManager)
@@ -217,4 +234,5 @@ func AutoSwitchPicture(bgManager *BackgroundManager) {
 		index = rand.Intn(l - 1)
 	}
 	indiviGSettings.SetInt("index", index)
+	gio.SettingsSync()
 }

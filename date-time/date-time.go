@@ -22,8 +22,8 @@ var (
 	_busConn     *dbus.Conn
 	_dtGSettings = gio.NewSettings(_DATE_TIME_SCHEMA)
 
-	_setDT, _ = setdatetime.NewSetDateTime("/com/deepin/daemon/setdatetime")
-	_gdate, _ = datetimemechanism.NewDateTimeMechanism("/")
+	_setDT *setdatetime.SetDateTime
+	_gdate *datetimemechanism.DateTimeMechanism
 )
 
 type DateTime struct {
@@ -37,12 +37,12 @@ func (date *DateTime) GetDBusInfo() dbus.DBusInfo {
 }
 
 func (date *DateTime) SetDate(d string) bool {
-	ret := _setDT.SetCurrentDate(d)
+	ret, _ := _setDT.SetCurrentDate(d)
 	return ret
 }
 
 func (date *DateTime) SetTime(t string) bool {
-	ret := _setDT.SetCurrentTime(t)
+	ret, _ := _setDT.SetCurrentTime(t)
 	return ret
 }
 
@@ -56,17 +56,17 @@ func (date *DateTime) SetAutoSetTime(auto bool) bool {
 	var ret bool
 	if auto {
 		date.AutoSetTime = true
-		ret = _setDT.SetNtpUsing(true)
+		ret, _ = _setDT.SetNtpUsing(true)
 	} else {
 		date.AutoSetTime = false
-		ret = _setDT.SetNtpUsing(false)
+		ret, _ = _setDT.SetNtpUsing(false)
 	}
 	dbus.NotifyChange(date, "AutoSetTime")
 	return ret
 }
 
 func (date *DateTime) SyncNtpTime() bool {
-	ret := _setDT.SyncNtpTime()
+	ret, _ := _setDT.SyncNtpTime()
 	return ret
 }
 
@@ -74,7 +74,7 @@ func NewDateAndTime() *DateTime {
 	dt := &DateTime{}
 
 	dt.Use24HourDisplay = property.NewGSettingsBoolProperty(dt, "Use24HourDisplay", _dtGSettings, "is-24hour")
-	dt.CurrentTimeZone = _gdate.GetTimezone()
+	dt.CurrentTimeZone, _ = _gdate.GetTimezone()
 
 	dt.AutoSetTime = _dtGSettings.GetBoolean("is-auto-set")
 	_dtGSettings.Connect("changed::is-auto-set", func(s *gio.Settings, name string) {
@@ -85,7 +85,24 @@ func NewDateAndTime() *DateTime {
 	return dt
 }
 
+func Init() {
+	var err error
+
+	_setDT, err = setdatetime.NewSetDateTime("/com/deepin/daemon/SetDateTime")
+	if err != nil {
+		fmt.Println("New SetDateTime Failed.")
+		panic(err)
+	}
+
+	_gdate, err = datetimemechanism.NewDateTimeMechanism("/")
+	if err != nil {
+		fmt.Println("New DateTimeMechanism Failed.")
+		panic(err)
+	}
+}
+
 func main() {
+	Init()
 	date := NewDateAndTime()
 	err := dbus.InstallOnSession(date)
 	if err != nil {
@@ -95,5 +112,6 @@ func main() {
 	if date.AutoSetTime {
 		go _setDT.SetNtpUsing(true)
 	}
+	dbus.DealWithUnhandledMessage()
 	dlib.StartLoop()
 }

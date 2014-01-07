@@ -68,5 +68,6 @@ func main() {
 	}
 
 	dbus.NotifyChange(dev, "DevInfoList")
+	dbus.DealWithUnhandledMessage()
 	dlib.StartLoop()
 }

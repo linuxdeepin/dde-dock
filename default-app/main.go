@@ -42,5 +42,6 @@ func main() {
 
 	media := NewMediaMount()
 	dbus.InstallOnSession (media)
+	dbus.DealWithUnhandledMessage()
 	select {}
 }

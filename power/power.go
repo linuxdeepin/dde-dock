@@ -76,16 +76,16 @@ func NewPower() (*Power, error) {
 	power.screensaverSettings = gio.NewSettings(schema_gsettings_screensaver)
 	power.getGsettingsProperty()
 
-	power.upower = upower.GetUpower("/org/freedesktop/UPower")
+	power.upower, _ = upower.NewUpower("/org/freedesktop/UPower")
 	if power.upower == nil {
 		println("WARNING:UPower not provided by dbus\n")
 	} else {
 		println("enumerating devices\n")
-		devices := power.upower.EnumerateDevices()
+		devices, _ := power.upower.EnumerateDevices()
 		paths := getUpowerDeviceObjectPath(devices)
 		println(paths)
 		if len(paths) >= 1 {
-			power.upowerBattery = upower.GetDevice(string(paths[0]))
+			power.upowerBattery, _ = upower.NewDevice(dbus.ObjectPath(paths[0]))
 			if power.upowerBattery != nil {
 				power.getUPowerProperty()
 			}
@@ -165,7 +165,7 @@ func (power *Power) EnumerateDevices() []dbus.ObjectPath {
 	if power.upower == nil {
 		println("WARNING:Upower object it nil\n")
 	}
-	devices := power.upower.EnumerateDevices()
+	devices, _ := power.upower.EnumerateDevices()
 	for _, v := range devices {
 		println(v)
 	}
@@ -212,6 +212,7 @@ func main() {
 		return
 	}
 	dbus.InstallOnSession(power)
+	dbus.DealWithUnhandledMessage()
 	dlib.StartLoop()
 	//select {}
 }

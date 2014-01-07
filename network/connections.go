@@ -32,19 +32,6 @@ func (this *Manager) initConnectionManage() {
 	})
 }
 
-func tryRemoveConnection(path dbus.ObjectPath, conns []*Connection) ([]*Connection, bool) {
-	var newConns []*Connection
-	found := false
-	for _, conn := range conns {
-		if conn.Path != path {
-			newConns = append(newConns, conn)
-		} else {
-			found = true
-		}
-	}
-	return newConns, found
-}
-
 func (this *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPath) {
 	switch operation {
 	case OpAdded:
@@ -145,19 +132,28 @@ func (this *Manager) GetConnectionByAccessPoint(path dbus.ObjectPath) (*Connecti
 		fmt.Println("CCC:", path, string(ap.Ssid.Get()))
 		return newWirelessConnection(string(ap.Ssid.Get()), string(ap.Ssid.Get()), parseFlags(ap.Flags.Get(), ap.WpaFlags.Get(), ap.RsnFlags.Get())), nil
 	} else {
-		fmt.Println("AccessPoint is invalid!")
 		return nil, dbus.NewNoObjectError(path)
 	}
 }
 
-func (this *Manager) GetActiveConnection(devPath dbus.ObjectPath) (ActiveConnection, error) {
+func (this *Manager) GetActiveConnection(devPath dbus.ObjectPath) (ret *ActiveConnection, err error) {
+	defer func() {
+		if x := recover(); x != nil {
+			err = x.(error)
+		}
+	}()
 	dev, err := nm.NewDevice(devPath)
 	if err != nil {
-		return ActiveConnection{}, err
+		return nil, err
 	}
-	ac, _ := nm.NewActiveConnection(dev.ActiveConnection.Get())
+	ac, err := nm.NewActiveConnection(dev.ActiveConnection.Get())
+	if err != nil {
+		return nil, err
+	}
 	name := ""
-	if c, err := nm.NewSettingsConnection(ac.Connection.Get()); err == nil {
+	if c, err := nm.NewSettingsConnection(ac.Connection.Get()); err != nil {
+		return nil, err
+	} else {
 		name = NewConnection(c).Name
 	}
 
@@ -182,7 +178,7 @@ func (this *Manager) GetActiveConnection(devPath dbus.ObjectPath) (ActiveConnect
 		nm.DestroyDeviceWireless(_dev)
 	}
 
-	return ActiveConnection{
+	return &ActiveConnection{
 		Interface:    name,
 		HWAddress:    macaddress,
 		IPAddress:    ip,
