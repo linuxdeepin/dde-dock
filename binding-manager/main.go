@@ -26,6 +26,7 @@ package main
 import "C"
 
 import (
+        "dlib"
 	"dlib/dbus"
 	"dlib/gio-2.0"
 	"fmt"
@@ -265,5 +266,6 @@ func main() {
 	ListenKeyPressEvent()
 	dbus.DealWithUnhandledMessage()
 
+        go dlib.StartLoop()
 	xevent.Main(X)
 }
