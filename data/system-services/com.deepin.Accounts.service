@@ -1,4 +1,0 @@
-[D-BUS Service]
-Name=com.deepin.Accounts
-Exec=/usr/lib/deepin-daemon/accounts-extends
-User=root
