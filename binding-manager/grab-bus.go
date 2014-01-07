@@ -125,15 +125,7 @@ func (m *GrabManager) GrabKeyboard() {
 				if len(modStr) > 0 {
 					value = ConvertKeyFromMod(modStr) + keyStr
 				} else {
-					m.KeyReleaseEvent("")
-					return
-				}
-				if strings.Contains(keyStr, "control") ||
-					strings.Contains(keyStr, "alt") ||
-					strings.Contains(keyStr, "shift") ||
-					strings.Contains(keyStr, "super") {
-					m.KeyReleaseEvent("")
-					return
+					value = keyStr
 				}
 				m.KeyReleaseEvent(value)
 				UngrabAllButton(X)

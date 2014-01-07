@@ -26,7 +26,7 @@ package main
 import "C"
 
 import (
-        "dlib"
+	"dlib"
 	"dlib/dbus"
 	"dlib/gio-2.0"
 	"fmt"
@@ -34,6 +34,7 @@ import (
 	"github.com/BurntSushi/xgbutil/keybind"
 	"github.com/BurntSushi/xgbutil/xevent"
 	"strconv"
+	"strings"
 )
 
 type AddAccelRet struct {
@@ -80,6 +81,23 @@ func (m *BindManager) AddKeyBind(name, action, shortcut string) *AddAccelRet {
 	return ret
 }
 
+func KeyIsValid(key string) bool {
+	tmp := FormatShortcut(key)
+	if strings.Contains(tmp, "-") {
+		return true
+	}
+
+	fmt.Println("KeyIsValid : ", tmp)
+	switch tmp {
+	case "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9", "f10", "f11", "f12", "print":
+		return true
+	default:
+		return false
+	}
+
+	return false
+}
+
 func (m *BindManager) ChangeShortcut(id int32, shortcut string) *ConflictInfo {
 	check := ConflictChecked(id, shortcut)
 	if check == nil {
@@ -112,6 +130,10 @@ func (m *BindManager) ChangeShortcut(id int32, shortcut string) *ConflictInfo {
 				DeleteConflictValidId(k)
 			}
 		}
+	}
+
+	if !KeyIsValid(shortcut) {
+		InsertConflictInvalidList(id)
 	}
 	ModifyShortcutById(id, shortcut)
 
@@ -266,6 +288,6 @@ func main() {
 	ListenKeyPressEvent()
 	dbus.DealWithUnhandledMessage()
 
-        go dlib.StartLoop()
+	go dlib.StartLoop()
 	xevent.Main(X)
 }
