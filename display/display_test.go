@@ -20,7 +20,7 @@ func init() {
 
 func (dpy *Display) TestScreenInfo(c *C) {
 	for _, r := range dpy.ListRotations() {
-		if uint16(r) == dpy.Rotation {
+		if r == dpy.Rotation {
 			c.Succeed()
 			return
 		}
@@ -59,6 +59,10 @@ func (dpy *Display) TestPrimaryOutput(c *C) {
 	c.Check(dpy.PrimaryRect.Height, Equals, dpy.Height)
 }
 
+func (dpy *Display) TestScreenSize() {
+}
+
+
 func (op *Output) TestInfo(c *C) {
 	c.Check(op.Brightness >= 0 && op.Brightness <= 1, Equals, true)
 
@@ -85,11 +89,48 @@ func (op *Output) TestInfo(c *C) {
 	op.updateCrtc(dpy)
 }
 
+
+func (op *Output) TestOther(c *C) {
+	if op.Name == "LVDS1" {
+		return
+	}
+	ci, _ := randr.GetCrtcInfo(X, op.crtc, 0).Reply()
+	fmt.Println(ci.X, ci.Y, ci.Width, ci.Height)
+}
+
+func (op *Output) TestRotation(c *C) {
+	oi, _ := randr.GetOutputInfo(X, op.Identify, 0).Reply()
+	/*ci, _ := randr.GetCrtcInfo(X, op.crtc, 0).Reply()*/
+	if op.Name == "LVDS1" {
+		return
+	}
+	return
+
+	s, err := randr.SetCrtcConfig(X, op.crtc, 0, 0, op.Allocation.X, op.Allocation.Y, op.bestMode, 2, []randr.Output{op.Identify}).Reply()
+	fmt.Println("Rotation....:", s, err, op.crtc, op.Allocation, op.bestMode)
+	fmt.Println("SupportCrtcs:", oi.Crtcs, op.crtc)
+	fmt.Println("SupportModes:", oi.Modes, op.bestMode)
+	fmt.Println("DPY:", dpy.Width, dpy.Height)
+
+	return
+	for _, reflect := range op.ListReflect() {
+		op.setReflect(reflect)
+		for _, rotation := range op.ListRotations() {
+			op.setRotation(uint16(rotation))
+			<-time.After(time.Millisecond * 2000)
+		}
+	}
+	op.setRotation(1)
+	op.setReflect(0)
+}
+
 func (op *Output) TestClose(c *C) {
+	return
 	/*op.setOpened(false)*/
 	/*<-time.After(time.Millisecond * 800)*/
 	/*op.setOpened(true)*/
 	oinfo, err := randr.GetOutputInfo(X, op.Identify, 0).Reply()
-	s, err := randr.SetCrtcConfig(X, oinfo.Crtcs[0], 0, 0, op.Allocation.X, op.Allocation.Y, op.bestMode, 1, []randr.Output{op.Identify}).Reply()
+	s, err := randr.SetCrtcConfig(X, oinfo.Crtcs[1], 0, 0, op.Allocation.X, op.Allocation.Y, op.bestMode, 1, []randr.Output{op.Identify}).Reply()
 	fmt.Println(s, err, oinfo.Crtcs[0])
+	<-time.After(time.Millisecond * 100)
 }

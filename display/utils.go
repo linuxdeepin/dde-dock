@@ -118,7 +118,7 @@ func getScreenInfo(root xproto.Window) (*randr.GetScreenInfoReply, error) {
 	return v, nil
 }
 
-func parseRotations(rotations uint16) (ret []uint8) {
+func parseRotations(rotations uint16) (ret []uint16) {
 	if rotations&randr.RotationRotate0 == randr.RotationRotate0 {
 		ret = append(ret, randr.RotationRotate0)
 	}
@@ -131,6 +131,11 @@ func parseRotations(rotations uint16) (ret []uint8) {
 	if rotations&randr.RotationRotate270 == randr.RotationRotate270 {
 		ret = append(ret, randr.RotationRotate270)
 	}
+	return
+}
+func parseReflects(rotations uint16) (ret []uint16) {
+	ret = append(ret, 0) //the normal reflect
+
 	if rotations&randr.RotationReflectX == randr.RotationReflectX {
 		ret = append(ret, randr.RotationReflectX)
 	}

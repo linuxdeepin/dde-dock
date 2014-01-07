@@ -84,8 +84,11 @@ func NewDisplay() *Display {
 
 func (dpy *Display) ShowInfoOnScreen() {
 }
-func (dpy *Display) ListRotations() []uint8 {
+func (dpy *Display) ListRotations() []uint16 {
 	return parseRotations(dpy.rotations)
+}
+func (dpy *Display) ListReflect() []uint16 {
+	return parseReflects(dpy.rotations)
 }
 
 func (dpy *Display) updatePrimary() {

@@ -25,6 +25,7 @@ type Output struct {
 	AdjustMethod uint8            `access:"readwrite"`
 
 	Rotation   uint16  `access:"readwrite"`
+	Reflect    uint16  `access:"readwrite"`
 	Opened     bool    `access:"readwrite"`
 	Brightness float64 `access:"readwrite"`
 }
@@ -40,8 +41,11 @@ func (output *Output) GetDBusInfo() dbus.DBusInfo {
 func (op *Output) ListModes() []Mode {
 	return op.modes
 }
-func (op *Output) ListRotations() []uint8 {
+func (op *Output) ListRotations() []uint16 {
 	return parseRotations(op.rotations)
+}
+func (op *Output) ListReflect() []uint16 {
+	return parseReflects(op.rotations)
 }
 
 func (op *Output) updateCrtc(dpy *Display) {
@@ -54,6 +58,7 @@ func (op *Output) updateCrtc(dpy *Display) {
 		op.Rotation = info.Rotation
 
 		op.Allocation = xproto.Rectangle{info.X, info.Y, info.Width, info.Height}
+		fmt.Println("UpdateCrtc To", op.Allocation)
 
 		op.Mode = buildMode(dpy.modes[info.Mode])
 	} else {
@@ -76,6 +81,23 @@ func (op *Output) update(dpy *Display, info *randr.GetOutputInfoReply) {
 		op.modes = append(op.modes, buildMode(info))
 	}
 	dbus.NotifyChange(op, "Mode")
+}
+
+func (op *Output) setRotation(rotation uint16) {
+	s, err := randr.SetCrtcConfig(X, op.crtc, 0, 0, op.Allocation.X, op.Allocation.Y, op.bestMode, rotation|op.Reflect, []randr.Output{op.Identify}).Reply()
+	if err != nil {
+		panic(err)
+	}
+	op.Rotation = rotation
+	fmt.Println("Rotation....:", s, err, op.crtc, op.Allocation, op.bestMode, rotation)
+}
+
+func (op *Output) setReflect(reflect uint16) {
+	_, err := randr.SetCrtcConfig(X, op.crtc, 0, 0, op.Allocation.X, op.Allocation.Y, op.bestMode, op.Rotation|reflect, []randr.Output{op.Identify}).Reply()
+	if err != nil {
+		panic(err)
+	}
+	op.Reflect = reflect
 }
 
 func (op *Output) setOpened(v bool) {
