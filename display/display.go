@@ -95,7 +95,7 @@ func (dpy *Display) updatePrimary() {
 	r, _ := randr.GetOutputPrimary(X, Root).Reply()
 	if r.Output == 0 {
 		dpy.PrimaryOutput = nil
-		dpy.PrimaryRect = xproto.Rectangle{0, 0, DefaultScreen.WidthInPixels, DefaultScreen.HeightInPixels}
+		dpy.PrimaryRect = xproto.Rectangle{0, 0, dpy.Width, dpy.Height}
 	} else if dpy.PrimaryOutput = queryOutput(dpy, r.Output); dpy.PrimaryOutput == nil {
 		//this output is invalid or disconnected, so set OutputPrimary to None
 		randr.SetOutputPrimary(X, Root, 0)
@@ -169,21 +169,12 @@ func (dpy *Display) listener() {
 		case randr.ScreenChangeNotifyEvent:
 			ee := e.(randr.ScreenChangeNotifyEvent)
 			DefaultScreen = xproto.Setup(X).DefaultScreen(X)
-			width, height := parseRotationSize(uint16(ee.Rotation), ee.Width, ee.Height)
 			dpy.updateRotationAndRelfect(uint16(ee.Rotation))
 
 			for _, op := range dpy.Outputs {
 				op.updateCrtc(dpy)
-
-				opWidth := uint16(op.Allocation.X + int16(op.Allocation.Width))
-				opHeight := uint16(op.Allocation.Y + int16(op.Allocation.Height))
-				if width < opWidth {
-					width = opWidth
-				}
-				if height < opHeight {
-					height = opHeight
-				}
 			}
+			width, height := parseScreenSize(dpy.Outputs)
 			dpy.updateScreenSize(width, height)
 			dpy.updatePrimary() //depend on updateScreenSize when there hasn't an primary output
 		}
@@ -193,16 +184,15 @@ func (dpy *Display) listener() {
 func (dpy *Display) updateScreenSize(width uint16, height uint16) {
 	if DefaultScreen.WidthInPixels != width || DefaultScreen.HeightInPixels != height {
 		//SetScreenSize will cause emit ScreenChangeNotifyEvent, so next time we will jump in the real "else" branch to set dpy.Width/Height
-		randr.SetScreenSize(X, Root, width, height, uint32(DefaultScreen.WidthInMillimeters), uint32(DefaultScreen.HeightInMillimeters))
-	} else {
-		if dpy.Width != width {
-			dpy.Width = width
-			dbus.NotifyChange(dpy, "Width")
-		}
-		if dpy.Height != height {
-			dpy.Height = height
-			dbus.NotifyChange(dpy, "Height")
-		}
+		randr.SetScreenSize(X, Root, width, height, uint32(DefaultScreen.WidthInMillimeters), uint32(DefaultScreen.HeightInMillimeters)).Reply()
+	}
+	if dpy.Width != width {
+		dpy.Width = width
+		dbus.NotifyChange(dpy, "Width")
+	}
+	if dpy.Height != height {
+		dpy.Height = height
+		dbus.NotifyChange(dpy, "Height")
 	}
 }
 func (dpy *Display) updateRotationAndRelfect(randr uint16) {

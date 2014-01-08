@@ -189,3 +189,18 @@ func parseRotationSize(rotation, width, height uint16) (uint16, uint16) {
 		return width, height
 	}
 }
+
+func parseScreenSize(ops []*Output) (width, height uint16) {
+	for _, op := range ops {
+		if op.Opened {
+			newWidth, newHeight := uint16(op.Allocation.X+int16(op.Allocation.Width)), uint16(op.Allocation.Y+int16(op.Allocation.Height))
+			if newWidth > width {
+				width = newWidth
+			}
+			if newHeight > height {
+				height = newHeight
+			}
+		}
+	}
+	return
+}
