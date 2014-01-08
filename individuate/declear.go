@@ -26,6 +26,11 @@ import (
 	"dlib/gio-2.0"
 )
 
+type ThemeInfo struct {
+        Name string
+        Type string // 'system' or 'custom'
+}
+
 type Manager struct {
 	GtkTheme       *property.GSettingsStringProperty `access:"readwrite"`
 	IconTheme      *property.GSettingsStringProperty `access:"readwrite"`
@@ -36,6 +41,13 @@ type Manager struct {
 	SwitchDuration *property.GSettingsIntProperty    `access:"readwrite"`
 	CrossFadeMode  *property.GSettingsStringProperty `access:"readwrite"`
 	CrossInterval  *property.GSettingsIntProperty    `access:"readwrite"`
+
+        AvailableGtkTheme []ThemeInfo
+        AvailableIconTheme []ThemeInfo
+        AvailableFontTheme []ThemeInfo
+        AvailableCursorTheme []ThemeInfo
+        AvailableBackground []ThemeInfo
+
 	isAutoSwitch   bool
 	quitAutoSwitch chan bool
 }

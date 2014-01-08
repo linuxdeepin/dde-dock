@@ -25,6 +25,7 @@ import (
 	"dlib/dbus"
 	"dlib/dbus/property"
 	"dlib/gio-2.0"
+	"fmt"
 )
 
 func (m *Manager) GetDBusInfo() dbus.DBusInfo {
@@ -65,8 +66,17 @@ func NewManager() *Manager {
 	m.CrossInterval = property.NewGSettingsIntProperty(
 		m, "CrossInterval",
 		indiviGSettings, SCHEMA_KEY_CROSS_INTERVAL)
+
+        m.AvailableGtkTheme = GetGtkThemes()
+        m.AvailableIconTheme = GetIconThemes()
+        m.AvailableFontTheme = GetFontThemes()
+        m.AvailableCursorTheme = GetCursorThemes()
+        m.AvailableBackground = GetBackgroundFiles()
+
 	m.isAutoSwitch = false
 	m.quitAutoSwitch = make(chan bool)
+
+	ListenSettings(m)
 
 	return m
 }
@@ -81,6 +91,8 @@ func ListenSettings(m *Manager) {
 				}
 				uri := s.GetString(SCHEMA_KEY_CUR_PICT)
 				filename := GetPathFromURI(uri)
+				fmt.Println("\tlisten uri: ", uri)
+				fmt.Println("\tlisten path: ", filename)
 				isExist := IsFileExist(filename)
 				if !isExist {
 					ParseFileNotExist(m)
@@ -108,10 +120,12 @@ func ListenSettings(m *Manager) {
 			}
 		case SCHEMA_KEY_AUTO_SWITCH:
 			{
+				fmt.Println("\tisAutoSwitch: ", m.isAutoSwitch)
 				if m.isAutoSwitch {
 					m.quitAutoSwitch <- true
 				}
 				autoSwitch := s.GetBoolean(SCHEMA_KEY_AUTO_SWITCH)
+				fmt.Println("\tautoSwitch: ", autoSwitch)
 				if autoSwitch {
 					go SwitchPictureThread(m)
 				}
@@ -126,8 +140,53 @@ func ListenSettings(m *Manager) {
 				}
 				break
 			}
+		case SCHEMA_KEY_CROSS_INTERVAL:
+			{
+				if m.isAutoSwitch {
+					m.quitAutoSwitch <- true
+				}
+				if m.AutoSwitch.Get() {
+					go SwitchPictureThread(m)
+				}
+				break
+			}
 		default:
 			break
 		}
 	})
+}
+
+func GetGtkThemes() []ThemeInfo {
+	gtkTheme := []ThemeInfo{}
+
+	gtkTheme = append(gtkTheme, ThemeInfo{Name: "Deepin", Type: "system"})
+	return gtkTheme
+}
+
+func GetIconThemes() []ThemeInfo {
+	iconTheme := []ThemeInfo{}
+
+	iconTheme = append(iconTheme, ThemeInfo{Name: "Deepin", Type: "system"})
+	return iconTheme
+}
+
+func GetFontThemes() []ThemeInfo {
+	fontTheme := []ThemeInfo{}
+
+	fontTheme = append(fontTheme, ThemeInfo{Name: "Deepin", Type: "system"})
+	return fontTheme
+}
+
+func GetCursorThemes() []ThemeInfo {
+	cursorTheme := []ThemeInfo{}
+
+	cursorTheme = append(cursorTheme, ThemeInfo{Name: "Deepin", Type: "system"})
+	return cursorTheme
+}
+
+func GetBackgroundFiles() []ThemeInfo {
+	bgTheme := []ThemeInfo{}
+
+	bgTheme = append(bgTheme, ThemeInfo{Name: "Deepin", Type: "system"})
+	return bgTheme
 }

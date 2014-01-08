@@ -23,7 +23,7 @@ package main
 
 import (
 	"os"
-        "strings"
+	"strings"
 )
 
 func IsFileExist(filename string) bool {
@@ -35,6 +35,9 @@ func IsFileExist(filename string) bool {
 	return true
 }
 
-func GetPathFromURI (uri string) string {
-        return strings.TrimLeft(uri, "file://")
+func GetPathFromURI(uri string) string {
+	if !strings.Contains(uri, "file:///") {
+		return uri
+	}
+	return "/" + strings.TrimLeft(uri, "file:///")
 }

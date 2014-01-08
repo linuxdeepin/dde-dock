@@ -65,6 +65,9 @@ func main() {
 		panic(err)
 	}
 
+        if m.AutoSwitch.Get() {
+                go SwitchPictureThread(m)
+        }
 	dbus.DealWithUnhandledMessage()
 	dlib.StartLoop()
 }

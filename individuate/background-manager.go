@@ -107,17 +107,27 @@ func AutoSwitchPicture(m *Manager) {
 	}
 	index := int(indiviGSettings.GetInt(SCHEMA_KEY_INDEX))
 
+	/*fmt.Println("\nAutoSwitchPicture...")*/
+	//fmt.Println("\turis: ", uris)
+	//fmt.Println("\tlen: ", l)
+	/*fmt.Println("\tindex: ", index)*/
+
 	crossMode := m.CrossFadeMode.Get()
+	//fmt.Println("\tmode: ", crossMode)
 	if crossMode == "Sequential" {
 		index += 1
-		if index > l {
+		if index >= l {
 			index = 0
 		}
+		fmt.Println("\tSequential index: ", index)
 	} else {
 		rand.Seed(time.Now().UTC().UnixNano())
 		index = rand.Intn(l - 1)
+		fmt.Println("\tOther index: ", index)
 	}
 	m.BackgroundFile.Set(uris[index])
+	//fmt.Println("\turi: ", uris[index])
+	indiviGSettings.SetInt(SCHEMA_KEY_INDEX, index)
 	gio.SettingsSync()
 }
 
