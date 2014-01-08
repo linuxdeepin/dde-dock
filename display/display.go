@@ -39,24 +39,13 @@ type Display struct {
 	PrimaryChanged func(xproto.Rectangle)
 }
 
-func (dpy *Display) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		"com.deepin.daemon.Display",
-		"/com/deepin/daemon/Display",
-		"com.deepin.daemon.Display",
-	}
-}
-
-func (dpy *Display) updateScreenInfo() {
-}
-
 func NewDisplay() *Display {
 	dpy := &Display{}
 
 	dpy.modes = make(map[randr.Mode]randr.ModeInfo)
 
 	sinfo, err := getScreenInfo(Root)
-	dpy.rotations = uint16(sinfo.Rotations)
+	dpy.setPropRotation(uint16(sinfo.Rotations))
 	dpy.updateRotationAndRelfect(sinfo.Rotation)
 
 	if err != nil {
@@ -94,18 +83,14 @@ func (dpy *Display) ListReflect() []uint16 {
 func (dpy *Display) updatePrimary() {
 	r, _ := randr.GetOutputPrimary(X, Root).Reply()
 	if r.Output == 0 {
-		dpy.PrimaryOutput = nil
-		dpy.PrimaryRect = xproto.Rectangle{0, 0, dpy.Width, dpy.Height}
-	} else if dpy.PrimaryOutput = queryOutput(dpy, r.Output); dpy.PrimaryOutput == nil {
+		dpy.setPropPrimaryOutput(nil)
+		dpy.setPropPrimaryRect(xproto.Rectangle{0, 0, dpy.Width, dpy.Height})
+	} else if dpy.setPropPrimaryOutput(queryOutput(dpy, r.Output)); dpy.PrimaryOutput == nil {
 		//this output is invalid or disconnected, so set OutputPrimary to None
 		randr.SetOutputPrimary(X, Root, 0)
 		return
 	} else {
-		dpy.PrimaryRect = dpy.PrimaryOutput.Allocation
-	}
-
-	if dpy.PrimaryChanged != nil {
-		dpy.PrimaryChanged(dpy.PrimaryRect)
+		dpy.setPropPrimaryRect(dpy.PrimaryOutput.Allocation)
 	}
 }
 
@@ -113,7 +98,7 @@ func (dpy *Display) updateOutputList(output randr.Output) {
 	op := queryOutput(dpy, output)
 	if op == nil {
 		if op = NewOutput(dpy, output); op != nil {
-			dpy.Outputs = append(dpy.Outputs, op)
+			dpy.setPropOutputs(append(dpy.Outputs, op))
 		}
 	} else {
 		info, err := randr.GetOutputInfo(X, output, xproto.TimeCurrentTime).Reply()
@@ -133,8 +118,7 @@ func (dpy *Display) removeOutput(output randr.Output) {
 		}
 	}
 	if len(newOutput) != len(dpy.Outputs) {
-		dpy.Outputs = newOutput
-		dbus.NotifyChange(dpy, "Outputs")
+		dpy.setPropOutputs(newOutput)
 	}
 }
 
@@ -176,6 +160,7 @@ func (dpy *Display) listener() {
 			}
 			width, height := parseScreenSize(dpy.Outputs)
 			dpy.updateScreenSize(width, height)
+			fmt.Println("UpdateScreenSize:", width, height, DefaultScreen.WidthInPixels, DefaultScreen.HeightInPixels)
 			dpy.updatePrimary() //depend on updateScreenSize when there hasn't an primary output
 		}
 	}
@@ -186,26 +171,14 @@ func (dpy *Display) updateScreenSize(width uint16, height uint16) {
 		//SetScreenSize will cause emit ScreenChangeNotifyEvent, so next time we will jump in the real "else" branch to set dpy.Width/Height
 		randr.SetScreenSize(X, Root, width, height, uint32(DefaultScreen.WidthInMillimeters), uint32(DefaultScreen.HeightInMillimeters)).Reply()
 	}
-	if dpy.Width != width {
-		dpy.Width = width
-		dbus.NotifyChange(dpy, "Width")
-	}
-	if dpy.Height != height {
-		dpy.Height = height
-		dbus.NotifyChange(dpy, "Height")
-	}
+	dpy.setPropWidth(width)
+	dpy.setPropHeight(height)
 }
 func (dpy *Display) updateRotationAndRelfect(randr uint16) {
 	rotation, reflect := parseRandR(randr)
 
-	if dpy.Rotation != rotation {
-		dpy.Rotation = rotation
-		dbus.NotifyChange(dpy, "Rotation")
-	}
-	if dpy.Reflect != reflect {
-		dpy.Reflect = reflect
-		dbus.NotifyChange(dpy, "Reflect")
-	}
+	dpy.setPropRotation(rotation)
+	dpy.setPropReflect(reflect)
 }
 
 func main() {

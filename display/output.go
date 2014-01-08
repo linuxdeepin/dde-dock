@@ -31,14 +31,6 @@ type Output struct {
 	Brightness float64 `access:"readwrite"`
 }
 
-func (output *Output) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		"com.deepin.daemon.Display",
-		fmt.Sprintf("/com/deepin/daemon/Display/Output%d", output.Identify),
-		"com.deepin.daemon.Display.Output",
-	}
-}
-
 func (op *Output) ListModes() []Mode {
 	return op.modes
 }
@@ -50,6 +42,7 @@ func (op *Output) ListReflect() []uint16 {
 }
 
 func (op *Output) SetMode(id uint32) {
+	// op.Mode will update when receive appropriate event
 	_, err := randr.SetCrtcConfig(X, op.crtc, 0, 0, op.Allocation.X, op.Allocation.Y, randr.Mode(id), op.Rotation|op.Reflect, []randr.Output{op.Identify}).Reply()
 	if err != nil {
 		panic(err)
@@ -60,24 +53,6 @@ func (op *Output) SetAllocation(x, y, width, height, adjMethod int16) {
 	//TODO: handle adjMethod with `width` and `height`
 	_, err := randr.SetCrtcConfig(X, op.crtc, 0, 0, x, y, randr.Mode(op.Mode.ID), op.Rotation|op.Reflect, []randr.Output{op.Identify}).Reply()
 	fmt.Println(err)
-}
-
-func (op *Output) OnPropertiesChanged(name string, oldv interface{}) {
-	defer func() {
-		if err := recover(); err != nil {
-			fmt.Println(err)
-		}
-	}()
-	switch name {
-	case "Rotation":
-		op.setRotation(op.Rotation)
-	case "Reflect":
-		op.setReflect(op.Reflect)
-	case "Opened":
-		op.setOpened(op.Opened)
-	case "Brightness":
-		op.setBrightness(op.Brightness)
-	}
 }
 
 func (op *Output) Debug() string {
@@ -96,8 +71,9 @@ func (op *Output) setBrightness(brightness float64) {
 	}
 	red, green, blue := genGammaRamp(gammaSize.Size, brightness)
 	randr.SetCrtcGamma(X, op.crtc, gammaSize.Size, red, green, blue)
-
+	op.setPropBrightness(brightness)
 }
+
 func (op *Output) setRotation(rotation uint16) {
 	v := op.Opened
 	defer func() { op.setOpened(v) }()
@@ -107,7 +83,7 @@ func (op *Output) setRotation(rotation uint16) {
 	if err != nil {
 		panic(fmt.Sprintln("SetRotation:", rotation, rotation|op.Reflect, err))
 	}
-	op.Rotation = rotation
+	op.setPropRotation(rotation)
 }
 
 func (op *Output) setReflect(reflect uint16) {
@@ -127,11 +103,12 @@ func (op *Output) setReflect(reflect uint16) {
 	if err != nil {
 		panic(fmt.Sprintln("SetReflect:", op.Rotation|reflect, err))
 	}
-	op.Reflect = reflect
+	op.setPropReflect(reflect)
 }
 
 func (op *Output) setOpened(v bool) {
 	fmt.Println("SetOpened.... ", v)
+	//op.Opened will be changed when we receive appropriate event
 	if v == true {
 		oinfo, err := randr.GetOutputInfo(X, op.Identify, 0).Reply()
 		if err != nil {
@@ -164,32 +141,38 @@ func (op *Output) updateCrtc(dpy *Display) {
 			panic("Opps:" + err.Error())
 		}
 		op.rotations = info.Rotations
-		op.Rotation, op.Reflect = parseRandR(info.Rotation)
 
-		op.Allocation = xproto.Rectangle{info.X, info.Y, info.Width, info.Height}
+		rotation, reflect := parseRandR(info.Rotation)
+		op.setPropRotation(rotation)
+		op.setPropReflect(reflect)
 
-		op.Mode = buildMode(dpy.modes[info.Mode])
+		op.setPropAllocation(xproto.Rectangle{info.X, info.Y, info.Width, info.Height})
+
+		op.setPropMode(buildMode(dpy.modes[info.Mode]))
 	} else {
-		op.Rotation = 1
-		op.Reflect = 0
-		op.Allocation = xproto.Rectangle{0, 0, 0, 0}
-
-		op.Mode = Mode{0, 0, 0, 0}
+		op.setPropRotation(1)
+		op.setPropReflect(0)
+		op.setPropAllocation(xproto.Rectangle{0, 0, 0, 0})
+		op.setPropMode(Mode{0, 0, 0, 0})
 	}
-	dbus.NotifyChange(op, "Allocation")
-	dbus.NotifyChange(op, "Rotation")
 }
 
 func (op *Output) update(dpy *Display, info *randr.GetOutputInfoReply) {
 	op.crtc = info.Crtc
-	op.Opened = info.Crtc != 0
-	dbus.NotifyChange(op, "Opened")
+	op.setPropOpened(info.Crtc != 0)
 	op.bestMode = info.Modes[0]
 	for _, m := range info.Modes {
 		info := dpy.modes[m]
 		op.modes = append(op.modes, buildMode(info))
 	}
-	dbus.NotifyChange(op, "Mode")
+
+	if op.crtc != 0 {
+		cinfo, err := randr.GetCrtcInfo(X, op.crtc, 0).Reply()
+		op.setPropMode(buildMode(dpy.modes[cinfo.Mode]))
+		if err != nil {
+			panic(fmt.Sprintf("Op.crtc(%d) != 0 && can't GetCrtcInfo (%s)", op.crtc, err.Error()))
+		}
+	}
 }
 
 func NewOutput(dpy *Display, core randr.Output) *Output {
