@@ -25,9 +25,8 @@ type Grub2 struct {
 }
 
 func NewGrub2() *Grub2 {
+	// TODO
 	grub := &Grub2{}
-	grub.grubMenuFile = GRUB_MENU
-	grub.grubConfigFile = GRUB_CONFIG
 	return grub
 }
 
@@ -41,6 +40,8 @@ func (grub *Grub2) GetDBusInfo() dbus.DBusInfo {
 
 func (grub *Grub2) Init() {
 	// TODO
+	grub.grubMenuFile = GRUB_MENU
+	grub.grubConfigFile = GRUB_CONFIG
 }
 
 func (grub *Grub2) Load() {
@@ -53,20 +54,19 @@ func (grub *Grub2) Save() {
 
 func (grub *Grub2) GetEntries() []string {
 	// TODO
-	return []string{"a", "b", "c"}
+	// return []string{"a", "b", "c"}
+	return grub.entries
 }
 
 func (grub *Grub2) SetDefaultEntry(entry string) {
-	// TODO
+	grub.settings["GRUB_DEFAULT"] = entry
 }
 
 func (grub *Grub2) GetDefaultEntry() string {
-	// TODO
-	return ""
+	return grub.settings["GRUB_DEFAULT"] // TODO
 }
 
 func (grub *Grub2) SetTimeout(timeout int32) {
-	// TODO
 	timeoutStr := strconv.FormatInt(int64(timeout), 10)
 	grub.settings["GRUB_TIMEOUT"] = timeoutStr
 }
@@ -74,28 +74,34 @@ func (grub *Grub2) SetTimeout(timeout int32) {
 func (grub *Grub2) GetTimeout() int32 {
 	timeout, err := strconv.ParseInt(grub.settings["GRUB_TIMEOUT"], 10, 32)
 	if err != nil {
-		logError(fmt.Sprintf(`valid value, settings["GRUB_TIMEOUT"]=%s`, grub.settings["GRUB_TIMEOUT"]))
-		return 0 // TODO
+		logError(fmt.Sprintf(`valid value, settings["GRUB_TIMEOUT"]=%s`, grub.settings["GRUB_TIMEOUT"])) // TODO
+		return 5
 	}
 	return int32(timeout)
 }
 
+func (grub *Grub2) SetGfxmode(gfxmode string) {
+	grub.settings["GRUB_GFXMODE"] = gfxmode
+}
+
+func (grub *Grub2) GetGfxmode() string {
+	return grub.settings["GRUB_GFXMODE"]
+}
+
 func (grub *Grub2) SetBackground(imageFile string) {
-	// TODO
+	grub.settings["GRUB_BACKGROUND"] = imageFile
 }
 
 func (grub *Grub2) GetBackground() string {
-	// TODO
-	return ""
+	return grub.settings["GRUB_BACKGROUND"]
 }
 
 func (grub *Grub2) SetTheme(themeFile string) {
-	// TODO
+	grub.settings["GRUB_THEME"] = themeFile
 }
 
 func (grub *Grub2) GetTheme() string {
-	// TODO
-	return ""
+	return grub.settings["GRUB_THEME"]
 }
 
 func main() {
