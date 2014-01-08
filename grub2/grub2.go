@@ -2,10 +2,12 @@ package main
 
 import (
 	"dlib/dbus"
+	"fmt"
+	"strconv"
 )
 
 const (
-	_GRUB2_SERV = "com.deepin.daemon.Grub2"
+	_GRUB2_DEST = "com.deepin.daemon.Grub2"
 	_GRUB2_PATH = "/com/deepin/daemon/Grub2"
 	_GRUB2_IFC  = "com.deepin.daemon.Grub2"
 )
@@ -31,7 +33,7 @@ func NewGrub2() *Grub2 {
 
 func (grub *Grub2) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		_GRUB2_SERV,
+		_GRUB2_DEST,
 		_GRUB2_PATH,
 		_GRUB2_IFC,
 	}
@@ -65,11 +67,17 @@ func (grub *Grub2) GetDefaultEntry() string {
 
 func (grub *Grub2) SetTimeout(timeout int32) {
 	// TODO
+	timeoutStr := strconv.FormatInt(int64(timeout), 10)
+	grub.settings["GRUB_TIMEOUT"] = timeoutStr
 }
 
 func (grub *Grub2) GetTimeout() int32 {
-	// TODO
-	return 0
+	timeout, err := strconv.ParseInt(grub.settings["GRUB_TIMEOUT"], 10, 32)
+	if err != nil {
+		logError(fmt.Sprintf(`valid value, settings["GRUB_TIMEOUT"]=%s`, grub.settings["GRUB_TIMEOUT"]))
+		return 0 // TODO
+	}
+	return int32(timeout)
 }
 
 func (grub *Grub2) SetBackground(imageFile string) {
