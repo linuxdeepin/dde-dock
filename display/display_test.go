@@ -5,6 +5,7 @@ import "fmt"
 import "testing"
 import "time"
 import "github.com/BurntSushi/xgb/randr"
+import "github.com/BurntSushi/xgb/xproto"
 import . "launchpad.net/gocheck"
 
 func delay() {
@@ -19,6 +20,9 @@ func init() {
 	dpy = NewDisplay()
 	Suite(dpy)
 	for _, op := range dpy.Outputs {
+		/*if op.Name != "LVDS1" {*/
+		/*Suite(op)*/
+		/*}*/
 		Suite(op)
 	}
 	for _, op := range dpy.Outputs {
@@ -114,10 +118,10 @@ func (op *Output) TestInfo(c *C) {
 	op.ListModes()
 	op.ListRotations()
 	op.updateCrtc(dpy)
+	delay()
 }
 
 func (op *Output) TestClose(c *C) {
-	return
 	delay()
 
 	v := op.Opened
@@ -133,14 +137,16 @@ func (op *Output) TestClose(c *C) {
 	return
 }
 
-func (op *Output) TestAllocation(c *C) {
+func (op *Output) TestRandr(c *C) {
 	rv := op.Rotation
 	fv := op.Reflect
 
 	for _, reflect := range op.ListReflect() {
+		delay()
 		op.setReflect(reflect)
 		delay()
 		for _, r := range op.ListRotations() {
+			fmt.Println("op.setReflect>", reflect, r)
 			op.setRotation(r)
 			delay()
 			cinfo, err := randr.GetCrtcInfo(X, op.crtc, 0).Reply()
@@ -161,4 +167,40 @@ func (op *Output) TestAllocation(c *C) {
 	delay()
 	c.Check(rv, Equals, op.Rotation)
 	c.Check(fv, Equals, op.Reflect)
+}
+
+func (op *Output) TestMode(c *C) {
+	vm := op.Mode
+	for _, m := range op.ListModes() {
+		delay()
+		op.setMode(m.ID)
+	}
+	delay()
+	op.setMode(vm.ID)
+}
+func (op *Output) TestAllocation(c *C) {
+	delay()
+	delay()
+	if op.Name == "LVDS1" {
+		op.setAllocation(0, 100, 0, 0, 0)
+	} else {
+		op.setAllocation(1280, 0, 0, 0, 0)
+	}
+	delay()
+	delay()
+	delay()
+	delay()
+}
+
+func TestEnsure(t *testing.T) {
+	if dpy.PrimaryOutput == nil {
+		rect := xproto.Rectangle{0, 0, dpy.Width, dpy.Height}
+		if dpy.PrimaryRect != rect {
+			t.Fatal("PriamryRect not mathced when no primary output")
+		}
+	} else {
+		if dpy.PrimaryRect != dpy.PrimaryOutput.Allocation {
+			t.Fatal("PriamryRect not mathced when primary output with allocation:", dpy.PrimaryOutput.Allocation)
+		}
+	}
 }

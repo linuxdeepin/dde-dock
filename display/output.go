@@ -6,6 +6,7 @@ import "dlib/dbus"
 import "fmt"
 
 type Mode struct {
+	ID     uint32
 	Width  uint16
 	Height uint16
 	Rate   uint16
@@ -20,9 +21,9 @@ type Output struct {
 	Name     string
 	Type     uint8
 
-	Mode         Mode             `access:"readwrite"`
-	Allocation   xproto.Rectangle `access:"readwrite"`
-	AdjustMethod uint8            `access:"readwrite"`
+	Mode         Mode
+	Allocation   xproto.Rectangle
+	AdjustMethod uint8
 
 	Rotation   uint16  `access:"readwrite"`
 	Reflect    uint16  `access:"readwrite"`
@@ -48,25 +49,121 @@ func (op *Output) ListReflect() []uint16 {
 	return parseReflects(op.rotations)
 }
 
+func (op *Output) SetMode(id uint32) {
+	_, err := randr.SetCrtcConfig(X, op.crtc, 0, 0, op.Allocation.X, op.Allocation.Y, randr.Mode(id), op.Rotation|op.Reflect, []randr.Output{op.Identify}).Reply()
+	if err != nil {
+		panic(err)
+	}
+}
+
+func (op *Output) SetAllocation(x, y, width, height, adjMethod int16) {
+	//TODO: handle adjMethod with `width` and `height`
+	_, err := randr.SetCrtcConfig(X, op.crtc, 0, 0, x, y, randr.Mode(op.Mode.ID), op.Rotation|op.Reflect, []randr.Output{op.Identify}).Reply()
+	fmt.Println(err)
+}
+
+func (op *Output) OnPropertiesChanged(name string, oldv interface{}) {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println(err)
+		}
+	}()
+	switch name {
+	case "Rotation":
+		op.setRotation(op.Rotation)
+	case "Reflect":
+		op.setReflect(op.Reflect)
+	case "Opened":
+		fmt.Println("Opened..", oldv.(bool), op.Opened)
+		op.setOpened(op.Opened)
+	case "Brightness":
+		fmt.Println("(Not Implement)Try set brightness to :", op.Brightness)
+	}
+}
+
+func (op *Output) Debug() string {
+	return fmt.Sprintf("Allocation:%v Rotation:%d", op.Allocation, op.Rotation)
+}
+
+//-------------- internal output methods---------------------
+
+func (op *Output) setRotation(rotation uint16) {
+	v := op.Opened
+	defer func() { op.setOpened(v) }()
+	op.setOpened(false)
+
+	_, err := randr.SetCrtcConfig(X, op.crtc, 0, 0, op.Allocation.X, op.Allocation.Y, op.bestMode, rotation|op.Reflect, []randr.Output{op.Identify}).Reply()
+	if err != nil {
+		panic(fmt.Sprintln("SetRotation:", rotation, rotation|op.Reflect, err))
+	}
+	op.Rotation = rotation
+}
+
+func (op *Output) setReflect(reflect uint16) {
+	switch reflect {
+	case 0, 16, 32, 48:
+		break
+	default:
+		panic(fmt.Sprintf("setReflect Value%d Error", reflect))
+	}
+
+	v := op.Opened
+	defer func() { op.setOpened(v) }()
+	op.setOpened(false)
+
+	_, err := randr.SetCrtcConfig(X, op.crtc, 0, 0, op.Allocation.X, op.Allocation.Y, op.bestMode, op.Rotation|reflect, []randr.Output{op.Identify}).Reply()
+	op.setOpened(true)
+	if err != nil {
+		panic(fmt.Sprintln("SetReflect:", op.Rotation|reflect, err))
+	}
+	op.Reflect = reflect
+}
+
+func (op *Output) setOpened(v bool) {
+	fmt.Println("SetOpened.... ", v)
+	if v == true {
+		oinfo, err := randr.GetOutputInfo(X, op.Identify, 0).Reply()
+		if err != nil {
+			panic(err)
+		}
+		for _, crtc := range oinfo.Crtcs {
+			if isCrtcConnected(X, crtc) {
+				fmt.Println("crtc:", crtc, "Is used for ", op.Name)
+				continue
+			}
+			s, err := randr.SetCrtcConfig(X, crtc, 0, 0, op.Allocation.X, op.Allocation.Y, op.bestMode, 1, []randr.Output{op.Identify}).Reply()
+			if err == nil {
+				fmt.Println("Crtc:", crtc, "for", op.Name, " is ok")
+				break
+			}
+			fmt.Println("AAAA:", s, err, crtc, op.bestMode, op.Rotation, op.Identify)
+		}
+	} else {
+		_, err := randr.SetCrtcConfig(X, op.crtc, 0, 0, op.Allocation.X, op.Allocation.Y, 0, op.Rotation, nil).Reply()
+		if err != nil {
+			panic(err)
+		}
+	}
+}
+
 func (op *Output) updateCrtc(dpy *Display) {
 	if op.crtc != 0 {
 		info, err := randr.GetCrtcInfo(X, op.crtc, 0).Reply()
 		if err != nil {
-			panic(err)
+			panic("Opps:" + err.Error())
 		}
 		op.rotations = info.Rotations
-		op.Rotation = info.Rotation & 0xf
-		op.Reflect = (info.Rotation >> 4) & 0xf
+		op.Rotation, op.Reflect = parseRandR(info.Rotation)
 
 		op.Allocation = xproto.Rectangle{info.X, info.Y, info.Width, info.Height}
 
 		op.Mode = buildMode(dpy.modes[info.Mode])
 	} else {
-		op.Rotation = 0
+		op.Rotation = 1
 		op.Reflect = 0
 		op.Allocation = xproto.Rectangle{0, 0, 0, 0}
 
-		op.Mode = Mode{0, 0, 0}
+		op.Mode = Mode{0, 0, 0, 0}
 	}
 	dbus.NotifyChange(op, "Allocation")
 	dbus.NotifyChange(op, "Rotation")
@@ -82,63 +179,6 @@ func (op *Output) update(dpy *Display, info *randr.GetOutputInfoReply) {
 		op.modes = append(op.modes, buildMode(info))
 	}
 	dbus.NotifyChange(op, "Mode")
-}
-
-func (op *Output) setRotation(rotation uint16) {
-	v := op.Opened
-	defer func() { op.setOpened(v) }()
-	op.setOpened(false)
-
-	_, err := randr.SetCrtcConfig(X, op.crtc, 0, 0, op.Allocation.X, op.Allocation.Y, op.bestMode, rotation|op.Reflect, []randr.Output{op.Identify}).Reply()
-	if err != nil {
-		panic(err)
-	}
-	op.Rotation = rotation
-}
-
-func (op *Output) setReflect(reflect uint16) {
-	v := op.Opened
-	defer func() { op.setOpened(v) }()
-	op.setOpened(false)
-
-	_, err := randr.SetCrtcConfig(X, op.crtc, 0, 0, op.Allocation.X, op.Allocation.Y, op.bestMode, op.Rotation|reflect, []randr.Output{op.Identify}).Reply()
-	op.setOpened(true)
-	if err != nil {
-		panic(err)
-	}
-	op.Reflect = reflect
-}
-
-func (op *Output) setOpened(v bool) {
-	if op.Opened != v {
-		if v == true {
-			oinfo, err := randr.GetOutputInfo(X, op.Identify, 0).Reply()
-			if err != nil {
-				panic(err)
-			}
-			for _, crtc := range oinfo.Crtcs {
-				if isCrtcConnected(X, crtc) {
-					fmt.Println("crtc:", crtc, "Is used for ", op.Name)
-					continue
-				}
-				s, err := randr.SetCrtcConfig(X, crtc, 0, 0, op.Allocation.X, op.Allocation.Y, op.bestMode, 1, []randr.Output{op.Identify}).Reply()
-				if err == nil {
-					fmt.Println("Crtc:", crtc, "for", op.Name, " is ok")
-					break
-				}
-				fmt.Println("AAAA:", s, err, crtc, op.bestMode, op.Rotation, op.Identify)
-			}
-		} else {
-			_, err := randr.SetCrtcConfig(X, op.crtc, 0, 0, op.Allocation.X, op.Allocation.Y, 0, op.Rotation, nil).Reply()
-			if err != nil {
-				panic(err)
-			}
-		}
-	}
-}
-
-func (op *Output) Debug() string {
-	return fmt.Sprintf("Allocation:%v Rotation:%d", op.Allocation, op.Rotation)
 }
 
 func NewOutput(dpy *Display, core randr.Output) *Output {

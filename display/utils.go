@@ -3,6 +3,7 @@ package main
 import "github.com/BurntSushi/xgb/xproto"
 import "github.com/BurntSushi/xgb/randr"
 import "github.com/BurntSushi/xgb"
+import "dlib/logger"
 import "math"
 
 func getAtom(c *xgb.Conn, name string) xproto.Atom {
@@ -60,7 +61,7 @@ func buildMode(info randr.ModeInfo) Mode {
 
 	rate := float64(info.DotClock) / float64(uint32(info.Htotal)*uint32(vTotal))
 	rate = math.Floor(rate + 0.5)
-	return Mode{info.Width, info.Height, uint16(rate)}
+	return Mode{info.Id, info.Width, info.Height, uint16(rate)}
 }
 
 // xgb/randr.GetScreenInfo will panic at this moment.( https://github.com/BurntSushi/xgb/issues/20)
@@ -118,6 +119,26 @@ func getScreenInfo(root xproto.Window) (*randr.GetScreenInfoReply, error) {
 	return v, nil
 }
 
+func parseRandR(randr uint16) (uint16, uint16) {
+	rotation := randr & 0xf
+	reflect := randr & 0xf0
+	switch rotation {
+	case 1, 2, 4, 8:
+		break
+	default:
+		logger.Println("invalid rotation value", rotation, randr)
+		rotation = 1
+	}
+	switch reflect {
+	case 0, 16, 32, 48:
+		break
+	default:
+		logger.Println("invalid reflect value", reflect, randr)
+		reflect = 0
+	}
+	return rotation, reflect
+}
+
 func parseRotations(rotations uint16) (ret []uint16) {
 	if rotations&randr.RotationRotate0 == randr.RotationRotate0 {
 		ret = append(ret, randr.RotationRotate0)
@@ -142,6 +163,11 @@ func parseReflects(rotations uint16) (ret []uint16) {
 	if rotations&randr.RotationReflectY == randr.RotationReflectY {
 		ret = append(ret, randr.RotationReflectY)
 	}
+
+	if (rotations&randr.RotationReflectX == randr.RotationReflectX) && (rotations&randr.RotationReflectY == randr.RotationReflectY) {
+		ret = append(ret, randr.RotationReflectX|randr.RotationReflectY)
+	}
+
 	return
 }
 
