@@ -9,7 +9,7 @@ type Mode struct {
 	ID     uint32
 	Width  uint16
 	Height uint16
-	Rate   uint16
+	Rate   float64
 }
 type Output struct {
 	bestMode  randr.Mode

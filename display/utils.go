@@ -60,8 +60,8 @@ func buildMode(info randr.ModeInfo) Mode {
 	}
 
 	rate := float64(info.DotClock) / float64(uint32(info.Htotal)*uint32(vTotal))
-	rate = math.Floor(rate + 0.5)
-	return Mode{info.Id, info.Width, info.Height, uint16(rate)}
+	rate = math.Floor(rate*10 + 0.5) / 10
+	return Mode{info.Id, info.Width, info.Height, rate}
 }
 
 // xgb/randr.GetScreenInfo will panic at this moment.( https://github.com/BurntSushi/xgb/issues/20)
