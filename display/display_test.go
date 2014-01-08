@@ -20,10 +20,10 @@ func init() {
 	dpy = NewDisplay()
 	Suite(dpy)
 	for _, op := range dpy.Outputs {
-		/*if op.Name != "LVDS1" {*/
+		if op.Name != "LVDS1" {
+			Suite(op)
+		}
 		/*Suite(op)*/
-		/*}*/
-		Suite(op)
 	}
 	for _, op := range dpy.Outputs {
 		xx, _ := randr.GetOutputInfo(X, op.Identify, 0).Reply()
@@ -125,7 +125,6 @@ func (op *Output) TestClose(c *C) {
 	delay()
 
 	v := op.Opened
-	op.setOpened(false)
 	delay()
 	op.setOpened(true)
 
@@ -134,6 +133,8 @@ func (op *Output) TestClose(c *C) {
 	delay()
 	c.Check(op.Opened, Equals, v)
 
+	delay()
+	delay()
 	return
 }
 
@@ -173,23 +174,45 @@ func (op *Output) TestMode(c *C) {
 	vm := op.Mode
 	for _, m := range op.ListModes() {
 		delay()
-		op.setMode(m.ID)
+		op.SetMode(m.ID)
 	}
 	delay()
-	op.setMode(vm.ID)
+	op.SetMode(vm.ID)
 }
 func (op *Output) TestAllocation(c *C) {
 	delay()
 	delay()
 	if op.Name == "LVDS1" {
-		op.setAllocation(0, 100, 0, 0, 0)
+		op.SetAllocation(0, 100, 0, 0, 0)
 	} else {
-		op.setAllocation(1280, 0, 0, 0, 0)
+		op.SetAllocation(1280, 0, 0, 0, 0)
 	}
 	delay()
 	delay()
 	delay()
 	delay()
+}
+
+func (op *Output) TestGramm(c *C) {
+	vb := op.Brightness
+
+	for i := 0.1; i < 1; i = i + 0.1 {
+		op.setBrightness(i)
+		delay()
+		delay()
+	}
+	for i := 0.1; i < 1; i = i + 0.001 {
+		<-time.After(time.Millisecond * 10)
+		op.setBrightness(i)
+	}
+	for i := 1.0; i > 0; i = i - 0.001 {
+		<-time.After(time.Millisecond * 10)
+		op.setBrightness(i)
+	}
+
+	op.setBrightness(vb)
+	c.Check(op.Brightness, Equals, vb)
+
 }
 
 func TestEnsure(t *testing.T) {

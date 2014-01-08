@@ -204,3 +204,17 @@ func parseScreenSize(ops []*Output) (width, height uint16) {
 	}
 	return
 }
+
+func genGammaRamp(size uint16, brightness float64) (red []uint16, green []uint16, blue []uint16) {
+	red = make([]uint16, size)
+	green = make([]uint16, size)
+	blue = make([]uint16, size)
+
+	step := uint16(65536 / uint32(size))
+	for i := uint16(0); i < size; i++ {
+		red[i] = uint16(float64(step*i) * brightness)
+		green[i] = uint16(float64(step*i) * brightness)
+		blue[i] = uint16(float64(step*i) * brightness)
+	}
+	return
+}

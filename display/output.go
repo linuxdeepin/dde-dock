@@ -74,10 +74,9 @@ func (op *Output) OnPropertiesChanged(name string, oldv interface{}) {
 	case "Reflect":
 		op.setReflect(op.Reflect)
 	case "Opened":
-		fmt.Println("Opened..", oldv.(bool), op.Opened)
 		op.setOpened(op.Opened)
 	case "Brightness":
-		fmt.Println("(Not Implement)Try set brightness to :", op.Brightness)
+		op.setBrightness(op.Brightness)
 	}
 }
 
@@ -87,6 +86,18 @@ func (op *Output) Debug() string {
 
 //-------------- internal output methods---------------------
 
+func (op *Output) setBrightness(brightness float64) {
+	if brightness < 0.01 || brightness > 1 {
+		brightness = 1
+	}
+	gammaSize, err := randr.GetCrtcGammaSize(X, op.crtc).Reply()
+	if err != nil {
+		panic(fmt.Sprintf("GetCrtcGrammSize(crtc:%d) failed: %s", op.crtc, err.Error()))
+	}
+	red, green, blue := genGammaRamp(gammaSize.Size, brightness)
+	randr.SetCrtcGamma(X, op.crtc, gammaSize.Size, red, green, blue)
+
+}
 func (op *Output) setRotation(rotation uint16) {
 	v := op.Opened
 	defer func() { op.setOpened(v) }()
