@@ -8,6 +8,7 @@ import (
 	"dlib/dbus/property"
 	"dlib/gio-2.0"
 	"fmt"
+	"github.com/howeyc/fsnotify"
 )
 
 const (
@@ -16,14 +17,16 @@ const (
 	_DATA_TIME_IFC  = "com.deepin.daemon.DateAndTime"
 
 	_DATE_TIME_SCHEMA = "com.deepin.dde.datetime"
+	_TIME_ZONE_FILE   = "/etc/timezone"
 )
 
 var (
 	_busConn     *dbus.Conn
 	_dtGSettings = gio.NewSettings(_DATE_TIME_SCHEMA)
 
-	_setDT *setdatetime.SetDateTime
-	_gdate *datetimemechanism.DateTimeMechanism
+	_setDT      *setdatetime.SetDateTime
+	_gdate      *datetimemechanism.DateTimeMechanism
+	zoneWatcher *fsnotify.Watcher
 )
 
 type DateTime struct {
@@ -85,6 +88,33 @@ func NewDateAndTime() *DateTime {
 	return dt
 }
 
+func ListenZone(dt *DateTime) {
+	err := zoneWatcher.Watch(_TIME_ZONE_FILE)
+	if err != nil {
+		fmt.Printf("Watch '%s' Failed: %s\n", _TIME_ZONE_FILE, err)
+		return
+	}
+
+	go func() {
+		for {
+			select {
+			case ev := <-zoneWatcher.Event:
+				fmt.Println("Watcher Event: ", ev)
+				if ev.IsDelete() {
+					zoneWatcher.Watch(_TIME_ZONE_FILE)
+				} else {
+					//if ev.IsModify() {
+					dt.CurrentTimeZone, _ = _gdate.GetTimezone()
+                                        fmt.Println(dt.CurrentTimeZone)
+					//}
+				}
+			case err := <-zoneWatcher.Error:
+				fmt.Println("Watcher Event: ", err)
+			}
+		}
+	}()
+}
+
 func Init() {
 	var err error
 
@@ -99,16 +129,25 @@ func Init() {
 		fmt.Println("New DateTimeMechanism Failed.")
 		panic(err)
 	}
+
+	zoneWatcher, err = fsnotify.NewWatcher()
+	if err != nil {
+		fmt.Println("New FS Watcher Failed.")
+		panic(err)
+	}
 }
 
 func main() {
 	Init()
+	defer zoneWatcher.Close()
+
 	date := NewDateAndTime()
 	err := dbus.InstallOnSession(date)
 	if err != nil {
 		panic(err)
 	}
 
+	ListenZone(date)
 	if date.AutoSetTime {
 		go _setDT.SetNtpUsing(true)
 	}
