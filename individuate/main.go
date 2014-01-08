@@ -22,45 +22,45 @@
 package main
 
 import (
+	"dbus/com/deepin/daemon/accounts"
 	accext "dbus/com/deepin/dde/api/accounts"
 	"dlib"
 	"dlib/dbus"
 	"fmt"
-)
-
-/*type IndividuateManager struct {}*/
-
-const (
-	_INDIVI_DEST     = "com.deepin.daemon.IndividuateManager"
-	_BG_MANAGER_PATH = "/com/deepin/Individuate/BackgroundManager"
-	_BG_MANAGER_IFC  = "com.deepin.daemon.Individuate.BackgroundManager"
+	"os/user"
 )
 
 var (
-        accountsExtends *accext.Accounts
-)
+	accountsExtends *accext.Accounts
+	userManager     *accounts.User
 
-func (bgManager *BackgroundManager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		_INDIVI_DEST,
-		_BG_MANAGER_PATH,
-		_BG_MANAGER_IFC,
-	}
-}
+	currentUid string
+)
 
 func InitVariable() {
 	var err error
 
-	accountsExtends, err = accext.NewAccounts("com.deepin.dde.api.Accounts")
+	accountsExtends, err = accext.NewAccounts("/com/deepin/dde/api/Accounts")
 	if err != nil {
 		fmt.Println("New Accounts Extends Failed.")
+		panic(err)
+	}
+
+	userInfo, _ := user.Current()
+	currentUid = userInfo.Uid
+
+	userManager, err = accounts.NewUser(DACCOUNTS_USER_PATH +
+		dbus.ObjectPath(currentUid))
+	if err != nil {
+		fmt.Println("New User Failed.")
 		panic(err)
 	}
 }
 
 func main() {
-	bgManager := NewBackgroundManager()
-	err := dbus.InstallOnSession(bgManager)
+	InitVariable()
+	m := NewManager()
+	err := dbus.InstallOnSession(m)
 	if err != nil {
 		panic(err)
 	}

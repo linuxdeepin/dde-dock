@@ -69,5 +69,25 @@
       <summary>Auto change background animation two frames duration</summary>
       <description>The unit is millisecond, change background animation two frames duration</description>
     </key>
+    <key type="s" name="cursor-theme">
+        <default>'Deepin'</default>
+        <summary>Mouse Theme</summary>
+        <description>Mouse Theme</description>
+    </key>
+    <key type="s" name="font-theme">
+        <default>'Cantarell 11'</default>
+        <summary>Font Theme</summary>
+        <description>Font Theme</description>
+    </key>
+    <key type="s" name="icon-theme">
+        <default>'Deepin'</default>
+        <summary>Icon Theme</summary>
+        <description>Icon Theme</description>
+    </key>
+    <key type="s" name="gtk-theme">
+        <default>'Deepin'</default>
+        <summary>GTK Theme</summary>
+        <description>GTK Theme</description>
+    </key>
   </schema>
 </schemalist>
