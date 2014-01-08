@@ -58,12 +58,18 @@ func (grub *Grub2) GetEntries() []string {
 	return grub.entries
 }
 
-func (grub *Grub2) SetDefaultEntry(entry string) {
-	grub.settings["GRUB_DEFAULT"] = entry
+func (grub *Grub2) SetDefaultEntry(index uint32) {
+	indexStr := strconv.FormatInt(int64(index), 10)
+	grub.settings["GRUB_DEFAULT"] = indexStr
 }
 
-func (grub *Grub2) GetDefaultEntry() string {
-	return grub.settings["GRUB_DEFAULT"] // TODO
+func (grub *Grub2) GetDefaultEntry() uint32 {
+	index, err := strconv.ParseInt(grub.settings["GRUB_DEFAULT"], 10, 32)
+	if err != nil {
+		logError(fmt.Sprintf(`valid value, settings["GRUB_DEFAULT"]=%s`, grub.settings["GRUB_DEFAULT"])) // TODO
+		return 0
+	}
+	return uint32(index)
 }
 
 func (grub *Grub2) SetTimeout(timeout int32) {

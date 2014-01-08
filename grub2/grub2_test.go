@@ -1,76 +1,105 @@
 package main
 
 import (
-// "testing"
+	"testing"
 )
 
-// func TestParseTitle(t *testing.T) {
-// 	var tests = []struct {
-// 		s, want string
-// 	}{
-// 		{`menuentry 'LinuxDeepin GNU/Linux' --class linux`, `LinuxDeepin GNU/Linux`},
-// 		{`  menuentry 'LinuxDeepin GNU/Linux' --class linux`, `LinuxDeepin GNU/Linux`},
-// 		{`submenu 'Advanced options for LinuxDeepin GNU/Linux'`, ``},
-// 		{``, ``},
-// 	}
-// 	grub := &Grub2{}
-// 	for _, c := range tests {
-// 		got, _ := grub.parseTitle(c.s)
-// 		if got != c.want {
-// 			t.Errorf("parseTitle(%q) == %q, want %q", c.s, got, c.want)
-// 		}
-// 	}
-// }
+func TestGrub2(t *testing.T) {
+	testMenuContent := `
+menuentry 'LinuxDeepin GNU/Linux' --class linuxdeepin --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-simple' {
+recordfail
+}
+submenu 'Advanced options for LinuxDeepin GNU/Linux' $menuentry_id_option 'gnulinux-advanced' {
+	menuentry 'LinuxDeepin GNU/Linux，Linux 3.11.0-15-generic' --class linuxdeepin --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-3.11.0-15-generic-advanced' {
+	recordfail
+		echo	'载入 Linux 3.11.0-15-generic ...'
+	}
+`
+	testConfigContent := `
+# comment line
+GRUB_DEFAULT="0"
+GRUB_HIDDEN_TIMEOUT="0"
+GRUB_HIDDEN_TIMEOUT_QUIET="true"
+# comment line
+GRUB_TIMEOUT="10"
+GRUB_GFXMODE="1024x768"
+  GRUB_BACKGROUND=/boot/grub/background.png
+  GRUB_THEME="/boot/grub/themes/demo/theme.txt"
+`
 
-// func TestParseEntries(t *testing.T) {
-// 	grub := &Grub2{}
-// 	testContent := `
-// menuentry 'LinuxDeepin GNU/Linux' --class linuxdeepin --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-simple' {
-// recordfail
-// }
-// submenu 'Advanced options for LinuxDeepin GNU/Linux' $menuentry_id_option 'gnulinux-advanced' {
-// 	menuentry 'LinuxDeepin GNU/Linux，Linux 3.11.0-15-generic' --class linuxdeepin --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-3.11.0-15-generic-advanced' {
-// 	recordfail
-// 		echo	'载入 Linux 3.11.0-15-generic ...'
-// 	}
-// `
-// 	wantEntryCount := 2
-// 	wantEntryOne := `LinuxDeepin GNU/Linux`
-// 	wantEntryTwo := `Advanced options for LinuxDeepin GNU/Linux`
+	grub := &Grub2{}
+	grub.parseEntries(testMenuContent)
+	grub.parseSettings(testConfigContent)
 
-// 	grub.parseEntries(testContent)
-// 	entriesCount := len(grub.entries)
-// 	if entriesCount != wantEntryCount {
-// 		t.Errorf("entriesCount == %q, want %q", entriesCount, wantEntryCount)
-// 	}
-// 	if grub.entries[0] != wantEntryOne {
-// 		t.Errorf("entryOne == %q, want %q", grub.entries[0], wantEntryOne)
-// 	}
-// 	if grub.entries[1] != wantEntryTwo {
-// 		t.Errorf("entryTwo == %q, want %q", grub.entries[1], wantEntryTwo)
-// 	}
-// }
+	wantEntryCount := 2
+	entries := grub.GetEntries()
+	entriesCount := len(entries)
+	if entriesCount != wantEntryCount {
+		t.Errorf("entriesCount == %v, want %v", entriesCount, wantEntryCount)
+	}
 
-// func TestParseSettings(t *testing.T) {
-// 	grub := &Grub2{}
-// 	testContent := `
-// # comment line
-// GRUB_DEFAULT="0"
-// GRUB_HIDDEN_TIMEOUT="0"
-// GRUB_HIDDEN_TIMEOUT_QUIET="true"
-// # comment line
-// GRUB_TIMEOUT="10"
-// GRUB_GFXMODE="1024x768"
-// GRUB_BACKGROUND=/boot/grub/background.png
-// GRUB_THEME="/boot/grub/themes/demo/theme.txt"
-// `
-// 	wantSettingCount := 7
-// 	wantDefault := 0
-// 	wantTimeout := 10
-// 	wantGfxmode := "1024x768"
-// 	wantBackground := "/boot/grub/background.png"
-// 	wantTheme := "/boot/grub/themes/demo/theme.txt"
+	// default entry
+	wantDefaultEntry := uint32(0)
+	defaultEntry := grub.GetDefaultEntry()
+	if defaultEntry != wantDefaultEntry {
+		t.Errorf("defaultEntry == %v, want %v", defaultEntry, wantDefaultEntry)
+	}
+	wantDefaultEntry = uint32(2)
+	grub.SetDefaultEntry(uint32(wantDefaultEntry))
+	defaultEntry = grub.GetDefaultEntry()
+	if defaultEntry != wantDefaultEntry {
+		t.Errorf("defaultEntry == %v, want %v", defaultEntry, wantDefaultEntry)
+	}
 
-// 	grub.parseSettings(testContent)
-// 	// TODO
-// }
+	// timeout
+	wantTimeout := int32(10)
+	timeout := grub.GetTimeout()
+	if timeout != wantTimeout {
+		t.Errorf("timeout == %v, want %v", timeout, wantTimeout)
+	}
+	wantTimeout = 15
+	grub.SetTimeout(wantTimeout)
+	timeout = grub.GetTimeout()
+	if timeout != wantTimeout {
+		t.Errorf("timeout == %v, want %v", timeout, wantTimeout)
+	}
+
+	// gfxmode
+	wantGfxmode := "1024x768"
+	gfxmode := grub.GetGfxmode()
+	if gfxmode != wantGfxmode {
+		t.Errorf("gfxmode == %q, want %q", gfxmode, wantGfxmode)
+	}
+	wantGfxmode = "saved"
+	grub.SetGfxmode(wantGfxmode)
+	gfxmode = grub.GetGfxmode()
+	if gfxmode != wantGfxmode {
+		t.Errorf("gfxmode == %q, want %q", gfxmode, wantGfxmode)
+	}
+
+	// background
+	wantBackground := "/boot/grub/background.png"
+	background := grub.GetBackground()
+	if background != wantBackground {
+		t.Errorf("background == %q, want %q", background, wantBackground)
+	}
+	wantBackground = "another_background.png"
+	grub.SetBackground(wantBackground)
+	background = grub.GetBackground()
+	if background != wantBackground {
+		t.Errorf("background == %q, want %q", background, wantBackground)
+	}
+
+	// theme
+	wantTheme := "/boot/grub/themes/demo/theme.txt"
+	theme := grub.GetTheme()
+	if theme != wantTheme {
+		t.Errorf("theme == %q, want %q", theme, wantTheme)
+	}
+	wantTheme = "another_theme.txt"
+	grub.SetTheme(wantTheme)
+	theme = grub.GetTheme()
+	if theme != wantTheme {
+		t.Errorf("theme == %q, want %q", theme, wantTheme)
+	}
+}
