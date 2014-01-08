@@ -160,6 +160,9 @@ func GetGtkThemes() []ThemeInfo {
 	gtkTheme := []ThemeInfo{}
 
 	gtkTheme = append(gtkTheme, ThemeInfo{Name: "Deepin", Type: "system"})
+	gtkTheme = append(gtkTheme, ThemeInfo{Name: "Deepin1", Type: "system"})
+	gtkTheme = append(gtkTheme, ThemeInfo{Name: "Deepin2", Type: "system"})
+	gtkTheme = append(gtkTheme, ThemeInfo{Name: "Deepin3", Type: "system"})
 	return gtkTheme
 }
 
@@ -167,6 +170,9 @@ func GetIconThemes() []ThemeInfo {
 	iconTheme := []ThemeInfo{}
 
 	iconTheme = append(iconTheme, ThemeInfo{Name: "Deepin", Type: "system"})
+	iconTheme = append(iconTheme, ThemeInfo{Name: "Deepin1", Type: "system"})
+	iconTheme = append(iconTheme, ThemeInfo{Name: "Deepin3", Type: "system"})
+	iconTheme = append(iconTheme, ThemeInfo{Name: "Deepin2", Type: "system"})
 	return iconTheme
 }
 
@@ -174,6 +180,9 @@ func GetFontThemes() []ThemeInfo {
 	fontTheme := []ThemeInfo{}
 
 	fontTheme = append(fontTheme, ThemeInfo{Name: "Deepin", Type: "system"})
+	fontTheme = append(fontTheme, ThemeInfo{Name: "Deepin1", Type: "system"})
+	fontTheme = append(fontTheme, ThemeInfo{Name: "Deepin2", Type: "system"})
+	fontTheme = append(fontTheme, ThemeInfo{Name: "Deepin3", Type: "system"})
 	return fontTheme
 }
 
@@ -181,6 +190,9 @@ func GetCursorThemes() []ThemeInfo {
 	cursorTheme := []ThemeInfo{}
 
 	cursorTheme = append(cursorTheme, ThemeInfo{Name: "Deepin", Type: "system"})
+	cursorTheme = append(cursorTheme, ThemeInfo{Name: "Deepin1", Type: "system"})
+	cursorTheme = append(cursorTheme, ThemeInfo{Name: "Deepin2", Type: "system"})
+	cursorTheme = append(cursorTheme, ThemeInfo{Name: "Deepin3", Type: "system"})
 	return cursorTheme
 }
 
@@ -188,5 +200,8 @@ func GetBackgroundFiles() []ThemeInfo {
 	bgTheme := []ThemeInfo{}
 
 	bgTheme = append(bgTheme, ThemeInfo{Name: "Deepin", Type: "system"})
+	bgTheme = append(bgTheme, ThemeInfo{Name: "Deepin1", Type: "system"})
+	bgTheme = append(bgTheme, ThemeInfo{Name: "Deepin2", Type: "system"})
+	bgTheme = append(bgTheme, ThemeInfo{Name: "Deepin3", Type: "system"})
 	return bgTheme
 }
