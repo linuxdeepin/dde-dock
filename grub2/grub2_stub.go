@@ -53,6 +53,7 @@ func (grub *Grub2) Load() {
 func (grub *Grub2) Save() {
 	// TODO
 	grub.writeSettings()
+	grub.generateGrubConfig()
 }
 
 func (grub *Grub2) GetEntries() []string {

@@ -24,17 +24,19 @@ const (
 type Grub2 struct {
 	settings map[string]string
 
+	Entries      []string
 	DefaultEntry uint32 `access:readwrite`
 	Timeout      int32  `access:readwrite`
 	Gfxmode      string `access:readwrite`
 	Background   string `access:readwrite`
 	Theme        string `access:readwrite`
-	Entries      []string
+	InUpdate     bool
 }
 
 func NewGrub2() *Grub2 {
 	// TODO
 	grub := &Grub2{}
+	grub.InUpdate = false
 	return grub
 }
 
@@ -65,10 +67,14 @@ func (grub *Grub2) writeSettings() {
 	}
 }
 
-func (grub *Grub2) udpateSettings() {
+func (grub *Grub2) generateGrubConfig() {
 	// TODO
+	logInfo("start to generate a new grub configuration file")
+	grub.InUpdate = true
 	// execAndWait(60, _GRUB_MKCONFIG_EXE, "-o", _GRUB_MENU)
-	// execAndWait(60, _GRUB_MKCONFIG_EXE)
+	execAndWait(60, _GRUB_MKCONFIG_EXE)
+	grub.InUpdate = false
+	logInfo("generate grub configuration finished")
 }
 
 func (grub *Grub2) parseEntries(fileContent string) {
