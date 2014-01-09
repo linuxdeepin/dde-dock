@@ -1,15 +1,14 @@
 package main
 
 import (
+	"bufio"
 	"dlib/dbus"
 	"fmt"
-	"strconv"
-)
-
-const (
-	_GRUB2_DEST = "com.deepin.daemon.Grub2"
-	_GRUB2_PATH = "/com/deepin/daemon/Grub2"
-	_GRUB2_IFC  = "com.deepin.daemon.Grub2"
+	"io/ioutil"
+	"os/exec"
+	"regexp"
+	"strings"
+	"unicode"
 )
 
 const (
@@ -18,11 +17,20 @@ const (
 	GRUB_MKCONFIG_EXE = "grub-mkconfig"
 )
 
+const (
+	_ENTRY_REGEXP_1 = `^ *menuentry +'(.*?)'.*$`
+	_ENTRY_REGEXP_2 = `^ *menuentry +"(.*?)".*$`
+)
+
 type Grub2 struct {
-	grubMenuFile   string
-	grubConfigFile string
-	entries        []string
-	settings       map[string]string
+	entries  []string
+	settings map[string]string
+
+	DefaultEntry uint32 `access:readwrite`
+	Timeout      uint32 `access:readwrite`
+	Gfxmode      string `access:readwrite`
+	Background   string `access:readwrite`
+	Theme        string `access:readwrite`
 }
 
 func NewGrub2() *Grub2 {
@@ -31,83 +39,97 @@ func NewGrub2() *Grub2 {
 	return grub
 }
 
-func (grub *Grub2) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		_GRUB2_DEST,
-		_GRUB2_PATH,
-		_GRUB2_IFC,
-	}
-}
-
-func (grub *Grub2) Init() {
-	// TODO
-}
-
-func (grub *Grub2) Load() {
-	// TODO
-	grub.readEntries()
-	grub.readSettings()
-}
-
-func (grub *Grub2) Save() {
-	// TODO
-	grub.writeSettings()
-}
-
-func (grub *Grub2) GetEntries() []string {
-	return grub.entries // TODO
-}
-
-func (grub *Grub2) SetDefaultEntry(index uint32) {
-	indexStr := strconv.FormatInt(int64(index), 10)
-	grub.settings["GRUB_DEFAULT"] = indexStr
-}
-
-func (grub *Grub2) GetDefaultEntry() uint32 {
-	index, err := strconv.ParseInt(grub.settings["GRUB_DEFAULT"], 10, 32)
+func (grub *Grub2) readEntries() {
+	fileContent, err := ioutil.ReadFile(GRUB_MENU)
 	if err != nil {
-		logError(fmt.Sprintf(`valid value, settings["GRUB_DEFAULT"]=%s`, grub.settings["GRUB_DEFAULT"])) // TODO
-		return 0
+		logError(err.Error()) // TODO
+		return
 	}
-	return uint32(index)
+	grub.parseEntries(string(fileContent))
 }
 
-func (grub *Grub2) SetTimeout(timeout int32) {
-	timeoutStr := strconv.FormatInt(int64(timeout), 10)
-	grub.settings["GRUB_TIMEOUT"] = timeoutStr
-}
-
-func (grub *Grub2) GetTimeout() int32 {
-	timeout, err := strconv.ParseInt(grub.settings["GRUB_TIMEOUT"], 10, 32)
+func (grub *Grub2) readSettings() {
+	fileContent, err := ioutil.ReadFile(GRUB_CONFIG)
 	if err != nil {
-		logError(fmt.Sprintf(`valid value, settings["GRUB_TIMEOUT"]=%s`, grub.settings["GRUB_TIMEOUT"])) // TODO
-		return 5
+		logError(err.Error()) // TODO
+		return
 	}
-	return int32(timeout)
+	grub.parseSettings(string(fileContent))
 }
 
-func (grub *Grub2) SetGfxmode(gfxmode string) {
-	grub.settings["GRUB_GFXMODE"] = gfxmode
+func (grub *Grub2) writeSettings() {
+	fileContent := grub.getSettingContentToSave()
+	err := ioutil.WriteFile(GRUB_CONFIG, []byte(fileContent), 0644)
+	if err != nil {
+		logError(err.Error()) // TODO
+		return
+	}
 }
 
-func (grub *Grub2) GetGfxmode() string {
-	return grub.settings["GRUB_GFXMODE"]
+func (grub *Grub2) udpateSettings() {
+	exec.Command(GRUB_MKCONFIG_EXE + " -o " + GRUB_MENU)
 }
 
-func (grub *Grub2) SetBackground(imageFile string) {
-	grub.settings["GRUB_BACKGROUND"] = imageFile
+func (grub *Grub2) parseEntries(fileContent string) {
+	// reset entries
+	grub.entries = make([]string, 0)
+
+	s := bufio.NewScanner(strings.NewReader(fileContent))
+	s.Split(bufio.ScanLines)
+	for s.Scan() {
+		entry, ok := grub.parseTitle(s.Text())
+		if ok {
+			grub.entries = append(grub.entries, entry)
+			logInfo(fmt.Sprintf("found entry: %s", entry)) // TODO
+		}
+	}
+	if err := s.Err(); err != nil {
+		logError(err.Error())
+	}
 }
 
-func (grub *Grub2) GetBackground() string {
-	return grub.settings["GRUB_BACKGROUND"]
+func (grub *Grub2) parseTitle(line string) (string, bool) {
+	line = strings.TrimLeftFunc(line, unicode.IsSpace)
+	reg1 := regexp.MustCompile(_ENTRY_REGEXP_1)
+	reg2 := regexp.MustCompile(_ENTRY_REGEXP_2)
+	if reg1.MatchString(line) {
+		return reg1.FindStringSubmatch(line)[1], true
+	} else if reg2.MatchString(line) {
+		return reg2.FindStringSubmatch(line)[1], true
+	} else {
+		return "", false
+	}
 }
 
-func (grub *Grub2) SetTheme(themeFile string) {
-	grub.settings["GRUB_THEME"] = themeFile
+func (grub *Grub2) parseSettings(fileContent string) {
+	// reset settings
+	grub.settings = make(map[string]string)
+
+	s := bufio.NewScanner(strings.NewReader(fileContent))
+	s.Split(bufio.ScanLines)
+	for s.Scan() {
+		line := s.Text()
+		line = strings.TrimSpace(line)
+		if strings.HasPrefix(line, "GRUB_") {
+			kv := strings.SplitN(line, "=", 2)
+			key, value := kv[0], kv[1]
+			grub.settings[key] = unquoteString(value)
+			logInfo(fmt.Sprintf("found setting: %s=%s", kv[0], kv[1])) // TODO
+		}
+	}
+	if err := s.Err(); err != nil {
+		logError(err.Error())
+	}
 }
 
-func (grub *Grub2) GetTheme() string {
-	return grub.settings["GRUB_THEME"]
+func (grub *Grub2) getSettingContentToSave() string {
+	fileContent := ""
+	for k, v := range grub.settings {
+		if len(v) > 0 {
+			fileContent += k + "=" + quoteString(v) + "\n"
+		}
+	}
+	return fileContent
 }
 
 func main() {
