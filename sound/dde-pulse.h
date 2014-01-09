@@ -260,7 +260,9 @@ int pa_init_context(pa *self);
 
 //Go export functions
 
-//extern void updateCard(int, pa_subscription_event_type_t);
-//extern void updateSink(int, pa_subscription_event_type_t);
-//extern void updateSource(int, pa_subscription_event_type_t);
+extern void updateCard(int, pa_subscription_event_type_t);
+extern void updateSink(int, pa_subscription_event_type_t);
+extern void updateSource(int, pa_subscription_event_type_t);
+extern void updateSinkInput(int, pa_subscription_event_type_t);
+extern void updateSourceOutput(int, pa_subscription_event_type_t);
 #endif
