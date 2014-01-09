@@ -19,10 +19,25 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-#ifndef __BLUR_PICT_H__
-#define __BLUR_PICT_H__
+package main
 
-int generate_blur_pict (const char *src_path, const char *dest_path);
-int blur_pict_is_valid (const char *src_path, const char *dest_path);
+import (
+	"os"
+	"strings"
+)
 
-#endif
+func IsFileExist(filename string) bool {
+	_, err := os.Stat(filename)
+	if os.IsNotExist(err) {
+		return false
+	}
+
+	return true
+}
+
+func GetPathFromURI(uri string) string {
+	if !strings.Contains(uri, "file:///") {
+		return uri
+	}
+	return "/" + strings.TrimLeft(uri, "file:///")
+}

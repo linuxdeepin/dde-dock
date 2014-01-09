@@ -1,4 +1,0 @@
-[D-BUS Service]
-Name=com.deepin.daemon.SetDateTime
-Exec=/usr/lib/deepin-daemon/set-date-time
-User=root

@@ -1,7 +1,6 @@
 run:=go build -o .out && rm .out
 
 all: 
-	cd accounts-extends/ && $(run)
 	cd daccounts/ &&  $(run)
 	cd date-time/ && $(run)
 	cd default-app/ && $(run)
@@ -12,7 +11,6 @@ all:
 	cd binding-manager/ && $(run)
 	cd network/ && $(run)
 	cd power/ && $(run)
-	cd set-date-time/ && $(run)
 	cd shutdown-manager/ && $(run)
 	cd sound/ && $(run)
 	cd system-info/ && $(run)
