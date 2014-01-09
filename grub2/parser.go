@@ -32,6 +32,15 @@ func (grub *Grub2) readSettings() {
 	grub.parseSettings(string(fileContent))
 }
 
+func (grub *Grub2) writeSettings() {
+	fileContent := grub.getSettingContentToSave()
+	err := ioutil.WriteFile(grub.grubConfigFile, []byte(fileContent), 0644)
+	if err != nil {
+		logError(err.Error()) // TODO
+		return
+	}
+}
+
 func (grub *Grub2) parseEntries(fileContent string) {
 	// reset entries
 	grub.entries = make([]string, 0)
@@ -82,4 +91,14 @@ func (grub *Grub2) parseSettings(fileContent string) {
 	if err := s.Err(); err != nil {
 		logError(err.Error())
 	}
+}
+
+func (grub *Grub2) getSettingContentToSave() string {
+	fileContent := ""
+	for k, v := range grub.settings {
+		if len(v) > 0 {
+			fileContent += k + "=" + quoteString(v) + "\n"
+		}
+	}
+	return fileContent
 }

@@ -27,6 +27,8 @@ type Grub2 struct {
 func NewGrub2() *Grub2 {
 	// TODO
 	grub := &Grub2{}
+	grub.grubMenuFile = GRUB_MENU
+	grub.grubConfigFile = GRUB_CONFIG
 	return grub
 }
 
@@ -40,22 +42,21 @@ func (grub *Grub2) GetDBusInfo() dbus.DBusInfo {
 
 func (grub *Grub2) Init() {
 	// TODO
-	grub.grubMenuFile = GRUB_MENU
-	grub.grubConfigFile = GRUB_CONFIG
 }
 
 func (grub *Grub2) Load() {
 	// TODO
+	grub.readEntries()
+	grub.readSettings()
 }
 
 func (grub *Grub2) Save() {
 	// TODO
+	grub.writeSettings()
 }
 
 func (grub *Grub2) GetEntries() []string {
-	// TODO
-	// return []string{"a", "b", "c"}
-	return grub.entries
+	return grub.entries // TODO
 }
 
 func (grub *Grub2) SetDefaultEntry(index uint32) {

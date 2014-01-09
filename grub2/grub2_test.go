@@ -45,7 +45,7 @@ GRUB_GFXMODE="1024x768"
 		t.Errorf("defaultEntry == %v, want %v", defaultEntry, wantDefaultEntry)
 	}
 	wantDefaultEntry = uint32(2)
-	grub.SetDefaultEntry(uint32(wantDefaultEntry))
+	grub.SetDefaultEntry(wantDefaultEntry)
 	defaultEntry = grub.GetDefaultEntry()
 	if defaultEntry != wantDefaultEntry {
 		t.Errorf("defaultEntry == %v, want %v", defaultEntry, wantDefaultEntry)
@@ -57,7 +57,7 @@ GRUB_GFXMODE="1024x768"
 	if timeout != wantTimeout {
 		t.Errorf("timeout == %v, want %v", timeout, wantTimeout)
 	}
-	wantTimeout = 15
+	wantTimeout = int32(15)
 	grub.SetTimeout(wantTimeout)
 	timeout = grub.GetTimeout()
 	if timeout != wantTimeout {
@@ -101,5 +101,31 @@ GRUB_GFXMODE="1024x768"
 	theme = grub.GetTheme()
 	if theme != wantTheme {
 		t.Errorf("theme == %q, want %q", theme, wantTheme)
+	}
+}
+
+func TestSaveSettings(t *testing.T) {
+	testConfigContent := `GRUB_DEFAULT="0"
+GRUB_TIMEOUT="10"
+GRUB_GFXMODE="1024x768"
+`
+	wantConfigContent := `GRUB_DEFAULT="1"
+GRUB_TIMEOUT="15"
+GRUB_GFXMODE="saved"
+GRUB_BACKGROUND="/boot/grub/background.png"
+GRUB_THEME="/boot/grub/themes/demo/theme.txt"
+`
+
+	grub := &Grub2{}
+	grub.parseSettings(testConfigContent)
+
+	grub.SetDefaultEntry(1)
+	grub.SetTimeout(15)
+	grub.SetGfxmode("saved")
+	grub.SetBackground("/boot/grub/background.png")
+	grub.SetTheme("/boot/grub/themes/demo/theme.txt")
+	configContent := grub.getSettingContentToSave()
+	if configContent != wantConfigContent {
+		t.Errorf("configContent == %s, want %s", configContent, wantConfigContent)
 	}
 }
