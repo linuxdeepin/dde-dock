@@ -186,9 +186,10 @@ func NewOutput(dpy *Display, core randr.Output) *Output {
 	}
 
 	// Nvidia driver which support Randr 1.4 will show an additional connected output which I didn't know it's exactly function. So simply filter it.
-	if info.MmWidth == 0 || info.MmHeight == 0 {
-		return nil
-	}
+	// UPDATE: some driver can't find the mm information but can be used as normal, so don't filter this one.  this need more research randr.
+	/*if info.MmWidth == 0 || info.MmHeight == 0 {*/
+	/*return nil*/
+	/*}*/
 
 	edidProp, _ := randr.GetOutputProperty(X, core, atomEDID, xproto.AtomInteger, 0, 1024, false, false).Reply()
 

@@ -86,8 +86,11 @@ func (dpy *Display) updatePrimary() {
 		dpy.setPropPrimaryOutput(nil)
 		dpy.setPropPrimaryRect(xproto.Rectangle{0, 0, dpy.Width, dpy.Height})
 	} else if dpy.setPropPrimaryOutput(queryOutput(dpy, r.Output)); dpy.PrimaryOutput == nil {
-		//this output is invalid or disconnected, so set OutputPrimary to None
-		randr.SetOutputPrimary(X, Root, 0)
+		//to avoid repeatedly trigger ScreenChangeNotifyEvent
+		if len(dpy.Outputs) != 0 {
+			//this output is invalid or disconnected, so set OutputPrimary to None
+			randr.SetOutputPrimary(X, Root, 0)
+		}
 		return
 	} else {
 		dpy.setPropPrimaryRect(dpy.PrimaryOutput.Allocation)
