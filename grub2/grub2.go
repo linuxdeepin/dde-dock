@@ -7,14 +7,15 @@ import (
 	"io/ioutil"
 	"os/exec"
 	"regexp"
+	"strconv"
 	"strings"
 	"unicode"
 )
 
 const (
-	GRUB_MENU         = "/boot/grub/grub.cfg"
-	GRUB_CONFIG       = "/etc/default/grub"
-	GRUB_MKCONFIG_EXE = "grub-mkconfig"
+	_GRUB_MENU         = "/boot/grub/grub.cfg"
+	_GRUB_CONFIG       = "/etc/default/grub"
+	_GRUB_MKCONFIG_EXE = "grub-mkconfig"
 )
 
 const (
@@ -23,14 +24,14 @@ const (
 )
 
 type Grub2 struct {
-	entries  []string
 	settings map[string]string
 
 	DefaultEntry uint32 `access:readwrite`
-	Timeout      uint32 `access:readwrite`
+	Timeout      int32  `access:readwrite`
 	Gfxmode      string `access:readwrite`
 	Background   string `access:readwrite`
 	Theme        string `access:readwrite`
+	Entries      []string
 }
 
 func NewGrub2() *Grub2 {
@@ -40,7 +41,7 @@ func NewGrub2() *Grub2 {
 }
 
 func (grub *Grub2) readEntries() {
-	fileContent, err := ioutil.ReadFile(GRUB_MENU)
+	fileContent, err := ioutil.ReadFile(_GRUB_MENU)
 	if err != nil {
 		logError(err.Error()) // TODO
 		return
@@ -49,7 +50,7 @@ func (grub *Grub2) readEntries() {
 }
 
 func (grub *Grub2) readSettings() {
-	fileContent, err := ioutil.ReadFile(GRUB_CONFIG)
+	fileContent, err := ioutil.ReadFile(_GRUB_CONFIG)
 	if err != nil {
 		logError(err.Error()) // TODO
 		return
@@ -59,7 +60,7 @@ func (grub *Grub2) readSettings() {
 
 func (grub *Grub2) writeSettings() {
 	fileContent := grub.getSettingContentToSave()
-	err := ioutil.WriteFile(GRUB_CONFIG, []byte(fileContent), 0644)
+	err := ioutil.WriteFile(_GRUB_CONFIG, []byte(fileContent), 0644)
 	if err != nil {
 		logError(err.Error()) // TODO
 		return
@@ -67,19 +68,19 @@ func (grub *Grub2) writeSettings() {
 }
 
 func (grub *Grub2) udpateSettings() {
-	exec.Command(GRUB_MKCONFIG_EXE + " -o " + GRUB_MENU)
+	exec.Command(_GRUB_MKCONFIG_EXE + " -o " + _GRUB_MENU)
 }
 
 func (grub *Grub2) parseEntries(fileContent string) {
 	// reset entries
-	grub.entries = make([]string, 0)
+	grub.Entries = make([]string, 0)
 
 	s := bufio.NewScanner(strings.NewReader(fileContent))
 	s.Split(bufio.ScanLines)
 	for s.Scan() {
 		entry, ok := grub.parseTitle(s.Text())
 		if ok {
-			grub.entries = append(grub.entries, entry)
+			grub.Entries = append(grub.Entries, entry)
 			logInfo(fmt.Sprintf("found entry: %s", entry)) // TODO
 		}
 	}
@@ -120,6 +121,54 @@ func (grub *Grub2) parseSettings(fileContent string) {
 	if err := s.Err(); err != nil {
 		logError(err.Error())
 	}
+
+	grub.DefaultEntry = grub.getDefaultEntry()
+	grub.Timeout = grub.getTimeout()
+	grub.Gfxmode = grub.getGfxmode()
+	grub.Background = grub.getBackground()
+	grub.Theme = grub.getTheme()
+}
+
+func (grub *Grub2) getDefaultEntry() uint32 {
+	if len(grub.settings["GRUB_DEFAULT"]) == 0 {
+		return 0
+	}
+
+	index, err := strconv.ParseInt(grub.settings["GRUB_DEFAULT"], 10, 32)
+	if err != nil {
+		logError(fmt.Sprintf(`valid value, settings["GRUB_DEFAULT"]=%s`, grub.settings["GRUB_DEFAULT"])) // TODO
+		return 0
+	}
+	return uint32(index)
+}
+
+func (grub *Grub2) getTimeout() int32 {
+	if len(grub.settings["GRUB_TIMEOUT"]) == 0 {
+		return 5
+	}
+
+	timeout, err := strconv.ParseInt(grub.settings["GRUB_TIMEOUT"], 10, 32)
+	if err != nil {
+		logError(fmt.Sprintf(`valid value, settings["GRUB_TIMEOUT"]=%s`, grub.settings["GRUB_TIMEOUT"])) // TODO
+		return 5
+	}
+	return int32(timeout)
+}
+
+func (grub *Grub2) getGfxmode() string {
+	if len(grub.settings["GRUB_GFXMODE"]) == 0 {
+		return "auto"
+	}
+
+	return grub.settings["GRUB_GFXMODE"]
+}
+
+func (grub *Grub2) getBackground() string {
+	return grub.settings["GRUB_BACKGROUND"]
+}
+
+func (grub *Grub2) getTheme() string {
+	return grub.settings["GRUB_THEME"]
 }
 
 func (grub *Grub2) getSettingContentToSave() string {

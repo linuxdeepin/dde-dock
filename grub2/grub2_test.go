@@ -39,15 +39,15 @@ submenu 'Advanced options for LinuxDeepin GNU/Linux' $menuentry_id_option 'gnuli
 	wantEntryTwo := `LinuxDeepin GNU/Linux，Linux 3.11.0-15-generic`
 
 	grub.parseEntries(testMenuContent)
-	entriesCount := len(grub.entries)
+	entriesCount := len(grub.Entries)
 	if entriesCount != wantEntryCount {
 		t.Errorf("entriesCount == %v, want %v", entriesCount, wantEntryCount)
 	}
-	if grub.entries[0] != wantEntryOne {
-		t.Errorf("entryOne == %q, want %q", grub.entries[0], wantEntryOne)
+	if grub.Entries[0] != wantEntryOne {
+		t.Errorf("entryOne == %q, want %q", grub.Entries[0], wantEntryOne)
 	}
-	if grub.entries[1] != wantEntryTwo {
-		t.Errorf("entryTwo == %q, want %q", grub.entries[1], wantEntryTwo)
+	if grub.Entries[1] != wantEntryTwo {
+		t.Errorf("entryTwo == %q, want %q", grub.Entries[1], wantEntryTwo)
 	}
 }
 
@@ -128,65 +128,65 @@ GRUB_GFXMODE="1024x768"
 
 	// default entry
 	wantDefaultEntry := uint32(0)
-	defaultEntry := grub.GetDefaultEntry()
+	defaultEntry := grub.getDefaultEntry()
 	if defaultEntry != wantDefaultEntry {
 		t.Errorf("defaultEntry == %v, want %v", defaultEntry, wantDefaultEntry)
 	}
 	wantDefaultEntry = uint32(2)
-	grub.SetDefaultEntry(wantDefaultEntry)
-	defaultEntry = grub.GetDefaultEntry()
+	grub.setDefaultEntry(wantDefaultEntry)
+	defaultEntry = grub.getDefaultEntry()
 	if defaultEntry != wantDefaultEntry {
 		t.Errorf("defaultEntry == %v, want %v", defaultEntry, wantDefaultEntry)
 	}
 
 	// timeout
 	wantTimeout := int32(10)
-	timeout := grub.GetTimeout()
+	timeout := grub.getTimeout()
 	if timeout != wantTimeout {
 		t.Errorf("timeout == %v, want %v", timeout, wantTimeout)
 	}
 	wantTimeout = int32(15)
-	grub.SetTimeout(wantTimeout)
-	timeout = grub.GetTimeout()
+	grub.setTimeout(wantTimeout)
+	timeout = grub.getTimeout()
 	if timeout != wantTimeout {
 		t.Errorf("timeout == %v, want %v", timeout, wantTimeout)
 	}
 
 	// gfxmode
 	wantGfxmode := "1024x768"
-	gfxmode := grub.GetGfxmode()
+	gfxmode := grub.getGfxmode()
 	if gfxmode != wantGfxmode {
 		t.Errorf("gfxmode == %q, want %q", gfxmode, wantGfxmode)
 	}
 	wantGfxmode = "saved"
-	grub.SetGfxmode(wantGfxmode)
-	gfxmode = grub.GetGfxmode()
+	grub.setGfxmode(wantGfxmode)
+	gfxmode = grub.getGfxmode()
 	if gfxmode != wantGfxmode {
 		t.Errorf("gfxmode == %q, want %q", gfxmode, wantGfxmode)
 	}
 
 	// background
 	wantBackground := "/boot/grub/background.png"
-	background := grub.GetBackground()
+	background := grub.getBackground()
 	if background != wantBackground {
 		t.Errorf("background == %q, want %q", background, wantBackground)
 	}
 	wantBackground = "another_background.png"
-	grub.SetBackground(wantBackground)
-	background = grub.GetBackground()
+	grub.setBackground(wantBackground)
+	background = grub.getBackground()
 	if background != wantBackground {
 		t.Errorf("background == %q, want %q", background, wantBackground)
 	}
 
 	// theme
 	wantTheme := "/boot/grub/themes/demo/theme.txt"
-	theme := grub.GetTheme()
+	theme := grub.getTheme()
 	if theme != wantTheme {
 		t.Errorf("theme == %q, want %q", theme, wantTheme)
 	}
 	wantTheme = "another_theme.txt"
-	grub.SetTheme(wantTheme)
-	theme = grub.GetTheme()
+	grub.setTheme(wantTheme)
+	theme = grub.getTheme()
 	if theme != wantTheme {
 		t.Errorf("theme == %q, want %q", theme, wantTheme)
 	}
@@ -195,10 +195,12 @@ GRUB_GFXMODE="1024x768"
 func TestSaveSettings(t *testing.T) {
 	testConfigContent := `GRUB_DEFAULT="0"
 GRUB_TIMEOUT="10"
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
 GRUB_GFXMODE="1024x768"
 `
 	wantConfigContent := `GRUB_DEFAULT="1"
 GRUB_TIMEOUT="15"
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
 GRUB_GFXMODE="saved"
 GRUB_BACKGROUND="/boot/grub/background.png"
 GRUB_THEME="/boot/grub/themes/demo/theme.txt"
@@ -207,11 +209,11 @@ GRUB_THEME="/boot/grub/themes/demo/theme.txt"
 	grub := &Grub2{}
 	grub.parseSettings(testConfigContent)
 
-	grub.SetDefaultEntry(1)
-	grub.SetTimeout(15)
-	grub.SetGfxmode("saved")
-	grub.SetBackground("/boot/grub/background.png")
-	grub.SetTheme("/boot/grub/themes/demo/theme.txt")
+	grub.setDefaultEntry(1)
+	grub.setTimeout(15)
+	grub.setGfxmode("saved")
+	grub.setBackground("/boot/grub/background.png")
+	grub.setTheme("/boot/grub/themes/demo/theme.txt")
 	configContent := grub.getSettingContentToSave()
 	if configContent != wantConfigContent {
 		t.Errorf("configContent == %s, want %s", configContent, wantConfigContent)
