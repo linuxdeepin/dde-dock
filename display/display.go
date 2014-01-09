@@ -2,6 +2,7 @@ package main
 
 import (
 	"dlib/dbus"
+	"dlib/logger"
 	"fmt"
 	"github.com/BurntSushi/xgb"
 	"github.com/BurntSushi/xgb/randr"
@@ -9,11 +10,12 @@ import (
 )
 
 var (
-	_             = fmt.Println
-	X, _          = xgb.NewConn()
-	DefaultScreen = xproto.Setup(X).DefaultScreen(X)
-	Root          = DefaultScreen.Root
-	atomEDID      = getAtom(X, "EDID")
+	_                   = fmt.Println
+	X, _                = xgb.NewConn()
+	DefaultScreen       = xproto.Setup(X).DefaultScreen(X)
+	Root                = DefaultScreen.Root
+	atomEDID            = getAtom(X, "EDID")
+	LastConfigTimeStamp = xproto.Timestamp(0)
 )
 
 func init() {
@@ -53,6 +55,7 @@ func NewDisplay() *Display {
 	}
 
 	resources, err := randr.GetScreenResources(X, Root).Reply()
+	LastConfigTimeStamp = resources.ConfigTimestamp
 
 	if err != nil {
 		panic("GetScreenResources failed:" + err.Error())
@@ -159,6 +162,12 @@ func (dpy *Display) listener() {
 			}
 		case randr.ScreenChangeNotifyEvent:
 			ee := e.(randr.ScreenChangeNotifyEvent)
+			if ee.ConfigTimestamp <= LastConfigTimeStamp {
+				logger.Println("Recived an invalid ScreenChangeNotifyEvent", ee)
+				continue
+			}
+			LastConfigTimeStamp = ee.ConfigTimestamp
+
 			DefaultScreen = xproto.Setup(X).DefaultScreen(X)
 			dpy.updateRotationAndRelfect(uint16(ee.Rotation))
 

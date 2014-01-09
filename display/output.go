@@ -43,7 +43,8 @@ func (op *Output) ListReflect() []uint16 {
 
 func (op *Output) SetMode(id uint32) {
 	// op.Mode will update when receive appropriate event
-	_, err := randr.SetCrtcConfig(X, op.crtc, 0, 0, op.Allocation.X, op.Allocation.Y, randr.Mode(id), op.Rotation|op.Reflect, []randr.Output{op.Identify}).Reply()
+	_, err := randr.SetCrtcConfig(X, op.crtc, xproto.TimeCurrentTime, LastConfigTimeStamp,
+		op.Allocation.X, op.Allocation.Y, randr.Mode(id), op.Rotation|op.Reflect, []randr.Output{op.Identify}).Reply()
 	if err != nil {
 		panic(err)
 	}
@@ -52,7 +53,7 @@ func (op *Output) SetMode(id uint32) {
 func (op *Output) SetAllocation(x, y, width, height, adjMethod int16) {
 	//TODO: handle adjMethod with `width` and `height`
 
-	cinfo, err := randr.GetCrtcInfo(X, op.crtc, 0).Reply()
+	cinfo, err := randr.GetCrtcInfo(X, op.crtc, LastConfigTimeStamp).Reply()
 	found := false
 	for _, po := range cinfo.Possible {
 		if po == op.Identify {
@@ -71,7 +72,7 @@ func (op *Output) SetAllocation(x, y, width, height, adjMethod int16) {
 		panic(fmt.Sprintf("%s SetAllocation check failed at rotation: %v != %v(op)", op.Name, cinfo.Rotation, op.Reflect|op.Rotation))
 	}
 
-	_, err = randr.SetCrtcConfig(X, op.crtc, 0, 0, x, y, cinfo.Mode, cinfo.Rotation, cinfo.Outputs).Reply()
+	_, err = randr.SetCrtcConfig(X, op.crtc, xproto.TimeCurrentTime, LastConfigTimeStamp, x, y, cinfo.Mode, cinfo.Rotation, cinfo.Outputs).Reply()
 	if err != nil {
 		panic(fmt.Sprintf("%s SetAllocation(%d,%d,%d,%d) screenSize(%d,%d) failed at SetCrtcConfig:%s",
 			op.Name, x, y, width, height, DefaultScreen.WidthInPixels, DefaultScreen.HeightInPixels, err.Error()))
@@ -102,7 +103,8 @@ func (op *Output) setRotation(rotation uint16) {
 	defer func() { op.setOpened(v) }()
 	op.setOpened(false)
 
-	_, err := randr.SetCrtcConfig(X, op.crtc, 0, 0, op.Allocation.X, op.Allocation.Y, op.bestMode, rotation|op.Reflect, []randr.Output{op.Identify}).Reply()
+	_, err := randr.SetCrtcConfig(X, op.crtc, xproto.TimeCurrentTime, LastConfigTimeStamp,
+		op.Allocation.X, op.Allocation.Y, op.bestMode, rotation|op.Reflect, []randr.Output{op.Identify}).Reply()
 	if err != nil {
 		panic(fmt.Sprintln("SetRotation:", rotation, rotation|op.Reflect, err))
 	}
@@ -121,7 +123,8 @@ func (op *Output) setReflect(reflect uint16) {
 	defer func() { op.setOpened(v) }()
 	op.setOpened(false)
 
-	_, err := randr.SetCrtcConfig(X, op.crtc, 0, 0, op.Allocation.X, op.Allocation.Y, op.bestMode, op.Rotation|reflect, []randr.Output{op.Identify}).Reply()
+	_, err := randr.SetCrtcConfig(X, op.crtc, xproto.TimeCurrentTime, LastConfigTimeStamp,
+		op.Allocation.X, op.Allocation.Y, op.bestMode, op.Rotation|reflect, []randr.Output{op.Identify}).Reply()
 	op.setOpened(true)
 	if err != nil {
 		panic(fmt.Sprintln("SetReflect:", op.Rotation|reflect, err))
@@ -133,7 +136,7 @@ func (op *Output) setOpened(v bool) {
 	fmt.Println("SetOpened.... ", v)
 	//op.Opened will be changed when we receive appropriate event
 	if v == true {
-		oinfo, err := randr.GetOutputInfo(X, op.Identify, 0).Reply()
+		oinfo, err := randr.GetOutputInfo(X, op.Identify, LastConfigTimeStamp).Reply()
 		if err != nil {
 			panic(err)
 		}
@@ -142,7 +145,8 @@ func (op *Output) setOpened(v bool) {
 				fmt.Println("crtc:", crtc, "Is used for ", op.Name)
 				continue
 			}
-			s, err := randr.SetCrtcConfig(X, crtc, 0, 0, op.Allocation.X, op.Allocation.Y, op.bestMode, 1, []randr.Output{op.Identify}).Reply()
+			s, err := randr.SetCrtcConfig(X, crtc, xproto.TimeCurrentTime, LastConfigTimeStamp,
+				op.Allocation.X, op.Allocation.Y, op.bestMode, 1, []randr.Output{op.Identify}).Reply()
 			if err == nil {
 				fmt.Println("Crtc:", crtc, "for", op.Name, " is ok")
 				break
@@ -150,7 +154,8 @@ func (op *Output) setOpened(v bool) {
 			fmt.Println("AAAA:", s, err, crtc, op.bestMode, op.Rotation, op.Identify)
 		}
 	} else {
-		_, err := randr.SetCrtcConfig(X, op.crtc, 0, 0, op.Allocation.X, op.Allocation.Y, 0, op.Rotation, nil).Reply()
+		_, err := randr.SetCrtcConfig(X, op.crtc, xproto.TimeCurrentTime, LastConfigTimeStamp,
+			op.Allocation.X, op.Allocation.Y, 0, op.Rotation, nil).Reply()
 		if err != nil {
 			panic(err)
 		}
@@ -159,7 +164,7 @@ func (op *Output) setOpened(v bool) {
 
 func (op *Output) updateCrtc(dpy *Display) {
 	if op.crtc != 0 {
-		info, err := randr.GetCrtcInfo(X, op.crtc, 0).Reply()
+		info, err := randr.GetCrtcInfo(X, op.crtc, LastConfigTimeStamp).Reply()
 		if err != nil {
 			panic("Opps:" + err.Error())
 		}
@@ -190,7 +195,7 @@ func (op *Output) update(dpy *Display, info *randr.GetOutputInfoReply) {
 	}
 
 	if op.crtc != 0 {
-		cinfo, err := randr.GetCrtcInfo(X, op.crtc, 0).Reply()
+		cinfo, err := randr.GetCrtcInfo(X, op.crtc, LastConfigTimeStamp).Reply()
 		op.setPropMode(buildMode(dpy.modes[cinfo.Mode]))
 		if err != nil {
 			panic(fmt.Sprintf("Op.crtc(%d) != 0 && can't GetCrtcInfo (%s)", op.crtc, err.Error()))
@@ -207,12 +212,6 @@ func NewOutput(dpy *Display, core randr.Output) *Output {
 	if info.Connection != randr.ConnectionConnected {
 		return nil
 	}
-
-	// Nvidia driver which support Randr 1.4 will show an additional connected output which I didn't know it's exactly function. So simply filter it.
-	// UPDATE: some driver can't find the mm information but can be used as normal, so don't filter this one.  this need more research randr.
-	/*if info.MmWidth == 0 || info.MmHeight == 0 {*/
-	/*return nil*/
-	/*}*/
 
 	edidProp, _ := randr.GetOutputProperty(X, core, atomEDID, xproto.AtomInteger, 0, 1024, false, false).Reply()
 
