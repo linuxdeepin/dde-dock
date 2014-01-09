@@ -122,11 +122,20 @@ func (grub *Grub2) parseSettings(fileContent string) {
 		logError(err.Error())
 	}
 
+	// get properties
 	grub.DefaultEntry = grub.getDefaultEntry()
 	grub.Timeout = grub.getTimeout()
 	grub.Gfxmode = grub.getGfxmode()
 	grub.Background = grub.getBackground()
 	grub.Theme = grub.getTheme()
+
+	// reset settings, for to sync the default values
+	grub.setDefaultEntry(grub.DefaultEntry)
+	grub.setTimeout(grub.Timeout)
+	grub.setGfxmode(grub.Gfxmode)
+	grub.setBackground(grub.Background)
+	grub.setTheme(grub.Theme)
+
 }
 
 func (grub *Grub2) getDefaultEntry() uint32 {

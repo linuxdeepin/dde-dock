@@ -192,6 +192,22 @@ GRUB_GFXMODE="1024x768"
 	}
 }
 
+func TestSaveDefaultSettings(t *testing.T) {
+	testConfigContent := `GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
+`
+	wantConfigContent := `GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
+GRUB_DEFAULT="0"
+GRUB_TIMEOUT="5"
+GRUB_GFXMODE="auto"
+`
+	grub := &Grub2{}
+	grub.parseSettings(testConfigContent)
+	configContent := grub.getSettingContentToSave()
+	if configContent != wantConfigContent {
+		t.Errorf("configContent == %s, want %s", configContent, wantConfigContent)
+	}
+}
+
 func TestSaveSettings(t *testing.T) {
 	testConfigContent := `GRUB_DEFAULT="0"
 GRUB_TIMEOUT="10"
@@ -201,7 +217,7 @@ GRUB_GFXMODE="1024x768"
 	wantConfigContent := `GRUB_DEFAULT="1"
 GRUB_TIMEOUT="15"
 GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
-GRUB_GFXMODE="saved"
+GRUB_GFXMODE="auto"
 GRUB_BACKGROUND="/boot/grub/background.png"
 GRUB_THEME="/boot/grub/themes/demo/theme.txt"
 `
@@ -211,7 +227,7 @@ GRUB_THEME="/boot/grub/themes/demo/theme.txt"
 
 	grub.setDefaultEntry(1)
 	grub.setTimeout(15)
-	grub.setGfxmode("saved")
+	grub.setGfxmode("auto")
 	grub.setBackground("/boot/grub/background.png")
 	grub.setTheme("/boot/grub/themes/demo/theme.txt")
 	configContent := grub.getSettingContentToSave()
