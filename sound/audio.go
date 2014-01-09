@@ -2,6 +2,7 @@ package main
 
 // #cgo amd64 386 CFLAGS: -g -Wall
 // #cgo LDFLAGS: -L. -lpulse -lc
+// #cgo CFLAGS: -Wno-error
 // #include "stdio.h"
 // #include "dde-pulse.h"
 import "C"
@@ -293,8 +294,9 @@ func NewAudio() (*Audio, error) {
 }
 
 //export updateCard
-func updateCard(index int,
+func updateCard(_index C.int,
 	event C.pa_subscription_event_type_t) {
+	index := int(_index)
 	switch event {
 	case C.PA_SUBSCRIPTION_EVENT_NEW:
 		//i := int32(audio.pa.cards[0].index)
@@ -321,8 +323,9 @@ func updateCard(index int,
 }
 
 //export updateSink
-func updateSink(index int,
+func updateSink(_index C.int,
 	event C.pa_subscription_event_type_t) {
+	index := int(_index)
 	switch event {
 	case C.PA_SUBSCRIPTION_EVENT_NEW:
 		audio.sinks[index] = getSinkFromC(audio.pa.sinks[0])
@@ -347,8 +350,9 @@ func updateSink(index int,
 }
 
 //export updateSource
-func updateSource(index int,
+func updateSource(_index C.int,
 	event C.pa_subscription_event_type_t) {
+	index := int(_index)
 	fmt.Print("Updating source property:")
 	switch event {
 	case C.PA_SUBSCRIPTION_EVENT_NEW:
@@ -376,8 +380,9 @@ func updateSource(index int,
 }
 
 //export updateSinkInput
-func updateSinkInput(index int,
+func updateSinkInput(_index C.int,
 	event C.pa_subscription_event_type_t) {
+	index := int(_index)
 	switch event {
 	case C.PA_SUBSCRIPTION_EVENT_NEW:
 		//audio.sources[index] = getSourceFromC(audio.pa.sources[0])
@@ -405,8 +410,9 @@ func updateSinkInput(index int,
 }
 
 //export updateSourceOutput
-func updateSourceOutput(index int,
+func updateSourceOutput(_index C.int,
 	event C.pa_subscription_event_type_t) {
+	index := int(_index)
 	switch event {
 	case C.PA_SUBSCRIPTION_EVENT_NEW:
 
