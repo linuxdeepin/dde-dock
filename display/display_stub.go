@@ -38,7 +38,7 @@ func (dpy *Display) setPropRotation(v uint16) {
 }
 
 func (dpy *Display) setPropReflect(v uint16) {
-	if dpy.Rotation != v {
+	if dpy.Reflect != v {
 		dpy.Reflect = v
 		dbus.NotifyChange(dpy, "Reflect")
 	}
@@ -47,14 +47,14 @@ func (dpy *Display) setPropReflect(v uint16) {
 func (dpy *Display) setPropPrimaryOutput(v *Output) {
 	if dpy.PrimaryOutput != v {
 		dpy.PrimaryOutput = v
-		dbus.NotifyChange(dpy, "PriamryOutput")
+		dbus.NotifyChange(dpy, "PrimaryOutput")
 	}
 }
 
 func (dpy *Display) setPropPrimaryRect(v xproto.Rectangle) {
 	if dpy.PrimaryRect != v {
 		dpy.PrimaryRect = v
-		dbus.NotifyChange(dpy, "PriamryRect")
+		dbus.NotifyChange(dpy, "PrimaryRect")
 
 		if dpy.PrimaryChanged != nil {
 			dpy.PrimaryChanged(dpy.PrimaryRect)

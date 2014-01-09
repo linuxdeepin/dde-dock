@@ -51,8 +51,31 @@ func (op *Output) SetMode(id uint32) {
 
 func (op *Output) SetAllocation(x, y, width, height, adjMethod int16) {
 	//TODO: handle adjMethod with `width` and `height`
-	_, err := randr.SetCrtcConfig(X, op.crtc, 0, 0, x, y, randr.Mode(op.Mode.ID), op.Rotation|op.Reflect, []randr.Output{op.Identify}).Reply()
-	fmt.Println(err)
+
+	cinfo, err := randr.GetCrtcInfo(X, op.crtc, 0).Reply()
+	found := false
+	for _, po := range cinfo.Possible {
+		if po == op.Identify {
+			found = true
+			break
+		}
+	}
+	if !found {
+		panic(fmt.Sprintf("%s Crtc %d is only support %v, but op which will be SetAllocation is %d", op.Name, op.crtc, cinfo.Possible, op.Identify))
+	}
+
+	if uint32(cinfo.Mode) != op.Mode.ID {
+		panic(fmt.Sprintf("%s SetAllocation check failed at mode : %v != %v(op)", op.Name, cinfo.Mode, op.Mode))
+	}
+	if cinfo.Rotation != op.Reflect|op.Rotation {
+		panic(fmt.Sprintf("%s SetAllocation check failed at rotation: %v != %v(op)", op.Name, cinfo.Rotation, op.Reflect|op.Rotation))
+	}
+
+	_, err = randr.SetCrtcConfig(X, op.crtc, 0, 0, x, y, cinfo.Mode, cinfo.Rotation, cinfo.Outputs).Reply()
+	if err != nil {
+		panic(fmt.Sprintf("%s SetAllocation(%d,%d,%d,%d) screenSize(%d,%d) failed at SetCrtcConfig:%s",
+			op.Name, x, y, width, height, DefaultScreen.WidthInPixels, DefaultScreen.HeightInPixels, err.Error()))
+	}
 }
 
 func (op *Output) Debug() string {

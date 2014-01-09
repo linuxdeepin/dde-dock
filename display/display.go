@@ -49,10 +49,14 @@ func NewDisplay() *Display {
 	dpy.updateRotationAndRelfect(sinfo.Rotation)
 
 	if err != nil {
-		panic(err)
+		panic("GetScreenInfo Failed:" + err.Error())
 	}
 
 	resources, err := randr.GetScreenResources(X, Root).Reply()
+
+	if err != nil {
+		panic("GetScreenResources failed:" + err.Error())
+	}
 
 	for _, m := range resources.Modes {
 		dpy.modes[randr.Mode(m.Id)] = m
@@ -106,7 +110,7 @@ func (dpy *Display) updateOutputList(output randr.Output) {
 	} else {
 		info, err := randr.GetOutputInfo(X, output, xproto.TimeCurrentTime).Reply()
 		if err != nil {
-			panic(err)
+			panic("GetOutputInfo failed:" + err.Error())
 		}
 		op.update(dpy, info)
 	}
