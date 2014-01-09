@@ -3,9 +3,7 @@ package main
 import (
 	"bufio"
 	"dlib/dbus"
-	"fmt"
 	"io/ioutil"
-	"os/exec"
 	"regexp"
 	"strconv"
 	"strings"
@@ -68,7 +66,9 @@ func (grub *Grub2) writeSettings() {
 }
 
 func (grub *Grub2) udpateSettings() {
-	exec.Command(_GRUB_MKCONFIG_EXE + " -o " + _GRUB_MENU)
+	// TODO
+	// execAndWait(60, _GRUB_MKCONFIG_EXE, "-o", _GRUB_MENU)
+	// execAndWait(60, _GRUB_MKCONFIG_EXE)
 }
 
 func (grub *Grub2) parseEntries(fileContent string) {
@@ -81,7 +81,7 @@ func (grub *Grub2) parseEntries(fileContent string) {
 		entry, ok := grub.parseTitle(s.Text())
 		if ok {
 			grub.Entries = append(grub.Entries, entry)
-			logInfo(fmt.Sprintf("found entry: %s", entry)) // TODO
+			logInfo("found entry: %s", entry) // TODO
 		}
 	}
 	if err := s.Err(); err != nil {
@@ -115,7 +115,7 @@ func (grub *Grub2) parseSettings(fileContent string) {
 			kv := strings.SplitN(line, "=", 2)
 			key, value := kv[0], kv[1]
 			grub.settings[key] = unquoteString(value)
-			logInfo(fmt.Sprintf("found setting: %s=%s", kv[0], kv[1])) // TODO
+			logInfo("found setting: %s=%s", kv[0], kv[1]) // TODO
 		}
 	}
 	if err := s.Err(); err != nil {
@@ -135,7 +135,6 @@ func (grub *Grub2) parseSettings(fileContent string) {
 	grub.setGfxmode(grub.Gfxmode)
 	grub.setBackground(grub.Background)
 	grub.setTheme(grub.Theme)
-
 }
 
 func (grub *Grub2) getDefaultEntry() uint32 {
@@ -145,7 +144,7 @@ func (grub *Grub2) getDefaultEntry() uint32 {
 
 	index, err := strconv.ParseInt(grub.settings["GRUB_DEFAULT"], 10, 32)
 	if err != nil {
-		logError(fmt.Sprintf(`valid value, settings["GRUB_DEFAULT"]=%s`, grub.settings["GRUB_DEFAULT"])) // TODO
+		logError(`valid value, settings["GRUB_DEFAULT"]=%s`, grub.settings["GRUB_DEFAULT"]) // TODO
 		return 0
 	}
 	return uint32(index)
@@ -158,7 +157,7 @@ func (grub *Grub2) getTimeout() int32 {
 
 	timeout, err := strconv.ParseInt(grub.settings["GRUB_TIMEOUT"], 10, 32)
 	if err != nil {
-		logError(fmt.Sprintf(`valid value, settings["GRUB_TIMEOUT"]=%s`, grub.settings["GRUB_TIMEOUT"])) // TODO
+		logError(`valid value, settings["GRUB_TIMEOUT"]=%s`, grub.settings["GRUB_TIMEOUT"]) // TODO
 		return 5
 	}
 	return int32(timeout)

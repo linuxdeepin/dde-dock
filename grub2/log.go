@@ -10,14 +10,14 @@ const (
 )
 
 // TODO just for test
-func log(msg string) {
-	fmt.Printf("==> %s\n", msg)
+func log(format string, v ...interface{}) {
+	fmt.Printf("==> "+format+"\n", v...)
 }
 
-func logInfo(msg string) {
-	log(fmt.Sprintf("[INFO] %s", msg))
+func logInfo(format string, v ...interface{}) {
+	log(fmt.Sprintf("[INFO] "+format, v...))
 }
 
-func logError(msg string) {
-	log(fmt.Sprintf("[ERROR] %s", msg))
+func logError(format string, v ...interface{}) {
+	log(fmt.Sprintf("[ERROR] "+format, v...))
 }
