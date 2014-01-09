@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"io/ioutil"
+	"os/exec"
 	"regexp"
 	"strings"
 	"unicode"
@@ -15,7 +16,7 @@ const (
 )
 
 func (grub *Grub2) readEntries() {
-	fileContent, err := ioutil.ReadFile(grub.grubMenuFile)
+	fileContent, err := ioutil.ReadFile(GRUB_MENU)
 	if err != nil {
 		logError(err.Error()) // TODO
 		return
@@ -24,7 +25,7 @@ func (grub *Grub2) readEntries() {
 }
 
 func (grub *Grub2) readSettings() {
-	fileContent, err := ioutil.ReadFile(grub.grubConfigFile)
+	fileContent, err := ioutil.ReadFile(GRUB_CONFIG)
 	if err != nil {
 		logError(err.Error()) // TODO
 		return
@@ -34,11 +35,15 @@ func (grub *Grub2) readSettings() {
 
 func (grub *Grub2) writeSettings() {
 	fileContent := grub.getSettingContentToSave()
-	err := ioutil.WriteFile(grub.grubConfigFile, []byte(fileContent), 0644)
+	err := ioutil.WriteFile(GRUB_CONFIG, []byte(fileContent), 0644)
 	if err != nil {
 		logError(err.Error()) // TODO
 		return
 	}
+}
+
+func (grub *Grub2) udpateSettings() {
+	exec.Command(GRUB_MKCONFIG_EXE + " -o " + GRUB_MENU)
 }
 
 func (grub *Grub2) parseEntries(fileContent string) {

@@ -13,8 +13,9 @@ const (
 )
 
 const (
-	GRUB_MENU   = "/boot/grub/grub.cfg"
-	GRUB_CONFIG = "/etc/default/grub"
+	GRUB_MENU         = "/boot/grub/grub.cfg"
+	GRUB_CONFIG       = "/etc/default/grub"
+	GRUB_MKCONFIG_EXE = "grub-mkconfig"
 )
 
 type Grub2 struct {
@@ -27,8 +28,6 @@ type Grub2 struct {
 func NewGrub2() *Grub2 {
 	// TODO
 	grub := &Grub2{}
-	grub.grubMenuFile = GRUB_MENU
-	grub.grubConfigFile = GRUB_CONFIG
 	return grub
 }
 
