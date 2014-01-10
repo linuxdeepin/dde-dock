@@ -1,14 +1,15 @@
 run:=go build -o .out && rm .out
 
 all: 
+	cd binding-manager/ && $(run)
 	cd daccounts/ &&  $(run)
 	cd date-time/ && $(run)
 	cd default-app/ && $(run)
 	cd desktop/ && $(run)
+	cd disk-mount-daemon/
 	cd display/ && $(run)
 	cd ext-device/ && $(run)
 	cd individuate/ && $(run)
-	cd binding-manager/ && $(run)
 	cd network/ && $(run)
 	cd power/ && $(run)
 	cd shutdown-manager/ && $(run)
