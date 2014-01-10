@@ -26,9 +26,9 @@ import (
 	"dlib/gio-2.0"
 )
 
-type ThemeInfo struct {
-        Name string
-        Type string // 'system' or 'custom'
+type ThemeType struct {
+	Name string
+	Type string // 'system' or 'custom'
 }
 
 type Manager struct {
@@ -42,11 +42,12 @@ type Manager struct {
 	CrossFadeMode  *property.GSettingsStringProperty `access:"readwrite"`
 	CrossInterval  *property.GSettingsIntProperty    `access:"readwrite"`
 
-        AvailableGtkTheme []ThemeInfo
-        AvailableIconTheme []ThemeInfo
-        AvailableFontTheme []ThemeInfo
-        AvailableCursorTheme []ThemeInfo
-        AvailableBackground []ThemeInfo
+	EnableGtkTheme    []ThemeType
+	EnableIconTheme   []ThemeType
+	EnableFontTheme   []ThemeType
+	EnableCursorTheme []ThemeType
+	EnableWindowTheme []ThemeType
+	EnableBackground  []ThemeType
 
 	isAutoSwitch   bool
 	quitAutoSwitch chan bool
@@ -59,6 +60,7 @@ const (
 
 	GSD_SCHEMA_ID      = "org.gnome.desktop.interface"
 	INDIVIDUATE_ID     = "com.deepin.dde.individuate"
+        GSD_INFACE_SCHEMA_ID = "org.gnome.desktop.interface"
 	DEFAULT_BG_PICTURE = "/usr/share/backgrounds/default_background.jpg"
 
 	SCHEMA_KEY_URIS           = "picture-uris"
@@ -79,4 +81,5 @@ const (
 var (
 	gsdSettings     = gio.NewSettings(GSD_SCHEMA_ID)
 	indiviGSettings = gio.NewSettings(INDIVIDUATE_ID)
+        infaceSettings = gio.NewSettings(GSD_INFACE_SCHEMA_ID)
 )

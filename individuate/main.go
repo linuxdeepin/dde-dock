@@ -37,6 +37,14 @@ var (
 	currentUid string
 )
 
+func (m *Manager) GetDBusInfo() dbus.DBusInfo {
+	return dbus.DBusInfo{
+		MANAGER_DEST,
+		MANAGER_PATH,
+		MANAGER_IFC,
+	}
+}
+
 func InitVariable() {
 	var err error
 
@@ -59,15 +67,16 @@ func InitVariable() {
 
 func main() {
 	InitVariable()
+	ReadThemeDir(THEME_DIR)
 	m := NewManager()
 	err := dbus.InstallOnSession(m)
 	if err != nil {
 		panic(err)
 	}
 
-        if m.AutoSwitch.Get() {
-                go SwitchPictureThread(m)
-        }
+	if m.AutoSwitch.Get() {
+		go SwitchPictureThread(m)
+	}
 	dbus.DealWithUnhandledMessage()
 	dlib.StartLoop()
 }

@@ -22,19 +22,10 @@
 package main
 
 import (
-	"dlib/dbus"
 	"dlib/dbus/property"
 	"dlib/gio-2.0"
 	"fmt"
 )
-
-func (m *Manager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		MANAGER_DEST,
-		MANAGER_PATH,
-		MANAGER_IFC,
-	}
-}
 
 func NewManager() *Manager {
 	m := &Manager{}
@@ -67,18 +58,32 @@ func NewManager() *Manager {
 		m, "CrossInterval",
 		indiviGSettings, SCHEMA_KEY_CROSS_INTERVAL)
 
-        m.AvailableGtkTheme = GetGtkThemes()
-        m.AvailableIconTheme = GetIconThemes()
-        m.AvailableFontTheme = GetFontThemes()
-        m.AvailableCursorTheme = GetCursorThemes()
-        m.AvailableBackground = GetBackgroundFiles()
-
 	m.isAutoSwitch = false
 	m.quitAutoSwitch = make(chan bool)
 
+	InitThemeInfo(m)
 	ListenSettings(m)
 
 	return m
+}
+
+func InitThemeInfo(m *Manager) {
+	m.EnableFontTheme = GetFontThemes()
+	m.EnableBackground = GetBackgroundFiles()
+
+	for _, v := range systemThemes {
+		gtk := ThemeType{Name: v.GtkTheme, Type: "system"}
+		m.EnableGtkTheme = append(m.EnableGtkTheme, gtk)
+
+		icon := ThemeType{Name: v.IconTheme, Type: "system"}
+		m.EnableIconTheme = append(m.EnableIconTheme, icon)
+
+		cursor := ThemeType{Name: v.CursorTheme, Type: "system"}
+		m.EnableCursorTheme = append(m.EnableCursorTheme, cursor)
+
+		window := ThemeType{Name: v.WindowTheme, Type: "system"}
+		m.EnableWindowTheme = append(m.EnableWindowTheme, window)
+	}
 }
 
 func ListenSettings(m *Manager) {
@@ -150,58 +155,91 @@ func ListenSettings(m *Manager) {
 				}
 				break
 			}
+		case SCHEMA_KEY_GTK:
+			{
+				gtk := infaceSettings.GetString(SCHEMA_KEY_GTK)
+				if gtk == m.GtkTheme.Get() {
+					break
+				}
+				infaceSettings.SetString(SCHEMA_KEY_GTK,
+					m.GtkTheme.Get())
+				break
+			}
+		case SCHEMA_KEY_ICON:
+			{
+				icon := infaceSettings.GetString(SCHEMA_KEY_ICON)
+				if icon == m.IconTheme.Get() {
+					break
+				}
+				infaceSettings.SetString(SCHEMA_KEY_ICON,
+					m.IconTheme.Get())
+				break
+			}
+		case SCHEMA_KEY_FONT:
+			{
+                                font := infaceSettings.GetString(SCHEMA_KEY_FONT)
+                                if font == m.FontTheme.Get() {
+                                        break
+                                }
+				break
+			}
+		case SCHEMA_KEY_CURSOR:
+			{
+				cursor := infaceSettings.GetString(SCHEMA_KEY_CURSOR)
+				if cursor == m.CursorTheme.Get() {
+					break
+				}
+				infaceSettings.SetString(SCHEMA_KEY_CURSOR,
+					m.CursorTheme.Get())
+				break
+			}
 		default:
 			break
 		}
+		gio.SettingsSync()
 	})
-}
 
-func GetGtkThemes() []ThemeInfo {
-	gtkTheme := []ThemeInfo{}
-
-	gtkTheme = append(gtkTheme, ThemeInfo{Name: "Deepin", Type: "system"})
-	gtkTheme = append(gtkTheme, ThemeInfo{Name: "Deepin1", Type: "system"})
-	gtkTheme = append(gtkTheme, ThemeInfo{Name: "Deepin2", Type: "system"})
-	gtkTheme = append(gtkTheme, ThemeInfo{Name: "Deepin3", Type: "system"})
-	return gtkTheme
-}
-
-func GetIconThemes() []ThemeInfo {
-	iconTheme := []ThemeInfo{}
-
-	iconTheme = append(iconTheme, ThemeInfo{Name: "Deepin", Type: "system"})
-	iconTheme = append(iconTheme, ThemeInfo{Name: "Deepin1", Type: "system"})
-	iconTheme = append(iconTheme, ThemeInfo{Name: "Deepin3", Type: "system"})
-	iconTheme = append(iconTheme, ThemeInfo{Name: "Deepin2", Type: "system"})
-	return iconTheme
-}
-
-func GetFontThemes() []ThemeInfo {
-	fontTheme := []ThemeInfo{}
-
-	fontTheme = append(fontTheme, ThemeInfo{Name: "Deepin", Type: "system"})
-	fontTheme = append(fontTheme, ThemeInfo{Name: "Deepin1", Type: "system"})
-	fontTheme = append(fontTheme, ThemeInfo{Name: "Deepin2", Type: "system"})
-	fontTheme = append(fontTheme, ThemeInfo{Name: "Deepin3", Type: "system"})
-	return fontTheme
-}
-
-func GetCursorThemes() []ThemeInfo {
-	cursorTheme := []ThemeInfo{}
-
-	cursorTheme = append(cursorTheme, ThemeInfo{Name: "Deepin", Type: "system"})
-	cursorTheme = append(cursorTheme, ThemeInfo{Name: "Deepin1", Type: "system"})
-	cursorTheme = append(cursorTheme, ThemeInfo{Name: "Deepin2", Type: "system"})
-	cursorTheme = append(cursorTheme, ThemeInfo{Name: "Deepin3", Type: "system"})
-	return cursorTheme
-}
-
-func GetBackgroundFiles() []ThemeInfo {
-	bgTheme := []ThemeInfo{}
-
-	bgTheme = append(bgTheme, ThemeInfo{Name: "Deepin", Type: "system"})
-	bgTheme = append(bgTheme, ThemeInfo{Name: "Deepin1", Type: "system"})
-	bgTheme = append(bgTheme, ThemeInfo{Name: "Deepin2", Type: "system"})
-	bgTheme = append(bgTheme, ThemeInfo{Name: "Deepin3", Type: "system"})
-	return bgTheme
+	infaceSettings.Connect("changed", func(s *gio.Settings, key string) {
+		switch key {
+		case SCHEMA_KEY_GTK:
+			{
+				gtk := infaceSettings.GetString(SCHEMA_KEY_GTK)
+				if gtk == m.GtkTheme.Get() {
+					break
+				}
+				m.GtkTheme.Set(gtk)
+				break
+			}
+		case SCHEMA_KEY_ICON:
+			{
+				icon := infaceSettings.GetString(SCHEMA_KEY_ICON)
+				if icon == m.IconTheme.Get() {
+					break
+				}
+				m.IconTheme.Set(icon)
+				break
+			}
+		case SCHEMA_KEY_FONT:
+			{
+                                font := infaceSettings.GetString(SCHEMA_KEY_FONT)
+                                if font == m.FontTheme.Get() {
+                                        break
+                                }
+                                m.FontTheme.Set(font)
+				break
+			}
+		case SCHEMA_KEY_CURSOR:
+			{
+				cursor := infaceSettings.GetString(SCHEMA_KEY_CURSOR)
+				if cursor == m.CursorTheme.Get() {
+					break
+				}
+				m.CursorTheme.Set(cursor)
+				break
+			}
+		default:
+			break
+		}
+		gio.SettingsSync()
+	})
 }
