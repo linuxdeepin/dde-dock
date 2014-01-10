@@ -145,7 +145,7 @@ func ListenSettings(m *Manager) {
 				}
 				break
 			}
-		case SCHEMA_KEY_CROSS_INTERVAL:
+		case SCHEMA_KEY_DURATION:
 			{
 				if m.isAutoSwitch {
 					m.quitAutoSwitch <- true
