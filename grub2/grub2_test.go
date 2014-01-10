@@ -76,7 +76,7 @@ GRUB_GFXMODE="1024x768"
   GRUB_THEME="/boot/grub/themes/demo/theme.txt"
 `
 	wantSettingCount := 7
-	wantDefaultEntry := "0"
+	wantDefaultEntry := ""
 	wantTimeout := "10"
 	wantTheme := "/boot/grub/themes/demo/theme.txt"
 
@@ -203,14 +203,20 @@ GRUB_GFXMODE="1024x768"
 }
 
 func TestSaveDefaultSettings(t *testing.T) {
+	testMenuContent := `
+menuentry 'LinuxDeepin GNU/Linux' --class linuxdeepin --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-simple' {
+recordfail
+}
+`
 	testConfigContent := `GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
 `
 	wantConfigContent := `GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
-GRUB_DEFAULT="0"
+GRUB_DEFAULT="LinuxDeepin GNU/Linux"
 GRUB_TIMEOUT="5"
 GRUB_GFXMODE="auto"
 `
 	grub := &Grub2{}
+	grub.parseEntries(testMenuContent)
 	grub.parseSettings(testConfigContent)
 	configContent := grub.getSettingContentToSave()
 	if configContent != wantConfigContent {
@@ -219,6 +225,11 @@ GRUB_GFXMODE="auto"
 }
 
 func TestSaveSettings(t *testing.T) {
+	testMenuContent := `
+menuentry 'LinuxDeepin GNU/Linux' --class linuxdeepin --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-simple' {
+recordfail
+}
+`
 	testConfigContent := `GRUB_DEFAULT="0"
 GRUB_TIMEOUT="10"
 GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
@@ -233,6 +244,7 @@ GRUB_THEME="/boot/grub/themes/demo/theme.txt"
 `
 
 	grub := &Grub2{}
+	grub.parseEntries(testMenuContent)
 	grub.parseSettings(testConfigContent)
 
 	grub.setDefaultEntry(`LinuxDeepin GNU/Linux`)

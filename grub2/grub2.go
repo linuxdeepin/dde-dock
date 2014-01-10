@@ -99,70 +99,62 @@ func (grub *Grub2) parseEntries(fileContent string) {
 	for sl.Scan() {
 		line := sl.Text()
 		line = strings.TrimSpace(line)
-		sw := bufio.NewScanner(strings.NewReader(line))
-		sw.Split(bufio.ScanWords)
-		for sw.Scan() {
-			word := sw.Text()
-			if word == "menuentry" {
-				if inMenuEntry {
-					logError("a 'menuentry' directive was detected inside the scope of a menuentry")
-					grub.clearEntries()
-					return
-				}
-				// TODO
-				title, ok := grub.parseTitle(line)
-				if ok {
-					entry := Entry{MENUENTRY, title, numCount[level], parentMenus[len(parentMenus)-1]}
-					grub.entries = append(grub.entries, entry)
-					logInfo("found entry: [%d] %s %s", level, strings.Repeat(" ", level*2), title) // TODO
-
-					numCount[level]++
-					inMenuEntry = true
-					continue
-				} else {
-					logError("parse entry title failed from: %q", line)
-					grub.clearEntries()
-					return
-				}
-			} else if word == "submenu" {
-				if inMenuEntry {
-					logError("a 'submenu' directive was detected inside the scope of a menuentry")
-					grub.clearEntries()
-					return
-				}
-				// TODO
-				title, ok := grub.parseTitle(line)
-				if ok {
-					entry := Entry{SUBMENU, title, numCount[level], parentMenus[len(parentMenus)-1]}
-					parentMenus = append(parentMenus, &entry)                                      // TODO
-					logInfo("found entry: [%d] %s %s", level, strings.Repeat(" ", level*2), title) // TODO
-
-					level++
-					numCount[level] = 0
-					continue
-				} else {
-					logError("parse entry title failed from: %q", line)
-					grub.clearEntries()
-					return
-				}
-			} else if word == "}" {
-				// TODO
-				if inMenuEntry {
-					inMenuEntry = false
-				} else if level > 0 {
-					// delete last parent submenu
-					i := len(parentMenus) - 1
-					copy(parentMenus[i:], parentMenus[i+1:])
-					parentMenus[len(parentMenus)-1] = nil
-					parentMenus = parentMenus[:len(parentMenus)-1]
-
-					level--
-				}
+		if strings.HasPrefix(line, "menuentry") {
+			if inMenuEntry {
+				logError("a 'menuentry' directive was detected inside the scope of a menuentry")
+				grub.clearEntries()
+				return
 			}
-		}
+			// TODO
+			title, ok := grub.parseTitle(line)
+			if ok {
+				entry := Entry{MENUENTRY, title, numCount[level], parentMenus[len(parentMenus)-1]}
+				grub.entries = append(grub.entries, entry)
+				logInfo("found entry: [%d] %s %s", level, strings.Repeat(" ", level*2), title) // TODO
 
-		if err := sw.Err(); err != nil {
-			logError(err.Error())
+				numCount[level]++
+				inMenuEntry = true
+				continue
+			} else {
+				logError("parse entry title failed from: %q", line)
+				grub.clearEntries()
+				return
+			}
+		} else if strings.HasPrefix(line, "submenu") {
+			if inMenuEntry {
+				logError("a 'submenu' directive was detected inside the scope of a menuentry")
+				grub.clearEntries()
+				return
+			}
+			// TODO
+			title, ok := grub.parseTitle(line)
+			if ok {
+				entry := Entry{SUBMENU, title, numCount[level], parentMenus[len(parentMenus)-1]}
+				grub.entries = append(grub.entries, entry)
+				parentMenus = append(parentMenus, &entry)                                      // TODO
+				logInfo("found entry: [%d] %s %s", level, strings.Repeat(" ", level*2), title) // TODO
+
+				level++
+				numCount[level] = 0
+				continue
+			} else {
+				logError("parse entry title failed from: %q", line)
+				grub.clearEntries()
+				return
+			}
+		} else if line == "}" {
+			// TODO
+			if inMenuEntry {
+				inMenuEntry = false
+			} else if level > 0 {
+				// delete last parent submenu
+				i := len(parentMenus) - 1
+				copy(parentMenus[i:], parentMenus[i+1:])
+				parentMenus[len(parentMenus)-1] = nil
+				parentMenus = parentMenus[:len(parentMenus)-1]
+
+				level--
+			}
 		}
 	}
 	if err := sl.Err(); err != nil {
