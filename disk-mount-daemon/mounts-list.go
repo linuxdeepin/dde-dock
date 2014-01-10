@@ -29,7 +29,6 @@ import (
 type DiskInfo struct {
 	Name       string
 	Type       string
-        Icon string
 	CanUnmount bool
 	CanEject   bool
 	UsableCap  uint32
