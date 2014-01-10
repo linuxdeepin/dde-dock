@@ -4,6 +4,46 @@ import (
 	"testing"
 )
 
+var _TEST_MENU_CONTENT string = `
+menuentry 'LinuxDeepin GNU/Linux' --class linuxdeepin --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-simple' {
+recordfail
+}
+submenu 'Advanced options for LinuxDeepin GNU/Linux' $menuentry_id_option 'gnulinux-advanced' {
+	menuentry 'LinuxDeepin GNU/Linux，Linux 3.11.0-15-generic' --class linuxdeepin --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-3.11.0-15-generic-advanced' {
+	recordfail
+		echo	'载入 Linux 3.11.0-15-generic ...'
+	}
+`
+var _TEST_MENU_CONTENT_LONG string = `
+menuentry 'LinuxDeepin GNU/Linux' --class linuxdeepin --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-simple' {
+recordfail
+	load_video
+}
+submenu 'Advanced options for LinuxDeepin GNU/Linux' $menuentry_id_option 'gnulinux-advanced' {
+	menuentry 'LinuxDeepin GNU/Linux，Linux 3.11.0-15-generic' --class linuxdeepin --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-3.11.0-15-generic-advanced' {
+	recordfail
+		echo	'载入 Linux 3.11.0-15-generic ...'
+	}
+    submenu 'Inner submenu for test' {
+    	menuentry 'Menuentry in Level 3' {
+        }
+    }
+}
+menuentry 'Other OS' {
+}
+`
+var _TEST_CONFIG_CONTENT string = `
+# comment line
+GRUB_DEFAULT="0"
+GRUB_HIDDEN_TIMEOUT="0"
+GRUB_HIDDEN_TIMEOUT_QUIET="true"
+# comment line
+GRUB_TIMEOUT="10"
+GRUB_GFXMODE="1024x768"
+  GRUB_BACKGROUND=/boot/grub/background.png
+  GRUB_THEME="/boot/grub/themes/demo/theme.txt"
+`
+
 func TestParseTitle(t *testing.T) {
 	var tests = []struct {
 		s, want string
@@ -24,24 +64,6 @@ func TestParseTitle(t *testing.T) {
 
 func TestParseEntries(t *testing.T) {
 	grub := &Grub2{}
-	testMenuContent := `
-menuentry 'LinuxDeepin GNU/Linux' --class linuxdeepin --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-simple' {
-recordfail
-	load_video
-}
-submenu 'Advanced options for LinuxDeepin GNU/Linux' $menuentry_id_option 'gnulinux-advanced' {
-	menuentry 'LinuxDeepin GNU/Linux，Linux 3.11.0-15-generic' --class linuxdeepin --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-3.11.0-15-generic-advanced' {
-	recordfail
-		echo	'载入 Linux 3.11.0-15-generic ...'
-	}
-    submenu 'Inner submenu for test' {
-    	menuentry 'Menuentry in Level 3' {
-        }
-    }
-}
-menuentry 'Other OS' {
-}
-`
 	wantEntyTitles := []string{
 		`LinuxDeepin GNU/Linux`,
 		`Advanced options for LinuxDeepin GNU/Linux`,
@@ -51,7 +73,7 @@ menuentry 'Other OS' {
 		`Other OS`,
 	}
 
-	grub.parseEntries(testMenuContent)
+	grub.parseEntries(_TEST_MENU_CONTENT_LONG)
 	if len(grub.entries) != len(wantEntyTitles) {
 		t.Errorf("entriesCount == %v, want %v", len(grub.entries), len(wantEntyTitles))
 	}
@@ -64,23 +86,13 @@ menuentry 'Other OS' {
 
 func TestParseSettings(t *testing.T) {
 	grub := &Grub2{}
-	testConfigContent := `
-# comment line
-GRUB_DEFAULT="0"
-GRUB_HIDDEN_TIMEOUT="0"
-GRUB_HIDDEN_TIMEOUT_QUIET="true"
-# comment line
-GRUB_TIMEOUT="10"
-GRUB_GFXMODE="1024x768"
-  GRUB_BACKGROUND=/boot/grub/background.png
-  GRUB_THEME="/boot/grub/themes/demo/theme.txt"
-`
+	grub.parseEntries(_TEST_MENU_CONTENT)
+	grub.parseSettings(_TEST_CONFIG_CONTENT)
+
 	wantSettingCount := 7
-	wantDefaultEntry := ""
+	wantDefaultEntry := "LinuxDeepin GNU/Linux"
 	wantTimeout := "10"
 	wantTheme := "/boot/grub/themes/demo/theme.txt"
-
-	grub.parseSettings(testConfigContent)
 
 	settingCount := len(grub.settings)
 	if settingCount != wantSettingCount {
@@ -104,31 +116,9 @@ GRUB_GFXMODE="1024x768"
 }
 
 func TestGrub2(t *testing.T) {
-	testMenuContent := `
-menuentry 'LinuxDeepin GNU/Linux' --class linuxdeepin --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-simple' {
-recordfail
-}
-submenu 'Advanced options for LinuxDeepin GNU/Linux' $menuentry_id_option 'gnulinux-advanced' {
-	menuentry 'LinuxDeepin GNU/Linux，Linux 3.11.0-15-generic' --class linuxdeepin --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-3.11.0-15-generic-advanced' {
-	recordfail
-		echo	'载入 Linux 3.11.0-15-generic ...'
-	}
-`
-	testConfigContent := `
-# comment line
-GRUB_DEFAULT="0"
-GRUB_HIDDEN_TIMEOUT="0"
-GRUB_HIDDEN_TIMEOUT_QUIET="true"
-# comment line
-GRUB_TIMEOUT="10"
-GRUB_GFXMODE="1024x768"
-  GRUB_BACKGROUND=/boot/grub/background.png
-  GRUB_THEME="/boot/grub/themes/demo/theme.txt"
-`
-
 	grub := &Grub2{}
-	grub.parseEntries(testMenuContent)
-	grub.parseSettings(testConfigContent)
+	grub.parseEntries(_TEST_MENU_CONTENT)
+	grub.parseSettings(_TEST_CONFIG_CONTENT)
 
 	wantEntryCount := 2
 	entriesCount := len(grub.GetEntryTitles())
@@ -136,7 +126,7 @@ GRUB_GFXMODE="1024x768"
 		t.Errorf("entriesCount == %v, want %v", entriesCount, wantEntryCount)
 	}
 
-	// default entry TODO
+	// default entry
 	wantDefaultEntry := `LinuxDeepin GNU/Linux`
 	defaultEntry := grub.getDefaultEntry()
 	if defaultEntry != wantDefaultEntry {
@@ -203,11 +193,6 @@ GRUB_GFXMODE="1024x768"
 }
 
 func TestSaveDefaultSettings(t *testing.T) {
-	testMenuContent := `
-menuentry 'LinuxDeepin GNU/Linux' --class linuxdeepin --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-simple' {
-recordfail
-}
-`
 	testConfigContent := `GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
 `
 	wantConfigContent := `GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
@@ -216,7 +201,7 @@ GRUB_TIMEOUT="5"
 GRUB_GFXMODE="auto"
 `
 	grub := &Grub2{}
-	grub.parseEntries(testMenuContent)
+	grub.parseEntries(_TEST_MENU_CONTENT)
 	grub.parseSettings(testConfigContent)
 	configContent := grub.getSettingContentToSave()
 	if configContent != wantConfigContent {
@@ -225,11 +210,6 @@ GRUB_GFXMODE="auto"
 }
 
 func TestSaveSettings(t *testing.T) {
-	testMenuContent := `
-menuentry 'LinuxDeepin GNU/Linux' --class linuxdeepin --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-simple' {
-recordfail
-}
-`
 	testConfigContent := `GRUB_DEFAULT="0"
 GRUB_TIMEOUT="10"
 GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
@@ -244,7 +224,7 @@ GRUB_THEME="/boot/grub/themes/demo/theme.txt"
 `
 
 	grub := &Grub2{}
-	grub.parseEntries(testMenuContent)
+	grub.parseEntries(_TEST_MENU_CONTENT)
 	grub.parseSettings(testConfigContent)
 
 	grub.setDefaultEntry(`LinuxDeepin GNU/Linux`)
