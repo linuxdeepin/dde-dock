@@ -189,6 +189,8 @@ func (op *Output) update(dpy *Display, info *randr.GetOutputInfoReply) {
 	op.crtc = info.Crtc
 	op.setPropOpened(info.Crtc != 0)
 	op.bestMode = info.Modes[0]
+
+	op.modes = nil
 	for _, m := range info.Modes {
 		info := dpy.modes[m]
 		op.modes = append(op.modes, buildMode(info))
