@@ -40,10 +40,6 @@ func (grub *Grub2) OnPropertiesChanged(name string, oldv interface{}) {
 	}
 }
 
-func (grub *Grub2) Init() {
-	// TODO
-}
-
 func (grub *Grub2) Load() {
 	// TODO
 	grub.readEntries()
@@ -54,10 +50,6 @@ func (grub *Grub2) Save() {
 	// TODO
 	grub.writeSettings()
 	grub.generateGrubConfig()
-}
-
-func (grub *Grub2) GetEntries() []string {
-	return grub.Entries // TODO
 }
 
 func (grub *Grub2) setDefaultEntry(index uint32) {

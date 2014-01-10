@@ -25,11 +25,11 @@ type Grub2 struct {
 	settings map[string]string
 
 	Entries      []string
-	DefaultEntry uint32 `access:readwrite`
-	Timeout      int32  `access:readwrite`
-	Gfxmode      string `access:readwrite`
-	Background   string `access:readwrite`
-	Theme        string `access:readwrite`
+	DefaultEntry uint32 `access:"readwrite"`
+	Timeout      int32  `access:"readwrite"`
+	Gfxmode      string `access:"readwrite"`
+	Background   string `access:"readwrite"`
+	Theme        string `access:"readwrite"`
 	InUpdate     bool
 }
 
@@ -68,9 +68,9 @@ func (grub *Grub2) writeSettings() {
 }
 
 func (grub *Grub2) generateGrubConfig() {
-	// TODO
 	logInfo("start to generate a new grub configuration file")
 	grub.InUpdate = true
+	// TODO
 	// execAndWait(60, _GRUB_MKCONFIG_EXE, "-o", _GRUB_MENU)
 	execAndWait(60, _GRUB_MKCONFIG_EXE)
 	grub.InUpdate = false
@@ -197,7 +197,8 @@ func (grub *Grub2) getSettingContentToSave() string {
 
 func main() {
 	grub := NewGrub2()
-	err := dbus.InstallOnSession(grub)
+	grub.Load()
+	err := dbus.InstallOnSystem(grub)
 	if err != nil {
 		panic(err) // TODO
 	}
