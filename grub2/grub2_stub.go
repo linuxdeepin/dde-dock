@@ -52,9 +52,22 @@ func (grub *Grub2) Save() {
 	grub.generateGrubConfig()
 }
 
-func (grub *Grub2) setDefaultEntry(index uint32) {
-	indexStr := strconv.FormatInt(int64(index), 10)
-	grub.settings["GRUB_DEFAULT"] = indexStr
+func (grub *Grub2) GetEntryTitles() []string {
+	// TODO
+	entryTitles := make([]string, 0)
+	for _, entry := range grub.entries {
+		if entry.entryType == MENUENTRY {
+			entryTitles = append(entryTitles, entry.getFullTitle())
+		}
+	}
+	if len(entryTitles) == 0 {
+		logError("there is no menu entry in %s", _GRUB_MENU)
+	}
+	return entryTitles
+}
+
+func (grub *Grub2) setDefaultEntry(title string) {
+	grub.settings["GRUB_DEFAULT"] = title
 }
 
 func (grub *Grub2) setTimeout(timeout int32) {

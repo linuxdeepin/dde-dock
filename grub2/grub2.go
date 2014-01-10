@@ -17,15 +17,15 @@ const (
 )
 
 const (
-	_ENTRY_REGEXP_1 = `^ *menuentry +'(.*?)'.*$`
-	_ENTRY_REGEXP_2 = `^ *menuentry +"(.*?)".*$`
+	_ENTRY_REGEXP_1 = `^ *(menuentry|submenu) +'(.*?)'.*$`
+	_ENTRY_REGEXP_2 = `^ *(menuentry|submenu) +"(.*?)".*$`
 )
 
 type Grub2 struct {
+	entries  []Entry
 	settings map[string]string
 
-	Entries      []string
-	DefaultEntry uint32 `access:"readwrite"`
+	DefaultEntry string `access:"readwrite"`
 	Timeout      int32  `access:"readwrite"`
 	Gfxmode      string `access:"readwrite"`
 	Background   string `access:"readwrite"`
@@ -38,6 +38,14 @@ func NewGrub2() *Grub2 {
 	grub := &Grub2{}
 	grub.InUpdate = false
 	return grub
+}
+
+func (grub *Grub2) clearEntries() {
+	grub.entries = make([]Entry, 0)
+}
+
+func (grub *Grub2) clearSettings() {
+	grub.settings = make(map[string]string)
 }
 
 func (grub *Grub2) readEntries() {
@@ -78,21 +86,89 @@ func (grub *Grub2) generateGrubConfig() {
 }
 
 func (grub *Grub2) parseEntries(fileContent string) {
-	// reset entries
-	grub.Entries = make([]string, 0)
+	grub.clearEntries()
 
-	s := bufio.NewScanner(strings.NewReader(fileContent))
-	s.Split(bufio.ScanLines)
-	for s.Scan() {
-		entry, ok := grub.parseTitle(s.Text())
-		if ok {
-			grub.Entries = append(grub.Entries, entry)
-			logInfo("found entry: %s", entry) // TODO
+	inMenuEntry := false
+	level := 0
+	numCount := make(map[int]int)
+	numCount[0] = 0
+	parentMenus := make([]*Entry, 0)
+	parentMenus = append(parentMenus, nil)
+	sl := bufio.NewScanner(strings.NewReader(fileContent))
+	sl.Split(bufio.ScanLines)
+	for sl.Scan() {
+		line := sl.Text()
+		line = strings.TrimSpace(line)
+		sw := bufio.NewScanner(strings.NewReader(line))
+		sw.Split(bufio.ScanWords)
+		for sw.Scan() {
+			word := sw.Text()
+			if word == "menuentry" {
+				if inMenuEntry {
+					logError("a 'menuentry' directive was detected inside the scope of a menuentry")
+					grub.clearEntries()
+					return
+				}
+				// TODO
+				title, ok := grub.parseTitle(line)
+				if ok {
+					entry := Entry{MENUENTRY, title, numCount[level], parentMenus[len(parentMenus)-1]}
+					grub.entries = append(grub.entries, entry)
+					logInfo("found entry: [%d] %s %s", level, strings.Repeat(" ", level*2), title) // TODO
+
+					numCount[level]++
+					inMenuEntry = true
+					continue
+				} else {
+					logError("parse entry title failed from: %q", line)
+					grub.clearEntries()
+					return
+				}
+			} else if word == "submenu" {
+				if inMenuEntry {
+					logError("a 'submenu' directive was detected inside the scope of a menuentry")
+					grub.clearEntries()
+					return
+				}
+				// TODO
+				title, ok := grub.parseTitle(line)
+				if ok {
+					entry := Entry{SUBMENU, title, numCount[level], parentMenus[len(parentMenus)-1]}
+					parentMenus = append(parentMenus, &entry)                                      // TODO
+					logInfo("found entry: [%d] %s %s", level, strings.Repeat(" ", level*2), title) // TODO
+
+					level++
+					numCount[level] = 0
+					continue
+				} else {
+					logError("parse entry title failed from: %q", line)
+					grub.clearEntries()
+					return
+				}
+			} else if word == "}" {
+				// TODO
+				if inMenuEntry {
+					inMenuEntry = false
+				} else if level > 0 {
+					// delete last parent submenu
+					i := len(parentMenus) - 1
+					copy(parentMenus[i:], parentMenus[i+1:])
+					parentMenus[len(parentMenus)-1] = nil
+					parentMenus = parentMenus[:len(parentMenus)-1]
+
+					level--
+				}
+			}
+		}
+
+		if err := sw.Err(); err != nil {
+			logError(err.Error())
 		}
 	}
-	if err := s.Err(); err != nil {
+	if err := sl.Err(); err != nil {
 		logError(err.Error())
 	}
+
 }
 
 func (grub *Grub2) parseTitle(line string) (string, bool) {
@@ -100,17 +176,16 @@ func (grub *Grub2) parseTitle(line string) (string, bool) {
 	reg1 := regexp.MustCompile(_ENTRY_REGEXP_1)
 	reg2 := regexp.MustCompile(_ENTRY_REGEXP_2)
 	if reg1.MatchString(line) {
-		return reg1.FindStringSubmatch(line)[1], true
+		return reg1.FindStringSubmatch(line)[2], true
 	} else if reg2.MatchString(line) {
-		return reg2.FindStringSubmatch(line)[1], true
+		return reg2.FindStringSubmatch(line)[2], true
 	} else {
 		return "", false
 	}
 }
 
 func (grub *Grub2) parseSettings(fileContent string) {
-	// reset settings
-	grub.settings = make(map[string]string)
+	grub.clearSettings()
 
 	s := bufio.NewScanner(strings.NewReader(fileContent))
 	s.Split(bufio.ScanLines)
@@ -128,7 +203,7 @@ func (grub *Grub2) parseSettings(fileContent string) {
 		logError(err.Error())
 	}
 
-	// get properties
+	// get properties, return default value for the missing property
 	grub.DefaultEntry = grub.getDefaultEntry()
 	grub.Timeout = grub.getTimeout()
 	grub.Gfxmode = grub.getGfxmode()
@@ -143,17 +218,35 @@ func (grub *Grub2) parseSettings(fileContent string) {
 	grub.setTheme(grub.Theme)
 }
 
-func (grub *Grub2) getDefaultEntry() uint32 {
-	if len(grub.settings["GRUB_DEFAULT"]) == 0 {
-		return 0
+func (grub *Grub2) getDefaultEntry() string {
+	entryTitles := grub.GetEntryTitles()
+	firstEntry := ""
+	if len(entryTitles) > 0 {
+		firstEntry = entryTitles[0]
+	}
+	value := grub.settings["GRUB_DEFAULT"]
+
+	// if GRUB_DEFAULE is empty, return the first entry's title
+	if len(value) == 0 {
+		return firstEntry
 	}
 
-	index, err := strconv.ParseInt(grub.settings["GRUB_DEFAULT"], 10, 32)
+	// if GRUB_DEFAULE exist and is a valid entry name, just return it
+	if stringInSlice(value, entryTitles) {
+		return value
+	}
+
+	// if GRUB_DEFAULE exist and is a entry index, return its entry name
+	index, err := strconv.ParseInt(value, 10, 32)
 	if err != nil {
 		logError(`valid value, settings["GRUB_DEFAULT"]=%s`, grub.settings["GRUB_DEFAULT"]) // TODO
-		return 0
+		index = 0
 	}
-	return uint32(index)
+	if index >= 0 && int(index) < len(entryTitles) {
+		return entryTitles[index]
+	} else {
+		return firstEntry
+	}
 }
 
 func (grub *Grub2) getTimeout() int32 {

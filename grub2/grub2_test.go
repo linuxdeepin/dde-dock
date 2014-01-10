@@ -10,7 +10,7 @@ func TestParseTitle(t *testing.T) {
 	}{
 		{`menuentry 'LinuxDeepin GNU/Linux' --class linux $menuentry_id_option 'gnulinux-simple'`, `LinuxDeepin GNU/Linux`},
 		{`  menuentry 'LinuxDeepin GNU/Linux' --class linux`, `LinuxDeepin GNU/Linux`},
-		{`submenu 'Advanced options for LinuxDeepin GNU/Linux'`, ``},
+		{`submenu 'Advanced options for LinuxDeepin GNU/Linux'`, `Advanced options for LinuxDeepin GNU/Linux`},
 		{``, ``},
 	}
 	grub := &Grub2{}
@@ -27,27 +27,38 @@ func TestParseEntries(t *testing.T) {
 	testMenuContent := `
 menuentry 'LinuxDeepin GNU/Linux' --class linuxdeepin --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-simple' {
 recordfail
+	load_video
 }
 submenu 'Advanced options for LinuxDeepin GNU/Linux' $menuentry_id_option 'gnulinux-advanced' {
 	menuentry 'LinuxDeepin GNU/Linux，Linux 3.11.0-15-generic' --class linuxdeepin --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-3.11.0-15-generic-advanced' {
 	recordfail
 		echo	'载入 Linux 3.11.0-15-generic ...'
 	}
+    submenu 'Inner submenu for test' {
+    	menuentry 'Menuentry in Level 3' {
+        }
+    }
+}
+menuentry 'Other OS' {
+}
 `
-	wantEntryCount := 2
-	wantEntryOne := `LinuxDeepin GNU/Linux`
-	wantEntryTwo := `LinuxDeepin GNU/Linux，Linux 3.11.0-15-generic`
+	wantEntyTitles := []string{
+		`LinuxDeepin GNU/Linux`,
+		`Advanced options for LinuxDeepin GNU/Linux`,
+		`Advanced options for LinuxDeepin GNU/Linux>LinuxDeepin GNU/Linux，Linux 3.11.0-15-generic`,
+		`Advanced options for LinuxDeepin GNU/Linux>Inner submenu for test`,
+		`Advanced options for LinuxDeepin GNU/Linux>Inner submenu for test>Menuentry in Level 3`,
+		`Other OS`,
+	}
 
 	grub.parseEntries(testMenuContent)
-	entriesCount := len(grub.Entries)
-	if entriesCount != wantEntryCount {
-		t.Errorf("entriesCount == %v, want %v", entriesCount, wantEntryCount)
+	if len(grub.entries) != len(wantEntyTitles) {
+		t.Errorf("entriesCount == %v, want %v", len(grub.entries), len(wantEntyTitles))
 	}
-	if grub.Entries[0] != wantEntryOne {
-		t.Errorf("entryOne == %q, want %q", grub.Entries[0], wantEntryOne)
-	}
-	if grub.Entries[1] != wantEntryTwo {
-		t.Errorf("entryTwo == %q, want %q", grub.Entries[1], wantEntryTwo)
+	for i, entry := range grub.entries {
+		if entry.getFullTitle() != wantEntyTitles[i] {
+			t.Errorf("entryTitle == %q, want %q", entry.getFullTitle(), wantEntyTitles[i])
+		}
 	}
 }
 
@@ -120,23 +131,22 @@ GRUB_GFXMODE="1024x768"
 	grub.parseSettings(testConfigContent)
 
 	wantEntryCount := 2
-	entries := grub.GetEntries()
-	entriesCount := len(entries)
+	entriesCount := len(grub.GetEntryTitles())
 	if entriesCount != wantEntryCount {
 		t.Errorf("entriesCount == %v, want %v", entriesCount, wantEntryCount)
 	}
 
-	// default entry
-	wantDefaultEntry := uint32(0)
+	// default entry TODO
+	wantDefaultEntry := `LinuxDeepin GNU/Linux`
 	defaultEntry := grub.getDefaultEntry()
 	if defaultEntry != wantDefaultEntry {
-		t.Errorf("defaultEntry == %v, want %v", defaultEntry, wantDefaultEntry)
+		t.Errorf("defaultEntry == %q, want %q", defaultEntry, wantDefaultEntry)
 	}
-	wantDefaultEntry = uint32(2)
+	wantDefaultEntry = `Advanced options for LinuxDeepin GNU/Linux>LinuxDeepin GNU/Linux，Linux 3.11.0-15-generic`
 	grub.setDefaultEntry(wantDefaultEntry)
 	defaultEntry = grub.getDefaultEntry()
 	if defaultEntry != wantDefaultEntry {
-		t.Errorf("defaultEntry == %v, want %v", defaultEntry, wantDefaultEntry)
+		t.Errorf("defaultEntry == %q, want %q", defaultEntry, wantDefaultEntry)
 	}
 
 	// timeout
@@ -214,7 +224,7 @@ GRUB_TIMEOUT="10"
 GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
 GRUB_GFXMODE="1024x768"
 `
-	wantConfigContent := `GRUB_DEFAULT="1"
+	wantConfigContent := `GRUB_DEFAULT="LinuxDeepin GNU/Linux"
 GRUB_TIMEOUT="15"
 GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
 GRUB_GFXMODE="auto"
@@ -225,7 +235,7 @@ GRUB_THEME="/boot/grub/themes/demo/theme.txt"
 	grub := &Grub2{}
 	grub.parseSettings(testConfigContent)
 
-	grub.setDefaultEntry(1)
+	grub.setDefaultEntry(`LinuxDeepin GNU/Linux`)
 	grub.setTimeout(15)
 	grub.setGfxmode("auto")
 	grub.setBackground("/boot/grub/background.png")
