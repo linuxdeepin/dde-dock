@@ -41,7 +41,6 @@ func (grub *Grub2) OnPropertiesChanged(name string, oldv interface{}) {
 }
 
 func (grub *Grub2) Load() {
-	// TODO
 	grub.readEntries()
 	grub.readSettings()
 }
@@ -53,7 +52,6 @@ func (grub *Grub2) Save() {
 }
 
 func (grub *Grub2) GetEntryTitles() []string {
-	// TODO
 	entryTitles := make([]string, 0)
 	for _, entry := range grub.entries {
 		if entry.entryType == MENUENTRY {

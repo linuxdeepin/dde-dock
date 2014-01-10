@@ -79,8 +79,8 @@ func (grub *Grub2) generateGrubConfig() {
 	logInfo("start to generate a new grub configuration file")
 	grub.InUpdate = true
 	// TODO
-	// execAndWait(60, _GRUB_MKCONFIG_EXE, "-o", _GRUB_MENU)
-	execAndWait(60, _GRUB_MKCONFIG_EXE)
+	execAndWait(60, _GRUB_MKCONFIG_EXE, "-o", _GRUB_MENU)
+	// execAndWait(60, _GRUB_MKCONFIG_EXE)
 	grub.InUpdate = false
 	logInfo("generate grub configuration finished")
 }
@@ -99,18 +99,17 @@ func (grub *Grub2) parseEntries(fileContent string) {
 	for sl.Scan() {
 		line := sl.Text()
 		line = strings.TrimSpace(line)
-		if strings.HasPrefix(line, "menuentry") {
+		if strings.HasPrefix(line, "menuentry ") {
 			if inMenuEntry {
 				logError("a 'menuentry' directive was detected inside the scope of a menuentry")
 				grub.clearEntries()
 				return
 			}
-			// TODO
 			title, ok := grub.parseTitle(line)
 			if ok {
 				entry := Entry{MENUENTRY, title, numCount[level], parentMenus[len(parentMenus)-1]}
 				grub.entries = append(grub.entries, entry)
-				logInfo("found entry: [%d] %s %s", level, strings.Repeat(" ", level*2), title) // TODO
+				logInfo("found entry: [%d] %s %s", level, strings.Repeat(" ", level*2), title)
 
 				numCount[level]++
 				inMenuEntry = true
@@ -120,19 +119,18 @@ func (grub *Grub2) parseEntries(fileContent string) {
 				grub.clearEntries()
 				return
 			}
-		} else if strings.HasPrefix(line, "submenu") {
+		} else if strings.HasPrefix(line, "submenu ") {
 			if inMenuEntry {
 				logError("a 'submenu' directive was detected inside the scope of a menuentry")
 				grub.clearEntries()
 				return
 			}
-			// TODO
 			title, ok := grub.parseTitle(line)
 			if ok {
 				entry := Entry{SUBMENU, title, numCount[level], parentMenus[len(parentMenus)-1]}
 				grub.entries = append(grub.entries, entry)
-				parentMenus = append(parentMenus, &entry)                                      // TODO
-				logInfo("found entry: [%d] %s %s", level, strings.Repeat(" ", level*2), title) // TODO
+				parentMenus = append(parentMenus, &entry)
+				logInfo("found entry: [%d] %s %s", level, strings.Repeat(" ", level*2), title)
 
 				level++
 				numCount[level] = 0
@@ -143,17 +141,16 @@ func (grub *Grub2) parseEntries(fileContent string) {
 				return
 			}
 		} else if line == "}" {
-			// TODO
 			if inMenuEntry {
 				inMenuEntry = false
 			} else if level > 0 {
+				level--
+
 				// delete last parent submenu
 				i := len(parentMenus) - 1
 				copy(parentMenus[i:], parentMenus[i+1:])
 				parentMenus[len(parentMenus)-1] = nil
 				parentMenus = parentMenus[:len(parentMenus)-1]
-
-				level--
 			}
 		}
 	}
