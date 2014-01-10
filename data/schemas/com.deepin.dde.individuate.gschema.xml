@@ -50,7 +50,7 @@
       <description>enumerations represent how pictures are chose to drawn. e.g. in random or in sequence</description>
     </key>
     <key type="i" name="background-duration">
-      <default>0</default>
+      <default>600</default>
       <summary>Background retention duration</summary>
       <description>The unit is second, if less or equal to zero, do not change the background; if more than 0, change the background after background-duration time</description>
     </key>
@@ -74,7 +74,7 @@
         <summary>Mouse Theme</summary>
         <description>Mouse Theme</description>
     </key>
-    <key type="s" name="font-theme">
+    <key type="s" name="font-name">
         <default>'Cantarell 11'</default>
         <summary>Font Theme</summary>
         <description>Font Theme</description>

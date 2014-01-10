@@ -22,61 +22,43 @@
 package main
 
 import (
-	"dbus/com/deepin/daemon/accounts"
-	accext "dbus/com/deepin/dde/api/accounts"
-	"dlib"
-	"dlib/dbus"
-	"fmt"
-	"os/user"
+	"testing"
 )
 
-var (
-	accountsExtends *accext.Accounts
-	userManager     *accounts.User
-
-	currentUid string
-)
-
-func (m *Manager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		MANAGER_DEST,
-		MANAGER_PATH,
-		MANAGER_IFC,
-	}
-}
-
-func InitVariable() {
-	var err error
-
-	accountsExtends, err = accext.NewAccounts("/com/deepin/dde/api/Accounts")
-	if err != nil {
-		fmt.Println("New Accounts Extends Failed.")
-		panic(err)
-	}
-
-	userInfo, _ := user.Current()
-	currentUid = userInfo.Uid
-
-	userManager, err = accounts.NewUser(DACCOUNTS_USER_PATH +
-		dbus.ObjectPath(currentUid))
-	if err != nil {
-		fmt.Println("New User Failed.")
-		panic(err)
-	}
-}
-
-func main() {
+func TestTheme(t *testing.T) {
 	InitVariable()
 	ReadThemeDir(THEME_DIR)
 	m := NewManager()
-	err := dbus.InstallOnSession(m)
-	if err != nil {
-		panic(err)
+	if m == nil {
+		t.Error("New Manager Failed!")
+		return
 	}
 
-	if m.AutoSwitch.Get() {
-		go SwitchPictureThread(m)
+	gtk := m.GtkTheme.Get()
+	for _, v := range m.EnableGtkTheme {
+		m.GtkTheme.Set(v.Name)
 	}
-	dbus.DealWithUnhandledMessage()
-	dlib.StartLoop()
+	m.GtkTheme.Set(gtk)
+
+	icon := m.IconTheme.Get()
+	for _, v := range m.EnableIconTheme {
+		m.IconTheme.Set(v.Name)
+	}
+	m.IconTheme.Set(icon)
+
+	cursor := m.CursorTheme.Get()
+	for _, v := range m.EnableCursorTheme {
+		m.CursorTheme.Set(v.Name)
+	}
+	m.CursorTheme.Set(cursor)
+
+        font := infaceSettings.GetString(SCHEMA_KEY_FONT)
+        ok := infaceSettings.SetString(SCHEMA_KEY_FONT, "DejaVu Sans Mono 11")
+        if !ok {
+                t.Error("Set Font for gsd interface error!")
+        }
+        ok = infaceSettings.SetString(SCHEMA_KEY_FONT, font)
+        if !ok {
+                t.Error("Set Font for gsd interface error!")
+        }
 }

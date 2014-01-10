@@ -2,6 +2,7 @@ package main
 
 import (
 	"dlib/dbus"
+	"dlib/logger"
 	"fmt"
 	"github.com/BurntSushi/xgb"
 	"github.com/BurntSushi/xgb/randr"
@@ -9,11 +10,12 @@ import (
 )
 
 var (
-	_             = fmt.Println
-	X, _          = xgb.NewConn()
-	DefaultScreen = xproto.Setup(X).DefaultScreen(X)
-	Root          = DefaultScreen.Root
-	atomEDID      = getAtom(X, "EDID")
+	_                   = fmt.Println
+	X, _                = xgb.NewConn()
+	DefaultScreen       = xproto.Setup(X).DefaultScreen(X)
+	Root                = DefaultScreen.Root
+	atomEDID            = getAtom(X, "EDID")
+	LastConfigTimeStamp = xproto.Timestamp(0)
 )
 
 func init() {
@@ -49,10 +51,15 @@ func NewDisplay() *Display {
 	dpy.updateRotationAndRelfect(sinfo.Rotation)
 
 	if err != nil {
-		panic(err)
+		panic("GetScreenInfo Failed:" + err.Error())
 	}
 
 	resources, err := randr.GetScreenResources(X, Root).Reply()
+	LastConfigTimeStamp = resources.ConfigTimestamp
+
+	if err != nil {
+		panic("GetScreenResources failed:" + err.Error())
+	}
 
 	for _, m := range resources.Modes {
 		dpy.modes[randr.Mode(m.Id)] = m
@@ -86,8 +93,11 @@ func (dpy *Display) updatePrimary() {
 		dpy.setPropPrimaryOutput(nil)
 		dpy.setPropPrimaryRect(xproto.Rectangle{0, 0, dpy.Width, dpy.Height})
 	} else if dpy.setPropPrimaryOutput(queryOutput(dpy, r.Output)); dpy.PrimaryOutput == nil {
-		//this output is invalid or disconnected, so set OutputPrimary to None
-		randr.SetOutputPrimary(X, Root, 0)
+		//to avoid repeatedly trigger ScreenChangeNotifyEvent
+		if len(dpy.Outputs) != 0 {
+			//this output is invalid or disconnected, so set OutputPrimary to None
+			randr.SetOutputPrimary(X, Root, 0)
+		}
 		return
 	} else {
 		dpy.setPropPrimaryRect(dpy.PrimaryOutput.Allocation)
@@ -103,7 +113,7 @@ func (dpy *Display) updateOutputList(output randr.Output) {
 	} else {
 		info, err := randr.GetOutputInfo(X, output, xproto.TimeCurrentTime).Reply()
 		if err != nil {
-			panic(err)
+			panic("GetOutputInfo failed:" + err.Error())
 		}
 		op.update(dpy, info)
 	}
@@ -152,6 +162,12 @@ func (dpy *Display) listener() {
 			}
 		case randr.ScreenChangeNotifyEvent:
 			ee := e.(randr.ScreenChangeNotifyEvent)
+			if ee.ConfigTimestamp <= LastConfigTimeStamp {
+				logger.Println("Recived an invalid ScreenChangeNotifyEvent", ee)
+				continue
+			}
+			LastConfigTimeStamp = ee.ConfigTimestamp
+
 			DefaultScreen = xproto.Setup(X).DefaultScreen(X)
 			dpy.updateRotationAndRelfect(uint16(ee.Rotation))
 

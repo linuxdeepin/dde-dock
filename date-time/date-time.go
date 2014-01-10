@@ -105,7 +105,8 @@ func ListenZone(dt *DateTime) {
 				} else {
 					//if ev.IsModify() {
 					dt.CurrentTimeZone, _ = _gdate.GetTimezone()
-                                        fmt.Println(dt.CurrentTimeZone)
+					dbus.NotifyChange(dt, "CurrentTimeZone")
+					fmt.Println(dt.CurrentTimeZone)
 					//}
 				}
 			case err := <-zoneWatcher.Error:

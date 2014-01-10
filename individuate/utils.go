@@ -41,3 +41,23 @@ func GetPathFromURI(uri string) string {
 	}
 	return "/" + strings.TrimLeft(uri, "file:///")
 }
+
+func GetFontThemes() []ThemeType {
+	fontTheme := []ThemeType{}
+
+	fontTheme = append(fontTheme, ThemeType{Name: "Deepin", Type: "system"})
+	fontTheme = append(fontTheme, ThemeType{Name: "Deepin1", Type: "system"})
+	fontTheme = append(fontTheme, ThemeType{Name: "Deepin2", Type: "system"})
+	fontTheme = append(fontTheme, ThemeType{Name: "Deepin3", Type: "system"})
+	return fontTheme
+}
+
+func GetBackgroundFiles() []ThemeType {
+	bgTheme := []ThemeType{}
+
+	bgTheme = append(bgTheme, ThemeType{Name: "Deepin", Type: "system"})
+	bgTheme = append(bgTheme, ThemeType{Name: "Deepin1", Type: "system"})
+	bgTheme = append(bgTheme, ThemeType{Name: "Deepin2", Type: "system"})
+	bgTheme = append(bgTheme, ThemeType{Name: "Deepin3", Type: "system"})
+	return bgTheme
+}
