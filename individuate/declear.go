@@ -72,7 +72,7 @@ const (
 	SCHEMA_KEY_DURATION       = "background-duration"
 	SCHEMA_KEY_GTK            = "gtk-theme"
 	SCHEMA_KEY_ICON           = "icon-theme"
-	SCHEMA_KEY_FONT           = "font-theme"
+	SCHEMA_KEY_FONT           = "font-name"
 	SCHEMA_KEY_CURSOR         = "cursor-theme"
 
 	DACCOUNTS_USER_PATH = "/com/deepin/daemon/Accounts/User"
