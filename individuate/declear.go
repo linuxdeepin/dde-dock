@@ -42,12 +42,12 @@ type Manager struct {
 	CrossFadeMode  *property.GSettingsStringProperty `access:"readwrite"`
 	CrossInterval  *property.GSettingsIntProperty    `access:"readwrite"`
 
-	EnableGtkTheme    []ThemeType
-	EnableIconTheme   []ThemeType
-	EnableFontTheme   []ThemeType
-	EnableCursorTheme []ThemeType
-	EnableWindowTheme []ThemeType
-	EnableBackground  []ThemeType
+	AvailableGtkTheme    []ThemeType
+	AvailableIconTheme   []ThemeType
+	AvailableFontTheme   []ThemeType
+	AvailableCursorTheme []ThemeType
+	AvailableWindowTheme []ThemeType
+	AvailableBackground  []ThemeType
 
 	isAutoSwitch   bool
 	quitAutoSwitch chan bool

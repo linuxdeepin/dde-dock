@@ -68,21 +68,21 @@ func NewManager() *Manager {
 }
 
 func InitThemeInfo(m *Manager) {
-	m.EnableFontTheme = GetFontThemes()
-	m.EnableBackground = GetBackgroundFiles()
+	m.AvailableFontTheme = GetFontThemes()
+	m.AvailableBackground = GetBackgroundFiles()
 
 	for _, v := range systemThemes {
 		gtk := ThemeType{Name: v.GtkTheme, Type: "system"}
-		m.EnableGtkTheme = append(m.EnableGtkTheme, gtk)
+		m.AvailableGtkTheme = append(m.AvailableGtkTheme, gtk)
 
 		icon := ThemeType{Name: v.IconTheme, Type: "system"}
-		m.EnableIconTheme = append(m.EnableIconTheme, icon)
+		m.AvailableIconTheme = append(m.AvailableIconTheme, icon)
 
 		cursor := ThemeType{Name: v.CursorTheme, Type: "system"}
-		m.EnableCursorTheme = append(m.EnableCursorTheme, cursor)
+		m.AvailableCursorTheme = append(m.AvailableCursorTheme, cursor)
 
 		window := ThemeType{Name: v.WindowTheme, Type: "system"}
-		m.EnableWindowTheme = append(m.EnableWindowTheme, window)
+		m.AvailableWindowTheme = append(m.AvailableWindowTheme, window)
 	}
 }
 

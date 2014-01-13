@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type = Application
-Exec = /usr/lib/deepin-daemon/individuate
+Exec = /usr/lib/deepin-daemon/individuate &
 Terminal=false
 Hidden=false
 Name = individuate
