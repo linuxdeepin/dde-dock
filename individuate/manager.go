@@ -103,6 +103,7 @@ func ListenSettings(m *Manager) {
 					ParseFileNotExist(m)
 					return
 				}
+				userManager.BackgroundFile.Set(filename)
 				tmp := []string{}
 				if m.AutoSwitch.Get() {
 					defer func() {
@@ -120,7 +121,6 @@ func ListenSettings(m *Manager) {
 				l := len(tmp)
 				s.SetStrv(SCHEMA_KEY_URIS, tmp)
 				s.SetInt(SCHEMA_KEY_INDEX, l-1)
-				userManager.BackgroundFile.Set(filename)
 				break
 			}
 		case SCHEMA_KEY_AUTO_SWITCH:

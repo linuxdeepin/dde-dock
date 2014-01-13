@@ -22,12 +22,13 @@
 package main
 
 import (
+	"dlib/dbus"
 	"dlib/gio-2.0"
 	"fmt"
-        "dlib/dbus"
 )
 
 type DiskInfo struct {
+	Id         int32
 	Name       string
 	Type       string
 	CanUnmount bool
@@ -47,20 +48,35 @@ type Manager struct {
 
 const (
 	DEVICE_KIND = "unix-device"
+
+	DISK_INFO_DEST = "com.deepin.daemon.DiskMount"
+	DISK_INFO_PATH = "/com/deepin/daemon/DiskMount"
+	DISK_INFO_IFC  = "com.deepin.daemon.DiskMount"
 )
 
 var (
+	count     = 0
 	monitor   = gio.VolumeMonitorGet()
-	objectMap map[*DiskInfo]*ObjectInfo
+	objectMap map[int32]*ObjectInfo
 )
 
-func (m *Manager) GetDBusInfo () dbus.DBusInfo {
-        return dbus.DBusInfo{
-        }
+func (m *Manager) GetDBusInfo() dbus.DBusInfo {
+	return dbus.DBusInfo{
+		DISK_INFO_DEST,
+		DISK_INFO_PATH,
+		DISK_INFO_IFC,
+	}
 }
 
-func NewDiskInfo(value interface{}, t string) *DiskInfo {
+func (m *Manager) DeviceMount(id int32, mount bool) {
+}
+
+func (m *Manager) DeviceEject (id int32, eject bool) {
+}
+
+func NewDiskInfo(value interface{}, t string, id int32) *DiskInfo {
 	info := &DiskInfo{}
+	info.Id = id
 
 	switch t {
 	case "volume":
@@ -127,8 +143,9 @@ func DriverList(m *Manager) {
 		if volumes == nil {
 			if driver.IsMediaRemovable() &&
 				!driver.IsMediaCheckAutomatic() {
-				info := NewDiskInfo(driver, "driver")
-				objectMap[info] = NewObjectInfo(driver, "driver")
+				info := NewDiskInfo(driver, "driver", int32(count))
+				count += 1
+				objectMap[info.Id] = NewObjectInfo(driver, "driver")
 				m.DiskList = append(m.DiskList, info)
 			}
 			continue
@@ -136,12 +153,14 @@ func DriverList(m *Manager) {
 		for _, volume := range volumes {
 			mount := volume.GetMount()
 			if mount != nil {
-				info := NewDiskInfo(mount, "mount")
-				objectMap[info] = NewObjectInfo(mount, "mount")
+				info := NewDiskInfo(mount, "mount", int32(count))
+				count += 1
+				objectMap[info.Id] = NewObjectInfo(mount, "mount")
 				m.DiskList = append(m.DiskList, info)
 			} else {
-				info := NewDiskInfo(volume, "volume")
-				objectMap[info] = NewObjectInfo(volume, "volume")
+				info := NewDiskInfo(volume, "volume", int32(count))
+				count += 1
+				objectMap[info.Id] = NewObjectInfo(volume, "volume")
 				m.DiskList = append(m.DiskList, info)
 			}
 		}
@@ -159,12 +178,14 @@ func VolumeList(m *Manager) {
 		fmt.Printf("id: %s\n", id)
 		mount := volume.GetMount()
 		if mount != nil {
-			info := NewDiskInfo(mount, "mount")
-			objectMap[info] = NewObjectInfo(mount, "mount")
+			info := NewDiskInfo(mount, "mount", int32(count))
+			count += 1
+			objectMap[info.Id] = NewObjectInfo(mount, "mount")
 			m.DiskList = append(m.DiskList, info)
 		} else {
-			info := NewDiskInfo(volume, "volume")
-			objectMap[info] = NewObjectInfo(volume, "volume")
+			info := NewDiskInfo(volume, "volume", int32(count))
+			count += 1
+			objectMap[info.Id] = NewObjectInfo(volume, "volume")
 			m.DiskList = append(m.DiskList, info)
 		}
 	}
@@ -183,8 +204,9 @@ func MountList(m *Manager) {
 			fmt.Printf("id: %s\n", id)
 			continue
 		}
-		info := NewDiskInfo(mount, "mount")
-		objectMap[info] = NewObjectInfo(mount, "mount")
+		info := NewDiskInfo(mount, "mount", int32(count))
+		count += 1
+		objectMap[info.Id] = NewObjectInfo(mount, "mount")
 		m.DiskList = append(m.DiskList, info)
 	}
 }
@@ -200,11 +222,14 @@ func ContainStart(str1, str2 string) bool {
 }
 
 func main() {
-	objectMap = make(map[*DiskInfo]*ObjectInfo)
+	objectMap = make(map[int32]*ObjectInfo)
 	m := &Manager{}
 	DriverList(m)
 	VolumeList(m)
 	MountList(m)
 
-        select{}
+	dbus.InstallOnSession(m)
+	dbus.DealWithUnhandledMessage()
+
+	select {}
 }
