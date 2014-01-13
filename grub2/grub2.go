@@ -16,10 +16,8 @@ const (
 	_GRUB_MKCONFIG_EXE = "grub-mkconfig"
 )
 
-const (
-	_ENTRY_REGEXP_1 = `^ *(menuentry|submenu) +'(.*?)'.*$`
-	_ENTRY_REGEXP_2 = `^ *(menuentry|submenu) +"(.*?)".*$`
-)
+var _ENTRY_REGEXP_1 = regexp.MustCompile(`^ *(menuentry|submenu) +'(.*?)'.*$`)
+var _ENTRY_REGEXP_2 = regexp.MustCompile(`^ *(menuentry|submenu) +"(.*?)".*$`)
 
 type Grub2 struct {
 	entries  []Entry
@@ -162,12 +160,10 @@ func (grub *Grub2) parseEntries(fileContent string) {
 
 func (grub *Grub2) parseTitle(line string) (string, bool) {
 	line = strings.TrimLeftFunc(line, unicode.IsSpace)
-	reg1 := regexp.MustCompile(_ENTRY_REGEXP_1)
-	reg2 := regexp.MustCompile(_ENTRY_REGEXP_2)
-	if reg1.MatchString(line) {
-		return reg1.FindStringSubmatch(line)[2], true
-	} else if reg2.MatchString(line) {
-		return reg2.FindStringSubmatch(line)[2], true
+	if _ENTRY_REGEXP_1.MatchString(line) {
+		return _ENTRY_REGEXP_1.FindStringSubmatch(line)[2], true
+	} else if _ENTRY_REGEXP_2.MatchString(line) {
+		return _ENTRY_REGEXP_2.FindStringSubmatch(line)[2], true
 	} else {
 		return "", false
 	}
@@ -282,7 +278,7 @@ func main() {
 	grub.Load()
 	err := dbus.InstallOnSystem(grub)
 	if err != nil {
-		panic(err) // TODO
+		panic(err)
 	}
 	select {}
 }
