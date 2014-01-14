@@ -22,6 +22,7 @@
 package main
 
 import (
+	"dlib"
 	"dlib/dbus"
 	"dlib/gio-2.0"
 	"fmt"
@@ -48,10 +49,6 @@ type Manager struct {
 
 const (
 	DEVICE_KIND = "unix-device"
-
-	DISK_INFO_DEST = "com.deepin.daemon.DiskMount"
-	DISK_INFO_PATH = "/com/deepin/daemon/DiskMount"
-	DISK_INFO_IFC  = "com.deepin.daemon.DiskMount"
 )
 
 var (
@@ -60,21 +57,94 @@ var (
 	objectMap map[int32]*ObjectInfo
 )
 
-func (m *Manager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		DISK_INFO_DEST,
-		DISK_INFO_PATH,
-		DISK_INFO_IFC,
+func (m *Manager) DeviceEject(id int32) {
+	info, ok := objectMap[id]
+	if !ok {
+		fmt.Printf("Eject id - %d not in objectMap.\n", id)
+		return
+	}
+
+	switch info.Type {
+	case "drive":
+		{
+			op := info.Object.(*gio.Drive)
+			op.Eject(gio.MountUnmountFlagsNone, nil, nil)
+		}
+                break
+	case "volume":
+		{
+			op := info.Object.(*gio.Volume)
+			op.Eject(gio.MountUnmountFlagsNone, nil, nil)
+		}
+                break
+	case "mount":
+		{
+			op := info.Object.(*gio.Mount)
+			op.Eject(gio.MountUnmountFlagsNone, nil, nil)
+		}
+                break
+        default:
+                break
 	}
 }
 
-func (m *Manager) DeviceMount(id int32, mount bool) {
+func (m *Manager) DeviceMount(id int32) {
+	info, ok := objectMap[id]
+	if !ok {
+		fmt.Printf("Mount id - %d not in objectMap.\n", id)
+		return
+	}
+
+	switch info.Type {
+	case "drive":
+		{
+		}
+                break
+	case "volume":
+		{
+			op := info.Object.(*gio.Volume)
+			op.Mount(gio.MountMountFlagsNone, nil, nil, nil)
+		}
+                break
+	case "mount":
+		{
+			op := info.Object.(*gio.Mount)
+			op.Remount(gio.MountMountFlagsNone, nil, nil, nil)
+		}
+                break
+        default:
+                break
+	}
 }
 
-func (m *Manager) DeviceEject (id int32, eject bool) {
+func (m *Manager) DeviceUnmount(id int32) {
+	info, ok := objectMap[id]
+	if !ok {
+		fmt.Printf("Unmount id - %d not in objectMap.\n", id)
+		return
+	}
+
+	switch info.Type {
+	case "drive":
+		{
+		}
+                break
+	case "volume":
+		{
+		}
+                break
+	case "mount":
+		{
+			op := info.Object.(*gio.Mount)
+			op.Unmount(gio.MountUnmountFlagsNone, nil, nil)
+		}
+                break
+        default:
+                break
+	}
 }
 
-func NewDiskInfo(value interface{}, t string, id int32) *DiskInfo {
+func newDiskInfo(value interface{}, t string, id int32) *DiskInfo {
 	info := &DiskInfo{}
 	info.Id = id
 
@@ -85,7 +155,7 @@ func NewDiskInfo(value interface{}, t string, id int32) *DiskInfo {
 			info.Name = v.GetName()
 			info.CanEject = v.CanEject()
 			id := v.GetIdentifier(DEVICE_KIND)
-			if ContainStart("network", id) {
+			if containStart("network", id) {
 				info.Type = "network"
 			} else if info.CanEject {
 				info.Type = "removable"
@@ -94,13 +164,13 @@ func NewDiskInfo(value interface{}, t string, id int32) *DiskInfo {
 			}
 			break
 		}
-	case "driver":
+	case "drive":
 		{
 			v := value.(*gio.Drive)
 			info.Name = v.GetName()
 			info.CanEject = v.CanEject()
 			id := v.GetIdentifier(DEVICE_KIND)
-			if ContainStart("network", id) {
+			if containStart("network", id) {
 				info.Type = "network"
 			} else if info.CanEject {
 				info.Type = "removable"
@@ -132,42 +202,46 @@ func NewDiskInfo(value interface{}, t string, id int32) *DiskInfo {
 	return info
 }
 
-func NewObjectInfo(v interface{}, t string) *ObjectInfo {
+func newObjectInfo(v interface{}, t string) *ObjectInfo {
 	return &ObjectInfo{Object: v, Type: t}
 }
 
-func DriverList(m *Manager) {
+func driverList() []*DiskInfo {
+	list := []*DiskInfo{}
 	drivers := monitor.GetConnectedDrives()
 	for _, driver := range drivers {
 		volumes := driver.GetVolumes()
 		if volumes == nil {
 			if driver.IsMediaRemovable() &&
 				!driver.IsMediaCheckAutomatic() {
-				info := NewDiskInfo(driver, "driver", int32(count))
+				info := newDiskInfo(driver, "drive", int32(count))
 				count += 1
-				objectMap[info.Id] = NewObjectInfo(driver, "driver")
-				m.DiskList = append(m.DiskList, info)
+				objectMap[info.Id] = newObjectInfo(driver, "drive")
+				list = append(list, info)
 			}
 			continue
 		}
 		for _, volume := range volumes {
 			mount := volume.GetMount()
 			if mount != nil {
-				info := NewDiskInfo(mount, "mount", int32(count))
+				info := newDiskInfo(mount, "mount", int32(count))
 				count += 1
-				objectMap[info.Id] = NewObjectInfo(mount, "mount")
-				m.DiskList = append(m.DiskList, info)
+				objectMap[info.Id] = newObjectInfo(mount, "mount")
+				list = append(list, info)
 			} else {
-				info := NewDiskInfo(volume, "volume", int32(count))
+				info := newDiskInfo(volume, "volume", int32(count))
 				count += 1
-				objectMap[info.Id] = NewObjectInfo(volume, "volume")
-				m.DiskList = append(m.DiskList, info)
+				objectMap[info.Id] = newObjectInfo(volume, "volume")
+				list = append(list, info)
 			}
 		}
 	}
+
+	return list
 }
 
-func VolumeList(m *Manager) {
+func volumeList() []*DiskInfo {
+	list := []*DiskInfo{}
 	volumes := monitor.GetVolumes()
 	for _, volume := range volumes {
 		driver := volume.GetDrive()
@@ -178,20 +252,22 @@ func VolumeList(m *Manager) {
 		fmt.Printf("id: %s\n", id)
 		mount := volume.GetMount()
 		if mount != nil {
-			info := NewDiskInfo(mount, "mount", int32(count))
+			info := newDiskInfo(mount, "mount", int32(count))
 			count += 1
-			objectMap[info.Id] = NewObjectInfo(mount, "mount")
-			m.DiskList = append(m.DiskList, info)
+			objectMap[info.Id] = newObjectInfo(mount, "mount")
+			list = append(list, info)
 		} else {
-			info := NewDiskInfo(volume, "volume", int32(count))
+			info := newDiskInfo(volume, "volume", int32(count))
 			count += 1
-			objectMap[info.Id] = NewObjectInfo(volume, "volume")
-			m.DiskList = append(m.DiskList, info)
+			objectMap[info.Id] = newObjectInfo(volume, "volume")
+			list = append(list, info)
 		}
 	}
+	return list
 }
 
-func MountList(m *Manager) {
+func mountList() []*DiskInfo {
+	list := []*DiskInfo{}
 	mounts := monitor.GetMounts()
 	for _, mount := range mounts {
 		if mount.IsShadowed() {
@@ -204,14 +280,15 @@ func MountList(m *Manager) {
 			fmt.Printf("id: %s\n", id)
 			continue
 		}
-		info := NewDiskInfo(mount, "mount", int32(count))
+		info := newDiskInfo(mount, "mount", int32(count))
 		count += 1
-		objectMap[info.Id] = NewObjectInfo(mount, "mount")
-		m.DiskList = append(m.DiskList, info)
+		objectMap[info.Id] = newObjectInfo(mount, "mount")
+		list = append(list, info)
 	}
+	return list
 }
 
-func ContainStart(str1, str2 string) bool {
+func containStart(str1, str2 string) bool {
 	for i, _ := range str1 {
 		if str1[i] != str2[i] {
 			return false
@@ -221,15 +298,89 @@ func ContainStart(str1, str2 string) bool {
 	return true
 }
 
+func getDiskInfoList() []*DiskInfo {
+	list := []*DiskInfo{}
+
+	destroyObjectMap()
+	l1 := driverList()
+	l2 := volumeList()
+	l3 := mountList()
+	list = append(list, l1...)
+	list = append(list, l2...)
+	list = append(list, l3...)
+
+	return list
+}
+
+func destroyObjectMap() {
+	for k, _ := range objectMap {
+		delete(objectMap, k)
+	}
+	count = 0
+}
+
+func (m *Manager) listenSignalChanged() {
+	monitor.Connect("mount-added", func(volumeMonitor *gio.VolumeMonitor, mount *gio.Mount) {
+		// Judge whether the property 'mount_and_open' set true
+		// if true, open the device use exec.Command("xdg-open", "device").Run()
+		m.setPropName("DiskList")
+		printDiskInfo(m.DiskList)
+	})
+	monitor.Connect("mount-removed", func(volumeMonitor *gio.VolumeMonitor, mount *gio.Mount) {
+		m.setPropName("DiskList")
+		printDiskInfo(m.DiskList)
+	})
+	monitor.Connect("mount-changed", func(volumeMonitor *gio.VolumeMonitor, mount *gio.Mount) {
+		m.setPropName("DiskList")
+		printDiskInfo(m.DiskList)
+	})
+
+	monitor.Connect("volume-added", func(volumeMonitor *gio.VolumeMonitor, volume *gio.Volume) {
+		m.setPropName("DiskList")
+		printDiskInfo(m.DiskList)
+	})
+	monitor.Connect("volume-removed", func(volumeMonitor *gio.VolumeMonitor, volume *gio.Volume) {
+		m.setPropName("DiskList")
+		printDiskInfo(m.DiskList)
+	})
+	monitor.Connect("volume-changed", func(volumeMonitor *gio.VolumeMonitor, volume *gio.Volume) {
+		m.setPropName("DiskList")
+		printDiskInfo(m.DiskList)
+	})
+
+	monitor.Connect("drive-disconnected", func(volumeMonitor *gio.VolumeMonitor, drive *gio.Drive) {
+		m.setPropName("DiskList")
+		printDiskInfo(m.DiskList)
+	})
+	monitor.Connect("drive-connected", func(volumeMonitor *gio.VolumeMonitor, drive *gio.Drive) {
+		m.setPropName("DiskList")
+		printDiskInfo(m.DiskList)
+	})
+	monitor.Connect("drive-changed", func(volumeMonitor *gio.VolumeMonitor, drive *gio.Drive) {
+		m.setPropName("DiskList")
+		printDiskInfo(m.DiskList)
+	})
+}
+
 func main() {
 	objectMap = make(map[int32]*ObjectInfo)
 	m := &Manager{}
-	DriverList(m)
-	VolumeList(m)
-	MountList(m)
+	m.setPropName("DiskList")
+	printDiskInfo(m.DiskList)
+	m.listenSignalChanged()
 
 	dbus.InstallOnSession(m)
 	dbus.DealWithUnhandledMessage()
 
-	select {}
+	dlib.StartLoop()
+}
+
+func printDiskInfo(infos []*DiskInfo) {
+	for _, v := range infos {
+		fmt.Printf("Id: %d\n", v.Id)
+		fmt.Printf("Name: %s\n", v.Name)
+		fmt.Println("CanEject:", v.CanEject)
+		fmt.Println("CanUnmount:", v.CanUnmount)
+		fmt.Printf("\n")
+	}
 }
