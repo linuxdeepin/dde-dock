@@ -37,14 +37,6 @@ var (
 	currentUid string
 )
 
-func (m *Manager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		MANAGER_DEST,
-		MANAGER_PATH,
-		MANAGER_IFC,
-	}
-}
-
 func InitVariable() {
 	var err error
 
@@ -75,7 +67,7 @@ func main() {
 	}
 
 	if m.AutoSwitch.Get() {
-		go SwitchPictureThread(m)
+		go m.switchPictureThread()
 	}
 	dbus.DealWithUnhandledMessage()
 	dlib.StartLoop()

@@ -45,7 +45,7 @@ func NewKeyCodeInfo(shortcut string) *KeyCodeInfo {
 		return nil
 	}
 
-        state, detail := keybind.DeduceKeyInfo(mods, keys[0])
+	state, detail := keybind.DeduceKeyInfo(mods, keys[0])
 	return &KeyCodeInfo{State: state, Detail: detail}
 }
 
@@ -117,14 +117,17 @@ func GetAllShortcuts() map[int32]string {
 	return allShortcuts
 }
 
-func ConflictChecked(id int32, shortcut string) *ConflictInfo {
+func ConflictChecked(id int32, shortcut string) ConflictInfo {
+	if len(shortcut) <= 0 {
+		return ConflictInfo{}
+	}
 	info := NewKeyCodeInfo(GetXGBShortcut(FormatShortcut(shortcut)))
 	if info == nil {
 		fmt.Println("shortcut invalid. ", shortcut)
-		return nil
+		return ConflictInfo{}
 	}
 
-	conflict := &ConflictInfo{}
+	conflict := ConflictInfo{}
 	conflict.IsConflict = false
 
 	allShortcuts := GetAllShortcuts()
