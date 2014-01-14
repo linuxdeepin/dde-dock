@@ -24,67 +24,21 @@
 package main
 
 import (
-	"dlib/dbus/property"
 	"dlib/gio-2.0"
 	"fmt"
 	"math/rand"
 	"time"
 )
 
-type BackgroundManager struct {
-	AutoSwitch     *property.GSettingsBoolProperty   `access:"readwrite"`
-	SwitchDuration *property.GSettingsIntProperty    `access:"readwrite"`
-	CrossFadeMode  *property.GSettingsStringProperty `access:"readwrite"`
-	CurrentPicture *property.GSettingsStringProperty
-	PictureURIS    *property.GSettingsStrvProperty
-	PictureIndex   *property.GSettingsIntProperty
-}
-
-const (
-	INDIVIDUATE_ID = "com.deepin.dde.individuate"
-)
-
-var (
-	indiviGSettings = gio.NewSettings(INDIVIDUATE_ID)
-	_switchQuit     chan bool
-)
-
-func (bgManager *BackgroundManager) SetBackgroundPicture(uri string, replace bool) {
-	var index int
-	pictStrv := []string{}
-
-	if replace {
-		/* use 'uri' replace 'PictureURIS' */
-		pictStrv = append(pictStrv, uri)
-		index = 0
-	} else {
-		/* append 'uri' to 'PictureURIS' */
-		pictStrv = bgManager.PictureURIS.Get()
-		success, i := IsURIExist(uri, pictStrv)
-		if success {
-			indiviGSettings.SetInt("index", i)
-			return
-		}
-
-		fmt.Println("add: strv ", pictStrv)
-		index = len(pictStrv)
-		fmt.Println("add: len ", index)
-		pictStrv = append(pictStrv, uri)
-	}
-
-	indiviGSettings.SetStrv("picture-uris", pictStrv)
-	indiviGSettings.SetInt("index", index)
-}
-
-func (bgManager *BackgroundManager) DeletePictureFromURIS(uri string) {
+func (m *Manager) DeletePictureFromURIS(uri string) {
 	if len(uri) <= 0 {
 		return
 	}
 
 	tempURIS := []string{}
-	uris := bgManager.PictureURIS.Get()
-	index := int(bgManager.PictureIndex.Get())
-	currentURI := bgManager.CurrentPicture.Get()
+	uris := indiviGSettings.GetStrv(SCHEMA_KEY_URIS)
+	index := indiviGSettings.GetInt(SCHEMA_KEY_INDEX)
+	currentURI := m.BackgroundFile.Get()
 
 	fmt.Println("del: uris ", uris)
 	for _, v := range uris {
@@ -97,6 +51,7 @@ func (bgManager *BackgroundManager) DeletePictureFromURIS(uri string) {
 	if len(tempURIS) <= 0 {
 		indiviGSettings.Reset("picture-uris")
 		indiviGSettings.SetInt("index", 0)
+		m.BackgroundFile.Set(tempURIS[0])
 		return
 	}
 	indiviGSettings.SetStrv("picture-uris", tempURIS)
@@ -106,69 +61,13 @@ func (bgManager *BackgroundManager) DeletePictureFromURIS(uri string) {
 		if index > len(tempURIS) {
 			index = 0
 		}
+		m.BackgroundFile.Set(tempURIS[index])
 	} else {
 		if success, i := IsURIExist(currentURI, tempURIS); success {
 			index = i
 		}
 	}
 	indiviGSettings.SetInt("index", index)
-}
-
-func NewBackgroundManager() *BackgroundManager {
-	bgManager := &BackgroundManager{}
-	_switchQuit = make(chan bool)
-
-	bgManager.AutoSwitch = property.NewGSettingsBoolProperty(
-		bgManager, "AutoSwitch",
-		indiviGSettings, "auto-switch")
-	bgManager.SwitchDuration = property.NewGSettingsIntProperty(
-		bgManager, "SwitchDuration",
-		indiviGSettings, "background-duration")
-	bgManager.CrossFadeMode = property.NewGSettingsStringProperty(
-		bgManager, "CrossFadeMode",
-		indiviGSettings, "cross-fade-auto-mode")
-	bgManager.CurrentPicture = property.NewGSettingsStringProperty(
-		bgManager, "CurrentPicture",
-		indiviGSettings, "current-picture")
-	bgManager.PictureURIS = property.NewGSettingsStrvProperty(
-		bgManager, "PictureURIS",
-		indiviGSettings, "picture-uris")
-	bgManager.PictureIndex = property.NewGSettingsIntProperty(
-		bgManager, "PictureIndex",
-		indiviGSettings, "index")
-
-	ListenGSetting(bgManager)
-
-	return bgManager
-}
-
-func ListenGSetting(bgManager *BackgroundManager) {
-	indiviGSettings.Connect("changed::picture-uris", func(s *gio.Settings, key string) {
-		/* generate bg blur picture */
-	})
-
-	indiviGSettings.Connect("changed::index", func(s *gio.Settings, key string) {
-		i := s.GetInt(key)
-		uris := s.GetStrv("picture-uris")
-		if len(uris) <= 0 {
-			s.Reset("current-picture")
-			return
-		}
-		if i > len(uris) {
-			i = 0
-		}
-		fmt.Println("signal: index ", i)
-		s.SetString("current-picture", uris[i])
-	})
-
-	indiviGSettings.Connect("changed::auto-switch", func(s *gio.Settings, key string) {
-		v := s.GetBoolean(key)
-		if v {
-			go SwitchPictureThread(bgManager)
-		} else {
-			_switchQuit <- true
-		}
-	})
 }
 
 func IsURIExist(uri string, uris []string) (bool, int) {
@@ -185,36 +84,73 @@ func IsURIExist(uri string, uris []string) (bool, int) {
 	return false, -1
 }
 
-func SwitchPictureThread(bgManager *BackgroundManager) {
+func (m *Manager) switchPictureThread() {
+	m.isAutoSwitch = true
 	for {
-		secondNums := bgManager.SwitchDuration.GetValue().(time.Duration)
-		timer := time.NewTimer(time.Second * secondNums)
+		secondNums := m.SwitchDuration.Get()
+		timer := time.NewTimer(time.Second * time.Duration(secondNums))
 		select {
 		case <-timer.C:
-			AutoSwitchPicture(bgManager)
-		case <-_switchQuit:
+			m.autoSwitchPicture()
+		case <-m.quitAutoSwitch:
+			m.isAutoSwitch = false
 			return
 		}
 	}
 }
 
-func AutoSwitchPicture(bgManager *BackgroundManager) {
-	uris := bgManager.PictureURIS.Get()
+func (m *Manager) autoSwitchPicture() {
+	uris := indiviGSettings.GetStrv(SCHEMA_KEY_URIS)
 	l := len(uris)
 	if l <= 1 {
 		return
 	}
-	index := int(bgManager.PictureIndex.Get())
+	index := int(indiviGSettings.GetInt(SCHEMA_KEY_INDEX))
 
-	crossMode := bgManager.CrossFadeMode.Get()
+	/*fmt.Println("\nAutoSwitchPicture...")*/
+	//fmt.Println("\turis: ", uris)
+	//fmt.Println("\tlen: ", l)
+	/*fmt.Println("\tindex: ", index)*/
+
+	crossMode := m.CrossFadeMode.Get()
+	//fmt.Println("\tmode: ", crossMode)
 	if crossMode == "Sequential" {
 		index += 1
-		if index > l {
+		if index >= l {
 			index = 0
 		}
+		fmt.Println("\tSequential index: ", index)
 	} else {
 		rand.Seed(time.Now().UTC().UnixNano())
 		index = rand.Intn(l - 1)
+		fmt.Println("\tOther index: ", index)
 	}
-	indiviGSettings.SetInt("index", index)
+	m.BackgroundFile.Set(uris[index])
+	//fmt.Println("\turi: ", uris[index])
+	indiviGSettings.SetInt(SCHEMA_KEY_INDEX, index)
+	gio.SettingsSync()
+}
+
+/*
+ * get default picture when picture not exist
+ */
+func (m *Manager) parseFileNotExist() {
+	tmp := []string{}
+	uris := indiviGSettings.GetStrv(SCHEMA_KEY_URIS)
+	uri := m.BackgroundFile.Get()
+	if ok, i := IsURIExist(uri, uris); ok {
+		for j, v := range uris {
+			if j == i {
+				continue
+			}
+			tmp = append(tmp, v)
+		}
+	}
+	l := len(tmp)
+	if l <= 0 {
+		tmp = []string{DEFAULT_BG_PICTURE}
+	}
+	indiviGSettings.SetStrv(SCHEMA_KEY_URIS, tmp)
+	m.BackgroundFile.Set(tmp[0])
+	indiviGSettings.SetInt(SCHEMA_KEY_INDEX, 0)
 }

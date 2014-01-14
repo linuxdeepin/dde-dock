@@ -62,6 +62,10 @@ func (u *User) OnPropertiesChanged(propName string, old interface{}) {
 		if v, ok := old.(string); ok && v != u.UserName {
 			u.userInface.SetUserName(u.UserName)
 		}
+	case "BackgroundFile":
+		if v, ok := old.(string); ok && v != u.BackgroundFile {
+			u.userInface.SetBackgroundFile(u.BackgroundFile)
+		}
 	}
 }
 
@@ -103,6 +107,7 @@ func GetUserProperties(u *User) {
 	u.PasswordMode = userInface.PasswordMode.Get()
 	u.UserName = userInface.UserName.Get()
 	u.Uid = userInface.Uid.Get()
+	u.BackgroundFile = userInface.BackgroundFile.Get()
 }
 
 func CompareUserManager(src, tmp *User) {
@@ -144,6 +149,11 @@ func CompareUserManager(src, tmp *User) {
 	if src.UserName != tmp.UserName {
 		src.UserName = tmp.UserName
 		dbus.NotifyChange(src, "UserName")
+	}
+
+	if src.BackgroundFile != tmp.BackgroundFile {
+		src.BackgroundFile = tmp.BackgroundFile
+		dbus.NotifyChange(src, "BackgroundFile")
 	}
 }
 

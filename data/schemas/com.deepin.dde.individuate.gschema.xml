@@ -50,7 +50,7 @@
       <description>enumerations represent how pictures are chose to drawn. e.g. in random or in sequence</description>
     </key>
     <key type="i" name="background-duration">
-      <default>0</default>
+      <default>600</default>
       <summary>Background retention duration</summary>
       <description>The unit is second, if less or equal to zero, do not change the background; if more than 0, change the background after background-duration time</description>
     </key>
@@ -68,6 +68,26 @@
       <default>1000</default>
       <summary>Auto change background animation two frames duration</summary>
       <description>The unit is millisecond, change background animation two frames duration</description>
+    </key>
+    <key type="s" name="cursor-theme">
+        <default>'Deepin'</default>
+        <summary>Mouse Theme</summary>
+        <description>Mouse Theme</description>
+    </key>
+    <key type="s" name="font-name">
+        <default>'Cantarell 11'</default>
+        <summary>Font Theme</summary>
+        <description>Font Theme</description>
+    </key>
+    <key type="s" name="icon-theme">
+        <default>'Deepin'</default>
+        <summary>Icon Theme</summary>
+        <description>Icon Theme</description>
+    </key>
+    <key type="s" name="gtk-theme">
+        <default>'Deepin'</default>
+        <summary>GTK Theme</summary>
+        <description>GTK Theme</description>
     </key>
   </schema>
 </schemalist>

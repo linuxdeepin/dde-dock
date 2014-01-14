@@ -19,10 +19,35 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-#ifndef __BLUR_PICT_H__
-#define __BLUR_PICT_H__
+package main
 
-int generate_blur_pict (const char *src_path, const char *dest_path);
-int blur_pict_is_valid (const char *src_path, const char *dest_path);
+import (
+	"dlib/dbus"
+)
 
-#endif
+const (
+	DISK_INFO_DEST = "com.deepin.daemon.DiskMount"
+	DISK_INFO_PATH = "/com/deepin/daemon/DiskMount"
+	DISK_INFO_IFC  = "com.deepin.daemon.DiskMount"
+)
+
+func (m *Manager) GetDBusInfo() dbus.DBusInfo {
+	return dbus.DBusInfo{
+		DISK_INFO_DEST,
+		DISK_INFO_PATH,
+		DISK_INFO_IFC,
+	}
+}
+
+func (m *Manager) setPropName(name string) {
+	switch name {
+	case "DiskList":
+		{
+			m.DiskList = getDiskInfoList()
+                        dbus.NotifyChange(m, name)
+		}
+		break
+	default:
+		break
+	}
+}

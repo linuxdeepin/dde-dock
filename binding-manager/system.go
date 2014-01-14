@@ -203,8 +203,14 @@ func UpdateCompizValue(id int32, key, shortcut string) {
 
 func ListenCompiz(m *BindManager) {
 	wmGSettings.Connect("changed", func(s *gio.Settings, key string) {
+		if !KeyIsExist(key) {
+			return
+		}
 		value := GetSystemValue(key, false)
 		tmps := wmGSettings.GetStrv(key)
+		if len(tmps) <= 0 {
+			return
+		}
 		if value == tmps[0] {
 			return
 		}
@@ -212,6 +218,9 @@ func ListenCompiz(m *BindManager) {
 	})
 
 	shiftGSettings.Connect("changed", func(s *gio.Settings, key string) {
+		if !KeyIsExist(key) {
+			return
+		}
 		tmp := shiftGSettings.GetString(key)
 		value := GetSystemValue(key, false)
 		if tmp == value {
@@ -221,6 +230,9 @@ func ListenCompiz(m *BindManager) {
 	})
 
 	putGSettings.Connect("changed", func(s *gio.Settings, key string) {
+		if !KeyIsExist(key) {
+			return
+		}
 		tmp := putGSettings.GetString(key)
 		value := GetSystemValue(key, false)
 		if tmp == value {
@@ -228,4 +240,14 @@ func ListenCompiz(m *BindManager) {
 		}
 		UpdateSystemShortcut(key, tmp)
 	})
+}
+
+func KeyIsExist(key string) bool {
+	for _, v := range IdNameMap {
+		if v == key {
+			return true
+		}
+	}
+
+	return false
 }

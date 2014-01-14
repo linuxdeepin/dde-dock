@@ -173,9 +173,7 @@ grab_key_event_cb (XPointer user_data, XRecordInterceptData *hook)
             g_debug ("key_press_cnt: %d\n", key_press_cnt);
 
             if (key_press_cnt == 1) {
-                if ( !is_grabbed() ) {
-                    exec_action (keycode);
-                }
+                exec_action (keycode);
             }
 
             key_press_cnt = 0;
@@ -219,7 +217,9 @@ exec_action (int code)
     g_debug ("exec action: %s\n", action);
 
     if (action) {
-        g_spawn_command_line_sync (action, NULL, NULL, NULL, NULL);
+        if (!is_grabbed()) {
+            g_spawn_command_line_sync (action, NULL, NULL, NULL, NULL);
+        }
     }
 }
 

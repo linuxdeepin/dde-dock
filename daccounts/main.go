@@ -39,6 +39,7 @@ type User struct {
 	Locked         bool   `access:"readwrite"`
 	PasswordMode   int32  `access:"readwrite"`
 	UserName       string `access:"readwrite"`
+        BackgroundFile string `access:"readwrite"`
 	LoginTime      int64
 	Uid            uint64
 	objectPath     string
