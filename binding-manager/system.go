@@ -180,18 +180,31 @@ func UpdateSystemShortcut(key, value string) {
 
 func UpdateCompizValue(id int32, key, shortcut string) {
 	if id >= 600 && id < 800 {
+                if IsInvalidConflict(id) {
+                        wmGSettings.SetStrv(key, []string{})
+                        return
+                }
 		values := wmGSettings.GetStrv(key)
+                if len(values) >= 1 {
 		if values[0] == shortcut {
 			return
-		}
+		}}
 		wmGSettings.SetStrv(key, []string{shortcut})
 	} else if id >= 800 && id < 900 {
+                if IsInvalidConflict(id) {
+                        shiftGSettings.SetStrv(key, []string{})
+                        return
+                }
 		value := shiftGSettings.GetString(key)
 		if value == shortcut {
 			return
 		}
 		shiftGSettings.SetString(key, shortcut)
 	} else if id >= 900 && id < 1000 {
+                if IsInvalidConflict(id) {
+                        putGSettings.SetStrv(key, []string{})
+                        return
+                }
 		value := putGSettings.GetString(key)
 		if value == shortcut {
 			return
