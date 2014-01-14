@@ -68,6 +68,17 @@ func NewDisplay() *Display {
 	if err != nil {
 		panic("GetScreenInfo Failed:" + err.Error())
 	}
+	dpy.updateResources()
+	dpy.updateScreenSize(DefaultScreen.WidthInPixels, DefaultScreen.HeightInPixels)
+
+	dpy.updatePrimary()
+
+	randr.SelectInput(X, Root, randr.NotifyMaskOutputChange|randr.NotifyMaskCrtcChange|randr.NotifyMaskScreenChange)
+	go dpy.listener()
+	return dpy
+}
+
+func (dpy *Display) updateResources() {
 
 	resources, err := randr.GetScreenResources(X, Root).Reply()
 	LastConfigTimeStamp = resources.ConfigTimestamp
@@ -84,13 +95,6 @@ func NewDisplay() *Display {
 		dpy.updateOutputList(output)
 	}
 
-	dpy.updateScreenSize(DefaultScreen.WidthInPixels, DefaultScreen.HeightInPixels)
-
-	dpy.updatePrimary()
-
-	randr.SelectInput(X, Root, randr.NotifyMaskOutputChange|randr.NotifyMaskCrtcChange|randr.NotifyMaskScreenChange)
-	go dpy.listener()
-	return dpy
 }
 
 func (dpy *Display) ShowInfoOnScreen() {
@@ -181,6 +185,7 @@ func (dpy *Display) listener() {
 			}
 		case randr.ScreenChangeNotifyEvent:
 			ee := e.(randr.ScreenChangeNotifyEvent)
+			dpy.updateResources()
 			if LastConfigTimeStamp < ee.ConfigTimestamp {
 				//TODO: monitor changed.
 				dpy.updateRotationAndRelfect(uint16(ee.Rotation))
