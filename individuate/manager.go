@@ -22,19 +22,10 @@
 package main
 
 import (
-	"dlib/dbus"
 	"dlib/dbus/property"
 	"dlib/gio-2.0"
 	"fmt"
 )
-
-func (m *Manager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		MANAGER_DEST,
-		MANAGER_PATH,
-		MANAGER_IFC,
-	}
-}
 
 func NewManager() *Manager {
 	m := &Manager{}
@@ -67,21 +58,21 @@ func NewManager() *Manager {
 		m, "CrossInterval",
 		indiviGSettings, SCHEMA_KEY_CROSS_INTERVAL)
 
-        m.AvailableGtkTheme = GetGtkThemes()
-        m.AvailableIconTheme = GetIconThemes()
-        m.AvailableFontTheme = GetFontThemes()
-        m.AvailableCursorTheme = GetCursorThemes()
-        m.AvailableBackground = GetBackgroundFiles()
-
 	m.isAutoSwitch = false
 	m.quitAutoSwitch = make(chan bool)
 
-	ListenSettings(m)
+	m.setPropThemeInfo("AvailableGtkTheme")
+	m.setPropThemeInfo("AvailableIconTheme")
+	m.setPropThemeInfo("AvailableFontTheme")
+	m.setPropThemeInfo("AvailableCursorTheme")
+	m.setPropThemeInfo("AvailableWindowTheme")
+	m.setPropThemeInfo("AvailableBackground")
+	m.listenSettings()
 
 	return m
 }
 
-func ListenSettings(m *Manager) {
+func (m *Manager) listenSettings() {
 	indiviGSettings.Connect("changed", func(s *gio.Settings, key string) {
 		switch key {
 		case SCHEMA_KEY_CUR_PICT:
@@ -90,18 +81,19 @@ func ListenSettings(m *Manager) {
 					m.quitAutoSwitch <- true
 				}
 				uri := s.GetString(SCHEMA_KEY_CUR_PICT)
-				filename := GetPathFromURI(uri)
+				filename := getPathFromURI(uri)
 				fmt.Println("\tlisten uri: ", uri)
 				fmt.Println("\tlisten path: ", filename)
-				isExist := IsFileExist(filename)
+				isExist := isFileExist(filename)
 				if !isExist {
-					ParseFileNotExist(m)
+					m.parseFileNotExist()
 					return
 				}
+				userManager.BackgroundFile.Set(filename)
 				tmp := []string{}
 				if m.AutoSwitch.Get() {
 					defer func() {
-						go SwitchPictureThread(m)
+						go m.switchPictureThread()
 					}()
 					uris := s.GetStrv(SCHEMA_KEY_URIS)
 					ok, i := IsURIExist(uri, uris)
@@ -115,7 +107,6 @@ func ListenSettings(m *Manager) {
 				l := len(tmp)
 				s.SetStrv(SCHEMA_KEY_URIS, tmp)
 				s.SetInt(SCHEMA_KEY_INDEX, l-1)
-				userManager.BackgroundFile.Set(filename)
 				break
 			}
 		case SCHEMA_KEY_AUTO_SWITCH:
@@ -127,7 +118,7 @@ func ListenSettings(m *Manager) {
 				autoSwitch := s.GetBoolean(SCHEMA_KEY_AUTO_SWITCH)
 				fmt.Println("\tautoSwitch: ", autoSwitch)
 				if autoSwitch {
-					go SwitchPictureThread(m)
+					go m.switchPictureThread()
 				}
 				break
 			}
@@ -136,57 +127,106 @@ func ListenSettings(m *Manager) {
 				/* generate bg blur picture */
 				uris := indiviGSettings.GetStrv(SCHEMA_KEY_URIS)
 				for _, v := range uris {
-					go accountsExtends.BackgroundBlurPictPath(currentUid, GetPathFromURI(v))
+					//go accountsExtends.BackgroundBlurPictPath(currentUid, GetPathFromURI(v))
+					accountsExtends.BackgroundBlurPictPath(currentUid, getPathFromURI(v))
 				}
 				break
 			}
-		case SCHEMA_KEY_CROSS_INTERVAL:
+		case SCHEMA_KEY_DURATION:
 			{
 				if m.isAutoSwitch {
 					m.quitAutoSwitch <- true
 				}
 				if m.AutoSwitch.Get() {
-					go SwitchPictureThread(m)
+					go m.switchPictureThread()
 				}
+				break
+			}
+		case SCHEMA_KEY_GTK:
+			{
+				gtk := infaceSettings.GetString(SCHEMA_KEY_GTK)
+				if gtk == m.GtkTheme.Get() {
+					break
+				}
+				infaceSettings.SetString(SCHEMA_KEY_GTK,
+					m.GtkTheme.Get())
+				break
+			}
+		case SCHEMA_KEY_ICON:
+			{
+				icon := infaceSettings.GetString(SCHEMA_KEY_ICON)
+				if icon == m.IconTheme.Get() {
+					break
+				}
+				infaceSettings.SetString(SCHEMA_KEY_ICON,
+					m.IconTheme.Get())
+				break
+			}
+		case SCHEMA_KEY_FONT:
+			{
+				font := infaceSettings.GetString(SCHEMA_KEY_FONT)
+				if font == m.FontTheme.Get() {
+					break
+				}
+				break
+			}
+		case SCHEMA_KEY_CURSOR:
+			{
+				cursor := infaceSettings.GetString(SCHEMA_KEY_CURSOR)
+				if cursor == m.CursorTheme.Get() {
+					break
+				}
+				infaceSettings.SetString(SCHEMA_KEY_CURSOR,
+					m.CursorTheme.Get())
 				break
 			}
 		default:
 			break
 		}
+		gio.SettingsSync()
 	})
-}
 
-func GetGtkThemes() []ThemeInfo {
-	gtkTheme := []ThemeInfo{}
-
-	gtkTheme = append(gtkTheme, ThemeInfo{Name: "Deepin", Type: "system"})
-	return gtkTheme
-}
-
-func GetIconThemes() []ThemeInfo {
-	iconTheme := []ThemeInfo{}
-
-	iconTheme = append(iconTheme, ThemeInfo{Name: "Deepin", Type: "system"})
-	return iconTheme
-}
-
-func GetFontThemes() []ThemeInfo {
-	fontTheme := []ThemeInfo{}
-
-	fontTheme = append(fontTheme, ThemeInfo{Name: "Deepin", Type: "system"})
-	return fontTheme
-}
-
-func GetCursorThemes() []ThemeInfo {
-	cursorTheme := []ThemeInfo{}
-
-	cursorTheme = append(cursorTheme, ThemeInfo{Name: "Deepin", Type: "system"})
-	return cursorTheme
-}
-
-func GetBackgroundFiles() []ThemeInfo {
-	bgTheme := []ThemeInfo{}
-
-	bgTheme = append(bgTheme, ThemeInfo{Name: "Deepin", Type: "system"})
-	return bgTheme
+	infaceSettings.Connect("changed", func(s *gio.Settings, key string) {
+		switch key {
+		case SCHEMA_KEY_GTK:
+			{
+				gtk := infaceSettings.GetString(SCHEMA_KEY_GTK)
+				if gtk == m.GtkTheme.Get() {
+					break
+				}
+				m.GtkTheme.Set(gtk)
+				break
+			}
+		case SCHEMA_KEY_ICON:
+			{
+				icon := infaceSettings.GetString(SCHEMA_KEY_ICON)
+				if icon == m.IconTheme.Get() {
+					break
+				}
+				m.IconTheme.Set(icon)
+				break
+			}
+		case SCHEMA_KEY_FONT:
+			{
+				font := infaceSettings.GetString(SCHEMA_KEY_FONT)
+				if font == m.FontTheme.Get() {
+					break
+				}
+				m.FontTheme.Set(font)
+				break
+			}
+		case SCHEMA_KEY_CURSOR:
+			{
+				cursor := infaceSettings.GetString(SCHEMA_KEY_CURSOR)
+				if cursor == m.CursorTheme.Get() {
+					break
+				}
+				m.CursorTheme.Set(cursor)
+				break
+			}
+		default:
+			break
+		}
+		gio.SettingsSync()
+	})
 }

@@ -22,53 +22,32 @@
 package main
 
 import (
-	"dbus/com/deepin/daemon/accounts"
-	accext "dbus/com/deepin/dde/api/accounts"
-	"dlib"
 	"dlib/dbus"
-	"fmt"
-	"os/user"
 )
 
-var (
-	accountsExtends *accext.Accounts
-	userManager     *accounts.User
-
-	currentUid string
+const (
+	DISK_INFO_DEST = "com.deepin.daemon.DiskMount"
+	DISK_INFO_PATH = "/com/deepin/daemon/DiskMount"
+	DISK_INFO_IFC  = "com.deepin.daemon.DiskMount"
 )
 
-func InitVariable() {
-	var err error
-
-	accountsExtends, err = accext.NewAccounts("/com/deepin/dde/api/Accounts")
-	if err != nil {
-		fmt.Println("New Accounts Extends Failed.")
-		panic(err)
-	}
-
-	userInfo, _ := user.Current()
-	currentUid = userInfo.Uid
-
-	userManager, err = accounts.NewUser(DACCOUNTS_USER_PATH +
-		dbus.ObjectPath(currentUid))
-	if err != nil {
-		fmt.Println("New User Failed.")
-		panic(err)
+func (m *Manager) GetDBusInfo() dbus.DBusInfo {
+	return dbus.DBusInfo{
+		DISK_INFO_DEST,
+		DISK_INFO_PATH,
+		DISK_INFO_IFC,
 	}
 }
 
-func main() {
-	InitVariable()
-	ReadThemeDir(THEME_DIR)
-	m := NewManager()
-	err := dbus.InstallOnSession(m)
-	if err != nil {
-		panic(err)
+func (m *Manager) setPropName(name string) {
+	switch name {
+	case "DiskList":
+		{
+			m.DiskList = getDiskInfoList()
+                        dbus.NotifyChange(m, name)
+		}
+		break
+	default:
+		break
 	}
-
-	if m.AutoSwitch.Get() {
-		go m.switchPictureThread()
-	}
-	dbus.DealWithUnhandledMessage()
-	dlib.StartLoop()
 }

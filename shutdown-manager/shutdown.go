@@ -13,10 +13,10 @@ type Manager struct{}
 
 const (
 	_LOCK_EXEC         = "/usr/bin/dlock"
-	_REBOOT_EXEC       = "/usr/lib/deepin-daemon/dreboot"
-	_LOGOUT_EXEC       = "/usr/lib/deepin-daemon/dlogout"
-	_SHUTDOWN_EXEC     = "/usr/lib/deepin-daemon/dshutdown"
-	_POWER_CHOOSE_EXEC = "/usr/lib/deepin-daemon/dpowerchoose"
+	_REBOOT_EXEC       = "/usr/lib/deepin-daemon/dpowerchoose --reboot"
+	_LOGOUT_EXEC       = "/usr/lib/deepin-daemon/dpowerchoose --logout"
+	_SHUTDOWN_EXEC     = "/usr/lib/deepin-daemon/dpowerchoose --shutdown"
+	_POWER_CHOOSE_EXEC = "/usr/lib/deepin-daemon/dpowerchoose --choice"
 )
 
 var (

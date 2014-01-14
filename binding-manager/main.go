@@ -39,7 +39,7 @@ import (
 
 type AddAccelRet struct {
 	Id    int32
-	Check *ConflictInfo
+	Check ConflictInfo
 }
 
 func (m *BindManager) GetDBusInfo() dbus.DBusInfo {
@@ -50,11 +50,11 @@ func (m *BindManager) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (m *BindManager) AddKeyBind(name, action, shortcut string) *AddAccelRet {
+func (m *BindManager) AddKeyBind(name, action, shortcut string) AddAccelRet {
 	id := GetMaxIdFromCustom() + 1
 	gs := NewGSettingsById(id)
 	if gs == nil {
-		return nil
+		return AddAccelRet{}
 	}
 	IdGSettingsMap[id] = gs
 
@@ -66,7 +66,7 @@ func (m *BindManager) AddKeyBind(name, action, shortcut string) *AddAccelRet {
 		GrabKeyPairs(CustomPrevPairs, false)
 		GrabKeyPairs(GetCustomPairs(), true)
 	})
-	ret := &AddAccelRet{}
+	ret := AddAccelRet{}
 	ret.Id = id
 	ret.Check = m.ChangeShortcut(id, shortcut)
 
@@ -98,11 +98,8 @@ func KeyIsValid(key string) bool {
 	return false
 }
 
-func (m *BindManager) ChangeShortcut(id int32, shortcut string) *ConflictInfo {
+func (m *BindManager) ChangeShortcut(id int32, shortcut string) ConflictInfo {
 	check := ConflictChecked(id, shortcut)
-	if check == nil {
-		return nil
-	}
 
 	tmpKeys := GetShortcutById(id)
 	tmpConflict := ConflictChecked(id, tmpKeys)
@@ -110,7 +107,7 @@ func (m *BindManager) ChangeShortcut(id int32, shortcut string) *ConflictInfo {
 		InsertConflictInvalidList(id)
 		InsertConflictValidList(check.IdList)
 
-		if tmpConflict != nil && tmpConflict.IsConflict {
+		if tmpConflict.IsConflict {
 			for _, k := range tmpConflict.IdList {
 				if k == id {
 					continue
@@ -122,7 +119,7 @@ func (m *BindManager) ChangeShortcut(id int32, shortcut string) *ConflictInfo {
 		}
 	} else {
 		DeleteConflictInvalidId(id)
-		if tmpConflict != nil && tmpConflict.IsConflict {
+		if tmpConflict.IsConflict {
 			for _, k := range tmpConflict.IdList {
 				if k == id {
 					continue
@@ -148,7 +145,7 @@ func (m *BindManager) DeleteCustomBind(id int32) {
 
 	tmpKeys := GetShortcutById(id)
 	tmpConflict := ConflictChecked(id, tmpKeys)
-	if tmpConflict != nil && tmpConflict.IsConflict {
+	if tmpConflict.IsConflict {
 		for _, k := range tmpConflict.IdList {
 			if k == id {
 				continue

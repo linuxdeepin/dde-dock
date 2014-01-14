@@ -84,14 +84,14 @@ func IsURIExist(uri string, uris []string) (bool, int) {
 	return false, -1
 }
 
-func SwitchPictureThread(m *Manager) {
+func (m *Manager) switchPictureThread() {
 	m.isAutoSwitch = true
 	for {
 		secondNums := m.SwitchDuration.Get()
 		timer := time.NewTimer(time.Second * time.Duration(secondNums))
 		select {
 		case <-timer.C:
-			AutoSwitchPicture(m)
+			m.autoSwitchPicture()
 		case <-m.quitAutoSwitch:
 			m.isAutoSwitch = false
 			return
@@ -99,7 +99,7 @@ func SwitchPictureThread(m *Manager) {
 	}
 }
 
-func AutoSwitchPicture(m *Manager) {
+func (m *Manager) autoSwitchPicture() {
 	uris := indiviGSettings.GetStrv(SCHEMA_KEY_URIS)
 	l := len(uris)
 	if l <= 1 {
@@ -134,7 +134,7 @@ func AutoSwitchPicture(m *Manager) {
 /*
  * get default picture when picture not exist
  */
-func ParseFileNotExist(m *Manager) {
+func (m *Manager) parseFileNotExist() {
 	tmp := []string{}
 	uris := indiviGSettings.GetStrv(SCHEMA_KEY_URIS)
 	uri := m.BackgroundFile.Get()

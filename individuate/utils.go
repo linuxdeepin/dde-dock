@@ -26,7 +26,7 @@ import (
 	"strings"
 )
 
-func IsFileExist(filename string) bool {
+func isFileExist(filename string) bool {
 	_, err := os.Stat(filename)
 	if os.IsNotExist(err) {
 		return false
@@ -35,9 +35,29 @@ func IsFileExist(filename string) bool {
 	return true
 }
 
-func GetPathFromURI(uri string) string {
+func getPathFromURI(uri string) string {
 	if !strings.Contains(uri, "file:///") {
 		return uri
 	}
 	return "/" + strings.TrimLeft(uri, "file:///")
+}
+
+func getFontThemes() []ThemeType {
+	fontTheme := []ThemeType{}
+
+	fontTheme = append(fontTheme, ThemeType{Name: "Deepin", Type: "system"})
+	fontTheme = append(fontTheme, ThemeType{Name: "Deepin1", Type: "system"})
+	fontTheme = append(fontTheme, ThemeType{Name: "Deepin2", Type: "system"})
+	fontTheme = append(fontTheme, ThemeType{Name: "Deepin3", Type: "system"})
+	return fontTheme
+}
+
+func getBackgroundFiles() []ThemeType {
+	bgTheme := []ThemeType{}
+
+	bgTheme = append(bgTheme, ThemeType{Name: "Deepin", Type: "system"})
+	bgTheme = append(bgTheme, ThemeType{Name: "Deepin1", Type: "system"})
+	bgTheme = append(bgTheme, ThemeType{Name: "Deepin2", Type: "system"})
+	bgTheme = append(bgTheme, ThemeType{Name: "Deepin3", Type: "system"})
+	return bgTheme
 }

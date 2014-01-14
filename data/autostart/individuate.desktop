@@ -1,8 +1,8 @@
 [Desktop Entry]
 Type = Application
-Exec = /usr/lib/deepin-daemon/binding-manager &
+Exec = /usr/lib/deepin-daemon/individuate &
 Terminal=false
 Hidden=false
-Name = binding-manager
-Comment = keybind daemon
+Name = individuate
+Comment = individuate daemon
 X-GNOME-Autostart-enabled = true
