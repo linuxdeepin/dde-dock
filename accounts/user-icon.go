@@ -59,6 +59,7 @@ func (u *User) AllHistoryIcons() []string {
 	}
 
 	keyFile := glib.NewKeyFile()
+	defer keyFile.Free()
 	_, err := keyFile.LoadFromFile(homeDir+_ICON_HISTORY_FILE,
 		glib.KeyFileFlagsNone)
 	if err != nil {
@@ -120,6 +121,7 @@ func (u *User) AddIconToUserDir(filename string) bool {
 func (u *User) DeleteUserIcon(filename string) bool {
 	homeDir := os.Getenv("HOME")
 	keyFile := glib.NewKeyFile()
+	defer keyFile.Free()
 	_, err := keyFile.LoadFromFile(homeDir+_ICON_HISTORY_FILE,
 		glib.KeyFileFlagsNone)
 	if err != nil {
@@ -164,6 +166,7 @@ func AddIconToHistory(filename string) bool {
 	}
 
 	keyFile := glib.NewKeyFile()
+	defer keyFile.Free()
 	_, err := keyFile.LoadFromFile(homeDir+_ICON_HISTORY_FILE,
 		glib.KeyFileFlagsNone)
 	if err != nil {

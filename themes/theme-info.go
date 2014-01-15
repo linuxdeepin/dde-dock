@@ -78,6 +78,7 @@ func ReadThemeDir(dir string) {
 func ReadThemeFile(filename string) {
 	//fmt.Printf("Read File: %s\n", filename)
 	conf := glib.NewKeyFile()
+	defer conf.Free()
 	_, err := conf.LoadFromFile(filename, glib.KeyFileFlagsNone)
 	if err != nil {
 		fmt.Printf("Key File Load File Failed: %s\n", err)
@@ -98,7 +99,6 @@ func ReadThemeFile(filename string) {
 		fmt.Printf("Get '%s' Failed: %s\n", THEME_KEY_ICON, err)
 	}
 	info.CursorTheme, err = conf.GetString(THEME_KEY_GROUP, THEME_KEY_CURSOR)
-	conf.Free()
 	if err != nil {
 		fmt.Printf("Get '%s' Failed: %s\n", THEME_KEY_CURSOR, err)
 	}
@@ -125,6 +125,7 @@ func ReadIconDir(dir string) {
 
 func ReadIconFile(filename string) {
 	conf := glib.NewKeyFile()
+	defer conf.Free()
 	_, err := conf.LoadFromFile(filename, glib.KeyFileFlagsNone)
 	if err != nil {
 		fmt.Printf("Key File Load File Failed: %s\n", err)
@@ -132,7 +133,6 @@ func ReadIconFile(filename string) {
 	}
 
 	name, err1 := conf.GetString(ICON_KEY_GROUP, ICON_KEY_NAME)
-	conf.Free()
 	if err1 != nil {
 		fmt.Printf("Get '%s : %s' Failed: %s\n",
 			filename, ICON_KEY_NAME, err1)
