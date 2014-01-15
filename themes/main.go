@@ -37,7 +37,47 @@ var (
 	currentUid string
 )
 
-func InitVariable() {
+func (m *Manager) DeletePictureFromURIS(uri string) {
+	if len(uri) <= 0 {
+		return
+	}
+
+	tempURIS := []string{}
+	uris := indiviGSettings.GetStrv(SCHEMA_KEY_URIS)
+	index := indiviGSettings.GetInt(SCHEMA_KEY_INDEX)
+	currentURI := m.BackgroundFile.Get()
+
+	fmt.Println("del: uris ", uris)
+	for _, v := range uris {
+		if v != uri {
+			tempURIS = append(tempURIS, v)
+		}
+	}
+
+	fmt.Println("del: tmp ", tempURIS)
+	if len(tempURIS) <= 0 {
+		indiviGSettings.Reset("picture-uris")
+		indiviGSettings.SetInt("index", 0)
+		m.BackgroundFile.Set(tempURIS[0])
+		return
+	}
+	indiviGSettings.SetStrv("picture-uris", tempURIS)
+
+	if uri == currentURI {
+		index += 1
+		if index > len(tempURIS) {
+			index = 0
+		}
+		m.BackgroundFile.Set(tempURIS[index])
+	} else {
+		if success, i := isURIExist(currentURI, tempURIS); success {
+			index = i
+		}
+	}
+	indiviGSettings.SetInt("index", index)
+}
+
+func initVariable() {
 	var err error
 
 	accountsExtends, err = accext.NewAccounts("/com/deepin/dde/api/Accounts")
@@ -58,7 +98,7 @@ func InitVariable() {
 }
 
 func main() {
-	InitVariable()
+	initVariable()
 	ReadThemeDir(THEME_DIR)
 	m := NewManager()
 	err := dbus.InstallOnSession(m)
