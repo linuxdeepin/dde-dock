@@ -43,9 +43,8 @@ type GrabManager struct {
 }
 
 const (
-	_GRAB_DEST = "com.deepin.daemon.GrabManager"
-	_GRAB_PATH = "/com/deepin/daemon/GrabManager"
-	_GRAB_IFC  = "com.deepin.daemon.GrabManager"
+	_GRAB_PATH = "/com/deepin/daemon/GrabKey"
+	_GRAB_IFC  = "com.deepin.daemon.GrabKey"
 )
 
 func (m *GrabManager) GetDBusInfo() dbus.DBusInfo {

@@ -55,9 +55,9 @@ type ConflictInfo struct {
 }
 
 const (
-	_BINDING_DEST = "com.deepin.daemon.BindManager"
-	_BINDING_PATH = "/com/deepin/daemon/BindManager"
-	_BINDING_IFC  = "com.deepin.daemon.BindManager"
+	_BINDING_DEST = "com.deepin.daemon.KeyBinding"
+	_BINDING_PATH = "/com/deepin/daemon/KeyBinding"
+	_BINDING_IFC  = "com.deepin.daemon.KeyBinding"
 
 	_BINDING_SCHEMA_ID      = "com.deepin.dde.key-binding"
 	_SYSTEM_SCHEMA_ID       = "com.deepin.dde.key-binding.system"
