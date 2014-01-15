@@ -34,11 +34,11 @@ type ShortcutInfo struct {
 }
 
 type BindManager struct {
-	SystemList    []*ShortcutInfo
-	MediaList     []*ShortcutInfo
-	WindowList    []*ShortcutInfo
-	WorkSpaceList []*ShortcutInfo
-	CustomList    []*ShortcutInfo
+	SystemList    []ShortcutInfo
+	MediaList     []ShortcutInfo
+	WindowList    []ShortcutInfo
+	WorkSpaceList []ShortcutInfo
+	CustomList    []ShortcutInfo
 
 	ConflictValid   []int32
 	ConflictInvalid []int32
@@ -90,12 +90,12 @@ var (
 	shiftGSettings  *gio.Settings
 	putGSettings    *gio.Settings
 
-	X            *xgbutil.XUtil
-	GrabKeyBinds map[*KeyCodeInfo]string
+	X              *xgbutil.XUtil
+	GrabKeyBinds   map[*KeyCodeInfo]string
 	IdGSettingsMap map[int32]*gio.Settings
 
-        CustomPrevPairs map[string]string
-        SystemPrevPairs map[string]string
+	CustomPrevPairs map[string]string
+	SystemPrevPairs map[string]string
 )
 
 var _ModifierMap = map[string]string{

@@ -22,18 +22,18 @@
 package main
 
 import (
-	"dlib/gio-2.0"
+	//"dlib/gio-2.0"
 	"fmt"
 	"github.com/BurntSushi/xgbutil/keybind"
 	"strconv"
 	"strings"
 )
 
-func NewShortcutInfo(id int32, desc, shortcut string) *ShortcutInfo {
-	return &ShortcutInfo{Id: id, Desc: desc, Shortcut: shortcut}
+func newShortcutInfo(id int32, desc, shortcut string) ShortcutInfo {
+	return ShortcutInfo{Id: id, Desc: desc, Shortcut: shortcut}
 }
 
-func NewKeyCodeInfo(shortcut string) *KeyCodeInfo {
+func newKeyCodeInfo(shortcut string) *KeyCodeInfo {
 	mods, keys, err := keybind.ParseString(X, shortcut)
 	if err != nil {
 		fmt.Println("keybind parse string failed: ", err)
@@ -49,7 +49,7 @@ func NewKeyCodeInfo(shortcut string) *KeyCodeInfo {
 	return &KeyCodeInfo{State: state, Detail: detail}
 }
 
-func KeyCodeInfoEqual(keyInfo1, keyInfo2 *KeyCodeInfo) bool {
+func keyCodeInfoEqual(keyInfo1, keyInfo2 *KeyCodeInfo) bool {
 	if keyInfo1 == nil || keyInfo2 == nil {
 		return false
 	}
@@ -62,12 +62,12 @@ func KeyCodeInfoEqual(keyInfo1, keyInfo2 *KeyCodeInfo) bool {
 	return false
 }
 
-func ModifyShortcutById(id int32, shortcut string) {
+func modifyShortcutById(id int32, shortcut string) {
 	if id >= _CUSTOM_ID_BASE {
-		gs := NewGSettingsById(id)
+		gs := newGSettingsById(id)
 		if gs != nil {
 			gs.SetString(_CUSTOM_KEY_SHORTCUT, shortcut)
-			gio.SettingsSync()
+			//gio.SettingsSync()
 		}
 
 		return
@@ -79,9 +79,9 @@ func ModifyShortcutById(id int32, shortcut string) {
 	}
 }
 
-func GetShortcutById(id int32) string {
+func getShortcutById(id int32) string {
 	if id >= _CUSTOM_ID_BASE {
-		gs := NewGSettingsById(id)
+		gs := newGSettingsById(id)
 		if gs != nil {
 			return gs.GetString(_CUSTOM_KEY_SHORTCUT)
 		}
@@ -89,17 +89,17 @@ func GetShortcutById(id int32) string {
 
 	value := ""
 	if key, ok := IdNameMap[id]; ok {
-		value = GetSystemValue(key, false)
+		value = getSystemValue(key, false)
 	}
 
 	return value
 }
 
-func GetAllShortcuts() map[int32]string {
+func getAllShortcuts() map[int32]string {
 	allShortcuts := make(map[int32]string)
 
 	for i, n := range IdNameMap {
-		shortcut := GetSystemValue(n, false)
+		shortcut := getSystemValue(n, false)
 		if len(shortcut) <= 0 {
 			continue
 		}
@@ -109,7 +109,7 @@ func GetAllShortcuts() map[int32]string {
 		allShortcuts[i] = shortcut
 	}
 
-	customShortcuts := GetCustomAccels()
+	customShortcuts := getCustomAccels()
 	for k, v := range customShortcuts {
 		allShortcuts[k] = v
 	}
@@ -117,8 +117,8 @@ func GetAllShortcuts() map[int32]string {
 	return allShortcuts
 }
 
-func ConflictChecked(id int32, shortcut string) ConflictInfo {
-	info := NewKeyCodeInfo(GetXGBShortcut(FormatShortcut(shortcut)))
+func conflictChecked(id int32, shortcut string) ConflictInfo {
+	info := newKeyCodeInfo(getXGBShortcut(formatShortcut(shortcut)))
 	if info == nil {
 		fmt.Println("shortcut invalid. ", shortcut)
 		return ConflictInfo{}
@@ -127,17 +127,17 @@ func ConflictChecked(id int32, shortcut string) ConflictInfo {
 	conflict := ConflictInfo{}
 	conflict.IsConflict = false
 
-	allShortcuts := GetAllShortcuts()
+	allShortcuts := getAllShortcuts()
 	for i, k := range allShortcuts {
 		if i == id {
 			continue
 		}
-		tmp := NewKeyCodeInfo(GetXGBShortcut(FormatShortcut(k)))
+		tmp := newKeyCodeInfo(getXGBShortcut(formatShortcut(k)))
 		if tmp == nil {
 			continue
 		}
 
-		if KeyCodeInfoEqual(info, tmp) {
+		if keyCodeInfoEqual(info, tmp) {
 			conflict.IsConflict = true
 			conflict.IdList = append(conflict.IdList, i)
 		}
@@ -146,7 +146,7 @@ func ConflictChecked(id int32, shortcut string) ConflictInfo {
 	return conflict
 }
 
-func IsValidConflict(id int32) bool {
+func isValidConflict(id int32) bool {
 	validList := bindGSettings.GetStrv(_BINDING_VALID_LIST)
 
 	for _, k := range validList {
@@ -159,10 +159,10 @@ func IsValidConflict(id int32) bool {
 	return false
 }
 
-func InsertConflictValidList(idList []int32) {
+func insertConflictValidList(idList []int32) {
 	validList := bindGSettings.GetStrv(_BINDING_VALID_LIST)
 	for _, k := range idList {
-		if IsValidConflict(k) || IsInvalidConflict(k) {
+		if isValidConflict(k) || isInvalidConflict(k) {
 			continue
 		}
 		tmp := strconv.FormatInt(int64(k), 10)
@@ -170,11 +170,11 @@ func InsertConflictValidList(idList []int32) {
 	}
 
 	bindGSettings.SetStrv(_BINDING_VALID_LIST, validList)
-	gio.SettingsSync()
+	//gio.SettingsSync()
 }
 
-func DeleteConflictValidId(id int32) {
-	if !IsValidConflict(id) {
+func deleteConflictValidId(id int32) {
+	if !isValidConflict(id) {
 		return
 	}
 
@@ -188,10 +188,10 @@ func DeleteConflictValidId(id int32) {
 		tmpList = append(tmpList, k)
 	}
 	bindGSettings.SetStrv(_BINDING_VALID_LIST, tmpList)
-	gio.SettingsSync()
+	//gio.SettingsSync()
 }
 
-func IsInvalidConflict(id int32) bool {
+func isInvalidConflict(id int32) bool {
 	invalidList := bindGSettings.GetStrv(_BINDING_INVALID_LIST)
 
 	for _, k := range invalidList {
@@ -204,8 +204,8 @@ func IsInvalidConflict(id int32) bool {
 	return false
 }
 
-func DeleteConflictInvalidId(id int32) {
-	if !IsInvalidConflict(id) {
+func deleteConflictInvalidId(id int32) {
+	if !isInvalidConflict(id) {
 		return
 	}
 
@@ -219,11 +219,11 @@ func DeleteConflictInvalidId(id int32) {
 		tmpList = append(tmpList, k)
 	}
 	bindGSettings.SetStrv(_BINDING_INVALID_LIST, tmpList)
-	gio.SettingsSync()
+	//gio.SettingsSync()
 }
 
-func InsertConflictInvalidList(id int32) {
-	if IsInvalidConflict(id) {
+func insertConflictInvalidList(id int32) {
+	if isInvalidConflict(id) {
 		return
 	}
 	invalidList := bindGSettings.GetStrv(_BINDING_INVALID_LIST)
@@ -231,10 +231,10 @@ func InsertConflictInvalidList(id int32) {
 	invalidList = append(invalidList, tmp)
 
 	bindGSettings.SetStrv(_BINDING_INVALID_LIST, invalidList)
-	gio.SettingsSync()
+	//gio.SettingsSync()
 }
 
-func IdIsExist(id int32, idList []int32) bool {
+func idIsExist(id int32, idList []int32) bool {
 	for _, v := range idList {
 		if id == v {
 			return true
@@ -244,8 +244,8 @@ func IdIsExist(id int32, idList []int32) bool {
 	return false
 }
 
-func GetXGBShortcut(shortcut string) string {
-	/*str := FormatShortcut(shortcut)
+func getXGBShortcut(shortcut string) string {
+	/*str := formatShortcut(shortcut)
 	if len(str) <= 0 {
 		return ""
 	}*/
@@ -275,7 +275,7 @@ func GetXGBShortcut(shortcut string) string {
  * Output string format: 'control-alt-t'
  */
 
-func FormatShortcut(shortcut string) string {
+func formatShortcut(shortcut string) string {
 	l := len(shortcut)
 
 	if l <= 0 {

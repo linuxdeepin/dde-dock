@@ -62,14 +62,14 @@ func (m *GrabManager) GrabShortcut(wid xproto.Window,
 		wid = X.RootWin()
 	}
 
-	key := GetXGBShortcut(FormatShortcut(shortcut))
+	key := getXGBShortcut(formatShortcut(shortcut))
 	if len(key) <= 0 {
 		return false
 	}
-	if !GrabKeyPress(wid, key) {
+	if !grabKeyPress(wid, key) {
 		return false
 	}
-	keyInfo := NewKeyCodeInfo(key)
+	keyInfo := newKeyCodeInfo(key)
 	GrabKeyBinds[keyInfo] = action
 
 	return true
@@ -81,8 +81,8 @@ func (m *GrabManager) UngrabShortcut(wid xproto.Window,
 		wid = X.RootWin()
 	}
 
-	key := GetXGBShortcut(FormatShortcut(shortcut))
-	return UngrabKey(wid, key)
+	key := getXGBShortcut(formatShortcut(shortcut))
+	return ungrabKey(wid, key)
 }
 
 func (m *GrabManager) GrabKeyboard() {

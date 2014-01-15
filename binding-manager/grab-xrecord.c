@@ -155,6 +155,7 @@ static void
 grab_key_event_cb (XPointer user_data, XRecordInterceptData *hook)
 {
     if ( hook->category != XRecordFromServer ) {
+        XRecordFreeData(hook);
         g_warning ("Data not from X server...");
         return;
     }
@@ -183,6 +184,7 @@ grab_key_event_cb (XPointer user_data, XRecordInterceptData *hook)
             key_press_cnt++;
             break;
     }
+        XRecordFreeData(hook);
 }
 
 void
@@ -218,7 +220,7 @@ exec_action (int code)
 
     if (action) {
         if (!is_grabbed()) {
-            g_spawn_command_line_sync (action, NULL, NULL, NULL, NULL);
+            g_spawn_command_line_async (action, NULL);
         }
     }
 }
