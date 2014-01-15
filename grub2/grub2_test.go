@@ -1,10 +1,14 @@
 package main
 
 import (
+	. "launchpad.net/gocheck"
 	"testing"
 )
 
-var _TEST_MENU_CONTENT string = `
+func Test(t *testing.T) { TestingT(t) }
+
+var (
+	_TEST_MENU_CONTENT = `
 menuentry 'LinuxDeepin GNU/Linux' --class linuxdeepin --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-simple' {
 recordfail
 }
@@ -14,7 +18,7 @@ submenu 'Advanced options for LinuxDeepin GNU/Linux' $menuentry_id_option 'gnuli
 		echo	'载入 Linux 3.11.0-15-generic ...'
 	}
 `
-var _TEST_MENU_CONTENT_LONG string = `
+	_TEST_MENU_CONTENT_LONG = `
 menuentry 'LinuxDeepin GNU/Linux' --class linuxdeepin --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-simple' {
 recordfail
 	load_video
@@ -32,7 +36,7 @@ submenu 'Advanced options for LinuxDeepin GNU/Linux' $menuentry_id_option 'gnuli
 menuentry 'Other OS' {
 }
 `
-var _TEST_CONFIG_CONTENT string = `
+	_TEST_CONFIG_CONTENT = `
 # comment line
 GRUB_DEFAULT="0"
 GRUB_HIDDEN_TIMEOUT="0"
@@ -43,8 +47,16 @@ GRUB_GFXMODE="1024x768"
   GRUB_BACKGROUND=/boot/grub/background.png
   GRUB_THEME="/boot/grub/themes/demo/theme.txt"
 `
+)
 
-func TestParseTitle(t *testing.T) {
+var grub *Grub2
+
+func init() {
+	grub = NewGrub2()
+	Suite(grub)
+}
+
+func (grub *Grub2) TestParseTitle(c *C) {
 	var tests = []struct {
 		s, want string
 	}{
@@ -53,17 +65,13 @@ func TestParseTitle(t *testing.T) {
 		{`submenu 'Advanced options for LinuxDeepin GNU/Linux'`, `Advanced options for LinuxDeepin GNU/Linux`},
 		{``, ``},
 	}
-	grub := &Grub2{}
-	for _, c := range tests {
-		got, _ := grub.parseTitle(c.s)
-		if got != c.want {
-			t.Errorf("parseTitle(%q) == %q, want %q", c.s, got, c.want)
-		}
+	for _, t := range tests {
+		got, _ := grub.parseTitle(t.s)
+		c.Check(got, Equals, t.want)
 	}
 }
 
-func TestParseEntries(t *testing.T) {
-	grub := &Grub2{}
+func (grub *Grub2) TestParseEntries(c *C) {
 	wantEntyTitles := []string{
 		`LinuxDeepin GNU/Linux`,
 		`Advanced options for LinuxDeepin GNU/Linux`,
@@ -74,18 +82,13 @@ func TestParseEntries(t *testing.T) {
 	}
 
 	grub.parseEntries(_TEST_MENU_CONTENT_LONG)
-	if len(grub.entries) != len(wantEntyTitles) {
-		t.Errorf("entriesCount == %v, want %v", len(grub.entries), len(wantEntyTitles))
-	}
+	c.Check(len(grub.entries), Equals, len(wantEntyTitles))
 	for i, entry := range grub.entries {
-		if entry.getFullTitle() != wantEntyTitles[i] {
-			t.Errorf("entryTitle == %q, want %q", entry.getFullTitle(), wantEntyTitles[i])
-		}
+		c.Check(entry.getFullTitle(), Equals, wantEntyTitles[i])
 	}
 }
 
-func TestParseSettings(t *testing.T) {
-	grub := &Grub2{}
+func (grub *Grub2) TestParseSettings(c *C) {
 	grub.parseEntries(_TEST_MENU_CONTENT)
 	grub.parseSettings(_TEST_CONFIG_CONTENT)
 
@@ -94,105 +97,55 @@ func TestParseSettings(t *testing.T) {
 	wantTimeout := "10"
 	wantTheme := "/boot/grub/themes/demo/theme.txt"
 
-	settingCount := len(grub.settings)
-	if settingCount != wantSettingCount {
-		t.Errorf("settingCount == %v, want %v", settingCount, wantSettingCount)
-	}
-
-	defaultEntry := grub.settings["GRUB_DEFAULT"]
-	if defaultEntry != wantDefaultEntry {
-		t.Errorf("defaultEntry == %q, want %q", defaultEntry, wantDefaultEntry)
-	}
-
-	timeout := grub.settings["GRUB_TIMEOUT"]
-	if timeout != wantTimeout {
-		t.Errorf("timeout == %q, want %q", timeout, wantTimeout)
-	}
-
-	theme := grub.settings["GRUB_THEME"]
-	if theme != wantTheme {
-		t.Errorf("theme == %q, want %q", theme, wantTheme)
-	}
+	c.Check(len(grub.settings), Equals, wantSettingCount)
+	c.Check(grub.settings["GRUB_DEFAULT"], Equals, wantDefaultEntry)
+	c.Check(grub.settings["GRUB_TIMEOUT"], Equals, wantTimeout)
+	c.Check(grub.settings["GRUB_THEME"], Equals, wantTheme)
 }
 
-func TestGrub2(t *testing.T) {
-	grub := &Grub2{}
+func (grub *Grub2) TestSetterAndGetter(c *C) {
 	grub.parseEntries(_TEST_MENU_CONTENT)
 	grub.parseSettings(_TEST_CONFIG_CONTENT)
 
-	wantEntryCount := 2
-	entriesCount := len(grub.GetEntryTitles())
-	if entriesCount != wantEntryCount {
-		t.Errorf("entriesCount == %v, want %v", entriesCount, wantEntryCount)
-	}
+	c.Check(len(grub.GetEntryTitles()), Equals, 2)
 
 	// default entry
 	wantDefaultEntry := `LinuxDeepin GNU/Linux`
-	defaultEntry := grub.getDefaultEntry()
-	if defaultEntry != wantDefaultEntry {
-		t.Errorf("defaultEntry == %q, want %q", defaultEntry, wantDefaultEntry)
-	}
+	c.Check(grub.getDefaultEntry(), Equals, wantDefaultEntry)
 	wantDefaultEntry = `Advanced options for LinuxDeepin GNU/Linux>LinuxDeepin GNU/Linux，Linux 3.11.0-15-generic`
 	grub.setDefaultEntry(wantDefaultEntry)
-	defaultEntry = grub.getDefaultEntry()
-	if defaultEntry != wantDefaultEntry {
-		t.Errorf("defaultEntry == %q, want %q", defaultEntry, wantDefaultEntry)
-	}
+	c.Check(grub.getDefaultEntry(), Equals, wantDefaultEntry)
 
 	// timeout
 	wantTimeout := int32(10)
-	timeout := grub.getTimeout()
-	if timeout != wantTimeout {
-		t.Errorf("timeout == %v, want %v", timeout, wantTimeout)
-	}
+	c.Check(grub.getTimeout(), Equals, wantTimeout)
 	wantTimeout = int32(15)
 	grub.setTimeout(wantTimeout)
-	timeout = grub.getTimeout()
-	if timeout != wantTimeout {
-		t.Errorf("timeout == %v, want %v", timeout, wantTimeout)
-	}
+	c.Check(grub.getTimeout(), Equals, wantTimeout)
 
 	// gfxmode
 	wantGfxmode := "1024x768"
-	gfxmode := grub.getGfxmode()
-	if gfxmode != wantGfxmode {
-		t.Errorf("gfxmode == %q, want %q", gfxmode, wantGfxmode)
-	}
+	c.Check(grub.getGfxmode(), Equals, wantGfxmode)
 	wantGfxmode = "saved"
 	grub.setGfxmode(wantGfxmode)
-	gfxmode = grub.getGfxmode()
-	if gfxmode != wantGfxmode {
-		t.Errorf("gfxmode == %q, want %q", gfxmode, wantGfxmode)
-	}
+	c.Check(grub.getGfxmode(), Equals, wantGfxmode)
 
 	// background
 	wantBackground := "/boot/grub/background.png"
-	background := grub.getBackground()
-	if background != wantBackground {
-		t.Errorf("background == %q, want %q", background, wantBackground)
-	}
+	c.Check(grub.getBackground(), Equals, wantBackground)
 	wantBackground = "another_background.png"
 	grub.setBackground(wantBackground)
-	background = grub.getBackground()
-	if background != wantBackground {
-		t.Errorf("background == %q, want %q", background, wantBackground)
-	}
+	c.Check(grub.getBackground(), Equals, wantBackground)
 
 	// theme
 	wantTheme := "/boot/grub/themes/demo/theme.txt"
-	theme := grub.getTheme()
-	if theme != wantTheme {
-		t.Errorf("theme == %q, want %q", theme, wantTheme)
-	}
+	c.Check(grub.getTheme(), Equals, wantTheme)
 	wantTheme = "another_theme.txt"
 	grub.setTheme(wantTheme)
-	theme = grub.getTheme()
-	if theme != wantTheme {
-		t.Errorf("theme == %q, want %q", theme, wantTheme)
-	}
+	c.Check(grub.getTheme(), Equals, wantTheme)
 }
 
-func TestSaveDefaultSettings(t *testing.T) {
+func (grub *Grub2) TestSaveDefaultSettings(c *C) {
 	testConfigContent := `GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
 `
 	wantConfigContent := `GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
@@ -200,16 +153,12 @@ GRUB_DEFAULT="LinuxDeepin GNU/Linux"
 GRUB_TIMEOUT="5"
 GRUB_GFXMODE="auto"
 `
-	grub := &Grub2{}
 	grub.parseEntries(_TEST_MENU_CONTENT)
 	grub.parseSettings(testConfigContent)
-	configContent := grub.getSettingContentToSave()
-	if configContent != wantConfigContent {
-		t.Errorf("configContent == %s, want %s", configContent, wantConfigContent)
-	}
+	c.Check(grub.getSettingContentToSave(), Equals, wantConfigContent)
 }
 
-func TestSaveSettings(t *testing.T) {
+func (grub *Grub2) TestSaveSettings(c *C) {
 	testConfigContent := `GRUB_DEFAULT="0"
 GRUB_TIMEOUT="10"
 GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
@@ -223,7 +172,6 @@ GRUB_BACKGROUND="/boot/grub/background.png"
 GRUB_THEME="/boot/grub/themes/demo/theme.txt"
 `
 
-	grub := &Grub2{}
 	grub.parseEntries(_TEST_MENU_CONTENT)
 	grub.parseSettings(testConfigContent)
 
@@ -232,8 +180,21 @@ GRUB_THEME="/boot/grub/themes/demo/theme.txt"
 	grub.setGfxmode("auto")
 	grub.setBackground("/boot/grub/background.png")
 	grub.setTheme("/boot/grub/themes/demo/theme.txt")
-	configContent := grub.getSettingContentToSave()
-	if configContent != wantConfigContent {
-		t.Errorf("configContent == %s, want %s", configContent, wantConfigContent)
+	c.Check(grub.getSettingContentToSave(), Equals, wantConfigContent)
+}
+
+func (grub *Grub2) TestGetEntryTitles(c *C) {
+	wantEntyTitles := []string{
+		`LinuxDeepin GNU/Linux`,
+		`Advanced options for LinuxDeepin GNU/Linux>LinuxDeepin GNU/Linux，Linux 3.11.0-15-generic`,
+		`Advanced options for LinuxDeepin GNU/Linux>Inner submenu for test>Menuentry in Level 3`,
+		`Other OS`,
+	}
+
+	grub.parseEntries(_TEST_MENU_CONTENT_LONG)
+	entryTitles := grub.GetEntryTitles()
+	c.Check(len(entryTitles), Equals, len(wantEntyTitles))
+	for i, title := range entryTitles {
+		c.Check(title, Equals, wantEntyTitles[i])
 	}
 }

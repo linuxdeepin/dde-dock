@@ -1,25 +1,26 @@
 package main
 
 import (
-	"testing"
+	. "launchpad.net/gocheck"
 )
 
-func TestQuoteString(t *testing.T) {
+type Util struct{}
+
+var _ = Suite(&Util{})
+
+func (u *Util) TestQuoteString(c *C) {
 	var tests = []struct {
 		s, want string
 	}{
 		{`abc`, `"abc"`},
 		{``, `""`},
 	}
-	for _, c := range tests {
-		got := quoteString(c.s)
-		if got != c.want {
-			t.Errorf("quoteString(%q) == %q, want %q", c.s, got, c.want)
-		}
+	for _, t := range tests {
+		c.Check(quoteString(t.s), Equals, t.want)
 	}
 }
 
-func TestUnquoteString(t *testing.T) {
+func (u *Util) TestUnquoteString(c *C) {
 	var tests = []struct {
 		s, want string
 	}{
@@ -31,10 +32,7 @@ func TestUnquoteString(t *testing.T) {
 		{`  "abc"`, `  "abc"`},
 		{``, ``},
 	}
-	for _, c := range tests {
-		got := unquoteString(c.s)
-		if got != c.want {
-			t.Errorf("unquoteString(%q) == %q, want %q", c.s, got, c.want)
-		}
+	for _, t := range tests {
+		c.Check(unquoteString(t.s), Equals, t.want)
 	}
 }
