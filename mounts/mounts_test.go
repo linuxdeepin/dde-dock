@@ -22,32 +22,54 @@
 package main
 
 import (
-	"dlib/dbus"
+	"launchpad.net/gocheck"
+	"testing"
 )
 
-const (
-	DISK_INFO_DEST = "com.deepin.daemon.DiskMount"
-	DISK_INFO_PATH = "/com/deepin/daemon/DiskMount"
-	DISK_INFO_IFC  = "com.deepin.daemon.DiskMount"
-)
-
-func (m *Manager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		DISK_INFO_DEST,
-		DISK_INFO_PATH,
-		DISK_INFO_IFC,
-	}
+func Test(t *testing.T) {
+	gocheck.TestingT(t)
 }
 
-func (m *Manager) setPropName(name string) {
-	switch name {
-	case "DiskList":
-		{
-			m.DiskList = getDiskInfoList()
-                        dbus.NotifyChange(m, name)
+var op *Manager
+
+func init() {
+	objectMap = make(map[int32]*ObjectInfo)
+
+	op = &Manager{}
+	op.setPropName("DiskList")
+	op.listenSignalChanged()
+	gocheck.Suite(op)
+}
+
+func (op *Manager) TestMount(c *gocheck.C) {
+	for _, info := range op.DiskList {
+		if !info.CanUnmount {
+			op.DeviceMount(info.Id)
 		}
-		break
-	default:
-		break
 	}
+	if c.Failed() {
+                c.Error("Test Mount Failed")
+        }
+}
+
+func (op *Manager) TestUnmount(c *gocheck.C) {
+	for _, info := range op.DiskList {
+		if info.CanUnmount {
+			op.DeviceUnmount(info.Id)
+		}
+	}
+	if c.Failed() {
+                c.Error("Test Mount Failed")
+        }
+}
+
+func (op *Manager) TestEject(c *gocheck.C) {
+	for _, info := range op.DiskList {
+		if info.CanEject {
+			op.DeviceEject(info.Id)
+		}
+	}
+	if c.Failed() {
+                c.Error("Test Mount Failed")
+        }
 }
