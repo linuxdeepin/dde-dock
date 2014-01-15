@@ -44,7 +44,7 @@ type ObjectInfo struct {
 }
 
 type Manager struct {
-	DiskList []*DiskInfo
+	DiskList []DiskInfo
 }
 
 const (
@@ -64,27 +64,19 @@ func (m *Manager) DeviceEject(id int32) {
 		return
 	}
 
+	fmt.Printf("Eject type: %s\n", info.Type)
 	switch info.Type {
 	case "drive":
-		{
-			op := info.Object.(*gio.Drive)
-			op.Eject(gio.MountUnmountFlagsNone, nil, nil)
-		}
-                break
+		op := info.Object.(*gio.Drive)
+		op.Eject(gio.MountUnmountFlagsNone, nil, nil)
 	case "volume":
-		{
-			op := info.Object.(*gio.Volume)
-			op.Eject(gio.MountUnmountFlagsNone, nil, nil)
-		}
-                break
+		op := info.Object.(*gio.Volume)
+		op.Eject(gio.MountUnmountFlagsNone, nil, nil)
 	case "mount":
-		{
-			op := info.Object.(*gio.Mount)
-			op.Eject(gio.MountUnmountFlagsNone, nil, nil)
-		}
-                break
-        default:
-                break
+		op := info.Object.(*gio.Mount)
+		op.Eject(gio.MountUnmountFlagsNone, nil, nil)
+	default:
+		fmt.Printf("'%s' invalid type\n", info.Type)
 	}
 }
 
@@ -95,25 +87,16 @@ func (m *Manager) DeviceMount(id int32) {
 		return
 	}
 
+	fmt.Printf("Mount type: %s\n", info.Type)
 	switch info.Type {
-	case "drive":
-		{
-		}
-                break
 	case "volume":
-		{
-			op := info.Object.(*gio.Volume)
-			op.Mount(gio.MountMountFlagsNone, nil, nil, nil)
-		}
-                break
+		op := info.Object.(*gio.Volume)
+		op.Mount(gio.MountMountFlagsNone, nil, nil, nil)
 	case "mount":
-		{
-			op := info.Object.(*gio.Mount)
-			op.Remount(gio.MountMountFlagsNone, nil, nil, nil)
-		}
-                break
-        default:
-                break
+		op := info.Object.(*gio.Mount)
+		op.Remount(gio.MountMountFlagsNone, nil, nil, nil)
+	default:
+		fmt.Printf("'%s' invalid type\n", info.Type)
 	}
 }
 
@@ -124,79 +107,60 @@ func (m *Manager) DeviceUnmount(id int32) {
 		return
 	}
 
+	fmt.Printf("Unmount type: %s\n", info.Type)
 	switch info.Type {
-	case "drive":
-		{
-		}
-                break
-	case "volume":
-		{
-		}
-                break
 	case "mount":
-		{
-			op := info.Object.(*gio.Mount)
-			op.Unmount(gio.MountUnmountFlagsNone, nil, nil)
-		}
-                break
-        default:
-                break
+		op := info.Object.(*gio.Mount)
+		op.Unmount(gio.MountUnmountFlagsNone, nil, nil)
+	default:
+		fmt.Printf("'%s' invalid type\n", info.Type)
 	}
 }
 
-func newDiskInfo(value interface{}, t string, id int32) *DiskInfo {
-	info := &DiskInfo{}
+func newDiskInfo(value interface{}, t string, id int32) DiskInfo {
+	info := DiskInfo{}
 	info.Id = id
 
 	switch t {
 	case "volume":
-		{
-			v := value.(*gio.Volume)
-			info.Name = v.GetName()
-			info.CanEject = v.CanEject()
-			id := v.GetIdentifier(DEVICE_KIND)
-			if containStart("network", id) {
-				info.Type = "network"
-			} else if info.CanEject {
-				info.Type = "removable"
-			} else {
-				info.Type = "native"
-			}
-			break
+		v := value.(*gio.Volume)
+		info.Name = v.GetName()
+		info.CanEject = v.CanEject()
+		id := v.GetIdentifier(DEVICE_KIND)
+		if containStart("network", id) {
+			info.Type = "network"
+		} else if info.CanEject {
+			info.Type = "removable"
+		} else {
+			info.Type = "native"
 		}
 	case "drive":
-		{
-			v := value.(*gio.Drive)
-			info.Name = v.GetName()
-			info.CanEject = v.CanEject()
-			id := v.GetIdentifier(DEVICE_KIND)
-			if containStart("network", id) {
-				info.Type = "network"
-			} else if info.CanEject {
-				info.Type = "removable"
-			} else {
-				info.Type = "native"
-			}
-			break
+		v := value.(*gio.Drive)
+		info.Name = v.GetName()
+		info.CanEject = v.CanEject()
+		id := v.GetIdentifier(DEVICE_KIND)
+		if containStart("network", id) {
+			info.Type = "network"
+		} else if info.CanEject {
+			info.Type = "removable"
+		} else {
+			info.Type = "native"
 		}
 	case "mount":
-		{
-			v := value.(*gio.Mount)
-			info.Name = v.GetName()
-			info.CanEject = v.CanEject()
-			info.CanUnmount = v.CanUnmount()
-			root := v.GetRoot()
-			if root.IsNative() {
-				info.Type = "native"
-			} else if info.CanEject {
-				info.Type = "removable"
-			} else {
-				info.Type = "network"
-			}
-			break
+		v := value.(*gio.Mount)
+		info.Name = v.GetName()
+		info.CanEject = v.CanEject()
+		info.CanUnmount = v.CanUnmount()
+		root := v.GetRoot()
+		if root.IsNative() {
+			info.Type = "native"
+		} else if info.CanEject {
+			info.Type = "removable"
+		} else {
+			info.Type = "network"
 		}
 	default:
-		break
+		fmt.Printf("'%s' invalid type\n", t)
 	}
 
 	return info
@@ -206,8 +170,8 @@ func newObjectInfo(v interface{}, t string) *ObjectInfo {
 	return &ObjectInfo{Object: v, Type: t}
 }
 
-func driverList() []*DiskInfo {
-	list := []*DiskInfo{}
+func driverList() []DiskInfo {
+	list := []DiskInfo{}
 	drivers := monitor.GetConnectedDrives()
 	for _, driver := range drivers {
 		volumes := driver.GetVolumes()
@@ -240,8 +204,8 @@ func driverList() []*DiskInfo {
 	return list
 }
 
-func volumeList() []*DiskInfo {
-	list := []*DiskInfo{}
+func volumeList() []DiskInfo {
+	list := []DiskInfo{}
 	volumes := monitor.GetVolumes()
 	for _, volume := range volumes {
 		driver := volume.GetDrive()
@@ -266,8 +230,8 @@ func volumeList() []*DiskInfo {
 	return list
 }
 
-func mountList() []*DiskInfo {
-	list := []*DiskInfo{}
+func mountList() []DiskInfo {
+	list := []DiskInfo{}
 	mounts := monitor.GetMounts()
 	for _, mount := range mounts {
 		if mount.IsShadowed() {
@@ -298,8 +262,8 @@ func containStart(str1, str2 string) bool {
 	return true
 }
 
-func getDiskInfoList() []*DiskInfo {
-	list := []*DiskInfo{}
+func getDiskInfoList() []DiskInfo {
+	list := []DiskInfo{}
 
 	destroyObjectMap()
 	l1 := driverList()
@@ -313,56 +277,29 @@ func getDiskInfoList() []*DiskInfo {
 }
 
 func destroyObjectMap() {
-	for k, _ := range objectMap {
+	for k, info := range objectMap {
+		switch info.Type {
+		case "drive":
+			op := info.Object.(*gio.Drive)
+			op.Unref()
+		case "volume":
+			op := info.Object.(*gio.Volume)
+			op.Unref()
+		case "mount":
+			op := info.Object.(*gio.Mount)
+			op.Unref()
+		}
 		delete(objectMap, k)
 	}
 	count = 0
 }
 
-func (m *Manager) listenSignalChanged() {
-	monitor.Connect("mount-added", func(volumeMonitor *gio.VolumeMonitor, mount *gio.Mount) {
-		// Judge whether the property 'mount_and_open' set true
-		// if true, open the device use exec.Command("xdg-open", "device").Run()
-		m.setPropName("DiskList")
-		printDiskInfo(m.DiskList)
-	})
-	monitor.Connect("mount-removed", func(volumeMonitor *gio.VolumeMonitor, mount *gio.Mount) {
-		m.setPropName("DiskList")
-		printDiskInfo(m.DiskList)
-	})
-	monitor.Connect("mount-changed", func(volumeMonitor *gio.VolumeMonitor, mount *gio.Mount) {
-		m.setPropName("DiskList")
-		printDiskInfo(m.DiskList)
-	})
-
-	monitor.Connect("volume-added", func(volumeMonitor *gio.VolumeMonitor, volume *gio.Volume) {
-		m.setPropName("DiskList")
-		printDiskInfo(m.DiskList)
-	})
-	monitor.Connect("volume-removed", func(volumeMonitor *gio.VolumeMonitor, volume *gio.Volume) {
-		m.setPropName("DiskList")
-		printDiskInfo(m.DiskList)
-	})
-	monitor.Connect("volume-changed", func(volumeMonitor *gio.VolumeMonitor, volume *gio.Volume) {
-		m.setPropName("DiskList")
-		printDiskInfo(m.DiskList)
-	})
-
-	monitor.Connect("drive-disconnected", func(volumeMonitor *gio.VolumeMonitor, drive *gio.Drive) {
-		m.setPropName("DiskList")
-		printDiskInfo(m.DiskList)
-	})
-	monitor.Connect("drive-connected", func(volumeMonitor *gio.VolumeMonitor, drive *gio.Drive) {
-		m.setPropName("DiskList")
-		printDiskInfo(m.DiskList)
-	})
-	monitor.Connect("drive-changed", func(volumeMonitor *gio.VolumeMonitor, drive *gio.Drive) {
-		m.setPropName("DiskList")
-		printDiskInfo(m.DiskList)
-	})
-}
-
 func main() {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Printf("recover err: %s\n", err)
+		}
+	}()
 	objectMap = make(map[int32]*ObjectInfo)
 	m := &Manager{}
 	m.setPropName("DiskList")
@@ -375,10 +312,11 @@ func main() {
 	dlib.StartLoop()
 }
 
-func printDiskInfo(infos []*DiskInfo) {
+func printDiskInfo(infos []DiskInfo) {
 	for _, v := range infos {
 		fmt.Printf("Id: %d\n", v.Id)
 		fmt.Printf("Name: %s\n", v.Name)
+		fmt.Printf("Type: %s\n", v.Type)
 		fmt.Println("CanEject:", v.CanEject)
 		fmt.Println("CanUnmount:", v.CanUnmount)
 		fmt.Printf("\n")
