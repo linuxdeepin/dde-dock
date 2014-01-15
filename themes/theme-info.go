@@ -43,10 +43,18 @@ const (
 
 	THEME_DIR        = "/usr/share/themes"
 	THEME_FILE_INDEX = "index.theme"
+
+	ICON_KEY_GROUP = "Icon Theme"
+	ICON_KEY_NAME  = "Name"
+
+	ICON_DIR         = "/usr/share/icons"
+	ICON_FILE_INDEX  = "index.theme"
+	ICON_FILE_CURSOR = "cursor.theme"
 )
 
 var (
 	systemThemes = []*ThemeInfo{}
+	icons        = []string{}
 )
 
 func ReadThemeDir(dir string) {
@@ -70,6 +78,7 @@ func ReadThemeDir(dir string) {
 func ReadThemeFile(filename string) {
 	//fmt.Printf("Read File: %s\n", filename)
 	conf := glib.NewKeyFile()
+	defer conf.Free()
 	_, err := conf.LoadFromFile(filename, glib.KeyFileFlagsNone)
 	if err != nil {
 		fmt.Printf("Key File Load File Failed: %s\n", err)
@@ -94,4 +103,40 @@ func ReadThemeFile(filename string) {
 		fmt.Printf("Get '%s' Failed: %s\n", THEME_KEY_CURSOR, err)
 	}
 	systemThemes = append(systemThemes, info)
+}
+
+func ReadIconDir(dir string) {
+	rets, err := ioutil.ReadDir(dir)
+	if err != nil {
+		fmt.Printf("Read '%s' Failed: %s\n", dir, err)
+		return
+	}
+
+	for _, v := range rets {
+		name := v.Name()
+		//fmt.Printf("Get Name: %s\n", name)
+		if v.IsDir() {
+			ReadIconDir(dir + "/" + name)
+		} else if name == ICON_FILE_INDEX || name == ICON_FILE_CURSOR {
+			ReadIconFile(dir + "/" + name)
+		}
+	}
+}
+
+func ReadIconFile(filename string) {
+	conf := glib.NewKeyFile()
+	defer conf.Free()
+	_, err := conf.LoadFromFile(filename, glib.KeyFileFlagsNone)
+	if err != nil {
+		fmt.Printf("Key File Load File Failed: %s\n", err)
+		return
+	}
+
+	name, err1 := conf.GetString(ICON_KEY_GROUP, ICON_KEY_NAME)
+	if err1 != nil {
+		fmt.Printf("Get '%s : %s' Failed: %s\n",
+			filename, ICON_KEY_NAME, err1)
+		return
+	}
+	icons = append(icons, name)
 }

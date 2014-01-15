@@ -2,6 +2,7 @@ package main
 
 import "github.com/BurntSushi/xgb/xproto"
 import "github.com/BurntSushi/xgb/randr"
+import "dlib/logger"
 import "dlib/dbus"
 import "fmt"
 
@@ -42,11 +43,10 @@ func (op *Output) ListReflect() []uint16 {
 }
 
 func (op *Output) SetMode(id uint32) {
-	// op.Mode will update when receive appropriate event
 	_, err := randr.SetCrtcConfig(X, op.crtc, xproto.TimeCurrentTime, LastConfigTimeStamp,
 		op.Allocation.X, op.Allocation.Y, randr.Mode(id), op.Rotation|op.Reflect, []randr.Output{op.Identify}).Reply()
 	if err != nil {
-		panic(err)
+		logger.Println(fmt.Sprintln("SetCrtcConfig failed:", err, op.crtc))
 	}
 }
 
@@ -99,9 +99,9 @@ func (op *Output) setBrightness(brightness float64) {
 }
 
 func (op *Output) setRotation(rotation uint16) {
-	v := op.Opened
-	defer func() { op.setOpened(v) }()
-	op.setOpened(false)
+	/*v := op.Opened*/
+	/*defer func() { op.setOpened(v) }()*/
+	/*op.setOpened(false)*/
 
 	_, err := randr.SetCrtcConfig(X, op.crtc, xproto.TimeCurrentTime, LastConfigTimeStamp,
 		op.Allocation.X, op.Allocation.Y, op.bestMode, rotation|op.Reflect, []randr.Output{op.Identify}).Reply()
@@ -109,6 +109,14 @@ func (op *Output) setRotation(rotation uint16) {
 		panic(fmt.Sprintln("SetRotation:", rotation, rotation|op.Reflect, err))
 	}
 	op.setPropRotation(rotation)
+
+	{
+		info, err := randr.GetCrtcInfo(X, op.crtc, 0).Reply()
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println("SetRotation:", info.X, info.Y, info.Width, info.Height, info.Rotation)
+	}
 }
 
 func (op *Output) setReflect(reflect uint16) {
@@ -146,7 +154,7 @@ func (op *Output) setOpened(v bool) {
 				continue
 			}
 			s, err := randr.SetCrtcConfig(X, crtc, xproto.TimeCurrentTime, LastConfigTimeStamp,
-				op.Allocation.X, op.Allocation.Y, op.bestMode, 1, []randr.Output{op.Identify}).Reply()
+				op.Allocation.X, op.Allocation.Y, op.bestMode, op.Rotation, []randr.Output{op.Identify}).Reply()
 			if err == nil {
 				fmt.Println("Crtc:", crtc, "for", op.Name, " is ok")
 				break
@@ -218,8 +226,9 @@ func NewOutput(dpy *Display, core randr.Output) *Output {
 	edidProp, _ := randr.GetOutputProperty(X, core, atomEDID, xproto.AtomInteger, 0, 1024, false, false).Reply()
 
 	op := &Output{
-		Identify: core,
-		Name:     getOutputName(edidProp.Data, string(info.Name)),
+		Identify:   core,
+		Name:       getOutputName(edidProp.Data, string(info.Name)),
+		Brightness: 1, //TODO: init this value
 	}
 	op.update(dpy, info)
 	op.updateCrtc(dpy)

@@ -1,8 +1,8 @@
 [Desktop Entry]
 Type = Application
-Exec = /usr/lib/deepin-daemon/binding-manager
-Terminal=true
-Hidden =true
+Exec = /usr/lib/deepin-daemon/binding-manager &
+Terminal=false
+Hidden=false
 Name = binding-manager
 Comment = keybind daemon
 X-GNOME-Autostart-enabled = true

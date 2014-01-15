@@ -1,18 +1,17 @@
 run:=go build -o .out && rm .out
 
 all: 
-	cd binding-manager/ && $(run)
-	cd daccounts/ &&  $(run)
-	cd date-time/ && $(run)
-	cd default-app/ && $(run)
+	cd keybinding/ && $(run)
+	cd accounts/ &&  $(run)
+	cd datetime/ && $(run)
+	cd mime/ && $(run)
 	cd desktop/ && $(run)
-	cd disk-mount-daemon/
+	cd mounts/
 	cd display/ && $(run)
-	cd ext-device/ && $(run)
-	cd individuate/ && $(run)
+	cd inputdevices/ && $(run)
+	cd themes/ && $(run)
 	cd network/ && $(run)
 	cd power/ && $(run)
-	cd shutdown-manager/ && $(run)
 	cd sound/ && $(run)
 	cd system-info/ && $(run)
 

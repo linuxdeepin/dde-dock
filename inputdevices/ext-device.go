@@ -43,12 +43,12 @@ type KeyboardEntry struct {
 }
 
 const (
-	_EXT_DEV_NAME = "com.deepin.daemon.ExtDevManager"
-	_EXT_DEV_PATH = "/com/deepin/daemon/ExtDevManager"
-	_EXT_DEV_IFC  = "com.deepin.daemon.ExtDevManager"
+	_EXT_DEV_NAME = "com.deepin.daemon.InputDevices"
+	_EXT_DEV_PATH = "/com/deepin/daemon/InputDevices"
+	_EXT_DEV_IFC  = "com.deepin.daemon.InputDevices"
 
-	_EXT_ENTRY_PATH = "/com/deepin/daemon/ExtDevManager/"
-	_EXT_ENTRY_IFC  = "com.deepin.daemon.ExtDevManager."
+	_EXT_ENTRY_PATH = "/com/deepin/daemon/InputDevice/"
+	_EXT_ENTRY_IFC  = "com.deepin.daemon.InputDevice."
 
 	_KEYBOARD_REPEAT_SCHEMA = "org.gnome.settings-daemon.peripherals.keyboard"
 	_LAYOUT_SCHEMA          = "org.gnome.libgnomekbd.keyboard"

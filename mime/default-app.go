@@ -118,6 +118,7 @@ func (dapp *DefaultApps) SetDefaultAppViaType(typeName, appID string) bool {
 func NewAppInfoByID(id string) *AppInfo {
 	appInfo := &AppInfo{}
 	keyFile := glib.NewKeyFile()
+        defer keyFile.Free()
 	lang := GetLocalLang()
 
 	_, err1 := keyFile.LoadFromFile(_DESKTOP_PATH+id, glib.KeyFileFlagsNone)
@@ -169,6 +170,7 @@ func GetTerminalList() []string {
 
 func IsTerminalEmulator(fileName string) bool {
 	keyFile := glib.NewKeyFile()
+        defer keyFile.Free()
 	_, err := keyFile.LoadFromFile(fileName, glib.KeyFileFlagsNone)
 	if err != nil {
 		fmt.Println("KeyFile Load File Failed:", err)

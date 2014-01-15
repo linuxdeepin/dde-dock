@@ -11,7 +11,6 @@ import . "launchpad.net/gocheck"
 func delay() {
 	<-time.After(time.Millisecond * 500)
 }
-
 func Test(t *testing.T) { TestingT(t) }
 
 var dpy *Display
@@ -32,7 +31,7 @@ func init() {
 }
 
 func (dpy *Display) TestScreenInfo(c *C) {
-	return
+	/*return*/
 	delay()
 	c.Check(dpy.Width, Equals, DefaultScreen.WidthInPixels)
 	c.Check(dpy.Height, Equals, DefaultScreen.HeightInPixels)
@@ -55,7 +54,7 @@ func (dpy *Display) TestOutputList(c *C) {
 }
 
 func (dpy *Display) TestPrimaryOutput(c *C) {
-	return
+	/*return*/
 	po := dpy.PrimaryOutput
 	savedIdentify := uint32(0)
 	if po != nil {
@@ -87,7 +86,7 @@ func (dpy *Display) TestPrimaryOutput(c *C) {
 }
 
 func (op *Output) TestInfo(c *C) {
-	return
+	/*return*/
 	c.Check(op.Brightness >= 0 && op.Brightness <= 1, Equals, true)
 
 	delay()
@@ -125,7 +124,7 @@ func (op *Output) TestInfo(c *C) {
 }
 
 func (op *Output) TestClose(c *C) {
-	return
+	/*return*/
 	delay()
 
 	v := op.Opened
@@ -139,11 +138,10 @@ func (op *Output) TestClose(c *C) {
 
 	delay()
 	delay()
-	return
 }
 
 func (op *Output) TestRandr(c *C) {
-	return
+	/*return*/
 	rv := op.Rotation
 	fv := op.Reflect
 
@@ -176,17 +174,25 @@ func (op *Output) TestRandr(c *C) {
 }
 
 func (op *Output) TestMode(c *C) {
-	return
+	/*return*/
 	vm := op.Mode
+	vw, vh := dpy.Width, dpy.Height
 	for _, m := range op.ListModes() {
 		delay()
 		op.SetMode(m.ID)
+		delay()
+		delay()
+		c.Check(op.Allocation.Width, Equals, dpy.Width)
+		c.Check(op.Allocation.Height, Equals, dpy.Height)
 	}
-	delay()
 	op.SetMode(vm.ID)
+	delay()
+	delay()
+	c.Check(vw, Equals, dpy.Width)
+	c.Check(vh, Equals, dpy.Height)
 }
 func (op *Output) TestAllocation(c *C) {
-	return
+	/*return*/
 	delay()
 	delay()
 	if op.Name == "LVDS1" {
@@ -201,8 +207,9 @@ func (op *Output) TestAllocation(c *C) {
 }
 
 func (op *Output) TestGramm(c *C) {
-	return
+	/*return*/
 	vb := op.Brightness
+	fmt.Println("TestGramm...", vb)
 
 	for i := 0.1; i < 1; i = i + 0.1 {
 		op.setBrightness(i)
@@ -218,12 +225,18 @@ func (op *Output) TestGramm(c *C) {
 		op.setBrightness(i)
 	}
 
+	delay()
+	delay()
 	op.setBrightness(vb)
+	fmt.Println("TestGrammaaaaaa...", vb)
+	delay()
+	delay()
 	c.Check(op.Brightness, Equals, vb)
 
 }
 
 func (op *Output) TestChangeMode(c *C) {
+	/*return*/
 	op.setRotation(1)
 	delay()
 	delay()
@@ -234,7 +247,7 @@ func (op *Output) TestChangeMode(c *C) {
 }
 
 func TestEnsure(t *testing.T) {
-	return
+	/*return*/
 	if dpy.PrimaryOutput == nil {
 		rect := xproto.Rectangle{0, 0, dpy.Width, dpy.Height}
 		if dpy.PrimaryRect != rect {

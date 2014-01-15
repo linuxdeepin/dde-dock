@@ -17,89 +17,76 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
- *
- * Function: Manager Background switch/add/delete etc...
  **/
 
 package main
 
 import (
-	"dlib/gio-2.0"
-	"fmt"
+	"dlib/dbus"
+	//"dlib/gio-2.0"
 	"math/rand"
 	"time"
+        "fmt"
 )
 
-func (m *Manager) DeletePictureFromURIS(uri string) {
-	if len(uri) <= 0 {
-		return
-	}
-
-	tempURIS := []string{}
-	uris := indiviGSettings.GetStrv(SCHEMA_KEY_URIS)
-	index := indiviGSettings.GetInt(SCHEMA_KEY_INDEX)
-	currentURI := m.BackgroundFile.Get()
-
-	fmt.Println("del: uris ", uris)
-	for _, v := range uris {
-		if v != uri {
-			tempURIS = append(tempURIS, v)
-		}
-	}
-
-	fmt.Println("del: tmp ", tempURIS)
-	if len(tempURIS) <= 0 {
-		indiviGSettings.Reset("picture-uris")
-		indiviGSettings.SetInt("index", 0)
-		m.BackgroundFile.Set(tempURIS[0])
-		return
-	}
-	indiviGSettings.SetStrv("picture-uris", tempURIS)
-
-	if uri == currentURI {
-		index += 1
-		if index > len(tempURIS) {
-			index = 0
-		}
-		m.BackgroundFile.Set(tempURIS[index])
-	} else {
-		if success, i := IsURIExist(currentURI, tempURIS); success {
-			index = i
-		}
-	}
-	indiviGSettings.SetInt("index", index)
-}
-
-func IsURIExist(uri string, uris []string) (bool, int) {
-	if len(uris) <= 0 {
-		return false, -1
-	}
-
-	for i, v := range uris {
-		if v == uri {
-			return true, i
-		}
-	}
-
-	return false, -1
-}
-
-func SwitchPictureThread(m *Manager) {
-	m.isAutoSwitch = true
-	for {
-		secondNums := m.SwitchDuration.Get()
-		timer := time.NewTimer(time.Second * time.Duration(secondNums))
-		select {
-		case <-timer.C:
-			AutoSwitchPicture(m)
-		case <-m.quitAutoSwitch:
-			m.isAutoSwitch = false
-			return
-		}
+func (m *Manager) GetDBusInfo() dbus.DBusInfo {
+	return dbus.DBusInfo{
+		MANAGER_DEST,
+		MANAGER_PATH,
+		MANAGER_IFC,
 	}
 }
 
-func AutoSwitchPicture(m *Manager) {
+func (m *Manager) setPropThemeInfo(name string) {
+	switch name {
+	case "AvailableFontTheme":
+		{
+			m.AvailableBackground = getBackgroundFiles()
+			dbus.NotifyChange(m, name)
+		}
+	case "AvailableBackground":
+		{
+			m.AvailableFontTheme = getFontThemes()
+			dbus.NotifyChange(m, name)
+		}
+	case "AvailableIconTheme":
+		{
+			for _, v := range systemThemes {
+				icon := ThemeType{Name: v.IconTheme, Type: "system"}
+				m.AvailableIconTheme = append(m.AvailableIconTheme, icon)
+			}
+			dbus.NotifyChange(m, name)
+		}
+	case "AvailableGtkTheme":
+		{
+			for _, v := range systemThemes {
+				gtk := ThemeType{Name: v.GtkTheme, Type: "system"}
+				m.AvailableGtkTheme = append(m.AvailableGtkTheme, gtk)
+			}
+			dbus.NotifyChange(m, name)
+		}
+	case "AvailableCursorTheme":
+		{
+			for _, v := range systemThemes {
+				cursor := ThemeType{Name: v.CursorTheme, Type: "system"}
+				m.AvailableCursorTheme = append(m.AvailableCursorTheme, cursor)
+			}
+			dbus.NotifyChange(m, name)
+		}
+	case "AvailableWindowTheme":
+		{
+			for _, v := range systemThemes {
+				window := ThemeType{Name: v.WindowTheme, Type: "system"}
+				m.AvailableWindowTheme = append(m.AvailableWindowTheme, window)
+			}
+			dbus.NotifyChange(m, name)
+		}
+	default:
+                fmt.Printf("'%s': invalid theme property\n", name)
+	}
+}
+
+func (m *Manager) autoSwitchPicture() {
 	uris := indiviGSettings.GetStrv(SCHEMA_KEY_URIS)
 	l := len(uris)
 	if l <= 1 {
@@ -128,17 +115,32 @@ func AutoSwitchPicture(m *Manager) {
 	m.BackgroundFile.Set(uris[index])
 	//fmt.Println("\turi: ", uris[index])
 	indiviGSettings.SetInt(SCHEMA_KEY_INDEX, index)
-	gio.SettingsSync()
+	//gio.SettingsSync()
+}
+
+func (m *Manager) switchPictureThread() {
+	m.isAutoSwitch = true
+	for {
+		secondNums := m.SwitchDuration.Get()
+		timer := time.NewTimer(time.Second * time.Duration(secondNums))
+		select {
+		case <-timer.C:
+			m.autoSwitchPicture()
+		case <-m.quitAutoSwitch:
+			m.isAutoSwitch = false
+			return
+		}
+	}
 }
 
 /*
  * get default picture when picture not exist
  */
-func ParseFileNotExist(m *Manager) {
+func (m *Manager) parseFileNotExist() {
 	tmp := []string{}
 	uris := indiviGSettings.GetStrv(SCHEMA_KEY_URIS)
 	uri := m.BackgroundFile.Get()
-	if ok, i := IsURIExist(uri, uris); ok {
+	if ok, i := isURIExist(uri, uris); ok {
 		for j, v := range uris {
 			if j == i {
 				continue
@@ -153,4 +155,18 @@ func ParseFileNotExist(m *Manager) {
 	indiviGSettings.SetStrv(SCHEMA_KEY_URIS, tmp)
 	m.BackgroundFile.Set(tmp[0])
 	indiviGSettings.SetInt(SCHEMA_KEY_INDEX, 0)
+}
+
+func isURIExist(uri string, uris []string) (bool, int) {
+	if len(uris) <= 0 {
+		return false, -1
+	}
+
+	for i, v := range uris {
+		if v == uri {
+			return true, i
+		}
+	}
+
+	return false, -1
 }
