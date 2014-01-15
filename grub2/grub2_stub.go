@@ -2,6 +2,7 @@ package main
 
 import (
 	"dlib/dbus"
+	"errors"
 	"fmt"
 	"strconv"
 )
@@ -40,18 +41,32 @@ func (grub *Grub2) OnPropertiesChanged(name string, oldv interface{}) {
 	}
 }
 
-func (grub *Grub2) Load() {
-	grub.readEntries()
-	grub.readSettings()
+func (grub *Grub2) Load() error {
+	err := grub.readEntries()
+	if err != nil {
+		return err
+	}
+	err = grub.readSettings()
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
-func (grub *Grub2) Save() {
+func (grub *Grub2) Save() error {
 	// TODO
-	grub.writeSettings()
+	err := grub.writeSettings()
+	if err != nil {
+		return err
+	}
 	grub.generateGrubConfig()
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
-func (grub *Grub2) GetEntryTitles() []string {
+func (grub *Grub2) GetEntryTitles() ([]string, error) {
 	entryTitles := make([]string, 0)
 	for _, entry := range grub.entries {
 		if entry.entryType == MENUENTRY {
@@ -59,9 +74,11 @@ func (grub *Grub2) GetEntryTitles() []string {
 		}
 	}
 	if len(entryTitles) == 0 {
-		logError("there is no menu entry in %s", _GRUB_MENU)
+		s := fmt.Sprintf("there is no menu entry in %s", _GRUB_MENU)
+		logError(s)
+		return entryTitles, errors.New(s)
 	}
-	return entryTitles
+	return entryTitles, nil
 }
 
 func (grub *Grub2) setDefaultEntry(title string) {

@@ -3,6 +3,8 @@ package main
 import (
 	"bufio"
 	"dlib/dbus"
+	"errors"
+	"fmt"
 	"io/ioutil"
 	"regexp"
 	"strconv"
@@ -16,8 +18,10 @@ const (
 	_GRUB_MKCONFIG_EXE = "grub-mkconfig"
 )
 
-var _ENTRY_REGEXP_1 = regexp.MustCompile(`^ *(menuentry|submenu) +'(.*?)'.*$`)
-var _ENTRY_REGEXP_2 = regexp.MustCompile(`^ *(menuentry|submenu) +"(.*?)".*$`)
+var (
+	_ENTRY_REGEXP_1 = regexp.MustCompile(`^ *(menuentry|submenu) +'(.*?)'.*$`)
+	_ENTRY_REGEXP_2 = regexp.MustCompile(`^ *(menuentry|submenu) +"(.*?)".*$`)
+)
 
 type Grub2 struct {
 	entries  []Entry
@@ -32,7 +36,6 @@ type Grub2 struct {
 }
 
 func NewGrub2() *Grub2 {
-	// TODO
 	grub := &Grub2{}
 	grub.InUpdate = false
 	return grub
@@ -46,44 +49,46 @@ func (grub *Grub2) clearSettings() {
 	grub.settings = make(map[string]string)
 }
 
-func (grub *Grub2) readEntries() {
+func (grub *Grub2) readEntries() error {
 	fileContent, err := ioutil.ReadFile(_GRUB_MENU)
 	if err != nil {
 		logError(err.Error()) // TODO
-		return
+		return err
 	}
-	grub.parseEntries(string(fileContent))
+	return grub.parseEntries(string(fileContent))
 }
 
-func (grub *Grub2) readSettings() {
+func (grub *Grub2) readSettings() error {
 	fileContent, err := ioutil.ReadFile(_GRUB_CONFIG)
 	if err != nil {
 		logError(err.Error()) // TODO
-		return
+		return err
 	}
-	grub.parseSettings(string(fileContent))
+	return grub.parseSettings(string(fileContent))
 }
 
-func (grub *Grub2) writeSettings() {
+func (grub *Grub2) writeSettings() error {
 	fileContent := grub.getSettingContentToSave()
 	err := ioutil.WriteFile(_GRUB_CONFIG, []byte(fileContent), 0644)
 	if err != nil {
 		logError(err.Error()) // TODO
-		return
+		return err
 	}
+	return nil
 }
 
-func (grub *Grub2) generateGrubConfig() {
+func (grub *Grub2) generateGrubConfig() error {
 	logInfo("start to generate a new grub configuration file")
 	grub.InUpdate = true
 	// TODO
-	execAndWait(60, _GRUB_MKCONFIG_EXE, "-o", _GRUB_MENU)
+	err := execAndWait(60, _GRUB_MKCONFIG_EXE, "-o", _GRUB_MENU)
 	// execAndWait(60, _GRUB_MKCONFIG_EXE)
 	grub.InUpdate = false
 	logInfo("generate grub configuration finished")
+	return err
 }
 
-func (grub *Grub2) parseEntries(fileContent string) {
+func (grub *Grub2) parseEntries(fileContent string) error {
 	grub.clearEntries()
 
 	inMenuEntry := false
@@ -99,9 +104,10 @@ func (grub *Grub2) parseEntries(fileContent string) {
 		line = strings.TrimSpace(line)
 		if strings.HasPrefix(line, "menuentry ") {
 			if inMenuEntry {
-				logError("a 'menuentry' directive was detected inside the scope of a menuentry")
 				grub.clearEntries()
-				return
+				s := "a 'menuentry' directive was detected inside the scope of a menuentry"
+				logError(s)
+				return errors.New(s)
 			}
 			title, ok := grub.parseTitle(line)
 			if ok {
@@ -113,15 +119,17 @@ func (grub *Grub2) parseEntries(fileContent string) {
 				inMenuEntry = true
 				continue
 			} else {
-				logError("parse entry title failed from: %q", line)
 				grub.clearEntries()
-				return
+				s := fmt.Sprintf("parse entry title failed from: %q", line)
+				logError(s)
+				return errors.New(s)
 			}
 		} else if strings.HasPrefix(line, "submenu ") {
 			if inMenuEntry {
-				logError("a 'submenu' directive was detected inside the scope of a menuentry")
 				grub.clearEntries()
-				return
+				s := "a 'submenu' directive was detected inside the scope of a menuentry"
+				logError(s)
+				return errors.New(s)
 			}
 			title, ok := grub.parseTitle(line)
 			if ok {
@@ -134,9 +142,10 @@ func (grub *Grub2) parseEntries(fileContent string) {
 				numCount[level] = 0
 				continue
 			} else {
-				logError("parse entry title failed from: %q", line)
 				grub.clearEntries()
-				return
+				s := fmt.Sprintf("parse entry title failed from: %q", line)
+				logError(s)
+				return errors.New(s)
 			}
 		} else if line == "}" {
 			if inMenuEntry {
@@ -154,8 +163,9 @@ func (grub *Grub2) parseEntries(fileContent string) {
 	}
 	if err := sl.Err(); err != nil {
 		logError(err.Error())
+		return err
 	}
-
+	return nil
 }
 
 func (grub *Grub2) parseTitle(line string) (string, bool) {
@@ -169,7 +179,7 @@ func (grub *Grub2) parseTitle(line string) (string, bool) {
 	}
 }
 
-func (grub *Grub2) parseSettings(fileContent string) {
+func (grub *Grub2) parseSettings(fileContent string) error {
 	grub.clearSettings()
 
 	s := bufio.NewScanner(strings.NewReader(fileContent))
@@ -186,6 +196,7 @@ func (grub *Grub2) parseSettings(fileContent string) {
 	}
 	if err := s.Err(); err != nil {
 		logError(err.Error())
+		return err
 	}
 
 	// get properties, return default value for the missing property
@@ -201,10 +212,12 @@ func (grub *Grub2) parseSettings(fileContent string) {
 	grub.setGfxmode(grub.Gfxmode)
 	grub.setBackground(grub.Background)
 	grub.setTheme(grub.Theme)
+
+	return nil
 }
 
 func (grub *Grub2) getDefaultEntry() string {
-	entryTitles := grub.GetEntryTitles()
+	entryTitles, _ := grub.GetEntryTitles()
 	firstEntry := ""
 	if len(entryTitles) > 0 {
 		firstEntry = entryTitles[0]
@@ -274,11 +287,19 @@ func (grub *Grub2) getSettingContentToSave() string {
 }
 
 func main() {
+	defer func() {
+		if err := recover(); err != nil {
+			logFatal("grub2 failed: %v", err)
+		}
+	}()
+
 	grub := NewGrub2()
 	grub.Load()
 	err := dbus.InstallOnSystem(grub)
 	if err != nil {
 		panic(err)
 	}
+	dbus.DealWithUnhandledMessage()
+
 	select {}
 }

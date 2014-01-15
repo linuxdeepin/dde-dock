@@ -107,7 +107,8 @@ func (grub *Grub2) TestSetterAndGetter(c *C) {
 	grub.parseEntries(_TEST_MENU_CONTENT)
 	grub.parseSettings(_TEST_CONFIG_CONTENT)
 
-	c.Check(len(grub.GetEntryTitles()), Equals, 2)
+	entryTitles, _ := grub.GetEntryTitles()
+	c.Check(len(entryTitles), Equals, 2)
 
 	// default entry
 	wantDefaultEntry := `LinuxDeepin GNU/Linux`
@@ -192,7 +193,7 @@ func (grub *Grub2) TestGetEntryTitles(c *C) {
 	}
 
 	grub.parseEntries(_TEST_MENU_CONTENT_LONG)
-	entryTitles := grub.GetEntryTitles()
+	entryTitles, _ := grub.GetEntryTitles()
 	c.Check(len(entryTitles), Equals, len(wantEntyTitles))
 	for i, title := range entryTitles {
 		c.Check(title, Equals, wantEntyTitles[i])
