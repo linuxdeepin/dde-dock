@@ -80,16 +80,16 @@ func (m *Manager) listenSignalChanged() {
 		printDiskInfo(m.DiskList)
 	})
 
-	monitor.Connect("drive-disconnected", func(volumeMonitor *gio.VolumeMonitor, drive *gio.Drive) {
-		m.setPropName("DiskList")
-		printDiskInfo(m.DiskList)
-	})
-	monitor.Connect("drive-connected", func(volumeMonitor *gio.VolumeMonitor, drive *gio.Drive) {
-		m.setPropName("DiskList")
-		printDiskInfo(m.DiskList)
-	})
-	monitor.Connect("drive-changed", func(volumeMonitor *gio.VolumeMonitor, drive *gio.Drive) {
-		m.setPropName("DiskList")
-		printDiskInfo(m.DiskList)
-	})
+		monitor.Connect("drive-disconnected", func(volumeMonitor *gio.VolumeMonitor, drive *gio.Drive) {
+			m.setPropName("DiskList")
+			printDiskInfo(m.DiskList)
+		})
+		monitor.Connect("drive-connected", func(volumeMonitor *gio.VolumeMonitor, drive *gio.Drive) {
+			m.setPropName("DiskList")
+			printDiskInfo(m.DiskList)
+		})
+		monitor.Connect("drive-changed", func(volumeMonitor *gio.VolumeMonitor, drive *gio.Drive) {
+			m.setPropName("DiskList")
+			printDiskInfo(m.DiskList)
+		})
 }
