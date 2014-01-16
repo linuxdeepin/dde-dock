@@ -37,19 +37,6 @@ var (
 	connectorTypeAtom = getAtom(X, "ConnectorType")
 	borderAtom        = getAtom(X, "Border")
 	unknownAtom       = getAtom(X, "unknown")
-	VGAAtom           = getAtom(X, "VGA")
-	DVIAtom           = getAtom(X, "DVI")
-	DVIIAtom          = getAtom(X, "DVI-I")
-	DVIAAtom          = getAtom(X, "DVI-A")
-	DVIDAtom          = getAtom(X, "DVI-D")
-	HDMIAtom          = getAtom(X, "HDMI Panel")
-	TVAtom            = getAtom(X, "TV")
-	TVCompositeAtom   = getAtom(X, "TV-Composite")
-	TVSVidoeAtom      = getAtom(X, "TV-SVideo")
-	TVSComponentAtom  = getAtom(X, "TV-Component")
-	TVSCARTAtom       = getAtom(X, "TV-SCART")
-	TVC4Atom          = getAtom(X, "TV-C4")
-	DisplayPort       = getAtom(X, "DisplayPort")
 )
 
 func getOutputName(core randr.Output, defaultName string) string {
@@ -72,14 +59,6 @@ func getOutputName(core randr.Output, defaultName string) string {
 		}
 	}
 	return defaultName
-}
-
-func getContentorType(op randr.Output) xproto.Atom {
-	prop, err := randr.GetOutputProperty(X, op, connectorTypeAtom, xproto.AtomAtom, 0, 1, false, false).Reply()
-	if err != nil {
-		return unknownAtom
-	}
-	return xproto.Atom(xgb.Get32(prop.Data))
 }
 
 func buildMode(info randr.ModeInfo) Mode {
@@ -238,6 +217,13 @@ func parseScreenSize(ops []*Output) (width, height uint16) {
 	return
 }
 
+func fixed2double(v render.Fixed) float32 {
+	return float32(v) / 65536
+}
+func double2fixed(v float32) render.Fixed {
+	return render.Fixed(v * 65536)
+}
+
 func genGammaRamp(size uint16, brightness float64) (red []uint16, green []uint16, blue []uint16) {
 	red = make([]uint16, size)
 	green = make([]uint16, size)
@@ -254,9 +240,9 @@ func genGammaRamp(size uint16, brightness float64) (red []uint16, green []uint16
 
 func genTransformByScale(xScale float32, yScale float32) render.Transform {
 	m := render.Transform{}
-	m.Matrix11 = render.Fixed(xScale * 65536)
-	m.Matrix22 = render.Fixed(yScale * 65536)
-	m.Matrix33 = render.Fixed(1 * 65536)
+	m.Matrix11 = double2fixed(xScale)
+	m.Matrix22 = double2fixed(yScale)
+	m.Matrix33 = double2fixed(1)
 	return m
 }
 
