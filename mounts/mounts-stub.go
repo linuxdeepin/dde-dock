@@ -56,40 +56,40 @@ func (m *Manager) listenSignalChanged() {
 		// Judge whether the property 'mount_and_open' set true
 		// if true, open the device use exec.Command("xdg-open", "device").Run()
 		m.setPropName("DiskList")
-		printDiskInfo(m.DiskList)
+		//printDiskInfo(m.DiskList)
 	})
 	monitor.Connect("mount-removed", func(volumeMonitor *gio.VolumeMonitor, mount *gio.Mount) {
 		m.setPropName("DiskList")
-		printDiskInfo(m.DiskList)
+		//printDiskInfo(m.DiskList)
 	})
 	monitor.Connect("mount-changed", func(volumeMonitor *gio.VolumeMonitor, mount *gio.Mount) {
 		m.setPropName("DiskList")
-		printDiskInfo(m.DiskList)
+		//printDiskInfo(m.DiskList)
 	})
 
 	monitor.Connect("volume-added", func(volumeMonitor *gio.VolumeMonitor, volume *gio.Volume) {
 		m.setPropName("DiskList")
-		printDiskInfo(m.DiskList)
+		//printDiskInfo(m.DiskList)
 	})
 	monitor.Connect("volume-removed", func(volumeMonitor *gio.VolumeMonitor, volume *gio.Volume) {
 		m.setPropName("DiskList")
-		printDiskInfo(m.DiskList)
+		//printDiskInfo(m.DiskList)
 	})
 	monitor.Connect("volume-changed", func(volumeMonitor *gio.VolumeMonitor, volume *gio.Volume) {
 		m.setPropName("DiskList")
-		printDiskInfo(m.DiskList)
+		//printDiskInfo(m.DiskList)
 	})
 
-		monitor.Connect("drive-disconnected", func(volumeMonitor *gio.VolumeMonitor, drive *gio.Drive) {
-			m.setPropName("DiskList")
-			printDiskInfo(m.DiskList)
-		})
-		monitor.Connect("drive-connected", func(volumeMonitor *gio.VolumeMonitor, drive *gio.Drive) {
-			m.setPropName("DiskList")
-			printDiskInfo(m.DiskList)
-		})
-		monitor.Connect("drive-changed", func(volumeMonitor *gio.VolumeMonitor, drive *gio.Drive) {
-			m.setPropName("DiskList")
-			printDiskInfo(m.DiskList)
-		})
+	monitor.Connect("drive-disconnected", func(volumeMonitor *gio.VolumeMonitor, drive *gio.Drive) {
+		m.setPropName("DiskList")
+		//printDiskInfo(m.DiskList)
+	})
+	monitor.Connect("drive-connected", func(volumeMonitor *gio.VolumeMonitor, drive *gio.Drive) {
+		m.setPropName("DiskList")
+		//printDiskInfo(m.DiskList)
+	})
+	monitor.Connect("drive-changed", func(volumeMonitor *gio.VolumeMonitor, drive *gio.Drive) {
+		m.setPropName("DiskList")
+		//printDiskInfo(m.DiskList)
+	})
 }

@@ -2486,7 +2486,8 @@ void pa_sink_input_update_info_cb(pa_context *c,
     {
         pa_sink_input_info_cb(c, i, eol, userdata);
         updateSinkInput(i->index,
-                        self->subscription_event & PA_SUBSCRIPTION_EVENT_TYPE_MASK);
+                        self->subscription_event &
+                        PA_SUBSCRIPTION_EVENT_TYPE_MASK);
     }
     else
     {
@@ -2513,7 +2514,8 @@ void pa_get_sink_input_volume_cb(pa_context *c,
 }
 
 void pa_source_output_info_cb(pa_context *c,
-                              const pa_source_output_info *o, int eol, void *userdata)
+                              const pa_source_output_info *o,
+                              int eol, void *userdata)
 {
     pa *self = userdata;
     source_output_t *source_output = NULL;
@@ -2562,7 +2564,8 @@ void pa_source_output_update_info_cb(pa_context *c,
     {
         pa_source_output_info_cb(c, o, eol, userdata);
         updateSourceOutput(o->index,
-                           self->subscription_event & PA_SUBSCRIPTION_EVENT_TYPE_MASK);
+                           self->subscription_event &
+                           PA_SUBSCRIPTION_EVENT_TYPE_MASK);
     }
     else
     {
@@ -2647,7 +2650,8 @@ int print_sink(const pa_sink_info *l)
                pa_cvolume_max(&l->volume));
         if (l->active_port)
         {
-            printf("\tactive port: name: %s\t description: %s\n", l->active_port->name, l->active_port->description);
+            printf("\tactive port: name: %s\t description: %s\n",
+                   l->active_port->name, l->active_port->description);
         }
     }
     return 0;
