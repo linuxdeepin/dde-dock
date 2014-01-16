@@ -2004,7 +2004,7 @@ void pa_context_subscribe_cb(pa_context *c,
 {
     pa* self = userdata;
     self->subscription_event = t;
-    printf("subscribe_cb type: %d, idx: %d\n", t, idx);
+    /*printf("subscribe_cb type: %d, idx: %d\n", t, idx);*/
     switch (t & PA_SUBSCRIPTION_EVENT_FACILITY_MASK)
     {
     case PA_SUBSCRIPTION_EVENT_CARD:
@@ -2202,7 +2202,7 @@ void pa_card_info_cb(pa_context *c, const pa_card_info*i,
     {
         pa2card(card, i);
     }
-    print_card(i);
+    /*print_card(i);*/
     return;
 }
 
@@ -2256,7 +2256,7 @@ void pa_sink_info_cb(pa_context *c,
     {
         sink = self->sinks + self->n_sinks - 1;
         pa2sink(sink, l);
-        print_sink(l);
+        /*print_sink(l);*/
     }
 }
 
@@ -2284,7 +2284,7 @@ void pa_get_sink_volume_cb(pa_context *c, const pa_sink_info *i, int eol, void *
 {
     if (eol > 0)
     {
-        fprintf(stderr, "End of list\n");
+        /*fprintf(stderr, "End of list\n");*/
         return;
     }
     if (!userdata)
@@ -2336,9 +2336,10 @@ void pa_source_update_info_cb(pa_context *c, const pa_source_info *l,
     pa_source_info_cb(c, l, eol, userdata);
     if (l)
     {
-        print_source(l);
+        /*print_source(l);*/
         updateSource(l->index,
-                     self->subscription_event & PA_SUBSCRIPTION_EVENT_TYPE_MASK);
+                     self->subscription_event &
+                     PA_SUBSCRIPTION_EVENT_TYPE_MASK);
     }
     else
     {
@@ -2347,11 +2348,12 @@ void pa_source_update_info_cb(pa_context *c, const pa_source_info *l,
     }
 }
 
-void pa_get_source_volume_cb(pa_context *c, const pa_source_info *i, int eol, void *userdata)
+void pa_get_source_volume_cb(pa_context *c, const pa_source_info *i,
+                             int eol, void *userdata)
 {
     if (eol > 0)
     {
-        fprintf(stderr, "End of list\n");
+        /*fprintf(stderr, "End of list\n");*/
         return;
     }
     if (!userdata)
@@ -2409,7 +2411,9 @@ void pa_client_info_cb(pa_context *c,
     printf("DEBUG client info %s\n", i ? i->name : NULL);
 }
 
-void pa_sink_input_info_cb(pa_context *c, const pa_sink_input_info *i, int eol, void *userdata)
+void pa_sink_input_info_cb(pa_context *c,
+                           const pa_sink_input_info *i,
+                           int eol, void *userdata)
 {
     pa *self = userdata;
     sink_input_t *sink_input = NULL;
@@ -2447,32 +2451,7 @@ void pa_sink_input_info_cb(pa_context *c, const pa_sink_input_info *i, int eol, 
     strncpy(sink_input->driver, i->driver, sizeof(i->driver) - 1);
     sink_input->proplist = pa_proplist_copy(i->proplist);
 
-    char buf[1024];
-    const char *prop_key = NULL;
-    void *prop_state = NULL;
-    printf("format_info: %s\n", pa_format_info_snprint(buf, 1000, i->format));
-    printf("------------------------------\n");
-    printf("index: %d\n", i->index);
-    printf("name: %s\n", i->name);
-    printf("volume: channels:%d, min:%d, max:%d\n",
-           i->volume.channels,
-           pa_cvolume_min(&i->volume),
-           pa_cvolume_max(&i->volume));
-    printf("mute: %d\n", i->mute);
 
-    /*while ((prop_key=pa_proplist_iterate(i->proplist, &prop_state)))
-    {
-        PyDict_SetItemString(dict,prop_key, PYSTRING_FROMSTRING(pa_proplist_gets(i->proplist, prop_key)));
-    }*/
-
-    while ((prop_key = pa_proplist_iterate(sink_input->proplist, &prop_state)))
-    {
-        printf("  %s: %s\n",
-               prop_key,
-               pa_proplist_gets(sink_input->proplist, prop_key));
-    }
-    printf("format_info: %s\n", pa_format_info_snprint(buf, 1000, i->format));
-    printf("------------------------------\n");
 }
 
 void pa_sink_input_update_info_cb(pa_context *c,
@@ -2666,6 +2645,32 @@ int print_source(const pa_source_info *l)
         printf("\tname: %s\n", l->name);
         printf("\tdescription: %s\n", l->description);
     }
+    return 0;
+}
+
+int print_sink_input(pa_sink_input_info *i)
+{
+    char buf[1024];
+    const char *prop_key = NULL;
+    void *prop_state = NULL;
+    printf("format_info: %s\n", pa_format_info_snprint(buf, 1000, i->format));
+    printf("------------------------------\n");
+    printf("index: %d\n", i->index);
+    printf("name: %s\n", i->name);
+    printf("volume: channels:%d, min:%d, max:%d\n",
+           i->volume.channels,
+           pa_cvolume_min(&i->volume),
+           pa_cvolume_max(&i->volume));
+    printf("mute: %d\n", i->mute);
+
+    while ((prop_key = pa_proplist_iterate(i->proplist, &prop_state)))
+    {
+        printf("  %s: %s\n",
+               prop_key,
+               pa_proplist_gets(i->proplist, prop_key));
+    }
+    printf("format_info: %s\n", pa_format_info_snprint(buf, 1000, i->format));
+    printf("------------------------------\n");
     return 0;
 }
 

@@ -33,7 +33,7 @@ type Audio struct {
 	//signals
 	Changed       func(string)
 	DeviceAdded   func(string)
-	DeviceChanged func(string)
+	DeviceChanged func(string, interface{})
 	DeviceRemoved func(string)
 }
 
@@ -69,7 +69,7 @@ type Sink struct {
 
 	//NVolumeSteps int32
 
-	nports     int32
+	NPorts     int32
 	Ports      []SinkPortInfo
 	ActivePort *SinkPortInfo
 }
@@ -93,7 +93,7 @@ type Source struct {
 	//N_formates int32
 	Volume int32
 
-	nports     int32
+	NPorts     int32
 	Ports      []SourcePortInfo
 	ActivePort *SourcePortInfo
 }
@@ -149,16 +149,22 @@ type Volume struct {
 
 func getDiffProperty(x, y interface{}) map[string]interface{} {
 
+	if x == nil || y == nil {
+		panic("NULL x,y\n")
+	}
+
 	typ := reflect.TypeOf(x)
 	valuex := reflect.ValueOf(x)
 	valuey := reflect.ValueOf(y)
 
+	//get element from pointer
 	if typ.Kind() == reflect.Ptr {
 		typ = typ.Elem()
 		valuex = valuex.Elem()
 		valuey = valuey.Elem()
 	}
 
+	//make the map
 	attrs := make(map[string]interface{})
 
 	//only structs are supported so return an empty result if not
@@ -174,28 +180,30 @@ func getDiffProperty(x, y interface{}) map[string]interface{} {
 		if !fielda.Anonymous {
 			fvaluea := valuex.Field(i)
 			fvalueb := valuey.Field(i)
-			va := fvaluea.Interface()
-			vb := fvalueb.Interface()
-			switch fielda.Type.Kind() {
-			case reflect.Int32:
-				ia := va.(int32)
-				ib := vb.(int32)
-				if ia != ib {
-					attrs[fielda.Name] = vb
+			if fvaluea.CanSet() && fvalueb.CanSet() {
+				va := fvaluea.Interface()
+				vb := fvalueb.Interface()
+				switch fielda.Type.Kind() {
+				case reflect.Int32:
+					ia := va.(int32)
+					ib := vb.(int32)
+					if ia != ib {
+						attrs[fielda.Name] = vb
+					}
+				case reflect.String:
+					sa := va.(string)
+					sb := vb.(string)
+					if sa != sb {
+						attrs[fielda.Name] = vb
+					}
+				case reflect.Map:
+				case reflect.Struct:
+				default:
+					if !reflect.DeepEqual(va, vb) {
+						attrs[fielda.Name] = vb
+					}
+					break
 				}
-			case reflect.String:
-				sa := va.(string)
-				sb := vb.(string)
-				if sa != sb {
-					attrs[fielda.Name] = vb
-				}
-			case reflect.Map:
-			case reflect.Struct:
-				if !reflect.DeepEqual(va, vb) {
-					attrs[fielda.Name] = vb
-				}
-			default:
-				break
 			}
 		}
 	}
@@ -239,9 +247,9 @@ func getSinkFromC(_sink C.sink_t) *Sink {
 	//sink.Cvolume.Values[j] =
 	//*((*uint32)(unsafe.Pointer(&_sink.volume.values[j])))
 	//}
-	sink.nports = int32(_sink.n_ports)
-	sink.Ports = make([]SinkPortInfo, sink.nports)
-	for j := 0; j < int(sink.nports); j = j + 1 {
+	sink.NPorts = int32(_sink.n_ports)
+	sink.Ports = make([]SinkPortInfo, sink.NPorts)
+	for j := 0; j < int(sink.NPorts); j = j + 1 {
 		sink.Ports[j].Available = int32(_sink.ports[j].available)
 		sink.Ports[j].Name = C.GoString(&_sink.ports[j].name[0])
 		sink.Ports[j].Description = C.GoString(&_sink.ports[j].description[0])
@@ -251,7 +259,7 @@ func getSinkFromC(_sink C.sink_t) *Sink {
 			sink.ActivePort = &sink.Ports[j]
 		}
 	}
-	if sink.nports == 0 {
+	if sink.NPorts == 0 {
 		sink.ActivePort = &SinkPortInfo{"", "", 0}
 	}
 	fmt.Println("Index: " + strconv.Itoa(int((sink.Index))) + " Card:" + strconv.Itoa(int(sink.Card)))
@@ -274,9 +282,9 @@ func getSourceFromC(_source C.source_t) *Source {
 	//*((*uint32)(unsafe.Pointer(&_source.volume.values[j])))
 	//}
 
-	source.nports = int32(_source.n_ports)
-	source.Ports = make([]SourcePortInfo, source.nports)
-	for j := 0; j < int(source.nports); j = j + 1 {
+	source.NPorts = int32(_source.n_ports)
+	source.Ports = make([]SourcePortInfo, source.NPorts)
+	for j := 0; j < int(source.NPorts); j = j + 1 {
 		source.Ports[j].Available = int32(_source.ports[j].available)
 		source.Ports[j].Name = C.GoString(&_source.ports[j].name[0])
 		source.Ports[j].Description = C.GoString(&_source.ports[j].description[0])
@@ -286,7 +294,7 @@ func getSourceFromC(_source C.source_t) *Source {
 			source.ActivePort = &source.Ports[j]
 		}
 	}
-	if source.nports == 0 {
+	if source.NPorts == 0 {
 		source.ActivePort = &SourcePortInfo{"", "", 0}
 	}
 
@@ -370,6 +378,7 @@ func updateCard(_index C.int,
 		//i := int32(audio.pa.cards[0].index)
 		audio.cards[index] = getCardFromC(audio.pa.cards[0])
 		dbus.InstallOnSession(audio.cards[index])
+		audio.DeviceAdded(audio.cards[index].GetDBusInfo().Dest)
 		break
 	case C.PA_SUBSCRIPTION_EVENT_CHANGE:
 		newcard := getCardFromC(audio.pa.cards[0])
@@ -379,14 +388,15 @@ func updateCard(_index C.int,
 				audio.cards[index] = newcard
 				dbus.InstallOnSession(audio.cards[i])
 				for key, v := range changes {
-					dbus.NotifyChange(audio.cards[i], key)
-					fmt.Println("updating card property: %v\n", v)
+					audio.DeviceChanged(key, v)
+					fmt.Printf("updating card property %v: %v\n", key, v)
 				}
 				break
 			}
 		}
 		break
 	case C.PA_SUBSCRIPTION_EVENT_REMOVE:
+		audio.DeviceRemoved(audio.cards[index].GetDBusInfo().Dest)
 		dbus.UnInstallObject(audio.cards[index])
 		delete(audio.cards, index)
 		break
@@ -401,23 +411,26 @@ func updateSink(_index C.int,
 	case C.PA_SUBSCRIPTION_EVENT_NEW:
 		audio.sinks[index] = getSinkFromC(audio.pa.sinks[0])
 		dbus.InstallOnSession(audio.sinks[index])
+		audio.DeviceAdded(audio.sinks[index].GetDBusInfo().Dest)
 		break
 	case C.PA_SUBSCRIPTION_EVENT_CHANGE:
 		newsink := getSinkFromC(audio.pa.sinks[0])
 		for i, _ := range audio.sinks {
 			if audio.sinks[i].Index == newsink.Index {
-				changes := getDiffProperty(audio.cards[i], newsink)
+				changes := getDiffProperty(audio.sinks[i], newsink)
 				audio.sinks[i] = newsink
 				dbus.InstallOnSession(audio.sinks[i])
 				for key, v := range changes {
-					dbus.NotifyChange(audio.sinks[i], key)
-					fmt.Println("updating sink property: %v\n", v)
+					audio.DeviceChanged(key, v)
+					//dbus.NotifyChange(audio.sinks[i], key)
+					fmt.Printf("updating sink property %v: %v\n", key, v)
 				}
 				break
 			}
 		}
 
 	case C.PA_SUBSCRIPTION_EVENT_REMOVE:
+		audio.DeviceRemoved(audio.sinks[index].GetDBusInfo().Dest)
 		dbus.UnInstallObject(audio.sinks[index])
 		delete(audio.sinks, index)
 		break
@@ -428,10 +441,10 @@ func updateSink(_index C.int,
 func updateSource(_index C.int,
 	event C.pa_subscription_event_type_t) {
 	index := int(_index)
-	fmt.Print("Updating source property:")
 	switch event {
 	case C.PA_SUBSCRIPTION_EVENT_NEW:
 		audio.sources[index] = getSourceFromC(audio.pa.sources[0])
+		audio.DeviceAdded(audio.sources[index].GetDBusInfo().Dest)
 		dbus.InstallOnSession(audio.sources[index])
 		break
 	case C.PA_SUBSCRIPTION_EVENT_CHANGE:
@@ -441,8 +454,9 @@ func updateSource(_index C.int,
 				changes := getDiffProperty(audio.sources[i], newsource)
 				audio.sources[i] = newsource
 				for key, _ := range changes {
-					dbus.NotifyChange(audio.sources[i], key)
-					fmt.Println("updating source information: %v\n", changes[key])
+					//dbus.NotifyChange(audio.sources[i], key)
+					audio.DeviceChanged(key, changes[key])
+					fmt.Printf("updating source information,%v: %v\n", key, changes[key])
 				}
 				dbus.InstallOnSession(audio.sources[i])
 				break
@@ -453,6 +467,7 @@ func updateSource(_index C.int,
 		break
 	case C.PA_SUBSCRIPTION_EVENT_REMOVE:
 		if audio.sources[index] != nil {
+			audio.DeviceRemoved(audio.sources[index].GetDBusInfo().Dest)
 			dbus.UnInstallObject(audio.sources[index])
 		}
 		delete(audio.sources, index)
