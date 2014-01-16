@@ -63,10 +63,19 @@ func keyCodeInfoEqual(keyInfo1, keyInfo2 *KeyCodeInfo) bool {
 }
 
 func modifyShortcutById(id int32, shortcut string) {
+        tmpKey := strings.ToLower(shortcut)
+        var accel string
+
+        if tmpKey == "super" || tmpKey == "super_l" ||
+        tmpKey == "super-super_l" {
+                accel = "Super"
+        } else {
+                accel = shortcut
+        }
 	if id >= _CUSTOM_ID_BASE {
 		gs := newGSettingsById(id)
 		if gs != nil {
-			gs.SetString(_CUSTOM_KEY_SHORTCUT, shortcut)
+			gs.SetString(_CUSTOM_KEY_SHORTCUT,accel)
 			//gio.SettingsSync()
 		}
 
@@ -74,7 +83,7 @@ func modifyShortcutById(id int32, shortcut string) {
 	}
 
 	if key, ok := IdNameMap[id]; ok {
-		UpdateSystemShortcut(key, shortcut)
+		UpdateSystemShortcut(key,accel)
 		return
 	}
 }
@@ -106,19 +115,27 @@ func getAllShortcuts() map[int32]string {
 		if i >= 300 && i < 500 {
 			continue
 		}
-		allShortcuts[i] = shortcut
+		allShortcuts[i] = strings.ToLower(shortcut)
 	}
 
 	customShortcuts := getCustomAccels()
 	for k, v := range customShortcuts {
-		allShortcuts[k] = v
+		allShortcuts[k] = strings.ToLower(v)
 	}
 
 	return allShortcuts
 }
 
 func conflictChecked(id int32, shortcut string) ConflictInfo {
-	info := newKeyCodeInfo(getXGBShortcut(formatShortcut(shortcut)))
+	tmpKey := strings.ToLower(shortcut)
+	var info *KeyCodeInfo
+
+	if tmpKey == "super-super_l" || tmpKey == "super_l" ||
+        tmpKey == "super" {
+		info = newKeyCodeInfo("Super_L")
+	} else {
+		info = newKeyCodeInfo(getXGBShortcut(formatShortcut(shortcut)))
+	}
 	if info == nil {
 		fmt.Println("shortcut invalid. ", shortcut)
 		return ConflictInfo{}
@@ -132,7 +149,13 @@ func conflictChecked(id int32, shortcut string) ConflictInfo {
 		if i == id {
 			continue
 		}
-		tmp := newKeyCodeInfo(getXGBShortcut(formatShortcut(k)))
+		var tmp *KeyCodeInfo
+
+		if k == "super" {
+			tmp = newKeyCodeInfo("Super_L")
+		} else {
+			tmp = newKeyCodeInfo(getXGBShortcut(formatShortcut(k)))
+		}
 		if tmp == nil {
 			continue
 		}

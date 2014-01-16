@@ -80,7 +80,7 @@ func KeyIsValid(key string) bool {
 
 	fmt.Println("KeyIsValid : ", tmp)
 	switch tmp {
-	case "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9", "f10", "f11", "f12", "print":
+	case "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9", "f10", "f11", "f12", "print", "super_l":
 		return true
 	default:
 		return false
@@ -110,12 +110,14 @@ func (m *BindManager) ChangeShortcut(id int32, shortcut string) ConflictInfo {
 		}
 	} else {
 		deleteConflictInvalidId(id)
+		deleteConflictValidId(id)
 		if tmpConflict.IsConflict {
 			for _, k := range tmpConflict.IdList {
 				if k == id {
 					continue
 				}
 				deleteConflictValidId(k)
+		deleteConflictInvalidId(k)
 			}
 		}
 	}
