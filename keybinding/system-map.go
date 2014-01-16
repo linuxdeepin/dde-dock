@@ -40,6 +40,25 @@ var SystemIdNameMap = map[int32]string{
 	4:   "logout",
 }
 
+var SystemIdIndexMap = map[int32]int32{
+	0:   0,
+	620: 1,
+	2:   2,
+	10:  3,
+	621: 4,
+	622: 5,
+	800: 6,
+	801: 7,
+	3:   8,
+	6:   9,
+	7:   10,
+	8:   11,
+	9:   12,
+	1:   13,
+	5:   14,
+	4:   15,
+}
+
 var SystemNameDescMap = map[string]string{
 	"launcher":                     "Launcher",
 	"show-desktop":                 "Show desktop",
@@ -75,6 +94,22 @@ var MediaIdNameMap = map[int32]string{
 	301: "eject",
 }
 
+var MediaIdIndexMap = map[int32]int32{
+	300: 0,
+	302: 1,
+	303: 2,
+	304: 3,
+	305: 4,
+	306: 5,
+	307: 6,
+	309: 7,
+	308: 8,
+	310: 9,
+	311: 10,
+	312: 11,
+	301: 12,
+}
+
 var MediaNameDescMap = map[string]string{
 	"calculator":  "Launch calculator",
 	"email":       "Launch email client",
@@ -100,6 +135,17 @@ var WindowIdNameMap = map[int32]string{
 	602: "begin-resize",
 	606: "toggle-shaded",
 	600: "activate-window-menu",
+}
+
+var WindowIdIndexMap = map[int32]int32{
+	603: 0,
+	604: 1,
+	607: 2,
+	605: 3,
+	601: 4,
+	602: 5,
+	606: 6,
+	600: 7,
 }
 
 var WindowNameDescMap = map[string]string{
@@ -130,6 +176,25 @@ var WorkSpaceIdNameMap = map[int32]string{
 	618: "move-to-workspace-right",
 	619: "move-to-workspace-up",
 	616: "move-to-workspace-down",
+}
+
+var WorkSpaceIdIndexMap = map[int32]int32{
+	608: 0,
+	609: 1,
+	610: 2,
+	611: 3,
+	613: 4,
+	614: 5,
+	615: 6,
+	612: 7,
+	900: 8,
+	901: 9,
+	902: 10,
+	903: 11,
+	617: 12,
+	618: 13,
+	619: 14,
+	616: 15,
 }
 
 var WorkSpaceNameDescMap = map[string]string{

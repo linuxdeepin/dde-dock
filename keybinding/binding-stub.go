@@ -40,16 +40,20 @@ func (m *BindManager) GetDBusInfo() dbus.DBusInfo {
 func (m *BindManager) setPropList(listName string) {
 	switch listName {
 	case "SystemList":
-		m.SystemList = getSystemKeyInfo()
+                tmpList := getSystemKeyInfo()
+		m.SystemList = sortShortcutInfoArray(tmpList)
 		dbus.NotifyChange(m, listName)
 	case "MediaList":
-		m.MediaList = getMediaKeyInfo()
+                tmpList := getMediaKeyInfo()
+		m.MediaList =sortShortcutInfoArray(tmpList)
 		dbus.NotifyChange(m, listName)
 	case "WindowList":
-		m.WindowList = getWindowKeyInfo()
+                tmpList := getWindowKeyInfo()
+		m.WindowList =sortShortcutInfoArray(tmpList)
 		dbus.NotifyChange(m, listName)
 	case "WorkSpaceList":
-		m.WorkSpaceList = getWorkSpaceKeyInfo()
+                tmpList := getWorkSpaceKeyInfo()
+		m.WorkSpaceList =sortShortcutInfoArray(tmpList)
 		dbus.NotifyChange(m, listName)
 	case "CustomList":
 		m.CustomList = getCustomKeyInfo()
@@ -183,6 +187,7 @@ func getSystemKeyInfo() []ShortcutInfo {
 			shortcut := getSystemValue(n, false)
 			tmp := newShortcutInfo(i, desc,
 				formatShortcut(shortcut))
+			tmp.index = SystemIdIndexMap[i]
 			systemInfoList = append(systemInfoList, tmp)
 		}
 	}
@@ -196,6 +201,7 @@ func getMediaKeyInfo() []ShortcutInfo {
 		if desc, ok := MediaNameDescMap[n]; ok {
 			shortcut := getSystemValue(n, false)
 			tmp := newShortcutInfo(i, desc, shortcut)
+			tmp.index = MediaIdIndexMap[i]
 			mediaInfoList = append(mediaInfoList, tmp)
 		}
 	}
@@ -210,6 +216,7 @@ func getWindowKeyInfo() []ShortcutInfo {
 			shortcut := getSystemValue(n, false)
 			tmp := newShortcutInfo(i, desc,
 				formatShortcut(shortcut))
+			tmp.index = WindowIdIndexMap[i]
 			windowInfoList = append(windowInfoList, tmp)
 		}
 	}
@@ -224,6 +231,7 @@ func getWorkSpaceKeyInfo() []ShortcutInfo {
 			shortcut := getSystemValue(n, false)
 			tmp := newShortcutInfo(i, desc,
 				formatShortcut(shortcut))
+			tmp.index = WorkSpaceIdIndexMap[i]
 			workSpaceInfoList = append(workSpaceInfoList, tmp)
 		}
 	}
@@ -235,6 +243,7 @@ func getCustomKeyInfo() []ShortcutInfo {
 	customList := getCustomList()
 	shortcutInfoList := []ShortcutInfo{}
 
+	index := int32(0)
 	for _, k := range customList {
 		tmp := ShortcutInfo{}
 		gs := newGSettingsById(k)
@@ -245,6 +254,8 @@ func getCustomKeyInfo() []ShortcutInfo {
 		tmp.Desc = getCustomValue(gs, _CUSTOM_KEY_NAME)
 		tmp.Shortcut = formatShortcut(
 			getCustomValue(gs, _CUSTOM_KEY_SHORTCUT))
+		tmp.index = index
+		index += 1
 		shortcutInfoList = append(shortcutInfoList, tmp)
 	}
 
@@ -447,4 +458,15 @@ func getCustomAccels() map[int32]string {
 	}
 
 	return customAccels
+}
+
+func sortShortcutInfoArray(array []ShortcutInfo) []ShortcutInfo {
+	l := len(array)
+	orderArray := make([]ShortcutInfo, l)
+
+	for _, v := range array {
+		orderArray[v.index] = v
+	}
+
+	return orderArray
 }
