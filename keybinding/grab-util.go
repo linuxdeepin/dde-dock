@@ -31,15 +31,15 @@ import (
 	"strings"
 )
 
-func GetSystemPairs() map[string]string {
+func getSystemPairs() map[string]string {
 	systemPairs := make(map[string]string)
 	for i, k := range SystemIdNameMap {
 		if i >= 0 && i < 300 {
-			if IsInvalidConflict(i) {
+			if isInvalidConflict(i) {
 				continue
 			}
-			shortcut := GetSystemValue(k, false)
-			action := GetSystemValue(k, true)
+			shortcut := getSystemValue(k, false)
+			action := getSystemValue(k, true)
 			systemPairs[shortcut] = action
 		}
 	}
@@ -48,15 +48,15 @@ func GetSystemPairs() map[string]string {
 	return systemPairs
 }
 
-func GetCustomPairs() map[string]string {
+func getCustomPairs() map[string]string {
 	customPairs := make(map[string]string)
-	customList := GetCustomList()
+	customList := getCustomList()
 
 	for _, i := range customList {
-		if IsInvalidConflict(i) {
+		if isInvalidConflict(i) {
 			continue
 		}
-		gs := NewGSettingsById(i)
+		gs := newGSettingsById(i)
 		if gs == nil {
 			continue
 		}
@@ -65,11 +65,11 @@ func GetCustomPairs() map[string]string {
 		customPairs[shortcut] = action
 	}
 
-        CustomPrevPairs = customPairs
+	CustomPrevPairs = customPairs
 	return customPairs
 }
 
-func GrabKeyPairs(accelPairs map[string]string, grab bool) {
+func grabKeyPairs(accelPairs map[string]string, grab bool) {
 	for k, v := range accelPairs {
 		if len(k) <= 0 {
 			continue
@@ -85,25 +85,25 @@ func GrabKeyPairs(accelPairs map[string]string, grab bool) {
 			continue
 		}
 
-		shortcut := GetXGBShortcut(FormatShortcut(k))
-		keyInfo := NewKeyCodeInfo(shortcut)
+		shortcut := getXGBShortcut(formatShortcut(k))
+		keyInfo := newKeyCodeInfo(shortcut)
 		if keyInfo == nil {
 			fmt.Printf("Failed: key: %s, value: %s\n", k, v)
 			continue
 		}
 
 		if grab {
-			if GrabKeyPress(X.RootWin(), shortcut) {
+			if grabKeyPress(X.RootWin(), shortcut) {
 				GrabKeyBinds[keyInfo] = v
 			}
 		} else {
-			UngrabKey(X.RootWin(), shortcut)
+			ungrabKey(X.RootWin(), shortcut)
 			delete(GrabKeyBinds, keyInfo)
 		}
 	}
 }
 
-func GrabKeyPress(wid xproto.Window, shortcut string) bool {
+func grabKeyPress(wid xproto.Window, shortcut string) bool {
 	if len(shortcut) <= 0 {
 		fmt.Println("grab key args failed...")
 		return false
@@ -124,7 +124,7 @@ func GrabKeyPress(wid xproto.Window, shortcut string) bool {
 	return true
 }
 
-func UngrabKey(wid xproto.Window, shortcut string) bool {
+func ungrabKey(wid xproto.Window, shortcut string) bool {
 	if len(shortcut) <= 0 {
 		return false
 	}
@@ -140,7 +140,7 @@ func UngrabKey(wid xproto.Window, shortcut string) bool {
 	return true
 }
 
-func GetExecAction(k1 *KeyCodeInfo) (bool, string) {
+func getExecAction(k1 *KeyCodeInfo) (bool, string) {
 	for k, v := range GrabKeyBinds {
 		if k1.State == k.State && k.Detail == k1.Detail {
 			return true, v
@@ -150,7 +150,7 @@ func GetExecAction(k1 *KeyCodeInfo) (bool, string) {
 	return false, ""
 }
 
-func ExecCommand(value string) {
+func execCommand(value string) {
 	var cmd *exec.Cmd
 	vals := strings.Split(value, " ")
 	l := len(vals)
@@ -171,7 +171,7 @@ func ExecCommand(value string) {
 	}
 }
 
-func ListenKeyPressEvent() {
+func listenKeyPressEvent() {
 	xevent.KeyPressFun(
 		func(X *xgbutil.XUtil, e xevent.KeyPressEvent) {
 			fmt.Printf("State: %d, Detail: %d\n",
@@ -185,10 +185,10 @@ func ListenKeyPressEvent() {
 				value = keyStr
 			}
 			fmt.Printf("%s pressed...\n", value)
-			tmpInfo := NewKeyCodeInfo(value)
-			if ok, v := GetExecAction(tmpInfo); ok {
+			tmpInfo := newKeyCodeInfo(value)
+			if ok, v := getExecAction(tmpInfo); ok {
 				// 不然按键会阻塞，直到程序推出
-				go ExecCommand(v)
+				go execCommand(v)
 			}
 		}).Connect(X, X.RootWin())
 }

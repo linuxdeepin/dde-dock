@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	_DEFAULT_APPS_DEST = "com.deepin.daemon.DefaultApps"
+	_DEFAULT_APPS_DEST = "com.deepin.daemon.Mime"
 	_DEFAULT_APPS_PATH = "/com/deepin/daemon/DefaultApps"
 	_DEFAULT_APPS_IFC  = "com.deepin.daemon.DefaultApps"
 	_MEDIA_MOUNT_PATH  = "/com/deepin/daemon/MediaMount"

@@ -54,9 +54,9 @@ type Manager struct {
 }
 
 const (
-	MANAGER_DEST = "com.deepin.daemon.Individuation"
-	MANAGER_PATH = "/com/deepin/daemon/Individuation"
-	MANAGER_IFC  = "com.deepin.daemon.Individuation"
+	MANAGER_DEST = "com.deepin.daemon.Themes"
+	MANAGER_PATH = "/com/deepin/daemon/Themes"
+	MANAGER_IFC  = "com.deepin.daemon.Themes"
 
 	GSD_SCHEMA_ID      = "org.gnome.desktop.interface"
 	INDIVIDUATE_ID     = "com.deepin.dde.individuate"

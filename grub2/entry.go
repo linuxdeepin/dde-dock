@@ -7,7 +7,6 @@ const (
 	SUBMENU
 )
 
-// type EntryTitle struct{}
 type Entry struct {
 	entryType     EntryType
 	title         string
@@ -16,7 +15,6 @@ type Entry struct {
 }
 
 func (entry *Entry) getFullTitle() string {
-	// TODO
 	if entry.parentSubMenu != nil {
 		return entry.parentSubMenu.getFullTitle() + ">" + entry.title
 	} else {

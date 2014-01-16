@@ -42,29 +42,20 @@ type AddAccelRet struct {
 	Check ConflictInfo
 }
 
-func (m *BindManager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		_BINDING_DEST,
-		_BINDING_PATH,
-		_BINDING_IFC,
-	}
-}
-
 func (m *BindManager) AddKeyBind(name, action, shortcut string) AddAccelRet {
-	id := GetMaxIdFromCustom() + 1
-	gs := NewGSettingsById(id)
+	id := getMaxIdFromCustom() + 1
+	gs := newGSettingsById(id)
 	if gs == nil {
 		return AddAccelRet{}
 	}
 	IdGSettingsMap[id] = gs
 
-	SetCustomValues(gs, id, name, action, "")
+	setCustomValues(gs, id, name, action, "")
 	gs.Connect("changed::shortcut", func(s *gio.Settings, key string) {
 		fmt.Printf("key: %s, value: %s\n", key, gs.GetString(key))
-		m.CustomList = GetCustomKeyInfo()
-		dbus.NotifyChange(m, "CustomList")
-		GrabKeyPairs(CustomPrevPairs, false)
-		GrabKeyPairs(GetCustomPairs(), true)
+		m.setPropList("CustomList")
+		grabKeyPairs(CustomPrevPairs, false)
+		grabKeyPairs(getCustomPairs(), true)
 	})
 	ret := AddAccelRet{}
 	ret.Id = id
@@ -74,22 +65,22 @@ func (m *BindManager) AddKeyBind(name, action, shortcut string) AddAccelRet {
 	customList := bindGSettings.GetStrv(_BINDING_CUSTOM_LIST)
 	customList = append(customList, idStr)
 	bindGSettings.SetStrv(_BINDING_CUSTOM_LIST, customList)
-	gio.SettingsSync()
+	//gio.SettingsSync()
 
-	GrabKeyPairs(CustomPrevPairs, false)
-	GrabKeyPairs(GetCustomPairs(), true)
+	grabKeyPairs(CustomPrevPairs, false)
+	grabKeyPairs(getCustomPairs(), true)
 	return ret
 }
 
 func KeyIsValid(key string) bool {
-	tmp := FormatShortcut(key)
+	tmp := formatShortcut(key)
 	if strings.Contains(tmp, "-") {
 		return true
 	}
 
 	fmt.Println("KeyIsValid : ", tmp)
 	switch tmp {
-	case "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9", "f10", "f11", "f12", "print":
+	case "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9", "f10", "f11", "f12", "print", "super_l":
 		return true
 	default:
 		return false
@@ -99,40 +90,42 @@ func KeyIsValid(key string) bool {
 }
 
 func (m *BindManager) ChangeShortcut(id int32, shortcut string) ConflictInfo {
-	check := ConflictChecked(id, shortcut)
+	check := conflictChecked(id, shortcut)
 
-	tmpKeys := GetShortcutById(id)
-	tmpConflict := ConflictChecked(id, tmpKeys)
+	tmpKeys := getShortcutById(id)
+	tmpConflict := conflictChecked(id, tmpKeys)
 	if check.IsConflict {
-		InsertConflictInvalidList(id)
-		InsertConflictValidList(check.IdList)
+		insertConflictInvalidList(id)
+		insertConflictValidList(check.IdList)
 
 		if tmpConflict.IsConflict {
 			for _, k := range tmpConflict.IdList {
 				if k == id {
 					continue
 				}
-				if !IdIsExist(k, check.IdList) {
-					DeleteConflictValidId(k)
+				if !idIsExist(k, check.IdList) {
+					deleteConflictValidId(k)
 				}
 			}
 		}
 	} else {
-		DeleteConflictInvalidId(id)
+		deleteConflictInvalidId(id)
+		deleteConflictValidId(id)
 		if tmpConflict.IsConflict {
 			for _, k := range tmpConflict.IdList {
 				if k == id {
 					continue
 				}
-				DeleteConflictValidId(k)
+				deleteConflictValidId(k)
+		deleteConflictInvalidId(k)
 			}
 		}
 	}
 
 	if !KeyIsValid(shortcut) {
-		InsertConflictInvalidList(id)
+		insertConflictInvalidList(id)
 	}
-	ModifyShortcutById(id, shortcut)
+	modifyShortcutById(id, shortcut)
 
 	return check
 }
@@ -143,20 +136,20 @@ func (m *BindManager) DeleteCustomBind(id int32) {
 		return
 	}
 
-	tmpKeys := GetShortcutById(id)
-	tmpConflict := ConflictChecked(id, tmpKeys)
+	tmpKeys := getShortcutById(id)
+	tmpConflict := conflictChecked(id, tmpKeys)
 	if tmpConflict.IsConflict {
 		for _, k := range tmpConflict.IdList {
 			if k == id {
 				continue
 			}
-			DeleteConflictValidId(k)
+			deleteConflictValidId(k)
 		}
 	}
-	DeleteConflictValidId(id)
-	DeleteConflictInvalidId(id)
+	deleteConflictValidId(id)
+	deleteConflictInvalidId(id)
 
-	ResetCustomValues(gs)
+	resetCustomValues(gs)
 	gs.Unref()
 	delete(IdGSettingsMap, id)
 
@@ -170,28 +163,7 @@ func (m *BindManager) DeleteCustomBind(id int32) {
 		tmpList = append(tmpList, k)
 	}
 	bindGSettings.SetStrv(_BINDING_CUSTOM_LIST, tmpList)
-	gio.SettingsSync()
-}
-
-func InitConflictList(m *BindManager) {
-	validList := bindGSettings.GetStrv(_BINDING_VALID_LIST)
-	invalidList := bindGSettings.GetStrv(_BINDING_INVALID_LIST)
-
-	for _, k := range validList {
-		tmp, err := strconv.ParseInt(k, 10, 64)
-		if err != nil {
-			continue
-		}
-		m.ConflictValid = append(m.ConflictValid, int32(tmp))
-	}
-
-	for _, k := range invalidList {
-		tmp, err := strconv.ParseInt(k, 10, 64)
-		if err != nil {
-			continue
-		}
-		m.ConflictInvalid = append(m.ConflictInvalid, int32(tmp))
-	}
+	//gio.SettingsSync()
 }
 
 func InitVariable() {
@@ -219,51 +191,21 @@ func InitVariable() {
 	SystemPrevPairs = make(map[string]string)
 }
 
-func InitListen(m *BindManager) {
-	ListenCustom(m)
-	ListenSystem(m)
-	ListenCompiz(m)
-
-	bindGSettings.Connect("changed::conflict-valid", func(s *gio.Settings, key string) {
-		validList := s.GetStrv(_BINDING_VALID_LIST)
-		fmt.Println("chaned valid: ", validList)
-		tmpList := []int32{}
-		for _, k := range validList {
-			tmp, err := strconv.ParseInt(k, 10, 64)
-			if err != nil {
-				continue
-			}
-			tmpList = append(tmpList, int32(tmp))
-		}
-		m.ConflictValid = tmpList
-		dbus.NotifyChange(m, "ConflictValid")
-	})
-
-	bindGSettings.Connect("changed::conflict-invalid", func(s *gio.Settings, key string) {
-		invalidList := s.GetStrv(_BINDING_INVALID_LIST)
-		fmt.Println("changed invalid: ", invalidList)
-		tmpList := []int32{}
-		for _, k := range invalidList {
-			tmp, err := strconv.ParseInt(k, 10, 64)
-			if err != nil {
-				continue
-			}
-			tmpList = append(tmpList, int32(tmp))
-		}
-		m.ConflictInvalid = tmpList
-		dbus.NotifyChange(m, "ConflictInvalid")
-	})
-}
-
 func NewBindManager() *BindManager {
 	m := &BindManager{}
 
-	InitSystemBind(m)
-	InitMediaBind(m)
-	InitWindowBind(m)
-	InitWorkSpaceBind(m)
-	InitCustomBind(m)
-	InitConflictList(m)
+	m.setPropList("SystemList")
+	m.setPropList("MediaList")
+	m.setPropList("WindowList")
+	m.setPropList("WorkSpaceList")
+	m.setPropList("CustomList")
+	m.setPropList("ConflictValid")
+	m.setPropList("ConflictInvalid")
+
+	m.listenCustom()
+	m.listenSystem()
+	m.listenCompiz()
+	m.listenConflict()
 
 	return m
 }
@@ -274,15 +216,14 @@ func main() {
 	defer C.grab_xrecord_finalize()
 
 	bm := NewBindManager()
-	InitListen(bm)
 	dbus.InstallOnSession(bm)
 
 	gm := &GrabManager{}
 	dbus.InstallOnSession(gm)
 
-	GrabKeyPairs(GetSystemPairs(), true)
-	GrabKeyPairs(GetCustomPairs(), true)
-	ListenKeyPressEvent()
+	grabKeyPairs(getSystemPairs(), true)
+	grabKeyPairs(getCustomPairs(), true)
+	listenKeyPressEvent()
 	dbus.DealWithUnhandledMessage()
 
 	go dlib.StartLoop()

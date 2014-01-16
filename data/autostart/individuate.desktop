@@ -1,8 +1,8 @@
 [Desktop Entry]
 Type = Application
-Exec = /usr/lib/deepin-daemon/individuate &
+Exec = /usr/lib/deepin-daemon/themes
 Terminal=false
 Hidden=false
-Name = individuate
-Comment = individuate daemon
+Name =themes
+Comment = themes daemon
 X-GNOME-Autostart-enabled = true

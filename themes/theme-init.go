@@ -96,7 +96,7 @@ func (m *Manager) listenSettings() {
 						go m.switchPictureThread()
 					}()
 					uris := s.GetStrv(SCHEMA_KEY_URIS)
-					ok, i := IsURIExist(uri, uris)
+					ok, i := isURIExist(uri, uris)
 					if ok {
 						s.SetInt(SCHEMA_KEY_INDEX, i)
 						return
@@ -107,7 +107,6 @@ func (m *Manager) listenSettings() {
 				l := len(tmp)
 				s.SetStrv(SCHEMA_KEY_URIS, tmp)
 				s.SetInt(SCHEMA_KEY_INDEX, l-1)
-				break
 			}
 		case SCHEMA_KEY_AUTO_SWITCH:
 			{
@@ -120,7 +119,6 @@ func (m *Manager) listenSettings() {
 				if autoSwitch {
 					go m.switchPictureThread()
 				}
-				break
 			}
 		case SCHEMA_KEY_URIS:
 			{
@@ -130,7 +128,6 @@ func (m *Manager) listenSettings() {
 					//go accountsExtends.BackgroundBlurPictPath(currentUid, GetPathFromURI(v))
 					accountsExtends.BackgroundBlurPictPath(currentUid, getPathFromURI(v))
 				}
-				break
 			}
 		case SCHEMA_KEY_DURATION:
 			{
@@ -140,7 +137,6 @@ func (m *Manager) listenSettings() {
 				if m.AutoSwitch.Get() {
 					go m.switchPictureThread()
 				}
-				break
 			}
 		case SCHEMA_KEY_GTK:
 			{
@@ -160,7 +156,6 @@ func (m *Manager) listenSettings() {
 				}
 				infaceSettings.SetString(SCHEMA_KEY_ICON,
 					m.IconTheme.Get())
-				break
 			}
 		case SCHEMA_KEY_FONT:
 			{
@@ -168,7 +163,6 @@ func (m *Manager) listenSettings() {
 				if font == m.FontTheme.Get() {
 					break
 				}
-				break
 			}
 		case SCHEMA_KEY_CURSOR:
 			{
@@ -178,12 +172,12 @@ func (m *Manager) listenSettings() {
 				}
 				infaceSettings.SetString(SCHEMA_KEY_CURSOR,
 					m.CursorTheme.Get())
-				break
 			}
 		default:
-			break
+                        // other key
+                        fmt.Printf("'%s' changed in themes\n", key)
 		}
-		gio.SettingsSync()
+		//gio.SettingsSync()
 	})
 
 	infaceSettings.Connect("changed", func(s *gio.Settings, key string) {
@@ -227,6 +221,6 @@ func (m *Manager) listenSettings() {
 		default:
 			break
 		}
-		gio.SettingsSync()
+		//gio.SettingsSync()
 	})
 }
