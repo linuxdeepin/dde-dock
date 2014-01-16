@@ -19,25 +19,25 @@ const (
 )
 
 var (
-	_ENTRY_REGEXP_1 = regexp.MustCompile(`^ *(menuentry|submenu) +'(.*?)'.*$`)
-	_ENTRY_REGEXP_2 = regexp.MustCompile(`^ *(menuentry|submenu) +"(.*?)".*$`)
+	_ENTRY_REGEXP_1       = regexp.MustCompile(`^ *(menuentry|submenu) +'(.*?)'.*$`)
+	_ENTRY_REGEXP_2       = regexp.MustCompile(`^ *(menuentry|submenu) +"(.*?)".*$`)
+	_GENERATE_ID    int32 = 0
 )
 
 type Grub2 struct {
 	entries  []Entry
 	settings map[string]string
 
-	DefaultEntry string `access:"readwrite"`
-	Timeout      int32  `access:"readwrite"`
-	Gfxmode      string `access:"readwrite"`
-	Background   string `access:"readwrite"`
-	Theme        string `access:"readwrite"`
-	InUpdate     bool
+	DefaultEntry      string `access:"readwrite"`
+	Timeout           int32  `access:"readwrite"`
+	Gfxmode           string `access:"readwrite"`
+	Background        string `access:"readwrite"`
+	Theme             string `access:"readwrite"`
+	GrubConfGenerated func(int32, bool)
 }
 
 func NewGrub2() *Grub2 {
 	grub := &Grub2{}
-	grub.InUpdate = false
 	return grub
 }
 
@@ -77,15 +77,23 @@ func (grub *Grub2) writeSettings() error {
 	return nil
 }
 
-func (grub *Grub2) generateGrubConfig() error {
+func (grub *Grub2) generateGrubConfig() int32 {
 	logInfo("start to generate a new grub configuration file")
-	grub.InUpdate = true
-	// TODO
-	err := execAndWait(60, _GRUB_MKCONFIG_EXE, "-o", _GRUB_MENU)
-	// execAndWait(60, _GRUB_MKCONFIG_EXE)
-	grub.InUpdate = false
+	_GENERATE_ID++
+	go func() {
+		// TODO
+		err := execAndWait(30, _GRUB_MKCONFIG_EXE, "-o", _GRUB_MENU)
+		if grub.GrubConfGenerated != nil {
+			if err == nil {
+				grub.GrubConfGenerated(_GENERATE_ID, true)
+			} else {
+				grub.GrubConfGenerated(_GENERATE_ID, false)
+			}
+		}
+	}()
+
 	logInfo("generate grub configuration finished")
-	return err
+	return _GENERATE_ID
 }
 
 func (grub *Grub2) parseEntries(fileContent string) error {
