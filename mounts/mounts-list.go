@@ -25,6 +25,7 @@ import (
 	"dlib"
 	"dlib/dbus"
 	"dlib/gio-2.0"
+	"dlib/gobject-2.0"
 	"fmt"
 	"sync"
 )
@@ -84,13 +85,19 @@ func (m *Manager) DeviceEject(id int32) {
 	switch info.Type {
 	case "drive":
 		op := info.Object.(*gio.Drive)
-		op.Eject(gio.MountUnmountFlagsNone, nil, nil)
+		op.Eject(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
+			op.EjectFinish(res)
+		}))
 	case "volume":
 		op := info.Object.(*gio.Volume)
-		op.Eject(gio.MountUnmountFlagsNone, nil, nil)
+		op.Eject(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
+			op.EjectFinish(res)
+		}))
 	case "mount":
 		op := info.Object.(*gio.Mount)
-		op.Eject(gio.MountUnmountFlagsNone, nil, nil)
+		op.Eject(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
+			op.EjectFinish(res)
+		}))
 	default:
 		fmt.Printf("'%s' invalid type\n", info.Type)
 	}
@@ -309,7 +316,7 @@ func NewManager() *Manager {
 	m.setPropName("DiskList")
 	m.listenSignalChanged()
 
-	printDiskInfo(m.DiskList)
+	//printDiskInfo(m.DiskList)
 	return m
 }
 
