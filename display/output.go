@@ -32,6 +32,13 @@ type Output struct {
 	Brightness float64 `access:"readwrite"`
 }
 
+type Border struct {
+	Left uint16
+	Top uint16
+	Right uint16
+	Bottom uint16
+}
+
 func (op *Output) ListModes() []Mode {
 	return op.modes
 }
@@ -223,11 +230,9 @@ func NewOutput(dpy *Display, core randr.Output) *Output {
 		return nil
 	}
 
-	edidProp, _ := randr.GetOutputProperty(X, core, atomEDID, xproto.AtomInteger, 0, 1024, false, false).Reply()
-
 	op := &Output{
 		Identify:   core,
-		Name:       getOutputName(edidProp.Data, string(info.Name)),
+		Name:       getOutputName(core, string(info.Name)),
 		Brightness: 1, //TODO: init this value
 	}
 	op.update(dpy, info)

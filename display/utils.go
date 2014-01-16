@@ -2,6 +2,7 @@ package main
 
 import "github.com/BurntSushi/xgb/xproto"
 import "github.com/BurntSushi/xgb/randr"
+import "github.com/BurntSushi/xgb/render"
 import "github.com/BurntSushi/xgb"
 import "dlib/logger"
 import "math"
@@ -31,9 +32,33 @@ func queryOutputByCrtc(dpy *Display, crtc randr.Crtc) *Output {
 	return nil
 }
 
-func getOutputName(edid []byte, defaultName string) string {
-	if len(edid) == 128 {
-		timingDescriptor := edid[36:]
+var (
+	edidAtom          = getAtom(X, "EDID")
+	connectorTypeAtom = getAtom(X, "ConnectorType")
+	borderAtom        = getAtom(X, "Border")
+	unknownAtom       = getAtom(X, "unknown")
+	VGAAtom           = getAtom(X, "VGA")
+	DVIAtom           = getAtom(X, "DVI")
+	DVIIAtom          = getAtom(X, "DVI-I")
+	DVIAAtom          = getAtom(X, "DVI-A")
+	DVIDAtom          = getAtom(X, "DVI-D")
+	HDMIAtom          = getAtom(X, "HDMI Panel")
+	TVAtom            = getAtom(X, "TV")
+	TVCompositeAtom   = getAtom(X, "TV-Composite")
+	TVSVidoeAtom      = getAtom(X, "TV-SVideo")
+	TVSComponentAtom  = getAtom(X, "TV-Component")
+	TVSCARTAtom       = getAtom(X, "TV-SCART")
+	TVC4Atom          = getAtom(X, "TV-C4")
+	DisplayPort       = getAtom(X, "DisplayPort")
+)
+
+func getOutputName(core randr.Output, defaultName string) string {
+	edidProp, err := randr.GetOutputProperty(X, core, edidAtom, xproto.AtomInteger, 0, 1024, false, false).Reply()
+	if err != nil {
+		return defaultName
+	}
+	if len(edidProp.Data) == 128 {
+		timingDescriptor := edidProp.Data[36:]
 		for i := 0; i < 4; i++ {
 			block := timingDescriptor[i*18 : (i+1)*18]
 			if block[3] == 0xfc { //descriptor type == Monitor Name
@@ -47,6 +72,14 @@ func getOutputName(edid []byte, defaultName string) string {
 		}
 	}
 	return defaultName
+}
+
+func getContentorType(op randr.Output) xproto.Atom {
+	prop, err := randr.GetOutputProperty(X, op, connectorTypeAtom, xproto.AtomAtom, 0, 1, false, false).Reply()
+	if err != nil {
+		return unknownAtom
+	}
+	return xproto.Atom(xgb.Get32(prop.Data))
 }
 
 func buildMode(info randr.ModeInfo) Mode {
@@ -65,8 +98,8 @@ func buildMode(info randr.ModeInfo) Mode {
 }
 
 // xgb/randr.GetScreenInfo will panic at this moment.( https://github.com/BurntSushi/xgb/issues/20)
-func getScreenInfo(root xproto.Window) (*randr.GetScreenInfoReply, error) {
-	cook := randr.GetScreenInfo(X, root)
+func getScreenInfo() (*randr.GetScreenInfoReply, error) {
+	cook := randr.GetScreenInfo(X, Root)
 
 	buf, err := cook.Cookie.Reply()
 	if err != nil {
@@ -217,4 +250,54 @@ func genGammaRamp(size uint16, brightness float64) (red []uint16, green []uint16
 		blue[i] = uint16(float64(step*i) * brightness)
 	}
 	return
+}
+
+func genTransformByScale(xScale float32, yScale float32) render.Transform {
+	m := render.Transform{}
+	m.Matrix11 = render.Fixed(xScale * 65536)
+	m.Matrix22 = render.Fixed(yScale * 65536)
+	m.Matrix33 = render.Fixed(1 * 65536)
+	return m
+}
+
+func setOutputBorder(op randr.Output, border Border) {
+	var buf [2 * 4]byte
+	xgb.Put16(buf[0:2], border.Left)
+	xgb.Put16(buf[2:4], border.Top)
+	xgb.Put16(buf[4:6], border.Right)
+	xgb.Put16(buf[6:8], border.Bottom)
+
+	err := randr.ChangeOutputPropertyChecked(X, op, borderAtom,
+		xproto.AtomInteger, 16, xproto.PropModeReplace, 4,
+		buf[:]).Check()
+	if err != nil {
+		logger.Println(err)
+	}
+}
+
+func getOutputBorder(op randr.Output) (ret Border) {
+	prop, err := randr.GetOutputProperty(X, op, borderAtom, xproto.AtomAny, 0, 2, false, false).Reply()
+	defer func() {
+		if err := recover(); err != nil {
+			logger.Println("getOutputBorder recvied an malformed packet", prop)
+			ret = Border{}
+		}
+	}()
+	if err != nil {
+		return Border{}
+	}
+	switch prop.NumItems {
+	case 0:
+		return Border{}
+	case 1:
+		value := xgb.Get16(prop.Data)
+		return Border{value, value, value, value}
+	case 2:
+		lr, tb := xgb.Get16(prop.Data), xgb.Get16(prop.Data[2:])
+		return Border{lr, tb, lr, tb}
+	case 4:
+		l, t, r, b := xgb.Get16(prop.Data), xgb.Get16(prop.Data[2:]), xgb.Get16(prop.Data[4:]), xgb.Get16(prop.Data[6:])
+		return Border{l, t, r, b}
+	}
+	return Border{}
 }

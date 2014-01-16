@@ -14,7 +14,6 @@ var (
 	X, _          = xgb.NewConn()
 	DefaultScreen = xproto.Setup(X).DefaultScreen(X)
 	Root          = DefaultScreen.Root
-	atomEDID      = getAtom(X, "EDID")
 
 	LastConfigTimeStamp = xproto.Timestamp(0)
 
@@ -61,7 +60,7 @@ func NewDisplay() *Display {
 
 	dpy.modes = make(map[randr.Mode]randr.ModeInfo)
 
-	sinfo, err := getScreenInfo(Root)
+	sinfo, err := getScreenInfo()
 	dpy.setPropRotation(uint16(sinfo.Rotations))
 	dpy.updateRotationAndRelfect(sinfo.Rotation)
 
