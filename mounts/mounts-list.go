@@ -86,17 +86,26 @@ func (m *Manager) DeviceEject(id int32) {
 	case "drive":
 		op := info.Object.(*gio.Drive)
 		op.Eject(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
-			op.EjectFinish(res)
+                        _, err := op.EjectFinish(res)
+                        if err != nil {
+                                fmt.Printf("drive eject failed: %d, %s\n", id, err)
+                        }
 		}))
 	case "volume":
 		op := info.Object.(*gio.Volume)
 		op.Eject(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
-			op.EjectFinish(res)
+                        _, err := op.EjectFinish(res)
+                        if err != nil {
+                                fmt.Printf("volume eject failed: %d, %s\n", id, err)
+                        }
 		}))
 	case "mount":
 		op := info.Object.(*gio.Mount)
 		op.Eject(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
-			op.EjectFinish(res)
+                        _, err := op.EjectFinish(res)
+                        if err != nil {
+                                fmt.Printf("mount eject failed: %d, %s\n", id, err)
+                        }
 		}))
 	default:
 		fmt.Printf("'%s' invalid type\n", info.Type)
@@ -114,10 +123,20 @@ func (m *Manager) DeviceMount(id int32) {
 	switch info.Type {
 	case "volume":
 		op := info.Object.(*gio.Volume)
-		op.Mount(gio.MountMountFlagsNone, nil, nil, nil)
+		op.Mount(gio.MountMountFlagsNone, nil, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
+			_, err := op.MountFinish(res)
+			if err != nil {
+				fmt.Printf("volume mount failed: %d, %s\n", id, err)
+			}
+		}))
 	case "mount":
 		op := info.Object.(*gio.Mount)
-		op.Remount(gio.MountMountFlagsNone, nil, nil, nil)
+		op.Remount(gio.MountMountFlagsNone, nil, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
+			_, err := op.RemountFinish(res)
+			if err != nil {
+				fmt.Printf("mount remount failed: %d, %s\n", id, err)
+			}
+		}))
 	default:
 		fmt.Printf("'%s' invalid type\n", info.Type)
 	}
@@ -134,7 +153,12 @@ func (m *Manager) DeviceUnmount(id int32) {
 	switch info.Type {
 	case "mount":
 		op := info.Object.(*gio.Mount)
-		op.Unmount(gio.MountUnmountFlagsNone, nil, nil)
+		op.Unmount(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
+			_, err := op.UnmountFinish(res)
+			if err != nil {
+				fmt.Printf("mount unmount failed: %d, %s\n", id, err)
+			}
+		}))
 	default:
 		fmt.Printf("'%s' invalid type\n", info.Type)
 	}
