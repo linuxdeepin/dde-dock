@@ -78,8 +78,9 @@ func (m *BindManager) listenSystem() {
 func (m *BindManager) updateSystemList(id int32, shortcut string) bool {
 	for _, info := range m.SystemList {
 		if info.Id == id {
-			info.Shortcut = shortcut
-			dbus.NotifyChange(m, "SystemList")
+			//info.Shortcut = shortcut
+			//dbus.NotifyChange(m, "SystemList")
+			m.setPropList("SystemList")
 			grabKeyPairs(SystemPrevPairs, false)
 			grabKeyPairs(getSystemPairs(), true)
 			return true
@@ -88,16 +89,18 @@ func (m *BindManager) updateSystemList(id int32, shortcut string) bool {
 
 	for _, info := range m.WindowList {
 		if info.Id == id {
-			info.Shortcut = shortcut
-			dbus.NotifyChange(m, "WindowList")
+			//info.Shortcut = shortcut
+			//dbus.NotifyChange(m, "WindowList")
+			m.setPropList("WindowList")
 			return true
 		}
 	}
 
 	for _, info := range m.WorkSpaceList {
 		if info.Id == id {
-			info.Shortcut = shortcut
-			dbus.NotifyChange(m, "WorkSpaceList")
+			//info.Shortcut = shortcut
+			//dbus.NotifyChange(m, "WorkSpaceList")
+			m.setPropList("WorkSpaceList")
 			return true
 		}
 	}
@@ -251,7 +254,7 @@ func getCustomKeyInfo() []ShortcutInfo {
 func getConflictList(valid bool) []int32 {
 	list := []int32{}
 
-	if valid {
+	if !valid {
 		invalidList := bindGSettings.GetStrv(_BINDING_INVALID_LIST)
 		for _, k := range invalidList {
 			tmp, err := strconv.ParseInt(k, 10, 64)
@@ -306,6 +309,11 @@ func getIdByName(name string) int32 {
 /* Update Shortcut */
 func UpdateSystemShortcut(key, value string) {
 	values := systemGSettings.GetStrv(key)
+	if len(values) <= 0 {
+		systemGSettings.SetStrv(key, []string{value})
+		//gio.SettingsSync()
+		return
+	}
 	values[0] = value
 
 	systemGSettings.SetStrv(key, values)
@@ -378,7 +386,7 @@ func setCustomValues(gs *gio.Settings,
 	gs.SetString(_CUSTOM_KEY_NAME, name)
 	gs.SetString(_CUSTOM_KEY_ACTION, action)
 	gs.SetString(_CUSTOM_KEY_SHORTCUT, shortcut)
-        //gio.SettingsSync()
+	//gio.SettingsSync()
 }
 
 func resetCustomValues(gs *gio.Settings) {
