@@ -41,6 +41,7 @@ func init() {
 
 type Display struct {
 	modes map[randr.Mode]randr.ModeInfo
+	mirrorMode bool
 
 	Outputs []*Output
 

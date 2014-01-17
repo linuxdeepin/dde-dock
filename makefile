@@ -6,7 +6,7 @@ all:
 	cd datetime/ && $(run)
 	cd mime/ && $(run)
 	cd desktop/ && $(run)
-	cd mounts/
+	cd mounts/ && $(run)
 	cd display/ && $(run)
 	cd inputdevices/ && $(run)
 	cd themes/ && $(run)

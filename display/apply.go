@@ -4,12 +4,13 @@ import "github.com/BurntSushi/xgb/randr"
 import "github.com/BurntSushi/xgb"
 import "github.com/BurntSushi/xgb/xproto"
 import "dlib/logger"
+import "sync"
 import "math"
 import "fmt"
 
 import "github.com/BurntSushi/xgb/render"
 
-var (
+const (
 	_PendingMaskMode      = 1 << 0
 	_PendingMaskPos       = 1 << 1
 	_PendingMaskBorder    = 1 << 2
@@ -17,6 +18,25 @@ var (
 	_PendingMaskRotation  = 1 << 4
 	_PendingMaskGramma    = 1 << 5
 )
+
+const (
+	AdjustModeNone uint8 = iota
+	AdjustModBorder
+	AdjustModePanning
+	AdjustModeScale
+	AdjustModeAuto
+)
+
+var changeLock, changeUnlock = func() (func(), func()) {
+	var locker sync.Mutex
+	return func() {
+			locker.Lock()
+			xproto.GrabServer(X)
+		}, func() {
+			xproto.UngrabServer(X)
+			locker.Unlock()
+		}
+}()
 
 type pendingConfig struct {
 	crtc   randr.Crtc
@@ -276,6 +296,33 @@ func boundAggregate(w, h uint16, b xproto.Rectangle) (uint16, uint16) {
 }
 
 func (dpy *Display) ApplyChanged() {
+	changeLock()
+	defer changeUnlock()
+
+	if dpy.mirrorMode {
+		mainOP := getMirrorOutput(dpy)
+		w, h := mainOP.Allocation.Width, mainOP.Allocation.Height
+		for _, op := range dpy.Outputs {
+			if op.Opened && op != mainOP {
+				op.pendingConfig = nil
+				op.SetAllocation(0, 0, w, h, AdjustModeAuto)
+			}
+		}
+	}
+
+	dpy.adjustScreenSize()
+
+	for _, op := range dpy.Outputs {
+		if op.pendingConfig != nil {
+			if err := op.pendingConfig.Apply(); err != nil {
+				fmt.Println("Apply", op.Name, "failed", err)
+			}
+			op.pendingConfig = nil
+		}
+	}
+}
+
+func (dpy *Display) adjustScreenSize() {
 	var ops []*Output
 	var w, h uint16
 	for _, op := range dpy.Outputs {
@@ -289,12 +336,6 @@ func (dpy *Display) ApplyChanged() {
 		}
 	}
 	dpy.setScreenSize(w, h)
-	for _, op := range ops {
-		if err := op.pendingConfig.Apply(); err != nil {
-			fmt.Println("Apply", op.Name, "failed", err)
-		}
-		op.pendingConfig = nil
-	}
 }
 
 func (dpy *Display) setScreenSize(width uint16, height uint16) {
