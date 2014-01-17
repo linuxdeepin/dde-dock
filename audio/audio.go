@@ -2,7 +2,6 @@ package main
 
 // #cgo amd64 386 CFLAGS: -g -Wall
 // #cgo LDFLAGS: -L. -lpulse -lc
-// #cgo CFLAGS: -Wno-error
 // #include "stdio.h"
 // #include "dde-pulse.h"
 import "C"
@@ -31,7 +30,6 @@ type Audio struct {
 	UserName string
 
 	//signals
-	Changed       func(string)
 	DeviceAdded   func(string)
 	DeviceChanged func(string, interface{})
 	DeviceRemoved func(string)
@@ -45,7 +43,7 @@ type CardProfileInfo struct {
 type Card struct {
 	Index         int32
 	Name          string
-	owner_module  int32
+	ownerModule   int32
 	driver        string
 	NProfiles     int32
 	Profiles      []CardProfileInfo
@@ -63,9 +61,9 @@ type Sink struct {
 	Name        string
 	Description string
 	driver      string
-	Mute        int32
+	Mute        bool
 	Card        int32
-	Volume      int32
+	Volume      uint32
 
 	//NVolumeSteps int32
 
@@ -87,11 +85,11 @@ type Source struct {
 	Name        string
 	Description string
 	driver      string
-	Mute        int32
-	//NVolumeSteps int32
-	Card int32
+	Mute        bool
+	Card        int32
+	Volume      uint32
 	//N_formates int32
-	Volume int32
+	//NVolumeSteps int32
 
 	NPorts     int32
 	Ports      []SourcePortInfo
@@ -99,48 +97,48 @@ type Source struct {
 }
 
 type SinkInput struct {
-	Index           int32
-	Name            string
-	owner_module    int32
-	Client          int32
-	Sink            int32
-	Volume          int32
-	driver          string
-	Mute            int32
-	Has_volume      int32
-	Volume_writable int32
+	Index       int32
+	Name        string
+	ownerModule int32
+	Client      int32
+	Sink        int32
+	Volume      uint32
+	driver      string
+	Mute        bool
+	//Has_volume      int32
+	//Volume_writable int32
 
 	PropList map[string]string
 }
 
 type SourceOutput struct {
-	Index           int32
-	Name            string
-	owner_module    int32
-	Client          int32
-	Source          int32
-	Volume          int32
-	driver          string
-	Mute            int32
-	Has_volume      int32
-	Volume_writable int32
+	Index       int32
+	Name        string
+	ownerModule int32
+	Client      int32
+	Source      int32
+	Volume      uint32
+	driver      string
+	Mute        bool
+	//Has_volume      int32
+	//Volume_writable int32
 
 	PropList map[string]string
 }
 
 type Client struct {
-	Index        int32
-	Name         string
-	owner_module int32
-	driver       string
+	Index       int32
+	Name        string
+	ownerModule int32
+	driver      string
 	//pa_proplist *proplist
 	Prop map[string]string
 }
 
-type Volume struct {
-	Channels uint32
-	Values   [320]uint32
-}
+//type Volume struct {
+//Channels uint32
+//Values   [320]uint32
+//}
 
 //func compare(x, y interface{}) bool {
 
@@ -215,7 +213,7 @@ func getCardFromC(_card C.card_t) *Card {
 	card.Index = int32(_card.index)
 	card.Name = C.GoString(&_card.name[0])
 	card.driver = C.GoString(&_card.driver[0])
-	card.owner_module = int32(_card.owner_module)
+	card.ownerModule = int32(_card.owner_module)
 	card.NProfiles = int32(_card.n_profiles)
 
 	card.Profiles = make([]CardProfileInfo, card.NProfiles)
@@ -238,9 +236,9 @@ func getSinkFromC(_sink C.sink_t) *Sink {
 	sink.Description =
 		C.GoString((*C.char)(unsafe.Pointer(&_sink.description[0])))
 	sink.driver = C.GoString(&_sink.driver[0])
-	sink.Mute = int32(_sink.mute)
+	sink.Mute = (int32(_sink.mute) != 0)
 	sink.Name = C.GoString(&_sink.name[0])
-	sink.Volume = int32(C.pa_cvolume_avg(&_sink.volume) * 100 / C.PA_VOLUME_NORM)
+	sink.Volume = uint32(C.pa_cvolume_avg(&_sink.volume) * 100 / C.PA_VOLUME_NORM)
 	//sink.NVolumeSteps = int32(_sink.n_volume_steps)
 	//sink.Cvolume.Channels = uint32(_sink.volume.channels)
 	//for j := 0; j < int(sink.Cvolume.Channels); j = j + 1 {
@@ -270,11 +268,11 @@ func getSourceFromC(_source C.source_t) *Source {
 	source := &Source{}
 	source.Index = int32(_source.index)
 	source.Card = int32(_source.card)
-	source.Mute = int32(_source.mute)
+	source.Mute = (int32(_source.mute) != 0)
 	source.Name = C.GoString((*C.char)(unsafe.Pointer(&_source.name[0])))
 	source.Description = C.GoString(&_source.description[0])
 
-	source.Volume = int32(100 * C.pa_cvolume_avg(&_source.volume) / C.PA_VOLUME_NORM)
+	source.Volume = uint32(100 * C.pa_cvolume_avg(&_source.volume) / C.PA_VOLUME_NORM)
 	//source.NVolumeSteps = int32(_source.n_volume_steps)
 	//source.Cvolume.Channels = uint32(_source.volume.channels)
 	//for j := uint32(0); j < source.Cvolume.Channels; j = j + 1 {
@@ -306,10 +304,10 @@ func getSinkInputFromC(_sink_input C.sink_input_t) *SinkInput {
 	sinkInput.Index = int32(_sink_input.index)
 	sinkInput.Client = int32(_sink_input.client)
 	sinkInput.Sink = int32(_sink_input.sink)
-	sinkInput.Mute = int32(_sink_input.mute)
-	sinkInput.Has_volume = int32(_sink_input.has_volume)
-	sinkInput.Volume_writable = int32(_sink_input.volume_writable)
-	sinkInput.Volume = int32(100 * C.pa_cvolume_avg(&_sink_input.volume) / C.PA_VOLUME_NORM)
+	sinkInput.Mute = (int32(_sink_input.mute) != 0)
+	//sinkInput.Has_volume = int32(_sink_input.has_volume)
+	//sinkInput.Volume_writable = int32(_sink_input.volume_writable)
+	sinkInput.Volume = uint32(100 * C.pa_cvolume_avg(&_sink_input.volume) / C.PA_VOLUME_NORM)
 	sinkInput.Name = C.GoString(&_sink_input.name[0])
 	sinkInput.PropList = make(map[string]string)
 	var prop_state *C.void = nil
@@ -333,11 +331,11 @@ func getSourceOutputFromC(_source_output C.source_output_t) *SourceOutput {
 	sourceOutput := &SourceOutput{}
 	sourceOutput.Index = int32(_source_output.index)
 	sourceOutput.Name = C.GoString(&_source_output.name[0])
-	sourceOutput.owner_module = int32(_source_output.owner_module)
+	sourceOutput.ownerModule = int32(_source_output.owner_module)
 	sourceOutput.Client = int32(_source_output.client)
 	sourceOutput.Source = int32(_source_output.source)
 	sourceOutput.driver = C.GoString(&_source_output.driver[0])
-	sourceOutput.Mute = int32(_source_output.mute)
+	sourceOutput.Mute = (int32(_source_output.mute) != 0)
 	//sourceOutputs[i].Cvolume.Channels = uint32(audio.pa.source_outputs[i].volume.channels)
 
 	//for j := uint32(0); j < sourceOutputs[i].Cvolume.Channels; j = j + 1 {
@@ -593,7 +591,6 @@ func (audio *Audio) getsinks() map[int]*Sink {
 	}
 
 	return audio.sinks
-
 }
 
 func (audio *Audio) GetSources() []*Source {
@@ -655,7 +652,7 @@ func (audio *Audio) GetClients() []*Client {
 	for i := 0; i < n; i = i + 1 {
 		clients[i] = &Client{}
 		clients[i].Index = int32(audio.pa.clients[i].index)
-		clients[i].owner_module = int32(audio.pa.clients[i].owner_module)
+		clients[i].ownerModule = int32(audio.pa.clients[i].owner_module)
 		clients[i].Name = C.GoString((*C.char)(unsafe.Pointer(&audio.pa.clients[i].name[0])))
 		clients[i].driver = C.GoString((*C.char)(unsafe.Pointer(&audio.pa.clients[i].driver[0])))
 	}
@@ -665,8 +662,8 @@ func (audio *Audio) GetClients() []*Client {
 func (sink *Sink) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		"com.deepin.daemon.Audio",
-		"/com/deepin/daemon/Audio/Output" + strconv.FormatInt(int64(sink.Index), 10),
-		"com.deepin.daemon.Audio.Output",
+		"/com/deepin/daemon/Audio/Sink" + strconv.FormatInt(int64(sink.Index), 10),
+		"com.deepin.daemon.Audio.Sink",
 	}
 }
 
@@ -719,11 +716,7 @@ func (sink *Sink) SetSinkPort(portname string) int32 {
 	return sink.setSinkPort(port)
 }
 
-func (sink *Sink) GetSinkVolume() int32 {
-	return sink.Volume
-}
-
-func (sink *Sink) SetSinkVolume(volume int32) int32 {
+func (sink *Sink) SetSinkVolume(volume uint32) int32 {
 	var cvolume C.pa_cvolume
 	cvolume.channels = C.uint8_t(2)
 	for i := 0; i < 2; i = i + 1 {
@@ -736,9 +729,9 @@ func (sink *Sink) SetSinkVolume(volume int32) int32 {
 	//for i := uint32(0); i < 2; i = i + 1 {
 	//cvolume.values[i] = *((*C.pa_volume_t)(unsafe.Pointer(&volume)))
 	//}
-	////for i := uint32(0); i < volume.Channels; i = i + 1 {
-	////cvolume.values[i] = *((*C.pa_volume_t)(unsafe.Pointer(&volume.Values[i])))
-	////}
+	//for i := uint32(0); i < volume.Channels; i = i + 1 {
+	//cvolume.values[i] = *((*C.pa_volume_t)(unsafe.Pointer(&volume.Values[i])))
+	//}
 	//return int32(C.pa_set_sink_volume_by_index(
 	//audio.pa, C.int(sink.Index), &cvolume))
 }
@@ -754,8 +747,12 @@ func (sink *Sink) setSinkMute(mute int32) int32 {
 	return int32(ret)
 }
 
-func (sink *Sink) SetSinkMute(mute int32) int32 {
-	return sink.setSinkMute(mute)
+func (sink *Sink) SetSinkMute(mute bool) int32 {
+	if mute {
+		return sink.setSinkMute(1)
+	} else {
+		return sink.setSinkMute(0)
+	}
 }
 
 func (source *Source) setSourcePort(port *C.char) int32 {
@@ -770,13 +767,9 @@ func (source *Source) SetSourcePort(portname string) int32 {
 func (source *Source) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		"com.deepin.daemon.Audio",
-		"/com/deepin/daemon/Audio/Input" + strconv.FormatInt(int64(source.Index), 10),
-		"com.deepin.daemon.Audio.Input",
+		"/com/deepin/daemon/Audio/Source" + strconv.FormatInt(int64(source.Index), 10),
+		"com.deepin.daemon.Audio.Source",
 	}
-}
-
-func (source *Source) GetSourceVolume() int32 {
-	return source.Volume
 }
 
 func (source *Source) setSourceVolume(volume *C.pa_cvolume) int32 {
@@ -793,9 +786,15 @@ func (source *Source) SetSourceVolume(volume int32) int32 {
 	return source.setSourceVolume(&cvolume)
 }
 
-func (source *Source) SetSourceMute(mute int32) int32 {
+func (source *Source) SetSourceMute(mute bool) int32 {
+	var _mute int
+	if mute {
+		_mute = 1
+	} else {
+		_mute = 0
+	}
 	ret := C.pa_set_source_mute_by_index(
-		audio.pa, C.int(source.Index), C.int(mute))
+		audio.pa, C.int(source.Index), C.int(_mute))
 	return int32(ret)
 }
 
@@ -806,10 +805,6 @@ func (sinkInput *SinkInput) GetDBusInfo() dbus.DBusInfo {
 			strconv.FormatInt(int64(sinkInput.Index), 10),
 		"com.deepin.daemon.Audio.Application",
 	}
-}
-
-func (sinkInput *SinkInput) GetSinkInputVolume() int32 {
-	return sinkInput.Volume
 }
 
 func (sinkInput *SinkInput) setSinkInputVolume(cvolume *C.pa_cvolume) int32 {
@@ -832,8 +827,13 @@ func (sinkInput *SinkInput) setSinkInputMute(mute int32) int32 {
 		C.int(sinkInput.Index), C.int(mute)))
 }
 
-func (sinkInput *SinkInput) SetMute(mute int32) int32 {
-	return sinkInput.setSinkInputMute(mute)
+func (sinkInput *SinkInput) SetMute(mute bool) int32 {
+	if mute {
+		return sinkInput.setSinkInputMute(1)
+	} else {
+		return sinkInput.setSinkInputMute(0)
+	}
+
 }
 
 func (sourceOutput *SourceOutput) GetDBusInfo() dbus.DBusInfo {
@@ -843,10 +843,6 @@ func (sourceOutput *SourceOutput) GetDBusInfo() dbus.DBusInfo {
 			strconv.FormatInt(int64(sourceOutput.Index), 10),
 		"com.deepin.daemon.Audio.Application",
 	}
-}
-
-func (sourceOutput *SourceOutput) GetSourceOuputVolume() int32 {
-	return sourceOutput.Volume
 }
 
 func (sourceOutput *SourceOutput) setSourceOutputVolume(cvolume *C.pa_cvolume) int32 {
@@ -864,7 +860,7 @@ func (sourceOutput *SourceOutput) SetVolume(volume int32) int32 {
 	return sourceOutput.setSourceOutputVolume(&cvolume)
 }
 
-func (sourceOutput *SourceOutput) SetMute(mute int32) int32 {
+func (sourceOutput *SourceOutput) SetMute(mute bool) int32 {
 	return 1
 }
 
