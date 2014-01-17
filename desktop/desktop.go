@@ -98,5 +98,12 @@ func main() {
 		panic(err)
 	}
 	dbus.DealWithUnhandledMessage()
+
+	desk.printManager()
 	dlib.StartLoop()
+}
+
+func (m *Manager) printManager() {
+	logger.Printf("Top Action: %d\n", m.TopLeft)
+	logger.Printf("Bottom Action: %d\n", m.BottomRight)
 }
