@@ -49,74 +49,8 @@ type Manager struct {
 	ShowTrashIcon    *property.GSettingsBoolProperty   `access:"readwrite"`
 	ShowDSCIcon      *property.GSettingsBoolProperty   `access:"readwrite"`
 	DockMode         *property.GSettingsStringProperty `access:"readwrite"`
-	TopLeft          int32
-	BottomRight      int32
-}
-
-func (desk *Manager) SetTopLeftAction(index int32) {
-	if index == ACTION_NONE {
-		rightTmp := desk.BottomRight
-		_compizIntegrated.SetString("command-11", "")
-		_compizCommand.SetString("run-command10-edge", "")
-		_compizScale.SetString("initiate-edge", "")
-
-		if rightTmp == ACTION_OPENED_WINDOWS {
-			_compizScale.SetString("initiate-edge", "BottomRight")
-		}
-	} else if index == ACTION_OPENED_WINDOWS {
-		if desk.BottomRight == ACTION_OPENED_WINDOWS {
-			desk.BottomRight = ACTION_LAUNCHER
-			_compizIntegrated.SetString("command-12", _LAUNCHER_CMD)
-			_compizCommand.SetString("run-command11-edge", "BottomRight")
-		}
-
-		_compizIntegrated.SetString("command-11", "")
-		_compizCommand.SetString("run-command10-edge", "")
-		_compizScale.SetString("initiate-edge", "TopLeft")
-	} else if index == ACTION_LAUNCHER {
-		if desk.BottomRight == ACTION_LAUNCHER {
-			desk.BottomRight = ACTION_OPENED_WINDOWS
-			_compizIntegrated.SetString("command-12", "")
-			_compizCommand.SetString("run-command11-edge", "")
-			_compizScale.SetString("initiate-edge", "BottomRight")
-		}
-
-		_compizIntegrated.SetString("command-11", _LAUNCHER_CMD)
-		_compizCommand.SetString("run-command10-edge", "TopLeft")
-	}
-}
-
-func (desk *Manager) SetBottomRightAction(index int32) {
-	if index == ACTION_NONE {
-		leftTmp := desk.TopLeft
-		_compizIntegrated.SetString("command-12", "")
-		_compizCommand.SetString("run-command11-edge", "")
-		_compizScale.SetString("initiate-edge", "")
-
-		if leftTmp == ACTION_OPENED_WINDOWS {
-			_compizScale.SetString("initiate-edge", "TopLeft")
-		}
-	} else if index == ACTION_OPENED_WINDOWS {
-		if desk.TopLeft == ACTION_OPENED_WINDOWS {
-			desk.TopLeft = ACTION_LAUNCHER
-			_compizIntegrated.SetString("command-11", _LAUNCHER_CMD)
-			_compizCommand.SetString("run-command10-edge", "TopLeft")
-		}
-
-		_compizIntegrated.SetString("command-12", "")
-		_compizCommand.SetString("run-command11-edge", "")
-		_compizScale.SetString("initiate-edge", "BottomRight")
-	} else if index == ACTION_LAUNCHER {
-		if desk.TopLeft == ACTION_LAUNCHER {
-			desk.TopLeft = ACTION_OPENED_WINDOWS
-			_compizIntegrated.SetString("command-11", "")
-			_compizCommand.SetString("run-command10-edge", "")
-			_compizScale.SetString("initiate-edge", "TopLeft")
-		}
-
-		_compizIntegrated.SetString("command-12", _LAUNCHER_CMD)
-		_compizCommand.SetString("run-command11-edge", "BottomRight")
-	}
+	TopLeft          int32                             `access:"readwrite"`
+	BottomRight      int32                             `access:"readwrite"`
 }
 
 func NewManager() *Manager {
@@ -129,8 +63,8 @@ func NewManager() *Manager {
 	desk.ShowDSCIcon = property.NewGSettingsBoolProperty(desk, "ShowDSCIcon", deskSettings, "show-dsc-icon")
 	desk.DockMode = property.NewGSettingsStringProperty(desk, "DockMode", gio.NewSettings(_DOCK_SCHEMA), "hide-mode")
 
-	desk.listenCompizGSettings()
 	desk.getEdgeAction()
+	desk.listenCompizGSettings()
 
 	return desk
 }
@@ -150,11 +84,11 @@ func initCompizGSettings() {
 }
 
 func main() {
-        defer func() {
-                if err := recover(); err != nil {
-                        logger.Println("recover a error:", err)
-                }
-        }()
+	defer func() {
+		if err := recover(); err != nil {
+			logger.Println("recover a error:", err)
+		}
+	}()
 
 	initCompizGSettings()
 	desk := NewManager()

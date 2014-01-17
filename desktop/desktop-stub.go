@@ -30,6 +30,21 @@ func (desk *Manager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{_DESKTOP_DEST, _DESKTOP_PATH, _DESKTOP_IFC}
 }
 
+func (desk *Manager) OnPropertiesChanged(name string, old interface{}) {
+	switch name {
+	case "BottomRight":
+		if v, ok := old.(int32); ok &&
+			v != desk.BottomRight {
+			desk.setBottomRightAction(v)
+		}
+	case "TopLeft":
+		if v, ok := old.(int32); ok &&
+			v != desk.TopLeft {
+			desk.setTopLeftAction(v)
+		}
+	}
+}
+
 func (desk *Manager) listenCompizGSettings() {
 	_compizIntegrated.Connect("changed::command-11", func(s *gio.Settings, name string) {
 		_runCommand11 = s.GetString("command-11")
@@ -72,4 +87,70 @@ func (desk *Manager) getEdgeAction() {
 
 	dbus.NotifyChange(desk, "TopLeft")
 	dbus.NotifyChange(desk, "BottomRight")
+}
+
+func (desk *Manager) setTopLeftAction(index int32) {
+	if index == ACTION_NONE {
+		rightTmp := desk.BottomRight
+		_compizIntegrated.SetString("command-11", "")
+		_compizCommand.SetString("run-command10-edge", "")
+		_compizScale.SetString("initiate-edge", "")
+
+		if rightTmp == ACTION_OPENED_WINDOWS {
+			_compizScale.SetString("initiate-edge", "BottomRight")
+		}
+	} else if index == ACTION_OPENED_WINDOWS {
+		if desk.BottomRight == ACTION_OPENED_WINDOWS {
+			desk.BottomRight = ACTION_LAUNCHER
+			_compizIntegrated.SetString("command-12", _LAUNCHER_CMD)
+			_compizCommand.SetString("run-command11-edge", "BottomRight")
+		}
+
+		_compizIntegrated.SetString("command-11", "")
+		_compizCommand.SetString("run-command10-edge", "")
+		_compizScale.SetString("initiate-edge", "TopLeft")
+	} else if index == ACTION_LAUNCHER {
+		if desk.BottomRight == ACTION_LAUNCHER {
+			desk.BottomRight = ACTION_OPENED_WINDOWS
+			_compizIntegrated.SetString("command-12", "")
+			_compizCommand.SetString("run-command11-edge", "")
+			_compizScale.SetString("initiate-edge", "BottomRight")
+		}
+
+		_compizIntegrated.SetString("command-11", _LAUNCHER_CMD)
+		_compizCommand.SetString("run-command10-edge", "TopLeft")
+	}
+}
+
+func (desk *Manager) setBottomRightAction(index int32) {
+	if index == ACTION_NONE {
+		leftTmp := desk.TopLeft
+		_compizIntegrated.SetString("command-12", "")
+		_compizCommand.SetString("run-command11-edge", "")
+		_compizScale.SetString("initiate-edge", "")
+
+		if leftTmp == ACTION_OPENED_WINDOWS {
+			_compizScale.SetString("initiate-edge", "TopLeft")
+		}
+	} else if index == ACTION_OPENED_WINDOWS {
+		if desk.TopLeft == ACTION_OPENED_WINDOWS {
+			desk.TopLeft = ACTION_LAUNCHER
+			_compizIntegrated.SetString("command-11", _LAUNCHER_CMD)
+			_compizCommand.SetString("run-command10-edge", "TopLeft")
+		}
+
+		_compizIntegrated.SetString("command-12", "")
+		_compizCommand.SetString("run-command11-edge", "")
+		_compizScale.SetString("initiate-edge", "BottomRight")
+	} else if index == ACTION_LAUNCHER {
+		if desk.TopLeft == ACTION_LAUNCHER {
+			desk.TopLeft = ACTION_OPENED_WINDOWS
+			_compizIntegrated.SetString("command-11", "")
+			_compizCommand.SetString("run-command10-edge", "")
+			_compizScale.SetString("initiate-edge", "TopLeft")
+		}
+
+		_compizIntegrated.SetString("command-12", _LAUNCHER_CMD)
+		_compizCommand.SetString("run-command11-edge", "BottomRight")
+	}
 }
