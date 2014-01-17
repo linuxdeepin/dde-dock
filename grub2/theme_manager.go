@@ -27,7 +27,6 @@ type ThemeManager struct {
 	enabledThemeMainFile string
 }
 
-// TODO
 func NewThemeManager() *ThemeManager {
 	tm := &ThemeManager{}
 	tm.enabledThemeMainFile = ""
