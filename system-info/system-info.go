@@ -3,12 +3,12 @@ package main
 import (
 	"dbus/org/freedesktop/udisks2"
 	"dlib/dbus"
+	"dlib/logger"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"strconv"
 	"strings"
-	"fmt"
 )
 
 type SystemInfo struct {
@@ -30,14 +30,6 @@ const (
 	_PROC_MEM_KEY  = "MemTotal"
 )
 
-func (sys *SystemInfo) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		"com.deepin.daemon.SystemInfo",
-		"/com/deepin/daemon/SystemInfo",
-		"com.deepin.daemon.SystemInfo",
-	}
-}
-
 func IsFileNotExist(filename string) bool {
 	_, err := os.Stat(filename)
 	if os.IsNotExist(err) {
@@ -53,6 +45,8 @@ func GetVersion() int32 {
 	}
 	contents, err := ioutil.ReadFile(_VERSION_ETC)
 	if err != nil {
+		logger.Printf("Read File Failed In Get Version: %s\n",
+			err)
 		return 0
 	}
 
@@ -80,6 +74,8 @@ func GetCpuInfo() string {
 	}
 	contents, err := ioutil.ReadFile(_PROC_CPU_INFO)
 	if err != nil {
+		logger.Printf("Read File Failed In Get CPU Info: %s\n",
+			err)
 		return ""
 	}
 
@@ -111,6 +107,8 @@ func GetMemoryCap() (memCap uint64) {
 	}
 	contents, err := ioutil.ReadFile(_PROC_MEM_INFO)
 	if err != nil {
+		logger.Printf("Read File Failed In Get Memory Cap: %s\n",
+			err)
 		return 0
 	}
 
@@ -134,6 +132,8 @@ func GetSystemType() (sysType int64) {
 	cmd := exec.Command("/bin/uname", "-m")
 	out, err := cmd.Output()
 	if err != nil {
+		logger.Printf("Exec 'uname -m' Failed In Get System Type: %s\n",
+			err)
 		return int64(0)
 	}
 
@@ -154,7 +154,7 @@ func GetDiskCap() (diskCap uint64) {
 	driList := []dbus.ObjectPath{}
 	obj, err := udisks2.NewObjectManager("/org/freedesktop/UDisks2")
 	if err != nil {
-		fmt.Println("udisks2: New ObjectManager Failed:", err)
+		logger.Println("udisks2: New ObjectManager Failed:", err)
 		return 0
 	}
 	managers, _ := obj.GetManagedObjects()
@@ -191,8 +191,8 @@ func GetDiskCap() (diskCap uint64) {
 	return diskCap
 }
 
-func main() {
-	sys := SystemInfo{}
+func NewSystemInfo() *SystemInfo {
+	sys := &SystemInfo{}
 
 	sys.Version = GetVersion()
 	sys.Processor = GetCpuInfo()
@@ -200,7 +200,18 @@ func main() {
 	sys.SystemType = GetSystemType()
 	sys.DiskCap = GetDiskCap()
 
-	err := dbus.InstallOnSystem(&sys)
+	return sys
+}
+
+func main() {
+	defer func() {
+		if err := recover(); err != nil {
+			logger.Println("recover error:", err)
+		}
+	}()
+
+	sys := NewSystemInfo()
+	err := dbus.InstallOnSystem(sys)
 	if err != nil {
 		panic(err)
 	}
