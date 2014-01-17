@@ -63,19 +63,19 @@ func keyCodeInfoEqual(keyInfo1, keyInfo2 *KeyCodeInfo) bool {
 }
 
 func modifyShortcutById(id int32, shortcut string) {
-        tmpKey := strings.ToLower(shortcut)
-        var accel string
+	tmpKey := strings.ToLower(shortcut)
+	var accel string
 
-        if tmpKey == "super" || tmpKey == "super_l" ||
-        tmpKey == "super-super_l" {
-                accel = "Super"
-        } else {
-                accel = shortcut
-        }
+	if tmpKey == "super" || tmpKey == "super_l" ||
+		tmpKey == "super-super_l" {
+		accel = "Super"
+	} else {
+		accel = shortcut
+	}
 	if id >= _CUSTOM_ID_BASE {
 		gs := newGSettingsById(id)
 		if gs != nil {
-			gs.SetString(_CUSTOM_KEY_SHORTCUT,accel)
+			gs.SetString(_CUSTOM_KEY_SHORTCUT, accel)
 			//gio.SettingsSync()
 		}
 
@@ -83,7 +83,7 @@ func modifyShortcutById(id int32, shortcut string) {
 	}
 
 	if key, ok := IdNameMap[id]; ok {
-		UpdateSystemShortcut(key,accel)
+		UpdateSystemShortcut(key, accel)
 		return
 	}
 }
@@ -131,7 +131,7 @@ func conflictChecked(id int32, shortcut string) ConflictInfo {
 	var info *KeyCodeInfo
 
 	if tmpKey == "super-super_l" || tmpKey == "super_l" ||
-        tmpKey == "super" {
+		tmpKey == "super" {
 		info = newKeyCodeInfo("Super_L")
 	} else {
 		info = newKeyCodeInfo(getXGBShortcut(formatShortcut(shortcut)))

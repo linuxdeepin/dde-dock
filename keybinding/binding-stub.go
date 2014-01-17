@@ -40,16 +40,20 @@ func (m *BindManager) GetDBusInfo() dbus.DBusInfo {
 func (m *BindManager) setPropList(listName string) {
 	switch listName {
 	case "SystemList":
-		m.SystemList = getSystemKeyInfo()
+                tmpList := getSystemKeyInfo()
+		m.SystemList = sortShortcutInfoArray(tmpList)
 		dbus.NotifyChange(m, listName)
 	case "MediaList":
-		m.MediaList = getMediaKeyInfo()
+                tmpList := getMediaKeyInfo()
+		m.MediaList =sortShortcutInfoArray(tmpList)
 		dbus.NotifyChange(m, listName)
 	case "WindowList":
-		m.WindowList = getWindowKeyInfo()
+                tmpList := getWindowKeyInfo()
+		m.WindowList =sortShortcutInfoArray(tmpList)
 		dbus.NotifyChange(m, listName)
 	case "WorkSpaceList":
-		m.WorkSpaceList = getWorkSpaceKeyInfo()
+                tmpList := getWorkSpaceKeyInfo()
+		m.WorkSpaceList =sortShortcutInfoArray(tmpList)
 		dbus.NotifyChange(m, listName)
 	case "CustomList":
 		m.CustomList = getCustomKeyInfo()
@@ -78,8 +82,9 @@ func (m *BindManager) listenSystem() {
 func (m *BindManager) updateSystemList(id int32, shortcut string) bool {
 	for _, info := range m.SystemList {
 		if info.Id == id {
-			info.Shortcut = shortcut
-			dbus.NotifyChange(m, "SystemList")
+			//info.Shortcut = shortcut
+			//dbus.NotifyChange(m, "SystemList")
+			m.setPropList("SystemList")
 			grabKeyPairs(SystemPrevPairs, false)
 			grabKeyPairs(getSystemPairs(), true)
 			return true
@@ -88,16 +93,18 @@ func (m *BindManager) updateSystemList(id int32, shortcut string) bool {
 
 	for _, info := range m.WindowList {
 		if info.Id == id {
-			info.Shortcut = shortcut
-			dbus.NotifyChange(m, "WindowList")
+			//info.Shortcut = shortcut
+			//dbus.NotifyChange(m, "WindowList")
+			m.setPropList("WindowList")
 			return true
 		}
 	}
 
 	for _, info := range m.WorkSpaceList {
 		if info.Id == id {
-			info.Shortcut = shortcut
-			dbus.NotifyChange(m, "WorkSpaceList")
+			//info.Shortcut = shortcut
+			//dbus.NotifyChange(m, "WorkSpaceList")
+			m.setPropList("WorkSpaceList")
 			return true
 		}
 	}
@@ -180,6 +187,7 @@ func getSystemKeyInfo() []ShortcutInfo {
 			shortcut := getSystemValue(n, false)
 			tmp := newShortcutInfo(i, desc,
 				formatShortcut(shortcut))
+			tmp.index = SystemIdIndexMap[i]
 			systemInfoList = append(systemInfoList, tmp)
 		}
 	}
@@ -193,6 +201,7 @@ func getMediaKeyInfo() []ShortcutInfo {
 		if desc, ok := MediaNameDescMap[n]; ok {
 			shortcut := getSystemValue(n, false)
 			tmp := newShortcutInfo(i, desc, shortcut)
+			tmp.index = MediaIdIndexMap[i]
 			mediaInfoList = append(mediaInfoList, tmp)
 		}
 	}
@@ -207,6 +216,7 @@ func getWindowKeyInfo() []ShortcutInfo {
 			shortcut := getSystemValue(n, false)
 			tmp := newShortcutInfo(i, desc,
 				formatShortcut(shortcut))
+			tmp.index = WindowIdIndexMap[i]
 			windowInfoList = append(windowInfoList, tmp)
 		}
 	}
@@ -221,6 +231,7 @@ func getWorkSpaceKeyInfo() []ShortcutInfo {
 			shortcut := getSystemValue(n, false)
 			tmp := newShortcutInfo(i, desc,
 				formatShortcut(shortcut))
+			tmp.index = WorkSpaceIdIndexMap[i]
 			workSpaceInfoList = append(workSpaceInfoList, tmp)
 		}
 	}
@@ -232,6 +243,7 @@ func getCustomKeyInfo() []ShortcutInfo {
 	customList := getCustomList()
 	shortcutInfoList := []ShortcutInfo{}
 
+	index := int32(0)
 	for _, k := range customList {
 		tmp := ShortcutInfo{}
 		gs := newGSettingsById(k)
@@ -242,6 +254,8 @@ func getCustomKeyInfo() []ShortcutInfo {
 		tmp.Desc = getCustomValue(gs, _CUSTOM_KEY_NAME)
 		tmp.Shortcut = formatShortcut(
 			getCustomValue(gs, _CUSTOM_KEY_SHORTCUT))
+		tmp.index = index
+		index += 1
 		shortcutInfoList = append(shortcutInfoList, tmp)
 	}
 
@@ -251,7 +265,7 @@ func getCustomKeyInfo() []ShortcutInfo {
 func getConflictList(valid bool) []int32 {
 	list := []int32{}
 
-	if valid {
+	if !valid {
 		invalidList := bindGSettings.GetStrv(_BINDING_INVALID_LIST)
 		for _, k := range invalidList {
 			tmp, err := strconv.ParseInt(k, 10, 64)
@@ -306,6 +320,11 @@ func getIdByName(name string) int32 {
 /* Update Shortcut */
 func UpdateSystemShortcut(key, value string) {
 	values := systemGSettings.GetStrv(key)
+	if len(values) <= 0 {
+		systemGSettings.SetStrv(key, []string{value})
+		//gio.SettingsSync()
+		return
+	}
 	values[0] = value
 
 	systemGSettings.SetStrv(key, values)
@@ -378,7 +397,7 @@ func setCustomValues(gs *gio.Settings,
 	gs.SetString(_CUSTOM_KEY_NAME, name)
 	gs.SetString(_CUSTOM_KEY_ACTION, action)
 	gs.SetString(_CUSTOM_KEY_SHORTCUT, shortcut)
-        //gio.SettingsSync()
+	//gio.SettingsSync()
 }
 
 func resetCustomValues(gs *gio.Settings) {
@@ -439,4 +458,15 @@ func getCustomAccels() map[int32]string {
 	}
 
 	return customAccels
+}
+
+func sortShortcutInfoArray(array []ShortcutInfo) []ShortcutInfo {
+	l := len(array)
+	orderArray := make([]ShortcutInfo, l)
+
+	for _, v := range array {
+		orderArray[v.index] = v
+	}
+
+	return orderArray
 }

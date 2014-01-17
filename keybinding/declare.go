@@ -31,6 +31,7 @@ type ShortcutInfo struct {
 	Id       int32
 	Desc     string
 	Shortcut string
+        index int32
 }
 
 type BindManager struct {

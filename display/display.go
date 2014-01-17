@@ -2,7 +2,6 @@ package main
 
 import (
 	"dlib/dbus"
-	"dlib/logger"
 	"fmt"
 	"github.com/BurntSushi/xgb"
 	"github.com/BurntSushi/xgb/randr"
@@ -11,10 +10,10 @@ import (
 
 var (
 	_             = fmt.Println
+	DPY           *Display
 	X, _          = xgb.NewConn()
 	DefaultScreen = xproto.Setup(X).DefaultScreen(X)
 	Root          = DefaultScreen.Root
-	atomEDID      = getAtom(X, "EDID")
 
 	LastConfigTimeStamp = xproto.Timestamp(0)
 
@@ -36,6 +35,8 @@ func init() {
 	if err != nil {
 		panic(fmt.Sprintln("randr.GetSceenSizeRange failed :", err))
 	}
+
+	initDisplay()
 }
 
 type Display struct {
@@ -50,18 +51,20 @@ type Display struct {
 	Reflect   uint16 `access:readwrite`
 	rotations uint16
 
+	MirrorOutput  *Output `access:readwrite`
 	PrimaryOutput *Output `access:readwrite`
 	//used by deepin-dock/launcher/desktop
 	PrimaryRect    xproto.Rectangle
 	PrimaryChanged func(xproto.Rectangle)
 }
 
-func NewDisplay() *Display {
+func initDisplay() *Display {
 	dpy := &Display{}
+	DPY = dpy
 
 	dpy.modes = make(map[randr.Mode]randr.ModeInfo)
 
-	sinfo, err := getScreenInfo(Root)
+	sinfo, err := getScreenInfo()
 	dpy.setPropRotation(uint16(sinfo.Rotations))
 	dpy.updateRotationAndRelfect(sinfo.Rotation)
 
@@ -69,7 +72,8 @@ func NewDisplay() *Display {
 		panic("GetScreenInfo Failed:" + err.Error())
 	}
 	dpy.updateResources()
-	dpy.updateScreenSize(DefaultScreen.WidthInPixels, DefaultScreen.HeightInPixels)
+	dpy.setPropWidth(DefaultScreen.WidthInPixels)
+	dpy.setPropHeight(DefaultScreen.HeightInPixels)
 
 	dpy.updatePrimary()
 
@@ -161,9 +165,8 @@ func (dpy *Display) listener() {
 		if err != nil {
 			continue
 		}
-		switch e.(type) {
+		switch ee := e.(type) {
 		case randr.NotifyEvent:
-			ee := e.(randr.NotifyEvent)
 			switch ee.SubCode {
 			case randr.NotifyCrtcChange:
 				info := ee.U.Cc
@@ -172,7 +175,6 @@ func (dpy *Display) listener() {
 				}
 				w, h := parseScreenSize(dpy.Outputs)
 				fmt.Println("NotifyCrtcChange....:", w, h)
-				dpy.updateScreenSize(w, h)
 
 			case randr.NotifyOutputChange:
 				info := ee.U.Oc
@@ -182,42 +184,22 @@ func (dpy *Display) listener() {
 				case randr.ConnectionDisconnected, randr.ConnectionUnknown:
 					dpy.removeOutput(info.Output)
 				}
+				dpy.updatePrimary()
 			}
 		case randr.ScreenChangeNotifyEvent:
-			ee := e.(randr.ScreenChangeNotifyEvent)
-			dpy.updateResources()
 			if LastConfigTimeStamp < ee.ConfigTimestamp {
-				//TODO: monitor changed.
-				dpy.updateRotationAndRelfect(uint16(ee.Rotation))
-				fmt.Println("ee.Width,:", ee.Width, ee.Height)
-				dpy.updateScreenSize(ee.Width, ee.Height)
+				dpy.updateResources()
 				LastConfigTimeStamp = ee.ConfigTimestamp
+				//TODO: monitor changed.
+				dpy.setPropWidth(DefaultScreen.WidthInPixels)
+				dpy.setPropHeight(DefaultScreen.HeightInPixels)
+				dpy.updateRotationAndRelfect(uint16(ee.Rotation))
+				dpy.setPropWidth(DefaultScreen.WidthInPixels)
+				dpy.setPropHeight(DefaultScreen.HeightInPixels)
+				dpy.updatePrimary()
 			}
 		}
 	}
-}
-
-func (dpy *Display) updateScreenSize(width uint16, height uint16) {
-	if width < MinWidth || width > MaxWidth || height < MinHeight || height > MaxWidth {
-		logger.Println("updateScreenSize with invalid value:", width, height)
-		return
-	}
-
-	if width < dpy.Width || height < dpy.Height {
-		randr.SetScreenSizeChecked(X, Root, width+height, height+width, uint32(DefaultScreen.WidthInMillimeters), uint32(DefaultScreen.HeightInMillimeters)).Check()
-	}
-	/*err := randr.SetScreenSizeChecked(X, Root, MaxWidth, MaxHeight, uint32(DefaultScreen.WidthInMillimeters), uint32(DefaultScreen.HeightInMillimeters)).Check()*/
-	err := randr.SetScreenSizeChecked(X, Root, width, height, uint32(DefaultScreen.WidthInMillimeters), uint32(DefaultScreen.HeightInMillimeters)).Check()
-
-	if err != nil {
-		logger.Println("randr.SetScreenSize to :", width, height, DefaultScreen.WidthInPixels, DefaultScreen.HeightInPixels, err)
-		/*panic(fmt.Sprintln("randr.SetScreenSize to :", width, height, err))*/
-	}
-	if width != dpy.Width || height != dpy.Height {
-		dpy.setPropWidth(width)
-		dpy.setPropHeight(height)
-	}
-	dpy.updatePrimary()
 }
 func (dpy *Display) updateRotationAndRelfect(randr uint16) {
 	rotation, reflect := parseRandR(randr)
@@ -227,9 +209,7 @@ func (dpy *Display) updateRotationAndRelfect(randr uint16) {
 }
 
 func main() {
-	var dpy *Display = nil
-	dpy = NewDisplay()
-	dbus.InstallOnSession(dpy)
+	dbus.InstallOnSession(DPY)
 	dbus.DealWithUnhandledMessage()
 
 	select {}

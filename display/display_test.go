@@ -13,20 +13,13 @@ func delay() {
 }
 func Test(t *testing.T) { TestingT(t) }
 
-var dpy *Display
-
 func init() {
-	dpy = NewDisplay()
-	Suite(dpy)
-	for _, op := range dpy.Outputs {
+	Suite(DPY)
+	for _, op := range DPY.Outputs {
 		if op.Name == "LVDS1" {
 			Suite(op)
 		}
 		/*Suite(op)*/
-	}
-	for _, op := range dpy.Outputs {
-		xx, _ := randr.GetOutputInfo(X, op.Identify, 0).Reply()
-		fmt.Println(op.Name, " : ", op.crtc, xx.Crtcs)
 	}
 }
 
@@ -52,6 +45,21 @@ func (dpy *Display) TestScreenInfo(c *C) {
 func (dpy *Display) TestOutputList(c *C) {
 	c.Check(len(dpy.Outputs) >= 1, Equals, true)
 }
+func (dpy *Display) TestApply(c *C) {
+	/*return*/
+	for _, op := range dpy.Outputs {
+		if op.Name == "LVDS1" {
+			op.pendingConfig = NewPendingConfig(op)
+			op.pendingConfig.SetScale(1.125, 1.125)
+			fmt.Println("RECT:", op.pendingConfig.appliedAllocation())
+		} else {
+			op.pendingConfig = NewPendingConfig(op)
+			op.pendingConfig.SetRotation(randr.RotationRotate0 | randr.RotationReflectY | randr.RotationReflectX)
+
+		}
+	}
+	dpy.ApplyChanged()
+}
 
 func (dpy *Display) TestPrimaryOutput(c *C) {
 	/*return*/
@@ -64,12 +72,21 @@ func (dpy *Display) TestPrimaryOutput(c *C) {
 		dpy.SetPrimary(savedIdentify)
 	}()
 
+	dpy.SetPrimary(0)
+	delay()
+	delay()
+	delay()
+
 	for _, op := range dpy.Outputs {
 		if op.Opened {
 			dpy.SetPrimary(uint32(op.Identify))
 			delay()
+			delay()
+			delay()
+			c.Assert(dpy.PrimaryOutput, Equals, op)
 			c.Check(dpy.PrimaryRect.Width, Equals, op.Allocation.Width)
 			c.Check(dpy.PrimaryRect.Height, Equals, op.Allocation.Height)
+			fmt.Println("PrimARY:", dpy.PrimaryRect, "DPY:", op.Allocation)
 		}
 	}
 
@@ -81,6 +98,9 @@ func (dpy *Display) TestPrimaryOutput(c *C) {
 
 	dpy.SetPrimary(0)
 	delay()
+	delay()
+	delay()
+	c.Assert(dpy.PrimaryOutput, Not(NotNil))
 	c.Check(dpy.PrimaryRect.Width, Equals, dpy.Width)
 	c.Check(dpy.PrimaryRect.Height, Equals, dpy.Height)
 }
@@ -106,7 +126,7 @@ func (op *Output) TestInfo(c *C) {
 	crtcInfo, err := randr.GetCrtcInfo(X, op.crtc, 0).Reply()
 	if op.Opened {
 		c.Assert(err, Equals, nil)
-		c.Check(op.Mode, Equals, buildMode(dpy.modes[crtcInfo.Mode]))
+		c.Check(op.Mode, Equals, buildMode(DPY.modes[crtcInfo.Mode]))
 		c.Check(op.Rotation, Equals, uint16(crtcInfo.Rotation))
 	} else {
 		c.Assert(err, NotNil)
@@ -119,7 +139,7 @@ func (op *Output) TestInfo(c *C) {
 
 	op.ListModes()
 	op.ListRotations()
-	op.updateCrtc(dpy)
+	op.updateCrtc(DPY)
 	delay()
 }
 
@@ -176,20 +196,23 @@ func (op *Output) TestRandr(c *C) {
 func (op *Output) TestMode(c *C) {
 	/*return*/
 	vm := op.Mode
-	vw, vh := dpy.Width, dpy.Height
+	vw, vh := op.Allocation.Width, op.Allocation.Height
 	for _, m := range op.ListModes() {
 		delay()
 		op.SetMode(m.ID)
+		rect := op.pendingConfig.appliedAllocation()
+		DPY.ApplyChanged()
 		delay()
 		delay()
-		c.Check(op.Allocation.Width, Equals, dpy.Width)
-		c.Check(op.Allocation.Height, Equals, dpy.Height)
+		c.Check(op.Allocation.Width, Equals, rect.Width)
+		c.Check(op.Allocation.Height, Equals, rect.Height)
 	}
 	op.SetMode(vm.ID)
+	DPY.ApplyChanged()
 	delay()
 	delay()
-	c.Check(vw, Equals, dpy.Width)
-	c.Check(vh, Equals, dpy.Height)
+	c.Check(vw, Equals, op.Allocation.Width)
+	c.Check(vh, Equals, op.Allocation.Height)
 }
 func (op *Output) TestAllocation(c *C) {
 	/*return*/
@@ -197,13 +220,30 @@ func (op *Output) TestAllocation(c *C) {
 	delay()
 	if op.Name == "LVDS1" {
 		op.SetAllocation(0, 100, 0, 0, 0)
+		c.Check(op.pendingConfig.appliedAllocation(), Equals, xproto.Rectangle{0, 100, op.Allocation.Width, op.Allocation.Height})
+		DPY.ApplyChanged()
+		c.Assert(op.pendingConfig, Equals, (*pendingConfig)(nil))
+		delay()
+		delay()
+		c.Check(op.Allocation, Equals, xproto.Rectangle{0, 100, op.Allocation.Width, op.Allocation.Height})
 	} else {
 		op.SetAllocation(1280, 0, 0, 0, 0)
 	}
+}
+
+func (op *Output) TestPos(c *C) {
+	/*return*/
+	DPY.SetPrimary(uint32(op.Identify))
+	delay()
+	op.SetAllocation(0, 100, 0, 0, 0)
+	rect := op.pendingConfig.appliedAllocation()
+	DPY.ApplyChanged()
 	delay()
 	delay()
-	delay()
-	delay()
+	c.Check(DPY.PrimaryOutput, Equals, op)
+	c.Check(DPY.PrimaryRect, Equals, rect)
+	c.Check(DPY.PrimaryRect, Equals, op.Allocation)
+	c.Check(rect.Y, Equals, 100)
 }
 
 func (op *Output) TestGramm(c *C) {
@@ -248,14 +288,14 @@ func (op *Output) TestChangeMode(c *C) {
 
 func TestEnsure(t *testing.T) {
 	/*return*/
-	if dpy.PrimaryOutput == nil {
-		rect := xproto.Rectangle{0, 0, dpy.Width, dpy.Height}
-		if dpy.PrimaryRect != rect {
+	if DPY.PrimaryOutput == nil {
+		rect := xproto.Rectangle{0, 0, DPY.Width, DPY.Height}
+		if DPY.PrimaryRect != rect {
 			t.Fatal("PriamryRect not mathced when no primary output")
 		}
 	} else {
-		if dpy.PrimaryRect != dpy.PrimaryOutput.Allocation {
-			t.Fatal("PriamryRect not mathced when primary output with allocation:", dpy.PrimaryOutput.Allocation)
+		if DPY.PrimaryRect != DPY.PrimaryOutput.Allocation {
+			t.Fatal("PriamryRect not mathced when primary output with allocation:", DPY.PrimaryOutput.Allocation)
 		}
 	}
 }

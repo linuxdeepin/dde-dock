@@ -1,8 +1,13 @@
 package main
 
 import (
+	"archive/tar"
 	"bytes"
+	"compress/gzip"
+	"io"
+	"os"
 	"os/exec"
+	"path"
 	"strconv"
 	"strings"
 	"time"
@@ -63,4 +68,96 @@ func stringInSlice(a string, list []string) bool {
 		}
 	}
 	return false
+}
+
+func unTarGz(archiveFile string, destDir string, prefix string) error {
+	destDir = path.Clean(destDir) + string(os.PathSeparator)
+
+	// open the archive file
+	fr, err := os.Open(archiveFile)
+	if err != nil {
+		return err
+	}
+	defer fr.Close()
+
+	// create a gzip reader
+	gr, err := gzip.NewReader(fr)
+	if err != nil {
+		return err
+	}
+	defer gr.Close()
+
+	// create a tar reader
+	tr := tar.NewReader(gr)
+
+	// loop files
+	for hdr, err := tr.Next(); err != io.EOF; hdr, err = tr.Next() {
+		if err != nil {
+			return err
+		}
+
+		if !strings.HasPrefix(hdr.Name, prefix) {
+			continue
+		}
+
+		fi := hdr.FileInfo()
+		destFullPath := destDir + hdr.Name
+		logInfo("UnTarGzing file: " + hdr.Name) // TODO
+
+		if hdr.Typeflag == tar.TypeDir {
+			// create dir
+			os.MkdirAll(destFullPath, fi.Mode().Perm())
+			os.Chmod(destFullPath, fi.Mode().Perm())
+		} else {
+			// create the parent dir for file
+			os.MkdirAll(path.Dir(destFullPath), fi.Mode().Perm())
+
+			// write data to file
+			fw, err := os.Create(destFullPath)
+			if err != nil {
+				return err
+			}
+			_, err = io.Copy(fw, tr)
+			if err != nil {
+				return err
+			}
+			fw.Close()
+
+			os.Chmod(destFullPath, fi.Mode().Perm())
+		}
+	}
+	return nil
+}
+
+// find if a file in archive and return its path
+func findFileInTarGz(archiveFile string, targetFile string) (string, error) {
+	// open the archive file
+	fr, err := os.Open(archiveFile)
+	if err != nil {
+		return "", err
+	}
+	defer fr.Close()
+
+	// create a gzip reader
+	gr, err := gzip.NewReader(fr)
+	if err != nil {
+		return "", err
+	}
+	defer gr.Close()
+
+	// create a tar reader
+	tr := tar.NewReader(gr)
+
+	// loop files
+	targetPath := ""
+	for hdr, err := tr.Next(); err != io.EOF; hdr, err = tr.Next() {
+		if err != nil {
+			return "", err
+		}
+
+		if hdr.Typeflag != tar.TypeDir && strings.HasSuffix(hdr.Name, targetFile) {
+			targetPath = hdr.Name
+		}
+	}
+	return targetPath, nil
 }

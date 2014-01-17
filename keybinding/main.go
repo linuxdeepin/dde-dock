@@ -52,7 +52,6 @@ func (m *BindManager) AddKeyBind(name, action, shortcut string) AddAccelRet {
 
 	setCustomValues(gs, id, name, action, "")
 	gs.Connect("changed::shortcut", func(s *gio.Settings, key string) {
-		fmt.Printf("key: %s, value: %s\n", key, gs.GetString(key))
 		m.setPropList("CustomList")
 		grabKeyPairs(CustomPrevPairs, false)
 		grabKeyPairs(getCustomPairs(), true)
@@ -96,18 +95,17 @@ func (m *BindManager) ChangeShortcut(id int32, shortcut string) ConflictInfo {
 	tmpConflict := conflictChecked(id, tmpKeys)
 	if check.IsConflict {
 		insertConflictInvalidList(id)
-		insertConflictValidList(check.IdList)
 
 		if tmpConflict.IsConflict {
 			for _, k := range tmpConflict.IdList {
 				if k == id {
 					continue
 				}
-				if !idIsExist(k, check.IdList) {
-					deleteConflictValidId(k)
-				}
+				deleteConflictValidId(k)
+				deleteConflictInvalidId(k)
 			}
 		}
+		insertConflictValidList(check.IdList)
 	} else {
 		deleteConflictInvalidId(id)
 		deleteConflictValidId(id)
@@ -117,7 +115,7 @@ func (m *BindManager) ChangeShortcut(id int32, shortcut string) ConflictInfo {
 					continue
 				}
 				deleteConflictValidId(k)
-		deleteConflictInvalidId(k)
+				deleteConflictInvalidId(k)
 			}
 		}
 	}

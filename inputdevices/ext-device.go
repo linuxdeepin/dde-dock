@@ -1,9 +1,9 @@
 package main
 
 import (
-	"dlib/dbus"
 	"dlib/dbus/property"
 	"dlib/gio-2.0"
+        "dlib/logger"
 )
 
 type ExtDevManager struct {
@@ -18,7 +18,7 @@ type ExtDeviceInfo struct {
 type MouseEntry struct {
 	UseHabit       *property.GSettingsBoolProperty  `access:"readwrite"`
 	MoveSpeed      *property.GSettingsFloatProperty `access:"readwrite"`
-	MoveAccuracy   *property.GSettingsFloatProperty   `access:"readwrite"`
+	MoveAccuracy   *property.GSettingsFloatProperty `access:"readwrite"`
 	ClickFrequency *property.GSettingsIntProperty   `access:"readwrite"`
 	DeviceID       string
 }
@@ -27,7 +27,7 @@ type TPadEntry struct {
 	TPadEnable     *property.GSettingsBoolProperty   `access:"readwrite"`
 	UseHabit       *property.GSettingsStringProperty `access:"readwrite"`
 	MoveSpeed      *property.GSettingsFloatProperty  `access:"readwrite"`
-	MoveAccuracy   *property.GSettingsFloatProperty    `access:"readwrite"`
+	MoveAccuracy   *property.GSettingsFloatProperty  `access:"readwrite"`
 	ClickFrequency *property.GSettingsIntProperty    `access:"readwrite"`
 	DragDelay      *property.GSettingsIntProperty    `access:"readwrite"`
 	DeviceID       string
@@ -91,15 +91,13 @@ func NewKeyboardEntry() *KeyboardEntry {
 	return keyboard
 }
 
-func (keyboard *KeyboardEntry) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		_EXT_DEV_NAME,
-		_EXT_ENTRY_PATH + keyboard.DeviceID,
-		_EXT_ENTRY_IFC + keyboard.DeviceID,
-	}
-}
-
-func (keyboard *KeyboardEntry) LayoutList () map[string]string {
+func (keyboard *KeyboardEntry) LayoutList() map[string]string {
+        defer func () {
+                if err := recover(); err != nil {
+                        logger.Println("recover error in get layout list:",
+                err)
+                }
+        }()
 	datas := ParseXML(_LAYOUT_XML_PATH)
 	layouts := GetLayoutList(datas)
 
@@ -122,14 +120,6 @@ func NewMouseEntry() *MouseEntry {
 	return mouse
 }
 
-func (mouse *MouseEntry) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		_EXT_DEV_NAME,
-		_EXT_ENTRY_PATH + mouse.DeviceID,
-		_EXT_ENTRY_IFC + mouse.DeviceID,
-	}
-}
-
 func NewTPadEntry() *TPadEntry {
 	tpad := &TPadEntry{}
 
@@ -150,18 +140,6 @@ func NewTPadEntry() *TPadEntry {
 	return tpad
 }
 
-func (tpad *TPadEntry) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		_EXT_DEV_NAME,
-		_EXT_ENTRY_PATH + tpad.DeviceID,
-		_EXT_ENTRY_IFC + tpad.DeviceID,
-	}
-}
-
 func NewExtDevManager() *ExtDevManager {
 	return &ExtDevManager{}
-}
-
-func (dev *ExtDevManager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{_EXT_DEV_NAME, _EXT_DEV_PATH, _EXT_DEV_IFC}
 }
