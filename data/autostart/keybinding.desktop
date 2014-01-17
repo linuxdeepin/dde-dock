@@ -2,7 +2,7 @@
 Type = Application
 Exec = /usr/lib/deepin-daemon/keybinding
 Terminal=false
-Hidden=false
+Hidden=true
 Name = keybinding
 Comment = keybinding daemon
 X-GNOME-Autostart-enabled = true

@@ -24,7 +24,7 @@ package main
 import (
 	"dlib/dbus"
 	"dlib/gio-2.0"
-	"fmt"
+	"dlib/logger"
 )
 
 const (
@@ -47,7 +47,7 @@ func (m *Manager) setPropName(name string) {
 		m.DiskList = getDiskInfoList()
 		dbus.NotifyChange(m, name)
 	default:
-		fmt.Printf("'%s': invalid mount property\n")
+		logger.Printf("'%s': invalid mount property\n")
 	}
 }
 
