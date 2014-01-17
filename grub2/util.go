@@ -18,8 +18,10 @@ func quoteString(str string) string {
 }
 
 func unquoteString(str string) string {
-	if (strings.HasPrefix(str, `"`) && strings.HasSuffix(str, `"`)) ||
-		(strings.HasPrefix(str, `'`) && strings.HasSuffix(str, `'`)) {
+	if strings.HasPrefix(str, `"`) && strings.HasSuffix(str, `"`) {
+		s, _ := strconv.Unquote(str)
+		return s
+	} else if strings.HasPrefix(str, `'`) && strings.HasSuffix(str, `'`) {
 		return str[1 : len(str)-1]
 	}
 	return str
