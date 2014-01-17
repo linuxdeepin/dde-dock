@@ -79,3 +79,19 @@ func (tm *ThemeManager) IsThemeCustomizable(themeName string) bool {
 	_, ok := tm.getThemeTplFile(themeName)
 	return ok
 }
+
+// TODO
+func (tm *ThemeManager) GetThemeCustomizedValues(themeName string) (background, itemColor, selectedItemColor string) {
+	return "", "", ""
+}
+
+// TODO
+func (tm *ThemeManager) GetThemeCustomizedDefaultValues(themeName string) (background, itemColor, selectedItemColor string) {
+	return "", "", ""
+	// return true
+}
+
+// TODO
+func (tm *ThemeManager) CustomTheme(themeName, background, itemColor, selectedItemColor string) bool {
+	return true
+}

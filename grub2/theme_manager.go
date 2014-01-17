@@ -3,6 +3,8 @@ package main
 import (
 	"path"
 	"strings"
+	"text/template"
+	"bytes"
 )
 
 const (
@@ -11,16 +13,10 @@ const (
 	_THEME_TPL_FILE  = "theme.tpl"
 )
 
+var _THEME_TEMPLATOR = template.New("theme-templator")
+
 type ThemeTpl struct {
 	Background, ItemColor, SelectedItemColor string
-}
-
-type Theme struct {
-	name    string
-	tplfile string
-	tpldata ThemeTpl
-	// zipfile  string
-	// mainfile string
 }
 
 type ThemeManager struct {
@@ -93,4 +89,18 @@ func (tm *ThemeManager) getThemeTplFile(themeName string) (string, bool) {
 		return tplFile, true
 	}
 	return "", false
+}
+
+func (tm *ThemeManager) getCustomizedThemeContent(fileContent string, tplData ThemeTpl) (string, error) {
+	tpl, err := _THEME_TEMPLATOR.Parse(fileContent)
+	if err != nil {
+		return "", err
+	}
+
+	buf := bytes.NewBufferString("")
+    err = tpl.Execute(buf, tplData)
+	if err != nil {
+		return "", err
+	}
+	return buf.String(), nil
 }
