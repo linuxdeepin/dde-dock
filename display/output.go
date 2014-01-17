@@ -49,7 +49,7 @@ func (op *Output) ListReflect() []uint16 {
 	return parseReflects(op.rotations)
 }
 
-func (op *Output) SetAllocation(x, y, width, height, adjMethod int16) {
+func (op *Output) SetAllocation(x, y int16, width, height uint16, adjMethod uint8) {
 	//TODO: handle adjMethod with `width` and `height`
 
 	cinfo, err := randr.GetCrtcInfo(X, op.crtc, LastConfigTimeStamp).Reply()

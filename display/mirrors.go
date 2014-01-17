@@ -24,19 +24,6 @@ var (
 	_DisplayPort      = getAtom(X, "DisplayPort")
 )
 
-func (dpy *Display) updateMirrorOutput() {
-	var mirrorOP *Output = nil
-	currentType := unknownAtom
-	for _, op := range dpy.Outputs {
-		t := getContentorType(op.Identify)
-		if greterConnectorType(currentType, t) {
-			currentType = t
-			mirrorOP = op
-		}
-	}
-	dpy.setPropMirrorOutput(mirrorOP)
-}
-
 var connectorTypeMap = map[xproto.Atom]int{
 	_PanelAtom:        0,
 	_VGAAtom:          1,
@@ -108,4 +95,18 @@ func (dpy *Display) adjustOutputToMirror(op *Output) {
 
 func matchMirror(width, height uint16, modes []Mode) (m randr.Mode, sameRation bool, x uint16, y uint16) {
 	return 0, false, 0, 0
+}
+
+func getMirrorOutput(dpy *Display) *Output {
+	// It's a bug if there isn't any Output.
+	var mirrorOP *Output = dpy.Outputs[0]
+	currentType := unknownAtom
+	for _, op := range dpy.Outputs {
+		t := getContentorType(op.Identify)
+		if greterConnectorType(currentType, t) {
+			currentType = t
+			mirrorOP = op
+		}
+	}
+	return mirrorOP
 }
