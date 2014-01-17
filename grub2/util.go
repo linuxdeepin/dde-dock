@@ -157,7 +157,16 @@ func findFileInTarGz(archiveFile string, targetFile string) (string, error) {
 
 		if hdr.Typeflag != tar.TypeDir && strings.HasSuffix(hdr.Name, targetFile) {
 			targetPath = hdr.Name
+			break
 		}
 	}
 	return targetPath, nil
+}
+
+func isFileExist(file string) bool {
+	if _, err := os.Stat(file); err == nil {
+		return true
+	} else {
+		return false
+	}
 }

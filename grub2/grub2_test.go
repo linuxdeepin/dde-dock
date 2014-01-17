@@ -138,7 +138,7 @@ func (grub *Grub2) TestSetterAndGetter(c *C) {
 	grub.setBackground(wantBackground)
 	c.Check(grub.getBackground(), Equals, wantBackground)
 
-	// theme
+	// TODO theme
 	wantTheme := "/boot/grub/themes/demo/theme.txt"
 	c.Check(grub.getTheme(), Equals, wantTheme)
 	wantTheme = "another_theme.txt"
