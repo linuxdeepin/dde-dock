@@ -37,6 +37,8 @@ func (tm *ThemeManager) setEnabledThemeMainFile(file string) {
 	// if the theme.txt file is not under theme dir(/boot/grub/themes), ignore it
 	if strings.HasPrefix(file, _THEME_DIR) {
 		tm.enabledThemeMainFile = file
+	} else {
+		tm.enabledThemeMainFile = ""
 	}
 }
 

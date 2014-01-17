@@ -209,7 +209,7 @@ func (grub *Grub2) parseSettings(fileContent string) error {
 		return err
 	}
 
-	// get properties, return default value for the missing property
+	// reset properties, return default value for the missing property
 	grub.DefaultEntry = grub.getDefaultEntry()
 	grub.Timeout = grub.getTimeout()
 	grub.Gfxmode = grub.getGfxmode()

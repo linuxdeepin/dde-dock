@@ -12,13 +12,13 @@ func init() {
 }
 
 func (tm *ThemeManager) TestGetterAndSetter(c *C) {
-	f := "/dir/grub/themes/test-theme/theme.txt"
-	want := ""
+	f := "/boot/grub/themes/test-theme/theme.txt"
+	want := f
 	tm.setEnabledThemeMainFile(f)
 	c.Check(tm.getEnabledThemeMainFile(), Equals, want)
 	
-	f = "/boot/grub/themes/test-theme/theme.txt"
-	want = f
+	f = "/dir/grub/themes/test-theme/theme.txt"
+	want = ""
 	tm.setEnabledThemeMainFile(f)
 	c.Check(tm.getEnabledThemeMainFile(), Equals, want)
 }
