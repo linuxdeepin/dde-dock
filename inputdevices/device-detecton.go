@@ -22,7 +22,7 @@
 package main
 
 import (
-	"fmt"
+	"dlib/logger"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -44,13 +44,13 @@ func IsFileNotExist(filename string) bool {
 
 func GetProcDeviceNameList() (bool, []string) {
 	if IsFileNotExist(_PROC_DEVICE_PATH) {
-		fmt.Printf("%s not exist\n", _PROC_DEVICE_PATH)
+		logger.Printf("%s not exist\n", _PROC_DEVICE_PATH)
 		return false, []string{}
 	}
 
 	contents, err := ioutil.ReadFile(_PROC_DEVICE_PATH)
 	if err != nil {
-		fmt.Println(err)
+		logger.Println(err)
 		return false, []string{}
 	}
 

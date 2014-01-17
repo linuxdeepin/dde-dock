@@ -6,11 +6,17 @@ package main
 import "C"
 import (
 	"dlib"
+        "dlib/logger"
 	"dlib/dbus"
 	"unsafe"
 )
 
 func main() {
+        defer func() {
+                if err := recover(); err != nil {
+                        logger.Println("recover err:", err)
+                }
+        }()
 	tpadFlag := false
 
 	if !InitGSettings() {
