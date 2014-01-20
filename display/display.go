@@ -2,6 +2,7 @@ package main
 
 import (
 	"dlib/dbus"
+	"dlib/logger"
 	"fmt"
 	"github.com/BurntSushi/xgb"
 	"github.com/BurntSushi/xgb/randr"
@@ -41,7 +42,6 @@ func init() {
 
 type Display struct {
 	modes map[randr.Mode]randr.ModeInfo
-	mirrorMode bool
 
 	Outputs []*Output
 
@@ -52,11 +52,13 @@ type Display struct {
 	Reflect   uint16 `access:readwrite`
 	rotations uint16
 
-	MirrorOutput  *Output `access:readwrite`
 	PrimaryOutput *Output `access:readwrite`
 	//used by deepin-dock/launcher/desktop
 	PrimaryRect    xproto.Rectangle
 	PrimaryChanged func(xproto.Rectangle)
+
+	MirrorMode   bool
+	MirrorOutput *Output `access:readwrite`
 }
 
 func initDisplay() *Display {
@@ -209,9 +211,22 @@ func (dpy *Display) updateRotationAndRelfect(randr uint16) {
 	dpy.setPropReflect(reflect)
 }
 
+func (dpy *Display) setScreenSize(width uint16, height uint16) {
+	if width < MinWidth || width > MaxWidth || height < MinHeight || height > MaxWidth {
+		logger.Println("updateScreenSize with invalid value:", width, height)
+		return
+	}
+
+	err := randr.SetScreenSizeChecked(X, Root, width, height, uint32(DefaultScreen.WidthInMillimeters), uint32(DefaultScreen.HeightInMillimeters)).Check()
+
+	if err != nil {
+		logger.Println("randr.SetScreenSize to :", width, height, DefaultScreen.WidthInPixels, DefaultScreen.HeightInPixels, err)
+		/*panic(fmt.Sprintln("randr.SetScreenSize to :", width, height, err))*/
+	}
+}
+
 func main() {
 	dbus.InstallOnSession(DPY)
 	dbus.DealWithUnhandledMessage()
-
 	select {}
 }
