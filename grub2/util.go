@@ -165,7 +165,7 @@ func findFileInTarGz(archiveFile string, targetFile string) (string, error) {
 	return targetPath, nil
 }
 
-func isFileExist(file string) bool {
+func isFileExists(file string) bool {
 	if _, err := os.Stat(file); err == nil {
 		return true
 	} else {

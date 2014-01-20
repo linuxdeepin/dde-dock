@@ -1,23 +1,28 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"path"
 	"strings"
 	"text/template"
-	"bytes"
 )
 
 const (
 	_THEME_DIR       = "/boot/grub/themes"
 	_THEME_MAIN_FILE = "theme.txt"
 	_THEME_TPL_FILE  = "theme.tpl"
+
+	// json stores the key-values for template file
+	_THEME_TPL_JSON_LAST    = "theme_tpl_last.json"
+	_THEME_TPL_JSON_DEFAULT = "theme_tpl_default.json"
+
+	_THEME_TPL_KEY_BACKGROUND          = "Background"
+	_THEME_TPL_KEY_ITEM_COLOR          = "ItemColor"
+	_THEME_TPL_KEY_SELECTED_ITEM_COLOR = "SelectedItemColor"
 )
 
 var _THEME_TEMPLATOR = template.New("theme-templator")
-
-type ThemeTpl struct {
-	Background, ItemColor, SelectedItemColor string
-}
 
 type ThemeManager struct {
 	enabledThemeMainFile string
@@ -69,38 +74,64 @@ func (tm *ThemeManager) getThemeName(themeMainFile string) string {
 
 func (tm *ThemeManager) getThemePath(themeName string) (string, bool) {
 	themePath := path.Join(_THEME_DIR, themeName)
-	if isFileExist(themePath) {
+	if isFileExists(themePath) {
 		return themePath, true
 	}
-	return "", false
+	return themePath, false
 }
 
 func (tm *ThemeManager) getThemeMainFile(themeName string) (string, bool) {
-	mainFile := path.Join(_THEME_DIR, themeName, _THEME_MAIN_FILE)
-	if isFileExist(mainFile) {
-		return mainFile, true
+	file := path.Join(_THEME_DIR, themeName, _THEME_MAIN_FILE)
+	if isFileExists(file) {
+		return file, true
 	}
-	return "", false
+	return file, false
 }
 
 func (tm *ThemeManager) getThemeTplFile(themeName string) (string, bool) {
-	tplFile := path.Join(_THEME_DIR, themeName, _THEME_TPL_FILE)
-	if isFileExist(tplFile) {
-		return tplFile, true
+	file := path.Join(_THEME_DIR, themeName, _THEME_TPL_FILE)
+	if isFileExists(file) {
+		return file, true
 	}
-	return "", false
+	return file, false
 }
 
-func (tm *ThemeManager) getCustomizedThemeContent(fileContent string, tplData ThemeTpl) (string, error) {
-	tpl, err := _THEME_TEMPLATOR.Parse(fileContent)
+func (tm *ThemeManager) getThemeTplDefaultJsonFile(themeName string) (string, bool) {
+	file := path.Join(_THEME_DIR, themeName, _THEME_TPL_JSON_DEFAULT)
+	if isFileExists(file) {
+		return file, true
+	}
+	return file, false
+}
+
+func (tm *ThemeManager) getThemeTplLastJsonFile(themeName string) (string, bool) {
+	file := path.Join(_THEME_DIR, themeName, _THEME_TPL_JSON_LAST)
+	if isFileExists(file) {
+		return file, true
+	}
+	return file, false
+}
+
+func (tm *ThemeManager) getCustomizedThemeContent(fileContent []byte, tplData interface{}) ([]byte, error) {
+	tpl, err := _THEME_TEMPLATOR.Parse(string(fileContent))
 	if err != nil {
-		return "", err
+		return []byte(""), err
 	}
 
 	buf := bytes.NewBufferString("")
-    err = tpl.Execute(buf, tplData)
+	err = tpl.Execute(buf, tplData)
 	if err != nil {
-		return "", err
+		return []byte(""), err
 	}
-	return buf.String(), nil
+	return buf.Bytes(), nil
+}
+
+func (tm *ThemeManager) getValuesInJson(fileContent []byte) (background, itemColor, selectedItemColor string, ok bool) {
+	tplData := make(map[string]string)
+	err := json.Unmarshal(fileContent, &tplData)
+	if err != nil {
+		logError(err.Error()) // TODO
+		return "", "", "", false
+	}
+	return tplData[_THEME_TPL_KEY_BACKGROUND], tplData[_THEME_TPL_KEY_ITEM_COLOR], tplData[_THEME_TPL_KEY_SELECTED_ITEM_COLOR], true
 }

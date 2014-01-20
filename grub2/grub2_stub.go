@@ -77,25 +77,3 @@ func (grub *Grub2) GetEntryTitles() ([]string, error) {
 	}
 	return entryTitles, nil
 }
-
-// TODO
-// func  (grub *Grub2) SetThemeBackground(imageFile string) bool {
-// 	return true
-// }
-
-// // TODO
-// func (grub *Grub2) deployTheme(archiveFile string) error {
-// 	themePathInZip, err := findFileInTarGz(archiveFile, _THEME_MAIN_FILE)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	err = unTarGz(archiveFile, _THEME_DIR, path.Dir(themePathInZip))
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	themePath := path.Clean(_THEME_DIR + string(os.PathSeparator) + themePathInZip)
-// 	grub.setTheme(themePath)
-
-// 	return nil
-// }

@@ -1,9 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	. "launchpad.net/gocheck"
 )
-
 
 var tm *ThemeManager
 
@@ -17,7 +17,7 @@ func (tm *ThemeManager) TestGetterAndSetter(c *C) {
 	want := f
 	tm.setEnabledThemeMainFile(f)
 	c.Check(tm.getEnabledThemeMainFile(), Equals, want)
-	
+
 	f = "/dir/grub/themes/test-theme/theme.txt"
 	want = ""
 	tm.setEnabledThemeMainFile(f)
@@ -35,6 +35,18 @@ func (tm *ThemeManager) TestGetThemeName(c *C) {
 	for _, t := range tests {
 		c.Check(tm.getThemeName(t.s), Equals, t.want)
 	}
+}
+
+func (tm *ThemeManager) TestGetValuesInJson(c *C) {
+	testJsonData := `{"Background": "background.jpg","ItemColor":"#a6a6a6","SelectedItemColor":"#fefefe"}`
+	wantBackground, wantItemColor, wantSelectedItemColor := "background.jpg", "#a6a6a6", "#fefefe"
+	background, itemColor, selectedItemColor, ok := tm.getValuesInJson([]byte(testJsonData))
+	if !ok {
+		c.Error("parse json data failed")
+	}
+	c.Check(background, Equals, wantBackground)
+	c.Check(itemColor, Equals, wantItemColor)
+	c.Check(selectedItemColor, Equals, wantSelectedItemColor)
 }
 
 func (tm *ThemeManager) TestGetCustomizedThemeContent(c *C) {
@@ -64,6 +76,7 @@ terminal-font: "Fixed Regular 13"
   scrollbar_thumb = "sb_th_*.png"
 }
 `
+	testThemeTplJSON := `{"Background": "background.jpg","ItemColor":"#a6a6a6","SelectedItemColor":"#fefefe"}`
 	wantThemeTxtContent := `# GRUB2 gfxmenu Linux Deepin theme
 # Designed for 1024x768 resolution
 # Global Property
@@ -90,25 +103,12 @@ terminal-font: "Fixed Regular 13"
   scrollbar_thumb = "sb_th_*.png"
 }
 `
-	tplData := ThemeTpl{"background.jpg", "#a6a6a6", "#fefefe"}
-	s, _ := tm.getCustomizedThemeContent(testThemeTplContent, tplData)
-	c.Check(s, Equals, wantThemeTxtContent)
+	tplData := make(map[string]string)
+	err := json.Unmarshal([]byte(testThemeTplJSON), &tplData)
+	if err != nil {
+		c.Error(err)
+	}
+
+	s, _ := tm.getCustomizedThemeContent([]byte(testThemeTplContent), tplData)
+	c.Check(string(s), Equals, wantThemeTxtContent)
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

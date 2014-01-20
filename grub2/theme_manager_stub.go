@@ -2,6 +2,7 @@ package main
 
 import (
 	"dlib/dbus"
+	"encoding/json"
 	"io/ioutil"
 	"os"
 	"path"
@@ -59,7 +60,8 @@ func (tm *ThemeManager) InstallTheme(archive string) bool {
 		logError("install theme %s failed: %v", archive, err) // TODO
 		return false
 	}
-	unTarGz(archive, _THEME_DIR, path.Dir(themePathInZip))
+	themePathPrefix := path.Dir(themePathInZip)
+	unTarGz(archive, _THEME_DIR, themePathPrefix)
 	return true
 }
 
@@ -80,18 +82,72 @@ func (tm *ThemeManager) IsThemeCustomizable(themeName string) bool {
 	return ok
 }
 
-// TODO
-func (tm *ThemeManager) GetThemeCustomizedValues(themeName string) (background, itemColor, selectedItemColor string) {
-	return "", "", ""
+func (tm *ThemeManager) GetThemeLastCustomizeValues(themeName string) (background, itemColor, selectedItemColor string, ok bool) {
+	jsonFile, ok := tm.getThemeTplLastJsonFile(themeName)
+	if !ok {
+		return tm.GetThemeDefaultCustomizeValues(themeName)
+	}
+
+	fileContent, err := ioutil.ReadFile(jsonFile)
+	if err != nil {
+		logError(err.Error()) // TODO
+		return "", "", "", false
+	}
+	return tm.getValuesInJson(fileContent)
 }
 
-// TODO
-func (tm *ThemeManager) GetThemeCustomizedDefaultValues(themeName string) (background, itemColor, selectedItemColor string) {
-	return "", "", ""
-	// return true
+func (tm *ThemeManager) GetThemeDefaultCustomizeValues(themeName string) (background, itemColor, selectedItemColor string, ok bool) {
+	jsonFile, ok := tm.getThemeTplDefaultJsonFile(themeName)
+	if !ok {
+		logError("theme [%s]: default json data file is not existed", themeName) // TODO
+		return "", "", "", false
+	}
+
+	fileContent, err := ioutil.ReadFile(jsonFile)
+	if err != nil {
+		logError(err.Error()) // TODO
+		return "", "", "", false
+	}
+	return tm.getValuesInJson(fileContent)
 }
 
-// TODO
 func (tm *ThemeManager) CustomTheme(themeName, background, itemColor, selectedItemColor string) bool {
+	tplData := make(map[string]string)
+	tplData[_THEME_TPL_KEY_BACKGROUND] = background
+	tplData[_THEME_TPL_KEY_ITEM_COLOR] = itemColor
+	tplData[_THEME_TPL_KEY_SELECTED_ITEM_COLOR] = selectedItemColor
+
+	tplFile, ok := tm.getThemeTplFile(themeName)
+	if !ok {
+		logError("theme [%s]: template file is not exited", themeName) // TODO
+	}
+
+	tplFileContent, err := ioutil.ReadFile(tplFile)
+	if err != nil {
+		logError(err.Error()) // TODO
+		return false
+	}
+
+	themeFileContent, err := tm.getCustomizedThemeContent(tplFileContent, tplData)
+	themeMainFile, _ := tm.getThemeMainFile(themeName)
+	err = ioutil.WriteFile(themeMainFile, themeFileContent, 0644)
+	if err != nil {
+		logError(err.Error()) // TODO
+		return false
+	}
+
+	// store the customized key-values to json file
+	jsonContent, err := json.Marshal(tplData)
+	if err != nil {
+		logError(err.Error()) // TODO
+		return false
+	}
+	lastJsonFile, _ := tm.getThemeTplLastJsonFile(themeName)
+	err = ioutil.WriteFile(lastJsonFile, jsonContent, 0644)
+	if err != nil {
+		logError(err.Error()) // TODO
+		return false
+	}
+
 	return true
 }
