@@ -36,11 +36,13 @@ func (desk *Manager) OnPropertiesChanged(name string, old interface{}) {
 		if v, ok := old.(int32); ok &&
 			v != desk.BottomRight {
 			desk.setBottomRightAction(v)
+	desk.printManager()
 		}
 	case "TopLeft":
 		if v, ok := old.(int32); ok &&
 			v != desk.TopLeft {
 			desk.setTopLeftAction(v)
+	desk.printManager()
 		}
 	}
 }
@@ -87,6 +89,7 @@ func (desk *Manager) getEdgeAction() {
 
 	dbus.NotifyChange(desk, "TopLeft")
 	dbus.NotifyChange(desk, "BottomRight")
+	desk.printManager()
 }
 
 func (desk *Manager) setTopLeftAction(index int32) {
