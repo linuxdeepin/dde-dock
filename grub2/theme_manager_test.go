@@ -49,6 +49,18 @@ func (tm *ThemeManager) TestGetValuesInJson(c *C) {
 	c.Check(selectedItemColor, Equals, wantSelectedItemColor)
 }
 
+func (tm *ThemeManager) TestGetNewBgFileName(c *C) {
+	tests := []struct {
+		s, want string
+	}{
+		{"/a/b/c/d/image.png", "background.png"},
+		{"/image2.jpg", "background.jpg"},
+	}
+	for _, t := range tests {
+		c.Check(tm.getNewBgFileName(t.s), Equals, t.want)
+	}
+}
+
 func (tm *ThemeManager) TestGetCustomizedThemeContent(c *C) {
 	testThemeTplContent := `# GRUB2 gfxmenu Linux Deepin theme
 # Designed for 1024x768 resolution

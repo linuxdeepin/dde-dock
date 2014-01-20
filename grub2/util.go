@@ -174,6 +174,11 @@ func isFileExists(file string) bool {
 }
 
 func copyFile(dest, src string) (written int64, err error) {
+	if dest == src {
+		logInfo("copyFile(): source and destination are same file") // TODO
+		return
+	}
+
 	sf, err := os.Open(src)
 	if err != nil {
 		return

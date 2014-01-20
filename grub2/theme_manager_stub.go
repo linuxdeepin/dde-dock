@@ -93,7 +93,12 @@ func (tm *ThemeManager) GetThemeLastCustomizeValues(themeName string) (backgroun
 		logError(err.Error()) // TODO
 		return "", "", "", false
 	}
-	return tm.getValuesInJson(fileContent)
+	background, itemColor, selectedItemColor, ok = tm.getValuesInJson(fileContent)
+	background = tm.getBgFileAbsPath(themeName, background)
+	if !isFileExists(background) {
+		logError("theme [%s]: background file not existed", background)
+	}
+	return
 }
 
 func (tm *ThemeManager) GetThemeDefaultCustomizeValues(themeName string) (background, itemColor, selectedItemColor string, ok bool) {
@@ -108,10 +113,21 @@ func (tm *ThemeManager) GetThemeDefaultCustomizeValues(themeName string) (backgr
 		logError(err.Error()) // TODO
 		return "", "", "", false
 	}
-	return tm.getValuesInJson(fileContent)
+	background, itemColor, selectedItemColor, ok = tm.getValuesInJson(fileContent)
+	background = tm.getBgFileAbsPath(themeName, background)
+	if !isFileExists(background) {
+		logError("theme [%s]: background file not existed", background)
+	}
+	return
 }
 
 func (tm *ThemeManager) CustomTheme(themeName, background, itemColor, selectedItemColor string) bool {
+	_, err := tm.copyBgFileToThemeDir(themeName, background)
+	if err != nil {
+		return false
+	}
+	background = tm.getNewBgFileName(background)
+
 	tplData := make(map[string]string)
 	tplData[_THEME_TPL_KEY_BACKGROUND] = background
 	tplData[_THEME_TPL_KEY_ITEM_COLOR] = itemColor
@@ -119,7 +135,7 @@ func (tm *ThemeManager) CustomTheme(themeName, background, itemColor, selectedIt
 
 	tplFile, ok := tm.getThemeTplFile(themeName)
 	if !ok {
-		logError("theme [%s]: template file is not exited", themeName) // TODO
+		logError("theme [%s]: template file is not existed", themeName) // TODO
 	}
 
 	tplFileContent, err := ioutil.ReadFile(tplFile)

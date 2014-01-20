@@ -72,44 +72,34 @@ func (tm *ThemeManager) getThemeName(themeMainFile string) string {
 	return path.Base(path.Dir(themeMainFile))
 }
 
-func (tm *ThemeManager) getThemePath(themeName string) (string, bool) {
-	themePath := path.Join(_THEME_DIR, themeName)
-	if isFileExists(themePath) {
-		return themePath, true
-	}
-	return themePath, false
+func (tm *ThemeManager) getThemePath(themeName string) (themePath string, existed bool) {
+	themePath = path.Join(_THEME_DIR, themeName)
+	existed = isFileExists(themePath)
+	return
 }
 
-func (tm *ThemeManager) getThemeMainFile(themeName string) (string, bool) {
-	file := path.Join(_THEME_DIR, themeName, _THEME_MAIN_FILE)
-	if isFileExists(file) {
-		return file, true
-	}
-	return file, false
+func (tm *ThemeManager) getThemeMainFile(themeName string) (file string, existed bool) {
+	file = path.Join(_THEME_DIR, themeName, _THEME_MAIN_FILE)
+	existed = isFileExists(file)
+	return
 }
 
-func (tm *ThemeManager) getThemeTplFile(themeName string) (string, bool) {
-	file := path.Join(_THEME_DIR, themeName, _THEME_TPL_FILE)
-	if isFileExists(file) {
-		return file, true
-	}
-	return file, false
+func (tm *ThemeManager) getThemeTplFile(themeName string) (file string, existed bool) {
+	file = path.Join(_THEME_DIR, themeName, _THEME_TPL_FILE)
+	existed = isFileExists(file)
+	return
 }
 
-func (tm *ThemeManager) getThemeTplDefaultJsonFile(themeName string) (string, bool) {
-	file := path.Join(_THEME_DIR, themeName, _THEME_TPL_JSON_DEFAULT)
-	if isFileExists(file) {
-		return file, true
-	}
-	return file, false
+func (tm *ThemeManager) getThemeTplDefaultJsonFile(themeName string) (file string, existed bool) {
+	file = path.Join(_THEME_DIR, themeName, _THEME_TPL_JSON_DEFAULT)
+	existed = isFileExists(file)
+	return
 }
 
-func (tm *ThemeManager) getThemeTplLastJsonFile(themeName string) (string, bool) {
-	file := path.Join(_THEME_DIR, themeName, _THEME_TPL_JSON_LAST)
-	if isFileExists(file) {
-		return file, true
-	}
-	return file, false
+func (tm *ThemeManager) getThemeTplLastJsonFile(themeName string) (file string, existed bool) {
+	file = path.Join(_THEME_DIR, themeName, _THEME_TPL_JSON_LAST)
+	existed = isFileExists(file)
+	return
 }
 
 func (tm *ThemeManager) getCustomizedThemeContent(fileContent []byte, tplData interface{}) ([]byte, error) {
@@ -133,5 +123,42 @@ func (tm *ThemeManager) getValuesInJson(fileContent []byte) (background, itemCol
 		logError(err.Error()) // TODO
 		return "", "", "", false
 	}
-	return tplData[_THEME_TPL_KEY_BACKGROUND], tplData[_THEME_TPL_KEY_ITEM_COLOR], tplData[_THEME_TPL_KEY_SELECTED_ITEM_COLOR], true
+	background = tplData[_THEME_TPL_KEY_BACKGROUND]
+	itemColor = tplData[_THEME_TPL_KEY_ITEM_COLOR]
+	selectedItemColor = tplData[_THEME_TPL_KEY_SELECTED_ITEM_COLOR]
+	return background, itemColor, selectedItemColor, true
+}
+
+func (tm *ThemeManager) getBgFileAbsPath(themeName, bgFileRelPath string) string {
+	themPath, _ := tm.getThemePath(themeName)
+	bgFileAbsPath := path.Join(themPath, bgFileRelPath)
+	return bgFileAbsPath
+}
+
+// TODO
+// func (tm *ThemeManager) getBgFileRelPath(themeName, bgFileAbsPath string) string {
+// 	themPath, _ := tm.getThemePath(themeName)
+// 	i := strings.Index(bgFileAbsPath, themPath)
+// 	if i >= 0 {
+// 		bgFileRelPath := bgFileAbsPath[i:]
+// 	}
+// 	// existed = isFileExists(bgFileAbsPath)
+// 	return bgFileRelPath
+// }
+
+func (tm *ThemeManager) copyBgFileToThemeDir(themeName, imageFile string) (newBgFile string, err error) {
+	bgFileName := tm.getNewBgFileName(imageFile)
+	newBgFile = tm.getBgFileAbsPath(themeName, bgFileName)
+	_, err = copyFile(newBgFile, imageFile)
+	if err != nil {
+		logError(err.Error()) // TODO
+	}
+	return
+}
+
+func (tm *ThemeManager) getNewBgFileName(imageFile string) string {
+	fileName := path.Base(imageFile)
+	i := strings.LastIndex(fileName, ".")
+	fileExt := fileName[i:]
+	return "background" + fileExt
 }
