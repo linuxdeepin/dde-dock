@@ -172,3 +172,17 @@ func isFileExists(file string) bool {
 		return false
 	}
 }
+
+func copyFile(dest, src string) (written int64, err error) {
+	sf, err := os.Open(src)
+	if err != nil {
+		return
+	}
+	defer sf.Close()
+	df, err := os.OpenFile(dest, os.O_WRONLY|os.O_CREATE, 0644)
+	if err != nil {
+		return
+	}
+	defer df.Close()
+	return io.Copy(df, sf)
+}
