@@ -45,7 +45,7 @@ type Card struct {
 	Name          string
 	ownerModule   int32
 	driver        string
-	NProfiles     int32
+	nProfiles     int32
 	Profiles      []CardProfileInfo
 	ActiveProfile *CardProfileInfo
 }
@@ -61,13 +61,14 @@ type Sink struct {
 	Name        string
 	Description string
 	driver      string
-	Mute        bool
-	Card        int32
-	Volume      uint32
+	Mute        bool `access:"readwrite"`
+	card        int32
+	Volume      uint32  `access:"readwrite"`
+	Balance     float64 `access:"readwrite"`
 
 	//NVolumeSteps int32
 
-	NPorts     int32
+	nPorts     int32
 	Ports      []SinkPortInfo
 	ActivePort *SinkPortInfo
 }
@@ -85,13 +86,13 @@ type Source struct {
 	Name        string
 	Description string
 	driver      string
-	Mute        bool
-	Card        int32
-	Volume      uint32
+	Mute        bool `access:"readwrite"`
+	card        int32
+	Volume      uint32 `access:"readwrite"`
 	//N_formates int32
 	//NVolumeSteps int32
 
-	NPorts     int32
+	nPorts     int32
 	Ports      []SourcePortInfo
 	ActivePort *SourcePortInfo
 }
@@ -214,10 +215,10 @@ func getCardFromC(_card C.card_t) *Card {
 	card.Name = C.GoString(&_card.name[0])
 	card.driver = C.GoString(&_card.driver[0])
 	card.ownerModule = int32(_card.owner_module)
-	card.NProfiles = int32(_card.n_profiles)
+	card.nProfiles = int32(_card.n_profiles)
 
-	card.Profiles = make([]CardProfileInfo, card.NProfiles)
-	for j := 0; j < int(card.NProfiles); j = j + 1 {
+	card.Profiles = make([]CardProfileInfo, card.nProfiles)
+	for j := 0; j < int(card.nProfiles); j = j + 1 {
 		card.Profiles[j].Name = C.GoString(&_card.profiles[j].name[0])
 		card.Profiles[j].Description = C.GoString(&_card.profiles[j].description[0])
 		ret := C.strcmp((*C.char)(&_card.active_profile.name[0]),
@@ -232,7 +233,7 @@ func getCardFromC(_card C.card_t) *Card {
 func getSinkFromC(_sink C.sink_t) *Sink {
 	sink := &Sink{}
 	sink.Index = int32(_sink.index)
-	sink.Card = int32(_sink.card)
+	sink.card = int32(_sink.card)
 	sink.Description =
 		C.GoString((*C.char)(unsafe.Pointer(&_sink.description[0])))
 	sink.driver = C.GoString(&_sink.driver[0])
@@ -245,9 +246,9 @@ func getSinkFromC(_sink C.sink_t) *Sink {
 	//sink.Cvolume.Values[j] =
 	//*((*uint32)(unsafe.Pointer(&_sink.volume.values[j])))
 	//}
-	sink.NPorts = int32(_sink.n_ports)
-	sink.Ports = make([]SinkPortInfo, sink.NPorts)
-	for j := 0; j < int(sink.NPorts); j = j + 1 {
+	sink.nPorts = int32(_sink.n_ports)
+	sink.Ports = make([]SinkPortInfo, sink.nPorts)
+	for j := 0; j < int(sink.nPorts); j = j + 1 {
 		sink.Ports[j].Available = int32(_sink.ports[j].available)
 		sink.Ports[j].Name = C.GoString(&_sink.ports[j].name[0])
 		sink.Ports[j].Description = C.GoString(&_sink.ports[j].description[0])
@@ -257,17 +258,17 @@ func getSinkFromC(_sink C.sink_t) *Sink {
 			sink.ActivePort = &sink.Ports[j]
 		}
 	}
-	if sink.NPorts == 0 {
+	if sink.nPorts == 0 {
 		sink.ActivePort = &SinkPortInfo{"", "", 0}
 	}
-	fmt.Println("Index: " + strconv.Itoa(int((sink.Index))) + " Card:" + strconv.Itoa(int(sink.Card)))
+	fmt.Println("Index: " + strconv.Itoa(int((sink.Index))) + " Card:" + strconv.Itoa(int(sink.card)))
 	return sink
 }
 
 func getSourceFromC(_source C.source_t) *Source {
 	source := &Source{}
 	source.Index = int32(_source.index)
-	source.Card = int32(_source.card)
+	source.card = int32(_source.card)
 	source.Mute = (int32(_source.mute) != 0)
 	source.Name = C.GoString((*C.char)(unsafe.Pointer(&_source.name[0])))
 	source.Description = C.GoString(&_source.description[0])
@@ -280,9 +281,9 @@ func getSourceFromC(_source C.source_t) *Source {
 	//*((*uint32)(unsafe.Pointer(&_source.volume.values[j])))
 	//}
 
-	source.NPorts = int32(_source.n_ports)
-	source.Ports = make([]SourcePortInfo, source.NPorts)
-	for j := 0; j < int(source.NPorts); j = j + 1 {
+	source.nPorts = int32(_source.n_ports)
+	source.Ports = make([]SourcePortInfo, source.nPorts)
+	for j := 0; j < int(source.nPorts); j = j + 1 {
 		source.Ports[j].Available = int32(_source.ports[j].available)
 		source.Ports[j].Name = C.GoString(&_source.ports[j].name[0])
 		source.Ports[j].Description = C.GoString(&_source.ports[j].description[0])
@@ -292,7 +293,7 @@ func getSourceFromC(_source C.source_t) *Source {
 			source.ActivePort = &source.Ports[j]
 		}
 	}
-	if source.NPorts == 0 {
+	if source.nPorts == 0 {
 		source.ActivePort = &SourcePortInfo{"", "", 0}
 	}
 
@@ -541,7 +542,7 @@ func (audio *Audio) getServerInfo() *Audio {
 	audio.HostName = C.GoString(audio.pa.server_info.host_name)
 	audio.UserName = C.GoString(audio.pa.server_info.user_name)
 	//fmt.Print("go: " + audio.HostName + "\n")
-	fmt.Print("go: " + C.GoString((audio.pa.server_info.host_name)) + "\n")
+	//fmt.Print("go: " + C.GoString((audio.pa.server_info.host_name)) + "\n")
 
 	return audio
 }
@@ -667,6 +668,22 @@ func (sink *Sink) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
+func (sink *Sink) OnPropertiesChanged(name string, oldv interface{}) {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Print(err)
+		}
+	}()
+	switch name {
+	case "Mute":
+		fmt.Printf("%v changed: %v\n", name, oldv)
+	case "Volume":
+	case "Balance":
+	default:
+		break
+	}
+}
+
 func (card *Card) GetCardProfile() []CardProfileInfo {
 	return card.Profiles
 }
@@ -687,7 +704,7 @@ func (card *Card) GetSinks() []*Sink {
 	var sinks []*Sink = make([]*Sink, n)
 	j := 0
 	for _, sink := range audio.sinks {
-		if sink.Card == card.Index {
+		if sink.card == card.Index {
 			sinks[j] = sink
 			j = j + 1
 		}
