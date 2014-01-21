@@ -37,6 +37,45 @@ func (tm *ThemeManager) TestGetThemeName(c *C) {
 	}
 }
 
+func (tm *ThemeManager) TestGetThemePath(c *C) {
+	var tests = []struct {
+		s, want string
+	}{
+		{"theme-name", "/boot/grub/themes/theme-name"},
+		{"", "/boot/grub/themes"}, // TODO
+	}
+	for _, t := range tests {
+		get, _ := tm.getThemePath(t.s)
+		c.Check(get, Equals, t.want)
+	}
+}
+
+func (tm *ThemeManager) TestGetThemeMainFile(c *C) {
+	var tests = []struct {
+		s, want string
+	}{
+		{"theme-name", "/boot/grub/themes/theme-name/theme.txt"},
+		{"", "/boot/grub/themes/theme.txt"}, // TODO
+	}
+	for _, t := range tests {
+		get, _ := tm.getThemeMainFile(t.s)
+		c.Check(get, Equals, t.want)
+	}
+}
+
+func (tm *ThemeManager) TestGetThemeTplFile(c *C) {
+	var tests = []struct {
+		s, want string
+	}{
+		{"theme-name", "/boot/grub/themes/theme-name/theme.tpl"},
+		{"", "/boot/grub/themes/theme.tpl"}, // TODO
+	}
+	for _, t := range tests {
+		get, _ := tm.getThemeTplFile(t.s)
+		c.Check(get, Equals, t.want)
+	}
+}
+
 func (tm *ThemeManager) TestGetValuesInJson(c *C) {
 	testJsonData := `{"Background": "background.jpg","ItemColor":"#a6a6a6","SelectedItemColor":"#fefefe"}`
 	wantBackground, wantItemColor, wantSelectedItemColor := "background.jpg", "#a6a6a6", "#fefefe"
