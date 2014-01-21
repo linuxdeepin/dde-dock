@@ -151,7 +151,6 @@ func (grub *Grub2) TestSaveDefaultSettings(c *C) {
 `
 	wantConfigContent := `GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
 GRUB_DEFAULT="LinuxDeepin GNU/Linux"
-GRUB_TIMEOUT="5"
 GRUB_GFXMODE="auto"
 `
 	grub.parseEntries(_TEST_MENU_CONTENT)

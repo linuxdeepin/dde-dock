@@ -51,7 +51,6 @@ func (grub *Grub2) Load() error {
 }
 
 func (grub *Grub2) Save() error {
-	// TODO
 	err := grub.writeSettings()
 	if err != nil {
 		return err
