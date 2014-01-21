@@ -1,3 +1,22 @@
+/* Copyright (C) 2013 ~ 2014 Deepin, Inc.
+ *
+ * Author:     onerhao <onerhao@gmail.com>
+ * Maintainer: onerhao<onerhao@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -7,10 +26,9 @@
 #include <pulse/mainloop.h>
 
 #include "dde-pulse.h"
-
+#include "_cgo_export.h"
 
 #define MAX_KEY 32
-
 
 
 int pa_clear(pa *self)
@@ -73,8 +91,6 @@ pa* pa_alloc(pa* self)
     self->source_outputs=(source_output_t*)malloc(sizeof(source_output_t)*
             MAX_SOURCE_OUTPUTS);
     */
-
-
     return self;
 }
 
@@ -400,7 +416,7 @@ void *pa_get_device_list(pa *self)
     {
         if (!self->sinks)
         {
-            fprintf(stderr, "NULL pointer error\n");
+            /*fprintf(stderr, "NULL pointer error\n");*/
             return NULL;
         }
     }
@@ -408,7 +424,7 @@ void *pa_get_device_list(pa *self)
     {
         if (!self->sources)
         {
-            fprintf(stderr, "NULL pointer error\n");
+            /*fprintf(stderr, "NULL pointer error\n");*/
             return NULL;
         }
     }
@@ -638,8 +654,9 @@ void *pa_get_source_output_list(pa *self)
         {
         case 0:
             self->n_source_outputs = 0;
-            self->pa_op = pa_context_get_source_output_info_list(self->pa_ctx,
-                          pa_source_output_info_cb, self);
+            self->pa_op = pa_context_get_source_output_info_list(
+                              self->pa_ctx,
+                              pa_source_output_info_cb, self);
             state++;
             break;
         case 1:
@@ -666,7 +683,7 @@ int pa_set_card_profile_by_index(pa *self, int index, const char *profile)
 
     if (!self)
     {
-        fprintf(stderr, "self is NULL pointer !\n");
+        /*fprintf(stderr, "self is NULL pointer !\n");*/
         return -1;
     }
 
@@ -745,7 +762,7 @@ int pa_set_sink_port_by_index(pa *self, int index, const char *port)
 
     if (!self)
     {
-        fprintf(stderr, "self is NULL pointer !\n");
+        /*fprintf(stderr, "self is NULL pointer !\n");*/
         return -1;
     }
 
@@ -804,7 +821,7 @@ int pa_set_sink_mute_by_index(pa *self, int index, int mute)
 
     if (!self)
     {
-        fprintf(stderr, "self is NULL pointer !\n");
+        /*fprintf(stderr, "self is NULL pointer !\n");*/
         return -1;
     }
 
@@ -1038,6 +1055,81 @@ int pa_dec_sink_volume_by_index(pa *self, int index, int volume)
         pa_mainloop_iterate(self->pa_ml, 1, NULL);
     }
     return -1;
+}
+
+int pa_set_sink_balance_by_index(pa *self, int index,
+                                 float balance)
+{
+    int state = 0;
+    if (!self)
+    {
+        fprintf(stderr, "NULL object pointer\n");
+        return -1;
+    }
+
+
+    pthread_mutex_lock(&self->pa_mutex);
+    for (;;)
+    {
+        if (self->pa_ready == 0)
+        {
+            pa_mainloop_iterate(self->pa_ml, 1, NULL);
+            continue;
+        }
+        if (self->pa_ready == 2)
+        {
+            pa_init_context(self);
+            continue;
+        }
+        switch (state)
+        {
+        case 0:
+            self->n_sinks = 0;
+            self->pa_op = pa_context_get_sink_info_by_index(
+                              self->pa_ctx,
+                              index, pa_sink_info_cb, self);
+            state++;
+        case 1:
+            if (pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
+            {
+                pa_operation_unref(self->pa_op);
+                if (!pa_channel_map_can_balance(
+                            &self->sinks[0].channel_map))
+                {
+                    /*fprintf(stderr, "Invalid volume provided\n");*/
+                    self->pa_op = NULL;
+                    pthread_mutex_unlock(&self->pa_mutex);
+                    return -1;
+                }
+
+                pa_cvolume_set_balance(&self->sinks[0].volume,
+                                       &self->sinks[0].channel_map,
+                                       balance);
+
+                self->pa_op = pa_context_set_sink_volume_by_index(
+                                  self->pa_ctx,
+                                  index,
+                                  &self->sinks[0].volume,
+                                  pa_context_success_cb, self);
+                state++;
+            }
+            break;
+        case 2:
+            if (pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
+            {
+                pa_operation_unref(self->pa_op);
+                self->pa_op = NULL;
+                pthread_mutex_unlock(&self->pa_mutex);
+                return 0;
+            }
+            break;
+        default:
+            fprintf(stderr, "in state %d\n", state);
+            return 0;
+        }
+        pa_mainloop_iterate(self->pa_ml, 1, NULL);
+    }
+    return 0;
 }
 
 int pa_set_source_port_by_index(pa *self, int index, const char *port)
@@ -1344,6 +1436,80 @@ int pa_dec_source_volume_by_index(pa *self, int index, int volume)
     return 0;
 }
 
+int pa_set_source_balance_by_index(pa *self, int index,
+                                   float balance)
+{
+    int state = 0;
+    if (!self)
+    {
+        fprintf(stderr, "NULL object pointer\n");
+        return -1;
+    }
+
+
+    pthread_mutex_lock(&self->pa_mutex);
+    for (;;)
+    {
+        if (self->pa_ready == 0)
+        {
+            pa_mainloop_iterate(self->pa_ml, 1, NULL);
+            continue;
+        }
+        if (self->pa_ready == 2)
+        {
+            pa_init_context(self);
+            continue;
+        }
+        switch (state)
+        {
+        case 0:
+            self->n_sources = 0;
+            self->pa_op = pa_context_get_source_info_by_index(
+                              self->pa_ctx,
+                              index, pa_source_info_cb, self);
+            state++;
+        case 1:
+            if (pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
+            {
+                pa_operation_unref(self->pa_op);
+                if (!pa_channel_map_can_balance(
+                            &self->sources[0].channel_map))
+                {
+                    /*fprintf(stderr, "Invalid volume provided\n");*/
+                    self->pa_op = NULL;
+                    pthread_mutex_unlock(&self->pa_mutex);
+                    return -1;
+                }
+
+                pa_cvolume_set_balance(&self->sources[0].volume,
+                                       &self->sources[0].channel_map,
+                                       balance);
+
+                self->pa_op = pa_context_set_sink_volume_by_index(
+                                  self->pa_ctx,
+                                  index,
+                                  &self->sources[0].volume,
+                                  pa_context_success_cb, self);
+                state++;
+            }
+            break;
+        case 2:
+            if (pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
+            {
+                pa_operation_unref(self->pa_op);
+                self->pa_op = NULL;
+                pthread_mutex_unlock(&self->pa_mutex);
+                return 0;
+            }
+            break;
+        default:
+            fprintf(stderr, "in state %d\n", state);
+            return 0;
+        }
+        pa_mainloop_iterate(self->pa_ml, 1, NULL);
+    }
+    return 0;
+}
 
 int pa_set_sink_input_mute(pa *self, int index, int mute)
 {
@@ -2147,7 +2313,7 @@ void pa_get_serverinfo_cb(pa_context *c, const pa_server_info*i, void *userdata)
     pa *self = userdata;
     if ( self == NULL)
     {
-        fprintf(stderr, "NULL pointer passed\n");
+        /*fprintf(stderr, "NULL pointer passed\n");*/
         return;
     }
     else
@@ -2188,7 +2354,7 @@ void pa_card_info_cb(pa_context *c, const pa_card_info*i,
     }
     if (eol > 0)
     {
-        printf("End of card list.\n");
+        /*printf("End of card list.\n");*/
         return;
     }
     if (self->n_cards >= MAX_CARDS)
@@ -2218,7 +2384,7 @@ void pa_card_update_info_cb(pa_context *c, const pa_card_info *l,
     }
     else
     {
-        fprintf(stderr, "NULL pointer\n");
+        /*fprintf(stderr, "NULL pointer\n");*/
         return;;
     }
 }
@@ -2237,7 +2403,7 @@ void pa_sink_info_cb(pa_context *c,
     // If eol is set to a positive number, you're at the end of the list
     if (eol > 0)
     {
-        fprintf(stderr, "End of sink list\n");
+        /*fprintf(stderr, "End of sink list\n");*/
         return;
     }
     else
@@ -2274,7 +2440,7 @@ void pa_sink_update_info_cb(pa_context *c,
     }
     else
     {
-        fprintf(stderr, "NULL pointer\n");
+        /*fprintf(stderr, "NULL pointer\n");*/
         return;
     }
 }
@@ -2306,7 +2472,7 @@ void pa_source_info_cb(pa_context *c, const pa_source_info *l,
 
     if (eol > 0)
     {
-        fprintf(stderr, "End of source list\n");
+        /*fprintf(stderr, "End of source list\n");*/
         return;
     }
     else
@@ -2343,7 +2509,7 @@ void pa_source_update_info_cb(pa_context *c, const pa_source_info *l,
     }
     else
     {
-        fprintf(stderr, "source is NULL pointer\n");
+        /*fprintf(stderr, "source is NULL pointer\n");*/
         return;
     }
 }
@@ -2379,7 +2545,7 @@ void pa_get_client_info_cb(pa_context *c, const pa_client_info *i,
 
     if (eol > 0)
     {
-        printf("End of clients\n");
+        /*printf("End of clients\n");*/
         return;
     }
     else
@@ -2424,7 +2590,7 @@ void pa_sink_input_info_cb(pa_context *c,
     }
     if (eol > 0)
     {
-        printf("End of sink inputs list.\n");
+        /*printf("End of sink inputs list.\n");*/
         return;
     }
     else
@@ -2500,12 +2666,12 @@ void pa_source_output_info_cb(pa_context *c,
     source_output_t *source_output = NULL;
     if (!self)
     {
-        fprintf(stderr, "NULL pointer!\n");
+        /*fprintf(stderr, "NULL pointer!\n");*/
         return;
     }
     if (eol > 0)
     {
-        printf("End of source outputs list.\n");
+        /*printf("End of source outputs list.\n");*/
         return;
     }
     else
@@ -2678,7 +2844,7 @@ card_t* pa2card(card_t *card, const pa_card_info *i)
 {
     if (!card || !i)
     {
-        fprintf(stderr, "NULL pointer error\n");
+        /*fprintf(stderr, "NULL pointer error\n");*/
         return NULL;
     }
     int j;
@@ -2709,6 +2875,7 @@ sink_t *pa2sink(sink_t *sink, const pa_sink_info *l)
 {
     int i;
     sink->index = l->index;
+    sink->channel_map = l->channel_map;
     sink->volume = l->volume;
     sink->mute = l->mute;
     sink->n_volume_steps = l->n_volume_steps;
@@ -2729,17 +2896,28 @@ sink_t *pa2sink(sink_t *sink, const pa_sink_info *l)
             sink->active_port = sink->ports + i;
         }
     }
+    if (pa_channel_map_can_balance(&sink->channel_map))
+    {
+        sink->balance = pa_cvolume_get_balance(
+                            &sink->volume,
+                            &sink->channel_map);
+    }
+    else
+    {
+        sink->balance = 0;
+    }
     return sink;
 }
 
 source_t *pa2source(source_t *source, const pa_source_info *l)
 {
     int i;
-    source->n_volume_steps = l->n_volume_steps;
-    source->card = l->card;
     source->index = l->index;
+    source->card = l->card;
+    source->channel_map = l->channel_map;
     source->mute = l->mute;
     source->volume = l->volume;
+    source->n_volume_steps = l->n_volume_steps;
     strncpy(source->name, l->name, sizeof(source->name) - 1);
     strncpy(source->driver, l->driver, sizeof(source->driver) - 1);
     strncpy(source->description, l->description, sizeof(source->description) - 1);
@@ -2759,5 +2937,21 @@ source_t *pa2source(source_t *source, const pa_source_info *l)
             source->active_port = source->ports + i;
         }
     }
+    if (pa_channel_map_can_balance(&source->channel_map))
+    {
+        source->balance = pa_cvolume_get_balance(
+                              &source->volume,
+                              &source->channel_map);
+    }
+    else
+    {
+        source->balance = 0;
+    }
     return source;
+}
+
+int getChannelMap(pa_channel_map cm, int i)
+{
+    //member map is a keyword in golang
+    return cm.map[i];
 }
