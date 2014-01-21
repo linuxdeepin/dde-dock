@@ -191,3 +191,15 @@ func copyFile(dest, src string) (written int64, err error) {
 	defer df.Close()
 	return io.Copy(df, sf)
 }
+
+func getPathLevel(p string) int {
+	if len(p) == 0 {
+		return 0
+	}
+	p = path.Clean(p)
+	lv := len(strings.Split(p, string(os.PathSeparator)))
+	if strings.HasPrefix(p, "/") {
+		lv--
+	}
+	return lv
+}

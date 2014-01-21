@@ -58,10 +58,17 @@ func (tm *ThemeManager) isThemeValid(themeName string) bool {
 }
 
 func (tm *ThemeManager) isThemeArchiveValid(archive string) bool {
-	_, err := findFileInTarGz(archive, _THEME_MAIN_FILE)
+	p, err := findFileInTarGz(archive, _THEME_MAIN_FILE)
 	if err != nil {
 		return false
 	}
+
+	// check theme path level in archive
+	p = path.Clean(p)
+	if getPathLevel(path.Base(p)) != 1 {
+		return false
+	}
+
 	return true
 }
 
@@ -134,17 +141,6 @@ func (tm *ThemeManager) getBgFileAbsPath(themeName, bgFileRelPath string) string
 	bgFileAbsPath := path.Join(themPath, bgFileRelPath)
 	return bgFileAbsPath
 }
-
-// TODO
-// func (tm *ThemeManager) getBgFileRelPath(themeName, bgFileAbsPath string) string {
-// 	themPath, _ := tm.getThemePath(themeName)
-// 	i := strings.Index(bgFileAbsPath, themPath)
-// 	if i >= 0 {
-// 		bgFileRelPath := bgFileAbsPath[i:]
-// 	}
-// 	// existed = isFileExists(bgFileAbsPath)
-// 	return bgFileRelPath
-// }
 
 func (tm *ThemeManager) copyBgFileToThemeDir(themeName, imageFile string) (newBgFile string, err error) {
 	bgFileName := tm.getNewBgFileName(imageFile)

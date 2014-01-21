@@ -36,7 +36,7 @@ func (tm *ThemeManager) GetInstalledThemes() []string {
 }
 
 func (tm *ThemeManager) GetEnabledTheme() string {
-	return tm.getThemeName(tm.enabledThemeMainFile)
+	return tm.getThemeName(tm.getEnabledThemeMainFile())
 }
 
 func (tm *ThemeManager) EnableTheme(themeName string) bool {
@@ -66,8 +66,8 @@ func (tm *ThemeManager) InstallTheme(archive string) bool {
 }
 
 func (tm *ThemeManager) UninstallTheme(themeName string) bool {
-	themePath, ok := tm.getThemePath(themeName)
-	if !ok {
+	themePath, exists := tm.getThemePath(themeName)
+	if !exists {
 		return false
 	}
 	err := os.RemoveAll(themePath)
