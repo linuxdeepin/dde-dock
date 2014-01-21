@@ -99,7 +99,7 @@ func main() {
 	}
 	dbus.DealWithUnhandledMessage()
 
-	desk.printManager()
+	//desk.printManager()
 	dlib.StartLoop()
 }
 

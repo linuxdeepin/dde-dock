@@ -31,18 +31,23 @@ func (desk *Manager) GetDBusInfo() dbus.DBusInfo {
 }
 
 func (desk *Manager) OnPropertiesChanged(name string, old interface{}) {
+	//print("******** Property Changed: ", name, ", value: ", old.(int32), "\n")
+	//print("******** TopLeft: ", desk.TopLeft, "\n")
+	//print("******** BottomRight: ", desk.BottomRight, "\n")
 	switch name {
 	case "BottomRight":
 		if v, ok := old.(int32); ok &&
 			v != desk.BottomRight {
-			desk.setBottomRightAction(v)
-	desk.printManager()
+			desk.setBottomRightAction(desk.BottomRight)
+			//print("\tProperty Changed: BottomRight\n")
+			//desk.printManager()
 		}
 	case "TopLeft":
 		if v, ok := old.(int32); ok &&
 			v != desk.TopLeft {
-			desk.setTopLeftAction(v)
-	desk.printManager()
+			desk.setTopLeftAction(desk.TopLeft)
+			//print("\tProperty Changed: TopLeft\n")
+			//desk.printManager()
 		}
 	}
 }
@@ -89,7 +94,7 @@ func (desk *Manager) getEdgeAction() {
 
 	dbus.NotifyChange(desk, "TopLeft")
 	dbus.NotifyChange(desk, "BottomRight")
-	desk.printManager()
+	//desk.printManager()
 }
 
 func (desk *Manager) setTopLeftAction(index int32) {
