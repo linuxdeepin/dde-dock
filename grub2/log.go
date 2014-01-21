@@ -24,16 +24,16 @@ func logWarn(format string, v ...interface{}) {
 }
 
 func logError(format string, v ...interface{}) {
-	log(fmt.Sprintf("[WARN] "+format, v...))
+	log(fmt.Sprintf("[ERROR] "+format, v...))
 }
 
 func logPanic(format string, v ...interface{}) {
-	s := fmt.Sprintf("[ERROR] "+format, v...)
+	s := fmt.Sprintf("[PANIC] "+format, v...)
 	log(s)
 	panic(s)
 }
 
 func logFatal(format string, v ...interface{}) {
-	log(fmt.Sprintf("[ERROR] "+format, v...))
+	log(fmt.Sprintf("[FATAL] "+format, v...))
 	os.Exit(1)
 }

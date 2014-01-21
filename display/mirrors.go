@@ -1,11 +1,40 @@
 package main
 
+import "fmt"
 import "github.com/BurntSushi/xgb/randr"
 import "github.com/BurntSushi/xgb"
 import "strings"
-import "dlib/logger"
 
 import "github.com/BurntSushi/xgb/xproto"
+
+func (dpy *Display) SetMirrorMode(v bool) {
+	dpy.setPropMirrorMode(v)
+	if v && dpy.MirrorOutput == nil {
+		dpy.MirrorOutput = deduceMirrorOutput(dpy.Outputs)
+	}
+}
+func (dpy *Display) SetMirrorOutput(op *Output) {
+	if op.Opened {
+	op.pendingConfig = NewPendingConfig(op).SetPos(0, 0).SetBorder(Border{0, 0, 0, 0}).SetScale(1, 1)
+	dpy.setPropMirrorOutput(op)
+	DPY.ApplyChanged()
+	}
+}
+
+func deduceMirrorOutput(ops []*Output) *Output {
+	// It's a bug if there isn't any Output.
+	var mirrorOP *Output = ops[0]
+	currentType := unknownAtom
+	for _, op := range ops {
+		t := getContentorType(op.Identify)
+		if greterConnectorType(t, currentType) {
+			currentType = t
+			mirrorOP = op
+		}
+	}
+	fmt.Println("DetectMiirorOutput:", mirrorOP.Name)
+	return mirrorOP
+}
 
 var (
 	_VGAAtom          = getAtom(X, "VGA")
@@ -23,19 +52,6 @@ var (
 	_TVC4Atom         = getAtom(X, "TV-C4")
 	_DisplayPort      = getAtom(X, "DisplayPort")
 )
-
-func (dpy *Display) updateMirrorOutput() {
-	var mirrorOP *Output = nil
-	currentType := unknownAtom
-	for _, op := range dpy.Outputs {
-		t := getContentorType(op.Identify)
-		if greterConnectorType(currentType, t) {
-			currentType = t
-			mirrorOP = op
-		}
-	}
-	dpy.setPropMirrorOutput(mirrorOP)
-}
 
 var connectorTypeMap = map[xproto.Atom]int{
 	_PanelAtom:        0,
@@ -93,19 +109,4 @@ func getContentorType(op randr.Output) xproto.Atom {
 	default:
 		return unknownAtom
 	}
-}
-
-func (dpy *Display) adjustOutputToMirror(op *Output) {
-	logger.Assert(dpy.MirrorOutput == nil)
-	logger.Assert(dpy.MirrorOutput.Allocation.X == 0)
-	logger.Assert(dpy.MirrorOutput.Allocation.Y == 0)
-
-	/*w := dpy.MirrorOutput.Allocation.Width*/
-	/*h := dpy.MirrorOutput.Allocation.Height*/
-
-	/*m, sameRation, offsetX, offsetY := matchMirror(w, h, op.ListModes())*/
-}
-
-func matchMirror(width, height uint16, modes []Mode) (m randr.Mode, sameRation bool, x uint16, y uint16) {
-	return 0, false, 0, 0
 }

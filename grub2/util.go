@@ -18,8 +18,10 @@ func quoteString(str string) string {
 }
 
 func unquoteString(str string) string {
-	if (strings.HasPrefix(str, `"`) && strings.HasSuffix(str, `"`)) ||
-		(strings.HasPrefix(str, `'`) && strings.HasSuffix(str, `'`)) {
+	if strings.HasPrefix(str, `"`) && strings.HasSuffix(str, `"`) {
+		s, _ := strconv.Unquote(str)
+		return s
+	} else if strings.HasPrefix(str, `'`) && strings.HasSuffix(str, `'`) {
 		return str[1 : len(str)-1]
 	}
 	return str
@@ -157,7 +159,16 @@ func findFileInTarGz(archiveFile string, targetFile string) (string, error) {
 
 		if hdr.Typeflag != tar.TypeDir && strings.HasSuffix(hdr.Name, targetFile) {
 			targetPath = hdr.Name
+			break
 		}
 	}
 	return targetPath, nil
+}
+
+func isFileExist(file string) bool {
+	if _, err := os.Stat(file); err == nil {
+		return true
+	} else {
+		return false
+	}
 }

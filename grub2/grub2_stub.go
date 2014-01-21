@@ -4,7 +4,6 @@ import (
 	"dlib/dbus"
 	"errors"
 	"fmt"
-	"strconv"
 )
 
 const (
@@ -36,8 +35,6 @@ func (grub *Grub2) OnPropertiesChanged(name string, oldv interface{}) {
 		grub.setGfxmode(grub.Gfxmode)
 	case "Background":
 		grub.setBackground(grub.Background)
-	case "Theme":
-		grub.setTheme(grub.Theme)
 	}
 }
 
@@ -81,23 +78,24 @@ func (grub *Grub2) GetEntryTitles() ([]string, error) {
 	return entryTitles, nil
 }
 
-func (grub *Grub2) setDefaultEntry(title string) {
-	grub.settings["GRUB_DEFAULT"] = title
-}
+// TODO
+// func  (grub *Grub2) SetThemeBackground(imageFile string) bool {
+// 	return true
+// }
 
-func (grub *Grub2) setTimeout(timeout int32) {
-	timeoutStr := strconv.FormatInt(int64(timeout), 10)
-	grub.settings["GRUB_TIMEOUT"] = timeoutStr
-}
+// // TODO
+// func (grub *Grub2) deployTheme(archiveFile string) error {
+// 	themePathInZip, err := findFileInTarGz(archiveFile, _THEME_MAIN_FILE)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	err = unTarGz(archiveFile, _THEME_DIR, path.Dir(themePathInZip))
+// 	if err != nil {
+// 		return err
+// 	}
 
-func (grub *Grub2) setGfxmode(gfxmode string) {
-	grub.settings["GRUB_GFXMODE"] = gfxmode
-}
+// 	themePath := path.Clean(_THEME_DIR + string(os.PathSeparator) + themePathInZip)
+// 	grub.setTheme(themePath)
 
-func (grub *Grub2) setBackground(imageFile string) {
-	grub.settings["GRUB_BACKGROUND"] = imageFile
-}
-
-func (grub *Grub2) setTheme(themeFile string) {
-	grub.settings["GRUB_THEME"] = themeFile
-}
+// 	return nil
+// }

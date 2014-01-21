@@ -13,6 +13,9 @@ func (u *Util) TestQuoteString(c *C) {
 		s, want string
 	}{
 		{`abc`, `"abc"`},
+		{`/abc/`, `"/abc/"`},
+		{`abc def`, `"abc def"`},
+		{`abc\def`, `"abc\\def"`},
 		{``, `""`},
 	}
 	for _, t := range tests {
@@ -30,6 +33,9 @@ func (u *Util) TestUnquoteString(c *C) {
 		{`'abc`, `'abc`},
 		{`abc`, `abc`},
 		{`  "abc"`, `  "abc"`},
+		{`"abc def"`, `abc def`},
+		{`"abc\\def"`, `abc\def`},
+		{`"/abc/"`, `/abc/`},
 		{``, ``},
 	}
 	for _, t := range tests {

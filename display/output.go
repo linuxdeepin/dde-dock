@@ -49,37 +49,19 @@ func (op *Output) ListReflect() []uint16 {
 	return parseReflects(op.rotations)
 }
 
-func (op *Output) SetAllocation(x, y, width, height, adjMethod int16) {
-	//TODO: handle adjMethod with `width` and `height`
-
-	cinfo, err := randr.GetCrtcInfo(X, op.crtc, LastConfigTimeStamp).Reply()
-	if err != nil {
-		panic(fmt.Sprintln("SetAllocation failed at GetCrtcInfo:", err))
-	}
-	found := false
-	for _, po := range cinfo.Possible {
-		if po == op.Identify {
-			found = true
-			break
-		}
-	}
-	if !found {
-		panic(fmt.Sprintf("%s Crtc %d is only support %v, but op which will be SetAllocation is %d", op.Name, op.crtc, cinfo.Possible, op.Identify))
-	}
-
-	if uint32(cinfo.Mode) != op.Mode.ID {
-		panic(fmt.Sprintf("%s SetAllocation check failed at mode : %v != %v(op)", op.Name, cinfo.Mode, op.Mode))
-	}
-	if cinfo.Rotation != op.Reflect|op.Rotation {
-		panic(fmt.Sprintf("%s SetAllocation check failed at rotation: %v != %v(op)", op.Name, cinfo.Rotation, op.Reflect|op.Rotation))
-	}
-
+func (op *Output) SetPos(x, y int16) {
 	op.pendingConfig = NewPendingConfig(op).SetPos(x, y)
 }
 
+func (op *Output) EnsureSize(width, height uint16, hint uint8) {
+	switch hint {
+	case EnsureSizeHintAuto, EnsureSizeHintPanning, EnsureSizeHintBorderScale:
+		op.pendingConfig = NewPendingConfig(op).EnsureSize(width, height, hint)
+	}
+}
+
 func (op *Output) SetMode(id uint32) {
-	op.pendingConfig = NewPendingConfig(op)
-	op.pendingConfig.SetMode(randr.Mode(id))
+	op.pendingConfig = NewPendingConfig(op).SetMode(randr.Mode(id))
 }
 
 func (op *Output) Debug() string {
@@ -97,7 +79,7 @@ func (op *Output) setBrightness(brightness float64) {
 		panic(fmt.Sprintf("GetCrtcGrammSize(crtc:%d) failed: %s", op.crtc, err.Error()))
 	}
 	red, green, blue := genGammaRamp(gammaSize.Size, brightness)
-	NewPendingConfig(op).SetGamma(red, green, blue).Apply()
+	NewPendingConfig(op).SetGamma(red, green, blue)
 }
 
 func (op *Output) setRotation(rotation uint16) {
@@ -112,7 +94,7 @@ func (op *Output) setReflect(reflect uint16) {
 		panic(fmt.Sprintf("setReflect Value%d Error", reflect))
 	}
 
-	NewPendingConfig(op).SetRotation(op.Rotation | reflect).Apply()
+	NewPendingConfig(op).SetRotation(op.Rotation | reflect)
 }
 
 func (op *Output) setOpened(v bool) {
@@ -125,7 +107,6 @@ func (op *Output) setOpened(v bool) {
 		}
 		for _, crtc := range oinfo.Crtcs {
 			if isCrtcConnected(X, crtc) {
-				fmt.Println("crtc:", crtc, "Is used for ", op.Name)
 				continue
 			}
 			s, err := randr.SetCrtcConfig(X, crtc, xproto.TimeCurrentTime, LastConfigTimeStamp,
@@ -136,11 +117,11 @@ func (op *Output) setOpened(v bool) {
 			}
 			fmt.Println("AAAA:", s, err, crtc, op.bestMode, op.Rotation, op.Identify)
 		}
-	} else {
+	} else if op.crtc != 0 {
 		_, err := randr.SetCrtcConfig(X, op.crtc, xproto.TimeCurrentTime, LastConfigTimeStamp,
 			op.Allocation.X, op.Allocation.Y, 0, op.Rotation, nil).Reply()
 		if err != nil {
-			panic(err)
+			panic(fmt.Sprintln("Close Output failed when SetCrtcConfig", op.crtc, err))
 		}
 	}
 }
@@ -157,7 +138,7 @@ func (op *Output) updateCrtc(dpy *Display) {
 		op.setPropRotation(rotation)
 		op.setPropReflect(reflect)
 		op.setPropMode(buildMode(dpy.modes[info.Mode]))
-		op.setPropAllocation(xproto.Rectangle{info.X, info.Y, info.Width, info.Height})
+		op.setPropAllocation(NewPendingConfig(op).appliedAllocation())
 
 		op.setPropAllocation(NewPendingConfig(op).appliedAllocation())
 	} else {
