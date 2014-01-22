@@ -76,16 +76,20 @@ func (tm *ThemeManager) TestGetThemeTplFile(c *C) {
 	}
 }
 
-func (tm *ThemeManager) TestGetValuesInJson(c *C) {
-	testJsonData := `{"Background": "background.jpg","ItemColor":"#a6a6a6","SelectedItemColor":"#fefefe"}`
-	wantBackground, wantItemColor, wantSelectedItemColor := "background.jpg", "#a6a6a6", "#fefefe"
-	background, itemColor, selectedItemColor, ok := tm.getValuesInJson([]byte(testJsonData))
-	if !ok {
-		c.Error("parse json data failed")
+func (tm *ThemeManager) TestGetplJsonData(c *C) {
+	testJsonContent := `{
+    "DefaultTplValue":{"Background":"background_default.jpg","ItemColor":"#a6a6a6","SelectedItemColor":"#fefefe"},
+    "LastTplValue":{"Background":"background.jpg","ItemColor":"#a6a6a0","SelectedItemColor":"#fefef0"}
+}`
+	wantJsonData := &TplJsonData{}
+	wantJsonData.DefaultTplValue = TplValues{"background_default.jpg", "#a6a6a6", "#fefefe"}
+	wantJsonData.LastTplValue = TplValues{"background.jpg", "#a6a6a0", "#fefef0"}
+
+	jsonData, err := tm.getTplJsonData([]byte(testJsonContent))
+	if err != nil {
+		c.Error(err)
 	}
-	c.Check(background, Equals, wantBackground)
-	c.Check(itemColor, Equals, wantItemColor)
-	c.Check(selectedItemColor, Equals, wantSelectedItemColor)
+	c.Check(*jsonData, Equals, *wantJsonData)
 }
 
 func (tm *ThemeManager) TestGetNewBgFileName(c *C) {
@@ -154,12 +158,12 @@ terminal-font: "Fixed Regular 13"
   scrollbar_thumb = "sb_th_*.png"
 }
 `
-	tplData := make(map[string]string)
-	err := json.Unmarshal([]byte(testThemeTplJSON), &tplData)
+	tplValues := TplValues{}
+	err := json.Unmarshal([]byte(testThemeTplJSON), &tplValues)
 	if err != nil {
 		c.Error(err)
 	}
 
-	s, _ := tm.getCustomizedThemeContent([]byte(testThemeTplContent), tplData)
+	s, _ := tm.getCustomizedThemeContent([]byte(testThemeTplContent), tplValues)
 	c.Check(string(s), Equals, wantThemeTxtContent)
 }

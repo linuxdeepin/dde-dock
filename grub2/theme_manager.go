@@ -3,26 +3,29 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
+	"fmt"
+	"io/ioutil"
 	"path"
 	"strings"
 	"text/template"
 )
 
 const (
-	_THEME_DIR       = "/boot/grub/themes"
-	_THEME_MAIN_FILE = "theme.txt"
-	_THEME_TPL_FILE  = "theme.tpl"
-
-	// json stores the key-values for template file
-	_THEME_TPL_JSON_LAST    = "theme_tpl_last.json"
-	_THEME_TPL_JSON_DEFAULT = "theme_tpl_default.json"
-
-	_THEME_TPL_KEY_BACKGROUND          = "Background"
-	_THEME_TPL_KEY_ITEM_COLOR          = "ItemColor"
-	_THEME_TPL_KEY_SELECTED_ITEM_COLOR = "SelectedItemColor"
+	_THEME_DIR           = "/boot/grub/themes"
+	_THEME_MAIN_FILE     = "theme.txt"
+	_THEME_TPL_FILE      = "theme.tpl"
+	_THEME_TPL_JSON_FILE = "theme_tpl.json" // json stores the key-values for template file
 )
 
 var _THEME_TEMPLATOR = template.New("theme-templator")
+
+type TplValues struct {
+	Background, ItemColor, SelectedItemColor string
+}
+type TplJsonData struct {
+	DefaultTplValue, LastTplValue TplValues
+}
 
 type ThemeManager struct {
 	enabledThemeMainFile string
@@ -97,14 +100,8 @@ func (tm *ThemeManager) getThemeTplFile(themeName string) (file string, existed 
 	return
 }
 
-func (tm *ThemeManager) getThemeTplDefaultJsonFile(themeName string) (file string, existed bool) {
-	file = path.Join(_THEME_DIR, themeName, _THEME_TPL_JSON_DEFAULT)
-	existed = isFileExists(file)
-	return
-}
-
-func (tm *ThemeManager) getThemeTplLastJsonFile(themeName string) (file string, existed bool) {
-	file = path.Join(_THEME_DIR, themeName, _THEME_TPL_JSON_LAST)
+func (tm *ThemeManager) getThemeTplJsonFile(themeName string) (file string, existed bool) {
+	file = path.Join(_THEME_DIR, themeName, _THEME_TPL_JSON_FILE)
 	existed = isFileExists(file)
 	return
 }
@@ -123,17 +120,35 @@ func (tm *ThemeManager) getCustomizedThemeContent(fileContent []byte, tplData in
 	return buf.Bytes(), nil
 }
 
-func (tm *ThemeManager) getValuesInJson(fileContent []byte) (background, itemColor, selectedItemColor string, ok bool) {
-	tplData := make(map[string]string)
-	err := json.Unmarshal(fileContent, &tplData)
+func (tm *ThemeManager) getThemeTplJsonData(themeName string) (*TplJsonData, error) {
+	jsonFile, ok := tm.getThemeTplJsonFile(themeName)
+	if !ok {
+		err := errors.New(fmt.Sprintf("theme [%s]: json file for template is not exists", jsonFile))
+		logError(err.Error()) // TODO
+		return nil, err
+	}
+
+	fileContent, err := ioutil.ReadFile(jsonFile)
 	if err != nil {
 		logError(err.Error()) // TODO
-		return "", "", "", false
+		return nil, err
 	}
-	background = tplData[_THEME_TPL_KEY_BACKGROUND]
-	itemColor = tplData[_THEME_TPL_KEY_ITEM_COLOR]
-	selectedItemColor = tplData[_THEME_TPL_KEY_SELECTED_ITEM_COLOR]
-	return background, itemColor, selectedItemColor, true
+
+	tplJsonData, err := tm.getTplJsonData(fileContent)
+	if err != nil {
+		return nil, err
+	}
+	return tplJsonData, nil
+}
+
+func (tm *ThemeManager) getTplJsonData(fileContent []byte) (*TplJsonData, error) {
+	tplJsonData := &TplJsonData{}
+	err := json.Unmarshal(fileContent, tplJsonData)
+	if err != nil {
+		logError(err.Error()) // TODO
+		return nil, err
+	}
+	return tplJsonData, nil
 }
 
 func (tm *ThemeManager) getBgFileAbsPath(themeName, bgFileRelPath string) string {

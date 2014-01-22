@@ -83,56 +83,62 @@ func (tm *ThemeManager) IsThemeCustomizable(themeName string) bool {
 }
 
 func (tm *ThemeManager) GetThemeLastCustomizeValues(themeName string) (background, itemColor, selectedItemColor string, ok bool) {
-	jsonFile, ok := tm.getThemeTplLastJsonFile(themeName)
-	if !ok {
-		return tm.GetThemeDefaultCustomizeValues(themeName)
-	}
-
-	fileContent, err := ioutil.ReadFile(jsonFile)
+	tplJsonData, err := tm.getThemeTplJsonData(themeName)
 	if err != nil {
-		logError(err.Error()) // TODO
 		return "", "", "", false
 	}
-	background, itemColor, selectedItemColor, ok = tm.getValuesInJson(fileContent)
+
+	background = tplJsonData.LastTplValue.Background
+	itemColor = tplJsonData.LastTplValue.ItemColor
+	selectedItemColor = tplJsonData.LastTplValue.SelectedItemColor
+	return background, itemColor, selectedItemColor, true
+
+	// return background's absolute path
 	background = tm.getBgFileAbsPath(themeName, background)
 	if !isFileExists(background) {
-		logError("theme [%s]: background file not existed", background)
+		logError("theme [%s]: background file is not exists", background) // TODO
 	}
+	ok = true
 	return
 }
 
 func (tm *ThemeManager) GetThemeDefaultCustomizeValues(themeName string) (background, itemColor, selectedItemColor string, ok bool) {
-	jsonFile, ok := tm.getThemeTplDefaultJsonFile(themeName)
-	if !ok {
-		logError("theme [%s]: default json data file is not existed", themeName) // TODO
+	tplJsonData, err := tm.getThemeTplJsonData(themeName)
+	if err != nil {
 		return "", "", "", false
 	}
 
-	fileContent, err := ioutil.ReadFile(jsonFile)
-	if err != nil {
-		logError(err.Error()) // TODO
-		return "", "", "", false
-	}
-	background, itemColor, selectedItemColor, ok = tm.getValuesInJson(fileContent)
+	background = tplJsonData.DefaultTplValue.Background
+	itemColor = tplJsonData.DefaultTplValue.ItemColor
+	selectedItemColor = tplJsonData.DefaultTplValue.SelectedItemColor
+	return background, itemColor, selectedItemColor, true
+
+	// return background's absolute path
 	background = tm.getBgFileAbsPath(themeName, background)
 	if !isFileExists(background) {
-		logError("theme [%s]: background file not existed", background)
+		logError("theme [%s]: background file is not exists", background) // TODO
 	}
+	ok = true
 	return
 }
 
 func (tm *ThemeManager) CustomTheme(themeName, background, itemColor, selectedItemColor string) bool {
+	// copy background file to theme dir if need
 	_, err := tm.copyBgFileToThemeDir(themeName, background)
 	if err != nil {
 		return false
 	}
 	background = tm.getNewBgFileName(background)
 
-	tplData := make(map[string]string)
-	tplData[_THEME_TPL_KEY_BACKGROUND] = background
-	tplData[_THEME_TPL_KEY_ITEM_COLOR] = itemColor
-	tplData[_THEME_TPL_KEY_SELECTED_ITEM_COLOR] = selectedItemColor
+	tplJsonData, err := tm.getThemeTplJsonData(themeName)
+	if err != nil {
+		return false
+	}
+	tplJsonData.LastTplValue.Background = background
+	tplJsonData.LastTplValue.ItemColor = itemColor
+	tplJsonData.LastTplValue.SelectedItemColor = selectedItemColor
 
+	// generate a new theme.txt from template
 	tplFile, ok := tm.getThemeTplFile(themeName)
 	if !ok {
 		logError("theme [%s]: template file is not existed", themeName) // TODO
@@ -144,7 +150,7 @@ func (tm *ThemeManager) CustomTheme(themeName, background, itemColor, selectedIt
 		return false
 	}
 
-	themeFileContent, err := tm.getCustomizedThemeContent(tplFileContent, tplData)
+	themeFileContent, err := tm.getCustomizedThemeContent(tplFileContent, tplJsonData.LastTplValue)
 	themeMainFile, _ := tm.getThemeMainFile(themeName)
 	err = ioutil.WriteFile(themeMainFile, themeFileContent, 0644)
 	if err != nil {
@@ -153,13 +159,13 @@ func (tm *ThemeManager) CustomTheme(themeName, background, itemColor, selectedIt
 	}
 
 	// store the customized key-values to json file
-	jsonContent, err := json.Marshal(tplData)
+	jsonContent, err := json.Marshal(tplFileContent)
 	if err != nil {
 		logError(err.Error()) // TODO
 		return false
 	}
-	lastJsonFile, _ := tm.getThemeTplLastJsonFile(themeName)
-	err = ioutil.WriteFile(lastJsonFile, jsonContent, 0644)
+	jsonFile, _ := tm.getThemeTplJsonFile(themeName)
+	err = ioutil.WriteFile(jsonFile, jsonContent, 0644)
 	if err != nil {
 		logError(err.Error()) // TODO
 		return false
