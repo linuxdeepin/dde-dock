@@ -106,6 +106,7 @@ typedef struct source_s
     float balance;  //balance
     char driver[MAX_STRING];
     int mute;
+    uint32_t monitor_of_sink;
     int n_volume_steps;
     int card;
     pa_cvolume volume;
@@ -161,6 +162,7 @@ typedef struct pa_s
     pa_operation   *pa_op;
 
     pthread_mutex_t pa_mutex;
+    pthread_mutex_t event_mutex;
 
     server_info_t *server_info;
     card_t cards[MAX_CARDS];

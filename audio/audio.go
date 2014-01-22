@@ -28,6 +28,9 @@ type Audio struct {
 	//exported properties
 	HostName string
 	UserName string
+	Cards    []*Card
+	Sinks    []*Sink
+	Sources  []*Source
 
 	//signals
 	DeviceAdded   func(string)
@@ -41,13 +44,14 @@ type CardProfileInfo struct {
 }
 
 type Card struct {
-	Index         int32
-	Name          string
-	ownerModule   int32
-	driver        string
-	nProfiles     int32
-	Profiles      []CardProfileInfo
-	ActiveProfile *CardProfileInfo
+	Index       int32
+	Name        string
+	ownerModule int32
+	driver      string
+	nProfiles   int32
+	Profiles    []CardProfileInfo
+	//ActiveProfile *CardProfileInfo
+	ActiveProfile int32
 }
 
 type SinkPortInfo struct {
@@ -69,9 +73,10 @@ type Sink struct {
 
 	//NVolumeSteps int32
 
-	nPorts     int32
-	Ports      []SinkPortInfo
-	ActivePort *SinkPortInfo
+	nPorts int32
+	Ports  []SinkPortInfo
+	//ActivePort *SinkPortInfo
+	ActivePort int32
 }
 
 //Only capitalized first character in Capitalized structure can be exposed
@@ -83,21 +88,23 @@ type SourcePortInfo struct {
 }
 
 type Source struct {
-	Index       int32
-	Name        string
-	Description string
-	channelMap  []int32
-	driver      string
-	Mute        bool `access:"readwrite"`
-	card        int32
-	Volume      uint32 `access:"readwrite"`
-	Balance     float64
+	Index         int32
+	Name          string
+	Description   string
+	channelMap    []int32
+	driver        string
+	Mute          bool `access:"readwrite"`
+	monitorOfSink uint32
+	card          int32
+	Volume        uint32 `access:"readwrite"`
+	Balance       float64
 	//N_formates int32
 	//NVolumeSteps int32
 
-	nPorts     int32
-	Ports      []SourcePortInfo
-	ActivePort *SourcePortInfo
+	nPorts int32
+	Ports  []SourcePortInfo
+	//ActivePort *SourcePortInfo
+	ActivePort int32
 }
 
 type SinkInput struct {
@@ -217,7 +224,8 @@ func getCardFromC(_card C.card_t) *Card {
 		ret := C.strcmp((*C.char)(&_card.active_profile.name[0]),
 			(*C.char)(&_card.profiles[j].name[0]))
 		if ret == 0 {
-			card.ActiveProfile = &card.Profiles[j]
+			//card.ActiveProfile = &card.Profiles[j]
+			card.ActiveProfile = int32(j)
 		}
 	}
 	return card
@@ -255,11 +263,11 @@ func getSinkFromC(_sink C.sink_t) *Sink {
 		ret := C.strcmp((*C.char)(&_sink.ports[j].name[0]),
 			(*C.char)(&_sink.active_port.name[0]))
 		if ret == 0 {
-			sink.ActivePort = &sink.Ports[j]
+			sink.ActivePort = int32(j)
 		}
 	}
 	if sink.nPorts == 0 {
-		sink.ActivePort = &SinkPortInfo{"", "", 0}
+		sink.ActivePort = 0
 	}
 	fmt.Println("Index: " + strconv.Itoa(int((sink.Index))) + " Card:" + strconv.Itoa(int(sink.card)))
 	return sink
@@ -270,6 +278,7 @@ func getSourceFromC(_source C.source_t) *Source {
 	source.Index = int32(_source.index)
 	source.card = int32(_source.card)
 	source.Mute = (int32(_source.mute) != 0)
+	source.monitorOfSink = uint32(_source.monitor_of_sink)
 	source.Name = C.GoString((*C.char)(unsafe.Pointer(&_source.name[0])))
 	source.Description = C.GoString(&_source.description[0])
 	n := int(_source.channel_map.channels)
@@ -296,11 +305,12 @@ func getSourceFromC(_source C.source_t) *Source {
 		ret := C.strcmp(&_source.ports[j].name[0],
 			&_source.active_port.name[0])
 		if ret == 0 {
-			source.ActivePort = &source.Ports[j]
+			source.ActivePort = int32(j)
 		}
 	}
 	if source.nPorts == 0 {
-		source.ActivePort = &SourcePortInfo{"", "", 0}
+		//source.ActivePort = &SourcePortInfo{"", "", 0}
+		source.ActivePort = -1
 	}
 
 	return source
@@ -367,10 +377,14 @@ func NewAudio() (*Audio, error) {
 
 	audio.getServerInfo()
 	audio.getCards()
-	audio.getsinks()
+	audio.getSinks()
 	audio.getSources()
 	audio.getSinkInputs()
 	audio.getSourceOutputs()
+
+	audio.updateCards()
+	audio.updateSinks()
+	audio.updateSources()
 	return audio, nil
 }
 
@@ -399,6 +413,8 @@ func updateCard(_index C.int,
 				break
 			}
 		}
+		audio.cards[index] = newcard
+		dbus.InstallOnSession(audio.cards[index])
 		break
 	case C.PA_SUBSCRIPTION_EVENT_REMOVE:
 		audio.DeviceRemoved(audio.cards[index].GetDBusInfo().Dest)
@@ -406,6 +422,7 @@ func updateCard(_index C.int,
 		delete(audio.cards, index)
 		break
 	}
+	audio.updateCards()
 }
 
 //export updateSink
@@ -416,12 +433,15 @@ func updateSink(_index C.int,
 	case C.PA_SUBSCRIPTION_EVENT_NEW:
 		audio.sinks[index] = getSinkFromC(audio.pa.sinks[0])
 		dbus.InstallOnSession(audio.sinks[index])
-		audio.DeviceAdded(audio.sinks[index].GetDBusInfo().Dest)
+		fmt.Printf("new sink installed: %v\n", index)
+		//audio.DeviceAdded(audio.sinks[index].GetDBusInfo().Dest)
 		break
 	case C.PA_SUBSCRIPTION_EVENT_CHANGE:
 		newsink := getSinkFromC(audio.pa.sinks[0])
+		newdevice := 1
 		for i, _ := range audio.sinks {
 			if audio.sinks[i].Index == newsink.Index {
+				newdevice = 0
 				changes := getDiffProperty(audio.sinks[i], newsink)
 				audio.sinks[i] = newsink
 				dbus.InstallOnSession(audio.sinks[i])
@@ -433,13 +453,25 @@ func updateSink(_index C.int,
 				break
 			}
 		}
-
+		//actually,this is a new sink device
+		if newdevice != 0 {
+			audio.sinks[index] = newsink
+			dbus.InstallOnSession(audio.sinks[index])
+			fmt.Printf("new sink installed: %v\n", index)
+		}
+		break
 	case C.PA_SUBSCRIPTION_EVENT_REMOVE:
-		audio.DeviceRemoved(audio.sinks[index].GetDBusInfo().Dest)
-		dbus.UnInstallObject(audio.sinks[index])
-		delete(audio.sinks, index)
+		//audio.DeviceRemoved(audio.sinks[index].GetDBusInfo().Dest)
+		if audio.sinks[index] != nil {
+			dbus.UnInstallObject(audio.sinks[index])
+			delete(audio.sinks, index)
+			fmt.Printf("removed sink device %v\n", index)
+		} else {
+			fmt.Printf("No such sink device %v to remove\n", index)
+		}
 		break
 	}
+	audio.updateSinks()
 }
 
 //export updateSource
@@ -449,8 +481,10 @@ func updateSource(_index C.int,
 	switch event {
 	case C.PA_SUBSCRIPTION_EVENT_NEW:
 		audio.sources[index] = getSourceFromC(audio.pa.sources[0])
-		audio.DeviceAdded(audio.sources[index].GetDBusInfo().Dest)
-		dbus.InstallOnSession(audio.sources[index])
+		if audio.sources[index].monitorOfSink == C.PA_INVALID_INDEX {
+			audio.DeviceAdded(audio.sources[index].GetDBusInfo().Dest)
+			dbus.InstallOnSession(audio.sources[index])
+		}
 		break
 	case C.PA_SUBSCRIPTION_EVENT_CHANGE:
 		newsource := getSourceFromC(audio.pa.sources[0])
@@ -467,8 +501,12 @@ func updateSource(_index C.int,
 				break
 			}
 		}
-		audio.sources[index] = getSourceFromC(audio.pa.sources[0])
-		dbus.InstallOnSession(audio.sources[index])
+		audio.sources[index] = newsource
+		if audio.sources[index].monitorOfSink == C.PA_INVALID_INDEX {
+			audio.sources[index] = getSourceFromC(audio.pa.sources[0])
+			dbus.InstallOnSession(audio.sources[index])
+			audio.DeviceAdded(audio.sources[index].GetDBusInfo().Dest)
+		}
 		break
 	case C.PA_SUBSCRIPTION_EVENT_REMOVE:
 		if audio.sources[index] != nil {
@@ -478,6 +516,47 @@ func updateSource(_index C.int,
 		delete(audio.sources, index)
 		break
 	}
+	audio.updateSources()
+}
+
+//update exported properties of struct audio
+func (audio *Audio) updateCards() int32 {
+	n := len(audio.cards)
+	audio.Cards = make([]*Card, n)
+	i := 0
+	for _, value := range audio.cards {
+		audio.Cards[i] = value
+		i++
+	}
+	dbus.NotifyChange(audio, "Cards")
+	return 0
+}
+
+func (audio *Audio) updateSinks() int32 {
+	n := len(audio.sinks)
+	audio.Sinks = make([]*Sink, n)
+	i := 0
+	for _, value := range audio.sinks {
+		audio.Sinks[i] = value
+		i++
+	}
+	dbus.NotifyChange(audio, "Sinks")
+	return 0
+}
+
+func (audio *Audio) updateSources() int32 {
+	n := len(audio.sources)
+	s := make([]*Source, n)
+	i := 0
+	for _, value := range audio.sources {
+		if value.monitorOfSink == C.PA_INVALID_INDEX {
+			s[i] = value
+			i++
+		}
+	}
+	audio.Sources = s[0:i]
+	dbus.NotifyChange(audio, "Source")
+	return 0
 }
 
 //export updateSinkInput
@@ -587,7 +666,7 @@ func (audio *Audio) GetSinks() []*Sink {
 	return sinks
 }
 
-func (audio *Audio) getsinks() map[int]*Sink {
+func (audio *Audio) getSinks() map[int]*Sink {
 	C.pa_get_device_list(audio.pa)
 	n := int(audio.pa.n_sinks)
 	//sinks := make([]*Sink, n)
@@ -666,6 +745,75 @@ func (audio *Audio) GetClients() []*Client {
 	return clients
 }
 
+func (card *Card) GetDBusInfo() dbus.DBusInfo {
+	return dbus.DBusInfo{
+		"com.deepin.daemon.Audio",
+		"/com/deepin/daemon/Audio/Card" + strconv.FormatInt(int64(card.Index), 10),
+		"com.deepin.daemon.Audio.Card",
+	}
+}
+func (card *Card) OnPropertiesChanged(name string, oldv interface{}) {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Print(err)
+		}
+	}()
+	switch name {
+	case "ActiveProfile":
+		fmt.Printf("%v changed: %v\n", name, oldv)
+		if oldv == card.ActiveProfile {
+			break
+		}
+		if card.ActiveProfile < 0 || int(card.ActiveProfile) >= len(card.Profiles) {
+			card.ActiveProfile = oldv.(int32)
+			break
+		}
+		if card.SetCardProfile(card.ActiveProfile) != 0 {
+			card.ActiveProfile = oldv.(int32)
+		}
+	}
+}
+
+func (card *Card) GetCardProfile() []CardProfileInfo {
+	return card.Profiles
+}
+
+func (card *Card) setCardProfile(index C.int, port *C.char) int32 {
+	return int32(C.pa_set_card_profile_by_index(
+		audio.pa,
+		index,
+		port))
+}
+
+func (card *Card) SetCardProfile(i int32) int32 {
+	port := card.Profiles[i].Name
+	return card.setCardProfile(C.int(card.Index), (*C.char)(C.CString(port)))
+}
+
+func (card *Card) GetSinks() []*Sink {
+	n := len(audio.sinks)
+	var sinks []*Sink = make([]*Sink, n)
+	j := 0
+	for _, sink := range audio.sinks {
+		if sink.card == card.Index {
+			sinks[j] = sink
+			j = j + 1
+		}
+	}
+	return sinks[0:j]
+}
+
+func (card *Card) GetSources() []*Source {
+	n := len(audio.sources)
+	var sources []*Source = make([]*Source, n)
+	j := 0
+	for _, source := range audio.sources {
+		sources[j] = source
+		j = j + 1
+	}
+	return sources[0:j]
+}
+
 func (sink *Sink) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		"com.deepin.daemon.Audio",
@@ -715,45 +863,6 @@ func (sink *Sink) OnPropertiesChanged(name string, oldv interface{}) {
 	default:
 		break
 	}
-}
-
-func (card *Card) GetCardProfile() []CardProfileInfo {
-	return card.Profiles
-}
-
-func (card *Card) setCardProfile(index C.int, port *C.char) int32 {
-	return int32(C.pa_set_card_profile_by_index(
-		audio.pa,
-		index,
-		port))
-}
-
-func (card *Card) SetCardProfile(port string) int32 {
-	return card.setCardProfile(C.int(card.Index), (*C.char)(C.CString(port)))
-}
-
-func (card *Card) GetSinks() []*Sink {
-	n := len(audio.sinks)
-	var sinks []*Sink = make([]*Sink, n)
-	j := 0
-	for _, sink := range audio.sinks {
-		if sink.card == card.Index {
-			sinks[j] = sink
-			j = j + 1
-		}
-	}
-	return sinks[0:j]
-}
-
-func (card *Card) GetSources() []*Source {
-	n := len(audio.sources)
-	var sources []*Source = make([]*Source, n)
-	j := 0
-	for _, source := range audio.sources {
-		sources[j] = source
-		j = j + 1
-	}
-	return sources[0:j]
 }
 
 func (sink *Sink) setSinkPort(port *C.char) int32 {
@@ -984,14 +1093,6 @@ func (client *Client) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (card *Card) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		"com.deepin.daemon.Audio",
-		"/com/deepin/daemon/Audio/Card" + strconv.FormatInt(int64(card.Index), 10),
-		"com.deepin.daemon.Audio.Card",
-	}
-}
-
 var audio *Audio
 
 func main() {
@@ -1008,8 +1109,10 @@ func main() {
 	for i := range audio.sinks {
 		dbus.InstallOnSession(audio.sinks[i])
 	}
-	for i, _ := range audio.sources {
-		dbus.InstallOnSession(audio.sources[i])
+	for i, value := range audio.sources {
+		if value.monitorOfSink == C.PA_INVALID_INDEX {
+			dbus.InstallOnSession(audio.sources[i])
+		}
 	}
 	for i, _ := range audio.sinkInputs {
 		dbus.InstallOnSession(audio.sinkInputs[i])
