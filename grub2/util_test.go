@@ -55,6 +55,11 @@ func (u *Util) TestGetPathLevel(c *C) {
 		{"/a/b/c/file", 4},
 		{"/", 1},
 		{"/file", 1},
+		{".", 0},
+		{"./", 0},
+		{"./file", 1},
+		{"./././file", 1},
+		{"file", 1},
 		{"", 0},
 	}
 	for _, t := range tests {

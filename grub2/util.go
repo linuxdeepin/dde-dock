@@ -193,12 +193,12 @@ func copyFile(dest, src string) (written int64, err error) {
 }
 
 func getPathLevel(p string) int {
+	p = path.Clean(p)
 	if len(p) == 0 {
 		return 0
 	}
-	p = path.Clean(p)
 	lv := len(strings.Split(p, string(os.PathSeparator)))
-	if strings.HasPrefix(p, "/") {
+	if strings.HasPrefix(p, "/") || strings.HasPrefix(p, ".") {
 		lv--
 	}
 	return lv
