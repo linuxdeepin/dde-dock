@@ -6,17 +6,17 @@ package main
 import "C"
 import (
 	"dlib"
-        "dlib/logger"
 	"dlib/dbus"
+	"dlib/logger"
 	"unsafe"
 )
 
 func main() {
-        defer func() {
-                if err := recover(); err != nil {
-                        logger.Println("recover err:", err)
-                }
-        }()
+	defer func() {
+		if err := recover(); err != nil {
+			logger.Println("recover err:", err)
+		}
+	}()
 	tpadFlag := false
 
 	if !InitGSettings() {
@@ -57,7 +57,7 @@ func main() {
 			dbus.InstallOnSession(tpad)
 			tmp := ExtDeviceInfo{
 				Path: _EXT_ENTRY_PATH + tpad.DeviceID,
-				Type: "TouchPad",
+				Type: "touchpad",
 			}
 			dev.DevInfoList = append(dev.DevInfoList, tmp)
 		}
