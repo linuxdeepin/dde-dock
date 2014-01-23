@@ -36,6 +36,7 @@
 #define MAX_SINK_INPUTS 128
 #define MAX_SOURCE_OUTPUTS 128
 #define MAX_CARD_PROFILES 32
+#define MAX_EVENTS  16
 
 typedef void (*struct_dealloc_t)(void* self);
 
@@ -153,6 +154,16 @@ typedef struct client_s
     char driver[MAX_STRING];
 } client_t;
 
+typedef struct pa_event_queue_s
+{
+    int length;
+    pa_subscription_event_type_t events[MAX_EVENTS];
+    int front;
+    int rear;
+    int full;
+    int number;
+} pa_event_queue_t;
+
 typedef struct pa_s
 {
     int pa_ready;
@@ -178,18 +189,12 @@ typedef struct pa_s
     source_output_t source_outputs[MAX_SOURCE_OUTPUTS];
     int  n_source_outputs;
 
-    pa_subscription_event_type_t subscription_event;
+    pa_event_queue_t subscription_events;
 
     struct_dealloc_t dealloc;
 } pa;
 
-typedef struct pa_devicelist
-{
-    uint8_t initialized;
-    char name[MAX_STRING];
-    uint32_t index;
-    char description[256];
-} pa_devicelist_t;
+
 
 int pa_clear(pa *self);
 pa* pa_alloc();
@@ -310,6 +315,11 @@ int print_sink(const pa_sink_info *l);
 int print_source(const pa_source_info *l);
 
 
+int event_queue_push(
+    pa_event_queue_t *event_queue,
+    pa_subscription_event_type_t t);
+
+pa_subscription_event_type_t event_queue_pop(pa_event_queue_t *event_queue);
 //utils
 int pa_init_context(pa *self);
 

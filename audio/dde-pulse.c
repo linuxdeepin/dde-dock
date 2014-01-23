@@ -116,8 +116,10 @@ int pa_init(pa *self)
 {
     pa_clear(self);
 
+    self->subscription_events.length = MAX_EVENTS;
+
     pa_init_context(self);
-    printf( "PulseAudio context initialized\n");
+    /*printf( "PulseAudio context initialized\n");*/
     pthread_mutex_init(&self->pa_mutex, NULL);
     pthread_mutex_init(&self->event_mutex, NULL);
 
@@ -175,7 +177,7 @@ int pa_init_context(pa *self)
     // ready.
     // If there's an error, the callback will set self->pa_ready to 2
     pa_context_set_state_callback(self->pa_ctx, pa_state_cb, &self->pa_ready);
-    printf("Connected to server\n");
+    /*printf("Connected to server\n");*/
     return 0;
 }
 
@@ -299,7 +301,7 @@ int pa_subscribe(pa *self)
         switch (state)
         {
         case 0:
-            printf("try to set subscribe callback\n");
+            /*printf("try to set subscribe callback\n");*/
             pa_context_set_subscribe_callback(self->pa_ctx,
                                               pa_context_subscribe_cb,
                                               self);
@@ -307,10 +309,10 @@ int pa_subscribe(pa *self)
                                                PA_SUBSCRIPTION_MASK_SERVER |
                                                PA_SUBSCRIPTION_MASK_CARD |
                                                PA_SUBSCRIPTION_MASK_SINK |
-                                               PA_SUBSCRIPTION_MASK_SOURCE |
-                                               PA_SUBSCRIPTION_MASK_SINK_INPUT |
-                                               PA_SUBSCRIPTION_MASK_SOURCE_OUTPUT |
-                                               PA_SUBSCRIPTION_MASK_CLIENT ,
+                                               PA_SUBSCRIPTION_MASK_SOURCE ,
+                                               /*PA_SUBSCRIPTION_MASK_SINK_INPUT |*/
+                                               /*PA_SUBSCRIPTION_MASK_SOURCE_OUTPUT |*/
+                                               /*PA_SUBSCRIPTION_MASK_CLIENT ,*/
                                                pa_context_success_cb,
                                                self);
             state++;
@@ -2174,10 +2176,24 @@ void pa_context_subscribe_cb(pa_context *c,
                              uint32_t idx,
                              void *userdata)
 {
+    int n = 0;
     pa* self = userdata;
-    fprintf(stderr, "subscribe callback\n");
-    pthread_mutex_lock(&self->event_mutex);
-    self->subscription_event = t;
+    /*pthread_mutex_lock(&self->event_mutex);*/
+    while (1)
+    {
+        n = event_queue_push(&self->subscription_events, t);
+        if (n)
+        {
+            fprintf(stderr, "Full event queue,%d events,have to discard this\n",
+                    self->subscription_events.number);
+            return ;
+        }
+        else
+        {
+            //push success!!!!!!!!
+            break;
+        }
+    }
     int event = t & PA_SUBSCRIPTION_EVENT_TYPE_MASK;
     /*printf("subscribe_cb type: %d, idx: %d\n", t, idx);*/
     switch (t & PA_SUBSCRIPTION_EVENT_FACILITY_MASK)
@@ -2187,20 +2203,21 @@ void pa_context_subscribe_cb(pa_context *c,
         if (event == PA_SUBSCRIPTION_EVENT_NEW)
         {
             printf("DEBUG card %d new\n", idx);
-            pa_context_get_card_info_by_index(c, idx,
-                                              pa_card_update_info_cb, self);
+            self->pa_op = pa_context_get_card_info_by_index(c, idx,
+                          pa_card_update_info_cb, self);
         }
         else if (event == PA_SUBSCRIPTION_EVENT_CHANGE)
         {
             printf("DEBUG card %d state changed\n", idx);
-            pa_context_get_card_info_by_index(c, idx,
-                                              pa_card_update_info_cb, self);
+            self->pa_op = pa_context_get_card_info_by_index(c, idx,
+                          pa_card_update_info_cb, self);
         }
         else if (event == PA_SUBSCRIPTION_EVENT_REMOVE)
         {
             printf("DEBUG card %d removed\n", idx);
             updateCard(idx, event);
-            pthread_mutex_unlock(&self->event_mutex);
+            event_queue_pop( &self->subscription_events);
+            /*pthread_mutex_unlock(&self->event_mutex);*/
         }
         break;
     case PA_SUBSCRIPTION_EVENT_SINK:
@@ -2209,105 +2226,109 @@ void pa_context_subscribe_cb(pa_context *c,
         if (event == PA_SUBSCRIPTION_EVENT_NEW)
         {
             printf("DEBUG sink %d new\n", idx);
-            pa_context_get_sink_info_by_index(
-                c, idx,
-                pa_sink_update_info_cb, self);
+            self->pa_op = pa_context_get_sink_info_by_index(
+                              c, idx,
+                              pa_sink_update_info_cb, self);
         }
         else if (event == PA_SUBSCRIPTION_EVENT_CHANGE)
         {
             printf("DEBUG sink %d state changed\n", idx);
-            pa_context_get_sink_info_by_index(
-                c, idx,
-                pa_sink_update_info_cb, self);
+            self->pa_op = pa_context_get_sink_info_by_index(
+                              c, idx,
+                              pa_sink_update_info_cb, self);
         }
         else if (event == PA_SUBSCRIPTION_EVENT_REMOVE)
         {
             printf("DEBUG sink %d removed\n", idx);
             updateSink(idx, event);
-            pthread_mutex_unlock(&self->event_mutex);
+            event_queue_pop( &self->subscription_events);
+            /*pthread_mutex_unlock(&self->event_mutex);*/
         }
         break;
     case PA_SUBSCRIPTION_EVENT_SOURCE :
         self->n_sources = 0;
         if (event == PA_SUBSCRIPTION_EVENT_NEW)
         {
-            printf("DEBUG source %d new\n", idx);
-            pa_context_get_source_info_by_index(c, idx,
-                                                pa_source_update_info_cb,
-                                                self);
+            /*printf("DEBUG source %d new\n", idx);*/
+            self->pa_op = pa_context_get_source_info_by_index(c, idx,
+                          pa_source_update_info_cb,
+                          self);
         }
         else if (event == PA_SUBSCRIPTION_EVENT_CHANGE)
         {
-            printf("DEBUG source %d changed\n", idx);
-            pa_context_get_source_info_by_index(c, idx,
-                                                pa_source_update_info_cb,
-                                                self);
+            /*printf("DEBUG source %d changed\n", idx);*/
+            self->pa_op = pa_context_get_source_info_by_index(c, idx,
+                          pa_source_update_info_cb,
+                          self);
         }
         else if (event == PA_SUBSCRIPTION_EVENT_REMOVE)
         {
-            printf("DEBUG source %d removed\n", idx);
+            /*printf("DEBUG source %d removed\n", idx);*/
             updateSource(idx, event);
-            pthread_mutex_unlock(&self->event_mutex);
+            event_queue_pop( &self->subscription_events);
+            /*pthread_mutex_unlock(&self->event_mutex);*/
         }
         break;
-        /*case PA_SUBSCRIPTION_EVENT_CLIENT:*/
-        /*self->n_clients = 0;*/
-        /*if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) == PA_SUBSCRIPTION_EVENT_REMOVE)*/
-        /*{*/
-        /*printf("DEBUG client %d removed\n", idx);*/
-        /*}*/
-        /*else*/
-        /*{*/
-        /*printf("DEBUG client %d inserted\n", idx);*/
-        /*pa_context_get_client_info(c, idx, pa_client_info_cb, self);*/
-        /*}*/
-        /*break;*/
-        /*case PA_SUBSCRIPTION_EVENT_SERVER:*/
-        /*printf("DEBUG server\n");*/
-        /*break;*/
-        /*case PA_SUBSCRIPTION_EVENT_SINK_INPUT:*/
-        /*self->n_sink_inputs = 0;*/
-        /*if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) ==*/
-        /*PA_SUBSCRIPTION_EVENT_NEW)*/
-        /*{*/
-        /*printf("DEBUG sink input %d new\n", idx);*/
-        /*pa_context_get_sink_input_info(c, idx,*/
-        /*pa_sink_input_update_info_cb,*/
-        /*self);*/
-        /*}*/
-        /*else if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) ==*/
-        /*PA_SUBSCRIPTION_EVENT_CHANGE)*/
-        /*{*/
-        /*printf("DEBUG sink input %d changed\n", idx);*/
-        /*pa_context_get_sink_input_info(c, idx,*/
-        /*pa_sink_input_update_info_cb,*/
-        /*self);*/
-        /*}*/
-        /*else if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) ==*/
-        /*PA_SUBSCRIPTION_EVENT_REMOVE)*/
-        /*{*/
-        /*printf("DEBUG sink input %d removed\n", idx);*/
-        /*updateSinkInput(idx,*/
-        /*t & PA_SUBSCRIPTION_EVENT_TYPE_MASK);*/
-        /*}*/
-        /*break;*/
+    case PA_SUBSCRIPTION_EVENT_CLIENT:
+        self->n_clients = 0;
+        if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) == PA_SUBSCRIPTION_EVENT_REMOVE)
+        {
+            printf("DEBUG client %d removed\n", idx);
+        }
+        else
+        {
+            printf("DEBUG client %d inserted\n", idx);
+            self->pa_op = pa_context_get_client_info(c, idx, pa_client_info_cb, self);
+        }
+        break;
+    case PA_SUBSCRIPTION_EVENT_SERVER:
+        printf("DEBUG server\n");
+        event_queue_pop( &self->subscription_events);
+        /*pthread_mutex_unlock(&self->event_mutex);*/
+        break;
+    case PA_SUBSCRIPTION_EVENT_SINK_INPUT:
+        self->n_sink_inputs = 0;
+        if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) ==
+                PA_SUBSCRIPTION_EVENT_NEW)
+        {
+            printf("DEBUG sink input %d new\n", idx);
+            self->pa_op = pa_context_get_sink_input_info(c, idx,
+                          pa_sink_input_update_info_cb,
+                          self);
+        }
+        else if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) ==
+                 PA_SUBSCRIPTION_EVENT_CHANGE)
+        {
+            printf("DEBUG sink input %d changed\n", idx);
+            self->pa_op = pa_context_get_sink_input_info(c, idx,
+                          pa_sink_input_update_info_cb,
+                          self);
+        }
+        else if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) ==
+                 PA_SUBSCRIPTION_EVENT_REMOVE)
+        {
+            printf("DEBUG sink input %d removed\n", idx);
+            updateSinkInput(idx,
+                            t & PA_SUBSCRIPTION_EVENT_TYPE_MASK);
+        }
+        break;
     case PA_SUBSCRIPTION_EVENT_SOURCE_OUTPUT:
         self->n_source_outputs = 0;
         if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) ==
                 PA_SUBSCRIPTION_EVENT_NEW)
         {
             printf("DEBUG source output %d new\n", idx);
-            pa_context_get_source_output_info(c, idx,
-                                              pa_source_output_update_info_cb,
-                                              self);
+            self->pa_op = pa_context_get_source_output_info(c, idx,
+                          pa_source_output_update_info_cb,
+                          self);
         }
         else if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) ==
                  PA_SUBSCRIPTION_EVENT_CHANGE)
         {
             printf("DEBUG source output %d changed\n", idx);
-            pa_context_get_source_output_info(c, idx,
-                                              pa_source_output_update_info_cb,
-                                              self);
+            self->pa_op = pa_context_get_source_output_info(c, idx,
+                          pa_source_output_update_info_cb,
+                          self);
         }
         else if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) ==
                  PA_SUBSCRIPTION_EVENT_REMOVE)
@@ -2315,13 +2336,13 @@ void pa_context_subscribe_cb(pa_context *c,
             printf("DEBUG source output %d removed\n", idx);
             updateSinkInput(idx,
                             t & PA_SUBSCRIPTION_EVENT_TYPE_MASK);
+            /*pthread_mutex_unlock(&self->event_mutex);*/
         }
-        pthread_mutex_unlock(&self->event_mutex);
         break;
     }
 }
 
-void pa_get_serverinfo_cb(pa_context *c, const pa_server_info*i, void *userdata)
+void pa_get_serverinfo_cb(pa_context * c, const pa_server_info * i, void * userdata)
 {
     pa *self = userdata;
     if ( self == NULL)
@@ -2355,8 +2376,8 @@ void pa_get_serverinfo_cb(pa_context *c, const pa_server_info*i, void *userdata)
     return;
 }
 
-void pa_card_info_cb(pa_context *c, const pa_card_info*i,
-                     int eol, void *userdata)
+void pa_card_info_cb(pa_context * c, const pa_card_info * i,
+                     int eol, void * userdata)
 {
     pa *self = userdata;
     card_t *card;
@@ -2381,36 +2402,36 @@ void pa_card_info_cb(pa_context *c, const pa_card_info*i,
     {
         pa2card(card, i);
     }
-    /*print_card(i);*/
+    print_card(i);
     return;
 }
 
-void pa_card_update_info_cb(pa_context *c, const pa_card_info *l,
-                            int eol, void *userdata)
+void pa_card_update_info_cb(pa_context * c, const pa_card_info * l,
+                            int eol, void * userdata)
 {
     pa *self = userdata;
     if (l)
     {
         pa_card_info_cb(c, l, eol, userdata);
+        pa_subscription_event_type_t e = event_queue_pop(&self->subscription_events);
         updateCard(l->index,
-                   self->subscription_event  &
-                   PA_SUBSCRIPTION_EVENT_TYPE_MASK);
-        pthread_mutex_unlock(&self->event_mutex);
+                   e & PA_SUBSCRIPTION_EVENT_TYPE_MASK);
+
     }
     else
     {
         /*fprintf(stderr, "NULL pointer\n");*/
-        return;;
     }
+    /*pthread_mutex_unlock(&self->event_mutex);*/
 }
 
 // pa_mainloop will call this function when it's ready to tell us about a sink.
 // Since we're not threading, there's no need for mutexes on the devicelist
 // structure
-void pa_sink_info_cb(pa_context *c,
-                     const pa_sink_info *l,
+void pa_sink_info_cb(pa_context * c,
+                     const pa_sink_info * l,
                      int eol,
-                     void *userdata)
+                     void * userdata)
 {
     pa *self = (pa*)userdata;
     sink_t *sink = NULL;
@@ -2441,28 +2462,27 @@ void pa_sink_info_cb(pa_context *c,
     }
 }
 
-void pa_sink_update_info_cb(pa_context *c,
-                            const pa_sink_info *l,
+void pa_sink_update_info_cb(pa_context * c,
+                            const pa_sink_info * l,
                             int eol,
-                            void *userdata)
+                            void * userdata)
 {
     pa* self = userdata;
     if (l)
     {
         pa_sink_info_cb(c, l, eol, userdata);
+        pa_subscription_event_type_t t = event_queue_pop(&self->subscription_events);
         updateSink(l->index,
-                   self->subscription_event &
-                   PA_SUBSCRIPTION_EVENT_TYPE_MASK);
-        pthread_mutex_unlock(&self->event_mutex);
+                   t & PA_SUBSCRIPTION_EVENT_TYPE_MASK);
     }
     else
     {
         /*fprintf(stderr, "NULL pointer\n");*/
-        return;
     }
+    /*pthread_mutex_unlock(&self->event_mutex);*/
 }
 
-void pa_get_sink_volume_cb(pa_context *c, const pa_sink_info *i, int eol, void *userdata)
+void pa_get_sink_volume_cb(pa_context * c, const pa_sink_info * i, int eol, void * userdata)
 {
     if (eol > 0)
     {
@@ -2480,8 +2500,8 @@ void pa_get_sink_volume_cb(pa_context *c, const pa_sink_info *i, int eol, void *
 }
 
 // See above.  This callback is pretty much identical to the previous
-void pa_source_info_cb(pa_context *c, const pa_source_info *l,
-                       int eol, void *userdata)
+void pa_source_info_cb(pa_context * c, const pa_source_info * l,
+                       int eol, void * userdata)
 {
     pa *self = userdata;
     source_t *source = NULL;
@@ -2511,28 +2531,27 @@ void pa_source_info_cb(pa_context *c, const pa_source_info *l,
     }
 }
 
-void pa_source_update_info_cb(pa_context *c, const pa_source_info *l,
-                              int eol, void *userdata)
+void pa_source_update_info_cb(pa_context * c, const pa_source_info * l,
+                              int eol, void * userdata)
 {
     pa *self = userdata;
     pa_source_info_cb(c, l, eol, userdata);
     if (l)
     {
         /*print_source(l);*/
+        pa_subscription_event_type_t t = event_queue_pop(&self->subscription_events);
         updateSource(l->index,
-                     self->subscription_event &
-                     PA_SUBSCRIPTION_EVENT_TYPE_MASK);
-        pthread_mutex_unlock(&self->event_mutex);
+                     t & PA_SUBSCRIPTION_EVENT_TYPE_MASK);
     }
     else
     {
         /*fprintf(stderr, "source is NULL pointer\n");*/
-        return;
     }
+    /*pthread_mutex_unlock(&self->event_mutex);*/
 }
 
-void pa_get_source_volume_cb(pa_context *c, const pa_source_info *i,
-                             int eol, void *userdata)
+void pa_get_source_volume_cb(pa_context * c, const pa_source_info * i,
+                             int eol, void * userdata)
 {
     if (eol > 0)
     {
@@ -2549,8 +2568,8 @@ void pa_get_source_volume_cb(pa_context *c, const pa_source_info *i,
     return;
 }
 
-void pa_get_client_info_cb(pa_context *c, const pa_client_info *i,
-                           int eol, void *userdata)
+void pa_get_client_info_cb(pa_context * c, const pa_client_info * i,
+                           int eol, void * userdata)
 {
     pa *self = userdata;
     client_t *client = NULL;
@@ -2586,17 +2605,17 @@ void pa_get_client_info_cb(pa_context *c, const pa_client_info *i,
     return;
 }
 
-void pa_client_info_cb(pa_context *c,
-                       const pa_client_info *i,
+void pa_client_info_cb(pa_context * c,
+                       const pa_client_info * i,
                        int eol,
-                       void *userdata)
+                       void * userdata)
 {
     printf("DEBUG client info %s\n", i ? i->name : NULL);
 }
 
-void pa_sink_input_info_cb(pa_context *c,
-                           const pa_sink_input_info *i,
-                           int eol, void *userdata)
+void pa_sink_input_info_cb(pa_context * c,
+                           const pa_sink_input_info * i,
+                           int eol, void * userdata)
 {
     pa *self = userdata;
     sink_input_t *sink_input = NULL;
@@ -2637,10 +2656,10 @@ void pa_sink_input_info_cb(pa_context *c,
 
 }
 
-void pa_sink_input_update_info_cb(pa_context *c,
-                                  const pa_sink_input_info *i,
+void pa_sink_input_update_info_cb(pa_context * c,
+                                  const pa_sink_input_info * i,
                                   int eol,
-                                  void *userdata
+                                  void * userdata
                                  )
 {
     pa *self = userdata;
@@ -2648,7 +2667,8 @@ void pa_sink_input_update_info_cb(pa_context *c,
     {
         pa_sink_input_info_cb(c, i, eol, userdata);
         updateSinkInput(i->index,
-                        self->subscription_event &
+                        self->subscription_events.events[
+                            self->subscription_events.front]&
                         PA_SUBSCRIPTION_EVENT_TYPE_MASK);
     }
     else
@@ -2657,10 +2677,10 @@ void pa_sink_input_update_info_cb(pa_context *c,
     }
 }
 
-void pa_get_sink_input_volume_cb(pa_context *c,
-                                 const pa_sink_input_info *i,
+void pa_get_sink_input_volume_cb(pa_context * c,
+                                 const pa_sink_input_info * i,
                                  int eol,
-                                 void *userdata)
+                                 void * userdata)
 {
     if (eol > 0)
     {
@@ -2675,9 +2695,9 @@ void pa_get_sink_input_volume_cb(pa_context *c,
     return;
 }
 
-void pa_source_output_info_cb(pa_context *c,
-                              const pa_source_output_info *o,
-                              int eol, void *userdata)
+void pa_source_output_info_cb(pa_context * c,
+                              const pa_source_output_info * o,
+                              int eol, void * userdata)
 {
     pa *self = userdata;
     source_output_t *source_output = NULL;
@@ -2716,28 +2736,28 @@ void pa_source_output_info_cb(pa_context *c,
     //void *prop_state = NULL;
 }
 
-void pa_source_output_update_info_cb(pa_context *c,
-                                     const pa_source_output_info *o,
+void pa_source_output_update_info_cb(pa_context * c,
+                                     const pa_source_output_info * o,
                                      int eol,
-                                     void *userdata)
+                                     void * userdata)
 {
     pa *self = userdata;
     if (o)
     {
         pa_source_output_info_cb(c, o, eol, userdata);
         updateSourceOutput(o->index,
-                           self->subscription_event &
+                           self->subscription_events.events[0] &
                            PA_SUBSCRIPTION_EVENT_TYPE_MASK);
     }
     else
     {
-        return;
     }
+    /*pthread_mutex_unlock(&self->event_mutex);*/
 }
 
-void pa_get_source_output_volume_cb(pa_context *c,
-                                    const pa_source_output_info *o,
-                                    int eol, void *userdata)
+void pa_get_source_output_volume_cb(pa_context * c,
+                                    const pa_source_output_info * o,
+                                    int eol, void * userdata)
 {
     if (eol > 0)
     {
@@ -2752,7 +2772,7 @@ void pa_get_source_output_volume_cb(pa_context *c,
     return;
 }
 
-void pa_context_success_cb(pa_context *c, int success, void *userdata)
+void pa_context_success_cb(pa_context * c, int success, void * userdata)
 {
     if (!success)
     {
@@ -2761,11 +2781,11 @@ void pa_context_success_cb(pa_context *c, int success, void *userdata)
     }
     else
     {
-        printf("operation successfully completed!\n");
+        /*printf("operation successfully completed!\n");*/
     }
 }
 
-void pa_set_sink_input_mute_cb(pa_context *c, int success, void *userdata)
+void pa_set_sink_input_mute_cb(pa_context * c, int success, void * userdata)
 {
     if (!success)
     {
@@ -2774,7 +2794,7 @@ void pa_set_sink_input_mute_cb(pa_context *c, int success, void *userdata)
     }
 }
 
-void pa_set_sink_input_volume_cb(pa_context *c, int success, void *userdata)
+void pa_set_sink_input_volume_cb(pa_context * c, int success, void * userdata)
 {
     if (!success)
     {
@@ -2783,7 +2803,7 @@ void pa_set_sink_input_volume_cb(pa_context *c, int success, void *userdata)
     }
 }
 
-int print_card(const pa_card_info *l)
+int print_card(const pa_card_info * l)
 {
     if (l)
     {
@@ -2798,7 +2818,7 @@ int print_card(const pa_card_info *l)
     }
 }
 
-int print_sink(const pa_sink_info *l)
+int print_sink(const pa_sink_info * l)
 {
     if (l)
     {
@@ -2819,7 +2839,7 @@ int print_sink(const pa_sink_info *l)
     return 0;
 }
 
-int print_source(const pa_source_info *l)
+int print_source(const pa_source_info * l)
 {
     if (l)
     {
@@ -2831,7 +2851,7 @@ int print_source(const pa_source_info *l)
     return 0;
 }
 
-int print_sink_input(pa_sink_input_info *i)
+int print_sink_input(pa_sink_input_info * i)
 {
     char buf[1024];
     const char *prop_key = NULL;
@@ -2857,7 +2877,7 @@ int print_sink_input(pa_sink_input_info *i)
     return 0;
 }
 
-card_t* pa2card(card_t *card, const pa_card_info *i)
+card_t* pa2card(card_t * card, const pa_card_info * i)
 {
     if (!card || !i)
     {
@@ -2888,7 +2908,7 @@ card_t* pa2card(card_t *card, const pa_card_info *i)
     return card;
 }
 
-sink_t *pa2sink(sink_t *sink, const pa_sink_info *l)
+sink_t *pa2sink(sink_t * sink, const pa_sink_info * l)
 {
     int i;
     sink->index = l->index;
@@ -2926,7 +2946,7 @@ sink_t *pa2sink(sink_t *sink, const pa_sink_info *l)
     return sink;
 }
 
-source_t *pa2source(source_t *source, const pa_source_info *l)
+source_t *pa2source(source_t * source, const pa_source_info * l)
 {
     int i;
     source->index = l->index;
@@ -2966,6 +2986,49 @@ source_t *pa2source(source_t *source, const pa_source_info *l)
         source->balance = 0;
     }
     return source;
+}
+
+int event_queue_push(
+    pa_event_queue_t *event_queue,
+    pa_subscription_event_type_t t)
+{
+    int n ;
+    n = (event_queue->rear + 1 ) %
+        event_queue->length;
+    if (!event_queue->full)
+    {
+        //not full queue
+        event_queue->events[event_queue->rear] = t;
+        event_queue->rear = n ;
+        event_queue->number++;
+        fprintf(stderr, "push to queue.front: %d,rear: %d,number: %d\n",
+                event_queue->front, event_queue->rear, event_queue->number);
+    }
+    else
+    {
+        return -1;
+    }
+    if (n == event_queue->front)
+    {
+        //full queue now
+        event_queue->full = 1;
+    }
+    return 0;
+}
+
+pa_subscription_event_type_t event_queue_pop(pa_event_queue_t *event_queue)
+{
+    pa_subscription_event_type_t e =
+        event_queue->events[event_queue->front];
+    event_queue->front = ( event_queue->front + 1) % event_queue->length;
+    event_queue->number--;
+    if (event_queue->full )
+    {
+        event_queue->full = 0;
+    }
+    fprintf(stderr, "pop from queue.front: %d,rear: %d,number: %d\n",
+            event_queue->front, event_queue->rear, event_queue->number);
+    return e;
 }
 
 int getChannelMap(pa_channel_map cm, int i)

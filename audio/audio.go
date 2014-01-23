@@ -269,7 +269,6 @@ func getSinkFromC(_sink C.sink_t) *Sink {
 	if sink.nPorts == 0 {
 		sink.ActivePort = 0
 	}
-	fmt.Println("Index: " + strconv.Itoa(int((sink.Index))) + " Card:" + strconv.Itoa(int(sink.card)))
 	return sink
 }
 
@@ -379,8 +378,8 @@ func NewAudio() (*Audio, error) {
 	audio.getCards()
 	audio.getSinks()
 	audio.getSources()
-	audio.getSinkInputs()
-	audio.getSourceOutputs()
+	//audio.getSinkInputs()
+	//audio.getSourceOutputs()
 
 	audio.updateCards()
 	audio.updateSinks()
@@ -401,8 +400,10 @@ func updateCard(_index C.int,
 		break
 	case C.PA_SUBSCRIPTION_EVENT_CHANGE:
 		newcard := getCardFromC(audio.pa.cards[0])
+		flag := 1 //card not found in our objects
 		for i, _ := range audio.cards {
 			if audio.cards[i].Index == newcard.Index {
+				flag = 0
 				changes := getDiffProperty(audio.cards[i], newcard)
 				audio.cards[index] = newcard
 				dbus.InstallOnSession(audio.cards[i])
@@ -413,13 +414,20 @@ func updateCard(_index C.int,
 				break
 			}
 		}
-		audio.cards[index] = newcard
-		dbus.InstallOnSession(audio.cards[index])
+		if flag != 0 {
+			audio.cards[index] = newcard
+			dbus.InstallOnSession(audio.cards[index])
+			fmt.Printf("installed a new card %v\n", index)
+		}
 		break
 	case C.PA_SUBSCRIPTION_EVENT_REMOVE:
-		audio.DeviceRemoved(audio.cards[index].GetDBusInfo().Dest)
-		dbus.UnInstallObject(audio.cards[index])
-		delete(audio.cards, index)
+		if audio.cards[index] != nil {
+			audio.DeviceRemoved(audio.cards[index].GetDBusInfo().Dest)
+			dbus.UnInstallObject(audio.cards[index])
+			delete(audio.cards, index)
+		} else {
+			fmt.Printf("no such card device to delete\n")
+		}
 		break
 	}
 	audio.updateCards()
@@ -431,10 +439,15 @@ func updateSink(_index C.int,
 	index := int(_index)
 	switch event {
 	case C.PA_SUBSCRIPTION_EVENT_NEW:
-		audio.sinks[index] = getSinkFromC(audio.pa.sinks[0])
-		dbus.InstallOnSession(audio.sinks[index])
-		fmt.Printf("new sink installed: %v\n", index)
-		//audio.DeviceAdded(audio.sinks[index].GetDBusInfo().Dest)
+		newsink := getSinkFromC(audio.pa.sinks[0])
+		if audio.sinks[index] == nil {
+			audio.sinks[index] = newsink
+			dbus.InstallOnSession(audio.sinks[index])
+			fmt.Printf("new sink installed: %v\n", index)
+			//audio.DeviceAdded(audio.sinks[index].GetDBusInfo().Dest)
+		} else {
+			fmt.Printf("sink already installed %v\n", index)
+		}
 		break
 	case C.PA_SUBSCRIPTION_EVENT_CHANGE:
 		newsink := getSinkFromC(audio.pa.sinks[0])
@@ -457,7 +470,7 @@ func updateSink(_index C.int,
 		if newdevice != 0 {
 			audio.sinks[index] = newsink
 			dbus.InstallOnSession(audio.sinks[index])
-			fmt.Printf("new sink installed: %v\n", index)
+			fmt.Printf("change,new sink installed: %v\n", index)
 		}
 		break
 	case C.PA_SUBSCRIPTION_EVENT_REMOVE:
@@ -488,8 +501,10 @@ func updateSource(_index C.int,
 		break
 	case C.PA_SUBSCRIPTION_EVENT_CHANGE:
 		newsource := getSourceFromC(audio.pa.sources[0])
+		isnewsource := 1
 		for i, _ := range audio.sources {
 			if audio.sources[i].Index == newsource.Index {
+				isnewsource = 0
 				changes := getDiffProperty(audio.sources[i], newsource)
 				audio.sources[i] = newsource
 				for key, _ := range changes {
@@ -501,11 +516,14 @@ func updateSource(_index C.int,
 				break
 			}
 		}
-		audio.sources[index] = newsource
-		if audio.sources[index].monitorOfSink == C.PA_INVALID_INDEX {
-			audio.sources[index] = getSourceFromC(audio.pa.sources[0])
-			dbus.InstallOnSession(audio.sources[index])
-			audio.DeviceAdded(audio.sources[index].GetDBusInfo().Dest)
+		if isnewsource != 0 {
+			audio.sources[index] = newsource
+			if audio.sources[index].monitorOfSink == C.PA_INVALID_INDEX {
+				audio.sources[index] = getSourceFromC(audio.pa.sources[0])
+				dbus.InstallOnSession(audio.sources[index])
+				audio.DeviceAdded(audio.sources[index].GetDBusInfo().Dest)
+			}
+			fmt.Printf("installed new souce %v\n", index)
 		}
 		break
 	case C.PA_SUBSCRIPTION_EVENT_REMOVE:
@@ -555,7 +573,7 @@ func (audio *Audio) updateSources() int32 {
 		}
 	}
 	audio.Sources = s[0:i]
-	dbus.NotifyChange(audio, "Source")
+	dbus.NotifyChange(audio, "Sources")
 	return 0
 }
 
