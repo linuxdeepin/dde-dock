@@ -227,7 +227,7 @@ func (grub *Grub2) parseSettings(fileContent string) error {
 }
 
 func (grub *Grub2) getDefaultEntry() string {
-	entryTitles, _ := grub.GetEntryTitles()
+	entryTitles, _ := grub.GetSimpleEntryTitles()
 	firstEntry := ""
 	if len(entryTitles) > 0 {
 		firstEntry = entryTitles[0]

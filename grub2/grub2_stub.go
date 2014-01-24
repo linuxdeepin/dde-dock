@@ -62,10 +62,11 @@ func (grub *Grub2) Save() error {
 	return nil
 }
 
-func (grub *Grub2) GetEntryTitles() ([]string, error) {
+// Get all entry titles in level one.
+func (grub *Grub2) GetSimpleEntryTitles() ([]string, error) {
 	entryTitles := make([]string, 0)
 	for _, entry := range grub.entries {
-		if entry.entryType == MENUENTRY {
+		if entry.parentSubMenu == nil && entry.entryType == MENUENTRY {
 			entryTitles = append(entryTitles, entry.getFullTitle())
 		}
 	}
