@@ -40,20 +40,20 @@ func (m *BindManager) GetDBusInfo() dbus.DBusInfo {
 func (m *BindManager) setPropList(listName string) {
 	switch listName {
 	case "SystemList":
-                tmpList := getSystemKeyInfo()
+		tmpList := getSystemKeyInfo()
 		m.SystemList = sortShortcutInfoArray(tmpList)
 		dbus.NotifyChange(m, listName)
 	case "MediaList":
-                tmpList := getMediaKeyInfo()
-		m.MediaList =sortShortcutInfoArray(tmpList)
+		tmpList := getMediaKeyInfo()
+		m.MediaList = sortShortcutInfoArray(tmpList)
 		dbus.NotifyChange(m, listName)
 	case "WindowList":
-                tmpList := getWindowKeyInfo()
-		m.WindowList =sortShortcutInfoArray(tmpList)
+		tmpList := getWindowKeyInfo()
+		m.WindowList = sortShortcutInfoArray(tmpList)
 		dbus.NotifyChange(m, listName)
 	case "WorkSpaceList":
-                tmpList := getWorkSpaceKeyInfo()
-		m.WorkSpaceList =sortShortcutInfoArray(tmpList)
+		tmpList := getWorkSpaceKeyInfo()
+		m.WorkSpaceList = sortShortcutInfoArray(tmpList)
 		dbus.NotifyChange(m, listName)
 	case "CustomList":
 		m.CustomList = getCustomKeyInfo()
@@ -409,9 +409,13 @@ func resetCustomValues(gs *gio.Settings) {
 }
 
 func getMaxIdFromCustom() int32 {
-	max := int32(0)
 	customList := getCustomList()
 
+	if len(customList) <= 0 {
+		return _CUSTOM_ID_BASE
+	}
+
+	max := int32(0)
 	for _, k := range customList {
 		if max < k {
 			max = k
