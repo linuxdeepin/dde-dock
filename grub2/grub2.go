@@ -33,7 +33,6 @@ type Grub2 struct {
 	DefaultEntry      string `access:"readwrite"`
 	Timeout           int32  `access:"readwrite"`
 	Gfxmode           string `access:"readwrite"`
-	Background        string `access:"readwrite"`
 	GrubConfGenerated func(int32, bool)
 }
 
@@ -213,14 +212,12 @@ func (grub *Grub2) parseSettings(fileContent string) error {
 	grub.DefaultEntry = grub.getDefaultEntry()
 	grub.Timeout = grub.getTimeout()
 	grub.Gfxmode = grub.getGfxmode()
-	grub.Background = grub.getBackground()
 	grub.tm.setEnabledThemeMainFile(grub.getTheme())
 
 	// reset settings to sync the default values
 	grub.setDefaultEntry(grub.DefaultEntry)
 	grub.setTimeout(grub.Timeout)
 	grub.setGfxmode(grub.Gfxmode)
-	grub.setBackground(grub.Background)
 	grub.setTheme(grub.tm.getEnabledThemeMainFile())
 
 	return nil
@@ -278,10 +275,6 @@ func (grub *Grub2) getGfxmode() string {
 	return grub.settings["GRUB_GFXMODE"]
 }
 
-func (grub *Grub2) getBackground() string {
-	return grub.settings["GRUB_BACKGROUND"]
-}
-
 func (grub *Grub2) getTheme() string {
 	return grub.settings["GRUB_THEME"]
 }
@@ -301,10 +294,6 @@ func (grub *Grub2) setTimeout(timeout int32) {
 
 func (grub *Grub2) setGfxmode(gfxmode string) {
 	grub.settings["GRUB_GFXMODE"] = gfxmode
-}
-
-func (grub *Grub2) setBackground(imageFile string) {
-	grub.settings["GRUB_BACKGROUND"] = imageFile
 }
 
 func (grub *Grub2) setTheme(themeFile string) {

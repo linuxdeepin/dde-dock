@@ -130,14 +130,7 @@ func (grub *Grub2) TestSetterAndGetter(c *C) {
 	grub.setGfxmode(wantGfxmode)
 	c.Check(grub.getGfxmode(), Equals, wantGfxmode)
 
-	// background
-	wantBackground := "/boot/grub/background.png"
-	c.Check(grub.getBackground(), Equals, wantBackground)
-	wantBackground = "another_background.png"
-	grub.setBackground(wantBackground)
-	c.Check(grub.getBackground(), Equals, wantBackground)
-
-	// TODO theme
+	// theme
 	wantTheme := "/boot/grub/themes/demo/theme.txt"
 	c.Check(grub.getTheme(), Equals, wantTheme)
 	wantTheme = "another_theme.txt"
@@ -167,7 +160,6 @@ GRUB_GFXMODE="1024x768"
 GRUB_TIMEOUT="15"
 GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
 GRUB_GFXMODE="auto"
-GRUB_BACKGROUND="/boot/grub/background.png"
 GRUB_THEME="/boot/grub/themes/demo/theme.txt"
 `
 
@@ -177,7 +169,6 @@ GRUB_THEME="/boot/grub/themes/demo/theme.txt"
 	grub.setDefaultEntry(`LinuxDeepin GNU/Linux`)
 	grub.setTimeout(15)
 	grub.setGfxmode("auto")
-	grub.setBackground("/boot/grub/background.png")
 	grub.setTheme("/boot/grub/themes/demo/theme.txt")
 	c.Check(grub.getSettingContentToSave(), Equals, wantConfigContent)
 }
