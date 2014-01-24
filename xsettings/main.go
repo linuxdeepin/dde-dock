@@ -42,6 +42,12 @@ type HeaderInfo struct {
 	value      interface{}
 }
 
+type Manager struct {
+	order  binary.ByteOrder
+	format byte
+	wid    xproto.Window
+}
+
 const (
 	XSETTINGS_S0       = "_XSETTINGS_S0"
 	XSETTINGS_SETTINGS = "_XSETTINGS_SETTINGS"
@@ -52,23 +58,11 @@ const (
 )
 
 var (
-	X               *xgb.Conn
-	sReply          *xproto.GetSelectionOwnerReply
-	byteOrder       binary.ByteOrder
-	bytesDataFormat byte
-	xsettingsInfo   *XSettingsInfo
+	X             *xgb.Conn
+	sReply        *xproto.GetSelectionOwnerReply
+	xsettingsInfo *XSettingsInfo
+	m             *Manager
 )
-
-func getAtom(X *xgb.Conn, name string) xproto.Atom {
-	reply, err := xproto.InternAtom(X, false,
-		uint16(len(name)), name).Reply()
-	if err != nil {
-		logger.Printf("'%s' Get Xproto Atom Failed: %s\n",
-			name, err)
-	}
-
-	return reply.Atom
-}
 
 func initXSettings() {
 	var err error
@@ -87,10 +81,12 @@ func initXSettings() {
 	}
 
 	xsettingsInfo = &XSettingsInfo{}
+	m = &Manager{}
 }
 
 func main() {
 	initXSettings()
+        //newXWindow()
 	logger.Println("Deepin-Legacy")
 	setXSettingsName("Net/ThemeName", "Deepin-Legacy")
 	setXSettingsName("Net/IconThemeName", "Deepin-Legacy")

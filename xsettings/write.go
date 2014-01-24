@@ -36,7 +36,7 @@ func writeInterger(value uint32, datas *[]byte) {
 	}()
 
 	buf := bytes.NewBuffer([]byte{})
-	binary.Write(buf, byteOrder, value)
+	binary.Write(buf, m.order, value)
 	tmp := buf.Bytes()
 
 	l := len(tmp)
@@ -53,7 +53,7 @@ func writeInterger2(value uint16, datas *[]byte) {
 	}()
 
 	buf := bytes.NewBuffer([]byte{})
-	binary.Write(buf, byteOrder, value)
+	binary.Write(buf, m.order, value)
 	tmp := buf.Bytes()
 
 	l := len(tmp)
@@ -133,10 +133,11 @@ func changeXSettingsProperty(datas []byte) {
 	}()
 
 	err := xproto.ChangePropertyChecked(X, xproto.PropModeReplace,
-		sReply.Owner,
+		//m.wid,
+                sReply.Owner,
 		getAtom(X, XSETTINGS_SETTINGS),
 		getAtom(X, XSETTINGS_SETTINGS),
-		bytesDataFormat, uint32(len(datas)), datas).Check()
+		m.format, uint32(len(datas)), datas).Check()
 	if err != nil {
 		logger.Printf("Change Property '%s' Failed: %s\n",
 			XSETTINGS_SETTINGS, err)

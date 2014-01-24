@@ -31,7 +31,7 @@ import (
 
 func readInterger(buf io.Reader) uint32 {
 	body := uint32(0)
-	binary.Read(buf, byteOrder, &body)
+	binary.Read(buf, m.order, &body)
 
 	return body
 }
@@ -40,13 +40,13 @@ func readColor(buf io.Reader) []uint16 {
 	ret := []uint16{}
 	var r uint16
 
-	binary.Read(buf, byteOrder, &r)
+	binary.Read(buf, m.order, &r)
 	ret = append(ret, r)
-	binary.Read(buf, byteOrder, &r)
+	binary.Read(buf, m.order, &r)
 	ret = append(ret, r)
-	binary.Read(buf, byteOrder, &r)
+	binary.Read(buf, m.order, &r)
 	ret = append(ret, r)
-	binary.Read(buf, byteOrder, &r)
+	binary.Read(buf, m.order, &r)
 	ret = append(ret, r)
 
 	return ret
@@ -54,14 +54,14 @@ func readColor(buf io.Reader) []uint16 {
 
 func readString(buf io.Reader) string {
 	var nameLen uint32
-	binary.Read(buf, byteOrder, &nameLen)
+	binary.Read(buf, m.order, &nameLen)
 	if nameLen > 1000 {
 		logger.Println("name len to long:", nameLen)
 		panic("name len to long")
 	}
 
 	nameBuf := make([]byte, nameLen)
-	binary.Read(buf, byteOrder, &nameBuf)
+	binary.Read(buf, m.order, &nameBuf)
 
 	leftPad := 3 - (nameLen+3)%4
 	buf.Read(make([]byte, leftPad))
@@ -71,10 +71,10 @@ func readString(buf io.Reader) string {
 
 func readString2(buf io.Reader) (string, uint16) {
 	var nameLen uint16
-	binary.Read(buf, byteOrder, &nameLen)
+	binary.Read(buf, m.order, &nameLen)
 
 	nameBuf := make([]byte, nameLen)
-	binary.Read(buf, byteOrder, &nameBuf)
+	binary.Read(buf, m.order, &nameBuf)
 
 	leftPad := 3 - (nameLen+3)%4
 	buf.Read(make([]byte, leftPad))
@@ -84,7 +84,7 @@ func readString2(buf io.Reader) (string, uint16) {
 
 func readHeader(buf io.Reader) (byte, uint16, string, uint32) {
 	var sType byte
-	binary.Read(buf, byteOrder, &sType)
+	binary.Read(buf, m.order, &sType)
 	buf.Read(make([]byte, 1))
 
 	name, nameLen := readString2(buf)
@@ -104,19 +104,19 @@ func readXSettings() []*HeaderInfo {
 	}
 
 	infos := []*HeaderInfo{}
-	bytesDataFormat = reply.Format
+	m.format = reply.Format
 	data := reply.Value[:reply.ValueLen]
 	xsettingsInfo.order = data[0]
 	if data[0] == 1 {
-		byteOrder = binary.BigEndian
+		m.order = binary.BigEndian
 	} else {
-		byteOrder = binary.LittleEndian
+		m.order = binary.LittleEndian
 	}
 
 	buf := bytes.NewReader(data[4:])
 
 	xsettingsInfo.serial = readInterger(buf)
-        numSettings := readInterger(buf)
+	numSettings := readInterger(buf)
 
 	//logger.Printf("serial: %d, numSettings: %d, suffix: %d\n",
 	//serial, numSettings, suffix)
