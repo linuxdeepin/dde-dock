@@ -389,14 +389,20 @@ func NewAudio() (*Audio, error) {
 
 //export updateCard
 func updateCard(_index C.int,
-	event C.pa_subscription_event_type_t) {
+	event C.int) {
 	index := int(_index)
+	fmt.Printf("updatecard before swith %v\n", event)
 	switch event {
 	case C.PA_SUBSCRIPTION_EVENT_NEW:
 		//i := int32(audio.pa.cards[0].index)
-		audio.cards[index] = getCardFromC(audio.pa.cards[0])
-		dbus.InstallOnSession(audio.cards[index])
-		audio.DeviceAdded(audio.cards[index].GetDBusInfo().Dest)
+		newcard := getCardFromC(audio.pa.cards[0])
+		if audio.cards[index] == nil {
+			audio.cards[index] = newcard
+			dbus.InstallOnSession(audio.cards[index])
+			audio.DeviceAdded(audio.cards[index].GetDBusInfo().Dest)
+		} else {
+			fmt.Print("card already exists\n")
+		}
 		break
 	case C.PA_SUBSCRIPTION_EVENT_CHANGE:
 		newcard := getCardFromC(audio.pa.cards[0])
@@ -407,9 +413,10 @@ func updateCard(_index C.int,
 				changes := getDiffProperty(audio.cards[i], newcard)
 				audio.cards[index] = newcard
 				dbus.InstallOnSession(audio.cards[i])
+				fmt.Println("updating card property\n")
 				for key, v := range changes {
 					audio.DeviceChanged(key, v)
-					fmt.Printf("updating card property %v: %v\n", key, v)
+					fmt.Printf("\t %v: %v\n", key, v)
 				}
 				break
 			}
@@ -424,6 +431,7 @@ func updateCard(_index C.int,
 		if audio.cards[index] != nil {
 			audio.DeviceRemoved(audio.cards[index].GetDBusInfo().Dest)
 			dbus.UnInstallObject(audio.cards[index])
+			fmt.Printf("removing card %v\n", index)
 			delete(audio.cards, index)
 		} else {
 			fmt.Printf("no such card device to delete\n")
@@ -435,7 +443,7 @@ func updateCard(_index C.int,
 
 //export updateSink
 func updateSink(_index C.int,
-	event C.pa_subscription_event_type_t) {
+	event C.int) {
 	index := int(_index)
 	switch event {
 	case C.PA_SUBSCRIPTION_EVENT_NEW:
@@ -458,10 +466,11 @@ func updateSink(_index C.int,
 				changes := getDiffProperty(audio.sinks[i], newsink)
 				audio.sinks[i] = newsink
 				dbus.InstallOnSession(audio.sinks[i])
+				fmt.Printf("updathing sink property:\n")
 				for key, v := range changes {
 					audio.DeviceChanged(key, v)
 					//dbus.NotifyChange(audio.sinks[i], key)
-					fmt.Printf("updating sink property %v: %v\n", key, v)
+					fmt.Printf("\t%v: %v\n", key, v)
 				}
 				break
 			}
@@ -489,7 +498,7 @@ func updateSink(_index C.int,
 
 //export updateSource
 func updateSource(_index C.int,
-	event C.pa_subscription_event_type_t) {
+	event C.int) {
 	index := int(_index)
 	switch event {
 	case C.PA_SUBSCRIPTION_EVENT_NEW:
@@ -507,10 +516,11 @@ func updateSource(_index C.int,
 				isnewsource = 0
 				changes := getDiffProperty(audio.sources[i], newsource)
 				audio.sources[i] = newsource
+				fmt.Print("updating source property:\n")
 				for key, _ := range changes {
 					//dbus.NotifyChange(audio.sources[i], key)
 					audio.DeviceChanged(key, changes[key])
-					fmt.Printf("updating source information,%v: %v\n", key, changes[key])
+					fmt.Printf("\t%v: %v\n", key, changes[key])
 				}
 				dbus.InstallOnSession(audio.sources[i])
 				break

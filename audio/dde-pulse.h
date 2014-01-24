@@ -154,10 +154,16 @@ typedef struct client_s
     char driver[MAX_STRING];
 } client_t;
 
+typedef struct event_s
+{
+    int index;
+    pa_subscription_event_type_t event;
+} event_t;
+
 typedef struct pa_event_queue_s
 {
     int length;
-    pa_subscription_event_type_t events[MAX_EVENTS];
+    event_t data[MAX_EVENTS];
     int front;
     int rear;
     int full;
@@ -254,11 +260,21 @@ void pa_card_info_cb(pa_context *c, const pa_card_info*i,
 void pa_card_update_info_cb(pa_context *C, const pa_card_info *l,
                             int eol, void *userdata);
 
+void pa_card_remove_cb(pa_context *c,
+                       const pa_card_info *l,
+                       int eol,
+                       void *userdata);
+
 void pa_sink_info_cb(pa_context *c, const pa_sink_info *l,
                      int eol, void *userdata);
 
 void pa_sink_update_info_cb(pa_context *c, const pa_sink_info *l,
                             int eol, void *userdata);
+
+void pa_sink_remove_cb(pa_context *c,
+                       const pa_sink_info *l,
+                       int eol,
+                       void *userdata);
 
 void pa_get_sink_volume_cb(pa_context *c, const pa_sink_info *i,
                            int eol, void *userdata);
@@ -268,6 +284,11 @@ void pa_source_info_cb(pa_context *c, const pa_source_info *l,
 
 void pa_source_update_info_cb(pa_context *c, const pa_source_info *l,
                               int eol, void *userdata);
+
+void pa_source_remove_cb(pa_context *c,
+                         const pa_source_info *l,
+                         int eol,
+                         void *userdata);
 
 void pa_get_source_volume_cb(pa_context *c, const pa_source_info *l,
                              int eol, void *userdata);
@@ -317,9 +338,9 @@ int print_source(const pa_source_info *l);
 
 int event_queue_push(
     pa_event_queue_t *event_queue,
-    pa_subscription_event_type_t t);
+    event_t t);
 
-pa_subscription_event_type_t event_queue_pop(pa_event_queue_t *event_queue);
+event_t event_queue_pop(pa_event_queue_t *event_queue);
 //utils
 int pa_init_context(pa *self);
 
