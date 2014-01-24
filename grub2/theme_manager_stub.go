@@ -22,6 +22,7 @@ func (tm *ThemeManager) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
+// TODO
 func (tm *ThemeManager) GetInstalledThemes() []string {
 	themes := make([]string, 0)
 	files, err := ioutil.ReadDir(_THEME_DIR)

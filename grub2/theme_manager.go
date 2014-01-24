@@ -28,13 +28,29 @@ type TplJsonData struct {
 }
 
 type ThemeManager struct {
+	themes               []*Theme // TODO
 	enabledThemeMainFile string
+
+	ThemeNames []string // TODO
 }
 
 func NewThemeManager() *ThemeManager {
 	tm := &ThemeManager{}
 	tm.enabledThemeMainFile = ""
 	return tm
+}
+
+func (tm *ThemeManager) load() {
+	tm.themes = make([]*Theme, 0)
+	files, err := ioutil.ReadDir(_THEME_DIR)
+	if err == nil {
+		for _, f := range files {
+			if f.IsDir() && tm.isThemeValid(f.Name()) {
+				theme := NewTheme(tm, f.Name())
+				tm.themes = append(tm.themes, theme)
+			}
+		}
+	}
 }
 
 func (tm *ThemeManager) setEnabledThemeMainFile(file string) {

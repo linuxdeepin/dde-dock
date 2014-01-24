@@ -38,7 +38,10 @@ type Grub2 struct {
 
 func NewGrub2() *Grub2 {
 	grub := &Grub2{}
+	// grub.load()
+	// TODO
 	grub.tm = NewThemeManager()
+	// grub.tm.load()
 	return grub
 }
 
@@ -330,6 +333,9 @@ func main() {
 
 	grub := NewGrub2()
 	grub.load()
+	// TODO
+	// grub.tm = NewThemeManager()
+	grub.tm.load()
 	err := dbus.InstallOnSystem(grub)
 	if err != nil {
 		panic(err)
