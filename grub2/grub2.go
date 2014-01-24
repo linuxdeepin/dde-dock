@@ -42,6 +42,17 @@ func NewGrub2() *Grub2 {
 	return grub
 }
 
+func (grub *Grub2) load() {
+	err := grub.readEntries()
+	if err != nil {
+		panic(err)
+	}
+	err = grub.readSettings()
+	if err != nil {
+		panic(err)
+	}
+}
+
 func (grub *Grub2) clearEntries() {
 	grub.entries = make([]Entry, 0)
 }
@@ -318,7 +329,7 @@ func main() {
 	}()
 
 	grub := NewGrub2()
-	grub.Load()
+	grub.load()
 	err := dbus.InstallOnSystem(grub)
 	if err != nil {
 		panic(err)

@@ -36,18 +36,6 @@ func (grub *Grub2) OnPropertiesChanged(name string, oldv interface{}) {
 	}
 }
 
-func (grub *Grub2) Load() error {
-	err := grub.readEntries()
-	if err != nil {
-		return err
-	}
-	err = grub.readSettings()
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
 func (grub *Grub2) Save() error {
 	err := grub.writeSettings()
 	if err != nil {
