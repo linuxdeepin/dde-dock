@@ -78,8 +78,9 @@ func (tm *ThemeManager) UninstallTheme(themeName string) bool {
 }
 
 func (tm *ThemeManager) IsThemeCustomizable(themeName string) bool {
-	_, ok := tm.getThemeTplFile(themeName)
-	return ok
+	_, okTpl := tm.getThemeTplFile(themeName)
+	_, okJson := tm.getThemeTplJsonFile(themeName)
+	return okTpl && okJson
 }
 
 func (tm *ThemeManager) GetThemeLastCustomizeValues(themeName string) (background, itemColor, selectedItemColor string, ok bool) {
