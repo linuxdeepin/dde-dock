@@ -18,8 +18,10 @@ func quoteString(str string) string {
 }
 
 func unquoteString(str string) string {
-	if (strings.HasPrefix(str, `"`) && strings.HasSuffix(str, `"`)) ||
-		(strings.HasPrefix(str, `'`) && strings.HasSuffix(str, `'`)) {
+	if strings.HasPrefix(str, `"`) && strings.HasSuffix(str, `"`) {
+		s, _ := strconv.Unquote(str)
+		return s
+	} else if strings.HasPrefix(str, `'`) && strings.HasSuffix(str, `'`) {
 		return str[1 : len(str)-1]
 	}
 	return str
@@ -157,7 +159,47 @@ func findFileInTarGz(archiveFile string, targetFile string) (string, error) {
 
 		if hdr.Typeflag != tar.TypeDir && strings.HasSuffix(hdr.Name, targetFile) {
 			targetPath = hdr.Name
+			break
 		}
 	}
 	return targetPath, nil
+}
+
+func isFileExists(file string) bool {
+	if _, err := os.Stat(file); err == nil {
+		return true
+	} else {
+		return false
+	}
+}
+
+func copyFile(dest, src string) (written int64, err error) {
+	if dest == src {
+		logInfo("copyFile(): source and destination are same file") // TODO
+		return
+	}
+
+	sf, err := os.Open(src)
+	if err != nil {
+		return
+	}
+	defer sf.Close()
+	df, err := os.OpenFile(dest, os.O_WRONLY|os.O_CREATE, 0644)
+	if err != nil {
+		return
+	}
+	defer df.Close()
+	return io.Copy(df, sf)
+}
+
+func getPathLevel(p string) int {
+	p = path.Clean(p)
+	if len(p) == 0 {
+		return 0
+	}
+	lv := len(strings.Split(p, string(os.PathSeparator)))
+	if strings.HasPrefix(p, "/") || strings.HasPrefix(p, ".") {
+		lv--
+	}
+	return lv
 }

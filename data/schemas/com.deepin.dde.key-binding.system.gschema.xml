@@ -22,7 +22,7 @@
 		<description>system shortcut</description>
 	</key>
 	<key type="as" name="logout">
-		<default>['&lt;Control&gt;&lt;Alt&gt;Delete','/usr/lib/deepin-daemon/dpowerchoose --logout']</default>
+		<default>['&lt;Control&gt;&lt;Alt&gt;Delete','/usr/lib/deepin-daemon/dshutdown --logout']</default>
 		<summary>shortcut</summary>
 		<description>system shortcut</description>
 	</key>

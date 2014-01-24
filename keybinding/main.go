@@ -73,7 +73,7 @@ func (m *BindManager) AddKeyBind(name, action, shortcut string) AddAccelRet {
 
 func KeyIsValid(key string) bool {
 	tmp := formatShortcut(key)
-	if strings.Contains(tmp, "-") {
+	if len(tmp) == 0 || strings.Contains(tmp, "-") {
 		return true
 	}
 

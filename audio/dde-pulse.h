@@ -1,9 +1,23 @@
-/*************************************************************************
-    > File Name: dde-pulse.h
-    > Author: onerhao
-    # mail: onerhao@gmail.com
-    > Created Time: Fri 13 Dec 2013 09:54:50 AM CST
- ************************************************************************/
+/* Copyright (C) 2013 ~ 2014 Deepin, Inc.
+ *
+ * Author:     onerhao <onerhao@gmail.com>
+ * Maintainer: onerhao<onerhao@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+
 #ifndef DDE_PULSE_H
 #define DDE_PULSE_H
 
@@ -22,6 +36,7 @@
 #define MAX_SINK_INPUTS 128
 #define MAX_SOURCE_OUTPUTS 128
 #define MAX_CARD_PROFILES 32
+#define MAX_EVENTS  16
 
 typedef void (*struct_dealloc_t)(void* self);
 
@@ -58,9 +73,12 @@ typedef struct sink_port_info_s
 
 typedef struct sink_s
 {
-    int index;
+    int  index;
     char name[MAX_STRING];
     char description[MAX_STRING];
+    pa_sample_spec sample_spec; /**< Sample spec of this sink */
+    pa_channel_map channel_map;//channel map
+    float balance;  //balance
     char driver[MAX_STRING];
     int mute;
     int n_volume_steps;
@@ -84,8 +102,12 @@ typedef struct source_s
     int index;
     char name[MAX_STRING];
     char description[MAX_STRING];
+    pa_sample_spec sample_spec; /**< Sample spec of this source */
+    pa_channel_map channel_map; //channel map
+    float balance;  //balance
     char driver[MAX_STRING];
     int mute;
+    uint32_t monitor_of_sink;
     int n_volume_steps;
     int card;
     pa_cvolume volume;
@@ -132,6 +154,22 @@ typedef struct client_s
     char driver[MAX_STRING];
 } client_t;
 
+typedef struct event_s
+{
+    int index;
+    pa_subscription_event_type_t event;
+} event_t;
+
+typedef struct pa_event_queue_s
+{
+    int length;
+    event_t data[MAX_EVENTS];
+    int front;
+    int rear;
+    int full;
+    int number;
+} pa_event_queue_t;
+
 typedef struct pa_s
 {
     int pa_ready;
@@ -141,6 +179,7 @@ typedef struct pa_s
     pa_operation   *pa_op;
 
     pthread_mutex_t pa_mutex;
+    pthread_mutex_t event_mutex;
 
     server_info_t *server_info;
     card_t cards[MAX_CARDS];
@@ -156,18 +195,12 @@ typedef struct pa_s
     source_output_t source_outputs[MAX_SOURCE_OUTPUTS];
     int  n_source_outputs;
 
-    pa_subscription_event_type_t subscription_event;
+    pa_event_queue_t subscription_events;
 
     struct_dealloc_t dealloc;
 } pa;
 
-typedef struct pa_devicelist
-{
-    uint8_t initialized;
-    char name[MAX_STRING];
-    uint32_t index;
-    char description[256];
-} pa_devicelist_t;
+
 
 int pa_clear(pa *self);
 pa* pa_alloc();
@@ -194,12 +227,14 @@ int pa_set_sink_mute_by_index(pa *self, int index, int mute);
 int pa_set_sink_volume_by_index(pa *self, int index, pa_cvolume *cvolume);
 int pa_inc_sink_volume_by_index(pa *self, int index, int volume);
 int pa_dec_sink_volume_by_index(pa *self, int index, int volume);
+int pa_set_sink_balance_by_index(pa *self, int index, float balance);
 
 int pa_set_source_port_by_index(pa *self, int index, const char *port);
 int pa_set_source_mute_by_index(pa *self, int index, int mute);
 int pa_set_source_volume_by_index(pa *self, int index, pa_cvolume *cvolume);
 int pa_inc_source_volume_by_index(pa *self, int index, int volume);
 int pa_dec_source_volume_by_index(pa *self, int index, int volume);
+int pa_set_source_balance_by_index(pa *self, int index, float balance);
 
 int pa_set_sink_input_mute(pa *self, int index, int mute);
 int pa_set_sink_input_mute_by_pid(pa *self, int index, int mute);
@@ -215,29 +250,74 @@ int pa_dec_source_output_volume(pa *self, int index, int volume);
 void pa_state_cb(pa_context *c, void *userdata);
 void pa_context_subscribe_cb(pa_context *c, pa_subscription_event_type_t t,
                              uint32_t index, void *userdata);
-void pa_get_serverinfo_cb(pa_context *c, const pa_server_info*i, void *userdata);
-void pa_card_info_cb(pa_context *c, const pa_card_info*i, int eol, void *userdata);
-void pa_card_update_info_cb(pa_context *C, const pa_card_info *l, int eol, void *userdata);
-void pa_sink_info_cb(pa_context *c, const pa_sink_info *l, int eol, void *userdata);
-void pa_sink_update_info_cb(pa_context *c, const pa_sink_info *l, int eol, void *userdata);
-void pa_get_sink_volume_cb(pa_context *c, const pa_sink_info *i, int eol, void *userdata);
+
+void pa_get_serverinfo_cb(pa_context *c, const pa_server_info*i,
+                          void *userdata);
+
+void pa_card_info_cb(pa_context *c, const pa_card_info*i,
+                     int eol, void *userdata);
+
+void pa_card_update_info_cb(pa_context *C, const pa_card_info *l,
+                            int eol, void *userdata);
+
+void pa_card_remove_cb(pa_context *c,
+                       const pa_card_info *l,
+                       int eol,
+                       void *userdata);
+
+void pa_sink_info_cb(pa_context *c, const pa_sink_info *l,
+                     int eol, void *userdata);
+
+void pa_sink_update_info_cb(pa_context *c, const pa_sink_info *l,
+                            int eol, void *userdata);
+
+void pa_sink_remove_cb(pa_context *c,
+                       const pa_sink_info *l,
+                       int eol,
+                       void *userdata);
+
+void pa_get_sink_volume_cb(pa_context *c, const pa_sink_info *i,
+                           int eol, void *userdata);
+
 void pa_source_info_cb(pa_context *c, const pa_source_info *l,
                        int eol, void *userdata);
-void pa_source_update_info_cb(pa_context *c, const pa_source_info *l, int eol, void *userdata);
-void pa_get_source_volume_cb(pa_context *c, const pa_source_info *l, int eol, void *userdata);
+
+void pa_source_update_info_cb(pa_context *c, const pa_source_info *l,
+                              int eol, void *userdata);
+
+void pa_source_remove_cb(pa_context *c,
+                         const pa_source_info *l,
+                         int eol,
+                         void *userdata);
+
+void pa_get_source_volume_cb(pa_context *c, const pa_source_info *l,
+                             int eol, void *userdata);
+
 void pa_get_client_info_cb(pa_context *c, const pa_client_info*i,
                            int eol, void *userdata);
+
 void pa_client_info_cb(pa_context *c,
                        const pa_client_info *i,
                        int eol,
                        void *userdata);
+
 void pa_get_sink_input_info_cb(pa_context *c, const pa_sink_input_info *i,
                                int eol, void *userdata);
-void pa_sink_input_info_cb(pa_context *c, const pa_sink_input_info *i, int eol, void *userdata);
+
+void pa_sink_input_info_cb(pa_context *c, const pa_sink_input_info *i,
+                           int eol, void *userdata);
+
 void pa_sink_input_update_info_cb(pa_context *c, const pa_sink_input_info *i, int eol, void *userdata);
-void pa_get_sink_input_volume_cb(pa_context *c, const pa_sink_input_info *i, int eol, void *userdata);
-void pa_source_output_info_cb(pa_context *c, const pa_source_output_info *i, int eol, void *userdata);
-void pa_source_output_update_info_cb(pa_context *c, const pa_source_output_info *i, int eol, void *userdata);
+
+void pa_get_sink_input_volume_cb(pa_context *c, const pa_sink_input_info *i,
+                                 int eol, void *userdata);
+
+void pa_source_output_info_cb(pa_context *c, const pa_source_output_info *i,
+                              int eol, void *userdata);
+
+void pa_source_output_update_info_cb(pa_context *c,
+                                     const pa_source_output_info *i, int eol, void *userdata);
+
 void pa_get_source_output_volume_cb(pa_context *c, const pa_source_output_info *o, int eol, void *userdata);
 
 
@@ -249,20 +329,26 @@ card_t *pa2card(card_t *card, const pa_card_info *l);
 sink_t *pa2sink(sink_t *sink, const pa_sink_info *l);
 source_t *pa2source(source_t *source, const pa_source_info *l);
 
+int getChannelMap(pa_channel_map cm, int i);
+
 int print_card(const pa_card_info *l);
 int print_sink(const pa_sink_info *l);
 int print_source(const pa_source_info *l);
 
 
+int event_queue_push(
+    pa_event_queue_t *event_queue,
+    event_t t);
+
+event_t event_queue_pop(pa_event_queue_t *event_queue);
 //utils
 int pa_init_context(pa *self);
 
 
 //Go export functions
-
-extern void updateCard(int, pa_subscription_event_type_t);
-extern void updateSink(int, pa_subscription_event_type_t);
-extern void updateSource(int, pa_subscription_event_type_t);
-extern void updateSinkInput(int, pa_subscription_event_type_t);
-extern void updateSourceOutput(int, pa_subscription_event_type_t);
+//extern void updateCard(int, pa_subscription_event_type_t);
+//extern void updateSink(int, pa_subscription_event_type_t);
+//extern void updateSource(int, pa_subscription_event_type_t);
+//extern void updateSinkInput(int, pa_subscription_event_type_t);
+//extern void updateSourceOutput(int, pa_subscription_event_type_t);
 #endif

@@ -28,6 +28,9 @@ type Audio struct {
 	//exported properties
 	HostName string
 	UserName string
+	Cards    []*Card
+	Sinks    []*Sink
+	Sources  []*Source
 
 	//signals
 	DeviceAdded   func(string)
@@ -41,13 +44,14 @@ type CardProfileInfo struct {
 }
 
 type Card struct {
-	Index         int32
-	Name          string
-	ownerModule   int32
-	driver        string
-	NProfiles     int32
-	Profiles      []CardProfileInfo
-	ActiveProfile *CardProfileInfo
+	Index       int32
+	Name        string
+	ownerModule int32
+	driver      string
+	nProfiles   int32
+	Profiles    []CardProfileInfo
+	//ActiveProfile *CardProfileInfo
+	ActiveProfile int32
 }
 
 type SinkPortInfo struct {
@@ -60,16 +64,19 @@ type Sink struct {
 	Index       int32
 	Name        string
 	Description string
+	channelMap  []int32
 	driver      string
-	Mute        bool
-	Card        int32
-	Volume      uint32
+	Mute        bool `access:"readwrite"`
+	card        int32
+	Volume      uint32  `access:"readwrite"`
+	Balance     float64 `access:"readwrite"`
 
 	//NVolumeSteps int32
 
-	NPorts     int32
-	Ports      []SinkPortInfo
-	ActivePort *SinkPortInfo
+	nPorts int32
+	Ports  []SinkPortInfo
+	//ActivePort *SinkPortInfo
+	ActivePort int32
 }
 
 //Only capitalized first character in Capitalized structure can be exposed
@@ -81,19 +88,23 @@ type SourcePortInfo struct {
 }
 
 type Source struct {
-	Index       int32
-	Name        string
-	Description string
-	driver      string
-	Mute        bool
-	Card        int32
-	Volume      uint32
+	Index         int32
+	Name          string
+	Description   string
+	channelMap    []int32
+	driver        string
+	Mute          bool `access:"readwrite"`
+	monitorOfSink uint32
+	card          int32
+	Volume        uint32 `access:"readwrite"`
+	Balance       float64
 	//N_formates int32
 	//NVolumeSteps int32
 
-	NPorts     int32
-	Ports      []SourcePortInfo
-	ActivePort *SourcePortInfo
+	nPorts int32
+	Ports  []SourcePortInfo
+	//ActivePort *SourcePortInfo
+	ActivePort int32
 }
 
 type SinkInput struct {
@@ -134,16 +145,6 @@ type Client struct {
 	//pa_proplist *proplist
 	Prop map[string]string
 }
-
-//type Volume struct {
-//Channels uint32
-//Values   [320]uint32
-//}
-
-//func compare(x, y interface{}) bool {
-
-//return true
-//}
 
 func getDiffProperty(x, y interface{}) map[string]interface{} {
 
@@ -214,16 +215,17 @@ func getCardFromC(_card C.card_t) *Card {
 	card.Name = C.GoString(&_card.name[0])
 	card.driver = C.GoString(&_card.driver[0])
 	card.ownerModule = int32(_card.owner_module)
-	card.NProfiles = int32(_card.n_profiles)
+	card.nProfiles = int32(_card.n_profiles)
 
-	card.Profiles = make([]CardProfileInfo, card.NProfiles)
-	for j := 0; j < int(card.NProfiles); j = j + 1 {
+	card.Profiles = make([]CardProfileInfo, card.nProfiles)
+	for j := 0; j < int(card.nProfiles); j = j + 1 {
 		card.Profiles[j].Name = C.GoString(&_card.profiles[j].name[0])
 		card.Profiles[j].Description = C.GoString(&_card.profiles[j].description[0])
 		ret := C.strcmp((*C.char)(&_card.active_profile.name[0]),
 			(*C.char)(&_card.profiles[j].name[0]))
 		if ret == 0 {
-			card.ActiveProfile = &card.Profiles[j]
+			//card.ActiveProfile = &card.Profiles[j]
+			card.ActiveProfile = int32(j)
 		}
 	}
 	return card
@@ -232,47 +234,60 @@ func getCardFromC(_card C.card_t) *Card {
 func getSinkFromC(_sink C.sink_t) *Sink {
 	sink := &Sink{}
 	sink.Index = int32(_sink.index)
-	sink.Card = int32(_sink.card)
+	sink.card = int32(_sink.card)
 	sink.Description =
 		C.GoString((*C.char)(unsafe.Pointer(&_sink.description[0])))
+	n := int(_sink.channel_map.channels)
+	sink.channelMap = make([]int32, n)
+	for i := 0; i < n; i++ {
+		sink.channelMap[i] = int32(
+			C.getChannelMap(_sink.channel_map, C.int(i)))
+	}
 	sink.driver = C.GoString(&_sink.driver[0])
 	sink.Mute = (int32(_sink.mute) != 0)
 	sink.Name = C.GoString(&_sink.name[0])
 	sink.Volume = uint32(C.pa_cvolume_avg(&_sink.volume) * 100 / C.PA_VOLUME_NORM)
+	sink.Balance = float64(_sink.balance)
 	//sink.NVolumeSteps = int32(_sink.n_volume_steps)
 	//sink.Cvolume.Channels = uint32(_sink.volume.channels)
 	//for j := 0; j < int(sink.Cvolume.Channels); j = j + 1 {
 	//sink.Cvolume.Values[j] =
 	//*((*uint32)(unsafe.Pointer(&_sink.volume.values[j])))
 	//}
-	sink.NPorts = int32(_sink.n_ports)
-	sink.Ports = make([]SinkPortInfo, sink.NPorts)
-	for j := 0; j < int(sink.NPorts); j = j + 1 {
+	sink.nPorts = int32(_sink.n_ports)
+	sink.Ports = make([]SinkPortInfo, sink.nPorts)
+	for j := 0; j < int(sink.nPorts); j = j + 1 {
 		sink.Ports[j].Available = int32(_sink.ports[j].available)
 		sink.Ports[j].Name = C.GoString(&_sink.ports[j].name[0])
 		sink.Ports[j].Description = C.GoString(&_sink.ports[j].description[0])
 		ret := C.strcmp((*C.char)(&_sink.ports[j].name[0]),
 			(*C.char)(&_sink.active_port.name[0]))
 		if ret == 0 {
-			sink.ActivePort = &sink.Ports[j]
+			sink.ActivePort = int32(j)
 		}
 	}
-	if sink.NPorts == 0 {
-		sink.ActivePort = &SinkPortInfo{"", "", 0}
+	if sink.nPorts == 0 {
+		sink.ActivePort = 0
 	}
-	fmt.Println("Index: " + strconv.Itoa(int((sink.Index))) + " Card:" + strconv.Itoa(int(sink.Card)))
 	return sink
 }
 
 func getSourceFromC(_source C.source_t) *Source {
 	source := &Source{}
 	source.Index = int32(_source.index)
-	source.Card = int32(_source.card)
+	source.card = int32(_source.card)
 	source.Mute = (int32(_source.mute) != 0)
+	source.monitorOfSink = uint32(_source.monitor_of_sink)
 	source.Name = C.GoString((*C.char)(unsafe.Pointer(&_source.name[0])))
 	source.Description = C.GoString(&_source.description[0])
-
+	n := int(_source.channel_map.channels)
+	source.channelMap = make([]int32, n)
+	for i := 0; i < n; i++ {
+		source.channelMap[i] = int32(
+			C.getChannelMap(_source.channel_map, C.int(i)))
+	}
 	source.Volume = uint32(100 * C.pa_cvolume_avg(&_source.volume) / C.PA_VOLUME_NORM)
+	source.Balance = float64(_source.balance)
 	//source.NVolumeSteps = int32(_source.n_volume_steps)
 	//source.Cvolume.Channels = uint32(_source.volume.channels)
 	//for j := uint32(0); j < source.Cvolume.Channels; j = j + 1 {
@@ -280,20 +295,21 @@ func getSourceFromC(_source C.source_t) *Source {
 	//*((*uint32)(unsafe.Pointer(&_source.volume.values[j])))
 	//}
 
-	source.NPorts = int32(_source.n_ports)
-	source.Ports = make([]SourcePortInfo, source.NPorts)
-	for j := 0; j < int(source.NPorts); j = j + 1 {
+	source.nPorts = int32(_source.n_ports)
+	source.Ports = make([]SourcePortInfo, source.nPorts)
+	for j := 0; j < int(source.nPorts); j = j + 1 {
 		source.Ports[j].Available = int32(_source.ports[j].available)
 		source.Ports[j].Name = C.GoString(&_source.ports[j].name[0])
 		source.Ports[j].Description = C.GoString(&_source.ports[j].description[0])
 		ret := C.strcmp(&_source.ports[j].name[0],
 			&_source.active_port.name[0])
 		if ret == 0 {
-			source.ActivePort = &source.Ports[j]
+			source.ActivePort = int32(j)
 		}
 	}
-	if source.NPorts == 0 {
-		source.ActivePort = &SourcePortInfo{"", "", 0}
+	if source.nPorts == 0 {
+		//source.ActivePort = &SourcePortInfo{"", "", 0}
+		source.ActivePort = -1
 	}
 
 	return source
@@ -360,108 +376,164 @@ func NewAudio() (*Audio, error) {
 
 	audio.getServerInfo()
 	audio.getCards()
-	audio.getsinks()
+	audio.getSinks()
 	audio.getSources()
-	audio.getSinkInputs()
-	audio.getSourceOutputs()
+	//audio.getSinkInputs()
+	//audio.getSourceOutputs()
+
+	audio.updateCards()
+	audio.updateSinks()
+	audio.updateSources()
 	return audio, nil
 }
 
 //export updateCard
 func updateCard(_index C.int,
-	event C.pa_subscription_event_type_t) {
+	event C.int) {
 	index := int(_index)
 	switch event {
 	case C.PA_SUBSCRIPTION_EVENT_NEW:
 		//i := int32(audio.pa.cards[0].index)
-		audio.cards[index] = getCardFromC(audio.pa.cards[0])
-		dbus.InstallOnSession(audio.cards[index])
-		audio.DeviceAdded(audio.cards[index].GetDBusInfo().Dest)
+		newcard := getCardFromC(audio.pa.cards[0])
+		if audio.cards[index] == nil {
+			audio.cards[index] = newcard
+			dbus.InstallOnSession(audio.cards[index])
+			audio.DeviceAdded(audio.cards[index].GetDBusInfo().Dest)
+		} else {
+			fmt.Print("card already exists\n")
+		}
 		break
 	case C.PA_SUBSCRIPTION_EVENT_CHANGE:
 		newcard := getCardFromC(audio.pa.cards[0])
+		flag := 1 //card not found in our objects
 		for i, _ := range audio.cards {
 			if audio.cards[i].Index == newcard.Index {
+				flag = 0
 				changes := getDiffProperty(audio.cards[i], newcard)
 				audio.cards[index] = newcard
 				dbus.InstallOnSession(audio.cards[i])
+				fmt.Printf("updating card property\n")
 				for key, v := range changes {
 					audio.DeviceChanged(key, v)
-					fmt.Printf("updating card property %v: %v\n", key, v)
+					fmt.Printf("\t %v: %v\n", key, v)
 				}
 				break
 			}
 		}
+		if flag != 0 {
+			audio.cards[index] = newcard
+			dbus.InstallOnSession(audio.cards[index])
+			fmt.Printf("installed a new card %v\n", index)
+		}
 		break
 	case C.PA_SUBSCRIPTION_EVENT_REMOVE:
-		audio.DeviceRemoved(audio.cards[index].GetDBusInfo().Dest)
-		dbus.UnInstallObject(audio.cards[index])
-		delete(audio.cards, index)
+		if audio.cards[index] != nil {
+			audio.DeviceRemoved(audio.cards[index].GetDBusInfo().Dest)
+			dbus.UnInstallObject(audio.cards[index])
+			fmt.Printf("removing card %v\n", index)
+			delete(audio.cards, index)
+		} else {
+			fmt.Printf("no such card device to delete\n")
+		}
 		break
 	}
+	audio.updateCards()
 }
 
 //export updateSink
 func updateSink(_index C.int,
-	event C.pa_subscription_event_type_t) {
+	event C.int) {
 	index := int(_index)
 	switch event {
 	case C.PA_SUBSCRIPTION_EVENT_NEW:
-		audio.sinks[index] = getSinkFromC(audio.pa.sinks[0])
-		dbus.InstallOnSession(audio.sinks[index])
-		audio.DeviceAdded(audio.sinks[index].GetDBusInfo().Dest)
+		newsink := getSinkFromC(audio.pa.sinks[0])
+		if audio.sinks[index] == nil {
+			audio.sinks[index] = newsink
+			dbus.InstallOnSession(audio.sinks[index])
+			fmt.Printf("new sink installed: %v\n", index)
+			//audio.DeviceAdded(audio.sinks[index].GetDBusInfo().Dest)
+		} else {
+			fmt.Printf("sink already installed %v\n", index)
+		}
 		break
 	case C.PA_SUBSCRIPTION_EVENT_CHANGE:
 		newsink := getSinkFromC(audio.pa.sinks[0])
+		newdevice := 1
 		for i, _ := range audio.sinks {
 			if audio.sinks[i].Index == newsink.Index {
+				newdevice = 0
 				changes := getDiffProperty(audio.sinks[i], newsink)
 				audio.sinks[i] = newsink
 				dbus.InstallOnSession(audio.sinks[i])
+				fmt.Printf("updating sink property:\n")
 				for key, v := range changes {
 					audio.DeviceChanged(key, v)
 					//dbus.NotifyChange(audio.sinks[i], key)
-					fmt.Printf("updating sink property %v: %v\n", key, v)
+					fmt.Printf("\t%v: %v\n", key, v)
 				}
 				break
 			}
 		}
-
+		//actually,this is a new sink device
+		if newdevice != 0 {
+			audio.sinks[index] = newsink
+			dbus.InstallOnSession(audio.sinks[index])
+			fmt.Printf("change,new sink installed: %v\n", index)
+		}
+		break
 	case C.PA_SUBSCRIPTION_EVENT_REMOVE:
-		audio.DeviceRemoved(audio.sinks[index].GetDBusInfo().Dest)
-		dbus.UnInstallObject(audio.sinks[index])
-		delete(audio.sinks, index)
+		//audio.DeviceRemoved(audio.sinks[index].GetDBusInfo().Dest)
+		if audio.sinks[index] != nil {
+			dbus.UnInstallObject(audio.sinks[index])
+			delete(audio.sinks, index)
+			fmt.Printf("removed sink device %v\n", index)
+		} else {
+			fmt.Printf("No such sink device %v to remove\n", index)
+		}
 		break
 	}
+	audio.updateSinks()
 }
 
 //export updateSource
 func updateSource(_index C.int,
-	event C.pa_subscription_event_type_t) {
+	event C.int) {
 	index := int(_index)
 	switch event {
 	case C.PA_SUBSCRIPTION_EVENT_NEW:
 		audio.sources[index] = getSourceFromC(audio.pa.sources[0])
-		audio.DeviceAdded(audio.sources[index].GetDBusInfo().Dest)
-		dbus.InstallOnSession(audio.sources[index])
+		if audio.sources[index].monitorOfSink == C.PA_INVALID_INDEX {
+			audio.DeviceAdded(audio.sources[index].GetDBusInfo().Dest)
+			dbus.InstallOnSession(audio.sources[index])
+		}
 		break
 	case C.PA_SUBSCRIPTION_EVENT_CHANGE:
 		newsource := getSourceFromC(audio.pa.sources[0])
+		isnewsource := 1
 		for i, _ := range audio.sources {
 			if audio.sources[i].Index == newsource.Index {
+				isnewsource = 0
 				changes := getDiffProperty(audio.sources[i], newsource)
 				audio.sources[i] = newsource
+				fmt.Print("updating source property:\n")
 				for key, _ := range changes {
 					//dbus.NotifyChange(audio.sources[i], key)
 					audio.DeviceChanged(key, changes[key])
-					fmt.Printf("updating source information,%v: %v\n", key, changes[key])
+					fmt.Printf("\t%v: %v\n", key, changes[key])
 				}
 				dbus.InstallOnSession(audio.sources[i])
 				break
 			}
 		}
-		audio.sources[index] = getSourceFromC(audio.pa.sources[0])
-		dbus.InstallOnSession(audio.sources[index])
+		if isnewsource != 0 {
+			audio.sources[index] = newsource
+			if audio.sources[index].monitorOfSink == C.PA_INVALID_INDEX {
+				audio.sources[index] = getSourceFromC(audio.pa.sources[0])
+				dbus.InstallOnSession(audio.sources[index])
+				audio.DeviceAdded(audio.sources[index].GetDBusInfo().Dest)
+			}
+			fmt.Printf("installed new souce %v\n", index)
+		}
 		break
 	case C.PA_SUBSCRIPTION_EVENT_REMOVE:
 		if audio.sources[index] != nil {
@@ -471,6 +543,47 @@ func updateSource(_index C.int,
 		delete(audio.sources, index)
 		break
 	}
+	audio.updateSources()
+}
+
+//update exported properties of struct audio
+func (audio *Audio) updateCards() int32 {
+	n := len(audio.cards)
+	audio.Cards = make([]*Card, n)
+	i := 0
+	for _, value := range audio.cards {
+		audio.Cards[i] = value
+		i++
+	}
+	dbus.NotifyChange(audio, "Cards")
+	return 0
+}
+
+func (audio *Audio) updateSinks() int32 {
+	n := len(audio.sinks)
+	audio.Sinks = make([]*Sink, n)
+	i := 0
+	for _, value := range audio.sinks {
+		audio.Sinks[i] = value
+		i++
+	}
+	dbus.NotifyChange(audio, "Sinks")
+	return 0
+}
+
+func (audio *Audio) updateSources() int32 {
+	n := len(audio.sources)
+	s := make([]*Source, n)
+	i := 0
+	for _, value := range audio.sources {
+		if value.monitorOfSink == C.PA_INVALID_INDEX {
+			s[i] = value
+			i++
+		}
+	}
+	audio.Sources = s[0:i]
+	dbus.NotifyChange(audio, "Sources")
+	return 0
 }
 
 //export updateSinkInput
@@ -541,7 +654,7 @@ func (audio *Audio) getServerInfo() *Audio {
 	audio.HostName = C.GoString(audio.pa.server_info.host_name)
 	audio.UserName = C.GoString(audio.pa.server_info.user_name)
 	//fmt.Print("go: " + audio.HostName + "\n")
-	fmt.Print("go: " + C.GoString((audio.pa.server_info.host_name)) + "\n")
+	//fmt.Print("go: " + C.GoString((audio.pa.server_info.host_name)) + "\n")
 
 	return audio
 }
@@ -580,7 +693,7 @@ func (audio *Audio) GetSinks() []*Sink {
 	return sinks
 }
 
-func (audio *Audio) getsinks() map[int]*Sink {
+func (audio *Audio) getSinks() map[int]*Sink {
 	C.pa_get_device_list(audio.pa)
 	n := int(audio.pa.n_sinks)
 	//sinks := make([]*Sink, n)
@@ -659,11 +772,32 @@ func (audio *Audio) GetClients() []*Client {
 	return clients
 }
 
-func (sink *Sink) GetDBusInfo() dbus.DBusInfo {
+func (card *Card) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		"com.deepin.daemon.Audio",
-		"/com/deepin/daemon/Audio/Sink" + strconv.FormatInt(int64(sink.Index), 10),
-		"com.deepin.daemon.Audio.Sink",
+		"/com/deepin/daemon/Audio/Card" + strconv.FormatInt(int64(card.Index), 10),
+		"com.deepin.daemon.Audio.Card",
+	}
+}
+func (card *Card) OnPropertiesChanged(name string, oldv interface{}) {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Print(err)
+		}
+	}()
+	switch name {
+	case "ActiveProfile":
+		fmt.Printf("%v changed: %v\n", name, oldv)
+		if oldv == card.ActiveProfile {
+			break
+		}
+		if card.ActiveProfile < 0 || int(card.ActiveProfile) >= len(card.Profiles) {
+			card.ActiveProfile = oldv.(int32)
+			break
+		}
+		if card.SetCardProfile(card.ActiveProfile) != 0 {
+			card.ActiveProfile = oldv.(int32)
+		}
 	}
 }
 
@@ -678,7 +812,8 @@ func (card *Card) setCardProfile(index C.int, port *C.char) int32 {
 		port))
 }
 
-func (card *Card) SetCardProfile(port string) int32 {
+func (card *Card) SetCardProfile(i int32) int32 {
+	port := card.Profiles[i].Name
 	return card.setCardProfile(C.int(card.Index), (*C.char)(C.CString(port)))
 }
 
@@ -687,7 +822,7 @@ func (card *Card) GetSinks() []*Sink {
 	var sinks []*Sink = make([]*Sink, n)
 	j := 0
 	for _, sink := range audio.sinks {
-		if sink.Card == card.Index {
+		if sink.card == card.Index {
 			sinks[j] = sink
 			j = j + 1
 		}
@@ -706,24 +841,69 @@ func (card *Card) GetSources() []*Source {
 	return sources[0:j]
 }
 
+func (sink *Sink) GetDBusInfo() dbus.DBusInfo {
+	return dbus.DBusInfo{
+		"com.deepin.daemon.Audio",
+		"/com/deepin/daemon/Audio/Sink" + strconv.FormatInt(int64(sink.Index), 10),
+		"com.deepin.daemon.Audio.Sink",
+	}
+}
+
+func (sink *Sink) OnPropertiesChanged(name string, oldv interface{}) {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Print(err)
+		}
+	}()
+	switch name {
+	case "Mute":
+		fmt.Printf("%v changed: %v\n", name, oldv)
+		if oldv == sink.Mute {
+			break
+		}
+		if sink.setSinkMute(sink.Mute) != 0 {
+			sink.Mute = oldv.(bool)
+		}
+	case "Volume":
+		if sink.Volume > 150 {
+			sink.Volume = oldv.(uint32)
+			break
+		}
+		if oldv == sink.Volume {
+			break
+		}
+		if sink.setSinkVolume(sink.Volume) != 0 {
+			sink.Volume = oldv.(uint32)
+		}
+	case "Balance":
+		if sink.Balance < -1 || sink.Balance > 1 {
+			sink.Balance = oldv.(float64)
+			break
+		}
+		if oldv == sink.Balance {
+			break
+		}
+		fmt.Printf("updating sink Balance: %v\n", sink.Balance)
+		if sink.setSinkBalance(sink.Balance) != 0 {
+			sink.Balance = oldv.(float64)
+		}
+	default:
+		break
+	}
+}
+
 func (sink *Sink) setSinkPort(port *C.char) int32 {
 	ret := C.pa_set_sink_port_by_index(audio.pa, C.int(sink.Index), port)
 	return int32(ret)
 }
 
-func (sink *Sink) SetSinkPort(portname string) int32 {
-	port := C.CString(portname)
+func (sink *Sink) SetSinkPort(portnum int32) int32 {
+	port := C.CString(sink.Ports[portnum].Name)
 	return sink.setSinkPort(port)
 }
 
 func (sink *Sink) SetSinkVolume(volume uint32) int32 {
-	var cvolume C.pa_cvolume
-	cvolume.channels = C.uint8_t(2)
-	for i := 0; i < 2; i = i + 1 {
-		cvolume.values[i] = C.pa_volume_t(volume * C.PA_VOLUME_NORM / 100)
-	}
-
-	return sink.setSinkVolume(&cvolume)
+	return sink.setSinkVolume(volume)
 	//var cvolume C.pa_cvolume
 	//cvolume.channels = C.uint8_t(2)
 	//for i := uint32(0); i < 2; i = i + 1 {
@@ -736,22 +916,85 @@ func (sink *Sink) SetSinkVolume(volume uint32) int32 {
 	//audio.pa, C.int(sink.Index), &cvolume))
 }
 
-func (sink *Sink) setSinkVolume(volume *C.pa_cvolume) int32 {
+func (sink *Sink) setSinkVolume(volume uint32) int32 {
+	var cvolume C.pa_cvolume
+	cvolume.channels = C.uint8_t(2)
+	for i := 0; i < 2; i = i + 1 {
+		cvolume.values[i] = C.pa_volume_t(volume * C.PA_VOLUME_NORM / 100)
+	}
 	return int32(C.pa_set_sink_volume_by_index(
-		audio.pa, C.int(sink.Index), volume))
+		audio.pa, C.int(sink.Index), &cvolume))
 }
 
-func (sink *Sink) setSinkMute(mute int32) int32 {
+func (sink *Sink) setSinkMute(mute bool) int32 {
+	var _mute int32
+	if mute {
+		_mute = 1
+	} else {
+		_mute = 0
+	}
 	ret := C.pa_set_sink_mute_by_index(
-		audio.pa, C.int(sink.Index), C.int(mute))
+		audio.pa, C.int(sink.Index), C.int(_mute))
 	return int32(ret)
 }
 
 func (sink *Sink) SetSinkMute(mute bool) int32 {
-	if mute {
-		return sink.setSinkMute(1)
-	} else {
-		return sink.setSinkMute(0)
+	return sink.setSinkMute(mute)
+}
+
+func (sink *Sink) setSinkBalance(balance float64) int32 {
+	ret := C.pa_set_sink_balance_by_index(audio.pa, C.int(sink.Index),
+		C.float(balance))
+	return int32(ret)
+}
+
+func (source *Source) GetDBusInfo() dbus.DBusInfo {
+	return dbus.DBusInfo{
+		"com.deepin.daemon.Audio",
+		"/com/deepin/daemon/Audio/Source" + strconv.FormatInt(int64(source.Index), 10),
+		"com.deepin.daemon.Audio.Source",
+	}
+}
+
+func (source *Source) OnPropertiesChanged(name string, oldv interface{}) {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Print(err)
+		}
+	}()
+	switch name {
+	case "Mute":
+		fmt.Printf("%v changed: %v\n", name, oldv)
+		if oldv == source.Mute {
+			break
+		}
+		if source.setSourceMute(source.Mute) != 0 {
+			source.Mute = oldv.(bool)
+		}
+	case "Volume":
+		if source.Volume > 150 {
+			source.Volume = oldv.(uint32)
+			break
+		}
+		if oldv == source.Volume {
+			break
+		}
+		if source.setSourceVolume(source.Volume) != 0 {
+			source.Volume = oldv.(uint32)
+		}
+	case "Balance":
+		if source.Balance < -1 || source.Balance > 1 {
+			source.Balance = oldv.(float64)
+			break
+		}
+		if oldv == source.Balance {
+			break
+		}
+		if source.setSourceBalance(source.Balance) != 0 {
+			source.Balance = oldv.(float64)
+		}
+	default:
+		break
 	}
 }
 
@@ -764,29 +1007,22 @@ func (source *Source) SetSourcePort(portname string) int32 {
 	port := C.CString(portname)
 	return source.setSourcePort(port)
 }
-func (source *Source) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		"com.deepin.daemon.Audio",
-		"/com/deepin/daemon/Audio/Source" + strconv.FormatInt(int64(source.Index), 10),
-		"com.deepin.daemon.Audio.Source",
-	}
-}
 
-func (source *Source) setSourceVolume(volume *C.pa_cvolume) int32 {
-	return int32(C.pa_set_source_volume_by_index(
-		audio.pa, C.int(source.Index), volume))
-}
-
-func (source *Source) SetSourceVolume(volume int32) int32 {
+func (source *Source) setSourceVolume(volume uint32) int32 {
 	var cvolume C.pa_cvolume
 	cvolume.channels = C.uint8_t(2)
 	for i := 0; i < int(cvolume.channels); i = i + 1 {
 		cvolume.values[i] = *(*C.pa_volume_t)(unsafe.Pointer(&volume))
 	}
-	return source.setSourceVolume(&cvolume)
+	return int32(C.pa_set_source_volume_by_index(
+		audio.pa, C.int(source.Index), &cvolume))
 }
 
-func (source *Source) SetSourceMute(mute bool) int32 {
+func (source *Source) SetSourceVolume(volume uint32) int32 {
+	return source.setSourceVolume(volume)
+}
+
+func (source *Source) setSourceMute(mute bool) int32 {
 	var _mute int
 	if mute {
 		_mute = 1
@@ -795,6 +1031,17 @@ func (source *Source) SetSourceMute(mute bool) int32 {
 	}
 	ret := C.pa_set_source_mute_by_index(
 		audio.pa, C.int(source.Index), C.int(_mute))
+	return int32(ret)
+}
+
+func (source *Source) SetSourceMute(mute bool) int32 {
+	return source.setSourceMute(mute)
+}
+
+func (source *Source) setSourceBalance(balance float64) int32 {
+	ret := C.pa_set_source_balance_by_index(audio.pa,
+		C.int(source.Index),
+		C.float(balance))
 	return int32(ret)
 }
 
@@ -873,14 +1120,6 @@ func (client *Client) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (card *Card) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		"com.deepin.daemon.Audio",
-		"/com/deepin/daemon/Audio/Card" + strconv.FormatInt(int64(card.Index), 10),
-		"com.deepin.daemon.Audio.Card",
-	}
-}
-
 var audio *Audio
 
 func main() {
@@ -897,8 +1136,10 @@ func main() {
 	for i := range audio.sinks {
 		dbus.InstallOnSession(audio.sinks[i])
 	}
-	for i, _ := range audio.sources {
-		dbus.InstallOnSession(audio.sources[i])
+	for i, value := range audio.sources {
+		if value.monitorOfSink == C.PA_INVALID_INDEX {
+			dbus.InstallOnSession(audio.sources[i])
+		}
 	}
 	for i, _ := range audio.sinkInputs {
 		dbus.InstallOnSession(audio.sinkInputs[i])

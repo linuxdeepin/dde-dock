@@ -62,6 +62,13 @@ func (dpy *Display) setPropPrimaryRect(v xproto.Rectangle) {
 	}
 }
 
+func (dpy *Display) setPropMirrorMode(v bool) {
+	if dpy.MirrorMode != v {
+		dpy.MirrorMode = v
+		dbus.NotifyChange(dpy, "MirrorMode")
+	}
+}
+
 func (dpy *Display) setPropMirrorOutput(v *Output) {
 	if dpy.MirrorOutput != v {
 		dpy.MirrorOutput = v

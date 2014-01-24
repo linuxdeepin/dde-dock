@@ -13,9 +13,10 @@ import (
 )
 
 const (
-	_GRUB_MENU         = "/boot/grub/grub.cfg"
-	_GRUB_CONFIG       = "/etc/default/grub"
-	_GRUB_MKCONFIG_EXE = "grub-mkconfig"
+	_GRUB_MENU            = "/boot/grub/grub.cfg"
+	_GRUB_CONFIG          = "/etc/default/grub"
+	_GRUB_MKCONFIG_EXE    = "grub-mkconfig"
+	_GRUB_TIMEOUT_DISABLE = -2
 )
 
 var (
@@ -27,17 +28,18 @@ var (
 type Grub2 struct {
 	entries  []Entry
 	settings map[string]string
+	tm       *ThemeManager
 
 	DefaultEntry      string `access:"readwrite"`
 	Timeout           int32  `access:"readwrite"`
 	Gfxmode           string `access:"readwrite"`
 	Background        string `access:"readwrite"`
-	Theme             string `access:"readwrite"`
 	GrubConfGenerated func(int32, bool)
 }
 
 func NewGrub2() *Grub2 {
 	grub := &Grub2{}
+	grub.tm = NewThemeManager()
 	return grub
 }
 
@@ -68,6 +70,7 @@ func (grub *Grub2) readSettings() error {
 }
 
 func (grub *Grub2) writeSettings() error {
+	grub.setTheme(grub.tm.getEnabledThemeMainFile())
 	fileContent := grub.getSettingContentToSave()
 	err := ioutil.WriteFile(_GRUB_CONFIG, []byte(fileContent), 0644)
 	if err != nil {
@@ -91,7 +94,6 @@ func (grub *Grub2) generateGrubConfig() int32 {
 			}
 		}
 	}()
-
 	logInfo("generate grub configuration finished")
 	return _GENERATE_ID
 }
@@ -207,19 +209,19 @@ func (grub *Grub2) parseSettings(fileContent string) error {
 		return err
 	}
 
-	// get properties, return default value for the missing property
+	// reset properties, return default value for the missing property
 	grub.DefaultEntry = grub.getDefaultEntry()
 	grub.Timeout = grub.getTimeout()
 	grub.Gfxmode = grub.getGfxmode()
 	grub.Background = grub.getBackground()
-	grub.Theme = grub.getTheme()
+	grub.tm.setEnabledThemeMainFile(grub.getTheme())
 
-	// reset settings, for to sync the default values
+	// reset settings to sync the default values
 	grub.setDefaultEntry(grub.DefaultEntry)
 	grub.setTimeout(grub.Timeout)
 	grub.setGfxmode(grub.Gfxmode)
 	grub.setBackground(grub.Background)
-	grub.setTheme(grub.Theme)
+	grub.setTheme(grub.tm.getEnabledThemeMainFile())
 
 	return nil
 }
@@ -257,13 +259,13 @@ func (grub *Grub2) getDefaultEntry() string {
 
 func (grub *Grub2) getTimeout() int32 {
 	if len(grub.settings["GRUB_TIMEOUT"]) == 0 {
-		return 5
+		return _GRUB_TIMEOUT_DISABLE
 	}
 
 	timeout, err := strconv.ParseInt(grub.settings["GRUB_TIMEOUT"], 10, 32)
 	if err != nil {
 		logError(`valid value, settings["GRUB_TIMEOUT"]=%s`, grub.settings["GRUB_TIMEOUT"]) // TODO
-		return 5
+		return _GRUB_TIMEOUT_DISABLE
 	}
 	return int32(timeout)
 }
@@ -282,6 +284,31 @@ func (grub *Grub2) getBackground() string {
 
 func (grub *Grub2) getTheme() string {
 	return grub.settings["GRUB_THEME"]
+}
+
+func (grub *Grub2) setDefaultEntry(title string) {
+	grub.settings["GRUB_DEFAULT"] = title
+}
+
+func (grub *Grub2) setTimeout(timeout int32) {
+	if timeout == _GRUB_TIMEOUT_DISABLE {
+		grub.settings["GRUB_TIMEOUT"] = ""
+	} else {
+		timeoutStr := strconv.FormatInt(int64(timeout), 10)
+		grub.settings["GRUB_TIMEOUT"] = timeoutStr
+	}
+}
+
+func (grub *Grub2) setGfxmode(gfxmode string) {
+	grub.settings["GRUB_GFXMODE"] = gfxmode
+}
+
+func (grub *Grub2) setBackground(imageFile string) {
+	grub.settings["GRUB_BACKGROUND"] = imageFile
+}
+
+func (grub *Grub2) setTheme(themeFile string) {
+	grub.settings["GRUB_THEME"] = themeFile
 }
 
 func (grub *Grub2) getSettingContentToSave() string {
@@ -304,6 +331,10 @@ func main() {
 	grub := NewGrub2()
 	grub.Load()
 	err := dbus.InstallOnSystem(grub)
+	if err != nil {
+		panic(err)
+	}
+	err = dbus.InstallOnSystem(grub.tm)
 	if err != nil {
 		panic(err)
 	}

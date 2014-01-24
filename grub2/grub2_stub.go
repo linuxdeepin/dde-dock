@@ -4,7 +4,6 @@ import (
 	"dlib/dbus"
 	"errors"
 	"fmt"
-	"strconv"
 )
 
 const (
@@ -36,8 +35,6 @@ func (grub *Grub2) OnPropertiesChanged(name string, oldv interface{}) {
 		grub.setGfxmode(grub.Gfxmode)
 	case "Background":
 		grub.setBackground(grub.Background)
-	case "Theme":
-		grub.setTheme(grub.Theme)
 	}
 }
 
@@ -54,7 +51,6 @@ func (grub *Grub2) Load() error {
 }
 
 func (grub *Grub2) Save() error {
-	// TODO
 	err := grub.writeSettings()
 	if err != nil {
 		return err
@@ -79,25 +75,4 @@ func (grub *Grub2) GetEntryTitles() ([]string, error) {
 		return entryTitles, errors.New(s)
 	}
 	return entryTitles, nil
-}
-
-func (grub *Grub2) setDefaultEntry(title string) {
-	grub.settings["GRUB_DEFAULT"] = title
-}
-
-func (grub *Grub2) setTimeout(timeout int32) {
-	timeoutStr := strconv.FormatInt(int64(timeout), 10)
-	grub.settings["GRUB_TIMEOUT"] = timeoutStr
-}
-
-func (grub *Grub2) setGfxmode(gfxmode string) {
-	grub.settings["GRUB_GFXMODE"] = gfxmode
-}
-
-func (grub *Grub2) setBackground(imageFile string) {
-	grub.settings["GRUB_BACKGROUND"] = imageFile
-}
-
-func (grub *Grub2) setTheme(themeFile string) {
-	grub.settings["GRUB_THEME"] = themeFile
 }

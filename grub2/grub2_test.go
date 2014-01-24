@@ -138,7 +138,7 @@ func (grub *Grub2) TestSetterAndGetter(c *C) {
 	grub.setBackground(wantBackground)
 	c.Check(grub.getBackground(), Equals, wantBackground)
 
-	// theme
+	// TODO theme
 	wantTheme := "/boot/grub/themes/demo/theme.txt"
 	c.Check(grub.getTheme(), Equals, wantTheme)
 	wantTheme = "another_theme.txt"
@@ -151,7 +151,6 @@ func (grub *Grub2) TestSaveDefaultSettings(c *C) {
 `
 	wantConfigContent := `GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
 GRUB_DEFAULT="LinuxDeepin GNU/Linux"
-GRUB_TIMEOUT="5"
 GRUB_GFXMODE="auto"
 `
 	grub.parseEntries(_TEST_MENU_CONTENT)
