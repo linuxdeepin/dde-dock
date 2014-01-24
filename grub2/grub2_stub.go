@@ -33,8 +33,6 @@ func (grub *Grub2) OnPropertiesChanged(name string, oldv interface{}) {
 		grub.setTimeout(grub.Timeout)
 	case "Gfxmode":
 		grub.setGfxmode(grub.Gfxmode)
-	case "Background":
-		grub.setBackground(grub.Background)
 	}
 }
 
