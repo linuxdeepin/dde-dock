@@ -391,7 +391,6 @@ func NewAudio() (*Audio, error) {
 func updateCard(_index C.int,
 	event C.int) {
 	index := int(_index)
-	fmt.Printf("updatecard before swith %v\n", event)
 	switch event {
 	case C.PA_SUBSCRIPTION_EVENT_NEW:
 		//i := int32(audio.pa.cards[0].index)
@@ -413,7 +412,7 @@ func updateCard(_index C.int,
 				changes := getDiffProperty(audio.cards[i], newcard)
 				audio.cards[index] = newcard
 				dbus.InstallOnSession(audio.cards[i])
-				fmt.Println("updating card property\n")
+				fmt.Printf("updating card property\n")
 				for key, v := range changes {
 					audio.DeviceChanged(key, v)
 					fmt.Printf("\t %v: %v\n", key, v)
@@ -466,7 +465,7 @@ func updateSink(_index C.int,
 				changes := getDiffProperty(audio.sinks[i], newsink)
 				audio.sinks[i] = newsink
 				dbus.InstallOnSession(audio.sinks[i])
-				fmt.Printf("updathing sink property:\n")
+				fmt.Printf("updating sink property:\n")
 				for key, v := range changes {
 					audio.DeviceChanged(key, v)
 					//dbus.NotifyChange(audio.sinks[i], key)
@@ -898,8 +897,8 @@ func (sink *Sink) setSinkPort(port *C.char) int32 {
 	return int32(ret)
 }
 
-func (sink *Sink) SetSinkPort(portname string) int32 {
-	port := C.CString(portname)
+func (sink *Sink) SetSinkPort(portnum int32) int32 {
+	port := C.CString(sink.Ports[portnum].Name)
 	return sink.setSinkPort(port)
 }
 
