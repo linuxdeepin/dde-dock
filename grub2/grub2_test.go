@@ -107,14 +107,13 @@ func (grub *Grub2) TestSetterAndGetter(c *C) {
 	grub.parseEntries(_TEST_MENU_CONTENT)
 	grub.parseSettings(_TEST_CONFIG_CONTENT)
 
-	entryTitles, _ := grub.GetEntryTitles()
-	c.Check(len(entryTitles), Equals, 2)
+	entryTitles, _ := grub.GetSimpleEntryTitles()
+	c.Check(len(entryTitles), Equals, 1)
 
 	// default entry
 	wantDefaultEntry := `LinuxDeepin GNU/Linux`
 	c.Check(grub.getDefaultEntry(), Equals, wantDefaultEntry)
-	wantDefaultEntry = `Advanced options for LinuxDeepin GNU/Linux>LinuxDeepin GNU/Linux，Linux 3.11.0-15-generic`
-	grub.setDefaultEntry(wantDefaultEntry)
+	grub.setDefaultEntry(`Advanced options for LinuxDeepin GNU/Linux>LinuxDeepin GNU/Linux，Linux 3.11.0-15-generic`)
 	c.Check(grub.getDefaultEntry(), Equals, wantDefaultEntry)
 
 	// timeout
@@ -186,13 +185,11 @@ GRUB_THEME="/boot/grub/themes/demo/theme.txt"
 func (grub *Grub2) TestGetEntryTitles(c *C) {
 	wantEntyTitles := []string{
 		`LinuxDeepin GNU/Linux`,
-		`Advanced options for LinuxDeepin GNU/Linux>LinuxDeepin GNU/Linux，Linux 3.11.0-15-generic`,
-		`Advanced options for LinuxDeepin GNU/Linux>Inner submenu for test>Menuentry in Level 3`,
 		`Other OS`,
 	}
 
 	grub.parseEntries(_TEST_MENU_CONTENT_LONG)
-	entryTitles, _ := grub.GetEntryTitles()
+	entryTitles, _ := grub.GetSimpleEntryTitles()
 	c.Check(len(entryTitles), Equals, len(wantEntyTitles))
 	for i, title := range entryTitles {
 		c.Check(title, Equals, wantEntyTitles[i])
