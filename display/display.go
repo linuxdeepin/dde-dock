@@ -265,6 +265,7 @@ func TT() {
 func main() {
 	dbus.InstallOnSession(DPY)
 	dbus.DealWithUnhandledMessage()
+	DPY.SetMirrorMode(true)
 	/*TT()*/
 	select {}
 }
