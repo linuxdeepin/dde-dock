@@ -36,7 +36,7 @@ func writeInterger(value uint32, datas *[]byte) {
 	}()
 
 	buf := bytes.NewBuffer([]byte{})
-	binary.Write(buf, m.order, value)
+	binary.Write(buf, byteOrder, value)
 	tmp := buf.Bytes()
 
 	l := len(tmp)
@@ -53,7 +53,7 @@ func writeInterger2(value uint16, datas *[]byte) {
 	}()
 
 	buf := bytes.NewBuffer([]byte{})
-	binary.Write(buf, m.order, value)
+	binary.Write(buf, byteOrder, value)
 	tmp := buf.Bytes()
 
 	l := len(tmp)
@@ -133,11 +133,10 @@ func changeXSettingsProperty(datas []byte) {
 	}()
 
 	err := xproto.ChangePropertyChecked(X, xproto.PropModeReplace,
-		//m.wid,
-                sReply.Owner,
+		sReply.Owner,
 		getAtom(X, XSETTINGS_SETTINGS),
 		getAtom(X, XSETTINGS_SETTINGS),
-		m.format, uint32(len(datas)), datas).Check()
+		XSETTINGS_FORMAT, uint32(len(datas)), datas).Check()
 	if err != nil {
 		logger.Printf("Change Property '%s' Failed: %s\n",
 			XSETTINGS_SETTINGS, err)
@@ -152,6 +151,7 @@ func setXSettingsName(name string, value interface{}) {
 		}
 	}()
 
+	//logger.Println("read xsettings start...")
 	infos := readXSettings()
 
 	isExist := false
@@ -178,11 +178,11 @@ func writeXSettingsData(infos []*HeaderInfo) {
 
 	datas := []byte{}
 
-	datas = append(datas, xsettingsInfo.order)
+	datas = append(datas, XSETTINGS_ORDER)
 	for i := 0; i < 3; i++ {
 		datas = append(datas, 0)
 	}
-	writeInterger(xsettingsInfo.serial, &datas)
+	writeInterger(XSETTINGS_SERIAL, &datas)
 	l := uint32(len(infos))
 	writeInterger(l, &datas)
 
@@ -207,7 +207,7 @@ func newHeaderInfo(name string, value interface{}) *HeaderInfo {
 	}
 
 	info.name = name
-	info.lastSerial = xsettingsInfo.serial
+	info.lastSerial = XSETTINGS_SERIAL
 	info.nameLen = uint16(len(name))
 	info.value = value
 
