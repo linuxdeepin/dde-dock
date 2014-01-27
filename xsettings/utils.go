@@ -39,12 +39,12 @@ func getAtom(X *xgb.Conn, name string) xproto.Atom {
 }
 
 func newXWindow() {
-	var err error
-	m.wid, err = xproto.NewWindowId(X)
+	wid, err := xproto.NewWindowId(X)
 	if err != nil {
 		logger.Println("New Window Id Failed:", err)
 		panic(err)
 	}
+	logger.Println("New window id:", wid)
 
 	setupInfo := xproto.Setup(X)
 	/*
@@ -52,13 +52,22 @@ func newXWindow() {
 	   }
 	*/
 	screen := setupInfo.DefaultScreen(X)
-	err = xproto.CreateWindowChecked(X,
+	logger.Println("root wid:", screen.Root)
+	err2 := xproto.CreateWindowChecked(X,
 		xproto.WindowClassCopyFromParent,
-		m.wid, screen.Root, 0, 0,
-		150, 150, 10, xproto.WindowClassInputOnly,
-		screen.RootVisual, 0, nil).Check()
-	if err != nil {
-		logger.Println("Create Window Failed:", err)
-		panic(err)
+		wid, screen.Root, 0, 0,
+		150, 150, 10, xproto.WindowClassInputOutput,
+		screen.RootVisual, 0,
+		nil).Check()
+	if err2 != nil {
+		panic(err2)
 	}
+	err3 := xproto.SetSelectionOwnerChecked(X, wid,
+		getAtom(X, XSETTINGS_S0),
+		xproto.TimeCurrentTime).Check()
+	if err3 != nil {
+		panic(err3)
+	}
+	xproto.MapWindow(X, wid)
+	X.Sync()
 }

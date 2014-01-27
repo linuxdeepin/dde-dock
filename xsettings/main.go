@@ -29,11 +29,6 @@ import (
 	"time"
 )
 
-type XSettingsInfo struct {
-	order  byte
-	serial uint32
-}
-
 type HeaderInfo struct {
 	vType      byte
 	nameLen    uint16
@@ -42,15 +37,13 @@ type HeaderInfo struct {
 	value      interface{}
 }
 
-type Manager struct {
-	order  binary.ByteOrder
-	format byte
-	wid    xproto.Window
-}
-
 const (
 	XSETTINGS_S0       = "_XSETTINGS_S0"
 	XSETTINGS_SETTINGS = "_XSETTINGS_SETTINGS"
+
+	XSETTINGS_FORMAT = 8
+	XSETTINGS_ORDER  = 0
+	XSETTINGS_SERIAL = 0
 
 	XSETTINGS_INTERGER = 0
 	XSETTINGS_STRING   = 1
@@ -58,10 +51,9 @@ const (
 )
 
 var (
-	X             *xgb.Conn
-	sReply        *xproto.GetSelectionOwnerReply
-	xsettingsInfo *XSettingsInfo
-	m             *Manager
+	X         *xgb.Conn
+	sReply    *xproto.GetSelectionOwnerReply
+	byteOrder binary.ByteOrder
 )
 
 func initXSettings() {
@@ -73,29 +65,35 @@ func initXSettings() {
 		panic(err)
 	}
 
+	if XSETTINGS_ORDER == 1 {
+		byteOrder = binary.BigEndian
+	} else {
+		byteOrder = binary.LittleEndian
+	}
+
+	newXWindow()
+
 	sReply, err = xproto.GetSelectionOwner(X,
 		getAtom(X, XSETTINGS_S0)).Reply()
 	if err != nil {
 		logger.Println("Unable to connect X server:", err)
 		panic(err)
 	}
-
-	xsettingsInfo = &XSettingsInfo{}
-	m = &Manager{}
+	logger.Println("select owner wid:", sReply.Owner)
 }
 
 func main() {
 	initXSettings()
-        //newXWindow()
-	logger.Println("Deepin-Legacy")
+        logger.Println("Deepin-Legacy")
 	setXSettingsName("Net/ThemeName", "Deepin-Legacy")
 	setXSettingsName("Net/IconThemeName", "Deepin-Legacy")
-	time.Sleep(time.Second * 5)
+	time.Sleep(time.Second * 10)
 	logger.Println("Adwaita, gnome")
 	setXSettingsName("Net/ThemeName", "Adwaita")
 	setXSettingsName("Net/IconThemeName", "gnome")
-	time.Sleep(time.Second * 5)
+	time.Sleep(time.Second * 10)
 	logger.Println("Deepin")
 	setXSettingsName("Net/ThemeName", "Deepin")
 	setXSettingsName("Net/IconThemeName", "Deepin")
+	time.Sleep(time.Second * 10)
 }
