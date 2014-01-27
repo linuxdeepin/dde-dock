@@ -1,10 +1,10 @@
 package main
 
 import "github.com/BurntSushi/xgb/randr"
-import "github.com/BurntSushi/xgb"
 import "github.com/BurntSushi/xgb/xproto"
-import "sync"
 import "math"
+import "runtime"
+import "sync"
 import "fmt"
 
 import "github.com/BurntSushi/xgb/render"
@@ -12,28 +12,40 @@ import "github.com/BurntSushi/xgb/render"
 const (
 	_PendingMaskMode = 1 << iota
 	_PendingMaskPos
-	_PendingMaskBorder
 	_PendingMaskTransform
 	_PendingMaskRotation
 	_PendingMaskGramma
 )
 
-var UnitMatrix = render.Transform{65536, 0, 0, 0, 65536, 0, 0, 0, 65536}
-
 const (
 	EnsureSizeHintAuto uint8 = iota
 	EnsureSizeHintPanning
-	EnsureSizeHintBorderScale
+	EnsureSizeHintScale
 )
+
+func min(a, b uint16) uint16 {
+	if a < b {
+		return a
+	}
+	return b
+}
+func max(a, b uint16) uint16 {
+	if a > b {
+		return a
+	}
+	return b
+}
 
 var changeLock, changeUnlock = func() (func(), func()) {
 	var locker sync.Mutex
 	return func() {
 			locker.Lock()
 			xproto.GrabServer(X)
+			fmt.Println("-------------------------GRABSERVER-----------------------")
 		}, func() {
 			xproto.UngrabServer(X)
 			locker.Unlock()
+			fmt.Println("-------------------------UNGRABSERVER-----------------------")
 		}
 }()
 
@@ -51,7 +63,8 @@ type pendingConfig struct {
 	filterName   string
 	filterParams []render.Fixed
 
-	border Border
+	borderCompensationX uint16
+	borderCompensationY uint16
 
 	// doesn't influence allocation
 	gammaRed   []uint16
@@ -59,216 +72,147 @@ type pendingConfig struct {
 	gammaBlue  []uint16
 }
 
-func NewPendingConfig(op *Output) *pendingConfig {
-	if op.pendingConfig != nil {
-		return op.pendingConfig
-	}
+func ClonePendingConfig(c *pendingConfig) *pendingConfig {
 	r := &pendingConfig{}
-	r.crtc = op.crtc
-	r.output = op.Identify
+	r.crtc = c.crtc
+	r.output = c.output
+	r.mask = c.mask
+	r.mode = c.mode
+	r.rotation = c.rotation
+	r.posX, r.posY = c.posX, c.posY
+	r.transform, r.filterName, r.filterParams = c.transform, c.filterName, c.filterParams
+	r.borderCompensationX, r.borderCompensationY = c.borderCompensationX, c.borderCompensationY
+	copy(r.gammaRed, c.gammaRed)
+	copy(r.gammaGreen, c.gammaGreen)
+	copy(r.gammaBlue, c.gammaBlue)
 
-	r.mode = randr.Mode(op.Mode.ID)
+	return r
+}
+
+func (c *pendingConfig) String() string {
+	return fmt.Sprintf(`
+	Crtc:%v, Output:%v, mode:%v, pos:(%v,%v), rotation:%v transform:(%v,%v,%v), borderComp:(%v,%v)
+	`, c.crtc, c.output, c.mode, c.posX, c.posY, c.rotation, c.transform.Matrix11, c.transform.Matrix22, c.transform.Matrix33,
+		c.borderCompensationX, c.borderCompensationY)
+}
+func NewPendingConfigWithoutCache(op *Output) *pendingConfig {
+	//don't call any pendingConfig.SetXX  otherwise ApplyChanged will apply this changed.
+	c := &pendingConfig{}
+
+	if op.crtc != 0 {
+		c.crtc = op.crtc
+	} else if op.savedConfig != nil {
+		c.crtc = op.savedConfig.crtc
+	}
+	if op.Mode.ID != 0 {
+		c.mode = randr.Mode(op.Mode.ID)
+	} else if op.savedConfig != nil {
+		c.mode = op.savedConfig.mode
+	}
+	c.output = op.Identify
+
 	validMode := false
 	for _, m := range op.ListModes() {
-		if r.mode == randr.Mode(m.ID) {
+		if c.mode == randr.Mode(m.ID) {
 			validMode = true
 			break
 		}
 	}
 	if !validMode {
-		r.mode = op.bestMode
+		c.mode = op.bestMode
 	}
 
-	r.posX = op.Allocation.X
-	r.posY = op.Allocation.Y
-	r.rotation = op.Rotation | op.Reflect
-
-	tinfo, err := randr.GetCrtcTransform(X, op.crtc).Reply()
+	cinfo, err := randr.GetCrtcInfo(X, c.crtc, LastConfigTimeStamp).Reply()
 	if err != nil {
-		panic(fmt.Sprintf("NewPendingCofing failed at GetCrtcTransform(crtc=%v)", r.crtc))
+		panic(fmt.Sprintf("NewPendingCofing failed at GetCrtcInfo(crtc=%v,op=%v,opened=%v):%v", c.crtc, c.output, op.Opened, err))
 	}
-	r.transform = tinfo.CurrentTransform
-	r.filterName = tinfo.CurrentFilterName
-	r.filterParams = tinfo.CurrentParams
-	return r
-}
-
-func (c *pendingConfig) SetMode(m randr.Mode) *pendingConfig {
-	c.mask = c.mask | _PendingMaskMode
-
-	c.mode = m
-	return c
-}
-func (c *pendingConfig) SetPos(x, y int16) *pendingConfig {
-	c.mask = c.mask | _PendingMaskPos
-
-	c.posX = x
-	c.posY = y
-
-	return c
-}
-
-func (c *pendingConfig) SetRotation(r uint16) *pendingConfig {
-	c.mask = c.mask | _PendingMaskRotation
-
-	c.rotation = r
-	return c
-}
-func (c *pendingConfig) SetBorder(b Border) *pendingConfig {
-	c.mask = c.mask | _PendingMaskBorder
-
-	c.border = b
-	return c
-}
-func (c *pendingConfig) SetTransform(matrix render.Transform, filterName string, params []render.Fixed) *pendingConfig {
-	c.mask = c.mask | _PendingMaskTransform
-
-	c.transform = matrix
-	c.filterName = filterName
-	c.filterParams = params
-
-	return c
-}
-
-func (c *pendingConfig) SetGamma(red, green, blue []uint16) *pendingConfig {
-	c.mask = c.mask | _PendingMaskGramma
-
-	c.gammaRed = red
-	c.gammaGreen = green
-	c.gammaBlue = blue
-	return c
-}
-
-func (c *pendingConfig) SetScale(xScale, yScale float32) *pendingConfig {
-	c.mask = c.mask | _PendingMaskTransform
-
-	c.transform.Matrix11 = double2fixed(xScale)
-	c.transform.Matrix22 = double2fixed(yScale)
-	c.transform.Matrix33 = double2fixed(1)
-	if xScale != 1 || yScale != 1 {
-		c.filterName = "bilinear"
-	} else {
-		c.filterName = "nearest"
+	if cinfo.Rotation&0xf == 0 {
+		panic("Rotation err")
 	}
+	c.rotation = cinfo.Rotation
 
-	return c
-}
-
-/*func (op *Output) deduceAdjustMethod(w, h uint16) uint8 {*/
-/*ratio := float64(w) / float64(h)*/
-/*for _, modeinfo := range op.ListModes() {*/
-/*mratio, mw, mh := float64(modeinfo.Width)/float64(modeinfo.Height), modeinfo.Width, modeinfo.Height*/
-/*if math.Abs(mratio-ratio) < 0.00001 {*/
-/*scale := float32(mw) / float32(w)*/
-/*op.pendingConfig = NewPendingConfig(op).SetScale(scale, scale)*/
-/*} else {*/
-/*scale := float32(mh) / float32(h)*/
-/*op.pendingConfig = NewPendingConfig(op).SetScale(scale, scale)*/
-/*}*/
-/*}*/
-/*return AdjustModeNone*/
-/*}*/
-
-func (c *pendingConfig) ensureSameRatio(dw, dh uint16) {
-}
-
-func (c *pendingConfig) appliedAllocation() (r xproto.Rectangle) {
-	minfo := DPY.modes[c.mode]
-	width := minfo.Width - c.border.Left - c.border.Right
-	height := minfo.Height - c.border.Top - c.border.Bottom
-	x1, y1, x2, y2 := calcBound(c.transform, c.rotation, width, height)
-	r.X = int16(int(c.posX) + x1)
-	r.Y = int16(int(c.posY) + y1)
-	r.Width = uint16(x2 - x1)
-	r.Height = uint16(y2 - y1)
-
-	//remove border space
-	/*r.X = r.X - int16(c.border.Left)*/
-	/*r.Y = r.Y - int16(c.border.Top)*/
-	/*r.Width = r.Width - c.border.Right*/
-	/*r.Height = r.Height - c.border.Bottom*/
-	/*fmt.Println(c.border)*/
-	return
-}
-func (c *pendingConfig) EnsureSize(width, height uint16, methodHint uint8) *pendingConfig {
-	minfo := DPY.modes[c.mode]
-	if minfo.Width == width && minfo.Height == height {
-		fmt.Println("SameSize....")
-		return c
+	tinfo, err := randr.GetCrtcTransform(X, c.crtc).Reply()
+	if err != nil {
+		panic(fmt.Sprintf("NewPendingCofing failed at GetCrtcTransform(crtc=%v,op=%v,opened=%v):%v", c.crtc, c.output, op.Opened, err))
 	}
-	ow := int16(minfo.Width - width)
-	oh := int16(minfo.Height - height)
-	ratio := minfo.Width / minfo.Height
-	fmt.Println("WTF", ow, oh)
-	switch {
-	case ow > 0 && oh > 0:
-		fmt.Println("Fucn..")
-		c.SetBorder(Border{uint16(ow / 2), uint16(oh / 2), uint16(ow / 2), uint16(oh / 2)})
-		c.SetPos(-int16(ow/2), -int16(oh/2))
+	c.transform = tinfo.CurrentTransform
+	c.filterName = tinfo.CurrentFilterName
+	c.filterParams = tinfo.CurrentParams
 
-	case ow < 0 && oh < 0:
-		if ratio == width/height {
-			scale := 1 + float32(-ow)/float32(minfo.Width)
-			c.SetScale(scale, scale)
-			fmt.Printf("Here!%v/%v=%v'\n", float32(-ow), float32(width), scale)
-		} else {
-			panic("XX")
+	if DPY.MirrorMode {
+		c.posX, c.posY = 0, 0
+		if cinfo.X < 0 {
+			c.borderCompensationX = uint16(-cinfo.X)
 		}
-
-	case ow > 0 && oh < 0:
-		margin := width - ratio*height
-		scale := float32(-oh) / float32(height)
-		c.SetBorder(Border{margin / 2, 0, margin / 2, 0})
-		c.SetScale(scale, scale)
-	case ow < 0 && oh > 0:
-		fmt.Println("GoHere....", ow, oh)
-		margin := height - ratio*width
-		scale := float32(-ow) / float32(width)
-		c.SetBorder(Border{0, margin / 2, 0, margin / 2})
-		c.SetScale(scale, scale)
-
-		/*case ow < 0 && oh < 0:*/
-		/*if ratio == width/height {*/
-		/*scale := float32(-ow) / float32(width)*/
-		/*if methodHint == EnsureSizeHintPanning {*/
-		/*//setPanning*/
-		/*} else {*/
-		/*c.SetScale(scale, scale)*/
-		/*}*/
-		/*} else {*/
-		/*if methodHint == EnsureSizeHintBorderScale {*/
-		/*c.SetScale(scale, scale)*/
-		/*} else {*/
-		/*//setPanning*/
-		/*}*/
-		/*}*/
+		if cinfo.X < 0 {
+			c.borderCompensationY = uint16(-cinfo.Y)
+		}
+	} else {
+		c.posX, c.posY = cinfo.X, cinfo.Y
+		c.borderCompensationX, c.borderCompensationY = 0, 0
 	}
 
 	return c
+}
+
+func NewPendingConfig(op *Output) *pendingConfig {
+	if op.pendingConfig != nil {
+		return op.pendingConfig
+	}
+	return NewPendingConfigWithoutCache(op)
 }
 
 func (c *pendingConfig) apply() error {
 	//setCrtcConfig: pos, mode, rotation
 	//setCrtcGamma: gamma
 	//setCrtcTransform: transform, filter
-	//setOutputProperty: border
+	// allocation of the output maybe changed when rotation/transform changed without change mode
+	if c.mode == 0 {
+		_, err := randr.SetCrtcConfig(X, c.crtc, xproto.TimeCurrentTime, LastConfigTimeStamp,
+			0, 0, 0, c.rotation, nil).Reply()
+		return err
+	}
+
+	{
+		/*cinfo, _ := randr.GetCrtcInfo(X, c.crtc, 0).Reply()*/
+		/*alloc := c.appliedAllocation()*/
+		/*randr.SetCrtcConfig(X, c.crtc, xproto.TimeCurrentTime, LastConfigTimeStamp, 0, 0, 0, c.rotation, nil).Reply()*/
+		/*if int16(cinfo.Width)+2*cinfo.X < int16(alloc.Width) || int16(cinfo.Height)+2*cinfo.Y < int16(alloc.Height) {*/
+		/*_, err := randr.SetCrtcConfig(X, c.crtc, xproto.TimeCurrentTime, LastConfigTimeStamp, 0, 0, 0, c.rotation, nil).Reply()*/
+		/*if err != nil {*/
+		/*cinfo, _ := randr.GetCrtcInfo(X, c.crtc, 0).Reply()*/
+		/*oinfo, _ := randr.GetOutputInfo(X, c.output, 0).Reply()*/
+		/*[>return fmt.Errorf("PendingConfig apply failed when SetCrtcConfig(1): %v %v", err, c, info.Possible)<]*/
+		/*fmt.Println("PendingConfig apply failed when SetCrtcConfig(1):", err, c, cinfo.Possible, oinfo.Crtc)*/
+		/*}*/
+		/*fmt.Println("1111111111111111111111111")*/
+		/*} else {*/
+		/*op := queryOutput(DPY, c.output)*/
+		/*fmt.Println("22222222222222222222222222", op.Name, op.Opened, c.crtc, cinfo.X, cinfo.Y, cinfo.Width, cinfo.Height, alloc)*/
+		/*}*/
+		/*if cinfo.Width > c.appliedAllocation().Width || cinfo.Height > c.appliedAllocation().Height {*/
+		/*fmt.Println("Cinfo:", cinfo.X, cinfo.Y, cinfo.Width, cinfo.Height, c.appliedAllocation(), "--------------------")*/
+		/*}*/
+	}
+
+	/*if smallerRectangle(queryOutput(DPY, c.output).Allocation, c.appliedAllocation()) {*/
+	/*_, err := randr.SetCrtcConfig(X, c.crtc, xproto.TimeCurrentTime, LastConfigTimeStamp, 0, 0, 0, c.rotation, nil).Reply()*/
+	/*if err != nil {*/
+	/*cinfo, _ := randr.GetCrtcInfo(X, c.crtc, 0).Reply()*/
+	/*oinfo, _ := randr.GetOutputInfo(X, c.output, 0).Reply()*/
+	/*[>return fmt.Errorf("PendingConfig apply failed when SetCrtcConfig(1): %v %v", err, c, info.Possible)<]*/
+	/*fmt.Println("PendingConfig apply failed when SetCrtcConfig(1):", err, c, cinfo.Possible, oinfo.Crtc)*/
+	/*}*/
+	/*fmt.Println("CompareRectangle small:", queryOutput(DPY, c.output).Allocation, c.appliedAllocation())*/
+	/*} else {*/
+	/*fmt.Println("CompareRectangle notsmall:", queryOutput(DPY, c.output).Allocation, c.appliedAllocation())*/
+	/*}*/
 
 	var err error
 	if c.mask&_PendingMaskGramma == _PendingMaskGramma {
 		err = randr.SetCrtcGammaChecked(X, c.crtc, uint16(len(c.gammaRed)), c.gammaRed, c.gammaGreen, c.gammaBlue).Check()
 		if err != nil {
 			return fmt.Errorf("PendingConfig apply failed when SetCrtcGammaCheched: %v %v", err, c)
-		}
-	}
-	if c.mask&_PendingMaskBorder == _PendingMaskBorder {
-		var buf [2 * 4]byte
-		xgb.Put16(buf[0:2], c.border.Left)
-		xgb.Put16(buf[2:4], c.border.Top)
-		xgb.Put16(buf[4:6], c.border.Right)
-		xgb.Put16(buf[6:8], c.border.Bottom)
-		err = randr.ChangeOutputPropertyChecked(X, c.output, borderAtom, xproto.AtomInteger, 16, xproto.PropModeReplace, 4, buf[:]).Check()
-		if err != nil {
-			return fmt.Errorf("PendingConfig apply failed when ChangeOutputProperty: %v %v", err, c)
 		}
 	}
 	if c.mask&_PendingMaskTransform == _PendingMaskTransform {
@@ -279,115 +223,268 @@ func (c *pendingConfig) apply() error {
 	}
 
 	if c.mask&_PendingMaskPos|_PendingMaskMode|_PendingMaskRotation != 0 {
-		_, err = randr.SetCrtcConfig(X, c.crtc, xproto.TimeCurrentTime, LastConfigTimeStamp, c.posX, c.posY, c.mode, c.rotation, []randr.Output{c.output}).Reply()
+		var outputs []randr.Output = nil
+		if c.mode != 0 {
+			outputs = []randr.Output{c.output}
+		}
+
+		if DPY.MirrorMode {
+			_, err = randr.SetCrtcConfig(X, c.crtc, xproto.TimeCurrentTime, LastConfigTimeStamp,
+				int16(-c.borderCompensationX), int16(-c.borderCompensationY), c.mode, c.rotation, outputs).Reply()
+		} else {
+			_, err = randr.SetCrtcConfig(X, c.crtc, xproto.TimeCurrentTime, LastConfigTimeStamp,
+				c.posX, c.posY, c.mode, c.rotation, outputs).Reply()
+		}
 		if err != nil {
-			return fmt.Errorf("PendingConfig apply failed when SetCrtcConfig: %v %v", err, c)
+			panic(fmt.Errorf("PendingConfig apply failed when SetCrtcConfig(2): %v %v", err, c).Error())
+			return fmt.Errorf("PendingConfig apply failed when SetCrtcConfig(2): %v %v", err, c)
+		}
+		fmt.Println("|||||||||d...", queryOutput(DPY, c.output).Name, c.appliedAllocation(), c.posX, c.posY, c.borderCompensationX)
+	}
+
+	{
+		/*outputs := []randr.Output{c.output}*/
+		/*_, err := randr.SetCrtcConfig(X, c.crtc, xproto.TimeCurrentTime, LastConfigTimeStamp,*/
+		cinfo, err := randr.GetCrtcInfo(X, c.crtc, xproto.TimeCurrentTime).Reply()
+		rect := xproto.Rectangle{cinfo.X, cinfo.Y, cinfo.Width - uint16(c.borderCompensationX), cinfo.Height - uint16(c.borderCompensationY)}
+		if err != nil || rect != c.appliedAllocation() {
+			/*panic(fmt.Sprintln("Apply failed...", cinfo, c))*/
+			fmt.Println("Apply failed...", queryOutput(DPY, c.output).Name, rect, c.appliedAllocation(), c.posX, c.posY, c.borderCompensationX)
 		}
 	}
 	return nil
 }
 
-func applyTransform(m render.Transform, x float32, y float32) (int, int, int, int) {
-	rx := fixed2double(m.Matrix11)*x + fixed2double(m.Matrix12)*y + fixed2double(m.Matrix13)*1
-	ry := fixed2double(m.Matrix21)*x + fixed2double(m.Matrix22)*y + fixed2double(m.Matrix23)*1
-	rw := fixed2double(m.Matrix31)*x + fixed2double(m.Matrix32)*y + fixed2double(m.Matrix33)*1
+func (c *pendingConfig) SetMode(m randr.Mode) *pendingConfig {
+	if c.mode != m {
+		c.mask = c.mask | _PendingMaskMode
 
-	if rw == 0 {
-		return 0, 0, 0, 0
+		c.mode = m
 	}
-
-	rx = rx / rw
-	if rx > 32767 || rx < -32767 {
-		return 0, 0, 0, 0
-	}
-
-	ry = ry / rw
-	if ry > 32767 || ry < -32767 {
-		return 0, 0, 0, 0
-	}
-
-	rw = rw / rw
-	if rw > 32767 || rw < -32767 {
-		return 0, 0, 0, 0
-	}
-	return int(math.Floor(float64(rx))), int(math.Floor(float64(ry))), int(math.Ceil(float64(rx))), int(math.Ceil(float64(ry)))
+	return c
 }
-func calcBound(m render.Transform, rotation uint16, width, height uint16) (x1, y1, x2, y2 int) {
-	switch rotation & 0xf {
-	case randr.RotationRotate90, randr.RotationRotate270:
-		width, height = height, width
+func (c *pendingConfig) SetPos(x, y int16) *pendingConfig {
+	if c.posX != x && c.posY != y {
+		c.mask = c.mask | _PendingMaskPos
+
+		c.posX = x
+		c.posY = y
+	}
+	return c
+}
+
+func (c *pendingConfig) setCompensation(x, y uint16) *pendingConfig {
+	c.borderCompensationX = x
+	c.borderCompensationY = y
+	/*c.SetPos(-c.borderCompensationX, -c.borderCompensationY)*/
+	return c
+}
+
+func (c *pendingConfig) SetRotation(r uint16) *pendingConfig {
+	if c.rotation != r {
+		c.mask = c.mask | _PendingMaskRotation
+
+		if r&0xf == 0 {
+			panic("SetRotation Error..")
+		}
+		c.rotation = r
+	}
+	return c
+}
+
+func (c *pendingConfig) SetTransform(matrix render.Transform, filterName string, params []render.Fixed) *pendingConfig {
+	//ignore params at this moment
+	if c.transform != matrix || c.filterName != filterName {
+		c.mask = c.mask | _PendingMaskTransform
+
+		c.transform = matrix
+		c.filterName = filterName
+		c.filterParams = params
+	}
+	return c
+}
+
+func (c *pendingConfig) setGamma(red, green, blue []uint16) *pendingConfig {
+	c.mask = c.mask | _PendingMaskGramma
+
+	c.gammaRed = red
+	c.gammaGreen = green
+	c.gammaBlue = blue
+	return c
+}
+
+func (c *pendingConfig) SetBrightness(brightness float64) *pendingConfig {
+	if brightness < 0.01 || brightness > 1 {
+		brightness = 1
+	}
+	gammaSize, err := randr.GetCrtcGammaSize(X, c.crtc).Reply()
+	if err != nil {
+		panic(fmt.Sprintf("GetCrtcGrammSize(crtc:%d) failed: %s", c.crtc, err.Error()))
+	}
+	red, green, blue := genGammaRamp(gammaSize.Size, brightness)
+	return c.setGamma(red, green, blue)
+}
+
+func (c *pendingConfig) SetScale(xScale, yScale float32) *pendingConfig {
+	c.transform.Matrix11 = double2fixed(xScale)
+	c.transform.Matrix22 = double2fixed(yScale)
+	c.transform.Matrix33 = double2fixed(1)
+	if xScale != 1 || yScale != 1 {
+		c.SetTransform(c.transform, "bilinear", nil)
+	} else {
+		c.SetTransform(c.transform, "nearest", nil)
 	}
 
-	x1, y1, x2, y2 = applyTransform(m, 0, 0)
+	return c
+}
 
-	tx1, ty1, tx2, ty2 := applyTransform(m, float32(width), 0)
-	if tx1 < x1 {
-		x1 = tx1
-	}
-	if ty1 < y1 {
-		y1 = ty1
-	}
-	if tx2 > x2 {
-		x2 = tx2
-	}
-	if ty2 > y2 {
-		y2 = ty2
-	}
+func (c *pendingConfig) ensureSameRatio(dw, dh uint16) {
+}
 
-	tx1, ty1, tx2, ty2 = applyTransform(m, float32(width), float32(height))
-	if tx1 < x1 {
-		x1 = tx1
+func (c *pendingConfig) appliedAllocation() (r xproto.Rectangle) {
+	minfo := DPY.modes[c.mode]
+	if minfo.Width == 0 || minfo.Height == 0 {
+		panic("No modeinfo")
 	}
-	if ty1 < y1 {
-		y1 = ty1
-	}
-	if tx2 > x2 {
-		x2 = tx2
-	}
-	if ty2 > y2 {
-		y2 = ty2
+	x1, y1, x2, y2 := calcBound(c.transform, c.rotation, minfo.Width, minfo.Height)
+	r.X = int16(int(c.posX)+x1) - int16(c.borderCompensationX)
+	r.Y = int16(int(c.posY)+y1) - int16(c.borderCompensationY)
+	r.Width = uint16(x2-x1) - 2*uint16(c.borderCompensationX)
+	r.Height = uint16(y2-y1) - 2*uint16(c.borderCompensationY)
+	if r.Width > 1440 {
+		fmt.Println("AppliedAllocation ppp:", r, c)
 	}
 
-	tx1, ty1, tx2, ty2 = applyTransform(m, 0, float32(height))
-	if tx1 < x1 {
-		x1 = tx1
-	}
-	if ty1 < y1 {
-		y1 = ty1
-	}
-	if tx2 > x2 {
-		x2 = tx2
-	}
-	if ty2 > y2 {
-		y2 = ty2
-	}
 	return
 }
+func (c *pendingConfig) EnsureSize(width, height uint16, methodHint uint8) *pendingConfig {
+	minfo := DPY.modes[c.mode]
+	if minfo.Width == width && minfo.Height == height {
+		c.SetScale(1, 1).setCompensation(0, 0)
+		if DPY.MirrorMode {
+			c.SetPos(0, 0)
+			c.mask = c.mask | _PendingMaskPos
+		}
+		fmt.Println("Find best mode:", c.appliedAllocation())
+		return c
+	}
+	ow := int16(minfo.Width - width)
+	oh := int16(minfo.Height - height)
+	ratio := float32(minfo.Width) / float32(minfo.Height)
+	switch {
+	case ow >= 0 && oh >= 0:
+		c.SetScale(1, 1)
+		c.setCompensation(uint16(ow/2), uint16(oh/2))
+	case ow < 0 && oh <= 0:
+		if ratio == float32(width)/float32(height) {
+			scale := 1 + float32(-ow)/float32(minfo.Width)
+			c.SetScale(scale, scale)
+			c.setCompensation(0, 0)
+			fmt.Printf("Here!%v/%v=%v'\n", float32(-ow), float32(width), scale)
+		} else {
+			if -ow < -oh {
+				panic("YAHOOO1")
+				//width offset smaller
+			} else {
+				ratio := float32(width) / float32(minfo.Width) /// float32(height)
+				margin := int16(float32(minfo.Height)*ratio - float32(height))
+				c.setCompensation(0, uint16(margin/2))
+				c.SetScale(ratio, ratio)
+				fmt.Println("YAHOOO2", c.posX, c.posY, ratio)
+				//height offset smaller
+			}
+		}
 
-func boundAggregate(w, h uint16, b xproto.Rectangle) (uint16, uint16) {
-	bw := uint16(b.X + int16(b.Width))
-	bh := uint16(b.Y + int16(b.Height))
-	if bw > w {
-		w = bw
+	case ow >= 0 && oh <= 0:
+		scale := float32(height) / float32(minfo.Height)
+
+		/*margin := minfo.Width - width*/
+		margin := int16(math.Ceil(float64(scale*float32(minfo.Width)-float32(width)) / 2))
+
+		c.setCompensation(uint16(margin), 0)
+		c.SetScale(scale, scale)
+
+		fmt.Println("XX:", &c, c.appliedAllocation(), margin)
+
+	case ow <= 0 && oh >= 0:
+		margin := int16(ratio*float32(width) - float32(height))
+		fmt.Printf("Ratio:%v, height:%v, width:%v\n", ratio, height, width)
+		c.setCompensation(0, uint16(margin/2))
+		scale := float32(width) / float32(minfo.Width)
+		c.SetScale(scale, scale)
+		fmt.Println("XX2:", c.appliedAllocation())
+
 	}
-	if bh > h {
-		h = bh
+	{
+		alloc := c.appliedAllocation()
+		if width != alloc.Width || height != alloc.Height {
+			cinfo, _ := randr.GetCrtcInfo(X, c.crtc, 0).Reply()
+			rect := xproto.Rectangle{cinfo.X, cinfo.Y, cinfo.Width, cinfo.Height}
+			fmt.Println("Ensure to Size failed:", ow, oh, width, height, "DesginAllocation:", c.appliedAllocation(), rect, "------------------")
+		}
 	}
-	return w, h
+
+	return c
+}
+
+func smallerRectangle(a, b xproto.Rectangle) bool {
+	if a.Width == b.Width && a.Height == b.Height {
+		return false
+	} else {
+		return true
+	}
+	if a.Width > b.Width || a.Height > b.Height {
+		return true
+	} else {
+		return false
+	}
+	if a == b {
+		return false
+	}
+	x1, y1 := b.X, b.Y
+	x2, y2 := int16(uint16(b.X)+b.Width), int16(uint16(b.Y)+b.Height)
+
+	var inRectangleB = func(x, y int16) bool {
+		return (x >= x1 && x <= x2) && (y >= y1 && y <= y2)
+	}
+	ret := inRectangleB(a.X, a.Y) && inRectangleB(int16(uint16(a.X)+a.Width), int16(uint16(a.Y)+a.Width))
+	return ret
 }
 
 func (dpy *Display) ApplyChanged() {
 	changeLock()
-	defer changeUnlock()
+	defer func() {
+		changeUnlock()
+		if err := recover(); err != nil {
+			var buf []byte
+			runtime.Stack(buf, true)
+			fmt.Println("***************************************************ApplyChanged Panic:", err, buf)
+		}
+	}()
+	stopRun := true
+	for _, op := range dpy.Outputs {
+		if op.pendingConfig != nil && op.pendingConfig.mask != 0 {
+			stopRun = false
+			break
+		}
+	}
+	if stopRun {
+		return
+	}
 
-	if mainOP := dpy.MirrorOutput; dpy.MirrorMode && mainOP != nil && mainOP.pendingConfig == nil {
-		fmt.Println("MainOP:", mainOP.Name)
-		w, h := mainOP.Allocation.Width, mainOP.Allocation.Height
-		for _, op := range dpy.Outputs {
-			if op.Opened && op != mainOP {
-				op.pendingConfig = NewPendingConfig(op).SetPos(0, 0).SetBorder(Border{0, 0, 0, 0}).SetRotation(mainOP.Rotation|mainOP.Reflect).SetScale(1, 1)
-				fmt.Println(op.Name, "Ensure to Size:", w, h, "DesginAllocation:", op.pendingConfig.appliedAllocation())
-				op.EnsureSize(w, h, EnsureSizeHintAuto)
+	dpy.stopListen()
+	defer dpy.startListen()
+
+	if dpy.MirrorOutput != nil && dpy.MirrorOutput.pendingConfig != nil {
+		if mainOP := dpy.MirrorOutput; dpy.MirrorMode && mainOP != nil && mainOP.Opened {
+			allocation := mainOP.pendingAllocation()
+			w, h := allocation.Width, allocation.Height
+			fmt.Println("-------MainOP:", mainOP.Name, mainOP.pendingConfig, mainOP.Allocation, mainOP.pendingAllocation(), w, h)
+			for _, op := range dpy.Outputs {
+				if op.Opened && op != mainOP {
+					op.pendingConfig = NewPendingConfig(op).SetPos(0, 0).SetRotation(mainOP.Rotation|mainOP.Reflect).SetScale(1, 1)
+					op.EnsureSize(w, h, EnsureSizeHintAuto)
+				}
 			}
 		}
 	}
@@ -397,39 +494,134 @@ func (dpy *Display) ApplyChanged() {
 	for _, op := range dpy.Outputs {
 		if op.pendingConfig != nil {
 			if err := op.pendingConfig.apply(); err != nil {
+				panic(fmt.Sprintln("Apply", op.Name, "failed", err))
 				fmt.Println("Apply", op.Name, "failed", err)
 			}
 			op.pendingConfig = nil
+			fmt.Println("Clearn config...", op.Name)
 		}
 	}
+
 	for _, op := range tmpClosedOutput {
 		op.setOpened(true)
 	}
+
+	if dpy.PrimaryOutput != nil {
+		randr.SetOutputPrimary(X, Root, dpy.PrimaryOutput.Identify)
+	} else {
+		randr.SetOutputPrimary(X, Root, 0)
+	}
+
+}
+
+func (dpy *Display) _getoutputs() (ret []string) {
+	for _, op := range dpy.Outputs {
+		info, _ := randr.GetCrtcInfo(X, op.crtc, 0).Reply()
+		ret = append(ret, fmt.Sprint(op.Name, op.Opened, op.crtc, info.X, info.Y, info.Width, info.Height))
+
+	}
+	return
 }
 
 func (dpy *Display) adjustScreenSize() []*Output {
+	dpy.stopListen()
+	defer dpy.startListen()
+	var boundAggregate = func(w, h uint16, b xproto.Rectangle) (uint16, uint16) {
+		return max(b.Width, w), max(b.Height, h)
+	}
 	var tmpOutputs []*Output
 	var w, h uint16
 	for _, op := range dpy.Outputs {
-		if op.Opened {
-			if op.pendingConfig != nil {
-				w, h = boundAggregate(w, h, op.pendingConfig.appliedAllocation())
-			} else {
-				w, h = boundAggregate(w, h, NewPendingConfig(op).appliedAllocation())
+		w, h = boundAggregate(w, h, op.pendingAllocation())
+	}
+
+	wDif := math.Abs(float64(w) - float64(dpy.Width))
+	hDif := math.Abs(float64(h) - float64(dpy.Height))
+	if wDif >= 4.0 || hDif >= 4.0 {
+		for _, op := range dpy.Outputs {
+			if op.Opened && op != dpy.MirrorOutput {
+				info, _ := randr.GetCrtcInfo(X, op.crtc, 0).Reply()
+				cw := max(op.Allocation.Width, info.Width)
+				ch := max(op.Allocation.Height, info.Height)
+				if cw > min(w, DPY.Width) || ch > min(h, DPY.Height) {
+					op.setOpened(false)
+					tmpOutputs = append(tmpOutputs, op)
+				}
 			}
 		}
+		dpy.setScreenSize(w, h)
+	} else {
+		dpy.setScreenSize(w+uint16(wDif), h+uint16(hDif))
 	}
-	for _, op := range dpy.Outputs {
-		currentWidth := uint16(op.Allocation.X + int16(op.Allocation.Width))
-		currentHeight := uint16(op.Allocation.Y + int16(op.Allocation.Height))
-		if currentWidth > w || currentHeight > h ||
-			currentWidth > DefaultScreen.WidthInPixels || currentHeight > DefaultScreen.HeightInPixels {
-			op.setOpened(false)
-			tmpOutputs = append(tmpOutputs, op)
-		}
-
-	}
-	dpy.setScreenSize(w, h)
+	fmt.Println("AdjustScreensize:", wDif, hDif, w, h)
 
 	return tmpOutputs
+}
+
+func (op *Output) pendingAllocation() xproto.Rectangle {
+	if op.Opened {
+		if op.pendingConfig != nil {
+			return op.pendingConfig.appliedAllocation()
+		} else {
+			ret := NewPendingConfig(op).appliedAllocation()
+			op.pendingConfig = nil
+			return ret
+		}
+	} else {
+		return xproto.Rectangle{0, 0, 0, 0}
+	}
+}
+
+func (op *Output) setOpened(v bool) {
+	if op.Opened == v {
+		return
+	}
+	op.Opened = v
+	//op.Opened will be changed when we receive appropriate event
+	if v == true {
+		if c := op.savedConfig; c != nil {
+			// there has an config we saved before
+			op.pendingConfig = ClonePendingConfig(op.savedConfig)
+			op.savedConfig = nil
+			err := op.pendingConfig.apply()
+			if err != nil {
+				fmt.Println(err)
+			}
+			op.pendingConfig = nil
+		} else {
+			oinfo, err := randr.GetOutputInfo(X, op.Identify, LastConfigTimeStamp).Reply()
+			if err != nil {
+				panic(fmt.Sprintln("setOpened failed at GetOutputInfo", err))
+			}
+			found := false
+			fmt.Println("OFINO:", oinfo.NumCrtcs, oinfo.Crtcs)
+			for _, crtc := range oinfo.Crtcs {
+				cinfo, err := randr.GetCrtcInfo(X, crtc, LastConfigTimeStamp).Reply()
+				if err != nil {
+					panic(fmt.Sprintln("setOpened failed at GetCrtcInfo(crtc:%v),%s", crtc, err))
+				}
+				if cinfo.Mode == 0 { //the crtc hasn't been connected with an output
+					_, err = randr.SetCrtcConfig(X, crtc, xproto.TimeCurrentTime, LastConfigTimeStamp, 0, 0, op.bestMode, op.Rotation, []randr.Output{op.Identify}).Reply()
+					if err != nil {
+						panic(fmt.Sprintf("setOpened failed at SetCrtcInfo(crtc:%v):%s\n", crtc, err))
+					}
+					found = true
+					break
+				}
+			}
+			if !found {
+				panic(fmt.Sprintln("Can't open the output:", op.Identify))
+			}
+			//try find best mode with available crtc
+		}
+	} else {
+		config := NewPendingConfig(op)
+		op.pendingConfig = nil
+		op.savedConfig = ClonePendingConfig(config)
+
+		err := config.SetMode(0).apply()
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
 }

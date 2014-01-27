@@ -205,13 +205,9 @@ func parseRotationSize(rotation, width, height uint16) (uint16, uint16) {
 func parseScreenSize(ops []*Output) (width, height uint16) {
 	for _, op := range ops {
 		if op.Opened {
-			newWidth, newHeight := uint16(op.Allocation.X+int16(op.Allocation.Width)), uint16(op.Allocation.Y+int16(op.Allocation.Height))
-			if newWidth > width {
-				width = newWidth
-			}
-			if newHeight > height {
-				height = newHeight
-			}
+			alloc := op.pendingAllocation()
+			width = max(width, alloc.Width)
+			height = max(height, alloc.Height)
 		}
 	}
 	return
@@ -286,4 +282,133 @@ func getOutputBorder(op randr.Output) (ret Border) {
 		return Border{l, t, r, b}
 	}
 	return Border{}
+}
+
+func calcBound(m render.Transform, rotation uint16, width, height uint16) (x1, y1, x2, y2 int) {
+	var applyTransform = func(m render.Transform, x float32, y float32) (int, int, int, int) {
+		rx := fixed2double(m.Matrix11)*x + fixed2double(m.Matrix12)*y + fixed2double(m.Matrix13)*1
+		ry := fixed2double(m.Matrix21)*x + fixed2double(m.Matrix22)*y + fixed2double(m.Matrix23)*1
+		rw := fixed2double(m.Matrix31)*x + fixed2double(m.Matrix32)*y + fixed2double(m.Matrix33)*1
+
+		if rw == 0 {
+			return 0, 0, 0, 0
+		}
+
+		rx = rx / rw
+		if rx > 32767 || rx < -32767 {
+			return 0, 0, 0, 0
+		}
+
+		ry = ry / rw
+		if ry > 32767 || ry < -32767 {
+			return 0, 0, 0, 0
+		}
+
+		rw = rw / rw
+		if rw > 32767 || rw < -32767 {
+			return 0, 0, 0, 0
+		}
+		return int(math.Floor(float64(rx))), int(math.Floor(float64(ry))), int(math.Ceil(float64(rx))), int(math.Ceil(float64(ry)))
+	}
+	switch rotation & 0xf {
+	case randr.RotationRotate90, randr.RotationRotate270:
+		width, height = height, width
+	}
+
+	var min = func(a, b int) int {
+		if a > b {
+			return b
+		}
+		return a
+	}
+	var max = func(a, b int) int {
+		if a < b {
+			return b
+		}
+		return a
+	}
+	x1, y1, x2, y2 = applyTransform(m, 0, 0)
+
+	tx1, ty1, tx2, ty2 := applyTransform(m, float32(width), 0)
+	x1 = min(x1, tx1)
+	y1 = min(y1, ty1)
+	x2 = max(x2, tx2)
+	y2 = max(y2, ty2)
+
+	tx1, ty1, tx2, ty2 = applyTransform(m, float32(width), float32(height))
+	x1 = min(x1, tx1)
+	y1 = min(y1, ty1)
+	x2 = max(x2, tx2)
+	y2 = max(y2, ty2)
+
+	tx1, ty1, tx2, ty2 = applyTransform(m, 0, float32(height))
+	x1 = min(x1, tx1)
+	y1 = min(y1, ty1)
+	x2 = max(x2, tx2)
+	y2 = max(y2, ty2)
+	return
+}
+func calcBound2(m render.Transform, rotation uint16, x, y float32, width, height uint16) (x1, y1, x2, y2 int) {
+	var applyTransform = func(m render.Transform, x float32, y float32) (int, int, int, int) {
+		rx := fixed2double(m.Matrix11)*x + fixed2double(m.Matrix12)*y + fixed2double(m.Matrix13)*1
+		ry := fixed2double(m.Matrix21)*x + fixed2double(m.Matrix22)*y + fixed2double(m.Matrix23)*1
+		rw := fixed2double(m.Matrix31)*x + fixed2double(m.Matrix32)*y + fixed2double(m.Matrix33)*1
+
+		if rw == 0 {
+			return 0, 0, 0, 0
+		}
+
+		rx = rx / rw
+		if rx > 32767 || rx < -32767 {
+			return 0, 0, 0, 0
+		}
+
+		ry = ry / rw
+		if ry > 32767 || ry < -32767 {
+			return 0, 0, 0, 0
+		}
+
+		rw = rw / rw
+		if rw > 32767 || rw < -32767 {
+			return 0, 0, 0, 0
+		}
+		return int(math.Floor(float64(rx))), int(math.Floor(float64(ry))), int(math.Ceil(float64(rx))), int(math.Ceil(float64(ry)))
+	}
+	switch rotation & 0xf {
+	case randr.RotationRotate90, randr.RotationRotate270:
+		width, height = height, width
+	}
+
+	var min = func(a, b int) int {
+		if a > b {
+			return b
+		}
+		return a
+	}
+	var max = func(a, b int) int {
+		if a < b {
+			return b
+		}
+		return a
+	}
+	x1, y1, x2, y2 = applyTransform(m, x, y)
+
+	tx1, ty1, tx2, ty2 := applyTransform(m, float32(width), y)
+	x1 = min(x1, tx1)
+	y1 = min(y1, ty1)
+	x2 = max(x2, tx2)
+	y2 = max(y2, ty2)
+
+	tx1, ty1, tx2, ty2 = applyTransform(m, float32(width), float32(height))
+	x1 = min(x1, tx1)
+	y1 = min(y1, ty1)
+	x2 = max(x2, tx2)
+	y2 = max(y2, ty2)
+
+	tx1, ty1, tx2, ty2 = applyTransform(m, x, float32(height))
+	x1 = min(x1, tx1)
+	y1 = min(y1, ty1)
+	x2 = max(x2, tx2)
+	y2 = max(y2, ty2)
+	return
 }
