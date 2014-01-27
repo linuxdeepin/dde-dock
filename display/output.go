@@ -1,6 +1,7 @@
 package main
 
 import "github.com/BurntSushi/xgb/xproto"
+import "math"
 import "github.com/BurntSushi/xgb/randr"
 import "dlib/dbus"
 import "fmt"
@@ -17,6 +18,7 @@ type Output struct {
 	rotations     uint16
 	crtc          randr.Crtc
 	pendingConfig *pendingConfig
+	savedConfig   *pendingConfig
 
 	Identify randr.Output
 	Name     string
@@ -53,15 +55,38 @@ func (op *Output) SetPos(x, y int16) {
 	op.pendingConfig = NewPendingConfig(op).SetPos(x, y)
 }
 
+func (op *Output) EnsureSize2(width, height uint16, hint uint8) {
+	op.EnsureSize(width, height, hint)
+	DPY.ApplyChanged()
+}
 func (op *Output) EnsureSize(width, height uint16, hint uint8) {
-	switch hint {
-	case EnsureSizeHintAuto, EnsureSizeHintPanning, EnsureSizeHintBorderScale:
-		op.pendingConfig = NewPendingConfig(op).EnsureSize(width, height, hint)
+	if !op.Opened {
+		return
 	}
+	matchedRate := op.Mode.Rate
+	matchedMode := randr.Mode(op.Mode.ID)
+	acc := float64(width + height)
+	for _, minfo := range op.ListModes() {
+		newAcc := math.Abs(float64(int16(minfo.Width)-int16(width))) + math.Abs(float64(int16(minfo.Height)-int16(height)))
+		if newAcc < acc {
+			matchedMode = randr.Mode(minfo.ID)
+			matchedRate = minfo.Rate
+			acc = newAcc
+		} else if newAcc == acc {
+			if matchedRate < minfo.Rate {
+				matchedMode = randr.Mode(minfo.ID)
+				matchedRate = minfo.Rate
+				acc = newAcc
+			}
+		}
+	}
+	fmt.Println("OPEnsureSize:", matchedMode, buildMode(DPY.modes[matchedMode]), width, height)
+	op.pendingConfig = NewPendingConfig(op).SetMode(matchedMode).EnsureSize(width, height, hint)
 }
 
 func (op *Output) SetMode(id uint32) {
 	op.pendingConfig = NewPendingConfig(op).SetMode(randr.Mode(id))
+	DPY.ApplyChanged()
 }
 
 func (op *Output) Debug() string {
@@ -70,20 +95,11 @@ func (op *Output) Debug() string {
 
 //-------------- internal output methods---------------------
 
-func (op *Output) setBrightness(brightness float64) {
-	if brightness < 0.01 || brightness > 1 {
-		brightness = 1
-	}
-	gammaSize, err := randr.GetCrtcGammaSize(X, op.crtc).Reply()
-	if err != nil {
-		panic(fmt.Sprintf("GetCrtcGrammSize(crtc:%d) failed: %s", op.crtc, err.Error()))
-	}
-	red, green, blue := genGammaRamp(gammaSize.Size, brightness)
-	NewPendingConfig(op).SetGamma(red, green, blue)
-}
-
 func (op *Output) setRotation(rotation uint16) {
 	op.pendingConfig = NewPendingConfig(op).SetRotation(rotation | op.Reflect)
+}
+func (op *Output) setBrightness(brightness float64) {
+	op.pendingConfig = NewPendingConfig(op).SetBrightness(brightness)
 }
 
 func (op *Output) setReflect(reflect uint16) {
@@ -94,39 +110,32 @@ func (op *Output) setReflect(reflect uint16) {
 		panic(fmt.Sprintf("setReflect Value%d Error", reflect))
 	}
 
-	NewPendingConfig(op).SetRotation(op.Rotation | reflect)
+	op.pendingConfig = NewPendingConfig(op).SetRotation(op.Rotation | reflect)
 }
 
-func (op *Output) setOpened(v bool) {
-	fmt.Println("SetOpened.... ", v)
-	//op.Opened will be changed when we receive appropriate event
-	if v == true {
-		oinfo, err := randr.GetOutputInfo(X, op.Identify, LastConfigTimeStamp).Reply()
+func (op *Output) update() {
+	info, err := randr.GetOutputInfo(X, op.Identify, xproto.TimeCurrentTime).Reply()
+	if err != nil {
+		fmt.Println("Output.update failed at GetOutputInfo", err)
+	}
+	op.crtc = info.Crtc
+	op.setPropOpened(info.Crtc != 0)
+	op.bestMode = info.Modes[0]
+
+	op.modes = nil
+	for _, m := range info.Modes {
+		info := DPY.modes[m]
+		op.modes = append(op.modes, buildMode(info))
+	}
+
+	if op.crtc != 0 {
+		cinfo, err := randr.GetCrtcInfo(X, op.crtc, LastConfigTimeStamp).Reply()
+		op.setPropMode(buildMode(DPY.modes[cinfo.Mode]))
 		if err != nil {
-			panic(err)
-		}
-		for _, crtc := range oinfo.Crtcs {
-			if isCrtcConnected(X, crtc) {
-				continue
-			}
-			s, err := randr.SetCrtcConfig(X, crtc, xproto.TimeCurrentTime, LastConfigTimeStamp,
-				op.Allocation.X, op.Allocation.Y, op.bestMode, op.Rotation, []randr.Output{op.Identify}).Reply()
-			if err == nil {
-				fmt.Println("Crtc:", crtc, "for", op.Name, " is ok")
-				break
-			}
-			fmt.Println("AAAA:", s, err, crtc, op.bestMode, op.Rotation, op.Identify)
-		}
-	} else if op.crtc != 0 {
-		_, err := randr.SetCrtcConfig(X, op.crtc, xproto.TimeCurrentTime, LastConfigTimeStamp,
-			op.Allocation.X, op.Allocation.Y, 0, op.Rotation, nil).Reply()
-		if err != nil {
-			panic(fmt.Sprintln("Close Output failed when SetCrtcConfig", op.crtc, err))
+			panic(fmt.Sprintf("Op.crtc(%d) != 0 && can't GetCrtcInfo (%s)", op.crtc, err.Error()))
 		}
 	}
-}
 
-func (op *Output) updateCrtc(dpy *Display) {
 	if op.crtc != 0 {
 		info, err := randr.GetCrtcInfo(X, op.crtc, LastConfigTimeStamp).Reply()
 		if err != nil {
@@ -137,35 +146,14 @@ func (op *Output) updateCrtc(dpy *Display) {
 		rotation, reflect := parseRandR(info.Rotation)
 		op.setPropRotation(rotation)
 		op.setPropReflect(reflect)
-		op.setPropMode(buildMode(dpy.modes[info.Mode]))
-		op.setPropAllocation(NewPendingConfig(op).appliedAllocation())
 
-		op.setPropAllocation(NewPendingConfig(op).appliedAllocation())
+		op.setPropMode(buildMode(DPY.modes[info.Mode]))
+		op.setPropAllocation(op.pendingAllocation())
 	} else {
 		op.setPropRotation(1)
 		op.setPropReflect(0)
 		op.setPropAllocation(xproto.Rectangle{0, 0, 0, 0})
 		op.setPropMode(Mode{0, 0, 0, 0})
-	}
-}
-
-func (op *Output) update(dpy *Display, info *randr.GetOutputInfoReply) {
-	op.crtc = info.Crtc
-	op.setPropOpened(info.Crtc != 0)
-	op.bestMode = info.Modes[0]
-
-	op.modes = nil
-	for _, m := range info.Modes {
-		info := dpy.modes[m]
-		op.modes = append(op.modes, buildMode(info))
-	}
-
-	if op.crtc != 0 {
-		cinfo, err := randr.GetCrtcInfo(X, op.crtc, LastConfigTimeStamp).Reply()
-		op.setPropMode(buildMode(dpy.modes[cinfo.Mode]))
-		if err != nil {
-			panic(fmt.Sprintf("Op.crtc(%d) != 0 && can't GetCrtcInfo (%s)", op.crtc, err.Error()))
-		}
 	}
 }
 
@@ -184,8 +172,7 @@ func NewOutput(dpy *Display, core randr.Output) *Output {
 		Name:       getOutputName(core, string(info.Name)),
 		Brightness: 1, //TODO: init this value
 	}
-	op.update(dpy, info)
-	op.updateCrtc(dpy)
+	op.update()
 	dbus.InstallOnSession(op)
 	return op
 }

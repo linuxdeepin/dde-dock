@@ -1,6 +1,5 @@
 package main
 
-import "fmt"
 import "github.com/BurntSushi/xgb/randr"
 import "github.com/BurntSushi/xgb"
 import "strings"
@@ -10,14 +9,14 @@ import "github.com/BurntSushi/xgb/xproto"
 func (dpy *Display) SetMirrorMode(v bool) {
 	dpy.setPropMirrorMode(v)
 	if v && dpy.MirrorOutput == nil {
-		dpy.MirrorOutput = deduceMirrorOutput(dpy.Outputs)
+		dpy.SetMirrorOutput(deduceMirrorOutput(dpy.Outputs))
 	}
 }
 func (dpy *Display) SetMirrorOutput(op *Output) {
 	if op.Opened {
-	op.pendingConfig = NewPendingConfig(op).SetPos(0, 0).SetBorder(Border{0, 0, 0, 0}).SetScale(1, 1)
-	dpy.setPropMirrorOutput(op)
-	DPY.ApplyChanged()
+		op.pendingConfig = NewPendingConfig(op).SetPos(0, 0).SetScale(1, 1).SetRotation(randr.RotationRotate0)
+		dpy.setPropMirrorOutput(op)
+		DPY.ApplyChanged()
 	}
 }
 
@@ -26,13 +25,14 @@ func deduceMirrorOutput(ops []*Output) *Output {
 	var mirrorOP *Output = ops[0]
 	currentType := unknownAtom
 	for _, op := range ops {
-		t := getContentorType(op.Identify)
-		if greterConnectorType(t, currentType) {
-			currentType = t
-			mirrorOP = op
+		if op.Opened {
+			t := getContentorType(op.Identify)
+			if greterConnectorType(t, currentType) {
+				currentType = t
+				mirrorOP = op
+			}
 		}
 	}
-	fmt.Println("DetectMiirorOutput:", mirrorOP.Name)
 	return mirrorOP
 }
 
