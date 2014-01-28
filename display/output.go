@@ -156,6 +156,17 @@ func (op *Output) update() {
 		op.setPropMode(Mode{0, 0, 0, 0})
 	}
 }
+func (op *Output) tryOpen() {
+	oinfo, _ := randr.GetOutputInfo(X, op.Identify, LastConfigTimeStamp).Reply()
+	for _, crtc := range oinfo.Crtcs {
+		if isCrtcConnected(X, crtc) == false {
+			_, err := randr.SetCrtcConfig(X, crtc, LastConfigTimeStamp, xproto.TimeCurrentTime, 0, 0, oinfo.Modes[0], randr.RotationRotate0, []randr.Output{op.Identify}).Reply()
+			if err != nil {
+				fmt.Println("TryOpenOutput", op.Identify, "Failed", err)
+			}
+		}
+	}
+}
 
 func NewOutput(dpy *Display, core randr.Output) *Output {
 	info, err := randr.GetOutputInfo(X, core, xproto.TimeCurrentTime).Reply()
@@ -171,6 +182,9 @@ func NewOutput(dpy *Display, core randr.Output) *Output {
 		Identify:   core,
 		Name:       getOutputName(core, string(info.Name)),
 		Brightness: 1, //TODO: init this value
+	}
+	if info.Crtc == 0 {
+		op.tryOpen()
 	}
 	op.update()
 	dbus.InstallOnSession(op)
