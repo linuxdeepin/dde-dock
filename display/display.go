@@ -66,6 +66,7 @@ type Display struct {
 
 func initDisplay() *Display {
 	dpy := &Display{}
+	dbus.InstallOnSession(dpy)
 	DPY = dpy
 
 	dpy.modes = make(map[randr.Mode]randr.ModeInfo)
@@ -81,6 +82,8 @@ func initDisplay() *Display {
 	dpy.updateResources()
 	dpy.setPropWidth(xproto.Setup(X).DefaultScreen(X).WidthInPixels)
 	dpy.setPropHeight(xproto.Setup(X).DefaultScreen(X).HeightInPixels)
+
+	dpy.setPropPrimaryRect(xproto.Rectangle{0, 0, dpy.Width, dpy.Height})
 
 	randr.SelectInput(X, Root, randr.NotifyMaskOutputChange|randr.NotifyMaskCrtcChange|randr.NotifyMaskScreenChange)
 	dpy.startListen()
@@ -146,6 +149,11 @@ func (dpy *Display) removeOutput(output randr.Output) {
 	if len(newOutputs) != len(dpy.Outputs) {
 		dpy.setPropOutputs(newOutputs)
 	}
+	if dpy.MirrorMode && dpy.MirrorOutput.Identify == output {
+		dpy.MirrorOutput = nil
+		dpy.SetMirrorMode(true)
+	}
+
 }
 
 func (dpy *Display) stopListen() {
@@ -194,6 +202,10 @@ func (dpy *Display) listener() {
 					dpy.SetMirrorOutput(deduceMirrorOutput(dpy.Outputs))
 
 					fmt.Println("OutputChanged....", info.Output, pinfo.Output)
+
+					if info.Mode == 0 && queryOutput(DPY, info.Output) == nil {
+						dpy.tryOpenOutput(info.Output)
+					}
 				case randr.ConnectionDisconnected, randr.ConnectionUnknown:
 					dpy.removeOutput(info.Output)
 
@@ -209,13 +221,29 @@ func (dpy *Display) listener() {
 				dpy.updateResources()
 				LastConfigTimeStamp = ee.ConfigTimestamp
 				//TODO: monitor changed.
-				dpy.setPropWidth(ee.Width)
-				dpy.setPropHeight(ee.Height)
 				dpy.updateRotationAndRelfect(uint16(ee.Rotation))
+				if dpy.MirrorMode {
+					if ee.Width != dpy.MirrorOutput.pendingAllocation().Width || ee.Height != dpy.MirrorOutput.pendingAllocation().Width {
+						dpy.ApplyChanged()
+					}
+				} else {
+					dpy.setPropWidth(ee.Width)
+					dpy.setPropHeight(ee.Height)
+				}
 			}
 		}
 	}
 }
+
+func (dpy *Display) tryOpenOutput(output randr.Output) {
+	oinfo, _ := randr.GetOutputInfo(X, output, LastConfigTimeStamp).Reply()
+	for _, crtc := range oinfo.Crtcs {
+		if isCrtcConnected(X, crtc) == false {
+			randr.SetCrtcConfig(X, crtc, LastConfigTimeStamp, xproto.TimeCurrentTime, 0, 0, oinfo.Modes[0], randr.RotationRotate0, []randr.Output{output})
+		}
+	}
+}
+
 func (dpy *Display) updateRotationAndRelfect(randr uint16) {
 	rotation, reflect := parseRandR(randr)
 
@@ -224,11 +252,6 @@ func (dpy *Display) updateRotationAndRelfect(randr uint16) {
 }
 
 func (dpy *Display) setScreenSize(width uint16, height uint16) {
-	if dpy.MirrorMode && dpy.MirrorOutput != nil{
-		width = max(width, dpy.MirrorOutput.Allocation.Width)
-		height = max(height, dpy.MirrorOutput.Allocation.Height)
-	}
-
 	if width < MinWidth || width > MaxWidth || height < MinHeight || height > MaxHeight {
 		logger.Println("updateScreenSize with invalid value:", width, height)
 		return
@@ -242,7 +265,8 @@ func (dpy *Display) setScreenSize(width uint16, height uint16) {
 			logger.Println("randr.SetScreenSize to :", width, height, DPY.Width, DPY.Height, err)
 			/*panic(fmt.Sprintln("randr.SetScreenSize to :", width, height, err))*/
 		} else {
-			dpy.Width, dpy.Height = width, height
+			dpy.setPropWidth(width)
+			dpy.setPropHeight(height)
 		}
 	}
 }
@@ -263,7 +287,6 @@ func TT() {
 }
 
 func main() {
-	dbus.InstallOnSession(DPY)
 	dbus.DealWithUnhandledMessage()
 	DPY.SetMirrorMode(true)
 	/*TT()*/
