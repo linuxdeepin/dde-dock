@@ -568,7 +568,12 @@ func (dpy *Display) adjustScreenSize() []*Output {
 	return tmpOutputs
 }
 
-func (op *Output) pendingAllocation() xproto.Rectangle {
+func (op *Output) pendingAllocation() (ret xproto.Rectangle) {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println("pendingAllocation panic:",err)
+		}
+	}()
 	if op.Opened {
 		if op.pendingConfig != nil {
 			return op.pendingConfig.appliedAllocation()
