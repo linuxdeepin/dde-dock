@@ -531,29 +531,39 @@ func (dpy *Display) adjustScreenSize() []*Output {
 	}
 	var tmpOutputs []*Output
 	var w, h uint16
-	for _, op := range dpy.Outputs {
-		w, h = boundAggregate(w, h, op.pendingAllocation())
+
+	if dpy.MirrorMode {
+		alloc := dpy.MirrorOutput.pendingAllocation()
+		w, h = alloc.Width, alloc.Height
+	} else {
+		for _, op := range dpy.Outputs {
+			w, h = boundAggregate(w, h, op.pendingAllocation())
+		}
 	}
 
-	wDif := math.Abs(float64(w) - float64(dpy.Width))
-	hDif := math.Abs(float64(h) - float64(dpy.Height))
-	if wDif >= 4.0 || hDif >= 4.0 {
-		for _, op := range dpy.Outputs {
-			if op.Opened && op != dpy.MirrorOutput {
-				info, _ := randr.GetCrtcInfo(X, op.crtc, 0).Reply()
-				cw := max(op.Allocation.Width, info.Width)
-				ch := max(op.Allocation.Height, info.Height)
-				if cw > min(w, DPY.Width) || ch > min(h, DPY.Height) {
-					op.setOpened(false)
-					tmpOutputs = append(tmpOutputs, op)
+	{
+
+		wDif := math.Abs(float64(w) - float64(dpy.Width))
+		hDif := math.Abs(float64(h) - float64(dpy.Height))
+		if wDif >= 4.0 || hDif >= 4.0 {
+			for _, op := range dpy.Outputs {
+				if op.Opened && op != dpy.MirrorOutput {
+					info, _ := randr.GetCrtcInfo(X, op.crtc, 0).Reply()
+					cw := max(op.Allocation.Width, info.Width)
+					ch := max(op.Allocation.Height, info.Height)
+					if cw > min(w, DPY.Width) || ch > min(h, DPY.Height) {
+						op.setOpened(false)
+						tmpOutputs = append(tmpOutputs, op)
+					}
 				}
 			}
+		} else {
+			w, h = w+uint16(wDif), h+uint16(hDif)
 		}
-		dpy.setScreenSize(w, h)
-	} else {
-		dpy.setScreenSize(w+uint16(wDif), h+uint16(hDif))
 	}
-	fmt.Println("AdjustScreensize:", wDif, hDif, w, h)
+	fmt.Println("AdjustScreensize before:", w, h, dpy.Width, dpy.Height)
+	dpy.setScreenSize(w, h)
+	fmt.Println("AdjustScreensize after:", w, h, dpy.Width, dpy.Height)
 
 	return tmpOutputs
 }
