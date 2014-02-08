@@ -95,5 +95,6 @@ func main() {
 	logger.Println("Deepin")
 	setXSettingsName("Net/ThemeName", "Deepin")
 	setXSettingsName("Net/IconThemeName", "Deepin")
-	time.Sleep(time.Second * 10)
+
+        select{}
 }
