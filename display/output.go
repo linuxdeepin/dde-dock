@@ -174,7 +174,12 @@ func NewOutput(dpy *Display, core randr.Output) *Output {
 		panic(err)
 		return nil
 	}
+
 	if info.Connection != randr.ConnectionConnected {
+		return nil
+	}
+	if info.Crtc == 0 {
+		//workaround: nvidia driver has an VGA-1 output which connection status equal connected but hasn't corresponding crtc, it will panic Xserver when trying to connect the output.
 		return nil
 	}
 
