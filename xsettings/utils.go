@@ -53,20 +53,20 @@ func newXWindow() {
 	*/
 	screen := setupInfo.DefaultScreen(X)
 	logger.Println("root wid:", screen.Root)
-	err2 := xproto.CreateWindowChecked(X,
-		xproto.WindowClassCopyFromParent,
+	err = xproto.CreateWindowChecked(X,
+		0,
 		wid, screen.Root, 0, 0,
-		150, 150, 10, xproto.WindowClassInputOutput,
+		10, 10, 0, xproto.WindowClassInputOnly,
 		screen.RootVisual, 0,
 		nil).Check()
-	if err2 != nil {
-		panic(err2)
+	if err != nil {
+		panic(err)
 	}
-	err3 := xproto.SetSelectionOwnerChecked(X, wid,
+	err = xproto.SetSelectionOwnerChecked(X, wid,
 		getAtom(X, XSETTINGS_S0),
 		xproto.TimeCurrentTime).Check()
-	if err3 != nil {
-		panic(err3)
+	if err != nil {
+		panic(err)
 	}
 	xproto.MapWindow(X, wid)
 	X.Sync()
