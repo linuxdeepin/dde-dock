@@ -25,22 +25,23 @@ import (
 	"dlib/logger"
 	"fmt"
 	"os/exec"
+	"strconv"
 	"strings"
 )
 
 const (
 	CMD_DF = "/bin/df"
-	ARG_DF = "-h"
 )
 
-func getDiskCap(path string) (string, string) {
-	bytes, err := exec.Command(CMD_DF, ARG_DF).Output()
+func getDiskCap(path string) (int64, int64) {
+	bytes, err := exec.Command(CMD_DF).Output()
 	if err != nil {
 		logger.Println("Exec 'df -h' failed:", err)
 		panic(err)
 	}
-	fmt.Println("path:", path)
 
+	usedSize := int64(0)
+	totalSize := int64(0)
 	outStrs := strings.Split(string(bytes), "\n")
 	for _, str := range outStrs {
 		array := strings.Split(str, " ")
@@ -53,11 +54,12 @@ func getDiskCap(path string) (string, string) {
 		if array[0] == path {
 			fmt.Println("Total:", rets[1])
 			fmt.Println("Used:", rets[2])
-			return rets[1], rets[2]
+			usedSize, _ = strconv.ParseInt(rets[2], 10, 64)
+			totalSize, _ = strconv.ParseInt(rets[1], 10, 64)
 		}
 	}
 
-	return "", ""
+	return totalSize, usedSize
 }
 
 func delSpaceElment(strs []string) []string {

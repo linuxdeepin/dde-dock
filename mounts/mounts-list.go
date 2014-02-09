@@ -36,10 +36,8 @@ type DiskInfo struct {
 	Type       string
 	CanUnmount bool
 	CanEject   bool
-	UsableCap  string
-	TotalCap   string
-	//UsableCap  uint32
-	//TotalCap   uint32
+	UsableCap  int64
+	TotalCap   int64
 }
 
 type ObjectInfo struct {
