@@ -23,7 +23,7 @@ package main
 
 import (
 	"dbus/com/deepin/daemon/accounts"
-	accext "dbus/com/deepin/dde/api/accounts"
+	accext "dbus/com/deepin/api/accounts"
 	"dlib"
 	"dlib/dbus"
 	"fmt"

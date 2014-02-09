@@ -12,7 +12,7 @@ all:
 	cd themes/ && $(run)
 	cd network/ && $(run)
 	cd power/ && $(run)
-	cd sound/ && $(run)
+	cd xsettings/ && $(run)
 	cd system-info/ && $(run)
 
 
