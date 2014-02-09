@@ -23,7 +23,7 @@ func (grub *Grub2) GetDBusInfo() dbus.DBusInfo {
 func (grub *Grub2) OnPropertiesChanged(name string, oldv interface{}) {
 	defer func() {
 		if err := recover(); err != nil {
-			logError("%v", err) // TODO
+			logError("%v", err)
 		}
 	}()
 	switch name {

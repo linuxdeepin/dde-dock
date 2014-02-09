@@ -23,7 +23,7 @@ func (tm *ThemeManager) GetDBusInfo() dbus.DBusInfo {
 func (tm *ThemeManager) OnPropertiesChanged(name string, oldv interface{}) {
 	defer func() {
 		if err := recover(); err != nil {
-			logError("%v", err) // TODO
+			logError("%v", err)
 		}
 	}()
 	switch name {
@@ -43,25 +43,18 @@ func (tm *ThemeManager) OnPropertiesChanged(name string, oldv interface{}) {
 func (tm *ThemeManager) InstallTheme(archive string) bool {
 	themePathInZip, err := findFileInTarGz(archive, _THEME_MAIN_FILE)
 	if err != nil {
-		logError("install theme %s failed: %v", archive, err) // TODO
+		logError("install theme %s failed: %v", archive, err)
 		return false
 	}
 	themePathPrefix := path.Dir(themePathInZip)
 	unTarGz(archive, _THEME_DIR, themePathPrefix)
 
 	tm.load()
-	// TODO append theme object to list
-	// theme, err := NewTheme(tm, themeName)
-	// if err == nil {
-	// tm.themes = append(tm.themes, theme)
-	// }
-	// tm.makeThemeNames()
 
 	logInfo("install theme success: %s", archive)
 	return true
 }
 
-// TODO
 func (tm *ThemeManager) UninstallTheme(themeName string) bool {
 	_, theme := tm.getTheme(themeName)
 	err := os.RemoveAll(theme.themePath)
@@ -70,13 +63,6 @@ func (tm *ThemeManager) UninstallTheme(themeName string) bool {
 	}
 
 	tm.load()
-	// TODO delete theme object from list
-	// i, theme := tm.getTheme(themeName)
-	// copy(tm.themes[i:], tm.themes[i+1:])
-	// tm.themes[len(tm.themes)-1] = nil
-	// tm.themes = tm.themes[:len(tm.themes)-1]
-	// dbus.UnInstallObject(theme)
-	// tm.makeThemeNames()
 
 	logInfo("uninstall theme success: %s", themeName)
 	return true

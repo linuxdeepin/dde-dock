@@ -28,6 +28,19 @@ func NewThemeManager() *ThemeManager {
 	return tm
 }
 
+// Update variable 'ThemeNames'
+func (tm *ThemeManager) makeThemeNames() {
+	tm.ThemeNames = make([]string, 0)
+	for _, t := range tm.themes {
+		tm.ThemeNames = append(tm.ThemeNames, t.Name)
+	}
+}
+
+// Update variable 'EnabledTheme'
+func (tm *ThemeManager) makeEnabledTheme() {
+	tm.EnabledTheme = tm.getThemeNameByMainFile(tm.getEnabledThemeMainFile())
+}
+
 func (tm *ThemeManager) load() {
 	// TODO clear themes load last time, uninstall dbus interface
 	for _, t := range tm.themes {
@@ -40,34 +53,17 @@ func (tm *ThemeManager) load() {
 	if err == nil {
 		for _, f := range files {
 			if f.IsDir() && tm.isThemeValid(f.Name()) {
-				theme, err := NewTheme(tm, f.Name())
-				if err == nil {
-					tm.themes = append(tm.themes, theme)
-
-					err := dbus.InstallOnSystem(theme)
-					if err != nil {
-						panic(err)
-					}
-
+				theme := NewTheme(tm, f.Name())
+				err := dbus.InstallOnSystem(theme)
+				if err != nil {
+					panic(err)
 				}
+				tm.themes = append(tm.themes, theme)
 				logInfo("found theme: %s", theme.Name)
 			}
 		}
 	}
 	tm.makeThemeNames()
-}
-
-// Update variable 'ThemeNames'
-func (tm *ThemeManager) makeThemeNames() {
-	tm.ThemeNames = make([]string, 0)
-	for _, t := range tm.themes {
-		tm.ThemeNames = append(tm.ThemeNames, t.Name)
-	}
-}
-
-// Update variable 'EnabledTheme'
-func (tm *ThemeManager) makeEnabledTheme() {
-	tm.EnabledTheme = tm.getThemeName(tm.getEnabledThemeMainFile())
 }
 
 func (tm *ThemeManager) setEnabledThemeMainFile(file string) {
@@ -115,15 +111,13 @@ func (tm *ThemeManager) isThemeCustomizable(themeName string) bool {
 	return okTpl && okJson
 }
 
-// TODO remove
-func (tm *ThemeManager) getThemeName(themeMainFile string) string {
+func (tm *ThemeManager) getThemeNameByMainFile(themeMainFile string) string {
 	if len(themeMainFile) == 0 {
 		return ""
 	}
 	return path.Base(path.Dir(themeMainFile))
 }
 
-// TODO remove
 func (tm *ThemeManager) getThemePath(themeName string) (themePath string, existed bool) {
 	themePath = path.Join(_THEME_DIR, themeName)
 	existed = isFileExists(themePath)
