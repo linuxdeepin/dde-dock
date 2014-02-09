@@ -8,18 +8,18 @@ import (
 )
 
 const (
-	_THEME_DIR           = "/boot/grub/themes"
-	_THEME_MAIN_FILE     = "theme.txt"
-	_THEME_TPL_FILE      = "theme.tpl"
-	_THEME_TPL_JSON_FILE = "theme_tpl.json" // json stores the key-values for template file
+	_THEME_DIR       = "/boot/grub/themes"
+	_THEME_MAIN_FILE = "theme.txt"
+	_THEME_TPL_FILE  = "theme.tpl"
+	_THEME_JSON_FILE = "theme_tpl.json" // json stores the key-values for template file
 )
 
 type ThemeManager struct {
 	themes               []*Theme
-	enabledThemeMainFile string // TODO
+	enabledThemeMainFile string
 
 	ThemeNames   []string
-	EnabledTheme string // TODO
+	EnabledTheme string `access:"readwrite"`
 }
 
 func NewThemeManager() *ThemeManager {
@@ -65,6 +65,11 @@ func (tm *ThemeManager) makeThemeNames() {
 	}
 }
 
+// Update variable 'EnabledTheme'
+func (tm *ThemeManager) makeEnabledTheme() {
+	tm.EnabledTheme = tm.getThemeName(tm.getEnabledThemeMainFile())
+}
+
 func (tm *ThemeManager) setEnabledThemeMainFile(file string) {
 	// if the theme.txt file is not under theme dir(/boot/grub/themes), ignore it
 	if strings.HasPrefix(file, _THEME_DIR) {
@@ -72,6 +77,7 @@ func (tm *ThemeManager) setEnabledThemeMainFile(file string) {
 	} else {
 		tm.enabledThemeMainFile = ""
 	}
+	tm.makeEnabledTheme()
 }
 
 func (tm *ThemeManager) getEnabledThemeMainFile() string {
@@ -105,7 +111,7 @@ func (tm *ThemeManager) isThemeArchiveValid(archive string) bool {
 
 func (tm *ThemeManager) isThemeCustomizable(themeName string) bool {
 	_, okTpl := tm.getThemeTplFile(themeName)
-	_, okJson := tm.getThemeTplJsonFile(themeName)
+	_, okJson := tm.getThemeJsonFile(themeName)
 	return okTpl && okJson
 }
 
@@ -136,8 +142,8 @@ func (tm *ThemeManager) getThemeTplFile(themeName string) (file string, existed 
 	return
 }
 
-func (tm *ThemeManager) getThemeTplJsonFile(themeName string) (file string, existed bool) {
-	file = path.Join(_THEME_DIR, themeName, _THEME_TPL_JSON_FILE)
+func (tm *ThemeManager) getThemeJsonFile(themeName string) (file string, existed bool) {
+	file = path.Join(_THEME_DIR, themeName, _THEME_JSON_FILE)
 	existed = isFileExists(file)
 	return
 }

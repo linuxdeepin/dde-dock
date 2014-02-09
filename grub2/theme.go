@@ -9,13 +9,6 @@ import (
 	"text/template"
 )
 
-// TODO remove
-// const (
-// 	_THEME_MAIN_FILE     = "theme.txt"
-// 	_THEME_TPL_FILE      = "theme.tpl"
-// 	_THEME_TPL_JSON_FILE = "theme_tpl.json" // json stores the key-values for template file
-// )
-
 var _THEME_TEMPLATOR = template.New("theme-templator")
 
 type TplValues struct {
@@ -34,7 +27,6 @@ type Theme struct {
 	mainFile  string
 	tplFile   string
 	jsonFile  string
-	// TODO
 	relBgFile string // relative background file path
 
 	Name              string
@@ -55,7 +47,7 @@ func NewTheme(tm *ThemeManager, name string) (*Theme, error) {
 	if path, ok := tm.getThemeTplFile(name); ok {
 		theme.tplFile = path
 	}
-	if path, ok := tm.getThemeTplJsonFile(name); ok {
+	if path, ok := tm.getThemeJsonFile(name); ok {
 		theme.jsonFile = path
 	}
 
