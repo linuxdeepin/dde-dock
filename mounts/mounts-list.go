@@ -237,18 +237,18 @@ func driverList() []DiskInfo {
 			continue
 		}
 		for _, volume := range volumes {
-			mount := volume.GetMount()
-			if mount != nil {
+			//mount := volume.GetMount()
+			//if mount != nil {
 				//info := newDiskInfo(mount, "mount", genID())
 				//logger.Println("id:", info.Id)
 				//objectMap[info.Id] = newObjectInfo(mount, "mount")
 				//list = append(list, info)
-			} else {
+			//} else {
 				info := newDiskInfo(volume, "volume", genID())
 				logger.Println("id:", info.Id)
 				objectMap[info.Id] = newObjectInfo(volume, "volume")
 				list = append(list, info)
-			}
+			//}
 		}
 	}
 
@@ -265,18 +265,18 @@ func volumeList() []DiskInfo {
 		}
 		id := volume.GetIdentifier("unix-device")
 		logger.Printf("id: %s\n", id)
-		mount := volume.GetMount()
-		if mount != nil {
-			info := newDiskInfo(mount, "mount", genID())
-			logger.Println("id:", info.Id)
-			objectMap[info.Id] = newObjectInfo(mount, "mount")
-			list = append(list, info)
-		} else {
+		//mount := volume.GetMount()
+		//if mount != nil {
+			//info := newDiskInfo(mount, "mount", genID())
+			//logger.Println("id:", info.Id)
+			//objectMap[info.Id] = newObjectInfo(mount, "mount")
+			//list = append(list, info)
+		//} else {
 			info := newDiskInfo(volume, "volume", genID())
 			logger.Println("id:", info.Id)
 			objectMap[info.Id] = newObjectInfo(volume, "volume")
 			list = append(list, info)
-		}
+		//}
 	}
 	return list
 }
