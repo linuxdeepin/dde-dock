@@ -1,14 +1,10 @@
 package main
 
 import (
-	"bytes"
-	"encoding/json"
-	"errors"
-	"fmt"
+	"dlib/dbus"
 	"io/ioutil"
 	"path"
 	"strings"
-	"text/template"
 )
 
 const (
@@ -18,20 +14,12 @@ const (
 	_THEME_TPL_JSON_FILE = "theme_tpl.json" // json stores the key-values for template file
 )
 
-var _THEME_TEMPLATOR = template.New("theme-templator")
-
-type TplValues struct {
-	Background, ItemColor, SelectedItemColor string
-}
-type TplJsonData struct {
-	DefaultTplValue, LastTplValue TplValues
-}
-
 type ThemeManager struct {
-	themes               []*Theme // TODO
-	enabledThemeMainFile string
+	themes               []*Theme
+	enabledThemeMainFile string // TODO
 
-	ThemeNames []string // TODO
+	ThemeNames   []string
+	EnabledTheme string // TODO
 }
 
 func NewThemeManager() *ThemeManager {
@@ -41,15 +29,39 @@ func NewThemeManager() *ThemeManager {
 }
 
 func (tm *ThemeManager) load() {
+	// TODO clear themes load last time, uninstall dbus interface
+	for _, t := range tm.themes {
+		dbus.UnInstallObject(t)
+	}
 	tm.themes = make([]*Theme, 0)
+
+	themeId = 0
 	files, err := ioutil.ReadDir(_THEME_DIR)
 	if err == nil {
 		for _, f := range files {
 			if f.IsDir() && tm.isThemeValid(f.Name()) {
-				theme := NewTheme(tm, f.Name())
-				tm.themes = append(tm.themes, theme)
+				theme, err := NewTheme(tm, f.Name())
+				if err == nil {
+					tm.themes = append(tm.themes, theme)
+
+					err := dbus.InstallOnSystem(theme)
+					if err != nil {
+						panic(err)
+					}
+
+				}
+				logInfo("found theme: %s", theme.Name)
 			}
 		}
+	}
+	tm.makeThemeNames()
+}
+
+// Update variable 'ThemeNames'
+func (tm *ThemeManager) makeThemeNames() {
+	tm.ThemeNames = make([]string, 0)
+	for _, t := range tm.themes {
+		tm.ThemeNames = append(tm.ThemeNames, t.Name)
 	}
 }
 
@@ -91,6 +103,13 @@ func (tm *ThemeManager) isThemeArchiveValid(archive string) bool {
 	return true
 }
 
+func (tm *ThemeManager) isThemeCustomizable(themeName string) bool {
+	_, okTpl := tm.getThemeTplFile(themeName)
+	_, okJson := tm.getThemeTplJsonFile(themeName)
+	return okTpl && okJson
+}
+
+// TODO remove
 func (tm *ThemeManager) getThemeName(themeMainFile string) string {
 	if len(themeMainFile) == 0 {
 		return ""
@@ -98,6 +117,7 @@ func (tm *ThemeManager) getThemeName(themeMainFile string) string {
 	return path.Base(path.Dir(themeMainFile))
 }
 
+// TODO remove
 func (tm *ThemeManager) getThemePath(themeName string) (themePath string, existed bool) {
 	themePath = path.Join(_THEME_DIR, themeName)
 	existed = isFileExists(themePath)
@@ -122,70 +142,11 @@ func (tm *ThemeManager) getThemeTplJsonFile(themeName string) (file string, exis
 	return
 }
 
-func (tm *ThemeManager) getCustomizedThemeContent(fileContent []byte, tplData interface{}) ([]byte, error) {
-	tpl, err := _THEME_TEMPLATOR.Parse(string(fileContent))
-	if err != nil {
-		return []byte(""), err
+func (tm *ThemeManager) getTheme(themeName string) (int, *Theme) {
+	for i, t := range tm.themes {
+		if t.Name == themeName {
+			return i, t
+		}
 	}
-
-	buf := bytes.NewBufferString("")
-	err = tpl.Execute(buf, tplData)
-	if err != nil {
-		return []byte(""), err
-	}
-	return buf.Bytes(), nil
-}
-
-func (tm *ThemeManager) getThemeTplJsonData(themeName string) (*TplJsonData, error) {
-	jsonFile, ok := tm.getThemeTplJsonFile(themeName)
-	if !ok {
-		err := errors.New(fmt.Sprintf("theme [%s]: json file for template is not exists", jsonFile))
-		logError(err.Error()) // TODO
-		return nil, err
-	}
-
-	fileContent, err := ioutil.ReadFile(jsonFile)
-	if err != nil {
-		logError(err.Error()) // TODO
-		return nil, err
-	}
-
-	tplJsonData, err := tm.getTplJsonData(fileContent)
-	if err != nil {
-		return nil, err
-	}
-	return tplJsonData, nil
-}
-
-func (tm *ThemeManager) getTplJsonData(fileContent []byte) (*TplJsonData, error) {
-	tplJsonData := &TplJsonData{}
-	err := json.Unmarshal(fileContent, tplJsonData)
-	if err != nil {
-		logError(err.Error()) // TODO
-		return nil, err
-	}
-	return tplJsonData, nil
-}
-
-func (tm *ThemeManager) getBgFileAbsPath(themeName, bgFileRelPath string) string {
-	themPath, _ := tm.getThemePath(themeName)
-	bgFileAbsPath := path.Join(themPath, bgFileRelPath)
-	return bgFileAbsPath
-}
-
-func (tm *ThemeManager) copyBgFileToThemeDir(themeName, imageFile string) (newBgFile string, err error) {
-	bgFileName := tm.getNewBgFileName(imageFile)
-	newBgFile = tm.getBgFileAbsPath(themeName, bgFileName)
-	_, err = copyFile(newBgFile, imageFile)
-	if err != nil {
-		logError(err.Error()) // TODO
-	}
-	return
-}
-
-func (tm *ThemeManager) getNewBgFileName(imageFile string) string {
-	fileName := path.Base(imageFile)
-	i := strings.LastIndex(fileName, ".")
-	fileExt := fileName[i:]
-	return "background" + fileExt
+	return -1, nil
 }

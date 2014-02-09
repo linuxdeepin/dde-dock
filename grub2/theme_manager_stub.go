@@ -2,8 +2,6 @@ package main
 
 import (
 	"dlib/dbus"
-	"encoding/json"
-	"io/ioutil"
 	"os"
 	"path"
 )
@@ -23,19 +21,6 @@ func (tm *ThemeManager) GetDBusInfo() dbus.DBusInfo {
 }
 
 // TODO
-func (tm *ThemeManager) GetInstalledThemes() []string {
-	themes := make([]string, 0)
-	files, err := ioutil.ReadDir(_THEME_DIR)
-	if err == nil {
-		for _, f := range files {
-			if f.IsDir() && tm.isThemeValid(f.Name()) {
-				themes = append(themes, f.Name())
-			}
-		}
-	}
-	return themes
-}
-
 func (tm *ThemeManager) GetEnabledTheme() string {
 	return tm.getThemeName(tm.getEnabledThemeMainFile())
 }
@@ -63,115 +48,45 @@ func (tm *ThemeManager) InstallTheme(archive string) bool {
 	}
 	themePathPrefix := path.Dir(themePathInZip)
 	unTarGz(archive, _THEME_DIR, themePathPrefix)
+
+	tm.load()
+	// TODO append theme object to list
+	// theme, err := NewTheme(tm, themeName)
+	// if err == nil {
+	// tm.themes = append(tm.themes, theme)
+	// }
+	// tm.makeThemeNames()
+
+	logInfo("install theme success: %s", archive)
 	return true
 }
 
+// TODO
 func (tm *ThemeManager) UninstallTheme(themeName string) bool {
-	themePath, exists := tm.getThemePath(themeName)
-	if !exists {
-		return false
-	}
-	err := os.RemoveAll(themePath)
+	_, theme := tm.getTheme(themeName)
+	err := os.RemoveAll(theme.themePath)
 	if err != nil {
 		return false
 	}
+
+	tm.load()
+	// TODO delete theme object from list
+	// i, theme := tm.getTheme(themeName)
+	// copy(tm.themes[i:], tm.themes[i+1:])
+	// tm.themes[len(tm.themes)-1] = nil
+	// tm.themes = tm.themes[:len(tm.themes)-1]
+	// dbus.UnInstallObject(theme)
+	// tm.makeThemeNames()
+
+	logInfo("uninstall theme success: %s", themeName)
 	return true
 }
 
-func (tm *ThemeManager) IsThemeCustomizable(themeName string) bool {
-	_, okTpl := tm.getThemeTplFile(themeName)
-	_, okJson := tm.getThemeTplJsonFile(themeName)
-	return okTpl && okJson
-}
-
-func (tm *ThemeManager) GetThemeLastCustomizeValues(themeName string) (background, itemColor, selectedItemColor string, ok bool) {
-	tplJsonData, err := tm.getThemeTplJsonData(themeName)
-	if err != nil {
-		return "", "", "", false
+func (tm *ThemeManager) GetThemeId(themeName string) int32 {
+	for _, t := range tm.themes {
+		if t.Name == themeName {
+			return t.id
+		}
 	}
-
-	background = tplJsonData.LastTplValue.Background
-	itemColor = tplJsonData.LastTplValue.ItemColor
-	selectedItemColor = tplJsonData.LastTplValue.SelectedItemColor
-	return background, itemColor, selectedItemColor, true
-
-	// return background's absolute path
-	background = tm.getBgFileAbsPath(themeName, background)
-	if !isFileExists(background) {
-		logError("theme [%s]: background file is not exists", background) // TODO
-	}
-	ok = true
-	return
-}
-
-func (tm *ThemeManager) GetThemeDefaultCustomizeValues(themeName string) (background, itemColor, selectedItemColor string, ok bool) {
-	tplJsonData, err := tm.getThemeTplJsonData(themeName)
-	if err != nil {
-		return "", "", "", false
-	}
-
-	background = tplJsonData.DefaultTplValue.Background
-	itemColor = tplJsonData.DefaultTplValue.ItemColor
-	selectedItemColor = tplJsonData.DefaultTplValue.SelectedItemColor
-	return background, itemColor, selectedItemColor, true
-
-	// return background's absolute path
-	background = tm.getBgFileAbsPath(themeName, background)
-	if !isFileExists(background) {
-		logError("theme [%s]: background file is not exists", background) // TODO
-	}
-	ok = true
-	return
-}
-
-func (tm *ThemeManager) CustomTheme(themeName, background, itemColor, selectedItemColor string) bool {
-	// copy background file to theme dir if need
-	_, err := tm.copyBgFileToThemeDir(themeName, background)
-	if err != nil {
-		return false
-	}
-	background = tm.getNewBgFileName(background)
-
-	tplJsonData, err := tm.getThemeTplJsonData(themeName)
-	if err != nil {
-		return false
-	}
-	tplJsonData.LastTplValue.Background = background
-	tplJsonData.LastTplValue.ItemColor = itemColor
-	tplJsonData.LastTplValue.SelectedItemColor = selectedItemColor
-
-	// generate a new theme.txt from template
-	tplFile, ok := tm.getThemeTplFile(themeName)
-	if !ok {
-		logError("theme [%s]: template file is not existed", themeName) // TODO
-	}
-
-	tplFileContent, err := ioutil.ReadFile(tplFile)
-	if err != nil {
-		logError(err.Error()) // TODO
-		return false
-	}
-
-	themeFileContent, err := tm.getCustomizedThemeContent(tplFileContent, tplJsonData.LastTplValue)
-	themeMainFile, _ := tm.getThemeMainFile(themeName)
-	err = ioutil.WriteFile(themeMainFile, themeFileContent, 0644)
-	if err != nil {
-		logError(err.Error()) // TODO
-		return false
-	}
-
-	// store the customized key-values to json file
-	jsonContent, err := json.Marshal(tplFileContent)
-	if err != nil {
-		logError(err.Error()) // TODO
-		return false
-	}
-	jsonFile, _ := tm.getThemeTplJsonFile(themeName)
-	err = ioutil.WriteFile(jsonFile, jsonContent, 0644)
-	if err != nil {
-		logError(err.Error()) // TODO
-		return false
-	}
-
-	return true
+	return -1
 }
