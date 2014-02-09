@@ -80,7 +80,7 @@ func (m *Manager) DeletePictureFromURIS(uri string) {
 func initVariable() {
 	var err error
 
-	accountsExtends, err = accext.NewAccounts("/com/deepin/dde/api/Accounts")
+	accountsExtends, err = accext.NewAccounts("/com/deepin/api/Accounts")
 	if err != nil {
 		fmt.Println("New Accounts Extends Failed.")
 		panic(err)

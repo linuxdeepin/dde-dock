@@ -16,7 +16,7 @@ const (
 	_DATE_TIME_PATH = "/com/deepin/daemon/DateAndTime"
 	_DATA_TIME_IFC  = "com.deepin.daemon.DateAndTime"
 
-	_DATE_TIME_SCHEMA = "com.deepin.dde.datetime"
+	_DATE_TIME_SCHEMA = "com.deepin.datetime"
 	_TIME_ZONE_FILE   = "/etc/timezone"
 )
 
@@ -111,7 +111,7 @@ func NewDateAndTime() *Manager {
 func Init() {
 	var err error
 
-	setDate, err = setdatetime.NewSetDateTime("/com/deepin/dde/api/SetDateTime")
+	setDate, err = setdatetime.NewSetDateTime("/com/deepin/api/SetDateTime")
 	if err != nil {
                 logger.Println("New SetDateTime Failed:", err)
 		panic(err)
