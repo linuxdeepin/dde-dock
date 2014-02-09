@@ -23,7 +23,6 @@ package main
 
 import (
 	"dlib/logger"
-	"fmt"
 	"os/exec"
 	"strconv"
 	"strings"
@@ -51,12 +50,20 @@ func getDiskCap(path string) (int64, int64) {
 			break
 		}
 
-		if array[0] == path {
-			fmt.Println("Total:", rets[1])
-			fmt.Println("Used:", rets[2])
-			usedSize, _ = strconv.ParseInt(rets[2], 10, 64)
-			totalSize, _ = strconv.ParseInt(rets[1], 10, 64)
+                isMatch := false
+		for _, v := range rets {
+			if path == v {
+                                isMatch = true
+				logger.Println("Total:", rets[1])
+				logger.Println("Used:", rets[2])
+				usedSize, _ = strconv.ParseInt(rets[2], 10, 64)
+				totalSize, _ = strconv.ParseInt(rets[1], 10, 64)
+				break
+			}
 		}
+                if isMatch {
+                        break
+                }
 	}
 
 	return totalSize, usedSize
