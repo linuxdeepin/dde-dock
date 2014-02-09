@@ -36,8 +36,10 @@ type DiskInfo struct {
 	Type       string
 	CanUnmount bool
 	CanEject   bool
-	UsableCap  uint32
-	TotalCap   uint32
+	UsableCap  string
+	TotalCap   string
+	//UsableCap  uint32
+	//TotalCap   uint32
 }
 
 type ObjectInfo struct {
@@ -86,26 +88,26 @@ func (m *Manager) DeviceEject(id int32) {
 	case "drive":
 		op := info.Object.(*gio.Drive)
 		op.Eject(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
-                        _, err := op.EjectFinish(res)
-                        if err != nil {
-                                logger.Printf("drive eject failed: %d, %s\n", id, err)
-                        }
+			_, err := op.EjectFinish(res)
+			if err != nil {
+				logger.Printf("drive eject failed: %d, %s\n", id, err)
+			}
 		}))
 	case "volume":
 		op := info.Object.(*gio.Volume)
 		op.Eject(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
-                        _, err := op.EjectFinish(res)
-                        if err != nil {
-                                logger.Printf("volume eject failed: %d, %s\n", id, err)
-                        }
+			_, err := op.EjectFinish(res)
+			if err != nil {
+				logger.Printf("volume eject failed: %d, %s\n", id, err)
+			}
 		}))
 	case "mount":
 		op := info.Object.(*gio.Mount)
 		op.Eject(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
-                        _, err := op.EjectFinish(res)
-                        if err != nil {
-                                logger.Printf("mount eject failed: %d, %s\n", id, err)
-                        }
+			_, err := op.EjectFinish(res)
+			if err != nil {
+				logger.Printf("mount eject failed: %d, %s\n", id, err)
+			}
 		}))
 	default:
 		logger.Printf("'%s' invalid type\n", info.Type)
@@ -174,6 +176,8 @@ func newDiskInfo(value interface{}, t string, id int32) DiskInfo {
 		info.Name = v.GetName()
 		info.CanEject = v.CanEject()
 		id := v.GetIdentifier(DEVICE_KIND)
+		logger.Println("id:", id)
+		info.TotalCap, info.UsableCap = getDiskCap(id)
 		if containStart("network", id) {
 			info.Type = "network"
 		} else if info.CanEject {
@@ -186,6 +190,8 @@ func newDiskInfo(value interface{}, t string, id int32) DiskInfo {
 		info.Name = v.GetName()
 		info.CanEject = v.CanEject()
 		id := v.GetIdentifier(DEVICE_KIND)
+		logger.Println("id:", id)
+		info.TotalCap, info.UsableCap = getDiskCap(id)
 		if containStart("network", id) {
 			info.Type = "network"
 		} else if info.CanEject {
@@ -226,6 +232,7 @@ func driverList() []DiskInfo {
 			if driver.IsMediaRemovable() &&
 				!driver.IsMediaCheckAutomatic() {
 				info := newDiskInfo(driver, "drive", genID())
+				logger.Println("id:", info.Id)
 				objectMap[info.Id] = newObjectInfo(driver, "drive")
 				list = append(list, info)
 			}
@@ -234,11 +241,13 @@ func driverList() []DiskInfo {
 		for _, volume := range volumes {
 			mount := volume.GetMount()
 			if mount != nil {
-				info := newDiskInfo(mount, "mount", genID())
-				objectMap[info.Id] = newObjectInfo(mount, "mount")
-				list = append(list, info)
+				//info := newDiskInfo(mount, "mount", genID())
+				//logger.Println("id:", info.Id)
+				//objectMap[info.Id] = newObjectInfo(mount, "mount")
+				//list = append(list, info)
 			} else {
 				info := newDiskInfo(volume, "volume", genID())
+				logger.Println("id:", info.Id)
 				objectMap[info.Id] = newObjectInfo(volume, "volume")
 				list = append(list, info)
 			}
@@ -261,10 +270,12 @@ func volumeList() []DiskInfo {
 		mount := volume.GetMount()
 		if mount != nil {
 			info := newDiskInfo(mount, "mount", genID())
+			logger.Println("id:", info.Id)
 			objectMap[info.Id] = newObjectInfo(mount, "mount")
 			list = append(list, info)
 		} else {
 			info := newDiskInfo(volume, "volume", genID())
+			logger.Println("id:", info.Id)
 			objectMap[info.Id] = newObjectInfo(volume, "volume")
 			list = append(list, info)
 		}
@@ -282,13 +293,17 @@ func mountList() []DiskInfo {
 
 		volume := mount.GetVolume()
 		if volume != nil {
-			id := volume.GetIdentifier("unix-device")
+			id := volume.GetIdentifier(DEVICE_KIND)
 			logger.Printf("id: %s\n", id)
+			info := newDiskInfo(volume, "volume", genID())
+			logger.Println("id:", info.Id)
+			objectMap[info.Id] = newObjectInfo(volume, "volume")
+			list = append(list, info)
 			continue
 		}
-		info := newDiskInfo(mount, "mount", genID())
-		objectMap[info.Id] = newObjectInfo(mount, "mount")
-		list = append(list, info)
+		//info := newDiskInfo(mount, "mount", genID())
+		//objectMap[info.Id] = newObjectInfo(mount, "mount")
+		//list = append(list, info)
 	}
 	return list
 }
