@@ -51,10 +51,13 @@ var (
 	_TVSCARTAtom      = getAtom(X, "TV-SCART")
 	_TVC4Atom         = getAtom(X, "TV-C4")
 	_DisplayPort      = getAtom(X, "DisplayPort")
+
+	connectorTypeAtom = getAtom(X, "ConnectorType")
 )
 
 var connectorTypeMap = map[xproto.Atom]int{
 	_PanelAtom:        0,
+	_DisplayPort:      0,
 	_VGAAtom:          1,
 	_DVIAtom:          2,
 	_DVIIAtom:         2,
@@ -67,7 +70,6 @@ var connectorTypeMap = map[xproto.Atom]int{
 	_TVSComponentAtom: 4,
 	_TVSCARTAtom:      4,
 	_TVC4Atom:         4,
-	_DisplayPort:      5,
 }
 
 func greterConnectorType(a xproto.Atom, b xproto.Atom) bool {
@@ -94,6 +96,8 @@ func getContentorType(op randr.Output) xproto.Atom {
 		return unknownAtom
 	}
 	switch {
+	case strings.Contains(string(oinfo.Name), "HDMI"):
+		return _HDMIAtom
 	case strings.Contains(string(oinfo.Name), "VGA"):
 		return _VGAAtom
 	case strings.Contains(string(oinfo.Name), "LVDS"), strings.Contains(string(oinfo.Name), "LCD"), strings.Contains(string(oinfo.Name), "Lvds"):
