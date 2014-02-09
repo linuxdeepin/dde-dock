@@ -1,7 +1,7 @@
 package main
 
 import (
-	"dbus/com/deepin/dde/api/setdatetime"
+	"dbus/com/deepin/api/setdatetime"
 	"dbus/org/gnome/settingsdaemon/datetimemechanism"
 	"dlib"
 	"dlib/dbus"
