@@ -20,24 +20,24 @@ func (tm *ThemeManager) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-// TODO
-func (tm *ThemeManager) GetEnabledTheme() string {
-	return tm.getThemeName(tm.getEnabledThemeMainFile())
-}
-
-func (tm *ThemeManager) EnableTheme(themeName string) bool {
-	if tm.isThemeValid(themeName) {
-		file, ok := tm.getThemeMainFile(themeName)
-		if ok {
-			tm.setEnabledThemeMainFile(file)
-			return true
+func (tm *ThemeManager) OnPropertiesChanged(name string, oldv interface{}) {
+	defer func() {
+		if err := recover(); err != nil {
+			logError("%v", err) // TODO
+		}
+	}()
+	switch name {
+	case "EnabledTheme":
+		if len(tm.EnabledTheme) == 0 {
+			tm.setEnabledThemeMainFile("")
+		} else {
+			_, theme := tm.getTheme(tm.EnabledTheme)
+			if theme == nil {
+				panic(newError("theme not found: %s", tm.EnabledTheme))
+			}
+			tm.setEnabledThemeMainFile(theme.mainFile)
 		}
 	}
-	return false
-}
-
-func (tm *ThemeManager) DisableTheme() {
-	tm.enabledThemeMainFile = ""
 }
 
 func (tm *ThemeManager) InstallTheme(archive string) bool {

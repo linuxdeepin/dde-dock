@@ -4,6 +4,8 @@ import (
 	"archive/tar"
 	"bytes"
 	"compress/gzip"
+	"errors"
+	"fmt"
 	"io"
 	"os"
 	"os/exec"
@@ -202,4 +204,8 @@ func getPathLevel(p string) int {
 		lv--
 	}
 	return lv
+}
+
+func newError(format string, v ...interface{}) error {
+	return errors.New(fmt.Sprintf(format, v...))
 }
