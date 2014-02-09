@@ -5,17 +5,11 @@ import (
 	"fmt"
 )
 
-const (
-	_GRUB2_THEME_DEST = "com.deepin.daemon.Grub2"
-	_GRUB2_THEME_PATH = "/com/deepin/daemon/Grub2/Theme"
-	_GRUB2_THEME_IFC  = "com.deepin.daemon.Grub2.Theme"
-)
-
 func (theme *Theme) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		_GRUB2_THEME_DEST,
-		fmt.Sprintf("%s/%s", _GRUB2_THEME_PATH, theme.Name),
-		_GRUB2_THEME_IFC,
+		"com.deepin.daemon.Grub2",
+		fmt.Sprintf("/com/deepin/daemon/Grub2/Theme%d", theme.id),
+		"com.deepin.daemon.Grub2.Theme",
 	}
 }
 
@@ -36,6 +30,17 @@ func (theme *Theme) OnPropertiesChanged(name string, oldv interface{}) {
 }
 
 // TODO
-func (t *Theme) Reset() error {
+func (theme *Theme) Reset() error {
+	tplJsonData, err := theme.getThemeTplJsonData()
+	if err != nil {
+		return err
+	}
+
+	theme.relBgFile = tplJsonData.DefaultTplValue.Background
+	theme.makeAbsBgFile()
+	theme.ItemColor = tplJsonData.DefaultTplValue.ItemColor
+	theme.SelectedItemColor = tplJsonData.DefaultTplValue.SelectedItemColor
+
+	theme.customTheme()
 	return nil
 }
