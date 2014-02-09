@@ -6,17 +6,11 @@ import (
 	"fmt"
 )
 
-const (
-	_GRUB2_DEST = "com.deepin.daemon.Grub2"
-	_GRUB2_PATH = "/com/deepin/daemon/Grub2"
-	_GRUB2_IFC  = "com.deepin.daemon.Grub2"
-)
-
 func (grub *Grub2) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		_GRUB2_DEST,
-		_GRUB2_PATH,
-		_GRUB2_IFC,
+		"com.deepin.daemon.Grub2",
+		"/com/deepin/daemon/Grub2",
+		"com.deepin.daemon.Grub2",
 	}
 }
 

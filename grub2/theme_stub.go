@@ -2,13 +2,12 @@ package main
 
 import (
 	"dlib/dbus"
-	"fmt"
 )
 
 func (theme *Theme) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		"com.deepin.daemon.Grub2",
-		fmt.Sprintf("/com/deepin/daemon/Grub2/Theme%d", theme.id),
+		"/com/deepin/daemon/Grub2/Theme",
 		"com.deepin.daemon.Grub2.Theme",
 	}
 }
@@ -41,5 +40,10 @@ func (theme *Theme) Reset() error {
 	theme.SelectedItemColor = tplJsonData.DefaultTplValue.SelectedItemColor
 
 	theme.customTheme()
+	return nil
+}
+
+func (theme *Theme) AutoGenerateBackground() error {
+	// TODO
 	return nil
 }

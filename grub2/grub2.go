@@ -28,7 +28,7 @@ var (
 type Grub2 struct {
 	entries  []Entry
 	settings map[string]string
-	tm       *ThemeManager
+	theme    *Theme
 
 	DefaultEntry      string `access:"readwrite"`
 	Timeout           int32  `access:"readwrite"`
@@ -38,7 +38,7 @@ type Grub2 struct {
 
 func NewGrub2() *Grub2 {
 	grub := &Grub2{}
-	grub.tm = NewThemeManager()
+	grub.theme = NewTheme()
 	return grub
 }
 
@@ -80,7 +80,7 @@ func (grub *Grub2) readSettings() error {
 }
 
 func (grub *Grub2) writeSettings() error {
-	grub.setTheme(grub.tm.getEnabledThemeMainFile())
+	grub.setTheme(grub.theme.mainFile)
 	fileContent := grub.getSettingContentToSave()
 	err := ioutil.WriteFile(_GRUB_CONFIG, []byte(fileContent), 0644)
 	if err != nil {
@@ -222,13 +222,11 @@ func (grub *Grub2) parseSettings(fileContent string) error {
 	grub.DefaultEntry = grub.getDefaultEntry()
 	grub.Timeout = grub.getTimeout()
 	grub.Gfxmode = grub.getGfxmode()
-	grub.tm.setEnabledThemeMainFile(grub.getTheme())
 
 	// reset settings to sync the default values
 	grub.setDefaultEntry(grub.DefaultEntry)
 	grub.setTimeout(grub.Timeout)
 	grub.setGfxmode(grub.Gfxmode)
-	grub.setTheme(grub.tm.getEnabledThemeMainFile())
 
 	return nil
 }
@@ -354,11 +352,10 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	err = dbus.InstallOnSystem(grub.tm)
+	err = dbus.InstallOnSystem(grub.theme)
 	if err != nil {
 		panic(err)
 	}
-	grub.tm.load() // load ThemeManager at end
 	dbus.DealWithUnhandledMessage()
 
 	select {}

@@ -9,6 +9,13 @@ import (
 	"text/template"
 )
 
+const (
+	_THEME_PATH      = "/boot/grub/themes/deepin" // TODO
+	_THEME_MAIN_FILE = _THEME_PATH + "/theme.txt"
+	_THEME_TPL_FILE  = _THEME_PATH + "/theme.tpl"
+	_THEME_JSON_FILE = _THEME_PATH + "/theme_tpl.json" // json stores the key-values for template file
+)
+
 var _THEME_TEMPLATOR = template.New("theme-templator")
 
 type TplValues struct {
@@ -18,52 +25,34 @@ type TplJsonData struct {
 	DefaultTplValue, LastTplValue TplValues
 }
 
-var themeId int32 = 0
-
 type Theme struct {
-	id        int32
-	tm        *ThemeManager
 	themePath string
 	mainFile  string
 	tplFile   string
 	jsonFile  string
 	relBgFile string // relative background file path
 
-	Name              string
-	Customizable      bool
 	Background        string `access:"readwrite"` // absolute background file path
 	ItemColor         string `access:"readwrite"`
 	SelectedItemColor string `access:"readwrite"`
 }
 
-func NewTheme(tm *ThemeManager, name string) *Theme {
+func NewTheme() *Theme {
 	theme := &Theme{}
-	theme.id = themeId
-	themeId++
-	theme.tm = tm
-	theme.themePath, _ = tm.getThemePath(name)
-	theme.mainFile, _ = tm.getThemeMainFile(name)
-	if path, ok := tm.getThemeTplFile(name); ok {
-		theme.tplFile = path
-	}
-	if path, ok := tm.getThemeJsonFile(name); ok {
-		theme.jsonFile = path
+	theme.themePath = _THEME_PATH
+	theme.mainFile = _THEME_MAIN_FILE
+	theme.tplFile = _THEME_TPL_FILE
+	theme.jsonFile = _THEME_JSON_FILE
+
+	tplJsonData, err := theme.getThemeTplJsonData()
+	if err != nil {
+		panic(err) // TODO
 	}
 
-	theme.Name = name
-	theme.Customizable = tm.isThemeCustomizable(name)
-	if theme.Customizable {
-		tplJsonData, err := theme.getThemeTplJsonData()
-		if err != nil {
-			theme.Customizable = false
-			return theme
-		}
-
-		theme.relBgFile = tplJsonData.LastTplValue.Background
-		theme.makeAbsBgFile()
-		theme.ItemColor = tplJsonData.LastTplValue.ItemColor
-		theme.SelectedItemColor = tplJsonData.LastTplValue.SelectedItemColor
-	}
+	theme.relBgFile = tplJsonData.LastTplValue.Background
+	theme.makeAbsBgFile()
+	theme.ItemColor = tplJsonData.LastTplValue.ItemColor
+	theme.SelectedItemColor = tplJsonData.LastTplValue.SelectedItemColor
 
 	return theme
 }
@@ -72,7 +61,7 @@ func NewTheme(tm *ThemeManager, name string) *Theme {
 func (theme *Theme) makeAbsBgFile() {
 	theme.Background = theme.getBgFileAbsPath(theme.relBgFile)
 	if !isFileExists(theme.Background) {
-		logError("theme [%s]: background file is not exists, %s", theme.Name, theme.Background)
+		logError("theme: background file is not exists, %s", theme.Background)
 	}
 }
 
