@@ -233,11 +233,27 @@ func (grub *Grub2) parseSettings(fileContent string) error {
 	return nil
 }
 
+func (grub *Grub2) getEntryTitles() ([]string, error) {
+	entryTitles := make([]string, 0)
+	for _, entry := range grub.entries {
+		if entry.entryType == MENUENTRY {
+			entryTitles = append(entryTitles, entry.getFullTitle())
+		}
+	}
+	if len(entryTitles) == 0 {
+		s := fmt.Sprintf("there is no menu entry in %s", _GRUB_MENU)
+		logError(s)
+		return entryTitles, errors.New(s)
+	}
+	return entryTitles, nil
+}
+
 func (grub *Grub2) getDefaultEntry() string {
-	entryTitles, _ := grub.GetSimpleEntryTitles()
+	entryTitles, _ := grub.getEntryTitles()
+	simpleEntryTitles, _ := grub.GetSimpleEntryTitles()
 	firstEntry := ""
-	if len(entryTitles) > 0 {
-		firstEntry = entryTitles[0]
+	if len(simpleEntryTitles) > 0 {
+		firstEntry = simpleEntryTitles[0]
 	}
 	value := grub.settings["GRUB_DEFAULT"]
 
@@ -247,18 +263,23 @@ func (grub *Grub2) getDefaultEntry() string {
 	}
 
 	// if GRUB_DEFAULE exist and is a valid entry name, just return it
-	if stringInSlice(value, entryTitles) {
+	if stringInSlice(value, simpleEntryTitles) {
 		return value
 	}
 
-	// if GRUB_DEFAULE exist and is a entry index, return its entry name
+	// if GRUB_DEFAULE exist and is a entry in submenu, return the first entry's title
+	if stringInSlice(value, entryTitles) {
+		return firstEntry
+	}
+
+	// if GRUB_DEFAULE exist and is a index number, return its entry name
 	index, err := strconv.ParseInt(value, 10, 32)
 	if err != nil {
-		logError(`valid value, settings["GRUB_DEFAULT"]=%s`, grub.settings["GRUB_DEFAULT"])
+		logError(`invalid number, settings["GRUB_DEFAULT"]=%s`, grub.settings["GRUB_DEFAULT"])
 		index = 0
 	}
-	if index >= 0 && int(index) < len(entryTitles) {
-		return entryTitles[index]
+	if index >= 0 && int(index) < len(simpleEntryTitles) {
+		return simpleEntryTitles[index]
 	} else {
 		return firstEntry
 	}
