@@ -48,7 +48,7 @@ func (grub *Grub2) Save() error {
 	return nil
 }
 
-// Get all entry titles in level one.
+// Get entry titles in level one.
 func (grub *Grub2) GetSimpleEntryTitles() ([]string, error) {
 	entryTitles := make([]string, 0)
 	for _, entry := range grub.entries {
