@@ -54,11 +54,11 @@ const (
 )
 
 var (
-	mutex     sync.Mutex
 	monitor   = gio.VolumeMonitorGet()
 	objectMap = make(map[int32]*ObjectInfo)
 
 	genID, destroyID = func() (func() int32, func()) {
+		var mutex sync.Mutex
 		count := int32(0)
 		return func() int32 {
 				mutex.Lock()
@@ -174,7 +174,6 @@ func newDiskInfo(value interface{}, t string, id int32) DiskInfo {
 		info.Name = v.GetName()
 		info.CanEject = v.CanEject()
 		id := v.GetIdentifier(DEVICE_KIND)
-		logger.Println("id:", id)
 		info.TotalCap, info.UsableCap = getDiskCap(id)
 		if containStart("network", id) {
 			info.Type = "network"
@@ -188,7 +187,6 @@ func newDiskInfo(value interface{}, t string, id int32) DiskInfo {
 		info.Name = v.GetName()
 		info.CanEject = v.CanEject()
 		id := v.GetIdentifier(DEVICE_KIND)
-		logger.Println("id:", id)
 		info.TotalCap, info.UsableCap = getDiskCap(id)
 		if containStart("network", id) {
 			info.Type = "network"
@@ -203,6 +201,7 @@ func newDiskInfo(value interface{}, t string, id int32) DiskInfo {
 		info.CanEject = v.CanEject()
 		info.CanUnmount = v.CanUnmount()
 		root := v.GetRoot()
+		info.TotalCap, info.UsableCap = getDiskCap(root.GetPath())
 		if root.IsNative() {
 			info.Type = "native"
 		} else if info.CanEject {
@@ -230,25 +229,22 @@ func driverList() []DiskInfo {
 			if driver.IsMediaRemovable() &&
 				!driver.IsMediaCheckAutomatic() {
 				info := newDiskInfo(driver, "drive", genID())
-				logger.Println("id:", info.Id)
 				objectMap[info.Id] = newObjectInfo(driver, "drive")
 				list = append(list, info)
 			}
 			continue
 		}
 		for _, volume := range volumes {
-			//mount := volume.GetMount()
-			//if mount != nil {
-				//info := newDiskInfo(mount, "mount", genID())
-				//logger.Println("id:", info.Id)
-				//objectMap[info.Id] = newObjectInfo(mount, "mount")
-				//list = append(list, info)
-			//} else {
+			mount := volume.GetMount()
+			if mount != nil {
+				info := newDiskInfo(mount, "mount", genID())
+				objectMap[info.Id] = newObjectInfo(mount, "mount")
+				list = append(list, info)
+			} else {
 				info := newDiskInfo(volume, "volume", genID())
-				logger.Println("id:", info.Id)
 				objectMap[info.Id] = newObjectInfo(volume, "volume")
 				list = append(list, info)
-			//}
+			}
 		}
 	}
 
@@ -263,20 +259,17 @@ func volumeList() []DiskInfo {
 		if driver != nil {
 			continue
 		}
-		id := volume.GetIdentifier("unix-device")
-		logger.Printf("id: %s\n", id)
-		//mount := volume.GetMount()
-		//if mount != nil {
-			//info := newDiskInfo(mount, "mount", genID())
-			//logger.Println("id:", info.Id)
-			//objectMap[info.Id] = newObjectInfo(mount, "mount")
-			//list = append(list, info)
-		//} else {
+		//id := volume.GetIdentifier("unix-device")
+		mount := volume.GetMount()
+		if mount != nil {
+			info := newDiskInfo(mount, "mount", genID())
+			objectMap[info.Id] = newObjectInfo(mount, "mount")
+			list = append(list, info)
+		} else {
 			info := newDiskInfo(volume, "volume", genID())
-			logger.Println("id:", info.Id)
 			objectMap[info.Id] = newObjectInfo(volume, "volume")
 			list = append(list, info)
-		//}
+		}
 	}
 	return list
 }
@@ -291,17 +284,11 @@ func mountList() []DiskInfo {
 
 		volume := mount.GetVolume()
 		if volume != nil {
-			id := volume.GetIdentifier(DEVICE_KIND)
-			logger.Printf("id: %s\n", id)
-			info := newDiskInfo(volume, "volume", genID())
-			logger.Println("id:", info.Id)
-			objectMap[info.Id] = newObjectInfo(volume, "volume")
-			list = append(list, info)
 			continue
 		}
-		//info := newDiskInfo(mount, "mount", genID())
-		//objectMap[info.Id] = newObjectInfo(mount, "mount")
-		//list = append(list, info)
+		info := newDiskInfo(mount, "mount", genID())
+		objectMap[info.Id] = newObjectInfo(mount, "mount")
+		list = append(list, info)
 	}
 	return list
 }
