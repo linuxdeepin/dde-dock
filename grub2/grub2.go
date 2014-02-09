@@ -32,7 +32,6 @@ type Grub2 struct {
 
 	DefaultEntry      string `access:"readwrite"`
 	Timeout           int32  `access:"readwrite"`
-	Gfxmode           string `access:"readwrite"`
 	GrubConfGenerated func(int32, bool)
 }
 
@@ -221,12 +220,10 @@ func (grub *Grub2) parseSettings(fileContent string) error {
 	// reset properties, return default value for the missing property
 	grub.DefaultEntry = grub.getDefaultEntry()
 	grub.Timeout = grub.getTimeout()
-	grub.Gfxmode = grub.getGfxmode()
 
 	// reset settings to sync the default values
 	grub.setDefaultEntry(grub.DefaultEntry)
 	grub.setTimeout(grub.Timeout)
-	grub.setGfxmode(grub.Gfxmode)
 
 	return nil
 }
