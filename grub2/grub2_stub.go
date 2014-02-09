@@ -25,8 +25,6 @@ func (grub *Grub2) OnPropertiesChanged(name string, oldv interface{}) {
 		grub.setDefaultEntry(grub.DefaultEntry)
 	case "Timeout":
 		grub.setTimeout(grub.Timeout)
-	case "Gfxmode":
-		grub.setGfxmode(grub.Gfxmode)
 	}
 }
 
