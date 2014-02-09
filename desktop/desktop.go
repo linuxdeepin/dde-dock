@@ -20,7 +20,7 @@ const (
 	_COMPIZ_COMMANDS_SCHEMA   = "org.compiz.commands"
 	_COMPIZ_SCALE_SCHEMA      = "org.compiz.scale"
 	_COMPIZ_COMMAND_PATH      = "/org/compiz/profiles/deepin/plugins/commands/"
-	_COMPIZ_SCALE_PATH        = "/org/compiz/profiles/deepin/plugins/_scale/"
+	_COMPIZ_SCALE_PATH        = "/org/compiz/profiles/deepin/plugins/scale/"
 
 	_LAUNCHER_CMD = "launcher"
 )
