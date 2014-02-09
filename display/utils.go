@@ -34,7 +34,6 @@ func queryOutputByCrtc(dpy *Display, crtc randr.Crtc) *Output {
 
 var (
 	edidAtom          = getAtom(X, "EDID")
-	connectorTypeAtom = getAtom(X, "ConnectorType")
 	borderAtom        = getAtom(X, "Border")
 	unknownAtom       = getAtom(X, "unknown")
 )
