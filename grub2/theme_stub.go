@@ -16,7 +16,7 @@ func (theme *Theme) GetDBusInfo() dbus.DBusInfo {
 func (theme *Theme) OnPropertiesChanged(name string, oldv interface{}) {
 	defer func() {
 		if err := recover(); err != nil {
-			logError("%v", err) // TODO
+			logError("%v", err)
 		}
 	}()
 	switch name {
@@ -29,7 +29,6 @@ func (theme *Theme) OnPropertiesChanged(name string, oldv interface{}) {
 	}
 }
 
-// TODO
 func (theme *Theme) Reset() error {
 	tplJsonData, err := theme.getThemeTplJsonData()
 	if err != nil {

@@ -36,12 +36,11 @@ type Theme struct {
 	SelectedItemColor string `access:"readwrite"`
 }
 
-func NewTheme(tm *ThemeManager, name string) (*Theme, error) {
+func NewTheme(tm *ThemeManager, name string) *Theme {
 	theme := &Theme{}
 	theme.id = themeId
 	themeId++
 	theme.tm = tm
-	theme.Name = name
 	theme.themePath, _ = tm.getThemePath(name)
 	theme.mainFile, _ = tm.getThemeMainFile(name)
 	if path, ok := tm.getThemeTplFile(name); ok {
@@ -51,12 +50,13 @@ func NewTheme(tm *ThemeManager, name string) (*Theme, error) {
 		theme.jsonFile = path
 	}
 
-	// TODO
+	theme.Name = name
 	theme.Customizable = tm.isThemeCustomizable(name)
 	if theme.Customizable {
 		tplJsonData, err := theme.getThemeTplJsonData()
 		if err != nil {
-			return nil, err
+			theme.Customizable = false
+			return theme
 		}
 
 		theme.relBgFile = tplJsonData.LastTplValue.Background
@@ -65,10 +65,17 @@ func NewTheme(tm *ThemeManager, name string) (*Theme, error) {
 		theme.SelectedItemColor = tplJsonData.LastTplValue.SelectedItemColor
 	}
 
-	return theme, nil
+	return theme
 }
 
-// TODO
+// Update variable 'Background' which means the absolute background file path
+func (theme *Theme) makeAbsBgFile() {
+	theme.Background = theme.getBgFileAbsPath(theme.relBgFile)
+	if !isFileExists(theme.Background) {
+		logError("theme [%s]: background file is not exists, %s", theme.Name, theme.Background)
+	}
+}
+
 func (theme *Theme) setBackground(background string) {
 	// copy background file to theme dir if need
 	theme.copyBgFileToThemeDir(background)
@@ -84,20 +91,12 @@ func (theme *Theme) setSelectedItemColor(selectedItemColor string) {
 	theme.customTheme()
 }
 
-// TODO Update variable 'Background' which means the absolute background file path
-func (theme *Theme) makeAbsBgFile() {
-	theme.Background = theme.getBgFileAbsPath(theme.relBgFile)
-	if !isFileExists(theme.Background) {
-		logError("theme [%s]: background file is not exists, %s", theme.Name, theme.Background) // TODO
-	}
-}
-
 func (theme *Theme) copyBgFileToThemeDir(imageFile string) (newBgFile string, err error) {
 	bgFileName := theme.getNewBgFileName(imageFile)
 	newBgFile = theme.getBgFileAbsPath(bgFileName)
 	_, err = copyFile(newBgFile, imageFile)
 	if err != nil {
-		logError(err.Error()) // TODO
+		logError(err.Error())
 	}
 	return
 }
@@ -114,11 +113,10 @@ func (theme *Theme) getNewBgFileName(imageFile string) string {
 	return "background" + fileExt
 }
 
-// TODO
 func (theme *Theme) getThemeTplJsonData() (*TplJsonData, error) {
 	fileContent, err := ioutil.ReadFile(theme.jsonFile)
 	if err != nil {
-		logError(err.Error()) // TODO
+		logError(err.Error())
 		return nil, err
 	}
 
@@ -133,7 +131,7 @@ func (theme *Theme) getTplJsonData(fileContent []byte) (*TplJsonData, error) {
 	tplJsonData := &TplJsonData{}
 	err := json.Unmarshal(fileContent, tplJsonData)
 	if err != nil {
-		logError(err.Error()) // TODO
+		logError(err.Error())
 		return nil, err
 	}
 	return tplJsonData, nil
@@ -151,25 +149,25 @@ func (theme *Theme) customTheme() {
 	// generate a new theme.txt from template
 	tplFileContent, err := ioutil.ReadFile(theme.tplFile)
 	if err != nil {
-		logError(err.Error()) // TODO
-		panic(err)
+		logError(err.Error())
+		panic(err) // TODO
 	}
 	themeFileContent, err := theme.getCustomizedThemeContent(tplFileContent, tplJsonData.LastTplValue)
 	err = ioutil.WriteFile(theme.mainFile, themeFileContent, 0644)
 	if err != nil {
-		logError(err.Error()) // TODO
+		logError(err.Error())
 		panic(err)
 	}
 
 	// store the customized key-values to json file
 	jsonContent, err := json.Marshal(tplFileContent)
 	if err != nil {
-		logError(err.Error()) // TODO
+		logError(err.Error())
 		panic(err)
 	}
 	err = ioutil.WriteFile(theme.jsonFile, jsonContent, 0644)
 	if err != nil {
-		logError(err.Error()) // TODO
+		logError(err.Error())
 		panic(err)
 	}
 }

@@ -64,7 +64,7 @@ func (grub *Grub2) clearSettings() {
 func (grub *Grub2) readEntries() error {
 	fileContent, err := ioutil.ReadFile(_GRUB_MENU)
 	if err != nil {
-		logError(err.Error()) // TODO
+		logError(err.Error())
 		return err
 	}
 	return grub.parseEntries(string(fileContent))
@@ -73,7 +73,7 @@ func (grub *Grub2) readEntries() error {
 func (grub *Grub2) readSettings() error {
 	fileContent, err := ioutil.ReadFile(_GRUB_CONFIG)
 	if err != nil {
-		logError(err.Error()) // TODO
+		logError(err.Error())
 		return err
 	}
 	return grub.parseSettings(string(fileContent))
@@ -84,7 +84,7 @@ func (grub *Grub2) writeSettings() error {
 	fileContent := grub.getSettingContentToSave()
 	err := ioutil.WriteFile(_GRUB_CONFIG, []byte(fileContent), 0644)
 	if err != nil {
-		logError(err.Error()) // TODO
+		logError(err.Error())
 		return err
 	}
 	return nil
@@ -94,7 +94,6 @@ func (grub *Grub2) generateGrubConfig() int32 {
 	logInfo("start to generate a new grub configuration file")
 	_GENERATE_ID++
 	go func() {
-		// TODO
 		err := execAndWait(30, _GRUB_MKCONFIG_EXE, "-o", _GRUB_MENU)
 		if grub.GrubConfGenerated != nil {
 			if err == nil {
@@ -211,7 +210,7 @@ func (grub *Grub2) parseSettings(fileContent string) error {
 			kv := strings.SplitN(line, "=", 2)
 			key, value := kv[0], kv[1]
 			grub.settings[key] = unquoteString(value)
-			logInfo("found setting: %s=%s", kv[0], kv[1]) // TODO
+			logInfo("found setting: %s=%s", kv[0], kv[1])
 		}
 	}
 	if err := s.Err(); err != nil {
@@ -255,7 +254,7 @@ func (grub *Grub2) getDefaultEntry() string {
 	// if GRUB_DEFAULE exist and is a entry index, return its entry name
 	index, err := strconv.ParseInt(value, 10, 32)
 	if err != nil {
-		logError(`valid value, settings["GRUB_DEFAULT"]=%s`, grub.settings["GRUB_DEFAULT"]) // TODO
+		logError(`valid value, settings["GRUB_DEFAULT"]=%s`, grub.settings["GRUB_DEFAULT"])
 		index = 0
 	}
 	if index >= 0 && int(index) < len(entryTitles) {
@@ -272,7 +271,7 @@ func (grub *Grub2) getTimeout() int32 {
 
 	timeout, err := strconv.ParseInt(grub.settings["GRUB_TIMEOUT"], 10, 32)
 	if err != nil {
-		logError(`valid value, settings["GRUB_TIMEOUT"]=%s`, grub.settings["GRUB_TIMEOUT"]) // TODO
+		logError(`valid value, settings["GRUB_TIMEOUT"]=%s`, grub.settings["GRUB_TIMEOUT"])
 		return _GRUB_TIMEOUT_DISABLE
 	}
 	return int32(timeout)

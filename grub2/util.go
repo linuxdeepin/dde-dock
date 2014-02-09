@@ -36,7 +36,7 @@ func execAndWait(timeout int, name string, arg ...string) error {
 	cmd.Stderr = &stderr
 	err := cmd.Start()
 	if err != nil {
-		logError(err.Error()) // TODO
+		logError(err.Error())
 		return err
 	}
 
@@ -49,16 +49,16 @@ func execAndWait(timeout int, name string, arg ...string) error {
 	select {
 	case <-time.After(time.Duration(timeout) * time.Second):
 		if err := cmd.Process.Kill(); err != nil {
-			logError(err.Error()) // TODO
+			logError(err.Error())
 			return err
 		}
 		<-done
-		logInfo("time out and process was killed") // TODO
+		logInfo("time out and process was killed")
 	case err := <-done:
 		logInfo("process output: %s", stdout.String())
 		if err != nil {
 			logError("process error output: %s", stderr.String())
-			logError("process done with error = %v", err) // TODO
+			logError("process done with error = %v", err)
 			return err
 		}
 	}
@@ -106,7 +106,7 @@ func unTarGz(archiveFile string, destDir string, prefix string) error {
 
 		fi := hdr.FileInfo()
 		destFullPath := destDir + hdr.Name
-		logInfo("UnTarGzing file: " + hdr.Name) // TODO
+		logInfo("UnTarGzing file: " + hdr.Name)
 
 		if hdr.Typeflag == tar.TypeDir {
 			// create dir
@@ -177,7 +177,7 @@ func isFileExists(file string) bool {
 
 func copyFile(dest, src string) (written int64, err error) {
 	if dest == src {
-		logInfo("copyFile(): source and destination are same file") // TODO
+		logInfo("copyFile(): source and destination are same file")
 		return
 	}
 

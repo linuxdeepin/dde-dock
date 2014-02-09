@@ -23,8 +23,7 @@ func (tm *ThemeManager) TestGetterAndSetter(c *C) {
 	c.Check(tm.getEnabledThemeMainFile(), Equals, want)
 }
 
-// TODO remove
-func (tm *ThemeManager) TestGetThemeName(c *C) {
+func (tm *ThemeManager) TestGetThemeNameByMainFile(c *C) {
 	var tests = []struct {
 		s, want string
 	}{
@@ -33,17 +32,16 @@ func (tm *ThemeManager) TestGetThemeName(c *C) {
 		{"", ""},
 	}
 	for _, t := range tests {
-		c.Check(tm.getThemeName(t.s), Equals, t.want)
+		c.Check(tm.getThemeNameByMainFile(t.s), Equals, t.want)
 	}
 }
 
-// TODO remove
 func (tm *ThemeManager) TestGetThemePath(c *C) {
 	var tests = []struct {
 		s, want string
 	}{
 		{"theme-name", "/boot/grub/themes/theme-name"},
-		{"", "/boot/grub/themes"}, // TODO
+		{"", "/boot/grub/themes"},
 	}
 	for _, t := range tests {
 		get, _ := tm.getThemePath(t.s)
@@ -56,7 +54,7 @@ func (tm *ThemeManager) TestGetThemeMainFile(c *C) {
 		s, want string
 	}{
 		{"theme-name", "/boot/grub/themes/theme-name/theme.txt"},
-		{"", "/boot/grub/themes/theme.txt"}, // TODO
+		{"", "/boot/grub/themes/theme.txt"},
 	}
 	for _, t := range tests {
 		get, _ := tm.getThemeMainFile(t.s)
@@ -69,7 +67,7 @@ func (tm *ThemeManager) TestGetThemeTplFile(c *C) {
 		s, want string
 	}{
 		{"theme-name", "/boot/grub/themes/theme-name/theme.tpl"},
-		{"", "/boot/grub/themes/theme.tpl"}, // TODO
+		{"", "/boot/grub/themes/theme.tpl"},
 	}
 	for _, t := range tests {
 		get, _ := tm.getThemeTplFile(t.s)
