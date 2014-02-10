@@ -1,0 +1,3 @@
+[D-BUS Service]
+Name=com.deepin.daemon.Audio
+Exec=/usr/lib/deepin-daemon/audio
