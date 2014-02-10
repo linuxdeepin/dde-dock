@@ -33,26 +33,20 @@ func queryOutputByCrtc(dpy *Display, crtc randr.Crtc) *Output {
 }
 
 var (
-	edidAtom          = getAtom(X, "EDID")
-	borderAtom        = getAtom(X, "Border")
-	unknownAtom       = getAtom(X, "unknown")
+	edidAtom    = getAtom(X, "EDID")
+	borderAtom  = getAtom(X, "Border")
+	unknownAtom = getAtom(X, "unknown")
 )
 
-func getOutputName(core randr.Output, defaultName string) string {
-	edidProp, err := randr.GetOutputProperty(X, core, edidAtom, xproto.AtomInteger, 0, 1024, false, false).Reply()
-	if err != nil {
-		return defaultName
-	}
-	if len(edidProp.Data) == 128 {
-		timingDescriptor := edidProp.Data[36:]
-		for i := 0; i < 4; i++ {
-			block := timingDescriptor[i*18 : (i+1)*18]
-			if block[3] == 0xfc { //descriptor type == Monitor Name
-				data := block[5:]
-				for i := 0; i < 13; i++ {
-					if data[i] == 0xa {
-						return string(data[:i])
-					}
+func getOutputName(data [128]byte, defaultName string) string {
+	timingDescriptor := data[36:]
+	for i := 0; i < 4; i++ {
+		block := timingDescriptor[i*18 : (i+1)*18]
+		if block[3] == 0xfc { //descriptor type == Monitor Name
+			data := block[5:]
+			for i := 0; i < 13; i++ {
+				if data[i] == 0xa {
+					return string(data[:i])
 				}
 			}
 		}
