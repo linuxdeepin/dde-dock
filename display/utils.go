@@ -16,6 +16,14 @@ func getAtom(c *xgb.Conn, name string) xproto.Atom {
 	}
 	return r.Atom
 }
+func queryAtomName(c *xgb.Conn, atom xproto.Atom)string {
+	r, err := xproto.GetAtomName(c, atom).Reply()
+	if err != nil {
+		return ""
+	}
+	return r.Name
+
+}
 
 func queryOutput(dpy *Display, o randr.Output) *Output {
 	for _, op := range dpy.Outputs {
