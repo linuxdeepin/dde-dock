@@ -7,6 +7,8 @@ import "github.com/BurntSushi/xgb"
 import "dlib/logger"
 import "math"
 
+var backlightAtom = getAtom(X, "Backlight")
+
 func getAtom(c *xgb.Conn, name string) xproto.Atom {
 	r, err := xproto.InternAtom(c, false, uint16(len(name)), name).Reply()
 	if err != nil {
@@ -187,6 +189,14 @@ func isCrtcConnected(c *xgb.Conn, crtc randr.Crtc) bool {
 	return true
 }
 
+func supportedBacklight(c *xgb.Conn, output randr.Output) (bool, float64) {
+	prop, err := randr.GetOutputProperty(c, output, backlightAtom, xproto.AtomAny, 0, 1, false, false).Reply()
+	if err != nil || prop.NumItems != 1 {
+		return false, 0
+	}
+	return true, float64(xgb.Get32(prop.Data)) / 100
+}
+
 func parseRotationSize(rotation, width, height uint16) (uint16, uint16) {
 	if rotation == randr.RotationRotate90 || rotation == randr.RotationRotate270 {
 		return height, width
@@ -244,6 +254,17 @@ func setOutputBorder(op randr.Output, border Border) {
 
 	err := randr.ChangeOutputPropertyChecked(X, op, borderAtom,
 		xproto.AtomInteger, 16, xproto.PropModeReplace, 4,
+		buf[:]).Check()
+	if err != nil {
+		logger.Println(err)
+	}
+}
+func setOutputBacklight(op randr.Output, light float64) {
+	var buf [4]byte
+	xgb.Put32(buf[0:4], uint32(light*100))
+
+	err := randr.ChangeOutputPropertyChecked(X, op, backlightAtom,
+		xproto.AtomInteger, 32, xproto.PropModeReplace, 1,
 		buf[:]).Check()
 	if err != nil {
 		logger.Println(err)

@@ -15,6 +15,7 @@ const (
 	_PendingMaskTransform
 	_PendingMaskRotation
 	_PendingMaskGramma
+	_PendingMaskBacklight
 )
 
 const (
@@ -50,9 +51,10 @@ var changeLock, changeUnlock = func() (func(), func()) {
 }()
 
 type pendingConfig struct {
-	crtc   randr.Crtc
-	output randr.Output
-	mask   int
+	crtc             randr.Crtc
+	output           randr.Output
+	mask             int
+	supportBacklight bool
 
 	mode     randr.Mode
 	posX     int16
@@ -70,6 +72,8 @@ type pendingConfig struct {
 	gammaRed   []uint16
 	gammaGreen []uint16
 	gammaBlue  []uint16
+
+	backlight float64
 }
 
 func ClonePendingConfig(c *pendingConfig) *pendingConfig {
@@ -82,6 +86,7 @@ func ClonePendingConfig(c *pendingConfig) *pendingConfig {
 	r.posX, r.posY = c.posX, c.posY
 	r.transform, r.filterName, r.filterParams = c.transform, c.filterName, c.filterParams
 	r.borderCompensationX, r.borderCompensationY = c.borderCompensationX, c.borderCompensationY
+	r.backlight = c.backlight
 	copy(r.gammaRed, c.gammaRed)
 	copy(r.gammaGreen, c.gammaGreen)
 	copy(r.gammaBlue, c.gammaBlue)
@@ -91,9 +96,9 @@ func ClonePendingConfig(c *pendingConfig) *pendingConfig {
 
 func (c *pendingConfig) String() string {
 	return fmt.Sprintf(`
-	Crtc:%v, Output:%v, mode:%v, pos:(%v,%v), rotation:%v transform:(%v,%v,%v), borderComp:(%v,%v)
+	Crtc:%v, Output:%v, mode:%v, pos:(%v,%v), rotation:%v transform:(%v,%v,%v), borderComp:(%v,%v), backlight:%v
 	`, c.crtc, c.output, c.mode, c.posX, c.posY, c.rotation, c.transform.Matrix11, c.transform.Matrix22, c.transform.Matrix33,
-		c.borderCompensationX, c.borderCompensationY)
+		c.borderCompensationX, c.borderCompensationY, c.backlight)
 }
 func NewPendingConfigWithoutCache(op *Output) *pendingConfig {
 	//don't call any pendingConfig.SetXX  otherwise ApplyChanged will apply this changed.
@@ -152,6 +157,7 @@ func NewPendingConfigWithoutCache(op *Output) *pendingConfig {
 		c.borderCompensationX, c.borderCompensationY = 0, 0
 	}
 
+	c.supportBacklight, c.backlight = supportedBacklight(X, c.output)
 	return c
 }
 
@@ -167,6 +173,8 @@ func (c *pendingConfig) apply() error {
 	//setCrtcGamma: gamma
 	//setCrtcTransform: transform, filter
 	// allocation of the output maybe changed when rotation/transform changed without change mode
+	defer func() { c.mask = 0 }()
+
 	if c.mode == 0 {
 		_, err := randr.SetCrtcConfig(X, c.crtc, xproto.TimeCurrentTime, LastConfigTimeStamp,
 			0, 0, 0, c.rotation, nil).Reply()
@@ -220,6 +228,9 @@ func (c *pendingConfig) apply() error {
 		if err != nil {
 			return fmt.Errorf("PendingConfig apply failed when SetCrtcTransform: %v %v", err, c)
 		}
+	}
+	if c.mask&_PendingMaskBacklight == _PendingMaskBacklight {
+		setOutputBacklight(c.output, c.backlight)
 	}
 
 	if c.mask&_PendingMaskPos|_PendingMaskMode|_PendingMaskRotation != 0 {
@@ -314,15 +325,25 @@ func (c *pendingConfig) setGamma(red, green, blue []uint16) *pendingConfig {
 }
 
 func (c *pendingConfig) SetBrightness(brightness float64) *pendingConfig {
-	if brightness < 0.01 || brightness > 1 {
+	if brightness < 0.1 {
+		brightness = 0.1
+	}
+	if brightness > 1 {
 		brightness = 1
 	}
-	gammaSize, err := randr.GetCrtcGammaSize(X, c.crtc).Reply()
-	if err != nil {
-		panic(fmt.Sprintf("GetCrtcGrammSize(crtc:%d) failed: %s", c.crtc, err.Error()))
+
+	if c.supportBacklight {
+		c.backlight = brightness
+		c.mask = c.mask | _PendingMaskBacklight
+		return c
+	} else {
+		gammaSize, err := randr.GetCrtcGammaSize(X, c.crtc).Reply()
+		if err != nil {
+			panic(fmt.Sprintf("GetCrtcGrammSize(crtc:%d) failed: %s", c.crtc, err.Error()))
+		}
+		red, green, blue := genGammaRamp(gammaSize.Size, brightness)
+		return c.setGamma(red, green, blue)
 	}
-	red, green, blue := genGammaRamp(gammaSize.Size, brightness)
-	return c.setGamma(red, green, blue)
 }
 
 func (c *pendingConfig) SetScale(xScale, yScale float32) *pendingConfig {
@@ -571,7 +592,7 @@ func (dpy *Display) adjustScreenSize() []*Output {
 func (op *Output) pendingAllocation() (ret xproto.Rectangle) {
 	defer func() {
 		if err := recover(); err != nil {
-			fmt.Println("pendingAllocation panic:",err)
+			fmt.Println("pendingAllocation panic:", err)
 		}
 	}()
 	if op.Opened {
