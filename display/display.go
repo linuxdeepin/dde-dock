@@ -107,6 +107,13 @@ func (dpy *Display) updateResources() {
 	}
 }
 
+func (dpy *Display) Reset() {
+	for _, op := range dpy.Outputs {
+		op.setBrightness(1)
+	}
+	dpy.ApplyChanged()
+}
+
 func (dpy *Display) ShowInfoOnScreen() {
 }
 func (dpy *Display) ListRotations() []uint16 {
