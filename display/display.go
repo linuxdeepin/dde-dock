@@ -84,7 +84,7 @@ func initDisplay() *Display {
 
 	dpy.setPropPrimaryRect(xproto.Rectangle{0, 0, dpy.Width, dpy.Height})
 
-	randr.SelectInput(X, Root, randr.NotifyMaskOutputChange|randr.NotifyMaskCrtcChange|randr.NotifyMaskScreenChange)
+	randr.SelectInput(X, Root, randr.NotifyMaskOutputChange|randr.NotifyMaskOutputProperty|randr.NotifyMaskCrtcChange|randr.NotifyMaskScreenChange)
 	dpy.startListen()
 	return dpy
 }
@@ -191,6 +191,14 @@ func (dpy *Display) listener() {
 					dpy.removeOutput(info.Output)
 
 					fmt.Println("OutputChanged lost....", info.Output)
+				}
+			case randr.NotifyOutputProperty:
+				info := ee.U.Op
+				//some driver use "BACKLIGHT" instead "Backlight" value as info.Atom, so we didn't check it.
+				if support, value := supportedBacklight(X, info.Output); support {
+					if op := queryOutput(dpy, info.Output); op != nil {
+						op.setPropBrightness(value)
+					}
 				}
 			}
 		case randr.ScreenChangeNotifyEvent:
