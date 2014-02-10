@@ -14,6 +14,7 @@ all:
 	cd power/ && $(run)
 	cd xsettings/ && $(run)
 	cd system-info/ && $(run)
+	cd audio/ && $(run)
 
 
 update:

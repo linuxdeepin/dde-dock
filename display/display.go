@@ -281,6 +281,10 @@ func TT() {
 func main() {
 	dbus.DealWithUnhandledMessage()
 	DPY.SetMirrorMode(true)
+	for _, o := range DPY.Outputs {
+		o.setBrightness(0.5)
+		o.pendingConfig.apply()
+	}
 	/*TT()*/
 	select {}
 }
