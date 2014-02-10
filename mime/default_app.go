@@ -34,17 +34,17 @@ var (
 	_TerminalGSettings = gio.NewSettings(_TERMINAL_SCHEMA)
 )
 
-func NewDAppInfo(gioApp *gio.AppInfo) *AppInfo {
+func NewDAppInfo(gioApp *gio.AppInfo) AppInfo {
 	dappInfo := AppInfo{}
 
 	dappInfo.ID = gioApp.GetId()
 	dappInfo.Name = gioApp.GetDisplayName()
 	dappInfo.Exec = gioApp.GetExecutable()
-	return &dappInfo
+	return dappInfo
 }
 
-func (dapp *DefaultApps) AppsListViaType(typeName string) []*AppInfo {
-	var defaultAppsList []*AppInfo
+func (dapp *DefaultApps) AppsListViaType(typeName string) []AppInfo {
+	var defaultAppsList []AppInfo
 
 	if typeName == "terminal" {
 		lists := GetTerminalList()
@@ -53,8 +53,12 @@ func (dapp *DefaultApps) AppsListViaType(typeName string) []*AppInfo {
 		}
 
 		for _, v := range lists {
+			app, ok := NewAppInfoByID(v)
+			if !ok {
+				continue
+			}
 			defaultAppsList = append(defaultAppsList,
-				NewAppInfoByID(v))
+				app)
 		}
 
 		return defaultAppsList
@@ -67,7 +71,7 @@ func (dapp *DefaultApps) AppsListViaType(typeName string) []*AppInfo {
 	return defaultAppsList
 }
 
-func (dapp *DefaultApps) DefaultAppViaType(typeName string) *AppInfo {
+func (dapp *DefaultApps) DefaultAppViaType(typeName string) AppInfo {
 	if typeName == "terminal" {
 		exec := _TerminalGSettings.GetString("exec")
 		terminalApps := dapp.AppsListViaType(typeName)
@@ -78,7 +82,7 @@ func (dapp *DefaultApps) DefaultAppViaType(typeName string) *AppInfo {
 			}
 		}
 
-		return nil
+		return AppInfo{}
 	}
 
 	gioApp := gio.AppInfoGetDefaultForType(typeName, false)
@@ -87,8 +91,8 @@ func (dapp *DefaultApps) DefaultAppViaType(typeName string) *AppInfo {
 
 func (dapp *DefaultApps) SetDefaultAppViaType(typeName, appID string) bool {
 	if typeName == "terminal" {
-		appInfo := NewAppInfoByID(appID)
-		if appInfo == nil {
+		appInfo, ok := NewAppInfoByID(appID)
+		if !ok {
 			return false
 		}
 
@@ -115,16 +119,16 @@ func (dapp *DefaultApps) SetDefaultAppViaType(typeName, appID string) bool {
 	return true
 }
 
-func NewAppInfoByID(id string) *AppInfo {
-	appInfo := &AppInfo{}
+func NewAppInfoByID(id string) (AppInfo, bool) {
+	appInfo := AppInfo{}
 	keyFile := glib.NewKeyFile()
-        defer keyFile.Free()
+	defer keyFile.Free()
 	lang := GetLocalLang()
 
 	_, err1 := keyFile.LoadFromFile(_DESKTOP_PATH+id, glib.KeyFileFlagsNone)
 	if err1 != nil {
 		fmt.Println("Load File Failed:", err1)
-		return nil
+		return AppInfo{}, false
 	}
 
 	name, err := keyFile.GetString(_DESKTOP_ENTRY, "Name["+lang+"]")
@@ -135,14 +139,14 @@ func NewAppInfoByID(id string) *AppInfo {
 	exec, err2 := keyFile.GetString(_DESKTOP_ENTRY, _EXEC)
 	if err2 != nil {
 		fmt.Println("Get Exec Failed:", err2)
-		return nil
+		return AppInfo{}, false
 	}
 
 	appInfo.ID = id
 	appInfo.Name = name
 	appInfo.Exec = exec
 
-	return appInfo
+	return appInfo, true
 }
 
 func GetLocalLang() string {
@@ -170,7 +174,7 @@ func GetTerminalList() []string {
 
 func IsTerminalEmulator(fileName string) bool {
 	keyFile := glib.NewKeyFile()
-        defer keyFile.Free()
+	defer keyFile.Free()
 	_, err := keyFile.LoadFromFile(fileName, glib.KeyFileFlagsNone)
 	if err != nil {
 		fmt.Println("KeyFile Load File Failed:", err)
