@@ -13,13 +13,8 @@ func init() {
 }
 
 func (theme *Theme) TestGetplJsonData(c *C) {
-	testJsonContent := `{
-    "DefaultTplValue":{"Background":"background_default.jpg","ItemColor":"#a6a6a6","SelectedItemColor":"#fefefe"},
-    "LastTplValue":{"Background":"background.jpg","ItemColor":"#a6a6a0","SelectedItemColor":"#fefef0"}
-}`
-	wantJsonData := &TplJsonData{}
-	wantJsonData.DefaultTplValue = TplValues{"background_default.jpg", "#a6a6a6", "#fefefe"}
-	wantJsonData.LastTplValue = TplValues{"background.jpg", "#a6a6a0", "#fefef0"}
+	testJsonContent := `{"ItemColor":"#a6a6a0","SelectedItemColor":"#fefef0"}`
+	wantJsonData := &TplJsonData{"#a6a6a0", "#fefef0"}
 
 	jsonData, err := theme.getTplJsonData([]byte(testJsonContent))
 	if err != nil {
@@ -28,6 +23,7 @@ func (theme *Theme) TestGetplJsonData(c *C) {
 	c.Check(*jsonData, Equals, *wantJsonData)
 }
 
+// TODO remove
 func (theme *Theme) TestGetNewBgFileName(c *C) {
 	tests := []struct {
 		s, want string
@@ -45,7 +41,7 @@ func (theme *Theme) TestGetCustomizedThemeContent(c *C) {
 # Designed for 1024x768 resolution
 # Global Property
 title-text: ""
-desktop-image: "{{.Background}}"
+desktop-image: "background.png"
 desktop-color: "#000000"
 terminal-box: "terminal_*.png"
 terminal-font: "Fixed Regular 13"
@@ -67,12 +63,12 @@ terminal-font: "Fixed Regular 13"
   scrollbar_thumb = "sb_th_*.png"
 }
 `
-	testThemeTplJSON := `{"Background": "background.jpg","ItemColor":"#a6a6a6","SelectedItemColor":"#fefefe"}`
+	testThemeTplJSON := `{"ItemColor":"#a6a6a6","SelectedItemColor":"#fefefe"}`
 	wantThemeTxtContent := `# GRUB2 gfxmenu Linux Deepin theme
 # Designed for 1024x768 resolution
 # Global Property
 title-text: ""
-desktop-image: "background.jpg"
+desktop-image: "background.png"
 desktop-color: "#000000"
 terminal-box: "terminal_*.png"
 terminal-font: "Fixed Regular 13"

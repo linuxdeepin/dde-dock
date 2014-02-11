@@ -29,6 +29,7 @@ func (grub *Grub2) OnPropertiesChanged(name string, oldv interface{}) {
 }
 
 func (grub *Grub2) Save() error {
+	grub.theme.customTheme() // TODO
 	err := grub.writeSettings()
 	if err != nil {
 		return err

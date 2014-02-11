@@ -29,6 +29,7 @@ func unquoteString(str string) string {
 	return str
 }
 
+// TODO move to dde-api/os
 func execAndWait(timeout int, name string, arg ...string) error {
 	cmd := exec.Command(name, arg...)
 	var stdout, stderr bytes.Buffer
@@ -74,6 +75,7 @@ func stringInSlice(a string, list []string) bool {
 	return false
 }
 
+// TODO move dde-api/file
 func unTarGz(archiveFile string, destDir string, prefix string) error {
 	destDir = path.Clean(destDir) + string(os.PathSeparator)
 
@@ -177,8 +179,7 @@ func isFileExists(file string) bool {
 
 func copyFile(dest, src string) (written int64, err error) {
 	if dest == src {
-		logInfo("copyFile(): source and destination are same file")
-		return
+		return -1, newError("source and destination are same file")
 	}
 
 	sf, err := os.Open(src)
@@ -209,3 +210,32 @@ func getPathLevel(p string) int {
 func newError(format string, v ...interface{}) error {
 	return errors.New(fmt.Sprintf(format, v...))
 }
+
+// TODO
+func getScreenResolution() (int32, int32) {
+	return 1024, 768
+}
+
+func getImgClipSizeByResolution(screenWidth, screenHeight, imgWidth, imgHeight int32) (w int32, h int32) {
+	if imgWidth >= screenWidth && imgHeight >= screenHeight {
+		w = screenWidth
+		h = screenHeight
+	} else {
+		scale := float32(screenWidth) / float32(screenHeight)
+		w = imgWidth
+		h = int32(float32(w) / scale)
+		if h > imgHeight {
+			h = imgHeight
+			w = int32(float32(h) * scale)
+		}
+	}
+	return
+}
+
+// func getImageSize(imageFile string) (w, h int32, err error) {
+
+// }
+// func convertToPNG(src, dest string) (err error) {
+// }
+// func clipPNG(src, dest string, x0, y0, x1, y1 int32) (err error) {
+// }

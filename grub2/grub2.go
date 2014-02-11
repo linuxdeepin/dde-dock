@@ -79,7 +79,7 @@ func (grub *Grub2) readSettings() error {
 }
 
 func (grub *Grub2) writeSettings() error {
-	grub.setTheme(grub.theme.mainFile)
+	grub.setTheme(grub.theme.mainFile) // enable deepin grub2 theme
 	fileContent := grub.getSettingContentToSave()
 	err := ioutil.WriteFile(_GRUB_CONFIG, []byte(fileContent), 0644)
 	if err != nil {
@@ -293,6 +293,7 @@ func (grub *Grub2) getTimeout() int32 {
 	return int32(timeout)
 }
 
+// TODO
 func (grub *Grub2) getGfxmode() string {
 	if len(grub.settings["GRUB_GFXMODE"]) == 0 {
 		return "auto"
