@@ -24,6 +24,7 @@ package main
 import (
 	"dlib/dbus"
 	"fmt"
+	"os/user"
 	"sort"
 	"strings"
 )
@@ -65,6 +66,29 @@ func (m *Manager) CreateUser(name, fullname string, accountType int32) string {
 
 func (m *Manager) DeleteUser(id int64, removeFiles bool) {
 	_accountInface.DeleteUser(id, removeFiles)
+}
+
+func (m *Manager) FindUserById(id string) string {
+	path := _USER_VALID_PATH + id
+	list := m.ListCachedUsers()
+
+	for _, v := range list {
+		if path == v {
+			return path
+		}
+	}
+
+	return ""
+}
+
+func (m *Manager) FindUserByName(name string) string {
+	userInfo, err := user.Lookup(name)
+	if err != nil {
+		fmt.Println("Lookup By Name Failed:", err)
+		return ""
+	}
+
+	return m.FindUserById(userInfo.Uid)
 }
 
 func NewAccountManager() *Manager {

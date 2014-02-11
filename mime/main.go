@@ -1,7 +1,9 @@
 package main
 
 import (
+	"dlib"
 	"dlib/dbus"
+        "dlib/logger"
 )
 
 const (
@@ -37,11 +39,21 @@ func (media *MediaMount) GetDBusInfo() dbus.DBusInfo {
 }
 
 func main() {
-	dapp := DefaultApps{}
-	dbus.InstallOnSession(&dapp)
+        defer func () {
+                if err := recover(); err != nil {
+                        logger.Println("Recover Error:", err)
+                }
+        } ()
+
+	dapp := NewDefaultApps()
+	if mimeWatcher != nil {
+		defer mimeWatcher.Close()
+	}
+	dbus.InstallOnSession(dapp)
 
 	media := NewMediaMount()
-	dbus.InstallOnSession (media)
+	dbus.InstallOnSession(media)
 	dbus.DealWithUnhandledMessage()
-	select {}
+
+	dlib.StartLoop()
 }

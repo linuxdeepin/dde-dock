@@ -17,7 +17,8 @@ var (
 )
 
 type MediaMount struct {
-	AutoMountOpen *property.GSettingsBoolProperty `access:"readwrite"`
+	AutoMountOpen      *property.GSettingsBoolProperty `access:"readwrite"`
+	MediaActionChanged func()
 }
 
 func NewMediaMount() *MediaMount {
@@ -25,6 +26,7 @@ func NewMediaMount() *MediaMount {
 	media.AutoMountOpen = property.NewGSettingsBoolProperty(
 		media, "AutoMountOpen",
 		mediaGSettings, MEDIA_KEY_AUTOMOUNT)
+        media.listenGSettings()
 
 	return media
 }
@@ -39,6 +41,23 @@ func (op *MediaMount) DefaultMediaAppByMime(mime string) AppInfo {
 
 func (op *MediaMount) MediaAppListByMime(mime string) []AppInfo {
 	return getActionsByMime(mime)
+}
+
+func (op *MediaMount) listenGSettings() {
+	mediaGSettings.Connect("changed::autorun-x-content-ignore",
+		func(s *gio.Settings, key string) {
+			op.MediaActionChanged()
+		})
+
+	mediaGSettings.Connect("changed::autorun-x-content-open-folder",
+		func(s *gio.Settings, key string) {
+			op.MediaActionChanged()
+		})
+
+	mediaGSettings.Connect("changed::autorun-x-content-start-app",
+		func(s *gio.Settings, key string) {
+			op.MediaActionChanged()
+		})
 }
 
 func getActionByMime(mime string) AppInfo {
