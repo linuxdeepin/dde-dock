@@ -16,7 +16,7 @@ const (
 	_DATE_TIME_PATH = "/com/deepin/daemon/DateAndTime"
 	_DATA_TIME_IFC  = "com.deepin.daemon.DateAndTime"
 
-	_DATE_TIME_SCHEMA = "com.deepin.datetime"
+	_DATE_TIME_SCHEMA = "com.deepin.dde.datetime"
 	_TIME_ZONE_FILE   = "/etc/timezone"
 )
 
@@ -113,29 +113,29 @@ func Init() {
 
 	setDate, err = setdatetime.NewSetDateTime("/com/deepin/api/SetDateTime")
 	if err != nil {
-                logger.Println("New SetDateTime Failed:", err)
+		logger.Println("New SetDateTime Failed:", err)
 		panic(err)
 	}
 
 	gsdDate, err = datetimemechanism.NewDateTimeMechanism("/")
 	if err != nil {
-                logger.Println("New DateTimeMechanism Failed:", err)
+		logger.Println("New DateTimeMechanism Failed:", err)
 		panic(err)
 	}
 
 	zoneWatcher, err = fsnotify.NewWatcher()
 	if err != nil {
-                logger.Println("New FS Watcher Failed:", err)
+		logger.Println("New FS Watcher Failed:", err)
 		panic(err)
 	}
 }
 
 func main() {
-        defer func () {
-                if err := recover(); err != nil {
-                        logger.Println("recover error:", err)
-                }
-        }()
+	defer func() {
+		if err := recover(); err != nil {
+			logger.Println("recover error:", err)
+		}
+	}()
 
 	Init()
 	defer zoneWatcher.Close()
@@ -143,7 +143,7 @@ func main() {
 	date := NewDateAndTime()
 	err := dbus.InstallOnSession(date)
 	if err != nil {
-                logger.Println("Install Session DBus Failed:", err)
+		logger.Println("Install Session DBus Failed:", err)
 		panic(err)
 	}
 
