@@ -4,13 +4,11 @@ import (
 	"bytes"
 	"encoding/json"
 	"io/ioutil"
-	"path"
-	"strings"
 	"text/template"
 )
 
 const (
-	_THEME_PATH        = "/boot/grub/themes/deepin" // TODO
+	_THEME_PATH        = "/boot/grub/themes/deepin"
 	_THEME_MAIN_FILE   = _THEME_PATH + "/theme.txt"
 	_THEME_TPL_FILE    = _THEME_PATH + "/theme.tpl"
 	_THEME_JSON_FILE   = _THEME_PATH + "/theme_tpl.json" // json stores the key-values for template file
@@ -20,13 +18,7 @@ const (
 
 var _THEME_TEMPLATOR = template.New("theme-templator")
 
-// TODO
-type TplValues struct {
-	// Background, ItemColor, SelectedItemColor string
-	ItemColor, SelectedItemColor string
-}
 type TplJsonData struct {
-	// DefaultTplValue, LastTplValue TplValues
 	ItemColor, SelectedItemColor string
 }
 
@@ -37,10 +29,8 @@ type Theme struct {
 	jsonFile  string
 	bgSrcFile string // TODO
 	bgFile    string // TODO
-	// relBgFile string // TODO remove relative background file path
 
-	Background string `access:"read"` // absolute background file path
-	// BackgroundSource  string `access:"read"` // TODO
+	Background        string `access:"read"` // absolute background file path
 	ItemColor         string `access:"readwrite"`
 	SelectedItemColor string `access:"readwrite"`
 }
@@ -59,62 +49,19 @@ func NewTheme() *Theme {
 		panic(err) // TODO
 	}
 
-	// theme.relBgFile = tplJsonData.LastTplValue.Background // TODO
-	theme.makeBackground()
+	theme.Background = theme.bgFile
 	theme.ItemColor = tplJsonData.ItemColor
 	theme.SelectedItemColor = tplJsonData.SelectedItemColor
 
 	return theme
 }
 
-// TODO Update variable 'Background'
-func (theme *Theme) makeBackground() {
-	theme.Background = theme.bgFile
-	// theme.Background = theme.getBgFileAbsPath(theme.relBgFile)
-	if !isFileExists(theme.Background) {
-		logError("theme: background file is not exists, %s", theme.Background)
-	}
-}
-
-// TODO remove
-// func (theme *Theme) setBackground(background string) {
-// 	// copy background file to theme dir if need
-// 	theme.copyBgFileToThemeDir(background)
-// 	theme.relBgFile = theme.getNewBgFileName(background)
-// 	// theme.customTheme()			// TODO
-// }
-
 func (theme *Theme) setItemColor(itemColor string) {
-	// theme.customTheme()			// TODO
+	theme.customTheme()
 }
 
 func (theme *Theme) setSelectedItemColor(selectedItemColor string) {
-	// theme.customTheme()			// TODO
-}
-
-// TODO remove
-func (theme *Theme) copyBgFileToThemeDir(imageFile string) (newBgFile string, err error) {
-	bgFileName := theme.getNewBgFileName(imageFile)
-	newBgFile = theme.getBgFileAbsPath(bgFileName)
-	_, err = copyFile(newBgFile, imageFile)
-	if err != nil {
-		logError(err.Error())
-	}
-	return
-}
-
-// TODO remove
-func (theme *Theme) getBgFileAbsPath(bgFileRelPath string) string {
-	bgFileAbsPath := path.Join(theme.themePath, bgFileRelPath)
-	return bgFileAbsPath
-}
-
-// TODO remove
-func (theme *Theme) getNewBgFileName(imageFile string) string {
-	fileName := path.Base(imageFile)
-	i := strings.LastIndex(fileName, ".")
-	fileExt := fileName[i:]
-	return "background" + fileExt
+	theme.customTheme()
 }
 
 func (theme *Theme) getThemeTplJsonData() (*TplJsonData, error) {

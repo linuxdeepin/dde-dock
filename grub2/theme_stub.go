@@ -49,22 +49,6 @@ func (theme *Theme) SetBackgroundSourceFile(imageFile string) bool {
 	return true
 }
 
-// TODO remove
-func (theme *Theme) Reset() error {
-	tplJsonData, err := theme.getThemeTplJsonData()
-	if err != nil {
-		return err
-	}
-
-	// theme.relBgFile = tplJsonData.DefaultTplValue.Background // TODO
-	theme.makeBackground()
-	theme.ItemColor = tplJsonData.ItemColor
-	theme.SelectedItemColor = tplJsonData.SelectedItemColor
-
-	// theme.customTheme()			// TODO
-	return nil
-}
-
 // TODO move Generate background to fit the monitor resolution.
 func (theme *Theme) generateBackground() {
 	screenWidth, screenHeight := getScreenResolution()

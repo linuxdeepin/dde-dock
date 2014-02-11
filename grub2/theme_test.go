@@ -23,19 +23,6 @@ func (theme *Theme) TestGetplJsonData(c *C) {
 	c.Check(*jsonData, Equals, *wantJsonData)
 }
 
-// TODO remove
-func (theme *Theme) TestGetNewBgFileName(c *C) {
-	tests := []struct {
-		s, want string
-	}{
-		{"/a/b/c/d/image.png", "background.png"},
-		{"/image2.jpg", "background.jpg"},
-	}
-	for _, t := range tests {
-		c.Check(theme.getNewBgFileName(t.s), Equals, t.want)
-	}
-}
-
 func (theme *Theme) TestGetCustomizedThemeContent(c *C) {
 	testThemeTplContent := `# GRUB2 gfxmenu Linux Deepin theme
 # Designed for 1024x768 resolution
@@ -90,7 +77,7 @@ terminal-font: "Fixed Regular 13"
   scrollbar_thumb = "sb_th_*.png"
 }
 `
-	tplValues := TplValues{}
+	tplValues := TplJsonData{}
 	err := json.Unmarshal([]byte(testThemeTplJSON), &tplValues)
 	if err != nil {
 		c.Error(err)
