@@ -8,3 +8,5 @@ test_*
 *.ini
 .#*
 .test
+*/*.test
+grub2/grub2
