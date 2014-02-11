@@ -7,7 +7,7 @@
 		<description>system shortcut</description>
 	</key>
 	<key type="as" name="terminal">
-		<default>['&lt;Control&gt;&lt;Alt&gt;T','python /usr/share/deepin-system-settings/modules/keyboard/src/terminal.py']</default>
+        <default>['&lt;Control&gt;&lt;Alt&gt;T','/usr/bin/x-terminal-emulator']</default>
 		<summary>shortcut</summary>
 		<description>system shortcut</description>
 	</key>

@@ -3,13 +3,17 @@ package main
 import (
 	"dlib/gio-2.0"
 	"dlib/glib-2.0"
-	"fmt"
+	"dlib/logger"
+	"github.com/howeyc/fsnotify"
 	"io/ioutil"
 	"os"
+	"os/user"
 	"strings"
 )
 
-type DefaultApps struct{}
+type DefaultApps struct {
+	DefaultAppChanged func()
+}
 
 type AppInfo struct {
 	ID   string
@@ -26,12 +30,15 @@ const (
 	_X_TERMINAL_EMULATOR = "x-terminal-emulator"
 	_CATEGORY            = "Categories"
 	_EXEC                = "Exec"
+
+	MIME_CACHE_FILE = ".local/share/applications/mimeapps.list"
 )
 
 var (
 	_TerminalBlacklist = []string{"guake"}
 
 	_TerminalGSettings = gio.NewSettings(_TERMINAL_SCHEMA)
+	mimeWatcher        *fsnotify.Watcher
 )
 
 func NewDAppInfo(gioApp *gio.AppInfo) AppInfo {
@@ -109,7 +116,7 @@ func (dapp *DefaultApps) SetDefaultAppViaType(typeName, appID string) bool {
 		if gioApp.GetId() == appID {
 			_, err := gioApp.SetAsDefaultForType(typeName)
 			if err != nil {
-				fmt.Println(err)
+				logger.Println(err)
 				return false
 			}
 			break
@@ -117,6 +124,60 @@ func (dapp *DefaultApps) SetDefaultAppViaType(typeName, appID string) bool {
 	}
 
 	return true
+}
+
+func (dapp *DefaultApps) listenMimeCacheFile() {
+	userInfo, err := user.Current()
+	if err != nil {
+		logger.Println("Get current user failed:", err)
+		panic(err)
+	}
+
+	mimeFile := userInfo.HomeDir + "/" + MIME_CACHE_FILE
+	err = mimeWatcher.Watch(mimeFile)
+	if err != nil {
+		logger.Printf("Watch '%s' Failed: %s\n",
+			MIME_CACHE_FILE, err)
+		panic(err)
+	}
+
+	go func() {
+		for {
+			select {
+			case ev := <-mimeWatcher.Event:
+				logger.Println("Watch Event:", ev)
+				if ev.IsDelete() {
+					mimeWatcher.Watch(mimeFile)
+				} else {
+					dapp.DefaultAppChanged()
+				}
+			case err := <-mimeWatcher.Error:
+				logger.Println("Watch Error:", err)
+			}
+		}
+	}()
+}
+
+func NewDefaultApps() *DefaultApps {
+        defer func () {
+                if err := recover(); err != nil {
+                        logger.Println("Recover Error in NewDefaultApps:",
+                err)
+                }
+        } ()
+
+	dapp := &DefaultApps{}
+
+	var err error
+	mimeWatcher, err = fsnotify.NewWatcher()
+	if err != nil {
+		logger.Println("Create mime file watcher failed:", err)
+		panic(err)
+	}
+
+	dapp.listenMimeCacheFile()
+
+	return dapp
 }
 
 func NewAppInfoByID(id string) (AppInfo, bool) {
@@ -127,7 +188,7 @@ func NewAppInfoByID(id string) (AppInfo, bool) {
 
 	_, err1 := keyFile.LoadFromFile(_DESKTOP_PATH+id, glib.KeyFileFlagsNone)
 	if err1 != nil {
-		fmt.Println("Load File Failed:", err1)
+		logger.Println("Load File Failed:", err1)
 		return AppInfo{}, false
 	}
 
@@ -138,7 +199,7 @@ func NewAppInfoByID(id string) (AppInfo, bool) {
 
 	exec, err2 := keyFile.GetString(_DESKTOP_ENTRY, _EXEC)
 	if err2 != nil {
-		fmt.Println("Get Exec Failed:", err2)
+		logger.Println("Get Exec Failed:", err2)
 		return AppInfo{}, false
 	}
 
@@ -159,7 +220,7 @@ func GetTerminalList() []string {
 	terminalList := []string{}
 	entryList, err := GetDesktopEntryList()
 	if err != nil {
-		fmt.Println("Get Desktop Entry List Failed")
+		logger.Println("Get Desktop Entry List Failed")
 		return nil
 	}
 
@@ -177,20 +238,20 @@ func IsTerminalEmulator(fileName string) bool {
 	defer keyFile.Free()
 	_, err := keyFile.LoadFromFile(fileName, glib.KeyFileFlagsNone)
 	if err != nil {
-		fmt.Println("KeyFile Load File Failed:", err)
+		logger.Println("KeyFile Load File Failed:", err)
 		return false
 	}
 
 	categories, err := keyFile.GetString(_DESKTOP_ENTRY, _CATEGORY)
 	if err != nil {
-		fmt.Println("KeyFile Get String Failed:", err)
+		logger.Println("KeyFile Get String Failed:", err)
 		return false
 	}
 
 	if strings.Contains(categories, _TERMINAL_EMULATOR) {
 		execName, err := keyFile.GetString(_DESKTOP_ENTRY, _EXEC)
 		if err != nil {
-			fmt.Println("KeyFile Get String Failed:", err)
+			logger.Println("KeyFile Get String Failed:", err)
 			return false
 		}
 
@@ -215,7 +276,7 @@ func GetDesktopEntryList() ([]string, error) {
 
 	desktops, err := ioutil.ReadDir(_DESKTOP_PATH)
 	if err != nil {
-		fmt.Println("Read Dir Failed:", err)
+		logger.Println("Read Dir Failed:", err)
 		return nil, err
 	}
 
