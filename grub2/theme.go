@@ -13,7 +13,7 @@ const (
 	_THEME_MAIN_FILE   = _THEME_PATH + "/theme.txt"
 	_THEME_TPL_FILE    = _THEME_PATH + "/theme.tpl"
 	_THEME_JSON_FILE   = _THEME_PATH + "/theme_tpl.json" // json stores the key-values for template file
-	_THEME_BG_SRC_FILE = _THEME_PATH + "/background_source.png"
+	_THEME_BG_SRC_FILE = _THEME_PATH + "/background_source"
 	_THEME_BG_FILE     = _THEME_PATH + "/background.png"
 )
 
@@ -105,7 +105,6 @@ func (theme *Theme) customTheme() {
 	if err != nil {
 		panic(err)
 	}
-	// tplJsonData.Background = theme.relBgFile // TODO
 	tplJsonData.ItemColor = theme.ItemColor
 	tplJsonData.SelectedItemColor = theme.SelectedItemColor
 
@@ -149,15 +148,17 @@ func (theme *Theme) getCustomizedThemeContent(fileContent []byte, tplData interf
 	return buf.Bytes(), nil
 }
 
-// TODO Generate background to fit the monitor resolution.
+// TODO [notify process end] Generate background to fit the monitor resolution.
 func (theme *Theme) generateBackground() {
 	screenWidth, screenHeight := getScreenResolution()
 	logInfo("screen resolution %dx%d", screenWidth, screenHeight)
+
 	imgWidth, imgHeight, err := dimg.GetImageSize(theme.bgSrcFile)
-	logInfo("source background size %dx%d", imgWidth, imgHeight)
 	if err != nil {
 		panic(err)
 	}
+	logInfo("source background size %dx%d", imgWidth, imgHeight)
+
 	w, h := getImgClipSizeByResolution(screenWidth, screenHeight, imgWidth, imgHeight)
 	logInfo("background size %dx%d", w, h)
 	err = dimg.ClipPNG(theme.bgSrcFile, theme.bgFile, 0, 0, w, h)

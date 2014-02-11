@@ -80,8 +80,8 @@ func (u *Util) TestGetImgClipSizeByResolution(c *C) {
 		c.Check(h, Equals, t.wanth)
 	}
 	var iw, ih int32 = 1920, 1080
-	for sw := 1; sw < 2000; sw += 5 {
-		for sh := 1; sh < 2000; sh += 5 {
+	for sw := 1; sw < 3000; sw += 5 {
+		for sh := 1; sh < 3000; sh += 5 {
 			w, h := getImgClipSizeByResolution(int32(sw), int32(sh), 1920, 1080)
 			if w > iw || h > ih {
 				c.Fatalf("sw=%d, sh=%d, iw=%d, ih=%d, w=%d, h=%d", sw, sh, iw, ih, w, h)

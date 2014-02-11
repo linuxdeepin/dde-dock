@@ -26,7 +26,7 @@ func (theme *Theme) OnPropertiesChanged(name string, oldv interface{}) {
 	}
 }
 
-// TODO Set the background source file, then generate the background
+// Set the background source file, then generate the background
 // to fit the screen resolution, support png and jpeg image format
 func (theme *Theme) SetBackgroundSourceFile(imageFile string) bool {
 	// check image size
@@ -39,8 +39,12 @@ func (theme *Theme) SetBackgroundSourceFile(imageFile string) bool {
 		return false
 	}
 
-	// backup background source file and convert it to png format
-	dimg.ConvertToPNG(imageFile, theme.bgSrcFile)
+	// backup background source file
+	_, err = copyFile(imageFile, theme.bgSrcFile)
+	if err != nil {
+		return false
+	}
+
 	theme.generateBackground()
 
 	return true

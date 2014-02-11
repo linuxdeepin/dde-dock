@@ -177,7 +177,7 @@ func isFileExists(file string) bool {
 	}
 }
 
-func copyFile(dest, src string) (written int64, err error) {
+func copyFile(src, dest string) (written int64, err error) {
 	if dest == src {
 		return -1, newError("source and destination are same file")
 	}
@@ -213,7 +213,8 @@ func newError(format string, v ...interface{}) error {
 
 // TODO
 func getScreenResolution() (int32, int32) {
-	return 1024, 768
+	// return 1024, 768
+	return 1920, 1080
 }
 
 func getImgClipSizeByResolution(screenWidth, screenHeight, imgWidth, imgHeight int32) (w int32, h int32) {
@@ -231,11 +232,3 @@ func getImgClipSizeByResolution(screenWidth, screenHeight, imgWidth, imgHeight i
 	}
 	return
 }
-
-// func getImageSize(imageFile string) (w, h int32, err error) {
-
-// }
-// func convertToPNG(src, dest string) (err error) {
-// }
-// func clipPNG(src, dest string, x0, y0, x1, y1 int32) (err error) {
-// }
