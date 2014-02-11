@@ -1,5 +1,11 @@
 package main
 
+// #cgo amd64 386 CFLAGS: -g -Wall
+// #cgo pkg-config:glib-2.0 x11 xext gtk+-3.0 gdk-3.0
+// #define GNOME_DESKTOP_USE_UNSTABLE_API
+// #include "gnome-idle-monitor.h"
+import "C"
+
 import (
 	"dbus/org/freedesktop/upower"
 	"dlib"
@@ -105,8 +111,8 @@ func (p *Power) GetDBusInfo() dbus.DBusInfo {
 }
 
 func (power *Power) getGsettingsProperty() int32 {
-	power.CurrentPlan = property.NewGSettingsStringProperty(
-		power, "CurrentPlan", power.powerSettings, "current-plan")
+	//power.CurrentPlan = property.NewGSettingsStringProperty(
+	//power, "CurrentPlan", power.powerSettings, "current-plan")
 	power.ButtonHibernate = property.NewGSettingsStringProperty(
 		power, "ButtonHibernate", power.powerSettings, "button-hibernate")
 	power.ButtonPower = property.NewGSettingsStringProperty(
@@ -122,14 +128,14 @@ func (power *Power) getGsettingsProperty() int32 {
 		power, "LidCloseAction", power.powerSettings, "lid-close-ac-action")
 	power.LidCloseBatteryAction = property.NewGSettingsStringProperty(
 		power, "LidCloseBatteryAction", power.powerSettings, "lid-close-battery-action")
-	power.ShowTray = property.NewGSettingsBoolProperty(
-		power, "ShowTray", power.powerSettings, "show-tray")
+	//power.ShowTray = property.NewGSettingsBoolProperty(
+	//power, "ShowTray", power.powerSettings, "show-tray")
 	power.SleepInactiveAcTimeout = property.NewGSettingsIntProperty(
 		power, "SleepInactiveAcTimeout", power.powerSettings, "sleep-inactive-ac-timeout")
 	power.SleepInactiveBatteryTimeout = property.NewGSettingsIntProperty(
 		power, "SleepInactiveBatteryTimeout", power.powerSettings, "sleep-inactive-battery-timeout")
-	power.SleepDisplayAc = property.NewGSettingsIntProperty(
-		power, "SleepDisplayAc", power.powerSettings, "sleep-display-ac")
+	//power.SleepDisplayAc = property.NewGSettingsIntProperty(
+	//power, "SleepDisplayAc", power.powerSettings, "sleep-display-ac")
 	power.SleepDisplayBattery = property.NewGSettingsIntProperty(
 		power, "SleepDisplayBattery", power.powerSettings, "sleep-display-battery")
 
@@ -180,7 +186,7 @@ func getUpowerDeviceObjectPath(devices []dbus.ObjectPath) []dbus.ObjectPath {
 		panic(err)
 	}
 	linePattern, err := regexp.Compile(
-		"org/freedesktop/UPower/devices/line_power_ADP[[:digit:]]+")
+		"/org/freedesktop/UPower/devices/line_power_ADP[[:digit:]]+")
 	if err != nil {
 		panic(err)
 	}
