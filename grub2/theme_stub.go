@@ -1,11 +1,8 @@
 package main
 
 import (
-	"dbus/com/deepin/dde/api/image"
 	"dlib/dbus"
 )
-
-var dimg *image.Image
 
 func (theme *Theme) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
@@ -47,18 +44,4 @@ func (theme *Theme) SetBackgroundSourceFile(imageFile string) bool {
 	theme.generateBackground()
 
 	return true
-}
-
-// TODO move Generate background to fit the monitor resolution.
-func (theme *Theme) generateBackground() {
-	screenWidth, screenHeight := getScreenResolution()
-	imgWidth, imgHeight, err := dimg.GetImageSize(theme.bgSrcFile)
-	if err != nil {
-		panic(err)
-	}
-	w, h := getImgClipSizeByResolution(screenWidth, screenHeight, imgWidth, imgHeight)
-	err = dimg.ClipPNG(theme.bgSrcFile, theme.bgFile, 0, 0, w, h)
-	if err != nil {
-		panic(err)
-	}
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"dbus/com/deepin/dde/api/image"
 	"encoding/json"
 	"io/ioutil"
 	"text/template"
@@ -16,7 +17,18 @@ const (
 	_THEME_BG_FILE     = _THEME_PATH + "/background.png"
 )
 
-var _THEME_TEMPLATOR = template.New("theme-templator")
+var (
+	_THEME_TEMPLATOR = template.New("theme-templator")
+	dimg             *image.Image
+)
+
+func init() {
+	var err error
+	dimg, err = image.NewImage("/com/deepin/api/Image")
+	if err != nil {
+		panic(err)
+	}
+}
 
 type TplJsonData struct {
 	ItemColor, SelectedItemColor string
@@ -135,4 +147,21 @@ func (theme *Theme) getCustomizedThemeContent(fileContent []byte, tplData interf
 		return []byte(""), err
 	}
 	return buf.Bytes(), nil
+}
+
+// TODO Generate background to fit the monitor resolution.
+func (theme *Theme) generateBackground() {
+	screenWidth, screenHeight := getScreenResolution()
+	logInfo("screen resolution %dx%d", screenWidth, screenHeight)
+	imgWidth, imgHeight, err := dimg.GetImageSize(theme.bgSrcFile)
+	logInfo("source background size %dx%d", imgWidth, imgHeight)
+	if err != nil {
+		panic(err)
+	}
+	w, h := getImgClipSizeByResolution(screenWidth, screenHeight, imgWidth, imgHeight)
+	logInfo("background size %dx%d", w, h)
+	err = dimg.ClipPNG(theme.bgSrcFile, theme.bgFile, 0, 0, w, h)
+	if err != nil {
+		panic(err)
+	}
 }
