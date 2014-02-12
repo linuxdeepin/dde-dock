@@ -500,7 +500,7 @@ void *pa_get_device_list(pa *self)
         // requests
         switch (state)
         {
-            // State 0: we haven't done anything yet
+        // State 0: we haven't done anything yet
         case 0:
             // This sends an operation to the server.  pa_sinklist_info is
             // our callback function and a pointer to our devicelist will
@@ -586,7 +586,7 @@ void *pa_get_client_list(pa *self)
         // requests
         switch (state)
         {
-            // State 0: we haven't done anything yet
+        // State 0: we haven't done anything yet
         case 0:
             // This sends an operation to the server.  pa_sinklist_info is
             // our callback function and a pointer to our devicelist will
@@ -717,6 +717,108 @@ void *pa_get_source_output_list(pa *self)
     return NULL;
 }
 
+int pa_set_default_sink(pa *self, const char *name)
+{
+    int state = 0;
+
+    if (!self)
+    {
+        /*fprintf(stderr, "self is NULL pointer !\n");*/
+        return -1;
+    }
+
+    pthread_mutex_lock(&self->pa_mutex);
+    for (;;)
+    {
+        if (self->pa_ready == 0)
+        {
+            pa_mainloop_iterate(self->pa_ml, 1, NULL);
+            continue;
+        }
+        if (self->pa_ready == 2)
+        {
+            pa_init_context(self);
+
+            continue;
+        }
+        switch (state)
+        {
+        case 0:
+            self->pa_op = pa_context_set_default_sink(self->pa_ctx,
+                          name,
+                          pa_context_success_cb,
+                          self);
+            state++;
+            break;
+        case 1:
+            if (pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
+            {
+                pa_operation_unref(self->pa_op);
+                self->pa_op = NULL;
+                pthread_mutex_unlock(&self->pa_mutex);
+                return 0;
+            }
+            break;
+        default:
+            fprintf(stderr, "in state %d\n", state);
+            return 0;
+        }
+        pa_mainloop_iterate(self->pa_ml, 1, NULL);
+    }
+    return 0;
+}
+
+int pa_set_default_source(pa *self, const char *name)
+{
+    int state = 0;
+
+    if (!self)
+    {
+        /*fprintf(stderr, "self is NULL pointer !\n");*/
+        return -1;
+    }
+
+    pthread_mutex_lock(&self->pa_mutex);
+    for (;;)
+    {
+        if (self->pa_ready == 0)
+        {
+            pa_mainloop_iterate(self->pa_ml, 1, NULL);
+            continue;
+        }
+        if (self->pa_ready == 2)
+        {
+            pa_init_context(self);
+
+            continue;
+        }
+        switch (state)
+        {
+        case 0:
+            self->pa_op = pa_context_set_default_source(self->pa_ctx,
+                          name,
+                          pa_context_success_cb,
+                          self);
+            state++;
+            break;
+        case 1:
+            if (pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
+            {
+                pa_operation_unref(self->pa_op);
+                self->pa_op = NULL;
+                pthread_mutex_unlock(&self->pa_mutex);
+                return 0;
+            }
+            break;
+        default:
+            fprintf(stderr, "in state %d\n", state);
+            return 0;
+        }
+        pa_mainloop_iterate(self->pa_ml, 1, NULL);
+    }
+    return 0;
+}
+
 int pa_set_card_profile_by_index(pa *self, int index, const char *profile)
 {
     int state = 0;
@@ -767,7 +869,6 @@ int pa_set_card_profile_by_index(pa *self, int index, const char *profile)
         pa_mainloop_iterate(self->pa_ml, 1, NULL);
     }
     return 0;
-
 }
 
 /*int pa_get_sink_input_index_by_pid(pa *self,int index,int )
@@ -1004,10 +1105,11 @@ int pa_inc_sink_volume_by_index(pa *self, int index, int volume)
                 }
                 else
                 {
-                    pa_context_set_sink_volume_by_index(self->pa_ctx, index,
-                                                        &cvolume,
-                                                        pa_set_sink_input_volume_cb,
-                                                        self);
+                    pa_context_set_sink_volume_by_index(
+                        self->pa_ctx, index,
+                        &cvolume,
+                        pa_set_sink_input_volume_cb,
+                        self);
                     state++;
                     break;
                 }
@@ -1054,8 +1156,9 @@ int pa_dec_sink_volume_by_index(pa *self, int index, int volume)
         switch (state)
         {
         case 0:
-            self->pa_op = pa_context_get_sink_info_by_index(self->pa_ctx, index,
-                          pa_get_sink_volume_cb, &cvolume);
+            self->pa_op = pa_context_get_sink_info_by_index(
+                              self->pa_ctx, index,
+                              pa_get_sink_volume_cb, &cvolume);
             state++;
             break;
         case 1:
@@ -1072,8 +1175,9 @@ int pa_dec_sink_volume_by_index(pa *self, int index, int volume)
                 }
                 else
                 {
-                    pa_context_set_sink_volume_by_index(self->pa_ctx, index, &cvolume,
-                                                        pa_set_sink_input_volume_cb, self);
+                    pa_context_set_sink_volume_by_index(
+                        self->pa_ctx, index, &cvolume,
+                        pa_set_sink_input_volume_cb, self);
                     state++;
                     break;
                 }
@@ -1240,8 +1344,9 @@ int pa_set_source_mute_by_index(pa *self, int index, int mute)
         switch (state)
         {
         case 0:
-            self->pa_op = pa_context_set_source_mute_by_index(self->pa_ctx, index, mute,
-                          pa_context_success_cb, self);
+            self->pa_op = pa_context_set_source_mute_by_index(
+                              self->pa_ctx, index, mute,
+                              pa_context_success_cb, self);
             state++;
             break;
         case 1:
@@ -1301,7 +1406,8 @@ int pa_set_source_volume_by_index(pa *self, int index, pa_cvolume *cvolume)
         {
         case 0:
             self->pa_op = pa_context_set_source_volume_by_index(
-                              self->pa_ctx, index, cvolume, pa_context_success_cb, self);
+                              self->pa_ctx, index,
+                              cvolume, pa_context_success_cb, self);
             state++;
             break;
         case 1:
@@ -1359,8 +1465,9 @@ int pa_inc_source_volume_by_index(pa *self, int index, int volume)
         switch (state)
         {
         case 0:
-            self->pa_op = pa_context_get_source_info_by_index(self->pa_ctx, index,
-                          pa_get_source_volume_cb, &cvolume);
+            self->pa_op = pa_context_get_source_info_by_index(
+                              self->pa_ctx, index,
+                              pa_get_source_volume_cb, &cvolume);
             state++;
             break;
         case 1:
@@ -1377,8 +1484,9 @@ int pa_inc_source_volume_by_index(pa *self, int index, int volume)
                 }
                 else
                 {
-                    pa_context_set_source_volume_by_index(self->pa_ctx, index, &cvolume,
-                                                          pa_context_success_cb, self);
+                    pa_context_set_source_volume_by_index(
+                        self->pa_ctx, index, &cvolume,
+                        pa_context_success_cb, self);
                     state++;
                     break;
                 }
@@ -1432,8 +1540,9 @@ int pa_dec_source_volume_by_index(pa *self, int index, int volume)
         switch (state)
         {
         case 0:
-            self->pa_op = pa_context_get_source_info_by_index(self->pa_ctx, index,
-                          pa_get_source_volume_cb, &cvolume);
+            self->pa_op = pa_context_get_source_info_by_index(
+                              self->pa_ctx, index,
+                              pa_get_source_volume_cb, &cvolume);
             state++;
             break;
         case 1:
@@ -1450,8 +1559,9 @@ int pa_dec_source_volume_by_index(pa *self, int index, int volume)
                 }
                 else
                 {
-                    pa_context_set_source_volume_by_index(self->pa_ctx, index, &cvolume,
-                                                          pa_set_sink_input_volume_cb, self);
+                    pa_context_set_source_volume_by_index(
+                        self->pa_ctx, index, &cvolume,
+                        pa_set_sink_input_volume_cb, self);
                     state++;
                     break;
                 }
@@ -2187,7 +2297,7 @@ void pa_state_cb(pa_context *c, void *userdata)
     state = pa_context_get_state(c);
     switch  (state)
     {
-        // There are just here for reference
+    // There are just here for reference
     case PA_CONTEXT_UNCONNECTED:
     case PA_CONTEXT_CONNECTING:
     case PA_CONTEXT_AUTHORIZING:
@@ -3146,3 +3256,18 @@ int getChannelMap(pa_channel_map cm, int i)
     //member map is a keyword in golang
     return cm.map[i];
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
