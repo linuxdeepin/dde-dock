@@ -28,19 +28,6 @@ func (grub *Grub2) OnPropertiesChanged(name string, oldv interface{}) {
 	}
 }
 
-func (grub *Grub2) Save() error {
-	grub.theme.customTheme() // TODO
-	err := grub.writeSettings()
-	if err != nil {
-		return err
-	}
-	grub.generateGrubConfig()
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
 // Get entry titles in level one.
 func (grub *Grub2) GetSimpleEntryTitles() ([]string, error) {
 	entryTitles := make([]string, 0)

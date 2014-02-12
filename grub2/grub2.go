@@ -20,9 +20,9 @@ const (
 )
 
 var (
-	_ENTRY_REGEXP_1       = regexp.MustCompile(`^ *(menuentry|submenu) +'(.*?)'.*$`)
-	_ENTRY_REGEXP_2       = regexp.MustCompile(`^ *(menuentry|submenu) +"(.*?)".*$`)
-	_GENERATE_ID    int32 = 0
+	_ENTRY_REGEXP_1 = regexp.MustCompile(`^ *(menuentry|submenu) +'(.*?)'.*$`)
+	_ENTRY_REGEXP_2 = regexp.MustCompile(`^ *(menuentry|submenu) +"(.*?)".*$`)
+	// _GENERATE_ID    int32 = 0	// TODO remove
 )
 
 type Grub2 struct {
@@ -30,9 +30,9 @@ type Grub2 struct {
 	settings map[string]string
 	theme    *Theme
 
-	DefaultEntry      string `access:"readwrite"`
-	Timeout           int32  `access:"readwrite"`
-	GrubConfGenerated func(int32, bool)
+	DefaultEntry string `access:"readwrite"`
+	Timeout      int32  `access:"readwrite"`
+	// GrubConfGenerated func(int32, bool) // TODO remove
 }
 
 func NewGrub2() *Grub2 {
@@ -50,6 +50,19 @@ func (grub *Grub2) load() {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func (grub *Grub2) save() error {
+	err := grub.writeSettings()
+	if err != nil {
+		return err
+	}
+	// TODO
+	grub.generateGrubConfig()
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (grub *Grub2) clearEntries() {
@@ -89,21 +102,29 @@ func (grub *Grub2) writeSettings() error {
 	return nil
 }
 
-func (grub *Grub2) generateGrubConfig() int32 {
+// TODO
+func (grub *Grub2) generateGrubConfig() (err error) {
 	logInfo("start to generate a new grub configuration file")
-	_GENERATE_ID++
-	go func() {
-		err := execAndWait(30, _GRUB_MKCONFIG_EXE, "-o", _GRUB_MENU)
-		if grub.GrubConfGenerated != nil {
-			if err == nil {
-				grub.GrubConfGenerated(_GENERATE_ID, true)
-			} else {
-				grub.GrubConfGenerated(_GENERATE_ID, false)
-			}
-		}
-	}()
-	logInfo("generate grub configuration finished")
-	return _GENERATE_ID
+	// _GENERATE_ID++
+	// go func() {
+	// 	err := execAndWait(30, _GRUB_MKCONFIG_EXE, "-o", _GRUB_MENU)
+	// 	if grub.GrubConfGenerated != nil {
+	// 		if err == nil {
+	// 			grub.GrubConfGenerated(_GENERATE_ID, true)
+	// 		} else {
+	// 			grub.GrubConfGenerated(_GENERATE_ID, false)
+	// 		}
+	// 	}
+	// }()
+	err = execAndWait(30, _GRUB_MKCONFIG_EXE, "-o", _GRUB_MENU)
+	return err
+	if err != nil {
+		logError("generate grub configuration failed")
+	} else {
+		logInfo("generate grub configuration finished")
+	}
+	return
+	// return _GENERATE_ID
 }
 
 func (grub *Grub2) parseEntries(fileContent string) error {
@@ -335,6 +356,14 @@ func (grub *Grub2) getSettingContentToSave() string {
 		}
 	}
 	return fileContent
+}
+
+// TODO [auto update grub and theme]
+func (grub *Grub2) autoSetGfxmode() {
+	w, h := getPrimaryScreenBestResolution()
+	gfxmode := fmt.Sprintf("%dx%d;auto", w, h)
+	grub.setGfxmode(gfxmode)
+	grub.theme.generateBackground()
 }
 
 func main() {

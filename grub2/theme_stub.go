@@ -35,7 +35,7 @@ func (theme *Theme) SetBackgroundSourceFile(imageFile string) bool {
 		return false
 	}
 	if w < 800 || h < 600 {
-		logError("image size too small") // TODO
+		logError("image size is too small") // TODO
 		return false
 	}
 

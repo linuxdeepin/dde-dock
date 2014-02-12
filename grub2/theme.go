@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"dbus/com/deepin/dde/api/image"
+	"dlib/dbus"
 	"encoding/json"
 	"io/ioutil"
 	"text/template"
@@ -39,8 +40,8 @@ type Theme struct {
 	mainFile  string
 	tplFile   string
 	jsonFile  string
-	bgSrcFile string // TODO
-	bgFile    string // TODO
+	bgSrcFile string
+	bgFile    string
 
 	Background        string `access:"read"` // absolute background file path
 	ItemColor         string `access:"readwrite"`
@@ -150,9 +151,7 @@ func (theme *Theme) getCustomizedThemeContent(fileContent []byte, tplData interf
 
 // TODO [notify process end] Generate background to fit the monitor resolution.
 func (theme *Theme) generateBackground() {
-	screenWidth, screenHeight := getScreenResolution()
-	logInfo("screen resolution %dx%d", screenWidth, screenHeight)
-
+	screenWidth, screenHeight := getPrimaryScreenBestResolution()
 	imgWidth, imgHeight, err := dimg.GetImageSize(theme.bgSrcFile)
 	if err != nil {
 		panic(err)
@@ -165,4 +164,6 @@ func (theme *Theme) generateBackground() {
 	if err != nil {
 		panic(err)
 	}
+
+	dbus.NotifyChange(theme, "Background") // TODO
 }
