@@ -253,22 +253,12 @@ func dbusGetProperty(dest, path, property string) (value interface{}, err error)
 	return
 }
 
-func getPrimaryScreenBestResolution() (w int32, h int32) {
+func getScreenBestResolution(outputObjPath dbus.ObjectPath) (w int32, h int32) {
 	w, h = 1024, 768 // default value
 
-	// get primary output
-	destDisplay := "com.deepin.daemon.Display"
-	pathDisplay := "/com/deepin/daemon/Display"
-	propertyDisplay := "PrimaryOutput"
-	primaryOutput, err := dbusGetProperty(destDisplay, pathDisplay, propertyDisplay)
-	if err != nil {
-		logError("get primary output failed, use default value 1024x768") // TODO
-		return
-	}
-
-	// get support modes
+	// get all support modes
 	destOutput := "com.deepin.daemon.Display"
-	pathOutput := string(primaryOutput.(dbus.ObjectPath))
+	pathOutput := string(outputObjPath)
 	methodOutput := "com.deepin.daemon.Display.Output.ListModes"
 	call, err := dbusCallMethod(destOutput, pathOutput, methodOutput)
 	if err != nil {
@@ -291,6 +281,33 @@ func getPrimaryScreenBestResolution() (w int32, h int32) {
 
 	// get the best resolution
 	w, h = int32(modes[0].Width), int32(modes[0].Height)
+	return
+}
+
+// Get all screen's best resolution and choose a smaller one for there
+// is no screen is primary.
+func getPrimaryScreenBestResolution() (w int32, h int32) {
+	w, h = 1024, 768 // default value
+
+	// get all screen outputs
+	destDisplay := "com.deepin.daemon.Display"
+	pathDisplay := "/com/deepin/daemon/Display"
+	propertyDisplay := "Outputs"
+	value, err := dbusGetProperty(destDisplay, pathDisplay, propertyDisplay)
+	if err != nil {
+		logError("get display outputs failed, use default value 1024x768") // TODO
+		return
+	}
+
+	outputs := value.([]dbus.ObjectPath)
+	// loop all outputs' best resolution and get the smallest one
+	w, h = getScreenBestResolution(outputs[0])
+	for _, o := range outputs {
+		bw, bh := getScreenBestResolution(o)
+		if bw < w || bh < h {
+			w, h = bw, bh
+		}
+	}
 
 	logInfo("primary screen's best resolution is %dx%d", w, h)
 	return
