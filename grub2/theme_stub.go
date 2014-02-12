@@ -47,5 +47,18 @@ func (theme *Theme) SetBackgroundSourceFile(imageFile string) bool {
 
 	theme.generateBackground()
 
+	// set item color through background's dominant color
+	_, _, v, err := dimg.GetDominantColorOfImage(theme.bgSrcFile)
+	if v < 0.4 {
+		// background is dark
+		theme.ItemColor = _THEME_ITEM_COLOR_BRIGHT
+		theme.SelectedItemColor = _THEME_SELECTED_ITEM_COLOR_BRIGHT
+	} else {
+		// background is bright
+		theme.ItemColor = _THEME_ITEM_COLOR_DARK
+		theme.SelectedItemColor = _THEME_SELECTED_ITEM_COLOR_DARK
+	}
+	theme.customTheme()
+
 	return true
 }

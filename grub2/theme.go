@@ -10,12 +10,16 @@ import (
 )
 
 const (
-	_THEME_PATH        = "/boot/grub/themes/deepin"
-	_THEME_MAIN_FILE   = _THEME_PATH + "/theme.txt"
-	_THEME_TPL_FILE    = _THEME_PATH + "/theme.tpl"
-	_THEME_JSON_FILE   = _THEME_PATH + "/theme_tpl.json" // json stores the key-values for template file
-	_THEME_BG_SRC_FILE = _THEME_PATH + "/background_source"
-	_THEME_BG_FILE     = _THEME_PATH + "/background.png"
+	_THEME_PATH                       = "/boot/grub/themes/deepin"
+	_THEME_MAIN_FILE                  = _THEME_PATH + "/theme.txt"
+	_THEME_TPL_FILE                   = _THEME_PATH + "/theme.tpl"
+	_THEME_JSON_FILE                  = _THEME_PATH + "/theme_tpl.json" // json stores the key-values for template file
+	_THEME_BG_SRC_FILE                = _THEME_PATH + "/background_source"
+	_THEME_BG_FILE                    = _THEME_PATH + "/background.png"
+	_THEME_ITEM_COLOR_BRIGHT          = "#a6a6a6"
+	_THEME_SELECTED_ITEM_COLOR_BRIGHT = "#05abcf"
+	_THEME_ITEM_COLOR_DARK            = "#a6a6a6" // TODO
+	_THEME_SELECTED_ITEM_COLOR_DARK   = "#05abcf" // TODO
 )
 
 var (
