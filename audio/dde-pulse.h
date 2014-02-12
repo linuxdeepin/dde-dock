@@ -220,6 +220,9 @@ void *pa_get_sink_input_list(pa *self);
 void *pa_get_source_output_list(pa *self);
 //void* pa_get_sink_input_index_by_pid(pa *self,int index,int pid);
 
+int pa_set_default_sink(pa *self, const char *name);
+int pa_set_default_source(pa *self, const char *name);
+
 int pa_set_card_profile_by_index(pa *self, int index, const char *profile);
 
 int pa_set_sink_port_by_index(pa *self, int index, const char *port);
@@ -352,3 +355,4 @@ int pa_init_context(pa *self);
 //extern void updateSinkInput(int, pa_subscription_event_type_t);
 //extern void updateSourceOutput(int, pa_subscription_event_type_t);
 #endif
+
