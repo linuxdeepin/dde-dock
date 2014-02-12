@@ -26,6 +26,11 @@ func (grub *Grub2) OnPropertiesChanged(name string, oldv interface{}) {
 	case "Timeout":
 		grub.setTimeout(grub.Timeout)
 	}
+	err := grub.save()
+	if err != nil {
+		panic(err)
+	}
+	grub.config.NeedUpdate = true
 }
 
 // Get entry titles in level one.

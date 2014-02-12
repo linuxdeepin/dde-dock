@@ -3,12 +3,16 @@ package main
 import (
 	"bufio"
 	"dlib/dbus"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"os"
+	"path"
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 	"unicode"
 )
 
@@ -17,6 +21,7 @@ const (
 	_GRUB_CONFIG          = "/etc/default/grub"
 	_GRUB_MKCONFIG_EXE    = "grub-mkconfig"
 	_GRUB_TIMEOUT_DISABLE = -2
+	_GRUB_CACHE_FILE      = "/var/cache/dde-daemon/grub2.json"
 )
 
 var (
@@ -25,10 +30,16 @@ var (
 	// _GENERATE_ID    int32 = 0	// TODO remove
 )
 
+type CacheConfig struct {
+	LastScreenWidth, LastScreenHeight int32
+	NeedUpdate                        bool // mark to generate grub configuration
+}
+
 type Grub2 struct {
 	entries  []Entry
 	settings map[string]string
 	theme    *Theme
+	config   CacheConfig
 
 	DefaultEntry string `access:"readwrite"`
 	Timeout      int32  `access:"readwrite"`
@@ -38,6 +49,7 @@ type Grub2 struct {
 func NewGrub2() *Grub2 {
 	grub := &Grub2{}
 	grub.theme = NewTheme()
+	grub.config = CacheConfig{1024, 768, false} // default value
 	return grub
 }
 
@@ -50,19 +62,57 @@ func (grub *Grub2) load() {
 	if err != nil {
 		panic(err)
 	}
+
+	if isFileExists(_GRUB_CACHE_FILE) {
+		err = grub.readCacheConfig()
+		if err != nil {
+			panic(err)
+		}
+	} else {
+		grub.writeCacheConfig()
+	}
+
+	grub.resetGfxmodeIfNeed()
+
+	// start a goroutine to update grub configuration automatically
+	go func() {
+		for {
+			if grub.config.NeedUpdate {
+				grub.config.NeedUpdate = false
+				grub.save()
+			}
+			time.Sleep(30 * time.Second)
+		}
+	}()
 }
 
-func (grub *Grub2) save() error {
-	err := grub.writeSettings()
+func (grub *Grub2) save() (err error) {
+	err = grub.writeSettings()
 	if err != nil {
-		return err
+		return
 	}
-	// TODO
-	grub.generateGrubConfig()
+	err = grub.doGenerateGrubConfig()
 	if err != nil {
-		return err
+		return
 	}
-	return nil
+	err = grub.writeCacheConfig()
+	if err != nil {
+		return
+	}
+	return
+}
+
+// TODO [auto update grub and theme]
+func (grub *Grub2) resetGfxmodeIfNeed() {
+	w, h := getPrimaryScreenBestResolution()
+	gfxmode := fmt.Sprintf("%dx%d;auto", w, h)
+	if gfxmode != grub.getGfxmode() || w != grub.config.LastScreenWidth || h != grub.config.LastScreenHeight {
+		grub.setGfxmode(gfxmode)
+		grub.config.LastScreenWidth = w
+		grub.config.LastScreenHeight = h
+		grub.config.NeedUpdate = true
+		grub.theme.generateBackground()
+	}
 }
 
 func (grub *Grub2) clearEntries() {
@@ -102,8 +152,56 @@ func (grub *Grub2) writeSettings() error {
 	return nil
 }
 
+func (grub *Grub2) readCacheConfig() (err error) {
+	fileContent, err := ioutil.ReadFile(_GRUB_CACHE_FILE)
+	if err != nil {
+		logError(err.Error())
+		return
+	}
+	err = json.Unmarshal(fileContent, &grub.config)
+	if err != nil {
+		logError(err.Error())
+		return
+	}
+	return
+}
+
+func (grub *Grub2) writeCacheConfig() (err error) {
+	// ensure parent directory existed
+	if !isFileExists(_GRUB_CACHE_FILE) {
+		os.MkdirAll(path.Dir(_GRUB_CACHE_FILE), 0755)
+	}
+	fileContent, err := json.Marshal(grub.config)
+	if err != nil {
+		logError(err.Error())
+		return
+	}
+	err = ioutil.WriteFile(_GRUB_CACHE_FILE, fileContent, 0644)
+	if err != nil {
+		logError(err.Error())
+		return
+	}
+	return
+}
+
 // TODO
-func (grub *Grub2) generateGrubConfig() (err error) {
+func (grub *Grub2) checkIfNeedGenerateConfig() bool {
+	return true
+}
+
+// TODO
+func (grub *Grub2) markNeedGenerateConfig() {
+}
+
+// TODO
+func (grub *Grub2) markGenerateConfigFinish() {
+}
+
+// TODO
+var grubConfigGenerating = false
+
+// TODO
+func (grub *Grub2) notifyGenerateGrubConfig() {
 	logInfo("start to generate a new grub configuration file")
 	// _GENERATE_ID++
 	// go func() {
@@ -116,6 +214,19 @@ func (grub *Grub2) generateGrubConfig() (err error) {
 	// 		}
 	// 	}
 	// }()
+	if grubConfigGenerating {
+		return
+	}
+	// go func() {
+	// 	grubConfigGenerating = true
+	// 	grub.doGenerateGrubConfig()
+	// 	grubConfigGenerating = false
+	// }()
+	return
+}
+
+func (grub *Grub2) doGenerateGrubConfig() (err error) {
+	logInfo("start to generate a new grub configuration file")
 	err = execAndWait(30, _GRUB_MKCONFIG_EXE, "-o", _GRUB_MENU)
 	return err
 	if err != nil {
@@ -124,7 +235,6 @@ func (grub *Grub2) generateGrubConfig() (err error) {
 		logInfo("generate grub configuration finished")
 	}
 	return
-	// return _GENERATE_ID
 }
 
 func (grub *Grub2) parseEntries(fileContent string) error {
@@ -356,14 +466,6 @@ func (grub *Grub2) getSettingContentToSave() string {
 		}
 	}
 	return fileContent
-}
-
-// TODO [auto update grub and theme]
-func (grub *Grub2) autoSetGfxmode() {
-	w, h := getPrimaryScreenBestResolution()
-	gfxmode := fmt.Sprintf("%dx%d;auto", w, h)
-	grub.setGfxmode(gfxmode)
-	grub.theme.generateBackground()
 }
 
 func main() {
