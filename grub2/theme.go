@@ -106,12 +106,8 @@ func (theme *Theme) getTplJsonData(fileContent []byte) (*TplJsonData, error) {
 }
 
 func (theme *Theme) customTheme() {
-	tplJsonData, err := theme.getThemeTplJsonData()
-	if err != nil {
-		panic(err)
-	}
-	tplJsonData.ItemColor = theme.ItemColor
-	tplJsonData.SelectedItemColor = theme.SelectedItemColor
+	tplJsonData := TplJsonData{theme.ItemColor, theme.SelectedItemColor}
+	logInfo("custom theme: %v", tplJsonData)
 
 	// generate a new theme.txt from template
 	tplFileContent, err := ioutil.ReadFile(theme.tplFile)
@@ -127,7 +123,7 @@ func (theme *Theme) customTheme() {
 	}
 
 	// store the customized key-values to json file
-	jsonContent, err := json.Marshal(tplFileContent)
+	jsonContent, err := json.Marshal(tplJsonData)
 	if err != nil {
 		logError(err.Error())
 		panic(err)
