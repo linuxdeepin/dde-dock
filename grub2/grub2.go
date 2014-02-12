@@ -94,7 +94,7 @@ func (grub *Grub2) readSettings() error {
 func (grub *Grub2) writeSettings() error {
 	grub.setTheme(grub.theme.mainFile) // enable deepin grub2 theme
 	fileContent := grub.getSettingContentToSave()
-	err := ioutil.WriteFile(_GRUB_CONFIG, []byte(fileContent), 0644)
+	err := ioutil.WriteFile(_GRUB_CONFIG, []byte(fileContent), 0664)
 	if err != nil {
 		logError(err.Error())
 		return err

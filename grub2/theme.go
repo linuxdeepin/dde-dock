@@ -120,7 +120,7 @@ func (theme *Theme) customTheme() {
 		panic(err) // TODO
 	}
 	themeFileContent, err := theme.getCustomizedThemeContent(tplFileContent, tplJsonData)
-	err = ioutil.WriteFile(theme.mainFile, themeFileContent, 0644)
+	err = ioutil.WriteFile(theme.mainFile, themeFileContent, 0664)
 	if err != nil {
 		logError(err.Error())
 		panic(err)
@@ -132,7 +132,7 @@ func (theme *Theme) customTheme() {
 		logError(err.Error())
 		panic(err)
 	}
-	err = ioutil.WriteFile(theme.jsonFile, jsonContent, 0644)
+	err = ioutil.WriteFile(theme.jsonFile, jsonContent, 0664)
 	if err != nil {
 		logError(err.Error())
 		panic(err)

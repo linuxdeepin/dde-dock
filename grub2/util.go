@@ -188,7 +188,7 @@ func copyFile(src, dest string) (written int64, err error) {
 		return
 	}
 	defer sf.Close()
-	df, err := os.OpenFile(dest, os.O_WRONLY|os.O_CREATE, 0644)
+	df, err := os.OpenFile(dest, os.O_WRONLY|os.O_CREATE, 0664)
 	if err != nil {
 		return
 	}
