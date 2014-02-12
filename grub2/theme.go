@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"dbus/com/deepin/dde/api/image"
-	"dlib/dbus"
 	"encoding/json"
 	"io/ioutil"
 	"text/template"
@@ -23,8 +22,9 @@ const (
 )
 
 var (
-	_THEME_TEMPLATOR = template.New("theme-templator")
-	dimg             *image.Image
+	_THEME_TEMPLATOR                   = template.New("theme-templator")
+	_UPDATE_THEME_BACKGROUND_ID uint32 = 0
+	dimg                        *image.Image
 )
 
 func init() {
@@ -50,6 +50,8 @@ type Theme struct {
 	Background        string `access:"read"` // absolute background file path
 	ItemColor         string `access:"readwrite"`
 	SelectedItemColor string `access:"readwrite"`
+
+	BackgroundUpdated func(uint32, bool)
 }
 
 func NewTheme() *Theme {
@@ -149,7 +151,7 @@ func (theme *Theme) getCustomizedThemeContent(fileContent []byte, tplData interf
 	return buf.Bytes(), nil
 }
 
-// TODO [notify process end] Generate background to fit the monitor resolution.
+// Generate background to fit the screen resolution.
 func (theme *Theme) generateBackground() {
 	screenWidth, screenHeight := getPrimaryScreenBestResolution()
 	imgWidth, imgHeight, err := dimg.GetImageSize(theme.bgSrcFile)
@@ -164,6 +166,4 @@ func (theme *Theme) generateBackground() {
 	if err != nil {
 		panic(err)
 	}
-
-	dbus.NotifyChange(theme, "Background") // TODO
 }

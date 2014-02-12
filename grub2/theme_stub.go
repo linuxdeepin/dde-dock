@@ -28,7 +28,19 @@ func (theme *Theme) OnPropertiesChanged(name string, oldv interface{}) {
 
 // Set the background source file, then generate the background
 // to fit the screen resolution, support png and jpeg image format
-func (theme *Theme) SetBackgroundSourceFile(imageFile string) bool {
+func (theme *Theme) SetBackgroundSourceFile(imageFile string) uint32 {
+	_UPDATE_THEME_BACKGROUND_ID++
+	go func() {
+		id := _UPDATE_THEME_BACKGROUND_ID
+		ok := theme.doSetBackgroundSourceFile(imageFile)
+		if theme.BackgroundUpdated != nil {
+			theme.BackgroundUpdated(id, ok)
+		}
+	}()
+	return _UPDATE_THEME_BACKGROUND_ID
+}
+
+func (theme *Theme) doSetBackgroundSourceFile(imageFile string) bool {
 	// check image size
 	w, h, err := dimg.GetImageSize(imageFile)
 	if err != nil {
@@ -60,5 +72,6 @@ func (theme *Theme) SetBackgroundSourceFile(imageFile string) bool {
 	}
 	theme.customTheme()
 
+	logInfo("update background sucess")
 	return true
 }

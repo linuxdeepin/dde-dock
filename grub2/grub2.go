@@ -27,7 +27,6 @@ const (
 var (
 	_ENTRY_REGEXP_1 = regexp.MustCompile(`^ *(menuentry|submenu) +'(.*?)'.*$`)
 	_ENTRY_REGEXP_2 = regexp.MustCompile(`^ *(menuentry|submenu) +"(.*?)".*$`)
-	// _GENERATE_ID    int32 = 0	// TODO remove
 )
 
 type CacheConfig struct {
@@ -43,7 +42,6 @@ type Grub2 struct {
 
 	DefaultEntry string `access:"readwrite"`
 	Timeout      int32  `access:"readwrite"`
-	// GrubConfGenerated func(int32, bool) // TODO remove
 }
 
 func NewGrub2() *Grub2 {
@@ -102,7 +100,6 @@ func (grub *Grub2) save() (err error) {
 	return
 }
 
-// TODO [auto update grub and theme]
 func (grub *Grub2) resetGfxmodeIfNeed() {
 	w, h := getPrimaryScreenBestResolution()
 	gfxmode := fmt.Sprintf("%dx%d;auto", w, h)
@@ -181,47 +178,6 @@ func (grub *Grub2) writeCacheConfig() (err error) {
 		logError(err.Error())
 		return
 	}
-	return
-}
-
-// TODO
-func (grub *Grub2) checkIfNeedGenerateConfig() bool {
-	return true
-}
-
-// TODO
-func (grub *Grub2) markNeedGenerateConfig() {
-}
-
-// TODO
-func (grub *Grub2) markGenerateConfigFinish() {
-}
-
-// TODO
-var grubConfigGenerating = false
-
-// TODO
-func (grub *Grub2) notifyGenerateGrubConfig() {
-	logInfo("start to generate a new grub configuration file")
-	// _GENERATE_ID++
-	// go func() {
-	// 	err := execAndWait(30, _GRUB_MKCONFIG_EXE, "-o", _GRUB_MENU)
-	// 	if grub.GrubConfGenerated != nil {
-	// 		if err == nil {
-	// 			grub.GrubConfGenerated(_GENERATE_ID, true)
-	// 		} else {
-	// 			grub.GrubConfGenerated(_GENERATE_ID, false)
-	// 		}
-	// 	}
-	// }()
-	if grubConfigGenerating {
-		return
-	}
-	// go func() {
-	// 	grubConfigGenerating = true
-	// 	grub.doGenerateGrubConfig()
-	// 	grubConfigGenerating = false
-	// }()
 	return
 }
 
@@ -424,7 +380,6 @@ func (grub *Grub2) getTimeout() int32 {
 	return int32(timeout)
 }
 
-// TODO
 func (grub *Grub2) getGfxmode() string {
 	if len(grub.settings["GRUB_GFXMODE"]) == 0 {
 		return "auto"
