@@ -76,6 +76,18 @@ func (dpy *Display) setPropMirrorMode(v bool) {
 	}
 }
 
+func (dpy *Display) setPropDisplayMode(v uint8) {
+	switch v {
+	case DisplayModeOnlyPrimary, DisplayModeOnlySecondary, DisplayModeMirrors, DisplayModeExtend:
+		if dpy.DisplayMode != v {
+			dpy.DisplayMode = v
+			dbus.NotifyChange(dpy, "DisplayMode")
+		}
+	default:
+		dpy.setPropDisplayMode(DisplayModeOnlyPrimary)
+	}
+}
+
 func (dpy *Display) setPropMirrorOutput(v *Output) {
 	if dpy.MirrorOutput != v {
 		dpy.MirrorOutput = v

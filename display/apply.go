@@ -86,7 +86,7 @@ func ClonePendingConfig(c *pendingConfig) *pendingConfig {
 	r.posX, r.posY = c.posX, c.posY
 	r.transform, r.filterName, r.filterParams = c.transform, c.filterName, c.filterParams
 	r.borderCompensationX, r.borderCompensationY = c.borderCompensationX, c.borderCompensationY
-	r.backlight = c.backlight
+	r.supportBacklight, r.backlight = c.supportBacklight, c.backlight
 	copy(r.gammaRed, c.gammaRed)
 	copy(r.gammaGreen, c.gammaGreen)
 	copy(r.gammaBlue, c.gammaBlue)
@@ -173,48 +173,13 @@ func (c *pendingConfig) apply() error {
 	//setCrtcGamma: gamma
 	//setCrtcTransform: transform, filter
 	// allocation of the output maybe changed when rotation/transform changed without change mode
-	defer func() { c.mask = 0 }()
+	/*defer func() { c.mask = 0 }()*/
 
 	if c.mode == 0 {
 		_, err := randr.SetCrtcConfig(X, c.crtc, xproto.TimeCurrentTime, LastConfigTimeStamp,
 			0, 0, 0, c.rotation, nil).Reply()
 		return err
 	}
-
-	{
-		/*cinfo, _ := randr.GetCrtcInfo(X, c.crtc, 0).Reply()*/
-		/*alloc := c.appliedAllocation()*/
-		/*randr.SetCrtcConfig(X, c.crtc, xproto.TimeCurrentTime, LastConfigTimeStamp, 0, 0, 0, c.rotation, nil).Reply()*/
-		/*if int16(cinfo.Width)+2*cinfo.X < int16(alloc.Width) || int16(cinfo.Height)+2*cinfo.Y < int16(alloc.Height) {*/
-		/*_, err := randr.SetCrtcConfig(X, c.crtc, xproto.TimeCurrentTime, LastConfigTimeStamp, 0, 0, 0, c.rotation, nil).Reply()*/
-		/*if err != nil {*/
-		/*cinfo, _ := randr.GetCrtcInfo(X, c.crtc, 0).Reply()*/
-		/*oinfo, _ := randr.GetOutputInfo(X, c.output, 0).Reply()*/
-		/*[>return fmt.Errorf("PendingConfig apply failed when SetCrtcConfig(1): %v %v", err, c, info.Possible)<]*/
-		/*fmt.Println("PendingConfig apply failed when SetCrtcConfig(1):", err, c, cinfo.Possible, oinfo.Crtc)*/
-		/*}*/
-		/*fmt.Println("1111111111111111111111111")*/
-		/*} else {*/
-		/*op := queryOutput(DPY, c.output)*/
-		/*fmt.Println("22222222222222222222222222", op.Name, op.Opened, c.crtc, cinfo.X, cinfo.Y, cinfo.Width, cinfo.Height, alloc)*/
-		/*}*/
-		/*if cinfo.Width > c.appliedAllocation().Width || cinfo.Height > c.appliedAllocation().Height {*/
-		/*fmt.Println("Cinfo:", cinfo.X, cinfo.Y, cinfo.Width, cinfo.Height, c.appliedAllocation(), "--------------------")*/
-		/*}*/
-	}
-
-	/*if smallerRectangle(queryOutput(DPY, c.output).Allocation, c.appliedAllocation()) {*/
-	/*_, err := randr.SetCrtcConfig(X, c.crtc, xproto.TimeCurrentTime, LastConfigTimeStamp, 0, 0, 0, c.rotation, nil).Reply()*/
-	/*if err != nil {*/
-	/*cinfo, _ := randr.GetCrtcInfo(X, c.crtc, 0).Reply()*/
-	/*oinfo, _ := randr.GetOutputInfo(X, c.output, 0).Reply()*/
-	/*[>return fmt.Errorf("PendingConfig apply failed when SetCrtcConfig(1): %v %v", err, c, info.Possible)<]*/
-	/*fmt.Println("PendingConfig apply failed when SetCrtcConfig(1):", err, c, cinfo.Possible, oinfo.Crtc)*/
-	/*}*/
-	/*fmt.Println("CompareRectangle small:", queryOutput(DPY, c.output).Allocation, c.appliedAllocation())*/
-	/*} else {*/
-	/*fmt.Println("CompareRectangle notsmall:", queryOutput(DPY, c.output).Allocation, c.appliedAllocation())*/
-	/*}*/
 
 	var err error
 	if c.mask&_PendingMaskGramma == _PendingMaskGramma {
@@ -275,7 +240,7 @@ func (c *pendingConfig) SetMode(m randr.Mode) *pendingConfig {
 	return c
 }
 func (c *pendingConfig) SetPos(x, y int16) *pendingConfig {
-	if c.posX != x && c.posY != y {
+	if c.posX != x || c.posY != y {
 		c.mask = c.mask | _PendingMaskPos
 
 		c.posX = x
@@ -325,6 +290,7 @@ func (c *pendingConfig) setGamma(red, green, blue []uint16) *pendingConfig {
 }
 
 func (c *pendingConfig) SetBrightness(brightness float64) *pendingConfig {
+	fmt.Println("SetBrightness..........................................", brightness)
 	if brightness < 0.1 {
 		brightness = 0.1
 	}
@@ -548,17 +514,18 @@ func (dpy *Display) adjustScreenSize() []*Output {
 	dpy.stopListen()
 	defer dpy.startListen()
 	var boundAggregate = func(w, h uint16, b xproto.Rectangle) (uint16, uint16) {
-		return max(b.Width, w), max(b.Height, h)
+		return max(b.Width+uint16(b.X), w), max(b.Height+uint16(b.Y), h)
 	}
 	var tmpOutputs []*Output
 	var w, h uint16
 
-	if dpy.MirrorMode {
+	if dpy.DisplayMode == DisplayModeMirrors {
 		alloc := dpy.MirrorOutput.pendingAllocation()
 		w, h = alloc.Width, alloc.Height
 	} else {
 		for _, op := range dpy.Outputs {
 			w, h = boundAggregate(w, h, op.pendingAllocation())
+			fmt.Println("HUHUHU>>>>>>>>>>>>>", op.Name, op.pendingConfig)
 		}
 	}
 
@@ -582,9 +549,9 @@ func (dpy *Display) adjustScreenSize() []*Output {
 			w, h = w+uint16(wDif), h+uint16(hDif)
 		}
 	}
-	fmt.Println("AdjustScreensize before:", w, h, dpy.Width, dpy.Height)
+	fmt.Println("-AdjustScreensize before:", w, h, dpy.Width, dpy.Height)
 	dpy.setScreenSize(w, h)
-	fmt.Println("AdjustScreensize after:", w, h, dpy.Width, dpy.Height)
+	fmt.Println("-AdjustScreensize after:", w, h, dpy.Width, dpy.Height)
 
 	return tmpOutputs
 }
@@ -637,7 +604,7 @@ func (op *Output) setOpened(v bool) {
 					panic(fmt.Sprintln("setOpened failed at GetCrtcInfo(crtc:%v),%s", crtc, err))
 				}
 				if cinfo.Mode == 0 { //the crtc hasn't been connected with an output
-					_, err = randr.SetCrtcConfig(X, crtc, xproto.TimeCurrentTime, LastConfigTimeStamp, 0, 0, op.bestMode, op.Rotation, []randr.Output{op.Identify}).Reply()
+					_, err = randr.SetCrtcConfig(X, crtc, xproto.TimeCurrentTime, LastConfigTimeStamp, cinfo.X, cinfo.Y, op.bestMode, op.Rotation, []randr.Output{op.Identify}).Reply()
 					if err != nil {
 						panic(fmt.Sprintf("setOpened failed at SetCrtcInfo(crtc:%v):%s\n", crtc, err))
 					}

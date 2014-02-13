@@ -180,10 +180,6 @@ func NewOutput(dpy *Display, core randr.Output) *Output {
 	}
 
 	edidProp, err := randr.GetOutputProperty(X, core, edidAtom, xproto.AtomInteger, 0, 1024, false, false).Reply()
-	if err != nil || len(edidProp.Data) != 128 {
-		//workaround: nvidia driver has an VGA-1 output which connection status equal connected, it will panic Xserver when trying to connect the output.
-		return nil
-	}
 
 	var edidData [128]byte
 	copy(edidData[:], edidProp.Data)

@@ -22,6 +22,13 @@ var (
 	MinWidth, MinHeight, MaxWidth, MaxHeight uint16
 )
 
+const (
+	DisplayModeOnlyPrimary uint8 = iota
+	DisplayModeOnlySecondary
+	DisplayModeMirrors
+	DisplayModeExtend
+)
+
 func init() {
 	randr.Init(X)
 	ver, err := randr.QueryVersion(X, 1, 4).Reply()
@@ -59,6 +66,7 @@ type Display struct {
 	PrimaryChanged func(xproto.Rectangle)
 
 	MirrorMode   bool
+	DisplayMode  uint8
 	MirrorOutput *Output `access:readwrite`
 
 	listening bool
@@ -181,7 +189,7 @@ func (dpy *Display) listener() {
 					w, h := parseScreenSize(dpy.Outputs)
 					fmt.Println("NotifyCrtcChange....:", op.Name, w, h)
 
-					dpy.SetMirrorOutput(deduceMirrorOutput(dpy.Outputs))
+					/*dpy.SetMirrorOutput(deduceMirrorOutput(dpy.Outputs))*/
 				}
 
 			case randr.NotifyOutputChange:
@@ -296,10 +304,6 @@ func TT() {
 func main() {
 	dbus.DealWithUnhandledMessage()
 	DPY.SetMirrorMode(true)
-	for _, o := range DPY.Outputs {
-		o.setBrightness(0.5)
-		o.pendingConfig.apply()
-	}
 	/*TT()*/
 	select {}
 }

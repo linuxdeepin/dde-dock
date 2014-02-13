@@ -1,5 +1,6 @@
 package main
 
+import "fmt"
 import "github.com/BurntSushi/xgb/randr"
 import "github.com/BurntSushi/xgb"
 import "strings"
@@ -8,9 +9,66 @@ import "github.com/BurntSushi/xgb/xproto"
 
 func (dpy *Display) SetMirrorMode(v bool) {
 	dpy.setPropMirrorMode(v)
-	if v && dpy.MirrorOutput == nil {
+	if v && dpy.MirrorOutput == nil{
 		dpy.SetMirrorOutput(deduceMirrorOutput(dpy.Outputs))
 	}
+}
+
+func (dpy *Display) SetDisplayMode(mode uint8) {
+	dpy.setPropDisplayMode(mode)
+	if len(dpy.Outputs) == 2 {
+		if dpy.MirrorOutput == nil {
+			dpy.SetMirrorOutput(deduceMirrorOutput(dpy.Outputs))
+		}
+		if mode != DisplayModeMirrors {
+			dpy.SetMirrorMode(false)
+			for _, op := range dpy.Outputs {
+				op.pendingConfig = NewPendingConfig(op).SetScale(1, 1)
+			}
+		}
+		switch mode {
+		case DisplayModeOnlyPrimary:
+			for _, op := range dpy.Outputs {
+				if op == dpy.MirrorOutput {
+					op.setOpened(false)
+				} else {
+					op.setOpened(true)
+				}
+			}
+		case DisplayModeOnlySecondary:
+			for _, op := range dpy.Outputs {
+				if op != dpy.MirrorOutput {
+					op.setOpened(false)
+				} else {
+					op.setOpened(true)
+				}
+			}
+		case DisplayModeMirrors:
+			dpy.SetMirrorMode(true)
+			for _, op := range dpy.Outputs {
+				op.SetPos(0, 0)
+				op.setOpened(true)
+			}
+
+		case DisplayModeExtend:
+			height := uint16(0)
+			for _, op := range dpy.Outputs {
+				/*op.setOpened(true)*/
+				height = max(height, NewPendingConfig(op).appliedAllocation().Height)
+				if op != dpy.MirrorOutput {
+					dpy.SetPrimaryOutput(uint32(op.Identify))
+				}
+			}
+			x := uint16(0)
+			for _, op := range dpy.Outputs {
+				op.SetPos(int16(x), int16(height-op.pendingConfig.appliedAllocation().Height))
+				fmt.Println("Set:", op.Name, op.pendingConfig, x)
+				x += op.pendingAllocation().Width
+			}
+		}
+		dpy.ApplyChanged()
+	}
+	fmt.Println("____________________")
 }
 func (dpy *Display) SetMirrorOutput(op *Output) {
 	if op.Opened {
@@ -25,13 +83,13 @@ func deduceMirrorOutput(ops []*Output) *Output {
 	var mirrorOP *Output = ops[0]
 	currentType := unknownAtom
 	for _, op := range ops {
-		if op.Opened {
-			t := getContentorType(op.Identify)
-			if greterConnectorType(t, currentType) {
-				currentType = t
-				mirrorOP = op
-			}
+		/*if op.Opened {*/
+		t := getContentorType(op.Identify)
+		if greterConnectorType(t, currentType) {
+			currentType = t
+			mirrorOP = op
 		}
+		/*}*/
 	}
 	return mirrorOP
 }
