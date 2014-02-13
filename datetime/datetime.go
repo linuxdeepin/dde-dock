@@ -2,7 +2,6 @@ package main
 
 import (
 	"dbus/com/deepin/api/setdatetime"
-	"dbus/org/gnome/settingsdaemon/datetimemechanism"
 	"dlib"
 	"dlib/dbus"
 	"dlib/dbus/property"
@@ -25,7 +24,6 @@ var (
 	dateSettings = gio.NewSettings(_DATE_TIME_SCHEMA)
 
 	setDate     *setdatetime.SetDateTime
-	gsdDate     *datetimemechanism.DateTimeMechanism
 	zoneWatcher *fsnotify.Watcher
 )
 
@@ -55,15 +53,15 @@ func (op *Manager) SetTime(t string) (bool, error) {
 	return ret, nil
 }
 
-func (op *Manager) SetTimeZone(zone string) error {
-	err := gsdDate.SetTimezone(zone)
+func (op *Manager) SetTimeZone(zone string) bool {
+	_, err := setDate.SetTimezone(zone)
 	if err != nil {
-		logger.Printf("Set TimeZone - '%s' Failed: %s\n",
-			zone, err)
-		return err
+                logger.Printf("Set TimeZone - '%s' Failed: %s\n", 
+                zone, err)
+		return false
 	}
 	op.setPropName("CurrentTimeZone")
-	return nil
+	return true
 }
 
 func (op *Manager) SetAutoSetTime(auto bool) (bool, error) {
@@ -114,12 +112,6 @@ func Init() {
 	setDate, err = setdatetime.NewSetDateTime("/com/deepin/api/SetDateTime")
 	if err != nil {
 		logger.Println("New SetDateTime Failed:", err)
-		panic(err)
-	}
-
-	gsdDate, err = datetimemechanism.NewDateTimeMechanism("/")
-	if err != nil {
-		logger.Println("New DateTimeMechanism Failed:", err)
 		panic(err)
 	}
 

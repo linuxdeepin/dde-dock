@@ -40,6 +40,7 @@ type User struct {
 	PasswordMode   int32  `access:"readwrite"`
 	UserName       string `access:"readwrite"`
         BackgroundFile string `access:"readwrite"`
+        HomeDir string `access:"readwrite"`
 	LoginTime      int64
 	Uid            uint64
 	objectPath     string

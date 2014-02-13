@@ -35,9 +35,9 @@ func (op *Manager) setPropName(name string) {
 	switch name {
 	case "CurrentTimeZone":
 		var err error
-		op.CurrentTimeZone, err = gsdDate.GetTimezone()
+		op.CurrentTimeZone, _, err = setDate.GetTimezone()
 		if err != nil {
-			logger.Printf("Get Time Zone Failed: %s\n", err)
+                        logger.Printf("Get Time Zone Failed: %s\n", err)
 			return
 		}
 		dbus.NotifyChange(op, name)
