@@ -2,7 +2,7 @@ package main
 
 import (
 	"bytes"
-	"dbus/com/deepin/dde/api/image"
+	"dbus/com/deepin/api/image"
 	"encoding/json"
 	"io/ioutil"
 	"text/template"
