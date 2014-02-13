@@ -1,6 +1,7 @@
 run:=go build -o .out && rm .out
 
 all: 
+	cd grub2/ && $(run)
 	cd keybinding/ && $(run)
 	cd accounts/ &&  $(run)
 	cd datetime/ && $(run)
