@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	. "launchpad.net/gocheck"
 )
 
@@ -13,8 +12,16 @@ func init() {
 }
 
 func (theme *Theme) TestGetplJsonData(c *C) {
-	testJsonContent := `{"ItemColor":"#a6a6a0","SelectedItemColor":"#fefef0"}`
-	wantJsonData := &TplJsonData{"#a6a6a0", "#fefef0"}
+	testJsonContent := `{
+    "BrightScheme":{"ItemColor":"#a6a6a6","SelectedItemColor":"#05abcf", "TerminalBox":"terminal_box_bright_*.png", "MenuPixmapStyle":"menu_box_bright_*.png", "ScrollbarThumb":"scrollbar_bright_*.png"},
+    "DarkScheme":{"ItemColor":"#a6a6a6","SelectedItemColor":"#05abcf", "TerminalBox":"terminal_box_dark_*.png", "MenuPixmapStyle":"menu_box_dark_*.png", "ScrollbarThumb":"scrollbar_dark_*.png"},
+    "CurrentScheme":{"ItemColor":"#a6a6a6","SelectedItemColor":"#05abcf", "TerminalBox":"terminal_box_dark_*.png", "MenuPixmapStyle":"menu_box_dark_*.png", "ScrollbarThumb":"scrollbar_dark_*.png"}
+}`
+	wantJsonData := &TplJsonData{
+		ThemeScheme{"#a6a6a6", "#05abcf", "terminal_box_bright_*.png", "menu_box_bright_*.png", "scrollbar_bright_*.png"},
+		ThemeScheme{"#a6a6a6", "#05abcf", "terminal_box_dark_*.png", "menu_box_dark_*.png", "scrollbar_dark_*.png"},
+		ThemeScheme{"#a6a6a6", "#05abcf", "terminal_box_dark_*.png", "menu_box_dark_*.png", "scrollbar_dark_*.png"},
+	}
 
 	jsonData, err := theme.getTplJsonData([]byte(testJsonContent))
 	if err != nil {
@@ -30,7 +37,7 @@ func (theme *Theme) TestGetCustomizedThemeContent(c *C) {
 title-text: ""
 desktop-image: "background.png"
 desktop-color: "#000000"
-terminal-box: "terminal_*.png"
+terminal-box: "{{.TerminalBox}}"
 terminal-font: "Fixed Regular 13"
 
 # Show the boot menu
@@ -44,20 +51,19 @@ terminal-font: "Fixed Regular 13"
   item_color = "{{.ItemColor}}"
   selected_item_color = "{{.SelectedItemColor}}"
   item_spacing = 0
-  menu_pixmap_style = "empty_*.png"
+  menu_pixmap_style = "{{.MenuPixmapStyle}}"
   scrollbar = true
   scrollbar_width = 7
-  scrollbar_thumb = "sb_th_*.png"
+  scrollbar_thumb = "{{.ScrollbarThumb}}"
 }
 `
-	testThemeTplJSON := `{"ItemColor":"#a6a6a6","SelectedItemColor":"#fefefe"}`
 	wantThemeTxtContent := `# GRUB2 gfxmenu Linux Deepin theme
 # Designed for 1024x768 resolution
 # Global Property
 title-text: ""
 desktop-image: "background.png"
 desktop-color: "#000000"
-terminal-box: "terminal_*.png"
+terminal-box: "terminal_box_bright_*.png"
 terminal-font: "Fixed Regular 13"
 
 # Show the boot menu
@@ -69,19 +75,15 @@ terminal-font: "Fixed Regular 13"
   item_font = "Courier 10 Pitch Bold 16"
   selected_item_font = "Courier 10 Pitch Bold 24"
   item_color = "#a6a6a6"
-  selected_item_color = "#fefefe"
+  selected_item_color = "#05abcf"
   item_spacing = 0
-  menu_pixmap_style = "empty_*.png"
+  menu_pixmap_style = "menu_box_bright_*.png"
   scrollbar = true
   scrollbar_width = 7
-  scrollbar_thumb = "sb_th_*.png"
+  scrollbar_thumb = "scrollbar_bright_*.png"
 }
 `
-	tplValues := TplJsonData{}
-	err := json.Unmarshal([]byte(testThemeTplJSON), &tplValues)
-	if err != nil {
-		c.Error(err)
-	}
+	tplValues := ThemeScheme{"#a6a6a6", "#05abcf", "terminal_box_bright_*.png", "menu_box_bright_*.png", "scrollbar_bright_*.png"}
 
 	s, _ := theme.getCustomizedThemeContent([]byte(testThemeTplContent), tplValues)
 	c.Check(string(s), Equals, wantThemeTxtContent)

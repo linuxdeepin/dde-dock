@@ -63,13 +63,13 @@ func (theme *Theme) doSetBackgroundSourceFile(imageFile string) bool {
 	_, _, v, err := dimg.GetDominantColorOfImage(theme.bgSrcFile)
 	if v < 0.4 {
 		// background is dark
-		theme.ItemColor = _THEME_ITEM_COLOR_BRIGHT
-		theme.SelectedItemColor = _THEME_SELECTED_ITEM_COLOR_BRIGHT
+		theme.tplJsonData.CurrentScheme = theme.tplJsonData.BrightScheme
 	} else {
 		// background is bright
-		theme.ItemColor = _THEME_ITEM_COLOR_DARK
-		theme.SelectedItemColor = _THEME_SELECTED_ITEM_COLOR_DARK
+		theme.tplJsonData.CurrentScheme = theme.tplJsonData.DarkScheme
 	}
+	theme.ItemColor = theme.tplJsonData.CurrentScheme.ItemColor
+	theme.SelectedItemColor = theme.tplJsonData.CurrentScheme.SelectedItemColor
 	theme.customTheme()
 
 	logInfo("update background sucess")

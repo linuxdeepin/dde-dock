@@ -9,16 +9,12 @@ import (
 )
 
 const (
-	_THEME_PATH                       = "/boot/grub/themes/deepin"
-	_THEME_MAIN_FILE                  = _THEME_PATH + "/theme.txt"
-	_THEME_TPL_FILE                   = _THEME_PATH + "/theme.tpl"
-	_THEME_JSON_FILE                  = _THEME_PATH + "/theme_tpl.json" // json stores the key-values for template file
-	_THEME_BG_SRC_FILE                = _THEME_PATH + "/background_source"
-	_THEME_BG_FILE                    = _THEME_PATH + "/background.png"
-	_THEME_ITEM_COLOR_BRIGHT          = "#a6a6a6"
-	_THEME_SELECTED_ITEM_COLOR_BRIGHT = "#05abcf"
-	_THEME_ITEM_COLOR_DARK            = "#a6a6a6" // TODO
-	_THEME_SELECTED_ITEM_COLOR_DARK   = "#05abcf" // TODO
+	_THEME_PATH        = "/boot/grub/themes/deepin"
+	_THEME_MAIN_FILE   = _THEME_PATH + "/theme.txt"
+	_THEME_TPL_FILE    = _THEME_PATH + "/theme.tpl"
+	_THEME_JSON_FILE   = _THEME_PATH + "/theme_tpl.json" // json stores the key-values for template file
+	_THEME_BG_SRC_FILE = _THEME_PATH + "/background_source"
+	_THEME_BG_FILE     = _THEME_PATH + "/background.png"
 )
 
 var (
@@ -35,17 +31,22 @@ func init() {
 	}
 }
 
+type ThemeScheme struct {
+	ItemColor, SelectedItemColor, TerminalBox, MenuPixmapStyle, ScrollbarThumb string
+}
+
 type TplJsonData struct {
-	ItemColor, SelectedItemColor string
+	BrightScheme, DarkScheme, CurrentScheme ThemeScheme
 }
 
 type Theme struct {
-	themePath string
-	mainFile  string
-	tplFile   string
-	jsonFile  string
-	bgSrcFile string
-	bgFile    string
+	themePath   string
+	mainFile    string
+	tplFile     string
+	jsonFile    string
+	bgSrcFile   string
+	bgFile      string
+	tplJsonData *TplJsonData
 
 	Background        string `access:"read"` // absolute background file path
 	ItemColor         string `access:"readwrite"`
@@ -63,23 +64,27 @@ func NewTheme() *Theme {
 	theme.bgSrcFile = _THEME_BG_SRC_FILE
 	theme.bgFile = _THEME_BG_FILE
 
-	tplJsonData, err := theme.getThemeTplJsonData()
+	var err error
+	theme.tplJsonData, err = theme.getThemeTplJsonData()
 	if err != nil {
 		panic(err) // TODO
 	}
 
+	// init properties
 	theme.Background = theme.bgFile
-	theme.ItemColor = tplJsonData.ItemColor
-	theme.SelectedItemColor = tplJsonData.SelectedItemColor
+	theme.ItemColor = theme.tplJsonData.CurrentScheme.ItemColor
+	theme.SelectedItemColor = theme.tplJsonData.CurrentScheme.SelectedItemColor
 
 	return theme
 }
 
 func (theme *Theme) setItemColor(itemColor string) {
+	theme.tplJsonData.CurrentScheme.ItemColor = itemColor
 	theme.customTheme()
 }
 
 func (theme *Theme) setSelectedItemColor(selectedItemColor string) {
+	theme.tplJsonData.CurrentScheme.SelectedItemColor = selectedItemColor
 	theme.customTheme()
 }
 
@@ -94,6 +99,7 @@ func (theme *Theme) getThemeTplJsonData() (*TplJsonData, error) {
 	if err != nil {
 		return nil, err
 	}
+	logInfo("theme template json data: %v", tplJsonData)
 	return tplJsonData, nil
 }
 
@@ -108,8 +114,7 @@ func (theme *Theme) getTplJsonData(fileContent []byte) (*TplJsonData, error) {
 }
 
 func (theme *Theme) customTheme() {
-	tplJsonData := TplJsonData{theme.ItemColor, theme.SelectedItemColor}
-	logInfo("custom theme: %v", tplJsonData)
+	logInfo("custom theme: %v", theme.tplJsonData.CurrentScheme)
 
 	// generate a new theme.txt from template
 	tplFileContent, err := ioutil.ReadFile(theme.tplFile)
@@ -117,7 +122,7 @@ func (theme *Theme) customTheme() {
 		logError(err.Error())
 		panic(err) // TODO
 	}
-	themeFileContent, err := theme.getCustomizedThemeContent(tplFileContent, tplJsonData)
+	themeFileContent, err := theme.getCustomizedThemeContent(tplFileContent, theme.tplJsonData.CurrentScheme)
 	err = ioutil.WriteFile(theme.mainFile, themeFileContent, 0664)
 	if err != nil {
 		logError(err.Error())
@@ -125,7 +130,7 @@ func (theme *Theme) customTheme() {
 	}
 
 	// store the customized key-values to json file
-	jsonContent, err := json.Marshal(tplJsonData)
+	jsonContent, err := json.Marshal(theme.tplJsonData)
 	if err != nil {
 		logError(err.Error())
 		panic(err)
