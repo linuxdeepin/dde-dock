@@ -53,8 +53,13 @@ func (op *Manager) SetTime(t string) (bool, error) {
 	return ret, nil
 }
 
+func (op *Manager) TimezoneCityList () []string {
+        return getZoneCityList()
+}
+
 func (op *Manager) SetTimeZone(zone string) bool {
-	_, err := setDate.SetTimezone(zone)
+        tz := convertCityToZone(zone)
+	_, err := setDate.SetTimezone(tz)
 	if err != nil {
                 logger.Printf("Set TimeZone - '%s' Failed: %s\n", 
                 zone, err)
