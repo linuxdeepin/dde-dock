@@ -52,7 +52,7 @@ GRUB_GFXMODE="1024x768"
 var grub *Grub2
 
 func init() {
-	grub = NewGrub2()
+	grub = &Grub2{}
 	Suite(grub)
 }
 
