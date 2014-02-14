@@ -47,7 +47,7 @@ type Grub2 struct {
 func NewGrub2() *Grub2 {
 	grub := &Grub2{}
 	grub.theme = NewTheme()
-	grub.config = CacheConfig{1024, 768, false} // default value
+	grub.config = CacheConfig{1024, 768, true} // default value
 	return grub
 }
 
@@ -164,7 +164,7 @@ func (grub *Grub2) readCacheConfig() (err error) {
 }
 
 func (grub *Grub2) writeCacheConfig() (err error) {
-	// ensure parent directory existed
+	// ensure parent directory exists
 	if !isFileExists(_GRUB_CACHE_FILE) {
 		os.MkdirAll(path.Dir(_GRUB_CACHE_FILE), 0755)
 	}
