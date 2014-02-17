@@ -22,100 +22,100 @@
 package main
 
 import (
-	"dlib/dbus"
-	"fmt"
-	"os/user"
-	"sort"
-	"strings"
+        "dlib/dbus"
+        "fmt"
+        "os/user"
+        "sort"
+        "strings"
 )
 
 const (
-	_USER_VALID_PATH = "/com/deepin/daemon/Accounts/User"
+        _USER_VALID_PATH = "/com/deepin/daemon/Accounts/User"
 )
 
 func (m *Manager) ListCachedUsers() []string {
-	objects, err := _accountInface.ListCachedUsers()
-	if err != nil {
-		fmt.Println("List Users Failed:", err)
-		return nil
-	}
+        objects, err := _accountInface.ListCachedUsers()
+        if err != nil {
+                fmt.Println("List Users Failed:", err)
+                return nil
+        }
 
-	userList := []string{}
-	for _, v := range objects {
-		userList = append(userList, ConvertPath(string(v)))
-	}
+        userList := []string{}
+        for _, v := range objects {
+                userList = append(userList, ConvertPath(string(v)))
+        }
 
-	sort.Strings(userList)
-	return userList
+        sort.Strings(userList)
+        return userList
 }
 
 func (m *Manager) CreateUser(name, fullname string, accountType int32) string {
-	path, err := _accountInface.CreateUser(name, fullname, accountType)
-	if err != nil {
-		fmt.Println("Create User Failed: ", err)
-		return ""
-	}
+        path, err := _accountInface.CreateUser(name, fullname, accountType)
+        if err != nil {
+                fmt.Println("Create User Failed: ", err)
+                return ""
+        }
 
-	userPath := ConvertPath(string(path))
-	if strings.Contains(userPath, _USER_VALID_PATH) {
-		NewAccountUserManager(path)
-	}
+        userPath := ConvertPath(string(path))
+        if strings.Contains(userPath, _USER_VALID_PATH) {
+                NewAccountUserManager(path)
+        }
 
-	return userPath
+        return userPath
 }
 
 func (m *Manager) DeleteUser(id int64, removeFiles bool) {
-	_accountInface.DeleteUser(id, removeFiles)
+        _accountInface.DeleteUser(id, removeFiles)
 }
 
 func (m *Manager) FindUserById(id string) string {
-	path := _USER_VALID_PATH + id
-	list := m.ListCachedUsers()
+        path := _USER_VALID_PATH + id
+        list := m.ListCachedUsers()
 
-	for _, v := range list {
-		if path == v {
-			return path
-		}
-	}
+        for _, v := range list {
+                if path == v {
+                        return path
+                }
+        }
 
-	return ""
+        return ""
 }
 
 func (m *Manager) FindUserByName(name string) string {
-	userInfo, err := user.Lookup(name)
-	if err != nil {
-		fmt.Println("Lookup By Name Failed:", err)
-		return ""
-	}
+        userInfo, err := user.Lookup(name)
+        if err != nil {
+                fmt.Println("Lookup By Name Failed:", err)
+                return ""
+        }
 
-	return m.FindUserById(userInfo.Uid)
+        return m.FindUserById(userInfo.Uid)
 }
 
 func NewAccountManager() *Manager {
-	m := &Manager{}
+        m := &Manager{}
 
-	_accountInface.ConnectUserAdded(func(user dbus.ObjectPath) {
-		/*NewAccountUserManager(user)*/
-		m.UserAdded(ConvertPath(string(user)))
-	})
+        _accountInface.ConnectUserAdded(func(user dbus.ObjectPath) {
+                /*NewAccountUserManager(user)*/
+                m.UserAdded(ConvertPath(string(user)))
+        })
 
-	_accountInface.ConnectUserDeleted(func(user dbus.ObjectPath) {
-		DeleteUserManager(user)
-		m.UserDeleted(ConvertPath(string(user)))
-	})
+        _accountInface.ConnectUserDeleted(func(user dbus.ObjectPath) {
+                DeleteUserManager(user)
+                m.UserDeleted(ConvertPath(string(user)))
+        })
 
-	return m
+        return m
 }
 
 /* Convert freedesktop path to deepin path */
 func ConvertPath(path string) string {
-	strs := strings.Split(path, "/")
-	l := len(strs)
-	if l <= 0 {
-		return ""
-	}
+        strs := strings.Split(path, "/")
+        l := len(strs)
+        if l <= 0 {
+                return ""
+        }
 
-	userID := strs[l-1]
+        userID := strs[l-1]
 
-	return _USER_PATH + userID
+        return _USER_PATH + userID
 }
