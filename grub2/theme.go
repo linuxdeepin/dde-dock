@@ -100,11 +100,19 @@ func NewTheme() *Theme {
 }
 
 func (theme *Theme) setItemColor(itemColor string) {
+	if len(itemColor) == 0 {
+		// set a default value to avoid empty string
+		itemColor = theme.tplJsonData.DarkScheme.ItemColor
+	}
 	theme.tplJsonData.CurrentScheme.ItemColor = itemColor
 	theme.customTheme()
 }
 
 func (theme *Theme) setSelectedItemColor(selectedItemColor string) {
+	if len(selectedItemColor) == 0 {
+		// set a default value to avoid empty string
+		selectedItemColor = theme.tplJsonData.DarkScheme.SelectedItemColor
+	}
 	theme.tplJsonData.CurrentScheme.SelectedItemColor = selectedItemColor
 	theme.customTheme()
 }
