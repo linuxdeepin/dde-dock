@@ -41,15 +41,12 @@ func (grub *Grub2) OnPropertiesChanged(name string, oldv interface{}) {
 			logError("%v", err)
 		}
 	}()
+	logInfo("OnPropertiesChanged: " + name)
 	switch name {
 	case "DefaultEntry":
 		grub.setDefaultEntry(grub.DefaultEntry)
 	case "Timeout":
 		grub.setTimeout(grub.Timeout)
-	}
-	err := grub.save()
-	if err != nil {
-		panic(err)
 	}
 	grub.config.NeedUpdate = true
 }
