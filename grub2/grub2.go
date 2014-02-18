@@ -100,7 +100,7 @@ func (grub *Grub2) load() {
 				grub.config.NeedUpdate = false
 				grub.save()
 			}
-			time.Sleep(30 * time.Second)
+			time.Sleep(5 * time.Second)
 		}
 	}()
 }
