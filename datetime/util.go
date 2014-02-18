@@ -22,67 +22,76 @@
 package main
 
 func getZoneCityList() []string {
-	list := []string{}
+        list := []string{}
 
-	for _, v := range zoneCityInfo {
-		tmp := convertZoneToCity(v)
-		list = append(list, tmp)
-	}
+        for _, v := range zoneCityMap {
+                list = append(list, v)
+        }
 
-	return list
+        return list
+}
+
+func getKeyByValue(value string) string {
+        for k, v := range zoneCityMap {
+                if v == value {
+                        return k
+                }
+        }
+
+        return ""
 }
 
 func convertZoneToCity(tz string) string {
-	city := ""
-	for _, c := range tz {
-		if c == '-' || c == '_' {
-			city = city + " "
-		} else {
-			city = city + string(c)
-		}
-	}
+        city := ""
+        for _, c := range tz {
+                if c == '-' || c == '_' {
+                        city = city + " "
+                } else {
+                        city = city + string(c)
+                }
+        }
 
         return city
 }
 
 func convertCityToZone(city string) string {
-	tz := ""
-	if isInUnderlineList(city) {
-		for _, c := range city {
-			if c == ' ' {
-				tz = tz + "_"
-			} else {
-				tz = tz + string(c)
-			}
-		}
-	} else {
-		for _, c := range city {
-			if c == ' ' {
-				tz = tz + "-"
-			} else {
-				tz = tz + string(c)
-			}
-		}
-	}
+        tz := ""
+        if isInUnderlineList(city) {
+                for _, c := range city {
+                        if c == ' ' {
+                                tz = tz + "_"
+                        } else {
+                                tz = tz + string(c)
+                        }
+                }
+        } else {
+                for _, c := range city {
+                        if c == ' ' {
+                                tz = tz + "-"
+                        } else {
+                                tz = tz + string(c)
+                        }
+                }
+        }
 
-	return tz
+        return tz
 }
 
 func isInUnderlineList(key string) bool {
-	ok := isElementExist(key, noUnderlineList)
-	if ok {
-		return false
-	}
+        ok := isElementExist(key, noUnderlineList)
+        if ok {
+                return false
+        }
 
-	return true
+        return true
 }
 
 func isElementExist(element string, list []string) bool {
-	for _, v := range list {
-		if v == element {
-			return true
-		}
-	}
+        for _, v := range list {
+                if v == element {
+                        return true
+                }
+        }
 
-	return false
+        return false
 }
