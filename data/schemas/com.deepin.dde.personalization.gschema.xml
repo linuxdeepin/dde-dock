@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-    <enum id="com.deepin.dde.individuate.draw-mode">
+    <enum id="com.deepin.dde.personalization.draw-mode">
 	<value nick="Scaling" value="1"/>
 	<value nick="Tiling"  value="2"/>
     </enum>
-    <enum id="com.deepin.dde.individuate.xfade-auto-mode">
+    <enum id="com.deepin.dde.personalization.xfade-auto-mode">
 	<value nick="Sequential" value="1"/>
 	<value nick="Random"	 value="2"/>
     </enum>
-    <schema path="/com/deepin/dde/individuate/" id="com.deepin.dde.individuate" gettext-domain="DDE">
+    <schema path="/com/deepin/dde/personalization/" id="com.deepin.dde.personalization" gettext-domain="DDE">
     <key type="b" name="active">
       <default>true</default>
       <summary>Activation of this plugin</summary>
@@ -24,7 +24,7 @@
       <summary>Current picture URI</summary>
       <description>Current picture being rendered on the screen</description>
     </key>
-    <key name="draw-mode" enum="com.deepin.dde.individuate.draw-mode">
+    <key name="draw-mode" enum="com.deepin.dde.personalization.draw-mode">
       <default>"Scaling"</default>
       <summary>how the background is drawed on the screen</summary>
       <description>enumerations represent how the background is drawed on the screen. e.g. scaling or tiling</description>
@@ -44,7 +44,7 @@
 		<summary>Auto Switch Pictures</summary>
 		<description>Auto switch background pictures</description>
 	</key>
-    <key name="cross-fade-auto-mode" enum="com.deepin.dde.individuate.xfade-auto-mode">
+    <key name="cross-fade-auto-mode" enum="com.deepin.dde.personalization.xfade-auto-mode">
       <default>"Sequential"</default>
       <summary>How pictures are chosen to draw</summary>
       <description>enumerations represent how pictures are chose to drawn. e.g. in random or in sequence</description>
