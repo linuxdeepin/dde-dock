@@ -41,7 +41,7 @@ import (
 const (
 	_GRUB_MENU            = "/boot/grub/grub.cfg"
 	_GRUB_CONFIG          = "/etc/default/grub"
-	_GRUB_MKCONFIG_EXE    = "grub-mkconfig"
+	_GRUB_MKCONFIG_EXE    = "/usr/sbin/grub-mkconfig"
 	_GRUB_TIMEOUT_DISABLE = -2
 	_GRUB_CACHE_FILE      = "/var/cache/dde-daemon/grub2.json"
 )
