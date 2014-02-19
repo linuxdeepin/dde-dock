@@ -61,7 +61,9 @@
 #define UPOWER_DBUS_INTERFACE                   "org.freedesktop.UPower"
 #define UPOWER_DBUS_INTERFACE_KBDBACKLIGHT      "org.freedesktop.UPower.KbdBacklight"
 
-#define GSD_POWER_SETTINGS_SCHEMA               "org.gnome.settings-daemon.plugins.power"
+/*#define GSD_POWER_SETTINGS_SCHEMA             "org.gnome.settings-daemon.plugins.power"*/
+#define DEEPIN_POWER_SETTINGS_SCHEMA            "com.deepin.daemon.power.settings"
+#define DEEPIN_POWER_SETTINGS_PATH              "/com/deepin/daemon/power/profiles/Default/"
 #define GSD_XRANDR_SETTINGS_SCHEMA              "org.gnome.settings-daemon.plugins.xrandr"
 
 #define GSD_POWER_DBUS_NAME                     GSD_DBUS_NAME ".Power"
@@ -378,6 +380,9 @@ engine_get_warning_csr (GsdPowerManager *manager, UpDevice *device)
     return WARNING_NONE;
 }
 
+/**
+ * get the warning based on the percentage
+ */
 static GsdPowerManagerWarning
 engine_get_warning_percentage (GsdPowerManager *manager, UpDevice *device)
 {
@@ -1807,6 +1812,7 @@ engine_charge_action (GsdPowerManager *manager, UpDevice *device)
     }
     else if (kind == UP_DEVICE_KIND_UPS)
     {
+        //Uninterruptible power supply
         /* TRANSLATORS: UPS is really, really, low */
         title = _("UPS critically low");
 
@@ -1877,6 +1883,9 @@ out:
     g_free (message);
 }
 
+/**
+ * callback for upower device changes,such as power percentage drops
+ */
 static void
 engine_device_changed_cb (UpClient *client, UpDevice *device, GsdPowerManager *manager)
 {
@@ -1930,7 +1939,8 @@ engine_device_changed_cb (UpClient *client, UpDevice *device, GsdPowerManager *m
     /* check the warning state has not changed */
     warning_old = GPOINTER_TO_INT(g_object_get_data (G_OBJECT(device), "engine-warning-old"));
     warning = engine_get_warning (manager, device);
-    if (warning != warning_old)
+    /*if (warning != warning_old)*/
+    if (1)
     {
         if (warning == WARNING_LOW)
         {
@@ -2769,7 +2779,10 @@ idle_is_session_inhibited (GsdPowerManager  *manager,
 
     /* not yet connected to gnome-session */
     if (manager->priv->session == NULL)
+    {
+        g_debug("not yet connected to gnome-session");
         return FALSE;
+    }
 
     variant = g_dbus_proxy_get_cached_property (manager->priv->session,
               "InhibitedActions");
@@ -2960,7 +2973,7 @@ main_battery_or_ups_low_changed (GsdPowerManager *manager,
     if (is_low == manager->priv->battery_is_low)
         return;
     manager->priv->battery_is_low = is_low;
-    g_debug("main_battery_or_ups-low_changed():\n");
+    g_debug("main_battery_or_ups_low_changed():\n");
     idle_configure (manager);
 }
 
@@ -3689,7 +3702,10 @@ gsd_power_manager_start (GsdPowerManager *manager,
     manager->priv->kbd_brightness_old = -1;
     manager->priv->kbd_brightness_pre_dim = -1;
     manager->priv->pre_dim_brightness = -1;
-    manager->priv->settings = g_settings_new (GSD_POWER_SETTINGS_SCHEMA);
+    /*manager->priv->settings = g_settings_new(GSD_POWER_SETTINGS_SCHEMA);*/
+    manager->priv->settings = g_settings_new_with_path(DEEPIN_POWER_SETTINGS_SCHEMA,
+                              DEEPIN_POWER_SETTINGS_PATH);
+    g_debug("created new setttings with path :%s\n", DEEPIN_POWER_SETTINGS_PATH);
     g_signal_connect (manager->priv->settings, "changed",
                       G_CALLBACK (engine_settings_key_changed_cb), manager);
     manager->priv->settings_screensaver = g_settings_new ("org.gnome.desktop.screensaver");
@@ -3792,7 +3808,6 @@ gsd_power_manager_start (GsdPowerManager *manager,
 
     /* coldplug the engine */
     engine_coldplug (manager);
-    g_debug("gsd_power_manager_start()\n");
     idle_configure (manager);
 
     manager->priv->xscreensaver_watchdog_timer_id = gsd_power_enable_screensaver_watchdog ();

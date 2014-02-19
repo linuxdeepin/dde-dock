@@ -67,6 +67,8 @@ parse_args (int *argc, char ***argv)
     if (debug)
         g_setenv ("G_MESSAGES_DEBUG", "all", FALSE);
 }
+
+#ifdef MAIN
 int main(int argc, char **argv)
 {
     GsdPowerManager *manager = gsd_power_manager_new();
@@ -75,6 +77,8 @@ int main(int argc, char **argv)
     parse_args(&argc, &argv);
     gtk_init(&argc, &argv);
     gsd_power_manager_start(manager, &error);
+    notify_init("gsd-power-manager");
     gtk_main();
     return 0;
 }
+#endif
