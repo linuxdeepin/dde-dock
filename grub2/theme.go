@@ -23,7 +23,6 @@ package main
 
 import (
 	"bytes"
-	"dbus/com/deepin/api/image"
 	"encoding/json"
 	"io/ioutil"
 	"text/template"
@@ -41,16 +40,7 @@ const (
 var (
 	_THEME_TEMPLATOR                   = template.New("theme-templator")
 	_UPDATE_THEME_BACKGROUND_ID uint32 = 0
-	dimg                        *image.Image
 )
-
-func init() {
-	var err error
-	dimg, err = image.NewImage("/com/deepin/api/Image")
-	if err != nil {
-		panic(err)
-	}
-}
 
 type ThemeScheme struct {
 	ItemColor, SelectedItemColor, TerminalBox, MenuPixmapStyle, ScrollbarThumb string
