@@ -116,8 +116,6 @@ func NewDateAndTime() *Manager {
 func Init() {
         var err error
 
-        initZoneCityMap()
-
         setDate, err = setdatetime.NewSetDateTime("/com/deepin/api/SetDateTime")
         if err != nil {
                 logger.Println("New SetDateTime Failed:", err)

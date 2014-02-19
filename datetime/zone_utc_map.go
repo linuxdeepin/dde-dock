@@ -1,348 +1,497 @@
 package main
 
-var zoneCityMap map[string]string
-
-func initZoneCityMap() {
-        zoneCityMap = make(map[string]string)
-        zoneCityMap["Africa/Abidjan"] = "Côte d'Ivoire (UTC+00) Abidjan"
-        zoneCityMap["Africa/Accra"] = "Ghana (UTC+00) Accra"
-        zoneCityMap["Africa/Addis_Ababa"] = "Ethiopia (UTC+03) Addis Ababa"
-        zoneCityMap["Africa/Algiers"] = "Algeria (UTC+01) Algiers"
-        zoneCityMap["Africa/Asmara"] = "Eritrea (UTC+03) Asmara"
-        zoneCityMap["Africa/Asmera"] = "Eritrea (UTC+03) Asmara"
-        zoneCityMap["Africa/Bamako"] = "Mali (UTC+00) Bamako"
-        zoneCityMap["Africa/Bangui"] = "Central African Republic (UTC+01) Bangui"
-        zoneCityMap["Africa/Bangui"] = "Central African Republic (UTC+01) Bangui"
-        zoneCityMap["Africa/Banjul"] = "The Gambia (UTC+00) Banjul"
-        zoneCityMap["Africa/Bissau"] = "Guinea-Bissau (UTC+00) Bissau"
-        zoneCityMap["Africa/Blantyre"] = "Malawi (UTC+02) Blantyre"
-        zoneCityMap["Africa/Brazzaville"] = "Congo (UTC+01) Brazzaville"
-        zoneCityMap["Africa/Bujumbura"] = "Burundi (UTC+02) Bujumbura"
-        zoneCityMap["Africa/Cairo"] = "Egypt (UTC+02) Cairo"
-        zoneCityMap["Africa/Casablanca"] = "Morocco (UTC+00) Casablanca"
-        zoneCityMap["Africa/Dakar"] = "Senegal (UTC+00) Dakar"
-        zoneCityMap["Africa/Dar_es_Salaam"] = "Tanzania (UTC+03) Dar es Salaam"
-        zoneCityMap["Africa/Djibouti"] = "Djibouti (UTC+03) Djibouti"
-        zoneCityMap["Africa/Djibouti"] = "Djibouti (UTC+03) Djibouti"
-        zoneCityMap["Africa/Djibouti"] = "Djibouti (UTC+03) Djibouti"
-        zoneCityMap["Africa/Douala"] = "Cameroon (UTC+01) Douala"
-        zoneCityMap["Africa/El_Aaiun"] = "Western Sahara (UTC+00) Laayoune"
-        zoneCityMap["Africa/Freetown"] = "Sierra Leone (UTC+00) Freetown"
-        zoneCityMap["Africa/Gaborone"] = "Botswana (UTC+02) Gaborone"
-        zoneCityMap["Africa/Harare"] = "Zimbabwe (UTC+02) Harare"
-        zoneCityMap["Africa/Johannesburg"] = "South Africa (UTC+02) Johannesburg"
-        zoneCityMap["Africa/Juba"] = "South Sudan (UTC+03) Juba"
-        zoneCityMap["Africa/Ouagadougou"] = "Burkina Faso (UTC+00) Ouagadougou"
-        zoneCityMap["Africa/Porto-Novo"] = "Benin (UTC+01) Porto Novo"
-        zoneCityMap["Africa/Sao_Tome"] = "São Tomé and Príncipe (UTC+00) São Tomé"
-        zoneCityMap["Africa/Timbuktu"] = "Mali (UTC+00) Timbuktu"
-        zoneCityMap["Africa/Tripoli"] = "Libya (UTC+02) Tripoli"
-        zoneCityMap["Africa/Tunis"] = "Tunisia (UTC+01) Tunis"
-        zoneCityMap["Africa/Windhoek"] = "Namibia (UTC+01) Windhoek"
-        zoneCityMap["America/Adak"] = "USA (UTC−10) Adak"
-        zoneCityMap["America/Anchorage"] = "USA (UTC−09) Anchorage"
-        zoneCityMap["America/Anchorage"] = "USA (UTC−09) Anchorage"
-        zoneCityMap["America/Argentina/Jujuy"] = "Argentina (UTC−03) América"
-        zoneCityMap["America/Argentina/La_Rioja"] = "Argentina (UTC−03) América"
-        zoneCityMap["America/Argentina/Mendoza"] = "Argentina (UTC−03) América"
-        zoneCityMap["America/Argentina/Mendoza"] = "Argentina (UTC−03) América"
-        zoneCityMap["America/Argentina/Mendoza"] = "Argentina (UTC−03) América"
-        zoneCityMap["America/Argentina/Rio_Gallegos"] = "Argentina (UTC−03) América"
-        zoneCityMap["America/Argentina/Salta"] = "Argentina (UTC−03) América"
-        zoneCityMap["America/Argentina/Salta"] = "Argentina (UTC−03) América"
-        zoneCityMap["America/Argentina/San_Juan"] = "Argentina (UTC−03) América"
-        zoneCityMap["America/Argentina/San_Luis"] = "Argentina (UTC−03) San Luis"
-        zoneCityMap["America/Argentina/San_Luis"] = "Argentina (UTC−03) San Luis"
-        zoneCityMap["America/Argentina/San_Luis"] = "Argentina (UTC−03) América del Sur"
-        zoneCityMap["America/Argentina/San_Luis"] = "Argentina (UTC−03) América"
-        zoneCityMap["America/Argentina/San_Luis"] = "Mexico (UTC−03) Argentina"
-        zoneCityMap["America/Argentina/San_Luis"] = "Mexico (UTC−03) Argentina"
-        zoneCityMap["America/Argentina/San_Luis"] = "Mexico (UTC−03) Argentina"
-        zoneCityMap["America/Argentina/Tucuman"] = "Argentina (UTC−03) Avenida América"
-        zoneCityMap["America/Argentina/Ushuaia"] = "Argentina (UTC−03) América del Sur"
-        zoneCityMap["America/Aruba"] = "USA (UTC−04) Aruba"
-        zoneCityMap["America/Aruba"] = "USA (UTC−04) Aruba"
-        zoneCityMap["America/Aruba"] = "USA (UTC−04) Aruba"
-        zoneCityMap["America/Aruba"] = "USA (UTC−04) Aruba"
-        zoneCityMap["America/Aruba"] = "USA (UTC−04) Aruba"
-        zoneCityMap["America/Aruba"] = "USA (UTC−04) Aruba"
-        zoneCityMap["America/Aruba"] = "USA (UTC−04) Aruba"
-        zoneCityMap["America/Asuncion"] = "USA (UTC−04) Asuncion"
-        zoneCityMap["America/Asuncion"] = "Paraguay (UTC−04) América"
-        zoneCityMap["America/Atikokan"] = "Canada (UTC−05) Atikokan"
-        zoneCityMap["America/Atka"] = "USA (UTC−10) Atka"
-        zoneCityMap["America/Bahia"] = "Brazil (UTC−03) América - Bahia"
-        zoneCityMap["America/Bahia"] = "USA (UTC−03) Bahia"
-        zoneCityMap["America/Bahia_Banderas"] = "Mexico (UTC−06) Bahía de Banderas"
-        zoneCityMap["America/Bahia_Banderas"] = "Mexico (UTC−06) Bahia de Banderas"
-        zoneCityMap["America/Bahia_Banderas"] = "Mexico (UTC−06) Bahía de Banderas"
-        zoneCityMap["America/Bahia_Banderas"] = "Mexico (UTC−06) Bahía de Banderas"
-        zoneCityMap["America/Bahia_Banderas"] = "Mexico (UTC−06) Bahía de Banderas"
-        zoneCityMap["America/Barbados"] = "USA (UTC−04) Barbados"
-        zoneCityMap["America/Barbados"] = "USA (UTC−04) Barbados"
-        zoneCityMap["America/Barbados"] = "USA (UTC−04) Barbados"
-        zoneCityMap["America/Barbados"] = "USA (UTC−04) Barbados"
-        zoneCityMap["America/Barbados"] = "USA (UTC−04) Barbados"
-        zoneCityMap["America/Barbados"] = "USA (UTC−04) Barbados"
-        zoneCityMap["America/Belem"] = "USA (UTC−03) Bethlehem"
-        zoneCityMap["America/Belem"] = "USA (UTC−03) Bethlehem"
-        zoneCityMap["America/Belem"] = "USA (UTC−03) Bethlehem"
-        zoneCityMap["America/Belize"] = "USA (UTC−06) Belize Drive"
-        zoneCityMap["America/Belize"] = "USA (UTC−06) Belize Drive"
-        zoneCityMap["America/Belize"] = "USA (UTC−06) Embassy of Belize"
-        zoneCityMap["America/Belize"] = "USA (UTC−06) Belize Drive"
-        zoneCityMap["America/Belize"] = "USA (UTC−06) Belize Way"
-        zoneCityMap["America/Belize"] = "USA (UTC−06) Belize Drive"
-        zoneCityMap["America/Belize"] = "USA (UTC−06) Belize Drive"
-        zoneCityMap["America/Belize"] = "USA (UTC−06) Belize Way"
-        zoneCityMap["America/Belize"] = "USA (UTC−06) Belize Place"
-        zoneCityMap["America/Belize"] = "USA (UTC−06) Belize Drive"
-        zoneCityMap["America/Belize"] = "USA (UTC−06) Belize Court"
-        zoneCityMap["America/Belize"] = "USA (UTC−06) Belize Drive"
-        zoneCityMap["America/Belize"] = "USA (UTC−06) Belize Lane"
-        zoneCityMap["America/Belize"] = "USA (UTC−06) Belize Court"
-        zoneCityMap["America/Belize"] = "USA (UTC−06) Belize Lane"
-        zoneCityMap["America/Belize"] = "USA (UTC−06) Belize Court"
-        zoneCityMap["America/Belize"] = "USA (UTC−06) Belize Tourist Board"
-        zoneCityMap["America/Belize"] = "USA (UTC−06) Belize Lane"
-        zoneCityMap["America/Belize"] = "USA (UTC−06) Belize It Tours"
-        zoneCityMap["America/Belize"] = "USA (UTC−06) Belize Pet World"
-        zoneCityMap["America/Belize"] = "USA (UTC−06) Belize Court"
-        zoneCityMap["America/Belize"] = "USA (UTC−06) Belize Court"
-        zoneCityMap["America/Belize"] = "USA (UTC−06) Belize Road"
-        zoneCityMap["America/Belize"] = "USA (UTC−06) Corte Belize"
-        zoneCityMap["America/Belize"] = "USA (UTC−06) Belize Court"
-        zoneCityMap["America/Belize"] = "USA (UTC−06) Adventures To Belize"
-        zoneCityMap["America/Belize"] = "USA (UTC−06) Belize Tourist Board"
-        zoneCityMap["America/Belize"] = "USA (UTC−06) Belize River Street"
-        zoneCityMap["America/Belize"] = "Belize (UTC−06) Voice of America Road"
-        zoneCityMap["America/Belize"] = "USA (UTC−06) Belize Park"
-        zoneCityMap["America/Boa_Vista"] = "USA (UTC−04) Boa Vista Drive"
-        zoneCityMap["America/Boa_Vista"] = "USA (UTC−04) Boa Vista Drive"
-        zoneCityMap["America/Boa_Vista"] = "USA (UTC−04) Boa Vista Drive"
-        zoneCityMap["America/Boa_Vista"] = "USA (UTC−04) Boa Trail"
-        zoneCityMap["America/Boa_Vista"] = "USA (UTC−04) Boa Drive"
-        zoneCityMap["America/Boa_Vista"] = "USA (UTC−04) Boa Vista Circle"
-        zoneCityMap["America/Boa_Vista"] = "USA (UTC−04) Boa Vista Street"
-        zoneCityMap["America/Boa_Vista"] = "USA (UTC−04) Boa Drive"
-        zoneCityMap["America/Boa_Vista"] = "USA (UTC−04) Boa Drive"
-        zoneCityMap["America/Boa_Vista"] = "USA (UTC−04) Boa Street"
-        zoneCityMap["America/Boa_Vista"] = "USA (UTC−04) West Boa Vista Drive"
-        zoneCityMap["America/Boa_Vista"] = "USA (UTC−04) Boa Drive"
-        zoneCityMap["America/Boa_Vista"] = "USA (UTC−04) Boa Avenue"
-        zoneCityMap["America/Boa_Vista"] = "USA (UTC−04) Boa Lane"
-        zoneCityMap["America/Boa_Vista"] = "USA (UTC−04) Boa Place"
-        zoneCityMap["America/Boa_Vista"] = "USA (UTC−04) Boa Circle"
-        zoneCityMap["America/Boa_Vista"] = "USA (UTC−04) South Boa Drive"
-        zoneCityMap["America/Bogota"] = "USA (UTC−05) Bogota"
-        zoneCityMap["America/Bogota"] = "USA (UTC−05) Bogota"
-        zoneCityMap["America/Bogota"] = "USA (UTC−05) Bogota"
-        zoneCityMap["America/Boise"] = "USA (UTC−07) Boise"
-        zoneCityMap["America/Buenos_Aires"] = "Argentina (UTC−03) América"
-        zoneCityMap["America/Cambridge_Bay"] = "USA (UTC−07) Hambrooks Bay"
-        zoneCityMap["America/Cambridge_Bay"] = "USA (UTC−07) Bay Street"
-        zoneCityMap["America/Cambridge_Bay"] = "USA (UTC−07) Cambridge Drive"
-        zoneCityMap["America/Cambridge_Bay"] = "USA (UTC−07) Bay Street"
-        zoneCityMap["America/Cambridge_Bay"] = "USA (UTC−07) Cambridge Circle"
-        zoneCityMap["America/Cambridge_Bay"] = "USA (UTC−07) Bay View Avenue"
-        zoneCityMap["America/Cambridge_Bay"] = "USA (UTC−07) Cambridge"
-        zoneCityMap["America/Cambridge_Bay"] = "USA (UTC−07) Bay Heights Avenue"
-        zoneCityMap["America/Cambridge_Bay"] = "USA (UTC−07) Cambridge Court West"
-        zoneCityMap["America/Cambridge_Bay"] = "USA (UTC−07) Cambridge Court East"
-        zoneCityMap["America/Cambridge_Bay"] = "USA (UTC−07) Harvard Square Station"
-        zoneCityMap["America/Cambridge_Bay"] = "United States (UTC−07) Chesapeake Bay"
-        zoneCityMap["America/Cambridge_Bay"] = "USA (UTC−07) Bay State Road"
-        zoneCityMap["America/Cambridge_Bay"] = "USA (UTC−07) Fishing Bay"
-        zoneCityMap["America/Cambridge_Bay"] = "USA (UTC−07) Tar Bay"
-        zoneCityMap["America/Cambridge_Bay"] = "USA (UTC−07) Lecompte Bay"
-        zoneCityMap["America/Cambridge_Bay"] = "USA (UTC−07) Madison Bay"
-        zoneCityMap["America/Cambridge_Bay"] = "USA (UTC−07) Brannock Bay"
-        zoneCityMap["America/Cambridge_Bay"] = "USA (UTC−07) Horne Bay"
-        zoneCityMap["America/Cambridge_Bay"] = "USA (UTC−07) Cambridge"
-        zoneCityMap["America/Cambridge_Bay"] = "USA (UTC−07) Cambridge Street"
-        zoneCityMap["America/Cambridge_Bay"] = "USA (UTC−07) Cambridge"
-        zoneCityMap["America/Cambridge_Bay"] = "USA (UTC−07) Bay Country Church"
-        zoneCityMap["America/Campo_Grande"] = "USA (UTC−04) Campo"
-        zoneCityMap["America/Campo_Grande"] = "Paraguay (UTC−04) America"
-        zoneCityMap["America/Campo_Grande"] = "Mexico (UTC−04) Campo Grande"
-        zoneCityMap["America/Campo_Grande"] = "USA (UTC−04) Campo Grande Mountain"
-        zoneCityMap["America/Campo_Grande"] = "USA (UTC−04) West El Campo Grande"
-        zoneCityMap["America/Campo_Grande"] = "USA (UTC−04) West El Campo Grande"
-        zoneCityMap["America/Cancun"] = "USA (UTC−06) Cancun"
-        zoneCityMap["America/Cancun"] = "USA (UTC−06) Cancun"
-        zoneCityMap["America/Cancun"] = "USA (UTC−06) Cancun"
-        zoneCityMap["America/Cancun"] = "USA (UTC−06) Cancun"
-        zoneCityMap["America/Cancun"] = "USA (UTC−06) Cancun"
-        zoneCityMap["America/Caracas"] = "Ecuador (UTC−03) Caracas"
-        zoneCityMap["America/Caracas"] = "USA (UTC−03) Caracas"
-        zoneCityMap["America/Caracas"] = "Venezuela (UTC−03) Avenida América"
-        zoneCityMap["America/Caracas"] = "Venezuela (UTC−03) Avenida América"
-        zoneCityMap["America/Caracas"] = "Venezuela (UTC−03) Calle America"
-        zoneCityMap["America/Caracas"] = "Colombia (UTC−03) Caracas"
-        zoneCityMap["America/Caracas"] = "Venezuela (UTC−03) Edificio America"
-        zoneCityMap["America/Cayenne"] = "USA (UTC−03) Cayenne"
-        zoneCityMap["America/Cayenne"] = "USA (UTC−03) Cayenne"
-        zoneCityMap["America/Cayenne"] = "USA (UTC−03) Cayenne"
-        zoneCityMap["America/Cayenne"] = "USA (UTC−03) Cayenne"
-        zoneCityMap["America/Cayenne"] = "USA (UTC−03) Cayenne"
-        zoneCityMap["America/Cayman"] = "USA (UTC−05) Cayman"
-        zoneCityMap["America/Cayman"] = "USA (UTC−05) Cayman Drive"
-        zoneCityMap["America/Cayman"] = "USA (UTC−05) Cayman"
-        zoneCityMap["America/Cayman"] = "USA (UTC−05) Cayman"
-        zoneCityMap["America/Cayman"] = "USA (UTC−05) Cayman"
-        zoneCityMap["America/Chicago"] = "USA (UTC−06) Chicago"
-        zoneCityMap["America/Chihuahua"] = "Mexico (UTC−07) América"
-        zoneCityMap["America/Chihuahua"] = "USA (UTC−07) Chihuahua"
-        zoneCityMap["America/Coral_Harbour"] = "USA (UTC−05) Coral Harbor"
-        zoneCityMap["America/Cordoba"] = "USA (UTC−03) Cordoba"
-        zoneCityMap["America/Cordoba"] = "USA (UTC−03) Cordoba"
-        zoneCityMap["America/Cordoba"] = "USA (UTC−03) Cordoba"
-        zoneCityMap["America/Cordoba"] = "USA (UTC−03) Cordoba"
-        zoneCityMap["America/Cordoba"] = "USA (UTC−03) Cordoba"
-        zoneCityMap["America/Cordoba"] = "Argentina (UTC−03) América"
-        zoneCityMap["America/Costa_Rica"] = "USA (UTC−06) Costa Rica"
-        zoneCityMap["America/Costa_Rica"] = "USA (UTC−06) Costa Rica"
-        zoneCityMap["America/Costa_Rica"] = "USA (UTC−06) Costa Rica"
-        zoneCityMap["America/Costa_Rica"] = "USA (UTC−06) Costa Rica"
-        zoneCityMap["America/Costa_Rica"] = "Mexico (UTC−06) Costa Rica"
-        zoneCityMap["America/Costa_Rica"] = "Mexico (UTC−06) Costa Rica"
-        zoneCityMap["America/Costa_Rica"] = "Mexico (UTC−06) Costa Rica"
-        zoneCityMap["America/Creston"] = "USA (UTC−07) Creston"
-        zoneCityMap["America/Creston"] = "USA (UTC−07) Creston"
-        zoneCityMap["America/Creston"] = "USA (UTC−07) Creston"
-        zoneCityMap["America/Creston"] = "USA (UTC−07) Creston"
-        zoneCityMap["America/Creston"] = "USA (UTC−07) Creston"
-        zoneCityMap["America/Creston"] = "USA (UTC−07) Creston"
-        zoneCityMap["America/Creston"] = "USA (UTC−07) Creston"
-        zoneCityMap["America/Creston"] = "USA (UTC−07) Creston"
-        zoneCityMap["America/Creston"] = "USA (UTC−07) Creston"
-        zoneCityMap["America/Creston"] = "USA (UTC−07) Creston"
-        zoneCityMap["America/Creston"] = "USA (UTC−07) Creston"
-        zoneCityMap["America/Creston"] = "USA (UTC−07) Creston"
-        zoneCityMap["America/Creston"] = "USA (UTC−07) Creston"
-        zoneCityMap["America/Creston"] = "USA (UTC−07) Creston"
-        zoneCityMap["America/Creston"] = "USA (UTC−07) Creston - Kenilworth"
-        zoneCityMap["America/Creston"] = "USA (UTC−07) Creston"
-        zoneCityMap["America/Cuiaba"] = "USA (UTC−04) Cuiaba"
-        zoneCityMap["America/Curacao"] = "USA (UTC−04) Curacao"
-        zoneCityMap["America/Curacao"] = "USA (UTC−04) Curacao"
-        zoneCityMap["America/Curacao"] = "USA (UTC−04) Curacao"
-        zoneCityMap["America/Dawson"] = "USA (UTC−08) Dawson"
-        zoneCityMap["America/Dawson"] = "USA (UTC−08) Dawson"
-        zoneCityMap["America/Dawson"] = "USA (UTC−08) Dawson"
-        zoneCityMap["America/Dawson"] = "USA (UTC−08) Dawson"
-        zoneCityMap["America/Dawson"] = "USA (UTC−08) Dawson"
-        zoneCityMap["America/Dawson"] = "USA (UTC−08) Dawson"
-        zoneCityMap["America/Dawson"] = "USA (UTC−08) Dawson"
-        zoneCityMap["America/Dawson"] = "USA (UTC−08) Dawson"
-        zoneCityMap["America/Dawson"] = "USA (UTC−08) Dawson"
-        zoneCityMap["America/Dawson"] = "USA (UTC−08) Dawson"
-        zoneCityMap["America/Dawson"] = "USA (UTC−08) Dawson's"
-        zoneCityMap["America/Dawson"] = "USA (UTC−08) Dawson"
-        zoneCityMap["America/Dawson"] = "USA (UTC−08) Dawson"
-        zoneCityMap["America/Dawson_Creek"] = "USA (UTC−07) Dawson Creek"
-        zoneCityMap["America/Dawson_Creek"] = "USA (UTC−07) Dawson Creek"
-        zoneCityMap["America/Dawson_Creek"] = "USA (UTC−07) Dawson Creek"
-        zoneCityMap["America/Denver"] = "USA (UTC−07) Denver"
-        zoneCityMap["America/Denver"] = "USA (UTC−07) Denver"
-        zoneCityMap["America/Denver"] = "USA (UTC−07) Denver"
-        zoneCityMap["America/Denver"] = "USA (UTC−07) Denver"
-        zoneCityMap["America/Denver"] = "USA (UTC−07) Denver"
-        zoneCityMap["America/Denver"] = "USA (UTC−07) Denver"
-        zoneCityMap["America/Detroit"] = "USA (UTC−05) Detroit"
-        zoneCityMap["America/Detroit"] = "USA (UTC−05) Detroit"
-        zoneCityMap["America/Detroit"] = "USA (UTC−05) Detroit"
-        zoneCityMap["America/Detroit"] = "USA (UTC−05) Detroit"
-        zoneCityMap["America/Detroit"] = "USA (UTC−05) Detroit"
-        zoneCityMap["America/Detroit"] = "USA (UTC−05) Detroit"
-        zoneCityMap["America/Dominica"] = "USA (UTC−04) Dominica"
-        zoneCityMap["America/Edmonton"] = "USA (UTC−07) Edmonton"
-        zoneCityMap["America/Eirunepe"] = "Brazil (UTC−04) Rua Eirunepe - Conjunto Residencial Salvador Tolezani"
-        zoneCityMap["America/El_Salvador"] = "USA (UTC−06) Salvador"
-        zoneCityMap["America/Ensenada"] = "USA (UTC−08) Ensenada"
-        zoneCityMap["America/Ensenada"] = "Mexico (UTC−08) América"
-        zoneCityMap["America/Ensenada"] = "USA (UTC−08) Ensenada"
-        zoneCityMap["America/Ensenada"] = "USA (UTC−08) Ensenada"
-        zoneCityMap["America/Fort_Wayne"] = "USA (UTC−05) Fort Wayne"
-        zoneCityMap["America/Fortaleza"] = "USA (UTC−03) Fortaleza"
-        zoneCityMap["America/Glace_Bay"] = "USA (UTC−04) Glace Bay Lane"
-        zoneCityMap["America/Godthab"] = "Greenland (UTC−03) Nuuk"
-        zoneCityMap["America/Goose_Bay"] = "USA (UTC−04) Goose Bay"
-        zoneCityMap["America/Goose_Bay"] = "USA (UTC−04) Goose Bay"
-        zoneCityMap["America/Goose_Bay"] = "USA (UTC−04) Goose Bay Airport"
-        zoneCityMap["America/Goose_Bay"] = "USA (UTC−04) Goose Bay"
-        zoneCityMap["America/Grand_Turk"] = "USA (UTC−05) Grand Turk"
-        zoneCityMap["America/Grenada"] = "USA (UTC−04) Grenada"
-        zoneCityMap["America/Grenada"] = "USA (UTC−04) Grenada"
-        zoneCityMap["America/Guadeloupe"] = "Mexico (UTC−04) América"
-        zoneCityMap["America/Guadeloupe"] = "Mexico (UTC−04) Guadalupe"
-        zoneCityMap["America/Guadeloupe"] = "USA (UTC−04) Guadeloupe East"
-        zoneCityMap["America/Guadeloupe"] = "USA (UTC−04) Guadeloupe West"
-        zoneCityMap["America/Guadeloupe"] = "Mexico (UTC−04) Guadalupe"
-        zoneCityMap["America/Guadeloupe"] = "Mexico (UTC−04) América"
-        zoneCityMap["America/Guadeloupe"] = "Mexico (UTC−04) Guadalupe"
-        zoneCityMap["America/Guadeloupe"] = "Mexico (UTC−04) Guadalupe"
-        zoneCityMap["America/Guatemala"] = "Mexico (UTC−06) Guatemala"
-        zoneCityMap["America/Guatemala"] = "Guatemala (UTC−06) Avenida Centro America"
-        zoneCityMap["America/Guatemala"] = "Guatemala (UTC−06) Avenida America"
-        zoneCityMap["America/Guayaquil"] = "Ecuador (UTC−05) América"
-        zoneCityMap["America/Guyana"] = "Mexico (UTC−04) Guyana"
-        zoneCityMap["America/Guyana"] = "Ecuador (UTC−04) Guyana"
-        zoneCityMap["America/Halifax"] = "USA (UTC−04) Halifax"
-        zoneCityMap["America/Halifax"] = "USA (UTC−04) Halifax"
-        zoneCityMap["America/Halifax"] = "USA (UTC−04) Halifax"
-        zoneCityMap["America/Halifax"] = "USA (UTC−04) Halifax"
-        zoneCityMap["America/Halifax"] = "USA (UTC−04) Halifax"
-        zoneCityMap["America/Halifax"] = "USA (UTC−04) halifax"
-        zoneCityMap["America/Halifax"] = "USA (UTC−04) Halifax"
-        zoneCityMap["America/Havana"] = "USA (UTC−05) Havana"
-        zoneCityMap["America/Havana"] = "USA (UTC−05) Havana"
-        zoneCityMap["America/Havana"] = "USA (UTC−05) Havana"
-        zoneCityMap["America/Havana"] = "USA (UTC−05) Havana"
-        zoneCityMap["America/Havana"] = "USA (UTC−05) Havana"
-        zoneCityMap["America/Havana"] = "USA (UTC−05) Havana"
-        zoneCityMap["America/Havana"] = "USA (UTC−05) Havana"
-        zoneCityMap["America/Havana"] = "USA (UTC−05) Havana"
-        zoneCityMap["America/Havana"] = "USA (UTC−05) Havana"
-        zoneCityMap["America/Havana"] = "Cuba (UTC−05) America"
-        zoneCityMap["America/Hermosillo"] = "USA (UTC−07) Hermosillo"
-        zoneCityMap["America/Indiana/Indianapolis"] = "USA (UTC−05) Indianapolis"
-        zoneCityMap["America/Indiana/Knox"] = "USA (UTC−06) Knox"
-        zoneCityMap["America/Indiana/Knox"] = "USA (UTC−06) Knox"
-        zoneCityMap["America/Indiana/Marengo"] = "USA (UTC−05) Marengo"
-        zoneCityMap["America/Indiana/Petersburg"] = "USA (UTC−05) Petersburg"
-        zoneCityMap["America/Indiana/Tell_City"] = "USA (UTC−06) Tell City"
-        zoneCityMap["America/Indiana/Vevay"] = "USA (UTC−05) Vevay"
-        zoneCityMap["America/Indiana/Vincennes"] = "USA (UTC−05) Vincennes"
-        zoneCityMap["America/Indiana/Winamac"] = "USA (UTC−05) Winamac"
-        zoneCityMap["America/Indianapolis"] = "USA (UTC−05) Indianapolis"
-        zoneCityMap["America/Inuvik"] = "Canada (UTC−07) Inuvik Region"
-        zoneCityMap["America/Iqaluit"] = "Canada (UTC−05) Iqaluit"
-        zoneCityMap["America/Jamaica"] = "USA (UTC−05) Jamaica"
-        zoneCityMap["America/Jamaica"] = "USA (UTC−05) Jamaica"
-        zoneCityMap["America/Jamaica"] = "USA (UTC−05) Jamaica"
-        zoneCityMap["America/Jamaica"] = "USA (UTC−05) Jamaica"
-        zoneCityMap["America/Jamaica"] = "USA (UTC−05) Jamaica"
-        zoneCityMap["America/Jamaica"] = "USA (UTC−05) Jamaica"
-        zoneCityMap["America/Jamaica"] = "USA (UTC−05) Jamaica"
-        zoneCityMap["America/Jamaica"] = "USA (UTC−05) Jamaica"
-        zoneCityMap["America/Jujuy"] = "Argentina (UTC−03) América"
-        zoneCityMap["America/Juneau"] = "USA (UTC−09) Juneau"
-        zoneCityMap["America/Juneau"] = "USA (UTC−09) Juneau"
-        zoneCityMap["America/Kentucky/Louisville"] = "USA (UTC−05) Louisville"
-        zoneCityMap["America/Recife"] = "USA (UTC−03) Recife Way"
-        zoneCityMap["America/Recife"] = "USA (UTC−03) Recife Drive"
-        zoneCityMap["America/Recife"] = "Brazil (UTC−03) Rua Recife - América"
-        zoneCityMap["America/Recife"] = "Brazil (UTC−03) Rua América - Alto José Bonifacio"
-        zoneCityMap["America/Recife"] = "Brazil (UTC−03) Curso América - Viaduto Caxangá"
-        zoneCityMap["America/Recife"] = "Brazil (UTC−03) América Futebol Clube - Estrada do Arraial - Casa Amarela"
-        zoneCityMap["America/Recife"] = "Brazil (UTC−03) Rua Nova América - Ibura"
-        zoneCityMap["America/Recife"] = "Brazil (UTC−03) Rua América Cisneiros - Alto Santa Terezinha"
-        zoneCityMap["America/Recife"] = "Brazil (UTC−03) ABA - Associação Brasil América - Avenida Cons Rosa e Silva"
-        zoneCityMap["America/Recife"] = "Brazil (UTC−03) Consulado dos Estados Unidos da América em Recife - Rua Gonçalves Maia"
-        zoneCityMap["America/Regina"] = "USA (UTC−06) Regina"
-        zoneCityMap["America/Regina"] = "USA (UTC−06) Regina"
-        zoneCityMap["America/Regina"] = "USA (UTC−06) Regina"
-        zoneCityMap["America/Regina"] = "USA (UTC−06) Regina"
-        zoneCityMap["America/Regina"] = "USA (UTC−06) Regina"
+var zoneCityMap = map[string]string{
+        "Africa/Abidjan":                   "Côte d'Ivoire (UTC+00) Abidjan",
+        "Africa/Accra":                     "Ghana (UTC+00) Accra",
+        "Africa/Addis_Ababa":               "Ethiopia (UTC+03) Addis_Ababa",
+        "Africa/Algiers":                   "Algeria (UTC+01) Algiers",
+        "Africa/Asmara":                    "Eritrea (UTC+03) Asmara",
+        "Africa/Asmera":                    "Eritrea (UTC+03) Asmera",
+        "Africa/Bamako":                    "Mali (UTC+00) Bamako",
+        "Africa/Bangui":                    "Central African Republic (UTC+01) Bangui",
+        "Africa/Banjul":                    "The Gambia (UTC+00) Banjul",
+        "Africa/Bissau":                    "Guinea-Bissau (UTC+00) Bissau",
+        "Africa/Blantyre":                  "Malawi (UTC+02) Blantyre",
+        "Africa/Brazzaville":               "Congo (UTC+01) Brazzaville",
+        "Africa/Bujumbura":                 "Burundi (UTC+02) Bujumbura",
+        "Africa/Cairo":                     "Egypt (UTC+02) Cairo",
+        "Africa/Casablanca":                "Morocco (UTC+00) Casablanca",
+        "Africa/Ceuta":                     "Spain (UTC+01) Ceuta",
+        "Africa/Conakry":                   "Guinea (UTC+00) Conakry",
+        "Africa/Dakar":                     "Senegal (UTC+00) Dakar",
+        "Africa/Dar_es_Salaam":             "Tanzania (UTC+03) Dar_es_Salaam",
+        "Africa/Djibouti":                  "Djibouti (UTC+03) Djibouti",
+        "Africa/Douala":                    "Cameroon (UTC+01) Douala",
+        "Africa/El_Aaiun":                  "Western Sahara (UTC+00) El_Aaiun",
+        "Africa/Freetown":                  "Sierra Leone (UTC+00) Freetown",
+        "Africa/Gaborone":                  "Botswana (UTC+02) Gaborone",
+        "Africa/Harare":                    "Zimbabwe (UTC+02) Harare",
+        "Africa/Johannesburg":              "South Africa (UTC+02) Johannesburg",
+        "Africa/Juba":                      "South Sudan (UTC+03) Juba",
+        "Africa/Kampala":                   "Uganda (UTC+03) Kampala",
+        "Africa/Khartoum":                  "Sudan (UTC+03) Khartoum",
+        "Africa/Kigali":                    "Rwanda (UTC+02) Kigali",
+        "Africa/Kinshasa":                  "Democratic Republic of the Congo (UTC+01) Kinshasa",
+        "Africa/Lagos":                     "Nigeria (UTC+01) Lagos",
+        "Africa/Libreville":                "Gabon (UTC+01) Libreville",
+        "Africa/Lome":                      "Togo (UTC+00) Lome",
+        "Africa/Luanda":                    "Angola (UTC+01) Luanda",
+        "Africa/Lubumbashi":                "Democratic Republic of the Congo (UTC+02) Lubumbashi",
+        "Africa/Lusaka":                    "Zambia (UTC+02) Lusaka",
+        "Africa/Malabo":                    "Equatorial Guinea (UTC+01) Malabo",
+        "Africa/Maputo":                    "Mozambique (UTC+02) Maputo",
+        "Africa/Maseru":                    "Lesotho (UTC+02) Maseru",
+        "Africa/Mbabane":                   "Swaziland (UTC+02) Mbabane",
+        "Africa/Mogadishu":                 "Somalia (UTC+03) Mogadishu",
+        "Africa/Monrovia":                  "Liberia (UTC+00) Monrovia",
+        "Africa/Nairobi":                   "Kenya (UTC+03) Nairobi",
+        "Africa/Ndjamena":                  "Chad (UTC+01) Ndjamena",
+        "Africa/Niamey":                    "Niger (UTC+01) Niamey",
+        "Africa/Nouakchott":                "Mauritania (UTC+00) Nouakchott",
+        "Africa/Ouagadougou":               "Burkina Faso (UTC+00) Ouagadougou",
+        "Africa/Porto-Novo":                "Benin (UTC+01) Porto-Novo",
+        "Africa/Sao_Tome":                  "São Tomé and Príncipe (UTC+00) Sao_Tome",
+        "Africa/Timbuktu":                  "Mali (UTC+00) Timbuktu",
+        "Africa/Tripoli":                   "Libya (UTC+02) Tripoli",
+        "Africa/Tunis":                     "Tunisia (UTC+01) Tunis",
+        "Africa/Windhoek":                  "Namibia (UTC+01) Windhoek",
+        "America/Adak":                     "USA (UTC−10) Adak",
+        "America/Anchorage":                "USA (UTC−09) Anchorage",
+        "America/Anguilla":                 "USA (UTC−04) Anguilla",
+        "America/Antigua":                  "USA (UTC−04) Antigua",
+        "America/Araguaina":                "USA (UTC−03) Araguaina",
+        "America/Argentina/Buenos_Aires":   "Argentina (UTC−03) Buenos_Aires",
+        "America/Argentina/Catamarca":      "Argentina (UTC−03) Catamarca",
+        "America/Argentina/ComodRivadavia": "Argentina (UTC−03) ComodRivadavia",
+        "America/Argentina/Cordoba":        "Argentina (UTC−03) Cordoba",
+        "America/Argentina/Jujuy":          "Argentina (UTC−03) Jujuy",
+        "America/Argentina/La_Rioja":       "Argentina (UTC−03) La_Rioja",
+        "America/Argentina/Mendoza":        "Argentina (UTC−03) Mendoza",
+        "America/Argentina/Rio_Gallegos":   "Argentina (UTC−03) Rio_Gallegos",
+        "America/Argentina/Salta":          "Argentina (UTC−03) Salta",
+        "America/Argentina/San_Juan":       "Argentina (UTC−03) San_Juan",
+        "America/Argentina/San_Luis":       "Argentina (UTC−03) San_Luis",
+        "America/Argentina/Tucuman":        "Argentina (UTC−03) Tucuman",
+        "America/Argentina/Ushuaia":        "Argentina (UTC−03) Ushuaia",
+        "America/Aruba":                    "USA (UTC−04) Aruba",
+        "America/Asuncion":                 "USA (UTC−04) Asuncion",
+        "America/Atikokan":                 "Canada (UTC−05) Atikokan",
+        "America/Atka":                     "USA (UTC−10) Atka",
+        "America/Bahia":                    "Brazil (UTC−03) Bahia",
+        "America/Bahia_Banderas":           "Mexico (UTC−06) Bahia_Banderas",
+        "America/Barbados":                 "USA (UTC−04) Barbados",
+        "America/Belem":                    "USA (UTC−03) Belem",
+        "America/Belize":                   "USA (UTC−06) Belize",
+        "America/Boa_Vista":                "USA (UTC−04) Boa_Vista",
+        "America/Bogota":                   "USA (UTC−05) Bogota",
+        "America/Boise":                    "USA (UTC−07) Boise",
+        "America/Buenos_Aires":             "Argentina (UTC−03) Buenos_Aires",
+        "America/Cambridge_Bay":            "USA (UTC−07) Cambridge_Bay",
+        "America/Campo_Grande":             "USA (UTC−04) Campo_Grande",
+        "America/Cancun":                   "USA (UTC−06) Cancun",
+        "America/Caracas":                  "Ecuador (UTC−03) Caracas",
+        "America/Cayenne":                  "USA (UTC−03) Cayenne",
+        "America/Cayman":                   "USA (UTC−05) Cayman",
+        "America/Chicago":                  "USA (UTC−06) Chicago",
+        "America/Chihuahua":                "Mexico (UTC−07) Chihuahua",
+        "America/Coral_Harbour":            "USA (UTC−05) Coral_Harbour",
+        "America/Cordoba":                  "USA (UTC−03) Cordoba",
+        "America/Costa_Rica":               "USA (UTC−06) Costa_Rica",
+        "America/Creston":                  "USA (UTC−07) Creston",
+        "America/Cuiaba":                   "USA (UTC−04) Cuiaba",
+        "America/Curacao":                  "USA (UTC−04) Curacao",
+        "America/Dawson":                   "USA (UTC−08) Dawson",
+        "America/Dawson_Creek":             "USA (UTC−07) Dawson_Creek",
+        "America/Denver":                   "USA (UTC−07) Denver",
+        "America/Detroit":                  "USA (UTC−05) Detroit",
+        "America/Dominica":                 "USA (UTC−04) Dominica",
+        "America/Edmonton":                 "USA (UTC−07) Edmonton",
+        "America/Eirunepe":                 "Brazil (UTC−04) Eirunepe",
+        "America/El_Salvador":              "USA (UTC−06) El_Salvador",
+        "America/Ensenada":                 "USA (UTC−08) Ensenada",
+        "America/Fort_Wayne":               "USA (UTC−05) Fort_Wayne",
+        "America/Fortaleza":                "USA (UTC−03) Fortaleza",
+        "America/Glace_Bay":                "USA (UTC−04) Glace_Bay",
+        "America/Godthab":                  "Greenland (UTC−03) Godthab",
+        "America/Goose_Bay":                "USA (UTC−04) Goose_Bay",
+        "America/Grand_Turk":               "USA (UTC−05) Grand_Turk",
+        "America/Grenada":                  "USA (UTC−04) Grenada",
+        "America/Guadeloupe":               "Mexico (UTC−04) Guadeloupe",
+        "America/Guatemala":                "Mexico (UTC−06) Guatemala",
+        "America/Guayaquil":                "Ecuador (UTC−05) Guayaquil",
+        "America/Guyana":                   "Mexico (UTC−04) Guyana",
+        "America/Halifax":                  "USA (UTC−04) Halifax",
+        "America/Havana":                   "USA (UTC−05) Havana",
+        "America/Hermosillo":               "USA (UTC−07) Hermosillo",
+        "America/Indiana/Indianapolis":     "USA (UTC−05) Indianapolis",
+        "America/Indiana/Knox":             "USA (UTC−06) Knox",
+        "America/Indiana/Marengo":          "USA (UTC−05) Marengo",
+        "America/Indiana/Petersburg":       "USA (UTC−05) Petersburg",
+        "America/Indiana/Tell_City":        "USA (UTC−06) Tell_City",
+        "America/Indiana/Vevay":            "USA (UTC−05) Vevay",
+        "America/Indiana/Vincennes":        "USA (UTC−05) Vincennes",
+        "America/Indiana/Winamac":          "USA (UTC−05) Winamac",
+        "America/Indianapolis":             "USA (UTC−05) Indianapolis",
+        "America/Inuvik":                   "Canada (UTC−07) Inuvik",
+        "America/Iqaluit":                  "Canada (UTC−05) Iqaluit",
+        "America/Jamaica":                  "USA (UTC−05) Jamaica",
+        "America/Jujuy":                    "Argentina (UTC−03) Jujuy",
+        "America/Juneau":                   "USA (UTC−09) Juneau",
+        "America/Kentucky/Louisville":      "USA (UTC−05) Louisville",
+        "America/Kentucky/Monticello":      "USA (UTC−05) Monticello",
+        "America/Knox_IN":                  "USA (UTC−06) Knox_IN",
+        "America/Kralendijk":               "Caribbean Netherlands (UTC−04) Kralendijk",
+        "America/La_Paz":                   "USA (UTC−04) La_Paz",
+        "America/Lima":                     "USA (UTC−05) Lima",
+        "America/Los_Angeles":              "USA (UTC−08) Los_Angeles",
+        "America/Louisville":               "USA (UTC−05) Louisville",
+        "America/Lower_Princes":            "Canada (UTC−04) Lower_Princes",
+        "America/Maceio":                   "Brazil (UTC−03) Maceio",
+        "America/Managua":                  "Mexico (UTC−06) Managua",
+        "America/Manaus":                   "USA (UTC−04) Manaus",
+        "America/Marigot":                  "USA (UTC−04) Marigot",
+        "America/Martinique":               "USA (UTC−04) Martinique",
+        "America/Matamoros":                "Mexico (UTC−06) Matamoros",
+        "America/Mazatlan":                 "USA (UTC−07) Mazatlan",
+        "America/Mendoza":                  "USA (UTC−03) Mendoza",
+        "America/Menominee":                "USA (UTC−06) Menominee",
+        "America/Merida":                   "USA (UTC−06) Merida",
+        "America/Metlakatla":               "USA (UTC−08) Metlakatla",
+        "America/Mexico_City":              "USA (UTC−06) Mexico_City",
+        "America/Miquelon":                 "USA (UTC−03) Miquelon",
+        "America/Moncton":                  "Canada (UTC−04) Moncton",
+        "America/Monterrey":                "USA (UTC−06) Monterrey",
+        "America/Montevideo":               "USA (UTC−03) Montevideo",
+        "America/Montreal":                 "USA (UTC−05) Montreal",
+        "America/Montserrat":               "USA (UTC−04) Montserrat",
+        "America/Nassau":                   "USA (UTC−05) Nassau",
+        "America/New_York":                 "USA (UTC−05) New_York",
+        "America/Nipigon":                  "Canada (UTC−05) Nipigon",
+        "America/Nome":                     "USA (UTC−09) Nome",
+        "America/Noronha":                  "Brazil (UTC−02) Noronha",
+        "America/North_Dakota/Beulah":      "USA (UTC−06) Beulah",
+        "America/North_Dakota/Center":      "USA (UTC−06) Center",
+        "America/North_Dakota/New_Salem":   "USA (UTC−06) New_Salem",
+        "America/Ojinaga":                  "Mexico (UTC−07) Ojinaga",
+        "America/Panama":                   "USA (UTC−05) Panama",
+        "America/Paramaribo":               "Mexico (UTC−03) Paramaribo",
+        "America/Phoenix":                  "USA (UTC−07) Phoenix",
+        "America/Port_of_Spain":            "USA (UTC−04) Port_of_Spain",
+        "America/Port-au-Prince":           "USA (UTC−05) Port-au-Prince",
+        "America/Porto_Acre":               "Brazil (UTC−05) Porto_Acre",
+        "America/Porto_Velho":              "USA (UTC−04) Porto_Velho",
+        "America/Puerto_Rico":              "USA (UTC−04) Puerto_Rico",
+        "America/Rainy_River":              "USA (UTC−06) Rainy_River",
+        "America/Recife":                   "USA (UTC−03) Recife",
+        "America/Regina":                   "USA (UTC−06) Regina",
+        "America/Resolute":                 "USA (UTC−06) Resolute",
+        "America/Rio_Branco":               "USA (UTC−05) Rio_Branco",
+        "America/Rosario":                  "USA (UTC−03) Rosario",
+        "America/Santa_Isabel":             "USA (UTC−08) Santa_Isabel",
+        "America/Santarem":                 "USA (UTC−03) Santarem",
+        "America/Santiago":                 "USA (UTC−04) Santiago",
+        "America/Santo_Domingo":            "USA (UTC−04) Santo_Domingo",
+        "America/Sao_Paulo":                "USA (UTC−03) Sao_Paulo",
+        "America/Shiprock":                 "USA (UTC−07) Shiprock",
+        "America/Sitka":                    "USA (UTC−09) Sitka",
+        "America/St_Barthelemy":            "USA (UTC−04) St_Barthelemy",
+        "America/St_Johns":                 "USA (UTC−04) St_Johns",
+        "America/St_Lucia":                 "USA (UTC−04) St_Lucia",
+        "America/St_Thomas":                "USA (UTC−04) St_Thomas",
+        "America/St_Vincent":               "USA (UTC−04) St_Vincent",
+        "America/Swift_Current":            "Canada (UTC−06) Swift_Current",
+        "America/Tegucigalpa":              "Ecuador (UTC−06) Tegucigalpa",
+        "America/Thule":                    "USA (UTC−04) Thule",
+        "America/Thunder_Bay":              "USA (UTC−05) Thunder_Bay",
+        "America/Tijuana":                  "Mexico (UTC−08) Tijuana",
+        "America/Toronto":                  "Canada (UTC−05) Toronto",
+        "America/Tortola":                  "USA (UTC−04) Tortola",
+        "America/Vancouver":                "USA (UTC−08) Vancouver",
+        "America/Virgin":                   "USA (UTC−04) Virgin",
+        "America/Whitehorse":               "USA (UTC−08) Whitehorse",
+        "America/Winnipeg":                 "Canada (UTC−06) Winnipeg",
+        "America/Yakutat":                  "USA (UTC−09) Yakutat",
+        "America/Yellowknife":              "USA (UTC−07) Yellowknife",
+        "Antarctica/Casey":                 "Antarctica (UTC+11) Casey",
+        "Antarctica/Davis":                 "Antarctica (UTC+05) Davis",
+        "Antarctica/DumontDUrville":        "Antarctica (UTC+10) DumontDUrville",
+        "Antarctica/Mawson":                "Antarctica (UTC+05) Mawson",
+        "Antarctica/McMurdo":               "Antarctica (UTC+12) McMurdo",
+        "Antarctica/Palmer":                "Antarctica (UTC−04) Palmer",
+        "Antarctica/Rothera":               "Antarctica (UTC−03) Rothera",
+        "Antarctica/South_Pole":            "Antarctica (UTC+12) South_Pole",
+        "Antarctica/Vostok":                "Antarctica (UTC+06) Vostok",
+        "Arctic/Longyearbyen":              "Svalbard and Jan Mayen (UTC+01) Longyearbyen",
+        "Asia/Aden":                        "Yemen (UTC+03) Aden",
+        "Asia/Almaty":                      "Kazakhstan (UTC+06) Almaty",
+        "Asia/Amman":                       "Jordan (UTC+02) Amman",
+        "Asia/Anadyr":                      "Russia (UTC+12) Anadyr",
+        "Asia/Aqtau":                       "Kazakhstan (UTC+05) Aqtau",
+        "Asia/Aqtobe":                      "Kazakhstan (UTC+05) Aqtobe",
+        "Asia/Ashgabat":                    "Turkmenistan (UTC+05) Ashgabat",
+        "Asia/Ashkhabad":                   "Turkmenistan (UTC+05) Ashkhabad",
+        "Asia/Baghdad":                     "Iraq (UTC+03) Baghdad",
+        "Asia/Bahrain":                     "Bahrain (UTC+03) Bahrain",
+        "Asia/Baku":                        "Azerbaijan (UTC+04) Baku",
+        "Asia/Bangkok":                     "Thailand (UTC+07) Bangkok",
+        "Asia/Beirut":                      "Lebanon (UTC+02) Beirut",
+        "Asia/Bishkek":                     "Kyrgyzstan (UTC+06) Bishkek",
+        "Asia/Brunei":                      "Brunei (UTC+08) Brunei",
+        "Asia/Calcutta":                    "India (UTC+08) Calcutta",
+        "Asia/Chongqing":                   "China (UTC+08) Chongqing",
+        "Asia/Chungking":                   "China (UTC+08) Chungking",
+        "Asia/Colombo":                     "Sri Lanka (UTC+06) Colombo",
+        "Asia/Damascus":                    "Syria (UTC+02) Damascus",
+        "Asia/Dhaka":                       "Bangladesh (UTC+06) Dhaka",
+        "Asia/Dili":                        "Timor-Leste (UTC+09) Dili",
+        "Asia/Dubai":                       "Dubai - United Arab Emirates (UTC+04) Dubai",
+        "Asia/Dushanbe":                    "Tajikistan (UTC+05) Dushanbe",
+        "Asia/Gaza":                        "Gaza (UTC+02) Gaza",
+        "Asia/Harbin":                      "China (UTC+08) Harbin",
+        "Asia/Hebron":                      "Hebron (UTC+02) Hebron",
+        "Asia/Ho_Chi_Minh":                 "Vietnam (UTC+07) Ho_Chi_Minh",
+        "Asia/Hong_Kong":                   "Hong Kong (UTC+08) Hong_Kong",
+        "Asia/Hovd":                        "Mongolia (UTC+07) Hovd",
+        "Asia/Irkutsk":                     "Russia (UTC+09) Irkutsk",
+        "Asia/Istanbul":                    "Turkey (UTC+02) Istanbul",
+        "Asia/Jakarta":                     "Indonesia (UTC+07) Jakarta",
+        "Asia/Jayapura":                    "India (UTC+09) Jayapura",
+        "Asia/Jerusalem":                   "Israel (UTC+02) Jerusalem",
+        "Asia/Kabul":                       "Afghanistan (UTC+12) Kabul",
+        "Asia/Karachi":                     "Pakistan (UTC+05) Karachi",
+        "Asia/Kashgar":                     "China (UTC+08) Kashgar",
+        "Asia/Kathmandu":                   "Nepal (UTC+08) Kathmandu",
+        "Asia/Kuala_Lumpur":                "Malaysia (UTC+08) Kuala_Lumpur",
+        "Asia/Kuching":                     "Malaysia (UTC+08) Kuching",
+        "Asia/Kuwait":                      "Kuwait (UTC+03) Kuwait",
+        "Asia/Macao":                       "Macau (UTC+08) Macao",
+        "Asia/Macau":                       "Macau (UTC+08) Macau",
+        "Asia/Magadan":                     "Russia (UTC+12) Magadan",
+        "Asia/Makassar":                    "Indonesia (UTC+08) Makassar",
+        "Asia/Manila":                      "Philippines (UTC+08) Manila",
+        "Asia/Muscat":                      "Oman (UTC+04) Muscat",
+        "Asia/Nicosia":                     "Nicosia (UTC+02) Nicosia",
+        "Asia/Novokuznetsk":                "Russia (UTC+07) Novokuznetsk",
+        "Asia/Novosibirsk":                 "Russia (UTC+07) Novosibirsk",
+        "Asia/Omsk":                        "Russia (UTC+07) Omsk",
+        "Asia/Oral":                        "Kazakhstan (UTC+05) Oral",
+        "Asia/Phnom_Penh":                  "Cambodia (UTC+07) Phnom_Penh",
+        "Asia/Pontianak":                   "Indonesia (UTC+07) Pontianak",
+        "Asia/Pyongyang":                   "North Korea (UTC+09) Pyongyang",
+        "Asia/Qatar":                       "Qatar (UTC+03) Qatar",
+        "Asia/Qyzylorda":                   "Kazakhstan (UTC+06) Qyzylorda",
+        "Asia/Rangoon":                     "Myanmar (Burma) (UTC+03) Rangoon",
+        "Asia/Saigon":                      "Vietnam (UTC+07) Saigon",
+        "Asia/Sakhalin":                    "Russia (UTC+11) Sakhalin",
+        "Asia/Samarkand":                   "Uzbekistan (UTC+05) Samarkand",
+        "Asia/Seoul":                       "South Korea (UTC+09) Seoul",
+        "Asia/Shanghai":                    "China (UTC+08) Shanghai",
+        "Asia/Singapore":                   "Singapore (UTC+08) Singapore",
+        "Asia/Taipei":                      "Taiwan (UTC+08) Taipei",
+        "Asia/Tashkent":                    "Uzbekistan (UTC+05) Tashkent",
+        "Asia/Tbilisi":                     "Georgia (UTC+04) Tbilisi",
+        "Asia/Tehran":                      "Iran (UTC+02) Tehran",
+        "Asia/Thimbu":                      "Bhutan (UTC+06) Thimbu",
+        "Asia/Thimphu":                     "Bhutan (UTC+06) Thimphu",
+        "Asia/Tokyo":                       "Japan (UTC+09) Tokyo",
+        "Asia/Ujung_Pandang":               "Indonesia (UTC+08) Ujung_Pandang",
+        "Asia/Ulaanbaatar":                 "Mongolia (UTC+08) Ulaanbaatar",
+        "Asia/Ulan_Bator":                  "Mongolia (UTC+08) Ulan_Bator",
+        "Asia/Urumqi":                      "China (UTC+08) Urumqi",
+        "Asia/Vientiane":                   "Laos (UTC+07) Vientiane",
+        "Asia/Vladivostok":                 "Russia (UTC+11) Vladivostok",
+        "Asia/Yakutsk":                     "Russia (UTC+10) Yakutsk",
+        "Asia/Yekaterinburg":               "620000 (UTC+06) Yekaterinburg",
+        "Asia/Yerevan":                     "Armenia (UTC+04) Yerevan",
+        "Atlantic/Bermuda":                 "USA (UTC−04) Bermuda",
+        "Atlantic/Canary":                  "USA (UTC+00) Canary",
+        "Atlantic/Cape_Verde":              "Puerto Rico (UTC−01) Cape_Verde",
+        "Atlantic/Madeira":                 "USA (UTC+00) Madeira",
+        "Atlantic/Reykjavik":               "Iceland (UTC+00) Reykjavik",
+        "Atlantic/South_Georgia":           "USA (UTC−02) South_Georgia",
+        "Atlantic/St_Helena":               "USA (UTC+00) St_Helena",
+        "Atlantic/Stanley":                 "USA (UTC−03) Stanley",
+        "Australia/ACT":                    "Australia (UTC+10) ACT",
+        "Australia/Adelaide":               "Australia (UTC+10) Adelaide",
+        "Australia/Broken_Hill":            "Australia (UTC+10) Broken_Hill",
+        "Australia/Currie":                 "Australia (UTC+10) Currie",
+        "Australia/Darwin":                 "Australia (UTC+10) Darwin",
+        "Australia/Lindeman":               "Australia (UTC+10) Lindeman",
+        "Australia/Lord_Howe":              "Australia (UTC+11) Lord_Howe",
+        "Australia/Melbourne":              "Australia (UTC+10) Melbourne",
+        "Australia/North":                  "Australia (UTC+10) North",
+        "Australia/Perth":                  "Australia (UTC+08) Perth",
+        "Australia/Queensland":             "Australia (UTC+10) Queensland",
+        "Australia/South":                  "Australia (UTC+10) South",
+        "Australia/Tasmania":               "Australia (UTC+10) Tasmania",
+        "Australia/Victoria":               "Australia (UTC+10) Victoria",
+        "Australia/West":                   "Australia (UTC+08) West",
+        "Australia/Yancowinna":             "Australia (UTC−05) Yancowinna",
+        "Brazil/East":                      "Brazil (UTC−03) East",
+        "Brazil/West":                      "Brazil (UTC−04) West",
+        "Canada/Atlantic":                  "Canada (UTC−04) Atlantic",
+        "Canada/Central":                   "Canada (UTC−06) Central",
+        "Canada/Eastern":                   "Canada (UTC−05) Eastern",
+        "Canada/East-Saskatchewan":         "Canada (UTC−06) East-Saskatchewan",
+        "Canada/Mountain":                  "Canada (UTC−07) Mountain",
+        "Canada/Newfoundland":              "Canada (UTC−08) Newfoundland",
+        "Canada/Saskatchewan":              "Canada (UTC−06) Saskatchewan",
+        "Canada/Yukon":                     "Canada (UTC−08) Yukon",
+        "CET":                              "USA (UTC+01) CET",
+        "Chile/Continental":                "Chile (UTC−04) Continental",
+        "Chile/EasterIsland":               "Chile (UTC−06) EasterIsland",
+        "Cuba":                             "Cuba (UTC−05) Cuba",
+        "EET":                              "USA (UTC+02) EET",
+        "Egypt":                            "Egypt (UTC+02) Egypt",
+        "Eire":                             "Ireland (UTC+00) Eire",
+        "EST":                              "Uganda (UTC−05) EST",
+        "Europe/Amsterdam":                 "The Netherlands (UTC+01) Amsterdam",
+        "Europe/Andorra":                   "Andorra (UTC+01) Andorra",
+        "Europe/Athens":                    "Greece (UTC+02) Athens",
+        "Europe/Belfast":                   "UK (UTC+00) Belfast",
+        "Europe/Belgrade":                  "Serbia (UTC+01) Belgrade",
+        "Europe/Berlin":                    "Germany (UTC+01) Berlin",
+        "Europe/Bratislava":                "Slovakia (UTC+01) Bratislava",
+        "Europe/Brussels":                  "Belgium (UTC+01) Brussels",
+        "Europe/Bucharest":                 "Romania (UTC+02) Bucharest",
+        "Europe/Budapest":                  "Hungary (UTC+01) Budapest",
+        "Europe/Chisinau":                  "Moldova (UTC+02) Chisinau",
+        "Europe/Copenhagen":                "Denmark (UTC+01) Copenhagen",
+        "Europe/Dublin":                    "Ireland (UTC+00) Dublin",
+        "Europe/Gibraltar":                 "Gibraltar (UTC+01) Gibraltar",
+        "Europe/Guernsey":                  "Guernsey (UTC+00) Guernsey",
+        "Europe/Helsinki":                  "Finland (UTC+02) Helsinki",
+        "Europe/Isle_of_Man":               "Isle of Man (UTC+00) Isle_of_Man",
+        "Europe/Istanbul":                  "Turkey (UTC+02) Istanbul",
+        "Europe/Jersey":                    "Jersey (UTC+00) Jersey",
+        "Europe/Kaliningrad":               "Russia (UTC+03) Kaliningrad",
+        "Europe/Kiev":                      "Ukraine (UTC+02) Kiev",
+        "Europe/Lisbon":                    "Portugal (UTC+00) Lisbon",
+        "Europe/Ljubljana":                 "Slovenia (UTC+01) Ljubljana",
+        "Europe/London":                    "UK (UTC+00) London",
+        "Europe/Luxembourg":                "Luxembourg (UTC+01) Luxembourg",
+        "Europe/Madrid":                    "Spain (UTC+01) Madrid",
+        "Europe/Malta":                     "Malta (UTC+01) Malta",
+        "Europe/Mariehamn":                 "Aland Islands (UTC+02) Mariehamn",
+        "Europe/Minsk":                     "Belarus (UTC+03) Minsk",
+        "Europe/Monaco":                    "Monaco (UTC+01) Monaco",
+        "Europe/Moscow":                    "Russia (UTC+04) Moscow",
+        "Europe/Nicosia":                   "Italy (UTC+02) Nicosia",
+        "Europe/Oslo":                      "Norway (UTC+01) Oslo",
+        "Europe/Paris":                     "France (UTC+01) Paris",
+        "Europe/Podgorica":                 "Montenegro (UTC+01) Podgorica",
+        "Europe/Prague":                    "Czech Republic (UTC+01) Prague",
+        "Europe/Riga":                      "Latvia (UTC+02) Riga",
+        "Europe/Rome":                      "Italy (UTC+01) Rome",
+        "Europe/Samara":                    "Russia (UTC+04) Samara",
+        "Europe/San_Marino":                "San Marino (UTC+01) San_Marino",
+        "Europe/Sarajevo":                  "Bosnia and Herzegovina (UTC+01) Sarajevo",
+        "Europe/Simferopol":                "Ukraine (UTC+02) Simferopol",
+        "Europe/Skopje":                    "Macedonia (FYROM) (UTC+01) Skopje",
+        "Europe/Sofia":                     "Bulgaria (UTC+02) Sofia",
+        "Europe/Stockholm":                 "Sweden (UTC+01) Stockholm",
+        "Europe/Tallinn":                   "Estonia (UTC+02) Tallinn",
+        "Europe/Tirane":                    "Albania (UTC+01) Tirane",
+        "Europe/Tiraspol":                  "Moldova (UTC+02) Tiraspol",
+        "Europe/Uzhgorod":                  "Ukraine (UTC+02) Uzhgorod",
+        "Europe/Vaduz":                     "Liechtenstein (UTC+01) Vaduz",
+        "Europe/Vatican":                   "Vatican City (UTC+01) Vatican",
+        "Europe/Vienna":                    "Austria (UTC+01) Vienna",
+        "Europe/Vilnius":                   "Lithuania (UTC+02) Vilnius",
+        "Europe/Volgograd":                 "Russia (UTC+04) Volgograd",
+        "Europe/Warsaw":                    "Poland (UTC+01) Warsaw",
+        "Europe/Zagreb":                    "Croatia (UTC+01) Zagreb",
+        "Europe/Zaporozhye":                "Ukraine (UTC+02) Zaporozhye",
+        "Europe/Zurich":                    "Switzerland (UTC+01) Zurich",
+        "GB":                               "United Kingdom (UTC+00) GB",
+        "GB-Eire":                          "Ireland (UTC+00) GB-Eire",
+        "GMT":                              "USA (UTC+00) GMT",
+        "GMT+0":                            "Brazil (UTC+00) GMT+0",
+        "GMT0":                             "Brazil (UTC+00) GMT0",
+        "GMT-0":                            "Brazil (UTC+00) GMT-0",
+        "Greenwich":                        "UK (UTC+00) Greenwich",
+        "Hongkong":                         "Hong Kong (UTC+08) Hongkong",
+        "HST":                              "Indonesia (UTC−10) HST",
+        "Iceland":                          "Iceland (UTC+00) Iceland",
+        "Indian/Antananarivo":              "Madagascar (UTC+03) Antananarivo",
+        "Indian/Chagos":                    "British Indian Ocean Territory (UTC+06) Chagos",
+        "Indian/Christmas":                 "Christmas Island (UTC+07) Christmas",
+        "Indian/Kerguelen":                 "Grande Terre (UTC+05) Kerguelen",
+        "Indian/Mahe":                      "Seychelles (UTC+04) Mahe",
+        "Indian/Maldives":                  "Maldives (UTC+05) Maldives",
+        "Indian/Mauritius":                 "India (UTC+04) Mauritius",
+        "Indian/Reunion":                   "USA (UTC+04) Reunion",
+        "Iran":                             "Iran (UTC+02) Iran",
+        "Jamaica":                          "Jamaica (UTC−05) Jamaica",
+        "Japan":                            "Japan (UTC+09) Japan",
+        "JST-9":                            "France (UTC+09) JST-9",
+        "Kwajalein":                        "RMI (UTC+12) Kwajalein",
+        "Libya":                            "Libya (UTC+02) Libya",
+        "MET":                              "France (UTC+01) MET",
+        "Mexico/BajaNorte":                 "Mexico (UTC−08) BajaNorte",
+        "Mexico/BajaSur":                   "Mexico (UTC−07) BajaSur",
+        "Mexico/General":                   "Mexico (UTC−06) General",
+        "MST":                              "The Netherlands (UTC−07) MST",
+        "Navajo":                           "USA (UTC−07) Navajo",
+        "NZ":                               "New Zealand (UTC+12) NZ",
+        "Pacific/Auckland":                 "New Zealand (UTC+12) Auckland",
+        "Pacific/Chatham":                  "USA (UTC+10) Chatham",
+        "Pacific/Easter":                   "USA (UTC−06) Easter",
+        "Pacific/Efate":                    "Vanuatu (UTC+11) Efate",
+        "Pacific/Enderbury":                "Australia (UTC+13) Enderbury",
+        "Pacific/Fakaofo":                  "Tokelau (UTC+13) Fakaofo",
+        "Pacific/Fiji":                     "Fiji (UTC+12) Fiji",
+        "Pacific/Funafuti":                 "Tuvalu (UTC+12) Funafuti",
+        "Pacific/Galapagos":                "Australia (UTC−06) Galapagos",
+        "Pacific/Gambier":                  "Australia (UTC−09) Gambier",
+        "Pacific/Guadalcanal":              "Solomon Islands (UTC+11) Guadalcanal",
+        "Pacific/Guam":                     "Guam (UTC+10) Guam",
+        "Pacific/Honolulu":                 "Hawaii 96813 (UTC−10) Honolulu",
+        "Pacific/Johnston":                 "USA (UTC−10) Johnston",
+        "Pacific/Kosrae":                   "Australia (UTC+11) Kosrae",
+        "Pacific/Kwajalein":                "RMI (UTC+12) Kwajalein",
+        "Pacific/Marquesas":                "French Polynesia (UTC−11) Marquesas",
+        "Pacific/Nauru":                    "Australia (UTC+12) Nauru",
+        "Pacific/Niue":                     "Niue (UTC−11) Niue",
+        "Pacific/Norfolk":                  "USA (UTC+11) Norfolk",
+        "Pacific/Palau":                    "Australia (UTC+09) Palau",
+        "Pacific/Pitcairn":                 "Australia (UTC−08) Pitcairn",
+        "Pacific/Pohnpei":                  "Micronesia (UTC+11) Pohnpei",
+        "Pacific/Ponape":                   "Micronesia (UTC+11) Ponape",
+        "Pacific/Port_Moresby":             "Papua New Guinea (UTC+10) Port_Moresby",
+        "Pacific/Rarotonga":                "Australia (UTC−10) Rarotonga",
+        "Pacific/Saipan":                   "CNMI (UTC+10) Saipan",
+        "Pacific/Samoa":                    "USA (UTC−11) Samoa",
+        "Pacific/Tahiti":                   "French Polynesia (UTC−10) Tahiti",
+        "Pacific/Tarawa":                   "Kiribati (UTC+12) Tarawa",
+        "Pacific/Tongatapu":                "Tonga (UTC+13) Tongatapu",
+        "Pacific/Truk":                     "USA (UTC+10) Truk",
+        "Pacific/Wake":                     "USA (UTC+12) Wake",
+        "Pacific/Wallis":                   "Australia (UTC+12) Wallis",
+        "Poland":                           "Poland (UTC+01) Poland",
+        "Portugal":                         "Portugal (UTC+00) Portugal",
+        "PRC":                              "USA (UTC+08) PRC",
+        "ROC":                              "USA (UTC+08) ROC",
+        "ROK":                              "Czech Republic (UTC+09) ROK",
+        "Singapore":                        "Singapore (UTC+08) Singapore",
+        "Turkey":                           "Turkey (UTC+02) Turkey",
+        "UCT":                              "South Africa (UTC+00) UCT",
+        "Universal":                        "USA (UTC+00) Universal",
+        "US/Alaska":                        "USA (UTC−09) Alaska",
+        "US/Aleutian":                      "USA (UTC−10) Aleutian",
+        "US/Arizona":                       "USA (UTC−07) Arizona",
+        "US/Central":                       "USA (UTC−06) Central",
+        "US/Eastern":                       "USA (UTC−05) Eastern",
+        "US/East-Indiana":                  "USA (UTC−05) East-Indiana",
+        "US/Hawaii":                        "USA (UTC−10) Hawaii",
+        "US/Indiana-Starke":                "USA (UTC−06) Indiana-Starke",
+        "US/Michigan":                      "USA (UTC−05) Michigan",
+        "US/Mountain":                      "USA (UTC−07) Mountain",
+        "US/Pacific":                       "USA (UTC−08) Pacific",
+        "US/Pacific-New":                   "USA (UTC−08) Pacific-New",
+        "US/Samoa":                         "USA (UTC−11) Samoa",
+        "UTC":                              "USA (UTC+00) UTC",
+        "WET":                              "USA (UTC+00) WET",
+        "W-SU":                             "WA (UTC+04) W-SU",
+        "Zulu":                             "USA (UTC+00) Zulu",
 }
