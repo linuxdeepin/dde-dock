@@ -43,6 +43,10 @@ var (
 
 func NewDAppInfo(gioApp *gio.AppInfo) AppInfo {
         dappInfo := AppInfo{}
+        if gioApp == nil {
+                logger.Println("gioApp is nil in NewDAppInfo")
+                return dappInfo
+        }
 
         dappInfo.ID = gioApp.GetId()
         dappInfo.Name = gioApp.GetDisplayName()
