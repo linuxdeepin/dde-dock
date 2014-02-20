@@ -6,6 +6,19 @@ package main
 // #cgo LDFLAGS: -lm
 // #define GNOME_DESKTOP_USE_UNSTABLE_API
 // #include "gnome-idle-monitor.h"
+// #include "gsd-power-manager.h"
+// int deepin_power_manager_start()
+// {
+//      GsdPowerManager *manager = gsd_power_manager_new();
+//      GError *error = NULL;
+//      gtk_init(NULL,NULL);
+//      g_setenv("G_MESSAGES_DEBUG","all",FALSE);
+//      notify_init("deepin-power-manager");
+//      XInitThreads();
+//      gsd_power_manager_start(manager,&error);
+//      gtk_main();
+//      return 0;
+// }
 import "C"
 
 import (
@@ -14,7 +27,9 @@ import (
 	"dlib/dbus"
 	"dlib/dbus/property"
 	"dlib/gio-2.0"
+	//"os"
 	"regexp"
+	//"unsafe"
 )
 
 type dbusBattery struct {
@@ -25,9 +40,10 @@ type dbusBattery struct {
 }
 
 const (
-	power_bus_name                       = "com.deepin.daemon.Power"
-	power_object_path                    = "/com/deepin/daemon/Power"
-	power_interface                      = "com.deepin.daemon.Power"
+	power_bus_name    = "com.deepin.daemon.Power"
+	power_object_path = "/com/deepin/daemon/Power"
+	power_interface   = "com.deepin.daemon.Power"
+
 	schema_gsettings_power               = "com.deepin.daemon.power"
 	schema_gsettings_power_settings_id   = "com.deepin.daemon.power.settings"
 	schema_gsettings_power_settings_path = "/com/deepin/daemon/power/profiles/"
@@ -43,7 +59,7 @@ type Power struct {
 	ButtonSleep     *property.GSettingsStringProperty `access:"readwrite"`
 	ButtonSuspend   *property.GSettingsStringProperty `access:"readwrite"`
 
-	CriticalBatteryAction *property.GSettingsStringProperty `access:"readwrite"`
+	CriticalBatteryAction *property.GSettingsStringProperty `access:"read"`
 	LidCloseAcAction      *property.GSettingsStringProperty `access:"readwrite"`
 	LidCloseBatteryAction *property.GSettingsStringProperty `access:"readwrite"`
 
@@ -230,6 +246,7 @@ func main() {
 	if err != nil {
 		return
 	}
+	C.deepin_power_manager_start()
 	dbus.InstallOnSession(power)
 	dbus.DealWithUnhandledMessage()
 	dlib.StartLoop()

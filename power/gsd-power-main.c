@@ -76,14 +76,16 @@ int gsd_power_manager_main(int argc, char **argv)
     parse_args(&argc, &argv);
     gtk_init(&argc, &argv);
     notify_init("gsd-power-manager");
+    XInitThreads();
     gsd_power_manager_start(manager, &error);
-    gtk_main();
     return 0;
 }
 
 #ifdef MAIN
 int main(int argc, char **argv)
 {
-    return gsd_power_manager_main(argc, argv);
+    gsd_power_manager_main(argc, argv);
+    gtk_main();
+    return 0;
 }
 #endif

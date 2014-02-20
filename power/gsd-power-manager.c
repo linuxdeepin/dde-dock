@@ -3719,17 +3719,18 @@ gsd_power_manager_start (GsdPowerManager *manager,
     inhibit_suspend (manager);
 
     /* track the active session */
-    manager->priv->session = gnome_settings_session_get_session_proxy ();
-    g_signal_connect (manager->priv->session, "g-properties-changed",
-                      G_CALLBACK (engine_session_properties_changed_cb),
-                      manager);
+    /*manager->priv->session = gnome_settings_session_get_session_proxy ();*/
+    /*g_signal_connect (manager->priv->session, "g-properties-changed",*/
+    /*G_CALLBACK (engine_session_properties_changed_cb),*/
+    /*manager);*/
 
     manager->priv->kbd_brightness_old = -1;
     manager->priv->kbd_brightness_pre_dim = -1;
     manager->priv->pre_dim_brightness = -1;
     /*manager->priv->settings = g_settings_new(GSD_POWER_SETTINGS_SCHEMA);*/
-    manager->priv->settings = g_settings_new_with_path(DEEPIN_POWER_SETTINGS_SCHEMA,
-                              DEEPIN_POWER_SETTINGS_PATH);
+    manager->priv->settings = g_settings_new_with_path(
+                                  DEEPIN_POWER_SETTINGS_SCHEMA,
+                                  DEEPIN_POWER_SETTINGS_PATH);
     g_debug("created new setttings with path :%s\n", DEEPIN_POWER_SETTINGS_PATH);
     g_signal_connect (manager->priv->settings, "changed",
                       G_CALLBACK (engine_settings_key_changed_cb), manager);
