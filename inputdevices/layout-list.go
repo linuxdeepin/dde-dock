@@ -22,75 +22,78 @@
 package main
 
 import (
-	"dlib/logger"
-	"encoding/xml"
-	"io/ioutil"
+        "dlib/logger"
+        "encoding/xml"
+        "io/ioutil"
+)
+
+const (
+        LAYOUT_DELIM = ";"
 )
 
 type XKBConfigRegister struct {
-	LayoutList XLayoutList `xml:"layoutList"`
+        LayoutList XLayoutList `xml:"layoutList"`
 }
 
 type XLayoutList struct {
-	Layout []XLayout `xml:"layout"`
+        Layout []XLayout `xml:"layout"`
 }
 
 type XLayout struct {
-	ConfigItem  XConfigItem  `xml:"configItem"`
-	VariantList XVariantList `xml:"variantList"`
+        ConfigItem  XConfigItem  `xml:"configItem"`
+        VariantList XVariantList `xml:"variantList"`
 }
 
 type XConfigItem struct {
-	Name        string `xml:"name"`
-	Description string `xml:"description"`
+        Name        string  `xml:"name"`
+        Description string  `xml:"description"`
 }
 
 type XVariantList struct {
-	Variant []XVariant `xml:"variant"`
+        Variant []XVariant `xml:"variant"`
 }
 
 type XVariant struct {
-	ConfigItem XConfigItem `xml:"configItem"`
+        ConfigItem XConfigItem `xml:"configItem"`
 }
 
 const (
-	_LAYOUT_XML_PATH = "/usr/share/X11/xkb/rules/base.xml"
+        _LAYOUT_XML_PATH = "/usr/share/X11/xkb/rules/base.xml"
 )
 
 func ParseXML(filename string) XKBConfigRegister {
-	xmlByte, err := ioutil.ReadFile(filename)
-	if err != nil {
-		logger.Printf("Read File '%s' Failed: %s\n",
-			filename, err)
-		panic(err)
-	}
+        xmlByte, err := ioutil.ReadFile(filename)
+        if err != nil {
+                logger.Printf("Read File '%s' Failed: %s\n",
+                        filename, err)
+                panic(err)
+        }
 
-	var v XKBConfigRegister
-	err = xml.Unmarshal(xmlByte, &v)
-	if err != nil {
-		logger.Printf("Unmarshal Failed: %s\n", err)
-		panic(err)
-	}
+        var v XKBConfigRegister
+        err = xml.Unmarshal(xmlByte, &v)
+        if err != nil {
+                logger.Printf("Unmarshal Failed: %s\n", err)
+                panic(err)
+        }
 
-	return v
+        return v
 }
 
 func GetLayoutList(xmlData XKBConfigRegister) map[string]string {
-	layouts := make(map[string]string)
+        layouts := make(map[string]string)
 
-	for _, layout := range xmlData.LayoutList.Layout {
-		firstName := layout.ConfigItem.Name
-		desc := layout.ConfigItem.Description
-		layouts[firstName] = desc
+        for _, layout := range xmlData.LayoutList.Layout {
+                firstName := layout.ConfigItem.Name
+                desc := layout.ConfigItem.Description
+                layouts[firstName+LAYOUT_DELIM] = desc
 
-		variants := layout.VariantList.Variant
-		for _, v := range variants {
-			lastName := v.ConfigItem.Name
-			descTmp := v.ConfigItem.Description
-			keyName := firstName + " " + lastName
-			layouts[keyName] = descTmp
-		}
-	}
+                variants := layout.VariantList.Variant
+                for _, v := range variants {
+                        lastName := v.ConfigItem.Name
+                        descTmp := v.ConfigItem.Description
+                        layouts[firstName+LAYOUT_DELIM+lastName] = descTmp
+                }
+        }
 
-	return layouts
+        return layouts
 }

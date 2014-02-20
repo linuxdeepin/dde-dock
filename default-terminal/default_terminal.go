@@ -41,6 +41,11 @@ func getDefaultTerminal() (string, []string) {
         cmdStr := settings.GetString(SCHEMA_KEY_EXEC)
         argStr := settings.GetString(SCHEMA_KEY_ARG)
 
+        if len(cmdStr) <= 0 {
+                cmdStr = "/usr/bin/x-terminal-emulator"
+                argStr = ""
+        }
+
         return cmdStr, strings.Split(argStr, " ")
 }
 
