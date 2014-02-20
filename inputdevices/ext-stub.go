@@ -85,6 +85,10 @@ func (keyboard *KeyboardEntry) setPropName(propName string) {
                         _layoutGSettings.SetStrv("layouts", []string{strs[0]})
                         _layoutGSettings.SetStrv("options", []string{strs[1]})
                 }
+                dbus.NotifyChange(keyboard, propName)
+        case "UserLayoutList":
+                _keyRepeatGSettings.SetStrv("user-layout-list", keyboard.UserLayoutList)
+                dbus.NotifyChange(keyboard, propName)
         }
 }
 
@@ -109,7 +113,9 @@ func (keyboard *KeyboardEntry) getPropName(propName string) {
 }
 
 func (keyboard *KeyboardEntry) appendUserLayout(str string) {
-        if !strings.Contains(str, LAYOUT_DELIM) {
+        if len(str) <= 0 {
+                str = "us;"
+        } else if !strings.Contains(str, LAYOUT_DELIM) {
                 return
         }
         if stringIsExist(str, keyboard.UserLayoutList) {
@@ -117,6 +123,7 @@ func (keyboard *KeyboardEntry) appendUserLayout(str string) {
         }
 
         keyboard.UserLayoutList = append(keyboard.UserLayoutList, str)
+        keyboard.setPropName("UserLayoutList")
 }
 
 func (keyboard *KeyboardEntry) deleteUserLayout(str string) {
@@ -137,6 +144,7 @@ func (keyboard *KeyboardEntry) deleteUserLayout(str string) {
         }
 
         keyboard.UserLayoutList = tmps
+        keyboard.setPropName("UserLayoutList")
 }
 
 func stringIsExist(str string, strs []string) bool {
@@ -147,4 +155,20 @@ func stringIsExist(str string, strs []string) bool {
         }
 
         return false
+}
+
+func stringArrayIsEqual(array1, array2 []string) bool {
+        l1 := len(array1)
+        l2 := len(array2)
+
+        if l1 != l2 {
+                return false
+        }
+
+        for i := 0; i < l1; i++ {
+                if array1[i] != array2[i] {
+                        return false
+                }
+        }
+        return true
 }

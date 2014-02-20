@@ -113,6 +113,9 @@ func (keyboard *KeyboardEntry) AddUserLayout(strs string) {
 }
 
 func (keyboard *KeyboardEntry) DeleteUserLayout(strs string) {
+        if len(strs) <= 0 {
+                return
+        }
         keyboard.deleteUserLayout(strs)
 }
 
