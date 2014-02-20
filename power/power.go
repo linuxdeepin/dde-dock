@@ -81,11 +81,11 @@ type Power struct {
 }
 
 func NewPower() (*Power, error) {
-	power := Power{}
+	power := &Power{}
 
 	power.powerProfile = gio.NewSettings(schema_gsettings_power)
 	power.CurrentProfile = property.NewGSettingsStringProperty(
-		&power, "CurrentProfile", power.powerProfile,
+		power, "CurrentProfile", power.powerProfile,
 		"current-profile")
 
 	power.powerSettings = gio.NewSettingsWithPath(
@@ -112,7 +112,7 @@ func NewPower() (*Power, error) {
 			println("upower battery interface not found\n")
 		}
 	}
-	return &power, nil
+	return power, nil
 }
 
 func (p *Power) GetDBusInfo() dbus.DBusInfo {

@@ -37,18 +37,18 @@ typedef struct GsdPowerManagerPrivate GsdPowerManagerPrivate;
 
 typedef struct
 {
-        GObject                     parent;
-        GsdPowerManagerPrivate *priv;
+    GObject                     parent;
+    GsdPowerManagerPrivate *priv;
 } GsdPowerManager;
 
 typedef struct
 {
-        GObjectClass   parent_class;
+    GObjectClass   parent_class;
 } GsdPowerManagerClass;
 
 enum
 {
-        GSD_POWER_MANAGER_ERROR_FAILED
+    GSD_POWER_MANAGER_ERROR_FAILED
 };
 
 GType                   gsd_power_manager_get_type            (void);
@@ -56,7 +56,7 @@ GQuark                  gsd_power_manager_error_quark         (void);
 
 GsdPowerManager *       gsd_power_manager_new                 (void);
 gboolean                gsd_power_manager_start               (GsdPowerManager *manager,
-                                                               GError         **error);
+        GError         **error);
 void                    gsd_power_manager_stop                (GsdPowerManager *manager);
 
 G_END_DECLS

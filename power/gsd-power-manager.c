@@ -251,6 +251,13 @@ static void      idle_set_mode (GsdPowerManager *manager, GsdPowerIdleMode mode)
 static void      idle_triggered_idle_cb (GnomeIdleMonitor *monitor, guint watch_id, gpointer user_data);
 static void      idle_became_active_cb (GnomeIdleMonitor *monitor, guint watch_id, gpointer user_data);
 
+static void
+engine_charge_low (GsdPowerManager *manager, UpDevice *device);
+static void
+engine_charge_critical (GsdPowerManager *manager, UpDevice *device);
+static void
+engine_charge_action (GsdPowerManager *manager, UpDevice *device);
+
 G_DEFINE_TYPE (GsdPowerManager, gsd_power_manager, G_TYPE_OBJECT)
 
 static gpointer manager_object = NULL;
@@ -1043,6 +1050,24 @@ engine_device_add (GsdPowerManager *manager, UpDevice *device)
 
     /* assign warning */
     warning = engine_get_warning (manager, device);
+
+    //in case the battery percentage is low/critical at startup time
+    if (warning == WARNING_LOW)
+    {
+        g_debug ("** EMIT: charge-low");
+        engine_charge_low (manager, device);
+    }
+    else if (warning == WARNING_CRITICAL)
+    {
+        g_debug ("** EMIT: charge-critical");
+        engine_charge_critical (manager, device);
+    }
+    else if (warning == WARNING_ACTION)
+    {
+        g_debug ("charge-action");
+        engine_charge_action (manager, device);
+    }
+    /* save new state */
     g_object_set_data (G_OBJECT(device),
                        "engine-warning-old",
                        GUINT_TO_POINTER(warning));
@@ -1939,8 +1964,8 @@ engine_device_changed_cb (UpClient *client, UpDevice *device, GsdPowerManager *m
     /* check the warning state has not changed */
     warning_old = GPOINTER_TO_INT(g_object_get_data (G_OBJECT(device), "engine-warning-old"));
     warning = engine_get_warning (manager, device);
-    /*if (warning != warning_old)*/
-    if (1)
+    if (warning != warning_old)
+        /*if (1)*/
     {
         if (warning == WARNING_LOW)
         {
