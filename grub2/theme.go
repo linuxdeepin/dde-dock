@@ -23,6 +23,7 @@ package main
 
 import (
 	"bytes"
+	"dlib/graph"
 	"encoding/json"
 	"io/ioutil"
 	"text/template"
@@ -178,7 +179,7 @@ func (theme *Theme) getCustomizedThemeContent(fileContent []byte, tplData interf
 // Generate background to fit the screen resolution.
 func (theme *Theme) generateBackground() {
 	screenWidth, screenHeight := getPrimaryScreenBestResolution()
-	imgWidth, imgHeight, err := dimg.GetImageSize(theme.bgSrcFile)
+	imgWidth, imgHeight, err := graph.GetImageSize(theme.bgSrcFile)
 	if err != nil {
 		panic(err)
 	}
@@ -186,7 +187,7 @@ func (theme *Theme) generateBackground() {
 
 	w, h := getImgClipSizeByResolution(screenWidth, screenHeight, imgWidth, imgHeight)
 	logInfo("background size %dx%d", w, h)
-	err = dimg.ClipPNG(theme.bgSrcFile, theme.bgFile, 0, 0, w, h)
+	err = graph.ClipPNG(theme.bgSrcFile, theme.bgFile, 0, 0, w, h)
 	if err != nil {
 		panic(err)
 	}

@@ -23,7 +23,6 @@ package main
 
 import (
 	"bufio"
-	"dbus/com/deepin/api/image"
 	"dlib/dbus"
 	"encoding/json"
 	"errors"
@@ -49,7 +48,6 @@ const (
 var (
 	_ENTRY_REGEXP_1 = regexp.MustCompile(`^ *(menuentry|submenu) +'(.*?)'.*$`)
 	_ENTRY_REGEXP_2 = regexp.MustCompile(`^ *(menuentry|submenu) +"(.*?)".*$`)
-	dimg            *image.Image
 )
 
 type CacheConfig struct {
@@ -72,16 +70,6 @@ func NewGrub2() *Grub2 {
 	grub.theme = NewTheme()
 	grub.config = CacheConfig{1024, 768, true} // default value
 	return grub
-}
-
-func initImageApi() {
-	if dimg == nil {
-		var err error
-		dimg, err = image.NewImage("/com/deepin/api/Image")
-		if err != nil {
-			panic(err)
-		}
-	}
 }
 
 func (grub *Grub2) load() {
@@ -462,8 +450,6 @@ func main() {
 			logFatal("grub2 failed: %v", err)
 		}
 	}()
-
-	initImageApi()
 
 	grub := NewGrub2()
 	grub.load()
