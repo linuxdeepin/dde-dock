@@ -11,12 +11,11 @@ package main
 // {
 //      GsdPowerManager *manager = gsd_power_manager_new();
 //      GError *error = NULL;
-//      gtk_init(NULL,NULL);
+//      gtk_init(0,NULL);
 //      g_setenv("G_MESSAGES_DEBUG","all",FALSE);
-//      notify_init("deepin-power-manager");
+//      notify_init("gsd-power-manager");
 //      XInitThreads();
 //      gsd_power_manager_start(manager,&error);
-//      gtk_main();
 //      return 0;
 // }
 import "C"
@@ -27,6 +26,7 @@ import (
 	"dlib/dbus"
 	"dlib/dbus/property"
 	"dlib/gio-2.0"
+	"fmt"
 	//"os"
 	"regexp"
 	//"unsafe"
@@ -242,13 +242,14 @@ func getUpowerDeviceObjectPath(devices []dbus.ObjectPath) []dbus.ObjectPath {
 }
 
 func main() {
+	C.deepin_power_manager_start()
 	power, err := NewPower()
 	if err != nil {
 		return
 	}
-	C.deepin_power_manager_start()
 	dbus.InstallOnSession(power)
 	dbus.DealWithUnhandledMessage()
+	fmt.Print("power module started,looping")
 	dlib.StartLoop()
 	//select {}
 }
