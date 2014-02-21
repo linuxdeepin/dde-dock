@@ -1,8 +1,0 @@
-[Desktop Entry]
-Type = Application
-Exec = /usr/lib/deepin-daemon/themes
-Terminal=false
-Hidden=true
-Name =themes
-Comment = themes daemon
-X-GNOME-Autostart-enabled = true

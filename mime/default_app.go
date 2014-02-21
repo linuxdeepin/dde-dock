@@ -131,7 +131,18 @@ func (dapp *DefaultApps) SetDefaultAppViaType(typeName, appID string) bool {
 }
 
 func (dapp *DefaultApps) listenMimeCacheFile() {
-        userInfo, err := user.Current()
+        var (
+                err      error
+                userInfo *user.User
+        )
+
+        mimeWatcher, err = fsnotify.NewWatcher()
+        if err != nil {
+                logger.Println("New Watcher Failed:", err)
+                panic(err)
+        }
+
+        userInfo, err = user.Current()
         if err != nil {
                 logger.Println("Get current user failed:", err)
                 panic(err)
@@ -146,6 +157,7 @@ func (dapp *DefaultApps) listenMimeCacheFile() {
         }
 
         go func() {
+                defer mimeWatcher.Close()
                 for {
                         select {
                         case ev := <-mimeWatcher.Event:

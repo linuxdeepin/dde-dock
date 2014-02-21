@@ -152,7 +152,6 @@ func main() {
         }()
 
         Init()
-        defer zoneWatcher.Close()
 
         date := NewDateAndTime()
         err := dbus.InstallOnSession(date)

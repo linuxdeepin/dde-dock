@@ -87,6 +87,7 @@ func (op *Manager) listenZone() {
         }
 
         go func() {
+                defer zoneWatcher.Close()
                 for {
                         select {
                         case ev := <-zoneWatcher.Event:
