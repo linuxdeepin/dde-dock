@@ -26,13 +26,10 @@ import (
         "fmt"
 )
 
-var idUserManagerMap map[string]*UserManager
+var idUserManagerMap map[string]*UserManager = make(map[string]*UserManager)
 
 func main() {
         defer func() {
-                if err := recover(); err != nil {
-                        fmt.Println("Recover Error:", err)
-                }
         }()
 
         idUserManagerMap = make(map[string]*UserManager)
@@ -40,6 +37,7 @@ func main() {
         opAccount := newAccountManager()
         err := dbus.InstallOnSystem(opAccount)
         if err != nil {
+                fmt.Println("Install Account Object On System Failed:", err)
                 panic(err)
         }
 
@@ -62,6 +60,8 @@ func updateUserList() {
                 opUser := newUserManager(info.Uid)
                 err := dbus.InstallOnSystem(opUser)
                 if err != nil {
+                        fmt.Printf("Install User:%s Object On System Failed:%s\n",
+                                info.Name, err)
                         panic(err)
                 }
 

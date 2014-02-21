@@ -38,6 +38,12 @@ const (
 )
 
 func (op *AccountManager) CreateUser(name, fullname string, accountTyte int32) string {
+        defer func() {
+                if err := recover(); err != nil {
+                        fmt.Println("Recover Error In CreateUser:", err)
+                }
+        }()
+
         args := []string{}
 
         args = append(args, "-m")
@@ -58,6 +64,12 @@ func (op *AccountManager) CreateUser(name, fullname string, accountTyte int32) s
 }
 
 func (op *AccountManager) DeleteUser(name string, removeFiles bool) {
+        defer func() {
+                if err := recover(); err != nil {
+                        fmt.Println("Recover Error In DeleteUser:", err)
+                }
+        }()
+
         args := []string{}
 
         if removeFiles {
@@ -70,6 +82,12 @@ func (op *AccountManager) DeleteUser(name string, removeFiles bool) {
 }
 
 func (op *AccountManager) FindUserById(id string) string {
+        defer func() {
+                if err := recover(); err != nil {
+                        fmt.Println("Recover Error In FindUserById:", err)
+                }
+        }()
+
         path := USER_MANAGER_PATH + id
         op.setPropName("UserList")
 
@@ -83,6 +101,12 @@ func (op *AccountManager) FindUserById(id string) string {
 }
 
 func (op *AccountManager) FindUserByName(name string) string {
+        defer func() {
+                if err := recover(); err != nil {
+                        fmt.Println("Recover Error In FindUserByName:", err)
+                }
+        }()
+
         userInfo, err := user.Lookup(name)
         if err != nil {
                 fmt.Println("Lookup By Name Failed:", err)

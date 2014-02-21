@@ -28,6 +28,11 @@ import (
 )
 
 func (op *UserManager) SetPassword(passwd string) {
+        defer func() {
+                if err := recover(); err != nil {
+                        fmt.Println("Recover Error In SetPassword:", err)
+                }
+        }()
 }
 
 func newUserManager(uid string) *UserManager {
