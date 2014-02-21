@@ -54,8 +54,9 @@ func (op *Manager) SetTime(t string) (bool, error) {
         return ret, nil
 }
 
-func (op *Manager) TimezoneCityList() []string {
-        return getZoneCityList()
+func (op *Manager) TimezoneCityList() map[string]string {
+        //return getZoneCityList()
+        return zoneCityMap
 }
 
 func (op *Manager) SetTimeZone(zone string) bool {
