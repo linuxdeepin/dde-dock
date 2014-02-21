@@ -22,79 +22,50 @@
 package main
 
 import (
-	"dbus/org/freedesktop/accounts"
-	"dlib/dbus"
-	"fmt"
+        "dlib/dbus"
+        "fmt"
 )
-
-type Manager struct {
-	UserAdded   func(string)
-	UserDeleted func(string)
-}
-
-type User struct {
-	AccountType    int32  `access:"readwrite"`
-	AutomaticLogin bool   `access:"readwrite"`
-	IconFile       string `access:"readwrite"`
-	Locked         bool   `access:"readwrite"`
-	PasswordMode   int32  `access:"readwrite"`
-	UserName       string `access:"readwrite"`
-        BackgroundFile string `access:"readwrite"`
-        HomeDir string `access:"readwrite"`
-	LoginTime      int64
-	Uid            uint64
-	objectPath     string
-	userInface     *accounts.User
-}
-
-const (
-	_ACCOUNTS_DEST = "com.deepin.daemon.Accounts"
-	_ACCOUNTS_PATH = "/com/deepin/daemon/Accounts"
-	_ACCOUNTS_IFC  = "com.deepin.daemon.Accounts"
-
-	_ACCOUNTS_USER_IFC = "com.deepin.daemon.Accounts.User"
-)
-
-var (
-	_accountInface *accounts.Accounts
-	_userMap       = make(map[dbus.ObjectPath]*User)
-)
-
-func (dam *Manager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		_ACCOUNTS_DEST,
-		_ACCOUNTS_PATH,
-		_ACCOUNTS_IFC,
-	}
-}
-
-func (u *User) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		_ACCOUNTS_DEST,
-		u.objectPath,
-		_ACCOUNTS_USER_IFC,
-	}
-}
 
 func main() {
-	var err error
-	_accountInface, err = accounts.NewAccounts("/org/freedesktop/Accounts")
-	if err != nil {
-		fmt.Println("New Accounts Failed From Freedesktop:", err)
-		return
-	}
+        defer func() {
+                if err := recover(); err != nil {
+                        fmt.Println("Recover Error:", err)
+                }
+        }()
 
-	account := NewAccountManager()
-	err = dbus.InstallOnSession(account)
-	if err != nil {
-		fmt.Println("Install Manager DBus Failed")
-		panic(err)
-	}
-	userList, _ := _accountInface.ListCachedUsers()
-	for _, v := range userList {
-		NewAccountUserManager(v)
-	}
-	dbus.DealWithUnhandledMessage()
+        opAccount := newAccountManager()
+        err := dbus.InstallOnSystem(opAccount)
+        if err != nil {
+                panic(err)
+        }
 
-	select {}
+        updateUserList()
+
+        listenFileChanged(ETC_PASSWD)
+        listenFileChanged(ETC_GROUP)
+        listenFileChanged(ETC_SHADOW)
+
+        dbus.DealWithUnhandledMessage()
+
+        select {}
+}
+
+func updateUserList() {
+        infos := getUserInfoList()
+        for _, info := range infos {
+                opUser := newUserManager(info.Uid)
+                err := dbus.InstallOnSystem(opUser)
+                if err != nil {
+                        panic(err)
+                }
+        }
+}
+
+func printUserInfo(info UserInfo) {
+        fmt.Println("Name:", info.Name)
+        fmt.Println("Uid:", info.Uid)
+        fmt.Println("Gid:", info.Gid)
+        fmt.Println("Home:", info.Home)
+        fmt.Println("Shell:", info.Shell)
+        fmt.Printf("\n")
 }
