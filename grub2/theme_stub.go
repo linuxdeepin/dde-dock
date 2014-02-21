@@ -92,6 +92,8 @@ func (theme *Theme) doSetBackgroundSourceFile(imageFile string) bool {
 	}
 	theme.ItemColor = theme.tplJsonData.CurrentScheme.ItemColor
 	theme.SelectedItemColor = theme.tplJsonData.CurrentScheme.SelectedItemColor
+	dbus.NotifyChange(theme, "ItemColor")
+	dbus.NotifyChange(theme, "SelectedItemColor")
 	theme.customTheme()
 
 	logInfo("update background sucess")

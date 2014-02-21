@@ -340,6 +340,8 @@ func (grub *Grub2) parseSettings(fileContent string) error {
 	// reset properties, return default value for the missing property
 	grub.DefaultEntry = grub.getDefaultEntry()
 	grub.Timeout = grub.getTimeout()
+	dbus.NotifyChange(grub, "DefaultEntry")
+	dbus.NotifyChange(grub, "Timeout")
 
 	// reset settings to sync the default values
 	grub.setDefaultEntry(grub.DefaultEntry)
@@ -464,7 +466,6 @@ func main() {
 	}()
 
 	grub := NewGrub2()
-	grub.load()
 	err := dbus.InstallOnSystem(grub)
 	if err != nil {
 		panic(err)
@@ -473,6 +474,12 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	// load after dbus service installed to ensure property changed
+	// signal send success
+	grub.load()
+	grub.theme.load()
+
 	dbus.DealWithUnhandledMessage()
 
 	select {}

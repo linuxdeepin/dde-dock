@@ -23,6 +23,7 @@ package main
 
 import (
 	"bytes"
+	"dlib/dbus"
 	"dlib/graph"
 	"encoding/json"
 	"io/ioutil"
@@ -76,6 +77,10 @@ func NewTheme() *Theme {
 	theme.bgSrcFile = _THEME_BG_SRC_FILE
 	theme.bgFile = _THEME_BG_FILE
 
+	return theme
+}
+
+func (theme *Theme) load() {
 	var err error
 	theme.tplJsonData, err = theme.getThemeTplJsonData()
 	if err != nil {
@@ -86,8 +91,9 @@ func NewTheme() *Theme {
 	theme.Background = theme.bgFile
 	theme.ItemColor = theme.tplJsonData.CurrentScheme.ItemColor
 	theme.SelectedItemColor = theme.tplJsonData.CurrentScheme.SelectedItemColor
-
-	return theme
+	dbus.NotifyChange(theme, "Background")
+	dbus.NotifyChange(theme, "ItemColor")
+	dbus.NotifyChange(theme, "SelectedItemColor")
 }
 
 func (theme *Theme) setItemColor(itemColor string) {
