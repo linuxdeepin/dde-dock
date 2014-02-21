@@ -30,7 +30,8 @@ var (
 type Manager struct {
         AutoSetTime      *property.GSettingsBoolProperty `access:"readwrite"`
         Use24HourDisplay *property.GSettingsBoolProperty `access:"readwrite"`
-        CurrentTimeZone  string
+        CurrentTimezone  string
+        UserTimezoneList []string
 }
 
 func (op *Manager) SetDate(d string) (bool, error) {
@@ -58,42 +59,53 @@ func (op *Manager) TimezoneCityList() []string {
 }
 
 func (op *Manager) SetTimeZone(zone string) bool {
-        //tz := convertCityToZone(zone)
-        tz := getKeyByValue(zone)
-        //logger.Println("tz:", tz)
-        _, err := setDate.SetTimezone(tz)
+        _, err := setDate.SetTimezone(zone)
         if err != nil {
                 logger.Printf("Set TimeZone - '%s' Failed: %s\n",
                         zone, err)
                 return false
         }
-        op.setPropName("CurrentTimeZone")
+        op.setPropName("CurrentTimezone")
         return true
-}
-
-func (op *Manager) SetAutoSetTime(auto bool) (bool, error) {
-        var (
-                ret     bool
-                err     error
-        )
-
-        if auto {
-                ret, err = setDate.SetNtpUsing(true)
-        } else {
-                ret, err = setDate.SetNtpUsing(false)
-        }
-
-        if err != nil {
-                logger.Printf("Set NTP - %d Failed: %s\n",
-                        auto, err)
-                return false, err
-        }
-        return ret, nil
 }
 
 func (op *Manager) SyncNtpTime() bool {
         ret, _ := setDate.SyncNtpTime()
         return ret
+}
+
+func (op *Manager) AddUserTimezoneList(tz string) {
+        if !timezoneIsValid(tz) {
+                return
+        }
+
+        list := dateSettings.GetStrv("user-timezone-list")
+        if !isElementExist(tz, list) {
+                return
+        }
+
+        list = append(list, tz)
+        dateSettings.SetStrv("user-timezone-list", list)
+}
+
+func (op *Manager) DeleteTimezoneList(tz string) {
+        if !timezoneIsValid(tz) {
+                return
+        }
+
+        list := dateSettings.GetStrv("user-timezone-list")
+        if !isElementExist(tz, list) {
+                return
+        }
+
+        tmp := []string{}
+        for _, v := range list {
+                if v == tz {
+                        continue
+                }
+                tmp = append(tmp, v)
+        }
+        dateSettings.SetStrv("user-timezone-list", tmp)
 }
 
 func NewDateAndTime() *Manager {
@@ -106,9 +118,11 @@ func NewDateAndTime() *Manager {
                 m, "Use24HourDisplay",
                 dateSettings, "is-24hour")
 
-        m.setPropName("CurrentTimeZone")
+        m.setPropName("CurrentTimezone")
+        m.setPropName("UserTimezoneList")
         m.listenSettings()
         m.listenZone()
+        m.AddUserTimezoneList(m.CurrentTimezone)
 
         return m
 }

@@ -22,56 +22,85 @@
 package main
 
 import (
-	"dlib/dbus"
-	"dlib/gio-2.0"
-	"dlib/logger"
+        "dlib/dbus"
+        "dlib/gio-2.0"
+        "dlib/logger"
 )
 
 func (m *Manager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{_DATE_TIME_DEST, _DATE_TIME_PATH, _DATA_TIME_IFC}
+        return dbus.DBusInfo{_DATE_TIME_DEST, _DATE_TIME_PATH, _DATA_TIME_IFC}
+}
+
+func (op *Manager) setAutoSetTime(auto bool) (bool, error) {
+        var (
+                ret     bool
+                err     error
+        )
+
+        if auto {
+                ret, err = setDate.SetNtpUsing(true)
+        } else {
+                ret, err = setDate.SetNtpUsing(false)
+        }
+
+        if err != nil {
+                logger.Printf("Set NTP - %d Failed: %s\n",
+                        auto, err)
+                return false, err
+        }
+        return ret, nil
 }
 
 func (op *Manager) setPropName(name string) {
-	switch name {
-	case "CurrentTimeZone":
+        switch name {
+        case "CurrentTimezone":
                 tz, _, err := setDate.GetTimezone()
-		if err != nil {
-			logger.Printf("Get Time Zone Failed: %s\n", err)
-			return
-		}
-		op.CurrentTimeZone = convertZoneToCity(tz)
-		dbus.NotifyChange(op, name)
-	}
+                if err != nil {
+                        logger.Printf("Get Time Zone Failed: %s\n", err)
+                        return
+                }
+                op.CurrentTimezone = tz
+                dbus.NotifyChange(op, name)
+        case "UserTimezoneList":
+                list := dateSettings.GetStrv("user-timezone-list")
+                if !strArrayIsEqual(list, op.UserTimezoneList) {
+                        op.UserTimezoneList = list
+                        dbus.NotifyChange(op, "UserTimezoneList")
+                }
+        }
 }
 
 func (op *Manager) listenSettings() {
-	dateSettings.Connect("changed::is-auto-set", func(s *gio.Settings, name string) {
-		op.SetAutoSetTime(s.GetBoolean("is-auto-set"))
-	})
+        dateSettings.Connect("changed::is-auto-set", func(s *gio.Settings, name string) {
+                op.setAutoSetTime(s.GetBoolean("is-auto-set"))
+        })
+        dateSettings.Connect("changed::user-timezone-list", func(s *gio.Settings, name string) {
+                op.setPropName("UserTimezoneList")
+        })
 }
 
 func (op *Manager) listenZone() {
-	err := zoneWatcher.Watch(_TIME_ZONE_FILE)
-	if err != nil {
-		logger.Printf("Watch '%s' Failed: %s\n", _TIME_ZONE_FILE, err)
-		return
-	}
+        err := zoneWatcher.Watch(_TIME_ZONE_FILE)
+        if err != nil {
+                logger.Printf("Watch '%s' Failed: %s\n", _TIME_ZONE_FILE, err)
+                return
+        }
 
-	go func() {
-		for {
-			select {
-			case ev := <-zoneWatcher.Event:
-				logger.Println("Watcher Event: ", ev)
-				if ev.IsDelete() {
-					zoneWatcher.Watch(_TIME_ZONE_FILE)
-				} else {
-					//if ev.IsModify() {
-					op.setPropName("CurrentTimeZone")
-					//}
-				}
-			case err := <-zoneWatcher.Error:
-				logger.Println("Watcher Event: ", err)
-			}
-		}
-	}()
+        go func() {
+                for {
+                        select {
+                        case ev := <-zoneWatcher.Event:
+                                logger.Println("Watcher Event: ", ev)
+                                if ev.IsDelete() {
+                                        zoneWatcher.Watch(_TIME_ZONE_FILE)
+                                } else {
+                                        //if ev.IsModify() {
+                                        op.setPropName("CurrentTimezone")
+                                        //}
+                                }
+                        case err := <-zoneWatcher.Error:
+                                logger.Println("Watcher Event: ", err)
+                        }
+                }
+        }()
 }

@@ -21,6 +21,11 @@
 
 package main
 
+func timezoneIsValid(tz string) bool {
+        _, ok := zoneCityMap[tz]
+        return ok
+}
+
 func getZoneCityList() []string {
         list := []string{}
 
@@ -94,4 +99,21 @@ func isElementExist(element string, list []string) bool {
         }
 
         return false
+}
+
+func strArrayIsEqual(array1, array2 []string) bool {
+        l1 := len(array1)
+        l2 := len(array2)
+
+        if l1 != l2 {
+                return false
+        }
+
+        for i := 0; i < l1; i++ {
+                if array1[i] != array2[i] {
+                        return false
+                }
+        }
+
+        return true
 }
