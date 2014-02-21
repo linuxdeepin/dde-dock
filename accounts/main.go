@@ -26,12 +26,16 @@ import (
         "fmt"
 )
 
+var idUserManagerMap map[string]*UserManager
+
 func main() {
         defer func() {
                 if err := recover(); err != nil {
                         fmt.Println("Recover Error:", err)
                 }
         }()
+
+        idUserManagerMap = make(map[string]*UserManager)
 
         opAccount := newAccountManager()
         err := dbus.InstallOnSystem(opAccount)
@@ -51,6 +55,8 @@ func main() {
 }
 
 func updateUserList() {
+        destroyAllUserObject()
+
         infos := getUserInfoList()
         for _, info := range infos {
                 opUser := newUserManager(info.Uid)
@@ -58,6 +64,15 @@ func updateUserList() {
                 if err != nil {
                         panic(err)
                 }
+
+                idUserManagerMap[info.Uid] = opUser
+        }
+}
+
+func destroyAllUserObject() {
+        for k, v := range idUserManagerMap {
+                dbus.UnInstallObject(v)
+                delete(idUserManagerMap, k)
         }
 }
 
