@@ -27,17 +27,24 @@ import (
 )
 
 func listenFileChanged(filename string) {
-        var watcher fsnotify.Watcher
-        err := watcher.Watch(filename)
+        watcher, err := fsnotify.NewWatcher()
+        if err != nil {
+                fmt.Println("New Watcher Failed:", err)
+                panic(err)
+        }
+
+        err = watcher.Watch(filename)
         if err != nil {
                 fmt.Printf("Watch '%s' failed: %s\n", filename, err)
                 panic(err)
         }
 
         go func() {
+                defer watcher.Close()
                 for {
                         select {
                         case ev := <-watcher.Event:
+
                                 if ev.IsDelete() {
                                         watcher.Watch(filename)
                                 } else {
