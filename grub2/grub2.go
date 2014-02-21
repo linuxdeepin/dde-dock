@@ -33,7 +33,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-	"time"
+	"sync"
 	"unicode"
 )
 
@@ -61,6 +61,10 @@ type Grub2 struct {
 	theme    *Theme
 	config   CacheConfig
 
+	needUpdateLock sync.Mutex
+	needUpdate     bool
+	chanUpdate     chan int
+
 	DefaultEntry string `access:"readwrite"`
 	Timeout      int32  `access:"readwrite"`
 }
@@ -69,7 +73,17 @@ func NewGrub2() *Grub2 {
 	grub := &Grub2{}
 	grub.theme = NewTheme()
 	grub.config = CacheConfig{1024, 768, true} // default value
+	grub.chanUpdate = make(chan int)
 	return grub
+}
+
+func (grub *Grub2) notifyUpdate() {
+	go func() {
+		grub.chanUpdate <- 1
+	}()
+	grub.needUpdateLock.Lock()
+	grub.needUpdate = true
+	grub.needUpdateLock.Unlock()
 }
 
 func (grub *Grub2) load() {
@@ -90,35 +104,31 @@ func (grub *Grub2) load() {
 	} else {
 		grub.writeCacheConfig()
 	}
+	if grub.config.NeedUpdate {
+		grub.notifyUpdate()
+	}
 
 	grub.resetGfxmodeIfNeed()
 
 	// start a goroutine to update grub configuration automatically
 	go func() {
 		for {
+			<-grub.chanUpdate
+			grub.needUpdateLock.Lock()
+			grub.config.NeedUpdate = grub.needUpdate
+			grub.needUpdate = false
+			grub.needUpdateLock.Unlock()
+
 			if grub.config.NeedUpdate {
+				grub.writeCacheConfig()
+
+				grub.generateGrubConfig()
+
 				grub.config.NeedUpdate = false
-				grub.save()
+				grub.writeCacheConfig()
 			}
-			time.Sleep(5 * time.Second)
 		}
 	}()
-}
-
-func (grub *Grub2) save() (err error) {
-	err = grub.writeSettings()
-	if err != nil {
-		return
-	}
-	err = grub.doGenerateGrubConfig()
-	if err != nil {
-		return
-	}
-	err = grub.writeCacheConfig()
-	if err != nil {
-		return
-	}
-	return
 }
 
 func (grub *Grub2) resetGfxmodeIfNeed() {
@@ -128,7 +138,9 @@ func (grub *Grub2) resetGfxmodeIfNeed() {
 		grub.setGfxmode(gfxmode)
 		grub.config.LastScreenWidth = w
 		grub.config.LastScreenHeight = h
-		grub.config.NeedUpdate = true
+
+		grub.notifyUpdate()
+
 		grub.theme.generateBackground()
 	}
 }
@@ -202,7 +214,7 @@ func (grub *Grub2) writeCacheConfig() (err error) {
 	return
 }
 
-func (grub *Grub2) doGenerateGrubConfig() (err error) {
+func (grub *Grub2) generateGrubConfig() (err error) {
 	logInfo("start to generate a new grub configuration file")
 	err = execAndWait(30, _GRUB_MKCONFIG_EXE, "-o", _GRUB_MENU)
 	return err

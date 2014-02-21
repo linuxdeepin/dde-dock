@@ -48,7 +48,9 @@ func (grub *Grub2) OnPropertiesChanged(name string, oldv interface{}) {
 	case "Timeout":
 		grub.setTimeout(grub.Timeout)
 	}
-	grub.config.NeedUpdate = true
+
+	grub.writeSettings()
+	grub.notifyUpdate()
 }
 
 // Get entry titles in level one.
