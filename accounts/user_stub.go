@@ -23,7 +23,6 @@ package main
 
 import (
         "dlib/dbus"
-        "dlib/gio-2.0"
 )
 
 const (
@@ -36,21 +35,17 @@ const (
         USER_CONFIG_FILE  = "/var/lib/AccountsService/users/"
 )
 
-var (
-        bgSettings = gio.NewSettings("com.deepin.dde.personalization")
-)
-
 type UserManager struct {
         Uid            string
         Gid            string
-        UserName       string  `access:"readwrite"`
-        HomeDir        string  `access:"readwrite"`
-        Shell          string  `access:"readwrite"`
-        IconFile       string  `access:"readwrite"`
-        BackgroundFile string  `access:"readwrite"`
-        AutomaticLogin bool    `access:"readwrite"`
-        AccountType    int32   `access:"readwrite"`
-        Locked         bool    `access:"readwrite"`
+        UserName       string
+        HomeDir        string
+        Shell          string
+        IconFile       string
+        BackgroundFile string
+        AutomaticLogin bool
+        AccountType    int32
+        Locked         bool
         LoginTime      uint64
         objectPath     string
 }
@@ -60,43 +55,6 @@ func (op *UserManager) GetDBusInfo() dbus.DBusInfo {
                 ACCOUNT_DEST,
                 USER_MANAGER_PATH + op.Uid,
                 USER_MANAGER_IFC,
-        }
-}
-
-func (op *UserManager) OnPropertiesChanged(propName string, old interface{}) {
-        switch propName {
-        case "UserName":
-                if v, ok := old.(string); ok && v != op.UserName {
-                        op.setPropName(propName, op.UserName)
-                }
-        case "HomeDir":
-                if v, ok := old.(string); ok && v != op.HomeDir {
-                        op.setPropName(propName, op.HomeDir)
-                }
-        case "Shell":
-                if v, ok := old.(string); ok && v != op.Shell {
-                        op.setPropName(propName, op.Shell)
-                }
-        case "IconFile":
-                if v, ok := old.(string); ok && v != op.IconFile {
-                        op.setPropName(propName, op.IconFile)
-                }
-        case "BackgroundFile":
-                if v, ok := old.(string); ok && v != op.BackgroundFile {
-                        op.setPropName(propName, op.BackgroundFile)
-                }
-        case "AutomaticLogin":
-                if v, ok := old.(bool); ok && v != op.AutomaticLogin {
-                        op.setPropName(propName, op.AutomaticLogin)
-                }
-        case "AccountType":
-                if v, ok := old.(int32); ok && v != op.AccountType {
-                        op.setPropName(propName, op.AccountType)
-                }
-        case "Locked":
-                if v, ok := old.(bool); ok && v != op.Locked {
-                        op.setPropName(propName, op.Locked)
-                }
         }
 }
 
@@ -127,7 +85,6 @@ func (op *UserManager) setPropName(propName string, propValue interface{}) {
                         KEY_TYPE_STRING, op.BackgroundFile)
         case "BackgroundFile":
                 file := USER_CONFIG_FILE + op.UserName
-                bgSettings.SetString("current-picture", propValue.(string))
                 writeKeyFileValue(file, "User", "Background",
                         KEY_TYPE_STRING, op.BackgroundFile)
         case "AutomaticLogin":
@@ -240,7 +197,8 @@ func (op *UserManager) updateUserInfo() {
 
 func addUserToAdmList(name string) {
         tmps := []string{}
-        tmps = append(tmps, "-a "+name)
+        tmps = append(tmps, "-a")
+        tmps = append(tmps, name)
         tmps = append(tmps, "sudo")
         go execCommand(CMD_GPASSWD, tmps)
 }

@@ -22,11 +22,19 @@
 package main
 
 import (
+        freedbus "dbus/org/freedesktop/dbus"
+        polkit "dbus/org/freedesktop/policykit1"
         "dlib/glib-2.0"
         "fmt"
         "os"
         "os/exec"
         "strings"
+)
+
+const (
+        POLKIT_DEST = "org.freedesktop.PolicyKit1"
+        POLKIT_PATH = "/org/freedesktop/PolicyKit1/Authority"
+        POLKIT_IFC  = "org.freedesktop.PolicyKit1.Authority"
 )
 
 func execCommand(cmdline string, args []string) {
@@ -166,6 +174,63 @@ func writeKeyFile(contents, file string) {
         _, err = f.WriteString(contents)
         if err != nil {
                 fmt.Printf("Write in '%s' failed: %s\n", file, err)
+                panic(err)
+        }
+}
+
+type polkitSubject struct {
+        /*
+         * The following kinds of subjects are known:
+         * Unix Process: should be set to unix-process with keys
+         *                  pid (of type uint32) and
+         *                  start-time (of type uint64)
+         * Unix Session: should be set to unix-session with the key
+         *                  session-id (of type string)
+         * System Bus Name: should be set to system-bus-name with the key
+         *                  name (of type string)
+         */
+        subjectKind    string
+        subjectDetails map[string]interface{}
+}
+
+func authWithPolkit(actionId string) {
+        var (
+                objPolkit *polkit.Authority
+                objDbus   *freedbus.DBusDaemon
+                err       error
+        )
+
+        objPolkit, err = polkit.NewAuthority(POLKIT_PATH)
+        if err != nil {
+                fmt.Println("New Authority Failed:", err)
+                panic(err)
+        }
+
+        objDbus, err = freedbus.NewDBusDaemon("/")
+        if err != nil {
+                fmt.Println("New DBusDaemon Failed:", err)
+                panic(err)
+        }
+
+        pid, err1 := objDbus.GetConnectionUnixProcessID(actionId)
+        if err1 != nil {
+                fmt.Println("GetConnectionUnixProcessID Failed:", err1)
+                panic(err1)
+        }
+        subject := polkitSubject{}
+        subject.subjectKind = "unix-process"
+        subject.subjectDetails = make(map[string]interface{})
+        subject.subjectDetails["pid"] = uint32(pid)
+        subject.subjectDetails["start-time"] = uint64(0)
+        details := make(map[string]string)
+        flags := uint32(1)
+        cancelId := ""
+
+        infaces := []interface{}{}
+        infaces = append(infaces, subject)
+        _, err = objPolkit.CheckAuthorization(infaces, actionId, details, flags, cancelId)
+        if err != nil {
+                fmt.Println("CheckAuthorization Failed:", err)
                 panic(err)
         }
 }

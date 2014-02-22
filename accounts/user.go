@@ -27,12 +27,74 @@ import (
         "strings"
 )
 
+const (
+        POLKIT_CHANGED_OWN_DATA = "com.deepin.daemon.accounts.change-own-user-data"
+        POLKIT_MANAGER_USER     = "com.deepin.daemon.accounts.user-administration"
+        POLKIT_SET_LOGIN_OPTION = "com.deepin.daemon.accounts.set-login-option"
+)
+
+func (op *UserManager) SetUserName(username string) {
+        if op.UserName != username {
+                authWithPolkit(POLKIT_CHANGED_OWN_DATA)
+                op.setPropName("UserName", username)
+        }
+}
+
+func (op *UserManager) SetHomeDir(dir string) {
+        if op.HomeDir != dir {
+                authWithPolkit(POLKIT_CHANGED_OWN_DATA)
+                op.setPropName("HomeDir", dir)
+        }
+}
+
+func (op *UserManager) SetShell(shell string) {
+        if op.Shell != shell {
+                authWithPolkit(POLKIT_CHANGED_OWN_DATA)
+                op.setPropName("Shell", shell)
+        }
+}
+
 func (op *UserManager) SetPassword(passwd string) {
         defer func() {
                 if err := recover(); err != nil {
                         fmt.Println("Recover Error In SetPassword:", err)
                 }
         }()
+}
+
+func (op *UserManager) SetAutomaticLogin(auto bool) {
+        if op.AutomaticLogin != auto {
+                authWithPolkit(POLKIT_SET_LOGIN_OPTION)
+                op.setPropName("AutomaticLogin", auto)
+        }
+}
+
+func (op *UserManager) SetAccountType(t int32) {
+        if op.AccountType != t {
+                authWithPolkit(POLKIT_MANAGER_USER)
+                op.setPropName("AccountType", t)
+        }
+}
+
+func (op *UserManager) SetLocked(locked bool) {
+        if op.Locked != locked {
+                authWithPolkit(POLKIT_MANAGER_USER)
+                op.setPropName("Locked", locked)
+        }
+}
+
+func (op *UserManager) SetIconFile(icon string) {
+        if op.IconFile != icon {
+                authWithPolkit(POLKIT_CHANGED_OWN_DATA)
+                op.setPropName("IconFile", icon)
+        }
+}
+
+func (op *UserManager) SetBackgroundFile(bg string) {
+        if op.BackgroundFile != bg {
+                authWithPolkit(POLKIT_CHANGED_OWN_DATA)
+                op.setPropName("BackgroundFile", bg)
+        }
 }
 
 func newUserManager(uid string) *UserManager {
