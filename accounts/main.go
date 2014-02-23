@@ -30,6 +30,9 @@ var idUserManagerMap map[string]*UserManager = make(map[string]*UserManager)
 
 func main() {
         defer func() {
+                if err := recover(); err != nil {
+                        fmt.Println("Recover Error:", err)
+                }
         }()
 
         idUserManagerMap = make(map[string]*UserManager)

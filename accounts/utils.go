@@ -22,7 +22,7 @@
 package main
 
 import (
-        freedbus "dbus/org/freedesktop/dbus"
+        //freedbus "dbus/org/freedesktop/dbus"
         polkit "dbus/org/freedesktop/policykit1"
         "dlib/glib-2.0"
         "fmt"
@@ -196,8 +196,8 @@ type polkitSubject struct {
 func authWithPolkit(actionId string) {
         var (
                 objPolkit *polkit.Authority
-                objDbus   *freedbus.DBusDaemon
-                err       error
+                //objDbus   *freedbus.DBusDaemon
+                err     error
         )
 
         objPolkit, err = polkit.NewAuthority(POLKIT_PATH)
@@ -206,17 +206,20 @@ func authWithPolkit(actionId string) {
                 panic(err)
         }
 
-        objDbus, err = freedbus.NewDBusDaemon("/")
-        if err != nil {
-                fmt.Println("New DBusDaemon Failed:", err)
-                panic(err)
-        }
+        /*
+           objDbus, err = freedbus.NewDBusDaemon("/")
+           if err != nil {
+                   fmt.Println("New DBusDaemon Failed:", err)
+                   panic(err)
+           }
 
-        pid, err1 := objDbus.GetConnectionUnixProcessID(actionId)
-        if err1 != nil {
-                fmt.Println("GetConnectionUnixProcessID Failed:", err1)
-                panic(err1)
-        }
+           pid, err1 := objDbus.GetConnectionUnixProcessID(actionId)
+           if err1 != nil {
+                   fmt.Println("GetConnectionUnixProcessID Failed:", err1)
+                   panic(err1)
+           }
+        */
+        pid := os.Getpid()
         subject := polkitSubject{}
         subject.subjectKind = "unix-process"
         subject.subjectDetails = make(map[string]interface{})
