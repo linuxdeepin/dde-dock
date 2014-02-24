@@ -51,7 +51,7 @@ var (
 )
 
 type CacheConfig struct {
-	LastScreenWidth, LastScreenHeight int32
+	LastScreenWidth, LastScreenHeight uint16
 	NeedUpdate                        bool // mark to generate grub configuration
 }
 
@@ -464,6 +464,8 @@ func (grub *Grub2) getSettingContentToSave() string {
 func main() {
 	defer func() {
 		if err := recover(); err != nil {
+			relerr := err.(error)
+			ioutil.WriteFile("/tmp/grub2.log", []byte(relerr.Error()), 0664) // TODO test
 			logFatal("grub2 failed: %v", err)
 		}
 	}()

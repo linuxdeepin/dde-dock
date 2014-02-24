@@ -25,9 +25,11 @@ import (
 	"archive/tar"
 	"bytes"
 	"compress/gzip"
-	"dlib/dbus"
 	"errors"
 	"fmt"
+	"github.com/BurntSushi/xgb"
+	"github.com/BurntSushi/xgb/randr"
+	"github.com/BurntSushi/xgb/xproto"
 	"io"
 	"os"
 	"os/exec"
@@ -233,100 +235,48 @@ func newError(format string, v ...interface{}) error {
 	return errors.New(fmt.Sprintf(format, v...))
 }
 
-func dbusGetSessionObject(dest, path string) (obj *dbus.Object, err error) {
-	conn, err := dbus.SessionBus()
-	if err != nil {
-		logError(err.Error())
-		return
-	}
-	obj = conn.Object(dest, dbus.ObjectPath(path))
-	var v string
-	obj.Call("org.freedesktop.DBus.Introspectable.Introspect", 0).Store(&v)
-	if strings.Index(v, dest) == -1 {
-		return nil, errors.New(fmt.Sprintf("'%s' hasn't interface '%s'.", path, dest))
-	}
-	return
-}
-
-func dbusCallMethod(dest, path, method string, args ...interface{}) (call *dbus.Call, err error) {
-	obj, err := dbusGetSessionObject(dest, path)
-	if err != nil {
-		return
-	}
-	logInfo("call dbus method: %s, %s, %s", dest, path, method, args)
-	call = obj.Call(method, 0, args...)
-	return
-}
-
-func dbusGetProperty(dest, path, property string) (value interface{}, err error) {
-	obj, err := dbusGetSessionObject(dest, path)
-	if err != nil {
-		return
-	}
-	var v dbus.Variant
-	err = obj.Call("org.freedesktop.DBus.Properties.Get", 0, dest, property).Store(&v)
-	if err != nil {
-		logError(err.Error())
-		return
-	}
-	value = v.Value()
-	logInfo("get property success: %s", v.String())
-	return
-}
-
-func getScreenBestResolution(outputObjPath dbus.ObjectPath) (w int32, h int32) {
-	w, h = 1024, 768 // default value
-
-	// get all support modes
-	destOutput := "com.deepin.daemon.Display"
-	pathOutput := string(outputObjPath)
-	methodOutput := "com.deepin.daemon.Display.Output.ListModes"
-	call, err := dbusCallMethod(destOutput, pathOutput, methodOutput)
-	if err != nil {
-		logError("get output's modes failed, use default value 1024x768") // TODO
-		return
-	}
-
-	type Mode struct {
-		ID     uint32
-		Width  uint16
-		Height uint16
-		Rate   float64
-	}
-	modes := make([]Mode, 0)
-	err = call.Store(&modes)
-	if err != nil {
-		logError("get output's modes failed, use default value 1024x768") // TODO
-		return
-	}
-
-	// get the best resolution
-	w, h = int32(modes[0].Width), int32(modes[0].Height)
-	return
-}
-
 // Get all screen's best resolution and choose a smaller one for there
 // is no screen is primary.
-func getPrimaryScreenBestResolution() (w int32, h int32) {
+func getPrimaryScreenBestResolution() (w uint16, h uint16) {
 	w, h = 1024, 768 // default value
 
-	// get all screen outputs
-	destDisplay := "com.deepin.daemon.Display"
-	pathDisplay := "/com/deepin/daemon/Display"
-	propertyDisplay := "Outputs"
-	value, err := dbusGetProperty(destDisplay, pathDisplay, propertyDisplay)
+	X, err := xgb.NewConn()
 	if err != nil {
-		logError("get display outputs failed, use default value 1024x768") // TODO
-		return
+		panic(err)
+	}
+	err = randr.Init(X)
+	if err != nil {
+		panic(err)
+	}
+	_, err = randr.QueryVersion(X, 1, 4).Reply()
+	if err != nil {
+		panic(err)
+	}
+	Root := xproto.Setup(X).DefaultScreen(X).Root
+	resources, err := randr.GetScreenResources(X, Root).Reply()
+	if err != nil {
+		panic(err)
 	}
 
-	outputs := value.([]dbus.ObjectPath)
-	// loop all outputs' best resolution and get the smallest one
-	w, h = getScreenBestResolution(outputs[0])
-	for _, o := range outputs {
-		bw, bh := getScreenBestResolution(o)
-		if bw < w || bh < h {
-			w, h = bw, bh
+	bestModes := make([]uint32, 0)
+	for _, output := range resources.Outputs {
+		reply, err := randr.GetOutputInfo(X, output, 0).Reply()
+		if err == nil && reply.NumModes > 1 {
+			bestModes = append(bestModes, uint32(reply.Modes[0]))
+		}
+	}
+
+	w, h = 0, 0
+	for _, m := range resources.Modes {
+		for _, id := range bestModes {
+			if id == m.Id {
+				bw, bh := m.Width, m.Height
+				if w*h == 0 {
+					w, h = bw, bh
+				} else if bw*bh < w*h {
+					w, h = bw, bh
+				}
+			}
 		}
 	}
 
@@ -334,10 +284,10 @@ func getPrimaryScreenBestResolution() (w int32, h int32) {
 	return
 }
 
-func getImgClipSizeByResolution(screenWidth, screenHeight, imgWidth, imgHeight int32) (w int32, h int32) {
-	if imgWidth >= screenWidth && imgHeight >= screenHeight {
-		w = screenWidth
-		h = screenHeight
+func getImgClipSizeByResolution(screenWidth, screenHeight uint16, imgWidth, imgHeight int32) (w int32, h int32) {
+	if imgWidth >= int32(screenWidth) && imgHeight >= int32(screenHeight) {
+		w = int32(screenWidth)
+		h = int32(screenHeight)
 	} else {
 		scale := float32(screenWidth) / float32(screenHeight)
 		w = imgWidth
