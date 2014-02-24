@@ -22,52 +22,57 @@
 package main
 
 import (
-	"dlib/logger"
-	"github.com/BurntSushi/xgb"
-	"github.com/BurntSushi/xgb/xproto"
+        "dlib/logger"
+        "github.com/BurntSushi/xgb"
+        "github.com/BurntSushi/xgb/xproto"
+        "time"
 )
 
 func getAtom(X *xgb.Conn, name string) xproto.Atom {
-	reply, err := xproto.InternAtom(X, false,
-		uint16(len(name)), name).Reply()
-	if err != nil {
-		logger.Printf("'%s' Get Xproto Atom Failed: %s\n",
-			name, err)
-	}
+        reply, err := xproto.InternAtom(X, false,
+                uint16(len(name)), name).Reply()
+        if err != nil {
+                logger.Printf("'%s' Get Xproto Atom Failed: %s\n",
+                        name, err)
+        }
 
-	return reply.Atom
+        return reply.Atom
 }
 
 func newXWindow() {
-	wid, err := xproto.NewWindowId(X)
-	if err != nil {
-		logger.Println("New Window Id Failed:", err)
-		panic(err)
-	}
-	logger.Println("New window id:", wid)
+        wid, err := xproto.NewWindowId(X)
+        if err != nil {
+                logger.Println("New Window Id Failed:", err)
+                panic(err)
+        }
+        logger.Println("New window id:", wid)
 
-	setupInfo := xproto.Setup(X)
-	/*
-	   for _, screenInfo := setupInfo.Roots {
-	   }
-	*/
-	screen := setupInfo.DefaultScreen(X)
-	logger.Println("root wid:", screen.Root)
-	err = xproto.CreateWindowChecked(X,
-		0,
-		wid, screen.Root, 0, 0,
-		10, 10, 0, xproto.WindowClassInputOnly,
-		screen.RootVisual, 0,
-		nil).Check()
-	if err != nil {
-		panic(err)
-	}
-	err = xproto.SetSelectionOwnerChecked(X, wid,
-		getAtom(X, XSETTINGS_S0),
-		xproto.TimeCurrentTime).Check()
-	if err != nil {
-		panic(err)
-	}
-	xproto.MapWindow(X, wid)
-	X.Sync()
+        setupInfo := xproto.Setup(X)
+        /*
+           for _, screenInfo := setupInfo.Roots {
+           }
+        */
+        screen := setupInfo.DefaultScreen(X)
+        logger.Println("root wid:", screen.Root)
+        err = xproto.CreateWindowChecked(X,
+                0,
+                wid, screen.Root, 0, 0,
+                10, 10, 0, xproto.WindowClassInputOnly,
+                screen.RootVisual, 0,
+                nil).Check()
+        if err != nil {
+                panic(err)
+        }
+        err = xproto.SetSelectionOwnerChecked(X, wid,
+                getAtom(X, XSETTINGS_S0),
+                xproto.Timestamp(getCurrentTimestamp())).Check()
+        if err != nil {
+                panic(err)
+        }
+        xproto.MapWindow(X, wid)
+        X.Sync()
+}
+
+func getCurrentTimestamp() int64 {
+        return time.Now().Unix()
 }
