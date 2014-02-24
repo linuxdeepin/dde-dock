@@ -43,8 +43,10 @@ func (theme *Theme) OnPropertiesChanged(name string, oldv interface{}) {
 	switch name {
 	case "ItemColor":
 		theme.setItemColor(theme.ItemColor)
+		dbus.NotifyChange(theme, "ItemColor")
 	case "SelectedItemColor":
 		theme.setSelectedItemColor(theme.SelectedItemColor)
+		dbus.NotifyChange(theme, "SelectedItemColor")
 	}
 }
 
