@@ -81,7 +81,7 @@ func (op *Manager) AddUserTimezoneList(tz string) {
         }
 
         list := dateSettings.GetStrv("user-timezone-list")
-        if !isElementExist(tz, list) {
+        if isElementExist(tz, list) {
                 return
         }
 
