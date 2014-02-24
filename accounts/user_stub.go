@@ -81,7 +81,7 @@ func (op *UserManager) setPropName(propName string, propValue interface{}) {
                 execCommand(CMD_USERMOD, args)
         case "IconFile":
                 file := USER_CONFIG_FILE + op.UserName
-                writeKeyFileValue(file, "User", "Background",
+                writeKeyFileValue(file, "User", "Icon",
                         KEY_TYPE_STRING, op.BackgroundFile)
         case "BackgroundFile":
                 file := USER_CONFIG_FILE + op.UserName
@@ -135,7 +135,7 @@ func (op *UserManager) getPropName(propName string) {
                 if !fileIsExist(file) {
                         op.IconFile = USER_DEFAULT_ICON
                 } else {
-                        v, ok := readKeyFileValue(file, "User", "Background", KEY_TYPE_STRING)
+                        v, ok := readKeyFileValue(file, "User", "Icon", KEY_TYPE_STRING)
                         if !ok {
                                 op.IconFile = USER_DEFAULT_ICON
                         } else {
