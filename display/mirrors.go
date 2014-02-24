@@ -1,97 +1,76 @@
 package main
 
-import "fmt"
 import "github.com/BurntSushi/xgb/randr"
 import "github.com/BurntSushi/xgb"
 import "strings"
 
 import "github.com/BurntSushi/xgb/xproto"
 
-func (dpy *Display) SetMirrorMode(v bool) {
-	dpy.setPropMirrorMode(v)
-	if v && dpy.MirrorOutput == nil{
-		dpy.SetMirrorOutput(deduceMirrorOutput(dpy.Outputs))
-	}
-}
-
-func (dpy *Display) SetDisplayMode(mode uint8) {
-	dpy.setPropDisplayMode(mode)
-	if len(dpy.Outputs) == 2 {
-		if dpy.MirrorOutput == nil {
-			dpy.SetMirrorOutput(deduceMirrorOutput(dpy.Outputs))
-		}
-		if mode != DisplayModeMirrors {
-			dpy.SetMirrorMode(false)
-			for _, op := range dpy.Outputs {
-				op.pendingConfig = NewPendingConfig(op).SetScale(1, 1)
-			}
-		}
-		switch mode {
-		case DisplayModeOnlyPrimary:
-			for _, op := range dpy.Outputs {
-				if op == dpy.MirrorOutput {
-					op.setOpened(false)
-				} else {
-					op.setOpened(true)
-				}
-			}
-		case DisplayModeOnlySecondary:
-			for _, op := range dpy.Outputs {
-				if op != dpy.MirrorOutput {
-					op.setOpened(false)
-				} else {
-					op.setOpened(true)
-				}
-			}
-		case DisplayModeMirrors:
-			dpy.SetMirrorMode(true)
-			for _, op := range dpy.Outputs {
-				op.SetPos(0, 0)
-				op.setOpened(true)
-			}
-
-		case DisplayModeExtend:
-			height := uint16(0)
-			for _, op := range dpy.Outputs {
-				/*op.setOpened(true)*/
-				height = max(height, NewPendingConfig(op).appliedAllocation().Height)
-				if op != dpy.MirrorOutput {
-					dpy.SetPrimaryOutput(uint32(op.Identify))
-				}
-			}
-			x := uint16(0)
-			for _, op := range dpy.Outputs {
-				op.SetPos(int16(x), int16(height-op.pendingConfig.appliedAllocation().Height))
-				fmt.Println("Set:", op.Name, op.pendingConfig, x)
-				x += op.pendingAllocation().Width
-			}
-		}
-		dpy.ApplyChanged()
-	}
-	fmt.Println("____________________")
-}
-func (dpy *Display) SetMirrorOutput(op *Output) {
-	if op.Opened {
-		op.pendingConfig = NewPendingConfig(op).SetPos(0, 0).SetScale(1, 1).SetRotation(randr.RotationRotate0)
-		dpy.setPropMirrorOutput(op)
-		DPY.ApplyChanged()
-	}
-}
-
-func deduceMirrorOutput(ops []*Output) *Output {
-	// It's a bug if there isn't any Output.
+func guestBuiltIn(ops []*Output) *Output {
+	// It's a bug if there hasn't any Output.
 	var mirrorOP *Output = ops[0]
 	currentType := unknownAtom
 	for _, op := range ops {
-		/*if op.Opened {*/
 		t := getContentorType(op.Identify)
-		if greterConnectorType(t, currentType) {
+		if !greaterConnectorType(t, currentType) {
 			currentType = t
 			mirrorOP = op
 		}
-		/*}*/
 	}
 	return mirrorOP
+}
+
+func getMatchedSize(ops []*Output) (uint16, uint16) {
+	switch len(ops) {
+	case 0:
+		panic("getMatchedSize received an ops with zero length")
+	case 1:
+		bestMode := ops[0].ListModes()[0]
+		return bestMode.Width, bestMode.Height
+	}
+	sameModes := make([]Mode, 0)
+	first := ops[0]
+	for _, modeA := range first.modes {
+		allHave := true
+		for _, op := range ops[1:] {
+			found := false
+			for _, modeB := range op.modes {
+				if modeA.Width == modeB.Width && modeA.Height == modeA.Height {
+					found = true
+					break
+				}
+			}
+			if found == false {
+				allHave = false
+				break
+			}
+		}
+		if allHave {
+			sameModes = append(sameModes, modeA)
+		}
+	}
+
+	bestMode := Mode{}
+	for _, mode := range sameModes {
+		if bestMode.Width+bestMode.Height <= mode.Width+mode.Height {
+			bestMode = mode
+		}
+	}
+	return bestMode.Width, bestMode.Height
+}
+
+func getMirrorSize(ops []*Output) (uint16, uint16) {
+	if len(ops) < 2 {
+		panic("getMirrorSize only should be used when there have more than two outputs")
+	}
+	builtin := guestBuiltIn(ops)
+	oth := make([]*Output, 0)
+	for _, op := range ops {
+		if op != builtin {
+			oth = append(oth, op)
+		}
+	}
+	return getMatchedSize(oth)
 }
 
 var (
@@ -130,7 +109,7 @@ var connectorTypeMap = map[xproto.Atom]int{
 	_TVC4Atom:         4,
 }
 
-func greterConnectorType(a xproto.Atom, b xproto.Atom) bool {
+func greaterConnectorType(a xproto.Atom, b xproto.Atom) bool {
 	if connectorTypeMap[a] > connectorTypeMap[b] {
 		return true
 	} else {

@@ -69,28 +69,16 @@ func (dpy *Display) setPropPrimaryRect(v xproto.Rectangle) {
 	}
 }
 
-func (dpy *Display) setPropMirrorMode(v bool) {
-	if dpy.MirrorMode != v {
-		dpy.MirrorMode = v
-		dbus.NotifyChange(dpy, "MirrorMode")
+func (dpy *Display) setPropDisplayMode(v int16) {
+	if dpy.DisplayMode != v {
+		dpy.DisplayMode = v
+		dbus.NotifyChange(dpy, "DisplayMode")
 	}
 }
 
-func (dpy *Display) setPropDisplayMode(v uint8) {
-	switch v {
-	case DisplayModeOnlyPrimary, DisplayModeOnlySecondary, DisplayModeMirrors, DisplayModeExtend:
-		if dpy.DisplayMode != v {
-			dpy.DisplayMode = v
-			dbus.NotifyChange(dpy, "DisplayMode")
-		}
-	default:
-		dpy.setPropDisplayMode(DisplayModeOnlyPrimary)
-	}
-}
-
-func (dpy *Display) setPropMirrorOutput(v *Output) {
-	if dpy.MirrorOutput != v {
-		dpy.MirrorOutput = v
-		dbus.NotifyChange(dpy, "MirrorOutput")
+func (dpy *Display) setPropBuiltinOutput(v *Output) {
+	if dpy.BuiltinOutput != v {
+		dpy.BuiltinOutput = v
+		dbus.NotifyChange(dpy, "BuiltinOutput")
 	}
 }

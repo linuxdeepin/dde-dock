@@ -16,7 +16,7 @@ func getAtom(c *xgb.Conn, name string) xproto.Atom {
 	}
 	return r.Atom
 }
-func queryAtomName(c *xgb.Conn, atom xproto.Atom)string {
+func queryAtomName(c *xgb.Conn, atom xproto.Atom) string {
 	r, err := xproto.GetAtomName(c, atom).Reply()
 	if err != nil {
 		return ""
@@ -193,6 +193,13 @@ func isCrtcConnected(c *xgb.Conn, crtc randr.Crtc) bool {
 	}
 	if cinfo.Mode == 0 {
 		return false
+	} else if cinfo.NumOutputs == 0 {
+		return false
+	} else {
+		oinfo, _ := randr.GetOutputInfo(X, cinfo.Outputs[0], 0).Reply()
+		if oinfo.Crtc != crtc {
+			return false
+		}
 	}
 	return true
 }

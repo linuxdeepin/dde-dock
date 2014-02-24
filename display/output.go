@@ -158,14 +158,25 @@ func (op *Output) update() {
 }
 func (op *Output) tryOpen() {
 	oinfo, _ := randr.GetOutputInfo(X, op.Identify, LastConfigTimeStamp).Reply()
+	found := false
 	for _, crtc := range oinfo.Crtcs {
 		if isCrtcConnected(X, crtc) == false {
+			found = true
 			_, err := randr.SetCrtcConfig(X, crtc, LastConfigTimeStamp, xproto.TimeCurrentTime, 0, 0, oinfo.Modes[0], randr.RotationRotate0, []randr.Output{op.Identify}).Reply()
 			if err != nil {
 				fmt.Println("TryOpenOutput", op.Identify, "Failed", err)
+			} else {
+			op.crtc = crtc
 			}
 		}
 	}
+	if !found {
+		fmt.Println("Can't open output ", op.Identify, oinfo)
+	}
+}
+
+func (op *Output) destroy() {
+	dbus.UnInstallObject(op)
 }
 
 func NewOutput(dpy *Display, core randr.Output) *Output {
@@ -188,9 +199,6 @@ func NewOutput(dpy *Display, core randr.Output) *Output {
 		Identify:   core,
 		Name:       getOutputName(edidData, string(info.Name)),
 		Brightness: 1, //TODO: init this value
-	}
-	if info.Crtc == 0 {
-		op.tryOpen()
 	}
 	op.update()
 	dbus.InstallOnSession(op)

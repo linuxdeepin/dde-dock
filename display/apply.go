@@ -3,7 +3,6 @@ package main
 import "github.com/BurntSushi/xgb/randr"
 import "github.com/BurntSushi/xgb/xproto"
 import "math"
-import "runtime"
 import "sync"
 import "fmt"
 
@@ -144,7 +143,7 @@ func NewPendingConfigWithoutCache(op *Output) *pendingConfig {
 	c.filterName = tinfo.CurrentFilterName
 	c.filterParams = tinfo.CurrentParams
 
-	if DPY.MirrorMode {
+	if DPY.DisplayMode == DisplayModeMirrors {
 		c.posX, c.posY = 0, 0
 		if cinfo.X < 0 {
 			c.borderCompensationX = uint16(-cinfo.X)
@@ -204,7 +203,7 @@ func (c *pendingConfig) apply() error {
 			outputs = []randr.Output{c.output}
 		}
 
-		if DPY.MirrorMode {
+		if DPY.DisplayMode == DisplayModeMirrors {
 			_, err = randr.SetCrtcConfig(X, c.crtc, xproto.TimeCurrentTime, LastConfigTimeStamp,
 				int16(-c.borderCompensationX), int16(-c.borderCompensationY), c.mode, c.rotation, outputs).Reply()
 		} else {
@@ -348,7 +347,7 @@ func (c *pendingConfig) EnsureSize(width, height uint16, methodHint uint8) *pend
 	minfo := DPY.modes[c.mode]
 	if minfo.Width == width && minfo.Height == height {
 		c.SetScale(1, 1).setCompensation(0, 0)
-		if DPY.MirrorMode {
+		if DPY.DisplayMode == DisplayModeMirrors {
 			c.SetPos(0, 0)
 			c.mask = c.mask | _PendingMaskPos
 		}
@@ -438,69 +437,6 @@ func smallerRectangle(a, b xproto.Rectangle) bool {
 	return ret
 }
 
-func (dpy *Display) ApplyChanged() {
-	changeLock()
-	defer func() {
-		changeUnlock()
-		if err := recover(); err != nil {
-			var buf []byte
-			runtime.Stack(buf, true)
-			fmt.Println("***************************************************ApplyChanged Panic:", err, buf)
-		}
-	}()
-	stopRun := true
-	for _, op := range dpy.Outputs {
-		if op.pendingConfig != nil && op.pendingConfig.mask != 0 {
-			stopRun = false
-			break
-		}
-	}
-	if stopRun {
-		return
-	}
-
-	dpy.stopListen()
-	defer dpy.startListen()
-
-	if dpy.MirrorOutput != nil && dpy.MirrorOutput.pendingConfig != nil {
-		if mainOP := dpy.MirrorOutput; dpy.MirrorMode && mainOP != nil && mainOP.Opened {
-			allocation := mainOP.pendingAllocation()
-			w, h := allocation.Width, allocation.Height
-			fmt.Println("-------MainOP:", mainOP.Name, mainOP.pendingConfig, mainOP.Allocation, mainOP.pendingAllocation(), w, h)
-			for _, op := range dpy.Outputs {
-				if op.Opened && op != mainOP {
-					op.pendingConfig = NewPendingConfig(op).SetPos(0, 0).SetRotation(mainOP.Rotation|mainOP.Reflect).SetScale(1, 1)
-					op.EnsureSize(w, h, EnsureSizeHintAuto)
-				}
-			}
-		}
-	}
-
-	tmpClosedOutput := dpy.adjustScreenSize()
-
-	for _, op := range dpy.Outputs {
-		if op.pendingConfig != nil {
-			if err := op.pendingConfig.apply(); err != nil {
-				panic(fmt.Sprintln("Apply", op.Name, "failed", err))
-				fmt.Println("Apply", op.Name, "failed", err)
-			}
-			op.pendingConfig = nil
-			fmt.Println("Clearn config...", op.Name)
-		}
-	}
-
-	for _, op := range tmpClosedOutput {
-		op.setOpened(true)
-	}
-
-	if dpy.PrimaryOutput != nil {
-		randr.SetOutputPrimary(X, Root, dpy.PrimaryOutput.Identify)
-	} else {
-		randr.SetOutputPrimary(X, Root, 0)
-	}
-
-}
-
 func (dpy *Display) _getoutputs() (ret []string) {
 	for _, op := range dpy.Outputs {
 		info, _ := randr.GetCrtcInfo(X, op.crtc, 0).Reply()
@@ -520,8 +456,7 @@ func (dpy *Display) adjustScreenSize() []*Output {
 	var w, h uint16
 
 	if dpy.DisplayMode == DisplayModeMirrors {
-		alloc := dpy.MirrorOutput.pendingAllocation()
-		w, h = alloc.Width, alloc.Height
+		w, h = getMirrorSize(dpy.Outputs)
 	} else {
 		for _, op := range dpy.Outputs {
 			w, h = boundAggregate(w, h, op.pendingAllocation())
@@ -535,7 +470,7 @@ func (dpy *Display) adjustScreenSize() []*Output {
 		hDif := math.Abs(float64(h) - float64(dpy.Height))
 		if wDif >= 4.0 || hDif >= 4.0 {
 			for _, op := range dpy.Outputs {
-				if op.Opened && op != dpy.MirrorOutput {
+				if op.Opened {
 					info, _ := randr.GetCrtcInfo(X, op.crtc, 0).Reply()
 					cw := max(op.Allocation.Width, info.Width)
 					ch := max(op.Allocation.Height, info.Height)
@@ -591,36 +526,15 @@ func (op *Output) setOpened(v bool) {
 				fmt.Println(err)
 			}
 			op.pendingConfig = nil
+			op.Opened = false
 		} else {
-			oinfo, err := randr.GetOutputInfo(X, op.Identify, LastConfigTimeStamp).Reply()
-			if err != nil {
-				panic(fmt.Sprintln("setOpened failed at GetOutputInfo", err))
-			}
-			found := false
-			fmt.Println("OFINO:", oinfo.NumCrtcs, oinfo.Crtcs)
-			for _, crtc := range oinfo.Crtcs {
-				cinfo, err := randr.GetCrtcInfo(X, crtc, LastConfigTimeStamp).Reply()
-				if err != nil {
-					panic(fmt.Sprintln("setOpened failed at GetCrtcInfo(crtc:%v),%s", crtc, err))
-				}
-				if cinfo.Mode == 0 { //the crtc hasn't been connected with an output
-					_, err = randr.SetCrtcConfig(X, crtc, xproto.TimeCurrentTime, LastConfigTimeStamp, cinfo.X, cinfo.Y, op.bestMode, op.Rotation, []randr.Output{op.Identify}).Reply()
-					if err != nil {
-						panic(fmt.Sprintf("setOpened failed at SetCrtcInfo(crtc:%v):%s\n", crtc, err))
-					}
-					found = true
-					break
-				}
-			}
-			if !found {
-				panic(fmt.Sprintln("Can't open the output:", op.Identify))
-			}
-			//try find best mode with available crtc
+			op.tryOpen()
 		}
 	} else {
 		config := NewPendingConfig(op)
 		op.pendingConfig = nil
 		op.savedConfig = ClonePendingConfig(config)
+		/*op.Opened = false*/
 
 		err := config.SetMode(0).apply()
 		if err != nil {
