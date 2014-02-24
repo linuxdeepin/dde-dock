@@ -13,7 +13,6 @@ all:
 	cd personalization/ && $(run)
 	cd network/ && $(run)
 	cd power/ && $(run)
-	cd xsettings/ && $(run)
 	cd system-info/ && $(run)
 	cd audio/ && $(run)
 
