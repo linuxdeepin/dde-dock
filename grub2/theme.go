@@ -40,7 +40,6 @@ const (
 )
 
 var (
-	_THEME_TEMPLATOR                   = template.New("theme-templator")
 	_UPDATE_THEME_BACKGROUND_ID uint32 = 0
 )
 
@@ -149,6 +148,13 @@ func (theme *Theme) customTheme() {
 		panic(err) // TODO
 	}
 	themeFileContent, err := theme.getCustomizedThemeContent(tplFileContent, theme.tplJsonData.CurrentScheme)
+	if err != nil {
+		logError(err.Error())
+		panic(err)
+	}
+	if len(themeFileContent) == 0 {
+		logError("theme content is empty")
+	}
 	err = ioutil.WriteFile(theme.mainFile, themeFileContent, 0664)
 	if err != nil {
 		logError(err.Error())
@@ -169,6 +175,7 @@ func (theme *Theme) customTheme() {
 }
 
 func (theme *Theme) getCustomizedThemeContent(fileContent []byte, tplData interface{}) ([]byte, error) {
+	_THEME_TEMPLATOR := template.New("theme-templator")
 	tpl, err := _THEME_TEMPLATOR.Parse(string(fileContent))
 	if err != nil {
 		return []byte(""), err
