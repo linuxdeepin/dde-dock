@@ -97,8 +97,15 @@ func (op *UserManager) setPropName(propName string, propValue interface{}) {
                 accountTyte := propValue.(int32)
                 switch accountTyte {
                 case ACCOUNT_TYPE_STANDARD:
+                        admList := getAdministratorList()
+                        if isElementExist(op.UserName, admList) {
+                                deleteUserFromAdmList(op.UserName)
+                        }
                 case ACCOUNT_TYPE_ADMINISTACTOR:
-                        addUserToAdmList(op.UserName)
+                        admList := getAdministratorList()
+                        if !isElementExist(op.UserName, admList) {
+                                addUserToAdmList(op.UserName)
+                        }
                 }
         case "Locked":
                 args := []string{}
@@ -198,6 +205,14 @@ func (op *UserManager) updateUserInfo() {
 func addUserToAdmList(name string) {
         tmps := []string{}
         tmps = append(tmps, "-a")
+        tmps = append(tmps, name)
+        tmps = append(tmps, "sudo")
+        go execCommand(CMD_GPASSWD, tmps)
+}
+
+func deleteUserFromAdmList(name string) {
+        tmps := []string{}
+        tmps = append(tmps, "-d")
         tmps = append(tmps, name)
         tmps = append(tmps, "sudo")
         go execCommand(CMD_GPASSWD, tmps)

@@ -35,22 +35,25 @@ const (
 
 func (op *UserManager) SetUserName(username string) {
         if op.UserName != username {
-                authWithPolkit(POLKIT_CHANGED_OWN_DATA)
+                //authWithPolkit(POLKIT_CHANGED_OWN_DATA)
                 op.setPropName("UserName", username)
+                op.getPropName("UserName")
         }
 }
 
 func (op *UserManager) SetHomeDir(dir string) {
         if op.HomeDir != dir {
-                authWithPolkit(POLKIT_CHANGED_OWN_DATA)
+                //authWithPolkit(POLKIT_CHANGED_OWN_DATA)
                 op.setPropName("HomeDir", dir)
+                op.getPropName("HomeDir")
         }
 }
 
 func (op *UserManager) SetShell(shell string) {
         if op.Shell != shell {
-                authWithPolkit(POLKIT_CHANGED_OWN_DATA)
+                //authWithPolkit(POLKIT_CHANGED_OWN_DATA)
                 op.setPropName("Shell", shell)
+                op.getPropName("Shell")
         }
 }
 
@@ -64,36 +67,43 @@ func (op *UserManager) SetPassword(passwd string) {
 
 func (op *UserManager) SetAutomaticLogin(auto bool) {
         if op.AutomaticLogin != auto {
-                authWithPolkit(POLKIT_SET_LOGIN_OPTION)
+                //authWithPolkit(POLKIT_SET_LOGIN_OPTION)
                 op.setPropName("AutomaticLogin", auto)
+                op.getPropName("AutomaticLogin")
         }
 }
 
 func (op *UserManager) SetAccountType(t int32) {
+        fmt.Println("src type:", op.AccountType)
+        fmt.Println("dest type:", t)
         if op.AccountType != t {
-                authWithPolkit(POLKIT_MANAGER_USER)
+                //authWithPolkit(POLKIT_MANAGER_USER)
                 op.setPropName("AccountType", t)
+                op.getPropName("AccountType")
         }
 }
 
 func (op *UserManager) SetLocked(locked bool) {
         if op.Locked != locked {
-                authWithPolkit(POLKIT_MANAGER_USER)
+                //authWithPolkit(POLKIT_MANAGER_USER)
                 op.setPropName("Locked", locked)
+                op.getPropName("Locked")
         }
 }
 
 func (op *UserManager) SetIconFile(icon string) {
         if op.IconFile != icon {
-                authWithPolkit(POLKIT_CHANGED_OWN_DATA)
+                //authWithPolkit(POLKIT_CHANGED_OWN_DATA)
                 op.setPropName("IconFile", icon)
+                op.getPropName("IconFile")
         }
 }
 
 func (op *UserManager) SetBackgroundFile(bg string) {
         if op.BackgroundFile != bg {
-                authWithPolkit(POLKIT_CHANGED_OWN_DATA)
+                //authWithPolkit(POLKIT_CHANGED_OWN_DATA)
                 op.setPropName("BackgroundFile", bg)
+                op.getPropName("BackgroundFile")
         }
 }
 

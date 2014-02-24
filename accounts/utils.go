@@ -207,8 +207,7 @@ type polkitSubject struct {
 func authWithPolkit(actionId string) {
         var (
                 objPolkit *polkit.Authority
-                //objDbus   *freedbus.DBusDaemon
-                err     error
+                err       error
         )
 
         objPolkit, err = polkit.NewAuthority(POLKIT_PATH)
@@ -217,19 +216,6 @@ func authWithPolkit(actionId string) {
                 panic(err)
         }
 
-        /*
-           objDbus, err = freedbus.NewDBusDaemon("/")
-           if err != nil {
-                   fmt.Println("New DBusDaemon Failed:", err)
-                   panic(err)
-           }
-
-           pid, err1 := objDbus.GetConnectionUnixProcessID(ACCOUNT_DEST)
-           if err1 != nil {
-                   fmt.Println("GetConnectionUnixProcessID Failed:", err1)
-                   panic(err1)
-           }
-        */
         pid := os.Getpid()
         subject := polkitSubject{}
         subject.subjectKind = "unix-process"
@@ -237,15 +223,22 @@ func authWithPolkit(actionId string) {
         subject.subjectDetails["pid"] = uint32(pid)
         subject.subjectDetails["start-time"] = uint64(0)
         details := make(map[string]string)
+        details[""] = ""
         flags := uint32(1)
-        cancelId := fmt.Sprintf("%d", genId())
+        //cancelId := fmt.Sprintf("%d", genId())
+        cancelId := ""
 
-        infaces := []interface{}{}
-        infaces = append(infaces, subject.subjectKind)
-        infaces = append(infaces, subject.subjectDetails)
-        _, err = objPolkit.CheckAuthorization(infaces, actionId, details, flags, cancelId)
-        if err != nil {
-                fmt.Println("CheckAuthorization Failed:", err)
-                panic(err)
+        infaces := []interface{}{
+                subject.subjectKind,
+                subject.subjectDetails,
+        }
+
+        rets, _err := objPolkit.CheckAuthorization(infaces, actionId, details, flags, cancelId)
+        for _, i := range rets {
+                fmt.Println(i)
+        }
+        if _err != nil {
+                fmt.Println("CheckAuthorization Failed:", _err)
+                panic(_err)
         }
 }
