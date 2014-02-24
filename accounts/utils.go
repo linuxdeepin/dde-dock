@@ -31,6 +31,17 @@ import (
         "strings"
 )
 
+var (
+        genId = func() func() uint32 {
+                id := uint32(0)
+                return func() uint32 {
+                        tmp := id
+                        id += 1
+                        return tmp
+                }
+        }()
+)
+
 const (
         POLKIT_DEST = "org.freedesktop.PolicyKit1"
         POLKIT_PATH = "/org/freedesktop/PolicyKit1/Authority"
@@ -213,7 +224,7 @@ func authWithPolkit(actionId string) {
                    panic(err)
            }
 
-           pid, err1 := objDbus.GetConnectionUnixProcessID(actionId)
+           pid, err1 := objDbus.GetConnectionUnixProcessID(ACCOUNT_DEST)
            if err1 != nil {
                    fmt.Println("GetConnectionUnixProcessID Failed:", err1)
                    panic(err1)
@@ -227,10 +238,11 @@ func authWithPolkit(actionId string) {
         subject.subjectDetails["start-time"] = uint64(0)
         details := make(map[string]string)
         flags := uint32(1)
-        cancelId := ""
+        cancelId := fmt.Sprintf("%d", genId())
 
         infaces := []interface{}{}
-        infaces = append(infaces, subject)
+        infaces = append(infaces, subject.subjectKind)
+        infaces = append(infaces, subject.subjectDetails)
         _, err = objPolkit.CheckAuthorization(infaces, actionId, details, flags, cancelId)
         if err != nil {
                 fmt.Println("CheckAuthorization Failed:", err)
