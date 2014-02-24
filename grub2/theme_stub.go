@@ -43,10 +43,8 @@ func (theme *Theme) OnPropertiesChanged(name string, oldv interface{}) {
 	switch name {
 	case "ItemColor":
 		theme.setItemColor(theme.ItemColor)
-		dbus.NotifyChange(theme, "ItemColor")
 	case "SelectedItemColor":
 		theme.setSelectedItemColor(theme.SelectedItemColor)
-		dbus.NotifyChange(theme, "SelectedItemColor")
 	}
 }
 
@@ -92,11 +90,8 @@ func (theme *Theme) doSetBackgroundSourceFile(imageFile string) bool {
 		// background is bright
 		theme.tplJsonData.CurrentScheme = theme.tplJsonData.DarkScheme
 	}
-	theme.ItemColor = theme.tplJsonData.CurrentScheme.ItemColor
-	theme.SelectedItemColor = theme.tplJsonData.CurrentScheme.SelectedItemColor
-	dbus.NotifyChange(theme, "ItemColor")
-	dbus.NotifyChange(theme, "SelectedItemColor")
-	theme.customTheme()
+	theme.setItemColor(theme.tplJsonData.CurrentScheme.ItemColor)
+	theme.setSelectedItemColor(theme.tplJsonData.CurrentScheme.SelectedItemColor)
 
 	logInfo("update background sucess")
 	return true

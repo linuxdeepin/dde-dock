@@ -45,10 +45,8 @@ func (grub *Grub2) OnPropertiesChanged(name string, oldv interface{}) {
 	switch name {
 	case "DefaultEntry":
 		grub.setDefaultEntry(grub.DefaultEntry)
-		dbus.NotifyChange(grub, "DefaultEntry")
 	case "Timeout":
 		grub.setTimeout(grub.Timeout)
-		dbus.NotifyChange(grub, "Timeout")
 	}
 
 	grub.writeSettings()

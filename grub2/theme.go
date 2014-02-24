@@ -101,6 +101,7 @@ func (theme *Theme) setItemColor(itemColor string) {
 		itemColor = theme.tplJsonData.DarkScheme.ItemColor
 	}
 	theme.tplJsonData.CurrentScheme.ItemColor = itemColor
+	dbus.NotifyChange(theme, "ItemColor")
 	theme.customTheme()
 }
 
@@ -110,6 +111,7 @@ func (theme *Theme) setSelectedItemColor(selectedItemColor string) {
 		selectedItemColor = theme.tplJsonData.DarkScheme.SelectedItemColor
 	}
 	theme.tplJsonData.CurrentScheme.SelectedItemColor = selectedItemColor
+	dbus.NotifyChange(theme, "SelectedItemColor")
 	theme.customTheme()
 }
 
@@ -204,4 +206,5 @@ func (theme *Theme) generateBackground() {
 	if err != nil {
 		panic(err)
 	}
+	dbus.NotifyChange(theme, "Background")
 }

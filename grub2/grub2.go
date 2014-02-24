@@ -342,8 +342,6 @@ func (grub *Grub2) parseSettings(fileContent string) error {
 	// reset properties, return default value for the missing property
 	grub.DefaultEntry = grub.getDefaultEntry()
 	grub.Timeout = grub.getTimeout()
-	dbus.NotifyChange(grub, "DefaultEntry")
-	dbus.NotifyChange(grub, "Timeout")
 
 	// reset settings to sync the default values
 	grub.setDefaultEntry(grub.DefaultEntry)
@@ -431,6 +429,7 @@ func (grub *Grub2) getTheme() string {
 
 func (grub *Grub2) setDefaultEntry(title string) {
 	grub.settings["GRUB_DEFAULT"] = title
+	dbus.NotifyChange(grub, "DefaultEntry")
 }
 
 func (grub *Grub2) setTimeout(timeout int32) {
@@ -440,6 +439,7 @@ func (grub *Grub2) setTimeout(timeout int32) {
 		timeoutStr := strconv.FormatInt(int64(timeout), 10)
 		grub.settings["GRUB_TIMEOUT"] = timeoutStr
 	}
+	dbus.NotifyChange(grub, "Timeout")
 }
 
 func (grub *Grub2) setGfxmode(gfxmode string) {
