@@ -22,6 +22,7 @@ type Output struct {
 
 	Identify randr.Output
 	Name     string
+	FullName string
 	Type     uint8
 
 	Mode         Mode
@@ -57,7 +58,6 @@ func (op *Output) SetPos(x, y int16) {
 
 func (op *Output) EnsureSize2(width, height uint16, hint uint8) {
 	op.EnsureSize(width, height, hint)
-	DPY.ApplyChanged()
 }
 func (op *Output) EnsureSize(width, height uint16, hint uint8) {
 	if !op.Opened {
@@ -86,7 +86,6 @@ func (op *Output) EnsureSize(width, height uint16, hint uint8) {
 
 func (op *Output) SetMode(id uint32) {
 	op.pendingConfig = NewPendingConfig(op).SetMode(randr.Mode(id))
-	DPY.ApplyChanged()
 }
 
 func (op *Output) Debug() string {
@@ -166,7 +165,7 @@ func (op *Output) tryOpen() {
 			if err != nil {
 				fmt.Println("TryOpenOutput", op.Identify, "Failed", err)
 			} else {
-			op.crtc = crtc
+				op.crtc = crtc
 			}
 		}
 	}
@@ -197,7 +196,8 @@ func NewOutput(dpy *Display, core randr.Output) *Output {
 
 	op := &Output{
 		Identify:   core,
-		Name:       getOutputName(edidData, string(info.Name)),
+		Name:       string(info.Name),
+		FullName:   getOutputName(edidData, string(info.Name)),
 		Brightness: 1, //TODO: init this value
 	}
 	op.update()

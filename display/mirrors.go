@@ -94,13 +94,13 @@ var (
 
 var connectorTypeMap = map[xproto.Atom]int{
 	_PanelAtom:        0,
-	_DisplayPort:      0,
 	_VGAAtom:          1,
 	_DVIAtom:          2,
 	_DVIIAtom:         2,
 	_DVIAAtom:         2,
 	_DVIDAtom:         2,
 	_HDMIAtom:         3,
+	_DisplayPort:      3,
 	_TVAtom:           4,
 	_TVCompositeAtom:  4,
 	_TVSVidoeAtom:     4,
@@ -138,6 +138,8 @@ func getContentorType(op randr.Output) xproto.Atom {
 	case strings.Contains(string(oinfo.Name), "VGA"):
 		return _VGAAtom
 	case strings.Contains(string(oinfo.Name), "LVDS"), strings.Contains(string(oinfo.Name), "LCD"), strings.Contains(string(oinfo.Name), "Lvds"):
+		return _PanelAtom
+	case strings.Contains(string(oinfo.Name), "eDP"):
 		return _PanelAtom
 	case strings.Contains(string(oinfo.Name), "DP"):
 		return _DisplayPort

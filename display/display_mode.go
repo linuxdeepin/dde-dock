@@ -6,22 +6,22 @@ import (
 )
 
 const (
+	DisplayModeUnknow = -100
 	DisplayModeMirrors = -1
 	DisplayModeCustom  = 0
 	DisplayModeOnlyOne = 1
 )
 
 func (dpy *Display) SetDisplayMode(mode int16) {
-	// TODO: rewrite
-	dpy.setPropDisplayMode(mode)
-	dpy.ApplyChanged()
-}
+	if mode == dpy.DisplayMode {
+		return
+	}
 
-func (dpy *Display) ApplyChanged() {
+	dpy.setPropDisplayMode(mode)
+
 	if dpy.DisplayMode == DisplayModeMirrors {
 		w, h := getMirrorSize(DPY.Outputs)
 		builtIn := guestBuiltIn(dpy.Outputs)
-		dpy.ApplyChanged2()
 		for _, op := range dpy.Outputs {
 			op.setOpened(true)
 			op.SetPos(0, 0)
@@ -29,18 +29,23 @@ func (dpy *Display) ApplyChanged() {
 				op.EnsureSize(w, h, EnsureSizeHintAuto)
 			}
 		}
-		dpy.ApplyChanged2()
 		fmt.Println("GetMirrorSize:", w, h)
 		fmt.Println("Mirrors mode...")
 	} else if dpy.DisplayMode == DisplayModeCustom {
-		x := int16(0)
-		for _, op := range dpy.Outputs {
-			op.setOpened(true)
-			op.SetPos(x, 0)
-			fmt.Println("Set:", op.Identify, x, 0)
-			x += int16(op.pendingAllocation().Width)
+		for _, config := range dpy.configuration.Outputs {
+			for _, op := range dpy.Outputs {
+				if op.Name == config.Name {
+					op.setOpened(config.Enabled)
+					op.SetPos(config.X, config.Y)
+					if config.Primary {
+						dpy.PrimaryOutput = op
+					}
+					op.setReflect(config.Reflect)
+					op.setRotation(config.Rotation)
+					op.SetMode(uint32(guestMode(op, config.Width, config.Height, config.RefreshRate)))
+				}
+			}
 		}
-		dpy.ApplyChanged2()
 		fmt.Println("Cusstom mode...")
 	} else if dpy.DisplayMode >= DisplayModeOnlyOne && int(dpy.DisplayMode) <= len(dpy.Outputs) {
 		reserveed := dpy.Outputs[dpy.DisplayMode-1]
@@ -51,11 +56,12 @@ func (dpy *Display) ApplyChanged() {
 				op.setOpened(false)
 			}
 		}
-		dpy.ApplyChanged2()
 	}
+
+	dpy.ApplyChanged()
 }
 
-func (dpy *Display) ApplyChanged2() {
+func (dpy *Display) ApplyChanged() {
 	changeLock()
 	defer func() {
 		changeUnlock()

@@ -42,7 +42,8 @@ type Display struct {
 	DisplayMode   int16
 	BuiltinOutput *Output
 
-	listening bool
+	listening     bool
+	configuration DisplayConfiguration
 }
 
 func initDisplay() *Display {
@@ -50,11 +51,11 @@ func initDisplay() *Display {
 	dbus.InstallOnSession(dpy)
 	DPY = dpy
 
+	dpy.DisplayMode = DisplayModeUnknow
 	dpy.update()
 
-	// display mode should first use saved configure
-	/*dpy.setPropDisplayMode(DisplayModeMirrors)*/
-	dpy.ApplyChanged()
+	dpy.configuration = LoadDisplayConfiguration(dpy)
+	dpy.SetDisplayMode(dpy.configuration.DisplayMode)
 
 	randr.SelectInput(X, Root, randr.NotifyMaskOutputChange|randr.NotifyMaskOutputProperty|randr.NotifyMaskCrtcChange|randr.NotifyMaskScreenChange)
 	dpy.startListen()
@@ -130,6 +131,11 @@ func (dpy *Display) update() {
 		fmt.Println("PrimaryOutput:", op, dpy.PrimaryRect)
 	}
 	dpy.adjustScreenSize()
+
+	if dpy.DisplayMode == DisplayModeCustom {
+		dpy.configuration = GenerateDefaultConfig(dpy)
+		dpy.configuration.save()
+	}
 }
 
 func (dpy *Display) Reset() {

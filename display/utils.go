@@ -441,3 +441,12 @@ func calcBound2(m render.Transform, rotation uint16, x, y float32, width, height
 	y2 = max(y2, ty2)
 	return
 }
+
+func guestMode(op *Output, w, h uint16, rate float64) randr.Mode {
+	for _, m := range op.ListModes() {
+		if m.Width == w && m.Height == h && m.Rate == rate {
+			return randr.Mode(m.ID)
+		}
+	}
+	return 0
+}
