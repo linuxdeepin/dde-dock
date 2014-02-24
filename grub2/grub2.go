@@ -40,7 +40,7 @@ import (
 const (
 	_GRUB_MENU            = "/boot/grub/grub.cfg"
 	_GRUB_CONFIG          = "/etc/default/grub"
-	_GRUB_MKCONFIG_EXE    = "/usr/sbin/grub-mkconfig"
+	_GRUB_UPDATE_EXE      = "/usr/sbin/update-grub"
 	_GRUB_TIMEOUT_DISABLE = -2
 	_GRUB_CACHE_FILE      = "/var/cache/dde-daemon/grub2.json"
 )
@@ -218,7 +218,7 @@ func (grub *Grub2) writeCacheConfig() (err error) {
 
 func (grub *Grub2) generateGrubConfig() (err error) {
 	logInfo("start to generate a new grub configuration file")
-	_, stderr, err := execAndWait(30, _GRUB_MKCONFIG_EXE, "-o", _GRUB_MENU)
+	_, stderr, err := execAndWait(30, _GRUB_UPDATE_EXE)
 	logInfo("process output: %s", stderr)
 	return err
 	if err != nil {
