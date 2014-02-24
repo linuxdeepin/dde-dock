@@ -51,19 +51,19 @@ func unquoteString(str string) string {
 	return str
 }
 
-// TODO move to dde-api/os
-func execAndWait(timeout int, name string, arg ...string) error {
+// TODO move to go-dlib/os, dde-api/os
+func execAndWait(timeout int, name string, arg ...string) (stdout, stderr string, err error) {
 	cmd := exec.Command(name, arg...)
-	var stdout, stderr bytes.Buffer
-	cmd.Stdout = &stdout
-	cmd.Stderr = &stderr
-	err := cmd.Start()
+	var buf_stdout, buf_stderr bytes.Buffer
+	cmd.Stdout = &buf_stdout
+	cmd.Stderr = &buf_stderr
+	err = cmd.Start()
 	if err != nil {
 		logError(err.Error())
-		return err
+		return
 	}
 
-	// wait for process finish
+	// wait for process finished
 	done := make(chan error)
 	go func() {
 		done <- cmd.Wait()
@@ -71,21 +71,21 @@ func execAndWait(timeout int, name string, arg ...string) error {
 
 	select {
 	case <-time.After(time.Duration(timeout) * time.Second):
-		if err := cmd.Process.Kill(); err != nil {
+		if err = cmd.Process.Kill(); err != nil {
 			logError(err.Error())
-			return err
+			return
 		}
 		<-done
 		logInfo("time out and process was killed")
-	case err := <-done:
-		logInfo("process output: %s", stdout.String())
+	case err = <-done:
+		stdout = buf_stdout.String()
+		stderr = buf_stderr.String()
 		if err != nil {
-			logError("process error output: %s", stderr.String())
 			logError("process done with error = %v", err)
-			return err
+			return
 		}
 	}
-	return nil
+	return
 }
 
 func stringInSlice(a string, list []string) bool {

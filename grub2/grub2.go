@@ -218,7 +218,8 @@ func (grub *Grub2) writeCacheConfig() (err error) {
 
 func (grub *Grub2) generateGrubConfig() (err error) {
 	logInfo("start to generate a new grub configuration file")
-	err = execAndWait(30, _GRUB_MKCONFIG_EXE, "-o", _GRUB_MENU)
+	_, stderr, err := execAndWait(30, _GRUB_MKCONFIG_EXE, "-o", _GRUB_MENU)
+	logInfo("process output: %s", stderr)
 	return err
 	if err != nil {
 		logError("generate grub configuration failed")
