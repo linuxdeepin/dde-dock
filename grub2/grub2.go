@@ -136,6 +136,8 @@ func (grub *Grub2) resetGfxmodeIfNeed() {
 	gfxmode := fmt.Sprintf("%dx%d;auto", w, h)
 	if gfxmode != grub.getGfxmode() || w != grub.config.LastScreenWidth || h != grub.config.LastScreenHeight {
 		grub.setGfxmode(gfxmode)
+		grub.writeSettings()
+
 		grub.config.LastScreenWidth = w
 		grub.config.LastScreenHeight = h
 
