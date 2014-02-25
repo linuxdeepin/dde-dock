@@ -61,7 +61,7 @@ func execAndWait(timeout int, name string, arg ...string) (stdout, stderr string
 	cmd.Stderr = &buf_stderr
 	err = cmd.Start()
 	if err != nil {
-		logError(err.Error())
+		_LOGGER.Error(err.Error())
 		return
 	}
 
@@ -74,16 +74,16 @@ func execAndWait(timeout int, name string, arg ...string) (stdout, stderr string
 	select {
 	case <-time.After(time.Duration(timeout) * time.Second):
 		if err = cmd.Process.Kill(); err != nil {
-			logError(err.Error())
+			_LOGGER.Error(err.Error())
 			return
 		}
 		<-done
-		logInfo("time out and process was killed")
+		_LOGGER.Info("time out and process was killed")
 	case err = <-done:
 		stdout = buf_stdout.String()
 		stderr = buf_stderr.String()
 		if err != nil {
-			logError("process done with error = %v", err)
+			_LOGGER.Error("process done with error = %v", err)
 			return
 		}
 	}
@@ -132,7 +132,7 @@ func unTarGz(archiveFile string, destDir string, prefix string) error {
 
 		fi := hdr.FileInfo()
 		destFullPath := destDir + hdr.Name
-		logInfo("UnTarGzing file: " + hdr.Name)
+		_LOGGER.Info("UnTarGzing file: " + hdr.Name)
 
 		if hdr.Typeflag == tar.TypeDir {
 			// create dir
@@ -280,7 +280,7 @@ func getPrimaryScreenBestResolution() (w uint16, h uint16) {
 		}
 	}
 
-	logInfo("primary screen's best resolution is %dx%d", w, h)
+	_LOGGER.Info("primary screen's best resolution is %dx%d", w, h)
 	return
 }
 

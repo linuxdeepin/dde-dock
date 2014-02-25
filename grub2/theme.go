@@ -83,7 +83,7 @@ func (theme *Theme) load() {
 	var err error
 	theme.tplJsonData, err = theme.getThemeTplJsonData()
 	if err != nil {
-		panic(err) // TODO
+		panic(err)
 	}
 
 	// init properties
@@ -118,7 +118,7 @@ func (theme *Theme) setSelectedItemColor(selectedItemColor string) {
 func (theme *Theme) getThemeTplJsonData() (*TplJsonData, error) {
 	fileContent, err := ioutil.ReadFile(theme.jsonFile)
 	if err != nil {
-		logError(err.Error())
+		_LOGGER.Error(err.Error())
 		return nil, err
 	}
 
@@ -126,7 +126,7 @@ func (theme *Theme) getThemeTplJsonData() (*TplJsonData, error) {
 	if err != nil {
 		return nil, err
 	}
-	logInfo("theme template json data: %v", tplJsonData)
+	_LOGGER.Info("theme template json data: %v", tplJsonData)
 	return tplJsonData, nil
 }
 
@@ -134,7 +134,7 @@ func (theme *Theme) getTplJsonData(fileContent []byte) (*TplJsonData, error) {
 	tplJsonData := &TplJsonData{}
 	err := json.Unmarshal(fileContent, tplJsonData)
 	if err != nil {
-		logError(err.Error())
+		_LOGGER.Error(err.Error())
 		return nil, err
 	}
 	return tplJsonData, nil
@@ -142,38 +142,37 @@ func (theme *Theme) getTplJsonData(fileContent []byte) (*TplJsonData, error) {
 
 // TODO split
 func (theme *Theme) customTheme() {
-	logInfo("custom theme: %v", theme.tplJsonData.CurrentScheme)
+	_LOGGER.Info("custom theme: %v", theme.tplJsonData.CurrentScheme)
 
 	// generate a new theme.txt from template
 	tplFileContent, err := ioutil.ReadFile(theme.tplFile)
 	if err != nil {
-		logError(err.Error())
-		panic(err) // TODO
+		_LOGGER.Error(err.Error())
+		return
 	}
 	themeFileContent, err := theme.getCustomizedThemeContent(tplFileContent, theme.tplJsonData.CurrentScheme)
 	if err != nil {
-		logError(err.Error())
-		panic(err)
+		_LOGGER.Error(err.Error())
+		return
 	}
 	if len(themeFileContent) == 0 {
-		logError("theme content is empty")
+		_LOGGER.Error("theme content is empty")
 	}
 	err = ioutil.WriteFile(theme.mainFile, themeFileContent, 0664)
 	if err != nil {
-		logError(err.Error())
-		panic(err)
+		_LOGGER.Error(err.Error())
+		return
 	}
 
 	// store the customized key-values to json file
 	jsonContent, err := json.Marshal(theme.tplJsonData)
 	if err != nil {
-		logError(err.Error())
-		panic(err)
+		return
 	}
 	err = ioutil.WriteFile(theme.jsonFile, jsonContent, 0664)
 	if err != nil {
-		logError(err.Error())
-		panic(err)
+		_LOGGER.Error(err.Error())
+		return
 	}
 }
 
@@ -198,15 +197,17 @@ func (theme *Theme) generateBackground() {
 	screenWidth, screenHeight := getPrimaryScreenBestResolution()
 	imgWidth, imgHeight, err := graph.GetImageSize(theme.bgSrcFile)
 	if err != nil {
-		panic(err)
+		_LOGGER.Error(err.Error())
+		return
 	}
-	logInfo("source background size %dx%d", imgWidth, imgHeight)
+	_LOGGER.Info("source background size %dx%d", imgWidth, imgHeight)
 
 	w, h := getImgClipSizeByResolution(screenWidth, screenHeight, imgWidth, imgHeight)
-	logInfo("background size %dx%d", w, h)
+	_LOGGER.Info("background size %dx%d", w, h)
 	err = graph.ClipPNG(theme.bgSrcFile, theme.bgFile, 0, 0, w, h)
 	if err != nil {
-		panic(err)
+		_LOGGER.Error(err.Error())
+		return
 	}
 	dbus.NotifyChange(theme, "Background")
 }

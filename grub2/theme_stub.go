@@ -37,7 +37,7 @@ func (theme *Theme) GetDBusInfo() dbus.DBusInfo {
 func (theme *Theme) OnPropertiesChanged(name string, oldv interface{}) {
 	defer func() {
 		if err := recover(); err != nil {
-			logError("%v", err)
+			_LOGGER.Error("%v", err)
 		}
 	}()
 	switch name {
@@ -69,7 +69,7 @@ func (theme *Theme) doSetBackgroundSourceFile(imageFile string) bool {
 		return false
 	}
 	if w < 800 || h < 600 {
-		logError("image size is too small") // TODO
+		_LOGGER.Error("image size is too small") // TODO
 		return false
 	}
 
@@ -93,6 +93,6 @@ func (theme *Theme) doSetBackgroundSourceFile(imageFile string) bool {
 	theme.setItemColor(theme.tplJsonData.CurrentScheme.ItemColor)
 	theme.setSelectedItemColor(theme.tplJsonData.CurrentScheme.SelectedItemColor)
 
-	logInfo("update background sucess")
+	_LOGGER.Info("update background sucess")
 	return true
 }

@@ -24,6 +24,7 @@ package main
 import (
 	"bufio"
 	"dlib/dbus"
+	"dlib/logger"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -46,6 +47,7 @@ const (
 )
 
 var (
+	_LOGGER, _      = logger.New("dde-daemon/grub2")
 	_ENTRY_REGEXP_1 = regexp.MustCompile(`^ *(menuentry|submenu) +'(.*?)'.*$`)
 	_ENTRY_REGEXP_2 = regexp.MustCompile(`^ *(menuentry|submenu) +"(.*?)".*$`)
 )
@@ -158,7 +160,7 @@ func (grub *Grub2) clearSettings() {
 func (grub *Grub2) readEntries() error {
 	fileContent, err := ioutil.ReadFile(_GRUB_MENU_FILE)
 	if err != nil {
-		logError(err.Error())
+		_LOGGER.Error(err.Error())
 		return err
 	}
 	return grub.parseEntries(string(fileContent))
@@ -167,7 +169,7 @@ func (grub *Grub2) readEntries() error {
 func (grub *Grub2) readSettings() error {
 	fileContent, err := ioutil.ReadFile(_GRUB_CONFIG_FILE)
 	if err != nil {
-		logError(err.Error())
+		_LOGGER.Error(err.Error())
 		return err
 	}
 	return grub.parseSettings(string(fileContent))
@@ -179,7 +181,7 @@ func (grub *Grub2) writeSettings() error {
 	fileContent := grub.getSettingContentToSave()
 	err := ioutil.WriteFile(_GRUB_CONFIG_FILE, []byte(fileContent), 0664)
 	if err != nil {
-		logError(err.Error())
+		_LOGGER.Error(err.Error())
 		return err
 	}
 	return nil
@@ -188,12 +190,12 @@ func (grub *Grub2) writeSettings() error {
 func (grub *Grub2) readCacheConfig() (err error) {
 	fileContent, err := ioutil.ReadFile(_GRUB_CACHE_FILE)
 	if err != nil {
-		logError(err.Error())
+		_LOGGER.Error(err.Error())
 		return
 	}
 	err = json.Unmarshal(fileContent, &grub.config)
 	if err != nil {
-		logError(err.Error())
+		_LOGGER.Error(err.Error())
 		return
 	}
 	return
@@ -207,12 +209,12 @@ func (grub *Grub2) writeCacheConfig() (err error) {
 	}
 	fileContent, err := json.Marshal(grub.config)
 	if err != nil {
-		logError(err.Error())
+		_LOGGER.Error(err.Error())
 		return
 	}
 	err = ioutil.WriteFile(_GRUB_CACHE_FILE, fileContent, 0644)
 	if err != nil {
-		logError(err.Error())
+		_LOGGER.Error(err.Error())
 		return
 	}
 	return
@@ -220,14 +222,14 @@ func (grub *Grub2) writeCacheConfig() (err error) {
 
 // TODO split
 func (grub *Grub2) generateGrubConfig() (err error) {
-	logInfo("start to generate a new grub configuration file")
+	_LOGGER.Info("start to generate a new grub configuration file")
 	_, stderr, err := execAndWait(30, _GRUB_UPDATE_EXE)
-	logInfo("process output: %s", stderr)
+	_LOGGER.Info("process output: %s", stderr)
 	return err
 	if err != nil {
-		logError("generate grub configuration failed")
+		_LOGGER.Error("generate grub configuration failed")
 	} else {
-		logInfo("generate grub configuration finished")
+		_LOGGER.Info("generate grub configuration finished")
 	}
 	return
 }
@@ -250,14 +252,14 @@ func (grub *Grub2) parseEntries(fileContent string) error {
 			if inMenuEntry {
 				grub.clearEntries()
 				s := "a 'menuentry' directive was detected inside the scope of a menuentry"
-				logError(s)
+				_LOGGER.Error(s)
 				return errors.New(s)
 			}
 			title, ok := grub.parseTitle(line)
 			if ok {
 				entry := Entry{MENUENTRY, title, numCount[level], parentMenus[len(parentMenus)-1]}
 				grub.entries = append(grub.entries, entry)
-				logInfo("found entry: [%d] %s %s", level, strings.Repeat(" ", level*2), title)
+				_LOGGER.Info("found entry: [%d] %s %s", level, strings.Repeat(" ", level*2), title)
 
 				numCount[level]++
 				inMenuEntry = true
@@ -265,14 +267,14 @@ func (grub *Grub2) parseEntries(fileContent string) error {
 			} else {
 				grub.clearEntries()
 				s := fmt.Sprintf("parse entry title failed from: %q", line)
-				logError(s)
+				_LOGGER.Error(s)
 				return errors.New(s)
 			}
 		} else if strings.HasPrefix(line, "submenu ") {
 			if inMenuEntry {
 				grub.clearEntries()
 				s := "a 'submenu' directive was detected inside the scope of a menuentry"
-				logError(s)
+				_LOGGER.Error(s)
 				return errors.New(s)
 			}
 			title, ok := grub.parseTitle(line)
@@ -280,7 +282,7 @@ func (grub *Grub2) parseEntries(fileContent string) error {
 				entry := Entry{SUBMENU, title, numCount[level], parentMenus[len(parentMenus)-1]}
 				grub.entries = append(grub.entries, entry)
 				parentMenus = append(parentMenus, &entry)
-				logInfo("found entry: [%d] %s %s", level, strings.Repeat(" ", level*2), title)
+				_LOGGER.Info("found entry: [%d] %s %s", level, strings.Repeat(" ", level*2), title)
 
 				level++
 				numCount[level] = 0
@@ -288,7 +290,7 @@ func (grub *Grub2) parseEntries(fileContent string) error {
 			} else {
 				grub.clearEntries()
 				s := fmt.Sprintf("parse entry title failed from: %q", line)
-				logError(s)
+				_LOGGER.Error(s)
 				return errors.New(s)
 			}
 		} else if line == "}" {
@@ -306,7 +308,7 @@ func (grub *Grub2) parseEntries(fileContent string) error {
 		}
 	}
 	if err := sl.Err(); err != nil {
-		logError(err.Error())
+		_LOGGER.Error(err.Error())
 		return err
 	}
 	return nil
@@ -335,11 +337,11 @@ func (grub *Grub2) parseSettings(fileContent string) error {
 			kv := strings.SplitN(line, "=", 2)
 			key, value := kv[0], kv[1]
 			grub.settings[key] = unquoteString(value)
-			logInfo("found setting: %s=%s", kv[0], kv[1])
+			_LOGGER.Info("found setting: %s=%s", kv[0], kv[1])
 		}
 	}
 	if err := s.Err(); err != nil {
-		logError(err.Error())
+		_LOGGER.Error(err.Error())
 		return err
 	}
 
@@ -363,7 +365,7 @@ func (grub *Grub2) getEntryTitles() ([]string, error) {
 	}
 	if len(entryTitles) == 0 {
 		s := fmt.Sprintf("there is no menu entry in %s", _GRUB_MENU_FILE)
-		logError(s)
+		_LOGGER.Error(s)
 		return entryTitles, errors.New(s)
 	}
 	return entryTitles, nil
@@ -396,7 +398,7 @@ func (grub *Grub2) getDefaultEntry() string {
 	// if GRUB_DEFAULE exist and is a index number, return its entry name
 	index, err := strconv.ParseInt(value, 10, 32)
 	if err != nil {
-		logError(`invalid number, settings["GRUB_DEFAULT"]=%s`, grub.settings["GRUB_DEFAULT"])
+		_LOGGER.Error(`invalid number, settings["GRUB_DEFAULT"]=%s`, grub.settings["GRUB_DEFAULT"])
 		index = 0
 	}
 	if index >= 0 && int(index) < len(simpleEntryTitles) {
@@ -413,7 +415,7 @@ func (grub *Grub2) getTimeout() int32 {
 
 	timeout, err := strconv.ParseInt(grub.settings["GRUB_TIMEOUT"], 10, 32)
 	if err != nil {
-		logError(`valid value, settings["GRUB_TIMEOUT"]=%s`, grub.settings["GRUB_TIMEOUT"])
+		_LOGGER.Error(`valid value, settings["GRUB_TIMEOUT"]=%s`, grub.settings["GRUB_TIMEOUT"])
 		return _GRUB_TIMEOUT_DISABLE
 	}
 	return int32(timeout)
@@ -467,9 +469,7 @@ func (grub *Grub2) getSettingContentToSave() string {
 func main() {
 	defer func() {
 		if err := recover(); err != nil {
-			relerr := err.(error)
-			ioutil.WriteFile("/tmp/grub2.log", []byte(relerr.Error()), 0664) // TODO test
-			logFatal("grub2 failed: %v", err)
+			_LOGGER.Fatal("%v", err)
 		}
 	}()
 

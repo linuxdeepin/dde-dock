@@ -38,10 +38,10 @@ func (grub *Grub2) GetDBusInfo() dbus.DBusInfo {
 func (grub *Grub2) OnPropertiesChanged(name string, oldv interface{}) {
 	defer func() {
 		if err := recover(); err != nil {
-			logError("%v", err)
+			_LOGGER.Error("%v", err)
 		}
 	}()
-	logInfo("OnPropertiesChanged: " + name)
+	_LOGGER.Info("OnPropertiesChanged: " + name)
 	switch name {
 	case "DefaultEntry":
 		grub.setDefaultEntry(grub.DefaultEntry)
@@ -63,7 +63,7 @@ func (grub *Grub2) GetSimpleEntryTitles() ([]string, error) {
 	}
 	if len(entryTitles) == 0 {
 		s := fmt.Sprintf("there is no menu entry in %s", _GRUB_MENU_FILE)
-		logError(s)
+		_LOGGER.Error(s)
 		return entryTitles, errors.New(s)
 	}
 	return entryTitles, nil
