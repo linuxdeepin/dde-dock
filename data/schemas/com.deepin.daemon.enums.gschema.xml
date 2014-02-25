@@ -1,0 +1,11 @@
+<schemalist>
+<enum id='com.deepin.daemon.GsdPowerActionType'>
+    <value nick='blank' value='0'/>
+    <value nick='suspend' value='1'/>
+    <value nick='shutdown' value='2'/>
+    <value nick='hibernate' value='3'/>
+    <value nick='interactive' value='4'/>
+    <value nick='nothing' value='5'/>
+    <value nick='logout' value='6'/>
+  </enum>
+</schemalist>
