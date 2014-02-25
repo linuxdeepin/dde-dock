@@ -86,8 +86,10 @@ func (theme *Theme) doSetBackgroundSourceFile(imageFile string) bool {
 		// background is bright
 		theme.tplJsonData.CurrentScheme = theme.tplJsonData.DarkScheme
 	}
-	theme.setItemColor(theme.tplJsonData.CurrentScheme.ItemColor)
-	theme.setSelectedItemColor(theme.tplJsonData.CurrentScheme.SelectedItemColor)
+	theme.ItemColor = theme.tplJsonData.CurrentScheme.ItemColor
+	theme.SelectedItemColor = theme.tplJsonData.CurrentScheme.SelectedItemColor
+	theme.setItemColor(theme.ItemColor)
+	theme.setSelectedItemColor(theme.SelectedItemColor)
 
 	_LOGGER.Info("update background sucess")
 	return true
