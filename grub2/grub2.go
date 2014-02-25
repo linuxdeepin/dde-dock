@@ -23,7 +23,7 @@ package main
 
 import (
 	"bufio"
-	grub2ext "dbus/com/deepin/api/grub2ext"
+	grub2ext "dbus/com/deepin/api/grub2"
 	"dlib/dbus"
 	"dlib/logger"
 	"encoding/json"
