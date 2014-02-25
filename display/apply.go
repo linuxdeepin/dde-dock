@@ -193,7 +193,7 @@ func (c *pendingConfig) apply() error {
 			return fmt.Errorf("PendingConfig apply failed when SetCrtcTransform: %v %v", err, c)
 		}
 	}
-	if c.mask&_PendingMaskBacklight == _PendingMaskBacklight {
+	if c.mask&_PendingMaskBacklight == _PendingMaskBacklight && c.supportBacklight {
 		setOutputBacklight(c.output, c.backlight)
 	}
 

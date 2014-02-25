@@ -60,17 +60,24 @@ func getMatchedSize(ops []*Output) (uint16, uint16) {
 }
 
 func getMirrorSize(ops []*Output) (uint16, uint16) {
-	if len(ops) < 2 {
-		panic("getMirrorSize only should be used when there have more than two outputs")
-	}
-	builtin := guestBuiltIn(ops)
-	oth := make([]*Output, 0)
-	for _, op := range ops {
-		if op != builtin {
-			oth = append(oth, op)
+	switch len(ops) {
+	case 0:
+		return 0, 0
+	case 1:
+		return ops[0].Mode.Width, ops[0].Mode.Height
+	default:
+		builtin := guestBuiltIn(ops)
+		oth := make([]*Output, 0)
+		for _, op := range ops {
+			if op != builtin && op.Opened {
+				oth = append(oth, op)
+			}
 		}
+		if len(oth) == 0 {
+			return builtin.Mode.Width, builtin.Mode.Height
+		}
+		return getMatchedSize(oth)
 	}
-	return getMatchedSize(oth)
 }
 
 var (

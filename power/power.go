@@ -1,9 +1,23 @@
 package main
 
+// #cgo CFLAGS: -DLIBEXECDIR=""
 // #cgo amd64 386 CFLAGS: -g -Wall
-// #cgo pkg-config:glib-2.0 x11 xext gtk+-3.0 gdk-3.0
+// #cgo pkg-config:glib-2.0 gtk+-3.0 x11 xext xtst xi gnome-desktop-3.0 upower-glib libnotify libcanberra-gtk3 gudev-1.0
+// #cgo LDFLAGS: -lm
 // #define GNOME_DESKTOP_USE_UNSTABLE_API
 // #include "gnome-idle-monitor.h"
+// #include "gsd-power-manager.h"
+// int deepin_power_manager_start()
+// {
+//      GsdPowerManager *manager = gsd_power_manager_new();
+//      GError *error = NULL;
+//      gtk_init(0,NULL);
+//      g_setenv("G_MESSAGES_DEBUG","all",FALSE);
+//      notify_init("gsd-power-manager");
+//      XInitThreads();
+//      gsd_power_manager_start(manager,&error);
+//      return 0;
+// }
 import "C"
 
 import (
@@ -12,7 +26,10 @@ import (
 	"dlib/dbus"
 	"dlib/dbus/property"
 	"dlib/gio-2.0"
+	"fmt"
+	//"os"
 	"regexp"
+	//"unsafe"
 )
 
 type dbusBattery struct {
@@ -23,22 +40,26 @@ type dbusBattery struct {
 }
 
 const (
-	power_bus_name               = "com.deepin.daemon.Power"
-	power_object_path            = "/com/deepin/daemon/Power"
-	power_interface              = "com.deepin.daemon.Power"
-	schema_gsettings_power       = "org.gnome.settings-daemon.plugins.power"
-	schema_gsettings_screensaver = "org.gnome.desktop.screensaver"
+	power_bus_name    = "com.deepin.daemon.Power"
+	power_object_path = "/com/deepin/daemon/Power"
+	power_interface   = "com.deepin.daemon.Power"
+
+	schema_gsettings_power               = "com.deepin.daemon.power"
+	schema_gsettings_power_settings_id   = "com.deepin.daemon.power.settings"
+	schema_gsettings_power_settings_path = "/com/deepin/daemon/power/profiles/"
+	schema_gsettings_screensaver         = "org.gnome.desktop.screensaver"
 )
 
 type Power struct {
 	//plugins.power keys
+	powerProfile    *gio.Settings
 	powerSettings   *gio.Settings
 	ButtonHibernate *property.GSettingsStringProperty `access:"readwrite"`
 	ButtonPower     *property.GSettingsStringProperty `access:"readwrite"`
 	ButtonSleep     *property.GSettingsStringProperty `access:"readwrite"`
 	ButtonSuspend   *property.GSettingsStringProperty `access:"readwrite"`
 
-	CriticalBatteryAction *property.GSettingsStringProperty `access:"readwrite"`
+	CriticalBatteryAction *property.GSettingsStringProperty `access:"read"`
 	LidCloseAcAction      *property.GSettingsStringProperty `access:"readwrite"`
 	LidCloseBatteryAction *property.GSettingsStringProperty `access:"readwrite"`
 
@@ -53,7 +74,7 @@ type Power struct {
 	SleepInactiveAcType      *property.GSettingsStringProperty `access:"readwrite"`
 	SleepInactiveBatteryType *property.GSettingsStringProperty `access:"readwrite"`
 
-	CurrentPlan *property.GSettingsStringProperty `access:"readwrite"`
+	CurrentProfile *property.GSettingsStringProperty `access:"readwrite"`
 
 	//upower interface
 	upower *upower.Upower
@@ -76,9 +97,17 @@ type Power struct {
 }
 
 func NewPower() (*Power, error) {
-	power := Power{}
+	power := &Power{}
 
-	power.powerSettings = gio.NewSettings(schema_gsettings_power)
+	power.powerProfile = gio.NewSettings(schema_gsettings_power)
+	power.CurrentProfile = property.NewGSettingsStringProperty(
+		power, "CurrentProfile", power.powerProfile,
+		"current-profile")
+
+	power.powerSettings = gio.NewSettingsWithPath(
+		schema_gsettings_power_settings_id,
+		string(schema_gsettings_power_settings_path)+
+			power.CurrentProfile.Get()+"/")
 	power.screensaverSettings = gio.NewSettings(schema_gsettings_screensaver)
 	power.getGsettingsProperty()
 
@@ -99,7 +128,7 @@ func NewPower() (*Power, error) {
 			println("upower battery interface not found\n")
 		}
 	}
-	return &power, nil
+	return power, nil
 }
 
 func (p *Power) GetDBusInfo() dbus.DBusInfo {
@@ -111,8 +140,8 @@ func (p *Power) GetDBusInfo() dbus.DBusInfo {
 }
 
 func (power *Power) getGsettingsProperty() int32 {
-	//power.CurrentPlan = property.NewGSettingsStringProperty(
-	//power, "CurrentPlan", power.powerSettings, "current-plan")
+	power.CurrentProfile = property.NewGSettingsStringProperty(
+		power, "CurrentProfile", power.powerProfile, "current-profile")
 	power.ButtonHibernate = property.NewGSettingsStringProperty(
 		power, "ButtonHibernate", power.powerSettings, "button-hibernate")
 	power.ButtonPower = property.NewGSettingsStringProperty(
@@ -136,8 +165,8 @@ func (power *Power) getGsettingsProperty() int32 {
 		power, "SleepInactiveBatteryTimeout", power.powerSettings, "sleep-inactive-battery-timeout")
 	//power.SleepDisplayAc = property.NewGSettingsIntProperty(
 	//power, "SleepDisplayAc", power.powerSettings, "sleep-display-ac")
-	power.SleepDisplayBattery = property.NewGSettingsIntProperty(
-		power, "SleepDisplayBattery", power.powerSettings, "sleep-display-battery")
+	//power.SleepDisplayBattery = property.NewGSettingsIntProperty(
+	//power, "SleepDisplayBattery", power.powerSettings, "sleep-display-battery")
 
 	power.SleepInactiveAcType = property.NewGSettingsStringProperty(
 		power, "SleepInactiveAcType", power.powerSettings,
@@ -213,12 +242,14 @@ func getUpowerDeviceObjectPath(devices []dbus.ObjectPath) []dbus.ObjectPath {
 }
 
 func main() {
+	C.deepin_power_manager_start()
 	power, err := NewPower()
 	if err != nil {
 		return
 	}
 	dbus.InstallOnSession(power)
 	dbus.DealWithUnhandledMessage()
+	fmt.Print("power module started,looping")
 	dlib.StartLoop()
 	//select {}
 }
