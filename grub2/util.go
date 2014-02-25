@@ -242,20 +242,20 @@ func getPrimaryScreenBestResolution() (w uint16, h uint16) {
 
 	X, err := xgb.NewConn()
 	if err != nil {
-		panic(err)
+		return
 	}
 	err = randr.Init(X)
 	if err != nil {
-		panic(err)
+		return
 	}
 	_, err = randr.QueryVersion(X, 1, 4).Reply()
 	if err != nil {
-		panic(err)
+		return
 	}
 	Root := xproto.Setup(X).DefaultScreen(X).Root
 	resources, err := randr.GetScreenResources(X, Root).Reply()
 	if err != nil {
-		panic(err)
+		return
 	}
 
 	bestModes := make([]uint32, 0)
