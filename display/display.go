@@ -57,6 +57,8 @@ func initDisplay() *Display {
 	dpy.configuration = LoadDisplayConfiguration(dpy)
 	dpy.SetDisplayMode(dpy.configuration.DisplayMode)
 
+	dpy.setPropBuiltinOutput(guestBuiltIn(dpy.Outputs))
+
 	randr.SelectInput(X, Root, randr.NotifyMaskOutputChange|randr.NotifyMaskOutputProperty|randr.NotifyMaskCrtcChange|randr.NotifyMaskScreenChange)
 	dpy.startListen()
 
@@ -112,10 +114,10 @@ func (dpy *Display) update() {
 		dpy.setPropOutputs(ops)
 	}
 
+	dpy.adjustScreenSize()
+
 	{
 		// update primary output and primary rectangle
-		dpy.setPropPrimaryRect(xproto.Rectangle{0, 0, dpy.Width, dpy.Height})
-
 		pinfo, err := randr.GetOutputPrimary(X, Root).Reply()
 		var op *Output
 		if err == nil {
@@ -130,7 +132,8 @@ func (dpy *Display) update() {
 		}
 		fmt.Println("PrimaryOutput:", op, dpy.PrimaryRect)
 	}
-	dpy.adjustScreenSize()
+	{
+	}
 
 	if dpy.DisplayMode == DisplayModeCustom {
 		dpy.configuration = GenerateDefaultConfig(dpy)
@@ -187,9 +190,13 @@ func (dpy *Display) listener() {
 				}
 			}
 		case randr.ScreenChangeNotifyEvent:
-			LastConfigTimeStamp = ee.ConfigTimestamp
-			fmt.Println("BeginUpdate...")
 			dpy.update()
+			if ee.ConfigTimestamp > LastConfigTimeStamp {
+				//output connection changed
+				LastConfigTimeStamp = ee.ConfigTimestamp
+				dpy.setPropBuiltinOutput(guestBuiltIn(dpy.Outputs))
+			}
+			fmt.Println("BeginUpdate...")
 			fmt.Println("endUpdate...")
 		}
 	}
@@ -216,11 +223,12 @@ func (dpy *Display) setScreenSize(width uint16, height uint16) {
 
 func main() {
 	randr.Init(X)
-	ver, err := randr.QueryVersion(X, 1, 4).Reply()
+	ver, err := randr.QueryVersion(X, 1, 3).Reply()
+	fmt.Println("VER:", ver)
 	if err != nil {
 		panic(fmt.Sprintln("randr.QueryVersion error:", err))
 	}
-	if ver.MajorVersion < 1 && ver.MinorVersion < 4 {
+	if ver.MajorVersion != 1 || ver.MinorVersion != 3 {
 		panic(fmt.Sprintln("randr version is too low:", ver.MajorVersion, ver.MinorVersion, "this program require at least randr 1.3"))
 	}
 

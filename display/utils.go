@@ -207,7 +207,7 @@ func isCrtcConnected(c *xgb.Conn, crtc randr.Crtc) bool {
 func supportedBacklight(c *xgb.Conn, output randr.Output) (bool, float64) {
 	prop, err := randr.GetOutputProperty(c, output, backlightAtom, xproto.AtomAny, 0, 1, false, false).Reply()
 	if err != nil || prop.NumItems != 1 {
-		return false, 0
+		return false, 100
 	}
 	return true, float64(xgb.Get32(prop.Data)) / 100
 }
