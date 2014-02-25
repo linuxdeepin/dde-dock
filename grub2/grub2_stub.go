@@ -62,7 +62,7 @@ func (grub *Grub2) GetSimpleEntryTitles() ([]string, error) {
 		}
 	}
 	if len(entryTitles) == 0 {
-		s := fmt.Sprintf("there is no menu entry in %s", _GRUB_MENU)
+		s := fmt.Sprintf("there is no menu entry in %s", _GRUB_MENU_FILE)
 		logError(s)
 		return entryTitles, errors.New(s)
 	}

@@ -38,9 +38,9 @@ import (
 )
 
 const (
-	_GRUB_MENU            = "/boot/grub/grub.cfg"
-	_GRUB_CONFIG          = "/etc/default/grub"
-	_GRUB_UPDATE_EXE      = "/usr/sbin/update-grub"
+	_GRUB_MENU_FILE       = "/boot/grub/grub.cfg"
+	_GRUB_CONFIG_FILE     = "/etc/default/grub"
+	_GRUB_UPDATE_EXE      = "/usr/sbin/update-grub" // TODO remove
 	_GRUB_TIMEOUT_DISABLE = -2
 	_GRUB_CACHE_FILE      = "/var/cache/dde-daemon/grub2.json"
 )
@@ -156,7 +156,7 @@ func (grub *Grub2) clearSettings() {
 }
 
 func (grub *Grub2) readEntries() error {
-	fileContent, err := ioutil.ReadFile(_GRUB_MENU)
+	fileContent, err := ioutil.ReadFile(_GRUB_MENU_FILE)
 	if err != nil {
 		logError(err.Error())
 		return err
@@ -165,7 +165,7 @@ func (grub *Grub2) readEntries() error {
 }
 
 func (grub *Grub2) readSettings() error {
-	fileContent, err := ioutil.ReadFile(_GRUB_CONFIG)
+	fileContent, err := ioutil.ReadFile(_GRUB_CONFIG_FILE)
 	if err != nil {
 		logError(err.Error())
 		return err
@@ -173,10 +173,11 @@ func (grub *Grub2) readSettings() error {
 	return grub.parseSettings(string(fileContent))
 }
 
+// TODO split
 func (grub *Grub2) writeSettings() error {
 	grub.setTheme(grub.theme.mainFile) // enable deepin grub2 theme
 	fileContent := grub.getSettingContentToSave()
-	err := ioutil.WriteFile(_GRUB_CONFIG, []byte(fileContent), 0664)
+	err := ioutil.WriteFile(_GRUB_CONFIG_FILE, []byte(fileContent), 0664)
 	if err != nil {
 		logError(err.Error())
 		return err
@@ -198,6 +199,7 @@ func (grub *Grub2) readCacheConfig() (err error) {
 	return
 }
 
+// TODO split
 func (grub *Grub2) writeCacheConfig() (err error) {
 	// ensure parent directory exists
 	if !isFileExists(_GRUB_CACHE_FILE) {
@@ -216,6 +218,7 @@ func (grub *Grub2) writeCacheConfig() (err error) {
 	return
 }
 
+// TODO split
 func (grub *Grub2) generateGrubConfig() (err error) {
 	logInfo("start to generate a new grub configuration file")
 	_, stderr, err := execAndWait(30, _GRUB_UPDATE_EXE)
@@ -359,7 +362,7 @@ func (grub *Grub2) getEntryTitles() ([]string, error) {
 		}
 	}
 	if len(entryTitles) == 0 {
-		s := fmt.Sprintf("there is no menu entry in %s", _GRUB_MENU)
+		s := fmt.Sprintf("there is no menu entry in %s", _GRUB_MENU_FILE)
 		logError(s)
 		return entryTitles, errors.New(s)
 	}

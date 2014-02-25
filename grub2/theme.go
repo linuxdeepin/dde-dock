@@ -140,6 +140,7 @@ func (theme *Theme) getTplJsonData(fileContent []byte) (*TplJsonData, error) {
 	return tplJsonData, nil
 }
 
+// TODO split
 func (theme *Theme) customTheme() {
 	logInfo("custom theme: %v", theme.tplJsonData.CurrentScheme)
 
@@ -191,6 +192,7 @@ func (theme *Theme) getCustomizedThemeContent(fileContent []byte, tplData interf
 	return buf.Bytes(), nil
 }
 
+// TODO split
 // Generate background to fit the screen resolution.
 func (theme *Theme) generateBackground() {
 	screenWidth, screenHeight := getPrimaryScreenBestResolution()
