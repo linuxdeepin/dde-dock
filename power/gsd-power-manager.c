@@ -2324,8 +2324,10 @@ suspend_on_lid_close (GsdPowerManager *manager)
     if (!external_monitor_is_connected (manager->priv->rr_screen))
         return TRUE;
 
-    val = g_settings_get_enum (manager->priv->settings_xrandr, "default-monitors-setup");
-    return val == GSD_XRANDR_BOOT_BEHAVIOUR_DO_NOTHING;
+    val = g_settings_get_enum(manager->priv->settings, "lid-close-ac-action");
+    return val == GSD_POWER_ACTION_SUSPEND;
+    /*val = g_settings_get_enum (manager->priv->settings_xrandr, "default-monitors-setup");*/
+    /*return val == GSD_XRANDR_BOOT_BEHAVIOUR_DO_NOTHING;*/
 }
 
 static gboolean
@@ -3739,7 +3741,7 @@ gsd_power_manager_start (GsdPowerManager *manager,
     manager->priv->settings_session = g_settings_new ("org.gnome.desktop.session");
     /*g_signal_connect (manager->priv->settings_session, "changed",*/
     /*G_CALLBACK (engine_settings_key_changed_cb), manager);*/
-    manager->priv->settings_xrandr = g_settings_new (GSD_XRANDR_SETTINGS_SCHEMA);
+    /*manager->priv->settings_xrandr = g_settings_new (GSD_XRANDR_SETTINGS_SCHEMA);*/
     manager->priv->up_client = up_client_new ();
     manager->priv->lid_is_closed = up_client_get_lid_is_closed (manager->priv->up_client);
     g_signal_connect (manager->priv->up_client, "device-added",
