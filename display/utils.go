@@ -206,10 +206,11 @@ func isCrtcConnected(c *xgb.Conn, crtc randr.Crtc) bool {
 
 func supportedBacklight(c *xgb.Conn, output randr.Output) (bool, float64) {
 	prop, err := randr.GetOutputProperty(c, output, backlightAtom, xproto.AtomAny, 0, 1, false, false).Reply()
-	if err != nil || prop.NumItems != 1 {
-		return false, 100
+	pinfo, err := randr.QueryOutputProperty(X, output, backlightAtom).Reply()
+	if err != nil || prop.NumItems != 1 || !pinfo.Range || len(pinfo.ValidValues) != 2 {
+		return false, 0
 	}
-	return true, float64(xgb.Get32(prop.Data)) / 100
+	return true, float64(xgb.Get32(prop.Data)) / float64(pinfo.ValidValues[1])
 }
 
 func parseRotationSize(rotation, width, height uint16) (uint16, uint16) {
@@ -275,10 +276,14 @@ func setOutputBorder(op randr.Output, border Border) {
 	}
 }
 func setOutputBacklight(op randr.Output, light float64) {
+	pinfo, err := randr.QueryOutputProperty(X, op, backlightAtom).Reply()
+	if err != nil || !pinfo.Range || len(pinfo.ValidValues) != 2 {
+		return
+	}
 	var buf [4]byte
-	xgb.Put32(buf[0:4], uint32(light*100))
+	xgb.Put32(buf[0:4], uint32(light*float64(pinfo.ValidValues[1])))
 
-	err := randr.ChangeOutputPropertyChecked(X, op, backlightAtom,
+	err = randr.ChangeOutputPropertyChecked(X, op, backlightAtom,
 		xproto.AtomInteger, 32, xproto.PropModeReplace, 1,
 		buf[:]).Check()
 	if err != nil {
@@ -444,7 +449,7 @@ func calcBound2(m render.Transform, rotation uint16, x, y float32, width, height
 
 func guestMode(op *Output, w, h uint16, rate float64) randr.Mode {
 	for _, m := range op.ListModes() {
-		if m.Width == w && m.Height == h && m.Rate == rate {
+		if m.Width == w && m.Height == h && math.Abs(m.Rate-rate) < 0.5 {
 			return randr.Mode(m.ID)
 		}
 	}
