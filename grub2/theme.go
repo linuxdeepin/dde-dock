@@ -24,7 +24,6 @@ package main
 import (
 	"bytes"
 	"dlib/dbus"
-	"dlib/graph"
 	"encoding/json"
 	"io/ioutil"
 	"text/template"
@@ -140,7 +139,6 @@ func (theme *Theme) getTplJsonData(fileContent []byte) (*TplJsonData, error) {
 	return tplJsonData, nil
 }
 
-// TODO split
 func (theme *Theme) customTheme() {
 	_LOGGER.Info("custom theme: %v", theme.tplJsonData.CurrentScheme)
 
@@ -158,22 +156,16 @@ func (theme *Theme) customTheme() {
 	if len(themeFileContent) == 0 {
 		_LOGGER.Error("theme content is empty")
 	}
-	err = ioutil.WriteFile(theme.mainFile, themeFileContent, 0664)
-	if err != nil {
-		_LOGGER.Error(err.Error())
-		return
-	}
+
+	_GRUB2EXT.DoCustomTheme(string(themeFileContent))
 
 	// store the customized key-values to json file
 	jsonContent, err := json.Marshal(theme.tplJsonData)
 	if err != nil {
 		return
 	}
-	err = ioutil.WriteFile(theme.jsonFile, jsonContent, 0664)
-	if err != nil {
-		_LOGGER.Error(err.Error())
-		return
-	}
+
+	_GRUB2EXT.DoWriteThemeJson(string(jsonContent))
 }
 
 func (theme *Theme) getCustomizedThemeContent(fileContent []byte, tplData interface{}) ([]byte, error) {
@@ -189,25 +181,4 @@ func (theme *Theme) getCustomizedThemeContent(fileContent []byte, tplData interf
 		return []byte(""), err
 	}
 	return buf.Bytes(), nil
-}
-
-// TODO split
-// Generate background to fit the screen resolution.
-func (theme *Theme) generateBackground() {
-	screenWidth, screenHeight := getPrimaryScreenBestResolution()
-	imgWidth, imgHeight, err := graph.GetImageSize(theme.bgSrcFile)
-	if err != nil {
-		_LOGGER.Error(err.Error())
-		return
-	}
-	_LOGGER.Info("source background size %dx%d", imgWidth, imgHeight)
-
-	w, h := getImgClipSizeByResolution(screenWidth, screenHeight, imgWidth, imgHeight)
-	_LOGGER.Info("background size %dx%d", w, h)
-	err = graph.ClipPNG(theme.bgSrcFile, theme.bgFile, 0, 0, w, h)
-	if err != nil {
-		_LOGGER.Error(err.Error())
-		return
-	}
-	dbus.NotifyChange(theme, "Background")
 }

@@ -73,13 +73,9 @@ func (theme *Theme) doSetBackgroundSourceFile(imageFile string) bool {
 		return false
 	}
 
-	// backup background source file
-	_, err = copyFile(imageFile, theme.bgSrcFile)
-	if err != nil {
-		return false
-	}
-
-	theme.generateBackground()
+	screenWidth, screenHeight := getPrimaryScreenBestResolution()
+	_GRUB2EXT.DoSetThemeBackgroundSourceFile(imageFile, screenWidth, screenHeight)
+	dbus.NotifyChange(theme, "Background")
 
 	// set item color through background's dominant color
 	_, _, v := graph.GetDominantColorOfImage(theme.bgSrcFile)

@@ -23,7 +23,6 @@ package main
 
 import (
 	"archive/tar"
-	"bytes"
 	"compress/gzip"
 	"errors"
 	"fmt"
@@ -32,11 +31,9 @@ import (
 	"github.com/BurntSushi/xgb/xproto"
 	"io"
 	"os"
-	"os/exec"
 	"path"
 	"strconv"
 	"strings"
-	"time"
 )
 
 func quoteString(str string) string {
@@ -51,43 +48,6 @@ func unquoteString(str string) string {
 		return str[1 : len(str)-1]
 	}
 	return str
-}
-
-// TODO move to go-dlib/os, dde-api/os
-func execAndWait(timeout int, name string, arg ...string) (stdout, stderr string, err error) {
-	cmd := exec.Command(name, arg...)
-	var buf_stdout, buf_stderr bytes.Buffer
-	cmd.Stdout = &buf_stdout
-	cmd.Stderr = &buf_stderr
-	err = cmd.Start()
-	if err != nil {
-		_LOGGER.Error(err.Error())
-		return
-	}
-
-	// wait for process finished
-	done := make(chan error)
-	go func() {
-		done <- cmd.Wait()
-	}()
-
-	select {
-	case <-time.After(time.Duration(timeout) * time.Second):
-		if err = cmd.Process.Kill(); err != nil {
-			_LOGGER.Error(err.Error())
-			return
-		}
-		<-done
-		_LOGGER.Info("time out and process was killed")
-	case err = <-done:
-		stdout = buf_stdout.String()
-		stderr = buf_stderr.String()
-		if err != nil {
-			_LOGGER.Error("process done with error = %v", err)
-			return
-		}
-	}
-	return
 }
 
 func stringInSlice(a string, list []string) bool {
@@ -201,24 +161,6 @@ func isFileExists(file string) bool {
 	}
 }
 
-func copyFile(src, dest string) (written int64, err error) {
-	if dest == src {
-		return -1, newError("source and destination are same file")
-	}
-
-	sf, err := os.Open(src)
-	if err != nil {
-		return
-	}
-	defer sf.Close()
-	df, err := os.OpenFile(dest, os.O_WRONLY|os.O_CREATE, 0664)
-	if err != nil {
-		return
-	}
-	defer df.Close()
-	return io.Copy(df, sf)
-}
-
 func getPathLevel(p string) int {
 	p = path.Clean(p)
 	if len(p) == 0 {
@@ -281,21 +223,5 @@ func getPrimaryScreenBestResolution() (w uint16, h uint16) {
 	}
 
 	_LOGGER.Info("primary screen's best resolution is %dx%d", w, h)
-	return
-}
-
-func getImgClipSizeByResolution(screenWidth, screenHeight uint16, imgWidth, imgHeight int32) (w int32, h int32) {
-	if imgWidth >= int32(screenWidth) && imgHeight >= int32(screenHeight) {
-		w = int32(screenWidth)
-		h = int32(screenHeight)
-	} else {
-		scale := float32(screenWidth) / float32(screenHeight)
-		w = imgWidth
-		h = int32(float32(w) / scale)
-		if h > imgHeight {
-			h = imgHeight
-			w = int32(float32(h) * scale)
-		}
-	}
 	return
 }

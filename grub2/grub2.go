@@ -23,6 +23,7 @@ package main
 
 import (
 	"bufio"
+	grub2ext "dbus/com/deepin/api/grub2ext"
 	"dlib/dbus"
 	"dlib/logger"
 	"encoding/json"
@@ -48,13 +49,15 @@ const (
 
 var (
 	_LOGGER, _      = logger.New("dde-daemon/grub2")
+	_GRUB2EXT, _    = grub2ext.NewGrub2Ext("/com/deepin/api/Grub2")
 	_ENTRY_REGEXP_1 = regexp.MustCompile(`^ *(menuentry|submenu) +'(.*?)'.*$`)
 	_ENTRY_REGEXP_2 = regexp.MustCompile(`^ *(menuentry|submenu) +"(.*?)".*$`)
 )
 
 type CacheConfig struct {
-	LastScreenWidth, LastScreenHeight uint16
-	NeedUpdate                        bool // mark to generate grub configuration
+	LastScreenWidth  uint16
+	LastScreenHeight uint16
+	NeedUpdate       bool // mark to generate grub configuration
 }
 
 type Grub2 struct {
@@ -124,7 +127,7 @@ func (grub *Grub2) load() {
 			if grub.config.NeedUpdate {
 				grub.writeCacheConfig()
 
-				grub.generateGrubConfig()
+				_GRUB2EXT.DoGenerateGrubConfig()
 
 				grub.config.NeedUpdate = false
 				grub.writeCacheConfig()
@@ -145,7 +148,8 @@ func (grub *Grub2) resetGfxmodeIfNeed() {
 
 		grub.notifyUpdate()
 
-		grub.theme.generateBackground()
+		screenWidth, screenHeight := getPrimaryScreenBestResolution()
+		_GRUB2EXT.DoGenerateThemeBackground(screenWidth, screenHeight)
 	}
 }
 
@@ -175,16 +179,11 @@ func (grub *Grub2) readSettings() error {
 	return grub.parseSettings(string(fileContent))
 }
 
-// TODO split
-func (grub *Grub2) writeSettings() error {
+func (grub *Grub2) writeSettings() {
 	grub.setTheme(grub.theme.mainFile) // enable deepin grub2 theme
 	fileContent := grub.getSettingContentToSave()
-	err := ioutil.WriteFile(_GRUB_CONFIG_FILE, []byte(fileContent), 0664)
-	if err != nil {
-		_LOGGER.Error(err.Error())
-		return err
-	}
-	return nil
+
+	_GRUB2EXT.DoWriteSettings(fileContent)
 }
 
 func (grub *Grub2) readCacheConfig() (err error) {
@@ -201,7 +200,6 @@ func (grub *Grub2) readCacheConfig() (err error) {
 	return
 }
 
-// TODO split
 func (grub *Grub2) writeCacheConfig() (err error) {
 	// ensure parent directory exists
 	if !isFileExists(_GRUB_CACHE_FILE) {
@@ -212,25 +210,9 @@ func (grub *Grub2) writeCacheConfig() (err error) {
 		_LOGGER.Error(err.Error())
 		return
 	}
-	err = ioutil.WriteFile(_GRUB_CACHE_FILE, fileContent, 0644)
-	if err != nil {
-		_LOGGER.Error(err.Error())
-		return
-	}
-	return
-}
 
-// TODO split
-func (grub *Grub2) generateGrubConfig() (err error) {
-	_LOGGER.Info("start to generate a new grub configuration file")
-	_, stderr, err := execAndWait(30, _GRUB_UPDATE_EXE)
-	_LOGGER.Info("process output: %s", stderr)
-	return err
-	if err != nil {
-		_LOGGER.Error("generate grub configuration failed")
-	} else {
-		_LOGGER.Info("generate grub configuration finished")
-	}
+	_GRUB2EXT.DoWriteCacheConfig(string(fileContent))
+
 	return
 }
 
@@ -474,11 +456,11 @@ func main() {
 	}()
 
 	grub := NewGrub2()
-	err := dbus.InstallOnSystem(grub)
+	err := dbus.InstallOnSession(grub)
 	if err != nil {
 		panic(err)
 	}
-	err = dbus.InstallOnSystem(grub.theme)
+	err = dbus.InstallOnSession(grub.theme)
 	if err != nil {
 		panic(err)
 	}
