@@ -22,6 +22,7 @@
 package main
 
 import (
+        dutils "dbus/com/deepin/api/utils"
         "dlib/dbus"
 )
 
@@ -31,7 +32,7 @@ const (
 
         USER_ICON_DIR     = "/var/lib/AccountsService/icons/"
         USER_DEFAULT_ICON = USER_ICON_DIR + "001.jpg"
-        USER_DEFAULT_BG   = "/usr/share/backgrounds/default_background.jpg"
+        USER_DEFAULT_BG   = "file:///usr/share/backgrounds/default_background.jpg"
         USER_CONFIG_FILE  = "/var/lib/AccountsService/users/"
 )
 
@@ -158,7 +159,15 @@ func (op *UserManager) getPropName(propName string) {
                         if !ok {
                                 op.BackgroundFile = USER_DEFAULT_BG
                         } else {
-                                op.BackgroundFile = v.(string)
+                                tmp := v.(string)
+                                opUtils, _ := dutils.NewUtils("/com/deepin/api/Utils")
+                                ok, _ := opUtils.IsContainFromStart(tmp, "file://")
+                                if ok {
+                                        op.BackgroundFile = tmp
+                                } else {
+                                        uri, _, _ := opUtils.ConvertPathToURI(tmp, 0)
+                                        op.BackgroundFile = uri
+                                }
                         }
                 }
         case "AutomaticLogin":
