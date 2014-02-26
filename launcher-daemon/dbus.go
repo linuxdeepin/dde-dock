@@ -4,7 +4,6 @@ import (
 	"dbus/com/deepin/api/graph"
 	"fmt"
 	"os"
-	"os/user"
 	"path"
 	"time"
 
@@ -255,19 +254,20 @@ func (d *LauncherDBus) GetBackgroundPict() string {
 		return errorHandler(err)
 	}
 
-	u, err := user.Current()
+	settings := gio.NewSettings("com.deepin.dde.personalization")
+	defer settings.Unref()
+	pict := settings.GetString("current-picture")
+	pict = pict[len("file://"):]
+	// status:
+	// -1: invalid pict passed, return default pict
+	//  0: blur pic
+	//  1: original pic
+	status, blurPath, err := i.BackgroundBlurPictPath(pict, "", 30, 1)
 	if err != nil {
 		return errorHandler(err)
 	}
 
-	// use "" to get current pict
-	res, err := i.BackgroundBlurPictPath(u.Uid, "")
-	if err != nil {
-		return errorHandler(err)
-	}
-
-	fmt.Println(res)
-	blurPath := res[1].(string)
+	fmt.Printf("status:%d, pict: %s\n", status, blurPath)
 	return blurPath
 }
 
