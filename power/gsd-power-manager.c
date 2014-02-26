@@ -62,7 +62,7 @@
 #define UPOWER_DBUS_INTERFACE_KBDBACKLIGHT      "org.freedesktop.UPower.KbdBacklight"
 
 /*#define GSD_POWER_SETTINGS_SCHEMA             "org.gnome.settings-daemon.plugins.power"*/
-#define DEEPIN_POWER_PROFILE_SCHEMA                     "com.deepin.daemon.power"
+#define DEEPIN_POWER_PROFILE_SCHEMA             "com.deepin.daemon.power"
 #define DEEPIN_POWER_SETTINGS_SCHEMA            "com.deepin.daemon.power.settings"
 #define DEEPIN_POWER_SETTINGS_PATH_PRE              "/com/deepin/daemon/power/profiles/"
 #define GSD_XRANDR_SETTINGS_SCHEMA              "org.gnome.settings-daemon.plugins.xrandr"
@@ -1199,6 +1199,34 @@ engine_device_removed_cb (UpClient *client, UpDevice *device, GsdPowerManager *m
     if (!ret)
         return;
     engine_recalculate_state (manager);
+}
+
+static void
+engine_profile_changed_cb (GSettings *settings,
+                           const gchar *key,
+                           GsdPowerManager *manager)
+{
+    /*if (g_strcmp0 (key, "use-time-for-policy") == 0)*/
+    /*{*/
+    /*manager->priv->use_time_primary = g_settings_get_boolean (settings, key);*/
+    /*return;*/
+    /*}*/
+    /*if (g_str_has_prefix (key, "sleep-inactive") ||*/
+    /*g_str_equal (key, "idle-delay") ||*/
+    /*g_str_equal (key, "idle-dim"))*/
+    /*{*/
+    /*g_debug("engine_settings_key_changed_cb()\n");*/
+    /*idle_configure (manager);*/
+    /*return;*/
+    /*}*/
+    GError *error = NULL;
+    gsd_power_manager_stop(manager);
+    gsd_power_manager_start(manager, &error);
+
+    g_debug("Exit\n");
+    gtk_main_quit();
+
+    return;
 }
 
 static void
@@ -3736,6 +3764,9 @@ gsd_power_manager_start (GsdPowerManager *manager,
     /*manager->priv->settings = g_settings_new(GSD_POWER_SETTINGS_SCHEMA);*/
 
     manager->priv->settings_profile = g_settings_new(DEEPIN_POWER_PROFILE_SCHEMA);
+    g_signal_connect(manager->priv->settings_profile, "changed",
+                     G_CALLBACK(engine_profile_changed_cb),
+                     manager);
     char *s = g_settings_get_string(manager->priv->settings_profile,
                                     "current-profile");
     manager->priv->settings_path = (char*)malloc(
@@ -4352,3 +4383,6 @@ gsd_power_manager_new (void)
     }
     return GSD_POWER_MANAGER (manager_object);
 }
+
+
+

@@ -85,7 +85,10 @@ int gsd_power_manager_main(int argc, char **argv)
 int main(int argc, char **argv)
 {
     gsd_power_manager_main(argc, argv);
-    gtk_main();
+    while (1)
+    {
+        gtk_main();
+    }
     return 0;
 }
 #endif
