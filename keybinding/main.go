@@ -67,11 +67,11 @@ func (m *BindManager) AddKeyBind(name, action string) (int32, bool) {
         return id, true
 }
 
-func (m *BindManager) AddKeyBindCheck(name, action, shortcut string) (int32, int32, []int32) {
+func (m *BindManager) AddKeyBindCheck(name, action, shortcut string) (int32, string, []int32) {
         id := getMaxIdFromCustom() + 1
         gs := newGSettingsById(id)
         if gs == nil {
-                return -1, -1, []int32{}
+                return -1, "failed", []int32{}
         }
         IdGSettingsMap[id] = gs
 
@@ -95,23 +95,19 @@ func (m *BindManager) AddKeyBindCheck(name, action, shortcut string) (int32, int
         return id, t, idList
 }
 
-func (m *BindManager) CheckShortcut(id int32, shortcut string) (int32, []int32) {
-        t := int32(0)
-        idList := []int32{}
-
+func (m *BindManager) CheckShortcut(id int32, shortcut string) (string, []int32) {
         if !keyIsValid(shortcut) {
-                t = 2
+                return "Invalid", []int32{}
         } else {
                 isConflict, list := conflictChecked(id, shortcut)
                 if isConflict {
-                        t = 1
-                        idList = list
+                        return "Conflict", list
                 } else {
-                        t = 0
+                        return "Valid", []int32{}
                 }
         }
 
-        return t, idList
+        return "Valid", []int32{}
 }
 
 func keyIsValid(key string) bool {
@@ -131,7 +127,7 @@ func keyIsValid(key string) bool {
         return false
 }
 
-func (m *BindManager) ChangeShortcut(id int32, shortcut string) (int32, []int32) {
+func (m *BindManager) ChangeShortcut(id int32, shortcut string) (string, []int32) {
         tmpKeys := getShortcutById(id)
         tmpConflict, tmpList := conflictChecked(id, tmpKeys)
         if tmpConflict {
@@ -141,29 +137,25 @@ func (m *BindManager) ChangeShortcut(id int32, shortcut string) (int32, []int32)
                 }
         }
 
-        t := int32(0)
-        idList := []int32{}
-
         if !keyIsValid(shortcut) {
                 insertConflictInvalidList(id)
-                t = 2
+                return "Invalid", []int32{}
         } else {
                 isConflict, list := conflictChecked(id, shortcut)
                 if isConflict {
                         insertConflictInvalidList(id)
                         insertConflictValidList(list)
-                        t = 1
-                        idList = list
+                        return "Conflict", list
                 } else {
                         deleteConflictInvalidId(id)
                         deleteConflictValidId(id)
-                        t = 0
+                        return "Valid", []int32{}
                 }
         }
 
         modifyShortcutById(id, shortcut)
 
-        return t, idList
+        return "Valid", []int32{}
 }
 
 func (m *BindManager) DeleteCustomBind(id int32) {
