@@ -126,7 +126,7 @@ func getAllShortcuts() map[int32]string {
         return allShortcuts
 }
 
-func conflictChecked(id int32, shortcut string) ConflictInfo {
+func conflictChecked(id int32, shortcut string) (bool, []int32) {
         tmpKey := strings.ToLower(shortcut)
         var info *KeyCodeInfo
 
@@ -138,12 +138,11 @@ func conflictChecked(id int32, shortcut string) ConflictInfo {
         }
         if info == nil {
                 fmt.Println("shortcut invalid. ", shortcut)
-                return ConflictInfo{}
+                return false, []int32{}
         }
 
-        conflict := ConflictInfo{}
-        conflict.IsConflict = false
-
+        isConflict := false
+        idList := []int32{}
         allShortcuts := getAllShortcuts()
         for i, k := range allShortcuts {
                 if i == id {
@@ -161,12 +160,12 @@ func conflictChecked(id int32, shortcut string) ConflictInfo {
                 }
 
                 if keyCodeInfoEqual(info, tmp) {
-                        conflict.IsConflict = true
-                        conflict.IdList = append(conflict.IdList, i)
+                        isConflict = true
+                        idList = append(idList, i)
                 }
         }
 
-        return conflict
+        return isConflict, idList
 }
 
 func isValidConflict(id int32) bool {
@@ -269,9 +268,9 @@ func idIsExist(id int32, idList []int32) bool {
 
 func getXGBShortcut(shortcut string) string {
         /*str := formatShortcut(shortcut)
-        if len(str) <= 0 {
-        	return ""
-        }*/
+          if len(str) <= 0 {
+          	return ""
+          }*/
 
         value := ""
         array := strings.Split(shortcut, "-")

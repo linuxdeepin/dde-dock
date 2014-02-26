@@ -56,6 +56,7 @@ func (m *BindManager) AddKeyBind(name, action string) (int32, bool) {
         customList := bindGSettings.GetStrv(_BINDING_CUSTOM_LIST)
         customList = append(customList, idStr)
         bindGSettings.SetStrv(_BINDING_CUSTOM_LIST, customList)
+        gio.SettingsSync()
 
         gs.Connect("changed::shortcut", func(s *gio.Settings, key string) {
                 m.setPropList("CustomList")
@@ -66,41 +67,51 @@ func (m *BindManager) AddKeyBind(name, action string) (int32, bool) {
         return id, true
 }
 
-func (m *BindManager) AddKeyBindCheck(name, action, shortcut string) AddAccelRet {
+func (m *BindManager) AddKeyBindCheck(name, action, shortcut string) (int32, int32, []int32) {
         id := getMaxIdFromCustom() + 1
         gs := newGSettingsById(id)
         if gs == nil {
-                return AddAccelRet{}
+                return -1, -1, []int32{}
         }
         IdGSettingsMap[id] = gs
 
         setCustomValues(gs, id, name, action, "")
-        gs.Connect("changed::shortcut", func(s *gio.Settings, key string) {
-                m.setPropList("CustomList")
-                grabKeyPairs(CustomPrevPairs, false)
-                grabKeyPairs(getCustomPairs(), true)
-        })
-        ret := AddAccelRet{}
-        ret.Id = id
-        ret.Check = m.ChangeShortcut(id, shortcut)
 
         idStr := strconv.FormatInt(int64(id), 10)
         customList := bindGSettings.GetStrv(_BINDING_CUSTOM_LIST)
         customList = append(customList, idStr)
         bindGSettings.SetStrv(_BINDING_CUSTOM_LIST, customList)
-        //gio.SettingsSync()
+        gio.SettingsSync()
+
+        gs.Connect("changed::shortcut", func(s *gio.Settings, key string) {
+                m.setPropList("CustomList")
+                grabKeyPairs(CustomPrevPairs, false)
+                grabKeyPairs(getCustomPairs(), true)
+        })
+        t, idList := m.ChangeShortcut(id, shortcut)
 
         grabKeyPairs(CustomPrevPairs, false)
         grabKeyPairs(getCustomPairs(), true)
-        return ret
+        return id, t, idList
 }
 
-func (m *BindManager) CheckShortcutConflict(shortcut string) (string, []int32) {
+func (m *BindManager) CheckShortcut(id int32, shortcut string) (int32, []int32) {
+        t := int32(0)
+        idList := []int32{}
+
         if !keyIsValid(shortcut) {
-                return "Invalid", []int32{}
+                t = 2
+        } else {
+                isConflict, list := conflictChecked(id, shortcut)
+                if isConflict {
+                        t = 1
+                        idList = list
+                } else {
+                        t = 0
+                }
         }
 
-        return "Valid", []int32{}
+        return t, idList
 }
 
 func keyIsValid(key string) bool {
@@ -120,44 +131,39 @@ func keyIsValid(key string) bool {
         return false
 }
 
-func (m *BindManager) ChangeShortcut(id int32, shortcut string) ConflictInfo {
-        check := conflictChecked(id, shortcut)
-
+func (m *BindManager) ChangeShortcut(id int32, shortcut string) (int32, []int32) {
         tmpKeys := getShortcutById(id)
-        tmpConflict := conflictChecked(id, tmpKeys)
-        if check.IsConflict {
-                insertConflictInvalidList(id)
-
-                if tmpConflict.IsConflict {
-                        for _, k := range tmpConflict.IdList {
-                                if k == id {
-                                        continue
-                                }
-                                deleteConflictValidId(k)
-                                deleteConflictInvalidId(k)
-                        }
-                }
-                insertConflictValidList(check.IdList)
-        } else {
-                deleteConflictInvalidId(id)
-                deleteConflictValidId(id)
-                if tmpConflict.IsConflict {
-                        for _, k := range tmpConflict.IdList {
-                                if k == id {
-                                        continue
-                                }
-                                deleteConflictValidId(k)
-                                deleteConflictInvalidId(k)
-                        }
+        tmpConflict, tmpList := conflictChecked(id, tmpKeys)
+        if tmpConflict {
+                for _, k := range tmpList {
+                        deleteConflictValidId(k)
+                        deleteConflictInvalidId(k)
                 }
         }
+
+        t := int32(0)
+        idList := []int32{}
 
         if !keyIsValid(shortcut) {
                 insertConflictInvalidList(id)
+                t = 2
+        } else {
+                isConflict, list := conflictChecked(id, shortcut)
+                if isConflict {
+                        insertConflictInvalidList(id)
+                        insertConflictValidList(list)
+                        t = 1
+                        idList = list
+                } else {
+                        deleteConflictInvalidId(id)
+                        deleteConflictValidId(id)
+                        t = 0
+                }
         }
+
         modifyShortcutById(id, shortcut)
 
-        return check
+        return t, idList
 }
 
 func (m *BindManager) DeleteCustomBind(id int32) {
@@ -165,23 +171,6 @@ func (m *BindManager) DeleteCustomBind(id int32) {
         if !ok {
                 return
         }
-
-        tmpKeys := getShortcutById(id)
-        tmpConflict := conflictChecked(id, tmpKeys)
-        if tmpConflict.IsConflict {
-                for _, k := range tmpConflict.IdList {
-                        if k == id {
-                                continue
-                        }
-                        deleteConflictValidId(k)
-                }
-        }
-        deleteConflictValidId(id)
-        deleteConflictInvalidId(id)
-
-        resetCustomValues(gs)
-        gs.Unref()
-        delete(IdGSettingsMap, id)
 
         tmpList := []string{}
         idStr := strconv.FormatInt(int64(id), 10)
@@ -194,6 +183,25 @@ func (m *BindManager) DeleteCustomBind(id int32) {
         }
         bindGSettings.SetStrv(_BINDING_CUSTOM_LIST, tmpList)
         gio.SettingsSync()
+
+        tmpKeys := getShortcutById(id)
+        tmpConflict, idList := conflictChecked(id, tmpKeys)
+        if tmpConflict {
+                for _, k := range idList {
+                        if k == id {
+                                continue
+                        }
+                        deleteConflictValidId(k)
+                        deleteConflictInvalidId(k)
+                }
+        }
+        deleteConflictValidId(id)
+        deleteConflictInvalidId(id)
+
+        resetCustomValues(gs)
+
+        gs.Unref()
+        delete(IdGSettingsMap, id)
 }
 
 func InitVariable() {
