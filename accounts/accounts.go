@@ -78,8 +78,8 @@ func (op *AccountManager) DeleteUser(name string, removeFiles bool) {
         }
         args = append(args, name)
 
-        execCommand(CMD_USERDEL, args)
         path := op.FindUserByName(name)
+        execCommand(CMD_USERDEL, args)
         op.UserDeleted(path)
 }
 
