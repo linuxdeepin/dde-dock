@@ -22,275 +22,274 @@
 package main
 
 import (
-	//"dlib/gio-2.0"
-	"fmt"
-	"github.com/BurntSushi/xgbutil/keybind"
-	"strconv"
-	"strings"
+        //"dlib/gio-2.0"
+        "fmt"
+        "github.com/BurntSushi/xgbutil/keybind"
+        "strconv"
+        "strings"
 )
 
 func newShortcutInfo(id int32, desc, shortcut string) ShortcutInfo {
-	return ShortcutInfo{Id: id, Desc: desc, Shortcut: shortcut}
+        return ShortcutInfo{Id: id, Desc: desc, Shortcut: shortcut}
 }
 
 func newKeyCodeInfo(shortcut string) *KeyCodeInfo {
-	mods, keys, err := keybind.ParseString(X, shortcut)
-	if err != nil {
-		fmt.Println("keybind parse string failed: ", err)
-		return nil
-	}
+        mods, keys, err := keybind.ParseString(X, shortcut)
+        if err != nil {
+                fmt.Println("keybind parse string failed: ", err)
+                return nil
+        }
 
-	if len(keys) <= 0 {
-		fmt.Println("no key")
-		return nil
-	}
+        if len(keys) <= 0 {
+                fmt.Println("no key")
+                return nil
+        }
 
-	state, detail := keybind.DeduceKeyInfo(mods, keys[0])
-	return &KeyCodeInfo{State: state, Detail: detail}
+        state, detail := keybind.DeduceKeyInfo(mods, keys[0])
+        return &KeyCodeInfo{State: state, Detail: detail}
 }
 
 func keyCodeInfoEqual(keyInfo1, keyInfo2 *KeyCodeInfo) bool {
-	if keyInfo1 == nil || keyInfo2 == nil {
-		return false
-	}
+        if keyInfo1 == nil || keyInfo2 == nil {
+                return false
+        }
 
-	if keyInfo1.State == keyInfo2.State &&
-		keyInfo1.Detail == keyInfo2.Detail {
-		return true
-	}
+        if keyInfo1.State == keyInfo2.State &&
+                keyInfo1.Detail == keyInfo2.Detail {
+                return true
+        }
 
-	return false
+        return false
 }
 
 func modifyShortcutById(id int32, shortcut string) {
-	tmpKey := strings.ToLower(shortcut)
-	var accel string
+        tmpKey := strings.ToLower(shortcut)
+        var accel string
 
-	if tmpKey == "super" || tmpKey == "super_l" ||
-		tmpKey == "super-super_l" {
-		accel = "Super"
-	} else {
-		accel = shortcut
-	}
-	if id >= _CUSTOM_ID_BASE {
-		gs := newGSettingsById(id)
-		if gs != nil {
-			gs.SetString(_CUSTOM_KEY_SHORTCUT, accel)
-			//gio.SettingsSync()
-		}
+        if tmpKey == "super" || tmpKey == "super_l" ||
+                tmpKey == "super-super_l" {
+                accel = "Super"
+        } else {
+                accel = shortcut
+        }
+        if id >= _CUSTOM_ID_BASE {
+                gs := newGSettingsById(id)
+                if gs != nil {
+                        gs.SetString(_CUSTOM_KEY_SHORTCUT, accel)
+                        //gio.SettingsSync()
+                }
 
-		return
-	}
+                return
+        }
 
-	if key, ok := IdNameMap[id]; ok {
-		UpdateSystemShortcut(key, accel)
-		return
-	}
+        if key, ok := IdNameMap[id]; ok {
+                UpdateSystemShortcut(key, accel)
+                return
+        }
 }
 
 func getShortcutById(id int32) string {
-	if id >= _CUSTOM_ID_BASE {
-		gs := newGSettingsById(id)
-		if gs != nil {
-			return gs.GetString(_CUSTOM_KEY_SHORTCUT)
-		}
-	}
+        if id >= _CUSTOM_ID_BASE {
+                gs := newGSettingsById(id)
+                if gs != nil {
+                        return gs.GetString(_CUSTOM_KEY_SHORTCUT)
+                }
+        }
 
-	value := ""
-	if key, ok := IdNameMap[id]; ok {
-		value = getSystemValue(key, false)
-	}
+        value := ""
+        if key, ok := IdNameMap[id]; ok {
+                value = getSystemValue(key, false)
+        }
 
-	return value
+        return value
 }
 
 func getAllShortcuts() map[int32]string {
-	allShortcuts := make(map[int32]string)
+        allShortcuts := make(map[int32]string)
 
-	for i, n := range IdNameMap {
-		shortcut := getSystemValue(n, false)
-		if len(shortcut) <= 0 {
-			continue
-		}
-		if i >= 300 && i < 500 {
-			continue
-		}
-		allShortcuts[i] = strings.ToLower(shortcut)
-	}
+        for i, n := range IdNameMap {
+                shortcut := getSystemValue(n, false)
+                if len(shortcut) <= 0 {
+                        continue
+                }
+                if i >= 300 && i < 500 {
+                        continue
+                }
+                allShortcuts[i] = strings.ToLower(shortcut)
+        }
 
-	customShortcuts := getCustomAccels()
-	for k, v := range customShortcuts {
-		allShortcuts[k] = strings.ToLower(v)
-	}
+        customShortcuts := getCustomAccels()
+        for k, v := range customShortcuts {
+                allShortcuts[k] = strings.ToLower(v)
+        }
 
-	return allShortcuts
+        return allShortcuts
 }
 
-func conflictChecked(id int32, shortcut string) ConflictInfo {
-	tmpKey := strings.ToLower(shortcut)
-	var info *KeyCodeInfo
+func conflictChecked(id int32, shortcut string) (bool, []int32) {
+        tmpKey := strings.ToLower(shortcut)
+        var info *KeyCodeInfo
 
-	if tmpKey == "super-super_l" || tmpKey == "super_l" ||
-		tmpKey == "super" {
-		info = newKeyCodeInfo("Super_L")
-	} else {
-		info = newKeyCodeInfo(getXGBShortcut(formatShortcut(shortcut)))
-	}
-	if info == nil {
-		fmt.Println("shortcut invalid. ", shortcut)
-		return ConflictInfo{}
-	}
+        if tmpKey == "super-super_l" || tmpKey == "super_l" ||
+                tmpKey == "super" {
+                info = newKeyCodeInfo("Super_L")
+        } else {
+                info = newKeyCodeInfo(getXGBShortcut(formatShortcut(shortcut)))
+        }
+        if info == nil {
+                fmt.Println("shortcut invalid. ", shortcut)
+                return false, []int32{}
+        }
 
-	conflict := ConflictInfo{}
-	conflict.IsConflict = false
+        isConflict := false
+        idList := []int32{}
+        allShortcuts := getAllShortcuts()
+        for i, k := range allShortcuts {
+                if i == id {
+                        continue
+                }
+                var tmp *KeyCodeInfo
 
-	allShortcuts := getAllShortcuts()
-	for i, k := range allShortcuts {
-		if i == id {
-			continue
-		}
-		var tmp *KeyCodeInfo
+                if k == "super" {
+                        tmp = newKeyCodeInfo("Super_L")
+                } else {
+                        tmp = newKeyCodeInfo(getXGBShortcut(formatShortcut(k)))
+                }
+                if tmp == nil {
+                        continue
+                }
 
-		if k == "super" {
-			tmp = newKeyCodeInfo("Super_L")
-		} else {
-			tmp = newKeyCodeInfo(getXGBShortcut(formatShortcut(k)))
-		}
-		if tmp == nil {
-			continue
-		}
+                if keyCodeInfoEqual(info, tmp) {
+                        isConflict = true
+                        idList = append(idList, i)
+                }
+        }
 
-		if keyCodeInfoEqual(info, tmp) {
-			conflict.IsConflict = true
-			conflict.IdList = append(conflict.IdList, i)
-		}
-	}
-
-	return conflict
+        return isConflict, idList
 }
 
 func isValidConflict(id int32) bool {
-	validList := bindGSettings.GetStrv(_BINDING_VALID_LIST)
+        validList := bindGSettings.GetStrv(_BINDING_VALID_LIST)
 
-	for _, k := range validList {
-		tmp, _ := strconv.ParseInt(k, 10, 64)
-		if id == int32(tmp) {
-			return true
-		}
-	}
+        for _, k := range validList {
+                tmp, _ := strconv.ParseInt(k, 10, 64)
+                if id == int32(tmp) {
+                        return true
+                }
+        }
 
-	return false
+        return false
 }
 
 func insertConflictValidList(idList []int32) {
-	validList := bindGSettings.GetStrv(_BINDING_VALID_LIST)
-	for _, k := range idList {
-		if isValidConflict(k) || isInvalidConflict(k) {
-			continue
-		}
-		tmp := strconv.FormatInt(int64(k), 10)
-		validList = append(validList, tmp)
-	}
+        validList := bindGSettings.GetStrv(_BINDING_VALID_LIST)
+        for _, k := range idList {
+                if isValidConflict(k) || isInvalidConflict(k) {
+                        continue
+                }
+                tmp := strconv.FormatInt(int64(k), 10)
+                validList = append(validList, tmp)
+        }
 
-	bindGSettings.SetStrv(_BINDING_VALID_LIST, validList)
-	//gio.SettingsSync()
+        bindGSettings.SetStrv(_BINDING_VALID_LIST, validList)
+        //gio.SettingsSync()
 }
 
 func deleteConflictValidId(id int32) {
-	if !isValidConflict(id) {
-		return
-	}
+        if !isValidConflict(id) {
+                return
+        }
 
-	tmpList := []string{}
-	tmp := strconv.FormatInt(int64(id), 10)
-	validList := bindGSettings.GetStrv(_BINDING_VALID_LIST)
-	for _, k := range validList {
-		if k == tmp {
-			continue
-		}
-		tmpList = append(tmpList, k)
-	}
-	bindGSettings.SetStrv(_BINDING_VALID_LIST, tmpList)
-	//gio.SettingsSync()
+        tmpList := []string{}
+        tmp := strconv.FormatInt(int64(id), 10)
+        validList := bindGSettings.GetStrv(_BINDING_VALID_LIST)
+        for _, k := range validList {
+                if k == tmp {
+                        continue
+                }
+                tmpList = append(tmpList, k)
+        }
+        bindGSettings.SetStrv(_BINDING_VALID_LIST, tmpList)
+        //gio.SettingsSync()
 }
 
 func isInvalidConflict(id int32) bool {
-	invalidList := bindGSettings.GetStrv(_BINDING_INVALID_LIST)
+        invalidList := bindGSettings.GetStrv(_BINDING_INVALID_LIST)
 
-	for _, k := range invalidList {
-		tmp, _ := strconv.ParseInt(k, 10, 64)
-		if id == int32(tmp) {
-			return true
-		}
-	}
+        for _, k := range invalidList {
+                tmp, _ := strconv.ParseInt(k, 10, 64)
+                if id == int32(tmp) {
+                        return true
+                }
+        }
 
-	return false
+        return false
 }
 
 func deleteConflictInvalidId(id int32) {
-	if !isInvalidConflict(id) {
-		return
-	}
+        if !isInvalidConflict(id) {
+                return
+        }
 
-	tmpList := []string{}
-	tmp := strconv.FormatInt(int64(id), 10)
-	invalidList := bindGSettings.GetStrv(_BINDING_INVALID_LIST)
-	for _, k := range invalidList {
-		if k == tmp {
-			continue
-		}
-		tmpList = append(tmpList, k)
-	}
-	bindGSettings.SetStrv(_BINDING_INVALID_LIST, tmpList)
-	//gio.SettingsSync()
+        tmpList := []string{}
+        tmp := strconv.FormatInt(int64(id), 10)
+        invalidList := bindGSettings.GetStrv(_BINDING_INVALID_LIST)
+        for _, k := range invalidList {
+                if k == tmp {
+                        continue
+                }
+                tmpList = append(tmpList, k)
+        }
+        bindGSettings.SetStrv(_BINDING_INVALID_LIST, tmpList)
+        //gio.SettingsSync()
 }
 
 func insertConflictInvalidList(id int32) {
-	if isInvalidConflict(id) {
-		return
-	}
-	invalidList := bindGSettings.GetStrv(_BINDING_INVALID_LIST)
-	tmp := strconv.FormatInt(int64(id), 10)
-	invalidList = append(invalidList, tmp)
+        if isInvalidConflict(id) {
+                return
+        }
+        invalidList := bindGSettings.GetStrv(_BINDING_INVALID_LIST)
+        tmp := strconv.FormatInt(int64(id), 10)
+        invalidList = append(invalidList, tmp)
 
-	bindGSettings.SetStrv(_BINDING_INVALID_LIST, invalidList)
-	//gio.SettingsSync()
+        bindGSettings.SetStrv(_BINDING_INVALID_LIST, invalidList)
+        //gio.SettingsSync()
 }
 
 func idIsExist(id int32, idList []int32) bool {
-	for _, v := range idList {
-		if id == v {
-			return true
-		}
-	}
+        for _, v := range idList {
+                if id == v {
+                        return true
+                }
+        }
 
-	return false
+        return false
 }
 
 func getXGBShortcut(shortcut string) string {
-	/*str := formatShortcut(shortcut)
-	if len(str) <= 0 {
-		return ""
-	}*/
+        /*str := formatShortcut(shortcut)
+          if len(str) <= 0 {
+          	return ""
+          }*/
 
-	value := ""
-	array := strings.Split(shortcut, "-")
-	for i, v := range array {
-		if i != 0 {
-			value += "-"
-		}
+        value := ""
+        array := strings.Split(shortcut, "-")
+        for i, v := range array {
+                if i != 0 {
+                        value += "-"
+                }
 
-		if v == "alt" || v == "super" ||
-			v == "meta" || v == "num_lock" ||
-			v == "caps_lock" || v == "hyper" {
-			modStr, _ := _ModifierMap[v]
-			value += modStr
-		} else {
-			value += v
-		}
-	}
+                if v == "alt" || v == "super" ||
+                        v == "meta" || v == "num_lock" ||
+                        v == "caps_lock" || v == "hyper" {
+                        modStr, _ := _ModifierMap[v]
+                        value += modStr
+                } else {
+                        value += v
+                }
+        }
 
-	return value
+        return value
 }
 
 /*
@@ -299,69 +298,69 @@ func getXGBShortcut(shortcut string) string {
  */
 
 func formatShortcut(shortcut string) string {
-	l := len(shortcut)
+        l := len(shortcut)
 
-	if l <= 0 {
-		fmt.Println("format args null")
-		return ""
-	}
+        if l <= 0 {
+                fmt.Println("format args null")
+                return ""
+        }
 
-	str := strings.ToLower(shortcut)
-	value := ""
-	flag := false
-	start := 0
-	end := 0
+        str := strings.ToLower(shortcut)
+        value := ""
+        flag := false
+        start := 0
+        end := 0
 
-	for i, ch := range str {
-		if ch == '<' {
-			flag = true
-			start = i
-		}
+        for i, ch := range str {
+                if ch == '<' {
+                        flag = true
+                        start = i
+                }
 
-		if ch == '>' && flag {
-			end = i
-			flag = false
-			if start != 0 {
-				value += "-"
-			}
+                if ch == '>' && flag {
+                        end = i
+                        flag = false
+                        if start != 0 {
+                                value += "-"
+                        }
 
-			for j := start + 1; j < end; j++ {
-				value += string(str[j])
-			}
-		}
-	}
+                        for j := start + 1; j < end; j++ {
+                                value += string(str[j])
+                        }
+                }
+        }
 
-	if end != l {
-		i := 0
-		if end > 0 {
-			i = end + 1
-			value += "-"
-		}
-		for ; i < l; i++ {
-			value += string(str[i])
-		}
-	}
+        if end != l {
+                i := 0
+                if end > 0 {
+                        i = end + 1
+                        value += "-"
+                }
+                for ; i < l; i++ {
+                        value += string(str[i])
+                }
+        }
 
-	array := strings.Split(value, "-")
-	value = ""
-	for i, v := range array {
-		if v == "primary" || v == "control" {
-			if !strings.Contains(value, "control") {
-				if i != 0 {
-					value += "-"
-				}
+        array := strings.Split(value, "-")
+        value = ""
+        for i, v := range array {
+                if v == "primary" || v == "control" {
+                        if !strings.Contains(value, "control") {
+                                if i != 0 {
+                                        value += "-"
+                                }
 
-				value += "control"
-			}
-			continue
-		}
+                                value += "control"
+                        }
+                        continue
+                }
 
-		if i != 0 {
-			value += "-"
-		}
+                if i != 0 {
+                        value += "-"
+                }
 
-		value += v
-	}
+                value += v
+        }
 
-	return value
+        return value
 }

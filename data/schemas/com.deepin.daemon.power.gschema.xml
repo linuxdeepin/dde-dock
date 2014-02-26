@@ -8,7 +8,7 @@
       <description>Describes the current profile</description>
     </key>
     <key type="as" name="existing-profiles">
-      <default>['Default']</default>
+      <default>['Default','Performance','Powersave','Customize']</default>
       <summary>Existing Profiles</summary>
       <description>Profiles available for the GSettings backend to use</description>
     </key>
