@@ -23,7 +23,7 @@ package main
 
 import (
 	"dlib/dbus"
-	"dlib/graph"
+	"dlib/graphic"
 )
 
 func (theme *Theme) GetDBusInfo() dbus.DBusInfo {
@@ -64,7 +64,7 @@ func (theme *Theme) SetBackgroundSourceFile(imageFile string) uint32 {
 
 func (theme *Theme) doSetBackgroundSourceFile(imageFile string) bool {
 	// check image size
-	w, h, err := graph.GetImageSize(imageFile)
+	w, h, err := graphic.GetImageSize(imageFile)
 	if err != nil {
 		return false
 	}
@@ -78,7 +78,7 @@ func (theme *Theme) doSetBackgroundSourceFile(imageFile string) bool {
 	dbus.NotifyChange(theme, "Background")
 
 	// set item color through background's dominant color
-	_, _, v := graph.GetDominantColorOfImage(theme.bgSrcFile)
+	_, _, v := graphic.GetDominantColorOfImage(theme.bgSrcFile)
 	if v < 0.4 {
 		// background is dark
 		theme.tplJsonData.CurrentScheme = theme.tplJsonData.BrightScheme
