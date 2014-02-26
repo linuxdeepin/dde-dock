@@ -2,6 +2,7 @@ package main
 
 import (
 	"dlib"
+	"dlib/dbus"
 	"fmt"
 )
 
@@ -16,5 +17,6 @@ func main() {
 	if tree != nil {
 		defer tree.DestroyTrie(treeId)
 	}
+	dbus.DealWithUnhandledMessage()
 	dlib.StartLoop()
 }
