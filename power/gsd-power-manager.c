@@ -62,8 +62,9 @@
 #define UPOWER_DBUS_INTERFACE_KBDBACKLIGHT      "org.freedesktop.UPower.KbdBacklight"
 
 /*#define GSD_POWER_SETTINGS_SCHEMA             "org.gnome.settings-daemon.plugins.power"*/
+#define DEEPIN_POWER_PROFILE_SCHEMA                     "com.deepin.daemon.power"
 #define DEEPIN_POWER_SETTINGS_SCHEMA            "com.deepin.daemon.power.settings"
-#define DEEPIN_POWER_SETTINGS_PATH              "/com/deepin/daemon/power/profiles/Default/"
+#define DEEPIN_POWER_SETTINGS_PATH_PRE              "/com/deepin/daemon/power/profiles/"
 #define GSD_XRANDR_SETTINGS_SCHEMA              "org.gnome.settings-daemon.plugins.xrandr"
 
 #define GSD_POWER_DBUS_NAME                     GSD_DBUS_NAME ".Power"
@@ -158,6 +159,7 @@ struct GsdPowerManagerPrivate
     GDBusProxy              *session_presence_proxy;
 
     /* Settings */
+    GSettings               *settings_profile;
     GSettings               *settings;
     GSettings               *settings_session;
     GSettings               *settings_screensaver;
@@ -178,6 +180,7 @@ struct GsdPowerManagerPrivate
     gboolean                 screensaver_active;
 
     /* State */
+    gchar                   *settings_path;
     gboolean                 lid_is_closed;
     UpClient                *up_client;
     gchar                   *previous_summary;
@@ -3731,10 +3734,20 @@ gsd_power_manager_start (GsdPowerManager *manager,
     manager->priv->kbd_brightness_pre_dim = -1;
     manager->priv->pre_dim_brightness = -1;
     /*manager->priv->settings = g_settings_new(GSD_POWER_SETTINGS_SCHEMA);*/
+
+    manager->priv->settings_profile = g_settings_new(DEEPIN_POWER_PROFILE_SCHEMA);
+    char *s = g_settings_get_string(manager->priv->settings_profile,
+                                    "current-profile");
+    manager->priv->settings_path = (char*)malloc(
+                                       sizeof(DEEPIN_POWER_SETTINGS_PATH_PRE) + strlen(s) + 1);
+    strcpy(manager->priv->settings_path, DEEPIN_POWER_SETTINGS_PATH_PRE);
+    strcat(manager->priv->settings_path, s);
+    strcat(manager->priv->settings_path, "/");
+
+    g_debug("created new setttings with path :%s\n", manager->priv->settings_path);
     manager->priv->settings = g_settings_new_with_path(
                                   DEEPIN_POWER_SETTINGS_SCHEMA,
-                                  DEEPIN_POWER_SETTINGS_PATH);
-    g_debug("created new setttings with path :%s\n", DEEPIN_POWER_SETTINGS_PATH);
+                                  manager->priv->settings_path);
     g_signal_connect (manager->priv->settings, "changed",
                       G_CALLBACK (engine_settings_key_changed_cb), manager);
     manager->priv->settings_screensaver = g_settings_new ("org.gnome.desktop.screensaver");
