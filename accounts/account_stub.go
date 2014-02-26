@@ -28,8 +28,8 @@ import (
 type AccountManager struct {
         UserList []string
 
-        UserAdded   func()
-        UserDeleted func()
+        UserAdded   func(string)
+        UserDeleted func(string)
 }
 
 func (op *AccountManager) GetDBusInfo() dbus.DBusInfo {
@@ -59,6 +59,10 @@ func newAccountManager() *AccountManager {
         m := &AccountManager{}
 
         m.setPropName("UserList")
+
+        listenFileChanged(ETC_PASSWD)
+        listenFileChanged(ETC_SHADOW)
+        listenFileChanged(ETC_GROUP)
 
         return m
 }

@@ -59,8 +59,9 @@ func (op *AccountManager) CreateUser(name, fullname string, accountTyte int32) s
         newUser.setPropName("AccountType", accountTyte)
         newUser.updateUserInfo()
 
-        op.UserAdded()
-        return op.FindUserByName(name)
+        path := op.FindUserByName(name)
+        op.UserAdded(path)
+        return path
 }
 
 func (op *AccountManager) DeleteUser(name string, removeFiles bool) {
@@ -78,7 +79,8 @@ func (op *AccountManager) DeleteUser(name string, removeFiles bool) {
         args = append(args, name)
 
         execCommand(CMD_USERDEL, args)
-        op.UserDeleted()
+        path := op.FindUserByName(name)
+        op.UserDeleted(path)
 }
 
 func (op *AccountManager) FindUserById(id string) string {
