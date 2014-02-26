@@ -1,7 +1,7 @@
 package main
 
 import (
-	"dbus/com/deepin/api/graph"
+	"dbus/com/deepin/api/graphic"
 	"fmt"
 	"os"
 	"path"
@@ -249,7 +249,7 @@ func (d *LauncherDBus) GetBackgroundPict() string {
 		return DefaultBackgroundImage
 	}
 
-	i, err := graph.NewGraph("/com/deepin/api/Graph")
+	i, err := graphic.NewGraphic("/com/deepin/api/Graphic")
 	if err != nil {
 		return errorHandler(err)
 	}
