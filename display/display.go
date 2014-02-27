@@ -100,7 +100,8 @@ func (dpy *Display) update() {
 		if err == nil {
 			op = queryOutput(dpy, randr.Output(pinfo.Output))
 		}
-		if op != nil {
+		if op != nil{
+			//TODO: check the primary output whether closed
 			dpy.setPropPrimaryOutput(op)
 			if op.pendingConfig != nil {
 				panic("SSSSSS")

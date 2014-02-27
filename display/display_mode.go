@@ -60,7 +60,7 @@ func (dpy *Display) SetDisplayMode(mode int16) {
 		reserveed.setOpened(true)
 
 		reserveed.SetPos(0, 0)
-		reserveed.pendingConfig.SetScale(1, 1)
+		reserveed.pendingConfig.SetScale(1, 1).apply()
 		for _, op := range dpy.Outputs {
 			if op != reserveed {
 				op.setOpened(false)
@@ -89,6 +89,10 @@ func (dpy *Display) ApplyChanged() {
 		}
 	}
 	if nothingWillChange {
+		tmpClosedOutput := dpy.adjustScreenSize()
+		for _, op := range tmpClosedOutput {
+			op.setOpened(true)
+		}
 		return
 	}
 

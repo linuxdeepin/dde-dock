@@ -471,8 +471,8 @@ func (dpy *Display) adjustScreenSize() []*Output {
 				info, _ := randr.GetCrtcInfo(X, op.crtc, 0).Reply()
 				/*cw := max(op.Allocation.Width, info.Width)*/
 				/*ch := max(op.Allocation.Height, info.Height)*/
-				cw :=  info.Width
-				ch :=  info.Height
+				cw := info.Width
+				ch := info.Height
 				/*if cw > min(w, DPY.Width) || ch > min(h, DPY.Height) {*/
 				if cw > w || ch > h {
 					op.setOpened(false)
@@ -531,7 +531,7 @@ func (op *Output) setOpened(v bool) {
 		config := NewPendingConfig(op)
 		op.pendingConfig = nil
 		op.savedConfig = ClonePendingConfig(config)
-		/*op.Opened = false*/
+		op.Opened = false
 
 		err := config.SetMode(0).apply()
 		if err != nil {
