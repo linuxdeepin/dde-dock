@@ -424,7 +424,6 @@ var zoneCityMap = map[string]string{
         "Iran":                             "Iran (UTC+02) Iran",
         "Jamaica":                          "Jamaica (UTC−05) Jamaica",
         "Japan":                            "Japan (UTC+09) Japan",
-        "JST-9":                            "France (UTC+09) JST 9",
         "Kwajalein":                        "RMI (UTC+12) Kwajalein",
         "Libya":                            "Libya (UTC+02) Libya",
         "MET":                              "France (UTC+01) MET",
