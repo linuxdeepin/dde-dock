@@ -15,11 +15,9 @@ import (
 )
 
 const (
-	launcherObject            string = "com.deepin.dde.daemon.Launcher"
-	launcherPath              string = "/com/deepin/dde/daemon/Launcher"
-	launcherInterface         string = launcherObject
-	launcherCategoryInterface string = launcherObject + ".category"
-	launcherConfigInterface   string = launcherObject + ".config"
+	launcherObject    string = "com.deepin.dde.daemon.Launcher"
+	launcherPath      string = "/com/deepin/dde/daemon/Launcher"
+	launcherInterface string = launcherObject
 
 	AppDirName     string      = "applications"
 	DirDefaultPerm os.FileMode = 775
@@ -257,7 +255,6 @@ func (d *LauncherDBus) GetBackgroundPict() string {
 	settings := gio.NewSettings("com.deepin.dde.personalization")
 	defer settings.Unref()
 	pict := settings.GetString("current-picture")
-	pict = pict[len("file://"):]
 	// status:
 	// -1: invalid pict passed, return default pict
 	//  0: blur pic

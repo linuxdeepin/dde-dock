@@ -9,8 +9,10 @@ import (
 func main() {
 	initCategory()
 	fmt.Println("init category done")
+
 	initItems()
 	fmt.Println("init items done")
+
 	initDBus()
 	fmt.Println("init dbus done")
 
