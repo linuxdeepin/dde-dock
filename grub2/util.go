@@ -22,16 +22,10 @@
 package main
 
 import (
-	"archive/tar"
-	"compress/gzip"
-	"errors"
-	"fmt"
 	"github.com/BurntSushi/xgb"
 	"github.com/BurntSushi/xgb/randr"
 	"github.com/BurntSushi/xgb/xproto"
-	"io"
 	"os"
-	"path"
 	"strconv"
 	"strings"
 )
@@ -59,122 +53,11 @@ func stringInSlice(a string, list []string) bool {
 	return false
 }
 
-// TODO move dde-api/file
-func unTarGz(archiveFile string, destDir string, prefix string) error {
-	destDir = path.Clean(destDir) + string(os.PathSeparator)
-
-	// open the archive file
-	fr, err := os.Open(archiveFile)
-	if err != nil {
-		return err
-	}
-	defer fr.Close()
-
-	// create a gzip reader
-	gr, err := gzip.NewReader(fr)
-	if err != nil {
-		return err
-	}
-	defer gr.Close()
-
-	// create a tar reader
-	tr := tar.NewReader(gr)
-
-	// loop files
-	for hdr, err := tr.Next(); err != io.EOF; hdr, err = tr.Next() {
-		if err != nil {
-			return err
-		}
-
-		if !strings.HasPrefix(hdr.Name, prefix) {
-			continue
-		}
-
-		fi := hdr.FileInfo()
-		destFullPath := destDir + hdr.Name
-		_LOGGER.Info("UnTarGzing file: " + hdr.Name)
-
-		if hdr.Typeflag == tar.TypeDir {
-			// create dir
-			os.MkdirAll(destFullPath, fi.Mode().Perm())
-			os.Chmod(destFullPath, fi.Mode().Perm())
-		} else {
-			// create the parent dir for file
-			os.MkdirAll(path.Dir(destFullPath), fi.Mode().Perm())
-
-			// write data to file
-			fw, err := os.Create(destFullPath)
-			if err != nil {
-				return err
-			}
-			_, err = io.Copy(fw, tr)
-			if err != nil {
-				return err
-			}
-			fw.Close()
-
-			os.Chmod(destFullPath, fi.Mode().Perm())
-		}
-	}
-	return nil
-}
-
-// find if a file in archive and return its path
-func findFileInTarGz(archiveFile string, targetFile string) (string, error) {
-	// open the archive file
-	fr, err := os.Open(archiveFile)
-	if err != nil {
-		return "", err
-	}
-	defer fr.Close()
-
-	// create a gzip reader
-	gr, err := gzip.NewReader(fr)
-	if err != nil {
-		return "", err
-	}
-	defer gr.Close()
-
-	// create a tar reader
-	tr := tar.NewReader(gr)
-
-	// loop files
-	targetPath := ""
-	for hdr, err := tr.Next(); err != io.EOF; hdr, err = tr.Next() {
-		if err != nil {
-			return "", err
-		}
-
-		if hdr.Typeflag != tar.TypeDir && strings.HasSuffix(hdr.Name, targetFile) {
-			targetPath = hdr.Name
-			break
-		}
-	}
-	return targetPath, nil
-}
-
 func isFileExists(file string) bool {
 	if _, err := os.Stat(file); err == nil {
 		return true
-	} else {
-		return false
 	}
-}
-
-func getPathLevel(p string) int {
-	p = path.Clean(p)
-	if len(p) == 0 {
-		return 0
-	}
-	lv := len(strings.Split(p, string(os.PathSeparator)))
-	if strings.HasPrefix(p, "/") || strings.HasPrefix(p, ".") {
-		lv--
-	}
-	return lv
-}
-
-func newError(format string, v ...interface{}) error {
-	return errors.New(fmt.Sprintf(format, v...))
+	return false
 }
 
 // Get all screen's best resolution and choose a smaller one for there

@@ -21,6 +21,7 @@
 
 package main
 
+// EntryType is used to define entry's type in '/boot/grub/grub.cfg'.
 type EntryType int
 
 const (
@@ -28,6 +29,7 @@ const (
 	SUBMENU
 )
 
+// Entry is a struct to store each entry's data/
 type Entry struct {
 	entryType     EntryType
 	title         string
@@ -38,7 +40,6 @@ type Entry struct {
 func (entry *Entry) getFullTitle() string {
 	if entry.parentSubMenu != nil {
 		return entry.parentSubMenu.getFullTitle() + ">" + entry.title
-	} else {
-		return entry.title
 	}
+	return entry.title
 }

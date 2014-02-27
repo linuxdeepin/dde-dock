@@ -42,7 +42,6 @@ import (
 const (
 	_GRUB_MENU_FILE       = "/boot/grub/grub.cfg"
 	_GRUB_CONFIG_FILE     = "/etc/default/grub"
-	_GRUB_UPDATE_EXE      = "/usr/sbin/update-grub" // TODO remove
 	_GRUB_TIMEOUT_DISABLE = -2
 	_GRUB_CACHE_FILE      = "/var/cache/dde-daemon/grub2.json"
 )
