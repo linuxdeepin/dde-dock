@@ -63,10 +63,10 @@ type Power struct {
 	LidCloseAcAction      *property.GSettingsStringProperty `access:"readwrite"`
 	LidCloseBatteryAction *property.GSettingsStringProperty `access:"readwrite"`
 
-	ShowTray *property.GSettingsBoolProperty `access:"readwrite"`
+	//ShowTray *property.GSettingsBoolProperty `access:"readwrite"`
 
-	SleepDisplayAc      *property.GSettingsIntProperty `access:"readwrite"`
-	SleepDisplayBattery *property.GSettingsIntProperty `access:"readwrite"`
+	//SleepDisplayAc      *property.GSettingsIntProperty `access:"readwrite"`
+	//SleepDisplayBattery *property.GSettingsIntProperty `access:"readwrite"`
 
 	SleepInactiveAcTimeout      *property.GSettingsIntProperty `access:"readwrite"`
 	SleepInactiveBatteryTimeout *property.GSettingsIntProperty `access:"readwrite"`
@@ -196,15 +196,20 @@ func (p *Power) getUPowerProperty() int32 {
 	return 1
 }
 
-func (power *Power) EnumerateDevices() []dbus.ObjectPath {
-	if power.upower == nil {
-		println("WARNING:Upower object it nil\n")
-	}
-	devices, _ := power.upower.EnumerateDevices()
-	for _, v := range devices {
-		println(v)
-	}
+func (p *Power) EnumerateDevices() []dbus.ObjectPath {
+	//if power.upower == nil {
+	//println("WARNING:Upower object it nil\n")
+	//}
+	//devices, _ := power.upower.EnumerateDevices()
+	//for _, v := range devices {
+	//println(v)
+	//}
+	devices := []dbus.ObjectPath{"testing"}
 	return devices
+}
+
+func (p *Power) Test() uint32 {
+	return 937
 }
 
 func getUpowerDeviceObjectPath(devices []dbus.ObjectPath) []dbus.ObjectPath {
@@ -251,5 +256,5 @@ func main() {
 	dbus.DealWithUnhandledMessage()
 	fmt.Print("power module started,looping")
 	dlib.StartLoop()
-	//select {}
+	select {}
 }

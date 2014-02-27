@@ -3486,6 +3486,7 @@ inhibit_lid_switch_done (GObject      *source,
     GUnixFDList *fd_list = NULL;
     gint idx;
 
+    //finish an operation started with g_dbus_proxy_call_with_unix_fd_list()
     res = g_dbus_proxy_call_with_unix_fd_list_finish (proxy, &fd_list, result, &error);
     if (res == NULL)
     {
@@ -3775,7 +3776,7 @@ gsd_power_manager_start (GsdPowerManager *manager,
     strcat(manager->priv->settings_path, s);
     strcat(manager->priv->settings_path, "/");
 
-    g_debug("created new setttings with path :%s\n", manager->priv->settings_path);
+    g_debug("created new settings with path :%s\n", manager->priv->settings_path);
     manager->priv->settings = g_settings_new_with_path(
                                   DEEPIN_POWER_SETTINGS_SCHEMA,
                                   manager->priv->settings_path);
