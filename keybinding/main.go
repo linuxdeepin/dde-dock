@@ -95,11 +95,11 @@ func (m *BindManager) AddKeyBindCheck(name, action, shortcut string) (int32, str
         return id, t, idList
 }
 
-func (m *BindManager) CheckShortcut(id int32, shortcut string) (string, []int32) {
+func (m *BindManager) CheckShortcut(shortcut string) (string, []int32) {
         if !keyIsValid(shortcut) {
                 return "Invalid", []int32{}
         } else {
-                isConflict, list := conflictChecked(id, shortcut)
+                isConflict, list := conflictChecked(-1, shortcut)
                 if isConflict {
                         return "Conflict", list
                 } else {
