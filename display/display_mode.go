@@ -12,15 +12,17 @@ const (
 	DisplayModeOnlyOne = 1
 )
 
+func (dpy *Display) SaveConfiguration() {
+	dpy.configuration = GenerateCurrentConfig(dpy)
+	dpy.configuration.save()
+}
+
 func (dpy *Display) SetDisplayMode(mode int16) {
 	if mode == dpy.DisplayMode {
 		return
 	}
 
 	dpy.setPropDisplayMode(mode)
-	//save the display mode inforamtion
-	dpy.configuration.DisplayMode = mode
-	dpy.configuration.save()
 
 	if dpy.DisplayMode == DisplayModeMirrors {
 		for _, op := range dpy.Outputs {
@@ -57,15 +59,15 @@ func (dpy *Display) SetDisplayMode(mode int16) {
 	} else if dpy.DisplayMode >= DisplayModeOnlyOne && int(dpy.DisplayMode) <= len(dpy.Outputs) {
 		reserveed := dpy.Outputs[dpy.DisplayMode-1]
 		fmt.Println("Reserverd Output:", reserveed.Name)
-		reserveed.setOpened(true)
-
-		reserveed.SetPos(0, 0)
-		reserveed.pendingConfig.SetScale(1, 1).apply()
 		for _, op := range dpy.Outputs {
 			if op != reserveed {
 				op.setOpened(false)
 			}
 		}
+		reserveed.setOpened(true)
+
+		reserveed.SetPos(0, 0)
+		reserveed.pendingConfig.SetScale(1, 1)
 	}
 
 	dpy.ApplyChanged()

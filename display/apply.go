@@ -461,9 +461,6 @@ func (dpy *Display) adjustScreenSize() []*Output {
 			fmt.Println("HUHUHU>>>>>>>>>>>>>", op.Name, op.pendingConfig)
 		}
 	}
-	if w < MinWidth || h < MinHeight {
-		return tmpOutputs
-	}
 
 	{
 		for _, op := range dpy.Outputs {

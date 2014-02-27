@@ -28,6 +28,7 @@ type OutputConfiguration struct {
 func LoadDisplayConfiguration(dpy *Display) DisplayConfiguration {
 	f, err := os.Open(_ConfigPath)
 	if err != nil {
+		fmt.Println("OpenFailed", err)
 		return generateDefaultConfig(dpy)
 	}
 	data, err := ioutil.ReadAll(f)
@@ -38,12 +39,14 @@ func LoadDisplayConfiguration(dpy *Display) DisplayConfiguration {
 		return generateDefaultConfig(dpy)
 	}
 	if config.hasError(dpy) {
+		fmt.Println("HASERROR")
 		return generateDefaultConfig(dpy)
 	}
 	return config
 }
 
 func (d DisplayConfiguration) save() {
+	fmt.Println("Saveconfig..........................................................................................")
 	bytes, err := json.Marshal(d)
 	if err != nil {
 		panic("marshal display configuration failed:" + err.Error())
@@ -59,7 +62,7 @@ func (d DisplayConfiguration) save() {
 
 func (d DisplayConfiguration) hasError(dpy *Display) bool {
 	// check whether the display mode is in range
-	if int(d.DisplayMode) > len(dpy.Outputs) || d.DisplayMode < DisplayModeMirrors {
+	if int(d.DisplayMode) > len(dpy.Outputs) || (d.DisplayMode < DisplayModeMirrors && d.DisplayMode != DisplayModeUnknow) {
 		return true
 	}
 	if len(d.Outputs) != len(dpy.Outputs) {
@@ -83,21 +86,22 @@ func (d DisplayConfiguration) hasError(dpy *Display) bool {
 }
 
 func generateDefaultConfig(dpy *Display) DisplayConfiguration {
+	fmt.Println("GenerateDefaultConfig............")
 	d := DisplayConfiguration{}
-	d.DisplayMode = dpy.DisplayMode
+	d.DisplayMode = DisplayModeUnknow
 	d.Outputs = make([]OutputConfiguration, len(dpy.Outputs))
 	for i, op := range dpy.Outputs {
 		d.Outputs[i] = OutputConfiguration{
 			X:           0,
 			Y:           0,
-			Width:       op.Mode.Width,
-			Height:      op.Mode.Height,
+			Width:       dpy.modes[op.bestMode].Width,
+			Height:      dpy.modes[op.bestMode].Height,
 			Name:        op.Name,
 			Primary:     dpy.PrimaryOutput == op,
 			Enabled:     true,
 			Rotation:    op.Rotation,
 			Reflect:     op.Reflect,
-			RefreshRate: op.Mode.Rate,
+			RefreshRate: buildMode(dpy.modes[op.bestMode]).Rate,
 		}
 	}
 	return d

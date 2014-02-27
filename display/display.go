@@ -100,7 +100,7 @@ func (dpy *Display) update() {
 		if err == nil {
 			op = queryOutput(dpy, randr.Output(pinfo.Output))
 		}
-		if op != nil{
+		if op != nil {
 			//TODO: check the primary output whether closed
 			dpy.setPropPrimaryOutput(op)
 			if op.pendingConfig != nil {
@@ -111,11 +111,6 @@ func (dpy *Display) update() {
 			dpy.setPropPrimaryOutput(nil)
 			dpy.setPropPrimaryRect(xproto.Rectangle{0, 0, dpy.Width, dpy.Height})
 		}
-	}
-
-	if dpy.DisplayMode == DisplayModeCustom {
-		dpy.configuration = GenerateCurrentConfig(dpy)
-		dpy.configuration.save()
 	}
 }
 
@@ -150,6 +145,10 @@ func (dpy *Display) listener() {
 			switch ee.SubCode {
 			case randr.NotifyCrtcChange:
 			case randr.NotifyOutputChange:
+				info := ee.U.Oc
+				if info.Connection != randr.ConnectionConnected && info.Mode != 0 {
+					randr.SetCrtcConfig(X, info.Crtc, xproto.TimeCurrentTime, LastConfigTimeStamp, 0, 0, 0, randr.RotationRotate0, nil)
+				}
 			case randr.NotifyOutputProperty:
 				fmt.Println("OutputPropertyChange...")
 				info := ee.U.Op
@@ -165,15 +164,22 @@ func (dpy *Display) listener() {
 			// DefaultSceen information doesn't be updated immediately
 			dpy.setPropWidth(ee.Width)
 			dpy.setPropHeight(ee.Height)
-			dpy.update()
+			if ee.ConfigTimestamp > LastConfigTimeStamp {
+				tmp := dpy.DisplayMode
+				dpy.DisplayMode = DisplayModeUnknow
+				dpy.update()
+
+				dpy.SetDisplayMode(tmp)
+				dpy.configuration = LoadDisplayConfiguration(dpy)
+			} else {
+				dpy.update()
+			}
 
 			if ee.ConfigTimestamp > LastConfigTimeStamp {
 				//output connection changed
 				LastConfigTimeStamp = ee.ConfigTimestamp
 				dpy.setPropBuiltinOutput(guestBuiltIn(dpy.Outputs))
-				if len(dpy.Outputs) == 1 {
-					dpy.SetDisplayMode(DisplayModeCustom)
-				}
+
 			}
 		}
 	}
