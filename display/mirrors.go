@@ -26,8 +26,9 @@ func getMatchedSize(ops []*Output) (uint16, uint16) {
 		panic("getMatchedSize received an ops with zero length")
 	case 1:
 		bestMode := ops[0].ListModes()[0]
-		return bestMode.Width, bestMode.Height
+		return parseRotationSize(ops[0].Rotation, bestMode.Width, bestMode.Height)
 	}
+	//TODO: calc rotation
 	sameModes := make([]Mode, 0)
 	first := ops[0]
 	for _, modeA := range first.modes {
@@ -64,7 +65,7 @@ func getMirrorSize(ops []*Output) (uint16, uint16) {
 	case 0:
 		return 0, 0
 	case 1:
-		return ops[0].Mode.Width, ops[0].Mode.Height
+		return parseRotationSize(ops[0].Rotation, ops[0].Mode.Width, ops[0].Mode.Height)
 	default:
 		builtin := guestBuiltIn(ops)
 		oth := make([]*Output, 0)
@@ -74,7 +75,7 @@ func getMirrorSize(ops []*Output) (uint16, uint16) {
 			}
 		}
 		if len(oth) == 0 {
-			return builtin.Mode.Width, builtin.Mode.Height
+			return parseRotationSize(ops[0].Rotation, builtin.Mode.Width, builtin.Mode.Height)
 		}
 		return getMatchedSize(oth)
 	}

@@ -18,15 +18,19 @@ func (dpy *Display) SetDisplayMode(mode int16) {
 	}
 
 	dpy.setPropDisplayMode(mode)
+	//save the display mode inforamtion
+	dpy.configuration.DisplayMode = mode
+	dpy.configuration.save()
 
 	if dpy.DisplayMode == DisplayModeMirrors {
 		for _, op := range dpy.Outputs {
 			op.setOpened(true)
 			op.SetPos(0, 0)
+			op.pendingConfig.SetScale(1, 1)
 		}
 		w, h := getMirrorSize(DPY.Outputs)
 		for _, op := range dpy.Outputs {
-			op.EnsureSize(w, h, EnsureSizeHintAuto)
+			op.ensureSize(w, h, EnsureSizeHintAuto)
 		}
 		fmt.Println("GetMirrorSize:", w, h)
 		fmt.Println("Mirrors mode...")
@@ -65,10 +69,6 @@ func (dpy *Display) SetDisplayMode(mode int16) {
 	}
 
 	dpy.ApplyChanged()
-
-	//save the display mode inforamtion
-	dpy.configuration = GenerateDefaultConfig(dpy)
-	dpy.configuration.save()
 }
 
 func (dpy *Display) ApplyChanged() {

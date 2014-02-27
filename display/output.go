@@ -56,10 +56,7 @@ func (op *Output) SetPos(x, y int16) {
 	op.pendingConfig = NewPendingConfig(op).SetPos(x, y)
 }
 
-func (op *Output) EnsureSize2(width, height uint16, hint uint8) {
-	op.EnsureSize(width, height, hint)
-}
-func (op *Output) EnsureSize(width, height uint16, hint uint8) {
+func (op *Output) ensureSize(width, height uint16, hint uint8) {
 	if !op.Opened {
 		return
 	}
@@ -85,7 +82,11 @@ func (op *Output) EnsureSize(width, height uint16, hint uint8) {
 }
 
 func (op *Output) SetMode(id uint32) {
+	if op.Opened == false {
+		op.setOpened(true)
+	}
 	op.pendingConfig = NewPendingConfig(op).SetMode(randr.Mode(id))
+	op.setPropMode(buildMode(DPY.modes[randr.Mode(id)]))
 }
 
 func (op *Output) Debug() string {
@@ -96,6 +97,7 @@ func (op *Output) Debug() string {
 
 func (op *Output) setRotation(rotation uint16) {
 	op.pendingConfig = NewPendingConfig(op).SetRotation(rotation | op.Reflect)
+	op.Rotation = rotation
 }
 func (op *Output) setBrightness(brightness float64) {
 	op.pendingConfig = NewPendingConfig(op).SetBrightness(brightness)
@@ -110,6 +112,7 @@ func (op *Output) setReflect(reflect uint16) {
 	}
 
 	op.pendingConfig = NewPendingConfig(op).SetRotation(op.Rotation | reflect)
+	op.Reflect = reflect
 }
 
 func (op *Output) update() {

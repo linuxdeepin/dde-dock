@@ -337,9 +337,6 @@ func (c *pendingConfig) appliedAllocation() (r xproto.Rectangle) {
 	r.Y = int16(int(c.posY)+y1) - int16(c.borderCompensationY)
 	r.Width = uint16(x2-x1) - 2*uint16(c.borderCompensationX)
 	r.Height = uint16(y2-y1) - 2*uint16(c.borderCompensationY)
-	if r.Width > 1440 {
-		fmt.Println("AppliedAllocation ppp:", r, c)
-	}
 
 	return
 }
@@ -457,31 +454,31 @@ func (dpy *Display) adjustScreenSize() []*Output {
 
 	if dpy.DisplayMode == DisplayModeMirrors {
 		w, h = getMirrorSize(dpy.Outputs)
+		fmt.Println("MirrorSize:", w, h)
 	} else {
 		for _, op := range dpy.Outputs {
 			w, h = boundAggregate(w, h, op.pendingAllocation())
 			fmt.Println("HUHUHU>>>>>>>>>>>>>", op.Name, op.pendingConfig)
 		}
 	}
+	if w < MinWidth || h < MinHeight {
+		return tmpOutputs
+	}
 
 	{
-
-		wDif := math.Abs(float64(w) - float64(dpy.Width))
-		hDif := math.Abs(float64(h) - float64(dpy.Height))
-		if wDif >= 4.0 || hDif >= 4.0 {
-			for _, op := range dpy.Outputs {
-				if op.Opened {
-					info, _ := randr.GetCrtcInfo(X, op.crtc, 0).Reply()
-					cw := max(op.Allocation.Width, info.Width)
-					ch := max(op.Allocation.Height, info.Height)
-					if cw > min(w, DPY.Width) || ch > min(h, DPY.Height) {
-						op.setOpened(false)
-						tmpOutputs = append(tmpOutputs, op)
-					}
+		for _, op := range dpy.Outputs {
+			if op.Opened {
+				info, _ := randr.GetCrtcInfo(X, op.crtc, 0).Reply()
+				/*cw := max(op.Allocation.Width, info.Width)*/
+				/*ch := max(op.Allocation.Height, info.Height)*/
+				cw :=  info.Width
+				ch :=  info.Height
+				/*if cw > min(w, DPY.Width) || ch > min(h, DPY.Height) {*/
+				if cw > w || ch > h {
+					op.setOpened(false)
+					tmpOutputs = append(tmpOutputs, op)
 				}
 			}
-		} else {
-			w, h = w+uint16(wDif), h+uint16(hDif)
 		}
 	}
 	fmt.Println("-AdjustScreensize before:", w, h, dpy.Width, dpy.Height)

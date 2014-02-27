@@ -31,20 +31,6 @@ func (dpy *Display) setPropOutputs(v []*Output) {
 	dbus.NotifyChange(dpy, "Outputs")
 }
 
-func (dpy *Display) setPropRotation(v uint16) {
-	if dpy.Rotation != v {
-		dpy.Rotation = v
-		dbus.NotifyChange(dpy, "Rotation")
-	}
-}
-
-func (dpy *Display) setPropReflect(v uint16) {
-	if dpy.Reflect != v {
-		dpy.Reflect = v
-		dbus.NotifyChange(dpy, "Reflect")
-	}
-}
-
 func (dpy *Display) setPropPrimaryOutput(v *Output) {
 	if dpy.PrimaryOutput != v {
 		dpy.PrimaryOutput = v

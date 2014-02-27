@@ -30,10 +30,6 @@ type Display struct {
 	Width  uint16
 	Height uint16
 
-	Rotation  uint16 `access:readwrite`
-	Reflect   uint16 `access:readwrite`
-	rotations uint16
-
 	PrimaryOutput *Output `access:readwrite`
 	//used by deepin-dock/launcher/desktop
 	PrimaryRect    xproto.Rectangle
@@ -66,29 +62,12 @@ func initDisplay() *Display {
 }
 
 func (dpy *Display) update() {
-	sinfo, err := getScreenInfo()
-	if err != nil {
-		fmt.Println("GetScreenInfo Failed:" + err.Error())
-		return
-	}
-
-	{
-		dpy.setPropRotation(uint16(sinfo.Rotations))
-		rotation, reflect := parseRandR(sinfo.Rotation)
-		dpy.setPropRotation(rotation)
-		dpy.setPropReflect(reflect)
-	}
-
-	{
-		sizeinfo := xproto.Setup(X).DefaultScreen(X)
-		dpy.setPropWidth(sizeinfo.WidthInPixels)
-		dpy.setPropHeight(sizeinfo.HeightInPixels)
-	}
+	changeLock()
+	defer changeUnlock()
 
 	{
 		// update output list
 		resources, err := randr.GetScreenResources(X, Root).Reply()
-		LastConfigTimeStamp = resources.ConfigTimestamp
 
 		if err != nil {
 			panic("GetScreenResources failed:" + err.Error())
@@ -114,8 +93,6 @@ func (dpy *Display) update() {
 		dpy.setPropOutputs(ops)
 	}
 
-	dpy.adjustScreenSize()
-
 	{
 		// update primary output and primary rectangle
 		pinfo, err := randr.GetOutputPrimary(X, Root).Reply()
@@ -125,18 +102,18 @@ func (dpy *Display) update() {
 		}
 		if op != nil {
 			dpy.setPropPrimaryOutput(op)
+			if op.pendingConfig != nil {
+				panic("SSSSSS")
+			}
 			dpy.setPropPrimaryRect(op.pendingAllocation())
 		} else {
 			dpy.setPropPrimaryOutput(nil)
 			dpy.setPropPrimaryRect(xproto.Rectangle{0, 0, dpy.Width, dpy.Height})
 		}
-		fmt.Println("PrimaryOutput:", op, dpy.PrimaryRect)
-	}
-	{
 	}
 
 	if dpy.DisplayMode == DisplayModeCustom {
-		dpy.configuration = GenerateDefaultConfig(dpy)
+		dpy.configuration = GenerateCurrentConfig(dpy)
 		dpy.configuration.save()
 	}
 }
@@ -149,12 +126,6 @@ func (dpy *Display) Reset() {
 }
 
 func (dpy *Display) ShowInfoOnScreen() {
-}
-func (dpy *Display) ListRotations() []uint16 {
-	return parseRotations(dpy.rotations)
-}
-func (dpy *Display) ListReflect() []uint16 {
-	return parseReflects(dpy.rotations)
 }
 
 func (dpy *Display) stopListen() {
@@ -190,14 +161,19 @@ func (dpy *Display) listener() {
 				}
 			}
 		case randr.ScreenChangeNotifyEvent:
+			// DefaultSceen information doesn't be updated immediately
+			dpy.setPropWidth(ee.Width)
+			dpy.setPropHeight(ee.Height)
 			dpy.update()
+
 			if ee.ConfigTimestamp > LastConfigTimeStamp {
 				//output connection changed
 				LastConfigTimeStamp = ee.ConfigTimestamp
 				dpy.setPropBuiltinOutput(guestBuiltIn(dpy.Outputs))
+				if len(dpy.Outputs) == 1 {
+					dpy.SetDisplayMode(DisplayModeCustom)
+				}
 			}
-			fmt.Println("BeginUpdate...")
-			fmt.Println("endUpdate...")
 		}
 	}
 }
@@ -208,16 +184,15 @@ func (dpy *Display) setScreenSize(width uint16, height uint16) {
 		return
 	}
 
-	if (width != dpy.Width) || (height != dpy.Height) {
-		err := randr.SetScreenSizeChecked(X, Root, width, height, uint32(ScreenWidthMm), uint32(ScreenHeightMm)).Check()
+	err := randr.SetScreenSizeChecked(X, Root, width, height, uint32(ScreenWidthMm), uint32(ScreenHeightMm)).Check()
 
-		if err != nil {
-			(fmt.Println("randr.SetScreenSize to :", width, height, dpy.Width, dpy.Height, err))
-			/*panic(fmt.Sprintln("randr.SetScreenSize to :", width, height, dpy.Width, dpy.Height, err))*/
-		} else {
-			dpy.setPropWidth(width)
-			dpy.setPropHeight(height)
-		}
+	if err != nil {
+		(fmt.Println("randr.SetScreenSize to :", width, height, dpy.Width, dpy.Height, err))
+		/*panic(fmt.Sprintln("randr.SetScreenSize to :", width, height, dpy.Width, dpy.Height, err))*/
+	} else {
+		fmt.Println("SetScreenSizeOK:", width, height)
+		dpy.setPropWidth(width)
+		dpy.setPropHeight(height)
 	}
 }
 

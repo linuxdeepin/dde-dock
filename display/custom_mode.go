@@ -10,7 +10,7 @@ type DisplayConfiguration struct {
 	Outputs     []OutputConfiguration
 }
 
-var _ConfigPath = os.Getenv("HOME") + "/.config/test_display.json"
+var _ConfigPath = os.Getenv("HOME") + "/.config/deepin_monitors.json"
 
 type OutputConfiguration struct {
 	Name string
@@ -28,17 +28,17 @@ type OutputConfiguration struct {
 func LoadDisplayConfiguration(dpy *Display) DisplayConfiguration {
 	f, err := os.Open(_ConfigPath)
 	if err != nil {
-		return GenerateDefaultConfig(dpy)
+		return generateDefaultConfig(dpy)
 	}
 	data, err := ioutil.ReadAll(f)
 	var config DisplayConfiguration
 	err = json.Unmarshal(data, &config)
 	if err != nil {
 		fmt.Println("Failed load displayConfiguration:", err, "Data:", string(data))
-		return GenerateDefaultConfig(dpy)
+		return generateDefaultConfig(dpy)
 	}
 	if config.hasError(dpy) {
-		return GenerateDefaultConfig(dpy)
+		return generateDefaultConfig(dpy)
 	}
 	return config
 }
@@ -62,11 +62,47 @@ func (d DisplayConfiguration) hasError(dpy *Display) bool {
 	if int(d.DisplayMode) > len(dpy.Outputs) || d.DisplayMode < DisplayModeMirrors {
 		return true
 	}
-	// TODO: check whether outputs configuration is valid
+	if len(d.Outputs) != len(dpy.Outputs) {
+		return true
+	}
+	for _, cfg := range d.Outputs {
+		var currentOP *Output
+		for _, op := range dpy.Outputs {
+			if op.Name == cfg.Name {
+				currentOP = op
+				break
+			}
+		}
+		if currentOP != nil {
+			// TODO: check whether outputs configuration is valid
+		} else {
+			return true
+		}
+	}
 	return false
 }
 
-func GenerateDefaultConfig(dpy *Display) DisplayConfiguration {
+func generateDefaultConfig(dpy *Display) DisplayConfiguration {
+	d := DisplayConfiguration{}
+	d.DisplayMode = dpy.DisplayMode
+	d.Outputs = make([]OutputConfiguration, len(dpy.Outputs))
+	for i, op := range dpy.Outputs {
+		d.Outputs[i] = OutputConfiguration{
+			X:           0,
+			Y:           0,
+			Width:       op.Mode.Width,
+			Height:      op.Mode.Height,
+			Name:        op.Name,
+			Primary:     dpy.PrimaryOutput == op,
+			Enabled:     true,
+			Rotation:    op.Rotation,
+			Reflect:     op.Reflect,
+			RefreshRate: op.Mode.Rate,
+		}
+	}
+	return d
+}
+func GenerateCurrentConfig(dpy *Display) DisplayConfiguration {
 	d := DisplayConfiguration{}
 	d.DisplayMode = dpy.DisplayMode
 	d.Outputs = make([]OutputConfiguration, len(dpy.Outputs))
