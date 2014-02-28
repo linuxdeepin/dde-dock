@@ -27,6 +27,7 @@ import (
 	"fmt"
 )
 
+// GetDBusInfo implements interface of dbus.DBusObject.
 func (grub *Grub2) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		"com.deepin.daemon.Grub2",
@@ -35,13 +36,14 @@ func (grub *Grub2) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
+// OnPropertiesChanged implements interface of dbus.DBusObject.
 func (grub *Grub2) OnPropertiesChanged(name string, oldv interface{}) {
 	defer func() {
 		if err := recover(); err != nil {
-			_LOGGER.Error("%v", err)
+			logger.Error("%v", err)
 		}
 	}()
-	_LOGGER.Info("OnPropertiesChanged: " + name)
+	logger.Debug("OnPropertiesChanged: " + name)
 	switch name {
 	case "DefaultEntry":
 		grub.setDefaultEntry(grub.DefaultEntry)
@@ -53,7 +55,7 @@ func (grub *Grub2) OnPropertiesChanged(name string, oldv interface{}) {
 	grub.notifyUpdate()
 }
 
-// Get entry titles in level one.
+// GetSimpleEntryTitles return entry titles in level one.
 func (grub *Grub2) GetSimpleEntryTitles() ([]string, error) {
 	entryTitles := make([]string, 0)
 	for _, entry := range grub.entries {
@@ -62,8 +64,8 @@ func (grub *Grub2) GetSimpleEntryTitles() ([]string, error) {
 		}
 	}
 	if len(entryTitles) == 0 {
-		s := fmt.Sprintf("there is no menu entry in %s", _GRUB_MENU_FILE)
-		_LOGGER.Error(s)
+		s := fmt.Sprintf("there is no menu entry in %s", grubMenuFile)
+		logger.Error(s)
 		return entryTitles, errors.New(s)
 	}
 	return entryTitles, nil

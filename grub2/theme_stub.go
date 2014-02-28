@@ -26,6 +26,7 @@ import (
 	"dlib/graphic"
 )
 
+// GetDBusInfo implements interface of dbus.DBusObject.
 func (theme *Theme) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		"com.deepin.daemon.Grub2",
@@ -34,10 +35,11 @@ func (theme *Theme) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
+// OnPropertiesChanged implements interface of dbus.DBusObject.
 func (theme *Theme) OnPropertiesChanged(name string, oldv interface{}) {
 	defer func() {
 		if err := recover(); err != nil {
-			_LOGGER.Error("%v", err)
+			logger.Error("%v", err)
 		}
 	}()
 	switch name {
@@ -48,18 +50,19 @@ func (theme *Theme) OnPropertiesChanged(name string, oldv interface{}) {
 	}
 }
 
-// Set the background source file, then generate the background
-// to fit the screen resolution, support png and jpeg image format
+// SetBackgroundSourceFile setup the background source file, then
+// generate the background to fit the screen resolution, support png
+// and jpeg image format.
 func (theme *Theme) SetBackgroundSourceFile(imageFile string) uint32 {
-	_UPDATE_THEME_BACKGROUND_ID++
+	updateThemeBackgroundID++
 	go func() {
-		id := _UPDATE_THEME_BACKGROUND_ID
+		id := updateThemeBackgroundID
 		ok := theme.doSetBackgroundSourceFile(imageFile)
 		if theme.BackgroundUpdated != nil {
 			theme.BackgroundUpdated(id, ok)
 		}
 	}()
-	return _UPDATE_THEME_BACKGROUND_ID
+	return updateThemeBackgroundID
 }
 
 func (theme *Theme) doSetBackgroundSourceFile(imageFile string) bool {
@@ -69,30 +72,30 @@ func (theme *Theme) doSetBackgroundSourceFile(imageFile string) bool {
 		return false
 	}
 	if w < 800 || h < 600 {
-		_LOGGER.Error("image size is too small") // TODO
+		logger.Error("image size is too small") // TODO
 		return false
 	}
 
 	screenWidth, screenHeight := getPrimaryScreenBestResolution()
-	_GRUB2EXT.DoSetThemeBackgroundSourceFile(imageFile, screenWidth, screenHeight)
+	grub2ext.DoSetThemeBackgroundSourceFile(imageFile, screenWidth, screenHeight)
 	dbus.NotifyChange(theme, "Background")
 
 	// set item color through background's dominant color
 	_, _, v := graphic.GetDominantColorOfImage(theme.bgSrcFile)
 	if v < 0.5 {
 		// background is dark
-		theme.tplJsonData.CurrentScheme = theme.tplJsonData.DarkScheme
-		_LOGGER.Info("background is dark, use the dark theme scheme")
+		theme.tplJSONData.CurrentScheme = theme.tplJSONData.DarkScheme
+		logger.Info("background is dark, use the dark theme scheme")
 	} else {
 		// background is bright
-		theme.tplJsonData.CurrentScheme = theme.tplJsonData.BrightScheme
-		_LOGGER.Info("background is bright, so use the bright theme scheme")
+		theme.tplJSONData.CurrentScheme = theme.tplJSONData.BrightScheme
+		logger.Info("background is bright, so use the bright theme scheme")
 	}
-	theme.ItemColor = theme.tplJsonData.CurrentScheme.ItemColor
-	theme.SelectedItemColor = theme.tplJsonData.CurrentScheme.SelectedItemColor
+	theme.ItemColor = theme.tplJSONData.CurrentScheme.ItemColor
+	theme.SelectedItemColor = theme.tplJSONData.CurrentScheme.SelectedItemColor
 	theme.setItemColor(theme.ItemColor)
 	theme.setSelectedItemColor(theme.SelectedItemColor)
 
-	_LOGGER.Info("update background sucess")
+	logger.Info("update background sucess")
 	return true
 }

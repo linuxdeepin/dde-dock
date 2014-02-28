@@ -30,26 +30,30 @@ import (
 )
 
 const (
-	_THEME_PATH        = "/boot/grub/themes/deepin"
-	_THEME_MAIN_FILE   = _THEME_PATH + "/theme.txt"
-	_THEME_TPL_FILE    = _THEME_PATH + "/theme.tpl"
-	_THEME_JSON_FILE   = _THEME_PATH + "/theme_tpl.json" // json stores the key-values for template file
-	_THEME_BG_SRC_FILE = _THEME_PATH + "/background_source"
-	_THEME_BG_FILE     = _THEME_PATH + "/background.png"
+	themePath      = "/boot/grub/themes/deepin"
+	themeMainFile  = themePath + "/theme.txt"
+	themeTplFile   = themePath + "/theme.tpl"
+	themeJSONFile  = themePath + "/theme_tpl.json"
+	themeBgSrcFile = themePath + "/background_source"
+	themeBgFile    = themePath + "/background.png"
 )
 
-var (
-	_UPDATE_THEME_BACKGROUND_ID uint32 = 0
-)
+var updateThemeBackgroundID uint32 // mark the asynchronous operation's ID when setup background.
 
+// ThemeScheme stores scheme data which be used when customing deepin grub2 theme.
 type ThemeScheme struct {
 	ItemColor, SelectedItemColor, TerminalBox, MenuPixmapStyle, ScrollbarThumb string
 }
 
-type TplJsonData struct {
+// TplJSONData read JSON data from
+// "/boot/grub/themes/deepin/theme_tpl.json" which stores the
+// key-values for template file.
+type TplJSONData struct {
 	BrightScheme, DarkScheme, CurrentScheme ThemeScheme
 }
 
+// Theme is a dbus object which provide properties and methods to
+// setup deepin grub2 theme.
 type Theme struct {
 	themePath   string
 	mainFile    string
@@ -57,7 +61,7 @@ type Theme struct {
 	jsonFile    string
 	bgSrcFile   string
 	bgFile      string
-	tplJsonData *TplJsonData
+	tplJSONData *TplJSONData
 
 	Background        string `access:"read"` // absolute background file path
 	ItemColor         string `access:"readwrite"`
@@ -66,29 +70,30 @@ type Theme struct {
 	BackgroundUpdated func(uint32, bool)
 }
 
+// NewTheme create Theme object.
 func NewTheme() *Theme {
 	theme := &Theme{}
-	theme.themePath = _THEME_PATH
-	theme.mainFile = _THEME_MAIN_FILE
-	theme.tplFile = _THEME_TPL_FILE
-	theme.jsonFile = _THEME_JSON_FILE
-	theme.bgSrcFile = _THEME_BG_SRC_FILE
-	theme.bgFile = _THEME_BG_FILE
+	theme.themePath = themePath
+	theme.mainFile = themeMainFile
+	theme.tplFile = themeTplFile
+	theme.jsonFile = themeJSONFile
+	theme.bgSrcFile = themeBgSrcFile
+	theme.bgFile = themeBgFile
 
 	return theme
 }
 
 func (theme *Theme) load() {
 	var err error
-	theme.tplJsonData, err = theme.getThemeTplJsonData()
+	theme.tplJSONData, err = theme.getThemeTplJSON()
 	if err != nil {
 		panic(err)
 	}
 
 	// init properties
 	theme.Background = theme.bgFile
-	theme.ItemColor = theme.tplJsonData.CurrentScheme.ItemColor
-	theme.SelectedItemColor = theme.tplJsonData.CurrentScheme.SelectedItemColor
+	theme.ItemColor = theme.tplJSONData.CurrentScheme.ItemColor
+	theme.SelectedItemColor = theme.tplJSONData.CurrentScheme.SelectedItemColor
 	dbus.NotifyChange(theme, "Background")
 	dbus.NotifyChange(theme, "ItemColor")
 	dbus.NotifyChange(theme, "SelectedItemColor")
@@ -97,9 +102,9 @@ func (theme *Theme) load() {
 func (theme *Theme) setItemColor(itemColor string) {
 	if len(itemColor) == 0 {
 		// set a default value to avoid empty string
-		itemColor = theme.tplJsonData.DarkScheme.ItemColor
+		itemColor = theme.tplJSONData.DarkScheme.ItemColor
 	}
-	theme.tplJsonData.CurrentScheme.ItemColor = itemColor
+	theme.tplJSONData.CurrentScheme.ItemColor = itemColor
 	dbus.NotifyChange(theme, "ItemColor")
 	theme.customTheme()
 }
@@ -107,70 +112,70 @@ func (theme *Theme) setItemColor(itemColor string) {
 func (theme *Theme) setSelectedItemColor(selectedItemColor string) {
 	if len(selectedItemColor) == 0 {
 		// set a default value to avoid empty string
-		selectedItemColor = theme.tplJsonData.DarkScheme.SelectedItemColor
+		selectedItemColor = theme.tplJSONData.DarkScheme.SelectedItemColor
 	}
-	theme.tplJsonData.CurrentScheme.SelectedItemColor = selectedItemColor
+	theme.tplJSONData.CurrentScheme.SelectedItemColor = selectedItemColor
 	dbus.NotifyChange(theme, "SelectedItemColor")
 	theme.customTheme()
 }
 
-func (theme *Theme) getThemeTplJsonData() (*TplJsonData, error) {
+func (theme *Theme) getThemeTplJSON() (*TplJSONData, error) {
 	fileContent, err := ioutil.ReadFile(theme.jsonFile)
 	if err != nil {
-		_LOGGER.Error(err.Error())
+		logger.Error(err.Error())
 		return nil, err
 	}
 
-	tplJsonData, err := theme.getTplJsonData(fileContent)
+	tplJSONData, err := theme.getTplJSONData(fileContent)
 	if err != nil {
 		return nil, err
 	}
-	_LOGGER.Info("theme template json data: %v", tplJsonData)
-	return tplJsonData, nil
+	logger.Debug("theme template json data: %v", tplJSONData)
+	return tplJSONData, nil
 }
 
-func (theme *Theme) getTplJsonData(fileContent []byte) (*TplJsonData, error) {
-	tplJsonData := &TplJsonData{}
-	err := json.Unmarshal(fileContent, tplJsonData)
+func (theme *Theme) getTplJSONData(fileContent []byte) (*TplJSONData, error) {
+	tplJSONData := &TplJSONData{}
+	err := json.Unmarshal(fileContent, tplJSONData)
 	if err != nil {
-		_LOGGER.Error(err.Error())
+		logger.Error(err.Error())
 		return nil, err
 	}
-	return tplJsonData, nil
+	return tplJSONData, nil
 }
 
 func (theme *Theme) customTheme() {
-	_LOGGER.Info("custom theme: %v", theme.tplJsonData.CurrentScheme)
+	logger.Debug("custom theme: %v", theme.tplJSONData.CurrentScheme)
 
 	// generate a new theme.txt from template
 	tplFileContent, err := ioutil.ReadFile(theme.tplFile)
 	if err != nil {
-		_LOGGER.Error(err.Error())
+		logger.Error(err.Error())
 		return
 	}
-	themeFileContent, err := theme.getCustomizedThemeContent(tplFileContent, theme.tplJsonData.CurrentScheme)
+	themeFileContent, err := theme.getCustomizedThemeContent(tplFileContent, theme.tplJSONData.CurrentScheme)
 	if err != nil {
-		_LOGGER.Error(err.Error())
+		logger.Error(err.Error())
 		return
 	}
 	if len(themeFileContent) == 0 {
-		_LOGGER.Error("theme content is empty")
+		logger.Error("theme content is empty")
 	}
 
-	_GRUB2EXT.DoCustomTheme(string(themeFileContent))
+	grub2ext.DoCustomTheme(string(themeFileContent))
 
 	// store the customized key-values to json file
-	jsonContent, err := json.Marshal(theme.tplJsonData)
+	jsonContent, err := json.Marshal(theme.tplJSONData)
 	if err != nil {
 		return
 	}
 
-	_GRUB2EXT.DoWriteThemeJson(string(jsonContent))
+	grub2ext.DoWriteThemeJson(string(jsonContent))
 }
 
 func (theme *Theme) getCustomizedThemeContent(fileContent []byte, tplData interface{}) ([]byte, error) {
-	_THEME_TEMPLATOR := template.New("theme-templator")
-	tpl, err := _THEME_TEMPLATOR.Parse(string(fileContent))
+	templator := template.New("theme-templator")
+	tpl, err := templator.Parse(string(fileContent))
 	if err != nil {
 		return []byte(""), err
 	}

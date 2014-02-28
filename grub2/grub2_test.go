@@ -8,7 +8,7 @@ import (
 func Test(t *testing.T) { TestingT(t) }
 
 var (
-	_TEST_MENU_CONTENT = `
+	testMenuContent = `
 menuentry 'LinuxDeepin GNU/Linux' --class linuxdeepin --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-simple' {
 recordfail
 }
@@ -18,7 +18,7 @@ submenu 'Advanced options for LinuxDeepin GNU/Linux' $menuentry_id_option 'gnuli
 		echo	'载入 Linux 3.11.0-15-generic ...'
 	}
 `
-	_TEST_MENU_CONTENT_LONG = `
+	testMenuContentLong = `
 menuentry 'LinuxDeepin GNU/Linux' --class linuxdeepin --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-simple' {
 recordfail
 	load_video
@@ -36,7 +36,7 @@ submenu 'Advanced options for LinuxDeepin GNU/Linux' $menuentry_id_option 'gnuli
 menuentry 'Other OS' {
 }
 `
-	_TEST_CONFIG_CONTENT = `
+	testConfigContent = `
 # comment line
 GRUB_DEFAULT="0"
 GRUB_HIDDEN_TIMEOUT="0"
@@ -81,7 +81,7 @@ func (grub *Grub2) TestParseEntries(c *C) {
 		`Other OS`,
 	}
 
-	grub.parseEntries(_TEST_MENU_CONTENT_LONG)
+	grub.parseEntries(testMenuContentLong)
 	c.Check(len(grub.entries), Equals, len(wantEntyTitles))
 	for i, entry := range grub.entries {
 		c.Check(entry.getFullTitle(), Equals, wantEntyTitles[i])
@@ -89,8 +89,8 @@ func (grub *Grub2) TestParseEntries(c *C) {
 }
 
 func (grub *Grub2) TestParseSettings(c *C) {
-	grub.parseEntries(_TEST_MENU_CONTENT)
-	grub.parseSettings(_TEST_CONFIG_CONTENT)
+	grub.parseEntries(testMenuContent)
+	grub.parseSettings(testConfigContent)
 
 	wantSettingCount := 7
 	wantDefaultEntry := "LinuxDeepin GNU/Linux"
@@ -104,8 +104,8 @@ func (grub *Grub2) TestParseSettings(c *C) {
 }
 
 func (grub *Grub2) TestSetterAndGetter(c *C) {
-	grub.parseEntries(_TEST_MENU_CONTENT)
-	grub.parseSettings(_TEST_CONFIG_CONTENT)
+	grub.parseEntries(testMenuContent)
+	grub.parseSettings(testConfigContent)
 
 	entryTitles, _ := grub.GetSimpleEntryTitles()
 	c.Check(len(entryTitles), Equals, 1)
@@ -144,7 +144,7 @@ func (grub *Grub2) TestSaveDefaultSettings(c *C) {
 	wantConfigContent := `GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
 GRUB_DEFAULT="LinuxDeepin GNU/Linux"
 `
-	grub.parseEntries(_TEST_MENU_CONTENT)
+	grub.parseEntries(testMenuContent)
 	grub.parseSettings(testConfigContent)
 	c.Check(grub.getSettingContentToSave(), Equals, wantConfigContent)
 }
@@ -162,7 +162,7 @@ GRUB_GFXMODE="auto"
 GRUB_THEME="/boot/grub/themes/demo/theme.txt"
 `
 
-	grub.parseEntries(_TEST_MENU_CONTENT)
+	grub.parseEntries(testMenuContent)
 	grub.parseSettings(testConfigContent)
 
 	grub.setDefaultEntry(`LinuxDeepin GNU/Linux`)
@@ -178,7 +178,7 @@ func (grub *Grub2) TestGetEntryTitles(c *C) {
 		`Other OS`,
 	}
 
-	grub.parseEntries(_TEST_MENU_CONTENT_LONG)
+	grub.parseEntries(testMenuContentLong)
 	entryTitles, _ := grub.GetSimpleEntryTitles()
 	c.Check(len(entryTitles), Equals, len(wantEntyTitles))
 	for i, title := range entryTitles {

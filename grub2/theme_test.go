@@ -12,22 +12,22 @@ func init() {
 }
 
 func (theme *Theme) TestGetplJsonData(c *C) {
-	testJsonContent := `{
+	testJSONContent := `{
     "BrightScheme":{"ItemColor":"#a6a6a6","SelectedItemColor":"#05abcf", "TerminalBox":"terminal_box_bright_*.png", "MenuPixmapStyle":"menu_box_bright_*.png", "ScrollbarThumb":"scrollbar_bright_*.png"},
     "DarkScheme":{"ItemColor":"#a6a6a6","SelectedItemColor":"#05abcf", "TerminalBox":"terminal_box_dark_*.png", "MenuPixmapStyle":"menu_box_dark_*.png", "ScrollbarThumb":"scrollbar_dark_*.png"},
     "CurrentScheme":{"ItemColor":"#a6a6a6","SelectedItemColor":"#05abcf", "TerminalBox":"terminal_box_dark_*.png", "MenuPixmapStyle":"menu_box_dark_*.png", "ScrollbarThumb":"scrollbar_dark_*.png"}
 }`
-	wantJsonData := &TplJsonData{
+	wantJSONData := &TplJSONData{
 		ThemeScheme{"#a6a6a6", "#05abcf", "terminal_box_bright_*.png", "menu_box_bright_*.png", "scrollbar_bright_*.png"},
 		ThemeScheme{"#a6a6a6", "#05abcf", "terminal_box_dark_*.png", "menu_box_dark_*.png", "scrollbar_dark_*.png"},
 		ThemeScheme{"#a6a6a6", "#05abcf", "terminal_box_dark_*.png", "menu_box_dark_*.png", "scrollbar_dark_*.png"},
 	}
 
-	jsonData, err := theme.getTplJsonData([]byte(testJsonContent))
+	jsonData, err := theme.getTplJSONData([]byte(testJSONContent))
 	if err != nil {
 		c.Error(err)
 	}
-	c.Check(*jsonData, Equals, *wantJsonData)
+	c.Check(*jsonData, Equals, *wantJSONData)
 }
 
 func (theme *Theme) TestGetCustomizedThemeContent(c *C) {
