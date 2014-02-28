@@ -178,6 +178,10 @@ func (m *BindManager) listenConflict() {
         bindGSettings.Connect("changed::conflict-invalid", func(s *gio.Settings, key string) {
                 m.setPropList("ConflictInvalid")
         })
+
+        bindGSettings.Connect("changed::custom-list", func(s *gio.Settings, key string) {
+                m.setPropList("CustomList")
+        })
 }
 
 func getSystemKeyInfo() []ShortcutInfo {
