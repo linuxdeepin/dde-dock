@@ -44,8 +44,14 @@ func (theme *Theme) OnPropertiesChanged(name string, oldv interface{}) {
 	}()
 	switch name {
 	case "ItemColor":
+		if theme.ItemColor == oldv.(string) {
+			return
+		}
 		theme.setItemColor(theme.ItemColor)
 	case "SelectedItemColor":
+		if theme.SelectedItemColor == oldv.(string) {
+			return
+		}
 		theme.setSelectedItemColor(theme.SelectedItemColor)
 	}
 }

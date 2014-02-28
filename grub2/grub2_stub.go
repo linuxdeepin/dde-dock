@@ -46,8 +46,14 @@ func (grub *Grub2) OnPropertiesChanged(name string, oldv interface{}) {
 	logger.Debug("OnPropertiesChanged: " + name)
 	switch name {
 	case "DefaultEntry":
+		if grub.DefaultEntry == oldv.(string) {
+			return
+		}
 		grub.setDefaultEntry(grub.DefaultEntry)
 	case "Timeout":
+		if grub.Timeout == oldv.(int32) {
+			return
+		}
 		grub.setTimeout(grub.Timeout)
 	}
 
