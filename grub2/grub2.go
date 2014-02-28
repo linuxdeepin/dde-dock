@@ -126,7 +126,9 @@ func (grub *Grub2) load() {
 			if grub.config.NeedUpdate {
 				grub.writeCacheConfig()
 
+				_LOGGER.Info("notify to generate a new grub configuration file")
 				_GRUB2EXT.DoGenerateGrubConfig()
+				_LOGGER.Info("generate grub configuration finished")
 
 				grub.config.NeedUpdate = false
 				grub.writeCacheConfig()

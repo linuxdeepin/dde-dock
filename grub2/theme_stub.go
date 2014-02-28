@@ -79,12 +79,14 @@ func (theme *Theme) doSetBackgroundSourceFile(imageFile string) bool {
 
 	// set item color through background's dominant color
 	_, _, v := graphic.GetDominantColorOfImage(theme.bgSrcFile)
-	if v < 0.4 {
+	if v < 0.5 {
 		// background is dark
-		theme.tplJsonData.CurrentScheme = theme.tplJsonData.BrightScheme
+		theme.tplJsonData.CurrentScheme = theme.tplJsonData.DarkScheme
+		_LOGGER.Info("background is dark, use the dark theme scheme")
 	} else {
 		// background is bright
-		theme.tplJsonData.CurrentScheme = theme.tplJsonData.DarkScheme
+		theme.tplJsonData.CurrentScheme = theme.tplJsonData.BrightScheme
+		_LOGGER.Info("background is bright, so use the bright theme scheme")
 	}
 	theme.ItemColor = theme.tplJsonData.CurrentScheme.ItemColor
 	theme.SelectedItemColor = theme.tplJsonData.CurrentScheme.SelectedItemColor
