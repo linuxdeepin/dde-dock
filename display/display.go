@@ -47,6 +47,10 @@ func initDisplay() *Display {
 	dbus.InstallOnSession(dpy)
 	DPY = dpy
 
+	screen := xproto.Setup(X).DefaultScreen(X)
+	dpy.setPropWidth(screen.WidthInPixels)
+	dpy.setPropHeight(screen.HeightInPixels)
+
 	dpy.DisplayMode = DisplayModeUnknow
 	dpy.update()
 
