@@ -16,6 +16,7 @@ all:
 	cd system-info/ && $(run)
 	cd audio/ && $(run)
 	cd launcher-daemon/ && $(run)
+	cd mediakey/ && $(run)
 
 
 update:
