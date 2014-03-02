@@ -28,6 +28,13 @@ func (m *Monitor) OnPropertiesChanged(name string, oldv interface{}) {
 	}
 }
 
+func (m *Monitor) setPropCurrentMode(v Mode) {
+	if m.CurrentMode != v {
+		m.CurrentMode = v
+		dbus.NotifyChange(m, "CurrentMode")
+	}
+}
+
 func (m *Monitor) setPropRotation(v uint16) {
 	if m.Rotation != v {
 		m.Rotation = v
@@ -51,5 +58,32 @@ func (m *Monitor) setPropBrightness(v float64) {
 	if m.Brightness != v {
 		m.Brightness = v
 		dbus.NotifyChange(m, "Brightness")
+	}
+}
+
+func (m *Monitor) setPropIsPrimary(v bool) {
+	if m.IsPrimary != v {
+		m.IsPrimary = v
+		dbus.NotifyChange(m, "IsPrimary")
+	}
+}
+
+func (m *Monitor) setPropWidth(v uint16) {
+	if m.Width != v {
+		m.Width = v
+		dbus.NotifyChange(m, "Width")
+	}
+}
+func (m *Monitor) setPropHeight(v uint16) {
+	if m.Height != v {
+		m.Height = v
+		dbus.NotifyChange(m, "Height")
+	}
+}
+func (m *Monitor) setPropXY(x, y int16) {
+	if m.X != x || m.Y != y {
+		m.X, m.Y  = x,y
+		dbus.NotifyChange(m, "X")
+		dbus.NotifyChange(m, "Y")
 	}
 }

@@ -12,17 +12,17 @@ func (dpy *Display) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (dpy *Display) setPropWidth(v uint16) {
-	if dpy.Width != v {
-		dpy.Width = v
-		dbus.NotifyChange(dpy, "Width")
+func (dpy *Display) setPropScreenWidth(v uint16) {
+	if dpy.ScreenWidth != v {
+		dpy.ScreenWidth = v
+		dbus.NotifyChange(dpy, "ScreenWidth")
 	}
 }
 
-func (dpy *Display) setPropHeight(v uint16) {
-	if dpy.Height != v {
-		dpy.Height = v
-		dbus.NotifyChange(dpy, "Height")
+func (dpy *Display) setPropScreenHeight(v uint16) {
+	if dpy.ScreenHeight != v {
+		dpy.ScreenHeight = v
+		dbus.NotifyChange(dpy, "ScreenHeight")
 	}
 }
 
@@ -42,4 +42,16 @@ func (dpy *Display) setPropDisplayMode(v int16) {
 		dpy.DisplayMode = v
 		dbus.NotifyChange(dpy, "DisplayMode")
 	}
+}
+
+func (dpy *Display) setPropMonitors(v []*Monitor) {
+	for _, m := range dpy.Monitors {
+		dbus.UnInstallObject(m)
+	}
+
+	dpy.Monitors = v
+	for _, m := range dpy.Monitors {
+		dbus.InstallOnSession(m)
+	}
+	dbus.NotifyChange(dpy, "Monitors")
 }

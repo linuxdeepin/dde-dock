@@ -26,10 +26,9 @@ type Display struct {
 
 	Monitors []*Monitor
 
-	Width  uint16
-	Height uint16
+	ScreenWidth  uint16
+	ScreenHeight uint16
 
-	PrimaryOutput *Monitor `access:readwrite`
 	//used by deepin-dock/launcher/desktop
 	PrimaryRect    xproto.Rectangle
 	PrimaryChanged func(xproto.Rectangle)
@@ -38,17 +37,6 @@ type Display struct {
 	BuiltinOutput *Monitor
 
 	HasChanged bool
-}
-
-func (dpy *Display) resetMonitors(monitors []*Monitor) {
-	for _, m := range dpy.Monitors {
-		dbus.UnInstallObject(m)
-	}
-
-	dpy.Monitors = monitors
-	for _, m := range dpy.Monitors {
-		dbus.InstallOnSession(m)
-	}
 }
 
 func (dpy *Display) JoinMonitor(a string, b string) error {
@@ -74,7 +62,7 @@ func (dpy *Display) JoinMonitor(a string, b string) error {
 	ops = append(ops, monitorB.outputs...)
 	monitor := NewMonitor(ops)
 	if monitor != nil {
-		dpy.resetMonitors(append(newMonitors, monitor))
+		dpy.setPropMonitors(append(newMonitors, monitor))
 		return nil
 	} else {
 		return fmt.Errorf("can't create composted monitor")
@@ -101,7 +89,7 @@ func (dpy *Display) SplitMonitor(a string) error {
 		}
 		newMonitors = append(newMonitors, m)
 	}
-	dpy.resetMonitors(newMonitors)
+	dpy.setPropMonitors(newMonitors)
 	return nil
 }
 
@@ -119,15 +107,13 @@ func initDisplay() *Display {
 	dpy := &Display{}
 	DPY = dpy
 	screen := xproto.Setup(X).DefaultScreen(X)
-	dpy.setPropWidth(screen.WidthInPixels)
-	dpy.setPropHeight(screen.HeightInPixels)
+	dpy.setPropScreenWidth(screen.WidthInPixels)
+	dpy.setPropScreenHeight(screen.HeightInPixels)
 	dbus.InstallOnSession(dpy)
 
 	loadConfiguration(dpy)
-	dpy.updateInfo()
 	dpy.updateMonitorList()
-
-	dpy.ResetChanged()
+	dpy.updateInfo()
 
 	randr.SelectInput(X, Root, randr.NotifyMaskOutputChange|randr.NotifyMaskOutputProperty|randr.NotifyMaskCrtcChange|randr.NotifyMaskScreenChange)
 	go dpy.listener()
@@ -143,11 +129,13 @@ func (dpy *Display) updateInfo() {
 		panic("GetScreenResources failed:" + err.Error())
 	}
 
-	{
-		dpy.modes = make(map[randr.Mode]Mode)
-		for _, minfo := range resources.Modes {
-			dpy.modes[randr.Mode(minfo.Id)] = buildMode(minfo)
-		}
+	dpy.modes = make(map[randr.Mode]Mode)
+	for _, minfo := range resources.Modes {
+		dpy.modes[randr.Mode(minfo.Id)] = buildMode(minfo)
+	}
+
+	for _, m := range dpy.Monitors {
+		m.updateInfo()
 	}
 }
 
@@ -169,8 +157,8 @@ func (dpy *Display) listener() {
 			case randr.NotifyOutputProperty:
 			}
 		case randr.ScreenChangeNotifyEvent:
-			dpy.setPropWidth(ee.Width)
-			dpy.setPropHeight(ee.Height)
+			dpy.setPropScreenWidth(ee.Width)
+			dpy.setPropScreenHeight(ee.Height)
 
 			pinfo, err := randr.GetOutputPrimary(X, Root).Reply()
 			if err == nil && pinfo.Output != 0 {
@@ -185,6 +173,7 @@ func (dpy *Display) listener() {
 
 			dpy.updateInfo()
 			if LastConfigTimeStamp < ee.ConfigTimestamp {
+				fmt.Println("AAAAAAAAAAAAA")
 				LastConfigTimeStamp = ee.ConfigTimestamp
 				dpy.updateMonitorList()
 			}

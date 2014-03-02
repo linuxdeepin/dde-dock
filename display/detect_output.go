@@ -65,7 +65,7 @@ func getMirrorSize(ops []*Monitor) (uint16, uint16) {
 	case 0:
 		return 0, 0
 	case 1:
-		return parseRotationSize(ops[0].Rotation, ops[0].Mode.Width, ops[0].Mode.Height)
+		return parseRotationSize(ops[0].Rotation, ops[0].CurrentMode.Width, ops[0].CurrentMode.Height)
 	default:
 		builtin := guestBuiltIn(ops)
 		oth := make([]*Monitor, 0)
@@ -75,7 +75,7 @@ func getMirrorSize(ops []*Monitor) (uint16, uint16) {
 			}
 		}
 		if len(oth) == 0 {
-			return parseRotationSize(ops[0].Rotation, builtin.Mode.Width, builtin.Mode.Height)
+			return parseRotationSize(ops[0].Rotation, builtin.CurrentMode.Width, builtin.CurrentMode.Height)
 		}
 		return getMatchedSize(oth)
 	}
