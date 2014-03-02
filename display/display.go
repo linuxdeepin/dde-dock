@@ -2,7 +2,6 @@ package main
 
 import (
 	"dlib/dbus"
-	"dlib/logger"
 	"fmt"
 	"github.com/BurntSushi/xgb"
 	"github.com/BurntSushi/xgb/randr"
@@ -23,123 +22,137 @@ var (
 )
 
 type Display struct {
-	modes map[randr.Mode]randr.ModeInfo
+	modes map[randr.Mode]Mode
 
-	Outputs []*Output
+	Monitors []*Monitor
 
 	Width  uint16
 	Height uint16
 
-	PrimaryOutput *Output `access:readwrite`
+	PrimaryOutput *Monitor `access:readwrite`
 	//used by deepin-dock/launcher/desktop
 	PrimaryRect    xproto.Rectangle
 	PrimaryChanged func(xproto.Rectangle)
 
 	DisplayMode   int16
-	BuiltinOutput *Output
+	BuiltinOutput *Monitor
 
-	listening     bool
-	configuration DisplayConfiguration
+	HasChanged bool
+}
+
+func (dpy *Display) resetMonitors(monitors []*Monitor) {
+	for _, m := range dpy.Monitors {
+		dbus.UnInstallObject(m)
+	}
+
+	dpy.Monitors = monitors
+	for _, m := range dpy.Monitors {
+		dbus.InstallOnSession(m)
+	}
+}
+
+func (dpy *Display) JoinMonitor(a string, b string) error {
+	var monitorA, monitorB *Monitor
+	newMonitors := make([]*Monitor, 0)
+	for _, m := range dpy.Monitors {
+		if m.Name == a {
+			monitorA = m
+		} else if m.Name == b {
+			monitorB = m
+		} else {
+			newMonitors = append(newMonitors, m)
+		}
+	}
+	if monitorA == nil {
+		return fmt.Errorf("cann't find %s", a)
+	}
+	if monitorB == nil {
+		return fmt.Errorf("cann't find %s", b)
+	}
+
+	ops := monitorA.outputs
+	ops = append(ops, monitorB.outputs...)
+	monitor := NewMonitor(ops)
+	if monitor != nil {
+		dpy.resetMonitors(append(newMonitors, monitor))
+		return nil
+	} else {
+		return fmt.Errorf("can't create composted monitor")
+	}
+}
+func (dpy *Display) SplitMonitor(a string) error {
+	newMonitors := make([]*Monitor, 0)
+	var monitor *Monitor
+	for _, m := range dpy.Monitors {
+		if m.Name == a {
+			monitor = m
+		} else {
+			newMonitors = append(newMonitors, m)
+		}
+	}
+	if monitor == nil {
+		return fmt.Errorf("can't find composited monitor: %s", a)
+	}
+
+	for _, op := range monitor.outputs {
+		m := NewMonitor([]randr.Output{op})
+		if m == nil {
+			return fmt.Errorf("can't create monitor: %d", op)
+		}
+		newMonitors = append(newMonitors, m)
+	}
+	dpy.resetMonitors(newMonitors)
+	return nil
+}
+
+func (dpy *Display) SetPrimary(name string) {
+	for _, m := range dpy.Monitors {
+		if m.Name == name {
+			m.setPrimary(true)
+		} else {
+			m.setPrimary(false)
+		}
+	}
 }
 
 func initDisplay() *Display {
 	dpy := &Display{}
-	dbus.InstallOnSession(dpy)
 	DPY = dpy
-
 	screen := xproto.Setup(X).DefaultScreen(X)
 	dpy.setPropWidth(screen.WidthInPixels)
 	dpy.setPropHeight(screen.HeightInPixels)
+	dbus.InstallOnSession(dpy)
 
-	dpy.DisplayMode = DisplayModeUnknow
-	dpy.update()
+	loadConfiguration(dpy)
+	dpy.updateInfo()
+	dpy.updateMonitorList()
 
-	dpy.configuration = LoadDisplayConfiguration(dpy)
-	dpy.SetDisplayMode(dpy.configuration.DisplayMode)
-
-	dpy.setPropBuiltinOutput(guestBuiltIn(dpy.Outputs))
+	dpy.ResetChanged()
 
 	randr.SelectInput(X, Root, randr.NotifyMaskOutputChange|randr.NotifyMaskOutputProperty|randr.NotifyMaskCrtcChange|randr.NotifyMaskScreenChange)
-	dpy.startListen()
+	go dpy.listener()
 
 	return dpy
 }
 
-func (dpy *Display) update() {
-	changeLock()
-	defer changeUnlock()
+func (dpy *Display) updateInfo() {
+	// update output list
+	resources, err := randr.GetScreenResources(X, Root).Reply()
 
-	{
-		// update output list
-		resources, err := randr.GetScreenResources(X, Root).Reply()
-
-		if err != nil {
-			panic("GetScreenResources failed:" + err.Error())
-		}
-
-		dpy.modes = make(map[randr.Mode]randr.ModeInfo)
-		for _, m := range resources.Modes {
-			dpy.modes[randr.Mode(m.Id)] = m
-		}
-
-		// clean old outputs
-		for _, op := range dpy.Outputs {
-			op.destroy()
-		}
-		// build new outputs
-		ops := make([]*Output, 0)
-		for _, output := range resources.Outputs {
-			op := NewOutput(dpy, output)
-			if op != nil {
-				ops = append(ops, op)
-			}
-		}
-		dpy.setPropOutputs(ops)
+	if err != nil {
+		panic("GetScreenResources failed:" + err.Error())
 	}
 
 	{
-		// update primary output and primary rectangle
-		pinfo, err := randr.GetOutputPrimary(X, Root).Reply()
-		var op *Output
-		if err == nil {
-			op = queryOutput(dpy, randr.Output(pinfo.Output))
-		}
-		if op != nil {
-			//TODO: check the primary output whether closed
-			dpy.setPropPrimaryOutput(op)
-			if op.pendingConfig != nil {
-				panic("SSSSSS")
-			}
-			dpy.setPropPrimaryRect(op.pendingAllocation())
-		} else {
-			dpy.setPropPrimaryOutput(nil)
-			dpy.setPropPrimaryRect(xproto.Rectangle{0, 0, dpy.Width, dpy.Height})
+		dpy.modes = make(map[randr.Mode]Mode)
+		for _, minfo := range resources.Modes {
+			dpy.modes[randr.Mode(minfo.Id)] = buildMode(minfo)
 		}
 	}
 }
 
-func (dpy *Display) Reset() {
-	for _, op := range dpy.Outputs {
-		op.setBrightness(1)
-	}
-	dpy.ApplyChanged()
-}
-
-func (dpy *Display) ShowInfoOnScreen() {
-}
-
-func (dpy *Display) stopListen() {
-	dpy.listening = false
-}
-func (dpy *Display) startListen() {
-	dpy.listening = true
-	go dpy.listener()
-}
 func (dpy *Display) listener() {
 	for {
-		if !dpy.listening {
-			return
-		}
 		e, err := X.WaitForEvent()
 		if err != nil {
 			continue
@@ -154,56 +167,28 @@ func (dpy *Display) listener() {
 					randr.SetCrtcConfig(X, info.Crtc, xproto.TimeCurrentTime, LastConfigTimeStamp, 0, 0, 0, randr.RotationRotate0, nil)
 				}
 			case randr.NotifyOutputProperty:
-				fmt.Println("OutputPropertyChange...")
-				info := ee.U.Op
-				//some driver use "BACKLIGHT" instead "Backlight" value as info.Atom, so we didn't check it.
-				if support, value := supportedBacklight(X, info.Output); support {
-					if op := queryOutput(dpy, info.Output); op != nil {
-						fmt.Println("TrySetBrightness:", value)
-						op.setPropBrightness(value)
-					}
-				}
 			}
 		case randr.ScreenChangeNotifyEvent:
-			// DefaultSceen information doesn't be updated immediately
 			dpy.setPropWidth(ee.Width)
 			dpy.setPropHeight(ee.Height)
-			if ee.ConfigTimestamp > LastConfigTimeStamp {
-				tmp := dpy.DisplayMode
-				dpy.DisplayMode = DisplayModeUnknow
-				dpy.update()
 
-				dpy.SetDisplayMode(tmp)
-				dpy.configuration = LoadDisplayConfiguration(dpy)
+			pinfo, err := randr.GetOutputPrimary(X, Root).Reply()
+			if err == nil && pinfo.Output != 0 {
+				if m := queryMonitor(dpy, pinfo.Output); m != nil {
+					dpy.setPropPrimaryRect(xproto.Rectangle{m.X, m.Y, m.Width, m.Height})
+				} else {
+					dpy.setPropPrimaryRect(xproto.Rectangle{0, 0, ee.Width, ee.Height})
+				}
 			} else {
-				dpy.update()
+				dpy.setPropPrimaryRect(xproto.Rectangle{0, 0, ee.Width, ee.Height})
 			}
 
-			if ee.ConfigTimestamp > LastConfigTimeStamp {
-				//output connection changed
+			dpy.updateInfo()
+			if LastConfigTimeStamp < ee.ConfigTimestamp {
 				LastConfigTimeStamp = ee.ConfigTimestamp
-				dpy.setPropBuiltinOutput(guestBuiltIn(dpy.Outputs))
-
+				dpy.updateMonitorList()
 			}
 		}
-	}
-}
-
-func (dpy *Display) setScreenSize(width uint16, height uint16) {
-	if width < MinWidth || width > MaxWidth || height < MinHeight || height > MaxHeight {
-		logger.Println("update1ScreenSize with invalid value:", width, height)
-		return
-	}
-
-	err := randr.SetScreenSizeChecked(X, Root, width, height, uint32(ScreenWidthMm), uint32(ScreenHeightMm)).Check()
-
-	if err != nil {
-		(fmt.Println("randr.SetScreenSize to :", width, height, dpy.Width, dpy.Height, err))
-		/*panic(fmt.Sprintln("randr.SetScreenSize to :", width, height, dpy.Width, dpy.Height, err))*/
-	} else {
-		fmt.Println("SetScreenSizeOK:", width, height)
-		dpy.setPropWidth(width)
-		dpy.setPropHeight(height)
 	}
 }
 
@@ -217,9 +202,6 @@ func main() {
 	if ver.MajorVersion != 1 || ver.MinorVersion != 3 {
 		panic(fmt.Sprintln("randr version is too low:", ver.MajorVersion, ver.MinorVersion, "this program require at least randr 1.3"))
 	}
-
-	rng, err := randr.GetScreenSizeRange(X, Root).Reply()
-	MinWidth, MinHeight, MaxWidth, MaxHeight = rng.MinWidth, rng.MinHeight, rng.MaxWidth, rng.MaxHeight
 
 	if err != nil {
 		panic(fmt.Sprintln("randr.GetSceenSizeRange failed :", err))

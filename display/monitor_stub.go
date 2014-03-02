@@ -1,0 +1,55 @@
+package main
+
+import "dlib/dbus"
+import "fmt"
+import "strings"
+
+func (m *Monitor) GetDBusInfo() dbus.DBusInfo {
+	name := strings.Replace(m.Name, "-", "_", -1)
+	name = strings.Replace(name, "|", "_", -1)
+	return dbus.DBusInfo{
+		"com.deepin.daemon.Display",
+		fmt.Sprintf("/com/deepin/daemon/Display/Monitor%s", name),
+		"com.deepin.daemon.Display.Monitor",
+	}
+}
+
+func (m *Monitor) OnPropertiesChanged(name string, oldv interface{}) {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println(err)
+		}
+	}()
+	switch name {
+	case "Rotation":
+	case "Reflect":
+	case "Opened":
+	case "Brightness":
+	}
+}
+
+func (m *Monitor) setPropRotation(v uint16) {
+	if m.Rotation != v {
+		m.Rotation = v
+		dbus.NotifyChange(m, "Rotation")
+	}
+}
+func (m *Monitor) setPropReflect(v uint16) {
+	if m.Reflect != v {
+		m.Reflect = v
+		dbus.NotifyChange(m, "Reflect")
+	}
+}
+
+func (m *Monitor) setPropOpened(v bool) {
+	if m.Opened != v {
+		m.Opened = v
+		dbus.NotifyChange(m, "Opened")
+	}
+}
+func (m *Monitor) setPropBrightness(v float64) {
+	if m.Brightness != v {
+		m.Brightness = v
+		dbus.NotifyChange(m, "Brightness")
+	}
+}

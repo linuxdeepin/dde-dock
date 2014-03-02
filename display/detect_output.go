@@ -6,12 +6,12 @@ import "strings"
 
 import "github.com/BurntSushi/xgb/xproto"
 
-func guestBuiltIn(ops []*Output) *Output {
+func guestBuiltIn(ops []*Monitor) *Monitor {
 	// It's a bug if there hasn't any Output.
-	var mirrorOP *Output = ops[0]
+	var mirrorOP *Monitor = ops[0]
 	currentType := unknownAtom
 	for _, op := range ops {
-		t := getContentorType(op.Identify)
+		t := getContentorType(op.outputs[0])
 		if !greaterConnectorType(t, currentType) {
 			currentType = t
 			mirrorOP = op
@@ -20,22 +20,22 @@ func guestBuiltIn(ops []*Output) *Output {
 	return mirrorOP
 }
 
-func getMatchedSize(ops []*Output) (uint16, uint16) {
+func getMatchedSize(ops []*Monitor) (uint16, uint16) {
 	switch len(ops) {
 	case 0:
 		panic("getMatchedSize received an ops with zero length")
 	case 1:
-		bestMode := ops[0].ListModes()[0]
+		bestMode := ops[0].BestMode
 		return parseRotationSize(ops[0].Rotation, bestMode.Width, bestMode.Height)
 	}
 	//TODO: calc rotation
 	sameModes := make([]Mode, 0)
 	first := ops[0]
-	for _, modeA := range first.modes {
+	for _, modeA := range first.Modes {
 		allHave := true
 		for _, op := range ops[1:] {
 			found := false
-			for _, modeB := range op.modes {
+			for _, modeB := range op.Modes {
 				if modeA.Width == modeB.Width && modeA.Height == modeA.Height {
 					found = true
 					break
@@ -60,7 +60,7 @@ func getMatchedSize(ops []*Output) (uint16, uint16) {
 	return bestMode.Width, bestMode.Height
 }
 
-func getMirrorSize(ops []*Output) (uint16, uint16) {
+func getMirrorSize(ops []*Monitor) (uint16, uint16) {
 	switch len(ops) {
 	case 0:
 		return 0, 0
@@ -68,9 +68,9 @@ func getMirrorSize(ops []*Output) (uint16, uint16) {
 		return parseRotationSize(ops[0].Rotation, ops[0].Mode.Width, ops[0].Mode.Height)
 	default:
 		builtin := guestBuiltIn(ops)
-		oth := make([]*Output, 0)
+		oth := make([]*Monitor, 0)
 		for _, op := range ops {
-			if op != builtin && op.Opened {
+			if op != builtin {
 				oth = append(oth, op)
 			}
 		}

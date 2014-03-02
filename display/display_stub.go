@@ -1,8 +1,8 @@
 package main
 
-import "dlib/dbus"
-import "fmt"
 import "github.com/BurntSushi/xgb/xproto"
+
+import "dlib/dbus"
 
 func (dpy *Display) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
@@ -26,26 +26,8 @@ func (dpy *Display) setPropHeight(v uint16) {
 	}
 }
 
-func (dpy *Display) setPropOutputs(v []*Output) {
-	dpy.Outputs = v
-	dbus.NotifyChange(dpy, "Outputs")
-}
-
-func (dpy *Display) setPropPrimaryOutput(v *Output) {
-	if dpy.PrimaryOutput != v {
-		dpy.PrimaryOutput = v
-		dbus.NotifyChange(dpy, "PrimaryOutput")
-		if v != nil {
-			fmt.Println("SetPropPrimaryOutput to ", v.Name)
-		} else {
-			fmt.Println("SetPropPrimaryOutput to None")
-		}
-	}
-}
-
 func (dpy *Display) setPropPrimaryRect(v xproto.Rectangle) {
 	if dpy.PrimaryRect != v {
-		fmt.Println("SetPropPrimaryRect to ", v)
 		dpy.PrimaryRect = v
 		dbus.NotifyChange(dpy, "PrimaryRect")
 
@@ -59,12 +41,5 @@ func (dpy *Display) setPropDisplayMode(v int16) {
 	if dpy.DisplayMode != v {
 		dpy.DisplayMode = v
 		dbus.NotifyChange(dpy, "DisplayMode")
-	}
-}
-
-func (dpy *Display) setPropBuiltinOutput(v *Output) {
-	if dpy.BuiltinOutput != v {
-		dpy.BuiltinOutput = v
-		dbus.NotifyChange(dpy, "BuiltinOutput")
 	}
 }

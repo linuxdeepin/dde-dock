@@ -5,9 +5,21 @@ import "github.com/BurntSushi/xgb/randr"
 import "github.com/BurntSushi/xgb/render"
 import "github.com/BurntSushi/xgb"
 import "dlib/logger"
+import "fmt"
+import "os/exec"
 import "math"
 
 var backlightAtom = getAtom(X, "Backlight")
+
+func runCode(code string) bool {
+	err := exec.Command("sh", "-c", code).Run()
+	if err != nil {
+		fmt.Println("Run", code, "failed:", err)
+	} else {
+		fmt.Println("RunCodeOK:", code)
+	}
+	return true
+}
 
 func getAtom(c *xgb.Conn, name string) xproto.Atom {
 	r, err := xproto.InternAtom(c, false, uint16(len(name)), name).Reply()
@@ -25,18 +37,10 @@ func queryAtomName(c *xgb.Conn, atom xproto.Atom) string {
 
 }
 
-func queryOutput(dpy *Display, o randr.Output) *Output {
-	for _, op := range dpy.Outputs {
-		if op.Identify == o {
-			return op
-		}
-	}
-	return nil
-}
-func queryOutputByCrtc(dpy *Display, crtc randr.Crtc) *Output {
-	for _, op := range dpy.Outputs {
-		if op.crtc == crtc {
-			return op
+func queryMonitor(dpy *Display, output randr.Output) *Monitor {
+	for _, m := range dpy.Monitors {
+		if m.isContain(output) {
+			return m
 		}
 	}
 	return nil
@@ -62,6 +66,13 @@ func getOutputName(data [128]byte, defaultName string) string {
 		}
 	}
 	return defaultName
+}
+
+type Mode struct {
+	ID     uint32
+	Width  uint16
+	Height uint16
+	Rate   float64
 }
 
 func buildMode(info randr.ModeInfo) Mode {
@@ -204,6 +215,15 @@ func isCrtcConnected(c *xgb.Conn, crtc randr.Crtc) bool {
 	return true
 }
 
+func queryBacklightRange(c *xgb.Conn, output randr.Output) int32 {
+	prop, err := randr.GetOutputProperty(c, output, backlightAtom, xproto.AtomAny, 0, 1, false, false).Reply()
+	pinfo, err := randr.QueryOutputProperty(X, output, backlightAtom).Reply()
+	if err != nil || prop.NumItems != 1 || !pinfo.Range || len(pinfo.ValidValues) != 2 {
+		return 0
+	}
+	return pinfo.ValidValues[1]
+}
+
 func supportedBacklight(c *xgb.Conn, output randr.Output) (bool, float64) {
 	prop, err := randr.GetOutputProperty(c, output, backlightAtom, xproto.AtomAny, 0, 1, false, false).Reply()
 	pinfo, err := randr.QueryOutputProperty(X, output, backlightAtom).Reply()
@@ -219,17 +239,6 @@ func parseRotationSize(rotation, width, height uint16) (uint16, uint16) {
 	} else {
 		return width, height
 	}
-}
-
-func parseScreenSize(ops []*Output) (width, height uint16) {
-	for _, op := range ops {
-		if op.Opened {
-			alloc := op.pendingAllocation()
-			width = max(width, alloc.Width)
-			height = max(height, alloc.Height)
-		}
-	}
-	return
 }
 
 func fixed2double(v render.Fixed) float32 {
@@ -261,20 +270,6 @@ func genTransformByScale(xScale float32, yScale float32) render.Transform {
 	return m
 }
 
-func setOutputBorder(op randr.Output, border Border) {
-	var buf [2 * 4]byte
-	xgb.Put16(buf[0:2], border.Left)
-	xgb.Put16(buf[2:4], border.Top)
-	xgb.Put16(buf[4:6], border.Right)
-	xgb.Put16(buf[6:8], border.Bottom)
-
-	err := randr.ChangeOutputPropertyChecked(X, op, borderAtom,
-		xproto.AtomInteger, 16, xproto.PropModeReplace, 4,
-		buf[:]).Check()
-	if err != nil {
-		logger.Println(err)
-	}
-}
 func setOutputBacklight(op randr.Output, light float64) {
 	pinfo, err := randr.QueryOutputProperty(X, op, backlightAtom).Reply()
 	if err != nil || !pinfo.Range || len(pinfo.ValidValues) != 2 {
@@ -289,33 +284,6 @@ func setOutputBacklight(op randr.Output, light float64) {
 	if err != nil {
 		logger.Println(err)
 	}
-}
-
-func getOutputBorder(op randr.Output) (ret Border) {
-	prop, err := randr.GetOutputProperty(X, op, borderAtom, xproto.AtomAny, 0, 2, false, false).Reply()
-	defer func() {
-		if err := recover(); err != nil {
-			logger.Println("getOutputBorder recvied an malformed packet", prop)
-			ret = Border{}
-		}
-	}()
-	if err != nil {
-		return Border{}
-	}
-	switch prop.NumItems {
-	case 0:
-		return Border{}
-	case 1:
-		value := xgb.Get16(prop.Data)
-		return Border{value, value, value, value}
-	case 2:
-		lr, tb := xgb.Get16(prop.Data), xgb.Get16(prop.Data[2:])
-		return Border{lr, tb, lr, tb}
-	case 4:
-		l, t, r, b := xgb.Get16(prop.Data), xgb.Get16(prop.Data[2:]), xgb.Get16(prop.Data[4:]), xgb.Get16(prop.Data[6:])
-		return Border{l, t, r, b}
-	}
-	return Border{}
 }
 
 func calcBound(m render.Transform, rotation uint16, width, height uint16) (x1, y1, x2, y2 int) {
@@ -445,13 +413,4 @@ func calcBound2(m render.Transform, rotation uint16, x, y float32, width, height
 	x2 = max(x2, tx2)
 	y2 = max(y2, ty2)
 	return
-}
-
-func guestMode(op *Output, w, h uint16, rate float64) randr.Mode {
-	for _, m := range op.ListModes() {
-		if m.Width == w && m.Height == h && math.Abs(m.Rate-rate) < 0.5 {
-			return randr.Mode(m.ID)
-		}
-	}
-	return 0
 }
