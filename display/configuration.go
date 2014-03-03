@@ -181,10 +181,12 @@ func (dpy *Display) updateMonitorList() {
 
 	for _, m := range dpy.Monitors {
 		if cfg, ok := __CFG__[m.Name]; ok {
-			cfg = cfg
+			if dpy.DisplayMode == DisplayModeCustom {
 			m.restore(cfg)
+			}
 		} else {
 			m.SwitchOn(true)
+			__CFG__[m.Name] = m.saveStatus()
 		}
 	}
 	if setAutoFlag {

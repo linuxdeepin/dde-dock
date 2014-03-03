@@ -106,7 +106,7 @@ func (m *Monitor) generateShell() string {
 		}
 		if m.Opened {
 			if m.CurrentMode.ID == 0 {
-				m.SetMode(m.BestMode.ID)
+				m.setPropCurrentMode(m.BestMode)
 				code = fmt.Sprintf("%s --auto", code)
 			} else {
 				fmt.Println("CurrentModeID:", m.Name, m.CurrentMode.ID)
@@ -186,6 +186,15 @@ func (m *Monitor) updateInfo() {
 		m.setPropRotation(rotation)
 		m.setPropReflect(reflect)
 		m.setPropCurrentMode(DPY.modes[cinfo.Mode])
+	}
+	if ok, backlight := supportedBacklight(X, op); ok {
+		m.SetBrightness(backlight)
+	}
+}
+
+func (m *Monitor) WorkaroundBacklight() {
+	if ok, backlight := supportedBacklight(X, m.outputs[0]); ok {
+		m.SetBrightness(backlight)
 	}
 }
 
