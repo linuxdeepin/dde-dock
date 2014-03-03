@@ -47,7 +47,7 @@ const (
 )
 
 var (
-	logger, _              = pkglogger.New("dde-daemon/grub2")
+	logger, _              = pkglogger.NewLogger("dde-daemon/grub2")
 	grub2ext, _            = pkggrub2ext.NewGrub2Ext("/com/deepin/api/Grub2")
 	entryRegexpSingleQuote = regexp.MustCompile(`^ *(menuentry|submenu) +'(.*?)'.*$`)
 	entryRegexpDoubleQuote = regexp.MustCompile(`^ *(menuentry|submenu) +"(.*?)".*$`)
@@ -458,6 +458,12 @@ func main() {
 			logger.Fatal("%v", err)
 		}
 	}()
+
+	// configure logger
+	logger.AddExtArgForRestart("--debug")
+	if stringInSlice("-d", os.Args) || stringInSlice("--debug", os.Args) {
+		logger.SetLogLevel(pkglogger.LEVEL_DEBUG)
+	}
 
 	grub := NewGrub2()
 	err := dbus.InstallOnSession(grub)
