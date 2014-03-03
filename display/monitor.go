@@ -55,7 +55,26 @@ func (m *Monitor) SetReflect(v uint16) {
 	m.setPropReflect(v)
 }
 
-func (m *Monitor) SetBrightness(v float64) {
+func (m *Monitor) ChangeBrightness(v float64) {
+	if v < 0.1 {
+		v = 0.1
+	} else if v > 1 {
+		v = 1
+	}
+	names := strings.Split(m.Name, joinSeparator)
+	code := "xrandr "
+	for _, name := range names {
+		code = fmt.Sprintf("%s --output %s", code, name)
+		maxBacklight := m.backlightRange[name]
+		if maxBacklight == 0 {
+			code = fmt.Sprintf("%s --brightness %f", code, v)
+		} else if maxBacklight > 0 {
+			code = fmt.Sprintf("%s --brightness 1 --set Backlight %d", code, int32(v*float64(maxBacklight)))
+		} else {
+			code = fmt.Sprintf("%s --brightness 1", code)
+		}
+	}
+	runCode(code)
 	m.setPropBrightness(v)
 }
 
@@ -145,15 +164,6 @@ func (m *Monitor) generateShell() string {
 				code = fmt.Sprintf("%s --reflect normal", code)
 			}
 
-			maxBacklight := m.backlightRange[name]
-			if maxBacklight == 0 {
-				code = fmt.Sprintf("%s --brightness %f", code, m.Brightness)
-			} else if maxBacklight > 0 {
-				code = fmt.Sprintf("%s --brightness 1 --set Backlight %d", code, int32(m.Brightness*float64(maxBacklight)))
-			} else {
-				code = fmt.Sprintf("%s --brightness 1", code)
-			}
-
 		} else {
 			code = fmt.Sprintf(" %s --off", code)
 		}
@@ -188,13 +198,13 @@ func (m *Monitor) updateInfo() {
 		m.setPropCurrentMode(DPY.modes[cinfo.Mode])
 	}
 	if ok, backlight := supportedBacklight(X, op); ok {
-		m.SetBrightness(backlight)
+		m.setPropBrightness(backlight)
 	}
 }
 
 func (m *Monitor) WorkaroundBacklight() {
 	if ok, backlight := supportedBacklight(X, m.outputs[0]); ok {
-		m.SetBrightness(backlight)
+		m.setPropBrightness(backlight)
 	}
 }
 
