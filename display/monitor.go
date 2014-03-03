@@ -11,13 +11,13 @@ const joinSeparator = "|"
 
 type Monitor struct {
 	outputs   []randr.Output
-	Rotations []uint16
-	Reflects  []uint16
-	Modes     []Mode
+	rotations []uint16
+	reflects  []uint16
+	modes     []Mode
 	BestMode  Mode
 	scaleMode bool
 
-	BacklightRange map[string]int32
+	backlightRange map[string]int32
 	IsComposited   bool
 	Name           string
 	FullName       string
@@ -39,6 +39,15 @@ type Monitor struct {
 	Height uint16
 }
 
+func (m *Monitor) ListRotations() []uint16 {
+	return m.rotations
+}
+func (m *Monitor) ListReflect() []uint16 {
+	return m.reflects
+}
+func (m *Monitor) ListModes() []Mode {
+	return m.modes
+}
 func (m *Monitor) SetRotation(v uint16) {
 	m.setPropRotation(v)
 }
@@ -77,7 +86,7 @@ func (m *Monitor) setPrimary(v bool) {
 }
 
 func (m *Monitor) SetMode(id uint32) {
-	for _, _m := range m.Modes {
+	for _, _m := range m.ListModes() {
 		if _m.ID == id {
 			m.setPropCurrentMode(_m)
 			m.scaleMode = false
@@ -136,7 +145,7 @@ func (m *Monitor) generateShell() string {
 				code = fmt.Sprintf("%s --reflect normal", code)
 			}
 
-			maxBacklight := m.BacklightRange[name]
+			maxBacklight := m.backlightRange[name]
 			if maxBacklight == 0 {
 				code = fmt.Sprintf("%s --brightness %f", code, m.Brightness)
 			} else if maxBacklight > 0 {
@@ -184,7 +193,7 @@ func NewMonitor(outputs []randr.Output) *Monitor {
 	m := &Monitor{}
 	runtime.SetFinalizer(m, func(o interface{}) { dbus.UnInstallObject(m) })
 	m.outputs = make([]randr.Output, len(outputs))
-	m.BacklightRange = make(map[string]int32)
+	m.backlightRange = make(map[string]int32)
 	m.setPropBrightness(1)
 	m.IsComposited = len(outputs) > 1
 	copy(m.outputs, outputs)
@@ -199,7 +208,7 @@ func NewMonitor(outputs []randr.Output) *Monitor {
 		if err != nil {
 			continue
 		}
-		m.BacklightRange[string(oinfo.Name)] = queryBacklightRange(X, op)
+		m.backlightRange[string(oinfo.Name)] = queryBacklightRange(X, op)
 		names = append(names, string(oinfo.Name))
 		for i := uint16(0); i < oinfo.NumModes; i++ {
 			modeMap[oinfo.Modes[i]] += 1
@@ -222,22 +231,22 @@ func NewMonitor(outputs []randr.Output) *Monitor {
 		}
 
 	}
-	m.Modes = make([]Mode, 0)
-	m.Rotations = make([]uint16, 0)
-	m.Reflects = make([]uint16, 0)
+	m.modes = make([]Mode, 0)
+	m.rotations = make([]uint16, 0)
+	m.reflects = make([]uint16, 0)
 	for mode, value := range modeMap {
 		if value == len(m.outputs) {
-			m.Modes = append(m.Modes, DPY.modes[mode])
+			m.modes = append(m.modes, DPY.modes[mode])
 		}
 	}
 	for r, value := range rotationMap {
 		if value == len(m.outputs) {
-			m.Rotations = append(m.Rotations, r)
+			m.rotations = append(m.rotations, r)
 		}
 	}
 	for r, value := range reflectMap {
 		if value == len(m.outputs) {
-			m.Reflects = append(m.Reflects, r)
+			m.reflects = append(m.reflects, r)
 		}
 	}
 
@@ -252,7 +261,7 @@ func (m *Monitor) ensureSize(w, h uint16) {
 	//find the nearest mode
 	delta := float64(w + h)
 	modeID := uint32(0)
-	for _, mInfo := range m.Modes {
+	for _, mInfo := range m.ListModes() {
 		t := math.Abs(float64((mInfo.Width + mInfo.Height) - (w + h)))
 		if t <= delta {
 			delta = t

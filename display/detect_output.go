@@ -31,11 +31,11 @@ func getMatchedSize(ops []*Monitor) (uint16, uint16) {
 	//TODO: calc rotation
 	sameModes := make([]Mode, 0)
 	first := ops[0]
-	for _, modeA := range first.Modes {
+	for _, modeA := range first.ListModes() {
 		allHave := true
 		for _, op := range ops[1:] {
 			found := false
-			for _, modeB := range op.Modes {
+			for _, modeB := range op.ListModes() {
 				if modeA.Width == modeB.Width && modeA.Height == modeA.Height {
 					found = true
 					break
