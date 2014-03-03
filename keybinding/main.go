@@ -137,25 +137,31 @@ func (m *BindManager) ChangeShortcut(id int32, shortcut string) (string, []int32
                 }
         }
 
+        retStr := ""
+        retList := []int32{}
         if !keyIsValid(shortcut) {
                 insertConflictInvalidList(id)
-                return "Invalid", []int32{}
+                //return "Invalid", []int32{}
+                retStr = "Invalid"
         } else {
                 isConflict, list := conflictChecked(id, shortcut)
                 if isConflict {
                         insertConflictInvalidList(id)
                         insertConflictValidList(list)
-                        return "Conflict", list
+                        //return "Conflict", list
+                        retStr = "Conflict"
+                        retList = list
                 } else {
                         deleteConflictInvalidId(id)
                         deleteConflictValidId(id)
-                        return "Valid", []int32{}
+                        //return "Valid", []int32{}
+                        retStr = "Valid"
                 }
         }
 
         modifyShortcutById(id, shortcut)
 
-        return "Valid", []int32{}
+        return retStr, retList
 }
 
 func (m *BindManager) DeleteCustomBind(id int32) {
