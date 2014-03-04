@@ -23,9 +23,9 @@ package main
 
 import (
 	"bufio"
-	pkggrub2ext "dbus/com/deepin/api/grub2"
+	apigrub2ext "dbus/com/deepin/api/grub2"
 	"dlib/dbus"
-	pkglogger "dlib/logger"
+	liblogger "dlib/logger"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -47,8 +47,8 @@ const (
 )
 
 var (
-	logger, _              = pkglogger.NewLogger("dde-daemon/grub2")
-	grub2ext, _            = pkggrub2ext.NewGrub2Ext("/com/deepin/api/Grub2")
+	logger                 = liblogger.NewLogger("dde-daemon/grub2")
+	grub2ext, _            = apigrub2ext.NewGrub2Ext("/com/deepin/api/Grub2")
 	entryRegexpSingleQuote = regexp.MustCompile(`^ *(menuentry|submenu) +'(.*?)'.*$`)
 	entryRegexpDoubleQuote = regexp.MustCompile(`^ *(menuentry|submenu) +"(.*?)".*$`)
 )
@@ -460,9 +460,9 @@ func main() {
 	}()
 
 	// configure logger
-	logger.AddExtArgForRestart("--debug")
+	logger.SetRestartCommand("/usr/lib/deepin-daemon/grub2", "--debug")
 	if stringInSlice("-d", os.Args) || stringInSlice("--debug", os.Args) {
-		logger.SetLogLevel(pkglogger.LEVEL_DEBUG)
+		logger.SetLogLevel(liblogger.LEVEL_DEBUG)
 	}
 
 	grub := NewGrub2()
