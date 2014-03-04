@@ -17,6 +17,8 @@ import (
 	"unsafe"
 )
 
+var l = logger.NewLogger("audio")
+
 type Audio struct {
 	//unexported properties
 	pa            *C.pa
@@ -1235,9 +1237,8 @@ func main() {
 	dbus.DealWithUnhandledMessage()
 	fmt.Println("module started\n")
 	go C.pa_subscribe(audio.pa)
-	l, _ := logger.NewLogger("audio")
 	if err := dbus.Wait(); err != nil {
-		l.Fatal("lost dbus session:", err)
+		l.Error("lost dbus session:", err)
 		os.Exit(1)
 	} else {
 		os.Exit(0)
