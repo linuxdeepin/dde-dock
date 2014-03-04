@@ -51,10 +51,20 @@ const (
 	schema_gsettings_screensaver         = "org.gnome.desktop.screensaver"
 )
 
+const (
+	MEDIA_KEY_DEST = "com.deepin.daemon.KeyBinding"
+	MEDIA_KEY_PATH = "/com/deepin/daemon/MediaKey"
+	MEDIA_KEY_IFC  = "com.deepin.daemon.MediaKey"
+
+	MEDIA_KEY_SCHEMA_ID = "com.deepin.dde.key-binding.mediakey"
+)
+
 type Power struct {
 	//plugins.power keys
-	powerProfile    *gio.Settings
-	powerSettings   *gio.Settings
+	powerProfile  *gio.Settings
+	powerSettings *gio.Settings
+	mediaKey      *gio.Settings
+
 	ButtonHibernate *property.GSettingsStringProperty `access:"readwrite"`
 	ButtonPower     *property.GSettingsStringProperty `access:"readwrite"`
 	ButtonSleep     *property.GSettingsStringProperty `access:"readwrite"`
@@ -109,6 +119,7 @@ func NewPower() (*Power, error) {
 		schema_gsettings_power_settings_id,
 		string(schema_gsettings_power_settings_path)+
 			power.CurrentProfile.Get()+"/")
+
 	power.screensaverSettings = gio.NewSettings(schema_gsettings_screensaver)
 	power.getGsettingsProperty()
 
