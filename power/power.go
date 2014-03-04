@@ -28,7 +28,7 @@ import (
 	"dlib/gio-2.0"
 	"dlib/logger"
 	"fmt"
-	//"os"
+	"os"
 	"regexp"
 	//"unsafe"
 )
@@ -256,10 +256,13 @@ func main() {
 	dbus.InstallOnSession(power)
 	dbus.DealWithUnhandledMessage()
 	fmt.Print("power module started,looping")
-	dlib.StartLoop()
+	go dlib.StartLoop()
 	l, _ := logger.NewLogger("power")
 	if err := dbus.Wait(); err != nil {
 		l.Fatal("lost dbus session:", err)
+		os.Exit(1)
+	} else {
+		os.Exit(0)
 	}
 	//select {}
 }

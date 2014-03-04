@@ -500,7 +500,7 @@ void *pa_get_device_list(pa *self)
         // requests
         switch (state)
         {
-        // State 0: we haven't done anything yet
+            // State 0: we haven't done anything yet
         case 0:
             // This sends an operation to the server.  pa_sinklist_info is
             // our callback function and a pointer to our devicelist will
@@ -586,7 +586,7 @@ void *pa_get_client_list(pa *self)
         // requests
         switch (state)
         {
-        // State 0: we haven't done anything yet
+            // State 0: we haven't done anything yet
         case 0:
             // This sends an operation to the server.  pa_sinklist_info is
             // our callback function and a pointer to our devicelist will
@@ -2297,7 +2297,7 @@ void pa_state_cb(pa_context *c, void *userdata)
     state = pa_context_get_state(c);
     switch  (state)
     {
-    // There are just here for reference
+        // There are just here for reference
     case PA_CONTEXT_UNCONNECTED:
     case PA_CONTEXT_CONNECTING:
     case PA_CONTEXT_AUTHORIZING:
@@ -3256,18 +3256,4 @@ int getChannelMap(pa_channel_map cm, int i)
     //member map is a keyword in golang
     return cm.map[i];
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

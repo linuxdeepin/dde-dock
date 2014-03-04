@@ -1234,10 +1234,13 @@ func main() {
 	}
 	dbus.DealWithUnhandledMessage()
 	fmt.Println("module started\n")
-	C.pa_subscribe(audio.pa)
+	go C.pa_subscribe(audio.pa)
 	l, _ := logger.NewLogger("audio")
 	if err := dbus.Wait(); err != nil {
 		l.Fatal("lost dbus session:", err)
+		os.Exit(1)
+	} else {
+		os.Exit(0)
 	}
 	//select {}
 }
