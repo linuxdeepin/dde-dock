@@ -23,6 +23,9 @@ func main() {
 	dbus.DealWithUnhandledMessage()
 	go dlib.StartLoop()
 	if err := dbus.Wait(); err != nil {
-		log.Fatal("lost dbus session:", err)
+		log.Panicln("lost dbus session:", err)
+		os.Exit(1)
+	} else {
+		os.Exit(0)
 	}
 }
