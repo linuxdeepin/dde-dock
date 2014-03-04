@@ -51,6 +51,8 @@ const (
 	schema_gsettings_screensaver         = "org.gnome.desktop.screensaver"
 )
 
+var l = logger.NewLogger("power")
+
 const (
 	MEDIA_KEY_DEST = "com.deepin.daemon.KeyBinding"
 	MEDIA_KEY_PATH = "/com/deepin/daemon/MediaKey"
@@ -268,9 +270,8 @@ func main() {
 	dbus.DealWithUnhandledMessage()
 	fmt.Print("power module started,looping")
 	go dlib.StartLoop()
-	l, _ := logger.NewLogger("power")
 	if err := dbus.Wait(); err != nil {
-		l.Fatal("lost dbus session:", err)
+		l.Error("lost dbus session:", err)
 		os.Exit(1)
 	} else {
 		os.Exit(0)
