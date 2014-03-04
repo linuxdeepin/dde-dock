@@ -2,6 +2,7 @@ package main
 
 import "dlib/dbus"
 import "dlib/dbus/property"
+import "os"
 import nm "dbus/org/freedesktop/networkmanager"
 
 const (
@@ -65,5 +66,9 @@ func _NewManager() (m *Manager) {
 func main() {
 	dbus.InstallOnSession(_Manager)
 	dbus.DealWithUnhandledMessage()
-	select {}
+	if err := dbus.Wait(); err != nil {
+		os.Exit(1)
+	} else {
+		os.Exit(0)
+	}
 }
