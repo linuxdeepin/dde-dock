@@ -8,6 +8,7 @@ import "C"
 
 import (
 	"dlib/dbus"
+	"dlib/logger"
 	"fmt"
 	"os"
 	"reflect"
@@ -1234,5 +1235,9 @@ func main() {
 	dbus.DealWithUnhandledMessage()
 	fmt.Println("module started\n")
 	C.pa_subscribe(audio.pa)
+	l, _ := logger.NewLogger("audio")
+	if err := dbus.Wait(); err != nil {
+		l.Fatal("lost dbus session:", err)
+	}
 	//select {}
 }
