@@ -1242,5 +1242,4 @@ func main() {
 	} else {
 		os.Exit(0)
 	}
-	//select {}
 }
