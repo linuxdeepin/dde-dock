@@ -7,7 +7,7 @@
 		<description>system shortcut</description>
 	</key>
 	<key type="as" name="terminal">
-        <default>['&lt;Control&gt;&lt;Alt&gt;T','/usr/bin/x-terminal-emulator']</default>
+        <default>['&lt;Control&gt;&lt;Alt&gt;T','/usr/bin/default-terminal']</default>
 		<summary>shortcut</summary>
 		<description>system shortcut</description>
 	</key>
@@ -78,71 +78,6 @@
 	</key>
 	<key type="as" name="next-key">
 		<default>['&lt;Shift&gt;&lt;Super&gt;Tab']</default>
-		<summary>shortcut</summary>
-		<description>system shortcut</description>
-	</key>
-	<key type="as" name="calculator">
-		<default>['XF86Calculator']</default>
-		<summary>shortcut</summary>
-		<description>system shortcut</description>
-	</key>
-	<key type="as" name="eject">
-		<default>['XF86Eject']</default>
-		<summary>shortcut</summary>
-		<description>system shortcut</description>
-	</key>
-	<key type="as" name="email">
-		<default>['XF86Mail']</default>
-		<summary>shortcut</summary>
-		<description>system shortcut</description>
-	</key>
-	<key type="as" name="www">
-		<default>['XF86WWW']</default>
-		<summary>shortcut</summary>
-		<description>system shortcut</description>
-	</key>
-	<key type="as" name="media">
-		<default>['XF86AudioMedia']</default>
-		<summary>shortcut</summary>
-		<description>system shortcut</description>
-	</key>
-	<key type="as" name="play">
-		<default>['XF86AudioPlay']</default>
-		<summary>shortcut</summary>
-		<description>system shortcut</description>
-	</key>
-	<key type="as" name="pause">
-		<default>['XF86AudioPause']</default>
-		<summary>shortcut</summary>
-		<description>system shortcut</description>
-	</key>
-	<key type="as" name="stop">
-		<default>['XF86AudioStop']</default>
-		<summary>shortcut</summary>
-		<description>system shortcut</description>
-	</key>
-	<key type="as" name="volume-down">
-		<default>['XF86AudioLowerVolume']</default>
-		<summary>shortcut</summary>
-		<description>system shortcut</description>
-	</key>
-	<key type="as" name="volume-mute">
-		<default>['XF86AudioMute']</default>
-		<summary>shortcut</summary>
-		<description>system shortcut</description>
-	</key>
-	<key type="as" name="volume-up">
-		<default>['XF86AudioRaiseVolume']</default>
-		<summary>shortcut</summary>
-		<description>system shortcut</description>
-	</key>
-	<key type="as" name="previous">
-		<default>['XF86AudioPrev']</default>
-		<summary>shortcut</summary>
-		<description>system shortcut</description>
-	</key>
-	<key type="as" name="next">
-		<default>['XF86AudioNext']</default>
 		<summary>shortcut</summary>
 		<description>system shortcut</description>
 	</key>

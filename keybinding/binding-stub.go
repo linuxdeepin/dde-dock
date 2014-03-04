@@ -203,7 +203,7 @@ func getMediaKeyInfo() []ShortcutInfo {
         mediaInfoList := []ShortcutInfo{}
         for i, n := range MediaIdNameMap {
                 if desc, ok := MediaNameDescMap[n]; ok {
-                        shortcut := getSystemValue(n, false)
+                        shortcut := mediaKeySettings.GetString(n)
                         tmp := newShortcutInfo(i, desc, shortcut)
                         tmp.index = MediaIdIndexMap[i]
                         mediaInfoList = append(mediaInfoList, tmp)

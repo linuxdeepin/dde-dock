@@ -33,6 +33,7 @@ import (
         "github.com/BurntSushi/xgbutil"
         "github.com/BurntSushi/xgbutil/keybind"
         "github.com/BurntSushi/xgbutil/xevent"
+        "os"
         "strconv"
         "strings"
 )
@@ -215,7 +216,6 @@ func InitVariable() {
         bindGSettings = gio.NewSettings(_BINDING_SCHEMA_ID)
         systemGSettings = gio.NewSettings(_SYSTEM_SCHEMA_ID)
         wmGSettings = gio.NewSettings(_WM_SCHEMA_ID)
-        mediaGSettings = gio.NewSettings(_MEDIA_SCHEMA_ID)
         shiftGSettings = gio.NewSettingsWithPath(_COMPIZ_SHIFT_SCHEMA_ID,
                 _COMPIZ_SHIFT_SCHEMA_PATH)
         putGSettings = gio.NewSettingsWithPath(_COMPIZ_PUT_SCHEMA_ID,
@@ -252,16 +252,31 @@ func main() {
         defer C.grab_xrecord_finalize()
 
         bm := NewBindManager()
-        dbus.InstallOnSession(bm)
+        err := dbus.InstallOnSession(bm)
+        if err != nil {
+                fmt.Println("Install DBus Session Failed:", err)
+                panic(err)
+        }
+
+        startMediaKey()
 
         gm := &GrabManager{}
-        dbus.InstallOnSession(gm)
+        err = dbus.InstallOnSession(gm)
+        if err != nil {
+                fmt.Println("Install DBus Session Failed:", err)
+                panic(err)
+        }
 
         grabKeyPairs(getSystemPairs(), true)
         grabKeyPairs(getCustomPairs(), true)
-        listenKeyPressEvent()
         dbus.DealWithUnhandledMessage()
 
         go dlib.StartLoop()
-        xevent.Main(X)
+        go xevent.Main(X)
+        if err = dbus.Wait(); err != nil {
+                fmt.Println("lost session bus:", err)
+                os.Exit(1)
+        } else {
+                os.Exit(0)
+        }
 }

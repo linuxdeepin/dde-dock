@@ -181,24 +181,27 @@ func execCommand(value string) {
         }
 }
 
-func listenKeyPressEvent() {
+func (op *MediaKeyManager) listenKeyPressEvent() {
         xevent.KeyPressFun(
                 func(X *xgbutil.XUtil, e xevent.KeyPressEvent) {
                         fmt.Printf("State: %d, Detail: %d\n",
                                 e.State, e.Detail)
                         modStr := keybind.ModifierString(e.State)
                         keyStr := keybind.LookupString(X, e.State, e.Detail)
-                        value := ""
-                        if len(modStr) > 0 {
-                                value = modStr + "-" + keyStr
-                        } else {
-                                value = keyStr
-                        }
-                        fmt.Printf("%s pressed...\n", value)
-                        tmpInfo := newKeyCodeInfo(value)
-                        if ok, v := getExecAction(tmpInfo); ok {
-                                // 不然按键会阻塞，直到程序推出
-                                go execCommand(v)
+                        fmt.Println("modStr:", modStr, "keyStr:", keyStr)
+                        if !op.emitSignal(modStr, keyStr) {
+                                value := ""
+                                if len(modStr) > 0 {
+                                        value = modStr + "-" + keyStr
+                                } else {
+                                        value = keyStr
+                                }
+                                fmt.Printf("%s pressed...\n", value)
+                                tmpInfo := newKeyCodeInfo(value)
+                                if ok, v := getExecAction(tmpInfo); ok {
+                                        // 不然按键会阻塞，直到程序推出
+                                        go execCommand(v)
+                                }
                         }
                 }).Connect(X, X.RootWin())
 }

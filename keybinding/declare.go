@@ -22,95 +22,93 @@
 package main
 
 import (
-	"dlib/gio-2.0"
-	"github.com/BurntSushi/xgb/xproto"
-	"github.com/BurntSushi/xgbutil"
+        "dlib/gio-2.0"
+        "github.com/BurntSushi/xgb/xproto"
+        "github.com/BurntSushi/xgbutil"
 )
 
 type ShortcutInfo struct {
-	Id       int32
-	Desc     string
-	Shortcut string
-        index int32
+        Id       int32
+        Desc     string
+        Shortcut string
+        index    int32
 }
 
 type BindManager struct {
-	SystemList    []ShortcutInfo
-	MediaList     []ShortcutInfo
-	WindowList    []ShortcutInfo
-	WorkSpaceList []ShortcutInfo
-	CustomList    []ShortcutInfo
+        SystemList    []ShortcutInfo
+        MediaList     []ShortcutInfo
+        WindowList    []ShortcutInfo
+        WorkSpaceList []ShortcutInfo
+        CustomList    []ShortcutInfo
 
-	ConflictValid   []int32
-	ConflictInvalid []int32
+        ConflictValid   []int32
+        ConflictInvalid []int32
 }
 
 type KeyCodeInfo struct {
-	State  uint16
-	Detail xproto.Keycode
+        State   uint16
+        Detail  xproto.Keycode
 }
 
 type ConflictInfo struct {
-	IsConflict bool
-	IdList     []int32
+        IsConflict bool
+        IdList     []int32
 }
 
 const (
-	_BINDING_DEST = "com.deepin.daemon.KeyBinding"
-	_BINDING_PATH = "/com/deepin/daemon/KeyBinding"
-	_BINDING_IFC  = "com.deepin.daemon.KeyBinding"
+        _BINDING_DEST = "com.deepin.daemon.KeyBinding"
+        _BINDING_PATH = "/com/deepin/daemon/KeyBinding"
+        _BINDING_IFC  = "com.deepin.daemon.KeyBinding"
 
-	_BINDING_SCHEMA_ID      = "com.deepin.dde.key-binding"
-	_SYSTEM_SCHEMA_ID       = "com.deepin.dde.key-binding.system"
-	_CUSTOM_ADD_SCHEMA_ID   = "com.deepin.dde.key-binding.custom"
-	_CUSTOM_ADD_SCHEMA_PATH = "/com/deepin/dde/key-binding/profiles/"
+        _BINDING_SCHEMA_ID      = "com.deepin.dde.key-binding"
+        _SYSTEM_SCHEMA_ID       = "com.deepin.dde.key-binding.system"
+        _CUSTOM_ADD_SCHEMA_ID   = "com.deepin.dde.key-binding.custom"
+        _CUSTOM_ADD_SCHEMA_PATH = "/com/deepin/dde/key-binding/profiles/"
 
-	_WM_SCHEMA_ID             = "org.gnome.desktop.wm.keybindings"
-	_MEDIA_SCHEMA_ID          = "org.gnome.settings-daemon.plugins.media-keys"
-	_COMPIZ_SHIFT_SCHEMA_ID   = "org.compiz.shift"
-	_COMPIZ_SHIFT_SCHEMA_PATH = "/org/compiz/profiles/shift/"
-	_COMPIZ_PUT_SCHEMA_ID     = "org.compiz.put"
-	_COMPIZ_PUT_SCHEMA_PATH   = "/org/compiz/profiles/put/"
+        _WM_SCHEMA_ID             = "org.gnome.desktop.wm.keybindings"
+        _COMPIZ_SHIFT_SCHEMA_ID   = "org.compiz.shift"
+        _COMPIZ_SHIFT_SCHEMA_PATH = "/org/compiz/profiles/shift/"
+        _COMPIZ_PUT_SCHEMA_ID     = "org.compiz.put"
+        _COMPIZ_PUT_SCHEMA_PATH   = "/org/compiz/profiles/put/"
 
-	_CUSTOM_ID_BASE      = 10000
-	_CUSTOM_KEY_ID       = "id"
-	_CUSTOM_KEY_NAME     = "name"
-	_CUSTOM_KEY_SHORTCUT = "shortcut"
-	_CUSTOM_KEY_ACTION   = "action"
+        _CUSTOM_ID_BASE      = 10000
+        _CUSTOM_KEY_ID       = "id"
+        _CUSTOM_KEY_NAME     = "name"
+        _CUSTOM_KEY_SHORTCUT = "shortcut"
+        _CUSTOM_KEY_ACTION   = "action"
 
-	_BINDING_CUSTOM_LIST  = "custom-list"
-	_BINDING_VALID_LIST   = "conflict-valid"
-	_BINDING_INVALID_LIST = "conflict-invalid"
+        _BINDING_CUSTOM_LIST  = "custom-list"
+        _BINDING_VALID_LIST   = "conflict-valid"
+        _BINDING_INVALID_LIST = "conflict-invalid"
 )
 
 var (
-	systemGSettings *gio.Settings
-	bindGSettings   *gio.Settings
-	wmGSettings     *gio.Settings
-	mediaGSettings  *gio.Settings
-	shiftGSettings  *gio.Settings
-	putGSettings    *gio.Settings
+        systemGSettings *gio.Settings
+        bindGSettings   *gio.Settings
+        wmGSettings     *gio.Settings
+        shiftGSettings  *gio.Settings
+        putGSettings    *gio.Settings
 
-	X              *xgbutil.XUtil
-	GrabKeyBinds   map[*KeyCodeInfo]string
-	IdGSettingsMap map[int32]*gio.Settings
+        X              *xgbutil.XUtil
+        GrabKeyBinds   map[*KeyCodeInfo]string
+        IdGSettingsMap map[int32]*gio.Settings
 
-	CustomPrevPairs map[string]string
-	SystemPrevPairs map[string]string
+        CustomPrevPairs map[string]string
+        SystemPrevPairs map[string]string
 )
 
 var _ModifierMap = map[string]string{
-	"caps_lock": "lock",
-	"alt":       "mod1",
-	"meta":      "mod1",
-	"num_lock":  "mod2",
-	"super":     "mod4",
-	"hyper":     "mod4",
+        "caps_lock": "lock",
+        "alt":       "mod1",
+        "meta":      "mod1",
+        "num_lock":  "mod2",
+        "super":     "mod4",
+        "hyper":     "mod4",
 }
 
 var _ModKeyMap = map[string]string{
-	"mod1": "alt",
-	"mod4": "super",
-	"lock": "caps_lock",
-	"mod2": "num_lock",
+        "mod1": "alt",
+        "mod4": "super",
+        "lock": "caps_lock",
+        "mod2": "num_lock",
 }

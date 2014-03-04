@@ -163,7 +163,7 @@ grab_key_event_cb (XPointer user_data, XRecordInterceptData *hook)
     int event_type = hook->data[0];
     KeyCode keycode = hook->data[1];
 
-    g_debug ("event type: %d, code: %d\n", (int)event_type, (int)keycode);
+    /*g_debug ("event type: %d, code: %d\n", (int)event_type, (int)keycode);*/
 
     switch (event_type) {
         case KeyPress:
@@ -171,7 +171,7 @@ grab_key_event_cb (XPointer user_data, XRecordInterceptData *hook)
             break;
 
         case KeyRelease:
-            g_debug ("key_press_cnt: %d\n", key_press_cnt);
+            /*g_debug ("key_press_cnt: %d\n", key_press_cnt);*/
 
             if (key_press_cnt == 1) {
                 exec_action (keycode);
@@ -196,7 +196,7 @@ grab_xrecord_key (int keycode, const char *action)
         return;
     }
 
-    g_debug ("insert code: %d, action: %s\n", keycode, action);
+    /*g_debug ("insert code: %d, action: %s\n", keycode, action);*/
     g_hash_table_insert (key_table,
                          GINT_TO_POINTER(keycode), g_strdup(action));
 }
@@ -216,7 +216,7 @@ static void
 exec_action (int code)
 {
     gchar *action = g_hash_table_lookup (key_table, GINT_TO_POINTER (code));
-    g_debug ("exec action: %s\n", action);
+    /*g_debug ("exec action: %s\n", action);*/
 
     if (action) {
         if (!is_grabbed()) {

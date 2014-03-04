@@ -25,6 +25,8 @@ import (
         "dlib/dbus"
         "dlib/gio-2.0"
         "dlib/logger"
+        "fmt"
+        "strings"
 )
 
 type MediaKeyManager struct {
@@ -38,8 +40,9 @@ type MediaKeyManager struct {
         NumLockOn      func()
         NumLockOff     func()
         DisplaySwitch  func()
-        WIFIOn         func()
-        WIFIOff        func()
+        TouchPadOn     func()
+        TouchPadOff    func()
+        PowerOff       func()
 }
 
 const (
@@ -90,11 +93,62 @@ func (op *MediaKeyManager) listenMediaKey() {
         })
 }
 
+func (op *MediaKeyManager) emitSignal(modStr, keyStr string) bool {
+        fmt.Println("***** ModStr:", modStr, "------")
+        fmt.Println("***** KeyStr:", keyStr, "------")
+        switch keyStr {
+        case "XF86MonBrightnessUp":
+                op.BrightnessUp()
+                return true
+        case "XF86MonBrightnessDown":
+                op.BrightnessDown()
+                return true
+        case "XF86AudioMute":
+                op.AudioMute()
+                return true
+        case "XF86AudioLowerVolume":
+                op.AudioDown()
+                return true
+        case "XF86AudioRaiseVolume":
+                op.AudioUp()
+                return true
+        case "Num_Lock":
+                if strings.Contains(modStr, "mod2") {
+                        op.NumLockOff()
+                } else {
+                        op.NumLockOn()
+                }
+                return true
+        case "Caps_Lock":
+                if strings.Contains(modStr, "lock") {
+                        op.CapsLockOff()
+                } else {
+                        op.CapsLockOn()
+                }
+                return true
+        case "XF86TouchPadOn":
+                op.TouchPadOn()
+                return true
+        case "XF86TouchPadOff":
+                op.TouchPadOff()
+                return true
+        case "XF86Display":
+                op.DisplaySwitch()
+                return true
+        case "XF86PowerOff":
+                op.PowerOff()
+                return true
+        }
+
+        return false
+}
+
 func startMediaKey() {
         m := &MediaKeyManager{}
 
         initMediaKey()
         m.listenMediaKey()
+        m.listenKeyPressEvent()
 
         dbus.InstallOnSession(m)
 }

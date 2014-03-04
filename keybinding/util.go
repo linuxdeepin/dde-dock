@@ -126,11 +126,11 @@ func getAllShortcuts() map[int32]string {
         allShortcuts := make(map[int32]string)
 
         for i, n := range IdNameMap {
-                shortcut := getSystemValue(n, false)
-                if len(shortcut) <= 0 {
+                if i >= 300 && i < 500 {
                         continue
                 }
-                if i >= 300 && i < 500 {
+                shortcut := getSystemValue(n, false)
+                if len(shortcut) <= 0 {
                         continue
                 }
                 allShortcuts[i] = strings.ToLower(shortcut)

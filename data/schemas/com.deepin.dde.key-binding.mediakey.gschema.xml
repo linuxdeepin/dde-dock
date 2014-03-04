@@ -16,6 +16,56 @@
             <summary>TouchPad Off</summary>
             <description>Close TouchPad</description>
         </key>
+        <key type="s" name="calculator">
+            <default>'XF86Calculator'</default>
+            <summary>shortcut</summary>
+            <description>system shortcut</description>
+        </key>
+        <key type="s" name="eject">
+            <default>'XF86Eject'</default>
+            <summary>shortcut</summary>
+            <description>system shortcut</description>
+        </key>
+        <key type="s" name="email">
+            <default>'XF86Mail'</default>
+            <summary>shortcut</summary>
+            <description>system shortcut</description>
+        </key>
+        <key type="s" name="www">
+            <default>'XF86WWW'</default>
+            <summary>shortcut</summary>
+            <description>system shortcut</description>
+        </key>
+        <key type="s" name="media">
+            <default>'XF86AudioMedia'</default>
+            <summary>shortcut</summary>
+            <description>system shortcut</description>
+        </key>
+        <key type="s" name="play">
+            <default>'XF86AudioPlay'</default>
+            <summary>shortcut</summary>
+            <description>system shortcut</description>
+        </key>
+        <key type="s" name="pause">
+            <default>'XF86AudioPause'</default>
+            <summary>shortcut</summary>
+            <description>system shortcut</description>
+        </key>
+        <key type="s" name="stop">
+            <default>'XF86AudioStop'</default>
+            <summary>shortcut</summary>
+            <description>system shortcut</description>
+        </key>
+        <key type="s" name="previous">
+            <default>'XF86AudioPrev'</default>
+            <summary>shortcut</summary>
+            <description>system shortcut</description>
+        </key>
+        <key type="s" name="next">
+            <default>'XF86AudioNext'</default>
+            <summary>shortcut</summary>
+            <description>system shortcut</description>
+        </key>
         <key type="s" name="volume-mute">
             <default>'XF86AudioMute'</default>
             <summary>Audio Mute</summary>
@@ -51,21 +101,25 @@
             <summary>Audio Repeat</summary>
             <description></description>
         </key>
+        <!--
         <key type="s" name="audio-rand-play">
             <default>'XF86AudioRandomPlay'</default>
             <summary>Audio Random Play</summary>
             <description></description>
         </key>
+        -->
         <key type="s" name="display">
             <default>'XF86Display'</default>
             <summary>Display</summary>
             <description></description>
         </key>
+        <!--
         <key type="s" name="rotate-windows">
             <default>'XF86RotateWindows'</default>
             <summary>Rotate Windows</summary>
             <description></description>
         </key>
+        -->
         <key type="s" name="power-off">
             <default>'XF86PowerOff'</default>
             <summary>Power Off</summary>
