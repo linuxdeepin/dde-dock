@@ -57,6 +57,7 @@ const (
 var (
         monitor   = gio.VolumeMonitorGet()
         objectMap = make(map[int32]*ObjectInfo)
+        logObject = logger.NewLogger("daemon/mounts")
 
         genID, destroyID = func() (func() int32, func()) {
                 var mutex sync.Mutex
@@ -78,18 +79,18 @@ var (
 func (m *Manager) DeviceEject(id int32) {
         info, ok := objectMap[id]
         if !ok {
-                logger.Printf("Eject id - %d not in objectMap.\n", id)
+                logObject.Info("Eject id - %d not in objectMap.\n", id)
                 return
         }
 
-        logger.Printf("Eject type: %s\n", info.Type)
+        logObject.Info("Eject type: %s\n", info.Type)
         switch info.Type {
         case "drive":
                 op := info.Object.(*gio.Drive)
                 op.Eject(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
                         _, err := op.EjectFinish(res)
                         if err != nil {
-                                logger.Printf("drive eject failed: %d, %s\n", id, err)
+                                logObject.Info("drive eject failed: %d, %s\n", id, err)
                         }
                 }))
         case "volume":
@@ -97,7 +98,7 @@ func (m *Manager) DeviceEject(id int32) {
                 op.Eject(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
                         _, err := op.EjectFinish(res)
                         if err != nil {
-                                logger.Printf("volume eject failed: %d, %s\n", id, err)
+                                logObject.Info("volume eject failed: %d, %s\n", id, err)
                         }
                 }))
         case "mount":
@@ -105,29 +106,29 @@ func (m *Manager) DeviceEject(id int32) {
                 op.Eject(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
                         _, err := op.EjectFinish(res)
                         if err != nil {
-                                logger.Printf("mount eject failed: %d, %s\n", id, err)
+                                logObject.Info("mount eject failed: %d, %s\n", id, err)
                         }
                 }))
         default:
-                logger.Printf("'%s' invalid type\n", info.Type)
+                logObject.Info("'%s' invalid type\n", info.Type)
         }
 }
 
 func (m *Manager) DeviceMount(id int32) {
         info, ok := objectMap[id]
         if !ok {
-                logger.Printf("Mount id - %d not in objectMap.\n", id)
+                logObject.Info("Mount id - %d not in objectMap.\n", id)
                 return
         }
 
-        logger.Printf("Mount type: %s\n", info.Type)
+        logObject.Info("Mount type: %s\n", info.Type)
         switch info.Type {
         case "volume":
                 op := info.Object.(*gio.Volume)
                 op.Mount(gio.MountMountFlagsNone, nil, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
                         _, err := op.MountFinish(res)
                         if err != nil {
-                                logger.Printf("volume mount failed: %d, %s\n", id, err)
+                                logObject.Info("volume mount failed: %d, %s\n", id, err)
                         }
                 }))
         case "mount":
@@ -135,33 +136,33 @@ func (m *Manager) DeviceMount(id int32) {
                 op.Remount(gio.MountMountFlagsNone, nil, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
                         _, err := op.RemountFinish(res)
                         if err != nil {
-                                logger.Printf("mount remount failed: %d, %s\n", id, err)
+                                logObject.Info("mount remount failed: %d, %s\n", id, err)
                         }
                 }))
         default:
-                logger.Printf("'%s' invalid type\n", info.Type)
+                logObject.Info("'%s' invalid type\n", info.Type)
         }
 }
 
 func (m *Manager) DeviceUnmount(id int32) {
         info, ok := objectMap[id]
         if !ok {
-                logger.Printf("Unmount id - %d not in objectMap.\n", id)
+                logObject.Info("Unmount id - %d not in objectMap.\n", id)
                 return
         }
 
-        logger.Printf("Unmount type: %s\n", info.Type)
+        logObject.Info("Unmount type: %s\n", info.Type)
         switch info.Type {
         case "mount":
                 op := info.Object.(*gio.Mount)
                 op.Unmount(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
                         _, err := op.UnmountFinish(res)
                         if err != nil {
-                                logger.Printf("mount unmount failed: %d, %s\n", id, err)
+                                logObject.Info("mount unmount failed: %d, %s\n", id, err)
                         }
                 }))
         default:
-                logger.Printf("'%s' invalid type\n", info.Type)
+                logObject.Info("'%s' invalid type\n", info.Type)
         }
 }
 
@@ -211,7 +212,7 @@ func newDiskInfo(value interface{}, t string, id int32) DiskInfo {
                         info.Type = "network"
                 }
         default:
-                logger.Printf("'%s' invalid type\n", t)
+                logObject.Info("'%s' invalid type\n", t)
         }
 
         return info
@@ -348,21 +349,22 @@ func NewManager() *Manager {
 func main() {
         defer func() {
                 if err := recover(); err != nil {
-                        logger.Printf("recover err: %s\n", err)
+                        logObject.Fatal("recover err: %s\n", err)
                 }
         }()
+        logObject.SetRestartCommand("/usr/lib/deepin-daemon/mounts")
 
         m := NewManager()
         err := dbus.InstallOnSession(m)
         if err != nil {
-                logger.Println("Install DBus Session Failed:", err)
+                logObject.Info("Install DBus Session Failed:", err)
                 panic(err)
         }
         dbus.DealWithUnhandledMessage()
 
         go dlib.StartLoop()
         if err = dbus.Wait(); err != nil {
-                logger.Println("lost dbus session:", err)
+                logObject.Info("lost dbus session:", err)
                 os.Exit(1)
         } else {
                 os.Exit(0)
@@ -371,11 +373,11 @@ func main() {
 
 func printDiskInfo(infos []DiskInfo) {
         for _, v := range infos {
-                logger.Printf("Id: %d\n", v.Id)
-                logger.Printf("Name: %s\n", v.Name)
-                logger.Printf("Type: %s\n", v.Type)
-                logger.Println("CanEject:", v.CanEject)
-                logger.Println("CanUnmount:", v.CanUnmount)
-                logger.Printf("\n")
+                logObject.Info("Id: %d\n", v.Id)
+                logObject.Info("Name: %s\n", v.Name)
+                logObject.Info("Type: %s\n", v.Type)
+                logObject.Info("CanEject:", v.CanEject)
+                logObject.Info("CanUnmount:", v.CanUnmount)
+                logObject.Info("\n")
         }
 }

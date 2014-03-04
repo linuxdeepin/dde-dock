@@ -3,7 +3,6 @@ package main
 import (
         "dlib/dbus/property"
         "dlib/gio-2.0"
-        "dlib/logger"
 )
 
 type ExtDevManager struct {
@@ -98,7 +97,7 @@ func NewKeyboardEntry() *KeyboardEntry {
 func (keyboard *KeyboardEntry) LayoutList() map[string]string {
         defer func() {
                 if err := recover(); err != nil {
-                        logger.Println("recover error in get layout list:",
+                        logObject.Info("recover error in get layout list:",
                                 err)
                 }
         }()

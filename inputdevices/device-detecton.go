@@ -22,55 +22,54 @@
 package main
 
 import (
-	"dlib/logger"
-	"io/ioutil"
-	"os"
-	"strings"
+        "io/ioutil"
+        "os"
+        "strings"
 )
 
 const (
-	_PROC_DEVICE_PATH = "/proc/bus/input/devices"
-	_PROC_DEV_KEY     = "N: Name"
+        _PROC_DEVICE_PATH = "/proc/bus/input/devices"
+        _PROC_DEV_KEY     = "N: Name"
 )
 
 func IsFileNotExist(filename string) bool {
-	_, err := os.Stat(filename)
-	if os.IsNotExist(err) {
-		return true
-	}
+        _, err := os.Stat(filename)
+        if os.IsNotExist(err) {
+                return true
+        }
 
-	return false
+        return false
 }
 
 func GetProcDeviceNameList() (bool, []string) {
-	if IsFileNotExist(_PROC_DEVICE_PATH) {
-		logger.Printf("%s not exist\n", _PROC_DEVICE_PATH)
-		return false, []string{}
-	}
+        if IsFileNotExist(_PROC_DEVICE_PATH) {
+                logObject.Info("%s not exist\n", _PROC_DEVICE_PATH)
+                return false, []string{}
+        }
 
-	contents, err := ioutil.ReadFile(_PROC_DEVICE_PATH)
-	if err != nil {
-		logger.Println(err)
-		return false, []string{}
-	}
+        contents, err := ioutil.ReadFile(_PROC_DEVICE_PATH)
+        if err != nil {
+                logObject.Info("%v", err)
+                return false, []string{}
+        }
 
-	lines := strings.Split(string(contents), "\n")
-	nameList := []string{}
-	for _, line := range lines {
-		if strings.Contains(line, _PROC_DEV_KEY) {
-			nameList = append(nameList, strings.ToLower(line))
-		}
-	}
+        lines := strings.Split(string(contents), "\n")
+        nameList := []string{}
+        for _, line := range lines {
+                if strings.Contains(line, _PROC_DEV_KEY) {
+                        nameList = append(nameList, strings.ToLower(line))
+                }
+        }
 
-	return true, nameList
+        return true, nameList
 }
 
 func DeviceIsExist(nameList []string, device string) bool {
-	for _, name := range nameList {
-		if strings.Contains(name, device) {
-			return true
-		}
-	}
+        for _, name := range nameList {
+                if strings.Contains(name, device) {
+                        return true
+                }
+        }
 
-	return false
+        return false
 }

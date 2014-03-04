@@ -26,6 +26,7 @@ var (
 
         setDate     *setdatetime.SetDateTime
         zoneWatcher *fsnotify.Watcher
+        logObject   = logger.NewLogger("daemon/datetime")
 )
 
 type Manager struct {
@@ -38,7 +39,7 @@ type Manager struct {
 func (op *Manager) SetDate(d string) (bool, error) {
         ret, err := setDate.SetCurrentDate(d)
         if err != nil {
-                logger.Printf("Set Date - '%s' Failed: %s\n",
+                logObject.Warning("Set Date - '%s' Failed: %s\n",
                         d, err)
                 return false, err
         }
@@ -48,7 +49,7 @@ func (op *Manager) SetDate(d string) (bool, error) {
 func (op *Manager) SetTime(t string) (bool, error) {
         ret, err := setDate.SetCurrentTime(t)
         if err != nil {
-                logger.Printf("Set Time - '%s' Failed: %s\n",
+                logObject.Warning("Set Time - '%s' Failed: %s\n",
                         t, err)
                 return false, err
         }
@@ -63,7 +64,7 @@ func (op *Manager) TimezoneCityList() map[string]string {
 func (op *Manager) SetTimeZone(zone string) bool {
         _, err := setDate.SetTimezone(zone)
         if err != nil {
-                logger.Printf("Set TimeZone - '%s' Failed: %s\n",
+                logObject.Warning("Set TimeZone - '%s' Failed: %s\n",
                         zone, err)
                 return false
         }
@@ -134,13 +135,13 @@ func Init() {
 
         setDate, err = setdatetime.NewSetDateTime("/com/deepin/api/SetDateTime")
         if err != nil {
-                logger.Println("New SetDateTime Failed:", err)
+                logObject.Info("New SetDateTime Failed:", err)
                 panic(err)
         }
 
         zoneWatcher, err = fsnotify.NewWatcher()
         if err != nil {
-                logger.Println("New FS Watcher Failed:", err)
+                logObject.Info("New FS Watcher Failed:", err)
                 panic(err)
         }
 }
@@ -148,16 +149,18 @@ func Init() {
 func main() {
         defer func() {
                 if err := recover(); err != nil {
-                        logger.Println("recover error:", err)
+                        logObject.Fatal("recover error:", err)
                 }
         }()
 
         Init()
 
+        logObject.SetRestartCommand("/usr/lib/deepin-daemon/datetime")
+
         date := NewDateAndTime()
         err := dbus.InstallOnSession(date)
         if err != nil {
-                logger.Println("Install Session DBus Failed:", err)
+                logObject.Info("Install Session DBus Failed:", err)
                 panic(err)
         }
 
@@ -168,7 +171,7 @@ func main() {
         go dlib.StartLoop()
 
         if err = dbus.Wait(); err != nil {
-                logger.Println("lost dbus session:", err)
+                logObject.Info("lost dbus session:", err)
                 os.Exit(1)
         } else {
                 os.Exit(0)

@@ -42,6 +42,8 @@ var (
         _runCommandEdge10 string
         _runCommandEdge11 string
         _scale            string
+
+        logObject = logger.NewLogger("daemon/desktop")
 )
 
 type Manager struct {
@@ -87,15 +89,16 @@ func initCompizGSettings() {
 func main() {
         defer func() {
                 if err := recover(); err != nil {
-                        logger.Println("recover a error:", err)
+                        logObject.Fatal("recover a error:", err)
                 }
         }()
 
+        logObject.SetRestartCommand("/usr/lib/deepin-daemon/desktop")
         initCompizGSettings()
         desk := NewManager()
         err := dbus.InstallOnSession(desk)
         if err != nil {
-                logger.Println("Install Session DBus Failed:", err)
+                logObject.Info("Install Session DBus Failed:", err)
                 panic(err)
         }
         dbus.DealWithUnhandledMessage()
@@ -103,7 +106,7 @@ func main() {
         //desk.printManager()
         go dlib.StartLoop()
         if err = dbus.Wait(); err != nil {
-                logger.Println("lost dbus session:", err)
+                logObject.Info("lost dbus session:", err)
                 os.Exit(1)
         } else {
                 os.Exit(0)
@@ -111,6 +114,6 @@ func main() {
 }
 
 func (m *Manager) printManager() {
-        logger.Printf("Top Action: %d\n", m.TopLeft)
-        logger.Printf("Bottom Action: %d\n", m.BottomRight)
+        logObject.Info("Top Action: %d\n", m.TopLeft)
+        logObject.Info("Bottom Action: %d\n", m.BottomRight)
 }

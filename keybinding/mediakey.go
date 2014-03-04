@@ -24,7 +24,6 @@ package main
 import (
         "dlib/dbus"
         "dlib/gio-2.0"
-        "dlib/logger"
         "fmt"
         "strings"
 )
@@ -69,7 +68,7 @@ func (op *MediaKeyManager) GetDBusInfo() dbus.DBusInfo {
 func initMediaKey() {
         defer func() {
                 if err := recover(); err != nil {
-                        logger.Println("Recover Error:", err)
+                        fmt.Println("Recover Error:", err)
                 }
         }()
 

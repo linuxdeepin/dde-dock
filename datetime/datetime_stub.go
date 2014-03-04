@@ -24,7 +24,6 @@ package main
 import (
         "dlib/dbus"
         "dlib/gio-2.0"
-        "dlib/logger"
 )
 
 func (m *Manager) GetDBusInfo() dbus.DBusInfo {
@@ -44,7 +43,7 @@ func (op *Manager) setAutoSetTime(auto bool) (bool, error) {
         }
 
         if err != nil {
-                logger.Printf("Set NTP - %d Failed: %s\n",
+                logObject.Info("Set NTP - %d Failed: %s\n",
                         auto, err)
                 return false, err
         }
@@ -56,7 +55,7 @@ func (op *Manager) setPropName(name string) {
         case "CurrentTimezone":
                 tz, _, err := setDate.GetTimezone()
                 if err != nil {
-                        logger.Printf("Get Time Zone Failed: %s\n", err)
+                        logObject.Info("Get Time Zone Failed: %s\n", err)
                         return
                 }
                 op.CurrentTimezone = tz
@@ -82,7 +81,7 @@ func (op *Manager) listenSettings() {
 func (op *Manager) listenZone() {
         err := zoneWatcher.Watch(_TIME_ZONE_FILE)
         if err != nil {
-                logger.Printf("Watch '%s' Failed: %s\n", _TIME_ZONE_FILE, err)
+                logObject.Info("Watch '%s' Failed: %s\n", _TIME_ZONE_FILE, err)
                 return
         }
 
@@ -91,7 +90,7 @@ func (op *Manager) listenZone() {
                 for {
                         select {
                         case ev := <-zoneWatcher.Event:
-                                logger.Println("Watcher Event: ", ev)
+                                logObject.Info("Watcher Event: ", ev)
                                 if ev.IsDelete() {
                                         zoneWatcher.Watch(_TIME_ZONE_FILE)
                                 } else {
@@ -100,7 +99,7 @@ func (op *Manager) listenZone() {
                                         //}
                                 }
                         case err := <-zoneWatcher.Error:
-                                logger.Println("Watcher Event: ", err)
+                                logObject.Info("Watcher Event: ", err)
                         }
                 }
         }()

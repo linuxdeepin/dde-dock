@@ -12,14 +12,19 @@ import (
         "unsafe"
 )
 
+var (
+        logObject = logger.NewLogger("daemon/inputdevices")
+)
+
 func main() {
         defer func() {
                 if err := recover(); err != nil {
-                        logger.Println("recover err:", err)
+                        logObject.Fatal("recover err:", err)
                 }
         }()
         tpadFlag := false
 
+        logObject.SetRestartCommand("/usr/lib/deepin-daemon/inputdevices")
         if !InitGSettings() {
                 return
         }
@@ -78,7 +83,7 @@ func main() {
         dbus.DealWithUnhandledMessage()
         go dlib.StartLoop()
         if err := dbus.Wait(); err != nil {
-                logger.Println("lost dbus session:", err)
+                logObject.Info("lost dbus session:", err)
                 os.Exit(1)
         } else {
                 os.Exit(0)

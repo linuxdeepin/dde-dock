@@ -23,6 +23,10 @@ const (
         _VIDEO_CONTENT_TYPE    = "video/mp4"
 )
 
+var (
+        logObject = logger.NewLogger("daemon/mime")
+)
+
 func (dapp *DefaultApps) GetDBusInfo() dbus.DBusInfo {
         return dbus.DBusInfo{
                 _DEFAULT_APPS_DEST,
@@ -42,9 +46,10 @@ func (media *MediaMount) GetDBusInfo() dbus.DBusInfo {
 func main() {
         defer func() {
                 if err := recover(); err != nil {
-                        logger.Println("Recover Error:", err)
+                        logObject.Fatal("Recover Error:", err)
                 }
         }()
+        logObject.SetRestartCommand("/usr/lib/deepin-daemon/mime")
 
         dapp := NewDefaultApps()
         if dapp == nil {
@@ -52,21 +57,21 @@ func main() {
         }
         err := dbus.InstallOnSession(dapp)
         if err != nil {
-                logger.Println("Install Session Failed:", err)
+                logObject.Info("Install Session Failed:", err)
                 panic(err)
         }
 
         media := NewMediaMount()
         err = dbus.InstallOnSession(media)
         if err != nil {
-                logger.Println("Install Session Failed:", err)
+                logObject.Info("Install Session Failed:", err)
                 panic(err)
         }
         dbus.DealWithUnhandledMessage()
 
         go dlib.StartLoop()
         if err = dbus.Wait(); err != nil {
-                logger.Println("lost dbus session:", err)
+                logObject.Info("lost dbus session:", err)
                 os.Exit(1)
         } else {
                 os.Exit(0)

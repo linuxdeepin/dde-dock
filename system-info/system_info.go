@@ -30,6 +30,10 @@ const (
         _PROC_MEM_KEY  = "MemTotal"
 )
 
+var (
+        logObject = logger.NewLogger("daemon/system-info")
+)
+
 func IsFileNotExist(filename string) bool {
         _, err := os.Stat(filename)
         if os.IsNotExist(err) {
@@ -45,7 +49,7 @@ func GetVersion() int32 {
         }
         contents, err := ioutil.ReadFile(_VERSION_ETC)
         if err != nil {
-                logger.Printf("Read File Failed In Get Version: %s\n",
+                logObject.Info("Read File Failed In Get Version: %s\n",
                         err)
                 return 0
         }
@@ -74,7 +78,7 @@ func GetCpuInfo() string {
         }
         contents, err := ioutil.ReadFile(_PROC_CPU_INFO)
         if err != nil {
-                logger.Printf("Read File Failed In Get CPU Info: %s\n",
+                logObject.Info("Read File Failed In Get CPU Info: %s\n",
                         err)
                 return ""
         }
@@ -107,7 +111,7 @@ func GetMemoryCap() (memCap uint64) {
         }
         contents, err := ioutil.ReadFile(_PROC_MEM_INFO)
         if err != nil {
-                logger.Printf("Read File Failed In Get Memory Cap: %s\n",
+                logObject.Info("Read File Failed In Get Memory Cap: %s\n",
                         err)
                 return 0
         }
@@ -132,7 +136,7 @@ func GetSystemType() (sysType int64) {
         cmd := exec.Command("/bin/uname", "-m")
         out, err := cmd.Output()
         if err != nil {
-                logger.Printf("Exec 'uname -m' Failed In Get System Type: %s\n",
+                logObject.Info("Exec 'uname -m' Failed In Get System Type: %s\n",
                         err)
                 return int64(0)
         }
@@ -154,7 +158,7 @@ func GetDiskCap() (diskCap uint64) {
         driList := []dbus.ObjectPath{}
         obj, err := udisks2.NewObjectManager("/org/freedesktop/UDisks2")
         if err != nil {
-                logger.Println("udisks2: New ObjectManager Failed:", err)
+                logObject.Info("udisks2: New ObjectManager Failed:", err)
                 return 0
         }
         managers, _ := obj.GetManagedObjects()
@@ -206,9 +210,10 @@ func NewSystemInfo() *SystemInfo {
 func main() {
         defer func() {
                 if err := recover(); err != nil {
-                        logger.Println("recover error:", err)
+                        logObject.Fatal("recover error:", err)
                 }
         }()
+        logObject.SetRestartCommand("/usr/lib/deepin-daemon/system-info")
 
         sys := NewSystemInfo()
         err := dbus.InstallOnSystem(sys)
@@ -219,7 +224,7 @@ func main() {
 
         //select {}
         if err = dbus.Wait(); err != nil {
-                logger.Println("lost dbus session:", err)
+                logObject.Info("lost dbus session:", err)
                 os.Exit(1)
         } else {
                 os.Exit(0)

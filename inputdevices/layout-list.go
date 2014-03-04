@@ -22,7 +22,6 @@
 package main
 
 import (
-        "dlib/logger"
         "encoding/xml"
         "io/ioutil"
 )
@@ -64,7 +63,7 @@ const (
 func ParseXML(filename string) XKBConfigRegister {
         xmlByte, err := ioutil.ReadFile(filename)
         if err != nil {
-                logger.Printf("Read File '%s' Failed: %s\n",
+                logObject.Info("Read File '%s' Failed: %s\n",
                         filename, err)
                 panic(err)
         }
@@ -72,7 +71,7 @@ func ParseXML(filename string) XKBConfigRegister {
         var v XKBConfigRegister
         err = xml.Unmarshal(xmlByte, &v)
         if err != nil {
-                logger.Printf("Unmarshal Failed: %s\n", err)
+                logObject.Info("Unmarshal Failed: %s\n", err)
                 panic(err)
         }
 
