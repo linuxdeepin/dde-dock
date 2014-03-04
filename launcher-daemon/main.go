@@ -5,6 +5,7 @@ import (
 	"dlib/dbus"
 	"fmt"
 	"log"
+	"os"
 )
 
 func main() {

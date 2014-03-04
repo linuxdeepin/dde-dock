@@ -30,11 +30,13 @@ type ItemChangedStatus struct {
 }
 
 type LauncherDBus struct {
+	background  Background
 	ItemChanged func(
 		status string,
 		itemInfo ItemInfo,
 		categoryIds []CategoryId,
 	)
+	BackgroundChanged func(uri string)
 }
 
 func (d *LauncherDBus) GetDBusInfo() dbus.DBusInfo {
@@ -272,8 +274,22 @@ func (d *LauncherDBus) GetAppId(path string) string {
 	return string(genId(path))
 }
 
+func (d *LauncherDBus) listenBackgroundChanged() {
+	d.background.init()
+	go func(d *LauncherDBus) {
+		for {
+			fmt.Println("listen background changed")
+			select {
+			case <-d.background.changed:
+				d.BackgroundChanged(d.background.currentBg())
+			}
+		}
+	}(d)
+}
+
 func initDBus() {
 	launcherDbus := LauncherDBus{}
 	dbus.InstallOnSession(&launcherDbus)
 	launcherDbus.listenItemChanged()
+	launcherDbus.listenBackgroundChanged()
 }
