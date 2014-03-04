@@ -2,10 +2,12 @@ package main
 
 import (
 	"dlib/dbus"
+	"dlib/logger"
 	"fmt"
 	"github.com/BurntSushi/xgb"
 	"github.com/BurntSushi/xgb/randr"
 	"github.com/BurntSushi/xgb/xproto"
+	"os"
 )
 
 var (
@@ -19,6 +21,8 @@ var (
 	LastConfigTimeStamp = xproto.Timestamp(0)
 
 	MinWidth, MinHeight, MaxWidth, MaxHeight uint16
+
+	Logger = logger.NewLogger("com.deepin.daemon.Display")
 )
 
 type Display struct {
@@ -199,5 +203,11 @@ func main() {
 	initDisplay()
 
 	dbus.DealWithUnhandledMessage()
-	select {}
+
+	if err := dbus.Wait(); err != nil {
+		Logger.Error("lost dbus session:", err)
+		os.Exit(1)
+	} else {
+		os.Exit(0)
+	}
 }
