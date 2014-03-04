@@ -482,5 +482,7 @@ func main() {
 
 	dbus.DealWithUnhandledMessage()
 
-	select {}
+	if err := dbus.Wait(); err != nil {
+		logger.Fatal("lost dbus session: %v", err)
+	}
 }
