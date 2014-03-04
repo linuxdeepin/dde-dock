@@ -22,20 +22,19 @@
 package main
 
 import (
-        "fmt"
         "github.com/howeyc/fsnotify"
 )
 
 func listenFileChanged(filename string) {
         watcher, err := fsnotify.NewWatcher()
         if err != nil {
-                fmt.Println("New Watcher Failed:", err)
+                logObject.Warning("New Watcher Failed:%v", err)
                 panic(err)
         }
 
         err = watcher.Watch(filename)
         if err != nil {
-                fmt.Printf("Watch '%s' failed: %s\n", filename, err)
+                logObject.Warning("Watch '%s' failed: %s\n", filename, err)
                 panic(err)
         }
 
@@ -51,7 +50,7 @@ func listenFileChanged(filename string) {
                                         updateUserList()
                                 }
                         case err := <-watcher.Error:
-                                fmt.Println("Watch Error:", err)
+                                logObject.Warning("Watch Error:%v", err)
                         }
                 }
         }()

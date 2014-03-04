@@ -22,7 +22,6 @@
 package main
 
 import (
-        "fmt"
         "io/ioutil"
         "os/user"
         "strconv"
@@ -40,7 +39,8 @@ const (
 func (op *AccountManager) CreateUser(name, fullname string, accountTyte int32) string {
         defer func() {
                 if err := recover(); err != nil {
-                        fmt.Println("Recover Error In CreateUser:", err)
+                        logObject.Warning("Recover Error In CreateUser:%v",
+                                err)
                 }
         }()
 
@@ -61,13 +61,15 @@ func (op *AccountManager) CreateUser(name, fullname string, accountTyte int32) s
 
         path := op.FindUserByName(name)
         op.UserAdded(path)
+        op.setPropName("UserList")
         return path
 }
 
 func (op *AccountManager) DeleteUser(name string, removeFiles bool) {
         defer func() {
                 if err := recover(); err != nil {
-                        fmt.Println("Recover Error In DeleteUser:", err)
+                        logObject.Warning("Recover Error In DeleteUser:%v",
+                                err)
                 }
         }()
 
@@ -81,12 +83,14 @@ func (op *AccountManager) DeleteUser(name string, removeFiles bool) {
         path := op.FindUserByName(name)
         execCommand(CMD_USERDEL, args)
         op.UserDeleted(path)
+        op.setPropName("UserList")
 }
 
 func (op *AccountManager) FindUserById(id string) string {
         defer func() {
                 if err := recover(); err != nil {
-                        fmt.Println("Recover Error In FindUserById:", err)
+                        logObject.Warning("Recover Error In FindUserById:%v",
+                                err)
                 }
         }()
 
@@ -105,13 +109,13 @@ func (op *AccountManager) FindUserById(id string) string {
 func (op *AccountManager) FindUserByName(name string) string {
         defer func() {
                 if err := recover(); err != nil {
-                        fmt.Println("Recover Error In FindUserByName:", err)
+                        logObject.Warning("Recover Error In FindUserByName:%v", err)
                 }
         }()
 
         userInfo, err := user.Lookup(name)
         if err != nil {
-                fmt.Println("Lookup By Name Failed:", err)
+                logObject.Warning("Lookup By Name Failed:%v", err)
                 return ""
         }
 
@@ -145,7 +149,7 @@ func getInfoViaName(name string) (UserInfo, bool) {
 func getUserInfoList() []UserInfo {
         contents, err := ioutil.ReadFile(ETC_PASSWD)
         if err != nil {
-                fmt.Printf("ReadFile '%s' failed: %s\n", ETC_PASSWD, err)
+                logObject.Warning("ReadFile '%s' failed: %s\n", ETC_PASSWD, err)
                 panic(err)
         }
 
@@ -206,7 +210,7 @@ func userIsHuman(info *UserInfo) bool {
 func detetedViaShadowFile(info *UserInfo) bool {
         contents, err := ioutil.ReadFile(ETC_SHADOW)
         if err != nil {
-                fmt.Printf("ReadFile '%s' failed: %s\n", ETC_SHADOW, err)
+                logObject.Warning("ReadFile '%s' failed: %s\n", ETC_SHADOW, err)
                 panic(err)
         }
 

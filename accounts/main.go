@@ -23,26 +23,30 @@ package main
 
 import (
         "dlib/dbus"
-        "fmt"
+        "dlib/logger"
         "os"
 )
 
-var idUserManagerMap map[string]*UserManager = make(map[string]*UserManager)
+var (
+        idUserManagerMap = make(map[string]*UserManager)
+        logObject        = logger.NewLogger("daemon/Accounts")
+)
 
 func main() {
         defer func() {
                 if err := recover(); err != nil {
-                        fmt.Println("Recover Error:", err)
+                        logObject.Fatal("Recover Error:", err)
                 }
         }()
 
-        idUserManagerMap = make(map[string]*UserManager)
+        // Configure Logger
+        logObject.SetRestartCommand("/usr/lib/deepin-daemon/Accounts")
 
         opAccount := newAccountManager()
         err := dbus.InstallOnSystem(opAccount)
         if err != nil {
-                fmt.Println("Install Account Object On System Failed:", err)
-                panic(err)
+                logObject.Warning("Install Account Object On System Failed:%v", err)
+                logObject.Fatal("%v", err)
         }
 
         updateUserList()
@@ -55,7 +59,7 @@ func main() {
 
         //select {}
         if err = dbus.Wait(); err != nil {
-                fmt.Println("lost dbus session:", err)
+                logObject.Warning("lost dbus session:%v", err)
                 os.Exit(1)
         } else {
                 os.Exit(0)
@@ -70,7 +74,7 @@ func updateUserList() {
                 opUser := newUserManager(info.Uid)
                 err := dbus.InstallOnSystem(opUser)
                 if err != nil {
-                        fmt.Printf("Install User:%s Object On System Failed:%s\n",
+                        logObject.Debug("Install User:%s Object On System Failed:%s\n",
                                 info.Name, err)
                         panic(err)
                 }
@@ -86,6 +90,7 @@ func destroyAllUserObject() {
         }
 }
 
+/*
 func printUserInfo(info UserInfo) {
         fmt.Println("Name:", info.Name)
         fmt.Println("Uid:", info.Uid)
@@ -94,3 +99,4 @@ func printUserInfo(info UserInfo) {
         fmt.Println("Shell:", info.Shell)
         fmt.Printf("\n")
 }
+*/

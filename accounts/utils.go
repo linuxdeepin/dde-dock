@@ -25,7 +25,6 @@ import (
         //freedbus "dbus/org/freedesktop/dbus"
         polkit "dbus/org/freedesktop/policykit1"
         "dlib/glib-2.0"
-        "fmt"
         "os"
         "os/exec"
         "strings"
@@ -51,7 +50,8 @@ const (
 func execCommand(cmdline string, args []string) {
         err := exec.Command(cmdline, args...).Run()
         if err != nil {
-                fmt.Println("Exec", cmdline, args, "failed:", err)
+                logObject.Warning("Exec '%v %v' failed:%v",
+                        cmdline, args, err)
                 panic(err)
         }
 }
@@ -63,10 +63,10 @@ func getBaseName(path string) string {
 
 func fileIsExist(file string) bool {
         if _, err := os.Stat(file); os.IsExist(err) {
-                fmt.Printf("'%s' is not exist\n", file)
+                logObject.Warning("'%s' is not exist\n", file)
                 return false
         }
-        //fmt.Printf("'%s' exist\n", file)
+        //logObject.Warning("'%s' exist\n", file)
 
         return true
 }
@@ -103,7 +103,7 @@ func readKeyFileValue(filename, group, key string, t int32) (interface{}, bool) 
         defer keyFile.Free()
         ok, _ := keyFile.LoadFromFile(filename, glib.KeyFileFlagsKeepComments)
         if !ok {
-                fmt.Printf("LoadKeyFile '%s' failed\n", filename)
+                logObject.Warning("LoadKeyFile '%s' failed\n", filename)
                 return nil, false
         }
 
@@ -111,24 +111,24 @@ func readKeyFileValue(filename, group, key string, t int32) (interface{}, bool) 
         case KEY_TYPE_BOOL:
                 v, err := keyFile.GetBoolean(group, key)
                 if err != nil {
-                        fmt.Printf("Get '%s' from '%s' failed: %s\n",
-                                key, filename, err)
+                        //logObject.Warning("Get '%s' from '%s' failed: %s\n",
+                        //key, filename, err)
                         break
                 }
                 return v, true
         case KEY_TYPE_INT:
                 v, err := keyFile.GetInteger(group, key)
                 if err != nil {
-                        fmt.Printf("Get '%s' from '%s' failed: %s\n",
-                                key, filename, err)
+                        //logObject.Warning("Get '%s' from '%s' failed: %s\n",
+                        //key, filename, err)
                         break
                 }
                 return v, true
         case KEY_TYPE_STRING:
                 v, err := keyFile.GetString(group, key)
                 if err != nil {
-                        fmt.Printf("Get '%s' from '%s' failed: %s\n",
-                                key, filename, err)
+                        //logObject.Warning("Get '%s' from '%s' failed: %s\n",
+                        //key, filename, err)
                         break
                 }
                 return v, true
@@ -146,7 +146,7 @@ func writeKeyFileValue(filename, group, key string, t int32, value interface{}) 
         defer keyFile.Free()
         ok, _ := keyFile.LoadFromFile(filename, glib.KeyFileFlagsKeepComments)
         if !ok {
-                fmt.Printf("LoadKeyFile '%s' failed\n", filename)
+                logObject.Warning("LoadKeyFile '%s' failed\n", filename)
                 return
         }
 
@@ -161,7 +161,7 @@ func writeKeyFileValue(filename, group, key string, t int32, value interface{}) 
 
         _, contents, err := keyFile.ToData()
         if err != nil {
-                fmt.Printf("KeyFile '%s' ToData failed: %s\n", filename, err)
+                logObject.Warning("KeyFile '%s' ToData failed: %s\n", filename, err)
                 panic(err)
         }
 
@@ -173,18 +173,18 @@ func writeKeyFile(contents, file string) {
                 return
         }
 
-        fmt.Println(contents)
+        //logObject.Warning(contents)
         //return
         f, err := os.OpenFile(file, os.O_WRONLY|os.O_CREATE, ETC_PERM)
         if err != nil {
-                fmt.Printf("OpenFile '%s' failed: %s\n", file, err)
+                logObject.Warning("OpenFile '%s' failed: %s\n", file, err)
                 panic(err)
         }
         defer f.Close()
 
         _, err = f.WriteString(contents)
         if err != nil {
-                fmt.Printf("Write in '%s' failed: %s\n", file, err)
+                logObject.Warning("Write in '%s' failed: %s\n", file, err)
                 panic(err)
         }
 }
@@ -212,7 +212,7 @@ func authWithPolkit(actionId string) {
 
         objPolkit, err = polkit.NewAuthority(POLKIT_PATH)
         if err != nil {
-                fmt.Println("New Authority Failed:", err)
+                logObject.Warning("New Authority Failed:%v", err)
                 panic(err)
         }
 
@@ -225,7 +225,6 @@ func authWithPolkit(actionId string) {
         details := make(map[string]string)
         details[""] = ""
         flags := uint32(1)
-        //cancelId := fmt.Sprintf("%d", genId())
         cancelId := ""
 
         infaces := []interface{}{
@@ -235,10 +234,10 @@ func authWithPolkit(actionId string) {
 
         rets, _err := objPolkit.CheckAuthorization(infaces, actionId, details, flags, cancelId)
         for _, i := range rets {
-                fmt.Println(i)
+                logObject.Warning("%v", i)
         }
         if _err != nil {
-                fmt.Println("CheckAuthorization Failed:", _err)
+                logObject.Warning("CheckAuthorization Failed:%v", _err)
                 panic(_err)
         }
 }

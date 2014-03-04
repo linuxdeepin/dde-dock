@@ -22,7 +22,6 @@
 package main
 
 import (
-        "fmt"
         "io/ioutil"
         "strings"
 )
@@ -60,7 +59,8 @@ func (op *UserManager) SetShell(shell string) {
 func (op *UserManager) SetPassword(passwd string) {
         defer func() {
                 if err := recover(); err != nil {
-                        fmt.Println("Recover Error In SetPassword:", err)
+                        logObject.Warning("Recover Error In SetPassword:%v",
+                                err)
                 }
         }()
 }
@@ -74,8 +74,8 @@ func (op *UserManager) SetAutomaticLogin(auto bool) {
 }
 
 func (op *UserManager) SetAccountType(t int32) {
-        fmt.Println("src type:", op.AccountType)
-        fmt.Println("dest type:", t)
+        logObject.Warning("src type:%v", op.AccountType)
+        logObject.Warning("dest type:%v", t)
         if op.AccountType != t {
                 //authWithPolkit(POLKIT_MANAGER_USER)
                 op.setPropName("AccountType", t)
@@ -119,7 +119,7 @@ func newUserManager(uid string) *UserManager {
 func getAdministratorList() []string {
         contents, err := ioutil.ReadFile(ETC_GROUP)
         if err != nil {
-                fmt.Printf("ReadFile '%s' failed: %s\n", ETC_PASSWD, err)
+                logObject.Warning("ReadFile '%s' failed: %s\n", ETC_PASSWD, err)
                 panic(err)
         }
 
@@ -178,7 +178,7 @@ func setAutomaticLogin(name string) {
                                 KEY_TYPE_STRING, name)
                 }
         default:
-                fmt.Println("No support display manager")
+                logObject.Warning("No support display manager")
         }
 }
 
@@ -232,7 +232,7 @@ func isAutoLogin(username string) bool {
 func getDefaultDisplayManager() string {
         contents, err := ioutil.ReadFile(ETC_DISPLAY_MANAGER)
         if err != nil {
-                fmt.Printf("ReadFile '%s' failed: %s\n",
+                logObject.Warning("ReadFile '%s' failed: %s\n",
                         ETC_DISPLAY_MANAGER, err)
                 panic(err)
         }
