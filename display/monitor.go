@@ -123,8 +123,7 @@ func (m *Monitor) generateShell() string {
 				code = fmt.Sprintf("%s --mode %dx%d --rate %f", code, m.CurrentMode.Width, m.CurrentMode.Height, m.CurrentMode.Rate)
 			}
 			if len(m.relativePosInfo[0]) != 0 && len(m.relativePosInfo[1]) != 0 {
-				fmt.Println("HeHe...")
-				code = fmt.Sprintf(" %s --%s %s", code, m.relativePosInfo[0], m.relativePosInfo[1])
+				code = fmt.Sprintf(" %s --%s %s", code, strings.Split(m.relativePosInfo[0], joinSeparator)[0], m.relativePosInfo[1])
 			} else {
 				code = fmt.Sprintf(" %s --pos %dx%d", code, m.X, m.Y)
 			}
