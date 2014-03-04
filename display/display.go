@@ -34,6 +34,7 @@ type Display struct {
 	ScreenHeight uint16
 
 	//used by deepin-dock/launcher/desktop
+	Primary        string
 	PrimaryRect    xproto.Rectangle
 	PrimaryChanged func(xproto.Rectangle)
 
@@ -97,14 +98,14 @@ func (dpy *Display) SplitMonitor(a string) error {
 	return nil
 }
 
-func (dpy *Display) SetPrimary(name string) {
+func (dpy *Display) SetPrimary(name string) error {
 	for _, m := range dpy.Monitors {
 		if m.Name == name {
-			m.setPrimary(true)
-		} else {
-			m.setPrimary(false)
+			dpy.setPropPrimary(m.Name)
+			return nil
 		}
 	}
+	return fmt.Errorf("Can't find this monitor: %s", name)
 }
 
 func initDisplay() *Display {
@@ -116,6 +117,7 @@ func initDisplay() *Display {
 	dbus.InstallOnSession(dpy)
 
 	loadConfiguration(dpy)
+	dpy.Primary = __CFG__.Primary
 	dpy.updateMonitorList()
 	dpy.updateInfo()
 
@@ -138,8 +140,16 @@ func (dpy *Display) updateInfo() {
 		dpy.modes[randr.Mode(minfo.Id)] = buildMode(minfo)
 	}
 
+	validPrimary := false
 	for _, m := range dpy.Monitors {
 		m.updateInfo()
+		if dpy.Primary == m.Name {
+			validPrimary = true
+		}
+	}
+	if !validPrimary {
+		builtIn := guestBuiltIn(dpy.Monitors)
+		dpy.SetPrimary(builtIn.Name)
 	}
 }
 

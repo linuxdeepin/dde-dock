@@ -22,7 +22,6 @@ type Monitor struct {
 	Name           string
 	FullName       string
 
-	IsPrimary       bool
 	X               int16
 	Y               int16
 	relativePosInfo [2]string
@@ -100,10 +99,6 @@ func (m *Monitor) SwitchOn(v bool) {
 	m.setPropOpened(v)
 }
 
-func (m *Monitor) setPrimary(v bool) {
-	m.setPropIsPrimary(v)
-}
-
 func (m *Monitor) SetMode(id uint32) {
 	for _, _m := range m.ListModes() {
 		if _m.ID == id {
@@ -120,9 +115,6 @@ func (m *Monitor) generateShell() string {
 	for _, name := range names {
 		code = fmt.Sprintf("%s --output %s", code, name)
 
-		if m.IsPrimary {
-			code = fmt.Sprintf(" %s --primary", code)
-		}
 		if m.Opened {
 			if m.CurrentMode.ID == 0 {
 				m.setPropCurrentMode(m.BestMode)

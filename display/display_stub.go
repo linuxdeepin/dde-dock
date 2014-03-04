@@ -37,6 +37,13 @@ func (dpy *Display) setPropPrimaryRect(v xproto.Rectangle) {
 	}
 }
 
+func (dpy *Display) setPropPrimary(v string) {
+	if dpy.Primary != v {
+		dpy.Primary = v
+		dbus.NotifyChange(dpy, "Primary")
+	}
+}
+
 func (dpy *Display) setPropDisplayMode(v int16) {
 	if dpy.DisplayMode != v {
 		dpy.DisplayMode = v

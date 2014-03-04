@@ -7,9 +7,15 @@ import "fmt"
 import "os"
 import "io/ioutil"
 
-var __CFG__ = make(map[string]_MonitorConfiguration)
+var __CFG__ _Configuration
 
 var _ConfigPath = os.Getenv("HOME") + "/.config/deepin_monitors.json"
+
+type _Configuration struct {
+	Primary     string
+	DisplayMode int16
+	Monitors    map[string]_MonitorConfiguration
+}
 
 type _MonitorConfiguration struct {
 	Name string
@@ -41,16 +47,13 @@ func saveConfiguration() {
 }
 
 func (dpy *Display) Apply() {
+
 	code := "xrandr "
-	hasPrimary := false
 	for _, m := range dpy.Monitors {
 		code += m.generateShell()
-		if m.IsPrimary {
-			hasPrimary = true
+		if dpy.Primary == m.Name {
+			code += " --primary"
 		}
-	}
-	if !hasPrimary {
-		code += " --noprimary"
 	}
 	runCode(code)
 }
@@ -84,11 +87,7 @@ func (dpy *Display) SwitchMode(mode int16) {
 				m.SetPos(0, 0)
 				m.SetMode(m.BestMode.ID)
 				m.SwitchOn(true)
-				if m.IsPrimary {
-					dpy.SetPrimary(m.Name)
-				} else {
-					dpy.SetPrimary("")
-				}
+				dpy.SetPrimary(m.Name)
 				fmt.Println("SetSwitch..", m.Name, m.Opened)
 			} else {
 				m.SwitchOn(false)
@@ -106,14 +105,14 @@ func (m *Monitor) restore(cfg _MonitorConfiguration) {
 	fmt.Println("SetRotation:", m.Name, cfg.Rotation)
 	m.ensureSize(cfg.Width, cfg.Height)
 	m.SwitchOn(cfg.Enabled)
-	m.setPrimary(cfg.Primary)
 	m.setPropRotation(cfg.Rotation)
 	m.setPropReflect(cfg.Reflect)
 	m.setPropBrightness(cfg.Brightness)
 }
 func (dpy *Display) ResetChanged() {
 	// dond't set the monitors which hasn't cfg information
-	for _, cfg := range __CFG__ {
+	dpy.SetPrimary(__CFG__.Primary)
+	for _, cfg := range __CFG__.Monitors {
 		for _, m := range dpy.Monitors {
 			if m.Name == cfg.Name {
 				m.restore(cfg)
@@ -131,7 +130,6 @@ func (m *Monitor) saveStatus() _MonitorConfiguration {
 		RefreshRate: m.CurrentMode.Rate,
 		X:           m.X,
 		Y:           m.Y,
-		Primary:     m.IsPrimary,
 		Enabled:     m.Opened,
 		Rotation:    m.Rotation,
 		Reflect:     m.Reflect,
@@ -139,14 +137,17 @@ func (m *Monitor) saveStatus() _MonitorConfiguration {
 	}
 }
 func (dpy *Display) SaveChanged() {
-	__CFG__ = make(map[string]_MonitorConfiguration)
+	__CFG__.Monitors = make(map[string]_MonitorConfiguration)
 	for _, m := range dpy.Monitors {
-		__CFG__[m.Name] = m.saveStatus()
+		__CFG__.Monitors[m.Name] = m.saveStatus()
 	}
+	__CFG__.Primary = dpy.Primary
 	saveConfiguration()
 }
 
 func loadConfiguration(dpy *Display) {
+	__CFG__.Monitors = make(map[string]_MonitorConfiguration)
+
 	f, err := os.Open(_ConfigPath)
 	if err != nil {
 		fmt.Println("OpenFailed", err)
@@ -154,6 +155,7 @@ func loadConfiguration(dpy *Display) {
 	}
 	data, err := ioutil.ReadAll(f)
 	err = json.Unmarshal(data, &__CFG__)
+	dpy.SetPrimary(__CFG__.Primary)
 	if err != nil {
 		fmt.Println("Failed load displayConfiguration:", err, "Data:", string(data))
 		return
@@ -175,18 +177,18 @@ func (dpy *Display) updateMonitorList() {
 	}
 	setAutoFlag := len(dpy.Monitors) > len(monitors)
 	dpy.setPropMonitors(monitors)
-	for _, m := range __CFG__ {
+	for _, m := range __CFG__.Monitors {
 		dpy.tryJoin(m.Name)
 	}
 
 	for _, m := range dpy.Monitors {
-		if cfg, ok := __CFG__[m.Name]; ok {
+		if cfg, ok := __CFG__.Monitors[m.Name]; ok {
 			if dpy.DisplayMode == DisplayModeCustom {
-			m.restore(cfg)
+				m.restore(cfg)
 			}
 		} else {
 			m.SwitchOn(true)
-			__CFG__[m.Name] = m.saveStatus()
+			__CFG__.Monitors[m.Name] = m.saveStatus()
 		}
 	}
 	if setAutoFlag {

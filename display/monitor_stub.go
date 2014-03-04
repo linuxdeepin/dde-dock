@@ -61,13 +61,6 @@ func (m *Monitor) setPropBrightness(v float64) {
 	}
 }
 
-func (m *Monitor) setPropIsPrimary(v bool) {
-	if m.IsPrimary != v {
-		m.IsPrimary = v
-		dbus.NotifyChange(m, "IsPrimary")
-	}
-}
-
 func (m *Monitor) setPropWidth(v uint16) {
 	if m.Width != v {
 		m.Width = v
