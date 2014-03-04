@@ -151,14 +151,14 @@ func parseRandR(randr uint16) (uint16, uint16) {
 	case 1, 2, 4, 8:
 		break
 	default:
-		Logger.Info("invalid rotation value", rotation, randr)
+		Logger.Error("invalid rotation value", rotation, randr)
 		rotation = 1
 	}
 	switch reflect {
 	case 0, 16, 32, 48:
 		break
 	default:
-		Logger.Info("invalid reflect value", reflect, randr)
+		Logger.Error("invalid reflect value", reflect, randr)
 		reflect = 0
 	}
 	return rotation, reflect
@@ -281,7 +281,7 @@ func setOutputBacklight(op randr.Output, light float64) {
 		xproto.AtomInteger, 32, xproto.PropModeReplace, 1,
 		buf[:]).Check()
 	if err != nil {
-		Logger.Info(err.Error())
+		Logger.Error("setOutputBacklight error:", err)
 	}
 }
 

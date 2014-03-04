@@ -2,12 +2,12 @@ package main
 
 import "github.com/BurntSushi/xgb/randr"
 import "dlib/dbus"
-import "strings"
 import "fmt"
+import "strings"
 import "math"
 import "runtime"
 
-const joinSeparator = "|"
+const joinSeparator = "="
 
 type Monitor struct {
 	outputs   []randr.Output
