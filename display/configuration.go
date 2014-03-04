@@ -23,8 +23,9 @@ type _MonitorConfiguration struct {
 	Width, Height uint16
 	RefreshRate   float64
 
-	X, Y     int16
-	Primary  bool
+	X, Y         int16
+	RelativeInfo [2]string
+
 	Enabled  bool
 	Rotation uint16
 	Reflect  uint16
@@ -101,8 +102,8 @@ func (dpy *Display) SwitchMode(mode int16) {
 }
 
 func (m *Monitor) restore(cfg _MonitorConfiguration) {
-	m.SetPos(cfg.X, cfg.Y)
-	fmt.Println("SetRotation:", m.Name, cfg.Rotation)
+	m.setPropXY(cfg.X, cfg.Y)
+	m.SetRelativePos(cfg.RelativeInfo[0], cfg.RelativeInfo[1])
 	m.ensureSize(cfg.Width, cfg.Height)
 	m.SwitchOn(cfg.Enabled)
 	m.setPropRotation(cfg.Rotation)
@@ -124,16 +125,17 @@ func (dpy *Display) ResetChanged() {
 
 func (m *Monitor) saveStatus() _MonitorConfiguration {
 	return _MonitorConfiguration{
-		Name:        m.Name,
-		Width:       m.Width,
-		Height:      m.Height,
-		RefreshRate: m.CurrentMode.Rate,
-		X:           m.X,
-		Y:           m.Y,
-		Enabled:     m.Opened,
-		Rotation:    m.Rotation,
-		Reflect:     m.Reflect,
-		Brightness:  m.Brightness,
+		Name:         m.Name,
+		Width:        m.Width,
+		Height:       m.Height,
+		RefreshRate:  m.CurrentMode.Rate,
+		X:            m.X,
+		Y:            m.Y,
+		RelativeInfo: m.relativePosInfo,
+		Enabled:      m.Opened,
+		Rotation:     m.Rotation,
+		Reflect:      m.Reflect,
+		Brightness:   m.Brightness,
 	}
 }
 func (dpy *Display) SaveChanged() {
@@ -173,7 +175,9 @@ func (dpy *Display) updateMonitorList() {
 		if err != nil || oinfo.Connection != randr.ConnectionConnected {
 			continue
 		}
-		monitors = append(monitors, NewMonitor([]randr.Output{op}))
+		m := NewMonitor([]randr.Output{op})
+		m.relativePosInfo = __CFG__.Monitors[m.Name].RelativeInfo
+		monitors = append(monitors, m)
 	}
 	setAutoFlag := len(dpy.Monitors) > len(monitors)
 	dpy.setPropMonitors(monitors)
@@ -181,13 +185,26 @@ func (dpy *Display) updateMonitorList() {
 		dpy.tryJoin(m.Name)
 	}
 
+	currentRight, rightX := "", int16(0)
 	for _, m := range dpy.Monitors {
+		if currentRight == "" {
+			currentRight = m.Name
+		} else if m.X > rightX {
+			currentRight = m.Name
+			rightX = m.X
+		}
+
 		if cfg, ok := __CFG__.Monitors[m.Name]; ok {
 			if dpy.DisplayMode == DisplayModeCustom {
 				m.restore(cfg)
 			}
 		} else {
 			m.SwitchOn(true)
+
+			m.SetRelativePos(currentRight, "right-of")
+			currentRight = m.Name
+			rightX += int16(m.CurrentMode.Width)
+
 			__CFG__.Monitors[m.Name] = m.saveStatus()
 		}
 	}
