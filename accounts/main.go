@@ -24,6 +24,7 @@ package main
 import (
         "dlib/dbus"
         "fmt"
+        "os"
 )
 
 var idUserManagerMap map[string]*UserManager = make(map[string]*UserManager)
@@ -52,7 +53,13 @@ func main() {
 
         dbus.DealWithUnhandledMessage()
 
-        select {}
+        //select {}
+        if err = dbus.Wait(); err != nil {
+                fmt.Println("lost dbus session:", err)
+                os.Exit(1)
+        } else {
+                os.Exit(0)
+        }
 }
 
 func updateUserList() {

@@ -107,12 +107,18 @@ func convertKeyToMod(key string) string {
         }
 
         strs := strings.Split(key, "-")
-        mod, ok := keyToModMap[strs[0]]
-        if !ok {
-                return key
+        l := len(strs) - 1
+        modStr := ""
+        for i := 0; i < l; i++ {
+                mod, ok := keyToModMap[strs[i]]
+                if !ok {
+                        modStr += strs[i] + "-"
+                        continue
+                }
+                modStr += mod + "-"
         }
 
-        tmp := mod + "-" + strs[1]
+        tmp := modStr + strs[l]
         fmt.Println("Mod Key:", tmp)
         return tmp
 }
@@ -127,12 +133,18 @@ func convertModToKey(key string) string {
         }
 
         strs := strings.Split(key, "-")
-        str, ok := modToKeyMap[strs[0]]
-        if !ok {
-                return key
+        l := len(strs) - 1
+        keyStr := ""
+        for i := 0; i < l; i++ {
+                str, ok := modToKeyMap[strs[i]]
+                if !ok {
+                        keyStr += strs[i] + "-"
+                        continue
+                }
+                keyStr += str + "-"
         }
 
-        tmp := str + "-" + strs[1]
+        tmp := keyStr + strs[l]
         fmt.Println("String Key:", tmp)
         return tmp
 }

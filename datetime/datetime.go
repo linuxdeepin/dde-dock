@@ -8,6 +8,7 @@ import (
         "dlib/gio-2.0"
         "dlib/logger"
         "github.com/howeyc/fsnotify"
+        "os"
 )
 
 const (
@@ -164,5 +165,12 @@ func main() {
                 go setDate.SetNtpUsing(true)
         }
         dbus.DealWithUnhandledMessage()
-        dlib.StartLoop()
+        go dlib.StartLoop()
+
+        if err = dbus.Wait(); err != nil {
+                logger.Println("lost dbus session:", err)
+                os.Exit(1)
+        } else {
+                os.Exit(0)
+        }
 }

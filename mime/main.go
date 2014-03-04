@@ -4,6 +4,7 @@ import (
         "dlib"
         "dlib/dbus"
         "dlib/logger"
+        "os"
 )
 
 const (
@@ -46,11 +47,28 @@ func main() {
         }()
 
         dapp := NewDefaultApps()
-        dbus.InstallOnSession(dapp)
+        if dapp == nil {
+                return
+        }
+        err := dbus.InstallOnSession(dapp)
+        if err != nil {
+                logger.Println("Install Session Failed:", err)
+                panic(err)
+        }
 
         media := NewMediaMount()
-        dbus.InstallOnSession(media)
+        err = dbus.InstallOnSession(media)
+        if err != nil {
+                logger.Println("Install Session Failed:", err)
+                panic(err)
+        }
         dbus.DealWithUnhandledMessage()
 
-        dlib.StartLoop()
+        go dlib.StartLoop()
+        if err = dbus.Wait(); err != nil {
+                logger.Println("lost dbus session:", err)
+                os.Exit(1)
+        } else {
+                os.Exit(0)
+        }
 }

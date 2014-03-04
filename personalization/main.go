@@ -22,93 +22,100 @@
 package main
 
 import (
-	"dbus/com/deepin/daemon/accounts"
-	accext "dbus/com/deepin/api/accounts"
-	"dlib"
-	"dlib/dbus"
-	"fmt"
-	"os/user"
+        accext "dbus/com/deepin/api/accounts"
+        "dbus/com/deepin/daemon/accounts"
+        "dlib"
+        "dlib/dbus"
+        "fmt"
+        "os"
+        "os/user"
 )
 
 var (
-	accountsExtends *accext.Accounts
-	userManager     *accounts.User
+        accountsExtends *accext.Accounts
+        userManager     *accounts.User
 
-	currentUid string
+        currentUid string
 )
 
 func (m *Manager) DeletePictureFromURIS(uri string) {
-	if len(uri) <= 0 {
-		return
-	}
+        if len(uri) <= 0 {
+                return
+        }
 
-	tempURIS := []string{}
-	uris := indiviGSettings.GetStrv(SCHEMA_KEY_URIS)
-	index := indiviGSettings.GetInt(SCHEMA_KEY_INDEX)
-	currentURI := m.BackgroundFile.Get()
+        tempURIS := []string{}
+        uris := indiviGSettings.GetStrv(SCHEMA_KEY_URIS)
+        index := indiviGSettings.GetInt(SCHEMA_KEY_INDEX)
+        currentURI := m.BackgroundFile.Get()
 
-	fmt.Println("del: uris ", uris)
-	for _, v := range uris {
-		if v != uri {
-			tempURIS = append(tempURIS, v)
-		}
-	}
+        fmt.Println("del: uris ", uris)
+        for _, v := range uris {
+                if v != uri {
+                        tempURIS = append(tempURIS, v)
+                }
+        }
 
-	fmt.Println("del: tmp ", tempURIS)
-	if len(tempURIS) <= 0 {
-		indiviGSettings.Reset("picture-uris")
-		indiviGSettings.SetInt("index", 0)
-		m.BackgroundFile.Set(tempURIS[0])
-		return
-	}
-	indiviGSettings.SetStrv("picture-uris", tempURIS)
+        fmt.Println("del: tmp ", tempURIS)
+        if len(tempURIS) <= 0 {
+                indiviGSettings.Reset("picture-uris")
+                indiviGSettings.SetInt("index", 0)
+                m.BackgroundFile.Set(tempURIS[0])
+                return
+        }
+        indiviGSettings.SetStrv("picture-uris", tempURIS)
 
-	if uri == currentURI {
-		index += 1
-		if index > len(tempURIS) {
-			index = 0
-		}
-		m.BackgroundFile.Set(tempURIS[index])
-	} else {
-		if success, i := isURIExist(currentURI, tempURIS); success {
-			index = i
-		}
-	}
-	indiviGSettings.SetInt("index", index)
+        if uri == currentURI {
+                index += 1
+                if index > len(tempURIS) {
+                        index = 0
+                }
+                m.BackgroundFile.Set(tempURIS[index])
+        } else {
+                if success, i := isURIExist(currentURI, tempURIS); success {
+                        index = i
+                }
+        }
+        indiviGSettings.SetInt("index", index)
 }
 
 func initVariable() {
-	var err error
+        var err error
 
-	accountsExtends, err = accext.NewAccounts("/com/deepin/api/Accounts")
-	if err != nil {
-		fmt.Println("New Accounts Extends Failed.")
-		panic(err)
-	}
+        accountsExtends, err = accext.NewAccounts("/com/deepin/api/Accounts")
+        if err != nil {
+                fmt.Println("New Accounts Extends Failed.")
+                panic(err)
+        }
 
-	userInfo, _ := user.Current()
-	currentUid = userInfo.Uid
+        userInfo, _ := user.Current()
+        currentUid = userInfo.Uid
 
-	userManager, err = accounts.NewUser(DACCOUNTS_USER_PATH +
-		dbus.ObjectPath(currentUid))
-	if err != nil {
-		fmt.Println("New User Failed.")
-		panic(err)
-	}
+        userManager, err = accounts.NewUser(DACCOUNTS_USER_PATH +
+                dbus.ObjectPath(currentUid))
+        if err != nil {
+                fmt.Println("New User Failed.")
+                panic(err)
+        }
 }
 
 func main() {
-	initVariable()
-	ReadThemeDir(THEME_DIR)
-	m := NewManager()
-	err := dbus.InstallOnSession(m)
-	if err != nil {
-		panic(err)
-	}
+        initVariable()
+        ReadThemeDir(THEME_DIR)
+        m := NewManager()
+        err := dbus.InstallOnSession(m)
+        if err != nil {
+                panic(err)
+        }
 
-	if m.AutoSwitch.Get() {
-		go m.switchPictureThread()
-	}
-	dbus.DealWithUnhandledMessage()
-	dlib.StartLoop()
+        if m.AutoSwitch.Get() {
+                go m.switchPictureThread()
+        }
+        dbus.DealWithUnhandledMessage()
+        go dlib.StartLoop()
+        if err = dbus.Wait(); err != nil {
+                fmt.Println("lost dbus session:", err)
+                os.Exit(1)
+        } else {
+                os.Exit(0)
+        }
 }

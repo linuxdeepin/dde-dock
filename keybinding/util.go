@@ -29,6 +29,24 @@ import (
         "strings"
 )
 
+var (
+        keyToModMap = map[string]string{
+                "caps_lock": "lock",
+                "alt":       "mod1",
+                "meta":      "mod1",
+                "num_lock":  "mod2",
+                "super":     "mod4",
+                "hyper":     "mod4",
+        }
+
+        modToKeyMap = map[string]string{
+                "mod1": "alt",
+                "mod2": "num_lock",
+                "mod4": "super",
+                "lock": "caps_lock",
+        }
+)
+
 func newShortcutInfo(id int32, desc, shortcut string) ShortcutInfo {
         return ShortcutInfo{Id: id, Desc: desc, Shortcut: shortcut}
 }
@@ -363,4 +381,56 @@ func formatShortcut(shortcut string) string {
         }
 
         return value
+}
+
+func convertKeyToMod(key string) string {
+        if len(key) <= 0 {
+                return ""
+        }
+
+        if !strings.Contains(key, "-") {
+                return key
+        }
+
+        strs := strings.Split(key, "-")
+        l := len(strs) - 1
+        modStr := ""
+        for i := 0; i < l; i++ {
+                mod, ok := keyToModMap[strs[i]]
+                if !ok {
+                        modStr += strs[i] + "-"
+                        continue
+                }
+                modStr += mod + "-"
+        }
+
+        tmp := modStr + strs[l]
+        fmt.Println("Mod Key:", tmp)
+        return tmp
+}
+
+func convertModToKey(key string) string {
+        if len(key) <= 0 {
+                return ""
+        }
+
+        if !strings.Contains(key, "-") {
+                return key
+        }
+
+        strs := strings.Split(key, "-")
+        l := len(strs) - 1
+        keyStr := ""
+        for i := 0; i < l; i++ {
+                str, ok := modToKeyMap[strs[i]]
+                if !ok {
+                        keyStr += strs[i] + "-"
+                        continue
+                }
+                keyStr += str + "-"
+        }
+
+        tmp := keyStr + strs[l]
+        fmt.Println("String Key:", tmp)
+        return tmp
 }
