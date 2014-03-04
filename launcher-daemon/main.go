@@ -4,6 +4,7 @@ import (
 	"dlib"
 	"dlib/dbus"
 	"fmt"
+	"log"
 )
 
 func main() {
@@ -20,5 +21,8 @@ func main() {
 		defer tree.DestroyTrie(treeId)
 	}
 	dbus.DealWithUnhandledMessage()
-	dlib.StartLoop()
+	go dlib.StartLoop()
+	if err := dbus.Wait(); err != nil {
+		log.Fatal("lost dbus session:", err)
+	}
 }
