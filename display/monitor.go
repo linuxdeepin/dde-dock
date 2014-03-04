@@ -167,6 +167,7 @@ func (m *Monitor) updateInfo() {
 	op := m.outputs[0]
 	oinfo, err := randr.GetOutputInfo(X, op, LastConfigTimeStamp).Reply()
 	if err != nil {
+		fmt.Println("updateInfo error:", err)
 	}
 	if oinfo.Crtc == 0 {
 		m.SwitchOn(false)
@@ -176,11 +177,13 @@ func (m *Monitor) updateInfo() {
 		m.setPropRotation(1)
 		m.setPropReflect(0)
 		m.setPropCurrentMode(Mode{})
+		m.SetMode(0)
 	} else {
 		m.SwitchOn(true)
 		cinfo, err := randr.GetCrtcInfo(X, oinfo.Crtc, LastConfigTimeStamp).Reply()
 		if err != nil {
 		}
+		m.SetMode(uint32(cinfo.Mode))
 		m.setPropXY(cinfo.X, cinfo.Y)
 		m.setPropWidth(cinfo.Width)
 		m.setPropHeight(cinfo.Height)
@@ -265,6 +268,20 @@ func NewMonitor(outputs []randr.Output) *Monitor {
 	m.FullName = m.Name
 
 	m.updateInfo()
+
+	if m.IsComposited {
+		best := m.CurrentMode
+		for _, mode := range m.ListModes() {
+			if mode.Width+mode.Height > best.Width+best.Height {
+				best = mode
+			}
+			if m.BestMode.ID == mode.ID {
+				best = m.BestMode
+				break
+			}
+		}
+		m.BestMode = best
+	}
 
 	return m
 }

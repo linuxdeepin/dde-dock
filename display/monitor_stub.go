@@ -6,7 +6,7 @@ import "strings"
 
 func (m *Monitor) GetDBusInfo() dbus.DBusInfo {
 	name := strings.Replace(m.Name, "-", "_", -1)
-	name = strings.Replace(name, "|", "_", -1)
+	name = strings.Replace(name, joinSeparator, "_", -1)
 	return dbus.DBusInfo{
 		"com.deepin.daemon.Display",
 		fmt.Sprintf("/com/deepin/daemon/Display/Monitor%s", name),

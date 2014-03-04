@@ -66,6 +66,9 @@ func (dpy *Display) JoinMonitor(a string, b string) error {
 	ops := monitorA.outputs
 	ops = append(ops, monitorB.outputs...)
 	monitor := NewMonitor(ops)
+	monitor.SetMode(monitor.BestMode.ID)
+	monitor.SetPos(monitorA.X, monitorA.Y)
+
 	if monitor != nil {
 		dpy.setPropMonitors(append(newMonitors, monitor))
 		return nil
@@ -91,6 +94,13 @@ func (dpy *Display) SplitMonitor(a string) error {
 		m := NewMonitor([]randr.Output{op})
 		if m == nil {
 			return fmt.Errorf("can't create monitor: %d", op)
+		}
+		if cfg, ok := __CFG__.Monitors[m.Name]; ok {
+			m.restore(cfg)
+		} else {
+			m.SetRelativePos(_CurrentRight, "right-of")
+			_CurrentRight = m.Name
+			_RightX += int16(m.CurrentMode.Width)
 		}
 		newMonitors = append(newMonitors, m)
 	}

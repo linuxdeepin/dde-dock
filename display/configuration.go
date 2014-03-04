@@ -11,6 +11,8 @@ var __CFG__ _Configuration
 
 var _ConfigPath = os.Getenv("HOME") + "/.config/deepin_monitors.json"
 
+var _CurrentRight, _RightX = "", int16(0)
+
 type _Configuration struct {
 	Primary     string
 	DisplayMode int16
@@ -185,13 +187,13 @@ func (dpy *Display) updateMonitorList() {
 		dpy.tryJoin(m.Name)
 	}
 
-	currentRight, rightX := "", int16(0)
+	_CurrentRight, _RightX = "", 0
 	for _, m := range dpy.Monitors {
-		if currentRight == "" {
-			currentRight = m.Name
-		} else if m.X > rightX {
-			currentRight = m.Name
-			rightX = m.X
+		if _CurrentRight == "" {
+			_CurrentRight = m.Name
+		} else if m.X > _RightX {
+			_CurrentRight = m.Name
+			_RightX = m.X
 		}
 
 		if cfg, ok := __CFG__.Monitors[m.Name]; ok {
@@ -201,9 +203,9 @@ func (dpy *Display) updateMonitorList() {
 		} else {
 			m.SwitchOn(true)
 
-			m.SetRelativePos(currentRight, "right-of")
-			currentRight = m.Name
-			rightX += int16(m.CurrentMode.Width)
+			m.SetRelativePos(_CurrentRight, "right-of")
+			_CurrentRight = m.Name
+			_RightX += int16(m.CurrentMode.Width)
 
 			__CFG__.Monitors[m.Name] = m.saveStatus()
 		}
