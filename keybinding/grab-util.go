@@ -189,7 +189,7 @@ func (op *MediaKeyManager) listenKeyPressEvent() {
                         modStr := keybind.ModifierString(e.State)
                         keyStr := keybind.LookupString(X, e.State, e.Detail)
                         fmt.Println("modStr:", modStr, "keyStr:", keyStr)
-                        if !op.emitSignal(modStr, keyStr) {
+                        if !op.emitSignal(modStr, keyStr, true) {
                                 value := ""
                                 if len(modStr) > 0 {
                                         value = modStr + "-" + keyStr
@@ -203,5 +203,13 @@ func (op *MediaKeyManager) listenKeyPressEvent() {
                                         go execCommand(v)
                                 }
                         }
+                }).Connect(X, X.RootWin())
+
+        xevent.KeyReleaseFun(
+                func(X *xgbutil.XUtil, e xevent.KeyReleaseEvent) {
+                        modStr := keybind.ModifierString(e.State)
+                        keyStr := keybind.LookupString(X, e.State, e.Detail)
+                        fmt.Println("Release modStr:", modStr, "keyStr:", keyStr)
+                        op.emitSignal(modStr, keyStr, false)
                 }).Connect(X, X.RootWin())
 }

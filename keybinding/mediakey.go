@@ -29,19 +29,19 @@ import (
 )
 
 type MediaKeyManager struct {
-        AudioMute      func()
-        AudioUp        func()
-        AudioDown      func()
-        BrightnessUp   func()
-        BrightnessDown func()
-        CapsLockOn     func()
-        CapsLockOff    func()
-        NumLockOn      func()
-        NumLockOff     func()
-        DisplaySwitch  func()
-        TouchPadOn     func()
-        TouchPadOff    func()
-        PowerOff       func()
+        AudioMute      func(bool)
+        AudioUp        func(bool)
+        AudioDown      func(bool)
+        BrightnessUp   func(bool)
+        BrightnessDown func(bool)
+        CapsLockOn     func(bool)
+        CapsLockOff    func(bool)
+        NumLockOn      func(bool)
+        NumLockOff     func(bool)
+        DisplaySwitch  func(bool)
+        TouchPadOn     func(bool)
+        TouchPadOff    func(bool)
+        PowerOff       func(bool)
 }
 
 const (
@@ -92,50 +92,49 @@ func (op *MediaKeyManager) listenMediaKey() {
         })
 }
 
-func (op *MediaKeyManager) emitSignal(modStr, keyStr string) bool {
-        fmt.Println("***** ModStr:", modStr, "------")
-        fmt.Println("***** KeyStr:", keyStr, "------")
+func (op *MediaKeyManager) emitSignal(modStr, keyStr string, press bool) bool {
+        fmt.Printf("Emit mod: %s, key: %s\n", modStr, keyStr)
         switch keyStr {
         case "XF86MonBrightnessUp":
-                op.BrightnessUp()
+                op.BrightnessUp(press)
                 return true
         case "XF86MonBrightnessDown":
-                op.BrightnessDown()
+                op.BrightnessDown(press)
                 return true
         case "XF86AudioMute":
-                op.AudioMute()
+                op.AudioMute(press)
                 return true
         case "XF86AudioLowerVolume":
-                op.AudioDown()
+                op.AudioDown(press)
                 return true
         case "XF86AudioRaiseVolume":
-                op.AudioUp()
+                op.AudioUp(press)
                 return true
         case "Num_Lock":
                 if strings.Contains(modStr, "mod2") {
-                        op.NumLockOff()
+                        op.NumLockOff(press)
                 } else {
-                        op.NumLockOn()
+                        op.NumLockOn(press)
                 }
                 return true
         case "Caps_Lock":
                 if strings.Contains(modStr, "lock") {
-                        op.CapsLockOff()
+                        op.CapsLockOff(press)
                 } else {
-                        op.CapsLockOn()
+                        op.CapsLockOn(press)
                 }
                 return true
         case "XF86TouchPadOn":
-                op.TouchPadOn()
+                op.TouchPadOn(press)
                 return true
         case "XF86TouchPadOff":
-                op.TouchPadOff()
+                op.TouchPadOff(press)
                 return true
         case "XF86Display":
-                op.DisplaySwitch()
+                op.DisplaySwitch(press)
                 return true
         case "XF86PowerOff":
-                op.PowerOff()
+                op.PowerOff(press)
                 return true
         }
 
