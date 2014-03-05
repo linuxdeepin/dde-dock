@@ -87,7 +87,7 @@ func (theme *Theme) doSetBackgroundSourceFile(imageFile string) bool {
 	dbus.NotifyChange(theme, "Background")
 
 	// set item color through background's dominant color
-	_, _, v := graphic.GetDominantColorOfImage(theme.bgSrcFile)
+	_, _, v, _ := graphic.GetDominantColorOfImage(theme.bgSrcFile)
 	if v < 0.5 {
 		// background is dark
 		theme.tplJSONData.CurrentScheme = theme.tplJSONData.DarkScheme
