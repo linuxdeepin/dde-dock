@@ -30,7 +30,7 @@ type Monitor struct {
 	Rotation uint16
 	Reflect  uint16
 
-	Brightness float64
+	Brightness map[string]float64
 
 	CurrentMode Mode
 
@@ -54,27 +54,31 @@ func (m *Monitor) SetReflect(v uint16) {
 	m.setPropReflect(v)
 }
 
-func (m *Monitor) ChangeBrightness(v float64) {
+func (m *Monitor) ChangeBrightness(name string, v float64) {
 	if v < 0.1 {
 		v = 0.1
 	} else if v > 1 {
 		v = 1
 	}
-	names := strings.Split(m.Name, joinSeparator)
-	code := "xrandr "
-	for _, name := range names {
-		code = fmt.Sprintf("%s --output %s", code, name)
-		maxBacklight := m.backlightRange[name]
-		if maxBacklight == 0 {
-			code = fmt.Sprintf("%s --brightness %f", code, v)
-		} else if maxBacklight > 0 {
-			code = fmt.Sprintf("%s --brightness 1 --set Backlight %d", code, int32(v*float64(maxBacklight)))
-		} else {
-			code = fmt.Sprintf("%s --brightness 1", code)
-		}
+	if old, ok := m.Brightness[name]; ok && v != old {
+		code := "xrandr "
+		code += m.generateBrightnessShell(name)
+		runCode(code)
+		m.setPropBrightness(name, v)
 	}
-	runCode(code)
-	m.setPropBrightness(v)
+}
+func (m *Monitor) generateBrightnessShell(name string) string {
+	code := ""
+	code = fmt.Sprintf("%s --output %s", code, name)
+	maxBacklight := m.backlightRange[name]
+	if maxBacklight == 0 {
+		code = fmt.Sprintf("%s --brightness %f", code, m.Brightness[name])
+	} else if maxBacklight > 0 {
+		code = fmt.Sprintf("%s --set Backlight %d", code, int32(m.Brightness[name]*float64(maxBacklight)))
+	} else {
+		code = fmt.Sprintf("%s --brightness 1", code)
+	}
+	return code
 }
 
 func (m *Monitor) SetPos(x, y int16) {
@@ -118,7 +122,6 @@ func (m *Monitor) generateShell() string {
 			if m.CurrentMode.ID == 0 {
 				code = fmt.Sprintf("%s --auto", code)
 			} else {
-				fmt.Println("CurrentModeID:", m.Name, m.CurrentMode.ID)
 				code = fmt.Sprintf("%s --mode %dx%d --rate %f", code, m.CurrentMode.Width, m.CurrentMode.Height, m.CurrentMode.Rate)
 			}
 			if len(m.relativePosInfo[0]) != 0 && len(m.relativePosInfo[1]) != 0 {
@@ -153,6 +156,8 @@ func (m *Monitor) generateShell() string {
 			default:
 				code = fmt.Sprintf("%s --reflect normal", code)
 			}
+
+			code = fmt.Sprintf("%s %s", code, m.generateBrightnessShell(name))
 
 		} else {
 			code = fmt.Sprintf(" %s --off", code)
@@ -191,13 +196,16 @@ func (m *Monitor) updateInfo() {
 		m.setPropCurrentMode(DPY.modes[cinfo.Mode])
 	}
 	if ok, backlight := supportedBacklight(X, op); ok {
-		m.setPropBrightness(backlight)
+		m.setPropBrightness(string(oinfo.Name), backlight)
 	}
 }
 
 func (m *Monitor) WorkaroundBacklight() {
-	if ok, backlight := supportedBacklight(X, m.outputs[0]); ok {
-		m.setPropBrightness(backlight)
+	names := strings.Split(m.Name, joinSeparator)
+	for i, op := range m.outputs {
+		if ok, backlight := supportedBacklight(X, op); ok {
+			m.setPropBrightness(names[i], backlight)
+		}
 	}
 }
 
@@ -206,7 +214,6 @@ func NewMonitor(outputs []randr.Output) *Monitor {
 	runtime.SetFinalizer(m, func(o interface{}) { dbus.UnInstallObject(m) })
 	m.outputs = make([]randr.Output, len(outputs))
 	m.backlightRange = make(map[string]int32)
-	m.setPropBrightness(1)
 	m.IsComposited = len(outputs) > 1
 	copy(m.outputs, outputs)
 
@@ -240,6 +247,11 @@ func NewMonitor(outputs []randr.Output) *Monitor {
 			for _, reflect := range parseReflects(cinfo.Rotations) {
 				reflectMap[reflect] += 1
 			}
+		}
+		if ok, backlight := supportedBacklight(X, op); ok {
+			m.setPropBrightness(string(oinfo.Name), backlight)
+		} else {
+			m.setPropBrightness(string(oinfo.Name), 1)
 		}
 
 	}

@@ -32,7 +32,7 @@ type _MonitorConfiguration struct {
 	Rotation uint16
 	Reflect  uint16
 
-	Brightness float64
+	Brightness map[string]float64
 }
 
 func saveConfiguration() {
@@ -125,7 +125,11 @@ func (m *Monitor) restore(cfg _MonitorConfiguration) {
 	m.SwitchOn(cfg.Enabled)
 	m.setPropRotation(cfg.Rotation)
 	m.setPropReflect(cfg.Reflect)
-	m.setPropBrightness(cfg.Brightness)
+	for k, v := range cfg.Brightness {
+		if v != 0 {
+			m.setPropBrightness(k, v)
+		}
+	}
 }
 func (dpy *Display) ResetChanged() {
 	// dond't set the monitors which hasn't cfg information

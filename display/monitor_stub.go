@@ -58,9 +58,13 @@ func (m *Monitor) setPropOpened(v bool) {
 		DPY.detectChanged()
 	}
 }
-func (m *Monitor) setPropBrightness(v float64) {
-	if m.Brightness != v {
-		m.Brightness = v
+
+func (m *Monitor) setPropBrightness(name string, v float64) {
+	if m.Brightness == nil {
+		m.Brightness = make(map[string]float64)
+	}
+	if old, _ := m.Brightness[name]; old != v {
+		m.Brightness[name] = v
 		dbus.NotifyChange(m, "Brightness")
 		DPY.detectChanged()
 	}
@@ -82,7 +86,7 @@ func (m *Monitor) setPropHeight(v uint16) {
 }
 func (m *Monitor) setPropXY(x, y int16) {
 	if m.X != x || m.Y != y {
-		m.X, m.Y  = x,y
+		m.X, m.Y = x, y
 		dbus.NotifyChange(m, "X")
 		dbus.NotifyChange(m, "Y")
 		DPY.detectChanged()
