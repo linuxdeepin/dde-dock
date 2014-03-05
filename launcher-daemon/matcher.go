@@ -16,19 +16,22 @@ func addMatcher(template string, key string, score uint32, m map[*regexp.Regexp]
 	return nil
 }
 
+const (
+	POOR          uint32 = 50000
+	BELOW_AVERAGE uint32 = 60000
+	AVERAGE       uint32 = 70000
+	ABOVE_AVERAGE uint32 = 75000
+	GOOD          uint32 = 80000
+	VERY_GOOD     uint32 = 85000
+	EXCELLENT     uint32 = 90000
+	HIGHEST       uint32 = 100000
+)
+
 // learn from synpase
 // TODO:
 // 1. analyse the code of synapse much deeply.
 // 2. add a weight for frequency.
 func getMatchers(key string) map[*regexp.Regexp]uint32 {
-	var POOR uint32 = 50000
-	var BELOW_AVERAGE uint32 = 60000
-	// var AVERAGE uint32 = 70000
-	var ABOVE_AVERAGE uint32 = 75000
-	var GOOD uint32 = 80000
-	var VERY_GOOD uint32 = 85000
-	var EXCELLENT uint32 = 90000
-	var HIGHEST uint32 = 100000
 
 	// * create a couple of regexes and try to help with matching
 	// * match with these regular expressions (with descending score):

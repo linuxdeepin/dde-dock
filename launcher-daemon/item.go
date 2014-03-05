@@ -34,6 +34,7 @@ type Xinfo struct {
 type ItemInfo struct {
 	Path        string
 	Name        string
+	enName      string
 	Id          ItemId
 	Icon        string
 	categoryIds map[CategoryId]bool
@@ -49,6 +50,7 @@ func (i *ItemInfo) init(app *gio.DesktopAppInfo) {
 	i.Id = getId(app)
 	i.Path = app.GetFilename()
 	i.Name = app.GetDisplayName()
+	i.enName = app.GetString("Name")
 	icon := app.GetIcon()
 	if icon != nil {
 		i.Icon = icon.ToString()
@@ -58,7 +60,11 @@ func (i *ItemInfo) init(app *gio.DesktopAppInfo) {
 	}
 
 	i.categoryIds = map[CategoryId]bool{}
-	i.xinfo.keywords = app.GetKeywords()
+	i.xinfo.keywords = make([]string, 0)
+	keywords := app.GetKeywords()
+	for _, keyword := range keywords {
+		i.xinfo.keywords = append(i.xinfo.keywords, strings.ToLower(keyword))
+	}
 	i.xinfo.exec = app.GetExecutable()
 	i.xinfo.genericName = app.GetGenericName()
 	i.xinfo.description = app.GetDescription()

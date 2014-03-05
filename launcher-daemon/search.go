@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"regexp"
 	"sort"
 	"strings"
 	"sync"
@@ -118,29 +119,37 @@ func search(key string) []ItemId {
 
 // 2. add a weight for frequency.
 func searchInstalled(key string, res chan<- SearchResult, end chan<- bool) {
-	matchers := getMatchers(key)
+	keyMatcher := regexp.MustCompile(fmt.Sprintf("(?i)(%s)", key))
+	matchers := getMatchers(key) // just use these to name.
 	for id, v := range itemTable {
 		var score uint32 = 0
-		var weight uint32 = 1
 
 		for matcher, s := range matchers {
 			if matcher.MatchString(v.Name) {
-				score += s * weight
+				score += s
 			}
-			for _, keyword := range v.xinfo.keywords {
-				if matcher.MatchString(keyword) {
-					score += s * weight
+		}
+		if v.enName != v.Name {
+			for matcher, s := range matchers {
+				if matcher.MatchString(v.enName) {
+					score += s
 				}
 			}
-			// if matcher.MatchString(v.xinfo.exec) {
-			// 	score += s * weight
-			// }
-			// if matcher.MatchString(v.xinfo.genericName) {
-			// 	score += s * weight
-			// }
-			// if matcher.MatchString(v.xinfo.description) {
-			// 	score += s * weight
-			// }
+		}
+
+		for _, keyword := range v.xinfo.keywords {
+			if keyMatcher.MatchString(keyword) {
+				score += VERY_GOOD
+			}
+		}
+		if keyMatcher.MatchString(v.xinfo.exec) {
+			score += GOOD
+		}
+		if keyMatcher.MatchString(v.xinfo.genericName) {
+			score += BELOW_AVERAGE
+		}
+		if keyMatcher.MatchString(v.xinfo.description) {
+			score += POOR
 		}
 
 		if score > 0 {
