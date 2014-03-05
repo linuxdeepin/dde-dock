@@ -49,8 +49,23 @@ func saveConfiguration() {
 	f.Write(bytes)
 }
 
-func (dpy *Display) Apply() {
+var __LastCode__ = ""
 
+func (dpy *Display) Apply() {
+	if dpy.HasChanged {
+		__LastCode__ = dpy.generateShell()
+		runCode(__LastCode__)
+	}
+}
+
+func (dpy *Display) detectChanged() {
+	if __LastCode__ != dpy.generateShell() {
+		dpy.HasChanged = true
+	} else {
+		dpy.HasChanged = false
+	}
+}
+func (dpy *Display) generateShell() string {
 	code := "xrandr "
 	for _, m := range dpy.Monitors {
 		code += m.generateShell()
@@ -58,7 +73,7 @@ func (dpy *Display) Apply() {
 			code += " --primary"
 		}
 	}
-	runCode(code)
+	return code
 }
 
 const (

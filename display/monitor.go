@@ -116,7 +116,6 @@ func (m *Monitor) generateShell() string {
 
 		if m.Opened {
 			if m.CurrentMode.ID == 0 {
-				m.setPropCurrentMode(m.BestMode)
 				code = fmt.Sprintf("%s --auto", code)
 			} else {
 				fmt.Println("CurrentModeID:", m.Name, m.CurrentMode.ID)
