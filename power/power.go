@@ -26,7 +26,7 @@ import (
 	"dlib/dbus"
 	"dlib/dbus/property"
 	"dlib/gio-2.0"
-	"dlib/logger"
+	//"dlib/logger"
 	"fmt"
 	"os"
 	"regexp"
@@ -51,7 +51,7 @@ const (
 	schema_gsettings_screensaver         = "org.gnome.desktop.screensaver"
 )
 
-var l = logger.NewLogger("power")
+//var l = logger.NewLogger("power")
 
 const (
 	MEDIA_KEY_DEST = "com.deepin.daemon.KeyBinding"
@@ -88,6 +88,9 @@ type Power struct {
 	SleepInactiveBatteryType *property.GSettingsStringProperty `access:"readwrite"`
 
 	CurrentProfile *property.GSettingsStringProperty `access:"readwrite"`
+
+	//dbus
+	conn *dbus.Conn
 
 	//upower interface
 	upower *upower.Upower
@@ -142,6 +145,21 @@ func NewPower() (*Power, error) {
 			println("upower battery interface not found\n")
 		}
 	}
+
+	var err error
+	power.conn, err = dbus.SessionBus()
+	if err != nil {
+		fmt.Print(os.Stderr, "Failed to connect to session bus")
+	}
+	//power.conn.BusObject().Call("org.freedesktop.DBus.AddMatch", 0,
+	//"type='signal',path='/com/deepin/daemon/KeyBinding',interface='com.deepin.daemon.MediaKey',sender='com.deepin.daemon.MediaKey'")
+	//go func() {
+	//c := make(chan *dbus.Signal, 16)
+	//for v := range c {
+	//fmt.Print(v)
+	//}
+	//}()
+
 	return power, nil
 }
 
@@ -271,7 +289,7 @@ func main() {
 	fmt.Print("power module started,looping")
 	go dlib.StartLoop()
 	if err := dbus.Wait(); err != nil {
-		l.Error("lost dbus session:", err)
+		//l.Error("lost dbus session:", err)
 		os.Exit(1)
 	} else {
 		os.Exit(0)
