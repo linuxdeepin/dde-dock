@@ -10,7 +10,7 @@ all:
 	cd mounts/ && $(run)
 	cd display/ && $(run)
 	cd inputdevices/ && $(run)
-	cd personalization/ && $(run)
+	cd themes/ && $(run)
 	cd network/ && $(run)
 	cd power/ && $(run)
 	cd system-info/ && $(run)

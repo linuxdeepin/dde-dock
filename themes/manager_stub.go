@@ -22,43 +22,35 @@
 package main
 
 import (
-	"testing"
+        "dlib/dbus"
 )
 
-func TestTheme(t *testing.T) {
-	InitVariable()
-	ReadThemeDir(THEME_DIR)
-	m := NewManager()
-	if m == nil {
-		t.Error("New Manager Failed!")
-		return
-	}
+const (
+        MANAGER_DEST = "com.deepin.daemon.ThemeManager"
+        MANAGER_PATH = "/com/deepin/daemon/ThemeManager"
+        MANAGER_IFC  = "com.deepin.daemon.ThemeManager"
+)
 
-	gtk := m.GtkTheme.Get()
-	for _, v := range m.EnableGtkTheme {
-		m.GtkTheme.Set(v.Name)
-	}
-	m.GtkTheme.Set(gtk)
-
-	icon := m.IconTheme.Get()
-	for _, v := range m.EnableIconTheme {
-		m.IconTheme.Set(v.Name)
-	}
-	m.IconTheme.Set(icon)
-
-	cursor := m.CursorTheme.Get()
-	for _, v := range m.EnableCursorTheme {
-		m.CursorTheme.Set(v.Name)
-	}
-	m.CursorTheme.Set(cursor)
-
-        font := infaceSettings.GetString(SCHEMA_KEY_FONT)
-        ok := infaceSettings.SetString(SCHEMA_KEY_FONT, "DejaVu Sans Mono 11")
-        if !ok {
-                t.Error("Set Font for gsd interface error!")
+func (op *Manager) GetDBusInfo() dbus.DBusInfo {
+        return dbus.DBusInfo{
+                MANAGER_DEST,
+                MANAGER_PATH,
+                MANAGER_IFC,
         }
-        ok = infaceSettings.SetString(SCHEMA_KEY_FONT, font)
-        if !ok {
-                t.Error("Set Font for gsd interface error!")
+}
+
+func (op *Manager) OnPropertiesChanged(propName string, old interface{}) {
+        switch propName {
+        case "ThemeList":
+        case "CurrentTheme":
+        }
+}
+
+func (op *Manager) setPropName(propName string) {
+        switch propName {
+        case "ThemeList":
+                dbus.NotifyChange(op, propName)
+        case "CurrentTheme":
+                dbus.NotifyChange(op, propName)
         }
 }
