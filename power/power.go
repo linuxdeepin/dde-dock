@@ -151,14 +151,14 @@ func NewPower() (*Power, error) {
 	if err != nil {
 		fmt.Print(os.Stderr, "Failed to connect to session bus")
 	}
-	//power.conn.BusObject().Call("org.freedesktop.DBus.AddMatch", 0,
-	//"type='signal',path='/com/deepin/daemon/KeyBinding',interface='com.deepin.daemon.MediaKey',sender='com.deepin.daemon.MediaKey'")
-	//go func() {
-	//c := make(chan *dbus.Signal, 16)
-	//for v := range c {
-	//fmt.Print(v)
-	//}
-	//}()
+	power.conn.BusObject().Call("org.freedesktop.DBus.AddMatch", 0,
+		"type='signal',path='/com/deepin/daemon/KeyBinding',interface='com.deepin.daemon.MediaKey',sender='com.deepin.daemon.MediaKey'")
+	go func() {
+		c := make(chan *dbus.Signal, 16)
+		for v := range c {
+			fmt.Print(v)
+		}
+	}()
 
 	return power, nil
 }
