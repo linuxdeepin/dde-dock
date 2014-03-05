@@ -468,11 +468,13 @@ func main() {
 	grub := NewGrub2()
 	err := dbus.InstallOnSession(grub)
 	if err != nil {
-		panic(err)
+		logger.Error("register dbus interface failed: %v", err)
+		os.Exit(1)
 	}
 	err = dbus.InstallOnSession(grub.theme)
 	if err != nil {
-		panic(err)
+		logger.Error("register dbus interface failed: %v", err)
+		os.Exit(1)
 	}
 
 	// load after dbus service installed to ensure property changed
