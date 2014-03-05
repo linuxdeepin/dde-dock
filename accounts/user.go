@@ -23,6 +23,7 @@ package main
 
 import (
         "io/ioutil"
+        "os"
         "strings"
 )
 
@@ -30,6 +31,7 @@ const (
         POLKIT_CHANGED_OWN_DATA = "com.deepin.daemon.accounts.change-own-user-data"
         POLKIT_MANAGER_USER     = "com.deepin.daemon.accounts.user-administration"
         POLKIT_SET_LOGIN_OPTION = "com.deepin.daemon.accounts.set-login-option"
+        ICON__SYSTEM_DIR        = "/var/lib/AccountsService/icons/"
 )
 
 func (op *UserManager) SetUserName(username string) {
@@ -107,13 +109,48 @@ func (op *UserManager) SetBackgroundFile(bg string) {
         }
 }
 
+func (op *UserManager) GetIconList() []string {
+        list := []string{}
+
+        sysList := getSystemIconList()
+        list = append(list, sysList...)
+
+        return list
+}
+
 func newUserManager(uid string) *UserManager {
         m := &UserManager{}
 
         m.Uid = uid
         m.updateUserInfo()
+        m.listenUserInfoChanged(ETC_GROUP)
+        m.listenUserInfoChanged(ETC_SHADOW)
 
         return m
+}
+
+func getSystemIconList() []string {
+        iconfd, err := os.Open(ICON__SYSTEM_DIR)
+        if err != nil {
+                logObject.Warning("Open '%s' failed: %v\n",
+                        ICON__SYSTEM_DIR, err)
+                return []string{}
+        }
+
+        names, _ := iconfd.Readdirnames(0)
+        list := []string{}
+        for _, v := range names {
+                if strings.Contains(v, "guest") {
+                        continue
+                } else if strings.Contains(v, "jpg") ||
+                        strings.Contains(v, "JPG") ||
+                        strings.Contains(v, "png") ||
+                        strings.Contains(v, "PNG") {
+                        list = append(list, ICON__SYSTEM_DIR+v)
+                }
+        }
+
+        return list
 }
 
 func getAdministratorList() []string {

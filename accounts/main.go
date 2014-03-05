@@ -51,10 +51,6 @@ func main() {
 
         updateUserList()
 
-        listenFileChanged(ETC_PASSWD)
-        listenFileChanged(ETC_GROUP)
-        listenFileChanged(ETC_SHADOW)
-
         dbus.DealWithUnhandledMessage()
 
         //select {}

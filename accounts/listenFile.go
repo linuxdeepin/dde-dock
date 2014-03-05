@@ -25,7 +25,37 @@ import (
         "github.com/howeyc/fsnotify"
 )
 
-func listenFileChanged(filename string) {
+func (op *AccountManager) listenUserListChanged() {
+        watcher, err := fsnotify.NewWatcher()
+        if err != nil {
+                logObject.Warning("New Watcher Failed:%v", err)
+                panic(err)
+        }
+
+        err = watcher.Watch(ETC_PASSWD)
+        if err != nil {
+                logObject.Warning("Watch File '%s' Failed: %v", ETC_PASSWD, err)
+                panic(err)
+        }
+
+        go func() {
+                defer watcher.Close()
+                for {
+                        select {
+                        case ev := <-watcher.Event:
+                                if ev.IsDelete() {
+                                        watcher.Watch(ETC_PASSWD)
+                                } else {
+                                        op.emitUserListChanged()
+                                }
+                        case err := <-watcher.Error:
+                                logObject.Warning("Watch Error:%v", err)
+                        }
+                }
+        }()
+}
+
+func (op *UserManager) listenUserInfoChanged(filename string) {
         watcher, err := fsnotify.NewWatcher()
         if err != nil {
                 logObject.Warning("New Watcher Failed:%v", err)
@@ -43,15 +73,74 @@ func listenFileChanged(filename string) {
                 for {
                         select {
                         case ev := <-watcher.Event:
-
                                 if ev.IsDelete() {
                                         watcher.Watch(filename)
                                 } else {
-                                        updateUserList()
+                                        op.updateUserInfo()
                                 }
                         case err := <-watcher.Error:
                                 logObject.Warning("Watch Error:%v", err)
                         }
                 }
         }()
+}
+
+func (op *AccountManager) emitUserListChanged() {
+        infos := getUserInfoList()
+        destList := []string{}
+        for _, info := range infos {
+                path := USER_MANAGER_PATH + info.Uid
+                destList = append(destList, path)
+        }
+        list, ret := compareStrList(op.UserList, destList)
+        switch ret {
+        case 1:
+                for _, v := range list {
+                        op.UserAdded(v)
+                }
+                op.setPropName("UserList")
+                updateUserList()
+        case -1:
+                for _, v := range list {
+                        op.UserDeleted(v)
+                }
+                op.setPropName("UserList")
+                updateUserList()
+        }
+}
+
+func compareStrList(src, dest []string) ([]string, int) {
+        sl := len(src)
+        dl := len(dest)
+
+        tmp := []string{}
+        if sl < dl {
+                for i := 0; i < dl; i++ {
+                        j := 0
+                        for ; j < sl; j++ {
+                                if dest[i] == src[j] {
+                                        break
+                                }
+                        }
+                        if j == sl {
+                                tmp = append(tmp, dest[i])
+                        }
+                }
+                return tmp, 1
+        } else if sl > dl {
+                for i := 0; i < sl; i++ {
+                        j := 0
+                        for ; j < dl; j++ {
+                                if src[i] == dest[j] {
+                                        break
+                                }
+                        }
+                        if j == dl {
+                                tmp = append(tmp, src[i])
+                        }
+                }
+                return tmp, -1
+        }
+
+        return tmp, 0
 }

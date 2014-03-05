@@ -60,8 +60,8 @@ func (op *AccountManager) CreateUser(name, fullname string, accountTyte int32) s
         newUser.updateUserInfo()
 
         path := op.FindUserByName(name)
-        op.UserAdded(path)
-        op.setPropName("UserList")
+        //op.UserAdded(path)
+        //op.setPropName("UserList")
         return path
 }
 
@@ -80,10 +80,10 @@ func (op *AccountManager) DeleteUser(name string, removeFiles bool) {
         }
         args = append(args, name)
 
-        path := op.FindUserByName(name)
+        //path := op.FindUserByName(name)
         execCommand(CMD_USERDEL, args)
-        op.UserDeleted(path)
-        op.setPropName("UserList")
+        //op.UserDeleted(path)
+        //op.setPropName("UserList")
 }
 
 func (op *AccountManager) FindUserById(id string) string {
@@ -157,6 +157,7 @@ func getUserInfoList() []UserInfo {
         lines := strings.Split(string(contents), "\n")
         for _, line := range lines {
                 strs := strings.Split(line, ":")
+
                 /* len of each line in /etc/passwd by spliting ':' is 7 */
                 if len(strs) != PASSWD_SPLIT_LEN {
                         continue
@@ -201,7 +202,10 @@ func userIsHuman(info *UserInfo) bool {
         }
 
         if !detetedViaShadowFile(info) {
-                return false
+                id, _ := strconv.ParseInt(info.Uid, 10, 64)
+                if id < 1000 {
+                        return false
+                }
         }
 
         return true

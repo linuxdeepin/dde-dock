@@ -59,10 +59,7 @@ func newAccountManager() *AccountManager {
         m := &AccountManager{}
 
         m.setPropName("UserList")
-
-        listenFileChanged(ETC_PASSWD)
-        listenFileChanged(ETC_SHADOW)
-        listenFileChanged(ETC_GROUP)
+        m.listenUserListChanged()
 
         return m
 }
