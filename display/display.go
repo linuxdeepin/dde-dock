@@ -134,6 +134,8 @@ func initDisplay() *Display {
 	randr.SelectInput(X, Root, randr.NotifyMaskOutputChange|randr.NotifyMaskOutputProperty|randr.NotifyMaskCrtcChange|randr.NotifyMaskScreenChange)
 	go dpy.listener()
 
+	dpy.workaroundBacklight()
+
 	return dpy
 }
 
