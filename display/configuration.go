@@ -142,6 +142,11 @@ func (dpy *Display) ResetChanged() {
 		}
 	}
 	dpy.Apply()
+
+	for _, m := range dpy.Monitors {
+		m.updateInfo()
+	}
+	dpy.detectChanged()
 }
 
 func (m *Monitor) saveStatus() _MonitorConfiguration {

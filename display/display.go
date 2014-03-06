@@ -136,6 +136,9 @@ func initDisplay() *Display {
 
 	dpy.workaroundBacklight()
 
+	dpy.HasChanged = false
+	__LastCode__ = dpy.generateShell()
+
 	return dpy
 }
 
