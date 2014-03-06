@@ -223,14 +223,6 @@ func (d *LauncherDBus) SendToDesktop(name string) {
 	sendToDesktop(name)
 }
 
-func (d *LauncherDBus) LoadHiddenApps() []ItemId {
-	return getHiddenApps()
-}
-
-func (d *LauncherDBus) SaveHiddenApps(ids []string) bool {
-	return saveHiddenApps(ids)
-}
-
 func (d *LauncherDBus) GetFavors() FavorItemList {
 	return getFavors()
 }
