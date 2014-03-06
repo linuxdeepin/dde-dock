@@ -292,6 +292,7 @@ func NewMonitor(outputs []randr.Output) *Monitor {
 		}
 		m.BestMode = best
 	}
+	m.SetMode(m.BestMode.ID)
 
 	return m
 }

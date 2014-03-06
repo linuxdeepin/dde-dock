@@ -56,6 +56,9 @@ func (dpy *Display) Apply() {
 		__LastCode__ = dpy.generateShell()
 		runCode(__LastCode__)
 	}
+	for _, m := range dpy.Monitors {
+		m.updateInfo()
+	}
 }
 
 func (dpy *Display) detectChanged() {

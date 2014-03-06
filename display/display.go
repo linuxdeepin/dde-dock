@@ -67,14 +67,17 @@ func (dpy *Display) JoinMonitor(a string, b string) error {
 	ops = append(ops, monitorB.outputs...)
 	monitor := NewMonitor(ops)
 	monitor.SetMode(monitor.BestMode.ID)
-	monitor.SetPos(monitorA.X, monitorA.Y)
+	monitor.SetPos(0, 0)
 
 	if monitor != nil {
 		dpy.setPropMonitors(append(newMonitors, monitor))
+		dpy.HasChanged = true
+		dpy.Apply()
 		return nil
 	} else {
 		return fmt.Errorf("can't create composted monitor")
 	}
+	return nil
 }
 func (dpy *Display) SplitMonitor(a string) error {
 	newMonitors := make([]*Monitor, 0)
@@ -90,6 +93,7 @@ func (dpy *Display) SplitMonitor(a string) error {
 		return fmt.Errorf("can't find composited monitor: %s", a)
 	}
 
+	haveStaticPosMonitor := false
 	for _, op := range monitor.outputs {
 		m := NewMonitor([]randr.Output{op})
 		if m == nil {
@@ -98,13 +102,20 @@ func (dpy *Display) SplitMonitor(a string) error {
 		if cfg, ok := __CFG__.Monitors[m.Name]; ok {
 			m.restore(cfg)
 		} else {
-			m.SetRelativePos(_CurrentRight, "right-of")
+			if haveStaticPosMonitor {
+				m.SetRelativePos(_CurrentRight, "right-of")
+			} else {
+				m.SetPos(0, 0)
+				haveStaticPosMonitor = true
+			}
 			_CurrentRight = m.Name
 			_RightX += int16(m.CurrentMode.Width)
 		}
 		newMonitors = append(newMonitors, m)
 	}
 	dpy.setPropMonitors(newMonitors)
+	dpy.HasChanged = true
+	dpy.Apply()
 	return nil
 }
 
@@ -138,6 +149,12 @@ func initDisplay() *Display {
 
 	dpy.HasChanged = false
 	__LastCode__ = dpy.generateShell()
+
+	for _, m := range dpy.Monitors {
+		if m.Name == dpy.Primary {
+			dpy.setPropPrimaryRect(xproto.Rectangle{m.X, m.Y, m.Width, m.Height})
+		}
+	}
 
 	return dpy
 }
@@ -192,11 +209,14 @@ func (dpy *Display) listener() {
 			pinfo, err := randr.GetOutputPrimary(X, Root).Reply()
 			if err == nil && pinfo.Output != 0 {
 				if m := queryMonitor(dpy, pinfo.Output); m != nil {
+					Logger.Info("11111")
 					dpy.setPropPrimaryRect(xproto.Rectangle{m.X, m.Y, m.Width, m.Height})
 				} else {
+					Logger.Info("2222")
 					dpy.setPropPrimaryRect(xproto.Rectangle{0, 0, ee.Width, ee.Height})
 				}
 			} else {
+				Logger.Info("3333")
 				dpy.setPropPrimaryRect(xproto.Rectangle{0, 0, ee.Width, ee.Height})
 			}
 
