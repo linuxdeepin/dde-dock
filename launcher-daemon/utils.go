@@ -125,15 +125,21 @@ func configFilePath(name string) string {
 	return path.Join(glib.GetUserConfigDir(), name)
 }
 
-func configFile(name string) (*glib.KeyFile, error) {
+func configFile(name string, defaultFile string) (*glib.KeyFile, error) {
 	file := glib.NewKeyFile()
 	conf := configFilePath(name)
 	if !exist(conf) {
-		f, err := os.Create(conf)
-		if err != nil {
-			return nil, err
+		os.MkdirAll(path.Base(conf), os.FileMode(0755))
+		if defaultFile == "" {
+			f, err := os.Create(conf)
+			if err != nil {
+				return nil, err
+			}
+			defer f.Close()
+		} else {
+			fmt.Println("copy", defaultFile, "to", conf)
+			copyFile(defaultFile, conf, CopyFileNotKeepSymlink)
 		}
-		defer f.Close()
 	}
 	if ok, err := file.LoadFromFile(conf, glib.KeyFileFlagsNone); !ok {
 		return nil, err

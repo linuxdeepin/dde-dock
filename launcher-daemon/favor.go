@@ -3,6 +3,8 @@ package main
 import (
 	"dlib/glib-2.0"
 	"fmt"
+	"os"
+	"strings"
 )
 
 const (
@@ -23,6 +25,17 @@ type FavorItem struct {
 
 type FavorItemList []FavorItem
 
+func defaultConfigPath() string {
+	languange := os.Getenv("LANGUAGE")
+	var defaultPath string
+	if strings.HasPrefix(languange, "zh") {
+		defaultPath = "/usr/share/dde/data/config/launcher/zh/favor.ini"
+	} else {
+		defaultPath = "/usr/share/dde/data/config/launcher/en/favor.ini"
+	}
+	return defaultPath
+}
+
 func getFavorIdList(file *glib.KeyFile) []string {
 	_, list, err := file.GetStringList(FavorConfigGroup, FavorConfigKey)
 	if err != nil {
@@ -34,7 +47,7 @@ func getFavorIdList(file *glib.KeyFile) []string {
 
 func getFavors() FavorItemList {
 	favors := make(FavorItemList, 0)
-	file, err := configFile(FavorConfigFile)
+	file, err := configFile(FavorConfigFile, defaultConfigPath())
 	defer file.Free()
 	if err != nil {
 		fmt.Println(fmt.Errorf("getFavors: %s", err))
@@ -59,7 +72,7 @@ func getFavors() FavorItemList {
 }
 
 func saveFavors(items FavorItemList) bool {
-	file, err := configFile(FavorConfigFile)
+	file, err := configFile(FavorConfigFile, defaultConfigPath())
 	defer file.Free()
 	if err != nil {
 		fmt.Println(fmt.Errorf("saveFavors: %s", err))
