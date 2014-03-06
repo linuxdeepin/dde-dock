@@ -74,14 +74,15 @@ func search(key string) []ItemId {
 		}
 	}(&res, resChan)
 
-	keys := []string{}
+	keys := []string{key}
+	var tkeys []string
 	if tree != nil {
-		keys, _ = tree.SearchKeys(key, treeId)
+		tkeys, _ = tree.SearchKeys(key, treeId)
 	}
 
-	for _, v := range keys {
+	for _, v := range tkeys {
 		if v != key {
-			keys = append(keys, key)
+			keys = append(keys, v)
 		}
 	}
 
@@ -119,19 +120,23 @@ func search(key string) []ItemId {
 
 // 2. add a weight for frequency.
 func searchInstalled(key string, res chan<- SearchResult, end chan<- bool) {
+	fmt.Println("SearchKey:", key)
 	keyMatcher := regexp.MustCompile(fmt.Sprintf("(?i)(%s)", key))
 	matchers := getMatchers(key) // just use these to name.
 	for id, v := range itemTable {
 		var score uint32 = 0
 
+		fmt.Println("search", v.Name)
 		for matcher, s := range matchers {
 			if matcher.MatchString(v.Name) {
+				fmt.Println("\tName:", v.Name, "match", matcher)
 				score += s
 			}
 		}
 		if v.enName != v.Name {
 			for matcher, s := range matchers {
 				if matcher.MatchString(v.enName) {
+					fmt.Println("\tEnName:", v.enName, "match", matcher)
 					score += s
 				}
 			}
@@ -139,16 +144,24 @@ func searchInstalled(key string, res chan<- SearchResult, end chan<- bool) {
 
 		for _, keyword := range v.xinfo.keywords {
 			if keyMatcher.MatchString(keyword) {
+				fmt.Println("\tKeyword:", keyword, "match", keyMatcher)
 				score += VERY_GOOD
 			}
 		}
+		if keyMatcher.MatchString(v.Path) {
+			fmt.Println("\tPath:", v.Path, "match", keyMatcher)
+			score += AVERAGE
+		}
 		if keyMatcher.MatchString(v.xinfo.exec) {
+			fmt.Println("\tExec:", v.xinfo.exec, "match", keyMatcher)
 			score += GOOD
 		}
 		if keyMatcher.MatchString(v.xinfo.genericName) {
+			fmt.Println("\tGenericName:", v.xinfo.genericName, "match", keyMatcher)
 			score += BELOW_AVERAGE
 		}
 		if keyMatcher.MatchString(v.xinfo.description) {
+			fmt.Println("\tDescription:", v.xinfo.description, "match", keyMatcher)
 			score += POOR
 		}
 

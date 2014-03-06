@@ -1,7 +1,7 @@
 package main
 
 import (
-	"crypto/md5"
+	// "crypto/md5"
 	"database/sql"
 	"fmt"
 	"log"
@@ -153,7 +153,8 @@ func getCategories(app *gio.DesktopAppInfo) []CategoryId {
 
 func genId(filename string) ItemId {
 	basename := path.Base(filename)
-	return ItemId(fmt.Sprintf("%x", md5.Sum([]byte(basename))))
+	// return ItemId(fmt.Sprintf("%x", md5.Sum([]byte(basename))))
+	return ItemId(basename[:len(basename)-8]) // len(".desktop")
 }
 
 func getId(app *gio.DesktopAppInfo) ItemId {

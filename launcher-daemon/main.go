@@ -3,12 +3,16 @@ package main
 import (
 	"dlib"
 	"dlib/dbus"
+	"dlib/gio-2.0"
 	"fmt"
 	"log"
 	"os"
 )
 
 func main() {
+	// DesktopAppInfo.ShouldShow does not know deepin.
+	gio.DesktopAppInfoSetDesktopEnv("deepin")
+
 	initCategory()
 	fmt.Println("init category done")
 
