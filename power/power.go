@@ -99,8 +99,8 @@ type Power struct {
 
 	//ShowTray *property.GSettingsBoolProperty `access:"readwrite"`
 
-	//SleepDisplayAc      *property.GSettingsIntProperty `access:"readwrite"`
-	//SleepDisplayBattery *property.GSettingsIntProperty `access:"readwrite"`
+	SleepDisplayAc      *property.GSettingsIntProperty `access:"readwrite"`
+	SleepDisplayBattery *property.GSettingsIntProperty `access:"readwrite"`
 
 	SleepInactiveAcTimeout      *property.GSettingsIntProperty `access:"readwrite"`
 	SleepInactiveBatteryTimeout *property.GSettingsIntProperty `access:"readwrite"`
@@ -336,10 +336,10 @@ func (power *Power) getGsettingsProperty() int32 {
 		power, "SleepInactiveAcTimeout", power.powerSettings, "sleep-inactive-ac-timeout")
 	power.SleepInactiveBatteryTimeout = property.NewGSettingsIntProperty(
 		power, "SleepInactiveBatteryTimeout", power.powerSettings, "sleep-inactive-battery-timeout")
-	//power.SleepDisplayAc = property.NewGSettingsIntProperty(
-	//power, "SleepDisplayAc", power.powerSettings, "sleep-display-ac")
-	//power.SleepDisplayBattery = property.NewGSettingsIntProperty(
-	//power, "SleepDisplayBattery", power.powerSettings, "sleep-display-battery")
+	power.SleepDisplayAc = property.NewGSettingsIntProperty(
+		power, "SleepDisplayAc", power.powerSettings, "sleep-display-ac")
+	power.SleepDisplayBattery = property.NewGSettingsIntProperty(
+		power, "SleepDisplayBattery", power.powerSettings, "sleep-display-battery")
 
 	power.SleepInactiveAcType = property.NewGSettingsStringProperty(
 		power, "SleepInactiveAcType", power.powerSettings,
