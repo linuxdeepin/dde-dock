@@ -8,7 +8,7 @@ import "C"
 
 import (
 	"dlib/dbus"
-	"dlib/logger"
+	//"dlib/logger"
 	"fmt"
 	"os"
 	"reflect"
@@ -17,7 +17,7 @@ import (
 	"unsafe"
 )
 
-var l = logger.NewLogger("audio")
+//var l = logger.NewLogger("audio")
 
 type Audio struct {
 	//unexported properties
@@ -1238,7 +1238,7 @@ func main() {
 	fmt.Println("module started\n")
 	go C.pa_subscribe(audio.pa)
 	if err := dbus.Wait(); err != nil {
-		l.Error("lost dbus session:", err)
+		//l.Error("lost dbus session:", err)
 		os.Exit(1)
 	} else {
 		os.Exit(0)

@@ -51,6 +51,12 @@ const (
 	schema_gsettings_screensaver         = "org.gnome.desktop.screensaver"
 )
 
+const (
+	LOGIND_DEST = "org.freedesktop.login1"
+	LOGIND_PATH = "/org/freedesktop/login1"
+	LOGIND_IFC  = "org.freedestkop.login1.Manager"
+)
+
 //var l = logger.NewLogger("power")
 
 const (
@@ -59,6 +65,10 @@ const (
 	MEDIA_KEY_IFC  = "com.deepin.daemon.MediaKey"
 
 	MEDIA_KEY_SCHEMA_ID = "com.deepin.dde.key-binding.mediakey"
+
+	SIGNAL_POWER     = "PowerOff"
+	SIGNAL_SLEEP     = "Sleep"
+	SIGNAL_HIBERNATE = "Hibernate"
 )
 
 type Power struct {
@@ -90,7 +100,9 @@ type Power struct {
 	CurrentProfile *property.GSettingsStringProperty `access:"readwrite"`
 
 	//dbus
-	conn *dbus.Conn
+	conn      *dbus.Conn
+	systemBus *dbus.Conn
+	logind    *dbus.Object
 
 	//upower interface
 	upower *upower.Upower
@@ -145,22 +157,73 @@ func NewPower() (*Power, error) {
 			println("upower battery interface not found\n")
 		}
 	}
-
 	var err error
 	power.conn, err = dbus.SessionBus()
 	if err != nil {
 		fmt.Print(os.Stderr, "Failed to connect to session bus")
 	}
-	power.conn.BusObject().Call("org.freedesktop.DBus.AddMatch", 0,
-		"type='signal',path='/com/deepin/daemon/KeyBinding',interface='com.deepin.daemon.MediaKey',sender='com.deepin.daemon.MediaKey'")
-	go func() {
-		c := make(chan *dbus.Signal, 16)
-		for v := range c {
-			fmt.Print(v)
-		}
-	}()
+
+	power.systemBus, err = dbus.SystemBus()
+	if err != nil {
+		fmt.Print(os.Stderr, "Failed to connect to system bus")
+	}
+
+	power.logind = power.systemBus.Object(LOGIND_DEST, LOGIND_PATH)
+	power.engineButton()
 
 	return power, nil
+}
+
+func (power *Power) engineButton() {
+
+	power.conn.BusObject().Call("org.freedesktop.DBus.AddMatch", 0,
+		"type='signal',path='/com/deepin/daemon/MediaKey',interface='com.deepin.daemon.MediaKey',member='PowerOff',sender='com.deepin.daemon.KeyBinding'")
+	power.conn.BusObject().Call("org.freedesktop.DBus.AddMatch", 0,
+		"type='signal',sender='com.deepin.daemon.KeyBinding',path='/com/deepin/daemon/MediaKey',interface='com.deepin.daemon.MediaKey',member='PowerOff'")
+	go func() {
+		c := make(chan *dbus.Signal, 16)
+		power.conn.Signal(c)
+		for v := range c {
+			fmt.Println(v.Name, v.Body)
+			switch v.Name {
+			case MEDIA_KEY_IFC + SIGNAL_POWER:
+				//power.logind.Call(""
+				break
+			}
+		}
+	}()
+}
+
+func (power *Power) actionPowerOff() {
+	call := power.logind.Call("PowerOff", 0,
+		true)
+	if call.Err != nil {
+		fmt.Println(call.Err)
+	}
+}
+
+func (power *Power) actionSuspend() {
+	call := power.logind.Call("Suspend", 0,
+		true)
+	if call.Err != nil {
+		fmt.Println(call.Err)
+	}
+}
+
+func (power *Power) actionHibernate() {
+	call := power.logind.Call("Hibernate", 0,
+		true)
+	if call.Err != nil {
+		fmt.Println(call.Err)
+	}
+}
+
+func (power *Power) actionHybridSleep() {
+	call := power.logind.Call("HybridSleep", 0,
+		true)
+	if call.Err != nil {
+		fmt.Println(call.Err)
+	}
 }
 
 func (p *Power) GetDBusInfo() dbus.DBusInfo {
