@@ -234,6 +234,14 @@ func (power *Power) engineButton() {
 	}()
 }
 
+func (power *Power) actionBlank() {
+
+}
+
+func (power *Power) actionLogout() {
+
+}
+
 func (power *Power) actionPowerOff() {
 	var can string
 	err := power.logind.Call(LOGIND_IFC+".CanPowerOff", 0).Store(&can)
