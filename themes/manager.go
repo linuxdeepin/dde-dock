@@ -22,8 +22,19 @@
 package main
 
 type Manager struct {
-        ThemeList    []string `access:"readwrite"`
-        CurrentTheme string   `access:"readwrite"`
+        ThemeList       []string
+        CurrentTheme    string  `access:"readwrite"`
+        GtkThemeList    []string
+        GtkBasePath     string
+        IconThemeList   []string
+        IconBasePath    string
+        CursorThemeList []string
+        CursorBasePath  string
+        FontThemeList   []string
+}
+
+func (op *Manager) SetTheme(gtk, icon, cursor, font string) string {
+        return ""
 }
 
 /*
@@ -31,7 +42,7 @@ type Manager struct {
    First, get all local themes
    Then, determine whether contains thumbnail
 */
-func (op *Manager) GetGtkThemeList() []string {
+func getGtkThemeList() []string {
         return []string{}
 }
 
@@ -40,7 +51,7 @@ func (op *Manager) GetGtkThemeList() []string {
    First, get all local themes
    Then, determine whether contains thumbnail
 */
-func (op *Manager) GetIconNameList() []string {
+func getIconNameList() []string {
         return []string{}
 }
 
@@ -49,12 +60,12 @@ func (op *Manager) GetIconNameList() []string {
    First, get all local themes
    Then, determine whether contains thumbnail
 */
-func (op *Manager) GetCursorNameList() []string {
+func getCursorNameList() []string {
         return []string{}
 }
 
 // Has not yet been determined
-func (op *Manager) GetFontNameList() []string {
+func getFontNameList() []string {
         return []string{}
 }
 
@@ -62,7 +73,7 @@ func (op *Manager) GetFontNameList() []string {
    Unlimited
    Return all bg.
 */
-func (op *Manager) GetBackgroundList() []string {
+func getBackgroundList() []string {
         return []string{}
 }
 

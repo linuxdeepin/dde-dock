@@ -139,7 +139,17 @@ func readKeyFileValue(filename, group, key string, t int32) (interface{}, bool) 
 
 func writeKeyFileValue(filename, group, key string, t int32, value interface{}) {
         if !fileIsExist(filename) {
-                return
+                f, err := os.Create(filename)
+                if err != nil {
+                        logObject.Info("Create '%s' failed: %v\n",
+                                filename, err)
+                        return
+                }
+                f.Close()
+                writeKeyFileValue(filename, "User", "Icon",
+                        KEY_TYPE_STRING, USER_DEFAULT_ICON)
+                writeKeyFileValue(filename, "User", "Background",
+                        KEY_TYPE_STRING, USER_DEFAULT_BG)
         }
 
         keyFile := glib.NewKeyFile()

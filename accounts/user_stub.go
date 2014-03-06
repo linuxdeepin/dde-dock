@@ -83,11 +83,11 @@ func (op *UserManager) setPropName(propName string, propValue interface{}) {
         case "IconFile":
                 file := USER_CONFIG_FILE + op.UserName
                 writeKeyFileValue(file, "User", "Icon",
-                        KEY_TYPE_STRING, op.BackgroundFile)
+                        KEY_TYPE_STRING, propValue.(string))
         case "BackgroundFile":
                 file := USER_CONFIG_FILE + op.UserName
                 writeKeyFileValue(file, "User", "Background",
-                        KEY_TYPE_STRING, op.BackgroundFile)
+                        KEY_TYPE_STRING, propValue.(string))
         case "AutomaticLogin":
                 if op.AutomaticLogin {
                         setAutomaticLogin(op.UserName)
@@ -146,6 +146,7 @@ func (op *UserManager) getPropName(propName string) {
                         v, ok := readKeyFileValue(file, "User", "Icon", KEY_TYPE_STRING)
                         if !ok {
                                 op.IconFile = USER_DEFAULT_ICON
+                                op.setPropName("IconFile", USER_DEFAULT_ICON)
                         } else {
                                 op.IconFile = v.(string)
                         }
@@ -158,6 +159,7 @@ func (op *UserManager) getPropName(propName string) {
                         v, ok := readKeyFileValue(file, "User", "Background", KEY_TYPE_STRING)
                         if !ok {
                                 op.BackgroundFile = USER_DEFAULT_BG
+                                op.setPropName("BackgroundFile", USER_DEFAULT_BG)
                         } else {
                                 tmp := v.(string)
                                 opUtils, _ := dutils.NewUtils("/com/deepin/api/Utils")

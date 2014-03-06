@@ -22,11 +22,14 @@
 package main
 
 type Theme struct {
-        GtkTheme       string  `access:"readwrite"`
-        IconTheme      string  `access:"readwrite"`
-        CursorTheme    string  `access:"readwrite"`
-        FontName       string  `access:"readwrite"`
-        BackgroundFile string  `access:"readwrite"`
+        Name           string
+        Type           string  //system or local theme
+        GtkTheme       string
+        IconTheme      string
+        CursorTheme    string
+        FontName       string
+        BackgroundFile string
+        BasePath       string
         path           string
 }
 
