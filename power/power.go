@@ -54,7 +54,7 @@ const (
 const (
 	LOGIND_DEST = "org.freedesktop.login1"
 	LOGIND_PATH = "/org/freedesktop/login1"
-	LOGIND_IFC  = "org.freedestkop.login1.Manager"
+	LOGIND_IFC  = "org.freedesktop.login1.Manager"
 )
 
 //var l = logger.NewLogger("power")
@@ -67,8 +67,19 @@ const (
 	MEDIA_KEY_SCHEMA_ID = "com.deepin.dde.key-binding.mediakey"
 
 	SIGNAL_POWER     = "PowerOff"
+	SIGNAL_SUSPEND   = "Suspend"
 	SIGNAL_SLEEP     = "Sleep"
 	SIGNAL_HIBERNATE = "Hibernate"
+)
+
+const (
+	ACTION_POWEROFF    = "shutdown"
+	ACTION_SUSPEND     = "suspend"
+	ACTION_INTERACTIVE = "interactive"
+	ACTION_NOTHING     = "nothing"
+	ACTION_LOGOUT      = "logout"
+	ACTION_HIBERNATE   = "hibernate"
+	ACTION_BLANK       = "blank"
 )
 
 type Power struct {
@@ -184,10 +195,39 @@ func (power *Power) engineButton() {
 		c := make(chan *dbus.Signal, 16)
 		power.conn.Signal(c)
 		for v := range c {
-			fmt.Println(v.Name, v.Body)
+			var action string
 			switch v.Name {
-			case MEDIA_KEY_IFC + SIGNAL_POWER:
+			case MEDIA_KEY_IFC + "." + SIGNAL_POWER:
 				//power.logind.Call(""
+				action = power.ButtonPower.Get()
+				break
+			case MEDIA_KEY_IFC + "." + SIGNAL_SLEEP:
+				action = power.ButtonSleep.Get()
+				break
+			case MEDIA_KEY_IFC + "." + SIGNAL_HIBERNATE:
+				action = power.ButtonHibernate.Get()
+			case MEDIA_KEY_IFC + "." + SIGNAL_SUSPEND:
+				action = power.ButtonSuspend.Get()
+			}
+
+			fmt.Println(v.Name, v.Body, " action: ", action)
+			switch action {
+			case ACTION_NOTHING:
+				break
+			case ACTION_INTERACTIVE:
+				break
+			case ACTION_BLANK:
+				break
+			case ACTION_LOGOUT:
+				break
+			case ACTION_SUSPEND:
+				power.actionSuspend()
+				break
+			case ACTION_POWEROFF:
+				power.actionPowerOff()
+				break
+			case ACTION_HIBERNATE:
+				power.actionHibernate()
 				break
 			}
 		}
@@ -195,34 +235,63 @@ func (power *Power) engineButton() {
 }
 
 func (power *Power) actionPowerOff() {
-	call := power.logind.Call("PowerOff", 0,
-		true)
-	if call.Err != nil {
-		fmt.Println(call.Err)
+	var can string
+	err := power.logind.Call(LOGIND_IFC+".CanPowerOff", 0).Store(&can)
+	if err != nil {
+		panic(err)
+	}
+	if can == "yes" {
+		call := power.logind.Call(LOGIND_IFC+".PowerOff", 0,
+			true)
+		if call.Err != nil {
+			fmt.Println(call.Err)
+		}
 	}
 }
 
 func (power *Power) actionSuspend() {
-	call := power.logind.Call("Suspend", 0,
-		true)
-	if call.Err != nil {
-		fmt.Println(call.Err)
+	var can string
+	err := power.logind.Call(LOGIND_IFC+".CanSuspend", 0).Store(&can)
+	if err != nil {
+		panic(err)
+	}
+	if can == "yes" {
+		fmt.Print("suspending\n")
+		call := power.logind.Call(LOGIND_IFC+".Suspend", 0,
+			true)
+		if call.Err != nil {
+			fmt.Println(call.Err)
+		}
 	}
 }
 
 func (power *Power) actionHibernate() {
-	call := power.logind.Call("Hibernate", 0,
-		true)
-	if call.Err != nil {
-		fmt.Println(call.Err)
+	var can string
+	err := power.logind.Call(LOGIND_IFC+".CanHibernate", 0).Store(&can)
+	if err != nil {
+		panic(err)
+	}
+	if can == "yes" {
+		call := power.logind.Call(LOGIND_IFC+".Hibernate", 0,
+			true)
+		if call.Err != nil {
+			fmt.Println(call.Err)
+		}
 	}
 }
 
 func (power *Power) actionHybridSleep() {
-	call := power.logind.Call("HybridSleep", 0,
-		true)
-	if call.Err != nil {
-		fmt.Println(call.Err)
+	var can string
+	err := power.logind.Call(LOGIND_IFC+".CanHybridSleep", 0).Store(&can)
+	if err != nil {
+		panic(err)
+	}
+	if can == "yes" {
+		call := power.logind.Call(LOGIND_IFC+".HybridSleep", 0,
+			true)
+		if call.Err != nil {
+			fmt.Println(call.Err)
+		}
 	}
 }
 

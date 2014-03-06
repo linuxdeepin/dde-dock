@@ -34,7 +34,7 @@ test -f /var/lock/acpisleep && exit 0
 [ -r /usr/share/acpi-support/power-funcs ] && getXconsole
 PMS="gnome-settings-daemon kpowersave xfce4-power-manager"
 PMS="$PMS guidance-power-manager.py dalston-power-applet"
-PMS="$PMS mate-settings-daemon dock"
+PMS="$PMS mate-settings-daemon power"
 
 if pidof x $PMS > /dev/null; then
         exit
