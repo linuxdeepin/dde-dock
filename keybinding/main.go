@@ -114,7 +114,15 @@ func (m *BindManager) CheckShortcut(shortcut string) (string, []int32) {
 func keyIsValid(key string) bool {
         tmp := formatShortcut(key)
         if len(tmp) == 0 || strings.Contains(tmp, "-") {
-                return true
+                array := strings.Split(tmp, "-")
+                str := array[len(array)-1]
+                if strings.Contains(str, "alt") ||
+                        strings.Contains(str, "shift") ||
+                        strings.Contains(str, "control") {
+                        return false
+                } else {
+                        return true
+                }
         }
 
         fmt.Println("keyIsValid : ", tmp)
