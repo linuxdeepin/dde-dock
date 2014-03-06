@@ -232,6 +232,7 @@ func (power *Power) engineButton() {
 			}
 		}
 	}()
+	fmt.Println("listening to power events")
 }
 
 func (power *Power) actionBlank() {
