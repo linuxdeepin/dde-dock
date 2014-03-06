@@ -42,6 +42,7 @@ type MediaKeyManager struct {
         TouchPadOn     func(bool)
         TouchPadOff    func(bool)
         PowerOff       func(bool)
+        PowerSleep     func(bool)
 }
 
 const (
@@ -135,6 +136,9 @@ func (op *MediaKeyManager) emitSignal(modStr, keyStr string, press bool) bool {
                 return true
         case "XF86PowerOff":
                 op.PowerOff(press)
+                return true
+        case "XF86Sleep":
+                op.PowerSleep(press)
                 return true
         }
 

@@ -31,6 +31,11 @@
             <summary>shortcut</summary>
             <description>system shortcut</description>
         </key>
+        <key type="s" name="home">
+            <default>'XF86HomePage'</default>
+            <summary>shortcut</summary>
+            <description>system shortcut</description>
+        </key>
         <key type="s" name="www">
             <default>'XF86WWW'</default>
             <summary>shortcut</summary>
