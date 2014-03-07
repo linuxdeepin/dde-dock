@@ -30,8 +30,9 @@ type Manager struct {
         //IconBasePath    string
         CursorThemeList []string
         //CursorBasePath  string
-        FontThemeList []string
-        pathNameMap   map[string]PathInfo
+        FontThemeList  []string
+        BackgroundList []string
+        pathNameMap    map[string]PathInfo
 }
 
 func (op *Manager) GetGtkBasePath(name string) string {
@@ -68,16 +69,6 @@ func (op *Manager) GetCursorBasePath(name string) string {
                 return THUMB_CURSOR_PATH + "/" + name
         } else if t == PATH_TYPE_LOCAL {
                 return THUMB_LOCAL_CURSOR_PATH + "/" + name
-        }
-
-        return ""
-}
-
-func getThemeType(name string, list []PathInfo) string {
-        for _, l := range list {
-                if name == l.path {
-                        return l.t
-                }
         }
 
         return ""
@@ -159,6 +150,16 @@ func getFontNameList() []string {
 */
 func getBackgroundList() []string {
         return []string{}
+}
+
+func getThemeType(name string, list []PathInfo) string {
+        for _, l := range list {
+                if name == l.path {
+                        return l.t
+                }
+        }
+
+        return ""
 }
 
 func newManager() *Manager {

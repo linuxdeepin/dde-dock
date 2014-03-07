@@ -49,10 +49,8 @@ func newTheme(path string, info PathInfo) *Theme {
         } else if m.Type == "local" {
                 m.BasePath = THUMB_LOCAL_THEME_PATH + "/" + m.Name
         }
-        m.setPropName("GtkTheme")
-        m.setPropName("IconTheme")
-        m.setPropName("CursorTheme")
-        m.setPropName("FontName")
+
+        m.updateThemeInfo()
         m.setPropName("BackgroundFile")
 
         m.listenSettingsChanged()

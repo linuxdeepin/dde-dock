@@ -27,9 +27,9 @@ import (
 )
 
 const (
-        MANAGER_DEST = "com.deepin.daemon.ThemeManager"
-        MANAGER_PATH = "/com/deepin/daemon/ThemeManager"
-        MANAGER_IFC  = "com.deepin.daemon.ThemeManager"
+        MANAGER_DEST = "com.deepin.daemon.Themes"
+        MANAGER_PATH = "/com/deepin/daemon/Themes"
+        MANAGER_IFC  = "com.deepin.daemon.Themes"
 )
 
 func (op *Manager) GetDBusInfo() dbus.DBusInfo {

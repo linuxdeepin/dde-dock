@@ -24,14 +24,21 @@ package main
 import (
         "dlib/dbus"
         "dlib/gio-2.0"
+        "dlib/glib-2.0"
 )
 
 const (
-        THEME_DEST = "com.deepin.deamon.ThemeManager"
+        THEME_DEST = "com.deepin.deamon.Themes"
         THEME_PATH = "/com/deepin/daemon/Theme"
         //THEME_PATH         = "/com/deepin/daemon/Theme/Entry"
         THEME_IFC          = "com.deepin.daemon.Theme"
         PERSONALIZATION_ID = "com.deepin.dde.personalization"
+
+        THEME_GROUP_COMPONENT = "component"
+        THEME_KEY_GTK         = "gtk"
+        THEME_KEY_ICONS       = "icons"
+        THEME_KEY_CURSOR      = "cursor"
+        THEME_KEY_FONT        = "font"
 )
 
 var (
@@ -48,18 +55,6 @@ func (op *Theme) GetDBusInfo() dbus.DBusInfo {
 
 func (op *Theme) OnPropertiesChanged(propName string, old interface{}) {
         switch propName {
-        case "GtkTheme":
-                if v, ok := old.(string); ok && v != op.GtkTheme {
-                }
-        case "IconTheme":
-                if v, ok := old.(string); ok && v != op.IconTheme {
-                }
-        case "CursorTheme":
-                if v, ok := old.(string); ok && v != op.CursorTheme {
-                }
-        case "FontName":
-                if v, ok := old.(string); ok && v != op.FontName {
-                }
         case "BackgroundFile":
                 if v, ok := old.(string); ok && v != op.BackgroundFile {
                         personSettings.SetString("current-picture",
@@ -91,4 +86,58 @@ func (op *Theme) listenSettingsChanged() {
                         op.setPropName("BackgroundFile")
                 }
         })
+}
+
+func (op *Theme) updateThemeInfo() {
+        filename := op.BasePath + "/theme.ini"
+        keyFile := glib.NewKeyFile()
+        defer keyFile.Free()
+
+        _, err := keyFile.LoadFromFile(filename,
+                glib.KeyFileFlagsKeepComments)
+        if err != nil {
+                logObject.Info("LoadFile '%s' failed: %v",
+                        filename, err)
+                return
+        }
+
+        str, err1 := keyFile.GetString(THEME_GROUP_COMPONENT,
+                THEME_KEY_GTK)
+        if err1 != nil {
+                logObject.Info("Get key '%s' value failed: %v",
+                        THEME_KEY_GTK, err)
+                return
+        }
+        op.GtkTheme = str
+        dbus.NotifyChange(op, "GtkTheme")
+
+        str, err1 = keyFile.GetString(THEME_GROUP_COMPONENT,
+                THEME_KEY_ICONS)
+        if err1 != nil {
+                logObject.Info("Get key '%s' value failed: %v",
+                        THEME_KEY_CURSOR, err)
+                return
+        }
+        op.IconTheme = str
+        dbus.NotifyChange(op, "IconTheme")
+
+        str, err1 = keyFile.GetString(THEME_GROUP_COMPONENT,
+                THEME_KEY_CURSOR)
+        if err1 != nil {
+                logObject.Info("Get key '%s' value failed: %v",
+                        THEME_KEY_CURSOR, err)
+                return
+        }
+        op.CursorTheme = str
+        dbus.NotifyChange(op, "CursorTheme")
+
+        str, err1 = keyFile.GetString(THEME_GROUP_COMPONENT,
+                THEME_KEY_FONT)
+        if err1 != nil {
+                logObject.Info("Get key '%s' value failed: %v",
+                        THEME_KEY_FONT, err)
+                return
+        }
+        op.FontName = str
+        dbus.NotifyChange(op, "FontName")
 }
