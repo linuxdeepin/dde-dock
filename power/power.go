@@ -31,6 +31,9 @@ import (
 	"os"
 	"regexp"
 	//"unsafe"
+	"github.com/BurntSushi/xgb"
+	"github.com/BurntSushi/xgb/randr"
+	"github.com/BurntSushi/xgb/xproto"
 )
 
 type dbusBattery struct {
@@ -211,6 +214,41 @@ func (power *Power) upowerChanged() {
 	}
 }
 
+func (power *Power) externalMonitorIsOn() bool {
+	X, _ := xgb.NewConn()
+
+	err := randr.Init(X)
+	if err != nil {
+		panic(err)
+	}
+
+	//root window on the default screen
+	root := xproto.Setup(X).DefaultScreen(X).Root
+
+	resources, err := randr.GetScreenResources(X, root).Reply()
+	if err != nil {
+		panic(err)
+	}
+
+	var on int = 0
+	for _, output := range resources.Outputs {
+		info, err := randr.GetOutputInfo(X, output, 0).Reply()
+		if err != nil {
+			panic(err)
+		}
+
+		if info.Connection == randr.ConnectionConnected {
+			on += 1
+		}
+
+		if on >= 2 {
+			return true
+		}
+	}
+
+	return false
+}
+
 func (power *Power) doLidCloseAction() {
 	battery := power.upower.OnBattery.Get()
 	var action string
@@ -225,11 +263,17 @@ func (power *Power) doLidCloseAction() {
 	case ACTION_NOTHING:
 		break
 	case ACTION_BLANK:
+		power.actionBlank()
 		break
 	case ACTION_LOGOUT:
+		power.actionLogout()
 		break
 	case ACTION_SUSPEND:
-		power.actionSuspend()
+		if power.externalMonitorIsOn() {
+			break
+		} else {
+			power.actionSuspend()
+		}
 		break
 	case ACTION_POWEROFF:
 		power.actionPowerOff()
@@ -386,7 +430,7 @@ func (power *Power) getGsettingsProperty() int32 {
 	power.CriticalBatteryAction = property.NewGSettingsStringProperty(
 		power, "CriticalBatteryAction", power.powerSettings, "critical-battery-action")
 	power.LidCloseACAction = property.NewGSettingsStringProperty(
-		power, "LidCloseAction", power.powerSettings, "lid-close-ac-action")
+		power, "LidCloseACAction", power.powerSettings, "lid-close-ac-action")
 	power.LidCloseBatteryAction = property.NewGSettingsStringProperty(
 		power, "LidCloseBatteryAction", power.powerSettings, "lid-close-battery-action")
 	//power.ShowTray = property.NewGSettingsBoolProperty(
