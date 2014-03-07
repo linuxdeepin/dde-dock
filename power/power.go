@@ -94,7 +94,7 @@ type Power struct {
 	ButtonSuspend   *property.GSettingsStringProperty `access:"readwrite"`
 
 	CriticalBatteryAction *property.GSettingsStringProperty `access:"read"`
-	LidCloseAcAction      *property.GSettingsStringProperty `access:"readwrite"`
+	LidCloseACAction      *property.GSettingsStringProperty `access:"readwrite"`
 	LidCloseBatteryAction *property.GSettingsStringProperty `access:"readwrite"`
 
 	//ShowTray *property.GSettingsBoolProperty `access:"readwrite"`
@@ -133,6 +133,10 @@ type Power struct {
 	//gnome.desktop.screensaver keys
 	screensaverSettings *gio.Settings
 	LockEnabled         *property.GSettingsBoolProperty `access:"readwrite"`
+
+	//states to keep track of changes
+	LidIsClosed  bool
+	BatteryIsLow bool
 }
 
 func NewPower() (*Power, error) {
@@ -155,6 +159,12 @@ func NewPower() (*Power, error) {
 	if power.upower == nil {
 		println("WARNING:UPower not provided by dbus\n")
 	} else {
+
+		power.LidIsClosed = power.upower.LidIsClosed.Get()
+		power.BatteryIsLow = power.upower.OnLowBattery.Get()
+
+		power.upower.ConnectChanged(power.upowerChanged)
+
 		println("enumerating devices\n")
 		devices, _ := power.upower.EnumerateDevices()
 		paths := getUpowerDeviceObjectPath(devices)
@@ -190,10 +200,48 @@ func (power *Power) upowerChanged() {
 	isPresent := power.upower.LidIsPresent.Get()
 	if isPresent {
 		closed := power.upower.LidIsClosed.Get()
+		if closed == power.LidIsClosed {
+			return
+		}
 		if closed {
-
+			power.doLidCloseAction()
+		} else {
+			power.doLidOpenAction()
 		}
 	}
+}
+
+func (power *Power) doLidCloseAction() {
+	battery := power.upower.OnBattery.Get()
+	var action string
+	if battery {
+		action = power.LidCloseBatteryAction.Get()
+	} else {
+		action = power.LidCloseACAction.Get()
+	}
+
+	fmt.Println("lid is closed: ", action)
+	switch action {
+	case ACTION_NOTHING:
+		break
+	case ACTION_BLANK:
+		break
+	case ACTION_LOGOUT:
+		break
+	case ACTION_SUSPEND:
+		power.actionSuspend()
+		break
+	case ACTION_POWEROFF:
+		power.actionPowerOff()
+		break
+	case ACTION_HIBERNATE:
+		power.actionHibernate()
+		break
+	}
+}
+
+func (power *Power) doLidOpenAction() {
+	fmt.Println("lid is open")
 }
 
 func (power *Power) engineButton() {
@@ -276,7 +324,7 @@ func (power *Power) actionSuspend() {
 		panic(err)
 	}
 	if can == "yes" {
-		fmt.Print("suspending\n")
+		fmt.Print("actionSuspend():suspending\n")
 		call := power.logind.Call(LOGIND_IFC+".Suspend", 0,
 			true)
 		if call.Err != nil {
@@ -337,7 +385,7 @@ func (power *Power) getGsettingsProperty() int32 {
 
 	power.CriticalBatteryAction = property.NewGSettingsStringProperty(
 		power, "CriticalBatteryAction", power.powerSettings, "critical-battery-action")
-	power.LidCloseAcAction = property.NewGSettingsStringProperty(
+	power.LidCloseACAction = property.NewGSettingsStringProperty(
 		power, "LidCloseAction", power.powerSettings, "lid-close-ac-action")
 	power.LidCloseBatteryAction = property.NewGSettingsStringProperty(
 		power, "LidCloseBatteryAction", power.powerSettings, "lid-close-battery-action")
