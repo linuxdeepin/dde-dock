@@ -280,7 +280,7 @@ func NewMonitor(outputs []randr.Output) *Monitor {
 	m.updateInfo()
 
 	if m.IsComposited {
-		best := m.CurrentMode
+		best := Mode{}
 		for _, mode := range m.ListModes() {
 			if mode.Width+mode.Height > best.Width+best.Height {
 				best = mode
