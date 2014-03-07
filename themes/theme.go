@@ -21,6 +21,10 @@
 
 package main
 
+import (
+        "strings"
+)
+
 type Theme struct {
         Name           string
         Type           string  //system or local theme
@@ -33,10 +37,18 @@ type Theme struct {
         path           string
 }
 
-func newTheme(path string) *Theme {
+func newTheme(path string, info PathInfo) *Theme {
         m := &Theme{}
 
         m.path = path
+        m.Name = info.path
+        m.Type = strings.ToLower(info.t)
+
+        if m.Type == "system" {
+                m.BasePath = THUMB_THEME_PATH + "/" + m.Name
+        } else if m.Type == "local" {
+                m.BasePath = THUMB_LOCAL_THEME_PATH + "/" + m.Name
+        }
         m.setPropName("GtkTheme")
         m.setPropName("IconTheme")
         m.setPropName("CursorTheme")

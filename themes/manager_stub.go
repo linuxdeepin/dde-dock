@@ -23,6 +23,7 @@ package main
 
 import (
         "dlib/dbus"
+        "strconv"
 )
 
 const (
@@ -41,7 +42,6 @@ func (op *Manager) GetDBusInfo() dbus.DBusInfo {
 
 func (op *Manager) OnPropertiesChanged(propName string, old interface{}) {
         switch propName {
-        case "ThemeList":
         case "CurrentTheme":
         }
 }
@@ -49,8 +49,34 @@ func (op *Manager) OnPropertiesChanged(propName string, old interface{}) {
 func (op *Manager) setPropName(propName string) {
         switch propName {
         case "ThemeList":
+                list := getThemeList()
+                for _, l := range list {
+                        id := genId()
+                        idStr := strconv.FormatInt(int64(id), 10)
+                        path := THEME_PATH + idStr
+                        op.ThemeList = append(op.ThemeList, path)
+                        op.pathNameMap[path] = l
+                }
                 dbus.NotifyChange(op, propName)
         case "CurrentTheme":
+                dbus.NotifyChange(op, propName)
+        case "GtkThemeList":
+                list := getGtkThemeList()
+                for _, l := range list {
+                        op.GtkThemeList = append(op.GtkThemeList, l.path)
+                }
+                dbus.NotifyChange(op, propName)
+        case "IconThemeList":
+                list := getIconThemeList()
+                for _, l := range list {
+                        op.IconThemeList = append(op.IconThemeList, l.path)
+                }
+                dbus.NotifyChange(op, propName)
+        case "CursorThemeList":
+                list := getCursorThemeList()
+                for _, l := range list {
+                        op.CursorThemeList = append(op.CursorThemeList, l.path)
+                }
                 dbus.NotifyChange(op, propName)
         }
 }

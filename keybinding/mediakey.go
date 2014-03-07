@@ -38,7 +38,7 @@ type MediaKeyManager struct {
         CapsLockOff    func(bool)
         NumLockOn      func(bool)
         NumLockOff     func(bool)
-        DisplaySwitch  func(bool)
+        SwitchMonitors func(bool)
         TouchPadOn     func(bool)
         TouchPadOff    func(bool)
         PowerOff       func(bool)
@@ -132,7 +132,7 @@ func (op *MediaKeyManager) emitSignal(modStr, keyStr string, press bool) bool {
                 op.TouchPadOff(press)
                 return true
         case "XF86Display":
-                op.DisplaySwitch(press)
+                op.SwitchMonitors(press)
                 return true
         case "XF86PowerOff":
                 op.PowerOff(press)
@@ -140,6 +140,21 @@ func (op *MediaKeyManager) emitSignal(modStr, keyStr string, press bool) bool {
         case "XF86Sleep":
                 op.PowerSleep(press)
                 return true
+        case "p", "P":
+                if strings.Contains(modStr, "mod4") {
+                        strs := strings.Split(modStr, "-")
+                        tmps := []string{}
+                        for _, a := range strs {
+                                if a == "lock" || a == "mod2" {
+                                        continue
+                                }
+                                tmps = append(tmps, a)
+                        }
+
+                        if len(tmps) == 1 {
+                                op.SwitchMonitors(press)
+                        }
+                }
         }
 
         return false

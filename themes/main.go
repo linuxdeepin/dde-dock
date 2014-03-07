@@ -25,11 +25,28 @@ import (
         "dlib/dbus"
         "dlib/logger"
         "os"
+        "sync"
 )
 
 var (
         logObject   = logger.NewLogger("daemon/themes")
         themeObjMap = make(map[string]*Theme)
+        mutex       sync.Mutex
+
+        genId, destroyId = func() (func() int, func()) {
+                count := 0
+                return func() int {
+                                mutex.Lock()
+                                tmp := count
+                                count++
+                                mutex.Unlock()
+                                return tmp
+                        }, func() {
+                                mutex.Lock()
+                                count = 0
+                                mutex.Unlock()
+                        }
+        }()
 )
 
 func destroyThemeObj(path string) {
@@ -49,11 +66,11 @@ func destroyAllThemeObj() {
         }
 }
 
-func updateThemeObj(list []string) {
+func updateThemeObj(pathNameMap map[string]PathInfo) {
         destroyAllThemeObj()
 
-        for _, path := range list {
-                obj := newTheme(path)
+        for path, info := range pathNameMap {
+                obj := newTheme(path, info)
                 err := dbus.InstallOnSession(obj)
                 if err != nil {
                         logObject.Warning("Install Session Failed: %v", err)
@@ -79,9 +96,9 @@ func main() {
                 panic(err)
         }
 
-        m.ThemeList = append(m.ThemeList, THEME_PATH+"Test")
-        m.ThemeList = append(m.ThemeList, THEME_PATH+"Deepin")
-        updateThemeObj(m.ThemeList)
+        //m.ThemeList = append(m.ThemeList, THEME_PATH+"Test")
+        //m.ThemeList = append(m.ThemeList, THEME_PATH+"Deepin")
+        updateThemeObj(m.pathNameMap)
         dbus.DealWithUnhandledMessage()
 
         if err = dbus.Wait(); err != nil {

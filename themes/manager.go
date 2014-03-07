@@ -22,28 +22,73 @@
 package main
 
 type Manager struct {
-        ThemeList       []string
-        CurrentTheme    string  `access:"readwrite"`
-        GtkThemeList    []string
-        GtkBasePath     string
-        IconThemeList   []string
-        IconBasePath    string
+        ThemeList    []string
+        CurrentTheme string  `access:"readwrite"`
+        GtkThemeList []string
+        //GtkBasePath     string
+        IconThemeList []string
+        //IconBasePath    string
         CursorThemeList []string
-        CursorBasePath  string
-        FontThemeList   []string
+        //CursorBasePath  string
+        FontThemeList []string
+        pathNameMap   map[string]PathInfo
+}
+
+func (op *Manager) GetGtkBasePath(name string) string {
+        list := getGtkThemeList()
+
+        t := getThemeType(name, list)
+        if t == PATH_TYPE_SYSTEM {
+                return THUMB_GTK_PATH + "/" + name
+        } else if t == PATH_TYPE_LOCAL {
+                return THUMB_LOCAL_GTK_PATH + "/" + name
+        }
+
+        return ""
+}
+
+func (op *Manager) GetIconBasePath(name string) string {
+        list := getIconThemeList()
+
+        t := getThemeType(name, list)
+        if t == PATH_TYPE_SYSTEM {
+                return THUMB_ICON_PATH + "/" + name
+        } else if t == PATH_TYPE_LOCAL {
+                return THUMB_LOCAL_ICON_PATH + "/" + name
+        }
+
+        return ""
+}
+
+func (op *Manager) GetCursorBasePath(name string) string {
+        list := getCursorThemeList()
+
+        t := getThemeType(name, list)
+        if t == PATH_TYPE_SYSTEM {
+                return THUMB_CURSOR_PATH + "/" + name
+        } else if t == PATH_TYPE_LOCAL {
+                return THUMB_LOCAL_CURSOR_PATH + "/" + name
+        }
+
+        return ""
+}
+
+func getThemeType(name string, list []PathInfo) string {
+        for _, l := range list {
+                if name == l.path {
+                        return l.t
+                }
+        }
+
+        return ""
 }
 
 func (op *Manager) SetTheme(gtk, icon, cursor, font string) string {
         return ""
 }
 
-/*
-   Return only contains thumbnail theme
-   First, get all local themes
-   Then, determine whether contains thumbnail
-*/
-func getGtkThemeList() []string {
-        return []string{}
+func getThemeList() []PathInfo {
+        return getThemeThumbList()
 }
 
 /*
@@ -51,8 +96,18 @@ func getGtkThemeList() []string {
    First, get all local themes
    Then, determine whether contains thumbnail
 */
-func getIconNameList() []string {
-        return []string{}
+func getGtkThemeList() []PathInfo {
+        valid := getValidGtkThemes()
+        thumb := getGtkThumbList()
+
+        list := []PathInfo{}
+        for _, v := range valid {
+                if isElementExist(v, thumb) {
+                        list = append(list, v)
+                }
+        }
+
+        return list
 }
 
 /*
@@ -60,8 +115,37 @@ func getIconNameList() []string {
    First, get all local themes
    Then, determine whether contains thumbnail
 */
-func getCursorNameList() []string {
-        return []string{}
+func getIconThemeList() []PathInfo {
+        valid := getValidIconThemes()
+        thumb := getIconThumbList()
+
+        list := []PathInfo{}
+        for _, v := range valid {
+                if isElementExist(v, thumb) {
+                        list = append(list, v)
+                }
+        }
+
+        return list
+}
+
+/*
+   Return only contains thumbnail theme
+   First, get all local themes
+   Then, determine whether contains thumbnail
+*/
+func getCursorThemeList() []PathInfo {
+        valid := getValidCursorThemes()
+        thumb := getCursorThumbList()
+
+        list := []PathInfo{}
+        for _, v := range valid {
+                if isElementExist(v, thumb) {
+                        list = append(list, v)
+                }
+        }
+
+        return list
 }
 
 // Has not yet been determined
@@ -80,8 +164,12 @@ func getBackgroundList() []string {
 func newManager() *Manager {
         m := &Manager{}
 
+        m.pathNameMap = make(map[string]PathInfo)
         m.setPropName("ThemeList")
         m.setPropName("CurrentTheme")
+        m.setPropName("GtkThemeList")
+        m.setPropName("IconThemeList")
+        m.setPropName("CursorThemeList")
 
         return m
 }

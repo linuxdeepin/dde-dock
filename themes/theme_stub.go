@@ -28,7 +28,7 @@ import (
 
 const (
         THEME_DEST = "com.deepin.deamon.ThemeManager"
-        THEME_PATH = "/com/deepin/daemon/Theme/"
+        THEME_PATH = "/com/deepin/daemon/Theme"
         //THEME_PATH         = "/com/deepin/daemon/Theme/Entry"
         THEME_IFC          = "com.deepin.daemon.Theme"
         PERSONALIZATION_ID = "com.deepin.dde.personalization"

@@ -118,6 +118,11 @@
             <summary>Display</summary>
             <description></description>
         </key>
+        <key type="s" name="switch-monitors">
+            <default>'mod4-p'</default>
+            <summary>Switch Monitors</summary>
+            <description></description>
+        </key>
         <!--
         <key type="s" name="rotate-windows">
             <default>'XF86RotateWindows'</default>
