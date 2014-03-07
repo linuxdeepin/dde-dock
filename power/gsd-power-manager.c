@@ -3777,6 +3777,7 @@ gsd_power_manager_start (GsdPowerManager *manager,
     strcat(manager->priv->settings_path, "/");
 
     g_debug("created new settings with path :%s\n", manager->priv->settings_path);
+
     manager->priv->settings = g_settings_new_with_path(
                                   DEEPIN_POWER_SETTINGS_SCHEMA,
                                   manager->priv->settings_path);
@@ -3793,10 +3794,15 @@ gsd_power_manager_start (GsdPowerManager *manager,
                       G_CALLBACK (engine_device_added_cb), manager);
     g_signal_connect (manager->priv->up_client, "device-removed",
                       G_CALLBACK (engine_device_removed_cb), manager);
-    g_signal_connect (manager->priv->up_client, "device-changed",
+    g_signal_connect (manager->priv->up_client,
+                      "device-changed",
                       G_CALLBACK (engine_device_changed_cb), manager);
-    g_signal_connect_after (manager->priv->up_client, "changed",
-                            G_CALLBACK (up_client_changed_cb), manager);
+
+    /*g_signal_connect_after (manager->priv->up_client,*/
+    /*"changed",*/
+    /*G_CALLBACK (up_client_changed_cb),*/
+    /*manager);*/
+
     g_signal_connect (manager->priv->up_client, "notify::on-battery",
                       G_CALLBACK (up_client_on_battery_cb), manager);
 

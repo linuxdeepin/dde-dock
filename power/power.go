@@ -185,6 +185,17 @@ func NewPower() (*Power, error) {
 	return power, nil
 }
 
+func (power *Power) upowerChanged() {
+
+	isPresent := power.upower.LidIsPresent.Get()
+	if isPresent {
+		closed := power.upower.LidIsClosed.Get()
+		if closed {
+
+		}
+	}
+}
+
 func (power *Power) engineButton() {
 
 	power.conn.BusObject().Call("org.freedesktop.DBus.AddMatch", 0,
