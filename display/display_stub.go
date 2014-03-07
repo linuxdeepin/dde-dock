@@ -62,3 +62,10 @@ func (dpy *Display) setPropMonitors(v []*Monitor) {
 	}
 	dbus.NotifyChange(dpy, "Monitors")
 }
+
+func (dpy *Display) setPropHasChanged(v bool) {
+	if dpy.HasChanged != v {
+		dpy.HasChanged = v
+		dbus.NotifyChange(dpy, "HasChanged")
+	}
+}

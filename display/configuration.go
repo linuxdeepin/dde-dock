@@ -63,9 +63,9 @@ func (dpy *Display) Apply() {
 
 func (dpy *Display) detectChanged() {
 	if __LastCode__ != dpy.generateShell() {
-		dpy.HasChanged = true
+		dpy.setPropHasChanged(true)
 	} else {
-		dpy.HasChanged = false
+		dpy.setPropHasChanged(false)
 	}
 }
 func (dpy *Display) generateShell() string {

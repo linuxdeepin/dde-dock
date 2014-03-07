@@ -71,7 +71,7 @@ func (dpy *Display) JoinMonitor(a string, b string) error {
 
 	if monitor != nil {
 		dpy.setPropMonitors(append(newMonitors, monitor))
-		dpy.HasChanged = true
+		dpy.setPropHasChanged(true)
 		dpy.Apply()
 		return nil
 	} else {
@@ -114,7 +114,7 @@ func (dpy *Display) SplitMonitor(a string) error {
 		newMonitors = append(newMonitors, m)
 	}
 	dpy.setPropMonitors(newMonitors)
-	dpy.HasChanged = true
+	dpy.setPropHasChanged(true)
 	dpy.Apply()
 	return nil
 }
@@ -147,7 +147,7 @@ func initDisplay() *Display {
 
 	dpy.workaroundBacklight()
 
-	dpy.HasChanged = false
+	dpy.setPropHasChanged(false)
 	__LastCode__ = dpy.generateShell()
 
 	for _, m := range dpy.Monitors {
