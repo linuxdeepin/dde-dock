@@ -72,16 +72,6 @@ func (theme *Theme) SetBackgroundSourceFile(imageFile string) uint32 {
 }
 
 func (theme *Theme) doSetBackgroundSourceFile(imageFile string) bool {
-	// check image size
-	w, h, err := graphic.GetImageSize(imageFile)
-	if err != nil {
-		return false
-	}
-	if w < 800 || h < 600 {
-		logger.Error("image size is too small") // TODO
-		return false
-	}
-
 	screenWidth, screenHeight := getPrimaryScreenBestResolution()
 	grub2ext.DoSetThemeBackgroundSourceFile(imageFile, screenWidth, screenHeight)
 	dbus.NotifyChange(theme, "Background")
