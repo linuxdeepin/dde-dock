@@ -44,6 +44,8 @@ func (op *AccountManager) CreateUser(name, fullname string, accountTyte int32) s
                 }
         }()
 
+        //authWithPolkit(POLKIT_MANAGER_USER)
+
         args := []string{}
 
         args = append(args, "-m")
@@ -72,6 +74,8 @@ func (op *AccountManager) DeleteUser(name string, removeFiles bool) {
                                 err)
                 }
         }()
+
+        //authWithPolkit(POLKIT_MANAGER_USER)
 
         args := []string{}
 

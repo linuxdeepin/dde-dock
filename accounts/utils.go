@@ -28,14 +28,18 @@ import (
         "os"
         "os/exec"
         "strings"
+        "sync"
 )
 
 var (
-        genId = func() func() uint32 {
+        mutex   sync.Mutex
+        genId   = func() func() uint32 {
                 id := uint32(0)
                 return func() uint32 {
+                        mutex.Lock()
                         tmp := id
                         id += 1
+                        mutex.Unlock()
                         return tmp
                 }
         }()
@@ -175,7 +179,9 @@ func writeKeyFileValue(filename, group, key string, t int32, value interface{}) 
                 panic(err)
         }
 
+        mutex.Lock()
         writeKeyFile(contents, filename)
+        mutex.Unlock()
 }
 
 func writeKeyFile(contents, file string) {
