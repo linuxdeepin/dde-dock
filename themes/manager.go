@@ -172,5 +172,13 @@ func newManager() *Manager {
         m.setPropName("IconThemeList")
         m.setPropName("CursorThemeList")
 
+        homeDir := getHomeDir()
+        m.listenThemeDir(THEMES_PATH)
+        m.listenThemeDir(homeDir + THEMES_LOCAL_PATH)
+        m.listenThemeDir(ICONS_PATH)
+        m.listenThemeDir(homeDir + ICONS_LOCAL_PATH)
+        m.listenThemeDir(THUMB_BASE_PATH)
+        m.listenThemeDir(homeDir + THUMB_LOCAL_BASE_PATH)
+
         return m
 }

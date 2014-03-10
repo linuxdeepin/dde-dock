@@ -68,6 +68,7 @@ func destroyAllThemeObj() {
 
 func updateThemeObj(pathNameMap map[string]PathInfo) {
         destroyAllThemeObj()
+        destroyId()
 
         for path, info := range pathNameMap {
                 obj := newTheme(path, info)

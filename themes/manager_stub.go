@@ -80,3 +80,13 @@ func (op *Manager) setPropName(propName string) {
                 dbus.NotifyChange(op, propName)
         }
 }
+
+func (op *Manager) updateAllProps() {
+        op.setPropName("ThemeList")
+        op.setPropName("CurrentTheme")
+        op.setPropName("GtkThemeList")
+        op.setPropName("IconThemeList")
+        op.setPropName("CursorThemeList")
+
+        updateThemeObj(op.pathNameMap)
+}
