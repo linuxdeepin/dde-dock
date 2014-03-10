@@ -130,8 +130,15 @@ func (theme *Theme) regenerateBackgroundIfNeed() {
 	}
 
 	if needUpdate {
-		grub2ext.DoGenerateThemeBackground(screenWidth, screenHeight)
+		ok, _ := grub2ext.DoGenerateThemeBackground(screenWidth, screenHeight)
 		dbus.NotifyChange(theme, "Background")
+
+		updateThemeBackgroundID++
+		id := updateThemeBackgroundID
+		if theme.BackgroundUpdated != nil {
+			theme.BackgroundUpdated(id, ok)
+		}
+
 		logger.Info("update background sucess")
 	}
 }
