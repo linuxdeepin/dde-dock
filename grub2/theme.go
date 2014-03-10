@@ -24,6 +24,7 @@ package main
 import (
 	"bytes"
 	"dlib/dbus"
+	"dlib/graphic"
 	"encoding/json"
 	"io/ioutil"
 	"text/template"
@@ -97,6 +98,42 @@ func (theme *Theme) load() {
 	dbus.NotifyChange(theme, "Background")
 	dbus.NotifyChange(theme, "ItemColor")
 	dbus.NotifyChange(theme, "SelectedItemColor")
+
+	theme.regenerateBackgroundIfNeed()
+}
+
+// fix issue that if update grub-themes-deepin pakcage lonely, the
+// background of theme will keep size with 1024x768
+func (theme *Theme) regenerateBackgroundIfNeed() {
+	logger.Debug("check if need regenerate theme background")
+	screenWidth, screenHeight := getPrimaryScreenBestResolution()
+	bgw, bgh, _ := graphic.GetImageSize(theme.Background)
+	srcbgw, srcbgh, _ := graphic.GetImageSize(theme.bgSrcFile)
+	needUpdate := false
+	logger.Debug("screen resolution: %dx%d, source background: %dx%d, background: %dx%d",
+		screenWidth, screenHeight, srcbgw, srcbgh, bgw, bgh)
+	if srcbgw >= int32(screenWidth) && srcbgh >= int32(screenHeight) {
+		// source background is bigger than screen resolution, so the
+		// background should equal with screen resolution
+		if delta(float64(bgw), float64(screenWidth)) > 5 ||
+			delta(float64(bgh), float64(screenHeight)) > 5 {
+			needUpdate = true
+		}
+	} else {
+		// source background is smaller than screen resolution, so the
+		// scale of backgound should equle with screen's
+		scalebg := float64(bgw) / float64(bgh)
+		scaleScreen := float64(screenWidth) / float64(screenHeight)
+		if delta(scalebg, scaleScreen) > 0.1 {
+			needUpdate = true
+		}
+	}
+
+	if needUpdate {
+		grub2ext.DoGenerateThemeBackground(screenWidth, screenHeight)
+		dbus.NotifyChange(theme, "Background")
+		logger.Info("update background sucess")
+	}
 }
 
 func (theme *Theme) setItemColor(itemColor string) {

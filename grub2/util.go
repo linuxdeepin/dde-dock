@@ -108,3 +108,10 @@ func getPrimaryScreenBestResolution() (w uint16, h uint16) {
 	logger.Info("primary screen's best resolution is %dx%d", w, h)
 	return
 }
+
+func delta(v1, v2 float64) float64 {
+	if v1 > v2 {
+		return v1 - v2
+	}
+	return v2 - v1
+}
