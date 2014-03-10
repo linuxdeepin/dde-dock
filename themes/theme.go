@@ -47,7 +47,8 @@ func newTheme(path string, info PathInfo) *Theme {
         if m.Type == "system" {
                 m.BasePath = THUMB_THEME_PATH + "/" + m.Name
         } else if m.Type == "local" {
-                m.BasePath = THUMB_LOCAL_THEME_PATH + "/" + m.Name
+                homeDir := getHomeDir()
+                m.BasePath = homeDir + THUMB_LOCAL_THEME_PATH + "/" + m.Name
         }
 
         m.updateThemeInfo()

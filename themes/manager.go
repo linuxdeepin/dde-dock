@@ -21,6 +21,11 @@
 
 package main
 
+import (
+        "dlib/glib-2.0"
+        "os"
+)
+
 type Manager struct {
         ThemeList    []string
         CurrentTheme string  `access:"readwrite"`
@@ -75,7 +80,19 @@ func (op *Manager) GetCursorBasePath(name string) string {
 }
 
 func (op *Manager) SetTheme(gtk, icon, cursor, font string) string {
-        return ""
+        for _, path := range op.ThemeList {
+                name, ok := isThemeExist(gtk, icon, cursor, font, path)
+                if !ok {
+                        continue
+                } else {
+                        return name
+                }
+        }
+
+        createTheme("Custom", gtk, icon, cursor, font)
+        updateThemeObj(op.pathNameMap)
+
+        return "Custom"
 }
 
 func getThemeList() []PathInfo {
@@ -160,6 +177,95 @@ func getThemeType(name string, list []PathInfo) string {
         }
 
         return ""
+}
+
+func isThemeExist(gtk, icon, cursor, font, path string) (string, bool) {
+        obj, ok := themeObjMap[path]
+        if !ok {
+                return "", false
+        }
+
+        if gtk != obj.GtkTheme || icon != obj.IconTheme ||
+                cursor != obj.CursorTheme || font != obj.FontName {
+                return "", false
+        }
+
+        return obj.Name, true
+}
+
+func createTheme(name, gtk, icon, cursor, font string) bool {
+        homeDir := getHomeDir()
+        path := homeDir + THUMB_LOCAL_THEME_PATH + "/" + name
+        logObject.Info("Theme Dir:%s\n", path)
+        if ok, _ := objUtil.IsFileExist(path); !ok {
+                logObject.Info("Create Theme Dir: %s\n", path)
+                err := os.MkdirAll(path, 0755)
+                if err != nil {
+                        logObject.Info("Mkdir '%s' failed: %v\n", path, err)
+                        return false
+                }
+        }
+
+        filename := path + "/" + "theme.ini"
+        logObject.Info("Theme Config File:%s\n", filename)
+        if ok, _ := objUtil.IsFileExist(filename); !ok {
+                logObject.Info("Create Theme Config File: %s\n", filename)
+                f, err := os.Create(filename)
+                if err != nil {
+                        logObject.Info("Create '%s' failed: %v\n",
+                                filename, err)
+                        return false
+                }
+                f.Close()
+        }
+
+        keyFile := glib.NewKeyFile()
+        defer keyFile.Free()
+        ok, err := keyFile.LoadFromFile(filename, glib.KeyFileFlagsKeepComments)
+        if !ok {
+                logObject.Warning("LoadKeyFile '%s' failed\n", filename)
+                return false
+        }
+
+        keyFile.SetString(THEME_GROUP_THEME, THEME_KEY_NAME, name)
+        keyFile.SetString(THEME_GROUP_COMPONENT, THEME_KEY_GTK, gtk)
+        keyFile.SetString(THEME_GROUP_COMPONENT, THEME_KEY_ICONS, icon)
+        keyFile.SetString(THEME_GROUP_COMPONENT, THEME_KEY_CURSOR, cursor)
+        keyFile.SetString(THEME_GROUP_COMPONENT, THEME_KEY_FONT, font)
+
+        _, contents, err1 := keyFile.ToData()
+        if err1 != nil {
+                logObject.Warning("KeyFile '%s' ToData failed: %s\n",
+                        filename, err)
+                return false
+        }
+
+        mutex.Lock()
+        writeDatasToKeyFile(contents, filename)
+        mutex.Unlock()
+
+        return true
+}
+
+func writeDatasToKeyFile(contents, filename string) {
+        if len(filename) <= 0 {
+                return
+        }
+
+        f, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE, 0644)
+        if err != nil {
+                logObject.Warning("OpenFile '%s' failed: %v\n",
+                        filename, err)
+                return
+        }
+        defer f.Close()
+
+        _, err = f.WriteString(contents)
+        if err != nil {
+                logObject.Warning("Write in '%s' failed: %v\n",
+                        filename, err)
+                return
+        }
 }
 
 func newManager() *Manager {

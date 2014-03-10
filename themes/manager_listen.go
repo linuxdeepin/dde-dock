@@ -22,13 +22,8 @@
 package main
 
 import (
-        "dbus/com/deepin/api/utils"
         "github.com/howeyc/fsnotify"
         "os"
-)
-
-var (
-        objUtil *utils.Utils
 )
 
 func (op *Manager) listenThemeDir(dir string) {
@@ -38,9 +33,8 @@ func (op *Manager) listenThemeDir(dir string) {
                 return
         }
 
-        objUtil, err = utils.NewUtils("/com/deepin/api/Utils")
         if ok, _ := objUtil.IsFileExist(dir); !ok {
-                err = os.MkdirAll(dir, 0644)
+                err = os.MkdirAll(dir, 0755)
                 if err != nil {
                         logObject.Info("Make dir '%s' failed: %v\n", dir, err)
                         return

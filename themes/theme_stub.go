@@ -34,6 +34,8 @@ const (
         THEME_IFC          = "com.deepin.daemon.Theme"
         PERSONALIZATION_ID = "com.deepin.dde.personalization"
 
+        THEME_GROUP_THEME     = "theme"
+        THEME_KEY_NAME        = "name"
         THEME_GROUP_COMPONENT = "component"
         THEME_KEY_GTK         = "gtk"
         THEME_KEY_ICONS       = "icons"
