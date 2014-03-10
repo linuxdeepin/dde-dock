@@ -191,8 +191,10 @@ func (op *MediaKeyManager) listenKeyPressEvent() {
                         fmt.Println("modStr:", modStr, "keyStr:", keyStr)
                         if !op.emitSignal(modStr, keyStr, true) {
                                 value := ""
-                                if len(modStr) > 0 {
-                                        value = modStr + "-" + keyStr
+                                tmp := filterModStr(modStr)
+                                fmt.Println("Filter modstr:", tmp)
+                                if len(tmp) > 0 {
+                                        value = tmp + "-" + keyStr
                                 } else {
                                         value = keyStr
                                 }

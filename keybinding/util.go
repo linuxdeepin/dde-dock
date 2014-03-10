@@ -434,3 +434,32 @@ func convertModToKey(key string) string {
         fmt.Println("String Key:", tmp)
         return tmp
 }
+
+func filterModStr(modStr string) string {
+        array := strings.Split(modStr, "-")
+        l := len(array)
+        tmp := ""
+
+        for i, a := range array {
+                if a == "mod2" || a == "lock" {
+                        continue
+                }
+                if i == l-1 {
+                        tmp += a
+                        continue
+                }
+                tmp += a + "-"
+        }
+
+        l1 := len(tmp)
+        ret := ""
+        if tmp[l1-1] == '-' {
+                for i := 0; i < l1-1; i++ {
+                        ret += string(tmp[i])
+                }
+        } else {
+                ret = tmp
+        }
+
+        return ret
+}

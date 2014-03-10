@@ -27,192 +27,192 @@ package main
 import "C"
 
 import (
-	"dlib/dbus"
-	"fmt"
-	"github.com/BurntSushi/xgb/xproto"
-	"github.com/BurntSushi/xgbutil"
-	"github.com/BurntSushi/xgbutil/keybind"
-	"github.com/BurntSushi/xgbutil/mousebind"
-	"github.com/BurntSushi/xgbutil/xevent"
-	"strings"
-	"unsafe"
+        "dlib/dbus"
+        "fmt"
+        "github.com/BurntSushi/xgb/xproto"
+        "github.com/BurntSushi/xgbutil"
+        "github.com/BurntSushi/xgbutil/keybind"
+        "github.com/BurntSushi/xgbutil/mousebind"
+        "github.com/BurntSushi/xgbutil/xevent"
+        "strings"
+        "unsafe"
 )
 
 type GrabManager struct {
-	KeyReleaseEvent func(string)
+        KeyReleaseEvent func(string)
 }
 
 const (
-	_GRAB_PATH = "/com/deepin/daemon/GrabKey"
-	_GRAB_IFC  = "com.deepin.daemon.GrabKey"
+        _GRAB_PATH = "/com/deepin/daemon/GrabKey"
+        _GRAB_IFC  = "com.deepin.daemon.GrabKey"
 )
 
 func (m *GrabManager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		_BINDING_DEST,
-		_GRAB_PATH,
-		_GRAB_IFC,
-	}
+        return dbus.DBusInfo{
+                _BINDING_DEST,
+                _GRAB_PATH,
+                _GRAB_IFC,
+        }
 }
 
 func (m *GrabManager) GrabShortcut(wid xproto.Window,
-	shortcut, action string) bool {
-	if wid == 0 {
-		wid = X.RootWin()
-	}
+        shortcut, action string) bool {
+        if wid == 0 {
+                wid = X.RootWin()
+        }
 
-	key := getXGBShortcut(formatShortcut(shortcut))
-	if len(key) <= 0 {
-		return false
-	}
-	if !grabKeyPress(wid, key) {
-		return false
-	}
-	keyInfo := newKeyCodeInfo(key)
-	GrabKeyBinds[keyInfo] = action
+        key := getXGBShortcut(formatShortcut(shortcut))
+        if len(key) <= 0 {
+                return false
+        }
+        if !grabKeyPress(wid, key) {
+                return false
+        }
+        keyInfo := newKeyCodeInfo(key)
+        GrabKeyBinds[keyInfo] = action
 
-	return true
+        return true
 }
 
 func (m *GrabManager) UngrabShortcut(wid xproto.Window,
-	shortcut string) bool {
-	if wid == 0 {
-		wid = X.RootWin()
-	}
+        shortcut string) bool {
+        if wid == 0 {
+                wid = X.RootWin()
+        }
 
-	key := getXGBShortcut(formatShortcut(shortcut))
-	return ungrabKey(wid, key)
+        key := getXGBShortcut(formatShortcut(shortcut))
+        return ungrabKey(wid, key)
 }
 
 func (m *GrabManager) GrabKeyboard() {
-	go func() {
-		X, err := xgbutil.NewConn()
-		if err != nil {
-			fmt.Println("Get New Connection Failed:", err)
-			return
-		}
-		keybind.Initialize(X)
-		mousebind.Initialize(X)
+        go func() {
+                X, err := xgbutil.NewConn()
+                if err != nil {
+                        fmt.Println("Get New Connection Failed:", err)
+                        return
+                }
+                keybind.Initialize(X)
+                mousebind.Initialize(X)
 
-		err = keybind.GrabKeyboard(X, X.RootWin())
-		if err != nil {
-			fmt.Println("Grab Keyboard Failed:", err)
-			return
-		}
+                err = keybind.GrabKeyboard(X, X.RootWin())
+                if err != nil {
+                        fmt.Println("Grab Keyboard Failed:", err)
+                        return
+                }
 
-		GrabAllButton(X)
+                GrabAllButton(X)
 
-		xevent.ButtonPressFun(
-			func(X *xgbutil.XUtil, e xevent.ButtonPressEvent) {
-				m.KeyReleaseEvent("")
-				UngrabAllButton(X)
-				keybind.UngrabKeyboard(X)
-				fmt.Println("Button Press Event")
-				xevent.Quit(X)
-			}).Connect(X, X.RootWin())
+                xevent.ButtonPressFun(
+                        func(X *xgbutil.XUtil, e xevent.ButtonPressEvent) {
+                                m.KeyReleaseEvent("")
+                                UngrabAllButton(X)
+                                keybind.UngrabKeyboard(X)
+                                fmt.Println("Button Press Event")
+                                xevent.Quit(X)
+                        }).Connect(X, X.RootWin())
 
-		xevent.KeyReleaseFun(
-			func(X *xgbutil.XUtil, e xevent.KeyReleaseEvent) {
-				modStr := keybind.ModifierString(e.State)
-				keyStr := strings.ToLower(
-					keybind.LookupString(X,
-						e.State, e.Detail))
-				if e.Detail == 65 {
-					keyStr = "space"
-				}
-				value := ""
-				if len(modStr) > 0 {
-					value = ConvertKeyFromMod(modStr) + keyStr
-				} else {
-					value = keyStr
-				}
-				m.KeyReleaseEvent(value)
-				UngrabAllButton(X)
-				keybind.UngrabKeyboard(X)
-				fmt.Printf("Key: %s\n", value)
-				xevent.Quit(X)
-			}).Connect(X, X.RootWin())
+                xevent.KeyReleaseFun(
+                        func(X *xgbutil.XUtil, e xevent.KeyReleaseEvent) {
+                                modStr := keybind.ModifierString(e.State)
+                                keyStr := strings.ToLower(
+                                        keybind.LookupString(X,
+                                                e.State, e.Detail))
+                                if e.Detail == 65 {
+                                        keyStr = "space"
+                                }
+                                value := ""
+                                if len(modStr) > 0 {
+                                        value = ConvertKeyFromMod(filterModStr(modStr)) + keyStr
+                                } else {
+                                        value = keyStr
+                                }
+                                m.KeyReleaseEvent(value)
+                                UngrabAllButton(X)
+                                keybind.UngrabKeyboard(X)
+                                fmt.Printf("Key: %s\n", value)
+                                xevent.Quit(X)
+                        }).Connect(X, X.RootWin())
 
-		xevent.Main(X)
-	}()
+                xevent.Main(X)
+        }()
 }
 
 func GrabAllButton(X *xgbutil.XUtil) {
-	mousebind.Grab(X, X.RootWin(), 0, 1, false)
-	mousebind.Grab(X, X.RootWin(), 0, 2, false)
-	mousebind.Grab(X, X.RootWin(), 0, 3, false)
+        mousebind.Grab(X, X.RootWin(), 0, 1, false)
+        mousebind.Grab(X, X.RootWin(), 0, 2, false)
+        mousebind.Grab(X, X.RootWin(), 0, 3, false)
 }
 
 func UngrabAllButton(X *xgbutil.XUtil) {
-	mousebind.Ungrab(X, X.RootWin(), 0, 1)
-	mousebind.Ungrab(X, X.RootWin(), 0, 2)
-	mousebind.Ungrab(X, X.RootWin(), 0, 3)
+        mousebind.Ungrab(X, X.RootWin(), 0, 1)
+        mousebind.Ungrab(X, X.RootWin(), 0, 2)
+        mousebind.Ungrab(X, X.RootWin(), 0, 3)
 }
 
 func ConvertKeyFromMod(mod string) string {
-	values := ""
-	vals := strings.Split(mod, "-")
-	for _, v := range vals {
-		if v == "mod1" || v == "mod2" ||
-			v == "mod4" || v == "lock" {
-			t, ok := _ModKeyMap[v]
-			if !ok {
-				fmt.Println("Get Key Failed From Modify")
-				return ""
-			}
-			values += t + "-"
-		} else {
-			values += v + "-"
-		}
-	}
+        values := ""
+        vals := strings.Split(mod, "-")
+        for _, v := range vals {
+                if v == "mod1" || v == "mod2" ||
+                        v == "mod4" || v == "lock" {
+                        t, ok := _ModKeyMap[v]
+                        if !ok {
+                                fmt.Println("Get Key Failed From Modify")
+                                return ""
+                        }
+                        values += t + "-"
+                } else {
+                        values += v + "-"
+                }
+        }
 
-	return values
+        return values
 }
 
 func (m *GrabManager) GrabSingleKey(key, action string) {
-	GrabXRecordKey(key, action)
+        GrabXRecordKey(key, action)
 }
 
 func GrabXRecordKey(key, action string) {
-	if len(action) <= 0 {
-		fmt.Println("action is null")
-		return
-	}
+        if len(action) <= 0 {
+                fmt.Println("action is null")
+                return
+        }
 
-	mod, keys, err := keybind.ParseString(X, key)
-	if err != nil {
-		fmt.Println("ParseString Failed:", err)
-		return
-	}
+        mod, keys, err := keybind.ParseString(X, key)
+        if err != nil {
+                fmt.Println("ParseString Failed:", err)
+                return
+        }
 
-	fmt.Printf("mod: %d, key: %d\n", mod, keys[0])
-	if mod > 0 {
-		fmt.Printf("Not single key\n")
-		return
-	}
+        fmt.Printf("mod: %d, key: %d\n", mod, keys[0])
+        if mod > 0 {
+                fmt.Printf("Not single key\n")
+                return
+        }
 
-	tmp := C.CString(action)
-	defer C.free(unsafe.Pointer(tmp))
-	C.grab_xrecord_key(C.int(keys[0]), tmp)
+        tmp := C.CString(action)
+        defer C.free(unsafe.Pointer(tmp))
+        C.grab_xrecord_key(C.int(keys[0]), tmp)
 }
 
 func (m *GrabManager) UngrabSingleKey(key string) {
-	UngrabXRecordKey(key)
+        UngrabXRecordKey(key)
 }
 
 func UngrabXRecordKey(key string) {
-	mod, keys, err := keybind.ParseString(X, key)
-	if err != nil {
-		fmt.Println("ParseString Failed:", err)
-		return
-	}
+        mod, keys, err := keybind.ParseString(X, key)
+        if err != nil {
+                fmt.Println("ParseString Failed:", err)
+                return
+        }
 
-	if mod > 0 {
-		fmt.Printf("Not single key\n")
-		return
-	}
+        if mod > 0 {
+                fmt.Printf("Not single key\n")
+                return
+        }
 
-	C.ungrab_xrecord_key(C.int(keys[0]))
+        C.ungrab_xrecord_key(C.int(keys[0]))
 }
 
 /*
