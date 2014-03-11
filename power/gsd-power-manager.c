@@ -2932,11 +2932,11 @@ idle_configure (GsdPowerManager *manager)
     action_type = g_settings_get_enum (manager->priv->settings, on_battery ?
                                        "sleep-inactive-battery-type" : "sleep-inactive-ac-type");
     timeout_sleep = 0;
-    if (!is_action_inhibited (manager, action_type))
-    {
-        timeout_sleep = g_settings_get_int (manager->priv->settings, on_battery ?
-                                            "sleep-inactive-battery-timeout" : "sleep-inactive-ac-timeout");
-    }
+    /*if (!is_action_inhibited (manager, action_type))*/
+    /*{*/
+    timeout_sleep = g_settings_get_int (manager->priv->settings, on_battery ?
+                                        "sleep-inactive-battery-timeout" : "sleep-inactive-ac-timeout");
+    /*}*/
 
     clear_idle_watch (manager->priv->idle_monitor,
                       &manager->priv->idle_sleep_id);
