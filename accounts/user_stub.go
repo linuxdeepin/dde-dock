@@ -48,6 +48,7 @@ type UserManager struct {
         AccountType    int32
         Locked         bool
         LoginTime      uint64
+        HistoryIcons   []string
         objectPath     string
 }
 
@@ -59,69 +60,86 @@ func (op *UserManager) GetDBusInfo() dbus.DBusInfo {
         }
 }
 
-func (op *UserManager) setPropName(propName string, propValue interface{}) {
+func (op *UserManager) applyPropertiesChanged(propName string, value interface{}) {
         switch propName {
         case "UserName":
-                args := []string{}
-                args = append(args, "-l")
-                args = append(args, propValue.(string))
-                args = append(args, op.UserName)
-                execCommand(CMD_USERMOD, args)
+                if v, ok := value.(string); ok && v != op.UserName {
+                        args := []string{}
+                        args = append(args, "-l")
+                        args = append(args, v)
+                        args = append(args, op.UserName)
+                        execCommand(CMD_USERMOD, args)
+                }
         case "HomeDir":
-                args := []string{}
-                args = append(args, "-m")
-                args = append(args, "-d")
-                args = append(args, propValue.(string))
-                args = append(args, op.UserName)
-                execCommand(CMD_USERMOD, args)
+                if v, ok := value.(string); ok && v != op.HomeDir {
+                        args := []string{}
+                        args = append(args, "-m")
+                        args = append(args, "-d")
+                        args = append(args, v)
+                        args = append(args, op.UserName)
+                        execCommand(CMD_USERMOD, args)
+                }
         case "Shell":
-                args := []string{}
-                args = append(args, "-s")
-                args = append(args, propValue.(string))
-                args = append(args, op.UserName)
-                execCommand(CMD_USERMOD, args)
+                if v, ok := value.(string); ok && v != op.Shell {
+                        args := []string{}
+                        args = append(args, "-s")
+                        args = append(args, v)
+                        args = append(args, op.UserName)
+                        execCommand(CMD_USERMOD, args)
+                }
         case "IconFile":
-                file := USER_CONFIG_FILE + op.UserName
-                writeKeyFileValue(file, "User", "Icon",
-                        KEY_TYPE_STRING, propValue.(string))
+                if v, ok := value.(string); ok && v != op.IconFile {
+                        file := USER_CONFIG_FILE + op.UserName
+                        writeKeyFileValue(file, "User", "Icon",
+                                KEY_TYPE_STRING, v)
+                        addHistoryIcon(file, v)
+                        op.setPropName("HistoryIcons")
+                }
         case "BackgroundFile":
-                file := USER_CONFIG_FILE + op.UserName
-                writeKeyFileValue(file, "User", "Background",
-                        KEY_TYPE_STRING, propValue.(string))
+                if v, ok := value.(string); ok && v != op.BackgroundFile {
+                        file := USER_CONFIG_FILE + op.UserName
+                        writeKeyFileValue(file, "User", "Background",
+                                KEY_TYPE_STRING, v)
+                }
         case "AutomaticLogin":
-                if op.AutomaticLogin {
-                        setAutomaticLogin(op.UserName)
-                } else {
-                        setAutomaticLogin("")
+                if v, ok := value.(bool); ok && v != op.AutomaticLogin {
+                        if v {
+                                setAutomaticLogin(op.UserName)
+                        } else {
+                                setAutomaticLogin("")
+                        }
                 }
         case "AccountType":
-                accountTyte := propValue.(int32)
-                switch accountTyte {
-                case ACCOUNT_TYPE_STANDARD:
-                        admList := getAdministratorList()
-                        if isElementExist(op.UserName, admList) {
-                                deleteUserFromAdmList(op.UserName)
-                        }
-                case ACCOUNT_TYPE_ADMINISTACTOR:
-                        admList := getAdministratorList()
-                        if !isElementExist(op.UserName, admList) {
-                                addUserToAdmList(op.UserName)
+                if v, ok := value.(int32); ok && v != op.AccountType {
+                        switch v {
+                        case ACCOUNT_TYPE_STANDARD:
+                                admList := getAdministratorList()
+                                if isElementExist(op.UserName, admList) {
+                                        deleteUserFromAdmList(op.UserName)
+                                }
+                        case ACCOUNT_TYPE_ADMINISTACTOR:
+                                admList := getAdministratorList()
+                                if !isElementExist(op.UserName, admList) {
+                                        addUserToAdmList(op.UserName)
+                                }
                         }
                 }
         case "Locked":
-                args := []string{}
-                if propValue.(bool) {
-                        args = append(args, "-L")
-                        args = append(args, op.UserName)
-                } else {
-                        args = append(args, "-U")
-                        args = append(args, op.UserName)
+                if v, ok := value.(bool); ok && v != op.Locked {
+                        args := []string{}
+                        if v {
+                                args = append(args, "-L")
+                                args = append(args, op.UserName)
+                        } else {
+                                args = append(args, "-U")
+                                args = append(args, op.UserName)
+                        }
+                        execCommand(CMD_USERMOD, args)
                 }
-                execCommand(CMD_USERMOD, args)
         }
 }
 
-func (op *UserManager) getPropName(propName string) {
+func (op *UserManager) setPropName(propName string) {
         switch propName {
         case "UserName":
                 info, ok := getInfoViaUid(op.Uid)
@@ -146,7 +164,6 @@ func (op *UserManager) getPropName(propName string) {
                         v, ok := readKeyFileValue(file, "User", "Icon", KEY_TYPE_STRING)
                         if !ok {
                                 op.IconFile = USER_DEFAULT_ICON
-                                op.setPropName("IconFile", USER_DEFAULT_ICON)
                         } else {
                                 op.IconFile = v.(string)
                         }
@@ -159,7 +176,6 @@ func (op *UserManager) getPropName(propName string) {
                         v, ok := readKeyFileValue(file, "User", "Background", KEY_TYPE_STRING)
                         if !ok {
                                 op.BackgroundFile = USER_DEFAULT_BG
-                                op.setPropName("BackgroundFile", USER_DEFAULT_BG)
                         } else {
                                 tmp := v.(string)
                                 opUtils, _ := dutils.NewUtils("/com/deepin/api/Utils")
@@ -191,6 +207,21 @@ func (op *UserManager) getPropName(propName string) {
                 if ok {
                         op.Locked = info.Locked
                 }
+        case "HistoryIcons":
+                file := USER_CONFIG_FILE + op.UserName
+                if !fileIsExist(file) {
+                        op.HistoryIcons = append(op.HistoryIcons,
+                                USER_DEFAULT_ICON)
+                } else {
+                        v, ok := readKeyFileValue(file, "User",
+                                "HistoryIcons", KEY_TYPE_STRING_LIST)
+                        if !ok {
+                                op.HistoryIcons = append(op.HistoryIcons,
+                                        USER_DEFAULT_ICON)
+                        } else {
+                                op.HistoryIcons = v.([]string)
+                        }
+                }
         }
         dbus.NotifyChange(op, propName)
 }
@@ -206,11 +237,40 @@ func (op *UserManager) updateUserInfo() {
         op.HomeDir = info.Home
         op.Locked = info.Locked
         op.Shell = info.Shell
-        op.getPropName("IconFile")
-        op.getPropName("BackgroundFile")
-        op.getPropName("AutomaticLogin")
-        op.getPropName("AccountType")
-        op.getPropName("LoginTime")
+        op.setPropName("IconFile")
+        op.setPropName("BackgroundFile")
+        op.setPropName("AutomaticLogin")
+        op.setPropName("AccountType")
+        op.setPropName("LoginTime")
+        op.setPropName("HistoryIcons")
+}
+
+func addHistoryIcon(filename, iconPath string) []string {
+        list, _ := readKeyFileValue(filename, "User",
+                "HistoryIcons", KEY_TYPE_STRING_LIST)
+
+        ret := []string{}
+        ret = append(ret, iconPath)
+        tmp := deleteElementFromList(iconPath, list.([]string))
+        ret = append(ret, tmp...)
+        writeKeyFileValue(filename, "User",
+                "HistoryIcons", KEY_TYPE_STRING_LIST, ret)
+
+        return ret
+}
+
+func deleteHistoryIcon(filename, iconPath string) []string {
+        list, ok := readKeyFileValue(filename, "User",
+                "HistoryIcons", KEY_TYPE_STRING_LIST)
+        if !ok || len(list.([]string)) <= 0 {
+                return []string{}
+        }
+
+        tmp := deleteElementFromList(iconPath, list.([]string))
+        writeKeyFileValue(filename, "User",
+                "HistoryIcons", KEY_TYPE_STRING_LIST, tmp)
+
+        return tmp
 }
 
 func addUserToAdmList(name string) {

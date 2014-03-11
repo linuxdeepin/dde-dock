@@ -54,9 +54,10 @@ const (
         SHADOW_SPLIT_LEN = 9
         GROUP_SPLIT_LEN  = 4
 
-        KEY_TYPE_BOOL   = 0
-        KEY_TYPE_INT    = 1
-        KEY_TYPE_STRING = 2
+        KEY_TYPE_BOOL        = 0
+        KEY_TYPE_INT         = 1
+        KEY_TYPE_STRING      = 2
+        KEY_TYPE_STRING_LIST = 3
 
         LIGHTDM_AUTOLOGIN_GROUP = "SeatDefaults"
         LIGHTDM_AUTOLOGIN_USER  = "autologin-user"

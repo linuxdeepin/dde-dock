@@ -66,13 +66,8 @@ func getBaseName(path string) string {
 }
 
 func fileIsExist(file string) bool {
-        if _, err := os.Stat(file); os.IsExist(err) {
-                logObject.Warning("'%s' is not exist\n", file)
-                return false
-        }
-        //logObject.Warning("'%s' exist\n", file)
-
-        return true
+        _, err := os.Stat(file)
+        return err == nil || os.IsExist(err)
 }
 
 func isElementExist(element string, list []string) bool {
@@ -96,6 +91,18 @@ func charIsAlNum(ch byte) bool {
         }
 
         return false
+}
+
+func deleteElementFromList(ele string, list []string) []string {
+        tmp := []string{}
+        for _, l := range list {
+                if ele == l {
+                        continue
+                }
+                tmp = append(tmp, l)
+        }
+
+        return tmp
 }
 
 func readKeyFileValue(filename, group, key string, t int32) (interface{}, bool) {
@@ -136,6 +143,12 @@ func readKeyFileValue(filename, group, key string, t int32) (interface{}, bool) 
                         break
                 }
                 return v, true
+        case KEY_TYPE_STRING_LIST:
+                _, v, err := keyFile.GetStringList(group, key)
+                if err != nil {
+                        break
+                }
+                return v, true
         }
 
         return nil, false
@@ -171,6 +184,8 @@ func writeKeyFileValue(filename, group, key string, t int32, value interface{}) 
                 keyFile.SetInteger(group, key, value.(int))
         case KEY_TYPE_STRING:
                 keyFile.SetString(group, key, value.(string))
+        case KEY_TYPE_STRING_LIST:
+                keyFile.SetStringList(group, key, value.([]string))
         }
 
         _, contents, err := keyFile.ToData()
