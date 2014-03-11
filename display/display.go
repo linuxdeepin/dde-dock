@@ -72,7 +72,6 @@ func (dpy *Display) JoinMonitor(a string, b string) error {
 	if monitor != nil {
 		dpy.setPropMonitors(append(newMonitors, monitor))
 		dpy.setPropHasChanged(true)
-		dpy.Apply()
 		return nil
 	} else {
 		return fmt.Errorf("can't create composted monitor")
@@ -115,7 +114,6 @@ func (dpy *Display) SplitMonitor(a string) error {
 	}
 	dpy.setPropMonitors(newMonitors)
 	dpy.setPropHasChanged(true)
-	dpy.Apply()
 	return nil
 }
 
@@ -123,6 +121,7 @@ func (dpy *Display) SetPrimary(name string) error {
 	for _, m := range dpy.Monitors {
 		if m.Name == name {
 			dpy.setPropPrimary(m.Name)
+			dpy.detectChanged()
 			return nil
 		}
 	}
@@ -209,6 +208,7 @@ func (dpy *Display) listener() {
 			pinfo, err := randr.GetOutputPrimary(X, Root).Reply()
 			if err == nil && pinfo.Output != 0 {
 				if m := queryMonitor(dpy, pinfo.Output); m != nil {
+					m.updateInfo()
 					Logger.Info("11111")
 					dpy.setPropPrimaryRect(xproto.Rectangle{m.X, m.Y, m.Width, m.Height})
 				} else {

@@ -59,6 +59,7 @@ func (dpy *Display) Apply() {
 	for _, m := range dpy.Monitors {
 		m.updateInfo()
 	}
+	dpy.detectChanged()
 }
 
 func (dpy *Display) detectChanged() {
