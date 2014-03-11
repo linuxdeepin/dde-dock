@@ -2839,18 +2839,18 @@ idle_is_session_inhibited (GsdPowerManager  *manager,
     if (manager->priv->session == NULL)
     {
         g_debug("not yet connected to gnome-session");
-        /*return FALSE;*/
+        return FALSE;
     }
 
-    /*variant = g_dbus_proxy_get_cached_property (manager->priv->session,*/
-    /*"InhibitedActions");*/
-    /*if (!variant)*/
-    /*return FALSE;*/
+    variant = g_dbus_proxy_get_cached_property (manager->priv->session,
+              "InhibitedActions");
+    if (!variant)
+        return FALSE;
 
-    /*inhibited_actions = g_variant_get_uint32 (variant);*/
-    /*g_variant_unref (variant);*/
+    inhibited_actions = g_variant_get_uint32 (variant);
+    g_variant_unref (variant);
 
-    /**is_inhibited = (inhibited_actions & mask);*/
+    *is_inhibited = (inhibited_actions & mask);
 
     return TRUE;
 }
@@ -2875,32 +2875,32 @@ idle_configure (GsdPowerManager *manager)
     guint timeout_dim;
     gboolean on_battery;
 
-    if (!idle_is_session_inhibited (manager,
-                                    GSM_INHIBITOR_FLAG_IDLE,
-                                    &is_idle_inhibited))
-    {
-        /* Session isn't available yet, postpone */
-        g_debug("Session isn't available yet,postpone\n");
-        return;
-    }
+    /*if (!idle_is_session_inhibited (manager,*/
+    /*GSM_INHIBITOR_FLAG_IDLE,*/
+    /*&is_idle_inhibited))*/
+    /*{*/
+    /*[> Session isn't available yet, postpone <]*/
+    /*g_debug("Session isn't available yet,postpone\n");*/
+    /*return;*/
+    /*}*/
 
     /* are we inhibited from going idle */
-    if (!is_session_active (manager) || is_idle_inhibited)
-    {
-        g_debug ("inhibited or inactive, so using normal state");
-        idle_set_mode (manager, GSD_POWER_IDLE_MODE_NORMAL);
+    /*if (!is_session_active (manager) || is_idle_inhibited)*/
+    /*{*/
+    /*g_debug ("inhibited or inactive, so using normal state");*/
+    /*idle_set_mode (manager, GSD_POWER_IDLE_MODE_NORMAL);*/
 
-        clear_idle_watch (manager->priv->idle_monitor,
-                          &manager->priv->idle_blank_id);
-        clear_idle_watch (manager->priv->idle_monitor,
-                          &manager->priv->idle_sleep_id);
-        clear_idle_watch (manager->priv->idle_monitor,
-                          &manager->priv->idle_dim_id);
-        clear_idle_watch (manager->priv->idle_monitor,
-                          &manager->priv->idle_sleep_warning_id);
-        notify_close_if_showing (&manager->priv->notification_sleep_warning);
-        return;
-    }
+    /*clear_idle_watch (manager->priv->idle_monitor,*/
+    /*&manager->priv->idle_blank_id);*/
+    /*clear_idle_watch (manager->priv->idle_monitor,*/
+    /*&manager->priv->idle_sleep_id);*/
+    /*clear_idle_watch (manager->priv->idle_monitor,*/
+    /*&manager->priv->idle_dim_id);*/
+    /*clear_idle_watch (manager->priv->idle_monitor,*/
+    /*&manager->priv->idle_sleep_warning_id);*/
+    /*notify_close_if_showing (&manager->priv->notification_sleep_warning);*/
+    /*return;*/
+    /*}*/
 
     /* set up blank callback only when the screensaver is on,
      * as it's what will drive the blank */
