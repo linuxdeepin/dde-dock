@@ -29,30 +29,10 @@
       <summary>how the background is drawed on the screen</summary>
       <description>enumerations represent how the background is drawed on the screen. e.g. scaling or tiling</description>
     </key>
-    <key type="as" name="picture-uris">
-      <default>['file:///usr/share/backgrounds/default_background.jpg']</default>
-      <summary>Picture URIs</summary>
-      <description>Background image URIs delimited by semicolons. Note that the backend only supports local (file://) URIs.</description>
-    </key>
-	<key type="i" name="index">
-		<default>0</default>
-		<summary>Pictures Index</summary>
-		<description>The picture index in uris</description>
-	</key>
-	<key type="b" name="auto-switch">
-		<default>false</default>
-		<summary>Auto Switch Pictures</summary>
-		<description>Auto switch background pictures</description>
-	</key>
     <key name="cross-fade-auto-mode" enum="com.deepin.dde.personalization.xfade-auto-mode">
       <default>"Sequential"</default>
       <summary>How pictures are chosen to draw</summary>
       <description>enumerations represent how pictures are chose to drawn. e.g. in random or in sequence</description>
-    </key>
-    <key type="i" name="background-duration">
-      <default>600</default>
-      <summary>Background retention duration</summary>
-      <description>The unit is second, if less or equal to zero, do not change the background; if more than 0, change the background after background-duration time</description>
     </key>
     <key type="i" name="cross-fade-interval">
       <default>1000</default>
@@ -69,25 +49,10 @@
       <summary>Auto change background animation two frames duration</summary>
       <description>The unit is millisecond, change background animation two frames duration</description>
     </key>
-    <key type="s" name="cursor-theme">
+    <key type="s" name="current-theme">
         <default>'Deepin'</default>
-        <summary>Mouse Theme</summary>
-        <description>Mouse Theme</description>
-    </key>
-    <key type="s" name="font-name">
-        <default>'Cantarell 11'</default>
-        <summary>Font Theme</summary>
-        <description>Font Theme</description>
-    </key>
-    <key type="s" name="icon-theme">
-        <default>'Deepin'</default>
-        <summary>Icon Theme</summary>
-        <description>Icon Theme</description>
-    </key>
-    <key type="s" name="gtk-theme">
-        <default>'Deepin'</default>
-        <summary>GTK Theme</summary>
-        <description>GTK Theme</description>
+        <summary>Current Theme</summary>
+        <description>Current System Theme</description>
     </key>
   </schema>
 </schemalist>
