@@ -35,6 +35,11 @@
       <summary>Dim the screen after a period of inactivity</summary>
       <description>If the screen should be dimmed to save power when the computer is idle.</description>
     </key>
+    <key type="i" name="idle-delay">
+        <default>300</default>
+        <summary>Time before session is considered idle</summary>
+        <description>The number of seconds of inactivity before the session is considered idle.</description>
+    </key>
     <key type="i" name="sleep-inactive-ac-timeout">
       <default>0</default>
       <summary>Sleep timeout computer when on AC</summary>

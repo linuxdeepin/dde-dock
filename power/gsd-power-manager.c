@@ -2993,7 +2993,9 @@ idle_configure (GsdPowerManager *manager)
     {
         if (g_settings_get_boolean (manager->priv->settings, "idle-dim"))
         {
-            timeout_dim = g_settings_get_uint (manager->priv->settings_session,
+            /*timeout_dim = g_settings_get_uint (manager->priv->settings_session,*/
+            /*"idle-delay");*/
+            timeout_dim = g_settings_get_uint (manager->priv->settings,
                                                "idle-delay");
             if (timeout_dim == 0)
             {
