@@ -2977,10 +2977,14 @@ idle_configure (GsdPowerManager *manager)
     if (manager->priv->screensaver_active)
     {
         /* Don't dim when the screen lock is active */
+        g_debug("@idle_configure:don't dim when screen lock is active");
     }
     else if (!on_battery)
     {
         /* Don't dim when charging */
+        g_debug("@idle_configure:don't dim when charging?");
+        timeout_dim = g_settings_get_uint (manager->priv->settings,
+                                           "idle-delay");
     }
     else if (manager->priv->battery_is_low)
     {
