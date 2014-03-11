@@ -436,6 +436,9 @@ func convertModToKey(key string) string {
 }
 
 func filterModStr(modStr string) string {
+        if len(modStr) <= 0 {
+                return ""
+        }
         array := strings.Split(modStr, "-")
         l := len(array)
         tmp := ""
