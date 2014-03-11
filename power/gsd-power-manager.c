@@ -2839,18 +2839,18 @@ idle_is_session_inhibited (GsdPowerManager  *manager,
     if (manager->priv->session == NULL)
     {
         g_debug("not yet connected to gnome-session");
-        return FALSE;
+        /*return FALSE;*/
     }
 
-    variant = g_dbus_proxy_get_cached_property (manager->priv->session,
-              "InhibitedActions");
-    if (!variant)
-        return FALSE;
+    /*variant = g_dbus_proxy_get_cached_property (manager->priv->session,*/
+    /*"InhibitedActions");*/
+    /*if (!variant)*/
+    /*return FALSE;*/
 
-    inhibited_actions = g_variant_get_uint32 (variant);
-    g_variant_unref (variant);
+    /*inhibited_actions = g_variant_get_uint32 (variant);*/
+    /*g_variant_unref (variant);*/
 
-    *is_inhibited = (inhibited_actions & mask);
+    /**is_inhibited = (inhibited_actions & mask);*/
 
     return TRUE;
 }
@@ -3755,11 +3755,11 @@ gsd_power_manager_start (GsdPowerManager *manager,
     inhibit_suspend (manager);
 
     /* track the active session */
-    manager->priv->session = gnome_settings_session_get_session_proxy ();
-    g_debug("manager->priv->session: %p", manager->priv->session);
-    g_signal_connect (manager->priv->session, "g-properties-changed",
-                      G_CALLBACK (engine_session_properties_changed_cb),
-                      manager);
+    /*manager->priv->session = gnome_settings_session_get_session_proxy ();*/
+    /*g_debug("manager->priv->session: %p", manager->priv->session);*/
+    /*g_signal_connect (manager->priv->session, "g-properties-changed",*/
+    /*G_CALLBACK (engine_session_properties_changed_cb),*/
+    /*manager);*/
 
     manager->priv->kbd_brightness_old = -1;
     manager->priv->kbd_brightness_pre_dim = -1;
@@ -3939,7 +3939,7 @@ gsd_power_manager_stop (GsdPowerManager *manager)
 
     g_signal_handlers_disconnect_by_data (manager->priv->up_client, manager);
 
-    g_clear_object (&manager->priv->session);
+    /*g_clear_object (&manager->priv->session);*/
     g_clear_object (&manager->priv->settings);
     g_clear_object (&manager->priv->settings_screensaver);
     g_clear_object (&manager->priv->settings_session);
@@ -4245,7 +4245,7 @@ handle_method_call (GDBusConnection       *connection,
        start or stop state */
     if (manager->priv->session == NULL)
     {
-        return;
+        /*return;*/
     }
 
     g_debug ("Calling method '%s.%s' for Power",
@@ -4293,7 +4293,7 @@ handle_get_property (GDBusConnection *connection,
        start or stop state */
     if (manager->priv->session == NULL)
     {
-        return NULL;
+        /*return NULL;*/
     }
 
     if (g_strcmp0 (property_name, "Icon") == 0)
