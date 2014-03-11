@@ -163,10 +163,14 @@ func writeKeyFileValue(filename, group, key string, t int32, value interface{}) 
                         return
                 }
                 f.Close()
+                mutex.Lock()
                 writeKeyFileValue(filename, "User", "Icon",
                         KEY_TYPE_STRING, USER_DEFAULT_ICON)
+                mutex.Unlock()
+                mutex.Lock()
                 writeKeyFileValue(filename, "User", "Background",
                         KEY_TYPE_STRING, USER_DEFAULT_BG)
+                mutex.Unlock()
         }
 
         keyFile := glib.NewKeyFile()
@@ -194,9 +198,7 @@ func writeKeyFileValue(filename, group, key string, t int32, value interface{}) 
                 panic(err)
         }
 
-        mutex.Lock()
         writeKeyFile(contents, filename)
-        mutex.Unlock()
 }
 
 func writeKeyFile(contents, file string) {

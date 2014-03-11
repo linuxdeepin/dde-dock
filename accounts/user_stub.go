@@ -90,16 +90,20 @@ func (op *UserManager) applyPropertiesChanged(propName string, value interface{}
         case "IconFile":
                 if v, ok := value.(string); ok && v != op.IconFile {
                         file := USER_CONFIG_FILE + op.UserName
+                        mutex.Lock()
                         writeKeyFileValue(file, "User", "Icon",
                                 KEY_TYPE_STRING, v)
+                        mutex.Unlock()
                         addHistoryIcon(file, v)
                         op.setPropName("HistoryIcons")
                 }
         case "BackgroundFile":
                 if v, ok := value.(string); ok && v != op.BackgroundFile {
                         file := USER_CONFIG_FILE + op.UserName
+                        mutex.Lock()
                         writeKeyFileValue(file, "User", "Background",
                                 KEY_TYPE_STRING, v)
+                        mutex.Unlock()
                 }
         case "AutomaticLogin":
                 if v, ok := value.(bool); ok && v != op.AutomaticLogin {
@@ -253,8 +257,10 @@ func addHistoryIcon(filename, iconPath string) []string {
         ret = append(ret, iconPath)
         tmp := deleteElementFromList(iconPath, list.([]string))
         ret = append(ret, tmp...)
+        mutex.Lock()
         writeKeyFileValue(filename, "User",
                 "HistoryIcons", KEY_TYPE_STRING_LIST, ret)
+        mutex.Unlock()
 
         return ret
 }
@@ -267,8 +273,10 @@ func deleteHistoryIcon(filename, iconPath string) []string {
         }
 
         tmp := deleteElementFromList(iconPath, list.([]string))
+        mutex.Lock()
         writeKeyFileValue(filename, "User",
                 "HistoryIcons", KEY_TYPE_STRING_LIST, tmp)
+        mutex.Unlock()
 
         return tmp
 }
