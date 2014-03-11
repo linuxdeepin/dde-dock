@@ -175,6 +175,7 @@ func (dpy *Display) SaveChanged() {
 	}
 	__CFG__.Primary = dpy.Primary
 	saveConfiguration()
+	dpy.SwitchMode(DisplayModeCustom)
 }
 
 func loadConfiguration(dpy *Display) {
