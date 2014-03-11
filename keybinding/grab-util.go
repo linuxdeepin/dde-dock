@@ -151,6 +151,9 @@ func ungrabKey(wid xproto.Window, shortcut string) bool {
 }
 
 func getExecAction(k1 *KeyCodeInfo) (bool, string) {
+        if k1 == nil {
+                return false, ""
+        }
         for k, v := range GrabKeyBinds {
                 if k1.State == k.State && k.Detail == k1.Detail {
                         return true, v
@@ -188,6 +191,9 @@ func (op *MediaKeyManager) listenKeyPressEvent() {
                                 e.State, e.Detail)
                         modStr := keybind.ModifierString(e.State)
                         keyStr := keybind.LookupString(X, e.State, e.Detail)
+                        if e.Detail == 65 {
+                                keyStr = "space"
+                        }
                         fmt.Println("modStr:", modStr, "keyStr:", keyStr)
                         if !op.emitSignal(modStr, keyStr, true) {
                                 value := ""
