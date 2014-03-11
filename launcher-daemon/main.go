@@ -11,7 +11,7 @@ import (
 
 func main() {
 	// DesktopAppInfo.ShouldShow does not know deepin.
-	gio.DesktopAppInfoSetDesktopEnv("deepin")
+	gio.DesktopAppInfoSetDesktopEnv("Deepin")
 
 	initCategory()
 	fmt.Println("init category done")
