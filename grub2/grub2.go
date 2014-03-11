@@ -340,6 +340,15 @@ func (grub *Grub2) parseSettings(fileContent string) error {
 	grub.setDefaultEntry(grub.DefaultEntry)
 	grub.setTimeout(grub.Timeout)
 
+	// just disable GRUB_HIDDEN_TIMEOUT and GRUB_HIDDEN_TIMEOUT_QUIET for will conflicts with GRUB_TIMEOUT
+	if len(grub.settings["GRUB_HIDDEN_TIMEOUT"]) != 0 ||
+		len(grub.settings["GRUB_HIDDEN_TIMEOUT_QUIET"]) != 0 {
+		grub.settings["GRUB_HIDDEN_TIMEOUT"] = ""
+		grub.settings["GRUB_HIDDEN_TIMEOUT_QUIET"] = ""
+		grub.writeSettings()
+		grub.notifyUpdate()
+	}
+
 	return nil
 }
 
