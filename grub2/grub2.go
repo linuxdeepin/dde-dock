@@ -31,7 +31,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"path"
 	"regexp"
 	"strconv"
 	"strings"
@@ -206,10 +205,6 @@ func (grub *Grub2) readCacheConfig() (err error) {
 }
 
 func (grub *Grub2) writeCacheConfig() (err error) {
-	// ensure parent directory exists
-	if !isFileExists(grubCacheFile) {
-		os.MkdirAll(path.Dir(grubCacheFile), 0755)
-	}
 	fileContent, err := json.Marshal(grub.config)
 	if err != nil {
 		logger.Error(err.Error())
