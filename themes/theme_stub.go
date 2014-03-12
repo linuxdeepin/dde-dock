@@ -23,28 +23,23 @@ package main
 
 import (
         "dlib/dbus"
-        "dlib/gio-2.0"
         "dlib/glib-2.0"
 )
 
 const (
-        THEME_DEST = "com.deepin.deamon.Themes"
+        THEME_DEST = "com.deepin.daemon.Themes"
         THEME_PATH = "/com/deepin/daemon/Theme"
         //THEME_PATH         = "/com/deepin/daemon/Theme/Entry"
-        THEME_IFC          = "com.deepin.daemon.Theme"
-        PERSONALIZATION_ID = "com.deepin.dde.personalization"
+        THEME_IFC = "com.deepin.daemon.Theme"
 
-        THEME_GROUP_THEME     = "theme"
-        THEME_KEY_NAME        = "name"
-        THEME_GROUP_COMPONENT = "component"
-        THEME_KEY_GTK         = "gtk"
-        THEME_KEY_ICONS       = "icons"
-        THEME_KEY_CURSOR      = "cursor"
-        THEME_KEY_FONT        = "font"
-)
-
-var (
-        personSettings = gio.NewSettings(PERSONALIZATION_ID)
+        THEME_GROUP_THEME     = "Theme"
+        THEME_KEY_NAME        = "Name"
+        THEME_GROUP_COMPONENT = "Component"
+        THEME_KEY_GTK         = "GtkTheme"
+        THEME_KEY_ICONS       = "IconTheme"
+        THEME_KEY_CURSOR      = "CursorTheme"
+        THEME_KEY_GTK_FONT    = "GtkFont"
+        THEME_KEY_BG          = "BackgroundFile"
 )
 
 func (op *Theme) GetDBusInfo() dbus.DBusInfo {
@@ -65,33 +60,8 @@ func (op *Theme) OnPropertiesChanged(propName string, old interface{}) {
         }
 }
 
-func (op *Theme) setPropName(propName string) {
-        switch propName {
-        case "GtkTheme":
-                dbus.NotifyChange(op, propName)
-        case "IconTheme":
-                dbus.NotifyChange(op, propName)
-        case "CursorTheme":
-                dbus.NotifyChange(op, propName)
-        case "FontName":
-                dbus.NotifyChange(op, propName)
-        case "BackgroundFile":
-                op.BackgroundFile = personSettings.GetString("current-picture")
-                dbus.NotifyChange(op, propName)
-        }
-}
-
-func (op *Theme) listenSettingsChanged() {
-        personSettings.Connect("changed", func(s *gio.Settings, key string) {
-                switch key {
-                case "current-picture":
-                        op.setPropName("BackgroundFile")
-                }
-        })
-}
-
 func (op *Theme) updateThemeInfo() {
-        filename := op.BasePath + "/theme.ini"
+        filename := op.basePath + "/theme.ini"
         keyFile := glib.NewKeyFile()
         defer keyFile.Free()
 
@@ -107,7 +77,7 @@ func (op *Theme) updateThemeInfo() {
                 THEME_KEY_GTK)
         if err1 != nil {
                 logObject.Info("Get key '%s' value failed: %v",
-                        THEME_KEY_GTK, err)
+                        THEME_KEY_GTK, err1)
                 return
         }
         op.GtkTheme = str
@@ -117,7 +87,7 @@ func (op *Theme) updateThemeInfo() {
                 THEME_KEY_ICONS)
         if err1 != nil {
                 logObject.Info("Get key '%s' value failed: %v",
-                        THEME_KEY_CURSOR, err)
+                        THEME_KEY_CURSOR, err1)
                 return
         }
         op.IconTheme = str
@@ -127,19 +97,29 @@ func (op *Theme) updateThemeInfo() {
                 THEME_KEY_CURSOR)
         if err1 != nil {
                 logObject.Info("Get key '%s' value failed: %v",
-                        THEME_KEY_CURSOR, err)
+                        THEME_KEY_CURSOR, err1)
                 return
         }
-        op.CursorTheme = str
-        dbus.NotifyChange(op, "CursorTheme")
+        op.GtkCursorTheme = str
+        dbus.NotifyChange(op, "GtkCursorTheme")
 
         str, err1 = keyFile.GetString(THEME_GROUP_COMPONENT,
-                THEME_KEY_FONT)
+                THEME_KEY_GTK_FONT)
         if err1 != nil {
                 logObject.Info("Get key '%s' value failed: %v",
-                        THEME_KEY_FONT, err)
+                        THEME_KEY_GTK_FONT, err1)
                 return
         }
-        op.FontName = str
-        dbus.NotifyChange(op, "FontName")
+        op.GtkFontName = str
+        dbus.NotifyChange(op, "GtkFontName")
+
+        str, err1 = keyFile.GetString(THEME_GROUP_COMPONENT,
+                THEME_KEY_BG)
+        if err1 != nil {
+                logObject.Info("Get key '%s' value failed: %v",
+                        THEME_KEY_BG, err1)
+                return
+        }
+        op.BackgroundFile = str
+        dbus.NotifyChange(op, "BackgroundFile")
 }

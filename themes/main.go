@@ -23,6 +23,7 @@ package main
 
 import (
         "dbus/com/deepin/api/utils"
+        "dlib"
         "dlib/dbus"
         "dlib/logger"
         "os"
@@ -108,8 +109,11 @@ func main() {
         //m.ThemeList = append(m.ThemeList, THEME_PATH+"Test")
         //m.ThemeList = append(m.ThemeList, THEME_PATH+"Deepin")
         updateThemeObj(m.pathNameMap)
+
+        m.getCurrentThemeObject(m.CurrentTheme).setThemeViaXSettings()
         dbus.DealWithUnhandledMessage()
 
+        go dlib.StartLoop()
         if err = dbus.Wait(); err != nil {
                 logObject.Warning("lost dbus session: %v", err)
                 os.Exit(1)

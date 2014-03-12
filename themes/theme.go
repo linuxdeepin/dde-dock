@@ -30,10 +30,12 @@ type Theme struct {
         Type           string  //system or local theme
         GtkTheme       string
         IconTheme      string
-        CursorTheme    string
-        FontName       string
+        GtkCursorTheme string
+        GtkFontName    string
         BackgroundFile string
-        BasePath       string
+        PreviewPath    string
+        ThumbnailPath  string
+        basePath       string
         path           string
 }
 
@@ -45,16 +47,15 @@ func newTheme(path string, info PathInfo) *Theme {
         m.Type = strings.ToLower(info.t)
 
         if m.Type == "system" {
-                m.BasePath = THUMB_THEME_PATH + "/" + m.Name
+                m.basePath = THUMB_THEME_PATH + "/" + m.Name
         } else if m.Type == "local" {
                 homeDir := getHomeDir()
-                m.BasePath = homeDir + THUMB_LOCAL_THEME_PATH + "/" + m.Name
+                m.basePath = homeDir + THUMB_LOCAL_THEME_PATH + "/" + m.Name
         }
+        m.PreviewPath = m.basePath + "/preview.png"
+        m.ThumbnailPath = m.basePath + "/thumbnail.png"
 
         m.updateThemeInfo()
-        m.setPropName("BackgroundFile")
-
-        m.listenSettingsChanged()
 
         return m
 }

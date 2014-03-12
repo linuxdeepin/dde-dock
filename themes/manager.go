@@ -40,48 +40,23 @@ type Manager struct {
         pathNameMap    map[string]PathInfo
 }
 
-func (op *Manager) GetGtkBasePath(name string) string {
-        list := getGtkThemeList()
-
-        t := getThemeType(name, list)
-        if t == PATH_TYPE_SYSTEM {
-                return THUMB_GTK_PATH + "/" + name
-        } else if t == PATH_TYPE_LOCAL {
-                return THUMB_LOCAL_GTK_PATH + "/" + name
+func (op *Manager) GetThumbPictPath(typeName, typePict, name string) string {
+        path := ""
+        switch typeName {
+        case "gtk":
+                path = op.getGtkPictPath(typePict, name)
+        case "icon":
+                path = op.getIconPictPath(typePict, name)
+        case "cursor":
+                path = op.getCursorPictPath(typePict, name)
         }
 
-        return ""
+        return path
 }
 
-func (op *Manager) GetIconBasePath(name string) string {
-        list := getIconThemeList()
-
-        t := getThemeType(name, list)
-        if t == PATH_TYPE_SYSTEM {
-                return THUMB_ICON_PATH + "/" + name
-        } else if t == PATH_TYPE_LOCAL {
-                return THUMB_LOCAL_ICON_PATH + "/" + name
-        }
-
-        return ""
-}
-
-func (op *Manager) GetCursorBasePath(name string) string {
-        list := getCursorThemeList()
-
-        t := getThemeType(name, list)
-        if t == PATH_TYPE_SYSTEM {
-                return THUMB_CURSOR_PATH + "/" + name
-        } else if t == PATH_TYPE_LOCAL {
-                return THUMB_LOCAL_CURSOR_PATH + "/" + name
-        }
-
-        return ""
-}
-
-func (op *Manager) SetTheme(gtk, icon, cursor, font string) string {
+func (op *Manager) SetTheme(gtk, icon, cursor, gtkFont, bg string) string {
         for _, path := range op.ThemeList {
-                name, ok := isThemeExist(gtk, icon, cursor, font, path)
+                name, ok := isThemeExist(gtk, icon, cursor, gtkFont, bg, path)
                 if !ok {
                         continue
                 } else {
@@ -89,7 +64,7 @@ func (op *Manager) SetTheme(gtk, icon, cursor, font string) string {
                 }
         }
 
-        createTheme("Custom", gtk, icon, cursor, font)
+        createTheme("Custom", gtk, icon, cursor, gtkFont, bg)
         updateThemeObj(op.pathNameMap)
 
         return "Custom"
@@ -169,31 +144,36 @@ func getBackgroundList() []string {
         return []string{}
 }
 
-func getThemeType(name string, list []PathInfo) string {
+func getThemeType(name string, list []string) string {
         for _, l := range list {
-                if name == l.path {
-                        return l.t
+                obj, ok := themeObjMap[l]
+                if !ok {
+                        continue
+                }
+                if name == obj.Name {
+                        return obj.Type
                 }
         }
 
         return ""
 }
 
-func isThemeExist(gtk, icon, cursor, font, path string) (string, bool) {
+func isThemeExist(gtk, icon, cursor, gtkFont, bg, path string) (string, bool) {
         obj, ok := themeObjMap[path]
         if !ok {
                 return "", false
         }
 
         if gtk != obj.GtkTheme || icon != obj.IconTheme ||
-                cursor != obj.CursorTheme || font != obj.FontName {
+                cursor != obj.GtkCursorTheme || gtkFont != obj.GtkFontName ||
+                obj.BackgroundFile != bg {
                 return "", false
         }
 
         return obj.Name, true
 }
 
-func createTheme(name, gtk, icon, cursor, font string) bool {
+func createTheme(name, gtk, icon, cursor, gtkFont, bg string) bool {
         homeDir := getHomeDir()
         path := homeDir + THUMB_LOCAL_THEME_PATH + "/" + name
         logObject.Info("Theme Dir:%s\n", path)
@@ -231,7 +211,8 @@ func createTheme(name, gtk, icon, cursor, font string) bool {
         keyFile.SetString(THEME_GROUP_COMPONENT, THEME_KEY_GTK, gtk)
         keyFile.SetString(THEME_GROUP_COMPONENT, THEME_KEY_ICONS, icon)
         keyFile.SetString(THEME_GROUP_COMPONENT, THEME_KEY_CURSOR, cursor)
-        keyFile.SetString(THEME_GROUP_COMPONENT, THEME_KEY_FONT, font)
+        keyFile.SetString(THEME_GROUP_COMPONENT, THEME_KEY_GTK_FONT, gtkFont)
+        keyFile.SetString(THEME_GROUP_COMPONENT, THEME_KEY_BG, bg)
 
         _, contents, err1 := keyFile.ToData()
         if err1 != nil {
@@ -278,6 +259,7 @@ func newManager() *Manager {
         m.setPropName("IconThemeList")
         m.setPropName("CursorThemeList")
 
+        m.listenSettingsChanged()
         homeDir := getHomeDir()
         m.listenThemeDir(THEMES_PATH)
         m.listenThemeDir(homeDir + THEMES_LOCAL_PATH)
