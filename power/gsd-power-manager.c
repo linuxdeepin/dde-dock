@@ -2678,7 +2678,8 @@ idle_set_mode (GsdPowerManager *manager, GsdPowerIdleMode mode)
     }
 
     /* ensure we're still on an active console */
-    is_active = is_session_active (manager);
+    /*is_active = is_session_active (manager);*/
+    is_active = TRUE;
     if (!is_active)
     {
         g_debug ("ignoring state transition to %s as inactive",
@@ -2982,9 +2983,9 @@ idle_configure (GsdPowerManager *manager)
     else if (!on_battery)
     {
         /* Don't dim when charging */
-        g_debug("@idle_configure:don't dim when charging?");
         timeout_dim = g_settings_get_uint (manager->priv->settings,
                                            "idle-delay");
+        g_debug("@idle_configure:don't dim when charging? %d", timeout_dim);
     }
     else if (manager->priv->battery_is_low)
     {
@@ -2997,8 +2998,8 @@ idle_configure (GsdPowerManager *manager)
         {
             /*timeout_dim = g_settings_get_uint (manager->priv->settings_session,*/
             /*"idle-delay");*/
-            timeout_dim = g_settings_get_uint (manager->priv->settings,
-                                               "idle-delay");
+            timeout_dim = g_settings_get_int (manager->priv->settings,
+                                              "idle-delay");
             if (timeout_dim == 0)
             {
                 timeout_dim = IDLE_DIM_BLANK_DISABLED_MIN;
