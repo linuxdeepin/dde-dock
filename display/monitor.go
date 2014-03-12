@@ -61,10 +61,10 @@ func (m *Monitor) ChangeBrightness(name string, v float64) {
 		v = 1
 	}
 	if old, ok := m.Brightness[name]; ok && v != old {
+		m.setPropBrightness(name, v)
 		code := "xrandr "
 		code += m.generateBrightnessShell(name)
 		runCode(code)
-		m.setPropBrightness(name, v)
 	}
 }
 func (m *Monitor) generateBrightnessShell(name string) string {
