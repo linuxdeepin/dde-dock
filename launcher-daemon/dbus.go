@@ -61,10 +61,15 @@ func (d *LauncherDBus) emitItemChanged(name, status string, info map[string]Item
 
 	fmt.Println("Status:", status)
 	if status != SOFTWARE_STATUS_DELETED {
+		fmt.Println(name)
 		app := gio.NewDesktopAppInfoFromFilename(name)
-		if app == nil {
-			fmt.Println("create DesktopAppInfo failed")
-			return
+		for count := 0; app == nil; count++ {
+			<-time.After(time.Millisecond * 200)
+			app = gio.NewDesktopAppInfoFromFilename(name)
+			if app == nil && count == 20 {
+				fmt.Println("create DesktopAppInfo failed")
+				return
+			}
 		}
 		defer app.Unref()
 		if !app.ShouldShow() {
@@ -102,6 +107,7 @@ func (d *LauncherDBus) itemChangedHandler(ev *fsnotify.FileEvent, name string, i
 		}
 	}
 	if ev.IsRename() {
+		fmt.Println("renamed")
 		select {
 		case <-info[name].renamed:
 		default:
@@ -131,6 +137,7 @@ func (d *LauncherDBus) itemChangedHandler(ev *fsnotify.FileEvent, name string, i
 				return
 			case <-time.After(time.Second):
 				<-info[name].created
+				fmt.Println("create")
 				d.emitItemChanged(name, SOFTWARE_STATUS_CREATED, info)
 			}
 		}()
@@ -145,6 +152,7 @@ func (d *LauncherDBus) itemChangedHandler(ev *fsnotify.FileEvent, name string, i
 			case <-info[name].renamed:
 				d.emitItemChanged(name, SOFTWARE_STATUS_MODIFIED, info)
 			default:
+				fmt.Println("modify created")
 				d.emitItemChanged(name, SOFTWARE_STATUS_CREATED, info)
 			}
 		}()
