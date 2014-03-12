@@ -118,6 +118,7 @@ type Power struct {
 	conn      *dbus.Conn
 	systemBus *dbus.Conn
 	logind    *dbus.Object
+	display   *dbus.Object
 
 	//upower interface
 	upower *upower.Upower
