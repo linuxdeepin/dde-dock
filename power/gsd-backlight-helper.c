@@ -74,7 +74,7 @@ out:
     return ret;
 }
 
-#if 0
+#if GSD_BACKLIGHT_HELPER
 int
 main (int argc, char *argv[])
 {
