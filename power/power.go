@@ -91,6 +91,7 @@ type Power struct {
 	powerSettings *gio.Settings
 	mediaKey      *gio.Settings
 
+	//gsettings properties
 	ButtonHibernate *property.GSettingsStringProperty `access:"readwrite"`
 	ButtonPower     *property.GSettingsStringProperty `access:"readwrite"`
 	ButtonSleep     *property.GSettingsStringProperty `access:"readwrite"`
@@ -140,6 +141,7 @@ type Power struct {
 	LockEnabled         *property.GSettingsBoolProperty `access:"readwrite"`
 
 	//states to keep track of changes
+	LidIsPresent bool
 	LidIsClosed  bool
 	BatteryIsLow bool
 }
@@ -165,6 +167,7 @@ func NewPower() (*Power, error) {
 		println("WARNING:UPower not provided by dbus\n")
 	} else {
 
+		power.LidIsPresent = power.upower.LidIsPresent.Get()
 		power.LidIsClosed = power.upower.LidIsClosed.Get()
 		power.BatteryIsLow = power.upower.OnLowBattery.Get()
 
