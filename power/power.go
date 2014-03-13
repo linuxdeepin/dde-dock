@@ -171,7 +171,7 @@ func NewPower() (*Power, error) {
 	power.screensaverSettings = gio.NewSettings(schema_gsettings_screensaver)
 	power.getGsettingsProperty()
 
-	power.upower, _ = upower.NewUpower("/org/freedesktop/UPower")
+	power.upower, _ = upower.NewUpower("org.freedesktop.UPower", "/org/freedesktop/UPower")
 	if power.upower == nil {
 		println("WARNING:UPower not provided by dbus\n")
 	} else {
@@ -187,7 +187,7 @@ func NewPower() (*Power, error) {
 		paths := getUpowerDeviceObjectPath(devices)
 		println(paths)
 		if len(paths) >= 1 {
-			power.upowerBattery, _ = upower.NewDevice(dbus.ObjectPath(paths[0]))
+			power.upowerBattery, _ = upower.NewDevice("org.freedesktop.UPower", dbus.ObjectPath(paths[0]))
 			if power.upowerBattery != nil {
 				power.getUPowerProperty()
 			}
