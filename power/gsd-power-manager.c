@@ -1227,7 +1227,7 @@ engine_profile_changed_cb (GSettings *settings,
     /*return;*/
     /*}*/
 
-    GError *error;
+    GError *error = NULL;
     gchar *s;
     if (g_strcmp0 (key, "current-profile"))
     {

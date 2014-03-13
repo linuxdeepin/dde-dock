@@ -199,6 +199,7 @@ func NewPower() (*Power, error) {
 			println("upower battery interface not found\n")
 		}
 	}
+
 	var err error
 	power.conn, err = dbus.SessionBus()
 	if err != nil {
@@ -216,6 +217,20 @@ func NewPower() (*Power, error) {
 	power.dmSession = power.getDMSession()
 
 	return power, nil
+}
+
+func (power *Power) OnPropertiesChanged(name string, oldv interface{}) {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Print(err)
+		}
+	}()
+	switch name {
+	case "CurrentProfile":
+		power.getGsettingsProperty()
+		break
+	}
+	dbus.NotifyChange(power, name)
 }
 
 func (power *Power) getDMSession() *dbus.Object {
