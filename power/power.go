@@ -166,13 +166,12 @@ func NewPower() (*Power, error) {
 	power.CurrentProfile = property.NewGSettingsStringProperty(
 		power, "CurrentProfile", power.powerProfile,
 		"current-profile")
+	power.CurrentProfile.ConnectChanged(power.profileChanged)
 
-	power.powerSettings = gio.NewSettingsWithPath(
-		schema_gsettings_power_settings_id,
-		string(schema_gsettings_power_settings_path)+
-			power.CurrentProfile.Get()+"/")
+	power.powerSettings = power.getPowerSettings()
 
 	power.screensaverSettings = gio.NewSettings(schema_gsettings_screensaver)
+
 	power.getGsettingsProperty()
 
 	power.upower, _ = upower.NewUpower("org.freedesktop.UPower", "/org/freedesktop/UPower")
@@ -227,12 +226,21 @@ func (power *Power) OnPropertiesChanged(name string, oldv interface{}) {
 	}()
 	switch name {
 	case "CurrentProfile":
+		fmt.Println("sleep inactive ac timeout: ", power.SleepInactiveAcTimeout.Get())
+		power.powerSettings = power.getPowerSettings()
 		power.getGsettingsProperty()
 		dbus.InstallOnSession(power)
-		fmt.Println("sleep inactive ac timeout: ", power.SleepInactiveAcTimeout.Get())
 		break
 	}
 	dbus.NotifyChange(power, name)
+}
+
+func (power *Power) getPowerSettings() *gio.Settings {
+	return gio.NewSettingsWithPath(
+		schema_gsettings_power_settings_id,
+		string(schema_gsettings_power_settings_path)+
+			power.CurrentProfile.Get()+"/")
+
 }
 
 func (power *Power) getDMSession() *dbus.Object {
@@ -268,6 +276,25 @@ func (power *Power) getDeepinSession() *dbus.Object {
 	obj := power.conn.Object(DEEPIN_SESSION_DEST, DEEPIN_SESSION_PATH)
 
 	return obj
+}
+
+func (power *Power) profileChanged() {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Print(err)
+		}
+	}()
+	name := power.CurrentProfile.Get()
+	switch name {
+	case "CurrentProfile":
+		fmt.Println("sleep inactive ac timeout: ", power.SleepInactiveAcTimeout.Get())
+		power.powerSettings = power.getPowerSettings()
+		power.getGsettingsProperty()
+		//dbus.InstallOnSession(power)
+		break
+	}
+	dbus.NotifyChange(power, name)
+
 }
 
 func (power *Power) upowerChanged() {
@@ -534,10 +561,9 @@ func (power *Power) getGsettingsProperty() int32 {
 		power, "LidCloseACAction", power.powerSettings, "lid-close-ac-action")
 	power.LidCloseBatteryAction = property.NewGSettingsStringProperty(
 		power, "LidCloseBatteryAction", power.powerSettings, "lid-close-battery-action")
-	//power.ShowTray = property.NewGSettingsBoolProperty(
-	//power, "ShowTray", power.powerSettings, "show-tray")
 	power.SleepInactiveAcTimeout = property.NewGSettingsIntProperty(
 		power, "SleepInactiveAcTimeout", power.powerSettings, "sleep-inactive-ac-timeout")
+	fmt.Println("settings profile:", power.CurrentProfile.Get(), ",", power.SleepInactiveAcTimeout.Get())
 	power.SleepInactiveBatteryTimeout = property.NewGSettingsIntProperty(
 		power, "SleepInactiveBatteryTimeout", power.powerSettings, "sleep-inactive-battery-timeout")
 	power.IdleDelay = property.NewGSettingsIntProperty(
@@ -587,10 +613,6 @@ func (power *Power) EnumerateDevices() []dbus.ObjectPath {
 	return devices
 }
 
-func (p *Power) Test() uint32 {
-	return 937
-}
-
 func getUpowerDeviceObjectPath(devices []dbus.ObjectPath) []dbus.ObjectPath {
 	paths := make([]dbus.ObjectPath, len(devices))
 	batPattern, err := regexp.Compile(
@@ -634,7 +656,7 @@ func main() {
 	dbus.InstallOnSession(power)
 	dbus.DealWithUnhandledMessage()
 	fmt.Print("power module started,looping")
-	go dlib.StartLoop()
+	dlib.StartLoop()
 	if err := dbus.Wait(); err != nil {
 		//l.Error("lost dbus session:", err)
 		os.Exit(1)
