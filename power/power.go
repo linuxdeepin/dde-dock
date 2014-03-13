@@ -355,8 +355,10 @@ func (power *Power) engineButton() {
 				break
 			case MEDIA_KEY_IFC + "." + SIGNAL_HIBERNATE:
 				action = power.ButtonHibernate.Get()
+				break
 			case MEDIA_KEY_IFC + "." + SIGNAL_SUSPEND:
 				action = power.ButtonSuspend.Get()
+				break
 			}
 
 			fmt.Println(v.Name, v.Body, " action: ", action)
