@@ -137,17 +137,18 @@ func (dapp *DefaultApps) listenMimeCacheFile() {
 
         mimeWatcher, err = fsnotify.NewWatcher()
         if err != nil {
-                logObject.Info("New Watcher Failed:", err)
+                logObject.Info("New Watcher Failed: %v\n", err)
                 panic(err)
         }
 
         userInfo, err = user.Current()
         if err != nil {
-                logObject.Info("Get current user failed:", err)
+                logObject.Info("Get current user failed: %v\n", err)
                 panic(err)
         }
 
         mimeFile := userInfo.HomeDir + "/" + MIME_CACHE_FILE
+        // TODO: if mimeFile not exist, touch it
         err = mimeWatcher.Watch(mimeFile)
         if err != nil {
                 logObject.Info("Watch '%s' Failed: %s\n",
@@ -160,14 +161,14 @@ func (dapp *DefaultApps) listenMimeCacheFile() {
                 for {
                         select {
                         case ev := <-mimeWatcher.Event:
-                                logObject.Info("Watch Event:", ev)
+                                logObject.Info("Watch Event: %v\n", ev)
                                 if ev.IsDelete() {
                                         mimeWatcher.Watch(mimeFile)
                                 } else {
                                         dapp.DefaultAppChanged()
                                 }
                         case err := <-mimeWatcher.Error:
-                                logObject.Info("Watch Error:", err)
+                                logObject.Info("Watch Error: %v\n", err)
                         }
                 }
         }()
@@ -176,7 +177,7 @@ func (dapp *DefaultApps) listenMimeCacheFile() {
 func NewDefaultApps() *DefaultApps {
         defer func() {
                 if err := recover(); err != nil {
-                        logObject.Info("Recover Error in NewDefaultApps:",
+                        logObject.Info("Recover Error in NewDefaultApps: %v\n",
                                 err)
                 }
         }()
@@ -186,7 +187,7 @@ func NewDefaultApps() *DefaultApps {
         var err error
         mimeWatcher, err = fsnotify.NewWatcher()
         if err != nil {
-                logObject.Info("Create mime file watcher failed:", err)
+                logObject.Info("Create mime file watcher failed: %v\n", err)
                 panic(err)
         }
 
@@ -203,7 +204,7 @@ func NewAppInfoByID(id string) (AppInfo, bool) {
 
         _, err1 := keyFile.LoadFromFile(_DESKTOP_PATH+id, glib.KeyFileFlagsNone)
         if err1 != nil {
-                logObject.Info("Load File Failed:", err1)
+                logObject.Info("Load File Failed: %v\n", err1)
                 return AppInfo{}, false
         }
 
@@ -214,7 +215,7 @@ func NewAppInfoByID(id string) (AppInfo, bool) {
 
         exec, err2 := keyFile.GetString(_DESKTOP_ENTRY, _EXEC)
         if err2 != nil {
-                logObject.Info("Get Exec Failed:", err2)
+                logObject.Info("Get Exec Failed: %v\n", err2)
                 return AppInfo{}, false
         }
 
@@ -253,20 +254,21 @@ func IsTerminalEmulator(fileName string) bool {
         defer keyFile.Free()
         _, err := keyFile.LoadFromFile(fileName, glib.KeyFileFlagsNone)
         if err != nil {
-                logObject.Info("KeyFile Load File Failed:", err)
+                logObject.Info("KeyFile Load File Failed: %v\n", err)
                 return false
         }
 
         categories, err := keyFile.GetString(_DESKTOP_ENTRY, _CATEGORY)
         if err != nil {
-                logObject.Info("KeyFile Get String Failed:", err)
+                logObject.Info("KeyFile Get String Failed: %v\n", err)
                 return false
         }
 
         if strings.Contains(categories, _TERMINAL_EMULATOR) {
                 execName, err := keyFile.GetString(_DESKTOP_ENTRY, _EXEC)
                 if err != nil {
-                        logObject.Info("KeyFile Get String Failed:", err)
+                        logObject.Info("KeyFile Get String Failed: %v\n",
+                                err)
                         return false
                 }
 
@@ -291,7 +293,7 @@ func GetDesktopEntryList() ([]string, error) {
 
         desktops, err := ioutil.ReadDir(_DESKTOP_PATH)
         if err != nil {
-                logObject.Info("Read Dir Failed:", err)
+                logObject.Info("Read Dir Failed: %v\n", err)
                 return nil, err
         }
 

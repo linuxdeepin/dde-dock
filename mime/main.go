@@ -46,7 +46,7 @@ func (media *MediaMount) GetDBusInfo() dbus.DBusInfo {
 func main() {
         defer func() {
                 if err := recover(); err != nil {
-                        logObject.Fatal("Recover Error:", err)
+                        logObject.Fatal("Recover Error: %v\n", err)
                 }
         }()
         logObject.SetRestartCommand("/usr/lib/deepin-daemon/mime")
@@ -57,21 +57,21 @@ func main() {
         }
         err := dbus.InstallOnSession(dapp)
         if err != nil {
-                logObject.Info("Install Session Failed:", err)
+                logObject.Info("Install Session Failed: %v\n", err)
                 panic(err)
         }
 
         media := NewMediaMount()
         err = dbus.InstallOnSession(media)
         if err != nil {
-                logObject.Info("Install Session Failed:", err)
+                logObject.Info("Install Session Failed: %v\n", err)
                 panic(err)
         }
         dbus.DealWithUnhandledMessage()
 
         go dlib.StartLoop()
         if err = dbus.Wait(); err != nil {
-                logObject.Info("lost dbus session:", err)
+                logObject.Info("lost dbus session: %v\n", err)
                 os.Exit(1)
         } else {
                 os.Exit(0)
