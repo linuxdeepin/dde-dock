@@ -1,7 +1,7 @@
 package main
 
 // #cgo CFLAGS: -DLIBEXECDIR=""
-// #cgo amd64 386 CFLAGS: -g -Wall
+// #cgo amd64 386 CFLAGS: -g
 // #cgo pkg-config:glib-2.0 gtk+-3.0 x11 xext xtst xi gnome-desktop-3.0 upower-glib libnotify libcanberra-gtk3 gudev-1.0
 // #cgo LDFLAGS: -lm
 // #define GNOME_DESKTOP_USE_UNSTABLE_API
