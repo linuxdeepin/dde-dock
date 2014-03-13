@@ -47,78 +47,6 @@ func (op *Manager) GetDBusInfo() dbus.DBusInfo {
         }
 }
 
-func (op *Manager) getGtkPictPath(typePict, name string) string {
-        path := ""
-
-        t := getThemeType(name, op.ThemeList)
-        if len(t) <= 0 {
-                return ""
-        }
-        if t == PATH_TYPE_SYSTEM {
-                path = THUMB_GTK_PATH + "/" + name
-        } else if t == PATH_TYPE_LOCAL {
-                homeDir := getHomeDir()
-                path = homeDir + THUMB_LOCAL_GTK_PATH + "/" + name
-        }
-
-        switch typePict {
-        case "thumbnail":
-                path += "/thumbnail.png"
-        case "preview":
-                path += "/preview.png"
-        }
-
-        return path
-}
-
-func (op *Manager) getIconPictPath(typePict, name string) string {
-        path := ""
-
-        t := getThemeType(name, op.ThemeList)
-        if len(t) <= 0 {
-                return ""
-        }
-        if t == PATH_TYPE_SYSTEM {
-                path = THUMB_ICON_PATH + "/" + name
-        } else if t == PATH_TYPE_LOCAL {
-                homeDir := getHomeDir()
-                path = homeDir + THUMB_LOCAL_ICON_PATH + "/" + name
-        }
-
-        switch typePict {
-        case "thumbnail":
-                path += "/thumbnail.png"
-        case "preview":
-                path += "/preview.png"
-        }
-
-        return path
-}
-
-func (op *Manager) getCursorPictPath(typePict, name string) string {
-        path := ""
-
-        t := getThemeType(name, op.ThemeList)
-        if len(t) <= 0 {
-                return ""
-        }
-        if t == PATH_TYPE_SYSTEM {
-                path = THUMB_CURSOR_PATH + "/" + name
-        } else if t == PATH_TYPE_LOCAL {
-                homeDir := getHomeDir()
-                path = homeDir + THUMB_LOCAL_CURSOR_PATH + "/" + name
-        }
-
-        switch typePict {
-        case "thumbnail":
-                path += "/thumbnail.png"
-        case "preview":
-                path += "/preview.png"
-        }
-
-        return path
-}
-
 func (op *Manager) OnPropertiesChanged(propName string, old interface{}) {
         switch propName {
         case "CurrentTheme":
@@ -166,7 +94,7 @@ func (op *Manager) setPropName(propName string) {
         }
 }
 
-func (op *Manager) getCurrentThemeObject(name string) *Theme {
+func (op *Manager) getThemeObject(name string) *Theme {
         for _, path := range op.ThemeList {
                 o, ok := themeObjMap[path]
                 if !ok {
@@ -195,7 +123,7 @@ func (op *Manager) listenSettingsChanged() {
                 switch key {
                 case "current-picture":
                         value := personSettings.GetString(key)
-                        obj := op.getCurrentThemeObject(op.CurrentTheme)
+                        obj := op.getThemeObject(op.CurrentTheme)
                         if obj != nil && obj.BackgroundFile != value {
                                 op.SetTheme(obj.GtkTheme, obj.IconTheme,
                                         obj.GtkCursorTheme, obj.GtkFontName,
@@ -206,7 +134,7 @@ func (op *Manager) listenSettingsChanged() {
                         if value == op.CurrentTheme {
                                 break
                         }
-                        obj := op.getCurrentThemeObject(value)
+                        obj := op.getThemeObject(value)
                         if obj != nil {
                                 obj.setThemeViaXSettings()
                                 op.CurrentTheme = value

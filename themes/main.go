@@ -30,10 +30,11 @@ import (
 )
 
 var (
+        objManager  *Manager
         objUtil     *utils.Utils
+        mutex       = new(sync.Mutex)
         logObject   = logger.NewLogger("daemon/themes")
         themeObjMap = make(map[string]*Theme)
-        mutex       sync.Mutex
 
         genId, destroyId = func() (func() int, func()) {
                 count := 0
@@ -99,8 +100,8 @@ func main() {
                 return
         }
 
-        m := newManager()
-        err = dbus.InstallOnSession(m)
+        objManager = newManager()
+        err = dbus.InstallOnSession(objManager)
         if err != nil {
                 logObject.Warning("Install Session Failed: %v", err)
                 panic(err)
@@ -108,8 +109,12 @@ func main() {
 
         //m.ThemeList = append(m.ThemeList, THEME_PATH+"Test")
         //m.ThemeList = append(m.ThemeList, THEME_PATH+"Deepin")
-        updateThemeObj(m.pathNameMap)
-        m.getCurrentThemeObject(m.CurrentTheme).setThemeViaXSettings()
+        updateThemeObj(objManager.pathNameMap)
+        objManager.getThemeObject(objManager.CurrentTheme).setThemeViaXSettings()
+        objThumb := &ThumbPath{}
+        dbus.InstallOnSession(objThumb)
+        objPre := &PreviewPath{}
+        dbus.InstallOnSession(objPre)
         dbus.DealWithUnhandledMessage()
 
         if err = dbus.Wait(); err != nil {

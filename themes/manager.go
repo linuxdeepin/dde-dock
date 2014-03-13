@@ -40,20 +40,6 @@ type Manager struct {
         pathNameMap    map[string]PathInfo
 }
 
-func (op *Manager) GetThumbPictPath(typeName, typePict, name string) string {
-        path := ""
-        switch typeName {
-        case "gtk":
-                path = op.getGtkPictPath(typePict, name)
-        case "icon":
-                path = op.getIconPictPath(typePict, name)
-        case "cursor":
-                path = op.getCursorPictPath(typePict, name)
-        }
-
-        return path
-}
-
 func (op *Manager) SetTheme(gtk, icon, cursor, gtkFont, bg string) string {
         for _, path := range op.ThemeList {
                 name, ok := isThemeExist(gtk, icon, cursor, gtkFont, bg, path)
@@ -144,20 +130,6 @@ func getBackgroundList() []string {
         return []string{}
 }
 
-func getThemeType(name string, list []string) string {
-        for _, l := range list {
-                obj, ok := themeObjMap[l]
-                if !ok {
-                        continue
-                }
-                if name == obj.Name {
-                        return obj.Type
-                }
-        }
-
-        return ""
-}
-
 func isThemeExist(gtk, icon, cursor, gtkFont, bg, path string) (string, bool) {
         obj, ok := themeObjMap[path]
         if !ok {
@@ -199,6 +171,8 @@ func createTheme(name, gtk, icon, cursor, gtkFont, bg string) bool {
                 f.Close()
         }
 
+        mutex.Lock()
+        defer mutex.Unlock()
         keyFile := glib.NewKeyFile()
         defer keyFile.Free()
         ok, err := keyFile.LoadFromFile(filename, glib.KeyFileFlagsKeepComments)
@@ -221,9 +195,7 @@ func createTheme(name, gtk, icon, cursor, gtkFont, bg string) bool {
                 return false
         }
 
-        mutex.Lock()
         writeDatasToKeyFile(contents, filename)
-        mutex.Unlock()
 
         return true
 }
@@ -233,20 +205,21 @@ func writeDatasToKeyFile(contents, filename string) {
                 return
         }
 
-        f, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE, 0644)
+        f, err := os.Create(filename + "~")
         if err != nil {
                 logObject.Warning("OpenFile '%s' failed: %v\n",
-                        filename, err)
+                        filename+"~", err)
                 return
         }
         defer f.Close()
 
-        _, err = f.WriteString(contents)
-        if err != nil {
+        if _, err = f.WriteString(contents); err != nil {
                 logObject.Warning("Write in '%s' failed: %v\n",
-                        filename, err)
+                        filename+"~", err)
                 return
         }
+        f.Sync()
+        os.Rename(filename+"~", filename)
 }
 
 func newManager() *Manager {

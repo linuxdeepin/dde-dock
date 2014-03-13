@@ -185,49 +185,37 @@ func setAutomaticLogin(name string) {
         switch dsp {
         case "lightdm":
                 if fileIsExist(ETC_LIGHTDM_CONFIG) {
-                        mutex.Lock()
                         writeKeyFileValue(ETC_LIGHTDM_CONFIG,
                                 LIGHTDM_AUTOLOGIN_GROUP,
                                 LIGHTDM_AUTOLOGIN_USER,
                                 KEY_TYPE_STRING, name)
-                        mutex.Unlock()
                 }
         case "gdm":
                 if fileIsExist(ETC_GDM_CONFIG) {
-                        mutex.Lock()
                         writeKeyFileValue(ETC_GDM_CONFIG,
                                 GDM_AUTOLOGIN_GROUP,
                                 GDM_AUTOLOGIN_USER,
                                 KEY_TYPE_STRING, name)
-                        mutex.Unlock()
                 }
         case "kdm":
                 if fileIsExist(ETC_KDM_CONFIG) {
-                        mutex.Lock()
                         writeKeyFileValue(ETC_KDM_CONFIG,
                                 KDM_AUTOLOGIN_GROUP,
                                 KDM_AUTOLOGIN_ENABLE,
                                 KEY_TYPE_BOOL, true)
-                        mutex.Unlock()
-                        mutex.Lock()
                         writeKeyFileValue(ETC_KDM_CONFIG,
                                 KDM_AUTOLOGIN_GROUP,
                                 KDM_AUTOLOGIN_USER,
                                 KEY_TYPE_STRING, name)
-                        mutex.Unlock()
                 } else if fileIsExist(USER_KDM_CONFIG) {
-                        mutex.Lock()
                         writeKeyFileValue(ETC_KDM_CONFIG,
                                 KDM_AUTOLOGIN_GROUP,
                                 KDM_AUTOLOGIN_ENABLE,
                                 KEY_TYPE_BOOL, true)
-                        mutex.Unlock()
-                        mutex.Lock()
                         writeKeyFileValue(USER_KDM_CONFIG,
                                 KDM_AUTOLOGIN_GROUP,
                                 KDM_AUTOLOGIN_USER,
                                 KEY_TYPE_STRING, name)
-                        mutex.Unlock()
                 }
         default:
                 logObject.Warning("No support display manager")
