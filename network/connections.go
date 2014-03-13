@@ -35,7 +35,7 @@ func (this *Manager) initConnectionManage() {
 func (this *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPath) {
 	switch operation {
 	case OpAdded:
-		nmConn, _ := nm.NewSettingsConnection(path)
+		nmConn, _ := nm.NewSettingsConnection(NMDest, path)
 		nmConn.ConnectRemoved(func() {
 			this.handleConnectionChanged(OpRemoved, path)
 			nm.DestroySettingsConnection(nmConn)
@@ -115,7 +115,7 @@ func newWirelessConnection(id string, ssid string, keyFlag int) *Connection {
 	data[fieldIPv6]["method"] = dbus.MakeVariant("auto")
 
 	newConn, err := _NMSettings.AddConnection(data)
-	core, err := nm.NewSettingsConnection(newConn)
+	core, err := nm.NewSettingsConnection(NMDest, newConn)
 	if err != nil {
 		panic(err)
 	}
@@ -123,7 +123,7 @@ func newWirelessConnection(id string, ssid string, keyFlag int) *Connection {
 }
 
 func (this *Manager) GetConnectionByAccessPoint(path dbus.ObjectPath) (*Connection, error) {
-	if ap, err := nm.NewAccessPoint(path); err == nil {
+	if ap, err := nm.NewAccessPoint(NMDest, path); err == nil {
 		for _, c := range this.WirelessConnections {
 			if c.ConnectionType == fieldWireless && string(c.Data[fieldWireless]["ssid"].Value().([]uint8)) == string(ap.Ssid.Get()) {
 				return c, nil
@@ -142,16 +142,16 @@ func (this *Manager) GetActiveConnection(devPath dbus.ObjectPath) (ret *ActiveCo
 			err = x.(error)
 		}
 	}()
-	dev, err := nm.NewDevice(devPath)
+	dev, err := nm.NewDevice(NMDest, devPath)
 	if err != nil {
 		return nil, err
 	}
-	ac, err := nm.NewActiveConnection(dev.ActiveConnection.Get())
+	ac, err := nm.NewActiveConnection(NMDest, dev.ActiveConnection.Get())
 	if err != nil {
 		return nil, err
 	}
 	name := ""
-	if c, err := nm.NewSettingsConnection(ac.Connection.Get()); err != nil {
+	if c, err := nm.NewSettingsConnection(NMDest, ac.Connection.Get()); err != nil {
 		return nil, err
 	} else {
 		name = NewConnection(c).Name
@@ -167,12 +167,12 @@ func (this *Manager) GetActiveConnection(devPath dbus.ObjectPath) (ret *ActiveCo
 	var speed = "-"
 	switch dev.DeviceType.Get() {
 	case NM_DEVICE_TYPE_ETHERNET:
-		_dev, _ := nm.NewDeviceWired(devPath)
+		_dev, _ := nm.NewDeviceWired(NMDest, devPath)
 		macaddress = _dev.HwAddress.Get()
 		speed = fmt.Sprintf("%d", _dev.Speed.Get())
 		nm.DestroyDeviceWired(_dev)
 	case NM_DEVICE_TYPE_WIFI:
-		_dev, _ := nm.NewDeviceWireless(devPath)
+		_dev, _ := nm.NewDeviceWireless(NMDest, devPath)
 		macaddress = _dev.HwAddress.Get()
 		speed = fmt.Sprintf("%d", _dev.Bitrate.Get()/1024)
 		nm.DestroyDeviceWireless(_dev)

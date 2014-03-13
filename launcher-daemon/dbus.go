@@ -249,7 +249,7 @@ func (d *LauncherDBus) GetBackgroundPict() string {
 		return DefaultBackgroundImage
 	}
 
-	i, err := graphic.NewGraphic("/com/deepin/api/Graphic")
+	i, err := graphic.NewGraphic("com.deepin.api.Graphic", "/com/deepin/api/Graphic")
 	if err != nil {
 		return errorHandler(err)
 	}

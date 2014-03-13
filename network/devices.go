@@ -22,7 +22,7 @@ func NewDevice(core *nm.Device) *Device {
 }
 
 func (this *Manager) DisconnectDevice(path dbus.ObjectPath) error {
-	if dev, err := nm.NewDevice(path); err != nil {
+	if dev, err := nm.NewDevice(NMDest, path); err != nil {
 		return err
 	} else {
 		dev.Disconnect()
@@ -39,7 +39,7 @@ func (this *Manager) DisconnectDevice(path dbus.ObjectPath) error {
 }
 
 func (this *Manager) ActiveWiredDevice(path dbus.ObjectPath) error {
-	if dev, err := nm.NewDevice(path); err != nil {
+	if dev, err := nm.NewDevice(NMDest, path); err != nil {
 		return err
 	} else {
 		if dev.State.Get() == NM_DEVICE_STATE_DISCONNECTED {
@@ -104,7 +104,7 @@ func (this *Manager) addOtherDevice(dev *nm.Device) {
 func (this *Manager) handleDeviceChanged(operation int32, path dbus.ObjectPath) {
 	switch operation {
 	case OpAdded:
-		dev, err := nm.NewDevice(path)
+		dev, err := nm.NewDevice(NMDest, path)
 		if err != nil {
 			panic(err)
 		}
@@ -171,13 +171,13 @@ func (this *Manager) GetAccessPoints(path dbus.ObjectPath) ([]AccessPoint, error
 		return 0
 	}
 	aps := make([]AccessPoint, 0)
-	if dev, err := nm.NewDeviceWireless(path); err == nil {
+	if dev, err := nm.NewDeviceWireless(NMDest, path); err == nil {
 		nmAps, err := dev.GetAccessPoints()
 		if err != nil {
 			return nil, err
 		}
 		for _, apPath := range nmAps {
-			if ap, err := nm.NewAccessPoint(apPath); err == nil {
+			if ap, err := nm.NewAccessPoint(NMDest, apPath); err == nil {
 				actived := dev.ActiveAccessPoint.Get() == apPath
 				aps = append(aps, AccessPoint{string(ap.Ssid.Get()),
 					parseFlags(ap.Flags.Get(), ap.WpaFlags.Get(), ap.RsnFlags.Get()) != ApKeyNone,
@@ -196,14 +196,14 @@ func (this *Manager) GetAccessPoints(path dbus.ObjectPath) ([]AccessPoint, error
 func (this *Manager) getDeviceAddress(devPath dbus.ObjectPath, devType uint32) string {
 	switch devType {
 	case NM_DEVICE_TYPE_ETHERNET:
-		dev, err := nm.NewDeviceWired(devPath)
+		dev, err := nm.NewDeviceWired(NMDest, devPath)
 		if err != nil {
 			panic(err)
 		}
 		defer func() { nm.DestroyDeviceWired(dev) }()
 		return dev.HwAddress.Get()
 	case NM_DEVICE_TYPE_WIFI:
-		dev, err := nm.NewDeviceWireless(devPath)
+		dev, err := nm.NewDeviceWireless(NMDest, devPath)
 		if err != nil {
 			panic(err)
 		}

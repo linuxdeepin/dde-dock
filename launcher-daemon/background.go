@@ -19,7 +19,7 @@ type Background struct {
 
 func (b *Background) init() error {
 	var err error
-	b.imgHandler, err = graphic.NewGraphic("/com/deepin/api/Graphic")
+	b.imgHandler, err = graphic.NewGraphic("com.deepin.api.Graphic", "/com/deepin/api/Graphic")
 	if err != nil {
 		return err
 	}

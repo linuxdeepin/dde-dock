@@ -19,7 +19,7 @@ func parseIP4address(v uint32) string {
 }
 
 func parseDHCP4(path dbus.ObjectPath) (string, string, string) {
-	dhcp4, err := nm.NewDHCP4Config(path)
+	dhcp4, err := nm.NewDHCP4Config(NMDest, path)
 	if err != nil {
 		panic(err)
 	}

@@ -9,6 +9,8 @@ const (
 	DBusDest = "com.deepin.daemon.Network"
 	DBusPath = "/com/deepin/daemon/Network"
 	DBusIFC  = "com.deepin.daemon.Network"
+
+	NMDest = "org.freedesktop.NetworkManager"
 )
 
 const (
@@ -17,8 +19,8 @@ const (
 )
 
 var (
-	_NMManager, _  = nm.NewManager("/org/freedesktop/NetworkManager")
-	_NMSettings, _ = nm.NewSettings("/org/freedesktop/NetworkManager/Settings")
+	_NMManager, _  = nm.NewManager(NMDest, "/org/freedesktop/NetworkManager")
+	_NMSettings, _ = nm.NewSettings(NMDest, "/org/freedesktop/NetworkManager/Settings")
 	_Manager       = _NewManager()
 )
 

@@ -22,102 +22,98 @@
 package main
 
 import (
-        "dbus/com/deepin/api/utils"
-        "dlib"
-        "dlib/dbus"
-        "dlib/logger"
-        "os"
-        "sync"
+	"dbus/com/deepin/api/utils"
+	"dlib/dbus"
+	"dlib/logger"
+	"os"
+	"sync"
 )
 
 var (
-        objUtil     *utils.Utils
-        logObject   = logger.NewLogger("daemon/themes")
-        themeObjMap = make(map[string]*Theme)
-        mutex       sync.Mutex
+	objUtil     *utils.Utils
+	logObject   = logger.NewLogger("daemon/themes")
+	themeObjMap = make(map[string]*Theme)
+	mutex       sync.Mutex
 
-        genId, destroyId = func() (func() int, func()) {
-                count := 0
-                return func() int {
-                                mutex.Lock()
-                                tmp := count
-                                count++
-                                mutex.Unlock()
-                                return tmp
-                        }, func() {
-                                mutex.Lock()
-                                count = 0
-                                mutex.Unlock()
-                        }
-        }()
+	genId, destroyId = func() (func() int, func()) {
+		count := 0
+		return func() int {
+				mutex.Lock()
+				tmp := count
+				count++
+				mutex.Unlock()
+				return tmp
+			}, func() {
+				mutex.Lock()
+				count = 0
+				mutex.Unlock()
+			}
+	}()
 )
 
 func destroyThemeObj(path string) {
-        obj, ok := themeObjMap[path]
-        if !ok {
-                return
-        }
+	obj, ok := themeObjMap[path]
+	if !ok {
+		return
+	}
 
-        dbus.UnInstallObject(obj)
-        delete(themeObjMap, path)
+	dbus.UnInstallObject(obj)
+	delete(themeObjMap, path)
 }
 
 func destroyAllThemeObj() {
-        for k, obj := range themeObjMap {
-                dbus.UnInstallObject(obj)
-                delete(themeObjMap, k)
-        }
+	for k, obj := range themeObjMap {
+		dbus.UnInstallObject(obj)
+		delete(themeObjMap, k)
+	}
 }
 
 func updateThemeObj(pathNameMap map[string]PathInfo) {
-        destroyAllThemeObj()
-        destroyId()
+	destroyAllThemeObj()
+	destroyId()
 
-        for path, info := range pathNameMap {
-                obj := newTheme(path, info)
-                err := dbus.InstallOnSession(obj)
-                if err != nil {
-                        logObject.Warning("Install Session Failed: %v", err)
-                        panic(err)
-                }
-                themeObjMap[path] = obj
-        }
+	for path, info := range pathNameMap {
+		obj := newTheme(path, info)
+		err := dbus.InstallOnSession(obj)
+		if err != nil {
+			logObject.Warning("Install Session Failed: %v", err)
+			panic(err)
+		}
+		themeObjMap[path] = obj
+	}
 }
 
 func main() {
-        defer func() {
-                if err := recover(); err != nil {
-                        logObject.Fatal("Recove error in main: %v", err)
-                }
-        }()
+	defer func() {
+		if err := recover(); err != nil {
+			logObject.Fatal("Recove error in main: %v", err)
+		}
+	}()
 
-        logObject.SetRestartCommand("/usr/lib/deepin-daemon/themes")
-        var err error
-        objUtil, err = utils.NewUtils("/com/deepin/api/Utils")
-        if err != nil {
-                logObject.Info("New Utils Object Failed: %v\n", err)
-                return
-        }
+	logObject.SetRestartCommand("/usr/lib/deepin-daemon/themes")
+	var err error
+	objUtil, err = utils.NewUtils("com.deepin.api.Utils", "/com/deepin/api/Utils")
+	if err != nil {
+		logObject.Info("New Utils Object Failed: %v\n", err)
+		return
+	}
 
-        m := newManager()
-        err = dbus.InstallOnSession(m)
-        if err != nil {
-                logObject.Warning("Install Session Failed: %v", err)
-                panic(err)
-        }
+	m := newManager()
+	err = dbus.InstallOnSession(m)
+	if err != nil {
+		logObject.Warning("Install Session Failed: %v", err)
+		panic(err)
+	}
 
-        //m.ThemeList = append(m.ThemeList, THEME_PATH+"Test")
-        //m.ThemeList = append(m.ThemeList, THEME_PATH+"Deepin")
-        updateThemeObj(m.pathNameMap)
+	//m.ThemeList = append(m.ThemeList, THEME_PATH+"Test")
+	//m.ThemeList = append(m.ThemeList, THEME_PATH+"Deepin")
+	updateThemeObj(m.pathNameMap)
+	dbus.DealWithUnhandledMessage()
 
-        m.getCurrentThemeObject(m.CurrentTheme).setThemeViaXSettings()
-        dbus.DealWithUnhandledMessage()
-
-        go dlib.StartLoop()
-        if err = dbus.Wait(); err != nil {
-                logObject.Warning("lost dbus session: %v", err)
-                os.Exit(1)
-        } else {
-                os.Exit(0)
-        }
+	if err = dbus.Wait(); err != nil {
+		logObject.Warning("lost dbus session: %v", err)
+		os.Exit(1)
+	} else {
+		os.Exit(0)
+	}
 }

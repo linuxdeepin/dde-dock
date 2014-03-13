@@ -133,7 +133,7 @@ func NewDateAndTime() *Manager {
 func Init() {
 	var err error
 
-	setDate, err = setdatetime.NewSetDateTime("/com/deepin/api/SetDateTime")
+	setDate, err = setdatetime.NewSetDateTime("com.deepin.api.SetDateTime", "/com/deepin/api/SetDateTime")
 	if err != nil {
 		logger.Info("New SetDateTime Failed:", err)
 		panic(err)

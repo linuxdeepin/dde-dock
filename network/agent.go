@@ -37,7 +37,7 @@ func (a *Agent) GetSecrets(connection map[string]map[string]dbus.Variant, connec
 }
 
 func (a *Agent) CancelGetSecrtes(connectionPath dbus.ObjectPath, settingName string) {
-	if setting, err := nm.NewSettingsConnection(connectionPath); err == nil {
+	if setting, err := nm.NewSettingsConnection(NMDest, connectionPath); err == nil {
 		s, err := setting.GetSettings()
 		if err == nil {
 			uuid, ok := s[fieldConnection]["uuid"].Value().(string)
@@ -74,7 +74,7 @@ func newAgent(identify string) *Agent {
 	c := &Agent{}
 	c.keys = make(map[string]chan string)
 	dbus.InstallOnSystem(c)
-	manager, err := nm.NewAgentManager("/org/freedesktop/NetworkManager/AgentManager")
+	manager, err := nm.NewAgentManager(NMDest, "/org/freedesktop/NetworkManager/AgentManager")
 	if err != nil {
 		panic(err)
 	}

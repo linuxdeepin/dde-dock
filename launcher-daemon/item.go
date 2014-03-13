@@ -175,7 +175,7 @@ func initItems() {
 	}
 
 	var err error
-	tree, err = pinyin.NewSearch("/com/deepin/api/Search")
+	tree, err = pinyin.NewSearch("com.deepin.api.Search", "/com/deepin/api/Search")
 	if err != nil {
 		return
 	}
