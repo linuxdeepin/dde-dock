@@ -397,7 +397,7 @@ func (power *Power) actionBlank() {
 
 func (power *Power) actionLock() {
 	fmt.Print("actionLock(): Locking\n")
-	power.dmSession.Call("Lock", 0)
+	power.dmSession.Call(DM_SESSION_IFC+".Lock", 0)
 }
 
 func (power *Power) actionLogout() {
