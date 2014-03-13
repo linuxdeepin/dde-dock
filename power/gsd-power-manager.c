@@ -3726,7 +3726,7 @@ gsd_power_manager_start (GsdPowerManager *manager,
                          GError **error)
 {
     g_debug ("Starting power manager");
-    gnome_settings_profile_start (NULL);
+    /*gnome_settings_profile_start (NULL);*/
 
     /* coldplug the list of screens */
     manager->priv->rr_screen = gnome_rr_screen_new (gdk_screen_get_default (), error);
@@ -3908,7 +3908,7 @@ gsd_power_manager_start (GsdPowerManager *manager,
     /* don't blank inside a VM */
     manager->priv->is_virtual_machine = gsd_power_is_hardware_a_vm ();
 
-    gnome_settings_profile_end (NULL);
+    /*gnome_settings_profile_end (NULL);*/
     return TRUE;
 }
 

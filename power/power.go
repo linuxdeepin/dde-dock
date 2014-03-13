@@ -61,11 +61,14 @@ const (
 	LOGIND_PATH = "/org/freedesktop/login1"
 	LOGIND_IFC  = "org.freedesktop.login1.Manager"
 
-	DM_DEST = "org.freedesktop.DisplayManager"
-	DM_PATH = "/org/freedesktop/DisplayManager"
-	DM_IFC  = "org.freedesktop.DisplayManager"
-
+	DM_DEST        = "org.freedesktop.DisplayManager"
+	DM_PATH        = "/org/freedesktop/DisplayManager"
+	DM_IFC         = "org.freedesktop.DisplayManager"
 	DM_SESSION_IFC = "org.freedesktop.DisplayManager.Session"
+
+	DEEPIN_SESSION_DEST = "com.deepin.SessionManager"
+	DEEPIN_SESSION_PATH = "/com/deepin/Session/Manager"
+	DEEPIN_SESSION_IFC  = "com.deepin.SessionManager"
 )
 
 //var l = logger.NewLogger("power")
@@ -124,11 +127,12 @@ type Power struct {
 	CurrentProfile *property.GSettingsStringProperty `access:"readwrite"`
 
 	//dbus
-	conn      *dbus.Conn
-	systemBus *dbus.Conn
-	logind    *dbus.Object
-	display   *dbus.Object
-	dmSession *dbus.Object
+	conn          *dbus.Conn
+	systemBus     *dbus.Conn
+	logind        *dbus.Object
+	display       *dbus.Object
+	dmSession     *dbus.Object
+	deepinSession *dbus.Object
 
 	//upower interface
 	upower *upower.Upower
@@ -241,6 +245,12 @@ func (power *Power) getDMSession() *dbus.Object {
 	}
 
 	return nil
+}
+
+func (power *Power) getDeepinSession() *dbus.Object {
+	obj := power.conn.Object(DEEPIN_SESSION_DEST, DEEPIN_SESSION_PATH)
+
+	return obj
 }
 
 func (power *Power) upowerChanged() {
@@ -403,7 +413,21 @@ func (power *Power) actionLock() {
 }
 
 func (power *Power) actionLogout() {
+	if power.deepinSession == nil {
+		fmt.Print("deepin session doesn't exist,can't logout")
+		return
+	}
 
+	var can bool
+	err := power.deepinSession.Call(DEEPIN_SESSION_IFC+".CanLogout", 0).Store(&can)
+	if err != nil {
+		fmt.Print(err)
+		return
+	} else {
+		if can {
+			power.deepinSession.Call(DEEPIN_SESSION_IFC+".Logout", 0)
+		}
+	}
 }
 
 func (power *Power) actionPowerOff() {
