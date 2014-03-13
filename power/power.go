@@ -248,6 +248,8 @@ func (power *Power) upowerChanged() {
 		closed := power.upower.LidIsClosed.Get()
 		if closed == power.LidIsClosed {
 			return
+		} else {
+			power.LidIsClosed = closed
 		}
 		if closed {
 			power.doLidCloseAction()
