@@ -1,0 +1,47 @@
+<node>
+    <interface name="dde.dock.Entry">
+	<method name="Activate">
+	    <arg type="i" direction="in"></arg>
+	    <arg type="i" direction="in"></arg>
+	</method>
+	<method name="ContextMenu">
+	    <arg type="i" direction="in"></arg>
+	    <arg type="i" direction="in"></arg>
+	</method>
+	<method name="OnDragDrop">
+	    <arg type="i" direction="in"></arg>
+	    <arg type="i" direction="in"></arg>
+	    <arg type="s" direction="in"></arg>
+	</method>
+	<method name="OnDragEnter">
+	    <arg type="i" direction="in"></arg>
+	    <arg type="i" direction="in"></arg>
+	    <arg type="s" direction="in"></arg>
+	</method>
+	<method name="OnDragLeave">
+	    <arg type="i" direction="in"></arg>
+	    <arg type="i" direction="in"></arg>
+	    <arg type="s" direction="in"></arg>
+	</method>
+	<method name="OnDragOver">
+	    <arg type="i" direction="in"></arg>
+	    <arg type="i" direction="in"></arg>
+	    <arg type="s" direction="in"></arg>
+	</method>
+	<method name="QuickWindow">
+	    <arg type="i" direction="in"></arg>
+	    <arg type="i" direction="in"></arg>
+	</method>
+	<method name="SecondaryActivate">
+	    <arg type="i" direction="in"></arg>
+	    <arg type="i" direction="in"></arg>
+	</method>
+	<property name="ID" type="s" access="read"></property>
+	<property name="Type" type="s" access="read"></property>
+	<property name="Tooltip" type="s" access="read"></property>
+	<property name="Icon" type="s" access="read"></property>
+	<property name="Status" type="i" access="read"></property>
+	<property name="QuickWindowVieable" type="b" access="read"></property>
+	<property name="Allocation" type="(nnqq)" access="read"></property>
+    </interface>
+</node>

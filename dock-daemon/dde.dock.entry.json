@@ -1,0 +1,18 @@
+{
+	"Config": {
+		"OutputDir": ".",
+		"InputDir": ".",
+		"BusType": "Session",
+		"DestName": "dde.dock.entry.NOUSED",
+		"Target": "Golang",
+		"PkgName": "main"
+	},
+	"Interfaces": [
+		{
+			"Interface": "dde.dock.Entry",
+			"OutFile": "remote_entry_autogen",
+			"XMLFile": "dde.dock.entry.xml",
+			"ObjectName": "RemoteEntry"
+		}
+	]
+}
