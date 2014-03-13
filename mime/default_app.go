@@ -148,7 +148,15 @@ func (dapp *DefaultApps) listenMimeCacheFile() {
         }
 
         mimeFile := userInfo.HomeDir + "/" + MIME_CACHE_FILE
-        // TODO: if mimeFile not exist, touch it
+        if ok, _ := objUtils.IsFileExist(mimeFile); !ok {
+                f, err := os.Create(mimeFile)
+                if err != nil {
+                        logObject.Warning("Create '%s' failed: %v\n",
+                                mimeFile, err)
+                        return
+                }
+                f.Close()
+        }
         err = mimeWatcher.Watch(mimeFile)
         if err != nil {
                 logObject.Info("Watch '%s' Failed: %s\n",

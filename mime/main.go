@@ -1,6 +1,7 @@
 package main
 
 import (
+        libutils "dbus/com/deepin/api/utils"
         "dlib"
         "dlib/dbus"
         "dlib/logger"
@@ -25,6 +26,7 @@ const (
 
 var (
         logObject = logger.NewLogger("daemon/mime")
+        objUtils  *libutils.Utils
 )
 
 func (dapp *DefaultApps) GetDBusInfo() dbus.DBusInfo {
@@ -50,12 +52,19 @@ func main() {
                 }
         }()
         logObject.SetRestartCommand("/usr/lib/deepin-daemon/mime")
+        var err error
+        objUtils, err = libutils.NewUtils("com.deepin.api.Utils",
+                "/com/deepin/api/Utils")
+        if err != nil {
+                logObject.Warning("New API Utils Failed: %v\n", err)
+                panic(err)
+        }
 
         dapp := NewDefaultApps()
         if dapp == nil {
                 return
         }
-        err := dbus.InstallOnSession(dapp)
+        err = dbus.InstallOnSession(dapp)
         if err != nil {
                 logObject.Info("Install Session Failed: %v\n", err)
                 panic(err)
