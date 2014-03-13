@@ -88,6 +88,11 @@
 #define SYSTEMD_DBUS_PATH                       "/org/freedesktop/login1"
 #define SYSTEMD_DBUS_INTERFACE                  "org.freedesktop.login1.Manager"
 
+#define PROFILE_DEFAULT   "Default"
+#define PROFILE_PERFORMANCE "Performance"
+#define PROFILE_POWERSAVE  "Powersave"
+#define PROFILE_CUSTOMIZE  "Customize"
+
 /* Keep this in sync with gnome-shell */
 #define SCREENSAVER_FADE_TIME                           10 /* seconds */
 
@@ -181,6 +186,7 @@ struct GsdPowerManagerPrivate
     gboolean                 screensaver_active;
 
     /* State */
+    gchar                   *current_profile;
     gchar                   *settings_path;
     gboolean                 lid_is_closed;
     UpClient                *up_client;
@@ -1220,12 +1226,22 @@ engine_profile_changed_cb (GSettings *settings,
     /*idle_configure (manager);*/
     /*return;*/
     /*}*/
-    GError *error = NULL;
+
+    GError *error;
+    gchar *s;
+    if (g_strcmp0 (key, "current-profile"))
+    {
+        s = g_settings_get_string(manager->priv->settings_profile, key);
+        if (strcmp(s, manager->priv->current_profile) == 0 )
+        {
+            return;
+        }
+    }
+
     gsd_power_manager_stop(manager);
-    /*gsd_power_manager_start(manager, &error);*/
 
     g_debug("restarting power manager\n");
-    gtk_main_quit();
+    gsd_power_manager_start(manager, &error);
 
     return;
 }
@@ -3781,12 +3797,13 @@ gsd_power_manager_start (GsdPowerManager *manager,
     g_signal_connect(manager->priv->settings_profile, "changed",
                      G_CALLBACK(engine_profile_changed_cb),
                      manager);
-    char *s = g_settings_get_string(manager->priv->settings_profile,
-                                    "current-profile");
+    manager->priv->current_profile = g_settings_get_string(manager->priv->settings_profile,
+                                     "current-profile");
     manager->priv->settings_path = (char*)malloc(
-                                       sizeof(DEEPIN_POWER_SETTINGS_PATH_PRE) + strlen(s) + 1);
+                                       sizeof(DEEPIN_POWER_SETTINGS_PATH_PRE) +
+                                       strlen(manager->priv->current_profile) + 1);
     strcpy(manager->priv->settings_path, DEEPIN_POWER_SETTINGS_PATH_PRE);
-    strcat(manager->priv->settings_path, s);
+    strcat(manager->priv->settings_path, manager->priv->current_profile);
     strcat(manager->priv->settings_path, "/");
 
     g_debug("created new settings with path :%s\n", manager->priv->settings_path);
