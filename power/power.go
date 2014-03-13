@@ -216,15 +216,15 @@ func NewPower() (*Power, error) {
 
 func (power *Power) getDMSession() *dbus.Object {
 	dm := power.systemBus.Object(DM_DEST, DM_PATH)
-	sessions, err := dm.GetProperty("Sessions")
+	sessions, err := dm.GetProperty(DM_IFC + ".Sessions")
 	if err != nil {
 		panic(err)
 	}
 	//_sessions := reflect.ValueOf(sessions.Value()).
-	var _sessions []string = sessions.Value().([]string)
+	var _sessions []dbus.ObjectPath = sessions.Value().([]dbus.ObjectPath)
 	for _, value := range _sessions {
-		obj := power.systemBus.Object(value, DM_SESSION_IFC)
-		username, err := obj.GetProperty("UserName")
+		obj := power.systemBus.Object(DM_DEST, value)
+		username, err := obj.GetProperty(DM_SESSION_IFC + ".UserName")
 		if err != nil {
 			panic(err)
 		}
@@ -392,6 +392,7 @@ func (power *Power) actionBlank() {
 }
 
 func (power *Power) actionLock() {
+	fmt.Print("actionLock(): Locking\n")
 	power.dmSession.Call("Lock", 0)
 }
 
