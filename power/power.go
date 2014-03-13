@@ -29,6 +29,8 @@ import (
 	//"dlib/logger"
 	"fmt"
 	"os"
+	"os/user"
+	//"reflect"
 	"regexp"
 	//"unsafe"
 	"github.com/BurntSushi/xgb"
@@ -58,6 +60,12 @@ const (
 	LOGIND_DEST = "org.freedesktop.login1"
 	LOGIND_PATH = "/org/freedesktop/login1"
 	LOGIND_IFC  = "org.freedesktop.login1.Manager"
+
+	DM_DEST = "org.freedesktop.DisplayManager"
+	DM_PATH = "/org/freedesktop/DisplayManager"
+	DM_IFC  = "org.freedesktop.DisplayManager"
+
+	DM_SESSION_IFC = "org.freedesktop.DisplayManager.Session"
 )
 
 //var l = logger.NewLogger("power")
@@ -120,6 +128,7 @@ type Power struct {
 	systemBus *dbus.Conn
 	logind    *dbus.Object
 	display   *dbus.Object
+	dmSession *dbus.Object
 
 	//upower interface
 	upower *upower.Upower
@@ -200,7 +209,36 @@ func NewPower() (*Power, error) {
 	power.logind = power.systemBus.Object(LOGIND_DEST, LOGIND_PATH)
 	power.engineButton()
 
+	power.dmSession = power.getDMSession()
+
 	return power, nil
+}
+
+func (power *Power) getDMSession() *dbus.Object {
+	dm := power.systemBus.Object(DM_DEST, DM_PATH)
+	sessions, err := dm.GetProperty("Sessions")
+	if err != nil {
+		panic(err)
+	}
+	//_sessions := reflect.ValueOf(sessions.Value()).
+	var _sessions []string = sessions.Value().([]string)
+	for _, value := range _sessions {
+		obj := power.systemBus.Object(value, DM_SESSION_IFC)
+		username, err := obj.GetProperty("UserName")
+		if err != nil {
+			panic(err)
+		}
+		user, err := user.Current()
+		if err != nil {
+			panic(err)
+		}
+		myusername := user.Username
+		if myusername == username.String() {
+			return obj
+		}
+	}
+
+	return nil
 }
 
 func (power *Power) upowerChanged() {
@@ -277,6 +315,9 @@ func (power *Power) doLidCloseAction() {
 		if power.externalMonitorIsOn() {
 			break
 		} else {
+			if power.LockEnabled.Get() {
+				go power.actionLock()
+			}
 			power.actionSuspend()
 		}
 		break
@@ -329,6 +370,9 @@ func (power *Power) engineButton() {
 			case ACTION_LOGOUT:
 				break
 			case ACTION_SUSPEND:
+				if power.LockEnabled.Get() {
+					go power.actionLock()
+				}
 				power.actionSuspend()
 				break
 			case ACTION_POWEROFF:
@@ -345,6 +389,10 @@ func (power *Power) engineButton() {
 
 func (power *Power) actionBlank() {
 
+}
+
+func (power *Power) actionLock() {
+	power.dmSession.Call("Lock", 0)
 }
 
 func (power *Power) actionLogout() {
@@ -479,15 +527,15 @@ func (p *Power) getUPowerProperty() int32 {
 	return 1
 }
 
-func (p *Power) EnumerateDevices() []dbus.ObjectPath {
-	//if power.upower == nil {
-	//println("WARNING:Upower object it nil\n")
-	//}
-	//devices, _ := power.upower.EnumerateDevices()
-	//for _, v := range devices {
-	//println(v)
-	//}
-	devices := []dbus.ObjectPath{"testing"}
+func (power *Power) EnumerateDevices() []dbus.ObjectPath {
+	if power.upower == nil {
+		println("WARNING:Upower object it nil\n")
+	}
+	devices, _ := power.upower.EnumerateDevices()
+	for _, v := range devices {
+		println(v)
+	}
+	//devices := []dbus.ObjectPath{"testing"}
 	return devices
 }
 
