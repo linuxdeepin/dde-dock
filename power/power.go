@@ -228,6 +228,8 @@ func (power *Power) OnPropertiesChanged(name string, oldv interface{}) {
 	switch name {
 	case "CurrentProfile":
 		power.getGsettingsProperty()
+		dbus.InstallOnSession(power)
+		fmt.Println("sleep inactive ac timeout: ", power.SleepInactiveAcTimeout.Get())
 		break
 	}
 	dbus.NotifyChange(power, name)
