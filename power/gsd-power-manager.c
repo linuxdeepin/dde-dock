@@ -1221,9 +1221,9 @@ engine_profile_changed_cb (GSettings *settings,
     /*}*/
     GError *error = NULL;
     gsd_power_manager_stop(manager);
-    gsd_power_manager_start(manager, &error);
+    /*gsd_power_manager_start(manager, &error);*/
 
-    g_debug("Exit\n");
+    g_debug("restarting power manager\n");
     gtk_main_quit();
 
     return;
