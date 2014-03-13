@@ -109,6 +109,7 @@ func main() {
         //m.ThemeList = append(m.ThemeList, THEME_PATH+"Test")
         //m.ThemeList = append(m.ThemeList, THEME_PATH+"Deepin")
         updateThemeObj(m.pathNameMap)
+        m.getCurrentThemeObject(m.CurrentTheme).setThemeViaXSettings()
         dbus.DealWithUnhandledMessage()
 
         if err = dbus.Wait(); err != nil {
