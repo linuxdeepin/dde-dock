@@ -22,8 +22,10 @@
 package main
 
 // #cgo pkg-config: glib-2.0 libcanberra
+// #include <stdlib.h>
 // #include "canberra_wrapper.h"
 import "C"
+import "unsafe"
 
 import (
 	"dlib/dbus"
@@ -51,7 +53,11 @@ func (s *Sound) PlaySystemSound(event string) (err error) {
 
 func (s *Sound) PlayThemeSystemSound(theme, event string) (err error) {
 	go func() {
-		ret := C.canberra_play_system_sound(C.CString(theme), C.CString(event))
+		ctheme := C.CString(theme)
+		defer C.free(unsafe.Pointer(ctheme))
+		cevent := C.CString(event)
+		defer C.free(unsafe.Pointer(cevent))
+		ret := C.canberra_play_system_sound(ctheme, cevent)
 		if ret != 0 {
 			logObject.Error("play system sound failed: theme=%s, event=%s, %s",
 				theme, event, C.GoString(C.ca_strerror(ret)))
@@ -60,10 +66,11 @@ func (s *Sound) PlayThemeSystemSound(theme, event string) (err error) {
 	return
 }
 
-// TODO remove
 func (s *Sound) PlaySoundFile(file string) (err error) {
 	go func() {
-		ret := C.canberra_play_sound_file(C.CString(file))
+		cfile := C.CString(file)
+		defer C.free(unsafe.Pointer(cfile))
+		ret := C.canberra_play_sound_file(cfile)
 		if ret != 0 {
 			logObject.Error("play sound file failed: %s, %s\n", file, C.GoString(C.ca_strerror(ret)))
 		}
