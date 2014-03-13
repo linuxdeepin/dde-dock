@@ -2700,7 +2700,8 @@ idle_set_mode (GsdPowerManager *manager, GsdPowerIdleMode mode)
 
     /* if we're moving to an idle mode, make sure
      * we add a watch to take us back to normal */
-    if (mode != GSD_POWER_IDLE_MODE_NORMAL)
+    /*if (mode != GSD_POWER_IDLE_MODE_NORMAL)*/
+    if (mode == GSD_POWER_IDLE_MODE_DIM || mode == GSD_POWER_IDLE_MODE_SLEEP)
     {
         gnome_idle_monitor_add_user_active_watch (manager->priv->idle_monitor,
                 idle_became_active_cb,
@@ -2907,13 +2908,14 @@ idle_configure (GsdPowerManager *manager)
      * as it's what will drive the blank */
     on_battery = up_client_get_on_battery (manager->priv->up_client);
     timeout_blank = 0;
-    if (manager->priv->screensaver_active)
+    if (manager->priv->screensaver_active || manager->priv->current_idle_mode == GSD_POWER_IDLE_MODE_DIM)
     {
         /* The tail is wagging the dog.
          * The screensaver coming on will blank the screen.
          * If an event occurs while the screensaver is on,
          * the aggressive idle watch will handle it */
-        timeout_blank = SCREENSAVER_TIMEOUT_BLANK;
+        /*timeout_blank = SCREENSAVER_TIMEOUT_BLANK;*/
+        timeout_blank = 3;
     }
 
     clear_idle_watch (manager->priv->idle_monitor,
@@ -3394,10 +3396,13 @@ idle_triggered_idle_cb (GnomeIdleMonitor *monitor,
     if (watch_id == manager->priv->idle_dim_id)
     {
         idle_set_mode (manager, GSD_POWER_IDLE_MODE_DIM);
+        manager->priv->screensaver_active = TRUE;
+        idle_configure(manager);
     }
     else if (watch_id == manager->priv->idle_blank_id)
     {
         idle_set_mode (manager, GSD_POWER_IDLE_MODE_BLANK);
+        /*manager->priv->screensaver_active = FALSE;*/
     }
     else if (watch_id == manager->priv->idle_sleep_id)
     {
@@ -3418,12 +3423,14 @@ idle_became_active_cb (GnomeIdleMonitor *monitor,
 
     g_debug ("idletime reset");
 
+    manager->priv->screensaver_active = FALSE;
     set_temporary_unidle_on_ac (manager, FALSE);
 
     /* close any existing notification about idleness */
     notify_close_if_showing (&manager->priv->notification_sleep_warning);
 
     idle_set_mode (manager, GSD_POWER_IDLE_MODE_NORMAL);
+    idle_configure(manager);
 }
 
 static void
@@ -3833,14 +3840,15 @@ gsd_power_manager_start (GsdPowerManager *manager,
                               session_presence_proxy_ready_cb,
                               manager);
 
-    manager->priv->screensaver_watch_id =
-        g_bus_watch_name (G_BUS_TYPE_SESSION,
-                          GS_DBUS_NAME,
-                          G_BUS_NAME_WATCHER_FLAGS_NONE,
-                          (GBusNameAppearedCallback) screensaver_appeared_cb,
-                          (GBusNameVanishedCallback) screensaver_vanished_cb,
-                          manager,
-                          NULL);
+    manager->priv->screensaver_active = FALSE;
+    /*manager->priv->screensaver_watch_id =*/
+    /*g_bus_watch_name (G_BUS_TYPE_SESSION,*/
+    /*GS_DBUS_NAME,*/
+    /*G_BUS_NAME_WATCHER_FLAGS_NONE,*/
+    /*(GBusNameAppearedCallback) screensaver_appeared_cb,*/
+    /*(GBusNameVanishedCallback) screensaver_vanished_cb,*/
+    /*manager,*/
+    /*NULL);*/
 
     manager->priv->devices_array = g_ptr_array_new_with_free_func (g_object_unref);
 
