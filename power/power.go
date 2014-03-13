@@ -233,7 +233,9 @@ func (power *Power) getDMSession() *dbus.Object {
 			panic(err)
 		}
 		myusername := user.Username
-		if myusername == username.String() {
+		fmt.Println("username: ", username.String(), ",", myusername)
+		if "\""+myusername+"\"" == username.String() {
+			fmt.Println("username: equals", username.String(), ",", myusername)
 			return obj
 		}
 	}
