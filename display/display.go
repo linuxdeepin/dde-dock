@@ -118,6 +118,7 @@ func (dpy *Display) SplitMonitor(a string) error {
 }
 
 func (dpy *Display) SetPrimary(name string) error {
+	fmt.Println("TrySetPrimary:", name)
 	var validPrimary *Monitor
 	for _, m := range dpy.Monitors {
 		if name == m.Name && m.Opened {
@@ -140,6 +141,7 @@ func (dpy *Display) SetPrimary(name string) error {
 		dpy.setPropPrimary(validPrimary.Name)
 		dpy.setPropPrimaryRect(xproto.Rectangle{validPrimary.X, validPrimary.Y, validPrimary.Width, validPrimary.Height})
 		dpy.detectChanged()
+		fmt.Println("SetTo:", name)
 		return nil
 	} else {
 		dpy.setPropPrimaryRect(xproto.Rectangle{0, 0, dpy.ScreenWidth, dpy.ScreenHeight})
@@ -157,8 +159,9 @@ func initDisplay() *Display {
 
 	loadConfiguration(dpy)
 	dpy.Primary = __CFG__.Primary
-	dpy.updateMonitorList()
 	dpy.updateInfo()
+	dpy.updateMonitorList()
+	dpy.SetPrimary(dpy.Primary)
 
 	randr.SelectInput(X, Root, randr.NotifyMaskOutputChange|randr.NotifyMaskOutputProperty|randr.NotifyMaskCrtcChange|randr.NotifyMaskScreenChange)
 	go dpy.listener()
@@ -189,8 +192,9 @@ func (dpy *Display) updateInfo() {
 	for _, minfo := range resources.Modes {
 		dpy.modes[randr.Mode(minfo.Id)] = buildMode(minfo)
 	}
-
-	dpy.SetPrimary(dpy.Primary)
+	for _, m := range dpy.Monitors {
+		m.updateInfo()
+	}
 }
 
 func (dpy *Display) listener() {
@@ -220,6 +224,7 @@ func (dpy *Display) listener() {
 				LastConfigTimeStamp = ee.ConfigTimestamp
 				dpy.updateMonitorList()
 			}
+			dpy.SetPrimary(dpy.Primary)
 		}
 	}
 }
