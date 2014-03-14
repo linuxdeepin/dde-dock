@@ -24,6 +24,8 @@ type DesktopEntry struct {
 
 	QuickWindowVieable bool
 	Allocation         Rectangle
+
+	Data map[string]string
 }
 
 func NewDesktopEntry(id string) *DesktopEntry {
