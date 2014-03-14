@@ -2,11 +2,14 @@ package main
 
 import "dlib/dbus"
 import pkgbus "dbus/org/freedesktop/dbus"
+import "time"
+import "sync"
 
 var busdaemon *pkgbus.DBusDaemon
 
 type Manager struct {
-	Entries []*EntryProxyer
+	Entries       []*EntryProxyer
+	entrireLocker sync.Mutex
 
 	Added   func(dbus.ObjectPath)
 	Removed func(string)
@@ -47,9 +50,17 @@ func (m *Manager) watchEntries() {
 		// will be not empty, if a dbus session was uninstalled, the
 		// name and oldOwner will be not empty
 		if len(newOwner) != 0 {
-			m.registerEntry(name)
+			go func() {
+				// FIXME: how long time should to wait for
+				time.Sleep(500 * time.Millisecond)
+				m.entrireLocker.Lock()
+				m.registerEntry(name)
+				m.entrireLocker.Unlock()
+			}()
 		} else {
+			m.entrireLocker.Lock()
 			m.unregisterEntry(name)
+			m.entrireLocker.Unlock()
 		}
 	})
 }
@@ -58,12 +69,12 @@ func (m *Manager) registerEntry(name string) {
 	if !isEntryNameValid(name) {
 		return
 	}
-	logger.Debug("register entry: ", name)
+	logger.Debug("register entry: %s", name)
 	entryId, ok := getEntryId(name)
 	if !ok {
 		return
 	}
-	logger.Debug("register entry id: ", entryId)
+	logger.Debug("register entry id: %s", entryId)
 	entry, err := NewEntryProxyer(entryId)
 	if err != nil {
 		logger.Error("register entry failed: %v", err)
@@ -75,29 +86,36 @@ func (m *Manager) registerEntry(name string) {
 		return
 	}
 	m.Entries = append(m.Entries, entry)
-	logger.Info("register entry: ", name)
+	logger.Info("register entry success: %s", name)
 }
 
 func (m *Manager) unregisterEntry(name string) {
 	if !isEntryNameValid(name) {
 		return
 	}
-	logger.Debug("unregister entry: ", name)
+	logger.Debug("unregister entry: %s", name)
 	entryId, ok := getEntryId(name)
 	if !ok {
 		return
 	}
-	logger.Debug("unregister entry id: ", entryId)
+	logger.Debug("unregister entry id: %s", entryId)
 
 	// find the index
-	var index int
-	var entry *EntryProxyer
+	index := -1
+	var entry *EntryProxyer = nil
 	for i, e := range m.Entries {
 		if e.entryId == entryId {
 			index = i
 			entry = e
+			break
 		}
 	}
+
+	if index < 0 {
+		logger.Warning("slice out of bounds, entry len: %d, index: %d", len(m.Entries), index)
+		return
+	}
+	logger.Debug("entry len: %d, index: %d", len(m.Entries), index)
 
 	if entry != nil {
 		dbus.UnInstallObject(entry)
@@ -108,5 +126,5 @@ func (m *Manager) unregisterEntry(name string) {
 	m.Entries[len(m.Entries)-1] = nil
 	m.Entries = m.Entries[:len(m.Entries)-1]
 
-	logger.Info("unregister entry: ", name)
+	logger.Info("unregister entry success: %s", name)
 }
