@@ -27,7 +27,7 @@ func NewManager() *Manager {
 
 func (m *Manager) watchEntries() {
 	var err error
-	busdaemon, err = pkgbus.NewDBusDaemon("org.freedesktop.DBus", "/")
+	busdaemon, err = pkgbus.NewDBusDaemon("org.freedesktop.DBus", "/org/freedesktop/DBus")
 	if err != nil {
 		panic(err)
 	}
@@ -42,13 +42,15 @@ func (m *Manager) watchEntries() {
 	}
 
 	// monitor name lost, name acquire
-	busdaemon.ConnectNameAcquired(func(name string) {
-		logger.Debug("dbus name acquired: ", name)
-		m.registerEntry(name)
-	})
-	busdaemon.ConnectNameLost(func(name string) {
-		logger.Debug("dbus name lost: ", name)
-		m.unregisterEntry(name)
+	busdaemon.ConnectNameOwnerChanged(func(name, oldOwner, newOwner string) {
+		// if a new dbus session was installed, the name and newOwner
+		// will be not empty, if a dbus session was uninstalled, the
+		// name and oldOwner will be not empty
+		if len(newOwner) != 0 {
+			m.registerEntry(name)
+		} else {
+			m.unregisterEntry(name)
+		}
 	})
 }
 
@@ -97,7 +99,9 @@ func (m *Manager) unregisterEntry(name string) {
 		}
 	}
 
-	dbus.UnInstallObject(entry)
+	if entry != nil {
+		dbus.UnInstallObject(entry)
+	}
 
 	// remove the entry from slice
 	copy(m.Entries[index:], m.Entries[index+1:])
