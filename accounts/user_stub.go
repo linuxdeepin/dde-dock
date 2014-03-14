@@ -246,8 +246,10 @@ func addHistoryIcon(filename, iconPath string) []string {
 
         ret := []string{}
         ret = append(ret, iconPath)
-        tmp := deleteElementFromList(iconPath, list.([]string))
-        ret = append(ret, tmp...)
+        if list != nil {
+                tmp := deleteElementFromList(iconPath, list.([]string))
+                ret = append(ret, tmp...)
+        }
         writeKeyFileValue(filename, "User",
                 "HistoryIcons", KEY_TYPE_STRING_LIST, ret)
 
