@@ -425,10 +425,12 @@ func (power *Power) engineButton() {
 			case ACTION_NOTHING:
 				break
 			case ACTION_INTERACTIVE:
+				power.actionInteractive()
 				break
 			case ACTION_BLANK:
 				break
 			case ACTION_LOGOUT:
+				power.actionLogout()
 				break
 			case ACTION_SUSPEND:
 				if power.LockEnabled.Get() {
@@ -446,6 +448,15 @@ func (power *Power) engineButton() {
 		}
 	}()
 	fmt.Println("listening to power events")
+}
+
+func (power *Power) actionInteractive() {
+	if power.deepinSession == nil {
+		fmt.Print("deepin session doesn't exist,can't choose")
+		return
+	}
+	fmt.Println("Interactive interface now")
+	power.deepinSession.Call(DEEPIN_SESSION_IFC+".PowerOffChoose", 0)
 }
 
 func (power *Power) actionBlank() {
