@@ -1,3 +1,0 @@
-[D-BUS Service]
-Name=com.deepin.daemon.ThemeManager
-Exec=/usr/lib/deepin-daemon/ThemeManager
