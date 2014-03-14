@@ -284,16 +284,16 @@ func (power *Power) profileChanged() {
 			fmt.Print(err)
 		}
 	}()
-	name := power.CurrentProfile.Get()
-	switch name {
-	case "CurrentProfile":
-		fmt.Println("sleep inactive ac timeout: ", power.SleepInactiveAcTimeout.Get())
-		power.powerSettings = power.getPowerSettings()
-		power.getGsettingsProperty()
-		//dbus.InstallOnSession(power)
-		break
-	}
-	dbus.NotifyChange(power, name)
+	//name := power.CurrentProfile.Get()
+	//switch name {
+	//case "CurrentProfile":
+	fmt.Println("sleep inactive ac timeout: ", power.SleepInactiveAcTimeout.Get())
+	power.powerSettings = power.getPowerSettings()
+	power.getGsettingsProperty()
+	//dbus.InstallOnSession(power)
+	dbus.NotifyChange(power, "CurrentProfile")
+	//break
+	//}
 
 }
 
@@ -302,6 +302,7 @@ func (power *Power) upowerChanged() {
 	isPresent := power.upower.LidIsPresent.Get()
 	if isPresent {
 		closed := power.upower.LidIsClosed.Get()
+		fmt.Println("lid is closed ? ", closed)
 		if closed == power.LidIsClosed {
 			return
 		} else {
@@ -656,11 +657,14 @@ func main() {
 	dbus.InstallOnSession(power)
 	dbus.DealWithUnhandledMessage()
 	fmt.Print("power module started,looping")
+	go func() {
+		if err := dbus.Wait(); err != nil {
+			//l.Error("lost dbus session:", err)
+			os.Exit(1)
+		} else {
+			os.Exit(0)
+		}
+	}()
+
 	dlib.StartLoop()
-	if err := dbus.Wait(); err != nil {
-		//l.Error("lost dbus session:", err)
-		os.Exit(1)
-	} else {
-		os.Exit(0)
-	}
 }
