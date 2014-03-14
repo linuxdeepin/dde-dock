@@ -67,7 +67,7 @@ const (
 	DM_SESSION_IFC = "org.freedesktop.DisplayManager.Session"
 
 	DEEPIN_SESSION_DEST = "com.deepin.SessionManager"
-	DEEPIN_SESSION_PATH = "/com/deepin/Session/Manager"
+	DEEPIN_SESSION_PATH = "/com/deepin/SessionManager"
 	DEEPIN_SESSION_IFC  = "com.deepin.SessionManager"
 )
 
