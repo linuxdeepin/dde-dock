@@ -137,6 +137,7 @@ func (m *Monitor) restore(cfg _MonitorConfiguration) {
 }
 func (dpy *Display) ResetChanged() {
 	// dond't set the monitors which hasn't cfg information
+	loadConfiguration(dpy)
 	dpy.SetPrimary(__CFG__.Primary)
 	for _, cfg := range __CFG__.Monitors {
 		for _, m := range dpy.Monitors {
@@ -145,6 +146,7 @@ func (dpy *Display) ResetChanged() {
 			}
 		}
 	}
+	dpy.HasChanged = true //force apply saved configuration
 	dpy.Apply()
 
 	for _, m := range dpy.Monitors {
@@ -176,6 +178,7 @@ func (dpy *Display) SaveChanged() {
 	__CFG__.Primary = dpy.Primary
 	saveConfiguration()
 	dpy.SwitchMode(DisplayModeCustom)
+	dpy.detectChanged()
 }
 
 func loadConfiguration(dpy *Display) {
