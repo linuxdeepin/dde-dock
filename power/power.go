@@ -364,6 +364,7 @@ func (power *Power) doLidCloseAction() {
 	fmt.Println("lid is closed: ", action)
 	switch action {
 	case ACTION_NOTHING:
+		power.actionNothing()
 		break
 	case ACTION_BLANK:
 		power.actionBlank()
@@ -424,6 +425,7 @@ func (power *Power) engineButton() {
 			fmt.Println(v.Name, v.Body, " action: ", action)
 			switch action {
 			case ACTION_NOTHING:
+				power.actionNothing()
 				break
 			case ACTION_INTERACTIVE:
 				power.actionInteractive()
@@ -449,6 +451,14 @@ func (power *Power) engineButton() {
 		}
 	}()
 	fmt.Println("listening to power events")
+}
+
+func (power *Power) actionNothing() {
+	if power.deepinSession {
+		power.actionInteractive()
+	} else {
+		fmt.Print("actionNothing() do nothing")
+	}
 }
 
 func (power *Power) actionInteractive() {
