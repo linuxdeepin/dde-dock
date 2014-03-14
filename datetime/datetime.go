@@ -151,7 +151,7 @@ func Init() {
 func main() {
         defer func() {
                 if err := recover(); err != nil {
-                        logger.Fatal("recover error:", err)
+                        logger.Fatal("recover error:%v\n", err)
                 }
         }()
 
@@ -161,13 +161,18 @@ func main() {
                 logger.SetLogLevel(dlogger.LEVEL_DEBUG)
         }
 
-        objUtils, _ = libutils.NewUtils("com.deeoin.api.Utils",
+        var err error
+        objUtils, err = libutils.NewUtils("com.deepin.api.Utils",
                 "/com/deepin/api/Utils")
+        if err != nil {
+                logger.Warning("New Utils Failed: %v\n", err)
+                panic(err)
+        }
 
         Init()
 
         date := NewDateAndTime()
-        err := dbus.InstallOnSession(date)
+        err = dbus.InstallOnSession(date)
         if err != nil {
                 logger.Error("Install Session DBus Failed:", err)
                 panic(err)
