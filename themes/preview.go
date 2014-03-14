@@ -32,18 +32,15 @@ const (
 )
 
 func (op *PreviewPath) GtkPath(name string) string {
-        obj := objManager.getThemeObject(name)
-        return gtkPreviewPath(obj.GtkTheme)
+        return gtkPreviewPath(name)
 }
 
 func (op *PreviewPath) IconPath(name string) string {
-        obj := objManager.getThemeObject(name)
-        return iconPreviewPath(obj.IconTheme)
+        return iconPreviewPath(name)
 }
 
 func (op *PreviewPath) CursorPath(name string) string {
-        obj := objManager.getThemeObject(name)
-        return cursorPreviewPath(obj.GtkCursorTheme)
+        return cursorPreviewPath(name)
 }
 
 func (op *PreviewPath) GetDBusInfo() dbus.DBusInfo {
@@ -70,6 +67,9 @@ func gtkPreviewPath(name string) string {
         }
 
         path += "/" + name + "/preview.png"
+        if ok, _ := objUtil.IsFileExist(path); !ok {
+                return ""
+        }
 
         return path
 }
@@ -90,6 +90,9 @@ func iconPreviewPath(name string) string {
         }
 
         path += "/" + name + "/preview.png"
+        if ok, _ := objUtil.IsFileExist(path); !ok {
+                return ""
+        }
 
         return path
 }
@@ -110,6 +113,9 @@ func cursorPreviewPath(name string) string {
         }
 
         path += "/" + name + "/preview.png"
+        if ok, _ := objUtil.IsFileExist(path); !ok {
+                return ""
+        }
 
         return path
 }

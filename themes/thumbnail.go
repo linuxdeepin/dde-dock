@@ -32,18 +32,15 @@ const (
 )
 
 func (op *ThumbPath) GtkPath(name string) string {
-        obj := objManager.getThemeObject(name)
-        return gtkThumbPath(obj.GtkTheme)
+        return gtkThumbPath(name)
 }
 
 func (op *ThumbPath) IconPath(name string) string {
-        obj := objManager.getThemeObject(name)
-        return iconThumbPath(obj.IconTheme)
+        return iconThumbPath(name)
 }
 
 func (op *ThumbPath) CursorPath(name string) string {
-        obj := objManager.getThemeObject(name)
-        return cursorThumbPath(obj.GtkCursorTheme)
+        return cursorThumbPath(name)
 }
 
 func (op *ThumbPath) GetDBusInfo() dbus.DBusInfo {
@@ -70,6 +67,9 @@ func gtkThumbPath(name string) string {
         }
 
         path += "/" + name + "/thumbnail.png"
+        if ok, _ := objUtil.IsFileExist(path); !ok {
+                return ""
+        }
 
         return path
 }
@@ -90,6 +90,9 @@ func iconThumbPath(name string) string {
         }
 
         path += "/" + name + "/thumbnail.png"
+        if ok, _ := objUtil.IsFileExist(path); !ok {
+                return ""
+        }
 
         return path
 }
@@ -110,6 +113,9 @@ func cursorThumbPath(name string) string {
         }
 
         path += "/" + name + "/thumbnail.png"
+        if ok, _ := objUtil.IsFileExist(path); !ok {
+                return ""
+        }
 
         return path
 }

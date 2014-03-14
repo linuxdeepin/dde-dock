@@ -182,12 +182,17 @@ func filterTheme(dir string, conditions []string) bool {
 }
 
 func getThemeThumbList() []PathInfo {
-        sysDirs := []PathInfo{PathInfo{THUMB_THEME_PATH, PATH_TYPE_SYSTEM}}
-        localDir := getHomeDir() + THUMB_LOCAL_THEME_PATH
+        sysDirs := []PathInfo{PathInfo{THUMB_THEME_PATH + "/", PATH_TYPE_SYSTEM}}
+        localDir := getHomeDir() + THUMB_LOCAL_THEME_PATH + "/"
         localDirs := []PathInfo{PathInfo{localDir, PATH_TYPE_LOCAL}}
+        conditions := []string{"theme.ini"}
 
-        sysList := getThumbList(sysDirs)
-        localList := getThumbList(localDirs)
+        //sysList := getThumbList(sysDirs)
+        //localList := getThumbList(localDirs)
+        sysList := getValidThemes(sysDirs, conditions)
+        localList := getValidThemes(localDirs, conditions)
+        //logObject.Info("System Theme List: %v\n", sysList)
+        //logObject.Info("Local Theme List: %v\n", localList)
         for _, l := range sysList {
                 if isElementExist(l, localList) {
                         continue
