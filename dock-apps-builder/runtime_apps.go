@@ -45,6 +45,9 @@ func (app *RuntimeApp) update_appid() {
 		wmInstance = wmClass.Instance
 		wmClassName = wmClass.Class
 	}
+	if pid == 0 {
+	} else {
+	}
 	appid := find_app_id(pid, name, wmInstance, wmClassName, iconName)
 	fmt.Println("INFO:", pid, name, wmInstance, wmClassName, iconName, "RESULT:", appid)
 }

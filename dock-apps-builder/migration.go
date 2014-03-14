@@ -3,8 +3,8 @@ package main
 // this file should be rewrite
 
 //#cgo pkg-config: glib-2.0 gio-unix-2.0 gtk+-3.0
-//#include "xid2aid.h"
 //#include <stdlib.h>
+// char* guest_app_id(long s_pid, const char* instance_name, const char* wmname, const char* wmclass, const char* icon_name);
 import "C"
 import "unsafe"
 
