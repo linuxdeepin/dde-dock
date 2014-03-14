@@ -118,14 +118,33 @@ func (dpy *Display) SplitMonitor(a string) error {
 }
 
 func (dpy *Display) SetPrimary(name string) error {
+	var validPrimary *Monitor
 	for _, m := range dpy.Monitors {
-		if m.Name == name {
-			dpy.setPropPrimary(m.Name)
-			dpy.detectChanged()
-			return nil
+		if name == m.Name && m.Opened {
+			validPrimary = m
 		}
 	}
-	return fmt.Errorf("Can't find this monitor: %s", name)
+	if validPrimary == nil && len(dpy.Monitors) >= 1 {
+		builtIn := guestBuiltIn(dpy.Monitors)
+		if builtIn.Opened {
+			validPrimary = builtIn
+		} else {
+			for _, m := range dpy.Monitors {
+				if m.Opened {
+					validPrimary = m
+				}
+			}
+		}
+	}
+	if validPrimary != nil {
+		dpy.setPropPrimary(validPrimary.Name)
+		dpy.setPropPrimaryRect(xproto.Rectangle{validPrimary.X, validPrimary.Y, validPrimary.Width, validPrimary.Height})
+		dpy.detectChanged()
+		return nil
+	} else {
+		dpy.setPropPrimaryRect(xproto.Rectangle{0, 0, dpy.ScreenWidth, dpy.ScreenHeight})
+		return fmt.Errorf("Can't find this monitor: %s", name)
+	}
 }
 
 func initDisplay() *Display {
@@ -171,17 +190,7 @@ func (dpy *Display) updateInfo() {
 		dpy.modes[randr.Mode(minfo.Id)] = buildMode(minfo)
 	}
 
-	validPrimary := false
-	for _, m := range dpy.Monitors {
-		m.updateInfo()
-		if dpy.Primary == m.Name {
-			validPrimary = true
-		}
-	}
-	if !validPrimary {
-		builtIn := guestBuiltIn(dpy.Monitors)
-		dpy.SetPrimary(builtIn.Name)
-	}
+	dpy.SetPrimary(dpy.Primary)
 }
 
 func (dpy *Display) listener() {
@@ -204,21 +213,6 @@ func (dpy *Display) listener() {
 		case randr.ScreenChangeNotifyEvent:
 			dpy.setPropScreenWidth(ee.Width)
 			dpy.setPropScreenHeight(ee.Height)
-
-			pinfo, err := randr.GetOutputPrimary(X, Root).Reply()
-			if err == nil && pinfo.Output != 0 {
-				if m := queryMonitor(dpy, pinfo.Output); m != nil {
-					m.updateInfo()
-					Logger.Info("11111")
-					dpy.setPropPrimaryRect(xproto.Rectangle{m.X, m.Y, m.Width, m.Height})
-				} else {
-					Logger.Info("2222")
-					dpy.setPropPrimaryRect(xproto.Rectangle{0, 0, ee.Width, ee.Height})
-				}
-			} else {
-				Logger.Info("3333")
-				dpy.setPropPrimaryRect(xproto.Rectangle{0, 0, ee.Width, ee.Height})
-			}
 
 			dpy.updateInfo()
 			if LastConfigTimeStamp < ee.ConfigTimestamp {
