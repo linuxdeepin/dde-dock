@@ -28,6 +28,14 @@ type EntryProxyer struct {
 	Allocation         Rectangle
 }
 
+func (e *EntryProxyer) GetDBusInfo() dbus.DBusInfo {
+	return dbus.DBusInfo{
+		"dde.dock.EntryManager",
+		entryPathPrefix + e.entryId,
+		"dde.dock.EntryProxyer",
+	}
+}
+
 func NewEntryProxyer(entryId string) (e *EntryProxyer, err error) {
 	e = &EntryProxyer{}
 	core, err := NewRemoteEntry(entryDestPrefix+entryId, dbus.ObjectPath(entryPathPrefix+entryId))
@@ -47,26 +55,42 @@ func NewEntryProxyer(entryId string) (e *EntryProxyer, err error) {
 	r := e.core.Allocation.Get()
 	e.Allocation = Rectangle{r[0].(int16), r[1].(int16), r[2].(uint16), r[3].(uint16)}
 
+	dbus.NotifyChange(e, "ID")
+	dbus.NotifyChange(e, "Type")
+	dbus.NotifyChange(e, "Tooltip")
+	dbus.NotifyChange(e, "Icon")
+	dbus.NotifyChange(e, "Status")
+	dbus.NotifyChange(e, "QuickWindowVieable")
+	dbus.NotifyChange(e, "Allocation")
+
 	// monitor properties changed
 	e.core.ID.ConnectChanged(func() {
+		e.ID = e.core.ID.Get()
 		dbus.NotifyChange(e, "ID")
 	})
 	e.core.Type.ConnectChanged(func() {
+		e.Type = e.core.Type.Get()
 		dbus.NotifyChange(e, "Type")
 	})
 	e.core.Tooltip.ConnectChanged(func() {
+		e.Tooltip = e.core.Tooltip.Get()
 		dbus.NotifyChange(e, "Tooltip")
 	})
 	e.core.Icon.ConnectChanged(func() {
+		e.Icon = e.core.Icon.Get()
 		dbus.NotifyChange(e, "Icon")
 	})
 	e.core.Status.ConnectChanged(func() {
+		e.Status = e.core.Status.Get()
 		dbus.NotifyChange(e, "Status")
 	})
 	e.core.QuickWindowVieable.ConnectChanged(func() {
+		e.QuickWindowVieable = e.core.QuickWindowVieable.Get()
 		dbus.NotifyChange(e, "QuickWindowVieable")
 	})
 	e.core.Allocation.ConnectChanged(func() {
+		r := e.core.Allocation.Get()
+		e.Allocation = Rectangle{r[0].(int16), r[1].(int16), r[2].(uint16), r[3].(uint16)}
 		dbus.NotifyChange(e, "Allocation")
 	})
 

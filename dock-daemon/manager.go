@@ -5,13 +5,19 @@ import pkgbus "dbus/org/freedesktop/dbus"
 
 var busdaemon *pkgbus.DBusDaemon
 
-// var busdaemon, _ = pkgbus.NewDBusDaemon("org.freedesktop.DBus", "/")
-
 type Manager struct {
 	Entries []*EntryProxyer
 
 	Added   func(dbus.ObjectPath)
 	Removed func(string)
+}
+
+func (m *Manager) GetDBusInfo() dbus.DBusInfo {
+	return dbus.DBusInfo{
+		"dde.dock.EntryManager",
+		"/dde/dock/EntryManager",
+		"dde.dock.EntryManager",
+	}
 }
 
 func NewManager() *Manager {
