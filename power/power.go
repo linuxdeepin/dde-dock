@@ -454,7 +454,7 @@ func (power *Power) engineButton() {
 }
 
 func (power *Power) actionNothing() {
-	if power.deepinSession {
+	if power.deepinSession != nil {
 		power.actionInteractive()
 	} else {
 		fmt.Print("actionNothing() do nothing")
