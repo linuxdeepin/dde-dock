@@ -10,3 +10,4 @@ test_*
 .test
 */*.test
 grub2/grub2
+themes/themes
