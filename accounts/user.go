@@ -122,6 +122,12 @@ func (op *UserManager) DeleteHistoryIcon(icon string) {
 }
 
 func newUserManager(uid string) *UserManager {
+        defer func() {
+                if err := recover(); err != nil {
+                        logObject.Info("Recover Error: %v\n", err)
+                }
+        }()
+
         m := &UserManager{}
 
         m.Uid = uid

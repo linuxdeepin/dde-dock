@@ -1,183 +1,188 @@
 package main
 
 import (
-	"dbus/com/deepin/api/setdatetime"
-	"dlib"
-	"dlib/dbus"
-	"dlib/dbus/property"
-	"dlib/gio-2.0"
-	dlogger "dlib/logger"
-	"github.com/howeyc/fsnotify"
-	"os"
+        "dbus/com/deepin/api/setdatetime"
+        libutils "dbus/com/deepin/api/utils"
+        "dlib"
+        "dlib/dbus"
+        "dlib/dbus/property"
+        "dlib/gio-2.0"
+        dlogger "dlib/logger"
+        "github.com/howeyc/fsnotify"
+        "os"
 )
 
 const (
-	_DATE_TIME_DEST = "com.deepin.daemon.DateAndTime"
-	_DATE_TIME_PATH = "/com/deepin/daemon/DateAndTime"
-	_DATA_TIME_IFC  = "com.deepin.daemon.DateAndTime"
+        _DATE_TIME_DEST = "com.deepin.daemon.DateAndTime"
+        _DATE_TIME_PATH = "/com/deepin/daemon/DateAndTime"
+        _DATA_TIME_IFC  = "com.deepin.daemon.DateAndTime"
 
-	_DATE_TIME_SCHEMA = "com.deepin.dde.datetime"
-	_TIME_ZONE_FILE   = "/etc/timezone"
+        _DATE_TIME_SCHEMA = "com.deepin.dde.datetime"
+        _TIME_ZONE_FILE   = "/etc/timezone"
 )
 
 var (
-	busConn      *dbus.Conn
-	dateSettings = gio.NewSettings(_DATE_TIME_SCHEMA)
+        busConn      *dbus.Conn
+        dateSettings = gio.NewSettings(_DATE_TIME_SCHEMA)
 
-	setDate     *setdatetime.SetDateTime
-	zoneWatcher *fsnotify.Watcher
-	logger      = dlogger.NewLogger("dde-daemon/datetime")
+        objUtils    *libutils.Utils
+        setDate     *setdatetime.SetDateTime
+        zoneWatcher *fsnotify.Watcher
+        logger      = dlogger.NewLogger("dde-daemon/datetime")
 )
 
 type Manager struct {
-	AutoSetTime      *property.GSettingsBoolProperty `access:"readwrite"`
-	Use24HourDisplay *property.GSettingsBoolProperty `access:"readwrite"`
-	CurrentTimezone  string
-	UserTimezoneList []string
+        AutoSetTime      *property.GSettingsBoolProperty `access:"readwrite"`
+        Use24HourDisplay *property.GSettingsBoolProperty `access:"readwrite"`
+        CurrentTimezone  string
+        UserTimezoneList []string
 }
 
 func (op *Manager) SetDate(d string) (bool, error) {
-	ret, err := setDate.SetCurrentDate(d)
-	if err != nil {
-		logger.Warning("Set Date - '%s' Failed: %s\n",
-			d, err)
-		return false, err
-	}
-	return ret, nil
+        ret, err := setDate.SetCurrentDate(d)
+        if err != nil {
+                logger.Warning("Set Date - '%s' Failed: %s\n",
+                        d, err)
+                return false, err
+        }
+        return ret, nil
 }
 
 func (op *Manager) SetTime(t string) (bool, error) {
-	ret, err := setDate.SetCurrentTime(t)
-	if err != nil {
-		logger.Warning("Set Time - '%s' Failed: %s\n",
-			t, err)
-		return false, err
-	}
-	return ret, nil
+        ret, err := setDate.SetCurrentTime(t)
+        if err != nil {
+                logger.Warning("Set Time - '%s' Failed: %s\n",
+                        t, err)
+                return false, err
+        }
+        return ret, nil
 }
 
 func (op *Manager) TimezoneCityList() map[string]string {
-	//return getZoneCityList()
-	return zoneCityMap
+        //return getZoneCityList()
+        return zoneCityMap
 }
 
 func (op *Manager) SetTimeZone(zone string) bool {
-	_, err := setDate.SetTimezone(zone)
-	if err != nil {
-		logger.Warning("Set TimeZone - '%s' Failed: %s\n",
-			zone, err)
-		return false
-	}
-	op.setPropName("CurrentTimezone")
-	return true
+        _, err := setDate.SetTimezone(zone)
+        if err != nil {
+                logger.Warning("Set TimeZone - '%s' Failed: %s\n",
+                        zone, err)
+                return false
+        }
+        op.setPropName("CurrentTimezone")
+        return true
 }
 
 func (op *Manager) SyncNtpTime() bool {
-	ret, _ := setDate.SyncNtpTime()
-	return ret
+        ret, _ := setDate.SyncNtpTime()
+        return ret
 }
 
 func (op *Manager) AddUserTimezoneList(tz string) {
-	if !timezoneIsValid(tz) {
-		return
-	}
+        if !timezoneIsValid(tz) {
+                return
+        }
 
-	list := dateSettings.GetStrv("user-timezone-list")
-	if isElementExist(tz, list) {
-		return
-	}
+        list := dateSettings.GetStrv("user-timezone-list")
+        if isElementExist(tz, list) {
+                return
+        }
 
-	list = append(list, tz)
-	dateSettings.SetStrv("user-timezone-list", list)
+        list = append(list, tz)
+        dateSettings.SetStrv("user-timezone-list", list)
 }
 
 func (op *Manager) DeleteTimezoneList(tz string) {
-	if !timezoneIsValid(tz) {
-		return
-	}
+        if !timezoneIsValid(tz) {
+                return
+        }
 
-	list := dateSettings.GetStrv("user-timezone-list")
-	if !isElementExist(tz, list) {
-		return
-	}
+        list := dateSettings.GetStrv("user-timezone-list")
+        if !isElementExist(tz, list) {
+                return
+        }
 
-	tmp := []string{}
-	for _, v := range list {
-		if v == tz {
-			continue
-		}
-		tmp = append(tmp, v)
-	}
-	dateSettings.SetStrv("user-timezone-list", tmp)
+        tmp := []string{}
+        for _, v := range list {
+                if v == tz {
+                        continue
+                }
+                tmp = append(tmp, v)
+        }
+        dateSettings.SetStrv("user-timezone-list", tmp)
 }
 
 func NewDateAndTime() *Manager {
-	m := &Manager{}
+        m := &Manager{}
 
-	m.AutoSetTime = property.NewGSettingsBoolProperty(
-		m, "AutoSetTime",
-		dateSettings, "is-auto-set")
-	m.Use24HourDisplay = property.NewGSettingsBoolProperty(
-		m, "Use24HourDisplay",
-		dateSettings, "is-24hour")
+        m.AutoSetTime = property.NewGSettingsBoolProperty(
+                m, "AutoSetTime",
+                dateSettings, "is-auto-set")
+        m.Use24HourDisplay = property.NewGSettingsBoolProperty(
+                m, "Use24HourDisplay",
+                dateSettings, "is-24hour")
 
-	m.setPropName("CurrentTimezone")
-	m.setPropName("UserTimezoneList")
-	m.listenSettings()
-	m.listenZone()
-	m.AddUserTimezoneList(m.CurrentTimezone)
+        m.setPropName("CurrentTimezone")
+        m.setPropName("UserTimezoneList")
+        m.listenSettings()
+        m.listenZone()
+        m.AddUserTimezoneList(m.CurrentTimezone)
 
-	return m
+        return m
 }
 
 func Init() {
-	var err error
+        var err error
 
-	setDate, err = setdatetime.NewSetDateTime("com.deepin.api.SetDateTime", "/com/deepin/api/SetDateTime")
-	if err != nil {
-		logger.Info("New SetDateTime Failed:", err)
-		panic(err)
-	}
+        setDate, err = setdatetime.NewSetDateTime("com.deepin.api.SetDateTime", "/com/deepin/api/SetDateTime")
+        if err != nil {
+                logger.Info("New SetDateTime Failed:", err)
+                panic(err)
+        }
 
-	zoneWatcher, err = fsnotify.NewWatcher()
-	if err != nil {
-		logger.Info("New FS Watcher Failed:", err)
-		panic(err)
-	}
+        zoneWatcher, err = fsnotify.NewWatcher()
+        if err != nil {
+                logger.Info("New FS Watcher Failed:", err)
+                panic(err)
+        }
 }
 
 func main() {
-	defer func() {
-		if err := recover(); err != nil {
-			logger.Fatal("recover error:", err)
-		}
-	}()
+        defer func() {
+                if err := recover(); err != nil {
+                        logger.Fatal("recover error:", err)
+                }
+        }()
 
-	// configure logger
-	logger.SetRestartCommand("/usr/lib/deepin-daemon/datetime", "--debug")
-	if isElementExist("-d", os.Args) || isElementExist("--debug", os.Args) {
-		logger.SetLogLevel(dlogger.LEVEL_DEBUG)
-	}
+        // configure logger
+        logger.SetRestartCommand("/usr/lib/deepin-daemon/datetime", "--debug")
+        if isElementExist("-d", os.Args) || isElementExist("--debug", os.Args) {
+                logger.SetLogLevel(dlogger.LEVEL_DEBUG)
+        }
 
-	Init()
+        objUtils, _ = libutils.NewUtils("com.deeoin.api.Utils",
+                "/com/deepin/api/Utils")
 
-	date := NewDateAndTime()
-	err := dbus.InstallOnSession(date)
-	if err != nil {
-		logger.Error("Install Session DBus Failed:", err)
-		panic(err)
-	}
+        Init()
 
-	if date.AutoSetTime.Get() {
-		go setDate.SetNtpUsing(true)
-	}
-	dbus.DealWithUnhandledMessage()
-	go dlib.StartLoop()
+        date := NewDateAndTime()
+        err := dbus.InstallOnSession(date)
+        if err != nil {
+                logger.Error("Install Session DBus Failed:", err)
+                panic(err)
+        }
 
-	if err = dbus.Wait(); err != nil {
-		logger.Error("lost dbus session:", err)
-		os.Exit(1)
-	} else {
-		os.Exit(0)
-	}
+        if date.AutoSetTime.Get() {
+                go setDate.SetNtpUsing(true)
+        }
+        dbus.DealWithUnhandledMessage()
+        go dlib.StartLoop()
+
+        if err = dbus.Wait(); err != nil {
+                logger.Error("lost dbus session:", err)
+                os.Exit(1)
+        } else {
+                os.Exit(0)
+        }
 }

@@ -85,14 +85,3 @@ func destroyAllUserObject() {
                 delete(idUserManagerMap, k)
         }
 }
-
-/*
-func printUserInfo(info UserInfo) {
-        fmt.Println("Name:", info.Name)
-        fmt.Println("Uid:", info.Uid)
-        fmt.Println("Gid:", info.Gid)
-        fmt.Println("Home:", info.Home)
-        fmt.Println("Shell:", info.Shell)
-        fmt.Printf("\n")
-}
-*/

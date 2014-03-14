@@ -22,85 +22,95 @@
 package main
 
 import (
-	"dlib/dbus"
-	"dlib/gio-2.0"
+        "dlib/dbus"
+        "dlib/gio-2.0"
+        "os"
 )
 
 func (m *Manager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{_DATE_TIME_DEST, _DATE_TIME_PATH, _DATA_TIME_IFC}
+        return dbus.DBusInfo{_DATE_TIME_DEST, _DATE_TIME_PATH, _DATA_TIME_IFC}
 }
 
 func (op *Manager) setAutoSetTime(auto bool) (bool, error) {
-	var (
-		ret bool
-		err error
-	)
+        var (
+                ret     bool
+                err     error
+        )
 
-	if auto {
-		ret, err = setDate.SetNtpUsing(true)
-	} else {
-		ret, err = setDate.SetNtpUsing(false)
-	}
+        if auto {
+                ret, err = setDate.SetNtpUsing(true)
+        } else {
+                ret, err = setDate.SetNtpUsing(false)
+        }
 
-	if err != nil {
-		logger.Info("Set NTP - %d Failed: %s\n",
-			auto, err)
-		return false, err
-	}
-	return ret, nil
+        if err != nil {
+                logger.Info("Set NTP - %d Failed: %s\n",
+                        auto, err)
+                return false, err
+        }
+        return ret, nil
 }
 
 func (op *Manager) setPropName(name string) {
-	switch name {
-	case "CurrentTimezone":
-		tz, _, err := setDate.GetTimezone()
-		if err != nil {
-			logger.Info("Get Time Zone Failed: %s\n", err)
-			return
-		}
-		op.CurrentTimezone = tz
-		dbus.NotifyChange(op, name)
-	case "UserTimezoneList":
-		list := dateSettings.GetStrv("user-timezone-list")
-		if !strArrayIsEqual(list, op.UserTimezoneList) {
-			op.UserTimezoneList = list
-			dbus.NotifyChange(op, "UserTimezoneList")
-		}
-	}
+        switch name {
+        case "CurrentTimezone":
+                tz, _, err := setDate.GetTimezone()
+                if err != nil {
+                        logger.Info("Get Time Zone Failed: %s\n", err)
+                        return
+                }
+                op.CurrentTimezone = tz
+                dbus.NotifyChange(op, name)
+        case "UserTimezoneList":
+                list := dateSettings.GetStrv("user-timezone-list")
+                if !strArrayIsEqual(list, op.UserTimezoneList) {
+                        op.UserTimezoneList = list
+                        dbus.NotifyChange(op, "UserTimezoneList")
+                }
+        }
 }
 
 func (op *Manager) listenSettings() {
-	dateSettings.Connect("changed::is-auto-set", func(s *gio.Settings, name string) {
-		op.setAutoSetTime(s.GetBoolean("is-auto-set"))
-	})
-	dateSettings.Connect("changed::user-timezone-list", func(s *gio.Settings, name string) {
-		op.setPropName("UserTimezoneList")
-	})
+        dateSettings.Connect("changed::is-auto-set", func(s *gio.Settings, name string) {
+                op.setAutoSetTime(s.GetBoolean("is-auto-set"))
+        })
+        dateSettings.Connect("changed::user-timezone-list", func(s *gio.Settings, name string) {
+                op.setPropName("UserTimezoneList")
+        })
 }
 
 func (op *Manager) listenZone() {
-	err := zoneWatcher.Watch(_TIME_ZONE_FILE)
-	if err != nil {
-		logger.Info("Watch '%s' Failed: %s\n", _TIME_ZONE_FILE, err)
-		return
-	}
+        if ok, _ := objUtils.IsFileExist(_TIME_ZONE_FILE); !ok {
+                f, err := os.Create(_TIME_ZONE_FILE)
+                if err != nil {
+                        logger.Info("Create '%s' Failed: %v\n",
+                                _TIME_ZONE_FILE, err)
+                        return
+                }
+                f.Close()
+        }
+        err := zoneWatcher.Watch(_TIME_ZONE_FILE)
+        if err != nil {
+                logger.Info("Watch '%s' Failed: %s\n", _TIME_ZONE_FILE, err)
+                return
+        }
 
-	go func() {
-		defer zoneWatcher.Close()
-		for {
-			select {
-			case ev := <-zoneWatcher.Event:
-				logger.Info("Watcher Event: ", ev)
-				if ev.IsDelete() {
-					zoneWatcher.Watch(_TIME_ZONE_FILE)
-				} else {
-					//if ev.IsModify() {
-					op.setPropName("CurrentTimezone")
-					//}
-				}
-			case err := <-zoneWatcher.Error:
-				logger.Info("Watcher Event: ", err)
-			}
-		}
-	}()
+        go func() {
+                defer zoneWatcher.Close()
+                for {
+                        select {
+                        case ev := <-zoneWatcher.Event:
+                                logger.Info("Watcher Event: ", ev)
+                                if ev.IsDelete() {
+                                        zoneWatcher.Watch(_TIME_ZONE_FILE)
+                                } else {
+                                        //if ev.IsModify() {
+                                        op.setPropName("CurrentTimezone")
+                                        //}
+                                }
+                        case err := <-zoneWatcher.Error:
+                                logger.Info("Watcher Event: ", err)
+                        }
+                }
+        }()
 }
