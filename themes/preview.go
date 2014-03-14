@@ -38,12 +38,12 @@ func (op *PreviewPath) GtkPath(name string) string {
 
 func (op *PreviewPath) IconPath(name string) string {
         obj := objManager.getThemeObject(name)
-        return getIconPreviewPath(obj.IconTheme)
+        return iconPreviewPath(obj.IconTheme)
 }
 
 func (op *PreviewPath) CursorPath(name string) string {
         obj := objManager.getThemeObject(name)
-        return getCursorPreviewPath(obj.GtkCursorTheme)
+        return cursorPreviewPath(obj.GtkCursorTheme)
 }
 
 func (op *PreviewPath) GetDBusInfo() dbus.DBusInfo {
@@ -74,7 +74,7 @@ func gtkPreviewPath(name string) string {
         return path
 }
 
-func getIconPreviewPath(name string) string {
+func iconPreviewPath(name string) string {
         path := ""
 
         list := getIconThemeList()
@@ -94,7 +94,7 @@ func getIconPreviewPath(name string) string {
         return path
 }
 
-func getCursorPreviewPath(name string) string {
+func cursorPreviewPath(name string) string {
         path := ""
 
         list := getCursorThemeList()
@@ -112,14 +112,4 @@ func getCursorPreviewPath(name string) string {
         path += "/" + name + "/preview.png"
 
         return path
-}
-
-func getThemeType(name string, list []PathInfo) string {
-        for _, l := range list {
-                if name == l.path {
-                        return l.t
-                }
-        }
-
-        return ""
 }

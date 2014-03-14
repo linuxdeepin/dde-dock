@@ -38,12 +38,12 @@ func (op *ThumbPath) GtkPath(name string) string {
 
 func (op *ThumbPath) IconPath(name string) string {
         obj := objManager.getThemeObject(name)
-        return getIconThumbPath(obj.IconTheme)
+        return iconThumbPath(obj.IconTheme)
 }
 
 func (op *ThumbPath) CursorPath(name string) string {
         obj := objManager.getThemeObject(name)
-        return getCursorThumbPath(obj.GtkCursorTheme)
+        return cursorThumbPath(obj.GtkCursorTheme)
 }
 
 func (op *ThumbPath) GetDBusInfo() dbus.DBusInfo {
@@ -74,7 +74,7 @@ func gtkThumbPath(name string) string {
         return path
 }
 
-func getIconThumbPath(name string) string {
+func iconThumbPath(name string) string {
         path := ""
 
         list := getIconThemeList()
@@ -94,7 +94,7 @@ func getIconThumbPath(name string) string {
         return path
 }
 
-func getCursorThumbPath(name string) string {
+func cursorThumbPath(name string) string {
         path := ""
 
         list := getCursorThemeList()
@@ -112,4 +112,14 @@ func getCursorThumbPath(name string) string {
         path += "/" + name + "/thumbnail.png"
 
         return path
+}
+
+func getThemeType(name string, list []PathInfo) string {
+        for _, l := range list {
+                if name == l.path {
+                        return l.t
+                }
+        }
+
+        return ""
 }
