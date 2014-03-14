@@ -1,21 +1,23 @@
 run:=go build -o .out && rm .out
 
 all: 
-	cd grub2/ && $(run)
-	cd keybinding/ && $(run)
 	cd accounts/ &&  $(run)
+	cd audio/ && $(run)
 	cd datetime/ && $(run)
-	cd mime/ && $(run)
 	cd desktop/ && $(run)
-	cd mounts/ && $(run)
 	cd display/ && $(run)
+	cd dock-apps-builder && $(run)
+	cd dock-daemon/ && $(run)
+	cd grub2/ && $(run)
 	cd inputdevices/ && $(run)
-	cd themes/ && $(run)
+	cd keybinding/ && $(run)
+	cd launcher-daemon/ && $(run)
+	cd mime/ && $(run)
+	cd mounts/ && $(run)
 	cd network/ && $(run)
 	cd power/ && $(run)
 	cd system-info/ && $(run)
-	cd audio/ && $(run)
-	cd launcher-daemon/ && $(run)
+	cd themes/ && $(run)
 
 
 update:
