@@ -172,7 +172,7 @@ func NewPower() (*Power, error) {
 
 	power.screensaverSettings = gio.NewSettings(schema_gsettings_screensaver)
 
-	power.getGsettingsProperty()
+	power.getPowerSettingsProperty()
 
 	power.upower, _ = upower.NewUpower("org.freedesktop.UPower", "/org/freedesktop/UPower")
 	if power.upower == nil {
@@ -228,7 +228,7 @@ func (power *Power) OnPropertiesChanged(name string, oldv interface{}) {
 	case "CurrentProfile":
 		fmt.Println("sleep inactive ac timeout: ", power.SleepInactiveAcTimeout.Get())
 		power.powerSettings = power.getPowerSettings()
-		power.getGsettingsProperty()
+		power.getPowerSettingsProperty()
 		dbus.InstallOnSession(power)
 		break
 	}
@@ -289,7 +289,7 @@ func (power *Power) profileChanged() {
 	//case "CurrentProfile":
 	fmt.Println("sleep inactive ac timeout: ", power.SleepInactiveAcTimeout.Get())
 	power.powerSettings = power.getPowerSettings()
-	power.getGsettingsProperty()
+	power.getPowerSettingsProperty()
 	//dbus.InstallOnSession(power)
 	dbus.NotifyChange(power, "CurrentProfile")
 	//break
@@ -544,7 +544,7 @@ func (p *Power) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (power *Power) getGsettingsProperty() int32 {
+func (power *Power) getPowerSettingsProperty() int32 {
 	power.CurrentProfile = property.NewGSettingsStringProperty(
 		power, "CurrentProfile", power.powerProfile, "current-profile")
 	power.ButtonHibernate = property.NewGSettingsStringProperty(
@@ -564,7 +564,9 @@ func (power *Power) getGsettingsProperty() int32 {
 		power, "LidCloseBatteryAction", power.powerSettings, "lid-close-battery-action")
 	power.SleepInactiveAcTimeout = property.NewGSettingsIntProperty(
 		power, "SleepInactiveAcTimeout", power.powerSettings, "sleep-inactive-ac-timeout")
+
 	fmt.Println("settings profile:", power.CurrentProfile.Get(), ",", power.SleepInactiveAcTimeout.Get())
+
 	power.SleepInactiveBatteryTimeout = property.NewGSettingsIntProperty(
 		power, "SleepInactiveBatteryTimeout", power.powerSettings, "sleep-inactive-battery-timeout")
 	power.IdleDelay = property.NewGSettingsIntProperty(
@@ -583,6 +585,8 @@ func (power *Power) getGsettingsProperty() int32 {
 	power.LockEnabled = property.NewGSettingsBoolProperty(
 		power, "LockEnabled", power.screensaverSettings, "lock-enabled")
 
+	power.signalPowerSettingsChange()
+
 	return 0
 }
 
@@ -600,6 +604,25 @@ func (p *Power) getUPowerProperty() int32 {
 	p.State = property.NewWrapProperty(p, "State", p.upowerBattery.State)
 	p.Type = property.NewWrapProperty(p, "Type", p.upowerBattery.Type)
 	return 1
+}
+
+func (power *Power) signalPowerSettingsChange() int32 {
+	dbus.NotifyChange(power, "CurrentProfile")
+	dbus.NotifyChange(power, "ButtonHibernate")
+	dbus.NotifyChange(power, "ButtonPower")
+	dbus.NotifyChange(power, "ButtonSleep")
+	dbus.NotifyChange(power, "ButtonSuspend")
+	dbus.NotifyChange(power, "CriticalBatteryAction")
+	dbus.NotifyChange(power, "LidCloseACAction")
+	dbus.NotifyChange(power, "LidCloseBatteryAction")
+	dbus.NotifyChange(power, "SleepInactiveAcTimeout")
+	dbus.NotifyChange(power, "SleepInactiveBatteryTimeout")
+	dbus.NotifyChange(power, "IdleDelay")
+	dbus.NotifyChange(power, "SleepInactiveAcType")
+	dbus.NotifyChange(power, "SleepInactiveBatteryType")
+	dbus.NotifyChange(power, "LockEnabled")
+
+	return 0
 }
 
 func (power *Power) EnumerateDevices() []dbus.ObjectPath {
