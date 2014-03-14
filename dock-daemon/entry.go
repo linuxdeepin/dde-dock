@@ -26,6 +26,8 @@ type EntryProxyer struct {
 
 	QuickWindowVieable bool
 	Allocation         Rectangle
+
+	Data map[string]string
 }
 
 func (e *EntryProxyer) GetDBusInfo() dbus.DBusInfo {
@@ -54,6 +56,7 @@ func NewEntryProxyer(entryId string) (e *EntryProxyer, err error) {
 	e.QuickWindowVieable = e.core.QuickWindowVieable.Get()
 	r := e.core.Allocation.Get()
 	e.Allocation = Rectangle{r[0].(int16), r[1].(int16), r[2].(uint16), r[3].(uint16)}
+	e.Data = e.core.Data.Get()
 
 	dbus.NotifyChange(e, "ID")
 	dbus.NotifyChange(e, "Type")
@@ -62,6 +65,7 @@ func NewEntryProxyer(entryId string) (e *EntryProxyer, err error) {
 	dbus.NotifyChange(e, "Status")
 	dbus.NotifyChange(e, "QuickWindowVieable")
 	dbus.NotifyChange(e, "Allocation")
+	dbus.NotifyChange(e, "Data")
 
 	// monitor properties changed
 	e.core.ID.ConnectChanged(func() {
@@ -92,6 +96,10 @@ func NewEntryProxyer(entryId string) (e *EntryProxyer, err error) {
 		r := e.core.Allocation.Get()
 		e.Allocation = Rectangle{r[0].(int16), r[1].(int16), r[2].(uint16), r[3].(uint16)}
 		dbus.NotifyChange(e, "Allocation")
+	})
+	e.core.Data.ConnectChanged(func() {
+		e.Data = e.core.Data.Get()
+		dbus.NotifyChange(e, "Data")
 	})
 
 	return

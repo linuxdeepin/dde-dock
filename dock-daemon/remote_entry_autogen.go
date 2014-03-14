@@ -10,6 +10,19 @@ import "fmt"
 import "errors"
 import "strings"
 
+var __conn *dbus.Conn = nil
+
+func getBus() *dbus.Conn {
+	if __conn == nil {
+		var err error
+		__conn, err = dbus.SessionBus()
+		if err != nil {
+			panic(err)
+		}
+	}
+	return __conn
+}
+
 /*prevent compile error*/
 var _ = fmt.Println
 var _ = runtime.SetFinalizer
@@ -32,6 +45,7 @@ type RemoteEntry struct {
 	Status             *dbusPropertyRemoteEntryStatus
 	QuickWindowVieable *dbusPropertyRemoteEntryQuickWindowVieable
 	Allocation         *dbusPropertyRemoteEntryAllocation
+	Data               *dbusPropertyRemoteEntryData
 }
 
 func (obj RemoteEntry) _createSignalChan() chan *dbus.Signal {
@@ -305,6 +319,32 @@ func (this *dbusPropertyRemoteEntryAllocation) GetType() reflect.Type {
 	return reflect.TypeOf((*[]interface{})(nil)).Elem()
 }
 
+type dbusPropertyRemoteEntryData struct {
+	*property.BaseObserver
+	core *dbus.Object
+}
+
+func (this *dbusPropertyRemoteEntryData) SetValue(notwritable interface{}) {
+	fmt.Println("dde.dock.Entry.Data is not writable")
+}
+
+func (this *dbusPropertyRemoteEntryData) Get() map[string]string {
+	return this.GetValue().(map[string]string)
+}
+func (this *dbusPropertyRemoteEntryData) GetValue() interface{} /*map[string]string*/ {
+	var r dbus.Variant
+	err := this.core.Call("org.freedesktop.DBus.Properties.Get", 0, "dde.dock.Entry", "Data").Store(&r)
+	if err == nil && r.Signature().String() == "a{ss}" {
+		return r.Value().(map[string]string)
+	} else {
+		fmt.Println("dbusProperty:Data error:", err, "at dde.dock.Entry")
+		return *new(map[string]string)
+	}
+}
+func (this *dbusPropertyRemoteEntryData) GetType() reflect.Type {
+	return reflect.TypeOf((*map[string]string)(nil)).Elem()
+}
+
 func NewRemoteEntry(destName string, path dbus.ObjectPath) (*RemoteEntry, error) {
 	if !path.IsValid() {
 		return nil, errors.New("The path of '" + string(path) + "' is invalid.")
@@ -326,6 +366,7 @@ func NewRemoteEntry(destName string, path dbus.ObjectPath) (*RemoteEntry, error)
 	obj.Status = &dbusPropertyRemoteEntryStatus{&property.BaseObserver{}, core}
 	obj.QuickWindowVieable = &dbusPropertyRemoteEntryQuickWindowVieable{&property.BaseObserver{}, core}
 	obj.Allocation = &dbusPropertyRemoteEntryAllocation{&property.BaseObserver{}, core}
+	obj.Data = &dbusPropertyRemoteEntryData{&property.BaseObserver{}, core}
 
 	getBus().BusObject().Call("org.freedesktop.DBus.AddMatch", 0, "type='signal',path='"+string(path)+"',interface='org.freedesktop.DBus.Properties',sender='"+destName+"',member='PropertiesChanged'")
 	getBus().BusObject().Call("org.freedesktop.DBus.AddMatch", 0, "type='signal',path='"+string(path)+"',interface='dde.dock.Entry',sender='"+destName+"',member='PropertiesChanged'")
@@ -364,6 +405,9 @@ func NewRemoteEntry(destName string, path dbus.ObjectPath) (*RemoteEntry, error)
 
 					} else if key == "Allocation" {
 						obj.Allocation.Notify()
+
+					} else if key == "Data" {
+						obj.Data.Notify()
 					}
 				}
 			} else if v.Name == "dde.dock.Entry.PropertiesChanged" && len(v.Body) == 1 && reflect.TypeOf(v.Body[0]) == typeKeyValues {
@@ -389,6 +433,9 @@ func NewRemoteEntry(destName string, path dbus.ObjectPath) (*RemoteEntry, error)
 
 					} else if key == "Allocation" {
 						obj.Allocation.Notify()
+
+					} else if key == "Data" {
+						obj.Data.Notify()
 					}
 				}
 			}
@@ -397,17 +444,4 @@ func NewRemoteEntry(destName string, path dbus.ObjectPath) (*RemoteEntry, error)
 
 	runtime.SetFinalizer(obj, func(_obj *RemoteEntry) { DestroyRemoteEntry(_obj) })
 	return obj, nil
-}
-
-var __conn *dbus.Conn = nil
-
-func getBus() *dbus.Conn {
-	if __conn == nil {
-		var err error
-		__conn, err = dbus.SessionBus()
-		if err != nil {
-			panic(err)
-		}
-	}
-	return __conn
 }

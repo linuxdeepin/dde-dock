@@ -43,5 +43,6 @@
 	<property name="Status" type="i" access="read"></property>
 	<property name="QuickWindowVieable" type="b" access="read"></property>
 	<property name="Allocation" type="(nnqq)" access="read"></property>
+        <property name="Data" type="a{ss}" access="read"></property>
     </interface>
 </node>
