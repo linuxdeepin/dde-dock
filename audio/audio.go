@@ -17,6 +17,20 @@ import (
 	"unsafe"
 )
 
+const (
+	MEDIA_KEY_DEST = "com.deepin.daemon.KeyBinding"
+	MEDIA_KEY_PATH = "/com/deepin/daemon/MediaKey"
+	MEDIA_KEY_IFC  = "com.deepin.daemon.MediaKey"
+
+	MEDIA_KEY_SCHEMA_ID = "com.deepin.dde.key-binding.mediakey"
+)
+
+const (
+	AUDIO_MUTE = "AudioMute"
+	AUDIO_UP   = "AudioUp"
+	AUDIO_DOWN = "AudioDOwn"
+)
+
 //var l = logger.NewLogger("audio")
 
 type Audio struct {
@@ -746,6 +760,46 @@ func (audio *Audio) OnPropertiesChanged(name string, oldv interface{}) {
 	}
 }
 
+func (audio *Audio) getMediaKey() *dbus.Object {
+	conn, err := dbus.SessionBus()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	obj := conn.Object(MEDIA_KEY_DEST, MEDIA_KEY_PATH)
+
+	return obj
+}
+
+func (audio *Audio) listenMediaKey() {
+	go func() {
+		conn, err := dbus.SessionBus()
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		conn.BusObject().Call("org.freedesktop.DBus.AddMatch", 0,
+			"type='signal',sender='com.deepin.daemon.KeyBinding',path='/com/deepin/daemon/MediaKey',interface='com.deepin.daemon.MediaKey',member='"+AUDIO_MUTE+"'")
+		conn.BusObject().Call("org.freedesktop.DBus.AddMatch", 0,
+			"type='signal',sender='com.deepin.daemon.KeyBinding',path='/com/deepin/daemon/MediaKey',interface='com.deepin.daemon.MediaKey',member='"+AUDIO_UP+"'")
+		conn.BusObject().Call("org.freedesktop.DBus.AddMatch", 0,
+			"type='signal',sender='com.deepin.daemon.KeyBinding',path='/com/deepin/daemon/MediaKey',interface='com.deepin.daemon.MediaKey',member='"+AUDIO_DOWN+"'")
+		c := make(chan *dbus.Signal, 16)
+		conn.Signal(c)
+		for v := range c {
+			fmt.Println(v)
+			switch v.Name {
+			case AUDIO_MUTE:
+				break
+			case AUDIO_UP:
+				break
+			case AUDIO_DOWN:
+				break
+			}
+		}
+	}()
+}
+
 func (audio *Audio) GetCards() []*Card {
 	n := len(audio.cards)
 	cards := make([]*Card, n)
@@ -791,6 +845,10 @@ func (audio *Audio) getSinks() map[int]*Sink {
 	}
 
 	return audio.sinks
+}
+
+func (audio *Audio) GetDefaultSink() dbus.ObjectPath {
+
 }
 
 func (audio *Audio) GetSources() []*Source {
