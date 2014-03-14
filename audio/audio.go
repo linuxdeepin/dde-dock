@@ -786,10 +786,16 @@ func (audio *Audio) listenMediaKey() {
 			"type='signal',sender='com.deepin.daemon.KeyBinding',path='/com/deepin/daemon/MediaKey',interface='com.deepin.daemon.MediaKey',member='"+AUDIO_DOWN+"'")
 		c := make(chan *dbus.Signal, 16)
 		conn.Signal(c)
+		var sink *Sink
 		for v := range c {
 			fmt.Println(v)
+			sink = audio.GetDefaultSink()
 			switch v.Name {
 			case AUDIO_MUTE:
+				if (v.Body)[0].(bool) {
+					//toggle mute when button released
+					sink.SetSinkMute(!sink.Mute)
+				}
 				break
 			case AUDIO_UP:
 				break
@@ -847,8 +853,11 @@ func (audio *Audio) getSinks() map[int]*Sink {
 	return audio.sinks
 }
 
-func (audio *Audio) GetDefaultSink() dbus.ObjectPath {
-
+func (audio *Audio) GetDefaultSink() *Sink {
+	sinks := audio.Sinks
+	defaultN := audio.DefaultSink
+	defaultSink := sinks[int(defaultN)]
+	return defaultSink
 }
 
 func (audio *Audio) GetSources() []*Source {
