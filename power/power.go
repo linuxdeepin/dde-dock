@@ -13,7 +13,7 @@ package main
 //      GError *error = NULL;
 //      gtk_init(0,NULL);
 //      g_setenv("G_MESSAGES_DEBUG","all",FALSE);
-//      notify_init("gsd-power-manager");
+//      notify_init("deepin power manager");
 //      XInitThreads();
 //      gsd_power_manager_start(manager,&error);
 //      return 0;

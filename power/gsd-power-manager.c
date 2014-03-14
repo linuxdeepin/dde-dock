@@ -1238,9 +1238,9 @@ engine_profile_changed_cb (GSettings *settings,
         }
     }
 
+    g_debug("restarting power manager\n");
     gsd_power_manager_stop(manager);
 
-    g_debug("restarting power manager\n");
     gsd_power_manager_start(manager, &error);
 
     return;
