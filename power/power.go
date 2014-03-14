@@ -172,6 +172,8 @@ func NewPower() (*Power, error) {
 
 	power.screensaverSettings = gio.NewSettings(schema_gsettings_screensaver)
 
+	power.deepinSession = power.getDeepinSession()
+
 	power.getPowerSettingsProperty()
 
 	power.upower, _ = upower.NewUpower("org.freedesktop.UPower", "/org/freedesktop/UPower")
