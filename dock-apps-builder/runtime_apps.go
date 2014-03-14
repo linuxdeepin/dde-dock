@@ -1,16 +1,36 @@
 package main
 
-import "fmt"
-import "github.com/BurntSushi/xgbutil"
 import "github.com/BurntSushi/xgb/xproto"
 import "github.com/BurntSushi/xgbutil/ewmh"
+import "bytes"
+import "encoding/base64"
+import "github.com/BurntSushi/xgbutil"
 import "github.com/BurntSushi/xgbutil/icccm"
-
-var XU, _ = xgbutil.NewConn()
+import "github.com/BurntSushi/xgbutil/xwindow"
+import "github.com/BurntSushi/xgbutil/xevent"
+import "github.com/BurntSushi/xgbutil/xgraphics"
 
 type RuntimeApp struct {
-	xid   xproto.Window
+	Id    string
+	xwin  *xwindow.Window
 	Title string
+	Icon  string
+}
+
+func find_app_id_by_xid(xid xproto.Window) string {
+	pid, _ := ewmh.WmPidGet(XU, xid)
+	iconName, _ := ewmh.WmIconNameGet(XU, xid)
+	name, _ := ewmh.WmNameGet(XU, xid)
+	wmClass, _ := icccm.WmClassGet(XU, xid)
+	var wmInstance, wmClassName string
+	if wmClass != nil {
+		wmInstance = wmClass.Instance
+		wmClassName = wmClass.Class
+	}
+	if pid == 0 {
+	} else {
+	}
+	return find_app_id(pid, name, wmInstance, wmClassName, iconName)
 }
 
 func contains(haystack []string, needle string) bool {
@@ -22,45 +42,61 @@ func contains(haystack []string, needle string) bool {
 	return false
 }
 
-func NewRuntimeApp(xid xproto.Window) *RuntimeApp {
+func isNormalWindow(xid xproto.Window) bool {
 	types, _ := ewmh.WmWindowTypeGet(XU, xid)
-	if !contains(types, "_NET_WM_WINDOW_TYPE_NORMAL") {
+	if contains(types, "_NET_WM_WINDOW_TYPE_NORMAL") {
+		return true
+	} else {
+		return false
+	}
+}
+
+func NewRuntimeApp(xid xproto.Window, appId string) *RuntimeApp {
+	if !isNormalWindow(xid) {
 		return nil
 	}
 
 	app := &RuntimeApp{}
-	app.xid = xid
+	app.xwin = xwindow.New(XU, xid)
+	app.xwin.Listen(xproto.EventMaskPropertyChange | xproto.EventMaskStructureNotify | xproto.EventMaskVisibilityChange)
 	app.Title, _ = ewmh.WmNameGet(XU, xid)
-	app.update_appid()
+	xevent.DestroyNotifyFun(func(XU *xgbutil.XUtil, ev xevent.DestroyNotifyEvent) {
+		MANAGER.destroyRuntimeApp(app)
+	}).Connect(XU, xid)
+	xevent.PropertyNotifyFun(func(XU *xgbutil.XUtil, ev xevent.PropertyNotifyEvent) {
+		switch ev.Atom {
+		case ATOM_WINDOW_ICON:
+			app.updateIcon()
+		case ATOM_WINDOW_NAME:
+			app.updateWmClass()
+		case ATOM_WINDOW_STATE:
+			app.updateState()
+		case ATOM_WINDOW_TYPE:
+			if !isNormalWindow(ev.Window) {
+				MANAGER.destroyRuntimeApp(app)
+			}
+		}
+	}).Connect(XU, xid)
+	app.updateIcon()
+	app.updateWmClass()
+	app.updateState()
 	return app
 }
-
-func (app *RuntimeApp) update_appid() {
-	pid, _ := ewmh.WmPidGet(XU, app.xid)
-	iconName, _ := ewmh.WmIconNameGet(XU, app.xid)
-	name, _ := ewmh.WmNameGet(XU, app.xid)
-	wmClass, _ := icccm.WmClassGet(XU, app.xid)
-	var wmInstance, wmClassName string
-	if wmClass != nil {
-		wmInstance = wmClass.Instance
-		wmClassName = wmClass.Class
-	}
-	if pid == 0 {
+func (app *RuntimeApp) updateIcon() {
+	icon, err := xgraphics.FindIcon(XU, app.xwin.Id, 48, 48)
+	if err == nil {
+		buf := bytes.NewBuffer(nil)
+		icon.WritePng(buf)
+		app.Icon = "data:image/png;base64," + base64.StdEncoding.EncodeToString(buf.Bytes())
 	} else {
-	}
-	appid := find_app_id(pid, name, wmInstance, wmClassName, iconName)
-	fmt.Println("INFO:", pid, name, wmInstance, wmClassName, iconName, "RESULT:", appid)
-}
-
-func monitor() {
-	list, _ := ewmh.ClientListGet(XU)
-	for _, xid := range list {
-		if app := NewRuntimeApp(xid); app != nil {
-			fmt.Println(app)
-		}
+		name, _ := ewmh.WmIconNameGet(XU, app.xwin.Id)
+		app.Icon = name
 	}
 }
+func (app *RuntimeApp) updateWmClass() {
+}
+func (app *RuntimeApp) updateState() {
+}
 
-func init() {
-	monitor()
+func (app *RuntimeApp) Destroy() {
 }

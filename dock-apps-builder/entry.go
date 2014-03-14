@@ -1,7 +1,6 @@
 package main
 
 import "dlib/dbus"
-import "dlib/gio-2.0"
 import "crypto/md5"
 import "encoding/hex"
 
@@ -12,8 +11,9 @@ type Rectangle struct {
 	Width, Height uint16
 }
 
-type DesktopEntry struct {
-	core *gio.DesktopAppInfo
+type AppEntry struct {
+	nApp *NormalApp
+	rApp *RuntimeApp
 	ID   string
 	Type string
 
@@ -28,30 +28,22 @@ type DesktopEntry struct {
 	Data map[string]string
 }
 
-func NewDesktopEntry(id string) *DesktopEntry {
-	e := &DesktopEntry{}
-	e.core = gio.NewDesktopAppInfo(id)
-	if e.core == nil {
-		return nil
-	}
-	e.Tooltip = e.core.GetName()
-	e.ID = e.core.GetId()
-	e.Icon = e.core.GetIcon().ToString()
+func NewAppEntry(id string) *AppEntry {
+	e := &AppEntry{}
 	return e
 }
 
-func (e *DesktopEntry) QuickWindow(x, y int32) {}
-func (e *DesktopEntry) ContextMenu(x, y int32) {}
-func (e *DesktopEntry) Activate(x, y int32) {
-	e.core.Launch(nil, nil)
+func (e *AppEntry) QuickWindow(x, y int32) {}
+func (e *AppEntry) ContextMenu(x, y int32) {}
+func (e *AppEntry) Activate(x, y int32) {
 }
-func (e *DesktopEntry) SecondaryActivate(x, y int32)        {}
-func (e *DesktopEntry) OnDragEnter(x, y int32, data string) {}
-func (e *DesktopEntry) OnDragLeave(x, y int32, data string) {}
-func (e *DesktopEntry) OnDragOver(x, y int32, data string)  {}
-func (e *DesktopEntry) OnDragDrop(x, y int32, data string)  {}
+func (e *AppEntry) SecondaryActivate(x, y int32)        {}
+func (e *AppEntry) OnDragEnter(x, y int32, data string) {}
+func (e *AppEntry) OnDragLeave(x, y int32, data string) {}
+func (e *AppEntry) OnDragOver(x, y int32, data string)  {}
+func (e *AppEntry) OnDragDrop(x, y int32, data string)  {}
 
-func (e *DesktopEntry) GetDBusInfo() dbus.DBusInfo {
+func (e *AppEntry) GetDBusInfo() dbus.DBusInfo {
 	hasher := md5.New()
 	hasher.Write([]byte(e.ID))
 	// DBusObjectPath can't be start with digital number
@@ -61,13 +53,4 @@ func (e *DesktopEntry) GetDBusInfo() dbus.DBusInfo {
 		"/dde/dock/entry/v1/" + id,
 		"dde.dock.Entry",
 	}
-}
-
-func main() {
-	for _, id := range loadAll() {
-		if e := NewDesktopEntry(id + ".desktop"); e != nil {
-			dbus.InstallOnSession(e)
-		}
-	}
-	dbus.Wait()
 }

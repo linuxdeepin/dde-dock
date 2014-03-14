@@ -1,5 +1,7 @@
 package main
 
+// +build ignore
+
 // this file should be rewrite
 
 //#cgo pkg-config: glib-2.0 gio-unix-2.0 gtk+-3.0
