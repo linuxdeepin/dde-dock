@@ -19,49 +19,31 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-#ifndef _XID2AID_H__
-#define _XID2AID_H__
-
 char* guest_app_id(long s_pid, const char* instance_name, const char* wmname, const char* wmclass, const char* icon_name);
+
 #include <glib.h>
 #include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 #include <gio/gdesktopappinfo.h>
+#include <glib/gprintf.h>
+#include <sys/stat.h>
+#include <stdio.h>
+#include <gtk/gtk.h>
+#include <fcntl.h>
 
-#define BG_BLUR_PICT_CACHE_DIR "gaussian-background"
-#define NOUSED(p) do { (void)(p); } while (0)
 
-#ifndef M_PI
-#define M_PI 3.141592653589793
-#endif
 
 char* get_name_by_pid(int pid);
 
-gboolean write_to_file(const char* path, const char* content, size_t size/* if 0 will use strlen(content)*/);
-
 GKeyFile* load_app_config(const char* name);
-
-void save_key_file(GKeyFile*, const char* path); /*careful, this function didn't free the key file*/
-void save_app_config(GKeyFile*, const char* name); /*careful, this function didn't free the key file*/
-
-char* to_lower_inplace(char* str);
-gboolean file_filter(const char *file_name);
-char* get_desktop_file_basename(GDesktopAppInfo* file);  // g_free the return value
-GDesktopAppInfo* guess_desktop_file(char const* app_id);
 
 char* get_basename_without_extend_name(char const* path);
 gboolean is_deepin_icon(char const* icon_path);
 char* check_absolute_path_icon(char const* app_id, char const* icon_path);
 gboolean is_chrome_app(char const* name);
-char* bg_blur_pict_get_dest_path (const char* src_uri);
-#endif
 
 
-
-#include <string.h>
-#include <glib.h>
-#include <unistd.h>
-
-#include <glib.h>
 
 enum APPID_FINDER_FILTER {
     APPID_FILTER_ARGS=1,
@@ -419,38 +401,6 @@ char* guest_app_id(long s_pid, const char* instance_name, const char* wmname, co
     return app_id;
 }
 
-/**
- * Copyright (c) 2011 ~ 2012 Deepin, Inc.
- *               2011 ~ 2012 snyh
- *
- * Author:      snyh <snyh@snyh.org>
- * Maintainer:  snyh <snyh@snyh.org>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
- **/
-#include <glib.h>
-#include <glib/gprintf.h>
-#include <sys/stat.h>
-#include <stdio.h>
-#include <gtk/gtk.h>
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
-
-
-#include <unistd.h>
-#include <fcntl.h>
 char* get_name_by_pid(int pid)
 {
 #define LEN 1024
@@ -488,74 +438,6 @@ GKeyFile* load_app_config(const char* name)
     /* no need to test file exitstly */
     return key;
 }
-
-void save_key_file(GKeyFile* key, const char* path)
-{
-    gsize size;
-    gchar* content = g_key_file_to_data(key, &size, NULL);
-    write_to_file(path, content, size);
-    g_free(content);
-}
-
-void save_app_config(GKeyFile* key, const char* name)
-{
-    char* path = g_build_filename(g_get_user_config_dir(), name, NULL);
-    save_key_file(key, path);
-    g_free(path);
-}
-
-gboolean write_to_file(const char* path, const char* content, size_t size/* if 0 will use strlen(content)*/)
-{
-    char* dir = g_path_get_dirname(path);
-    if (g_file_test(dir, G_FILE_TEST_IS_REGULAR)) {
-        g_free(dir);
-        g_warning("write content to %s, but %s is not directory!!\n",
-                path, dir);
-        return FALSE;
-    } else if (!g_file_test(dir, G_FILE_TEST_EXISTS)) {
-        if (g_mkdir_with_parents(dir, 0755) == -1) {
-            g_warning("write content to %s, but create %s is failed!!\n",
-                    path, dir);
-            return FALSE;
-        }
-    }
-    g_free(dir);
-
-    if (size == 0) {
-        size = strlen(content);
-    }
-    FILE* f = fopen(path, "w");
-    if (f != NULL) {
-        fwrite(content, sizeof(char), size, f);
-        fclose(f);
-        return TRUE;
-    } else {
-        return FALSE;
-    }
-}
-char* to_lower_inplace(char* str)
-{
-    g_assert(str != NULL);
-    size_t i = 0;
-    for (; i<strlen(str); i++)
-        str[i] = g_ascii_tolower(str[i]);
-    return str;
-}
-
-char* get_desktop_file_basename(GDesktopAppInfo* file)
-{
-    const char* filename = g_desktop_app_info_get_filename(file);
-    return g_path_get_basename(filename);
-}
-
-GDesktopAppInfo* guess_desktop_file(char const* app_id)
-{
-    char* basename = g_strconcat(app_id, ".desktop", NULL);
-    GDesktopAppInfo* desktop_file = g_desktop_app_info_new(basename);
-    g_free(basename);
-    return desktop_file;
-}
-
 
 char* get_basename_without_extend_name(char const* path)
 {
@@ -644,34 +526,3 @@ gboolean is_chrome_app(char const* name)
 {
     return g_str_has_prefix(name, "chrome-");
 }
-
-
-char* bg_blur_pict_get_dest_path (const char* src_uri)
-{
-    g_debug ("[%s] bg_blur_pict_get_dest_path: src_uri=%s", __func__, src_uri);
-    g_return_val_if_fail (src_uri != NULL, NULL);
-
-    //1. calculate original picture md5
-    GChecksum* checksum;
-    checksum = g_checksum_new (G_CHECKSUM_MD5);
-    g_checksum_update (checksum, (const guchar *) src_uri, strlen (src_uri));
-
-    guint8 digest[16];
-    gsize digest_len = sizeof (digest);
-    g_checksum_get_digest (checksum, digest, &digest_len);
-    g_assert (digest_len == 16);
-
-    //2. build blurred picture path
-    char* file;
-    file = g_strconcat (g_checksum_get_string (checksum), ".png", NULL);
-    g_checksum_free (checksum);
-    char* path;
-    path = g_build_filename (g_get_user_cache_dir (),
-                    BG_BLUR_PICT_CACHE_DIR,
-                    file,
-                    NULL);
-    g_free (file);
-
-    return path;
-}
-
