@@ -62,8 +62,9 @@ func (m *Manager) runtimeAppChangged(xids []xproto.Window) {
 	// 1. create newfound RuntimeApps
 	for _, xid := range xids {
 		appId := find_app_id_by_xid(xid)
-		if _, ok := m.runtimeApps[appId]; ok {
+		if rApp, ok := m.runtimeApps[appId]; ok {
 			willBeDestroied[appId] = nil
+			rApp.attachXid(xid)
 		} else {
 			m.createRuntimeApp(xid)
 		}

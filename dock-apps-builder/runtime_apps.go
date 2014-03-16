@@ -10,15 +10,33 @@ import "github.com/BurntSushi/xgbutil/xwindow"
 import "github.com/BurntSushi/xgbutil/xevent"
 import "github.com/BurntSushi/xgbutil/xgraphics"
 
+type WindowInfo struct {
+	Xid   xproto.Window
+	Title string
+	Icon  string
+}
 type RuntimeApp struct {
 	Id string
 	//TODO: multiple xid window
-	xwin  *xwindow.Window
-	Title string
-	Icon  string
+	xids map[xproto.Window]*WindowInfo
+
+	CurrentInfo *WindowInfo
 
 	state     []string
 	changedCB func()
+}
+
+func NewRuntimeApp(xid xproto.Window, appId string) *RuntimeApp {
+	if !isNormalWindow(xid) {
+		return nil
+	}
+	app := &RuntimeApp{
+		Id:   appId,
+		xids: make(map[xproto.Window]*WindowInfo),
+	}
+	app.attachXid(xid)
+	app.CurrentInfo = app.xids[xid]
+	return app
 }
 
 func (app *RuntimeApp) setChangedCB(cb func()) {
@@ -66,79 +84,105 @@ func isNormalWindow(xid xproto.Window) bool {
 	}
 }
 
-func NewRuntimeApp(xid xproto.Window, appId string) *RuntimeApp {
-	if !isNormalWindow(xid) {
-		return nil
+func (app *RuntimeApp) updateIcon(xid xproto.Window) {
+	icon, err := xgraphics.FindIcon(XU, xid, 48, 48)
+	if err == nil {
+		buf := bytes.NewBuffer(nil)
+		icon.WritePng(buf)
+		app.xids[xid].Icon = "data:image/png;base64," + base64.StdEncoding.EncodeToString(buf.Bytes())
+	} else {
+		name, _ := ewmh.WmIconNameGet(XU, xid)
+		app.xids[xid].Icon = name
+	}
+}
+func (app *RuntimeApp) updateWmClass(xid xproto.Window) {
+	if name, err := ewmh.WmNameGet(XU, xid); err == nil {
+		app.xids[xid].Title = name
 	}
 
-	app := &RuntimeApp{Id: appId}
-	app.xwin = xwindow.New(XU, xid)
-	app.xwin.Listen(xproto.EventMaskPropertyChange | xproto.EventMaskStructureNotify | xproto.EventMaskVisibilityChange)
-	app.Title, _ = ewmh.WmNameGet(XU, xid)
+}
+func (app *RuntimeApp) updateState(xid xproto.Window) {
+	//TODO: handle state
+	app.state, _ = ewmh.WmStateGet(XU, xid)
+}
+
+func (app *RuntimeApp) Activate(x, y int32) error {
+	//TODO: handle multiple xids
+	switch {
+	case !contains(app.state, "_NET_WM_STATE_FOCUSED"):
+		ewmh.ActiveWindowSet(XU, app.CurrentInfo.Xid)
+	case contains(app.state, "_NET_WM_STATE_FOCUSED"):
+		s, err := icccm.WmStateGet(XU, app.CurrentInfo.Xid)
+		if err != nil {
+			LOGGER.Info("WmStateGetError:", s, err)
+			return err
+		}
+		switch s.State {
+		case icccm.StateIconic:
+			s.State = icccm.StateNormal
+			icccm.WmStateSet(XU, app.CurrentInfo.Xid, s)
+		case icccm.StateNormal:
+			activeXid, _ := ewmh.ActiveWindowGet(XU)
+			if activeXid == app.CurrentInfo.Xid {
+				s.State = icccm.StateIconic
+				icccm.WmStateSet(XU, app.CurrentInfo.Xid, s)
+			}
+		}
+
+	}
+	return nil
+}
+
+func (app *RuntimeApp) detachXid(xid xproto.Window) {
+	if info, ok := app.xids[xid]; ok {
+		if len(app.xids) == 1 {
+			MANAGER.destroyRuntimeApp(app)
+		} else {
+			delete(app.xids, xid)
+			if info == app.CurrentInfo {
+				for _, nextInfo := range app.xids {
+					if nextInfo != nil {
+						app.CurrentInfo = nextInfo
+						app.notifyChanged()
+					} else {
+						MANAGER.destroyRuntimeApp(app)
+					}
+					break
+				}
+			}
+		}
+	}
+}
+func (app *RuntimeApp) attachXid(xid xproto.Window) {
+	xwin := xwindow.New(XU, xid)
+	xwin.Listen(xproto.EventMaskPropertyChange | xproto.EventMaskStructureNotify | xproto.EventMaskVisibilityChange)
+	winfo := &WindowInfo{Xid: xid}
+	winfo.Title, _ = ewmh.WmNameGet(XU, xid)
 	xevent.DestroyNotifyFun(func(XU *xgbutil.XUtil, ev xevent.DestroyNotifyEvent) {
-		MANAGER.destroyRuntimeApp(app)
+		xwin.Listen(xproto.EventMaskNoEvent)
+		app.detachXid(xid)
 	}).Connect(XU, xid)
 	xevent.PropertyNotifyFun(func(XU *xgbutil.XUtil, ev xevent.PropertyNotifyEvent) {
 		switch ev.Atom {
 		case ATOM_WINDOW_ICON:
-			app.updateIcon()
+			app.updateIcon(xid)
 		case ATOM_WINDOW_NAME:
-			app.updateWmClass()
+			app.updateWmClass(xid)
 		case ATOM_WINDOW_STATE:
-			app.updateState()
+			app.updateState(xid)
 		case ATOM_WINDOW_TYPE:
 			if !isNormalWindow(ev.Window) {
-				MANAGER.destroyRuntimeApp(app)
+				xwin.Listen(xproto.EventMaskNoEvent)
+				app.detachXid(xid)
 			}
 		default:
 			return
 		}
 		app.notifyChanged()
 	}).Connect(XU, xid)
-	app.updateIcon()
-	app.updateWmClass()
-	app.updateState()
+	app.xids[xid] = winfo
+	app.updateIcon(xid)
+	app.updateWmClass(xid)
+	app.updateState(xid)
 	app.notifyChanged()
-	return app
-}
-func (app *RuntimeApp) updateIcon() {
-	icon, err := xgraphics.FindIcon(XU, app.xwin.Id, 48, 48)
-	if err == nil {
-		buf := bytes.NewBuffer(nil)
-		icon.WritePng(buf)
-		app.Icon = "data:image/png;base64," + base64.StdEncoding.EncodeToString(buf.Bytes())
-	} else {
-		name, _ := ewmh.WmIconNameGet(XU, app.xwin.Id)
-		app.Icon = name
-	}
-}
-func (app *RuntimeApp) updateWmClass() {
-	if name, err := ewmh.WmNameGet(XU, app.xwin.Id); err == nil {
-		app.Title = name
-	}
-
-}
-func (app *RuntimeApp) updateState() {
-	app.state, _ = ewmh.WmStateGet(XU, app.xwin.Id)
-}
-
-func (app *RuntimeApp) Activate(x, y int32) {
-	switch {
-	case !contains(app.state, "_NET_WM_STATE_FOCUSED"):
-		ewmh.ActiveWindowSet(XU, app.xwin.Id)
-	case contains(app.state, "_NET_WM_STATE_FOCUSED"):
-		s, _ := icccm.WmStateGet(XU, app.xwin.Id)
-		switch s.State {
-		case icccm.StateIconic:
-			s.State = icccm.StateNormal
-			icccm.WmStateSet(XU, app.xwin.Id, s)
-		case icccm.StateNormal:
-			activeXid, _ := ewmh.ActiveWindowGet(XU)
-			if activeXid == app.xwin.Id {
-				s.State = icccm.StateIconic
-				icccm.WmStateSet(XU, app.xwin.Id, s)
-			}
-		}
-
-	}
 }

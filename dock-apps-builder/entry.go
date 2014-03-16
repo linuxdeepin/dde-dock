@@ -75,8 +75,8 @@ func (e *AppEntry) update() {
 	}
 	switch e.Status {
 	case ActiveStatus:
-		e.Tooltip = e.rApp.Title
-		e.Icon = e.rApp.Icon
+		e.Tooltip = e.rApp.CurrentInfo.Title
+		e.Icon = e.rApp.CurrentInfo.Icon
 	case NormalStatus:
 		e.Icon = e.nApp.Icon
 		e.Tooltip = e.nApp.Name
