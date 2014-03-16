@@ -28,6 +28,7 @@ type AppEntry struct {
 
 	Tooltip string
 	Icon    string
+	Menu    string
 
 	Status int32
 
@@ -62,6 +63,15 @@ func (e *AppEntry) QuickWindow(x, y int32) {}
 
 func (e *AppEntry) ContextMenu(x, y int32) {}
 
+func (e *AppEntry) HandleMenuItem(id int32) {
+	switch e.Status {
+	case NormalStatus:
+		e.nApp.HandleMenuItem(id)
+	case ActiveStatus:
+		e.rApp.HandleMenuItem(id)
+	}
+}
+
 func (e *AppEntry) Activate(x, y int32) {
 	switch e.Status {
 	case NormalStatus:
@@ -86,13 +96,16 @@ func (e *AppEntry) update() {
 		LOGGER.Warning(e.Id + " goto an invalid status")
 		return
 	}
+	//NOTE: sync this with NormalApp/RuntimeApp
 	switch e.Status {
 	case ActiveStatus:
 		e.Tooltip = e.rApp.CurrentInfo.Title
 		e.Icon = e.rApp.CurrentInfo.Icon
+		e.Menu = e.rApp.Menu
 	case NormalStatus:
 		e.Icon = e.nApp.Icon
 		e.Tooltip = e.nApp.Name
+		e.Menu = e.nApp.Menu
 	}
 }
 func (e *AppEntry) attachNoramlApp(nApp *NormalApp) {

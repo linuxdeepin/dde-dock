@@ -21,6 +21,7 @@ type RuntimeApp struct {
 	xids map[xproto.Window]*WindowInfo
 
 	CurrentInfo *WindowInfo
+	Menu        string
 
 	state     []string
 	changedCB func()
@@ -36,7 +37,11 @@ func NewRuntimeApp(xid xproto.Window, appId string) *RuntimeApp {
 	}
 	app.attachXid(xid)
 	app.CurrentInfo = app.xids[xid]
+	app.buildMenu()
 	return app
+}
+func (app *RuntimeApp) buildMenu() {
+	//TODO
 }
 
 func (app *RuntimeApp) setChangedCB(cb func()) {
@@ -46,6 +51,9 @@ func (app *RuntimeApp) notifyChanged() {
 	if app.changedCB != nil {
 		app.changedCB()
 	}
+}
+
+func (app *RuntimeApp) HandleMenuItem(id int32) {
 }
 
 //func find_app_id(pid uint, instanceName, wmName, wmClass, iconName string) string { return "" }

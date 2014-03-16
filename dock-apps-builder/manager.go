@@ -174,7 +174,7 @@ func main() {
 	for _, id := range loadAll() {
 		MANAGER.createNormalApp(id + ".desktop")
 	}
-	listenerRootWindow()
-	go xevent.Main(XU)
+	//listenerRootWindow()
+	//go xevent.Main(XU)
 	dbus.Wait()
 }
