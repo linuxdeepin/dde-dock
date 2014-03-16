@@ -35,13 +35,26 @@ type AppEntry struct {
 	Allocation         Rectangle
 }
 
-func NewAppEntry(id string) *AppEntry {
+func NewAppEntryWithRuntimeApp(rApp *RuntimeApp) *AppEntry {
+	fmt.Println("NewAppEntryWithRuntimeApp:", rApp.Id, rApp.CurrentInfo.Xid)
 	e := &AppEntry{
-		Id:     id,
+		Id:     rApp.Id,
 		Type:   "App",
-		Status: InvalidStatus,
+		Status: ActiveStatus,
 		Data:   make(map[string]string),
 	}
+	e.attachRuntimeApp(rApp)
+	return e
+}
+func NewAppEntryWithNormalApp(nApp *NormalApp) *AppEntry {
+	fmt.Println("NewAppEntryWithNormalApp:", nApp.Id)
+	e := &AppEntry{
+		Id:     nApp.Id,
+		Type:   "App",
+		Status: NormalStatus,
+		Data:   make(map[string]string),
+	}
+	e.attachNoramlApp(nApp)
 	return e
 }
 
@@ -70,8 +83,8 @@ func (e *AppEntry) update() {
 	} else if e.nApp != nil {
 		e.Status = NormalStatus
 	} else {
-		fmt.Println("Invalid...:", e.Id, e.nApp, e.rApp)
-		e.Status = InvalidStatus
+		LOGGER.Warning(e.Id + " goto an invalid status")
+		return
 	}
 	switch e.Status {
 	case ActiveStatus:
@@ -96,7 +109,9 @@ func (e *AppEntry) detachNormalApp() {
 		fmt.Println("DetachNormalApp", e.nApp.Id)
 		e.nApp = nil
 		e.nApp.setChangedCB(nil)
-		e.update()
+		if e.rApp != nil {
+			e.update()
+		}
 	}
 }
 func (e *AppEntry) attachRuntimeApp(rApp *RuntimeApp) {
@@ -113,6 +128,8 @@ func (e *AppEntry) detachRuntimeApp() {
 		fmt.Println("DetachRuntimeApp:", e.rApp.Id)
 		e.rApp.setChangedCB(nil)
 		e.rApp = nil
-		e.update()
+		if e.nApp != nil {
+			e.update()
+		}
 	}
 }

@@ -76,10 +76,15 @@ func contains(haystack []string, needle string) bool {
 }
 
 func isNormalWindow(xid xproto.Window) bool {
+	//TODO: improve
 	types, _ := ewmh.WmWindowTypeGet(XU, xid)
-	if contains(types, "_NET_WM_WINDOW_TYPE_NORMAL") {
+	switch {
+	case contains(types, "_KDE_NET_WM_WINDOW_TYPE_OVERRIDE"):
+		return false
+
+	case contains(types, "_NET_WM_WINDOW_TYPE_NORMAL"):
 		return true
-	} else {
+	default:
 		return false
 	}
 }
@@ -135,6 +140,9 @@ func (app *RuntimeApp) Activate(x, y int32) error {
 
 func (app *RuntimeApp) detachXid(xid xproto.Window) {
 	if info, ok := app.xids[xid]; ok {
+		xwindow.New(XU, xid).Listen(xproto.EventMaskNoEvent)
+		xevent.Detach(XU, xid)
+
 		if len(app.xids) == 1 {
 			MANAGER.destroyRuntimeApp(app)
 		} else {
@@ -152,33 +160,36 @@ func (app *RuntimeApp) detachXid(xid xproto.Window) {
 			}
 		}
 	}
+	app.setChangedCB(nil)
 }
+
 func (app *RuntimeApp) attachXid(xid xproto.Window) {
+	if _, ok := app.xids[xid]; ok {
+		return
+	}
 	xwin := xwindow.New(XU, xid)
 	xwin.Listen(xproto.EventMaskPropertyChange | xproto.EventMaskStructureNotify | xproto.EventMaskVisibilityChange)
 	winfo := &WindowInfo{Xid: xid}
 	winfo.Title, _ = ewmh.WmNameGet(XU, xid)
 	xevent.DestroyNotifyFun(func(XU *xgbutil.XUtil, ev xevent.DestroyNotifyEvent) {
-		xwin.Listen(xproto.EventMaskNoEvent)
 		app.detachXid(xid)
 	}).Connect(XU, xid)
 	xevent.PropertyNotifyFun(func(XU *xgbutil.XUtil, ev xevent.PropertyNotifyEvent) {
 		switch ev.Atom {
 		case ATOM_WINDOW_ICON:
 			app.updateIcon(xid)
+			app.notifyChanged()
 		case ATOM_WINDOW_NAME:
 			app.updateWmClass(xid)
+			app.notifyChanged()
 		case ATOM_WINDOW_STATE:
 			app.updateState(xid)
+			app.notifyChanged()
 		case ATOM_WINDOW_TYPE:
 			if !isNormalWindow(ev.Window) {
-				xwin.Listen(xproto.EventMaskNoEvent)
 				app.detachXid(xid)
 			}
-		default:
-			return
 		}
-		app.notifyChanged()
 	}).Connect(XU, xid)
 	app.xids[xid] = winfo
 	app.updateIcon(xid)

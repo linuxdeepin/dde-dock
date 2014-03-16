@@ -61,12 +61,14 @@ func (m *Manager) runtimeAppChangged(xids []xproto.Window) {
 
 	// 1. create newfound RuntimeApps
 	for _, xid := range xids {
-		appId := find_app_id_by_xid(xid)
-		if rApp, ok := m.runtimeApps[appId]; ok {
-			willBeDestroied[appId] = nil
-			rApp.attachXid(xid)
-		} else {
-			m.createRuntimeApp(xid)
+		if isNormalWindow(xid) {
+			appId := find_app_id_by_xid(xid)
+			if rApp, ok := m.runtimeApps[appId]; ok {
+				willBeDestroied[appId] = nil
+				rApp.attachXid(xid)
+			} else {
+				m.createRuntimeApp(xid)
+			}
 		}
 	}
 	// 2. destroy disappeared RuntimeApps since last runtimeAppChanged point
@@ -77,15 +79,27 @@ func (m *Manager) runtimeAppChangged(xids []xproto.Window) {
 	}
 }
 
-func (m *Manager) mustGetEntry(appId string) *AppEntry {
-	if e, ok := m.appEntries[appId]; ok {
-		return e
-	} else {
-		e := NewAppEntry(appId)
-		m.appEntries[appId] = e
-		dbus.InstallOnSession(e)
-		return e
+func (m *Manager) mustGetEntry(nApp *NormalApp, rApp *RuntimeApp) *AppEntry {
+	if rApp != nil {
+		if e, ok := m.appEntries[rApp.Id]; ok {
+			return e
+		} else {
+			e := NewAppEntryWithRuntimeApp(rApp)
+			m.appEntries[rApp.Id] = e
+			dbus.InstallOnSession(e)
+			return e
+		}
+	} else if nApp != nil {
+		if e, ok := m.appEntries[nApp.Id]; ok {
+			return e
+		} else {
+			e := NewAppEntryWithNormalApp(nApp)
+			m.appEntries[nApp.Id] = e
+			dbus.InstallOnSession(e)
+			return e
+		}
 	}
+	panic("mustGetEntry: at least give one app")
 }
 
 func (m *Manager) destroyEntry(appId string) {
@@ -104,15 +118,15 @@ func (m *Manager) updateEntry(appId string, nApp *NormalApp, rApp *RuntimeApp) {
 	case nApp == nil && rApp == nil:
 		m.destroyEntry(appId)
 	case nApp == nil && rApp != nil:
-		e := m.mustGetEntry(appId)
+		e := m.mustGetEntry(nApp, rApp)
 		e.attachRuntimeApp(rApp)
 		e.detachNormalApp()
 	case nApp != nil && rApp != nil:
-		e := m.mustGetEntry(appId)
+		e := m.mustGetEntry(nApp, rApp)
 		e.attachNoramlApp(nApp)
 		e.attachRuntimeApp(rApp)
 	case nApp != nil && rApp == nil:
-		e := m.mustGetEntry(appId)
+		e := m.mustGetEntry(nApp, rApp)
 		e.attachNoramlApp(nApp)
 		e.detachRuntimeApp()
 	}
@@ -132,10 +146,11 @@ func (m *Manager) createRuntimeApp(xid xproto.Window) {
 	}
 
 	m.runtimeApps[appId] = rApp
-	m.updateEntry(appId, m.mustGetEntry(appId).nApp, rApp)
+	m.updateEntry(appId, m.mustGetEntry(nil, rApp).nApp, rApp)
 }
-func (m *Manager) destroyRuntimeApp(app *RuntimeApp) {
-	m.updateEntry(app.Id, m.mustGetEntry(app.Id).nApp, nil)
+func (m *Manager) destroyRuntimeApp(rApp *RuntimeApp) {
+	delete(m.runtimeApps, rApp.Id)
+	m.updateEntry(rApp.Id, m.mustGetEntry(nil, rApp).nApp, nil)
 }
 func (m *Manager) createNormalApp(id string) {
 	if _, ok := m.normalApps[id]; ok {
@@ -148,10 +163,11 @@ func (m *Manager) createNormalApp(id string) {
 	}
 
 	m.normalApps[id] = nApp
-	m.updateEntry(id, nApp, m.mustGetEntry(id).rApp)
+	m.updateEntry(id, nApp, m.mustGetEntry(nApp, nil).rApp)
 }
-func (m *Manager) destroyNormalApp(app *NormalApp) {
-	m.updateEntry(app.Id, nil, m.mustGetEntry(app.Id).rApp)
+func (m *Manager) destroyNormalApp(nApp *NormalApp) {
+	delete(m.normalApps, nApp.Id)
+	m.updateEntry(nApp.Id, nil, m.mustGetEntry(nApp, nil).rApp)
 }
 
 func main() {
