@@ -2,6 +2,7 @@ package main
 
 import "dlib/dbus"
 import "dlib/logger"
+import "fmt"
 import "github.com/BurntSushi/xgbutil"
 import "github.com/BurntSushi/xgbutil/xwindow"
 import "github.com/BurntSushi/xgbutil/xevent"
@@ -21,16 +22,21 @@ var (
 )
 
 func listenerRootWindow() {
+	var update = func() {
+		list, err := ewmh.ClientListGet(XU)
+		if err != nil {
+			LOGGER.Warning("Can't Get _NET_CLIENT_LIST", err)
+		}
+		MANAGER.runtimeAppChangged(list)
+	}
+
 	xwindow.New(XU, XU.RootWin()).Listen(xproto.EventMaskPropertyChange)
 	xevent.PropertyNotifyFun(func(XU *xgbutil.XUtil, ev xevent.PropertyNotifyEvent) {
 		if ev.Atom == _NET_CLIENT_LIST {
-			list, err := ewmh.ClientListGet(XU)
-			if err != nil {
-				LOGGER.Warning("Can't Get _NET_CLIENT_LIST", err)
-			}
-			MANAGER.runtimeAppChangged(list)
+			update()
 		}
 	}).Connect(XU, XU.RootWin())
+	update()
 }
 
 type Manager struct {
@@ -52,6 +58,8 @@ func (m *Manager) runtimeAppChangged(xids []xproto.Window) {
 	for _, app := range m.runtimeApps {
 		willBeDestroied[app.Id] = app
 	}
+
+	// 1. create newfound RuntimeApps
 	for _, xid := range xids {
 		appId := find_app_id_by_xid(xid)
 		if _, ok := m.runtimeApps[appId]; ok {
@@ -60,23 +68,52 @@ func (m *Manager) runtimeAppChangged(xids []xproto.Window) {
 			m.createRuntimeApp(xid)
 		}
 	}
+	// 2. destroy disappeared RuntimeApps since last runtimeAppChanged point
 	for _, app := range willBeDestroied {
-		m.destroyRuntimeApp(app)
+		if app != nil {
+			m.destroyRuntimeApp(app)
+		}
+	}
+}
+
+func (m *Manager) mustGetEntry(appId string) *AppEntry {
+	if e, ok := m.appEntries[appId]; ok {
+		return e
+	} else {
+		e := NewAppEntry(appId)
+		m.appEntries[appId] = e
+		dbus.InstallOnSession(e)
+		return e
 	}
 }
 
 func (m *Manager) destroyEntry(appId string) {
-}
-func (m *Manager) mustGetEntry(appId string) *AppEntry {
-	return nil
+	if e, ok := m.appEntries[appId]; ok {
+		e.detachNormalApp()
+		e.detachRuntimeApp()
+		dbus.ReleaseName(e)
+		dbus.UnInstallObject(e)
+		fmt.Println("destroyEntry:", appId)
+	}
+	delete(m.appEntries, appId)
 }
 
 func (m *Manager) updateEntry(appId string, nApp *NormalApp, rApp *RuntimeApp) {
-	if nApp == nil && rApp == nil {
+	switch {
+	case nApp == nil && rApp == nil:
 		m.destroyEntry(appId)
-	}
-	m.mustGetEntry(appId)
-	if _, ok := m.appEntries[appId]; !ok {
+	case nApp == nil && rApp != nil:
+		e := m.mustGetEntry(appId)
+		e.attachRuntimeApp(rApp)
+		e.detachNormalApp()
+	case nApp != nil && rApp != nil:
+		e := m.mustGetEntry(appId)
+		e.attachNoramlApp(nApp)
+		e.attachRuntimeApp(rApp)
+	case nApp != nil && rApp == nil:
+		e := m.mustGetEntry(appId)
+		e.attachNoramlApp(nApp)
+		e.detachRuntimeApp()
 	}
 }
 
@@ -94,23 +131,31 @@ func (m *Manager) createRuntimeApp(xid xproto.Window) {
 	}
 
 	m.runtimeApps[appId] = rApp
-	if nApp, ok := m.normalApps[rApp.Id]; ok {
-		m.updateEntry(appId, nApp, rApp)
-	} else {
-		// an undocked RuntimeApp
-		m.updateEntry(appId, nil, rApp)
-	}
+	m.updateEntry(appId, m.mustGetEntry(appId).nApp, rApp)
 }
 func (m *Manager) destroyRuntimeApp(app *RuntimeApp) {
 	m.updateEntry(app.Id, m.mustGetEntry(app.Id).nApp, nil)
-	app.Destroy()
+}
+func (m *Manager) createNormalApp(id string) {
+	if _, ok := m.normalApps[id]; ok {
+		return
+	}
+
+	nApp := NewNormalApp(id)
+	if nApp == nil {
+		return
+	}
+
+	m.normalApps[id] = nApp
+	m.updateEntry(id, nApp, m.mustGetEntry(id).rApp)
+}
+func (m *Manager) destroyNormalApp(app *NormalApp) {
+	m.updateEntry(app.Id, nil, m.mustGetEntry(app.Id).rApp)
 }
 
 func main() {
 	for _, id := range loadAll() {
-		if e := NewAppEntry(id + ".desktop"); e != nil {
-			dbus.InstallOnSession(e)
-		}
+		MANAGER.createNormalApp(id + ".desktop")
 	}
 	listenerRootWindow()
 	go xevent.Main(XU)

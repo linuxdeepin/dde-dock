@@ -11,11 +11,26 @@ import "github.com/BurntSushi/xgbutil/xevent"
 import "github.com/BurntSushi/xgbutil/xgraphics"
 
 type RuntimeApp struct {
-	Id    string
+	Id string
+	//TODO: multiple xid window
 	xwin  *xwindow.Window
 	Title string
 	Icon  string
+
+	state     []string
+	changedCB func()
 }
+
+func (app *RuntimeApp) setChangedCB(cb func()) {
+	app.changedCB = cb
+}
+func (app *RuntimeApp) notifyChanged() {
+	if app.changedCB != nil {
+		app.changedCB()
+	}
+}
+
+//func find_app_id(pid uint, instanceName, wmName, wmClass, iconName string) string { return "" }
 
 func find_app_id_by_xid(xid xproto.Window) string {
 	pid, _ := ewmh.WmPidGet(XU, xid)
@@ -56,7 +71,7 @@ func NewRuntimeApp(xid xproto.Window, appId string) *RuntimeApp {
 		return nil
 	}
 
-	app := &RuntimeApp{}
+	app := &RuntimeApp{Id: appId}
 	app.xwin = xwindow.New(XU, xid)
 	app.xwin.Listen(xproto.EventMaskPropertyChange | xproto.EventMaskStructureNotify | xproto.EventMaskVisibilityChange)
 	app.Title, _ = ewmh.WmNameGet(XU, xid)
@@ -75,11 +90,15 @@ func NewRuntimeApp(xid xproto.Window, appId string) *RuntimeApp {
 			if !isNormalWindow(ev.Window) {
 				MANAGER.destroyRuntimeApp(app)
 			}
+		default:
+			return
 		}
+		app.notifyChanged()
 	}).Connect(XU, xid)
 	app.updateIcon()
 	app.updateWmClass()
 	app.updateState()
+	app.notifyChanged()
 	return app
 }
 func (app *RuntimeApp) updateIcon() {
@@ -94,9 +113,32 @@ func (app *RuntimeApp) updateIcon() {
 	}
 }
 func (app *RuntimeApp) updateWmClass() {
+	if name, err := ewmh.WmNameGet(XU, app.xwin.Id); err == nil {
+		app.Title = name
+	}
+
 }
 func (app *RuntimeApp) updateState() {
+	app.state, _ = ewmh.WmStateGet(XU, app.xwin.Id)
 }
 
-func (app *RuntimeApp) Destroy() {
+func (app *RuntimeApp) Activate(x, y int32) {
+	switch {
+	case !contains(app.state, "_NET_WM_STATE_FOCUSED"):
+		ewmh.ActiveWindowSet(XU, app.xwin.Id)
+	case contains(app.state, "_NET_WM_STATE_FOCUSED"):
+		s, _ := icccm.WmStateGet(XU, app.xwin.Id)
+		switch s.State {
+		case icccm.StateIconic:
+			s.State = icccm.StateNormal
+			icccm.WmStateSet(XU, app.xwin.Id, s)
+		case icccm.StateNormal:
+			activeXid, _ := ewmh.ActiveWindowGet(XU)
+			if activeXid == app.xwin.Id {
+				s.State = icccm.StateIconic
+				icccm.WmStateSet(XU, app.xwin.Id, s)
+			}
+		}
+
+	}
 }

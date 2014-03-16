@@ -1,6 +1,7 @@
 package main
 
 func loadAll() []string {
+	return []string{}
 	return []string{
 		"libreoffice-impress",
 		"gnome-system-monitor",
