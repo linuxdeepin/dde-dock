@@ -21,6 +21,14 @@
 
 package main
 
+import (
+        "dlib/gio-2.0"
+)
+
+var (
+        wmPreSettings = gio.NewSettings("org.gnome.desktop.wm.preferences")
+)
+
 func (op *Theme) setThemeViaXSettings() {
         setGtkThemeViaXSettings(op.GtkTheme)
         setIconThemeViaXSettings(op.IconTheme)
@@ -30,6 +38,7 @@ func (op *Theme) setThemeViaXSettings() {
 
 func setGtkThemeViaXSettings(name string) {
         objXSettings.SetString("Net/ThemeName", name)
+        wmPreSettings.SetString("theme", name)
 }
 
 func setIconThemeViaXSettings(name string) {

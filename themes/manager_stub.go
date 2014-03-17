@@ -53,6 +53,9 @@ func (op *Manager) OnPropertiesChanged(propName string, old interface{}) {
                 if v, ok := old.(string); ok && v != op.CurrentTheme {
                         personSettings.SetString("current-theme",
                                 op.CurrentTheme)
+                        if obj := op.getThemeObject(op.CurrentTheme); obj != nil {
+                                obj.setThemeViaXSettings()
+                        }
                 }
         }
 }
