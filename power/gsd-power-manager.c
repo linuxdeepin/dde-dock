@@ -1880,6 +1880,8 @@ engine_charge_action (GsdPowerManager *manager, UpDevice *device)
             message = g_strdup (_("The battery is below the critical level and "
                                   "this computer is about to shutdown."));
         }
+        message = g_strdup(_("The battery is below the critical level and "
+                             "this computer is going to suspend."));
 
         /* wait 20 seconds for user-panic */
         timer_id = g_timeout_add_seconds (GSD_ACTION_DELAY,
@@ -1919,6 +1921,7 @@ engine_charge_action (GsdPowerManager *manager, UpDevice *device)
             message = g_strdup (_("UPS is below the critical level and "
                                   "this computer is about to shutdown."));
         }
+
 
         /* wait 20 seconds for user-panic */
         timer_id = g_timeout_add_seconds (GSD_ACTION_DELAY,
