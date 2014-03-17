@@ -28,52 +28,54 @@ import "C"
 import "unsafe"
 
 import (
-	"dlib/dbus"
+        "dlib/dbus"
 )
 
 const (
-	SOUND_DEST = "com.deepin.daemon.Themes"
-	SOUND_PATH = "/com/deepin/daemon/Sound"
-	SOUND_IFC  = "com.deepin.daemon.Sound"
+        SOUND_DEST = "com.deepin.daemon.Themes"
+        SOUND_PATH = "/com/deepin/daemon/Sound"
+        SOUND_IFC  = "com.deepin.daemon.Sound"
 )
 
+type Sound struct{}
+
 func (s *Sound) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		SOUND_DEST,
-		SOUND_PATH,
-		SOUND_IFC,
-	}
+        return dbus.DBusInfo{
+                SOUND_DEST,
+                SOUND_PATH,
+                SOUND_IFC,
+        }
 }
 
-// FIXME PlaySystemSound() maybe should be place in dde-api
+// FIXME: PlaySystemSound() maybe should be placed in dde-api
 func (s *Sound) PlaySystemSound(event string) (err error) {
-	currentTheme := "LinuxDeepin" // TODO
-	return s.PlayThemeSystemSound(currentTheme, event)
+        currentTheme := "LinuxDeepin" // TODO
+        return s.PlayThemeSound(currentTheme, event)
 }
 
-func (s *Sound) PlayThemeSystemSound(theme, event string) (err error) {
-	go func() {
-		ctheme := C.CString(theme)
-		defer C.free(unsafe.Pointer(ctheme))
-		cevent := C.CString(event)
-		defer C.free(unsafe.Pointer(cevent))
-		ret := C.canberra_play_system_sound(ctheme, cevent)
-		if ret != 0 {
-			logObject.Error("play system sound failed: theme=%s, event=%s, %s",
-				theme, event, C.GoString(C.ca_strerror(ret)))
-		}
-	}()
-	return
+func (s *Sound) PlayThemeSound(theme, event string) (err error) {
+        go func() {
+                ctheme := C.CString(theme)
+                defer C.free(unsafe.Pointer(ctheme))
+                cevent := C.CString(event)
+                defer C.free(unsafe.Pointer(cevent))
+                ret := C.canberra_play_system_sound(ctheme, cevent)
+                if ret != 0 {
+                        logObject.Error("play system sound failed: theme=%s, event=%s, %s",
+                                theme, event, C.GoString(C.ca_strerror(ret)))
+                }
+        }()
+        return
 }
 
 func (s *Sound) PlaySoundFile(file string) (err error) {
-	go func() {
-		cfile := C.CString(file)
-		defer C.free(unsafe.Pointer(cfile))
-		ret := C.canberra_play_sound_file(cfile)
-		if ret != 0 {
-			logObject.Error("play sound file failed: %s, %s\n", file, C.GoString(C.ca_strerror(ret)))
-		}
-	}()
-	return
+        go func() {
+                cfile := C.CString(file)
+                defer C.free(unsafe.Pointer(cfile))
+                ret := C.canberra_play_sound_file(cfile)
+                if ret != 0 {
+                        logObject.Error("play sound file failed: %s, %s\n", file, C.GoString(C.ca_strerror(ret)))
+                }
+        }()
+        return
 }

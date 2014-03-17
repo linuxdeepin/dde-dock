@@ -100,21 +100,21 @@ func main() {
         objXSettings, err = xs.NewXSettings("com.deepin.SessionManager",
                 "/com/deepin/XSettings")
         if err != nil {
-                logObject.Warning("New XSettings Failed: %v\n", err)
+                logObject.Error("New XSettings Failed: %v", err)
                 panic(err)
         }
 
         objUtil, err = utils.NewUtils("com.deepin.api.Utils",
                 "/com/deepin/api/Utils")
         if err != nil {
-                logObject.Info("New Utils Object Failed: %v\n", err)
+                logObject.Info("New Utils Object Failed: %v", err)
                 return
         }
 
         objManager = newManager()
         err = dbus.InstallOnSession(objManager)
         if err != nil {
-                logObject.Warning("Install Session Failed: %v", err)
+                logObject.Error("Install Session Failed: %v", err)
                 panic(err)
         }
 
@@ -128,8 +128,15 @@ func main() {
         dbus.InstallOnSession(objThumb)
         objPre := &PreviewPath{}
         dbus.InstallOnSession(objPre)
-        dbus.DealWithUnhandledMessage()
 
+        objSound := &Sound{}
+        err = dbus.InstallOnSession(objSound)
+        if err != nil {
+                logObject.Error("Install Session Failed: %v", err)
+                panic(err)
+        }
+
+        dbus.DealWithUnhandledMessage()
         if err = dbus.Wait(); err != nil {
                 logObject.Warning("lost dbus session: %v", err)
                 os.Exit(1)

@@ -22,19 +22,19 @@
 package main
 
 import (
-	"dlib/dbus"
+        "dlib/dbus"
 )
 
 const (
-	WALLPAPER_DEST = "com.deepin.daemon.Themes"
-	WALLPAPER_PATH = "/com/deepin/daemon/Wallpaper"
-	WALLPAPER_IFC  = "com.deepin.daemon.Wallpaper"
+        WALLPAPER_DEST = "com.deepin.daemon.Themes"
+        WALLPAPER_PATH = "/com/deepin/daemon/Wallpaper"
+        WALLPAPER_IFC  = "com.deepin.daemon.Wallpaper"
 )
 
 func (w *Wallpaper) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		WALLPAPER_DEST,
-		WALLPAPER_PATH,
-		WALLPAPER_IFC,
-	}
+        return dbus.DBusInfo{
+                WALLPAPER_DEST,
+                WALLPAPER_PATH,
+                WALLPAPER_IFC,
+        }
 }
