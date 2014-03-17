@@ -802,6 +802,8 @@ func (audio *Audio) listenMediaKey() {
 					volume := sink.Volume + 5
 					if volume < 0 {
 						volume = 0
+					} else if volume > 150 {
+						volume = 150
 					}
 					sink.setSinkVolume(volume)
 					fmt.Println("Volume step up: ", volume)
