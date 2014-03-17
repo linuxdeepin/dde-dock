@@ -86,6 +86,12 @@ func (m *Manager) registerEntry(name string) {
 		return
 	}
 	m.Entries = append(m.Entries, entry)
+
+	// send signal
+	if m.Added != nil {
+		m.Added(dbus.ObjectPath(entry.objectPath))
+	}
+
 	logger.Info("register entry success: %s", name)
 }
 
@@ -125,6 +131,11 @@ func (m *Manager) unregisterEntry(name string) {
 	copy(m.Entries[index:], m.Entries[index+1:])
 	m.Entries[len(m.Entries)-1] = nil
 	m.Entries = m.Entries[:len(m.Entries)-1]
+
+	// send signal
+	if m.Removed != nil {
+		m.Removed(string(entry.destPath))
+	}
 
 	logger.Info("unregister entry success: %s", name)
 }

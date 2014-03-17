@@ -13,8 +13,10 @@ type Rectangle struct {
 }
 
 type EntryProxyer struct {
-	entryId string
-	core    *RemoteEntry
+	entryId    string
+	destPath   string
+	objectPath dbus.ObjectPath
+	core       *RemoteEntry
 
 	ID   string `dmusic`
 	Type string `applet/other`
@@ -40,7 +42,9 @@ func (e *EntryProxyer) GetDBusInfo() dbus.DBusInfo {
 
 func NewEntryProxyer(entryId string) (e *EntryProxyer, err error) {
 	e = &EntryProxyer{}
-	core, err := NewRemoteEntry(entryDestPrefix+entryId, dbus.ObjectPath(entryPathPrefix+entryId))
+	e.destPath = entryDestPrefix + entryId
+	e.objectPath = dbus.ObjectPath(entryPathPrefix + entryId)
+	core, err := NewRemoteEntry(e.destPath, e.objectPath)
 	if err != nil {
 		return
 	}
