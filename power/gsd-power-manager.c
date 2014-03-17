@@ -1391,7 +1391,12 @@ manager_critical_action_do (GsdPowerManager *manager,
     play_loop_stop (&manager->priv->critical_alert_timeout_id);
 
     action_type = manager_critical_action_get (manager, is_ups);
-    /*do_power_action_type (manager, action_type);*/
+
+#ifdef MAIN
+    do_power_action_type (manager, action_type);
+#else
+    action_suspend(manager);
+#endif
 
     return FALSE;
 }
@@ -2146,8 +2151,6 @@ gnome_session_logout (GsdPowerManager *manager,
                        gnome_session_logout_cb, NULL);
 }
 
-#ifdef MAIN
-
 static void
 action_poweroff (GsdPowerManager *manager)
 {
@@ -2202,8 +2205,6 @@ action_hibernate (GsdPowerManager *manager)
                        NULL);
 }
 
-#endif
-
 static void
 backlight_enable (GsdPowerManager *manager)
 {
@@ -2241,7 +2242,6 @@ backlight_disable (GsdPowerManager *manager)
     g_debug ("TESTSUITE: Blanked screen");
 }
 
-#ifdef MAIN
 static void
 do_power_action_type (GsdPowerManager *manager,
                       GsdPowerActionType action_type)
@@ -2273,7 +2273,6 @@ do_power_action_type (GsdPowerManager *manager,
         break;
     }
 }
-#endif
 
 static GsmInhibitorFlag
 get_idle_inhibitors_for_action (GsdPowerActionType action_type)
@@ -2792,11 +2791,7 @@ idle_set_mode (GsdPowerManager *manager, GsdPowerIdleMode mode)
             action_type = g_settings_get_enum (manager->priv->settings,
                                                "sleep-inactive-ac-type");
         }
-#ifdef MAIN
         do_power_action_type (manager, action_type);
-#else
-        do_power_action_type();
-#endif
 
         /* turn on screen and restore user-selected brightness level */
     }
