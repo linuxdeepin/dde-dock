@@ -7,6 +7,7 @@ package main
 // #define GNOME_DESKTOP_USE_UNSTABLE_API
 // #include "gnome-idle-monitor.h"
 // #include "gsd-power-manager.h"
+// #include "power-force-idle.h"
 // int deepin_power_manager_start()
 // {
 //      GsdPowerManager *manager = gsd_power_manager_new();
@@ -397,8 +398,8 @@ func (power *Power) doLidOpenAction() {
 
 func (power *Power) engineButton() {
 
-	power.conn.BusObject().Call("org.freedesktop.DBus.AddMatch", 0,
-		"type='signal',path='/com/deepin/daemon/MediaKey',interface='com.deepin.daemon.MediaKey',member='PowerOff',sender='com.deepin.daemon.KeyBinding'")
+	power.conn.BusObject().Call("org.freedesktop.DBus.AddMatch",
+		0, "type='signal',path='/com/deepin/daemon/MediaKey',interface='com.deepin.daemon.MediaKey',member='PowerOff',sender='com.deepin.daemon.KeyBinding'")
 	power.conn.BusObject().Call("org.freedesktop.DBus.AddMatch", 0,
 		"type='signal',sender='com.deepin.daemon.KeyBinding',path='/com/deepin/daemon/MediaKey',interface='com.deepin.daemon.MediaKey',member='PowerOff'")
 	go func() {
@@ -647,6 +648,8 @@ func (power *Power) signalPowerSettingsChange() int32 {
 	return 0
 }
 
+//exported functions
+
 func (power *Power) EnumerateDevices() []dbus.ObjectPath {
 	if power.upower == nil {
 		println("WARNING:Upower object it nil\n")
@@ -657,6 +660,16 @@ func (power *Power) EnumerateDevices() []dbus.ObjectPath {
 	}
 	//devices := []dbus.ObjectPath{"testing"}
 	return devices
+}
+
+func (power *Power) StartDim() int32 {
+	C.start_dim()
+	return 0
+}
+
+func (power *Power) StopDim() int32 {
+	C.stop_dim()
+	return 0
 }
 
 func getUpowerDeviceObjectPath(devices []dbus.ObjectPath) []dbus.ObjectPath {
