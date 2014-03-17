@@ -54,13 +54,13 @@ func (m *Manager) watchEntries() {
 				// FIXME: how long time should to wait for
 				time.Sleep(500 * time.Millisecond)
 				m.entrireLocker.Lock()
+				defer m.entrireLocker.Unlock()
 				m.registerEntry(name)
-				m.entrireLocker.Unlock()
 			}()
 		} else {
 			m.entrireLocker.Lock()
+			defer m.entrireLocker.Unlock()
 			m.unregisterEntry(name)
-			m.entrireLocker.Unlock()
 		}
 	})
 }
