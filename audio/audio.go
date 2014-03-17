@@ -799,21 +799,21 @@ func (audio *Audio) listenMediaKey() {
 					sink.SetSinkMute(!sink.Mute)
 					break
 				case MEDIA_KEY_IFC + "." + AUDIO_UP:
-					volume := sink.Volume + 5
+					volume := int32(sink.Volume + 5)
 					if volume < 0 {
 						volume = 0
 					} else if volume > 150 {
 						volume = 150
 					}
-					sink.setSinkVolume(volume)
-					fmt.Println("Volume step up: ", volume)
+					sink.setSinkVolume(uint32(volume))
+					fmt.Println("Volume step up: ", int32(volume))
 					break
 				case MEDIA_KEY_IFC + "." + AUDIO_DOWN:
-					volume := sink.Volume - 5
+					volume := int32(sink.Volume - 5)
 					if volume < 0 {
 						volume = 0
 					}
-					sink.setSinkVolume(volume)
+					sink.setSinkVolume(uint32(volume))
 					fmt.Println("Volume step down: ", volume)
 					break
 				default:
