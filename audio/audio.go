@@ -1316,6 +1316,7 @@ func main() {
 	}
 	dbus.DealWithUnhandledMessage()
 	fmt.Println("module started\n")
+	audio.listenMediaKey()
 	go C.pa_subscribe(audio.pa)
 	if err := dbus.Wait(); err != nil {
 		//l.Error("lost dbus session:", err)

@@ -2243,9 +2243,9 @@ do_power_action_type (GsdPowerManager *manager,
 {
     switch (action_type)
     {
-        /*case GSD_POWER_ACTION_SUSPEND:*/
-        /*action_suspend (manager);*/
-        /*break;*/
+    case GSD_POWER_ACTION_SUSPEND:
+        action_suspend (manager);
+        break;
     case GSD_POWER_ACTION_INTERACTIVE:
         gnome_session_shutdown (manager);
         break;
