@@ -87,7 +87,7 @@
     </key>
 
     <key name="button-power" enum="com.deepin.daemon.GsdPowerActionType">
-      <default>'suspend'</default>
+      <default>'interactive'</default>
       <summary>Power button action</summary>
       <description>The action to take when the system power button is pressed.</description>
     </key>
