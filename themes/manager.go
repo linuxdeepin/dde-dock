@@ -40,7 +40,94 @@ type Manager struct {
         pathNameMap    map[string]PathInfo
 }
 
-func (op *Manager) SetTheme(gtk, icon, cursor, gtkFont, bg string) string {
+func (op *Manager) GetPathViaName(name string) (string, bool) {
+        if obj := op.getThemeObject(name); obj != nil {
+                return obj.path, true
+        }
+
+        return "", false
+}
+
+func (op *Manager) SetGtkTheme(name string) (string, bool) {
+        if len(name) <= 0 {
+                return op.CurrentTheme, false
+        }
+
+        setGtkThemeViaXSettings(name)
+        if obj := op.getThemeObject(op.CurrentTheme); obj != nil {
+                v := op.setTheme(name, obj.IconTheme, obj.GtkCursorTheme,
+                        obj.GtkFontName, obj.BackgroundFile)
+                op.updateCurrentTheme(v)
+                return v, true
+        }
+
+        return op.CurrentTheme, false
+}
+
+func (op *Manager) SetIconTheme(name string) (string, bool) {
+        if len(name) <= 0 {
+                return op.CurrentTheme, false
+        }
+
+        setIconThemeViaXSettings(name)
+        if obj := op.getThemeObject(op.CurrentTheme); obj != nil {
+                v := op.setTheme(obj.GtkTheme, name,
+                        obj.GtkCursorTheme, obj.GtkFontName, obj.BackgroundFile)
+                op.updateCurrentTheme(v)
+                return v, true
+        }
+
+        return op.CurrentTheme, false
+}
+
+func (op *Manager) SetGtkCursorTheme(name string) (string, bool) {
+        if len(name) <= 0 {
+                return op.CurrentTheme, false
+        }
+
+        setGtkCursorThemeViaXSettings(name)
+        if obj := op.getThemeObject(op.CurrentTheme); obj != nil {
+                v := op.setTheme(obj.GtkTheme, obj.IconTheme,
+                        name, obj.GtkFontName, obj.BackgroundFile)
+                op.updateCurrentTheme(v)
+                return v, true
+        }
+
+        return op.CurrentTheme, false
+}
+
+func (op *Manager) SetGtkFontTheme(name string) (string, bool) {
+        if len(name) <= 0 {
+                return op.CurrentTheme, false
+        }
+
+        setGtkFontThemeViaXSettings(name)
+        if obj := op.getThemeObject(op.CurrentTheme); obj != nil {
+                v := op.setTheme(obj.GtkTheme, obj.IconTheme,
+                        obj.GtkCursorTheme, name, obj.BackgroundFile)
+                op.updateCurrentTheme(v)
+                return v, true
+        }
+
+        return op.CurrentTheme, false
+}
+
+func (op *Manager) SetBackgroundFile(name string) (string, bool) {
+        if len(name) <= 0 {
+                return op.CurrentTheme, false
+        }
+
+        if obj := op.getThemeObject(op.CurrentTheme); obj != nil {
+                v := op.setTheme(obj.GtkTheme, obj.IconTheme,
+                        obj.GtkCursorTheme, obj.GtkFontName, name)
+                op.updateCurrentTheme(v)
+                return v, true
+        }
+
+        return op.CurrentTheme, false
+}
+
+func (op *Manager) setTheme(gtk, icon, cursor, gtkFont, bg string) string {
         for _, path := range op.ThemeList {
                 name, ok := isThemeExist(gtk, icon, cursor, gtkFont, bg, path)
                 if !ok {

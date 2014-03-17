@@ -21,18 +21,25 @@
 
 package main
 
-import (
-        xs "dbus/com/deepin/sessionmanager"
-)
-
-var (
-        objXSettings, _ = xs.NewXSettings("com.deepin.SessionManager",
-                "/com/deepin/XSettings")
-)
-
 func (op *Theme) setThemeViaXSettings() {
-        objXSettings.SetString("Net/ThemeName", op.GtkTheme)
-        objXSettings.SetString("Net/IconThemeName", op.IconTheme)
-        objXSettings.SetString("Gtk/FontName", op.GtkFontName)
-        objXSettings.SetString("Gtk/CursorThemeName", op.GtkCursorTheme)
+        setGtkThemeViaXSettings(op.GtkTheme)
+        setIconThemeViaXSettings(op.IconTheme)
+        setGtkCursorThemeViaXSettings(op.GtkCursorTheme)
+        setGtkFontThemeViaXSettings(op.GtkFontName)
+}
+
+func setGtkThemeViaXSettings(name string) {
+        objXSettings.SetString("Net/ThemeName", name)
+}
+
+func setIconThemeViaXSettings(name string) {
+        objXSettings.SetString("Net/IconThemeName", name)
+}
+
+func setGtkCursorThemeViaXSettings(name string) {
+        objXSettings.SetString("Gtk/CursorThemeName", name)
+}
+
+func setGtkFontThemeViaXSettings(name string) {
+        objXSettings.SetString("Gtk/FontName", name)
 }

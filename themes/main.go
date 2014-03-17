@@ -23,6 +23,7 @@ package main
 
 import (
         "dbus/com/deepin/api/utils"
+        xs "dbus/com/deepin/sessionmanager"
         "dlib/dbus"
         "dlib/logger"
         "os"
@@ -30,11 +31,12 @@ import (
 )
 
 var (
-        objManager  *Manager
-        objUtil     *utils.Utils
-        mutex       = new(sync.Mutex)
-        logObject   = logger.NewLogger("daemon/themes")
-        themeObjMap = make(map[string]*Theme)
+        objManager   *Manager
+        objXSettings *xs.XSettings
+        objUtil      *utils.Utils
+        mutex        = new(sync.Mutex)
+        logObject    = logger.NewLogger("daemon/themes")
+        themeObjMap  = make(map[string]*Theme)
 
         genId, destroyId = func() (func() int, func()) {
                 count := 0
@@ -85,14 +87,23 @@ func updateThemeObj(pathNameMap map[string]PathInfo) {
 }
 
 func main() {
-        defer func() {
-                if err := recover(); err != nil {
-                        logObject.Fatal("Recove error in main: %v", err)
-                }
-        }()
+        /*
+           defer func() {
+                   if err := recover(); err != nil {
+                           logObject.Fatal("Recove error in main: %v", err)
+                   }
+           }()
+        */
 
         logObject.SetRestartCommand("/usr/lib/deepin-daemon/themes")
         var err error
+        objXSettings, err = xs.NewXSettings("com.deepin.SessionManager",
+                "/com/deepin/XSettings")
+        if err != nil {
+                logObject.Warning("New XSettings Failed: %v\n", err)
+                panic(err)
+        }
+
         objUtil, err = utils.NewUtils("com.deepin.api.Utils",
                 "/com/deepin/api/Utils")
         if err != nil {
@@ -110,7 +121,9 @@ func main() {
         //m.ThemeList = append(m.ThemeList, THEME_PATH+"Test")
         //m.ThemeList = append(m.ThemeList, THEME_PATH+"Deepin")
         updateThemeObj(objManager.pathNameMap)
-        objManager.getThemeObject(objManager.CurrentTheme).setThemeViaXSettings()
+        if obj := objManager.getThemeObject(objManager.CurrentTheme); obj != nil {
+                obj.setThemeViaXSettings()
+        }
         objThumb := &ThumbPath{}
         dbus.InstallOnSession(objThumb)
         objPre := &PreviewPath{}

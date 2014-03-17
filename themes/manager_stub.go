@@ -118,16 +118,26 @@ func (op *Manager) updateAllProps() {
         updateThemeObj(op.pathNameMap)
 }
 
+func (op *Manager) updateCurrentTheme(name string) {
+        logObject.Info("Update Current Theme: %s\n", name)
+        if v := personSettings.GetString("current-theme"); v != name {
+                personSettings.SetString("current-theme", name)
+        }
+}
+
 func (op *Manager) listenSettingsChanged() {
         personSettings.Connect("changed", func(s *gio.Settings, key string) {
+                logObject.Info("Theme GSettings Key Changed: %s\n", key)
                 switch key {
                 case "current-picture":
                         value := personSettings.GetString(key)
                         obj := op.getThemeObject(op.CurrentTheme)
                         if obj != nil && obj.BackgroundFile != value {
-                                op.SetTheme(obj.GtkTheme, obj.IconTheme,
+                                if name := op.setTheme(obj.GtkTheme, obj.IconTheme,
                                         obj.GtkCursorTheme, obj.GtkFontName,
-                                        value)
+                                        value); name != op.CurrentTheme {
+                                        op.updateCurrentTheme(name)
+                                }
                         }
                 case "current-theme":
                         value := personSettings.GetString(key)
@@ -137,7 +147,7 @@ func (op *Manager) listenSettingsChanged() {
                         obj := op.getThemeObject(value)
                         if obj != nil {
                                 obj.setThemeViaXSettings()
-                                op.CurrentTheme = value
+                                op.setPropName("CurrentTheme")
                         }
                 }
         })
