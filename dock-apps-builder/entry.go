@@ -32,29 +32,29 @@ type AppEntry struct {
 
 	Status int32
 
-	QuickWindowVieable bool
-	Allocation         Rectangle
+	QuickWindowViewable bool
+	Allocation          Rectangle
 }
 
 func NewAppEntryWithRuntimeApp(rApp *RuntimeApp) *AppEntry {
 	fmt.Println("NewAppEntryWithRuntimeApp:", rApp.Id, rApp.CurrentInfo.Xid)
 	e := &AppEntry{
-		Id:     rApp.Id,
-		Type:   "App",
-		Status: ActiveStatus,
-		Data:   make(map[string]string),
+		Id:   rApp.Id,
+		Type: "App",
+		Data: make(map[string]string),
 	}
+	e.setPropStatus(ActiveStatus)
 	e.attachRuntimeApp(rApp)
 	return e
 }
 func NewAppEntryWithNormalApp(nApp *NormalApp) *AppEntry {
 	fmt.Println("NewAppEntryWithNormalApp:", nApp.Id)
 	e := &AppEntry{
-		Id:     nApp.Id,
-		Type:   "App",
-		Status: NormalStatus,
-		Data:   make(map[string]string),
+		Id:   nApp.Id,
+		Type: "App",
+		Data: make(map[string]string),
 	}
+	e.setPropStatus(NormalStatus)
 	e.attachNoramlApp(nApp)
 	return e
 }
@@ -89,9 +89,9 @@ func (e *AppEntry) OnDragDrop(x, y int32, data string)  {}
 
 func (e *AppEntry) update() {
 	if e.rApp != nil {
-		e.Status = ActiveStatus
+		e.setPropStatus(ActiveStatus)
 	} else if e.nApp != nil {
-		e.Status = NormalStatus
+		e.setPropStatus(NormalStatus)
 	} else {
 		LOGGER.Warning(e.Id + " goto an invalid status")
 		return
@@ -99,13 +99,13 @@ func (e *AppEntry) update() {
 	//NOTE: sync this with NormalApp/RuntimeApp
 	switch e.Status {
 	case ActiveStatus:
-		e.Tooltip = e.rApp.CurrentInfo.Title
-		e.Icon = e.rApp.CurrentInfo.Icon
-		e.Menu = e.rApp.Menu
+		e.setPropTooltip(e.rApp.CurrentInfo.Title)
+		e.setPropIcon(e.rApp.CurrentInfo.Icon)
+		e.setPropMenu(e.rApp.Menu)
 	case NormalStatus:
-		e.Icon = e.nApp.Icon
-		e.Tooltip = e.nApp.Name
-		e.Menu = e.nApp.Menu
+		e.setPropTooltip(e.nApp.Name)
+		e.setPropIcon(e.nApp.Icon)
+		e.setPropMenu(e.nApp.Menu)
 	}
 }
 func (e *AppEntry) attachNoramlApp(nApp *NormalApp) {
