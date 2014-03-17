@@ -2792,7 +2792,11 @@ idle_set_mode (GsdPowerManager *manager, GsdPowerIdleMode mode)
             action_type = g_settings_get_enum (manager->priv->settings,
                                                "sleep-inactive-ac-type");
         }
-        /*do_power_action_type (manager, action_type);*/
+#ifdef MAIN
+        do_power_action_type (manager, action_type);
+#else
+        do_power_action_type();
+#endif
 
         /* turn on screen and restore user-selected brightness level */
     }

@@ -28,7 +28,7 @@ const (
 const (
 	AUDIO_MUTE = "AudioMute"
 	AUDIO_UP   = "AudioUp"
-	AUDIO_DOWN = "AudioDOwn"
+	AUDIO_DOWN = "AudioDown"
 )
 
 //var l = logger.NewLogger("audio")
