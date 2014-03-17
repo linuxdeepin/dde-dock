@@ -26,8 +26,8 @@ type EntryProxyer struct {
 
 	Status int32 `Actived/Normal/`
 
-	QuickWindowVieable bool
-	Allocation         Rectangle
+	QuickWindowViewable bool
+	Allocation          Rectangle
 
 	Data map[string]string
 }
@@ -57,7 +57,7 @@ func NewEntryProxyer(entryId string) (e *EntryProxyer, err error) {
 	e.Tooltip = e.core.Tooltip.Get()
 	e.Icon = e.core.Icon.Get()
 	e.Status = e.core.Status.Get()
-	e.QuickWindowVieable = e.core.QuickWindowVieable.Get()
+	e.QuickWindowViewable = e.core.QuickWindowViewable.Get()
 	r := e.core.Allocation.Get()
 	e.Allocation = Rectangle{r[0].(int16), r[1].(int16), r[2].(uint16), r[3].(uint16)}
 	e.Data = e.core.Data.Get()
@@ -67,7 +67,7 @@ func NewEntryProxyer(entryId string) (e *EntryProxyer, err error) {
 	dbus.NotifyChange(e, "Tooltip")
 	dbus.NotifyChange(e, "Icon")
 	dbus.NotifyChange(e, "Status")
-	dbus.NotifyChange(e, "QuickWindowVieable")
+	dbus.NotifyChange(e, "QuickWindowViewable")
 	dbus.NotifyChange(e, "Allocation")
 	dbus.NotifyChange(e, "Data")
 
@@ -92,9 +92,9 @@ func NewEntryProxyer(entryId string) (e *EntryProxyer, err error) {
 		e.Status = e.core.Status.Get()
 		dbus.NotifyChange(e, "Status")
 	})
-	e.core.QuickWindowVieable.ConnectChanged(func() {
-		e.QuickWindowVieable = e.core.QuickWindowVieable.Get()
-		dbus.NotifyChange(e, "QuickWindowVieable")
+	e.core.QuickWindowViewable.ConnectChanged(func() {
+		e.QuickWindowViewable = e.core.QuickWindowViewable.Get()
+		dbus.NotifyChange(e, "QuickWindowViewable")
 	})
 	e.core.Allocation.ConnectChanged(func() {
 		r := e.core.Allocation.Get()

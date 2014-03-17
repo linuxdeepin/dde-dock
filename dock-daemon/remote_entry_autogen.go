@@ -38,14 +38,14 @@ type RemoteEntry struct {
 	signals       map[chan *dbus.Signal]bool
 	signalsLocker sync.Mutex
 
-	Id                 *dbusPropertyRemoteEntryId
-	Type               *dbusPropertyRemoteEntryType
-	Tooltip            *dbusPropertyRemoteEntryTooltip
-	Icon               *dbusPropertyRemoteEntryIcon
-	Status             *dbusPropertyRemoteEntryStatus
-	QuickWindowVieable *dbusPropertyRemoteEntryQuickWindowVieable
-	Allocation         *dbusPropertyRemoteEntryAllocation
-	Data               *dbusPropertyRemoteEntryData
+	Id                  *dbusPropertyRemoteEntryId
+	Type                *dbusPropertyRemoteEntryType
+	Tooltip             *dbusPropertyRemoteEntryTooltip
+	Icon                *dbusPropertyRemoteEntryIcon
+	Status              *dbusPropertyRemoteEntryStatus
+	QuickWindowViewable *dbusPropertyRemoteEntryQuickWindowViewable
+	Allocation          *dbusPropertyRemoteEntryAllocation
+	Data                *dbusPropertyRemoteEntryData
 }
 
 func (obj RemoteEntry) _createSignalChan() chan *dbus.Signal {
@@ -83,6 +83,14 @@ func (obj RemoteEntry) Activate(arg0 int32, arg1 int32) (_err error) {
 
 func (obj RemoteEntry) ContextMenu(arg0 int32, arg1 int32) (_err error) {
 	_err = obj.core.Call("dde.dock.Entry.ContextMenu", 0, arg0, arg1).Store()
+	if _err != nil {
+		fmt.Println(_err)
+	}
+	return
+}
+
+func (obj RemoteEntry) HideQuickWindow() (_err error) {
+	_err = obj.core.Call("dde.dock.Entry.HideQuickWindow", 0).Store()
 	if _err != nil {
 		fmt.Println(_err)
 	}
@@ -267,29 +275,29 @@ func (this *dbusPropertyRemoteEntryStatus) GetType() reflect.Type {
 	return reflect.TypeOf((*int32)(nil)).Elem()
 }
 
-type dbusPropertyRemoteEntryQuickWindowVieable struct {
+type dbusPropertyRemoteEntryQuickWindowViewable struct {
 	*property.BaseObserver
 	core *dbus.Object
 }
 
-func (this *dbusPropertyRemoteEntryQuickWindowVieable) SetValue(notwritable interface{}) {
-	fmt.Println("dde.dock.Entry.QuickWindowVieable is not writable")
+func (this *dbusPropertyRemoteEntryQuickWindowViewable) SetValue(notwritable interface{}) {
+	fmt.Println("dde.dock.Entry.QuickWindowViewable is not writable")
 }
 
-func (this *dbusPropertyRemoteEntryQuickWindowVieable) Get() bool {
+func (this *dbusPropertyRemoteEntryQuickWindowViewable) Get() bool {
 	return this.GetValue().(bool)
 }
-func (this *dbusPropertyRemoteEntryQuickWindowVieable) GetValue() interface{} /*bool*/ {
+func (this *dbusPropertyRemoteEntryQuickWindowViewable) GetValue() interface{} /*bool*/ {
 	var r dbus.Variant
-	err := this.core.Call("org.freedesktop.DBus.Properties.Get", 0, "dde.dock.Entry", "QuickWindowVieable").Store(&r)
+	err := this.core.Call("org.freedesktop.DBus.Properties.Get", 0, "dde.dock.Entry", "QuickWindowViewable").Store(&r)
 	if err == nil && r.Signature().String() == "b" {
 		return r.Value().(bool)
 	} else {
-		fmt.Println("dbusProperty:QuickWindowVieable error:", err, "at dde.dock.Entry")
+		fmt.Println("dbusProperty:QuickWindowViewable error:", err, "at dde.dock.Entry")
 		return *new(bool)
 	}
 }
-func (this *dbusPropertyRemoteEntryQuickWindowVieable) GetType() reflect.Type {
+func (this *dbusPropertyRemoteEntryQuickWindowViewable) GetType() reflect.Type {
 	return reflect.TypeOf((*bool)(nil)).Elem()
 }
 
@@ -364,7 +372,7 @@ func NewRemoteEntry(destName string, path dbus.ObjectPath) (*RemoteEntry, error)
 	obj.Tooltip = &dbusPropertyRemoteEntryTooltip{&property.BaseObserver{}, core}
 	obj.Icon = &dbusPropertyRemoteEntryIcon{&property.BaseObserver{}, core}
 	obj.Status = &dbusPropertyRemoteEntryStatus{&property.BaseObserver{}, core}
-	obj.QuickWindowVieable = &dbusPropertyRemoteEntryQuickWindowVieable{&property.BaseObserver{}, core}
+	obj.QuickWindowViewable = &dbusPropertyRemoteEntryQuickWindowViewable{&property.BaseObserver{}, core}
 	obj.Allocation = &dbusPropertyRemoteEntryAllocation{&property.BaseObserver{}, core}
 	obj.Data = &dbusPropertyRemoteEntryData{&property.BaseObserver{}, core}
 
@@ -400,8 +408,8 @@ func NewRemoteEntry(destName string, path dbus.ObjectPath) (*RemoteEntry, error)
 					} else if key == "Status" {
 						obj.Status.Notify()
 
-					} else if key == "QuickWindowVieable" {
-						obj.QuickWindowVieable.Notify()
+					} else if key == "QuickWindowViewable" {
+						obj.QuickWindowViewable.Notify()
 
 					} else if key == "Allocation" {
 						obj.Allocation.Notify()
@@ -428,8 +436,8 @@ func NewRemoteEntry(destName string, path dbus.ObjectPath) (*RemoteEntry, error)
 					} else if key == "Status" {
 						obj.Status.Notify()
 
-					} else if key == "QuickWindowVieable" {
-						obj.QuickWindowVieable.Notify()
+					} else if key == "QuickWindowViewable" {
+						obj.QuickWindowViewable.Notify()
 
 					} else if key == "Allocation" {
 						obj.Allocation.Notify()

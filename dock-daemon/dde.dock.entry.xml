@@ -8,6 +8,8 @@
 	    <arg type="i" direction="in"></arg>
 	    <arg type="i" direction="in"></arg>
 	</method>
+        <method name="HideQuickWindow">
+        </method>
 	<method name="OnDragDrop">
 	    <arg type="i" direction="in"></arg>
 	    <arg type="i" direction="in"></arg>
@@ -41,7 +43,7 @@
 	<property name="Tooltip" type="s" access="read"></property>
 	<property name="Icon" type="s" access="read"></property>
 	<property name="Status" type="i" access="read"></property>
-	<property name="QuickWindowVieable" type="b" access="read"></property>
+	<property name="QuickWindowViewable" type="b" access="read"></property>
 	<property name="Allocation" type="(nnqq)" access="read"></property>
         <property name="Data" type="a{ss}" access="read"></property>
     </interface>
