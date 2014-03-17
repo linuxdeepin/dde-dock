@@ -792,14 +792,14 @@ func (audio *Audio) listenMediaKey() {
 			fmt.Println(v)
 			sink = audio.GetDefaultSink()
 			switch v.Name {
-			case AUDIO_MUTE:
+			case MEDIA_KEY_IFC + "." + AUDIO_MUTE:
 				if (v.Body)[0].(bool) {
 					//toggle mute when button released
 					fmt.Println("Toggle mute mode: ", !sink.Mute)
 					sink.SetSinkMute(!sink.Mute)
 				}
 				break
-			case AUDIO_UP:
+			case MEDIA_KEY_IFC + "." + AUDIO_UP:
 				volume := sink.Volume + 5
 				if volume < 0 {
 					volume = 0
@@ -807,13 +807,16 @@ func (audio *Audio) listenMediaKey() {
 				sink.setSinkVolume(volume)
 				fmt.Println("Volume step up: ", volume)
 				break
-			case AUDIO_DOWN:
+			case MEDIA_KEY_IFC + "." + AUDIO_DOWN:
 				volume := sink.Volume - 5
 				if volume < 0 {
 					volume = 0
 				}
 				sink.setSinkVolume(volume)
 				fmt.Println("Volume step down: ", volume)
+				break
+			default:
+				fmt.Println("media key ignored")
 				break
 			}
 		}
