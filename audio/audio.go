@@ -791,33 +791,33 @@ func (audio *Audio) listenMediaKey() {
 		for v := range c {
 			fmt.Println(v)
 			sink = audio.GetDefaultSink()
-			switch v.Name {
-			case MEDIA_KEY_IFC + "." + AUDIO_MUTE:
-				if (v.Body)[0].(bool) {
+			if (v.Body)[0].(bool) {
+				switch v.Name {
+				case MEDIA_KEY_IFC + "." + AUDIO_MUTE:
 					//toggle mute when button released
 					fmt.Println("Toggle mute mode: ", !sink.Mute)
 					sink.SetSinkMute(!sink.Mute)
+					break
+				case MEDIA_KEY_IFC + "." + AUDIO_UP:
+					volume := sink.Volume + 5
+					if volume < 0 {
+						volume = 0
+					}
+					sink.setSinkVolume(volume)
+					fmt.Println("Volume step up: ", volume)
+					break
+				case MEDIA_KEY_IFC + "." + AUDIO_DOWN:
+					volume := sink.Volume - 5
+					if volume < 0 {
+						volume = 0
+					}
+					sink.setSinkVolume(volume)
+					fmt.Println("Volume step down: ", volume)
+					break
+				default:
+					fmt.Println("media key ignored")
+					break
 				}
-				break
-			case MEDIA_KEY_IFC + "." + AUDIO_UP:
-				volume := sink.Volume + 5
-				if volume < 0 {
-					volume = 0
-				}
-				sink.setSinkVolume(volume)
-				fmt.Println("Volume step up: ", volume)
-				break
-			case MEDIA_KEY_IFC + "." + AUDIO_DOWN:
-				volume := sink.Volume - 5
-				if volume < 0 {
-					volume = 0
-				}
-				sink.setSinkVolume(volume)
-				fmt.Println("Volume step down: ", volume)
-				break
-			default:
-				fmt.Println("media key ignored")
-				break
 			}
 		}
 	}()
