@@ -48,7 +48,7 @@ func NewEntryProxyer(entryId string) (e *EntryProxyer, err error) {
 	// init properties
 	e.entryId = entryId
 	e.core = core
-	e.ID = e.core.ID.Get()
+	e.ID = e.core.Id.Get()
 	e.Type = e.core.Type.Get()
 	e.Tooltip = e.core.Tooltip.Get()
 	e.Icon = e.core.Icon.Get()
@@ -68,8 +68,8 @@ func NewEntryProxyer(entryId string) (e *EntryProxyer, err error) {
 	dbus.NotifyChange(e, "Data")
 
 	// monitor properties changed
-	e.core.ID.ConnectChanged(func() {
-		e.ID = e.core.ID.Get()
+	e.core.Id.ConnectChanged(func() {
+		e.ID = e.core.Id.Get()
 		dbus.NotifyChange(e, "ID")
 	})
 	e.core.Type.ConnectChanged(func() {

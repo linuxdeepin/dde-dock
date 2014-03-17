@@ -36,7 +36,7 @@
 	    <arg type="i" direction="in"></arg>
 	    <arg type="i" direction="in"></arg>
 	</method>
-	<property name="ID" type="s" access="read"></property>
+	<property name="Id" type="s" access="read"></property>
 	<property name="Type" type="s" access="read"></property>
 	<property name="Tooltip" type="s" access="read"></property>
 	<property name="Icon" type="s" access="read"></property>

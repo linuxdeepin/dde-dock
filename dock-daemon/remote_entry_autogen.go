@@ -38,7 +38,7 @@ type RemoteEntry struct {
 	signals       map[chan *dbus.Signal]bool
 	signalsLocker sync.Mutex
 
-	ID                 *dbusPropertyRemoteEntryID
+	Id                 *dbusPropertyRemoteEntryId
 	Type               *dbusPropertyRemoteEntryType
 	Tooltip            *dbusPropertyRemoteEntryTooltip
 	Icon               *dbusPropertyRemoteEntryIcon
@@ -137,29 +137,29 @@ func (obj RemoteEntry) SecondaryActivate(arg0 int32, arg1 int32) (_err error) {
 	return
 }
 
-type dbusPropertyRemoteEntryID struct {
+type dbusPropertyRemoteEntryId struct {
 	*property.BaseObserver
 	core *dbus.Object
 }
 
-func (this *dbusPropertyRemoteEntryID) SetValue(notwritable interface{}) {
-	fmt.Println("dde.dock.Entry.ID is not writable")
+func (this *dbusPropertyRemoteEntryId) SetValue(notwritable interface{}) {
+	fmt.Println("dde.dock.Entry.Id is not writable")
 }
 
-func (this *dbusPropertyRemoteEntryID) Get() string {
+func (this *dbusPropertyRemoteEntryId) Get() string {
 	return this.GetValue().(string)
 }
-func (this *dbusPropertyRemoteEntryID) GetValue() interface{} /*string*/ {
+func (this *dbusPropertyRemoteEntryId) GetValue() interface{} /*string*/ {
 	var r dbus.Variant
-	err := this.core.Call("org.freedesktop.DBus.Properties.Get", 0, "dde.dock.Entry", "ID").Store(&r)
+	err := this.core.Call("org.freedesktop.DBus.Properties.Get", 0, "dde.dock.Entry", "Id").Store(&r)
 	if err == nil && r.Signature().String() == "s" {
 		return r.Value().(string)
 	} else {
-		fmt.Println("dbusProperty:ID error:", err, "at dde.dock.Entry")
+		fmt.Println("dbusProperty:Id error:", err, "at dde.dock.Entry")
 		return *new(string)
 	}
 }
-func (this *dbusPropertyRemoteEntryID) GetType() reflect.Type {
+func (this *dbusPropertyRemoteEntryId) GetType() reflect.Type {
 	return reflect.TypeOf((*string)(nil)).Elem()
 }
 
@@ -359,7 +359,7 @@ func NewRemoteEntry(destName string, path dbus.ObjectPath) (*RemoteEntry, error)
 
 	obj := &RemoteEntry{Path: path, DestName: destName, core: core, signals: make(map[chan *dbus.Signal]bool)}
 
-	obj.ID = &dbusPropertyRemoteEntryID{&property.BaseObserver{}, core}
+	obj.Id = &dbusPropertyRemoteEntryId{&property.BaseObserver{}, core}
 	obj.Type = &dbusPropertyRemoteEntryType{&property.BaseObserver{}, core}
 	obj.Tooltip = &dbusPropertyRemoteEntryTooltip{&property.BaseObserver{}, core}
 	obj.Icon = &dbusPropertyRemoteEntryIcon{&property.BaseObserver{}, core}
@@ -385,8 +385,8 @@ func NewRemoteEntry(destName string, path dbus.ObjectPath) (*RemoteEntry, error)
 				props := v.Body[1].(map[string]dbus.Variant)
 				for key, _ := range props {
 					if false {
-					} else if key == "ID" {
-						obj.ID.Notify()
+					} else if key == "Id" {
+						obj.Id.Notify()
 
 					} else if key == "Type" {
 						obj.Type.Notify()
@@ -413,8 +413,8 @@ func NewRemoteEntry(destName string, path dbus.ObjectPath) (*RemoteEntry, error)
 			} else if v.Name == "dde.dock.Entry.PropertiesChanged" && len(v.Body) == 1 && reflect.TypeOf(v.Body[0]) == typeKeyValues {
 				for key, _ := range v.Body[0].(map[string]dbus.Variant) {
 					if false {
-					} else if key == "ID" {
-						obj.ID.Notify()
+					} else if key == "Id" {
+						obj.Id.Notify()
 
 					} else if key == "Type" {
 						obj.Type.Notify()
