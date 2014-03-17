@@ -18,7 +18,7 @@ type EntryProxyer struct {
 	objectPath dbus.ObjectPath
 	core       *RemoteEntry
 
-	ID   string `dmusic`
+	Id   string `dmusic`
 	Type string `applet/other`
 
 	Tooltip string
@@ -52,7 +52,7 @@ func NewEntryProxyer(entryId string) (e *EntryProxyer, err error) {
 	// init properties
 	e.entryId = entryId
 	e.core = core
-	e.ID = e.core.Id.Get()
+	e.Id = e.core.Id.Get()
 	e.Type = e.core.Type.Get()
 	e.Tooltip = e.core.Tooltip.Get()
 	e.Icon = e.core.Icon.Get()
@@ -62,7 +62,7 @@ func NewEntryProxyer(entryId string) (e *EntryProxyer, err error) {
 	e.Allocation = Rectangle{r[0].(int16), r[1].(int16), r[2].(uint16), r[3].(uint16)}
 	e.Data = e.core.Data.Get()
 
-	dbus.NotifyChange(e, "ID")
+	dbus.NotifyChange(e, "Id")
 	dbus.NotifyChange(e, "Type")
 	dbus.NotifyChange(e, "Tooltip")
 	dbus.NotifyChange(e, "Icon")
@@ -73,8 +73,8 @@ func NewEntryProxyer(entryId string) (e *EntryProxyer, err error) {
 
 	// monitor properties changed
 	e.core.Id.ConnectChanged(func() {
-		e.ID = e.core.Id.Get()
-		dbus.NotifyChange(e, "ID")
+		e.Id = e.core.Id.Get()
+		dbus.NotifyChange(e, "Id")
 	})
 	e.core.Type.ConnectChanged(func() {
 		e.Type = e.core.Type.Get()
