@@ -1391,7 +1391,7 @@ manager_critical_action_do (GsdPowerManager *manager,
     play_loop_stop (&manager->priv->critical_alert_timeout_id);
 
     action_type = manager_critical_action_get (manager, is_ups);
-    do_power_action_type (manager, action_type);
+    /*do_power_action_type (manager, action_type);*/
 
     return FALSE;
 }
@@ -2792,7 +2792,7 @@ idle_set_mode (GsdPowerManager *manager, GsdPowerIdleMode mode)
             action_type = g_settings_get_enum (manager->priv->settings,
                                                "sleep-inactive-ac-type");
         }
-        do_power_action_type (manager, action_type);
+        /*do_power_action_type (manager, action_type);*/
 
         /* turn on screen and restore user-selected brightness level */
     }
