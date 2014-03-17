@@ -1392,11 +1392,7 @@ manager_critical_action_do (GsdPowerManager *manager,
 
     action_type = manager_critical_action_get (manager, is_ups);
 
-#ifdef MAIN
     do_power_action_type (manager, action_type);
-#else
-    action_suspend(manager);
-#endif
 
     return FALSE;
 }
