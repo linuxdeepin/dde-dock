@@ -713,3 +713,8 @@ func main() {
 
 	dlib.StartLoop()
 }
+
+//export
+func doPowerActionType(action int) {
+
+}

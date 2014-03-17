@@ -2146,59 +2146,63 @@ gnome_session_logout (GsdPowerManager *manager,
                        gnome_session_logout_cb, NULL);
 }
 
-/*static void*/
-/*action_poweroff (GsdPowerManager *manager)*/
-/*{*/
-/*if (manager->priv->logind_proxy == NULL)*/
-/*{*/
-/*g_warning ("no systemd support");*/
-/*return;*/
-/*}*/
-/*g_dbus_proxy_call (manager->priv->logind_proxy,*/
-/*"PowerOff",*/
-/*g_variant_new ("(b)", FALSE),*/
-/*G_DBUS_CALL_FLAGS_NONE,*/
-/*G_MAXINT,*/
-/*NULL,*/
-/*NULL,*/
-/*NULL);*/
-/*}*/
+#ifdef MAIN
 
-/*static void*/
-/*action_suspend (GsdPowerManager *manager)*/
-/*{*/
-/*if (manager->priv->logind_proxy == NULL)*/
-/*{*/
-/*g_warning ("no systemd support");*/
-/*return;*/
-/*}*/
-/*g_dbus_proxy_call (manager->priv->logind_proxy,*/
-/*"Suspend",*/
-/*g_variant_new ("(b)", FALSE),*/
-/*G_DBUS_CALL_FLAGS_NONE,*/
-/*G_MAXINT,*/
-/*NULL,*/
-/*NULL,*/
-/*NULL);*/
-/*}*/
+static void
+action_poweroff (GsdPowerManager *manager)
+{
+    if (manager->priv->logind_proxy == NULL)
+    {
+        g_warning ("no systemd support");
+        return;
+    }
+    g_dbus_proxy_call (manager->priv->logind_proxy,
+                       "PowerOff",
+                       g_variant_new ("(b)", FALSE),
+                       G_DBUS_CALL_FLAGS_NONE,
+                       G_MAXINT,
+                       NULL,
+                       NULL,
+                       NULL);
+}
 
-/*static void*/
-/*action_hibernate (GsdPowerManager *manager)*/
-/*{*/
-/*if (manager->priv->logind_proxy == NULL)*/
-/*{*/
-/*g_warning ("no systemd support");*/
-/*return;*/
-/*}*/
-/*g_dbus_proxy_call (manager->priv->logind_proxy,*/
-/*"Hibernate",*/
-/*g_variant_new ("(b)", FALSE),*/
-/*G_DBUS_CALL_FLAGS_NONE,*/
-/*G_MAXINT,*/
-/*NULL,*/
-/*NULL,*/
-/*NULL);*/
-/*}*/
+static void
+action_suspend (GsdPowerManager *manager)
+{
+    if (manager->priv->logind_proxy == NULL)
+    {
+        g_warning ("no systemd support");
+        return;
+    }
+    g_dbus_proxy_call (manager->priv->logind_proxy,
+                       "Suspend",
+                       g_variant_new ("(b)", FALSE),
+                       G_DBUS_CALL_FLAGS_NONE,
+                       G_MAXINT,
+                       NULL,
+                       NULL,
+                       NULL);
+}
+
+static void
+action_hibernate (GsdPowerManager *manager)
+{
+    if (manager->priv->logind_proxy == NULL)
+    {
+        g_warning ("no systemd support");
+        return;
+    }
+    g_dbus_proxy_call (manager->priv->logind_proxy,
+                       "Hibernate",
+                       g_variant_new ("(b)", FALSE),
+                       G_DBUS_CALL_FLAGS_NONE,
+                       G_MAXINT,
+                       NULL,
+                       NULL,
+                       NULL);
+}
+
+#endif
 
 static void
 backlight_enable (GsdPowerManager *manager)
@@ -2237,6 +2241,7 @@ backlight_disable (GsdPowerManager *manager)
     g_debug ("TESTSUITE: Blanked screen");
 }
 
+#ifdef MAIN
 static void
 do_power_action_type (GsdPowerManager *manager,
                       GsdPowerActionType action_type)
@@ -2249,15 +2254,15 @@ do_power_action_type (GsdPowerManager *manager,
     case GSD_POWER_ACTION_INTERACTIVE:
         gnome_session_shutdown (manager);
         break;
-        /*case GSD_POWER_ACTION_HIBERNATE:*/
-        /*action_hibernate (manager);*/
-        /*break;*/
-        /*case GSD_POWER_ACTION_SHUTDOWN:*/
-        /* this is only used on critically low battery where
-         * hibernate is not available and is marginally better
-         * than just powering down the computer mid-write */
-        /*action_poweroff (manager);*/
-        /*break;*/
+    case GSD_POWER_ACTION_HIBERNATE:
+        action_hibernate (manager);
+        break;
+    case GSD_POWER_ACTION_SHUTDOWN:
+        /*this is only used on critically low battery where*/
+        /*hibernate is not available and is marginally better*/
+        /*than just powering down the computer mid - write*/
+        action_poweroff (manager);
+        break;
     case GSD_POWER_ACTION_BLANK:
         backlight_disable (manager);
         break;
@@ -2268,6 +2273,7 @@ do_power_action_type (GsdPowerManager *manager,
         break;
     }
 }
+#endif
 
 static GsmInhibitorFlag
 get_idle_inhibitors_for_action (GsdPowerActionType action_type)

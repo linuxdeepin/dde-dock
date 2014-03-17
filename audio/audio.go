@@ -786,6 +786,7 @@ func (audio *Audio) listenMediaKey() {
 			"type='signal',sender='com.deepin.daemon.KeyBinding',path='/com/deepin/daemon/MediaKey',interface='com.deepin.daemon.MediaKey',member='"+AUDIO_DOWN+"'")
 		c := make(chan *dbus.Signal, 16)
 		conn.Signal(c)
+		fmt.Println("listening to media keys")
 		var sink *Sink
 		for v := range c {
 			fmt.Println(v)
