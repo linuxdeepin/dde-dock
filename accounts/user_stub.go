@@ -31,7 +31,7 @@ const (
         CMD_GPASSWD = "/usr/bin/gpasswd"
 
         USER_ICON_DIR     = "/var/lib/AccountsService/icons/"
-        USER_DEFAULT_ICON = USER_ICON_DIR + "1.jpg"
+        USER_DEFAULT_ICON = USER_ICON_DIR + "1.png"
         USER_DEFAULT_BG   = "file:///usr/share/backgrounds/default_background.jpg"
         USER_CONFIG_FILE  = "/var/lib/AccountsService/users/"
 )
