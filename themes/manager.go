@@ -58,8 +58,8 @@ func (op *Manager) SetGtkTheme(name string) (string, bool) {
 
         defer setGtkThemeViaXSettings(name)
         if obj := op.getThemeObject(op.CurrentTheme); obj != nil {
-                v := op.setTheme(name, obj.IconTheme, obj.GtkCursorTheme,
-                        obj.GtkFontName, obj.BackgroundFile, obj.SoundThemeName)
+                v := op.setTheme(name, obj.IconTheme, obj.CursorTheme,
+                        obj.FontName, obj.BackgroundFile, obj.SoundThemeName)
                 op.updateCurrentTheme(v)
                 return v, true
         }
@@ -75,7 +75,7 @@ func (op *Manager) SetIconTheme(name string) (string, bool) {
         defer setIconThemeViaXSettings(name)
         if obj := op.getThemeObject(op.CurrentTheme); obj != nil {
                 v := op.setTheme(obj.GtkTheme, name,
-                        obj.GtkCursorTheme, obj.GtkFontName, obj.BackgroundFile, obj.SoundThemeName)
+                        obj.CursorTheme, obj.FontName, obj.BackgroundFile, obj.SoundThemeName)
                 op.updateCurrentTheme(v)
                 return v, true
         }
@@ -83,15 +83,15 @@ func (op *Manager) SetIconTheme(name string) (string, bool) {
         return op.CurrentTheme, false
 }
 
-func (op *Manager) SetGtkCursorTheme(name string) (string, bool) {
+func (op *Manager) SetCursorTheme(name string) (string, bool) {
         if len(name) <= 0 {
                 return op.CurrentTheme, false
         }
 
-        defer setGtkCursorThemeViaXSettings(name)
+        defer setCursorThemeViaXSettings(name)
         if obj := op.getThemeObject(op.CurrentTheme); obj != nil {
                 v := op.setTheme(obj.GtkTheme, obj.IconTheme,
-                        name, obj.GtkFontName, obj.BackgroundFile, obj.SoundThemeName)
+                        name, obj.FontName, obj.BackgroundFile, obj.SoundThemeName)
                 op.updateCurrentTheme(v)
                 return v, true
         }
@@ -99,7 +99,7 @@ func (op *Manager) SetGtkCursorTheme(name string) (string, bool) {
         return op.CurrentTheme, false
 }
 
-func (op *Manager) SetGtkFontTheme(name string) (string, bool) {
+func (op *Manager) SetFontName(name string) (string, bool) {
         if len(name) <= 0 {
                 return op.CurrentTheme, false
         }
@@ -107,7 +107,7 @@ func (op *Manager) SetGtkFontTheme(name string) (string, bool) {
         defer setGtkFontThemeViaXSettings(name)
         if obj := op.getThemeObject(op.CurrentTheme); obj != nil {
                 v := op.setTheme(obj.GtkTheme, obj.IconTheme,
-                        obj.GtkCursorTheme, name, obj.BackgroundFile, obj.SoundThemeName)
+                        obj.CursorTheme, name, obj.BackgroundFile, obj.SoundThemeName)
                 op.updateCurrentTheme(v)
                 return v, true
         }
@@ -122,7 +122,7 @@ func (op *Manager) SetBackgroundFile(name string) (string, bool) {
 
         if obj := op.getThemeObject(op.CurrentTheme); obj != nil {
                 v := op.setTheme(obj.GtkTheme, obj.IconTheme,
-                        obj.GtkCursorTheme, obj.GtkFontName, name, obj.SoundThemeName)
+                        obj.CursorTheme, obj.FontName, name, obj.SoundThemeName)
                 op.updateCurrentTheme(v)
                 return v, true
         }
@@ -137,7 +137,7 @@ func (op *Manager) SetSoundTheme(name string) (string, bool) {
 
         if obj := op.getThemeObject(op.CurrentTheme); obj != nil {
                 v := op.setTheme(obj.GtkTheme, obj.IconTheme,
-                        obj.GtkCursorTheme, obj.GtkFontName, obj.BackgroundFile, name)
+                        obj.CursorTheme, obj.FontName, obj.BackgroundFile, name)
                 op.updateCurrentTheme(v)
                 return v, true
         }
@@ -275,7 +275,7 @@ func isThemeExist(gtk, icon, cursor, gtkFont, bg, sound, path string) (string, b
         }
 
         if gtk != obj.GtkTheme || icon != obj.IconTheme ||
-                cursor != obj.GtkCursorTheme || gtkFont != obj.GtkFontName ||
+                cursor != obj.CursorTheme || gtkFont != obj.FontName ||
                 obj.BackgroundFile != bg || obj.SoundThemeName != sound {
                 return "", false
         }

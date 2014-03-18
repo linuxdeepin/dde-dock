@@ -30,8 +30,8 @@ type Theme struct {
         Type           string  //system or local theme
         GtkTheme       string
         IconTheme      string
-        GtkCursorTheme string
-        GtkFontName    string
+        CursorTheme    string
+        FontName       string
         BackgroundFile string
         SoundThemeName string
         PreviewPath    string

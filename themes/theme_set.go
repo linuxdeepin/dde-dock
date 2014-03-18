@@ -27,7 +27,7 @@ import (
 
 const (
         FONT_DEFAULT_SIZE = " 11"
-        TITLE_FONT_SIZE   = " 8"
+        TITLE_FONT_SIZE   = " 10"
 )
 
 var (
@@ -37,8 +37,8 @@ var (
 func (op *Theme) setThemeViaXSettings() {
         setGtkThemeViaXSettings(op.GtkTheme)
         setIconThemeViaXSettings(op.IconTheme)
-        setGtkCursorThemeViaXSettings(op.GtkCursorTheme)
-        setGtkFontThemeViaXSettings(op.GtkFontName)
+        setCursorThemeViaXSettings(op.CursorTheme)
+        setGtkFontThemeViaXSettings(op.FontName)
 }
 
 func setGtkThemeViaXSettings(name string) {
@@ -50,11 +50,12 @@ func setIconThemeViaXSettings(name string) {
         objXSettings.SetString("Net/IconThemeName", name)
 }
 
-func setGtkCursorThemeViaXSettings(name string) {
+func setCursorThemeViaXSettings(name string) {
         objXSettings.SetString("Gtk/CursorThemeName", name)
 }
 
 func setGtkFontThemeViaXSettings(name string) {
+        //logObject.Info("Set Font: %s\n", name)
         objXSettings.SetString("Gtk/FontName", name+FONT_DEFAULT_SIZE)
         wmPreSettings.SetString("titlebar-font", name+TITLE_FONT_SIZE)
 }

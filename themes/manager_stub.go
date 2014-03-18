@@ -149,7 +149,7 @@ func (op *Manager) listenSettingsChanged() {
                         obj := op.getThemeObject(op.CurrentTheme)
                         if obj != nil && obj.BackgroundFile != value {
                                 if name := op.setTheme(obj.GtkTheme, obj.IconTheme,
-                                        obj.GtkCursorTheme, obj.GtkFontName,
+                                        obj.CursorTheme, obj.FontName,
                                         value, obj.SoundThemeName); name != op.CurrentTheme {
                                         op.updateCurrentTheme(name)
                                 }

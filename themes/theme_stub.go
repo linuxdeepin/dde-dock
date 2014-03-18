@@ -38,7 +38,7 @@ const (
         THEME_KEY_GTK         = "GtkTheme"
         THEME_KEY_ICONS       = "IconTheme"
         THEME_KEY_CURSOR      = "CursorTheme"
-        THEME_KEY_GTK_FONT    = "GtkFont"
+        THEME_KEY_GTK_FONT    = "FontName"
         THEME_KEY_BG          = "BackgroundFile"
         THEME_KEY_SOUND       = "SoundTheme"
 )
@@ -101,8 +101,8 @@ func (op *Theme) updateThemeInfo() {
                         THEME_KEY_CURSOR, err1)
                 return
         }
-        op.GtkCursorTheme = str
-        dbus.NotifyChange(op, "GtkCursorTheme")
+        op.CursorTheme = str
+        dbus.NotifyChange(op, "CursorTheme")
 
         str, err1 = keyFile.GetString(THEME_GROUP_COMPONENT,
                 THEME_KEY_GTK_FONT)
@@ -111,8 +111,8 @@ func (op *Theme) updateThemeInfo() {
                         THEME_KEY_GTK_FONT, err1)
                 return
         }
-        op.GtkFontName = str
-        dbus.NotifyChange(op, "GtkFontName")
+        op.FontName = str
+        dbus.NotifyChange(op, "FontName")
 
         str, err1 = keyFile.GetString(THEME_GROUP_COMPONENT,
                 THEME_KEY_BG)
