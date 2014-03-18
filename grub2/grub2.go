@@ -487,7 +487,6 @@ func main() {
 	grub.theme.load()
 
 	dbus.DealWithUnhandledMessage()
-
 	if err := dbus.Wait(); err != nil {
 		logger.Error("lost dbus session: %v", err)
 		os.Exit(1)

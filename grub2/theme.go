@@ -39,8 +39,6 @@ const (
 	themeBgFile    = themePath + "/background.png"
 )
 
-var updateThemeBackgroundID uint32 // mark the asynchronous operation's ID when setup background.
-
 // ThemeScheme stores scheme data which be used when customing deepin grub2 theme.
 type ThemeScheme struct {
 	ItemColor, SelectedItemColor, TerminalBox, MenuPixmapStyle, ScrollbarThumb string
@@ -67,8 +65,6 @@ type Theme struct {
 	Background        string `access:"read"` // absolute background file path
 	ItemColor         string `access:"readwrite"`
 	SelectedItemColor string `access:"readwrite"`
-
-	BackgroundUpdated func(uint32, bool)
 }
 
 // NewTheme create Theme object.
@@ -130,15 +126,8 @@ func (theme *Theme) regenerateBackgroundIfNeed() {
 	}
 
 	if needUpdate {
-		ok, _ := grub2ext.DoGenerateThemeBackground(screenWidth, screenHeight)
-		dbus.NotifyChange(theme, "Background")
-
-		updateThemeBackgroundID++
-		id := updateThemeBackgroundID
-		if theme.BackgroundUpdated != nil {
-			theme.BackgroundUpdated(id, ok)
-		}
-
+		grub2ext.DoGenerateThemeBackground(screenWidth, screenHeight)
+		dbus.NotifyChange(theme, "Background") // TODO
 		logger.Info("update background sucess")
 	}
 }
