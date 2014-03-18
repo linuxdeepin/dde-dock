@@ -33,6 +33,7 @@ const (
         MANAGER_IFC  = "com.deepin.daemon.ThemeManager"
 
         PERSONALIZATION_ID = "com.deepin.dde.personalization"
+        DEFAULT_THEME_NAME = "Deepin"
 )
 
 var (
@@ -64,17 +65,24 @@ func (op *Manager) setPropName(propName string) {
         switch propName {
         case "ThemeList":
                 list := getThemeList()
+                logObject.Info("Theme List: %v\n", list)
                 for _, l := range list {
                         id := genId()
                         idStr := strconv.FormatInt(int64(id), 10)
                         path := THEME_PATH + idStr
                         op.ThemeList = append(op.ThemeList, path)
                         op.pathNameMap[path] = l
+                        themeNamePathMap[l.path] = path
                 }
                 dbus.NotifyChange(op, propName)
         case "CurrentTheme":
                 value := personSettings.GetString("current-theme")
-                op.CurrentTheme = value
+                if _, ok := themeNamePathMap[value]; ok {
+                        op.CurrentTheme = value
+                } else {
+                        op.CurrentTheme = DEFAULT_THEME_NAME
+                        personSettings.SetString("current-theme", DEFAULT_THEME_NAME)
+                }
                 dbus.NotifyChange(op, propName)
         case "GtkThemeList":
                 list := getGtkThemeList()

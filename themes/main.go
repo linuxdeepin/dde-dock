@@ -31,12 +31,13 @@ import (
 )
 
 var (
-        objManager   *Manager
-        objXSettings *xs.XSettings
-        objUtil      *utils.Utils
-        mutex        = new(sync.Mutex)
-        logObject    = logger.NewLogger("daemon/themes")
-        themeObjMap  = make(map[string]*Theme)
+        objManager       *Manager
+        objXSettings     *xs.XSettings
+        objUtil          *utils.Utils
+        mutex            = new(sync.Mutex)
+        logObject        = logger.NewLogger("daemon/themes")
+        themeObjMap      = make(map[string]*Theme)
+        themeNamePathMap = make(map[string]string)
 
         genId, destroyId = func() (func() int, func()) {
                 count := 0

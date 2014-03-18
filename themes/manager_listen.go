@@ -27,6 +27,7 @@ import (
 )
 
 func (op *Manager) listenThemeDir(dir string) {
+        //logObject.Info("Listen Dir: %s\n", dir)
         watcher, err := fsnotify.NewWatcher()
         if err != nil {
                 logObject.Info("Create new watch failed: %v", err)
