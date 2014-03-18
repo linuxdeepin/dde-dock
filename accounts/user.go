@@ -101,14 +101,6 @@ func (op *UserManager) SetBackgroundFile(bg string) {
         }
 }
 
-func (op *UserManager) RandUserIcon() (string, bool) {
-        if icon := getRandUserIcon(); len(icon) > 0 {
-                return icon, true
-        }
-
-        return "", false
-}
-
 func (op *UserManager) GetIconList() []string {
         list := []string{}
 
@@ -133,10 +125,10 @@ func newUserManager(uid string) *UserManager {
         m := &UserManager{}
 
         m.Uid = uid
+        m.updateUserInfo()
         m.initUserInfo()
         m.listenUserInfoChanged(ETC_GROUP)
         m.listenUserInfoChanged(ETC_SHADOW)
-        m.updateUserInfo()
 
         return m
 }

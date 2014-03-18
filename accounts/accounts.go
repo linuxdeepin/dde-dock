@@ -127,6 +127,14 @@ func (op *AccountManager) FindUserByName(name string) string {
         return op.FindUserById(userInfo.Uid)
 }
 
+func (op *AccountManager) RandUserIcon() (string, bool) {
+        if icon := getRandUserIcon(); len(icon) > 0 {
+                return icon, true
+        }
+
+        return "", false
+}
+
 func getInfoViaUid(uid string) (UserInfo, bool) {
         infos := getUserInfoList()
 

@@ -241,8 +241,8 @@ func (op *UserManager) updateUserInfo() {
 }
 
 func (op *UserManager) initUserInfo() {
-        op.applyPropertiesChanged("IconFile", getRandUserIcon())
-        op.applyPropertiesChanged("BackgroundFile", USER_DEFAULT_BG)
+        op.applyPropertiesChanged("IconFile", op.IconFile)
+        op.applyPropertiesChanged("BackgroundFile", op.BackgroundFile)
 }
 
 func addHistoryIcon(filename, iconPath string) []string {
