@@ -177,7 +177,7 @@ func getGtkThemeList() []PathInfo {
 
         list := []PathInfo{}
         for _, v := range valid {
-                if isElementExist(v, thumb) && !isElementExist(v, list) {
+                if isPathInfoInArray(v, thumb) && !isPathInfoInArray(v, list) {
                         list = append(list, v)
                 }
         }
@@ -196,7 +196,7 @@ func getIconThemeList() []PathInfo {
 
         list := []PathInfo{}
         for _, v := range valid {
-                if isElementExist(v, thumb) && !isElementExist(v, list) {
+                if isPathInfoInArray(v, thumb) && !isPathInfoInArray(v, list) {
                         list = append(list, v)
                 }
         }
@@ -215,7 +215,7 @@ func getCursorThemeList() []PathInfo {
 
         list := []PathInfo{}
         for _, v := range valid {
-                if isElementExist(v, thumb) && !isElementExist(v, list) {
+                if isPathInfoInArray(v, thumb) && !isPathInfoInArray(v, list) {
                         list = append(list, v)
                 }
         }

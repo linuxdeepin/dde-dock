@@ -68,7 +68,7 @@ func getValidGtkThemes() []PathInfo {
         sysList := getValidThemes(sysDirs, conditions)
         localList := getValidThemes(localDirs, conditions)
         for _, l := range sysList {
-                if isElementExist(l, localList) {
+                if isPathInfoInArray(l, localList) {
                         continue
                 }
                 localList = append(localList, l)
@@ -87,7 +87,7 @@ func getValidIconThemes() []PathInfo {
         sysList := getValidThemes(sysDirs, conditions)
         localList := getValidThemes(localDirs, conditions)
         for _, l := range sysList {
-                if isElementExist(l, localList) {
+                if isPathInfoInArray(l, localList) {
                         continue
                 }
                 localList = append(localList, l)
@@ -106,7 +106,7 @@ func getValidCursorThemes() []PathInfo {
         sysList := getValidThemes(sysDirs, conditions)
         localList := getValidThemes(localDirs, conditions)
         for _, l := range sysList {
-                if isElementExist(l, localList) {
+                if isPathInfoInArray(l, localList) {
                         continue
                 }
                 localList = append(localList, l)
@@ -194,7 +194,7 @@ func getThemeThumbList() []PathInfo {
         //logObject.Info("System Theme List: %v", sysList)
         //logObject.Info("Local Theme List: %v", localList)
         for _, l := range sysList {
-                if isElementExist(l, localList) {
+                if isPathInfoInArray(l, localList) {
                         continue
                 }
                 localList = append(localList, l)
@@ -212,7 +212,7 @@ func getGtkThumbList() []PathInfo {
         sysList := getThumbList(sysDirs)
         localList := getThumbList(localDirs)
         for _, l := range sysList {
-                if isElementExist(l, localList) {
+                if isPathInfoInArray(l, localList) {
                         continue
                 }
                 localList = append(localList, l)
@@ -230,7 +230,7 @@ func getIconThumbList() []PathInfo {
         sysList := getThumbList(sysDirs)
         localList := getThumbList(localDirs)
         for _, l := range sysList {
-                if isElementExist(l, localList) {
+                if isPathInfoInArray(l, localList) {
                         continue
                 }
                 localList = append(localList, l)
@@ -248,7 +248,7 @@ func getCursorThumbList() []PathInfo {
         sysList := getThumbList(sysDirs)
         localList := getThumbList(localDirs)
         for _, l := range sysList {
-                if isElementExist(l, localList) {
+                if isPathInfoInArray(l, localList) {
                         continue
                 }
                 localList = append(localList, l)
@@ -286,12 +286,21 @@ func getThumbList(dirs []PathInfo) []PathInfo {
         return list
 }
 
-func isElementExist(ele PathInfo, list []PathInfo) bool {
+func isPathInfoInArray(ele PathInfo, list []PathInfo) bool {
         for _, e := range list {
                 if ele.path == e.path {
                         return true
                 }
         }
 
+        return false
+}
+
+func isStringInArray(s string, list []string) bool {
+        for _, i := range list {
+                if i == s {
+                        return true
+                }
+        }
         return false
 }
