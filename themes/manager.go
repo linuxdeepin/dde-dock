@@ -155,7 +155,7 @@ func (op *Manager) setTheme(gtk, icon, cursor, gtkFont, bg, sound string) string
                 }
         }
 
-        createTheme("Custom", gtk, icon, cursor, gtkFont, bg)
+        createTheme("Custom", gtk, icon, cursor, gtkFont, bg, sound)
         op.updateAllProps()
         updateThemeObj(op.pathNameMap)
 
