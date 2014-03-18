@@ -65,7 +65,7 @@ func (op *Manager) setPropName(propName string) {
         switch propName {
         case "ThemeList":
                 list := getThemeList()
-                logObject.Info("Theme List: %v\n", list)
+                //logObject.Info("Theme List: %v\n", list)
                 for _, l := range list {
                         id := genId()
                         idStr := strconv.FormatInt(int64(id), 10)
@@ -86,18 +86,21 @@ func (op *Manager) setPropName(propName string) {
                 dbus.NotifyChange(op, propName)
         case "GtkThemeList":
                 list := getGtkThemeList()
+                //logObject.Info("Gtk Theme List: %v\n", list)
                 for _, l := range list {
                         op.GtkThemeList = append(op.GtkThemeList, l.path)
                 }
                 dbus.NotifyChange(op, propName)
         case "IconThemeList":
                 list := getIconThemeList()
+                //logObject.Info("Icon Theme List: %v\n", list)
                 for _, l := range list {
                         op.IconThemeList = append(op.IconThemeList, l.path)
                 }
                 dbus.NotifyChange(op, propName)
         case "CursorThemeList":
                 list := getCursorThemeList()
+                //logObject.Info("Cursor Theme List: %v\n", list)
                 for _, l := range list {
                         op.CursorThemeList = append(op.CursorThemeList, l.path)
                 }
