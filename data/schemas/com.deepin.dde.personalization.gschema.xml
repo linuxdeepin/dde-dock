@@ -54,5 +54,10 @@
         <summary>Current Theme</summary>
         <description>Current System Theme</description>
     </key>
+    <key type="s" name="current-sound-theme">
+        <default>'LinuxDeepin'</default>
+        <summary>Current Sound Theme</summary>
+        <description>Current System Sound Theme</description>
+    </key>
   </schema>
 </schemalist>
