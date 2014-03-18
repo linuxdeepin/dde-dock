@@ -32,8 +32,9 @@ const (
         MANAGER_PATH = "/com/deepin/daemon/ThemeManager"
         MANAGER_IFC  = "com.deepin.daemon.ThemeManager"
 
-        PERSONALIZATION_ID = "com.deepin.dde.personalization"
-        DEFAULT_THEME_NAME = "Deepin"
+        PERSONALIZATION_ID       = "com.deepin.dde.personalization"
+        DEFAULT_THEME_NAME       = "Deepin"
+        DEFAULT_SOUND_THEME_NAME = "LinuxDeepin"
 )
 
 var (
@@ -58,6 +59,11 @@ func (op *Manager) OnPropertiesChanged(propName string, old interface{}) {
                                 obj.setThemeViaXSettings()
                         }
                 }
+        case "CurrentSoundTheme": // TODO
+                if v, ok := old.(string); ok && v != op.CurrentSoundTheme {
+                        personSettings.SetString("current-sound-theme",
+                                op.CurrentSoundTheme)
+                }
         }
 }
 
@@ -65,7 +71,7 @@ func (op *Manager) setPropName(propName string) {
         switch propName {
         case "ThemeList":
                 list := getThemeList()
-                //logObject.Info("Theme List: %v\n", list)
+                //logObject.Info("Theme List: %v", list)
                 for _, l := range list {
                         id := genId()
                         idStr := strconv.FormatInt(int64(id), 10)
@@ -74,6 +80,30 @@ func (op *Manager) setPropName(propName string) {
                         op.pathNameMap[path] = l
                         themeNamePathMap[l.path] = path
                 }
+                dbus.NotifyChange(op, propName)
+        case "GtkThemeList":
+                list := getGtkThemeList()
+                //logObject.Info("Gtk Theme List: %v", list)
+                for _, l := range list {
+                        op.GtkThemeList = append(op.GtkThemeList, l.path)
+                }
+                dbus.NotifyChange(op, propName)
+        case "IconThemeList":
+                list := getIconThemeList()
+                //logObject.Info("Icon Theme List: %v", list)
+                for _, l := range list {
+                        op.IconThemeList = append(op.IconThemeList, l.path)
+                }
+                dbus.NotifyChange(op, propName)
+        case "CursorThemeList":
+                list := getCursorThemeList()
+                //logObject.Info("Cursor Theme List: %v", list)
+                for _, l := range list {
+                        op.CursorThemeList = append(op.CursorThemeList, l.path)
+                }
+                dbus.NotifyChange(op, propName)
+        case "SoundThemeList":
+                op.SoundThemeList = getSoundThemeList()
                 dbus.NotifyChange(op, propName)
         case "CurrentTheme":
                 value := personSettings.GetString("current-theme")
@@ -84,29 +114,14 @@ func (op *Manager) setPropName(propName string) {
                         personSettings.SetString("current-theme", DEFAULT_THEME_NAME)
                 }
                 dbus.NotifyChange(op, propName)
-        case "GtkThemeList":
-                list := getGtkThemeList()
-                //logObject.Info("Gtk Theme List: %v\n", list)
-                for _, l := range list {
-                        op.GtkThemeList = append(op.GtkThemeList, l.path)
+        case "CurrentSoundTheme": // TODO
+                value := personSettings.GetString("current-sound-theme")
+                if isStringInArray(value, op.SoundThemeList) {
+                        op.CurrentSoundTheme = value
+                } else {
+                        op.CurrentSoundTheme = DEFAULT_SOUND_THEME_NAME
+                        personSettings.SetString("current-sound-theme", DEFAULT_SOUND_THEME_NAME)
                 }
-                dbus.NotifyChange(op, propName)
-        case "IconThemeList":
-                list := getIconThemeList()
-                //logObject.Info("Icon Theme List: %v\n", list)
-                for _, l := range list {
-                        op.IconThemeList = append(op.IconThemeList, l.path)
-                }
-                dbus.NotifyChange(op, propName)
-        case "CursorThemeList":
-                list := getCursorThemeList()
-                //logObject.Info("Cursor Theme List: %v\n", list)
-                for _, l := range list {
-                        op.CursorThemeList = append(op.CursorThemeList, l.path)
-                }
-                dbus.NotifyChange(op, propName)
-        case "SoundThemeList":
-                op.SoundThemeList = getSoundThemeList()
                 dbus.NotifyChange(op, propName)
         }
 }
@@ -126,12 +141,17 @@ func (op *Manager) getThemeObject(name string) *Theme {
 }
 
 func (op *Manager) updateAllProps() {
+        // TODO similar to newManager()
         op.setPropName("ThemeList")
-        op.setPropName("CurrentTheme")
         op.setPropName("GtkThemeList")
         op.setPropName("IconThemeList")
         op.setPropName("CursorThemeList")
         op.setPropName("SoundThemeList")
+
+        // the following properties should be setup at end for their values
+        // depends on other property
+        op.setPropName("CurrentTheme")
+        op.setPropName("CurrentSoundTheme")
 
         updateThemeObj(op.pathNameMap)
 }
@@ -167,6 +187,12 @@ func (op *Manager) listenSettingsChanged() {
                                 obj.setThemeViaXSettings()
                                 op.setPropName("CurrentTheme")
                         }
+                case "current-sound-theme": // TODO
+                        value := personSettings.GetString(key)
+                        if value == op.CurrentSoundTheme {
+                                break
+                        }
+                        op.setPropName("SoundThemeList")
                 }
         })
 }

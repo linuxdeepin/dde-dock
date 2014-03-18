@@ -29,9 +29,10 @@ import (
 )
 
 type Manager struct {
-        ThemeList    []string
-        CurrentTheme string  `access:"readwrite"`
-        GtkThemeList []string
+        ThemeList         []string
+        CurrentTheme      string  `access:"readwrite"`
+        CurrentSoundTheme string  `access:"readwrite"`
+        GtkThemeList      []string
         //GtkBasePath     string
         IconThemeList []string
         //IconBasePath    string
@@ -364,13 +365,18 @@ func writeDatasToKeyFile(contents, filename string) {
 func newManager() *Manager {
         m := &Manager{}
 
+        // TODO similar to updateAllProps()
         m.pathNameMap = make(map[string]PathInfo)
         m.setPropName("ThemeList")
         m.setPropName("GtkThemeList")
         m.setPropName("IconThemeList")
         m.setPropName("CursorThemeList")
         m.setPropName("SoundThemeList")
+
+        // the following properties should be setup at end for their values
+        // depends on other property
         m.setPropName("CurrentTheme")
+        m.setPropName("CurrentSoundTheme")
 
         m.listenSettingsChanged()
         homeDir := getHomeDir()
