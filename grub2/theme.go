@@ -94,6 +94,14 @@ func (theme *Theme) load() {
 	theme.regenerateBackgroundIfNeed()
 }
 
+// reset to default configuration
+func (theme *Theme) reset() {
+	theme.tplJSONData.CurrentScheme = theme.tplJSONData.DarkScheme
+	theme.setProperty("ItemColor", theme.tplJSONData.CurrentScheme.ItemColor)
+	theme.setProperty("SelectedItemColor", theme.tplJSONData.CurrentScheme.SelectedItemColor)
+	theme.customTheme()
+}
+
 // fix issue that if update grub-themes-deepin pakcage lonely, the
 // background of theme will keep size with 1024x768
 func (theme *Theme) regenerateBackgroundIfNeed() {

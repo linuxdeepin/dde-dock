@@ -89,7 +89,14 @@ func (grub *Grub2) GetSimpleEntryTitles() ([]string, error) {
 	return entryTitles, nil
 }
 
-// TODO Reset reset all configuretion.
+// Reset reset all configuretion.
 func (grub *Grub2) Reset() {
-
+	simpleEntryTitles, _ := grub.GetSimpleEntryTitles()
+	firstEntry := ""
+	if len(simpleEntryTitles) > 0 {
+		firstEntry = simpleEntryTitles[0]
+	}
+	grub.setProperty("DefaultEntry", firstEntry)
+	grub.setProperty("Timeout", 10)
+	grub.theme.reset()
 }
