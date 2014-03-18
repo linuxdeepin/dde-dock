@@ -21,5 +21,20 @@
 
 package main
 
-type Wallpaper struct {
+import (
+	"dlib/dbus"
+)
+
+const (
+	BACKGROUND_DEST = "com.deepin.daemon.Themes"
+	BACKGROUND_PATH = "/com/deepin/daemon/Background"
+	BACKGROUND_IFC  = "com.deepin.daemon.Background"
+)
+
+func (b *Background) GetDBusInfo() dbus.DBusInfo {
+	return dbus.DBusInfo{
+		BACKGROUND_DEST,
+		BACKGROUND_PATH,
+		BACKGROUND_IFC,
+	}
 }
