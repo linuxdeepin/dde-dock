@@ -4,7 +4,21 @@ import "crypto/md5"
 import "encoding/hex"
 
 import "dlib/dbus"
+import "github.com/BurntSushi/xgb/xproto"
+import "strconv"
 import "strings"
+
+func (e *AppEntry) setPropData(m map[xproto.Window]*WindowInfo) {
+	for k, v := range m {
+		title := v.Title
+		key := strconv.FormatUint(uint64(k), 10)
+		if value, ok := e.Data[key]; ok && value == title {
+			continue
+		}
+		e.Data[key] = title
+		dbus.NotifyChange(e, "Data")
+	}
+}
 
 func (e *AppEntry) setPropTooltip(v string) {
 	if e.Tooltip != v {

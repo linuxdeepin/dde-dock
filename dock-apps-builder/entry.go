@@ -61,6 +61,8 @@ func NewAppEntryWithNormalApp(nApp *NormalApp) *AppEntry {
 
 func (e *AppEntry) QuickWindow(x, y int32) {}
 
+func (e *AppEntry) HideQuickWindow() {}
+
 func (e *AppEntry) ContextMenu(x, y int32) {}
 
 func (e *AppEntry) HandleMenuItem(id int32) {
@@ -134,6 +136,7 @@ func (e *AppEntry) attachRuntimeApp(rApp *RuntimeApp) {
 	e.rApp = rApp
 	fmt.Println("AttachRuntimeApp:", e.rApp.Id)
 	e.rApp.setChangedCB(e.update)
+	e.setPropData(rApp.xids)
 	e.update()
 }
 func (e *AppEntry) detachRuntimeApp() {

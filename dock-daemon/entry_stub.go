@@ -64,6 +64,7 @@ func NewEntryProxyer(entryId string) (e *EntryProxyer, err error) {
 }
 
 func (e *EntryProxyer) QuickWindow(x, y int32)              { e.core.QuickWindow(x, y) }
+func (e *EntryProxyer) HideQuickWindow()                    { e.core.HideQuickWindow() }
 func (e *EntryProxyer) ContextMenu(x, y int32)              { e.core.ContextMenu(x, y) }
 func (e *EntryProxyer) Activate(x, y int32)                 { e.core.Activate(x, y) }
 func (e *EntryProxyer) SecondaryActivate(x, y int32)        { e.core.SecondaryActivate(x, y) }

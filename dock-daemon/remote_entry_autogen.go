@@ -389,7 +389,7 @@ func NewRemoteEntry(destName string, path dbus.ObjectPath) (*RemoteEntry, error)
 				reflect.TypeOf(v.Body[0]) == typeString &&
 				reflect.TypeOf(v.Body[1]) == typeKeyValues &&
 				reflect.TypeOf(v.Body[2]) == typeArrayValues &&
-				v.Body[0].(string) != "dde.dock.Entry" {
+				v.Body[0].(string) == "dde.dock.Entry" {
 				props := v.Body[1].(map[string]dbus.Variant)
 				for key, _ := range props {
 					if false {
