@@ -49,16 +49,28 @@ func (grub *Grub2) OnPropertiesChanged(name string, oldv interface{}) {
 		if grub.DefaultEntry == oldv.(string) {
 			return
 		}
-		grub.setDefaultEntry(grub.DefaultEntry)
+		grub.setProperty(name, grub.DefaultEntry)
 	case "Timeout":
 		if grub.Timeout == oldv.(int32) {
 			return
 		}
-		grub.setTimeout(grub.Timeout)
+		grub.setProperty(name, grub.Timeout)
 	}
 
 	grub.writeSettings()
 	grub.notifyUpdate()
+}
+
+func (grub *Grub2) setProperty(name string, value interface{}) {
+	switch name {
+	case "DefaultEntry":
+		grub.DefaultEntry = value.(string)
+		grub.setDefaultEntry(grub.DefaultEntry)
+	case "Timeout":
+		grub.Timeout = value.(int32)
+		grub.setTimeout(grub.Timeout)
+	}
+	dbus.NotifyChange(grub, name)
 }
 
 // GetSimpleEntryTitles return entry titles in level one.
@@ -75,4 +87,9 @@ func (grub *Grub2) GetSimpleEntryTitles() ([]string, error) {
 		return entryTitles, errors.New(s)
 	}
 	return entryTitles, nil
+}
+
+// TODO Reset reset all configuretion.
+func (grub *Grub2) Reset() {
+
 }

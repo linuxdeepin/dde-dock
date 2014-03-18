@@ -47,13 +47,39 @@ func (theme *Theme) OnPropertiesChanged(name string, oldv interface{}) {
 		if theme.ItemColor == oldv.(string) {
 			return
 		}
-		theme.setItemColor(theme.ItemColor)
+		theme.setProperty("ItemColor", theme.ItemColor)
+		theme.customTheme()
 	case "SelectedItemColor":
 		if theme.SelectedItemColor == oldv.(string) {
 			return
 		}
-		theme.setSelectedItemColor(theme.SelectedItemColor)
+		theme.setProperty("SelectedItemColor", theme.SelectedItemColor)
+		theme.customTheme()
 	}
+}
+
+func (theme *Theme) setProperty(name string, value interface{}) {
+	switch name {
+	case "Background":
+		theme.Background = value.(string)
+	case "ItemColor":
+		itemColor := value.(string)
+		if len(itemColor) == 0 {
+			// set a default value to avoid empty string
+			itemColor = theme.tplJSONData.DarkScheme.ItemColor
+		}
+		theme.ItemColor = itemColor
+		theme.tplJSONData.CurrentScheme.ItemColor = itemColor
+	case "SelectedItemColor":
+		selectedItemColor := value.(string)
+		if len(selectedItemColor) == 0 {
+			// set a default value to avoid empty string
+			selectedItemColor = theme.tplJSONData.DarkScheme.SelectedItemColor
+		}
+		theme.SelectedItemColor = selectedItemColor
+		theme.tplJSONData.CurrentScheme.SelectedItemColor = selectedItemColor
+	}
+	dbus.NotifyChange(theme, name)
 }
 
 // SetBackgroundSourceFile setup the background source file, then
@@ -68,7 +94,7 @@ func (theme *Theme) SetBackgroundSourceFile(imageFile string) {
 func (theme *Theme) doSetBackgroundSourceFile(imageFile string) bool {
 	screenWidth, screenHeight := getPrimaryScreenBestResolution()
 	grub2ext.DoSetThemeBackgroundSourceFile(imageFile, screenWidth, screenHeight)
-	dbus.NotifyChange(theme, "Background")
+	theme.setProperty("Background", theme.Background)
 
 	// set item color through background's dominant color
 	_, _, v, _ := graphic.GetDominantColorOfImage(theme.bgSrcFile)
@@ -81,10 +107,9 @@ func (theme *Theme) doSetBackgroundSourceFile(imageFile string) bool {
 		theme.tplJSONData.CurrentScheme = theme.tplJSONData.BrightScheme
 		logger.Info("background is bright, so use the bright theme scheme")
 	}
-	theme.ItemColor = theme.tplJSONData.CurrentScheme.ItemColor
-	theme.SelectedItemColor = theme.tplJSONData.CurrentScheme.SelectedItemColor
-	theme.setItemColor(theme.ItemColor)
-	theme.setSelectedItemColor(theme.SelectedItemColor)
+	theme.setProperty("ItemColor", theme.tplJSONData.CurrentScheme.ItemColor)
+	theme.setProperty("SelectedItemColor", theme.tplJSONData.CurrentScheme.SelectedItemColor)
+	theme.customTheme()
 
 	logger.Info("update background sucess")
 	return true

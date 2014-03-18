@@ -23,7 +23,6 @@ package main
 
 import (
 	"bytes"
-	"dlib/dbus"
 	"dlib/graphic"
 	"encoding/json"
 	"io/ioutil"
@@ -88,12 +87,9 @@ func (theme *Theme) load() {
 	}
 
 	// init properties
-	theme.Background = theme.bgFile
-	theme.ItemColor = theme.tplJSONData.CurrentScheme.ItemColor
-	theme.SelectedItemColor = theme.tplJSONData.CurrentScheme.SelectedItemColor
-	dbus.NotifyChange(theme, "Background")
-	dbus.NotifyChange(theme, "ItemColor")
-	dbus.NotifyChange(theme, "SelectedItemColor")
+	theme.setProperty("Background", theme.bgFile)
+	theme.setProperty("ItemColor", theme.tplJSONData.CurrentScheme.ItemColor)
+	theme.setProperty("SelectedItemColor", theme.tplJSONData.CurrentScheme.SelectedItemColor)
 
 	theme.regenerateBackgroundIfNeed()
 }
@@ -127,29 +123,9 @@ func (theme *Theme) regenerateBackgroundIfNeed() {
 
 	if needUpdate {
 		grub2ext.DoGenerateThemeBackground(screenWidth, screenHeight)
-		dbus.NotifyChange(theme, "Background") // TODO
+		theme.setProperty("Background", theme.Background)
 		logger.Info("update background sucess")
 	}
-}
-
-func (theme *Theme) setItemColor(itemColor string) {
-	if len(itemColor) == 0 {
-		// set a default value to avoid empty string
-		itemColor = theme.tplJSONData.DarkScheme.ItemColor
-	}
-	theme.tplJSONData.CurrentScheme.ItemColor = itemColor
-	dbus.NotifyChange(theme, "ItemColor")
-	theme.customTheme()
-}
-
-func (theme *Theme) setSelectedItemColor(selectedItemColor string) {
-	if len(selectedItemColor) == 0 {
-		// set a default value to avoid empty string
-		selectedItemColor = theme.tplJSONData.DarkScheme.SelectedItemColor
-	}
-	theme.tplJSONData.CurrentScheme.SelectedItemColor = selectedItemColor
-	dbus.NotifyChange(theme, "SelectedItemColor")
-	theme.customTheme()
 }
 
 func (theme *Theme) getThemeTplJSON() (*TplJSONData, error) {
