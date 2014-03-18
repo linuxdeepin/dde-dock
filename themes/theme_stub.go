@@ -55,7 +55,7 @@ func (op *Theme) OnPropertiesChanged(propName string, old interface{}) {
         switch propName {
         case "BackgroundFile":
                 if v, ok := old.(string); ok && v != op.BackgroundFile {
-                        personSettings.SetString(GKEY_CURRENT_PICTURE,
+                        personSettings.SetString(GKEY_CURRENT_BACKGROUND,
                                 op.BackgroundFile)
                 }
         }

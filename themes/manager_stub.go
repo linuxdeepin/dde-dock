@@ -34,7 +34,7 @@ const (
 
         PERSONALIZATION_ID       = "com.deepin.dde.personalization"
         GKEY_CURRENT_THEME       = "current-theme"
-        GKEY_CURRENT_PICTURE     = "current-picture"
+        GKEY_CURRENT_BACKGROUND     = "current-picture"
         GKEY_CURRENT_SOUND_THEME = "current-sound-theme"
         DEFAULT_THEME_NAME       = "Deepin"
         DEFAULT_SOUND_THEME_NAME = "LinuxDeepin"
@@ -173,7 +173,7 @@ func (op *Manager) listenSettingsChanged() {
         personSettings.Connect("changed", func(s *gio.Settings, key string) {
                 logObject.Info("Theme GSettings Key Changed: %s", key)
                 switch key {
-                case GKEY_CURRENT_PICTURE:
+                case GKEY_CURRENT_BACKGROUND:
                         value := personSettings.GetString(key)
                         obj := op.getThemeObject(op.CurrentTheme)
                         if obj != nil && obj.BackgroundFile != value {
