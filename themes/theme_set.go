@@ -25,6 +25,11 @@ import (
         "dlib/gio-2.0"
 )
 
+const (
+        FONT_DEFAULT_SIZE = " 11"
+        TITLE_FONT_SIZE   = " 8"
+)
+
 var (
         wmPreSettings = gio.NewSettings("org.gnome.desktop.wm.preferences")
 )
@@ -50,5 +55,6 @@ func setGtkCursorThemeViaXSettings(name string) {
 }
 
 func setGtkFontThemeViaXSettings(name string) {
-        objXSettings.SetString("Gtk/FontName", name)
+        objXSettings.SetString("Gtk/FontName", name+FONT_DEFAULT_SIZE)
+        wmPreSettings.SetString("titlebar-font", name+TITLE_FONT_SIZE)
 }
