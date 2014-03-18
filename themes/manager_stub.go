@@ -33,6 +33,9 @@ const (
         MANAGER_IFC  = "com.deepin.daemon.ThemeManager"
 
         PERSONALIZATION_ID       = "com.deepin.dde.personalization"
+        GKEY_CURRENT_THEME       = "current-theme"
+        GKEY_CURRENT_PICTURE     = "current-picture"
+        GKEY_CURRENT_SOUND_THEME = "current-sound-theme"
         DEFAULT_THEME_NAME       = "Deepin"
         DEFAULT_SOUND_THEME_NAME = "LinuxDeepin"
 )
@@ -53,7 +56,7 @@ func (op *Manager) OnPropertiesChanged(propName string, old interface{}) {
         switch propName {
         case "CurrentTheme":
                 if v, ok := old.(string); ok && v != op.CurrentTheme {
-                        personSettings.SetString("current-theme",
+                        personSettings.SetString(GKEY_CURRENT_THEME,
                                 op.CurrentTheme)
                         if obj := op.getThemeObject(op.CurrentTheme); obj != nil {
                                 obj.setThemeViaXSettings()
@@ -61,7 +64,7 @@ func (op *Manager) OnPropertiesChanged(propName string, old interface{}) {
                 }
         case "CurrentSoundTheme": // TODO
                 if v, ok := old.(string); ok && v != op.CurrentSoundTheme {
-                        personSettings.SetString("current-sound-theme",
+                        personSettings.SetString(GKEY_CURRENT_SOUND_THEME,
                                 op.CurrentSoundTheme)
                 }
         }
@@ -106,21 +109,21 @@ func (op *Manager) setPropName(propName string) {
                 op.SoundThemeList = getSoundThemeList()
                 dbus.NotifyChange(op, propName)
         case "CurrentTheme":
-                value := personSettings.GetString("current-theme")
+                value := personSettings.GetString(GKEY_CURRENT_THEME)
                 if _, ok := themeNamePathMap[value]; ok {
                         op.CurrentTheme = value
                 } else {
                         op.CurrentTheme = DEFAULT_THEME_NAME
-                        personSettings.SetString("current-theme", DEFAULT_THEME_NAME)
+                        personSettings.SetString(GKEY_CURRENT_THEME, DEFAULT_THEME_NAME)
                 }
                 dbus.NotifyChange(op, propName)
         case "CurrentSoundTheme": // TODO
-                value := personSettings.GetString("current-sound-theme")
+                value := personSettings.GetString(GKEY_CURRENT_SOUND_THEME)
                 if isStringInArray(value, op.SoundThemeList) {
                         op.CurrentSoundTheme = value
                 } else {
                         op.CurrentSoundTheme = DEFAULT_SOUND_THEME_NAME
-                        personSettings.SetString("current-sound-theme", DEFAULT_SOUND_THEME_NAME)
+                        personSettings.SetString(GKEY_CURRENT_SOUND_THEME, DEFAULT_SOUND_THEME_NAME)
                 }
                 dbus.NotifyChange(op, propName)
         }
@@ -158,8 +161,8 @@ func (op *Manager) updateAllProps() {
 
 func (op *Manager) updateCurrentTheme(name string) {
         logObject.Info("Update Current Theme: %s", name)
-        if v := personSettings.GetString("current-theme"); v != name {
-                personSettings.SetString("current-theme", name)
+        if v := personSettings.GetString(GKEY_CURRENT_THEME); v != name {
+                personSettings.SetString(GKEY_CURRENT_THEME, name)
         }
 }
 
@@ -167,7 +170,7 @@ func (op *Manager) listenSettingsChanged() {
         personSettings.Connect("changed", func(s *gio.Settings, key string) {
                 logObject.Info("Theme GSettings Key Changed: %s", key)
                 switch key {
-                case "current-picture":
+                case GKEY_CURRENT_PICTURE:
                         value := personSettings.GetString(key)
                         obj := op.getThemeObject(op.CurrentTheme)
                         if obj != nil && obj.BackgroundFile != value {
@@ -177,7 +180,7 @@ func (op *Manager) listenSettingsChanged() {
                                         op.updateCurrentTheme(name)
                                 }
                         }
-                case "current-theme":
+                case GKEY_CURRENT_THEME:
                         value := personSettings.GetString(key)
                         if value == op.CurrentTheme {
                                 break
@@ -187,7 +190,7 @@ func (op *Manager) listenSettingsChanged() {
                                 obj.setThemeViaXSettings()
                                 op.setPropName("CurrentTheme")
                         }
-                case "current-sound-theme": // TODO
+                case GKEY_CURRENT_SOUND_THEME: // TODO
                         value := personSettings.GetString(key)
                         if value == op.CurrentSoundTheme {
                                 break
