@@ -38,6 +38,9 @@ const (
         GKEY_CURRENT_SOUND_THEME = "current-sound-theme"
         DEFAULT_THEME_NAME       = "Deepin"
         DEFAULT_SOUND_THEME_NAME = "LinuxDeepin"
+
+        SOUND_THEME_PATH      = "/usr/share/sounds/"
+        SOUND_THEME_MAIN_FILE = "index.theme"
 )
 
 var (

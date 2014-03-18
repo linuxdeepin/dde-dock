@@ -130,13 +130,6 @@ func main() {
         objPre := &PreviewPath{}
         dbus.InstallOnSession(objPre)
 
-        objSound := &Sound{}
-        err = dbus.InstallOnSession(objSound)
-        if err != nil {
-                logObject.Error("Install Session Failed: %v", err)
-                panic(err)
-        }
-
         dbus.DealWithUnhandledMessage()
         if err = dbus.Wait(); err != nil {
                 logObject.Warning("lost dbus session: %v", err)
