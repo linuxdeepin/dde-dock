@@ -94,6 +94,9 @@ func (op *Manager) setPropName(propName string) {
                         op.CursorThemeList = append(op.CursorThemeList, l.path)
                 }
                 dbus.NotifyChange(op, propName)
+        case "SoundThemeList":
+                op.SoundThemeList = getSoundThemeList()
+                dbus.NotifyChange(op, propName)
         }
 }
 
@@ -117,6 +120,7 @@ func (op *Manager) updateAllProps() {
         op.setPropName("GtkThemeList")
         op.setPropName("IconThemeList")
         op.setPropName("CursorThemeList")
+        op.setPropName("SoundThemeList")
 
         updateThemeObj(op.pathNameMap)
 }
@@ -138,7 +142,7 @@ func (op *Manager) listenSettingsChanged() {
                         if obj != nil && obj.BackgroundFile != value {
                                 if name := op.setTheme(obj.GtkTheme, obj.IconTheme,
                                         obj.GtkCursorTheme, obj.GtkFontName,
-                                        value); name != op.CurrentTheme {
+                                        value, obj.SoundThemeName); name != op.CurrentTheme {
                                         op.updateCurrentTheme(name)
                                 }
                         }

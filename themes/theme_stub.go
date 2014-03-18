@@ -40,6 +40,7 @@ const (
         THEME_KEY_CURSOR      = "CursorTheme"
         THEME_KEY_GTK_FONT    = "GtkFont"
         THEME_KEY_BG          = "BackgroundFile"
+        THEME_KEY_SOUND       = "SoundTheme"
 )
 
 func (op *Theme) GetDBusInfo() dbus.DBusInfo {
@@ -122,4 +123,14 @@ func (op *Theme) updateThemeInfo() {
         }
         op.BackgroundFile = str
         dbus.NotifyChange(op, "BackgroundFile")
+
+        str, err1 = keyFile.GetString(THEME_GROUP_COMPONENT,
+                THEME_KEY_SOUND)
+        if err1 != nil {
+                logObject.Info("Get key '%s' value failed: %v",
+                        THEME_KEY_SOUND, err1)
+                return
+        }
+        op.SoundThemeName = str
+        dbus.NotifyChange(op, "SoundThemeName")
 }

@@ -23,7 +23,9 @@ package main
 
 import (
         "dlib/glib-2.0"
+        "io/ioutil"
         "os"
+        "path"
 )
 
 type Manager struct {
@@ -37,6 +39,7 @@ type Manager struct {
         //CursorBasePath  string
         FontThemeList  []string
         BackgroundList []string
+        SoundThemeList []string
         pathNameMap    map[string]PathInfo
 }
 
@@ -56,7 +59,7 @@ func (op *Manager) SetGtkTheme(name string) (string, bool) {
         setGtkThemeViaXSettings(name)
         if obj := op.getThemeObject(op.CurrentTheme); obj != nil {
                 v := op.setTheme(name, obj.IconTheme, obj.GtkCursorTheme,
-                        obj.GtkFontName, obj.BackgroundFile)
+                        obj.GtkFontName, obj.BackgroundFile, obj.SoundThemeName)
                 op.updateCurrentTheme(v)
                 return v, true
         }
@@ -72,7 +75,7 @@ func (op *Manager) SetIconTheme(name string) (string, bool) {
         setIconThemeViaXSettings(name)
         if obj := op.getThemeObject(op.CurrentTheme); obj != nil {
                 v := op.setTheme(obj.GtkTheme, name,
-                        obj.GtkCursorTheme, obj.GtkFontName, obj.BackgroundFile)
+                        obj.GtkCursorTheme, obj.GtkFontName, obj.BackgroundFile, obj.SoundThemeName)
                 op.updateCurrentTheme(v)
                 return v, true
         }
@@ -88,7 +91,7 @@ func (op *Manager) SetGtkCursorTheme(name string) (string, bool) {
         setGtkCursorThemeViaXSettings(name)
         if obj := op.getThemeObject(op.CurrentTheme); obj != nil {
                 v := op.setTheme(obj.GtkTheme, obj.IconTheme,
-                        name, obj.GtkFontName, obj.BackgroundFile)
+                        name, obj.GtkFontName, obj.BackgroundFile, obj.SoundThemeName)
                 op.updateCurrentTheme(v)
                 return v, true
         }
@@ -104,7 +107,7 @@ func (op *Manager) SetGtkFontTheme(name string) (string, bool) {
         setGtkFontThemeViaXSettings(name)
         if obj := op.getThemeObject(op.CurrentTheme); obj != nil {
                 v := op.setTheme(obj.GtkTheme, obj.IconTheme,
-                        obj.GtkCursorTheme, name, obj.BackgroundFile)
+                        obj.GtkCursorTheme, name, obj.BackgroundFile, obj.SoundThemeName)
                 op.updateCurrentTheme(v)
                 return v, true
         }
@@ -119,7 +122,7 @@ func (op *Manager) SetBackgroundFile(name string) (string, bool) {
 
         if obj := op.getThemeObject(op.CurrentTheme); obj != nil {
                 v := op.setTheme(obj.GtkTheme, obj.IconTheme,
-                        obj.GtkCursorTheme, obj.GtkFontName, name)
+                        obj.GtkCursorTheme, obj.GtkFontName, name, obj.SoundThemeName)
                 op.updateCurrentTheme(v)
                 return v, true
         }
@@ -127,9 +130,24 @@ func (op *Manager) SetBackgroundFile(name string) (string, bool) {
         return op.CurrentTheme, false
 }
 
-func (op *Manager) setTheme(gtk, icon, cursor, gtkFont, bg string) string {
+func (op *Manager) SetSoundTheme(name string) (string, bool) {
+        if len(name) <= 0 {
+                return op.CurrentTheme, false
+        }
+
+        if obj := op.getThemeObject(op.CurrentTheme); obj != nil {
+                v := op.setTheme(obj.GtkTheme, obj.IconTheme,
+                        obj.GtkCursorTheme, obj.GtkFontName, obj.BackgroundFile, name)
+                op.updateCurrentTheme(v)
+                return v, true
+        }
+
+        return op.CurrentTheme, false
+}
+
+func (op *Manager) setTheme(gtk, icon, cursor, gtkFont, bg, sound string) string {
         for _, path := range op.ThemeList {
-                name, ok := isThemeExist(gtk, icon, cursor, gtkFont, bg, path)
+                name, ok := isThemeExist(gtk, icon, cursor, gtkFont, bg, sound, path)
                 if !ok {
                         continue
                 } else {
@@ -137,7 +155,7 @@ func (op *Manager) setTheme(gtk, icon, cursor, gtkFont, bg string) string {
                 }
         }
 
-        createTheme("Custom", gtk, icon, cursor, gtkFont, bg)
+        createTheme("Custom", gtk, icon, cursor, gtkFont, bg, sound)
         updateThemeObj(op.pathNameMap)
 
         return "Custom"
@@ -217,7 +235,39 @@ func getBackgroundList() []string {
         return []string{}
 }
 
-func isThemeExist(gtk, icon, cursor, gtkFont, bg, path string) (string, bool) {
+/*
+   Return all sound theme names.
+*/
+func getSoundThemeList() []string {
+        list := []string{}
+        files, err := ioutil.ReadDir(SOUND_THEME_PATH)
+        if err != nil {
+                logObject.Error("%v", err)
+                return list
+        }
+
+        for _, f := range files {
+                if f.IsDir() {
+                        // check if index.theme file exists
+                        tmpf, err := os.Open(path.Join(SOUND_THEME_PATH, f.Name(), SOUND_THEME_MAIN_FILE))
+                        if err != nil {
+                                continue
+                        }
+                        defer tmpf.Close()
+                        tmpi, err := tmpf.Stat()
+                        if err != nil {
+                                continue
+                        }
+                        if !tmpi.IsDir() {
+                                list = append(list, f.Name())
+                        }
+                }
+        }
+
+        return list
+}
+
+func isThemeExist(gtk, icon, cursor, gtkFont, bg, sound, path string) (string, bool) {
         obj, ok := themeObjMap[path]
         if !ok {
                 return "", false
@@ -225,14 +275,14 @@ func isThemeExist(gtk, icon, cursor, gtkFont, bg, path string) (string, bool) {
 
         if gtk != obj.GtkTheme || icon != obj.IconTheme ||
                 cursor != obj.GtkCursorTheme || gtkFont != obj.GtkFontName ||
-                obj.BackgroundFile != bg {
+                obj.BackgroundFile != bg || obj.SoundThemeName != sound {
                 return "", false
         }
 
         return obj.Name, true
 }
 
-func createTheme(name, gtk, icon, cursor, gtkFont, bg string) bool {
+func createTheme(name, gtk, icon, cursor, gtkFont, bg, sound string) bool {
         homeDir := getHomeDir()
         path := homeDir + THUMB_LOCAL_THEME_PATH + "/" + name
         logObject.Info("Theme Dir:%s\n", path)
@@ -274,6 +324,7 @@ func createTheme(name, gtk, icon, cursor, gtkFont, bg string) bool {
         keyFile.SetString(THEME_GROUP_COMPONENT, THEME_KEY_CURSOR, cursor)
         keyFile.SetString(THEME_GROUP_COMPONENT, THEME_KEY_GTK_FONT, gtkFont)
         keyFile.SetString(THEME_GROUP_COMPONENT, THEME_KEY_BG, bg)
+        keyFile.SetString(THEME_GROUP_COMPONENT, THEME_KEY_SOUND, sound)
 
         _, contents, err1 := keyFile.ToData()
         if err1 != nil {
@@ -318,6 +369,7 @@ func newManager() *Manager {
         m.setPropName("GtkThemeList")
         m.setPropName("IconThemeList")
         m.setPropName("CursorThemeList")
+        m.setPropName("SoundThemeList")
 
         m.listenSettingsChanged()
         homeDir := getHomeDir()

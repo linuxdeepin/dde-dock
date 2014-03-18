@@ -33,6 +33,7 @@ type Theme struct {
         GtkCursorTheme string
         GtkFontName    string
         BackgroundFile string
+        SoundThemeName string
         PreviewPath    string
         ThumbnailPath  string
         basePath       string

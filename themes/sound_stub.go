@@ -37,6 +37,11 @@ const (
         SOUND_IFC  = "com.deepin.daemon.Sound"
 )
 
+const (
+        SOUND_THEME_PATH      = "/usr/share/sounds/"
+        SOUND_THEME_MAIN_FILE = "index.theme"
+)
+
 type Sound struct{}
 
 func (s *Sound) GetDBusInfo() dbus.DBusInfo {
@@ -47,10 +52,18 @@ func (s *Sound) GetDBusInfo() dbus.DBusInfo {
         }
 }
 
-// FIXME: PlaySystemSound() maybe should be placed in dde-api
 func (s *Sound) PlaySystemSound(event string) (err error) {
-        currentTheme := "LinuxDeepin" // TODO
-        return s.PlayThemeSound(currentTheme, event)
+        return s.PlayThemeSound(s.getCurrentSoundTheme(), event)
+}
+
+func (s *Sound) getCurrentSoundTheme() string {
+        currentSoundTheme := "LinuxDeepin" // default theme name
+        if objManager != nil {
+                if objTheme := objManager.getThemeObject(objManager.CurrentTheme); objTheme != nil {
+                        currentSoundTheme = objTheme.SoundThemeName
+                }
+        }
+        return currentSoundTheme
 }
 
 func (s *Sound) PlayThemeSound(theme, event string) (err error) {
