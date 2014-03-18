@@ -21,12 +21,6 @@
 
 package main
 
-import (
-        "io/ioutil"
-        "os"
-        "strings"
-)
-
 const (
         POLKIT_CHANGED_OWN_DATA = "com.deepin.daemon.accounts.change-own-user-data"
         POLKIT_MANAGER_USER     = "com.deepin.daemon.accounts.user-administration"
@@ -107,6 +101,14 @@ func (op *UserManager) SetBackgroundFile(bg string) {
         }
 }
 
+func (op *UserManager) RandUserIcon() (string, bool) {
+        if icon := getRandUserIcon(); len(icon) > 0 {
+                return icon, true
+        }
+
+        return "", false
+}
+
 func (op *UserManager) GetIconList() []string {
         list := []string{}
 
@@ -131,166 +133,10 @@ func newUserManager(uid string) *UserManager {
         m := &UserManager{}
 
         m.Uid = uid
-        m.updateUserInfo()
+        m.initUserInfo()
         m.listenUserInfoChanged(ETC_GROUP)
         m.listenUserInfoChanged(ETC_SHADOW)
+        m.updateUserInfo()
 
         return m
-}
-
-func getSystemIconList() []string {
-        iconfd, err := os.Open(ICON__SYSTEM_DIR)
-        if err != nil {
-                logObject.Warning("Open '%s' failed: %v\n",
-                        ICON__SYSTEM_DIR, err)
-                return []string{}
-        }
-
-        names, _ := iconfd.Readdirnames(0)
-        list := []string{}
-        for _, v := range names {
-                if strings.Contains(v, "guest") {
-                        continue
-                } else if strings.Contains(v, "jpg") ||
-                        strings.Contains(v, "JPG") ||
-                        strings.Contains(v, "png") ||
-                        strings.Contains(v, "PNG") {
-                        list = append(list, ICON__SYSTEM_DIR+v)
-                }
-        }
-
-        return list
-}
-
-func getAdministratorList() []string {
-        contents, err := ioutil.ReadFile(ETC_GROUP)
-        if err != nil {
-                logObject.Warning("ReadFile '%s' failed: %s\n", ETC_PASSWD, err)
-                panic(err)
-        }
-
-        list := ""
-        lines := strings.Split(string(contents), "\n")
-        for _, line := range lines {
-                strs := strings.Split(line, ":")
-                if len(strs) != GROUP_SPLIT_LEN {
-                        continue
-                }
-
-                if strs[0] == "sudo" {
-                        list = strs[3]
-                        break
-                }
-        }
-
-        return strings.Split(list, ",")
-}
-
-func setAutomaticLogin(name string) {
-        dsp := getDefaultDisplayManager()
-        switch dsp {
-        case "lightdm":
-                if fileIsExist(ETC_LIGHTDM_CONFIG) {
-                        writeKeyFileValue(ETC_LIGHTDM_CONFIG,
-                                LIGHTDM_AUTOLOGIN_GROUP,
-                                LIGHTDM_AUTOLOGIN_USER,
-                                KEY_TYPE_STRING, name)
-                }
-        case "gdm":
-                if fileIsExist(ETC_GDM_CONFIG) {
-                        writeKeyFileValue(ETC_GDM_CONFIG,
-                                GDM_AUTOLOGIN_GROUP,
-                                GDM_AUTOLOGIN_USER,
-                                KEY_TYPE_STRING, name)
-                }
-        case "kdm":
-                if fileIsExist(ETC_KDM_CONFIG) {
-                        writeKeyFileValue(ETC_KDM_CONFIG,
-                                KDM_AUTOLOGIN_GROUP,
-                                KDM_AUTOLOGIN_ENABLE,
-                                KEY_TYPE_BOOL, true)
-                        writeKeyFileValue(ETC_KDM_CONFIG,
-                                KDM_AUTOLOGIN_GROUP,
-                                KDM_AUTOLOGIN_USER,
-                                KEY_TYPE_STRING, name)
-                } else if fileIsExist(USER_KDM_CONFIG) {
-                        writeKeyFileValue(ETC_KDM_CONFIG,
-                                KDM_AUTOLOGIN_GROUP,
-                                KDM_AUTOLOGIN_ENABLE,
-                                KEY_TYPE_BOOL, true)
-                        writeKeyFileValue(USER_KDM_CONFIG,
-                                KDM_AUTOLOGIN_GROUP,
-                                KDM_AUTOLOGIN_USER,
-                                KEY_TYPE_STRING, name)
-                }
-        default:
-                logObject.Warning("No support display manager")
-        }
-}
-
-func isAutoLogin(username string) bool {
-        dsp := getDefaultDisplayManager()
-
-        switch dsp {
-        case "lightdm":
-                if fileIsExist(ETC_LIGHTDM_CONFIG) {
-                        v, ok := readKeyFileValue(ETC_LIGHTDM_CONFIG,
-                                LIGHTDM_AUTOLOGIN_GROUP,
-                                LIGHTDM_AUTOLOGIN_USER,
-                                KEY_TYPE_STRING)
-                        if ok && v.(string) == username {
-                                return true
-                        }
-                }
-        case "gdm":
-                if fileIsExist(ETC_GDM_CONFIG) {
-                        v, ok := readKeyFileValue(ETC_GDM_CONFIG,
-                                GDM_AUTOLOGIN_GROUP,
-                                GDM_AUTOLOGIN_USER,
-                                KEY_TYPE_STRING)
-                        if ok && v.(string) == username {
-                                return true
-                        }
-                }
-        case "kdm":
-                if fileIsExist(ETC_KDM_CONFIG) {
-                        v, ok := readKeyFileValue(ETC_KDM_CONFIG,
-                                KDM_AUTOLOGIN_GROUP,
-                                KDM_AUTOLOGIN_USER,
-                                KEY_TYPE_STRING)
-                        if ok && v.(string) == username {
-                                return true
-                        }
-                } else if fileIsExist(USER_KDM_CONFIG) {
-                        v, ok := readKeyFileValue(USER_KDM_CONFIG,
-                                KDM_AUTOLOGIN_GROUP,
-                                KDM_AUTOLOGIN_USER,
-                                KEY_TYPE_STRING)
-                        if ok && v.(string) == username {
-                                return true
-                        }
-                }
-        }
-
-        return false
-}
-
-func getDefaultDisplayManager() string {
-        contents, err := ioutil.ReadFile(ETC_DISPLAY_MANAGER)
-        if err != nil {
-                logObject.Warning("ReadFile '%s' failed: %s\n",
-                        ETC_DISPLAY_MANAGER, err)
-                panic(err)
-        }
-
-        tmp := ""
-        for _, b := range contents {
-                if b == '\n' {
-                        tmp += ""
-                        continue
-                }
-                tmp += string(b)
-        }
-
-        return getBaseName(tmp)
 }

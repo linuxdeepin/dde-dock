@@ -58,7 +58,8 @@ func (op *AccountManager) CreateUser(name, fullname string, accountTyte int32) s
 
         info, _ := getInfoViaName(name)
         newUser := newUserManager(info.Uid)
-        newUser.AccountType = accountTyte
+        //newUser.AccountType = accountTyte
+        newUser.applyPropertiesChanged("AccountType", accountTyte)
         newUser.updateUserInfo()
 
         path := op.FindUserByName(name)
