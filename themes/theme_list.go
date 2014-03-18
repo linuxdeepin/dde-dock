@@ -121,7 +121,7 @@ func getValidThemes(dirs []PathInfo, conditions []string) []PathInfo {
         for _, dir := range dirs {
                 f, err := os.Open(dir.path)
                 if err != nil {
-                        logObject.Info("Open '%s' failed: %s\n",
+                        logObject.Info("Open '%s' failed: %s",
                                 dir.path, err)
                         continue
                 }
@@ -129,7 +129,7 @@ func getValidThemes(dirs []PathInfo, conditions []string) []PathInfo {
 
                 infos, err1 := f.Readdir(0)
                 if err1 != nil {
-                        logObject.Info("ReadDir '%s' failed: %s\n",
+                        logObject.Info("ReadDir '%s' failed: %s",
                                 dir.path, err)
                         continue
                 }
@@ -153,14 +153,14 @@ func getValidThemes(dirs []PathInfo, conditions []string) []PathInfo {
 func filterTheme(dir string, conditions []string) bool {
         f, err := os.Open(dir)
         if err != nil {
-                logObject.Info("Open '%s' failed: %s\n", dir, err)
+                logObject.Info("Open '%s' failed: %s", dir, err)
                 return false
         }
         defer f.Close()
 
         names, err1 := f.Readdirnames(0)
         if err1 != nil {
-                logObject.Info("ReadDir '%s' failed: %s\n", dir, err)
+                logObject.Info("ReadDir '%s' failed: %s", dir, err)
                 return false
         }
 
@@ -191,8 +191,8 @@ func getThemeThumbList() []PathInfo {
         //localList := getThumbList(localDirs)
         sysList := getValidThemes(sysDirs, conditions)
         localList := getValidThemes(localDirs, conditions)
-        //logObject.Info("System Theme List: %v\n", sysList)
-        //logObject.Info("Local Theme List: %v\n", localList)
+        //logObject.Info("System Theme List: %v", sysList)
+        //logObject.Info("Local Theme List: %v", localList)
         for _, l := range sysList {
                 if isElementExist(l, localList) {
                         continue

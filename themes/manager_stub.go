@@ -126,7 +126,7 @@ func (op *Manager) updateAllProps() {
 }
 
 func (op *Manager) updateCurrentTheme(name string) {
-        logObject.Info("Update Current Theme: %s\n", name)
+        logObject.Info("Update Current Theme: %s", name)
         if v := personSettings.GetString("current-theme"); v != name {
                 personSettings.SetString("current-theme", name)
         }
@@ -134,7 +134,7 @@ func (op *Manager) updateCurrentTheme(name string) {
 
 func (op *Manager) listenSettingsChanged() {
         personSettings.Connect("changed", func(s *gio.Settings, key string) {
-                logObject.Info("Theme GSettings Key Changed: %s\n", key)
+                logObject.Info("Theme GSettings Key Changed: %s", key)
                 switch key {
                 case "current-picture":
                         value := personSettings.GetString(key)

@@ -87,7 +87,7 @@ func (s *Sound) PlaySoundFile(file string) (err error) {
                 defer C.free(unsafe.Pointer(cfile))
                 ret := C.canberra_play_sound_file(cfile)
                 if ret != 0 {
-                        logObject.Error("play sound file failed: %s, %s\n", file, C.GoString(C.ca_strerror(ret)))
+                        logObject.Error("play sound file failed: %s, %s", file, C.GoString(C.ca_strerror(ret)))
                 }
         }()
         return

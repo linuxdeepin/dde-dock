@@ -285,23 +285,23 @@ func isThemeExist(gtk, icon, cursor, gtkFont, bg, sound, path string) (string, b
 func createTheme(name, gtk, icon, cursor, gtkFont, bg, sound string) bool {
         homeDir := getHomeDir()
         path := homeDir + THUMB_LOCAL_THEME_PATH + "/" + name
-        logObject.Info("Theme Dir:%s\n", path)
+        logObject.Info("Theme Dir:%s", path)
         if ok, _ := objUtil.IsFileExist(path); !ok {
-                logObject.Info("Create Theme Dir: %s\n", path)
+                logObject.Info("Create Theme Dir: %s", path)
                 err := os.MkdirAll(path, 0755)
                 if err != nil {
-                        logObject.Info("Mkdir '%s' failed: %v\n", path, err)
+                        logObject.Info("Mkdir '%s' failed: %v", path, err)
                         return false
                 }
         }
 
         filename := path + "/" + "theme.ini"
-        logObject.Info("Theme Config File:%s\n", filename)
+        logObject.Info("Theme Config File:%s", filename)
         if ok, _ := objUtil.IsFileExist(filename); !ok {
-                logObject.Info("Create Theme Config File: %s\n", filename)
+                logObject.Info("Create Theme Config File: %s", filename)
                 f, err := os.Create(filename)
                 if err != nil {
-                        logObject.Info("Create '%s' failed: %v\n",
+                        logObject.Info("Create '%s' failed: %v",
                                 filename, err)
                         return false
                 }
@@ -314,7 +314,7 @@ func createTheme(name, gtk, icon, cursor, gtkFont, bg, sound string) bool {
         defer keyFile.Free()
         ok, err := keyFile.LoadFromFile(filename, glib.KeyFileFlagsKeepComments)
         if !ok {
-                logObject.Warning("LoadKeyFile '%s' failed\n", filename)
+                logObject.Warning("LoadKeyFile '%s' failed", filename)
                 return false
         }
 
@@ -328,7 +328,7 @@ func createTheme(name, gtk, icon, cursor, gtkFont, bg, sound string) bool {
 
         _, contents, err1 := keyFile.ToData()
         if err1 != nil {
-                logObject.Warning("KeyFile '%s' ToData failed: %s\n",
+                logObject.Warning("KeyFile '%s' ToData failed: %s",
                         filename, err)
                 return false
         }
@@ -345,14 +345,14 @@ func writeDatasToKeyFile(contents, filename string) {
 
         f, err := os.Create(filename + "~")
         if err != nil {
-                logObject.Warning("OpenFile '%s' failed: %v\n",
+                logObject.Warning("OpenFile '%s' failed: %v",
                         filename+"~", err)
                 return
         }
         defer f.Close()
 
         if _, err = f.WriteString(contents); err != nil {
-                logObject.Warning("Write in '%s' failed: %v\n",
+                logObject.Warning("Write in '%s' failed: %v",
                         filename+"~", err)
                 return
         }
