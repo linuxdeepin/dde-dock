@@ -73,6 +73,9 @@ type Grub2 struct {
 
 	DefaultEntry string `access:"readwrite"`
 	Timeout      int32  `access:"readwrite"`
+
+	GenerateBegin func()
+	GenerateEnd   func()
 }
 
 // NewGrub2 create a Grub2 object.
@@ -127,6 +130,11 @@ func (grub *Grub2) load() {
 			grub.needUpdateLock.Unlock()
 
 			if grub.config.NeedUpdate {
+				// send signal GenerateBegin()
+				if grub.GenerateBegin != nil {
+					grub.GenerateBegin()
+				}
+
 				grub.writeCacheConfig()
 
 				logger.Info("notify to generate a new grub configuration file")
@@ -135,6 +143,15 @@ func (grub *Grub2) load() {
 
 				grub.config.NeedUpdate = false
 				grub.writeCacheConfig()
+
+				// send signal GenerateEnd() only if don't need update any more
+				grub.needUpdateLock.Lock()
+				if !grub.needUpdate {
+					if grub.GenerateEnd != nil {
+						grub.GenerateEnd()
+					}
+				}
+				grub.needUpdateLock.Unlock()
 			}
 		}
 	}()
