@@ -97,6 +97,6 @@ func (grub *Grub2) Reset() {
 		firstEntry = simpleEntryTitles[0]
 	}
 	grub.setProperty("DefaultEntry", firstEntry)
-	grub.setProperty("Timeout", 10)
+	grub.setProperty("Timeout", int32(10))
 	grub.theme.reset()
 }

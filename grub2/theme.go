@@ -91,7 +91,7 @@ func (theme *Theme) load() {
 	theme.setProperty("ItemColor", theme.tplJSONData.CurrentScheme.ItemColor)
 	theme.setProperty("SelectedItemColor", theme.tplJSONData.CurrentScheme.SelectedItemColor)
 
-	theme.regenerateBackgroundIfNeed()
+	theme.regenerateBackgroundIfNeed() // TODO speed up
 }
 
 // reset to default configuration
@@ -100,6 +100,14 @@ func (theme *Theme) reset() {
 	theme.setProperty("ItemColor", theme.tplJSONData.CurrentScheme.ItemColor)
 	theme.setProperty("SelectedItemColor", theme.tplJSONData.CurrentScheme.SelectedItemColor)
 	theme.customTheme()
+
+	// reset theme background
+	go func() {
+		grub2ext.DoResetThemeBackground()
+		screenWidth, screenHeight := getPrimaryScreenBestResolution()
+		grub2ext.DoGenerateThemeBackground(screenWidth, screenHeight)
+		theme.setProperty("Background", theme.Background)
+	}()
 }
 
 // fix issue that if update grub-themes-deepin pakcage lonely, the
@@ -130,9 +138,11 @@ func (theme *Theme) regenerateBackgroundIfNeed() {
 	}
 
 	if needUpdate {
-		grub2ext.DoGenerateThemeBackground(screenWidth, screenHeight)
-		theme.setProperty("Background", theme.Background)
-		logger.Info("update background sucess")
+		go func() {
+			grub2ext.DoGenerateThemeBackground(screenWidth, screenHeight)
+			theme.setProperty("Background", theme.Background)
+			logger.Info("update background sucess")
+		}()
 	}
 }
 
@@ -187,7 +197,7 @@ func (theme *Theme) customTheme() {
 		return
 	}
 
-	grub2ext.DoWriteThemeJson(string(jsonContent))
+	grub2ext.DoWriteThemeJSON(string(jsonContent))
 }
 
 func (theme *Theme) getCustomizedThemeContent(fileContent []byte, tplData interface{}) ([]byte, error) {
