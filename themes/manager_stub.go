@@ -104,6 +104,9 @@ func (op *Manager) setPropName(propName string) {
         case "SoundThemeList":
                 op.SoundThemeList = getSoundThemeList()
                 dbus.NotifyChange(op, propName)
+        case "BackgroundList":
+                op.BackgroundList = getBackgroundList()
+                dbus.NotifyChange(op, propName)
         case "CurrentTheme":
                 value := personSettings.GetString(GKEY_CURRENT_THEME)
                 if _, ok := themeNamePathMap[value]; ok {
@@ -137,6 +140,7 @@ func (op *Manager) updateAllProps() {
         op.setPropName("IconThemeList")
         op.setPropName("CursorThemeList")
         op.setPropName("SoundThemeList")
+        op.setPropName("BackgroundList")
 
         // the following properties should be configure at end for their values
         // depends on other property

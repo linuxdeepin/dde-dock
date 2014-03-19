@@ -22,8 +22,10 @@
 package main
 
 import (
+        "io/ioutil"
         "os"
         "os/user"
+        "path"
 )
 
 type PathInfo struct {
@@ -51,8 +53,7 @@ const (
 
         BACKGROUND_PATH       = THUMB_BASE_PATH + "wallpappers"
         BACKGROUND_LOCAL_PATH = "/.wallpappers"
-        SOUND_THEME_PATH      = "/usr/share/sounds"
-        SOUND_THEME_MAIN_FILE = "index.theme"
+        SOUND_THEME_PATH      = "/usr/share/sounds/"
 )
 
 func getHomeDir() string {
@@ -121,12 +122,45 @@ func getValidCursorThemes() []PathInfo {
         return localList
 }
 
+func getValidBackground() []PathInfo {
+        localDir := getHomeDir() + BACKGROUND_LOCAL_PATH
+        dirs := []PathInfo{PathInfo{localDir, PATH_TYPE_LOCAL}, PathInfo{BACKGROUND_PATH, PATH_TYPE_SYSTEM}}
+        list := []PathInfo{}
+        for _, d := range dirs {
+                files, err := ioutil.ReadDir(d.path)
+                if err != nil {
+                        logObject.Error("Read directory failed: %v", err)
+                        continue
+                }
+                for _, f := range files {
+                        if !f.IsDir() {
+                                abspath := path.Join(d.path, f.Name())
+                                uripath, ok, _ := objUtil.PathToFileURI(abspath)
+                                if ok {
+                                        list = append(list, PathInfo{uripath, d.t})
+                                }
+                        }
+                }
+        }
+        logObject.Debug("Valid Background: %v", list)
+
+        return list
+}
+
+func getValidSoundThemes() []PathInfo {
+        sysDirs := []PathInfo{PathInfo{SOUND_THEME_PATH, PATH_TYPE_SYSTEM}}
+        conditions := []string{"index.theme"}
+        sysList := getValidThemes(sysDirs, conditions)
+        logObject.Debug("Valid Sound Theme: %v", sysList)
+        return sysList
+}
+
 func getValidThemes(dirs []PathInfo, conditions []string) []PathInfo {
         valid := []PathInfo{}
         for _, dir := range dirs {
                 f, err := os.Open(dir.path)
                 if err != nil {
-                        logObject.Info("Open '%s' failed: %s",
+                        logObject.Warning("Open '%s' failed: %s",
                                 dir.path, err)
                         continue
                 }
@@ -134,7 +168,7 @@ func getValidThemes(dirs []PathInfo, conditions []string) []PathInfo {
 
                 infos, err1 := f.Readdir(0)
                 if err1 != nil {
-                        logObject.Info("ReadDir '%s' failed: %s",
+                        logObject.Warning("ReadDir '%s' failed: %s",
                                 dir.path, err)
                         continue
                 }
@@ -158,14 +192,14 @@ func getValidThemes(dirs []PathInfo, conditions []string) []PathInfo {
 func filterTheme(dir string, conditions []string) bool {
         f, err := os.Open(dir)
         if err != nil {
-                logObject.Info("Open '%s' failed: %s", dir, err)
+                logObject.Warning("Open '%s' failed: %s", dir, err)
                 return false
         }
         defer f.Close()
 
         names, err1 := f.Readdirnames(0)
         if err1 != nil {
-                logObject.Info("ReadDir '%s' failed: %s", dir, err)
+                logObject.Warning("ReadDir '%s' failed: %s", dir, err)
                 return false
         }
 

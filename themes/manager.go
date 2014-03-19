@@ -23,9 +23,7 @@ package main
 
 import (
         "dlib/glib-2.0"
-        "io/ioutil"
         "os"
-        "path"
 )
 
 type Manager struct {
@@ -252,42 +250,27 @@ func getFontNameList() []string {
 }
 
 /*
-   Unlimited TODO
+   Unlimited.
    Return all bg.
 */
 func getBackgroundList() []string {
-        return []string{}
+        valid := getValidBackground()
+        list := []string{}
+        for _, l := range valid {
+                list = append(list, l.path)
+        }
+        return list
 }
 
 /*
    Return all sound theme names.
 */
 func getSoundThemeList() []string {
+        valid := getValidSoundThemes()
         list := []string{}
-        files, err := ioutil.ReadDir(SOUND_THEME_PATH)
-        if err != nil {
-                logObject.Error("%v", err)
-                return list
+        for _, l := range valid {
+                list = append(list, l.path)
         }
-
-        for _, f := range files {
-                if f.IsDir() {
-                        // check if index.theme file exists
-                        tmpf, err := os.Open(path.Join(SOUND_THEME_PATH, f.Name(), SOUND_THEME_MAIN_FILE))
-                        if err != nil {
-                                continue
-                        }
-                        defer tmpf.Close()
-                        tmpi, err := tmpf.Stat()
-                        if err != nil {
-                                continue
-                        }
-                        if !tmpi.IsDir() {
-                                list = append(list, f.Name())
-                        }
-                }
-        }
-
         return list
 }
 
@@ -394,6 +377,7 @@ func newManager() *Manager {
         m.setPropName("IconThemeList")
         m.setPropName("CursorThemeList")
         m.setPropName("SoundThemeList")
+        m.setPropName("BackgroundList")
 
         // the following properties should be configure at end for their values
         // depends on other property
@@ -407,6 +391,9 @@ func newManager() *Manager {
         m.listenThemeDir(homeDir + ICONS_LOCAL_PATH)
         m.listenThemeDir(THUMB_BASE_PATH)
         m.listenThemeDir(homeDir + THUMB_LOCAL_BASE_PATH)
+        m.listenThemeDir(BACKGROUND_PATH)
+        m.listenThemeDir(homeDir + BACKGROUND_LOCAL_PATH)
+        m.listenThemeDir(SOUND_THEME_PATH)
 
         return m
 }
