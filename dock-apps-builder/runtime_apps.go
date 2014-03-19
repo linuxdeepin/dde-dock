@@ -4,6 +4,7 @@ import "github.com/BurntSushi/xgb/xproto"
 import "github.com/BurntSushi/xgbutil/ewmh"
 import "bytes"
 import "encoding/base64"
+import "fmt"
 import "github.com/BurntSushi/xgbutil"
 import "github.com/BurntSushi/xgbutil/icccm"
 import "github.com/BurntSushi/xgbutil/xwindow"
@@ -83,18 +84,76 @@ func contains(haystack []string, needle string) bool {
 	return false
 }
 
-func isNormalWindow(xid xproto.Window) bool {
-	//TODO: improve
-	types, _ := ewmh.WmWindowTypeGet(XU, xid)
-	switch {
-	case contains(types, "_KDE_NET_WM_WINDOW_TYPE_OVERRIDE"):
-		return false
-
-	case contains(types, "_NET_WM_WINDOW_TYPE_NORMAL"):
-		return true
-	default:
+func isSkipTaskbar(xid xproto.Window) bool {
+	state, err := ewmh.WmStateGet(XU, xid)
+	if err != nil {
 		return false
 	}
+
+	return contains(state, "_NET_WM_STATE_SKIP_TASKBAR")
+}
+
+func canBeMinimized(xid xproto.Window) bool {
+	actions, err := ewmh.WmAllowedActionsGet(XU, xid)
+	if err != nil && contains(actions, "_NET_WM_ACTION_MINIMIZE") {
+		return true
+	}
+	return false
+}
+
+var cannotBeDockedType []string = []string{
+	"_NET_WM_WINDOW_TYPE_UTILITY",
+	"_NET_WM_WINDOW_TYPE_COMBO",
+	"_NET_WM_WINDOW_TYPE_DESKTOP",
+	"_NET_WM_WINDOW_TYPE_DND",
+	"_NET_WM_WINDOW_TYPE_DOCK",
+	"_NET_WM_WINDOW_TYPE_DROPDOWN_MENU",
+	"_NET_WM_WINDOW_TYPE_MENU",
+	"_NET_WM_WINDOW_TYPE_NOTIFICATION",
+	"_NET_WM_WINDOW_TYPE_POPUP_MENU",
+	"_NET_WM_WINDOW_TYPE_SPLASH",
+	"_NET_WM_WINDOW_TYPE_TOOLBAR",
+	"_NET_WM_WINDOW_TYPE_TOOLTIP",
+}
+
+func isNormalWindow(xid xproto.Window) bool {
+	fmt.Println("enter isNormalWindow:", xid)
+	if wmClass, err := icccm.WmClassGet(XU, xid); err == nil {
+		if wmClass.Instance == "explorer.exe" && wmClass.Class == "Wine" {
+			return false
+		} else if wmClass.Class == "DDELauncher" {
+			// FIXME:
+			// start_monitor_launcher_window like before?
+			return false
+		} else if wmClass.Class == "Desktop" {
+			// FIXME:
+			// get_desktop_pid like before?
+			return false
+		} else if wmClass.Class == "Dlock" {
+			return false
+		}
+	}
+	if isSkipTaskbar(xid) {
+		return false
+	}
+	types, err := ewmh.WmWindowTypeGet(XU, xid)
+	if err != nil {
+		fmt.Println("Get Window Type failed:", err)
+		return true
+	}
+	mayBeDocked := false
+	cannotBeDoced := false
+	for _, wmType := range types {
+		if wmType == "_NET_WM_WINDOW_TYPE_NORMAL" ||
+			(wmType == "_NET_WM_WINDOW_TYPE_DIALOG" &&
+				canBeMinimized(xid)) {
+			mayBeDocked = true
+		} else if contains(cannotBeDockedType, wmType) {
+			cannotBeDoced = true
+		}
+	}
+	isNormal := mayBeDocked && !cannotBeDoced
+	return isNormal
 }
 
 func (app *RuntimeApp) updateIcon(xid xproto.Window) {
