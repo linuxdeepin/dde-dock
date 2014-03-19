@@ -59,10 +59,5 @@
         <summary>Current Sound Theme</summary>
         <description>Current System Sound Theme</description>
     </key>
-    <key type="s" name="background-fill-style">
-        <default>'tile'</default>
-        <summary>Background image fill style</summary>
-        <description>Background image fill style, could be "tile", "center", "stretch", "scalestretch"</description>
-    </key>
   </schema>
 </schemalist>
