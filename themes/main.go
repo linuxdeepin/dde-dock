@@ -88,15 +88,18 @@ func updateThemeObj(pathNameMap map[string]PathInfo) {
 }
 
 func main() {
-        /*
-           defer func() {
-                   if err := recover(); err != nil {
-                           logObject.Fatal("Recove error in main: %v", err)
-                   }
-           }()
-        */
+        defer func() {
+                if err := recover(); err != nil {
+                        logObject.Fatal("Recove error in main: %v", err)
+                }
+        }()
 
-        logObject.SetRestartCommand("/usr/lib/deepin-daemon/themes")
+        // configure logger
+        logObject.SetRestartCommand("/usr/lib/deepin-daemon/themes", "--debug")
+        if isStringInArray("-d", os.Args) || isStringInArray("--debug", os.Args) {
+                logObject.SetLogLevel(logger.LEVEL_DEBUG)
+        }
+
         var err error
         objXSettings, err = xs.NewXSettings("com.deepin.SessionManager",
                 "/com/deepin/XSettings")

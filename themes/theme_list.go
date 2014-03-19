@@ -48,6 +48,11 @@ const (
         THUMB_LOCAL_GTK_PATH    = THUMB_LOCAL_BASE_PATH + "gtk"
         THUMB_LOCAL_ICON_PATH   = THUMB_LOCAL_BASE_PATH + "icons"
         THUMB_LOCAL_CURSOR_PATH = THUMB_LOCAL_BASE_PATH + "cursor"
+
+        BACKGROUND_PATH       = THUMB_BASE_PATH + "wallpappers"
+        BACKGROUND_LOCAL_PATH = "/.wallpappers"
+        SOUND_THEME_PATH      = "/usr/share/sounds"
+        SOUND_THEME_MAIN_FILE = "index.theme"
 )
 
 func getHomeDir() string {
@@ -73,7 +78,7 @@ func getValidGtkThemes() []PathInfo {
                 }
                 localList = append(localList, l)
         }
-        //logObject.Info("Valid Gtk Theme: %v", localList)
+        logObject.Debug("Valid Gtk Theme: %v", localList)
 
         return localList
 }
@@ -92,7 +97,7 @@ func getValidIconThemes() []PathInfo {
                 }
                 localList = append(localList, l)
         }
-        //logObject.Info("Valid Icon Theme: %v", localList)
+        logObject.Debug("Valid Icon Theme: %v", localList)
 
         return localList
 }
@@ -111,7 +116,7 @@ func getValidCursorThemes() []PathInfo {
                 }
                 localList = append(localList, l)
         }
-        //logObject.Info("Valid Cursor Theme: %v", localList)
+        logObject.Debug("Valid Cursor Theme: %v", localList)
 
         return localList
 }
@@ -199,7 +204,7 @@ func getThemeThumbList() []PathInfo {
                 }
                 localList = append(localList, l)
         }
-        //logObject.Info("Gtk Thumb List:%v", localList)
+        logObject.Debug("Gtk Thumb List:%v", localList)
 
         return localList
 }
@@ -217,7 +222,7 @@ func getGtkThumbList() []PathInfo {
                 }
                 localList = append(localList, l)
         }
-        //logObject.Info("Gtk Thumb List:%v", localList)
+        logObject.Debug("Gtk Thumb List:%v", localList)
 
         return localList
 }
@@ -235,7 +240,7 @@ func getIconThumbList() []PathInfo {
                 }
                 localList = append(localList, l)
         }
-        //logObject.Info("Icon Thumb List:%v", localList)
+        logObject.Debug("Icon Thumb List:%v", localList)
 
         return localList
 }
@@ -253,7 +258,7 @@ func getCursorThumbList() []PathInfo {
                 }
                 localList = append(localList, l)
         }
-        //logObject.Info("Cursor Thumb List:%v", localList)
+        logObject.Debug("Cursor Thumb List:%v", localList)
 
         return localList
 }

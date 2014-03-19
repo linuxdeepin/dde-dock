@@ -37,9 +37,6 @@ const (
         GKEY_CURRENT_BACKGROUND  = "current-picture"
         GKEY_CURRENT_SOUND_THEME = "current-sound-theme"
         DEFAULT_THEME_NAME       = "Deepin"
-
-        SOUND_THEME_PATH      = "/usr/share/sounds/"
-        SOUND_THEME_MAIN_FILE = "index.theme"
 )
 
 var (
