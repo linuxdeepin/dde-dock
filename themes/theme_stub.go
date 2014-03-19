@@ -131,6 +131,6 @@ func (op *Theme) updateThemeInfo() {
                         THEME_KEY_SOUND, err1)
                 return
         }
-        op.SoundThemeName = str
-        dbus.NotifyChange(op, "SoundThemeName")
+        op.SoundTheme = str
+        dbus.NotifyChange(op, "SoundTheme")
 }

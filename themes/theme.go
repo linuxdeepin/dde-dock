@@ -33,7 +33,7 @@ type Theme struct {
         CursorTheme    string
         FontName       string
         BackgroundFile string
-        SoundThemeName string
+        SoundTheme     string
         PreviewPath    string
         ThumbnailPath  string
         basePath       string

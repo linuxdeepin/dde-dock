@@ -173,14 +173,14 @@ func (op *Manager) listenSettingsChanged() {
                         if obj != nil && obj.BackgroundFile != value {
                                 if name := op.setTheme(obj.GtkTheme, obj.IconTheme,
                                         obj.CursorTheme, obj.FontName,
-                                        value, obj.SoundThemeName); name != op.CurrentTheme {
+                                        value, obj.SoundTheme); name != op.CurrentTheme {
                                         op.updateCurrentTheme(name)
                                 }
                         }
                 case GKEY_CURRENT_SOUND_THEME: // TODO
                         value := personSettings.GetString(key)
                         obj := op.getThemeObject(op.CurrentTheme)
-                        if obj != nil && obj.SoundThemeName != value {
+                        if obj != nil && obj.SoundTheme != value {
                                 if name := op.setTheme(obj.GtkTheme, obj.IconTheme,
                                         obj.CursorTheme, obj.FontName,
                                         obj.BackgroundFile, value); name != op.CurrentTheme {
