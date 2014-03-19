@@ -55,16 +55,6 @@ func (op *Manager) GetDBusInfo() dbus.DBusInfo {
 }
 
 func (op *Manager) OnPropertiesChanged(propName string, old interface{}) {
-        switch propName {
-        case "CurrentTheme":
-                if v, ok := old.(string); ok && v != op.CurrentTheme {
-                        personSettings.SetString(GKEY_CURRENT_THEME,
-                                op.CurrentTheme)
-                        if obj := op.getThemeObject(op.CurrentTheme); obj != nil {
-                                obj.setThemeViaXSettings()
-                        }
-                }
-        }
 }
 
 func (op *Manager) setPropName(propName string) {
@@ -72,35 +62,47 @@ func (op *Manager) setPropName(propName string) {
         case "ThemeList":
                 list := getThemeList()
                 //logObject.Info("Theme List: %v", list)
+                tmpMap := make(map[string]PathInfo)
+                tmpNameMap := make(map[string]string)
+                tmp := []string{}
                 for _, l := range list {
                         id := genId()
                         idStr := strconv.FormatInt(int64(id), 10)
                         path := THEME_PATH + idStr
-                        op.ThemeList = append(op.ThemeList, path)
-                        op.pathNameMap[path] = l
-                        themeNamePathMap[l.path] = path
+                        tmp = append(tmp, path)
+                        tmpMap[path] = l
+                        tmpNameMap[l.path] = path
                 }
+                op.ThemeList = tmp
+                op.pathNameMap = tmpMap
+                themeNamePathMap = tmpNameMap
                 dbus.NotifyChange(op, propName)
         case "GtkThemeList":
                 list := getGtkThemeList()
-                //logObject.Info("Gtk Theme List: %v", list)
+                //logObject.Info("Gtk Theme List: %v\n", list)
+                tmp := []string{}
                 for _, l := range list {
-                        op.GtkThemeList = append(op.GtkThemeList, l.path)
+                        tmp = append(tmp, l.path)
                 }
+                op.GtkThemeList = tmp
                 dbus.NotifyChange(op, propName)
         case "IconThemeList":
                 list := getIconThemeList()
-                //logObject.Info("Icon Theme List: %v", list)
+                //logObject.Info("Icon Theme List: %v\n", list)
+                tmp := []string{}
                 for _, l := range list {
-                        op.IconThemeList = append(op.IconThemeList, l.path)
+                        tmp = append(tmp, l.path)
                 }
+                op.IconThemeList = tmp
                 dbus.NotifyChange(op, propName)
         case "CursorThemeList":
                 list := getCursorThemeList()
-                //logObject.Info("Cursor Theme List: %v", list)
+                //logObject.Info("Cursor Theme List: %v\n", list)
+                tmp := []string{}
                 for _, l := range list {
-                        op.CursorThemeList = append(op.CursorThemeList, l.path)
+                        tmp = append(tmp, l.path)
                 }
+                op.CursorThemeList = tmp
                 dbus.NotifyChange(op, propName)
         case "SoundThemeList":
                 op.SoundThemeList = getSoundThemeList()

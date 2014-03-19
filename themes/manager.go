@@ -30,7 +30,7 @@ import (
 
 type Manager struct {
         ThemeList    []string
-        CurrentTheme string  `access:"readwrite"`
+        CurrentTheme string
         GtkThemeList []string
         //GtkBasePath     string // TODO
         IconThemeList []string
@@ -49,6 +49,23 @@ func (op *Manager) GetPathViaName(name string) (string, bool) {
         }
 
         return "", false
+}
+
+func (op *Manager) SetCurrentTheme(name string) bool {
+        if _, ok := themeNamePathMap[name]; !ok {
+                return false
+        }
+
+        if name != op.CurrentTheme {
+                if obj := op.getThemeObject(name); obj != nil {
+                        obj.setThemeViaXSettings()
+                }
+                personSettings.SetString(GKEY_CURRENT_THEME,
+                        name)
+                op.CurrentTheme = name
+        }
+
+        return true
 }
 
 func (op *Manager) SetGtkTheme(name string) (string, bool) {
