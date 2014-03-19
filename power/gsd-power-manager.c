@@ -3420,7 +3420,6 @@ idle_triggered_idle_cb (GnomeIdleMonitor *monitor,
     else if (watch_id == manager->priv->idle_blank_id)
     {
         idle_set_mode (manager, GSD_POWER_IDLE_MODE_BLANK);
-        /*manager->priv->screensaver_active = FALSE;*/
     }
     else if (watch_id == manager->priv->idle_sleep_id)
     {
@@ -3801,7 +3800,7 @@ gsd_power_manager_start (GsdPowerManager *manager,
         g_signal_connect(manager->priv->settings_profile, "changed",
                          G_CALLBACK(engine_profile_changed_cb),
                          manager);
-        started = TRUE
+        started = TRUE;
     }
     manager->priv->current_profile = g_settings_get_string(manager->priv->settings_profile,
                                      "current-profile");
