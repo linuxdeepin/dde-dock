@@ -261,7 +261,7 @@ func (grub *Grub2) parseEntries(fileContent string) error {
 			if ok {
 				entry := Entry{MENUENTRY, title, numCount[level], parentMenus[len(parentMenus)-1]}
 				grub.entries = append(grub.entries, entry)
-				logger.Debug("found entry: [%d] %s %s", level, strings.Repeat(" ", level*2), title)
+				logger.Debugf("found entry: [%d] %s %s", level, strings.Repeat(" ", level*2), title)
 
 				numCount[level]++
 				inMenuEntry = true
@@ -284,7 +284,7 @@ func (grub *Grub2) parseEntries(fileContent string) error {
 				entry := Entry{SUBMENU, title, numCount[level], parentMenus[len(parentMenus)-1]}
 				grub.entries = append(grub.entries, entry)
 				parentMenus = append(parentMenus, &entry)
-				logger.Debug("found entry: [%d] %s %s", level, strings.Repeat(" ", level*2), title)
+				logger.Debugf("found entry: [%d] %s %s", level, strings.Repeat(" ", level*2), title)
 
 				level++
 				numCount[level] = 0
@@ -339,7 +339,7 @@ func (grub *Grub2) parseSettings(fileContent string) error {
 			kv := strings.SplitN(line, "=", 2)
 			key, value := kv[0], kv[1]
 			grub.settings[key] = unquoteString(value)
-			logger.Debug("found setting: %s=%s", kv[0], kv[1])
+			logger.Debugf("found setting: %s=%s", kv[0], kv[1])
 		}
 	}
 	if err := s.Err(); err != nil {
@@ -405,7 +405,7 @@ func (grub *Grub2) getDefaultEntry() string {
 	// if GRUB_DEFAULE exist and is a index number, return its entry name
 	index, err := strconv.ParseInt(value, 10, 32)
 	if err != nil {
-		logger.Error(`invalid number, settings["GRUB_DEFAULT"]=%s`, grub.settings["GRUB_DEFAULT"])
+		logger.Errorf(`invalid number, settings["GRUB_DEFAULT"]=%s`, grub.settings["GRUB_DEFAULT"])
 		index = 0
 	}
 	if index >= 0 && int(index) < len(simpleEntryTitles) {
@@ -421,7 +421,7 @@ func (grub *Grub2) getTimeout() int32 {
 
 	timeout, err := strconv.ParseInt(grub.settings["GRUB_TIMEOUT"], 10, 32)
 	if err != nil {
-		logger.Error(`valid value, settings["GRUB_TIMEOUT"]=%s`, grub.settings["GRUB_TIMEOUT"])
+		logger.Errorf(`valid value, settings["GRUB_TIMEOUT"]=%s`, grub.settings["GRUB_TIMEOUT"])
 		return grubTimeoutDisable
 	}
 	return int32(timeout)
@@ -473,7 +473,7 @@ func (grub *Grub2) getSettingContentToSave() string {
 func main() {
 	defer func() {
 		if err := recover(); err != nil {
-			logger.Fatal("%v", err)
+			logger.Fatalf("%v", err)
 		}
 	}()
 
@@ -498,12 +498,12 @@ func main() {
 
 	err := dbus.InstallOnSession(grub)
 	if err != nil {
-		logger.Error("register dbus interface failed: %v", err)
+		logger.Errorf("register dbus interface failed: %v", err)
 		os.Exit(1)
 	}
 	err = dbus.InstallOnSession(grub.theme)
 	if err != nil {
-		logger.Error("register dbus interface failed: %v", err)
+		logger.Errorf("register dbus interface failed: %v", err)
 		os.Exit(1)
 	}
 
@@ -514,7 +514,7 @@ func main() {
 
 	dbus.DealWithUnhandledMessage()
 	if err := dbus.Wait(); err != nil {
-		logger.Error("lost dbus session: %v", err)
+		logger.Errorf("lost dbus session: %v", err)
 		os.Exit(1)
 	} else {
 		os.Exit(0)

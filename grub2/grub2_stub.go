@@ -40,7 +40,7 @@ func (grub *Grub2) GetDBusInfo() dbus.DBusInfo {
 func (grub *Grub2) OnPropertiesChanged(name string, oldv interface{}) {
 	defer func() {
 		if err := recover(); err != nil {
-			logger.Error("%v", err)
+			logger.Errorf("%v", err)
 		}
 	}()
 	logger.Debug("OnPropertiesChanged: " + name)

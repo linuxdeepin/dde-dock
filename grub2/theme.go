@@ -118,7 +118,7 @@ func (theme *Theme) regenerateBackgroundIfNeed() {
 	bgw, bgh, _ := graphic.GetImageSize(theme.Background)
 	srcbgw, srcbgh, _ := graphic.GetImageSize(theme.bgSrcFile)
 	needUpdate := false
-	logger.Debug("screen resolution: %dx%d, source background: %dx%d, background: %dx%d",
+	logger.Debugf("screen resolution: %dx%d, source background: %dx%d, background: %dx%d",
 		screenWidth, screenHeight, srcbgw, srcbgh, bgw, bgh)
 	if srcbgw >= int32(screenWidth) && srcbgh >= int32(screenHeight) {
 		// source background is bigger than screen resolution, so the
@@ -155,7 +155,7 @@ func (theme *Theme) getThemeTplJSON() (*TplJSONData, error) {
 	if err != nil {
 		return nil, err
 	}
-	logger.Debug("theme template json data: %v", tplJSONData)
+	logger.Debugf("theme template json data: %v", tplJSONData)
 	return tplJSONData, nil
 }
 
@@ -170,7 +170,7 @@ func (theme *Theme) getTplJSONData(fileContent []byte) (*TplJSONData, error) {
 }
 
 func (theme *Theme) customTheme() {
-	logger.Debug("custom theme: %v", theme.tplJSONData.CurrentScheme)
+	logger.Debugf("custom theme: %v", theme.tplJSONData.CurrentScheme)
 
 	// generate a new theme.txt from template
 	tplFileContent, err := ioutil.ReadFile(theme.tplFile)
