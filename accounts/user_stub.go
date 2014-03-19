@@ -160,9 +160,7 @@ func (op *UserManager) setPropName(propName string) {
                 file := USER_CONFIG_FILE + op.UserName
                 if !fileIsExist(file) {
                         path := getRandUserIcon()
-                        logObject.Warning("Rand Icon Path:%s\n", file)
                         op.applyPropertiesChanged("IconFile", path)
-                        logObject.Warning("Rand Icon end\n")
                         op.IconFile = path
                 } else {
                         v, ok := readKeyFileValue(file, "User", "Icon", KEY_TYPE_STRING)

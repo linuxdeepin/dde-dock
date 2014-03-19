@@ -155,8 +155,6 @@ func readKeyFileValue(filename, group, key string, t int32) (interface{}, bool) 
 }
 
 func writeKeyFileValue(filename, group, key string, t int32, value interface{}) {
-        //mutex.Lock()
-        //defer mutex.Unlock()
         if !fileIsExist(filename) {
                 f, err := os.Create(filename)
                 if err != nil {
@@ -171,6 +169,8 @@ func writeKeyFileValue(filename, group, key string, t int32, value interface{}) 
                         KEY_TYPE_STRING, USER_DEFAULT_BG)
         }
 
+        mutex.Lock()
+        defer mutex.Unlock()
         keyFile := glib.NewKeyFile()
         defer keyFile.Free()
         ok, _ := keyFile.LoadFromFile(filename, glib.KeyFileFlagsKeepComments)
