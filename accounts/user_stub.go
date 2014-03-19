@@ -158,7 +158,6 @@ func (op *UserManager) setPropName(propName string) {
                 }
         case "IconFile":
                 file := USER_CONFIG_FILE + op.UserName
-                logObject.Warning("File Path:%s\n", file)
                 if !fileIsExist(file) {
                         path := getRandUserIcon()
                         logObject.Warning("Rand Icon Path:%s\n", file)

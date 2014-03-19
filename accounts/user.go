@@ -59,6 +59,7 @@ func (op *UserManager) SetPassword(passwd string) {
                                 err)
                 }
         }()
+        op.SetLocked(false)
 }
 
 func (op *UserManager) SetAutomaticLogin(auto bool) {

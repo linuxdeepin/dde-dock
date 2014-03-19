@@ -249,7 +249,7 @@ func detetedViaShadowFile(info *UserInfo) bool {
                         if len(pw) < 4 {
                                 continue
                         }
-                } else if pw == "!" {
+                } else if pw[0] == '!' {
                         info.Locked = true
                         id, _ := strconv.ParseInt(info.Uid, 10, 64)
                         if id < 1000 {
