@@ -24,6 +24,7 @@ package main
 import (
         "dbus/com/deepin/api/utils"
         xs "dbus/com/deepin/sessionmanager"
+        "dlib"
         "dlib/dbus"
         "dlib/logger"
         "os"
@@ -134,6 +135,7 @@ func main() {
         dbus.InstallOnSession(objPre)
 
         dbus.DealWithUnhandledMessage()
+        go dlib.StartLoop()
         if err = dbus.Wait(); err != nil {
                 logObject.Warning("lost dbus session: %v", err)
                 os.Exit(1)
