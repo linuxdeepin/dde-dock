@@ -57,14 +57,6 @@ func (op *Manager) GetDBusInfo() dbus.DBusInfo {
 
 func (op *Manager) OnPropertiesChanged(propName string, old interface{}) {
         switch propName {
-        case "CurrentTheme":
-                if v, ok := old.(string); ok && v != op.CurrentTheme {
-                        personSettings.SetString(GKEY_CURRENT_THEME,
-                                op.CurrentTheme)
-                        if obj := op.getThemeObject(op.CurrentTheme); obj != nil {
-                                obj.setThemeViaXSettings()
-                        }
-                }
         case "CurrentSoundTheme": // TODO
                 if v, ok := old.(string); ok && v != op.CurrentSoundTheme {
                         personSettings.SetString(GKEY_CURRENT_SOUND_THEME,
@@ -79,6 +71,7 @@ func (op *Manager) setPropName(propName string) {
                 list := getThemeList()
                 //logObject.Info("Theme List: %v", list)
                 tmpMap := make(map[string]PathInfo)
+                tmpNameMap := make(map[string]string)
                 tmp := []string{}
                 for _, l := range list {
                         id := genId()
@@ -86,10 +79,11 @@ func (op *Manager) setPropName(propName string) {
                         path := THEME_PATH + idStr
                         tmp = append(tmp, path)
                         tmpMap[path] = l
-                        themeNamePathMap[l.path] = path
+                        tmpNameMap[l.path] = path
                 }
                 op.ThemeList = tmp
                 op.pathNameMap = tmpMap
+                themeNamePathMap = tmpNameMap
                 dbus.NotifyChange(op, propName)
         case "GtkThemeList":
                 list := getGtkThemeList()
