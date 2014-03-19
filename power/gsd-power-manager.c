@@ -1208,6 +1208,40 @@ engine_device_removed_cb (UpClient *client, UpDevice *device, GsdPowerManager *m
     engine_recalculate_state (manager);
 }
 
+static void profile_set_default(GsdPowerManager *manager)
+{
+    g_settings_set_string(manager->priv->settings,"button-power","interactive");
+    if (strcmp(manager->priv->current_profile,PROFILE_DEFAULT)==0)
+    {
+        g_settings_set_int(manager->priv->settings,"idle-delay",300);
+        g_settings_set_int(manager->priv->settings,
+                "sleep-inactive-ac-timeout",
+                1800);
+        g_settings_set_int(manager->priv->settings,
+                "sleep-inactive-battery-timeout",
+                900);
+    }
+    else if(!strcmp(manager->priv->current_profile,PROFILE_PERFORMANCE))
+    {
+        g_settings_set_int(manager->priv->settings,"idle-delay",0);
+        g_settings_set_int(manager->priv->settings,
+                "sleep-inactive-ac-timeout",
+                0);
+        g_settings_set_int(manager->priv->settings,
+                "sleep-inactive-battery-timeout",
+                0);
+    }
+    else if(!strcmp(manager->priv->current_profile,PROFILE_POWERSAVE))
+    {
+        g_settings_set_int(manager->priv->settings,"idle-delay",60);
+        g_settings_set_int(manager->priv->settings,
+                "sleep-inactive-ac-timeout",300);
+        g_settings_set_int(manager->priv->settings,
+                "sleep-inactive-battery-timeout",60);
+    }
+    /*idle_configure(manager);*/
+}
+
 static void
 engine_profile_changed_cb (GSettings *settings,
                            const gchar *key,
@@ -1246,6 +1280,8 @@ engine_profile_changed_cb (GSettings *settings,
     gsd_power_manager_stop(manager);
 
     gsd_power_manager_start(manager, &error);
+    g_debug("setting default reserved gsettings value\n");
+    profile_set_default(manager);
 
     return;
 }
