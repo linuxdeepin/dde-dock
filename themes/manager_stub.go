@@ -34,10 +34,11 @@ const (
 
         PERSONALIZATION_ID       = "com.deepin.dde.personalization"
         GKEY_CURRENT_THEME       = "current-theme"
-        GKEY_CURRENT_BACKGROUND     = "current-picture"
+        GKEY_CURRENT_BACKGROUND  = "current-picture"
         GKEY_CURRENT_SOUND_THEME = "current-sound-theme"
         DEFAULT_THEME_NAME       = "Deepin"
         DEFAULT_SOUND_THEME_NAME = "LinuxDeepin"
+        DEFAULT_BACKGROUND_FILE  = "file:///usr/share/backgrounds/default_background.jpg"
 
         SOUND_THEME_PATH      = "/usr/share/sounds/"
         SOUND_THEME_MAIN_FILE = "index.theme"
@@ -69,6 +70,11 @@ func (op *Manager) OnPropertiesChanged(propName string, old interface{}) {
                 if v, ok := old.(string); ok && v != op.CurrentSoundTheme {
                         personSettings.SetString(GKEY_CURRENT_SOUND_THEME,
                                 op.CurrentSoundTheme)
+                }
+        case "CurrentBackground": // TODO
+                if v, ok := old.(string); ok && v != op.CurrentBackground {
+                        personSettings.SetString(GKEY_CURRENT_BACKGROUND,
+                                op.CurrentBackground)
                 }
         }
 }
@@ -129,6 +135,15 @@ func (op *Manager) setPropName(propName string) {
                         personSettings.SetString(GKEY_CURRENT_SOUND_THEME, DEFAULT_SOUND_THEME_NAME)
                 }
                 dbus.NotifyChange(op, propName)
+        case "CurrentBackground": // TODO
+                value := personSettings.GetString(GKEY_CURRENT_BACKGROUND)
+                if isStringInArray(value, op.BackgroundList) {
+                        op.CurrentBackground = value
+                } else {
+                        op.CurrentBackground = DEFAULT_BACKGROUND_FILE
+                        personSettings.SetString(GKEY_CURRENT_BACKGROUND, DEFAULT_BACKGROUND_FILE)
+                }
+                dbus.NotifyChange(op, propName)
         }
 }
 
@@ -158,6 +173,7 @@ func (op *Manager) updateAllProps() {
         // depends on other property
         op.setPropName("CurrentTheme")
         op.setPropName("CurrentSoundTheme")
+        op.setPropName("CurrentBackground")
 
         updateThemeObj(op.pathNameMap)
 }
@@ -173,16 +189,6 @@ func (op *Manager) listenSettingsChanged() {
         personSettings.Connect("changed", func(s *gio.Settings, key string) {
                 logObject.Info("Theme GSettings Key Changed: %s", key)
                 switch key {
-                case GKEY_CURRENT_BACKGROUND:
-                        value := personSettings.GetString(key)
-                        obj := op.getThemeObject(op.CurrentTheme)
-                        if obj != nil && obj.BackgroundFile != value {
-                                if name := op.setTheme(obj.GtkTheme, obj.IconTheme,
-                                        obj.CursorTheme, obj.FontName,
-                                        value, obj.SoundThemeName); name != op.CurrentTheme {
-                                        op.updateCurrentTheme(name)
-                                }
-                        }
                 case GKEY_CURRENT_THEME:
                         value := personSettings.GetString(key)
                         if value == op.CurrentTheme {
@@ -192,6 +198,22 @@ func (op *Manager) listenSettingsChanged() {
                         if obj != nil {
                                 obj.setThemeViaXSettings()
                                 op.setPropName("CurrentTheme")
+                        }
+                case GKEY_CURRENT_BACKGROUND: // TODO
+                        value := personSettings.GetString(key)
+                        if value == op.CurrentBackground {
+                                break
+                        }
+
+                        op.setPropName("CurrentBackground")
+
+                        obj := op.getThemeObject(op.CurrentTheme)
+                        if obj != nil && obj.BackgroundFile != value {
+                                if name := op.setTheme(obj.GtkTheme, obj.IconTheme,
+                                        obj.CursorTheme, obj.FontName,
+                                        value, obj.SoundThemeName); name != op.CurrentTheme {
+                                        op.updateCurrentTheme(name)
+                                }
                         }
                 case GKEY_CURRENT_SOUND_THEME: // TODO
                         value := personSettings.GetString(key)

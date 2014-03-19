@@ -32,6 +32,7 @@ type Manager struct {
         ThemeList         []string
         CurrentTheme      string  `access:"readwrite"`
         CurrentSoundTheme string  `access:"readwrite"`
+        CurrentBackground string  `access:"readwrite"`
         GtkThemeList      []string
         //GtkBasePath     string
         IconThemeList []string
@@ -230,7 +231,7 @@ func getFontNameList() []string {
 }
 
 /*
-   Unlimited
+   Unlimited TODO
    Return all bg.
 */
 func getBackgroundList() []string {
@@ -377,6 +378,7 @@ func newManager() *Manager {
         // depends on other property
         m.setPropName("CurrentTheme")
         m.setPropName("CurrentSoundTheme")
+        m.setPropName("CurrentBackground")
 
         m.listenSettingsChanged()
         homeDir := getHomeDir()
