@@ -3417,8 +3417,6 @@ idle_triggered_idle_cb (GnomeIdleMonitor *monitor,
     if (watch_id == manager->priv->idle_dim_id)
     {
         idle_set_mode (manager, GSD_POWER_IDLE_MODE_DIM);
-        manager->priv->screensaver_active = TRUE;
-        idle_configure(manager);
     }
     else if (watch_id == manager->priv->idle_blank_id)
     {
