@@ -2,6 +2,7 @@ package main
 
 import "dlib/dbus"
 import "dlib/dbus/property"
+import "dlib/logger"
 import "os"
 import nm "dbus/org/freedesktop/networkmanager"
 
@@ -22,6 +23,7 @@ var (
 	_NMManager, _  = nm.NewManager(NMDest, "/org/freedesktop/NetworkManager")
 	_NMSettings, _ = nm.NewSettings(NMDest, "/org/freedesktop/NetworkManager/Settings")
 	_Manager       = _NewManager()
+	LOGGER         = logger.NewLogger("com.deepin.daemon.Network")
 )
 
 type Manager struct {
@@ -41,7 +43,7 @@ type Manager struct {
 	WirelessConnections []*Connection
 	VPNConnections      []*Connection
 
-	NeedMoreConfigure func(string, string)
+	NeedSecrets func(dbus.ObjectPath, string, string)
 
 	agent *Agent
 }

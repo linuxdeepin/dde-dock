@@ -1,12 +1,22 @@
 package main
 
 import "dlib/dbus"
+import "time"
 import nm "dbus/org/freedesktop/networkmanager"
-import "log"
 
-type Agent struct {
-	keys map[string]chan string
+type mapKey struct {
+	path dbus.ObjectPath
+	name string
 }
+type Agent struct {
+	pendingKeys map[mapKey]chan string
+
+	savedKeys map[mapKey]map[string]map[string]dbus.Variant
+}
+
+var (
+	invalidKey = make(map[string]map[string]dbus.Variant)
+)
 
 func (c *Agent) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
@@ -16,72 +26,108 @@ func (c *Agent) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (a *Agent) GetSecrets(connection map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath, settingName string, hints []string, flags uint32) map[string]map[string]dbus.Variant {
-	log.Println("GetSecrtes:", connectionPath, settingName, hints, flags)
+func fillSecret(settingName string, key string) map[string]map[string]dbus.Variant {
 	r := make(map[string]map[string]dbus.Variant)
-	if uuid, ok := connection[fieldConnection]["uuid"].Value().(string); ok {
-		r["802-11-wireless-security"] = make(map[string]dbus.Variant)
-		_Manager.NeedMoreConfigure(uuid, "PASSWORD")
-		log.Println("Begin getsecrtes...", connection[fieldConnection]["id"], uuid)
-		if _, ok := a.keys[uuid]; !ok {
-			//only wait the key when there is no other GetSecrtes runing with this uuid
-			a.keys[uuid] = make(chan string)
-			key, ok := <-a.keys[uuid]
-			if ok {
-				r["802-11-wireless-security"]["psk"] = dbus.MakeVariant(key)
-			}
-			log.Println("End getsecrtes...", connection[fieldConnection]["id"])
-		}
+	r[settingName] = make(map[string]dbus.Variant)
+	switch settingName {
+	case "802-11-wireless-security":
+		r[settingName]["psk"] = dbus.MakeVariant(key)
+	default:
+		LOGGER.Warning("Unknow secrety setting name", settingName, ",please report it to linuxdeepin")
 	}
 	return r
 }
 
-func (a *Agent) CancelGetSecrtes(connectionPath dbus.ObjectPath, settingName string) {
-	if setting, err := nm.NewSettingsConnection(NMDest, connectionPath); err == nil {
-		s, err := setting.GetSettings()
-		if err == nil {
-			uuid, ok := s[fieldConnection]["uuid"].Value().(string)
-			if ok {
-				close(a.keys[uuid])
-				delete(a.keys, uuid)
-			}
-		} else {
-			log.Println("CancelGetSecrtes Error:", err)
-		}
+func (a *Agent) GetSecrets(connection map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath, settingName string, hints []string, flags uint32) map[string]map[string]dbus.Variant {
+	LOGGER.Info("GetSecrtes:", connectionPath, settingName, hints, flags)
+	keyId := mapKey{connectionPath, settingName}
+	if keyValue, ok := a.savedKeys[keyId]; ok && (flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_REQUEST_NEW == 0) {
+		return keyValue
+	}
+
+	if flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_ALLOW_INTERACTION == 0 {
+		return invalidKey
+	}
+
+	if _, ok := a.pendingKeys[keyId]; ok {
+		//only wait the key when there is no other GetSecrtes runing with this uuid
+		LOGGER.Info("Repeat GetSecrets", keyId)
 	} else {
-		log.Println("CancelGetSecrtes Failed:", err)
+		select {
+		case keyValue, ok := <-a.createPendingKey(keyId, pageGeneralGetId(connection)):
+			if ok {
+				keyValue := fillSecret(settingName, keyValue)
+				a.SaveSecrets(keyValue, connectionPath)
+				return keyValue
+			}
+			LOGGER.Info("failed getsecrtes...", keyId)
+		case <-time.After(120 * time.Second):
+			a.CancelGetSecrtes(connectionPath, settingName)
+			LOGGER.Info("get secrets timeout:", keyId)
+		}
+	}
+	return invalidKey
+}
+func (a *Agent) createPendingKey(keyId mapKey, connectionId string) chan string {
+	if _Manager.NeedSecrets != nil {
+		defer _Manager.NeedSecrets(keyId.path, keyId.name, connectionId)
+	} else {
+		LOGGER.Warning("createPendingKey when DNetworkManager hasn't init")
+	}
+	a.pendingKeys[keyId] = make(chan string)
+	return a.pendingKeys[keyId]
+}
+
+func (a *Agent) CancelGetSecrtes(connectionPath dbus.ObjectPath, settingName string) {
+	keyId := mapKey{connectionPath, settingName}
+
+	if pendingChan, ok := a.pendingKeys[keyId]; ok {
+		close(pendingChan)
+		delete(a.pendingKeys, keyId)
+	} else {
+		LOGGER.Warning("CancelGetSecrtes an unknow PendingKey:", keyId)
 	}
 }
 
 func (a *Agent) SaveSecrets(connection map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath) {
-	log.Println("SaveSecretes")
+	if _, ok := connection["802-11-wireless-security"]; ok {
+		keyId := mapKey{connectionPath, "802-11-wireless-security"}
+		a.savedKeys[keyId] = connection
+	}
+	LOGGER.Info("SaveSecretes")
 }
 
 func (a *Agent) DeleteSecrets(connection map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath) {
-	log.Println("DeleteSecretes")
+	if _, ok := connection["802-11-wireless-security"]; ok {
+		keyId := mapKey{connectionPath, "802-11-wireless-security"}
+		delete(a.savedKeys, keyId)
+	}
+	LOGGER.Info("DeleteSecretes")
 }
 
-func (a *Agent) handleNewKeys(uuid string, key string) {
-	ch, ok := a.keys[uuid]
-	if ok {
-		//ignore handle key request when there is no GetSecrets waiting.
+func (a *Agent) feedSecret(path dbus.ObjectPath, name string, key string) {
+	keyId := mapKey{path, name}
+	if ch, ok := a.pendingKeys[keyId]; ok {
 		ch <- key
-		delete(a.keys, uuid)
+		delete(a.pendingKeys, keyId)
 	}
 }
 
 func newAgent(identify string) *Agent {
 	c := &Agent{}
-	c.keys = make(map[string]chan string)
+	c.pendingKeys = make(map[mapKey]chan string)
+	c.savedKeys = make(map[mapKey]map[string]map[string]dbus.Variant)
+
 	dbus.InstallOnSystem(c)
-	manager, err := nm.NewAgentManager(NMDest, "/org/freedesktop/NetworkManager/AgentManager")
-	if err != nil {
+
+	if manager, err := nm.NewAgentManager(NMDest, "/org/freedesktop/NetworkManager/AgentManager"); err != nil {
 		panic(err)
+	} else {
+		manager.Register("com.deepin.daemon.Network.Agent")
 	}
-	manager.Register("org.snyh.test")
 	return c
 }
 
-func (m *Manager) SetKey(id string, key string) {
-	m.agent.handleNewKeys(id, key)
+func (m *Manager) FeedSecret(path dbus.ObjectPath, name, key string) {
+	m.agent.feedSecret(path, name, key)
 }
