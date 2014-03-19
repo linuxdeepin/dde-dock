@@ -28,6 +28,7 @@ import (
 	liblogger "dlib/logger"
 	"encoding/json"
 	"errors"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -47,6 +48,8 @@ const (
 
 var (
 	logger                 = liblogger.NewLogger("dde-daemon/grub2")
+	argDebug               bool
+	argSetup               bool
 	grub2ext, _            = apigrub2ext.NewGrub2Ext("com.deepin.api.Grub2", "/com/deepin/api/Grub2")
 	entryRegexpSingleQuote = regexp.MustCompile(`^ *(menuentry|submenu) +'(.*?)'.*$`)
 	entryRegexpDoubleQuote = regexp.MustCompile(`^ *(menuentry|submenu) +"(.*?)".*$`)
@@ -474,13 +477,25 @@ func main() {
 		}
 	}()
 
+	flag.BoolVar(&argDebug, "d", false, "debug mode")
+	flag.BoolVar(&argDebug, "debug", false, "debug mode")
+	flag.BoolVar(&argSetup, "setup", false, "setup grub and exit")
+	flag.Parse()
+
 	// configure logger
 	logger.SetRestartCommand("/usr/lib/deepin-daemon/grub2", "--debug")
-	if stringInSlice("-d", os.Args) || stringInSlice("--debug", os.Args) {
+	if argDebug {
 		logger.SetLogLevel(liblogger.LEVEL_DEBUG)
 	}
 
 	grub := NewGrub2()
+
+	// setup grub and exit
+	if argSetup {
+		// TODO
+		os.Exit(0)
+	}
+
 	err := dbus.InstallOnSession(grub)
 	if err != nil {
 		logger.Error("register dbus interface failed: %v", err)

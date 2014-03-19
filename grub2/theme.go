@@ -138,11 +138,9 @@ func (theme *Theme) regenerateBackgroundIfNeed() {
 	}
 
 	if needUpdate {
-		go func() {
-			grub2ext.DoGenerateThemeBackground(screenWidth, screenHeight)
-			theme.setProperty("Background", theme.Background)
-			logger.Info("update background sucess")
-		}()
+		grub2ext.DoGenerateThemeBackground(screenWidth, screenHeight)
+		theme.setProperty("Background", theme.Background)
+		logger.Info("update background sucess")
 	}
 }
 
