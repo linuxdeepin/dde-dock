@@ -61,16 +61,23 @@ func (grub *Grub2) OnPropertiesChanged(name string, oldv interface{}) {
 	grub.notifyUpdate()
 }
 
-func (grub *Grub2) setProperty(name string, value interface{}) {
+func (grub *Grub2) setProperty(name string, value interface{}) (ok bool) {
 	switch name {
 	case "DefaultEntry":
-		grub.DefaultEntry = value.(string)
-		grub.setDefaultEntry(grub.DefaultEntry)
+		grub.DefaultEntry, ok = value.(string)
+		if ok {
+			grub.setDefaultEntry(grub.DefaultEntry)
+		}
 	case "Timeout":
-		grub.Timeout = value.(int32)
-		grub.setTimeout(grub.Timeout)
+		grub.Timeout, ok = value.(int32)
+		if ok {
+			grub.setTimeout(grub.Timeout)
+		}
 	}
-	dbus.NotifyChange(grub, name)
+	if ok {
+		dbus.NotifyChange(grub, name)
+	}
+	return
 }
 
 // GetSimpleEntryTitles return entry titles in level one.
