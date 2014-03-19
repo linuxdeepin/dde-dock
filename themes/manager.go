@@ -29,12 +29,10 @@ import (
 )
 
 type Manager struct {
-        ThemeList         []string
-        CurrentTheme      string  `access:"readwrite"`
-        CurrentSoundTheme string  `access:"readwrite"`
-        CurrentBackground string  `access:"readwrite"`
-        GtkThemeList      []string
-        //GtkBasePath     string
+        ThemeList    []string
+        CurrentTheme string  `access:"readwrite"`
+        GtkThemeList []string
+        //GtkBasePath     string // TODO
         IconThemeList []string
         //IconBasePath    string
         CursorThemeList []string
@@ -129,6 +127,9 @@ func (op *Manager) SetBackgroundFile(name string) (string, bool) {
                 return v, true
         }
 
+        // sync value to gsettings
+        personSettings.SetString(GKEY_CURRENT_BACKGROUND, name)
+
         return op.CurrentTheme, false
 }
 
@@ -143,6 +144,9 @@ func (op *Manager) SetSoundTheme(name string) (string, bool) {
                 op.updateCurrentTheme(v)
                 return v, true
         }
+
+        // sync value to gsettings
+        personSettings.SetString(GKEY_CURRENT_SOUND_THEME, name)
 
         return op.CurrentTheme, false
 }
@@ -374,11 +378,9 @@ func newManager() *Manager {
         m.setPropName("CursorThemeList")
         m.setPropName("SoundThemeList")
 
-        // the following properties should be setup at end for their values
+        // the following properties should be configure at end for their values
         // depends on other property
         m.setPropName("CurrentTheme")
-        m.setPropName("CurrentSoundTheme")
-        m.setPropName("CurrentBackground")
 
         m.listenSettingsChanged()
         homeDir := getHomeDir()
