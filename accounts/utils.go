@@ -155,8 +155,8 @@ func readKeyFileValue(filename, group, key string, t int32) (interface{}, bool) 
 }
 
 func writeKeyFileValue(filename, group, key string, t int32, value interface{}) {
-        mutex.Lock()
-        defer mutex.Unlock()
+        //mutex.Lock()
+        //defer mutex.Unlock()
         if !fileIsExist(filename) {
                 f, err := os.Create(filename)
                 if err != nil {

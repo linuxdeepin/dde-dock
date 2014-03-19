@@ -36,7 +36,8 @@ func getRandUserIcon() string {
         }
 
         index := rand.Int31n(int32(l))
-        logObject.Info("Rand Icon Index: %d\n", index)
+        //logObject.Info("Rand Icon Index: %d\n", index)
+        //logObject.Info("Rand Icon Path: %s\n", list[index])
         return list[index]
 }
 

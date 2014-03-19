@@ -158,12 +158,19 @@ func (op *UserManager) setPropName(propName string) {
                 }
         case "IconFile":
                 file := USER_CONFIG_FILE + op.UserName
+                logObject.Warning("File Path:%s\n", file)
                 if !fileIsExist(file) {
-                        op.IconFile = getRandUserIcon()
+                        path := getRandUserIcon()
+                        logObject.Warning("Rand Icon Path:%s\n", file)
+                        op.applyPropertiesChanged("IconFile", path)
+                        logObject.Warning("Rand Icon end\n")
+                        op.IconFile = path
                 } else {
                         v, ok := readKeyFileValue(file, "User", "Icon", KEY_TYPE_STRING)
                         if !ok {
-                                op.IconFile = getRandUserIcon()
+                                path := getRandUserIcon()
+                                op.applyPropertiesChanged("IconFile", path)
+                                op.IconFile = path
                         } else {
                                 op.IconFile = v.(string)
                         }
@@ -171,10 +178,12 @@ func (op *UserManager) setPropName(propName string) {
         case "BackgroundFile":
                 file := USER_CONFIG_FILE + op.UserName
                 if !fileIsExist(file) {
+                        op.applyPropertiesChanged("BackgroundFile", USER_DEFAULT_BG)
                         op.BackgroundFile = USER_DEFAULT_BG
                 } else {
                         v, ok := readKeyFileValue(file, "User", "Background", KEY_TYPE_STRING)
                         if !ok {
+                                op.applyPropertiesChanged("BackgroundFile", USER_DEFAULT_BG)
                                 op.BackgroundFile = USER_DEFAULT_BG
                         } else {
                                 tmp := v.(string)
@@ -238,11 +247,6 @@ func (op *UserManager) updateUserInfo() {
         op.setPropName("AccountType")
         op.setPropName("LoginTime")
         op.setPropName("HistoryIcons")
-}
-
-func (op *UserManager) initUserInfo() {
-        op.applyPropertiesChanged("IconFile", op.IconFile)
-        op.applyPropertiesChanged("BackgroundFile", op.BackgroundFile)
 }
 
 func addHistoryIcon(filename, iconPath string) []string {

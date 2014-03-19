@@ -126,7 +126,6 @@ func newUserManager(uid string) *UserManager {
 
         m.Uid = uid
         m.updateUserInfo()
-        m.initUserInfo()
         m.listenUserInfoChanged(ETC_GROUP)
         m.listenUserInfoChanged(ETC_SHADOW)
 
