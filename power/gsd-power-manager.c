@@ -2933,27 +2933,6 @@ idle_configure (GsdPowerManager *manager)
      * as it's what will drive the blank */
     on_battery = up_client_get_on_battery (manager->priv->up_client);
     timeout_blank = 0;
-    if (manager->priv->screensaver_active || manager->priv->current_idle_mode == GSD_POWER_IDLE_MODE_DIM)
-    {
-        /* The tail is wagging the dog.
-         * The screensaver coming on will blank the screen.
-         * If an event occurs while the screensaver is on,
-         * the aggressive idle watch will handle it */
-        /*timeout_blank = SCREENSAVER_TIMEOUT_BLANK;*/
-        timeout_blank = 3;
-    }
-
-    clear_idle_watch (manager->priv->idle_monitor,
-                      &manager->priv->idle_blank_id);
-
-    if (timeout_blank != 0)
-    {
-        g_debug ("setting up blank callback for %is", timeout_blank);
-
-        manager->priv->idle_blank_id = gnome_idle_monitor_add_idle_watch (manager->priv->idle_monitor,
-                                       timeout_blank * 1000,
-                                       idle_triggered_idle_cb, manager, NULL);
-    }
 
     /* only do the sleep timeout when the session is idle
      * and we aren't inhibited from sleeping (or logging out, etc.) */
@@ -3002,6 +2981,7 @@ idle_configure (GsdPowerManager *manager)
     /* set up dim callback for when the screen lock is not active,
      * but only if we actually want to dim. */
     timeout_dim = 0;
+    timeout_blank = 0;
     if (manager->priv->screensaver_active)
     {
         /* Don't dim when the screen lock is active */
@@ -3053,7 +3033,22 @@ idle_configure (GsdPowerManager *manager)
         manager->priv->idle_dim_id = gnome_idle_monitor_add_idle_watch (manager->priv->idle_monitor,
                                      timeout_dim * 1000,
                                      idle_triggered_idle_cb, manager, NULL);
+        timeout_blank = timeout_dim +5;
     }
+
+    //configure blank watch,of which event comes after dim
+    clear_idle_watch (manager->priv->idle_monitor,
+                      &manager->priv->idle_blank_id);
+
+    if (timeout_blank != 0)
+    {
+        g_debug ("setting up blank callback for %is", timeout_blank);
+
+        manager->priv->idle_blank_id = gnome_idle_monitor_add_idle_watch (manager->priv->idle_monitor,
+                                       timeout_blank * 1000,
+                                       idle_triggered_idle_cb, manager, NULL);
+    }
+
 }
 
 static void
@@ -3806,7 +3801,7 @@ gsd_power_manager_start (GsdPowerManager *manager,
         g_signal_connect(manager->priv->settings_profile, "changed",
                          G_CALLBACK(engine_profile_changed_cb),
                          manager);
-        started = TRUE;
+        started = TRUE
     }
     manager->priv->current_profile = g_settings_get_string(manager->priv->settings_profile,
                                      "current-profile");
