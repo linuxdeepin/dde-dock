@@ -1229,11 +1229,15 @@ engine_profile_changed_cb (GSettings *settings,
 
     GError *error = NULL;
     gchar *s;
-    if (g_strcmp0 (key, "current-profile"))
+    if (g_strcmp0 (key, "current-profile")==0)
     {
         s = g_settings_get_string(manager->priv->settings_profile, key);
+        g_debug("profile changed from %s to %s",
+                manager->priv->current_profile,
+                s);
         if (strcmp(s, manager->priv->current_profile) == 0 )
         {
+            g_debug("profile remains the same,do nothing\n");
             return;
         }
     }
@@ -3744,6 +3748,7 @@ gboolean
 gsd_power_manager_start (GsdPowerManager *manager,
                          GError **error)
 {
+    static gboolean started = FALSE;
     g_debug ("Starting power manager");
     /*gnome_settings_profile_start (NULL);*/
 
@@ -3796,9 +3801,13 @@ gsd_power_manager_start (GsdPowerManager *manager,
     /*manager->priv->settings = g_settings_new(GSD_POWER_SETTINGS_SCHEMA);*/
 
     manager->priv->settings_profile = g_settings_new(DEEPIN_POWER_PROFILE_SCHEMA);
-    g_signal_connect(manager->priv->settings_profile, "changed",
-                     G_CALLBACK(engine_profile_changed_cb),
-                     manager);
+    if (!started)
+    {
+        g_signal_connect(manager->priv->settings_profile, "changed",
+                         G_CALLBACK(engine_profile_changed_cb),
+                         manager);
+        started = TRUE;
+    }
     manager->priv->current_profile = g_settings_get_string(manager->priv->settings_profile,
                                      "current-profile");
     manager->priv->settings_path = (char*)malloc(
