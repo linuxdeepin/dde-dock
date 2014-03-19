@@ -156,7 +156,7 @@ func GetSystemType() (sysType int64) {
 
 func GetDiskCap() (diskCap uint64) {
         driList := []dbus.ObjectPath{}
-        obj, err := udisks2.NewObjectManager("org.freedesktop.UDisk2", "/org/freedesktop/UDisks2")
+        obj, err := udisks2.NewObjectManager("org.freedesktop.UDisks2", "/org/freedesktop/UDisks2")
         if err != nil {
                 logObject.Info("udisks2: New ObjectManager Failed:%v", err)
                 return 0
