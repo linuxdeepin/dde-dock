@@ -16,7 +16,7 @@ var _CurrentRight, _RightX = "", int16(0)
 type _Configuration struct {
 	Primary     string
 	DisplayMode int16
-	Monitors    map[string]_MonitorConfiguration
+	Monitors    map[string]*_MonitorConfiguration
 }
 
 type _MonitorConfiguration struct {
@@ -35,8 +35,21 @@ type _MonitorConfiguration struct {
 	Brightness map[string]float64
 }
 
-func saveConfiguration() {
-	bytes, err := json.Marshal(__CFG__)
+func readCfg() _Configuration {
+	cfg := _Configuration{Monitors: make(map[string]*_MonitorConfiguration)}
+	f, err := os.Open(_ConfigPath)
+	if err != nil {
+		Logger.Warning("Failed load displayConfiguration:", err)
+		return cfg
+	}
+	defer f.Close()
+	data, err := ioutil.ReadAll(f)
+	err = json.Unmarshal(data, &cfg)
+	return cfg
+}
+
+func writeCfg(cfg _Configuration) {
+	bytes, err := json.Marshal(cfg)
 	if err != nil {
 		panic("marshal display configuration failed:" + err.Error())
 	}
@@ -47,6 +60,39 @@ func saveConfiguration() {
 	}
 	defer f.Close()
 	f.Write(bytes)
+}
+func (dpy *Display) SaveChanged() {
+	__CFG__.Monitors = make(map[string]*_MonitorConfiguration)
+	for _, m := range dpy.Monitors {
+		__CFG__.Monitors[m.Name] = m.saveStatus()
+	}
+	__CFG__.Primary = dpy.Primary
+	writeCfg(__CFG__)
+	dpy.SwitchMode(DisplayModeCustom)
+	dpy.detectChanged()
+}
+
+func saveBrightness(name string, v float64) {
+	cfg := readCfg()
+	for _, mcfg := range cfg.Monitors {
+		for _name, _ := range mcfg.Brightness {
+			if _name == name {
+				mcfg.Brightness[name] = v
+			}
+		}
+	}
+	writeCfg(cfg)
+}
+func initBrightness(monitors []*Monitor) {
+	for _, m := range monitors {
+		for _, mcfg := range __CFG__.Monitors {
+			if mcfg.Name == m.Name {
+				for k, v := range mcfg.Brightness {
+					m.ChangeBrightness(k, v)
+				}
+			}
+		}
+	}
 }
 
 var __LastCode__ = ""
@@ -122,7 +168,7 @@ func (dpy *Display) SwitchMode(mode int16) {
 	dpy.Apply()
 }
 
-func (m *Monitor) restore(cfg _MonitorConfiguration) {
+func (m *Monitor) restore(cfg *_MonitorConfiguration) {
 	m.setPropXY(cfg.X, cfg.Y)
 	m.SetRelativePos(cfg.RelativeInfo[0], cfg.RelativeInfo[1])
 	m.ensureSize(cfg.Width, cfg.Height)
@@ -137,7 +183,7 @@ func (m *Monitor) restore(cfg _MonitorConfiguration) {
 }
 func (dpy *Display) ResetChanged() {
 	// dond't set the monitors which hasn't cfg information
-	loadConfiguration(dpy)
+	__CFG__ = readCfg()
 	dpy.SetPrimary(__CFG__.Primary)
 	for _, cfg := range __CFG__.Monitors {
 		for _, m := range dpy.Monitors {
@@ -155,8 +201,8 @@ func (dpy *Display) ResetChanged() {
 	dpy.detectChanged()
 }
 
-func (m *Monitor) saveStatus() _MonitorConfiguration {
-	return _MonitorConfiguration{
+func (m *Monitor) saveStatus() *_MonitorConfiguration {
+	return &_MonitorConfiguration{
 		Name:         m.Name,
 		Width:        m.Width,
 		Height:       m.Height,
@@ -168,33 +214,6 @@ func (m *Monitor) saveStatus() _MonitorConfiguration {
 		Rotation:     m.Rotation,
 		Reflect:      m.Reflect,
 		Brightness:   m.Brightness,
-	}
-}
-func (dpy *Display) SaveChanged() {
-	__CFG__.Monitors = make(map[string]_MonitorConfiguration)
-	for _, m := range dpy.Monitors {
-		__CFG__.Monitors[m.Name] = m.saveStatus()
-	}
-	__CFG__.Primary = dpy.Primary
-	saveConfiguration()
-	dpy.SwitchMode(DisplayModeCustom)
-	dpy.detectChanged()
-}
-
-func loadConfiguration(dpy *Display) {
-	__CFG__.Monitors = make(map[string]_MonitorConfiguration)
-
-	f, err := os.Open(_ConfigPath)
-	if err != nil {
-		fmt.Println("OpenFailed", err)
-		return
-	}
-	data, err := ioutil.ReadAll(f)
-	err = json.Unmarshal(data, &__CFG__)
-	dpy.SetPrimary(__CFG__.Primary)
-	if err != nil {
-		fmt.Println("Failed load displayConfiguration:", err, "Data:", string(data))
-		return
 	}
 }
 

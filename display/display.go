@@ -157,11 +157,15 @@ func initDisplay() *Display {
 	dpy.setPropScreenHeight(screen.HeightInPixels)
 	dbus.InstallOnSession(dpy)
 
-	loadConfiguration(dpy)
+	__CFG__ = readCfg()
 	dpy.Primary = __CFG__.Primary
+	dpy.SetPrimary(dpy.Primary)
+
 	dpy.updateInfo()
 	dpy.updateMonitorList()
 	dpy.SetPrimary(dpy.Primary)
+
+	initBrightness(dpy.Monitors)
 
 	randr.SelectInput(X, Root, randr.NotifyMaskOutputChange|randr.NotifyMaskOutputProperty|randr.NotifyMaskCrtcChange|randr.NotifyMaskScreenChange)
 	go dpy.listener()

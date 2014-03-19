@@ -60,25 +60,27 @@ func (m *Monitor) ChangeBrightness(name string, v float64) {
 	} else if v > 1 {
 		v = 1
 	}
+	code := "xrandr "
 	if old, ok := m.Brightness[name]; ok && v != old {
 		m.setPropBrightness(name, v)
-		code := "xrandr "
-		code += m.generateBrightnessShell(name)
+		code = fmt.Sprintf("%s --output %s", code, name)
+		maxBacklight := m.backlightRange[name]
+		if maxBacklight == 0 {
+			code = fmt.Sprintf("%s --brightness %f", code, m.Brightness[name])
+		} else if maxBacklight > 0 {
+			code = fmt.Sprintf("%s --set Backlight %d", code, int32(m.Brightness[name]*float64(maxBacklight)))
+		} else {
+			code = fmt.Sprintf("%s --brightness 1", code)
+		}
+	}
+	if code != "xrandr " {
 		runCode(code)
 	}
 }
-func (m *Monitor) generateBrightnessShell(name string) string {
-	code := ""
-	code = fmt.Sprintf("%s --output %s", code, name)
-	maxBacklight := m.backlightRange[name]
-	if maxBacklight == 0 {
-		code = fmt.Sprintf("%s --brightness %f", code, m.Brightness[name])
-	} else if maxBacklight > 0 {
-		code = fmt.Sprintf("%s --set Backlight %d", code, int32(m.Brightness[name]*float64(maxBacklight)))
-	} else {
-		code = fmt.Sprintf("%s --brightness 1", code)
-	}
-	return code
+
+func (m *Monitor) SetBrightness(name string, v float64) {
+	m.ChangeBrightness(name, v)
+	saveBrightness(name, v)
 }
 
 func (m *Monitor) SetPos(x, y int16) {
@@ -156,9 +158,6 @@ func (m *Monitor) generateShell() string {
 			default:
 				code = fmt.Sprintf("%s --reflect normal", code)
 			}
-
-			code = fmt.Sprintf("%s %s", code, m.generateBrightnessShell(name))
-
 		} else {
 			code = fmt.Sprintf(" %s --off", code)
 		}
