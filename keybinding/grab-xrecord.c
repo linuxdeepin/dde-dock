@@ -181,10 +181,11 @@ grab_key_event_cb (XPointer user_data, XRecordInterceptData *hook)
             break;
 
         default:
-            key_press_cnt++;
+            key_press_cnt = 0;
             break;
     }
-        XRecordFreeData(hook);
+
+    XRecordFreeData(hook);
 }
 
 void
@@ -247,6 +248,7 @@ is_grabbed ()
         XCloseDisplay(dpy);
         return True;
     }
+
 
     XUngrabKeyboard (dpy, CurrentTime);
     XCloseDisplay(dpy);
