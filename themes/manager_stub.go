@@ -34,7 +34,7 @@ const (
 
         PERSONALIZATION_ID       = "com.deepin.dde.personalization"
         GKEY_CURRENT_THEME       = "current-theme"
-        GKEY_CURRENT_BACKGROUND     = "current-picture"
+        GKEY_CURRENT_BACKGROUND  = "current-picture"
         GKEY_CURRENT_SOUND_THEME = "current-sound-theme"
         DEFAULT_THEME_NAME       = "Deepin"
         DEFAULT_SOUND_THEME_NAME = "LinuxDeepin"
@@ -78,35 +78,45 @@ func (op *Manager) setPropName(propName string) {
         case "ThemeList":
                 list := getThemeList()
                 //logObject.Info("Theme List: %v", list)
+                tmpMap := make(map[string]PathInfo)
+                tmp := []string{}
                 for _, l := range list {
                         id := genId()
                         idStr := strconv.FormatInt(int64(id), 10)
                         path := THEME_PATH + idStr
-                        op.ThemeList = append(op.ThemeList, path)
-                        op.pathNameMap[path] = l
+                        tmp = append(tmp, path)
+                        tmpMap[path] = l
                         themeNamePathMap[l.path] = path
                 }
+                op.ThemeList = tmp
+                op.pathNameMap = tmpMap
                 dbus.NotifyChange(op, propName)
         case "GtkThemeList":
                 list := getGtkThemeList()
-                //logObject.Info("Gtk Theme List: %v", list)
+                //logObject.Info("Gtk Theme List: %v\n", list)
+                tmp := []string{}
                 for _, l := range list {
-                        op.GtkThemeList = append(op.GtkThemeList, l.path)
+                        tmp = append(tmp, l.path)
                 }
+                op.GtkThemeList = tmp
                 dbus.NotifyChange(op, propName)
         case "IconThemeList":
                 list := getIconThemeList()
-                //logObject.Info("Icon Theme List: %v", list)
+                //logObject.Info("Icon Theme List: %v\n", list)
+                tmp := []string{}
                 for _, l := range list {
-                        op.IconThemeList = append(op.IconThemeList, l.path)
+                        tmp = append(tmp, l.path)
                 }
+                op.IconThemeList = tmp
                 dbus.NotifyChange(op, propName)
         case "CursorThemeList":
                 list := getCursorThemeList()
-                //logObject.Info("Cursor Theme List: %v", list)
+                //logObject.Info("Cursor Theme List: %v\n", list)
+                tmp := []string{}
                 for _, l := range list {
-                        op.CursorThemeList = append(op.CursorThemeList, l.path)
+                        tmp = append(tmp, l.path)
                 }
+                op.CursorThemeList = tmp
                 dbus.NotifyChange(op, propName)
         case "SoundThemeList":
                 op.SoundThemeList = getSoundThemeList()
