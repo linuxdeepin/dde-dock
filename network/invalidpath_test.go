@@ -22,7 +22,7 @@ func TestInvalid(t *testing.T) {
 
 	_Manager.GetConnectionByAccessPoint("/")
 
-	_Manager.SetKey("xxoo", "sd")
+	_Manager.FeedSecret(dbus.ObjectPath("xxoo"), "sd", "ss")
 	_Manager.GetDBusInfo()
 
 	dumy := make(map[string]map[string]string)
@@ -30,15 +30,15 @@ func TestInvalid(t *testing.T) {
 }
 
 func TestDBusFailed(t *testing.T) {
-	if _, err := nm.NewNetworkManager("/"); err == nil {
+	if _, err := nm.NewNetworkManager("com.deepin.daemon.Network", "/"); err == nil {
 		t.Fail()
 	}
 
-	m, err := nm.NewNetworkManager("/com/deepin/daemon/Network")
+	m, err := nm.NewNetworkManager("com.deepin.daemon.Network", "/com/deepin/daemon/Network")
 	if err != nil {
 		t.Fatal("NewNetworkManager1")
 	}
-	if _, err := nm.NewNetworkManager("/com/deepin/daemon/Networkxx"); err == nil {
+	if _, err := nm.NewNetworkManager("com.deepin.daemon.Network", "/com/deepin/daemon/Networkxx"); err == nil {
 		t.Fatal("NewNetworkManager2")
 	}
 	if err = m.ActiveAccessPoint("/", "/"); err == nil {
@@ -60,13 +60,13 @@ func TestDBusFailed(t *testing.T) {
 	if _, err = m.GetConnectionByAccessPoint("/"); err == nil {
 		t.Fatal("GetConnectionByAccessPoint")
 	}
-	if err = m.SetKey("xxoo", "sd"); err == nil {
-		//This wouldn't failed
-	}
+	//if err = m.FeedSecret("xxoo", "s", "sd"); err == nil {
+	////This wouldn't failed
+	//}
 }
 
 func TestDBusSuccess(t *testing.T) {
-	m, err := nm.NewNetworkManager("/com/deepin/daemon/Network")
+	m, err := nm.NewNetworkManager("com.deepin.daemon.Network", "/com/deepin/daemon/Network")
 	if err != nil {
 		t.Fatal("Create NetworkManager failed")
 	}
