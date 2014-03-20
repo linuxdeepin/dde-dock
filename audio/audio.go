@@ -1230,6 +1230,11 @@ func (source *Source) getSourceOutputs() []*SourceOutput {
     return sourceOutputs[0:j]
 }
 
+func (source *Source) CreateStream() *SourceOutput {
+    C.pa_connect_stream_record(audio.pa, C.CString(source.Name))
+    return nil
+}
+
 func (source *Source) GetSourceOutputs() []*SourceOutput {
     return source.getSourceOutputs()
 }
