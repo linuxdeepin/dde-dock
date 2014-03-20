@@ -7,6 +7,7 @@ package main
 //#cgo pkg-config: glib-2.0 gio-unix-2.0 gtk+-3.0
 //#include <stdlib.h>
 // char* guest_app_id(long s_pid, const char* instance_name, const char* wmname, const char* wmclass, const char* icon_name);
+// char* get_exe_name(int pid);
 import "C"
 import "unsafe"
 
@@ -24,4 +25,8 @@ func find_app_id(pid uint, instanceName, wmName, wmClass, iconName string) strin
 		C.free(unsafe.Pointer(id))
 	}()
 	return C.GoString(id)
+}
+
+func find_exec_name_by_pid(pid uint) string {
+	return C.GoString(C.get_exe_name(C.int(pid)))
 }

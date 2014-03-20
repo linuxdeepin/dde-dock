@@ -11,7 +11,7 @@ var logger = liblogger.NewLogger("dde-daemon/dock-daemon")
 func main() {
 	defer func() {
 		if err := recover(); err != nil {
-			logger.Fatal("%v", err)
+			logger.Fatalf("%v", err)
 		}
 	}()
 
@@ -24,7 +24,7 @@ func main() {
 	m := NewManager()
 	err := dbus.InstallOnSession(m)
 	if err != nil {
-		logger.Error("register dbus interface failed: %v", err)
+		logger.Errorf("register dbus interface failed: %v", err)
 		os.Exit(1)
 	}
 
@@ -32,7 +32,7 @@ func main() {
 	dbus.DealWithUnhandledMessage()
 
 	if err := dbus.Wait(); err != nil {
-		logger.Error("lost dbus session: %v\n", err)
+		logger.Errorf("lost dbus session: %v\n", err)
 		os.Exit(1)
 	}
 	os.Exit(0)

@@ -1,6 +1,7 @@
 package main
 
 import "dlib/gio-2.0"
+import "fmt"
 
 type NormalApp struct {
 	Id   string
@@ -26,20 +27,27 @@ func NewNormalApp(id string) *NormalApp {
 
 func (app *NormalApp) buildMenu() {
 	app.coreMenu = NewMenu()
+	app.coreMenu.AppendItem(NewMenuItem("_Run", func() {
+		_, err := app.core.Launch(make([]*gio.File, 0), nil)
+		LOGGER.Warning("Launch App Failed: ", err)
+	}, true))
+	app.coreMenu.AddSeparator()
 	for _, actionName := range app.core.ListActions() {
 		name := actionName //NOTE: don't directly use 'actionName' with closure in an forloop
-		app.coreMenu.AppendItem(&MenuItem{
+		app.coreMenu.AppendItem(NewMenuItem(
 			name,
 			func() { app.core.LaunchAction(name, nil) },
 			true,
-		})
+		))
 	}
-	dockItem := &MenuItem{
-		Name:   "_Undock",
-		Action: func() { /*TODO: do the real work*/
+	app.coreMenu.AddSeparator()
+	dockItem := NewMenuItem(
+		"_Undock",
+		func() { /*TODO: do the real work*/
+			fmt.Println("Undock")
 		},
-		Enabled: true,
-	}
+		true,
+	)
 	app.coreMenu.AppendItem(dockItem)
 
 	app.Menu = app.coreMenu.GenerateJSON()
@@ -54,6 +62,9 @@ func (app *NormalApp) HandleMenuItem(id int32) {
 func NewNormalAppFromFilename(name string) *NormalApp {
 	app := &NormalApp{}
 	app.core = gio.NewDesktopAppInfoFromFilename(name)
+	app.Icon = app.core.GetIcon().ToString()
+	app.Name = app.core.GetDisplayName()
+	app.buildMenu()
 	return app
 }
 

@@ -2,6 +2,7 @@ package main
 
 import "dlib/dbus"
 import "dlib/logger"
+import "flag"
 import "fmt"
 import "github.com/BurntSushi/xgbutil"
 import "github.com/BurntSushi/xgbutil/xwindow"
@@ -153,6 +154,7 @@ func (m *Manager) destroyRuntimeApp(rApp *RuntimeApp) {
 	m.updateEntry(rApp.Id, m.mustGetEntry(nil, rApp).nApp, nil)
 }
 func (m *Manager) createNormalApp(id string) {
+	fmt.Println("createNormalApp")
 	if _, ok := m.normalApps[id]; ok {
 		return
 	}
@@ -171,6 +173,13 @@ func (m *Manager) destroyNormalApp(nApp *NormalApp) {
 }
 
 func main() {
+	var debug bool
+	flag.BoolVar(&debug, "d", false, "start debug")
+	flag.Parse()
+	if debug {
+		LOGGER.SetLogLevel(logger.LEVEL_DEBUG)
+	}
+
 	for _, id := range loadAll() {
 		MANAGER.createNormalApp(id + ".desktop")
 	}

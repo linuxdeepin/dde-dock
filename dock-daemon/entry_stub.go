@@ -33,6 +33,7 @@ func NewEntryProxyer(entryId string) (e *EntryProxyer, err error) {
 	e.setProperty("QuickWindowViewable")
 	e.setProperty("Allocation")
 	e.setProperty("Data")
+	e.setProperty("Menu")
 
 	// monitor properties changed
 	e.core.Id.ConnectChanged(func() {
@@ -59,6 +60,9 @@ func NewEntryProxyer(entryId string) (e *EntryProxyer, err error) {
 	e.core.Data.ConnectChanged(func() {
 		e.setProperty("Data")
 	})
+	e.core.Data.ConnectChanged(func() {
+		e.setProperty("Menu")
+	})
 
 	return
 }
@@ -66,6 +70,7 @@ func NewEntryProxyer(entryId string) (e *EntryProxyer, err error) {
 func (e *EntryProxyer) QuickWindow(x, y int32)              { e.core.QuickWindow(x, y) }
 func (e *EntryProxyer) HideQuickWindow()                    { e.core.HideQuickWindow() }
 func (e *EntryProxyer) ContextMenu(x, y int32)              { e.core.ContextMenu(x, y) }
+func (e *EntryProxyer) HandleMenuItem(id int32)             { e.core.HandleMenuItem(id) }
 func (e *EntryProxyer) Activate(x, y int32)                 { e.core.Activate(x, y) }
 func (e *EntryProxyer) SecondaryActivate(x, y int32)        { e.core.SecondaryActivate(x, y) }
 func (e *EntryProxyer) OnDragEnter(x, y int32, data string) { e.core.OnDragEnter(x, y, data) }
@@ -92,6 +97,8 @@ func (e *EntryProxyer) setProperty(prop string) {
 		e.Allocation = Rectangle{r[0].(int16), r[1].(int16), r[2].(uint16), r[3].(uint16)}
 	case "Data":
 		e.Data = e.core.Data.Get()
+	case "Menu":
+		e.Menu = e.core.Menu.Get()
 	}
 	dbus.NotifyChange(e, prop)
 }

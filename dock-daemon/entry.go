@@ -23,6 +23,7 @@ type EntryProxyer struct {
 
 	Tooltip string
 	Icon    string
+	Menu    string
 
 	Status int32 `Actived/Normal/`
 

@@ -365,6 +365,10 @@ char* guest_app_id(long s_pid, const char* instance_name, const char* wmname, co
     char* exec_args = NULL;
     get_pid_info(s_pid, &exec_name, &exec_args);
     if (exec_name != NULL) {
+        if (g_str_has_prefix(exec_name, "google-chrome-")) {
+            g_free(exec_name);
+            exec_name = g_strdup("google-chrome");
+        }
 	if (app_id == NULL) {
 	    GKeyFile* f = load_app_config(FILTER_FILE);
 	    if (f != NULL && instance_name != NULL) {
@@ -526,3 +530,4 @@ gboolean is_chrome_app(char const* name)
 {
     return g_str_has_prefix(name, "chrome-");
 }
+

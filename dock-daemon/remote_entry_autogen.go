@@ -46,6 +46,7 @@ type RemoteEntry struct {
 	QuickWindowViewable *dbusPropertyRemoteEntryQuickWindowViewable
 	Allocation          *dbusPropertyRemoteEntryAllocation
 	Data                *dbusPropertyRemoteEntryData
+	Menu                *dbusPropertyRemoteEntryMenu
 }
 
 func (obj RemoteEntry) _createSignalChan() chan *dbus.Signal {
@@ -75,6 +76,14 @@ func DestroyRemoteEntry(obj *RemoteEntry) {
 
 func (obj RemoteEntry) Activate(arg0 int32, arg1 int32) (_err error) {
 	_err = obj.core.Call("dde.dock.Entry.Activate", 0, arg0, arg1).Store()
+	if _err != nil {
+		fmt.Println(_err)
+	}
+	return
+}
+
+func (obj RemoteEntry) HandleMenuItem(arg0 int32) (_err error) {
+	_err = obj.core.Call("dde.dock.Entry.HandleMenuItem", 0, arg0).Store()
 	if _err != nil {
 		fmt.Println(_err)
 	}
@@ -353,6 +362,32 @@ func (this *dbusPropertyRemoteEntryData) GetType() reflect.Type {
 	return reflect.TypeOf((*map[string]string)(nil)).Elem()
 }
 
+type dbusPropertyRemoteEntryMenu struct {
+	*property.BaseObserver
+	core *dbus.Object
+}
+
+func (this *dbusPropertyRemoteEntryMenu) SetValue(notwritable interface{}) {
+	fmt.Println("dde.dock.Entry.Menu is not writable")
+}
+
+func (this *dbusPropertyRemoteEntryMenu) Get() string {
+	return this.GetValue().(string)
+}
+func (this *dbusPropertyRemoteEntryMenu) GetValue() interface{} /*string*/ {
+	var r dbus.Variant
+	err := this.core.Call("org.freedesktop.DBus.Properties.Get", 0, "dde.dock.Entry", "Menu").Store(&r)
+	if err == nil && r.Signature().String() == "s" {
+		return r.Value().(string)
+	} else {
+		fmt.Println("dbusProperty:Menu error:", err, "at dde.dock.Entry")
+		return *new(string)
+	}
+}
+func (this *dbusPropertyRemoteEntryMenu) GetType() reflect.Type {
+	return reflect.TypeOf((*string)(nil)).Elem()
+}
+
 func NewRemoteEntry(destName string, path dbus.ObjectPath) (*RemoteEntry, error) {
 	if !path.IsValid() {
 		return nil, errors.New("The path of '" + string(path) + "' is invalid.")
@@ -375,6 +410,7 @@ func NewRemoteEntry(destName string, path dbus.ObjectPath) (*RemoteEntry, error)
 	obj.QuickWindowViewable = &dbusPropertyRemoteEntryQuickWindowViewable{&property.BaseObserver{}, core}
 	obj.Allocation = &dbusPropertyRemoteEntryAllocation{&property.BaseObserver{}, core}
 	obj.Data = &dbusPropertyRemoteEntryData{&property.BaseObserver{}, core}
+	obj.Menu = &dbusPropertyRemoteEntryMenu{&property.BaseObserver{}, core}
 
 	getBus().BusObject().Call("org.freedesktop.DBus.AddMatch", 0, "type='signal',path='"+string(path)+"',interface='org.freedesktop.DBus.Properties',sender='"+destName+"',member='PropertiesChanged'")
 	getBus().BusObject().Call("org.freedesktop.DBus.AddMatch", 0, "type='signal',path='"+string(path)+"',interface='dde.dock.Entry',sender='"+destName+"',member='PropertiesChanged'")
@@ -416,6 +452,9 @@ func NewRemoteEntry(destName string, path dbus.ObjectPath) (*RemoteEntry, error)
 
 					} else if key == "Data" {
 						obj.Data.Notify()
+
+					} else if key == "Menu" {
+						obj.Menu.Notify()
 					}
 				}
 			} else if v.Name == "dde.dock.Entry.PropertiesChanged" && len(v.Body) == 1 && reflect.TypeOf(v.Body[0]) == typeKeyValues {
@@ -444,6 +483,9 @@ func NewRemoteEntry(destName string, path dbus.ObjectPath) (*RemoteEntry, error)
 
 					} else if key == "Data" {
 						obj.Data.Notify()
+
+					} else if key == "Menu" {
+						obj.Menu.Notify()
 					}
 				}
 			}

@@ -3,19 +3,23 @@ package main
 import "github.com/BurntSushi/xgb/xproto"
 import "github.com/BurntSushi/xgbutil/ewmh"
 import "bytes"
+import "dlib/gio-2.0"
+import "dlib/glib-2.0"
 import "encoding/base64"
-import "fmt"
 import "github.com/BurntSushi/xgbutil"
 import "github.com/BurntSushi/xgbutil/icccm"
 import "github.com/BurntSushi/xgbutil/xwindow"
 import "github.com/BurntSushi/xgbutil/xevent"
 import "github.com/BurntSushi/xgbutil/xgraphics"
+import "strings"
 
 type WindowInfo struct {
 	Xid   xproto.Window
 	Title string
 	Icon  string
 }
+
+// TODO: when docked, create a desktop, will this work fine?
 type RuntimeApp struct {
 	Id string
 	//TODO: multiple xid window
@@ -23,6 +27,10 @@ type RuntimeApp struct {
 
 	CurrentInfo *WindowInfo
 	Menu        string
+	coreMenu    *Menu
+
+	exec string
+	core *gio.DesktopAppInfo
 
 	state     []string
 	changedCB func()
@@ -38,11 +46,93 @@ func NewRuntimeApp(xid xproto.Window, appId string) *RuntimeApp {
 	}
 	app.attachXid(xid)
 	app.CurrentInfo = app.xids[xid]
+	app.core = gio.NewDesktopAppInfo(appId + ".desktop")
+	LOGGER.Info(appId, " ", app.core.ListActions())
+	app.getExec(xid)
+	LOGGER.Debug("Exec:", app.exec)
 	app.buildMenu()
 	return app
 }
+
+func find_exec_name_by_xid(xid xproto.Window) string {
+	pid, _ := ewmh.WmPidGet(XU, xid)
+	return find_exec_name_by_pid(pid)
+}
+func (app *RuntimeApp) getExec(xid xproto.Window) {
+	if app.core != nil {
+		LOGGER.Debug(app.Id, " Get Exec from desktop file")
+		// should NOT use GetExecuable, get wrong result, like skype
+		// which gets 'env'.
+		app.exec = app.core.GetString(glib.KeyFileDesktopKeyExec)
+		return
+	}
+	LOGGER.Debug(app.Id, " Get Exec from pid")
+	app.exec = find_exec_name_by_xid(xid)
+}
 func (app *RuntimeApp) buildMenu() {
-	//TODO
+	app.coreMenu = NewMenu()
+	itemName := strings.Title(app.Id)
+	if app.core != nil {
+		itemName = strings.Title(app.core.GetDisplayName())
+	}
+	app.coreMenu.AppendItem(NewMenuItem(
+		itemName,
+		func() {
+			var a *gio.AppInfo
+			LOGGER.Info(itemName)
+			if app.core != nil {
+				LOGGER.Info("DesktopAppInfo")
+				a = (*gio.AppInfo)(app.core)
+			} else {
+				LOGGER.Info("Non-DesktopAppInfo")
+				a, err := gio.AppInfoCreateFromCommandline(
+					app.exec,
+					"",
+					gio.AppInfoCreateFlagsNone,
+				)
+				if err != nil {
+					LOGGER.Warning("Launch App Falied: ", err)
+					return
+				}
+
+				defer a.Unref()
+			}
+
+			_, err := a.Launch(make([]*gio.File, 0), nil)
+			LOGGER.Warning("Launch App Failed: ", err)
+		},
+		true,
+	))
+	app.coreMenu.AddSeparator()
+	if app.core != nil {
+		for _, actionName := range app.core.ListActions() {
+			name := actionName //NOTE: don't directly use 'actionName' with closure in an forloop
+			app.coreMenu.AppendItem(NewMenuItem(
+				app.core.GetActionName(actionName),
+				func() { app.core.LaunchAction(name, nil) },
+				true,
+			))
+		}
+		app.coreMenu.AddSeparator()
+	}
+	closeItem := NewMenuItem(
+		"_Close All", // TODO: i18n
+		func() {
+			LOGGER.Warning("Close All")
+		},
+		true,
+	)
+	app.coreMenu.AppendItem(closeItem)
+	dockItem := NewMenuItem(
+		"_Dock",
+		func() { /*TODO: do the real work*/
+			LOGGER.Warning("dock")
+		},
+		true, // TODO: status
+	)
+	app.coreMenu.AppendItem(dockItem)
+
+	app.Menu = app.coreMenu.GenerateJSON()
 }
 
 func (app *RuntimeApp) setChangedCB(cb func()) {
@@ -55,6 +145,9 @@ func (app *RuntimeApp) notifyChanged() {
 }
 
 func (app *RuntimeApp) HandleMenuItem(id int32) {
+	if app.coreMenu != nil {
+		app.coreMenu.HandleAction(id)
+	}
 }
 
 //func find_app_id(pid uint, instanceName, wmName, wmClass, iconName string) string { return "" }
@@ -117,7 +210,7 @@ var cannotBeDockedType []string = []string{
 }
 
 func isNormalWindow(xid xproto.Window) bool {
-	fmt.Println("enter isNormalWindow:", xid)
+	// LOGGER.Debug("enter isNormalWindow:", xid)
 	if wmClass, err := icccm.WmClassGet(XU, xid); err == nil {
 		if wmClass.Instance == "explorer.exe" && wmClass.Class == "Wine" {
 			return false
@@ -138,7 +231,7 @@ func isNormalWindow(xid xproto.Window) bool {
 	}
 	types, err := ewmh.WmWindowTypeGet(XU, xid)
 	if err != nil {
-		fmt.Println("Get Window Type failed:", err)
+		LOGGER.Debug("Get Window Type failed:", err)
 		return true
 	}
 	mayBeDocked := false

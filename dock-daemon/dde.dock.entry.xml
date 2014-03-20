@@ -4,6 +4,9 @@
 	    <arg type="i" direction="in"></arg>
 	    <arg type="i" direction="in"></arg>
 	</method>
+        <method name="HandleMenuItem">
+            <arg type="i" direction="in"></arg>
+        </method>
 	<method name="ContextMenu">
 	    <arg type="i" direction="in"></arg>
 	    <arg type="i" direction="in"></arg>
@@ -46,5 +49,6 @@
 	<property name="QuickWindowViewable" type="b" access="read"></property>
 	<property name="Allocation" type="(nnqq)" access="read"></property>
         <property name="Data" type="a{ss}" access="read"></property>
+        <property name="Menu" type="s" access="read"></property>
     </interface>
 </node>

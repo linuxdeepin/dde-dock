@@ -69,20 +69,20 @@ func (m *Manager) registerEntry(name string) {
 	if !isEntryNameValid(name) {
 		return
 	}
-	logger.Debug("register entry: %s", name)
+	logger.Debugf("register entry: %s", name)
 	entryId, ok := getEntryId(name)
 	if !ok {
 		return
 	}
-	logger.Debug("register entry id: %s", entryId)
+	logger.Debugf("register entry id: %s", entryId)
 	entry, err := NewEntryProxyer(entryId)
 	if err != nil {
-		logger.Error("register entry failed: %v", err)
+		logger.Errorf("register entry failed: %v", err)
 		return
 	}
 	err = dbus.InstallOnSession(entry)
 	if err != nil {
-		logger.Error("register entry failed: %v", err)
+		logger.Errorf("register entry failed: %v", err)
 		return
 	}
 	m.Entries = append(m.Entries, entry)
@@ -92,19 +92,19 @@ func (m *Manager) registerEntry(name string) {
 		m.Added(dbus.ObjectPath(entry.objectPath))
 	}
 
-	logger.Info("register entry success: %s", name)
+	logger.Infof("register entry success: %s", name)
 }
 
 func (m *Manager) unregisterEntry(name string) {
 	if !isEntryNameValid(name) {
 		return
 	}
-	logger.Debug("unregister entry: %s", name)
+	logger.Debugf("unregister entry: %s", name)
 	entryId, ok := getEntryId(name)
 	if !ok {
 		return
 	}
-	logger.Debug("unregister entry id: %s", entryId)
+	logger.Debugf("unregister entry id: %s", entryId)
 
 	// find the index
 	index := -1
@@ -121,7 +121,7 @@ func (m *Manager) unregisterEntry(name string) {
 		logger.Warning("slice out of bounds, entry len: %d, index: %d", len(m.Entries), index)
 		return
 	}
-	logger.Debug("entry len: %d, index: %d", len(m.Entries), index)
+	logger.Debugf("entry len: %d, index: %d", len(m.Entries), index)
 
 	if entry != nil {
 		dbus.UnInstallObject(entry)
@@ -137,5 +137,5 @@ func (m *Manager) unregisterEntry(name string) {
 		m.Removed(string(entry.destPath))
 	}
 
-	logger.Info("unregister entry success: %s", name)
+	logger.Infof("unregister entry success: %s", name)
 }
