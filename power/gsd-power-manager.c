@@ -1215,11 +1215,9 @@ static void profile_set_default(GsdPowerManager *manager)
     {
         g_settings_set_int(manager->priv->settings,"idle-delay",300);
         g_settings_set_int(manager->priv->settings,
-                "sleep-inactive-ac-timeout",
-                1800);
+                "sleep-inactive-ac-timeout", 0);
         g_settings_set_int(manager->priv->settings,
-                "sleep-inactive-battery-timeout",
-                900);
+                "sleep-inactive-battery-timeout", 900);
     }
     else if(!strcmp(manager->priv->current_profile,PROFILE_PERFORMANCE))
     {
@@ -1233,11 +1231,11 @@ static void profile_set_default(GsdPowerManager *manager)
     }
     else if(!strcmp(manager->priv->current_profile,PROFILE_POWERSAVE))
     {
-        g_settings_set_int(manager->priv->settings,"idle-delay",60);
+        g_settings_set_int(manager->priv->settings,"idle-delay",380);
         g_settings_set_int(manager->priv->settings,
-                "sleep-inactive-ac-timeout",300);
+                "sleep-inactive-ac-timeout",900);
         g_settings_set_int(manager->priv->settings,
-                "sleep-inactive-battery-timeout",60);
+                "sleep-inactive-battery-timeout",600);
     }
     /*idle_configure(manager);*/
 }
