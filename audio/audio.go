@@ -1212,7 +1212,7 @@ func (source *Source) getSourceOutputs() []*SourceOutput {
         }
     }
 
-    return sourceOutputs
+    return sourceOutputs[0:j]
 }
 
 func (source *Source) GetSourceOutputs() []*SourceOutput {
