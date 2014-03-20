@@ -268,7 +268,7 @@ func getSinkFromC(_sink C.sink_t) *Sink {
     sink.driver = C.GoString(&_sink.driver[0])
     sink.Mute = (int32(_sink.mute) != 0)
     sink.Name = C.GoString(&_sink.name[0])
-    sink.Volume = uint32(C.pa_cvolume_avg(&_sink.volume) * 100 / C.PA_VOLUME_NORM)
+    sink.Volume = uint32(C.pa_cvolume_max(&_sink.volume) * 100 / C.PA_VOLUME_NORM)
     sink.Balance = float64(_sink.balance)
     //sink.NVolumeSteps = int32(_sink.n_volume_steps)
     //sink.Cvolume.Channels = uint32(_sink.volume.channels)
@@ -308,7 +308,7 @@ func getSourceFromC(_source C.source_t) *Source {
         source.channelMap[i] = int32(
             C.getChannelMap(_source.channel_map, C.int(i)))
     }
-    source.Volume = uint32(100 * C.pa_cvolume_avg(&_source.volume) / C.PA_VOLUME_NORM)
+    source.Volume = uint32(100 * C.pa_cvolume_max(&_source.volume) / C.PA_VOLUME_NORM)
     source.Balance = float64(_source.balance)
     //source.NVolumeSteps = int32(_source.n_volume_steps)
     //source.Cvolume.Channels = uint32(_source.volume.channels)
@@ -345,7 +345,7 @@ func getSinkInputFromC(_sink_input C.sink_input_t) *SinkInput {
     sinkInput.Mute = (int32(_sink_input.mute) != 0)
     //sinkInput.Has_volume = int32(_sink_input.has_volume)
     //sinkInput.Volume_writable = int32(_sink_input.volume_writable)
-    sinkInput.Volume = uint32(100 * C.pa_cvolume_avg(&_sink_input.volume) / C.PA_VOLUME_NORM)
+    sinkInput.Volume = uint32(100 * C.pa_cvolume_max(&_sink_input.volume) / C.PA_VOLUME_NORM)
     sinkInput.Name = C.GoString(&_sink_input.name[0])
     sinkInput.PropList = make(map[string]string)
     var prop_state *C.void = nil
@@ -1158,6 +1158,10 @@ func (sink *Sink) setSinkBalance(balance float64) int32 {
     ret := C.pa_set_sink_balance_by_index(audio.pa, C.int(sink.Index),
         C.float(balance))
     return int32(ret)
+}
+
+func (sink *Sink) SetSinkBalance(balance float64) int32 {
+    return sink.setSinkBalance(balance)
 }
 
 func (source *Source) GetDBusInfo() dbus.DBusInfo {
