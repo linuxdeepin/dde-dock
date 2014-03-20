@@ -49,9 +49,7 @@ const (
         THUMB_LOCAL_ICON_PATH   = THUMB_LOCAL_BASE_PATH + "icons"
         THUMB_LOCAL_CURSOR_PATH = THUMB_LOCAL_BASE_PATH + "cursor"
 
-        BACKGROUND_PATH       = THUMB_BASE_PATH + "wallpappers"
-        BACKGROUND_LOCAL_PATH = "/.wallpappers"
-        SOUND_THEME_PATH      = "/usr/share/sounds/"
+        SOUND_THEME_PATH = "/usr/share/sounds/"
 )
 
 func getHomeDir() string {

@@ -136,6 +136,27 @@ func (op *Manager) SetBackgroundFile(name string) (string, bool) {
         }
 
         name, _, _ = objUtil.PathToFileURI(name)
+        if ok, _ := objUtil.IsFileExist(name); !ok {
+                return op.CurrentTheme, false
+        }
+
+        if !isElementExist(name, op.BackgroundList) {
+                // Copy name to Custom dir
+                logObject.Infof("Copy '%s' To Custom", name)
+                dir := getHomeDir() + "/" + BACKGROUND_PERSON_LOCAL_DIR + "/Custom"
+                if ok, _ := objUtil.IsFileExist(dir); !ok {
+                        if err := os.MkdirAll(dir, 0755); err != nil {
+                                return op.CurrentTheme, false
+                        }
+                }
+                src, _, _ := objUtil.URIToPath(name)
+                baseName, _, _ := objUtil.GetBaseName(src)
+                path := dir + "/" + baseName
+                if ok, _ := objUtil.CopyFile(src, path); !ok {
+                        return op.CurrentTheme, false
+                }
+                name = path
+        }
 
         if obj := op.getThemeObject(op.CurrentTheme); obj != nil {
                 v := op.setTheme(obj.GtkTheme, obj.IconTheme,
@@ -163,7 +184,7 @@ func (op *Manager) SetSoundTheme(name string) (string, bool) {
         }
 
         // sync value to gsettings
-        personSettings.SetString(GKEY_CURRENT_SOUND_THEME, name)
+        op.updateGSettingsKey(GKEY_CURRENT_SOUND_THEME, name)
 
         return op.CurrentTheme, false
 }
@@ -374,15 +395,31 @@ func newManager() *Manager {
 
         m.listenSettingsChanged()
         homeDir := getHomeDir()
+
         m.listenThemeDir(THEMES_PATH)
         m.listenThemeDir(homeDir + THEMES_LOCAL_PATH)
+
         m.listenThemeDir(ICONS_PATH)
         m.listenThemeDir(homeDir + ICONS_LOCAL_PATH)
+
         m.listenThemeDir(THUMB_BASE_PATH)
         m.listenThemeDir(homeDir + THUMB_LOCAL_BASE_PATH)
-        m.listenThemeDir(BACKGROUND_PATH)
-        m.listenThemeDir(homeDir + BACKGROUND_LOCAL_PATH)
+
         m.listenThemeDir(SOUND_THEME_PATH)
 
+        m.listenBackgroundDir(BACKGROUND_DEFAULT_DIR)
+        m.listenBackgroundDir(BACKGROUND_PERSON_SYS_DIR)
+        m.listenBackgroundDir(homeDir + "/" + BACKGROUND_PERSON_LOCAL_DIR)
+
         return m
+}
+
+func isElementExist(ele string, list []string) bool {
+        for _, l := range list {
+                if ele == l {
+                        return true
+                }
+        }
+
+        return false
 }
