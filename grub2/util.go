@@ -105,7 +105,7 @@ func getPrimaryScreenBestResolution() (w uint16, h uint16) {
 		}
 	}
 
-	logger.Infof("primary screen's best resolution is %dx%d", w, h)
+	logger.Debugf("primary screen's best resolution is %dx%d", w, h)
 	return
 }
 

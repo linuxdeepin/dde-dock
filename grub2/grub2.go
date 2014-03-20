@@ -24,14 +24,10 @@ package main
 import (
 	"bufio"
 	apigrub2ext "dbus/com/deepin/api/grub2"
-	"dlib/dbus"
-	liblogger "dlib/logger"
 	"encoding/json"
 	"errors"
-	"flag"
 	"fmt"
 	"io/ioutil"
-	"os"
 	"regexp"
 	"strconv"
 	"strings"
@@ -47,7 +43,6 @@ const (
 )
 
 var (
-	logger                 = liblogger.NewLogger("dde-daemon/grub2")
 	argDebug               bool
 	argSetup               bool
 	grub2ext, _            = apigrub2ext.NewGrub2Ext("com.deepin.api.Grub2", "/com/deepin/api/Grub2")
@@ -90,12 +85,19 @@ func NewGrub2() *Grub2 {
 	return grub
 }
 
-func (grub *Grub2) notifyUpdate() {
-	go func() {
-		grub.chanUpdate <- 1
-	}()
+// setup grub2 environment, regenerate configure and theme if need
+func (grub *Grub2) setup() {
+	grub.load()
+	grub.resetGfxmodeIfNeed()
 	grub.needUpdateLock.Lock()
-	grub.needUpdate = true
+	if grub.needUpdate {
+		grub.writeCacheConfig()
+		logger.Info("setup grub2, notify to generate a new grub configuration file")
+		grub2ext.DoGenerateGrubConfig()
+		logger.Info("setup grub2, generate grub configuration finished")
+		grub.config.NeedUpdate = false
+		grub.writeCacheConfig()
+	}
 	grub.needUpdateLock.Unlock()
 }
 
@@ -120,9 +122,18 @@ func (grub *Grub2) load() {
 	if grub.config.NeedUpdate {
 		grub.notifyUpdate()
 	}
+}
 
-	grub.resetGfxmodeIfNeed()
+func (grub *Grub2) notifyUpdate() {
+	go func() {
+		grub.chanUpdate <- 1
+	}()
+	grub.needUpdateLock.Lock()
+	grub.needUpdate = true
+	grub.needUpdateLock.Unlock()
+}
 
+func (grub *Grub2) startUpdateLoop() {
 	// start a goroutine to update grub configuration automatically
 	go func() {
 		for {
@@ -174,6 +185,7 @@ func (grub *Grub2) resetGfxmodeIfNeed() {
 
 		screenWidth, screenHeight := getPrimaryScreenBestResolution()
 		grub2ext.DoGenerateThemeBackground(screenWidth, screenHeight)
+		grub.theme.setProperty("Background", grub.theme.Background)
 	}
 }
 
@@ -194,17 +206,39 @@ func (grub *Grub2) readEntries() error {
 	return grub.parseEntries(string(fileContent))
 }
 
-func (grub *Grub2) readSettings() error {
+func (grub *Grub2) readSettings() (err error) {
 	fileContent, err := ioutil.ReadFile(grubConfigFile)
 	if err != nil {
 		logger.Error(err.Error())
 		return err
 	}
-	return grub.parseSettings(string(fileContent))
+	err = grub.parseSettings(string(fileContent))
+
+	needUpdate := false
+
+	// just disable GRUB_HIDDEN_TIMEOUT and GRUB_HIDDEN_TIMEOUT_QUIET for will conflicts with GRUB_TIMEOUT
+	if len(grub.settings["GRUB_HIDDEN_TIMEOUT"]) != 0 ||
+		len(grub.settings["GRUB_HIDDEN_TIMEOUT_QUIET"]) != 0 {
+		grub.settings["GRUB_HIDDEN_TIMEOUT"] = ""
+		grub.settings["GRUB_HIDDEN_TIMEOUT_QUIET"] = ""
+		needUpdate = true
+	}
+
+	// enable deepin grub2 theme default
+	if grub.getTheme() != grub.theme.mainFile {
+		grub.setTheme(grub.theme.mainFile)
+		needUpdate = true
+	}
+
+	if needUpdate {
+		grub.writeSettings()
+		grub.notifyUpdate()
+	}
+
+	return
 }
 
 func (grub *Grub2) writeSettings() {
-	grub.setTheme(grub.theme.mainFile) // enable deepin grub2 theme
 	fileContent := grub.getSettingContentToSave()
 
 	grub2ext.DoWriteSettings(fileContent)
@@ -351,15 +385,6 @@ func (grub *Grub2) parseSettings(fileContent string) error {
 	grub.setProperty("DefaultEntry", grub.getDefaultEntry())
 	grub.setProperty("Timeout", grub.getTimeout())
 
-	// just disable GRUB_HIDDEN_TIMEOUT and GRUB_HIDDEN_TIMEOUT_QUIET for will conflicts with GRUB_TIMEOUT
-	if len(grub.settings["GRUB_HIDDEN_TIMEOUT"]) != 0 ||
-		len(grub.settings["GRUB_HIDDEN_TIMEOUT_QUIET"]) != 0 {
-		grub.settings["GRUB_HIDDEN_TIMEOUT"] = ""
-		grub.settings["GRUB_HIDDEN_TIMEOUT_QUIET"] = ""
-		grub.writeSettings()
-		grub.notifyUpdate()
-	}
-
 	return nil
 }
 
@@ -468,55 +493,4 @@ func (grub *Grub2) getSettingContentToSave() string {
 		}
 	}
 	return fileContent
-}
-
-func main() {
-	defer func() {
-		if err := recover(); err != nil {
-			logger.Fatalf("%v", err)
-		}
-	}()
-
-	flag.BoolVar(&argDebug, "d", false, "debug mode")
-	flag.BoolVar(&argDebug, "debug", false, "debug mode")
-	flag.BoolVar(&argSetup, "setup", false, "setup grub and exit")
-	flag.Parse()
-
-	// configure logger
-	logger.SetRestartCommand("/usr/lib/deepin-daemon/grub2", "--debug")
-	if argDebug {
-		logger.SetLogLevel(liblogger.LEVEL_DEBUG)
-	}
-
-	grub := NewGrub2()
-
-	// setup grub and exit
-	if argSetup {
-		// TODO
-		os.Exit(0)
-	}
-
-	err := dbus.InstallOnSession(grub)
-	if err != nil {
-		logger.Errorf("register dbus interface failed: %v", err)
-		os.Exit(1)
-	}
-	err = dbus.InstallOnSession(grub.theme)
-	if err != nil {
-		logger.Errorf("register dbus interface failed: %v", err)
-		os.Exit(1)
-	}
-
-	// load after dbus service installed to ensure property changed
-	// signal send success
-	grub.load()
-	grub.theme.load()
-
-	dbus.DealWithUnhandledMessage()
-	if err := dbus.Wait(); err != nil {
-		logger.Errorf("lost dbus session: %v", err)
-		os.Exit(1)
-	} else {
-		os.Exit(0)
-	}
 }

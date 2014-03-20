@@ -90,8 +90,6 @@ func (theme *Theme) load() {
 	theme.setProperty("Background", theme.bgFile)
 	theme.setProperty("ItemColor", theme.tplJSONData.CurrentScheme.ItemColor)
 	theme.setProperty("SelectedItemColor", theme.tplJSONData.CurrentScheme.SelectedItemColor)
-
-	theme.regenerateBackgroundIfNeed() // TODO speed up
 }
 
 // reset to default configuration
@@ -110,14 +108,14 @@ func (theme *Theme) reset() {
 	}()
 }
 
-// fix issue that if update grub-themes-deepin pakcage lonely, the
-// background of theme will keep size with 1024x768
+// Fix issue that if update grub-themes-deepin pakcage lonely, but the
+// background of theme will keep default size as 1024x768.
 func (theme *Theme) regenerateBackgroundIfNeed() {
 	logger.Debug("check if need regenerate theme background")
 	screenWidth, screenHeight := getPrimaryScreenBestResolution()
 	bgw, bgh, _ := graphic.GetImageSize(theme.Background)
 	srcbgw, srcbgh, _ := graphic.GetImageSize(theme.bgSrcFile)
-	needUpdate := false
+	needGenerate := false
 	logger.Debugf("screen resolution: %dx%d, source background: %dx%d, background: %dx%d",
 		screenWidth, screenHeight, srcbgw, srcbgh, bgw, bgh)
 	if srcbgw >= int32(screenWidth) && srcbgh >= int32(screenHeight) {
@@ -125,7 +123,7 @@ func (theme *Theme) regenerateBackgroundIfNeed() {
 		// background should equal with screen resolution
 		if delta(float64(bgw), float64(screenWidth)) > 5 ||
 			delta(float64(bgh), float64(screenHeight)) > 5 {
-			needUpdate = true
+			needGenerate = true
 		}
 	} else {
 		// source background is smaller than screen resolution, so the
@@ -133,11 +131,11 @@ func (theme *Theme) regenerateBackgroundIfNeed() {
 		scalebg := float64(bgw) / float64(bgh)
 		scaleScreen := float64(screenWidth) / float64(screenHeight)
 		if delta(scalebg, scaleScreen) > 0.1 {
-			needUpdate = true
+			needGenerate = true
 		}
 	}
 
-	if needUpdate {
+	if needGenerate {
 		grub2ext.DoGenerateThemeBackground(screenWidth, screenHeight)
 		theme.setProperty("Background", theme.Background)
 		logger.Info("update background sucess")
