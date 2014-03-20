@@ -229,7 +229,9 @@ func (dpy *Display) updateMonitorList() {
 			continue
 		}
 		m := NewMonitor([]randr.Output{op})
-		m.relativePosInfo = __CFG__.Monitors[m.Name].RelativeInfo
+		if mcfg, ok := __CFG__.Monitors[m.Name]; ok {
+			m.relativePosInfo = mcfg.RelativeInfo
+		}
 		monitors = append(monitors, m)
 	}
 	setAutoFlag := len(dpy.Monitors) > len(monitors)
