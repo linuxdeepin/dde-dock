@@ -118,7 +118,7 @@ func (m *Manager) unregisterEntry(name string) {
 	}
 
 	if index < 0 {
-		logger.Warning("slice out of bounds, entry len: %d, index: %d", len(m.Entries), index)
+		logger.Warningf("slice out of bounds, entry len: %d, index: %d", len(m.Entries), index)
 		return
 	}
 	logger.Debugf("entry len: %d, index: %d", len(m.Entries), index)
