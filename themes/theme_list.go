@@ -59,7 +59,7 @@ const (
 func getHomeDir() string {
         u, err := user.Current()
         if err != nil {
-                logObject.Info("Get current user info failed:%v", err)
+                logObject.Infof("Get current user info failed:%v", err)
                 panic(err)
         }
         return u.HomeDir
@@ -79,7 +79,7 @@ func getValidGtkThemes() []PathInfo {
                 }
                 localList = append(localList, l)
         }
-        logObject.Debug("Valid Gtk Theme: %v", localList)
+        logObject.Debugf("Valid Gtk Theme: %v", localList)
 
         return localList
 }
@@ -98,7 +98,7 @@ func getValidIconThemes() []PathInfo {
                 }
                 localList = append(localList, l)
         }
-        logObject.Debug("Valid Icon Theme: %v", localList)
+        logObject.Debugf("Valid Icon Theme: %v", localList)
 
         return localList
 }
@@ -117,7 +117,7 @@ func getValidCursorThemes() []PathInfo {
                 }
                 localList = append(localList, l)
         }
-        logObject.Debug("Valid Cursor Theme: %v", localList)
+        logObject.Debugf("Valid Cursor Theme: %v", localList)
 
         return localList
 }
@@ -129,7 +129,7 @@ func getValidBackground() []PathInfo {
         for _, d := range dirs {
                 files, err := ioutil.ReadDir(d.path)
                 if err != nil {
-                        logObject.Error("Read directory failed: %v", err)
+                        logObject.Errorf("Read directory failed: %v", err)
                         continue
                 }
                 for _, f := range files {
@@ -142,7 +142,7 @@ func getValidBackground() []PathInfo {
                         }
                 }
         }
-        logObject.Debug("Valid Background: %v", list)
+        logObject.Debugf("Valid Background: %v", list)
 
         return list
 }
@@ -151,7 +151,7 @@ func getValidSoundThemes() []PathInfo {
         sysDirs := []PathInfo{PathInfo{SOUND_THEME_PATH, PATH_TYPE_SYSTEM}}
         conditions := []string{"index.theme"}
         sysList := getValidThemes(sysDirs, conditions)
-        logObject.Debug("Valid Sound Theme: %v", sysList)
+        logObject.Debugf("Valid Sound Theme: %v", sysList)
         return sysList
 }
 
@@ -160,7 +160,7 @@ func getValidThemes(dirs []PathInfo, conditions []string) []PathInfo {
         for _, dir := range dirs {
                 f, err := os.Open(dir.path)
                 if err != nil {
-                        logObject.Warning("Open '%s' failed: %s",
+                        logObject.Warningf("Open '%s' failed: %s",
                                 dir.path, err)
                         continue
                 }
@@ -168,7 +168,7 @@ func getValidThemes(dirs []PathInfo, conditions []string) []PathInfo {
 
                 infos, err1 := f.Readdir(0)
                 if err1 != nil {
-                        logObject.Warning("ReadDir '%s' failed: %s",
+                        logObject.Warningf("ReadDir '%s' failed: %s",
                                 dir.path, err)
                         continue
                 }
@@ -192,14 +192,14 @@ func getValidThemes(dirs []PathInfo, conditions []string) []PathInfo {
 func filterTheme(dir string, conditions []string) bool {
         f, err := os.Open(dir)
         if err != nil {
-                logObject.Warning("Open '%s' failed: %s", dir, err)
+                logObject.Warningf("Open '%s' failed: %s", dir, err)
                 return false
         }
         defer f.Close()
 
         names, err1 := f.Readdirnames(0)
         if err1 != nil {
-                logObject.Warning("ReadDir '%s' failed: %s", dir, err)
+                logObject.Warningf("ReadDir '%s' failed: %s", dir, err)
                 return false
         }
 
@@ -230,15 +230,15 @@ func getThemeThumbList() []PathInfo {
         //localList := getThumbList(localDirs)
         sysList := getValidThemes(sysDirs, conditions)
         localList := getValidThemes(localDirs, conditions)
-        //logObject.Info("System Theme List: %v", sysList)
-        //logObject.Info("Local Theme List: %v", localList)
+        //logObject.Infof("System Theme List: %v", sysList)
+        //logObject.Infof("Local Theme List: %v", localList)
         for _, l := range sysList {
                 if isPathInfoInArray(l, localList) {
                         continue
                 }
                 localList = append(localList, l)
         }
-        logObject.Debug("Gtk Thumb List:%v", localList)
+        logObject.Debugf("Gtk Thumb List:%v", localList)
 
         return localList
 }
@@ -256,7 +256,7 @@ func getGtkThumbList() []PathInfo {
                 }
                 localList = append(localList, l)
         }
-        logObject.Debug("Gtk Thumb List:%v", localList)
+        logObject.Debugf("Gtk Thumb List:%v", localList)
 
         return localList
 }
@@ -274,7 +274,7 @@ func getIconThumbList() []PathInfo {
                 }
                 localList = append(localList, l)
         }
-        logObject.Debug("Icon Thumb List:%v", localList)
+        logObject.Debugf("Icon Thumb List:%v", localList)
 
         return localList
 }
@@ -292,7 +292,7 @@ func getCursorThumbList() []PathInfo {
                 }
                 localList = append(localList, l)
         }
-        logObject.Debug("Cursor Thumb List:%v", localList)
+        logObject.Debugf("Cursor Thumb List:%v", localList)
 
         return localList
 }
@@ -302,14 +302,14 @@ func getThumbList(dirs []PathInfo) []PathInfo {
         for _, dir := range dirs {
                 f, err := os.Open(dir.path)
                 if err != nil {
-                        logObject.Info("Open '%s' failed: %v",
+                        logObject.Infof("Open '%s' failed: %v",
                                 dir.path, err)
                         return list
                 }
 
                 infos, err1 := f.Readdir(0)
                 if err1 != nil {
-                        logObject.Info("ReadDir '%s' failed: %v",
+                        logObject.Infof("ReadDir '%s' failed: %v",
                                 dir.path, err)
                         return list
                 }

@@ -69,7 +69,7 @@ func (op *Theme) updateThemeInfo() {
         _, err := keyFile.LoadFromFile(filename,
                 glib.KeyFileFlagsKeepComments)
         if err != nil {
-                logObject.Info("LoadFile '%s' failed: %v",
+                logObject.Infof("LoadFile '%s' failed: %v",
                         filename, err)
                 return
         }
@@ -77,7 +77,7 @@ func (op *Theme) updateThemeInfo() {
         str, err1 := keyFile.GetString(THEME_GROUP_COMPONENT,
                 THEME_KEY_GTK)
         if err1 != nil {
-                logObject.Info("Get key '%s' value failed: %v",
+                logObject.Infof("Get key '%s' value failed: %v",
                         THEME_KEY_GTK, err1)
                 return
         }
@@ -87,7 +87,7 @@ func (op *Theme) updateThemeInfo() {
         str, err1 = keyFile.GetString(THEME_GROUP_COMPONENT,
                 THEME_KEY_ICONS)
         if err1 != nil {
-                logObject.Info("Get key '%s' value failed: %v",
+                logObject.Infof("Get key '%s' value failed: %v",
                         THEME_KEY_CURSOR, err1)
                 return
         }
@@ -97,7 +97,7 @@ func (op *Theme) updateThemeInfo() {
         str, err1 = keyFile.GetString(THEME_GROUP_COMPONENT,
                 THEME_KEY_CURSOR)
         if err1 != nil {
-                logObject.Info("Get key '%s' value failed: %v",
+                logObject.Infof("Get key '%s' value failed: %v",
                         THEME_KEY_CURSOR, err1)
                 return
         }
@@ -107,7 +107,7 @@ func (op *Theme) updateThemeInfo() {
         str, err1 = keyFile.GetString(THEME_GROUP_COMPONENT,
                 THEME_KEY_GTK_FONT)
         if err1 != nil {
-                logObject.Info("Get key '%s' value failed: %v",
+                logObject.Infof("Get key '%s' value failed: %v",
                         THEME_KEY_GTK_FONT, err1)
                 return
         }
@@ -117,7 +117,7 @@ func (op *Theme) updateThemeInfo() {
         str, err1 = keyFile.GetString(THEME_GROUP_COMPONENT,
                 THEME_KEY_BG)
         if err1 != nil {
-                logObject.Info("Get key '%s' value failed: %v",
+                logObject.Infof("Get key '%s' value failed: %v",
                         THEME_KEY_BG, err1)
                 return
         }
@@ -127,7 +127,7 @@ func (op *Theme) updateThemeInfo() {
         str, err1 = keyFile.GetString(THEME_GROUP_COMPONENT,
                 THEME_KEY_SOUND)
         if err1 != nil {
-                logObject.Info("Get key '%s' value failed: %v",
+                logObject.Infof("Get key '%s' value failed: %v",
                         THEME_KEY_SOUND, err1)
                 return
         }

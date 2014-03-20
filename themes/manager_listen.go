@@ -27,24 +27,24 @@ import (
 )
 
 func (op *Manager) listenThemeDir(dir string) {
-        //logObject.Info("Listen Dir: %s\n", dir)
+        //logObject.Infof("Listen Dir: %s\n", dir)
         watcher, err := fsnotify.NewWatcher()
         if err != nil {
-                logObject.Info("Create new watch failed: %v", err)
+                logObject.Infof("Create new watch failed: %v", err)
                 return
         }
 
         if ok, _ := objUtil.IsFileExist(dir); !ok {
                 err = os.MkdirAll(dir, 0755)
                 if err != nil {
-                        logObject.Info("Make dir '%s' failed: %v", dir, err)
+                        logObject.Infof("Make dir '%s' failed: %v", dir, err)
                         return
                 }
         }
 
         err = watcher.Watch(dir)
         if err != nil {
-                logObject.Info("Watch '%s' failed: %v", dir, err)
+                logObject.Infof("Watch '%s' failed: %v", dir, err)
                 return
         }
 
@@ -57,7 +57,7 @@ func (op *Manager) listenThemeDir(dir string) {
                                         op.updateAllProps()
                                 }
                         case err := <-watcher.Error:
-                                logObject.Warning("Watch Error: %v", err)
+                                logObject.Warningf("Watch Error: %v", err)
                         }
                 }
         }()

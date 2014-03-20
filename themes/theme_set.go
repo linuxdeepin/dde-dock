@@ -55,7 +55,7 @@ func setCursorThemeViaXSettings(name string) {
 }
 
 func setGtkFontThemeViaXSettings(name string) {
-        //logObject.Info("Set Font: %s\n", name)
+        //logObject.Infof("Set Font: %s\n", name)
         objXSettings.SetString("Gtk/FontName", name+FONT_DEFAULT_SIZE)
         wmPreSettings.SetString("titlebar-font", name+TITLE_FONT_SIZE)
 }

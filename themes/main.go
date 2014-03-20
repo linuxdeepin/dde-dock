@@ -81,7 +81,7 @@ func updateThemeObj(pathNameMap map[string]PathInfo) {
                 obj := newTheme(path, info)
                 err := dbus.InstallOnSession(obj)
                 if err != nil {
-                        logObject.Warning("Install Session Failed: %v", err)
+                        logObject.Warningf("Install Session Failed: %v", err)
                         panic(err)
                 }
                 themeObjMap[path] = obj
@@ -91,7 +91,7 @@ func updateThemeObj(pathNameMap map[string]PathInfo) {
 func main() {
         defer func() {
                 if err := recover(); err != nil {
-                        logObject.Fatal("Recove error in main: %v", err)
+                        logObject.Fatalf("Recove error in main: %v", err)
                 }
         }()
 
@@ -105,21 +105,21 @@ func main() {
         objXSettings, err = xs.NewXSettings("com.deepin.SessionManager",
                 "/com/deepin/XSettings")
         if err != nil {
-                logObject.Error("New XSettings Failed: %v", err)
+                logObject.Errorf("New XSettings Failed: %v", err)
                 panic(err)
         }
 
         objUtil, err = utils.NewUtils("com.deepin.api.Utils",
                 "/com/deepin/api/Utils")
         if err != nil {
-                logObject.Info("New Utils Object Failed: %v", err)
+                logObject.Infof("New Utils Object Failed: %v", err)
                 return
         }
 
         objManager = newManager()
         err = dbus.InstallOnSession(objManager)
         if err != nil {
-                logObject.Error("Install Session Failed: %v", err)
+                logObject.Errorf("Install Session Failed: %v", err)
                 panic(err)
         }
 
@@ -137,7 +137,7 @@ func main() {
         dbus.DealWithUnhandledMessage()
         go dlib.StartLoop()
         if err = dbus.Wait(); err != nil {
-                logObject.Warning("lost dbus session: %v", err)
+                logObject.Warningf("lost dbus session: %v", err)
                 os.Exit(1)
         } else {
                 os.Exit(0)

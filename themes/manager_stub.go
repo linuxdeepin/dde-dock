@@ -58,7 +58,7 @@ func (op *Manager) setPropName(propName string) {
         switch propName {
         case "ThemeList":
                 list := getThemeList()
-                //logObject.Info("Theme List: %v", list)
+                //logObject.Infof("Theme List: %v", list)
                 tmpMap := make(map[string]PathInfo)
                 tmpNameMap := make(map[string]string)
                 tmp := []string{}
@@ -76,7 +76,7 @@ func (op *Manager) setPropName(propName string) {
                 dbus.NotifyChange(op, propName)
         case "GtkThemeList":
                 list := getGtkThemeList()
-                //logObject.Info("Gtk Theme List: %v\n", list)
+                //logObject.Infof("Gtk Theme List: %v\n", list)
                 tmp := []string{}
                 for _, l := range list {
                         tmp = append(tmp, l.path)
@@ -85,7 +85,7 @@ func (op *Manager) setPropName(propName string) {
                 dbus.NotifyChange(op, propName)
         case "IconThemeList":
                 list := getIconThemeList()
-                //logObject.Info("Icon Theme List: %v\n", list)
+                //logObject.Infof("Icon Theme List: %v\n", list)
                 tmp := []string{}
                 for _, l := range list {
                         tmp = append(tmp, l.path)
@@ -94,7 +94,7 @@ func (op *Manager) setPropName(propName string) {
                 dbus.NotifyChange(op, propName)
         case "CursorThemeList":
                 list := getCursorThemeList()
-                //logObject.Info("Cursor Theme List: %v\n", list)
+                //logObject.Infof("Cursor Theme List: %v\n", list)
                 tmp := []string{}
                 for _, l := range list {
                         tmp = append(tmp, l.path)
@@ -150,7 +150,7 @@ func (op *Manager) updateAllProps() {
 }
 
 func (op *Manager) updateCurrentTheme(name string) {
-        logObject.Info("Update Current Theme: %s", name)
+        logObject.Infof("Update Current Theme: %s", name)
         if v := personSettings.GetString(GKEY_CURRENT_THEME); v != name {
                 personSettings.SetString(GKEY_CURRENT_THEME, name)
         }
@@ -158,7 +158,7 @@ func (op *Manager) updateCurrentTheme(name string) {
 
 func (op *Manager) listenSettingsChanged() {
         personSettings.Connect("changed", func(s *gio.Settings, key string) {
-                logObject.Info("Theme GSettings Key Changed: %s", key)
+                logObject.Infof("Theme GSettings Key Changed: %s", key)
                 switch key {
                 case GKEY_CURRENT_THEME:
                         value := personSettings.GetString(key)
