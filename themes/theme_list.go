@@ -22,10 +22,8 @@
 package main
 
 import (
-        "io/ioutil"
         "os"
         "os/user"
-        "path"
 )
 
 type PathInfo struct {
@@ -120,31 +118,6 @@ func getValidCursorThemes() []PathInfo {
         logObject.Debugf("Valid Cursor Theme: %v", localList)
 
         return localList
-}
-
-func getValidBackground() []PathInfo {
-        localDir := getHomeDir() + BACKGROUND_LOCAL_PATH
-        dirs := []PathInfo{PathInfo{localDir, PATH_TYPE_LOCAL}, PathInfo{BACKGROUND_PATH, PATH_TYPE_SYSTEM}}
-        list := []PathInfo{}
-        for _, d := range dirs {
-                files, err := ioutil.ReadDir(d.path)
-                if err != nil {
-                        logObject.Errorf("Read directory failed: %v", err)
-                        continue
-                }
-                for _, f := range files {
-                        if !f.IsDir() {
-                                abspath := path.Join(d.path, f.Name())
-                                uripath, ok, _ := objUtil.PathToFileURI(abspath)
-                                if ok {
-                                        list = append(list, PathInfo{uripath, d.t})
-                                }
-                        }
-                }
-        }
-        logObject.Debugf("Valid Background: %v", list)
-
-        return list
 }
 
 func getValidSoundThemes() []PathInfo {

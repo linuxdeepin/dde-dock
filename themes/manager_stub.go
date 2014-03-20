@@ -149,10 +149,24 @@ func (op *Manager) updateAllProps() {
         updateThemeObj(op.pathNameMap)
 }
 
-func (op *Manager) updateCurrentTheme(name string) {
-        logObject.Infof("Update Current Theme: %s", name)
-        if v := personSettings.GetString(GKEY_CURRENT_THEME); v != name {
-                personSettings.SetString(GKEY_CURRENT_THEME, name)
+func (op *Manager) updateGSettingsKey(name string, value interface{}) {
+        logObject.Infof("Update GSettings Key: %s", name)
+        switch name {
+        case GKEY_CURRENT_THEME:
+                str := value.(string)
+                if v := personSettings.GetString(GKEY_CURRENT_THEME); v != str {
+                        personSettings.SetString(GKEY_CURRENT_THEME, str)
+                }
+        case GKEY_CURRENT_BACKGROUND:
+                str := value.(string)
+                if v := personSettings.GetString(GKEY_CURRENT_BACKGROUND); v != str {
+                        personSettings.SetString(GKEY_CURRENT_BACKGROUND, str)
+                }
+        case GKEY_CURRENT_SOUND_THEME:
+                str := value.(string)
+                if v := personSettings.GetString(GKEY_CURRENT_SOUND_THEME); v != str {
+                        personSettings.SetString(GKEY_CURRENT_SOUND_THEME, str)
+                }
         }
 }
 
@@ -177,7 +191,7 @@ func (op *Manager) listenSettingsChanged() {
                                 if name := op.setTheme(obj.GtkTheme, obj.IconTheme,
                                         obj.CursorTheme, obj.FontName,
                                         value, obj.SoundTheme); name != op.CurrentTheme {
-                                        op.updateCurrentTheme(name)
+                                        op.updateGSettingsKey(GKEY_CURRENT_THEME, name)
                                 }
                         }
                 case GKEY_CURRENT_SOUND_THEME: // TODO
@@ -187,7 +201,7 @@ func (op *Manager) listenSettingsChanged() {
                                 if name := op.setTheme(obj.GtkTheme, obj.IconTheme,
                                         obj.CursorTheme, obj.FontName,
                                         obj.BackgroundFile, value); name != op.CurrentTheme {
-                                        op.updateCurrentTheme(name)
+                                        op.updateGSettingsKey(GKEY_CURRENT_THEME, name)
                                 }
                         }
                 }

@@ -75,7 +75,7 @@ func (op *Manager) SetGtkTheme(name string) (string, bool) {
         if obj := op.getThemeObject(op.CurrentTheme); obj != nil {
                 v := op.setTheme(name, obj.IconTheme, obj.CursorTheme,
                         obj.FontName, obj.BackgroundFile, obj.SoundTheme)
-                op.updateCurrentTheme(v)
+                op.updateGSettingsKey(GKEY_CURRENT_THEME, v)
                 return v, true
         }
 
@@ -91,7 +91,7 @@ func (op *Manager) SetIconTheme(name string) (string, bool) {
         if obj := op.getThemeObject(op.CurrentTheme); obj != nil {
                 v := op.setTheme(obj.GtkTheme, name,
                         obj.CursorTheme, obj.FontName, obj.BackgroundFile, obj.SoundTheme)
-                op.updateCurrentTheme(v)
+                op.updateGSettingsKey(GKEY_CURRENT_THEME, v)
                 return v, true
         }
 
@@ -107,7 +107,7 @@ func (op *Manager) SetCursorTheme(name string) (string, bool) {
         if obj := op.getThemeObject(op.CurrentTheme); obj != nil {
                 v := op.setTheme(obj.GtkTheme, obj.IconTheme,
                         name, obj.FontName, obj.BackgroundFile, obj.SoundTheme)
-                op.updateCurrentTheme(v)
+                op.updateGSettingsKey(GKEY_CURRENT_THEME, v)
                 return v, true
         }
 
@@ -123,7 +123,7 @@ func (op *Manager) SetFontName(name string) (string, bool) {
         if obj := op.getThemeObject(op.CurrentTheme); obj != nil {
                 v := op.setTheme(obj.GtkTheme, obj.IconTheme,
                         obj.CursorTheme, name, obj.BackgroundFile, obj.SoundTheme)
-                op.updateCurrentTheme(v)
+                op.updateGSettingsKey(GKEY_CURRENT_THEME, v)
                 return v, true
         }
 
@@ -135,15 +135,17 @@ func (op *Manager) SetBackgroundFile(name string) (string, bool) {
                 return op.CurrentTheme, false
         }
 
+        name, _, _ = objUtil.PathToFileURI(name)
+
         if obj := op.getThemeObject(op.CurrentTheme); obj != nil {
                 v := op.setTheme(obj.GtkTheme, obj.IconTheme,
                         obj.CursorTheme, obj.FontName, name, obj.SoundTheme)
-                op.updateCurrentTheme(v)
+                op.updateGSettingsKey(GKEY_CURRENT_THEME, v)
                 return v, true
         }
 
         // sync value to gsettings
-        personSettings.SetString(GKEY_CURRENT_BACKGROUND, name)
+        op.updateGSettingsKey(GKEY_CURRENT_BACKGROUND, name)
 
         return op.CurrentTheme, false
 }
@@ -156,7 +158,7 @@ func (op *Manager) SetSoundTheme(name string) (string, bool) {
         if obj := op.getThemeObject(op.CurrentTheme); obj != nil {
                 v := op.setTheme(obj.GtkTheme, obj.IconTheme,
                         obj.CursorTheme, obj.FontName, obj.BackgroundFile, name)
-                op.updateCurrentTheme(v)
+                op.updateGSettingsKey(GKEY_CURRENT_THEME, v)
                 return v, true
         }
 
@@ -247,19 +249,6 @@ func getCursorThemeList() []PathInfo {
 // Has not yet been determined
 func getFontNameList() []string {
         return []string{}
-}
-
-/*
-   Unlimited.
-   Return all bg.
-*/
-func getBackgroundList() []string {
-        valid := getValidBackground()
-        list := []string{}
-        for _, l := range valid {
-                list = append(list, l.path)
-        }
-        return list
 }
 
 /*

@@ -24,6 +24,7 @@ package main
 import (
         "dlib/dbus"
         "dlib/glib-2.0"
+        "strings"
 )
 
 const (
@@ -31,6 +32,9 @@ const (
         THEME_PATH = "/com/deepin/daemon/Theme"
         //THEME_PATH         = "/com/deepin/daemon/Theme/Entry"
         THEME_IFC = "com.deepin.daemon.Theme"
+
+        BG_DIR_SYS   = "/usr/share/deepin-personalization/wallpappers"
+        BG_DIR_LOCAL = ".deepin-personalization/wallpappers"
 
         THEME_GROUP_THEME     = "Theme"
         THEME_KEY_NAME        = "Name"
@@ -121,7 +125,16 @@ func (op *Theme) updateThemeInfo() {
                         THEME_KEY_BG, err1)
                 return
         }
-        op.BackgroundFile = str
+        if !strings.Contains(str, "/") {
+                if op.Type == PATH_TYPE_SYSTEM {
+                        str = BG_DIR_SYS + "/" + op.Name + "/" + str
+                } else if op.Type == PATH_TYPE_LOCAL {
+                        homeDir := getHomeDir()
+                        str = homeDir + "/" + BG_DIR_LOCAL + "/" + op.Name + "/" + str
+                }
+        }
+        fileUri, _, _ := objUtil.PathToFileURI(str)
+        op.BackgroundFile = fileUri
         dbus.NotifyChange(op, "BackgroundFile")
 
         str, err1 = keyFile.GetString(THEME_GROUP_COMPONENT,
