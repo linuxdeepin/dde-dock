@@ -14,6 +14,7 @@ import (
     "reflect"
     "regexp"
     "strconv"
+    "sync"
     "unsafe"
 )
 
@@ -42,6 +43,7 @@ type Audio struct {
     clients       map[int]*Client
     sinkInputs    map[int]*SinkInput
     sourceOutputs map[int]*SourceOutput
+    lock          sync.Mutex
 
     //exported properties
     HostName      string
@@ -902,7 +904,7 @@ func (audio *Audio) getSources() map[int]*Source {
     return audio.sources
 }
 
-func (audio *Audio) getSinkInputs() map[int]*SinkInput {
+func (audio *Audio) getSinkInputs() []*SinkInput {
     C.pa_get_sink_input_list(audio.pa)
     n := int(audio.pa.n_sink_inputs)
     audio.sinkInputs = make(map[int]*SinkInput)
@@ -910,15 +912,20 @@ func (audio *Audio) getSinkInputs() map[int]*SinkInput {
     for i := 0; i < n; i = i + 1 {
         audio.sinkInputs[i] = getSinkInputFromC(audio.pa.sink_inputs[i])
     }
-    return audio.sinkInputs
+    sinkInputs := make([]*SinkInput, len(audio.sinkInputs))
+    var j int
+    for _, value := range audio.sinkInputs {
+        sinkInputs[j] = value
+        j = j + 1
+    }
+    return sinkInputs
 }
 
 func (audio *Audio) GetSinkInputs() []*SinkInput {
-    return nil
-    //return audio.getSinkInputs()
+    return audio.getSinkInputs()
 }
 
-func (audio *Audio) getSourceOutputs() map[int]*SourceOutput {
+func (audio *Audio) getSourceOutputs() []*SourceOutput {
     C.pa_get_source_output_list(audio.pa)
     n := int(audio.pa.n_source_outputs)
     audio.sourceOutputs = make(map[int]*SourceOutput)
@@ -927,7 +934,17 @@ func (audio *Audio) getSourceOutputs() map[int]*SourceOutput {
         audio.sourceOutputs[i] =
             getSourceOutputFromC(audio.pa.source_outputs[i])
     }
-    return audio.sourceOutputs
+    sourceOutputs := make([]*SourceOutput, len(audio.sourceOutputs))
+    var j int
+    for _, value := range audio.sourceOutputs {
+        sourceOutputs[j] = value
+        j = j + 1
+    }
+    return sourceOutputs
+}
+
+func (audio *Audio) GetSourceOutputs() []*SourceOutput {
+    return audio.getSourceOutputs()
 }
 
 func (audio *Audio) GetClients() []*Client {
@@ -952,6 +969,7 @@ func (card *Card) GetDBusInfo() dbus.DBusInfo {
         "com.deepin.daemon.Audio.Card",
     }
 }
+
 func (card *Card) OnPropertiesChanged(name string, oldv interface{}) {
     defer func() {
         if err := recover(); err != nil {
@@ -1180,6 +1198,25 @@ func (source *Source) OnPropertiesChanged(name string, oldv interface{}) {
     default:
         break
     }
+}
+
+func (source *Source) getSourceOutputs() []*SourceOutput {
+    audio.lock.Lock()
+    all := audio.getSourceOutputs()
+    audio.lock.Unlock()
+    sourceOutputs := make([]*SourceOutput, len(all))
+    var j int = 0
+    for _, value := range all {
+        if value.Source == source.Index {
+            sourceOutputs[j] = value
+        }
+    }
+
+    return sourceOutputs
+}
+
+func (source *Source) GetSourceOutputs() []*SourceOutput {
+    return source.getSourceOutputs()
 }
 
 func (source *Source) setSourcePort(port *C.char) int32 {

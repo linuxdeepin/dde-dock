@@ -3132,6 +3132,7 @@ sink_t *pa2sink(sink_t * sink, const pa_sink_info * l)
 {
     int i;
     sink->index = l->index;
+    sink->card = l->card;
     sink->channel_map = l->channel_map;
     sink->volume = l->volume;
     sink->mute = l->mute;
