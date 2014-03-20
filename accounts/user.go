@@ -55,7 +55,7 @@ func (op *UserManager) SetShell(shell string) {
 func (op *UserManager) SetPassword(passwd string) {
         defer func() {
                 if err := recover(); err != nil {
-                        logObject.Warning("Recover Error In SetPassword:%v",
+                        logObject.Warningf("Recover Error In SetPassword:%v",
                                 err)
                 }
         }()
@@ -119,7 +119,7 @@ func (op *UserManager) DeleteHistoryIcon(icon string) {
 func newUserManager(uid string) *UserManager {
         defer func() {
                 if err := recover(); err != nil {
-                        logObject.Info("Recover Error: %v\n", err)
+                        logObject.Infof("Recover Error: %v", err)
                 }
         }()
 

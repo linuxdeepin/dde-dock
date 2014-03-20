@@ -36,15 +36,15 @@ func getRandUserIcon() string {
         }
 
         index := rand.Int31n(int32(l))
-        //logObject.Info("Rand Icon Index: %d\n", index)
-        //logObject.Info("Rand Icon Path: %s\n", list[index])
+        //logObject.Infof("Rand Icon Index: %d", index)
+        //logObject.Infof("Rand Icon Path: %s", list[index])
         return list[index]
 }
 
 func getSystemIconList() []string {
         iconfd, err := os.Open(ICON__SYSTEM_DIR)
         if err != nil {
-                logObject.Warning("Open '%s' failed: %v\n",
+                logObject.Warningf("Open '%s' failed: %v",
                         ICON__SYSTEM_DIR, err)
                 return []string{}
         }
@@ -68,7 +68,7 @@ func getSystemIconList() []string {
 func getAdministratorList() []string {
         contents, err := ioutil.ReadFile(ETC_GROUP)
         if err != nil {
-                logObject.Warning("ReadFile '%s' failed: %s\n", ETC_PASSWD, err)
+                logObject.Warningf("ReadFile '%s' failed: %s", ETC_PASSWD, err)
                 panic(err)
         }
 
@@ -181,7 +181,7 @@ func isAutoLogin(username string) bool {
 func getDefaultDisplayManager() string {
         contents, err := ioutil.ReadFile(ETC_DISPLAY_MANAGER)
         if err != nil {
-                logObject.Warning("ReadFile '%s' failed: %s\n",
+                logObject.Warningf("ReadFile '%s' failed: %s",
                         ETC_DISPLAY_MANAGER, err)
                 panic(err)
         }

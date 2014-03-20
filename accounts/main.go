@@ -45,8 +45,8 @@ func main() {
         opAccount := newAccountManager()
         err := dbus.InstallOnSystem(opAccount)
         if err != nil {
-                logObject.Warning("Install Account Object On System Failed:%v", err)
-                logObject.Fatal("%v", err)
+                logObject.Warningf("Install Account Object On System Failed:%v", err)
+                logObject.Fatalf("%v", err)
         }
 
         updateUserList()
@@ -55,7 +55,7 @@ func main() {
 
         //select {}
         if err = dbus.Wait(); err != nil {
-                logObject.Warning("lost dbus session:%v", err)
+                logObject.Warningf("lost dbus session:%v", err)
                 os.Exit(1)
         } else {
                 os.Exit(0)
@@ -70,7 +70,7 @@ func updateUserList() {
                 opUser := newUserManager(info.Uid)
                 err := dbus.InstallOnSystem(opUser)
                 if err != nil {
-                        logObject.Debug("Install User:%s Object On System Failed:%s\n",
+                        logObject.Debugf("Install User:%s Object On System Failed:%s",
                                 info.Name, err)
                         panic(err)
                 }

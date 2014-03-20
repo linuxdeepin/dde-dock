@@ -63,7 +63,7 @@ const (
 func ParseXML(filename string) XKBConfigRegister {
         xmlByte, err := ioutil.ReadFile(filename)
         if err != nil {
-                logObject.Info("Read File '%s' Failed: %s\n",
+                logObject.Infof("Read File '%s' Failed: %s",
                         filename, err)
                 panic(err)
         }
@@ -71,7 +71,7 @@ func ParseXML(filename string) XKBConfigRegister {
         var v XKBConfigRegister
         err = xml.Unmarshal(xmlByte, &v)
         if err != nil {
-                logObject.Info("Unmarshal Failed: %s\n", err)
+                logObject.Infof("Unmarshal Failed: %s", err)
                 panic(err)
         }
 

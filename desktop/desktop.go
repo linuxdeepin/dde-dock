@@ -114,6 +114,6 @@ func main() {
 }
 
 func (m *Manager) printManager() {
-        logObject.Info("Top Action: %d\n", m.TopLeft)
-        logObject.Info("Bottom Action: %d\n", m.BottomRight)
+        logObject.Infof("Top Action: %d", m.TopLeft)
+        logObject.Infof("Bottom Action: %d", m.BottomRight)
 }

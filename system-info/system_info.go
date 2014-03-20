@@ -49,7 +49,7 @@ func GetVersion() int32 {
         }
         contents, err := ioutil.ReadFile(_VERSION_ETC)
         if err != nil {
-                logObject.Info("Read File Failed In Get Version: %s\n",
+                logObject.Infof("Read File Failed In Get Version: %s",
                         err)
                 return 0
         }
@@ -78,7 +78,7 @@ func GetCpuInfo() string {
         }
         contents, err := ioutil.ReadFile(_PROC_CPU_INFO)
         if err != nil {
-                logObject.Info("Read File Failed In Get CPU Info: %s\n",
+                logObject.Infof("Read File Failed In Get CPU Info: %s",
                         err)
                 return ""
         }
@@ -111,7 +111,7 @@ func GetMemoryCap() (memCap uint64) {
         }
         contents, err := ioutil.ReadFile(_PROC_MEM_INFO)
         if err != nil {
-                logObject.Info("Read File Failed In Get Memory Cap: %s\n",
+                logObject.Infof("Read File Failed In Get Memory Cap: %s",
                         err)
                 return 0
         }
@@ -136,7 +136,7 @@ func GetSystemType() (sysType int64) {
         cmd := exec.Command("/bin/uname", "-m")
         out, err := cmd.Output()
         if err != nil {
-                logObject.Info("Exec 'uname -m' Failed In Get System Type: %s\n",
+                logObject.Infof("Exec 'uname -m' Failed In Get System Type: %s",
                         err)
                 return int64(0)
         }
@@ -158,7 +158,7 @@ func GetDiskCap() (diskCap uint64) {
         driList := []dbus.ObjectPath{}
         obj, err := udisks2.NewObjectManager("org.freedesktop.UDisks2", "/org/freedesktop/UDisks2")
         if err != nil {
-                logObject.Info("udisks2: New ObjectManager Failed:%v", err)
+                logObject.Infof("udisks2: New ObjectManager Failed:%v", err)
                 return 0
         }
         managers, _ := obj.GetManagedObjects()

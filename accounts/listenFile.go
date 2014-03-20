@@ -28,13 +28,13 @@ import (
 func (op *AccountManager) listenUserListChanged() {
         watcher, err := fsnotify.NewWatcher()
         if err != nil {
-                logObject.Warning("New Watcher Failed:%v", err)
+                logObject.Warningf("New Watcher Failed:%v", err)
                 panic(err)
         }
 
         err = watcher.Watch(ETC_PASSWD)
         if err != nil {
-                logObject.Warning("Watch File '%s' Failed: %v", ETC_PASSWD, err)
+                logObject.Warningf("Watch File '%s' Failed: %v", ETC_PASSWD, err)
                 panic(err)
         }
 
@@ -49,7 +49,7 @@ func (op *AccountManager) listenUserListChanged() {
                                         op.emitUserListChanged()
                                 }
                         case err := <-watcher.Error:
-                                logObject.Warning("Watch Error:%v", err)
+                                logObject.Warningf("Watch Error:%v", err)
                         }
                 }
         }()
@@ -58,13 +58,13 @@ func (op *AccountManager) listenUserListChanged() {
 func (op *UserManager) listenUserInfoChanged(filename string) {
         watcher, err := fsnotify.NewWatcher()
         if err != nil {
-                logObject.Warning("New Watcher Failed:%v", err)
+                logObject.Warningf("New Watcher Failed:%v", err)
                 panic(err)
         }
 
         err = watcher.Watch(filename)
         if err != nil {
-                logObject.Warning("Watch '%s' failed: %s\n", filename, err)
+                logObject.Warningf("Watch '%s' failed: %s", filename, err)
                 panic(err)
         }
 
@@ -79,7 +79,7 @@ func (op *UserManager) listenUserInfoChanged(filename string) {
                                         op.updateUserInfo()
                                 }
                         case err := <-watcher.Error:
-                                logObject.Warning("Watch Error:%v", err)
+                                logObject.Warningf("Watch Error:%v", err)
                         }
                 }
         }()

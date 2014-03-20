@@ -58,7 +58,7 @@ func (op *AccountManager) setPropName(name string) {
 func newAccountManager() *AccountManager {
         defer func() {
                 if err := recover(); err != nil {
-                        logObject.Warning("Recover Error: %v\n", err)
+                        logObject.Warningf("Recover Error: %v", err)
                 }
         }()
 

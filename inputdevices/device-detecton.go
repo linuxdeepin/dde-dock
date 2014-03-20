@@ -43,13 +43,13 @@ func IsFileNotExist(filename string) bool {
 
 func GetProcDeviceNameList() (bool, []string) {
         if IsFileNotExist(_PROC_DEVICE_PATH) {
-                logObject.Info("%s not exist\n", _PROC_DEVICE_PATH)
+                logObject.Infof("%s not exist", _PROC_DEVICE_PATH)
                 return false, []string{}
         }
 
         contents, err := ioutil.ReadFile(_PROC_DEVICE_PATH)
         if err != nil {
-                logObject.Info("%v", err)
+                logObject.Infof("%v", err)
                 return false, []string{}
         }
 

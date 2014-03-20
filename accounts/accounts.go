@@ -39,7 +39,7 @@ const (
 func (op *AccountManager) CreateUser(name, fullname string, accountTyte int32) string {
         defer func() {
                 if err := recover(); err != nil {
-                        logObject.Warning("Recover Error In CreateUser:%v",
+                        logObject.Warningf("Recover Error In CreateUser:%v",
                                 err)
                 }
         }()
@@ -71,7 +71,7 @@ func (op *AccountManager) CreateUser(name, fullname string, accountTyte int32) s
 func (op *AccountManager) DeleteUser(name string, removeFiles bool) {
         defer func() {
                 if err := recover(); err != nil {
-                        logObject.Warning("Recover Error In DeleteUser:%v",
+                        logObject.Warningf("Recover Error In DeleteUser:%v",
                                 err)
                 }
         }()
@@ -94,7 +94,7 @@ func (op *AccountManager) DeleteUser(name string, removeFiles bool) {
 func (op *AccountManager) FindUserById(id string) string {
         defer func() {
                 if err := recover(); err != nil {
-                        logObject.Warning("Recover Error In FindUserById:%v",
+                        logObject.Warningf("Recover Error In FindUserById:%v",
                                 err)
                 }
         }()
@@ -114,13 +114,13 @@ func (op *AccountManager) FindUserById(id string) string {
 func (op *AccountManager) FindUserByName(name string) string {
         defer func() {
                 if err := recover(); err != nil {
-                        logObject.Warning("Recover Error In FindUserByName:%v", err)
+                        logObject.Warningf("Recover Error In FindUserByName:%v", err)
                 }
         }()
 
         userInfo, err := user.Lookup(name)
         if err != nil {
-                logObject.Warning("Lookup By Name Failed:%v", err)
+                logObject.Warningf("Lookup By Name Failed:%v", err)
                 return ""
         }
 
@@ -162,7 +162,7 @@ func getInfoViaName(name string) (UserInfo, bool) {
 func getUserInfoList() []UserInfo {
         contents, err := ioutil.ReadFile(ETC_PASSWD)
         if err != nil {
-                logObject.Warning("ReadFile '%s' failed: %s\n", ETC_PASSWD, err)
+                logObject.Warningf("ReadFile '%s' failed: %s", ETC_PASSWD, err)
                 panic(err)
         }
 
@@ -227,7 +227,7 @@ func userIsHuman(info *UserInfo) bool {
 func detetedViaShadowFile(info *UserInfo) bool {
         contents, err := ioutil.ReadFile(ETC_SHADOW)
         if err != nil {
-                logObject.Warning("ReadFile '%s' failed: %s\n", ETC_SHADOW, err)
+                logObject.Warningf("ReadFile '%s' failed: %s", ETC_SHADOW, err)
                 panic(err)
         }
 

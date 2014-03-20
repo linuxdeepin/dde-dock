@@ -54,7 +54,7 @@ const (
 func execCommand(cmdline string, args []string) {
         err := exec.Command(cmdline, args...).Run()
         if err != nil {
-                logObject.Warning("Exec '%v %v' failed:%v",
+                logObject.Warningf("Exec '%v %v' failed:%v",
                         cmdline, args, err)
                 panic(err)
         }
@@ -114,7 +114,7 @@ func readKeyFileValue(filename, group, key string, t int32) (interface{}, bool) 
         defer keyFile.Free()
         ok, _ := keyFile.LoadFromFile(filename, glib.KeyFileFlagsKeepComments)
         if !ok {
-                logObject.Warning("LoadKeyFile '%s' failed\n", filename)
+                logObject.Warningf("LoadKeyFile '%s' failed", filename)
                 return nil, false
         }
 
@@ -122,7 +122,7 @@ func readKeyFileValue(filename, group, key string, t int32) (interface{}, bool) 
         case KEY_TYPE_BOOL:
                 v, err := keyFile.GetBoolean(group, key)
                 if err != nil {
-                        //logObject.Warning("Get '%s' from '%s' failed: %s\n",
+                        //logObject.Warningf("Get '%s' from '%s' failed: %s",
                         //key, filename, err)
                         break
                 }
@@ -130,7 +130,7 @@ func readKeyFileValue(filename, group, key string, t int32) (interface{}, bool) 
         case KEY_TYPE_INT:
                 v, err := keyFile.GetInteger(group, key)
                 if err != nil {
-                        //logObject.Warning("Get '%s' from '%s' failed: %s\n",
+                        //logObject.Warningf("Get '%s' from '%s' failed: %s",
                         //key, filename, err)
                         break
                 }
@@ -138,7 +138,7 @@ func readKeyFileValue(filename, group, key string, t int32) (interface{}, bool) 
         case KEY_TYPE_STRING:
                 v, err := keyFile.GetString(group, key)
                 if err != nil {
-                        //logObject.Warning("Get '%s' from '%s' failed: %s\n",
+                        //logObject.Warningf("Get '%s' from '%s' failed: %s",
                         //key, filename, err)
                         break
                 }
@@ -158,7 +158,7 @@ func writeKeyFileValue(filename, group, key string, t int32, value interface{}) 
         if !fileIsExist(filename) {
                 f, err := os.Create(filename)
                 if err != nil {
-                        logObject.Info("Create '%s' failed: %v\n",
+                        logObject.Infof("Create '%s' failed: %v",
                                 filename, err)
                         return
                 }
@@ -175,7 +175,7 @@ func writeKeyFileValue(filename, group, key string, t int32, value interface{}) 
         defer keyFile.Free()
         ok, _ := keyFile.LoadFromFile(filename, glib.KeyFileFlagsKeepComments)
         if !ok {
-                logObject.Warning("LoadKeyFile '%s' failed\n", filename)
+                logObject.Warningf("LoadKeyFile '%s' failed", filename)
                 return
         }
 
@@ -192,7 +192,7 @@ func writeKeyFileValue(filename, group, key string, t int32, value interface{}) 
 
         _, contents, err := keyFile.ToData()
         if err != nil {
-                logObject.Warning("KeyFile '%s' ToData failed: %s\n", filename, err)
+                logObject.Warningf("KeyFile '%s' ToData failed: %s", filename, err)
                 panic(err)
         }
 
@@ -208,14 +208,14 @@ func writeKeyFile(contents, file string) {
         //return
         f, err := os.Create(file + "~")
         if err != nil {
-                logObject.Warning("OpenFile '%s' failed: %s\n",
+                logObject.Warningf("OpenFile '%s' failed: %s",
                         file+"~", err)
                 panic(err)
         }
         defer f.Close()
 
         if _, err = f.WriteString(contents); err != nil {
-                logObject.Warning("Write in '%s' failed: %s\n", file, err)
+                logObject.Warningf("Write in '%s' failed: %s", file, err)
                 panic(err)
         }
         f.Sync()
@@ -245,7 +245,7 @@ func authWithPolkit(actionId string) {
 
         objPolkit, err = polkit.NewAuthority(POLKIT_DEST, POLKIT_PATH)
         if err != nil {
-                logObject.Warning("New Authority Failed:%v", err)
+                logObject.Warningf("New Authority Failed:%v", err)
                 panic(err)
         }
 
@@ -267,10 +267,10 @@ func authWithPolkit(actionId string) {
 
         rets, _err := objPolkit.CheckAuthorization(infaces, actionId, details, flags, cancelId)
         for _, i := range rets {
-                logObject.Warning("%v", i)
+                logObject.Warningf("%v", i)
         }
         if _err != nil {
-                logObject.Warning("CheckAuthorization Failed:%v", _err)
+                logObject.Warningf("CheckAuthorization Failed:%v", _err)
                 panic(_err)
         }
 }

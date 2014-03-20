@@ -79,18 +79,18 @@ var (
 func (m *Manager) DeviceEject(id int32) {
         info, ok := objectMap[id]
         if !ok {
-                logObject.Info("Eject id - %d not in objectMap.\n", id)
+                logObject.Infof("Eject id - %d not in objectMap.", id)
                 return
         }
 
-        logObject.Info("Eject type: %s\n", info.Type)
+        logObject.Infof("Eject type: %s", info.Type)
         switch info.Type {
         case "drive":
                 op := info.Object.(*gio.Drive)
                 op.Eject(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
                         _, err := op.EjectFinish(res)
                         if err != nil {
-                                logObject.Info("drive eject failed: %d, %s\n", id, err)
+                                logObject.Infof("drive eject failed: %d, %s", id, err)
                         }
                 }))
         case "volume":
@@ -98,7 +98,7 @@ func (m *Manager) DeviceEject(id int32) {
                 op.Eject(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
                         _, err := op.EjectFinish(res)
                         if err != nil {
-                                logObject.Info("volume eject failed: %d, %s\n", id, err)
+                                logObject.Infof("volume eject failed: %d, %s", id, err)
                         }
                 }))
         case "mount":
@@ -106,29 +106,29 @@ func (m *Manager) DeviceEject(id int32) {
                 op.Eject(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
                         _, err := op.EjectFinish(res)
                         if err != nil {
-                                logObject.Info("mount eject failed: %d, %s\n", id, err)
+                                logObject.Infof("mount eject failed: %d, %s", id, err)
                         }
                 }))
         default:
-                logObject.Info("'%s' invalid type\n", info.Type)
+                logObject.Infof("'%s' invalid type", info.Type)
         }
 }
 
 func (m *Manager) DeviceMount(id int32) {
         info, ok := objectMap[id]
         if !ok {
-                logObject.Info("Mount id - %d not in objectMap.\n", id)
+                logObject.Infof("Mount id - %d not in objectMap.", id)
                 return
         }
 
-        logObject.Info("Mount type: %s\n", info.Type)
+        logObject.Infof("Mount type: %s", info.Type)
         switch info.Type {
         case "volume":
                 op := info.Object.(*gio.Volume)
                 op.Mount(gio.MountMountFlagsNone, nil, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
                         _, err := op.MountFinish(res)
                         if err != nil {
-                                logObject.Info("volume mount failed: %d, %s\n", id, err)
+                                logObject.Infof("volume mount failed: %d, %s", id, err)
                         }
                 }))
         case "mount":
@@ -136,33 +136,33 @@ func (m *Manager) DeviceMount(id int32) {
                 op.Remount(gio.MountMountFlagsNone, nil, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
                         _, err := op.RemountFinish(res)
                         if err != nil {
-                                logObject.Info("mount remount failed: %d, %s\n", id, err)
+                                logObject.Infof("mount remount failed: %d, %s", id, err)
                         }
                 }))
         default:
-                logObject.Info("'%s' invalid type\n", info.Type)
+                logObject.Infof("'%s' invalid type", info.Type)
         }
 }
 
 func (m *Manager) DeviceUnmount(id int32) {
         info, ok := objectMap[id]
         if !ok {
-                logObject.Info("Unmount id - %d not in objectMap.\n", id)
+                logObject.Infof("Unmount id - %d not in objectMap.", id)
                 return
         }
 
-        logObject.Info("Unmount type: %s\n", info.Type)
+        logObject.Infof("Unmount type: %s", info.Type)
         switch info.Type {
         case "mount":
                 op := info.Object.(*gio.Mount)
                 op.Unmount(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
                         _, err := op.UnmountFinish(res)
                         if err != nil {
-                                logObject.Info("mount unmount failed: %d, %s\n", id, err)
+                                logObject.Infof("mount unmount failed: %d, %s", id, err)
                         }
                 }))
         default:
-                logObject.Info("'%s' invalid type\n", info.Type)
+                logObject.Infof("'%s' invalid type", info.Type)
         }
 }
 
@@ -212,7 +212,7 @@ func newDiskInfo(value interface{}, t string, id int32) DiskInfo {
                         info.Type = "network"
                 }
         default:
-                logObject.Info("'%s' invalid type\n", t)
+                logObject.Infof("'%s' invalid type", t)
         }
 
         return info
@@ -349,7 +349,7 @@ func NewManager() *Manager {
 func main() {
         defer func() {
                 if err := recover(); err != nil {
-                        logObject.Fatal("recover err: %s\n", err)
+                        logObject.Fatalf("recover err: %s", err)
                 }
         }()
         logObject.SetRestartCommand("/usr/lib/deepin-daemon/mounts")
@@ -373,11 +373,10 @@ func main() {
 
 func printDiskInfo(infos []DiskInfo) {
         for _, v := range infos {
-                logObject.Info("Id: %d\n", v.Id)
-                logObject.Info("Name: %s\n", v.Name)
-                logObject.Info("Type: %s\n", v.Type)
+                logObject.Infof("Id: %d", v.Id)
+                logObject.Infof("Name: %s", v.Name)
+                logObject.Infof("Type: %s", v.Type)
                 logObject.Info("CanEject:", v.CanEject)
                 logObject.Info("CanUnmount:", v.CanUnmount)
-                logObject.Info("\n")
         }
 }
