@@ -32,6 +32,7 @@ import (
 	"os"
 	"os/user"
 	//"reflect"
+	"reflect"
 	"regexp"
 	//"unsafe"
 	"github.com/BurntSushi/xgb"
@@ -103,14 +104,15 @@ const (
 	ACTION_BLANK       = "blank"
 )
 
-type inhibitor struct {
+type Inhibitor struct {
 	appName string
 	reason  string
 }
 
 type ScreenSaver struct {
-	cookies map[int]inhibitor
-	n       uint32
+	cookies     map[int]Inhibitor
+	n           uint32
+	IsInhibited bool
 }
 
 func (ss *ScreenSaver) GetDBusInfo() dbus.DBusInfo {
@@ -123,23 +125,38 @@ func (ss *ScreenSaver) GetDBusInfo() dbus.DBusInfo {
 
 func NewScreenSaver() (*ScreenSaver, error) {
 	ss := &ScreenSaver{}
-	ss.cookies = make(map[int]inhibitor)
+	ss.cookies = make(map[int]Inhibitor)
 	ss.n = 0
+	ss.IsInhibited = false
 
 	return ss, nil
 }
 
 func (ss *ScreenSaver) Inhibit(appName, reason string) uint32 {
-	ss.cookies[int(ss.n)] = inhibitor{appName, reason}
+	newIn := Inhibitor{appName, reason}
+	fmt.Println("New inhibtor: ", newIn)
+	for key, v := range ss.cookies {
+		if reflect.DeepEqual(newIn, v) {
+			fmt.Println(newIn, ",", v, ",", ss.cookies)
+			return uint32(key)
+		}
+	}
 	res := ss.n
+	ss.cookies[int(ss.n)] = newIn
 	ss.n = ss.n + 1
 	fmt.Println(ss.cookies)
+	if len(ss.cookies) > 0 {
+		ss.IsInhibited = true
+	}
 	return res
 }
 
 func (ss *ScreenSaver) UnInhibit(cookie uint32) {
 	delete(ss.cookies, int(cookie))
 	fmt.Println(ss.cookies)
+	if len(ss.cookies) == 0 {
+		ss.IsInhibited = false
+	}
 }
 
 type Power struct {
