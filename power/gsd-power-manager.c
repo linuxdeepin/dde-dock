@@ -1208,38 +1208,6 @@ engine_device_removed_cb (UpClient *client, UpDevice *device, GsdPowerManager *m
     engine_recalculate_state (manager);
 }
 
-static void profile_set_default(GsdPowerManager *manager)
-{
-    g_settings_set_string(manager->priv->settings,"button-power","interactive");
-    if (strcmp(manager->priv->current_profile,PROFILE_DEFAULT)==0)
-    {
-        g_settings_set_int(manager->priv->settings,"idle-delay",300);
-        g_settings_set_int(manager->priv->settings,
-                "sleep-inactive-ac-timeout", 0);
-        g_settings_set_int(manager->priv->settings,
-                "sleep-inactive-battery-timeout", 900);
-    }
-    else if(!strcmp(manager->priv->current_profile,PROFILE_PERFORMANCE))
-    {
-        g_settings_set_int(manager->priv->settings,"idle-delay",0);
-        g_settings_set_int(manager->priv->settings,
-                "sleep-inactive-ac-timeout",
-                0);
-        g_settings_set_int(manager->priv->settings,
-                "sleep-inactive-battery-timeout",
-                0);
-    }
-    else if(!strcmp(manager->priv->current_profile,PROFILE_POWERSAVE))
-    {
-        g_settings_set_int(manager->priv->settings,"idle-delay",380);
-        g_settings_set_int(manager->priv->settings,
-                "sleep-inactive-ac-timeout",900);
-        g_settings_set_int(manager->priv->settings,
-                "sleep-inactive-battery-timeout",600);
-    }
-    /*idle_configure(manager);*/
-}
-
 static void
 engine_profile_changed_cb (GSettings *settings,
                            const gchar *key,
@@ -1261,15 +1229,11 @@ engine_profile_changed_cb (GSettings *settings,
 
     GError *error = NULL;
     gchar *s;
-    if (g_strcmp0 (key, "current-profile")==0)
+    if (g_strcmp0 (key, "current-profile"))
     {
         s = g_settings_get_string(manager->priv->settings_profile, key);
-        g_debug("profile changed from %s to %s",
-                manager->priv->current_profile,
-                s);
         if (strcmp(s, manager->priv->current_profile) == 0 )
         {
-            g_debug("profile remains the same,do nothing\n");
             return;
         }
     }
@@ -1278,8 +1242,6 @@ engine_profile_changed_cb (GSettings *settings,
     gsd_power_manager_stop(manager);
 
     gsd_power_manager_start(manager, &error);
-    g_debug("setting default reserved gsettings value\n");
-    profile_set_default(manager);
 
     return;
 }
@@ -1402,19 +1364,24 @@ manager_critical_action_get (GsdPowerManager *manager,
     GsdPowerActionType policy;
 
     policy = g_settings_get_enum (manager->priv->settings, "critical-battery-action");
-    if (policy == GSD_POWER_ACTION_SUSPEND)
-    {
-        if (is_ups == FALSE &&
-                up_client_get_can_suspend (manager->priv->up_client))
-            return policy;
+    /*if (policy == GSD_POWER_ACTION_SUSPEND)*/
+    /*{*/
+    /*if (is_ups == FALSE &&*/
+    /*up_client_get_can_suspend (manager->priv->up_client))*/
+    /*return policy;*/
+    /*return GSD_POWER_ACTION_SHUTDOWN;*/
+    /*}*/
+    /*else if (policy == GSD_POWER_ACTION_HIBERNATE)*/
+    /*{*/
+    /*if (up_client_get_can_hibernate (manager->priv->up_client))*/
+    /*return policy;*/
+    /*return GSD_POWER_ACTION_SHUTDOWN;*/
+    /*}*/
+
+    if (up_client_get_can_suspend(manager->priv->up_client))
+        return policy;
+    else
         return GSD_POWER_ACTION_SHUTDOWN;
-    }
-    else if (policy == GSD_POWER_ACTION_HIBERNATE)
-    {
-        if (up_client_get_can_hibernate (manager->priv->up_client))
-            return policy;
-        return GSD_POWER_ACTION_SHUTDOWN;
-    }
 
     return policy;
 }
@@ -2967,6 +2934,27 @@ idle_configure (GsdPowerManager *manager)
      * as it's what will drive the blank */
     on_battery = up_client_get_on_battery (manager->priv->up_client);
     timeout_blank = 0;
+    if (manager->priv->screensaver_active || manager->priv->current_idle_mode == GSD_POWER_IDLE_MODE_DIM)
+    {
+        /* The tail is wagging the dog.
+         * The screensaver coming on will blank the screen.
+         * If an event occurs while the screensaver is on,
+         * the aggressive idle watch will handle it */
+        /*timeout_blank = SCREENSAVER_TIMEOUT_BLANK;*/
+        timeout_blank = 3;
+    }
+
+    clear_idle_watch (manager->priv->idle_monitor,
+                      &manager->priv->idle_blank_id);
+
+    if (timeout_blank != 0)
+    {
+        g_debug ("setting up blank callback for %is", timeout_blank);
+
+        manager->priv->idle_blank_id = gnome_idle_monitor_add_idle_watch (manager->priv->idle_monitor,
+                                       timeout_blank * 1000,
+                                       idle_triggered_idle_cb, manager, NULL);
+    }
 
     /* only do the sleep timeout when the session is idle
      * and we aren't inhibited from sleeping (or logging out, etc.) */
@@ -3015,7 +3003,6 @@ idle_configure (GsdPowerManager *manager)
     /* set up dim callback for when the screen lock is not active,
      * but only if we actually want to dim. */
     timeout_dim = 0;
-    timeout_blank = 0;
     if (manager->priv->screensaver_active)
     {
         /* Don't dim when the screen lock is active */
@@ -3067,22 +3054,7 @@ idle_configure (GsdPowerManager *manager)
         manager->priv->idle_dim_id = gnome_idle_monitor_add_idle_watch (manager->priv->idle_monitor,
                                      timeout_dim * 1000,
                                      idle_triggered_idle_cb, manager, NULL);
-        timeout_blank = timeout_dim +5;
     }
-
-    //configure blank watch,of which event comes after dim
-    clear_idle_watch (manager->priv->idle_monitor,
-                      &manager->priv->idle_blank_id);
-
-    if (timeout_blank != 0)
-    {
-        g_debug ("setting up blank callback for %is", timeout_blank);
-
-        manager->priv->idle_blank_id = gnome_idle_monitor_add_idle_watch (manager->priv->idle_monitor,
-                                       timeout_blank * 1000,
-                                       idle_triggered_idle_cb, manager, NULL);
-    }
-
 }
 
 static void
@@ -3450,10 +3422,13 @@ idle_triggered_idle_cb (GnomeIdleMonitor *monitor,
     if (watch_id == manager->priv->idle_dim_id)
     {
         idle_set_mode (manager, GSD_POWER_IDLE_MODE_DIM);
+        manager->priv->screensaver_active = TRUE;
+        idle_configure(manager);
     }
     else if (watch_id == manager->priv->idle_blank_id)
     {
         idle_set_mode (manager, GSD_POWER_IDLE_MODE_BLANK);
+        /*manager->priv->screensaver_active = FALSE;*/
     }
     else if (watch_id == manager->priv->idle_sleep_id)
     {
@@ -3776,7 +3751,6 @@ gboolean
 gsd_power_manager_start (GsdPowerManager *manager,
                          GError **error)
 {
-    static gboolean started = FALSE;
     g_debug ("Starting power manager");
     /*gnome_settings_profile_start (NULL);*/
 
@@ -3829,13 +3803,9 @@ gsd_power_manager_start (GsdPowerManager *manager,
     /*manager->priv->settings = g_settings_new(GSD_POWER_SETTINGS_SCHEMA);*/
 
     manager->priv->settings_profile = g_settings_new(DEEPIN_POWER_PROFILE_SCHEMA);
-    if (!started)
-    {
-        g_signal_connect(manager->priv->settings_profile, "changed",
-                         G_CALLBACK(engine_profile_changed_cb),
-                         manager);
-        started = TRUE;
-    }
+    g_signal_connect(manager->priv->settings_profile, "changed",
+                     G_CALLBACK(engine_profile_changed_cb),
+                     manager);
     manager->priv->current_profile = g_settings_get_string(manager->priv->settings_profile,
                                      "current-profile");
     manager->priv->settings_path = (char*)malloc(
