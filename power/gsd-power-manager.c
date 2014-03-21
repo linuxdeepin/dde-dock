@@ -1074,7 +1074,7 @@ engine_device_add (GsdPowerManager *manager, UpDevice *device)
     }
     else if (warning == WARNING_ACTION)
     {
-        g_debug ("charge-action");
+        g_debug ("** EMIT: charge-action");
         engine_charge_action (manager, device);
     }
     /* save new state */
@@ -1173,7 +1173,10 @@ engine_coldplug (GsdPowerManager *manager)
     /* add to database */
     array = up_client_get_devices (manager->priv->up_client);
     if (array == NULL)
+    {
+        g_debug("got NULL device list");
         goto out;
+    }
 
     for (i = 0; i < array->len; i++)
     {
@@ -2190,6 +2193,7 @@ action_suspend (GsdPowerManager *manager)
                        NULL,
                        NULL,
                        NULL);
+    g_debug("action_suspend():called suspend method");
 }
 
 static void
@@ -3480,38 +3484,38 @@ engine_settings_key_changed_cb (GSettings *settings,
     }
 }
 
-static void
-engine_session_properties_changed_cb (GDBusProxy      *session,
-                                      GVariant        *changed,
-                                      char           **invalidated,
-                                      GsdPowerManager *manager)
-{
-    GVariant *v;
+/*static void*/
+/*engine_session_properties_changed_cb (GDBusProxy      *session,*/
+/*GVariant        *changed,*/
+/*char           **invalidated,*/
+/*GsdPowerManager *manager)*/
+/*{*/
+/*GVariant *v;*/
 
-    v = g_variant_lookup_value (changed, "SessionIsActive", G_VARIANT_TYPE_BOOLEAN);
-    if (v)
-    {
-        gboolean active;
+/*v = g_variant_lookup_value (changed, "SessionIsActive", G_VARIANT_TYPE_BOOLEAN);*/
+/*if (v)*/
+/*{*/
+/*gboolean active;*/
 
-        active = g_variant_get_boolean (v);
-        g_debug ("Received session is active change: now %s", active ? "active" : "inactive");
-        /* when doing the fast-user-switch into a new account,
-         * ensure the new account is undimmed and with the backlight on */
-        if (active)
-            idle_set_mode (manager, GSD_POWER_IDLE_MODE_NORMAL);
-        g_variant_unref (v);
+/*active = g_variant_get_boolean (v);*/
+/*g_debug ("Received session is active change: now %s", active ? "active" : "inactive");*/
+/* when doing the fast-user-switch into a new account,
+ * ensure the new account is undimmed and with the backlight on */
+/*if (active)*/
+/*idle_set_mode (manager, GSD_POWER_IDLE_MODE_NORMAL);*/
+/*g_variant_unref (v);*/
 
-    }
+/*}*/
 
-    v = g_variant_lookup_value (changed, "InhibitedActions", G_VARIANT_TYPE_UINT32);
-    if (v)
-    {
-        g_variant_unref (v);
-        g_debug ("Received gnome session inhibitor change");
-        g_debug ("engine_session_properties_changed_cb()\n");
-        idle_configure (manager);
-    }
-}
+/*v = g_variant_lookup_value (changed, "InhibitedActions", G_VARIANT_TYPE_UINT32);*/
+/*if (v)*/
+/*{*/
+/*g_variant_unref (v);*/
+/*g_debug ("Received gnome session inhibitor change");*/
+/*g_debug ("engine_session_properties_changed_cb()\n");*/
+/*idle_configure (manager);*/
+/*}*/
+/*}*/
 
 static void
 inhibit_lid_switch_done (GObject      *source,
@@ -3838,10 +3842,10 @@ gsd_power_manager_start (GsdPowerManager *manager,
                       "device-changed",
                       G_CALLBACK (engine_device_changed_cb), manager);
 
-    /*g_signal_connect_after (manager->priv->up_client,*/
-    /*"changed",*/
-    /*G_CALLBACK (up_client_changed_cb),*/
-    /*manager);*/
+    g_signal_connect_after (manager->priv->up_client,
+                            "changed",
+                            G_CALLBACK (up_client_changed_cb),
+                            manager);
 
     g_signal_connect (manager->priv->up_client, "notify::on-battery",
                       G_CALLBACK (up_client_on_battery_cb), manager);
