@@ -184,6 +184,7 @@ func main() {
 		MANAGER.createNormalApp(id + ".desktop")
 	}
 	listenerRootWindow()
+	initTrayManager()
 	go xevent.Main(XU)
 	dbus.Wait()
 }

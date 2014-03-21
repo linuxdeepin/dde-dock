@@ -4,18 +4,14 @@ import (
 	"bytes"
 	"crypto/md5"
 	"dlib/dbus"
-	"dlib/logger"
 	"github.com/BurntSushi/xgb/composite"
 	"github.com/BurntSushi/xgb/damage"
 	"github.com/BurntSushi/xgb/xproto"
-	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/ewmh"
 	"github.com/BurntSushi/xgbutil/xgraphics"
 	"github.com/BurntSushi/xgbutil/xprop"
 	"github.com/BurntSushi/xgbutil/xwindow"
 )
-
-var LOGGER = logger.NewLogger("com.deepin.dde.TrayManager")
 
 type TrayManager struct {
 	visual xproto.Visualid
@@ -103,7 +99,6 @@ func (m *TrayManager) handleTrayDamage(xid xproto.Window) {
 
 var TRAYMANAGER *TrayManager
 
-var XU, _ = xgbutil.NewConn()
 var _NET_SYSTEM_TRAY_S0, _ = xprop.Atm(XU, "_NET_SYSTEM_TRAY_S0")
 var _NET_SYSTEM_TRAY_OPCODE, _ = xprop.Atm(XU, "_NET_SYSTEM_TRAY_OPCODE")
 
