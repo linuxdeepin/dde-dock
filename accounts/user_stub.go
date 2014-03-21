@@ -261,12 +261,27 @@ func (op *UserManager) updateUserInfo() {
 func addHistoryIcon(filename, iconPath string) []string {
         list, _ := readKeyFileValue(filename, "User",
                 "HistoryIcons", KEY_TYPE_STRING_LIST)
+        if ok, _ := opUtils.IsFileExist(iconPath); !ok {
+                return list.([]string)
+        }
 
         ret := []string{}
         ret = append(ret, iconPath)
+        cnt := 1
         if list != nil {
-                tmp := deleteElementFromList(iconPath, list.([]string))
-                ret = append(ret, tmp...)
+                strs := list.([]string)
+                as := deleteElementFromList(iconPath, strs)
+                for _, l := range as {
+                        if cnt >= 9 {
+                                break
+                        }
+
+                        if ok, _ := opUtils.IsFileExist(l); !ok {
+                                continue
+                        }
+                        ret = append(ret, l)
+                        cnt++
+                }
         }
         writeKeyFileValue(filename, "User",
                 "HistoryIcons", KEY_TYPE_STRING_LIST, ret)
