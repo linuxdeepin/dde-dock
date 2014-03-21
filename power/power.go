@@ -731,14 +731,14 @@ func main() {
 	dbus.InstallOnSession(power)
 	dbus.DealWithUnhandledMessage()
 	fmt.Print("power module started,looping")
-	//go func() {
-	//if err := dbus.Wait(); err != nil {
-	////l.Error("lost dbus session:", err)
-	//os.Exit(1)
-	//} else {
-	//os.Exit(0)
-	//}
-	//}()
+	go func() {
+		if err := dbus.Wait(); err != nil {
+			//l.Error("lost dbus session:", err)
+			os.Exit(1)
+		} else {
+			os.Exit(0)
+		}
+	}()
 
 	dlib.StartLoop()
 }

@@ -1379,9 +1379,10 @@ manager_critical_action_get (GsdPowerManager *manager,
     /*}*/
 
     if (up_client_get_can_suspend(manager->priv->up_client))
-        return policy;
+        return GSD_POWER_ACTION_SUSPEND;
+    /*return policy;*/
     else
-        return GSD_POWER_ACTION_SHUTDOWN;
+        return policy;
 
     return policy;
 }
@@ -2086,74 +2087,74 @@ engine_get_primary_device (GsdPowerManager *manager)
     return device;
 }
 
-static void
-gnome_session_shutdown_cb (GObject *source_object,
-                           GAsyncResult *res,
-                           gpointer user_data)
-{
-    GVariant *result;
-    GError *error = NULL;
+/*static void*/
+/*gnome_session_shutdown_cb (GObject *source_object,*/
+/*GAsyncResult *res,*/
+/*gpointer user_data)*/
+/*{*/
+/*GVariant *result;*/
+/*GError *error = NULL;*/
 
-    result = g_dbus_proxy_call_finish (G_DBUS_PROXY (source_object),
-                                       res,
-                                       &error);
-    if (result == NULL)
-    {
-        g_warning ("couldn't shutdown using gnome-session: %s",
-                   error->message);
-        g_error_free (error);
-    }
-    else
-    {
-        g_variant_unref (result);
-    }
-}
+/*result = g_dbus_proxy_call_finish (G_DBUS_PROXY (source_object),*/
+/*res,*/
+/*&error);*/
+/*if (result == NULL)*/
+/*{*/
+/*g_warning ("couldn't shutdown using gnome-session: %s",*/
+/*error->message);*/
+/*g_error_free (error);*/
+/*}*/
+/*else*/
+/*{*/
+/*g_variant_unref (result);*/
+/*}*/
+/*}*/
 
-static void
-gnome_session_shutdown (GsdPowerManager *manager)
-{
-    g_dbus_proxy_call (manager->priv->session,
-                       "Shutdown",
-                       NULL,
-                       G_DBUS_CALL_FLAGS_NONE,
-                       -1, NULL,
-                       gnome_session_shutdown_cb, NULL);
-}
+/*static void*/
+/*gnome_session_shutdown (GsdPowerManager *manager)*/
+/*{*/
+/*g_dbus_proxy_call (manager->priv->session,*/
+/*"Shutdown",*/
+/*NULL,*/
+/*G_DBUS_CALL_FLAGS_NONE,*/
+/*-1, NULL,*/
+/*gnome_session_shutdown_cb, NULL);*/
+/*}*/
 
-static void
-gnome_session_logout_cb (GObject *source_object,
-                         GAsyncResult *res,
-                         gpointer user_data)
-{
-    GVariant *result;
-    GError *error = NULL;
+/*static void*/
+/*gnome_session_logout_cb (GObject *source_object,*/
+/*GAsyncResult *res,*/
+/*gpointer user_data)*/
+/*{*/
+/*GVariant *result;*/
+/*GError *error = NULL;*/
 
-    result = g_dbus_proxy_call_finish (G_DBUS_PROXY (source_object),
-                                       res,
-                                       &error);
-    if (result == NULL)
-    {
-        g_warning ("couldn't log out using gnome-session: %s",
-                   error->message);
-        g_error_free (error);
-    }
-    else
-    {
-        g_variant_unref (result);
-    }
-}
+/*result = g_dbus_proxy_call_finish (G_DBUS_PROXY (source_object),*/
+/*res,*/
+/*&error);*/
+/*if (result == NULL)*/
+/*{*/
+/*g_warning ("couldn't log out using gnome-session: %s",*/
+/*error->message);*/
+/*g_error_free (error);*/
+/*}*/
+/*else*/
+/*{*/
+/*g_variant_unref (result);*/
+/*}*/
+/*}*/
 
-static void
-gnome_session_logout (GsdPowerManager *manager,
-                      guint            logout_mode)
-{
-    g_dbus_proxy_call (manager->priv->session,
-                       "Logout",
-                       g_variant_new ("(u)", logout_mode),
-                       G_DBUS_CALL_FLAGS_NONE,
-                       -1, NULL,
-                       gnome_session_logout_cb, NULL);
-}
+/*static void*/
+/*gnome_session_logout (GsdPowerManager *manager,*/
+/*guint            logout_mode)*/
+/*{*/
+/*g_dbus_proxy_call (manager->priv->session,*/
+/*"Logout",*/
+/*g_variant_new ("(u)", logout_mode),*/
+/*G_DBUS_CALL_FLAGS_NONE,*/
+/*-1, NULL,*/
+/*gnome_session_logout_cb, NULL);*/
+/*}*/
 
 static void
 action_poweroff (GsdPowerManager *manager)
@@ -2256,7 +2257,7 @@ do_power_action_type (GsdPowerManager *manager,
         action_suspend (manager);
         break;
     case GSD_POWER_ACTION_INTERACTIVE:
-        gnome_session_shutdown (manager);
+        /*gnome_session_shutdown (manager);*/
         break;
     case GSD_POWER_ACTION_HIBERNATE:
         action_hibernate (manager);
@@ -2273,7 +2274,7 @@ do_power_action_type (GsdPowerManager *manager,
     case GSD_POWER_ACTION_NOTHING:
         break;
     case GSD_POWER_ACTION_LOGOUT:
-        gnome_session_logout (manager, GSM_MANAGER_LOGOUT_MODE_FORCE);
+        /*gnome_session_logout (manager, GSM_MANAGER_LOGOUT_MODE_FORCE);*/
         break;
     }
 }
