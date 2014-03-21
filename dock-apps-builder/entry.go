@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 )
 
@@ -87,9 +88,20 @@ func (e *AppEntry) getData(key string) string {
 	return e.Data[key]
 }
 
+type XidInfo struct {
+	Xid   uint32
+	Title string
+}
+
 func (e *AppEntry) update() {
 	if e.rApp != nil {
 		e.setData(FieldStatus, ActiveStatus)
+		xids := make([]XidInfo, 0)
+		for k, v := range e.rApp.xids {
+			xids = append(xids, XidInfo{uint32(k), v.Title})
+		}
+		b, _ := json.Marshal(xids)
+		e.setData(FieldAppXids, string(b))
 	} else if e.nApp != nil {
 		e.setData(FieldStatus, NormalStatus)
 	} else {
@@ -134,7 +146,6 @@ func (e *AppEntry) attachRuntimeApp(rApp *RuntimeApp) {
 	e.rApp = rApp
 	fmt.Println("AttachRuntimeApp:", e.rApp.Id)
 	e.rApp.setChangedCB(e.update)
-	//TODO: e.setPropData(rApp.xids)
 	e.update()
 }
 func (e *AppEntry) detachRuntimeApp() {

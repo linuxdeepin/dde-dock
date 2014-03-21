@@ -35,7 +35,7 @@ func (app *NormalApp) buildMenu() {
 	for _, actionName := range app.core.ListActions() {
 		name := actionName //NOTE: don't directly use 'actionName' with closure in an forloop
 		app.coreMenu.AppendItem(NewMenuItem(
-			name,
+			app.core.GetActionName(actionName),
 			func() { app.core.LaunchAction(name, nil) },
 			true,
 		))

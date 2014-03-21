@@ -47,7 +47,11 @@ func NewRuntimeApp(xid xproto.Window, appId string) *RuntimeApp {
 	app.attachXid(xid)
 	app.CurrentInfo = app.xids[xid]
 	app.core = gio.NewDesktopAppInfo(appId + ".desktop")
-	LOGGER.Info(appId, " ", app.core.ListActions())
+	if app.core != nil {
+		LOGGER.Debug(appId, ", Actions:", app.core.ListActions())
+	} else {
+		LOGGER.Debug(appId, ", Actions:[]")
+	}
 	app.getExec(xid)
 	LOGGER.Debug("Exec:", app.exec)
 	app.buildMenu()
@@ -76,7 +80,7 @@ func (app *RuntimeApp) buildMenu() {
 		itemName = strings.Title(app.core.GetDisplayName())
 	}
 	app.coreMenu.AppendItem(NewMenuItem(
-		itemName,
+		"_"+itemName,
 		func() {
 			var a *gio.AppInfo
 			LOGGER.Info(itemName)
