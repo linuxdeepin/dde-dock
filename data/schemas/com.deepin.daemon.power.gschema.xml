@@ -114,7 +114,7 @@
 	lid is closed and regardless of external monitors.</description>
     </key>
     <key name="critical-battery-action" enum="com.deepin.daemon.GsdPowerActionType">
-      <default>'hibernate'</default>
+      <default>'suspend'</default>
       <summary>Battery critical low action</summary>
       <description>The action to take when the battery is critically low.</description>
     </key>

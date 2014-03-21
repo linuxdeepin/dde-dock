@@ -58,10 +58,11 @@ const (
 )
 
 const (
-	POWER_DEST             = "com.deepin.daemon.Power"
-	POWER_PATH             = "/com/deepin/daemon/Power"
-	POWER_IFC              = "com.deepin.daemon.Power"
-	ORG_FREEDESKTOP_SS_IFC = "org.freedesktop.ScreenSaver"
+	POWER_DEST              = "com.deepin.daemon.Power"
+	POWER_PATH              = "/com/deepin/daemon/Power"
+	POWER_IFC               = "com.deepin.daemon.Power"
+	ORG_FREEDESKTOP_SS_PATH = "/org/freedeskto/ScreenSaver"
+	ORG_FREEDESKTOP_SS_IFC  = "org.freedesktop.ScreenSaver"
 
 	LOGIND_DEST = "org.freedesktop.login1"
 	LOGIND_PATH = "/org/freedesktop/login1"
@@ -102,15 +103,43 @@ const (
 	ACTION_BLANK       = "blank"
 )
 
+type inhibitor struct {
+	appName string
+	reason  string
+}
+
 type ScreenSaver struct {
+	cookies map[int]inhibitor
+	n       uint32
 }
 
 func (ss *ScreenSaver) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		POWER_DEST, //bus name
-		POWER_PATH, //object path
+		POWER_DEST,              //bus name
+		ORG_FREEDESKTOP_SS_PATH, //object path
 		ORG_FREEDESKTOP_SS_IFC,
 	}
+}
+
+func NewScreenSaver() (*ScreenSaver, error) {
+	ss := &ScreenSaver{}
+	ss.cookies = make(map[int]inhibitor)
+	ss.n = 0
+
+	return ss, nil
+}
+
+func (ss *ScreenSaver) Inhibit(appName, reason string) uint32 {
+	ss.cookies[int(ss.n)] = inhibitor{appName, reason}
+	res := ss.n
+	ss.n = ss.n + 1
+	fmt.Println(ss.cookies)
+	return res
+}
+
+func (ss *ScreenSaver) UnInhibit(cookie uint32) {
+	delete(ss.cookies, int(cookie))
+	fmt.Println(ss.cookies)
 }
 
 type Power struct {
@@ -728,7 +757,13 @@ func main() {
 	if err != nil {
 		return
 	}
+	screenSaver, err := NewScreenSaver()
+	if err != nil {
+		return
+	}
+	dbus.InstallOnSession(screenSaver)
 	dbus.InstallOnSession(power)
+
 	dbus.DealWithUnhandledMessage()
 	fmt.Print("power module started,looping")
 	go func() {
