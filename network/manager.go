@@ -43,7 +43,7 @@ type Manager struct {
 	WirelessConnections []*Connection
 	VPNConnections      []*Connection
 
-	NeedSecrets func(dbus.ObjectPath, string, string)
+	NeedSecrets func(string, string, string)
 
 	agent *Agent
 }
