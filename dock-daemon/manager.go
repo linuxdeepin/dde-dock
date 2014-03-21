@@ -12,7 +12,7 @@ type Manager struct {
 	entrireLocker sync.Mutex
 
 	Added   func(dbus.ObjectPath)
-	Removed func(string)
+	Removed func(dbus.ObjectPath)
 }
 
 func (m *Manager) GetDBusInfo() dbus.DBusInfo {
@@ -52,7 +52,7 @@ func (m *Manager) watchEntries() {
 		if len(newOwner) != 0 {
 			go func() {
 				// FIXME: how long time should to wait for
-				time.Sleep(500 * time.Millisecond)
+				time.Sleep(60 * time.Millisecond)
 				m.entrireLocker.Lock()
 				defer m.entrireLocker.Unlock()
 				m.registerEntry(name)
@@ -89,7 +89,7 @@ func (m *Manager) registerEntry(name string) {
 
 	// send signal
 	if m.Added != nil {
-		m.Added(dbus.ObjectPath(entry.objectPath))
+		m.Added(dbus.ObjectPath(entry.GetDBusInfo().ObjectPath))
 	}
 
 	logger.Infof("register entry success: %s", name)
@@ -134,7 +134,7 @@ func (m *Manager) unregisterEntry(name string) {
 
 	// send signal
 	if m.Removed != nil {
-		m.Removed(string(entry.destPath))
+		m.Removed(dbus.ObjectPath(entry.GetDBusInfo().Dest))
 	}
 
 	logger.Infof("unregister entry success: %s", name)

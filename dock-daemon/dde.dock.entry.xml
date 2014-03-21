@@ -4,15 +4,13 @@
 	    <arg type="i" direction="in"></arg>
 	    <arg type="i" direction="in"></arg>
 	</method>
-        <method name="HandleMenuItem">
-            <arg type="i" direction="in"></arg>
-        </method>
 	<method name="ContextMenu">
 	    <arg type="i" direction="in"></arg>
 	    <arg type="i" direction="in"></arg>
 	</method>
-        <method name="HideQuickWindow">
-        </method>
+	<method name="HandleMenuItem">
+	    <arg type="i" direction="in"></arg>
+	</method>
 	<method name="OnDragDrop">
 	    <arg type="i" direction="in"></arg>
 	    <arg type="i" direction="in"></arg>
@@ -33,22 +31,16 @@
 	    <arg type="i" direction="in"></arg>
 	    <arg type="s" direction="in"></arg>
 	</method>
-	<method name="QuickWindow">
-	    <arg type="i" direction="in"></arg>
-	    <arg type="i" direction="in"></arg>
-	</method>
 	<method name="SecondaryActivate">
 	    <arg type="i" direction="in"></arg>
 	    <arg type="i" direction="in"></arg>
 	</method>
+	<signal name="DataChanged">
+	    <arg type="s"></arg>
+	    <arg type="s"></arg>
+	</signal>
 	<property name="Id" type="s" access="read"></property>
 	<property name="Type" type="s" access="read"></property>
-	<property name="Tooltip" type="s" access="read"></property>
-	<property name="Icon" type="s" access="read"></property>
-	<property name="Status" type="i" access="read"></property>
-	<property name="QuickWindowViewable" type="b" access="read"></property>
-	<property name="Allocation" type="(nnqq)" access="read"></property>
-        <property name="Data" type="a{ss}" access="read"></property>
-        <property name="Menu" type="s" access="read"></property>
+	<property name="Data" type="a{ss}" access="read"></property>
     </interface>
 </node>
