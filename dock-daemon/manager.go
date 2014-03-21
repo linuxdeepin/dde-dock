@@ -134,7 +134,7 @@ func (m *Manager) unregisterEntry(name string) {
 
 	// send signal
 	if m.Removed != nil {
-		m.Removed(dbus.ObjectPath(entry.GetDBusInfo().Dest))
+		m.Removed(dbus.ObjectPath(entry.GetDBusInfo().ObjectPath))
 	}
 
 	logger.Infof("unregister entry success: %s", name)
