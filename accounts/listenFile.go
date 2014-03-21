@@ -85,6 +85,34 @@ func (op *UserManager) listenUserInfoChanged(filename string) {
         }()
 }
 
+func (op *UserManager) listenIconListChanged(filename string) {
+        logObject.Info("Watch Icon Dir:", filename)
+        watcher, err := fsnotify.NewWatcher()
+        if err != nil {
+                logObject.Warningf("New Watcher Failed:%v", err)
+                panic(err)
+        }
+
+        err = watcher.Watch(filename)
+        if err != nil {
+                logObject.Warningf("Watch '%s' failed: %s", filename, err)
+                panic(err)
+        }
+
+        go func() {
+                defer watcher.Close()
+                for {
+                        select {
+                        case ev := <-watcher.Event:
+                                logObject.Info("Icon List Event:", ev)
+                                op.setPropName("IconList")
+                        case err := <-watcher.Error:
+                                logObject.Warningf("Watch Error:%v", err)
+                        }
+                }
+        }()
+}
+
 func (op *AccountManager) emitUserListChanged() {
         infos := getUserInfoList()
         destList := []string{}

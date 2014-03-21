@@ -22,6 +22,7 @@
 package main
 
 import (
+        dutils "dbus/com/deepin/api/utils"
         "dlib/dbus"
         "dlib/logger"
         "os"
@@ -30,6 +31,7 @@ import (
 var (
         idUserManagerMap = make(map[string]*UserManager)
         logObject        = logger.NewLogger("daemon/Accounts")
+        opUtils          *dutils.Utils
 )
 
 func main() {
@@ -41,9 +43,15 @@ func main() {
 
         // Configure Logger
         logObject.SetRestartCommand("/usr/lib/deepin-daemon/Accounts")
+        var err error
+        opUtils, err = dutils.NewUtils("com.deepin.api.Utils", "/com/deepin/api/Utils")
+        if err != nil {
+                logObject.Info("New Utils failed:", err)
+                panic(err)
+        }
 
         opAccount := newAccountManager()
-        err := dbus.InstallOnSystem(opAccount)
+        err = dbus.InstallOnSystem(opAccount)
         if err != nil {
                 logObject.Warningf("Install Account Object On System Failed:%v", err)
                 logObject.Fatalf("%v", err)

@@ -29,7 +29,7 @@ import (
 )
 
 func getRandUserIcon() string {
-        list := getSystemIconList()
+        list := getIconList(ICON_SYSTEM_DIR)
         l := len(list)
         if l <= 0 {
                 return ""
@@ -41,11 +41,11 @@ func getRandUserIcon() string {
         return list[index]
 }
 
-func getSystemIconList() []string {
-        iconfd, err := os.Open(ICON__SYSTEM_DIR)
+func getIconList(dir string) []string {
+        iconfd, err := os.Open(dir)
         if err != nil {
                 logObject.Warningf("Open '%s' failed: %v",
-                        ICON__SYSTEM_DIR, err)
+                        dir, err)
                 return []string{}
         }
 
@@ -57,8 +57,12 @@ func getSystemIconList() []string {
                 } else if strings.Contains(v, "jpg") ||
                         strings.Contains(v, "JPG") ||
                         strings.Contains(v, "png") ||
-                        strings.Contains(v, "PNG") {
-                        list = append(list, ICON__SYSTEM_DIR+v)
+                        strings.Contains(v, "PNG") ||
+                        strings.Contains(v, "jpeg") ||
+                        strings.Contains(v, "JPEG") ||
+                        strings.Contains(v, "gif") ||
+                        strings.Contains(v, "GIF") {
+                        list = append(list, dir+"/"+v)
                 }
         }
 

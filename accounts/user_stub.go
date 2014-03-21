@@ -22,8 +22,8 @@
 package main
 
 import (
-        dutils "dbus/com/deepin/api/utils"
         "dlib/dbus"
+        "strings"
 )
 
 const (
@@ -49,6 +49,7 @@ type UserManager struct {
         Locked         bool
         LoginTime      uint64
         HistoryIcons   []string
+        IconList       []string
         objectPath     string
 }
 
@@ -184,7 +185,6 @@ func (op *UserManager) setPropName(propName string) {
                                 op.BackgroundFile = USER_DEFAULT_BG
                         } else {
                                 tmp := v.(string)
-                                opUtils, _ := dutils.NewUtils("com.deepin.api.Utils", "/com/deepin/api/Utils")
                                 uri, _, _ := opUtils.PathToFileURI(tmp)
                                 op.BackgroundFile = uri
                         }
@@ -223,6 +223,18 @@ func (op *UserManager) setPropName(propName string) {
                                 op.HistoryIcons = v.([]string)
                         }
                 }
+        case "IconList":
+                list := []string{}
+
+                sysList := getIconList(ICON_SYSTEM_DIR)
+                list = append(list, sysList...)
+                localList := getIconList(ICON_LOCAL_DIR)
+                for _, l := range localList {
+                        if strings.Contains(l, op.UserName+"-") {
+                                list = append(list, l)
+                        }
+                }
+                op.IconList = list
         }
         dbus.NotifyChange(op, propName)
 }

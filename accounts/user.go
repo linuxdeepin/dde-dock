@@ -21,11 +21,17 @@
 
 package main
 
+import (
+        "os"
+)
+
 const (
         POLKIT_CHANGED_OWN_DATA = "com.deepin.daemon.accounts.change-own-user-data"
         POLKIT_MANAGER_USER     = "com.deepin.daemon.accounts.user-administration"
         POLKIT_SET_LOGIN_OPTION = "com.deepin.daemon.accounts.set-login-option"
-        ICON__SYSTEM_DIR        = "/var/lib/AccountsService/icons/"
+
+        ICON_SYSTEM_DIR = "/var/lib/AccountsService/icons"
+        ICON_LOCAL_DIR  = "/var/lib/AccountsService/icons/local"
 )
 
 func (op *UserManager) SetUserName(username string) {
@@ -88,10 +94,25 @@ func (op *UserManager) SetLocked(locked bool) {
 
 func (op *UserManager) SetIconFile(icon string) {
         //authWithPolkit(POLKIT_CHANGED_OWN_DATA)
-        if op.IconFile != icon {
-                op.applyPropertiesChanged("IconFile", icon)
-                op.setPropName("IconFile")
+        if ok, _ := opUtils.IsFileExist(icon); !ok || op.IconFile == icon {
+                return
         }
+
+        if !isElementExist(icon, op.IconList) {
+                if ok, _ := opUtils.IsFileExist(ICON_LOCAL_DIR); !ok {
+                        if err := os.MkdirAll(ICON_LOCAL_DIR, 0755); err != nil {
+                                return
+                        }
+                }
+                name, _, _ := opUtils.GetBaseName(icon)
+                dest := ICON_LOCAL_DIR + "/" + op.UserName + "-" + name
+                if ok, _ := opUtils.CopyFile(icon, dest); !ok {
+                        return
+                }
+                icon = dest
+        }
+        op.applyPropertiesChanged("IconFile", icon)
+        op.setPropName("IconFile")
 }
 
 func (op *UserManager) SetBackgroundFile(bg string) {
@@ -100,15 +121,6 @@ func (op *UserManager) SetBackgroundFile(bg string) {
                 op.applyPropertiesChanged("BackgroundFile", bg)
                 op.setPropName("BackgroundFile")
         }
-}
-
-func (op *UserManager) GetIconList() []string {
-        list := []string{}
-
-        sysList := getSystemIconList()
-        list = append(list, sysList...)
-
-        return list
 }
 
 func (op *UserManager) DeleteHistoryIcon(icon string) {
@@ -127,8 +139,11 @@ func newUserManager(uid string) *UserManager {
 
         m.Uid = uid
         m.updateUserInfo()
+        m.setPropName("IconList")
         m.listenUserInfoChanged(ETC_GROUP)
         m.listenUserInfoChanged(ETC_SHADOW)
+        m.listenIconListChanged(ICON_SYSTEM_DIR)
+        m.listenIconListChanged(ICON_LOCAL_DIR)
 
         return m
 }
