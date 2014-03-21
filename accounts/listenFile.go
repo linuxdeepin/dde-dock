@@ -23,19 +23,22 @@ package main
 
 import (
         "github.com/howeyc/fsnotify"
+        "os"
 )
 
 func (op *AccountManager) listenUserListChanged() {
         watcher, err := fsnotify.NewWatcher()
         if err != nil {
                 logObject.Warningf("New Watcher Failed:%v", err)
-                panic(err)
+                //panic(err)
+                return
         }
 
         err = watcher.Watch(ETC_PASSWD)
         if err != nil {
                 logObject.Warningf("Watch File '%s' Failed: %v", ETC_PASSWD, err)
-                panic(err)
+                //panic(err)
+                return
         }
 
         go func() {
@@ -59,13 +62,15 @@ func (op *UserManager) listenUserInfoChanged(filename string) {
         watcher, err := fsnotify.NewWatcher()
         if err != nil {
                 logObject.Warningf("New Watcher Failed:%v", err)
-                panic(err)
+                //panic(err)
+                return
         }
 
         err = watcher.Watch(filename)
         if err != nil {
                 logObject.Warningf("Watch '%s' failed: %s", filename, err)
-                panic(err)
+                //panic(err)
+                return
         }
 
         go func() {
@@ -86,17 +91,23 @@ func (op *UserManager) listenUserInfoChanged(filename string) {
 }
 
 func (op *UserManager) listenIconListChanged(filename string) {
-        logObject.Info("Watch Icon Dir:", filename)
+        if ok, _ := opUtils.IsFileExist(filename); !ok {
+                if err := os.MkdirAll(filename, 0755); err != nil {
+                        return
+                }
+        }
         watcher, err := fsnotify.NewWatcher()
         if err != nil {
                 logObject.Warningf("New Watcher Failed:%v", err)
-                panic(err)
+                //panic(err)
+                return
         }
 
         err = watcher.Watch(filename)
         if err != nil {
                 logObject.Warningf("Watch '%s' failed: %s", filename, err)
-                panic(err)
+                //panic(err)
+                return
         }
 
         go func() {
