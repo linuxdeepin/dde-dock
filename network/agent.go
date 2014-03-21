@@ -131,3 +131,6 @@ func newAgent(identify string) *Agent {
 func (m *Manager) FeedSecret(path dbus.ObjectPath, name, key string) {
 	m.agent.feedSecret(path, name, key)
 }
+func (m *Manager) CancelSecret(path dbus.ObjectPath, name string) {
+	m.agent.CancelGetSecrtes(path, name)
+}

@@ -250,6 +250,8 @@ int pa_set_source_output_volume(pa *self, int index, pa_cvolume *volume);
 int pa_inc_source_output_volume(pa *self, int index, int volume);
 int pa_dec_source_output_volume(pa *self, int index, int volume);
 
+int pa_connect_stream_record(pa *self,char *dev_name);
+
 void pa_state_cb(pa_context *c, void *userdata);
 void pa_context_subscribe_cb(pa_context *c, pa_subscription_event_type_t t,
                              uint32_t index, void *userdata);
