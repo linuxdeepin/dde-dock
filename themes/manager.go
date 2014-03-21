@@ -143,7 +143,7 @@ func (op *Manager) SetBackgroundFile(name string) (string, bool) {
         if !isElementExist(name, op.BackgroundList) {
                 // Copy name to Custom dir
                 logObject.Infof("Copy '%s' To Custom", name)
-                dir := getHomeDir() + "/" + BACKGROUND_PERSON_LOCAL_DIR + "/Custom"
+                dir := getHomeDir() + THUMB_LOCAL_THEME_PATH + "/Custom/" + PERSON_BG_DIR_NAME
                 if ok, _ := objUtil.IsFileExist(dir); !ok {
                         if err := os.MkdirAll(dir, 0755); err != nil {
                                 return op.CurrentTheme, false
@@ -408,8 +408,6 @@ func newManager() *Manager {
         m.listenThemeDir(SOUND_THEME_PATH)
 
         m.listenBackgroundDir(BACKGROUND_DEFAULT_DIR)
-        m.listenBackgroundDir(BACKGROUND_PERSON_SYS_DIR)
-        m.listenBackgroundDir(homeDir + "/" + BACKGROUND_PERSON_LOCAL_DIR)
 
         return m
 }

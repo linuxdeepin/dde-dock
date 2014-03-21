@@ -27,9 +27,8 @@ import (
 )
 
 const (
-        BACKGROUND_DEFAULT_DIR      = "/usr/share/backgrounds"
-        BACKGROUND_PERSON_SYS_DIR   = "/usr/share/deepin-personalization/wallpappers"
-        BACKGROUND_PERSON_LOCAL_DIR = ".deepin-personalization/wallpappers"
+        BACKGROUND_DEFAULT_DIR = "/usr/share/backgrounds"
+        PERSON_BG_DIR_NAME     = "wallpappers"
 )
 
 func getBackgroundList() []string {
@@ -39,7 +38,7 @@ func getBackgroundList() []string {
                 list = append(list, defaultList...)
         }
 
-        if dirs, ok := getDirPath(BACKGROUND_PERSON_SYS_DIR); ok {
+        if dirs, ok := getDirPath(THUMB_THEME_PATH); ok {
                 for _, d := range dirs {
                         if l, ok := getImagePath(d); ok {
                                 list = append(list, l...)
@@ -48,7 +47,7 @@ func getBackgroundList() []string {
         }
 
         homeDir := getHomeDir()
-        if dirs, ok := getDirPath(homeDir + "/" + BACKGROUND_PERSON_LOCAL_DIR); ok {
+        if dirs, ok := getDirPath(homeDir + THUMB_LOCAL_THEME_PATH); ok {
                 for _, d := range dirs {
                         if l, ok := getImagePath(d); ok {
                                 list = append(list, l...)
@@ -56,7 +55,7 @@ func getBackgroundList() []string {
                 }
         }
 
-        logObject.Infof("Background List: %v", list)
+        //logObject.Infof("Background List: %v", list)
         return list
 }
 
@@ -79,10 +78,13 @@ func getDirPath(dir string) ([]string, bool) {
         }
 
         list := []string{}
+        conditions := []string{PERSON_BG_DIR_NAME}
         for _, i := range fi {
                 if i.IsDir() {
                         path := dir + "/" + i.Name()
-                        list = append(list, path)
+                        if filterTheme(path, conditions) {
+                                list = append(list, path+"/"+PERSON_BG_DIR_NAME)
+                        }
                 }
         }
 
