@@ -22,9 +22,9 @@ type Monitor struct {
 	Name           string
 	FullName       string
 
-	X               int16
-	Y               int16
-	relativePosInfo [2]string
+	X int16
+	Y int16
+	//relativePosInfo [2]string
 
 	Opened   bool
 	Rotation uint16
@@ -85,7 +85,8 @@ func (m *Monitor) SetBrightness(name string, v float64) {
 
 func (m *Monitor) SetPos(x, y int16) {
 	m.setPropXY(x, y)
-	m.relativePosInfo[0], m.relativePosInfo[1] = "", ""
+	fmt.Println("SetPOS:", m.Name, x, y)
+	//m.relativePosInfo[0], m.relativePosInfo[1] = "", ""
 }
 
 func (m *Monitor) SetRelativePos(reference string, pos string) {
@@ -96,7 +97,7 @@ func (m *Monitor) SetRelativePos(reference string, pos string) {
 				return
 			}
 		}
-		m.relativePosInfo[0], m.relativePosInfo[1] = pos, reference
+		//m.relativePosInfo[0], m.relativePosInfo[1] = pos, reference
 	}
 }
 
@@ -126,11 +127,11 @@ func (m *Monitor) generateShell() string {
 			} else {
 				code = fmt.Sprintf("%s --mode %dx%d --rate %f", code, m.CurrentMode.Width, m.CurrentMode.Height, m.CurrentMode.Rate)
 			}
-			if len(m.relativePosInfo[0]) != 0 && len(m.relativePosInfo[1]) != 0 {
-				code = fmt.Sprintf(" %s --%s %s", code, strings.Split(m.relativePosInfo[0], joinSeparator)[0], m.relativePosInfo[1])
-			} else {
-				code = fmt.Sprintf(" %s --pos %dx%d", code, m.X, m.Y)
-			}
+			//if len(m.relativePosInfo[0]) != 0 && len(m.relativePosInfo[1]) != 0 {
+			//code = fmt.Sprintf(" %s --%s %s", code, strings.Split(m.relativePosInfo[0], joinSeparator)[0], m.relativePosInfo[1])
+			//} else {
+			code = fmt.Sprintf(" %s --pos %dx%d", code, m.X, m.Y)
+			//}
 
 			if m.scaleMode {
 				code = fmt.Sprintf("%s --scale-from %dx%d", code, m.Width, m.Height)
@@ -178,7 +179,6 @@ func (m *Monitor) updateInfo() {
 		m.setPropHeight(0)
 		m.setPropRotation(1)
 		m.setPropReflect(0)
-		m.setPropCurrentMode(Mode{})
 		m.SetMode(0)
 	} else {
 		m.SwitchOn(true)
@@ -283,10 +283,6 @@ func NewMonitor(outputs []randr.Output) *Monitor {
 		for _, mode := range m.ListModes() {
 			if mode.Width+mode.Height > best.Width+best.Height {
 				best = mode
-			}
-			if m.BestMode.ID == mode.ID {
-				best = m.BestMode
-				break
 			}
 		}
 		m.BestMode = best

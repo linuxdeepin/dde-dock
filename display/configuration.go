@@ -203,17 +203,17 @@ func (dpy *Display) ResetChanged() {
 
 func (m *Monitor) saveStatus() *_MonitorConfiguration {
 	return &_MonitorConfiguration{
-		Name:         m.Name,
-		Width:        m.Width,
-		Height:       m.Height,
-		RefreshRate:  m.CurrentMode.Rate,
-		X:            m.X,
-		Y:            m.Y,
-		RelativeInfo: m.relativePosInfo,
-		Enabled:      m.Opened,
-		Rotation:     m.Rotation,
-		Reflect:      m.Reflect,
-		Brightness:   m.Brightness,
+		Name:        m.Name,
+		Width:       m.Width,
+		Height:      m.Height,
+		RefreshRate: m.CurrentMode.Rate,
+		X:           m.X,
+		Y:           m.Y,
+		//RelativeInfo: m.relativePosInfo,
+		Enabled:    m.Opened,
+		Rotation:   m.Rotation,
+		Reflect:    m.Reflect,
+		Brightness: m.Brightness,
 	}
 }
 
@@ -229,9 +229,9 @@ func (dpy *Display) updateMonitorList() {
 			continue
 		}
 		m := NewMonitor([]randr.Output{op})
-		if mcfg, ok := __CFG__.Monitors[m.Name]; ok {
-			m.relativePosInfo = mcfg.RelativeInfo
-		}
+		//if mcfg, ok := __CFG__.Monitors[m.Name]; ok {
+		//m.relativePosInfo = mcfg.RelativeInfo
+		//}
 		monitors = append(monitors, m)
 	}
 	setAutoFlag := len(dpy.Monitors) > len(monitors)
