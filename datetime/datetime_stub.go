@@ -80,7 +80,7 @@ func (op *Manager) listenSettings() {
 }
 
 func (op *Manager) listenZone() {
-        if ok, _ := objUtils.IsFileExist(_TIME_ZONE_FILE); !ok {
+        if ok := objUtils.IsFileExist(_TIME_ZONE_FILE); !ok {
                 f, err := os.Create(_TIME_ZONE_FILE)
                 if err != nil {
                         logger.Info("Create '%s' Failed: %v\n",

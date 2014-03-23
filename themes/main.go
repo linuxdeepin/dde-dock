@@ -22,11 +22,11 @@
 package main
 
 import (
-        "dbus/com/deepin/api/utils"
         xs "dbus/com/deepin/sessionmanager"
         "dlib"
         "dlib/dbus"
         "dlib/logger"
+        "dlib/utils"
         "os"
         "sync"
 )
@@ -34,7 +34,7 @@ import (
 var (
         objManager       *Manager
         objXSettings     *xs.XSettings
-        objUtil          *utils.Utils
+        objUtil          *utils.Manager
         mutex            = new(sync.Mutex)
         logObject        = logger.NewLogger("daemon/themes")
         themeObjMap      = make(map[string]*Theme)
@@ -109,12 +109,7 @@ func main() {
                 panic(err)
         }
 
-        objUtil, err = utils.NewUtils("com.deepin.api.Utils",
-                "/com/deepin/api/Utils")
-        if err != nil {
-                logObject.Infof("New Utils Object Failed: %v", err)
-                return
-        }
+        objUtil = utils.NewUtils()
 
         objManager = newManager()
         err = dbus.InstallOnSession(objManager)

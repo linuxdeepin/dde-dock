@@ -133,7 +133,7 @@ func (op *Theme) updateThemeInfo() {
                         str = homeDir + "/" + BG_DIR_LOCAL + "/" + op.Name + "/" + str
                 }
         }
-        fileUri, _, _ := objUtil.PathToFileURI(str)
+        fileUri, _ := objUtil.PathToFileURI(str)
         op.BackgroundFile = fileUri
         dbus.NotifyChange(op, "BackgroundFile")
 

@@ -67,7 +67,7 @@ func gtkPreviewPath(name string) string {
         }
 
         path += "/" + name + "/preview.png"
-        if ok, _ := objUtil.IsFileExist(path); !ok {
+        if ok := objUtil.IsFileExist(path); !ok {
                 return ""
         }
 
@@ -90,7 +90,7 @@ func iconPreviewPath(name string) string {
         }
 
         path += "/" + name + "/preview.png"
-        if ok, _ := objUtil.IsFileExist(path); !ok {
+        if ok := objUtil.IsFileExist(path); !ok {
                 return ""
         }
 
@@ -113,7 +113,7 @@ func cursorPreviewPath(name string) string {
         }
 
         path += "/" + name + "/preview.png"
-        if ok, _ := objUtil.IsFileExist(path); !ok {
+        if ok := objUtil.IsFileExist(path); !ok {
                 return ""
         }
 

@@ -91,7 +91,7 @@ func (op *UserManager) listenUserInfoChanged(filename string) {
 }
 
 func (op *UserManager) listenIconListChanged(filename string) {
-        if ok, _ := opUtils.IsFileExist(filename); !ok {
+        if ok := opUtils.IsFileExist(filename); !ok {
                 if err := os.MkdirAll(filename, 0755); err != nil {
                         return
                 }

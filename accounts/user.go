@@ -94,19 +94,19 @@ func (op *UserManager) SetLocked(locked bool) {
 
 func (op *UserManager) SetIconFile(icon string) {
         //authWithPolkit(POLKIT_CHANGED_OWN_DATA)
-        if ok, _ := opUtils.IsFileExist(icon); !ok || op.IconFile == icon {
+        if ok := opUtils.IsFileExist(icon); !ok || op.IconFile == icon {
                 return
         }
 
-        if !isElementExist(icon, op.IconList) {
-                if ok, _ := opUtils.IsFileExist(ICON_LOCAL_DIR); !ok {
+        if !opUtils.IsElementExist(icon, op.IconList) {
+                if ok := opUtils.IsFileExist(ICON_LOCAL_DIR); !ok {
                         if err := os.MkdirAll(ICON_LOCAL_DIR, 0755); err != nil {
                                 return
                         }
                 }
-                name, _, _ := opUtils.GetBaseName(icon)
+                name, _ := opUtils.GetBaseName(icon)
                 dest := ICON_LOCAL_DIR + "/" + op.UserName + "-" + name
-                if ok, _ := opUtils.CopyFile(icon, dest); !ok {
+                if ok := opUtils.CopyFile(icon, dest); !ok {
                         return
                 }
                 icon = dest

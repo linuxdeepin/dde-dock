@@ -2,12 +2,12 @@ package main
 
 import (
         "dbus/com/deepin/api/setdatetime"
-        libutils "dbus/com/deepin/api/utils"
         "dlib"
         "dlib/dbus"
         "dlib/dbus/property"
         "dlib/gio-2.0"
         dlogger "dlib/logger"
+        libutils "dlib/utils"
         "github.com/howeyc/fsnotify"
         "os"
 )
@@ -25,7 +25,7 @@ var (
         busConn      *dbus.Conn
         dateSettings = gio.NewSettings(_DATE_TIME_SCHEMA)
 
-        objUtils    *libutils.Utils
+        objUtils    *libutils.Manager
         setDate     *setdatetime.SetDateTime
         zoneWatcher *fsnotify.Watcher
         logger      = dlogger.NewLogger("dde-daemon/datetime")
@@ -85,7 +85,7 @@ func (op *Manager) AddUserTimezoneList(tz string) {
         }
 
         list := dateSettings.GetStrv("user-timezone-list")
-        if isElementExist(tz, list) {
+        if objUtils.IsElementExist(tz, list) {
                 return
         }
 
@@ -99,7 +99,7 @@ func (op *Manager) DeleteTimezoneList(tz string) {
         }
 
         list := dateSettings.GetStrv("user-timezone-list")
-        if !isElementExist(tz, list) {
+        if !objUtils.IsElementExist(tz, list) {
                 return
         }
 
@@ -157,17 +157,13 @@ func main() {
 
         // configure logger
         logger.SetRestartCommand("/usr/lib/deepin-daemon/datetime", "--debug")
-        if isElementExist("-d", os.Args) || isElementExist("--debug", os.Args) {
+        if objUtils.IsElementExist("-d", os.Args) ||
+                objUtils.IsElementExist("--debug", os.Args) {
                 logger.SetLogLevel(dlogger.LEVEL_DEBUG)
         }
 
         var err error
-        objUtils, err = libutils.NewUtils("com.deepin.api.Utils",
-                "/com/deepin/api/Utils")
-        if err != nil {
-                logger.Warning("New Utils Failed: %v\n", err)
-                panic(err)
-        }
+        objUtils = libutils.NewUtils()
 
         Init()
 

@@ -135,24 +135,24 @@ func (op *Manager) SetBackgroundFile(name string) (string, bool) {
                 return op.CurrentTheme, false
         }
 
-        name, _, _ = objUtil.PathToFileURI(name)
-        if ok, _ := objUtil.IsFileExist(name); !ok {
+        name, _ = objUtil.PathToFileURI(name)
+        if ok := objUtil.IsFileExist(name); !ok {
                 return op.CurrentTheme, false
         }
 
-        if !isElementExist(name, op.BackgroundList) {
+        if !objUtil.IsElementExist(name, op.BackgroundList) {
                 // Copy name to Custom dir
                 logObject.Infof("Copy '%s' To Custom", name)
                 dir := getHomeDir() + THUMB_LOCAL_THEME_PATH + "/Custom/" + PERSON_BG_DIR_NAME
-                if ok, _ := objUtil.IsFileExist(dir); !ok {
+                if ok := objUtil.IsFileExist(dir); !ok {
                         if err := os.MkdirAll(dir, 0755); err != nil {
                                 return op.CurrentTheme, false
                         }
                 }
-                src, _, _ := objUtil.URIToPath(name)
-                baseName, _, _ := objUtil.GetBaseName(src)
+                src, _ := objUtil.URIToPath(name)
+                baseName, _ := objUtil.GetBaseName(src)
                 path := dir + "/" + baseName
-                if ok, _ := objUtil.CopyFile(src, path); !ok {
+                if ok := objUtil.CopyFile(src, path); !ok {
                         return op.CurrentTheme, false
                 }
                 name = path
@@ -303,7 +303,7 @@ func createTheme(name, gtk, icon, cursor, gtkFont, bg, sound string) bool {
         homeDir := getHomeDir()
         path := homeDir + THUMB_LOCAL_THEME_PATH + "/" + name
         logObject.Infof("Theme Dir:%s", path)
-        if ok, _ := objUtil.IsFileExist(path); !ok {
+        if ok := objUtil.IsFileExist(path); !ok {
                 logObject.Infof("Create Theme Dir: %s", path)
                 err := os.MkdirAll(path, 0755)
                 if err != nil {
@@ -314,7 +314,7 @@ func createTheme(name, gtk, icon, cursor, gtkFont, bg, sound string) bool {
 
         filename := path + "/" + "theme.ini"
         logObject.Infof("Theme Config File:%s", filename)
-        if ok, _ := objUtil.IsFileExist(filename); !ok {
+        if ok := objUtil.IsFileExist(filename); !ok {
                 logObject.Infof("Create Theme Config File: %s", filename)
                 f, err := os.Create(filename)
                 if err != nil {

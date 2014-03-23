@@ -34,7 +34,7 @@ func (op *Manager) listenThemeDir(dir string) {
                 return
         }
 
-        if ok, _ := objUtil.IsFileExist(dir); !ok {
+        if ok := objUtil.IsFileExist(dir); !ok {
                 err = os.MkdirAll(dir, 0755)
                 if err != nil {
                         logObject.Infof("Make dir '%s' failed: %v", dir, err)
@@ -64,7 +64,7 @@ func (op *Manager) listenThemeDir(dir string) {
 }
 
 func (op *Manager) listenBackgroundDir(dir string) {
-        if ok, _ := objUtil.IsFileExist(dir); !ok {
+        if ok := objUtil.IsFileExist(dir); !ok {
                 err := os.MkdirAll(dir, 0755)
                 if err != nil {
                         logObject.Infof("mkdir '%s' failed: %v", dir, err)

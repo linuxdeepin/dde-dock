@@ -199,7 +199,7 @@ func newUserInfo(name, uid, gid, home, shell string) UserInfo {
 }
 
 func userIsFilterList(name string) bool {
-        return isElementExist(name, filterList)
+        return opUtils.IsElementExist(name, filterList)
 }
 
 func userIsHuman(info *UserInfo) bool {

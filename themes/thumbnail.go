@@ -67,7 +67,7 @@ func gtkThumbPath(name string) string {
         }
 
         path += "/" + name + "/thumbnail.png"
-        if ok, _ := objUtil.IsFileExist(path); !ok {
+        if ok := objUtil.IsFileExist(path); !ok {
                 return ""
         }
 
@@ -90,7 +90,7 @@ func iconThumbPath(name string) string {
         }
 
         path += "/" + name + "/thumbnail.png"
-        if ok, _ := objUtil.IsFileExist(path); !ok {
+        if ok := objUtil.IsFileExist(path); !ok {
                 return ""
         }
 
@@ -113,7 +113,7 @@ func cursorThumbPath(name string) string {
         }
 
         path += "/" + name + "/thumbnail.png"
-        if ok, _ := objUtil.IsFileExist(path); !ok {
+        if ok := objUtil.IsFileExist(path); !ok {
                 return ""
         }
 

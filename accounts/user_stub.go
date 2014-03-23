@@ -115,12 +115,12 @@ func (op *UserManager) applyPropertiesChanged(propName string, value interface{}
                         switch v {
                         case ACCOUNT_TYPE_STANDARD:
                                 admList := getAdministratorList()
-                                if isElementExist(op.UserName, admList) {
+                                if opUtils.IsElementExist(op.UserName, admList) {
                                         deleteUserFromAdmList(op.UserName)
                                 }
                         case ACCOUNT_TYPE_ADMINISTACTOR:
                                 admList := getAdministratorList()
-                                if !isElementExist(op.UserName, admList) {
+                                if !opUtils.IsElementExist(op.UserName, admList) {
                                         addUserToAdmList(op.UserName)
                                 }
                         }
@@ -185,7 +185,7 @@ func (op *UserManager) setPropName(propName string) {
                                 op.BackgroundFile = USER_DEFAULT_BG
                         } else {
                                 tmp := v.(string)
-                                uri, _, _ := opUtils.PathToFileURI(tmp)
+                                uri, _ := opUtils.PathToFileURI(tmp)
                                 op.BackgroundFile = uri
                         }
                 }
@@ -198,7 +198,7 @@ func (op *UserManager) setPropName(propName string) {
                 }
         case "AccountType":
                 admList := getAdministratorList()
-                if isElementExist(op.UserName, admList) {
+                if opUtils.IsElementExist(op.UserName, admList) {
                         op.AccountType = ACCOUNT_TYPE_ADMINISTACTOR
                 } else {
                         op.AccountType = ACCOUNT_TYPE_STANDARD
@@ -261,7 +261,7 @@ func (op *UserManager) updateUserInfo() {
 func addHistoryIcon(filename, iconPath string) []string {
         list, _ := readKeyFileValue(filename, "User",
                 "HistoryIcons", KEY_TYPE_STRING_LIST)
-        if ok, _ := opUtils.IsFileExist(iconPath); !ok {
+        if ok := opUtils.IsFileExist(iconPath); !ok {
                 return list.([]string)
         }
 
@@ -276,7 +276,7 @@ func addHistoryIcon(filename, iconPath string) []string {
                                 break
                         }
 
-                        if ok, _ := opUtils.IsFileExist(l); !ok {
+                        if ok := opUtils.IsFileExist(l); !ok {
                                 continue
                         }
                         ret = append(ret, l)

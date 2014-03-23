@@ -60,7 +60,7 @@ func getBackgroundList() []string {
 }
 
 func getDirPath(dir string) ([]string, bool) {
-        if ok, _ := objUtil.IsFileExist(dir); !ok {
+        if ok := objUtil.IsFileExist(dir); !ok {
                 return []string{}, false
         }
 
@@ -92,7 +92,7 @@ func getDirPath(dir string) ([]string, bool) {
 }
 
 func getImagePath(dir string) ([]string, bool) {
-        if ok, _ := objUtil.IsFileExist(dir); !ok {
+        if ok := objUtil.IsFileExist(dir); !ok {
                 return []string{}, false
         }
 
@@ -118,7 +118,7 @@ func getImagePath(dir string) ([]string, bool) {
                                 strings.Contains(name, "png") ||
                                 strings.Contains(name, "PNG") {
                                 path := dir + "/" + name
-                                if tmp, ok, _ := objUtil.PathToFileURI(path); ok {
+                                if tmp, ok := objUtil.PathToFileURI(path); ok {
                                         list = append(list, tmp)
                                 }
                         }

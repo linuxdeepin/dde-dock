@@ -83,7 +83,7 @@ func convertCityToZone(city string) string {
 }
 
 func isInUnderlineList(key string) bool {
-        ok := isElementExist(key, noUnderlineList)
+        ok := objUtils.IsElementExist(key, noUnderlineList)
         if ok {
                 return false
         }
