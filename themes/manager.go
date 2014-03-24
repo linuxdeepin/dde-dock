@@ -161,12 +161,11 @@ func (op *Manager) SetBackgroundFile(name string) (string, bool) {
         if obj := op.getThemeObject(op.CurrentTheme); obj != nil {
                 v := op.setTheme(obj.GtkTheme, obj.IconTheme,
                         obj.CursorTheme, obj.FontName, name, obj.SoundTheme)
+                // sync value to gsettings
+                op.updateGSettingsKey(GKEY_CURRENT_BACKGROUND, name)
                 op.updateGSettingsKey(GKEY_CURRENT_THEME, v)
                 return v, true
         }
-
-        // sync value to gsettings
-        op.updateGSettingsKey(GKEY_CURRENT_BACKGROUND, name)
 
         return op.CurrentTheme, false
 }
@@ -179,12 +178,11 @@ func (op *Manager) SetSoundTheme(name string) (string, bool) {
         if obj := op.getThemeObject(op.CurrentTheme); obj != nil {
                 v := op.setTheme(obj.GtkTheme, obj.IconTheme,
                         obj.CursorTheme, obj.FontName, obj.BackgroundFile, name)
+                // sync value to gsettings
+                op.updateGSettingsKey(GKEY_CURRENT_SOUND_THEME, name)
                 op.updateGSettingsKey(GKEY_CURRENT_THEME, v)
                 return v, true
         }
-
-        // sync value to gsettings
-        op.updateGSettingsKey(GKEY_CURRENT_SOUND_THEME, name)
 
         return op.CurrentTheme, false
 }
