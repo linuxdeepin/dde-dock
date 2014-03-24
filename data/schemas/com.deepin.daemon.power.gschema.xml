@@ -59,7 +59,14 @@
       <default>'suspend'</default>
       <summary>Whether to hibernate, suspend or do nothing when inactive</summary>
       <description>The type of sleeping that should be performed when the computer is inactive.</description>
+      </key>
+
+      <key type="b" name="lock-enabled">
+      <default>true</default>
+      <summary>Lock on activation</summary>
+      <description>Set this to TRUE to lock the screen when the screensaver goes active or computer is suspended.</description>
     </key>
+
     <!--<key type='i' name="sleep-display-ac" >-->
       <!--<default>0</default>-->
       <!--<summary>Whether to hibernate, suspend or do nothing when inactive</summary>-->

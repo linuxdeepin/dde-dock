@@ -66,6 +66,10 @@
 #define DEEPIN_POWER_SETTINGS_SCHEMA            "com.deepin.daemon.power.settings"
 #define DEEPIN_POWER_SETTINGS_PATH_PRE          "/com/deepin/daemon/power/profiles/"
 
+#define DEEPIN_SCREENSAVER_NAME                            "com.deepin.daemon.Power"
+#define DEEPIN_SCREENSAVER_PATH                            "/org/freedesktop/ScreenSaver"
+#define DEEPIN_SCREENSAVER_INTERFACE                       "org.freedesktop.ScreenSaver"
+
 #define GSD_XRANDR_SETTINGS_SCHEMA              "org.gnome.settings-daemon.plugins.xrandr"
 
 #define GSD_POWER_DBUS_NAME                     GSD_DBUS_NAME ".Power"
@@ -74,9 +78,6 @@
 #define GSD_POWER_DBUS_INTERFACE_SCREEN         GSD_POWER_DBUS_INTERFACE ".Screen"
 #define GSD_POWER_DBUS_INTERFACE_KEYBOARD       GSD_POWER_DBUS_INTERFACE ".Keyboard"
 
-#define GS_DBUS_NAME                            "org.gnome.ScreenSaver"
-#define GS_DBUS_PATH                            "/org/gnome/ScreenSaver"
-#define GS_DBUS_INTERFACE                       "org.gnome.ScreenSaver"
 
 #define GSD_POWER_MANAGER_NOTIFY_TIMEOUT_SHORT          10 * 1000 /* ms */
 #define GSD_POWER_MANAGER_NOTIFY_TIMEOUT_LONG           30 * 1000 /* ms */
@@ -3253,16 +3254,16 @@ screensaver_proxy_ready_cb (GObject         *source_object,
 
     manager->priv->screensaver_proxy = proxy;
 
-    g_signal_connect (manager->priv->screensaver_proxy, "g-signal",
-                      G_CALLBACK (screensaver_signal_cb), manager);
-    g_dbus_proxy_call (manager->priv->screensaver_proxy,
-                       "GetActive",
-                       NULL,
-                       0,
-                       G_MAXINT,
-                       NULL,
-                       (GAsyncReadyCallback)get_active_cb,
-                       manager);
+    /*g_signal_connect (manager->priv->screensaver_proxy, "g-signal",*/
+                      /*G_CALLBACK (screensaver_signal_cb), manager);*/
+    /*g_dbus_proxy_call (manager->priv->screensaver_proxy,*/
+                       /*"GetActive",*/
+                       /*NULL,*/
+                       /*0,*/
+                       /*G_MAXINT,*/
+                       /*NULL,*/
+                       /*(GAsyncReadyCallback)get_active_cb,*/
+                       /*manager);*/
 
 }
 
@@ -3275,9 +3276,9 @@ screensaver_appeared_cb (GDBusConnection *connection,
     g_dbus_proxy_new (connection,
                       0,
                       NULL,
-                      GS_DBUS_NAME,
-                      GS_DBUS_PATH,
-                      GS_DBUS_INTERFACE,
+                      DEEPIN_SCREENSAVER_NAME,
+                      DEEPIN_SCREENSAVER_PATH,
+                      DEEPIN_SCREENSAVER_INTERFACE,
                       manager->priv->screensaver_cancellable,
                       (GAsyncReadyCallback) screensaver_proxy_ready_cb,
                       manager);
@@ -3484,38 +3485,38 @@ engine_settings_key_changed_cb (GSettings *settings,
     }
 }
 
-/*static void*/
-/*engine_session_properties_changed_cb (GDBusProxy      *session,*/
-/*GVariant        *changed,*/
-/*char           **invalidated,*/
-/*GsdPowerManager *manager)*/
-/*{*/
-/*GVariant *v;*/
+static void
+engine_session_properties_changed_cb (GDBusProxy      *session,
+GVariant        *changed,
+char           **invalidated,
+GsdPowerManager *manager)
+{
+    GVariant *v;
 
-/*v = g_variant_lookup_value (changed, "SessionIsActive", G_VARIANT_TYPE_BOOLEAN);*/
-/*if (v)*/
-/*{*/
-/*gboolean active;*/
+    v = g_variant_lookup_value (changed, "SessionIsActive", G_VARIANT_TYPE_BOOLEAN);
+    if (v)
+    {
+        gboolean active;
 
-/*active = g_variant_get_boolean (v);*/
-/*g_debug ("Received session is active change: now %s", active ? "active" : "inactive");*/
-/* when doing the fast-user-switch into a new account,
- * ensure the new account is undimmed and with the backlight on */
-/*if (active)*/
-/*idle_set_mode (manager, GSD_POWER_IDLE_MODE_NORMAL);*/
-/*g_variant_unref (v);*/
+        active = g_variant_get_boolean (v);
+        g_debug ("Received session is active change: now %s", active ? "active" : "inactive");
+        /*when doing the fast-user-switch into a new account,*/
+        /*ensure the new account is undimmed and with the backlight on*/
+        if (active)
+            idle_set_mode (manager, GSD_POWER_IDLE_MODE_NORMAL);
+        g_variant_unref (v);
+    }
 
-/*}*/
 
-/*v = g_variant_lookup_value (changed, "InhibitedActions", G_VARIANT_TYPE_UINT32);*/
-/*if (v)*/
-/*{*/
-/*g_variant_unref (v);*/
-/*g_debug ("Received gnome session inhibitor change");*/
-/*g_debug ("engine_session_properties_changed_cb()\n");*/
-/*idle_configure (manager);*/
-/*}*/
-/*}*/
+    v = g_variant_lookup_value (changed, "InhibitedActions", G_VARIANT_TYPE_UINT32);
+    if (v)
+    {
+        g_variant_unref (v);
+        g_debug ("Received gnome session inhibitor change");
+        g_debug ("engine_session_properties_changed_cb()\n");
+        idle_configure (manager);
+    }
+}
 
 static void
 inhibit_lid_switch_done (GObject      *source,
@@ -3827,8 +3828,8 @@ gsd_power_manager_start (GsdPowerManager *manager,
                                   manager->priv->settings_path);
     g_signal_connect (manager->priv->settings, "changed",
                       G_CALLBACK (engine_settings_key_changed_cb), manager);
-    manager->priv->settings_screensaver = g_settings_new ("org.gnome.desktop.screensaver");
-    manager->priv->settings_session = g_settings_new ("org.gnome.desktop.session");
+    /*manager->priv->settings_screensaver = g_settings_new ("org.gnome.desktop.screensaver");*/
+    /*manager->priv->settings_session = g_settings_new ("org.gnome.desktop.session");*/
     /*g_signal_connect (manager->priv->settings_session, "changed",*/
     /*G_CALLBACK (engine_settings_key_changed_cb), manager);*/
     /*manager->priv->settings_xrandr = g_settings_new (GSD_XRANDR_SETTINGS_SCHEMA);*/
