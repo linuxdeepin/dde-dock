@@ -5,6 +5,9 @@
  * Copyright (C) 2011 Ritesh Khadgaray <khadgaray@gmail.com>
  * Copyright (C) 2012-2013 Red Hat Inc.
  *
+ * Copyright (C) 2013-2014 onerhao <onerhao@gmail.com>
+ * Copyright (C) 2013-2014 Linux Deepin.
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -4420,17 +4423,17 @@ on_bus_gotten (GObject             *source_object,
                              NULL);
 }
 
-static void
-register_manager_dbus (GsdPowerManager *manager)
-{
-    manager->priv->introspection_data = g_dbus_node_info_new_for_xml (introspection_xml, NULL);
-    g_assert (manager->priv->introspection_data != NULL);
+/*static void*/
+/*register_manager_dbus (GsdPowerManager *manager)*/
+/*{*/
+    /*manager->priv->introspection_data = g_dbus_node_info_new_for_xml (introspection_xml, NULL);*/
+    /*g_assert (manager->priv->introspection_data != NULL);*/
 
-    g_bus_get (G_BUS_TYPE_SESSION,
-               manager->priv->bus_cancellable,
-               (GAsyncReadyCallback) on_bus_gotten,
-               manager);
-}
+    /*g_bus_get (G_BUS_TYPE_SESSION,*/
+               /*manager->priv->bus_cancellable,*/
+               /*(GAsyncReadyCallback) on_bus_gotten,*/
+               /*manager);*/
+/*}*/
 
 GsdPowerManager *
 gsd_power_manager_new (void)
@@ -4444,7 +4447,7 @@ gsd_power_manager_new (void)
         manager_object = g_object_new (GSD_TYPE_POWER_MANAGER, NULL);
         g_object_add_weak_pointer (manager_object,
                                    (gpointer *) &manager_object);
-        register_manager_dbus (manager_object);
+        /*register_manager_dbus (manager_object);*/
     }
     return GSD_POWER_MANAGER (manager_object);
 }
