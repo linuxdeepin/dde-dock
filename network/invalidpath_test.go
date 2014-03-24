@@ -22,7 +22,7 @@ func TestInvalid(t *testing.T) {
 
 	_Manager.GetConnectionByAccessPoint("/")
 
-	_Manager.FeedSecret(dbus.ObjectPath("xxoo"), "sd", "ss")
+	_Manager.FeedSecret("xxoo", "sd", "ss")
 	_Manager.GetDBusInfo()
 
 	dumy := make(map[string]map[string]string)
