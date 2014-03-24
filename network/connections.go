@@ -188,6 +188,7 @@ func (this *Manager) GetActiveConnection(devPath dbus.ObjectPath) (ret *ActiveCo
 	}, nil
 }
 
+// TODO
 func (this *Manager) UpdateConnection(data map[string]map[string]string) {
 	/*func (this *Manager) UpdateConnection(data string) {*/
 	fmt.Println("Update:", data)

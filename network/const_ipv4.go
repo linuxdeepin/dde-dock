@@ -105,7 +105,9 @@ const (
 	// completes successfully.
 	// Default value: TRUE
 	NM_SETTING_IP4_CONFIG_MAY_FAIL = "may-fail"
+)
 
+const (
 	// IPv4 configuration should be automatically determined via a
 	// method appropriate for the hardware interface, ie DHCP or PPP
 	// or some other device-specific manner.
