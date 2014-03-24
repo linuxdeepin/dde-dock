@@ -32,7 +32,7 @@
 #include <gdk/gdk.h>
 
 #define GNOME_DESKTOP_USE_UNSTABLE_API
-#include "gnome-idle-monitor.h"
+#include "libgnome-desktop/gnome-idle-monitor.h"
 
 #define GNOME_IDLE_MONITOR_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNOME_TYPE_IDLE_MONITOR, GnomeIdleMonitorPrivate))
 

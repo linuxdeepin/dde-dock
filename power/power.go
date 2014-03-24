@@ -2,10 +2,10 @@ package main
 
 // #cgo CFLAGS: -DLIBEXECDIR=""
 // #cgo amd64 386 CFLAGS: -g
-// #cgo pkg-config:glib-2.0 gtk+-3.0 x11 xext xtst xi gnome-desktop-3.0 upower-glib libnotify libcanberra-gtk3 gudev-1.0
+// #cgo pkg-config:glib-2.0 gtk+-3.0 x11 xext xtst xi upower-glib libnotify libcanberra-gtk3 gudev-1.0 xrandr
 // #cgo LDFLAGS: -lm
 // #define GNOME_DESKTOP_USE_UNSTABLE_API
-// #include "gnome-idle-monitor.h"
+// #include "libgnome-desktop/gnome-idle-monitor.h"
 // #include "gsd-power-manager.h"
 // #include "power-force-idle.h"
 // int deepin_power_manager_start()

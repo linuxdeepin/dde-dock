@@ -35,8 +35,8 @@
 #include <gio/gunixfdlist.h>
 
 #define GNOME_DESKTOP_USE_UNSTABLE_API
-#include <libgnome-desktop/gnome-rr.h>
-#include <libgnome-desktop/gnome-idle-monitor.h>
+#include "libgnome-desktop/gnome-rr.h"
+#include "libgnome-desktop/gnome-idle-monitor.h"
 
 /*#include <gsd-input-helper.h>*/
 

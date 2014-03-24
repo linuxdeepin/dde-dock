@@ -1,5 +1,5 @@
 #include "power-force-idle.h"
-#include "gnome-idle-monitor.h"
+#include "libgnome-desktop/gnome-idle-monitor.h"
 
 int start_dim()
 {
