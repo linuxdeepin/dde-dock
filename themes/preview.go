@@ -60,10 +60,10 @@ func gtkPreviewPath(name string) string {
                 return ""
         }
         if t == PATH_TYPE_SYSTEM {
-                path = THUMB_GTK_PATH
+                path = PREVIEW_GTK_PATH
         } else if t == PATH_TYPE_LOCAL {
                 homeDir := getHomeDir()
-                path = homeDir + THUMB_LOCAL_GTK_PATH
+                path = homeDir + PREVIEW_LOCAL_GTK_PATH
         }
 
         path += "/" + name + "/preview.png"
@@ -83,10 +83,10 @@ func iconPreviewPath(name string) string {
                 return ""
         }
         if t == PATH_TYPE_SYSTEM {
-                path = THUMB_ICON_PATH
+                path = PREVIEW_ICON_PATH
         } else if t == PATH_TYPE_LOCAL {
                 homeDir := getHomeDir()
-                path = homeDir + THUMB_LOCAL_ICON_PATH
+                path = homeDir + PREVIEW_LOCAL_ICON_PATH
         }
 
         path += "/" + name + "/preview.png"
@@ -106,10 +106,10 @@ func cursorPreviewPath(name string) string {
                 return ""
         }
         if t == PATH_TYPE_SYSTEM {
-                path = THUMB_CURSOR_PATH
+                path = PREVIEW_CURSOR_PATH
         } else if t == PATH_TYPE_LOCAL {
                 homeDir := getHomeDir()
-                path = homeDir + THUMB_LOCAL_CURSOR_PATH
+                path = homeDir + PREVIEW_LOCAL_CURSOR_PATH
         }
 
         path += "/" + name + "/preview.png"

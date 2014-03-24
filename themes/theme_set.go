@@ -52,12 +52,10 @@ func setGtkThemeViaXSettings(name string) {
         objXSettings.SetString("Net/ThemeName", name)
         wmPreSettings.SetString("theme", name)
         homeDir := getHomeDir()
-        logObject.Info("File Path: ", homeDir+"/"+QT_CONFIG_FILE)
         if ok := objUtil.WriteKeyToKeyFile(homeDir+"/"+QT_CONFIG_FILE,
                 QT_KEY_GROUP, QT_KEY_STYLE, QT_STYLE_VALUE); !ok {
                 logObject.Infof("Write key: '%s', value: '%s', in file: '%s' failed", QT_KEY_STYLE, "GTK+", homeDir+"/"+QT_CONFIG_FILE)
         }
-        logObject.Info("Set QT Style End...")
 }
 
 func setIconThemeViaXSettings(name string) {
