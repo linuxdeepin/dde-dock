@@ -26,8 +26,15 @@ import (
 )
 
 const (
+        QT_CONFIG_FILE    = ".config/Trolltech.conf"
         FONT_DEFAULT_SIZE = " 11"
         TITLE_FONT_SIZE   = " 10"
+
+        QT_KEY_GROUP   = "Qt"
+        QT_KEY_STYLE   = "stype"
+        QT_STYLE_VALUE = "GTK+"
+        QT_KEY_FONT    = "font"
+        QT_FONT_ARGS   = ",11,-1,5,50,0,0,0,0,0"
 )
 
 var (
@@ -44,6 +51,13 @@ func (op *Theme) setThemeViaXSettings() {
 func setGtkThemeViaXSettings(name string) {
         objXSettings.SetString("Net/ThemeName", name)
         wmPreSettings.SetString("theme", name)
+        homeDir := getHomeDir()
+        logObject.Info("File Path: ", homeDir+"/"+QT_CONFIG_FILE)
+        if ok := objUtil.WriteKeyToKeyFile(homeDir+"/"+QT_CONFIG_FILE,
+                QT_KEY_GROUP, QT_KEY_STYLE, QT_STYLE_VALUE); !ok {
+                logObject.Infof("Write key: '%s', value: '%s', in file: '%s' failed", QT_KEY_STYLE, "GTK+", homeDir+"/"+QT_CONFIG_FILE)
+        }
+        logObject.Info("Set QT Style End...")
 }
 
 func setIconThemeViaXSettings(name string) {
@@ -58,4 +72,9 @@ func setGtkFontThemeViaXSettings(name string) {
         //logObject.Infof("Set Font: %s\n", name)
         objXSettings.SetString("Gtk/FontName", name+FONT_DEFAULT_SIZE)
         wmPreSettings.SetString("titlebar-font", name+TITLE_FONT_SIZE)
+        homeDir := getHomeDir()
+        if ok := objUtil.WriteKeyToKeyFile(homeDir+"/"+QT_CONFIG_FILE,
+                QT_KEY_GROUP, QT_KEY_FONT, "\""+name+QT_FONT_ARGS+"\""); !ok {
+                logObject.Infof("Write key: '%s', value: '%s', in file: '%s' failed", QT_KEY_FONT, name, homeDir+"/"+QT_CONFIG_FILE)
+        }
 }
