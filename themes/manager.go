@@ -58,9 +58,9 @@ func (op *Manager) SetCurrentTheme(name string) bool {
                 if obj := op.getThemeObject(name); obj != nil {
                         obj.setThemeViaXSettings()
                 }
-                personSettings.SetString(GKEY_CURRENT_THEME,
+                op.updateGSettingsKey(GKEY_CURRENT_THEME,
                         name)
-                op.CurrentTheme = name
+                op.setPropName("CurrentTheme")
         }
 
         return true
