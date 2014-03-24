@@ -2,10 +2,29 @@ package main
 
 import "dlib/dbus"
 import pkgbus "dbus/org/freedesktop/dbus"
+import "encoding/json"
+import "github.com/BurntSushi/xgb/xproto"
 import "time"
 import "sync"
 
 var busdaemon *pkgbus.DBusDaemon
+
+const (
+	FieldTitle   = "title"
+	FieldIcon    = "icon"
+	FieldMenu    = "menu"
+	FieldAppXids = "app-xids"
+
+	FieldStatus   = "app-status"
+	ActiveStatus  = "active"
+	NormalStatus  = "normal"
+	InvalidStatus = "invalid"
+)
+
+type XidInfo struct {
+	Xid   uint32
+	Title string
+}
 
 type Manager struct {
 	Entries       []*EntryProxyer
@@ -84,6 +103,11 @@ func (m *Manager) registerEntry(name string) {
 	if err != nil {
 		logger.Errorf("register entry failed: %v", err)
 		return
+	}
+	var xidInfos []XidInfo
+	json.Unmarshal([]byte(entry.Data[FieldAppXids]), xidInfos)
+	for _, info := range xidInfos {
+		hideWindow(xproto.Window(info.Xid))
 	}
 	m.Entries = append(m.Entries, entry)
 

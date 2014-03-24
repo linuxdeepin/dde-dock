@@ -29,6 +29,13 @@ func main() {
 	}
 
 	m.watchEntries()
+
+	d := NewDockedAppManager()
+	if err != nil {
+		logger.Errorf("register dbus interface failed: %v", err)
+		os.Exit(1)
+	}
+	err = dbus.InstallOnSession(d)
 	dbus.DealWithUnhandledMessage()
 
 	if err := dbus.Wait(); err != nil {
