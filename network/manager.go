@@ -5,6 +5,7 @@ import "dlib/dbus/property"
 import "dlib/logger"
 import "os"
 import nm "dbus/org/freedesktop/networkmanager"
+import "flag"
 
 const (
 	DBusDest = "com.deepin.daemon.Network"
@@ -24,6 +25,7 @@ var (
 	_NMSettings, _ = nm.NewSettings(NMDest, "/org/freedesktop/NetworkManager/Settings")
 	_Manager       = _NewManager()
 	LOGGER         = logger.NewLogger("com.deepin.daemon.Network")
+	argDebug       bool
 )
 
 type Manager struct {
@@ -68,6 +70,20 @@ func _NewManager() (m *Manager) {
 }
 
 func main() {
+	defer func() {
+		if err := recover(); err != nil {
+			LOGGER.Fatal(err)
+		}
+	}()
+
+	// configure logger
+	flag.BoolVar(&argDebug, "d", false, "debug mode")
+	flag.BoolVar(&argDebug, "debug", false, "debug mode")
+	flag.Parse()
+	if argDebug {
+		LOGGER.SetLogLevel(logger.LEVEL_DEBUG)
+	}
+
 	dbus.InstallOnSession(_Manager)
 	dbus.DealWithUnhandledMessage()
 	if err := dbus.Wait(); err != nil {
