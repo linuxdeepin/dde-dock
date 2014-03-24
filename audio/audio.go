@@ -32,6 +32,8 @@ const (
     AUDIO_DOWN = "AudioDown"
 )
 
+const VOLUME_STEP = 10
+
 //var l = logger.NewLogger("audio")
 
 type Audio struct {
@@ -801,7 +803,7 @@ func (audio *Audio) listenMediaKey() {
                     sink.SetSinkMute(!sink.Mute)
                     break
                 case MEDIA_KEY_IFC + "." + AUDIO_UP:
-                    volume := int32(sink.Volume + 5)
+                    volume := int32(sink.Volume + VOLUME_STEP)
                     if volume < 0 {
                         volume = 0
                     } else if volume > 150 {
@@ -812,7 +814,7 @@ func (audio *Audio) listenMediaKey() {
                     sink.setSinkMute(false)
                     break
                 case MEDIA_KEY_IFC + "." + AUDIO_DOWN:
-                    volume := int32(sink.Volume - 5)
+                    volume := int32(sink.Volume - VOLUME_STEP)
                     if volume < 0 {
                         volume = 0
                     }
