@@ -147,6 +147,7 @@ func (ss *ScreenSaver) Inhibit(appName, reason string) uint32 {
     fmt.Println(ss.cookies)
     if len(ss.cookies) > 0 {
         ss.IsInhibited = true
+        dbus.NotifyChange(ss, "IsInhibited")
     }
     return res
 }
@@ -156,6 +157,7 @@ func (ss *ScreenSaver) UnInhibit(cookie uint32) {
     fmt.Println(ss.cookies)
     if len(ss.cookies) == 0 {
         ss.IsInhibited = false
+        dbus.NotifyChange(ss, "IsInhibited")
     }
 }
 
@@ -175,17 +177,14 @@ type Power struct {
     LidCloseACAction      *property.GSettingsStringProperty `access:"readwrite"`
     LidCloseBatteryAction *property.GSettingsStringProperty `access:"readwrite"`
 
-    //ShowTray *property.GSettingsBoolProperty `access:"readwrite"`
-
-    //SleepDisplayAc      *property.GSettingsIntProperty `access:"readwrite"`
-    //SleepDisplayBattery *property.GSettingsIntProperty `access:"readwrite"`
-    IdleDelay *property.GSettingsIntProperty `access:"readwrite"`
-
+    IdleDelay                   *property.GSettingsIntProperty `access:"readwrite"`
     SleepInactiveAcTimeout      *property.GSettingsIntProperty `access:"readwrite"`
     SleepInactiveBatteryTimeout *property.GSettingsIntProperty `access:"readwrite"`
 
     SleepInactiveAcType      *property.GSettingsStringProperty `access:"readwrite"`
     SleepInactiveBatteryType *property.GSettingsStringProperty `access:"readwrite"`
+
+    LockEnabled *property.GSettingsBoolProperty `access:"readwrite"`
 
     CurrentProfile *property.GSettingsStringProperty `access:"readwrite"`
 
@@ -214,7 +213,6 @@ type Power struct {
 
     //gnome.desktop.screensaver keys
     //screensaverSettings *gio.Settings
-    LockEnabled *property.GSettingsBoolProperty `access:"readwrite"`
 
     //states to keep track of changes
     LidIsPresent bool
@@ -227,8 +225,7 @@ func NewPower() (*Power, error) {
 
     power.powerProfile = gio.NewSettings(schema_gsettings_power)
     power.CurrentProfile = property.NewGSettingsStringProperty(
-        power, "CurrentProfile", power.powerProfile,
-        "current-profile")
+        power, "CurrentProfile", power.powerProfile, "current-profile")
     power.CurrentProfile.ConnectChanged(power.profileChanged)
 
     power.powerSettings = power.getPowerSettings()
@@ -714,7 +711,7 @@ func (power *Power) signalPowerSettingsChange() int32 {
 
 func (power *Power) EnumerateDevices() []dbus.ObjectPath {
     if power.upower == nil {
-        println("WARNING:Upower object it nil\n")
+        println("WARNING:Upower object is nil\n")
     }
     devices, _ := power.upower.EnumerateDevices()
     for _, v := range devices {
@@ -735,6 +732,9 @@ func (power *Power) StopDim() int32 {
 }
 
 func getUpowerDeviceObjectPath(devices []dbus.ObjectPath) []dbus.ObjectPath {
+    if len(devices) == 0 {
+        return nil
+    }
     paths := make([]dbus.ObjectPath, len(devices))
     batPattern, err := regexp.Compile(
         "/org/freedesktop/UPower/devices/battery_BAT[[:digit:]]+")

@@ -1217,20 +1217,6 @@ engine_profile_changed_cb (GSettings *settings,
                            const gchar *key,
                            GsdPowerManager *manager)
 {
-    /*if (g_strcmp0 (key, "use-time-for-policy") == 0)*/
-    /*{*/
-    /*manager->priv->use_time_primary = g_settings_get_boolean (settings, key);*/
-    /*return;*/
-    /*}*/
-    /*if (g_str_has_prefix (key, "sleep-inactive") ||*/
-    /*g_str_equal (key, "idle-delay") ||*/
-    /*g_str_equal (key, "idle-dim"))*/
-    /*{*/
-    /*g_debug("engine_settings_key_changed_cb()\n");*/
-    /*idle_configure (manager);*/
-    /*return;*/
-    /*}*/
-
     GError *error = NULL;
     gchar *s;
     if (g_strcmp0 (key, "current-profile"))
@@ -2870,21 +2856,23 @@ idle_is_session_inhibited (GsdPowerManager  *manager,
     GsmInhibitorFlag inhibited_actions;
 
     /* not yet connected to gnome-session */
-    if (manager->priv->session == NULL)
+    if (manager->priv->screensaver_proxy == NULL)
     {
         g_debug("not yet connected to gnome-session");
         return FALSE;
     }
 
-    variant = g_dbus_proxy_get_cached_property (manager->priv->session,
-              "InhibitedActions");
+    variant = g_dbus_proxy_get_cached_property (manager->priv->screensaver_proxy,
+              "isInhibited");
     if (!variant)
         return FALSE;
 
-    inhibited_actions = g_variant_get_uint32 (variant);
+    /*inhibited_actions = g_variant_get_boolean (variant);*/
     g_variant_unref (variant);
 
-    *is_inhibited = (inhibited_actions & mask);
+    /**is_inhibited = (inhibited_actions & mask);*/
+    *is_inhibited = g_variant_get_boolean (variant);
+    g_debug("idle is inhibited by org.freedesktop.ScreenSaver: %s",*is_inhibited? "true":"false");
 
     return TRUE;
 }
@@ -3210,8 +3198,26 @@ screensaver_signal_cb (GDBusProxy *proxy,
                        GVariant *parameters,
                        gpointer user_data)
 {
-    if (g_strcmp0 (signal_name, "ActiveChanged") == 0)
-        handle_screensaver_active (GSD_POWER_MANAGER (user_data), parameters);
+    g_debug("screensaver signal: %s",sender_name);
+    /*if (g_strcmp0 (signal_name, "ActiveChanged") == 0)*/
+        /*handle_screensaver_active (GSD_POWER_MANAGER (user_data), parameters);*/
+}
+
+static void
+screensaver_properties_changed_cb(GDBusProxy *proxy,
+        GVariant *changed_properties,
+        GStrv invalidated_properties,
+        gpointer user_data)
+{
+    int i = 0;
+    for (i=0;invalidated_properties[i];i++)
+    {
+        g_debug("%s changed",
+                invalidated_properties[i]);
+    }
+    g_debug("screensaver changed properties: %s",
+                g_variant_print(changed_properties,TRUE));
+
 }
 
 static void
@@ -3251,11 +3257,17 @@ screensaver_proxy_ready_cb (GObject         *source_object,
         g_error_free (error);
         return;
     }
+    else
+    {
+        g_debug("connected to org.freedesktop.ScreenSaver DBus proxy");
+    }
 
     manager->priv->screensaver_proxy = proxy;
 
-    /*g_signal_connect (manager->priv->screensaver_proxy, "g-signal",*/
-                      /*G_CALLBACK (screensaver_signal_cb), manager);*/
+    g_signal_connect (manager->priv->screensaver_proxy, "g-signal",
+                      G_CALLBACK (screensaver_signal_cb), manager);
+    g_signal_connect (manager->priv->screensaver_proxy,"g-properties-changed",
+            G_CALLBACK(screensaver_properties_changed_cb),manager);
     /*g_dbus_proxy_call (manager->priv->screensaver_proxy,*/
                        /*"GetActive",*/
                        /*NULL,*/
@@ -3874,14 +3886,14 @@ gsd_power_manager_start (GsdPowerManager *manager,
                               manager);
 
     manager->priv->screensaver_active = FALSE;
-    /*manager->priv->screensaver_watch_id =*/
-    /*g_bus_watch_name (G_BUS_TYPE_SESSION,*/
-    /*GS_DBUS_NAME,*/
-    /*G_BUS_NAME_WATCHER_FLAGS_NONE,*/
-    /*(GBusNameAppearedCallback) screensaver_appeared_cb,*/
-    /*(GBusNameVanishedCallback) screensaver_vanished_cb,*/
-    /*manager,*/
-    /*NULL);*/
+    manager->priv->screensaver_watch_id =
+        g_bus_watch_name (G_BUS_TYPE_SESSION,
+                DEEPIN_SCREENSAVER_NAME,
+                G_BUS_NAME_WATCHER_FLAGS_NONE,
+                (GBusNameAppearedCallback) screensaver_appeared_cb,
+                (GBusNameVanishedCallback) screensaver_vanished_cb,
+                manager,
+                NULL);
 
     manager->priv->devices_array = g_ptr_array_new_with_free_func (g_object_unref);
 
