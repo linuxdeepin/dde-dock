@@ -158,6 +158,9 @@ func (op *Manager) SetBackgroundFile(name string) (string, bool) {
                 name = path
         }
 
+        // sync value to gsettings
+        op.updateGSettingsKey(GKEY_CURRENT_BACKGROUND, name)
+
         if obj := op.getThemeObject(op.CurrentTheme); obj != nil {
                 v := op.setTheme(obj.GtkTheme, obj.IconTheme,
                         obj.CursorTheme, obj.FontName, name, obj.SoundTheme)
@@ -406,6 +409,7 @@ func newManager() *Manager {
         m.listenThemeDir(SOUND_THEME_PATH)
 
         m.listenBackgroundDir(BACKGROUND_DEFAULT_DIR)
+        m.listenBackgroundDir(homeDir + THUMB_LOCAL_THEME_PATH + "/Custom/wallpappers")
 
         return m
 }
