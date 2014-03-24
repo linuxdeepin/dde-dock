@@ -136,10 +136,20 @@ func initTrayManager() {
 
 	LOGGER.Debug("TrayManager Owner:", owner.Id)
 
-	xproto.SetSelectionOwner(XU.Conn(), owner.Id, _NET_SYSTEM_TRAY_S0, 0)
-	//owner the _NET_SYSTEM_TRAY_Sn
-	go TRAYMANAGER.startListenr()
-	dbus.InstallOnSession(TRAYMANAGER)
+	// Make a check, the tray application MUST be 1.
+	_trayInstance := xproto.GetSelectionOwner(XU.Conn(), _NET_SYSTEM_TRAY_S0)
+	reply, err := _trayInstance.Reply()
+	if err != nil {
+		LOGGER.Fatal(err)
+	}
+	if reply.Owner == 0 {
+		xproto.SetSelectionOwner(XU.Conn(), owner.Id, _NET_SYSTEM_TRAY_S0, 0)
+		//owner the _NET_SYSTEM_TRAY_Sn
+		go TRAYMANAGER.startListenr()
+		dbus.InstallOnSession(TRAYMANAGER)
+	} else {
+		LOGGER.Info("Another System tray application is running")
+	}
 }
 
 func (m *TrayManager) startListenr() {
