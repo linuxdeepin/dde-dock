@@ -253,6 +253,17 @@ func NewPower() (*Power, error) {
             power.upowerBattery, _ = upower.NewDevice("org.freedesktop.UPower", dbus.ObjectPath(paths[0]))
             if power.upowerBattery != nil {
                 power.getUPowerProperty()
+            } else {
+                //power.BatteryIsPresent = dbus.Property{}
+                //power.IsRechargable = false
+                //power.BatteryPercentage = 0
+                //power.Model = ""
+                //power.Vendor = ""
+                //power.TimeToEmpty = 0
+                //power.TimeToFull = 0
+                //power.State = 0
+                //power.Type = 0
+
             }
         } else {
             println("upower battery interface not found\n")

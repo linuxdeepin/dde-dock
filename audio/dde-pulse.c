@@ -2186,6 +2186,62 @@ int pa_set_source_output_volume(pa *self, int index, pa_cvolume *cvolume)
     return 0;
 }
 
+int pa_kill_source_output(pa *self, int index)
+{
+    int state = 0;
+    //float tmp=0;
+    if (!self)
+    {
+        fprintf(stderr, "NULL object pointer\n");
+        return -1;
+    }
+
+    pthread_mutex_lock(&self->pa_mutex);
+    for (;;)
+    {
+        if (self->pa_ready == 0)
+        {
+            pa_mainloop_iterate(self->pa_ml, 1, NULL);
+            continue;
+        }
+        if (self->pa_ready == 2)
+        {
+            pa_context_disconnect(self->pa_ctx);
+            pa_context_unref(self->pa_ctx);
+            pa_mainloop_free(self->pa_ml);
+            self->pa_op = NULL;
+            self->pa_ctx = NULL;
+            self->pa_mlapi = NULL;
+            self->pa_ml = NULL;
+            return -1;
+        }
+        switch (state)
+        {
+        case 0:
+            self->pa_op = pa_context_kill_source_output(
+                              self->pa_ctx, index,
+                              pa_context_success_cb, self);
+            state++;
+            break;
+        case 1:
+            if (pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
+            {
+                pa_operation_unref(self->pa_op);
+                self->pa_op = NULL;
+                pthread_mutex_unlock(&self->pa_mutex);
+                return 0;
+            }
+            break;
+        default:
+            fprintf(stderr, "in state %d\n", state);
+            return -1;
+        }
+        pa_mainloop_iterate(self->pa_ml, 1, NULL);
+    }
+
+    return 0;
+}
+
 int pa_inc_source_output_volume(pa *self, int index, int volume)
 {
     int state = 0;
