@@ -43,8 +43,6 @@ const (
 )
 
 var (
-	argDebug               bool
-	argSetup               bool
 	grub2ext, _            = apigrub2ext.NewGrub2Ext("com.deepin.api.Grub2", "/com/deepin/api/Grub2")
 	entryRegexpSingleQuote = regexp.MustCompile(`^ *(menuentry|submenu) +'(.*?)'.*$`)
 	entryRegexpDoubleQuote = regexp.MustCompile(`^ *(menuentry|submenu) +"(.*?)".*$`)

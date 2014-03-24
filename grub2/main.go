@@ -28,7 +28,11 @@ import (
 	"os"
 )
 
-var logger = liblogger.NewLogger("dde-daemon/grub2")
+var (
+	logger   = liblogger.NewLogger("dde-daemon/grub2")
+	argDebug bool
+	argSetup bool
+)
 
 func main() {
 	defer func() {
