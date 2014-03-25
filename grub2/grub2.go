@@ -171,7 +171,7 @@ func (grub *Grub2) startUpdateLoop() {
 
 func (grub *Grub2) resetGfxmodeIfNeed() {
 	w, h := getPrimaryScreenBestResolution()
-	gfxmode := fmt.Sprintf("%dx%d;auto", w, h)
+	gfxmode := fmt.Sprintf("%dx%d", w, h)
 	if gfxmode != grub.getGfxmode() || w != grub.config.LastScreenWidth || h != grub.config.LastScreenHeight {
 		grub.setGfxmode(gfxmode)
 		grub.writeSettings()
