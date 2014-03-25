@@ -1,6 +1,8 @@
 package main
 
 // https://developer.gnome.org/libnm-util/0.9/NMSettingIP4Config.html
+// https://developer.gnome.org/NetworkManager/unstable/ref-settings.html
+
 const (
 	// IPv4 configuration method. If 'auto' is specified then the
 	// appropriate automatic method (DHCP, PPP, etc) is used for the

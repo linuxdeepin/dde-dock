@@ -23,7 +23,11 @@ func (editor *ConnectionEditor) updatePropHasChanged(v bool) {
 }
 
 func (editor *ConnectionEditor) updatePropCurrentFields() {
-	// get current fields through current page
+	// get fields through current page, show or hide some fields when
+	// target fileds toggled
+
+	// TODO processing logic
+
 	editor.CurrentFields = editor.listFields(editor.currentPage)
 	dbus.NotifyChange(editor, "CurrentFields")
 }

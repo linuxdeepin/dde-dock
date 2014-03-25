@@ -35,3 +35,16 @@ func isStringInArray(s string, list []string) bool {
 	}
 	return false
 }
+
+func wrapVarient(s string) dbus.Variant {
+	return dbus.MakeVariant(s)
+}
+
+func unwrapVarient(v dbus.Variant) (s string, err error) {
+	s, ok := v.Value().(string)
+	if !ok {
+		err = fmt.Errorf("convert varient to string failed: %v", v)
+		return
+	}
+	return
+}

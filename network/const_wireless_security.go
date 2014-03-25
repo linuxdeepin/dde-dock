@@ -1,6 +1,8 @@
 package main
 
-//https://developer.gnome.org/libnm-util/0.9/NMSettingWirelessSecurity.html
+// https://developer.gnome.org/libnm-util/0.9/NMSettingWirelessSecurity.html
+// https://developer.gnome.org/NetworkManager/unstable/ref-settings.html
+
 const (
 	// Key management used for the connection. One of 'none' (WEP),
 	// 'ieee8021x' (Dynamic WEP), 'wpa-none' (Ad-Hoc WPA-PSK),
