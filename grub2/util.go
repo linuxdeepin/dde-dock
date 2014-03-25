@@ -22,9 +22,10 @@
 package main
 
 import (
-	"github.com/BurntSushi/xgb"
 	"github.com/BurntSushi/xgb/randr"
 	"github.com/BurntSushi/xgb/xproto"
+	"github.com/BurntSushi/xgbutil"
+	"github.com/BurntSushi/xgbutil/xwindow"
 	"os"
 	"strconv"
 	"strings"
@@ -65,27 +66,27 @@ func isFileExists(file string) bool {
 func getPrimaryScreenBestResolution() (w uint16, h uint16) {
 	w, h = 1024, 768 // default value
 
-	X, err := xgb.NewConn()
+	XU, err := xgbutil.NewConn()
 	if err != nil {
 		return
 	}
-	err = randr.Init(X)
+	err = randr.Init(XU.Conn())
 	if err != nil {
 		return
 	}
-	_, err = randr.QueryVersion(X, 1, 4).Reply()
+	_, err = randr.QueryVersion(XU.Conn(), 1, 4).Reply()
 	if err != nil {
 		return
 	}
-	Root := xproto.Setup(X).DefaultScreen(X).Root
-	resources, err := randr.GetScreenResources(X, Root).Reply()
+	Root := xproto.Setup(XU.Conn()).DefaultScreen(XU.Conn()).Root
+	resources, err := randr.GetScreenResources(XU.Conn(), Root).Reply()
 	if err != nil {
 		return
 	}
 
 	bestModes := make([]uint32, 0)
 	for _, output := range resources.Outputs {
-		reply, err := randr.GetOutputInfo(X, output, 0).Reply()
+		reply, err := randr.GetOutputInfo(XU.Conn(), output, 0).Reply()
 		if err == nil && reply.NumModes > 1 {
 			bestModes = append(bestModes, uint32(reply.Modes[0]))
 		}
@@ -103,6 +104,16 @@ func getPrimaryScreenBestResolution() (w uint16, h uint16) {
 				}
 			}
 		}
+	}
+
+	if w*h == 0 {
+		// get resource failed, use root window's geometry
+		rootRect := xwindow.RootGeometry(XU)
+		w, h = uint16(rootRect.Width()), uint16(rootRect.Height())
+	}
+
+	if w*h == 0 {
+		w, h = 1024, 768 // default value
 	}
 
 	logger.Debugf("primary screen's best resolution is %dx%d", w, h)
