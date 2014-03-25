@@ -244,21 +244,31 @@ func detetedViaShadowFile(info *UserInfo) bool {
                         continue
                 }
                 pw := strs[1]
-                /* modern hashes start with "$n$" && len is 98 */
-                if pw[0] == '$' {
-                        if len(pw) < 4 {
-                                continue
-                        }
-                } else if pw[0] == '!' {
-                        info.Locked = true
-                        id, _ := strconv.ParseInt(info.Uid, 10, 64)
-                        if id < 1000 {
-                                continue
-                        }
-                } else if pw[0] != '.' || pw[0] != '/' ||
-                        !charIsAlNum(pw[0]) {
-                        /* DES crypt is base64 encoded [./A-Za-z0-9] */
+                /*
+                   // modern hashes start with "$n$" && len is 98
+                   if pw[0] == '$' {
+                           if len(pw) < 4 {
+                                   continue
+                           }
+                   } else if pw[0] == '!' {
+                           info.Locked = true
+                           id, _ := strconv.ParseInt(info.Uid, 10, 64)
+                           if id < 1000 {
+                                   continue
+                           }
+                   } else if pw[0] != '.' || pw[0] != '/' ||
+                           !charIsAlNum(pw[0]) {
+                           // DES crypt is base64 encoded [./A-Za-z0-9]
+                           continue
+                   }
+                */
+                //加盐密码最短为13
+                if len(pw) < 13 {
                         continue
+                }
+
+                if pw[0] == '!' {
+                        info.Locked = true
                 }
 
                 isHuman = true
