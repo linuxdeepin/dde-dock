@@ -279,7 +279,7 @@ func (app *RuntimeApp) Activate(x, y int32) error {
 	//TODO: handle multiple xids
 	switch {
 	case !contains(app.state, "_NET_WM_STATE_FOCUSED"):
-		ewmh.ActiveWindowSet(XU, app.CurrentInfo.Xid)
+		ewmh.ActiveWindowReq(XU, app.CurrentInfo.Xid)
 	case contains(app.state, "_NET_WM_STATE_FOCUSED"):
 		s, err := icccm.WmStateGet(XU, app.CurrentInfo.Xid)
 		if err != nil {
@@ -292,14 +292,57 @@ func (app *RuntimeApp) Activate(x, y int32) error {
 			icccm.WmStateSet(XU, app.CurrentInfo.Xid, s)
 		case icccm.StateNormal:
 			activeXid, _ := ewmh.ActiveWindowGet(XU)
-			if activeXid == app.CurrentInfo.Xid {
+			if len(app.xids) == 1 {
 				s.State = icccm.StateIconic
-				icccm.WmStateSet(XU, app.CurrentInfo.Xid, s)
+				iconifyWindow(app.CurrentInfo.Xid)
+			} else {
+				if activeXid == app.CurrentInfo.Xid {
+					//ewmh.ActiveWindowReq(XU, app.findNextLeader())
+
+					x := app.findNextLeader()
+					ewmh.ActiveWindowReq(XU, x)
+				}
 			}
 		}
-
 	}
 	return nil
+}
+
+func (app *RuntimeApp) setLeader(leader xproto.Window) {
+	if info, ok := app.xids[leader]; ok {
+		app.CurrentInfo = info
+		app.notifyChanged()
+	}
+}
+
+func (app *RuntimeApp) findNextLeader() xproto.Window {
+	min := app.CurrentInfo
+
+	var afterCurrent []*WindowInfo
+	for _, xinfo := range app.xids {
+		if xinfo.Xid > app.CurrentInfo.Xid {
+			afterCurrent = append(afterCurrent, xinfo)
+		}
+		if xinfo.Xid < min.Xid {
+			min = xinfo
+		}
+	}
+
+	if len(afterCurrent) == 0 {
+		return min.Xid
+	} else {
+		next := afterCurrent[0].Xid
+		for _, xinfo := range afterCurrent {
+			if next > xinfo.Xid {
+				next = xinfo.Xid
+			}
+		}
+		return next
+	}
+}
+
+func iconifyWindow(xid xproto.Window) {
+	ewmh.ClientEvent(XU, xid, "WM_CHANGE_STATE", icccm.StateIconic)
 }
 
 func (app *RuntimeApp) detachXid(xid xproto.Window) {

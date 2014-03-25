@@ -12,14 +12,15 @@ import "github.com/BurntSushi/xgbutil/xprop"
 import "github.com/BurntSushi/xgbutil/ewmh"
 
 var (
-	XU, _                = xgbutil.NewConn()
-	_NET_CLIENT_LIST, _  = xprop.Atm(XU, "_NET_CLIENT_LIST")
-	ATOM_WINDOW_ICON, _  = xprop.Atm(XU, "_NET_WM_ICON")
-	ATOM_WINDOW_NAME, _  = xprop.Atm(XU, "_NET_WM_NAME")
-	ATOM_WINDOW_STATE, _ = xprop.Atm(XU, "_NET_WM_STATE")
-	ATOM_WINDOW_TYPE, _  = xprop.Atm(XU, "_NET_WM_WINDOW_TYPE")
-	MANAGER              = initManager()
-	LOGGER               = logger.NewLogger("com.deepin.daemon.DockAppsBuilder")
+	XU, _                 = xgbutil.NewConn()
+	_NET_CLIENT_LIST, _   = xprop.Atm(XU, "_NET_CLIENT_LIST")
+	_NET_ACTIVE_WINDOW, _ = xprop.Atm(XU, "_NET_ACTIVE_WINDOW")
+	ATOM_WINDOW_ICON, _   = xprop.Atm(XU, "_NET_WM_ICON")
+	ATOM_WINDOW_NAME, _   = xprop.Atm(XU, "_NET_WM_NAME")
+	ATOM_WINDOW_STATE, _  = xprop.Atm(XU, "_NET_WM_STATE")
+	ATOM_WINDOW_TYPE, _   = xprop.Atm(XU, "_NET_WM_WINDOW_TYPE")
+	MANAGER               = initManager()
+	LOGGER                = logger.NewLogger("com.deepin.daemon.DockAppsBuilder")
 )
 
 func listenerRootWindow() {
@@ -33,8 +34,16 @@ func listenerRootWindow() {
 
 	xwindow.New(XU, XU.RootWin()).Listen(xproto.EventMaskPropertyChange)
 	xevent.PropertyNotifyFun(func(XU *xgbutil.XUtil, ev xevent.PropertyNotifyEvent) {
-		if ev.Atom == _NET_CLIENT_LIST {
+		switch ev.Atom {
+		case _NET_CLIENT_LIST:
 			update()
+		case _NET_ACTIVE_WINDOW:
+			if activedWindow, err := ewmh.ActiveWindowGet(XU); err == nil {
+				appId := find_app_id_by_xid(activedWindow)
+				if rApp, ok := MANAGER.runtimeApps[appId]; ok {
+					rApp.setLeader(activedWindow)
+				}
+			}
 		}
 	}).Connect(XU, XU.RootWin())
 	update()
