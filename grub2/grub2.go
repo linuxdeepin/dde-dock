@@ -25,7 +25,6 @@ import (
 	"bufio"
 	apigrub2ext "dbus/com/deepin/api/grub2"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"regexp"
@@ -102,17 +101,17 @@ func (grub *Grub2) setup() {
 func (grub *Grub2) load() {
 	err := grub.readEntries()
 	if err != nil {
-		panic(err)
+		logger.Error(err)
 	}
 	err = grub.readSettings()
 	if err != nil {
-		panic(err)
+		logger.Error(err)
 	}
 
 	if isFileExists(grubCacheFile) {
 		err = grub.readCacheConfig()
 		if err != nil {
-			panic(err)
+			logger.Error(err)
 		}
 	} else {
 		grub.writeCacheConfig()
@@ -268,7 +267,7 @@ func (grub *Grub2) writeCacheConfig() (err error) {
 	return
 }
 
-func (grub *Grub2) parseEntries(fileContent string) error {
+func (grub *Grub2) parseEntries(fileContent string) (err error) {
 	grub.clearEntries()
 
 	inMenuEntry := false
@@ -285,9 +284,8 @@ func (grub *Grub2) parseEntries(fileContent string) error {
 		if strings.HasPrefix(line, "menuentry ") {
 			if inMenuEntry {
 				grub.clearEntries()
-				s := "a 'menuentry' directive was detected inside the scope of a menuentry"
-				logger.Error(s)
-				return errors.New(s)
+				err = fmt.Errorf("a 'menuentry' directive was detected inside the scope of a menuentry")
+				return
 			}
 			title, ok := grub.parseTitle(line)
 			if ok {
@@ -300,16 +298,14 @@ func (grub *Grub2) parseEntries(fileContent string) error {
 				continue
 			} else {
 				grub.clearEntries()
-				s := fmt.Sprintf("parse entry title failed from: %q", line)
-				logger.Error(s)
-				return errors.New(s)
+				err = fmt.Errorf("parse entry title failed from: %q", line)
+				return
 			}
 		} else if strings.HasPrefix(line, "submenu ") {
 			if inMenuEntry {
 				grub.clearEntries()
-				s := "a 'submenu' directive was detected inside the scope of a menuentry"
-				logger.Error(s)
-				return errors.New(s)
+				err = fmt.Errorf("a 'submenu' directive was detected inside the scope of a menuentry")
+				return
 			}
 			title, ok := grub.parseTitle(line)
 			if ok {
@@ -323,9 +319,8 @@ func (grub *Grub2) parseEntries(fileContent string) error {
 				continue
 			} else {
 				grub.clearEntries()
-				s := fmt.Sprintf("parse entry title failed from: %q", line)
-				logger.Error(s)
-				return errors.New(s)
+				err = fmt.Errorf("parse entry title failed from: %q", line)
+				return
 			}
 		} else if line == "}" {
 			if inMenuEntry {
@@ -341,11 +336,11 @@ func (grub *Grub2) parseEntries(fileContent string) error {
 			}
 		}
 	}
-	if err := sl.Err(); err != nil {
-		logger.Error(err.Error())
-		return err
+	err = sl.Err()
+	if err != nil {
+		return
 	}
-	return nil
+	return
 }
 
 func (grub *Grub2) parseTitle(line string) (string, bool) {
@@ -386,19 +381,18 @@ func (grub *Grub2) parseSettings(fileContent string) error {
 	return nil
 }
 
-func (grub *Grub2) getEntryTitles() ([]string, error) {
-	entryTitles := make([]string, 0)
+func (grub *Grub2) getEntryTitles() (entryTitles []string, err error) {
+	entryTitles = make([]string, 0)
 	for _, entry := range grub.entries {
 		if entry.entryType == MENUENTRY {
 			entryTitles = append(entryTitles, entry.getFullTitle())
 		}
 	}
 	if len(entryTitles) == 0 {
-		s := fmt.Sprintf("there is no menu entry in %s", grubMenuFile)
-		logger.Error(s)
-		return entryTitles, errors.New(s)
+		err = fmt.Errorf("there is no menu entry in %s", grubMenuFile)
+		return
 	}
-	return entryTitles, nil
+	return
 }
 
 func (grub *Grub2) getDefaultEntry() string {
@@ -428,7 +422,7 @@ func (grub *Grub2) getDefaultEntry() string {
 	// if GRUB_DEFAULE exist and is a index number, return its entry name
 	index, err := strconv.ParseInt(value, 10, 32)
 	if err != nil {
-		logger.Errorf(`invalid number, settings["GRUB_DEFAULT"]=%s`, grub.settings["GRUB_DEFAULT"])
+		logger.Warningf(`invalid number, settings["GRUB_DEFAULT"]=%s`, grub.settings["GRUB_DEFAULT"])
 		index = 0
 	}
 	if index >= 0 && int(index) < len(simpleEntryTitles) {

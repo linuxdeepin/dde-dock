@@ -90,7 +90,7 @@ func (grub *Grub2) GetSimpleEntryTitles() ([]string, error) {
 	}
 	if len(entryTitles) == 0 {
 		s := fmt.Sprintf("there is no menu entry in %s", grubMenuFile)
-		logger.Error(s)
+		logger.Warning(s)
 		return entryTitles, errors.New(s)
 	}
 	return entryTitles, nil
