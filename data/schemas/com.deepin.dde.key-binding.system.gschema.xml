@@ -27,7 +27,7 @@
 		<description>system shortcut</description>
 	</key>
 	<key type="as" name="terminal-quake">
-		<default>['F12','deepin-terminal --quake-mode']</default>
+		<default>['F4','deepin-terminal --quake-mode']</default>
 		<summary>shortcut</summary>
 		<description>system shortcut</description>
 	</key>
