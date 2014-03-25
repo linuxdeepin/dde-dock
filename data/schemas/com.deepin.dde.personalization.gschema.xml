@@ -14,11 +14,6 @@
       <summary>Activation of this plugin</summary>
       <description>Whether this plugin would be activated by gnome-settings-daemon or not</description>
     </key>
-    <key type="i" name="priority">
-      <default>1</default>
-      <summary>Priority to use for this plugin</summary>
-      <description>Priority to use for this plugin in gnome-settings-daemon startup queue</description>
-    </key>
     <key type="s" name="current-picture">
       <default>'file:///usr/share/backgrounds/default_background.jpg'</default>
       <summary>Current picture URI</summary>
