@@ -85,7 +85,7 @@ func NewGrub2() *Grub2 {
 
 // setup grub2 environment, regenerate configure and theme if need
 func (grub *Grub2) setup() {
-	grub.load()
+	grub.readSettings() // read setttings and fix settings automaticly
 	grub.resetGfxmodeIfNeed()
 	grub.needUpdateLock.Lock()
 	if grub.needUpdate {
