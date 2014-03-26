@@ -264,7 +264,7 @@ func detetedViaShadowFile(info *UserInfo) bool {
                 */
                 //加盐密码最短为13
                 if len(pw) < 13 {
-                        continue
+                        break
                 }
 
                 if pw[0] == '!' {
