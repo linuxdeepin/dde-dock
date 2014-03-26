@@ -11,3 +11,4 @@ test_*
 */*.test
 grub2/grub2
 themes/themes
+network/network
