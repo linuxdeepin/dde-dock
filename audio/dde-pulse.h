@@ -247,6 +247,7 @@ int pa_dec_sink_input_volume(pa *self, int index, int volume);
 
 int pa_set_source_output_mute(pa *self, int index, int mute);
 int pa_set_source_output_volume(pa *self, int index, pa_cvolume *volume);
+int pa_kill_source_output(pa *self,int index);
 int pa_inc_source_output_volume(pa *self, int index, int volume);
 int pa_dec_source_output_volume(pa *self, int index, int volume);
 

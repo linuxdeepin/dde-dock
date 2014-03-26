@@ -731,6 +731,10 @@ func (audio *Audio) getServerInfo() *Audio {
     return audio
 }
 
+func (audio *Audio) KillSourceOutput(index int32) int32 {
+    return int32(C.pa_kill_source_output(audio.pa, C.int(index)))
+}
+
 func (audio *Audio) OnPropertiesChanged(name string, oldv interface{}) {
     defer func() {
         if err := recover(); err != nil {

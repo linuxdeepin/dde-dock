@@ -1881,7 +1881,7 @@ int pa_inc_sink_input_volume(pa *self, int index, int volume)
 
 void monitor_read_cb(pa_stream *s,size_t length,void *userdata)
 {
-const void *data;
+    const void *data;
     double v;
 
     printf("read callback length: %d\n", length);
@@ -1896,12 +1896,12 @@ const void *data;
                         assert(length > 0);
                             assert(length % sizeof(float) == 0);
 
-                                v = ((const float*) data)[length / sizeof(float) -1];
+                    v = ((const float*) data)[length / sizeof(float) -1];
 
                                     pa_stream_drop(s);
 
-                                        if (v < 0) v = 0;
-                                            if (v > 1) v = 1;
+                        if (v < 0) v = 0;
+                                        if (v > 1) v = 1;
                                                 printf("\tread callback peek: %f\n", v);
 }
 
@@ -2189,7 +2189,6 @@ int pa_set_source_output_volume(pa *self, int index, pa_cvolume *cvolume)
 int pa_kill_source_output(pa *self, int index)
 {
     int state = 0;
-    //float tmp=0;
     if (!self)
     {
         fprintf(stderr, "NULL object pointer\n");
@@ -2206,13 +2205,7 @@ int pa_kill_source_output(pa *self, int index)
         }
         if (self->pa_ready == 2)
         {
-            pa_context_disconnect(self->pa_ctx);
-            pa_context_unref(self->pa_ctx);
-            pa_mainloop_free(self->pa_ml);
-            self->pa_op = NULL;
-            self->pa_ctx = NULL;
-            self->pa_mlapi = NULL;
-            self->pa_ml = NULL;
+            pa_init_context(self);
             return -1;
         }
         switch (state)
