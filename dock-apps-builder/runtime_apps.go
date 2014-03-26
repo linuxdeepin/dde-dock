@@ -367,7 +367,11 @@ func (app *RuntimeApp) detachXid(xid xproto.Window) {
 			}
 		}
 	}
-	app.setChangedCB(nil)
+	if len(app.xids) == 0 {
+		app.setChangedCB(nil)
+	} else {
+		app.notifyChanged()
+	}
 }
 
 func (app *RuntimeApp) attachXid(xid xproto.Window) {
