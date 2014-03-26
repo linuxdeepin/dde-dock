@@ -1,6 +1,7 @@
 package main
 
 import (
+	"dlib"
 	"dlib/dbus"
 	liblogger "dlib/logger"
 	"os"
@@ -31,11 +32,21 @@ func main() {
 	m.watchEntries()
 
 	d := NewDockedAppManager()
+	err = dbus.InstallOnSession(d)
 	if err != nil {
 		logger.Errorf("register dbus interface failed: %v", err)
 		os.Exit(1)
 	}
-	err = dbus.InstallOnSession(d)
+
+	s := NewSetting()
+	err = dbus.InstallOnSession(s)
+	if err != nil {
+		logger.Errorf("register dbus interface failed: %v", err)
+		os.Exit(1)
+	}
+
+	go dlib.StartLoop()
+
 	dbus.DealWithUnhandledMessage()
 
 	if err := dbus.Wait(); err != nil {

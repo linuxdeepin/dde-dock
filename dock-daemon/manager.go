@@ -30,7 +30,7 @@ type Manager struct {
 
 func (m *Manager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		"dde.dock.EntryManager",
+		"dde.dock.Daemon",
 		"/dde/dock/EntryManager",
 		"dde.dock.EntryManager",
 	}

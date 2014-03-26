@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	SChemaId   string = "com.deepin.dde.dock"
+	SchemaId   string = "com.deepin.dde.dock"
 	DockedApps string = "docked-apps"
 )
 
@@ -24,7 +24,7 @@ func NewDockedAppManager() *DockedAppManager {
 }
 
 func (m *DockedAppManager) init() {
-	m.core = gio.NewSettings(SChemaId)
+	m.core = gio.NewSettings(SchemaId)
 }
 
 func (m *DockedAppManager) DockedAppList() []string {
