@@ -56,6 +56,13 @@ func (op *Manager) SetCurrentTheme(name string) bool {
 
         if name != op.CurrentTheme {
                 if obj := op.getThemeObject(name); obj != nil {
+                        // Check if theme properties valid
+                        if !objUtil.IsElementExist(obj.GtkTheme, op.GtkThemeList) ||
+                                !objUtil.IsElementExist(obj.IconTheme, op.IconThemeList) ||
+                                //!objUtil.IsElementExist(obj.FontName, op.FontThemeList) ||
+                                !objUtil.IsElementExist(obj.CursorTheme, op.CursorThemeList) {
+                                return false
+                        }
                         obj.setThemeViaXSettings()
                 }
                 op.updateGSettingsKey(GKEY_CURRENT_THEME,
@@ -67,7 +74,8 @@ func (op *Manager) SetCurrentTheme(name string) bool {
 }
 
 func (op *Manager) SetGtkTheme(name string) (string, bool) {
-        if len(name) <= 0 {
+        if len(name) <= 0 ||
+                !objUtil.IsElementExist(name, op.GtkThemeList) {
                 return op.CurrentTheme, false
         }
 
@@ -83,7 +91,8 @@ func (op *Manager) SetGtkTheme(name string) (string, bool) {
 }
 
 func (op *Manager) SetIconTheme(name string) (string, bool) {
-        if len(name) <= 0 {
+        if len(name) <= 0 ||
+                !objUtil.IsElementExist(name, op.IconThemeList) {
                 return op.CurrentTheme, false
         }
 
@@ -99,7 +108,8 @@ func (op *Manager) SetIconTheme(name string) (string, bool) {
 }
 
 func (op *Manager) SetCursorTheme(name string) (string, bool) {
-        if len(name) <= 0 {
+        if len(name) <= 0 ||
+                !objUtil.IsElementExist(name, op.CursorThemeList) {
                 return op.CurrentTheme, false
         }
 
@@ -115,7 +125,8 @@ func (op *Manager) SetCursorTheme(name string) (string, bool) {
 }
 
 func (op *Manager) SetFontName(name string) (string, bool) {
-        if len(name) <= 0 {
+        if len(name) <= 0 ||
+                !objUtil.IsElementExist(name, op.FontThemeList) {
                 return op.CurrentTheme, false
         }
 
@@ -410,6 +421,19 @@ func newManager() *Manager {
 
         m.listenBackgroundDir(BACKGROUND_DEFAULT_DIR)
         m.listenBackgroundDir(homeDir + THUMB_LOCAL_THEME_PATH + "/Custom/wallpappers")
+
+        m.listenThemeDir(THUMB_GTK_PATH)
+        m.listenThemeDir(PREVIEW_GTK_PATH)
+        m.listenThemeDir(THUMB_ICON_PATH)
+        m.listenThemeDir(PREVIEW_ICON_PATH)
+        m.listenThemeDir(THUMB_CURSOR_PATH)
+        m.listenThemeDir(PREVIEW_CURSOR_PATH)
+        m.listenThemeDir(homeDir + THUMB_LOCAL_GTK_PATH)
+        m.listenThemeDir(homeDir + PREVIEW_LOCAL_ICON_PATH)
+        m.listenThemeDir(homeDir + THUMB_LOCAL_ICON_PATH)
+        m.listenThemeDir(homeDir + PREVIEW_LOCAL_ICON_PATH)
+        m.listenThemeDir(homeDir + THUMB_LOCAL_CURSOR_PATH)
+        m.listenThemeDir(homeDir + PREVIEW_LOCAL_CURSOR_PATH)
 
         return m
 }

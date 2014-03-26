@@ -109,8 +109,17 @@ func (op *Manager) setPropName(propName string) {
                 dbus.NotifyChange(op, propName)
         case "CurrentTheme":
                 value := personSettings.GetString(GKEY_CURRENT_THEME)
-                if _, ok := themeNamePathMap[value]; ok {
-                        op.CurrentTheme = value
+                if obj := op.getThemeObject(value); obj != nil {
+                        // Check if theme properties valid
+                        if !objUtil.IsElementExist(obj.GtkTheme, op.GtkThemeList) ||
+                                !objUtil.IsElementExist(obj.IconTheme, op.IconThemeList) ||
+                                //!objUtil.IsElementExist(obj.FontName, op.FontThemeList) ||
+                                !objUtil.IsElementExist(obj.CursorTheme, op.CursorThemeList) {
+                                op.CurrentTheme = DEFAULT_THEME_NAME
+                                personSettings.SetString(GKEY_CURRENT_THEME, DEFAULT_THEME_NAME)
+                        } else {
+                                op.CurrentTheme = value
+                        }
                 } else {
                         op.CurrentTheme = DEFAULT_THEME_NAME
                         personSettings.SetString(GKEY_CURRENT_THEME, DEFAULT_THEME_NAME)
