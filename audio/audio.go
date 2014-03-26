@@ -723,8 +723,13 @@ func (audio *Audio) setDefaultDevice() int32 {
 }
 
 func (audio *Audio) setDefaultSink(name string) int32 {
+	dbus.NotifyChange(audio, "DefaultSink")
 	return int32(C.pa_set_default_sink(audio.pa,
 		(*C.char)(C.CString(name))))
+}
+
+func (audio *Audio) SetDefaultSink(name string) int32 {
+	return audio.setDefaultSink(name)
 }
 
 func (audio *Audio) setDefaultSource(name string) int32 {
@@ -735,8 +740,9 @@ func (audio *Audio) setDefaultSource(name string) int32 {
 func (audio *Audio) playSound() {
 	if audio.apiSound != nil {
 		audio.apiSound.Call(API_SOUND_IFC+".PlaySystemSound", 0,
-			dbus.MakeVariant(SOUND_ROOT_PATH+
-				"/freedesktop/stereo/bell.oga"))
+			//dbus.MakeVariant(SOUND_ROOT_PATH+
+			//"/freedesktop/stereo/bell.oga"))
+			"audio-volume-change")
 	}
 }
 
