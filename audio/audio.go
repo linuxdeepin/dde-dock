@@ -1041,6 +1041,7 @@ func (card *Card) GetCardProfile() []CardProfileInfo {
 }
 
 func (card *Card) setCardProfile(index C.int, port *C.char) int32 {
+	dbus.NotifyChange(card, "ActiveProfile")
 	return int32(C.pa_set_card_profile_by_index(
 		audio.pa,
 		index,
@@ -1130,6 +1131,7 @@ func (sink *Sink) OnPropertiesChanged(name string, oldv interface{}) {
 }
 
 func (sink *Sink) setSinkPort(port *C.char) int32 {
+	dbus.NotifyChange(sink, "ActivePort")
 	ret := C.pa_set_sink_port_by_index(audio.pa, C.int(sink.Index), port)
 	return int32(ret)
 }
@@ -1140,6 +1142,7 @@ func (sink *Sink) SetSinkPort(portnum int32) int32 {
 }
 
 func (sink *Sink) SetSinkVolume(volume uint32) int32 {
+	dbus.NotifyChange(sink, "Volume")
 	return sink.setSinkVolume(volume)
 	//var cvolume C.pa_cvolume
 	//cvolume.channels = C.uint8_t(2)
@@ -1197,10 +1200,12 @@ func (sink *Sink) setSinkMute(mute bool) int32 {
 }
 
 func (sink *Sink) SetSinkMute(mute bool) int32 {
+	dbus.NotifyChange(sink, "Mute")
 	return sink.setSinkMute(mute)
 }
 
 func (sink *Sink) setSinkBalance(balance float64) int32 {
+	dbus.NotifyChange(sink, "Balance")
 	ret := C.pa_set_sink_balance_by_index(audio.pa, C.int(sink.Index),
 		C.float(balance))
 	return int32(ret)
@@ -1290,6 +1295,7 @@ func (source *Source) GetSourceOutputs() []*SourceOutput {
 }
 
 func (source *Source) setSourcePort(port *C.char) int32 {
+	dbus.NotifyChange(source, "ActivePort")
 	ret := C.pa_set_source_port_by_index(audio.pa, C.int(source.Index), port)
 	return int32(ret)
 }
@@ -1320,6 +1326,7 @@ func (source *Source) setSourceMute(mute bool) int32 {
 	} else {
 		_mute = 0
 	}
+	dbus.NotifyChange(source, "Mute")
 	ret := C.pa_set_source_mute_by_index(
 		audio.pa, C.int(source.Index), C.int(_mute))
 	return int32(ret)
@@ -1333,6 +1340,7 @@ func (source *Source) setSourceBalance(balance float64) int32 {
 	ret := C.pa_set_source_balance_by_index(audio.pa,
 		C.int(source.Index),
 		C.float(balance))
+	dbus.NotifyChange(source, "Balance")
 	return int32(ret)
 }
 
