@@ -9,6 +9,7 @@ import (
         "dlib/dbus"
         "dlib/logger"
         "os"
+        "os/exec"
         "unsafe"
 )
 
@@ -25,6 +26,10 @@ func main() {
         tpadFlag := false
 
         logObject.SetRestartCommand("/usr/lib/deepin-daemon/inputdevices")
+
+        go exec.Command("/usr/lib/dde-daemon/gsd-mouse").Run()
+        go exec.Command("/usr/lib/dde-daemon/gsd-keyboard").Run()
+
         if !InitGSettings() {
                 return
         }
