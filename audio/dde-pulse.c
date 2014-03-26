@@ -1879,7 +1879,7 @@ int pa_inc_sink_input_volume(pa *self, int index, int volume)
     return  0;
 }
 
-void monitor_read_cb(pa_stream *s,size_t length,void *userdata)
+void monitor_read_cb(pa_stream *s, size_t length, void *userdata)
 {
     const void *data;
     double v;
@@ -1888,32 +1888,33 @@ void monitor_read_cb(pa_stream *s,size_t length,void *userdata)
     printf("\tget_device_index: %d\n", pa_stream_get_device_index(s));
     printf("\tget_device_name: %s\n", pa_stream_get_device_name(s));
     printf("\tget_monitor_stream: %d\n", pa_stream_get_monitor_stream(s));
-                if (pa_stream_peek(s, &data, &length) < 0) {
-                                printf("Failed to read data from stream\n");
-                                        return;
-                                            }
+    if (pa_stream_peek(s, &data, &length) < 0)
+    {
+        printf("Failed to read data from stream\n");
+        return;
+    }
 
-                        assert(length > 0);
-                            assert(length % sizeof(float) == 0);
+    assert(length > 0);
+    assert(length % sizeof(float) == 0);
 
-                    v = ((const float*) data)[length / sizeof(float) -1];
+    v = ((const float*) data)[length / sizeof(float) - 1];
 
-                                    pa_stream_drop(s);
+    pa_stream_drop(s);
 
-                        if (v < 0) v = 0;
-                                        if (v > 1) v = 1;
-                                                printf("\tread callback peek: %f\n", v);
+    if (v < 0) v = 0;
+    if (v > 1) v = 1;
+    printf("\tread callback peek: %f\n", v);
 }
 
-void monitor_suspend_cb(pa_stream *s,void *userdata)
+void monitor_suspend_cb(pa_stream *s, void *userdata)
 {
-    if(pa_stream_is_suspended(s))
+    if (pa_stream_is_suspended(s))
     {
         printf("suspend callback\n");
     }
 }
 
-int pa_connect_stream_record(pa *self,char *dev_name)
+int pa_connect_stream_record(pa *self, char *dev_name)
 {
     if (pa_context_get_server_protocol_version(self->pa_ctx) < 13 )
     {
@@ -1934,36 +1935,36 @@ int pa_connect_stream_record(pa *self,char *dev_name)
     ss.rate = 25;
 
     //pa_buffer_attr
-    memset(&attr,0,sizeof(attr));
+    memset(&attr, 0, sizeof(attr));
     attr.fragsize = sizeof(float);
-    attr.maxlength = (uint32_t) -1;
+    attr.maxlength = (uint32_t) - 1;
 
     //pa_proplist
     proplist = pa_proplist_new();
-    pa_proplist_sets(proplist,PA_PROP_APPLICATION_ID,"dde daemon audio");
+    pa_proplist_sets(proplist, PA_PROP_APPLICATION_ID, "dde daemon audio");
 
     //create new steam
-    if (!(s = pa_stream_new_with_proplist(self->pa_ctx,"dde daemon audio stream",&ss,NULL,proplist)))
+    if (!(s = pa_stream_new_with_proplist(self->pa_ctx, "dde daemon audio stream", &ss, NULL, proplist)))
     {
-        fprintf(stderr,"pa_stream_new_with_proplist error\n");
+        fprintf(stderr, "pa_stream_new_with_proplist error\n");
         return -2;
     }
 
     pa_proplist_free(proplist);
 
-    pa_stream_set_read_callback(s,monitor_read_cb,self);
-    pa_stream_set_suspended_callback(s,monitor_suspend_cb,self);
+    pa_stream_set_read_callback(s, monitor_read_cb, self);
+    pa_stream_set_suspended_callback(s, monitor_suspend_cb, self);
 
     res = pa_stream_connect_record(s,
-            dev_name,
-            &attr,
-            (pa_stream_flags_t)(
-                PA_STREAM_DONT_MOVE|
-                PA_STREAM_PEAK_DETECT|
-                PA_STREAM_ADJUST_LATENCY));
+                                   dev_name,
+                                   &attr,
+                                   (pa_stream_flags_t)(
+                                       PA_STREAM_DONT_MOVE |
+                                       PA_STREAM_PEAK_DETECT |
+                                       PA_STREAM_ADJUST_LATENCY));
     if (res < 0)
     {
-        fprintf(stderr,"Failed to connect to record stream\n");
+        fprintf(stderr, "Failed to connect to record stream\n");
         return -3;
     }
 
