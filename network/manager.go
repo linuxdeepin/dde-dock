@@ -24,7 +24,6 @@ var (
 	_NMManager, _  = nm.NewManager(NMDest, "/org/freedesktop/NetworkManager")
 	_NMSettings, _ = nm.NewSettings(NMDest, "/org/freedesktop/NetworkManager/Settings")
 	_Manager       = _NewManager()
-	_Editor        = NewConnectionEditor()
 	LOGGER         = logger.NewLogger("com.deepin.daemon.Network")
 	argDebug       bool
 )
@@ -86,12 +85,6 @@ func main() {
 	}
 
 	err := dbus.InstallOnSession(_Manager)
-	if err != nil {
-		LOGGER.Error("register dbus interface failed: ", err)
-		os.Exit(1)
-	}
-
-	err = dbus.InstallOnSession(_Editor)
 	if err != nil {
 		LOGGER.Error("register dbus interface failed: ", err)
 		os.Exit(1)

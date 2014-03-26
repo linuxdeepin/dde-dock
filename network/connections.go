@@ -81,6 +81,7 @@ func NewConnection(core *nm.SettingsConnection) *Connection {
 	return c
 }
 
+// TODO
 func newWirelessConnection(id string, ssid string, keyFlag int) *Connection {
 	data := make(_ConnectionData)
 	data[fieldConnection] = make(map[string]dbus.Variant)
@@ -192,4 +193,48 @@ func (this *Manager) GetActiveConnection(devPath dbus.ObjectPath) (ret *ActiveCo
 func (this *Manager) UpdateConnection(data map[string]map[string]string) {
 	/*func (this *Manager) UpdateConnection(data string) {*/
 	fmt.Println("Update:", data)
+}
+
+// CreateConnection create a new connection, return ConnectionSession's dbus object path if success.
+func (this *Manager) CreateConnection(connType string) (objPath dbus.ObjectPath, err error) {
+	session, err := NewConnectionSessionByCreate(connType)
+	if err != nil {
+		LOGGER.Error(err)
+		return
+	}
+
+	// install dbus session
+	err = dbus.InstallOnSession(session)
+	if err != nil {
+		LOGGER.Error(err)
+		return
+	}
+
+	objPath = session.objPath
+	return
+}
+
+// OpenConnection open a connection through uuid, return ConnectionSession's dbus object path if success.
+func (this *Manager) OpenConnection(uuid string) (objPath dbus.ObjectPath, err error) {
+	session, err := NewConnectionSessionByOpen(uuid)
+	if err != nil {
+		LOGGER.Error(err)
+		return
+	}
+
+	// install dbus session
+	err = dbus.InstallOnSession(session)
+	if err != nil {
+		LOGGER.Error(err)
+		return
+	}
+
+	objPath = session.objPath
+	return
+}
+
+// DeleteConnection delete a connection through uuid.
+func (this *Manager) DeleteConnection(uuid string) (err error) {
+	// TODO
+	return
 }

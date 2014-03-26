@@ -1,11 +1,11 @@
 package main
 
 const (
-	fieldConnection       = "connection"
-	fieldWireless         = "802-11-wireless"
-	fieldWirelessSecurity = "802-11-wireless-security"
-	fieldIPv4             = "ipv4"
-	fieldIPv6             = "ipv6"
+	fieldConnection       = NM_SETTING_CONNECTION_SETTING_NAME
+	fieldWireless         = NM_SETTING_WIRELESS_SETTING_NAME
+	fieldWirelessSecurity = NM_SETTING_WIRELESS_SECURITY_SETTING_NAME
+	fieldIPv4             = NM_SETTING_IP4_CONFIG_SETTING_NAME
+	fieldIPv6             = NM_SETTING_IP6_CONFIG_SETTING_NAME
 )
 
 const (

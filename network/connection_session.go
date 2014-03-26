@@ -1,6 +1,7 @@
 package main
 
 import (
+	"dlib/dbus"
 	"fmt"
 )
 
@@ -16,12 +17,14 @@ var supportedConnectionTypes = []string{
 	NM_SETTING_WIRELESS_SETTING_NAME,
 }
 
-type ConnectionEditor struct {
+type ConnectionSession struct {
+	objPath dbus.ObjectPath
+
 	data _ConnectionData
 
 	connType string // TODO
 
-	CurrentUUID string
+	currentUUID string // TODO hide property
 	HasChanged  bool
 
 	currentPage string
@@ -33,69 +36,52 @@ type ConnectionEditor struct {
 	CurrentErrors []string
 }
 
-func NewConnectionEditor() *ConnectionEditor {
-	editor := &ConnectionEditor{}
-	return editor
-}
-
 //所有字段值都为string，后端自行转换为需要的值后提供给NM
 
-//新建一个Connection 返回uuid (此时这个Connection还未提交到NM)
-//如果是支持的类型则设置CurrentUUID属性
-// Create try to create a new connection, return empty string if error ocurred.
-func (editor *ConnectionEditor) Create(connType string) (uuid string) {
+func NewConnectionSessionByCreate(connType string) (session *ConnectionSession, err error) {
 	if !isStringInArray(connType, supportedConnectionTypes) {
-		return ""
+		err = fmt.Errorf("connection type is out of support: %s", connType)
+		LOGGER.Error(err)
+		return
 	}
 
-	// TODO
-	editor.data = make(_ConnectionData)
-	editor.connType = connType
-
-	uuid = newUUID()
-	editor.updatePropCurrentUUID(uuid)
-	editor.updatePropHasChanged(true)
+	session = &ConnectionSession{}
+	session.currentUUID = newUUID()
+	session.objPath = dbus.ObjectPath(fmt.Sprintf("/com/deepin/daemon/ConnectionSession/%s", session.currentUUID))
 
 	// TODO
-	// editor.currentPage = editor.getDefaultPage(connType)
-	// editor.updatePropCurrentFields()
+	session.data = make(_ConnectionData)
+	session.connType = connType
+
+	// session.updatePropCurrentUUID(uuid)
+	// session.updatePropHasChanged(true)
+
+	// TODO
+	// session.currentPage = session.getDefaultPage(connType)
+	// session.updatePropCurrentFields()
 
 	// TODO current errors
-
-	return uuid
+	return
 }
 
-// // TODO get default page of target connection type
-// func (editor *ConnectionEditor) getDefaultPage(connType string) (defpage string) {
-// 	switch connType {
-// 	case NM_SETTING_WIRED_SETTING_NAME:
-// 		defpage = pageIPv4 // TODO
-// 	case NM_SETTING_WIRELESS_SETTING_NAME:
-// 		defpage = "default page" // TODO
-// 	}
-// 	return
-// }
+func NewConnectionSessionByOpen(uuid string) (session *ConnectionSession, err error) {
+	// TODO
+	session = &ConnectionSession{}
+	return
+}
 
 //保存当前Connection的修改。  不错任何处理如果Changed属性=false
-func (editor *ConnectionEditor) Save() {
+func (session *ConnectionSession) Save() {
 	// TODO
-	if !editor.HasChanged {
+	if !session.HasChanged {
 		return
 	}
 }
 
-//打开uuid指定的Connection 如果无法通过
-//org.freedesktop.NetworkManager.Settings的GetConnectionByUuid得到结果
-//则设置Error属性如果成功打开则设置CurrentUUID属性
-func (editor *ConnectionEditor) Open(uuid string) (err error) {
-	// TODO
-	return
-}
-
 //根据CurrentUUID返回此Connection支持的设置页面
-func (editor *ConnectionEditor) ListPages() (pages []string) {
+func (session *ConnectionSession) ListPages() (pages []string) {
 	// TODO
-	switch editor.connType {
+	switch session.connType {
 	case NM_SETTING_WIRED_SETTING_NAME:
 		pages = []string{
 			pageGeneral,
@@ -109,10 +95,10 @@ func (editor *ConnectionEditor) ListPages() (pages []string) {
 }
 
 // get valid fields for target page
-func (editor *ConnectionEditor) listFields(page string) (fields []string) {
-	switch editor.connType {
+func (session *ConnectionSession) listFields(page string) (fields []string) {
+	switch session.connType {
 	case NM_SETTING_WIRED_SETTING_NAME:
-		switch editor.currentPage {
+		switch session.currentPage {
 		case pageGeneral:
 			fields = []string{"General_field1", "General_field2"}
 		case pageIPv4:
@@ -141,16 +127,16 @@ func (editor *ConnectionEditor) listFields(page string) (fields []string) {
 }
 
 //设置/获得字段的值都受这里设置page的影响。
-func (editor *ConnectionEditor) SwitchPage(page string) {
+func (session *ConnectionSession) SwitchPage(page string) {
 	// TODO HasChanged
-	editor.currentPage = page
-	editor.updatePropCurrentFields()
+	session.currentPage = page
+	session.updatePropCurrentFields()
 }
 
 //比如获得当前链接支持的加密方式 EAP字段: TLS、MD5、FAST、PEAP
 //获得ip设置方式 : Manual、Link-Local Only、Automatic(DHCP)
 //获得当前可用mac地址(这种字段是有几个可选值但用户也可用手动输入一个其他值)
-func (editor *ConnectionEditor) GetAvailableValue(key string) (values []string) {
+func (session *ConnectionSession) GetAvailableValue(key string) (values []string) {
 	// TODO
 	switch key {
 	case NM_SETTING_IP4_CONFIG_METHOD:
@@ -169,61 +155,70 @@ func (editor *ConnectionEditor) GetAvailableValue(key string) (values []string) 
 //仅仅调试使用，返回某个页面支持的字段。 因为字段如何安排(位置、我们是否要提供这个字段)是由前端决定的。
 //*****在设计前端显示内容的时候和这个返回值关联很大*****
 // DebugListFields return all fields of current page, only for debugging.
-func (editor *ConnectionEditor) DebugListFields() []string {
+func (session *ConnectionSession) DebugListFields() []string {
 	// TODO
-	return editor.listFields(editor.currentPage)
+	return session.listFields(session.currentPage)
 }
 
 // DebugConnectionTypes return all supported connection types, only for debugging.
-func (editor *ConnectionEditor) DebugConnectionTypes() []string {
+func (session *ConnectionSession) DebugConnectionTypes() []string {
 	return supportedConnectionTypes
 }
 
+// TODO
+func (session *ConnectionSession) DebugGetKeyType(page, key string) (t uint32) {
+	return 0
+}
+
 //设置某个字段， 会影响CurrentFields属性，某些值会导致其他属性进入不可用状态
-func (editor *ConnectionEditor) SetField(key, value string) (err error) {
-	page, ok := editor.data[editor.currentPage]
-	if !ok {
-		err = fmt.Errorf("invalid page: data[%s]", editor.currentPage)
-		return
-	}
+// TODO SetField
+// func (session *ConnectionSession) SetField(key, value string) (err error) {
+// 	page, ok := session.data[session.currentPage]
+// 	if !ok {
+// 		err = fmt.Errorf("invalid page: data[%s]", session.currentPage)
+// 		return
+// 	}
 
-	varient, ok := page[key]
-	if !ok {
-		// field is not yet exits
-		page[key] = wrapVarient(value)
-		editor.HasChanged = true
-		return
-	}
+// 	varient, ok := page[key]
+// 	if !ok {
+// 		// field is not yet exits
+// 		page[key] = dbus.MakeVariant(value)
+// 		session.HasChanged = true
+// 		return
+// 	}
 
-	oldValue, err := unwrapVarient(varient)
-	if err != nil {
-		return
-	}
-	if oldValue == value {
-		return
-	}
-	page[key] = wrapVarient(value)
-	editor.HasChanged = true
+// 	// TODO oldValue, err := varientToString(varient)
+// 	// oldValue, err := varientToString(varient)
+// 	// if err != nil {
+// 	// 	return
+// 	// }
+// 	// if oldValue == value {
+// 	// 	return
+// 	// }
+// 	// page[key] = dbus.MakeVariant(value)
+// 	// session.HasChanged = true
 
-	// TODO processing logic
-	editor.updatePropCurrentFields()
+// 	// // TODO processing logic
+// 	// session.updatePropCurrentFields()
 
-	return
-}
+// 	return
+// }
 
-func (editor *ConnectionEditor) GetField(key string) (value string, err error) {
-	page, ok := editor.data[editor.currentPage]
-	if !ok {
-		err = fmt.Errorf("invalid page: data[%s]", editor.currentPage)
-		return
-	}
+// func (session *ConnectionSession) GetField(key string) (value string, err error) {
+// 	page, ok := session.data[session.currentPage]
+// 	if !ok {
+// 		err = fmt.Errorf("invalid page: data[%s]", session.currentPage)
+// 		return
+// 	}
 
-	varient, ok := page[key]
-	if !ok {
-		err = fmt.Errorf("invalid field: data[%s][%s]", editor.currentPage, key)
-		return
-	}
+// 	// TODO
+// 	// varient, ok := page[key]
+// 	// if !ok {
+// 	// 	err = fmt.Errorf("invalid field: data[%s][%s]", session.currentPage, key)
+// 	// 	return
+// 	// }
 
-	value, err = unwrapVarient(varient)
-	return
-}
+// 	// TODO
+// 	// value, err = varientToString(varient)
+// 	return
+// }

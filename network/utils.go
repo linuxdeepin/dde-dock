@@ -5,15 +5,6 @@ import "fmt"
 import "io"
 import "crypto/rand"
 
-func pageGeneralGetId(con map[string]map[string]dbus.Variant) string {
-	defer func() {
-		if err := recover(); err != nil {
-			LOGGER.Warning("EditorGetID failed:", con, err)
-		}
-	}()
-	return con[fieldConnection]["id"].Value().(string)
-}
-
 func newUUID() string {
 	uuid := make([]byte, 16)
 	n, err := io.ReadFull(rand.Reader, uuid)
@@ -27,6 +18,25 @@ func newUUID() string {
 	return fmt.Sprintf("%x-%x-%x-%x-%x", uuid[0:4], uuid[4:6], uuid[6:8], uuid[8:10], uuid[10:])
 }
 
+func pageGeneralGetId(con map[string]map[string]dbus.Variant) string {
+	defer func() {
+		if err := recover(); err != nil {
+			LOGGER.Warning("EditorGetID failed:", con, err)
+		}
+	}()
+	return con[fieldConnection]["id"].Value().(string)
+}
+
+// TODO
+func getConnectionData(data _ConnectionData, field, key string, t ktype) (value string, err error) {
+	return
+}
+
+// TODO
+func setConnectionData(data _ConnectionData, field, key, value string, t ktype) (err error) {
+	return
+}
+
 func isStringInArray(s string, list []string) bool {
 	for _, i := range list {
 		if i == s {
@@ -34,17 +44,4 @@ func isStringInArray(s string, list []string) bool {
 		}
 	}
 	return false
-}
-
-func wrapVarient(s string) dbus.Variant {
-	return dbus.MakeVariant(s)
-}
-
-func unwrapVarient(v dbus.Variant) (s string, err error) {
-	s, ok := v.Value().(string)
-	if !ok {
-		err = fmt.Errorf("convert varient to string failed: %v", v)
-		return
-	}
-	return
 }
