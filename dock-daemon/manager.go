@@ -2,8 +2,6 @@ package main
 
 import "dlib/dbus"
 import pkgbus "dbus/org/freedesktop/dbus"
-import "encoding/json"
-import "github.com/BurntSushi/xgb/xproto"
 import "time"
 import "sync"
 
@@ -21,17 +19,13 @@ const (
 	InvalidStatus = "invalid"
 )
 
-type XidInfo struct {
-	Xid   uint32
-	Title string
-}
-
 type Manager struct {
 	Entries       []*EntryProxyer
 	entrireLocker sync.Mutex
 
-	Added   func(dbus.ObjectPath)
-	Removed func(dbus.ObjectPath)
+	Added func(dbus.ObjectPath)
+	// Removed func(dbus.ObjectPath)
+	Removed func(string)
 }
 
 func (m *Manager) GetDBusInfo() dbus.DBusInfo {
@@ -104,11 +98,6 @@ func (m *Manager) registerEntry(name string) {
 		logger.Errorf("register entry failed: %v", err)
 		return
 	}
-	var xidInfos []XidInfo
-	json.Unmarshal([]byte(entry.Data[FieldAppXids]), xidInfos)
-	for _, info := range xidInfos {
-		hideWindow(xproto.Window(info.Xid))
-	}
 	m.Entries = append(m.Entries, entry)
 
 	// send signal
@@ -158,7 +147,8 @@ func (m *Manager) unregisterEntry(name string) {
 
 	// send signal
 	if m.Removed != nil {
-		m.Removed(dbus.ObjectPath(entry.GetDBusInfo().ObjectPath))
+		m.Removed(entry.Id)
+		// m.Removed(dbus.ObjectPath(entry.GetDBusInfo().ObjectPath))
 	}
 
 	logger.Infof("unregister entry success: %s", name)

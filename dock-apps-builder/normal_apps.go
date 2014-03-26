@@ -17,7 +17,7 @@ type NormalApp struct {
 }
 
 func NewNormalApp(id string) *NormalApp {
-	app := &NormalApp{Id: id}
+	app := &NormalApp{Id: id[:len(id)-8]}
 	app.core = gio.NewDesktopAppInfo(id)
 	app.Icon = app.core.GetIcon().ToString()
 	app.Name = app.core.GetDisplayName()
