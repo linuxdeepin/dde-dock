@@ -32,6 +32,14 @@ const (
 	AUDIO_DOWN = "AudioDown"
 )
 
+const SOUND_ROOT_PATH = "/usr/share/sounds"
+
+const (
+	API_SOUND_DEST = "com.deepin.api.Sound"
+	API_SOUND_PATH = "/com/deepin/api/Sound"
+	API_SOUND_IFC  = "com.deepin.api.Sound"
+)
+
 const VOLUME_STEP = 10
 
 //var l = logger.NewLogger("audio")
@@ -46,6 +54,9 @@ type Audio struct {
 	sinkInputs    map[int]*SinkInput
 	sourceOutputs map[int]*SourceOutput
 	lock          sync.Mutex
+
+	//other dbus interface
+	apiSound *dbus.Object
 
 	//exported properties
 	HostName      string
@@ -394,6 +405,14 @@ func NewAudio() (*Audio, error) {
 			"unable to connect to the pulseaudio server,exiting\n")
 		os.Exit(-1)
 	}
+
+	conn, err := dbus.SessionBus()
+	if err != nil {
+		fmt.Println(err)
+	}
+	audio.apiSound = conn.Object(
+		API_SOUND_DEST,
+		API_SOUND_PATH)
 	audio.cards = make(map[int]*Card)
 	audio.sinks = make(map[int]*Sink)
 	audio.sources = make(map[int]*Source)
@@ -713,6 +732,14 @@ func (audio *Audio) setDefaultSource(name string) int32 {
 		(*C.char)(C.CString(name))))
 }
 
+func (audio *Audio) playSound() {
+	if audio.apiSound != nil {
+		audio.apiSound.Call(API_SOUND_IFC+".PlaySystemSound", 0,
+			dbus.MakeVariant(SOUND_ROOT_PATH+
+				"/freedesktop/stereo/bell.oga"))
+	}
+}
+
 func (audio *Audio) GetServerInfo() *Audio {
 	return audio.getServerInfo()
 }
@@ -808,6 +835,7 @@ func (audio *Audio) listenMediaKey() {
 					//toggle mute when button released
 					fmt.Println("Toggle mute mode: ", !sink.Mute)
 					sink.SetSinkMute(!sink.Mute)
+					audio.playSound()
 					break
 				case MEDIA_KEY_IFC + "." + AUDIO_UP:
 					volume := int32(sink.Volume + VOLUME_STEP)
@@ -819,6 +847,7 @@ func (audio *Audio) listenMediaKey() {
 					fmt.Println("Volume step up: ", int32(volume))
 					sink.setSinkVolume(uint32(volume))
 					sink.setSinkMute(false)
+					audio.playSound()
 					break
 				case MEDIA_KEY_IFC + "." + AUDIO_DOWN:
 					volume := int32(sink.Volume - VOLUME_STEP)
@@ -828,6 +857,7 @@ func (audio *Audio) listenMediaKey() {
 					sink.setSinkVolume(uint32(volume))
 					sink.setSinkMute(false)
 					fmt.Println("Volume step down: ", volume)
+					audio.playSound()
 					break
 				default:
 					fmt.Println("media key ignored")
