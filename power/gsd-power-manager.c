@@ -2866,7 +2866,7 @@ idle_is_session_inhibited (GsdPowerManager  *manager,
     }
 
     variant = g_dbus_proxy_get_cached_property (manager->priv->screensaver_proxy,
-              "isInhibited");
+              "IsInhibited");
     if (!variant)
         return FALSE;
 
@@ -2900,43 +2900,44 @@ idle_configure (GsdPowerManager *manager)
     guint timeout_dim;
     gboolean on_battery;
 
-    /*if (!idle_is_session_inhibited (manager,*/
-    /*GSM_INHIBITOR_FLAG_IDLE,*/
-    /*&is_idle_inhibited))*/
-    /*{*/
-    /*[> Session isn't available yet, postpone <]*/
-    /*g_debug("Session isn't available yet,postpone\n");*/
-    /*return;*/
-    /*}*/
+    if (!idle_is_session_inhibited (manager,
+                                    GSM_INHIBITOR_FLAG_IDLE,
+                                    &is_idle_inhibited))
+    {
+        /*[ > Session isn't available yet, postpone <]*/
+        g_debug("Session isn't available yet, postpone\n");
+        return;
+    }
 
-    /* are we inhibited from going idle */
+    /*are we inhibited from going idle*/
     /*if (!is_session_active (manager) || is_idle_inhibited)*/
-    /*{*/
-    /*g_debug ("inhibited or inactive, so using normal state");*/
-    /*idle_set_mode (manager, GSD_POWER_IDLE_MODE_NORMAL);*/
+    if (is_idle_inhibited)
+    {
+        g_debug ("inhibited or inactive, so using normal state");
+        idle_set_mode (manager, GSD_POWER_IDLE_MODE_NORMAL);
 
-    /*clear_idle_watch (manager->priv->idle_monitor,*/
-    /*&manager->priv->idle_blank_id);*/
-    /*clear_idle_watch (manager->priv->idle_monitor,*/
-    /*&manager->priv->idle_sleep_id);*/
-    /*clear_idle_watch (manager->priv->idle_monitor,*/
-    /*&manager->priv->idle_dim_id);*/
-    /*clear_idle_watch (manager->priv->idle_monitor,*/
-    /*&manager->priv->idle_sleep_warning_id);*/
-    /*notify_close_if_showing (&manager->priv->notification_sleep_warning);*/
-    /*return;*/
-    /*}*/
+        clear_idle_watch (manager->priv->idle_monitor,
+                          &manager->priv->idle_blank_id);
+        clear_idle_watch (manager->priv->idle_monitor,
+                          &manager->priv->idle_sleep_id);
+        clear_idle_watch (manager->priv->idle_monitor,
+                          &manager->priv->idle_dim_id);
+        clear_idle_watch (manager->priv->idle_monitor,
+                          &manager->priv->idle_sleep_warning_id);
+        notify_close_if_showing (&manager->priv->notification_sleep_warning);
+        return;
+    }
 
     /* set up blank callback only when the screensaver is on,
-     * as it's what will drive the blank */
+    * as it's what will drive the blank */
     on_battery = up_client_get_on_battery (manager->priv->up_client);
     timeout_blank = 0;
     if (manager->priv->screensaver_active || manager->priv->current_idle_mode == GSD_POWER_IDLE_MODE_DIM)
     {
         /* The tail is wagging the dog.
-         * The screensaver coming on will blank the screen.
-         * If an event occurs while the screensaver is on,
-         * the aggressive idle watch will handle it */
+        * The screensaver coming on will blank the screen.
+        * If an event occurs while the screensaver is on,
+        * the aggressive idle watch will handle it */
         /*timeout_blank = SCREENSAVER_TIMEOUT_BLANK;*/
         timeout_blank = 3;
     }
@@ -2946,7 +2947,7 @@ idle_configure (GsdPowerManager *manager)
 
     if (timeout_blank != 0)
     {
-        g_debug ("setting up blank callback for %is", timeout_blank);
+        g_debug ("setting up blank callback for % is", timeout_blank);
 
         manager->priv->idle_blank_id = gnome_idle_monitor_add_idle_watch (manager->priv->idle_monitor,
                                        timeout_blank * 1000,
@@ -2954,14 +2955,14 @@ idle_configure (GsdPowerManager *manager)
     }
 
     /* only do the sleep timeout when the session is idle
-     * and we aren't inhibited from sleeping (or logging out, etc.) */
+    * and we aren't inhibited from sleeping (or logging out, etc.) */
     action_type = g_settings_get_enum (manager->priv->settings, on_battery ?
-                                       "sleep-inactive-battery-type" : "sleep-inactive-ac-type");
+                                       "sleep - inactive - battery - type" : "sleep - inactive - ac - type");
     timeout_sleep = 0;
     /*if (!is_action_inhibited (manager, action_type))*/
     /*{*/
     timeout_sleep = g_settings_get_int (manager->priv->settings, on_battery ?
-                                        "sleep-inactive-battery-timeout" : "sleep-inactive-ac-timeout");
+                                        "sleep - inactive - battery - timeout" : "sleep - inactive - ac - timeout");
     /*}*/
 
     clear_idle_watch (manager->priv->idle_monitor,
@@ -2969,7 +2970,7 @@ idle_configure (GsdPowerManager *manager)
     clear_idle_watch (manager->priv->idle_monitor,
                       &manager->priv->idle_sleep_warning_id);
 
-    g_debug ("setting up sleep callback %is", timeout_sleep);
+    g_debug ("setting up sleep callback % is", timeout_sleep);
     if (timeout_sleep != 0)
     {
         manager->priv->idle_sleep_id = gnome_idle_monitor_add_idle_watch (manager->priv->idle_monitor,
@@ -2986,7 +2987,7 @@ idle_configure (GsdPowerManager *manager)
             if (timeout_sleep_warning < MINIMUM_IDLE_DIM_DELAY)
                 timeout_sleep_warning = 0;
 
-            g_debug ("setting up sleep warning callback %is", timeout_sleep_warning);
+            g_debug ("setting up sleep warning callback % is", timeout_sleep_warning);
 
             manager->priv->idle_sleep_warning_id = gnome_idle_monitor_add_idle_watch (manager->priv->idle_monitor,
                                                    timeout_sleep_warning * 1000,
@@ -2998,16 +2999,17 @@ idle_configure (GsdPowerManager *manager)
         notify_close_if_showing (&manager->priv->notification_sleep_warning);
 
     /* set up dim callback for when the screen lock is not active,
-     * but only if we actually want to dim. */
+    * but only if we actually want to dim. */
     timeout_dim = 0;
-    if (manager->priv->screensaver_active)
+    /*if (manager->priv->screensaver_active)*/
+    if (0)
     {
         /* Don't dim when the screen lock is active */
-        g_debug("@idle_configure:don't dim when screen lock is active");
+        g_debug("@idle_configure : don't dim when screen lock is active");
     }
     else if (!on_battery)
     {
-        /* Don't dim when charging */
+        /*Don't dim when charging */
         timeout_dim = g_settings_get_int (manager->priv->settings,
                                           "idle-delay");
         g_debug("@idle_configure:don't dim when charging? %d", timeout_dim);
@@ -3212,6 +3214,8 @@ screensaver_properties_changed_cb(GDBusProxy *proxy,
                                   GStrv invalidated_properties,
                                   gpointer user_data)
 {
+    GsdPowerManager *manager = user_data;
+    gboolean res;
     int i = 0;
     for (i = 0; invalidated_properties[i]; i++)
     {
@@ -3220,7 +3224,11 @@ screensaver_properties_changed_cb(GDBusProxy *proxy,
     }
     g_debug("screensaver changed properties: %s",
             g_variant_print(changed_properties, TRUE));
-
+    res = g_variant_get_boolean(g_dbus_proxy_get_cached_property(
+                                    manager->priv->screensaver_proxy,
+                                    "IsInhibited"));
+    g_debug("screensaver property IsInhibited: %s", res ? "true" : "false");
+    idle_configure(manager);
 }
 
 static void
