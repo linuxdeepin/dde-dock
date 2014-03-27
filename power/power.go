@@ -734,7 +734,6 @@ func (power *Power) EnumerateDevices() []dbus.ObjectPath {
 
 func (power *Power) StartDim() int32 {
 	fmt.Println("Starting dim")
-	C.start_dim()
 	return 0
 }
 

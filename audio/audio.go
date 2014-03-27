@@ -425,11 +425,12 @@ func NewAudio() (*Audio, error) {
 	audio.getSources()
 	//audio.getSinkInputs()
 	//audio.getSourceOutputs()
-	audio.setDefaultDevice()
 
 	audio.updateCards()
 	audio.updateSinks()
 	audio.updateSources()
+
+	audio.setDefaultDevice()
 	return audio, nil
 }
 

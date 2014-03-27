@@ -2973,6 +2973,11 @@ idle_configure (GsdPowerManager *manager)
                                            idle_triggered_idle_cb, manager, NULL);
         }
     }
+
+    if (timeout_dim == 0 && timeout_sleep == 0 )
+    {
+        //check if screen is locked.if so start special power settings
+    }
 }
 
 static void
