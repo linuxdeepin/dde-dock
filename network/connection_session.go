@@ -73,7 +73,7 @@ func NewConnectionSessionByOpen(uuid string) (session *ConnectionSession, err er
 	session = &ConnectionSession{}
 	session.currentUUID = uuid
 	session.objPath = fmt.Sprintf("/com/deepin/daemon/ConnectionSession/%s", randString(8))
-	session.data = data
+	session.data = data // TODO need deep copy
 	return
 }
 

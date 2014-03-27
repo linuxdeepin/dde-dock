@@ -47,6 +47,7 @@ func getConnectionData(data _ConnectionData, field, key string, t ktype) (value 
 		return
 	}
 
+	// LOGGER.Debugf("getConnectionData: data[%s][%s]=%s", field, key, value) // TODO
 	return
 }
 
@@ -54,6 +55,7 @@ func setConnectionData(data _ConnectionData, field, key, value string, t ktype) 
 	var fieldData map[string]dbus.Variant
 	fieldData, ok := data[field]
 	if !ok {
+		// create field if not exists yet
 		fieldData = make(map[string]dbus.Variant)
 		data[field] = fieldData
 		return
@@ -66,6 +68,7 @@ func setConnectionData(data _ConnectionData, field, key, value string, t ktype) 
 	}
 	fieldData[key] = valueVariant
 
+	LOGGER.Debugf("setConnectionData: data[%s][%s]=%s", field, key, value) // TODO
 	return
 }
 

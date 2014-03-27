@@ -31,7 +31,7 @@ func fillSecret(settingName string, key string) map[string]map[string]dbus.Varia
 	r[settingName] = make(map[string]dbus.Variant)
 	switch settingName {
 	case "802-11-wireless-security":
-		r[settingName]["psk"] = dbus.MakeVariant(key)
+		r[settingName]["psk"] = dbus.MakeVariant(key) // TODO
 	default:
 		LOGGER.Warning("Unknow secrety setting name", settingName, ",please report it to linuxdeepin")
 	}
@@ -54,6 +54,7 @@ func (a *Agent) GetSecrets(connection map[string]map[string]dbus.Variant, connec
 		LOGGER.Info("Repeat GetSecrets", keyId)
 	} else {
 		select {
+		// TODO
 		case keyValue, ok := <-a.createPendingKey(keyId, pageGeneralGetId(connection)):
 			if ok {
 				keyValue := fillSecret(settingName, keyValue)

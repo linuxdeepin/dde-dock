@@ -72,49 +72,24 @@ func NewConnection(core *nm.SettingsConnection) *Connection {
 	c := &Connection{}
 	settings, err := core.GetSettings()
 	if err != nil {
-		return c
+		return c // TODO still return even error occured?
 	}
 	c.Path = core.Path
-	c.Name = settings["connection"]["id"].Value().(string)
-	c.Uuid = settings["connection"]["uuid"].Value().(string)
-	c.ConnectionType = settings["connection"]["type"].Value().(string)
-	c.Data, err = core.GetSettings()
+	// TODO remove
+	// c.Name = settings["connection"]["id"].Value().(string)
+	// c.Uuid = settings["connection"]["uuid"].Value().(string)
+	// c.ConnectionType = settings["connection"]["type"].Value().(string)
+	c.Name = getSettingConnectionId(settings)
+	c.Uuid = getSettingConnectionUuid(settings)
+	c.ConnectionType = getSettingConnectionType(settings)
+	c.Data, err = core.GetSettings() // TODO need GetSettings() again?
 	return c
 }
 
-// TODO
 func newWirelessConnection(id string, ssid string, keyFlag int) *Connection {
 	data := make(_ConnectionData)
-	data[fieldConnection] = make(map[string]dbus.Variant)
-	data[fieldIPv4] = make(map[string]dbus.Variant)
-	data[fieldIPv6] = make(map[string]dbus.Variant)
-	data[fieldWireless] = make(map[string]dbus.Variant)
-
-	data[fieldConnection]["id"] = dbus.MakeVariant(id)
 	uuid := newUUID()
-	data[fieldConnection]["uuid"] = dbus.MakeVariant(uuid)
-	data[fieldConnection]["type"] = dbus.MakeVariant(fieldWireless)
-
-	data[fieldWireless]["ssid"] = dbus.MakeVariant([]uint8(ssid))
-
-	if keyFlag != ApKeyNone {
-		data[fieldWirelessSecurity] = make(map[string]dbus.Variant)
-		data[fieldWireless]["security"] = dbus.MakeVariant(fieldWirelessSecurity)
-		switch keyFlag {
-		case ApKeyWep:
-			data[fieldWirelessSecurity]["key-mgmt"] = dbus.MakeVariant("none")
-		case ApKeyPsk:
-			data[fieldWirelessSecurity]["key-mgmt"] = dbus.MakeVariant("wpa-psk")
-			data[fieldWirelessSecurity]["auth-alg"] = dbus.MakeVariant("open")
-		case ApKeyEap:
-			data[fieldWirelessSecurity]["key-mgmt"] = dbus.MakeVariant("wpa-eap")
-			data[fieldWirelessSecurity]["auth-alg"] = dbus.MakeVariant("open")
-		}
-	}
-
-	data[fieldIPv4]["method"] = dbus.MakeVariant("auto")
-
-	data[fieldIPv6]["method"] = dbus.MakeVariant("auto")
+	initWirelessConnection(data, id, uuid, ssid, keyFlag)
 
 	newConn, err := _NMSettings.AddConnection(data)
 	core, err := nm.NewSettingsConnection(NMDest, newConn)
@@ -127,6 +102,7 @@ func newWirelessConnection(id string, ssid string, keyFlag int) *Connection {
 func (this *Manager) GetConnectionByAccessPoint(path dbus.ObjectPath) (*Connection, error) {
 	if ap, err := nm.NewAccessPoint(NMDest, path); err == nil {
 		for _, c := range this.WirelessConnections {
+			// TODO
 			if c.ConnectionType == fieldWireless && string(c.Data[fieldWireless]["ssid"].Value().([]uint8)) == string(ap.Ssid.Get()) {
 				return c, nil
 			}

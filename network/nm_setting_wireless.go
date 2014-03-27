@@ -141,7 +141,61 @@ func getSettingWirelessKeyType(key string) (t ktype) {
 }
 
 // TODO
-func initWirelessConnection() {
+func initWirelessConnection(data _ConnectionData, id, uuid, ssid string, keyFlag int) {
+	setSettingConnectionId(data, id)
+	setSettingConnectionUuid(data, uuid)
+	setSettingConnectionType(data, fieldWireless)
+
+	setSettingWirelessSsid(data, ssid)
+
+	if keyFlag != ApKeyNone {
+		setSettingWirelessSec(data, fieldWirelessSecurity)
+		switch keyFlag {
+		case ApKeyWep:
+			setSettingWirelessSecurityKeyMgmt(data, "none")
+		case ApKeyPsk:
+			setSettingWirelessSecurityKeyMgmt(data, "wpa-psk")
+			setSettingWirelessSecurityAuthAlg(data, "open")
+		case ApKeyEap:
+			setSettingWirelessSecurityKeyMgmt(data, "wpa-eap")
+			setSettingWirelessSecurityAuthAlg(data, "open")
+		}
+	}
+
+	setSettingIp4ConfigMethod(data, "auto")
+	setSettingIp6ConfigMethod(data, "auto")
+
+	// TODO remove
+
+	// data[fieldConnection] = make(map[string]dbus.Variant)
+	// data[fieldIPv4] = make(map[string]dbus.Variant)
+	// data[fieldIPv6] = make(map[string]dbus.Variant)
+	// data[fieldWireless] = make(map[string]dbus.Variant)
+
+	// data[fieldConnection]["id"] = dbus.MakeVariant(id)
+	// uuid := newUUID()
+	// data[fieldConnection]["uuid"] = dbus.MakeVariant(uuid)
+	// data[fieldConnection]["type"] = dbus.MakeVariant(fieldWireless)
+
+	// data[fieldWireless]["ssid"] = dbus.MakeVariant([]uint8(ssid))
+
+	// if keyFlag != ApKeyNone {
+	// 	data[fieldWirelessSecurity] = make(map[string]dbus.Variant)
+	// 	data[fieldWireless]["security"] = dbus.MakeVariant(fieldWirelessSecurity)
+	// 	switch keyFlag {
+	// 	case ApKeyWep:
+	// 		data[fieldWirelessSecurity]["key-mgmt"] = dbus.MakeVariant("none")
+	// 	case ApKeyPsk:
+	// 		data[fieldWirelessSecurity]["key-mgmt"] = dbus.MakeVariant("wpa-psk")
+	// 		data[fieldWirelessSecurity]["auth-alg"] = dbus.MakeVariant("open")
+	// 	case ApKeyEap:
+	// 		data[fieldWirelessSecurity]["key-mgmt"] = dbus.MakeVariant("wpa-eap")
+	// 		data[fieldWirelessSecurity]["auth-alg"] = dbus.MakeVariant("open")
+	// 	}
+	// }
+
+	// data[fieldIPv4]["method"] = dbus.MakeVariant("auto")
+	// data[fieldIPv6]["method"] = dbus.MakeVariant("auto")
 }
 
 // Getter

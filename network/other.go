@@ -24,6 +24,7 @@ func parseDHCP4(path dbus.ObjectPath) (string, string, string) {
 		panic(err)
 	}
 	options := dhcp4.Options.Get()
+	// TODO
 	route, _ := options["routers"].Value().(string)
 	ip, _ := options["ip_address"].Value().(string)
 	mask, _ := options["subnet_mask"].Value().(string)
