@@ -2875,7 +2875,7 @@ idle_is_session_inhibited (GsdPowerManager  *manager,
 
     /**is_inhibited = (inhibited_actions & mask);*/
     *is_inhibited = g_variant_get_boolean (variant);
-    g_debug("idle is inhibited by org.freedesktop.ScreenSaver: %s",*is_inhibited? "true":"false");
+    g_debug("idle is inhibited by org.freedesktop.ScreenSaver: %s", *is_inhibited ? "true" : "false");
 
     return TRUE;
 }
@@ -3201,25 +3201,25 @@ screensaver_signal_cb (GDBusProxy *proxy,
                        GVariant *parameters,
                        gpointer user_data)
 {
-    g_debug("screensaver signal: %s",sender_name);
+    g_debug("screensaver signal: %s", sender_name);
     /*if (g_strcmp0 (signal_name, "ActiveChanged") == 0)*/
-        /*handle_screensaver_active (GSD_POWER_MANAGER (user_data), parameters);*/
+    /*handle_screensaver_active (GSD_POWER_MANAGER (user_data), parameters);*/
 }
 
 static void
 screensaver_properties_changed_cb(GDBusProxy *proxy,
-        GVariant *changed_properties,
-        GStrv invalidated_properties,
-        gpointer user_data)
+                                  GVariant *changed_properties,
+                                  GStrv invalidated_properties,
+                                  gpointer user_data)
 {
     int i = 0;
-    for (i=0;invalidated_properties[i];i++)
+    for (i = 0; invalidated_properties[i]; i++)
     {
         g_debug("%s changed",
                 invalidated_properties[i]);
     }
     g_debug("screensaver changed properties: %s",
-                g_variant_print(changed_properties,TRUE));
+            g_variant_print(changed_properties, TRUE));
 
 }
 
@@ -3269,16 +3269,16 @@ screensaver_proxy_ready_cb (GObject         *source_object,
 
     g_signal_connect (manager->priv->screensaver_proxy, "g-signal",
                       G_CALLBACK (screensaver_signal_cb), manager);
-    g_signal_connect (manager->priv->screensaver_proxy,"g-properties-changed",
-            G_CALLBACK(screensaver_properties_changed_cb),manager);
+    g_signal_connect (manager->priv->screensaver_proxy, "g-properties-changed",
+                      G_CALLBACK(screensaver_properties_changed_cb), manager);
     /*g_dbus_proxy_call (manager->priv->screensaver_proxy,*/
-                       /*"GetActive",*/
-                       /*NULL,*/
-                       /*0,*/
-                       /*G_MAXINT,*/
-                       /*NULL,*/
-                       /*(GAsyncReadyCallback)get_active_cb,*/
-                       /*manager);*/
+    /*"GetActive",*/
+    /*NULL,*/
+    /*0,*/
+    /*G_MAXINT,*/
+    /*NULL,*/
+    /*(GAsyncReadyCallback)get_active_cb,*/
+    /*manager);*/
 
 }
 
@@ -3288,6 +3288,7 @@ screensaver_appeared_cb (GDBusConnection *connection,
                          const char      *name_owner,
                          GsdPowerManager *manager)
 {
+    g_debug("screensaver_appeared!\n");
     g_dbus_proxy_new (connection,
                       0,
                       NULL,
@@ -3502,9 +3503,9 @@ engine_settings_key_changed_cb (GSettings *settings,
 
 static void
 engine_session_properties_changed_cb (GDBusProxy      *session,
-GVariant        *changed,
-char           **invalidated,
-GsdPowerManager *manager)
+                                      GVariant        *changed,
+                                      char           **invalidated,
+                                      GsdPowerManager *manager)
 {
     GVariant *v;
 
@@ -3891,12 +3892,12 @@ gsd_power_manager_start (GsdPowerManager *manager,
     manager->priv->screensaver_active = FALSE;
     manager->priv->screensaver_watch_id =
         g_bus_watch_name (G_BUS_TYPE_SESSION,
-                DEEPIN_SCREENSAVER_NAME,
-                G_BUS_NAME_WATCHER_FLAGS_NONE,
-                (GBusNameAppearedCallback) screensaver_appeared_cb,
-                (GBusNameVanishedCallback) screensaver_vanished_cb,
-                manager,
-                NULL);
+                          DEEPIN_SCREENSAVER_NAME,
+                          G_BUS_NAME_WATCHER_FLAGS_NONE,
+                          (GBusNameAppearedCallback) screensaver_appeared_cb,
+                          (GBusNameVanishedCallback) screensaver_vanished_cb,
+                          manager,
+                          NULL);
 
     manager->priv->devices_array = g_ptr_array_new_with_free_func (g_object_unref);
 
@@ -4426,13 +4427,13 @@ on_bus_gotten (GObject             *source_object,
 /*static void*/
 /*register_manager_dbus (GsdPowerManager *manager)*/
 /*{*/
-    /*manager->priv->introspection_data = g_dbus_node_info_new_for_xml (introspection_xml, NULL);*/
-    /*g_assert (manager->priv->introspection_data != NULL);*/
+/*manager->priv->introspection_data = g_dbus_node_info_new_for_xml (introspection_xml, NULL);*/
+/*g_assert (manager->priv->introspection_data != NULL);*/
 
-    /*g_bus_get (G_BUS_TYPE_SESSION,*/
-               /*manager->priv->bus_cancellable,*/
-               /*(GAsyncReadyCallback) on_bus_gotten,*/
-               /*manager);*/
+/*g_bus_get (G_BUS_TYPE_SESSION,*/
+/*manager->priv->bus_cancellable,*/
+/*(GAsyncReadyCallback) on_bus_gotten,*/
+/*manager);*/
 /*}*/
 
 GsdPowerManager *

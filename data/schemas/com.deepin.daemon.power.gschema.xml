@@ -136,7 +136,7 @@
       <description>The percentage of the battery when it is considered critical. Only valid when use-time-for-policy is false.</description>
     </key>
     <key type="i" name="percentage-action">
-      <default>2</default>
+      <default>5</default>
       <summary>Percentage action is taken</summary>
       <description>The percentage of the battery when the critical action is performed. Only valid when use-time-for-policy is false.</description>
     </key>
