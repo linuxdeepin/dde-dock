@@ -699,7 +699,7 @@ func (audio *Audio) setDefaultDevice() int32 {
 
 	length := len(audio.Sinks)
 	if length >= 2 {
-		analogPattern, err := regexp.Compile(".*analog.*")
+		analogPattern, err := regexp.Compile("analog")
 		if err != nil {
 			panic(err)
 		}
@@ -716,7 +716,7 @@ func (audio *Audio) setDefaultDevice() int32 {
 			}
 		}
 	} else {
-		fmt.Printf("Only one output device found,set fallback it\n")
+		fmt.Printf("Only one output device found,set fallback to it\n")
 		audio.DefaultSink = 0
 	}
 
