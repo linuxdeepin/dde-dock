@@ -58,7 +58,6 @@ func setConnectionData(data _ConnectionData, field, key, value string, t ktype) 
 		// create field if not exists yet
 		fieldData = make(map[string]dbus.Variant)
 		data[field] = fieldData
-		return
 	}
 
 	valueVariant, err := wrapVariant(value, t)

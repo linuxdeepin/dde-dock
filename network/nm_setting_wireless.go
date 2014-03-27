@@ -144,7 +144,7 @@ func getSettingWirelessKeyType(key string) (t ktype) {
 func initWirelessConnection(data _ConnectionData, id, uuid, ssid string, keyFlag int) {
 	setSettingConnectionId(data, id)
 	setSettingConnectionUuid(data, uuid)
-	setSettingConnectionType(data, fieldWireless)
+	setSettingConnectionType(data, typeWireless)
 
 	setSettingWirelessSsid(data, ssid)
 
