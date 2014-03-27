@@ -139,17 +139,3 @@ func setSettingConnectionSecondaries(data _ConnectionData, value string) (err er
 	err = setConnectionData(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_SECONDARIES, value, getSettingConnectionKeyType(NM_SETTING_CONNECTION_SECONDARIES))
 	return
 }
-
-// TODO remove
-
-// SettingConnectionId NM_SETTING_CONNECTION_ID
-// SettingConnectionUuid NM_SETTING_CONNECTION_UUID
-// SettingConnectionType NM_SETTING_CONNECTION_TYPE
-// SettingConnectionAutoconnect NM_SETTING_CONNECTION_AUTOCONNECT
-// SettingConnectionTimestamp NM_SETTING_CONNECTION_TIMESTAMP
-// SettingConnectionReadOnly NM_SETTING_CONNECTION_READ_ONLY
-// SettingConnectionPermissions NM_SETTING_CONNECTION_PERMISSIONS
-// SettingConnectionZone NM_SETTING_CONNECTION_ZONE
-// SettingConnectionMaster NM_SETTING_CONNECTION_MASTER
-// SettingConnectionSlaveType NM_SETTING_CONNECTION_SLAVE_TYPE
-// SettingConnectionSecondaries NM_SETTING_CONNECTION_SECONDARIES

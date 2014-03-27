@@ -259,20 +259,3 @@ func setSettingWirelessHidden(data _ConnectionData, value string) (err error) {
 	err = setConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_HIDDEN, value, getSettingWirelessKeyType(NM_SETTING_WIRELESS_HIDDEN))
 	return
 }
-
-// TODO remove
-
-// SettingWirelessSsid NM_SETTING_WIRELESS_SSID
-// SettingWirelessMode NM_SETTING_WIRELESS_MODE
-// SettingWirelessBand NM_SETTING_WIRELESS_BAND
-// SettingWirelessChannel NM_SETTING_WIRELESS_CHANNEL
-// SettingWirelessBssid NM_SETTING_WIRELESS_BSSID
-// SettingWirelessRate NM_SETTING_WIRELESS_RATE
-// SettingWirelessTxPower NM_SETTING_WIRELESS_TX_POWER
-// SettingWirelessMacAddress NM_SETTING_WIRELESS_MAC_ADDRESS
-// SettingWirelessClonedMacAddress NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS
-// SettingWirelessMacAddressBlacklist NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST
-// SettingWirelessMtu NM_SETTING_WIRELESS_MTU
-// SettingWirelessSeenBssids NM_SETTING_WIRELESS_SEEN_BSSIDS
-// SettingWirelessSec NM_SETTING_WIRELESS_SEC
-// SettingWirelessHidden NM_SETTING_WIRELESS_HIDDEN
