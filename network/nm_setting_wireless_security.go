@@ -123,7 +123,6 @@ const (
 	NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS = "psk-flags"
 )
 
-// TODO
 func getSettingWirelessSecurityKeyType(key string) (t ktype) {
 	switch key {
 	default:

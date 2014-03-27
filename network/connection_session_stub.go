@@ -7,7 +7,7 @@ import (
 func (session *ConnectionSession) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		"com.deepin.daemon.Network",
-		string(session.objPath),
+		session.objPath,
 		"com.deepin.daemon.ConnectionSession",
 	}
 }

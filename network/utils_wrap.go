@@ -28,6 +28,30 @@ const (
 	ktypeIpv6Routes       // json, array of (byte array, uint32, byte array, uint32)
 )
 
+type ktypeDescription struct {
+	t    uint32
+	desc string
+}
+
+var ktypeDescriptions = []ktypeDescription{
+	// TODO
+	{uint32(ktypeUnknown), "Unknown"},
+	{uint32(ktypeString), "String"},
+	{uint32(ktypeByte), "Byte"},
+	{uint32(ktypeInt32), "Int32"},
+	{uint32(ktypeUint32), "Uint32"},
+	{uint32(ktypeUint64), "Uint64"},
+	{uint32(ktypeBoolean), "Boolean"},
+	{uint32(ktypeArrayByte), "ArrayByte"},
+	{uint32(ktypeArrayString), "ArrayString, encode by json"},
+	{uint32(ktypeArrayUint32), "ArrayUint32, encode by json"},
+	{uint32(ktypeArrayArrayByte), "ArrayArrayByte, array of array of byte, encode by json"},
+	{uint32(ktypeArrayArrayUint32), "ArrayArrayUint32, array of array of uint32, encode by json"},
+	{uint32(ktypeDictStringString), "DictStringString, dict of (string::string), encode by json"},
+	{uint32(ktypeIpv6Addresses), "Ipv6Addresses, array of (byte array, uint32, byte array), encode by json"},
+	{uint32(ktypeIpv6Routes), "Ipv6Routes, array of (byte array, uint32, byte array, uint32), encode by json"},
+}
+
 // Ipv6Addresses is an array of (byte array, uint32, byte array)
 type Ipv6Addresses []struct {
 	Address []byte

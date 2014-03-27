@@ -67,6 +67,7 @@ func (this *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPa
 
 }
 
+// TODO
 func NewConnection(core *nm.SettingsConnection) *Connection {
 	c := &Connection{}
 	settings, err := core.GetSettings()
@@ -195,9 +196,28 @@ func (this *Manager) UpdateConnection(data map[string]map[string]string) {
 	fmt.Println("Update:", data)
 }
 
+func (this *Manager) getConnectionData(uuid string) (data _ConnectionData) {
+	for _, c := range this.WiredConnections {
+		if uuid == c.Uuid {
+			return c.Data
+		}
+	}
+	for _, c := range this.WirelessConnections {
+		if uuid == c.Uuid {
+			return c.Data
+		}
+	}
+	for _, c := range this.VPNConnections {
+		if uuid == c.Uuid {
+			return c.Data
+		}
+	}
+	return nil
+}
+
 // CreateConnection create a new connection, return ConnectionSession's dbus object path if success.
-func (this *Manager) CreateConnection(connType string) (objPath dbus.ObjectPath, err error) {
-	session, err := NewConnectionSessionByCreate(connType)
+func (this *Manager) CreateConnection(connType string) (session *ConnectionSession, err error) {
+	session, err = NewConnectionSessionByCreate(connType)
 	if err != nil {
 		LOGGER.Error(err)
 		return
@@ -210,13 +230,12 @@ func (this *Manager) CreateConnection(connType string) (objPath dbus.ObjectPath,
 		return
 	}
 
-	objPath = session.objPath
 	return
 }
 
 // OpenConnection open a connection through uuid, return ConnectionSession's dbus object path if success.
-func (this *Manager) OpenConnection(uuid string) (objPath dbus.ObjectPath, err error) {
-	session, err := NewConnectionSessionByOpen(uuid)
+func (this *Manager) OpenConnection(uuid string) (session *ConnectionSession, err error) {
+	session, err = NewConnectionSessionByOpen(uuid)
 	if err != nil {
 		LOGGER.Error(err)
 		return
@@ -229,7 +248,6 @@ func (this *Manager) OpenConnection(uuid string) (objPath dbus.ObjectPath, err e
 		return
 	}
 
-	objPath = session.objPath
 	return
 }
 

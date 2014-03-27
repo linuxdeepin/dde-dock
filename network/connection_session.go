@@ -18,7 +18,7 @@ var supportedConnectionTypes = []string{
 }
 
 type ConnectionSession struct {
-	objPath dbus.ObjectPath
+	objPath string
 
 	data _ConnectionData
 
@@ -47,7 +47,7 @@ func NewConnectionSessionByCreate(connType string) (session *ConnectionSession, 
 
 	session = &ConnectionSession{}
 	session.currentUUID = newUUID()
-	session.objPath = dbus.ObjectPath(fmt.Sprintf("/com/deepin/daemon/ConnectionSession/%s", session.currentUUID))
+	session.objPath = fmt.Sprintf("/com/deepin/daemon/ConnectionSession/%s", randString(8))
 
 	// TODO
 	session.data = make(_ConnectionData)
@@ -65,17 +65,31 @@ func NewConnectionSessionByCreate(connType string) (session *ConnectionSession, 
 }
 
 func NewConnectionSessionByOpen(uuid string) (session *ConnectionSession, err error) {
-	// TODO
+	data := _Manager.getConnectionData(uuid)
+	if data == nil {
+		err = fmt.Errorf("counld not find connection with uuid equal %s", uuid)
+		return
+	}
 	session = &ConnectionSession{}
+	session.currentUUID = uuid
+	session.objPath = fmt.Sprintf("/com/deepin/daemon/ConnectionSession/%s", randString(8))
+	session.data = data
 	return
 }
 
-//保存当前Connection的修改。  不错任何处理如果Changed属性=false
+// Save save current connection session.
 func (session *ConnectionSession) Save() {
 	// TODO
 	if !session.HasChanged {
+		dbus.UnInstallObject(session)
 		return
 	}
+	dbus.UnInstallObject(session)
+}
+
+// Cancel cancel current connection session.
+func (session *ConnectionSession) Cancel() {
+	dbus.UnInstallObject(session)
 }
 
 //根据CurrentUUID返回此Connection支持的设置页面
@@ -166,8 +180,14 @@ func (session *ConnectionSession) DebugConnectionTypes() []string {
 }
 
 // TODO
-func (session *ConnectionSession) DebugGetKeyType(page, key string) (t uint32) {
-	return 0
+func (session *ConnectionSession) DebugGetKeyType(page, key string) ktypeDescription {
+	return ktypeDescriptions[0]
+}
+
+// TODO panic error
+func (*Manager) DebugListKeyTypes() (uint32, string) {
+	LOGGER.Debug(ktypeDescriptions)
+	return ktypeDescriptions[0].t, ktypeDescriptions[0].desc
 }
 
 //设置某个字段， 会影响CurrentFields属性，某些值会导致其他属性进入不可用状态
