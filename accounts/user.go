@@ -58,13 +58,21 @@ func (op *UserManager) SetShell(shell string) {
         }
 }
 
-func (op *UserManager) SetPassword(passwd string) {
+func (op *UserManager) SetPassword(words string) {
         defer func() {
                 if err := recover(); err != nil {
                         logObject.Warningf("Recover Error In SetPassword:%v",
                                 err)
                 }
         }()
+        passwd := encodePasswd(words)
+        args := []string{}
+
+        args = append(args, "-p")
+        args = append(args, passwd)
+        args = append(args, op.UserName)
+        execCommand(CMD_USERMOD, args)
+
         op.SetLocked(false)
 }
 

@@ -21,6 +21,12 @@
 
 package main
 
+// #cgo CFLAGS: -Wall -g
+// #cgo LDFLAGS: -lcrypt
+// #include <stdlib.h>
+// #include "mkpasswd.h"
+import "C"
+
 import (
         //freedbus "dbus/org/freedesktop/dbus"
         polkit "dbus/org/freedesktop/policykit1"
@@ -29,6 +35,7 @@ import (
         "os/exec"
         "strings"
         "sync"
+        "unsafe"
 )
 
 var (
@@ -58,6 +65,14 @@ func execCommand(cmdline string, args []string) {
                         cmdline, args, err)
                 panic(err)
         }
+}
+
+func encodePasswd(words string) string {
+        str := C.CString(words)
+        defer C.free(unsafe.Pointer(str))
+
+        ret := C.mkpasswd(str)
+        return C.GoString(ret)
 }
 
 func getBaseName(path string) string {
