@@ -103,93 +103,82 @@ func getSettingWiredKeyType(key string) (t ktype) {
 }
 
 // Getter
-func getSettingWiredPort(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_PORT, getSettingWiredKeyType(NM_SETTING_WIRED_PORT))
+func getSettingWiredPort(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_PORT, getSettingWiredKeyType(NM_SETTING_WIRED_PORT))
 	return
 }
-func getSettingWiredSpeed(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_SPEED, getSettingWiredKeyType(NM_SETTING_WIRED_SPEED))
+func getSettingWiredSpeed(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_SPEED, getSettingWiredKeyType(NM_SETTING_WIRED_SPEED))
 	return
 }
-func getSettingWiredDuplex(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_DUPLEX, getSettingWiredKeyType(NM_SETTING_WIRED_DUPLEX))
+func getSettingWiredDuplex(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_DUPLEX, getSettingWiredKeyType(NM_SETTING_WIRED_DUPLEX))
 	return
 }
-func getSettingWiredAutoNegotiate(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_AUTO_NEGOTIATE, getSettingWiredKeyType(NM_SETTING_WIRED_AUTO_NEGOTIATE))
+func getSettingWiredAutoNegotiate(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_AUTO_NEGOTIATE, getSettingWiredKeyType(NM_SETTING_WIRED_AUTO_NEGOTIATE))
 	return
 }
-func getSettingWiredMacAddress(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS, getSettingWiredKeyType(NM_SETTING_WIRED_MAC_ADDRESS))
+func getSettingWiredMacAddress(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS, getSettingWiredKeyType(NM_SETTING_WIRED_MAC_ADDRESS))
 	return
 }
-func getSettingWiredClonedMacAddress(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_CLONED_MAC_ADDRESS, getSettingWiredKeyType(NM_SETTING_WIRED_CLONED_MAC_ADDRESS))
+func getSettingWiredClonedMacAddress(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_CLONED_MAC_ADDRESS, getSettingWiredKeyType(NM_SETTING_WIRED_CLONED_MAC_ADDRESS))
 	return
 }
-func getSettingWiredMacAddressBlacklist(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST, getSettingWiredKeyType(NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST))
+func getSettingWiredMacAddressBlacklist(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST, getSettingWiredKeyType(NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST))
 	return
 }
-func getSettingWiredMtu(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MTU, getSettingWiredKeyType(NM_SETTING_WIRED_MTU))
+func getSettingWiredMtu(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MTU, getSettingWiredKeyType(NM_SETTING_WIRED_MTU))
 	return
 }
-func getSettingWiredS390Subchannels(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_SUBCHANNELS, getSettingWiredKeyType(NM_SETTING_WIRED_S390_SUBCHANNELS))
+func getSettingWiredS390Subchannels(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_SUBCHANNELS, getSettingWiredKeyType(NM_SETTING_WIRED_S390_SUBCHANNELS))
 	return
 }
-func getSettingWiredS390Nettype(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_NETTYPE, getSettingWiredKeyType(NM_SETTING_WIRED_S390_NETTYPE))
+func getSettingWiredS390Nettype(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_NETTYPE, getSettingWiredKeyType(NM_SETTING_WIRED_S390_NETTYPE))
 	return
 }
-func getSettingWiredS390Options(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_OPTIONS, getSettingWiredKeyType(NM_SETTING_WIRED_S390_OPTIONS))
+func getSettingWiredS390Options(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_OPTIONS, getSettingWiredKeyType(NM_SETTING_WIRED_S390_OPTIONS))
 	return
 }
 
 // Setter
-func setSettingWiredPort(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_PORT, value, getSettingWiredKeyType(NM_SETTING_WIRED_PORT))
-	return
+func setSettingWiredPort(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_PORT, value, getSettingWiredKeyType(NM_SETTING_WIRED_PORT))
 }
-func setSettingWiredSpeed(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_SPEED, value, getSettingWiredKeyType(NM_SETTING_WIRED_SPEED))
-	return
+func setSettingWiredSpeed(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_SPEED, value, getSettingWiredKeyType(NM_SETTING_WIRED_SPEED))
 }
-func setSettingWiredDuplex(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_DUPLEX, value, getSettingWiredKeyType(NM_SETTING_WIRED_DUPLEX))
-	return
+func setSettingWiredDuplex(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_DUPLEX, value, getSettingWiredKeyType(NM_SETTING_WIRED_DUPLEX))
 }
-func setSettingWiredAutoNegotiate(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_AUTO_NEGOTIATE, value, getSettingWiredKeyType(NM_SETTING_WIRED_AUTO_NEGOTIATE))
-	return
+func setSettingWiredAutoNegotiate(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_AUTO_NEGOTIATE, value, getSettingWiredKeyType(NM_SETTING_WIRED_AUTO_NEGOTIATE))
 }
-func setSettingWiredMacAddress(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS, value, getSettingWiredKeyType(NM_SETTING_WIRED_MAC_ADDRESS))
-	return
+func setSettingWiredMacAddress(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS, value, getSettingWiredKeyType(NM_SETTING_WIRED_MAC_ADDRESS))
 }
-func setSettingWiredClonedMacAddress(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_CLONED_MAC_ADDRESS, value, getSettingWiredKeyType(NM_SETTING_WIRED_CLONED_MAC_ADDRESS))
-	return
+func setSettingWiredClonedMacAddress(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_CLONED_MAC_ADDRESS, value, getSettingWiredKeyType(NM_SETTING_WIRED_CLONED_MAC_ADDRESS))
 }
-func setSettingWiredMacAddressBlacklist(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST, value, getSettingWiredKeyType(NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST))
-	return
+func setSettingWiredMacAddressBlacklist(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST, value, getSettingWiredKeyType(NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST))
 }
-func setSettingWiredMtu(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MTU, value, getSettingWiredKeyType(NM_SETTING_WIRED_MTU))
-	return
+func setSettingWiredMtu(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MTU, value, getSettingWiredKeyType(NM_SETTING_WIRED_MTU))
 }
-func setSettingWiredS390Subchannels(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_SUBCHANNELS, value, getSettingWiredKeyType(NM_SETTING_WIRED_S390_SUBCHANNELS))
-	return
+func setSettingWiredS390Subchannels(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_SUBCHANNELS, value, getSettingWiredKeyType(NM_SETTING_WIRED_S390_SUBCHANNELS))
 }
-func setSettingWiredS390Nettype(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_NETTYPE, value, getSettingWiredKeyType(NM_SETTING_WIRED_S390_NETTYPE))
-	return
+func setSettingWiredS390Nettype(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_NETTYPE, value, getSettingWiredKeyType(NM_SETTING_WIRED_S390_NETTYPE))
 }
-func setSettingWiredS390Options(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_OPTIONS, value, getSettingWiredKeyType(NM_SETTING_WIRED_S390_OPTIONS))
-	return
+func setSettingWiredS390Options(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_OPTIONS, value, getSettingWiredKeyType(NM_SETTING_WIRED_S390_OPTIONS))
 }

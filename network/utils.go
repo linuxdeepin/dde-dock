@@ -28,7 +28,7 @@ func pageGeneralGetId(con map[string]map[string]dbus.Variant) string {
 	return con[fieldConnection]["id"].Value().(string)
 }
 
-func getConnectionData(data _ConnectionData, field, key string, t ktype) (value string, err error) {
+func getConnectionData(data _ConnectionData, field, key string, t ktype) (value string) {
 	fieldData, ok := data[field]
 	if !ok {
 		LOGGER.Errorf("invalid field: data[%s]", field)
@@ -41,7 +41,7 @@ func getConnectionData(data _ConnectionData, field, key string, t ktype) (value 
 		return
 	}
 
-	value, err = unwrapVariant(valueVariant, t)
+	value, err := unwrapVariant(valueVariant, t)
 	if err != nil {
 		LOGGER.Error("get connection data failed:", err)
 		return
@@ -50,7 +50,7 @@ func getConnectionData(data _ConnectionData, field, key string, t ktype) (value 
 	return
 }
 
-func setConnectionData(data _ConnectionData, field, key, value string, t ktype) (err error) {
+func setConnectionData(data _ConnectionData, field, key, value string, t ktype) {
 	var fieldData map[string]dbus.Variant
 	fieldData, ok := data[field]
 	if !ok {

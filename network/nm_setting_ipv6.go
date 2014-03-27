@@ -49,93 +49,82 @@ func getSettingIp6ConfigKeyType(key string) (t ktype) {
 }
 
 // Getter
-func getSettingIp6ConfigMethod(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_METHOD, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_METHOD))
+func getSettingIp6ConfigMethod(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_METHOD, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_METHOD))
 	return
 }
-func getSettingIp6ConfigDns(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_DNS))
+func getSettingIp6ConfigDns(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_DNS))
 	return
 }
-func getSettingIp6ConfigDnsSEARCH(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS_SEARCH, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_DNS_SEARCH))
+func getSettingIp6ConfigDnsSearch(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS_SEARCH, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_DNS_SEARCH))
 	return
 }
-func getSettingIp6ConfigAddresses(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ADDRESSES, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_ADDRESSES))
+func getSettingIp6ConfigAddresses(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ADDRESSES, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_ADDRESSES))
 	return
 }
-func getSettingIp6ConfigRoutes(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTES, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_ROUTES))
+func getSettingIp6ConfigRoutes(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTES, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_ROUTES))
 	return
 }
-func getSettingIp6ConfigIgnoreAUTOROUTES(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES))
+func getSettingIp6ConfigIgnoreAutoRoutes(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES))
 	return
 }
-func getSettingIp6ConfigIgnoreAUTODNS(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS))
+func getSettingIp6ConfigIgnoreAutoDns(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS))
 	return
 }
-func getSettingIp6ConfigNeverDEFAULT(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_NEVER_DEFAULT, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_NEVER_DEFAULT))
+func getSettingIp6ConfigNeverDefault(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_NEVER_DEFAULT, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_NEVER_DEFAULT))
 	return
 }
-func getSettingIp6ConfigMayFAIL(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_MAY_FAIL, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_MAY_FAIL))
+func getSettingIp6ConfigMayFail(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_MAY_FAIL, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_MAY_FAIL))
 	return
 }
-func getSettingIp6ConfigIp6PRIVACY(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IP6_PRIVACY, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_IP6_PRIVACY))
+func getSettingIp6ConfigIp6Privacy(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IP6_PRIVACY, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_IP6_PRIVACY))
 	return
 }
-func getSettingIp6ConfigDhcpHOSTNAME(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME))
+func getSettingIp6ConfigDhcpHostname(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME))
 	return
 }
 
 // Setter
-func setSettingIp6ConfigMethod(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_METHOD, value, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_METHOD))
-	return
+func setSettingIp6ConfigMethod(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_METHOD, value, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_METHOD))
 }
-func setSettingIp6ConfigDns(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS, value, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_DNS))
-	return
+func setSettingIp6ConfigDns(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS, value, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_DNS))
 }
-func setSettingIp6ConfigDnsSEARCH(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS_SEARCH, value, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_DNS_SEARCH))
-	return
+func setSettingIp6ConfigDnsSearch(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS_SEARCH, value, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_DNS_SEARCH))
 }
-func setSettingIp6ConfigAddresses(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ADDRESSES, value, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_ADDRESSES))
-	return
+func setSettingIp6ConfigAddresses(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ADDRESSES, value, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_ADDRESSES))
 }
-func setSettingIp6ConfigRoutes(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTES, value, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_ROUTES))
-	return
+func setSettingIp6ConfigRoutes(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTES, value, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_ROUTES))
 }
-func setSettingIp6ConfigIgnoreAUTOROUTES(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES, value, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES))
-	return
+func setSettingIp6ConfigIgnoreAutoRoutes(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES, value, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES))
 }
-func setSettingIp6ConfigIgnoreAUTODNS(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS, value, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS))
-	return
+func setSettingIp6ConfigIgnoreAutoDns(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS, value, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS))
 }
-func setSettingIp6ConfigNeverDEFAULT(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_NEVER_DEFAULT, value, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_NEVER_DEFAULT))
-	return
+func setSettingIp6ConfigNeverDefault(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_NEVER_DEFAULT, value, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_NEVER_DEFAULT))
 }
-func setSettingIp6ConfigMayFAIL(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_MAY_FAIL, value, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_MAY_FAIL))
-	return
+func setSettingIp6ConfigMayFail(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_MAY_FAIL, value, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_MAY_FAIL))
 }
-func setSettingIp6ConfigIp6PRIVACY(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IP6_PRIVACY, value, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_IP6_PRIVACY))
-	return
+func setSettingIp6ConfigIp6Privacy(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IP6_PRIVACY, value, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_IP6_PRIVACY))
 }
-func setSettingIp6ConfigDhcpHOSTNAME(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME, value, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME))
-	return
+func setSettingIp6ConfigDhcpHostname(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME, value, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME))
 }

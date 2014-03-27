@@ -145,117 +145,103 @@ func initWirelessConnection() {
 }
 
 // Getter
-func getSettingWirelessSsid(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SSID, getSettingWirelessKeyType(NM_SETTING_WIRELESS_SSID))
+func getSettingWirelessSsid(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SSID, getSettingWirelessKeyType(NM_SETTING_WIRELESS_SSID))
 	return
 }
-func getSettingWirelessMode(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MODE, getSettingWirelessKeyType(NM_SETTING_WIRELESS_MODE))
+func getSettingWirelessMode(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MODE, getSettingWirelessKeyType(NM_SETTING_WIRELESS_MODE))
 	return
 }
-func getSettingWirelessBand(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_BAND, getSettingWirelessKeyType(NM_SETTING_WIRELESS_BAND))
+func getSettingWirelessBand(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_BAND, getSettingWirelessKeyType(NM_SETTING_WIRELESS_BAND))
 	return
 }
-func getSettingWirelessChannel(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_CHANNEL, getSettingWirelessKeyType(NM_SETTING_WIRELESS_CHANNEL))
+func getSettingWirelessChannel(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_CHANNEL, getSettingWirelessKeyType(NM_SETTING_WIRELESS_CHANNEL))
 	return
 }
-func getSettingWirelessBssid(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_BSSID, getSettingWirelessKeyType(NM_SETTING_WIRELESS_BSSID))
+func getSettingWirelessBssid(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_BSSID, getSettingWirelessKeyType(NM_SETTING_WIRELESS_BSSID))
 	return
 }
-func getSettingWirelessRate(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_RATE, getSettingWirelessKeyType(NM_SETTING_WIRELESS_RATE))
+func getSettingWirelessRate(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_RATE, getSettingWirelessKeyType(NM_SETTING_WIRELESS_RATE))
 	return
 }
-func getSettingWirelessTxPower(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_TX_POWER, getSettingWirelessKeyType(NM_SETTING_WIRELESS_TX_POWER))
+func getSettingWirelessTxPower(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_TX_POWER, getSettingWirelessKeyType(NM_SETTING_WIRELESS_TX_POWER))
 	return
 }
-func getSettingWirelessMacAddress(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MAC_ADDRESS, getSettingWirelessKeyType(NM_SETTING_WIRELESS_MAC_ADDRESS))
+func getSettingWirelessMacAddress(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MAC_ADDRESS, getSettingWirelessKeyType(NM_SETTING_WIRELESS_MAC_ADDRESS))
 	return
 }
-func getSettingWirelessClonedMacAddress(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS, getSettingWirelessKeyType(NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS))
+func getSettingWirelessClonedMacAddress(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS, getSettingWirelessKeyType(NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS))
 	return
 }
-func getSettingWirelessMacAddressBlacklist(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST, getSettingWirelessKeyType(NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST))
+func getSettingWirelessMacAddressBlacklist(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST, getSettingWirelessKeyType(NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST))
 	return
 }
-func getSettingWirelessMtu(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MTU, getSettingWirelessKeyType(NM_SETTING_WIRELESS_MTU))
+func getSettingWirelessMtu(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MTU, getSettingWirelessKeyType(NM_SETTING_WIRELESS_MTU))
 	return
 }
-func getSettingWirelessSeenBssids(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEEN_BSSIDS, getSettingWirelessKeyType(NM_SETTING_WIRELESS_SEEN_BSSIDS))
+func getSettingWirelessSeenBssids(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEEN_BSSIDS, getSettingWirelessKeyType(NM_SETTING_WIRELESS_SEEN_BSSIDS))
 	return
 }
-func getSettingWirelessSec(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEC, getSettingWirelessKeyType(NM_SETTING_WIRELESS_SEC))
+func getSettingWirelessSec(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEC, getSettingWirelessKeyType(NM_SETTING_WIRELESS_SEC))
 	return
 }
-func getSettingWirelessHidden(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_HIDDEN, getSettingWirelessKeyType(NM_SETTING_WIRELESS_HIDDEN))
+func getSettingWirelessHidden(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_HIDDEN, getSettingWirelessKeyType(NM_SETTING_WIRELESS_HIDDEN))
 	return
 }
 
 // Setter
-func setSettingWirelessSsid(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SSID, value, getSettingWirelessKeyType(NM_SETTING_WIRELESS_SSID))
-	return
+func setSettingWirelessSsid(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SSID, value, getSettingWirelessKeyType(NM_SETTING_WIRELESS_SSID))
 }
-func setSettingWirelessMode(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MODE, value, getSettingWirelessKeyType(NM_SETTING_WIRELESS_MODE))
-	return
+func setSettingWirelessMode(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MODE, value, getSettingWirelessKeyType(NM_SETTING_WIRELESS_MODE))
 }
-func setSettingWirelessBand(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_BAND, value, getSettingWirelessKeyType(NM_SETTING_WIRELESS_BAND))
-	return
+func setSettingWirelessBand(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_BAND, value, getSettingWirelessKeyType(NM_SETTING_WIRELESS_BAND))
 }
-func setSettingWirelessChannel(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_CHANNEL, value, getSettingWirelessKeyType(NM_SETTING_WIRELESS_CHANNEL))
-	return
+func setSettingWirelessChannel(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_CHANNEL, value, getSettingWirelessKeyType(NM_SETTING_WIRELESS_CHANNEL))
 }
-func setSettingWirelessBssid(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_BSSID, value, getSettingWirelessKeyType(NM_SETTING_WIRELESS_BSSID))
-	return
+func setSettingWirelessBssid(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_BSSID, value, getSettingWirelessKeyType(NM_SETTING_WIRELESS_BSSID))
 }
-func setSettingWirelessRate(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_RATE, value, getSettingWirelessKeyType(NM_SETTING_WIRELESS_RATE))
-	return
+func setSettingWirelessRate(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_RATE, value, getSettingWirelessKeyType(NM_SETTING_WIRELESS_RATE))
 }
-func setSettingWirelessTxPower(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_TX_POWER, value, getSettingWirelessKeyType(NM_SETTING_WIRELESS_TX_POWER))
-	return
+func setSettingWirelessTxPower(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_TX_POWER, value, getSettingWirelessKeyType(NM_SETTING_WIRELESS_TX_POWER))
 }
-func setSettingWirelessMacAddress(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MAC_ADDRESS, value, getSettingWirelessKeyType(NM_SETTING_WIRELESS_MAC_ADDRESS))
-	return
+func setSettingWirelessMacAddress(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MAC_ADDRESS, value, getSettingWirelessKeyType(NM_SETTING_WIRELESS_MAC_ADDRESS))
 }
-func setSettingWirelessClonedMacAddress(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS, value, getSettingWirelessKeyType(NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS))
-	return
+func setSettingWirelessClonedMacAddress(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS, value, getSettingWirelessKeyType(NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS))
 }
-func setSettingWirelessMacAddressBlacklist(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST, value, getSettingWirelessKeyType(NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST))
-	return
+func setSettingWirelessMacAddressBlacklist(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST, value, getSettingWirelessKeyType(NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST))
 }
-func setSettingWirelessMtu(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MTU, value, getSettingWirelessKeyType(NM_SETTING_WIRELESS_MTU))
-	return
+func setSettingWirelessMtu(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MTU, value, getSettingWirelessKeyType(NM_SETTING_WIRELESS_MTU))
 }
-func setSettingWirelessSeenBssids(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEEN_BSSIDS, value, getSettingWirelessKeyType(NM_SETTING_WIRELESS_SEEN_BSSIDS))
-	return
+func setSettingWirelessSeenBssids(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEEN_BSSIDS, value, getSettingWirelessKeyType(NM_SETTING_WIRELESS_SEEN_BSSIDS))
 }
-func setSettingWirelessSec(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEC, value, getSettingWirelessKeyType(NM_SETTING_WIRELESS_SEC))
-	return
+func setSettingWirelessSec(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEC, value, getSettingWirelessKeyType(NM_SETTING_WIRELESS_SEC))
 }
-func setSettingWirelessHidden(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_HIDDEN, value, getSettingWirelessKeyType(NM_SETTING_WIRELESS_HIDDEN))
-	return
+func setSettingWirelessHidden(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_HIDDEN, value, getSettingWirelessKeyType(NM_SETTING_WIRELESS_HIDDEN))
 }

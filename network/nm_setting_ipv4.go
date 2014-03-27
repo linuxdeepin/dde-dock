@@ -169,101 +169,89 @@ func getSettingIp4ConfigKeyType(key string) (t ktype) {
 }
 
 // Getter
-func getSettingIp4ConfigMethod(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_METHOD, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_METHOD))
+func getSettingIp4ConfigMethod(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_METHOD, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_METHOD))
 	return
 }
-func getSettingIp4ConfigDns(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DNS))
+func getSettingIp4ConfigDns(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DNS))
 	return
 }
-func getSettingIp4ConfigDnsSearch(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_SEARCH, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DNS_SEARCH))
+func getSettingIp4ConfigDnsSearch(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_SEARCH, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DNS_SEARCH))
 	return
 }
-func getSettingIp4ConfigAddresses(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_ADDRESSES))
+func getSettingIp4ConfigAddresses(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_ADDRESSES))
 	return
 }
-func getSettingIp4ConfigRoutes(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTES, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_ROUTES))
+func getSettingIp4ConfigRoutes(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTES, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_ROUTES))
 	return
 }
-func getSettingIp4ConfigIgnoreAutoRoutes(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES))
+func getSettingIp4ConfigIgnoreAutoRoutes(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES))
 	return
 }
-func getSettingIp4ConfigIgnoreAutoDns(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS))
+func getSettingIp4ConfigIgnoreAutoDns(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS))
 	return
 }
-func getSettingIp4ConfigDhcpClientId(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID))
+func getSettingIp4ConfigDhcpClientId(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID))
 	return
 }
-func getSettingIp4ConfigDhcpSendHostname(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME))
+func getSettingIp4ConfigDhcpSendHostname(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME))
 	return
 }
-func getSettingIp4ConfigDhcpHostname(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME))
+func getSettingIp4ConfigDhcpHostname(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME))
 	return
 }
-func getSettingIp4ConfigNeverDefault(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_NEVER_DEFAULT, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_NEVER_DEFAULT))
+func getSettingIp4ConfigNeverDefault(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_NEVER_DEFAULT, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_NEVER_DEFAULT))
 	return
 }
-func getSettingIp4ConfigMayFail(data _ConnectionData) (value string, err error) {
-	value, err = getConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_MAY_FAIL, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_MAY_FAIL))
+func getSettingIp4ConfigMayFail(data _ConnectionData) (value string) {
+	value = getConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_MAY_FAIL, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_MAY_FAIL))
 	return
 }
 
 // Setter
-func setSettingIp4ConfigMethod(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_METHOD, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_METHOD))
-	return
+func setSettingIp4ConfigMethod(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_METHOD, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_METHOD))
 }
-func setSettingIp4ConfigDns(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DNS))
-	return
+func setSettingIp4ConfigDns(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DNS))
 }
-func setSettingIp4ConfigDnsSearch(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_SEARCH, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DNS_SEARCH))
-	return
+func setSettingIp4ConfigDnsSearch(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_SEARCH, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DNS_SEARCH))
 }
-func setSettingIp4ConfigAddresses(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_ADDRESSES))
-	return
+func setSettingIp4ConfigAddresses(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_ADDRESSES))
 }
-func setSettingIp4ConfigRoutes(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTES, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_ROUTES))
-	return
+func setSettingIp4ConfigRoutes(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTES, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_ROUTES))
 }
-func setSettingIp4ConfigIgnoreAutoRoutes(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES))
-	return
+func setSettingIp4ConfigIgnoreAutoRoutes(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES))
 }
-func setSettingIp4ConfigIgnoreAutoDns(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS))
-	return
+func setSettingIp4ConfigIgnoreAutoDns(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS))
 }
-func setSettingIp4ConfigDhcpClientId(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID))
-	return
+func setSettingIp4ConfigDhcpClientId(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID))
 }
-func setSettingIp4ConfigDhcpSendHostname(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME))
-	return
+func setSettingIp4ConfigDhcpSendHostname(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME))
 }
-func setSettingIp4ConfigDhcpHostname(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME))
-	return
+func setSettingIp4ConfigDhcpHostname(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME))
 }
-func setSettingIp4ConfigNeverDefault(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_NEVER_DEFAULT, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_NEVER_DEFAULT))
-	return
+func setSettingIp4ConfigNeverDefault(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_NEVER_DEFAULT, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_NEVER_DEFAULT))
 }
-func setSettingIp4ConfigMayFail(data _ConnectionData, value string) (err error) {
-	err = setConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_MAY_FAIL, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_MAY_FAIL))
-	return
+func setSettingIp4ConfigMayFail(data _ConnectionData, value string) {
+	setConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_MAY_FAIL, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_MAY_FAIL))
 }
