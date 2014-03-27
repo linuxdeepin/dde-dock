@@ -49,13 +49,15 @@
 
 #define GNOMELOCALEDIR "/usr/share/locale"
 
-enum {
+enum
+{
     SCREEN_PROP_0,
     SCREEN_PROP_GDK_SCREEN,
     SCREEN_PROP_LAST,
 };
 
-enum {
+enum
+{
     SCREEN_CHANGED,
     SCREEN_OUTPUT_CONNECTED,
     SCREEN_OUTPUT_DISCONNECTED,
@@ -66,84 +68,84 @@ gint screen_signals[SCREEN_SIGNAL_LAST];
 
 struct GnomeRROutput
 {
-    ScreenInfo *	info;
-    RROutput		id;
+    ScreenInfo *    info;
+    RROutput        id;
 
-    char *		name;
-    char *		display_name;
-    GnomeRRCrtc *	current_crtc;
-    gboolean		connected;
-    gulong		width_mm;
-    gulong		height_mm;
-    GnomeRRCrtc **	possible_crtcs;
-    GnomeRROutput **	clones;
-    GnomeRRMode **	modes;
-    int			n_preferred;
-    guint8 *		edid_data;
-    gsize		edid_size;
+    char *      name;
+    char *      display_name;
+    GnomeRRCrtc *   current_crtc;
+    gboolean        connected;
+    gulong      width_mm;
+    gulong      height_mm;
+    GnomeRRCrtc **  possible_crtcs;
+    GnomeRROutput **    clones;
+    GnomeRRMode **  modes;
+    int         n_preferred;
+    guint8 *        edid_data;
+    gsize       edid_size;
     char *              connector_type;
-    gint		backlight_min;
-    gint		backlight_max;
+    gint        backlight_min;
+    gint        backlight_max;
 };
 
 struct GnomeRROutputWrap
 {
-    RROutput		id;
+    RROutput        id;
 };
 
 struct GnomeRRCrtc
 {
-    ScreenInfo *	info;
-    RRCrtc		id;
+    ScreenInfo *    info;
+    RRCrtc      id;
 
-    GnomeRRMode *	current_mode;
-    GnomeRROutput **	current_outputs;
-    GnomeRROutput **	possible_outputs;
-    int			x;
-    int			y;
+    GnomeRRMode *   current_mode;
+    GnomeRROutput **    current_outputs;
+    GnomeRROutput **    possible_outputs;
+    int         x;
+    int         y;
 
-    GnomeRRRotation	current_rotation;
-    GnomeRRRotation	rotations;
-    int			gamma_size;
+    GnomeRRRotation current_rotation;
+    GnomeRRRotation rotations;
+    int         gamma_size;
 };
 
 struct GnomeRRMode
 {
-    ScreenInfo *	info;
-    RRMode		id;
-    char *		name;
-    int			width;
-    int			height;
-    int			freq;		/* in mHz */
+    ScreenInfo *    info;
+    RRMode      id;
+    char *      name;
+    int         width;
+    int         height;
+    int         freq;       /* in mHz */
 };
 
 /* GnomeRRCrtc */
 static GnomeRRCrtc *  crtc_new          (ScreenInfo         *info,
-					 RRCrtc              id);
+        RRCrtc              id);
 static GnomeRRCrtc *  crtc_copy         (const GnomeRRCrtc  *from);
 static void           crtc_free         (GnomeRRCrtc        *crtc);
 
 static gboolean       crtc_initialize   (GnomeRRCrtc        *crtc,
-					 XRRScreenResources *res,
-					 GError            **error);
+        XRRScreenResources *res,
+        GError            **error);
 
 /* GnomeRROutput */
 static GnomeRROutput *output_new        (ScreenInfo         *info,
-					 RROutput            id);
+        RROutput            id);
 
 static gboolean       output_initialize (GnomeRROutput      *output,
-					 XRRScreenResources *res,
-					 GError            **error);
+        XRRScreenResources *res,
+        GError            **error);
 
 static GnomeRROutput *output_copy       (const GnomeRROutput *from);
 static void           output_free       (GnomeRROutput      *output);
 
 /* GnomeRRMode */
 static GnomeRRMode *  mode_new          (ScreenInfo         *info,
-					 RRMode              id);
+        RRMode              id);
 
 static void           mode_initialize   (GnomeRRMode        *mode,
-					 XRRModeInfo        *info);
+        XRRModeInfo        *info);
 
 static GnomeRRMode *  mode_copy         (const GnomeRRMode  *from);
 static void           mode_free         (GnomeRRMode        *mode);
@@ -154,7 +156,7 @@ static void gnome_rr_screen_get_property (GObject*, guint, GValue*, GParamSpec*)
 static gboolean gnome_rr_screen_initable_init (GInitable*, GCancellable*, GError**);
 static void gnome_rr_screen_initable_iface_init (GInitableIface *iface);
 G_DEFINE_TYPE_WITH_CODE (GnomeRRScreen, gnome_rr_screen, G_TYPE_OBJECT,
-        G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, gnome_rr_screen_initable_iface_init))
+                         G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, gnome_rr_screen_initable_iface_init))
 
 G_DEFINE_BOXED_TYPE (GnomeRRCrtc, gnome_rr_crtc, crtc_copy, crtc_free)
 G_DEFINE_BOXED_TYPE (GnomeRROutput, gnome_rr_output, output_copy, output_free)
@@ -186,8 +188,8 @@ gnome_rr_output_by_id (ScreenInfo *info, RROutput id)
 
     for (output = info->outputs; *output; ++output)
     {
-	if ((*output)->id == id)
-	    return *output;
+        if ((*output)->id == id)
+            return *output;
     }
 
     return NULL;
@@ -203,8 +205,8 @@ crtc_by_id (ScreenInfo *info, RRCrtc id)
 
     for (crtc = info->crtcs; *crtc; ++crtc)
     {
-	if ((*crtc)->id == id)
-	    return *crtc;
+        if ((*crtc)->id == id)
+            return *crtc;
     }
 
     return NULL;
@@ -219,8 +221,8 @@ mode_by_id (ScreenInfo *info, RRMode id)
 
     for (mode = info->modes; *mode; ++mode)
     {
-	if ((*mode)->id == id)
-	    return *mode;
+        if ((*mode)->id == id)
+            return *mode;
     }
 
     return NULL;
@@ -237,36 +239,36 @@ screen_info_free (ScreenInfo *info)
 
     if (info->resources)
     {
-	XRRFreeScreenResources (info->resources);
+        XRRFreeScreenResources (info->resources);
 
-	info->resources = NULL;
+        info->resources = NULL;
     }
 
     if (info->outputs)
     {
-	for (output = info->outputs; *output; ++output)
-	    output_free (*output);
-	g_free (info->outputs);
+        for (output = info->outputs; *output; ++output)
+            output_free (*output);
+        g_free (info->outputs);
     }
 
     if (info->crtcs)
     {
-	for (crtc = info->crtcs; *crtc; ++crtc)
-	    crtc_free (*crtc);
-	g_free (info->crtcs);
+        for (crtc = info->crtcs; *crtc; ++crtc)
+            crtc_free (*crtc);
+        g_free (info->crtcs);
     }
 
     if (info->modes)
     {
-	for (mode = info->modes; *mode; ++mode)
-	    mode_free (*mode);
-	g_free (info->modes);
+        for (mode = info->modes; *mode; ++mode)
+            mode_free (*mode);
+        g_free (info->modes);
     }
 
     if (info->clone_modes)
     {
-	/* The modes themselves were freed above */
-	g_free (info->clone_modes);
+        /* The modes themselves were freed above */
+        g_free (info->clone_modes);
     }
 
     g_free (info);
@@ -282,13 +284,13 @@ has_similar_mode (GnomeRROutput *output, GnomeRRMode *mode)
 
     for (i = 0; modes[i] != NULL; ++i)
     {
-	GnomeRRMode *m = modes[i];
+        GnomeRRMode *m = modes[i];
 
-	if (gnome_rr_mode_get_width (m) == width	&&
-	    gnome_rr_mode_get_height (m) == height)
-	{
-	    return TRUE;
-	}
+        if (gnome_rr_mode_get_width (m) == width    &&
+                gnome_rr_mode_get_height (m) == height)
+        {
+            return TRUE;
+        }
     }
 
     return FALSE;
@@ -302,38 +304,38 @@ gather_clone_modes (ScreenInfo *info)
 
     for (i = 0; info->outputs[i] != NULL; ++i)
     {
-	int j;
-	GnomeRROutput *output1, *output2;
+        int j;
+        GnomeRROutput *output1, *output2;
 
-	output1 = info->outputs[i];
+        output1 = info->outputs[i];
 
-	if (!output1->connected)
-	    continue;
+        if (!output1->connected)
+            continue;
 
-	for (j = 0; output1->modes[j] != NULL; ++j)
-	{
-	    GnomeRRMode *mode = output1->modes[j];
-	    gboolean valid;
-	    int k;
+        for (j = 0; output1->modes[j] != NULL; ++j)
+        {
+            GnomeRRMode *mode = output1->modes[j];
+            gboolean valid;
+            int k;
 
-	    valid = TRUE;
-	    for (k = 0; info->outputs[k] != NULL; ++k)
-	    {
-		output2 = info->outputs[k];
+            valid = TRUE;
+            for (k = 0; info->outputs[k] != NULL; ++k)
+            {
+                output2 = info->outputs[k];
 
-		if (!output2->connected)
-		    continue;
+                if (!output2->connected)
+                    continue;
 
-		if (!has_similar_mode (output2, mode))
-		{
-		    valid = FALSE;
-		    break;
-		}
-	    }
+                if (!has_similar_mode (output2, mode))
+                {
+                    valid = FALSE;
+                    break;
+                }
+            }
 
-	    if (valid)
-		g_ptr_array_add (result, mode);
-	}
+            if (valid)
+                g_ptr_array_add (result, mode);
+        }
     }
 
     g_ptr_array_add (result, NULL);
@@ -343,8 +345,8 @@ gather_clone_modes (ScreenInfo *info)
 
 static gboolean
 fill_screen_info_from_resources (ScreenInfo *info,
-				 XRRScreenResources *resources,
-				 GError **error)
+                                 XRRScreenResources *resources,
+                                 GError **error)
 {
     int i;
     GPtrArray *a;
@@ -359,9 +361,9 @@ fill_screen_info_from_resources (ScreenInfo *info,
     a = g_ptr_array_new ();
     for (i = 0; i < resources->ncrtc; ++i)
     {
-	GnomeRRCrtc *crtc = crtc_new (info, resources->crtcs[i]);
+        GnomeRRCrtc *crtc = crtc_new (info, resources->crtcs[i]);
 
-	g_ptr_array_add (a, crtc);
+        g_ptr_array_add (a, crtc);
     }
     g_ptr_array_add (a, NULL);
     info->crtcs = (GnomeRRCrtc **)g_ptr_array_free (a, FALSE);
@@ -369,9 +371,9 @@ fill_screen_info_from_resources (ScreenInfo *info,
     a = g_ptr_array_new ();
     for (i = 0; i < resources->noutput; ++i)
     {
-	GnomeRROutput *output = output_new (info, resources->outputs[i]);
+        GnomeRROutput *output = output_new (info, resources->outputs[i]);
 
-	g_ptr_array_add (a, output);
+        g_ptr_array_add (a, output);
     }
     g_ptr_array_add (a, NULL);
     info->outputs = (GnomeRROutput **)g_ptr_array_free (a, FALSE);
@@ -379,9 +381,9 @@ fill_screen_info_from_resources (ScreenInfo *info,
     a = g_ptr_array_new ();
     for (i = 0;  i < resources->nmode; ++i)
     {
-	GnomeRRMode *mode = mode_new (info, resources->modes[i].id);
+        GnomeRRMode *mode = mode_new (info, resources->modes[i].id);
 
-	g_ptr_array_add (a, mode);
+        g_ptr_array_add (a, mode);
     }
     g_ptr_array_add (a, NULL);
     info->modes = (GnomeRRMode **)g_ptr_array_free (a, FALSE);
@@ -389,21 +391,21 @@ fill_screen_info_from_resources (ScreenInfo *info,
     /* Initialize */
     for (crtc = info->crtcs; *crtc; ++crtc)
     {
-	if (!crtc_initialize (*crtc, resources, error))
-	    return FALSE;
+        if (!crtc_initialize (*crtc, resources, error))
+            return FALSE;
     }
 
     for (output = info->outputs; *output; ++output)
     {
-	if (!output_initialize (*output, resources, error))
-	    return FALSE;
+        if (!output_initialize (*output, resources, error))
+            return FALSE;
     }
 
     for (i = 0; i < resources->nmode; ++i)
     {
-	GnomeRRMode *mode = mode_by_id (info, resources->modes[i].id);
+        GnomeRRMode *mode = mode_by_id (info, resources->modes[i].id);
 
-	mode_initialize (mode, &(resources->modes[i]));
+        mode_initialize (mode, &(resources->modes[i]));
     }
 
     gather_clone_modes (info);
@@ -413,10 +415,10 @@ fill_screen_info_from_resources (ScreenInfo *info,
 
 static gboolean
 fill_out_screen_info (Display *xdisplay,
-		      Window xroot,
-		      ScreenInfo *info,
-		      gboolean needs_reprobe,
-		      GError **error)
+                      Window xroot,
+                      ScreenInfo *info,
+                      gboolean needs_reprobe,
+                      GError **error)
 {
     XRRScreenResources *resources;
     GnomeRRScreenPrivate *priv;
@@ -432,10 +434,10 @@ fill_out_screen_info (Display *xdisplay,
         resources = XRRGetScreenResources (xdisplay, xroot);
     else
     {
-	/* XRRGetScreenResourcesCurrent is less expensive than
-	 * XRRGetScreenResources, however it is available only
-	 * in RandR 1.3 or higher
-	 */
+        /* XRRGetScreenResourcesCurrent is less expensive than
+         * XRRGetScreenResources, however it is available only
+         * in RandR 1.3 or higher
+         */
         if (SERVERS_RANDR_IS_AT_LEAST_1_3 (priv))
             resources = XRRGetScreenResourcesCurrent (xdisplay, xroot);
         else
@@ -444,57 +446,61 @@ fill_out_screen_info (Display *xdisplay,
 
     if (resources)
     {
-	if (!fill_screen_info_from_resources (info, resources, error))
-	    return FALSE;
+        if (!fill_screen_info_from_resources (info, resources, error))
+            return FALSE;
     }
     else
     {
-	g_set_error (error, GNOME_RR_ERROR, GNOME_RR_ERROR_RANDR_ERROR,
-		     /* Translators: a CRTC is a CRT Controller (this is X terminology). */
-		     _("could not get the screen resources (CRTCs, outputs, modes)"));
-	return FALSE;
+        g_set_error (error, GNOME_RR_ERROR, GNOME_RR_ERROR_RANDR_ERROR,
+                     /* Translators: a CRTC is a CRT Controller (this is X terminology). */
+                     _("could not get the screen resources (CRTCs, outputs, modes)"));
+        return FALSE;
     }
 
     /* Then update the screen size range.  We do this after XRRGetScreenResources() so that
      * the X server will already have an updated view of the outputs.
      */
 
-    if (needs_reprobe) {
-	gboolean success;
+    if (needs_reprobe)
+    {
+        gboolean success;
 
         gdk_error_trap_push ();
-	success = XRRGetScreenSizeRange (xdisplay, xroot,
-					 &(info->min_width),
-					 &(info->min_height),
-					 &(info->max_width),
-					 &(info->max_height));
-	gdk_flush ();
-	if (gdk_error_trap_pop ()) {
-	    g_set_error (error, GNOME_RR_ERROR, GNOME_RR_ERROR_UNKNOWN,
-			 _("unhandled X error while getting the range of screen sizes"));
-	    return FALSE;
-	}
+        success = XRRGetScreenSizeRange (xdisplay, xroot,
+                                         &(info->min_width),
+                                         &(info->min_height),
+                                         &(info->max_width),
+                                         &(info->max_height));
+        gdk_flush ();
+        if (gdk_error_trap_pop ())
+        {
+            g_set_error (error, GNOME_RR_ERROR, GNOME_RR_ERROR_UNKNOWN,
+                         _("unhandled X error while getting the range of screen sizes"));
+            return FALSE;
+        }
 
-	if (!success) {
-	    g_set_error (error, GNOME_RR_ERROR, GNOME_RR_ERROR_RANDR_ERROR,
-			 _("could not get the range of screen sizes"));
+        if (!success)
+        {
+            g_set_error (error, GNOME_RR_ERROR, GNOME_RR_ERROR_RANDR_ERROR,
+                         _("could not get the range of screen sizes"));
             return FALSE;
         }
     }
     else
     {
         gnome_rr_screen_get_ranges (info->screen,
-					 &(info->min_width),
-					 &(info->max_width),
-					 &(info->min_height),
-					 &(info->max_height));
+                                    &(info->min_width),
+                                    &(info->max_width),
+                                    &(info->min_height),
+                                    &(info->max_height));
     }
 
     info->primary = None;
-    if (SERVERS_RANDR_IS_AT_LEAST_1_3 (priv)) {
+    if (SERVERS_RANDR_IS_AT_LEAST_1_3 (priv))
+    {
         gdk_error_trap_push ();
         info->primary = XRRGetOutputPrimary (xdisplay, xroot);
-	gdk_error_trap_pop_ignored ();
+        gdk_error_trap_pop_ignored ();
     }
 
     /* can the screen do DPMS? */
@@ -522,12 +528,12 @@ screen_info_new (GnomeRRScreen *screen, gboolean needs_reprobe, GError **error)
 
     if (fill_out_screen_info (priv->xdisplay, priv->xroot, info, needs_reprobe, error))
     {
-	return info;
+        return info;
     }
     else
     {
-	screen_info_free (info);
-	return NULL;
+        screen_info_free (info);
+        return NULL;
     }
 }
 
@@ -538,8 +544,8 @@ find_output_by_id (GnomeRROutput **haystack, guint32 id)
 
     for (i = 0; haystack[i] != NULL; i++)
     {
-	if (gnome_rr_output_get_id (haystack[i]) == id)
-	    return haystack[i];
+        if (gnome_rr_output_get_id (haystack[i]) == id)
+            return haystack[i];
     }
     return NULL;
 }
@@ -557,24 +563,24 @@ diff_outputs_and_emit_signals (ScreenInfo *old, ScreenInfo *new)
     {
         id_old = gnome_rr_output_get_id (old->outputs[i]);
         output_new = find_output_by_id (new->outputs, id_old);
-	if (output_new == NULL)
-	{
-	    /* output removed (and disconnected) */
-	    if (gnome_rr_output_is_connected (old->outputs[i]))
-	     {
-	        g_signal_emit (G_OBJECT (new->screen),
-			       screen_signals[SCREEN_OUTPUT_DISCONNECTED], 0,
-			       old->outputs[i]);
-             }
-	    continue;
-	}
-	if (gnome_rr_output_is_connected (old->outputs[i]) &&
-	    !gnome_rr_output_is_connected (output_new))
-	{
-	    /* output disconnected */
-	    g_signal_emit (G_OBJECT (new->screen),
-			   screen_signals[SCREEN_OUTPUT_DISCONNECTED], 0,
-			   old->outputs[i]);
+        if (output_new == NULL)
+        {
+            /* output removed (and disconnected) */
+            if (gnome_rr_output_is_connected (old->outputs[i]))
+            {
+                g_signal_emit (G_OBJECT (new->screen),
+                               screen_signals[SCREEN_OUTPUT_DISCONNECTED], 0,
+                               old->outputs[i]);
+            }
+            continue;
+        }
+        if (gnome_rr_output_is_connected (old->outputs[i]) &&
+                !gnome_rr_output_is_connected (output_new))
+        {
+            /* output disconnected */
+            g_signal_emit (G_OBJECT (new->screen),
+                           screen_signals[SCREEN_OUTPUT_DISCONNECTED], 0,
+                           old->outputs[i]);
         }
     }
 
@@ -583,25 +589,25 @@ diff_outputs_and_emit_signals (ScreenInfo *old, ScreenInfo *new)
     {
         id_new = gnome_rr_output_get_id (new->outputs[i]);
         output_old = find_output_by_id (old->outputs, id_new);
-	if (output_old == NULL)
-	{
-	    /* output created */
-	    if (gnome_rr_output_is_connected (new->outputs[i]))
-	     {
-	        g_signal_emit (G_OBJECT (new->screen),
-			       screen_signals[SCREEN_OUTPUT_CONNECTED], 0,
-			       new->outputs[i]);
+        if (output_old == NULL)
+        {
+            /* output created */
+            if (gnome_rr_output_is_connected (new->outputs[i]))
+            {
+                g_signal_emit (G_OBJECT (new->screen),
+                               screen_signals[SCREEN_OUTPUT_CONNECTED], 0,
+                               new->outputs[i]);
             }
-	    continue;
-	}
-	if (!gnome_rr_output_is_connected (output_old) &&
-	    gnome_rr_output_is_connected (new->outputs[i]))
-	{
-	    /* output connected */
-	    g_signal_emit (G_OBJECT (new->screen),
-			   screen_signals[SCREEN_OUTPUT_CONNECTED], 0,
-			   new->outputs[i]);
-         }
+            continue;
+        }
+        if (!gnome_rr_output_is_connected (output_old) &&
+                gnome_rr_output_is_connected (new->outputs[i]))
+        {
+            /* output connected */
+            g_signal_emit (G_OBJECT (new->screen),
+                           screen_signals[SCREEN_OUTPUT_CONNECTED], 0,
+                           new->outputs[i]);
+        }
     }
 }
 
@@ -615,10 +621,10 @@ screen_update (GnomeRRScreen *screen, gboolean force_callback, gboolean needs_re
 
     info = screen_info_new (screen, needs_reprobe, error);
     if (!info)
-	    return FALSE;
+        return FALSE;
 
     if (info->resources->configTimestamp != screen->priv->info->resources->configTimestamp)
-	    changed = TRUE;
+        changed = TRUE;
 
     /* work out if any outputs have changed connected state */
     diff_outputs_and_emit_signals (screen->priv->info, info);
@@ -635,8 +641,8 @@ screen_update (GnomeRRScreen *screen, gboolean force_callback, gboolean needs_re
 
 static GdkFilterReturn
 screen_on_event (GdkXEvent *xevent,
-		 GdkEvent *event,
-		 gpointer data)
+                 GdkEvent *event,
+                 gpointer data)
 {
     GnomeRRScreen *screen = data;
     GnomeRRScreenPrivate *priv = screen->priv;
@@ -644,46 +650,47 @@ screen_on_event (GdkXEvent *xevent,
     int event_num;
 
     if (!e)
-	return GDK_FILTER_CONTINUE;
+        return GDK_FILTER_CONTINUE;
 
     event_num = e->type - priv->randr_event_base;
 
-    if (event_num == RRScreenChangeNotify) {
-	/* We don't reprobe the hardware; we just fetch the X server's latest
-	 * state.  The server already knows the new state of the outputs; that's
-	 * why it sent us an event!
-	 */
+    if (event_num == RRScreenChangeNotify)
+    {
+        /* We don't reprobe the hardware; we just fetch the X server's latest
+         * state.  The server already knows the new state of the outputs; that's
+         * why it sent us an event!
+         */
         screen_update (screen, TRUE, FALSE, NULL); /* NULL-GError */
 #if 0
-	/* Enable this code to get a dialog showing the RANDR timestamps, for debugging purposes */
-	{
-	    GtkWidget *dialog;
-	    XRRScreenChangeNotifyEvent *rr_event;
-	    static int dialog_num;
+        /* Enable this code to get a dialog showing the RANDR timestamps, for debugging purposes */
+        {
+            GtkWidget *dialog;
+            XRRScreenChangeNotifyEvent *rr_event;
+            static int dialog_num;
 
-	    rr_event = (XRRScreenChangeNotifyEvent *) e;
+            rr_event = (XRRScreenChangeNotifyEvent *) e;
 
-	    dialog = gtk_message_dialog_new (NULL,
-					     0,
-					     GTK_MESSAGE_INFO,
-					     GTK_BUTTONS_CLOSE,
-					     "RRScreenChangeNotify timestamps (%d):\n"
-					     "event change: %u\n"
-					     "event config: %u\n"
-					     "event serial: %lu\n"
-					     "----------------------"
-					     "screen change: %u\n"
-					     "screen config: %u\n",
-					     dialog_num++,
-					     (guint32) rr_event->timestamp,
-					     (guint32) rr_event->config_timestamp,
-					     rr_event->serial,
-					     (guint32) priv->info->resources->timestamp,
-					     (guint32) priv->info->resources->configTimestamp);
-	    g_signal_connect (dialog, "response",
-			      G_CALLBACK (gtk_widget_destroy), NULL);
-	    gtk_widget_show (dialog);
-	}
+            dialog = gtk_message_dialog_new (NULL,
+                                             0,
+                                             GTK_MESSAGE_INFO,
+                                             GTK_BUTTONS_CLOSE,
+                                             "RRScreenChangeNotify timestamps (%d):\n"
+                                             "event change: %u\n"
+                                             "event config: %u\n"
+                                             "event serial: %lu\n"
+                                             "----------------------"
+                                             "screen change: %u\n"
+                                             "screen config: %u\n",
+                                             dialog_num++,
+                                             (guint32) rr_event->timestamp,
+                                             (guint32) rr_event->config_timestamp,
+                                             rr_event->serial,
+                                             (guint32) priv->info->resources->timestamp,
+                                             (guint32) priv->info->resources->configTimestamp);
+            g_signal_connect (dialog, "response",
+                              G_CALLBACK (gtk_widget_destroy), NULL);
+            gtk_widget_show (dialog);
+        }
 #endif
     }
 #if 0
@@ -703,23 +710,23 @@ screen_on_event (GdkXEvent *xevent,
      */
     else if (event_num == RRNotify)
     {
-	/* Other RandR events */
+        /* Other RandR events */
 
-	XRRNotifyEvent *event = (XRRNotifyEvent *)e;
+        XRRNotifyEvent *event = (XRRNotifyEvent *)e;
 
-	/* Here we can distinguish between RRNotify events supported
-	 * since RandR 1.2 such as RRNotify_OutputProperty.  For now, we
-	 * don't have anything special to do for particular subevent types, so
-	 * we leave this as an empty switch().
-	 */
-	switch (event->subtype)
-	{
-	default:
-	    break;
-	}
+        /* Here we can distinguish between RRNotify events supported
+         * since RandR 1.2 such as RRNotify_OutputProperty.  For now, we
+         * don't have anything special to do for particular subevent types, so
+         * we leave this as an empty switch().
+         */
+        switch (event->subtype)
+        {
+        default:
+            break;
+        }
 
-	/* No need to reprobe hardware here */
-	screen_update (screen, TRUE, FALSE, NULL); /* NULL-GError */
+        /* No need to reprobe hardware here */
+        screen_update (screen, TRUE, FALSE, NULL); /* NULL-GError */
     }
 #endif
 
@@ -743,35 +750,37 @@ gnome_rr_screen_initable_init (GInitable *initable, GCancellable *canc, GError *
         priv->randr_event_base = event_base;
 
         XRRQueryVersion (dpy, &priv->rr_major_version, &priv->rr_minor_version);
-        if (priv->rr_major_version < 1 || (priv->rr_major_version == 1 && priv->rr_minor_version < 2)) {
+        if (priv->rr_major_version < 1 || (priv->rr_major_version == 1 && priv->rr_minor_version < 2))
+        {
             g_set_error (error, GNOME_RR_ERROR, GNOME_RR_ERROR_NO_RANDR_EXTENSION,
-                    "RANDR extension is too old (must be at least 1.2)");
+                         "RANDR extension is too old (must be at least 1.2)");
             return FALSE;
         }
 
         priv->info = screen_info_new (self, TRUE, error);
 
-        if (!priv->info) {
+        if (!priv->info)
+        {
             return FALSE;
         }
 
         XRRSelectInput (priv->xdisplay,
-                priv->xroot,
-                RRScreenChangeNotifyMask);
+                        priv->xroot,
+                        RRScreenChangeNotifyMask);
         gdk_x11_register_standard_event_type (gdk_screen_get_display (priv->gdk_screen),
-                          event_base,
-                          RRNotify + 1);
+                                              event_base,
+                                              RRNotify + 1);
         gdk_window_add_filter (priv->gdk_root, screen_on_event, self);
 
         return TRUE;
     }
     else
     {
-      g_set_error (error, GNOME_RR_ERROR, GNOME_RR_ERROR_NO_RANDR_EXTENSION,
-                   _("RANDR extension is not present"));
+        g_set_error (error, GNOME_RR_ERROR, GNOME_RR_ERROR_NO_RANDR_EXTENSION,
+                     _("RANDR extension is not present"));
 
-      return FALSE;
-   }
+        return FALSE;
+    }
 }
 
 void
@@ -788,7 +797,7 @@ gnome_rr_screen_finalize (GObject *gobject)
     gdk_window_remove_filter (screen->priv->gdk_root, screen_on_event, screen);
 
     if (screen->priv->info)
-      screen_info_free (screen->priv->info);
+        screen_info_free (screen->priv->info);
 
     G_OBJECT_CLASS (gnome_rr_screen_parent_class)->finalize (gobject);
 }
@@ -845,27 +854,27 @@ gnome_rr_screen_class_init (GnomeRRScreenClass *klass)
     gobject_class->finalize = gnome_rr_screen_finalize;
 
     g_object_class_install_property(
-            gobject_class,
-            SCREEN_PROP_GDK_SCREEN,
-            g_param_spec_object (
-                    "gdk-screen",
-                    "GDK Screen",
-                    "The GDK Screen represented by this GnomeRRScreen",
-                    GDK_TYPE_SCREEN,
-                    G_PARAM_READWRITE |
-		    G_PARAM_CONSTRUCT_ONLY |
-		    G_PARAM_STATIC_STRINGS)
-            );
+        gobject_class,
+        SCREEN_PROP_GDK_SCREEN,
+        g_param_spec_object (
+            "gdk-screen",
+            "GDK Screen",
+            "The GDK Screen represented by this GnomeRRScreen",
+            GDK_TYPE_SCREEN,
+            G_PARAM_READWRITE |
+            G_PARAM_CONSTRUCT_ONLY |
+            G_PARAM_STATIC_STRINGS)
+    );
 
     screen_signals[SCREEN_CHANGED] = g_signal_new("changed",
-            G_TYPE_FROM_CLASS (gobject_class),
-            G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
-            G_STRUCT_OFFSET (GnomeRRScreenClass, changed),
-            NULL,
-            NULL,
-            g_cclosure_marshal_VOID__VOID,
-            G_TYPE_NONE,
-	    0);
+                                     G_TYPE_FROM_CLASS (gobject_class),
+                                     G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
+                                     G_STRUCT_OFFSET (GnomeRRScreenClass, changed),
+                                     NULL,
+                                     NULL,
+                                     g_cclosure_marshal_VOID__VOID,
+                                     G_TYPE_NONE,
+                                     0);
 
     /**
      * GnomeRRScreen::output-connected:
@@ -963,7 +972,7 @@ rr_screen_weak_notify_cb (gpointer data, GObject *where_the_object_was)
  */
 GnomeRRScreen *
 gnome_rr_screen_new (GdkScreen *screen,
-		     GError **error)
+                     GError **error)
 {
     GnomeRRScreen *rr_screen;
 
@@ -972,13 +981,15 @@ gnome_rr_screen_new (GdkScreen *screen,
 
     rr_screen = g_object_get_data (G_OBJECT (screen), "GnomeRRScreen");
     if (rr_screen)
-	g_object_ref (rr_screen);
-    else {
-	rr_screen = g_initable_new (GNOME_TYPE_RR_SCREEN, NULL, error, "gdk-screen", screen, NULL);
-	if (rr_screen) {
-	    g_object_set_data (G_OBJECT (screen), "GnomeRRScreen", rr_screen);
-	    g_object_weak_ref (G_OBJECT (rr_screen), rr_screen_weak_notify_cb, screen);
-	}
+        g_object_ref (rr_screen);
+    else
+    {
+        rr_screen = g_initable_new (GNOME_TYPE_RR_SCREEN, NULL, error, "gdk-screen", screen, NULL);
+        if (rr_screen)
+        {
+            g_object_set_data (G_OBJECT (screen), "GnomeRRScreen", rr_screen);
+            g_object_weak_ref (G_OBJECT (rr_screen), rr_screen_weak_notify_cb, screen);
+        }
     }
 
     return rr_screen;
@@ -986,16 +997,16 @@ gnome_rr_screen_new (GdkScreen *screen,
 
 void
 gnome_rr_screen_set_size (GnomeRRScreen *screen,
-			  int	      width,
-			  int       height,
-			  int       mm_width,
-			  int       mm_height)
+                          int         width,
+                          int       height,
+                          int       mm_width,
+                          int       mm_height)
 {
     g_return_if_fail (GNOME_IS_RR_SCREEN (screen));
 
     gdk_error_trap_push ();
     XRRSetScreenSize (screen->priv->xdisplay, screen->priv->xroot,
-		      width, height, mm_width, mm_height);
+                      width, height, mm_width, mm_height);
     gdk_error_trap_pop_ignored ();
 }
 
@@ -1011,10 +1022,10 @@ gnome_rr_screen_set_size (GnomeRRScreen *screen,
  */
 void
 gnome_rr_screen_get_ranges (GnomeRRScreen *screen,
-			    int	          *min_width,
-			    int	          *max_width,
-			    int           *min_height,
-			    int	          *max_height)
+                            int           *min_width,
+                            int           *max_width,
+                            int           *min_height,
+                            int           *max_height)
 {
     GnomeRRScreenPrivate *priv;
 
@@ -1023,16 +1034,16 @@ gnome_rr_screen_get_ranges (GnomeRRScreen *screen,
     priv = screen->priv;
 
     if (min_width)
-	*min_width = priv->info->min_width;
+        *min_width = priv->info->min_width;
 
     if (max_width)
-	*max_width = priv->info->max_width;
+        *max_width = priv->info->max_width;
 
     if (min_height)
-	*min_height = priv->info->min_height;
+        *min_height = priv->info->min_height;
 
     if (max_height)
-	*max_height = priv->info->max_height;
+        *max_height = priv->info->max_height;
 }
 
 /**
@@ -1049,8 +1060,8 @@ gnome_rr_screen_get_ranges (GnomeRRScreen *screen,
  */
 void
 gnome_rr_screen_get_timestamps (GnomeRRScreen *screen,
-				guint32       *change_timestamp_ret,
-				guint32       *config_timestamp_ret)
+                                guint32       *change_timestamp_ret,
+                                guint32       *config_timestamp_ret)
 {
     GnomeRRScreenPrivate *priv;
 
@@ -1059,10 +1070,10 @@ gnome_rr_screen_get_timestamps (GnomeRRScreen *screen,
     priv = screen->priv;
 
     if (change_timestamp_ret)
-	*change_timestamp_ret = priv->info->resources->timestamp;
+        *change_timestamp_ret = priv->info->resources->timestamp;
 
     if (config_timestamp_ret)
-	*config_timestamp_ret = priv->info->resources->configTimestamp;
+        *config_timestamp_ret = priv->info->resources->configTimestamp;
 }
 
 static gboolean
@@ -1079,35 +1090,35 @@ force_timestamp_update (GnomeRRScreen *screen)
     crtc = priv->info->crtcs[0];
 
     if (crtc == NULL)
-	goto out;
+        goto out;
 
     current_info = XRRGetCrtcInfo (priv->xdisplay,
-				   priv->info->resources,
-				   crtc->id);
+                                   priv->info->resources,
+                                   crtc->id);
 
     if (current_info == NULL)
-	goto out;
+        goto out;
 
     gdk_error_trap_push ();
     status = XRRSetCrtcConfig (priv->xdisplay,
-			       priv->info->resources,
-			       crtc->id,
-			       current_info->timestamp,
-			       current_info->x,
-			       current_info->y,
-			       current_info->mode,
-			       current_info->rotation,
-			       current_info->outputs,
-			       current_info->noutput);
+                               priv->info->resources,
+                               crtc->id,
+                               current_info->timestamp,
+                               current_info->x,
+                               current_info->y,
+                               current_info->mode,
+                               current_info->rotation,
+                               current_info->outputs,
+                               current_info->noutput);
 
     XRRFreeCrtcInfo (current_info);
 
     gdk_flush ();
     if (gdk_error_trap_pop ())
-	goto out;
+        goto out;
 
     if (status == RRSetConfigSuccess)
-	timestamp_updated = TRUE;
+        timestamp_updated = TRUE;
 out:
     return timestamp_updated;
 }
@@ -1127,7 +1138,7 @@ out:
  */
 gboolean
 gnome_rr_screen_refresh (GnomeRRScreen *screen,
-			 GError       **error)
+                         GError       **error)
 {
     gboolean refreshed;
 
@@ -1159,7 +1170,8 @@ gnome_rr_screen_get_dpms_mode (GnomeRRScreen *screen,
     g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
     g_return_val_if_fail (mode != NULL, FALSE);
 
-    if (!screen->priv->dpms_capable) {
+    if (!screen->priv->dpms_capable)
+    {
         g_set_error_literal (error,
                              GNOME_RR_ERROR,
                              GNOME_RR_ERROR_NO_DPMS_EXTENSION,
@@ -1169,7 +1181,8 @@ gnome_rr_screen_get_dpms_mode (GnomeRRScreen *screen,
 
     if (!DPMSInfo (screen->priv->xdisplay,
                    &state,
-                   &enabled)) {
+                   &enabled))
+    {
         g_set_error_literal (error,
                              GNOME_RR_ERROR,
                              GNOME_RR_ERROR_UNKNOWN,
@@ -1178,13 +1191,15 @@ gnome_rr_screen_get_dpms_mode (GnomeRRScreen *screen,
     }
 
     /* DPMS not enabled is a valid mode */
-    if (!enabled) {
+    if (!enabled)
+    {
         *mode = GNOME_RR_DPMS_DISABLED;
         ret = TRUE;
         goto out;
     }
 
-    switch (state) {
+    switch (state)
+    {
     case DPMSModeOn:
         *mode = GNOME_RR_DPMS_ON;
         break;
@@ -1216,7 +1231,8 @@ gnome_rr_screen_clear_dpms_timeouts (GnomeRRScreen *screen,
     gdk_error_trap_push ();
     /* DPMSSetTimeouts() return value is often a lie, so ignore it */
     DPMSSetTimeouts (screen->priv->xdisplay, 0, 0, 0);
-    if (gdk_error_trap_pop ()) {
+    if (gdk_error_trap_pop ())
+    {
         g_set_error_literal (error,
                              GNOME_RR_ERROR,
                              GNOME_RR_ERROR_UNKNOWN,
@@ -1246,12 +1262,14 @@ gnome_rr_screen_set_dpms_mode (GnomeRRScreen *screen,
     ret = gnome_rr_screen_get_dpms_mode (screen, &current_mode, error);
     if (!ret)
         goto out;
-    if (current_mode == mode) {
+    if (current_mode == mode)
+    {
         ret = gnome_rr_screen_clear_dpms_timeouts (screen, error);
         goto out;
     }
 
-    switch (mode) {
+    switch (mode)
+    {
     case GNOME_RR_DPMS_ON:
         state = DPMSModeOn;
         break;
@@ -1273,7 +1291,8 @@ gnome_rr_screen_set_dpms_mode (GnomeRRScreen *screen,
     /* DPMSForceLevel() return value is often a lie, so ignore it */
     DPMSForceLevel (screen->priv->xdisplay, state);
     XSync (screen->priv->xdisplay, False);
-    if (gdk_error_trap_pop ()) {
+    if (gdk_error_trap_pop ())
+    {
         ret = FALSE;
         g_set_error_literal (error,
                              GNOME_RR_ERROR,
@@ -1360,7 +1379,7 @@ gnome_rr_screen_list_outputs (GnomeRRScreen *screen)
  */
 GnomeRRCrtc *
 gnome_rr_screen_get_crtc_by_id (GnomeRRScreen *screen,
-				guint32        id)
+                                guint32        id)
 {
     GnomeRRCrtc **crtcs;
     int i;
@@ -1372,8 +1391,8 @@ gnome_rr_screen_get_crtc_by_id (GnomeRRScreen *screen,
 
     for (i = 0; crtcs[i] != NULL; ++i)
     {
-	if (crtcs[i]->id == id)
-	    return crtcs[i];
+        if (crtcs[i]->id == id)
+            return crtcs[i];
     }
 
     return NULL;
@@ -1386,7 +1405,7 @@ gnome_rr_screen_get_crtc_by_id (GnomeRRScreen *screen,
  */
 GnomeRROutput *
 gnome_rr_screen_get_output_by_id (GnomeRRScreen *screen,
-				  guint32        id)
+                                  guint32        id)
 {
     GnomeRROutput **outputs;
     int i;
@@ -1398,8 +1417,8 @@ gnome_rr_screen_get_output_by_id (GnomeRRScreen *screen,
 
     for (i = 0; outputs[i] != NULL; ++i)
     {
-	if (outputs[i]->id == id)
-	    return outputs[i];
+        if (outputs[i]->id == id)
+            return outputs[i];
     }
 
     return NULL;
@@ -1419,9 +1438,9 @@ output_new (ScreenInfo *info, RROutput id)
 
 static guint8 *
 get_property (Display *dpy,
-	      RROutput output,
-	      Atom atom,
-	      gsize *len)
+              RROutput output,
+              Atom atom,
+              gsize *len)
 {
     unsigned char *prop;
     int actual_format;
@@ -1430,20 +1449,20 @@ get_property (Display *dpy,
     guint8 *result;
 
     XRRGetOutputProperty (dpy, output, atom,
-			  0, 100, False, False,
-			  AnyPropertyType,
-			  &actual_type, &actual_format,
-			  &nitems, &bytes_after, &prop);
+                          0, 100, False, False,
+                          AnyPropertyType,
+                          &actual_type, &actual_format,
+                          &nitems, &bytes_after, &prop);
 
     if (actual_type == XA_INTEGER && actual_format == 8)
     {
-	result = g_memdup (prop, nitems);
-	if (len)
-	    *len = nitems;
+        result = g_memdup (prop, nitems);
+        if (len)
+            *len = nitems;
     }
     else
     {
-	result = NULL;
+        result = NULL;
     }
 
     XFree (prop);
@@ -1459,28 +1478,28 @@ read_edid_data (GnomeRROutput *output, gsize *len)
 
     edid_atom = XInternAtom (DISPLAY (output), "EDID", FALSE);
     result = get_property (DISPLAY (output),
-			   output->id, edid_atom, len);
+                           output->id, edid_atom, len);
 
     if (!result)
     {
-	edid_atom = XInternAtom (DISPLAY (output), "EDID_DATA", FALSE);
-	result = get_property (DISPLAY (output),
-			       output->id, edid_atom, len);
+        edid_atom = XInternAtom (DISPLAY (output), "EDID_DATA", FALSE);
+        result = get_property (DISPLAY (output),
+                               output->id, edid_atom, len);
     }
 
     if (!result)
     {
-	edid_atom = XInternAtom (DISPLAY (output), "XFree86_DDC_EDID1_RAWDATA", FALSE);
-	result = get_property (DISPLAY (output),
-			       output->id, edid_atom, len);
+        edid_atom = XInternAtom (DISPLAY (output), "XFree86_DDC_EDID1_RAWDATA", FALSE);
+        result = get_property (DISPLAY (output),
+                               output->id, edid_atom, len);
     }
 
     if (result)
     {
-	if (*len % 128 == 0)
-	    return result;
-	else
-	    g_free (result);
+        if (*len % 128 == 0)
+            return result;
+        else
+            g_free (result);
     }
 
     return NULL;
@@ -1500,21 +1519,22 @@ get_connector_type_string (GnomeRROutput *output)
     result = NULL;
 
     if (XRRGetOutputProperty (DISPLAY (output), output->id, output->info->screen->priv->connector_type_atom,
-			      0, 100, False, False,
-			      AnyPropertyType,
-			      &actual_type, &actual_format,
-			      &nitems, &bytes_after, &prop) != Success)
-	return NULL;
+                              0, 100, False, False,
+                              AnyPropertyType,
+                              &actual_type, &actual_format,
+                              &nitems, &bytes_after, &prop) != Success)
+        return NULL;
 
     if (!(actual_type == XA_ATOM && actual_format == 32 && nitems == 1))
-	goto out;
+        goto out;
 
     connector_type = *((Atom *) prop);
 
     connector_type_str = XGetAtomName (DISPLAY (output), connector_type);
-    if (connector_type_str) {
-	result = g_strdup (connector_type_str); /* so the caller can g_free() it */
-	XFree (connector_type_str);
+    if (connector_type_str)
+    {
+        result = g_strdup (connector_type_str); /* so the caller can g_free() it */
+        XFree (connector_type_str);
     }
 
 out:
@@ -1538,14 +1558,14 @@ update_brightness_limits (GnomeRROutput *output)
     if (rc != Success)
     {
         if (rc != BadName)
-          g_warning ("could not get output property for %s, rc: %i",
-		     output->name, rc);
+            g_warning ("could not get output property for %s, rc: %i",
+                       output->name, rc);
         goto out;
     }
     if (info == NULL)
     {
         g_warning ("could not get output property for %s",
-		   output->name);
+                   output->name);
         goto out;
     }
     if (!info->range || info->num_values != 2)
@@ -1566,7 +1586,7 @@ static gboolean
 output_initialize (GnomeRROutput *output, XRRScreenResources *res, GError **error)
 {
     XRROutputInfo *info = XRRGetOutputInfo (
-	DISPLAY (output), res, output->id);
+                              DISPLAY (output), res, output->id);
     GPtrArray *a;
     int i;
 
@@ -1576,12 +1596,12 @@ output_initialize (GnomeRROutput *output, XRRScreenResources *res, GError **erro
 
     if (!info || !output->info)
     {
-	/* FIXME: see the comment in crtc_initialize() */
-	/* Translators: here, an "output" is a video output */
-	g_set_error (error, GNOME_RR_ERROR, GNOME_RR_ERROR_RANDR_ERROR,
-		     _("could not get information about output %d"),
-		     (int) output->id);
-	return FALSE;
+        /* FIXME: see the comment in crtc_initialize() */
+        /* Translators: here, an "output" is a video output */
+        g_set_error (error, GNOME_RR_ERROR, GNOME_RR_ERROR_RANDR_ERROR,
+                     _("could not get information about output %d"),
+                     (int) output->id);
+        return FALSE;
     }
 
     output->name = g_strdup (info->name); /* FIXME: what is nameLen used for? */
@@ -1597,10 +1617,10 @@ output_initialize (GnomeRROutput *output, XRRScreenResources *res, GError **erro
 
     for (i = 0; i < info->ncrtc; ++i)
     {
-	GnomeRRCrtc *crtc = crtc_by_id (output->info, info->crtcs[i]);
+        GnomeRRCrtc *crtc = crtc_by_id (output->info, info->crtcs[i]);
 
-	if (crtc)
-	    g_ptr_array_add (a, crtc);
+        if (crtc)
+            g_ptr_array_add (a, crtc);
     }
     g_ptr_array_add (a, NULL);
     output->possible_crtcs = (GnomeRRCrtc **)g_ptr_array_free (a, FALSE);
@@ -1609,10 +1629,10 @@ output_initialize (GnomeRROutput *output, XRRScreenResources *res, GError **erro
     a = g_ptr_array_new ();
     for (i = 0; i < info->nclone; ++i)
     {
-	GnomeRROutput *gnome_rr_output = gnome_rr_output_by_id (output->info, info->clones[i]);
+        GnomeRROutput *gnome_rr_output = gnome_rr_output_by_id (output->info, info->clones[i]);
 
-	if (gnome_rr_output)
-	    g_ptr_array_add (a, gnome_rr_output);
+        if (gnome_rr_output)
+            g_ptr_array_add (a, gnome_rr_output);
     }
     g_ptr_array_add (a, NULL);
     output->clones = (GnomeRROutput **)g_ptr_array_free (a, FALSE);
@@ -1621,10 +1641,10 @@ output_initialize (GnomeRROutput *output, XRRScreenResources *res, GError **erro
     a = g_ptr_array_new ();
     for (i = 0; i < info->nmode; ++i)
     {
-	GnomeRRMode *mode = mode_by_id (output->info, info->modes[i]);
+        GnomeRRMode *mode = mode_by_id (output->info, info->modes[i]);
 
-	if (mode)
-	    g_ptr_array_add (a, mode);
+        if (mode)
+            g_ptr_array_add (a, mode);
     }
     g_ptr_array_add (a, NULL);
     output->modes = (GnomeRRMode **)g_ptr_array_free (a, FALSE);
@@ -1766,7 +1786,8 @@ ensure_display_name (GnomeRROutput *output)
         output->display_name = g_strdup (_("Built-in Display"));
 
     if (output->display_name == NULL
-        && output->edid_data != NULL) {
+            && output->edid_data != NULL)
+    {
         MonitorInfo *info;
 
         info = decode_edid (output->edid_data);
@@ -1776,10 +1797,12 @@ ensure_display_name (GnomeRROutput *output)
         g_free (info);
     }
 
-    if (output->display_name == NULL) {
+    if (output->display_name == NULL)
+    {
         char *inches;
         inches = make_display_size_string (output->width_mm, output->height_mm);
-        if (inches != NULL) {
+        if (inches != NULL)
+        {
             /* Translators: %s is the size of the monitor in inches */
             output->display_name = g_strdup_printf (_("%s Display"), inches);
         }
@@ -1787,8 +1810,9 @@ ensure_display_name (GnomeRROutput *output)
     }
 
     /* last chance on the stairway */
-    if (output->display_name == NULL) {
-      output->display_name = g_strdup (_("Unknown Display"));
+    if (output->display_name == NULL)
+    {
+        output->display_name = g_strdup (_("Unknown Display"));
     }
 }
 
@@ -1847,40 +1871,43 @@ gnome_rr_output_get_backlight (GnomeRROutput *output, GError **error)
 
     gdk_error_trap_push ();
     atom = XInternAtom (DISPLAY (output), "Backlight", FALSE);
-    retval = XRRGetOutputProperty (DISPLAY (output), output->id, atom,
-				   0, 4, False, False, None,
-				   &actual_type, &actual_format,
-				   &nitems, &bytes_after, ((unsigned char **)&prop));
+    retval = XRRGetOutputProperty (DISPLAY (output), output->id,
+                                   atom,
+                                   0, 4, False, False, None,
+                                   &actual_type, &actual_format,
+                                   &nitems, &bytes_after,
+                                   ((unsigned char **)&prop));
     gdk_flush ();
     if (gdk_error_trap_pop ())
     {
         g_set_error_literal (error,
-			     GNOME_RR_ERROR,
-			     GNOME_RR_ERROR_UNKNOWN,
-			     "unhandled X error while getting the range of backlight values");
+                             GNOME_RR_ERROR,
+                             GNOME_RR_ERROR_UNKNOWN,
+                             "unhandled X error while getting the range of backlight values");
         goto out;
     }
 
-    if (retval != Success) {
+    if (retval != Success)
+    {
         g_set_error_literal (error,
-			     GNOME_RR_ERROR,
-			     GNOME_RR_ERROR_RANDR_ERROR,
-			     "could not get the range of backlight values");
+                             GNOME_RR_ERROR,
+                             GNOME_RR_ERROR_RANDR_ERROR,
+                             "could not get the range of backlight values");
         goto out;
     }
     if (actual_type == XA_INTEGER &&
-        nitems == 1 &&
-        actual_format == 32)
+            nitems == 1 &&
+            actual_format == 32)
     {
         memcpy (&now, prop, sizeof (guint));
     }
     else
     {
-	g_set_error (error,
-		     GNOME_RR_ERROR,
-		     GNOME_RR_ERROR_RANDR_ERROR,
-		     "failed to get correct property type, got %lu,%i",
-		     nitems, actual_format);
+        g_set_error (error,
+                     GNOME_RR_ERROR,
+                     GNOME_RR_ERROR_RANDR_ERROR,
+                     "failed to get correct property type, got %lu,%i",
+                     nitems, actual_format);
     }
 out:
     XFree (prop);
@@ -1903,29 +1930,29 @@ gnome_rr_output_set_backlight (GnomeRROutput *output, gint value, GError **error
 
     /* check this is sane */
     if (value < output->backlight_min ||
-        value > output->backlight_max)
+            value > output->backlight_max)
     {
-	g_set_error (error,
-		     GNOME_RR_ERROR,
-		     GNOME_RR_ERROR_BOUNDS_ERROR,
-		     "out of brightness range: %i, has to be %i -> %i",
-		     value,
-		     output->backlight_max, output->backlight_min);
-	goto out;
+        g_set_error (error,
+                     GNOME_RR_ERROR,
+                     GNOME_RR_ERROR_BOUNDS_ERROR,
+                     "out of brightness range: %i, has to be %i -> %i",
+                     value,
+                     output->backlight_max, output->backlight_min);
+        goto out;
     }
 
     /* don't abort on error */
     gdk_error_trap_push ();
     atom = XInternAtom (DISPLAY (output), "Backlight", FALSE);
     XRRChangeOutputProperty (DISPLAY (output), output->id, atom,
-			     XA_INTEGER, 32, PropModeReplace,
-			     (unsigned char *) &value, 1);
+                             XA_INTEGER, 32, PropModeReplace,
+                             (unsigned char *) &value, 1);
     if (gdk_error_trap_pop ())
     {
         g_set_error_literal (error,
-			     GNOME_RR_ERROR,
-			     GNOME_RR_ERROR_UNKNOWN,
-			     "unhandled X error while setting the backlight values");
+                             GNOME_RR_ERROR,
+                             GNOME_RR_ERROR_UNKNOWN,
+                             "unhandled X error while setting the backlight values");
         goto out;
     }
 
@@ -1942,7 +1969,7 @@ out:
  */
 GnomeRROutput *
 gnome_rr_screen_get_output_by_name (GnomeRRScreen *screen,
-				    const char    *name)
+                                    const char    *name)
 {
     int i;
 
@@ -1951,10 +1978,10 @@ gnome_rr_screen_get_output_by_name (GnomeRRScreen *screen,
 
     for (i = 0; screen->priv->info->outputs[i] != NULL; ++i)
     {
-	GnomeRROutput *output = screen->priv->info->outputs[i];
+        GnomeRROutput *output = screen->priv->info->outputs[i];
 
-	if (strcmp (output->name, name) == 0)
-	    return output;
+        if (strcmp (output->name, name) == 0)
+            return output;
     }
 
     return NULL;
@@ -1984,11 +2011,11 @@ _gnome_rr_output_name_is_laptop (const char *name)
         return FALSE;
 
     if (strstr (name, "lvds") ||  /* Most drivers use an "LVDS" prefix... */
-	strstr (name, "LVDS") ||
-	strstr (name, "Lvds") ||
-	strstr (name, "LCD")  ||  /* ... but fglrx uses "LCD" in some versions.  Shoot me now, kthxbye. */
-	strstr (name, "eDP")  ||  /* eDP is for internal laptop panel connections */
-	strstr (name, "default")) /* Finally, NVidia and all others that don't bother to do RANDR properly */
+            strstr (name, "LVDS") ||
+            strstr (name, "Lvds") ||
+            strstr (name, "LCD")  ||  /* ... but fglrx uses "LCD" in some versions.  Shoot me now, kthxbye. */
+            strstr (name, "eDP")  ||  /* eDP is for internal laptop panel connections */
+            strstr (name, "default")) /* Finally, NVidia and all others that don't bother to do RANDR properly */
         return TRUE;
 
     return FALSE;
@@ -2000,11 +2027,11 @@ gnome_rr_output_is_laptop (GnomeRROutput *output)
     g_return_val_if_fail (output != NULL, FALSE);
 
     if (!output->connected)
-	return FALSE;
+        return FALSE;
 
     /* The ConnectorType property is present in RANDR 1.3 and greater */
     if (g_strcmp0 (output->connector_type, GNOME_RR_CONNECTOR_TYPE_PANEL) == 0)
-	return TRUE;
+        return TRUE;
 
     /* Older versions of RANDR - this is a best guess, as @#$% RANDR doesn't have standard output names,
      * so drivers can use whatever they like.
@@ -2023,7 +2050,7 @@ gnome_rr_output_get_current_mode (GnomeRROutput *output)
     g_return_val_if_fail (output != NULL, NULL);
 
     if ((crtc = gnome_rr_output_get_crtc (output)))
-	return gnome_rr_crtc_get_current_mode (crtc);
+        return gnome_rr_crtc_get_current_mode (crtc);
 
     return NULL;
 }
@@ -2036,15 +2063,15 @@ gnome_rr_output_get_current_mode (GnomeRROutput *output)
  */
 void
 gnome_rr_output_get_position (GnomeRROutput   *output,
-			      int             *x,
-			      int             *y)
+                              int             *x,
+                              int             *y)
 {
     GnomeRRCrtc *crtc;
 
     g_return_if_fail (output != NULL);
 
     if ((crtc = gnome_rr_output_get_crtc (output)))
-	gnome_rr_crtc_get_position (crtc, x, y);
+        gnome_rr_crtc_get_position (crtc, x, y);
 }
 
 const char *
@@ -2073,7 +2100,7 @@ gnome_rr_output_get_preferred_mode (GnomeRROutput *output)
 {
     g_return_val_if_fail (output != NULL, NULL);
     if (output->n_preferred)
-	return output->modes[0];
+        return output->modes[0];
 
     return NULL;
 }
@@ -2094,7 +2121,7 @@ gnome_rr_output_is_connected (GnomeRROutput *output)
 
 gboolean
 gnome_rr_output_supports_mode (GnomeRROutput *output,
-			       GnomeRRMode   *mode)
+                               GnomeRRMode   *mode)
 {
     int i;
 
@@ -2103,8 +2130,8 @@ gnome_rr_output_supports_mode (GnomeRROutput *output,
 
     for (i = 0; output->modes[i] != NULL; ++i)
     {
-	if (output->modes[i] == mode)
-	    return TRUE;
+        if (output->modes[i] == mode)
+            return TRUE;
     }
 
     return FALSE;
@@ -2112,7 +2139,7 @@ gnome_rr_output_supports_mode (GnomeRROutput *output,
 
 gboolean
 gnome_rr_output_can_clone (GnomeRROutput *output,
-			   GnomeRROutput *clone)
+                           GnomeRROutput *clone)
 {
     int i;
 
@@ -2121,8 +2148,8 @@ gnome_rr_output_can_clone (GnomeRROutput *output,
 
     for (i = 0; output->clones[i] != NULL; ++i)
     {
-	if (output->clones[i] == clone)
-	    return TRUE;
+        if (output->clones[i] == clone)
+            return TRUE;
     }
 
     return FALSE;
@@ -2150,7 +2177,8 @@ gnome_rr_screen_set_primary_output (GnomeRRScreen *screen,
     else
         id = None;
 
-    if (SERVERS_RANDR_IS_AT_LEAST_1_3 (priv)) {
+    if (SERVERS_RANDR_IS_AT_LEAST_1_3 (priv))
+    {
         gdk_error_trap_push ();
         XRRSetOutputPrimary (priv->xdisplay, priv->xroot, id);
         gdk_error_trap_pop_ignored ();
@@ -2182,8 +2210,8 @@ gnome_rr_rotation_from_xrotation (Rotation r)
 
     for (i = 0; i < G_N_ELEMENTS (rotation_map); ++i)
     {
-	if (r & rotation_map[i].xrot)
-	    result |= rotation_map[i].rot;
+        if (r & rotation_map[i].xrot)
+            result |= rotation_map[i].rot;
     }
 
     return result;
@@ -2197,8 +2225,8 @@ xrotation_from_rotation (GnomeRRRotation r)
 
     for (i = 0; i < G_N_ELEMENTS (rotation_map); ++i)
     {
-	if (r & rotation_map[i].rot)
-	    result |= rotation_map[i].xrot;
+        if (r & rotation_map[i].rot)
+            result |= rotation_map[i].xrot;
     }
 
     return result;
@@ -2206,14 +2234,14 @@ xrotation_from_rotation (GnomeRRRotation r)
 
 gboolean
 gnome_rr_crtc_set_config_with_time (GnomeRRCrtc      *crtc,
-				    guint32           timestamp,
-				    int               x,
-				    int               y,
-				    GnomeRRMode      *mode,
-				    GnomeRRRotation   rotation,
-				    GnomeRROutput   **outputs,
-				    int               n_outputs,
-				    GError          **error)
+                                    guint32           timestamp,
+                                    int               x,
+                                    int               y,
+                                    GnomeRRMode      *mode,
+                                    GnomeRRRotation   rotation,
+                                    GnomeRROutput   **outputs,
+                                    int               n_outputs,
+                                    GError          **error)
 {
     ScreenInfo *info;
     GArray *output_ids;
@@ -2229,51 +2257,54 @@ gnome_rr_crtc_set_config_with_time (GnomeRRCrtc      *crtc,
 
     if (mode)
     {
-	if (x + mode->width > info->max_width
-	    || y + mode->height > info->max_height)
-	{
-	    g_set_error (error, GNOME_RR_ERROR, GNOME_RR_ERROR_BOUNDS_ERROR,
-			 /* Translators: the "position", "size", and "maximum"
-			  * words here are not keywords; please translate them
-			  * as usual.  A CRTC is a CRT Controller (this is X terminology) */
-			 _("requested position/size for CRTC %d is outside the allowed limit: "
-			   "position=(%d, %d), size=(%d, %d), maximum=(%d, %d)"),
-			 (int) crtc->id,
-			 x, y,
-			 mode->width, mode->height,
-			 info->max_width, info->max_height);
-	    return FALSE;
-	}
+        if (x + mode->width > info->max_width
+                || y + mode->height > info->max_height)
+        {
+            g_set_error (error, GNOME_RR_ERROR, GNOME_RR_ERROR_BOUNDS_ERROR,
+                         /* Translators: the "position", "size", and "maximum"
+                          * words here are not keywords; please translate them
+                          * as usual.  A CRTC is a CRT Controller (this is X terminology) */
+                         _("requested position/size for CRTC %d is outside the allowed limit: "
+                           "position=(%d, %d), size=(%d, %d), maximum=(%d, %d)"),
+                         (int) crtc->id,
+                         x, y,
+                         mode->width, mode->height,
+                         info->max_width, info->max_height);
+            return FALSE;
+        }
     }
 
     output_ids = g_array_new (FALSE, FALSE, sizeof (RROutput));
 
     if (outputs)
     {
-	for (i = 0; i < n_outputs; ++i)
-	    g_array_append_val (output_ids, outputs[i]->id);
+        for (i = 0; i < n_outputs; ++i)
+            g_array_append_val (output_ids, outputs[i]->id);
     }
 
     gdk_error_trap_push ();
     status = XRRSetCrtcConfig (DISPLAY (crtc), info->resources, crtc->id,
-			       timestamp,
-			       x, y,
-			       mode ? mode->id : None,
-			       xrotation_from_rotation (rotation),
-			       (RROutput *)output_ids->data,
-			       output_ids->len);
+                               timestamp,
+                               x, y,
+                               mode ? mode->id : None,
+                               xrotation_from_rotation (rotation),
+                               (RROutput *)output_ids->data,
+                               output_ids->len);
 
     g_array_free (output_ids, TRUE);
 
-    if (gdk_error_trap_pop () || status != RRSetConfigSuccess) {
-	/* Translators: CRTC is a CRT Controller (this is X terminology).
-	 * It is *very* unlikely that you'll ever get this error, so it is
-	 * only listed for completeness. */
-	g_set_error (error, GNOME_RR_ERROR, GNOME_RR_ERROR_RANDR_ERROR,
-		     _("could not set the configuration for CRTC %d"),
-		     (int) crtc->id);
+    if (gdk_error_trap_pop () || status != RRSetConfigSuccess)
+    {
+        /* Translators: CRTC is a CRT Controller (this is X terminology).
+         * It is *very* unlikely that you'll ever get this error, so it is
+         * only listed for completeness. */
+        g_set_error (error, GNOME_RR_ERROR, GNOME_RR_ERROR_RANDR_ERROR,
+                     _("could not set the configuration for CRTC %d"),
+                     (int) crtc->id);
         return FALSE;
-    } else {
+    }
+    else
+    {
         result = TRUE;
     }
 
@@ -2298,7 +2329,7 @@ gnome_rr_crtc_get_id (GnomeRRCrtc *crtc)
 
 gboolean
 gnome_rr_crtc_can_drive_output (GnomeRRCrtc   *crtc,
-				GnomeRROutput *output)
+                                GnomeRROutput *output)
 {
     int i;
 
@@ -2307,8 +2338,8 @@ gnome_rr_crtc_can_drive_output (GnomeRRCrtc   *crtc,
 
     for (i = 0; crtc->possible_outputs[i] != NULL; ++i)
     {
-	if (crtc->possible_outputs[i] == output)
-	    return TRUE;
+        if (crtc->possible_outputs[i] == output)
+            return TRUE;
     }
 
     return FALSE;
@@ -2323,16 +2354,16 @@ gnome_rr_crtc_can_drive_output (GnomeRRCrtc   *crtc,
  */
 void
 gnome_rr_crtc_get_position (GnomeRRCrtc *crtc,
-			    int         *x,
-			    int         *y)
+                            int         *x,
+                            int         *y)
 {
     g_return_if_fail (crtc != NULL);
 
     if (x)
-	*x = crtc->x;
+        *x = crtc->x;
 
     if (y)
-	*y = crtc->y;
+        *y = crtc->y;
 }
 
 /* FIXME: merge with get_mode()? */
@@ -2352,7 +2383,7 @@ gnome_rr_crtc_get_rotations (GnomeRRCrtc *crtc)
 
 gboolean
 gnome_rr_crtc_supports_rotation (GnomeRRCrtc *   crtc,
-				 GnomeRRRotation rotation)
+                                 GnomeRRRotation rotation)
 {
     g_return_val_if_fail (crtc != NULL, FALSE);
     return (crtc->rotations & rotation);
@@ -2404,8 +2435,8 @@ crtc_copy (const GnomeRRCrtc *from)
 
 static gboolean
 crtc_initialize (GnomeRRCrtc        *crtc,
-		 XRRScreenResources *res,
-		 GError            **error)
+                 XRRScreenResources *res,
+                 GError            **error)
 {
     XRRCrtcInfo *info = XRRGetCrtcInfo (DISPLAY (crtc), res, crtc->id);
     GPtrArray *a;
@@ -2417,16 +2448,16 @@ crtc_initialize (GnomeRRCrtc        *crtc,
 
     if (!info)
     {
-	/* FIXME: We need to reaquire the screen resources */
-	/* FIXME: can we actually catch BadRRCrtc, and does it make sense to emit that? */
+        /* FIXME: We need to reaquire the screen resources */
+        /* FIXME: can we actually catch BadRRCrtc, and does it make sense to emit that? */
 
-	/* Translators: CRTC is a CRT Controller (this is X terminology).
-	 * It is *very* unlikely that you'll ever get this error, so it is
-	 * only listed for completeness. */
-	g_set_error (error, GNOME_RR_ERROR, GNOME_RR_ERROR_RANDR_ERROR,
-		     _("could not get information about CRTC %d"),
-		     (int) crtc->id);
-	return FALSE;
+        /* Translators: CRTC is a CRT Controller (this is X terminology).
+         * It is *very* unlikely that you'll ever get this error, so it is
+         * only listed for completeness. */
+        g_set_error (error, GNOME_RR_ERROR, GNOME_RR_ERROR_RANDR_ERROR,
+                     _("could not get information about CRTC %d"),
+                     (int) crtc->id);
+        return FALSE;
     }
 
     /* GnomeRRMode */
@@ -2439,10 +2470,10 @@ crtc_initialize (GnomeRRCrtc        *crtc,
     a = g_ptr_array_new ();
     for (i = 0; i < info->noutput; ++i)
     {
-	GnomeRROutput *output = gnome_rr_output_by_id (crtc->info, info->outputs[i]);
+        GnomeRROutput *output = gnome_rr_output_by_id (crtc->info, info->outputs[i]);
 
-	if (output)
-	    g_ptr_array_add (a, output);
+        if (output)
+            g_ptr_array_add (a, output);
     }
     g_ptr_array_add (a, NULL);
     crtc->current_outputs = (GnomeRROutput **)g_ptr_array_free (a, FALSE);
@@ -2451,10 +2482,10 @@ crtc_initialize (GnomeRRCrtc        *crtc,
     a = g_ptr_array_new ();
     for (i = 0; i < info->npossible; ++i)
     {
-	GnomeRROutput *output = gnome_rr_output_by_id (crtc->info, info->possible[i]);
+        GnomeRROutput *output = gnome_rr_output_by_id (crtc->info, info->possible[i]);
 
-	if (output)
-	    g_ptr_array_add (a, output);
+        if (output)
+            g_ptr_array_add (a, output);
     }
     g_ptr_array_add (a, NULL);
     crtc->possible_outputs = (GnomeRROutput **)g_ptr_array_free (a, FALSE);
@@ -2555,9 +2586,9 @@ mode_free (GnomeRRMode *mode)
 
 void
 gnome_rr_crtc_set_gamma (GnomeRRCrtc *crtc, int size,
-			 unsigned short *red,
-			 unsigned short *green,
-			 unsigned short *blue)
+                         unsigned short *red,
+                         unsigned short *green,
+                         unsigned short *blue)
 {
     int copy_size;
     XRRCrtcGamma *gamma;
@@ -2568,7 +2599,7 @@ gnome_rr_crtc_set_gamma (GnomeRRCrtc *crtc, int size,
     g_return_if_fail (blue != NULL);
 
     if (size != crtc->gamma_size)
-	return;
+        return;
 
     gamma = XRRAllocGamma (crtc->gamma_size);
 
@@ -2583,8 +2614,8 @@ gnome_rr_crtc_set_gamma (GnomeRRCrtc *crtc, int size,
 
 gboolean
 gnome_rr_crtc_get_gamma (GnomeRRCrtc *crtc, int *size,
-			 unsigned short **red, unsigned short **green,
-			 unsigned short **blue)
+                         unsigned short **red, unsigned short **green,
+                         unsigned short **blue)
 {
     int copy_size;
     unsigned short *r, *g, *b;
@@ -2594,32 +2625,35 @@ gnome_rr_crtc_get_gamma (GnomeRRCrtc *crtc, int *size,
 
     gamma = XRRGetCrtcGamma (DISPLAY (crtc), crtc->id);
     if (!gamma)
-	return FALSE;
+        return FALSE;
 
     copy_size = crtc->gamma_size * sizeof (unsigned short);
 
-    if (red) {
-	r = g_new0 (unsigned short, crtc->gamma_size);
-	memcpy (r, gamma->red, copy_size);
-	*red = r;
+    if (red)
+    {
+        r = g_new0 (unsigned short, crtc->gamma_size);
+        memcpy (r, gamma->red, copy_size);
+        *red = r;
     }
 
-    if (green) {
-	g = g_new0 (unsigned short, crtc->gamma_size);
-	memcpy (g, gamma->green, copy_size);
-	*green = g;
+    if (green)
+    {
+        g = g_new0 (unsigned short, crtc->gamma_size);
+        memcpy (g, gamma->green, copy_size);
+        *green = g;
     }
 
-    if (blue) {
-	b = g_new0 (unsigned short, crtc->gamma_size);
-	memcpy (b, gamma->blue, copy_size);
-	*blue = b;
+    if (blue)
+    {
+        b = g_new0 (unsigned short, crtc->gamma_size);
+        memcpy (b, gamma->blue, copy_size);
+        *blue = b;
     }
 
     XRRFreeGamma (gamma);
 
     if (size)
-	*size = crtc->gamma_size;
+        *size = crtc->gamma_size;
 
     return TRUE;
 }

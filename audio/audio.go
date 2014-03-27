@@ -704,18 +704,19 @@ func (audio *Audio) setDefaultDevice() int32 {
 			panic(err)
 		}
 		for key, value := range audio.Sinks {
-			for _, port := range value.Ports {
-				ret := analogPattern.FindString(port.Name)
-				if ret != "" {
-					//set the default sink which has analog ports
-					C.pa_set_default_sink(audio.pa,
-						(*C.char)(C.CString(value.Name)))
-					audio.DefaultSink = int32(key)
-					break
-				}
+			ret := analogPattern.FindString(value.Name)
+			if ret != "" {
+				//set the default sink which has analog ports
+				fmt.Println("found analog device: ", value.Name,
+					" index is: ", value.Index)
+				C.pa_set_default_sink(audio.pa,
+					(*C.char)(C.CString(value.Name)))
+				audio.DefaultSink = int32(key)
+				break
 			}
 		}
 	} else {
+		fmt.Printf("Only one output device found,set fallback it\n")
 		audio.DefaultSink = 0
 	}
 

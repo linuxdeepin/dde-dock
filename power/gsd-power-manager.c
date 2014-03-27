@@ -106,48 +106,6 @@
 #define GSD_ACTION_DELAY 20
 #endif /* !GSD_ACTION_DELAY */
 
-static const gchar introspection_xml[] =
-    "<node>"
-    "  <interface name='org.gnome.SettingsDaemon.Power'>"
-    "    <property name='Icon' type='s' access='read'/>"
-    "    <property name='Tooltip' type='s' access='read'/>"
-    "    <property name='Percentage' type='d' access='read'/>"
-    "    <method name='GetPrimaryDevice'>"
-    "      <arg name='device' type='(susdut)' direction='out' />"
-    "    </method>"
-    "    <method name='GetDevices'>"
-    "      <arg name='devices' type='a(susdut)' direction='out' />"
-    "    </method>"
-    "  </interface>"
-    "  <interface name='org.gnome.SettingsDaemon.Power.Screen'>"
-    "    <method name='StepUp'>"
-    "      <arg type='u' name='new_percentage' direction='out'/>"
-    "    </method>"
-    "    <method name='StepDown'>"
-    "      <arg type='u' name='new_percentage' direction='out'/>"
-    "    </method>"
-    "    <method name='GetPercentage'>"
-    "      <arg type='u' name='percentage' direction='out'/>"
-    "    </method>"
-    "    <method name='SetPercentage'>"
-    "      <arg type='u' name='percentage' direction='in'/>"
-    "      <arg type='u' name='new_percentage' direction='out'/>"
-    "    </method>"
-    "    <signal name='Changed'/>"
-    "  </interface>"
-    "  <interface name='org.gnome.SettingsDaemon.Power.Keyboard'>"
-    "    <method name='StepUp'>"
-    "      <arg type='u' name='new_percentage' direction='out'/>"
-    "    </method>"
-    "    <method name='StepDown'>"
-    "      <arg type='u' name='new_percentage' direction='out'/>"
-    "    </method>"
-    "    <method name='Toggle'>"
-    "      <arg type='u' name='new_percentage' direction='out'/>"
-    "    </method>"
-    "  </interface>"
-    "</node>";
-
 #define GSD_POWER_MANAGER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GSD_TYPE_POWER_MANAGER, GsdPowerManagerPrivate))
 
 typedef enum
@@ -2906,7 +2864,8 @@ idle_configure (GsdPowerManager *manager)
     {
         /*[ > Session isn't available yet, postpone <]*/
         g_debug("Session isn't available yet, postpone\n");
-        return;
+        is_idle_inhibited = FALSE;
+        /*return;*/
     }
 
     /*are we inhibited from going idle*/
@@ -2931,38 +2890,16 @@ idle_configure (GsdPowerManager *manager)
     /* set up blank callback only when the screensaver is on,
     * as it's what will drive the blank */
     on_battery = up_client_get_on_battery (manager->priv->up_client);
-    timeout_blank = 0;
-    if (manager->priv->screensaver_active || manager->priv->current_idle_mode == GSD_POWER_IDLE_MODE_DIM)
-    {
-        /* The tail is wagging the dog.
-        * The screensaver coming on will blank the screen.
-        * If an event occurs while the screensaver is on,
-        * the aggressive idle watch will handle it */
-        /*timeout_blank = SCREENSAVER_TIMEOUT_BLANK;*/
-        timeout_blank = 3;
-    }
-
-    clear_idle_watch (manager->priv->idle_monitor,
-                      &manager->priv->idle_blank_id);
-
-    if (timeout_blank != 0)
-    {
-        g_debug ("setting up blank callback for % is", timeout_blank);
-
-        manager->priv->idle_blank_id = gnome_idle_monitor_add_idle_watch (manager->priv->idle_monitor,
-                                       timeout_blank * 1000,
-                                       idle_triggered_idle_cb, manager, NULL);
-    }
 
     /* only do the sleep timeout when the session is idle
     * and we aren't inhibited from sleeping (or logging out, etc.) */
     action_type = g_settings_get_enum (manager->priv->settings, on_battery ?
-                                       "sleep - inactive - battery - type" : "sleep - inactive - ac - type");
+                                       "sleep-inactive-battery-type" : "sleep-inactive-ac-type");
     timeout_sleep = 0;
     /*if (!is_action_inhibited (manager, action_type))*/
     /*{*/
     timeout_sleep = g_settings_get_int (manager->priv->settings, on_battery ?
-                                        "sleep - inactive - battery - timeout" : "sleep - inactive - ac - timeout");
+                                        "sleep-inactive-battery-timeout" : "sleep-inactive-ac-timeout");
     /*}*/
 
     clear_idle_watch (manager->priv->idle_monitor,
@@ -3001,46 +2938,15 @@ idle_configure (GsdPowerManager *manager)
     /* set up dim callback for when the screen lock is not active,
     * but only if we actually want to dim. */
     timeout_dim = 0;
-    /*if (manager->priv->screensaver_active)*/
-    if (0)
+    if (g_settings_get_boolean (manager->priv->settings, "idle-dim"))
     {
-        /* Don't dim when the screen lock is active */
-        g_debug("@idle_configure : don't dim when screen lock is active");
-    }
-    else if (!on_battery)
-    {
-        /*Don't dim when charging */
         timeout_dim = g_settings_get_int (manager->priv->settings,
                                           "idle-delay");
-        g_debug("@idle_configure:don't dim when charging? %d", timeout_dim);
-    }
-    else if (manager->priv->battery_is_low)
-    {
-        /* Aggressively blank when battery is low */
-        timeout_dim = SCREENSAVER_TIMEOUT_BLANK;
-    }
-    else
-    {
-        if (g_settings_get_boolean (manager->priv->settings, "idle-dim"))
-        {
-            /*timeout_dim = g_settings_get_uint (manager->priv->settings_session,*/
-            /*"idle-delay");*/
-            timeout_dim = g_settings_get_int (manager->priv->settings,
-                                              "idle-delay");
-            if (timeout_dim == 0)
-            {
-                timeout_dim = IDLE_DIM_BLANK_DISABLED_MIN;
-            }
-            else
-            {
-                timeout_dim *= IDLE_DELAY_TO_IDLE_DIM_MULTIPLIER;
-                /* Don't bother dimming if the idle-delay is
-                 * too low, we'll do that when we bring down the
-                 * screen lock */
-                if (timeout_dim < MINIMUM_IDLE_DIM_DELAY)
-                    timeout_dim = 0;
-            }
-        }
+        /* Don't bother dimming if the idle-delay is
+        * too low, we'll do that when we bring down the
+        * screen lock */
+        if (timeout_dim < MINIMUM_IDLE_DIM_DELAY)
+            timeout_dim = 0;
     }
 
     clear_idle_watch (manager->priv->idle_monitor,
@@ -3053,6 +2959,19 @@ idle_configure (GsdPowerManager *manager)
         manager->priv->idle_dim_id = gnome_idle_monitor_add_idle_watch (manager->priv->idle_monitor,
                                      timeout_dim * 1000,
                                      idle_triggered_idle_cb, manager, NULL);
+        timeout_blank = 0;
+        timeout_blank += timeout_dim + 5;
+        clear_idle_watch (manager->priv->idle_monitor,
+                          &manager->priv->idle_blank_id);
+
+        if (timeout_blank != 0)
+        {
+            g_debug ("setting up blank callback for % is", timeout_blank);
+
+            manager->priv->idle_blank_id = gnome_idle_monitor_add_idle_watch (manager->priv->idle_monitor,
+                                           timeout_blank * 1000,
+                                           idle_triggered_idle_cb, manager, NULL);
+        }
     }
 }
 
