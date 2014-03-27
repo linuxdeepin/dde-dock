@@ -23,13 +23,13 @@ func (session *ConnectionSession) updatePropHasChanged(v bool) {
 	dbus.NotifyChange(session, "HasChanged")
 }
 
-func (session *ConnectionSession) updatePropCurrentFields() {
+func (session *ConnectionSession) updatePropCurrentFields(page string) {
 	// get fields through current page, show or hide some fields when
 	// target fileds toggled
 
 	// TODO processing logic
 
-	session.CurrentFields = session.listFields(session.currentPage)
+	session.CurrentFields = session.listFields(page)
 	dbus.NotifyChange(session, "CurrentFields")
 }
 

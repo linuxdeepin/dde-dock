@@ -27,7 +27,7 @@ type ConnectionSession struct {
 	currentUUID string // TODO hide property
 	HasChanged  bool
 
-	currentPage string
+	// currentPage string // TODO
 
 	//前端只显示此列表中的字段,会跟随当前正在编辑的值而改变
 	// TODO more documentation
@@ -112,7 +112,7 @@ func (session *ConnectionSession) ListPages() (pages []string) {
 func (session *ConnectionSession) listFields(page string) (fields []string) {
 	switch session.connType {
 	case NM_SETTING_WIRED_SETTING_NAME:
-		switch session.currentPage {
+		switch page {
 		case pageGeneral:
 			fields = []string{"General_field1", "General_field2"}
 		case pageIPv4:
@@ -143,8 +143,8 @@ func (session *ConnectionSession) listFields(page string) (fields []string) {
 //设置/获得字段的值都受这里设置page的影响。
 func (session *ConnectionSession) SwitchPage(page string) {
 	// TODO HasChanged
-	session.currentPage = page
-	session.updatePropCurrentFields()
+	// session.currentPage = page
+	session.updatePropCurrentFields(page)
 }
 
 //比如获得当前链接支持的加密方式 EAP字段: TLS、MD5、FAST、PEAP
@@ -169,9 +169,9 @@ func (session *ConnectionSession) GetAvailableValue(key string) (values []string
 //仅仅调试使用，返回某个页面支持的字段。 因为字段如何安排(位置、我们是否要提供这个字段)是由前端决定的。
 //*****在设计前端显示内容的时候和这个返回值关联很大*****
 // DebugListFields return all fields of current page, only for debugging.
-func (session *ConnectionSession) DebugListFields() []string {
+func (session *ConnectionSession) DebugListFields(page string) []string {
 	// TODO
-	return session.listFields(session.currentPage)
+	return session.listFields(page)
 }
 
 // DebugConnectionTypes return all supported connection types, only for debugging.
@@ -192,53 +192,41 @@ func (*Manager) DebugListKeyTypes() (uint32, string) {
 
 //设置某个字段， 会影响CurrentFields属性，某些值会导致其他属性进入不可用状态
 // TODO SetField
-// func (session *ConnectionSession) SetField(key, value string) (err error) {
-// 	page, ok := session.data[session.currentPage]
-// 	if !ok {
-// 		err = fmt.Errorf("invalid page: data[%s]", session.currentPage)
-// 		return
-// 	}
+func (session *ConnectionSession) SetField(page, key, value string) (err error) {
 
-// 	varient, ok := page[key]
-// 	if !ok {
-// 		// field is not yet exits
-// 		page[key] = dbus.MakeVariant(value)
-// 		session.HasChanged = true
-// 		return
-// 	}
+	// TODO oldValue, err := varientToString(varient)
+	// oldValue, err := varientToString(varient)
+	// if err != nil {
+	// 	return
+	// }
+	// if oldValue == value {
+	// 	return
+	// }
+	// page[key] = dbus.MakeVariant(value)
+	// session.HasChanged = true
 
-// 	// TODO oldValue, err := varientToString(varient)
-// 	// oldValue, err := varientToString(varient)
-// 	// if err != nil {
-// 	// 	return
-// 	// }
-// 	// if oldValue == value {
-// 	// 	return
-// 	// }
-// 	// page[key] = dbus.MakeVariant(value)
-// 	// session.HasChanged = true
+	// // TODO processing logic
+	// session.updatePropCurrentFields()
 
-// 	// // TODO processing logic
-// 	// session.updatePropCurrentFields()
+	return
+}
 
-// 	return
-// }
+// TODO
+func (session *ConnectionSession) GetField(page, key string) (value string, err error) {
+	// page, ok := session.data[session.currentPage]
+	// if !ok {
+	// 	err = fmt.Errorf("invalid page: data[%s]", session.currentPage)
+	// 	return
+	// }
 
-// func (session *ConnectionSession) GetField(key string) (value string, err error) {
-// 	page, ok := session.data[session.currentPage]
-// 	if !ok {
-// 		err = fmt.Errorf("invalid page: data[%s]", session.currentPage)
-// 		return
-// 	}
+	// TODO
+	// varient, ok := page[key]
+	// if !ok {
+	// 	err = fmt.Errorf("invalid field: data[%s][%s]", session.currentPage, key)
+	// 	return
+	// }
 
-// 	// TODO
-// 	// varient, ok := page[key]
-// 	// if !ok {
-// 	// 	err = fmt.Errorf("invalid field: data[%s][%s]", session.currentPage, key)
-// 	// 	return
-// 	// }
-
-// 	// TODO
-// 	// value, err = varientToString(varient)
-// 	return
-// }
+	// TODO
+	// value, err = varientToString(varient)
+	return
+}
