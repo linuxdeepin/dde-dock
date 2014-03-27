@@ -164,62 +164,61 @@ func wrapVariantBoolean(s string) (v dbus.Variant, err error) {
 func wrapVariantArrayByte(s string) (v dbus.Variant, err error) {
 	var d []byte
 	d = []byte(s)
+	// err = json.Unmarshal([]byte(s), &d)
 	v = dbus.MakeVariant(d)
+	// LOGGER.Debug(d) // TODO
 	return
 }
 
-// TODO
 func wrapVariantArrayString(s string) (v dbus.Variant, err error) {
-	var d = make([]string, 0)
-	err = json.Unmarshal([]byte(s), d)
+	var d []string
+	err = json.Unmarshal([]byte(s), &d)
 	v = dbus.MakeVariant(d)
 	return
 }
 
-// TODO
 func wrapVariantArrayUint32(s string) (v dbus.Variant, err error) {
-	var d = make([]uint32, 0)
-	err = json.Unmarshal([]byte(s), d)
+	var d []uint32
+	err = json.Unmarshal([]byte(s), &d)
 	v = dbus.MakeVariant(d)
 	return
 }
 
 // TODO
 func wrapVariantArrayArrayByte(s string) (v dbus.Variant, err error) {
-	var d = make([][]byte, 0)
-	err = json.Unmarshal([]byte(s), d)
+	var d [][]byte
+	err = json.Unmarshal([]byte(s), &d)
 	v = dbus.MakeVariant(d)
+	LOGGER.Debug(d) // TODO
 	return
 }
 
-// TODO
 func wrapVariantArrayArrayUint32(s string) (v dbus.Variant, err error) {
-	var d = make([][]uint32, 0)
-	err = json.Unmarshal([]byte(s), d)
+	var d [][]uint32
+	err = json.Unmarshal([]byte(s), &d)
 	v = dbus.MakeVariant(d)
 	return
 }
 
-// TODO
 func wrapVariantDictStringString(s string) (v dbus.Variant, err error) {
-	var d = make(map[string]string)
-	err = json.Unmarshal([]byte(s), d)
+	var d map[string]string
+	err = json.Unmarshal([]byte(s), &d)
 	v = dbus.MakeVariant(d)
 	return
 }
 
 // TODO
 func wrapVariantIpv6Addresses(s string) (v dbus.Variant, err error) {
-	var d = make(Ipv6Addresses, 0)
-	err = json.Unmarshal([]byte(s), d)
+	var d Ipv6Addresses
+	err = json.Unmarshal([]byte(s), &d)
 	v = dbus.MakeVariant(d)
 	return
 }
 
 // TODO
 func wrapVariantIpv6Routes(s string) (v dbus.Variant, err error) {
-	var d = make(Ipv6Routes, 0)
-	err = json.Unmarshal([]byte(s), d)
+	var d Ipv6Routes
+	err = json.Unmarshal([]byte(s), &d)
 	v = dbus.MakeVariant(d)
 	return
 }

@@ -60,7 +60,6 @@ func unwrapVariantByte(v dbus.Variant) (s string, err error) {
 		err = fmt.Errorf("unwrapVariantByte() failed: %v", v)
 		return
 	}
-	// TODO
 	s = string(d)
 	return
 }
@@ -72,7 +71,6 @@ func unwrapVariantInt32(v dbus.Variant) (s string, err error) {
 		err = fmt.Errorf("unwrapVariantInt32() failed: %v", v)
 		return
 	}
-	// TODO
 	s = strconv.FormatInt(int64(d), 10)
 	return
 }
@@ -84,7 +82,6 @@ func unwrapVariantUint32(v dbus.Variant) (s string, err error) {
 		err = fmt.Errorf("unwrapVariantUint32() failed: %v", v)
 		return
 	}
-	// TODO
 	s = strconv.FormatUint(uint64(d), 10)
 	return
 }
@@ -96,7 +93,6 @@ func unwrapVariantUint64(v dbus.Variant) (s string, err error) {
 		err = fmt.Errorf("unwrapVariantUint64() failed: %v", v)
 		return
 	}
-	// TODO
 	s = strconv.FormatUint(d, 10)
 	return
 }
@@ -108,7 +104,6 @@ func unwrapVariantBoolean(v dbus.Variant) (s string, err error) {
 		err = fmt.Errorf("unwrapVariantBoolean() failed: %v", v)
 		return
 	}
-	// TODO
 	s = strconv.FormatBool(d)
 	return
 }
@@ -120,8 +115,10 @@ func unwrapVariantArrayByte(v dbus.Variant) (s string, err error) {
 		err = fmt.Errorf("unwrapVariantArrayByte() failed: %v", v)
 		return
 	}
-	// TODO
+	// b, err := json.Marshal(d)
+	// s = string(b)
 	s = string(d)
+	// LOGGER.Debug(s) // TODO
 	return
 }
 
@@ -132,8 +129,6 @@ func unwrapVariantArrayString(v dbus.Variant) (s string, err error) { // TODO
 		err = fmt.Errorf("unwrapVariantArrayString() failed: %v", v)
 		return
 	}
-	// use json marshal complicated structure
-	// TODO
 	b, err := json.Marshal(d)
 	s = string(b)
 	return
@@ -146,8 +141,6 @@ func unwrapVariantArrayUint32(v dbus.Variant) (s string, err error) {
 		err = fmt.Errorf("unwrapVariantArrayUint32() failed: %v", v)
 		return
 	}
-	// use json marshal complicated structure
-	// TODO
 	b, err := json.Marshal(d)
 	s = string(b)
 	return
@@ -160,10 +153,10 @@ func unwrapVariantArrayArrayByte(v dbus.Variant) (s string, err error) {
 		err = fmt.Errorf("unwrapVariantArrayArrayByte() failed: %v", v)
 		return
 	}
-	// use json marshal complicated structure
 	// TODO
 	b, err := json.Marshal(d)
 	s = string(b)
+	LOGGER.Debug(s) // TODO
 	return
 }
 
@@ -174,14 +167,11 @@ func unwrapVariantArrayArrayUint32(v dbus.Variant) (s string, err error) {
 		err = fmt.Errorf("unwrapVariantArrayArrayUint32() failed: %v", v)
 		return
 	}
-	// use json marshal complicated structure
-	// TODO
 	b, err := json.Marshal(d)
 	s = string(b)
 	return
 }
 
-// TODO
 func unwrapVariantDictStringString(v dbus.Variant) (s string, err error) {
 	var d map[string]string
 	d, ok := v.Value().(map[string]string)
@@ -189,7 +179,6 @@ func unwrapVariantDictStringString(v dbus.Variant) (s string, err error) {
 		err = fmt.Errorf("unwrapVariantDictStringString() failed: %v", v)
 		return
 	}
-	// use json marshal complicated structure
 	// TODO
 	b, err := json.Marshal(d)
 	s = string(b)
@@ -203,7 +192,6 @@ func unwrapVariantIpv6Addresses(v dbus.Variant) (s string, err error) {
 		err = fmt.Errorf("unwrapVariantIpv6Addresses() failed: %v", v)
 		return
 	}
-	// use json marshal complicated structure
 	// TODO
 	b, err := json.Marshal(d)
 	s = string(b)
@@ -217,7 +205,6 @@ func unwrapVariantIpv6Routes(v dbus.Variant) (s string, err error) {
 		err = fmt.Errorf("unwrapVariantIpv6Routes() failed: %v", v)
 		return
 	}
-	// use json marshal complicated structure
 	// TODO
 	b, err := json.Marshal(d)
 	s = string(b)

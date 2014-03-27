@@ -18,6 +18,15 @@ const (
 	NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME      = "dhcp-hostname"
 )
 
+const (
+	NM_SETTING_IP6_CONFIG_METHOD_IGNORE     = "ignore"
+	NM_SETTING_IP6_CONFIG_METHOD_AUTO       = "auto"
+	NM_SETTING_IP6_CONFIG_METHOD_DHCP       = "dhcp"
+	NM_SETTING_IP6_CONFIG_METHOD_LINK_LOCAL = "link-local"
+	NM_SETTING_IP6_CONFIG_METHOD_MANUAL     = "manual"
+	NM_SETTING_IP6_CONFIG_METHOD_SHARED     = "shared"
+)
+
 func getSettingIp6ConfigKeyType(key string) (t ktype) {
 	switch key {
 	default:

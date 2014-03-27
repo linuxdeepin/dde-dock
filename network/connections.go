@@ -222,7 +222,7 @@ func (this *Manager) CreateConnection(connType string) (session *ConnectionSessi
 }
 
 // OpenConnection open a connection through uuid, return ConnectionSession's dbus object path if success.
-func (this *Manager) OpenConnection(uuid string) (session *ConnectionSession, err error) {
+func (this *Manager) EditConnection(uuid string) (session *ConnectionSession, err error) {
 	session, err = NewConnectionSessionByOpen(uuid)
 	if err != nil {
 		LOGGER.Error(err)

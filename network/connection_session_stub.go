@@ -12,28 +12,21 @@ func (session *ConnectionSession) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-// TODO
-// func (session *ConnectionSession) updatePropCurrentUUID(v string) {
-// 	session.CurrentUUID = v
-// 	dbus.NotifyChange(session, "CurrentUUID")
-// }
-
 func (session *ConnectionSession) updatePropHasChanged(v bool) {
 	session.HasChanged = v
 	dbus.NotifyChange(session, "HasChanged")
 }
 
-func (session *ConnectionSession) updatePropCurrentFields() {
-	// get fields through current page, show or hide some fields when
-	// target fileds toggled
-
-	// TODO processing logic
-
-	session.CurrentFields = session.listFields(session.currentPage)
-	dbus.NotifyChange(session, "CurrentFields")
+func (session *ConnectionSession) updatePropAvailableKeys() {
+	session.AvailableKeys = make(map[string][]string) // clear structure
+	for _, page := range session.ListPages() {
+		session.AvailableKeys[page] = session.listKeys(page)
+	}
+	dbus.NotifyChange(session, "AvailableKeys")
 }
 
-func (session *ConnectionSession) updatePropCurrentErrors(v string) {
+func (session *ConnectionSession) updatePropErrors(v string) {
 	// TODO
-	dbus.NotifyChange(session, "CurrentErrors")
+	// session.Errors
+	dbus.NotifyChange(session, "Errors")
 }
