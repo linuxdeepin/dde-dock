@@ -193,17 +193,3 @@ func setSettingWiredS390Options(data _ConnectionData, value string) (err error) 
 	err = setConnectionData(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_OPTIONS, value, getSettingWiredKeyType(NM_SETTING_WIRED_S390_OPTIONS))
 	return
 }
-
-// TODO remove
-
-// SettingWiredPort NM_SETTING_WIRED_PORT
-// SettingWiredSpeed NM_SETTING_WIRED_SPEED
-// SettingWiredDuplex NM_SETTING_WIRED_DUPLEX
-// SettingWiredAutoNegotiate NM_SETTING_WIRED_AUTO_NEGOTIATE
-// SettingWiredMacAddress NM_SETTING_WIRED_MAC_ADDRESS
-// SettingWiredClonedMacAddress NM_SETTING_WIRED_CLONED_MAC_ADDRESS
-// SettingWiredMacAddressBlacklist NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST
-// SettingWiredMtu NM_SETTING_WIRED_MTU
-// SettingWiredS390Subchannels NM_SETTING_WIRED_S390_SUBCHANNELS
-// SettingWiredS390Nettype NM_SETTING_WIRED_S390_NETTYPE
-// SettingWiredS390Options NM_SETTING_WIRED_S390_OPTIONS

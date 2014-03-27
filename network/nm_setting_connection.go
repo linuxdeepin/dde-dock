@@ -1,6 +1,6 @@
 package main
 
-// TODO
+// TODO doc
 
 const NM_SETTING_CONNECTION_SETTING_NAME = "connection"
 

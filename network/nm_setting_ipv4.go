@@ -267,18 +267,3 @@ func setSettingIp4ConfigMayFail(data _ConnectionData, value string) (err error) 
 	err = setConnectionData(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_MAY_FAIL, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_MAY_FAIL))
 	return
 }
-
-// TODO remove
-
-// SettingIp4ConfigMethod NM_SETTING_IP4_CONFIG_METHOD
-// SettingIp4ConfigDns NM_SETTING_IP4_CONFIG_DNS
-// SettingIp4ConfigDnsSearch NM_SETTING_IP4_CONFIG_DNS_SEARCH
-// SettingIp4ConfigAddresses NM_SETTING_IP4_CONFIG_ADDRESSES
-// SettingIp4ConfigRoutes NM_SETTING_IP4_CONFIG_ROUTES
-// SettingIp4ConfigIgnoreAutoRoutes NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES
-// SettingIp4ConfigIgnoreAutoDns NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS
-// SettingIp4ConfigDhcpClientId NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID
-// SettingIp4ConfigDhcpSendHostname NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME
-// SettingIp4ConfigDhcpHostname NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME
-// SettingIp4ConfigNeverDefault NM_SETTING_IP4_CONFIG_NEVER_DEFAULT
-// SettingIp4ConfigMayFail NM_SETTING_IP4_CONFIG_MAY_FAIL

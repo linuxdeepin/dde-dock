@@ -11,8 +11,9 @@ import (
 type ktype uint32
 
 const (
-	ktypeString ktype = iota
-	ktypeByte         // for byte and gchar type
+	ktypeUnknown ktype = iota
+	ktypeString
+	ktypeByte // for byte and gchar type
 	ktypeInt32
 	ktypeUint32
 	ktypeUint64
@@ -25,7 +26,6 @@ const (
 	ktypeDictStringString // json, dict of (string::string)
 	ktypeIpv6Addresses    // json, array of (byte array, uint32, byte array)
 	ktypeIpv6Routes       // json, array of (byte array, uint32, byte array, uint32)
-	ktypeUnknown
 )
 
 // Ipv6Addresses is an array of (byte array, uint32, byte array)
