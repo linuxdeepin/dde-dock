@@ -7,7 +7,7 @@ import (
 func (session *ConnectionSession) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		"com.deepin.daemon.Network",
-		session.objPath,
+		string(session.objPath),
 		"com.deepin.daemon.ConnectionSession",
 	}
 }
@@ -23,13 +23,13 @@ func (session *ConnectionSession) updatePropHasChanged(v bool) {
 	dbus.NotifyChange(session, "HasChanged")
 }
 
-func (session *ConnectionSession) updatePropCurrentFields(page string) {
+func (session *ConnectionSession) updatePropCurrentFields() {
 	// get fields through current page, show or hide some fields when
 	// target fileds toggled
 
 	// TODO processing logic
 
-	session.CurrentFields = session.listFields(page)
+	session.CurrentFields = session.listFields(session.currentPage)
 	dbus.NotifyChange(session, "CurrentFields")
 }
 

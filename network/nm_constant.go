@@ -1,11 +1,35 @@
 package main
 
 const (
+	typeWired    = NM_SETTING_WIRED_SETTING_NAME
+	typeWireless = NM_SETTING_WIRELESS_SETTING_NAME
+	// typeVpn // TODO
+	// typeAdsl // TODO
+)
+
+var supportedConnectionTypes = []string{
+	typeWired,
+	typeWireless,
+}
+
+const (
+	field8021x            = NM_SETTING_802_1X_SETTING_NAME
 	fieldConnection       = NM_SETTING_CONNECTION_SETTING_NAME
-	fieldWireless         = NM_SETTING_WIRELESS_SETTING_NAME
-	fieldWirelessSecurity = NM_SETTING_WIRELESS_SECURITY_SETTING_NAME
 	fieldIPv4             = NM_SETTING_IP4_CONFIG_SETTING_NAME
 	fieldIPv6             = NM_SETTING_IP6_CONFIG_SETTING_NAME
+	fieldWired            = NM_SETTING_WIRED_SETTING_NAME
+	fieldWireless         = NM_SETTING_WIRELESS_SETTING_NAME
+	fieldWirelessSecurity = NM_SETTING_WIRELESS_SECURITY_SETTING_NAME
+)
+
+// page is a wrapper of field for easy to configure
+const (
+	pageGeneral  = "General"  // -> fieldConnection
+	pageEthernet = "Ethernet" // -> fieldWireed
+	pageWifi     = "Wifi"     // -> fieldWireless
+	pageIPv4     = "IPv4"     // -> fieldIPv4
+	pageIPv6     = "IPv6"     // -> fieldIPv6
+	pageSecurity = "Security" // -> field8021x, fieldWirelessSecurity
 )
 
 const (

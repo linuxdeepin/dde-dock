@@ -12,7 +12,7 @@ type Connection struct {
 	Path           dbus.ObjectPath
 	Uuid           string
 	Name           string
-	ConnectionType string
+	ConnectionType string // TODO
 }
 
 func (this *Manager) initConnectionManage() {
@@ -172,23 +172,27 @@ func (this *Manager) UpdateConnection(data map[string]map[string]string) {
 	fmt.Println("Update:", data)
 }
 
-func (this *Manager) getConnectionData(uuid string) (data _ConnectionData) {
+func (this *Manager) getConnectionPathByUUID(uuid string) (path dbus.ObjectPath, ok bool) {
+	ok = false
 	for _, c := range this.WiredConnections {
 		if uuid == c.Uuid {
-			return c.Data
+			path = c.Path
+			ok = true
 		}
 	}
 	for _, c := range this.WirelessConnections {
 		if uuid == c.Uuid {
-			return c.Data
+			path = c.Path
+			ok = true
 		}
 	}
 	for _, c := range this.VPNConnections {
 		if uuid == c.Uuid {
-			return c.Data
+			path = c.Path
+			ok = true
 		}
 	}
-	return nil
+	return
 }
 
 // CreateConnection create a new connection, return ConnectionSession's dbus object path if success.
