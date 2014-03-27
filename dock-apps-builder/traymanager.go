@@ -18,7 +18,7 @@ type TrayManager struct {
 
 	TrayIcons []uint32
 
-	Destroy func(id uint32)
+	Removed func(id uint32)
 	Added   func(id uint32)
 	Changed func(id uint32)
 
@@ -67,8 +67,8 @@ func (m *TrayManager) removeTrayIcon(xid xproto.Window) {
 	delete(m.nameInfo, xid)
 	delete(m.notifyInfo, xid)
 	delete(m.md5Info, xid)
-	if m.Destroy != nil {
-		m.Destroy(uint32(xid))
+	if m.Removed != nil {
+		m.Removed(uint32(xid))
 	}
 	var newIcons []uint32
 	for _, id := range m.TrayIcons {
