@@ -67,10 +67,8 @@ type Ipv6Routes []struct {
 	Metric  uint32
 }
 
-// TODO
 // string -> realdata -> dbus.Variant
-func wrapVariant(s string, t ktype) (v dbus.Variant) {
-	var err error
+func wrapVariant(s string, t ktype) (v dbus.Variant, err error) {
 	switch t {
 	case ktypeString:
 		v, err = wrapVariantString(s)
@@ -103,11 +101,6 @@ func wrapVariant(s string, t ktype) (v dbus.Variant) {
 	default:
 		err = fmt.Errorf("invalid variant type, %s", s)
 	}
-
-	if err != nil {
-		LOGGER.Error("wrapVariant() failed:", err)
-	}
-
 	return
 }
 

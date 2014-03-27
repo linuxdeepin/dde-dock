@@ -7,10 +7,8 @@ import (
 	"strconv"
 )
 
-// TODO
 // dbus.Variant -> realdata -> string
-func unwrapVariant(v dbus.Variant, t ktype) (s string) {
-	var err error
+func unwrapVariant(v dbus.Variant, t ktype) (s string, err error) {
 	switch t {
 	case ktypeString:
 		s, err = unwrapVariantString(v)
@@ -43,11 +41,6 @@ func unwrapVariant(v dbus.Variant, t ktype) (s string) {
 	default:
 		err = fmt.Errorf("invalid key type, %v", v)
 	}
-
-	if err != nil {
-		LOGGER.Error("unwrapVariant() failed:", err)
-	}
-
 	return
 }
 

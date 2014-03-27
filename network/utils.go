@@ -18,6 +18,7 @@ func newUUID() string {
 	return fmt.Sprintf("%x-%x-%x-%x-%x", uuid[0:4], uuid[4:6], uuid[6:8], uuid[8:10], uuid[10:])
 }
 
+// TODO remove
 func pageGeneralGetId(con map[string]map[string]dbus.Variant) string {
 	defer func() {
 		if err := recover(); err != nil {
@@ -27,13 +28,44 @@ func pageGeneralGetId(con map[string]map[string]dbus.Variant) string {
 	return con[fieldConnection]["id"].Value().(string)
 }
 
-// TODO
 func getConnectionData(data _ConnectionData, field, key string, t ktype) (value string, err error) {
+	fieldData, ok := data[field]
+	if !ok {
+		LOGGER.Errorf("invalid field: data[%s]", field)
+		return
+	}
+
+	valueVariant, ok := fieldData[key]
+	if !ok {
+		LOGGER.Errorf("invalid key: data[%s][%s]", field, key)
+		return
+	}
+
+	value, err = unwrapVariant(valueVariant, t)
+	if err != nil {
+		LOGGER.Error("get connection data failed:", err)
+		return
+	}
+
 	return
 }
 
-// TODO
 func setConnectionData(data _ConnectionData, field, key, value string, t ktype) (err error) {
+	var fieldData map[string]dbus.Variant
+	fieldData, ok := data[field]
+	if !ok {
+		fieldData = make(map[string]dbus.Variant)
+		data[field] = fieldData
+		return
+	}
+
+	valueVariant, err := wrapVariant(value, t)
+	if err != nil {
+		LOGGER.Error("set connection data failed:", err)
+		return
+	}
+	fieldData[key] = valueVariant
+
 	return
 }
 
