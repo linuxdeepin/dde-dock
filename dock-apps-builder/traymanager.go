@@ -35,24 +35,24 @@ func (m *TrayManager) addTrayIcon(xid xproto.Window) {
 		}
 	}
 
-	if d, err := damage.NewDamageId(XU.Conn()); err != nil {
+	if d, err := damage.NewDamageId(TrayXU.Conn()); err != nil {
 		return
 	} else {
 		m.dmageInfo[xid] = d
-		if err := damage.CreateChecked(XU.Conn(), d, xproto.Drawable(xid), damage.ReportLevelRawRectangles).Check(); err != nil {
+		if err := damage.CreateChecked(TrayXU.Conn(), d, xproto.Drawable(xid), damage.ReportLevelRawRectangles).Check(); err != nil {
 			LOGGER.Debug("DamageCreate Failed:", err)
 			return
 		}
 	}
-	composite.RedirectWindow(XU.Conn(), xid, composite.RedirectAutomatic)
+	composite.RedirectWindow(TrayXU.Conn(), xid, composite.RedirectAutomatic)
 
 	m.TrayIcons = append(m.TrayIcons, uint32(xid))
-	icon := xwindow.New(XU, xid)
+	icon := xwindow.New(TrayXU, xid)
 	icon.Listen(xproto.EventMaskVisibilityChange | damage.Notify | xproto.EventMaskStructureNotify)
 	icon.Change(xproto.CwBackPixel, 0)
 	icon.Map()
 
-	name, err := ewmh.WmNameGet(XU, xid)
+	name, err := ewmh.WmNameGet(TrayXU, xid)
 	if err != nil {
 		LOGGER.Debug("WmNameGet failed:", err, xid)
 	}
@@ -99,25 +99,25 @@ func (m *TrayManager) handleTrayDamage(xid xproto.Window) {
 
 var TRAYMANAGER *TrayManager
 
-var _NET_SYSTEM_TRAY_S0, _ = xprop.Atm(XU, "_NET_SYSTEM_TRAY_S0")
-var _NET_SYSTEM_TRAY_OPCODE, _ = xprop.Atm(XU, "_NET_SYSTEM_TRAY_OPCODE")
+var _NET_SYSTEM_TRAY_S0, _ = xprop.Atm(TrayXU, "_NET_SYSTEM_TRAY_S0")
+var _NET_SYSTEM_TRAY_OPCODE, _ = xprop.Atm(TrayXU, "_NET_SYSTEM_TRAY_OPCODE")
 
 func findRGBAVisualID() xproto.Visualid {
-	for _, dinfo := range XU.Screen().AllowedDepths {
+	for _, dinfo := range TrayXU.Screen().AllowedDepths {
 		for _, vinfo := range dinfo.Visuals {
 			if dinfo.Depth == 32 {
 				return vinfo.VisualId
 			}
 		}
 	}
-	return XU.Screen().RootVisual
+	return TrayXU.Screen().RootVisual
 }
 
 func initTrayManager() {
-	composite.Init(XU.Conn())
-	composite.QueryVersion(XU.Conn(), 0, 4)
-	damage.Init(XU.Conn())
-	damage.QueryVersion(XU.Conn(), 1, 1)
+	composite.Init(TrayXU.Conn())
+	composite.QueryVersion(TrayXU.Conn(), 0, 4)
+	damage.Init(TrayXU.Conn())
+	damage.QueryVersion(TrayXU.Conn(), 1, 1)
 
 	TRAYMANAGER = &TrayManager{
 		visual:     findRGBAVisualID(),
@@ -126,24 +126,24 @@ func initTrayManager() {
 		md5Info:    make(map[xproto.Window][]byte),
 		dmageInfo:  make(map[xproto.Window]damage.Damage),
 	}
-	owner, _ := xwindow.Generate(XU)
-	xproto.CreateWindowChecked(XU.Conn(), 0, owner.Id, XU.RootWin(), 0, 0, 1, 1, 0, xproto.WindowClassInputOnly, TRAYMANAGER.visual, 0, nil)
-	XU.Sync()
+	owner, _ := xwindow.Generate(TrayXU)
+	xproto.CreateWindowChecked(TrayXU.Conn(), 0, owner.Id, TrayXU.RootWin(), 0, 0, 1, 1, 0, xproto.WindowClassInputOnly, TRAYMANAGER.visual, 0, nil)
+	TrayXU.Sync()
 	owner.Listen(xproto.EventMaskStructureNotify)
 
-	xprop.ChangeProp32(XU, owner.Id, "_NET_SYSTEM_TRAY_VISUAL", "VISUALID", uint(TRAYMANAGER.visual))
-	xprop.ChangeProp32(XU, owner.Id, "_NET_SYSTEM_TRAY_ORIENTAION", "CARDINAL", 0)
+	xprop.ChangeProp32(TrayXU, owner.Id, "_NET_SYSTEM_TRAY_VISUAL", "VISUALID", uint(TRAYMANAGER.visual))
+	xprop.ChangeProp32(TrayXU, owner.Id, "_NET_SYSTEM_TRAY_ORIENTAION", "CARDINAL", 0)
 
 	LOGGER.Debug("TrayManager Owner:", owner.Id)
 
 	// Make a check, the tray application MUST be 1.
-	_trayInstance := xproto.GetSelectionOwner(XU.Conn(), _NET_SYSTEM_TRAY_S0)
+	_trayInstance := xproto.GetSelectionOwner(TrayXU.Conn(), _NET_SYSTEM_TRAY_S0)
 	reply, err := _trayInstance.Reply()
 	if err != nil {
 		LOGGER.Fatal(err)
 	}
 	if reply.Owner == 0 {
-		xproto.SetSelectionOwner(XU.Conn(), owner.Id, _NET_SYSTEM_TRAY_S0, 0)
+		xproto.SetSelectionOwner(TrayXU.Conn(), owner.Id, _NET_SYSTEM_TRAY_S0, 0)
 		//owner the _NET_SYSTEM_TRAY_Sn
 		go TRAYMANAGER.startListenr()
 		dbus.InstallOnSession(TRAYMANAGER)
@@ -154,7 +154,7 @@ func initTrayManager() {
 
 func (m *TrayManager) startListenr() {
 	for {
-		if e, err := XU.Conn().WaitForEvent(); err == nil {
+		if e, err := TrayXU.Conn().WaitForEvent(); err == nil {
 			switch ev := e.(type) {
 			case xproto.ClientMessageEvent:
 				if ev.Type == _NET_SYSTEM_TRAY_OPCODE {
@@ -173,13 +173,13 @@ func (m *TrayManager) startListenr() {
 }
 
 func icon2md5(xid xproto.Window) []byte {
-	pixmap, _ := xproto.NewPixmapId(XU.Conn())
-	defer xproto.FreePixmap(XU.Conn(), pixmap)
-	if err := composite.NameWindowPixmapChecked(XU.Conn(), xid, pixmap).Check(); err != nil {
+	pixmap, _ := xproto.NewPixmapId(TrayXU.Conn())
+	defer xproto.FreePixmap(TrayXU.Conn(), pixmap)
+	if err := composite.NameWindowPixmapChecked(TrayXU.Conn(), xid, pixmap).Check(); err != nil {
 		LOGGER.Warning("NameWindowPixmap failed:", err, xid)
 		return nil
 	}
-	im, err := xgraphics.NewDrawable(XU, xproto.Drawable(pixmap))
+	im, err := xgraphics.NewDrawable(TrayXU, xproto.Drawable(pixmap))
 	if err != nil {
 		LOGGER.Warning("Create xgraphics.Image failed:", err, pixmap)
 		return nil
