@@ -174,12 +174,6 @@ func (this *Manager) GetActiveConnection(devPath dbus.ObjectPath) (ret *ActiveCo
 	}, nil
 }
 
-// TODO
-func (this *Manager) UpdateConnection(data map[string]map[string]string) {
-	/*func (this *Manager) UpdateConnection(data string) {*/
-	fmt.Println("Update:", data)
-}
-
 func (this *Manager) getConnectionPathByUUID(uuid string) (path dbus.ObjectPath, ok bool) {
 	ok = false
 	for _, c := range this.WiredConnections {
