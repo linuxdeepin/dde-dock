@@ -91,16 +91,40 @@ func NewConnectionSessionByOpen(uuid string) (session *ConnectionSession, err er
 }
 
 // Save save current connection session.
-func (session *ConnectionSession) Save() {
-	// TODO
-	if !session.HasChanged {
-		dbus.UnInstallObject(session)
-		return
+func (session *ConnectionSession) Save() bool {
+	if session.isErrorOccured() {
+		return false
 	}
 
-	// TODO Errors
+	if !session.HasChanged {
+		dbus.UnInstallObject(session)
+		return true
+	}
+
+	// TODO what about the connection has been deleted?
+	// update connection data
+	nmConn, err := nm.NewSettingsConnection(NMDest, session.coreObjPath)
+	if err != nil {
+		LOGGER.Error(err)
+		return false
+	}
+	err = nmConn.Update(session.data)
+	if err != nil {
+		LOGGER.Error(err)
+		return false
+	}
 
 	dbus.UnInstallObject(session)
+	return true
+}
+
+func (session *ConnectionSession) isErrorOccured() bool {
+	for _, v := range session.Errors {
+		if len(v) > 1 {
+			return true
+		}
+	}
+	return false
 }
 
 // Close cancel current connection session.
