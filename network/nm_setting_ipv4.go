@@ -255,3 +255,41 @@ func setSettingIp4ConfigNeverDefault(data _ConnectionData, value string) {
 func setSettingIp4ConfigMayFail(data _ConnectionData, value string) {
 	setConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_MAY_FAIL, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_MAY_FAIL))
 }
+
+// Remover
+func removeSettingIp4ConfigMethod(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_METHOD)
+}
+func removeSettingIp4ConfigDns(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS)
+}
+func removeSettingIp4ConfigDnsSearch(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_SEARCH)
+}
+func removeSettingIp4ConfigAddresses(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES)
+}
+func removeSettingIp4ConfigRoutes(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTES)
+}
+func removeSettingIp4ConfigIgnoreAutoRoutes(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES)
+}
+func removeSettingIp4ConfigIgnoreAutoDns(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS)
+}
+func removeSettingIp4ConfigDhcpClientId(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID)
+}
+func removeSettingIp4ConfigDhcpSendHostname(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME)
+}
+func removeSettingIp4ConfigDhcpHostname(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME)
+}
+func removeSettingIp4ConfigNeverDefault(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_NEVER_DEFAULT)
+}
+func removeSettingIp4ConfigMayFail(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_MAY_FAIL)
+}

@@ -301,3 +301,47 @@ func setSettingWirelessSec(data _ConnectionData, value string) {
 func setSettingWirelessHidden(data _ConnectionData, value string) {
 	setConnectionDataKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_HIDDEN, value, getSettingWirelessKeyType(NM_SETTING_WIRELESS_HIDDEN))
 }
+
+// Remover
+func removeSettingWirelessSsid(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SSID)
+}
+func removeSettingWirelessMode(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MODE)
+}
+func removeSettingWirelessBand(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_BAND)
+}
+func removeSettingWirelessChannel(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_CHANNEL)
+}
+func removeSettingWirelessBssid(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_BSSID)
+}
+func removeSettingWirelessRate(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_RATE)
+}
+func removeSettingWirelessTxPower(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_TX_POWER)
+}
+func removeSettingWirelessMacAddress(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MAC_ADDRESS)
+}
+func removeSettingWirelessClonedMacAddress(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS)
+}
+func removeSettingWirelessMacAddressBlacklist(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST)
+}
+func removeSettingWirelessMtu(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MTU)
+}
+func removeSettingWirelessSeenBssids(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEEN_BSSIDS)
+}
+func removeSettingWirelessSec(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEC)
+}
+func removeSettingWirelessHidden(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_HIDDEN)
+}

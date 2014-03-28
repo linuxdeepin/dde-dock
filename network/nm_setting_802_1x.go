@@ -338,3 +338,101 @@ func setSetting8021xPinFlags(data _ConnectionData, value string) {
 func setSetting8021xSystemCaCerts(data _ConnectionData, value string) {
 	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_SYSTEM_CA_CERTS, value, getSetting8021xKeyType(NM_SETTING_802_1X_SYSTEM_CA_CERTS))
 }
+
+// Remover
+func removeSetting8021xEap(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_EAP)
+}
+func removeSetting8021xIdentity(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY)
+}
+func removeSetting8021xAnonymousIdentity(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ANONYMOUS_IDENTITY)
+}
+func removeSetting8021xPacFile(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PAC_FILE)
+}
+func removeSetting8021xCaCert(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT)
+}
+func removeSetting8021xCaPath(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_PATH)
+}
+func removeSetting8021xSubjectMatch(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_SUBJECT_MATCH)
+}
+func removeSetting8021xAltsubjectMatches(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ALTSUBJECT_MATCHES)
+}
+func removeSetting8021xClientCert(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT)
+}
+func removeSetting8021xPhase1Peapver(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPVER)
+}
+func removeSetting8021xPhase1Peaplabel(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPLABEL)
+}
+func removeSetting8021xPhase1FastProvisioning(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING)
+}
+func removeSetting8021xPhase2Auth(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTH)
+}
+func removeSetting8021xPhase2Autheap(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTHEAP)
+}
+func removeSetting8021xPhase2CaCert(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CA_CERT)
+}
+func removeSetting8021xPhase2CaPath(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CA_PATH)
+}
+func removeSetting8021xPhase2SubjectMatch(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH)
+}
+func removeSetting8021xPhase2AltsubjectMatches(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES)
+}
+func removeSetting8021xPhase2ClientCert(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CLIENT_CERT)
+}
+func removeSetting8021xPassword(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD)
+}
+func removeSetting8021xPasswordFlags(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_FLAGS)
+}
+func removeSetting8021xPasswordRaw(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW)
+}
+func removeSetting8021xPasswordRawFlags(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW_FLAGS)
+}
+func removeSetting8021xPrivateKey(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY)
+}
+func removeSetting8021xPrivateKeyPassword(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD)
+}
+func removeSetting8021xPrivateKeyPasswordFlags(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS)
+}
+func removeSetting8021xPhase2PrivateKey(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY)
+}
+func removeSetting8021xPhase2PrivateKeyPassword(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD)
+}
+func removeSetting8021xPhase2PrivateKeyPasswordFlags(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS)
+}
+func removeSetting8021xPin(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PIN)
+}
+func removeSetting8021xPinFlags(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PIN_FLAGS)
+}
+func removeSetting8021xSystemCaCerts(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_SYSTEM_CA_CERTS)
+}

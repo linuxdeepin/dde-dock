@@ -137,3 +137,38 @@ func setSettingIp6ConfigIp6Privacy(data _ConnectionData, value string) {
 func setSettingIp6ConfigDhcpHostname(data _ConnectionData, value string) {
 	setConnectionDataKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME, value, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME))
 }
+
+// Remover
+func removeSettingIp6ConfigMethod(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_METHOD)
+}
+func removeSettingIp6ConfigDns(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS)
+}
+func removeSettingIp6ConfigDnsSearch(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS_SEARCH)
+}
+func removeSettingIp6ConfigAddresses(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ADDRESSES)
+}
+func removeSettingIp6ConfigRoutes(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTES)
+}
+func removeSettingIp6ConfigIgnoreAutoRoutes(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES)
+}
+func removeSettingIp6ConfigIgnoreAutoDns(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS)
+}
+func removeSettingIp6ConfigNeverDefault(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_NEVER_DEFAULT)
+}
+func removeSettingIp6ConfigMayFail(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_MAY_FAIL)
+}
+func removeSettingIp6ConfigIp6Privacy(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IP6_PRIVACY)
+}
+func removeSettingIp6ConfigDhcpHostname(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME)
+}

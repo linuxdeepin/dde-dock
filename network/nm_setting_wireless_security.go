@@ -287,3 +287,56 @@ func setSettingWirelessSecurityLeapPassword(data _ConnectionData, value string) 
 func setSettingWirelessSecurityLeapPasswordFlags(data _ConnectionData, value string) {
 	setConnectionDataKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS, value, getSettingWirelessSecurityKeyType(NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS))
 }
+
+// Remover
+func removeSettingWirelessSecurityKeyMgmt(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT)
+}
+func removeSettingWirelessSecurityWepTxKeyidx(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_TX_KEYIDX)
+}
+func removeSettingWirelessSecurityAuthAlg(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_AUTH_ALG)
+}
+func removeSettingWirelessSecurityProto(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PROTO)
+}
+func removeSettingWirelessSecurityPairwise(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PAIRWISE)
+}
+func removeSettingWirelessSecurityGroup(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_GROUP)
+}
+func removeSettingWirelessSecurityLeapUsername(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME)
+}
+func removeSettingWirelessSecurityWepKey0(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY0)
+}
+func removeSettingWirelessSecurityWepKey1(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY1)
+}
+func removeSettingWirelessSecurityWepKey2(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY2)
+}
+func removeSettingWirelessSecurityWepKey3(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY3)
+}
+func removeSettingWirelessSecurityWepKeyFlags(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY_FLAGS)
+}
+func removeSettingWirelessSecurityWepKeyType(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE)
+}
+func removeSettingWirelessSecurityPsk(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PSK)
+}
+func removeSettingWirelessSecurityPskFlags(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS)
+}
+func removeSettingWirelessSecurityLeapPassword(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD)
+}
+func removeSettingWirelessSecurityLeapPasswordFlags(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS)
+}

@@ -197,3 +197,38 @@ func setSettingWiredS390Nettype(data _ConnectionData, value string) {
 func setSettingWiredS390Options(data _ConnectionData, value string) {
 	setConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_OPTIONS, value, getSettingWiredKeyType(NM_SETTING_WIRED_S390_OPTIONS))
 }
+
+// Remover
+func removeSettingWiredPort(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_PORT)
+}
+func removeSettingWiredSpeed(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_SPEED)
+}
+func removeSettingWiredDuplex(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_DUPLEX)
+}
+func removeSettingWiredAutoNegotiate(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_AUTO_NEGOTIATE)
+}
+func removeSettingWiredMacAddress(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS)
+}
+func removeSettingWiredClonedMacAddress(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_CLONED_MAC_ADDRESS)
+}
+func removeSettingWiredMacAddressBlacklist(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST)
+}
+func removeSettingWiredMtu(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MTU)
+}
+func removeSettingWiredS390Subchannels(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_SUBCHANNELS)
+}
+func removeSettingWiredS390Nettype(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_NETTYPE)
+}
+func removeSettingWiredS390Options(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_OPTIONS)
+}

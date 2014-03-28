@@ -128,3 +128,38 @@ func setSettingConnectionSlaveType(data _ConnectionData, value string) {
 func setSettingConnectionSecondaries(data _ConnectionData, value string) {
 	setConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_SECONDARIES, value, getSettingConnectionKeyType(NM_SETTING_CONNECTION_SECONDARIES))
 }
+
+// Remover
+func removeSettingConnectionId(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_ID)
+}
+func removeSettingConnectionUuid(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_UUID)
+}
+func removeSettingConnectionType(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TYPE)
+}
+func removeSettingConnectionAutoconnect(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_802_1X_SYSTEM_CA_CERTS)
+}
+func removeSettingConnectionTimestamp(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TIMESTAMP)
+}
+func removeSettingConnectionReadOnly(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_READ_ONLY)
+}
+func removeSettingConnectionPermissions(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_PERMISSIONS)
+}
+func removeSettingConnectionZone(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_ZONE)
+}
+func removeSettingConnectionMaster(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_MASTER)
+}
+func removeSettingConnectionSlaveType(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_SLAVE_TYPE)
+}
+func removeSettingConnectionSecondaries(data _ConnectionData) {
+	removeConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_SECONDARIES)
+}
