@@ -4,7 +4,7 @@ all:
 	cd accounts/ &&  $(run)
 	cd audio/ && $(run)
 	cd datetime/ && $(run)
-	cd desktop/ && $(run)
+	cd desktop-toggle/ && $(run)
 	cd display/ && $(run)
 	cd dock-apps-builder && $(run)
 	cd dock-daemon/ && $(run)
