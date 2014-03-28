@@ -38,23 +38,6 @@ func (this *Manager) DisconnectDevice(path dbus.ObjectPath) error {
 	}
 }
 
-func (this *Manager) ActiveWiredDevice(path dbus.ObjectPath) error {
-	if dev, err := nm.NewDevice(NMDest, path); err != nil {
-		return err
-	} else {
-		if dev.State.Get() == NM_DEVICE_STATE_DISCONNECTED {
-			for _, c := range dev.AvailableConnections.Get() {
-				_NMManager.ActivateConnection(c, path, dbus.ObjectPath("/"))
-			}
-			dbus.NotifyChange(this, "WiredConnections")
-		} else {
-			return fmt.Errorf("WiredDeveice %v has been actived already.", path)
-		}
-		nm.DestroyDevice(dev)
-	}
-	return nil
-}
-
 func (this *Manager) initDeviceManage() {
 	_NMManager.ConnectDeviceAdded(func(path dbus.ObjectPath) {
 		this.handleDeviceChanged(OpAdded, path)
@@ -213,11 +196,12 @@ func (this *Manager) getDeviceAddress(devPath dbus.ObjectPath, devType uint32) s
 	return ""
 }
 
-func (this *Manager) ActiveAccessPoint(dev dbus.ObjectPath, ap dbus.ObjectPath) error {
-	con, err := this.GetConnectionByAccessPoint(ap)
-	if err != nil {
-		return err
+func (this *Manager) ActivateConnection(uuid string, dev dbus.ObjectPath) {
+	if cpath, err := _NMSettings.GetConnectionByUuid(uuid); err == nil {
+		spath := dbus.ObjectPath("/")
+		_NMManager.ActivateConnection(dev, cpath, spath)
 	}
-	_NMManager.ActivateConnection(con.Path, dev, ap)
-	return nil
+}
+func (this *Manager) DeactivateConnection(cpath dbus.ObjectPath) error {
+	return _NMManager.DeactivateConnection(cpath)
 }
