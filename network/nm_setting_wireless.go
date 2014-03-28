@@ -104,43 +104,6 @@ const (
 	NM_SETTING_WIRELESS_MODE_INFRA = "infrastructure"
 )
 
-func getSettingWirelessKeyType(key string) (t ktype) {
-	switch key {
-	default:
-		t = ktypeUnknown
-	case NM_SETTING_WIRELESS_SSID:
-		t = ktypeArrayByte
-	case NM_SETTING_WIRELESS_MODE:
-		t = ktypeString
-	case NM_SETTING_WIRELESS_BAND:
-		t = ktypeString
-	case NM_SETTING_WIRELESS_CHANNEL:
-		t = ktypeUint32
-	case NM_SETTING_WIRELESS_BSSID:
-		t = ktypeArrayByte
-	case NM_SETTING_WIRELESS_RATE:
-		t = ktypeUint32
-	case NM_SETTING_WIRELESS_TX_POWER:
-		t = ktypeUint32
-	case NM_SETTING_WIRELESS_MAC_ADDRESS:
-		t = ktypeArrayByte
-	case NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS:
-		t = ktypeArrayByte
-	case NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST:
-		t = ktypeArrayString
-	case NM_SETTING_WIRELESS_MTU:
-		t = ktypeUint32
-	case NM_SETTING_WIRELESS_SEEN_BSSIDS:
-		t = ktypeArrayString
-	case NM_SETTING_WIRELESS_SEC:
-		t = ktypeString
-	case NM_SETTING_WIRELESS_HIDDEN:
-		t = ktypeBoolean
-	}
-	return
-}
-
-// TODO
 func newWirelessConnectionData(id, uuid, ssid string, keyFlag int) (data _ConnectionData) {
 	data = make(_ConnectionData)
 	setSettingConnectionId(data, id)
@@ -199,6 +162,42 @@ func newWirelessConnectionData(id, uuid, ssid string, keyFlag int) (data _Connec
 
 	// data[fieldIPv4]["method"] = dbus.MakeVariant("auto")
 	// data[fieldIPv6]["method"] = dbus.MakeVariant("auto")
+}
+
+func getSettingWirelessKeyType(key string) (t ktype) {
+	switch key {
+	default:
+		t = ktypeUnknown
+	case NM_SETTING_WIRELESS_SSID:
+		t = ktypeArrayByte
+	case NM_SETTING_WIRELESS_MODE:
+		t = ktypeString
+	case NM_SETTING_WIRELESS_BAND:
+		t = ktypeString
+	case NM_SETTING_WIRELESS_CHANNEL:
+		t = ktypeUint32
+	case NM_SETTING_WIRELESS_BSSID:
+		t = ktypeArrayByte
+	case NM_SETTING_WIRELESS_RATE:
+		t = ktypeUint32
+	case NM_SETTING_WIRELESS_TX_POWER:
+		t = ktypeUint32
+	case NM_SETTING_WIRELESS_MAC_ADDRESS:
+		t = ktypeArrayByte
+	case NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS:
+		t = ktypeArrayByte
+	case NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST:
+		t = ktypeArrayString
+	case NM_SETTING_WIRELESS_MTU:
+		t = ktypeUint32
+	case NM_SETTING_WIRELESS_SEEN_BSSIDS:
+		t = ktypeArrayString
+	case NM_SETTING_WIRELESS_SEC:
+		t = ktypeString
+	case NM_SETTING_WIRELESS_HIDDEN:
+		t = ktypeBoolean
+	}
+	return
 }
 
 // Getter

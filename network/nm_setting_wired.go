@@ -72,6 +72,21 @@ const (
 	NM_SETTING_WIRED_S390_OPTIONS = "s390-options"
 )
 
+func newWireedConnectionData(id, uuid string) (data _ConnectionData) {
+	data = make(_ConnectionData)
+	setSettingConnectionId(data, id)
+	setSettingConnectionUuid(data, uuid)
+	setSettingConnectionType(data, typeWired)
+
+	// TODO
+	setSettingWiredDuplex(data, "full")
+
+	setSettingIp4ConfigMethod(data, NM_SETTING_IP4_CONFIG_METHOD_AUTO)
+	setSettingIp6ConfigMethod(data, NM_SETTING_IP6_CONFIG_METHOD_AUTO)
+
+	return
+}
+
 func getSettingWiredKeyType(key string) (t ktype) {
 	switch key {
 	default:

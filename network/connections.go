@@ -67,11 +67,9 @@ func (this *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPa
 func newWirelessConnection(id string, ssid string, keyFlag int) string {
 	uuid := newUUID()
 	data := newWirelessConnectionData(id, uuid, ssid, keyFlag)
-	LOGGER.Debugf("%v", data)
-	// map[connection:map[uuid:"9c60bc6f-d2ac-4571-a06f-58b0d5d22eac" type:"802-11-wireless"] 802-11-wireless:map[security:"802-11-wireless-security"] 802-11-wireless-security:map[auth-alg:"open"] ipv4:map[] ipv6:map[]]
-	// map[connection:map[id:"CMCC-AUTO" uuid:"8b135d1c-6d3b-4797-a992-304a82b95d07" type:"802-11-wireless"] ipv4:map[method:"auto"] ipv6:map[method:"auto"] 802-11-wireless:map[ssid:@ay [0x43, 0x4d, 0x43, 0x43, 0x2d, 0x41, 0x55, 0x54, 0x4f] security:"802-11-wireless-security"] 802-11-wireless-security:map[key-mgmt:"wpa-eap" auth-alg:"open"]]
 
-	// TODO
+	LOGGER.Debug("new wireless connection data:", data) // TODO test
+
 	_, err := _NMSettings.AddConnection(data)
 	if err != nil {
 		panic(err)
