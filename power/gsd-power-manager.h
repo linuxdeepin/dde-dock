@@ -59,6 +59,9 @@ gboolean                gsd_power_manager_start               (GsdPowerManager *
         GError         **error);
 void                    gsd_power_manager_stop                (GsdPowerManager *manager);
 
+int start_dim(GsdPowerManager *manager);
+int stop_dim(GsdPowerManager *manager);
+
 
 G_END_DECLS
 #endif /* __GSD_POWER_MANAGER_H */

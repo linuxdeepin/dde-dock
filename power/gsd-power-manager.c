@@ -234,6 +234,8 @@ G_DEFINE_TYPE (GsdPowerManager, gsd_power_manager, G_TYPE_OBJECT)
 
 static gpointer manager_object = NULL;
 
+int locked = 0;
+
 GQuark
 gsd_power_manager_error_quark (void)
 {
@@ -2680,7 +2682,9 @@ idle_set_mode (GsdPowerManager *manager, GsdPowerIdleMode mode)
     /* if we're moving to an idle mode, make sure
      * we add a watch to take us back to normal */
     /*if (mode != GSD_POWER_IDLE_MODE_NORMAL)*/
-    if (mode == GSD_POWER_IDLE_MODE_DIM || mode == GSD_POWER_IDLE_MODE_SLEEP)
+    if (mode == GSD_POWER_IDLE_MODE_DIM ||
+            mode == GSD_POWER_IDLE_MODE_SLEEP ||
+            GSD_POWER_IDLE_MODE_SLEEP)
     {
         gnome_idle_monitor_add_user_active_watch (manager->priv->idle_monitor,
                 idle_became_active_cb,
@@ -2974,9 +2978,35 @@ idle_configure (GsdPowerManager *manager)
         }
     }
 
-    if (timeout_dim == 0 && timeout_sleep == 0 )
+    if (timeout_dim == 0 && timeout_sleep == 0)
     {
         //check if screen is locked.if so start special power settings
+        if (locked)
+        {
+            //uses a hash table to store the watches
+            clear_idle_watch(manager->priv->idle_monitor,
+                    &manager->priv->idle_blank_id);
+            clear_idle_watch(manager->priv->idle_monitor,
+                    &manager->priv->idle_dim_id);
+            manager->priv->idle_dim_id=gnome_idle_monitor_add_idle_watch(
+                    manager->priv->idle_monitor,
+                    5 * 1000,
+                    idle_triggered_idle_cb,manager,NULL);
+            manager->priv->idle_blank_id = gnome_idle_monitor_add_idle_watch(
+                    manager->priv->idle_monitor,
+                    8 * 1000,
+                    idle_triggered_idle_cb,manager,NULL);
+            g_debug("added idle watch for locked screen state");
+        }
+        else
+        {
+            clear_idle_watch(manager->priv->idle_monitor,
+                    &manager->priv->idle_blank_id);
+            clear_idle_watch(manager->priv->idle_monitor,
+                    &manager->priv->idle_dim_id);
+
+            g_debug("screen not locked,back to performance mode");
+        }
     }
 }
 
@@ -3376,13 +3406,10 @@ idle_triggered_idle_cb (GnomeIdleMonitor *monitor,
     if (watch_id == manager->priv->idle_dim_id)
     {
         idle_set_mode (manager, GSD_POWER_IDLE_MODE_DIM);
-        manager->priv->screensaver_active = TRUE;
-        idle_configure(manager);
     }
     else if (watch_id == manager->priv->idle_blank_id)
     {
         idle_set_mode (manager, GSD_POWER_IDLE_MODE_BLANK);
-        /*manager->priv->screensaver_active = FALSE;*/
     }
     else if (watch_id == manager->priv->idle_sleep_id)
     {
@@ -4386,4 +4413,17 @@ gsd_power_manager_new (void)
 }
 
 
+int start_dim(GsdPowerManager *manager)
+{
+    locked = 1;
+    idle_configure(manager);
+    return 0;
+}
+
+int stop_dim(GsdPowerManager *manager)
+{
+    locked = 0;
+    idle_configure(manager);
+    return 0;
+}
 
