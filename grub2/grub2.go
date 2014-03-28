@@ -37,6 +37,7 @@ import (
 const (
 	grubMenuFile       = "/boot/grub/grub.cfg"
 	grubConfigFile     = "/etc/default/grub"
+	grubUpdateExe      = "/usr/sbin/update-grub"
 	grubTimeoutDisable = -2
 	grubCacheFile      = "/var/cache/dde-daemon/grub2.json"
 )
@@ -82,18 +83,6 @@ func NewGrub2() *Grub2 {
 	return grub
 }
 
-// setup grub2 environment, regenerate configure and theme if need
-func (grub *Grub2) setup() {
-	grub.readSettings() // read setttings and fix settings automaticly
-	grub.resetGfxmodeIfNeed()
-	grub.writeCacheConfig()
-	logger.Info("notify to generate a new grub configuration file")
-	grub2ext.DoGenerateGrubConfig()
-	logger.Info("generate grub configuration finished")
-	grub.config.NeedUpdate = false
-	grub.writeCacheConfig()
-}
-
 func (grub *Grub2) load() {
 	err := grub.readEntries()
 	if err != nil {
@@ -103,6 +92,12 @@ func (grub *Grub2) load() {
 	if err != nil {
 		logger.Error(err)
 	}
+	if needUpdate := grub.fixSettings(); needUpdate {
+		grub.writeSettings()
+		grub.notifyUpdate()
+	}
+	grub.setProperty("DefaultEntry", grub.getDefaultEntry())
+	grub.setProperty("Timeout", grub.getTimeout())
 
 	if isFileExists(grubCacheFile) {
 		err = grub.readCacheConfig()
@@ -165,21 +160,28 @@ func (grub *Grub2) startUpdateLoop() {
 }
 
 func (grub *Grub2) resetGfxmodeIfNeed() {
-	w, h := getPrimaryScreenBestResolution()
-	gfxmode := fmt.Sprintf("%dx%d", w, h)
-	if gfxmode != grub.getGfxmode() || w != grub.config.LastScreenWidth || h != grub.config.LastScreenHeight {
-		grub.setGfxmode(gfxmode)
+	if needUpdate := grub.resetGfxmode(); needUpdate {
 		grub.writeSettings()
-
-		grub.config.LastScreenWidth = w
-		grub.config.LastScreenHeight = h
-
 		grub.notifyUpdate()
 
+		// regenerate theme background
 		screenWidth, screenHeight := getPrimaryScreenBestResolution()
 		grub2ext.DoGenerateThemeBackground(screenWidth, screenHeight)
 		grub.theme.setProperty("Background", grub.theme.Background)
 	}
+}
+
+func (grub *Grub2) resetGfxmode() (needUpdate bool) {
+	needUpdate = false
+	w, h := getPrimaryScreenBestResolution()
+	expectedGfxmode := fmt.Sprintf("%dx%d", w, h)
+	if expectedGfxmode != grub.getGfxmode() || w != grub.config.LastScreenWidth || h != grub.config.LastScreenHeight {
+		grub.setGfxmode(expectedGfxmode)
+		grub.config.LastScreenWidth = w
+		grub.config.LastScreenHeight = h
+		needUpdate = true
+	}
+	return
 }
 
 func (grub *Grub2) clearEntries() {
@@ -207,7 +209,15 @@ func (grub *Grub2) readSettings() (err error) {
 	}
 	err = grub.parseSettings(string(fileContent))
 
-	needUpdate := false
+	return
+}
+
+func (grub *Grub2) fixSettings() (needUpdate bool) {
+	needUpdate = false
+
+	// reset properties, return default value for the missing property
+	grub.setDefaultEntry(grub.getDefaultEntry())
+	grub.setTimeout(grub.getTimeout())
 
 	// just disable GRUB_HIDDEN_TIMEOUT and GRUB_HIDDEN_TIMEOUT_QUIET for will conflicts with GRUB_TIMEOUT
 	if len(grub.settings["GRUB_HIDDEN_TIMEOUT"]) != 0 ||
@@ -221,11 +231,6 @@ func (grub *Grub2) readSettings() (err error) {
 	if grub.getTheme() != grub.theme.mainFile {
 		grub.setTheme(grub.theme.mainFile)
 		needUpdate = true
-	}
-
-	if needUpdate {
-		grub.writeSettings()
-		grub.notifyUpdate()
 	}
 
 	return
@@ -369,10 +374,6 @@ func (grub *Grub2) parseSettings(fileContent string) error {
 		logger.Error(err.Error())
 		return err
 	}
-
-	// reset properties, return default value for the missing property
-	grub.setProperty("DefaultEntry", grub.getDefaultEntry())
-	grub.setProperty("Timeout", grub.getTimeout())
 
 	return nil
 }
