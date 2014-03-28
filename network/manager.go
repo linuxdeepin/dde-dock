@@ -41,9 +41,10 @@ type Manager struct {
 	OtherDevices    []*Device
 
 	//update by connections.go
-	WiredConnections    []*Connection
-	WirelessConnections []*Connection
-	VPNConnections      []*Connection
+	WiredConnections    []string
+	WirelessConnections []string
+	VPNConnections      []string
+	uuid2connectionType map[string]string
 
 	NeedSecrets func(string, string, string)
 

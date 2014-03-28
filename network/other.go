@@ -43,15 +43,3 @@ func tryRemoveDevice(path dbus.ObjectPath, devices []*Device) ([]*Device, bool) 
 	}
 	return newDevices, found
 }
-func tryRemoveConnection(path dbus.ObjectPath, conns []*Connection) ([]*Connection, bool) {
-	var newConns []*Connection
-	found := false
-	for _, conn := range conns {
-		if conn.Path != path {
-			newConns = append(newConns, conn)
-		} else {
-			found = true
-		}
-	}
-	return newConns, found
-}

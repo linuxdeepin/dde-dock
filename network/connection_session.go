@@ -60,8 +60,8 @@ func NewConnectionSessionByCreate(connType string) (session *ConnectionSession, 
 }
 
 func NewConnectionSessionByOpen(uuid string) (session *ConnectionSession, err error) {
-	coreObjPath, ok := _Manager.getConnectionPathByUUID(uuid)
-	if !ok {
+	coreObjPath, err := _NMSettings.GetConnectionByUuid(uuid)
+	if err != nil {
 		err = fmt.Errorf("counld not find connection with uuid equal %s", uuid)
 		return
 	}
