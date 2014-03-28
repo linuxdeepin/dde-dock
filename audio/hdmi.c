@@ -21,7 +21,7 @@ int setup_hdmi_enumerator()
 
     /* Create a list of the devices in the 'hidraw' subsystem. */
     enumerate = udev_enumerate_new(udev);
-    udev_enumerate_add_match_subsystem(enumerate, "hidraw");
+    udev_enumerate_add_match_subsystem(enumerate, "drm");
     udev_enumerate_scan_devices(enumerate);
     devices = udev_enumerate_get_list_entry(enumerate);
     /* For each item enumerated, print out its information.
@@ -86,7 +86,7 @@ int setup_hdmi_monitor()
 {
 /* Set up a monitor to monitor hidraw devices */
     struct udev_monitor *mon = udev_monitor_new_from_netlink(udev, "udev");
-    udev_monitor_filter_add_match_subsystem_devtype(mon, "hidraw", NULL);
+    udev_monitor_filter_add_match_subsystem_devtype(mon, "drm", NULL);
     udev_monitor_enable_receiving(mon);
     /* Get the file descriptor (fd) for the monitor.
        This fd will get passed to select() */
