@@ -34,7 +34,42 @@ const (
 
         ACCOUNT_TYPE_STANDARD      = 0
         ACCOUNT_TYPE_ADMINISTACTOR = 1
+
+        GUEST_ACCOUNT_NAME  = "Guest"
+        GUEST_USER_ICON     = "/var/lib/AccountsService/icons/guest.jpg"
+        ACCOUNT_CONFIG_FILE = "/var/lib/AccountsService/accounts.ini"
+        ACCOUNT_GROUP_KEY   = "Accounts"
+        ACCOUNT_KEY_GUEST   = "AllowGuest"
 )
+
+func (op *AccountManager) CreateGuestAccount() string {
+        args := []string{}
+
+        passwd := encodePasswd("")
+        args = append(args, "-m")
+        args = append(args, "-d")
+        args = append(args, "/tmp/"+GUEST_ACCOUNT_NAME)
+        args = append(args, "-s")
+        args = append(args, "/bin/bash")
+        args = append(args, "-l")
+        args = append(args, "-p")
+        args = append(args, passwd)
+        args = append(args, GUEST_ACCOUNT_NAME)
+        execCommand(CMD_USERADD, args)
+
+        info, _ := getInfoViaName(GUEST_ACCOUNT_NAME)
+        newUser := newUserManager(info.Uid)
+        newUser.applyPropertiesChanged("IconFile", GUEST_USER_ICON)
+        newUser.updateUserInfo()
+
+        return op.FindUserByName(GUEST_ACCOUNT_NAME)
+}
+
+func (op *AccountManager) AllowGuestAccout(allow bool) {
+        writeKeyFileValue(ACCOUNT_CONFIG_FILE, ACCOUNT_GROUP_KEY,
+                ACCOUNT_KEY_GUEST, KEY_TYPE_BOOL, allow)
+        op.setPropName("AllowGuest")
+}
 
 func (op *AccountManager) CreateUser(name, fullname string, accountTyte int32) string {
         defer func() {

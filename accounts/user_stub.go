@@ -89,6 +89,9 @@ func (op *UserManager) applyPropertiesChanged(propName string, value interface{}
                         execCommand(CMD_USERMOD, args)
                 }
         case "IconFile":
+                println("User Icon: ", op.IconFile)
+                println("IconFile: ", value.(string))
+                println("User: ", op.UserName)
                 if v, ok := value.(string); ok && v != op.IconFile {
                         file := USER_CONFIG_FILE + op.UserName
                         writeKeyFileValue(file, "User", "Icon",

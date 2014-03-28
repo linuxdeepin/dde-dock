@@ -26,7 +26,8 @@ import (
 )
 
 type AccountManager struct {
-        UserList []string
+        UserList   []string
+        AllowGuest bool
 
         UserAdded   func(string)
         UserDeleted func(string)
@@ -52,6 +53,18 @@ func (op *AccountManager) setPropName(name string) {
                 }
                 op.UserList = list
                 dbus.NotifyChange(op, name)
+        case "AllowGuest":
+                if v, ok := readKeyFileValue(ACCOUNT_CONFIG_FILE,
+                        ACCOUNT_GROUP_KEY, ACCOUNT_KEY_GUEST, KEY_TYPE_BOOL); !ok {
+                        op.AllowGuest = false
+                        dbus.NotifyChange(op, name)
+                        writeKeyFileValue(ACCOUNT_CONFIG_FILE, ACCOUNT_GROUP_KEY,
+                                ACCOUNT_KEY_GUEST, KEY_TYPE_BOOL, false)
+                        return
+                } else {
+                        op.AllowGuest = v.(bool)
+                        dbus.NotifyChange(op, name)
+                }
         }
 }
 
@@ -65,6 +78,7 @@ func newAccountManager() *AccountManager {
         m := &AccountManager{}
 
         m.setPropName("UserList")
+        m.setPropName("AllowGuest")
         m.listenUserListChanged()
 
         return m
