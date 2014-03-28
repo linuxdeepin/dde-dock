@@ -86,16 +86,12 @@ func NewGrub2() *Grub2 {
 func (grub *Grub2) setup() {
 	grub.readSettings() // read setttings and fix settings automaticly
 	grub.resetGfxmodeIfNeed()
-	grub.needUpdateLock.Lock()
-	if grub.needUpdate {
-		grub.writeCacheConfig()
-		logger.Info("setup grub2, notify to generate a new grub configuration file")
-		grub2ext.DoGenerateGrubConfig()
-		logger.Info("setup grub2, generate grub configuration finished")
-		grub.config.NeedUpdate = false
-		grub.writeCacheConfig()
-	}
-	grub.needUpdateLock.Unlock()
+	grub.writeCacheConfig()
+	logger.Info("notify to generate a new grub configuration file")
+	grub2ext.DoGenerateGrubConfig()
+	logger.Info("generate grub configuration finished")
+	grub.config.NeedUpdate = false
+	grub.writeCacheConfig()
 }
 
 func (grub *Grub2) load() {
