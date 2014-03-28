@@ -6,6 +6,7 @@ import (
 	"dlib/dbus"
 	"github.com/BurntSushi/xgb/composite"
 	"github.com/BurntSushi/xgb/damage"
+	"github.com/BurntSushi/xgb/xfixes"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil/ewmh"
 	"github.com/BurntSushi/xgbutil/xgraphics"
@@ -14,6 +15,7 @@ import (
 )
 
 type TrayManager struct {
+	owner  xproto.Window
 	visual xproto.Visualid
 
 	TrayIcons []uint32
@@ -118,24 +120,33 @@ func initTrayManager() {
 	composite.QueryVersion(TrayXU.Conn(), 0, 4)
 	damage.Init(TrayXU.Conn())
 	damage.QueryVersion(TrayXU.Conn(), 1, 1)
+	xfixes.Init(TrayXU.Conn())
+	xfixes.QueryVersion(TrayXU.Conn(), 5, 0)
+
+	visualId := findRGBAVisualID()
+	win, _ := xwindow.Generate(TrayXU)
+	xproto.CreateWindowChecked(TrayXU.Conn(), 0, win.Id, TrayXU.RootWin(), 0, 0, 1, 1, 0, xproto.WindowClassInputOnly, visualId, 0, nil)
+	TrayXU.Sync()
+	win.Listen(xproto.EventMaskStructureNotify)
+
+	xprop.ChangeProp32(TrayXU, win.Id, "_NET_SYSTEM_TRAY_VISUAL", "VISUALID", uint(visualId))
+	xprop.ChangeProp32(TrayXU, win.Id, "_NET_SYSTEM_TRAY_ORIENTAION", "CARDINAL", 0)
 
 	TRAYMANAGER = &TrayManager{
-		visual:     findRGBAVisualID(),
+		owner:      win.Id,
+		visual:     visualId,
 		nameInfo:   make(map[xproto.Window]string),
 		notifyInfo: make(map[xproto.Window]bool),
 		md5Info:    make(map[xproto.Window][]byte),
 		dmageInfo:  make(map[xproto.Window]damage.Damage),
 	}
-	owner, _ := xwindow.Generate(TrayXU)
-	xproto.CreateWindowChecked(TrayXU.Conn(), 0, owner.Id, TrayXU.RootWin(), 0, 0, 1, 1, 0, xproto.WindowClassInputOnly, TRAYMANAGER.visual, 0, nil)
-	TrayXU.Sync()
-	owner.Listen(xproto.EventMaskStructureNotify)
 
-	xprop.ChangeProp32(TrayXU, owner.Id, "_NET_SYSTEM_TRAY_VISUAL", "VISUALID", uint(TRAYMANAGER.visual))
-	xprop.ChangeProp32(TrayXU, owner.Id, "_NET_SYSTEM_TRAY_ORIENTAION", "CARDINAL", 0)
-
-	LOGGER.Debug("TrayManager Owner:", owner.Id)
-
+	TRAYMANAGER.tryOwner()
+	xfixes.SelectSelectionInput(TrayXU.Conn(), TrayXU.RootWin(), _NET_SYSTEM_TRAY_S0, xfixes.SelectionEventMaskSelectionClientClose)
+	go TRAYMANAGER.startListenr()
+	dbus.InstallOnSession(TRAYMANAGER)
+}
+func (m *TrayManager) tryOwner() {
 	// Make a check, the tray application MUST be 1.
 	_trayInstance := xproto.GetSelectionOwner(TrayXU.Conn(), _NET_SYSTEM_TRAY_S0)
 	reply, err := _trayInstance.Reply()
@@ -143,10 +154,9 @@ func initTrayManager() {
 		LOGGER.Fatal(err)
 	}
 	if reply.Owner == 0 {
-		xproto.SetSelectionOwner(TrayXU.Conn(), owner.Id, _NET_SYSTEM_TRAY_S0, 0)
+		xproto.SetSelectionOwner(TrayXU.Conn(), m.owner, _NET_SYSTEM_TRAY_S0, 0)
 		//owner the _NET_SYSTEM_TRAY_Sn
-		go TRAYMANAGER.startListenr()
-		dbus.InstallOnSession(TRAYMANAGER)
+		LOGGER.Info("Required _NET_SYSTEM_TRAY_S0")
 	} else {
 		LOGGER.Info("Another System tray application is running")
 	}
@@ -167,6 +177,8 @@ func (m *TrayManager) startListenr() {
 				m.removeTrayIcon(ev.Window)
 			case xproto.SelectionClearEvent:
 				//clean up
+			case xfixes.SelectionNotifyEvent:
+				m.tryOwner()
 			}
 		}
 	}
