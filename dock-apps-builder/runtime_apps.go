@@ -10,6 +10,7 @@ import "github.com/BurntSushi/xgbutil"
 import "github.com/BurntSushi/xgbutil/icccm"
 import "github.com/BurntSushi/xgbutil/xwindow"
 import "github.com/BurntSushi/xgbutil/xevent"
+import "github.com/BurntSushi/xgbutil/xprop"
 import "github.com/BurntSushi/xgbutil/xgraphics"
 import "strings"
 
@@ -236,7 +237,11 @@ func isNormalWindow(xid xproto.Window) bool {
 	types, err := ewmh.WmWindowTypeGet(XU, xid)
 	if err != nil {
 		LOGGER.Debug("Get Window Type failed:", err)
-		return true
+		if _, err := xprop.GetProperty(XU, xid, "_XEMBED_INFO"); err != nil {
+			return true
+		} else {
+			return false
+		}
 	}
 	mayBeDocked := false
 	cannotBeDoced := false
