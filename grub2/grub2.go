@@ -50,9 +50,7 @@ var (
 
 // CacheConfig store the key-values in cache file "/var/cache/dde-daemon/grub2.json".
 type CacheConfig struct {
-	LastScreenWidth  uint16
-	LastScreenHeight uint16
-	NeedUpdate       bool // mark to generate grub configuration
+	NeedUpdate bool // mark to generate grub configuration
 }
 
 // Grub2 is a dbus object, and provide properties and methods to setup
@@ -78,7 +76,7 @@ type Grub2 struct {
 func NewGrub2() *Grub2 {
 	grub := &Grub2{}
 	grub.theme = NewTheme()
-	grub.config = CacheConfig{1024, 768, true} // default value
+	grub.config = CacheConfig{true} // default value
 	grub.chanUpdate = make(chan int)
 	return grub
 }
@@ -175,10 +173,8 @@ func (grub *Grub2) resetGfxmode() (needUpdate bool) {
 	needUpdate = false
 	w, h := getPrimaryScreenBestResolution()
 	expectedGfxmode := fmt.Sprintf("%dx%d", w, h)
-	if expectedGfxmode != grub.getSettingGfxmode() || w != grub.config.LastScreenWidth || h != grub.config.LastScreenHeight {
+	if expectedGfxmode != grub.getSettingGfxmode() {
 		grub.setSettingGfxmode(expectedGfxmode)
-		grub.config.LastScreenWidth = w
-		grub.config.LastScreenHeight = h
 		needUpdate = true
 	}
 	return
