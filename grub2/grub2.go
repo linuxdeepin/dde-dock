@@ -96,8 +96,8 @@ func (grub *Grub2) load() {
 		grub.writeSettings()
 		grub.notifyUpdate()
 	}
-	grub.setProperty("DefaultEntry", grub.getDefaultEntry())
-	grub.setProperty("Timeout", grub.getTimeout())
+	grub.setProperty("DefaultEntry", grub.getSettingDefaultEntry())
+	grub.setProperty("Timeout", grub.getSettingTimeout())
 
 	if isFileExists(grubCacheFile) {
 		err = grub.readCacheConfig()
@@ -175,8 +175,8 @@ func (grub *Grub2) resetGfxmode() (needUpdate bool) {
 	needUpdate = false
 	w, h := getPrimaryScreenBestResolution()
 	expectedGfxmode := fmt.Sprintf("%dx%d", w, h)
-	if expectedGfxmode != grub.getGfxmode() || w != grub.config.LastScreenWidth || h != grub.config.LastScreenHeight {
-		grub.setGfxmode(expectedGfxmode)
+	if expectedGfxmode != grub.getSettingGfxmode() || w != grub.config.LastScreenWidth || h != grub.config.LastScreenHeight {
+		grub.setSettingGfxmode(expectedGfxmode)
 		grub.config.LastScreenWidth = w
 		grub.config.LastScreenHeight = h
 		needUpdate = true
@@ -216,8 +216,8 @@ func (grub *Grub2) fixSettings() (needUpdate bool) {
 	needUpdate = false
 
 	// reset properties, return default value for the missing property
-	grub.setDefaultEntry(grub.getDefaultEntry())
-	grub.setTimeout(grub.getTimeout())
+	grub.setSettingDefaultEntry(grub.getSettingDefaultEntry())
+	grub.setSettingTimeout(grub.getSettingTimeout())
 
 	// just disable GRUB_HIDDEN_TIMEOUT and GRUB_HIDDEN_TIMEOUT_QUIET for will conflicts with GRUB_TIMEOUT
 	if len(grub.settings["GRUB_HIDDEN_TIMEOUT"]) != 0 ||
@@ -228,8 +228,8 @@ func (grub *Grub2) fixSettings() (needUpdate bool) {
 	}
 
 	// enable deepin grub2 theme default
-	if grub.getTheme() != grub.theme.mainFile {
-		grub.setTheme(grub.theme.mainFile)
+	if grub.getSettingTheme() != grub.theme.mainFile {
+		grub.setSettingTheme(grub.theme.mainFile)
 		needUpdate = true
 	}
 
@@ -392,7 +392,7 @@ func (grub *Grub2) getEntryTitles() (entryTitles []string, err error) {
 	return
 }
 
-func (grub *Grub2) getDefaultEntry() string {
+func (grub *Grub2) getSettingDefaultEntry() string {
 	entryTitles, _ := grub.getEntryTitles()
 	simpleEntryTitles, _ := grub.GetSimpleEntryTitles()
 	firstEntry := ""
@@ -428,7 +428,7 @@ func (grub *Grub2) getDefaultEntry() string {
 	return firstEntry
 }
 
-func (grub *Grub2) getTimeout() int32 {
+func (grub *Grub2) getSettingTimeout() int32 {
 	if len(grub.settings["GRUB_TIMEOUT"]) == 0 {
 		return grubTimeoutDisable
 	}
@@ -441,7 +441,7 @@ func (grub *Grub2) getTimeout() int32 {
 	return int32(timeout)
 }
 
-func (grub *Grub2) getGfxmode() string {
+func (grub *Grub2) getSettingGfxmode() string {
 	if len(grub.settings["GRUB_GFXMODE"]) == 0 {
 		return "auto"
 	}
@@ -449,15 +449,15 @@ func (grub *Grub2) getGfxmode() string {
 	return grub.settings["GRUB_GFXMODE"]
 }
 
-func (grub *Grub2) getTheme() string {
+func (grub *Grub2) getSettingTheme() string {
 	return grub.settings["GRUB_THEME"]
 }
 
-func (grub *Grub2) setDefaultEntry(title string) {
+func (grub *Grub2) setSettingDefaultEntry(title string) {
 	grub.settings["GRUB_DEFAULT"] = title
 }
 
-func (grub *Grub2) setTimeout(timeout int32) {
+func (grub *Grub2) setSettingTimeout(timeout int32) {
 	if timeout == grubTimeoutDisable {
 		grub.settings["GRUB_TIMEOUT"] = ""
 	} else {
@@ -466,11 +466,11 @@ func (grub *Grub2) setTimeout(timeout int32) {
 	}
 }
 
-func (grub *Grub2) setGfxmode(gfxmode string) {
+func (grub *Grub2) setSettingGfxmode(gfxmode string) {
 	grub.settings["GRUB_GFXMODE"] = gfxmode
 }
 
-func (grub *Grub2) setTheme(themeFile string) {
+func (grub *Grub2) setSettingTheme(themeFile string) {
 	grub.settings["GRUB_THEME"] = themeFile
 }
 

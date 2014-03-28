@@ -66,12 +66,12 @@ func (grub *Grub2) setProperty(name string, value interface{}) (ok bool) {
 	case "DefaultEntry":
 		grub.DefaultEntry, ok = value.(string)
 		if ok {
-			grub.setDefaultEntry(grub.DefaultEntry)
+			grub.setSettingDefaultEntry(grub.DefaultEntry)
 		}
 	case "Timeout":
 		grub.Timeout, ok = value.(int32)
 		if ok {
-			grub.setTimeout(grub.Timeout)
+			grub.setSettingTimeout(grub.Timeout)
 		}
 	}
 	if ok {
