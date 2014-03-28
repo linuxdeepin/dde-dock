@@ -141,7 +141,8 @@ func getSettingWirelessKeyType(key string) (t ktype) {
 }
 
 // TODO
-func initWirelessConnection(data _ConnectionData, id, uuid, ssid string, keyFlag int) {
+func newWirelessConnectionData(id, uuid, ssid string, keyFlag int) (data _ConnectionData) {
+	data = make(_ConnectionData)
 	setSettingConnectionId(data, id)
 	setSettingConnectionUuid(data, uuid)
 	setSettingConnectionType(data, typeWireless)
@@ -162,8 +163,10 @@ func initWirelessConnection(data _ConnectionData, id, uuid, ssid string, keyFlag
 		}
 	}
 
-	setSettingIp4ConfigMethod(data, "auto")
-	setSettingIp6ConfigMethod(data, "auto")
+	setSettingIp4ConfigMethod(data, NM_SETTING_IP4_CONFIG_METHOD_AUTO)
+	setSettingIp6ConfigMethod(data, NM_SETTING_IP6_CONFIG_METHOD_AUTO)
+
+	return
 
 	// TODO remove
 
