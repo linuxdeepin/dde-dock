@@ -28,7 +28,25 @@ func pageGeneralGetId(con map[string]map[string]dbus.Variant) string {
 	return con[fieldConnection]["id"].Value().(string)
 }
 
-func getConnectionData(data _ConnectionData, field, key string, t ktype) (value string) {
+func addConnectionDataField(data _ConnectionData, field string) {
+	var fieldData map[string]dbus.Variant
+	fieldData, ok := data[field]
+	// add field if not exists
+	if !ok {
+		fieldData = make(map[string]dbus.Variant)
+		data[field] = fieldData
+	}
+}
+
+func removeConnectionDataField(data _ConnectionData, field string) {
+	_, ok := data[field]
+	// remove field if exists
+	if !ok {
+		delete(data, field)
+	}
+}
+
+func getConnectionDataKey(data _ConnectionData, field, key string, t ktype) (value string) {
 	fieldData, ok := data[field]
 	if !ok {
 		LOGGER.Errorf("invalid field: data[%s]", field)
@@ -47,17 +65,16 @@ func getConnectionData(data _ConnectionData, field, key string, t ktype) (value 
 		return
 	}
 
-	// LOGGER.Debugf("getConnectionData: data[%s][%s]=%s", field, key, value) // TODO
+	LOGGER.Debugf("getConnectionDataKey: data[%s][%s]=%s", field, key, value) // TODO test
 	return
 }
 
-func setConnectionData(data _ConnectionData, field, key, value string, t ktype) {
+func setConnectionDataKey(data _ConnectionData, field, key, value string, t ktype) {
 	var fieldData map[string]dbus.Variant
 	fieldData, ok := data[field]
 	if !ok {
 		// create field if not exists yet
-		fieldData = make(map[string]dbus.Variant)
-		data[field] = fieldData
+		addConnectionDataField(data, field)
 	}
 
 	valueVariant, err := wrapVariant(value, t)
@@ -67,8 +84,22 @@ func setConnectionData(data _ConnectionData, field, key, value string, t ktype) 
 	}
 	fieldData[key] = valueVariant
 
-	LOGGER.Debugf("setConnectionData: data[%s][%s]=%s", field, key, value) // TODO
+	LOGGER.Debugf("setConnectionDataKey: data[%s][%s]=%s", field, key, value) // TODO test
 	return
+}
+
+func removeConnectionDataKey(data _ConnectionData, field, key string) {
+	fieldData, ok := data[field]
+	if !ok {
+		return
+	}
+
+	_, ok = fieldData[key]
+	if !ok {
+		return
+	}
+
+	delete(fieldData, key)
 }
 
 func isStringInArray(s string, list []string) bool {

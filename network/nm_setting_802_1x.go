@@ -113,228 +113,228 @@ func getSetting8021xKeyType(key string) (t ktype) {
 
 // Getter
 func getSetting8021xEap(data _ConnectionData) (value string) {
-	value = getConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_EAP, getSetting8021xKeyType(NM_SETTING_802_1X_EAP))
+	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_EAP, getSetting8021xKeyType(NM_SETTING_802_1X_EAP))
 	return
 }
 func getSetting8021xIdentity(data _ConnectionData) (value string) {
-	value = getConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY, getSetting8021xKeyType(NM_SETTING_802_1X_IDENTITY))
+	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY, getSetting8021xKeyType(NM_SETTING_802_1X_IDENTITY))
 	return
 }
 func getSetting8021xAnonymousIdentity(data _ConnectionData) (value string) {
-	value = getConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ANONYMOUS_IDENTITY, getSetting8021xKeyType(NM_SETTING_802_1X_ANONYMOUS_IDENTITY))
+	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ANONYMOUS_IDENTITY, getSetting8021xKeyType(NM_SETTING_802_1X_ANONYMOUS_IDENTITY))
 	return
 }
 func getSetting8021xPacFile(data _ConnectionData) (value string) {
-	value = getConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PAC_FILE, getSetting8021xKeyType(NM_SETTING_802_1X_PAC_FILE))
+	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PAC_FILE, getSetting8021xKeyType(NM_SETTING_802_1X_PAC_FILE))
 	return
 }
 func getSetting8021xCaCert(data _ConnectionData) (value string) {
-	value = getConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT, getSetting8021xKeyType(NM_SETTING_802_1X_CA_CERT))
+	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT, getSetting8021xKeyType(NM_SETTING_802_1X_CA_CERT))
 	return
 }
 func getSetting8021xCaPath(data _ConnectionData) (value string) {
-	value = getConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_PATH, getSetting8021xKeyType(NM_SETTING_802_1X_CA_PATH))
+	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_PATH, getSetting8021xKeyType(NM_SETTING_802_1X_CA_PATH))
 	return
 }
 func getSetting8021xSubjectMatch(data _ConnectionData) (value string) {
-	value = getConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_SUBJECT_MATCH, getSetting8021xKeyType(NM_SETTING_802_1X_SUBJECT_MATCH))
+	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_SUBJECT_MATCH, getSetting8021xKeyType(NM_SETTING_802_1X_SUBJECT_MATCH))
 	return
 }
 func getSetting8021xAltsubjectMatches(data _ConnectionData) (value string) {
-	value = getConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ALTSUBJECT_MATCHES, getSetting8021xKeyType(NM_SETTING_802_1X_ALTSUBJECT_MATCHES))
+	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ALTSUBJECT_MATCHES, getSetting8021xKeyType(NM_SETTING_802_1X_ALTSUBJECT_MATCHES))
 	return
 }
 func getSetting8021xClientCert(data _ConnectionData) (value string) {
-	value = getConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT, getSetting8021xKeyType(NM_SETTING_802_1X_CLIENT_CERT))
+	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT, getSetting8021xKeyType(NM_SETTING_802_1X_CLIENT_CERT))
 	return
 }
 func getSetting8021xPhase1Peapver(data _ConnectionData) (value string) {
-	value = getConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPVER, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_PEAPVER))
+	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPVER, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_PEAPVER))
 	return
 }
 func getSetting8021xPhase1Peaplabel(data _ConnectionData) (value string) {
-	value = getConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPLABEL, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_PEAPLABEL))
+	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPLABEL, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_PEAPLABEL))
 	return
 }
 func getSetting8021xPhase1FastProvisioning(data _ConnectionData) (value string) {
-	value = getConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING))
+	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING))
 	return
 }
 func getSetting8021xPhase2Auth(data _ConnectionData) (value string) {
-	value = getConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTH, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_AUTH))
+	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTH, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_AUTH))
 	return
 }
 func getSetting8021xPhase2Autheap(data _ConnectionData) (value string) {
-	value = getConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTHEAP, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_AUTHEAP))
+	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTHEAP, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_AUTHEAP))
 	return
 }
 func getSetting8021xPhase2CaCert(data _ConnectionData) (value string) {
-	value = getConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CA_CERT, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_CA_CERT))
+	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CA_CERT, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_CA_CERT))
 	return
 }
 func getSetting8021xPhase2CaPath(data _ConnectionData) (value string) {
-	value = getConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CA_PATH, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_CA_PATH))
+	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CA_PATH, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_CA_PATH))
 	return
 }
 func getSetting8021xPhase2SubjectMatch(data _ConnectionData) (value string) {
-	value = getConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH))
+	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH))
 	return
 }
 func getSetting8021xPhase2AltsubjectMatches(data _ConnectionData) (value string) {
-	value = getConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES))
+	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES))
 	return
 }
 func getSetting8021xPhase2ClientCert(data _ConnectionData) (value string) {
-	value = getConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CLIENT_CERT, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_CLIENT_CERT))
+	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CLIENT_CERT, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_CLIENT_CERT))
 	return
 }
 func getSetting8021xPassword(data _ConnectionData) (value string) {
-	value = getConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD))
+	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD))
 	return
 }
 func getSetting8021xPasswordFlags(data _ConnectionData) (value string) {
-	value = getConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_FLAGS, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD_FLAGS))
+	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_FLAGS, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD_FLAGS))
 	return
 }
 func getSetting8021xPasswordRaw(data _ConnectionData) (value string) {
-	value = getConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD_RAW))
+	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD_RAW))
 	return
 }
 func getSetting8021xPasswordRawFlags(data _ConnectionData) (value string) {
-	value = getConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW_FLAGS, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD_RAW_FLAGS))
+	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW_FLAGS, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD_RAW_FLAGS))
 	return
 }
 func getSetting8021xPrivateKey(data _ConnectionData) (value string) {
-	value = getConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY))
+	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY))
 	return
 }
 func getSetting8021xPrivateKeyPassword(data _ConnectionData) (value string) {
-	value = getConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD))
+	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD))
 	return
 }
 func getSetting8021xPrivateKeyPasswordFlags(data _ConnectionData) (value string) {
-	value = getConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS))
+	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS))
 	return
 }
 func getSetting8021xPhase2PrivateKey(data _ConnectionData) (value string) {
-	value = getConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_PRIVATE_KEY))
+	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_PRIVATE_KEY))
 	return
 }
 func getSetting8021xPhase2PrivateKeyPassword(data _ConnectionData) (value string) {
-	value = getConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD))
+	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD))
 	return
 }
 func getSetting8021xPhase2PrivateKeyPasswordFlags(data _ConnectionData) (value string) {
-	value = getConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS))
+	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS))
 	return
 }
 func getSetting8021xPin(data _ConnectionData) (value string) {
-	value = getConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PIN, getSetting8021xKeyType(NM_SETTING_802_1X_PIN))
+	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PIN, getSetting8021xKeyType(NM_SETTING_802_1X_PIN))
 	return
 }
 func getSetting8021xPinFlags(data _ConnectionData) (value string) {
-	value = getConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PIN_FLAGS, getSetting8021xKeyType(NM_SETTING_802_1X_PIN_FLAGS))
+	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PIN_FLAGS, getSetting8021xKeyType(NM_SETTING_802_1X_PIN_FLAGS))
 	return
 }
 func getSetting8021xSystemCaCerts(data _ConnectionData) (value string) {
-	value = getConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_SYSTEM_CA_CERTS, getSetting8021xKeyType(NM_SETTING_802_1X_SYSTEM_CA_CERTS))
+	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_SYSTEM_CA_CERTS, getSetting8021xKeyType(NM_SETTING_802_1X_SYSTEM_CA_CERTS))
 	return
 }
 
 // Setter
 func setSetting8021xEap(data _ConnectionData, value string) {
-	setConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_EAP, value, getSetting8021xKeyType(NM_SETTING_802_1X_EAP))
+	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_EAP, value, getSetting8021xKeyType(NM_SETTING_802_1X_EAP))
 }
 func setSetting8021xIdentity(data _ConnectionData, value string) {
-	setConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY, value, getSetting8021xKeyType(NM_SETTING_802_1X_IDENTITY))
+	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY, value, getSetting8021xKeyType(NM_SETTING_802_1X_IDENTITY))
 }
 func setSetting8021xAnonymousIdentity(data _ConnectionData, value string) {
-	setConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ANONYMOUS_IDENTITY, value, getSetting8021xKeyType(NM_SETTING_802_1X_ANONYMOUS_IDENTITY))
+	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ANONYMOUS_IDENTITY, value, getSetting8021xKeyType(NM_SETTING_802_1X_ANONYMOUS_IDENTITY))
 }
 func setSetting8021xPacFile(data _ConnectionData, value string) {
-	setConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PAC_FILE, value, getSetting8021xKeyType(NM_SETTING_802_1X_PAC_FILE))
+	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PAC_FILE, value, getSetting8021xKeyType(NM_SETTING_802_1X_PAC_FILE))
 }
 func setSetting8021xCaCert(data _ConnectionData, value string) {
-	setConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT, value, getSetting8021xKeyType(NM_SETTING_802_1X_CA_CERT))
+	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT, value, getSetting8021xKeyType(NM_SETTING_802_1X_CA_CERT))
 }
 func setSetting8021xCaPath(data _ConnectionData, value string) {
-	setConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_PATH, value, getSetting8021xKeyType(NM_SETTING_802_1X_CA_PATH))
+	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_PATH, value, getSetting8021xKeyType(NM_SETTING_802_1X_CA_PATH))
 }
 func setSetting8021xSubjectMatch(data _ConnectionData, value string) {
-	setConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_SUBJECT_MATCH, value, getSetting8021xKeyType(NM_SETTING_802_1X_SUBJECT_MATCH))
+	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_SUBJECT_MATCH, value, getSetting8021xKeyType(NM_SETTING_802_1X_SUBJECT_MATCH))
 }
 func setSetting8021xAltsubjectMatches(data _ConnectionData, value string) {
-	setConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ALTSUBJECT_MATCHES, value, getSetting8021xKeyType(NM_SETTING_802_1X_ALTSUBJECT_MATCHES))
+	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ALTSUBJECT_MATCHES, value, getSetting8021xKeyType(NM_SETTING_802_1X_ALTSUBJECT_MATCHES))
 }
 func setSetting8021xClientCert(data _ConnectionData, value string) {
-	setConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT, value, getSetting8021xKeyType(NM_SETTING_802_1X_CLIENT_CERT))
+	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT, value, getSetting8021xKeyType(NM_SETTING_802_1X_CLIENT_CERT))
 }
 func setSetting8021xPhase1Peapver(data _ConnectionData, value string) {
-	setConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPVER, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_PEAPVER))
+	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPVER, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_PEAPVER))
 }
 func setSetting8021xPhase1Peaplabel(data _ConnectionData, value string) {
-	setConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPLABEL, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_PEAPLABEL))
+	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPLABEL, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_PEAPLABEL))
 }
 func setSetting8021xPhase1FastProvisioning(data _ConnectionData, value string) {
-	setConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING))
+	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING))
 }
 func setSetting8021xPhase2Auth(data _ConnectionData, value string) {
-	setConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTH, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_AUTH))
+	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTH, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_AUTH))
 }
 func setSetting8021xPhase2Autheap(data _ConnectionData, value string) {
-	setConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTHEAP, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_AUTHEAP))
+	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTHEAP, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_AUTHEAP))
 }
 func setSetting8021xPhase2CaCert(data _ConnectionData, value string) {
-	setConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CA_CERT, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_CA_CERT))
+	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CA_CERT, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_CA_CERT))
 }
 func setSetting8021xPhase2CaPath(data _ConnectionData, value string) {
-	setConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CA_PATH, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_CA_PATH))
+	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CA_PATH, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_CA_PATH))
 }
 func setSetting8021xPhase2SubjectMatch(data _ConnectionData, value string) {
-	setConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH))
+	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH))
 }
 func setSetting8021xPhase2AltsubjectMatches(data _ConnectionData, value string) {
-	setConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES))
+	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES))
 }
 func setSetting8021xPhase2ClientCert(data _ConnectionData, value string) {
-	setConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CLIENT_CERT, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_CLIENT_CERT))
+	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CLIENT_CERT, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_CLIENT_CERT))
 }
 func setSetting8021xPassword(data _ConnectionData, value string) {
-	setConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD, value, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD))
+	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD, value, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD))
 }
 func setSetting8021xPasswordFlags(data _ConnectionData, value string) {
-	setConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_FLAGS, value, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD_FLAGS))
+	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_FLAGS, value, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD_FLAGS))
 }
 func setSetting8021xPasswordRaw(data _ConnectionData, value string) {
-	setConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW, value, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD_RAW))
+	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW, value, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD_RAW))
 }
 func setSetting8021xPasswordRawFlags(data _ConnectionData, value string) {
-	setConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW_FLAGS, value, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD_RAW_FLAGS))
+	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW_FLAGS, value, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD_RAW_FLAGS))
 }
 func setSetting8021xPrivateKey(data _ConnectionData, value string) {
-	setConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY, value, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY))
+	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY, value, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY))
 }
 func setSetting8021xPrivateKeyPassword(data _ConnectionData, value string) {
-	setConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD, value, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD))
+	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD, value, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD))
 }
 func setSetting8021xPrivateKeyPasswordFlags(data _ConnectionData, value string) {
-	setConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS, value, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS))
+	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS, value, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS))
 }
 func setSetting8021xPhase2PrivateKey(data _ConnectionData, value string) {
-	setConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_PRIVATE_KEY))
+	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_PRIVATE_KEY))
 }
 func setSetting8021xPhase2PrivateKeyPassword(data _ConnectionData, value string) {
-	setConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD))
+	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD))
 }
 func setSetting8021xPhase2PrivateKeyPasswordFlags(data _ConnectionData, value string) {
-	setConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS))
+	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS))
 }
 func setSetting8021xPin(data _ConnectionData, value string) {
-	setConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PIN, value, getSetting8021xKeyType(NM_SETTING_802_1X_PIN))
+	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PIN, value, getSetting8021xKeyType(NM_SETTING_802_1X_PIN))
 }
 func setSetting8021xPinFlags(data _ConnectionData, value string) {
-	setConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PIN_FLAGS, value, getSetting8021xKeyType(NM_SETTING_802_1X_PIN_FLAGS))
+	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PIN_FLAGS, value, getSetting8021xKeyType(NM_SETTING_802_1X_PIN_FLAGS))
 }
 func setSetting8021xSystemCaCerts(data _ConnectionData, value string) {
-	setConnectionData(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_SYSTEM_CA_CERTS, value, getSetting8021xKeyType(NM_SETTING_802_1X_SYSTEM_CA_CERTS))
+	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_SYSTEM_CA_CERTS, value, getSetting8021xKeyType(NM_SETTING_802_1X_SYSTEM_CA_CERTS))
 }
