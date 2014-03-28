@@ -22,27 +22,24 @@ const (
 )
 
 const (
-	testKtypeString  = "test string"
-	testKtypeByte    = "a"
-	testKtypeInt32   = "-32"
-	testKtypeUint32  = "32"
-	testKtypeUint64  = "64"
-	testKtypeBoolean = "true"
-	// testKtypeArrayByte = "[97,114,114,97,121,32,98,121,116,101]" // TODO
-	// testKtypeArrayByte        = "YXJyYXkgYnl0ZQ=="
-	testKtypeArrayByte        = "array byte"
+	testKtypeString           = "test string"
+	testKtypeByte             = "a"
+	testKtypeInt32            = "-32"
+	testKtypeUint32           = "32"
+	testKtypeUint64           = "64"
+	testKtypeBoolean          = "true"
+	testKtypeArrayByte        = `"YXJyYXkgYnl0ZQ=="` // "array byte"
 	testKtypeArrayString      = `["str1","str2"]`
 	testKtypeArrayUint32      = `[32,32]`
-	testKtypeArrayArrayByte   = `["array byte1","array byte2"]`
+	testKtypeArrayArrayByte   = `["YXJyYXkgYnl0ZQ==","YXJyYXkgYnl0ZQ=="]`
 	testKtypeArrayArrayUint32 = `[[32,32],[32,32]]`
 	testKtypeDictStringString = `{"key1":"value1","key2":"value2"}`
-	testKtypeIpv6Addresses    = `[{"Address":}]` // TODO
+	testKtypeIpv6Addresses    = `[{"Address":"/oAAAAAAAAACImj//g9NCQ==","Prefix":32,"Gateway":"/oAAAAAAAAACImj//g9NCQ=="}]`
+	testKtypeIpv6Routes       = `[{"Address":"/oAAAAAAAAACImj//g9NCQ==","Prefix":32,"NextHop":"/oAAAAAAAAACImj//g9NCQ==","Metric":32}]` // TODO
 	// 'addresses': [([254, 128, 0, 0, 0, 0, 0, 0, 2, 34, 104, 255, 254, 15, 77, 9], 64L, [254, 128, 0, 0, 0, 0, 0, 0, 2, 34, 104, 255, 254, 15, 77, 9])]
-	testKtypeIpv6Routes = `[{}]` // TODO
 	// 'routes': [([254, 128, 0, 0, 0, 0, 0, 0, 2, 34, 104, 255, 254, 15, 77, 9], 64L, [254, 128, 0, 0, 0, 0, 0, 0, 2, 34, 104, 255, 254, 15, 77, 9], 12L)]
 )
 
-// TODO
 func (*Utils) TestGetSetConnectionData(c *C) {
 	data := make(_ConnectionData)
 	setSettingConnectionId(data, testConnectionId)
@@ -55,9 +52,6 @@ func (*Utils) TestGetSetConnectionData(c *C) {
 }
 
 func (*Utils) TestVariantWrapper(c *C) {
-	// TODO remove
-	// s, _ = unwrapVariant(v, ktypeString)
-	// c.Check(s, Equals, testKtypeString)
 	var v dbus.Variant
 	var s string
 

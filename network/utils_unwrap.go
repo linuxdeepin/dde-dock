@@ -115,14 +115,12 @@ func unwrapVariantArrayByte(v dbus.Variant) (s string, err error) {
 		err = fmt.Errorf("unwrapVariantArrayByte() failed: %v", v)
 		return
 	}
-	// b, err := json.Marshal(d)
-	// s = string(b)
-	s = string(d)
-	// LOGGER.Debug(s) // TODO
+	b, err := json.Marshal(d)
+	s = string(b)
 	return
 }
 
-func unwrapVariantArrayString(v dbus.Variant) (s string, err error) { // TODO
+func unwrapVariantArrayString(v dbus.Variant) (s string, err error) {
 	var d []string
 	d, ok := v.Value().([]string)
 	if !ok {
@@ -153,10 +151,8 @@ func unwrapVariantArrayArrayByte(v dbus.Variant) (s string, err error) {
 		err = fmt.Errorf("unwrapVariantArrayArrayByte() failed: %v", v)
 		return
 	}
-	// TODO
 	b, err := json.Marshal(d)
 	s = string(b)
-	LOGGER.Debug(s) // TODO
 	return
 }
 
@@ -179,7 +175,6 @@ func unwrapVariantDictStringString(v dbus.Variant) (s string, err error) {
 		err = fmt.Errorf("unwrapVariantDictStringString() failed: %v", v)
 		return
 	}
-	// TODO
 	b, err := json.Marshal(d)
 	s = string(b)
 	return
@@ -192,7 +187,6 @@ func unwrapVariantIpv6Addresses(v dbus.Variant) (s string, err error) {
 		err = fmt.Errorf("unwrapVariantIpv6Addresses() failed: %v", v)
 		return
 	}
-	// TODO
 	b, err := json.Marshal(d)
 	s = string(b)
 	return
@@ -205,7 +199,6 @@ func unwrapVariantIpv6Routes(v dbus.Variant) (s string, err error) {
 		err = fmt.Errorf("unwrapVariantIpv6Routes() failed: %v", v)
 		return
 	}
-	// TODO
 	b, err := json.Marshal(d)
 	s = string(b)
 	return

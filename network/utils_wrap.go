@@ -53,19 +53,21 @@ var ktypeDescriptions = []ktypeDescription{
 }
 
 // Ipv6Addresses is an array of (byte array, uint32, byte array)
-type Ipv6Addresses []struct {
+type Ipv6Address struct {
 	Address []byte
 	Prefix  uint32
 	Gateway []byte
 }
+type Ipv6Addresses []Ipv6Address
 
 // Ipv6Routes is an array of (byte array, uint32, byte array, uint32)
-type Ipv6Routes []struct {
+type Ipv6Route struct {
 	Address []byte
 	Prefix  uint32
 	NextHop []byte
 	Metric  uint32
 }
+type Ipv6Routes []Ipv6Route
 
 // string -> realdata -> dbus.Variant
 func wrapVariant(s string, t ktype) (v dbus.Variant, err error) {
@@ -163,10 +165,8 @@ func wrapVariantBoolean(s string) (v dbus.Variant, err error) {
 
 func wrapVariantArrayByte(s string) (v dbus.Variant, err error) {
 	var d []byte
-	d = []byte(s)
-	// err = json.Unmarshal([]byte(s), &d)
+	err = json.Unmarshal([]byte(s), &d)
 	v = dbus.MakeVariant(d)
-	// LOGGER.Debug(d) // TODO
 	return
 }
 
@@ -184,12 +184,10 @@ func wrapVariantArrayUint32(s string) (v dbus.Variant, err error) {
 	return
 }
 
-// TODO
 func wrapVariantArrayArrayByte(s string) (v dbus.Variant, err error) {
 	var d [][]byte
 	err = json.Unmarshal([]byte(s), &d)
 	v = dbus.MakeVariant(d)
-	LOGGER.Debug(d) // TODO
 	return
 }
 
@@ -207,7 +205,6 @@ func wrapVariantDictStringString(s string) (v dbus.Variant, err error) {
 	return
 }
 
-// TODO
 func wrapVariantIpv6Addresses(s string) (v dbus.Variant, err error) {
 	var d Ipv6Addresses
 	err = json.Unmarshal([]byte(s), &d)
@@ -215,7 +212,6 @@ func wrapVariantIpv6Addresses(s string) (v dbus.Variant, err error) {
 	return
 }
 
-// TODO
 func wrapVariantIpv6Routes(s string) (v dbus.Variant, err error) {
 	var d Ipv6Routes
 	err = json.Unmarshal([]byte(s), &d)
