@@ -64,6 +64,13 @@ func (grub *Grub2) setup() {
 	setup.DoGenerateThemeBackground(screenWidth, screenHeight)
 }
 
+func (grub *Grub2) setupTheme() {
+	setup := &Setup{}
+	// generate theme background
+	screenWidth, screenHeight := getPrimaryScreenBestResolution()
+	setup.DoGenerateThemeBackground(screenWidth, screenHeight)
+}
+
 // DoWriteSettings write file content to "/etc/default/grub".
 func (setup *Setup) DoWriteSettings(fileContent string) (ok bool, err error) {
 	err = ioutil.WriteFile(grubConfigFile, []byte(fileContent), 0664)

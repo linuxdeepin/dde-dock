@@ -29,9 +29,10 @@ import (
 )
 
 var (
-	logger   = liblogger.NewLogger("dde-daemon/grub2")
-	argDebug bool
-	argSetup bool
+	logger        = liblogger.NewLogger("dde-daemon/grub2")
+	argDebug      bool
+	argSetup      bool
+	argSetupTheme bool
 )
 
 func main() {
@@ -44,6 +45,7 @@ func main() {
 	flag.BoolVar(&argDebug, "d", false, "debug mode")
 	flag.BoolVar(&argDebug, "debug", false, "debug mode")
 	flag.BoolVar(&argSetup, "setup", false, "setup grub and exit")
+	flag.BoolVar(&argSetupTheme, "setup-theme", false, "setup grub theme only and exit")
 	flag.Parse()
 
 	// configure logger
@@ -57,6 +59,12 @@ func main() {
 	// setup grub and exit
 	if argSetup {
 		grub.setup()
+		os.Exit(0)
+	}
+
+	// setup grub theme only and exit
+	if argSetupTheme {
+		grub.setupTheme()
 		os.Exit(0)
 	}
 
