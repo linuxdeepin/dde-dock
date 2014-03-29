@@ -123,6 +123,7 @@ const (
 	NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS = "psk-flags"
 )
 
+// Get key type
 func getSettingWirelessSecurityKeyType(key string) (t ktype) {
 	switch key {
 	default:
@@ -161,6 +162,49 @@ func getSettingWirelessSecurityKeyType(key string) (t ktype) {
 		t = ktypeString
 	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS:
 		t = ktypeUint32
+	}
+	return
+}
+
+// Get and set key's value generally
+func generalGetSettingWirelessSecurityKey(data _ConnectionData, key string) (value string) {
+	switch key {
+	default:
+		LOGGER.Error("generalGetSettingWirelessSecurityKey: invalide key", key)
+	case NM_SETTING_WIRELESS_SECURITY_KEY_MGMT:
+		value = getSettingWirelessSecurityKeyMgmt(data)
+	case NM_SETTING_WIRELESS_SECURITY_WEP_TX_KEYIDX:
+		value = getSettingWirelessSecurityWepTxKeyidx(data)
+	case NM_SETTING_WIRELESS_SECURITY_AUTH_ALG:
+		value = getSettingWirelessSecurityAuthAlg(data)
+	case NM_SETTING_WIRELESS_SECURITY_PROTO:
+		value = getSettingWirelessSecurityProto(data)
+	case NM_SETTING_WIRELESS_SECURITY_PAIRWISE:
+		value = getSettingWirelessSecurityPairwise(data)
+	case NM_SETTING_WIRELESS_SECURITY_GROUP:
+		value = getSettingWirelessSecurityGroup(data)
+	case NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME:
+		value = getSettingWirelessSecurityLeapUsername(data)
+	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY0:
+		value = getSettingWirelessSecurityWepKey0(data)
+	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY1:
+		value = getSettingWirelessSecurityWepKey1(data)
+	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY2:
+		value = getSettingWirelessSecurityWepKey2(data)
+	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY3:
+		value = getSettingWirelessSecurityWepKey3(data)
+	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY_FLAGS:
+		value = getSettingWirelessSecurityWepKeyFlags(data)
+	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE:
+		value = getSettingWirelessSecurityWepKeyType(data)
+	case NM_SETTING_WIRELESS_SECURITY_PSK:
+		value = getSettingWirelessSecurityPsk(data)
+	case NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS:
+		value = getSettingWirelessSecurityPskFlags(data)
+	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD:
+		value = getSettingWirelessSecurityLeapPassword(data)
+	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS:
+		value = getSettingWirelessSecurityLeapPasswordFlags(data)
 	}
 	return
 }

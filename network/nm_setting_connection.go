@@ -18,6 +18,7 @@ const (
 	NM_SETTING_CONNECTION_SECONDARIES = "secondaries"
 )
 
+// Get key type
 func getSettingConnectionKeyType(key string) (t ktype) {
 	switch key {
 	default:
@@ -44,6 +45,37 @@ func getSettingConnectionKeyType(key string) (t ktype) {
 		t = ktypeString
 	case NM_SETTING_CONNECTION_SECONDARIES:
 		t = ktypeArrayString
+	}
+	return
+}
+
+// Get and set key's value generally
+func generalGetSettingConnectionKey(data _ConnectionData, key string) (value string) {
+	switch key {
+	default:
+		LOGGER.Error("generalGetSettingConnectionKey: invalide key", key)
+	case NM_SETTING_CONNECTION_ID:
+		value = getSettingConnectionId(data)
+	case NM_SETTING_CONNECTION_UUID:
+		value = getSettingConnectionUuid(data)
+	case NM_SETTING_CONNECTION_TYPE:
+		value = getSettingConnectionType(data)
+	case NM_SETTING_CONNECTION_AUTOCONNECT:
+		value = getSettingConnectionAutoconnect(data)
+	case NM_SETTING_CONNECTION_TIMESTAMP:
+		value = getSettingConnectionTimestamp(data)
+	case NM_SETTING_CONNECTION_READ_ONLY:
+		value = getSettingConnectionReadOnly(data)
+	case NM_SETTING_CONNECTION_PERMISSIONS:
+		value = getSettingConnectionPermissions(data)
+	case NM_SETTING_CONNECTION_ZONE:
+		value = getSettingConnectionZone(data)
+	case NM_SETTING_CONNECTION_MASTER:
+		value = getSettingConnectionMaster(data)
+	case NM_SETTING_CONNECTION_SLAVE_TYPE:
+		value = getSettingConnectionSlaveType(data)
+	case NM_SETTING_CONNECTION_SECONDARIES:
+		value = getSettingConnectionSecondaries(data)
 	}
 	return
 }

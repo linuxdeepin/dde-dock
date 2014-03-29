@@ -46,6 +46,8 @@ func removeConnectionDataField(data _ConnectionData, field string) {
 	}
 }
 
+// TODO key: add(), remove()
+
 func getConnectionDataKey(data _ConnectionData, field, key string, t ktype) (value string) {
 	fieldData, ok := data[field]
 	if !ok {
@@ -65,11 +67,19 @@ func getConnectionDataKey(data _ConnectionData, field, key string, t ktype) (val
 		return
 	}
 
+	if len(value) == 0 {
+		LOGGER.Warning("getConnectionDataKey: value is empty")
+	}
+
 	LOGGER.Debugf("getConnectionDataKey: data[%s][%s]=%s", field, key, value) // TODO test
 	return
 }
 
 func setConnectionDataKey(data _ConnectionData, field, key, value string, t ktype) {
+	if len(value) == 0 {
+		LOGGER.Warning("setConnectionDataKey: value is empty")
+	}
+
 	var fieldData map[string]dbus.Variant
 	fieldData, ok := data[field]
 	if !ok {

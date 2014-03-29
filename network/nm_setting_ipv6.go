@@ -27,6 +27,7 @@ const (
 	NM_SETTING_IP6_CONFIG_METHOD_SHARED     = "shared"
 )
 
+// Get key type
 func getSettingIp6ConfigKeyType(key string) (t ktype) {
 	switch key {
 	default:
@@ -53,6 +54,37 @@ func getSettingIp6ConfigKeyType(key string) (t ktype) {
 		t = ktypeBoolean
 	case NM_SETTING_IP6_CONFIG_IP6_PRIVACY:
 		t = ktypeInt32
+	}
+	return
+}
+
+// Get and set key's value generally
+func generalGetSettingIp6ConfigKey(data _ConnectionData, key string) (value string) {
+	switch key {
+	default:
+		LOGGER.Error("generalGetSettingIp6ConfigKey: invalide key", key)
+	case NM_SETTING_IP6_CONFIG_METHOD:
+		value = getSettingIp6ConfigMethod(data)
+	case NM_SETTING_IP6_CONFIG_DNS:
+		value = getSettingIp6ConfigDns(data)
+	case NM_SETTING_IP6_CONFIG_DNS_SEARCH:
+		value = getSettingIp6ConfigDnsSearch(data)
+	case NM_SETTING_IP6_CONFIG_ADDRESSES:
+		value = getSettingIp6ConfigAddresses(data)
+	case NM_SETTING_IP6_CONFIG_ROUTES:
+		value = getSettingIp6ConfigRoutes(data)
+	case NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES:
+		value = getSettingIp6ConfigIgnoreAutoRoutes(data)
+	case NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS:
+		value = getSettingIp6ConfigIgnoreAutoDns(data)
+	case NM_SETTING_IP6_CONFIG_NEVER_DEFAULT:
+		value = getSettingIp6ConfigNeverDefault(data)
+	case NM_SETTING_IP6_CONFIG_MAY_FAIL:
+		value = getSettingIp6ConfigMayFail(data)
+	case NM_SETTING_IP6_CONFIG_IP6_PRIVACY:
+		value = getSettingIp6ConfigIp6Privacy(data)
+	case NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME:
+		value = getSettingIp6ConfigDhcpHostname(data)
 	}
 	return
 }

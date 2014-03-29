@@ -11,16 +11,18 @@ type ConnectionSession struct {
 	objPath     dbus.ObjectPath
 	data        _ConnectionData
 	connType    string
-	currentUUID string // TODO hide property
+
+	CurrentUUID string // TODO hide property
 	// currentPage string // TODO remove
 
+	// TODO if need another property "CouldSave"?
 	HasChanged bool
 
 	// 前端只显示此列表中的字段, 会跟随当前正在编辑的值而改变
 	// TODO more documentation
 	AvailableKeys map[string][]string
 
-	// 返回当前 page 下错误的字段和对应的错误原因
+	// 返回所有 page 下错误的字段和对应的错误原因
 	Errors map[string]map[string]string
 }
 
@@ -42,7 +44,7 @@ func NewConnectionSessionByCreate(connType string) (session *ConnectionSession, 
 	}
 
 	session = doNewConnectionSession()
-	session.currentUUID = newUUID()
+	session.CurrentUUID = newUUID()
 	session.objPath = dbus.ObjectPath(fmt.Sprintf("/com/deepin/daemon/ConnectionSession/%s", randString(8)))
 
 	// TODO
@@ -67,7 +69,7 @@ func NewConnectionSessionByOpen(uuid string) (session *ConnectionSession, err er
 
 	session = doNewConnectionSession()
 	session.coreObjPath = coreObjPath
-	session.currentUUID = uuid
+	session.CurrentUUID = uuid
 	session.objPath = dbus.ObjectPath(fmt.Sprintf("/com/deepin/daemon/ConnectionSession/%s", randString(8)))
 
 	// get connection data
@@ -156,6 +158,7 @@ func (session *ConnectionSession) ListPages() (pages []string) {
 // get valid keys of target page, show or hide some keys when special
 // keys toggled
 func (session *ConnectionSession) listKeys(page string) (keys []string) {
+	// TODO get aviable key in each field
 	switch session.connType {
 	case typeWired:
 		switch page {
@@ -224,6 +227,7 @@ func (session *ConnectionSession) listKeys(page string) (keys []string) {
 //获得ip设置方式 : Manual、Link-Local Only、Automatic(DHCP)
 //获得当前可用mac地址(这种字段是有几个可选值但用户也可用手动输入一个其他值)
 func (session *ConnectionSession) GetAvailableValues(page, key string) (values []string) {
+	// TODO
 	switch session.connType {
 	case typeWired:
 		switch page {
@@ -253,6 +257,67 @@ func (session *ConnectionSession) GetAvailableValues(page, key string) (values [
 	return
 }
 
+// TODO
+func (session *ConnectionSession) GetKey(page, key string) (value string) {
+	switch page {
+	default:
+		LOGGER.Error("GetKey: invalid page name", page)
+	case pageGeneral:
+		value = generalGetSettingConnectionKey(session.data, key)
+	case pageEthernet:
+		value = generalGetSettingWiredKey(session.data, key)
+	case pageWifi:
+		value = generalGetSettingWirelessKey(session.data, key)
+	case pageIPv4:
+		value = generalGetSettingIp4ConfigKey(session.data, key)
+	case pageIPv6:
+		value = generalGetSettingIp6ConfigKey(session.data, key)
+	case pageSecurity: // TODO
+		switch session.connType {
+		case typeWired:
+		case typeWireless:
+			// switch method {
+			// value = generalGetSettingWirelessSecurityKey(session.data, key)
+			// value = generalGetSetting8021xKey(session.data, key)
+			// }
+		}
+	}
+
+	return
+}
+
+//设置某个字段， 会影响AvailableKeys属性，某些值会导致其他属性进入不可用状态
+// TODO SetKey
+func (session *ConnectionSession) SetKey(page, key, value string) {
+	switch page {
+	default:
+		LOGGER.Error("SetKey: invalid page name", page)
+	case pageGeneral:
+	case pageEthernet:
+	case pageWifi:
+	case pageIPv4:
+		setSettingIp4ConfigKey(session.data, key, value)
+	case pageIPv6:
+	case pageSecurity: // TODO
+		switch session.connType {
+		case typeWired:
+		case typeWireless:
+			// switch method {
+			// 	setSetting8021xKey(session.data, key, value)
+			// }
+		}
+	}
+
+	// TODO
+	session.updatePropAvailableKeys()
+	return
+}
+
+// TODO CheckValue check target value if is correct.
+func (session *ConnectionSession) CheckValue(page, key, value string) (ok bool) {
+	return
+}
+
 //仅仅调试使用，返回某个页面支持的字段。 因为字段如何安排(位置、我们是否要提供这个字段)是由前端决定的。
 //*****在设计前端显示内容的时候和这个返回值关联很大*****
 // DebugListKeyss return all keys of current page, only for debugging.
@@ -277,137 +342,3 @@ func (session *ConnectionSession) DebugListSupportedConnectionTypes() []string {
 // 	LOGGER.Debug(ktypeDescriptions)
 // 	return ktypeDescriptions[0].t, ktypeDescriptions[0].desc
 // }
-
-//设置某个字段， 会影响AvailableKeys属性，某些值会导致其他属性进入不可用状态
-// TODO SetKey
-func (session *ConnectionSession) SetKey(page, key, value string) {
-	switch session.connType {
-	case typeWired:
-		switch page {
-		case pageGeneral:
-			switch key {
-			case NM_SETTING_CONNECTION_ID:
-				setSettingConnectionId(session.data, value)
-			case NM_SETTING_CONNECTION_AUTOCONNECT:
-				setSettingConnectionAutoconnect(session.data, value)
-			case NM_SETTING_CONNECTION_PERMISSIONS:
-				setSettingConnectionPermissions(session.data, value)
-			}
-		case pageIPv4:
-			switch key {
-			case NM_SETTING_IP4_CONFIG_METHOD:
-				setSettingIp4ConfigMethod(session.data, value)
-			case NM_SETTING_IP4_CONFIG_DNS:
-				setSettingIp4ConfigDns(session.data, value)
-			case NM_SETTING_IP4_CONFIG_ADDRESSES:
-				setSettingIp4ConfigAddresses(session.data, value)
-			}
-		case pageIPv6:
-			// TODO
-			switch key {
-			case NM_SETTING_IP6_CONFIG_METHOD:
-			case NM_SETTING_IP6_CONFIG_DNS:
-			case NM_SETTING_IP6_CONFIG_DNS_SEARCH:
-			case NM_SETTING_IP6_CONFIG_ADDRESSES:
-			case NM_SETTING_IP6_CONFIG_ROUTES:
-			case NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES:
-			case NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS:
-			case NM_SETTING_IP6_CONFIG_NEVER_DEFAULT:
-			case NM_SETTING_IP6_CONFIG_MAY_FAIL:
-			case NM_SETTING_IP6_CONFIG_IP6_PRIVACY:
-			case NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME:
-			}
-		case pageSecurity:
-			// TODO
-			switch key {
-			case NM_SETTING_WIRELESS_SECURITY_KEY_MGMT:
-			case NM_SETTING_WIRELESS_SECURITY_WEP_TX_KEYIDX:
-			case NM_SETTING_WIRELESS_SECURITY_AUTH_ALG:
-			case NM_SETTING_WIRELESS_SECURITY_PROTO:
-			case NM_SETTING_WIRELESS_SECURITY_PAIRWISE:
-			case NM_SETTING_WIRELESS_SECURITY_GROUP:
-			case NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME:
-			case NM_SETTING_WIRELESS_SECURITY_WEP_KEY0:
-			case NM_SETTING_WIRELESS_SECURITY_WEP_KEY1:
-			case NM_SETTING_WIRELESS_SECURITY_WEP_KEY2:
-			case NM_SETTING_WIRELESS_SECURITY_WEP_KEY3:
-			case NM_SETTING_WIRELESS_SECURITY_WEP_KEY_FLAGS:
-			case NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE:
-			case NM_SETTING_WIRELESS_SECURITY_PSK:
-			case NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS:
-			case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD:
-			case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS:
-			}
-		}
-	case typeWireless:
-		// TODO
-	}
-	session.updatePropAvailableKeys()
-	return
-}
-
-// TODO
-func (session *ConnectionSession) GetKey(page, key string) (value string) {
-	switch session.connType {
-	case typeWired:
-		switch page {
-		case pageGeneral:
-			switch key {
-			case NM_SETTING_CONNECTION_ID:
-				value = getSettingConnectionId(session.data)
-			case NM_SETTING_CONNECTION_AUTOCONNECT:
-				value = getSettingConnectionAutoconnect(session.data)
-			case NM_SETTING_CONNECTION_PERMISSIONS:
-				value = getSettingConnectionPermissions(session.data)
-			}
-		case pageIPv4:
-			switch key {
-			case NM_SETTING_IP4_CONFIG_METHOD:
-				value = getSettingIp4ConfigMethod(session.data)
-			case NM_SETTING_IP4_CONFIG_DNS:
-				value = getSettingIp4ConfigDns(session.data)
-			case NM_SETTING_IP4_CONFIG_ADDRESSES:
-				value = getSettingIp4ConfigAddresses(session.data)
-			}
-		case pageIPv6:
-			// TODO
-			switch key {
-			case NM_SETTING_IP6_CONFIG_METHOD:
-			case NM_SETTING_IP6_CONFIG_DNS:
-			case NM_SETTING_IP6_CONFIG_DNS_SEARCH:
-			case NM_SETTING_IP6_CONFIG_ADDRESSES:
-			case NM_SETTING_IP6_CONFIG_ROUTES:
-			case NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES:
-			case NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS:
-			case NM_SETTING_IP6_CONFIG_NEVER_DEFAULT:
-			case NM_SETTING_IP6_CONFIG_MAY_FAIL:
-			case NM_SETTING_IP6_CONFIG_IP6_PRIVACY:
-			case NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME:
-			}
-		case pageSecurity:
-			// TODO
-			switch key {
-			case NM_SETTING_WIRELESS_SECURITY_KEY_MGMT:
-			case NM_SETTING_WIRELESS_SECURITY_WEP_TX_KEYIDX:
-			case NM_SETTING_WIRELESS_SECURITY_AUTH_ALG:
-			case NM_SETTING_WIRELESS_SECURITY_PROTO:
-			case NM_SETTING_WIRELESS_SECURITY_PAIRWISE:
-			case NM_SETTING_WIRELESS_SECURITY_GROUP:
-			case NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME:
-			case NM_SETTING_WIRELESS_SECURITY_WEP_KEY0:
-			case NM_SETTING_WIRELESS_SECURITY_WEP_KEY1:
-			case NM_SETTING_WIRELESS_SECURITY_WEP_KEY2:
-			case NM_SETTING_WIRELESS_SECURITY_WEP_KEY3:
-			case NM_SETTING_WIRELESS_SECURITY_WEP_KEY_FLAGS:
-			case NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE:
-			case NM_SETTING_WIRELESS_SECURITY_PSK:
-			case NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS:
-			case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD:
-			case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS:
-			}
-		}
-	case typeWireless:
-		// TODO
-	}
-	return
-}

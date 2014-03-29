@@ -164,6 +164,7 @@ func newWirelessConnectionData(id, uuid, ssid string, keyFlag int) (data _Connec
 	// data[fieldIPv6]["method"] = dbus.MakeVariant("auto")
 }
 
+// Get key type
 func getSettingWirelessKeyType(key string) (t ktype) {
 	switch key {
 	default:
@@ -196,6 +197,43 @@ func getSettingWirelessKeyType(key string) (t ktype) {
 		t = ktypeString
 	case NM_SETTING_WIRELESS_HIDDEN:
 		t = ktypeBoolean
+	}
+	return
+}
+
+// Get and set key's value generally
+func generalGetSettingWirelessKey(data _ConnectionData, key string) (value string) {
+	switch key {
+	default:
+		LOGGER.Error("generalGetSettingWirelessKey: invalide key", key)
+	case NM_SETTING_WIRELESS_SSID:
+		value = getSettingWirelessSsid(data)
+	case NM_SETTING_WIRELESS_MODE:
+		value = getSettingWirelessMode(data)
+	case NM_SETTING_WIRELESS_BAND:
+		value = getSettingWirelessBand(data)
+	case NM_SETTING_WIRELESS_CHANNEL:
+		value = getSettingWirelessChannel(data)
+	case NM_SETTING_WIRELESS_BSSID:
+		value = getSettingWirelessBssid(data)
+	case NM_SETTING_WIRELESS_RATE:
+		value = getSettingWirelessRate(data)
+	case NM_SETTING_WIRELESS_TX_POWER:
+		value = getSettingWirelessTxPower(data)
+	case NM_SETTING_WIRELESS_MAC_ADDRESS:
+		value = getSettingWirelessMacAddress(data)
+	case NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS:
+		value = getSettingWirelessClonedMacAddress(data)
+	case NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST:
+		value = getSettingWirelessMacAddressBlacklist(data)
+	case NM_SETTING_WIRELESS_MTU:
+		value = getSettingWirelessMtu(data)
+	case NM_SETTING_WIRELESS_SEEN_BSSIDS:
+		value = getSettingWirelessSeenBssids(data)
+	case NM_SETTING_WIRELESS_SEC:
+		value = getSettingWirelessSec(data)
+	case NM_SETTING_WIRELESS_HIDDEN:
+		value = getSettingWirelessHidden(data)
 	}
 	return
 }

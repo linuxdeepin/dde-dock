@@ -87,6 +87,7 @@ func newWireedConnectionData(id, uuid string) (data _ConnectionData) {
 	return
 }
 
+// Get key type
 func getSettingWiredKeyType(key string) (t ktype) {
 	switch key {
 	default:
@@ -113,6 +114,37 @@ func getSettingWiredKeyType(key string) (t ktype) {
 		t = ktypeString
 	case NM_SETTING_WIRED_S390_OPTIONS:
 		t = ktypeDictStringString
+	}
+	return
+}
+
+// Get and set key's value generally
+func generalGetSettingWiredKey(data _ConnectionData, key string) (value string) {
+	switch key {
+	default:
+		LOGGER.Error("generalGetSettingWiredKey: invalide key", key)
+	case NM_SETTING_WIRED_PORT:
+		value = getSettingWiredPort(data)
+	case NM_SETTING_WIRED_SPEED:
+		value = getSettingWiredSpeed(data)
+	case NM_SETTING_WIRED_DUPLEX:
+		value = getSettingWiredDuplex(data)
+	case NM_SETTING_WIRED_AUTO_NEGOTIATE:
+		value = getSettingWiredAutoNegotiate(data)
+	case NM_SETTING_WIRED_MAC_ADDRESS:
+		value = getSettingWiredMacAddress(data)
+	case NM_SETTING_WIRED_CLONED_MAC_ADDRESS:
+		value = getSettingWiredClonedMacAddress(data)
+	case NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST:
+		value = getSettingWiredMacAddressBlacklist(data)
+	case NM_SETTING_WIRED_MTU:
+		value = getSettingWiredMtu(data)
+	case NM_SETTING_WIRED_S390_SUBCHANNELS:
+		value = getSettingWiredS390Subchannels(data)
+	case NM_SETTING_WIRED_S390_NETTYPE:
+		value = getSettingWiredS390Nettype(data)
+	case NM_SETTING_WIRED_S390_OPTIONS:
+		value = getSettingWiredS390Options(data)
 	}
 	return
 }

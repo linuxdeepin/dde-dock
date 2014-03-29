@@ -39,6 +39,7 @@ const (
 	NM_SETTING_802_1X_SYSTEM_CA_CERTS                   = "system-ca-certs"
 )
 
+// Get key type
 func getSetting8021xKeyType(key string) (t ktype) {
 	switch key {
 	default:
@@ -109,6 +110,77 @@ func getSetting8021xKeyType(key string) (t ktype) {
 		t = ktypeBoolean
 	}
 	return t
+}
+
+// Get and set key's value generally
+func generalGetSetting8021xKey(data _ConnectionData, key string) (value string) {
+	switch key {
+	default:
+		LOGGER.Error("generalGetSetting8021xKey: invalide key", key)
+	case NM_SETTING_802_1X_EAP:
+		value = getSetting8021xEap(data)
+	case NM_SETTING_802_1X_IDENTITY:
+		value = getSetting8021xIdentity(data)
+	case NM_SETTING_802_1X_ANONYMOUS_IDENTITY:
+		value = getSetting8021xAnonymousIdentity(data)
+	case NM_SETTING_802_1X_PAC_FILE:
+		value = getSetting8021xPacFile(data)
+	case NM_SETTING_802_1X_CA_CERT:
+		value = getSetting8021xCaCert(data)
+	case NM_SETTING_802_1X_CA_PATH:
+		value = getSetting8021xCaPath(data)
+	case NM_SETTING_802_1X_SUBJECT_MATCH:
+		value = getSetting8021xSubjectMatch(data)
+	case NM_SETTING_802_1X_ALTSUBJECT_MATCHES:
+		value = getSetting8021xAltsubjectMatches(data)
+	case NM_SETTING_802_1X_CLIENT_CERT:
+		value = getSetting8021xClientCert(data)
+	case NM_SETTING_802_1X_PHASE1_PEAPVER:
+		value = getSetting8021xPhase1Peapver(data)
+	case NM_SETTING_802_1X_PHASE1_PEAPLABEL:
+		value = getSetting8021xPhase1Peaplabel(data)
+	case NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING:
+		value = getSetting8021xPhase1FastProvisioning(data)
+	case NM_SETTING_802_1X_PHASE2_AUTH:
+		value = getSetting8021xPhase2Auth(data)
+	case NM_SETTING_802_1X_PHASE2_AUTHEAP:
+		value = getSetting8021xPhase2Autheap(data)
+	case NM_SETTING_802_1X_PHASE2_CA_CERT:
+		value = getSetting8021xPhase2CaCert(data)
+	case NM_SETTING_802_1X_PHASE2_CA_PATH:
+		value = getSetting8021xPhase2CaPath(data)
+	case NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH:
+		value = getSetting8021xPhase2SubjectMatch(data)
+	case NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES:
+		value = getSetting8021xPhase2AltsubjectMatches(data)
+	case NM_SETTING_802_1X_PASSWORD:
+		value = getSetting8021xPassword(data)
+	case NM_SETTING_802_1X_PASSWORD_FLAGS:
+		value = getSetting8021xPasswordFlags(data)
+	case NM_SETTING_802_1X_PASSWORD_RAW:
+		value = getSetting8021xPasswordRaw(data)
+	case NM_SETTING_802_1X_PASSWORD_RAW_FLAGS:
+		value = getSetting8021xPasswordRawFlags(data)
+	case NM_SETTING_802_1X_PRIVATE_KEY:
+		value = getSetting8021xPrivateKey(data)
+	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD:
+		value = getSetting8021xPrivateKeyPassword(data)
+	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS:
+		value = getSetting8021xPrivateKeyPasswordFlags(data)
+	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY:
+		value = getSetting8021xPhase2PrivateKey(data)
+	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD:
+		value = getSetting8021xPhase2PrivateKeyPassword(data)
+	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS:
+		value = getSetting8021xPhase2PrivateKeyPasswordFlags(data)
+	case NM_SETTING_802_1X_PIN:
+		value = getSetting8021xPin(data)
+	case NM_SETTING_802_1X_PIN_FLAGS:
+		value = getSetting8021xPinFlags(data)
+	case NM_SETTING_802_1X_SYSTEM_CA_CERTS:
+		value = getSetting8021xSystemCaCerts(data)
+	}
+	return
 }
 
 // Getter
