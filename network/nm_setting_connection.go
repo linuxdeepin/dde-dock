@@ -38,7 +38,7 @@ const (
 	// update the connection timestamp periodically when the
 	// connection is active to ensure that an active connection has
 	// the latest timestamp.
-	NM_SETTING_CONNECTION_TIMESTAMP = "timestamp"
+	NM_SETTING_CONNECTION_TIMESTAMP = "timestamp" // TODO
 
 	// If TRUE, the connection is read-only and cannot be changed by
 	// the user or any other mechanism. This is normally set for
@@ -78,6 +78,16 @@ const (
 	// connection itself is activated.
 	NM_SETTING_CONNECTION_SECONDARIES = "secondaries"
 )
+
+// TODO Get available keys
+func getSettingConnectionAvailableKeys(data _ConnectionData) (keys []string) {
+	keys = []string{
+		NM_SETTING_CONNECTION_ID,
+		NM_SETTING_CONNECTION_AUTOCONNECT,
+		NM_SETTING_CONNECTION_PERMISSIONS,
+	}
+	return
+}
 
 // Get key type
 func getSettingConnectionKeyType(key string) (t ktype) {

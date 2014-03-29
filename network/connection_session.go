@@ -15,8 +15,8 @@ type ConnectionSession struct {
 	CurrentUUID string // TODO hide property
 	// currentPage string // TODO remove
 
-	// TODO if need another property "CouldSave"?
 	HasChanged bool
+	AllowSave  bool // TODO really need?
 
 	// 前端只显示此列表中的字段, 会跟随当前正在编辑的值而改变
 	// TODO more documentation
@@ -31,6 +31,8 @@ type ConnectionSession struct {
 func doNewConnectionSession() (session *ConnectionSession) {
 	session = &ConnectionSession{}
 	session.data = make(_ConnectionData)
+	session.HasChanged = false
+	session.AllowSave = false // TODO
 	session.AvailableKeys = make(map[string][]string)
 	session.Errors = make(map[string]map[string]string)
 	return session
@@ -98,6 +100,7 @@ func (session *ConnectionSession) Save() bool {
 		return false
 	}
 
+	// TODO
 	if !session.HasChanged {
 		dbus.UnInstallObject(session)
 		return true
@@ -158,67 +161,18 @@ func (session *ConnectionSession) ListPages() (pages []string) {
 // get valid keys of target page, show or hide some keys when special
 // keys toggled
 func (session *ConnectionSession) listKeys(page string) (keys []string) {
-	// TODO get aviable key in each field
-	switch session.connType {
-	case typeWired:
-		switch page {
-		case pageGeneral:
-			keys = []string{
-				NM_SETTING_CONNECTION_ID,
-				NM_SETTING_CONNECTION_AUTOCONNECT,
-				NM_SETTING_CONNECTION_PERMISSIONS,
-			}
-		case pageIPv4: // TODO
-			switch getSettingIp4ConfigMethod(session.data) {
-			case NM_SETTING_IP4_CONFIG_METHOD_AUTO:
-				keys = []string{
-					NM_SETTING_IP4_CONFIG_METHOD,
-					NM_SETTING_IP4_CONFIG_DNS,
-				}
-			case NM_SETTING_IP4_CONFIG_METHOD_MANUAL:
-				keys = []string{
-					NM_SETTING_IP4_CONFIG_METHOD,
-					NM_SETTING_IP4_CONFIG_DNS,
-					NM_SETTING_IP4_CONFIG_ADDRESSES,
-				}
-			}
-		case pageIPv6: // TODO
-			keys = []string{
-			// NM_SETTING_IP6_CONFIG_METHOD,
-			// NM_SETTING_IP6_CONFIG_DNS,
-			// NM_SETTING_IP6_CONFIG_DNS_SEARCH,
-			// NM_SETTING_IP6_CONFIG_ADDRESSES,
-			// NM_SETTING_IP6_CONFIG_ROUTES,
-			// NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES,
-			// NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS,
-			// NM_SETTING_IP6_CONFIG_NEVER_DEFAULT,
-			// NM_SETTING_IP6_CONFIG_MAY_FAIL,
-			// NM_SETTING_IP6_CONFIG_IP6_PRIVACY,
-			// NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME,
-			}
-		case pageSecurity: // TODO
-			keys = []string{
-			// NM_SETTING_WIRELESS_SECURITY_KEY_MGMT,
-			// NM_SETTING_WIRELESS_SECURITY_WEP_TX_KEYIDX,
-			// NM_SETTING_WIRELESS_SECURITY_AUTH_ALG,
-			// NM_SETTING_WIRELESS_SECURITY_PROTO,
-			// NM_SETTING_WIRELESS_SECURITY_PAIRWISE,
-			// NM_SETTING_WIRELESS_SECURITY_GROUP,
-			// NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME,
-			// NM_SETTING_WIRELESS_SECURITY_WEP_KEY0,
-			// NM_SETTING_WIRELESS_SECURITY_WEP_KEY1,
-			// NM_SETTING_WIRELESS_SECURITY_WEP_KEY2,
-			// NM_SETTING_WIRELESS_SECURITY_WEP_KEY3,
-			// NM_SETTING_WIRELESS_SECURITY_WEP_KEY_FLAGS,
-			// NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE,
-			// NM_SETTING_WIRELESS_SECURITY_PSK,
-			// NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS,
-			// NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD,
-			// NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS,
-			}
+	switch page {
+	case pageGeneral:
+		keys = getSettingConnectionAvailableKeys(session.data)
+	case pageIPv4:
+		keys = getSettingIp4ConfigAvailableKeys(session.data)
+	case pageIPv6:
+		keys = getSettingIp6ConfigAvailableKeys(session.data)
+	case pageSecurity: // TODO
+		switch session.connType {
+		case typeWired:
+		case typeWireless:
 		}
-	case typeWireless:
-		// TODO
 	}
 	return
 }
@@ -257,7 +211,6 @@ func (session *ConnectionSession) GetAvailableValues(page, key string) (values [
 	return
 }
 
-// TODO
 func (session *ConnectionSession) GetKey(page, key string) (value string) {
 	switch page {
 	default:
@@ -285,8 +238,6 @@ func (session *ConnectionSession) GetKey(page, key string) (value string) {
 	return
 }
 
-//设置某个字段， 会影响AvailableKeys属性，某些值会导致其他属性进入不可用状态
-// TODO SetKey
 func (session *ConnectionSession) SetKey(page, key, value string) {
 	switch page {
 	default:
@@ -314,21 +265,23 @@ func (session *ConnectionSession) SetKey(page, key, value string) {
 
 	// TODO
 	session.updatePropAvailableKeys()
+	// session.updatePropAllowSave()
 	return
 }
 
-// TODO CheckValue check target value if is correct.
+// TODO CheckValues check target value if is correct.
 func (session *ConnectionSession) CheckValue(page, key, value string) (ok bool) {
 	return
 }
 
+// TODO remove
 //仅仅调试使用，返回某个页面支持的字段。 因为字段如何安排(位置、我们是否要提供这个字段)是由前端决定的。
 //*****在设计前端显示内容的时候和这个返回值关联很大*****
 // DebugListKeyss return all keys of current page, only for debugging.
-func (session *ConnectionSession) DebugListKeys(page string) []string {
-	// TODO
-	return session.listKeys(page)
-}
+// func (session *ConnectionSession) DebugListKeys(page string) []string {
+// 	// TODO
+// 	return session.listKeys(page)
+// }
 
 // DebugConnectionTypes return all supported connection types, only for debugging.
 // TODO move to manager

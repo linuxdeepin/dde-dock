@@ -27,6 +27,38 @@ const (
 	NM_SETTING_IP6_CONFIG_METHOD_SHARED     = "shared"
 )
 
+// TODO Get available keys
+func getSettingIp6ConfigAvailableKeys(data _ConnectionData) (keys []string) {
+	method := getSettingIp6ConfigMethod(data)
+	switch method {
+	default:
+		LOGGER.Error("ip6 config method is invalid:", method)
+	case NM_SETTING_IP6_CONFIG_METHOD_IGNORE:
+		keys = []string{
+			NM_SETTING_IP6_CONFIG_METHOD,
+		}
+	case NM_SETTING_IP6_CONFIG_METHOD_AUTO:
+		keys = []string{
+			NM_SETTING_IP6_CONFIG_METHOD,
+			NM_SETTING_IP6_CONFIG_DNS,
+		}
+	case NM_SETTING_IP6_CONFIG_METHOD_DHCP:
+		keys = []string{
+			NM_SETTING_IP6_CONFIG_METHOD,
+			NM_SETTING_IP6_CONFIG_DNS,
+		}
+	case NM_SETTING_IP6_CONFIG_METHOD_LINK_LOCAL: // ignore
+	case NM_SETTING_IP6_CONFIG_METHOD_MANUAL: // ignore
+		keys = []string{
+			NM_SETTING_IP6_CONFIG_METHOD,
+			NM_SETTING_IP6_CONFIG_DNS,
+			NM_SETTING_IP6_CONFIG_ADDRESSES,
+		}
+	case NM_SETTING_IP6_CONFIG_METHOD_SHARED: // ignore
+	}
+	return
+}
+
 // Get key type
 func getSettingIp6ConfigKeyType(key string) (t ktype) {
 	switch key {

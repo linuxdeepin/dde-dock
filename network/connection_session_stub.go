@@ -17,6 +17,12 @@ func (session *ConnectionSession) updatePropHasChanged(v bool) {
 	dbus.NotifyChange(session, "HasChanged")
 }
 
+// TODO
+func (session *ConnectionSession) updatePropAllowSave(v bool) {
+	session.AllowSave = v
+	dbus.NotifyChange(session, "AllowSave")
+}
+
 func (session *ConnectionSession) updatePropAvailableKeys() {
 	session.AvailableKeys = make(map[string][]string) // clear structure
 	for _, page := range session.ListPages() {

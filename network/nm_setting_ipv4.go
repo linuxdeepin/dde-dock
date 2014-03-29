@@ -136,7 +136,34 @@ const (
 	NM_SETTING_IP4_CONFIG_METHOD_DISABLED = "disabled"
 )
 
-// TODO Get aviable keys
+// TODO Get available keys
+func getSettingIp4ConfigAvailableKeys(data _ConnectionData) (keys []string) {
+	method := getSettingIp4ConfigMethod(data)
+	switch method {
+	default:
+		LOGGER.Error("ip4 config method is invalid:", method)
+	case NM_SETTING_IP4_CONFIG_METHOD_AUTO:
+		keys = []string{
+			NM_SETTING_IP4_CONFIG_METHOD,
+			NM_SETTING_IP4_CONFIG_DNS,
+		}
+	case NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL: // ignore
+	case NM_SETTING_IP4_CONFIG_METHOD_MANUAL:
+		keys = []string{
+			NM_SETTING_IP4_CONFIG_METHOD,
+			NM_SETTING_IP4_CONFIG_DNS,
+			NM_SETTING_IP4_CONFIG_ADDRESSES,
+		}
+	case NM_SETTING_IP4_CONFIG_METHOD_SHARED: // ignore
+	case NM_SETTING_IP4_CONFIG_METHOD_DISABLED:
+		keys = []string{
+			NM_SETTING_IP4_CONFIG_METHOD,
+		}
+	}
+	return
+}
+
+// TODO Get available values
 
 // TODO Adder, Remover
 
