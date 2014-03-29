@@ -80,6 +80,37 @@ func generalGetSettingConnectionKey(data _ConnectionData, key string) (value str
 	return
 }
 
+// TODO use logic setter
+func generalSetSettingConnectionKey(data _ConnectionData, key, value string) {
+	switch key {
+	default:
+		LOGGER.Error("generalSetSettingConnectionKey: invalide key", key)
+	case NM_SETTING_CONNECTION_ID:
+		setSettingConnectionId(data, value)
+	case NM_SETTING_CONNECTION_UUID:
+		setSettingConnectionUuid(data, value)
+	case NM_SETTING_CONNECTION_TYPE:
+		setSettingConnectionType(data, value)
+	case NM_SETTING_CONNECTION_AUTOCONNECT:
+		setSettingConnectionAutoconnect(data, value)
+	case NM_SETTING_CONNECTION_TIMESTAMP:
+		setSettingConnectionTimestamp(data, value)
+	case NM_SETTING_CONNECTION_READ_ONLY:
+		setSettingConnectionReadOnly(data, value)
+	case NM_SETTING_CONNECTION_PERMISSIONS:
+		setSettingConnectionPermissions(data, value)
+	case NM_SETTING_CONNECTION_ZONE:
+		setSettingConnectionZone(data, value)
+	case NM_SETTING_CONNECTION_MASTER:
+		setSettingConnectionMaster(data, value)
+	case NM_SETTING_CONNECTION_SLAVE_TYPE:
+		setSettingConnectionSlaveType(data, value)
+	case NM_SETTING_CONNECTION_SECONDARIES:
+		setSettingConnectionSecondaries(data, value)
+	}
+	return
+}
+
 // Getter
 func getSettingConnectionId(data _ConnectionData) (value string) {
 	value = getConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_ID, getSettingConnectionKeyType(NM_SETTING_CONNECTION_ID))

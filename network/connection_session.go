@@ -282,7 +282,6 @@ func (session *ConnectionSession) GetKey(page, key string) (value string) {
 			// }
 		}
 	}
-
 	return
 }
 
@@ -293,17 +292,22 @@ func (session *ConnectionSession) SetKey(page, key, value string) {
 	default:
 		LOGGER.Error("SetKey: invalid page name", page)
 	case pageGeneral:
+		generalSetSettingConnectionKey(session.data, key, value)
 	case pageEthernet:
+		generalSetSettingWiredKey(session.data, key, value)
 	case pageWifi:
+		generalSetSettingWirelessKey(session.data, key, value)
 	case pageIPv4:
-		setSettingIp4ConfigKey(session.data, key, value)
+		generalSetSettingIp4ConfigKey(session.data, key, value)
 	case pageIPv6:
+		generalSetSettingIp6ConfigKey(session.data, key, value)
 	case pageSecurity: // TODO
 		switch session.connType {
 		case typeWired:
 		case typeWireless:
 			// switch method {
-			// 	setSetting8021xKey(session.data, key, value)
+			// generalSetSettingWirelessSecurityKey(session.data, key, value)
+			// generalSetSetting8021xKey(session.data, key, value)
 			// }
 		}
 	}

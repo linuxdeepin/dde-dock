@@ -89,6 +89,37 @@ func generalGetSettingIp6ConfigKey(data _ConnectionData, key string) (value stri
 	return
 }
 
+// TODO use logic setter
+func generalSetSettingIp6ConfigKey(data _ConnectionData, key, value string) {
+	switch key {
+	default:
+		LOGGER.Error("generalSetSettingIp6ConfigKey: invalide key", key)
+	case NM_SETTING_IP6_CONFIG_METHOD:
+		setSettingIp6ConfigMethod(data, value)
+	case NM_SETTING_IP6_CONFIG_DNS:
+		setSettingIp6ConfigDns(data, value)
+	case NM_SETTING_IP6_CONFIG_DNS_SEARCH:
+		setSettingIp6ConfigDnsSearch(data, value)
+	case NM_SETTING_IP6_CONFIG_ADDRESSES:
+		setSettingIp6ConfigAddresses(data, value)
+	case NM_SETTING_IP6_CONFIG_ROUTES:
+		setSettingIp6ConfigRoutes(data, value)
+	case NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES:
+		setSettingIp6ConfigIgnoreAutoRoutes(data, value)
+	case NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS:
+		setSettingIp6ConfigIgnoreAutoDns(data, value)
+	case NM_SETTING_IP6_CONFIG_NEVER_DEFAULT:
+		setSettingIp6ConfigNeverDefault(data, value)
+	case NM_SETTING_IP6_CONFIG_MAY_FAIL:
+		setSettingIp6ConfigMayFail(data, value)
+	case NM_SETTING_IP6_CONFIG_IP6_PRIVACY:
+		setSettingIp6ConfigIp6Privacy(data, value)
+	case NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME:
+		setSettingIp6ConfigDhcpHostname(data, value)
+	}
+	return
+}
+
 // Getter
 func getSettingIp6ConfigMethod(data _ConnectionData) (value string) {
 	value = getConnectionDataKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_METHOD, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_METHOD))

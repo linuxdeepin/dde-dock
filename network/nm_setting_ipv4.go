@@ -206,13 +206,13 @@ func generalGetSettingIp4ConfigKey(data _ConnectionData, key string) (value stri
 	return
 }
 
-// TODO:logic setter
-func setSettingIp4ConfigKey(data _ConnectionData, key, value string) {
+// TODO use logic setter
+func generalSetSettingIp4ConfigKey(data _ConnectionData, key, value string) {
 	switch key {
 	default:
-		LOGGER.Error("getSettingIp4ConfigKey: invalide key", key)
+		LOGGER.Error("generalSetSettingIp4ConfigKey: invalide key", key)
 	case NM_SETTING_IP4_CONFIG_METHOD:
-		setSettingIp4ConfigMethod(data, value)
+		setSettingIp4ConfigMethod(data, value) // TODO
 	case NM_SETTING_IP4_CONFIG_DNS:
 		setSettingIp4ConfigDns(data, value)
 	case NM_SETTING_IP4_CONFIG_DNS_SEARCH:

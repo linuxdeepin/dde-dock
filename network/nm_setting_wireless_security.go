@@ -209,6 +209,49 @@ func generalGetSettingWirelessSecurityKey(data _ConnectionData, key string) (val
 	return
 }
 
+// TODO use logic setter
+func generalSetSettingWirelessSecurityKey(data _ConnectionData, key, value string) {
+	switch key {
+	default:
+		LOGGER.Error("generalSetSettingWirelessSecurityKey: invalide key", key)
+	case NM_SETTING_WIRELESS_SECURITY_KEY_MGMT:
+		setSettingWirelessSecurityKeyMgmt(data, value)
+	case NM_SETTING_WIRELESS_SECURITY_WEP_TX_KEYIDX:
+		setSettingWirelessSecurityWepTxKeyidx(data, value)
+	case NM_SETTING_WIRELESS_SECURITY_AUTH_ALG:
+		setSettingWirelessSecurityAuthAlg(data, value)
+	case NM_SETTING_WIRELESS_SECURITY_PROTO:
+		setSettingWirelessSecurityProto(data, value)
+	case NM_SETTING_WIRELESS_SECURITY_PAIRWISE:
+		setSettingWirelessSecurityPairwise(data, value)
+	case NM_SETTING_WIRELESS_SECURITY_GROUP:
+		setSettingWirelessSecurityGroup(data, value)
+	case NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME:
+		setSettingWirelessSecurityLeapUsername(data, value)
+	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY0:
+		setSettingWirelessSecurityWepKey0(data, value)
+	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY1:
+		setSettingWirelessSecurityWepKey1(data, value)
+	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY2:
+		setSettingWirelessSecurityWepKey2(data, value)
+	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY3:
+		setSettingWirelessSecurityWepKey3(data, value)
+	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY_FLAGS:
+		setSettingWirelessSecurityWepKeyFlags(data, value)
+	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE:
+		setSettingWirelessSecurityWepKeyType(data, value)
+	case NM_SETTING_WIRELESS_SECURITY_PSK:
+		setSettingWirelessSecurityPsk(data, value)
+	case NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS:
+		setSettingWirelessSecurityPskFlags(data, value)
+	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD:
+		setSettingWirelessSecurityLeapPassword(data, value)
+	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS:
+		setSettingWirelessSecurityLeapPasswordFlags(data, value)
+	}
+	return
+}
+
 // Getter
 func getSettingWirelessSecurityKeyMgmt(data _ConnectionData) (value string) {
 	value = getConnectionDataKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT, getSettingWirelessSecurityKeyType(NM_SETTING_WIRELESS_SECURITY_KEY_MGMT))

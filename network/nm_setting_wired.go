@@ -149,6 +149,37 @@ func generalGetSettingWiredKey(data _ConnectionData, key string) (value string) 
 	return
 }
 
+// TODO use logic setter
+func generalSetSettingWiredKey(data _ConnectionData, key, value string) {
+	switch key {
+	default:
+		LOGGER.Error("generalSetSettingWiredKey: invalide key", key)
+	case NM_SETTING_WIRED_PORT:
+		setSettingWiredPort(data, value)
+	case NM_SETTING_WIRED_SPEED:
+		setSettingWiredSpeed(data, value)
+	case NM_SETTING_WIRED_DUPLEX:
+		setSettingWiredDuplex(data, value)
+	case NM_SETTING_WIRED_AUTO_NEGOTIATE:
+		setSettingWiredAutoNegotiate(data, value)
+	case NM_SETTING_WIRED_MAC_ADDRESS:
+		setSettingWiredMacAddress(data, value)
+	case NM_SETTING_WIRED_CLONED_MAC_ADDRESS:
+		setSettingWiredClonedMacAddress(data, value)
+	case NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST:
+		setSettingWiredMacAddressBlacklist(data, value)
+	case NM_SETTING_WIRED_MTU:
+		setSettingWiredMtu(data, value)
+	case NM_SETTING_WIRED_S390_SUBCHANNELS:
+		setSettingWiredS390Subchannels(data, value)
+	case NM_SETTING_WIRED_S390_NETTYPE:
+		setSettingWiredS390Nettype(data, value)
+	case NM_SETTING_WIRED_S390_OPTIONS:
+		setSettingWiredS390Options(data, value)
+	}
+	return
+}
+
 // Getter
 func getSettingWiredPort(data _ConnectionData) (value string) {
 	value = getConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_PORT, getSettingWiredKeyType(NM_SETTING_WIRED_PORT))

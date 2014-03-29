@@ -183,6 +183,77 @@ func generalGetSetting8021xKey(data _ConnectionData, key string) (value string) 
 	return
 }
 
+// TODO use logic setter
+func generalSetSetting8021xKey(data _ConnectionData, key, value string) {
+	switch key {
+	default:
+		LOGGER.Error("generalSetSetting8021xKey: invalide key", key)
+	case NM_SETTING_802_1X_EAP:
+		setSetting8021xEap(data, value)
+	case NM_SETTING_802_1X_IDENTITY:
+		setSetting8021xIdentity(data, value)
+	case NM_SETTING_802_1X_ANONYMOUS_IDENTITY:
+		setSetting8021xAnonymousIdentity(data, value)
+	case NM_SETTING_802_1X_PAC_FILE:
+		setSetting8021xPacFile(data, value)
+	case NM_SETTING_802_1X_CA_CERT:
+		setSetting8021xCaCert(data, value)
+	case NM_SETTING_802_1X_CA_PATH:
+		setSetting8021xCaPath(data, value)
+	case NM_SETTING_802_1X_SUBJECT_MATCH:
+		setSetting8021xSubjectMatch(data, value)
+	case NM_SETTING_802_1X_ALTSUBJECT_MATCHES:
+		setSetting8021xAltsubjectMatches(data, value)
+	case NM_SETTING_802_1X_CLIENT_CERT:
+		setSetting8021xClientCert(data, value)
+	case NM_SETTING_802_1X_PHASE1_PEAPVER:
+		setSetting8021xPhase1Peapver(data, value)
+	case NM_SETTING_802_1X_PHASE1_PEAPLABEL:
+		setSetting8021xPhase1Peaplabel(data, value)
+	case NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING:
+		setSetting8021xPhase1FastProvisioning(data, value)
+	case NM_SETTING_802_1X_PHASE2_AUTH:
+		setSetting8021xPhase2Auth(data, value)
+	case NM_SETTING_802_1X_PHASE2_AUTHEAP:
+		setSetting8021xPhase2Autheap(data, value)
+	case NM_SETTING_802_1X_PHASE2_CA_CERT:
+		setSetting8021xPhase2CaCert(data, value)
+	case NM_SETTING_802_1X_PHASE2_CA_PATH:
+		setSetting8021xPhase2CaPath(data, value)
+	case NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH:
+		setSetting8021xPhase2SubjectMatch(data, value)
+	case NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES:
+		setSetting8021xPhase2AltsubjectMatches(data, value)
+	case NM_SETTING_802_1X_PASSWORD:
+		setSetting8021xPassword(data, value)
+	case NM_SETTING_802_1X_PASSWORD_FLAGS:
+		setSetting8021xPasswordFlags(data, value)
+	case NM_SETTING_802_1X_PASSWORD_RAW:
+		setSetting8021xPasswordRaw(data, value)
+	case NM_SETTING_802_1X_PASSWORD_RAW_FLAGS:
+		setSetting8021xPasswordRawFlags(data, value)
+	case NM_SETTING_802_1X_PRIVATE_KEY:
+		setSetting8021xPrivateKey(data, value)
+	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD:
+		setSetting8021xPrivateKeyPassword(data, value)
+	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS:
+		setSetting8021xPrivateKeyPasswordFlags(data, value)
+	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY:
+		setSetting8021xPhase2PrivateKey(data, value)
+	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD:
+		setSetting8021xPhase2PrivateKeyPassword(data, value)
+	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS:
+		setSetting8021xPhase2PrivateKeyPasswordFlags(data, value)
+	case NM_SETTING_802_1X_PIN:
+		setSetting8021xPin(data, value)
+	case NM_SETTING_802_1X_PIN_FLAGS:
+		setSetting8021xPinFlags(data, value)
+	case NM_SETTING_802_1X_SYSTEM_CA_CERTS:
+		setSetting8021xSystemCaCerts(data, value)
+	}
+	return
+}
+
 // Getter
 func getSetting8021xEap(data _ConnectionData) (value string) {
 	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_EAP, getSetting8021xKeyType(NM_SETTING_802_1X_EAP))

@@ -238,6 +238,43 @@ func generalGetSettingWirelessKey(data _ConnectionData, key string) (value strin
 	return
 }
 
+// TODO use logic setter
+func generalSetSettingWirelessKey(data _ConnectionData, key, value string) {
+	switch key {
+	default:
+		LOGGER.Error("generalSetSettingWirelessKey: invalide key", key)
+	case NM_SETTING_WIRELESS_SSID:
+		setSettingWirelessSsid(data, value)
+	case NM_SETTING_WIRELESS_MODE:
+		setSettingWirelessMode(data, value)
+	case NM_SETTING_WIRELESS_BAND:
+		setSettingWirelessBand(data, value)
+	case NM_SETTING_WIRELESS_CHANNEL:
+		setSettingWirelessChannel(data, value)
+	case NM_SETTING_WIRELESS_BSSID:
+		setSettingWirelessBssid(data, value)
+	case NM_SETTING_WIRELESS_RATE:
+		setSettingWirelessRate(data, value)
+	case NM_SETTING_WIRELESS_TX_POWER:
+		setSettingWirelessTxPower(data, value)
+	case NM_SETTING_WIRELESS_MAC_ADDRESS:
+		setSettingWirelessMacAddress(data, value)
+	case NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS:
+		setSettingWirelessClonedMacAddress(data, value)
+	case NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST:
+		setSettingWirelessMacAddressBlacklist(data, value)
+	case NM_SETTING_WIRELESS_MTU:
+		setSettingWirelessMtu(data, value)
+	case NM_SETTING_WIRELESS_SEEN_BSSIDS:
+		setSettingWirelessSeenBssids(data, value)
+	case NM_SETTING_WIRELESS_SEC:
+		setSettingWirelessSec(data, value)
+	case NM_SETTING_WIRELESS_HIDDEN:
+		setSettingWirelessHidden(data, value)
+	}
+	return
+}
+
 // Getter
 func getSettingWirelessSsid(data _ConnectionData) (value string) {
 	value = getConnectionDataKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SSID, getSettingWirelessKeyType(NM_SETTING_WIRELESS_SSID))
