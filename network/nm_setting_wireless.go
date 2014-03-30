@@ -113,7 +113,6 @@ func newWirelessConnectionData(id, uuid, ssid string, keyFlag int) (data _Connec
 	setSettingConnectionType(data, typeWireless)
 
 	addConnectionDataField(data, fieldWireless)
-	LOGGER.Debug("ssid:", ssid) // TODO Tenda_40C558
 	setSettingWirelessSsid(data, ssid)
 
 	if keyFlag != ApKeyNone {

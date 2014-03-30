@@ -22,13 +22,14 @@ const (
 )
 
 const (
-	testKtypeString           = "test string"
-	testKtypeByte             = "a"
-	testKtypeInt32            = "-32"
-	testKtypeUint32           = "32"
-	testKtypeUint64           = "64"
-	testKtypeBoolean          = "true"
-	testKtypeArrayByte        = `"YXJyYXkgYnl0ZQ=="` // "array byte"
+	testKtypeString  = "test string"
+	testKtypeByte    = "a"
+	testKtypeInt32   = "-32"
+	testKtypeUint32  = "32"
+	testKtypeUint64  = "64"
+	testKtypeBoolean = "true"
+	// testKtypeArrayByte        = `"YXJyYXkgYnl0ZQ=="` // json, "array byte"
+	testKtypeArrayByte        = `array byte`
 	testKtypeArrayString      = `["str1","str2"]`
 	testKtypeArrayUint32      = `[32,32]`
 	testKtypeArrayArrayByte   = `["YXJyYXkgYnl0ZQ==","YXJyYXkgYnl0ZQ=="]`
@@ -42,6 +43,7 @@ const (
 
 func (*Utils) TestGetSetConnectionData(c *C) {
 	data := make(_ConnectionData)
+	addConnectionDataField(data, fieldConnection)
 	setSettingConnectionId(data, testConnectionId)
 	setSettingConnectionUuid(data, testConnectionUuid)
 	setSettingConnectionType(data, testConnectionType)

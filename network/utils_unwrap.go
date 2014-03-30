@@ -115,8 +115,10 @@ func unwrapVariantArrayByte(v dbus.Variant) (s string, err error) {
 		err = fmt.Errorf("unwrapVariantArrayByte() failed: %v", v)
 		return
 	}
-	b, err := json.Marshal(d)
-	s = string(b)
+	// TODO unwrap throuh json
+	// b, err := json.Marshal(d)
+	// s = string(b)
+	s = string(d)
 	return
 }
 

@@ -201,7 +201,9 @@ func wrapVariantBoolean(s string) (v dbus.Variant, err error) {
 
 func wrapVariantArrayByte(s string) (v dbus.Variant, err error) {
 	var d []byte
-	err = json.Unmarshal([]byte(s), &d)
+	// TODO wrap throuh json
+	// err = json.Unmarshal([]byte(s), &d)
+	d = []byte(s)
 	v = dbus.MakeVariant(d)
 	return
 }
