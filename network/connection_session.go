@@ -13,10 +13,8 @@ type ConnectionSession struct {
 	connType    string
 
 	CurrentUUID string // TODO hide property
-	// currentPage string // TODO remove
 
-	HasChanged bool
-	AllowSave  bool // TODO really need?
+	AllowSave bool // TODO really need?
 
 	// 前端只显示此列表中的字段, 会跟随当前正在编辑的值而改变
 	// TODO more documentation
@@ -31,7 +29,6 @@ type ConnectionSession struct {
 func doNewConnectionSession() (session *ConnectionSession) {
 	session = &ConnectionSession{}
 	session.data = make(_ConnectionData)
-	session.HasChanged = false
 	session.AllowSave = false // TODO
 	session.AvailableKeys = make(map[string][]string)
 	session.Errors = make(map[string]map[string]string)
@@ -52,13 +49,12 @@ func NewConnectionSessionByCreate(connType string) (session *ConnectionSession, 
 	// TODO
 	session.connType = connType
 
-	// session.updatePropCurrentUUID(uuid)
-	// session.updatePropHasChanged(true)
-
 	// TODO
 	session.updatePropAvailableKeys()
+	session.updatePropAllowSave(false)
 
 	// TODO current errors
+
 	return
 }
 
@@ -87,6 +83,7 @@ func NewConnectionSessionByOpen(uuid string) (session *ConnectionSession, err er
 
 	// TODO
 	session.updatePropAvailableKeys()
+	session.updatePropAllowSave(false)
 
 	// TODO
 	LOGGER.Debug("NewConnectionSessionByOpen():", session.data)
@@ -96,14 +93,8 @@ func NewConnectionSessionByOpen(uuid string) (session *ConnectionSession, err er
 
 // Save save current connection session.
 func (session *ConnectionSession) Save() bool {
-	if session.isErrorOccured() {
+	if !session.AllowSave {
 		return false
-	}
-
-	// TODO
-	if !session.HasChanged {
-		dbus.UnInstallObject(session)
-		return true
 	}
 
 	// TODO what about the connection has been deleted?
@@ -265,14 +256,18 @@ func (session *ConnectionSession) SetKey(page, key, value string) {
 
 	// TODO
 	session.updatePropAvailableKeys()
-	// session.updatePropAllowSave()
+
+	if !session.isErrorOccured() {
+		session.updatePropAllowSave(true)
+	}
+
 	return
 }
 
 // TODO CheckValues check target value if is correct.
-func (session *ConnectionSession) CheckValue(page, key, value string) (ok bool) {
-	return
-}
+// func (session *ConnectionSession) CheckValue(page, key, value string) (ok bool) {
+// 	return
+// }
 
 // TODO remove
 //仅仅调试使用，返回某个页面支持的字段。 因为字段如何安排(位置、我们是否要提供这个字段)是由前端决定的。

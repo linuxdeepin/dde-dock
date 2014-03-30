@@ -12,11 +12,6 @@ func (session *ConnectionSession) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (session *ConnectionSession) updatePropHasChanged(v bool) {
-	session.HasChanged = v
-	dbus.NotifyChange(session, "HasChanged")
-}
-
 // TODO
 func (session *ConnectionSession) updatePropAllowSave(v bool) {
 	session.AllowSave = v
