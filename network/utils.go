@@ -83,13 +83,14 @@ func setConnectionDataKey(data _ConnectionData, field, key, value string, t ktyp
 	var fieldData map[string]dbus.Variant
 	fieldData, ok := data[field]
 	if !ok {
-		// create field if not exists yet
-		addConnectionDataField(data, field)
+		LOGGER.Error(fmt.Errorf(`set connection data failed, field "%s" is not exits yet`, field))
+		return
 	}
 
 	valueVariant, err := wrapVariant(value, t)
 	if err != nil {
-		LOGGER.Error("set connection data failed:", err)
+		LOGGER.Errorf("set connection data failed, value=%s, ktype=%s, error message:%v",
+			value, getKtypeDescription(t), err)
 		return
 	}
 	fieldData[key] = valueVariant

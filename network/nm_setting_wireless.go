@@ -106,13 +106,18 @@ const (
 
 func newWirelessConnectionData(id, uuid, ssid string, keyFlag int) (data _ConnectionData) {
 	data = make(_ConnectionData)
+
+	addConnectionDataField(data, fieldConnection)
 	setSettingConnectionId(data, id)
 	setSettingConnectionUuid(data, uuid)
 	setSettingConnectionType(data, typeWireless)
 
+	addConnectionDataField(data, fieldWireless)
+	LOGGER.Debug("ssid:", ssid) // TODO Tenda_40C558
 	setSettingWirelessSsid(data, ssid)
 
 	if keyFlag != ApKeyNone {
+		addConnectionDataField(data, fieldWirelessSecurity)
 		setSettingWirelessSec(data, fieldWirelessSecurity)
 		switch keyFlag {
 		case ApKeyWep:
@@ -126,7 +131,10 @@ func newWirelessConnectionData(id, uuid, ssid string, keyFlag int) (data _Connec
 		}
 	}
 
+	addConnectionDataField(data, fieldIPv4)
 	setSettingIp4ConfigMethod(data, NM_SETTING_IP4_CONFIG_METHOD_AUTO)
+
+	addConnectionDataField(data, fieldIPv6)
 	setSettingIp6ConfigMethod(data, NM_SETTING_IP6_CONFIG_METHOD_AUTO)
 
 	return

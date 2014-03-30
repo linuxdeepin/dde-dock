@@ -52,6 +52,42 @@ var ktypeDescriptions = []ktypeDescription{
 	{uint32(ktypeIpv6Routes), "Ipv6Routes, array of (byte array, uint32, byte array, uint32), encode by json"},
 }
 
+func getKtypeDescription(t ktype) (desc string) {
+	switch t {
+	case ktypeUnknown:
+		desc = "Unknown"
+	case ktypeString:
+		desc = "String"
+	case ktypeByte:
+		desc = "Byte"
+	case ktypeInt32:
+		desc = "Int32"
+	case ktypeUint32:
+		desc = "Uint32"
+	case ktypeUint64:
+		desc = "Uint64"
+	case ktypeBoolean:
+		desc = "Boolean"
+	case ktypeArrayByte:
+		desc = "ArrayByte"
+	case ktypeArrayString:
+		desc = "ArrayString, encode by json"
+	case ktypeArrayUint32:
+		desc = "ArrayUint32, encode by json"
+	case ktypeArrayArrayByte:
+		desc = "ArrayArrayByte, array of array of byte, encode by json"
+	case ktypeArrayArrayUint32:
+		desc = "ArrayArrayUint32, array of array of uint32, encode by json"
+	case ktypeDictStringString:
+		desc = "DictStringString, dict of (string::string), encode by json"
+	case ktypeIpv6Addresses:
+		desc = "Ipv6Addresses, array of (byte array, uint32, byte array), encode by json"
+	case ktypeIpv6Routes:
+		desc = "Ipv6Routes, array of (byte array, uint32, byte array, uint32), encode by json"
+	}
+	return
+}
+
 // Ipv6Addresses is an array of (byte array, uint32, byte array)
 type Ipv6Address struct {
 	Address []byte
