@@ -127,146 +127,169 @@ func getSettingConnectionKeyType(key string) (t ktype) {
 }
 
 // Get and set key's value generally
-func generalGetSettingConnectionKey(data _ConnectionData, key string) (value string) {
+func generalGetSettingConnectionKeyJSON(data _ConnectionData, key string) (value string) {
 	switch key {
 	default:
 		LOGGER.Error("generalGetSettingConnectionKey: invalide key", key)
 	case NM_SETTING_CONNECTION_ID:
-		value = getSettingConnectionId(data)
+		value = getSettingConnectionIdJSON(data)
 	case NM_SETTING_CONNECTION_UUID:
-		value = getSettingConnectionUuid(data)
+		value = getSettingConnectionUuidJSON(data)
 	case NM_SETTING_CONNECTION_TYPE:
-		value = getSettingConnectionType(data)
+		value = getSettingConnectionTypeJSON(data)
 	case NM_SETTING_CONNECTION_AUTOCONNECT:
-		value = getSettingConnectionAutoconnect(data)
+		value = getSettingConnectionAutoconnectJSON(data)
 	case NM_SETTING_CONNECTION_TIMESTAMP:
-		value = getSettingConnectionTimestamp(data)
+		value = getSettingConnectionTimestampJSON(data)
 	case NM_SETTING_CONNECTION_READ_ONLY:
-		value = getSettingConnectionReadOnly(data)
+		value = getSettingConnectionReadOnlyJSON(data)
 	case NM_SETTING_CONNECTION_PERMISSIONS:
-		value = getSettingConnectionPermissions(data)
+		value = getSettingConnectionPermissionsJSON(data)
 	case NM_SETTING_CONNECTION_ZONE:
-		value = getSettingConnectionZone(data)
+		value = getSettingConnectionZoneJSON(data)
 	case NM_SETTING_CONNECTION_MASTER:
-		value = getSettingConnectionMaster(data)
+		value = getSettingConnectionMasterJSON(data)
 	case NM_SETTING_CONNECTION_SLAVE_TYPE:
-		value = getSettingConnectionSlaveType(data)
+		value = getSettingConnectionSlaveTypeJSON(data)
 	case NM_SETTING_CONNECTION_SECONDARIES:
-		value = getSettingConnectionSecondaries(data)
+		value = getSettingConnectionSecondariesJSON(data)
 	}
 	return
 }
 
 // TODO use logic setter
-func generalSetSettingConnectionKey(data _ConnectionData, key, value string) {
+func generalSetSettingConnectionKeyJSON(data _ConnectionData, key, value string) {
 	switch key {
 	default:
 		LOGGER.Error("generalSetSettingConnectionKey: invalide key", key)
 	case NM_SETTING_CONNECTION_ID:
-		setSettingConnectionId(data, value)
+		setSettingConnectionIdJSON(data, value)
 	case NM_SETTING_CONNECTION_UUID:
-		setSettingConnectionUuid(data, value)
+		setSettingConnectionUuidJSON(data, value)
 	case NM_SETTING_CONNECTION_TYPE:
-		setSettingConnectionType(data, value)
+		setSettingConnectionTypeJSON(data, value)
 	case NM_SETTING_CONNECTION_AUTOCONNECT:
-		setSettingConnectionAutoconnect(data, value)
+		setSettingConnectionAutoconnectJSON(data, value)
 	case NM_SETTING_CONNECTION_TIMESTAMP:
-		setSettingConnectionTimestamp(data, value)
+		setSettingConnectionTimestampJSON(data, value)
 	case NM_SETTING_CONNECTION_READ_ONLY:
-		setSettingConnectionReadOnly(data, value)
+		setSettingConnectionReadOnlyJSON(data, value)
 	case NM_SETTING_CONNECTION_PERMISSIONS:
-		setSettingConnectionPermissions(data, value)
+		setSettingConnectionPermissionsJSON(data, value)
 	case NM_SETTING_CONNECTION_ZONE:
-		setSettingConnectionZone(data, value)
+		setSettingConnectionZoneJSON(data, value)
 	case NM_SETTING_CONNECTION_MASTER:
-		setSettingConnectionMaster(data, value)
+		setSettingConnectionMasterJSON(data, value)
 	case NM_SETTING_CONNECTION_SLAVE_TYPE:
-		setSettingConnectionSlaveType(data, value)
+		setSettingConnectionSlaveTypeJSON(data, value)
 	case NM_SETTING_CONNECTION_SECONDARIES:
-		setSettingConnectionSecondaries(data, value)
+		setSettingConnectionSecondariesJSON(data, value)
 	}
 	return
 }
 
-// Getter
+// TODO tmp
 func getSettingConnectionId(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_ID, getSettingConnectionKeyType(NM_SETTING_CONNECTION_ID))
+	value = getConnectionDataKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_ID, getSettingConnectionKeyType(NM_SETTING_CONNECTION_ID))
 	return
 }
 func getSettingConnectionUuid(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_UUID, getSettingConnectionKeyType(NM_SETTING_CONNECTION_UUID))
+	value = getConnectionDataKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_UUID, getSettingConnectionKeyType(NM_SETTING_CONNECTION_UUID))
 	return
 }
 func getSettingConnectionType(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TYPE, getSettingConnectionKeyType(NM_SETTING_CONNECTION_TYPE))
+	value = getConnectionDataKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TYPE, getSettingConnectionKeyType(NM_SETTING_CONNECTION_TYPE))
 	return
 }
-func getSettingConnectionAutoconnect(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_802_1X_SYSTEM_CA_CERTS, getSettingConnectionKeyType(NM_SETTING_CONNECTION_AUTOCONNECT))
+func setSettingConnectionId(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_ID, value, getSettingConnectionKeyType(NM_SETTING_CONNECTION_ID))
+}
+func setSettingConnectionUuid(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_UUID, value, getSettingConnectionKeyType(NM_SETTING_CONNECTION_UUID))
+}
+func setSettingConnectionType(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TYPE, value, getSettingConnectionKeyType(NM_SETTING_CONNECTION_TYPE))
+}
+
+// Getter
+func getSettingConnectionIdJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_ID, getSettingConnectionKeyType(NM_SETTING_CONNECTION_ID))
 	return
 }
-func getSettingConnectionTimestamp(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TIMESTAMP, getSettingConnectionKeyType(NM_SETTING_CONNECTION_TIMESTAMP))
+func getSettingConnectionUuidJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_UUID, getSettingConnectionKeyType(NM_SETTING_CONNECTION_UUID))
 	return
 }
-func getSettingConnectionReadOnly(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_READ_ONLY, getSettingConnectionKeyType(NM_SETTING_CONNECTION_READ_ONLY))
+func getSettingConnectionTypeJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TYPE, getSettingConnectionKeyType(NM_SETTING_CONNECTION_TYPE))
 	return
 }
-func getSettingConnectionPermissions(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_PERMISSIONS, getSettingConnectionKeyType(NM_SETTING_CONNECTION_PERMISSIONS))
+func getSettingConnectionAutoconnectJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_802_1X_SYSTEM_CA_CERTS, getSettingConnectionKeyType(NM_SETTING_CONNECTION_AUTOCONNECT))
 	return
 }
-func getSettingConnectionZone(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_ZONE, getSettingConnectionKeyType(NM_SETTING_CONNECTION_ZONE))
+func getSettingConnectionTimestampJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TIMESTAMP, getSettingConnectionKeyType(NM_SETTING_CONNECTION_TIMESTAMP))
 	return
 }
-func getSettingConnectionMaster(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_MASTER, getSettingConnectionKeyType(NM_SETTING_CONNECTION_MASTER))
+func getSettingConnectionReadOnlyJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_READ_ONLY, getSettingConnectionKeyType(NM_SETTING_CONNECTION_READ_ONLY))
 	return
 }
-func getSettingConnectionSlaveType(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_SLAVE_TYPE, getSettingConnectionKeyType(NM_SETTING_CONNECTION_SLAVE_TYPE))
+func getSettingConnectionPermissionsJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_PERMISSIONS, getSettingConnectionKeyType(NM_SETTING_CONNECTION_PERMISSIONS))
 	return
 }
-func getSettingConnectionSecondaries(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_SECONDARIES, getSettingConnectionKeyType(NM_SETTING_CONNECTION_SECONDARIES))
+func getSettingConnectionZoneJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_ZONE, getSettingConnectionKeyType(NM_SETTING_CONNECTION_ZONE))
+	return
+}
+func getSettingConnectionMasterJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_MASTER, getSettingConnectionKeyType(NM_SETTING_CONNECTION_MASTER))
+	return
+}
+func getSettingConnectionSlaveTypeJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_SLAVE_TYPE, getSettingConnectionKeyType(NM_SETTING_CONNECTION_SLAVE_TYPE))
+	return
+}
+func getSettingConnectionSecondariesJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_SECONDARIES, getSettingConnectionKeyType(NM_SETTING_CONNECTION_SECONDARIES))
 	return
 }
 
 // Setter
-func setSettingConnectionId(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_ID, value, getSettingConnectionKeyType(NM_SETTING_CONNECTION_ID))
+func setSettingConnectionIdJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_ID, value, getSettingConnectionKeyType(NM_SETTING_CONNECTION_ID))
 }
-func setSettingConnectionUuid(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_UUID, value, getSettingConnectionKeyType(NM_SETTING_CONNECTION_UUID))
+func setSettingConnectionUuidJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_UUID, value, getSettingConnectionKeyType(NM_SETTING_CONNECTION_UUID))
 }
-func setSettingConnectionType(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TYPE, value, getSettingConnectionKeyType(NM_SETTING_CONNECTION_TYPE))
+func setSettingConnectionTypeJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TYPE, value, getSettingConnectionKeyType(NM_SETTING_CONNECTION_TYPE))
 }
-func setSettingConnectionAutoconnect(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_AUTOCONNECT, value, getSettingConnectionKeyType(NM_SETTING_CONNECTION_AUTOCONNECT))
+func setSettingConnectionAutoconnectJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_AUTOCONNECT, value, getSettingConnectionKeyType(NM_SETTING_CONNECTION_AUTOCONNECT))
 }
-func setSettingConnectionTimestamp(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TIMESTAMP, value, getSettingConnectionKeyType(NM_SETTING_CONNECTION_TIMESTAMP))
+func setSettingConnectionTimestampJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TIMESTAMP, value, getSettingConnectionKeyType(NM_SETTING_CONNECTION_TIMESTAMP))
 }
-func setSettingConnectionReadOnly(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_READ_ONLY, value, getSettingConnectionKeyType(NM_SETTING_CONNECTION_READ_ONLY))
+func setSettingConnectionReadOnlyJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_READ_ONLY, value, getSettingConnectionKeyType(NM_SETTING_CONNECTION_READ_ONLY))
 }
-func setSettingConnectionPermissions(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_PERMISSIONS, value, getSettingConnectionKeyType(NM_SETTING_CONNECTION_PERMISSIONS))
+func setSettingConnectionPermissionsJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_PERMISSIONS, value, getSettingConnectionKeyType(NM_SETTING_CONNECTION_PERMISSIONS))
 }
-func setSettingConnectionZone(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_ZONE, value, getSettingConnectionKeyType(NM_SETTING_CONNECTION_ZONE))
+func setSettingConnectionZoneJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_ZONE, value, getSettingConnectionKeyType(NM_SETTING_CONNECTION_ZONE))
 }
-func setSettingConnectionMaster(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_MASTER, value, getSettingConnectionKeyType(NM_SETTING_CONNECTION_MASTER))
+func setSettingConnectionMasterJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_MASTER, value, getSettingConnectionKeyType(NM_SETTING_CONNECTION_MASTER))
 }
-func setSettingConnectionSlaveType(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_SLAVE_TYPE, value, getSettingConnectionKeyType(NM_SETTING_CONNECTION_SLAVE_TYPE))
+func setSettingConnectionSlaveTypeJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_SLAVE_TYPE, value, getSettingConnectionKeyType(NM_SETTING_CONNECTION_SLAVE_TYPE))
 }
-func setSettingConnectionSecondaries(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_SECONDARIES, value, getSettingConnectionKeyType(NM_SETTING_CONNECTION_SECONDARIES))
+func setSettingConnectionSecondariesJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_SECONDARIES, value, getSettingConnectionKeyType(NM_SETTING_CONNECTION_SECONDARIES))
 }
 
 // Remover

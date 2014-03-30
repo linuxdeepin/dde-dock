@@ -64,7 +64,7 @@ func (this *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPa
 
 }
 
-func newWirelessConnection(id string, ssid string, keyFlag int) string {
+func newWirelessConnection(id string, ssid []byte, keyFlag int) string {
 	uuid := newUUID()
 	data := newWirelessConnectionData(id, uuid, ssid, keyFlag)
 
@@ -82,7 +82,7 @@ func (this *Manager) GetConnectionByAccessPoint(path dbus.ObjectPath) (string, e
 		for _, c := range this.WirelessConnections {
 			if nmConn, err := nm.NewSettingsConnection(NMDest, path); err == nil {
 				if cdata, err := nmConn.GetSettings(); err == nil {
-					if getSettingWirelessSsid(cdata) == string(ap.Ssid.Get()) {
+					if string(getSettingWirelessSsid(cdata)) == string(ap.Ssid.Get()) { // TODO
 						return c, nil
 					}
 				}
@@ -90,7 +90,7 @@ func (this *Manager) GetConnectionByAccessPoint(path dbus.ObjectPath) (string, e
 
 		}
 		fmt.Println("CCC:", path, string(ap.Ssid.Get()))
-		return newWirelessConnection(string(ap.Ssid.Get()), string(ap.Ssid.Get()), parseFlags(ap.Flags.Get(), ap.WpaFlags.Get(), ap.RsnFlags.Get())), nil
+		return newWirelessConnection(string(ap.Ssid.Get()), []byte(ap.Ssid.Get()), parseFlags(ap.Flags.Get(), ap.WpaFlags.Get(), ap.RsnFlags.Get())), nil
 	} else {
 		return "", dbus.NewNoObjectError(path)
 	}

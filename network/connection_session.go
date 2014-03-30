@@ -205,22 +205,22 @@ func (session *ConnectionSession) GetKey(page, key string) (value string) {
 	default:
 		LOGGER.Error("GetKey: invalid page name", page)
 	case pageGeneral:
-		value = generalGetSettingConnectionKey(session.data, key)
+		value = generalGetSettingConnectionKeyJSON(session.data, key)
 	case pageEthernet:
-		value = generalGetSettingWiredKey(session.data, key)
+		value = generalGetSettingWiredKeyJSON(session.data, key)
 	case pageWifi:
-		value = generalGetSettingWirelessKey(session.data, key)
+		value = generalGetSettingWirelessKeyJSON(session.data, key)
 	case pageIPv4:
-		value = generalGetSettingIp4ConfigKey(session.data, key)
+		value = generalGetSettingIp4ConfigKeyJSON(session.data, key)
 	case pageIPv6:
-		value = generalGetSettingIp6ConfigKey(session.data, key)
+		value = generalGetSettingIp6ConfigKeyJSON(session.data, key)
 	case pageSecurity: // TODO
 		switch session.connType {
 		case typeWired:
 		case typeWireless:
 			// switch method {
-			// value = generalGetSettingWirelessSecurityKey(session.data, key)
-			// value = generalGetSetting8021xKey(session.data, key)
+			// value = generalGetSettingWirelessSecurityKeyJSON(session.data, key)
+			// value = generalGetSetting8021xKeyJSON(session.data, key)
 			// }
 		}
 	}
@@ -232,22 +232,22 @@ func (session *ConnectionSession) SetKey(page, key, value string) {
 	default:
 		LOGGER.Error("SetKey: invalid page name", page)
 	case pageGeneral:
-		generalSetSettingConnectionKey(session.data, key, value)
+		generalSetSettingConnectionKeyJSON(session.data, key, value)
 	case pageEthernet:
-		generalSetSettingWiredKey(session.data, key, value)
+		generalSetSettingWiredKeyJSON(session.data, key, value)
 	case pageWifi:
-		generalSetSettingWirelessKey(session.data, key, value)
+		generalSetSettingWirelessKeyJSON(session.data, key, value)
 	case pageIPv4:
-		generalSetSettingIp4ConfigKey(session.data, key, value)
+		generalSetSettingIp4ConfigKeyJSON(session.data, key, value)
 	case pageIPv6:
-		generalSetSettingIp6ConfigKey(session.data, key, value)
+		generalSetSettingIp6ConfigKeyJSON(session.data, key, value)
 	case pageSecurity: // TODO
 		switch session.connType {
 		case typeWired:
 		case typeWireless:
 			// switch method {
-			// generalSetSettingWirelessSecurityKey(session.data, key, value)
-			// generalSetSetting8021xKey(session.data, key, value)
+			// generalSetSettingWirelessSecurityKeyJSON(session.data, key, value)
+			// generalSetSetting8021xKeyJSON(session.data, key, value)
 			// }
 		}
 	}

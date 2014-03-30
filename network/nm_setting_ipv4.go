@@ -199,7 +199,7 @@ func checkSettingIp4ConfigValues(data _ConnectionData) (errs map[string]string) 
 
 	for key, _ := range fieldData {
 		availableValues, customizable := getSettingIp4ConfigAvailableValues(key)
-		wrappedValue := generalGetSettingIp4ConfigKey(data, key)
+		wrappedValue := generalGetSettingIp4ConfigKeyJSON(data, key) // TODO
 		if !customizable && !isStringInArray(wrappedValue, availableValues) {
 			errs[key] = "invalid value: " + wrappedValue
 			continue
@@ -251,7 +251,7 @@ func checkSettingIp4ConfigValues(data _ConnectionData) (errs map[string]string) 
 		}
 	}
 
-	// method := getSettingIp4ConfigMethod(data)
+	// method := getSettingIp4ConfigMethodJSON(data)
 	// switch method {
 	// case NM_SETTING_IP4_CONFIG_METHOD_AUTO:
 	// 	// removeSettingIp4ConfigAddresses(data)
@@ -301,72 +301,72 @@ func getSettingIp4ConfigKeyType(key string) (t ktype) {
 }
 
 // Get and set key's value generally
-func generalGetSettingIp4ConfigKey(data _ConnectionData, key string) (value string) {
+func generalGetSettingIp4ConfigKeyJSON(data _ConnectionData, key string) (value string) {
 	switch key {
 	default:
 		LOGGER.Error("generalGetSettingIp4ConfigKey: invalide key", key)
 	case NM_SETTING_IP4_CONFIG_METHOD:
-		value = getSettingIp4ConfigMethod(data)
+		value = getSettingIp4ConfigMethodJSON(data)
 	case NM_SETTING_IP4_CONFIG_DNS:
-		value = getSettingIp4ConfigDns(data)
+		value = getSettingIp4ConfigDnsJSON(data)
 	case NM_SETTING_IP4_CONFIG_DNS_SEARCH:
-		value = getSettingIp4ConfigDnsSearch(data)
+		value = getSettingIp4ConfigDnsSearchJSON(data)
 	case NM_SETTING_IP4_CONFIG_ADDRESSES:
-		value = getSettingIp4ConfigAddresses(data)
+		value = getSettingIp4ConfigAddressesJSON(data)
 	case NM_SETTING_IP4_CONFIG_ROUTES:
-		value = getSettingIp4ConfigRoutes(data)
+		value = getSettingIp4ConfigRoutesJSON(data)
 	case NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES:
-		value = getSettingIp4ConfigIgnoreAutoRoutes(data)
+		value = getSettingIp4ConfigIgnoreAutoRoutesJSON(data)
 	case NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS:
-		value = getSettingIp4ConfigIgnoreAutoDns(data)
+		value = getSettingIp4ConfigIgnoreAutoDnsJSON(data)
 	case NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID:
-		value = getSettingIp4ConfigDhcpClientId(data)
+		value = getSettingIp4ConfigDhcpClientIdJSON(data)
 	case NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME:
-		value = getSettingIp4ConfigDhcpSendHostname(data)
+		value = getSettingIp4ConfigDhcpSendHostnameJSON(data)
 	case NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME:
-		value = getSettingIp4ConfigDhcpHostname(data)
+		value = getSettingIp4ConfigDhcpHostnameJSON(data)
 	case NM_SETTING_IP4_CONFIG_NEVER_DEFAULT:
-		value = getSettingIp4ConfigNeverDefault(data)
+		value = getSettingIp4ConfigNeverDefaultJSON(data)
 	case NM_SETTING_IP4_CONFIG_MAY_FAIL:
-		value = getSettingIp4ConfigMayFail(data)
+		value = getSettingIp4ConfigMayFailJSON(data)
 	}
 	return
 }
 
 // TODO use logic setter
-func generalSetSettingIp4ConfigKey(data _ConnectionData, key, value string) {
+func generalSetSettingIp4ConfigKeyJSON(data _ConnectionData, key, value string) {
 	switch key {
 	default:
 		LOGGER.Error("generalSetSettingIp4ConfigKey: invalide key", key)
 	case NM_SETTING_IP4_CONFIG_METHOD:
 		logicSetSettingIp4ConfigMethod(data, value) // TODO
 	case NM_SETTING_IP4_CONFIG_DNS:
-		setSettingIp4ConfigDns(data, value)
+		setSettingIp4ConfigDnsJSON(data, value)
 	case NM_SETTING_IP4_CONFIG_DNS_SEARCH:
-		setSettingIp4ConfigDnsSearch(data, value)
+		setSettingIp4ConfigDnsSearchJSON(data, value)
 	case NM_SETTING_IP4_CONFIG_ADDRESSES:
-		setSettingIp4ConfigAddresses(data, value)
+		setSettingIp4ConfigAddressesJSON(data, value)
 	case NM_SETTING_IP4_CONFIG_ROUTES:
-		setSettingIp4ConfigRoutes(data, value)
+		setSettingIp4ConfigRoutesJSON(data, value)
 	case NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES:
-		setSettingIp4ConfigIgnoreAutoRoutes(data, value)
+		setSettingIp4ConfigIgnoreAutoRoutesJSON(data, value)
 	case NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS:
-		setSettingIp4ConfigIgnoreAutoDns(data, value)
+		setSettingIp4ConfigIgnoreAutoDnsJSON(data, value)
 	case NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID:
-		setSettingIp4ConfigDhcpClientId(data, value)
+		setSettingIp4ConfigDhcpClientIdJSON(data, value)
 	case NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME:
-		setSettingIp4ConfigDhcpSendHostname(data, value)
+		setSettingIp4ConfigDhcpSendHostnameJSON(data, value)
 	case NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME:
-		setSettingIp4ConfigDhcpHostname(data, value)
+		setSettingIp4ConfigDhcpHostnameJSON(data, value)
 	case NM_SETTING_IP4_CONFIG_NEVER_DEFAULT:
-		setSettingIp4ConfigNeverDefault(data, value)
+		setSettingIp4ConfigNeverDefaultJSON(data, value)
 	case NM_SETTING_IP4_CONFIG_MAY_FAIL:
-		setSettingIp4ConfigMayFail(data, value)
+		setSettingIp4ConfigMayFailJSON(data, value)
 	}
 	return
 }
 
-// TODO Logic setter
+// TODO Logic setterJSON
 func logicSetSettingIp4ConfigMethod(data _ConnectionData, value string) {
 	switch value {
 	case NM_SETTING_IP4_CONFIG_METHOD_AUTO:
@@ -378,96 +378,105 @@ func logicSetSettingIp4ConfigMethod(data _ConnectionData, value string) {
 		removeSettingIp4ConfigDns(data)
 		removeSettingIp4ConfigAddresses(data)
 	}
-	setSettingIp4ConfigMethod(data, value)
+	setSettingIp4ConfigMethodJSON(data, value)
 	return
 }
 
-// Getter
+// TODO
 func getSettingIp4ConfigMethod(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_METHOD, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_METHOD))
+	value = getConnectionDataKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_METHOD, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_METHOD))
 	return
 }
-func getSettingIp4ConfigDns(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DNS))
+func setSettingIp4ConfigMethod(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_METHOD, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_METHOD))
+}
+
+// Getter
+func getSettingIp4ConfigMethodJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_METHOD, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_METHOD))
 	return
 }
-func getSettingIp4ConfigDnsSearch(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_SEARCH, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DNS_SEARCH))
+func getSettingIp4ConfigDnsJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DNS))
 	return
 }
-func getSettingIp4ConfigAddresses(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_ADDRESSES))
+func getSettingIp4ConfigDnsSearchJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_SEARCH, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DNS_SEARCH))
 	return
 }
-func getSettingIp4ConfigRoutes(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTES, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_ROUTES))
+func getSettingIp4ConfigAddressesJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_ADDRESSES))
 	return
 }
-func getSettingIp4ConfigIgnoreAutoRoutes(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES))
+func getSettingIp4ConfigRoutesJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTES, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_ROUTES))
 	return
 }
-func getSettingIp4ConfigIgnoreAutoDns(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS))
+func getSettingIp4ConfigIgnoreAutoRoutesJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES))
 	return
 }
-func getSettingIp4ConfigDhcpClientId(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID))
+func getSettingIp4ConfigIgnoreAutoDnsJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS))
 	return
 }
-func getSettingIp4ConfigDhcpSendHostname(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME))
+func getSettingIp4ConfigDhcpClientIdJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID))
 	return
 }
-func getSettingIp4ConfigDhcpHostname(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME))
+func getSettingIp4ConfigDhcpSendHostnameJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME))
 	return
 }
-func getSettingIp4ConfigNeverDefault(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_NEVER_DEFAULT, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_NEVER_DEFAULT))
+func getSettingIp4ConfigDhcpHostnameJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME))
 	return
 }
-func getSettingIp4ConfigMayFail(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_MAY_FAIL, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_MAY_FAIL))
+func getSettingIp4ConfigNeverDefaultJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_NEVER_DEFAULT, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_NEVER_DEFAULT))
+	return
+}
+func getSettingIp4ConfigMayFailJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_MAY_FAIL, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_MAY_FAIL))
 	return
 }
 
 // Setter
-func setSettingIp4ConfigMethod(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_METHOD, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_METHOD))
+func setSettingIp4ConfigMethodJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_METHOD, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_METHOD))
 }
-func setSettingIp4ConfigDns(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DNS))
+func setSettingIp4ConfigDnsJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DNS))
 }
-func setSettingIp4ConfigDnsSearch(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_SEARCH, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DNS_SEARCH))
+func setSettingIp4ConfigDnsSearchJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_SEARCH, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DNS_SEARCH))
 }
-func setSettingIp4ConfigAddresses(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_ADDRESSES))
+func setSettingIp4ConfigAddressesJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_ADDRESSES))
 }
-func setSettingIp4ConfigRoutes(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTES, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_ROUTES))
+func setSettingIp4ConfigRoutesJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTES, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_ROUTES))
 }
-func setSettingIp4ConfigIgnoreAutoRoutes(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES))
+func setSettingIp4ConfigIgnoreAutoRoutesJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES))
 }
-func setSettingIp4ConfigIgnoreAutoDns(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS))
+func setSettingIp4ConfigIgnoreAutoDnsJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS))
 }
-func setSettingIp4ConfigDhcpClientId(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID))
+func setSettingIp4ConfigDhcpClientIdJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID))
 }
-func setSettingIp4ConfigDhcpSendHostname(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME))
+func setSettingIp4ConfigDhcpSendHostnameJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME))
 }
-func setSettingIp4ConfigDhcpHostname(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME))
+func setSettingIp4ConfigDhcpHostnameJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME))
 }
-func setSettingIp4ConfigNeverDefault(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_NEVER_DEFAULT, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_NEVER_DEFAULT))
+func setSettingIp4ConfigNeverDefaultJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_NEVER_DEFAULT, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_NEVER_DEFAULT))
 }
-func setSettingIp4ConfigMayFail(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_MAY_FAIL, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_MAY_FAIL))
+func setSettingIp4ConfigMayFailJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_MAY_FAIL, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_MAY_FAIL))
 }
 
 // Remover

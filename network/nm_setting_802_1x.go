@@ -119,469 +119,469 @@ func getSetting8021xKeyType(key string) (t ktype) {
 }
 
 // Get and set key's value generally
-func generalGetSetting8021xKey(data _ConnectionData, key string) (value string) {
+func generalGetSetting8021xKeyJSON(data _ConnectionData, key string) (value string) {
 	switch key {
 	default:
 		LOGGER.Error("generalGetSetting8021xKey: invalide key", key)
 	case NM_SETTING_802_1X_EAP:
-		value = getSetting8021xEap(data)
+		value = getSetting8021xEapJSON(data)
 	case NM_SETTING_802_1X_IDENTITY:
-		value = getSetting8021xIdentity(data)
+		value = getSetting8021xIdentityJSON(data)
 	case NM_SETTING_802_1X_ANONYMOUS_IDENTITY:
-		value = getSetting8021xAnonymousIdentity(data)
+		value = getSetting8021xAnonymousIdentityJSON(data)
 	case NM_SETTING_802_1X_PAC_FILE:
-		value = getSetting8021xPacFile(data)
+		value = getSetting8021xPacFileJSON(data)
 	case NM_SETTING_802_1X_CA_CERT:
-		value = getSetting8021xCaCert(data)
+		value = getSetting8021xCaCertJSON(data)
 	case NM_SETTING_802_1X_CA_PATH:
-		value = getSetting8021xCaPath(data)
+		value = getSetting8021xCaPathJSON(data)
 	case NM_SETTING_802_1X_SUBJECT_MATCH:
-		value = getSetting8021xSubjectMatch(data)
+		value = getSetting8021xSubjectMatchJSON(data)
 	case NM_SETTING_802_1X_ALTSUBJECT_MATCHES:
-		value = getSetting8021xAltsubjectMatches(data)
+		value = getSetting8021xAltsubjectMatchesJSON(data)
 	case NM_SETTING_802_1X_CLIENT_CERT:
-		value = getSetting8021xClientCert(data)
+		value = getSetting8021xClientCertJSON(data)
 	case NM_SETTING_802_1X_PHASE1_PEAPVER:
-		value = getSetting8021xPhase1Peapver(data)
+		value = getSetting8021xPhase1PeapverJSON(data)
 	case NM_SETTING_802_1X_PHASE1_PEAPLABEL:
-		value = getSetting8021xPhase1Peaplabel(data)
+		value = getSetting8021xPhase1PeaplabelJSON(data)
 	case NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING:
-		value = getSetting8021xPhase1FastProvisioning(data)
+		value = getSetting8021xPhase1FastProvisioningJSON(data)
 	case NM_SETTING_802_1X_PHASE2_AUTH:
-		value = getSetting8021xPhase2Auth(data)
+		value = getSetting8021xPhase2AuthJSON(data)
 	case NM_SETTING_802_1X_PHASE2_AUTHEAP:
-		value = getSetting8021xPhase2Autheap(data)
+		value = getSetting8021xPhase2AutheapJSON(data)
 	case NM_SETTING_802_1X_PHASE2_CA_CERT:
-		value = getSetting8021xPhase2CaCert(data)
+		value = getSetting8021xPhase2CaCertJSON(data)
 	case NM_SETTING_802_1X_PHASE2_CA_PATH:
-		value = getSetting8021xPhase2CaPath(data)
+		value = getSetting8021xPhase2CaPathJSON(data)
 	case NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH:
-		value = getSetting8021xPhase2SubjectMatch(data)
+		value = getSetting8021xPhase2SubjectMatchJSON(data)
 	case NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES:
-		value = getSetting8021xPhase2AltsubjectMatches(data)
+		value = getSetting8021xPhase2AltsubjectMatchesJSON(data)
 	case NM_SETTING_802_1X_PASSWORD:
-		value = getSetting8021xPassword(data)
+		value = getSetting8021xPasswordJSON(data)
 	case NM_SETTING_802_1X_PASSWORD_FLAGS:
-		value = getSetting8021xPasswordFlags(data)
+		value = getSetting8021xPasswordFlagsJSON(data)
 	case NM_SETTING_802_1X_PASSWORD_RAW:
-		value = getSetting8021xPasswordRaw(data)
+		value = getSetting8021xPasswordRawJSON(data)
 	case NM_SETTING_802_1X_PASSWORD_RAW_FLAGS:
-		value = getSetting8021xPasswordRawFlags(data)
+		value = getSetting8021xPasswordRawFlagsJSON(data)
 	case NM_SETTING_802_1X_PRIVATE_KEY:
-		value = getSetting8021xPrivateKey(data)
+		value = getSetting8021xPrivateKeyJSON(data)
 	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD:
-		value = getSetting8021xPrivateKeyPassword(data)
+		value = getSetting8021xPrivateKeyPasswordJSON(data)
 	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS:
-		value = getSetting8021xPrivateKeyPasswordFlags(data)
+		value = getSetting8021xPrivateKeyPasswordFlagsJSON(data)
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY:
-		value = getSetting8021xPhase2PrivateKey(data)
+		value = getSetting8021xPhase2PrivateKeyJSON(data)
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD:
-		value = getSetting8021xPhase2PrivateKeyPassword(data)
+		value = getSetting8021xPhase2PrivateKeyPasswordJSON(data)
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS:
-		value = getSetting8021xPhase2PrivateKeyPasswordFlags(data)
+		value = getSetting8021xPhase2PrivateKeyPasswordFlagsJSON(data)
 	case NM_SETTING_802_1X_PIN:
-		value = getSetting8021xPin(data)
+		value = getSetting8021xPinJSON(data)
 	case NM_SETTING_802_1X_PIN_FLAGS:
-		value = getSetting8021xPinFlags(data)
+		value = getSetting8021xPinFlagsJSON(data)
 	case NM_SETTING_802_1X_SYSTEM_CA_CERTS:
-		value = getSetting8021xSystemCaCerts(data)
+		value = getSetting8021xSystemCaCertsJSON(data)
 	}
 	return
 }
 
 // TODO use logic setter
-func generalSetSetting8021xKey(data _ConnectionData, key, value string) {
+func generalSetSetting8021xKeyJSON(data _ConnectionData, key, value string) {
 	switch key {
 	default:
 		LOGGER.Error("generalSetSetting8021xKey: invalide key", key)
 	case NM_SETTING_802_1X_EAP:
-		setSetting8021xEap(data, value)
+		setSetting8021xEapJSON(data, value)
 	case NM_SETTING_802_1X_IDENTITY:
-		setSetting8021xIdentity(data, value)
+		setSetting8021xIdentityJSON(data, value)
 	case NM_SETTING_802_1X_ANONYMOUS_IDENTITY:
-		setSetting8021xAnonymousIdentity(data, value)
+		setSetting8021xAnonymousIdentityJSON(data, value)
 	case NM_SETTING_802_1X_PAC_FILE:
-		setSetting8021xPacFile(data, value)
+		setSetting8021xPacFileJSON(data, value)
 	case NM_SETTING_802_1X_CA_CERT:
-		setSetting8021xCaCert(data, value)
+		setSetting8021xCaCertJSON(data, value)
 	case NM_SETTING_802_1X_CA_PATH:
-		setSetting8021xCaPath(data, value)
+		setSetting8021xCaPathJSON(data, value)
 	case NM_SETTING_802_1X_SUBJECT_MATCH:
-		setSetting8021xSubjectMatch(data, value)
+		setSetting8021xSubjectMatchJSON(data, value)
 	case NM_SETTING_802_1X_ALTSUBJECT_MATCHES:
-		setSetting8021xAltsubjectMatches(data, value)
+		setSetting8021xAltsubjectMatchesJSON(data, value)
 	case NM_SETTING_802_1X_CLIENT_CERT:
-		setSetting8021xClientCert(data, value)
+		setSetting8021xClientCertJSON(data, value)
 	case NM_SETTING_802_1X_PHASE1_PEAPVER:
-		setSetting8021xPhase1Peapver(data, value)
+		setSetting8021xPhase1PeapverJSON(data, value)
 	case NM_SETTING_802_1X_PHASE1_PEAPLABEL:
-		setSetting8021xPhase1Peaplabel(data, value)
+		setSetting8021xPhase1PeaplabelJSON(data, value)
 	case NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING:
-		setSetting8021xPhase1FastProvisioning(data, value)
+		setSetting8021xPhase1FastProvisioningJSON(data, value)
 	case NM_SETTING_802_1X_PHASE2_AUTH:
-		setSetting8021xPhase2Auth(data, value)
+		setSetting8021xPhase2AuthJSON(data, value)
 	case NM_SETTING_802_1X_PHASE2_AUTHEAP:
-		setSetting8021xPhase2Autheap(data, value)
+		setSetting8021xPhase2AutheapJSON(data, value)
 	case NM_SETTING_802_1X_PHASE2_CA_CERT:
-		setSetting8021xPhase2CaCert(data, value)
+		setSetting8021xPhase2CaCertJSON(data, value)
 	case NM_SETTING_802_1X_PHASE2_CA_PATH:
-		setSetting8021xPhase2CaPath(data, value)
+		setSetting8021xPhase2CaPathJSON(data, value)
 	case NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH:
-		setSetting8021xPhase2SubjectMatch(data, value)
+		setSetting8021xPhase2SubjectMatchJSON(data, value)
 	case NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES:
-		setSetting8021xPhase2AltsubjectMatches(data, value)
+		setSetting8021xPhase2AltsubjectMatchesJSON(data, value)
 	case NM_SETTING_802_1X_PASSWORD:
-		setSetting8021xPassword(data, value)
+		setSetting8021xPasswordJSON(data, value)
 	case NM_SETTING_802_1X_PASSWORD_FLAGS:
-		setSetting8021xPasswordFlags(data, value)
+		setSetting8021xPasswordFlagsJSON(data, value)
 	case NM_SETTING_802_1X_PASSWORD_RAW:
-		setSetting8021xPasswordRaw(data, value)
+		setSetting8021xPasswordRawJSON(data, value)
 	case NM_SETTING_802_1X_PASSWORD_RAW_FLAGS:
-		setSetting8021xPasswordRawFlags(data, value)
+		setSetting8021xPasswordRawFlagsJSON(data, value)
 	case NM_SETTING_802_1X_PRIVATE_KEY:
-		setSetting8021xPrivateKey(data, value)
+		setSetting8021xPrivateKeyJSON(data, value)
 	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD:
-		setSetting8021xPrivateKeyPassword(data, value)
+		setSetting8021xPrivateKeyPasswordJSON(data, value)
 	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS:
-		setSetting8021xPrivateKeyPasswordFlags(data, value)
+		setSetting8021xPrivateKeyPasswordFlagsJSON(data, value)
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY:
-		setSetting8021xPhase2PrivateKey(data, value)
+		setSetting8021xPhase2PrivateKeyJSON(data, value)
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD:
-		setSetting8021xPhase2PrivateKeyPassword(data, value)
+		setSetting8021xPhase2PrivateKeyPasswordJSON(data, value)
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS:
-		setSetting8021xPhase2PrivateKeyPasswordFlags(data, value)
+		setSetting8021xPhase2PrivateKeyPasswordFlagsJSON(data, value)
 	case NM_SETTING_802_1X_PIN:
-		setSetting8021xPin(data, value)
+		setSetting8021xPinJSON(data, value)
 	case NM_SETTING_802_1X_PIN_FLAGS:
-		setSetting8021xPinFlags(data, value)
+		setSetting8021xPinFlagsJSON(data, value)
 	case NM_SETTING_802_1X_SYSTEM_CA_CERTS:
-		setSetting8021xSystemCaCerts(data, value)
+		setSetting8021xSystemCaCertsJSON(data, value)
 	}
 	return
 }
 
 // Getter
-func getSetting8021xEap(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_EAP, getSetting8021xKeyType(NM_SETTING_802_1X_EAP))
+func getSetting8021xEapJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_EAP, getSetting8021xKeyType(NM_SETTING_802_1X_EAP))
 	return
 }
-func getSetting8021xIdentity(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY, getSetting8021xKeyType(NM_SETTING_802_1X_IDENTITY))
+func getSetting8021xIdentityJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY, getSetting8021xKeyType(NM_SETTING_802_1X_IDENTITY))
 	return
 }
-func getSetting8021xAnonymousIdentity(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ANONYMOUS_IDENTITY, getSetting8021xKeyType(NM_SETTING_802_1X_ANONYMOUS_IDENTITY))
+func getSetting8021xAnonymousIdentityJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ANONYMOUS_IDENTITY, getSetting8021xKeyType(NM_SETTING_802_1X_ANONYMOUS_IDENTITY))
 	return
 }
-func getSetting8021xPacFile(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PAC_FILE, getSetting8021xKeyType(NM_SETTING_802_1X_PAC_FILE))
+func getSetting8021xPacFileJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PAC_FILE, getSetting8021xKeyType(NM_SETTING_802_1X_PAC_FILE))
 	return
 }
-func getSetting8021xCaCert(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT, getSetting8021xKeyType(NM_SETTING_802_1X_CA_CERT))
+func getSetting8021xCaCertJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT, getSetting8021xKeyType(NM_SETTING_802_1X_CA_CERT))
 	return
 }
-func getSetting8021xCaPath(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_PATH, getSetting8021xKeyType(NM_SETTING_802_1X_CA_PATH))
+func getSetting8021xCaPathJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_PATH, getSetting8021xKeyType(NM_SETTING_802_1X_CA_PATH))
 	return
 }
-func getSetting8021xSubjectMatch(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_SUBJECT_MATCH, getSetting8021xKeyType(NM_SETTING_802_1X_SUBJECT_MATCH))
+func getSetting8021xSubjectMatchJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_SUBJECT_MATCH, getSetting8021xKeyType(NM_SETTING_802_1X_SUBJECT_MATCH))
 	return
 }
-func getSetting8021xAltsubjectMatches(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ALTSUBJECT_MATCHES, getSetting8021xKeyType(NM_SETTING_802_1X_ALTSUBJECT_MATCHES))
+func getSetting8021xAltsubjectMatchesJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ALTSUBJECT_MATCHES, getSetting8021xKeyType(NM_SETTING_802_1X_ALTSUBJECT_MATCHES))
 	return
 }
-func getSetting8021xClientCert(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT, getSetting8021xKeyType(NM_SETTING_802_1X_CLIENT_CERT))
+func getSetting8021xClientCertJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT, getSetting8021xKeyType(NM_SETTING_802_1X_CLIENT_CERT))
 	return
 }
-func getSetting8021xPhase1Peapver(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPVER, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_PEAPVER))
+func getSetting8021xPhase1PeapverJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPVER, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_PEAPVER))
 	return
 }
-func getSetting8021xPhase1Peaplabel(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPLABEL, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_PEAPLABEL))
+func getSetting8021xPhase1PeaplabelJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPLABEL, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_PEAPLABEL))
 	return
 }
-func getSetting8021xPhase1FastProvisioning(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING))
+func getSetting8021xPhase1FastProvisioningJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING))
 	return
 }
-func getSetting8021xPhase2Auth(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTH, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_AUTH))
+func getSetting8021xPhase2AuthJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTH, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_AUTH))
 	return
 }
-func getSetting8021xPhase2Autheap(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTHEAP, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_AUTHEAP))
+func getSetting8021xPhase2AutheapJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTHEAP, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_AUTHEAP))
 	return
 }
-func getSetting8021xPhase2CaCert(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CA_CERT, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_CA_CERT))
+func getSetting8021xPhase2CaCertJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CA_CERT, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_CA_CERT))
 	return
 }
-func getSetting8021xPhase2CaPath(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CA_PATH, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_CA_PATH))
+func getSetting8021xPhase2CaPathJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CA_PATH, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_CA_PATH))
 	return
 }
-func getSetting8021xPhase2SubjectMatch(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH))
+func getSetting8021xPhase2SubjectMatchJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH))
 	return
 }
-func getSetting8021xPhase2AltsubjectMatches(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES))
+func getSetting8021xPhase2AltsubjectMatchesJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES))
 	return
 }
-func getSetting8021xPhase2ClientCert(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CLIENT_CERT, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_CLIENT_CERT))
+func getSetting8021xPhase2ClientCertJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CLIENT_CERT, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_CLIENT_CERT))
 	return
 }
-func getSetting8021xPassword(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD))
+func getSetting8021xPasswordJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD))
 	return
 }
-func getSetting8021xPasswordFlags(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_FLAGS, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD_FLAGS))
+func getSetting8021xPasswordFlagsJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_FLAGS, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD_FLAGS))
 	return
 }
-func getSetting8021xPasswordRaw(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD_RAW))
+func getSetting8021xPasswordRawJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD_RAW))
 	return
 }
-func getSetting8021xPasswordRawFlags(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW_FLAGS, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD_RAW_FLAGS))
+func getSetting8021xPasswordRawFlagsJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW_FLAGS, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD_RAW_FLAGS))
 	return
 }
-func getSetting8021xPrivateKey(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY))
+func getSetting8021xPrivateKeyJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY))
 	return
 }
-func getSetting8021xPrivateKeyPassword(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD))
+func getSetting8021xPrivateKeyPasswordJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD))
 	return
 }
-func getSetting8021xPrivateKeyPasswordFlags(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS))
+func getSetting8021xPrivateKeyPasswordFlagsJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS))
 	return
 }
-func getSetting8021xPhase2PrivateKey(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_PRIVATE_KEY))
+func getSetting8021xPhase2PrivateKeyJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_PRIVATE_KEY))
 	return
 }
-func getSetting8021xPhase2PrivateKeyPassword(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD))
+func getSetting8021xPhase2PrivateKeyPasswordJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD))
 	return
 }
-func getSetting8021xPhase2PrivateKeyPasswordFlags(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS))
+func getSetting8021xPhase2PrivateKeyPasswordFlagsJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS))
 	return
 }
-func getSetting8021xPin(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PIN, getSetting8021xKeyType(NM_SETTING_802_1X_PIN))
+func getSetting8021xPinJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PIN, getSetting8021xKeyType(NM_SETTING_802_1X_PIN))
 	return
 }
-func getSetting8021xPinFlags(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PIN_FLAGS, getSetting8021xKeyType(NM_SETTING_802_1X_PIN_FLAGS))
+func getSetting8021xPinFlagsJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PIN_FLAGS, getSetting8021xKeyType(NM_SETTING_802_1X_PIN_FLAGS))
 	return
 }
-func getSetting8021xSystemCaCerts(data _ConnectionData) (value string) {
-	value = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_SYSTEM_CA_CERTS, getSetting8021xKeyType(NM_SETTING_802_1X_SYSTEM_CA_CERTS))
+func getSetting8021xSystemCaCertsJSON(data _ConnectionData) (value string) {
+	value = getConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_SYSTEM_CA_CERTS, getSetting8021xKeyType(NM_SETTING_802_1X_SYSTEM_CA_CERTS))
 	return
 }
 
 // Setter
-func setSetting8021xEap(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_EAP, value, getSetting8021xKeyType(NM_SETTING_802_1X_EAP))
+func setSetting8021xEapJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_EAP, value, getSetting8021xKeyType(NM_SETTING_802_1X_EAP))
 }
-func setSetting8021xIdentity(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY, value, getSetting8021xKeyType(NM_SETTING_802_1X_IDENTITY))
+func setSetting8021xIdentityJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY, value, getSetting8021xKeyType(NM_SETTING_802_1X_IDENTITY))
 }
-func setSetting8021xAnonymousIdentity(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ANONYMOUS_IDENTITY, value, getSetting8021xKeyType(NM_SETTING_802_1X_ANONYMOUS_IDENTITY))
+func setSetting8021xAnonymousIdentityJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ANONYMOUS_IDENTITY, value, getSetting8021xKeyType(NM_SETTING_802_1X_ANONYMOUS_IDENTITY))
 }
-func setSetting8021xPacFile(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PAC_FILE, value, getSetting8021xKeyType(NM_SETTING_802_1X_PAC_FILE))
+func setSetting8021xPacFileJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PAC_FILE, value, getSetting8021xKeyType(NM_SETTING_802_1X_PAC_FILE))
 }
-func setSetting8021xCaCert(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT, value, getSetting8021xKeyType(NM_SETTING_802_1X_CA_CERT))
+func setSetting8021xCaCertJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT, value, getSetting8021xKeyType(NM_SETTING_802_1X_CA_CERT))
 }
-func setSetting8021xCaPath(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_PATH, value, getSetting8021xKeyType(NM_SETTING_802_1X_CA_PATH))
+func setSetting8021xCaPathJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_PATH, value, getSetting8021xKeyType(NM_SETTING_802_1X_CA_PATH))
 }
-func setSetting8021xSubjectMatch(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_SUBJECT_MATCH, value, getSetting8021xKeyType(NM_SETTING_802_1X_SUBJECT_MATCH))
+func setSetting8021xSubjectMatchJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_SUBJECT_MATCH, value, getSetting8021xKeyType(NM_SETTING_802_1X_SUBJECT_MATCH))
 }
-func setSetting8021xAltsubjectMatches(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ALTSUBJECT_MATCHES, value, getSetting8021xKeyType(NM_SETTING_802_1X_ALTSUBJECT_MATCHES))
+func setSetting8021xAltsubjectMatchesJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ALTSUBJECT_MATCHES, value, getSetting8021xKeyType(NM_SETTING_802_1X_ALTSUBJECT_MATCHES))
 }
-func setSetting8021xClientCert(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT, value, getSetting8021xKeyType(NM_SETTING_802_1X_CLIENT_CERT))
+func setSetting8021xClientCertJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT, value, getSetting8021xKeyType(NM_SETTING_802_1X_CLIENT_CERT))
 }
-func setSetting8021xPhase1Peapver(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPVER, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_PEAPVER))
+func setSetting8021xPhase1PeapverJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPVER, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_PEAPVER))
 }
-func setSetting8021xPhase1Peaplabel(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPLABEL, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_PEAPLABEL))
+func setSetting8021xPhase1PeaplabelJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPLABEL, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_PEAPLABEL))
 }
-func setSetting8021xPhase1FastProvisioning(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING))
+func setSetting8021xPhase1FastProvisioningJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING))
 }
-func setSetting8021xPhase2Auth(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTH, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_AUTH))
+func setSetting8021xPhase2AuthJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTH, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_AUTH))
 }
-func setSetting8021xPhase2Autheap(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTHEAP, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_AUTHEAP))
+func setSetting8021xPhase2AutheapJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTHEAP, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_AUTHEAP))
 }
-func setSetting8021xPhase2CaCert(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CA_CERT, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_CA_CERT))
+func setSetting8021xPhase2CaCertJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CA_CERT, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_CA_CERT))
 }
-func setSetting8021xPhase2CaPath(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CA_PATH, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_CA_PATH))
+func setSetting8021xPhase2CaPathJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CA_PATH, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_CA_PATH))
 }
-func setSetting8021xPhase2SubjectMatch(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH))
+func setSetting8021xPhase2SubjectMatchJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH))
 }
-func setSetting8021xPhase2AltsubjectMatches(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES))
+func setSetting8021xPhase2AltsubjectMatchesJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES))
 }
-func setSetting8021xPhase2ClientCert(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CLIENT_CERT, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_CLIENT_CERT))
+func setSetting8021xPhase2ClientCertJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CLIENT_CERT, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_CLIENT_CERT))
 }
-func setSetting8021xPassword(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD, value, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD))
+func setSetting8021xPasswordJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD, value, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD))
 }
-func setSetting8021xPasswordFlags(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_FLAGS, value, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD_FLAGS))
+func setSetting8021xPasswordFlagsJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_FLAGS, value, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD_FLAGS))
 }
-func setSetting8021xPasswordRaw(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW, value, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD_RAW))
+func setSetting8021xPasswordRawJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW, value, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD_RAW))
 }
-func setSetting8021xPasswordRawFlags(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW_FLAGS, value, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD_RAW_FLAGS))
+func setSetting8021xPasswordRawFlagsJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW_FLAGS, value, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD_RAW_FLAGS))
 }
-func setSetting8021xPrivateKey(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY, value, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY))
+func setSetting8021xPrivateKeyJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY, value, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY))
 }
-func setSetting8021xPrivateKeyPassword(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD, value, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD))
+func setSetting8021xPrivateKeyPasswordJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD, value, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD))
 }
-func setSetting8021xPrivateKeyPasswordFlags(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS, value, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS))
+func setSetting8021xPrivateKeyPasswordFlagsJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS, value, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS))
 }
-func setSetting8021xPhase2PrivateKey(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_PRIVATE_KEY))
+func setSetting8021xPhase2PrivateKeyJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_PRIVATE_KEY))
 }
-func setSetting8021xPhase2PrivateKeyPassword(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD))
+func setSetting8021xPhase2PrivateKeyPasswordJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD))
 }
-func setSetting8021xPhase2PrivateKeyPasswordFlags(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS))
+func setSetting8021xPhase2PrivateKeyPasswordFlagsJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS, value, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS))
 }
-func setSetting8021xPin(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PIN, value, getSetting8021xKeyType(NM_SETTING_802_1X_PIN))
+func setSetting8021xPinJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PIN, value, getSetting8021xKeyType(NM_SETTING_802_1X_PIN))
 }
-func setSetting8021xPinFlags(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PIN_FLAGS, value, getSetting8021xKeyType(NM_SETTING_802_1X_PIN_FLAGS))
+func setSetting8021xPinFlagsJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PIN_FLAGS, value, getSetting8021xKeyType(NM_SETTING_802_1X_PIN_FLAGS))
 }
-func setSetting8021xSystemCaCerts(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_SYSTEM_CA_CERTS, value, getSetting8021xKeyType(NM_SETTING_802_1X_SYSTEM_CA_CERTS))
+func setSetting8021xSystemCaCertsJSON(data _ConnectionData, value string) {
+	setConnectionDataKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_SYSTEM_CA_CERTS, value, getSetting8021xKeyType(NM_SETTING_802_1X_SYSTEM_CA_CERTS))
 }
 
 // Remover
-func removeSetting8021xEap(data _ConnectionData) {
+func removeSetting8021xEapJSON(data _ConnectionData) {
 	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_EAP)
 }
-func removeSetting8021xIdentity(data _ConnectionData) {
+func removeSetting8021xIdentityJSON(data _ConnectionData) {
 	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY)
 }
-func removeSetting8021xAnonymousIdentity(data _ConnectionData) {
+func removeSetting8021xAnonymousIdentityJSON(data _ConnectionData) {
 	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ANONYMOUS_IDENTITY)
 }
-func removeSetting8021xPacFile(data _ConnectionData) {
+func removeSetting8021xPacFileJSON(data _ConnectionData) {
 	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PAC_FILE)
 }
-func removeSetting8021xCaCert(data _ConnectionData) {
+func removeSetting8021xCaCertJSON(data _ConnectionData) {
 	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT)
 }
-func removeSetting8021xCaPath(data _ConnectionData) {
+func removeSetting8021xCaPathJSON(data _ConnectionData) {
 	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_PATH)
 }
-func removeSetting8021xSubjectMatch(data _ConnectionData) {
+func removeSetting8021xSubjectMatchJSON(data _ConnectionData) {
 	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_SUBJECT_MATCH)
 }
-func removeSetting8021xAltsubjectMatches(data _ConnectionData) {
+func removeSetting8021xAltsubjectMatchesJSON(data _ConnectionData) {
 	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ALTSUBJECT_MATCHES)
 }
-func removeSetting8021xClientCert(data _ConnectionData) {
+func removeSetting8021xClientCertJSON(data _ConnectionData) {
 	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT)
 }
-func removeSetting8021xPhase1Peapver(data _ConnectionData) {
+func removeSetting8021xPhase1PeapverJSON(data _ConnectionData) {
 	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPVER)
 }
-func removeSetting8021xPhase1Peaplabel(data _ConnectionData) {
+func removeSetting8021xPhase1PeaplabelJSON(data _ConnectionData) {
 	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPLABEL)
 }
-func removeSetting8021xPhase1FastProvisioning(data _ConnectionData) {
+func removeSetting8021xPhase1FastProvisioningJSON(data _ConnectionData) {
 	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING)
 }
-func removeSetting8021xPhase2Auth(data _ConnectionData) {
+func removeSetting8021xPhase2AuthJSON(data _ConnectionData) {
 	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTH)
 }
-func removeSetting8021xPhase2Autheap(data _ConnectionData) {
+func removeSetting8021xPhase2AutheapJSON(data _ConnectionData) {
 	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTHEAP)
 }
-func removeSetting8021xPhase2CaCert(data _ConnectionData) {
+func removeSetting8021xPhase2CaCertJSON(data _ConnectionData) {
 	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CA_CERT)
 }
-func removeSetting8021xPhase2CaPath(data _ConnectionData) {
+func removeSetting8021xPhase2CaPathJSON(data _ConnectionData) {
 	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CA_PATH)
 }
-func removeSetting8021xPhase2SubjectMatch(data _ConnectionData) {
+func removeSetting8021xPhase2SubjectMatchJSON(data _ConnectionData) {
 	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH)
 }
-func removeSetting8021xPhase2AltsubjectMatches(data _ConnectionData) {
+func removeSetting8021xPhase2AltsubjectMatchesJSON(data _ConnectionData) {
 	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES)
 }
-func removeSetting8021xPhase2ClientCert(data _ConnectionData) {
+func removeSetting8021xPhase2ClientCertJSON(data _ConnectionData) {
 	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CLIENT_CERT)
 }
-func removeSetting8021xPassword(data _ConnectionData) {
+func removeSetting8021xPasswordJSON(data _ConnectionData) {
 	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD)
 }
-func removeSetting8021xPasswordFlags(data _ConnectionData) {
+func removeSetting8021xPasswordFlagsJSON(data _ConnectionData) {
 	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_FLAGS)
 }
-func removeSetting8021xPasswordRaw(data _ConnectionData) {
+func removeSetting8021xPasswordRawJSON(data _ConnectionData) {
 	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW)
 }
-func removeSetting8021xPasswordRawFlags(data _ConnectionData) {
+func removeSetting8021xPasswordRawFlagsJSON(data _ConnectionData) {
 	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW_FLAGS)
 }
-func removeSetting8021xPrivateKey(data _ConnectionData) {
+func removeSetting8021xPrivateKeyJSON(data _ConnectionData) {
 	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY)
 }
-func removeSetting8021xPrivateKeyPassword(data _ConnectionData) {
+func removeSetting8021xPrivateKeyPasswordJSON(data _ConnectionData) {
 	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD)
 }
-func removeSetting8021xPrivateKeyPasswordFlags(data _ConnectionData) {
+func removeSetting8021xPrivateKeyPasswordFlagsJSON(data _ConnectionData) {
 	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS)
 }
-func removeSetting8021xPhase2PrivateKey(data _ConnectionData) {
+func removeSetting8021xPhase2PrivateKeyJSON(data _ConnectionData) {
 	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY)
 }
-func removeSetting8021xPhase2PrivateKeyPassword(data _ConnectionData) {
+func removeSetting8021xPhase2PrivateKeyPasswordJSON(data _ConnectionData) {
 	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD)
 }
-func removeSetting8021xPhase2PrivateKeyPasswordFlags(data _ConnectionData) {
+func removeSetting8021xPhase2PrivateKeyPasswordFlagsJSON(data _ConnectionData) {
 	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS)
 }
-func removeSetting8021xPin(data _ConnectionData) {
+func removeSetting8021xPinJSON(data _ConnectionData) {
 	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PIN)
 }
-func removeSetting8021xPinFlags(data _ConnectionData) {
+func removeSetting8021xPinFlagsJSON(data _ConnectionData) {
 	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PIN_FLAGS)
 }
-func removeSetting8021xSystemCaCerts(data _ConnectionData) {
+func removeSetting8021xSystemCaCertsJSON(data _ConnectionData) {
 	removeConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_SYSTEM_CA_CERTS)
 }

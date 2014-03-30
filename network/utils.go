@@ -31,8 +31,8 @@ func pageGeneralGetId(con map[string]map[string]dbus.Variant) string {
 func addConnectionDataField(data _ConnectionData, field string) {
 	var fieldData map[string]dbus.Variant
 	fieldData, ok := data[field]
-	// add field if not exists
 	if !ok {
+		// add field if not exists
 		fieldData = make(map[string]dbus.Variant)
 		data[field] = fieldData
 	}
@@ -40,46 +40,67 @@ func addConnectionDataField(data _ConnectionData, field string) {
 
 func removeConnectionDataField(data _ConnectionData, field string) {
 	_, ok := data[field]
-	// remove field if exists
 	if !ok {
+		// remove field if exists
 		delete(data, field)
 	}
 }
 
 // TODO key: add(), remove()
 
-func getConnectionDataKey(data _ConnectionData, field, key string, t ktype) (value string) {
+func getConnectionDataKeyJSON(data _ConnectionData, field, key string, t ktype) (valueJSON string) {
+	value := getConnectionDataKey(data, field, key)
+	if value == nil {
+		return
+	}
+
+	valueJSON, err := interfaceToJSON(value, t)
+	if err != nil {
+		LOGGER.Error("get connection data failed:", err)
+		return
+	}
+
+	if len(valueJSON) == 0 {
+		LOGGER.Warning("getConnectionDataKeyJSON: valueJSON is empty")
+	}
+
+	return
+}
+
+func getConnectionDataKey(data _ConnectionData, field, key string) (value interface{}) {
 	fieldData, ok := data[field]
 	if !ok {
 		LOGGER.Errorf("invalid field: data[%s]", field)
 		return
 	}
 
-	valueVariant, ok := fieldData[key]
+	variant, ok := fieldData[key]
 	if !ok {
 		LOGGER.Errorf("invalid key: data[%s][%s]", field, key)
 		return
 	}
 
-	value, err := unwrapVariant(valueVariant, t)
-	if err != nil {
-		LOGGER.Error("get connection data failed:", err)
-		return
-	}
-
-	if len(value) == 0 {
-		LOGGER.Warning("getConnectionDataKey: value is empty")
-	}
-
-	LOGGER.Debugf("getConnectionDataKey: data[%s][%s]=%s", field, key, value) // TODO test
+	value = variant.Value()
+	LOGGER.Debugf("getConnectionDataKey: data[%s][%s]=%v", field, key, value) // TODO test
 	return
 }
 
-func setConnectionDataKey(data _ConnectionData, field, key, value string, t ktype) {
-	if len(value) == 0 {
-		LOGGER.Warning("setConnectionDataKey: value is empty")
+func setConnectionDataKeyJSON(data _ConnectionData, field, key, valueJSON string, t ktype) {
+	if len(valueJSON) == 0 {
+		LOGGER.Warning("setConnectionDataKeyJSON: valueJSON is empty")
 	}
 
+	value, err := jsonToInterface(valueJSON, t)
+	if err != nil {
+		LOGGER.Errorf("set connection data failed, valueJSON=%s, ktype=%s, error message:%v",
+			valueJSON, getKtypeDescription(t), err)
+		return
+	}
+	setConnectionDataKey(data, field, key, value)
+	return
+}
+
+func setConnectionDataKey(data _ConnectionData, field, key string, value interface{}) {
 	var fieldData map[string]dbus.Variant
 	fieldData, ok := data[field]
 	if !ok {
@@ -87,13 +108,7 @@ func setConnectionDataKey(data _ConnectionData, field, key, value string, t ktyp
 		return
 	}
 
-	valueVariant, err := wrapVariant(value, t)
-	if err != nil {
-		LOGGER.Errorf("set connection data failed, value=%s, ktype=%s, error message:%v",
-			value, getKtypeDescription(t), err)
-		return
-	}
-	fieldData[key] = valueVariant
+	fieldData[key] = dbus.MakeVariant(value)
 
 	LOGGER.Debugf("setConnectionDataKey: data[%s][%s]=%s", field, key, value) // TODO test
 	return

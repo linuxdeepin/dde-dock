@@ -1,7 +1,6 @@
 package main
 
 import (
-	"dlib/dbus"
 	. "launchpad.net/gocheck"
 	"testing"
 )
@@ -41,75 +40,75 @@ const (
 	// 'routes': [([254, 128, 0, 0, 0, 0, 0, 0, 2, 34, 104, 255, 254, 15, 77, 9], 64L, [254, 128, 0, 0, 0, 0, 0, 0, 2, 34, 104, 255, 254, 15, 77, 9], 12L)]
 )
 
-func (*Utils) TestGetSetConnectionData(c *C) {
+func (*Utils) TestGetSetConnectionDataJSON(c *C) {
 	data := make(_ConnectionData)
 	addConnectionDataField(data, fieldConnection)
-	setSettingConnectionId(data, testConnectionId)
-	setSettingConnectionUuid(data, testConnectionUuid)
-	setSettingConnectionType(data, testConnectionType)
+	setSettingConnectionIdJSON(data, testConnectionId)
+	setSettingConnectionUuidJSON(data, testConnectionUuid)
+	setSettingConnectionTypeJSON(data, testConnectionType)
 
-	c.Check(getSettingConnectionId(data), Equals, testConnectionId)
-	c.Check(getSettingConnectionUuid(data), Equals, testConnectionUuid)
-	c.Check(getSettingConnectionType(data), Equals, testConnectionType)
+	c.Check(getSettingConnectionIdJSON(data), Equals, testConnectionId)
+	c.Check(getSettingConnectionUuidJSON(data), Equals, testConnectionUuid)
+	c.Check(getSettingConnectionTypeJSON(data), Equals, testConnectionType)
 }
 
-func (*Utils) TestVariantWrapper(c *C) {
-	var v dbus.Variant
+func (*Utils) TestJSONWrapper(c *C) {
+	var v interface{}
 	var s string
 
-	v, _ = wrapVariant(testKtypeString, ktypeString)
-	s, _ = unwrapVariant(v, ktypeString)
+	v, _ = jsonToInterface(testKtypeString, ktypeString)
+	s, _ = interfaceToJSON(v, ktypeString)
 	c.Check(s, Equals, testKtypeString)
 
-	v, _ = wrapVariant(testKtypeByte, ktypeByte)
-	s, _ = unwrapVariant(v, ktypeByte)
+	v, _ = jsonToInterface(testKtypeByte, ktypeByte)
+	s, _ = interfaceToJSON(v, ktypeByte)
 	c.Check(s, Equals, testKtypeByte)
 
-	v, _ = wrapVariant(testKtypeInt32, ktypeInt32)
-	s, _ = unwrapVariant(v, ktypeInt32)
+	v, _ = jsonToInterface(testKtypeInt32, ktypeInt32)
+	s, _ = interfaceToJSON(v, ktypeInt32)
 	c.Check(s, Equals, testKtypeInt32)
 
-	v, _ = wrapVariant(testKtypeUint32, ktypeUint32)
-	s, _ = unwrapVariant(v, ktypeUint32)
+	v, _ = jsonToInterface(testKtypeUint32, ktypeUint32)
+	s, _ = interfaceToJSON(v, ktypeUint32)
 	c.Check(s, Equals, testKtypeUint32)
 
-	v, _ = wrapVariant(testKtypeUint64, ktypeUint64)
-	s, _ = unwrapVariant(v, ktypeUint64)
+	v, _ = jsonToInterface(testKtypeUint64, ktypeUint64)
+	s, _ = interfaceToJSON(v, ktypeUint64)
 	c.Check(s, Equals, testKtypeUint64)
 
-	v, _ = wrapVariant(testKtypeBoolean, ktypeBoolean)
-	s, _ = unwrapVariant(v, ktypeBoolean)
+	v, _ = jsonToInterface(testKtypeBoolean, ktypeBoolean)
+	s, _ = interfaceToJSON(v, ktypeBoolean)
 	c.Check(s, Equals, testKtypeBoolean)
 
-	v, _ = wrapVariant(testKtypeArrayByte, ktypeArrayByte)
-	s, _ = unwrapVariant(v, ktypeArrayByte)
+	v, _ = jsonToInterface(testKtypeArrayByte, ktypeArrayByte)
+	s, _ = interfaceToJSON(v, ktypeArrayByte)
 	c.Check(s, Equals, testKtypeArrayByte)
 
-	v, _ = wrapVariant(testKtypeArrayString, ktypeArrayString)
-	s, _ = unwrapVariant(v, ktypeArrayString)
+	v, _ = jsonToInterface(testKtypeArrayString, ktypeArrayString)
+	s, _ = interfaceToJSON(v, ktypeArrayString)
 	c.Check(s, Equals, testKtypeArrayString)
 
-	v, _ = wrapVariant(testKtypeArrayUint32, ktypeArrayUint32)
-	s, _ = unwrapVariant(v, ktypeArrayUint32)
+	v, _ = jsonToInterface(testKtypeArrayUint32, ktypeArrayUint32)
+	s, _ = interfaceToJSON(v, ktypeArrayUint32)
 	c.Check(s, Equals, testKtypeArrayUint32)
 
-	v, _ = wrapVariant(testKtypeArrayArrayByte, ktypeArrayArrayByte)
-	s, _ = unwrapVariant(v, ktypeArrayArrayByte)
+	v, _ = jsonToInterface(testKtypeArrayArrayByte, ktypeArrayArrayByte)
+	s, _ = interfaceToJSON(v, ktypeArrayArrayByte)
 	c.Check(s, Equals, testKtypeArrayArrayByte)
 
-	v, _ = wrapVariant(testKtypeArrayArrayUint32, ktypeArrayArrayUint32)
-	s, _ = unwrapVariant(v, ktypeArrayArrayUint32)
+	v, _ = jsonToInterface(testKtypeArrayArrayUint32, ktypeArrayArrayUint32)
+	s, _ = interfaceToJSON(v, ktypeArrayArrayUint32)
 	c.Check(s, Equals, testKtypeArrayArrayUint32)
 
-	v, _ = wrapVariant(testKtypeDictStringString, ktypeDictStringString)
-	s, _ = unwrapVariant(v, ktypeDictStringString)
+	v, _ = jsonToInterface(testKtypeDictStringString, ktypeDictStringString)
+	s, _ = interfaceToJSON(v, ktypeDictStringString)
 	c.Check(s, Equals, testKtypeDictStringString)
 
-	v, _ = wrapVariant(testKtypeIpv6Addresses, ktypeIpv6Addresses)
-	s, _ = unwrapVariant(v, ktypeIpv6Addresses)
+	v, _ = jsonToInterface(testKtypeIpv6Addresses, ktypeIpv6Addresses)
+	s, _ = interfaceToJSON(v, ktypeIpv6Addresses)
 	c.Check(s, Equals, testKtypeIpv6Addresses)
 
-	v, _ = wrapVariant(testKtypeIpv6Routes, ktypeIpv6Routes)
-	s, _ = unwrapVariant(v, ktypeIpv6Routes)
+	v, _ = jsonToInterface(testKtypeIpv6Routes, ktypeIpv6Routes)
+	s, _ = interfaceToJSON(v, ktypeIpv6Routes)
 	c.Check(s, Equals, testKtypeIpv6Routes)
 }
