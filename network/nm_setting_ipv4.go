@@ -165,7 +165,13 @@ func getSettingIp4ConfigAvailableKeys(data _ConnectionData) (keys []string) {
 
 // TODO Get available values
 
-// TODO Adder, Remover
+// TODO Check whether the values are correct
+func checkSettingIp4ConfigValues(data _ConnectionData) (errs map[string]string) {
+	errs = make(map[string]string)
+	return
+}
+
+// TODO Adder
 
 // Get key type
 func getSettingIp4ConfigKeyType(key string) (t ktype) {
@@ -239,7 +245,7 @@ func generalSetSettingIp4ConfigKey(data _ConnectionData, key, value string) {
 	default:
 		LOGGER.Error("generalSetSettingIp4ConfigKey: invalide key", key)
 	case NM_SETTING_IP4_CONFIG_METHOD:
-		setSettingIp4ConfigMethod(data, value) // TODO
+		logicSetSettingIp4ConfigMethod(data, value) // TODO
 	case NM_SETTING_IP4_CONFIG_DNS:
 		setSettingIp4ConfigDns(data, value)
 	case NM_SETTING_IP4_CONFIG_DNS_SEARCH:
@@ -267,63 +273,18 @@ func generalSetSettingIp4ConfigKey(data _ConnectionData, key, value string) {
 }
 
 // TODO Logic setter
-func logicSetSettingIp4ConfigMethod(data _ConnectionData, value string) (err error) {
-	setSettingIp4ConfigMethod(data, value)
+func logicSetSettingIp4ConfigMethod(data _ConnectionData, value string) {
 	switch value {
 	case NM_SETTING_IP4_CONFIG_METHOD_AUTO:
-
+		removeSettingIp4ConfigAddresses(data)
 	case NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL: // ignore
 	case NM_SETTING_IP4_CONFIG_METHOD_MANUAL:
 	case NM_SETTING_IP4_CONFIG_METHOD_SHARED: // ignore
-	case NM_SETTING_IP4_CONFIG_METHOD_DISABLED: // ignore
-	default:
-		// TODO
-		// err =
+	case NM_SETTING_IP4_CONFIG_METHOD_DISABLED:
+		removeSettingIp4ConfigDns(data)
+		removeSettingIp4ConfigAddresses(data)
 	}
-	return
-}
-func logicSetSettingIp4ConfigDns(data _ConnectionData, value string) (err error) {
-	setSettingIp4ConfigDns(data, value)
-	return
-}
-func logicSetSettingIp4ConfigDnsSearch(data _ConnectionData, value string) (err error) {
-	setSettingIp4ConfigDnsSearch(data, value)
-	return
-}
-func logicSetSettingIp4ConfigAddresses(data _ConnectionData, value string) (err error) {
-	setSettingIp4ConfigAddresses(data, value)
-	return
-}
-func logicSetSettingIp4ConfigRoutes(data _ConnectionData, value string) (err error) {
-	setSettingIp4ConfigRoutes(data, value)
-	return
-}
-func logicSetSettingIp4ConfigIgnoreAutoRoutes(data _ConnectionData, value string) (err error) {
-	setSettingIp4ConfigIgnoreAutoRoutes(data, value)
-	return
-}
-func logicSetSettingIp4ConfigIgnoreAutoDns(data _ConnectionData, value string) (err error) {
-	setSettingIp4ConfigIgnoreAutoDns(data, value)
-	return
-}
-func logicSetSettingIp4ConfigDhcpClientId(data _ConnectionData, value string) (err error) {
-	setSettingIp4ConfigDhcpClientId(data, value)
-	return
-}
-func logicSetSettingIp4ConfigDhcpSendHostname(data _ConnectionData, value string) (err error) {
-	setSettingIp4ConfigDhcpSendHostname(data, value)
-	return
-}
-func logicSetSettingIp4ConfigDhcpHostname(data _ConnectionData, value string) (err error) {
-	setSettingIp4ConfigDhcpHostname(data, value)
-	return
-}
-func logicSetSettingIp4ConfigNeverDefault(data _ConnectionData, value string) (err error) {
-	setSettingIp4ConfigNeverDefault(data, value)
-	return
-}
-func logicSetSettingIp4ConfigMayFail(data _ConnectionData, value string) (err error) {
-	setSettingIp4ConfigMayFail(data, value)
+	setSettingIp4ConfigMethod(data, value)
 	return
 }
 

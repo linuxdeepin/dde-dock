@@ -89,6 +89,12 @@ func getSettingConnectionAvailableKeys(data _ConnectionData) (keys []string) {
 	return
 }
 
+// TODO Check whether the values are correct
+func checkSettingConnectionValues(data _ConnectionData) (errs map[string]string) {
+	errs = make(map[string]string)
+	return
+}
+
 // Get key type
 func getSettingConnectionKeyType(key string) (t ktype) {
 	switch key {

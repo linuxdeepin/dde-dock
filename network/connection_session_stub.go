@@ -26,8 +26,31 @@ func (session *ConnectionSession) updatePropAvailableKeys() {
 	dbus.NotifyChange(session, "AvailableKeys")
 }
 
-func (session *ConnectionSession) updatePropErrors(v string) {
-	// TODO
-	// session.Errors
+func (session *ConnectionSession) updatePropErrors() {
+	for _, page := range session.ListPages() {
+		switch page {
+		default:
+			LOGGER.Error("updatePropErrors: invalid page name", page)
+		case pageGeneral:
+			session.Errors[page] = checkSettingConnectionValues(session.data)
+		case pageEthernet:
+			session.Errors[page] = checkSettingWiredValues(session.data)
+		case pageWifi:
+			session.Errors[page] = checkSettingWirelessValues(session.data)
+		case pageIPv4:
+			session.Errors[page] = checkSettingIp4ConfigValues(session.data)
+		case pageIPv6:
+			session.Errors[page] = checkSettingIp6ConfigValues(session.data)
+		case pageSecurity: // TODO
+			switch session.connType {
+			case typeWired:
+			case typeWireless:
+				// switch method {
+				// session.Errors[page] = checkSetting8021xValues(session.data)
+				// session.Errors[page] = checkSettingWirelessSecurityValues(session.data)
+				// }
+			}
+		}
+	}
 	dbus.NotifyChange(session, "Errors")
 }

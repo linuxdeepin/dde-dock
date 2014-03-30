@@ -59,6 +59,12 @@ func getSettingIp6ConfigAvailableKeys(data _ConnectionData) (keys []string) {
 	return
 }
 
+// TODO Check whether the values are correct
+func checkSettingIp6ConfigValues(data _ConnectionData) (errs map[string]string) {
+	errs = make(map[string]string)
+	return
+}
+
 // Get key type
 func getSettingIp6ConfigKeyType(key string) (t ktype) {
 	switch key {

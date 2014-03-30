@@ -39,6 +39,12 @@ const (
 	NM_SETTING_802_1X_SYSTEM_CA_CERTS                   = "system-ca-certs"
 )
 
+// TODO Check whether the values are correct
+func checkSetting8021xValues(data _ConnectionData) (errs map[string]string) {
+	errs = make(map[string]string)
+	return
+}
+
 // Get key type
 func getSetting8021xKeyType(key string) (t ktype) {
 	switch key {

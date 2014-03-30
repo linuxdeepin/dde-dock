@@ -166,6 +166,12 @@ func getSettingWirelessSecurityKeyType(key string) (t ktype) {
 	return
 }
 
+// TODO Check whether the values are correct
+func checkSettingWirelessSecurityValues(data _ConnectionData) (errs map[string]string) {
+	errs = make(map[string]string)
+	return
+}
+
 // Get and set key's value generally
 func generalGetSettingWirelessSecurityKey(data _ConnectionData, key string) (value string) {
 	switch key {

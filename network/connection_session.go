@@ -49,11 +49,9 @@ func NewConnectionSessionByCreate(connType string) (session *ConnectionSession, 
 	// TODO
 	session.connType = connType
 
-	// TODO
+	session.updatePropErrors()
 	session.updatePropAvailableKeys()
 	session.updatePropAllowSave(false)
-
-	// TODO current errors
 
 	return
 }
@@ -81,7 +79,7 @@ func NewConnectionSessionByOpen(uuid string) (session *ConnectionSession, err er
 	}
 	session.connType = getSettingConnectionType(session.data)
 
-	// TODO
+	session.updatePropErrors()
 	session.updatePropAvailableKeys()
 	session.updatePropAllowSave(false)
 
@@ -254,10 +252,11 @@ func (session *ConnectionSession) SetKey(page, key, value string) {
 		}
 	}
 
-	// TODO
+	session.updatePropErrors()
 	session.updatePropAvailableKeys()
-
-	if !session.isErrorOccured() {
+	if session.isErrorOccured() {
+		session.updatePropAllowSave(false)
+	} else {
 		session.updatePropAllowSave(true)
 	}
 

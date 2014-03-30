@@ -171,6 +171,12 @@ func newWirelessConnectionData(id, uuid, ssid string, keyFlag int) (data _Connec
 	// data[fieldIPv6]["method"] = dbus.MakeVariant("auto")
 }
 
+// TODO Check whether the values are correct
+func checkSettingWirelessValues(data _ConnectionData) (errs map[string]string) {
+	errs = make(map[string]string)
+	return
+}
+
 // Get key type
 func getSettingWirelessKeyType(key string) (t ktype) {
 	switch key {
