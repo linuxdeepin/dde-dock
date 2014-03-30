@@ -159,12 +159,12 @@ func generalSetSettingIp6ConfigKeyJSON(data _ConnectionData, key, value string) 
 }
 
 // TODO tmp
-func setSettingIp6ConfigMethod(data _ConnectionData, value string) {
-	setConnectionDataKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_METHOD, value, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_METHOD))
-}
 func getSettingIp6ConfigMethod(data _ConnectionData) (value string) {
-	value = getConnectionDataKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_METHOD, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_METHOD))
+	value, _ = getConnectionDataKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_METHOD).(string)
 	return
+}
+func setSettingIp6ConfigMethod(data _ConnectionData, value string) {
+	setConnectionDataKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_METHOD, value)
 }
 
 // Getter

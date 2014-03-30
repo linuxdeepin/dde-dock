@@ -85,8 +85,12 @@ func interfaceToJSON(v interface{}, t ktype) (s string, err error) {
 	return
 }
 
-// Convert sepcial key type which wrapped by json to dbus variant
+// Convert sepcial key type which wrapped by json to dbus variant's value
+// TODO
 func jsonToInterfaceString(s string) (v interface{}, err error) {
+	// var d string
+	// json.Unmarshal([]byte(s), &d)
+	// v = d
 	v = s
 	return
 }
@@ -188,8 +192,19 @@ func jsonToInterfaceIpv6Routes(s string) (v interface{}, err error) {
 	return
 }
 
-// Convert dbus variant to special key type and wrap to json
+// Convert dbus variant's value to special key type and wrap to json
+// TODO
 func interfaceToJSONString(v interface{}) (s string, err error) {
+	// d, err := interfaceToString(v)
+	// if err != nil {
+	// 	return
+	// }
+	// b, err := json.Marshal(d)
+	// if err != nil {
+	// 	return
+	// }
+	// s = string(b)
+	// return
 	return interfaceToString(v)
 }
 func interfaceToJSONByte(v interface{}) (s string, err error) {

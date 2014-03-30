@@ -194,7 +194,7 @@ func generalSetSettingWiredKeyJSON(data _ConnectionData, key, value string) {
 
 // TODO tmp
 func setSettingWiredDuplex(data _ConnectionData, value string) {
-	setConnectionDataKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_DUPLEX, value, getSettingWiredKeyType(NM_SETTING_WIRED_DUPLEX))
+	setConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_DUPLEX, value)
 }
 
 // Getter

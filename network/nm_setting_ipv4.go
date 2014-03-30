@@ -382,13 +382,13 @@ func logicSetSettingIp4ConfigMethod(data _ConnectionData, value string) {
 	return
 }
 
-// TODO
+// TODO tmp
 func getSettingIp4ConfigMethod(data _ConnectionData) (value string) {
-	value = getConnectionDataKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_METHOD, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_METHOD))
+	value, _ = getConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_METHOD).(string)
 	return
 }
 func setSettingIp4ConfigMethod(data _ConnectionData, value string) {
-	setConnectionDataKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_METHOD, value, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_METHOD))
+	setConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_METHOD, value)
 }
 
 // Getter

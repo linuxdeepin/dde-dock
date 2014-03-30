@@ -15,9 +15,12 @@ func init() {
 }
 
 const (
-	testConnectionId   = "idname"
-	testConnectionUuid = "8e2f9aa2-42b8-47d5-b040-ae82c53fa1f2"
-	testConnectionType = typeWired
+	testConnectionId       = "idname"
+	testConnectionUuid     = "8e2f9aa2-42b8-47d5-b040-ae82c53fa1f2"
+	testConnectionType     = "802-3-ethernet"
+	testConnectionIdJSON   = "idname"
+	testConnectionUuidJSON = "8e2f9aa2-42b8-47d5-b040-ae82c53fa1f2"
+	testConnectionTypeJSON = "802-3-ethernet"
 )
 
 const (
@@ -40,16 +43,28 @@ const (
 	// 'routes': [([254, 128, 0, 0, 0, 0, 0, 0, 2, 34, 104, 255, 254, 15, 77, 9], 64L, [254, 128, 0, 0, 0, 0, 0, 0, 2, 34, 104, 255, 254, 15, 77, 9], 12L)]
 )
 
+func (*Utils) TestGetSetConnectionData(c *C) {
+	data := make(_ConnectionData)
+	addConnectionDataField(data, fieldConnection)
+	setSettingConnectionId(data, testConnectionId)
+	setSettingConnectionUuid(data, testConnectionUuid)
+	setSettingConnectionType(data, testConnectionType)
+
+	c.Check(getSettingConnectionId(data), Equals, testConnectionId)
+	c.Check(getSettingConnectionUuid(data), Equals, testConnectionUuid)
+	c.Check(getSettingConnectionType(data), Equals, testConnectionType)
+}
+
 func (*Utils) TestGetSetConnectionDataJSON(c *C) {
 	data := make(_ConnectionData)
 	addConnectionDataField(data, fieldConnection)
-	setSettingConnectionIdJSON(data, testConnectionId)
-	setSettingConnectionUuidJSON(data, testConnectionUuid)
-	setSettingConnectionTypeJSON(data, testConnectionType)
+	setSettingConnectionIdJSON(data, testConnectionIdJSON)
+	setSettingConnectionUuidJSON(data, testConnectionUuidJSON)
+	setSettingConnectionTypeJSON(data, testConnectionTypeJSON)
 
-	c.Check(getSettingConnectionIdJSON(data), Equals, testConnectionId)
-	c.Check(getSettingConnectionUuidJSON(data), Equals, testConnectionUuid)
-	c.Check(getSettingConnectionTypeJSON(data), Equals, testConnectionType)
+	c.Check(getSettingConnectionIdJSON(data), Equals, testConnectionIdJSON)
+	c.Check(getSettingConnectionUuidJSON(data), Equals, testConnectionUuidJSON)
+	c.Check(getSettingConnectionTypeJSON(data), Equals, testConnectionTypeJSON)
 }
 
 func (*Utils) TestJSONWrapper(c *C) {

@@ -290,14 +290,14 @@ func generalSetSettingWirelessKeyJSON(data _ConnectionData, key, value string) {
 
 // TODO tmp
 func getSettingWirelessSsid(data _ConnectionData) (value []byte) {
-	value = getConnectionDataKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SSID).([]byte)
+	value, _ = getConnectionDataKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SSID).([]byte)
 	return
 }
 func setSettingWirelessSsid(data _ConnectionData, value []byte) {
 	setConnectionDataKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SSID, value)
 }
 func setSettingWirelessSec(data _ConnectionData, value string) {
-	setConnectionDataKeyJSON(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEC, value, getSettingWirelessKeyType(NM_SETTING_WIRELESS_SEC))
+	setConnectionDataKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEC, value)
 }
 
 // Getter
