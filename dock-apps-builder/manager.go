@@ -24,7 +24,7 @@ var (
 	LOGGER                = logger.NewLogger("com.deepin.daemon.DockAppsBuilder")
 )
 
-func listenerRootWindow() {
+func listenRootWindow() {
 	var update = func() {
 		list, err := ewmh.ClientListGet(XU)
 		if err != nil {
@@ -190,10 +190,11 @@ func main() {
 		LOGGER.SetLogLevel(logger.LEVEL_DEBUG)
 	}
 
+	initDeepin()
 	for _, id := range loadAll() {
 		MANAGER.createNormalApp(id + ".desktop")
 	}
-	listenerRootWindow()
+	listenRootWindow()
 	initTrayManager()
 	go xevent.Main(XU)
 	dbus.Wait()

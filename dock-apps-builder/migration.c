@@ -480,6 +480,10 @@ char* icon_name_to_path(const char* name, int size)
 
     char* pic_name = g_strndup(name, pic_name_len);
     GtkIconTheme* them = gtk_icon_theme_get_default(); //do not ref or unref it
+    if (them == NULL) {
+        g_warning("get theme failed");
+        return NULL;
+    }
 
     // This info must not unref, owned by gtk !!!!!!!!!!!!!!!!!!!!!
     GtkIconInfo* info = gtk_icon_theme_lookup_icon(them, pic_name, size, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
@@ -529,5 +533,27 @@ char* check_absolute_path_icon(char const* app_id, char const* icon_path)
 gboolean is_chrome_app(char const* name)
 {
     return g_str_has_prefix(name, "chrome-");
+}
+
+void set_default_theme(const char* theme)
+{
+    GtkSettings* setting = gtk_settings_get_default();
+    g_object_set(setting, "gtk-icon-theme-name", theme, NULL);
+}
+
+static char DE_NAME[100] = "DEEPIN";
+
+void set_desktop_env_name(const char* name)
+{
+    size_t max_len = strlen(name) + 1;
+    memcpy(DE_NAME, name, max_len > 100 ? max_len : 100);
+    g_desktop_app_info_set_desktop_env(name);
+}
+
+void init_deepin()
+{
+    gtk_init(NULL, NULL);
+    set_desktop_env_name("Deepin");
+    set_default_theme("Deepin");
 }
 

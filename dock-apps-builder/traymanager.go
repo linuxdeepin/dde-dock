@@ -143,7 +143,7 @@ func initTrayManager() {
 
 	TRAYMANAGER.tryOwner()
 	xfixes.SelectSelectionInput(TrayXU.Conn(), TrayXU.RootWin(), _NET_SYSTEM_TRAY_S0, xfixes.SelectionEventMaskSelectionClientClose)
-	go TRAYMANAGER.startListenr()
+	go TRAYMANAGER.startListener()
 	dbus.InstallOnSession(TRAYMANAGER)
 }
 func (m *TrayManager) tryOwner() {
@@ -162,7 +162,7 @@ func (m *TrayManager) tryOwner() {
 	}
 }
 
-func (m *TrayManager) startListenr() {
+func (m *TrayManager) startListener() {
 	for {
 		if e, err := TrayXU.Conn().WaitForEvent(); err == nil {
 			switch ev := e.(type) {

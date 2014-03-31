@@ -12,6 +12,8 @@ import "github.com/BurntSushi/xgbutil/xwindow"
 import "github.com/BurntSushi/xgbutil/xevent"
 import "github.com/BurntSushi/xgbutil/xprop"
 import "github.com/BurntSushi/xgbutil/xgraphics"
+import "io/ioutil"
+import "path"
 import "strings"
 
 type WindowInfo struct {
@@ -45,14 +47,14 @@ func NewRuntimeApp(xid xproto.Window, appId string) *RuntimeApp {
 		Id:   appId,
 		xids: make(map[xproto.Window]*WindowInfo),
 	}
-	app.attachXid(xid)
-	app.CurrentInfo = app.xids[xid]
 	app.core = gio.NewDesktopAppInfo(appId + ".desktop")
 	if app.core != nil {
 		LOGGER.Debug(appId, ", Actions:", app.core.ListActions())
 	} else {
 		LOGGER.Debug(appId, ", Actions:[]")
 	}
+	app.attachXid(xid)
+	app.CurrentInfo = app.xids[xid]
 	app.getExec(xid)
 	LOGGER.Debug("Exec:", app.exec)
 	app.buildMenu()
@@ -259,6 +261,28 @@ func isNormalWindow(xid xproto.Window) bool {
 }
 
 func (app *RuntimeApp) updateIcon(xid xproto.Window) {
+	if app.core != nil {
+		gioIcon := app.core.GetIcon()
+		if gioIcon != nil {
+			LOGGER.Debug("GetIcon:", gioIcon.ToString())
+			icon := get_theme_icon(gioIcon.ToString(), 48)
+			if icon != "" {
+				LOGGER.Debug("get_theme_icon:", icon)
+				ext := path.Ext(icon)
+				if strings.EqualFold(ext, "xmp") {
+					buf, err := ioutil.ReadFile(icon)
+					if err != nil {
+						app.xids[xid].Icon = "data:image/png;base64," +
+							base64.StdEncoding.EncodeToString(buf)
+						return
+					}
+				} else {
+					app.xids[xid].Icon = icon
+					return
+				}
+			}
+		}
+	}
 	icon, err := xgraphics.FindIcon(XU, xid, 48, 48)
 	if err == nil {
 		buf := bytes.NewBuffer(nil)
