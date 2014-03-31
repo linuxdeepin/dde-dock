@@ -185,43 +185,6 @@ func checkSettingWirelessValues(data _ConnectionData) (errs map[string]string) {
 	return
 }
 
-// Get and set key's value generally
-func generalGetSettingWirelessKeyJSON(data _ConnectionData, key string) (value string) {
-	switch key {
-	default:
-		LOGGER.Error("generalGetSettingWirelessKey: invalide key", key)
-	case NM_SETTING_WIRELESS_SSID:
-		value = getSettingWirelessSsidJSON(data)
-	case NM_SETTING_WIRELESS_MODE:
-		value = getSettingWirelessModeJSON(data)
-	case NM_SETTING_WIRELESS_BAND:
-		value = getSettingWirelessBandJSON(data)
-	case NM_SETTING_WIRELESS_CHANNEL:
-		value = getSettingWirelessChannelJSON(data)
-	case NM_SETTING_WIRELESS_BSSID:
-		value = getSettingWirelessBssidJSON(data)
-	case NM_SETTING_WIRELESS_RATE:
-		value = getSettingWirelessRateJSON(data)
-	case NM_SETTING_WIRELESS_TX_POWER:
-		value = getSettingWirelessTxPowerJSON(data)
-	case NM_SETTING_WIRELESS_MAC_ADDRESS:
-		value = getSettingWirelessMacAddressJSON(data)
-	case NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS:
-		value = getSettingWirelessClonedMacAddressJSON(data)
-	case NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST:
-		value = getSettingWirelessMacAddressBlacklistJSON(data)
-	case NM_SETTING_WIRELESS_MTU:
-		value = getSettingWirelessMtuJSON(data)
-	case NM_SETTING_WIRELESS_SEEN_BSSIDS:
-		value = getSettingWirelessSeenBssidsJSON(data)
-	case NM_SETTING_WIRELESS_SEC:
-		value = getSettingWirelessSecJSON(data)
-	case NM_SETTING_WIRELESS_HIDDEN:
-		value = getSettingWirelessHiddenJSON(data)
-	}
-	return
-}
-
 // TODO use logic setter
 func generalSetSettingWirelessKeyJSON(data _ConnectionData, key, value string) {
 	switch key {

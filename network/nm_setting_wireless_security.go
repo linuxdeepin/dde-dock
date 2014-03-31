@@ -139,49 +139,6 @@ func checkSettingWirelessSecurityValues(data _ConnectionData) (errs map[string]s
 	return
 }
 
-// Get and set key's value generally
-func generalGetSettingWirelessSecurityKeyJSON(data _ConnectionData, key string) (value string) {
-	switch key {
-	default:
-		LOGGER.Error("generalGetSettingWirelessSecurityKey: invalide key", key)
-	case NM_SETTING_WIRELESS_SECURITY_KEY_MGMT:
-		value = getSettingWirelessSecurityKeyMgmtJSON(data)
-	case NM_SETTING_WIRELESS_SECURITY_WEP_TX_KEYIDX:
-		value = getSettingWirelessSecurityWepTxKeyidxJSON(data)
-	case NM_SETTING_WIRELESS_SECURITY_AUTH_ALG:
-		value = getSettingWirelessSecurityAuthAlgJSON(data)
-	case NM_SETTING_WIRELESS_SECURITY_PROTO:
-		value = getSettingWirelessSecurityProtoJSON(data)
-	case NM_SETTING_WIRELESS_SECURITY_PAIRWISE:
-		value = getSettingWirelessSecurityPairwiseJSON(data)
-	case NM_SETTING_WIRELESS_SECURITY_GROUP:
-		value = getSettingWirelessSecurityGroupJSON(data)
-	case NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME:
-		value = getSettingWirelessSecurityLeapUsernameJSON(data)
-	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY0:
-		value = getSettingWirelessSecurityWepKey0JSON(data)
-	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY1:
-		value = getSettingWirelessSecurityWepKey1JSON(data)
-	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY2:
-		value = getSettingWirelessSecurityWepKey2JSON(data)
-	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY3:
-		value = getSettingWirelessSecurityWepKey3JSON(data)
-	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY_FLAGS:
-		value = getSettingWirelessSecurityWepKeyFlagsJSON(data)
-	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE:
-		value = getSettingWirelessSecurityWepKeyTypeJSON(data)
-	case NM_SETTING_WIRELESS_SECURITY_PSK:
-		value = getSettingWirelessSecurityPskJSON(data)
-	case NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS:
-		value = getSettingWirelessSecurityPskFlagsJSON(data)
-	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD:
-		value = getSettingWirelessSecurityLeapPasswordJSON(data)
-	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS:
-		value = getSettingWirelessSecurityLeapPasswordFlagsJSON(data)
-	}
-	return
-}
-
 // TODO use logic setter
 func generalSetSettingWirelessSecurityKeyJSON(data _ConnectionData, key, value string) {
 	switch key {

@@ -108,37 +108,6 @@ func checkSettingWiredValues(data _ConnectionData) (errs map[string]string) {
 	return
 }
 
-// Get and set key's value generally
-func generalGetSettingWiredKeyJSON(data _ConnectionData, key string) (value string) {
-	switch key {
-	default:
-		LOGGER.Error("generalGetSettingWiredKey: invalide key", key)
-	case NM_SETTING_WIRED_PORT:
-		value = getSettingWiredPortJSON(data)
-	case NM_SETTING_WIRED_SPEED:
-		value = getSettingWiredSpeedJSON(data)
-	case NM_SETTING_WIRED_DUPLEX:
-		value = getSettingWiredDuplexJSON(data)
-	case NM_SETTING_WIRED_AUTO_NEGOTIATE:
-		value = getSettingWiredAutoNegotiateJSON(data)
-	case NM_SETTING_WIRED_MAC_ADDRESS:
-		value = getSettingWiredMacAddressJSON(data)
-	case NM_SETTING_WIRED_CLONED_MAC_ADDRESS:
-		value = getSettingWiredClonedMacAddressJSON(data)
-	case NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST:
-		value = getSettingWiredMacAddressBlacklistJSON(data)
-	case NM_SETTING_WIRED_MTU:
-		value = getSettingWiredMtuJSON(data)
-	case NM_SETTING_WIRED_S390_SUBCHANNELS:
-		value = getSettingWiredS390SubchannelsJSON(data)
-	case NM_SETTING_WIRED_S390_NETTYPE:
-		value = getSettingWiredS390NettypeJSON(data)
-	case NM_SETTING_WIRED_S390_OPTIONS:
-		value = getSettingWiredS390OptionsJSON(data)
-	}
-	return
-}
-
 // TODO use logic setter
 func generalSetSettingWiredKeyJSON(data _ConnectionData, key, value string) {
 	switch key {

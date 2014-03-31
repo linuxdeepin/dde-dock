@@ -267,39 +267,6 @@ func checkSettingIp4ConfigValues(data _ConnectionData) (errs map[string]string) 
 
 // TODO Adder
 
-// Get and set key's value generally
-func generalGetSettingIp4ConfigKeyJSON(data _ConnectionData, key string) (value string) {
-	switch key {
-	default:
-		LOGGER.Error("generalGetSettingIp4ConfigKey: invalide key", key)
-	case NM_SETTING_IP4_CONFIG_METHOD:
-		value = getSettingIp4ConfigMethodJSON(data)
-	case NM_SETTING_IP4_CONFIG_DNS:
-		value = getSettingIp4ConfigDnsJSON(data)
-	case NM_SETTING_IP4_CONFIG_DNS_SEARCH:
-		value = getSettingIp4ConfigDnsSearchJSON(data)
-	case NM_SETTING_IP4_CONFIG_ADDRESSES:
-		value = getSettingIp4ConfigAddressesJSON(data)
-	case NM_SETTING_IP4_CONFIG_ROUTES:
-		value = getSettingIp4ConfigRoutesJSON(data)
-	case NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES:
-		value = getSettingIp4ConfigIgnoreAutoRoutesJSON(data)
-	case NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS:
-		value = getSettingIp4ConfigIgnoreAutoDnsJSON(data)
-	case NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID:
-		value = getSettingIp4ConfigDhcpClientIdJSON(data)
-	case NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME:
-		value = getSettingIp4ConfigDhcpSendHostnameJSON(data)
-	case NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME:
-		value = getSettingIp4ConfigDhcpHostnameJSON(data)
-	case NM_SETTING_IP4_CONFIG_NEVER_DEFAULT:
-		value = getSettingIp4ConfigNeverDefaultJSON(data)
-	case NM_SETTING_IP4_CONFIG_MAY_FAIL:
-		value = getSettingIp4ConfigMayFailJSON(data)
-	}
-	return
-}
-
 // TODO use logic setter
 func generalSetSettingIp4ConfigKeyJSON(data _ConnectionData, key, value string) {
 	switch key {
