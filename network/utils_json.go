@@ -11,74 +11,74 @@ import (
 // wrapArrayByte, unwrapArrayByte, wrapArrayByteByJSON
 // ktypeStringToVariant
 
-// string[json] -> realdata -> dbus.Variant
-func jsonToInterface(s string, t ktype) (v interface{}, err error) {
+// string[json] -> realdata -> dbus.Variant.Value()
+func jsonToKeyValue(s string, t ktype) (v interface{}, err error) {
 	switch t {
 	case ktypeString:
-		v, err = jsonToInterfaceString(s)
+		v, err = jsonToKeyValueString(s)
 	case ktypeByte:
-		v, err = jsonToInterfaceByte(s)
+		v, err = jsonToKeyValueByte(s)
 	case ktypeInt32:
-		v, err = jsonToInterfaceInt32(s)
+		v, err = jsonToKeyValueInt32(s)
 	case ktypeUint32:
-		v, err = jsonToInterfaceUint32(s)
+		v, err = jsonToKeyValueUint32(s)
 	case ktypeUint64:
-		v, err = jsonToInterfaceUint64(s)
+		v, err = jsonToKeyValueUint64(s)
 	case ktypeBoolean:
-		v, err = jsonToInterfaceBoolean(s)
+		v, err = jsonToKeyValueBoolean(s)
 	case ktypeArrayString:
-		v, err = jsonToInterfaceArrayString(s)
+		v, err = jsonToKeyValueArrayString(s)
 	case ktypeArrayByte:
-		v, err = jsonToInterfaceArrayByte(s)
+		v, err = jsonToKeyValueArrayByte(s)
 	case ktypeArrayUint32:
-		v, err = jsonToInterfaceArrayUint32(s)
+		v, err = jsonToKeyValueArrayUint32(s)
 	case ktypeArrayArrayByte:
-		v, err = jsonToInterfaceArrayArrayByte(s)
+		v, err = jsonToKeyValueArrayArrayByte(s)
 	case ktypeArrayArrayUint32:
-		v, err = jsonToInterfaceArrayArrayUint32(s)
+		v, err = jsonToKeyValueArrayArrayUint32(s)
 	case ktypeDictStringString:
-		v, err = jsonToInterfaceDictStringString(s)
+		v, err = jsonToKeyValueDictStringString(s)
 	case ktypeIpv6Addresses:
-		v, err = jsonToInterfaceIpv6Addresses(s)
+		v, err = jsonToKeyValueIpv6Addresses(s)
 	case ktypeIpv6Routes:
-		v, err = jsonToInterfaceIpv6Routes(s)
+		v, err = jsonToKeyValueIpv6Routes(s)
 	default:
 		err = fmt.Errorf("invalid variant type, %s", s)
 	}
 	return
 }
 
-// dbus.Variant -> realdata -> string[json]
-func interfaceToJSON(v interface{}, t ktype) (s string, err error) {
+// dbus.Variant.Value() -> realdata -> string[json]
+func keyValueToJSON(v interface{}, t ktype) (s string, err error) {
 	switch t {
 	case ktypeString:
-		s, err = interfaceToJSONString(v)
+		s, err = keyValueToJSONString(v)
 	case ktypeByte:
-		s, err = interfaceToJSONByte(v)
+		s, err = keyValueToJSONByte(v)
 	case ktypeInt32:
-		s, err = interfaceToJSONInt32(v)
+		s, err = keyValueToJSONInt32(v)
 	case ktypeUint32:
-		s, err = interfaceToJSONUint32(v)
+		s, err = keyValueToJSONUint32(v)
 	case ktypeUint64:
-		s, err = interfaceToJSONUint64(v)
+		s, err = keyValueToJSONUint64(v)
 	case ktypeBoolean:
-		s, err = interfaceToJSONBoolean(v)
+		s, err = keyValueToJSONBoolean(v)
 	case ktypeArrayString:
-		s, err = interfaceToJSONArrayString(v)
+		s, err = keyValueToJSONArrayString(v)
 	case ktypeArrayByte:
-		s, err = interfaceToJSONArrayByte(v)
+		s, err = keyValueToJSONArrayByte(v)
 	case ktypeArrayUint32:
-		s, err = interfaceToJSONArrayUint32(v)
+		s, err = keyValueToJSONArrayUint32(v)
 	case ktypeArrayArrayByte:
-		s, err = interfaceToJSONArrayArrayByte(v)
+		s, err = keyValueToJSONArrayArrayByte(v)
 	case ktypeArrayArrayUint32:
-		s, err = interfaceToJSONArrayArrayUint32(v)
+		s, err = keyValueToJSONArrayArrayUint32(v)
 	case ktypeDictStringString:
-		s, err = interfaceToJSONDictStringString(v)
+		s, err = keyValueToJSONDictStringString(v)
 	case ktypeIpv6Addresses:
-		s, err = interfaceToJSONIpv6Addresses(v)
+		s, err = keyValueToJSONIpv6Addresses(v)
 	case ktypeIpv6Routes:
-		s, err = interfaceToJSONIpv6Routes(v)
+		s, err = keyValueToJSONIpv6Routes(v)
 	default:
 		err = fmt.Errorf("invalid key type, %v", v)
 	}
@@ -87,14 +87,14 @@ func interfaceToJSON(v interface{}, t ktype) (s string, err error) {
 
 // Convert sepcial key type which wrapped by json to dbus variant's value
 // TODO
-func jsonToInterfaceString(s string) (v interface{}, err error) {
+func jsonToKeyValueString(s string) (v interface{}, err error) {
 	// var d string
 	// json.Unmarshal([]byte(s), &d)
 	// v = d
 	v = s
 	return
 }
-func jsonToInterfaceByte(s string) (v interface{}, err error) {
+func jsonToKeyValueByte(s string) (v interface{}, err error) {
 	if len(s) == 0 {
 		err = fmt.Errorf("string is empty")
 		return
@@ -103,7 +103,7 @@ func jsonToInterfaceByte(s string) (v interface{}, err error) {
 	v = d
 	return
 }
-func jsonToInterfaceInt32(s string) (v interface{}, err error) {
+func jsonToKeyValueInt32(s string) (v interface{}, err error) {
 	var d int32
 	tmpd, err := strconv.ParseInt(s, 10, 0)
 	if err != nil {
@@ -113,7 +113,7 @@ func jsonToInterfaceInt32(s string) (v interface{}, err error) {
 	v = d
 	return
 }
-func jsonToInterfaceUint32(s string) (v interface{}, err error) {
+func jsonToKeyValueUint32(s string) (v interface{}, err error) {
 	var d uint32
 	tmpd, err := strconv.ParseUint(s, 10, 0)
 	if err != nil {
@@ -123,7 +123,7 @@ func jsonToInterfaceUint32(s string) (v interface{}, err error) {
 	v = d
 	return
 }
-func jsonToInterfaceUint64(s string) (v interface{}, err error) {
+func jsonToKeyValueUint64(s string) (v interface{}, err error) {
 	var d uint64
 	d, err = strconv.ParseUint(s, 10, 0)
 	if err != nil {
@@ -132,7 +132,7 @@ func jsonToInterfaceUint64(s string) (v interface{}, err error) {
 	v = d
 	return
 }
-func jsonToInterfaceBoolean(s string) (v interface{}, err error) {
+func jsonToKeyValueBoolean(s string) (v interface{}, err error) {
 	var d bool
 	d, err = strconv.ParseBool(s)
 	if err != nil {
@@ -141,7 +141,7 @@ func jsonToInterfaceBoolean(s string) (v interface{}, err error) {
 	v = d
 	return
 }
-func jsonToInterfaceArrayByte(s string) (v interface{}, err error) {
+func jsonToKeyValueArrayByte(s string) (v interface{}, err error) {
 	var d []byte
 	// TODO wrap throuh json
 	// err = json.Unmarshal([]byte(s), &d)
@@ -149,43 +149,43 @@ func jsonToInterfaceArrayByte(s string) (v interface{}, err error) {
 	v = d
 	return
 }
-func jsonToInterfaceArrayString(s string) (v interface{}, err error) {
+func jsonToKeyValueArrayString(s string) (v interface{}, err error) {
 	var d []string
 	err = json.Unmarshal([]byte(s), &d)
 	v = d
 	return
 }
-func jsonToInterfaceArrayUint32(s string) (v interface{}, err error) {
+func jsonToKeyValueArrayUint32(s string) (v interface{}, err error) {
 	var d []uint32
 	err = json.Unmarshal([]byte(s), &d)
 	v = d
 	return
 }
-func jsonToInterfaceArrayArrayByte(s string) (v interface{}, err error) {
+func jsonToKeyValueArrayArrayByte(s string) (v interface{}, err error) {
 	var d [][]byte
 	err = json.Unmarshal([]byte(s), &d)
 	v = d
 	return
 }
-func jsonToInterfaceArrayArrayUint32(s string) (v interface{}, err error) {
+func jsonToKeyValueArrayArrayUint32(s string) (v interface{}, err error) {
 	var d [][]uint32
 	err = json.Unmarshal([]byte(s), &d)
 	v = d
 	return
 }
-func jsonToInterfaceDictStringString(s string) (v interface{}, err error) {
+func jsonToKeyValueDictStringString(s string) (v interface{}, err error) {
 	var d map[string]string
 	err = json.Unmarshal([]byte(s), &d)
 	v = d
 	return
 }
-func jsonToInterfaceIpv6Addresses(s string) (v interface{}, err error) {
+func jsonToKeyValueIpv6Addresses(s string) (v interface{}, err error) {
 	var d Ipv6Addresses
 	err = json.Unmarshal([]byte(s), &d)
 	v = d
 	return
 }
-func jsonToInterfaceIpv6Routes(s string) (v interface{}, err error) {
+func jsonToKeyValueIpv6Routes(s string) (v interface{}, err error) {
 	var d Ipv6Routes
 	err = json.Unmarshal([]byte(s), &d)
 	v = d
@@ -194,7 +194,7 @@ func jsonToInterfaceIpv6Routes(s string) (v interface{}, err error) {
 
 // Convert dbus variant's value to special key type and wrap to json
 // TODO
-func interfaceToJSONString(v interface{}) (s string, err error) {
+func keyValueToJSONString(v interface{}) (s string, err error) {
 	// d, err := interfaceToString(v)
 	// if err != nil {
 	// 	return
@@ -207,7 +207,7 @@ func interfaceToJSONString(v interface{}) (s string, err error) {
 	// return
 	return interfaceToString(v)
 }
-func interfaceToJSONByte(v interface{}) (s string, err error) {
+func keyValueToJSONByte(v interface{}) (s string, err error) {
 	d, err := interfaceToByte(v)
 	if err != nil {
 		return
@@ -215,7 +215,7 @@ func interfaceToJSONByte(v interface{}) (s string, err error) {
 	s = string(d)
 	return
 }
-func interfaceToJSONInt32(v interface{}) (s string, err error) {
+func keyValueToJSONInt32(v interface{}) (s string, err error) {
 	d, err := interfaceToInt32(v)
 	if err != nil {
 		return
@@ -223,7 +223,7 @@ func interfaceToJSONInt32(v interface{}) (s string, err error) {
 	s = strconv.FormatInt(int64(d), 10)
 	return
 }
-func interfaceToJSONUint32(v interface{}) (s string, err error) {
+func keyValueToJSONUint32(v interface{}) (s string, err error) {
 	d, err := interfaceToUint32(v)
 	if err != nil {
 		return
@@ -231,7 +231,7 @@ func interfaceToJSONUint32(v interface{}) (s string, err error) {
 	s = strconv.FormatUint(uint64(d), 10)
 	return
 }
-func interfaceToJSONUint64(v interface{}) (s string, err error) {
+func keyValueToJSONUint64(v interface{}) (s string, err error) {
 	d, err := interfaceToUint64(v)
 	if err != nil {
 		return
@@ -239,7 +239,7 @@ func interfaceToJSONUint64(v interface{}) (s string, err error) {
 	s = strconv.FormatUint(d, 10)
 	return
 }
-func interfaceToJSONBoolean(v interface{}) (s string, err error) {
+func keyValueToJSONBoolean(v interface{}) (s string, err error) {
 	d, err := interfaceToBoolean(v)
 	if err != nil {
 		return
@@ -247,7 +247,7 @@ func interfaceToJSONBoolean(v interface{}) (s string, err error) {
 	s = strconv.FormatBool(d)
 	return
 }
-func interfaceToJSONArrayByte(v interface{}) (s string, err error) {
+func keyValueToJSONArrayByte(v interface{}) (s string, err error) {
 	d, err := interfaceToArrayByte(v)
 	if err != nil {
 		return
@@ -258,7 +258,7 @@ func interfaceToJSONArrayByte(v interface{}) (s string, err error) {
 	s = string(d)
 	return
 }
-func interfaceToJSONArrayString(v interface{}) (s string, err error) {
+func keyValueToJSONArrayString(v interface{}) (s string, err error) {
 	d, err := interfaceToArrayString(v)
 	if err != nil {
 		return
@@ -267,7 +267,7 @@ func interfaceToJSONArrayString(v interface{}) (s string, err error) {
 	s = string(b)
 	return
 }
-func interfaceToJSONArrayUint32(v interface{}) (s string, err error) {
+func keyValueToJSONArrayUint32(v interface{}) (s string, err error) {
 	d, err := interfaceToArrayUint32(v)
 	if err != nil {
 		return
@@ -276,7 +276,7 @@ func interfaceToJSONArrayUint32(v interface{}) (s string, err error) {
 	s = string(b)
 	return
 }
-func interfaceToJSONArrayArrayByte(v interface{}) (s string, err error) {
+func keyValueToJSONArrayArrayByte(v interface{}) (s string, err error) {
 	d, err := interfaceToArrayArrayByte(v)
 	if err != nil {
 		return
@@ -285,7 +285,7 @@ func interfaceToJSONArrayArrayByte(v interface{}) (s string, err error) {
 	s = string(b)
 	return
 }
-func interfaceToJSONArrayArrayUint32(v interface{}) (s string, err error) {
+func keyValueToJSONArrayArrayUint32(v interface{}) (s string, err error) {
 	d, err := interfaceToArrayArrayUint32(v)
 	if err != nil {
 		return
@@ -294,7 +294,7 @@ func interfaceToJSONArrayArrayUint32(v interface{}) (s string, err error) {
 	s = string(b)
 	return
 }
-func interfaceToJSONDictStringString(v interface{}) (s string, err error) {
+func keyValueToJSONDictStringString(v interface{}) (s string, err error) {
 	d, err := interfaceToDictStringString(v)
 	if err != nil {
 		return
@@ -303,7 +303,7 @@ func interfaceToJSONDictStringString(v interface{}) (s string, err error) {
 	s = string(b)
 	return
 }
-func interfaceToJSONIpv6Addresses(v interface{}) (s string, err error) {
+func keyValueToJSONIpv6Addresses(v interface{}) (s string, err error) {
 	d, err := interfaceToIpv6Addresses(v)
 	if err != nil {
 		return
@@ -312,7 +312,7 @@ func interfaceToJSONIpv6Addresses(v interface{}) (s string, err error) {
 	s = string(b)
 	return
 }
-func interfaceToJSONIpv6Routes(v interface{}) (s string, err error) {
+func keyValueToJSONIpv6Routes(v interface{}) (s string, err error) {
 	d, err := interfaceToIpv6Routes(v)
 	if err != nil {
 		return

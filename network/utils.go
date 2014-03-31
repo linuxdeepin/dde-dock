@@ -54,7 +54,7 @@ func getConnectionDataKeyJSON(data _ConnectionData, field, key string, t ktype) 
 		return
 	}
 
-	valueJSON, err := interfaceToJSON(value, t)
+	valueJSON, err := keyValueToJSON(value, t)
 	if err != nil {
 		LOGGER.Error("get connection data failed:", err)
 		return
@@ -90,7 +90,7 @@ func setConnectionDataKeyJSON(data _ConnectionData, field, key, valueJSON string
 		LOGGER.Warning("setConnectionDataKeyJSON: valueJSON is empty")
 	}
 
-	value, err := jsonToInterface(valueJSON, t)
+	value, err := jsonToKeyValue(valueJSON, t)
 	if err != nil {
 		LOGGER.Errorf("set connection data failed, valueJSON=%s, ktype=%s, error message:%v",
 			valueJSON, getKtypeDescription(t), err)
