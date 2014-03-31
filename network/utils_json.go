@@ -87,108 +87,83 @@ func keyValueToJSON(v interface{}, t ktype) (s string, err error) {
 
 // Convert sepcial key type which wrapped by json to dbus variant's value
 // TODO
-func jsonToKeyValueString(s string) (v interface{}, err error) {
+func jsonToKeyValueString(s string) (v string, err error) {
 	// var d string
 	// json.Unmarshal([]byte(s), &d)
 	// v = d
 	v = s
 	return
 }
-func jsonToKeyValueByte(s string) (v interface{}, err error) {
+func jsonToKeyValueByte(s string) (v byte, err error) {
 	if len(s) == 0 {
 		err = fmt.Errorf("string is empty")
 		return
 	}
-	d := byte(s[0])
-	v = d
+	v = byte(s[0])
 	return
 }
-func jsonToKeyValueInt32(s string) (v interface{}, err error) {
-	var d int32
+func jsonToKeyValueInt32(s string) (v int32, err error) {
 	tmpd, err := strconv.ParseInt(s, 10, 0)
 	if err != nil {
 		return
 	}
-	d = int32(tmpd)
-	v = d
+	v = int32(tmpd)
 	return
 }
-func jsonToKeyValueUint32(s string) (v interface{}, err error) {
-	var d uint32
+func jsonToKeyValueUint32(s string) (v uint32, err error) {
 	tmpd, err := strconv.ParseUint(s, 10, 0)
 	if err != nil {
 		return
 	}
-	d = uint32(tmpd)
-	v = d
+	v = uint32(tmpd)
 	return
 }
-func jsonToKeyValueUint64(s string) (v interface{}, err error) {
-	var d uint64
-	d, err = strconv.ParseUint(s, 10, 0)
+func jsonToKeyValueUint64(s string) (v uint64, err error) {
+	v, err = strconv.ParseUint(s, 10, 0)
 	if err != nil {
 		return
 	}
-	v = d
 	return
 }
-func jsonToKeyValueBoolean(s string) (v interface{}, err error) {
-	var d bool
-	d, err = strconv.ParseBool(s)
+func jsonToKeyValueBoolean(s string) (v bool, err error) {
+	v, err = strconv.ParseBool(s)
 	if err != nil {
 		return
 	}
-	v = d
 	return
 }
-func jsonToKeyValueArrayByte(s string) (v interface{}, err error) {
-	var d []byte
+func jsonToKeyValueArrayByte(s string) (v []byte, err error) {
 	// TODO wrap throuh json
 	// err = json.Unmarshal([]byte(s), &d)
-	d = []byte(s)
-	v = d
+	v = []byte(s)
 	return
 }
-func jsonToKeyValueArrayString(s string) (v interface{}, err error) {
-	var d []string
-	err = json.Unmarshal([]byte(s), &d)
-	v = d
+func jsonToKeyValueArrayString(s string) (v []string, err error) {
+	err = json.Unmarshal([]byte(s), &v)
 	return
 }
-func jsonToKeyValueArrayUint32(s string) (v interface{}, err error) {
-	var d []uint32
-	err = json.Unmarshal([]byte(s), &d)
-	v = d
+func jsonToKeyValueArrayUint32(s string) (v []uint32, err error) {
+	err = json.Unmarshal([]byte(s), &v)
 	return
 }
-func jsonToKeyValueArrayArrayByte(s string) (v interface{}, err error) {
-	var d [][]byte
-	err = json.Unmarshal([]byte(s), &d)
-	v = d
+func jsonToKeyValueArrayArrayByte(s string) (v [][]byte, err error) {
+	err = json.Unmarshal([]byte(s), &v)
 	return
 }
-func jsonToKeyValueArrayArrayUint32(s string) (v interface{}, err error) {
-	var d [][]uint32
-	err = json.Unmarshal([]byte(s), &d)
-	v = d
+func jsonToKeyValueArrayArrayUint32(s string) (v [][]uint32, err error) {
+	err = json.Unmarshal([]byte(s), &v)
 	return
 }
-func jsonToKeyValueDictStringString(s string) (v interface{}, err error) {
-	var d map[string]string
-	err = json.Unmarshal([]byte(s), &d)
-	v = d
+func jsonToKeyValueDictStringString(s string) (v map[string]string, err error) {
+	err = json.Unmarshal([]byte(s), &v)
 	return
 }
-func jsonToKeyValueIpv6Addresses(s string) (v interface{}, err error) {
-	var d Ipv6Addresses
-	err = json.Unmarshal([]byte(s), &d)
-	v = d
+func jsonToKeyValueIpv6Addresses(s string) (v Ipv6Addresses, err error) {
+	err = json.Unmarshal([]byte(s), &v)
 	return
 }
-func jsonToKeyValueIpv6Routes(s string) (v interface{}, err error) {
-	var d Ipv6Routes
-	err = json.Unmarshal([]byte(s), &d)
-	v = d
+func jsonToKeyValueIpv6Routes(s string) (v Ipv6Routes, err error) {
+	err = json.Unmarshal([]byte(s), &v)
 	return
 }
 

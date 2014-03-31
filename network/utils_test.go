@@ -71,59 +71,59 @@ func (*Utils) TestJSONWrapper(c *C) {
 	var v interface{}
 	var s string
 
-	v, _ = jsonToInterface(testKtypeString, ktypeString)
-	s, _ = interfaceToJSON(v, ktypeString)
+	v, _ = jsonToKeyValue(testKtypeString, ktypeString)
+	s, _ = keyValueToJSON(v, ktypeString)
 	c.Check(s, Equals, testKtypeString)
 
-	v, _ = jsonToInterface(testKtypeByte, ktypeByte)
-	s, _ = interfaceToJSON(v, ktypeByte)
+	v, _ = jsonToKeyValue(testKtypeByte, ktypeByte)
+	s, _ = keyValueToJSON(v, ktypeByte)
 	c.Check(s, Equals, testKtypeByte)
 
-	v, _ = jsonToInterface(testKtypeInt32, ktypeInt32)
-	s, _ = interfaceToJSON(v, ktypeInt32)
+	v, _ = jsonToKeyValue(testKtypeInt32, ktypeInt32)
+	s, _ = keyValueToJSON(v, ktypeInt32)
 	c.Check(s, Equals, testKtypeInt32)
 
-	v, _ = jsonToInterface(testKtypeUint32, ktypeUint32)
-	s, _ = interfaceToJSON(v, ktypeUint32)
+	v, _ = jsonToKeyValue(testKtypeUint32, ktypeUint32)
+	s, _ = keyValueToJSON(v, ktypeUint32)
 	c.Check(s, Equals, testKtypeUint32)
 
-	v, _ = jsonToInterface(testKtypeUint64, ktypeUint64)
-	s, _ = interfaceToJSON(v, ktypeUint64)
+	v, _ = jsonToKeyValue(testKtypeUint64, ktypeUint64)
+	s, _ = keyValueToJSON(v, ktypeUint64)
 	c.Check(s, Equals, testKtypeUint64)
 
-	v, _ = jsonToInterface(testKtypeBoolean, ktypeBoolean)
-	s, _ = interfaceToJSON(v, ktypeBoolean)
+	v, _ = jsonToKeyValue(testKtypeBoolean, ktypeBoolean)
+	s, _ = keyValueToJSON(v, ktypeBoolean)
 	c.Check(s, Equals, testKtypeBoolean)
 
-	v, _ = jsonToInterface(testKtypeArrayByte, ktypeArrayByte)
-	s, _ = interfaceToJSON(v, ktypeArrayByte)
+	v, _ = jsonToKeyValue(testKtypeArrayByte, ktypeArrayByte)
+	s, _ = keyValueToJSON(v, ktypeArrayByte)
 	c.Check(s, Equals, testKtypeArrayByte)
 
-	v, _ = jsonToInterface(testKtypeArrayString, ktypeArrayString)
-	s, _ = interfaceToJSON(v, ktypeArrayString)
+	v, _ = jsonToKeyValue(testKtypeArrayString, ktypeArrayString)
+	s, _ = keyValueToJSON(v, ktypeArrayString)
 	c.Check(s, Equals, testKtypeArrayString)
 
-	v, _ = jsonToInterface(testKtypeArrayUint32, ktypeArrayUint32)
-	s, _ = interfaceToJSON(v, ktypeArrayUint32)
+	v, _ = jsonToKeyValue(testKtypeArrayUint32, ktypeArrayUint32)
+	s, _ = keyValueToJSON(v, ktypeArrayUint32)
 	c.Check(s, Equals, testKtypeArrayUint32)
 
-	v, _ = jsonToInterface(testKtypeArrayArrayByte, ktypeArrayArrayByte)
-	s, _ = interfaceToJSON(v, ktypeArrayArrayByte)
+	v, _ = jsonToKeyValue(testKtypeArrayArrayByte, ktypeArrayArrayByte)
+	s, _ = keyValueToJSON(v, ktypeArrayArrayByte)
 	c.Check(s, Equals, testKtypeArrayArrayByte)
 
-	v, _ = jsonToInterface(testKtypeArrayArrayUint32, ktypeArrayArrayUint32)
-	s, _ = interfaceToJSON(v, ktypeArrayArrayUint32)
+	v, _ = jsonToKeyValue(testKtypeArrayArrayUint32, ktypeArrayArrayUint32)
+	s, _ = keyValueToJSON(v, ktypeArrayArrayUint32)
 	c.Check(s, Equals, testKtypeArrayArrayUint32)
 
-	v, _ = jsonToInterface(testKtypeDictStringString, ktypeDictStringString)
-	s, _ = interfaceToJSON(v, ktypeDictStringString)
+	v, _ = jsonToKeyValue(testKtypeDictStringString, ktypeDictStringString)
+	s, _ = keyValueToJSON(v, ktypeDictStringString)
 	c.Check(s, Equals, testKtypeDictStringString)
 
-	v, _ = jsonToInterface(testKtypeIpv6Addresses, ktypeIpv6Addresses)
-	s, _ = interfaceToJSON(v, ktypeIpv6Addresses)
+	v, _ = jsonToKeyValue(testKtypeIpv6Addresses, ktypeIpv6Addresses)
+	s, _ = keyValueToJSON(v, ktypeIpv6Addresses)
 	c.Check(s, Equals, testKtypeIpv6Addresses)
 
-	v, _ = jsonToInterface(testKtypeIpv6Routes, ktypeIpv6Routes)
-	s, _ = interfaceToJSON(v, ktypeIpv6Routes)
+	v, _ = jsonToKeyValue(testKtypeIpv6Routes, ktypeIpv6Routes)
+	s, _ = keyValueToJSON(v, ktypeIpv6Routes)
 	c.Check(s, Equals, testKtypeIpv6Routes)
 }

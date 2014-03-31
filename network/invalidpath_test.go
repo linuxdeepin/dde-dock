@@ -42,16 +42,16 @@ func TestDBusFailed(t *testing.T) {
 	if _, err := nm.NewNetworkManager("com.deepin.daemon.Network", "/com/deepin/daemon/Networkxx"); err == nil {
 		t.Fatal("NewNetworkManager2")
 	}
-	if err = m.ActiveAccessPoint("/", "/"); err == nil {
-		t.Fatal("ActiveAccessPoint")
-	}
+	// if err = m.ActiveAccessPoint("/", "/"); err == nil {
+	// 	t.Fatal("ActiveAccessPoint")
+	// }
 
 	if err = m.DisconnectDevice("/"); err == nil {
 		t.Fatal("DisconnectDevice")
 	}
-	if err = m.ActiveWiredDevice("/"); err == nil {
-		t.Fatal("ActiveWiredDevice")
-	}
+	// if err = m.ActiveWiredDevice("/"); err == nil {
+	// 	t.Fatal("ActiveWiredDevice")
+	// }
 	if _, err = m.GetAccessPoints("/"); err == nil {
 		t.Fatal("GetAccessPoints")
 	}

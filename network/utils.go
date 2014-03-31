@@ -46,7 +46,7 @@ func removeConnectionDataField(data _ConnectionData, field string) {
 	}
 }
 
-// TODO key: add(), remove()
+// TODO key: add()
 
 func getConnectionDataKeyJSON(data _ConnectionData, field, key string, t ktype) (valueJSON string) {
 	value := getConnectionDataKey(data, field, key)
