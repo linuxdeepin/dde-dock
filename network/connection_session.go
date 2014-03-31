@@ -138,7 +138,7 @@ func (session *ConnectionSession) ListPages() (pages []string) {
 	case typeWireless:
 		pages = []string{
 			pageGeneral,
-			pageWifi,
+			// pageWifi, // TODO
 			pageIPv4,
 			pageIPv6,
 			pageSecurity,
@@ -153,6 +153,10 @@ func (session *ConnectionSession) listKeys(page string) (keys []string) {
 	switch page {
 	case pageGeneral:
 		keys = getSettingConnectionAvailableKeys(session.data)
+	case pageEthernet:
+
+	case pageWifi:
+		keys = getSettingWirelessAvailableKeys(session.data)
 	case pageIPv4:
 		keys = getSettingIp4ConfigAvailableKeys(session.data)
 	case pageIPv6:
@@ -161,7 +165,12 @@ func (session *ConnectionSession) listKeys(page string) (keys []string) {
 		switch session.connType {
 		case typeWired:
 		case typeWireless:
+			// TODO
+			keys = getSettingWirelessSecurityAvailableKeys(session.data)
 		}
+	}
+	if len(keys) == 0 {
+		LOGGER.Warning("there is no avaiable keys for page", page)
 	}
 	return
 }

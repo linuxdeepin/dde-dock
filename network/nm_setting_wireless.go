@@ -171,6 +171,14 @@ func newWirelessConnectionData(id, uuid string, ssid []byte, keyFlag int) (data 
 	// data[fieldIPv6]["method"] = dbus.MakeVariant("auto")
 }
 
+// TODO Get available keys
+func getSettingWirelessAvailableKeys(data _ConnectionData) (keys []string) {
+	keys = []string{
+		NM_SETTING_WIRELESS_MODE,
+	}
+	return
+}
+
 // TODO Check whether the values are correct
 func checkSettingWirelessValues(data _ConnectionData) (errs map[string]string) {
 	errs = make(map[string]string)

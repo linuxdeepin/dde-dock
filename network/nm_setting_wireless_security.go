@@ -123,6 +123,16 @@ const (
 	NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS = "psk-flags"
 )
 
+// TODO Get available keys
+func getSettingWirelessSecurityAvailableKeys(data _ConnectionData) (keys []string) {
+	keys = []string{
+		NM_SETTING_WIRELESS_SECURITY_WEP_KEY0,
+		NM_SETTING_WIRELESS_SECURITY_AUTH_ALG,
+		NM_SETTING_WIRELESS_SECURITY_KEY_MGMT,
+	}
+	return
+}
+
 // TODO Check whether the values are correct
 func checkSettingWirelessSecurityValues(data _ConnectionData) (errs map[string]string) {
 	errs = make(map[string]string)

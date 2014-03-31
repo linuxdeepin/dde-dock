@@ -39,6 +39,17 @@ const (
 	NM_SETTING_802_1X_SYSTEM_CA_CERTS                   = "system-ca-certs"
 )
 
+// TODO Get available keys
+func getSettingConnectionAvailableKeys(data _ConnectionData) (keys []string) {
+	keys = []string{
+		NM_SETTING_802_1X_EAP,
+		NM_SETTING_802_1X_IDENTITY,
+		NM_SETTING_802_1X_ANONYMOUS_IDENTITY,
+		NM_SETTING_802_1X_PAC_FILE,
+	}
+	return
+}
+
 // TODO Check whether the values are correct
 func checkSetting8021xValues(data _ConnectionData) (errs map[string]string) {
 	errs = make(map[string]string)

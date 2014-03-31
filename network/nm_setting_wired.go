@@ -93,6 +93,15 @@ func newWireedConnectionData(id, uuid string) (data _ConnectionData) {
 	return
 }
 
+// TODO Get available keys
+func getSettingWiredAvailableKeys(data _ConnectionData) (keys []string) {
+	keys = []string{
+		NM_SETTING_WIRED_MAC_ADDRESS,
+		NM_SETTING_WIRED_MTU,
+	}
+	return
+}
+
 // TODO Check whether the values are correct
 func checkSettingWiredValues(data _ConnectionData) (errs map[string]string) {
 	errs = make(map[string]string)
