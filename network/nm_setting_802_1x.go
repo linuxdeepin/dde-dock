@@ -40,7 +40,7 @@ const (
 )
 
 // TODO Get available keys
-func getSettingConnectionAvailableKeys(data _ConnectionData) (keys []string) {
+func getSetting8021xAvailableKeys(data _ConnectionData) (keys []string) {
 	keys = []string{
 		NM_SETTING_802_1X_EAP,
 		NM_SETTING_802_1X_IDENTITY,
