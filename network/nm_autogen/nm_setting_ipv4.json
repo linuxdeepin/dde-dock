@@ -2,17 +2,17 @@
     "FieldName":"NM_SETTING_IP4_CONFIG_SETTING_NAME",
     "OutputFile":"../nm_setting_ipv4_autogen.go",
     "Keys":[
-	    {"Name":"NM_SETTING_IP4_CONFIG_METHOD", "Type":"ktypeString"},
-	    {"Name":"NM_SETTING_IP4_CONFIG_DNS", "Type":"ktypeArrayUint32"},
-	    {"Name":"NM_SETTING_IP4_CONFIG_DNS_SEARCH", "Type":"ktypeString"},
-	    {"Name":"NM_SETTING_IP4_CONFIG_ADDRESSES", "Type":"ktypeArrayArrayUint32"},
-	    {"Name":"NM_SETTING_IP4_CONFIG_ROUTES", "Type":"ktypeArrayArrayUint32"},
-	    {"Name":"NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES", "Type":"ktypeBoolean"},
-	    {"Name":"NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS", "Type":"ktypeBoolean"},
-	    {"Name":"NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID", "Type":"ktypeString"},
-	    {"Name":"NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME", "Type":"ktypeBoolean"},
-	    {"Name":"NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME", "Type":"ktypeString"},
-	    {"Name":"NM_SETTING_IP4_CONFIG_NEVER_DEFAULT", "Type":"ktypeBoolean"},
-	    {"Name":"NM_SETTING_IP4_CONFIG_MAY_FAIL", "Type":"ktypeBoolean"}
+	    {"Name":"NM_SETTING_IP4_CONFIG_METHOD", "Type":"ktypeString", "Default":"<none>"},
+	    {"Name":"NM_SETTING_IP4_CONFIG_DNS", "Type":"ktypeArrayUint32", "Default":""},
+	    {"Name":"NM_SETTING_IP4_CONFIG_DNS_SEARCH", "Type":"ktypeString", "Default":""},
+	    {"Name":"NM_SETTING_IP4_CONFIG_ADDRESSES", "Type":"ktypeArrayArrayUint32", "Default":""},
+	    {"Name":"NM_SETTING_IP4_CONFIG_ROUTES", "Type":"ktypeArrayArrayUint32", "Default":""},
+	    {"Name":"NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES", "Type":"ktypeBoolean", "Default":""},
+	    {"Name":"NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS", "Type":"ktypeBoolean", "Default":""},
+	    {"Name":"NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID", "Type":"ktypeString", "Default":"<none>"},
+	    {"Name":"NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME", "Type":"ktypeBoolean", "Default":"true"},
+	    {"Name":"NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME", "Type":"ktypeString", "Default":"<none>"},
+	    {"Name":"NM_SETTING_IP4_CONFIG_NEVER_DEFAULT", "Type":"ktypeBoolean", "Default":""},
+	    {"Name":"NM_SETTING_IP4_CONFIG_MAY_FAIL", "Type":"ktypeBoolean", "Default":"true"}
 	]
 }

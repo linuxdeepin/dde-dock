@@ -198,6 +198,7 @@ func (this *Manager) getDeviceAddress(devPath dbus.ObjectPath, devType uint32) s
 
 func (this *Manager) ActivateConnection(uuid string, dev dbus.ObjectPath) {
 	if cpath, err := _NMSettings.GetConnectionByUuid(uuid); err == nil {
+		// TODO, ap path, "/"
 		spath := dbus.ObjectPath("/")
 		_NMManager.ActivateConnection(dev, cpath, spath)
 	}

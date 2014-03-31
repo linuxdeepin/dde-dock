@@ -72,8 +72,10 @@ func newWirelessConnection(id string, ssid []byte, keyFlag int) string {
 
 	_, err := _NMSettings.AddConnection(data)
 	if err != nil {
-		panic(err)
+		panic(err) // TODO fixme
+		// LOGGER.Error(err)
 	}
+
 	return uuid
 }
 

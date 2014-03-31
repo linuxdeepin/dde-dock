@@ -32,8 +32,45 @@ func getSettingWiredKeyType(key string) (t ktype) {
 	return
 }
 
+// Get key's default value
+func getSettingWiredKeyDefaultValueJSON(key string) (valueJSON string) {
+	value := getSettingWiredKeyDefaultValue(key)
+	t := getSettingWiredKeyType(key)
+	valueJSON, err := keyValueToJSON(value, t)
+	if err != nil {
+		LOGGER.Error("getSettingWiredKeyDefaultValueJSON:", err)
+	}
+	return
+}
+func getSettingWiredKeyDefaultValue(key string) (value interface{}) {
+	switch key {
+	default:
+		LOGGER.Error("invalid key:", key)
+	case NM_SETTING_WIRED_SPEED:
+		value = 0
+	case NM_SETTING_WIRED_AUTO_NEGOTIATE:
+		value = false
+	case NM_SETTING_WIRED_MAC_ADDRESS:
+		value = make([]byte, 0)
+	case NM_SETTING_WIRED_CLONED_MAC_ADDRESS:
+		value = make([]byte, 0)
+	case NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST:
+		value = make([]string, 0)
+	case NM_SETTING_WIRED_MTU:
+		value = 0
+	case NM_SETTING_WIRED_S390_SUBCHANNELS:
+		value = make([]string, 0)
+	case NM_SETTING_WIRED_S390_OPTIONS:
+		value = make(map[string]string)
+	}
+	return
+}
+
 // Get JSON value generally
 func generalGetSettingWiredKeyJSON(data _ConnectionData, key string) (value string) {
+	if !isConnectionDataKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, key) {
+		return getSettingWiredKeyDefaultValueJSON(key)
+	}
 	switch key {
 	default:
 		LOGGER.Error("generalGetSettingWiredKeyJSON: invalide key", key)

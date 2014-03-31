@@ -32,8 +32,39 @@ func getSettingConnectionKeyType(key string) (t ktype) {
 	return
 }
 
+// Get key's default value
+func getSettingConnectionKeyDefaultValueJSON(key string) (valueJSON string) {
+	value := getSettingConnectionKeyDefaultValue(key)
+	t := getSettingConnectionKeyType(key)
+	valueJSON, err := keyValueToJSON(value, t)
+	if err != nil {
+		LOGGER.Error("getSettingConnectionKeyDefaultValueJSON:", err)
+	}
+	return
+}
+func getSettingConnectionKeyDefaultValue(key string) (value interface{}) {
+	switch key {
+	default:
+		LOGGER.Error("invalid key:", key)
+	case NM_SETTING_CONNECTION_PERMISSIONS:
+		value = make([]string, 0)
+	case NM_SETTING_CONNECTION_AUTOCONNECT:
+		value = false
+	case NM_SETTING_CONNECTION_TIMESTAMP:
+		value = 0
+	case NM_SETTING_CONNECTION_READ_ONLY:
+		value = false
+	case NM_SETTING_CONNECTION_SECONDARIES:
+		value = make([]string, 0)
+	}
+	return
+}
+
 // Get JSON value generally
 func generalGetSettingConnectionKeyJSON(data _ConnectionData, key string) (value string) {
+	if !isConnectionDataKeyExists(data, NM_SETTING_CONNECTION_SETTING_NAME, key) {
+		return getSettingConnectionKeyDefaultValueJSON(key)
+	}
 	switch key {
 	default:
 		LOGGER.Error("generalGetSettingConnectionKeyJSON: invalide key", key)

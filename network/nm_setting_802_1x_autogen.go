@@ -74,8 +74,61 @@ func getSetting8021xKeyType(key string) (t ktype) {
 	return
 }
 
+// Get key's default value
+func getSetting8021xKeyDefaultValueJSON(key string) (valueJSON string) {
+	value := getSetting8021xKeyDefaultValue(key)
+	t := getSetting8021xKeyType(key)
+	valueJSON, err := keyValueToJSON(value, t)
+	if err != nil {
+		LOGGER.Error("getSetting8021xKeyDefaultValueJSON:", err)
+	}
+	return
+}
+func getSetting8021xKeyDefaultValue(key string) (value interface{}) {
+	switch key {
+	default:
+		LOGGER.Error("invalid key:", key)
+	case NM_SETTING_802_1X_EAP:
+		value = make([]string, 0)
+	case NM_SETTING_802_1X_CA_CERT:
+		value = make([]byte, 0)
+	case NM_SETTING_802_1X_ALTSUBJECT_MATCHES:
+		value = make([]string, 0)
+	case NM_SETTING_802_1X_CLIENT_CERT:
+		value = make([]byte, 0)
+	case NM_SETTING_802_1X_PHASE2_CA_CERT:
+		value = make([]byte, 0)
+	case NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES:
+		value = make([]string, 0)
+	case NM_SETTING_802_1X_PHASE2_CLIENT_CERT:
+		value = make([]byte, 0)
+	case NM_SETTING_802_1X_PASSWORD_FLAGS:
+		value = 0
+	case NM_SETTING_802_1X_PASSWORD_RAW:
+		value = make([]byte, 0)
+	case NM_SETTING_802_1X_PASSWORD_RAW_FLAGS:
+		value = 0
+	case NM_SETTING_802_1X_PRIVATE_KEY:
+		value = make([]byte, 0)
+	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS:
+		value = 0
+	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY:
+		value = make([]byte, 0)
+	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS:
+		value = 0
+	case NM_SETTING_802_1X_PIN_FLAGS:
+		value = 0
+	case NM_SETTING_802_1X_SYSTEM_CA_CERTS:
+		value = false
+	}
+	return
+}
+
 // Get JSON value generally
 func generalGetSetting8021xKeyJSON(data _ConnectionData, key string) (value string) {
+	if !isConnectionDataKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, key) {
+		return getSetting8021xKeyDefaultValueJSON(key)
+	}
 	switch key {
 	default:
 		LOGGER.Error("generalGetSetting8021xKeyJSON: invalide key", key)

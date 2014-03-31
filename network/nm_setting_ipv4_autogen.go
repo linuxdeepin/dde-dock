@@ -34,8 +34,47 @@ func getSettingIp4ConfigKeyType(key string) (t ktype) {
 	return
 }
 
+// Get key's default value
+func getSettingIp4ConfigKeyDefaultValueJSON(key string) (valueJSON string) {
+	value := getSettingIp4ConfigKeyDefaultValue(key)
+	t := getSettingIp4ConfigKeyType(key)
+	valueJSON, err := keyValueToJSON(value, t)
+	if err != nil {
+		LOGGER.Error("getSettingIp4ConfigKeyDefaultValueJSON:", err)
+	}
+	return
+}
+func getSettingIp4ConfigKeyDefaultValue(key string) (value interface{}) {
+	switch key {
+	default:
+		LOGGER.Error("invalid key:", key)
+	case NM_SETTING_IP4_CONFIG_DNS:
+		value = make([]uint32, 0)
+	case NM_SETTING_IP4_CONFIG_DNS_SEARCH:
+		value = ""
+	case NM_SETTING_IP4_CONFIG_ADDRESSES:
+		value = make([][]uint32, 0)
+	case NM_SETTING_IP4_CONFIG_ROUTES:
+		value = make([][]uint32, 0)
+	case NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES:
+		value = false
+	case NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS:
+		value = false
+	case NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME:
+		value = false
+	case NM_SETTING_IP4_CONFIG_NEVER_DEFAULT:
+		value = false
+	case NM_SETTING_IP4_CONFIG_MAY_FAIL:
+		value = false
+	}
+	return
+}
+
 // Get JSON value generally
 func generalGetSettingIp4ConfigKeyJSON(data _ConnectionData, key string) (value string) {
+	if !isConnectionDataKeyExists(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, key) {
+		return getSettingIp4ConfigKeyDefaultValueJSON(key)
+	}
 	switch key {
 	default:
 		LOGGER.Error("generalGetSettingIp4ConfigKeyJSON: invalide key", key)

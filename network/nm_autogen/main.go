@@ -15,9 +15,10 @@ import (
 )
 
 var funcMap = template.FuncMap{
-	"ToFieldFuncBaseName": ToFieldFuncBaseName,
-	"ToKeyFuncBaseName":   ToKeyFuncBaseName,
-	"ToKeyTypeRealData":   ToKeyTypeRealData,
+	"ToFieldFuncBaseName":   ToFieldFuncBaseName,
+	"ToKeyFuncBaseName":     ToKeyFuncBaseName,
+	"ToKeyTypeRealData":     ToKeyTypeRealData,
+	"ToKeyTypeDefaultValue": ToKeyTypeDefaultValue,
 }
 
 var jsonFiles = []string{
@@ -34,8 +35,9 @@ type NMSettingStruct struct {
 	FieldName  string
 	OutputFile string
 	Keys       []struct {
-		Name string
-		Type string
+		Name    string
+		Type    string
+		Default string
 	}
 }
 
@@ -44,6 +46,7 @@ func generateNMSettingCode(nmSetting NMSettingStruct) (content string) {
 	content += "package main\n"
 
 	content += generateTemplate(nmSetting, tplGetKeyType)        // get key type
+	content += generateTemplate(nmSetting, tplGetDefaultValue)   // get default value
 	content += generateTemplate(nmSetting, tplGeneralGetterJSON) // general json getter
 	content += generateTemplate(nmSetting, tplGetter)            // getter
 	content += generateTemplate(nmSetting, tplSetter)            // setter
@@ -109,6 +112,47 @@ func ToKeyTypeRealData(ktype string) (realData string) {
 		realData = "Ipv6Addresses"
 	case "ktypeIpv6Routes":
 		realData = "Ipv6Routes"
+	}
+	return
+}
+
+// "ktypeString" -> "\"\"", "ktypeBool" -> "false"
+func ToKeyTypeDefaultValue(ktype, customValue string) (value string) {
+	if customValue == "<none>" {
+		return
+	}
+	switch ktype {
+	default:
+		fmt.Println("invalid ktype:", ktype)
+		os.Exit(1)
+	case "ktypeString":
+		value = `""`
+	case "ktypeByte":
+		value = `0`
+	case "ktypeInt32":
+		value = `0`
+	case "ktypeUint32":
+		value = `0`
+	case "ktypeUint64":
+		value = `0`
+	case "ktypeBoolean":
+		value = `false`
+	case "ktypeArrayByte":
+		value = `make([]byte, 0)`
+	case "ktypeArrayString":
+		value = `make([]string, 0)`
+	case "ktypeArrayUint32":
+		value = `make([]uint32, 0)`
+	case "ktypeArrayArrayByte":
+		value = `make([][]byte, 0)`
+	case "ktypeArrayArrayUint32":
+		value = `make([][]uint32, 0)`
+	case "ktypeDictStringString":
+		value = `make(map[string]string)`
+	case "ktypeIpv6Addresses":
+		value = `make(Ipv6Addresses, 0)`
+	case "ktypeIpv6Routes":
+		value = `make(Ipv6Routes, 0)`
 	}
 	return
 }
