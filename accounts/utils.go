@@ -253,7 +253,7 @@ type polkitSubject struct {
         SubjectDetails map[string]dbus.Variant
 }
 
-func authWithPolkit(actionId string, pid uint32) {
+func authWithPolkit(actionId string, pid uint32) bool {
         var (
                 objPolkit *polkit.Authority
                 err       error
@@ -262,7 +262,8 @@ func authWithPolkit(actionId string, pid uint32) {
         objPolkit, err = polkit.NewAuthority(POLKIT_DEST, POLKIT_PATH)
         if err != nil {
                 logObject.Warningf("New Authority Failed:%v", err)
-                panic(err)
+                //panic(err)
+                return false
         }
 
         subject := polkitSubject{}
@@ -275,9 +276,18 @@ func authWithPolkit(actionId string, pid uint32) {
         flags := uint32(1)
         cancelId := ""
 
-        _, _err := objPolkit.CheckAuthorization(subject, actionId, details, flags, cancelId)
+        rets, _err := objPolkit.CheckAuthorization(subject, actionId, details, flags, cancelId)
+        //println("Is Authority: ", rets[0].(bool))
+        //println("Is Challonge: ", rets[1].(bool))
         if _err != nil {
                 logObject.Warningf("CheckAuthorization Failed:%v", _err)
-                panic(_err)
+                return false
         }
+
+        // Is Authority
+        if !rets[0].(bool) {
+                return false
+        }
+
+        return true
 }

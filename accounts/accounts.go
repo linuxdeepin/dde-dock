@@ -42,6 +42,10 @@ const (
         ACCOUNT_KEY_GUEST   = "AllowGuest"
 )
 
+func (op *AccountManager) AuthWithPolkit(pid uint32) bool {
+        return authWithPolkit(POLKIT_MANAGER_USER, pid)
+}
+
 func (op *AccountManager) CreateGuestAccount() string {
         args := []string{}
 
