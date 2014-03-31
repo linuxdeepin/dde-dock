@@ -30,6 +30,7 @@ import "C"
 import (
         //freedbus "dbus/org/freedesktop/dbus"
         polkit "dbus/org/freedesktop/policykit1"
+        "dlib/dbus"
         "dlib/glib-2.0"
         "os"
         "os/exec"
@@ -248,11 +249,11 @@ type polkitSubject struct {
          * System Bus Name: should be set to system-bus-name with the key
          *                  name (of type string)
          */
-        subjectKind    string
-        subjectDetails map[string]interface{}
+        SubjectKind    string
+        SubjectDetails map[string]dbus.Variant
 }
 
-func authWithPolkit(actionId string) {
+func authWithPolkit(actionId string, pid uint32) {
         var (
                 objPolkit *polkit.Authority
                 err       error
@@ -264,26 +265,17 @@ func authWithPolkit(actionId string) {
                 panic(err)
         }
 
-        pid := os.Getpid()
         subject := polkitSubject{}
-        subject.subjectKind = "unix-process"
-        subject.subjectDetails = make(map[string]interface{})
-        subject.subjectDetails["pid"] = uint32(pid)
-        subject.subjectDetails["start-time"] = uint64(0)
+        subject.SubjectKind = "unix-process"
+        subject.SubjectDetails = make(map[string]dbus.Variant)
+        subject.SubjectDetails["pid"] = dbus.MakeVariant(uint32(pid))
+        subject.SubjectDetails["start-time"] = dbus.MakeVariant(uint64(0))
         details := make(map[string]string)
-        details[""] = ""
+        //details[""] = ""
         flags := uint32(1)
         cancelId := ""
 
-        infaces := []interface{}{
-                subject.subjectKind,
-                subject.subjectDetails,
-        }
-
-        rets, _err := objPolkit.CheckAuthorization(infaces, actionId, details, flags, cancelId)
-        for _, i := range rets {
-                logObject.Warningf("%v", i)
-        }
+        _, _err := objPolkit.CheckAuthorization(subject, actionId, details, flags, cancelId)
         if _err != nil {
                 logObject.Warningf("CheckAuthorization Failed:%v", _err)
                 panic(_err)
