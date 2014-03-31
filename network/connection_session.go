@@ -96,6 +96,7 @@ func (session *ConnectionSession) Save() bool {
 	}
 
 	// TODO what about the connection has been deleted?
+
 	// update connection data
 	nmConn, err := nm.NewSettingsConnection(NMDest, session.coreObjPath)
 	if err != nil {

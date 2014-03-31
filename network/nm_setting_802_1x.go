@@ -56,6 +56,7 @@ func checkSetting8021xValues(data _ConnectionData) (errs map[string]string) {
 	return
 }
 
+// Set JSON value generally
 // TODO use logic setter
 func generalSetSetting8021xKeyJSON(data _ConnectionData, key, value string) {
 	switch key {

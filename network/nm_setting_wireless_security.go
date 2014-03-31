@@ -139,6 +139,7 @@ func checkSettingWirelessSecurityValues(data _ConnectionData) (errs map[string]s
 	return
 }
 
+// Set JSON value generally
 // TODO use logic setter
 func generalSetSettingWirelessSecurityKeyJSON(data _ConnectionData, key, value string) {
 	switch key {

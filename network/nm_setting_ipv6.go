@@ -65,6 +65,7 @@ func checkSettingIp6ConfigValues(data _ConnectionData) (errs map[string]string) 
 	return
 }
 
+// Set JSON value generally
 // TODO use logic setter
 func generalSetSettingIp6ConfigKeyJSON(data _ConnectionData, key, value string) {
 	switch key {

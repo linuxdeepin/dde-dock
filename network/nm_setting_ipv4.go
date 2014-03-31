@@ -267,13 +267,14 @@ func checkSettingIp4ConfigValues(data _ConnectionData) (errs map[string]string) 
 
 // TODO Adder
 
+// Set JSON value generally
 // TODO use logic setter
 func generalSetSettingIp4ConfigKeyJSON(data _ConnectionData, key, value string) {
 	switch key {
 	default:
 		LOGGER.Error("generalSetSettingIp4ConfigKey: invalide key", key)
 	case NM_SETTING_IP4_CONFIG_METHOD:
-		logicSetSettingIp4ConfigMethod(data, value) // TODO
+		logicSetSettingIp4ConfigMethodJSON(data, value) // TODO
 	case NM_SETTING_IP4_CONFIG_DNS:
 		setSettingIp4ConfigDnsJSON(data, value)
 	case NM_SETTING_IP4_CONFIG_DNS_SEARCH:
@@ -300,7 +301,17 @@ func generalSetSettingIp4ConfigKeyJSON(data _ConnectionData, key, value string) 
 	return
 }
 
-// TODO Logic setterJSON
+// TODO Logic setter
+func logicSetSettingIp4ConfigMethodJSON(data _ConnectionData, valueJSON string) {
+	valueInterface, err := jsonToKeyValue(valueJSON, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_METHOD))
+	if err != nil {
+		LOGGER.Error("logicSetSettingIp4ConfigMethodJSON:", err)
+		return
+	}
+	value, _ := valueInterface.(string)
+	logicSetSettingIp4ConfigMethod(data, value)
+	return
+}
 func logicSetSettingIp4ConfigMethod(data _ConnectionData, value string) {
 	switch value {
 	case NM_SETTING_IP4_CONFIG_METHOD_AUTO:
@@ -312,6 +323,6 @@ func logicSetSettingIp4ConfigMethod(data _ConnectionData, value string) {
 		removeSettingIp4ConfigDns(data)
 		removeSettingIp4ConfigAddresses(data)
 	}
-	setSettingIp4ConfigMethodJSON(data, value)
+	setSettingIp4ConfigMethod(data, value)
 	return
 }
