@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-// Convert dbus variant to other data type
+// Convert dbus variant's value to other data type
 
 func interfaceToString(v interface{}) (d string, err error) {
 	d, ok := v.(string)

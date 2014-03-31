@@ -46,7 +46,25 @@ func removeConnectionDataField(data _ConnectionData, field string) {
 	}
 }
 
+func isConnectionDataFieldExists(data _ConnectionData, field string) bool {
+	_, ok := data[field]
+	return ok
+}
+
 // TODO key: add()
+func isConnectionDataKeyExists(data _ConnectionData, field, key string) bool {
+	fieldData, ok := data[field]
+	if !ok {
+		return false
+	}
+
+	_, ok = fieldData[key]
+	if !ok {
+		return false
+	}
+
+	return true
+}
 
 func getConnectionDataKeyJSON(data _ConnectionData, field, key string, t ktype) (valueJSON string) {
 	value := getConnectionDataKey(data, field, key)
