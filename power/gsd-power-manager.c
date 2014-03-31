@@ -3732,6 +3732,7 @@ gboolean
 gsd_power_manager_start (GsdPowerManager *manager,
                          GError **error)
 {
+    static gboolean started = FALSE;
     g_debug ("Starting power manager");
     /*gnome_settings_profile_start (NULL);*/
 
@@ -3784,11 +3785,16 @@ gsd_power_manager_start (GsdPowerManager *manager,
     /*manager->priv->settings = g_settings_new(GSD_POWER_SETTINGS_SCHEMA);*/
 
     manager->priv->settings_profile = g_settings_new(DEEPIN_POWER_PROFILE_SCHEMA);
-    g_signal_connect(manager->priv->settings_profile, "changed",
+    if (!started)
+    {
+        g_signal_connect(manager->priv->settings_profile, "changed",
                      G_CALLBACK(engine_profile_changed_cb),
                      manager);
-    manager->priv->current_profile = g_settings_get_string(manager->priv->settings_profile,
-                                     "current-profile");
+        started = TRUE;
+    }
+
+        manager->priv->current_profile = g_settings_get_string(manager->priv->settings_profile,
+                                         "current-profile");
     manager->priv->settings_path = (char*)malloc(
                                        sizeof(DEEPIN_POWER_SETTINGS_PATH_PRE) +
                                        strlen(manager->priv->current_profile) + 1);
@@ -3801,8 +3807,8 @@ gsd_power_manager_start (GsdPowerManager *manager,
     manager->priv->settings = g_settings_new_with_path(
                                   DEEPIN_POWER_SETTINGS_SCHEMA,
                                   manager->priv->settings_path);
-    g_signal_connect (manager->priv->settings, "changed",
-                      G_CALLBACK (engine_settings_key_changed_cb), manager);
+        g_signal_connect (manager->priv->settings, "changed",
+                          G_CALLBACK (engine_settings_key_changed_cb), manager);
     /*manager->priv->settings_screensaver = g_settings_new ("org.gnome.desktop.screensaver");*/
     /*manager->priv->settings_session = g_settings_new ("org.gnome.desktop.session");*/
     /*g_signal_connect (manager->priv->settings_session, "changed",*/
