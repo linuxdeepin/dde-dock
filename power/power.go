@@ -299,9 +299,9 @@ func (power *Power) OnPropertiesChanged(name string, oldv interface{}) {
     }()
     switch name {
     case "CurrentProfile":
-        fmt.Println("sleep inactive ac timeout: ", power.SleepInactiveAcTimeout.Get())
-        power.powerSettings = power.getPowerSettings()
-        power.getPowerSettingsProperty()
+        //fmt.Println("sleep inactive ac timeout: ", power.SleepInactiveAcTimeout.Get())
+        //power.powerSettings = power.getPowerSettings()
+        //power.getPowerSettingsProperty()
         //dbus.InstallOnSession(power)
         break
     }

@@ -849,8 +849,8 @@ func (audio *Audio) listenMediaKey() {
                     volume := int32(sink.Volume + VOLUME_STEP)
                     if volume < 0 {
                         volume = 0
-                    } else if volume > 150 {
-                        volume = 150
+                    } else if volume > 100 {
+                        volume = 100
                     }
                     fmt.Println("Volume step up: ", int32(volume))
                     sink.setSinkVolume(uint32(volume))
@@ -1456,8 +1456,8 @@ func main() {
     }
     dbus.DealWithUnhandledMessage()
     fmt.Println("module started\n")
-    audio.listenMediaKey()
     go C.pa_subscribe(audio.pa)
+    audio.listenMediaKey()
     if err := dbus.Wait(); err != nil {
         //l.Error("lost dbus session:", err)
         os.Exit(1)
