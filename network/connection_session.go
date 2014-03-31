@@ -179,33 +179,20 @@ func (session *ConnectionSession) listKeys(page string) (keys []string) {
 //比如获得当前链接支持的加密方式 EAP字段: TLS、MD5、FAST、PEAP
 //获得ip设置方式 : Manual、Link-Local Only、Automatic(DHCP)
 //获得当前可用mac地址(这种字段是有几个可选值但用户也可用手动输入一个其他值)
+// TODO
 func (session *ConnectionSession) GetAvailableValues(page, key string) (values []string) {
-	// TODO
-	switch session.connType {
-	case typeWired:
-		switch page {
-		case pageGeneral:
-		case pageIPv4:
-			switch key {
-			case NM_SETTING_IP4_CONFIG_METHOD:
-				values = []string{
-					NM_SETTING_IP4_CONFIG_METHOD_AUTO,
-					NM_SETTING_IP4_CONFIG_METHOD_MANUAL,
-				}
-			}
-		case pageIPv6:
-			switch key {
-			case NM_SETTING_IP6_CONFIG_METHOD:
-				values = []string{
-					NM_SETTING_IP6_CONFIG_METHOD_IGNORE,
-					NM_SETTING_IP6_CONFIG_METHOD_AUTO,
-					NM_SETTING_IP6_CONFIG_METHOD_MANUAL,
-				}
-			}
-		case pageSecurity: // TODO
-		}
-	case typeWireless:
-		// TODO
+	switch page {
+	case pageGeneral:
+	case pageIPv4:
+		values, _ = getSettingIp4ConfigAvailableValues(key)
+	case pageIPv6:
+		values, _ = getSettingIp6ConfigAvailableValues(key)
+	case pageSecurity: // TODO
+		// switch session.connType {
+		// case typeWired:
+		// case typeWireless:
+		// 	// TODO
+		// }
 	}
 	return
 }

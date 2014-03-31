@@ -59,6 +59,24 @@ func getSettingIp6ConfigAvailableKeys(data _ConnectionData) (keys []string) {
 	return
 }
 
+// TODO Get available values
+func getSettingIp6ConfigAvailableValues(key string) (values []string, customizable bool) {
+	customizable = true
+	switch key {
+	case NM_SETTING_IP6_CONFIG_METHOD:
+		values = []string{
+			NM_SETTING_IP6_CONFIG_METHOD_IGNORE,
+			NM_SETTING_IP6_CONFIG_METHOD_AUTO,
+			// NM_SETTING_IP6_CONFIG_METHOD_DHCP, // ignore
+			// NM_SETTING_IP6_CONFIG_METHOD_LINK_LOCAL, // ignore
+			NM_SETTING_IP6_CONFIG_METHOD_MANUAL,
+			// NM_SETTING_IP6_CONFIG_METHOD_SHARED,// ignore
+		}
+		customizable = false
+	}
+	return
+}
+
 // TODO Check whether the values are correct
 func checkSettingIp6ConfigValues(data _ConnectionData) (errs map[string]string) {
 	errs = make(map[string]string)
