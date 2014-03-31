@@ -1,0 +1,17 @@
+{
+    "FieldName":"NM_SETTING_IP6_CONFIG_SETTING_NAME",
+    "OutputFile":"../nm_setting_ipv6_autogen.go",
+    "Keys":[
+	    {"Name":"NM_SETTING_IP6_CONFIG_METHOD", "Type":"ktypeString"},
+	    {"Name":"NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME", "Type":"ktypeString"},
+	    {"Name":"NM_SETTING_IP6_CONFIG_DNS", "Type":"ktypeArrayByte"},
+	    {"Name":"NM_SETTING_IP6_CONFIG_DNS_SEARCH", "Type":"ktypeArrayString"},
+	    {"Name":"NM_SETTING_IP6_CONFIG_ADDRESSES", "Type":"ktypeIpv6Addresses"},
+	    {"Name":"NM_SETTING_IP6_CONFIG_ROUTES", "Type":"ktypeIpv6Routes"},
+	    {"Name":"NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES", "Type":"ktypeBoolean"},
+	    {"Name":"NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS", "Type":"ktypeBoolean"},
+	    {"Name":"NM_SETTING_IP6_CONFIG_NEVER_DEFAULT", "Type":"ktypeBoolean"},
+	    {"Name":"NM_SETTING_IP6_CONFIG_MAY_FAIL", "Type":"ktypeBoolean"},
+	    {"Name":"NM_SETTING_IP6_CONFIG_IP6_PRIVACY", "Type":"ktypeInt32"}
+    ]
+}

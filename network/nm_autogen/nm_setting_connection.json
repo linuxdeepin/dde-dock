@@ -1,0 +1,17 @@
+{
+    "FieldName":"NM_SETTING_CONNECTION_SETTING_NAME",
+    "OutputFile":"../nm_setting_connection_autogen.go",
+    "Keys":[
+	    {"Name":"NM_SETTING_CONNECTION_ID", "Type":"ktypeString"},
+	    {"Name":"NM_SETTING_CONNECTION_UUID", "Type":"ktypeString"},
+	    {"Name":"NM_SETTING_CONNECTION_TYPE", "Type":"ktypeString"},
+	    {"Name":"NM_SETTING_CONNECTION_PERMISSIONS", "Type":"ktypeArrayString"},
+	    {"Name":"NM_SETTING_CONNECTION_AUTOCONNECT", "Type":"ktypeBoolean"},
+	    {"Name":"NM_SETTING_CONNECTION_TIMESTAMP", "Type":"ktypeUint64"},
+	    {"Name":"NM_SETTING_CONNECTION_READ_ONLY", "Type":"ktypeBoolean"},
+	    {"Name":"NM_SETTING_CONNECTION_ZONE", "Type":"ktypeString"},
+	    {"Name":"NM_SETTING_CONNECTION_MASTER", "Type":"ktypeString"},
+	    {"Name":"NM_SETTING_CONNECTION_SLAVE_TYPE", "Type":"ktypeString"},
+	    {"Name":"NM_SETTING_CONNECTION_SECONDARIES", "Type":"ktypeArrayString"}
+    ]
+}

@@ -1,0 +1,23 @@
+{
+    "FieldName":"NM_SETTING_WIRELESS_SECURITY_SETTING_NAME",
+    "OutputFile":"../nm_setting_wireless_security_autogen.go",
+    "Keys":[
+	    {"Name":"NM_SETTING_WIRELESS_SECURITY_KEY_MGMT", "Type":"ktypeString"},
+	    {"Name":"NM_SETTING_WIRELESS_SECURITY_WEP_TX_KEYIDX", "Type":"ktypeUint32"},
+	    {"Name":"NM_SETTING_WIRELESS_SECURITY_AUTH_ALG", "Type":"ktypeString"},
+	    {"Name":"NM_SETTING_WIRELESS_SECURITY_PROTO", "Type":"ktypeArrayString"},
+	    {"Name":"NM_SETTING_WIRELESS_SECURITY_PAIRWISE", "Type":"ktypeArrayString"},
+	    {"Name":"NM_SETTING_WIRELESS_SECURITY_GROUP", "Type":"ktypeArrayString"},
+	    {"Name":"NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME", "Type":"ktypeString"},
+	    {"Name":"NM_SETTING_WIRELESS_SECURITY_WEP_KEY0", "Type":"ktypeString"},
+	    {"Name":"NM_SETTING_WIRELESS_SECURITY_WEP_KEY1", "Type":"ktypeString"},
+	    {"Name":"NM_SETTING_WIRELESS_SECURITY_WEP_KEY2", "Type":"ktypeString"},
+	    {"Name":"NM_SETTING_WIRELESS_SECURITY_WEP_KEY3", "Type":"ktypeString"},
+	    {"Name":"NM_SETTING_WIRELESS_SECURITY_WEP_KEY_FLAGS", "Type":"ktypeUint32"},
+	    {"Name":"NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE", "Type":"ktypeUint32"},
+	    {"Name":"NM_SETTING_WIRELESS_SECURITY_PSK", "Type":"ktypeString"},
+	    {"Name":"NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS", "Type":"ktypeUint32"},
+	    {"Name":"NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD", "Type":"ktypeString"},
+	    {"Name":"NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS", "Type":"ktypeUint32"}
+    ]
+}

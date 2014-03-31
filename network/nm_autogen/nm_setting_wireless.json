@@ -1,0 +1,20 @@
+{
+    "FieldName":"NM_SETTING_WIRELESS_SETTING_NAME",
+    "OutputFile":"../nm_setting_wireless_autogen.go",
+    "Keys":[
+	    {"Name":"NM_SETTING_WIRELESS_SSID", "Type":"ktypeArrayByte"},
+	    {"Name":"NM_SETTING_WIRELESS_MODE", "Type":"ktypeString"},
+	    {"Name":"NM_SETTING_WIRELESS_BAND", "Type":"ktypeString"},
+	    {"Name":"NM_SETTING_WIRELESS_CHANNEL", "Type":"ktypeUint32"},
+	    {"Name":"NM_SETTING_WIRELESS_BSSID", "Type":"ktypeArrayByte"},
+	    {"Name":"NM_SETTING_WIRELESS_RATE", "Type":"ktypeUint32"},
+	    {"Name":"NM_SETTING_WIRELESS_TX_POWER", "Type":"ktypeUint32"},
+	    {"Name":"NM_SETTING_WIRELESS_MAC_ADDRESS", "Type":"ktypeArrayByte"},
+	    {"Name":"NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS", "Type":"ktypeArrayByte"},
+	    {"Name":"NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST", "Type":"ktypeArrayString"},
+	    {"Name":"NM_SETTING_WIRELESS_MTU", "Type":"ktypeUint32"},
+	    {"Name":"NM_SETTING_WIRELESS_SEEN_BSSIDS", "Type":"ktypeArrayString"},
+	    {"Name":"NM_SETTING_WIRELESS_SEC", "Type":"ktypeString"},
+	    {"Name":"NM_SETTING_WIRELESS_HIDDEN", "Type":"ktypeBoolean"}
+    ]
+}

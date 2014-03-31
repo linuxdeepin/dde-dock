@@ -1,0 +1,17 @@
+{
+    "FieldName":"NM_SETTING_WIRED_SETTING_NAME",
+    "OutputFile":"../nm_setting_wired_autogen.go",
+    "Keys":[
+	    {"Name":"NM_SETTING_WIRED_PORT", "Type":"ktypeString"},
+	    {"Name":"NM_SETTING_WIRED_SPEED", "Type":"ktypeUint32"},
+	    {"Name":"NM_SETTING_WIRED_DUPLEX", "Type":"ktypeString"},
+	    {"Name":"NM_SETTING_WIRED_AUTO_NEGOTIATE", "Type":"ktypeBoolean"},
+	    {"Name":"NM_SETTING_WIRED_MAC_ADDRESS", "Type":"ktypeArrayByte"},
+	    {"Name":"NM_SETTING_WIRED_CLONED_MAC_ADDRESS", "Type":"ktypeArrayByte"},
+	    {"Name":"NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST", "Type":"ktypeArrayString"},
+	    {"Name":"NM_SETTING_WIRED_MTU", "Type":"ktypeUint32"},
+	    {"Name":"NM_SETTING_WIRED_S390_SUBCHANNELS", "Type":"ktypeArrayString"},
+	    {"Name":"NM_SETTING_WIRED_S390_NETTYPE", "Type":"ktypeString"},
+	    {"Name":"NM_SETTING_WIRED_S390_OPTIONS", "Type":"ktypeDictStringString"}
+    ]
+}
