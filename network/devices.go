@@ -178,6 +178,7 @@ func (this *Manager) GetAccessPoints(path dbus.ObjectPath) ([]AccessPoint, error
 	if dev, err := nm.NewDeviceWireless(NMDest, path); err == nil {
 		nmAps, err := dev.GetAccessPoints()
 		if err != nil {
+			LOGGER.Error("GetAccessPoints:", err) // TODO test
 			return nil, err
 		}
 		for _, apPath := range nmAps {
@@ -219,9 +220,10 @@ func (this *Manager) getDeviceAddress(devPath dbus.ObjectPath, devType uint32) s
 
 func (this *Manager) ActivateConnection(uuid string, dev dbus.ObjectPath) {
 	if cpath, err := _NMSettings.GetConnectionByUuid(uuid); err == nil {
+		LOGGER.Debug("ActivateConnection:", uuid, dev)
 		// TODO, ap path, "/"
 		spath := dbus.ObjectPath("/")
-		_NMManager.ActivateConnection(dev, cpath, spath)
+		_NMManager.ActivateConnection(cpath, dev, spath)
 	}
 }
 func (this *Manager) DeactivateConnection(cpath dbus.ObjectPath) error {
