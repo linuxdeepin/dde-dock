@@ -43,6 +43,7 @@ type MediaKeyManager struct {
         TouchPadOff    func(bool)
         PowerOff       func(bool)
         PowerSleep     func(bool)
+        SwitchLayout   func(bool)
 }
 
 const (
@@ -153,6 +154,21 @@ func (op *MediaKeyManager) emitSignal(modStr, keyStr string, press bool) bool {
 
                         if len(tmps) == 1 {
                                 op.SwitchMonitors(press)
+                        }
+                }
+        case "space":
+                if strings.Contains(modStr, "mod4") {
+                        strs := strings.Split(modStr, "-")
+                        tmps := []string{}
+                        for _, a := range strs {
+                                if a == "lock" || a == "mod2" {
+                                        continue
+                                }
+                                tmps = append(tmps, a)
+                        }
+
+                        if len(tmps) == 1 {
+                                op.SwitchLayout(press)
                         }
                 }
         }

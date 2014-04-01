@@ -217,6 +217,9 @@ func (op *MediaKeyManager) listenKeyPressEvent() {
                 func(X *xgbutil.XUtil, e xevent.KeyReleaseEvent) {
                         modStr := keybind.ModifierString(e.State)
                         keyStr := keybind.LookupString(X, e.State, e.Detail)
+                        if e.Detail == 65 {
+                                keyStr = "space"
+                        }
                         fmt.Println("Release modStr:", modStr, "keyStr:", keyStr)
                         op.emitSignal(modStr, keyStr, false)
                 }).Connect(X, X.RootWin())

@@ -200,5 +200,10 @@
             <summary>Web Camera</summary>
             <description></description>
         </key>
+        <key type="s" name="switch-layout">
+            <default>'mod4-space'</default>
+            <summary>Switch Keyboard Layout</summary>
+            <description></description>
+        </key>
     </schema>
 </schemalist>
