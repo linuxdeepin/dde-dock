@@ -2,7 +2,6 @@ package main
 
 import nm "dbus/org/freedesktop/networkmanager"
 import "dlib/dbus"
-import "fmt"
 
 type AccessPoint struct {
 	Ssid     string
@@ -31,7 +30,7 @@ func (this *Manager) DisconnectDevice(path dbus.ObjectPath) error {
 		case NM_DEVICE_TYPE_WIFI:
 			dbus.NotifyChange(this, "WirelessConnections")
 		case NM_DEVICE_TYPE_ETHERNET:
-			fmt.Println("DisconnectDevice...", path)
+			LOGGER.Debug("DisconnectDevice...", path)
 			dbus.NotifyChange(this, "WiredConnections")
 		}
 		return nil
@@ -56,6 +55,7 @@ func (this *Manager) initDeviceManage() {
 
 func (this *Manager) addWirelessDevice(dev *nm.Device) {
 	wirelessDevice := NewDevice(dev)
+	LOGGER.Debug("addWirelessDevices:", wirelessDevice)
 	dev.ConnectStateChanged(func(new_state uint32, old_state uint32, reason uint32) {
 		wirelessDevice.State = new_state
 		dbus.NotifyChange(this, "WirelessDevices")
@@ -85,6 +85,7 @@ func (this *Manager) addOtherDevice(dev *nm.Device) {
 }
 
 func (this *Manager) handleDeviceChanged(operation int32, path dbus.ObjectPath) {
+	LOGGER.Debugf("handleDeviceChanged: operation %d, path %s", operation, path)
 	switch operation {
 	case OpAdded:
 		dev, err := nm.NewDevice(NMDest, path)
@@ -103,7 +104,7 @@ func (this *Manager) handleDeviceChanged(operation int32, path dbus.ObjectPath) 
 		var removed bool
 		if this.WirelessDevices, removed = tryRemoveDevice(path, this.WirelessDevices); removed {
 			dbus.NotifyChange(this, "WirelessDevices")
-			fmt.Println("WirelessRemoved..")
+			LOGGER.Debug("WirelessRemoved..")
 		} else if this.WiredDevices, removed = tryRemoveDevice(path, this.WiredDevices); removed {
 			dbus.NotifyChange(this, "WiredDevices")
 		}

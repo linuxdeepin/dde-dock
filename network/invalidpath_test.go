@@ -78,7 +78,7 @@ func TestDBusSuccess(t *testing.T) {
 			t.Fatal(err)
 		}
 		for _, ap := range aps {
-			fmt.Println(ap)
+			LOGGER.Debug(ap)
 		}
 	}
 }

@@ -99,7 +99,7 @@ func getConnectionDataKey(data _ConnectionData, field, key string) (value interf
 	}
 
 	value = variant.Value()
-	LOGGER.Debugf("getConnectionDataKey: data[%s][%s]=%v", field, key, value) // TODO test
+	// LOGGER.Debugf("getConnectionDataKey: data[%s][%s]=%v", field, key, value) // TODO test
 	return
 }
 
@@ -128,7 +128,7 @@ func setConnectionDataKey(data _ConnectionData, field, key string, value interfa
 
 	fieldData[key] = dbus.MakeVariant(value)
 
-	LOGGER.Debugf("setConnectionDataKey: data[%s][%s]=%s", field, key, value) // TODO test
+	// LOGGER.Debugf("setConnectionDataKey: data[%s][%s]=%s", field, key, value) // TODO test
 	return
 }
 

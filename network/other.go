@@ -14,7 +14,7 @@ type ActiveConnection struct {
 }
 
 func parseIP4address(v uint32) string {
-	fmt.Println("Parseip:", v)
+	LOGGER.Debug("Parseip:", v)
 	return fmt.Sprintf("%d.%d.%d.%d", byte(v), byte(v>>8), byte(v>>16), byte(v>>24))
 }
 

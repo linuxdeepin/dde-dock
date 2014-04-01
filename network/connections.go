@@ -68,12 +68,12 @@ func newWirelessConnection(id string, ssid []byte, keyFlag int) string {
 	uuid := newUUID()
 	data := newWirelessConnectionData(id, uuid, ssid, keyFlag)
 
-	LOGGER.Debug("new wireless connection data:", data) // TODO test
+	// LOGGER.Debug("new wireless connection data:", data) // TODO test
 
 	_, err := _NMSettings.AddConnection(data)
 	if err != nil {
-		panic(err) // TODO fixme
-		// LOGGER.Error(err)
+		// panic(err) // TODO fixme
+		LOGGER.Error(err)
 	}
 
 	return uuid
@@ -91,7 +91,7 @@ func (this *Manager) GetConnectionByAccessPoint(path dbus.ObjectPath) (string, e
 			}
 
 		}
-		fmt.Println("CCC:", path, string(ap.Ssid.Get()))
+		LOGGER.Debug("CCC:", path, string(ap.Ssid.Get()))
 		return newWirelessConnection(string(ap.Ssid.Get()), []byte(ap.Ssid.Get()), parseFlags(ap.Flags.Get(), ap.WpaFlags.Get(), ap.RsnFlags.Get())), nil
 	} else {
 		return "", dbus.NewNoObjectError(path)
