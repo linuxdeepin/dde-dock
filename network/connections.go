@@ -65,6 +65,12 @@ func (this *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPa
 }
 
 func newWirelessConnection(id string, ssid []byte, keyFlag int) string {
+	// TODO FIXME
+	if keyFlag == ApKeyEap {
+		LOGGER.Debug("ignore wireless connection:", id)
+		return ""
+	}
+
 	uuid := newUUID()
 	data := newWirelessConnectionData(id, uuid, ssid, keyFlag)
 
