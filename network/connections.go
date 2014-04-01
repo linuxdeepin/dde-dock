@@ -226,3 +226,9 @@ func (this *Manager) DeleteConnection(uuid string) (err error) {
 	}
 	return conn.Delete()
 }
+
+// GetConnectionByUuid return connection setting dbus path by uuid
+func (this *Manager) GetConnectionByUuid(uuid string) (cpath dbus.ObjectPath, err error) {
+	cpath, err = _NMSettings.GetConnectionByUuid(uuid)
+	return
+}
