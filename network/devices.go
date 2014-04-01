@@ -55,6 +55,10 @@ func (this *Manager) initDeviceManage() {
 
 func (this *Manager) addWirelessDevice(dev *nm.Device) {
 	wirelessDevice := NewDevice(dev)
+	if isDeviceExists(this.WirelessDevices, wirelessDevice) {
+		// device maybe is repeated added
+		return
+	}
 	LOGGER.Debug("addWirelessDevices:", wirelessDevice)
 	dev.ConnectStateChanged(func(new_state uint32, old_state uint32, reason uint32) {
 		wirelessDevice.State = new_state
@@ -65,6 +69,10 @@ func (this *Manager) addWirelessDevice(dev *nm.Device) {
 }
 func (this *Manager) addWiredDevice(dev *nm.Device) {
 	wiredDevice := NewDevice(dev)
+	if isDeviceExists(this.WiredDevices, wiredDevice) {
+		// device maybe is repeated added
+		return
+	}
 	dev.ConnectStateChanged(func(new_state uint32, old_state uint32, reason uint32) {
 		wiredDevice.State = new_state
 		dbus.NotifyChange(this, "WiredDevices")
@@ -76,12 +84,24 @@ func (this *Manager) addOtherDevice(dev *nm.Device) {
 	this.OtherDevices = append(this.OtherDevices, NewDevice(dev))
 
 	otherDevice := NewDevice(dev)
+	if isDeviceExists(this.OtherDevices, otherDevice) {
+		// device maybe is repeated added
+		return
+	}
 	dev.ConnectStateChanged(func(new_state uint32, old_state uint32, reason uint32) {
 		otherDevice.State = new_state
 		dbus.NotifyChange(this, "OtherDevices")
 	})
 	this.OtherDevices = append(this.OtherDevices, otherDevice)
 	dbus.NotifyChange(this, "OtherDevices")
+}
+func isDeviceExists(devs []*Device, dev *Device) bool {
+	for _, d := range devs {
+		if d.Path == dev.Path {
+			return true
+		}
+	}
+	return false
 }
 
 func (this *Manager) handleDeviceChanged(operation int32, path dbus.ObjectPath) {
