@@ -66,7 +66,7 @@ func (this *Manager) addWirelessDevice(dev *nm.Device) {
 		if this.DeviceStateChanged != nil {
 			this.DeviceStateChanged(dev.Path, new_state)
 		}
-		// TODO
+		// TODO remove
 		// dbus.NotifyChange(this, "WirelessDevices")
 	})
 
@@ -109,7 +109,7 @@ func (this *Manager) addWiredDevice(dev *nm.Device) {
 		if this.DeviceStateChanged != nil {
 			this.DeviceStateChanged(dev.Path, new_state)
 		}
-		// TODO
+		// TODO remove
 		// dbus.NotifyChange(this, "WirelessDevices")
 	})
 	this.WiredDevices = append(this.WiredDevices, wiredDevice)
@@ -120,7 +120,7 @@ func (this *Manager) addOtherDevice(dev *nm.Device) {
 
 	otherDevice := NewDevice(dev)
 	if isDeviceExists(this.OtherDevices, otherDevice) {
-		// device maybe is repeated added
+		// may be repeated to add device
 		return
 	}
 
@@ -130,7 +130,7 @@ func (this *Manager) addOtherDevice(dev *nm.Device) {
 		if this.DeviceStateChanged != nil {
 			this.DeviceStateChanged(dev.Path, new_state)
 		}
-		// TODO
+		// TODO remove
 		// dbus.NotifyChange(this, "WirelessDevices")
 	})
 	this.OtherDevices = append(this.OtherDevices, otherDevice)

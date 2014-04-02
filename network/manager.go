@@ -34,7 +34,7 @@ type Manager struct {
 	VPNEnabled        bool          `access:"readwrite"`
 	WirelessEnabled   dbus.Property `access:"readwrite"`
 	NetworkingEnabled dbus.Property `access:"readwrite"`
-	ActiveConnections []string      // uuid collection of connections that actived
+	ActiveConnections []string      // uuid collection of connections that activated
 	State             uint32        // networking state
 
 	//update by devices.go
@@ -48,10 +48,12 @@ type Manager struct {
 	VPNConnections      []string
 	uuid2connectionType map[string]string // TODO
 
-	NeedSecrets        func(string, string, string)
-	DeviceStateChanged func(devPath dbus.ObjectPath, new_state uint32)
-	AccessPointAdded   func(devPath dbus.ObjectPath, ap AccessPoint)
-	AccessPointRemoved func(devPath dbus.ObjectPath, apPath dbus.ObjectPath)
+	//signals
+	NeedSecrets                  func(string, string, string)
+	DeviceStateChanged           func(devPath dbus.ObjectPath, new_state uint32)
+	AccessPointAdded             func(devPath dbus.ObjectPath, ap AccessPoint)
+	AccessPointRemoved           func(devPath dbus.ObjectPath, apPath dbus.ObjectPath)
+	AccessPointPropertiesChanged func(devPath dbus.ObjectPath, ap AccessPoint) // TODO
 
 	agent *Agent
 }
