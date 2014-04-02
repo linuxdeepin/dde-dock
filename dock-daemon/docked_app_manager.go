@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"container/list"
 	"dlib/gio-2.0"
 	"os"
@@ -26,7 +25,7 @@ type DockedAppManager struct {
 	core  *gio.Settings
 	items *list.List
 
-	Docked   func(id string, indicator string)
+	Docked   func(id string) // find indicator on front-end.
 	Undocked func(id string)
 }
 
@@ -53,34 +52,36 @@ func (m *DockedAppManager) DockedAppList() []string {
 }
 
 type dockedItemInfo struct {
-	Title, Icon, Exec string
+	Name, Icon, Exec string
 }
 
-func (m *DockedAppManager) Dock(id, title, icon, cmd, indicator string) bool {
-	indicatorElement := m.findItem(indicator)
-	if indicatorElement == nil {
+func (m *DockedAppManager) Dock(id, title, icon, cmd string) bool {
+	idElement := m.findItem(id)
+	if idElement != nil {
 		return false
-	} else {
-		m.items.InsertBefore(id, indicatorElement)
-		m.core.SetStrv(DockedApps, m.toSlice())
-		if app := gio.NewDesktopAppInfo(id + ".desktop"); app != nil {
-			app.Unref()
-		} else {
-			homeDir := os.Getenv("HOME")
-			path := ".config/dock/scratch"
-			configDir := filepath.Join(homeDir, path)
-			os.MkdirAll(configDir, 0775)
-			temp := template.Must(template.New("docked_item_temp").Parse(DockedItemTemp))
-			bytes.NewBuffer(make([]byte, 0))
-			f, err := os.Create(filepath.Join(configDir, id+".desktop"))
-			if err != nil {
-				return false
-			}
-			temp.Execute(f, dockedItemInfo{title, icon, cmd})
-		}
-		m.Docked(id, indicator)
-		return true
 	}
+
+	m.items.PushBack(id)
+	if app := gio.NewDesktopAppInfo(id + ".desktop"); app != nil {
+		app.Unref()
+	} else {
+		homeDir := os.Getenv("HOME")
+		path := ".config/dock/scratch"
+		configDir := filepath.Join(homeDir, path)
+		os.MkdirAll(configDir, 0775)
+		f, err := os.Create(filepath.Join(configDir, id+".desktop"))
+		if err != nil {
+			return false
+		}
+		temp := template.Must(template.New("docked_item_temp").Parse(DockedItemTemp))
+		logger.Info(title, ",", icon, ",", cmd)
+		e := temp.Execute(f, dockedItemInfo{title, icon, cmd})
+		if e != nil {
+			logger.Error(e)
+		}
+	}
+	m.Docked(id)
+	return true
 }
 
 func (m *DockedAppManager) Undock(id string) bool {
@@ -107,6 +108,24 @@ func (m *DockedAppManager) findItem(id string) *list.Element {
 		}
 	}
 	return nil
+}
+
+func (m *DockedAppManager) Sort(items []string) {
+	stack := list.New()
+	for _, item := range items {
+		if i := m.findItem(item); i != nil {
+			m.items.Remove(i)
+			if stack.Len() != 0 {
+				m.items.InsertBefore(i, stack.Back())
+				stack.Remove(stack.Back())
+			}
+			stack.PushBack(i)
+		}
+	}
+	if stack.Len() != 0 {
+		m.items.PushBackList(stack)
+	}
+	m.core.SetStrv(DockedApps, m.toSlice())
 }
 
 func (m *DockedAppManager) toSlice() []string {

@@ -5,7 +5,7 @@ import (
 )
 
 func loadAll() []string {
-	manager, err := dock.NewDockedAppManager(
+	DOCKED_APP_MANAGER, err := dock.NewDockedAppManager(
 		"com.deepin.daemon.Dock",
 		"/dde/dock/DockedAppManager",
 	)
@@ -14,7 +14,7 @@ func loadAll() []string {
 		return make([]string, 0)
 	}
 
-	l, _ := manager.DockedAppList()
+	l, _ := DOCKED_APP_MANAGER.DockedAppList()
 	return l
 
 	return []string{"firefox"}

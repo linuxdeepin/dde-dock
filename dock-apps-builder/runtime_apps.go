@@ -1,20 +1,25 @@
 package main
 
-import "github.com/BurntSushi/xgb/xproto"
-import "github.com/BurntSushi/xgbutil/ewmh"
-import "bytes"
-import "dlib/gio-2.0"
-import "dlib/glib-2.0"
-import "encoding/base64"
-import "github.com/BurntSushi/xgbutil"
-import "github.com/BurntSushi/xgbutil/icccm"
-import "github.com/BurntSushi/xgbutil/xwindow"
-import "github.com/BurntSushi/xgbutil/xevent"
-import "github.com/BurntSushi/xgbutil/xprop"
-import "github.com/BurntSushi/xgbutil/xgraphics"
-import "io/ioutil"
-import "path"
-import "strings"
+import (
+	"bytes"
+	"dbus/com/deepin/daemon/dock"
+	"dlib/gio-2.0"
+	"dlib/glib-2.0"
+	"encoding/base64"
+	"github.com/BurntSushi/xgb/xproto"
+	"github.com/BurntSushi/xgbutil"
+	"github.com/BurntSushi/xgbutil/ewmh"
+	"github.com/BurntSushi/xgbutil/icccm"
+	"github.com/BurntSushi/xgbutil/xevent"
+	"github.com/BurntSushi/xgbutil/xgraphics"
+	"github.com/BurntSushi/xgbutil/xprop"
+	"github.com/BurntSushi/xgbutil/xwindow"
+	"io/ioutil"
+	"path"
+	"strings"
+)
+
+var DOCKED_APP_MANAGER *dock.DockedAppManager
 
 type WindowInfo struct {
 	Xid   xproto.Window
@@ -134,6 +139,38 @@ func (app *RuntimeApp) buildMenu() {
 		"_Dock",
 		func() { /*TODO: do the real work*/
 			LOGGER.Warning("dock")
+			var err error
+			if DOCKED_APP_MANAGER == nil {
+				DOCKED_APP_MANAGER, err = dock.NewDockedAppManager(
+					"com.deepin.daemon.Dock",
+					"/dde/dock/DockedAppManager",
+				)
+				if err != nil {
+					LOGGER.Warning("get DockedAppManager failed", err)
+					return
+				}
+			}
+			LOGGER.Info("appid:", app.Id)
+			// TODO:
+			// these two need to do something.
+			var title string
+			var icon string
+			if app.core != nil {
+				title = app.core.GetDisplayName()
+				icon = app.core.GetIcon().ToString()
+			} else {
+				title = app.Id
+				icon = ""
+			}
+			_, err = DOCKED_APP_MANAGER.Dock(
+				app.Id,
+				title,
+				icon,
+				app.exec,
+			)
+			if err != nil {
+				LOGGER.Error("Docked failed: ", err)
+			}
 		},
 		true, // TODO: status
 	)
