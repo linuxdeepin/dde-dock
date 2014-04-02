@@ -39,6 +39,15 @@ var (
         edgeActionMap = make(map[string]string)
 )
 
+func (op *Manager) EnableZoneSettings(enable bool) {
+        if enable {
+                unregisterZoneArea()
+                registerZoneArea()
+        } else {
+                unregisterZoneArea()
+        }
+}
+
 func (op *Manager) SetTopLeft(value string) {
         mutex.Lock()
         defer mutex.Unlock()

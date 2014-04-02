@@ -21,10 +21,6 @@
 
 package main
 
-// #cgo pkg-config: x11 xtst glib-2.0
-// #include "send_key_event.h"
-import "C"
-
 import (
         "dlib/dbus"
 )
@@ -52,7 +48,6 @@ func (op *Manager) listenSignal() {
 
         areaObj.ConnectMotionCoordinate(func(t string, x, y, id int32) {
                 if id != areaId || t != MOTION_INSIDE {
-                        C.initate_windows()
                         return
                 }
 

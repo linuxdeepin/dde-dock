@@ -21,6 +21,10 @@
 
 package main
 
+// #cgo pkg-config: x11 xtst glib-2.0
+// #include "send_key_event.h"
+import "C"
+
 import (
         "os/exec"
         "strings"
@@ -89,6 +93,7 @@ func unregisterZoneArea() {
 func execEdgeAction(edge string) {
         if action, ok := edgeActionMap[edge]; ok {
                 if action == ACTION_WORKSPACE {
+                        C.initate_windows()
                         return
                 }
                 strs := strings.Split(action, " ")
@@ -119,11 +124,9 @@ func getInterfaceArray(area areaRange) []interface{} {
 }
 
 func newManager() *Manager {
-        println("New Manager...")
         m := &Manager{}
 
-        registerZoneArea()
-        println("New Manager end")
+        //registerZoneArea()
         m.listenSignal()
 
         return m
