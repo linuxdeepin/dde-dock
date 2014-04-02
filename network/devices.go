@@ -171,6 +171,35 @@ func parseFlags(flags, wpaFlags, rsnFlags uint32) int {
 }
 
 func (this *Manager) GetAccessPoints(path dbus.ObjectPath) ([]AccessPoint, error) {
+	aps := make([]AccessPoint, 0)
+	if dev, err := nm.NewDeviceWireless(NMDest, path); err == nil {
+		nmAps, err := dev.GetAccessPoints()
+		if err != nil {
+			LOGGER.Error("GetAccessPoints:", err) // TODO test
+			return nil, err
+		}
+		for _, apPath := range nmAps {
+			// TODO remove
+			// if ap, err := nm.NewAccessPoint(NMDest, apPath); err == nil {
+			// 	actived := dev.ActiveAccessPoint.Get() == apPath
+			// 	aps = append(aps, AccessPoint{string(ap.Ssid.Get()),
+			// 		parseFlags(ap.Flags.Get(), ap.WpaFlags.Get(), ap.RsnFlags.Get()) != ApKeyNone,
+			// 		calcStrength(ap.Strength.Get()),
+			// 		ap.Path,
+			// 		actived,
+			// 	})
+			// }
+			if ap, err := newAccessPoint(dev, apPath); err == nil {
+				aps = append(aps, ap)
+			}
+		}
+		return aps, nil
+	} else {
+		return nil, err
+	}
+}
+
+func newAccessPoint(dev *nm.DeviceWireless, apPath dbus.ObjectPath) (ap AccessPoint, err error) {
 	calcStrength := func(s uint8) uint8 {
 		switch {
 		case s <= 10:
@@ -186,28 +215,20 @@ func (this *Manager) GetAccessPoints(path dbus.ObjectPath) ([]AccessPoint, error
 		}
 		return 0
 	}
-	aps := make([]AccessPoint, 0)
-	if dev, err := nm.NewDeviceWireless(NMDest, path); err == nil {
-		nmAps, err := dev.GetAccessPoints()
-		if err != nil {
-			LOGGER.Error("GetAccessPoints:", err) // TODO test
-			return nil, err
-		}
-		for _, apPath := range nmAps {
-			if ap, err := nm.NewAccessPoint(NMDest, apPath); err == nil {
-				actived := dev.ActiveAccessPoint.Get() == apPath
-				aps = append(aps, AccessPoint{string(ap.Ssid.Get()),
-					parseFlags(ap.Flags.Get(), ap.WpaFlags.Get(), ap.RsnFlags.Get()) != ApKeyNone,
-					calcStrength(ap.Strength.Get()),
-					ap.Path,
-					actived,
-				})
-			}
-		}
-		return aps, nil
-	} else {
-		return nil, err
+
+	nmAp, err := nm.NewAccessPoint(NMDest, apPath)
+	if err != nil {
+		return
 	}
+
+	actived := dev.ActiveAccessPoint.Get() == apPath
+	ap = AccessPoint{string(nmAp.Ssid.Get()),
+		parseFlags(nmAp.Flags.Get(), nmAp.WpaFlags.Get(), nmAp.RsnFlags.Get()) != ApKeyNone,
+		calcStrength(nmAp.Strength.Get()),
+		nmAp.Path,
+		actived,
+	}
+	return
 }
 
 func (this *Manager) getDeviceAddress(devPath dbus.ObjectPath, devType uint32) string {
