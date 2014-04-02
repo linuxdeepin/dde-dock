@@ -8,7 +8,6 @@ type AccessPoint struct {
 	NeedKey  bool
 	Strength uint8
 	Path     dbus.ObjectPath
-	Actived  bool
 }
 
 type Device struct {
@@ -82,7 +81,7 @@ func (this *Manager) addWirelessDevice(dev *nm.Device) {
 	if devWireless, err := nm.NewDeviceWireless(NMDest, dev.Path); err == nil {
 		devWireless.ConnectAccessPointAdded(func(apPath dbus.ObjectPath) {
 			if this.AccessPointAdded != nil {
-				if ap, err := newAccessPoint(devWireless, apPath); err == nil {
+				if ap, err := newAccessPoint(apPath); err == nil {
 					this.AccessPointAdded(dev.Path, ap)
 				}
 			}
@@ -219,7 +218,7 @@ func (this *Manager) GetAccessPoints(path dbus.ObjectPath) ([]AccessPoint, error
 			// 		actived,
 			// 	})
 			// }
-			if ap, err := newAccessPoint(dev, apPath); err == nil {
+			if ap, err := newAccessPoint(apPath); err == nil {
 				aps = append(aps, ap)
 			}
 		}
@@ -229,7 +228,7 @@ func (this *Manager) GetAccessPoints(path dbus.ObjectPath) ([]AccessPoint, error
 	}
 }
 
-func newAccessPoint(dev *nm.DeviceWireless, apPath dbus.ObjectPath) (ap AccessPoint, err error) {
+func newAccessPoint(apPath dbus.ObjectPath) (ap AccessPoint, err error) {
 	calcStrength := func(s uint8) uint8 {
 		switch {
 		case s <= 10:
@@ -251,12 +250,10 @@ func newAccessPoint(dev *nm.DeviceWireless, apPath dbus.ObjectPath) (ap AccessPo
 		return
 	}
 
-	actived := dev.ActiveAccessPoint.Get() == apPath
 	ap = AccessPoint{string(nmAp.Ssid.Get()),
 		parseFlags(nmAp.Flags.Get(), nmAp.WpaFlags.Get(), nmAp.RsnFlags.Get()) != ApKeyNone,
 		calcStrength(nmAp.Strength.Get()),
 		nmAp.Path,
-		actived,
 	}
 	return
 }
