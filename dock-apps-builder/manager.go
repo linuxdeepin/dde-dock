@@ -10,6 +10,8 @@ import "github.com/BurntSushi/xgbutil/xevent"
 import "github.com/BurntSushi/xgb/xproto"
 import "github.com/BurntSushi/xgbutil/xprop"
 import "github.com/BurntSushi/xgbutil/ewmh"
+import "os"
+import "path/filepath"
 
 var (
 	XU, _                 = xgbutil.NewConn()
@@ -171,7 +173,15 @@ func (m *Manager) createNormalApp(id string) {
 
 	nApp := NewNormalApp(id)
 	if nApp == nil {
-		return
+		newId := filepath.Join(
+			os.Getenv("HOME"),
+			".config/dock/scratch",
+			id,
+		)
+		nApp = NewNormalApp(newId)
+		if nApp == nil {
+			return
+		}
 	}
 
 	m.normalApps[id] = nApp
@@ -192,6 +202,7 @@ func main() {
 
 	initDeepin()
 	for _, id := range loadAll() {
+		// LOGGER.Debug(id)
 		MANAGER.createNormalApp(id + ".desktop")
 	}
 	listenRootWindow()

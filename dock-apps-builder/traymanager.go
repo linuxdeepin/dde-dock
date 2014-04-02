@@ -141,12 +141,12 @@ func initTrayManager() {
 		dmageInfo:  make(map[xproto.Window]damage.Damage),
 	}
 
-	TRAYMANAGER.tryOwner()
-	xfixes.SelectSelectionInput(TrayXU.Conn(), TrayXU.RootWin(), _NET_SYSTEM_TRAY_S0, xfixes.SelectionEventMaskSelectionClientClose)
-	go TRAYMANAGER.startListener()
-	dbus.InstallOnSession(TRAYMANAGER)
+	if TRAYMANAGER.tryOwner() {
+		dbus.InstallOnSession(TRAYMANAGER)
+	}
 }
-func (m *TrayManager) tryOwner() {
+
+func (m *TrayManager) tryOwner() bool {
 	// Make a check, the tray application MUST be 1.
 	_trayInstance := xproto.GetSelectionOwner(TrayXU.Conn(), _NET_SYSTEM_TRAY_S0)
 	reply, err := _trayInstance.Reply()
@@ -157,8 +157,12 @@ func (m *TrayManager) tryOwner() {
 		xproto.SetSelectionOwner(TrayXU.Conn(), m.owner, _NET_SYSTEM_TRAY_S0, 0)
 		//owner the _NET_SYSTEM_TRAY_Sn
 		LOGGER.Info("Required _NET_SYSTEM_TRAY_S0")
+		xfixes.SelectSelectionInput(TrayXU.Conn(), TrayXU.RootWin(), _NET_SYSTEM_TRAY_S0, xfixes.SelectionEventMaskSelectionClientClose)
+		go TRAYMANAGER.startListener()
+		return true
 	} else {
 		LOGGER.Info("Another System tray application is running")
+		return false
 	}
 }
 

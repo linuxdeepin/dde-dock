@@ -25,12 +25,13 @@ type Manager struct {
 
 	Added func(dbus.ObjectPath)
 	// Removed func(dbus.ObjectPath)
-	Removed func(string)
+	Removed    func(string)
+	TrayInited func()
 }
 
 func (m *Manager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		"dde.dock.Daemon",
+		"com.deepin.daemon.Dock",
 		"/dde/dock/EntryManager",
 		"dde.dock.EntryManager",
 	}
@@ -55,6 +56,9 @@ func (m *Manager) watchEntries() {
 	}
 	for _, n := range names {
 		m.registerEntry(n)
+		if n == "com.deepin.dde.TrayManager" {
+			m.TrayInited()
+		}
 	}
 
 	// monitor name lost, name acquire

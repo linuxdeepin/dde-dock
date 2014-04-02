@@ -2,6 +2,7 @@ package main
 
 import "dlib/gio-2.0"
 import "fmt"
+import "path/filepath"
 
 type NormalApp struct {
 	Id   string
@@ -17,8 +18,16 @@ type NormalApp struct {
 }
 
 func NewNormalApp(id string) *NormalApp {
-	app := &NormalApp{Id: id[:len(id)-8]}
-	app.core = gio.NewDesktopAppInfo(id)
+	app := &NormalApp{Id: filepath.Base(id[:len(id)-8])}
+	LOGGER.Info(id)
+	if filepath.IsAbs(id) {
+		app.core = gio.NewDesktopAppInfoFromFilename(id)
+	} else {
+		app.core = gio.NewDesktopAppInfo(id)
+	}
+	if app.core == nil {
+		return nil
+	}
 	app.Icon = app.core.GetIcon().ToString()
 	app.Name = app.core.GetDisplayName()
 	app.buildMenu()

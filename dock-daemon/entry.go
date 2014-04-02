@@ -49,7 +49,7 @@ func (e *EntryProxyer) OnDragDrop(x, y int32, data string)  { e.core.OnDragDrop(
 
 func (e *EntryProxyer) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		"dde.dock.Daemon",
+		"com.deepin.daemon.Dock",
 		entryPathPrefix + e.entryId,
 		"dde.dock.EntryProxyer",
 	}
