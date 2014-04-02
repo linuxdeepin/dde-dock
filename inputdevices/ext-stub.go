@@ -22,6 +22,7 @@
 package main
 
 import (
+        libsm "dbus/com/deepin/sessionmanager"
         "dlib/dbus"
         "dlib/gio-2.0"
         "strings"
@@ -58,6 +59,21 @@ func (tpad *TPadEntry) GetDBusInfo() dbus.DBusInfo {
 func (keyboard *KeyboardEntry) listenLayoutChanged() {
         _layoutGSettings.Connect("changed", func(s *gio.Settings, key string) {
                 keyboard.getPropName("CurrentLayout")
+        })
+
+        _infaceGSettings.Connect("changed", func(s *gio.Settings, key string) {
+                switch key {
+                case "cursor-blink-time":
+                        v := _infaceGSettings.GetInt(key)
+                        xsObj, err := libsm.NewXSettings(
+                                "com.deepin.SessionManager",
+                                "/com/deepin/XSettings")
+                        if err != nil {
+                                logObject.Info("New XSettings Failed: ", err)
+                                return
+                        }
+                        xsObj.SetInterger("Net/CursorBlinkTime", uint32(v))
+                }
         })
 }
 
