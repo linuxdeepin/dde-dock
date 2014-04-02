@@ -62,7 +62,11 @@ func (this *Manager) addWirelessDevice(dev *nm.Device) {
 	LOGGER.Debug("addWirelessDevices:", wirelessDevice)
 	dev.ConnectStateChanged(func(new_state uint32, old_state uint32, reason uint32) {
 		wirelessDevice.State = new_state
-		dbus.NotifyChange(this, "WirelessDevices")
+		if this.DeviceStateChanged != nil {
+			this.DeviceStateChanged(dev.Path, new_state)
+		}
+		// TODO
+		// dbus.NotifyChange(this, "WirelessDevices")
 	})
 	this.WirelessDevices = append(this.WirelessDevices, wirelessDevice)
 	dbus.NotifyChange(this, "WirelessDevices")
@@ -75,7 +79,11 @@ func (this *Manager) addWiredDevice(dev *nm.Device) {
 	}
 	dev.ConnectStateChanged(func(new_state uint32, old_state uint32, reason uint32) {
 		wiredDevice.State = new_state
-		dbus.NotifyChange(this, "WiredDevices")
+		if this.DeviceStateChanged != nil {
+			this.DeviceStateChanged(dev.Path, new_state)
+		}
+		// TODO
+		// dbus.NotifyChange(this, "WirelessDevices")
 	})
 	this.WiredDevices = append(this.WiredDevices, wiredDevice)
 	dbus.NotifyChange(this, "WiredDevices")
@@ -90,7 +98,11 @@ func (this *Manager) addOtherDevice(dev *nm.Device) {
 	}
 	dev.ConnectStateChanged(func(new_state uint32, old_state uint32, reason uint32) {
 		otherDevice.State = new_state
-		dbus.NotifyChange(this, "OtherDevices")
+		if this.DeviceStateChanged != nil {
+			this.DeviceStateChanged(dev.Path, new_state)
+		}
+		// TODO
+		// dbus.NotifyChange(this, "WirelessDevices")
 	})
 	this.OtherDevices = append(this.OtherDevices, otherDevice)
 	dbus.NotifyChange(this, "OtherDevices")

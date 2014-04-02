@@ -46,7 +46,8 @@ type Manager struct {
 	VPNConnections      []string
 	uuid2connectionType map[string]string
 
-	NeedSecrets func(string, string, string)
+	NeedSecrets        func(string, string, string)
+	DeviceStateChanged func(devpath dbus.ObjectPath, new_state uint32)
 
 	agent *Agent
 }
