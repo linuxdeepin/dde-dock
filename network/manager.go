@@ -36,7 +36,7 @@ type Manager struct {
 	NetworkingEnabled dbus.Property `access:"readwrite"`
 
 	//update by devices.go
-	WirelessDevices []*Device
+	WirelessDevices []*Device // TODO is Device struct needed
 	WiredDevices    []*Device
 	OtherDevices    []*Device
 
@@ -47,7 +47,9 @@ type Manager struct {
 	uuid2connectionType map[string]string
 
 	NeedSecrets        func(string, string, string)
-	DeviceStateChanged func(devpath dbus.ObjectPath, new_state uint32)
+	DeviceStateChanged func(devPath dbus.ObjectPath, new_state uint32)
+	AccessPointAdded   func(devPath dbus.ObjectPath, ap AccessPoint)
+	AccessPointRemoved func(devPath dbus.ObjectPath, apPath dbus.ObjectPath)
 
 	agent *Agent
 }

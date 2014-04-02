@@ -60,6 +60,8 @@ func (this *Manager) addWirelessDevice(dev *nm.Device) {
 		return
 	}
 	LOGGER.Debug("addWirelessDevices:", wirelessDevice)
+
+	// connect signal DeviceStateChanged()
 	dev.ConnectStateChanged(func(new_state uint32, old_state uint32, reason uint32) {
 		wirelessDevice.State = new_state
 		if this.DeviceStateChanged != nil {
@@ -68,6 +70,23 @@ func (this *Manager) addWirelessDevice(dev *nm.Device) {
 		// TODO
 		// dbus.NotifyChange(this, "WirelessDevices")
 	})
+
+	// connect signal AccessPointAdded() and AccessPointRemoved()
+	if devWireless, err := nm.NewDeviceWireless(NMDest, dev.Path); err == nil {
+		devWireless.ConnectAccessPointAdded(func(apPath dbus.ObjectPath) {
+			if this.AccessPointAdded != nil {
+				if ap, err := newAccessPoint(devWireless, apPath); err == nil {
+					this.AccessPointAdded(dev.Path, ap)
+				}
+			}
+		})
+		devWireless.ConnectAccessPointRemoved(func(apPath dbus.ObjectPath) {
+			if this.AccessPointRemoved != nil {
+				this.AccessPointRemoved(dev.Path, apPath)
+			}
+		})
+	}
+
 	this.WirelessDevices = append(this.WirelessDevices, wirelessDevice)
 	dbus.NotifyChange(this, "WirelessDevices")
 }
@@ -77,6 +96,8 @@ func (this *Manager) addWiredDevice(dev *nm.Device) {
 		// device maybe is repeated added
 		return
 	}
+
+	// connect signal DeviceStateChanged()
 	dev.ConnectStateChanged(func(new_state uint32, old_state uint32, reason uint32) {
 		wiredDevice.State = new_state
 		if this.DeviceStateChanged != nil {
@@ -96,6 +117,8 @@ func (this *Manager) addOtherDevice(dev *nm.Device) {
 		// device maybe is repeated added
 		return
 	}
+
+	// connect signal DeviceStateChanged()
 	dev.ConnectStateChanged(func(new_state uint32, old_state uint32, reason uint32) {
 		otherDevice.State = new_state
 		if this.DeviceStateChanged != nil {
