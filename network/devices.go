@@ -72,6 +72,13 @@ func (this *Manager) addWirelessDevice(dev *nm.Device) {
 	})
 
 	// connect signal AccessPointAdded() and AccessPointRemoved()
+	if aps, err := this.GetAccessPoints(dev.Path); err == nil {
+		for _, ap := range aps {
+			if this.AccessPointAdded != nil {
+				this.AccessPointAdded(dev.Path, ap)
+			}
+		}
+	}
 	if devWireless, err := nm.NewDeviceWireless(NMDest, dev.Path); err == nil {
 		devWireless.ConnectAccessPointAdded(func(apPath dbus.ObjectPath) {
 			if this.AccessPointAdded != nil {

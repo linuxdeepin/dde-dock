@@ -23,7 +23,7 @@ const (
 var (
 	_NMManager, _  = nm.NewManager(NMDest, "/org/freedesktop/NetworkManager")
 	_NMSettings, _ = nm.NewSettings(NMDest, "/org/freedesktop/NetworkManager/Settings")
-	_Manager       = _NewManager()
+	_Manager       *Manager
 	LOGGER         = logger.NewLogger("com.deepin.daemon.Network")
 	argDebug       bool
 )
@@ -64,12 +64,11 @@ func (this *Manager) initManager() {
 	this.NetworkingEnabled = property.NewWrapProperty(this, "NetworkingEnabled", _NMManager.NetworkingEnabled)
 	this.initDeviceManage()
 	this.initConnectionManage()
+	this.agent = newAgent("org.snyh.agent")
 }
 
 func _NewManager() (m *Manager) {
 	this := &Manager{}
-	this.initManager()
-	this.agent = newAgent("org.snyh.agent")
 	return this
 }
 
@@ -88,11 +87,15 @@ func main() {
 		LOGGER.SetLogLevel(logger.LEVEL_DEBUG)
 	}
 
+	_Manager = _NewManager()
 	err := dbus.InstallOnSession(_Manager)
 	if err != nil {
 		LOGGER.Error("register dbus interface failed: ", err)
 		os.Exit(1)
 	}
+
+	// initialize manager after configuring dbus
+	_Manager.initManager()
 
 	dbus.DealWithUnhandledMessage()
 	if err := dbus.Wait(); err != nil {
