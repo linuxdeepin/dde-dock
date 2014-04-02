@@ -34,9 +34,11 @@ type Manager struct {
 	VPNEnabled        bool          `access:"readwrite"`
 	WirelessEnabled   dbus.Property `access:"readwrite"`
 	NetworkingEnabled dbus.Property `access:"readwrite"`
+	ActiveConnections []string      // uuid collection of connections that actived
+	State             uint32        // networking state
 
 	//update by devices.go
-	WirelessDevices []*Device // TODO is Device struct needed
+	WirelessDevices []*Device // TODO is "Device" struct still needed?
 	WiredDevices    []*Device
 	OtherDevices    []*Device
 
@@ -44,7 +46,6 @@ type Manager struct {
 	WiredConnections    []string
 	WirelessConnections []string
 	VPNConnections      []string
-	ActiveConnections   []string
 	uuid2connectionType map[string]string // TODO
 
 	NeedSecrets        func(string, string, string)
@@ -59,6 +60,11 @@ func (this *Manager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{DBusDest, DBusPath, DBusIFC}
 }
 
+func _NewManager() (m *Manager) {
+	this := &Manager{}
+	return this
+}
+
 func (this *Manager) initManager() {
 	this.WiredEnabled = true
 	this.WirelessEnabled = property.NewWrapProperty(this, "WirelessEnabled", _NMManager.WirelessEnabled)
@@ -66,6 +72,12 @@ func (this *Manager) initManager() {
 
 	this.initDeviceManage()
 	this.initConnectionManage()
+
+	// update property "State"
+	this.updatePropState()
+	_NMManager.State.ConnectChanged(func() {
+		this.updatePropState()
+	})
 
 	// update property "ActiveConnections" after initilizing device
 	this.updatePropActiveConnections()
@@ -76,9 +88,19 @@ func (this *Manager) initManager() {
 	this.agent = newAgent("org.snyh.agent")
 }
 
-func _NewManager() (m *Manager) {
-	this := &Manager{}
-	return this
+func (this *Manager) updatePropActiveConnections() {
+	this.ActiveConnections = make([]string, 0)
+	for _, cpath := range _NMManager.ActiveConnections.Get() {
+		if conn, err := nm.NewActiveConnection(NMDest, cpath); err == nil {
+			this.ActiveConnections = append(this.ActiveConnections, conn.Uuid.Get())
+		}
+	}
+	dbus.NotifyChange(this, "ActiveConnections")
+}
+
+func (this *Manager) updatePropState() {
+	this.State = _NMManager.State.Get()
+	dbus.NotifyChange(this, "State")
 }
 
 func main() {

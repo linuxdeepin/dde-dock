@@ -23,16 +23,6 @@ func (this *Manager) initConnectionManage() {
 	})
 }
 
-func (this *Manager) updatePropActiveConnections() {
-	this.ActiveConnections = make([]string, 0)
-	for _, cpath := range _NMManager.ActiveConnections.Get() {
-		if conn, err := nm.NewActiveConnection(NMDest, cpath); err == nil {
-			this.ActiveConnections = append(this.ActiveConnections, conn.Uuid.Get())
-		}
-	}
-	dbus.NotifyChange(this, "ActiveConnections")
-}
-
 func (this *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPath) {
 	LOGGER.Debugf("handleConnectionChanged: operation %d, path %s", operation, path)
 	switch operation {

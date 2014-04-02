@@ -65,6 +65,17 @@ const (
 	NM_DEVICE_STATE_FAILED       = uint32(120)
 )
 
+const (
+	NM_STATE_UNKNOWN          = uint32(0)
+	NM_STATE_ASLEEP           = uint32(10)
+	NM_STATE_DISCONNECTED     = uint32(20)
+	NM_STATE_DISCONNECTING    = uint32(30)
+	NM_STATE_CONNECTING       = uint32(40)
+	NM_STATE_CONNECTED_LOCAL  = uint32(50)
+	NM_STATE_CONNECTED_SITE   = uint32(60)
+	NM_STATE_CONNECTED_GLOBAL = uint32(70)
+)
+
 //https://projects.gnome.org/NetworkManager/developers/api/09/spec.html#type-NM_802_11_AP_SEC
 const (
 	NM_802_11_AP_SEC_NONE            = uint32(0x0)
