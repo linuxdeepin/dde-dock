@@ -44,7 +44,8 @@ type Manager struct {
 	WiredConnections    []string
 	WirelessConnections []string
 	VPNConnections      []string
-	uuid2connectionType map[string]string
+	ActiveConnections   []string
+	uuid2connectionType map[string]string // TODO
 
 	NeedSecrets        func(string, string, string)
 	DeviceStateChanged func(devPath dbus.ObjectPath, new_state uint32)
@@ -62,8 +63,16 @@ func (this *Manager) initManager() {
 	this.WiredEnabled = true
 	this.WirelessEnabled = property.NewWrapProperty(this, "WirelessEnabled", _NMManager.WirelessEnabled)
 	this.NetworkingEnabled = property.NewWrapProperty(this, "NetworkingEnabled", _NMManager.NetworkingEnabled)
+
 	this.initDeviceManage()
 	this.initConnectionManage()
+
+	// update property "ActiveConnections" after initilizing device
+	this.updatePropActiveConnections()
+	_NMManager.ActiveConnections.ConnectChanged(func() {
+		this.updatePropActiveConnections()
+	})
+
 	this.agent = newAgent("org.snyh.agent")
 }
 
