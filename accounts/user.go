@@ -133,7 +133,9 @@ func (op *UserManager) SetBackgroundFile(bg string) {
 
 func (op *UserManager) DeleteHistoryIcon(icon string) {
         file := USER_CONFIG_FILE + op.UserName
-        op.HistoryIcons = deleteHistoryIcon(file, icon)
+        //op.HistoryIcons = deleteHistoryIcon(file, icon)
+        deleteHistoryIcon(file, icon)
+        op.setPropName("HistoryIcons")
 }
 
 func newUserManager(uid string) *UserManager {
