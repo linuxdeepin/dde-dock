@@ -30,12 +30,13 @@ var (
 
 type Manager struct {
 	//update by manager.go
-	WiredEnabled      bool          `access:"readwrite"`
-	VPNEnabled        bool          `access:"readwrite"`
-	WirelessEnabled   dbus.Property `access:"readwrite"`
-	NetworkingEnabled dbus.Property `access:"readwrite"`
-	ActiveConnections []string      // uuid collection of connections that activated
-	State             uint32        // networking state
+	WiredEnabled         bool          `access:"readwrite"`
+	VPNEnabled           bool          `access:"readwrite"`
+	WirelessEnabled      dbus.Property `access:"readwrite"`
+	NetworkingEnabled    dbus.Property `access:"readwrite"`
+	ActiveConnections    []string      // uuid collection of connections that activated
+	ActivatingConnection string        // TODO uuid of connection that avtivating
+	State                uint32        // networking state
 
 	//update by devices.go
 	WirelessDevices []*Device // TODO is "Device" struct still needed?
@@ -75,16 +76,19 @@ func (this *Manager) initManager() {
 	this.initDeviceManage()
 	this.initConnectionManage()
 
-	// update property "State"
-	this.updatePropState()
-	_NMManager.State.ConnectChanged(func() {
-		this.updatePropState()
-	})
-
 	// update property "ActiveConnections" after initilizing device
 	this.updatePropActiveConnections()
 	_NMManager.ActiveConnections.ConnectChanged(func() {
 		this.updatePropActiveConnections()
+	})
+
+	// TODO update property "ActivatingConnection"
+	this.updatePropActivatingConnection()
+
+	// update property "State"
+	this.updatePropState()
+	_NMManager.State.ConnectChanged(func() {
+		this.updatePropState()
 	})
 
 	this.agent = newAgent("org.snyh.agent")
@@ -98,6 +102,11 @@ func (this *Manager) updatePropActiveConnections() {
 		}
 	}
 	dbus.NotifyChange(this, "ActiveConnections")
+}
+
+// TODO
+func (this *Manager) updatePropActivatingConnection() {
+	dbus.NotifyChange(this, "ActivatingConnection")
 }
 
 func (this *Manager) updatePropState() {
