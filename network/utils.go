@@ -66,13 +66,37 @@ func isConnectionDataKeyExists(data _ConnectionData, field, key string) bool {
 	return true
 }
 
+func getConnectionDataKeyDefaultValue(field, key string) (value interface{}) {
+	switch field {
+	default:
+		LOGGER.Warning("invalid field name", field)
+	case field8021x:
+		value = getSetting8021xKeyDefaultValue(key)
+	case fieldConnection:
+		value = getSettingConnectionKeyDefaultValue(key)
+	case fieldIPv4:
+		value = getSettingIp4ConfigKeyDefaultValue(key)
+	case fieldIPv6:
+		value = getSettingIp6ConfigKeyDefaultValue(key)
+	case fieldWired:
+		value = getSettingWiredKeyDefaultValue(key)
+	case fieldWireless:
+		value = getSettingWirelessKeyDefaultValue(key)
+	case fieldWirelessSecurity:
+		value = getSettingWirelessSecurityKeyDefaultValue(key)
+	}
+	return
+}
+
 func getConnectionDataKeyJSON(data _ConnectionData, field, key string, t ktype) (valueJSON string) {
 	value := getConnectionDataKey(data, field, key)
 	if value == nil {
-		// the key is not exists
-		// TODO should return default value for it
-		// value = getConnectionDataKeyDefaultValue(data, field, key)
-		return ""
+		// the key is not exists should return default value for
+		// it, if there is no default value, return empty string
+		value = getConnectionDataKeyDefaultValue(field, key)
+		if value == nil {
+			return "" // TODO maybe should return `""` for ktypeString
+		}
 	}
 
 	valueJSON, err := keyValueToJSON(value, t)

@@ -45,15 +45,6 @@ func getSettingWirelessSecurityKeyType(key string) (t ktype) {
 }
 
 // Get key's default value
-func getSettingWirelessSecurityKeyDefaultValueJSON(key string) (valueJSON string) {
-	value := getSettingWirelessSecurityKeyDefaultValue(key)
-	t := getSettingWirelessSecurityKeyType(key)
-	valueJSON, err := keyValueToJSON(value, t)
-	if err != nil {
-		LOGGER.Error("getSettingWirelessSecurityKeyDefaultValueJSON:", err)
-	}
-	return
-}
 func getSettingWirelessSecurityKeyDefaultValue(key string) (value interface{}) {
 	switch key {
 	default:
@@ -98,9 +89,6 @@ func getSettingWirelessSecurityKeyDefaultValue(key string) (value interface{}) {
 
 // Get JSON value generally
 func generalGetSettingWirelessSecurityKeyJSON(data _ConnectionData, key string) (value string) {
-	if !isConnectionDataKeyExists(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, key) {
-		return getSettingWirelessSecurityKeyDefaultValueJSON(key)
-	}
 	switch key {
 	default:
 		LOGGER.Error("generalGetSettingWirelessSecurityKeyJSON: invalide key", key)

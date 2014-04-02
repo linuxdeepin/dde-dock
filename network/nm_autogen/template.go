@@ -17,15 +17,6 @@ func get{{.FieldName | ToFieldFuncBaseName}}KeyType(key string) (t ktype) {
 // get key's default value
 const tplGetDefaultValue = `{{$fieldFuncBaseName := .FieldName | ToFieldFuncBaseName}}
 // Get key's default value
-func get{{$fieldFuncBaseName}}KeyDefaultValueJSON(key string) (valueJSON string) {
-	value := get{{$fieldFuncBaseName}}KeyDefaultValue(key)
-	t := get{{$fieldFuncBaseName}}KeyType(key)
-	valueJSON, err := keyValueToJSON(value, t)
-	if err != nil {
-		LOGGER.Error("get{{$fieldFuncBaseName}}KeyDefaultValueJSON:", err)
-	}
-	return
-}
 func get{{$fieldFuncBaseName}}KeyDefaultValue(key string) (value interface{}) {
 	switch key {
 	default:
@@ -42,9 +33,6 @@ const tplGeneralGetterJSON = `
 {{$fieldFuncBaseName := .FieldName | ToFieldFuncBaseName}}
 // Get JSON value generally
 func generalGet{{$fieldFuncBaseName}}KeyJSON(data _ConnectionData, key string) (value string) {
-	if !isConnectionDataKeyExists(data, {{.FieldName}}, key) {
-		return get{{$fieldFuncBaseName}}KeyDefaultValueJSON(key)
-	}
 	switch key {
 	default:
 		LOGGER.Error("generalGet{{.FieldName | ToFieldFuncBaseName}}KeyJSON: invalide key", key){{range .Keys}}

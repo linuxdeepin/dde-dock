@@ -75,15 +75,6 @@ func getSetting8021xKeyType(key string) (t ktype) {
 }
 
 // Get key's default value
-func getSetting8021xKeyDefaultValueJSON(key string) (valueJSON string) {
-	value := getSetting8021xKeyDefaultValue(key)
-	t := getSetting8021xKeyType(key)
-	valueJSON, err := keyValueToJSON(value, t)
-	if err != nil {
-		LOGGER.Error("getSetting8021xKeyDefaultValueJSON:", err)
-	}
-	return
-}
 func getSetting8021xKeyDefaultValue(key string) (value interface{}) {
 	switch key {
 	default:
@@ -158,9 +149,6 @@ func getSetting8021xKeyDefaultValue(key string) (value interface{}) {
 
 // Get JSON value generally
 func generalGetSetting8021xKeyJSON(data _ConnectionData, key string) (value string) {
-	if !isConnectionDataKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, key) {
-		return getSetting8021xKeyDefaultValueJSON(key)
-	}
 	switch key {
 	default:
 		LOGGER.Error("generalGetSetting8021xKeyJSON: invalide key", key)

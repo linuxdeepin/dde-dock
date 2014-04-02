@@ -33,15 +33,6 @@ func getSettingWiredKeyType(key string) (t ktype) {
 }
 
 // Get key's default value
-func getSettingWiredKeyDefaultValueJSON(key string) (valueJSON string) {
-	value := getSettingWiredKeyDefaultValue(key)
-	t := getSettingWiredKeyType(key)
-	valueJSON, err := keyValueToJSON(value, t)
-	if err != nil {
-		LOGGER.Error("getSettingWiredKeyDefaultValueJSON:", err)
-	}
-	return
-}
 func getSettingWiredKeyDefaultValue(key string) (value interface{}) {
 	switch key {
 	default:
@@ -74,9 +65,6 @@ func getSettingWiredKeyDefaultValue(key string) (value interface{}) {
 
 // Get JSON value generally
 func generalGetSettingWiredKeyJSON(data _ConnectionData, key string) (value string) {
-	if !isConnectionDataKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, key) {
-		return getSettingWiredKeyDefaultValueJSON(key)
-	}
 	switch key {
 	default:
 		LOGGER.Error("generalGetSettingWiredKeyJSON: invalide key", key)

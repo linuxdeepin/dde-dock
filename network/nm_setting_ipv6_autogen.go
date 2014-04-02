@@ -33,15 +33,6 @@ func getSettingIp6ConfigKeyType(key string) (t ktype) {
 }
 
 // Get key's default value
-func getSettingIp6ConfigKeyDefaultValueJSON(key string) (valueJSON string) {
-	value := getSettingIp6ConfigKeyDefaultValue(key)
-	t := getSettingIp6ConfigKeyType(key)
-	valueJSON, err := keyValueToJSON(value, t)
-	if err != nil {
-		LOGGER.Error("getSettingIp6ConfigKeyDefaultValueJSON:", err)
-	}
-	return
-}
 func getSettingIp6ConfigKeyDefaultValue(key string) (value interface{}) {
 	switch key {
 	default:
@@ -74,9 +65,6 @@ func getSettingIp6ConfigKeyDefaultValue(key string) (value interface{}) {
 
 // Get JSON value generally
 func generalGetSettingIp6ConfigKeyJSON(data _ConnectionData, key string) (value string) {
-	if !isConnectionDataKeyExists(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, key) {
-		return getSettingIp6ConfigKeyDefaultValueJSON(key)
-	}
 	switch key {
 	default:
 		LOGGER.Error("generalGetSettingIp6ConfigKeyJSON: invalide key", key)
