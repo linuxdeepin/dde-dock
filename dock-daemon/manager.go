@@ -56,9 +56,6 @@ func (m *Manager) watchEntries() {
 	}
 	for _, n := range names {
 		m.registerEntry(n)
-		if n == "com.deepin.dde.TrayManager" {
-			m.TrayInited()
-		}
 	}
 
 	// monitor name lost, name acquire
@@ -67,6 +64,9 @@ func (m *Manager) watchEntries() {
 		// will be not empty, if a dbus session was uninstalled, the
 		// name and oldOwner will be not empty
 		if len(newOwner) != 0 {
+			if name == "com.deepin.dde.TrayManager" {
+				m.TrayInited()
+			}
 			go func() {
 				// FIXME: how long time should to wait for
 				time.Sleep(60 * time.Millisecond)
