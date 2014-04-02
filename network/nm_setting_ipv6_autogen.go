@@ -46,6 +46,8 @@ func getSettingIp6ConfigKeyDefaultValue(key string) (value interface{}) {
 	switch key {
 	default:
 		LOGGER.Error("invalid key:", key)
+	case NM_SETTING_IP6_CONFIG_METHOD:
+		value = nil
 	case NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME:
 		value = ""
 	case NM_SETTING_IP6_CONFIG_DNS:

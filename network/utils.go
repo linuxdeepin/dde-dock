@@ -69,7 +69,10 @@ func isConnectionDataKeyExists(data _ConnectionData, field, key string) bool {
 func getConnectionDataKeyJSON(data _ConnectionData, field, key string, t ktype) (valueJSON string) {
 	value := getConnectionDataKey(data, field, key)
 	if value == nil {
-		return
+		// the key is not exists
+		// TODO should return default value for it
+		// value = getConnectionDataKeyDefaultValue(data, field, key)
+		return ""
 	}
 
 	valueJSON, err := keyValueToJSON(value, t)
@@ -82,6 +85,23 @@ func getConnectionDataKeyJSON(data _ConnectionData, field, key string, t ktype) 
 		LOGGER.Warning("getConnectionDataKeyJSON: valueJSON is empty")
 	}
 
+	return
+}
+
+func setConnectionDataKeyJSON(data _ConnectionData, field, key, valueJSON string, t ktype) {
+	if len(valueJSON) == 0 {
+		// if valueJSON is empty, just means to remove current key
+		removeConnectionDataKey(data, field, key)
+		return
+	}
+
+	value, err := jsonToKeyValue(valueJSON, t)
+	if err != nil {
+		LOGGER.Errorf("set connection data failed, valueJSON=%s, ktype=%s, error message:%v",
+			valueJSON, getKtypeDescription(t), err)
+		return
+	}
+	setConnectionDataKey(data, field, key, value)
 	return
 }
 
@@ -100,21 +120,6 @@ func getConnectionDataKey(data _ConnectionData, field, key string) (value interf
 
 	value = variant.Value()
 	// LOGGER.Debugf("getConnectionDataKey: data[%s][%s]=%v", field, key, value) // TODO test
-	return
-}
-
-func setConnectionDataKeyJSON(data _ConnectionData, field, key, valueJSON string, t ktype) {
-	if len(valueJSON) == 0 {
-		LOGGER.Warning("setConnectionDataKeyJSON: valueJSON is empty")
-	}
-
-	value, err := jsonToKeyValue(valueJSON, t)
-	if err != nil {
-		LOGGER.Errorf("set connection data failed, valueJSON=%s, ktype=%s, error message:%v",
-			valueJSON, getKtypeDescription(t), err)
-		return
-	}
-	setConnectionDataKey(data, field, key, value)
 	return
 }
 

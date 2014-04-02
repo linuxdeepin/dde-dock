@@ -46,8 +46,12 @@ func getSettingWiredKeyDefaultValue(key string) (value interface{}) {
 	switch key {
 	default:
 		LOGGER.Error("invalid key:", key)
+	case NM_SETTING_WIRED_PORT:
+		value = nil
 	case NM_SETTING_WIRED_SPEED:
 		value = 0
+	case NM_SETTING_WIRED_DUPLEX:
+		value = nil
 	case NM_SETTING_WIRED_AUTO_NEGOTIATE:
 		value = false
 	case NM_SETTING_WIRED_MAC_ADDRESS:
@@ -60,6 +64,8 @@ func getSettingWiredKeyDefaultValue(key string) (value interface{}) {
 		value = 0
 	case NM_SETTING_WIRED_S390_SUBCHANNELS:
 		value = make([]string, 0)
+	case NM_SETTING_WIRED_S390_NETTYPE:
+		value = nil
 	case NM_SETTING_WIRED_S390_OPTIONS:
 		value = make(map[string]string)
 	}

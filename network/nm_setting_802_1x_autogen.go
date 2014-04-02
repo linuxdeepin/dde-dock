@@ -90,18 +90,44 @@ func getSetting8021xKeyDefaultValue(key string) (value interface{}) {
 		LOGGER.Error("invalid key:", key)
 	case NM_SETTING_802_1X_EAP:
 		value = make([]string, 0)
+	case NM_SETTING_802_1X_IDENTITY:
+		value = nil
+	case NM_SETTING_802_1X_ANONYMOUS_IDENTITY:
+		value = nil
+	case NM_SETTING_802_1X_PAC_FILE:
+		value = nil
 	case NM_SETTING_802_1X_CA_CERT:
 		value = make([]byte, 0)
+	case NM_SETTING_802_1X_CA_PATH:
+		value = nil
+	case NM_SETTING_802_1X_SUBJECT_MATCH:
+		value = nil
 	case NM_SETTING_802_1X_ALTSUBJECT_MATCHES:
 		value = make([]string, 0)
 	case NM_SETTING_802_1X_CLIENT_CERT:
 		value = make([]byte, 0)
+	case NM_SETTING_802_1X_PHASE1_PEAPVER:
+		value = nil
+	case NM_SETTING_802_1X_PHASE1_PEAPLABEL:
+		value = nil
+	case NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING:
+		value = nil
+	case NM_SETTING_802_1X_PHASE2_AUTH:
+		value = nil
+	case NM_SETTING_802_1X_PHASE2_AUTHEAP:
+		value = nil
 	case NM_SETTING_802_1X_PHASE2_CA_CERT:
 		value = make([]byte, 0)
+	case NM_SETTING_802_1X_PHASE2_CA_PATH:
+		value = nil
+	case NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH:
+		value = nil
 	case NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES:
 		value = make([]string, 0)
 	case NM_SETTING_802_1X_PHASE2_CLIENT_CERT:
 		value = make([]byte, 0)
+	case NM_SETTING_802_1X_PASSWORD:
+		value = nil
 	case NM_SETTING_802_1X_PASSWORD_FLAGS:
 		value = 0
 	case NM_SETTING_802_1X_PASSWORD_RAW:
@@ -110,12 +136,18 @@ func getSetting8021xKeyDefaultValue(key string) (value interface{}) {
 		value = 0
 	case NM_SETTING_802_1X_PRIVATE_KEY:
 		value = make([]byte, 0)
+	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD:
+		value = nil
 	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS:
 		value = 0
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY:
 		value = make([]byte, 0)
+	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD:
+		value = nil
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS:
 		value = 0
+	case NM_SETTING_802_1X_PIN:
+		value = nil
 	case NM_SETTING_802_1X_PIN_FLAGS:
 		value = 0
 	case NM_SETTING_802_1X_SYSTEM_CA_CERTS:

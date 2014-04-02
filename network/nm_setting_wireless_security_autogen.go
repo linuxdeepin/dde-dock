@@ -58,20 +58,38 @@ func getSettingWirelessSecurityKeyDefaultValue(key string) (value interface{}) {
 	switch key {
 	default:
 		LOGGER.Error("invalid key:", key)
+	case NM_SETTING_WIRELESS_SECURITY_KEY_MGMT:
+		value = nil
 	case NM_SETTING_WIRELESS_SECURITY_WEP_TX_KEYIDX:
 		value = 0
+	case NM_SETTING_WIRELESS_SECURITY_AUTH_ALG:
+		value = nil
 	case NM_SETTING_WIRELESS_SECURITY_PROTO:
 		value = make([]string, 0)
 	case NM_SETTING_WIRELESS_SECURITY_PAIRWISE:
 		value = make([]string, 0)
 	case NM_SETTING_WIRELESS_SECURITY_GROUP:
 		value = make([]string, 0)
+	case NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME:
+		value = nil
+	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY0:
+		value = nil
+	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY1:
+		value = nil
+	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY2:
+		value = nil
+	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY3:
+		value = nil
 	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY_FLAGS:
 		value = 0
 	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE:
 		value = 0
+	case NM_SETTING_WIRELESS_SECURITY_PSK:
+		value = nil
 	case NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS:
 		value = 0
+	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD:
+		value = nil
 	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS:
 		value = 0
 	}

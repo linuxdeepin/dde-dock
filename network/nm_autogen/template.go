@@ -29,9 +29,9 @@ func get{{$fieldFuncBaseName}}KeyDefaultValueJSON(key string) (valueJSON string)
 func get{{$fieldFuncBaseName}}KeyDefaultValue(key string) (value interface{}) {
 	switch key {
 	default:
-		LOGGER.Error("invalid key:", key){{range .Keys}}{{$default := ToKeyTypeDefaultValue .Type .Default}}{{if $default}}
+		LOGGER.Error("invalid key:", key){{range .Keys}}{{$default := ToKeyTypeDefaultValue .Type .Default}}
 	case {{.Name}}:
-		value = {{$default}}{{end}}{{end}}
+		{{if $default}}value = {{$default}}{{else}}value = nil{{end}}{{end}}
 	}
 	return
 }
