@@ -255,6 +255,16 @@ func NewPower() (*Power, error) {
             power.upowerBattery, _ = upower.NewDevice("org.freedesktop.UPower", dbus.ObjectPath(paths[0]))
             if power.upowerBattery != nil {
                 power.getUPowerProperty()
+                power.upowerBattery.ConnectChanged(func() {
+                    power.getUPowerProperty()
+                    dbus.NotifyChange(power, "BatteryIsPresent")
+                    dbus.NotifyChange(power, "BatteryPercentage")
+                    dbus.NotifyChange(power, "TimeToEmpty")
+                    dbus.NotifyChange(power, "TimeToFull")
+                    dbus.NotifyChange(power, "State")
+                    dbus.NotifyChange(power, "Type")
+                })
+
             } else {
                 //power.BatteryIsPresent = dbus.Property{}
                 //power.IsRechargable = false
@@ -733,6 +743,7 @@ func (p *Power) getUPowerProperty() int32 {
     dbus.NotifyChange(p, "State")
     p.Type = property.NewWrapProperty(p, "Type", p.upowerBattery.Type)
     dbus.NotifyChange(p, "Type")
+
     return 1
 }
 
