@@ -74,6 +74,7 @@ func (this *Manager) addWirelessDevice(dev *nm.Device) {
 	if aps, err := this.GetAccessPoints(dev.Path); err == nil {
 		for _, ap := range aps {
 			if this.AccessPointAdded != nil {
+				LOGGER.Debug("AccessPointAdded:", ap.Ssid, ap.Path)
 				this.AccessPointAdded(dev.Path, ap)
 			}
 		}
@@ -82,12 +83,14 @@ func (this *Manager) addWirelessDevice(dev *nm.Device) {
 		devWireless.ConnectAccessPointAdded(func(apPath dbus.ObjectPath) {
 			if this.AccessPointAdded != nil {
 				if ap, err := newAccessPoint(apPath); err == nil {
+					LOGGER.Debug("AccessPointAdded:", ap.Ssid, apPath)
 					this.AccessPointAdded(dev.Path, ap)
 				}
 			}
 		})
 		devWireless.ConnectAccessPointRemoved(func(apPath dbus.ObjectPath) {
 			if this.AccessPointRemoved != nil {
+				LOGGER.Debug("AccessPointRemoved:", apPath)
 				this.AccessPointRemoved(dev.Path, apPath)
 			}
 		})

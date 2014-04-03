@@ -24,21 +24,21 @@ const (
 )
 
 const (
-	testKtypeString  = "test string"
-	testKtypeByte    = "a"
-	testKtypeInt32   = "-32"
-	testKtypeUint32  = "32"
-	testKtypeUint64  = "64"
-	testKtypeBoolean = "true"
-	// testKtypeArrayByte        = `"YXJyYXkgYnl0ZQ=="` // json, "array byte"
-	testKtypeArrayByte        = `array byte`
-	testKtypeArrayString      = `["str1","str2"]`
-	testKtypeArrayUint32      = `[32,32]`
-	testKtypeArrayArrayByte   = `["YXJyYXkgYnl0ZQ==","YXJyYXkgYnl0ZQ=="]`
-	testKtypeArrayArrayUint32 = `[[32,32],[32,32]]`
-	testKtypeDictStringString = `{"key1":"value1","key2":"value2"}`
-	testKtypeIpv6Addresses    = `[{"Address":"/oAAAAAAAAACImj//g9NCQ==","Prefix":32,"Gateway":"/oAAAAAAAAACImj//g9NCQ=="}]`
-	testKtypeIpv6Routes       = `[{"Address":"/oAAAAAAAAACImj//g9NCQ==","Prefix":32,"NextHop":"/oAAAAAAAAACImj//g9NCQ==","Metric":32}]` // TODO
+	testJSONKtypeString  = `"test string"`
+	testJSONKtypeByte    = "a"
+	testJSONKtypeInt32   = `-32`
+	testJSONKtypeUint32  = `32`
+	testJSONKtypeUint64  = `64`
+	testJSONKtypeBoolean = `true`
+	// testJSONKtypeArrayByte        = `"YXJyYXkgYnl0ZQ=="` // json, "array byte"
+	testJSONKtypeArrayByte        = `array byte`
+	testJSONKtypeArrayString      = `["str1","str2"]`
+	testJSONKtypeArrayUint32      = `[32,32]`
+	testJSONKtypeArrayArrayByte   = `["YXJyYXkgYnl0ZQ==","YXJyYXkgYnl0ZQ=="]`
+	testJSONKtypeArrayArrayUint32 = `[[32,32],[32,32]]`
+	testJSONKtypeDictStringString = `{"key1":"value1","key2":"value2"}`
+	testJSONKtypeIpv6Addresses    = `[{"Address":"/oAAAAAAAAACImj//g9NCQ==","Prefix":32,"Gateway":"/oAAAAAAAAACImj//g9NCQ=="}]`
+	testJSONKtypeIpv6Routes       = `[{"Address":"/oAAAAAAAAACImj//g9NCQ==","Prefix":32,"NextHop":"/oAAAAAAAAACImj//g9NCQ==","Metric":32}]` // TODO
 	// 'addresses': [([254, 128, 0, 0, 0, 0, 0, 0, 2, 34, 104, 255, 254, 15, 77, 9], 64L, [254, 128, 0, 0, 0, 0, 0, 0, 2, 34, 104, 255, 254, 15, 77, 9])]
 	// 'routes': [([254, 128, 0, 0, 0, 0, 0, 0, 2, 34, 104, 255, 254, 15, 77, 9], 64L, [254, 128, 0, 0, 0, 0, 0, 0, 2, 34, 104, 255, 254, 15, 77, 9], 12L)]
 )
@@ -71,59 +71,59 @@ func (*Utils) TestJSONWrapper(c *C) {
 	var v interface{}
 	var s string
 
-	v, _ = jsonToKeyValue(testKtypeString, ktypeString)
+	v, _ = jsonToKeyValue(testJSONKtypeString, ktypeString)
 	s, _ = keyValueToJSON(v, ktypeString)
-	c.Check(s, Equals, testKtypeString)
+	c.Check(s, Equals, testJSONKtypeString)
 
-	v, _ = jsonToKeyValue(testKtypeByte, ktypeByte)
+	v, _ = jsonToKeyValue(testJSONKtypeByte, ktypeByte)
 	s, _ = keyValueToJSON(v, ktypeByte)
-	c.Check(s, Equals, testKtypeByte)
+	c.Check(s, Equals, testJSONKtypeByte)
 
-	v, _ = jsonToKeyValue(testKtypeInt32, ktypeInt32)
+	v, _ = jsonToKeyValue(testJSONKtypeInt32, ktypeInt32)
 	s, _ = keyValueToJSON(v, ktypeInt32)
-	c.Check(s, Equals, testKtypeInt32)
+	c.Check(s, Equals, testJSONKtypeInt32)
 
-	v, _ = jsonToKeyValue(testKtypeUint32, ktypeUint32)
+	v, _ = jsonToKeyValue(testJSONKtypeUint32, ktypeUint32)
 	s, _ = keyValueToJSON(v, ktypeUint32)
-	c.Check(s, Equals, testKtypeUint32)
+	c.Check(s, Equals, testJSONKtypeUint32)
 
-	v, _ = jsonToKeyValue(testKtypeUint64, ktypeUint64)
+	v, _ = jsonToKeyValue(testJSONKtypeUint64, ktypeUint64)
 	s, _ = keyValueToJSON(v, ktypeUint64)
-	c.Check(s, Equals, testKtypeUint64)
+	c.Check(s, Equals, testJSONKtypeUint64)
 
-	v, _ = jsonToKeyValue(testKtypeBoolean, ktypeBoolean)
+	v, _ = jsonToKeyValue(testJSONKtypeBoolean, ktypeBoolean)
 	s, _ = keyValueToJSON(v, ktypeBoolean)
-	c.Check(s, Equals, testKtypeBoolean)
+	c.Check(s, Equals, testJSONKtypeBoolean)
 
-	v, _ = jsonToKeyValue(testKtypeArrayByte, ktypeArrayByte)
+	v, _ = jsonToKeyValue(testJSONKtypeArrayByte, ktypeArrayByte)
 	s, _ = keyValueToJSON(v, ktypeArrayByte)
-	c.Check(s, Equals, testKtypeArrayByte)
+	c.Check(s, Equals, testJSONKtypeArrayByte)
 
-	v, _ = jsonToKeyValue(testKtypeArrayString, ktypeArrayString)
+	v, _ = jsonToKeyValue(testJSONKtypeArrayString, ktypeArrayString)
 	s, _ = keyValueToJSON(v, ktypeArrayString)
-	c.Check(s, Equals, testKtypeArrayString)
+	c.Check(s, Equals, testJSONKtypeArrayString)
 
-	v, _ = jsonToKeyValue(testKtypeArrayUint32, ktypeArrayUint32)
+	v, _ = jsonToKeyValue(testJSONKtypeArrayUint32, ktypeArrayUint32)
 	s, _ = keyValueToJSON(v, ktypeArrayUint32)
-	c.Check(s, Equals, testKtypeArrayUint32)
+	c.Check(s, Equals, testJSONKtypeArrayUint32)
 
-	v, _ = jsonToKeyValue(testKtypeArrayArrayByte, ktypeArrayArrayByte)
+	v, _ = jsonToKeyValue(testJSONKtypeArrayArrayByte, ktypeArrayArrayByte)
 	s, _ = keyValueToJSON(v, ktypeArrayArrayByte)
-	c.Check(s, Equals, testKtypeArrayArrayByte)
+	c.Check(s, Equals, testJSONKtypeArrayArrayByte)
 
-	v, _ = jsonToKeyValue(testKtypeArrayArrayUint32, ktypeArrayArrayUint32)
+	v, _ = jsonToKeyValue(testJSONKtypeArrayArrayUint32, ktypeArrayArrayUint32)
 	s, _ = keyValueToJSON(v, ktypeArrayArrayUint32)
-	c.Check(s, Equals, testKtypeArrayArrayUint32)
+	c.Check(s, Equals, testJSONKtypeArrayArrayUint32)
 
-	v, _ = jsonToKeyValue(testKtypeDictStringString, ktypeDictStringString)
+	v, _ = jsonToKeyValue(testJSONKtypeDictStringString, ktypeDictStringString)
 	s, _ = keyValueToJSON(v, ktypeDictStringString)
-	c.Check(s, Equals, testKtypeDictStringString)
+	c.Check(s, Equals, testJSONKtypeDictStringString)
 
-	v, _ = jsonToKeyValue(testKtypeIpv6Addresses, ktypeIpv6Addresses)
+	v, _ = jsonToKeyValue(testJSONKtypeIpv6Addresses, ktypeIpv6Addresses)
 	s, _ = keyValueToJSON(v, ktypeIpv6Addresses)
-	c.Check(s, Equals, testKtypeIpv6Addresses)
+	c.Check(s, Equals, testJSONKtypeIpv6Addresses)
 
-	v, _ = jsonToKeyValue(testKtypeIpv6Routes, ktypeIpv6Routes)
+	v, _ = jsonToKeyValue(testJSONKtypeIpv6Routes, ktypeIpv6Routes)
 	s, _ = keyValueToJSON(v, ktypeIpv6Routes)
-	c.Check(s, Equals, testKtypeIpv6Routes)
+	c.Check(s, Equals, testJSONKtypeIpv6Routes)
 }
