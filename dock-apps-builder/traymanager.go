@@ -14,6 +14,12 @@ import (
 	"github.com/BurntSushi/xgbutil/xwindow"
 )
 
+const (
+	OpCodeSystemTrayRequestDock   uint32 = 0
+	OpCodeSystemTrayBeginMessage  uint32 = 1
+	OpCodeSystemTrayCancelMessage uint32 = 2
+)
+
 type TrayManager struct {
 	owner  xproto.Window
 	visual xproto.Visualid
@@ -154,9 +160,24 @@ func (m *TrayManager) tryOwner() bool {
 		LOGGER.Fatal(err)
 	}
 	if reply.Owner == 0 {
-		xproto.SetSelectionOwner(TrayXU.Conn(), m.owner, _NET_SYSTEM_TRAY_S0, 0)
+		if err := xproto.SetSelectionOwnerChecked(TrayXU.Conn(), m.owner,
+			_NET_SYSTEM_TRAY_S0, 0).Check(); err != nil {
+			LOGGER.Info("Set Selection Owner failed: ", err)
+			// TODO:
+			// may do someting more.
+			return false
+		}
 		//owner the _NET_SYSTEM_TRAY_Sn
 		LOGGER.Info("Required _NET_SYSTEM_TRAY_S0")
+
+		timeStamp, _ := ewmh.WmUserTimeGet(TrayXU, TRAYMANAGER.owner)
+		err = ewmh.ClientEvent(TrayXU, TrayXU.RootWin(), "MANAGER",
+			int(timeStamp), int(_NET_SYSTEM_TRAY_S0),
+			int(TRAYMANAGER.owner))
+		if err != nil {
+			LOGGER.Error("Send MANAGER Request failed:", err)
+		}
+
 		xfixes.SelectSelectionInput(TrayXU.Conn(), TrayXU.RootWin(), _NET_SYSTEM_TRAY_S0, xfixes.SelectionEventMaskSelectionClientClose)
 		go TRAYMANAGER.startListener()
 		return true
@@ -172,8 +193,17 @@ func (m *TrayManager) startListener() {
 			switch ev := e.(type) {
 			case xproto.ClientMessageEvent:
 				if ev.Type == _NET_SYSTEM_TRAY_OPCODE {
-					xid := xproto.Window(ev.Data.Data32[2])
-					m.addTrayIcon(xid)
+					// timeStamp = ev.Data.Data32[0]
+					opCode := ev.Data.Data32[1]
+
+					switch opCode {
+					case OpCodeSystemTrayRequestDock:
+						xid := xproto.Window(ev.Data.Data32[2])
+						LOGGER.Debug("Get Request Dock: ", xid)
+						m.addTrayIcon(xid)
+					case OpCodeSystemTrayBeginMessage:
+					case OpCodeSystemTrayCancelMessage:
+					}
 				}
 			case damage.NotifyEvent:
 				m.handleTrayDamage(xproto.Window(ev.Drawable))
