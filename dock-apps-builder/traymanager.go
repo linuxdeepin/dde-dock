@@ -9,9 +9,14 @@ import (
 	"github.com/BurntSushi/xgb/xfixes"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil/ewmh"
+	"github.com/BurntSushi/xgbutil/xevent"
 	"github.com/BurntSushi/xgbutil/xgraphics"
 	"github.com/BurntSushi/xgbutil/xprop"
 	"github.com/BurntSushi/xgbutil/xwindow"
+)
+
+var (
+	isListened bool = false
 )
 
 const (
@@ -135,9 +140,6 @@ func initTrayManager() {
 	TrayXU.Sync()
 	win.Listen(xproto.EventMaskStructureNotify)
 
-	xprop.ChangeProp32(TrayXU, win.Id, "_NET_SYSTEM_TRAY_VISUAL", "VISUALID", uint(visualId))
-	xprop.ChangeProp32(TrayXU, win.Id, "_NET_SYSTEM_TRAY_ORIENTAION", "CARDINAL", 0)
-
 	TRAYMANAGER = &TrayManager{
 		owner:      win.Id,
 		visual:     visualId,
@@ -160,26 +162,62 @@ func (m *TrayManager) tryOwner() bool {
 		LOGGER.Fatal(err)
 	}
 	if reply.Owner == 0 {
-		if err := xproto.SetSelectionOwnerChecked(TrayXU.Conn(), m.owner,
-			_NET_SYSTEM_TRAY_S0, 0).Check(); err != nil {
+		timeStamp, _ := ewmh.WmUserTimeGet(TrayXU, TRAYMANAGER.owner)
+		err := xproto.SetSelectionOwnerChecked(
+			TrayXU.Conn(),
+			m.owner,
+			_NET_SYSTEM_TRAY_S0,
+			xproto.Timestamp(timeStamp),
+		).Check()
+		if err != nil {
 			LOGGER.Info("Set Selection Owner failed: ", err)
-			// TODO:
-			// may do someting more.
 			return false
 		}
+		go TRAYMANAGER.startListener()
+
 		//owner the _NET_SYSTEM_TRAY_Sn
 		LOGGER.Info("Required _NET_SYSTEM_TRAY_S0")
 
-		timeStamp, _ := ewmh.WmUserTimeGet(TrayXU, TRAYMANAGER.owner)
-		err = ewmh.ClientEvent(TrayXU, TrayXU.RootWin(), "MANAGER",
-			int(timeStamp), int(_NET_SYSTEM_TRAY_S0),
-			int(TRAYMANAGER.owner))
+		mstype, err := xprop.Atm(TrayXU, "MANAGER")
 		if err != nil {
-			LOGGER.Error("Send MANAGER Request failed:", err)
+			LOGGER.Error("Get MANAGER Failed")
+			return false
 		}
 
+		timeStamp, _ = ewmh.WmUserTimeGet(TrayXU, TRAYMANAGER.owner)
+		cm, err := xevent.NewClientMessage(
+			32,
+			TrayXU.RootWin(),
+			mstype,
+			int(timeStamp),
+			int(_NET_SYSTEM_TRAY_S0),
+			int(TRAYMANAGER.owner),
+		)
+
+		if err != nil {
+			LOGGER.Error("Send MANAGER Request failed:", err)
+			return false
+		}
+
+		// !!! ewmh.ClientEvent not use EventMaskStructureNotify.
+		xevent.SendRootEvent(TrayXU, cm,
+			uint32(xproto.EventMaskStructureNotify))
+
+		xprop.ChangeProp32(
+			TrayXU,
+			TRAYMANAGER.owner,
+			"_NET_SYSTEM_TRAY_VISUAL",
+			"VISUALID",
+			uint(TRAYMANAGER.visual),
+		)
+		xprop.ChangeProp32(
+			TrayXU,
+			TRAYMANAGER.owner,
+			"_NET_SYSTEM_TRAY_ORIENTAION",
+			"CARDINAL",
+			0,
+		)
 		xfixes.SelectSelectionInput(TrayXU.Conn(), TrayXU.RootWin(), _NET_SYSTEM_TRAY_S0, xfixes.SelectionEventMaskSelectionClientClose)
-		go TRAYMANAGER.startListener()
 		return true
 	} else {
 		LOGGER.Info("Another System tray application is running")
@@ -187,19 +225,35 @@ func (m *TrayManager) tryOwner() bool {
 	}
 }
 
+func (m *TrayManager) unmanage() {
+	timeStamp, _ := ewmh.WmUserTimeGet(TrayXU, TRAYMANAGER.owner)
+	// FIXME:
+	// is 0 right?
+	xproto.SetSelectionOwner(TrayXU.Conn(), 0,
+		_NET_SYSTEM_TRAY_S0, xproto.Timestamp(timeStamp)).Check()
+}
+
 func (m *TrayManager) startListener() {
+	// to avoid creating too much listener when SelectionNotifyEvent occurs.
+	if isListened {
+		return
+	}
+	isListened = true
+
 	for {
 		if e, err := TrayXU.Conn().WaitForEvent(); err == nil {
 			switch ev := e.(type) {
 			case xproto.ClientMessageEvent:
+				// LOGGER.Info("ClientMessageEvent")
 				if ev.Type == _NET_SYSTEM_TRAY_OPCODE {
 					// timeStamp = ev.Data.Data32[0]
 					opCode := ev.Data.Data32[1]
+					// LOGGER.Info("TRAY_OPCODE")
 
 					switch opCode {
 					case OpCodeSystemTrayRequestDock:
 						xid := xproto.Window(ev.Data.Data32[2])
-						LOGGER.Debug("Get Request Dock: ", xid)
+						// LOGGER.Info("Get Request Dock: ", xid)
 						m.addTrayIcon(xid)
 					case OpCodeSystemTrayBeginMessage:
 					case OpCodeSystemTrayCancelMessage:
@@ -211,6 +265,7 @@ func (m *TrayManager) startListener() {
 				m.removeTrayIcon(ev.Window)
 			case xproto.SelectionClearEvent:
 				//clean up
+				m.unmanage()
 			case xfixes.SelectionNotifyEvent:
 				m.tryOwner()
 			}
