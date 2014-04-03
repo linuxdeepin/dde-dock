@@ -2,16 +2,16 @@
     "FieldName":"NM_SETTING_CONNECTION_SETTING_NAME",
     "OutputFile":"../nm_setting_connection_autogen.go",
     "Keys":[
-	    {"Name":"NM_SETTING_CONNECTION_ID", "Type":"ktypeString", "Default":"<none>"},
-	    {"Name":"NM_SETTING_CONNECTION_UUID", "Type":"ktypeString", "Default":"<none>"},
-	    {"Name":"NM_SETTING_CONNECTION_TYPE", "Type":"ktypeString", "Default":"<none>"},
-	    {"Name":"NM_SETTING_CONNECTION_PERMISSIONS", "Type":"ktypeArrayString", "Default":""},
+	    {"Name":"NM_SETTING_CONNECTION_ID", "Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_CONNECTION_UUID", "Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_CONNECTION_TYPE", "Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_CONNECTION_PERMISSIONS", "Type":"ktypeArrayString", "Default":"<default>"},
 	    {"Name":"NM_SETTING_CONNECTION_AUTOCONNECT", "Type":"ktypeBoolean", "Default":"true"},
-	    {"Name":"NM_SETTING_CONNECTION_TIMESTAMP", "Type":"ktypeUint64", "Default":""},
-	    {"Name":"NM_SETTING_CONNECTION_READ_ONLY", "Type":"ktypeBoolean", "Default":""},
-	    {"Name":"NM_SETTING_CONNECTION_ZONE", "Type":"ktypeString", "Default":"<none>"},
-	    {"Name":"NM_SETTING_CONNECTION_MASTER", "Type":"ktypeString", "Default":"<none>"},
-	    {"Name":"NM_SETTING_CONNECTION_SLAVE_TYPE", "Type":"ktypeString", "Default":"<none>"},
-	    {"Name":"NM_SETTING_CONNECTION_SECONDARIES", "Type":"ktypeArrayString", "Default":""}
+	    {"Name":"NM_SETTING_CONNECTION_TIMESTAMP", "Type":"ktypeUint64", "Default":"<default>"},
+	    {"Name":"NM_SETTING_CONNECTION_READ_ONLY", "Type":"ktypeBoolean", "Default":"<default>"},
+	    {"Name":"NM_SETTING_CONNECTION_ZONE", "Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_CONNECTION_MASTER", "Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_CONNECTION_SLAVE_TYPE", "Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_CONNECTION_SECONDARIES", "Type":"ktypeArrayString", "Default":"<default>"}
     ]
 }

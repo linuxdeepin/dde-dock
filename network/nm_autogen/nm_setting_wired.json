@@ -2,16 +2,16 @@
     "FieldName":"NM_SETTING_WIRED_SETTING_NAME",
     "OutputFile":"../nm_setting_wired_autogen.go",
     "Keys":[
-	    {"Name":"NM_SETTING_WIRED_PORT", "Type":"ktypeString", "Default":"<none>"},
-	    {"Name":"NM_SETTING_WIRED_SPEED", "Type":"ktypeUint32", "Default":""},
-	    {"Name":"NM_SETTING_WIRED_DUPLEX", "Type":"ktypeString", "Default":"<none>"},
+	    {"Name":"NM_SETTING_WIRED_PORT", "Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_WIRED_SPEED", "Type":"ktypeUint32", "Default":"<default>"},
+	    {"Name":"NM_SETTING_WIRED_DUPLEX", "Type":"ktypeString", "Default":"<null>"},
 	    {"Name":"NM_SETTING_WIRED_AUTO_NEGOTIATE", "Type":"ktypeBoolean", "Default":"true"},
-	    {"Name":"NM_SETTING_WIRED_MAC_ADDRESS", "Type":"ktypeArrayByte", "Default":""},
-	    {"Name":"NM_SETTING_WIRED_CLONED_MAC_ADDRESS", "Type":"ktypeArrayByte", "Default":""},
-	    {"Name":"NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST", "Type":"ktypeArrayString", "Default":""},
-	    {"Name":"NM_SETTING_WIRED_MTU", "Type":"ktypeUint32", "Default":""},
-	    {"Name":"NM_SETTING_WIRED_S390_SUBCHANNELS", "Type":"ktypeArrayString", "Default":""},
-	    {"Name":"NM_SETTING_WIRED_S390_NETTYPE", "Type":"ktypeString", "Default":"<none>"},
-	    {"Name":"NM_SETTING_WIRED_S390_OPTIONS", "Type":"ktypeDictStringString", "Default":""}
+	    {"Name":"NM_SETTING_WIRED_MAC_ADDRESS", "Type":"ktypeArrayByte", "Default":"<default>"},
+	    {"Name":"NM_SETTING_WIRED_CLONED_MAC_ADDRESS", "Type":"ktypeArrayByte", "Default":"<default>"},
+	    {"Name":"NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST", "Type":"ktypeArrayString", "Default":"<default>"},
+	    {"Name":"NM_SETTING_WIRED_MTU", "Type":"ktypeUint32", "Default":"<default>"},
+	    {"Name":"NM_SETTING_WIRED_S390_SUBCHANNELS", "Type":"ktypeArrayString", "Default":"<default>"},
+	    {"Name":"NM_SETTING_WIRED_S390_NETTYPE", "Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_WIRED_S390_OPTIONS", "Type":"ktypeDictStringString", "Default":"<default>"}
     ]
 }
