@@ -18,20 +18,19 @@ const (
 	testConnectionId       = "idname"
 	testConnectionUuid     = "8e2f9aa2-42b8-47d5-b040-ae82c53fa1f2"
 	testConnectionType     = "802-3-ethernet"
-	testConnectionIdJSON   = "idname"
-	testConnectionUuidJSON = "8e2f9aa2-42b8-47d5-b040-ae82c53fa1f2"
-	testConnectionTypeJSON = "802-3-ethernet"
+	testConnectionIdJSON   = `"idname"`
+	testConnectionUuidJSON = `"8e2f9aa2-42b8-47d5-b040-ae82c53fa1f2"`
+	testConnectionTypeJSON = `"802-3-ethernet"`
 )
 
 const (
-	testJSONKtypeString  = `"test string"`
-	testJSONKtypeByte    = "a"
-	testJSONKtypeInt32   = `-32`
-	testJSONKtypeUint32  = `32`
-	testJSONKtypeUint64  = `64`
-	testJSONKtypeBoolean = `true`
-	// testJSONKtypeArrayByte        = `"YXJyYXkgYnl0ZQ=="` // json, "array byte"
-	testJSONKtypeArrayByte        = `array byte`
+	testJSONKtypeString           = `"test string"`
+	testJSONKtypeByte             = `97` // character 'a'
+	testJSONKtypeInt32            = `-32`
+	testJSONKtypeUint32           = `32`
+	testJSONKtypeUint64           = `64`
+	testJSONKtypeBoolean          = `true`
+	testJSONKtypeArrayByte        = `"YXJyYXkgYnl0ZQ=="` // characters "array byte"
 	testJSONKtypeArrayString      = `["str1","str2"]`
 	testJSONKtypeArrayUint32      = `[32,32]`
 	testJSONKtypeArrayArrayByte   = `["YXJyYXkgYnl0ZQ==","YXJyYXkgYnl0ZQ=="]`

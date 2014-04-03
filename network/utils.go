@@ -101,6 +101,7 @@ func getConnectionDataKeyJSON(data _ConnectionData, field, key string, t ktype) 
 		}
 	}
 
+	// TODO
 	valueJSON, err := keyValueToJSON(value, t)
 	if err != nil {
 		LOGGER.Error("get connection data failed:", err)

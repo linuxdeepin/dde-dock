@@ -3,10 +3,13 @@ package main
 import "testing"
 import "dlib/dbus"
 import nm "dbus/com/deepin/daemon/network"
-import "fmt"
+
+// import "fmt"
 
 func init() {
+	_Manager = _NewManager()
 	dbus.InstallOnSession(_Manager)
+	_Manager.initManager()
 }
 
 // TODO test case need update
