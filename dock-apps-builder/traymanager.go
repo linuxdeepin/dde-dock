@@ -253,7 +253,7 @@ func (m *TrayManager) startListener() {
 					switch opCode {
 					case OpCodeSystemTrayRequestDock:
 						xid := xproto.Window(ev.Data.Data32[2])
-						// LOGGER.Info("Get Request Dock: ", xid)
+						LOGGER.Info("Get Request Dock: ", xid)
 						m.addTrayIcon(xid)
 					case OpCodeSystemTrayBeginMessage:
 					case OpCodeSystemTrayCancelMessage:

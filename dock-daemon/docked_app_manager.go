@@ -25,7 +25,7 @@ type DockedAppManager struct {
 	core  *gio.Settings
 	items *list.List
 
-	Docked   func(id string) // find indicator on front-end.
+	Docked   func(id, title, icon, exec string) // find indicator on front-end.
 	Undocked func(id string)
 }
 
@@ -80,7 +80,7 @@ func (m *DockedAppManager) Dock(id, title, icon, cmd string) bool {
 			logger.Error(e)
 		}
 	}
-	m.Docked(id)
+	m.Docked(id, title, icon, cmd)
 	return true
 }
 
