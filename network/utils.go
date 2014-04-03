@@ -91,11 +91,13 @@ func getConnectionDataKeyDefaultValue(field, key string) (value interface{}) {
 func getConnectionDataKeyJSON(data _ConnectionData, field, key string, t ktype) (valueJSON string) {
 	value := getConnectionDataKey(data, field, key)
 	if value == nil {
-		// the key is not exists should return default value for
-		// it, if there is no default value, return empty string
+		// return default value if the key is not exists
 		value = getConnectionDataKeyDefaultValue(field, key)
-		if value == nil {
-			return "" // TODO maybe should return `""` for ktypeString
+		if t == ktypeString && value == nil {
+			// return `""` for ktypeString which missing default
+			// value, and the keys which missing default value should
+			// all are ktypString
+			return `""`
 		}
 	}
 
@@ -114,9 +116,13 @@ func getConnectionDataKeyJSON(data _ConnectionData, field, key string, t ktype) 
 
 func setConnectionDataKeyJSON(data _ConnectionData, field, key, valueJSON string, t ktype) {
 	if len(valueJSON) == 0 {
-		// if valueJSON is empty, just means to remove current key
-		removeConnectionDataKey(data, field, key)
+		LOGGER.Error("setConnectionDataKeyJSON: valueJSON is empty")
 		return
+	}
+
+	if t == ktypeString && valueJSON == `""` {
+		// if valueJSON is empty string, just means to remove current key
+		removeConnectionDataKey(data, field, key)
 	}
 
 	value, err := jsonToKeyValue(valueJSON, t)
