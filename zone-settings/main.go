@@ -25,15 +25,17 @@ import (
         libarea "dbus/com/deepin/api/xmousearea"
         libdsp "dbus/com/deepin/daemon/display"
         "dlib/dbus"
+        "dlib/gio-2.0"
         Logger "dlib/logger"
         "os"
         "sync"
 )
 
 var (
-        dspObj  *libdsp.Display
-        areaObj *libarea.XMouseArea
-        logObj  = Logger.NewLogger("daemon/zone")
+        dspObj       *libdsp.Display
+        areaObj      *libarea.XMouseArea
+        logObj       = Logger.NewLogger("daemon/zone")
+        zoneSettings = gio.NewSettings("com.deepin.dde.zone")
 
         mutex         = new(sync.Mutex)
         edgeActionMap = make(map[string]string)
@@ -54,10 +56,18 @@ func (op *Manager) SetTopLeft(value string) {
         edgeActionMap[EDGE_TOPLEFT] = value
 }
 
+func (op *Manager) TopLeftAction() string {
+        return zoneSettings.GetString("left-up")
+}
+
 func (op *Manager) SetBottomLeft(value string) {
         mutex.Lock()
         defer mutex.Unlock()
         edgeActionMap[EDGE_BOTTOMLEFT] = value
+}
+
+func (op *Manager) BottomLeftAction() string {
+        return zoneSettings.GetString("left-down")
 }
 
 func (op *Manager) SetTopRight(value string) {
@@ -66,10 +76,18 @@ func (op *Manager) SetTopRight(value string) {
         edgeActionMap[EDGE_TOPRIGHT] = value
 }
 
+func (op *Manager) TopRightAction() string {
+        return zoneSettings.GetString("right-up")
+}
+
 func (op *Manager) SetBottomRight(value string) {
         mutex.Lock()
         defer mutex.Unlock()
         edgeActionMap[EDGE_BOTTOMRIGHT] = value
+}
+
+func (op *Manager) BottomRightAction() string {
+        return zoneSettings.GetString("right-down")
 }
 
 func main() {
