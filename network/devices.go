@@ -67,7 +67,7 @@ func (this *Manager) addWirelessDevice(dev *nm.Device) {
 			this.DeviceStateChanged(dev.Path, new_state)
 		}
 		// TODO remove
-		// dbus.NotifyChange(this, "WirelessDevices")
+		dbus.NotifyChange(this, "WirelessDevices")
 	})
 
 	// connect signal AccessPointAdded() and AccessPointRemoved()
@@ -110,7 +110,7 @@ func (this *Manager) addWiredDevice(dev *nm.Device) {
 			this.DeviceStateChanged(dev.Path, new_state)
 		}
 		// TODO remove
-		// dbus.NotifyChange(this, "WirelessDevices")
+		dbus.NotifyChange(this, "WirelessDevices")
 	})
 	this.WiredDevices = append(this.WiredDevices, wiredDevice)
 	dbus.NotifyChange(this, "WiredDevices")
@@ -131,7 +131,7 @@ func (this *Manager) addOtherDevice(dev *nm.Device) {
 			this.DeviceStateChanged(dev.Path, new_state)
 		}
 		// TODO remove
-		// dbus.NotifyChange(this, "WirelessDevices")
+		dbus.NotifyChange(this, "WirelessDevices")
 	})
 	this.OtherDevices = append(this.OtherDevices, otherDevice)
 	dbus.NotifyChange(this, "OtherDevices")
