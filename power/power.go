@@ -689,14 +689,23 @@ func (p *Power) getUPowerProperty() int32 {
         return -1
     }
     p.BatteryIsPresent = property.NewWrapProperty(p, "IsPresent", p.upowerBattery.IsPresent)
+    dbus.NotifyChange(p, "BatteryIsPresent")
     p.IsRechargable = property.NewWrapProperty(p, "IsRechargable", p.upowerBattery.IsRechargeable)
+    dbus.NotifyChange(p, "IsRechargable")
     p.BatteryPercentage = property.NewWrapProperty(p, "BatteryPercentage", p.upowerBattery.Percentage)
+    dbus.NotifyChange(p, "BatteryPercentage")
     p.TimeToEmpty = property.NewWrapProperty(p, "TimeToEmpty", p.upowerBattery.TimeToEmpty)
+    dbus.NotifyChange(p, "TimeToEmpty")
     p.TimeToFull = property.NewWrapProperty(p, "TimeToFull", p.upowerBattery.TimeToFull)
+    dbus.NotifyChange(p, "TimeToFull")
     p.Model = property.NewWrapProperty(p, "Model", p.upowerBattery.Model)
+    dbus.NotifyChange(p, "Model")
     p.Vendor = property.NewWrapProperty(p, "Vendor", p.upowerBattery.Vendor)
+    dbus.NotifyChange(p, "Vendor")
     p.State = property.NewWrapProperty(p, "State", p.upowerBattery.State)
+    dbus.NotifyChange(p, "State")
     p.Type = property.NewWrapProperty(p, "Type", p.upowerBattery.Type)
+    dbus.NotifyChange(p, "Type")
     return 1
 }
 
