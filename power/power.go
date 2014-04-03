@@ -284,6 +284,7 @@ func NewPower() (*Power, error) {
 
     power.logind = power.systemBus.Object(LOGIND_DEST, LOGIND_PATH)
     power.engineButton()
+    power.listenSleep()
 
     power.dmSession = power.getDMSession()
     power.deepinSession = power.getDeepinSession()
@@ -387,6 +388,30 @@ func (power *Power) upowerChanged() {
             power.doLidOpenAction()
         }
     }
+}
+
+func (power *Power) listenSleep() {
+    power.systemBus.BusObject().Call("org.freedesktop.DBus.AddMatch",
+        0, "type='signal',path='/org/freedesktop/login1', interface='org.freedesktop.login1.Manager',member='PrepareForSleep'")
+
+    go func() {
+        c := make(chan *dbus.Signal, 10)
+        power.systemBus.Signal(c)
+        for v := range c {
+            fmt.Println(v)
+            switch v.Body[0].(bool) {
+            case true:
+                fmt.Println("Preparing to sleep")
+                if power.LockEnabled.Get() {
+                    power.actionLock()
+                }
+                break
+            case false:
+                fmt.Println("Preparing to wake from  sleep")
+                break
+            }
+        }
+    }()
 }
 
 func (power *Power) externalMonitorIsOn() bool {
@@ -592,10 +617,12 @@ func (power *Power) actionSuspend() {
     }
     if can == "yes" {
         fmt.Print("actionSuspend():suspending\n")
+        //power.systemBus.Emit(power.logind., "org.freedesktop.login1.Manager.PrepareForSleep", true)
         call := power.logind.Call(LOGIND_IFC+".Suspend", 0,
             true)
-        if call.Err != nil {
-            fmt.Println(call.Err)
+        err = call.Store()
+        if err != nil {
+            fmt.Println(err)
         }
     }
 }
