@@ -104,6 +104,9 @@ func main() {
         }
         dbus.DealWithUnhandledMessage()
 
+        m.SetBottomLeft("/usr/bin/gedit")
+        m.SetTopLeft("/usr/bin/gedit")
+
         if err := dbus.Wait(); err != nil {
                 logObj.Info("lost dbus: ", err)
                 os.Exit(-1)

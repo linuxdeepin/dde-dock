@@ -31,10 +31,10 @@ import (
 )
 
 type areaRange struct {
-        x1      int32
-        x2      int32
-        y1      int32
-        y2      int32
+        X1      int32
+        X2      int32
+        Y1      int32
+        Y2      int32
 }
 
 const (
@@ -74,11 +74,12 @@ func registerZoneArea() {
 
         //areaId = areaObj.RegisterArea(area)
         var err error
-        areaId, err = areaObj.RegisterArea([][]interface{}{
-                getInterfaceArray(topLeftArea),
-                getInterfaceArray(bottomLeftArea),
-                getInterfaceArray(topRightArea),
-                getInterfaceArray(bottomRightArea)})
+        areaId, err = areaObj.RegisterArea([]areaRange{
+                topLeftArea,
+                bottomLeftArea,
+                topRightArea,
+                bottomRightArea,
+        })
         if err != nil {
                 logObj.Info("Register area failed: ", err)
                 return
@@ -111,22 +112,18 @@ func execEdgeAction(edge string) {
 }
 
 func isInArea(x, y int32, area areaRange) bool {
-        if x >= (area.x1) && x < (area.x2) &&
-                y >= (area.y1) && y < (area.y2) {
+        if x >= (area.X1) && x < (area.X2) &&
+                y >= (area.Y1) && y < (area.Y2) {
                 return true
         }
 
         return false
 }
 
-func getInterfaceArray(area areaRange) []interface{} {
-        return []interface{}{area.x1, area.x2, area.y1, area.y2}
-}
-
 func newManager() *Manager {
         m := &Manager{}
 
-        //registerZoneArea()
+        registerZoneArea()
         m.listenSignal()
 
         return m
