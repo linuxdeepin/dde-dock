@@ -57,10 +57,9 @@ var (
 )
 
 func registerZoneArea() {
-        //mutex.Lock()
-        //defer mutex.Unlock()
+        mutex.Lock()
+        defer mutex.Unlock()
 
-        println("Register ...")
         rect := dspObj.PrimaryRect.Get()
         x1 := int32(rect[0].(int16))
         y1 := int32(rect[1].(int16))
@@ -72,7 +71,6 @@ func registerZoneArea() {
         topRightArea = areaRange{x2 - DISTANCE, x2, y1, y1 + DISTANCE}
         bottomRightArea = areaRange{x2 - DISTANCE, x2, y2 - DISTANCE, y2}
 
-        //areaId = areaObj.RegisterArea(area)
         var err error
         areaId, err = areaObj.RegisterArea([]areaRange{
                 topLeftArea,
@@ -84,7 +82,6 @@ func registerZoneArea() {
                 logObj.Info("Register area failed: ", err)
                 return
         }
-        println("Register end")
 }
 
 func unregisterZoneArea() {

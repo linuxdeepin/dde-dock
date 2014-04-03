@@ -39,7 +39,7 @@ var (
         edgeActionMap = make(map[string]string)
 )
 
-func (op *Manager) EnableZoneSettings(enable bool) {
+func (op *Manager) EnableZoneDetected(enable bool) {
         if enable {
                 unregisterZoneArea()
                 registerZoneArea()
