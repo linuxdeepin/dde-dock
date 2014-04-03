@@ -821,5 +821,4 @@ func main() {
 
 //export
 func doPowerActionType(action int) {
-
 }

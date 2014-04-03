@@ -1315,10 +1315,19 @@ func (source *Source) SetSourcePort(portname string) int32 {
 
 func (source *Source) setSourceVolume(volume uint32) int32 {
     var cvolume C.pa_cvolume
+    var left, right uint32
     cvolume.channels = C.uint8_t(2)
-    for i := 0; i < int(cvolume.channels); i = i + 1 {
-        cvolume.values[i] = *(*C.pa_volume_t)(unsafe.Pointer(&volume))
+
+    if source.Balance > 0 {
+        //volume == max volume
+        right = volume * C.PA_VOLUME_NORM / 100
+        left = uint32(float64(volume) * (1 - source.Balance) * C.PA_VOLUME_NORM / 100)
+    } else {
+        left = volume * C.PA_VOLUME_NORM / 100
+        right = uint32(float64(volume) * (1 + source.Balance) * C.PA_VOLUME_NORM / 100)
     }
+    cvolume.values[0] = C.pa_volume_t(left)
+    cvolume.values[1] = C.pa_volume_t(right)
     return int32(C.pa_set_source_volume_by_index(
         audio.pa, C.int(source.Index), &cvolume))
 }
