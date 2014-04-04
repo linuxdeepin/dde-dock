@@ -15,7 +15,7 @@ func getSetting8021xKeyType(key string) (t ktype) {
 	case NM_SETTING_802_1X_PAC_FILE:
 		t = ktypeString
 	case NM_SETTING_802_1X_CA_CERT:
-		t = ktypeArrayByte
+		t = ktypeWrapperString
 	case NM_SETTING_802_1X_CA_PATH:
 		t = ktypeString
 	case NM_SETTING_802_1X_SUBJECT_MATCH:
@@ -23,7 +23,7 @@ func getSetting8021xKeyType(key string) (t ktype) {
 	case NM_SETTING_802_1X_ALTSUBJECT_MATCHES:
 		t = ktypeArrayString
 	case NM_SETTING_802_1X_CLIENT_CERT:
-		t = ktypeArrayByte
+		t = ktypeWrapperString
 	case NM_SETTING_802_1X_PHASE1_PEAPVER:
 		t = ktypeString
 	case NM_SETTING_802_1X_PHASE1_PEAPLABEL:
@@ -35,7 +35,7 @@ func getSetting8021xKeyType(key string) (t ktype) {
 	case NM_SETTING_802_1X_PHASE2_AUTHEAP:
 		t = ktypeString
 	case NM_SETTING_802_1X_PHASE2_CA_CERT:
-		t = ktypeArrayByte
+		t = ktypeWrapperString
 	case NM_SETTING_802_1X_PHASE2_CA_PATH:
 		t = ktypeString
 	case NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH:
@@ -43,7 +43,7 @@ func getSetting8021xKeyType(key string) (t ktype) {
 	case NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES:
 		t = ktypeArrayString
 	case NM_SETTING_802_1X_PHASE2_CLIENT_CERT:
-		t = ktypeArrayByte
+		t = ktypeWrapperString
 	case NM_SETTING_802_1X_PASSWORD:
 		t = ktypeString
 	case NM_SETTING_802_1X_PASSWORD_FLAGS:
@@ -53,13 +53,13 @@ func getSetting8021xKeyType(key string) (t ktype) {
 	case NM_SETTING_802_1X_PASSWORD_RAW_FLAGS:
 		t = ktypeUint32
 	case NM_SETTING_802_1X_PRIVATE_KEY:
-		t = ktypeArrayByte
+		t = ktypeWrapperString
 	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD:
 		t = ktypeString
 	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS:
 		t = ktypeUint32
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY:
-		t = ktypeArrayByte
+		t = ktypeWrapperString
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD:
 		t = ktypeString
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS:

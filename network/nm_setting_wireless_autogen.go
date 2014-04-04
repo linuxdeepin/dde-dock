@@ -7,7 +7,7 @@ func getSettingWirelessKeyType(key string) (t ktype) {
 	default:
 		t = ktypeUnknown
 	case NM_SETTING_WIRELESS_SSID:
-		t = ktypeArrayByte
+		t = ktypeWrapperString
 	case NM_SETTING_WIRELESS_MODE:
 		t = ktypeString
 	case NM_SETTING_WIRELESS_BAND:
@@ -15,15 +15,15 @@ func getSettingWirelessKeyType(key string) (t ktype) {
 	case NM_SETTING_WIRELESS_CHANNEL:
 		t = ktypeUint32
 	case NM_SETTING_WIRELESS_BSSID:
-		t = ktypeArrayByte
+		t = ktypeWrapperString
 	case NM_SETTING_WIRELESS_RATE:
 		t = ktypeUint32
 	case NM_SETTING_WIRELESS_TX_POWER:
 		t = ktypeUint32
 	case NM_SETTING_WIRELESS_MAC_ADDRESS:
-		t = ktypeArrayByte
+		t = ktypeWrapperMacAddress
 	case NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS:
-		t = ktypeArrayByte
+		t = ktypeWrapperMacAddress
 	case NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST:
 		t = ktypeArrayString
 	case NM_SETTING_WIRELESS_MTU:

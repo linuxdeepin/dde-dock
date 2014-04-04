@@ -15,9 +15,9 @@ func getSettingWiredKeyType(key string) (t ktype) {
 	case NM_SETTING_WIRED_AUTO_NEGOTIATE:
 		t = ktypeBoolean
 	case NM_SETTING_WIRED_MAC_ADDRESS:
-		t = ktypeArrayByte
+		t = ktypeWrapperMacAddress
 	case NM_SETTING_WIRED_CLONED_MAC_ADDRESS:
-		t = ktypeArrayByte
+		t = ktypeWrapperMacAddress
 	case NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST:
 		t = ktypeArrayString
 	case NM_SETTING_WIRED_MTU:

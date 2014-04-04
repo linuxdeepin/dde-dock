@@ -11,13 +11,13 @@ func getSettingIp6ConfigKeyType(key string) (t ktype) {
 	case NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME:
 		t = ktypeString
 	case NM_SETTING_IP6_CONFIG_DNS:
-		t = ktypeArrayByte
+		t = ktypeWrapperIpv6Dns
 	case NM_SETTING_IP6_CONFIG_DNS_SEARCH:
 		t = ktypeArrayString
 	case NM_SETTING_IP6_CONFIG_ADDRESSES:
-		t = ktypeIpv6Addresses
+		t = ktypeWrapperIpv6Addresses
 	case NM_SETTING_IP6_CONFIG_ROUTES:
-		t = ktypeIpv6Routes
+		t = ktypeWrapperIpv6Routes
 	case NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES:
 		t = ktypeBoolean
 	case NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS:
@@ -42,7 +42,7 @@ func getSettingIp6ConfigKeyDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME:
 		value = ""
 	case NM_SETTING_IP6_CONFIG_DNS:
-		value = make([]byte, 0)
+		value = make([][]byte, 0)
 	case NM_SETTING_IP6_CONFIG_DNS_SEARCH:
 		value = make([]string, 0)
 	case NM_SETTING_IP6_CONFIG_ADDRESSES:
@@ -103,8 +103,8 @@ func getSettingIp6ConfigDhcpHostname(data _ConnectionData) (value string) {
 	value, _ = getConnectionDataKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME).(string)
 	return
 }
-func getSettingIp6ConfigDns(data _ConnectionData) (value []byte) {
-	value, _ = getConnectionDataKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS).([]byte)
+func getSettingIp6ConfigDns(data _ConnectionData) (value [][]byte) {
+	value, _ = getConnectionDataKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS).([][]byte)
 	return
 }
 func getSettingIp6ConfigDnsSearch(data _ConnectionData) (value []string) {
@@ -147,7 +147,7 @@ func setSettingIp6ConfigMethod(data _ConnectionData, value string) {
 func setSettingIp6ConfigDhcpHostname(data _ConnectionData, value string) {
 	setConnectionDataKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME, value)
 }
-func setSettingIp6ConfigDns(data _ConnectionData, value []byte) {
+func setSettingIp6ConfigDns(data _ConnectionData, value [][]byte) {
 	setConnectionDataKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS, value)
 }
 func setSettingIp6ConfigDnsSearch(data _ConnectionData, value []string) {

@@ -9,13 +9,13 @@ func getSettingIp4ConfigKeyType(key string) (t ktype) {
 	case NM_SETTING_IP4_CONFIG_METHOD:
 		t = ktypeString
 	case NM_SETTING_IP4_CONFIG_DNS:
-		t = ktypeArrayUint32
+		t = ktypeWrapperIpv4Dns
 	case NM_SETTING_IP4_CONFIG_DNS_SEARCH:
 		t = ktypeString
 	case NM_SETTING_IP4_CONFIG_ADDRESSES:
-		t = ktypeArrayArrayUint32
+		t = ktypeWrapperIpv4Addresses
 	case NM_SETTING_IP4_CONFIG_ROUTES:
-		t = ktypeArrayArrayUint32
+		t = ktypeWrapperIpv4Routes
 	case NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES:
 		t = ktypeBoolean
 	case NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS:
