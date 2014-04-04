@@ -79,19 +79,47 @@ func unwrapIpv6Dns(wrapData []string) (data [][]byte) {
 }
 
 func wrapIpv6Addresses(data Ipv6Addresses) (wrapData Ipv6AddressesWrapper) {
-	// TODO
+	for _, d := range data {
+		ipv6Addr := Ipv6AddressWrapper{}
+		ipv6Addr.Address = convertIpv6AddressToString(d.Address)
+		ipv6Addr.Prefix = d.Prefix
+		ipv6Addr.Gateway = convertIpv6AddressToString(d.Gateway)
+		wrapData = append(wrapData, ipv6Addr)
+	}
 	return
 }
 func unwrapIpv6Addresses(wrapData Ipv6AddressesWrapper) (data Ipv6Addresses) {
-	// TODO
+	for _, d := range wrapData {
+		ipv6Addr := Ipv6Address{}
+		ipv6Addr.Address = convertIpv6AddressToArrayByte(d.Address)
+		ipv6Addr.Prefix = d.Prefix
+		ipv6Addr.Gateway = convertIpv6AddressToArrayByte(d.Gateway)
+		data = append(data, ipv6Addr)
+	}
 	return
 }
 
 func wrapIpv6Routes(data Ipv6Routes) (wrapData Ipv6RoutesWrapper) {
-	// TODO
+	for _, d := range data {
+		ipv6Route := Ipv6RouteWrapper{}
+		ipv6Route.Address = convertIpv6AddressToString(d.Address)
+		ipv6Route.Prefix = d.Prefix
+		ipv6Route.NextHop = convertIpv6AddressToString(d.NextHop)
+		ipv6Route.Metric = d.Metric
+		wrapData = append(wrapData, ipv6Route)
+	}
+	LOGGER.Debug("ipv6 routes", data, wrapData)
 	return
 }
 func unwrapIpv6Routes(wrapData Ipv6RoutesWrapper) (data Ipv6Routes) {
-	// TODO
+	for _, d := range wrapData {
+		ipv6Route := Ipv6Route{}
+		ipv6Route.Address = convertIpv6AddressToArrayByte(d.Address)
+		ipv6Route.Prefix = d.Prefix
+		ipv6Route.NextHop = convertIpv6AddressToArrayByte(d.NextHop)
+		ipv6Route.Metric = d.Metric
+		data = append(data, ipv6Route)
+	}
+	LOGGER.Debug("ipv6 routes", data, wrapData)
 	return
 }

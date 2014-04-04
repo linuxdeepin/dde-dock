@@ -46,9 +46,9 @@ const (
 	testJSONKtypeWrapperIpv4Dns       = `["192.168.1.1","192.168.1.2"]`
 	testJSONKtypeWrapperIpv4Addresses = `[{"Address":"192.168.1.100","Mask":"255.255.255.0","Gateway":"192.168.1.1"},{"Address":"192.168.1.150","Mask":"128.0.0.0","Gateway":"192.168.1.1"}]`
 	testJSONKtypeWrapperIpv4Routes    = `[{"Address":"192.168.1.100","Mask":"255.255.192.0","NextHop":"192.168.1.1","Metric":100}]`
-	testJSONKtypeWrapperIpv6Dns       = `["1111:2222:3333:4444:5555:6666:aaaa:ffff"]`
-	testJSONKtypeWrapperIpv6Addresses = `[{"Address":["1111:2222:3333:4444:5555:6666:AAAA:FFFF"],"Prefix":64,"Gateway":"1111:2222:3333:4444:5555:6666:AAAA:1111"}]`
-	testJSONKtypeWrapperIpv6Routes    = `[{"Address":["1111:2222:3333:4444:5555:6666:AAAA:FFFF"],"Prefix":64,"Gateway":"1111:2222:3333:4444:5555:6666:AAAA:1111","Metric":32}]`
+	testJSONKtypeWrapperIpv6Dns       = `["1234:2345:3456:4444:5555:6666:AAAA:FFFF"]`
+	testJSONKtypeWrapperIpv6Addresses = `[{"Address":"1111:2222:3333:4444:5555:6666:AAAA:FFFF","Prefix":64,"Gateway":"1111:2222:3333:4444:5555:6666:AAAA:1111"}]`
+	testJSONKtypeWrapperIpv6Routes    = `[{"Address":"1111:2222:3333:4444:5555:6666:AAAA:FFFF","Prefix":64,"NextHop":"1111:2222:3333:4444:5555:6666:AAAA:1111","Metric":32}]`
 )
 
 func (*Utils) TestGetSetConnectionData(c *C) {
@@ -347,15 +347,18 @@ func (*Utils) TestJSONWrapper(c *C) {
 	s, _ = keyValueToJSON(v, ktypeWrapperIpv4Routes)
 	c.Check(s, Equals, testJSONKtypeWrapperIpv4Routes)
 
-	// v, _ = jsonToKeyValue(testJSONKtypeWrapperIpv6Dns, ktypeWrapperIpv6Dns)
-	// s, _ = keyValueToJSON(v, ktypeWrapperIpv6Dns)
-	// c.Check(s, Equals, testJSONKtypeWrapperIpv6Dns)
+	v, _ = jsonToKeyValue(testJSONKtypeWrapperIpv6Dns, ktypeWrapperIpv6Dns)
+	fmt.Println("ipv6 dns:", v)
+	s, _ = keyValueToJSON(v, ktypeWrapperIpv6Dns)
+	c.Check(s, Equals, testJSONKtypeWrapperIpv6Dns)
 
-	// v, _ = jsonToKeyValue(testJSONKtypeWrapperIpv6Addresses, ktypeWrapperIpv6Addresses)
-	// s, _ = keyValueToJSON(v, ktypeWrapperIpv6Addresses)
-	// c.Check(s, Equals, testJSONKtypeWrapperIpv6Addresses)
+	v, _ = jsonToKeyValue(testJSONKtypeWrapperIpv6Addresses, ktypeWrapperIpv6Addresses)
+	fmt.Println("ipv6 address:", v)
+	s, _ = keyValueToJSON(v, ktypeWrapperIpv6Addresses)
+	c.Check(s, Equals, testJSONKtypeWrapperIpv6Addresses)
 
-	// v, _ = jsonToKeyValue(testJSONKtypeWrapperIpv6Routes, ktypeWrapperIpv6Routes)
-	// s, _ = keyValueToJSON(v, ktypeWrapperIpv6Routes)
-	// c.Check(s, Equals, testJSONKtypeWrapperIpv6Routes)
+	v, _ = jsonToKeyValue(testJSONKtypeWrapperIpv6Routes, ktypeWrapperIpv6Routes)
+	fmt.Println("ipv6 route:", v)
+	s, _ = keyValueToJSON(v, ktypeWrapperIpv6Routes)
+	c.Check(s, Equals, testJSONKtypeWrapperIpv6Routes)
 }
