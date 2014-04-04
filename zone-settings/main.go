@@ -122,6 +122,11 @@ func main() {
         }
         dbus.DealWithUnhandledMessage()
 
+        m.SetTopLeft(m.TopLeftAction())
+        m.SetBottomLeft(m.BottomLeftAction())
+        m.SetTopRight(m.TopRightAction())
+        m.SetBottomRight(m.BottomRightAction())
+
         if err := dbus.Wait(); err != nil {
                 logObj.Info("lost dbus: ", err)
                 os.Exit(-1)
