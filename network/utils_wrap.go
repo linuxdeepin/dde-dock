@@ -58,6 +58,44 @@ func formatIpv4AddressToUint32(v string) (ip4Addr uint32) {
 	return
 }
 
+// host order to network order, or network order to host order
+func reverseOrderUint32(net uint32) (host uint32) {
+	host = uint32(byte(net>>24)) << 0
+	host |= uint32(byte(net>>16)) << 8
+	host |= uint32(byte(net>>8)) << 16
+	host |= uint32(byte(net>>0)) << 24
+	return
+}
+
+// 24 -> "255.255.255.0"(string format)
+func convertIpv4PrefixToNetMask(prefix uint32) (maskAddress string) {
+	var mask uint32
+	for i := uint32(0); i < prefix; i++ {
+		mask = mask<<1 + 1
+	}
+	for i := prefix; i < 32; i++ {
+		mask = mask<<1 + 0
+	}
+	mask = reverseOrderUint32(mask)
+	maskAddress = formatIpv4AddressToString(mask)
+	return
+}
+
+// "255.255.255.0"(string format) -> 24
+func convertIpv4NetMaskToPrefix(maskAddress string) (prefix uint32) {
+	var mask uint32 // network order
+	mask = formatIpv4AddressToUint32(maskAddress)
+	mask = reverseOrderUint32(mask)
+	for i := uint32(0); i < 32; i++ {
+		if mask>>(32-i-1)&0x01 == 1 {
+			prefix++
+		} else {
+			break
+		}
+	}
+	return
+}
+
 // TODO
 func formatIpv6AddressToString(v []byte) string {
 	return ""
