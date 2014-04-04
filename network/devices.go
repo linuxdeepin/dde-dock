@@ -19,6 +19,36 @@ func NewDevice(core *nm.Device) *Device {
 	return &Device{core.Path, core.State.Get()}
 }
 
+func NewAccessPoint(apPath dbus.ObjectPath) (ap AccessPoint, err error) {
+	calcStrength := func(s uint8) uint8 {
+		switch {
+		case s <= 10:
+			return 0
+		case s <= 25:
+			return 25
+		case s <= 50:
+			return 50
+		case s <= 75:
+			return 75
+		case s <= 100:
+			return 100
+		}
+		return 0
+	}
+
+	nmAp, err := nm.NewAccessPoint(NMDest, apPath)
+	if err != nil {
+		return
+	}
+
+	ap = AccessPoint{string(nmAp.Ssid.Get()),
+		parseFlags(nmAp.Flags.Get(), nmAp.WpaFlags.Get(), nmAp.RsnFlags.Get()) != ApKeyNone,
+		calcStrength(nmAp.Strength.Get()),
+		nmAp.Path,
+	}
+	return
+}
+
 func (this *Manager) DisconnectDevice(path dbus.ObjectPath) error {
 	if dev, err := nm.NewDevice(NMDest, path); err != nil {
 		return err
@@ -61,37 +91,29 @@ func (this *Manager) addWirelessDevice(dev *nm.Device) {
 	LOGGER.Debug("addWirelessDevices:", wirelessDevice)
 
 	// connect signal DeviceStateChanged()
-	dev.ConnectStateChanged(func(new_state uint32, old_state uint32, reason uint32) {
-		wirelessDevice.State = new_state
+	dev.ConnectStateChanged(func(newState uint32, old_state uint32, reason uint32) {
+		wirelessDevice.State = newState
 		if this.DeviceStateChanged != nil {
-			this.DeviceStateChanged(dev.Path, new_state)
+			this.DeviceStateChanged(string(dev.Path), newState)
 		}
 		// TODO remove
 		dbus.NotifyChange(this, "WirelessDevices")
 	})
 
 	// connect signal AccessPointAdded() and AccessPointRemoved()
-	if aps, err := this.GetAccessPoints(dev.Path); err == nil {
-		for _, ap := range aps {
-			if this.AccessPointAdded != nil {
-				LOGGER.Debug("AccessPointAdded:", ap.Ssid, ap.Path)
-				this.AccessPointAdded(dev.Path, ap)
-			}
-		}
-	}
 	if devWireless, err := nm.NewDeviceWireless(NMDest, dev.Path); err == nil {
 		devWireless.ConnectAccessPointAdded(func(apPath dbus.ObjectPath) {
-			if this.AccessPointAdded != nil {
-				if ap, err := newAccessPoint(apPath); err == nil {
+			if this.AccessPointChanged != nil {
+				if ap, err := NewAccessPoint(apPath); err == nil {
 					LOGGER.Debug("AccessPointAdded:", ap.Ssid, apPath)
-					this.AccessPointAdded(dev.Path, ap)
+					this.AccessPointChanged(string(dev.Path), string(ap.Path))
 				}
 			}
 		})
 		devWireless.ConnectAccessPointRemoved(func(apPath dbus.ObjectPath) {
-			if this.AccessPointRemoved != nil {
+			if this.AccessPointChanged != nil {
 				LOGGER.Debug("AccessPointRemoved:", apPath)
-				this.AccessPointRemoved(dev.Path, apPath)
+				this.AccessPointChanged(string(dev.Path), string(apPath))
 			}
 		})
 	}
@@ -107,10 +129,10 @@ func (this *Manager) addWiredDevice(dev *nm.Device) {
 	}
 
 	// connect signal DeviceStateChanged()
-	dev.ConnectStateChanged(func(new_state uint32, old_state uint32, reason uint32) {
-		wiredDevice.State = new_state
+	dev.ConnectStateChanged(func(newState uint32, old_state uint32, reason uint32) {
+		wiredDevice.State = newState
 		if this.DeviceStateChanged != nil {
-			this.DeviceStateChanged(dev.Path, new_state)
+			this.DeviceStateChanged(string(dev.Path), newState)
 		}
 		// TODO remove
 		dbus.NotifyChange(this, "WirelessDevices")
@@ -128,10 +150,10 @@ func (this *Manager) addOtherDevice(dev *nm.Device) {
 	}
 
 	// connect signal DeviceStateChanged()
-	dev.ConnectStateChanged(func(new_state uint32, old_state uint32, reason uint32) {
-		otherDevice.State = new_state
+	dev.ConnectStateChanged(func(newState uint32, old_state uint32, reason uint32) {
+		otherDevice.State = newState
 		if this.DeviceStateChanged != nil {
-			this.DeviceStateChanged(dev.Path, new_state)
+			this.DeviceStateChanged(string(dev.Path), newState)
 		}
 		// TODO remove
 		dbus.NotifyChange(this, "WirelessDevices")
@@ -202,62 +224,19 @@ func parseFlags(flags, wpaFlags, rsnFlags uint32) int {
 	return r
 }
 
-func (this *Manager) GetAccessPoints(path dbus.ObjectPath) ([]AccessPoint, error) {
-	aps := make([]AccessPoint, 0)
-	if dev, err := nm.NewDeviceWireless(NMDest, path); err == nil {
-		nmAps, err := dev.GetAccessPoints()
-		if err != nil {
-			LOGGER.Error("GetAccessPoints:", err) // TODO test
-			return nil, err
-		}
-		for _, apPath := range nmAps {
-			// TODO remove
-			// if ap, err := nm.NewAccessPoint(NMDest, apPath); err == nil {
-			// 	actived := dev.ActiveAccessPoint.Get() == apPath
-			// 	aps = append(aps, AccessPoint{string(ap.Ssid.Get()),
-			// 		parseFlags(ap.Flags.Get(), ap.WpaFlags.Get(), ap.RsnFlags.Get()) != ApKeyNone,
-			// 		calcStrength(ap.Strength.Get()),
-			// 		ap.Path,
-			// 		actived,
-			// 	})
-			// }
-			if ap, err := newAccessPoint(apPath); err == nil {
-				aps = append(aps, ap)
-			}
-		}
-		return aps, nil
-	} else {
-		return nil, err
-	}
-}
-
-func newAccessPoint(apPath dbus.ObjectPath) (ap AccessPoint, err error) {
-	calcStrength := func(s uint8) uint8 {
-		switch {
-		case s <= 10:
-			return 0
-		case s <= 25:
-			return 25
-		case s <= 50:
-			return 50
-		case s <= 75:
-			return 75
-		case s <= 100:
-			return 100
-		}
-		return 0
-	}
-
-	nmAp, err := nm.NewAccessPoint(NMDest, apPath)
+// GetAccessPoints return all access point's dbus path of target device.
+func (this *Manager) GetAccessPoints(path dbus.ObjectPath) (aps []dbus.ObjectPath, err error) {
+	dev, err := nm.NewDeviceWireless(NMDest, path)
 	if err != nil {
 		return
 	}
+	aps, err = dev.GetAccessPoints()
+	return
+}
 
-	ap = AccessPoint{string(nmAp.Ssid.Get()),
-		parseFlags(nmAp.Flags.Get(), nmAp.WpaFlags.Get(), nmAp.RsnFlags.Get()) != ApKeyNone,
-		calcStrength(nmAp.Strength.Get()),
-		nmAp.Path,
-	}
+// GetAccessPointProperty return access point's detail information.
+func (this *Manager) GetAccessPointProperty(apPath dbus.ObjectPath) (ap AccessPoint, err error) {
+	ap, err = NewAccessPoint(apPath)
 	return
 }
 

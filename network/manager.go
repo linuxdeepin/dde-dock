@@ -50,11 +50,9 @@ type Manager struct {
 	uuid2connectionType map[string]string // TODO
 
 	//signals
-	NeedSecrets                  func(string, string, string)
-	DeviceStateChanged           func(devPath dbus.ObjectPath, new_state uint32)
-	AccessPointAdded             func(devPath dbus.ObjectPath, ap AccessPoint)
-	AccessPointRemoved           func(devPath dbus.ObjectPath, apPath dbus.ObjectPath)
-	AccessPointPropertiesChanged func(devPath dbus.ObjectPath, ap AccessPoint) // TODO
+	NeedSecrets        func(string, string, string)
+	DeviceStateChanged func(devPath string, newState uint32)
+	AccessPointChanged func(devPath string, apPath string)
 
 	agent *Agent
 }
