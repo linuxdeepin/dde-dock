@@ -44,8 +44,8 @@ const (
 	testJSONKtypeWrapperString        = `"test wrapper string"`
 	testJSONKtypeWrapperMacAddress    = `"00:12:34:56:78:AB"`
 	testJSONKtypeWrapperIpv4Dns       = `["192.168.1.1","192.168.1.2"]`
-	testJSONKtypeWrapperIpv4Addresses = `[{"Address":"192.168.1.100","Prefix":24,"Gateway":"192.168.1.1"},{"Address":"192.168.1.150","Prefix":24,"Gateway":"192.168.1.1"}]`
-	testJSONKtypeWrapperIpv4Routes    = `[{"Address":"192.168.1.100","Prefix":24,"NextHop":"192.168.1.1","Metric":100}]`
+	testJSONKtypeWrapperIpv4Addresses = `[{"Address":"192.168.1.100","Mask":"255.255.255.0","Gateway":"192.168.1.1"},{"Address":"192.168.1.150","Mask":"128.0.0.0","Gateway":"192.168.1.1"}]`
+	testJSONKtypeWrapperIpv4Routes    = `[{"Address":"192.168.1.100","Mask":"255.255.192.0","NextHop":"192.168.1.1","Metric":100}]`
 	testJSONKtypeWrapperIpv6Dns       = `["1111:2222:3333:4444:5555:6666;:aaaa:ffff"]`
 	testJSONKtypeWrapperIpv6Addresses = `[{"Address":["1111:2222:3333:4444:5555:6666;:aaaa:ffff"],"Prefix":64,"Gateway":"1111:2222:3333:4444:5555:6666;:aaaa:1111"}]`
 	testJSONKtypeWrapperIpv6Routes    = `[{"Address":["1111:2222:3333:4444:5555:6666;:aaaa:ffff"],"Prefix":64,"Gateway":"1111:2222:3333:4444:5555:6666;:aaaa:1111","Metric":32}]`
