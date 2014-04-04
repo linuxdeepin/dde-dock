@@ -83,7 +83,7 @@ func (*Utils) TestConnectionDataDefaultValue(c *C) {
 	// data := make(_ConnectionData)
 }
 
-func (*Utils) TestFormatMacAddressToString(c *C) {
+func (*Utils) TestConvertMacAddressToString(c *C) {
 	tests := []struct {
 		test   []byte
 		result string
@@ -92,11 +92,11 @@ func (*Utils) TestFormatMacAddressToString(c *C) {
 		{[]byte{0, 18, 52, 86, 120, 171}, "00:12:34:56:78:AB"},
 	}
 	for _, t := range tests {
-		c.Check(t.result, Equals, formatMacAddressToString(t.test))
+		c.Check(t.result, Equals, convertMacAddressToString(t.test))
 	}
 }
 
-func (*Utils) TestFormatMacAddressToArrayByte(c *C) {
+func (*Utils) TestConvertMacAddressToArrayByte(c *C) {
 	tests := []struct {
 		test   string
 		result []byte
@@ -105,11 +105,11 @@ func (*Utils) TestFormatMacAddressToArrayByte(c *C) {
 		{"00:12:34:56:78:AB", []byte{0, 18, 52, 86, 120, 171}},
 	}
 	for _, t := range tests {
-		c.Check(t.result, DeepEquals, formatMacAddressToArrayByte(t.test))
+		c.Check(t.result, DeepEquals, convertMacAddressToArrayByte(t.test))
 	}
 }
 
-func (*Utils) TestFormatIpv4AddressToString(c *C) {
+func (*Utils) TestConvertIpv4AddressToString(c *C) {
 	tests := []struct {
 		test   uint32
 		result string
@@ -118,11 +118,11 @@ func (*Utils) TestFormatIpv4AddressToString(c *C) {
 		{0x0101a8c0, "192.168.1.1"},
 	}
 	for _, t := range tests {
-		c.Check(t.result, Equals, formatIpv4AddressToString(t.test))
+		c.Check(t.result, Equals, convertIpv4AddressToString(t.test))
 	}
 }
 
-func (*Utils) TestFormatIpv4AddressToUint32(c *C) {
+func (*Utils) TestConvertIpv4AddressToUint32(c *C) {
 	tests := []struct {
 		test   string
 		result uint32
@@ -131,7 +131,7 @@ func (*Utils) TestFormatIpv4AddressToUint32(c *C) {
 		{"192.168.1.1", 0x0101a8c0},
 	}
 	for _, t := range tests {
-		c.Check(t.result, Equals, formatIpv4AddressToUint32(t.test))
+		c.Check(t.result, Equals, convertIpv4AddressToUint32(t.test))
 	}
 }
 
@@ -237,7 +237,7 @@ func (*Utils) TestReverseOrderUint32(c *C) {
 }
 
 // TODO
-// func (*Utils) TestFormatIpv6AddressToString(c *C) {
+// func (*Utils) TestConvertIpv6AddressToString(c *C) {
 // }
 
 //func (*Utils) formatIpv6AddressToArrayByte(c *C) {}

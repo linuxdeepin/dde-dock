@@ -20,7 +20,7 @@ func keyValueToJSON(v interface{}, t ktype) (jsonStr string, err error) {
 		v = string(tmpv)
 	case ktypeWrapperMacAddress:
 		tmpv, _ := interfaceToArrayByte(v)
-		v = formatMacAddressToString(tmpv)
+		v = convertMacAddressToString(tmpv)
 	case ktypeWrapperIpv4Dns:
 		tmpv, _ := interfaceToArrayUint32(v)
 		v = wrapIpv4Dns(tmpv)
@@ -216,7 +216,7 @@ func jsonToKeyValueWrapperMacAddress(jsonStr string) (v []byte, err error) {
 	if err != nil {
 		return
 	}
-	v = formatMacAddressToArrayByte(wrapData)
+	v = convertMacAddressToArrayByte(wrapData)
 	return
 }
 func jsonToKeyValueWrapperIpv4Dns(jsonStr string) (v []uint32, err error) {
