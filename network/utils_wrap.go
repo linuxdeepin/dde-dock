@@ -16,7 +16,7 @@ func unwrapIpv4Dns(wrapData []string) (data []uint32) {
 func wrapIpv4Addresses(data [][]uint32) (wrapData Ipv4AddressesWrapper) {
 	for _, d := range data {
 		if len(d) != 3 {
-			LOGGER.Error("wrapIpv4Addresses, ipv4 address invalid", d)
+			LOGGER.Error("ipv4 address invalid", d)
 			continue
 		}
 		ipv4Addr := Ipv4AddressWrapper{}
@@ -41,7 +41,7 @@ func unwrapIpv4Addresses(wrapData Ipv4AddressesWrapper) (data [][]uint32) {
 func wrapIpv4Routes(data [][]uint32) (wrapData Ipv4RoutesWrapper) {
 	for _, d := range data {
 		if len(d) != 4 {
-			LOGGER.Error("wrapIpv4Routes: invalid ipv2 route", d)
+			LOGGER.Error("invalid ipv4 route", d)
 			continue
 		}
 		ipv4Route := Ipv4RouteWrapper{}

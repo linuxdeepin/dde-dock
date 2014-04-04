@@ -46,9 +46,9 @@ const (
 	testJSONKtypeWrapperIpv4Dns       = `["192.168.1.1","192.168.1.2"]`
 	testJSONKtypeWrapperIpv4Addresses = `[{"Address":"192.168.1.100","Mask":"255.255.255.0","Gateway":"192.168.1.1"},{"Address":"192.168.1.150","Mask":"128.0.0.0","Gateway":"192.168.1.1"}]`
 	testJSONKtypeWrapperIpv4Routes    = `[{"Address":"192.168.1.100","Mask":"255.255.192.0","NextHop":"192.168.1.1","Metric":100}]`
-	testJSONKtypeWrapperIpv6Dns       = `["1111:2222:3333:4444:5555:6666;:aaaa:ffff"]`
-	testJSONKtypeWrapperIpv6Addresses = `[{"Address":["1111:2222:3333:4444:5555:6666;:aaaa:ffff"],"Prefix":64,"Gateway":"1111:2222:3333:4444:5555:6666;:aaaa:1111"}]`
-	testJSONKtypeWrapperIpv6Routes    = `[{"Address":["1111:2222:3333:4444:5555:6666;:aaaa:ffff"],"Prefix":64,"Gateway":"1111:2222:3333:4444:5555:6666;:aaaa:1111","Metric":32}]`
+	testJSONKtypeWrapperIpv6Dns       = `["1111:2222:3333:4444:5555:6666:aaaa:ffff"]`
+	testJSONKtypeWrapperIpv6Addresses = `[{"Address":["1111:2222:3333:4444:5555:6666:AAAA:FFFF"],"Prefix":64,"Gateway":"1111:2222:3333:4444:5555:6666:AAAA:1111"}]`
+	testJSONKtypeWrapperIpv6Routes    = `[{"Address":["1111:2222:3333:4444:5555:6666:AAAA:FFFF"],"Prefix":64,"Gateway":"1111:2222:3333:4444:5555:6666:AAAA:1111","Metric":32}]`
 )
 
 func (*Utils) TestGetSetConnectionData(c *C) {
@@ -236,11 +236,31 @@ func (*Utils) TestReverseOrderUint32(c *C) {
 	}
 }
 
-// TODO
-// func (*Utils) TestConvertIpv6AddressToString(c *C) {
-// }
+func (*Utils) TestConvertIpv6AddressToString(c *C) {
+	tests := []struct {
+		test   []byte
+		result string
+	}{
+		{[]byte{0x12, 0x34, 0x23, 0x45, 0x34, 0x56, 0x44, 0x44, 0x55, 0x55, 0x66, 0x66, 0xaa, 0xaa, 0xff, 0xff}, "1234:2345:3456:4444:5555:6666:AAAA:FFFF"},
+		{[]byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, "0000:0000:0000:0000:0000:0000:0000:0000"},
+	}
+	for _, t := range tests {
+		c.Check(t.result, Equals, convertIpv6AddressToString(t.test)) // TODO
+	}
+}
 
-//func (*Utils) formatIpv6AddressToArrayByte(c *C) {}
+func (*Utils) TestConvertIpv6AddressToArrayByte(c *C) {
+	tests := []struct {
+		test   string
+		result []byte
+	}{
+		{"1234:2345:3456:4444:5555:6666:AAAA:FFFF", []byte{0x12, 0x34, 0x23, 0x45, 0x34, 0x56, 0x44, 0x44, 0x55, 0x55, 0x66, 0x66, 0xaa, 0xaa, 0xff, 0xff}},
+		{"0000:0000:0000:0000:0000:0000:0000:0000", []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},
+	}
+	for _, t := range tests {
+		c.Check(t.result, DeepEquals, convertIpv6AddressToArrayByte(t.test))
+	}
+}
 
 func (*Utils) TestJSONWrapper(c *C) {
 	var v interface{}
