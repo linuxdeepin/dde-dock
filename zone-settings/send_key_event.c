@@ -88,6 +88,8 @@ initate_windows()
     send_key_event(dsp, win, XK_W, True);
     send_key_event(dsp, win, XK_Super_L, False);
     send_key_event(dsp, win, XK_W, False);
+    send_key_event(dsp, win, XK_BackSpace, True);
+    send_key_event(dsp, win, XK_BackSpace, False);
 
     XCloseDisplay(dsp);
 }
