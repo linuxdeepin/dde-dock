@@ -103,17 +103,17 @@ func (this *Manager) addWirelessDevice(dev *nm.Device) {
 	// connect signal AccessPointAdded() and AccessPointRemoved()
 	if devWireless, err := nm.NewDeviceWireless(NMDest, dev.Path); err == nil {
 		devWireless.ConnectAccessPointAdded(func(apPath dbus.ObjectPath) {
-			if this.AccessPointChanged != nil {
+			if this.AccessPointAdded != nil {
 				if ap, err := NewAccessPoint(apPath); err == nil {
 					LOGGER.Debug("AccessPointAdded:", ap.Ssid, apPath)
-					this.AccessPointChanged(string(dev.Path), string(ap.Path))
+					this.AccessPointAdded(string(dev.Path), string(ap.Path))
 				}
 			}
 		})
 		devWireless.ConnectAccessPointRemoved(func(apPath dbus.ObjectPath) {
-			if this.AccessPointChanged != nil {
+			if this.AccessPointRemoved != nil {
 				LOGGER.Debug("AccessPointRemoved:", apPath)
-				this.AccessPointChanged(string(dev.Path), string(apPath))
+				this.AccessPointRemoved(string(dev.Path), string(apPath))
 			}
 		})
 	}
