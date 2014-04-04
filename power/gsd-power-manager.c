@@ -64,9 +64,9 @@
 #define UPOWER_DBUS_INTERFACE                   "org.freedesktop.UPower"
 #define UPOWER_DBUS_INTERFACE_KBDBACKLIGHT      "org.freedesktop.UPower.KbdBacklight"
 
-/*#define GSD_POWER_SETTINGS_SCHEMA             "org.gnome.settings-daemon.plugins.power"*/
 #define DEEPIN_POWER_PROFILE_SCHEMA             "com.deepin.daemon.power"
-#define DEEPIN_POWER_SETTINGS_SCHEMA            "com.deepin.daemon.power.settings"
+#define DEEPIN_POWER_SETTINGS_COMMON_SCHEMA     "com.deepin.daemon.power.settings.common"
+#define DEEPIN_POWER_SETTINGS_SPECIFIC_SCHEMA   "com.deepin.daemon.power.settings.specific"
 #define DEEPIN_POWER_SETTINGS_PATH_PRE          "/com/deepin/daemon/power/profiles/"
 
 #define DEEPIN_SCREENSAVER_NAME                            "com.deepin.daemon.Power"
@@ -129,6 +129,7 @@ struct GsdPowerManagerPrivate
     /* Settings */
     GSettings               *settings_profile;
     GSettings               *settings;
+    GSettings               *settings_common;
     GSettings               *settings_session;
     GSettings               *settings_screensaver;
     GSettings               *settings_xrandr;
@@ -151,6 +152,10 @@ struct GsdPowerManagerPrivate
     gchar                   *current_profile;
     gchar                   *settings_path;
     gboolean                 lid_is_closed;
+    gchar                   *button_power;
+    gchar                   *lid_close_action;
+    gchar                   *lock_enabled;
+
     UpClient                *up_client;
     gchar                   *previous_summary;
     GIcon                   *previous_icon;
@@ -1187,10 +1192,10 @@ engine_profile_changed_cb (GSettings *settings,
         s = g_settings_get_string(manager->priv->settings_profile, key);
     }
 
-    /*g_debug("restarting power manager\n");*/
-    /*gsd_power_manager_stop(manager);*/
+    g_debug("restarting power manager\n");
+    gsd_power_manager_stop(manager);
 
-    /*gsd_power_manager_start(manager, &error);*/
+    gsd_power_manager_start(manager, &error);
 
     return;
 }
@@ -2324,67 +2329,11 @@ upower_kbd_toggle (GsdPowerManager *manager,
     return ret;
 }
 
-static gboolean
-suspend_on_lid_close (GsdPowerManager *manager)
-{
-    GsdXrandrBootBehaviour val;
-
-    if (!external_monitor_is_connected (manager->priv->rr_screen))
-        return TRUE;
-
-    val = g_settings_get_enum(manager->priv->settings, "lid-close-ac-action");
-    return val == GSD_POWER_ACTION_SUSPEND;
-    /*val = g_settings_get_enum (manager->priv->settings_xrandr, "default-monitors-setup");*/
-    /*return val == GSD_XRANDR_BOOT_BEHAVIOUR_DO_NOTHING;*/
-}
-
-static gboolean
-inhibit_lid_switch_timer_cb (GsdPowerManager *manager)
-{
-    if (suspend_on_lid_close (manager))
-    {
-        g_debug ("no external monitors for a while; uninhibiting lid close");
-        uninhibit_lid_switch (manager);
-        manager->priv->inhibit_lid_switch_timer_id = 0;
-        return G_SOURCE_REMOVE;
-    }
-
-    g_debug ("external monitor still there; trying again later");
-    return G_SOURCE_CONTINUE;
-}
 
 /* Sets up a timer to be triggered some seconds after closing the laptop lid
  * when the laptop is *not* suspended for some reason.  We'll check conditions
  * again in the timeout handler to see if we can suspend then.
  */
-static void
-setup_inhibit_lid_switch_timer (GsdPowerManager *manager)
-{
-    if (manager->priv->inhibit_lid_switch_timer_id != 0)
-    {
-        g_debug ("lid close safety timer already set up");
-        return;
-    }
-
-    g_debug ("setting up lid close safety timer");
-
-    manager->priv->inhibit_lid_switch_timer_id = g_timeout_add_seconds (GSD_POWER_MANAGER_LID_CLOSE_SAFETY_TIMEOUT,
-            (GSourceFunc) inhibit_lid_switch_timer_cb,
-            manager);
-    g_source_set_name_by_id (manager->priv->inhibit_lid_switch_timer_id, "[GsdPowerManager] lid close safety timer");
-}
-
-static void
-restart_inhibit_lid_switch_timer (GsdPowerManager *manager)
-{
-    if (manager->priv->inhibit_lid_switch_timer_id != 0)
-    {
-        g_debug ("restarting lid close safety timer");
-        g_source_remove (manager->priv->inhibit_lid_switch_timer_id);
-        manager->priv->inhibit_lid_switch_timer_id = 0;
-        setup_inhibit_lid_switch_timer (manager);
-    }
-}
 
 static void
 do_lid_open_action (GsdPowerManager *manager)
@@ -2425,37 +2374,7 @@ lock_screensaver (GsdPowerManager *manager)
                             -1, NULL, NULL);
 }
 
-static void
-do_lid_closed_action (GsdPowerManager *manager)
-{
-    /* play a sound, using sounds from the naming spec */
-    ca_context_play (ca_gtk_context_get (), 0,
-                     CA_PROP_EVENT_ID, "lid-close",
-                     /* TRANSLATORS: this is the sound description */
-                     CA_PROP_EVENT_DESCRIPTION, _("Lid has been closed"),
-                     NULL);
 
-    /* refresh RANDR so we get an accurate view of what monitors are plugged in when the lid is closed */
-    gnome_rr_screen_refresh (manager->priv->rr_screen, NULL); /* NULL-GError */
-
-    restart_inhibit_lid_switch_timer (manager);
-
-    if (suspend_on_lid_close (manager))
-    {
-        gboolean is_inhibited;
-
-        idle_is_session_inhibited (manager,
-                                   GSM_INHIBITOR_FLAG_SUSPEND,
-                                   &is_inhibited);
-        if (is_inhibited)
-        {
-            g_debug ("Suspend is inhibited but lid is closed, locking the screen");
-            /* We put the screensaver on * as we're not suspending,
-             * but the lid is closed */
-            lock_screensaver (manager);
-        }
-    }
-}
 
 static void
 up_client_changed_cb (UpClient *client, GsdPowerManager *manager)
@@ -2470,17 +2389,6 @@ up_client_changed_cb (UpClient *client, GsdPowerManager *manager)
         main_battery_or_ups_low_changed (manager, FALSE);
     }
 
-    /* same state */
-    tmp = up_client_get_lid_is_closed (manager->priv->up_client);
-    if (manager->priv->lid_is_closed == tmp)
-        return;
-    manager->priv->lid_is_closed = tmp;
-    g_debug ("up changed: lid is now %s", tmp ? "closed" : "open");
-
-    if (manager->priv->lid_is_closed)
-        do_lid_closed_action (manager);
-    else
-        do_lid_open_action (manager);
 }
 
 static const gchar *
@@ -2938,7 +2846,7 @@ idle_configure (GsdPowerManager *manager)
     /* set up dim callback for when the screen lock is not active,
     * but only if we actually want to dim. */
     timeout_dim = 0;
-    if (g_settings_get_boolean (manager->priv->settings, "idle-dim"))
+    if (g_settings_get_boolean (manager->priv->settings_common, "idle-dim"))
     {
         timeout_dim = g_settings_get_int (manager->priv->settings,
                                           "idle-delay");
@@ -3642,34 +3550,13 @@ uninhibit_suspend (GsdPowerManager *manager)
     manager->priv->inhibit_suspend_taken = FALSE;
 }
 
-static void
-on_randr_event (GnomeRRScreen *screen, gpointer user_data)
-{
-    GsdPowerManager *manager = GSD_POWER_MANAGER (user_data);
 
-    if (suspend_on_lid_close (manager))
-    {
-        restart_inhibit_lid_switch_timer (manager);
-        return;
-    }
-
-    /* when a second monitor is plugged in, we take the
-     * handle-lid-switch inhibitor lock of logind to prevent
-     * it from suspending.
-     *
-     * Uninhibiting is done in the inhibit_lid_switch_timer,
-     * since we want to give users a few seconds when unplugging
-     * and replugging an external monitor, not suspend right away.
-     */
-    inhibit_lid_switch (manager);
-    setup_inhibit_lid_switch_timer (manager);
-}
 
 #ifdef GSD_MOCK
 static gboolean
 received_sigusr2 (GsdPowerManager *manager)
 {
-    on_randr_event (NULL, manager);
+    /*on_randr_event (NULL, manager);*/
     return TRUE;
 }
 #endif /* GSD_MOCK */
@@ -3778,7 +3665,9 @@ gsd_power_manager_start (GsdPowerManager *manager,
     manager->priv->kbd_brightness_old = -1;
     manager->priv->kbd_brightness_pre_dim = -1;
     manager->priv->pre_dim_brightness = -1;
-    /*manager->priv->settings = g_settings_new(GSD_POWER_SETTINGS_SCHEMA);*/
+
+    manager->priv->settings_common = g_settings_new(
+            DEEPIN_POWER_SETTINGS_COMMON_SCHEMA);
 
     manager->priv->settings_profile = g_settings_new(DEEPIN_POWER_PROFILE_SCHEMA);
     if (!started)
@@ -3801,7 +3690,7 @@ gsd_power_manager_start (GsdPowerManager *manager,
     g_debug("created new settings with path :%s\n", manager->priv->settings_path);
 
     manager->priv->settings = g_settings_new_with_path(
-                                  DEEPIN_POWER_SETTINGS_SCHEMA,
+                                  DEEPIN_POWER_SETTINGS_SPECIFIC_SCHEMA,
                                   manager->priv->settings_path);
         g_signal_connect (manager->priv->settings, "changed",
                           G_CALLBACK (engine_settings_key_changed_cb), manager);
@@ -3873,31 +3762,31 @@ gsd_power_manager_start (GsdPowerManager *manager,
                   NULL);
 
     /* get percentage policy */
-    manager->priv->low_percentage = g_settings_get_int (manager->priv->settings,
+    manager->priv->low_percentage = g_settings_get_int (manager->priv->settings_common,
                                     "percentage-low");
-    manager->priv->critical_percentage = g_settings_get_int (manager->priv->settings,
+    manager->priv->critical_percentage = g_settings_get_int (manager->priv->settings_common,
                                          "percentage-critical");
-    manager->priv->action_percentage = g_settings_get_int (manager->priv->settings,
+    manager->priv->action_percentage = g_settings_get_int (manager->priv->settings_common,
                                        "percentage-action");
 
     /* get time policy */
-    manager->priv->low_time = g_settings_get_int (manager->priv->settings,
+    manager->priv->low_time = g_settings_get_int (manager->priv->settings_common,
                               "time-low");
-    manager->priv->critical_time = g_settings_get_int (manager->priv->settings,
+    manager->priv->critical_time = g_settings_get_int (manager->priv->settings_common,
                                    "time-critical");
-    manager->priv->action_time = g_settings_get_int (manager->priv->settings,
+    manager->priv->action_time = g_settings_get_int (manager->priv->settings_common,
                                  "time-action");
 
     /* we can disable this if the time remaining is inaccurate or just plain wrong */
-    manager->priv->use_time_primary = g_settings_get_boolean (manager->priv->settings,
+    manager->priv->use_time_primary = g_settings_get_boolean (manager->priv->settings_common,
                                       "use-time-for-policy");
 
     /* create IDLETIME watcher */
     manager->priv->idle_monitor = gnome_idle_monitor_new ();
 
     /* set up the screens */
-    g_signal_connect (manager->priv->rr_screen, "changed", G_CALLBACK (on_randr_event), manager);
-    on_randr_event (manager->priv->rr_screen, manager);
+    /*g_signal_connect (manager->priv->rr_screen, "changed", G_CALLBACK (on_randr_event), manager);*/
+    /*on_randr_event (manager->priv->rr_screen, manager);*/
 
 #ifdef GSD_MOCK
     g_unix_signal_add (SIGUSR2, (GSourceFunc) received_sigusr2, manager);

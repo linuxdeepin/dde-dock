@@ -54,9 +54,11 @@ const (
     power_object_path = "/com/deepin/daemon/Power"
     power_interface   = "com.deepin.daemon.Power"
 
-    schema_gsettings_power               = "com.deepin.daemon.power"
-    schema_gsettings_power_settings_id   = "com.deepin.daemon.power.settings"
-    schema_gsettings_power_settings_path = "/com/deepin/daemon/power/profiles/"
+    schema_gsettings_power                        = "com.deepin.daemon.power"
+    schema_gsettings_power_settings_id_specific   = "com.deepin.daemon.power.settings.specific"
+    schema_gsettings_power_settings_id_common     = "com.deepin.daemon.power.settings.common"
+    schema_gsettings_power_settings_common_path   = "/com/deepin/daemon/power/"
+    schema_gsettings_power_settings_specific_path = "/com/deepin/daemon/power/profiles/"
     //schema_gsettings_screensaver         = "org.gnome.desktop.screensaver"
 )
 
@@ -179,9 +181,10 @@ func (ss *ScreenSaver) UnInhibit(cookie uint32) {
 
 type Power struct {
     //plugins.power keys
-    powerProfile  *gio.Settings
-    powerSettings *gio.Settings
-    mediaKey      *gio.Settings
+    powerProfile          *gio.Settings
+    powerSettingsSpecific *gio.Settings
+    powerSettingsCommon   *gio.Settings
+    mediaKey              *gio.Settings
 
     //gsettings properties
     ButtonHibernate *property.GSettingsStringProperty `access:"readwrite"`
@@ -245,7 +248,7 @@ func NewPower() (*Power, error) {
         power, "CurrentProfile", power.powerProfile, "current-profile")
     power.CurrentProfile.ConnectChanged(power.profileChanged)
 
-    power.powerSettings = power.getPowerSettings()
+    power.getPowerSettings()
 
     //power.screensaverSettings = gio.NewSettings(schema_gsettings_screensaver)
 
@@ -334,10 +337,13 @@ func (power *Power) OnPropertiesChanged(name string, oldv interface{}) {
     dbus.NotifyChange(power, name)
 }
 
-func (power *Power) getPowerSettings() *gio.Settings {
-    return gio.NewSettingsWithPath(
-        schema_gsettings_power_settings_id,
-        string(schema_gsettings_power_settings_path)+
+func (power *Power) getPowerSettings() {
+    power.powerSettingsCommon = gio.NewSettingsWithPath(
+        schema_gsettings_power_settings_id_common,
+        string(schema_gsettings_power_settings_common_path))
+    power.powerSettingsSpecific = gio.NewSettingsWithPath(
+        schema_gsettings_power_settings_id_specific,
+        string(schema_gsettings_power_settings_specific_path)+
             power.CurrentProfile.Get()+"/")
 
 }
@@ -387,7 +393,7 @@ func (power *Power) profileChanged() {
     //switch name {
     //case "CurrentProfile":
     fmt.Println("sleep inactive ac timeout: ", power.SleepInactiveAcTimeout.Get())
-    power.powerSettings = power.getPowerSettings()
+    power.getPowerSettings()
     power.getPowerSettingsProperty()
     //dbus.InstallOnSession(power)
     dbus.NotifyChange(power, "CurrentProfile")
@@ -695,42 +701,42 @@ func (power *Power) getPowerSettingsProperty() int32 {
     power.CurrentProfile = property.NewGSettingsStringProperty(
         power, "CurrentProfile", power.powerProfile, "current-profile")
     power.ButtonHibernate = property.NewGSettingsStringProperty(
-        power, "ButtonHibernate", power.powerSettings, "button-hibernate")
+        power, "ButtonHibernate", power.powerSettingsCommon, "button-hibernate")
     power.ButtonPower = property.NewGSettingsStringProperty(
-        power, "ButtonPower", power.powerSettings, "button-power")
+        power, "ButtonPower", power.powerSettingsCommon, "button-power")
     power.ButtonSleep = property.NewGSettingsStringProperty(
-        power, "ButtonSleep", power.powerSettings, "button-sleep")
+        power, "ButtonSleep", power.powerSettingsCommon, "button-sleep")
     power.ButtonSuspend = property.NewGSettingsStringProperty(
-        power, "ButtonSuspend", power.powerSettings, "button-suspend")
+        power, "ButtonSuspend", power.powerSettingsCommon, "button-suspend")
 
     power.CriticalBatteryAction = property.NewGSettingsStringProperty(
-        power, "CriticalBatteryAction", power.powerSettings, "critical-battery-action")
+        power, "CriticalBatteryAction", power.powerSettingsCommon, "critical-battery-action")
     power.LidCloseACAction = property.NewGSettingsStringProperty(
-        power, "LidCloseACAction", power.powerSettings, "lid-close-ac-action")
+        power, "LidCloseACAction", power.powerSettingsCommon, "lid-close-ac-action")
     power.LidCloseBatteryAction = property.NewGSettingsStringProperty(
-        power, "LidCloseBatteryAction", power.powerSettings, "lid-close-battery-action")
+        power, "LidCloseBatteryAction", power.powerSettingsCommon, "lid-close-battery-action")
     power.SleepInactiveAcTimeout = property.NewGSettingsIntProperty(
-        power, "SleepInactiveAcTimeout", power.powerSettings, "sleep-inactive-ac-timeout")
+        power, "SleepInactiveAcTimeout", power.powerSettingsSpecific, "sleep-inactive-ac-timeout")
 
     fmt.Println("settings profile:", power.CurrentProfile.Get(), ",", power.SleepInactiveAcTimeout.Get())
 
     power.SleepInactiveBatteryTimeout = property.NewGSettingsIntProperty(
-        power, "SleepInactiveBatteryTimeout", power.powerSettings, "sleep-inactive-battery-timeout")
+        power, "SleepInactiveBatteryTimeout", power.powerSettingsSpecific, "sleep-inactive-battery-timeout")
     power.IdleDelay = property.NewGSettingsIntProperty(
-        power, "IdleDelay", power.powerSettings, "idle-delay")
+        power, "IdleDelay", power.powerSettingsSpecific, "idle-delay")
     //power.SleepDisplayAc = property.NewGSettingsIntProperty(
     //power, "SleepDisplayAc", power.powerSettings, "sleep-display-ac")
     //power.SleepDisplayBattery = property.NewGSettingsIntProperty(
     //power, "SleepDisplayBattery", power.powerSettings, "sleep-display-battery")
 
     power.SleepInactiveAcType = property.NewGSettingsStringProperty(
-        power, "SleepInactiveAcType", power.powerSettings,
+        power, "SleepInactiveAcType", power.powerSettingsSpecific,
         "sleep-inactive-ac-type")
     power.SleepInactiveBatteryType = property.NewGSettingsStringProperty(
-        power, "SleepInactiveBatteryType", power.powerSettings, "sleep-inactive-battery-type")
+        power, "SleepInactiveBatteryType", power.powerSettingsCommon, "sleep-inactive-battery-type")
 
     power.LockEnabled = property.NewGSettingsBoolProperty(
-        power, "LockEnabled", power.powerSettings, "lock-enabled")
+        power, "LockEnabled", power.powerSettingsCommon, "lock-enabled")
 
     power.signalPowerSettingsChange()
 
