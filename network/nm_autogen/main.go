@@ -112,6 +112,22 @@ func ToKeyTypeRealData(ktype string) (realData string) {
 		realData = "Ipv6Addresses"
 	case "ktypeIpv6Routes":
 		realData = "Ipv6Routes"
+	case "ktypeWrapperString":
+		realData = "ktypeArrayByte"
+	case "ktypeWrapperMacAddress":
+		realData = "ktypeArrayByte"
+	case "ktypeWrapperIpv4Dns":
+		realData = "ktypeArrayUint32"
+	case "ktypeWrapperIpv4Addresses":
+		realData = "ktypeArrayArrayUint32"
+	case "ktypeWrapperIpv4Routes":
+		realData = "ktypeArrayArrayUint32"
+	case "ktypeWrapperIpv6Dns":
+		realData = "ktypeArrayArrayByte"
+	case "ktypeWrapperIpv6Addresses":
+		realData = "ktypeIpv6Addresses"
+	case "ktypeWrapperIpv6Routes":
+		realData = "ktypeIpv6Routes"
 	}
 	return
 }
@@ -152,6 +168,22 @@ func ToKeyTypeDefaultValue(ktype, customValue string) (value string) {
 	case "ktypeIpv6Addresses":
 		value = `make(Ipv6Addresses, 0)`
 	case "ktypeIpv6Routes":
+		value = `make(Ipv6Routes, 0)`
+	case "ktypeWrapperString": // TODO
+		value = `make([]byte, 0)`
+	case "ktypeWrapperMacAddress":
+		value = `make([]byte, 0)`
+	case "ktypeWrapperIpv4Dns":
+		value = `make([]uint32, 0)`
+	case "ktypeWrapperIpv4Addresses":
+		value = `make([][]uint32, 0)`
+	case "ktypeWrapperIpv4Routes":
+		value = `make([][]uint32, 0)`
+	case "ktypeWrapperIpv6Dns":
+		value = `make([][]byte, 0)`
+	case "ktypeWrapperIpv6Addresses":
+		value = `make(Ipv6Addresses, 0)`
+	case "ktypeWrapperIpv6Routes":
 		value = `make(Ipv6Routes, 0)`
 	}
 	return

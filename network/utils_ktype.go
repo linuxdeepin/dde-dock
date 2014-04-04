@@ -12,15 +12,77 @@ const (
 	ktypeUint64
 	ktypeBoolean
 	ktypeArrayByte
-	ktypeArrayString      // json
-	ktypeArrayUint32      // json
-	ktypeArrayArrayByte   // json, array of array of byte
-	ktypeArrayArrayUint32 // json, array of array of uint32
-	ktypeDictStringString // json, dict of (string::string)
-	ktypeIpv6Addresses    // json, array of (byte array, uint32, byte array)
-	ktypeIpv6Routes       // json, array of (byte array, uint32, byte array, uint32)
+	ktypeArrayString
+	ktypeArrayUint32
+	ktypeArrayArrayByte   // [array of array of byte]
+	ktypeArrayArrayUint32 // [array of array of uint32]
+	ktypeDictStringString // [dict of (string::string)]
+	ktypeIpv6Addresses    // [array of (byte array, uint32, byte array)]
+	ktypeIpv6Routes       // [array of (byte array, uint32, byte array, uint32)]
+
+	// wrapper for special key type, used by json setter and getter
+	ktypeWrapperString        // wrap ktypeArrayByte to [string]
+	ktypeWrapperMacAddress    // wrap ktypeArrayByte to [string]
+	ktypeWrapperIpv4Dns       // wrap ktypeArrayUint32 to [array of string]
+	ktypeWrapperIpv4Addresses // wrap ktypeArrayArrayUint32 to [array of (string, string, string)]
+	ktypeWrapperIpv4Routes    // wrap ktypeArrayArrayUint32 to [array of (string, string, string, uint32)]
+	ktypeWrapperIpv6Dns       // wrap ktypeArrayArrayByte to [array of string]
+	ktypeWrapperIpv6Addresses // wrap ktypeIpv6Addresses to [array of (string, uint32, string)]
+	ktypeWrapperIpv6Routes    // wrap ktypeIpv6Routes to [array of (string, uint32, string, uint32)]
 )
 
+// Ipv4AddressesWrapper
+type Ipv4AddressesWrapper []Ipv4AddressWrapper
+type Ipv4AddressWrapper struct {
+	Address string
+	Prefix  string
+	Gateway string
+}
+
+// Ipv4RoutesWrapper
+type Ipv4RoutesWrapper []Ipv4RouteWrapper
+type Ipv4RouteWrapper struct {
+	Address string
+	Prefix  string
+	NextHop string
+	Metric  uint32
+}
+
+// Ipv6AddressesWrapper
+type Ipv6AddressesWrapper []Ipv6AddressWrapper
+type Ipv6AddressWrapper struct {
+	Address string
+	Prefix  uint32
+	Gateway string
+}
+
+// Ipv6Addresses is an array of (byte array, uint32, byte array)
+type Ipv6Addresses []Ipv6Address
+type Ipv6Address struct {
+	Address []byte
+	Prefix  uint32
+	Gateway []byte
+}
+
+// Ipv6RoutesWrapper
+type Ipv6RoutesWrapper []Ipv6RouteWrapper
+type Ipv6RouteWrapper struct {
+	Address string
+	Prefix  uint32
+	NextHop string
+	Metric  uint32
+}
+
+// Ipv6Routes is an array of (byte array, uint32, byte array, uint32)
+type Ipv6Route struct {
+	Address []byte
+	Prefix  uint32
+	NextHop []byte
+	Metric  uint32
+}
+type Ipv6Routes []Ipv6Route
+
+// TODO remove
 type ktypeDescription struct {
 	t    uint32
 	desc string
@@ -80,20 +142,3 @@ func getKtypeDescription(t ktype) (desc string) {
 	}
 	return
 }
-
-// Ipv6Addresses is an array of (byte array, uint32, byte array)
-type Ipv6Address struct {
-	Address []byte
-	Prefix  uint32
-	Gateway []byte
-}
-type Ipv6Addresses []Ipv6Address
-
-// Ipv6Routes is an array of (byte array, uint32, byte array, uint32)
-type Ipv6Route struct {
-	Address []byte
-	Prefix  uint32
-	NextHop []byte
-	Metric  uint32
-}
-type Ipv6Routes []Ipv6Route

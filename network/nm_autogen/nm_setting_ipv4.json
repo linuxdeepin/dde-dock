@@ -3,10 +3,10 @@
     "OutputFile":"../nm_setting_ipv4_autogen.go",
     "Keys":[
 	    {"Name":"NM_SETTING_IP4_CONFIG_METHOD", "Type":"ktypeString", "Default":"<null>"},
-	    {"Name":"NM_SETTING_IP4_CONFIG_DNS", "Type":"ktypeArrayUint32", "Default":"<default>"},
+	    {"Name":"NM_SETTING_IP4_CONFIG_DNS", "Type":"ktypeWrapperIpv4Dns", "Default":"<default>"},
 	    {"Name":"NM_SETTING_IP4_CONFIG_DNS_SEARCH", "Type":"ktypeString", "Default":"<default>"},
-	    {"Name":"NM_SETTING_IP4_CONFIG_ADDRESSES", "Type":"ktypeArrayArrayUint32", "Default":"<default>"},
-	    {"Name":"NM_SETTING_IP4_CONFIG_ROUTES", "Type":"ktypeArrayArrayUint32", "Default":"<default>"},
+	    {"Name":"NM_SETTING_IP4_CONFIG_ADDRESSES", "Type":"ktypeWrapperIpv4Addresses", "Default":"<default>"},
+	    {"Name":"NM_SETTING_IP4_CONFIG_ROUTES", "Type":"ktypeWrapperIpv4Routes", "Default":"<default>"},
 	    {"Name":"NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES", "Type":"ktypeBoolean", "Default":"<default>"},
 	    {"Name":"NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS", "Type":"ktypeBoolean", "Default":"<default>"},
 	    {"Name":"NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID", "Type":"ktypeString", "Default":"<null>"},

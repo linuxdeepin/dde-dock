@@ -97,7 +97,7 @@ func getConnectionDataKeyJSON(data _ConnectionData, field, key string, t ktype) 
 			// return `""` for ktypeString which missing default
 			// value, and the keys which missing default value should
 			// all are ktypString
-			return `""`
+			return `""` // TODO default value for ktypeWrapper
 		}
 	}
 
@@ -121,6 +121,7 @@ func setConnectionDataKeyJSON(data _ConnectionData, field, key, valueJSON string
 		return
 	}
 
+	// TODO default value for ktypeWrapper
 	if t == ktypeString && valueJSON == `""` {
 		// if valueJSON is empty string, just means to remove current key
 		removeConnectionDataKey(data, field, key)

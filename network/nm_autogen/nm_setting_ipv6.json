@@ -4,10 +4,10 @@
     "Keys":[
 	    {"Name":"NM_SETTING_IP6_CONFIG_METHOD", "Type":"ktypeString", "Default":"<null>"},
 	    {"Name":"NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME", "Type":"ktypeString", "Default":"<default>"},
-	    {"Name":"NM_SETTING_IP6_CONFIG_DNS", "Type":"ktypeArrayByte", "Default":"<default>"},
+	    {"Name":"NM_SETTING_IP6_CONFIG_DNS", "Type":"ktypeWrapperIpv6Dns", "Default":"<default>"},
 	    {"Name":"NM_SETTING_IP6_CONFIG_DNS_SEARCH", "Type":"ktypeArrayString", "Default":"<default>"},
-	    {"Name":"NM_SETTING_IP6_CONFIG_ADDRESSES", "Type":"ktypeIpv6Addresses", "Default":"<default>"},
-	    {"Name":"NM_SETTING_IP6_CONFIG_ROUTES", "Type":"ktypeIpv6Routes", "Default":"<default>"},
+	    {"Name":"NM_SETTING_IP6_CONFIG_ADDRESSES", "Type":"ktypeWrapperIpv6Addresses", "Default":"<default>"},
+	    {"Name":"NM_SETTING_IP6_CONFIG_ROUTES", "Type":"ktypeWrapperIpv6Routes", "Default":"<default>"},
 	    {"Name":"NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES", "Type":"ktypeBoolean", "Default":"<default>"},
 	    {"Name":"NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS", "Type":"ktypeBoolean", "Default":"<default>"},
 	    {"Name":"NM_SETTING_IP6_CONFIG_NEVER_DEFAULT", "Type":"ktypeBoolean", "Default":"<default>"},

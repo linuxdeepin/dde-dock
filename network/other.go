@@ -13,6 +13,7 @@ type ActiveConnection struct {
 	Speed        string
 }
 
+// TODO
 func parseIP4address(v uint32) string {
 	LOGGER.Debug("Parseip:", v)
 	return fmt.Sprintf("%d.%d.%d.%d", byte(v), byte(v>>8), byte(v>>16), byte(v>>24))
