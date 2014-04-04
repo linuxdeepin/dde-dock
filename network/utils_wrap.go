@@ -7,10 +7,10 @@ import (
 )
 
 // []byte{0,0,0,0,0,0} -> "00:00:00:00:00:00"
-func formatMacAddressToString(v []byte) (macAddr string, err error) {
+func formatMacAddressToString(v []byte) (macAddr string) {
 	if len(v) != 6 {
 		macAddr = "00:00:00:00:00:00"
-		err = fmt.Errorf("formatMacAddressToString error, machine address is invalid: %v", v)
+		LOGGER.Error("formatMacAddressToString, machine address is invalid", v)
 		return
 	}
 	macAddr = fmt.Sprintf("%02X:%02X:%02X:%02X:%02X:%02X", v[0], v[1], v[2], v[3], v[4], v[5])
@@ -18,17 +18,19 @@ func formatMacAddressToString(v []byte) (macAddr string, err error) {
 }
 
 // "00:00:00:00:00:00" -> []byte{0,0,0,0,0,0}
-func formatMacAddressToArrayByte(v string) (macAddr []byte, err error) {
+func formatMacAddressToArrayByte(v string) (macAddr []byte) {
 	a := strings.Split(v, ":")
 	if len(a) != 6 {
 		macAddr = []byte{0, 0, 0, 0, 0, 0}
-		err = fmt.Errorf("formatMacAddressToArrayByte error, machine address is invalid: %v", v)
+		LOGGER.Error("formatMacAddressToArrayByte, machine address is invalid", v)
 		return
 	}
 	macAddr = make([]byte, 6)
-	var tmpn uint64
 	for i := 0; i < 6; i++ {
-		tmpn, err = strconv.ParseUint(a[i], 16, 8) // TODO
+		tmpn, err := strconv.ParseUint(a[i], 16, 8)
+		if err != nil {
+			LOGGER.Error("formatMacAddressToArrayByte, machine address is invalid", v)
+		}
 		macAddr[i] = byte(tmpn)
 	}
 	return
@@ -38,16 +40,19 @@ func formatIpv4AddressToString(v uint32) (ip4Addr string) {
 	ip4Addr = fmt.Sprintf("%d.%d.%d.%d", byte(v), byte(v>>8), byte(v>>16), byte(v>>24))
 	return
 }
-func formatIpv4AddressToUint32(v string) (ip4Addr uint32, err error) {
+func formatIpv4AddressToUint32(v string) (ip4Addr uint32) {
 	a := strings.Split(v, ".")
 	if len(a) != 4 {
 		ip4Addr = 0
-		err = fmt.Errorf("formatIpv4AddressToUint32 error, ip address is invalid: %v", v)
+		LOGGER.Error("formatIpv4AddressToUint32, ip address is invalid", v)
 		return
 	}
-	var tmpn uint64
 	for i := 3; i >= 0; i-- {
-		tmpn, err = strconv.ParseUint(a[i], 10, 8)
+		tmpn, err := strconv.ParseUint(a[i], 10, 8)
+		if err != nil {
+			LOGGER.Error("formatIpv4AddressToUint32, ip address is invalid", v)
+			return
+		}
 		ip4Addr = ip4Addr<<8 + uint32(tmpn)
 	}
 	return
@@ -61,65 +66,98 @@ func formatIpv6AddressToArrayByte(v string) []byte {
 	return nil
 }
 
-func wrapIpv4Dns(v []uint32) (addrs []string) {
-	for _, a := range v {
-		addrs = append(addrs, formatIpv4AddressToString(a))
+func wrapIpv4Dns(data []uint32) (wrapData []string) {
+	for _, a := range data {
+		wrapData = append(wrapData, formatIpv4AddressToString(a))
 	}
 	return
 }
-func unwrapIpv4Dns(v []string) (addrs []uint32) {
-	for _, a := range v {
-		addr, _ := formatIpv4AddressToUint32(a)
-		addrs = append(addrs, addr)
-	}
-	return
-}
-
-func wrapIpv4Addresses(v [][]uint32) Ipv4AddressesWrapper {
-	// TODO
-	return nil
-}
-func unwrapIpv4Addresses(v Ipv4AddressesWrapper) [][]uint32 {
-	// TODO
-	return nil
-}
-
-func wrapIpv4Routes(v [][]uint32) Ipv4RoutesWrapper {
-	// TODO
-	return nil
-}
-func unwrapIpv4Routes(v Ipv4RoutesWrapper) [][]uint32 {
-	// TODO
-	return nil
-}
-
-func wrapIpv6Dns(v [][]byte) (addrs []string) {
-	for _, a := range v {
-		addrs = append(addrs, formatIpv6AddressToString(a))
-	}
-	return
-}
-func unwrapIpv6Dns(v []string) (addrs [][]byte) {
-	for _, a := range v {
-		addrs = append(addrs, formatIpv6AddressToArrayByte(a))
+func unwrapIpv4Dns(wrapData []string) (data []uint32) {
+	for _, a := range wrapData {
+		data = append(data, formatIpv4AddressToUint32(a))
 	}
 	return
 }
 
-func wrapIpv6Addresses(v Ipv6Addresses) Ipv6AddressesWrapper {
-	// TODO
-	return nil
+func wrapIpv4Addresses(data [][]uint32) (wrapData Ipv4AddressesWrapper) {
+	for _, d := range data {
+		if len(d) != 3 {
+			LOGGER.Error("wrapIpv4Addresses, ipv4 address invalid", d)
+			continue
+		}
+		ipv4Addr := Ipv4AddressWrapper{}
+		ipv4Addr.Address = formatIpv4AddressToString(d[0])
+		ipv4Addr.Prefix = d[1]
+		ipv4Addr.Gateway = formatIpv4AddressToString(d[2])
+		wrapData = append(wrapData, ipv4Addr)
+	}
+	return
 }
-func unwrapIpv6Addresses(v Ipv6AddressesWrapper) Ipv6Addresses {
-	// TODO
-	return nil
+func unwrapIpv4Addresses(wrapData Ipv4AddressesWrapper) (data [][]uint32) {
+	for _, d := range wrapData {
+		ipv4Addr := make([]uint32, 3)
+		ipv4Addr[0] = formatIpv4AddressToUint32(d.Address)
+		ipv4Addr[1] = d.Prefix
+		ipv4Addr[2] = formatIpv4AddressToUint32(d.Gateway)
+		data = append(data, ipv4Addr)
+	}
+	return
 }
 
-func wrapIpv6Routes(v Ipv6Routes) Ipv6RoutesWrapper {
-	// TODO
-	return nil
+func wrapIpv4Routes(data [][]uint32) (wrapData Ipv4RoutesWrapper) {
+	for _, d := range data {
+		if len(d) != 4 {
+			LOGGER.Error("wrapIpv4Routes: invalid ipv2 route", d)
+			continue
+		}
+		ipv4Route := Ipv4RouteWrapper{}
+		ipv4Route.Address = formatIpv4AddressToString(d[0])
+		ipv4Route.Prefix = d[1]
+		ipv4Route.NextHop = formatIpv4AddressToString(d[2])
+		ipv4Route.Metric = d[3]
+		wrapData = append(wrapData, ipv4Route)
+	}
+	return
 }
-func unwrapIpv6Routes(v Ipv6RoutesWrapper) Ipv6Routes {
+func unwrapIpv4Routes(wrapData Ipv4RoutesWrapper) (data [][]uint32) {
+	for _, d := range wrapData {
+		ipv4Route := make([]uint32, 4)
+		ipv4Route[0] = formatIpv4AddressToUint32(d.Address)
+		ipv4Route[1] = d.Prefix
+		ipv4Route[2] = formatIpv4AddressToUint32(d.NextHop)
+		ipv4Route[3] = d.Metric
+		data = append(data, ipv4Route)
+	}
+	return
+}
+
+func wrapIpv6Dns(data [][]byte) (wrapData []string) {
+	for _, a := range data {
+		wrapData = append(wrapData, formatIpv6AddressToString(a))
+	}
+	return
+}
+func unwrapIpv6Dns(wrapData []string) (data [][]byte) {
+	for _, a := range wrapData {
+		data = append(data, formatIpv6AddressToArrayByte(a))
+	}
+	return
+}
+
+func wrapIpv6Addresses(data Ipv6Addresses) (wrapData Ipv6AddressesWrapper) {
 	// TODO
-	return nil
+	return
+}
+func unwrapIpv6Addresses(wrapData Ipv6AddressesWrapper) (data Ipv6Addresses) {
+	// TODO
+	return
+}
+
+func wrapIpv6Routes(data Ipv6Routes) (wrapData Ipv6RoutesWrapper) {
+	// TODO
+	return
+}
+func unwrapIpv6Routes(wrapData Ipv6RoutesWrapper) (data Ipv6Routes) {
+	// TODO
+	return
 }

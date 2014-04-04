@@ -35,7 +35,7 @@ const (
 type Ipv4AddressesWrapper []Ipv4AddressWrapper
 type Ipv4AddressWrapper struct {
 	Address string
-	Prefix  string
+	Prefix  uint32
 	Gateway string
 }
 
@@ -43,7 +43,7 @@ type Ipv4AddressWrapper struct {
 type Ipv4RoutesWrapper []Ipv4RouteWrapper
 type Ipv4RouteWrapper struct {
 	Address string
-	Prefix  string
+	Prefix  uint32
 	NextHop string
 	Metric  uint32
 }
