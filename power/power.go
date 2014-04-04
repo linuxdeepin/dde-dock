@@ -35,6 +35,7 @@ import (
     //"reflect"
     "reflect"
     "regexp"
+    "time"
     //"unsafe"
     "github.com/BurntSushi/xgb"
     "github.com/BurntSushi/xgb/randr"
@@ -60,9 +61,11 @@ const (
 )
 
 const (
-    POWER_DEST              = "com.deepin.daemon.Power"
-    POWER_PATH              = "/com/deepin/daemon/Power"
-    POWER_IFC               = "com.deepin.daemon.Power"
+    POWER_DEST = "com.deepin.daemon.Power"
+    POWER_PATH = "/com/deepin/daemon/Power"
+    POWER_IFC  = "com.deepin.daemon.Power"
+
+    ORG_FREEDESKTOP_SS_DEST = "org.freedesktop.ScreenSaver"
     ORG_FREEDESKTOP_SS_PATH = "/org/freedesktop/ScreenSaver"
     ORG_FREEDESKTOP_SS_IFC  = "org.freedesktop.ScreenSaver"
 
@@ -112,13 +115,14 @@ type Inhibitor struct {
 
 type ScreenSaver struct {
     cookies     map[int]Inhibitor
+    timers      map[int]*time.Timer
     n           uint32
     IsInhibited bool
 }
 
 func (ss *ScreenSaver) GetDBusInfo() dbus.DBusInfo {
     return dbus.DBusInfo{
-        POWER_DEST,              //bus name
+        ORG_FREEDESKTOP_SS_DEST, //bus name
         ORG_FREEDESKTOP_SS_PATH, //object path
         ORG_FREEDESKTOP_SS_IFC,
     }
@@ -127,6 +131,7 @@ func (ss *ScreenSaver) GetDBusInfo() dbus.DBusInfo {
 func NewScreenSaver() (*ScreenSaver, error) {
     ss := &ScreenSaver{}
     ss.cookies = make(map[int]Inhibitor)
+    ss.timers = make(map[int]*time.Timer)
     ss.n = 0
     ss.IsInhibited = false
 
@@ -143,19 +148,29 @@ func (ss *ScreenSaver) Inhibit(appName, reason string) uint32 {
         }
     }
     res := ss.n
+    cookie := ss.n
     ss.cookies[int(ss.n)] = newIn
+    ss.timers[int(ss.n)] = time.NewTimer(time.Minute)
     ss.n = ss.n + 1
     fmt.Println(ss.cookies)
     if len(ss.cookies) > 0 {
         ss.IsInhibited = true
         dbus.NotifyChange(ss, "IsInhibited")
     }
+    go func() {
+        <-ss.timers[int(cookie)].C
+        ss.UnInhibit(cookie)
+    }()
     return res
+}
+
+func (ss *ScreenSaver) Tick(cookie uint32) {
+    ss.timers[int(cookie)].Reset(time.Duration(time.Minute))
 }
 
 func (ss *ScreenSaver) UnInhibit(cookie uint32) {
     delete(ss.cookies, int(cookie))
-    fmt.Println(ss.cookies)
+    fmt.Println("After delete", ":", ss.cookies)
     if len(ss.cookies) == 0 {
         ss.IsInhibited = false
         dbus.NotifyChange(ss, "IsInhibited")
@@ -413,11 +428,12 @@ func (power *Power) listenSleep() {
             case true:
                 fmt.Println("Preparing to sleep")
                 if power.LockEnabled.Get() {
-                    power.actionLock()
+                    //power.actionLock()
                 }
                 break
             case false:
                 fmt.Println("Preparing to wake from  sleep")
+                power.actionLock()
                 break
             }
         }
@@ -583,7 +599,7 @@ func (power *Power) actionBlank() {
 
 func (power *Power) actionLock() {
     fmt.Print("actionLock(): Locking\n")
-    power.dmSession.Call(DM_SESSION_IFC+".Lock", 0)
+    power.dmSession.Call(DM_SESSION_IFC+".Lock", 0).Store()
 }
 
 func (power *Power) actionLogout() {

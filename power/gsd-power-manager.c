@@ -1185,16 +1185,12 @@ engine_profile_changed_cb (GSettings *settings,
     if (g_strcmp0 (key, "current-profile"))
     {
         s = g_settings_get_string(manager->priv->settings_profile, key);
-        if (strcmp(s, manager->priv->current_profile) == 0 )
-        {
-            return;
-        }
     }
 
-    g_debug("restarting power manager\n");
-    gsd_power_manager_stop(manager);
+    /*g_debug("restarting power manager\n");*/
+    /*gsd_power_manager_stop(manager);*/
 
-    gsd_power_manager_start(manager, &error);
+    /*gsd_power_manager_start(manager, &error);*/
 
     return;
 }
@@ -2877,7 +2873,7 @@ idle_configure (GsdPowerManager *manager)
     if (is_idle_inhibited)
     {
         g_debug ("inhibited or inactive, so using normal state");
-        idle_set_mode (manager, GSD_POWER_IDLE_MODE_NORMAL);
+        /*idle_set_mode (manager, GSD_POWER_IDLE_MODE_NORMAL);*/
 
         clear_idle_watch (manager->priv->idle_monitor,
                           &manager->priv->idle_blank_id);
@@ -3793,8 +3789,8 @@ gsd_power_manager_start (GsdPowerManager *manager,
         started = TRUE;
     }
 
-        manager->priv->current_profile = g_settings_get_string(manager->priv->settings_profile,
-                                         "current-profile");
+    manager->priv->current_profile = g_settings_get_string(manager->priv->settings_profile,
+                                     "current-profile");
     manager->priv->settings_path = (char*)malloc(
                                        sizeof(DEEPIN_POWER_SETTINGS_PATH_PRE) +
                                        strlen(manager->priv->current_profile) + 1);

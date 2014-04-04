@@ -1906,29 +1906,29 @@ void record_state_cb(pa_stream *p, void *userdata)
 
 void monitor_read_cb(pa_stream *s, size_t length, void *userdata)
 {
-    /*const void *data;*/
-    /*double v;*/
+    const void *data;
+    double v;
 
-    /*printf("read callback length: %ld\n", length);*/
-    /*printf("\tget_device_index: %d\n", pa_stream_get_device_index(s));*/
-    /*printf("\tget_device_name: %s\n", pa_stream_get_device_name(s));*/
-    /*printf("\tget_monitor_stream: %d\n", pa_stream_get_monitor_stream(s));*/
-    /*if (pa_stream_peek(s, &data, &length) < 0)*/
-    /*{*/
-    /*printf("Failed to read data from stream\n");*/
-    /*return;*/
-    /*}*/
+    printf("read callback length: %ld\n", length);
+    printf("\tget_device_index: %d\n", pa_stream_get_device_index(s));
+    printf("\tget_device_name: %s\n", pa_stream_get_device_name(s));
+    printf("\tget_monitor_stream: %d\n", pa_stream_get_monitor_stream(s));
+    if (pa_stream_peek(s, &data, &length) < 0)
+    {
+    printf("Failed to read data from stream\n");
+    return;
+    }
 
-    /*assert(length > 0);*/
-    /*assert(length % sizeof(float) == 0);*/
+    assert(length > 0);
+    assert(length % sizeof(float) == 0);
 
-    /*v = ((const float*) data)[length / sizeof(float) - 1];*/
+    v = ((const float*) data)[length / sizeof(float) - 1];
 
-    /*pa_stream_drop(s);*/
+    pa_stream_drop(s);
 
     /*if (v < 0) v = 0;*/
     /*if (v > 1) v = 1;*/
-    /*printf("\tread callback peek: %f\n", v);*/
+    printf("\tread callback peek: %f\n", v);
 }
 
 void monitor_suspend_cb(pa_stream *s, void *userdata)
