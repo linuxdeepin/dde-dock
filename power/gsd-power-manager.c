@@ -1180,6 +1180,20 @@ engine_device_removed_cb (UpClient *client, UpDevice *device, GsdPowerManager *m
     engine_recalculate_state (manager);
 }
 
+char * get_specific_gsettings_path(GsdPowerManager *manager)
+{
+    manager->priv->settings_path = (char*)malloc(
+                                       sizeof(DEEPIN_POWER_SETTINGS_PATH_PRE) +
+                                       strlen(manager->priv->current_profile) + 1);
+    strcpy(manager->priv->settings_path, DEEPIN_POWER_SETTINGS_PATH_PRE);
+    strcat(manager->priv->settings_path, manager->priv->current_profile);
+    strcat(manager->priv->settings_path, "/");
+
+    return manager->priv->settings_path;
+
+
+}
+
 static void
 engine_profile_changed_cb (GSettings *settings,
                            const gchar *key,
@@ -1190,12 +1204,19 @@ engine_profile_changed_cb (GSettings *settings,
     if (g_strcmp0 (key, "current-profile"))
     {
         s = g_settings_get_string(manager->priv->settings_profile, key);
+        if(strcmp(s,manager->priv->current_profile)==0)
+        {
+            return;
+        }
+        else
+        {
+            strcmp(manager->priv->current_profile,s);
+        }
     }
 
-    g_debug("restarting power manager\n");
-    gsd_power_manager_stop(manager);
+    g_debug("profile changed\n");
 
-    gsd_power_manager_start(manager, &error);
+    /*g_clear_object(&manager->priv->settings);*/
 
     return;
 }
@@ -3680,18 +3701,12 @@ gsd_power_manager_start (GsdPowerManager *manager,
 
     manager->priv->current_profile = g_settings_get_string(manager->priv->settings_profile,
                                      "current-profile");
-    manager->priv->settings_path = (char*)malloc(
-                                       sizeof(DEEPIN_POWER_SETTINGS_PATH_PRE) +
-                                       strlen(manager->priv->current_profile) + 1);
-    strcpy(manager->priv->settings_path, DEEPIN_POWER_SETTINGS_PATH_PRE);
-    strcat(manager->priv->settings_path, manager->priv->current_profile);
-    strcat(manager->priv->settings_path, "/");
 
-    g_debug("created new settings with path :%s\n", manager->priv->settings_path);
-
+    get_specific_gsettings_path(manager);
     manager->priv->settings = g_settings_new_with_path(
                                   DEEPIN_POWER_SETTINGS_SPECIFIC_SCHEMA,
                                   manager->priv->settings_path);
+    g_debug("created new settings with path :%s\n", manager->priv->settings_path);
         g_signal_connect (manager->priv->settings, "changed",
                           G_CALLBACK (engine_settings_key_changed_cb), manager);
     /*manager->priv->settings_screensaver = g_settings_new ("org.gnome.desktop.screensaver");*/

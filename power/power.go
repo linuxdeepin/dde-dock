@@ -733,7 +733,7 @@ func (power *Power) getPowerSettingsProperty() int32 {
         power, "SleepInactiveAcType", power.powerSettingsSpecific,
         "sleep-inactive-ac-type")
     power.SleepInactiveBatteryType = property.NewGSettingsStringProperty(
-        power, "SleepInactiveBatteryType", power.powerSettingsCommon, "sleep-inactive-battery-type")
+        power, "SleepInactiveBatteryType", power.powerSettingsSpecific, "sleep-inactive-battery-type")
 
     power.LockEnabled = property.NewGSettingsBoolProperty(
         power, "LockEnabled", power.powerSettingsCommon, "lock-enabled")
