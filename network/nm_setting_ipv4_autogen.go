@@ -56,13 +56,13 @@ func getSettingIp4ConfigKeyDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID:
 		value = nil
 	case NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME:
-		value = false
+		value = true
 	case NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME:
 		value = nil
 	case NM_SETTING_IP4_CONFIG_NEVER_DEFAULT:
 		value = false
 	case NM_SETTING_IP4_CONFIG_MAY_FAIL:
-		value = false
+		value = true
 	}
 	return
 }

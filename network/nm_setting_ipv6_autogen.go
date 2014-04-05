@@ -56,9 +56,9 @@ func getSettingIp6ConfigKeyDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_IP6_CONFIG_NEVER_DEFAULT:
 		value = false
 	case NM_SETTING_IP6_CONFIG_MAY_FAIL:
-		value = false
+		value = true
 	case NM_SETTING_IP6_CONFIG_IP6_PRIVACY:
-		value = 0
+		value = -1
 	}
 	return
 }

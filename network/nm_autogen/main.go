@@ -136,6 +136,8 @@ func ToKeyTypeRealData(ktype string) (realData string) {
 func ToKeyTypeDefaultValue(ktype, customValue string) (value string) {
 	if customValue == "<null>" {
 		return
+	} else if customValue != "<default>" {
+		return customValue
 	}
 	switch ktype {
 	default:
