@@ -10,6 +10,7 @@ import (
 )
 
 func main() {
+	dlib.InitI18n()
 	// DesktopAppInfo.ShouldShow does not know deepin.
 	gio.DesktopAppInfoSetDesktopEnv("Deepin")
 
