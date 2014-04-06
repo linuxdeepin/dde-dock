@@ -122,7 +122,8 @@ func getSetting8021xKeyDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_802_1X_PASSWORD_FLAGS:
 		value = 0
 	case NM_SETTING_802_1X_PASSWORD_RAW:
-		value = make([]byte, 0)
+		// value = make([]byte, 0)
+		value = nil
 	case NM_SETTING_802_1X_PASSWORD_RAW_FLAGS:
 		value = 0
 	case NM_SETTING_802_1X_PRIVATE_KEY:

@@ -49,6 +49,7 @@ func getSettingIp4ConfigKeyDefaultValue(key string) (value interface{}) {
 		value = make([][]uint32, 0)
 	case NM_SETTING_IP4_CONFIG_ROUTES:
 		value = make([][]uint32, 0)
+		// value = nil
 	case NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES:
 		value = false
 	case NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS:

@@ -4,6 +4,7 @@ import "dlib/dbus"
 import "fmt"
 import "io"
 import "crypto/rand"
+import "reflect"
 
 func newUUID() string {
 	uuid := make([]byte, 16)
@@ -89,15 +90,17 @@ func getConnectionDataKeyDefaultValue(field, key string) (value interface{}) {
 }
 
 func getConnectionDataKeyJSON(data _ConnectionData, field, key string, t ktype) (valueJSON string) {
-	value := getConnectionDataKey(data, field, key)
-	if value == nil {
+	var value interface{}
+	if isConnectionDataKeyExists(data, field, key) {
+		value = getConnectionDataKey(data, field, key)
+	} else {
 		// return default value if the key is not exists
 		value = getConnectionDataKeyDefaultValue(field, key)
-		if t == ktypeString && value == nil {
-			// return `""` for ktypeString which missing default
-			// value, and the keys which missing default value should
-			// all are ktypString
-			return `""` // TODO default value for ktypeWrapper
+		// LOGGER.Debugf("default value data[%s][%s]=%#v", field, key, value) // TODO test
+		if isInterfaceNil(value) {
+			if t == ktypeString || t == ktypeWrapperString || t == ktypeWrapperMacAddress {
+				return `""`
+			}
 		}
 	}
 
@@ -109,7 +112,7 @@ func getConnectionDataKeyJSON(data _ConnectionData, field, key string, t ktype) 
 	}
 
 	if len(valueJSON) == 0 {
-		LOGGER.Warning("getConnectionDataKeyJSON: valueJSON is empty")
+		LOGGER.Error("getConnectionDataKeyJSON: valueJSON is empty")
 	}
 
 	return
@@ -122,9 +125,12 @@ func setConnectionDataKeyJSON(data _ConnectionData, field, key, valueJSON string
 	}
 
 	// TODO default value for ktypeWrapper
-	if t == ktypeString && valueJSON == `""` {
+	if valueJSON == `""` {
 		// if valueJSON is empty string, just means to remove current key
-		removeConnectionDataKey(data, field, key)
+		if t == ktypeString || t == ktypeWrapperString || t == ktypeWrapperMacAddress {
+			removeConnectionDataKey(data, field, key)
+			return
+		}
 	}
 
 	value, err := jsonToKeyValue(valueJSON, t)
@@ -133,7 +139,13 @@ func setConnectionDataKeyJSON(data _ConnectionData, field, key, valueJSON string
 			valueJSON, getKtypeDescription(t), err)
 		return
 	}
-	setConnectionDataKey(data, field, key, value)
+	// LOGGER.Debugf("setConnectionDataKeyJSON data[%s][%s]=%#v, valueJSON=%s", field, key, value, valueJSON) // TODO test
+	if isInterfaceNil(value) {
+		// if value == getConnectionDataKeyDefaultValue(field, key) {
+		removeConnectionDataKey(data, field, key)
+	} else {
+		setConnectionDataKey(data, field, key, value)
+	}
 	return
 }
 
@@ -200,4 +212,9 @@ func randString(n int) string {
 		bytes[i] = alphanum[b%byte(len(alphanum))]
 	}
 	return string(bytes)
+}
+
+func isInterfaceNil(v interface{}) bool {
+	defer func() { recover() }()
+	return v == nil || reflect.ValueOf(v).IsNil()
 }

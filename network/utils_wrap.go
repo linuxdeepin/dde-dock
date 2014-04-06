@@ -1,6 +1,7 @@
 package main
 
 func wrapIpv4Dns(data []uint32) (wrapData []string) {
+	// wrapData = make([]string, 0) // TODO
 	for _, a := range data {
 		wrapData = append(wrapData, convertIpv4AddressToString(a))
 	}
@@ -14,6 +15,7 @@ func unwrapIpv4Dns(wrapData []string) (data []uint32) {
 }
 
 func wrapIpv4Addresses(data [][]uint32) (wrapData Ipv4AddressesWrapper) {
+	// wrapData = make(Ipv4AddressesWrapper, 0) // TODO
 	for _, d := range data {
 		if len(d) != 3 {
 			LOGGER.Error("ipv4 address invalid", d)
@@ -108,7 +110,6 @@ func wrapIpv6Routes(data Ipv6Routes) (wrapData Ipv6RoutesWrapper) {
 		ipv6Route.Metric = d.Metric
 		wrapData = append(wrapData, ipv6Route)
 	}
-	LOGGER.Debug("ipv6 routes", data, wrapData)
 	return
 }
 func unwrapIpv6Routes(wrapData Ipv6RoutesWrapper) (data Ipv6Routes) {
@@ -120,6 +121,5 @@ func unwrapIpv6Routes(wrapData Ipv6RoutesWrapper) (data Ipv6Routes) {
 		ipv6Route.Metric = d.Metric
 		data = append(data, ipv6Route)
 	}
-	LOGGER.Debug("ipv6 routes", data, wrapData)
 	return
 }

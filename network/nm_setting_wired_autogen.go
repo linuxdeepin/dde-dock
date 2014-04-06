@@ -46,7 +46,8 @@ func getSettingWiredKeyDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_WIRED_AUTO_NEGOTIATE:
 		value = true
 	case NM_SETTING_WIRED_MAC_ADDRESS:
-		value = make([]byte, 0)
+		// value = make([]byte, 0)
+		value = nil
 	case NM_SETTING_WIRED_CLONED_MAC_ADDRESS:
 		value = make([]byte, 0)
 	case NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST:

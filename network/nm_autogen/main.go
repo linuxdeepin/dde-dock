@@ -156,7 +156,7 @@ func ToKeyTypeDefaultValue(ktype, customValue string) (value string) {
 	case "ktypeBoolean":
 		value = `false`
 	case "ktypeArrayByte":
-		value = `make([]byte, 0)`
+		value = `make([]byte, 0)` // TODO
 	case "ktypeArrayString":
 		value = `make([]string, 0)`
 	case "ktypeArrayUint32":

@@ -39,6 +39,7 @@ func getSettingConnectionKeyDefaultValue(key string) (value interface{}) {
 		LOGGER.Error("invalid key:", key)
 	case NM_SETTING_CONNECTION_ID:
 		value = nil
+		// value = ""
 	case NM_SETTING_CONNECTION_UUID:
 		value = nil
 	case NM_SETTING_CONNECTION_TYPE:
