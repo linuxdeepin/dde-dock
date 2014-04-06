@@ -33,33 +33,32 @@ func getSettingWiredKeyType(key string) (t ktype) {
 }
 
 // Get key's default value
-func getSettingWiredKeyDefaultValue(key string) (value interface{}) {
+func getSettingWiredKeyDefaultValueJSON(key string) (valueJSON string) {
 	switch key {
 	default:
 		LOGGER.Error("invalid key:", key)
 	case NM_SETTING_WIRED_PORT:
-		value = nil
+		valueJSON = `""`
 	case NM_SETTING_WIRED_SPEED:
-		value = 0
+		valueJSON = `0`
 	case NM_SETTING_WIRED_DUPLEX:
-		value = nil
+		valueJSON = `""`
 	case NM_SETTING_WIRED_AUTO_NEGOTIATE:
-		value = true
+		valueJSON = `true`
 	case NM_SETTING_WIRED_MAC_ADDRESS:
-		// value = make([]byte, 0)
-		value = nil
+		valueJSON = `""`
 	case NM_SETTING_WIRED_CLONED_MAC_ADDRESS:
-		value = make([]byte, 0)
+		valueJSON = `""`
 	case NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST:
-		value = make([]string, 0)
+		valueJSON = `null`
 	case NM_SETTING_WIRED_MTU:
-		value = 0
+		valueJSON = `0`
 	case NM_SETTING_WIRED_S390_SUBCHANNELS:
-		value = make([]string, 0)
+		valueJSON = `null`
 	case NM_SETTING_WIRED_S390_NETTYPE:
-		value = nil
+		valueJSON = `""`
 	case NM_SETTING_WIRED_S390_OPTIONS:
-		value = make(map[string]string)
+		valueJSON = `null`
 	}
 	return
 }

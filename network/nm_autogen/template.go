@@ -14,15 +14,15 @@ func get{{.FieldName | ToFieldFuncBaseName}}KeyType(key string) (t ktype) {
 }
 `
 
-// get key's default value
-const tplGetDefaultValue = `{{$fieldFuncBaseName := .FieldName | ToFieldFuncBaseName}}
+// get key's default json value
+const tplGetDefaultValueJSON = `{{$fieldFuncBaseName := .FieldName | ToFieldFuncBaseName}}
 // Get key's default value
-func get{{$fieldFuncBaseName}}KeyDefaultValue(key string) (value interface{}) {
+func get{{$fieldFuncBaseName}}KeyDefaultValueJSON(key string) (valueJSON string) {
 	switch key {
 	default:
-		LOGGER.Error("invalid key:", key){{range .Keys}}{{$default := ToKeyTypeDefaultValue .Type .Default}}
+		LOGGER.Error("invalid key:", key){{range .Keys}}{{$default := ToKeyTypeDefaultValueJSON .Type .Default}}
 	case {{.Name}}:
-		{{if $default}}value = {{$default}}{{else}}value = nil{{end}}{{end}}
+		valueJSON = ` + "`{{$default}}`" + `{{end}}
 	}
 	return
 }

@@ -39,38 +39,38 @@ func getSettingWirelessKeyType(key string) (t ktype) {
 }
 
 // Get key's default value
-func getSettingWirelessKeyDefaultValue(key string) (value interface{}) {
+func getSettingWirelessKeyDefaultValueJSON(key string) (valueJSON string) {
 	switch key {
 	default:
 		LOGGER.Error("invalid key:", key)
 	case NM_SETTING_WIRELESS_SSID:
-		value = make([]byte, 0)
+		valueJSON = `""`
 	case NM_SETTING_WIRELESS_MODE:
-		value = nil
+		valueJSON = `""`
 	case NM_SETTING_WIRELESS_BAND:
-		value = nil
+		valueJSON = `""`
 	case NM_SETTING_WIRELESS_CHANNEL:
-		value = 0
+		valueJSON = `0`
 	case NM_SETTING_WIRELESS_BSSID:
-		value = make([]byte, 0)
+		valueJSON = `""`
 	case NM_SETTING_WIRELESS_RATE:
-		value = 0
+		valueJSON = `0`
 	case NM_SETTING_WIRELESS_TX_POWER:
-		value = 0
+		valueJSON = `0`
 	case NM_SETTING_WIRELESS_MAC_ADDRESS:
-		value = make([]byte, 0)
+		valueJSON = `""`
 	case NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS:
-		value = make([]byte, 0)
+		valueJSON = `""`
 	case NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST:
-		value = make([]string, 0)
+		valueJSON = `null`
 	case NM_SETTING_WIRELESS_MTU:
-		value = 0
+		valueJSON = `0`
 	case NM_SETTING_WIRELESS_SEEN_BSSIDS:
-		value = make([]string, 0)
+		valueJSON = `null`
 	case NM_SETTING_WIRELESS_SEC:
-		value = nil
+		valueJSON = `""`
 	case NM_SETTING_WIRELESS_HIDDEN:
-		value = false
+		valueJSON = `false`
 	}
 	return
 }

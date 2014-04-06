@@ -67,24 +67,24 @@ func isConnectionDataKeyExists(data _ConnectionData, field, key string) bool {
 	return true
 }
 
-func getConnectionDataKeyDefaultValue(field, key string) (value interface{}) {
+func getConnectionDataKeyDefaultValueJSON(field, key string) (valueJSON string) {
 	switch field {
 	default:
 		LOGGER.Warning("invalid field name", field)
 	case field8021x:
-		value = getSetting8021xKeyDefaultValue(key)
+		valueJSON = getSetting8021xKeyDefaultValueJSON(key)
 	case fieldConnection:
-		value = getSettingConnectionKeyDefaultValue(key)
+		valueJSON = getSettingConnectionKeyDefaultValueJSON(key)
 	case fieldIPv4:
-		value = getSettingIp4ConfigKeyDefaultValue(key)
+		valueJSON = getSettingIp4ConfigKeyDefaultValueJSON(key)
 	case fieldIPv6:
-		value = getSettingIp6ConfigKeyDefaultValue(key)
+		valueJSON = getSettingIp6ConfigKeyDefaultValueJSON(key)
 	case fieldWired:
-		value = getSettingWiredKeyDefaultValue(key)
+		valueJSON = getSettingWiredKeyDefaultValueJSON(key)
 	case fieldWireless:
-		value = getSettingWirelessKeyDefaultValue(key)
+		valueJSON = getSettingWirelessKeyDefaultValueJSON(key)
 	case fieldWirelessSecurity:
-		value = getSettingWirelessSecurityKeyDefaultValue(key)
+		valueJSON = getSettingWirelessSecurityKeyDefaultValueJSON(key)
 	}
 	return
 }
@@ -95,16 +95,10 @@ func getConnectionDataKeyJSON(data _ConnectionData, field, key string, t ktype) 
 		value = getConnectionDataKey(data, field, key)
 	} else {
 		// return default value if the key is not exists
-		value = getConnectionDataKeyDefaultValue(field, key)
-		// LOGGER.Debugf("default value data[%s][%s]=%#v", field, key, value) // TODO test
-		if isInterfaceNil(value) {
-			if t == ktypeString || t == ktypeWrapperString || t == ktypeWrapperMacAddress {
-				return `""`
-			}
-		}
+		valueJSON = getConnectionDataKeyDefaultValueJSON(field, key)
+		return
 	}
 
-	// TODO
 	valueJSON, err := keyValueToJSON(value, t)
 	if err != nil {
 		LOGGER.Error("get connection data failed:", err)
@@ -124,13 +118,10 @@ func setConnectionDataKeyJSON(data _ConnectionData, field, key, valueJSON string
 		return
 	}
 
-	// TODO default value for ktypeWrapper
-	if valueJSON == `""` {
-		// if valueJSON is empty string, just means to remove current key
-		if t == ktypeString || t == ktypeWrapperString || t == ktypeWrapperMacAddress {
-			removeConnectionDataKey(data, field, key)
-			return
-		}
+	// remove connection data key if valueJSON is null or empty
+	if valueJSON == `null` || valueJSON == `""` || valueJSON == `[]` {
+		removeConnectionDataKey(data, field, key)
+		return
 	}
 
 	value, err := jsonToKeyValue(valueJSON, t)
@@ -141,7 +132,6 @@ func setConnectionDataKeyJSON(data _ConnectionData, field, key, valueJSON string
 	}
 	// LOGGER.Debugf("setConnectionDataKeyJSON data[%s][%s]=%#v, valueJSON=%s", field, key, value, valueJSON) // TODO test
 	if isInterfaceNil(value) {
-		// if value == getConnectionDataKeyDefaultValue(field, key) {
 		removeConnectionDataKey(data, field, key)
 	} else {
 		setConnectionDataKey(data, field, key, value)
@@ -163,6 +153,7 @@ func getConnectionDataKey(data _ConnectionData, field, key string) (value interf
 	}
 
 	value = variant.Value()
+
 	// LOGGER.Debugf("getConnectionDataKey: data[%s][%s]=%v", field, key, value) // TODO test
 	return
 }

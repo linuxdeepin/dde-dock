@@ -75,75 +75,74 @@ func getSetting8021xKeyType(key string) (t ktype) {
 }
 
 // Get key's default value
-func getSetting8021xKeyDefaultValue(key string) (value interface{}) {
+func getSetting8021xKeyDefaultValueJSON(key string) (valueJSON string) {
 	switch key {
 	default:
 		LOGGER.Error("invalid key:", key)
 	case NM_SETTING_802_1X_EAP:
-		value = make([]string, 0)
+		valueJSON = `null`
 	case NM_SETTING_802_1X_IDENTITY:
-		value = nil
+		valueJSON = `""`
 	case NM_SETTING_802_1X_ANONYMOUS_IDENTITY:
-		value = nil
+		valueJSON = `""`
 	case NM_SETTING_802_1X_PAC_FILE:
-		value = nil
+		valueJSON = `""`
 	case NM_SETTING_802_1X_CA_CERT:
-		value = make([]byte, 0)
+		valueJSON = `""`
 	case NM_SETTING_802_1X_CA_PATH:
-		value = nil
+		valueJSON = `""`
 	case NM_SETTING_802_1X_SUBJECT_MATCH:
-		value = nil
+		valueJSON = `""`
 	case NM_SETTING_802_1X_ALTSUBJECT_MATCHES:
-		value = make([]string, 0)
+		valueJSON = `null`
 	case NM_SETTING_802_1X_CLIENT_CERT:
-		value = make([]byte, 0)
+		valueJSON = `""`
 	case NM_SETTING_802_1X_PHASE1_PEAPVER:
-		value = nil
+		valueJSON = `""`
 	case NM_SETTING_802_1X_PHASE1_PEAPLABEL:
-		value = nil
+		valueJSON = `""`
 	case NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING:
-		value = nil
+		valueJSON = `""`
 	case NM_SETTING_802_1X_PHASE2_AUTH:
-		value = nil
+		valueJSON = `""`
 	case NM_SETTING_802_1X_PHASE2_AUTHEAP:
-		value = nil
+		valueJSON = `""`
 	case NM_SETTING_802_1X_PHASE2_CA_CERT:
-		value = make([]byte, 0)
+		valueJSON = `""`
 	case NM_SETTING_802_1X_PHASE2_CA_PATH:
-		value = nil
+		valueJSON = `""`
 	case NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH:
-		value = nil
+		valueJSON = `""`
 	case NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES:
-		value = make([]string, 0)
+		valueJSON = `null`
 	case NM_SETTING_802_1X_PHASE2_CLIENT_CERT:
-		value = make([]byte, 0)
+		valueJSON = `""`
 	case NM_SETTING_802_1X_PASSWORD:
-		value = nil
+		valueJSON = `""`
 	case NM_SETTING_802_1X_PASSWORD_FLAGS:
-		value = 0
+		valueJSON = `0`
 	case NM_SETTING_802_1X_PASSWORD_RAW:
-		// value = make([]byte, 0)
-		value = nil
+		valueJSON = `""`
 	case NM_SETTING_802_1X_PASSWORD_RAW_FLAGS:
-		value = 0
+		valueJSON = `0`
 	case NM_SETTING_802_1X_PRIVATE_KEY:
-		value = make([]byte, 0)
+		valueJSON = `""`
 	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD:
-		value = nil
+		valueJSON = `""`
 	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS:
-		value = 0
+		valueJSON = `0`
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY:
-		value = make([]byte, 0)
+		valueJSON = `""`
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD:
-		value = nil
+		valueJSON = `""`
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS:
-		value = 0
+		valueJSON = `0`
 	case NM_SETTING_802_1X_PIN:
-		value = nil
+		valueJSON = `""`
 	case NM_SETTING_802_1X_PIN_FLAGS:
-		value = 0
+		valueJSON = `0`
 	case NM_SETTING_802_1X_SYSTEM_CA_CERTS:
-		value = false
+		valueJSON = `false`
 	}
 	return
 }
