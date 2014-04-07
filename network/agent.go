@@ -39,10 +39,17 @@ func fillSecret(settingName string, key string) map[string]map[string]dbus.Varia
 }
 
 func (a *Agent) GetSecrets(connection map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath, settingName string, hints []string, flags uint32) map[string]map[string]dbus.Variant {
-	LOGGER.Info("GetSecrtes:", connectionPath, settingName, hints, flags)
+	LOGGER.Info("GetSecrets:", connectionPath, settingName, hints, flags)
 	keyId := mapKey{connectionPath, settingName}
-	if keyValue, ok := a.savedKeys[keyId]; ok && (flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_REQUEST_NEW == 0) {
-		return keyValue
+
+	// TODO fixme
+	// if keyValue, ok := a.savedKeys[keyId]; ok && (flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_REQUEST_NEW == 0) {
+	// LOGGER.Debug("GetSecrets return ", keyValue) // TODO test
+	// return keyValue
+	// }
+	if flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_USER_REQUESTED == 0 {
+		LOGGER.Debug("GetSecrets return") // TODO test
+		return invalidKey
 	}
 
 	if flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_ALLOW_INTERACTION == 0 {
@@ -70,6 +77,7 @@ func (a *Agent) GetSecrets(connection map[string]map[string]dbus.Variant, connec
 	return invalidKey
 }
 func (a *Agent) createPendingKey(keyId mapKey, connectionId string) chan string {
+	LOGGER.Debug("createPendingKey:", keyId, connectionId) // TODO test
 	if _Manager.NeedSecrets != nil {
 		defer _Manager.NeedSecrets(string(keyId.path), keyId.name, connectionId)
 	} else {
@@ -88,13 +96,16 @@ func (a *Agent) CancelGetSecrtes(connectionPath dbus.ObjectPath, settingName str
 	} else {
 		LOGGER.Warning("CancelGetSecrtes an unknow PendingKey:", keyId)
 	}
+	LOGGER.Info("CancelGetSecrtes")
 }
 
 func (a *Agent) SaveSecrets(connection map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath) {
-	if _, ok := connection["802-11-wireless-security"]; ok {
-		keyId := mapKey{connectionPath, "802-11-wireless-security"}
-		a.savedKeys[keyId] = connection
-	}
+	// TODO fixme
+	// if _, ok := connection["802-11-wireless-security"]; ok {
+	// keyId := mapKey{connectionPath, "802-11-wireless-security"}
+	// a.savedKeys[keyId] = connection
+	// LOGGER.Debug("SaveSecrets:", connection, connectionPath) // TODO test
+	// }
 	LOGGER.Info("SaveSecretes")
 }
 
