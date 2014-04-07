@@ -12,9 +12,9 @@ type ConnectionSession struct {
 	data        _ConnectionData
 	connType    string
 
-	CurrentUUID string // TODO hide property
+	CurrentUUID string
 
-	AllowSave bool // TODO really need?
+	AllowSave bool // TODO really needed?
 
 	// 前端只显示此列表中的字段, 会跟随当前正在编辑的值而改变
 	// TODO more documentation
@@ -155,7 +155,7 @@ func (session *ConnectionSession) listKeys(page string) (keys []string) {
 	case pageGeneral:
 		keys = getSettingConnectionAvailableKeys(session.data)
 	case pageEthernet:
-
+		keys = getSettingWiredAvailableKeys(session.data)
 	case pageWifi:
 		keys = getSettingWirelessAvailableKeys(session.data)
 	case pageIPv4:
@@ -265,28 +265,8 @@ func (session *ConnectionSession) SetKey(page, key, value string) {
 // 	return
 // }
 
-// TODO remove
-//仅仅调试使用，返回某个页面支持的字段。 因为字段如何安排(位置、我们是否要提供这个字段)是由前端决定的。
-//*****在设计前端显示内容的时候和这个返回值关联很大*****
-// DebugListKeyss return all keys of current page, only for debugging.
-// func (session *ConnectionSession) DebugListKeys(page string) []string {
-// 	// TODO
-// 	return session.listKeys(page)
-// }
-
 // DebugConnectionTypes return all supported connection types, only for debugging.
 // TODO move to manager
 func (session *ConnectionSession) DebugListSupportedConnectionTypes() []string {
 	return supportedConnectionTypes
 }
-
-// TODO
-// func (session *ConnectionSession) DebugGetKeyType(key string) ktypeDescription {
-// 	return ktypeDescriptions[0]
-// }
-
-// TODO panic error
-// func (*Manager) DebugListKeyTypes() (uint32, string) {
-// 	LOGGER.Debug(ktypeDescriptions)
-// 	return ktypeDescriptions[0].t, ktypeDescriptions[0].desc
-// }
