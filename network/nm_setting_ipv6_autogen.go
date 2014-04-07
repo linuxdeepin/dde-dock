@@ -94,6 +94,41 @@ func generalGetSettingIp6ConfigKeyJSON(data _ConnectionData, key string) (value 
 	return
 }
 
+// Check if key exists
+func isSettingIp6ConfigMethodExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_METHOD)
+}
+func isSettingIp6ConfigDhcpHostnameExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME)
+}
+func isSettingIp6ConfigDnsExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS)
+}
+func isSettingIp6ConfigDnsSearchExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS_SEARCH)
+}
+func isSettingIp6ConfigAddressesExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ADDRESSES)
+}
+func isSettingIp6ConfigRoutesExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTES)
+}
+func isSettingIp6ConfigIgnoreAutoRoutesExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES)
+}
+func isSettingIp6ConfigIgnoreAutoDnsExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS)
+}
+func isSettingIp6ConfigNeverDefaultExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_NEVER_DEFAULT)
+}
+func isSettingIp6ConfigMayFailExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_MAY_FAIL)
+}
+func isSettingIp6ConfigIp6PrivacyExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IP6_PRIVACY)
+}
+
 // Getter
 func getSettingIp6ConfigMethod(data _ConnectionData) (value string) {
 	value, _ = getConnectionDataKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_METHOD).(string)

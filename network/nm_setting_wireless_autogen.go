@@ -112,6 +112,50 @@ func generalGetSettingWirelessKeyJSON(data _ConnectionData, key string) (value s
 	return
 }
 
+// Check if key exists
+func isSettingWirelessSsidExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SSID)
+}
+func isSettingWirelessModeExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MODE)
+}
+func isSettingWirelessBandExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_BAND)
+}
+func isSettingWirelessChannelExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_CHANNEL)
+}
+func isSettingWirelessBssidExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_BSSID)
+}
+func isSettingWirelessRateExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_RATE)
+}
+func isSettingWirelessTxPowerExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_TX_POWER)
+}
+func isSettingWirelessMacAddressExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MAC_ADDRESS)
+}
+func isSettingWirelessClonedMacAddressExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS)
+}
+func isSettingWirelessMacAddressBlacklistExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST)
+}
+func isSettingWirelessMtuExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MTU)
+}
+func isSettingWirelessSeenBssidsExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEEN_BSSIDS)
+}
+func isSettingWirelessSecExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEC)
+}
+func isSettingWirelessHiddenExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_HIDDEN)
+}
+
 // Getter
 func getSettingWirelessSsid(data _ConnectionData) (value []byte) {
 	value, _ = getConnectionDataKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SSID).([]byte)

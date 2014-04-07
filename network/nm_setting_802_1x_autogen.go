@@ -220,6 +220,104 @@ func generalGetSetting8021xKeyJSON(data _ConnectionData, key string) (value stri
 	return
 }
 
+// Check if key exists
+func isSetting8021xEapExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_EAP)
+}
+func isSetting8021xIdentityExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY)
+}
+func isSetting8021xAnonymousIdentityExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ANONYMOUS_IDENTITY)
+}
+func isSetting8021xPacFileExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PAC_FILE)
+}
+func isSetting8021xCaCertExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT)
+}
+func isSetting8021xCaPathExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_PATH)
+}
+func isSetting8021xSubjectMatchExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_SUBJECT_MATCH)
+}
+func isSetting8021xAltsubjectMatchesExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ALTSUBJECT_MATCHES)
+}
+func isSetting8021xClientCertExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT)
+}
+func isSetting8021xPhase1PeapverExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPVER)
+}
+func isSetting8021xPhase1PeaplabelExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPLABEL)
+}
+func isSetting8021xPhase1FastProvisioningExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING)
+}
+func isSetting8021xPhase2AuthExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTH)
+}
+func isSetting8021xPhase2AutheapExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTHEAP)
+}
+func isSetting8021xPhase2CaCertExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CA_CERT)
+}
+func isSetting8021xPhase2CaPathExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CA_PATH)
+}
+func isSetting8021xPhase2SubjectMatchExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH)
+}
+func isSetting8021xPhase2AltsubjectMatchesExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES)
+}
+func isSetting8021xPhase2ClientCertExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CLIENT_CERT)
+}
+func isSetting8021xPasswordExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD)
+}
+func isSetting8021xPasswordFlagsExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_FLAGS)
+}
+func isSetting8021xPasswordRawExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW)
+}
+func isSetting8021xPasswordRawFlagsExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW_FLAGS)
+}
+func isSetting8021xPrivateKeyExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY)
+}
+func isSetting8021xPrivateKeyPasswordExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD)
+}
+func isSetting8021xPrivateKeyPasswordFlagsExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS)
+}
+func isSetting8021xPhase2PrivateKeyExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY)
+}
+func isSetting8021xPhase2PrivateKeyPasswordExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD)
+}
+func isSetting8021xPhase2PrivateKeyPasswordFlagsExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS)
+}
+func isSetting8021xPinExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PIN)
+}
+func isSetting8021xPinFlagsExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PIN_FLAGS)
+}
+func isSetting8021xSystemCaCertsExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_SYSTEM_CA_CERTS)
+}
+
 // Getter
 func getSetting8021xEap(data _ConnectionData) (value []string) {
 	value, _ = getConnectionDataKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_EAP).([]string)

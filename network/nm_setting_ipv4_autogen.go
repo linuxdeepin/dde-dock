@@ -100,6 +100,44 @@ func generalGetSettingIp4ConfigKeyJSON(data _ConnectionData, key string) (value 
 	return
 }
 
+// Check if key exists
+func isSettingIp4ConfigMethodExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_METHOD)
+}
+func isSettingIp4ConfigDnsExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS)
+}
+func isSettingIp4ConfigDnsSearchExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_SEARCH)
+}
+func isSettingIp4ConfigAddressesExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES)
+}
+func isSettingIp4ConfigRoutesExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTES)
+}
+func isSettingIp4ConfigIgnoreAutoRoutesExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES)
+}
+func isSettingIp4ConfigIgnoreAutoDnsExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS)
+}
+func isSettingIp4ConfigDhcpClientIdExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID)
+}
+func isSettingIp4ConfigDhcpSendHostnameExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME)
+}
+func isSettingIp4ConfigDhcpHostnameExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME)
+}
+func isSettingIp4ConfigNeverDefaultExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_NEVER_DEFAULT)
+}
+func isSettingIp4ConfigMayFailExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_MAY_FAIL)
+}
+
 // Getter
 func getSettingIp4ConfigMethod(data _ConnectionData) (value string) {
 	value, _ = getConnectionDataKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_METHOD).(string)

@@ -94,6 +94,41 @@ func generalGetSettingConnectionKeyJSON(data _ConnectionData, key string) (value
 	return
 }
 
+// Check if key exists
+func isSettingConnectionIdExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_ID)
+}
+func isSettingConnectionUuidExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_UUID)
+}
+func isSettingConnectionTypeExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TYPE)
+}
+func isSettingConnectionPermissionsExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_PERMISSIONS)
+}
+func isSettingConnectionAutoconnectExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_AUTOCONNECT)
+}
+func isSettingConnectionTimestampExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TIMESTAMP)
+}
+func isSettingConnectionReadOnlyExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_READ_ONLY)
+}
+func isSettingConnectionZoneExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_ZONE)
+}
+func isSettingConnectionMasterExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_MASTER)
+}
+func isSettingConnectionSlaveTypeExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_SLAVE_TYPE)
+}
+func isSettingConnectionSecondariesExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_SECONDARIES)
+}
+
 // Getter
 func getSettingConnectionId(data _ConnectionData) (value string) {
 	value, _ = getConnectionDataKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_ID).(string)

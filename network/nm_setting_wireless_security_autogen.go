@@ -130,6 +130,59 @@ func generalGetSettingWirelessSecurityKeyJSON(data _ConnectionData, key string) 
 	return
 }
 
+// Check if key exists
+func isSettingWirelessSecurityKeyMgmtExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT)
+}
+func isSettingWirelessSecurityWepTxKeyidxExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_TX_KEYIDX)
+}
+func isSettingWirelessSecurityAuthAlgExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_AUTH_ALG)
+}
+func isSettingWirelessSecurityProtoExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PROTO)
+}
+func isSettingWirelessSecurityPairwiseExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PAIRWISE)
+}
+func isSettingWirelessSecurityGroupExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_GROUP)
+}
+func isSettingWirelessSecurityLeapUsernameExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME)
+}
+func isSettingWirelessSecurityWepKey0Exists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY0)
+}
+func isSettingWirelessSecurityWepKey1Exists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY1)
+}
+func isSettingWirelessSecurityWepKey2Exists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY2)
+}
+func isSettingWirelessSecurityWepKey3Exists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY3)
+}
+func isSettingWirelessSecurityWepKeyFlagsExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY_FLAGS)
+}
+func isSettingWirelessSecurityWepKeyTypeExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE)
+}
+func isSettingWirelessSecurityPskExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PSK)
+}
+func isSettingWirelessSecurityPskFlagsExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS)
+}
+func isSettingWirelessSecurityLeapPasswordExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD)
+}
+func isSettingWirelessSecurityLeapPasswordFlagsExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS)
+}
+
 // Getter
 func getSettingWirelessSecurityKeyMgmt(data _ConnectionData) (value string) {
 	value, _ = getConnectionDataKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT).(string)

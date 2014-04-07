@@ -94,6 +94,41 @@ func generalGetSettingWiredKeyJSON(data _ConnectionData, key string) (value stri
 	return
 }
 
+// Check if key exists
+func isSettingWiredPortExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_PORT)
+}
+func isSettingWiredSpeedExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_SPEED)
+}
+func isSettingWiredDuplexExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_DUPLEX)
+}
+func isSettingWiredAutoNegotiateExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_AUTO_NEGOTIATE)
+}
+func isSettingWiredMacAddressExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS)
+}
+func isSettingWiredClonedMacAddressExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_CLONED_MAC_ADDRESS)
+}
+func isSettingWiredMacAddressBlacklistExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST)
+}
+func isSettingWiredMtuExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MTU)
+}
+func isSettingWiredS390SubchannelsExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_SUBCHANNELS)
+}
+func isSettingWiredS390NettypeExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_NETTYPE)
+}
+func isSettingWiredS390OptionsExists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_OPTIONS)
+}
+
 // Getter
 func getSettingWiredPort(data _ConnectionData) (value string) {
 	value, _ = getConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_PORT).(string)

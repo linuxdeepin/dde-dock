@@ -43,6 +43,14 @@ func generalGet{{$fieldFuncBaseName}}KeyJSON(data _ConnectionData, key string) (
 }
 `
 
+// check if key exists
+const tplCheckExists = `
+// Check if key exists{{$fieldName := .FieldName}}{{range $index, $key := .Keys}}
+func is{{$key.Name | ToKeyFuncBaseName}}Exists(data _ConnectionData) bool {
+	return isConnectionDataKeyExists(data, {{$fieldName}}, {{$key.Name}})
+}{{end}}
+`
+
 // getter
 const tplGetter = `
 // Getter{{$fieldName := .FieldName}}{{range $index, $key := .Keys}}
