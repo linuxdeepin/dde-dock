@@ -27,7 +27,7 @@ const (
 	NM_SETTING_IP6_CONFIG_METHOD_SHARED     = "shared"
 )
 
-// TODO Get available keys
+// Get available keys
 func getSettingIp6ConfigAvailableKeys(data _ConnectionData) (keys []string) {
 	method := getSettingIp6ConfigMethod(data)
 	switch method {
@@ -59,7 +59,7 @@ func getSettingIp6ConfigAvailableKeys(data _ConnectionData) (keys []string) {
 	return
 }
 
-// TODO Get available values
+// Get available values
 func getSettingIp6ConfigAvailableValues(key string) (values []string, customizable bool) {
 	customizable = true
 	switch key {
@@ -77,9 +77,29 @@ func getSettingIp6ConfigAvailableValues(key string) (values []string, customizab
 	return
 }
 
-// TODO Check whether the values are correct
+// Check whether the values are correct
 func checkSettingIp6ConfigValues(data _ConnectionData) (errs map[string]string) {
 	errs = make(map[string]string)
+
+	// check NM_SETTING_IP6_CONFIG_METHOD
+	if !isSettingIp6ConfigMethodExists(data) {
+		errs[NM_SETTING_IP6_CONFIG_METHOD] = NM_KEY_ERROR_MISSING_VALUE
+		return
+	}
+	method := getSettingIp6ConfigMethod(data)
+	switch method {
+	default:
+		errs[NM_SETTING_IP6_CONFIG_METHOD] = NM_KEY_ERROR_INVALID_VALUE
+		return
+	case NM_SETTING_IP6_CONFIG_METHOD_IGNORE:
+		// TODO
+	case NM_SETTING_IP6_CONFIG_METHOD_AUTO:
+	case NM_SETTING_IP6_CONFIG_METHOD_DHCP: // ignore
+	case NM_SETTING_IP6_CONFIG_METHOD_LINK_LOCAL: // ignore
+	case NM_SETTING_IP6_CONFIG_METHOD_MANUAL:
+	case NM_SETTING_IP6_CONFIG_METHOD_SHARED: // ignore
+	}
+
 	return
 }
 

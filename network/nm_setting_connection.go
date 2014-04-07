@@ -38,7 +38,7 @@ const (
 	// update the connection timestamp periodically when the
 	// connection is active to ensure that an active connection has
 	// the latest timestamp.
-	NM_SETTING_CONNECTION_TIMESTAMP = "timestamp" // TODO
+	NM_SETTING_CONNECTION_TIMESTAMP = "timestamp"
 
 	// If TRUE, the connection is read-only and cannot be changed by
 	// the user or any other mechanism. This is normally set for
@@ -79,24 +79,29 @@ const (
 	NM_SETTING_CONNECTION_SECONDARIES = "secondaries"
 )
 
-// TODO Get available keys
+// Get available keys
 func getSettingConnectionAvailableKeys(data _ConnectionData) (keys []string) {
 	keys = []string{
 		NM_SETTING_CONNECTION_ID,
 		NM_SETTING_CONNECTION_AUTOCONNECT,
-		NM_SETTING_CONNECTION_PERMISSIONS,
 	}
 	return
 }
 
-// TODO Check whether the values are correct
+// Check whether the values are correct
 func checkSettingConnectionValues(data _ConnectionData) (errs map[string]string) {
 	errs = make(map[string]string)
+
+	// check NM_SETTING_CONNECTION_ID
+	id := getSettingConnectionId(data)
+	if len(id) == 0 {
+		errs[NM_SETTING_CONNECTION_ID] = NM_KEY_ERROR_MISSING_VALUE
+	}
+
 	return
 }
 
 // Set JSON value generally
-// TODO use logic setter
 func generalSetSettingConnectionKeyJSON(data _ConnectionData, key, value string) {
 	switch key {
 	default:

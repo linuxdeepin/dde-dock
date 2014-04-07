@@ -140,7 +140,7 @@ const (
 	NM_SETTING_IP4_CONFIG_METHOD_DISABLED = "disabled"
 )
 
-// TODO Get available keys
+// Get available keys
 func getSettingIp4ConfigAvailableKeys(data _ConnectionData) (keys []string) {
 	method := getSettingIp4ConfigMethod(data)
 	switch method {
@@ -167,7 +167,7 @@ func getSettingIp4ConfigAvailableKeys(data _ConnectionData) (keys []string) {
 	return
 }
 
-// TODO Get available values
+// Get available values
 func getSettingIp4ConfigAvailableValues(key string) (values []string, customizable bool) {
 	customizable = true
 	switch key {
@@ -184,84 +184,81 @@ func getSettingIp4ConfigAvailableValues(key string) (values []string, customizab
 	return
 }
 
-// TODO Check whether the values are correct
+// Check whether the values are correct
 func checkSettingIp4ConfigValues(data _ConnectionData) (errs map[string]string) {
 	errs = make(map[string]string)
-	fieldData, ok := data[fieldIPv4]
-	if !ok {
-		LOGGER.Warning("field ipv4 does not exist")
+
+	// check NM_SETTING_IP4_CONFIG_METHOD
+	if !isSettingIp4ConfigMethodExists(data) {
+		errs[NM_SETTING_IP4_CONFIG_METHOD] = NM_KEY_ERROR_MISSING_VALUE
 		return
 	}
-	if len(fieldData) == 0 {
-		LOGGER.Warning("field ipv4 is empty")
+	method := getSettingIp4ConfigMethod(data)
+	switch method {
+	default:
+		errs[NM_SETTING_IP4_CONFIG_METHOD] = NM_KEY_ERROR_INVALID_VALUE
+		return
+	case NM_SETTING_IP4_CONFIG_METHOD_AUTO:
+	case NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL: // ignore
+		checkSettingIp4MethodConflict(data, errs)
+	case NM_SETTING_IP4_CONFIG_METHOD_MANUAL:
+		// check NM_SETTING_IP4_CONFIG_ADDRESSES
+		errMsg := checkSettingIp4ConfigAddresses(data)
+		if len(errMsg) != 0 {
+			errs[NM_SETTING_IP4_CONFIG_ADDRESSES] = errMsg
+		}
+	case NM_SETTING_IP4_CONFIG_METHOD_SHARED: // ignore
+		checkSettingIp4MethodConflict(data, errs)
+	case NM_SETTING_IP4_CONFIG_METHOD_DISABLED: // ignore
+		checkSettingIp4MethodConflict(data, errs)
+	}
+
+	return
+}
+
+func checkSettingIp4MethodConflict(data _ConnectionData, errs map[string]string) {
+	// check NM_SETTING_IP4_CONFIG_DNS
+	if isSettingIp4ConfigDnsExists(data) {
+		errs[NM_SETTING_IP4_CONFIG_DNS] = fmt.Sprintf(NM_KEY_ERROR_IP4_METHOD_CONFLICT, NM_SETTING_IP4_CONFIG_DNS)
+	}
+
+	// check NM_SETTING_IP4_CONFIG_ADDRESSES
+	if isSettingIp4ConfigAddressesExists(data) {
+		errs[NM_SETTING_IP4_CONFIG_ADDRESSES] = fmt.Sprintf(NM_KEY_ERROR_IP4_METHOD_CONFLICT, NM_SETTING_IP4_CONFIG_ADDRESSES)
+	}
+
+	// check NM_SETTING_IP4_CONFIG_DNS_SEARCH
+	if isSettingIp4ConfigDnsSearchExists(data) {
+		errs[NM_SETTING_IP4_CONFIG_DNS_SEARCH] = fmt.Sprintf(NM_KEY_ERROR_IP4_METHOD_CONFLICT, NM_SETTING_IP4_CONFIG_DNS_SEARCH)
+	}
+
+	// check NM_SETTING_IP4_CONFIG_ROUTES:
+	if isSettingIp4ConfigRoutesExists(data) {
+		errs[NM_SETTING_IP4_CONFIG_ROUTES] = fmt.Sprintf(NM_KEY_ERROR_IP4_METHOD_CONFLICT, NM_SETTING_IP4_CONFIG_ROUTES)
+	}
+}
+
+func checkSettingIp4ConfigAddresses(data _ConnectionData) (errMsg string) {
+	if !isSettingIp4ConfigAddressesExists(data) {
+		errMsg = NM_KEY_ERROR_MISSING_VALUE
 		return
 	}
 
-	for key, _ := range fieldData {
-		availableValues, customizable := getSettingIp4ConfigAvailableValues(key)
-		wrappedValue := generalGetSettingIp4ConfigKeyJSON(data, key) // TODO
-		if !customizable && !isStringInArray(wrappedValue, availableValues) {
-			errs[key] = "invalid value: " + wrappedValue
-			continue
+	addresses := getSettingIp4ConfigAddresses(data)
+	if len(addresses) == 0 {
+		errMsg = NM_KEY_ERROR_MISSING_VALUE
+		return
+	}
+	for _, addr := range addresses {
+		if len(addr) != 3 {
+			errMsg = NM_KEY_ERROR_IP4_ADDRESSES_STRUCT
+			return
 		}
-
-		method := getSettingIp4ConfigMethod(data)
-		methodSharedLinkloacalDisable := []string{NM_SETTING_IP4_CONFIG_METHOD_SHARED,
-			NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL,
-			NM_SETTING_IP4_CONFIG_METHOD_DISABLED}
-		switch key {
-		case NM_SETTING_IP4_CONFIG_METHOD:
-		case NM_SETTING_IP4_CONFIG_DNS:
-			if isStringInArray(method, methodSharedLinkloacalDisable) {
-				errs[key] = fmt.Sprintf(`key "%s" cannot be used with the 'shared', 'link-local', or 'disabled' methods`, key)
-				continue
-			}
-			// TODO
-		case NM_SETTING_IP4_CONFIG_DNS_SEARCH: // TODO
-			if isStringInArray(method, methodSharedLinkloacalDisable) {
-				errs[key] = fmt.Sprintf(`key "%s" cannot be used with the 'shared', 'link-local', or 'disabled' methods`, key)
-				continue
-			}
-		case NM_SETTING_IP4_CONFIG_ADDRESSES:
-			if isStringInArray(method, methodSharedLinkloacalDisable) {
-				errs[key] = fmt.Sprintf(`key "%s" cannot be used with the 'shared', 'link-local', or 'disabled' methods`, key)
-				continue
-			}
-
-			// if method is "manual", addresses cannot be empty
-			if method == NM_SETTING_IP4_CONFIG_METHOD_MANUAL && len(wrappedValue) == 0 {
-				errs[key] = "ip address cannot be empty"
-				continue
-			}
-
-			// TODO check address format
-		case NM_SETTING_IP4_CONFIG_ROUTES:
-			if isStringInArray(method, methodSharedLinkloacalDisable) {
-				errs[key] = fmt.Sprintf(`key "%s" cannot be used with the 'shared', 'link-local', or 'disabled' methods`, key)
-				continue
-			}
-			// TODO
-		case NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES: // ignore
-		case NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS: // ignore
-		case NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID: // ignore
-		case NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME: // ignore
-		case NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME: // ignore
-		case NM_SETTING_IP4_CONFIG_NEVER_DEFAULT: // ignore
-		case NM_SETTING_IP4_CONFIG_MAY_FAIL: // ignore
+		// check prefix
+		if addr[1] < 1 || addr[1] > 32 {
+			errMsg = NM_KEY_ERROR_IP4_ADDRESSES_PREFIX
 		}
 	}
-
-	// method := getSettingIp4ConfigMethodJSON(data)
-	// switch method {
-	// case NM_SETTING_IP4_CONFIG_METHOD_AUTO:
-	// 	// removeSettingIp4ConfigAddresses(data)
-	// case NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL: // ignore
-	// case NM_SETTING_IP4_CONFIG_METHOD_MANUAL:
-	// case NM_SETTING_IP4_CONFIG_METHOD_SHARED: // ignore
-	// case NM_SETTING_IP4_CONFIG_METHOD_DISABLED:
-	// 	// removeSettingIp4ConfigDns(data)
-	// 	// removeSettingIp4ConfigAddresses(data)
-	// }
 	return
 }
 

@@ -93,7 +93,7 @@ func newWireedConnectionData(id, uuid string) (data _ConnectionData) {
 	return
 }
 
-// TODO Get available keys
+// Get available keys
 func getSettingWiredAvailableKeys(data _ConnectionData) (keys []string) {
 	keys = []string{
 		NM_SETTING_WIRED_MAC_ADDRESS,
@@ -109,7 +109,6 @@ func checkSettingWiredValues(data _ConnectionData) (errs map[string]string) {
 	return
 }
 
-// TODO use logic setter
 func generalSetSettingWiredKeyJSON(data _ConnectionData, key, value string) {
 	switch key {
 	default:

@@ -53,6 +53,9 @@ const (
 
 func (*Utils) TestGetSetConnectionData(c *C) {
 	data := make(_ConnectionData)
+
+	c.Check(getSettingConnectionId(data), Equals, "")
+
 	addConnectionDataField(data, fieldConnection)
 	setSettingConnectionId(data, testConnectionId)
 	setSettingConnectionUuid(data, testConnectionUuid)
