@@ -91,7 +91,10 @@ func NewConnectionSessionByOpen(uuid string) (session *ConnectionSession, err er
 
 // Save save current connection session.
 func (session *ConnectionSession) Save() bool {
-	if !session.AllowSave {
+	// if !session.AllowSave {
+	// return false
+	// }
+	if session.isErrorOccured() {
 		return false
 	}
 
