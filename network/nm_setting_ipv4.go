@@ -265,47 +265,43 @@ func checkSettingIp4ConfigAddresses(data _ConnectionData) (errMsg string) {
 // TODO Adder
 
 // Set JSON value generally
-// TODO use logic setter
-func generalSetSettingIp4ConfigKeyJSON(data _ConnectionData, key, value string) {
+func generalSetSettingIp4ConfigKeyJSON(data _ConnectionData, key, valueJSON string) {
 	switch key {
 	default:
 		LOGGER.Error("generalSetSettingIp4ConfigKey: invalide key", key)
 	case NM_SETTING_IP4_CONFIG_METHOD:
-		logicSetSettingIp4ConfigMethodJSON(data, value) // TODO
+		logicSetSettingIp4ConfigMethodJSON(data, valueJSON)
 	case NM_SETTING_IP4_CONFIG_DNS:
-		setSettingIp4ConfigDnsJSON(data, value)
+		setSettingIp4ConfigDnsJSON(data, valueJSON)
 	case NM_SETTING_IP4_CONFIG_DNS_SEARCH:
-		setSettingIp4ConfigDnsSearchJSON(data, value)
+		setSettingIp4ConfigDnsSearchJSON(data, valueJSON)
 	case NM_SETTING_IP4_CONFIG_ADDRESSES:
-		setSettingIp4ConfigAddressesJSON(data, value)
+		setSettingIp4ConfigAddressesJSON(data, valueJSON)
 	case NM_SETTING_IP4_CONFIG_ROUTES:
-		setSettingIp4ConfigRoutesJSON(data, value)
+		setSettingIp4ConfigRoutesJSON(data, valueJSON)
 	case NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES:
-		setSettingIp4ConfigIgnoreAutoRoutesJSON(data, value)
+		setSettingIp4ConfigIgnoreAutoRoutesJSON(data, valueJSON)
 	case NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS:
-		setSettingIp4ConfigIgnoreAutoDnsJSON(data, value)
+		setSettingIp4ConfigIgnoreAutoDnsJSON(data, valueJSON)
 	case NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID:
-		setSettingIp4ConfigDhcpClientIdJSON(data, value)
+		setSettingIp4ConfigDhcpClientIdJSON(data, valueJSON)
 	case NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME:
-		setSettingIp4ConfigDhcpSendHostnameJSON(data, value)
+		setSettingIp4ConfigDhcpSendHostnameJSON(data, valueJSON)
 	case NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME:
-		setSettingIp4ConfigDhcpHostnameJSON(data, value)
+		setSettingIp4ConfigDhcpHostnameJSON(data, valueJSON)
 	case NM_SETTING_IP4_CONFIG_NEVER_DEFAULT:
-		setSettingIp4ConfigNeverDefaultJSON(data, value)
+		setSettingIp4ConfigNeverDefaultJSON(data, valueJSON)
 	case NM_SETTING_IP4_CONFIG_MAY_FAIL:
-		setSettingIp4ConfigMayFailJSON(data, value)
+		setSettingIp4ConfigMayFailJSON(data, valueJSON)
 	}
 	return
 }
 
-// TODO Logic setter
+// Logic setter
 func logicSetSettingIp4ConfigMethodJSON(data _ConnectionData, valueJSON string) {
-	valueInterface, err := jsonToKeyValue(valueJSON, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_METHOD))
-	if err != nil {
-		LOGGER.Error("logicSetSettingIp4ConfigMethodJSON:", err)
-		return
-	}
-	value, _ := valueInterface.(string)
+	setSettingIp4ConfigMethodJSON(data, valueJSON)
+
+	value := getSettingIp4ConfigMethod(data)
 	logicSetSettingIp4ConfigMethod(data, value)
 	return
 }
@@ -314,11 +310,21 @@ func logicSetSettingIp4ConfigMethod(data _ConnectionData, value string) {
 	case NM_SETTING_IP4_CONFIG_METHOD_AUTO:
 		removeSettingIp4ConfigAddresses(data)
 	case NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL: // ignore
+		removeSettingIp4ConfigDns(data)
+		removeSettingIp4ConfigDnsSearch(data)
+		removeSettingIp4ConfigAddresses(data)
+		removeSettingIp4ConfigRoutes(data)
 	case NM_SETTING_IP4_CONFIG_METHOD_MANUAL:
 	case NM_SETTING_IP4_CONFIG_METHOD_SHARED: // ignore
-	case NM_SETTING_IP4_CONFIG_METHOD_DISABLED:
 		removeSettingIp4ConfigDns(data)
+		removeSettingIp4ConfigDnsSearch(data)
 		removeSettingIp4ConfigAddresses(data)
+		removeSettingIp4ConfigRoutes(data)
+	case NM_SETTING_IP4_CONFIG_METHOD_DISABLED: // ignore
+		removeSettingIp4ConfigDns(data)
+		removeSettingIp4ConfigDnsSearch(data)
+		removeSettingIp4ConfigAddresses(data)
+		removeSettingIp4ConfigRoutes(data)
 	}
 	setSettingIp4ConfigMethod(data, value)
 	return
