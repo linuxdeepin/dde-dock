@@ -1,5 +1,9 @@
 package main
 
+import (
+	"fmt"
+)
+
 const NM_SETTING_WIRELESS_SETTING_NAME = "802-11-wireless"
 
 const (
@@ -179,46 +183,86 @@ func getSettingWirelessAvailableKeys(data _ConnectionData) (keys []string) {
 	return
 }
 
-// TODO Check whether the values are correct
+// Get available values
+func getSettingWirelessAvailableValues(key string) (values []string, customizable bool) {
+	customizable = true
+	switch key {
+	case NM_SETTING_WIRELESS_MODE:
+		values = []string{
+			NM_SETTING_WIRELESS_MODE_ADHOC,
+			NM_SETTING_WIRELESS_MODE_AP,
+			NM_SETTING_WIRELESS_MODE_INFRA,
+		}
+		customizable = false
+	case NM_SETTING_WIRELESS_SEC:
+		values = []string{
+			fieldWirelessSecurity,
+			field8021x,
+		}
+		customizable = true
+	}
+	return
+}
+
+// Check whether the values are correct
 func checkSettingWirelessValues(data _ConnectionData) (errs map[string]string) {
 	errs = make(map[string]string)
+
+	// check ssid
+	if !isSettingWirelessSsidExists(data) {
+		rememberError(errs, NM_SETTING_WIRELESS_SSID, NM_KEY_ERROR_MISSING_VALUE)
+		return
+	}
+	ssid := getSettingWirelessSsid(data)
+	if len(ssid) == 0 {
+		rememberError(errs, NM_SETTING_WIRELESS_SSID, NM_KEY_ERROR_EMPTY_VALUE)
+		return
+	}
+
+	// check security
+	if isSettingWirelessSecExists(data) {
+		securityField := getSettingWirelessSec(data)
+		if !isConnectionDataFieldExists(data, securityField) {
+			rememberError(errs, NM_SETTING_WIRELESS_SEC, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, securityField))
+		}
+	}
+
 	return
 }
 
 // Set JSON value generally
-// TODO use logic setter
-func generalSetSettingWirelessKeyJSON(data _ConnectionData, key, value string) {
+func generalSetSettingWirelessKeyJSON(data _ConnectionData, key, valueJSON string) {
 	switch key {
 	default:
 		LOGGER.Error("generalSetSettingWirelessKey: invalide key", key)
 	case NM_SETTING_WIRELESS_SSID:
-		setSettingWirelessSsidJSON(data, value)
+		setSettingWirelessSsidJSON(data, valueJSON)
 	case NM_SETTING_WIRELESS_MODE:
-		setSettingWirelessModeJSON(data, value)
+		setSettingWirelessModeJSON(data, valueJSON)
 	case NM_SETTING_WIRELESS_BAND:
-		setSettingWirelessBandJSON(data, value)
+		setSettingWirelessBandJSON(data, valueJSON)
 	case NM_SETTING_WIRELESS_CHANNEL:
-		setSettingWirelessChannelJSON(data, value)
+		setSettingWirelessChannelJSON(data, valueJSON)
 	case NM_SETTING_WIRELESS_BSSID:
-		setSettingWirelessBssidJSON(data, value)
+		setSettingWirelessBssidJSON(data, valueJSON)
 	case NM_SETTING_WIRELESS_RATE:
-		setSettingWirelessRateJSON(data, value)
+		setSettingWirelessRateJSON(data, valueJSON)
 	case NM_SETTING_WIRELESS_TX_POWER:
-		setSettingWirelessTxPowerJSON(data, value)
+		setSettingWirelessTxPowerJSON(data, valueJSON)
 	case NM_SETTING_WIRELESS_MAC_ADDRESS:
-		setSettingWirelessMacAddressJSON(data, value)
+		setSettingWirelessMacAddressJSON(data, valueJSON)
 	case NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS:
-		setSettingWirelessClonedMacAddressJSON(data, value)
+		setSettingWirelessClonedMacAddressJSON(data, valueJSON)
 	case NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST:
-		setSettingWirelessMacAddressBlacklistJSON(data, value)
+		setSettingWirelessMacAddressBlacklistJSON(data, valueJSON)
 	case NM_SETTING_WIRELESS_MTU:
-		setSettingWirelessMtuJSON(data, value)
+		setSettingWirelessMtuJSON(data, valueJSON)
 	case NM_SETTING_WIRELESS_SEEN_BSSIDS:
-		setSettingWirelessSeenBssidsJSON(data, value)
+		setSettingWirelessSeenBssidsJSON(data, valueJSON)
 	case NM_SETTING_WIRELESS_SEC:
-		setSettingWirelessSecJSON(data, value)
+		setSettingWirelessSecJSON(data, valueJSON)
 	case NM_SETTING_WIRELESS_HIDDEN:
-		setSettingWirelessHiddenJSON(data, value)
+		setSettingWirelessHiddenJSON(data, valueJSON)
 	}
 	return
 }
