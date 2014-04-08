@@ -50,6 +50,12 @@ func getSetting8021xAvailableKeys(data _ConnectionData) (keys []string) {
 	return
 }
 
+// TODO Get available values
+func getSetting8021xAvailableValues(key string) (values []string, customizable bool) {
+	customizable = true
+	return
+}
+
 // TODO Check whether the values are correct
 func checkSetting8021xValues(data _ConnectionData) (errs map[string]string) {
 	errs = make(map[string]string)

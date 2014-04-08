@@ -7,14 +7,14 @@ import (
 )
 
 type ConnectionSession struct {
-	coreObjPath dbus.ObjectPath
-	objPath     dbus.ObjectPath
-	data        _ConnectionData
-	connType    string
+	coreObjPath    dbus.ObjectPath
+	objPath        dbus.ObjectPath
+	data           _ConnectionData
+	connectionType string
 
 	CurrentUUID string
 
-	AllowSave bool // TODO really needed?
+	AllowSave bool // TODO really need?
 
 	// 前端只显示此列表中的字段, 会跟随当前正在编辑的值而改变
 	// TODO more documentation
@@ -35,9 +35,9 @@ func doNewConnectionSession() (session *ConnectionSession) {
 	return session
 }
 
-func NewConnectionSessionByCreate(connType string) (session *ConnectionSession, err error) {
-	if !isStringInArray(connType, supportedConnectionTypes) {
-		err = fmt.Errorf("connection type is out of support: %s", connType)
+func NewConnectionSessionByCreate(connectionType string) (session *ConnectionSession, err error) {
+	if !isStringInArray(connectionType, supportedConnectionTypes) {
+		err = fmt.Errorf("connection type is out of support: %s", connectionType)
 		LOGGER.Error(err)
 		return
 	}
@@ -47,11 +47,17 @@ func NewConnectionSessionByCreate(connType string) (session *ConnectionSession, 
 	session.objPath = dbus.ObjectPath(fmt.Sprintf("/com/deepin/daemon/ConnectionSession/%s", randString(8)))
 
 	// TODO
-	session.connType = connType
+	session.connectionType = connectionType
+	switch session.connectionType {
+	case typeWired:
+		session.data = newWireedConnectionData("", session.CurrentUUID)
+	case typeWireless:
+		session.data = newWirelessConnectionData("", session.CurrentUUID, nil, ApKeyNone)
+	}
 
 	session.updatePropErrors()
 	session.updatePropAvailableKeys()
-	session.updatePropAllowSave(false)
+	// session.updatePropAllowSave(false) // TODO
 
 	return
 }
@@ -77,11 +83,11 @@ func NewConnectionSessionByOpen(uuid string) (session *ConnectionSession, err er
 	if err != nil {
 		return nil, err
 	}
-	session.connType = getSettingConnectionType(session.data)
+	session.connectionType = getSettingConnectionType(session.data)
 
 	session.updatePropErrors()
 	session.updatePropAvailableKeys()
-	session.updatePropAllowSave(false)
+	// session.updatePropAllowSave(false) // TODO
 
 	// TODO
 	LOGGER.Debug("NewConnectionSessionByOpen():", session.data)
@@ -132,7 +138,7 @@ func (session *ConnectionSession) Close() {
 
 //根据CurrentUUID返回此Connection支持的设置页面
 func (session *ConnectionSession) ListPages() (pages []string) {
-	switch session.connType {
+	switch session.connectionType {
 	case typeWired:
 		pages = []string{
 			pageGeneral,
@@ -142,7 +148,7 @@ func (session *ConnectionSession) ListPages() (pages []string) {
 	case typeWireless:
 		pages = []string{
 			pageGeneral,
-			// pageWifi, // TODO
+			// pageWifi, // TODO need when setup adhoc
 			pageIPv4,
 			pageIPv6,
 			pageSecurity,
@@ -166,11 +172,17 @@ func (session *ConnectionSession) listKeys(page string) (keys []string) {
 	case pageIPv6:
 		keys = getSettingIp6ConfigAvailableKeys(session.data)
 	case pageSecurity: // TODO
-		switch session.connType {
+		switch session.connectionType {
 		case typeWired:
+			keys = getSetting8021xAvailableKeys(session.data)
 		case typeWireless:
-			// TODO
-			keys = getSettingWirelessSecurityAvailableKeys(session.data)
+			securityField := getSettingWirelessSec(session.data)
+			switch securityField {
+			case fieldWirelessSecurity:
+				keys = getSettingWirelessSecurityAvailableKeys(session.data)
+			case field8021x:
+				keys = getSetting8021xAvailableKeys(session.data)
+			}
 		}
 	}
 	if len(keys) == 0 {
@@ -179,23 +191,28 @@ func (session *ConnectionSession) listKeys(page string) (keys []string) {
 	return
 }
 
-//比如获得当前链接支持的加密方式 EAP字段: TLS、MD5、FAST、PEAP
-//获得ip设置方式 : Manual、Link-Local Only、Automatic(DHCP)
-//获得当前可用mac地址(这种字段是有几个可选值但用户也可用手动输入一个其他值)
-// TODO
+// GetAvailableValues get available values for target key.
 func (session *ConnectionSession) GetAvailableValues(page, key string) (values []string) {
 	switch page {
 	case pageGeneral:
+		values, _ = getSettingConnectionAvailableValues(key)
 	case pageIPv4:
 		values, _ = getSettingIp4ConfigAvailableValues(key)
 	case pageIPv6:
 		values, _ = getSettingIp6ConfigAvailableValues(key)
 	case pageSecurity: // TODO
-		// switch session.connType {
-		// case typeWired:
-		// case typeWireless:
-		// 	// TODO
-		// }
+		switch session.connectionType {
+		case typeWired:
+			values, _ = getSetting8021xAvailableValues(key)
+		case typeWireless:
+			securityField := getSettingWirelessSec(session.data)
+			switch securityField {
+			case fieldWirelessSecurity:
+				values, _ = getSettingWirelessSecurityAvailableValues(key)
+			case field8021x:
+				values, _ = getSetting8021xAvailableValues(key)
+			}
+		}
 	}
 	return
 }
@@ -215,13 +232,17 @@ func (session *ConnectionSession) GetKey(page, key string) (value string) {
 	case pageIPv6:
 		value = generalGetSettingIp6ConfigKeyJSON(session.data, key)
 	case pageSecurity: // TODO
-		switch session.connType {
+		switch session.connectionType {
 		case typeWired:
+			value = generalGetSetting8021xKeyJSON(session.data, key)
 		case typeWireless:
-			// switch method {
-			// value = generalGetSettingWirelessSecurityKeyJSON(session.data, key)
-			// value = generalGetSetting8021xKeyJSON(session.data, key)
-			// }
+			securityField := getSettingWirelessSec(session.data)
+			switch securityField {
+			case fieldWirelessSecurity:
+				value = generalGetSettingWirelessSecurityKeyJSON(session.data, key)
+			case field8021x:
+				value = generalGetSetting8021xKeyJSON(session.data, key)
+			}
 		}
 	}
 	return
@@ -242,28 +263,33 @@ func (session *ConnectionSession) SetKey(page, key, value string) {
 	case pageIPv6:
 		generalSetSettingIp6ConfigKeyJSON(session.data, key, value)
 	case pageSecurity: // TODO
-		switch session.connType {
+		switch session.connectionType {
 		case typeWired:
+			generalSetSetting8021xKeyJSON(session.data, key, value)
 		case typeWireless:
-			// switch method {
-			// generalSetSettingWirelessSecurityKeyJSON(session.data, key, value)
-			// generalSetSetting8021xKeyJSON(session.data, key, value)
-			// }
+			securityField := getSettingWirelessSec(session.data)
+			switch securityField {
+			case fieldWirelessSecurity:
+				generalSetSettingWirelessSecurityKeyJSON(session.data, key, value)
+			case field8021x:
+				generalSetSetting8021xKeyJSON(session.data, key, value)
+			}
 		}
 	}
 
 	session.updatePropErrors()
 	session.updatePropAvailableKeys()
-	if session.isErrorOccured() {
-		session.updatePropAllowSave(false)
-	} else {
-		session.updatePropAllowSave(true)
-	}
+	// TODO
+	// if session.isErrorOccured() {
+	// 	session.updatePropAllowSave(false)
+	// } else {
+	// 	session.updatePropAllowSave(true)
+	// }
 
 	return
 }
 
-// TODO CheckValues check target value if is correct.
+// TODO remove CheckValues check target value if is correct.
 // func (session *ConnectionSession) CheckValue(page, key, value string) (ok bool) {
 // 	return
 // }

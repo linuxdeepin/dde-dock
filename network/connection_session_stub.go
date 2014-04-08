@@ -42,7 +42,7 @@ func (session *ConnectionSession) updatePropErrors() {
 		case pageIPv6:
 			session.Errors[page] = checkSettingIp6ConfigValues(session.data)
 		case pageSecurity: // TODO
-			switch session.connType {
+			switch session.connectionType {
 			case typeWired:
 			case typeWireless:
 				// switch method {

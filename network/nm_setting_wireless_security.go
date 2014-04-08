@@ -133,6 +133,12 @@ func getSettingWirelessSecurityAvailableKeys(data _ConnectionData) (keys []strin
 	return
 }
 
+// TODO Get available values
+func getSettingWirelessSecurityAvailableValues(key string) (values []string, customizable bool) {
+	customizable = true
+	return
+}
+
 // TODO Check whether the values are correct
 func checkSettingWirelessSecurityValues(data _ConnectionData) (errs map[string]string) {
 	errs = make(map[string]string)

@@ -88,6 +88,12 @@ func getSettingConnectionAvailableKeys(data _ConnectionData) (keys []string) {
 	return
 }
 
+// Get available values
+func getSettingConnectionAvailableValues(key string) (values []string, customizable bool) {
+	customizable = true
+	return
+}
+
 // Check whether the values are correct
 func checkSettingConnectionValues(data _ConnectionData) (errs map[string]string) {
 	errs = make(map[string]string)
