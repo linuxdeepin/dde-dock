@@ -260,14 +260,23 @@ func (this *Manager) getDeviceAddress(devPath dbus.ObjectPath, devType uint32) s
 	return ""
 }
 
-func (this *Manager) ActivateConnection(uuid string, dev dbus.ObjectPath) {
-	if cpath, err := _NMSettings.GetConnectionByUuid(uuid); err == nil {
-		LOGGER.Debug("ActivateConnection:", uuid, dev)
-		// TODO, ap path, "/"
-		spath := dbus.ObjectPath("/")
-		_NMManager.ActivateConnection(cpath, dev, spath)
+func (this *Manager) ActivateConnection(uuid string, dev dbus.ObjectPath) (err error) {
+	LOGGER.Debug("ActivateConnection:", uuid, dev)
+	cpath, err := _NMSettings.GetConnectionByUuid(uuid)
+	if err != nil {
+		return
 	}
+	// TODO, ap path, "/"
+	spath := dbus.ObjectPath("/")
+	_, err = _NMManager.ActivateConnection(cpath, dev, spath)
+	return
 }
-func (this *Manager) DeactivateConnection(cpath dbus.ObjectPath) error {
-	return _NMManager.DeactivateConnection(cpath)
+func (this *Manager) DeactivateConnection(uuid dbus.ObjectPath) (err error) {
+	LOGGER.Debug("DeactivateConnection:", uuid)
+	cpath, err := _NMSettings.GetConnectionByUuid(string(uuid))
+	if err != nil {
+		return
+	}
+	err = _NMManager.DeactivateConnection(cpath)
+	return
 }
