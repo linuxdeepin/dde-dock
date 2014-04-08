@@ -47,33 +47,33 @@ func (a *Agent) GetSecrets(connection map[string]map[string]dbus.Variant, connec
 	// LOGGER.Debug("GetSecrets return ", keyValue) // TODO test
 	// return keyValue
 	// }
-	if flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_USER_REQUESTED == 0 {
-		LOGGER.Debug("GetSecrets return") // TODO test
-		return invalidKey
-	}
+	// if flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_USER_REQUESTED == 0 {
+	// LOGGER.Debug("GetSecrets return") // TODO test
+	// return invalidKey
+	// }
 
 	if flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_ALLOW_INTERACTION == 0 {
 		return invalidKey
 	}
 
-	if _, ok := a.pendingKeys[keyId]; ok {
-		//only wait the key when there is no other GetSecrtes runing with this uuid
-		LOGGER.Info("Repeat GetSecrets", keyId)
-	} else {
-		select {
-		// TODO
-		case keyValue, ok := <-a.createPendingKey(keyId, pageGeneralGetId(connection)):
-			if ok {
-				keyValue := fillSecret(settingName, keyValue)
-				a.SaveSecrets(keyValue, connectionPath)
-				return keyValue
-			}
-			LOGGER.Info("failed getsecrtes...", keyId)
-		case <-time.After(120 * time.Second):
-			a.CancelGetSecrtes(connectionPath, settingName)
-			LOGGER.Info("get secrets timeout:", keyId)
+	// if _, ok := a.pendingKeys[keyId]; ok {
+	// 	//only wait the key when there is no other GetSecrtes runing with this uuid
+	// 	LOGGER.Info("Repeat GetSecrets", keyId)
+	// } else {
+	select {
+	// TODO
+	case keyValue, ok := <-a.createPendingKey(keyId, pageGeneralGetId(connection)):
+		if ok {
+			keyValue := fillSecret(settingName, keyValue)
+			a.SaveSecrets(keyValue, connectionPath)
+			return keyValue
 		}
+		LOGGER.Info("failed getsecrtes...", keyId)
+	case <-time.After(120 * time.Second):
+		a.CancelGetSecrtes(connectionPath, settingName)
+		LOGGER.Info("get secrets timeout:", keyId)
 	}
+	// }
 	return invalidKey
 }
 func (a *Agent) createPendingKey(keyId mapKey, connectionId string) chan string {
