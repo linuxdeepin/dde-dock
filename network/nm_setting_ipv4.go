@@ -188,7 +188,7 @@ func getSettingIp4ConfigAvailableValues(key string) (values []string, customizab
 func checkSettingIp4ConfigValues(data _ConnectionData) (errs map[string]string) {
 	errs = make(map[string]string)
 
-	// check NM_SETTING_IP4_CONFIG_METHOD
+	// check method
 	if !isSettingIp4ConfigMethodExists(data) {
 		rememberError(errs, NM_SETTING_IP4_CONFIG_METHOD, NM_KEY_ERROR_MISSING_VALUE)
 		return
@@ -202,7 +202,7 @@ func checkSettingIp4ConfigValues(data _ConnectionData) (errs map[string]string) 
 	case NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL: // ignore
 		checkSettingIp4MethodConflict(data, errs)
 	case NM_SETTING_IP4_CONFIG_METHOD_MANUAL:
-		// check NM_SETTING_IP4_CONFIG_ADDRESSES
+		// ensure address exists
 		if !isSettingIp4ConfigAddressesExists(data) {
 			rememberError(errs, NM_SETTING_IP4_CONFIG_ADDRESSES, NM_KEY_ERROR_MISSING_VALUE)
 		}
@@ -212,34 +212,33 @@ func checkSettingIp4ConfigValues(data _ConnectionData) (errs map[string]string) 
 		checkSettingIp4MethodConflict(data, errs)
 	}
 
-	// check value NM_SETTING_IP4_CONFIG_DNS
+	// check value of dns
 	checkSettingIp4ConfigDns(data, errs)
 
-	// check value NM_SETTING_IP4_CONFIG_ADDRESSES
+	// check value of address
 	checkSettingIp4ConfigAddresses(data, errs)
+
+	// TODO check value of route
 
 	return
 }
 
 func checkSettingIp4MethodConflict(data _ConnectionData, errs map[string]string) {
-	// check NM_SETTING_IP4_CONFIG_DNS
+	// check dns
 	if isSettingIp4ConfigDnsExists(data) {
-		errs[NM_SETTING_IP4_CONFIG_DNS] = fmt.Sprintf(NM_KEY_ERROR_IP4_METHOD_CONFLICT, NM_SETTING_IP4_CONFIG_DNS)
+		rememberError(errs, NM_SETTING_IP4_CONFIG_DNS, fmt.Sprintf(NM_KEY_ERROR_IP4_METHOD_CONFLICT, NM_SETTING_IP4_CONFIG_DNS))
 	}
-
-	// check NM_SETTING_IP4_CONFIG_ADDRESSES
-	if isSettingIp4ConfigAddressesExists(data) {
-		errs[NM_SETTING_IP4_CONFIG_ADDRESSES] = fmt.Sprintf(NM_KEY_ERROR_IP4_METHOD_CONFLICT, NM_SETTING_IP4_CONFIG_ADDRESSES)
-	}
-
-	// check NM_SETTING_IP4_CONFIG_DNS_SEARCH
+	// check dns search
 	if isSettingIp4ConfigDnsSearchExists(data) {
-		errs[NM_SETTING_IP4_CONFIG_DNS_SEARCH] = fmt.Sprintf(NM_KEY_ERROR_IP4_METHOD_CONFLICT, NM_SETTING_IP4_CONFIG_DNS_SEARCH)
+		rememberError(errs, NM_SETTING_IP4_CONFIG_DNS_SEARCH, fmt.Sprintf(NM_KEY_ERROR_IP4_METHOD_CONFLICT, NM_SETTING_IP4_CONFIG_DNS_SEARCH))
 	}
-
-	// check NM_SETTING_IP4_CONFIG_ROUTES:
+	// check address
+	if isSettingIp4ConfigAddressesExists(data) {
+		rememberError(errs, NM_SETTING_IP4_CONFIG_ADDRESSES, fmt.Sprintf(NM_KEY_ERROR_IP4_METHOD_CONFLICT, NM_SETTING_IP4_CONFIG_ADDRESSES))
+	}
+	// check route
 	if isSettingIp4ConfigRoutesExists(data) {
-		errs[NM_SETTING_IP4_CONFIG_ROUTES] = fmt.Sprintf(NM_KEY_ERROR_IP4_METHOD_CONFLICT, NM_SETTING_IP4_CONFIG_ROUTES)
+		rememberError(errs, NM_SETTING_IP4_CONFIG_ROUTES, fmt.Sprintf(NM_KEY_ERROR_IP4_METHOD_CONFLICT, NM_SETTING_IP4_CONFIG_ROUTES))
 	}
 }
 
@@ -282,8 +281,6 @@ func checkSettingIp4ConfigAddresses(data _ConnectionData, errs map[string]string
 	}
 }
 
-// TODO Adder
-
 // Set JSON value generally
 func generalSetSettingIp4ConfigKeyJSON(data _ConnectionData, key, valueJSON string) {
 	switch key {
@@ -319,13 +316,17 @@ func generalSetSettingIp4ConfigKeyJSON(data _ConnectionData, key, valueJSON stri
 
 // Logic setter
 func logicSetSettingIp4ConfigMethodJSON(data _ConnectionData, valueJSON string) {
+	// set valueJSON firstly to avoid duplication of code
 	setSettingIp4ConfigMethodJSON(data, valueJSON)
 
+	// then get value and call logic setter
 	value := getSettingIp4ConfigMethod(data)
 	logicSetSettingIp4ConfigMethod(data, value)
 	return
 }
 func logicSetSettingIp4ConfigMethod(data _ConnectionData, value string) {
+	// just ignore error here and set value directly, error will be
+	// check in checkSettingXXXValues()
 	switch value {
 	case NM_SETTING_IP4_CONFIG_METHOD_AUTO:
 		removeSettingIp4ConfigAddresses(data)
@@ -347,5 +348,4 @@ func logicSetSettingIp4ConfigMethod(data _ConnectionData, value string) {
 		removeSettingIp4ConfigRoutes(data)
 	}
 	setSettingIp4ConfigMethod(data, value)
-	return
 }

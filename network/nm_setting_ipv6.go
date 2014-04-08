@@ -1,5 +1,9 @@
 package main
 
+import (
+	"fmt"
+)
+
 // TODO doc
 
 const NM_SETTING_IP6_CONFIG_SETTING_NAME = "ipv6"
@@ -42,13 +46,13 @@ func getSettingIp6ConfigAvailableKeys(data _ConnectionData) (keys []string) {
 			NM_SETTING_IP6_CONFIG_METHOD,
 			NM_SETTING_IP6_CONFIG_DNS,
 		}
-	case NM_SETTING_IP6_CONFIG_METHOD_DHCP:
+	case NM_SETTING_IP6_CONFIG_METHOD_DHCP: // ignore
 		keys = []string{
 			NM_SETTING_IP6_CONFIG_METHOD,
 			NM_SETTING_IP6_CONFIG_DNS,
 		}
 	case NM_SETTING_IP6_CONFIG_METHOD_LINK_LOCAL: // ignore
-	case NM_SETTING_IP6_CONFIG_METHOD_MANUAL: // ignore
+	case NM_SETTING_IP6_CONFIG_METHOD_MANUAL:
 		keys = []string{
 			NM_SETTING_IP6_CONFIG_METHOD,
 			NM_SETTING_IP6_CONFIG_DNS,
@@ -65,7 +69,7 @@ func getSettingIp6ConfigAvailableValues(key string) (values []string, customizab
 	switch key {
 	case NM_SETTING_IP6_CONFIG_METHOD:
 		values = []string{
-			NM_SETTING_IP6_CONFIG_METHOD_IGNORE,
+			// NM_SETTING_IP6_CONFIG_METHOD_IGNORE, // ignore
 			NM_SETTING_IP6_CONFIG_METHOD_AUTO,
 			// NM_SETTING_IP6_CONFIG_METHOD_DHCP, // ignore
 			// NM_SETTING_IP6_CONFIG_METHOD_LINK_LOCAL, // ignore
@@ -81,56 +85,167 @@ func getSettingIp6ConfigAvailableValues(key string) (values []string, customizab
 func checkSettingIp6ConfigValues(data _ConnectionData) (errs map[string]string) {
 	errs = make(map[string]string)
 
-	// check NM_SETTING_IP6_CONFIG_METHOD
+	// check method
 	if !isSettingIp6ConfigMethodExists(data) {
-		errs[NM_SETTING_IP6_CONFIG_METHOD] = NM_KEY_ERROR_MISSING_VALUE
+		rememberError(errs, NM_SETTING_IP6_CONFIG_METHOD, NM_KEY_ERROR_MISSING_VALUE)
 		return
 	}
 	method := getSettingIp6ConfigMethod(data)
 	switch method {
 	default:
-		errs[NM_SETTING_IP6_CONFIG_METHOD] = NM_KEY_ERROR_INVALID_VALUE
+		rememberError(errs, NM_SETTING_IP6_CONFIG_METHOD, NM_KEY_ERROR_INVALID_VALUE)
 		return
-	case NM_SETTING_IP6_CONFIG_METHOD_IGNORE:
-		// TODO
+	case NM_SETTING_IP6_CONFIG_METHOD_IGNORE: // ignore
+		checkSettingIp6MethodConflict(data, errs)
 	case NM_SETTING_IP6_CONFIG_METHOD_AUTO:
 	case NM_SETTING_IP6_CONFIG_METHOD_DHCP: // ignore
+		// ensure address exists
+		if !isSettingIp6ConfigAddressesExists(data) {
+			rememberError(errs, NM_SETTING_IP6_CONFIG_ADDRESSES, NM_KEY_ERROR_MISSING_VALUE)
+		}
 	case NM_SETTING_IP6_CONFIG_METHOD_LINK_LOCAL: // ignore
+		checkSettingIp6MethodConflict(data, errs)
 	case NM_SETTING_IP6_CONFIG_METHOD_MANUAL:
+		// ensure address exists
+		if !isSettingIp6ConfigAddressesExists(data) {
+			rememberError(errs, NM_SETTING_IP6_CONFIG_ADDRESSES, NM_KEY_ERROR_MISSING_VALUE)
+		}
 	case NM_SETTING_IP6_CONFIG_METHOD_SHARED: // ignore
+		checkSettingIp6MethodConflict(data, errs)
 	}
+
+	// check value of dns
+	checkSettingIp6ConfigDns(data, errs)
+
+	// check value of address
+	checkSettingIp6ConfigAddresses(data, errs)
+
+	// TODO check value of route
 
 	return
 }
 
+func checkSettingIp6MethodConflict(data _ConnectionData, errs map[string]string) {
+	// check dns
+	if isSettingIp6ConfigDnsExists(data) {
+		rememberError(errs, NM_SETTING_IP6_CONFIG_DNS, fmt.Sprintf(NM_KEY_ERROR_IP6_METHOD_CONFLICT, NM_SETTING_IP6_CONFIG_DNS))
+	}
+	// check dns search
+	if isSettingIp6ConfigDnsSearchExists(data) {
+		rememberError(errs, NM_SETTING_IP6_CONFIG_DNS_SEARCH, fmt.Sprintf(NM_KEY_ERROR_IP6_METHOD_CONFLICT, NM_SETTING_IP6_CONFIG_DNS_SEARCH))
+	}
+	// check address
+	if isSettingIp6ConfigAddressesExists(data) {
+		rememberError(errs, NM_SETTING_IP6_CONFIG_ADDRESSES, fmt.Sprintf(NM_KEY_ERROR_IP6_METHOD_CONFLICT, NM_SETTING_IP6_CONFIG_ADDRESSES))
+	}
+	// check route
+	if isSettingIp6ConfigRoutesExists(data) {
+		rememberError(errs, NM_SETTING_IP6_CONFIG_ROUTES, fmt.Sprintf(NM_KEY_ERROR_IP6_METHOD_CONFLICT, NM_SETTING_IP6_CONFIG_ROUTES))
+	}
+}
+
+func checkSettingIp6ConfigDns(data _ConnectionData, errs map[string]string) {
+	if !isSettingIp6ConfigDnsExists(data) {
+		return
+	}
+	dnses := getSettingIp6ConfigDns(data)
+	if len(dnses) == 0 {
+		rememberError(errs, NM_SETTING_IP6_CONFIG_DNS, NM_KEY_ERROR_EMPTY_VALUE)
+		return
+	}
+	for _, dns := range dnses {
+		if !isIpv6AddressValid(dns) {
+			rememberError(errs, NM_SETTING_IP6_CONFIG_DNS, NM_KEY_ERROR_INVALID_VALUE)
+			return
+		}
+		if isIpv6AddressZero(dns) {
+			rememberError(errs, NM_SETTING_IP6_CONFIG_DNS, NM_KEY_ERROR_INVALID_VALUE)
+			return
+		}
+	}
+}
+
+func checkSettingIp6ConfigAddresses(data _ConnectionData, errs map[string]string) {
+	if !isSettingIp6ConfigAddressesExists(data) {
+		return
+	}
+	addresses := getSettingIp6ConfigAddresses(data)
+	if len(addresses) == 0 {
+		rememberError(errs, NM_SETTING_IP6_CONFIG_ADDRESSES, NM_KEY_ERROR_EMPTY_VALUE)
+		return
+	}
+	for _, addr := range addresses {
+		if !isIpv6AddressValid(addr.Address) {
+			rememberError(errs, NM_SETTING_IP6_CONFIG_ADDRESSES, NM_KEY_ERROR_INVALID_VALUE)
+			return
+		}
+		if !isIpv6AddressValid(addr.Gateway) {
+			rememberError(errs, NM_SETTING_IP6_CONFIG_ADDRESSES, NM_KEY_ERROR_INVALID_VALUE)
+			return
+		}
+		if addr.Prefix < 1 || addr.Prefix > 128 {
+			rememberError(errs, NM_SETTING_IP6_CONFIG_ADDRESSES, NM_KEY_ERROR_INVALID_VALUE)
+			return
+		}
+	}
+}
+
 // Set JSON value generally
-// TODO use logic setter
-func generalSetSettingIp6ConfigKeyJSON(data _ConnectionData, key, value string) {
+func generalSetSettingIp6ConfigKeyJSON(data _ConnectionData, key, valueJSON string) {
 	switch key {
 	default:
 		LOGGER.Error("generalSetSettingIp6ConfigKey: invalide key", key)
 	case NM_SETTING_IP6_CONFIG_METHOD:
-		setSettingIp6ConfigMethodJSON(data, value)
+		logicSetSettingIp6ConfigMethodJSON(data, valueJSON)
 	case NM_SETTING_IP6_CONFIG_DNS:
-		setSettingIp6ConfigDnsJSON(data, value)
+		setSettingIp6ConfigDnsJSON(data, valueJSON)
 	case NM_SETTING_IP6_CONFIG_DNS_SEARCH:
-		setSettingIp6ConfigDnsSearchJSON(data, value)
+		setSettingIp6ConfigDnsSearchJSON(data, valueJSON)
 	case NM_SETTING_IP6_CONFIG_ADDRESSES:
-		setSettingIp6ConfigAddressesJSON(data, value)
+		setSettingIp6ConfigAddressesJSON(data, valueJSON)
 	case NM_SETTING_IP6_CONFIG_ROUTES:
-		setSettingIp6ConfigRoutesJSON(data, value)
+		setSettingIp6ConfigRoutesJSON(data, valueJSON)
 	case NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES:
-		setSettingIp6ConfigIgnoreAutoRoutesJSON(data, value)
+		setSettingIp6ConfigIgnoreAutoRoutesJSON(data, valueJSON)
 	case NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS:
-		setSettingIp6ConfigIgnoreAutoDnsJSON(data, value)
+		setSettingIp6ConfigIgnoreAutoDnsJSON(data, valueJSON)
 	case NM_SETTING_IP6_CONFIG_NEVER_DEFAULT:
-		setSettingIp6ConfigNeverDefaultJSON(data, value)
+		setSettingIp6ConfigNeverDefaultJSON(data, valueJSON)
 	case NM_SETTING_IP6_CONFIG_MAY_FAIL:
-		setSettingIp6ConfigMayFailJSON(data, value)
+		setSettingIp6ConfigMayFailJSON(data, valueJSON)
 	case NM_SETTING_IP6_CONFIG_IP6_PRIVACY:
-		setSettingIp6ConfigIp6PrivacyJSON(data, value)
+		setSettingIp6ConfigIp6PrivacyJSON(data, valueJSON)
 	case NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME:
-		setSettingIp6ConfigDhcpHostnameJSON(data, value)
+		setSettingIp6ConfigDhcpHostnameJSON(data, valueJSON)
 	}
 	return
+}
+
+// Logic setter
+func logicSetSettingIp6ConfigMethodJSON(data _ConnectionData, valueJSON string) {
+	setSettingIp6ConfigMethodJSON(data, valueJSON)
+
+	value := getSettingIp6ConfigMethod(data)
+	logicSetSettingIp6ConfigMethod(data, value)
+}
+func logicSetSettingIp6ConfigMethod(data _ConnectionData, value string) {
+	switch value {
+	case NM_SETTING_IP6_CONFIG_METHOD_IGNORE: // ignore
+		removeConnectionDataKeyBut(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_METHOD)
+	case NM_SETTING_IP6_CONFIG_METHOD_AUTO:
+		removeSettingIp6ConfigAddresses(data)
+	case NM_SETTING_IP6_CONFIG_METHOD_DHCP: // ignore
+	case NM_SETTING_IP6_CONFIG_METHOD_LINK_LOCAL: // ignore
+		removeSettingIp6ConfigDns(data)
+		removeSettingIp6ConfigDnsSearch(data)
+		removeSettingIp6ConfigAddresses(data)
+		removeSettingIp6ConfigRoutes(data)
+	case NM_SETTING_IP6_CONFIG_METHOD_MANUAL:
+	case NM_SETTING_IP6_CONFIG_METHOD_SHARED: // ignore
+		removeSettingIp6ConfigDns(data)
+		removeSettingIp6ConfigDnsSearch(data)
+		removeSettingIp6ConfigAddresses(data)
+		removeSettingIp6ConfigRoutes(data)
+	}
+	setSettingIp6ConfigMethod(data, value)
 }

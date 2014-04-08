@@ -144,3 +144,21 @@ func convertIpv6AddressToArrayByte(v string) (ipv6Addr []byte) {
 	}
 	return
 }
+
+func isIpv6AddressValid(v []byte) bool {
+	if len(v) != 16 {
+		return false
+	}
+	return true
+}
+
+func isIpv6AddressZero(v []byte) bool {
+	allAreZero := true
+	for _, b := range v {
+		if b != 0 {
+			allAreZero = false
+			break
+		}
+	}
+	return allAreZero
+}

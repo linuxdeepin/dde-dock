@@ -203,3 +203,16 @@ func removeConnectionDataKey(data _ConnectionData, field, key string) {
 
 	delete(fieldData, key)
 }
+
+func removeConnectionDataKeyBut(data _ConnectionData, field string, keys ...string) {
+	fieldData, ok := data[field]
+	if !ok {
+		return
+	}
+
+	for k := range fieldData {
+		if isStringInArray(k, keys) {
+			delete(fieldData, k)
+		}
+	}
+}
