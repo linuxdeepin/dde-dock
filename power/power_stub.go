@@ -21,12 +21,6 @@ func (p *Power) setPropBatterySuspendDelay(v int32) {
 		dbus.NotifyChange(p, "BatterySuspendDelay")
 	}
 }
-func (p *Power) setPropBatteryPlan(v int32) {
-	if p.BatteryPlan != v {
-		p.BatteryPlan = v
-		dbus.NotifyChange(p, "BatteryPlan")
-	}
-}
 
 func (p *Power) setPropLinePowerIdleDelay(v int32) {
 	if p.LinePowerIdleDelay != v {
@@ -38,12 +32,6 @@ func (p *Power) setPropLinePowerSuspendDelay(v int32) {
 	if p.LinePowerSuspendDelay != v {
 		p.LinePowerSuspendDelay = v
 		dbus.NotifyChange(p, "LinePowerSuspendDelay")
-	}
-}
-func (p *Power) setPropLinePowerPlan(v int32) {
-	if p.LinePowerPlan != v {
-		p.LinePowerPlan = v
-		dbus.NotifyChange(p, "LinePowerPlan")
 	}
 }
 
@@ -76,14 +64,4 @@ func (p *Power) setPropBatteryState(v uint32) {
 }
 
 func (p *Power) OnPropertiesChanged(key string, oldv interface{}) {
-	switch key {
-	case "BatteryPlan":
-		if v, ok := oldv.(int32); ok {
-			p.setBatteryPlan(v)
-		}
-	case "LinePowerPlan":
-		if v, ok := oldv.(int32); ok {
-			p.setLinePowerPlan(v)
-		}
-	}
 }

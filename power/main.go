@@ -7,7 +7,6 @@ import "dlib/dbus/property"
 import "dlib/gio-2.0"
 import "dbus/org/freedesktop/notifications"
 import "os"
-import "fmt"
 
 var LOGGER = logger.NewLogger("com.deepin.daemon.Power").SetLogLevel(logger.LEVEL_INFO)
 
@@ -23,13 +22,13 @@ type Power struct {
 
 	LidIsPresent bool
 
-	LinePowerPlan         int32 `access:"readwrite"`
-	LinePowerSuspendDelay int32 `access:"readwrite"`
-	LinePowerIdleDelay    int32 `access:"readwrite"`
+	LinePowerPlan         *property.GSettingsEnumProperty `access:"readwrite"`
+	LinePowerSuspendDelay int32                           `access:"readwrite"`
+	LinePowerIdleDelay    int32                           `access:"readwrite"`
 
-	BatteryPlan         int32 `access:"readwrite"`
-	BatterySuspendDelay int32 `access:"readwrite"`
-	BatteryIdleDelay    int32 `access:"readwrite"`
+	BatteryPlan         *property.GSettingsEnumProperty `access:"readwrite"`
+	BatterySuspendDelay int32                           `access:"readwrite"`
+	BatteryIdleDelay    int32                           `access:"readwrite"`
 
 	BatteryPercentage float64
 
@@ -45,8 +44,9 @@ func (p *Power) Reset() {
 	p.PowerButtonAction.Set(ActionInteractive)
 	p.LidClosedAction.Set(ActionSuspend)
 	p.LockWhenActive.Set(true)
-	p.setLinePowerPlan(PowerPlanHighPerformance)
-	p.setBatteryPlan(PowerPlanBalanced)
+
+	p.LinePowerPlan.Set(PowerPlanHighPerformance)
+	p.BatteryPlan.Set(PowerPlanBalanced)
 }
 
 func (*Power) GetDBusInfo() dbus.DBusInfo {
@@ -64,9 +64,17 @@ func NewPower() *Power {
 	p.LidClosedAction = property.NewGSettingsEnumProperty(p, "LidClosedAction", p.coreSettings, "lid-close")
 	p.LockWhenActive = property.NewGSettingsBoolProperty(p, "LockWhenActive", p.coreSettings, "lock-enabled")
 
-	p.setBatteryPlan(int32(p.coreSettings.GetEnum("battery-plan")))
-	p.setLinePowerPlan(int32(p.coreSettings.GetEnum("ac-plan")))
-	fmt.Println("LidClosedAction:", p.LidClosedAction.Get())
+	p.LinePowerPlan = property.NewGSettingsEnumProperty(p, "LinePowerPlan", p.coreSettings, "ac-plan")
+	p.LinePowerPlan.ConnectChanged(func() {
+		p.setLinePowerPlan(p.LinePowerPlan.Get())
+	})
+	p.setLinePowerPlan(p.LinePowerPlan.Get())
+
+	p.BatteryPlan = property.NewGSettingsEnumProperty(p, "BatteryPlan", p.coreSettings, "battery-plan")
+	p.BatteryPlan.ConnectChanged(func() {
+		p.setBatteryPlan(p.BatteryPlan.Get())
+	})
+	p.setBatteryPlan(p.BatteryPlan.Get())
 
 	p.initUpower()
 	p.initEventHandle()
@@ -98,11 +106,11 @@ func main() {
 	if err := dbus.InstallOnSession(p); err != nil {
 		LOGGER.Error("Failed InstallOnSession:", err)
 	}
+	go dlib.StartLoop()
 	if err := dbus.Wait(); err != nil {
 		LOGGER.Error("dbus.Wait recieve an error:", err)
 		os.Exit(1)
 	} else {
 		os.Exit(0)
 	}
-
 }

@@ -11,7 +11,7 @@ const (
 func (p *Power) setBatteryIdleDelay(delay int32) {
 	p.setPropBatteryIdleDelay(delay)
 
-	if p.BatteryPlan == PowerPlanCustom && int32(p.coreSettings.GetInt("battery-idle-delay")) != delay {
+	if p.BatteryPlan.Get() == PowerPlanCustom && int32(p.coreSettings.GetInt("battery-idle-delay")) != delay {
 		p.coreSettings.SetInt("battery-idle-delay", int(delay))
 	}
 }
@@ -19,7 +19,7 @@ func (p *Power) setBatteryIdleDelay(delay int32) {
 func (p *Power) setBatterySuspendDelay(delay int32) {
 	p.setPropBatterySuspendDelay(delay)
 
-	if p.BatteryPlan == PowerPlanCustom && int32(p.coreSettings.GetInt("battery-suspend-delay")) != delay {
+	if p.BatteryPlan.Get() == PowerPlanCustom && int32(p.coreSettings.GetInt("battery-suspend-delay")) != delay {
 		p.coreSettings.SetInt("battery-suspend-delay", int(delay))
 	}
 }
@@ -44,7 +44,7 @@ func (p *Power) setBatteryPlan(plan int32) {
 func (p *Power) setLinePowerIdleDelay(delay int32) {
 	p.setPropLinePowerIdleDelay(delay)
 
-	if p.LinePowerPlan == PowerPlanCustom && int32(p.coreSettings.GetInt("ac-idle-delay")) != delay {
+	if p.LinePowerPlan.Get() == PowerPlanCustom && int32(p.coreSettings.GetInt("ac-idle-delay")) != delay {
 		p.coreSettings.SetInt("ac-idle-delay", int(delay))
 	}
 }
@@ -52,7 +52,7 @@ func (p *Power) setLinePowerIdleDelay(delay int32) {
 func (p *Power) setLinePowerSuspendDelay(delay int32) {
 	p.setPropLinePowerSuspendDelay(delay)
 
-	if p.LinePowerPlan == PowerPlanCustom && int32(p.coreSettings.GetInt("ac-suspend-delay")) != delay {
+	if p.LinePowerPlan.Get() == PowerPlanCustom && int32(p.coreSettings.GetInt("ac-suspend-delay")) != delay {
 		p.coreSettings.SetInt("ac-suspend-delay", int(delay))
 	}
 }
