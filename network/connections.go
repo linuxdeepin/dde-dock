@@ -83,32 +83,39 @@ func newWirelessConnection(id string, ssid []byte, keyFlag int) (uuid string) {
 
 // GetConnectionByAccessPoint return the connection's uuid of access point, return empty if none.
 func (this *Manager) GetConnectionByAccessPoint(apPath dbus.ObjectPath) (uuid string) {
-	LOGGER.Debug("GetConnectionByAccessPoint: apPath", apPath)
 	if ap, err := nm.NewAccessPoint(NMDest, apPath); err == nil {
-		for _, conUuid := range this.WirelessConnections {
-			if cpath, err := _NMSettings.GetConnectionByUuid(conUuid); err == nil {
-				if nmConn, err := nm.NewSettingsConnection(NMDest, cpath); err == nil {
-					if cdata, err := nmConn.GetSettings(); err == nil {
-						if string(getSettingWirelessSsid(cdata)) == string(ap.Ssid.Get()) { // TODO
-							LOGGER.Debug("connection is already exists", apPath, conUuid)
-							uuid = conUuid
-							break
-						}
+		conns, err := _NMSettings.ListConnections()
+		if err != nil {
+			LOGGER.Error(err)
+			return
+		}
+		for _, cpath := range conns {
+			if nmConn, err := nm.NewSettingsConnection(NMDest, cpath); err == nil {
+				if cdata, err := nmConn.GetSettings(); err == nil {
+					if isSettingWirelessSsidExists(cdata) && string(getSettingWirelessSsid(cdata)) == string(ap.Ssid.Get()) {
+						uuid = getSettingConnectionUuid(cdata)
+						LOGGER.Debug("connection is already exists", apPath, uuid)
+						break
 					}
 				}
 			}
-
-			// TODO remove
-			// if nmConn, err := nm.NewSettingsConnection(NMDest, apPath); err == nil {
-			// 	if cdata, err := nmConn.GetSettings(); err == nil {
-			// 		if string(getSettingWirelessSsid(cdata)) == string(ap.Ssid.Get()) { // TODO
-			// 			LOGGER.Debug("TEST:", string(getSettingWirelessSsid(cdata)), conUuid) // TODO
-			// 			return conUuid, nil
-			// 		}
-			// 	}
-			// }
 		}
+		// TODO remove
+		// for _, conUuid := range this.WirelessConnections {
+		// 	if cpath, err := _NMSettings.GetConnectionByUuid(conUuid); err == nil {
+		// 		if nmConn, err := nm.NewSettingsConnection(NMDest, cpath); err == nil {
+		// 			if cdata, err := nmConn.GetSettings(); err == nil {
+		// 				if string(getSettingWirelessSsid(cdata)) == string(ap.Ssid.Get()) { // TODO
+		// 					LOGGER.Debug("connection is already exists", apPath, conUuid)
+		// 					uuid = conUuid
+		// 					break
+		// 				}
+		// 			}
+		// 		}
+		// 	}
+		// }
 	}
+	LOGGER.Debugf("GetConnectionByAccessPoint: apPath=%s, uuid=%s", apPath, uuid)
 	return
 }
 
