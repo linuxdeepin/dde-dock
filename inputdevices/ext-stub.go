@@ -25,6 +25,7 @@ import (
         libsm "dbus/com/deepin/sessionmanager"
         "dlib/dbus"
         "dlib/gio-2.0"
+        "os/user"
         "strings"
 )
 
@@ -73,6 +74,7 @@ func (keyboard *KeyboardEntry) listenLayoutChanged() {
                                 return
                         }
                         xsObj.SetInterger("Net/CursorBlinkTime", uint32(v))
+                        setQtCursorBlink(uint32(v))
                 }
         })
 }
@@ -187,4 +189,14 @@ func stringArrayIsEqual(array1, array2 []string) bool {
                 }
         }
         return true
+}
+
+func setQtCursorBlink(rate uint32) {
+        homeDir := ""
+        if info, err := user.Current(); err == nil && info != nil {
+                homeDir = info.HomeDir
+        }
+
+        qtPath := homeDir + "/.config/Trolltech.conf"
+        objUtils.WriteKeyToKeyFile(qtPath, "Qt", "cursorFlashTime", rate)
 }

@@ -3,6 +3,7 @@ package main
 import (
         "dlib/dbus/property"
         "dlib/gio-2.0"
+        libutils "dlib/utils"
 )
 
 type ExtDevManager struct {
@@ -63,6 +64,7 @@ var (
         _infaceGSettings    *gio.Settings
         _layoutGSettings    *gio.Settings
         _keyRepeatGSettings *gio.Settings
+        objUtils            = libutils.NewUtils()
 )
 
 func InitGSettings() bool {
