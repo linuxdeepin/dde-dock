@@ -44,6 +44,14 @@ type MediaKeyManager struct {
         PowerOff       func(bool)
         PowerSleep     func(bool)
         SwitchLayout   func(bool)
+        AudioPlay      func(bool)
+        AudioPause     func(bool)
+        AudioStop      func(bool)
+        AudioPrevious  func(bool)
+        AudioNext      func(bool)
+        AudioRewind    func(bool)
+        AudioForward   func(bool)
+        AudioRepeat    func(bool)
 }
 
 const (
@@ -99,81 +107,75 @@ func (op *MediaKeyManager) emitSignal(modStr, keyStr string, press bool) bool {
         switch keyStr {
         case "XF86MonBrightnessUp":
                 op.BrightnessUp(press)
-                return true
         case "XF86MonBrightnessDown":
                 op.BrightnessDown(press)
-                return true
         case "XF86AudioMute":
                 op.AudioMute(press)
-                return true
         case "XF86AudioLowerVolume":
                 op.AudioDown(press)
-                return true
         case "XF86AudioRaiseVolume":
                 op.AudioUp(press)
-                return true
         case "Num_Lock":
                 if strings.Contains(modStr, "mod2") {
                         op.NumLockOff(press)
                 } else {
                         op.NumLockOn(press)
                 }
-                return true
         case "Caps_Lock":
                 if strings.Contains(modStr, "lock") {
                         op.CapsLockOff(press)
                 } else {
                         op.CapsLockOn(press)
                 }
-                return true
         case "XF86TouchPadOn":
                 op.TouchPadOn(press)
-                return true
         case "XF86TouchPadOff":
                 op.TouchPadOff(press)
-                return true
         case "XF86Display":
                 op.SwitchMonitors(press)
-                return true
         case "XF86PowerOff":
                 op.PowerOff(press)
-                return true
         case "XF86Sleep":
                 op.PowerSleep(press)
-                return true
         case "p", "P":
-                if strings.Contains(modStr, "mod4") {
-                        strs := strings.Split(modStr, "-")
-                        tmps := []string{}
-                        for _, a := range strs {
-                                if a == "lock" || a == "mod2" {
-                                        continue
-                                }
-                                tmps = append(tmps, a)
-                        }
-
-                        if len(tmps) == 1 {
-                                op.SwitchMonitors(press)
-                        }
+                tmps := deleteSpecialMod(modStr)
+                println("mod string after delete: ", tmps)
+                if strings.Contains(tmps, "-") {
+                        return false
+                }
+                if strings.Contains(tmps, "mod4") {
+                        op.SwitchMonitors(press)
                 }
         case "space":
-                if strings.Contains(modStr, "mod4") {
-                        strs := strings.Split(modStr, "-")
-                        tmps := []string{}
-                        for _, a := range strs {
-                                if a == "lock" || a == "mod2" {
-                                        continue
-                                }
-                                tmps = append(tmps, a)
-                        }
-
-                        if len(tmps) == 1 {
-                                op.SwitchLayout(press)
-                        }
+                tmps := deleteSpecialMod(modStr)
+                println("mod string after delete: ", tmps)
+                if strings.Contains(tmps, "-") {
+                        return false
                 }
+                if strings.Contains(modStr, "mod4") {
+                        op.SwitchLayout(press)
+                }
+        case "XF86AudioPlay":
+                op.AudioPlay(press)
+        case "XF86AudioPause":
+                op.AudioPause(press)
+        case "XF86AudioStop":
+                op.AudioStop(press)
+        case "XF86AudioPrev":
+                op.AudioPrevious(press)
+        case "XF86AudioNext":
+                op.AudioNext(press)
+        case "XF86AudioRewind":
+                op.AudioRewind(press)
+        case "XF86AudioForward":
+                op.AudioForward(press)
+        case "XF86AudioRepeat":
+                op.AudioRepeat(press)
+        default:
+                return false
         }
 
-        return false
+        return true
 }
 
 func startMediaKey() {
@@ -184,4 +186,26 @@ func startMediaKey() {
         m.listenKeyPressEvent()
 
         dbus.InstallOnSession(m)
+}
+
+/*
+ * delete Num_Lock and Caps_Lock
+ */
+func deleteSpecialMod(modStr string) string {
+        ret := ""
+        strs := strings.Split(modStr, "-")
+        l := len(strs)
+        for i, s := range strs {
+                if s == "lock" || s == "mod2" {
+                        continue
+                }
+
+                if i == l-1 {
+                        ret += s
+                        break
+                }
+                ret += s + "-"
+        }
+
+        return ret
 }

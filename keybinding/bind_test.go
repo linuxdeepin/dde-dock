@@ -22,39 +22,39 @@
 package main
 
 import (
-	"fmt"
-	"testing"
+        "fmt"
+        "testing"
 )
 
 func TestBind(t *testing.T) {
-	InitVariable()
-	bm := NewBindManager()
+        InitVariable()
+        bm := NewBindManager()
 
-	fmt.Println("CustomList: ", bm.CustomList)
-	fmt.Println("SystemList: ", bm.SystemList)
-	fmt.Println("MediaList", bm.MediaList)
-	fmt.Println("WindowList", bm.WindowList)
-	fmt.Println("WorkSpaceList", bm.WorkSpaceList)
-	fmt.Println("ValidList: ", bm.ConflictValid)
-	fmt.Println("InvalidList: ", bm.ConflictInvalid)
+        fmt.Println("CustomList: ", bm.CustomList)
+        fmt.Println("SystemList: ", bm.SystemList)
+        //fmt.Println("MediaList", bm.MediaList)
+        fmt.Println("WindowList", bm.WindowList)
+        fmt.Println("WorkSpaceList", bm.WorkSpaceList)
+        fmt.Println("ValidList: ", bm.ConflictValid)
+        fmt.Println("InvalidList: ", bm.ConflictInvalid)
 
-	check := bm.ChangeShortcut(10000, "<Super>E")
-	if check == nil {
-		t.Error("ChangeShortcut Error")
-	}
-	if check.IsConflict {
-		fmt.Println("Conflict idList: ", check.IdList)
-	}
-	fmt.Println("ValidList: ", bm.ConflictValid)
-	fmt.Println("InvalidList: ", bm.ConflictInvalid)
+        check := bm.ChangeShortcut(10000, "<Super>E")
+        if check == nil {
+                t.Error("ChangeShortcut Error")
+        }
+        if check.IsConflict {
+                fmt.Println("Conflict idList: ", check.IdList)
+        }
+        fmt.Println("ValidList: ", bm.ConflictValid)
+        fmt.Println("InvalidList: ", bm.ConflictInvalid)
 
-	check = bm.ChangeShortcut(10000, "<Alt>E")
-	if check == nil {
-		t.Error("ChangeShortcut Error")
-	}
-	if check.IsConflict {
-		fmt.Println("Conflict idList: ", check.IdList)
-	}
-	fmt.Println("ValidList: ", bm.ConflictValid)
-	fmt.Println("InvalidList: ", bm.ConflictInvalid)
+        check = bm.ChangeShortcut(10000, "<Alt>E")
+        if check == nil {
+                t.Error("ChangeShortcut Error")
+        }
+        if check.IsConflict {
+                fmt.Println("Conflict idList: ", check.IdList)
+        }
+        fmt.Println("ValidList: ", bm.ConflictValid)
+        fmt.Println("InvalidList: ", bm.ConflictInvalid)
 }
