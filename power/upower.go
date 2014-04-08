@@ -30,6 +30,14 @@ const (
 	BatteryStatePendingDischarge = 6
 )
 
+const (
+	//internal used
+	lowBatteryStatusNormal = iota
+	lowBatteryStatusLow
+	lowBatteryStatusCritcal
+	lowBatteryStatusAction
+)
+
 func (p *Power) refreshUpower(up *upower.Upower) {
 	p.setPropOnBattery(up.OnBattery.Get())
 
@@ -39,10 +47,44 @@ func (p *Power) refreshUpower(up *upower.Upower) {
 		p.setPropBatteryIsPresent(dev.IsPresent.Get())
 		p.setPropBatteryState(dev.State.Get())
 		p.setPropBatteryPercentage(dev.Percentage.Get())
+		p.handleBatteryPercentage()
 	} else {
 		p.setPropBatteryIsPresent(false)
 	}
 	//TODO: handle lowe battery
+}
+
+func (p *Power) handleBatteryPercentage() {
+	if !p.OnBattery {
+		if p.lowBatteryStatus != lowBatteryStatusNormal {
+			p.lowBatteryStatus = lowBatteryStatusNormal
+			doCloseLowpower()
+		}
+		return
+	}
+	switch {
+	case p.BatteryPercentage < float64(p.coreSettings.GetInt("percentage-action")):
+		if p.lowBatteryStatus != lowBatteryStatusAction {
+			p.lowBatteryStatus = lowBatteryStatusAction
+			p.sendNotify("battery-low", "Battery low", "Computer will suspend very soon unless it is plugged in(TODO:Calucate remaining).")
+		}
+	case p.BatteryPercentage < float64(p.coreSettings.GetInt("percentage-critical")):
+		if p.lowBatteryStatus != lowBatteryStatusCritcal {
+			p.lowBatteryStatus = lowBatteryStatusCritcal
+			p.sendNotify("battery-critical", "Battery cirtical low", "Computer will suspend very soon unless it is plugged in.")
+		}
+	case p.BatteryPercentage < float64(p.coreSettings.GetInt("percentage-low")):
+		if p.lowBatteryStatus != lowBatteryStatusLow {
+			p.lowBatteryStatus = lowBatteryStatusLow
+			p.sendNotify("battery-critical", "Battery cirtical low", "Computer will suspend very soon unless it is plugged in.")
+			doSuspend()
+		}
+	default:
+		if p.lowBatteryStatus != lowBatteryStatusNormal {
+			p.lowBatteryStatus = lowBatteryStatusNormal
+			doCloseLowpower()
+		}
+	}
 }
 
 func (p *Power) initUpower() {

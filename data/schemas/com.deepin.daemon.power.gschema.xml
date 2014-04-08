@@ -79,5 +79,22 @@
 	    <summary>Lock on activation</summary>
 	    <description>Set this to TRUE to lock the screen when the screensaver goes active or computer is suspended.</description>
 	</key>
+
+	<key name="percentage-low" type="i">
+	    <default>20</default>
+	    <summary>Percentage considered low</summary>
+	    <description>The percentage of the battery when it is considered low. Only valid when use-time-for-policy is false.</description>
+	</key>
+	<key name="percentage-critical" type="i">
+	    <default>10</default>
+	    <summary>Percentage considered critical</summary>
+	    <description>The percentage of the battery when it is considered critical. Only valid when use-time-for-policy is false.</description>
+	</key>
+	<key name="percentage-action" type="i">
+	    <default>5</default>
+	    <summary>Percentage action is taken</summary>
+	    <description>The percentage of the battery when the critical action is performed. Only valid when use-time-for-policy is false.</description>
+	</key>
+
     </schema>
 </schemalist>

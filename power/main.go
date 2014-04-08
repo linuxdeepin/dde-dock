@@ -1,16 +1,20 @@
 package main
 
+import "dlib"
 import "dlib/logger"
 import "dlib/dbus"
 import "dlib/dbus/property"
 import "dlib/gio-2.0"
+import "dbus/org/freedesktop/notifications"
 import "fmt"
 
 var LOGGER = logger.NewLogger("com.deepin.daemon.Power").SetLogLevel(logger.LEVEL_INFO)
 
 type Power struct {
-	coreSettings *gio.Settings
-	lidIsClosed  bool
+	coreSettings     *gio.Settings
+	notifier         *notifications.Notifier
+	lidIsClosed      bool
+	lowBatteryStatus uint32
 
 	PowerButtonAction *property.GSettingsEnumProperty `access:"readwrite"`
 	LidClosedAction   *property.GSettingsEnumProperty `access:"readwrite"`
@@ -58,11 +62,30 @@ func NewPower() *Power {
 	p.initUpower()
 	p.initEventHandle()
 
+	var err error
+	if p.notifier, err = notifications.NewNotifier("org.freedesktop.Notifications", "/org/freedesktop/Notifications"); err != nil {
+		LOGGER.Warning("Can't build org.freedesktop.Notficaations:", err)
+	}
+
 	return p
 }
 
+func (p *Power) sendNotify(icon, summary, body string) {
+	//TODO: close previous notification
+	if p.notifier != nil {
+		p.notifier.Notify("com.deepin.daemon.power", 0, icon, summary, body, nil, nil, 0)
+	} else {
+		LOGGER.Warning("failed to show notify message:", summary, body)
+	}
+}
+
 func main() {
+	if !dlib.UniqueOnSession("com.deepin.daemon.Power") {
+		LOGGER.Warning("There already has an Power daemon running.")
+		return
+	}
 	p := NewPower()
+
 	dbus.InstallOnSession(p)
 	fmt.Println("GetBattery:", getBattery().Vendor.Get())
 	dbus.Wait()

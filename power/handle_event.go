@@ -31,6 +31,13 @@ func doLock() {
 
 }
 
+func doShowLowpower() {
+	go exec.Command("/usr/lib/deepin-daemon/lowpower").Run()
+}
+func doCloseLowpower() {
+	go exec.Command("killall", "lowpower").Run()
+}
+
 func doShutDown() {
 	if m, err := sessionmanager.NewSessionManager("com.deepin.SessionManager", "/com/deepin/SessionManager"); err != nil {
 		LOGGER.Warning("can't build SessionManager Object:", err)
@@ -139,8 +146,12 @@ func (p *Power) initEventHandle() {
 				if p.coreSettings.GetBoolean("lock-enabled") {
 					doLock()
 				}
+			} else {
+				p.handleBatteryPercentage()
+				if p.lowBatteryStatus == lowBatteryStatusAction {
+					doShowLowpower()
+				}
 			}
 		})
 	}
-
 }
