@@ -254,3 +254,19 @@ func (this *Manager) GetConnectionByUuid(uuid string) (cpath dbus.ObjectPath, er
 	cpath, err = _NMSettings.GetConnectionByUuid(uuid)
 	return
 }
+
+// GetActiveConnectionState get current state of the active connection.
+func (this *Manager) GetActiveConnectionState(uuid string) (state uint32) {
+	cpath, err := _NMSettings.GetConnectionByUuid(uuid)
+	if err != nil {
+		LOGGER.Error("GetActiveConnectionState,", err)
+		return
+	}
+	conn, err := nm.NewActiveConnection(NMDest, cpath)
+	if err != nil {
+		LOGGER.Error("GetActiveConnectionState,", err)
+		return
+	}
+	state = conn.State.Get()
+	return
+}
