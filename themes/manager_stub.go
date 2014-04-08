@@ -113,7 +113,6 @@ func (op *Manager) setPropName(propName string) {
                         // Check if theme properties valid
                         if !objUtil.IsElementExist(obj.GtkTheme, op.GtkThemeList) ||
                                 !objUtil.IsElementExist(obj.IconTheme, op.IconThemeList) ||
-                                //!objUtil.IsElementExist(obj.FontName, op.FontThemeList) ||
                                 !objUtil.IsElementExist(obj.CursorTheme, op.CursorThemeList) {
                                 op.CurrentTheme = DEFAULT_THEME_NAME
                                 personSettings.SetString(GKEY_CURRENT_THEME, DEFAULT_THEME_NAME)
@@ -198,7 +197,7 @@ func (op *Manager) listenSettingsChanged() {
                         obj := op.getThemeObject(op.CurrentTheme)
                         if obj != nil && obj.BackgroundFile != value {
                                 if name := op.setTheme(obj.GtkTheme, obj.IconTheme,
-                                        obj.CursorTheme, obj.FontName,
+                                        obj.CursorTheme, obj.FontSize,
                                         value, obj.SoundTheme); name != op.CurrentTheme {
                                         op.updateGSettingsKey(GKEY_CURRENT_THEME, name)
                                 }
@@ -208,7 +207,7 @@ func (op *Manager) listenSettingsChanged() {
                         obj := op.getThemeObject(op.CurrentTheme)
                         if obj != nil && obj.SoundTheme != value {
                                 if name := op.setTheme(obj.GtkTheme, obj.IconTheme,
-                                        obj.CursorTheme, obj.FontName,
+                                        obj.CursorTheme, obj.FontSize,
                                         obj.BackgroundFile, value); name != op.CurrentTheme {
                                         op.updateGSettingsKey(GKEY_CURRENT_THEME, name)
                                 }

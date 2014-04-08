@@ -42,7 +42,7 @@ const (
         THEME_KEY_GTK         = "GtkTheme"
         THEME_KEY_ICONS       = "IconTheme"
         THEME_KEY_CURSOR      = "CursorTheme"
-        THEME_KEY_GTK_FONT    = "FontName"
+        THEME_KEY_FONT_SIZE   = "FontSize"
         THEME_KEY_BG          = "BackgroundFile"
         THEME_KEY_SOUND       = "SoundTheme"
 )
@@ -109,14 +109,14 @@ func (op *Theme) updateThemeInfo() {
         dbus.NotifyChange(op, "CursorTheme")
 
         str, err1 = keyFile.GetString(THEME_GROUP_COMPONENT,
-                THEME_KEY_GTK_FONT)
+                THEME_KEY_FONT_SIZE)
         if err1 != nil {
                 logObject.Infof("Get key '%s' value failed: %v",
-                        THEME_KEY_GTK_FONT, err1)
+                        THEME_KEY_FONT_SIZE, err1)
                 return
         }
-        op.FontName = str
-        dbus.NotifyChange(op, "FontName")
+        op.FontSize = str
+        dbus.NotifyChange(op, "FontSize")
 
         str, err1 = keyFile.GetString(THEME_GROUP_COMPONENT,
                 THEME_KEY_BG)

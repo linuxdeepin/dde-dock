@@ -23,18 +23,21 @@ package main
 
 import (
         "dlib/gio-2.0"
+        "os/exec"
 )
 
 const (
         QT_CONFIG_FILE    = ".config/Trolltech.conf"
-        FONT_DEFAULT_SIZE = " 11"
-        TITLE_FONT_SIZE   = " 10"
+        DEFAULT_FONT_SIZE = " 11"
 
         QT_KEY_GROUP   = "Qt"
         QT_KEY_STYLE   = "stype"
         QT_STYLE_VALUE = "GTK+"
         QT_KEY_FONT    = "font"
-        QT_FONT_ARGS   = ",11,-1,5,50,0,0,0,0,0"
+        QT_FONT_ARGS   = ",-1,5,50,0,0,0,0,0"
+
+        DEFAULT_FONT      = "WenQuanYi Micro Hei"
+        DEFAULT_FONT_MONO = "WenQuanYi Micro Hei Mono"
 )
 
 var (
@@ -45,7 +48,7 @@ func (op *Theme) setThemeViaXSettings() {
         setGtkThemeViaXSettings(op.GtkTheme)
         setIconThemeViaXSettings(op.IconTheme)
         setCursorThemeViaXSettings(op.CursorTheme)
-        setGtkFontThemeViaXSettings(op.FontName)
+        setFontNameViaXSettings(DEFAULT_FONT, op.FontSize)
 }
 
 func setGtkThemeViaXSettings(name string) {
@@ -66,13 +69,41 @@ func setCursorThemeViaXSettings(name string) {
         objXSettings.SetString("Gtk/CursorThemeName", name)
 }
 
-func setGtkFontThemeViaXSettings(name string) {
+func setFontNameViaXSettings(name, size string) {
         //logObject.Infof("Set Font: %s\n", name)
-        objXSettings.SetString("Gtk/FontName", name+FONT_DEFAULT_SIZE)
-        wmPreSettings.SetString("titlebar-font", name+TITLE_FONT_SIZE)
+        if len(name) <= 0 {
+                name = DEFAULT_FONT
+        }
+
+        if len(size) <= 0 {
+                size = DEFAULT_FONT_SIZE
+        }
+
+        objXSettings.SetString("Gtk/FontName", name+" "+size)
+        wmPreSettings.SetString("titlebar-font", name+" Bold "+size)
         homeDir := getHomeDir()
         if ok := objUtil.WriteKeyToKeyFile(homeDir+"/"+QT_CONFIG_FILE,
-                QT_KEY_GROUP, QT_KEY_FONT, "\""+name+QT_FONT_ARGS+"\""); !ok {
+                QT_KEY_GROUP, QT_KEY_FONT, "\""+name+","+size+QT_FONT_ARGS+"\""); !ok {
                 logObject.Infof("Write key: '%s', value: '%s', in file: '%s' failed", QT_KEY_FONT, name, homeDir+"/"+QT_CONFIG_FILE)
         }
+        setFontMono(DEFAULT_FONT_MONO, size)
+}
+
+func setFontMono(name, size string) {
+        if len(name) <= 0 {
+                return
+        }
+
+        if len(size) <= 0 {
+                size = "10"
+        }
+
+        args := []string{}
+        args = append(args, "-t")
+        args = append(args, "string")
+        args = append(args, "-s")
+        args = append(args, "/desktop/gnome/interface/monospace_font_name")
+        args = append(args, name+" "+size)
+
+        exec.Command("/usr/bin/gconftool", args...).Run()
 }

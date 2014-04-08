@@ -31,7 +31,7 @@ type Theme struct {
         GtkTheme       string
         IconTheme      string
         CursorTheme    string
-        FontName       string
+        FontSize       string
         BackgroundFile string
         SoundTheme     string
         PreviewPath    string
