@@ -1,8 +1,9 @@
 package main
 
-import "dlib/gio-2.0"
-import "fmt"
-import "path/filepath"
+import (
+	"dlib/gio-2.0"
+	"path/filepath"
+)
 
 type NormalApp struct {
 	Id   string
@@ -53,7 +54,7 @@ func (app *NormalApp) buildMenu() {
 	dockItem := NewMenuItem(
 		"_Undock",
 		func() { /*TODO: do the real work*/
-			fmt.Println("Undock")
+			DOCKED_APP_MANAGER.Undock(app.Id)
 		},
 		true,
 	)

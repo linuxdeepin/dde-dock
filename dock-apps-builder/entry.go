@@ -47,7 +47,7 @@ func NewAppEntryWithNormalApp(nApp *NormalApp) *AppEntry {
 		Data: make(map[string]string),
 	}
 	e.setData(FieldStatus, NormalStatus)
-	e.attachNoramlApp(nApp)
+	e.attachNormalApp(nApp)
 	return e
 }
 
@@ -120,7 +120,7 @@ func (e *AppEntry) update() {
 		e.setData(FieldMenu, e.nApp.Menu)
 	}
 }
-func (e *AppEntry) attachNoramlApp(nApp *NormalApp) {
+func (e *AppEntry) attachNormalApp(nApp *NormalApp) {
 	if e.nApp != nil {
 		return
 	}
@@ -132,8 +132,8 @@ func (e *AppEntry) attachNoramlApp(nApp *NormalApp) {
 func (e *AppEntry) detachNormalApp() {
 	if e.nApp != nil {
 		fmt.Println("DetachNormalApp", e.nApp.Id)
-		e.nApp = nil
 		e.nApp.setChangedCB(nil)
+		e.nApp = nil
 		if e.rApp != nil {
 			e.update()
 		}

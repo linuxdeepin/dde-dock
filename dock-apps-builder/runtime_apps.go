@@ -138,7 +138,7 @@ func (app *RuntimeApp) buildMenu() {
 	dockItem := NewMenuItem(
 		"_Dock",
 		func() { /*TODO: do the real work*/
-			LOGGER.Warning("dock")
+			LOGGER.Warning("dock item")
 			var err error
 			if DOCKED_APP_MANAGER == nil {
 				DOCKED_APP_MANAGER, err = dock.NewDockedAppManager(
@@ -158,8 +158,17 @@ func (app *RuntimeApp) buildMenu() {
 				// TODO:
 				icon = ""
 				exec = app.exec
+			} else {
+				title = app.core.GetDisplayName()
+				icon =
+					get_theme_icon(app.core.GetIcon().ToString(),
+						48)
+				exec =
+					app.core.GetString(glib.KeyFileDesktopKeyExec)
 			}
 
+			LOGGER.Info("id", app.Id, "title", title, "icon", icon,
+				"exec", exec)
 			_, err = DOCKED_APP_MANAGER.Dock(
 				app.Id,
 				title,

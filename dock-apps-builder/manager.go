@@ -65,6 +65,7 @@ func initManager() *Manager {
 	m.runtimeApps = make(map[string]*RuntimeApp)
 	m.normalApps = make(map[string]*NormalApp)
 	m.appEntries = make(map[string]*AppEntry)
+	m.listenDockedApp()
 	return m
 }
 
@@ -83,16 +84,16 @@ func (m *Manager) listenDockedApp() {
 	}
 
 	DOCKED_APP_MANAGER.ConnectDocked(func(id string) {
-		if _, ok := m.appEntries[id]; ok {
+		if _, ok := m.normalApps[id]; ok {
 			LOGGER.Info(id, "is docked")
 			return
 		}
-
 		m.createNormalApp(id + ".desktop")
 	})
 
 	DOCKED_APP_MANAGER.ConnectUndocked(func(id string) {
-		LOGGER.Info("TODO: handle undockde")
+		// undocked is operated on normal app
+		m.destroyEntry(id)
 	})
 }
 
@@ -166,11 +167,11 @@ func (m *Manager) updateEntry(appId string, nApp *NormalApp, rApp *RuntimeApp) {
 		e.detachNormalApp()
 	case nApp != nil && rApp != nil:
 		e := m.mustGetEntry(nApp, rApp)
-		e.attachNoramlApp(nApp)
+		e.attachNormalApp(nApp)
 		e.attachRuntimeApp(rApp)
 	case nApp != nil && rApp == nil:
 		e := m.mustGetEntry(nApp, rApp)
-		e.attachNoramlApp(nApp)
+		e.attachNormalApp(nApp)
 		e.detachRuntimeApp()
 	}
 }
