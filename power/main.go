@@ -12,15 +12,19 @@ type Power struct {
 	coreSettings *gio.Settings
 	lidIsClosed  bool
 
-	PowerButtonAction *property.GSettingsEnumProperty
-	LidClosedAction   *property.GSettingsEnumProperty
-	LockWhenActive    *property.GSettingsBoolProperty
+	PowerButtonAction *property.GSettingsEnumProperty `access:"readwrite"`
+	LidClosedAction   *property.GSettingsEnumProperty `access:"readwrite"`
+	LockWhenActive    *property.GSettingsBoolProperty `access:"readwrite"`
 
 	LidIsPresent bool
 
-	CurrentPlan  int32 `dbus:"readwrite"`
-	SuspendDelay int32 `dbus:"readwrite"`
-	IdleDelay    int32 `dbus:"readwrite"`
+	LinePowerPlan         int32 `access:"readwrite"`
+	LinePowerSuspendDelay int32 `access:"readwrite"`
+	LinePowerIdleDelay    int32 `access:"readwrite"`
+
+	BatteryPlan         int32 `access:"readwrite"`
+	BatterySuspendDelay int32 `access:"readwrite"`
+	BatteryIdleDelay    int32 `access:"readwrite"`
 
 	BatteryPercentage float64
 
@@ -47,7 +51,8 @@ func NewPower() *Power {
 	p.LidClosedAction = property.NewGSettingsEnumProperty(p, "LidClosedAction", p.coreSettings, "lid-close")
 	p.LockWhenActive = property.NewGSettingsBoolProperty(p, "LockWhenActive", p.coreSettings, "lock-enabled")
 
-	p.setPlan(int32(p.coreSettings.GetEnum("current-power-plan")))
+	p.setBatteryPlan(int32(p.coreSettings.GetEnum("battery-plan")))
+	p.setLinePowerPlan(int32(p.coreSettings.GetEnum("ac-plan")))
 	fmt.Println("LidClosedAction:", p.LidClosedAction.Get())
 
 	p.initUpower()
