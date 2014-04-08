@@ -190,28 +190,33 @@ func checkSettingIp4ConfigValues(data _ConnectionData) (errs map[string]string) 
 
 	// check NM_SETTING_IP4_CONFIG_METHOD
 	if !isSettingIp4ConfigMethodExists(data) {
-		errs[NM_SETTING_IP4_CONFIG_METHOD] = NM_KEY_ERROR_MISSING_VALUE
+		rememberError(errs, NM_SETTING_IP4_CONFIG_METHOD, NM_KEY_ERROR_MISSING_VALUE)
 		return
 	}
 	method := getSettingIp4ConfigMethod(data)
 	switch method {
 	default:
-		errs[NM_SETTING_IP4_CONFIG_METHOD] = NM_KEY_ERROR_INVALID_VALUE
+		rememberError(errs, NM_SETTING_IP4_CONFIG_METHOD, NM_KEY_ERROR_INVALID_VALUE)
 		return
 	case NM_SETTING_IP4_CONFIG_METHOD_AUTO:
 	case NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL: // ignore
 		checkSettingIp4MethodConflict(data, errs)
 	case NM_SETTING_IP4_CONFIG_METHOD_MANUAL:
 		// check NM_SETTING_IP4_CONFIG_ADDRESSES
-		errMsg := checkSettingIp4ConfigAddresses(data)
-		if len(errMsg) != 0 {
-			errs[NM_SETTING_IP4_CONFIG_ADDRESSES] = errMsg
+		if !isSettingIp4ConfigAddressesExists(data) {
+			rememberError(errs, NM_SETTING_IP4_CONFIG_ADDRESSES, NM_KEY_ERROR_MISSING_VALUE)
 		}
 	case NM_SETTING_IP4_CONFIG_METHOD_SHARED: // ignore
 		checkSettingIp4MethodConflict(data, errs)
 	case NM_SETTING_IP4_CONFIG_METHOD_DISABLED: // ignore
 		checkSettingIp4MethodConflict(data, errs)
 	}
+
+	// check value NM_SETTING_IP4_CONFIG_DNS
+	checkSettingIp4ConfigDns(data, errs)
+
+	// check value NM_SETTING_IP4_CONFIG_ADDRESSES
+	checkSettingIp4ConfigAddresses(data, errs)
 
 	return
 }
@@ -238,28 +243,43 @@ func checkSettingIp4MethodConflict(data _ConnectionData, errs map[string]string)
 	}
 }
 
-func checkSettingIp4ConfigAddresses(data _ConnectionData) (errMsg string) {
-	if !isSettingIp4ConfigAddressesExists(data) {
-		errMsg = NM_KEY_ERROR_MISSING_VALUE
+func checkSettingIp4ConfigDns(data _ConnectionData, errs map[string]string) {
+	if !isSettingIp4ConfigDnsExists(data) {
 		return
 	}
+	dnses := getSettingIp4ConfigDns(data)
+	if len(dnses) == 0 {
+		rememberError(errs, NM_SETTING_IP4_CONFIG_DNS, NM_KEY_ERROR_EMPTY_VALUE)
+		return
+	}
+	for _, dns := range dnses {
+		if dns == 0 {
+			rememberError(errs, NM_SETTING_IP4_CONFIG_DNS, NM_KEY_ERROR_INVALID_VALUE)
+			return
+		}
+	}
+}
 
+func checkSettingIp4ConfigAddresses(data _ConnectionData, errs map[string]string) {
+	if !isSettingIp4ConfigAddressesExists(data) {
+		return
+	}
 	addresses := getSettingIp4ConfigAddresses(data)
 	if len(addresses) == 0 {
-		errMsg = NM_KEY_ERROR_MISSING_VALUE
+		rememberError(errs, NM_SETTING_IP4_CONFIG_ADDRESSES, NM_KEY_ERROR_EMPTY_VALUE)
 		return
 	}
 	for _, addr := range addresses {
 		if len(addr) != 3 {
-			errMsg = NM_KEY_ERROR_IP4_ADDRESSES_STRUCT
+			rememberError(errs, NM_SETTING_IP4_CONFIG_ADDRESSES, NM_KEY_ERROR_IP4_ADDRESSES_STRUCT)
 			return
 		}
 		// check prefix
 		if addr[1] < 1 || addr[1] > 32 {
-			errMsg = NM_KEY_ERROR_IP4_ADDRESSES_PREFIX
+			rememberError(errs, NM_SETTING_IP4_CONFIG_ADDRESSES, NM_KEY_ERROR_IP4_ADDRESSES_PREFIX)
+			return
 		}
 	}
-	return
 }
 
 // TODO Adder
