@@ -6,6 +6,7 @@ import "dlib/dbus"
 import "dlib/dbus/property"
 import "dlib/gio-2.0"
 import "dbus/org/freedesktop/notifications"
+import "os"
 import "fmt"
 
 var LOGGER = logger.NewLogger("com.deepin.daemon.Power").SetLogLevel(logger.LEVEL_INFO)
@@ -38,6 +39,14 @@ type Power struct {
 	BatteryIsPresent bool
 
 	OnBattery bool
+}
+
+func (p *Power) Reset() {
+	p.PowerButtonAction.Set(ActionInteractive)
+	p.LidClosedAction.Set(ActionSuspend)
+	p.LockWhenActive.Set(true)
+	p.setLinePowerPlan(PowerPlanHighPerformance)
+	p.setBatteryPlan(PowerPlanBalanced)
 }
 
 func (*Power) GetDBusInfo() dbus.DBusInfo {
@@ -86,7 +95,14 @@ func main() {
 	}
 	p := NewPower()
 
-	dbus.InstallOnSession(p)
-	fmt.Println("GetBattery:", getBattery().Vendor.Get())
-	dbus.Wait()
+	if err := dbus.InstallOnSession(p); err != nil {
+		LOGGER.Error("Failed InstallOnSession:", err)
+	}
+	if err := dbus.Wait(); err != nil {
+		LOGGER.Error("dbus.Wait recieve an error:", err)
+		os.Exit(1)
+	} else {
+		os.Exit(0)
+	}
+
 }
