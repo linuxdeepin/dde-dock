@@ -72,6 +72,41 @@ func getConnectionDataKeyDefaultValueJSON(field, key string) (valueJSON string) 
 	return
 }
 
+func isJSONKeyValueMeansToDeleteKey(valueJSON string, t ktype) (doDelete bool) {
+	if valueJSON == `null` || valueJSON == `""` || valueJSON == `[]` {
+		return true
+	}
+	switch t {
+	case ktypeIpv6Addresses:
+	case ktypeIpv6Routes:
+	case ktypeWrapperIpv4Dns:
+		if valueJSON == `[""]` {
+			doDelete = true
+		}
+	case ktypeWrapperIpv4Addresses:
+		if valueJSON == `[{"Address":"","Mask":"","Gateway":""}]` {
+			doDelete = true
+		}
+	case ktypeWrapperIpv4Routes:
+		if valueJSON == `[{"Address":"","Mask":"","NextHop":"","Metric":0}]` {
+			doDelete = true
+		}
+	case ktypeWrapperIpv6Dns:
+		if valueJSON == `[""]` {
+			doDelete = true
+		}
+	case ktypeWrapperIpv6Addresses:
+		if valueJSON == `[{"Address":"","Prefix":0,"Gateway":""}]` {
+			doDelete = true
+		}
+	case ktypeWrapperIpv6Routes:
+		if valueJSON == `[{"Address":"","Prefix":0,"NextHop":"","Metric":0}]` {
+			doDelete = true
+		}
+	}
+	return
+}
+
 func getConnectionDataKeyJSON(data _ConnectionData, field, key string, t ktype) (valueJSON string) {
 	var value interface{}
 	if isConnectionDataKeyExists(data, field, key) {
@@ -102,7 +137,7 @@ func setConnectionDataKeyJSON(data _ConnectionData, field, key, valueJSON string
 	}
 
 	// remove connection data key if valueJSON is null or empty
-	if valueJSON == `null` || valueJSON == `""` || valueJSON == `[]` {
+	if isJSONKeyValueMeansToDeleteKey(valueJSON, t) {
 		removeConnectionDataKey(data, field, key)
 		return
 	}

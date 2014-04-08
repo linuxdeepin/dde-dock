@@ -54,8 +54,6 @@ const (
 func (*Utils) TestGetSetConnectionData(c *C) {
 	data := make(_ConnectionData)
 
-	c.Check(getSettingConnectionId(data), Equals, "")
-
 	addConnectionDataField(data, fieldConnection)
 	setSettingConnectionId(data, testConnectionId)
 	setSettingConnectionUuid(data, testConnectionUuid)
@@ -89,6 +87,7 @@ func (*Utils) TestConnectionDataDefaultValue(c *C) {
 	addConnectionDataField(data, fieldWired)
 	addConnectionDataField(data, field8021x)
 	addConnectionDataField(data, fieldIPv4)
+	addConnectionDataField(data, fieldIPv6)
 
 	// ktypeBoolean
 	defaultValueJSON = `true`
@@ -126,28 +125,45 @@ func (*Utils) TestConnectionDataDefaultValue(c *C) {
 
 	// ktypeWrapperIpv4Dns
 	defaultValueJSON = `null`
-	setValueJSON = `[]`
-	// setValueJSON = `[""]` // TODO
+	setValueJSON = `[""]`
 	c.Check(getSettingIp4ConfigDnsJSON(data), Equals, defaultValueJSON)
 	setSettingIp4ConfigDnsJSON(data, setValueJSON)
 	c.Check(isConnectionDataKeyExists(data, fieldIPv4, NM_SETTING_IP4_CONFIG_DNS), Equals, false)
 
 	// ktypeWrapperIpv4Addresses
 	defaultValueJSON = `null`
-	setValueJSON = `[]`
-	// setValueJSON = `[{"Address":"","Mask":"","Gateway":""}]` // TODO
+	setValueJSON = `[{"Address":"","Mask":"","Gateway":""}]`
 	c.Check(getSettingIp4ConfigAddressesJSON(data), Equals, defaultValueJSON)
 	setSettingIp4ConfigAddressesJSON(data, setValueJSON)
 	c.Check(isConnectionDataKeyExists(data, fieldIPv4, NM_SETTING_IP4_CONFIG_ADDRESSES), Equals, false)
 
 	// ktypeWrapperIpv4Routes
 	defaultValueJSON = `null`
-	setValueJSON = `[]`
-	// setValueJSON = `[{"Address":"","Mask":"","NextHop":"","Metric":0}]` // TODO
+	setValueJSON = `[{"Address":"","Mask":"","NextHop":"","Metric":0}]`
 	c.Check(getSettingIp4ConfigRoutesJSON(data), Equals, defaultValueJSON)
 	setSettingIp4ConfigRoutesJSON(data, setValueJSON)
 	c.Check(isConnectionDataKeyExists(data, fieldIPv4, NM_SETTING_IP4_CONFIG_ROUTES), Equals, false)
 
+	// ktypeWrapperIpv6Dns
+	defaultValueJSON = `null`
+	setValueJSON = `[""]`
+	c.Check(getSettingIp6ConfigDnsJSON(data), Equals, defaultValueJSON)
+	setSettingIp6ConfigDnsJSON(data, setValueJSON)
+	c.Check(isSettingIp6ConfigDnsExists(data), Equals, false)
+
+	// ktypeWrapperIpv6Addresses
+	defaultValueJSON = `null`
+	setValueJSON = `[{"Address":"","Prefix":0,"Gateway":""}]`
+	c.Check(getSettingIp6ConfigAddressesJSON(data), Equals, defaultValueJSON)
+	setSettingIp6ConfigAddressesJSON(data, setValueJSON)
+	c.Check(isSettingIp6ConfigAddressesExists(data), Equals, false)
+
+	// ktypeWrapperIpv6
+	defaultValueJSON = `null`
+	setValueJSON = `[{"Address":"","Prefix":0,"NextHop":"","Metric":0}]`
+	c.Check(getSettingIp6ConfigRoutesJSON(data), Equals, defaultValueJSON)
+	setSettingIp6ConfigRoutesJSON(data, setValueJSON)
+	c.Check(isSettingIp6ConfigRoutesExists(data), Equals, false)
 }
 
 func (*Utils) TestConvertMacAddressToString(c *C) {
