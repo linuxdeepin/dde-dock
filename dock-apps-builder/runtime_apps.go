@@ -151,22 +151,20 @@ func (app *RuntimeApp) buildMenu() {
 				}
 			}
 			LOGGER.Info("appid:", app.Id)
-			// TODO:
-			// these two need to do something.
-			var title string
-			var icon string
-			if app.core != nil {
-				title = app.core.GetDisplayName()
-				icon = app.core.GetIcon().ToString()
-			} else {
+
+			var title, icon, exec string
+			if app.core == nil {
 				title = app.Id
+				// TODO:
 				icon = ""
+				exec = app.exec
 			}
+
 			_, err = DOCKED_APP_MANAGER.Dock(
 				app.Id,
 				title,
 				icon,
-				app.exec,
+				exec,
 			)
 			if err != nil {
 				LOGGER.Error("Docked failed: ", err)
@@ -305,8 +303,11 @@ func (app *RuntimeApp) updateIcon(xid xproto.Window) {
 			icon := get_theme_icon(gioIcon.ToString(), 48)
 			if icon != "" {
 				LOGGER.Debug("get_theme_icon:", icon)
-				ext := path.Ext(icon)
-				if strings.EqualFold(ext, "xmp") {
+				// the path.Ext return ".xxx"
+				ext := path.Ext(icon)[1:]
+				LOGGER.Debug("ext:", ext)
+				if strings.EqualFold(ext, "xpm") {
+					LOGGER.Debug("change xmp to data uri")
 					buf, err := ioutil.ReadFile(icon)
 					if err != nil {
 						app.xids[xid].Icon = "data:image/png;base64," +

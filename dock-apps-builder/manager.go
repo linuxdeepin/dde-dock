@@ -1,5 +1,7 @@
 package main
 
+import "dbus/com/deepin/daemon/dock"
+import "dlib"
 import "dlib/dbus"
 import "dlib/logger"
 import "flag"
@@ -64,6 +66,34 @@ func initManager() *Manager {
 	m.normalApps = make(map[string]*NormalApp)
 	m.appEntries = make(map[string]*AppEntry)
 	return m
+}
+
+func (m *Manager) listenDockedApp() {
+	// TODO:
+	if DOCKED_APP_MANAGER == nil {
+		var err error
+		DOCKED_APP_MANAGER, err = dock.NewDockedAppManager(
+			"com.deepin.daemon.Dock",
+			"/dde/dock/DockedAppManager",
+		)
+		if err != nil {
+			LOGGER.Warning("get DockedAppManager failed", err)
+			return
+		}
+	}
+
+	DOCKED_APP_MANAGER.ConnectDocked(func(id string) {
+		if _, ok := m.appEntries[id]; ok {
+			LOGGER.Info(id, "is docked")
+			return
+		}
+
+		m.createNormalApp(id + ".desktop")
+	})
+
+	DOCKED_APP_MANAGER.ConnectUndocked(func(id string) {
+		LOGGER.Info("TODO: handle undockde")
+	})
 }
 
 func (m *Manager) runtimeAppChangged(xids []xproto.Window) {
@@ -200,6 +230,7 @@ func main() {
 		LOGGER.SetLogLevel(logger.LEVEL_DEBUG)
 	}
 
+	dlib.InitI18n()
 	initDeepin()
 	for _, id := range loadAll() {
 		// LOGGER.Debug(id)

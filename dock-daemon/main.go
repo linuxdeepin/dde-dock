@@ -16,6 +16,8 @@ func main() {
 		}
 	}()
 
+	dlib.InitI18n()
+
 	// configure logger
 	logger.SetRestartCommand("/usr/lib/deepin-daemon/grub2", "--debug")
 	if stringInSlice("-d", os.Args) || stringInSlice("--debug", os.Args) {
