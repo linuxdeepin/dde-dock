@@ -30,13 +30,12 @@ var (
 
 type Manager struct {
 	//update by manager.go
-	WiredEnabled         bool          `access:"readwrite"`
-	VPNEnabled           bool          `access:"readwrite"`
-	WirelessEnabled      dbus.Property `access:"readwrite"`
-	NetworkingEnabled    dbus.Property `access:"readwrite"`
-	ActiveConnections    []string      // uuid collection of connections that activated
-	ActivatingConnection string        // TODO uuid of connection that avtivating
-	State                uint32        // networking state
+	WiredEnabled      bool          `access:"readwrite"`
+	VPNEnabled        bool          `access:"readwrite"`
+	WirelessEnabled   dbus.Property `access:"readwrite"`
+	NetworkingEnabled dbus.Property `access:"readwrite"`
+	ActiveConnections []string      // uuid collection of connections that activated
+	State             uint32        // networking state
 
 	//update by devices.go
 	WirelessDevices []*Device // TODO is "Device" struct still needed?
@@ -82,9 +81,6 @@ func (this *Manager) initManager() {
 		this.updatePropActiveConnections()
 	})
 
-	// TODO update property "ActivatingConnection"
-	this.updatePropActivatingConnection()
-
 	// update property "State"
 	this.updatePropState()
 	_NMManager.State.ConnectChanged(func() {
@@ -99,14 +95,10 @@ func (this *Manager) updatePropActiveConnections() {
 	for _, cpath := range _NMManager.ActiveConnections.Get() {
 		if conn, err := nm.NewActiveConnection(NMDest, cpath); err == nil {
 			this.ActiveConnections = append(this.ActiveConnections, conn.Uuid.Get())
+			LOGGER.Debugf("ActiveConnections, uuid=%s, state=%d", conn.Uuid.Get(), conn.State.Get()) // TODO test
 		}
 	}
 	dbus.NotifyChange(this, "ActiveConnections")
-}
-
-// TODO
-func (this *Manager) updatePropActivatingConnection() {
-	dbus.NotifyChange(this, "ActivatingConnection")
 }
 
 func (this *Manager) updatePropState() {

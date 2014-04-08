@@ -105,14 +105,14 @@ func (this *Manager) addWirelessDevice(dev *nm.Device) {
 		devWireless.ConnectAccessPointAdded(func(apPath dbus.ObjectPath) {
 			if this.AccessPointAdded != nil {
 				if ap, err := NewAccessPoint(apPath); err == nil {
-					LOGGER.Debug("AccessPointAdded:", ap.Ssid, apPath)
+					// LOGGER.Debug("AccessPointAdded:", ap.Ssid, apPath) // TODO test
 					this.AccessPointAdded(string(dev.Path), string(ap.Path))
 				}
 			}
 		})
 		devWireless.ConnectAccessPointRemoved(func(apPath dbus.ObjectPath) {
 			if this.AccessPointRemoved != nil {
-				LOGGER.Debug("AccessPointRemoved:", apPath)
+				// LOGGER.Debug("AccessPointRemoved:", apPath) // TODO test
 				this.AccessPointRemoved(string(dev.Path), string(apPath))
 			}
 		})
@@ -261,14 +261,18 @@ func (this *Manager) getDeviceAddress(devPath dbus.ObjectPath, devType uint32) s
 }
 
 func (this *Manager) ActivateConnection(uuid string, dev dbus.ObjectPath) (err error) {
-	LOGGER.Debug("ActivateConnection:", uuid, dev)
+	LOGGER.Debugf("ActivateConnection: uuid=%s, devPath=%s", uuid, dev)
 	cpath, err := _NMSettings.GetConnectionByUuid(uuid)
 	if err != nil {
+		LOGGER.Error(err)
 		return
 	}
 	// TODO, ap path, "/"
 	spath := dbus.ObjectPath("/")
 	_, err = _NMManager.ActivateConnection(cpath, dev, spath)
+	if err != nil {
+		LOGGER.Error(err)
+	}
 	return
 }
 func (this *Manager) DeactivateConnection(uuid dbus.ObjectPath) (err error) {

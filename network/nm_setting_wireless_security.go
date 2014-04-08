@@ -136,6 +136,11 @@ func getSettingWirelessSecurityAvailableKeys(data _ConnectionData) (keys []strin
 // TODO Get available values
 func getSettingWirelessSecurityAvailableValues(key string) (values []string, customizable bool) {
 	customizable = true
+	switch key {
+	case NM_SETTING_WIRELESS_SECURITY_KEY_MGMT:
+		values = []string{"none", "ieee8021x", "wpa-none", "wpa-psk", "wpa-eap"}
+		customizable = false
+	}
 	return
 }
 
