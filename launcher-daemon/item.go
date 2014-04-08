@@ -3,7 +3,7 @@ package main
 import (
 	// "crypto/md5"
 	"database/sql"
-	"fmt"
+	// "fmt"
 	"log"
 	"path"
 	"strings"
@@ -89,7 +89,7 @@ func (i *ItemInfo) destroy() {
 		// fmt.Printf("delete id from category#%d\n", cid)
 		delete(categoryTable[cid].items, i.Id)
 	}
-	// fmt.Println("delete id from category#-1")
+	// logger.Info("delete id from category#-1")
 	delete(categoryTable[OtherID].items, i.Id)
 }
 
@@ -118,7 +118,7 @@ func getDeepinCategory(app *gio.DesktopAppInfo) (CategoryId, error) {
 		return OtherID, err
 	}
 	id := findCategoryId(categoryName)
-	// fmt.Println(categoryName, id)
+	// logger.Info(categoryName, id)
 	return id, nil
 }
 
@@ -187,15 +187,15 @@ func initItems() {
 }
 
 func getItemInfos(id CategoryId) []ItemInfo {
-	// fmt.Println(id)
+	// logger.Info(id)
 	infos := make([]ItemInfo, 0)
 	if _, ok := categoryTable[id]; !ok {
-		fmt.Println("category id:", id, "not exist")
+		logger.Info("category id:", id, "not exist")
 		return infos
 	}
 
 	for k, _ := range categoryTable[id].items {
-		// fmt.Println("get item", k, "from category#", id)
+		// logger.Info("get item", k, "from category#", id)
 		if _, ok := itemTable[k]; ok {
 			infos = append(infos, *itemTable[k])
 		}

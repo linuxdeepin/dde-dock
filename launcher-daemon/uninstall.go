@@ -2,7 +2,7 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
+	// "fmt"
 	"log"
 	"os/exec"
 	p "path"
@@ -20,10 +20,10 @@ const (
 func getPackageNames(path string) []string {
 	names, err := getPackageNamesFromDatabase(path)
 	if err != nil {
-		fmt.Println(err)
+		logger.Info(err)
 		names, err = getPackageNamesFromCommandline(path)
 		if err != nil {
-			fmt.Println(err)
+			logger.Info(err)
 			return names
 		}
 	}

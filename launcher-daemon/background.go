@@ -28,9 +28,9 @@ func (b *Background) init() error {
 	b.settings = gio.NewSettings(PersonalizationID)
 	detailSignal := fmt.Sprintf("changed::%s", CurrentBgKey)
 	b.settings.Connect(detailSignal, func(s *gio.Settings, key string, d interface{}) {
-		fmt.Println(key)
+		logger.Info(key)
 		uri := s.GetString(key)
-		fmt.Println(uri)
+		logger.Info(uri)
 		b.changed <- true
 	})
 
@@ -46,7 +46,7 @@ func (b *Background) currentBg() string {
 	//  1: original pic
 	status, blurPath, err := b.imgHandler.BackgroundBlurPictPath(pict, "", 30, 1)
 	if err != nil {
-		fmt.Println("BackgroundBlurPictPath:", err)
+		logger.Info("BackgroundBlurPictPath:", err)
 		return DefaultBackgroundImage
 	}
 

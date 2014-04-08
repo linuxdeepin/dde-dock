@@ -39,7 +39,7 @@ func defaultConfigPath() string {
 func getFavorIdList(file *glib.KeyFile) []string {
 	_, list, err := file.GetStringList(FavorConfigGroup, FavorConfigKey)
 	if err != nil {
-		fmt.Println(fmt.Errorf("getFavorIdList: %s", err))
+		logger.Info(fmt.Errorf("getFavorIdList: %s", err))
 		return make([]string, 0)
 	}
 	return uniqueStringList(list)
@@ -50,7 +50,7 @@ func getFavors() FavorItemList {
 	file, err := configFile(FavorConfigFile, defaultConfigPath())
 	defer file.Free()
 	if err != nil {
-		fmt.Println(fmt.Errorf("getFavors: %s", err))
+		logger.Info(fmt.Errorf("getFavors: %s", err))
 		return favors
 	}
 
@@ -75,7 +75,7 @@ func saveFavors(items FavorItemList) bool {
 	file, err := configFile(FavorConfigFile, defaultConfigPath())
 	defer file.Free()
 	if err != nil {
-		fmt.Println(fmt.Errorf("saveFavors: %s", err))
+		logger.Info(fmt.Errorf("saveFavors: %s", err))
 		return false
 	}
 
@@ -107,7 +107,7 @@ func saveFavors(items FavorItemList) bool {
 
 	err = saveKeyFile(file, configFilePath(FavorConfigFile))
 	if err != nil {
-		fmt.Println(err)
+		logger.Info(err)
 		return false
 	}
 	return true

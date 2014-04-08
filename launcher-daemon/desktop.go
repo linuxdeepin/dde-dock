@@ -10,13 +10,13 @@ import (
 
 func isOnDesktop(name string) bool {
 	path := p.Join(glib.GetUserSpecialDir(glib.UserDirectoryDirectoryDesktop), p.Base(name))
-	// fmt.Println(path)
+	// logger.Info(path)
 	return exist(path)
 }
 
 func sendToDesktop(name string) {
 	path := p.Join(glib.GetUserSpecialDir(glib.UserDirectoryDirectoryDesktop), p.Base(name))
-	// fmt.Println(path)
+	// logger.Info(path)
 	copyFile(name, path,
 		CopyFileNotKeepSymlink|CopyFileOverWrite)
 	s, _ := os.Stat(path)

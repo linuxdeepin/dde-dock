@@ -131,14 +131,14 @@ func configFile(name string, defaultFile string) (*glib.KeyFile, error) {
 	if !exist(conf) {
 		os.MkdirAll(path.Dir(conf), os.FileMode(0755))
 		if defaultFile == "" {
-			fmt.Println("create", conf)
+			logger.Info("create", conf)
 			f, err := os.Create(conf)
 			if err != nil {
 				return nil, err
 			}
 			defer f.Close()
 		} else {
-			fmt.Println("copy", defaultFile, "to", conf)
+			logger.Info("copy", defaultFile, "to", conf)
 			copyFile(defaultFile, conf, CopyFileNotKeepSymlink)
 		}
 	}

@@ -93,10 +93,10 @@ func initCategory() {
 		var name string
 		var id CategoryId
 		rows.Scan(&name, &id)
-		// fmt.Println(name, id)
+		// logger.Info(name, id)
 		lowerName := strings.ToLower(name)
 		nameIdMap[lowerName] = id
-		// fmt.Println("category id:", id)
+		// logger.Info("category id:", id)
 		categoryTable[id] = &CategoryInfo{
 			id,
 			lowerName,
@@ -106,14 +106,14 @@ func initCategory() {
 	rows.Close()
 
 	for _, v := range XCategoryNameIdMap {
-		// fmt.Println(v.Name(), v.Id())
+		// logger.Info(v.Name(), v.Id())
 		nameIdMap[strings.ToLower(v.Name())] = v.Id()
 	}
 }
 
 func findCategoryId(categoryName string) CategoryId {
 	lowerCategoryName := strings.ToLower(categoryName)
-	// fmt.Println("categoryName:", lowerCategoryName)
+	// logger.Info("categoryName:", lowerCategoryName)
 	id, ok := nameIdMap[lowerCategoryName]
 	// fmt.Printf("nameIdMap[\"%s\"]=%d\n", lowerCategoryName, id)
 	if !ok {

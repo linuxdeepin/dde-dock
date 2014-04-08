@@ -97,9 +97,9 @@ func search(key string) []ItemId {
 		for _ = range searchFuncs {
 			select {
 			case <-done:
-				// fmt.Println("done")
+				// logger.Info("done")
 			case <-time.After(1 * time.Second):
-				fmt.Println("wait search result time out")
+				logger.Info("wait search result time out")
 			}
 		}
 	}
@@ -112,7 +112,7 @@ func search(key string) []ItemId {
 
 	ids := make([]ItemId, 0)
 	for _, v := range resList {
-		// fmt.Println(itemTable[v.Id].Name, v.Score)
+		// logger.Info(itemTable[v.Id].Name, v.Score)
 		ids = append(ids, v.Id)
 	}
 	return ids
@@ -120,23 +120,23 @@ func search(key string) []ItemId {
 
 // 2. add a weight for frequency.
 func searchInstalled(key string, res chan<- SearchResult, end chan<- bool) {
-	fmt.Println("SearchKey:", key)
+	logger.Info("SearchKey:", key)
 	keyMatcher := regexp.MustCompile(fmt.Sprintf("(?i)(%s)", key))
 	matchers := getMatchers(key) // just use these to name.
 	for id, v := range itemTable {
 		var score uint32 = 0
 
-		fmt.Println("search", v.Name)
+		logger.Info("search", v.Name)
 		for matcher, s := range matchers {
 			if matcher.MatchString(v.Name) {
-				fmt.Println("\tName:", v.Name, "match", matcher)
+				logger.Info("\tName:", v.Name, "match", matcher)
 				score += s
 			}
 		}
 		if v.enName != v.Name {
 			for matcher, s := range matchers {
 				if matcher.MatchString(v.enName) {
-					fmt.Println("\tEnName:", v.enName, "match", matcher)
+					logger.Info("\tEnName:", v.enName, "match", matcher)
 					score += s
 				}
 			}
@@ -144,24 +144,24 @@ func searchInstalled(key string, res chan<- SearchResult, end chan<- bool) {
 
 		for _, keyword := range v.xinfo.keywords {
 			if keyMatcher.MatchString(keyword) {
-				fmt.Println("\tKeyword:", keyword, "match", keyMatcher)
+				logger.Info("\tKeyword:", keyword, "match", keyMatcher)
 				score += VERY_GOOD
 			}
 		}
 		if keyMatcher.MatchString(v.Path) {
-			fmt.Println("\tPath:", v.Path, "match", keyMatcher)
+			logger.Info("\tPath:", v.Path, "match", keyMatcher)
 			score += AVERAGE
 		}
 		if keyMatcher.MatchString(v.xinfo.exec) {
-			fmt.Println("\tExec:", v.xinfo.exec, "match", keyMatcher)
+			logger.Info("\tExec:", v.xinfo.exec, "match", keyMatcher)
 			score += GOOD
 		}
 		if keyMatcher.MatchString(v.xinfo.genericName) {
-			fmt.Println("\tGenericName:", v.xinfo.genericName, "match", keyMatcher)
+			logger.Info("\tGenericName:", v.xinfo.genericName, "match", keyMatcher)
 			score += BELOW_AVERAGE
 		}
 		if keyMatcher.MatchString(v.xinfo.description) {
-			fmt.Println("\tDescription:", v.xinfo.description, "match", keyMatcher)
+			logger.Info("\tDescription:", v.xinfo.description, "match", keyMatcher)
 			score += POOR
 		}
 

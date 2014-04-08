@@ -59,28 +59,28 @@ func (d *LauncherDBus) emitItemChanged(name, status string, info map[string]Item
 	defer delete(info, name)
 	id := genId(name)
 
-	fmt.Println("Status:", status)
+	logger.Info("Status:", status)
 	if status != SOFTWARE_STATUS_DELETED {
-		fmt.Println(name)
+		logger.Info(name)
 		app := gio.NewDesktopAppInfoFromFilename(name)
 		for count := 0; app == nil; count++ {
 			<-time.After(time.Millisecond * 200)
 			app = gio.NewDesktopAppInfoFromFilename(name)
 			if app == nil && count == 20 {
-				fmt.Println("create DesktopAppInfo failed")
+				logger.Info("create DesktopAppInfo failed")
 				return
 			}
 		}
 		defer app.Unref()
 		if !app.ShouldShow() {
-			fmt.Println(app.GetFilename(), "should NOT show")
+			logger.Info(app.GetFilename(), "should NOT show")
 			return
 		}
 		itemTable[id] = &ItemInfo{}
 		itemTable[id].init(app)
 	}
 	if _, ok := itemTable[id]; !ok {
-		fmt.Println("get item from itemTable failed")
+		logger.Info("get item from itemTable failed")
 		return
 	}
 	d.ItemChanged(status, *itemTable[id], itemTable[id].getCategoryIds())
@@ -94,7 +94,7 @@ func (d *LauncherDBus) emitItemChanged(name, status string, info map[string]Item
 			categoryTable[cid].items[id] = true
 		}
 	}
-	fmt.Println(status, "successful")
+	logger.Info(status, "successful")
 }
 
 func (d *LauncherDBus) itemChangedHandler(ev *fsnotify.FileEvent, name string, info map[string]ItemChangedStatus) {
@@ -107,7 +107,7 @@ func (d *LauncherDBus) itemChangedHandler(ev *fsnotify.FileEvent, name string, i
 		}
 	}
 	if ev.IsRename() {
-		fmt.Println("renamed")
+		logger.Info("renamed")
 		select {
 		case <-info[name].renamed:
 		default:
@@ -126,18 +126,18 @@ func (d *LauncherDBus) itemChangedHandler(ev *fsnotify.FileEvent, name string, i
 		go func() {
 			select {
 			case <-info[name].renamed:
-				// fmt.Println("not renamed")
+				// logger.Info("not renamed")
 				info[name].notRenamed <- true
 				info[name].renamed <- true
 			default:
-				// fmt.Println("default")
+				// logger.Info("default")
 			}
 			select {
 			case <-info[name].notCreated:
 				return
 			case <-time.After(time.Second):
 				<-info[name].created
-				fmt.Println("create")
+				logger.Info("create")
 				d.emitItemChanged(name, SOFTWARE_STATUS_CREATED, info)
 			}
 		}()
@@ -152,7 +152,7 @@ func (d *LauncherDBus) itemChangedHandler(ev *fsnotify.FileEvent, name string, i
 			case <-info[name].renamed:
 				d.emitItemChanged(name, SOFTWARE_STATUS_MODIFIED, info)
 			default:
-				fmt.Println("modify created")
+				logger.Info("modify created")
 				d.emitItemChanged(name, SOFTWARE_STATUS_CREATED, info)
 			}
 		}()
@@ -212,7 +212,7 @@ func (d *LauncherDBus) listenItemChanged() {
 	}
 	// FIXME: close watcher.
 	for _, dir := range dirs {
-		fmt.Println("monitor:", dir)
+		logger.Info("monitor:", dir)
 		watcher.Watch(dir)
 	}
 
@@ -245,7 +245,7 @@ func (d *LauncherDBus) GetPackageNames(path string) []string {
 
 func (d *LauncherDBus) GetBackgroundPict() string {
 	errorHandler := func(e error) string {
-		fmt.Println(e)
+		logger.Info(e)
 		return DefaultBackgroundImage
 	}
 
@@ -278,7 +278,7 @@ func (d *LauncherDBus) listenBackgroundChanged() {
 	d.background.init()
 	go func(d *LauncherDBus) {
 		for {
-			fmt.Println("listen background changed")
+			logger.Info("listen background changed")
 			select {
 			case <-d.background.changed:
 				d.BackgroundChanged(d.background.currentBg())
