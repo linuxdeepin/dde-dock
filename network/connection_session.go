@@ -157,66 +157,6 @@ func (session *ConnectionSession) ListPages() (pages []string) {
 	return
 }
 
-// get valid keys of target page, show or hide some keys when special
-// keys toggled
-func (session *ConnectionSession) listKeys(page string) (keys []string) {
-	switch page {
-	case pageGeneral:
-		keys = getSettingConnectionAvailableKeys(session.data)
-	case pageEthernet:
-		keys = getSettingWiredAvailableKeys(session.data)
-	case pageWifi:
-		keys = getSettingWirelessAvailableKeys(session.data)
-	case pageIPv4:
-		keys = getSettingIp4ConfigAvailableKeys(session.data)
-	case pageIPv6:
-		keys = getSettingIp6ConfigAvailableKeys(session.data)
-	case pageSecurity: // TODO
-		switch session.connectionType {
-		case typeWired:
-			keys = getSetting8021xAvailableKeys(session.data)
-		case typeWireless:
-			securityField := getSettingWirelessSec(session.data)
-			switch securityField {
-			case fieldWirelessSecurity:
-				keys = getSettingWirelessSecurityAvailableKeys(session.data)
-			case field8021x:
-				keys = getSetting8021xAvailableKeys(session.data)
-			}
-		}
-	}
-	if len(keys) == 0 {
-		LOGGER.Warning("there is no avaiable keys for page", page)
-	}
-	return
-}
-
-// GetAvailableValues get available values for target key.
-func (session *ConnectionSession) GetAvailableValues(page, key string) (values []string) {
-	switch page {
-	case pageGeneral:
-		values, _ = getSettingConnectionAvailableValues(key)
-	case pageIPv4:
-		values, _ = getSettingIp4ConfigAvailableValues(key)
-	case pageIPv6:
-		values, _ = getSettingIp6ConfigAvailableValues(key)
-	case pageSecurity: // TODO
-		switch session.connectionType {
-		case typeWired:
-			values, _ = getSetting8021xAvailableValues(key)
-		case typeWireless:
-			securityField := getSettingWirelessSec(session.data)
-			switch securityField {
-			case fieldWirelessSecurity:
-				values, _ = getSettingWirelessSecurityAvailableValues(key)
-			case field8021x:
-				values, _ = getSetting8021xAvailableValues(key)
-			}
-		}
-	}
-	return
-}
-
 func (session *ConnectionSession) pageToField(page string) (field string) {
 	switch page {
 	default:
@@ -244,6 +184,54 @@ func (session *ConnectionSession) pageToField(page string) (field string) {
 				field = field8021x
 			}
 		}
+	}
+	return
+}
+
+// get valid keys of target page, show or hide some keys when special
+// keys toggled
+func (session *ConnectionSession) listKeys(page string) (keys []string) {
+	field := session.pageToField(page)
+	switch field {
+	case field8021x:
+		keys = getSetting8021xAvailableKeys(session.data)
+	case fieldConnection:
+		keys = getSettingConnectionAvailableKeys(session.data)
+	case fieldIPv4:
+		keys = getSettingIp4ConfigAvailableKeys(session.data)
+	case fieldIPv6:
+		keys = getSettingIp6ConfigAvailableKeys(session.data)
+	case fieldWired:
+		keys = getSettingWiredAvailableKeys(session.data)
+	case fieldWireless:
+		keys = getSettingWirelessAvailableKeys(session.data)
+	case fieldWirelessSecurity:
+		keys = getSettingWirelessSecurityAvailableKeys(session.data)
+	}
+	if len(keys) == 0 {
+		LOGGER.Warning("there is no avaiable keys for page", page)
+	}
+	return
+}
+
+// GetAvailableValues get available values for target key.
+func (session *ConnectionSession) GetAvailableValues(page, key string) (values []string) {
+	field := session.pageToField(page)
+	switch field {
+	case field8021x:
+		values, _ = getSetting8021xAvailableValues(key)
+	case fieldConnection:
+		values, _ = getSettingConnectionAvailableValues(key)
+	case fieldIPv4:
+		values, _ = getSettingIp4ConfigAvailableValues(key)
+	case fieldIPv6:
+		values, _ = getSettingIp6ConfigAvailableValues(key)
+	case fieldWired:
+		// values, _ = getSettingWiredAvailableValues(key)
+	case fieldWireless:
+		values, _ = getSettingWirelessAvailableValues(key)
+	case fieldWirelessSecurity:
+		values, _ = getSettingWirelessSecurityAvailableValues(key)
 	}
 	return
 }

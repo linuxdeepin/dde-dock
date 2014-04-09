@@ -31,7 +31,7 @@ const (
 	NM_SETTING_VK_IP6_CONFIG_ROUTES_METRIC     = "vk-routes-metric"
 )
 
-// TODO wireless security
+// wireless security
 const (
 	NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT = "vk-key-mgmt"
 )
