@@ -13,8 +13,9 @@ int setup_hdmi_enumerator()
     struct udev_device *dev;
 
     /* Create the udev object */
-    udev = udev_new();
-    if (!udev) {
+    /*udev = udev_new();*/
+    if (!udev)
+    {
         printf("Can't create udev\n");
         exit(1);
     }
@@ -29,7 +30,8 @@ int setup_hdmi_enumerator()
        a loop. The loop will be executed for each member in
        devices, setting dev_list_entry to a list entry
        which contains the device's path in /sys. */
-    udev_list_entry_foreach(dev_list_entry, devices) {
+    udev_list_entry_foreach(dev_list_entry, devices)
+    {
         const char *path;
 
         /* Get the filename of the /sys entry for the device
@@ -48,10 +50,11 @@ int setup_hdmi_enumerator()
            be several levels up the tree, but the function will find
            it.*/
         dev = udev_device_get_parent_with_subsystem_devtype(
-               dev,
-               "usb",
-               "usb_device");
-        if (!dev) {
+                  dev,
+                  "usb",
+                  "usb_device");
+        if (!dev)
+        {
             printf("Unable to find parent usb device.");
             exit(1);
         }
@@ -64,13 +67,13 @@ int setup_hdmi_enumerator()
            encoded, but the strings returned from
            udev_device_get_sysattr_value() are UTF-8 encoded. */
         printf("  VID/PID: %s %s\n",
-                udev_device_get_sysattr_value(dev,"idVendor"),
-                udev_device_get_sysattr_value(dev, "idProduct"));
+               udev_device_get_sysattr_value(dev, "idVendor"),
+               udev_device_get_sysattr_value(dev, "idProduct"));
         printf("  %s\n  %s\n",
-                udev_device_get_sysattr_value(dev,"manufacturer"),
-                udev_device_get_sysattr_value(dev,"product"));
+               udev_device_get_sysattr_value(dev, "manufacturer"),
+               udev_device_get_sysattr_value(dev, "product"));
         printf("  serial: %s\n",
-                 udev_device_get_sysattr_value(dev, "serial"));
+               udev_device_get_sysattr_value(dev, "serial"));
         udev_device_unref(dev);
     }
     /* Free the enumerator object */
@@ -84,7 +87,7 @@ int setup_hdmi_enumerator()
 
 int setup_hdmi_monitor()
 {
-/* Set up a monitor to monitor hidraw devices */
+    /* Set up a monitor to monitor hidraw devices */
     struct udev_monitor *mon = udev_monitor_new_from_netlink(udev, "udev");
     udev_monitor_filter_add_match_subsystem_devtype(mon, "drm", NULL);
     udev_monitor_enable_receiving(mon);
@@ -95,7 +98,8 @@ int setup_hdmi_monitor()
     /* This section will run continuously, calling usleep() at
        the end of each pass. This is to demonstrate how to use
        a udev_monitor in a non-blocking way. */
-    while (1) {
+    while (1)
+    {
         /* Set up the call to select(). In this case, select() will
            only operate on a single file descriptor, the one
            associated with our udev_monitor. Note that the timeval
@@ -110,30 +114,43 @@ int setup_hdmi_monitor()
         tv.tv_sec = 0;
         tv.tv_usec = 0;
 
-        ret = select(fd+1, &fds, NULL, NULL, &tv);
+        ret = select(fd + 1, &fds, NULL, NULL, &tv);
 
         /* Check if our file descriptor has received data. */
-        if (ret > 0 && FD_ISSET(fd, &fds)) {
+        if (ret > 0 && FD_ISSET(fd, &fds))
+        {
             printf("\nselect() says there should be data\n");
 
             /* Make the call to receive the device.
                select() ensured that this will not block. */
             struct udev_device *dev = udev_monitor_receive_device(mon);
-            if (dev) {
+            if (dev)
+            {
                 printf("Got Device\n");
                 printf("   Node: %s\n", udev_device_get_devnode(dev));
                 printf("   Subsystem: %s\n", udev_device_get_subsystem(dev));
                 printf("   Devtype: %s\n", udev_device_get_devtype(dev));
 
-                printf("   Action: %s\n",udev_device_get_action(dev));
+                printf("   Action: %s\n", udev_device_get_action(dev));
                 udev_device_unref(dev);
             }
-            else {
+            else
+            {
                 printf("No Device from receive_device(). An error occured.\n");
             }
         }
-        usleep(250*1000);
+        usleep(250 * 1000);
         printf(".");
         fflush(stdout);
     }
 }
+
+#if TEST_HDMI
+int main()
+{
+    udev = udev_new();
+    setup_hdmi_monitor();
+    return 0;
+}
+
+#endif
