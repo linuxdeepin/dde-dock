@@ -445,3 +445,7 @@ func (*Utils) TestJSONWrapper(c *C) {
 	s, _ = keyValueToJSON(v, ktypeWrapperIpv6Routes)
 	c.Check(s, Equals, testJSONKtypeWrapperIpv6Routes)
 }
+
+func (*Utils) TestGetterAndSetterForVirtualKey(c *C) {
+	// TODO
+}

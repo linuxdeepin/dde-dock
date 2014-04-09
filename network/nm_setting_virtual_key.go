@@ -36,6 +36,106 @@ const (
 	NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT = "vk-key-mgmt"
 )
 
+func isVirtualKey(field, key string) bool {
+	if isStringInArray(key, getFieldVirtualKeys(field)) {
+		return true
+	}
+	return false
+}
+
+func getFieldVirtualKeys(field string) (vks []string) {
+	switch field {
+	case field8021x:
+	case fieldConnection:
+		vks = []string{NM_SETTING_VK_CONNECTION_PERMISSIONS}
+	case fieldIPv4:
+		vks = []string{
+			NM_SETTING_VK_IP4_CONFIG_DNS,
+			NM_SETTING_VK_IP4_CONFIG_ADDRESSES_ADDRESS,
+			NM_SETTING_VK_IP4_CONFIG_ADDRESSES_MASK,
+			NM_SETTING_VK_IP4_CONFIG_ADDRESSES_GATEWAY,
+			NM_SETTING_VK_IP4_CONFIG_ROUTES_ADDRESS,
+			NM_SETTING_VK_IP4_CONFIG_ROUTES_MASK,
+			NM_SETTING_VK_IP4_CONFIG_ROUTES_NEXTHOP,
+			NM_SETTING_VK_IP4_CONFIG_ROUTES_METRIC,
+		}
+	case fieldIPv6:
+		vks = []string{
+			NM_SETTING_VK_IP6_CONFIG_DNS,
+			NM_SETTING_VK_IP6_CONFIG_ADDRESSES_ADDRESS,
+			NM_SETTING_VK_IP6_CONFIG_ADDRESSES_PREFIX,
+			NM_SETTING_VK_IP6_CONFIG_ADDRESSES_GATEWAY,
+			NM_SETTING_VK_IP6_CONFIG_ROUTES_ADDRESS,
+			NM_SETTING_VK_IP6_CONFIG_ROUTES_PREFIX,
+			NM_SETTING_VK_IP6_CONFIG_ROUTES_NEXTHOP,
+			NM_SETTING_VK_IP6_CONFIG_ROUTES_METRIC,
+		}
+	case fieldWired:
+	case fieldWireless:
+	case fieldWirelessSecurity:
+		vks = []string{NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT}
+	}
+	return
+}
+
+func getSettingVkKeyType(field, key string) (t ktype) {
+	t = ktypeUnknown
+	switch field {
+	case field8021x:
+	case fieldConnection:
+		switch key {
+		case NM_SETTING_VK_CONNECTION_PERMISSIONS:
+			t = ktypeBoolean
+		}
+	case fieldIPv4:
+		switch key {
+		case NM_SETTING_VK_IP4_CONFIG_DNS:
+			t = ktypeString
+		case NM_SETTING_VK_IP4_CONFIG_ADDRESSES_ADDRESS:
+			t = ktypeString
+		case NM_SETTING_VK_IP4_CONFIG_ADDRESSES_MASK:
+			t = ktypeString
+		case NM_SETTING_VK_IP4_CONFIG_ADDRESSES_GATEWAY:
+			t = ktypeString
+		case NM_SETTING_VK_IP4_CONFIG_ROUTES_ADDRESS:
+			t = ktypeString
+		case NM_SETTING_VK_IP4_CONFIG_ROUTES_MASK:
+			t = ktypeString
+		case NM_SETTING_VK_IP4_CONFIG_ROUTES_NEXTHOP:
+			t = ktypeString
+		case NM_SETTING_VK_IP4_CONFIG_ROUTES_METRIC:
+			t = ktypeString
+		}
+	case fieldIPv6:
+		switch key {
+		case NM_SETTING_VK_IP6_CONFIG_DNS:
+			t = ktypeString
+		case NM_SETTING_VK_IP6_CONFIG_ADDRESSES_ADDRESS:
+			t = ktypeString
+		case NM_SETTING_VK_IP6_CONFIG_ADDRESSES_PREFIX:
+			t = ktypeString
+		case NM_SETTING_VK_IP6_CONFIG_ADDRESSES_GATEWAY:
+			t = ktypeString
+		case NM_SETTING_VK_IP6_CONFIG_ROUTES_ADDRESS:
+			t = ktypeString
+		case NM_SETTING_VK_IP6_CONFIG_ROUTES_PREFIX:
+			t = ktypeString
+		case NM_SETTING_VK_IP6_CONFIG_ROUTES_NEXTHOP:
+			t = ktypeString
+		case NM_SETTING_VK_IP6_CONFIG_ROUTES_METRIC:
+			t = ktypeString
+		}
+	case fieldWired:
+	case fieldWireless:
+	case fieldWirelessSecurity:
+		switch key {
+		case NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT:
+			t = ktypeString
+		}
+	}
+	return
+}
+
 func getRelatedVirtualKeys(field, key string) (vks []string) {
 	switch field {
 	case field8021x:
@@ -86,63 +186,6 @@ func getRelatedVirtualKeys(field, key string) (vks []string) {
 		switch key {
 		case NM_SETTING_WIRELESS_SECURITY_KEY_MGMT:
 			vks = []string{NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT}
-		}
-	}
-	return
-}
-
-func isVirtualKey(field, key string) (vk bool) {
-	switch field {
-	case field8021x:
-	case fieldConnection:
-		switch key {
-		case NM_SETTING_VK_CONNECTION_PERMISSIONS:
-			vk = true
-		}
-	case fieldIPv4:
-		switch key {
-		case NM_SETTING_VK_IP4_CONFIG_DNS:
-			vk = true
-		case NM_SETTING_VK_IP4_CONFIG_ADDRESSES_ADDRESS:
-			vk = true
-		case NM_SETTING_VK_IP4_CONFIG_ADDRESSES_MASK:
-			vk = true
-		case NM_SETTING_VK_IP4_CONFIG_ADDRESSES_GATEWAY:
-			vk = true
-		case NM_SETTING_VK_IP4_CONFIG_ROUTES_ADDRESS:
-			vk = true
-		case NM_SETTING_VK_IP4_CONFIG_ROUTES_MASK:
-			vk = true
-		case NM_SETTING_VK_IP4_CONFIG_ROUTES_NEXTHOP:
-			vk = true
-		case NM_SETTING_VK_IP4_CONFIG_ROUTES_METRIC:
-			vk = true
-		}
-	case fieldIPv6:
-		switch key {
-		case NM_SETTING_VK_IP6_CONFIG_DNS:
-			vk = true
-		case NM_SETTING_VK_IP6_CONFIG_ADDRESSES_ADDRESS:
-			vk = true
-		case NM_SETTING_VK_IP6_CONFIG_ADDRESSES_PREFIX:
-			vk = true
-		case NM_SETTING_VK_IP6_CONFIG_ADDRESSES_GATEWAY:
-			vk = true
-		case NM_SETTING_VK_IP6_CONFIG_ROUTES_ADDRESS:
-			vk = true
-		case NM_SETTING_VK_IP6_CONFIG_ROUTES_PREFIX:
-			vk = true
-		case NM_SETTING_VK_IP6_CONFIG_ROUTES_NEXTHOP:
-			vk = true
-		case NM_SETTING_VK_IP6_CONFIG_ROUTES_METRIC:
-			vk = true
-		}
-	case fieldWired:
-	case fieldWireless:
-	case fieldWirelessSecurity:
-		switch key {
-		case NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT:
-			vk = true
 		}
 	}
 	return
@@ -262,7 +305,7 @@ func generalSetVirtualKeyJSON(data _ConnectionData, field, key string, valueJSON
 	return
 }
 
-// Virtual key JSON getter
+// JSON getter for virtual keys
 func getSettingVkConnectionPermissionsJSON(data _ConnectionData) (valueJSON string) {
 	// TODO
 	// value = getSettingConnectionPermissions(data)
@@ -398,7 +441,7 @@ func getSettingVkWirelessSecurityKeyMgmtJSON(data _ConnectionData) (valueJSON st
 	return
 }
 
-// Virtual key JSON setter
+// JSON setter for virtual keys
 func setSettingVkConnectionPermissionsJSON(data _ConnectionData, valueJSON string) {
 	// TODO
 	// setSettingConnectionPermissionsJSON(data)

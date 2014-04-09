@@ -50,6 +50,52 @@ func isConnectionDataKeyExists(data _ConnectionData, field, key string) bool {
 	return true
 }
 
+func generalGetKeyType(field, key string) (t ktype) {
+	if isVirtualKey(field, key) {
+		t = getSettingVkKeyType(field, key)
+		return
+	}
+	switch field {
+	default:
+		LOGGER.Warning("invalid field name", field)
+	case field8021x:
+		t = getSetting8021xKeyType(key)
+	case fieldConnection:
+		t = getSettingConnectionKeyType(key)
+	case fieldIPv4:
+		t = getSettingIp4ConfigKeyType(key)
+	case fieldIPv6:
+		t = getSettingIp6ConfigKeyType(key)
+	case fieldWired:
+		t = getSettingWiredKeyType(key)
+	case fieldWireless:
+		t = getSettingWirelessKeyType(key)
+	case fieldWirelessSecurity:
+		t = getSettingWirelessSecurityKeyType(key)
+	}
+	return
+}
+
+func generalGetAvailableValues(field, key string) (values []string, customizable bool) {
+	switch field {
+	case field8021x:
+		values, customizable = getSetting8021xAvailableValues(key)
+	case fieldConnection:
+		values, customizable = getSettingConnectionAvailableValues(key)
+	case fieldIPv4:
+		values, customizable = getSettingIp4ConfigAvailableValues(key)
+	case fieldIPv6:
+		values, customizable = getSettingIp6ConfigAvailableValues(key)
+	case fieldWired:
+		// values,customizable = getSettingWiredAvailableValues(key)
+	case fieldWireless:
+		values, customizable = getSettingWirelessAvailableValues(key)
+	case fieldWirelessSecurity:
+		values, customizable = getSettingWirelessSecurityAvailableValues(key)
+	}
+	return
+}
+
 func generalGetKeyJSON(data _ConnectionData, field, key string) (valueJSON string) {
 	switch field {
 	default:

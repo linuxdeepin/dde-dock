@@ -39,6 +39,7 @@ func convertIpv4AddressToString(v uint32) (ip4Addr string) {
 	ip4Addr = fmt.Sprintf("%d.%d.%d.%d", byte(v), byte(v>>8), byte(v>>16), byte(v>>24))
 	return
 }
+
 func convertIpv4AddressToUint32(v string) (ip4Addr uint32) {
 	a := strings.Split(v, ".")
 	if len(a) != 4 {

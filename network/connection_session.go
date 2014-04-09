@@ -217,22 +217,7 @@ func (session *ConnectionSession) listKeys(page string) (keys []string) {
 // GetAvailableValues get available values for target key.
 func (session *ConnectionSession) GetAvailableValues(page, key string) (values []string) {
 	field := session.pageToField(page)
-	switch field {
-	case field8021x:
-		values, _ = getSetting8021xAvailableValues(key)
-	case fieldConnection:
-		values, _ = getSettingConnectionAvailableValues(key)
-	case fieldIPv4:
-		values, _ = getSettingIp4ConfigAvailableValues(key)
-	case fieldIPv6:
-		values, _ = getSettingIp6ConfigAvailableValues(key)
-	case fieldWired:
-		// values, _ = getSettingWiredAvailableValues(key)
-	case fieldWireless:
-		values, _ = getSettingWirelessAvailableValues(key)
-	case fieldWirelessSecurity:
-		values, _ = getSettingWirelessSecurityAvailableValues(key)
-	}
+	values, _ = generalGetAvailableValues(field, key)
 	return
 }
 
@@ -274,4 +259,21 @@ func (session *ConnectionSession) SetKey(page, key, value string) {
 // TODO move to manager
 func (session *ConnectionSession) DebugListSupportedConnectionTypes() []string {
 	return supportedConnectionTypes
+}
+
+func (session *ConnectionSession) DebugListKeyDetail() (info string) {
+	for _, page := range session.ListPages() {
+		field := session.pageToField(page)
+		fieldData, ok := session.AvailableKeys[page]
+		if !ok {
+			LOGGER.Warning("no available keys for field", field)
+			continue
+		}
+		for _, key := range fieldData {
+			t := generalGetKeyType(field, key)
+			values, _ := generalGetAvailableValues(field, key)
+			info += fmt.Sprintf("%s->%s: %s %s\n", page, key, getKtypeDescription(t), values)
+		}
+	}
+	return
 }
