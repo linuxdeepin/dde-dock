@@ -100,7 +100,7 @@ func (p *Power) updateIdletimer() {
 		min = suspend
 		delta = idle - suspend
 	}
-	if err := p.screensaver.SetTimeout(uint32(min)/10, uint32(delta)/10, true); err != nil {
+	if err := p.screensaver.SetTimeout(uint32(min)/10, uint32(delta)/10, false); err != nil {
 		LOGGER.Error("Failed set ScreenSaver's timeout:", err)
 	} else {
 		LOGGER.Info("Set ScreenTimeout to ", uint32(min), uint32(delta))
