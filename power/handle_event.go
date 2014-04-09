@@ -6,6 +6,7 @@ import "dbus/com/deepin/sessionmanager"
 import "dbus/org/freedesktop/upower"
 import "dbus/org/freedesktop/login1"
 import "dbus/com/deepin/daemon/keybinding"
+import "dbus/com/deepin/daemon/display"
 import "fmt"
 
 const (
@@ -89,18 +90,47 @@ func (up *Power) handlePowerButton() {
 	}
 }
 
-func (up *Power) handleCloseLidSwitch() {
-	switch up.LidClosedAction.Get() {
-	case ActionInteractive:
-		doShutDownInteractive()
-	case ActionSuspend:
-		doSuspend()
-	case ActionShutdown:
-		doShutDown()
-	case ActionNothing:
-	default:
-		LOGGER.Warning("invalid LidSwitchAction:", up.LidClosedAction.Get())
+func (up *Power) handleLidSwitch(opend bool) {
+	if opend {
+		//TODO: DPMS ON
+	} else {
+		//TODO: DPMS OFF
+		switch up.LidClosedAction.Get() {
+		case ActionInteractive:
+			doShutDownInteractive()
+		case ActionSuspend:
+			if isMultihead() && !up.coreSettings.GetBoolean("lid-close-suspend-with-external-monitor") {
+				return
+			}
+			doSuspend()
+		case ActionShutdown:
+			doShutDown()
+		case ActionNothing:
+		default:
+			LOGGER.Warning("invalid LidSwitchAction:", up.LidClosedAction.Get())
+		}
 	}
+}
+
+func isMultihead() bool {
+	if dp, err := display.NewDisplay("com.deepin.daemon.Display", "/com/deepin/daemon/Display"); err != nil {
+		LOGGER.Error("Can't build com.deepin.daemon.Display Object:", err)
+		return false
+	} else {
+		paths := dp.Monitors.Get()
+		if len(paths) > 1 {
+			return true
+		} else if len(paths) == 1 {
+			if m, err := display.NewMonitor("com.deepin.daemon.Display", paths[0]); err != nil {
+				return false
+			} else if m.IsComposited.Get() {
+				return true
+			} else {
+				return false
+			}
+		}
+	}
+	return false
 }
 
 func (p *Power) initEventHandle() {
@@ -114,7 +144,7 @@ func (p *Power) initEventHandle() {
 			if p.lidIsClosed != currentLidCloed {
 				p.lidIsClosed = currentLidCloed
 				if currentLidCloed {
-					p.handleCloseLidSwitch()
+					p.handleLidSwitch(false)
 				}
 			}
 			p.lidIsClosed = currentLidCloed
