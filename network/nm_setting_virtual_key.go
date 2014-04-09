@@ -254,247 +254,375 @@ func generalSetVirtualKeyJSON(data _ConnectionData, field, key string, valueJSON
 	return
 }
 
-// JSON getter
-func getSettingVkConnectionPermissionsJSON(data _ConnectionData) (valueJSON string) {
+func doGetOrNewSettingIp4ConfigAddresses(data _ConnectionData) (addresses [][]uint32) {
+	addresses = getSettingIp4ConfigAddresses(data)
+	if len(addresses) == 0 {
+		addresses = make([][]uint32, 1)
+		addresses[0] = make([]uint32, 3)
+	}
+	if len(addresses[0]) != 3 {
+		addresses[0] = make([]uint32, 3)
+	}
+	return
+}
+
+func doIsSettingIp4ConfigAddressesEmpty(data _ConnectionData) bool {
+	addresses := getSettingIp4ConfigAddresses(data)
+	if len(addresses) == 0 {
+		return true
+	}
+	if len(addresses[0]) != 3 {
+		return true
+	}
+	return false
+}
+
+// Getter
+func getSettingVkConnectionPermissions(data _ConnectionData) (value bool) {
 	// TODO
 	// value = getSettingConnectionPermissions(data)
 	return
 }
-func getSettingVkIp4ConfigDnsJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON = jsonEmptyString
-	value := getSettingIp4ConfigDns(data)
-	if len(value) == 0 {
+func getSettingVkIp4ConfigDns(data _ConnectionData) (value string) {
+	dns := getSettingIp4ConfigDns(data)
+	if len(dns) == 0 {
 		return
 	}
-	valueJSON, _ = marshalJSON(convertIpv4AddressToString(value[0]))
+	value = convertIpv4AddressToString(dns[0])
 	return
 }
-func getSettingVkIp4ConfigAddressesAddressJSON(data _ConnectionData) (valueJSON string) {
-	// TODO
-	valueJSON = jsonEmptyString
-	value := getSettingIp4ConfigAddresses(data)
-	if len(value) == 0 {
+func getSettingVkIp4ConfigAddressesAddress(data _ConnectionData) (value string) {
+	if doIsSettingIp4ConfigAddressesEmpty(data) {
 		return
 	}
-	addr := value[0]
-	if len(addr) != 3 {
-		return
-	}
-	valueJSON, _ = marshalJSON(convertIpv4AddressToString(addr[0]))
+	addresses := getSettingIp4ConfigAddresses(data)
+	value = convertIpv4AddressToString(addresses[0][0])
 	return
 }
-func getSettingVkIp4ConfigAddressesMaskJSON(data _ConnectionData) (valueJSON string) {
-	// TODO
-	valueJSON = jsonEmptyString
-	value := getSettingIp4ConfigAddresses(data)
-	if len(value) == 0 {
+func getSettingVkIp4ConfigAddressesMask(data _ConnectionData) (value string) {
+	if doIsSettingIp4ConfigAddressesEmpty(data) {
 		return
 	}
-	addr := value[0]
-	if len(addr) != 3 {
-		return
-	}
-	valueJSON, _ = marshalJSON(convertIpv4PrefixToNetMask(addr[1]))
+	addresses := getSettingIp4ConfigAddresses(data)
+	value = convertIpv4PrefixToNetMask(addresses[0][1])
 	return
 }
-func getSettingVkIp4ConfigAddressesGatewayJSON(data _ConnectionData) (valueJSON string) {
-	// TODO
-	valueJSON = jsonEmptyString
-	value := getSettingIp4ConfigAddresses(data)
-	if len(value) == 0 {
+func getSettingVkIp4ConfigAddressesGateway(data _ConnectionData) (value string) {
+	if doIsSettingIp4ConfigAddressesEmpty(data) {
 		return
 	}
-	addr := value[0]
-	if len(addr) != 3 {
-		return
-	}
-	valueJSON, _ = marshalJSON(convertIpv4AddressToString(addr[2]))
+	addresses := getSettingIp4ConfigAddresses(data)
+	value = convertIpv4AddressToString(addresses[0][2])
 	return
 }
-func getSettingVkIp4ConfigRoutesAddressJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkIp4ConfigRoutesAddress(data _ConnectionData) (value string) {
 	// TODO
 	// valueJSON = jsonEmptyString
 	// value := getSettingIp4ConfigRoutesAddress(data)
 	return
 }
-func getSettingVkIp4ConfigRoutesMaskJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkIp4ConfigRoutesMask(data _ConnectionData) (value string) {
 	// TODO
 	// valueJSON = jsonEmptyString
 	// value := getSettingIp4ConfigRoutesMask(data)
 	return
 }
-func getSettingVkIp4ConfigRoutesNexthopJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkIp4ConfigRoutesNexthop(data _ConnectionData) (value string) {
 	// TODO
 	// valueJSON = jsonEmptyString
 	// value := getSettingIp4ConfigRoutesNexthop(data)
 	return
 }
-func getSettingVkIp4ConfigRoutesMetricJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkIp4ConfigRoutesMetric(data _ConnectionData) (value string) {
 	// TODO
 	// valueJSON = jsonEmptyString
 	// value := getSettingIp4ConfigRoutesMetric(data)
 	return
 }
-func getSettingVkIp6ConfigDnsJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkIp6ConfigDns(data _ConnectionData) (value string) {
 	// TODO
 	// valueJSON = jsonEmptyString
 	// value := getSettingIp6ConfigDns(data)
 	return
 }
-func getSettingVkIp6ConfigAddressesAddressJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkIp6ConfigAddressesAddress(data _ConnectionData) (value string) {
 	// TODO
 	// valueJSON = jsonEmptyString
 	// value := getSettingIp6ConfigAddressesAddress(data)
 	return
 }
-func getSettingVkIp6ConfigAddressesPrefixJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkIp6ConfigAddressesPrefix(data _ConnectionData) (value string) {
 	// TODO
 	// valueJSON = jsonEmptyString
 	// value := getSettingIp6ConfigAddressesPrefix(data)
 	return
 }
-func getSettingVkIp6ConfigAddressesGatewayJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkIp6ConfigAddressesGateway(data _ConnectionData) (value string) {
 	// TODO
 	// valueJSON = jsonEmptyString
 	// value := getSettingIp6ConfigAddressesGateway(data)
 	return
 }
-func getSettingVkIp6ConfigRoutesAddressJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkIp6ConfigRoutesAddress(data _ConnectionData) (value string) {
 	// TODO
 	// valueJSON = jsonEmptyString
 	// value := getSettingIp6ConfigRoutesAddress(data)
 	return
 }
-func getSettingVkIp6ConfigRoutesPrefixJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkIp6ConfigRoutesPrefix(data _ConnectionData) (value string) {
 	// TODO
 	// valueJSON = jsonEmptyString
 	// value := getSettingIp6ConfigRoutesPrefix(data)
 	return
 }
-func getSettingVkIp6ConfigRoutesNexthopJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkIp6ConfigRoutesNexthop(data _ConnectionData) (value string) {
 	// TODO
 	// valueJSON = jsonEmptyString
 	// value := getSettingIp6ConfigRoutesNexthop(data)
 	return
 }
-func getSettingVkIp6ConfigRoutesMetricJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkIp6ConfigRoutesMetric(data _ConnectionData) (value string) {
 	// TODO
 	// valueJSON = jsonEmptyString
 	// value := getSettingIp6ConfigRoutesMetric(data)
 	return
 }
-func getSettingVkWirelessSecurityKeyMgmtJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkWirelessSecurityKeyMgmt(data _ConnectionData) (value string) {
 	// TODO
 	// valueJSON = jsonEmptyString
 	// value := getSettingWirelessSecurityKeyMgmtJSON(data)
 	return
 }
 
-// JSON setter
-func setSettingVkConnectionPermissionsJSON(data _ConnectionData, valueJSON string) {
+// Setter
+func setSettingVkConnectionPermissions(data _ConnectionData, value bool) {
 	// TODO
 	// setSettingConnectionPermissionsJSON(data)
 }
-func setSettingVkIp4ConfigDnsJSON(data _ConnectionData, valueJSON string) {
+func setSettingVkIp4ConfigDns(data _ConnectionData, value string) {
 	// TODO
-	strAddr, _ := jsonToKeyValueString(valueJSON)
-	value := []uint32{convertIpv4AddressToUint32(strAddr)}
-	setSettingIp4ConfigDns(data, value)
+	dns := getSettingIp4ConfigDns(data)
+	if len(dns) == 0 {
+		dns = make([]uint32, 1)
+	}
+	dns[0] = convertIpv4AddressToUint32(value)
+	setSettingIp4ConfigDns(data, dns)
 }
-func setSettingVkIp4ConfigAddressesAddressJSON(data _ConnectionData, valueJSON string) {
-	// TODO
-	strAddr, _ := jsonToKeyValueString(valueJSON)
-	value := getSettingIp4ConfigAddresses(data)
-	if len(value) == 0 {
-		value = make([][]uint32, 1)
-		value[0] = make([]uint32, 3)
-	}
-	addr := value[0]
-	if len(addr) != 3 {
-		value[0] = make([]uint32, 3)
-	}
-	addr[0] = convertIpv4AddressToUint32(strAddr)
-	setSettingIp4ConfigAddresses(data, value)
+func setSettingVkIp4ConfigAddressesAddress(data _ConnectionData, value string) {
+	addresses := doGetOrNewSettingIp4ConfigAddresses(data)
+	addr := addresses[0]
+	addr[0] = convertIpv4AddressToUint32(value)
+	setSettingIp4ConfigAddresses(data, addresses)
 }
-func setSettingVkIp4ConfigAddressesMaskJSON(data _ConnectionData, valueJSON string) {
-	// TODO
-	strAddr, _ := jsonToKeyValueString(valueJSON)
-	value := getSettingIp4ConfigAddresses(data)
-	if len(value) == 0 {
-		value = make([][]uint32, 1)
-		value[0] = make([]uint32, 3)
-	}
-	addr := value[0]
-	if len(addr) != 3 {
-		value[0] = make([]uint32, 3)
-	}
-	addr[1] = convertIpv4NetMaskToPrefix(strAddr)
-	setSettingIp4ConfigAddresses(data, value)
+func setSettingVkIp4ConfigAddressesMask(data _ConnectionData, value string) {
+	addresses := doGetOrNewSettingIp4ConfigAddresses(data)
+	addr := addresses[0]
+	addr[1] = convertIpv4NetMaskToPrefix(value)
+	setSettingIp4ConfigAddresses(data, addresses)
 }
-func setSettingVkIp4ConfigAddressesGatewayJSON(data _ConnectionData, valueJSON string) {
-	// TODO
-	strAddr, _ := jsonToKeyValueString(valueJSON)
-	value := getSettingIp4ConfigAddresses(data)
-	if len(value) == 0 {
-		value = make([][]uint32, 1)
-		value[0] = make([]uint32, 3)
-	}
-	addr := value[0]
-	if len(addr) != 3 {
-		value[0] = make([]uint32, 3)
-	}
-	addr[2] = convertIpv4AddressToUint32(strAddr)
-	setSettingIp4ConfigAddresses(data, value)
+func setSettingVkIp4ConfigAddressesGateway(data _ConnectionData, value string) {
+	addresses := doGetOrNewSettingIp4ConfigAddresses(data)
+	addr := addresses[0]
+	addr[2] = convertIpv4AddressToUint32(value)
+	setSettingIp4ConfigAddresses(data, addresses)
 }
-func setSettingVkIp4ConfigRoutesAddressJSON(data _ConnectionData, valueJSON string) {
+func setSettingVkIp4ConfigRoutesAddress(data _ConnectionData, value string) {
 	// TODO
 	// setSettingIp4ConfigRoutesAddressJSON(data)
 }
-func setSettingVkIp4ConfigRoutesMaskJSON(data _ConnectionData, valueJSON string) {
+func setSettingVkIp4ConfigRoutesMask(data _ConnectionData, value string) {
 	// TODO
 	// setSettingIp4ConfigRoutesMaskJSON(data)
 }
-func setSettingVkIp4ConfigRoutesNexthopJSON(data _ConnectionData, valueJSON string) {
+func setSettingVkIp4ConfigRoutesNexthop(data _ConnectionData, value string) {
 	// TODO
 	// setSettingIp4ConfigRoutesNexthopJSON(data)
 }
-func setSettingVkIp4ConfigRoutesMetricJSON(data _ConnectionData, valueJSON string) {
+func setSettingVkIp4ConfigRoutesMetric(data _ConnectionData, value string) {
 	// TODO
 	// setSettingIp4ConfigRoutesMetricJSON(data)
 }
-func setSettingVkIp6ConfigDnsJSON(data _ConnectionData, valueJSON string) {
+func setSettingVkIp6ConfigDns(data _ConnectionData, value string) {
 	// TODO
 	// setSettingIp6ConfigDnsJSON(data)
 }
-func setSettingVkIp6ConfigAddressesAddressJSON(data _ConnectionData, valueJSON string) {
+func setSettingVkIp6ConfigAddressesAddress(data _ConnectionData, value string) {
 	// TODO
 	// setSettingIp6ConfigAddressesAddressJSON(data)
 }
-func setSettingVkIp6ConfigAddressesPrefixJSON(data _ConnectionData, valueJSON string) {
+func setSettingVkIp6ConfigAddressesPrefix(data _ConnectionData, value string) {
 	// TODO
 	// setSettingIp6ConfigAddressesPrefixJSON(data)
 }
-func setSettingVkIp6ConfigAddressesGatewayJSON(data _ConnectionData, valueJSON string) {
+func setSettingVkIp6ConfigAddressesGateway(data _ConnectionData, value string) {
 	// TODO
 	// setSettingIp6ConfigAddressesGatewayJSON(data)
 }
-func setSettingVkIp6ConfigRoutesAddressJSON(data _ConnectionData, valueJSON string) {
+func setSettingVkIp6ConfigRoutesAddress(data _ConnectionData, value string) {
 	// TODO
 	// setSettingIp6ConfigRoutesAddressJSON(data)
 }
-func setSettingVkIp6ConfigRoutesPrefixJSON(data _ConnectionData, valueJSON string) {
+func setSettingVkIp6ConfigRoutesPrefix(data _ConnectionData, value string) {
 	// TODO
 	// setSettingIp6ConfigRoutesPrefixJSON(data)
 }
-func setSettingVkIp6ConfigRoutesNexthopJSON(data _ConnectionData, valueJSON string) {
+func setSettingVkIp6ConfigRoutesNexthop(data _ConnectionData, value string) {
 	// TODO
 	// setSettingIp6ConfigRoutesNexthopJSON(data)
 }
-func setSettingVkIp6ConfigRoutesMetricJSON(data _ConnectionData, valueJSON string) {
+func setSettingVkIp6ConfigRoutesMetric(data _ConnectionData, value string) {
 	// TODO
 	// setSettingIp6ConfigRoutesMetricJSON(data)
 }
-func setSettingVkWirelessSecurityKeyMgmtJSON(data _ConnectionData, valueJSON string) {
+func setSettingVkWirelessSecurityKeyMgmt(data _ConnectionData, value string) {
 	// TODO
 	// setSettingWirelessSecurityKeyMgmtJSON(data)
+}
+
+// JSON getter
+func getSettingVkConnectionPermissionsJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkConnectionPermissions(data))
+	return
+}
+func getSettingVkIp4ConfigDnsJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkIp4ConfigDns(data))
+	return
+}
+func getSettingVkIp4ConfigAddressesAddressJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkIp4ConfigAddressesAddress(data))
+	return
+}
+func getSettingVkIp4ConfigAddressesMaskJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkIp4ConfigAddressesMask(data))
+	return
+}
+func getSettingVkIp4ConfigAddressesGatewayJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkIp4ConfigAddressesGateway(data))
+	return
+}
+func getSettingVkIp4ConfigRoutesAddressJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkIp4ConfigRoutesAddress(data))
+	return
+}
+func getSettingVkIp4ConfigRoutesMaskJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkIp4ConfigRoutesMask(data))
+	return
+}
+func getSettingVkIp4ConfigRoutesNexthopJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkIp4ConfigRoutesNexthop(data))
+	return
+}
+func getSettingVkIp4ConfigRoutesMetricJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkIp4ConfigRoutesMetric(data))
+	return
+}
+func getSettingVkIp6ConfigDnsJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkIp6ConfigDns(data))
+	return
+}
+func getSettingVkIp6ConfigAddressesAddressJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkIp6ConfigAddressesAddress(data))
+	return
+}
+func getSettingVkIp6ConfigAddressesPrefixJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkIp6ConfigAddressesPrefix(data))
+	return
+}
+func getSettingVkIp6ConfigAddressesGatewayJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkIp6ConfigAddressesGateway(data))
+	return
+}
+func getSettingVkIp6ConfigRoutesAddressJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkIp6ConfigRoutesAddress(data))
+	return
+}
+func getSettingVkIp6ConfigRoutesPrefixJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkIp6ConfigRoutesPrefix(data))
+	return
+}
+func getSettingVkIp6ConfigRoutesNexthopJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkIp6ConfigRoutesNexthop(data))
+	return
+}
+func getSettingVkIp6ConfigRoutesMetricJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkIp6ConfigRoutesMetric(data))
+	return
+}
+func getSettingVkWirelessSecurityKeyMgmtJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkWirelessSecurityKeyMgmt(data))
+	return
+}
+
+// JSON setter
+func setSettingVkConnectionPermissionsJSON(data _ConnectionData, valueJSON string) {
+	value, _ := jsonToKeyValueBoolean(valueJSON)
+	setSettingVkConnectionPermissions(data, value)
+}
+func setSettingVkIp4ConfigDnsJSON(data _ConnectionData, valueJSON string) {
+	value, _ := jsonToKeyValueString(valueJSON)
+	setSettingVkIp4ConfigDns(data, value)
+}
+func setSettingVkIp4ConfigAddressesAddressJSON(data _ConnectionData, valueJSON string) {
+	value, _ := jsonToKeyValueString(valueJSON)
+	setSettingVkIp4ConfigAddressesAddress(data, value)
+}
+func setSettingVkIp4ConfigAddressesMaskJSON(data _ConnectionData, valueJSON string) {
+	value, _ := jsonToKeyValueString(valueJSON)
+	setSettingVkIp4ConfigAddressesMask(data, value)
+}
+func setSettingVkIp4ConfigAddressesGatewayJSON(data _ConnectionData, valueJSON string) {
+	value, _ := jsonToKeyValueString(valueJSON)
+	setSettingVkIp4ConfigAddressesGateway(data, value)
+}
+func setSettingVkIp4ConfigRoutesAddressJSON(data _ConnectionData, valueJSON string) {
+	value, _ := jsonToKeyValueString(valueJSON)
+	setSettingVkIp4ConfigRoutesAddress(data, value)
+}
+func setSettingVkIp4ConfigRoutesMaskJSON(data _ConnectionData, valueJSON string) {
+	value, _ := jsonToKeyValueString(valueJSON)
+	setSettingVkIp4ConfigRoutesMask(data, value)
+}
+func setSettingVkIp4ConfigRoutesNexthopJSON(data _ConnectionData, valueJSON string) {
+	value, _ := jsonToKeyValueString(valueJSON)
+	setSettingVkIp4ConfigRoutesNexthop(data, value)
+}
+func setSettingVkIp4ConfigRoutesMetricJSON(data _ConnectionData, valueJSON string) {
+	value, _ := jsonToKeyValueString(valueJSON)
+	setSettingVkIp4ConfigRoutesMetric(data, value)
+}
+func setSettingVkIp6ConfigDnsJSON(data _ConnectionData, valueJSON string) {
+	value, _ := jsonToKeyValueString(valueJSON)
+	setSettingVkIp6ConfigDns(data, value)
+}
+func setSettingVkIp6ConfigAddressesAddressJSON(data _ConnectionData, valueJSON string) {
+	value, _ := jsonToKeyValueString(valueJSON)
+	setSettingVkIp6ConfigAddressesAddress(data, value)
+}
+func setSettingVkIp6ConfigAddressesPrefixJSON(data _ConnectionData, valueJSON string) {
+	value, _ := jsonToKeyValueString(valueJSON)
+	setSettingVkIp6ConfigAddressesPrefix(data, value)
+}
+func setSettingVkIp6ConfigAddressesGatewayJSON(data _ConnectionData, valueJSON string) {
+	value, _ := jsonToKeyValueString(valueJSON)
+	setSettingVkIp6ConfigAddressesGateway(data, value)
+}
+func setSettingVkIp6ConfigRoutesAddressJSON(data _ConnectionData, valueJSON string) {
+	value, _ := jsonToKeyValueString(valueJSON)
+	setSettingVkIp6ConfigRoutesAddress(data, value)
+}
+func setSettingVkIp6ConfigRoutesPrefixJSON(data _ConnectionData, valueJSON string) {
+	value, _ := jsonToKeyValueString(valueJSON)
+	setSettingVkIp6ConfigRoutesPrefix(data, value)
+}
+func setSettingVkIp6ConfigRoutesNexthopJSON(data _ConnectionData, valueJSON string) {
+	value, _ := jsonToKeyValueString(valueJSON)
+	setSettingVkIp6ConfigRoutesNexthop(data, value)
+}
+func setSettingVkIp6ConfigRoutesMetricJSON(data _ConnectionData, valueJSON string) {
+	value, _ := jsonToKeyValueString(valueJSON)
+	setSettingVkIp6ConfigRoutesMetric(data, value)
+}
+func setSettingVkWirelessSecurityKeyMgmtJSON(data _ConnectionData, valueJSON string) {
+	value, _ := jsonToKeyValueString(valueJSON)
+	setSettingVkWirelessSecurityKeyMgmt(data, value)
 }
