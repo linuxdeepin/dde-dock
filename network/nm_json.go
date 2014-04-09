@@ -3,13 +3,18 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	// "strconv"
 )
 
 // TODO
 // arrayByteToVariant, variantToArrayByte
 // wrapArrayByte, unwrapArrayByte, wrapArrayByteByJSON
 // ktypeStringToVariant
+
+const (
+	jsonNull        = `null`
+	jsonEmptyString = `""`
+	jsonEmptyArray  = `[]`
+)
 
 // dbus.Variant.Value() -> realdata -> wrapped data(if need) -> json string
 func keyValueToJSON(v interface{}, t ktype) (jsonStr string, err error) {
@@ -41,12 +46,9 @@ func keyValueToJSON(v interface{}, t ktype) (jsonStr string, err error) {
 		v = wrapIpv6Routes(tmpv)
 	}
 
-	jsonBytes, err := json.Marshal(v)
-	if err != nil {
-		return
-	}
-	jsonStr = string(jsonBytes)
+	jsonStr, err = marshalJSON(v)
 	return
+	// TODO remove
 	// switch t {
 	// default:
 	// 	err = fmt.Errorf("invalid key type, %v", v)
@@ -140,7 +142,6 @@ func jsonToKeyValue(jsonStr string, t ktype) (v interface{}, err error) {
 }
 
 // Convert sepcial key type which wrapped by json to dbus variant'jsonStr value
-// TODO
 func jsonToKeyValueString(jsonStr string) (v string, err error) {
 	err = json.Unmarshal([]byte(jsonStr), &v)
 	return

@@ -116,7 +116,7 @@ func getConnectionDataKeyDefaultValueJSON(field, key string) (valueJSON string) 
 }
 
 func isJSONKeyValueMeansToDeleteKey(valueJSON string, t ktype) (doDelete bool) {
-	if valueJSON == `null` || valueJSON == `""` || valueJSON == `[]` {
+	if valueJSON == jsonNull || valueJSON == jsonEmptyString || valueJSON == jsonEmptyArray {
 		return true
 	}
 	switch t {

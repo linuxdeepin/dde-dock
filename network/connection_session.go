@@ -249,12 +249,22 @@ func (session *ConnectionSession) pageToField(page string) (field string) {
 }
 
 func (session *ConnectionSession) GetKey(page, key string) (value string) {
-	value = generalGetKeyJSON(session.data, session.pageToField(page), key)
+	field := session.pageToField(page)
+	if isVirtualKey(field, key) {
+		value = generalGetVirtualKeyJSON(session.data, field, key)
+	} else {
+		value = generalGetKeyJSON(session.data, field, key)
+	}
 	return
 }
 
 func (session *ConnectionSession) SetKey(page, key, value string) {
-	generalSetKeyJSON(session.data, session.pageToField(page), key, value)
+	field := session.pageToField(page)
+	if isVirtualKey(field, key) {
+		generalSetVirtualKeyJSON(session.data, field, key, value)
+	} else {
+		generalSetKeyJSON(session.data, field, key, value)
+	}
 	session.updatePropErrors()
 	session.updatePropAvailableKeys()
 	// TODO

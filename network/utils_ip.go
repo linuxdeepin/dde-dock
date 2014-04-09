@@ -119,7 +119,7 @@ func convertIpv6AddressToArrayByte(v string) (ipv6Addr []byte) {
 	a := strings.Split(v, ":")
 	if len(a) != 8 {
 		LOGGER.Error("ipv6 address is invalid", v)
-		return
+		return // TODO
 	}
 	for i := 0; i < 8; i++ {
 		s := a[i]

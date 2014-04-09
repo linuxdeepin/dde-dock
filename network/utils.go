@@ -4,6 +4,7 @@ import "fmt"
 import "io"
 import "crypto/rand"
 import "reflect"
+import "encoding/json"
 
 func newUUID() string {
 	uuid := make([]byte, 16)
@@ -27,6 +28,14 @@ func isStringInArray(s string, list []string) bool {
 	return false
 }
 
+func appendStringArray(a1 []string, a2 []string) (a []string) {
+	a = a1
+	for _, s := range a2 {
+		a = append(a, s)
+	}
+	return
+}
+
 func randString(n int) string {
 	const alphanum = "0123456789abcdef"
 	var bytes = make([]byte, n)
@@ -40,4 +49,13 @@ func randString(n int) string {
 func isInterfaceNil(v interface{}) bool {
 	defer func() { recover() }()
 	return v == nil || reflect.ValueOf(v).IsNil()
+}
+
+func marshalJSON(v interface{}) (jsonStr string, err error) {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return
+	}
+	jsonStr = string(b)
+	return
 }
