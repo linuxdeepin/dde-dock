@@ -4,6 +4,7 @@ import (
 	"container/list"
 	"dlib/gio-2.0"
 	"dlib/glib-2.0"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"text/template"
@@ -37,40 +38,76 @@ func NewDockedAppManager() *DockedAppManager {
 }
 
 func (m *DockedAppManager) init() {
-	m.core = gio.NewSettings(SchemaId)
-	if m.core != nil {
-		conf := glib.NewKeyFile()
-		defer conf.Free()
-		confFile := filepath.Join(glib.GetUserConfigDir(), "dock/apps.ini")
-		conf.LoadFromFile(confFile, glib.KeyFileFlagsNone)
-		if inited, err := conf.GetBoolean("__Config__", "inited"); err != nil && !inited {
-			_, ids, _ := conf.GetStringList("__Config__", "Position")
-			for _, id := range ids {
-				if a := gio.NewDesktopAppInfo(id + ".desktop"); a != nil {
-					a.Unref()
-					continue
-				}
-
-				exec, _ := conf.GetString(id, "CmdLine")
-				icon, _ := conf.GetString(id, "Icon")
-				title, _ := conf.GetString(id, "Name")
-				createScratchFile(id, title, icon, exec)
-			}
-			m.core.SetStrv(DockedApps, ids)
-			conf.SetBoolean("__Config__", "inited", true)
-			gio.SettingsSync()
-		}
-	}
 	m.items = list.New()
+	m.core = gio.NewSettings(SchemaId)
+	if m.core == nil {
+		return
+	}
+
+	// TODO:
+	// listen changed.
+	appList := m.core.GetStrv(DockedApps)
+	for _, id := range appList {
+		m.items.PushBack(id)
+	}
+
+	conf := glib.NewKeyFile()
+	defer conf.Free()
+
+	confFile := filepath.Join(glib.GetUserConfigDir(), "dock/apps.ini")
+	_, err := conf.LoadFromFile(confFile, glib.KeyFileFlagsNone)
+	if err != nil {
+		logger.Error("Open old dock config file failed:", err)
+		return
+	}
+
+	inited, err := conf.GetBoolean("__Config__", "inited")
+	if err == nil && inited {
+		return
+	}
+
+	_, ids, err := conf.GetStringList("__Config__", "Position")
+	if err != nil {
+		logger.Error("Read docked app from old config file failed:", err)
+		return
+	}
+	for _, id := range ids {
+		if a := gio.NewDesktopAppInfo(id + ".desktop"); a != nil {
+			a.Unref()
+			continue
+		}
+
+		exec, _ := conf.GetString(id, "CmdLine")
+		icon, _ := conf.GetString(id, "Icon")
+		title, _ := conf.GetString(id, "Name")
+		createScratchFile(id, title, icon, exec)
+	}
+
+	m.core.SetStrv(DockedApps, ids)
+	gio.SettingsSync()
+	conf.SetBoolean("__Config__", "inited", true)
+
+	_, content, err := conf.ToData()
+	if err != nil {
+		return
+	}
+
+	var mode os.FileMode = 0666
+	stat, err := os.Lstat(confFile)
+	if err == nil {
+		mode = stat.Mode()
+	}
+
+	err = ioutil.WriteFile(confFile, []byte(content), mode)
+	if err != nil {
+		logger.Error("Save Config file failed:", err)
+	}
 }
 
 func (m *DockedAppManager) DockedAppList() []string {
 	if m.core != nil {
-		list := m.core.GetStrv(DockedApps)
-		for _, id := range list {
-			m.items.PushBack(id)
-		}
-		return list
+		appList := m.core.GetStrv(DockedApps)
+		return appList
 	}
 	return make([]string, 0)
 }
@@ -106,8 +143,8 @@ func (m *DockedAppManager) Dock(id, title, icon, cmd string) bool {
 func (m *DockedAppManager) Undock(id string) bool {
 	removeItem := m.findItem(id)
 	if removeItem != nil {
-		logger.Info("undocd", id)
-		m.items.Remove(removeItem)
+		logger.Info("undock", id)
+		logger.Info("Remove", m.items.Remove(removeItem))
 		m.core.SetStrv(DockedApps, m.toSlice())
 		gio.SettingsSync()
 		os.Remove(filepath.Join(
@@ -144,11 +181,11 @@ func (m *DockedAppManager) Sort(items []string) {
 }
 
 func (m *DockedAppManager) toSlice() []string {
-	list := make([]string, 0)
+	appList := make([]string, 0)
 	for e := m.items.Front(); e != nil; e = e.Next() {
-		list = append(list, e.Value.(string))
+		appList = append(appList, e.Value.(string))
 	}
-	return list
+	return appList
 }
 
 func createScratchFile(id, title, icon, cmd string) error {
