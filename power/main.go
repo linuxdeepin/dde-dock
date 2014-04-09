@@ -107,6 +107,9 @@ func main() {
 		LOGGER.Error("Failed InstallOnSession:", err)
 	}
 	go dlib.StartLoop()
+
+	dbus.InstallOnSession(NewScreenSaver())
+
 	if err := dbus.Wait(); err != nil {
 		LOGGER.Error("dbus.Wait recieve an error:", err)
 		os.Exit(1)
