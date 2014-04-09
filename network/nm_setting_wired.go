@@ -75,19 +75,19 @@ const (
 func newWireedConnectionData(id, uuid string) (data _ConnectionData) {
 	data = make(_ConnectionData)
 
-	addConnectionDataField(data, fieldConnection)
+	addSettingField(data, fieldConnection)
 	setSettingConnectionId(data, id)
 	setSettingConnectionUuid(data, uuid)
 	setSettingConnectionType(data, typeWired)
 
 	// TODO
-	addConnectionDataField(data, fieldWired)
+	addSettingField(data, fieldWired)
 	setSettingWiredDuplex(data, "full")
 
-	addConnectionDataField(data, fieldIPv4)
+	addSettingField(data, fieldIPv4)
 	setSettingIp4ConfigMethod(data, NM_SETTING_IP4_CONFIG_METHOD_AUTO)
 
-	addConnectionDataField(data, fieldIPv6)
+	addSettingField(data, fieldIPv6)
 	setSettingIp6ConfigMethod(data, NM_SETTING_IP6_CONFIG_METHOD_AUTO)
 
 	return

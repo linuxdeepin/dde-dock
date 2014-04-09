@@ -47,7 +47,7 @@ func generalGet{{$fieldFuncBaseName}}KeyJSON(data _ConnectionData, key string) (
 const tplCheckExists = `
 // Check if key exists{{$fieldName := .FieldName}}{{range $index, $key := .Keys}}
 func is{{$key.Name | ToKeyFuncBaseName}}Exists(data _ConnectionData) bool {
-	return isConnectionDataKeyExists(data, {{$fieldName}}, {{$key.Name}})
+	return isSettingKeyExists(data, {{$fieldName}}, {{$key.Name}})
 }{{end}}
 `
 
@@ -55,7 +55,7 @@ func is{{$key.Name | ToKeyFuncBaseName}}Exists(data _ConnectionData) bool {
 const tplGetter = `
 // Getter{{$fieldName := .FieldName}}{{range $index, $key := .Keys}}
 func get{{$key.Name | ToKeyFuncBaseName}}(data _ConnectionData) (value {{$key.Type | ToKeyTypeRealData}}) {
-	value, _ = getConnectionDataKey(data, {{$fieldName}}, {{$key.Name}}).({{$key.Type | ToKeyTypeRealData}})
+	value, _ = getSettingKey(data, {{$fieldName}}, {{$key.Name}}).({{$key.Type | ToKeyTypeRealData}})
 	return
 }{{end}}
 `
@@ -64,7 +64,7 @@ func get{{$key.Name | ToKeyFuncBaseName}}(data _ConnectionData) (value {{$key.Ty
 const tplSetter = `
 // Setter{{$fieldName := .FieldName}}{{range $index, $key := .Keys}}
 func set{{$key.Name | ToKeyFuncBaseName}}(data _ConnectionData, value {{$key.Type | ToKeyTypeRealData}}) {
-	setConnectionDataKey(data, {{$fieldName}}, {{$key.Name}}, value)
+	setSettingKey(data, {{$fieldName}}, {{$key.Name}}, value)
 }{{end}}
 `
 
@@ -72,7 +72,7 @@ func set{{$key.Name | ToKeyFuncBaseName}}(data _ConnectionData, value {{$key.Typ
 const tplJSONGetter = `
 // JSON Getter{{$fieldName := .FieldName}}{{range $index, $key := .Keys}}
 func get{{$key.Name | ToKeyFuncBaseName}}JSON(data _ConnectionData) (valueJSON string) {
-	valueJSON = getConnectionDataKeyJSON(data, {{$fieldName}}, {{$key.Name}}, get{{$fieldName | ToFieldFuncBaseName}}KeyType({{$key.Name}}))
+	valueJSON = getSettingKeyJSON(data, {{$fieldName}}, {{$key.Name}}, get{{$fieldName | ToFieldFuncBaseName}}KeyType({{$key.Name}}))
 	return
 }{{end}}
 `
@@ -81,7 +81,7 @@ func get{{$key.Name | ToKeyFuncBaseName}}JSON(data _ConnectionData) (valueJSON s
 const tplJSONSetter = `
 // JSON Setter{{$fieldName := .FieldName}}{{range $index, $key := .Keys}}
 func set{{$key.Name | ToKeyFuncBaseName}}JSON(data _ConnectionData, valueJSON string) {
-	setConnectionDataKeyJSON(data, {{$fieldName}}, {{$key.Name}}, valueJSON, get{{$fieldName | ToFieldFuncBaseName}}KeyType({{$key.Name}}))
+	setSettingKeyJSON(data, {{$fieldName}}, {{$key.Name}}, valueJSON, get{{$fieldName | ToFieldFuncBaseName}}KeyType({{$key.Name}}))
 }{{end}}
 `
 
@@ -89,7 +89,7 @@ func set{{$key.Name | ToKeyFuncBaseName}}JSON(data _ConnectionData, valueJSON st
 const tplRemover = `
 // Remover{{$fieldName := .FieldName}}{{range $index, $key := .Keys}}
 func remove{{$key.Name | ToKeyFuncBaseName}}(data _ConnectionData) {
-	removeConnectionDataKey(data, {{$fieldName}}, {{$key.Name}})
+	removeSettingKey(data, {{$fieldName}}, {{$key.Name}})
 }{{end}}
 `
 

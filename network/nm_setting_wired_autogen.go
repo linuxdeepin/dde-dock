@@ -96,232 +96,232 @@ func generalGetSettingWiredKeyJSON(data _ConnectionData, key string) (value stri
 
 // Check if key exists
 func isSettingWiredPortExists(data _ConnectionData) bool {
-	return isConnectionDataKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_PORT)
+	return isSettingKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_PORT)
 }
 func isSettingWiredSpeedExists(data _ConnectionData) bool {
-	return isConnectionDataKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_SPEED)
+	return isSettingKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_SPEED)
 }
 func isSettingWiredDuplexExists(data _ConnectionData) bool {
-	return isConnectionDataKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_DUPLEX)
+	return isSettingKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_DUPLEX)
 }
 func isSettingWiredAutoNegotiateExists(data _ConnectionData) bool {
-	return isConnectionDataKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_AUTO_NEGOTIATE)
+	return isSettingKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_AUTO_NEGOTIATE)
 }
 func isSettingWiredMacAddressExists(data _ConnectionData) bool {
-	return isConnectionDataKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS)
+	return isSettingKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS)
 }
 func isSettingWiredClonedMacAddressExists(data _ConnectionData) bool {
-	return isConnectionDataKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_CLONED_MAC_ADDRESS)
+	return isSettingKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_CLONED_MAC_ADDRESS)
 }
 func isSettingWiredMacAddressBlacklistExists(data _ConnectionData) bool {
-	return isConnectionDataKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST)
+	return isSettingKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST)
 }
 func isSettingWiredMtuExists(data _ConnectionData) bool {
-	return isConnectionDataKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MTU)
+	return isSettingKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MTU)
 }
 func isSettingWiredS390SubchannelsExists(data _ConnectionData) bool {
-	return isConnectionDataKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_SUBCHANNELS)
+	return isSettingKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_SUBCHANNELS)
 }
 func isSettingWiredS390NettypeExists(data _ConnectionData) bool {
-	return isConnectionDataKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_NETTYPE)
+	return isSettingKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_NETTYPE)
 }
 func isSettingWiredS390OptionsExists(data _ConnectionData) bool {
-	return isConnectionDataKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_OPTIONS)
+	return isSettingKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_OPTIONS)
 }
 
 // Getter
 func getSettingWiredPort(data _ConnectionData) (value string) {
-	value, _ = getConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_PORT).(string)
+	value, _ = getSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_PORT).(string)
 	return
 }
 func getSettingWiredSpeed(data _ConnectionData) (value uint32) {
-	value, _ = getConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_SPEED).(uint32)
+	value, _ = getSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_SPEED).(uint32)
 	return
 }
 func getSettingWiredDuplex(data _ConnectionData) (value string) {
-	value, _ = getConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_DUPLEX).(string)
+	value, _ = getSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_DUPLEX).(string)
 	return
 }
 func getSettingWiredAutoNegotiate(data _ConnectionData) (value bool) {
-	value, _ = getConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_AUTO_NEGOTIATE).(bool)
+	value, _ = getSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_AUTO_NEGOTIATE).(bool)
 	return
 }
 func getSettingWiredMacAddress(data _ConnectionData) (value []byte) {
-	value, _ = getConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS).([]byte)
+	value, _ = getSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS).([]byte)
 	return
 }
 func getSettingWiredClonedMacAddress(data _ConnectionData) (value []byte) {
-	value, _ = getConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_CLONED_MAC_ADDRESS).([]byte)
+	value, _ = getSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_CLONED_MAC_ADDRESS).([]byte)
 	return
 }
 func getSettingWiredMacAddressBlacklist(data _ConnectionData) (value []string) {
-	value, _ = getConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST).([]string)
+	value, _ = getSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST).([]string)
 	return
 }
 func getSettingWiredMtu(data _ConnectionData) (value uint32) {
-	value, _ = getConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MTU).(uint32)
+	value, _ = getSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MTU).(uint32)
 	return
 }
 func getSettingWiredS390Subchannels(data _ConnectionData) (value []string) {
-	value, _ = getConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_SUBCHANNELS).([]string)
+	value, _ = getSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_SUBCHANNELS).([]string)
 	return
 }
 func getSettingWiredS390Nettype(data _ConnectionData) (value string) {
-	value, _ = getConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_NETTYPE).(string)
+	value, _ = getSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_NETTYPE).(string)
 	return
 }
 func getSettingWiredS390Options(data _ConnectionData) (value map[string]string) {
-	value, _ = getConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_OPTIONS).(map[string]string)
+	value, _ = getSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_OPTIONS).(map[string]string)
 	return
 }
 
 // Setter
 func setSettingWiredPort(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_PORT, value)
+	setSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_PORT, value)
 }
 func setSettingWiredSpeed(data _ConnectionData, value uint32) {
-	setConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_SPEED, value)
+	setSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_SPEED, value)
 }
 func setSettingWiredDuplex(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_DUPLEX, value)
+	setSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_DUPLEX, value)
 }
 func setSettingWiredAutoNegotiate(data _ConnectionData, value bool) {
-	setConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_AUTO_NEGOTIATE, value)
+	setSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_AUTO_NEGOTIATE, value)
 }
 func setSettingWiredMacAddress(data _ConnectionData, value []byte) {
-	setConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS, value)
+	setSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS, value)
 }
 func setSettingWiredClonedMacAddress(data _ConnectionData, value []byte) {
-	setConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_CLONED_MAC_ADDRESS, value)
+	setSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_CLONED_MAC_ADDRESS, value)
 }
 func setSettingWiredMacAddressBlacklist(data _ConnectionData, value []string) {
-	setConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST, value)
+	setSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST, value)
 }
 func setSettingWiredMtu(data _ConnectionData, value uint32) {
-	setConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MTU, value)
+	setSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MTU, value)
 }
 func setSettingWiredS390Subchannels(data _ConnectionData, value []string) {
-	setConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_SUBCHANNELS, value)
+	setSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_SUBCHANNELS, value)
 }
 func setSettingWiredS390Nettype(data _ConnectionData, value string) {
-	setConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_NETTYPE, value)
+	setSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_NETTYPE, value)
 }
 func setSettingWiredS390Options(data _ConnectionData, value map[string]string) {
-	setConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_OPTIONS, value)
+	setSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_OPTIONS, value)
 }
 
 // JSON Getter
 func getSettingWiredPortJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON = getConnectionDataKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_PORT, getSettingWiredKeyType(NM_SETTING_WIRED_PORT))
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_PORT, getSettingWiredKeyType(NM_SETTING_WIRED_PORT))
 	return
 }
 func getSettingWiredSpeedJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON = getConnectionDataKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_SPEED, getSettingWiredKeyType(NM_SETTING_WIRED_SPEED))
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_SPEED, getSettingWiredKeyType(NM_SETTING_WIRED_SPEED))
 	return
 }
 func getSettingWiredDuplexJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON = getConnectionDataKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_DUPLEX, getSettingWiredKeyType(NM_SETTING_WIRED_DUPLEX))
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_DUPLEX, getSettingWiredKeyType(NM_SETTING_WIRED_DUPLEX))
 	return
 }
 func getSettingWiredAutoNegotiateJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON = getConnectionDataKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_AUTO_NEGOTIATE, getSettingWiredKeyType(NM_SETTING_WIRED_AUTO_NEGOTIATE))
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_AUTO_NEGOTIATE, getSettingWiredKeyType(NM_SETTING_WIRED_AUTO_NEGOTIATE))
 	return
 }
 func getSettingWiredMacAddressJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON = getConnectionDataKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS, getSettingWiredKeyType(NM_SETTING_WIRED_MAC_ADDRESS))
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS, getSettingWiredKeyType(NM_SETTING_WIRED_MAC_ADDRESS))
 	return
 }
 func getSettingWiredClonedMacAddressJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON = getConnectionDataKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_CLONED_MAC_ADDRESS, getSettingWiredKeyType(NM_SETTING_WIRED_CLONED_MAC_ADDRESS))
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_CLONED_MAC_ADDRESS, getSettingWiredKeyType(NM_SETTING_WIRED_CLONED_MAC_ADDRESS))
 	return
 }
 func getSettingWiredMacAddressBlacklistJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON = getConnectionDataKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST, getSettingWiredKeyType(NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST))
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST, getSettingWiredKeyType(NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST))
 	return
 }
 func getSettingWiredMtuJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON = getConnectionDataKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MTU, getSettingWiredKeyType(NM_SETTING_WIRED_MTU))
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MTU, getSettingWiredKeyType(NM_SETTING_WIRED_MTU))
 	return
 }
 func getSettingWiredS390SubchannelsJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON = getConnectionDataKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_SUBCHANNELS, getSettingWiredKeyType(NM_SETTING_WIRED_S390_SUBCHANNELS))
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_SUBCHANNELS, getSettingWiredKeyType(NM_SETTING_WIRED_S390_SUBCHANNELS))
 	return
 }
 func getSettingWiredS390NettypeJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON = getConnectionDataKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_NETTYPE, getSettingWiredKeyType(NM_SETTING_WIRED_S390_NETTYPE))
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_NETTYPE, getSettingWiredKeyType(NM_SETTING_WIRED_S390_NETTYPE))
 	return
 }
 func getSettingWiredS390OptionsJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON = getConnectionDataKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_OPTIONS, getSettingWiredKeyType(NM_SETTING_WIRED_S390_OPTIONS))
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_OPTIONS, getSettingWiredKeyType(NM_SETTING_WIRED_S390_OPTIONS))
 	return
 }
 
 // JSON Setter
 func setSettingWiredPortJSON(data _ConnectionData, valueJSON string) {
-	setConnectionDataKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_PORT, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_PORT))
+	setSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_PORT, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_PORT))
 }
 func setSettingWiredSpeedJSON(data _ConnectionData, valueJSON string) {
-	setConnectionDataKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_SPEED, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_SPEED))
+	setSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_SPEED, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_SPEED))
 }
 func setSettingWiredDuplexJSON(data _ConnectionData, valueJSON string) {
-	setConnectionDataKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_DUPLEX, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_DUPLEX))
+	setSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_DUPLEX, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_DUPLEX))
 }
 func setSettingWiredAutoNegotiateJSON(data _ConnectionData, valueJSON string) {
-	setConnectionDataKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_AUTO_NEGOTIATE, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_AUTO_NEGOTIATE))
+	setSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_AUTO_NEGOTIATE, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_AUTO_NEGOTIATE))
 }
 func setSettingWiredMacAddressJSON(data _ConnectionData, valueJSON string) {
-	setConnectionDataKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_MAC_ADDRESS))
+	setSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_MAC_ADDRESS))
 }
 func setSettingWiredClonedMacAddressJSON(data _ConnectionData, valueJSON string) {
-	setConnectionDataKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_CLONED_MAC_ADDRESS, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_CLONED_MAC_ADDRESS))
+	setSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_CLONED_MAC_ADDRESS, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_CLONED_MAC_ADDRESS))
 }
 func setSettingWiredMacAddressBlacklistJSON(data _ConnectionData, valueJSON string) {
-	setConnectionDataKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST))
+	setSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST))
 }
 func setSettingWiredMtuJSON(data _ConnectionData, valueJSON string) {
-	setConnectionDataKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MTU, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_MTU))
+	setSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MTU, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_MTU))
 }
 func setSettingWiredS390SubchannelsJSON(data _ConnectionData, valueJSON string) {
-	setConnectionDataKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_SUBCHANNELS, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_S390_SUBCHANNELS))
+	setSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_SUBCHANNELS, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_S390_SUBCHANNELS))
 }
 func setSettingWiredS390NettypeJSON(data _ConnectionData, valueJSON string) {
-	setConnectionDataKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_NETTYPE, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_S390_NETTYPE))
+	setSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_NETTYPE, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_S390_NETTYPE))
 }
 func setSettingWiredS390OptionsJSON(data _ConnectionData, valueJSON string) {
-	setConnectionDataKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_OPTIONS, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_S390_OPTIONS))
+	setSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_OPTIONS, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_S390_OPTIONS))
 }
 
 // Remover
 func removeSettingWiredPort(data _ConnectionData) {
-	removeConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_PORT)
+	removeSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_PORT)
 }
 func removeSettingWiredSpeed(data _ConnectionData) {
-	removeConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_SPEED)
+	removeSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_SPEED)
 }
 func removeSettingWiredDuplex(data _ConnectionData) {
-	removeConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_DUPLEX)
+	removeSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_DUPLEX)
 }
 func removeSettingWiredAutoNegotiate(data _ConnectionData) {
-	removeConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_AUTO_NEGOTIATE)
+	removeSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_AUTO_NEGOTIATE)
 }
 func removeSettingWiredMacAddress(data _ConnectionData) {
-	removeConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS)
+	removeSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS)
 }
 func removeSettingWiredClonedMacAddress(data _ConnectionData) {
-	removeConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_CLONED_MAC_ADDRESS)
+	removeSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_CLONED_MAC_ADDRESS)
 }
 func removeSettingWiredMacAddressBlacklist(data _ConnectionData) {
-	removeConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST)
+	removeSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST)
 }
 func removeSettingWiredMtu(data _ConnectionData) {
-	removeConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MTU)
+	removeSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MTU)
 }
 func removeSettingWiredS390Subchannels(data _ConnectionData) {
-	removeConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_SUBCHANNELS)
+	removeSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_SUBCHANNELS)
 }
 func removeSettingWiredS390Nettype(data _ConnectionData) {
-	removeConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_NETTYPE)
+	removeSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_NETTYPE)
 }
 func removeSettingWiredS390Options(data _ConnectionData) {
-	removeConnectionDataKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_OPTIONS)
+	removeSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_OPTIONS)
 }

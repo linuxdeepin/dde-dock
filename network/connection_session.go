@@ -217,7 +217,7 @@ func (session *ConnectionSession) listKeys(page string) (keys []string) {
 // GetAvailableValues get available values for target key.
 func (session *ConnectionSession) GetAvailableValues(page, key string) (values []string) {
 	field := session.pageToField(page)
-	values, _ = generalGetAvailableValues(field, key)
+	values, _ = generalGetSettingAvailableValues(field, key)
 	return
 }
 
@@ -226,7 +226,7 @@ func (session *ConnectionSession) GetKey(page, key string) (value string) {
 	if isVirtualKey(field, key) {
 		value = generalGetVirtualKeyJSON(session.data, field, key)
 	} else {
-		value = generalGetKeyJSON(session.data, field, key)
+		value = generalGetSettingKeyJSON(session.data, field, key)
 	}
 	return
 }
@@ -236,7 +236,7 @@ func (session *ConnectionSession) SetKey(page, key, value string) {
 	if isVirtualKey(field, key) {
 		generalSetVirtualKeyJSON(session.data, field, key, value)
 	} else {
-		generalSetKeyJSON(session.data, field, key, value)
+		generalSetSettingKeyJSON(session.data, field, key, value)
 	}
 	session.updatePropErrors()
 	session.updatePropAvailableKeys()
@@ -270,8 +270,8 @@ func (session *ConnectionSession) DebugListKeyDetail() (info string) {
 			continue
 		}
 		for _, key := range fieldData {
-			t := generalGetKeyType(field, key)
-			values, _ := generalGetAvailableValues(field, key)
+			t := generalGetSettingKeyType(field, key)
+			values, _ := generalGetSettingAvailableValues(field, key)
 			info += fmt.Sprintf("%s->%s: %s %s\n", page, key, getKtypeDescription(t), values)
 		}
 	}

@@ -231,7 +231,7 @@ func logicSetSettingIp6ConfigMethodJSON(data _ConnectionData, valueJSON string) 
 func logicSetSettingIp6ConfigMethod(data _ConnectionData, value string) {
 	switch value {
 	case NM_SETTING_IP6_CONFIG_METHOD_IGNORE: // ignore
-		removeConnectionDataKeyBut(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_METHOD)
+		removeSettingKeyBut(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_METHOD)
 	case NM_SETTING_IP6_CONFIG_METHOD_AUTO:
 		removeSettingIp6ConfigAddresses(data)
 	case NM_SETTING_IP6_CONFIG_METHOD_DHCP: // ignore

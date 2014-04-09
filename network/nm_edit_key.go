@@ -13,44 +13,7 @@ func pageGeneralGetId(con map[string]map[string]dbus.Variant) string {
 	return con[fieldConnection]["id"].Value().(string)
 }
 
-func addConnectionDataField(data _ConnectionData, field string) {
-	var fieldData map[string]dbus.Variant
-	fieldData, ok := data[field]
-	if !ok {
-		// add field if not exists
-		fieldData = make(map[string]dbus.Variant)
-		data[field] = fieldData
-	}
-}
-
-func removeConnectionDataField(data _ConnectionData, field string) {
-	_, ok := data[field]
-	if !ok {
-		// remove field if exists
-		delete(data, field)
-	}
-}
-
-func isConnectionDataFieldExists(data _ConnectionData, field string) bool {
-	_, ok := data[field]
-	return ok
-}
-
-func isConnectionDataKeyExists(data _ConnectionData, field, key string) bool {
-	fieldData, ok := data[field]
-	if !ok {
-		return false
-	}
-
-	_, ok = fieldData[key]
-	if !ok {
-		return false
-	}
-
-	return true
-}
-
-func generalGetKeyType(field, key string) (t ktype) {
+func generalGetSettingKeyType(field, key string) (t ktype) {
 	if isVirtualKey(field, key) {
 		t = getSettingVkKeyType(field, key)
 		return
@@ -76,7 +39,7 @@ func generalGetKeyType(field, key string) (t ktype) {
 	return
 }
 
-func generalGetAvailableValues(field, key string) (values []string, customizable bool) {
+func generalGetSettingAvailableValues(field, key string) (values []string, customizable bool) {
 	switch field {
 	case field8021x:
 		values, customizable = getSetting8021xAvailableValues(key)
@@ -96,7 +59,7 @@ func generalGetAvailableValues(field, key string) (values []string, customizable
 	return
 }
 
-func generalGetKeyJSON(data _ConnectionData, field, key string) (valueJSON string) {
+func generalGetSettingKeyJSON(data _ConnectionData, field, key string) (valueJSON string) {
 	switch field {
 	default:
 		LOGGER.Warning("invalid field name", field)
@@ -118,7 +81,7 @@ func generalGetKeyJSON(data _ConnectionData, field, key string) (valueJSON strin
 	return
 }
 
-func generalSetKeyJSON(data _ConnectionData, field, key, valueJSON string) {
+func generalSetSettingKeyJSON(data _ConnectionData, field, key, valueJSON string) {
 	switch field {
 	default:
 		LOGGER.Warning("invalid field name", field)
@@ -139,7 +102,7 @@ func generalSetKeyJSON(data _ConnectionData, field, key, valueJSON string) {
 	}
 }
 
-func getConnectionDataKeyDefaultValueJSON(field, key string) (valueJSON string) {
+func getSettingKeyDefaultValueJSON(field, key string) (valueJSON string) {
 	switch field {
 	default:
 		LOGGER.Warning("invalid field name", field)
@@ -196,13 +159,13 @@ func isJSONKeyValueMeansToDeleteKey(valueJSON string, t ktype) (doDelete bool) {
 	return
 }
 
-func getConnectionDataKeyJSON(data _ConnectionData, field, key string, t ktype) (valueJSON string) {
+func getSettingKeyJSON(data _ConnectionData, field, key string, t ktype) (valueJSON string) {
 	var value interface{}
-	if isConnectionDataKeyExists(data, field, key) {
-		value = getConnectionDataKey(data, field, key)
+	if isSettingKeyExists(data, field, key) {
+		value = getSettingKey(data, field, key)
 	} else {
 		// return default value if the key is not exists
-		valueJSON = getConnectionDataKeyDefaultValueJSON(field, key)
+		valueJSON = getSettingKeyDefaultValueJSON(field, key)
 		return
 	}
 
@@ -213,21 +176,21 @@ func getConnectionDataKeyJSON(data _ConnectionData, field, key string, t ktype) 
 	}
 
 	if len(valueJSON) == 0 {
-		LOGGER.Error("getConnectionDataKeyJSON: valueJSON is empty")
+		LOGGER.Error("getSettingKeyJSON: valueJSON is empty")
 	}
 
 	return
 }
 
-func setConnectionDataKeyJSON(data _ConnectionData, field, key, valueJSON string, t ktype) {
+func setSettingKeyJSON(data _ConnectionData, field, key, valueJSON string, t ktype) {
 	if len(valueJSON) == 0 {
-		LOGGER.Error("setConnectionDataKeyJSON: valueJSON is empty")
+		LOGGER.Error("setSettingKeyJSON: valueJSON is empty")
 		return
 	}
 
 	// remove connection data key if valueJSON is null or empty
 	if isJSONKeyValueMeansToDeleteKey(valueJSON, t) {
-		removeConnectionDataKey(data, field, key)
+		removeSettingKey(data, field, key)
 		return
 	}
 
@@ -237,16 +200,16 @@ func setConnectionDataKeyJSON(data _ConnectionData, field, key, valueJSON string
 			valueJSON, getKtypeDescription(t), err)
 		return
 	}
-	// LOGGER.Debugf("setConnectionDataKeyJSON data[%s][%s]=%#v, valueJSON=%s", field, key, value, valueJSON) // TODO test
+	// LOGGER.Debugf("setSettingKeyJSON data[%s][%s]=%#v, valueJSON=%s", field, key, value, valueJSON) // TODO test
 	if isInterfaceNil(value) {
-		removeConnectionDataKey(data, field, key)
+		removeSettingKey(data, field, key)
 	} else {
-		setConnectionDataKey(data, field, key, value)
+		setSettingKey(data, field, key, value)
 	}
 	return
 }
 
-func getConnectionDataKey(data _ConnectionData, field, key string) (value interface{}) {
+func getSettingKey(data _ConnectionData, field, key string) (value interface{}) {
 	fieldData, ok := data[field]
 	if !ok {
 		LOGGER.Errorf("invalid field: data[%s]", field)
@@ -261,11 +224,11 @@ func getConnectionDataKey(data _ConnectionData, field, key string) (value interf
 
 	value = variant.Value()
 
-	// LOGGER.Debugf("getConnectionDataKey: data[%s][%s]=%v", field, key, value) // TODO test
+	// LOGGER.Debugf("getSettingKey: data[%s][%s]=%v", field, key, value) // TODO test
 	return
 }
 
-func setConnectionDataKey(data _ConnectionData, field, key string, value interface{}) {
+func setSettingKey(data _ConnectionData, field, key string, value interface{}) {
 	var fieldData map[string]dbus.Variant
 	fieldData, ok := data[field]
 	if !ok {
@@ -275,11 +238,11 @@ func setConnectionDataKey(data _ConnectionData, field, key string, value interfa
 
 	fieldData[key] = dbus.MakeVariant(value)
 
-	// LOGGER.Debugf("setConnectionDataKey: data[%s][%s]=%s", field, key, value) // TODO test
+	// LOGGER.Debugf("setSettingKey: data[%s][%s]=%s", field, key, value) // TODO test
 	return
 }
 
-func removeConnectionDataKey(data _ConnectionData, field, key string) {
+func removeSettingKey(data _ConnectionData, field, key string) {
 	fieldData, ok := data[field]
 	if !ok {
 		return
@@ -293,7 +256,7 @@ func removeConnectionDataKey(data _ConnectionData, field, key string) {
 	delete(fieldData, key)
 }
 
-func removeConnectionDataKeyBut(data _ConnectionData, field string, keys ...string) {
+func removeSettingKeyBut(data _ConnectionData, field string, keys ...string) {
 	fieldData, ok := data[field]
 	if !ok {
 		return
@@ -304,4 +267,41 @@ func removeConnectionDataKeyBut(data _ConnectionData, field string, keys ...stri
 			delete(fieldData, k)
 		}
 	}
+}
+
+func isSettingKeyExists(data _ConnectionData, field, key string) bool {
+	fieldData, ok := data[field]
+	if !ok {
+		return false
+	}
+
+	_, ok = fieldData[key]
+	if !ok {
+		return false
+	}
+
+	return true
+}
+
+func addSettingField(data _ConnectionData, field string) {
+	var fieldData map[string]dbus.Variant
+	fieldData, ok := data[field]
+	if !ok {
+		// add field if not exists
+		fieldData = make(map[string]dbus.Variant)
+		data[field] = fieldData
+	}
+}
+
+func removeSettingField(data _ConnectionData, field string) {
+	_, ok := data[field]
+	if !ok {
+		// remove field if exists
+		delete(data, field)
+	}
+}
+
+func isSettingFieldExists(data _ConnectionData, field string) bool {
+	_, ok := data[field]
+	return ok
 }

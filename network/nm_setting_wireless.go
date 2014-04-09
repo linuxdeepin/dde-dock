@@ -111,16 +111,16 @@ const (
 func newWirelessConnectionData(id, uuid string, ssid []byte, keyFlag int) (data _ConnectionData) {
 	data = make(_ConnectionData)
 
-	addConnectionDataField(data, fieldConnection)
+	addSettingField(data, fieldConnection)
 	setSettingConnectionId(data, id)
 	setSettingConnectionUuid(data, uuid)
 	setSettingConnectionType(data, typeWireless)
 
-	addConnectionDataField(data, fieldWireless)
+	addSettingField(data, fieldWireless)
 	setSettingWirelessSsid(data, ssid)
 
 	if keyFlag != ApKeyNone {
-		addConnectionDataField(data, fieldWirelessSecurity)
+		addSettingField(data, fieldWirelessSecurity)
 		setSettingWirelessSec(data, fieldWirelessSecurity)
 		switch keyFlag {
 		case ApKeyWep:
@@ -134,10 +134,10 @@ func newWirelessConnectionData(id, uuid string, ssid []byte, keyFlag int) (data 
 		}
 	}
 
-	addConnectionDataField(data, fieldIPv4)
+	addSettingField(data, fieldIPv4)
 	setSettingIp4ConfigMethod(data, NM_SETTING_IP4_CONFIG_METHOD_AUTO)
 
-	addConnectionDataField(data, fieldIPv6)
+	addSettingField(data, fieldIPv6)
 	setSettingIp6ConfigMethod(data, NM_SETTING_IP6_CONFIG_METHOD_AUTO)
 
 	return
@@ -222,7 +222,7 @@ func checkSettingWirelessValues(data _ConnectionData) (errs map[string]string) {
 	// check security
 	if isSettingWirelessSecExists(data) {
 		securityField := getSettingWirelessSec(data)
-		if !isConnectionDataFieldExists(data, securityField) {
+		if !isSettingFieldExists(data, securityField) {
 			rememberError(errs, NM_SETTING_WIRELESS_SEC, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, securityField))
 		}
 	}
