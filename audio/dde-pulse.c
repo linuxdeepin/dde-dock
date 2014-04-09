@@ -1908,6 +1908,7 @@ void monitor_read_cb(pa_stream *s, size_t length, void *userdata)
 {
     const void *data;
     double v;
+    int index = pa_stream_get_index(s);
 
     printf("read callback length: %ld\n", length);
     printf("\tget_device_index: %d\n", pa_stream_get_device_index(s));
@@ -1915,8 +1916,8 @@ void monitor_read_cb(pa_stream *s, size_t length, void *userdata)
     printf("\tget_monitor_stream: %d\n", pa_stream_get_monitor_stream(s));
     if (pa_stream_peek(s, &data, &length) < 0)
     {
-    printf("Failed to read data from stream\n");
-    return;
+        printf("Failed to read data from stream\n");
+        return;
     }
 
     assert(length > 0);
@@ -1929,6 +1930,9 @@ void monitor_read_cb(pa_stream *s, size_t length, void *userdata)
     /*if (v < 0) v = 0;*/
     /*if (v > 1) v = 1;*/
     printf("\tread callback peek: %f\n", v);
+
+    //update go dbus property
+    updateSourceOutputInputLevel(index, v);
 }
 
 void monitor_suspend_cb(pa_stream *s, void *userdata)
@@ -2647,7 +2651,8 @@ void pa_context_subscribe_cb(pa_context *c,
         {
             printf("DEBUG source output %d removed\n", idx);
             updateSourceOutput(idx,
-                               t & PA_SUBSCRIPTION_EVENT_TYPE_MASK);
+                               t & PA_SUBSCRIPTION_EVENT_TYPE_MASK
+                              );
             /*pthread_mutex_unlock(&self->event_mutex);*/
         }
         break;
