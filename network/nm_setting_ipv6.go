@@ -107,9 +107,7 @@ func checkSettingIp6ConfigValues(data _ConnectionData) (errs map[string]string) 
 		checkSettingIp6MethodConflict(data, errs)
 	case NM_SETTING_IP6_CONFIG_METHOD_MANUAL:
 		// ensure address exists
-		if !isSettingIp6ConfigAddressesExists(data) {
-			rememberError(errs, NM_SETTING_IP6_CONFIG_ADDRESSES, NM_KEY_ERROR_MISSING_VALUE)
-		}
+		ensureSettingIp6ConfigAddressesExists(data, errs)
 	case NM_SETTING_IP6_CONFIG_METHOD_SHARED: // ignore
 		checkSettingIp6MethodConflict(data, errs)
 	}
@@ -149,10 +147,6 @@ func checkSettingIp6ConfigDns(data _ConnectionData, errs map[string]string) {
 		return
 	}
 	dnses := getSettingIp6ConfigDns(data)
-	if len(dnses) == 0 {
-		rememberError(errs, NM_SETTING_IP6_CONFIG_DNS, NM_KEY_ERROR_EMPTY_VALUE)
-		return
-	}
 	for _, dns := range dnses {
 		if !isIpv6AddressValid(dns) {
 			rememberError(errs, NM_SETTING_IP6_CONFIG_DNS, NM_KEY_ERROR_INVALID_VALUE)
@@ -165,8 +159,9 @@ func checkSettingIp6ConfigDns(data _ConnectionData, errs map[string]string) {
 	}
 }
 
-func checkSettingIp6ConfigAddresses(data _ConnectionData, errs map[string]string) {
+func ensureSettingIp6ConfigAddressesExists(data _ConnectionData, errs map[string]string) {
 	if !isSettingIp6ConfigAddressesExists(data) {
+		rememberError(errs, NM_SETTING_IP6_CONFIG_ADDRESSES, NM_KEY_ERROR_MISSING_VALUE)
 		return
 	}
 	addresses := getSettingIp6ConfigAddresses(data)
@@ -174,6 +169,12 @@ func checkSettingIp6ConfigAddresses(data _ConnectionData, errs map[string]string
 		rememberError(errs, NM_SETTING_IP6_CONFIG_ADDRESSES, NM_KEY_ERROR_EMPTY_VALUE)
 		return
 	}
+}
+func checkSettingIp6ConfigAddresses(data _ConnectionData, errs map[string]string) {
+	if !isSettingIp6ConfigAddressesExists(data) {
+		return
+	}
+	addresses := getSettingIp6ConfigAddresses(data)
 	for _, addr := range addresses {
 		if !isIpv6AddressValid(addr.Address) {
 			rememberError(errs, NM_SETTING_IP6_CONFIG_ADDRESSES, NM_KEY_ERROR_INVALID_VALUE)

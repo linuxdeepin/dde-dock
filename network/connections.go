@@ -39,7 +39,7 @@ func (this *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPa
 		uuid := getSettingConnectionUuid(cdata)
 
 		switch getSettingConnectionType(cdata) {
-		case "802-11-wireless":
+		case "802-11-wireless": // TODO
 			this.WirelessConnections = append(this.WirelessConnections, uuid)
 			dbus.NotifyChange(this, "WirelessConnections")
 		case "802-3-ethernet":
