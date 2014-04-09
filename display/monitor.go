@@ -77,6 +77,11 @@ func (m *Monitor) ChangeBrightness(name string, v float64) {
 		runCode(code)
 	}
 }
+func (m *Monitor) ResetBrightness(name string) {
+	if v, ok := __CFG__.Monitors[m.Name].Brightness[name]; ok {
+		m.ChangeBrightness(name, v)
+	}
+}
 
 func (m *Monitor) SetBrightness(name string, v float64) {
 	m.ChangeBrightness(name, v)
