@@ -1,7 +1,10 @@
 package main
 
 import (
-	"fmt"
+	"dbus/com/deepin/daemon/display"
+	"github.com/BurntSushi/xgb"
+	"github.com/BurntSushi/xgb/dpms"
+	"time"
 )
 
 const (
@@ -13,6 +16,9 @@ const (
 )
 
 func (p *Power) setBatteryIdleDelay(delay int32) {
+	if delay == 0 {
+		delay = 0xfffffff
+	}
 	p.setPropBatteryIdleDelay(delay)
 
 	if p.BatteryPlan.Get() == PowerPlanCustom && int32(p.coreSettings.GetInt("battery-idle-delay")) != delay {
@@ -22,6 +28,9 @@ func (p *Power) setBatteryIdleDelay(delay int32) {
 }
 
 func (p *Power) setBatterySuspendDelay(delay int32) {
+	if delay == 0 {
+		delay = 0xfffffff
+	}
 	p.setPropBatterySuspendDelay(delay)
 
 	if p.BatteryPlan.Get() == PowerPlanCustom && int32(p.coreSettings.GetInt("battery-suspend-delay")) != delay {
@@ -48,6 +57,9 @@ func (p *Power) setBatteryPlan(plan int32) {
 }
 
 func (p *Power) setLinePowerIdleDelay(delay int32) {
+	if delay == 0 {
+		delay = 0xfffffff
+	}
 	p.setPropLinePowerIdleDelay(delay)
 
 	if p.LinePowerPlan.Get() == PowerPlanCustom && int32(p.coreSettings.GetInt("ac-idle-delay")) != delay {
@@ -57,6 +69,9 @@ func (p *Power) setLinePowerIdleDelay(delay int32) {
 }
 
 func (p *Power) setLinePowerSuspendDelay(delay int32) {
+	if delay == 0 {
+		delay = 0xfffffff
+	}
 	p.setPropLinePowerSuspendDelay(delay)
 
 	if p.LinePowerPlan.Get() == PowerPlanCustom && int32(p.coreSettings.GetInt("ac-suspend-delay")) != delay {
@@ -107,38 +122,90 @@ func (p *Power) updateIdletimer() {
 	}
 }
 
+var dpmsOn func()
+var dpmsOff func()
+
 func (p *Power) initPlan() {
 	p.screensaver.ConnectIdleOn(p.handleIdleOn)
 	p.screensaver.ConnectIdleOff(p.handleIdleOff)
 	p.screensaver.ConnectCycleActive(p.handleCycleActive)
 	p.updateIdletimer()
+	con, _ := xgb.NewConn()
+	dpms.Init(con)
+	dpmsOn = func() { dpms.ForceLevel(con, dpms.DPMSModeOn) }
+	dpmsOff = func() { dpms.ForceLevel(con, dpms.DPMSModeOff) }
+}
+
+var stopAnimation []chan bool
+
+func doIdleAction() {
+	dp, _ := display.NewDisplay("com.deepin.daemon.Display", "/com/deepin/daemon/Display")
+	defer display.DestroyDisplay(dp)
+
+	for _, p := range dp.Monitors.Get() {
+		go func() {
+			stoper := make(chan bool)
+			stopAnimation = append(stopAnimation, stoper)
+
+			m, _ := display.NewMonitor("com.deepin.daemon.Display", p)
+			defer display.DestroyMonitor(m)
+
+			for v := 0.8; v > 0.1; v -= 0.05 {
+				<-time.After(time.Millisecond * time.Duration(float64(400)*(v)))
+
+				select {
+				case <-stoper:
+					for name, _ := range m.Brightness.Get() {
+						m.ResetBrightness(name)
+					}
+					dpmsOn()
+					return
+
+				default:
+					for name, _ := range m.Brightness.Get() {
+						m.ChangeBrightness(name, v)
+					}
+				}
+			}
+			dpmsOff()
+		}()
+	}
 }
 
 func (p *Power) handleIdleOn() {
 	if p.OnBattery {
 		if p.BatteryIdleDelay < p.BatterySuspendDelay {
-			fmt.Println("ON battery Idel>>>>>>>>>")
+			doIdleAction()
 		} else {
-			fmt.Println("ON battery Suspend>>>>>>>>>")
 			doSuspend()
 		}
 	} else {
 		if p.LinePowerIdleDelay < p.LinePowerSuspendDelay {
-			fmt.Println("ON LinePower Idel>>>>>>>>>")
+			doIdleAction()
 		} else {
-			fmt.Println("ON LinePower Suspend>>>>>>>>>")
 			doSuspend()
 		}
 	}
 }
+
 func (*Power) handleIdleOff() {
-	fmt.Println("OFF>>>>>>>>>")
-}
-func (p *Power) handleCycleActive() {
-	if p.OnBattery {
-		fmt.Println("ON battery Suspend>>>>>>>>>")
-	} else {
-		fmt.Println("ON LinePower Suspend>>>>>>>>>")
+	for _, c := range stopAnimation {
+		close(c)
 	}
+	stopAnimation = nil
+
+	dpmsOn()
+	dp, _ := display.NewDisplay("com.deepin.daemon.Display", "/com/deepin/daemon/Display")
+	defer display.DestroyDisplay(dp)
+	for _, p := range dp.Monitors.Get() {
+		m, _ := display.NewMonitor("com.deepin.daemon.Display", p)
+		defer display.DestroyMonitor(m)
+		for name, _ := range m.Brightness.Get() {
+			m.ResetBrightness(name)
+		}
+	}
+}
+
+func (p *Power) handleCycleActive() {
 	doSuspend()
 }

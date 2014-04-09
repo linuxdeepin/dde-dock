@@ -83,6 +83,8 @@ func (up *Power) handlePowerButton() {
 		doShutDownInteractive()
 	case ActionShutdown:
 		doShutDown()
+	case ActionSuspend:
+		doSuspend()
 	case ActionNothing:
 	default:
 		LOGGER.Warning("invalid LidSwitchAction:", up.LidClosedAction)
