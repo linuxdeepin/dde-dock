@@ -64,4 +64,14 @@ func (p *Power) setPropBatteryState(v uint32) {
 }
 
 func (p *Power) OnPropertiesChanged(key string, oldv interface{}) {
+	switch key {
+	case "BatterySuspendDelay":
+		p.coreSettings.SetInt("battery-suspend-delay", int(p.BatterySuspendDelay))
+	case "BatteryIdleDelay":
+		p.coreSettings.SetInt("battery-idle-delay", int(p.BatteryIdleDelay))
+	case "LinePowerSuspendDelay":
+		p.coreSettings.SetInt("ac-suspend-delay", int(p.LinePowerSuspendDelay))
+	case "LinePowerIdleDelay":
+		p.coreSettings.SetInt("ac-idle-delay", int(p.LinePowerSuspendDelay))
+	}
 }
