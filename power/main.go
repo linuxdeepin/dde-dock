@@ -40,6 +40,8 @@ type Power struct {
 	BatteryIsPresent bool
 
 	OnBattery bool
+
+	PlanInfo string
 }
 
 func (p *Power) Reset() {

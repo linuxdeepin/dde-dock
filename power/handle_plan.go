@@ -2,6 +2,7 @@ package main
 
 import (
 	"dbus/com/deepin/daemon/display"
+	"fmt"
 	"github.com/BurntSushi/xgb"
 	"github.com/BurntSushi/xgb/dpms"
 	"time"
@@ -16,27 +17,23 @@ const (
 )
 
 func (p *Power) setBatteryIdleDelay(delay int32) {
-	if delay == 0 {
-		delay = 0xfffffff
-	}
 	p.setPropBatteryIdleDelay(delay)
 
 	if p.BatteryPlan.Get() == PowerPlanCustom && int32(p.coreSettings.GetInt("battery-idle-delay")) != delay {
 		p.coreSettings.SetInt("battery-idle-delay", int(delay))
 	}
 	p.updateIdletimer()
+	p.updatePlanInfo()
 }
 
 func (p *Power) setBatterySuspendDelay(delay int32) {
-	if delay == 0 {
-		delay = 0xfffffff
-	}
 	p.setPropBatterySuspendDelay(delay)
 
 	if p.BatteryPlan.Get() == PowerPlanCustom && int32(p.coreSettings.GetInt("battery-suspend-delay")) != delay {
 		p.coreSettings.SetInt("battery-suspend-delay", int(delay))
 	}
 	p.updateIdletimer()
+	p.updatePlanInfo()
 }
 
 func (p *Power) setBatteryPlan(plan int32) {
@@ -57,27 +54,23 @@ func (p *Power) setBatteryPlan(plan int32) {
 }
 
 func (p *Power) setLinePowerIdleDelay(delay int32) {
-	if delay == 0 {
-		delay = 0xfffffff
-	}
 	p.setPropLinePowerIdleDelay(delay)
 
 	if p.LinePowerPlan.Get() == PowerPlanCustom && int32(p.coreSettings.GetInt("ac-idle-delay")) != delay {
 		p.coreSettings.SetInt("ac-idle-delay", int(delay))
 	}
 	p.updateIdletimer()
+	p.updatePlanInfo()
 }
 
 func (p *Power) setLinePowerSuspendDelay(delay int32) {
-	if delay == 0 {
-		delay = 0xfffffff
-	}
 	p.setPropLinePowerSuspendDelay(delay)
 
 	if p.LinePowerPlan.Get() == PowerPlanCustom && int32(p.coreSettings.GetInt("ac-suspend-delay")) != delay {
 		p.coreSettings.SetInt("ac-suspend-delay", int(delay))
 	}
 	p.updateIdletimer()
+	p.updatePlanInfo()
 }
 
 func (p *Power) setLinePowerPlan(plan int32) {
@@ -97,8 +90,10 @@ func (p *Power) setLinePowerPlan(plan int32) {
 	}
 }
 
+var suspendDelta int32 = 0
+
 func (p *Power) updateIdletimer() {
-	var min, delta int32
+	var min int32
 	var idle, suspend int32
 	if p.OnBattery {
 		idle = p.BatteryIdleDelay
@@ -107,19 +102,39 @@ func (p *Power) updateIdletimer() {
 		idle = p.LinePowerIdleDelay
 		suspend = p.LinePowerSuspendDelay
 	}
+	if idle == 0 {
+		idle = 0xfffffff
+	}
+	if suspend == 0 {
+		suspend = 0xfffffff
+	}
 
 	if idle < suspend {
 		min = idle
-		delta = suspend - idle
+		suspendDelta = suspend - idle
 	} else {
 		min = suspend
-		delta = idle - suspend
+		suspendDelta = idle - suspend
 	}
-	if err := p.screensaver.SetTimeout(uint32(min)/10, uint32(delta)/10, false); err != nil {
+	if suspendDelta > 0xfffff {
+		suspendDelta = 0
+	}
+	if min > 0xffffff {
+		min = 0
+	}
+	if err := p.screensaver.SetTimeout(uint32(min)/10, 0, false); err != nil {
 		LOGGER.Error("Failed set ScreenSaver's timeout:", err)
 	} else {
-		LOGGER.Info("Set ScreenTimeout to ", uint32(min), uint32(delta))
+		LOGGER.Info("Set ScreenTimeout to ", uint32(min), uint32(suspendDelta))
 	}
+}
+
+func (p *Power) updatePlanInfo() {
+	info := fmt.Sprintf(`{
+		PowerLine:{Custom:[%d,%d], PowerSaver:[300,600], Blanced:[600,0],HighPerformance:[0,0]},
+		Battery:{Custom:[%d,%d], PowerSaver:[300,600], Blanced:[600,0],HighPerformance:[0,0]}
+	}`, p.LinePowerIdleDelay, p.LinePowerSuspendDelay, p.BatteryIdleDelay, p.BatterySuspendDelay)
+	p.setPropPlanInfo(info)
 }
 
 var dpmsOn func()
@@ -128,7 +143,6 @@ var dpmsOff func()
 func (p *Power) initPlan() {
 	p.screensaver.ConnectIdleOn(p.handleIdleOn)
 	p.screensaver.ConnectIdleOff(p.handleIdleOff)
-	p.screensaver.ConnectCycleActive(p.handleCycleActive)
 	p.updateIdletimer()
 	con, _ := xgb.NewConn()
 	dpms.Init(con)
@@ -142,11 +156,10 @@ func doIdleAction() {
 	dp, _ := display.NewDisplay("com.deepin.daemon.Display", "/com/deepin/daemon/Display")
 	defer display.DestroyDisplay(dp)
 
+	stoper := make(chan bool)
+	stopAnimation = append(stopAnimation, stoper)
 	for _, p := range dp.Monitors.Get() {
 		go func() {
-			stoper := make(chan bool)
-			stopAnimation = append(stopAnimation, stoper)
-
 			m, _ := display.NewMonitor("com.deepin.daemon.Display", p)
 			defer display.DestroyMonitor(m)
 
@@ -167,20 +180,32 @@ func doIdleAction() {
 					}
 				}
 			}
-			dpmsOff()
 		}()
+	}
+
+	dpmsOff()
+	if suspendDelta != 0 {
+		for {
+			select {
+			case <-time.After(time.Second * time.Duration(suspendDelta/10)):
+				doSuspend()
+				return
+			case <-stoper:
+				return
+			}
+		}
 	}
 }
 
 func (p *Power) handleIdleOn() {
 	if p.OnBattery {
-		if p.BatteryIdleDelay < p.BatterySuspendDelay {
+		if p.BatteryIdleDelay < p.BatterySuspendDelay || p.BatterySuspendDelay == 0 {
 			doIdleAction()
 		} else {
 			doSuspend()
 		}
 	} else {
-		if p.LinePowerIdleDelay < p.LinePowerSuspendDelay {
+		if p.LinePowerIdleDelay < p.LinePowerSuspendDelay || p.LinePowerSuspendDelay == 0 {
 			doIdleAction()
 		} else {
 			doSuspend()
@@ -204,8 +229,4 @@ func (*Power) handleIdleOff() {
 			m.ResetBrightness(name)
 		}
 	}
-}
-
-func (p *Power) handleCycleActive() {
-	doSuspend()
 }

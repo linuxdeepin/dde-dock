@@ -5,6 +5,7 @@ import "os/exec"
 import "dbus/com/deepin/sessionmanager"
 import "dbus/org/freedesktop/upower"
 import "dbus/org/freedesktop/login1"
+import "time"
 import "dbus/com/deepin/daemon/keybinding"
 import "dbus/com/deepin/daemon/display"
 import "fmt"
@@ -173,13 +174,12 @@ func (p *Power) initEventHandle() {
 	} else {
 		login.ConnectPrepareForSleep(func(before bool) {
 			fmt.Println("Sleep change...", before)
-			p.screensaver.SimulateUserActivity()
+			time.AfterFunc(time.Second*1, func() { p.screensaver.SimulateUserActivity() })
 			if before {
 				if p.coreSettings.GetBoolean("lock-enabled") {
 					doLock()
 				}
 			} else {
-
 				p.handleBatteryPercentage()
 				if p.lowBatteryStatus == lowBatteryStatusAction {
 					doShowLowpower()

@@ -63,6 +63,13 @@ func (p *Power) setPropBatteryState(v uint32) {
 	}
 }
 
+func (p *Power) setPropPlanInfo(v string) {
+	if p.PlanInfo != v {
+		p.PlanInfo = v
+		dbus.NotifyChange(p, "PlanInfo")
+	}
+}
+
 func (p *Power) OnPropertiesChanged(key string, oldv interface{}) {
 	switch key {
 	case "BatterySuspendDelay":
