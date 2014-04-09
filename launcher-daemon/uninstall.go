@@ -18,6 +18,7 @@ const (
 )
 
 func getPackageNames(path string) []string {
+	// logger.Info("getPackageNames")
 	names, err := getPackageNamesFromDatabase(path)
 	if err != nil {
 		logger.Info(err)
@@ -27,6 +28,7 @@ func getPackageNames(path string) []string {
 			return names
 		}
 	}
+	// logger.Info(names)
 	return names
 }
 
@@ -53,7 +55,8 @@ func getPackageNamesFromDatabase(path string) ([]string, error) {
 	if err != nil {
 		return make([]string, 0), err
 	}
-	return strings.Split(names, " "), nil
+	// logger.Info(names)
+	return strings.Split(names, ","), nil
 }
 
 func getPackageNamesFromCommandline(path string) ([]string, error) {
@@ -61,5 +64,6 @@ func getPackageNamesFromCommandline(path string) ([]string, error) {
 	if err != nil {
 		return make([]string, 0), err
 	}
-	return strings.Split(string(names), " "), nil
+	name := strings.Split(string(names), ":")[0]
+	return []string{name}, nil
 }
