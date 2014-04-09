@@ -22,6 +22,8 @@
 package main
 
 import (
+        libkeybind "dbus/com/deepin/daemon/keybinding"
+        libdbus "dbus/org/freedesktop/dbus"
         libmpris "dbus/org/mpris/mediaplayer2"
         "strings"
 )
@@ -29,7 +31,12 @@ import (
 const (
         MPRIS_FILTER_KEY = "org.mpris.MediaPlayer2"
         MPRIS_PATH       = "/org/mpris/MediaPlayer2"
-        SEEK_DISTANCE    = int64(10000000) // 10s
+        SEEK_DISTANCE    = int64(5000000) // 5s
+)
+
+var (
+        dbusObj     *libdbus.DBusDaemon
+        mediaKeyObj *libkeybind.MediaKey
 )
 
 func getMprisClients() ([]string, bool) {
@@ -61,6 +68,9 @@ func getActiveMprisClient() *libmpris.Player {
                         logObj.Warningf("New mpris player failed: '%v'' for sender: '%s'", err, dest)
                         continue
                 }
+                if len(list) == 1 {
+                        return obj
+                }
                 if obj.PlaybackStatus.GetValue().(string) == "Playing" {
                         return obj
                 }
@@ -71,14 +81,23 @@ func getActiveMprisClient() *libmpris.Player {
 
 func listenAudioSignal() {
         mediaKeyObj.ConnectAudioPlay(func(press bool) {
+                if press {
+                        return
+                }
+
                 obj := getActiveMprisClient()
                 if obj == nil {
                         return
                 }
-                obj.Play()
+                //obj.Play()
+                obj.PlayPause()
         })
 
         mediaKeyObj.ConnectAudioPause(func(press bool) {
+                if press {
+                        return
+                }
+
                 obj := getActiveMprisClient()
                 if obj == nil {
                         return
@@ -87,6 +106,10 @@ func listenAudioSignal() {
         })
 
         mediaKeyObj.ConnectAudioStop(func(press bool) {
+                if press {
+                        return
+                }
+
                 obj := getActiveMprisClient()
                 if obj == nil {
                         return
@@ -95,6 +118,10 @@ func listenAudioSignal() {
         })
 
         mediaKeyObj.ConnectAudioPrevious(func(press bool) {
+                if press {
+                        return
+                }
+
                 obj := getActiveMprisClient()
                 if obj == nil {
                         return
@@ -103,6 +130,10 @@ func listenAudioSignal() {
         })
 
         mediaKeyObj.ConnectAudioNext(func(press bool) {
+                if press {
+                        return
+                }
+
                 obj := getActiveMprisClient()
                 if obj == nil {
                         return
@@ -111,26 +142,78 @@ func listenAudioSignal() {
         })
 
         mediaKeyObj.ConnectAudioRewind(func(press bool) {
+                if press {
+                        return
+                }
+
                 obj := getActiveMprisClient()
                 if obj == nil {
                         return
                 }
-                obj.Seek(obj.Position.GetValue().(int64) - SEEK_DISTANCE)
+                pos := obj.Position.GetValue().(int64)
+                //println("Current Position: ", pos)
+                nextPos := pos - SEEK_DISTANCE
+                if nextPos < 0 {
+                        nextPos = 0
+                } else {
+                        nextPos = 0 - SEEK_DISTANCE
+                }
+                //println("Rewind Position: ", nextPos)
+                obj.Seek(nextPos)
+                if obj.PlaybackStatus.GetValue().(string) != "Playing" {
+                        obj.PlayPause()
+                }
         })
 
         mediaKeyObj.ConnectAudioForward(func(press bool) {
+                if press {
+                        return
+                }
+
                 obj := getActiveMprisClient()
                 if obj == nil {
                         return
                 }
-                obj.Seek(obj.Position.GetValue().(int64) + SEEK_DISTANCE)
+                //pos := obj.Position.GetValue().(int64)
+                //println("Current Position: ", pos)
+                //nextPos := pos + SEEK_DISTANCE
+                //println("Forward Position: ", nextPos)
+                obj.Seek(SEEK_DISTANCE)
+                if obj.PlaybackStatus.GetValue().(string) != "Playing" {
+                        obj.PlayPause()
+                }
         })
 
         mediaKeyObj.ConnectAudioRepeat(func(press bool) {
+                if press {
+                        return
+                }
+
                 obj := getActiveMprisClient()
                 if obj == nil {
                         return
                 }
                 obj.Play()
         })
+}
+
+func startMprisDaemon() {
+        var err error
+
+        dbusObj, err = libdbus.NewDBusDaemon("org.freedesktop.DBus",
+                "/")
+        if err != nil {
+                logObj.Info("New DBusDaemon Failed: ", err)
+                panic(err)
+        }
+
+        mediaKeyObj, err = libkeybind.NewMediaKey(
+                "com.deepin.daemon.KeyBinding",
+                "/com/deepin/daemon/MediaKey")
+        if err != nil {
+                logObj.Info("New MediaKey Object Failed: ", err)
+                panic(err)
+        }
+
+        listenAudioSignal()
 }

@@ -19,7 +19,7 @@ all:
 	cd system-info/ && $(run)
 	cd themes/ && $(run)
 	cd zone-settings/ && $(run)
-	cd mpris-daemon/ && $(run)
+	cd deepin-daemon/ && $(run)
 
 
 update:

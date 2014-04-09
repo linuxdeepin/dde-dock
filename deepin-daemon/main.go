@@ -42,5 +42,7 @@ func main() {
         enableTouchPad()
         listenDevices()
 
+        startMprisDaemon()
+
         select {}
 }
