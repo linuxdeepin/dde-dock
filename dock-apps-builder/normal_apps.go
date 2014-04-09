@@ -29,8 +29,9 @@ func NewNormalApp(id string) *NormalApp {
 	if app.core == nil {
 		return nil
 	}
-	app.Icon = app.core.GetIcon().ToString()
+	app.Icon = get_theme_icon(app.core.GetIcon().ToString(), 48)
 	app.Name = app.core.GetDisplayName()
+	LOGGER.Info("Name", app.Name)
 	app.buildMenu()
 	return app
 }

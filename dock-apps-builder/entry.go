@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 )
 
 const (
@@ -29,7 +28,7 @@ type AppEntry struct {
 }
 
 func NewAppEntryWithRuntimeApp(rApp *RuntimeApp) *AppEntry {
-	fmt.Println("NewAppEntryWithRuntimeApp:", rApp.Id, rApp.CurrentInfo.Xid)
+	LOGGER.Info("NewAppEntryWithRuntimeApp:", rApp.Id, rApp.CurrentInfo.Xid)
 	e := &AppEntry{
 		Id:   rApp.Id,
 		Type: "App",
@@ -40,7 +39,7 @@ func NewAppEntryWithRuntimeApp(rApp *RuntimeApp) *AppEntry {
 	return e
 }
 func NewAppEntryWithNormalApp(nApp *NormalApp) *AppEntry {
-	fmt.Println("NewAppEntryWithNormalApp:", nApp.Id)
+	LOGGER.Info("NewAppEntryWithNormalApp:", nApp.Id)
 	e := &AppEntry{
 		Id:   nApp.Id,
 		Type: "App",
@@ -125,13 +124,13 @@ func (e *AppEntry) attachNormalApp(nApp *NormalApp) {
 		return
 	}
 	e.nApp = nApp
-	fmt.Println("AttachNormalApp:", e.nApp.Id)
+	LOGGER.Info("AttachNormalApp:", e.nApp.Id)
 	e.nApp.setChangedCB(e.update)
 	e.update()
 }
 func (e *AppEntry) detachNormalApp() {
 	if e.nApp != nil {
-		fmt.Println("DetachNormalApp", e.nApp.Id)
+		LOGGER.Info("DetachNormalApp", e.nApp.Id)
 		e.nApp.setChangedCB(nil)
 		e.nApp = nil
 		if e.rApp != nil {
@@ -144,13 +143,13 @@ func (e *AppEntry) attachRuntimeApp(rApp *RuntimeApp) {
 		return
 	}
 	e.rApp = rApp
-	fmt.Println("AttachRuntimeApp:", e.rApp.Id)
+	LOGGER.Info("AttachRuntimeApp:", e.rApp.Id)
 	e.rApp.setChangedCB(e.update)
 	e.update()
 }
 func (e *AppEntry) detachRuntimeApp() {
 	if e.rApp != nil {
-		fmt.Println("DetachRuntimeApp:", e.rApp.Id)
+		LOGGER.Info("DetachRuntimeApp:", e.rApp.Id)
 		e.rApp.setChangedCB(nil)
 		e.rApp = nil
 		if e.nApp != nil {

@@ -216,7 +216,8 @@ func find_app_id_by_xid(xid xproto.Window) string {
 	if pid == 0 {
 	} else {
 	}
-	return find_app_id(pid, name, wmInstance, wmClassName, iconName)
+	appId := find_app_id(pid, name, wmInstance, wmClassName, iconName)
+	return appId
 }
 
 func contains(haystack []string, needle string) bool {

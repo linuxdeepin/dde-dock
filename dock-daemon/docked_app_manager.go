@@ -169,13 +169,14 @@ func (m *DockedAppManager) findItem(id string) *list.Element {
 }
 
 func (m *DockedAppManager) Sort(items []string) {
-	logger.Info(items)
+	logger.Info("sort:", items)
 	for _, item := range items {
 		if i := m.findItem(item); i != nil {
 			m.items.PushBack(m.items.Remove(i))
 		}
 	}
 	l := m.toSlice()
+	logger.Info("sorted:", l)
 	m.core.SetStrv(DockedApps, l)
 	gio.SettingsSync()
 }

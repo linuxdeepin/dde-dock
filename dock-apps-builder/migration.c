@@ -379,12 +379,15 @@ char* guest_app_id(long s_pid, const char* instance_name, const char* wmname, co
 	}
 	if (app_id == NULL) {
 	    app_id = find_app_id(exec_name, wmname, APPID_FILTER_WMNAME);
+            g_debug("get from wmname");
 	}
 	if (app_id == NULL && instance_name != NULL) {
 	    app_id = find_app_id(exec_name, instance_name, APPID_FILTER_WMINSTANCE);
+            g_debug("get from instance_name");
 	}
 	if (app_id == NULL && wmclass != NULL) {
 	    app_id = find_app_id(exec_name, wmclass, APPID_FILTER_WMCLASS);
+            g_debug("get from wmclass");
 	}
 	if (app_id == NULL && exec_args != NULL && exec_args[0] != '\0') {
 	    app_id = find_app_id(exec_name, exec_args, APPID_FILTER_ARGS);
@@ -393,6 +396,7 @@ char* guest_app_id(long s_pid, const char* instance_name, const char* wmname, co
 	if (app_id == NULL && icon_name != NULL) {
 	    if (icon_name != NULL) {
 		app_id = find_app_id(exec_name, icon_name, APPID_FILTER_ICON_NAME);
+                g_debug("get from icon name");
 	    }
 	}
 	if (app_id == NULL && exec_name != NULL) {

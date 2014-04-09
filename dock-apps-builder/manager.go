@@ -5,7 +5,6 @@ import "dlib"
 import "dlib/dbus"
 import "dlib/logger"
 import "flag"
-import "fmt"
 import "github.com/BurntSushi/xgbutil"
 import "github.com/BurntSushi/xgbutil/xwindow"
 import "github.com/BurntSushi/xgbutil/xevent"
@@ -85,15 +84,19 @@ func (m *Manager) listenDockedApp() {
 
 	DOCKED_APP_MANAGER.ConnectDocked(func(id string) {
 		if _, ok := m.normalApps[id]; ok {
-			LOGGER.Info(id, "is docked")
+			LOGGER.Info(id, "is already docked")
 			return
 		}
-		m.createNormalApp(id + ".desktop")
+		m.createNormalApp(id)
 	})
 
 	DOCKED_APP_MANAGER.ConnectUndocked(func(id string) {
 		// undocked is operated on normal app
-		m.destroyEntry(id)
+		LOGGER.Info("Undock", id)
+		if app, ok := m.normalApps[id]; ok {
+			LOGGER.Info("destroy normal app")
+			m.destroyNormalApp(app)
+		}
 	})
 }
 
@@ -152,7 +155,7 @@ func (m *Manager) destroyEntry(appId string) {
 		e.detachRuntimeApp()
 		dbus.ReleaseName(e)
 		dbus.UnInstallObject(e)
-		fmt.Println("destroyEntry:", appId)
+		LOGGER.Info("destroyEntry:", appId)
 	}
 	delete(m.appEntries, appId)
 }
@@ -197,17 +200,20 @@ func (m *Manager) destroyRuntimeApp(rApp *RuntimeApp) {
 	m.updateEntry(rApp.Id, m.mustGetEntry(nil, rApp).nApp, nil)
 }
 func (m *Manager) createNormalApp(id string) {
-	fmt.Println("createNormalApp")
+	LOGGER.Info("createNormalApp for", id)
 	if _, ok := m.normalApps[id]; ok {
+		LOGGER.Info("normal app for", id, "is exist")
 		return
 	}
 
-	nApp := NewNormalApp(id)
+	desktopId := id + ".desktop"
+	nApp := NewNormalApp(desktopId)
 	if nApp == nil {
+		LOGGER.Info("create scratch file")
 		newId := filepath.Join(
 			os.Getenv("HOME"),
 			".config/dock/scratch",
-			id,
+			desktopId,
 		)
 		nApp = NewNormalApp(newId)
 		if nApp == nil {
@@ -234,8 +240,8 @@ func main() {
 	dlib.InitI18n()
 	initDeepin()
 	for _, id := range loadAll() {
-		// LOGGER.Debug(id)
-		MANAGER.createNormalApp(id + ".desktop")
+		LOGGER.Debug("load", id)
+		MANAGER.createNormalApp(id)
 	}
 	listenRootWindow()
 	initTrayManager()
