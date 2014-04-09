@@ -217,66 +217,44 @@ func (session *ConnectionSession) GetAvailableValues(page, key string) (values [
 	return
 }
 
-func (session *ConnectionSession) GetKey(page, key string) (value string) {
+func (session *ConnectionSession) pageToField(page string) (field string) {
 	switch page {
 	default:
-		LOGGER.Error("GetKey: invalid page name", page)
+		LOGGER.Error("pageToField: invalid page name", page)
 	case pageGeneral:
-		value = generalGetSettingConnectionKeyJSON(session.data, key)
+		field = fieldConnection
 	case pageEthernet:
-		value = generalGetSettingWiredKeyJSON(session.data, key)
+		field = fieldWired
 	case pageWifi:
-		value = generalGetSettingWirelessKeyJSON(session.data, key)
+		field = fieldWireless
 	case pageIPv4:
-		value = generalGetSettingIp4ConfigKeyJSON(session.data, key)
+		field = fieldIPv4
 	case pageIPv6:
-		value = generalGetSettingIp6ConfigKeyJSON(session.data, key)
+		field = fieldIPv6
 	case pageSecurity: // TODO
 		switch session.connectionType {
 		case typeWired:
-			value = generalGetSetting8021xKeyJSON(session.data, key)
+			field = field8021x
 		case typeWireless:
 			securityField := getSettingWirelessSec(session.data)
 			switch securityField {
 			case fieldWirelessSecurity:
-				value = generalGetSettingWirelessSecurityKeyJSON(session.data, key)
+				field = fieldWirelessSecurity
 			case field8021x:
-				value = generalGetSetting8021xKeyJSON(session.data, key)
+				field = field8021x
 			}
 		}
 	}
 	return
 }
 
-func (session *ConnectionSession) SetKey(page, key, value string) {
-	switch page {
-	default:
-		LOGGER.Error("SetKey: invalid page name", page)
-	case pageGeneral:
-		generalSetSettingConnectionKeyJSON(session.data, key, value)
-	case pageEthernet:
-		generalSetSettingWiredKeyJSON(session.data, key, value)
-	case pageWifi:
-		generalSetSettingWirelessKeyJSON(session.data, key, value)
-	case pageIPv4:
-		generalSetSettingIp4ConfigKeyJSON(session.data, key, value)
-	case pageIPv6:
-		generalSetSettingIp6ConfigKeyJSON(session.data, key, value)
-	case pageSecurity: // TODO
-		switch session.connectionType {
-		case typeWired:
-			generalSetSetting8021xKeyJSON(session.data, key, value)
-		case typeWireless:
-			securityField := getSettingWirelessSec(session.data)
-			switch securityField {
-			case fieldWirelessSecurity:
-				generalSetSettingWirelessSecurityKeyJSON(session.data, key, value)
-			case field8021x:
-				generalSetSetting8021xKeyJSON(session.data, key, value)
-			}
-		}
-	}
+func (session *ConnectionSession) GetKey(page, key string) (value string) {
+	value = generalGetKeyJSON(session.data, session.pageToField(page), key)
+	return
+}
 
+func (session *ConnectionSession) SetKey(page, key, value string) {
+	generalSetKeyJSON(session.data, session.pageToField(page), key, value)
 	session.updatePropErrors()
 	session.updatePropAvailableKeys()
 	// TODO

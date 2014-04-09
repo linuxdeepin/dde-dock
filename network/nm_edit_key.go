@@ -50,6 +50,49 @@ func isConnectionDataKeyExists(data _ConnectionData, field, key string) bool {
 	return true
 }
 
+func generalGetKeyJSON(data _ConnectionData, field, key string) (valueJSON string) {
+	switch field {
+	default:
+		LOGGER.Warning("invalid field name", field)
+	case field8021x:
+		valueJSON = generalGetSetting8021xKeyJSON(data, key)
+	case fieldConnection:
+		valueJSON = generalGetSettingConnectionKeyJSON(data, key)
+	case fieldIPv4:
+		valueJSON = generalGetSettingIp4ConfigKeyJSON(data, key)
+	case fieldIPv6:
+		valueJSON = generalGetSettingIp6ConfigKeyJSON(data, key)
+	case fieldWired:
+		valueJSON = generalGetSettingWiredKeyJSON(data, key)
+	case fieldWireless:
+		valueJSON = generalGetSettingWirelessKeyJSON(data, key)
+	case fieldWirelessSecurity:
+		valueJSON = generalGetSettingWirelessSecurityKeyJSON(data, key)
+	}
+	return
+}
+
+func generalSetKeyJSON(data _ConnectionData, field, key, valueJSON string) {
+	switch field {
+	default:
+		LOGGER.Warning("invalid field name", field)
+	case field8021x:
+		generalSetSetting8021xKeyJSON(data, key, valueJSON)
+	case fieldConnection:
+		generalSetSettingConnectionKeyJSON(data, key, valueJSON)
+	case fieldIPv4:
+		generalSetSettingIp4ConfigKeyJSON(data, key, valueJSON)
+	case fieldIPv6:
+		generalSetSettingIp6ConfigKeyJSON(data, key, valueJSON)
+	case fieldWired:
+		generalSetSettingWiredKeyJSON(data, key, valueJSON)
+	case fieldWireless:
+		generalSetSettingWirelessKeyJSON(data, key, valueJSON)
+	case fieldWirelessSecurity:
+		generalSetSettingWirelessSecurityKeyJSON(data, key, valueJSON)
+	}
+}
+
 func getConnectionDataKeyDefaultValueJSON(field, key string) (valueJSON string) {
 	switch field {
 	default:
