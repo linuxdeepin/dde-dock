@@ -1,6 +1,6 @@
 package main
 
-// Virtual keys for each fields.
+// Virtual key names.
 
 // connection
 const (
@@ -36,6 +36,37 @@ const (
 	NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT = "vk-key-mgmt"
 )
 
+// VirtualKey store virtual key info for each fields.
+type VirtualKey struct {
+	name       string
+	field      string
+	keyType    ktype
+	relatedKey string
+	available  bool
+	required   bool // check if child virtual key is optional
+}
+
+var virtualKeys = []VirtualKey{
+	VirtualKey{NM_SETTING_VK_CONNECTION_PERMISSIONS, fieldConnection, ktypeBoolean, NM_SETTING_CONNECTION_PERMISSIONS, true, true},
+	VirtualKey{NM_SETTING_VK_IP4_CONFIG_DNS, fieldIPv4, ktypeString, NM_SETTING_IP4_CONFIG_DNS, true, true},
+	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ADDRESSES_ADDRESS, fieldIPv4, ktypeString, NM_SETTING_IP4_CONFIG_ADDRESSES, true, true},
+	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ADDRESSES_MASK, fieldIPv4, ktypeString, NM_SETTING_IP4_CONFIG_ADDRESSES, true, true},
+	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ADDRESSES_GATEWAY, fieldIPv4, ktypeString, NM_SETTING_IP4_CONFIG_ADDRESSES, true, false},
+	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ROUTES_ADDRESS, fieldIPv4, ktypeString, NM_SETTING_IP4_CONFIG_ROUTES, true, true},
+	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ROUTES_MASK, fieldIPv4, ktypeString, NM_SETTING_IP4_CONFIG_ROUTES, true, true},
+	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ROUTES_NEXTHOP, fieldIPv4, ktypeString, NM_SETTING_IP4_CONFIG_ROUTES, true, true},
+	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ROUTES_METRIC, fieldIPv4, ktypeString, NM_SETTING_IP4_CONFIG_ROUTES, false, false},
+	VirtualKey{NM_SETTING_VK_IP6_CONFIG_DNS, fieldIPv6, ktypeString, NM_SETTING_IP6_CONFIG_DNS, true, true},
+	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ADDRESSES_ADDRESS, fieldIPv6, ktypeString, NM_SETTING_IP6_CONFIG_ADDRESSES, true, true},
+	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ADDRESSES_PREFIX, fieldIPv6, ktypeString, NM_SETTING_IP6_CONFIG_ADDRESSES, true, true},
+	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ADDRESSES_GATEWAY, fieldIPv6, ktypeString, NM_SETTING_IP6_CONFIG_ADDRESSES, true, false},
+	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ROUTES_ADDRESS, fieldIPv6, ktypeString, NM_SETTING_IP6_CONFIG_ROUTES, true, true},
+	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ROUTES_PREFIX, fieldIPv6, ktypeString, NM_SETTING_IP6_CONFIG_ROUTES, true, true},
+	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ROUTES_NEXTHOP, fieldIPv6, ktypeString, NM_SETTING_IP6_CONFIG_ROUTES, true, true},
+	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ROUTES_METRIC, fieldIPv6, ktypeString, NM_SETTING_IP6_CONFIG_ROUTES, false, false},
+	VirtualKey{NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT, fieldWirelessSecurity, ktypeString, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT, true, true},
+}
+
 func isVirtualKey(field, key string) bool {
 	if isStringInArray(key, getVirtualKeysOfField(field)) {
 		return true
@@ -44,93 +75,19 @@ func isVirtualKey(field, key string) bool {
 }
 
 func getVirtualKeysOfField(field string) (vks []string) {
-	switch field {
-	case field8021x:
-	case fieldConnection:
-		vks = []string{NM_SETTING_VK_CONNECTION_PERMISSIONS}
-	case fieldIPv4:
-		vks = []string{
-			NM_SETTING_VK_IP4_CONFIG_DNS,
-			NM_SETTING_VK_IP4_CONFIG_ADDRESSES_ADDRESS,
-			NM_SETTING_VK_IP4_CONFIG_ADDRESSES_MASK,
-			NM_SETTING_VK_IP4_CONFIG_ADDRESSES_GATEWAY,
-			NM_SETTING_VK_IP4_CONFIG_ROUTES_ADDRESS,
-			NM_SETTING_VK_IP4_CONFIG_ROUTES_MASK,
-			NM_SETTING_VK_IP4_CONFIG_ROUTES_NEXTHOP,
-			NM_SETTING_VK_IP4_CONFIG_ROUTES_METRIC,
+	for _, vk := range virtualKeys {
+		if vk.field == field {
+			vks = append(vks, vk.name)
 		}
-	case fieldIPv6:
-		vks = []string{
-			NM_SETTING_VK_IP6_CONFIG_DNS,
-			NM_SETTING_VK_IP6_CONFIG_ADDRESSES_ADDRESS,
-			NM_SETTING_VK_IP6_CONFIG_ADDRESSES_PREFIX,
-			NM_SETTING_VK_IP6_CONFIG_ADDRESSES_GATEWAY,
-			NM_SETTING_VK_IP6_CONFIG_ROUTES_ADDRESS,
-			NM_SETTING_VK_IP6_CONFIG_ROUTES_PREFIX,
-			NM_SETTING_VK_IP6_CONFIG_ROUTES_NEXTHOP,
-			NM_SETTING_VK_IP6_CONFIG_ROUTES_METRIC,
-		}
-	case fieldWired:
-	case fieldWireless:
-	case fieldWirelessSecurity:
-		vks = []string{NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT}
 	}
 	return
 }
 
 func getSettingVkKeyType(field, key string) (t ktype) {
 	t = ktypeUnknown
-	switch field {
-	case field8021x:
-	case fieldConnection:
-		switch key {
-		case NM_SETTING_VK_CONNECTION_PERMISSIONS:
-			t = ktypeBoolean
-		}
-	case fieldIPv4:
-		switch key {
-		case NM_SETTING_VK_IP4_CONFIG_DNS:
-			t = ktypeString
-		case NM_SETTING_VK_IP4_CONFIG_ADDRESSES_ADDRESS:
-			t = ktypeString
-		case NM_SETTING_VK_IP4_CONFIG_ADDRESSES_MASK:
-			t = ktypeString
-		case NM_SETTING_VK_IP4_CONFIG_ADDRESSES_GATEWAY:
-			t = ktypeString
-		case NM_SETTING_VK_IP4_CONFIG_ROUTES_ADDRESS:
-			t = ktypeString
-		case NM_SETTING_VK_IP4_CONFIG_ROUTES_MASK:
-			t = ktypeString
-		case NM_SETTING_VK_IP4_CONFIG_ROUTES_NEXTHOP:
-			t = ktypeString
-		case NM_SETTING_VK_IP4_CONFIG_ROUTES_METRIC:
-			t = ktypeString
-		}
-	case fieldIPv6:
-		switch key {
-		case NM_SETTING_VK_IP6_CONFIG_DNS:
-			t = ktypeString
-		case NM_SETTING_VK_IP6_CONFIG_ADDRESSES_ADDRESS:
-			t = ktypeString
-		case NM_SETTING_VK_IP6_CONFIG_ADDRESSES_PREFIX:
-			t = ktypeString
-		case NM_SETTING_VK_IP6_CONFIG_ADDRESSES_GATEWAY:
-			t = ktypeString
-		case NM_SETTING_VK_IP6_CONFIG_ROUTES_ADDRESS:
-			t = ktypeString
-		case NM_SETTING_VK_IP6_CONFIG_ROUTES_PREFIX:
-			t = ktypeString
-		case NM_SETTING_VK_IP6_CONFIG_ROUTES_NEXTHOP:
-			t = ktypeString
-		case NM_SETTING_VK_IP6_CONFIG_ROUTES_METRIC:
-			t = ktypeString
-		}
-	case fieldWired:
-	case fieldWireless:
-	case fieldWirelessSecurity:
-		switch key {
-		case NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT:
-			t = ktypeString
+	for _, vk := range virtualKeys {
+		if vk.field == field && vk.name == key {
+			t = vk.keyType
 		}
 	}
 	return
@@ -155,55 +112,9 @@ func generalGetSettingVkAvailableValues(field, key string) (values []string) {
 }
 
 func getRelatedAvailableVirtualKeys(field, key string) (vks []string) {
-	switch field {
-	case field8021x:
-	case fieldConnection:
-		switch key {
-		case NM_SETTING_CONNECTION_PERMISSIONS:
-			vks = []string{NM_SETTING_VK_CONNECTION_PERMISSIONS}
-		}
-	case fieldIPv4:
-		switch key {
-		case NM_SETTING_IP4_CONFIG_DNS:
-			vks = []string{NM_SETTING_VK_IP4_CONFIG_DNS}
-		case NM_SETTING_IP4_CONFIG_ADDRESSES:
-			vks = []string{
-				NM_SETTING_VK_IP4_CONFIG_ADDRESSES_ADDRESS,
-				NM_SETTING_VK_IP4_CONFIG_ADDRESSES_MASK,
-				NM_SETTING_VK_IP4_CONFIG_ADDRESSES_GATEWAY,
-			}
-		case NM_SETTING_IP4_CONFIG_ROUTES:
-			vks = []string{
-				NM_SETTING_VK_IP4_CONFIG_ROUTES_ADDRESS,
-				NM_SETTING_VK_IP4_CONFIG_ROUTES_MASK,
-				NM_SETTING_VK_IP4_CONFIG_ROUTES_NEXTHOP,
-				// NM_SETTING_VK_IP4_CONFIG_ROUTES_METRIC, // ignore
-			}
-		}
-	case fieldIPv6:
-		switch key {
-		case NM_SETTING_IP6_CONFIG_DNS:
-			vks = []string{NM_SETTING_VK_IP6_CONFIG_DNS}
-		case NM_SETTING_IP6_CONFIG_ADDRESSES:
-			vks = []string{
-				NM_SETTING_VK_IP6_CONFIG_ADDRESSES_ADDRESS,
-				NM_SETTING_VK_IP6_CONFIG_ADDRESSES_PREFIX,
-				NM_SETTING_VK_IP6_CONFIG_ADDRESSES_GATEWAY,
-			}
-		case NM_SETTING_IP6_CONFIG_ROUTES:
-			vks = []string{
-				NM_SETTING_VK_IP6_CONFIG_ROUTES_ADDRESS,
-				NM_SETTING_VK_IP6_CONFIG_ROUTES_PREFIX,
-				NM_SETTING_VK_IP6_CONFIG_ROUTES_NEXTHOP,
-				// NM_SETTING_VK_IP6_CONFIG_ROUTES_METRIC, // ignore
-			}
-		}
-	case fieldWired:
-	case fieldWireless:
-	case fieldWirelessSecurity:
-		switch key {
-		case NM_SETTING_WIRELESS_SECURITY_KEY_MGMT:
-			vks = []string{NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT}
+	for _, vk := range virtualKeys {
+		if vk.field == field && vk.relatedKey == key && vk.available {
+			vks = append(vks, vk.name)
 		}
 	}
 	return
@@ -211,82 +122,20 @@ func getRelatedAvailableVirtualKeys(field, key string) (vks []string) {
 
 // get related virtual key(s) for target key
 func getRelatedVirtualKeys(field, key string) (vks []string) {
-	switch field {
-	case field8021x:
-	case fieldConnection:
-		switch key {
-		case NM_SETTING_CONNECTION_PERMISSIONS:
-			vks = []string{NM_SETTING_VK_CONNECTION_PERMISSIONS}
-		}
-	case fieldIPv4:
-		switch key {
-		case NM_SETTING_IP4_CONFIG_DNS:
-			vks = []string{NM_SETTING_VK_IP4_CONFIG_DNS}
-		case NM_SETTING_IP4_CONFIG_ADDRESSES:
-			vks = []string{
-				NM_SETTING_VK_IP4_CONFIG_ADDRESSES_ADDRESS,
-				NM_SETTING_VK_IP4_CONFIG_ADDRESSES_MASK,
-				NM_SETTING_VK_IP4_CONFIG_ADDRESSES_GATEWAY,
-			}
-		case NM_SETTING_IP4_CONFIG_ROUTES:
-			vks = []string{
-				NM_SETTING_VK_IP4_CONFIG_ROUTES_ADDRESS,
-				NM_SETTING_VK_IP4_CONFIG_ROUTES_MASK,
-				NM_SETTING_VK_IP4_CONFIG_ROUTES_NEXTHOP,
-				NM_SETTING_VK_IP4_CONFIG_ROUTES_METRIC,
-			}
-		}
-	case fieldIPv6:
-		switch key {
-		case NM_SETTING_IP6_CONFIG_DNS:
-			vks = []string{NM_SETTING_VK_IP6_CONFIG_DNS}
-		case NM_SETTING_IP6_CONFIG_ADDRESSES:
-			vks = []string{
-				NM_SETTING_VK_IP6_CONFIG_ADDRESSES_ADDRESS,
-				NM_SETTING_VK_IP6_CONFIG_ADDRESSES_PREFIX,
-				NM_SETTING_VK_IP6_CONFIG_ADDRESSES_GATEWAY,
-			}
-		case NM_SETTING_IP6_CONFIG_ROUTES:
-			vks = []string{
-				NM_SETTING_VK_IP6_CONFIG_ROUTES_ADDRESS,
-				NM_SETTING_VK_IP6_CONFIG_ROUTES_PREFIX,
-				NM_SETTING_VK_IP6_CONFIG_ROUTES_NEXTHOP,
-				NM_SETTING_VK_IP6_CONFIG_ROUTES_METRIC,
-			}
-		}
-	case fieldWired:
-	case fieldWireless:
-	case fieldWirelessSecurity:
-		switch key {
-		case NM_SETTING_WIRELESS_SECURITY_KEY_MGMT:
-			vks = []string{NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT}
+	for _, vk := range virtualKeys {
+		if vk.field == field && vk.relatedKey == key {
+			vks = append(vks, vk.name)
 		}
 	}
 	return
 }
 
-// check if is optional child virtual key
-func isOptionalChildVirtualKeys(field, key string) (optional bool) {
-	switch field {
-	case field8021x:
-	case fieldConnection:
-	case fieldIPv4:
-		switch key {
-		case NM_SETTING_VK_IP4_CONFIG_ADDRESSES_GATEWAY:
-			optional = true
-		case NM_SETTING_VK_IP4_CONFIG_ROUTES_METRIC:
-			optional = true
+// check if is required child virtual key
+func isRequiredChildVirtualKeys(field, vkey string) (required bool) {
+	for _, vk := range virtualKeys {
+		if vk.field == field && vk.name == vkey {
+			required = vk.required
 		}
-	case fieldIPv6:
-		switch key {
-		case NM_SETTING_VK_IP6_CONFIG_ADDRESSES_GATEWAY:
-			optional = true
-		case NM_SETTING_VK_IP6_CONFIG_ROUTES_METRIC:
-			optional = true
-		}
-	case fieldWired:
-	case fieldWireless:
-	case fieldWirelessSecurity:
 	}
 	return
 }

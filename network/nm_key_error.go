@@ -22,7 +22,7 @@ func rememberError(errs map[string]string, key, errMsg string) {
 func rememberErrorForVirtualKey(errs map[string]string, field, key, errMsg string) {
 	vks := getRelatedVirtualKeys(field, key)
 	for _, vk := range vks {
-		if !isOptionalChildVirtualKeys(field, vk) {
+		if isRequiredChildVirtualKeys(field, vk) {
 			rememberError(errs, vk, errMsg)
 		}
 	}
