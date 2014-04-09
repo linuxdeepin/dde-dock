@@ -57,7 +57,7 @@ func doSuspend() {
 		if err = m.RequestSuspend(); err != nil {
 			LOGGER.Warning("Suspend failed:", err)
 		}
-		fmt.Println("RequestSuspend...", err)
+		LOGGER.Info("RequestSuspend...", err)
 		sessionmanager.DestroySessionManager(m)
 	}
 }
@@ -78,7 +78,6 @@ func doShutDownInteractive() {
 }
 
 func (up *Power) handlePowerButton() {
-	fmt.Println("HandlePowerButton:")
 	switch up.PowerButtonAction.Get() {
 	case ActionInteractive:
 		doShutDownInteractive()
@@ -92,14 +91,17 @@ func (up *Power) handlePowerButton() {
 
 func (up *Power) handleLidSwitch(opend bool) {
 	if opend {
+		fmt.Println("LidOpend...")
 		//TODO: DPMS ON
 	} else {
+		fmt.Println("LidClosed...")
 		//TODO: DPMS OFF
 		switch up.LidClosedAction.Get() {
 		case ActionInteractive:
 			doShutDownInteractive()
 		case ActionSuspend:
 			if isMultihead() && !up.coreSettings.GetBoolean("lid-close-suspend-with-external-monitor") {
+				LOGGER.Info("Prevent suspend when lidclosed because another monitor connected")
 				return
 			}
 			doSuspend()
@@ -139,15 +141,12 @@ func (p *Power) initEventHandle() {
 		LOGGER.Error("Can't build org.freedesktop.UPower:", err)
 	} else {
 		up.ConnectChanged(func() {
-			currentLidCloed := up.LidIsClosed.Get()
-			fmt.Println("LidState:", currentLidCloed)
-			if p.lidIsClosed != currentLidCloed {
-				p.lidIsClosed = currentLidCloed
-				if currentLidCloed {
-					p.handleLidSwitch(false)
-				}
+			currentLidClosed := up.LidIsClosed.Get()
+			if p.lidIsClosed != currentLidClosed {
+				p.lidIsClosed = currentLidClosed
+				p.handleLidSwitch(!currentLidClosed)
 			}
-			p.lidIsClosed = currentLidCloed
+			p.lidIsClosed = currentLidClosed
 
 		})
 	}
