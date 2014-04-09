@@ -6,6 +6,7 @@ import "dlib/dbus"
 import "dlib/dbus/property"
 import "dlib/gio-2.0"
 import "dbus/org/freedesktop/notifications"
+import ss "dbus/org/freedesktop/screensaver"
 import "os"
 
 var LOGGER = logger.NewLogger("com.deepin.daemon.Power").SetLogLevel(logger.LEVEL_INFO)
@@ -13,6 +14,7 @@ var LOGGER = logger.NewLogger("com.deepin.daemon.Power").SetLogLevel(logger.LEVE
 type Power struct {
 	coreSettings     *gio.Settings
 	notifier         *notifications.Notifier
+	screensaver      *ss.ScreenSaver
 	lidIsClosed      bool
 	lowBatteryStatus uint32
 
@@ -64,6 +66,18 @@ func NewPower() *Power {
 	p.LidClosedAction = property.NewGSettingsEnumProperty(p, "LidClosedAction", p.coreSettings, "lid-close")
 	p.LockWhenActive = property.NewGSettingsBoolProperty(p, "LockWhenActive", p.coreSettings, "lock-enabled")
 
+	var err error
+	if p.notifier, err = notifications.NewNotifier("org.freedesktop.Notifications", "/org/freedesktop/Notifications"); err != nil {
+		LOGGER.Warning("Can't build org.freedesktop.Notficaations:", err)
+	}
+	if p.screensaver, err = ss.NewScreenSaver("org.freedesktop.ScreenSaver", "/org/freedesktop/ScreenSaver"); err != nil {
+		LOGGER.Warning("Can't build org.freedesktop.ScreenSaver:", err)
+	}
+
+	p.initPlan()
+	p.initUpower()
+	p.initEventHandle()
+
 	p.LinePowerPlan = property.NewGSettingsEnumProperty(p, "LinePowerPlan", p.coreSettings, "ac-plan")
 	p.LinePowerPlan.ConnectChanged(func() {
 		p.setLinePowerPlan(p.LinePowerPlan.Get())
@@ -75,14 +89,6 @@ func NewPower() *Power {
 		p.setBatteryPlan(p.BatteryPlan.Get())
 	})
 	p.setBatteryPlan(p.BatteryPlan.Get())
-
-	p.initUpower()
-	p.initEventHandle()
-
-	var err error
-	if p.notifier, err = notifications.NewNotifier("org.freedesktop.Notifications", "/org/freedesktop/Notifications"); err != nil {
-		LOGGER.Warning("Can't build org.freedesktop.Notficaations:", err)
-	}
 
 	return p
 }
@@ -101,14 +107,14 @@ func main() {
 		LOGGER.Warning("There already has an Power daemon running.")
 		return
 	}
+	dbus.InstallOnSession(NewScreenSaver())
+
 	p := NewPower()
 
 	if err := dbus.InstallOnSession(p); err != nil {
 		LOGGER.Error("Failed InstallOnSession:", err)
 	}
 	go dlib.StartLoop()
-
-	dbus.InstallOnSession(NewScreenSaver())
 
 	if err := dbus.Wait(); err != nil {
 		LOGGER.Error("dbus.Wait recieve an error:", err)

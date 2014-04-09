@@ -39,7 +39,12 @@ const (
 )
 
 func (p *Power) refreshUpower(up *upower.Upower) {
-	p.setPropOnBattery(up.OnBattery.Get())
+
+	if up.OnBattery.Get() != p.OnBattery {
+		//update ScreenSaver timeout when OnBattery changed
+		p.updateIdletimer()
+		p.setPropOnBattery(up.OnBattery.Get())
+	}
 
 	p.setPropLidIsPresent(up.LidIsPresent.Get())
 
