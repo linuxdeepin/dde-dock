@@ -255,12 +255,6 @@ func (session *ConnectionSession) SetKey(page, key, value string) {
 // 	return
 // }
 
-// DebugConnectionTypes return all supported connection types, only for debugging.
-// TODO move to manager
-func (session *ConnectionSession) DebugListSupportedConnectionTypes() []string {
-	return supportedConnectionTypes
-}
-
 func (session *ConnectionSession) DebugListKeyDetail() (info string) {
 	for _, page := range session.ListPages() {
 		field := session.pageToField(page)

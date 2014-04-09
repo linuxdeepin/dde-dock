@@ -277,3 +277,8 @@ func (this *Manager) GetActiveConnectionState(uuid string) (state uint32) {
 	state = conn.State.Get()
 	return
 }
+
+// GetSupportedConnectionTypes return all supported connection types
+func (session *ConnectionSession) GetSupportedConnectionTypes() []string {
+	return supportedConnectionTypes
+}
