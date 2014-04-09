@@ -37,13 +37,13 @@ const (
 )
 
 func isVirtualKey(field, key string) bool {
-	if isStringInArray(key, getFieldVirtualKeys(field)) {
+	if isStringInArray(key, getVirtualKeysOfField(field)) {
 		return true
 	}
 	return false
 }
 
-func getFieldVirtualKeys(field string) (vks []string) {
+func getVirtualKeysOfField(field string) (vks []string) {
 	switch field {
 	case field8021x:
 	case fieldConnection:
@@ -136,6 +136,80 @@ func getSettingVkKeyType(field, key string) (t ktype) {
 	return
 }
 
+func generalGetSettingVkAvailableValues(field, key string) (values []string) {
+	switch field {
+	case field8021x:
+	case fieldConnection:
+	case fieldIPv4:
+	case fieldIPv6:
+	case fieldWired:
+	case fieldWireless:
+	case fieldWirelessSecurity:
+		switch key {
+		case NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT:
+			// TODO
+			values = []string{"none", "wep-128", "leap", "wpa", "wpa-eap"}
+		}
+	}
+	return
+}
+
+func getRelatedAvailableVirtualKeys(field, key string) (vks []string) {
+	switch field {
+	case field8021x:
+	case fieldConnection:
+		switch key {
+		case NM_SETTING_CONNECTION_PERMISSIONS:
+			vks = []string{NM_SETTING_VK_CONNECTION_PERMISSIONS}
+		}
+	case fieldIPv4:
+		switch key {
+		case NM_SETTING_IP4_CONFIG_DNS:
+			vks = []string{NM_SETTING_VK_IP4_CONFIG_DNS}
+		case NM_SETTING_IP4_CONFIG_ADDRESSES:
+			vks = []string{
+				NM_SETTING_VK_IP4_CONFIG_ADDRESSES_ADDRESS,
+				NM_SETTING_VK_IP4_CONFIG_ADDRESSES_MASK,
+				NM_SETTING_VK_IP4_CONFIG_ADDRESSES_GATEWAY,
+			}
+		case NM_SETTING_IP4_CONFIG_ROUTES:
+			vks = []string{
+				NM_SETTING_VK_IP4_CONFIG_ROUTES_ADDRESS,
+				NM_SETTING_VK_IP4_CONFIG_ROUTES_MASK,
+				NM_SETTING_VK_IP4_CONFIG_ROUTES_NEXTHOP,
+				// NM_SETTING_VK_IP4_CONFIG_ROUTES_METRIC, // ignore
+			}
+		}
+	case fieldIPv6:
+		switch key {
+		case NM_SETTING_IP6_CONFIG_DNS:
+			vks = []string{NM_SETTING_VK_IP6_CONFIG_DNS}
+		case NM_SETTING_IP6_CONFIG_ADDRESSES:
+			vks = []string{
+				NM_SETTING_VK_IP6_CONFIG_ADDRESSES_ADDRESS,
+				NM_SETTING_VK_IP6_CONFIG_ADDRESSES_PREFIX,
+				NM_SETTING_VK_IP6_CONFIG_ADDRESSES_GATEWAY,
+			}
+		case NM_SETTING_IP6_CONFIG_ROUTES:
+			vks = []string{
+				NM_SETTING_VK_IP6_CONFIG_ROUTES_ADDRESS,
+				NM_SETTING_VK_IP6_CONFIG_ROUTES_PREFIX,
+				NM_SETTING_VK_IP6_CONFIG_ROUTES_NEXTHOP,
+				// NM_SETTING_VK_IP6_CONFIG_ROUTES_METRIC, // ignore
+			}
+		}
+	case fieldWired:
+	case fieldWireless:
+	case fieldWirelessSecurity:
+		switch key {
+		case NM_SETTING_WIRELESS_SECURITY_KEY_MGMT:
+			vks = []string{NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT}
+		}
+	}
+	return
+}
+
+// get related virtual key(s) for target key
 func getRelatedVirtualKeys(field, key string) (vks []string) {
 	switch field {
 	case field8021x:
@@ -187,6 +261,32 @@ func getRelatedVirtualKeys(field, key string) (vks []string) {
 		case NM_SETTING_WIRELESS_SECURITY_KEY_MGMT:
 			vks = []string{NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT}
 		}
+	}
+	return
+}
+
+// check if is optional child virtual key
+func isOptionalChildVirtualKeys(field, key string) (optional bool) {
+	switch field {
+	case field8021x:
+	case fieldConnection:
+	case fieldIPv4:
+		switch key {
+		case NM_SETTING_VK_IP4_CONFIG_ADDRESSES_GATEWAY:
+			optional = true
+		case NM_SETTING_VK_IP4_CONFIG_ROUTES_METRIC:
+			optional = true
+		}
+	case fieldIPv6:
+		switch key {
+		case NM_SETTING_VK_IP6_CONFIG_ADDRESSES_GATEWAY:
+			optional = true
+		case NM_SETTING_VK_IP6_CONFIG_ROUTES_METRIC:
+			optional = true
+		}
+	case fieldWired:
+	case fieldWireless:
+	case fieldWirelessSecurity:
 	}
 	return
 }
@@ -305,7 +405,7 @@ func generalSetVirtualKeyJSON(data _ConnectionData, field, key string, valueJSON
 	return
 }
 
-// JSON getter for virtual keys
+// JSON getter
 func getSettingVkConnectionPermissionsJSON(data _ConnectionData) (valueJSON string) {
 	// TODO
 	// value = getSettingConnectionPermissions(data)
@@ -441,7 +541,7 @@ func getSettingVkWirelessSecurityKeyMgmtJSON(data _ConnectionData) (valueJSON st
 	return
 }
 
-// JSON setter for virtual keys
+// JSON setter
 func setSettingVkConnectionPermissionsJSON(data _ConnectionData, valueJSON string) {
 	// TODO
 	// setSettingConnectionPermissionsJSON(data)

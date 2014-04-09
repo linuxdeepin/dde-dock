@@ -150,14 +150,14 @@ func getSettingIp4ConfigAvailableKeys(data _ConnectionData) (keys []string) {
 		keys = []string{
 			NM_SETTING_IP4_CONFIG_METHOD,
 		}
-		keys = appendStringArray(keys, getRelatedVirtualKeys(fieldIPv4, NM_SETTING_IP4_CONFIG_DNS))
+		keys = appendStringArray(keys, getRelatedAvailableVirtualKeys(fieldIPv4, NM_SETTING_IP4_CONFIG_DNS))
 	case NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL: // ignore
 	case NM_SETTING_IP4_CONFIG_METHOD_MANUAL:
 		keys = []string{
 			NM_SETTING_IP4_CONFIG_METHOD,
 		}
-		keys = appendStringArray(keys, getRelatedVirtualKeys(fieldIPv4, NM_SETTING_IP4_CONFIG_DNS))
-		keys = appendStringArray(keys, getRelatedVirtualKeys(fieldIPv4, NM_SETTING_IP4_CONFIG_ADDRESSES))
+		keys = appendStringArray(keys, getRelatedAvailableVirtualKeys(fieldIPv4, NM_SETTING_IP4_CONFIG_DNS))
+		keys = appendStringArray(keys, getRelatedAvailableVirtualKeys(fieldIPv4, NM_SETTING_IP4_CONFIG_ADDRESSES))
 	case NM_SETTING_IP4_CONFIG_METHOD_SHARED: // ignore
 	case NM_SETTING_IP4_CONFIG_METHOD_DISABLED:
 		keys = []string{
