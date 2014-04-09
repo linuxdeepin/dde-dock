@@ -69,7 +69,6 @@ func initManager() *Manager {
 }
 
 func (m *Manager) listenDockedApp() {
-	// TODO:
 	if DOCKED_APP_MANAGER == nil {
 		var err error
 		DOCKED_APP_MANAGER, err = dock.NewDockedAppManager(

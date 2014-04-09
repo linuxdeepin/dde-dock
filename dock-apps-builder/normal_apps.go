@@ -54,7 +54,7 @@ func (app *NormalApp) buildMenu() {
 	app.coreMenu.AddSeparator()
 	dockItem := NewMenuItem(
 		"_Undock",
-		func() { /*TODO: do the real work*/
+		func() {
 			DOCKED_APP_MANAGER.Undock(app.Id)
 		},
 		true,

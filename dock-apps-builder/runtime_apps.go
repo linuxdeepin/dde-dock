@@ -27,7 +27,6 @@ type WindowInfo struct {
 	Icon  string
 }
 
-// TODO: when docked, create a desktop, will this work fine?
 type RuntimeApp struct {
 	Id string
 	//TODO: multiple xid window
@@ -135,21 +134,22 @@ func (app *RuntimeApp) buildMenu() {
 		true,
 	)
 	app.coreMenu.AppendItem(closeItem)
+	var err error
+	if DOCKED_APP_MANAGER == nil {
+		DOCKED_APP_MANAGER, err = dock.NewDockedAppManager(
+			"com.deepin.daemon.Dock",
+			"/dde/dock/DockedAppManager",
+		)
+		if err != nil {
+			LOGGER.Warning("get DockedAppManager failed", err)
+			return
+		}
+	}
+	isDocked, _ := DOCKED_APP_MANAGER.IsDocked((app.Id)) // TODO: status
 	dockItem := NewMenuItem(
 		"_Dock",
-		func() { /*TODO: do the real work*/
+		func() {
 			LOGGER.Warning("dock item")
-			var err error
-			if DOCKED_APP_MANAGER == nil {
-				DOCKED_APP_MANAGER, err = dock.NewDockedAppManager(
-					"com.deepin.daemon.Dock",
-					"/dde/dock/DockedAppManager",
-				)
-				if err != nil {
-					LOGGER.Warning("get DockedAppManager failed", err)
-					return
-				}
-			}
 			LOGGER.Info("appid:", app.Id)
 
 			var title, icon, exec string
@@ -179,7 +179,7 @@ func (app *RuntimeApp) buildMenu() {
 				LOGGER.Error("Docked failed: ", err)
 			}
 		},
-		true, // TODO: status
+		!isDocked,
 	)
 	app.coreMenu.AppendItem(dockItem)
 
