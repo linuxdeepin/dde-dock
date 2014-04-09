@@ -4,7 +4,6 @@ import (
 	// "crypto/md5"
 	"database/sql"
 	// "fmt"
-	"log"
 	"path"
 	"strings"
 
@@ -98,12 +97,12 @@ func getDeepinCategory(app *gio.DesktopAppInfo) (CategoryId, error) {
 	basename := path.Base(filename)
 	dbPath, err := getDBPath(CategoryNameDBPath)
 	if err != nil {
-		log.Fatal(err)
+		return OtherID, err
 	}
 
 	db, err := sql.Open("sqlite3", dbPath)
 	if err != nil {
-		log.Fatal(err)
+		return OtherID, err
 	}
 	defer db.Close()
 

@@ -3,7 +3,6 @@ package main
 import (
 	"database/sql"
 	// "fmt"
-	"log"
 	"os/exec"
 	p "path"
 	"strings"
@@ -35,12 +34,12 @@ func getPackageNames(path string) []string {
 func getPackageNamesFromDatabase(path string) ([]string, error) {
 	dbPath, err := getDBPath(CategoryNameDBPath)
 	if err != nil {
-		log.Fatal(err)
+		return make([]string, 0), err
 	}
 
 	db, err := sql.Open("sqlite3", dbPath)
 	if err != nil {
-		log.Fatal(err)
+		return make([]string, 0), err
 	}
 	defer db.Close()
 

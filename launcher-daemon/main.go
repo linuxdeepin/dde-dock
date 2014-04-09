@@ -17,8 +17,9 @@ func main() {
 	// DesktopAppInfo.ShouldShow does not know deepin.
 	gio.DesktopAppInfoSetDesktopEnv("Deepin")
 
-	initCategory()
 	logger = l.NewLogger("dde-daemon/launcher-daemon")
+
+	initCategory()
 	logger.Info("init category done")
 
 	initItems()

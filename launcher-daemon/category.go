@@ -1,13 +1,9 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
-	"log"
 	"sort"
 	"strings"
-
-	_ "github.com/mattn/go-sqlite3"
 
 	"dlib/glib-2.0"
 )
@@ -46,8 +42,18 @@ type CategoryInfo struct {
 var (
 	nameIdMap     = map[string]CategoryId{}
 	categoryTable = map[CategoryId]*CategoryInfo{
-		AllID:   &CategoryInfo{AllID, "all", map[ItemId]bool{}},
-		OtherID: &CategoryInfo{OtherID, "other", map[ItemId]bool{}},
+		AllID:          &CategoryInfo{AllID, "all", map[ItemId]bool{}},
+		OtherID:        &CategoryInfo{OtherID, "other", map[ItemId]bool{}},
+		NetworkID:      &CategoryInfo{NetworkID, "internet", map[ItemId]bool{}},
+		MultimediaID:   &CategoryInfo{MultimediaID, "multimedia", map[ItemId]bool{}},
+		GamesID:        &CategoryInfo{GamesID, "games", map[ItemId]bool{}},
+		GraphicsID:     &CategoryInfo{GraphicsID, "graphics", map[ItemId]bool{}},
+		ProductivityID: &CategoryInfo{ProductivityID, "productivity", map[ItemId]bool{}},
+		IndustryID:     &CategoryInfo{IndustryID, "industry", map[ItemId]bool{}},
+		EducationID:    &CategoryInfo{EducationID, "education", map[ItemId]bool{}},
+		DevelopmentID:  &CategoryInfo{DevelopmentID, "development", map[ItemId]bool{}},
+		SystemID:       &CategoryInfo{SystemID, "system", map[ItemId]bool{}},
+		UtilitiesID:    &CategoryInfo{UtilitiesID, "utilities", map[ItemId]bool{}},
 	}
 )
 
@@ -69,42 +75,6 @@ func getDBPath(template string) (string, error) {
 }
 
 func initCategory() {
-	dbPath, err := getDBPath(CategoryIndexDBPath)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	db, err := sql.Open("sqlite3", dbPath)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
-	sql := `select distinct first_category_name, first_category_index
-	from  category_name;`
-
-	rows, err := db.Query(sql)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer rows.Close()
-
-	for rows.Next() {
-		var name string
-		var id CategoryId
-		rows.Scan(&name, &id)
-		// logger.Info(name, id)
-		lowerName := strings.ToLower(name)
-		nameIdMap[lowerName] = id
-		// logger.Info("category id:", id)
-		categoryTable[id] = &CategoryInfo{
-			id,
-			lowerName,
-			map[ItemId]bool{},
-		}
-	}
-	rows.Close()
-
 	for _, v := range XCategoryNameIdMap {
 		// logger.Info(v.Name(), v.Id())
 		nameIdMap[strings.ToLower(v.Name())] = v.Id()
