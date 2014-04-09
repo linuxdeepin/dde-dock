@@ -39,7 +39,7 @@ func readCfg() _Configuration {
 	cfg := _Configuration{Monitors: make(map[string]*_MonitorConfiguration)}
 	f, err := os.Open(_ConfigPath)
 	if err != nil {
-		Logger.Warning("Failed load displayConfiguration:", err)
+		LOGGER.Warning("Failed load displayConfiguration:", err)
 		return cfg
 	}
 	defer f.Close()

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"dlib"
 	"dlib/dbus"
 	"dlib/logger"
 	"fmt"
@@ -22,7 +23,7 @@ var (
 
 	MinWidth, MinHeight, MaxWidth, MaxHeight uint16
 
-	Logger = logger.NewLogger("com.deepin.daemon.Display")
+	LOGGER = logger.NewLogger("com.deepin.daemon.Display")
 )
 
 type Display struct {
@@ -234,6 +235,10 @@ func (dpy *Display) listener() {
 }
 
 func main() {
+	if !dlib.UniqueOnSession("com.deepin.daemon.Display") {
+		LOGGER.Warning("Another com.deepin.daemon.Display is running")
+		return
+	}
 	randr.Init(X)
 	ver, err := randr.QueryVersion(X, 1, 3).Reply()
 	fmt.Println("VER:", ver)
@@ -253,7 +258,7 @@ func main() {
 	dbus.DealWithUnhandledMessage()
 
 	if err := dbus.Wait(); err != nil {
-		Logger.Error("lost dbus session:", err)
+		LOGGER.Error("lost dbus session:", err)
 		os.Exit(1)
 	} else {
 		os.Exit(0)
