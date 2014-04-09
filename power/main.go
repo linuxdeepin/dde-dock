@@ -5,6 +5,7 @@ import "dlib/logger"
 import "dlib/dbus"
 import "dlib/dbus/property"
 import "dlib/gio-2.0"
+import "dbus/com/deepin/api/sound"
 import "dbus/org/freedesktop/notifications"
 import ss "dbus/org/freedesktop/screensaver"
 import "os"
@@ -14,6 +15,7 @@ var LOGGER = logger.NewLogger("com.deepin.daemon.Power").SetLogLevel(logger.LEVE
 type Power struct {
 	coreSettings     *gio.Settings
 	notifier         *notifications.Notifier
+	player           *sound.Sound
 	screensaver      *ss.ScreenSaver
 	lidIsClosed      bool
 	lowBatteryStatus uint32
@@ -74,6 +76,9 @@ func NewPower() *Power {
 	}
 	if p.screensaver, err = ss.NewScreenSaver("org.freedesktop.ScreenSaver", "/org/freedesktop/ScreenSaver"); err != nil {
 		LOGGER.Warning("Can't build org.freedesktop.ScreenSaver:", err)
+	}
+	if p.player, err = sound.NewSound("com.deepin.api.Sound", "/com/deepin/api/Sound"); err != nil {
+		LOGGER.Warning("Can't build com.deepin.api.Sound:", err)
 	}
 
 	p.initPlan()

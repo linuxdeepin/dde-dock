@@ -1,6 +1,9 @@
 package main
 
 import "dbus/org/freedesktop/upower"
+import "fmt"
+import "dlib/gio-2.0"
+import "time"
 
 const (
 	UPOWER_BUS_NAME = "org.freedesktop.UPower"
@@ -41,7 +44,12 @@ const (
 func (p *Power) refreshUpower(up *upower.Upower) {
 
 	if up.OnBattery.Get() != p.OnBattery {
-		//update ScreenSaver timeout when OnBattery changed
+		if p.OnBattery {
+			p.player.PlaySystemSound("power-unplug")
+		} else {
+			p.player.PlaySystemSound("power-plug")
+		}
+		//OnBattery will effect current PowerPlan idle value
 		p.updateIdletimer()
 		p.setPropOnBattery(up.OnBattery.Get())
 	}
@@ -59,11 +67,14 @@ func (p *Power) refreshUpower(up *upower.Upower) {
 	//TODO: handle lowe battery
 }
 
+var stopPowerCaution chan bool
+
 func (p *Power) handleBatteryPercentage() {
 	if !p.OnBattery {
 		if p.lowBatteryStatus != lowBatteryStatusNormal {
 			p.lowBatteryStatus = lowBatteryStatusNormal
 			doCloseLowpower()
+			close(stopPowerCaution)
 		}
 		return
 	}
@@ -72,22 +83,38 @@ func (p *Power) handleBatteryPercentage() {
 		if p.lowBatteryStatus != lowBatteryStatusAction {
 			p.lowBatteryStatus = lowBatteryStatusAction
 			p.sendNotify("battery-low", "Battery low", "Computer will suspend very soon unless it is plugged in(TODO:Calucate remaining).")
+			p.player.PlaySystemSound("power-low")
 		}
 	case p.BatteryPercentage < float64(p.coreSettings.GetInt("percentage-critical")):
+		fmt.Println("HHHH\n")
 		if p.lowBatteryStatus != lowBatteryStatusCritcal {
 			p.lowBatteryStatus = lowBatteryStatusCritcal
 			p.sendNotify("battery-critical", "Battery cirtical low", "Computer will suspend very soon unless it is plugged in.")
+
+			p.player.PlaySystemSound("power-caution")
+			stopPowerCaution = make(chan bool)
+			go func() {
+				for {
+					select {
+					case <-stopPowerCaution:
+						return
+					case <-time.After(time.Second * 10):
+						p.player.PlaySystemSound("power-caution")
+					}
+				}
+			}()
 		}
 	case p.BatteryPercentage < float64(p.coreSettings.GetInt("percentage-low")):
 		if p.lowBatteryStatus != lowBatteryStatusLow {
 			p.lowBatteryStatus = lowBatteryStatusLow
 			p.sendNotify("battery-critical", "Battery cirtical low", "Computer will suspend very soon unless it is plugged in.")
-			doSuspend()
+			//doSuspend()
 		}
 	default:
 		if p.lowBatteryStatus != lowBatteryStatusNormal {
 			p.lowBatteryStatus = lowBatteryStatusNormal
 			doCloseLowpower()
+			close(stopPowerCaution)
 		}
 	}
 }
@@ -101,7 +128,18 @@ func (p *Power) initUpower() {
 			p.refreshUpower(up)
 		})
 	}
+	p.setPropOnBattery(up.OnBattery.Get())
 	p.refreshUpower(up)
+
+	p.coreSettings.Connect("changed::percentage-action", func(s *gio.Settings, name string) {
+		p.handleBatteryPercentage()
+	})
+	p.coreSettings.Connect("changed::percentage-low", func(s *gio.Settings, name string) {
+		p.handleBatteryPercentage()
+	})
+	p.coreSettings.Connect("changed::percentage-critical", func(s *gio.Settings, name string) {
+		p.handleBatteryPercentage()
+	})
 }
 func getBattery() *upower.Device {
 	up, err := upower.NewUpower(UPOWER_BUS_NAME, "/org/freedesktop/UPower")
