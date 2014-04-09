@@ -59,3 +59,14 @@ func marshalJSON(v interface{}) (jsonStr string, err error) {
 	jsonStr = string(b)
 	return
 }
+
+func isUint32ArrayEmpty(a []uint32) (empty bool) {
+	empty = true
+	for _, v := range a {
+		if v != 0 {
+			empty = false
+			break
+		}
+	}
+	return
+}

@@ -248,7 +248,7 @@ func generalSetVirtualKeyJSON(data _ConnectionData, field, key string, valueJSON
 	case fieldWirelessSecurity:
 		switch key {
 		case NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT:
-			setSettingVkWirelessSecurityKeyMgmtJSON(data, valueJSON)
+			logicSetSettingVkWirelessSecurityKeyMgmtJSON(data, valueJSON)
 		}
 	}
 	return
@@ -312,7 +312,7 @@ func getSettingVkIp4ConfigAddressesGateway(data _ConnectionData) (value string) 
 		return
 	}
 	addresses := getSettingIp4ConfigAddresses(data)
-	value = convertIpv4AddressToString(addresses[0][2])
+	value = convertIpv4AddressToStringNoZeor(addresses[0][2])
 	return
 }
 func getSettingVkIp4ConfigRoutesAddress(data _ConnectionData) (value string) {
@@ -400,31 +400,46 @@ func setSettingVkConnectionPermissions(data _ConnectionData, value bool) {
 	// setSettingConnectionPermissionsJSON(data)
 }
 func setSettingVkIp4ConfigDns(data _ConnectionData, value string) {
-	// TODO
 	dns := getSettingIp4ConfigDns(data)
 	if len(dns) == 0 {
 		dns = make([]uint32, 1)
 	}
 	dns[0] = convertIpv4AddressToUint32(value)
-	setSettingIp4ConfigDns(data, dns)
+	if dns[0] != 0 {
+		setSettingIp4ConfigDns(data, dns)
+	} else {
+		removeSettingIp4ConfigDns(data)
+	}
 }
 func setSettingVkIp4ConfigAddressesAddress(data _ConnectionData, value string) {
 	addresses := doGetOrNewSettingIp4ConfigAddresses(data)
 	addr := addresses[0]
 	addr[0] = convertIpv4AddressToUint32(value)
-	setSettingIp4ConfigAddresses(data, addresses)
+	if !isUint32ArrayEmpty(addr) {
+		setSettingIp4ConfigAddresses(data, addresses)
+	} else {
+		removeSettingIp4ConfigAddresses(data)
+	}
 }
 func setSettingVkIp4ConfigAddressesMask(data _ConnectionData, value string) {
 	addresses := doGetOrNewSettingIp4ConfigAddresses(data)
 	addr := addresses[0]
 	addr[1] = convertIpv4NetMaskToPrefix(value)
-	setSettingIp4ConfigAddresses(data, addresses)
+	if !isUint32ArrayEmpty(addr) {
+		setSettingIp4ConfigAddresses(data, addresses)
+	} else {
+		removeSettingIp4ConfigAddresses(data)
+	}
 }
 func setSettingVkIp4ConfigAddressesGateway(data _ConnectionData, value string) {
 	addresses := doGetOrNewSettingIp4ConfigAddresses(data)
 	addr := addresses[0]
 	addr[2] = convertIpv4AddressToUint32(value)
-	setSettingIp4ConfigAddresses(data, addresses)
+	if !isUint32ArrayEmpty(addr) {
+		setSettingIp4ConfigAddresses(data, addresses)
+	} else {
+		removeSettingIp4ConfigAddresses(data)
+	}
 }
 func setSettingVkIp4ConfigRoutesAddress(data _ConnectionData, value string) {
 	// TODO
@@ -625,4 +640,9 @@ func setSettingVkIp6ConfigRoutesMetricJSON(data _ConnectionData, valueJSON strin
 func setSettingVkWirelessSecurityKeyMgmtJSON(data _ConnectionData, valueJSON string) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	setSettingVkWirelessSecurityKeyMgmt(data, value)
+}
+
+// Logic setter
+func logicSetSettingVkWirelessSecurityKeyMgmtJSON(data _ConnectionData, valueJSON string) {
+	// TODO
 }
