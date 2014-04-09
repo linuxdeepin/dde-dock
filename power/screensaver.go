@@ -76,10 +76,10 @@ func (*ScreenSaver) GetDBusInfo() dbus.DBusInfo {
 
 func NewScreenSaver() *ScreenSaver {
 	s := &ScreenSaver{inhibitors: make(map[uint32]inhibitor)}
-	XU, _ := xgbutil.NewConn()
-	screensaver.Init(XU.Conn())
-	screensaver.QueryVersion(XU.Conn(), 1, 0)
-	screensaver.SelectInput(XU.Conn(), xproto.Drawable(XU.RootWin()), screensaver.EventNotifyMask|screensaver.EventCycleMask)
+	s.xu, _ = xgbutil.NewConn()
+	screensaver.Init(s.xu.Conn())
+	screensaver.QueryVersion(s.xu.Conn(), 1, 0)
+	screensaver.SelectInput(s.xu.Conn(), xproto.Drawable(s.xu.RootWin()), screensaver.EventNotifyMask|screensaver.EventCycleMask)
 
 	go s.loop()
 	return s
