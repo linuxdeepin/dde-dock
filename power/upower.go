@@ -123,6 +123,9 @@ func (p *Power) initUpower() {
 		up.ConnectChanged(func() {
 			p.refreshUpower(up)
 		})
+		up.ConnectDeviceChanged(func(path string) {
+			p.refreshUpower(up)
+		})
 	}
 	p.setPropOnBattery(up.OnBattery.Get())
 	p.refreshUpower(up)
