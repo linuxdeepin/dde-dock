@@ -117,6 +117,40 @@ func isInArea(x, y int32, area areaRange) bool {
         return false
 }
 
+func getEdgeForCommand(cmd string) string {
+        keys := zoneSettings.ListKeys()
+
+        for _, key := range keys {
+                v := zoneSettings.GetString(key)
+                if v == cmd {
+                        return key
+                }
+        }
+
+        return ""
+}
+
+func enableOneEdge(edge string) {
+        switch edge {
+        case "left-up":
+                edgeActionMap["BottomLeft"] = ""
+                edgeActionMap["TopRight"] = ""
+                edgeActionMap["BottomRight"] = ""
+        case "left-down":
+                edgeActionMap["TopLeft"] = ""
+                edgeActionMap["TopRight"] = ""
+                edgeActionMap["BottomRight"] = ""
+        case "right-up":
+                edgeActionMap["TopLeft"] = ""
+                edgeActionMap["BottomLeft"] = ""
+                edgeActionMap["BottomRight"] = ""
+        case "right-down":
+                edgeActionMap["TopLeft"] = ""
+                edgeActionMap["BottomLeft"] = ""
+                edgeActionMap["TopRight"] = ""
+        }
+}
+
 func newManager() *Manager {
         m := &Manager{}
 

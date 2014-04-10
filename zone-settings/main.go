@@ -90,6 +90,17 @@ func (op *Manager) BottomRightAction() string {
         return zoneSettings.GetString("right-down")
 }
 
+func (op *Manager) OnlyEnableLauncher() {
+        enableOneEdge(getEdgeForCommand("/usr/bin/launcher"))
+}
+
+func (op *Manager) EnableAllEdge() {
+        op.SetTopLeft(op.TopLeftAction())
+        op.SetBottomLeft(op.BottomLeftAction())
+        op.SetTopRight(op.TopRightAction())
+        op.SetBottomRight(op.BottomRightAction())
+}
+
 func main() {
         defer func() {
                 if err := recover(); err != nil {
