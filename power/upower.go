@@ -1,7 +1,6 @@
 package main
 
 import "dbus/org/freedesktop/upower"
-import "fmt"
 import "dlib/gio-2.0"
 import "time"
 
@@ -67,14 +66,11 @@ func (p *Power) refreshUpower(up *upower.Upower) {
 	//TODO: handle lowe battery
 }
 
-var stopPowerCaution chan bool
-
 func (p *Power) handleBatteryPercentage() {
 	if !p.OnBattery {
-		if p.lowBatteryStatus != lowBatteryStatusNormal {
+		if p.lowBatteryStatus == lowBatteryStatusAction {
 			p.lowBatteryStatus = lowBatteryStatusNormal
 			doCloseLowpower()
-			close(stopPowerCaution)
 		}
 		return
 	}
@@ -82,39 +78,39 @@ func (p *Power) handleBatteryPercentage() {
 	case p.BatteryPercentage < float64(p.coreSettings.GetInt("percentage-action")):
 		if p.lowBatteryStatus != lowBatteryStatusAction {
 			p.lowBatteryStatus = lowBatteryStatusAction
-			p.sendNotify("battery-low", "Battery low", "Computer will suspend very soon unless it is plugged in(TODO:Calucate remaining).")
-			p.player.PlaySystemSound("power-low")
+			p.sendNotify("battery-action", "Battery cirtical low", "Computer will suspend very soon unless it is plugged in.")
+			doSuspend()
+			go func() {
+				for p.lowBatteryStatus == lowBatteryStatusAction {
+					<-time.After(time.Second * 10)
+					//TODO: suspend when there hasn't user input event
+					doSuspend()
+				}
+			}()
 		}
 	case p.BatteryPercentage < float64(p.coreSettings.GetInt("percentage-critical")):
-		fmt.Println("HHHH\n")
 		if p.lowBatteryStatus != lowBatteryStatusCritcal {
 			p.lowBatteryStatus = lowBatteryStatusCritcal
 			p.sendNotify("battery-critical", "Battery cirtical low", "Computer will suspend very soon unless it is plugged in.")
 
 			p.player.PlaySystemSound("power-caution")
-			stopPowerCaution = make(chan bool)
 			go func() {
-				for {
-					select {
-					case <-stopPowerCaution:
-						return
-					case <-time.After(time.Second * 10):
-						p.player.PlaySystemSound("power-caution")
-					}
+				for p.lowBatteryStatus == lowBatteryStatusCritcal {
+					<-time.After(time.Second * 10)
+					p.player.PlaySystemSound("power-caution")
 				}
 			}()
 		}
 	case p.BatteryPercentage < float64(p.coreSettings.GetInt("percentage-low")):
 		if p.lowBatteryStatus != lowBatteryStatusLow {
 			p.lowBatteryStatus = lowBatteryStatusLow
-			p.sendNotify("battery-critical", "Battery cirtical low", "Computer will suspend very soon unless it is plugged in.")
-			//doSuspend()
+			p.sendNotify("battery-low", "Battery low", "Computer will suspend very soon unless it is plugged in(TODO:Calucate remaining).")
+			p.player.PlaySystemSound("power-low")
 		}
 	default:
-		if p.lowBatteryStatus != lowBatteryStatusNormal {
+		if p.lowBatteryStatus == lowBatteryStatusAction {
 			p.lowBatteryStatus = lowBatteryStatusNormal
 			doCloseLowpower()
-			close(stopPowerCaution)
 		}
 	}
 }
