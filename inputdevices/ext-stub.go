@@ -30,6 +30,8 @@ import (
         "strings"
 )
 
+const DEFAULT_LAYOUT = "us;"
+
 func (dev *ExtDevManager) GetDBusInfo() dbus.DBusInfo {
         return dbus.DBusInfo{_EXT_DEV_NAME, _EXT_DEV_PATH, _EXT_DEV_IFC}
 }
@@ -93,6 +95,9 @@ func (keyboard *KeyboardEntry) setPropName(propName string) {
         switch propName {
         case "CurrentLayout":
                 strs := strings.Split(keyboard.CurrentLayout, LAYOUT_DELIM)
+                if len(strs[0]) <= 0 {
+                        strs[0] = "us"
+                }
                 switch len(strs) {
                 case 1:
                         _layoutGSettings.SetStrv("layouts", []string{strs[0]})
@@ -121,7 +126,7 @@ func (keyboard *KeyboardEntry) getPropName(propName string) {
                                 keyboard.CurrentLayout += option[0]
                         }
                 } else {
-                        keyboard.CurrentLayout = LAYOUT_DELIM
+                        keyboard.CurrentLayout = DEFAULT_LAYOUT
                 }
                 dbus.NotifyChange(keyboard, propName)
         case "UserLayoutList":
