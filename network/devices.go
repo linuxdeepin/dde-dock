@@ -276,11 +276,21 @@ func (this *Manager) ActivateConnection(uuid string, dev dbus.ObjectPath) (err e
 	return
 }
 func (this *Manager) DeactivateConnection(uuid string) (err error) {
-	LOGGER.Debug("DeactivateConnection:", uuid)
-	cpath, err := _NMSettings.GetConnectionByUuid(string(uuid))
-	if err != nil {
+	cpath := this.getActiveConnectionByUuid(uuid)
+	if len(cpath) == 0 {
 		return
 	}
+	LOGGER.Debug("DeactivateConnection:", uuid, cpath)
 	err = _NMManager.DeactivateConnection(cpath)
+	return
+}
+func (this *Manager) getActiveConnectionByUuid(uuid string) (cpath dbus.ObjectPath) {
+	for _, path := range _NMManager.ActiveConnections.Get() {
+		if conn, err := nm.NewActiveConnection(NMDest, path); err == nil {
+			if conn.Uuid.Get() == uuid {
+				cpath = path
+			}
+		}
+	}
 	return
 }
