@@ -273,3 +273,7 @@ func (session *ConnectionSession) DebugListKeyDetail() (info string) {
 func (session *ConnectionSession) DebugGetConnectionData() _ConnectionData {
 	return session.data
 }
+
+func (session *ConnectionSession) DebugGetErrors() map[string]map[string]string {
+	return session.Errors
+}
