@@ -23,7 +23,6 @@ package main
 
 import (
 	"dlib/graphic"
-	"encoding/json"
 	"io/ioutil"
 	"os"
 	"path"
@@ -40,24 +39,11 @@ func (grub *Grub2) setup() {
 	grub.readSettings()
 	grub.fixSettings()
 
-	// grub.resetGfxmodeIfNeed()
 	grub.resetGfxmode()
 
 	// grub.writeSettings()
 	settingFileContent := grub.getSettingContentToSave()
 	setup.DoWriteSettings(settingFileContent)
-
-	// grub.writeCacheConfig()
-	grub.config.NeedUpdate = true
-	cacheFileContent, _ := json.Marshal(grub.config)
-	setup.DoWriteCacheConfig(string(cacheFileContent))
-
-	setup.DoGenerateGrubConfig()
-
-	// grub.writeCacheConfig()
-	grub.config.NeedUpdate = false
-	cacheFileContent, _ = json.Marshal(grub.config)
-	setup.DoWriteCacheConfig(string(cacheFileContent))
 
 	// generate theme background
 	screenWidth, screenHeight := getPrimaryScreenBestResolution()
@@ -66,6 +52,7 @@ func (grub *Grub2) setup() {
 
 func (grub *Grub2) setupTheme() {
 	setup := &Setup{}
+
 	// generate theme background
 	screenWidth, screenHeight := getPrimaryScreenBestResolution()
 	setup.DoGenerateThemeBackground(screenWidth, screenHeight)
