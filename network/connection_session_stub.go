@@ -29,23 +29,8 @@ func (session *ConnectionSession) updatePropAvailableKeys() {
 func (session *ConnectionSession) updatePropErrors() {
 	for _, page := range session.ListPages() {
 		field := session.pageToField(page)
-		switch field {
-		default:
-			LOGGER.Error("updatePropErrors: invalid field name", field)
-		case field8021x:
-			session.Errors[page] = checkSetting8021xValues(session.data)
-		case fieldConnection:
-			session.Errors[page] = checkSettingConnectionValues(session.data)
-		case fieldIPv4:
-			session.Errors[page] = checkSettingIp4ConfigValues(session.data)
-		case fieldIPv6:
-			session.Errors[page] = checkSettingIp6ConfigValues(session.data)
-		case fieldWired:
-			session.Errors[page] = checkSettingWiredValues(session.data)
-		case fieldWireless:
-			session.Errors[page] = checkSettingWirelessValues(session.data)
-		case fieldWirelessSecurity:
-			session.Errors[page] = checkSettingWirelessSecurityValues(session.data)
+		if isSettingFieldExists(session.data, field) { // TODO
+			session.Errors[page] = generalCheckSettingValues(session.data, field)
 		}
 	}
 	dbus.NotifyChange(session, "Errors")

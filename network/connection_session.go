@@ -190,24 +190,11 @@ func (session *ConnectionSession) pageToField(page string) (field string) {
 // keys toggled
 func (session *ConnectionSession) listKeys(page string) (keys []string) {
 	field := session.pageToField(page)
-	switch field {
-	case field8021x:
-		keys = getSetting8021xAvailableKeys(session.data)
-	case fieldConnection:
-		keys = getSettingConnectionAvailableKeys(session.data)
-	case fieldIPv4:
-		keys = getSettingIp4ConfigAvailableKeys(session.data)
-	case fieldIPv6:
-		keys = getSettingIp6ConfigAvailableKeys(session.data)
-	case fieldWired:
-		keys = getSettingWiredAvailableKeys(session.data)
-	case fieldWireless:
-		keys = getSettingWirelessAvailableKeys(session.data)
-	case fieldWirelessSecurity:
-		keys = getSettingWirelessSecurityAvailableKeys(session.data)
-	}
-	if len(keys) == 0 {
-		LOGGER.Warning("there is no avaiable keys for page", page)
+	if isSettingFieldExists(session.data, field) { // TODO
+		keys = generalGetSettingAvailableKeys(session.data, field)
+		if len(keys) == 0 {
+			LOGGER.Warning("there is no avaiable keys for page", page)
+		}
 	}
 	return
 }

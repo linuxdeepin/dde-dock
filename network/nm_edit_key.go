@@ -39,6 +39,26 @@ func generalGetSettingKeyType(field, key string) (t ktype) {
 	return
 }
 
+func generalGetSettingAvailableKeys(data _ConnectionData, field string) (keys []string) {
+	switch field {
+	case field8021x:
+		keys = getSetting8021xAvailableKeys(data)
+	case fieldConnection:
+		keys = getSettingConnectionAvailableKeys(data)
+	case fieldIPv4:
+		keys = getSettingIp4ConfigAvailableKeys(data)
+	case fieldIPv6:
+		keys = getSettingIp6ConfigAvailableKeys(data)
+	case fieldWired:
+		keys = getSettingWiredAvailableKeys(data)
+	case fieldWireless:
+		keys = getSettingWirelessAvailableKeys(data)
+	case fieldWirelessSecurity:
+		keys = getSettingWirelessSecurityAvailableKeys(data)
+	}
+	return
+}
+
 func generalGetSettingAvailableValues(field, key string) (values []string, customizable bool) {
 	switch field {
 	case field8021x:
@@ -55,6 +75,28 @@ func generalGetSettingAvailableValues(field, key string) (values []string, custo
 		values, customizable = getSettingWirelessAvailableValues(key)
 	case fieldWirelessSecurity:
 		values, customizable = getSettingWirelessSecurityAvailableValues(key)
+	}
+	return
+}
+
+func generalCheckSettingValues(data _ConnectionData, field string) (errs map[string]string) {
+	switch field {
+	default:
+		LOGGER.Error("updatePropErrors: invalid field name", field)
+	case field8021x:
+		errs = checkSetting8021xValues(data)
+	case fieldConnection:
+		errs = checkSettingConnectionValues(data)
+	case fieldIPv4:
+		errs = checkSettingIp4ConfigValues(data)
+	case fieldIPv6:
+		errs = checkSettingIp6ConfigValues(data)
+	case fieldWired:
+		errs = checkSettingWiredValues(data)
+	case fieldWireless:
+		errs = checkSettingWirelessValues(data)
+	case fieldWirelessSecurity:
+		errs = checkSettingWirelessSecurityValues(data)
 	}
 	return
 }
