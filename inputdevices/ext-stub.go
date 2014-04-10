@@ -25,6 +25,7 @@ import (
         libsm "dbus/com/deepin/sessionmanager"
         "dlib/dbus"
         "dlib/gio-2.0"
+        "os/exec"
         "os/user"
         "strings"
 )
@@ -93,15 +94,14 @@ func (keyboard *KeyboardEntry) setPropName(propName string) {
         case "CurrentLayout":
                 strs := strings.Split(keyboard.CurrentLayout, LAYOUT_DELIM)
                 switch len(strs) {
-                case 0:
-                        _layoutGSettings.SetStrv("layouts", []string{strs[0]})
-                        _layoutGSettings.SetStrv("options", []string{})
                 case 1:
                         _layoutGSettings.SetStrv("layouts", []string{strs[0]})
                         _layoutGSettings.SetStrv("options", []string{})
+                        setLayout(strs[0], "")
                 case 2:
                         _layoutGSettings.SetStrv("layouts", []string{strs[0]})
                         _layoutGSettings.SetStrv("options", []string{strs[1]})
+                        setLayout(strs[0], strs[1])
                 }
                 dbus.NotifyChange(keyboard, propName)
         case "UserLayoutList":
@@ -199,4 +199,13 @@ func setQtCursorBlink(rate uint32) {
 
         qtPath := homeDir + "/.config/Trolltech.conf"
         objUtils.WriteKeyToKeyFile(qtPath, "Qt", "cursorFlashTime", rate)
+}
+
+func setLayout(layout, option string) {
+        args := []string{}
+        args = append(args, "-layout")
+        args = append(args, layout)
+        args = append(args, "-option")
+        args = append(args, option)
+        exec.Command("/usr/bin/setxkbmap", args...).Run()
 }
