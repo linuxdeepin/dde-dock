@@ -25,6 +25,8 @@ import (
         libkeybind "dbus/com/deepin/daemon/keybinding"
         libdbus "dbus/org/freedesktop/dbus"
         libmpris "dbus/org/mpris/mediaplayer2"
+        "dlib/gio-2.0"
+        "os/exec"
         "strings"
 )
 
@@ -32,6 +34,10 @@ const (
         MPRIS_FILTER_KEY = "org.mpris.MediaPlayer2"
         MPRIS_PATH       = "/org/mpris/MediaPlayer2"
         SEEK_DISTANCE    = int64(5000000) // 5s
+
+        MIME_TYPE_BROWSER = "x-scheme-handler/http"
+        MIME_TYPE_EMAIL   = "x-scheme-handler/mailto"
+        CALCULATOR_CMD    = "/usr/bin/gnome-calculator"
 )
 
 var (
@@ -195,6 +201,34 @@ func listenAudioSignal() {
                 }
                 obj.Play()
         })
+
+        mediaKeyObj.ConnectLaunchEmail(func(press bool) {
+                if press {
+                        return
+                }
+
+                if cmd, ok := getCommandByMimeType(MIME_TYPE_EMAIL); ok {
+                        go exec.Command(cmd).Run()
+                }
+        })
+
+        mediaKeyObj.ConnectLaunchBrowser(func(press bool) {
+                if press {
+                        return
+                }
+
+                if cmd, ok := getCommandByMimeType(MIME_TYPE_BROWSER); ok {
+                        go exec.Command(cmd).Run()
+                }
+        })
+
+        mediaKeyObj.ConnectLaunchCalculator(func(press bool) {
+                if press {
+                        return
+                }
+
+                go exec.Command(CALCULATOR_CMD).Run()
+        })
 }
 
 func startMprisDaemon() {
@@ -216,4 +250,12 @@ func startMprisDaemon() {
         }
 
         listenAudioSignal()
+}
+
+func getCommandByMimeType(mimeType string) (string, bool) {
+        if appInfo := gio.AppInfoGetDefaultForType(mimeType, false); appInfo != nil {
+                return appInfo.GetExecutable(), true
+        }
+
+        return "", false
 }
