@@ -224,7 +224,7 @@ func checkSettingIp4ConfigValues(data _ConnectionData) (errs map[string]string) 
 func checkSettingIp4MethodConflict(data _ConnectionData, errs map[string]string) {
 	// check dns
 	if isSettingIp4ConfigDnsExists(data) {
-		rememberErrorForVirtualKey(errs, fieldIPv4, NM_SETTING_IP4_CONFIG_DNS, fmt.Sprintf(NM_KEY_ERROR_IP4_METHOD_CONFLICT, NM_SETTING_IP4_CONFIG_DNS))
+		rememberVkError(errs, fieldIPv4, NM_SETTING_IP4_CONFIG_DNS, fmt.Sprintf(NM_KEY_ERROR_IP4_METHOD_CONFLICT, NM_SETTING_IP4_CONFIG_DNS))
 	}
 	// check dns search
 	if isSettingIp4ConfigDnsSearchExists(data) {
@@ -232,11 +232,11 @@ func checkSettingIp4MethodConflict(data _ConnectionData, errs map[string]string)
 	}
 	// check address
 	if isSettingIp4ConfigAddressesExists(data) {
-		rememberErrorForVirtualKey(errs, fieldIPv4, NM_SETTING_IP4_CONFIG_ADDRESSES, fmt.Sprintf(NM_KEY_ERROR_IP4_METHOD_CONFLICT, NM_SETTING_IP4_CONFIG_ADDRESSES))
+		rememberVkError(errs, fieldIPv4, NM_SETTING_IP4_CONFIG_ADDRESSES, fmt.Sprintf(NM_KEY_ERROR_IP4_METHOD_CONFLICT, NM_SETTING_IP4_CONFIG_ADDRESSES))
 	}
 	// check route
 	if isSettingIp4ConfigRoutesExists(data) {
-		rememberErrorForVirtualKey(errs, fieldIPv4, NM_SETTING_IP4_CONFIG_ROUTES, fmt.Sprintf(NM_KEY_ERROR_IP4_METHOD_CONFLICT, NM_SETTING_IP4_CONFIG_ROUTES))
+		rememberVkError(errs, fieldIPv4, NM_SETTING_IP4_CONFIG_ROUTES, fmt.Sprintf(NM_KEY_ERROR_IP4_METHOD_CONFLICT, NM_SETTING_IP4_CONFIG_ROUTES))
 	}
 }
 
@@ -247,7 +247,7 @@ func checkSettingIp4ConfigDns(data _ConnectionData, errs map[string]string) {
 	dnses := getSettingIp4ConfigDns(data)
 	for _, dns := range dnses {
 		if dns == 0 {
-			rememberErrorForVirtualKey(errs, fieldIPv4, NM_SETTING_IP4_CONFIG_DNS, NM_KEY_ERROR_INVALID_VALUE)
+			rememberVkError(errs, fieldIPv4, NM_SETTING_IP4_CONFIG_DNS, NM_KEY_ERROR_INVALID_VALUE)
 			return
 		}
 	}
@@ -255,12 +255,12 @@ func checkSettingIp4ConfigDns(data _ConnectionData, errs map[string]string) {
 
 func ensureSettingIpv4ConfigAddressesExists(data _ConnectionData, errs map[string]string) {
 	if !isSettingIp4ConfigAddressesExists(data) {
-		rememberErrorForVirtualKey(errs, fieldIPv4, NM_SETTING_IP4_CONFIG_ADDRESSES, NM_KEY_ERROR_MISSING_VALUE)
+		rememberVkError(errs, fieldIPv4, NM_SETTING_IP4_CONFIG_ADDRESSES, NM_KEY_ERROR_MISSING_VALUE)
 		return
 	}
 	addresses := getSettingIp4ConfigAddresses(data)
 	if len(addresses) == 0 {
-		rememberErrorForVirtualKey(errs, fieldIPv4, NM_SETTING_IP4_CONFIG_ADDRESSES, NM_KEY_ERROR_EMPTY_VALUE)
+		rememberVkError(errs, fieldIPv4, NM_SETTING_IP4_CONFIG_ADDRESSES, NM_KEY_ERROR_EMPTY_VALUE)
 		return
 	}
 }
@@ -272,7 +272,7 @@ func checkSettingIp4ConfigAddresses(data _ConnectionData, errs map[string]string
 	for _, addr := range addresses {
 		// check address struct
 		if len(addr) != 3 {
-			rememberErrorForVirtualKey(errs, fieldIPv4, NM_SETTING_IP4_CONFIG_ADDRESSES, NM_KEY_ERROR_IP4_ADDRESSES_STRUCT)
+			rememberVkError(errs, fieldIPv4, NM_SETTING_IP4_CONFIG_ADDRESSES, NM_KEY_ERROR_IP4_ADDRESSES_STRUCT)
 			return
 		}
 		// check address

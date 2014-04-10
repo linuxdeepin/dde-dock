@@ -122,7 +122,7 @@ func checkSettingIp6ConfigValues(data _ConnectionData) (errs map[string]string) 
 func checkSettingIp6MethodConflict(data _ConnectionData, errs map[string]string) {
 	// check dns
 	if isSettingIp6ConfigDnsExists(data) {
-		rememberErrorForVirtualKey(errs, fieldIPv6, NM_SETTING_IP6_CONFIG_DNS, fmt.Sprintf(NM_KEY_ERROR_IP6_METHOD_CONFLICT, NM_SETTING_IP6_CONFIG_DNS))
+		rememberVkError(errs, fieldIPv6, NM_SETTING_IP6_CONFIG_DNS, fmt.Sprintf(NM_KEY_ERROR_IP6_METHOD_CONFLICT, NM_SETTING_IP6_CONFIG_DNS))
 	}
 	// check dns search
 	if isSettingIp6ConfigDnsSearchExists(data) {
@@ -130,11 +130,11 @@ func checkSettingIp6MethodConflict(data _ConnectionData, errs map[string]string)
 	}
 	// check address
 	if isSettingIp6ConfigAddressesExists(data) {
-		rememberErrorForVirtualKey(errs, fieldIPv6, NM_SETTING_IP6_CONFIG_ADDRESSES, fmt.Sprintf(NM_KEY_ERROR_IP6_METHOD_CONFLICT, NM_SETTING_IP6_CONFIG_ADDRESSES))
+		rememberVkError(errs, fieldIPv6, NM_SETTING_IP6_CONFIG_ADDRESSES, fmt.Sprintf(NM_KEY_ERROR_IP6_METHOD_CONFLICT, NM_SETTING_IP6_CONFIG_ADDRESSES))
 	}
 	// check route
 	if isSettingIp6ConfigRoutesExists(data) {
-		rememberErrorForVirtualKey(errs, fieldIPv6, NM_SETTING_IP6_CONFIG_ROUTES, fmt.Sprintf(NM_KEY_ERROR_IP6_METHOD_CONFLICT, NM_SETTING_IP6_CONFIG_ROUTES))
+		rememberVkError(errs, fieldIPv6, NM_SETTING_IP6_CONFIG_ROUTES, fmt.Sprintf(NM_KEY_ERROR_IP6_METHOD_CONFLICT, NM_SETTING_IP6_CONFIG_ROUTES))
 	}
 }
 
@@ -157,12 +157,12 @@ func checkSettingIp6ConfigDns(data _ConnectionData, errs map[string]string) {
 
 func ensureSettingIp6ConfigAddressesExists(data _ConnectionData, errs map[string]string) {
 	if !isSettingIp6ConfigAddressesExists(data) {
-		rememberErrorForVirtualKey(errs, fieldIPv6, NM_SETTING_IP6_CONFIG_ADDRESSES, NM_KEY_ERROR_MISSING_VALUE)
+		rememberVkError(errs, fieldIPv6, NM_SETTING_IP6_CONFIG_ADDRESSES, NM_KEY_ERROR_MISSING_VALUE)
 		return
 	}
 	addresses := getSettingIp6ConfigAddresses(data)
 	if len(addresses) == 0 {
-		rememberErrorForVirtualKey(errs, fieldIPv6, NM_SETTING_IP6_CONFIG_ADDRESSES, NM_KEY_ERROR_EMPTY_VALUE)
+		rememberVkError(errs, fieldIPv6, NM_SETTING_IP6_CONFIG_ADDRESSES, NM_KEY_ERROR_EMPTY_VALUE)
 		return
 	}
 }

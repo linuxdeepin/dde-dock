@@ -126,28 +126,59 @@ const (
 // TODO Get available keys
 func getSettingWirelessSecurityAvailableKeys(data _ConnectionData) (keys []string) {
 	keys = []string{
-		NM_SETTING_WIRELESS_SECURITY_WEP_KEY0,
-		NM_SETTING_WIRELESS_SECURITY_AUTH_ALG,
 		NM_SETTING_WIRELESS_SECURITY_KEY_MGMT,
+		NM_SETTING_WIRELESS_SECURITY_WEP_KEY0,
 	}
 	return
 }
 
-// TODO Get available values
+// Get available values
 func getSettingWirelessSecurityAvailableValues(key string) (values []string, customizable bool) {
 	customizable = true
 	switch key {
 	case NM_SETTING_WIRELESS_SECURITY_KEY_MGMT:
-		values = []string{"none", "ieee8021x", "wpa-none", "wpa-psk", "wpa-eap"}
+		values = []string{
+			"none",      // wep
+			"ieee8021x", // dynamic wep
+			"wpa-none",  // wpa-psk ad-hoc
+			"wpa-psk",   // wpa-psk infrastructure
+			"wpa-eap",   // wpa enterprise
+		}
 		customizable = false
 	}
 	return
 }
 
-// TODO Check whether the values are correct
+// Check whether the values are correct
 func checkSettingWirelessSecurityValues(data _ConnectionData) (errs map[string]string) {
 	errs = make(map[string]string)
+
+	// check key-mgmt
+	if !isSettingWirelessSecurityKeyMgmtExists(data) {
+		rememberVkError(errs, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT, NM_KEY_ERROR_MISSING_VALUE)
+		return
+	}
+	keyMgmt := getSettingWirelessSecurityKeyMgmt(data)
+	switch keyMgmt {
+	default:
+		rememberVkError(errs, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT, NM_KEY_ERROR_INVALID_VALUE)
+		return
+	case "none": // wep
+	case "ieee8021x": // dynamic wep
+	case "wpa-none": // wpa-psk ad-hoc
+	case "wpa-psk": // wpa-psk infrastructure
+	case "wpa-eap": // wpa enterprise
+	}
+
+	// TODO check wep-key0
+
+	// TODO check psk
+
 	return
+}
+
+// TODO
+func ensureSettingWirelessSecurityWepKeyExists(data _ConnectionData, errs map[string]string) {
 }
 
 // Set JSON value generally

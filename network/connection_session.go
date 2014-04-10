@@ -171,17 +171,15 @@ func (session *ConnectionSession) pageToField(page string) (field string) {
 		field = fieldIPv4
 	case pageIPv6:
 		field = fieldIPv6
-	case pageSecurity: // TODO
+	case pageSecurity:
 		switch session.connectionType {
 		case typeWired:
 			field = field8021x
-		case typeWireless:
-			securityField := getSettingWirelessSec(session.data)
-			switch securityField {
-			case fieldWirelessSecurity:
-				field = fieldWirelessSecurity
-			case field8021x:
+		case typeWireless: // TODO
+			if isSettingFieldExists(session.data, field8021x) {
 				field = field8021x
+			} else {
+				field = fieldWirelessSecurity
 			}
 		}
 	}
@@ -266,7 +264,7 @@ func (session *ConnectionSession) DebugListKeyDetail() (info string) {
 		for _, key := range fieldData {
 			t := generalGetSettingKeyType(field, key)
 			values, _ := generalGetSettingAvailableValues(field, key)
-			info += fmt.Sprintf("%s->%s: %s %s\n", page, key, getKtypeDescription(t), values)
+			info += fmt.Sprintf("%s->%s[%s]: %s (%s)\n", page, key, getKtypeDescription(t), session.GetKey(page, key), values)
 		}
 	}
 	return
