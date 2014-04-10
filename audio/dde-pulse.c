@@ -307,7 +307,7 @@ int pa_subscribe(pa *self)
         pthread_mutex_lock(&self->pa_mutex);
         if (self->pa_ready == 0)
         {
-            ret = pa_mainloop_iterate(self->pa_ml, 0, NULL);
+            ret = pa_mainloop_iterate(self->pa_ml, 1, NULL);
             if (ret < 0)
             {
                 if (ret == -2)
@@ -315,7 +315,7 @@ int pa_subscribe(pa *self)
                     //mainloop quit indicated
                     pa_init_context(self);
                     pthread_mutex_unlock(&self->pa_mutex);
-                    usleep(1000);
+                    /*usleep(1000);*/
                     fprintf(stderr, "mainloop quit indicated\n");
                 }
                 continue;
@@ -330,7 +330,7 @@ int pa_subscribe(pa *self)
             /* wait for a while to reconnect to pulse server */
             pa_init_context(self);
             pthread_mutex_unlock(&self->pa_mutex);
-            usleep(1000);
+            /*usleep(1000);*/
             continue;
         }
         // At this point, we're connected to the server and ready to make
@@ -356,7 +356,7 @@ int pa_subscribe(pa *self)
             break;
         case 1:
             pthread_mutex_unlock(&self->pa_mutex);
-            usleep(100);
+            usleep(2000);
             pthread_mutex_lock(&self->pa_mutex);
             break;
         case 2:
@@ -671,6 +671,59 @@ void *pa_get_sink_input_list(pa *self)
         pa_mainloop_iterate(self->pa_ml, 1, NULL);
     }
     return NULL;
+}
+
+void pa_get_sink_input(pa *self,int index)
+{
+    int state = 0;
+
+    pthread_mutex_lock(&self->pa_mutex);
+    for(;;)
+    {
+        if(self->pa_ready == 0 )
+        {
+            pa_mainloop_iterate(self->pa_ml,1,NULL);
+        }
+
+        if(self->pa_ready == 2)
+        {
+            pa_context_disconnect(self->pa_ctx);
+            pa_context_unref(self->pa_ctx);
+            pa_mainloop_free(self->pa_ml);
+            self->pa_ctx = NULL;
+            self->pa_mlapi = NULL;
+            self->pa_ml = NULL;
+            fprintf(stderr, "Unable to connect to the PA server,reinitializing\n");
+            pa_init_context(self);
+
+            continue;
+        }
+        switch(state)
+        {
+            case 0:
+                self->n_sink_inputs = 0;
+                self->pa_op = pa_context_get_sink_input_info (
+                        self->pa_ctx,
+                        index,
+                        NULL,
+                        self);
+                break;
+            case 1:
+                if(pa_operation_get_state(self->pa_op) == PA_OPERATION_DONE)
+                {
+                    pa_operation_unref(self->pa_op);
+                    self->pa_op = NULL;
+                    pthread_mutex_unlock(&self->pa_mutex);
+                    return ;
+                }
+                break;
+            default:
+                fprintf(stderr,"in state %d\n",state);
+                break;
+        }
+        pa_mainloop_iterate(self->pa_ml,1,NULL);
+    }
+    return;
 }
 
 void *pa_get_source_output_list(pa *self)
