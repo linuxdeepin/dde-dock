@@ -201,5 +201,10 @@
 		<summary>shortcut</summary>
 		<description>system shortcut</description>
 	</key>
+	<key type="as" name="disable-touchpad">
+        <default>['','/usr/bin/synclient TouchpadOff=1']</default>
+		<summary>shortcut</summary>
+		<description>system shortcut</description>
+	</key>
 	</schema>
 </schemalist>

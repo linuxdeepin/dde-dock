@@ -148,6 +148,8 @@ func (op *MediaKeyManager) emitSignal(modStr, keyStr string, press bool) bool {
                 }
                 if strings.Contains(tmps, "mod4") {
                         op.SwitchMonitors(press)
+                } else {
+                        return false
                 }
         case "space":
                 tmps := deleteSpecialMod(modStr)
@@ -157,6 +159,8 @@ func (op *MediaKeyManager) emitSignal(modStr, keyStr string, press bool) bool {
                 }
                 if strings.Contains(modStr, "mod4") {
                         op.SwitchLayout(press)
+                } else {
+                        return false
                 }
         case "XF86AudioPlay":
                 op.AudioPlay(press)
