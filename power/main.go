@@ -124,7 +124,7 @@ func main() {
 	go dlib.StartLoop()
 
 	dbus.DealWithUnhandledMessage()
-	newFullScreenWorkaround().start()
+	go newFullScreenWorkaround().start()
 	if err := dbus.Wait(); err != nil {
 		LOGGER.Error("dbus.Wait recieve an error:", err)
 		os.Exit(1)

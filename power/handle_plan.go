@@ -131,8 +131,8 @@ func (p *Power) updateIdletimer() {
 
 func (p *Power) updatePlanInfo() {
 	info := fmt.Sprintf(`{
-		PowerLine:{Custom:[%d,%d], PowerSaver:[300,600], Blanced:[600,0],HighPerformance:[0,0]},
-		Battery:{Custom:[%d,%d], PowerSaver:[300,600], Blanced:[600,0],HighPerformance:[0,0]}
+		"PowerLine":{"Custom":[%d,%d], "PowerSaver":[300,600], "Balanced":[600,0],"HighPerformance":[0,0]},
+		"Battery":{"Custom":[%d,%d], "PowerSaver":[300,600], "Balanced":[600,0],"HighPerformance":[0,0]}
 	}`, p.LinePowerIdleDelay, p.LinePowerSuspendDelay, p.BatteryIdleDelay, p.BatterySuspendDelay)
 	p.setPropPlanInfo(info)
 }
