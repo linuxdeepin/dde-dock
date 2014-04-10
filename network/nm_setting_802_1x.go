@@ -53,6 +53,10 @@ func getSetting8021xAvailableKeys(data _ConnectionData) (keys []string) {
 // TODO Get available values
 func getSetting8021xAvailableValues(key string) (values []string, customizable bool) {
 	customizable = true
+	switch key {
+	case NM_SETTING_802_1X_EAP:
+		values = []string{"leap", "md5", "tls", "peap", "ttls", "fast"}
+	}
 	return
 }
 

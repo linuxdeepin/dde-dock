@@ -6,10 +6,16 @@ import (
 	"strings"
 )
 
+const (
+	macAddrZero  = "00:00:00:00:00:00"
+	ipv4Zero     = "0.0.0.0"
+	ipv6AddrZero = "0000:0000:0000:0000:0000:0000:0000:0000"
+)
+
 // []byte{0,0,0,0,0,0} -> "00:00:00:00:00:00"
 func convertMacAddressToString(v []byte) (macAddr string) {
 	if len(v) != 6 {
-		macAddr = "00:00:00:00:00:00"
+		macAddr = macAddrZero
 		LOGGER.Error("machine address is invalid", v)
 		return
 	}
@@ -41,7 +47,7 @@ func convertIpv4AddressToString(v uint32) (ip4Addr string) {
 }
 
 // if address is 0, return empty string instead of "0.0.0.0"
-func convertIpv4AddressToStringNoZeor(v uint32) (ip4Addr string) {
+func convertIpv4AddressToStringNoZero(v uint32) (ip4Addr string) {
 	if v == 0 {
 		return
 	} else {
@@ -51,6 +57,9 @@ func convertIpv4AddressToStringNoZeor(v uint32) (ip4Addr string) {
 }
 
 func convertIpv4AddressToUint32(v string) (ip4Addr uint32) {
+	if len(v) == 0 {
+		v = ipv4Zero // convert empty string to "0.0.0.0"
+	}
 	a := strings.Split(v, ".")
 	if len(a) != 4 {
 		ip4Addr = 0
@@ -109,7 +118,7 @@ func convertIpv4NetMaskToPrefix(maskAddress string) (prefix uint32) {
 // []byte{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0} -> "0000:0000:0000:0000:0000:0000:0000:0000"
 func convertIpv6AddressToString(v []byte) (ipv6Addr string) {
 	if len(v) != 16 {
-		ipv6Addr = "0000:0000:0000:0000:0000:0000:0000:0000"
+		ipv6Addr = ipv6AddrZero
 		LOGGER.Error("ipv6 address is invalid", v)
 		return
 	}

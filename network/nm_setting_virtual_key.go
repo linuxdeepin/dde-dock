@@ -312,7 +312,7 @@ func getSettingVkIp4ConfigAddressesGateway(data _ConnectionData) (value string) 
 		return
 	}
 	addresses := getSettingIp4ConfigAddresses(data)
-	value = convertIpv4AddressToStringNoZeor(addresses[0][2])
+	value = convertIpv4AddressToStringNoZero(addresses[0][2])
 	return
 }
 func getSettingVkIp4ConfigRoutesAddress(data _ConnectionData) (value string) {
@@ -432,6 +432,9 @@ func setSettingVkIp4ConfigAddressesMask(data _ConnectionData, value string) {
 	}
 }
 func setSettingVkIp4ConfigAddressesGateway(data _ConnectionData, value string) {
+	if len(value) == 0 {
+		value = ipv4Zero
+	}
 	addresses := doGetOrNewSettingIp4ConfigAddresses(data)
 	addr := addresses[0]
 	addr[2] = convertIpv4AddressToUint32(value)

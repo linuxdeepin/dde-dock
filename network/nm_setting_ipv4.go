@@ -239,7 +239,6 @@ func checkSettingIp4MethodConflict(data _ConnectionData, errs map[string]string)
 		rememberVkError(errs, fieldIPv4, NM_SETTING_IP4_CONFIG_ROUTES, fmt.Sprintf(NM_KEY_ERROR_IP4_METHOD_CONFLICT, NM_SETTING_IP4_CONFIG_ROUTES))
 	}
 }
-
 func checkSettingIp4ConfigDns(data _ConnectionData, errs map[string]string) {
 	if !isSettingIp4ConfigDnsExists(data) {
 		return
@@ -252,7 +251,6 @@ func checkSettingIp4ConfigDns(data _ConnectionData, errs map[string]string) {
 		}
 	}
 }
-
 func ensureSettingIpv4ConfigAddressesExists(data _ConnectionData, errs map[string]string) {
 	if !isSettingIp4ConfigAddressesExists(data) {
 		rememberVkError(errs, fieldIPv4, NM_SETTING_IP4_CONFIG_ADDRESSES, NM_KEY_ERROR_MISSING_VALUE)

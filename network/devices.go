@@ -275,7 +275,7 @@ func (this *Manager) ActivateConnection(uuid string, dev dbus.ObjectPath) (err e
 	}
 	return
 }
-func (this *Manager) DeactivateConnection(uuid dbus.ObjectPath) (err error) {
+func (this *Manager) DeactivateConnection(uuid string) (err error) {
 	LOGGER.Debug("DeactivateConnection:", uuid)
 	cpath, err := _NMSettings.GetConnectionByUuid(string(uuid))
 	if err != nil {

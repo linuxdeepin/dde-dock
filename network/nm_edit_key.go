@@ -218,7 +218,6 @@ func getSettingKey(data _ConnectionData, field, key string) (value interface{}) 
 
 	variant, ok := fieldData[key]
 	if !ok {
-		LOGGER.Errorf("invalid key: data[%s][%s]", field, key)
 		return
 	}
 

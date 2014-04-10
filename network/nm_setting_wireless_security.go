@@ -145,6 +145,9 @@ func getSettingWirelessSecurityAvailableValues(key string) (values []string, cus
 			"wpa-eap",   // wpa enterprise
 		}
 		customizable = false
+	case NM_SETTING_WIRELESS_SECURITY_GROUP:
+		// TODO
+		values = []string{"wep40", "wep104", "tkip", "ccmp"}
 	}
 	return
 }
@@ -164,21 +167,54 @@ func checkSettingWirelessSecurityValues(data _ConnectionData) (errs map[string]s
 		rememberVkError(errs, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT, NM_KEY_ERROR_INVALID_VALUE)
 		return
 	case "none": // wep
+		ensureSettingWirelessSecurityWepKeyTypeExists(data, errs)
+		ensureSettingWirelessSecurityWepKey0Exists(data, errs)
 	case "ieee8021x": // dynamic wep
 	case "wpa-none": // wpa-psk ad-hoc
 	case "wpa-psk": // wpa-psk infrastructure
 	case "wpa-eap": // wpa enterprise
 	}
 
-	// TODO check wep-key0
+	// check wep-key-type
+	checkSettingWirelessSecurityWepKeyType(data, errs)
+
+	// check wep-key0
+	checkSettingWirelessSecurityWepKey0(data, errs)
 
 	// TODO check psk
 
 	return
 }
 
-// TODO
-func ensureSettingWirelessSecurityWepKeyExists(data _ConnectionData, errs map[string]string) {
+func ensureSettingWirelessSecurityWepKeyTypeExists(data _ConnectionData, errs map[string]string) {
+	if !isSettingWirelessSecurityWepKeyTypeExists(data) {
+		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE, NM_KEY_ERROR_MISSING_VALUE)
+	}
+}
+func ensureSettingWirelessSecurityWepKey0Exists(data _ConnectionData, errs map[string]string) {
+	if len(getSettingWirelessSecurityWepKey0(data)) == 0 {
+		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_WEP_KEY0, NM_KEY_ERROR_MISSING_VALUE)
+	}
+}
+func checkSettingWirelessSecurityWepKeyType(data _ConnectionData, errs map[string]string) {
+	if !isSettingWirelessSecurityWepKeyTypeExists(data) {
+		return
+	}
+	wepKeyType := getSettingWirelessSecurityWepKeyType(data)
+	if wepKeyType != 1 && wepKeyType != 2 {
+		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE, NM_KEY_ERROR_INVALID_VALUE)
+	}
+}
+func checkSettingWirelessSecurityWepKey0(data _ConnectionData, errs map[string]string) {
+	if !isSettingWirelessSecurityWepKey0Exists(data) {
+		return
+	}
+	wepKeyType := getSettingWirelessSecurityWepKeyType(data)
+	if wepKeyType == 1 {
+		// TODO
+	} else if wepKeyType == 2 {
+	}
+	// rememberError(errs, NM_SETTING_WIRELESS_SECURITY_WEP_KEY0, NM_KEY_ERROR_MISSING_VALUE)
 }
 
 // Set JSON value generally
