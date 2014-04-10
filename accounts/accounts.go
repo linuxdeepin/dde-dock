@@ -46,6 +46,7 @@ func (op *AccountManager) AuthWithPolkit(pid uint32) bool {
         return authWithPolkit(POLKIT_MANAGER_USER, pid)
 }
 
+/*
 func (op *AccountManager) CreateGuestAccount() string {
         args := []string{}
 
@@ -68,8 +69,9 @@ func (op *AccountManager) CreateGuestAccount() string {
 
         return op.FindUserByName(GUEST_ACCOUNT_NAME)
 }
+*/
 
-func (op *AccountManager) AllowGuestAccout(allow bool) {
+func (op *AccountManager) AllowGuestAccount(allow bool) {
         writeKeyFileValue(ACCOUNT_CONFIG_FILE, ACCOUNT_GROUP_KEY,
                 ACCOUNT_KEY_GUEST, KEY_TYPE_BOOL, allow)
         op.setPropName("AllowGuest")
