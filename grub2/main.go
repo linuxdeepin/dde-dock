@@ -22,6 +22,7 @@
 package main
 
 import (
+	apigrub2ext "dbus/com/deepin/api/grub2"
 	"dlib/dbus"
 	liblogger "dlib/logger"
 	"flag"
@@ -29,7 +30,7 @@ import (
 )
 
 var (
-	logger        = liblogger.NewLogger("dde-daemon/grub2")
+	logger        *liblogger.Logger
 	argDebug      bool
 	argSetup      bool
 	argSetupTheme bool
@@ -49,6 +50,7 @@ func main() {
 	flag.Parse()
 
 	// configure logger
+	logger = liblogger.NewLogger("dde-daemon/grub2")
 	logger.SetRestartCommand("/usr/lib/deepin-daemon/grub2", "--debug")
 	if argDebug {
 		logger.SetLogLevel(liblogger.LEVEL_DEBUG)
@@ -68,6 +70,7 @@ func main() {
 		os.Exit(0)
 	}
 
+	grub2ext, _ = apigrub2ext.NewGrub2Ext("com.deepin.api.Grub2", "/com/deepin/api/Grub2")
 	err := dbus.InstallOnSession(grub)
 	if err != nil {
 		logger.Errorf("register dbus interface failed: %v", err)
