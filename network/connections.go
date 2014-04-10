@@ -226,6 +226,14 @@ func (this *Manager) CreateConnection(connType string) (session *ConnectionSessi
 
 // OpenConnection open a connection through uuid, return ConnectionSession's dbus object path if success.
 func (this *Manager) EditConnection(uuid string) (session *ConnectionSession, err error) {
+	// if is read only connection(default system connection created by
+	// network manager), create a new connection
+	connData := this.getConnectionDataByUuid(uuid)
+	if getSettingConnectionReadOnly(connData) {
+		LOGGER.Debug("read only connection, create new")
+		return this.CreateConnection(getSettingConnectionType(connData))
+	}
+
 	session, err = NewConnectionSessionByOpen(uuid)
 	if err != nil {
 		LOGGER.Error(err)
@@ -239,6 +247,25 @@ func (this *Manager) EditConnection(uuid string) (session *ConnectionSession, er
 		return
 	}
 
+	return
+}
+
+func (this *Manager) getConnectionDataByUuid(uuid string) (data _ConnectionData) {
+	coreObjPath, err := _NMSettings.GetConnectionByUuid(uuid)
+	if err != nil {
+		LOGGER.Error(err)
+		return
+	}
+	nmConn, err := nm.NewSettingsConnection(NMDest, coreObjPath)
+	if err != nil {
+		LOGGER.Error(err)
+		return
+	}
+	data, err = nmConn.GetSettings()
+	if err != nil {
+		LOGGER.Error(err)
+		return
+	}
 	return
 }
 
