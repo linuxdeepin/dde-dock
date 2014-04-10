@@ -229,6 +229,9 @@ func (m *Manager) destroyNormalApp(nApp *NormalApp) {
 }
 
 func main() {
+	if !dlib.UniqueOnSession("com.deepin.daemon.DockAppsBuilder") {
+		LOGGER.Warning("Another com.deepin.daemon.DockAppsBuilder running")
+	}
 	var debug bool
 	flag.BoolVar(&debug, "d", false, "start debug")
 	flag.Parse()
@@ -244,6 +247,12 @@ func main() {
 	}
 	listenRootWindow()
 	initTrayManager()
+	dbus.DealWithUnhandledMessage()
 	go xevent.Main(XU)
-	dbus.Wait()
+	if err := dbus.Wait(); err != nil {
+		LOGGER.Error("dbus.Wait error:", err)
+		os.Exit(1)
+	} else {
+		os.Exit(0)
+	}
 }

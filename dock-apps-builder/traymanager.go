@@ -149,9 +149,8 @@ func initTrayManager() {
 		dmageInfo:  make(map[xproto.Window]damage.Damage),
 	}
 
-	if TRAYMANAGER.tryOwner() {
-		dbus.InstallOnSession(TRAYMANAGER)
-	}
+	dbus.InstallOnSession(TRAYMANAGER)
+	TRAYMANAGER.tryOwner()
 }
 
 func (m *TrayManager) tryOwner() bool {
