@@ -29,29 +29,32 @@ import (
 )
 
 type MediaKeyManager struct {
-        AudioMute      func(bool)
-        AudioUp        func(bool)
-        AudioDown      func(bool)
-        BrightnessUp   func(bool)
-        BrightnessDown func(bool)
-        CapsLockOn     func(bool)
-        CapsLockOff    func(bool)
-        NumLockOn      func(bool)
-        NumLockOff     func(bool)
-        SwitchMonitors func(bool)
-        TouchPadOn     func(bool)
-        TouchPadOff    func(bool)
-        PowerOff       func(bool)
-        PowerSleep     func(bool)
-        SwitchLayout   func(bool)
-        AudioPlay      func(bool)
-        AudioPause     func(bool)
-        AudioStop      func(bool)
-        AudioPrevious  func(bool)
-        AudioNext      func(bool)
-        AudioRewind    func(bool)
-        AudioForward   func(bool)
-        AudioRepeat    func(bool)
+        AudioMute        func(bool)
+        AudioUp          func(bool)
+        AudioDown        func(bool)
+        BrightnessUp     func(bool)
+        BrightnessDown   func(bool)
+        CapsLockOn       func(bool)
+        CapsLockOff      func(bool)
+        NumLockOn        func(bool)
+        NumLockOff       func(bool)
+        SwitchMonitors   func(bool)
+        TouchPadOn       func(bool)
+        TouchPadOff      func(bool)
+        PowerOff         func(bool)
+        PowerSleep       func(bool)
+        SwitchLayout     func(bool)
+        AudioPlay        func(bool)
+        AudioPause       func(bool)
+        AudioStop        func(bool)
+        AudioPrevious    func(bool)
+        AudioNext        func(bool)
+        AudioRewind      func(bool)
+        AudioForward     func(bool)
+        AudioRepeat      func(bool)
+        LaunchEmail      func(bool)
+        LaunchBrowser    func(bool)
+        LaunchCalculator func(bool)
 }
 
 const (
@@ -171,6 +174,12 @@ func (op *MediaKeyManager) emitSignal(modStr, keyStr string, press bool) bool {
                 op.AudioForward(press)
         case "XF86AudioRepeat":
                 op.AudioRepeat(press)
+        case "XF86WWW":
+                op.LaunchBrowser(press)
+        case "XF86Mail":
+                op.LaunchEmail(press)
+        case "XF86Calculator":
+                op.LaunchCalculator(press)
         default:
                 return false
         }
