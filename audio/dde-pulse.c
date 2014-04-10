@@ -307,7 +307,7 @@ int pa_subscribe(pa *self)
         pthread_mutex_lock(&self->pa_mutex);
         if (self->pa_ready == 0)
         {
-            ret = pa_mainloop_iterate(self->pa_ml, 1, NULL);
+            ret = pa_mainloop_iterate(self->pa_ml, 0, NULL);
             if (ret < 0)
             {
                 if (ret == -2)
@@ -356,7 +356,7 @@ int pa_subscribe(pa *self)
             break;
         case 1:
             pthread_mutex_unlock(&self->pa_mutex);
-            usleep(2000);
+            usleep(3000);
             pthread_mutex_lock(&self->pa_mutex);
             break;
         case 2:
@@ -2473,8 +2473,9 @@ int pa_dec_source_output_volume(pa *self, int index, int volume)
                 }
                 else
                 {
-                    pa_context_set_source_output_volume(self->pa_ctx, index, &cvolume,
-                                                        pa_context_success_cb, self);
+                    pa_context_set_source_output_volume(
+                            self->pa_ctx, index, &cvolume,
+                            pa_context_success_cb, self);
                     state++;
                     break;
                 }
