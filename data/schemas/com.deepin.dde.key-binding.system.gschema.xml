@@ -2,7 +2,7 @@
 <schemalist>
 	<schema id="com.deepin.dde.key-binding.system" path="/com/deepin/dde/key-binding/system/">
 	<key type="as" name="launcher">
-		<default>['Super','/usr/bin/launcher']</default>
+		<default>['Super','/usr/bin/dde-launcher']</default>
 		<summary>shortcut</summary>
 		<description>system shortcut</description>
 	</key>
@@ -12,7 +12,7 @@
 		<description>system shortcut</description>
 	</key>
 	<key type="as" name="lock-screen">
-		<default>['&lt;Super&gt;L','/usr/bin/dlock']</default>
+		<default>['&lt;Super&gt;L','/usr/bin/dde-lock']</default>
 		<summary>shortcut</summary>
 		<description>system shortcut</description>
 	</key>
@@ -22,7 +22,7 @@
 		<description>system shortcut</description>
 	</key>
 	<key type="as" name="logout">
-		<default>['&lt;Control&gt;&lt;Alt&gt;Delete','/usr/lib/deepin-daemon/dshutdown']</default>
+		<default>['&lt;Control&gt;&lt;Alt&gt;Delete','/usr/bin/dde-dshutdown']</default>
 		<summary>shortcut</summary>
 		<description>system shortcut</description>
 	</key>
