@@ -620,16 +620,13 @@ func updateSinkInput(_index C.int,
         //dbus.InstallOnSession(audio.sources[index])
         //break
     case C.PA_SUBSCRIPTION_EVENT_CHANGE:
-        //for i, _ := range audio.sources {
-        //if audio.sources[i].Index == int32(audio.pa.sources[0].index) {
-        //audio.sources[i] = getSourceFromC(audio.pa.sources[0])
-        //dbus.InstallOnSession(audio.sources[i])
-        //break
-        //}
-        //}
-        audio.sinkInputs[index] =
-            getSinkInputFromC(audio.pa.sink_inputs[0])
-        dbus.InstallOnSession(audio.sinkInputs[index])
+        for i, _ := range audio.sinkInputs {
+            if audio.sinkInputs[i].Index == int32(audio.pa.sink_inputs[0].index) {
+                audio.sinkInputs[i] = getSinkInputFromC(audio.pa.sink_inputs[0])
+                dbus.InstallOnSession(audio.sinkInputs[i])
+                break
+            }
+        }
         break
     case C.PA_SUBSCRIPTION_EVENT_REMOVE:
         if audio.sinkInputs[index] != nil {
@@ -647,6 +644,7 @@ func updateSourceOutput(_index C.int,
     switch event {
     case C.PA_SUBSCRIPTION_EVENT_NEW:
 
+        break
     case C.PA_SUBSCRIPTION_EVENT_CHANGE:
         if audio.sourceOutputs[index] != nil {
             newso := getSourceOutputFromC(audio.pa.source_outputs[0])

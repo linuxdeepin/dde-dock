@@ -1963,10 +1963,10 @@ void monitor_read_cb(pa_stream *s, size_t length, void *userdata)
     double v;
     int index = pa_stream_get_index(s);
 
-    printf("read callback length: %ld\n", length);
-    printf("\tget_device_index: %d\n", pa_stream_get_device_index(s));
-    printf("\tget_device_name: %s\n", pa_stream_get_device_name(s));
-    printf("\tget_monitor_stream: %d\n", pa_stream_get_monitor_stream(s));
+    /*printf("read callback length: %ld\n", length);*/
+    /*printf("\tget_device_index: %d\n", pa_stream_get_device_index(s));*/
+    /*printf("\tget_device_name: %s\n", pa_stream_get_device_name(s));*/
+    /*printf("\tget_monitor_stream: %d\n", pa_stream_get_monitor_stream(s));*/
     if (pa_stream_peek(s, &data, &length) < 0)
     {
         printf("Failed to read data from stream\n");
@@ -1982,7 +1982,7 @@ void monitor_read_cb(pa_stream *s, size_t length, void *userdata)
 
     /*if (v < 0) v = 0;*/
     /*if (v > 1) v = 1;*/
-    printf("\tread callback peek: %f\n", v);
+    /*printf("\tread callback peek: %f\n", v);*/
 
     //update go dbus property
     updateSourceOutputInputLevel(index, v);
@@ -3108,10 +3108,10 @@ void pa_sink_input_update_info_cb(pa_context * c,
     if (i)
     {
         pa_sink_input_info_cb(c, i, eol, userdata);
-        /*updateSinkInput(i->index,*/
-        /*self->subscription_events.data.events[*/
-        /*self->subscription_events.front]&*/
-        /*PA_SUBSCRIPTION_EVENT_TYPE_MASK);*/
+        pa_subscription_event_type_t t =
+        event_queue_pop( &self->subscription_events).event;
+        updateSinkInput(i->index,
+        t & PA_SUBSCRIPTION_EVENT_TYPE_MASK);
     }
     else
     {
@@ -3183,17 +3183,18 @@ void pa_source_output_update_info_cb(pa_context * c,
                                      int eol,
                                      void * userdata)
 {
+    pa *self= userdata;
     if (o)
     {
         pa_source_output_info_cb(c, o, eol, userdata);
-        /*updateSourceOutput(o->index,*/
-        /*self->subscription_events.events[0] &*/
-        /*PA_SUBSCRIPTION_EVENT_TYPE_MASK);*/
+         pa_subscription_event_type_t t =
+        event_queue_pop( &self->subscription_events).event;
+           updateSourceOutput(o->index,
+        t & PA_SUBSCRIPTION_EVENT_TYPE_MASK);
     }
     else
     {
     }
-    /*pthread_mutex_unlock(&self->event_mutex);*/
 }
 
 void pa_get_source_output_volume_cb(pa_context * c,
