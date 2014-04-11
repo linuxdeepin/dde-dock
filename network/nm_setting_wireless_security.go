@@ -131,6 +131,8 @@ const (
 func getSettingWirelessSecurityAvailableKeys(data _ConnectionData) (keys []string) {
 	vkKeyMgmt := getSettingVkWirelessSecurityKeyMgmt(data)
 	switch vkKeyMgmt {
+	default:
+		LOGGER.Error("invalid value", vkKeyMgmt)
 	case "none":
 		keys = getRelatedAvailableVirtualKeys(fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT)
 	case "wep":
@@ -138,7 +140,7 @@ func getSettingWirelessSecurityAvailableKeys(data _ConnectionData) (keys []strin
 			NM_SETTING_WIRELESS_SECURITY_WEP_KEY0,
 		}
 		keys = appendStringArray(keys, getRelatedAvailableVirtualKeys(fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT))
-	case "wpa":
+	case "wpa-psk":
 		keys = []string{
 			NM_SETTING_WIRELESS_SECURITY_PSK,
 		}

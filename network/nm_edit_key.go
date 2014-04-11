@@ -373,7 +373,7 @@ func addSettingField(data _ConnectionData, field string) {
 
 func removeSettingField(data _ConnectionData, field string) {
 	_, ok := data[field]
-	if !ok {
+	if ok {
 		// remove field if exists
 		delete(data, field)
 	}

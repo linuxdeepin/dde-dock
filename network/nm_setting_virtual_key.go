@@ -651,7 +651,7 @@ func logicSetSettingVkWirelessSecurityKeyMgmtJSON(data _ConnectionData, valueJSO
 func logicSetSettingVkWirelessSecurityKeyMgmt(data _ConnectionData, value string) {
 	switch value {
 	default:
-		LOGGER.Error("invalid value for virtual key vk-key-mgmt:", value)
+		LOGGER.Error("invalid value", value)
 	case "none":
 		removeSettingField(data, fieldWirelessSecurity)
 		removeSettingField(data, field8021x)
