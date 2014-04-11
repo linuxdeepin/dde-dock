@@ -29,15 +29,24 @@ import (
 	"text/template"
 )
 
-const (
+var (
 	themePath          = "/boot/grub/themes/deepin"
-	themeMainFile      = themePath + "/theme.txt"
-	themeTplFile       = themePath + "/theme.tpl"
-	themeJSONFile      = themePath + "/theme_tpl.json"
-	themeBgOrigSrcFile = themePath + "/background_origin_source"
-	themeBgSrcFile     = themePath + "/background_source"
-	themeBgFile        = themePath + "/background.png"
+	themeMainFile      string
+	themeTplFile       string
+	themeJSONFile      string
+	themeBgOrigSrcFile string
+	themeBgSrcFile     string
+	themeBgFile        string
 )
+
+func setupThemePath() {
+	themeMainFile = themePath + "/theme.txt"
+	themeTplFile = themePath + "/theme.tpl"
+	themeJSONFile = themePath + "/theme_tpl.json"
+	themeBgOrigSrcFile = themePath + "/background_origin_source"
+	themeBgSrcFile = themePath + "/background_source"
+	themeBgFile = themePath + "/background.png"
+}
 
 // ThemeScheme stores scheme data which be used when customing deepin grub2 theme.
 type ThemeScheme struct {

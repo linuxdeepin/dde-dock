@@ -34,9 +34,10 @@ import (
 	"unicode"
 )
 
+var grubConfigFile = "/etc/default/grub"
+
 const (
 	grubMenuFile       = "/boot/grub/grub.cfg"
-	grubConfigFile     = "/etc/default/grub"
 	grubUpdateExe      = "/usr/sbin/update-grub"
 	grubTimeoutDisable = -2
 	grubCacheFile      = "/var/cache/dde-daemon/grub2.json"
@@ -201,7 +202,6 @@ func (grub *Grub2) readSettings() (err error) {
 	fileContent, err := ioutil.ReadFile(grubConfigFile)
 	if err != nil {
 		logger.Error(err.Error())
-		return err
 	}
 	err = grub.parseSettings(string(fileContent))
 

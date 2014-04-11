@@ -34,6 +34,9 @@ var (
 	argDebug      bool
 	argSetup      bool
 	argSetupTheme bool
+	argConfig     string
+	argThemeDir   string
+	argGfxmode    string
 )
 
 func main() {
@@ -47,6 +50,9 @@ func main() {
 	flag.BoolVar(&argDebug, "debug", false, "debug mode")
 	flag.BoolVar(&argSetup, "setup", false, "setup grub and exit")
 	flag.BoolVar(&argSetupTheme, "setup-theme", false, "setup grub theme only and exit")
+	flag.StringVar(&argConfig, "config", "", "specify an alternative configuration file when setup grub")
+	flag.StringVar(&argThemeDir, "theme-dir", "", "specify an alternative theme directory when setup grub")
+	flag.StringVar(&argGfxmode, "gfxmode", "", "specify gfxmode when setup grub")
 	flag.Parse()
 
 	// configure logger
@@ -56,11 +62,25 @@ func main() {
 		logger.SetLogLevel(liblogger.LEVEL_DEBUG)
 	}
 
+	// dispatch optional arguments
+	if len(argConfig) != 0 {
+		logger.Info("config:", argConfig)
+		grubConfigFile = argConfig
+	}
+	if len(argThemeDir) != 0 {
+		logger.Info("theme dir:", argThemeDir)
+		themePath = argThemeDir
+	}
+	if len(argGfxmode) != 0 {
+		logger.Info("gfxmode:", argGfxmode)
+	}
+
+	setupThemePath()
 	grub := NewGrub2()
 
 	// setup grub and exit
 	if argSetup {
-		grub.setup()
+		grub.setup(argGfxmode)
 		os.Exit(0)
 	}
 

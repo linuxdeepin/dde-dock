@@ -26,6 +26,8 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
+	"strconv"
+	"strings"
 )
 
 // Setup is a copy of dde-api/grub2ext, for to remove the dependency
@@ -33,21 +35,56 @@ import (
 type Setup struct{}
 
 // setup grub2 environment, regenerate configure and theme if need, don't depends on dbus
-func (grub *Grub2) setup() {
+func (grub *Grub2) setup(gfxmode string) {
 	setup := &Setup{}
 
 	grub.readSettings()
 	grub.fixSettings()
 
-	grub.resetGfxmode()
+	if len(gfxmode) == 0 {
+		grub.resetGfxmode()
+	} else {
+		grub.setSettingGfxmode(gfxmode)
+	}
 
-	// grub.writeSettings()
 	settingFileContent := grub.getSettingContentToSave()
 	setup.DoWriteSettings(settingFileContent)
 
 	// generate theme background
-	screenWidth, screenHeight := getPrimaryScreenBestResolution()
+	var screenWidth, screenHeight uint16
+	if len(gfxmode) == 0 {
+		screenWidth, screenHeight = getPrimaryScreenBestResolution()
+	} else {
+		screenWidth, screenHeight = parseGfxmode(gfxmode)
+	}
 	setup.DoGenerateThemeBackground(screenWidth, screenHeight)
+}
+
+func parseGfxmode(gfxmode string) (w, h uint16) {
+	w, h = getPrimaryScreenBestResolution() // default value
+	a := strings.Split(gfxmode, "x")
+	if len(a) != 2 {
+		logger.Error("gfxmode format error", gfxmode)
+		return
+	}
+
+	// parse width
+	tmpw, err := strconv.ParseUint(a[0], 10, 16)
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+
+	// parse height
+	tmph, err := strconv.ParseUint(a[1], 10, 16)
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+
+	w = uint16(tmpw)
+	h = uint16(tmph)
+	return
 }
 
 func (grub *Grub2) setupTheme() {
