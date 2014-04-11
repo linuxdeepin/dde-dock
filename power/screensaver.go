@@ -2,6 +2,7 @@ package main
 
 import (
 	"dlib/dbus"
+	"github.com/BurntSushi/xgb/dpms"
 	"github.com/BurntSushi/xgb/screensaver"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
@@ -64,6 +65,7 @@ func (ss *ScreenSaver) SetTimeout(seconds, interval uint32, blank bool) {
 		ss.blank = 0
 	}
 	xproto.SetScreenSaver(ss.xu.Conn(), int16(seconds), int16(interval), ss.blank, 0)
+	dpms.SetTimeouts(ss.xu.Conn(), 0, 0, 0)
 }
 
 func (*ScreenSaver) GetDBusInfo() dbus.DBusInfo {
@@ -80,6 +82,7 @@ func NewScreenSaver() *ScreenSaver {
 	screensaver.Init(s.xu.Conn())
 	screensaver.QueryVersion(s.xu.Conn(), 1, 0)
 	screensaver.SelectInput(s.xu.Conn(), xproto.Drawable(s.xu.RootWin()), screensaver.EventNotifyMask|screensaver.EventCycleMask)
+	dpms.Init(s.xu.Conn())
 
 	go s.loop()
 	return s
