@@ -44,6 +44,47 @@ func getSettingWirelessSecurityKeyType(key string) (t ktype) {
 	return
 }
 
+// Check is key in current setting field
+func isKeyInSettingWirelessSecurity(key string) bool {
+	switch key {
+	case NM_SETTING_WIRELESS_SECURITY_KEY_MGMT:
+		return true
+	case NM_SETTING_WIRELESS_SECURITY_WEP_TX_KEYIDX:
+		return true
+	case NM_SETTING_WIRELESS_SECURITY_AUTH_ALG:
+		return true
+	case NM_SETTING_WIRELESS_SECURITY_PROTO:
+		return true
+	case NM_SETTING_WIRELESS_SECURITY_PAIRWISE:
+		return true
+	case NM_SETTING_WIRELESS_SECURITY_GROUP:
+		return true
+	case NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME:
+		return true
+	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY0:
+		return true
+	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY1:
+		return true
+	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY2:
+		return true
+	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY3:
+		return true
+	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY_FLAGS:
+		return true
+	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE:
+		return true
+	case NM_SETTING_WIRELESS_SECURITY_PSK:
+		return true
+	case NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS:
+		return true
+	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD:
+		return true
+	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS:
+		return true
+	}
+	return false
+}
+
 // Get key's default value
 func getSettingWirelessSecurityKeyDefaultValueJSON(key string) (valueJSON string) {
 	switch key {

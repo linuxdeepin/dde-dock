@@ -28,9 +28,15 @@ func (session *ConnectionSession) updatePropAvailableKeys() {
 
 func (session *ConnectionSession) updatePropErrors() {
 	for _, page := range session.ListPages() {
-		field := session.pageToField(page)
-		if isSettingFieldExists(session.data, field) { // TODO
-			session.Errors[page] = generalCheckSettingValues(session.data, field)
+		session.Errors[page] = make(map[string]string)
+		fields := session.pageToFields(page)
+		for _, field := range fields {
+			if isSettingFieldExists(session.data, field) { // TODO
+				errs := generalCheckSettingValues(session.data, field)
+				for k, v := range errs {
+					session.Errors[page][k] = v
+				}
+			}
 		}
 	}
 	dbus.NotifyChange(session, "Errors")

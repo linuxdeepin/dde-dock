@@ -32,6 +32,35 @@ func getSettingIp6ConfigKeyType(key string) (t ktype) {
 	return
 }
 
+// Check is key in current setting field
+func isKeyInSettingIp6Config(key string) bool {
+	switch key {
+	case NM_SETTING_IP6_CONFIG_METHOD:
+		return true
+	case NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME:
+		return true
+	case NM_SETTING_IP6_CONFIG_DNS:
+		return true
+	case NM_SETTING_IP6_CONFIG_DNS_SEARCH:
+		return true
+	case NM_SETTING_IP6_CONFIG_ADDRESSES:
+		return true
+	case NM_SETTING_IP6_CONFIG_ROUTES:
+		return true
+	case NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES:
+		return true
+	case NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS:
+		return true
+	case NM_SETTING_IP6_CONFIG_NEVER_DEFAULT:
+		return true
+	case NM_SETTING_IP6_CONFIG_MAY_FAIL:
+		return true
+	case NM_SETTING_IP6_CONFIG_IP6_PRIVACY:
+		return true
+	}
+	return false
+}
+
 // Get key's default value
 func getSettingIp6ConfigKeyDefaultValueJSON(key string) (valueJSON string) {
 	switch key {

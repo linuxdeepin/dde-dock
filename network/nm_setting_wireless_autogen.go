@@ -38,6 +38,41 @@ func getSettingWirelessKeyType(key string) (t ktype) {
 	return
 }
 
+// Check is key in current setting field
+func isKeyInSettingWireless(key string) bool {
+	switch key {
+	case NM_SETTING_WIRELESS_SSID:
+		return true
+	case NM_SETTING_WIRELESS_MODE:
+		return true
+	case NM_SETTING_WIRELESS_BAND:
+		return true
+	case NM_SETTING_WIRELESS_CHANNEL:
+		return true
+	case NM_SETTING_WIRELESS_BSSID:
+		return true
+	case NM_SETTING_WIRELESS_RATE:
+		return true
+	case NM_SETTING_WIRELESS_TX_POWER:
+		return true
+	case NM_SETTING_WIRELESS_MAC_ADDRESS:
+		return true
+	case NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS:
+		return true
+	case NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST:
+		return true
+	case NM_SETTING_WIRELESS_MTU:
+		return true
+	case NM_SETTING_WIRELESS_SEEN_BSSIDS:
+		return true
+	case NM_SETTING_WIRELESS_SEC:
+		return true
+	case NM_SETTING_WIRELESS_HIDDEN:
+		return true
+	}
+	return false
+}
+
 // Get key's default value
 func getSettingWirelessKeyDefaultValueJSON(key string) (valueJSON string) {
 	switch key {

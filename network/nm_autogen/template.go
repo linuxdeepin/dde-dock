@@ -14,6 +14,18 @@ func get{{.FieldName | ToFieldFuncBaseName}}KeyType(key string) (t ktype) {
 }
 `
 
+// check is key in current field
+const tplIsKeyInSettingField = `
+// Check is key in current setting field
+func isKeyIn{{.FieldName | ToFieldFuncBaseName}}(key string) bool {
+	switch key { {{range .Keys}}
+	case {{.Name}}:
+		return true{{end}}
+	}
+	return false
+}
+`
+
 // get key's default json value
 const tplGetDefaultValueJSON = `{{$fieldFuncBaseName := .FieldName | ToFieldFuncBaseName}}
 // Get key's default value

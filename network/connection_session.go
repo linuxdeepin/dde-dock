@@ -156,63 +156,81 @@ func (session *ConnectionSession) ListPages() (pages []string) {
 	return
 }
 
-func (session *ConnectionSession) pageToField(page string) (field string) {
+func (session *ConnectionSession) pageToFields(page string) (fields []string) {
 	switch page {
 	default:
-		LOGGER.Error("pageToField: invalid page name", page)
+		LOGGER.Error("pageToFields: invalid page name", page)
 	case pageGeneral:
-		field = fieldConnection
+		fields = []string{fieldConnection}
 	case pageEthernet:
-		field = fieldWired
+		fields = []string{fieldWired}
 	case pageWifi:
-		field = fieldWireless
+		fields = []string{fieldWireless}
 	case pageIPv4:
-		field = fieldIPv4
+		fields = []string{fieldIPv4}
 	case pageIPv6:
-		field = fieldIPv6
+		fields = []string{fieldIPv6}
 	case pageSecurity:
 		switch session.connectionType {
 		case typeWired:
-			field = field8021x
-		case typeWireless: // TODO
+			fields = []string{field8021x}
+		case typeWireless:
 			if isSettingFieldExists(session.data, field8021x) {
-				field = field8021x
+				fields = []string{fieldWirelessSecurity, field8021x}
 			} else {
-				field = fieldWirelessSecurity
+				fields = []string{fieldWirelessSecurity}
 			}
 		}
 	}
 	return
 }
 
+func (session *ConnectionSession) getFieldOfPageKey(page, key string) string {
+	fields := session.pageToFields(page)
+	for _, field := range fields {
+		if generalIsKeyInSettingField(field, key) {
+			return field
+		}
+	}
+	LOGGER.Errorf("get corresponding filed of key in page failed, page=%s, key=%s", page, key)
+	return ""
+}
+
 // get valid keys of target page, show or hide some keys when special
 // keys toggled
 func (session *ConnectionSession) listKeys(page string) (keys []string) {
-	field := session.pageToField(page)
-	if isSettingFieldExists(session.data, field) { // TODO
-		keys = generalGetSettingAvailableKeys(session.data, field)
-		if len(keys) == 0 {
-			LOGGER.Warning("there is no avaiable keys for page", page)
+	fields := session.pageToFields(page)
+	for _, field := range fields {
+		if isSettingFieldExists(session.data, field) {
+			keys = appendStringArray(keys, generalGetSettingAvailableKeys(session.data, field))
 		}
+	}
+	if len(keys) == 0 {
+		LOGGER.Warning("there is no avaiable keys for page", page)
 	}
 	return
 }
 
 // GetAvailableValues get available values for target key.
 func (session *ConnectionSession) GetAvailableValues(page, key string) (values []string) {
-	field := session.pageToField(page)
-	values, _ = generalGetSettingAvailableValues(field, key)
+	fields := session.pageToFields(page)
+	for _, field := range fields {
+		values, _ = generalGetSettingAvailableValues(field, key)
+		if len(values) > 0 {
+			break
+		}
+	}
 	return
 }
 
 func (session *ConnectionSession) GetKey(page, key string) (value string) {
-	field := session.pageToField(page)
+	field := session.getFieldOfPageKey(page, key)
 	value = generalGetSettingKeyJSON(session.data, field, key)
 	return
 }
 
 func (session *ConnectionSession) SetKey(page, key, value string) {
-	field := session.pageToField(page)
+	field := session.getFieldOfPageKey(page, key)
 	generalSetSettingKeyJSON(session.data, field, key, value)
 	session.updatePropErrors()
 	session.updatePropAvailableKeys()
@@ -233,13 +251,13 @@ func (session *ConnectionSession) SetKey(page, key, value string) {
 
 func (session *ConnectionSession) DebugListKeyDetail() (info string) {
 	for _, page := range session.ListPages() {
-		field := session.pageToField(page)
-		fieldData, ok := session.AvailableKeys[page]
+		pageData, ok := session.AvailableKeys[page]
 		if !ok {
-			LOGGER.Warning("no available keys for field", field)
+			LOGGER.Warning("no available keys for page", page)
 			continue
 		}
-		for _, key := range fieldData {
+		for _, key := range pageData {
+			field := session.getFieldOfPageKey(page, key)
 			t := generalGetSettingKeyType(field, key)
 			values, _ := generalGetSettingAvailableValues(field, key)
 			info += fmt.Sprintf("%s->%s[%s]: %s (%s)\n", page, key, getKtypeDescription(t), session.GetKey(page, key), values)

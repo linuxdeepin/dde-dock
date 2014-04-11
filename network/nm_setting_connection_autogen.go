@@ -32,6 +32,35 @@ func getSettingConnectionKeyType(key string) (t ktype) {
 	return
 }
 
+// Check is key in current setting field
+func isKeyInSettingConnection(key string) bool {
+	switch key {
+	case NM_SETTING_CONNECTION_ID:
+		return true
+	case NM_SETTING_CONNECTION_UUID:
+		return true
+	case NM_SETTING_CONNECTION_TYPE:
+		return true
+	case NM_SETTING_CONNECTION_PERMISSIONS:
+		return true
+	case NM_SETTING_CONNECTION_AUTOCONNECT:
+		return true
+	case NM_SETTING_CONNECTION_TIMESTAMP:
+		return true
+	case NM_SETTING_CONNECTION_READ_ONLY:
+		return true
+	case NM_SETTING_CONNECTION_ZONE:
+		return true
+	case NM_SETTING_CONNECTION_MASTER:
+		return true
+	case NM_SETTING_CONNECTION_SLAVE_TYPE:
+		return true
+	case NM_SETTING_CONNECTION_SECONDARIES:
+		return true
+	}
+	return false
+}
+
 // Get key's default value
 func getSettingConnectionKeyDefaultValueJSON(key string) (valueJSON string) {
 	switch key {

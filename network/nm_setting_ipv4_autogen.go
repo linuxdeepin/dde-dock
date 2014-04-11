@@ -34,6 +34,37 @@ func getSettingIp4ConfigKeyType(key string) (t ktype) {
 	return
 }
 
+// Check is key in current setting field
+func isKeyInSettingIp4Config(key string) bool {
+	switch key {
+	case NM_SETTING_IP4_CONFIG_METHOD:
+		return true
+	case NM_SETTING_IP4_CONFIG_DNS:
+		return true
+	case NM_SETTING_IP4_CONFIG_DNS_SEARCH:
+		return true
+	case NM_SETTING_IP4_CONFIG_ADDRESSES:
+		return true
+	case NM_SETTING_IP4_CONFIG_ROUTES:
+		return true
+	case NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES:
+		return true
+	case NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS:
+		return true
+	case NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID:
+		return true
+	case NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME:
+		return true
+	case NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME:
+		return true
+	case NM_SETTING_IP4_CONFIG_NEVER_DEFAULT:
+		return true
+	case NM_SETTING_IP4_CONFIG_MAY_FAIL:
+		return true
+	}
+	return false
+}
+
 // Get key's default value
 func getSettingIp4ConfigKeyDefaultValueJSON(key string) (valueJSON string) {
 	switch key {

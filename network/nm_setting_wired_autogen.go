@@ -32,6 +32,35 @@ func getSettingWiredKeyType(key string) (t ktype) {
 	return
 }
 
+// Check is key in current setting field
+func isKeyInSettingWired(key string) bool {
+	switch key {
+	case NM_SETTING_WIRED_PORT:
+		return true
+	case NM_SETTING_WIRED_SPEED:
+		return true
+	case NM_SETTING_WIRED_DUPLEX:
+		return true
+	case NM_SETTING_WIRED_AUTO_NEGOTIATE:
+		return true
+	case NM_SETTING_WIRED_MAC_ADDRESS:
+		return true
+	case NM_SETTING_WIRED_CLONED_MAC_ADDRESS:
+		return true
+	case NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST:
+		return true
+	case NM_SETTING_WIRED_MTU:
+		return true
+	case NM_SETTING_WIRED_S390_SUBCHANNELS:
+		return true
+	case NM_SETTING_WIRED_S390_NETTYPE:
+		return true
+	case NM_SETTING_WIRED_S390_OPTIONS:
+		return true
+	}
+	return false
+}
+
 // Get key's default value
 func getSettingWiredKeyDefaultValueJSON(key string) (valueJSON string) {
 	switch key {

@@ -46,6 +46,7 @@ func generateNMSettingCode(nmSetting NMSettingStruct) (content string) {
 	content += "package main\n"
 
 	content += generateTemplate(nmSetting, tplGetKeyType)          // get key type
+	content += generateTemplate(nmSetting, tplIsKeyInSettingField) // check is key in current field
 	content += generateTemplate(nmSetting, tplGetDefaultValueJSON) // get default json value
 	content += generateTemplate(nmSetting, tplGeneralGetterJSON)   // general json getter
 	content += generateTemplate(nmSetting, tplCheckExists)         // check if key exists

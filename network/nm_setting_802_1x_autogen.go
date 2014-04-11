@@ -74,6 +74,77 @@ func getSetting8021xKeyType(key string) (t ktype) {
 	return
 }
 
+// Check is key in current setting field
+func isKeyInSetting8021x(key string) bool {
+	switch key {
+	case NM_SETTING_802_1X_EAP:
+		return true
+	case NM_SETTING_802_1X_IDENTITY:
+		return true
+	case NM_SETTING_802_1X_ANONYMOUS_IDENTITY:
+		return true
+	case NM_SETTING_802_1X_PAC_FILE:
+		return true
+	case NM_SETTING_802_1X_CA_CERT:
+		return true
+	case NM_SETTING_802_1X_CA_PATH:
+		return true
+	case NM_SETTING_802_1X_SUBJECT_MATCH:
+		return true
+	case NM_SETTING_802_1X_ALTSUBJECT_MATCHES:
+		return true
+	case NM_SETTING_802_1X_CLIENT_CERT:
+		return true
+	case NM_SETTING_802_1X_PHASE1_PEAPVER:
+		return true
+	case NM_SETTING_802_1X_PHASE1_PEAPLABEL:
+		return true
+	case NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING:
+		return true
+	case NM_SETTING_802_1X_PHASE2_AUTH:
+		return true
+	case NM_SETTING_802_1X_PHASE2_AUTHEAP:
+		return true
+	case NM_SETTING_802_1X_PHASE2_CA_CERT:
+		return true
+	case NM_SETTING_802_1X_PHASE2_CA_PATH:
+		return true
+	case NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH:
+		return true
+	case NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES:
+		return true
+	case NM_SETTING_802_1X_PHASE2_CLIENT_CERT:
+		return true
+	case NM_SETTING_802_1X_PASSWORD:
+		return true
+	case NM_SETTING_802_1X_PASSWORD_FLAGS:
+		return true
+	case NM_SETTING_802_1X_PASSWORD_RAW:
+		return true
+	case NM_SETTING_802_1X_PASSWORD_RAW_FLAGS:
+		return true
+	case NM_SETTING_802_1X_PRIVATE_KEY:
+		return true
+	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD:
+		return true
+	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS:
+		return true
+	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY:
+		return true
+	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD:
+		return true
+	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS:
+		return true
+	case NM_SETTING_802_1X_PIN:
+		return true
+	case NM_SETTING_802_1X_PIN_FLAGS:
+		return true
+	case NM_SETTING_802_1X_SYSTEM_CA_CERTS:
+		return true
+	}
+	return false
+}
+
 // Get key's default value
 func getSetting8021xKeyDefaultValueJSON(key string) (valueJSON string) {
 	switch key {

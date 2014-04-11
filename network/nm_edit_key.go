@@ -13,6 +13,31 @@ func pageGeneralGetId(con map[string]map[string]dbus.Variant) string {
 	return con[fieldConnection]["id"].Value().(string)
 }
 
+func generalIsKeyInSettingField(field, key string) bool {
+	if isVirtualKey(field, key) {
+		return true
+	}
+	switch field {
+	default:
+		LOGGER.Warning("invalid field name", field)
+	case field8021x:
+		return isKeyInSetting8021x(key)
+	case fieldConnection:
+		return isKeyInSettingConnection(key)
+	case fieldIPv4:
+		return isKeyInSettingIp4Config(key)
+	case fieldIPv6:
+		return isKeyInSettingIp6Config(key)
+	case fieldWired:
+		return isKeyInSettingWired(key)
+	case fieldWireless:
+		return isKeyInSettingWireless(key)
+	case fieldWirelessSecurity:
+		return isKeyInSettingWirelessSecurity(key)
+	}
+	return false
+}
+
 func generalGetSettingKeyType(field, key string) (t ktype) {
 	if isVirtualKey(field, key) {
 		t = getSettingVkKeyType(field, key)
