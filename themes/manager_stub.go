@@ -40,7 +40,8 @@ const (
 )
 
 var (
-        personSettings = gio.NewSettings(PERSONALIZATION_ID)
+        personSettings  = gio.NewSettings(PERSONALIZATION_ID)
+        gnomeBgSettings = gio.NewSettings("org.gnome.desktop.background")
 )
 
 func (op *Manager) GetDBusInfo() dbus.DBusInfo {
@@ -211,6 +212,17 @@ func (op *Manager) listenSettingsChanged() {
                                         obj.BackgroundFile, value); name != op.CurrentTheme {
                                         op.updateGSettingsKey(GKEY_CURRENT_THEME, name)
                                 }
+                        }
+                }
+        })
+
+        gnomeBgSettings.Connect("changed", func(s *gio.Settings, key string) {
+                switch key {
+                case "picture-uri":
+                        v := gnomeBgSettings.GetString(key)
+                        tmp := personSettings.GetString(GKEY_CURRENT_BACKGROUND)
+                        if v != tmp {
+                                personSettings.SetString(GKEY_CURRENT_BACKGROUND, v)
                         }
                 }
         })
