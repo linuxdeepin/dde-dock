@@ -240,10 +240,13 @@ func isSkipTaskbar(xid xproto.Window) bool {
 
 func canBeMinimized(xid xproto.Window) bool {
 	actions, err := ewmh.WmAllowedActionsGet(XU, xid)
-	if err != nil && contains(actions, "_NET_WM_ACTION_MINIMIZE") {
-		return true
+	// LOGGER.Infof("%x: %v", xid, actions)
+	if err != nil {
+		return false
 	}
-	return false
+	canBeMin := contains(actions, "_NET_WM_ACTION_MINIMIZE")
+	// LOGGER.Infof("%x can be minimized: %v", xid, canBeMin)
+	return canBeMin
 }
 
 var cannotBeDockedType []string = []string{
