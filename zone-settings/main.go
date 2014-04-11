@@ -133,6 +133,10 @@ func main() {
         }
         dbus.DealWithUnhandledMessage()
 
+        logObj.Info("TopLeftAction: ", m.TopLeftAction())
+        logObj.Info("BottomLeftAction: ", m.BottomLeftAction())
+        logObj.Info("TopRightAction: ", m.TopRightAction())
+        logObj.Info("BottomRightAction: ", m.BottomRightAction())
         m.SetTopLeft(m.TopLeftAction())
         m.SetBottomLeft(m.BottomLeftAction())
         m.SetTopRight(m.TopRightAction())

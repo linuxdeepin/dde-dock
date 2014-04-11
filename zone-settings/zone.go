@@ -66,10 +66,17 @@ func registerZoneArea() {
         x2 := int32(rect[2].(uint16))
         y2 := int32(rect[3].(uint16))
 
+        logObj.Infof("PrimaryRect: %d, %d, %d, %d\n", x1, x2, y1, y2)
+
         topLeftArea = areaRange{x1, x1 + DISTANCE, y1, y1 + DISTANCE}
         bottomLeftArea = areaRange{x1, x1 + DISTANCE, y2 - DISTANCE, y2}
         topRightArea = areaRange{x2 - DISTANCE, x2, y1, y1 + DISTANCE}
         bottomRightArea = areaRange{x2 - DISTANCE, x2, y2 - DISTANCE, y2}
+
+        logObj.Info("topLeft: ", topLeftArea)
+        logObj.Info("bottomLeft: ", bottomLeftArea)
+        logObj.Info("topRight: ", topRightArea)
+        logObj.Info("bottomRight: ", bottomRightArea)
 
         var err error
         areaId, err = areaObj.RegisterArea([]areaRange{
@@ -82,6 +89,8 @@ func registerZoneArea() {
                 logObj.Info("Register area failed: ", err)
                 return
         }
+
+        logObj.Info("MouseArea Id: ", areaId)
 }
 
 func unregisterZoneArea() {
