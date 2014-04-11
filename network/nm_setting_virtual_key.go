@@ -104,8 +104,7 @@ func generalGetSettingVkAvailableValues(field, key string) (values []string) {
 	case fieldWirelessSecurity:
 		switch key {
 		case NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT:
-			// TODO
-			values = []string{"none", "wep-128", "leap", "wpa", "wpa-eap"}
+			values = []string{"none", "wep", "wpa-psk", "wpa-eap"}
 		}
 	}
 	return
@@ -317,80 +316,79 @@ func getSettingVkIp4ConfigAddressesGateway(data _ConnectionData) (value string) 
 }
 func getSettingVkIp4ConfigRoutesAddress(data _ConnectionData) (value string) {
 	// TODO
-	// valueJSON = jsonEmptyString
 	// value := getSettingIp4ConfigRoutesAddress(data)
 	return
 }
 func getSettingVkIp4ConfigRoutesMask(data _ConnectionData) (value string) {
 	// TODO
-	// valueJSON = jsonEmptyString
 	// value := getSettingIp4ConfigRoutesMask(data)
 	return
 }
 func getSettingVkIp4ConfigRoutesNexthop(data _ConnectionData) (value string) {
 	// TODO
-	// valueJSON = jsonEmptyString
 	// value := getSettingIp4ConfigRoutesNexthop(data)
 	return
 }
 func getSettingVkIp4ConfigRoutesMetric(data _ConnectionData) (value string) {
 	// TODO
-	// valueJSON = jsonEmptyString
 	// value := getSettingIp4ConfigRoutesMetric(data)
 	return
 }
 func getSettingVkIp6ConfigDns(data _ConnectionData) (value string) {
 	// TODO
-	// valueJSON = jsonEmptyString
 	// value := getSettingIp6ConfigDns(data)
 	return
 }
 func getSettingVkIp6ConfigAddressesAddress(data _ConnectionData) (value string) {
 	// TODO
-	// valueJSON = jsonEmptyString
 	// value := getSettingIp6ConfigAddressesAddress(data)
 	return
 }
 func getSettingVkIp6ConfigAddressesPrefix(data _ConnectionData) (value string) {
 	// TODO
-	// valueJSON = jsonEmptyString
 	// value := getSettingIp6ConfigAddressesPrefix(data)
 	return
 }
 func getSettingVkIp6ConfigAddressesGateway(data _ConnectionData) (value string) {
 	// TODO
-	// valueJSON = jsonEmptyString
 	// value := getSettingIp6ConfigAddressesGateway(data)
 	return
 }
 func getSettingVkIp6ConfigRoutesAddress(data _ConnectionData) (value string) {
 	// TODO
-	// valueJSON = jsonEmptyString
 	// value := getSettingIp6ConfigRoutesAddress(data)
 	return
 }
 func getSettingVkIp6ConfigRoutesPrefix(data _ConnectionData) (value string) {
 	// TODO
-	// valueJSON = jsonEmptyString
 	// value := getSettingIp6ConfigRoutesPrefix(data)
 	return
 }
 func getSettingVkIp6ConfigRoutesNexthop(data _ConnectionData) (value string) {
 	// TODO
-	// valueJSON = jsonEmptyString
 	// value := getSettingIp6ConfigRoutesNexthop(data)
 	return
 }
 func getSettingVkIp6ConfigRoutesMetric(data _ConnectionData) (value string) {
 	// TODO
-	// valueJSON = jsonEmptyString
 	// value := getSettingIp6ConfigRoutesMetric(data)
 	return
 }
 func getSettingVkWirelessSecurityKeyMgmt(data _ConnectionData) (value string) {
-	// TODO
-	// valueJSON = jsonEmptyString
-	// value := getSettingWirelessSecurityKeyMgmtJSON(data)
+	if !isSettingFieldExists(data, fieldWirelessSecurity) {
+		value = "none"
+		return
+	}
+
+	keyMgmt := getSettingWirelessSecurityKeyMgmt(data)
+	switch keyMgmt {
+	case "none":
+		value = "wep"
+	case "wpa-psk":
+		value = "wpa-psk"
+	case "wpa-eap":
+		value = "wpa-eap"
+	}
 	return
 }
 
@@ -647,5 +645,30 @@ func setSettingVkWirelessSecurityKeyMgmtJSON(data _ConnectionData, valueJSON str
 
 // Logic setter
 func logicSetSettingVkWirelessSecurityKeyMgmtJSON(data _ConnectionData, valueJSON string) {
-	// TODO
+	value, _ := jsonToKeyValueString(valueJSON)
+	logicSetSettingVkWirelessSecurityKeyMgmt(data, value)
+}
+func logicSetSettingVkWirelessSecurityKeyMgmt(data _ConnectionData, value string) {
+	switch value {
+	default:
+		LOGGER.Error("invalid value for virtual key vk-key-mgmt:", value)
+	case "none":
+		removeSettingField(data, fieldWirelessSecurity)
+		removeSettingField(data, field8021x)
+	case "wep":
+		addSettingField(data, fieldWirelessSecurity)
+		removeSettingField(data, field8021x)
+		setSettingWirelessSecurityKeyMgmt(data, "none")
+		setSettingWirelessSecurityAuthAlg(data, "open")
+		setSettingWirelessSecurityWepKeyType(data, 1)
+	case "wpa-psk":
+		addSettingField(data, fieldWirelessSecurity)
+		removeSettingField(data, field8021x)
+		setSettingWirelessSecurityKeyMgmt(data, "wpa-psk")
+	case "wpa-eap":
+		addSettingField(data, fieldWirelessSecurity)
+		addSettingField(data, field8021x)
+		setSettingWirelessSecurityKeyMgmt(data, "wpa-eap")
+		// TODO
+	}
 }

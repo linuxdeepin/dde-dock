@@ -127,7 +127,7 @@ const (
 	NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS = "psk-flags"
 )
 
-// TODO Get available keys
+// Get available keys
 func getSettingWirelessSecurityAvailableKeys(data _ConnectionData) (keys []string) {
 	vkKeyMgmt := getSettingVkWirelessSecurityKeyMgmt(data)
 	switch vkKeyMgmt {
@@ -163,8 +163,9 @@ func getSettingWirelessSecurityAvailableValues(key string) (values []string, cus
 		}
 		customizable = false
 	case NM_SETTING_WIRELESS_SECURITY_GROUP:
-		// TODO
-		values = []string{"wep40", "wep104", "tkip", "ccmp"}
+		values = []string{"wep40", "wep104", "tkip", "ccmp"} // TODO
+	case NM_SETTING_WIRELESS_SECURITY_AUTH_ALG:
+		values = []string{"open", "shared", "leap"}
 	}
 	return
 }
