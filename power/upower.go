@@ -87,7 +87,9 @@ func (p *Power) handleBatteryPercentage() {
 				for p.lowBatteryStatus == lowBatteryStatusAction {
 					<-time.After(time.Second * 30)
 					//TODO: suspend when there hasn't user input event
-					doSuspend()
+					if p.lowBatteryStatus == lowBatteryStatusAction {
+						doSuspend()
+					}
 				}
 			}()
 		}
