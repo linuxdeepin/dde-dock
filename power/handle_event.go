@@ -34,10 +34,10 @@ func doLock() {
 }
 
 func doShowLowpower() {
-	go exec.Command("/usr/lib/deepin-daemon/lowpower").Run()
+	go exec.Command("/usr/lib/deepin-daemon/dde-lowpower").Run()
 }
 func doCloseLowpower() {
-	go exec.Command("killall", "lowpower").Run()
+	go exec.Command("killall", "dde-lowpower").Run()
 }
 
 func doShutDown() {
