@@ -71,6 +71,9 @@ func (p *Power) handleBatteryPercentage() {
 		if p.lowBatteryStatus == lowBatteryStatusAction {
 			p.lowBatteryStatus = lowBatteryStatusNormal
 			doCloseLowpower()
+			if p.LockWhenActive.Get() {
+				doLock()
+			}
 		}
 		return
 	}
@@ -82,7 +85,7 @@ func (p *Power) handleBatteryPercentage() {
 			doSuspend()
 			go func() {
 				for p.lowBatteryStatus == lowBatteryStatusAction {
-					<-time.After(time.Second * 10)
+					<-time.After(time.Second * 30)
 					//TODO: suspend when there hasn't user input event
 					doSuspend()
 				}
@@ -111,6 +114,9 @@ func (p *Power) handleBatteryPercentage() {
 		if p.lowBatteryStatus == lowBatteryStatusAction {
 			p.lowBatteryStatus = lowBatteryStatusNormal
 			doCloseLowpower()
+			if p.LockWhenActive.Get() {
+				doLock()
+			}
 		}
 	}
 }

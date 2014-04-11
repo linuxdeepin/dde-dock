@@ -176,13 +176,14 @@ func (p *Power) initEventHandle() {
 			fmt.Println("Sleep change...", before)
 			if before {
 			} else {
-				if p.coreSettings.GetBoolean("lock-enabled") {
-					doLock()
-				}
 				time.AfterFunc(time.Second*1, func() { p.screensaver.SimulateUserActivity() })
 				p.handleBatteryPercentage()
 				if p.lowBatteryStatus == lowBatteryStatusAction {
 					doShowLowpower()
+				} else {
+					if p.coreSettings.GetBoolean("lock-enabled") {
+						doLock()
+					}
 				}
 			}
 		})
