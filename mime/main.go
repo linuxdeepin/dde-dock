@@ -51,6 +51,12 @@ func main() {
                         logObject.Fatalf("Recover Error: %v", err)
                 }
         }()
+
+        if !dlib.UniqueOnSession(_DEFAULT_APPS_DEST) {
+                logObject.Warning("There already has an Mime daemon running.")
+                return
+        }
+
         logObject.SetRestartCommand("/usr/lib/deepin-daemon/mime")
         var err error
         objUtils = libutils.NewUtils()

@@ -24,6 +24,7 @@ package main
 import (
         libarea "dbus/com/deepin/api/xmousearea"
         libdsp "dbus/com/deepin/daemon/display"
+        "dlib"
         "dlib/dbus"
         "dlib/gio-2.0"
         Logger "dlib/logger"
@@ -107,6 +108,11 @@ func main() {
                         logObj.Fatal("Recover Error: ", err)
                 }
         }()
+
+        if !dlib.UniqueOnSession(ZONE_DEST) {
+                logObj.Warning("There already has an ZoneSettings daemon running.")
+                return
+        }
 
         var err error
         dspObj, err = libdsp.NewDisplay("com.deepin.daemon.Display",

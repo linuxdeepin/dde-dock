@@ -2,6 +2,7 @@ package main
 
 import (
         "dbus/org/freedesktop/udisks2"
+        "dlib"
         "dlib/dbus"
         "dlib/logger"
         "io/ioutil"
@@ -213,6 +214,12 @@ func main() {
                         logObject.Fatal("recover error:", err)
                 }
         }()
+
+        if !dlib.UniqueOnSystem("com.deepin.daemon.SystemInfo") {
+                logObject.Warning("There already has an SystemInfo daemon running.")
+                return
+        }
+
         logObject.SetRestartCommand("/usr/lib/deepin-daemon/system-info")
 
         sys := NewSystemInfo()

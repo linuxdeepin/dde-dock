@@ -23,6 +23,11 @@ func main() {
                         logObject.Fatal("recover err:", err)
                 }
         }()
+
+        if !dlib.UniqueOnSession(_EXT_DEV_NAME) {
+                logObject.Warning("There already has an InputDevices daemon running.")
+                return
+        }
         tpadFlag := false
 
         logObject.SetRestartCommand("/usr/lib/deepin-daemon/inputdevices")

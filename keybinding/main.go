@@ -261,6 +261,11 @@ func NewBindManager() *BindManager {
 }
 
 func main() {
+        if !dlib.UniqueOnSession(_BINDING_DEST) {
+                fmt.Println("There already has an KeyBinding daemon running.")
+                return
+        }
+
         InitVariable()
         C.grab_xrecord_init()
         defer C.grab_xrecord_finalize()

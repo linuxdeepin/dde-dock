@@ -95,6 +95,11 @@ func main() {
                 }
         }()
 
+        if !dlib.UniqueOnSession(MANAGER_DEST) {
+                logObject.Warning("There already has an Themes daemon running.")
+                return
+        }
+
         // configure logger
         logObject.SetRestartCommand("/usr/lib/deepin-daemon/themes", "--debug")
         if isStringInArray("-d", os.Args) || isStringInArray("--debug", os.Args) {

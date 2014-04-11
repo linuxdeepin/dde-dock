@@ -352,6 +352,12 @@ func main() {
                         logObject.Fatalf("recover err: %s", err)
                 }
         }()
+
+        if !dlib.UniqueOnSession(DISK_INFO_DEST) {
+                logObject.Warning("There already has an Mount daemon running.")
+                return
+        }
+
         logObject.SetRestartCommand("/usr/lib/deepin-daemon/mounts")
 
         m := NewManager()

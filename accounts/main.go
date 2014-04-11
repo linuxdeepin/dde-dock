@@ -22,6 +22,7 @@
 package main
 
 import (
+        "dlib"
         "dlib/dbus"
         "dlib/logger"
         dutils "dlib/utils"
@@ -40,6 +41,11 @@ func main() {
                         logObject.Fatal("Recover Error:", err)
                 }
         }()
+
+        if !dlib.UniqueOnSystem(ACCOUNT_DEST) {
+                logObject.Warning("There already has an Accounts daemon running.")
+                return
+        }
 
         // Configure Logger
         logObject.SetRestartCommand("/usr/lib/deepin-daemon/Accounts")

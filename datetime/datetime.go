@@ -155,6 +155,11 @@ func main() {
                 }
         }()
 
+        if !dlib.UniqueOnSession(_DATE_TIME_DEST) {
+                logger.Warning("There already has an DateTime daemon running.")
+                return
+        }
+
         // configure logger
         logger.SetRestartCommand("/usr/lib/deepin-daemon/datetime", "--debug")
         if objUtils.IsElementExist("-d", os.Args) ||
