@@ -39,7 +39,7 @@ const (
 // VirtualKey store virtual key info for each fields.
 type VirtualKey struct {
 	name       string
-	field      string
+	fields     []string
 	keyType    ktype
 	relatedKey string
 	available  bool
@@ -47,24 +47,24 @@ type VirtualKey struct {
 }
 
 var virtualKeys = []VirtualKey{
-	VirtualKey{NM_SETTING_VK_CONNECTION_PERMISSIONS, fieldConnection, ktypeBoolean, NM_SETTING_CONNECTION_PERMISSIONS, true, true},
-	VirtualKey{NM_SETTING_VK_IP4_CONFIG_DNS, fieldIPv4, ktypeString, NM_SETTING_IP4_CONFIG_DNS, true, true},
-	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ADDRESSES_ADDRESS, fieldIPv4, ktypeString, NM_SETTING_IP4_CONFIG_ADDRESSES, true, true},
-	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ADDRESSES_MASK, fieldIPv4, ktypeString, NM_SETTING_IP4_CONFIG_ADDRESSES, true, true},
-	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ADDRESSES_GATEWAY, fieldIPv4, ktypeString, NM_SETTING_IP4_CONFIG_ADDRESSES, true, false},
-	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ROUTES_ADDRESS, fieldIPv4, ktypeString, NM_SETTING_IP4_CONFIG_ROUTES, true, true},
-	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ROUTES_MASK, fieldIPv4, ktypeString, NM_SETTING_IP4_CONFIG_ROUTES, true, true},
-	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ROUTES_NEXTHOP, fieldIPv4, ktypeString, NM_SETTING_IP4_CONFIG_ROUTES, true, true},
-	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ROUTES_METRIC, fieldIPv4, ktypeString, NM_SETTING_IP4_CONFIG_ROUTES, false, false},
-	VirtualKey{NM_SETTING_VK_IP6_CONFIG_DNS, fieldIPv6, ktypeString, NM_SETTING_IP6_CONFIG_DNS, true, true},
-	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ADDRESSES_ADDRESS, fieldIPv6, ktypeString, NM_SETTING_IP6_CONFIG_ADDRESSES, true, true},
-	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ADDRESSES_PREFIX, fieldIPv6, ktypeString, NM_SETTING_IP6_CONFIG_ADDRESSES, true, true},
-	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ADDRESSES_GATEWAY, fieldIPv6, ktypeString, NM_SETTING_IP6_CONFIG_ADDRESSES, true, false},
-	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ROUTES_ADDRESS, fieldIPv6, ktypeString, NM_SETTING_IP6_CONFIG_ROUTES, true, true},
-	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ROUTES_PREFIX, fieldIPv6, ktypeString, NM_SETTING_IP6_CONFIG_ROUTES, true, true},
-	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ROUTES_NEXTHOP, fieldIPv6, ktypeString, NM_SETTING_IP6_CONFIG_ROUTES, true, true},
-	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ROUTES_METRIC, fieldIPv6, ktypeString, NM_SETTING_IP6_CONFIG_ROUTES, false, false},
-	VirtualKey{NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT, fieldWirelessSecurity, ktypeString, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT, true, true},
+	VirtualKey{NM_SETTING_VK_CONNECTION_PERMISSIONS, []string{fieldConnection}, ktypeBoolean, NM_SETTING_CONNECTION_PERMISSIONS, true, true},
+	VirtualKey{NM_SETTING_VK_IP4_CONFIG_DNS, []string{fieldIPv4}, ktypeString, NM_SETTING_IP4_CONFIG_DNS, true, true},
+	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ADDRESSES_ADDRESS, []string{fieldIPv4}, ktypeString, NM_SETTING_IP4_CONFIG_ADDRESSES, true, true},
+	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ADDRESSES_MASK, []string{fieldIPv4}, ktypeString, NM_SETTING_IP4_CONFIG_ADDRESSES, true, true},
+	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ADDRESSES_GATEWAY, []string{fieldIPv4}, ktypeString, NM_SETTING_IP4_CONFIG_ADDRESSES, true, false},
+	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ROUTES_ADDRESS, []string{fieldIPv4}, ktypeString, NM_SETTING_IP4_CONFIG_ROUTES, true, true},
+	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ROUTES_MASK, []string{fieldIPv4}, ktypeString, NM_SETTING_IP4_CONFIG_ROUTES, true, true},
+	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ROUTES_NEXTHOP, []string{fieldIPv4}, ktypeString, NM_SETTING_IP4_CONFIG_ROUTES, true, true},
+	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ROUTES_METRIC, []string{fieldIPv4}, ktypeString, NM_SETTING_IP4_CONFIG_ROUTES, false, false},
+	VirtualKey{NM_SETTING_VK_IP6_CONFIG_DNS, []string{fieldIPv6}, ktypeString, NM_SETTING_IP6_CONFIG_DNS, true, true},
+	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ADDRESSES_ADDRESS, []string{fieldIPv6}, ktypeString, NM_SETTING_IP6_CONFIG_ADDRESSES, true, true},
+	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ADDRESSES_PREFIX, []string{fieldIPv6}, ktypeString, NM_SETTING_IP6_CONFIG_ADDRESSES, true, true},
+	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ADDRESSES_GATEWAY, []string{fieldIPv6}, ktypeString, NM_SETTING_IP6_CONFIG_ADDRESSES, true, false},
+	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ROUTES_ADDRESS, []string{fieldIPv6}, ktypeString, NM_SETTING_IP6_CONFIG_ROUTES, true, true},
+	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ROUTES_PREFIX, []string{fieldIPv6}, ktypeString, NM_SETTING_IP6_CONFIG_ROUTES, true, true},
+	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ROUTES_NEXTHOP, []string{fieldIPv6}, ktypeString, NM_SETTING_IP6_CONFIG_ROUTES, true, true},
+	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ROUTES_METRIC, []string{fieldIPv6}, ktypeString, NM_SETTING_IP6_CONFIG_ROUTES, false, false},
+	VirtualKey{NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT, []string{fieldWirelessSecurity, field8021x}, ktypeString, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT, true, true},
 }
 
 func isVirtualKey(field, key string) bool {
@@ -76,7 +76,7 @@ func isVirtualKey(field, key string) bool {
 
 func getVirtualKeysOfField(field string) (vks []string) {
 	for _, vk := range virtualKeys {
-		if vk.field == field {
+		if isStringInArray(field, vk.fields) {
 			vks = append(vks, vk.name)
 		}
 	}
@@ -86,7 +86,7 @@ func getVirtualKeysOfField(field string) (vks []string) {
 func getSettingVkKeyType(field, key string) (t ktype) {
 	t = ktypeUnknown
 	for _, vk := range virtualKeys {
-		if vk.field == field && vk.name == key {
+		if isStringInArray(field, vk.fields) && vk.name == key {
 			t = vk.keyType
 		}
 	}
@@ -105,7 +105,7 @@ func generalGetSettingVkAvailableValues(field, key string) (values []string) {
 		switch key {
 		case NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT:
 			// TODO
-			values = []string{"none", "wep-128", "leap", "wpa", "wpa-eap"}
+			values = []string{"none", "wep", "wpa", "wpa-eap"}
 		}
 	}
 	return
@@ -113,7 +113,7 @@ func generalGetSettingVkAvailableValues(field, key string) (values []string) {
 
 func getRelatedAvailableVirtualKeys(field, key string) (vks []string) {
 	for _, vk := range virtualKeys {
-		if vk.field == field && vk.relatedKey == key && vk.available {
+		if isStringInArray(field, vk.fields) && vk.relatedKey == key && vk.available {
 			vks = append(vks, vk.name)
 		}
 	}
@@ -123,7 +123,7 @@ func getRelatedAvailableVirtualKeys(field, key string) (vks []string) {
 // get related virtual key(s) for target key
 func getRelatedVirtualKeys(field, key string) (vks []string) {
 	for _, vk := range virtualKeys {
-		if vk.field == field && vk.relatedKey == key {
+		if isStringInArray(field, vk.fields) && vk.relatedKey == key {
 			vks = append(vks, vk.name)
 		}
 	}
@@ -133,7 +133,7 @@ func getRelatedVirtualKeys(field, key string) (vks []string) {
 // check if is required child virtual key
 func isRequiredChildVirtualKeys(field, vkey string) (required bool) {
 	for _, vk := range virtualKeys {
-		if vk.field == field && vk.name == vkey {
+		if isStringInArray(field, vk.fields) && vk.name == vkey {
 			required = vk.required
 		}
 	}
@@ -200,6 +200,11 @@ func generalGetVirtualKeyJSON(data _ConnectionData, field, key string) (valueJSO
 func generalSetVirtualKeyJSON(data _ConnectionData, field, key string, valueJSON string) {
 	switch field {
 	case field8021x:
+		switch key {
+		case NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT:
+			// TODO
+			logicSetSettingVkWirelessSecurityKeyMgmtJSON(data, valueJSON)
+		}
 	case fieldConnection:
 		switch key {
 		case NM_SETTING_VK_CONNECTION_PERMISSIONS:
@@ -390,7 +395,7 @@ func getSettingVkIp6ConfigRoutesMetric(data _ConnectionData) (value string) {
 func getSettingVkWirelessSecurityKeyMgmt(data _ConnectionData) (value string) {
 	// TODO
 	// valueJSON = jsonEmptyString
-	// value := getSettingWirelessSecurityKeyMgmtJSON(data)
+	// keyMgmt := getSettingWirelessSecurityKeyMgmt(data)
 	return
 }
 

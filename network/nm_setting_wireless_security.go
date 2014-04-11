@@ -1,5 +1,9 @@
 package main
 
+import (
+	"fmt"
+)
+
 // https://developer.gnome.org/libnm-util/0.9/NMSettingWirelessSecurity.html
 // https://developer.gnome.org/NetworkManager/unstable/ref-settings.html
 
@@ -125,9 +129,22 @@ const (
 
 // TODO Get available keys
 func getSettingWirelessSecurityAvailableKeys(data _ConnectionData) (keys []string) {
-	keys = []string{
-		NM_SETTING_WIRELESS_SECURITY_KEY_MGMT,
-		NM_SETTING_WIRELESS_SECURITY_WEP_KEY0,
+	vkKeyMgmt := getSettingVkWirelessSecurityKeyMgmt(data)
+	switch vkKeyMgmt {
+	case "none":
+		keys = getRelatedAvailableVirtualKeys(fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT)
+	case "wep":
+		keys = []string{
+			NM_SETTING_WIRELESS_SECURITY_WEP_KEY0,
+		}
+		keys = appendStringArray(keys, getRelatedAvailableVirtualKeys(fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT))
+	case "wpa":
+		keys = []string{
+			NM_SETTING_WIRELESS_SECURITY_PSK,
+		}
+		keys = appendStringArray(keys, getRelatedAvailableVirtualKeys(fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT))
+	case "wpa-eap":
+		keys = getRelatedAvailableVirtualKeys(fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT)
 	}
 	return
 }
@@ -172,7 +189,12 @@ func checkSettingWirelessSecurityValues(data _ConnectionData) (errs map[string]s
 	case "ieee8021x": // dynamic wep
 	case "wpa-none": // wpa-psk ad-hoc
 	case "wpa-psk": // wpa-psk infrastructure
+		ensureSettingWirelessSecurityPskExists(data, errs)
 	case "wpa-eap": // wpa enterprise
+		// ensure field 8021x exists
+		if !isSettingFieldExists(data, field8021x) {
+			rememberError(errs, NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, field8021x))
+		}
 	}
 
 	// check wep-key-type
@@ -181,7 +203,8 @@ func checkSettingWirelessSecurityValues(data _ConnectionData) (errs map[string]s
 	// check wep-key0
 	checkSettingWirelessSecurityWepKey0(data, errs)
 
-	// TODO check psk
+	// check psk
+	checkSettingWirelessSecurityPsk(data, errs)
 
 	return
 }
@@ -194,6 +217,11 @@ func ensureSettingWirelessSecurityWepKeyTypeExists(data _ConnectionData, errs ma
 func ensureSettingWirelessSecurityWepKey0Exists(data _ConnectionData, errs map[string]string) {
 	if len(getSettingWirelessSecurityWepKey0(data)) == 0 {
 		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_WEP_KEY0, NM_KEY_ERROR_MISSING_VALUE)
+	}
+}
+func ensureSettingWirelessSecurityPskExists(data _ConnectionData, errs map[string]string) {
+	if len(getSettingWirelessSecurityPsk(data)) == 0 {
+		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_PSK, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
 func checkSettingWirelessSecurityWepKeyType(data _ConnectionData, errs map[string]string) {
@@ -209,12 +237,38 @@ func checkSettingWirelessSecurityWepKey0(data _ConnectionData, errs map[string]s
 	if !isSettingWirelessSecurityWepKey0Exists(data) {
 		return
 	}
+	wepKey0 := getSettingWirelessSecurityWepKey0(data)
 	wepKeyType := getSettingWirelessSecurityWepKeyType(data)
 	if wepKeyType == 1 {
-		// TODO
+		// If set to 1 and the keys are hexadecimal, they must be
+		// either 10 or 26 characters in length. If set to 1 and the
+		// keys are ASCII keys, they must be either 5 or 13 characters
+		// in length.
+		if len(wepKey0) != 10 && len(wepKey0) != 26 && len(wepKey0) != 5 && len(wepKey0) != 13 {
+			rememberError(errs, NM_SETTING_WIRELESS_SECURITY_WEP_KEY0, NM_KEY_ERROR_INVALID_VALUE)
+		}
 	} else if wepKeyType == 2 {
+		// If set to 2, the passphrase is hashed using the de-facto
+		// MD5 method to derive the actual WEP key.
+		if len(wepKey0) == 0 {
+			rememberError(errs, NM_SETTING_WIRELESS_SECURITY_WEP_KEY0, NM_KEY_ERROR_INVALID_VALUE)
+		}
 	}
-	// rememberError(errs, NM_SETTING_WIRELESS_SECURITY_WEP_KEY0, NM_KEY_ERROR_MISSING_VALUE)
+}
+func checkSettingWirelessSecurityPsk(data _ConnectionData, errs map[string]string) {
+	if !isSettingWirelessSecurityPskExists(data) {
+		return
+	}
+	psk := getSettingWirelessSecurityPsk(data)
+	// If the key is 64-characters long, it must contain only
+	// hexadecimal characters and is interpreted as a hexadecimal WPA
+	// key. Otherwise, the key must be between 8 and 63 ASCII
+	// characters (as specified in the 802.11i standard) and is
+	// interpreted as a WPA passphrase
+	if len(psk) < 8 || len(psk) > 64 {
+		// TODO
+		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_PSK, NM_KEY_ERROR_INVALID_VALUE)
+	}
 }
 
 // Set JSON value generally

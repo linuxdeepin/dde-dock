@@ -207,21 +207,13 @@ func (session *ConnectionSession) GetAvailableValues(page, key string) (values [
 
 func (session *ConnectionSession) GetKey(page, key string) (value string) {
 	field := session.pageToField(page)
-	if isVirtualKey(field, key) {
-		value = generalGetVirtualKeyJSON(session.data, field, key)
-	} else {
-		value = generalGetSettingKeyJSON(session.data, field, key)
-	}
+	value = generalGetSettingKeyJSON(session.data, field, key)
 	return
 }
 
 func (session *ConnectionSession) SetKey(page, key, value string) {
 	field := session.pageToField(page)
-	if isVirtualKey(field, key) {
-		generalSetVirtualKeyJSON(session.data, field, key, value)
-	} else {
-		generalSetSettingKeyJSON(session.data, field, key, value)
-	}
+	generalSetSettingKeyJSON(session.data, field, key, value)
 	session.updatePropErrors()
 	session.updatePropAvailableKeys()
 	// TODO

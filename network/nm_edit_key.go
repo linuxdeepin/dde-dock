@@ -60,6 +60,10 @@ func generalGetSettingAvailableKeys(data _ConnectionData, field string) (keys []
 }
 
 func generalGetSettingAvailableValues(field, key string) (values []string, customizable bool) {
+	if isVirtualKey(field, key) {
+		values = generalGetSettingVkAvailableValues(field, key)
+		return
+	}
 	switch field {
 	case field8021x:
 		values, customizable = getSetting8021xAvailableValues(key)
@@ -102,6 +106,10 @@ func generalCheckSettingValues(data _ConnectionData, field string) (errs map[str
 }
 
 func generalGetSettingKeyJSON(data _ConnectionData, field, key string) (valueJSON string) {
+	if isVirtualKey(field, key) {
+		valueJSON = generalGetVirtualKeyJSON(data, field, key)
+		return
+	}
 	switch field {
 	default:
 		LOGGER.Warning("invalid field name", field)
@@ -124,6 +132,10 @@ func generalGetSettingKeyJSON(data _ConnectionData, field, key string) (valueJSO
 }
 
 func generalSetSettingKeyJSON(data _ConnectionData, field, key, valueJSON string) {
+	if isVirtualKey(field, key) {
+		generalSetVirtualKeyJSON(data, field, key, valueJSON)
+		return
+	}
 	switch field {
 	default:
 		LOGGER.Warning("invalid field name", field)

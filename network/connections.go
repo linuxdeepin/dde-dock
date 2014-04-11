@@ -228,6 +228,7 @@ func (this *Manager) CreateConnection(connType string) (session *ConnectionSessi
 func (this *Manager) EditConnection(uuid string) (session *ConnectionSession, err error) {
 	// if is read only connection(default system connection created by
 	// network manager), create a new connection
+	// TODO
 	connData := this.getConnectionDataByUuid(uuid)
 	if getSettingConnectionReadOnly(connData) {
 		LOGGER.Debug("read only connection, create new")
