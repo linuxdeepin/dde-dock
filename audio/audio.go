@@ -7,8 +7,9 @@ package main
 import "C"
 
 import (
+    "dlib"
     "dlib/dbus"
-    //"dlib/logger"
+    "dlib/logger"
     "fmt"
     "os"
     "reflect"
@@ -42,7 +43,8 @@ const (
 
 const VOLUME_STEP = 10
 
-//var l = logger.NewLogger("audio")
+var l = logger.NewLogger("audio")
+var LOGGER = l.SetLogLevel(logger.LEVEL_INFO)
 
 type Audio struct {
     //unexported properties
@@ -1457,6 +1459,10 @@ var audio *Audio
 
 func main() {
     var err error
+    if !dlib.UniqueOnSession("com.deepin.daemon.Audio") {
+        LOGGER.Warning("There already has an Audio daemon running.")
+        return
+    }
     audio, err = NewAudio()
     if err != nil {
         panic(err)
