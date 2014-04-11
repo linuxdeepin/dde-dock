@@ -90,7 +90,7 @@ var (
         putGSettings    *gio.Settings
 
         X              *xgbutil.XUtil
-        GrabKeyBinds   map[*KeyCodeInfo]string
+        GrabKeyBinds   map[KeyCodeInfo]string
         IdGSettingsMap map[int32]*gio.Settings
 
         CustomPrevPairs map[string]string

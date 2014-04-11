@@ -112,6 +112,9 @@ func (m *BindManager) CheckShortcut(shortcut string) (string, []int32) {
 }
 
 func keyIsValid(key string) bool {
+        if len(key) <= 0 {
+                return true
+        }
         tmp := formatShortcut(key)
         if len(tmp) == 0 || strings.Contains(tmp, "-") {
                 array := strings.Split(tmp, "-")
@@ -137,6 +140,7 @@ func keyIsValid(key string) bool {
 }
 
 func (m *BindManager) ChangeShortcut(id int32, shortcut string) (string, []int32) {
+        fmt.Printf("Change id: %d, key: %s\n", id, shortcut)
         tmpKeys := getShortcutById(id)
         tmpConflict, tmpList := conflictChecked(id, tmpKeys)
         if tmpConflict {
@@ -152,6 +156,8 @@ func (m *BindManager) ChangeShortcut(id int32, shortcut string) (string, []int32
                 insertConflictInvalidList(id)
                 //return "Invalid", []int32{}
                 retStr = "Invalid"
+        } else if len(shortcut) <= 0 {
+                retStr = "Valid"
         } else {
                 isConflict, list := conflictChecked(id, shortcut)
                 if isConflict {
@@ -229,7 +235,7 @@ func InitVariable() {
         putGSettings = gio.NewSettingsWithPath(_COMPIZ_PUT_SCHEMA_ID,
                 _COMPIZ_PUT_SCHEMA_PATH)
 
-        GrabKeyBinds = make(map[*KeyCodeInfo]string)
+        GrabKeyBinds = make(map[KeyCodeInfo]string)
         IdGSettingsMap = make(map[int32]*gio.Settings)
         CustomPrevPairs = make(map[string]string)
         SystemPrevPairs = make(map[string]string)

@@ -68,7 +68,10 @@ func (m *GrabManager) GrabShortcut(wid xproto.Window,
         if !grabKeyPress(wid, key) {
                 return false
         }
-        keyInfo := newKeyCodeInfo(key)
+        keyInfo, ok := newKeyCodeInfo(key)
+        if !ok {
+                return false
+        }
         GrabKeyBinds[keyInfo] = action
 
         return true

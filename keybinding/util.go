@@ -51,27 +51,26 @@ func newShortcutInfo(id int32, desc, shortcut string) ShortcutInfo {
         return ShortcutInfo{Id: id, Desc: desc, Shortcut: shortcut}
 }
 
-func newKeyCodeInfo(shortcut string) *KeyCodeInfo {
+func newKeyCodeInfo(shortcut string) (KeyCodeInfo, bool) {
+        if len(shortcut) <= 0 {
+                return KeyCodeInfo{}, false
+        }
         mods, keys, err := keybind.ParseString(X, shortcut)
         if err != nil {
                 fmt.Println("keybind parse string failed: ", err)
-                return nil
+                return KeyCodeInfo{}, false
         }
 
         if len(keys) <= 0 {
                 fmt.Println("no key")
-                return nil
+                return KeyCodeInfo{}, false
         }
 
         state, detail := keybind.DeduceKeyInfo(mods, keys[0])
-        return &KeyCodeInfo{State: state, Detail: detail}
+        return KeyCodeInfo{State: state, Detail: detail}, true
 }
 
-func keyCodeInfoEqual(keyInfo1, keyInfo2 *KeyCodeInfo) bool {
-        if keyInfo1 == nil || keyInfo2 == nil {
-                return false
-        }
-
+func keyCodeInfoEqual(keyInfo1, keyInfo2 KeyCodeInfo) bool {
         if keyInfo1.State == keyInfo2.State &&
                 keyInfo1.Detail == keyInfo2.Detail {
                 return true
@@ -146,15 +145,16 @@ func getAllShortcuts() map[int32]string {
 
 func conflictChecked(id int32, shortcut string) (bool, []int32) {
         tmpKey := strings.ToLower(shortcut)
-        var info *KeyCodeInfo
+        var info KeyCodeInfo
+        var ok bool
 
         if tmpKey == "super-super_l" || tmpKey == "super_l" ||
                 tmpKey == "super" {
-                info = newKeyCodeInfo("Super_L")
+                info, ok = newKeyCodeInfo("Super_L")
         } else {
-                info = newKeyCodeInfo(getXGBShortcut(formatShortcut(shortcut)))
+                info, ok = newKeyCodeInfo(getXGBShortcut(formatShortcut(shortcut)))
         }
-        if info == nil {
+        if !ok {
                 fmt.Println("shortcut invalid. ", shortcut)
                 return false, []int32{}
         }
@@ -166,14 +166,14 @@ func conflictChecked(id int32, shortcut string) (bool, []int32) {
                 if i == id {
                         continue
                 }
-                var tmp *KeyCodeInfo
+                var tmp KeyCodeInfo
 
                 if k == "super" {
-                        tmp = newKeyCodeInfo("Super_L")
+                        tmp, ok = newKeyCodeInfo("Super_L")
                 } else {
-                        tmp = newKeyCodeInfo(getXGBShortcut(formatShortcut(k)))
+                        tmp, ok = newKeyCodeInfo(getXGBShortcut(formatShortcut(k)))
                 }
-                if tmp == nil {
+                if !ok {
                         continue
                 }
 

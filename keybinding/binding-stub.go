@@ -85,8 +85,11 @@ func (m *BindManager) updateSystemList(id int32, shortcut string) bool {
                         //info.Shortcut = shortcut
                         //dbus.NotifyChange(m, "SystemList")
                         m.setPropList("SystemList")
+                        //fmt.Printf("Prev System Pairs: %v\n", SystemPrevPairs)
                         grabKeyPairs(SystemPrevPairs, false)
-                        grabKeyPairs(getSystemPairs(), true)
+                        systemPairs := getSystemPairs()
+                        grabKeyPairs(systemPairs, true)
+                        //fmt.Printf("System Pairs: %v\n", systemPairs)
                         return true
                 }
         }
@@ -164,8 +167,12 @@ func (m *BindManager) listenCustom() {
 
                 gs.Connect("changed::shortcut", func(s *gio.Settings, key string) {
                         m.setPropList("CustomList")
+                        //fmt.Printf("%s Changed...\n", key)
+                        //fmt.Printf("Prev Custom Pairs: %v\n", CustomPrevPairs)
                         grabKeyPairs(CustomPrevPairs, false)
-                        grabKeyPairs(getCustomPairs(), true)
+                        customPairs := getCustomPairs()
+                        //fmt.Printf("Custom Pairs: %v\n", customPairs)
+                        grabKeyPairs(customPairs, true)
                 })
         }
 }

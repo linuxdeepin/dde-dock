@@ -29,9 +29,17 @@ import (
         "github.com/BurntSushi/xgbutil/xevent"
         "os/exec"
         "strings"
+        "sync"
+)
+
+var (
+        mutex = new(sync.Mutex)
 )
 
 func getSystemPairs() map[string]string {
+        mutex.Lock()
+        defer mutex.Unlock()
+        //fmt.Println("Update SystemPairs")
         systemPairs := make(map[string]string)
         for i, k := range SystemIdNameMap {
                 if i >= 0 && i < 300 {
@@ -49,6 +57,9 @@ func getSystemPairs() map[string]string {
 }
 
 func getCustomPairs() map[string]string {
+        mutex.Lock()
+        defer mutex.Unlock()
+        //fmt.Println("Update CustomPairs")
         customPairs := make(map[string]string)
         customList := getCustomList()
 
@@ -70,6 +81,8 @@ func getCustomPairs() map[string]string {
 }
 
 func grabKeyPairs(accelPairs map[string]string, grab bool) {
+        mutex.Lock()
+        defer mutex.Unlock()
         for k, v := range accelPairs {
                 if len(k) <= 0 {
                         continue
@@ -86,8 +99,8 @@ func grabKeyPairs(accelPairs map[string]string, grab bool) {
                 }
 
                 shortcut := getXGBShortcut(formatShortcut(k))
-                keyInfo := newKeyCodeInfo(shortcut)
-                if keyInfo == nil {
+                keyInfo, ok := newKeyCodeInfo(shortcut)
+                if !ok {
                         fmt.Printf("Failed: key: %s, value: %s\n", k, v)
                         continue
                 }
@@ -97,8 +110,9 @@ func grabKeyPairs(accelPairs map[string]string, grab bool) {
                                 GrabKeyBinds[keyInfo] = v
                         }
                 } else {
-                        ungrabKey(X.RootWin(), shortcut)
+                        //fmt.Printf("Ungrab key: %s, value: %s\n", k, v)
                         delete(GrabKeyBinds, keyInfo)
+                        ungrabKey(X.RootWin(), shortcut)
                 }
         }
 }
@@ -150,10 +164,7 @@ func ungrabKey(wid xproto.Window, shortcut string) bool {
         return true
 }
 
-func getExecAction(k1 *KeyCodeInfo) (bool, string) {
-        if k1 == nil {
-                return false, ""
-        }
+func getExecAction(k1 KeyCodeInfo) (bool, string) {
         for k, v := range GrabKeyBinds {
                 if k1.State == k.State && k.Detail == k1.Detail {
                         return true, v
@@ -205,8 +216,13 @@ func (op *MediaKeyManager) listenKeyPressEvent() {
                                         value = keyStr
                                 }
                                 fmt.Printf("%s pressed...\n", value)
-                                tmpInfo := newKeyCodeInfo(value)
+                                tmpInfo, ok := newKeyCodeInfo(value)
+                                if !ok {
+                                        return
+                                }
                                 if ok, v := getExecAction(tmpInfo); ok {
+                                        //fmt.Printf("Get '%s' Command:: %s\n",
+                                        //value, v)
                                         // 不然按键会阻塞，直到程序推出
                                         go execCommand(v)
                                 }
