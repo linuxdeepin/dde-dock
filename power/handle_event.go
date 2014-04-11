@@ -75,7 +75,7 @@ func doLogout() {
 }
 
 func doShutDownInteractive() {
-	go exec.Command("/usr/lib/deepin-daemon/dshutdown").Run()
+	go exec.Command("dde-shutdown").Run()
 }
 
 func (up *Power) handlePowerButton() {
