@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <enum id='com.deepin.dde.GsdTouchpadScrollMethod'>
+    <value nick='disabled' value='0'/>
+    <value nick='edge-scrolling' value='1'/>
+    <value nick='two-finger-scrolling' value='2'/>
+  </enum>
+  <enum id='com.deepin.dde.GsdBellMode'>
+    <value nick='on' value='0'/>
+    <value nick='off' value='1'/>
+    <value nick='custom' value='2'/>
+  </enum>
+  <enum id='com.deepin.dde.GsdTouchpadHandedness'>
+    <value nick='right' value='0'/>
+    <value nick='left' value='1'/>
+    <value nick='mouse' value='2'/>
+  </enum>
+  <enum id='com.deepin.dde.GsdNumLockState'>
+    <value nick='unknown' value='0'/>
+    <value nick='on' value='1'/>
+    <value nick='off' value='2'/>
+  </enum>
+  <enum id='com.deepin.dde.GsdInputSourcesSwitcher'>
+    <value nick='off' value='0'/>
+    <value nick='shift-l' value='1'/>
+    <value nick='alt-l' value='2'/>
+    <value nick='ctrl-l' value='3'/>
+    <value nick='shift-r' value='4'/>
+    <value nick='alt-r' value='5'/>
+    <value nick='ctrl-r' value='6'/>
+    <value nick='alt-shift-l' value='7'/>
+    <value nick='alt-shift-r' value='8'/>
+    <value nick='ctrl-shift-l' value='9'/>
+    <value nick='ctrl-shift-r' value='10'/>
+    <value nick='shift-l-shift-r' value='11'/>
+    <value nick='alt-l-alt-r' value='12'/>
+    <value nick='ctrl-l-ctrl-r' value='13'/>
+    <value nick='alt-shift' value='14'/>
+    <value nick='ctrl-shift' value='15'/>
+    <value nick='alt-ctrl' value='16'/>
+    <value nick='caps' value='17'/>
+    <value nick='shift-caps' value='18'/>
+    <value nick='alt-caps' value='19'/>
+    <value nick='ctrl-caps' value='20'/>
+  </enum>
+  <schema path="/com/deepin/dde/peripherals/" id="com.deepin.dde.peripherals">
+    <child schema="com.deepin.dde.peripherals.touchpad" name="touchpad"/>
+    <child schema="com.deepin.dde.peripherals.keyboard" name="keyboard"/>
+    <child schema="com.deepin.dde.peripherals.mouse" name="mouse"/>
+    <child schema="com.deepin.dde.peripherals.touchscreen" name="touchscreen"/>
+    <child schema="com.deepin.dde.peripherals.input-devices" name="input-devices"/>
+  </schema>
+  <schema path="/com/deepin/dde/peripherals/touchpad/" id="com.deepin.dde.peripherals.touchpad" >
+    <key type="b" name="disable-while-typing">
+      <default>false</default>
+      <summary>Disable touchpad while typing</summary>
+      <description>Set this to TRUE if you have problems with accidentally hitting the touchpad while typing.</description>
+    </key>
+    <key type="b" name="horiz-scroll-enabled">
+      <default>true</default>
+      <summary>Enable horizontal scrolling</summary>
+      <description>Set this to TRUE to allow horizontal scrolling by the same method selected with the scroll_method key.</description>
+    </key>
+    <key name="scroll-method" enum="com.deepin.dde.GsdTouchpadScrollMethod">
+      <default>'edge-scrolling'</default>
+      <summary>Select the touchpad scroll method</summary>
+      <description>Select the touchpad scroll method. Supported values are: "disabled", "edge-scrolling", "two-finger-scrolling".</description>
+    </key>
+    <key type="b" name="tap-to-click">
+      <default>true</default>
+      <summary>Enable mouse clicks with touchpad</summary>
+      <description>Set this to TRUE to be able to send mouse clicks by tapping on the touchpad.</description>
+    </key>
+    <key type="b" name="touchpad-enabled">
+      <default>true</default>
+      <summary>Enable touchpad</summary>
+      <description>Set this to TRUE to enable all touchpads.</description>
+    </key>
+    <key name="left-handed" enum="com.deepin.dde.GsdTouchpadHandedness">
+      <default>'right'</default>
+      <summary>Touchpad button orientation</summary>
+      <description>Swap left and right mouse buttons for left-handed mice with 'left', 'right' for right-handed, 'mouse' to follow the mouse setting.</description>
+    </key>
+    <key type="d" name="motion-acceleration">
+      <default>1</default>
+      <summary>Single Click</summary>
+      <description>Acceleration multiplier for mouse motion. A value of -1 is the system default.</description>
+    </key>
+    <key type="d" name="motion-threshold">
+      <default>1</default>
+      <summary>Motion Threshold</summary>
+      <description>Distance in pixels the pointer must move before accelerated mouse motion is activated. A value of -1 is the system default.</description>
+    </key>
+    <key type="b" name="natural-scroll">
+      <default>false</default>
+      <summary>Natural scrolling</summary>
+      <description>Set this to TRUE to enable natural (reverse) scrolling for touchpads.</description>
+    </key>
+    <key type="b" name="two-finger-scroll">
+      <default>true</default>
+      <summary>Two finger scrolling.</summary>
+      <description>Enable(or disable) two finger scrolling.</description>
+    </key>
+  </schema>
+  <schema path="/com/deepin/dde/peripherals/keyboard/" id="com.deepin.dde.peripherals.keyboard" >
+    <key type="as" name="user-layout-list">
+        <default>[]</default>
+        <summary>User Add Layout List</summary>
+        <description>User Add Layout List</description>
+    </key>
+    <key type="b" name="repeat">
+      <default>true</default>
+    </key>
+    <key type="b" name="click">
+      <default>true</default>
+    </key>
+    <key type="u" name="repeat-interval">
+      <default>30</default>
+      <summary>Key Repeat Interval</summary>
+      <description>Delay between repeats in milliseconds.</description>
+    </key>
+    <key type="u" name="delay">
+      <default>500</default>
+      <summary>Initial Key Repeat Delay</summary>
+      <description>Initial key repeat delay in milliseconds.</description>
+    </key>
+    <key type="i" name="click-volume">
+      <default>0</default>
+    </key>
+    <key name="bell-mode" enum="com.deepin.dde.GsdBellMode">
+      <default>'on'</default>
+      <description>Possible values are "on", "off", and "custom".</description>
+    </key>
+    <key type="i" name="bell-pitch">
+      <default>400</default>
+    </key>
+    <key type="i" name="bell-duration">
+      <default>100</default>
+    </key>
+    <key type="s" name="bell-custom-file">
+      <default>''</default>
+      <summary>Keyboard Bell Custom Filename</summary>
+      <description>File name of the bell sound to be played.</description>
+    </key>
+    <key type="b" name="remember-numlock-state">
+      <default>true</default>
+      <summary>Remember NumLock state</summary>
+      <description>When set to true, GNOME will remember the state of the NumLock LED between sessions.</description>
+    </key>
+    <key name="numlock-state" enum="com.deepin.dde.GsdNumLockState">
+      <default>'unknown'</default>
+      <summary>NumLock state</summary>
+      <description>The remembered state of the NumLock LED.</description>
+    </key>
+    <key name="input-sources-switcher" enum="com.deepin.dde.GsdInputSourcesSwitcher">
+      <default>'off'</default>
+      <summary>Modifiers-only input sources switcher shortcut</summary>
+    </key>
+  </schema>
+  <schema path="/com/deepin/dde/peripherals/mouse/" id="com.deepin.dde.peripherals.mouse" >
+    <key type="b" name="locate-pointer">
+      <default>false</default>
+      <summary>Highlights the current location of the pointer when the Control key is pressed and released.</summary>
+    </key>
+    <key type="b" name="left-handed">
+      <default>false</default>
+      <summary>Mouse button orientation</summary>
+      <description>Swap left and right mouse buttons for left-handed mice.</description>
+    </key>
+    <key type="d" name="motion-acceleration">
+      <default>1.0</default>
+      <summary>Single Click</summary>
+      <description>Acceleration multiplier for mouse motion. A value of -1 is the system default.</description>
+    </key>
+    <key type="d" name="motion-threshold">
+      <default>1</default>
+      <summary>Motion Threshold</summary>
+      <description>Distance in pixels the pointer must move before accelerated mouse motion is activated. A value of -1 is the system default.</description>
+    </key>
+    <key type="i" name="double-click">
+      <default>400</default>
+      <summary>Double click time</summary>
+      <description>Length of a double click in milliseconds.</description>
+    </key>
+    <key type="i" name="drag-threshold">
+      <default>8</default>
+      <summary>Drag threshold</summary>
+      <description>Distance before a drag is started.</description>
+    </key>
+    <key type="b" name="middle-button-enabled">
+      <default>false</default>
+      <summary>Middle button emulation</summary>
+      <description>Enables middle mouse button emulation through simultaneous left and right button click.</description>
+    </key>
+  </schema>
+  <schema path="/com/deepin/dde/peripherals/touchscreen/" id="com.deepin.dde.peripherals.touchscreen" >
+    <key type="b" name="orientation-lock">
+      <default>false</default>
+      <summary>Whether the tablet's orientation is locked, or rotated automatically.</summary>
+    </key>
+  </schema>
+  <schema path="/com/deepin/dde/peripherals/input-devices/" id="com.deepin.dde.peripherals.input-devices" >
+    <key type="s" name="hotplug-command">
+      <default>''</default>
+      <summary>Device hotplug custom command</summary>
+      <description>Command to be run when a device is added or removed. An exit value of 1 means that the device will not be handled further by gnome-settings-daemon.</description>
+    </key>
+  </schema>
+</schemalist>
