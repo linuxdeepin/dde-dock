@@ -202,7 +202,7 @@ func (session *ConnectionSession) listKeys(page string) (keys []string) {
 	fields := session.pageToFields(page)
 	for _, field := range fields {
 		if isSettingFieldExists(session.data, field) {
-			keys = appendStringArray(keys, generalGetSettingAvailableKeys(session.data, field))
+			keys = appendStrArrayUnion(keys, generalGetSettingAvailableKeys(session.data, field)...)
 		}
 	}
 	if len(keys) == 0 {
@@ -215,7 +215,7 @@ func (session *ConnectionSession) listKeys(page string) (keys []string) {
 func (session *ConnectionSession) GetAvailableValues(page, key string) (values []string) {
 	fields := session.pageToFields(page)
 	for _, field := range fields {
-		values, _ = generalGetSettingAvailableValues(field, key)
+		values, _ = generalGetSettingAvailableValues(session.data, field, key)
 		if len(values) > 0 {
 			break
 		}
@@ -259,7 +259,7 @@ func (session *ConnectionSession) DebugListKeyDetail() (info string) {
 		for _, key := range pageData {
 			field := session.getFieldOfPageKey(page, key)
 			t := generalGetSettingKeyType(field, key)
-			values, _ := generalGetSettingAvailableValues(field, key)
+			values, _ := generalGetSettingAvailableValues(session.data, field, key)
 			info += fmt.Sprintf("%s->%s[%s]: %s (%s)\n", page, key, getKtypeDescription(t), session.GetKey(page, key), values)
 		}
 	}

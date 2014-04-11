@@ -39,23 +39,94 @@ const (
 	NM_SETTING_802_1X_SYSTEM_CA_CERTS                   = "system-ca-certs"
 )
 
-// TODO Get available keys
+func doGetSetting8021xEap(data _ConnectionData) (eap string) {
+	eaps := getSetting8021xEap(data)
+	if len(eaps) == 0 {
+		LOGGER.Error("eap value is empty")
+		return
+	}
+	eap = eaps[0]
+	return
+}
+
+// Get available keys
 func getSetting8021xAvailableKeys(data _ConnectionData) (keys []string) {
-	keys = []string{
-		NM_SETTING_802_1X_EAP,
-		NM_SETTING_802_1X_IDENTITY,
-		NM_SETTING_802_1X_ANONYMOUS_IDENTITY,
-		NM_SETTING_802_1X_PAC_FILE,
+	keys = []string{NM_SETTING_802_1X_EAP}
+	switch doGetSetting8021xEap(data) {
+	case "tls":
+		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_IDENTITY)
+		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_CLIENT_CERT)
+		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_CA_CERT)
+		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PRIVATE_KEY)
+		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PASSWORD)
+	case "leap":
+		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_IDENTITY)
+		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PASSWORD)
+	case "fast":
+		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_ANONYMOUS_IDENTITY)
+		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING)
+		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PAC_FILE)
+		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PHASE2_AUTH)
+		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_IDENTITY)
+		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PASSWORD_FLAGS) // TODO
+		if getSetting8021xPasswordFlags(data) == NM_SETTING_SECRET_FLAG_NOT_SAVED {
+			keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PASSWORD)
+		}
+	case "ttls":
+		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_ANONYMOUS_IDENTITY)
+		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_CA_CERT)
+		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PHASE2_AUTH)
+		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_IDENTITY)
+		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PASSWORD_FLAGS) // TODO
+		if getSetting8021xPasswordFlags(data) == NM_SETTING_SECRET_FLAG_NOT_SAVED {
+			keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PASSWORD)
+		}
+	case "peap":
+		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_ANONYMOUS_IDENTITY)
+		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_CA_CERT)
+		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PHASE1_PEAPVER)
+		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PHASE2_AUTH)
+		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_IDENTITY)
+		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PASSWORD_FLAGS) // TODO
+		if getSetting8021xPasswordFlags(data) == NM_SETTING_SECRET_FLAG_NOT_SAVED {
+			keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PASSWORD)
+		}
 	}
 	return
 }
 
-// TODO Get available values
-func getSetting8021xAvailableValues(key string) (values []string, customizable bool) {
+// Get available values
+func getSetting8021xAvailableValues(data _ConnectionData, key string) (values []string, customizable bool) {
 	customizable = true
 	switch key {
 	case NM_SETTING_802_1X_EAP:
-		values = []string{"leap", "md5", "tls", "peap", "ttls", "fast"}
+		values = []string{"tls", "leap", "fast", "ttls", "peap"}
+	case NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING:
+		values = []string{
+			"0", // disabled
+			"1", // allow unauthenticated provisioning
+			"2", // allow authenticated provisioning
+			"3", // allow both authenticated and unauthenticated provisioning
+		}
+	case NM_SETTING_802_1X_PHASE2_AUTH:
+		// 'pap', 'chap', 'mschap', 'mschapv2', 'gtc', 'otp', 'md5', and 'tls'
+		switch doGetSetting8021xEap(data) {
+		case "tls":
+		case "leap":
+		case "fast":
+			values = []string{"gtc", "mschapv2"}
+		case "ttls":
+			values = []string{"pap", "mschap", "mschapv2", "chap"}
+		case "peap":
+			values = []string{"gtc", "md5", "mschapv2"}
+		}
+	case NM_SETTING_802_1X_PASSWORD_FLAGS: // TODO
+		// values = []string{
+		// 	NM_SETTING_SECRET_FLAG_NONE,
+		// 	NM_SETTING_SECRET_FLAG_AGENT_OWNED,
+		// 	NM_SETTING_SECRET_FLAG_NOT_SAVED,
+		// 	NM_SETTING_SECRET_FLAG_NOT_REQUIRED,
+		// }
 	}
 	return
 }
@@ -73,6 +144,8 @@ func generalSetSetting8021xKeyJSON(data _ConnectionData, key, value string) {
 	default:
 		LOGGER.Error("generalSetSetting8021xKey: invalide key", key)
 	case NM_SETTING_802_1X_EAP:
+		// TODO
+		// logicSetSetting8021xEapJSON(data, value)
 		setSetting8021xEapJSON(data, value)
 	case NM_SETTING_802_1X_IDENTITY:
 		setSetting8021xIdentityJSON(data, value)
@@ -137,3 +210,6 @@ func generalSetSetting8021xKeyJSON(data _ConnectionData, key, value string) {
 	}
 	return
 }
+
+// Logic setter
+// TODO

@@ -5,6 +5,7 @@ import "io"
 import "crypto/rand"
 import "reflect"
 import "encoding/json"
+import "strings"
 
 func newUUID() string {
 	uuid := make([]byte, 16)
@@ -28,10 +29,12 @@ func isStringInArray(s string, list []string) bool {
 	return false
 }
 
-func appendStringArray(a1 []string, a2 []string) (a []string) {
+func appendStrArrayUnion(a1 []string, a2 ...string) (a []string) {
 	a = a1
 	for _, s := range a2 {
-		a = append(a, s)
+		if !isStringInArray(s, a) {
+			a = append(a, s)
+		}
 	}
 	return
 }
@@ -69,4 +72,12 @@ func isUint32ArrayEmpty(a []uint32) (empty bool) {
 		}
 	}
 	return
+}
+
+func uriToPath(uri string) (string, bool) {
+	tmp := strings.TrimLeft(uri, " ")
+	if strings.HasPrefix(tmp, "file://") {
+		return tmp[7:], true
+	}
+	return "", false
 }

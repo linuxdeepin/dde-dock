@@ -45,19 +45,19 @@ func getSettingIp6ConfigAvailableKeys(data _ConnectionData) (keys []string) {
 		keys = []string{
 			NM_SETTING_IP6_CONFIG_METHOD,
 		}
-		keys = appendStringArray(keys, getRelatedAvailableVirtualKeys(fieldIPv6, NM_SETTING_IP6_CONFIG_DNS))
+		keys = appendStrArrayUnion(keys, getRelatedAvailableVirtualKeys(fieldIPv6, NM_SETTING_IP6_CONFIG_DNS)...)
 	case NM_SETTING_IP6_CONFIG_METHOD_DHCP: // ignore
 		keys = []string{
 			NM_SETTING_IP6_CONFIG_METHOD,
 		}
-		keys = appendStringArray(keys, getRelatedAvailableVirtualKeys(fieldIPv6, NM_SETTING_IP6_CONFIG_DNS))
+		keys = appendStrArrayUnion(keys, getRelatedAvailableVirtualKeys(fieldIPv6, NM_SETTING_IP6_CONFIG_DNS)...)
 	case NM_SETTING_IP6_CONFIG_METHOD_LINK_LOCAL: // ignore
 	case NM_SETTING_IP6_CONFIG_METHOD_MANUAL:
 		keys = []string{
 			NM_SETTING_IP6_CONFIG_METHOD,
 		}
-		keys = appendStringArray(keys, getRelatedAvailableVirtualKeys(fieldIPv6, NM_SETTING_IP6_CONFIG_DNS))
-		keys = appendStringArray(keys, getRelatedAvailableVirtualKeys(fieldIPv6, NM_SETTING_IP6_CONFIG_ADDRESSES))
+		keys = appendStrArrayUnion(keys, getRelatedAvailableVirtualKeys(fieldIPv6, NM_SETTING_IP6_CONFIG_DNS)...)
+		keys = appendStrArrayUnion(keys, getRelatedAvailableVirtualKeys(fieldIPv6, NM_SETTING_IP6_CONFIG_ADDRESSES)...)
 	case NM_SETTING_IP6_CONFIG_METHOD_SHARED: // ignore
 	}
 	return

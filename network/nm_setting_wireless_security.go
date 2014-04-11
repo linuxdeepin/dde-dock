@@ -139,12 +139,12 @@ func getSettingWirelessSecurityAvailableKeys(data _ConnectionData) (keys []strin
 		keys = []string{
 			NM_SETTING_WIRELESS_SECURITY_WEP_KEY0,
 		}
-		keys = appendStringArray(keys, getRelatedAvailableVirtualKeys(fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT))
+		keys = appendStrArrayUnion(keys, getRelatedAvailableVirtualKeys(fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT)...)
 	case "wpa-psk":
 		keys = []string{
 			NM_SETTING_WIRELESS_SECURITY_PSK,
 		}
-		keys = appendStringArray(keys, getRelatedAvailableVirtualKeys(fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT))
+		keys = appendStrArrayUnion(keys, getRelatedAvailableVirtualKeys(fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT)...)
 	case "wpa-eap":
 		keys = getRelatedAvailableVirtualKeys(fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT)
 	}

@@ -84,14 +84,14 @@ func generalGetSettingAvailableKeys(data _ConnectionData, field string) (keys []
 	return
 }
 
-func generalGetSettingAvailableValues(field, key string) (values []string, customizable bool) {
+func generalGetSettingAvailableValues(data _ConnectionData, field, key string) (values []string, customizable bool) {
 	if isVirtualKey(field, key) {
 		values = generalGetSettingVkAvailableValues(field, key)
 		return
 	}
 	switch field {
 	case field8021x:
-		values, customizable = getSetting8021xAvailableValues(key)
+		values, customizable = getSetting8021xAvailableValues(data, key)
 	case fieldConnection:
 		values, customizable = getSettingConnectionAvailableValues(key)
 	case fieldIPv4:
@@ -99,7 +99,7 @@ func generalGetSettingAvailableValues(field, key string) (values []string, custo
 	case fieldIPv6:
 		values, customizable = getSettingIp6ConfigAvailableValues(key)
 	case fieldWired:
-		// values,customizable = getSettingWiredAvailableValues(key)
+		values, customizable = getSettingWiredAvailableValues(key)
 	case fieldWireless:
 		values, customizable = getSettingWirelessAvailableValues(key)
 	case fieldWirelessSecurity:
