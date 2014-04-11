@@ -125,12 +125,12 @@ func newWirelessConnectionData(id, uuid string, ssid []byte, keyFlag int) (data 
 		switch keyFlag {
 		case ApKeyWep:
 			setSettingWirelessSecurityKeyMgmt(data, "none")
+			setSettingWirelessSecurityAuthAlg(data, "open")
 		case ApKeyPsk:
 			setSettingWirelessSecurityKeyMgmt(data, "wpa-psk")
-			setSettingWirelessSecurityAuthAlg(data, "open")
 		case ApKeyEap:
 			setSettingWirelessSecurityKeyMgmt(data, "wpa-eap")
-			setSettingWirelessSecurityAuthAlg(data, "open")
+			// TODO
 		}
 	}
 
