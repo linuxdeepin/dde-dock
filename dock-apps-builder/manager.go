@@ -231,6 +231,7 @@ func (m *Manager) destroyNormalApp(nApp *NormalApp) {
 func main() {
 	if !dlib.UniqueOnSession("com.deepin.daemon.DockAppsBuilder") {
 		LOGGER.Warning("Another com.deepin.daemon.DockAppsBuilder running")
+		return
 	}
 	var debug bool
 	flag.BoolVar(&debug, "d", false, "start debug")

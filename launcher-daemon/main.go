@@ -10,14 +10,16 @@ import (
 	"os"
 )
 
-var logger *l.Logger
+var logger *l.Logger = l.NewLogger("dde-daemon/launcher-daemon")
 
 func main() {
+	if !dlib.UniqueOnSession("com.deepin.daemon.launcher-daemon") {
+		logger.Warning("Another com.deepin.daemon.launcher-daemon is running.")
+		return
+	}
 	dlib.InitI18n()
 	// DesktopAppInfo.ShouldShow does not know deepin.
 	gio.DesktopAppInfoSetDesktopEnv("Deepin")
-
-	logger = l.NewLogger("dde-daemon/launcher-daemon")
 
 	initCategory()
 	logger.Info("init category done")
