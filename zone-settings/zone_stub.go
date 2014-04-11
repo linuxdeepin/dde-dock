@@ -43,6 +43,7 @@ func (op *Manager) GetDBusInfo() dbus.DBusInfo {
 
 func (op *Manager) listenSignal() {
         dspObj.ConnectPrimaryChanged(func(argv []interface{}) {
+                unregisterZoneArea()
                 registerZoneArea()
         })
 
