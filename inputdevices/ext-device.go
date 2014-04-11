@@ -51,11 +51,11 @@ const (
         _EXT_ENTRY_PATH = "/com/deepin/daemon/InputDevice/"
         _EXT_ENTRY_IFC  = "com.deepin.daemon.InputDevice."
 
-        _KEYBOARD_REPEAT_SCHEMA = "org.gnome.settings-daemon.peripherals.keyboard"
+        _KEYBOARD_REPEAT_SCHEMA = "com.deepin.dde.peripherals.keyboard"
         _LAYOUT_SCHEMA          = "org.gnome.libgnomekbd.keyboard"
         _DESKTOP_INFACE_SCHEMA  = "org.gnome.desktop.interface"
-        _MOUSE_SCHEMA           = "org.gnome.settings-daemon.peripherals.mouse"
-        _TPAD_SCHEMA            = "org.gnome.settings-daemon.peripherals.touchpad"
+        _MOUSE_SCHEMA           = "com.deepin.dde.peripherals.mouse"
+        _TPAD_SCHEMA            = "com.deepin.dde.peripherals.touchpad"
 )
 
 var (
