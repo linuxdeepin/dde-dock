@@ -204,6 +204,9 @@ func (app *RuntimeApp) HandleMenuItem(id int32) {
 //func find_app_id(pid uint, instanceName, wmName, wmClass, iconName string) string { return "" }
 
 func find_app_id_by_xid(xid xproto.Window) string {
+	if id, err := xprop.PropValStr(xprop.GetProperty(XU, xid, "_DDE_DOCK_APP_ID")); err == nil {
+		return id
+	}
 	pid, _ := ewmh.WmPidGet(XU, xid)
 	iconName, _ := ewmh.WmIconNameGet(XU, xid)
 	name, _ := ewmh.WmNameGet(XU, xid)
