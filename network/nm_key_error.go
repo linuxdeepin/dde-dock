@@ -9,6 +9,7 @@ const (
 	// NM_KEY_ERROR_IP4_ADDRESSES_PREFIX = "IPv4 prefix's value should be 1-32"
 	NM_KEY_ERROR_IP6_METHOD_CONFLICT = `%s cannot be used with the 'shared', 'link-local', or 'ignore' methods`
 	NM_KEY_ERROR_MISSING_SECTION     = "missing %s field section"
+	NM_KEY_ERROR_EMPTY_SECTION       = "field section %s is empty"
 )
 
 func rememberError(errs map[string]string, key, errMsg string) {

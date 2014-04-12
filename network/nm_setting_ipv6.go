@@ -102,8 +102,7 @@ func checkSettingIp6ConfigValues(data _ConnectionData) (errs map[string]string) 
 	case NM_SETTING_IP6_CONFIG_METHOD_LINK_LOCAL: // ignore
 		checkSettingIp6MethodConflict(data, errs)
 	case NM_SETTING_IP6_CONFIG_METHOD_MANUAL:
-		// ensure address exists
-		ensureSettingIp6ConfigAddressesExists(data, errs)
+		ensureSettingIp6ConfigAddressesNoEmpty(data, errs)
 	case NM_SETTING_IP6_CONFIG_METHOD_SHARED: // ignore
 		checkSettingIp6MethodConflict(data, errs)
 	}
@@ -155,17 +154,6 @@ func checkSettingIp6ConfigDns(data _ConnectionData, errs map[string]string) {
 	}
 }
 
-func ensureSettingIp6ConfigAddressesExists(data _ConnectionData, errs map[string]string) {
-	if !isSettingIp6ConfigAddressesExists(data) {
-		rememberVkError(errs, fieldIPv6, NM_SETTING_IP6_CONFIG_ADDRESSES, NM_KEY_ERROR_MISSING_VALUE)
-		return
-	}
-	addresses := getSettingIp6ConfigAddresses(data)
-	if len(addresses) == 0 {
-		rememberVkError(errs, fieldIPv6, NM_SETTING_IP6_CONFIG_ADDRESSES, NM_KEY_ERROR_EMPTY_VALUE)
-		return
-	}
-}
 func checkSettingIp6ConfigAddresses(data _ConnectionData, errs map[string]string) {
 	if !isSettingIp6ConfigAddressesExists(data) {
 		return

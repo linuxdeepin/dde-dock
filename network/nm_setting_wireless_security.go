@@ -1,9 +1,5 @@
 package main
 
-import (
-	"fmt"
-)
-
 // https://developer.gnome.org/libnm-util/0.9/NMSettingWirelessSecurity.html
 // https://developer.gnome.org/NetworkManager/unstable/ref-settings.html
 
@@ -187,17 +183,14 @@ func checkSettingWirelessSecurityValues(data _ConnectionData) (errs map[string]s
 		rememberVkError(errs, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT, NM_KEY_ERROR_INVALID_VALUE)
 		return
 	case "none": // wep
-		ensureSettingWirelessSecurityWepKeyTypeExists(data, errs)
-		ensureSettingWirelessSecurityWepKey0Exists(data, errs)
+		ensureSettingWirelessSecurityWepKeyTypeNoEmpty(data, errs)
+		ensureSettingWirelessSecurityWepKey0NoEmpty(data, errs)
 	case "ieee8021x": // dynamic wep
 	case "wpa-none": // wpa-psk ad-hoc
 	case "wpa-psk": // wpa-psk infrastructure
-		ensureSettingWirelessSecurityPskExists(data, errs)
+		ensureSettingWirelessSecurityPskNoEmpty(data, errs)
 	case "wpa-eap": // wpa enterprise
-		// ensure field 8021x exists
-		if !isSettingFieldExists(data, field8021x) {
-			rememberError(errs, NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, field8021x))
-		}
+		ensureFieldSetting8021xExists(data, errs, NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT)
 	}
 
 	// check wep-key-type
@@ -212,21 +205,6 @@ func checkSettingWirelessSecurityValues(data _ConnectionData) (errs map[string]s
 	return
 }
 
-func ensureSettingWirelessSecurityWepKeyTypeExists(data _ConnectionData, errs map[string]string) {
-	if !isSettingWirelessSecurityWepKeyTypeExists(data) {
-		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE, NM_KEY_ERROR_MISSING_VALUE)
-	}
-}
-func ensureSettingWirelessSecurityWepKey0Exists(data _ConnectionData, errs map[string]string) {
-	if len(getSettingWirelessSecurityWepKey0(data)) == 0 {
-		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_WEP_KEY0, NM_KEY_ERROR_MISSING_VALUE)
-	}
-}
-func ensureSettingWirelessSecurityPskExists(data _ConnectionData, errs map[string]string) {
-	if len(getSettingWirelessSecurityPsk(data)) == 0 {
-		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_PSK, NM_KEY_ERROR_MISSING_VALUE)
-	}
-}
 func checkSettingWirelessSecurityWepKeyType(data _ConnectionData, errs map[string]string) {
 	if !isSettingWirelessSecurityWepKeyTypeExists(data) {
 		return
