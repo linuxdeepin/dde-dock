@@ -86,12 +86,8 @@ func checkSettingIp6ConfigValues(data _ConnectionData) (errs map[string]string) 
 	errs = make(map[string]string)
 
 	// check method
-	if !isSettingIp6ConfigMethodExists(data) {
-		rememberError(errs, NM_SETTING_IP6_CONFIG_METHOD, NM_KEY_ERROR_MISSING_VALUE)
-		return
-	}
-	method := getSettingIp6ConfigMethod(data)
-	switch method {
+	ensureSettingIp6ConfigMethodNoEmpty(data, errs)
+	switch getSettingIp6ConfigMethod(data) {
 	default:
 		rememberError(errs, NM_SETTING_IP6_CONFIG_METHOD, NM_KEY_ERROR_INVALID_VALUE)
 		return

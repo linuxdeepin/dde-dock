@@ -98,11 +98,8 @@ func getSettingConnectionAvailableValues(key string) (values []string, customiza
 func checkSettingConnectionValues(data _ConnectionData) (errs map[string]string) {
 	errs = make(map[string]string)
 
-	// check NM_SETTING_CONNECTION_ID
-	id := getSettingConnectionId(data)
-	if len(id) == 0 {
-		rememberError(errs, NM_SETTING_CONNECTION_ID, NM_KEY_ERROR_MISSING_VALUE)
-	}
+	// check id
+	ensureSettingConnectionIdNoEmpty(data, errs)
 
 	return
 }

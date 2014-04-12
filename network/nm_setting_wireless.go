@@ -209,15 +209,7 @@ func checkSettingWirelessValues(data _ConnectionData) (errs map[string]string) {
 	errs = make(map[string]string)
 
 	// check ssid
-	if !isSettingWirelessSsidExists(data) {
-		rememberError(errs, NM_SETTING_WIRELESS_SSID, NM_KEY_ERROR_MISSING_VALUE)
-		return
-	}
-	ssid := getSettingWirelessSsid(data)
-	if len(ssid) == 0 {
-		rememberError(errs, NM_SETTING_WIRELESS_SSID, NM_KEY_ERROR_EMPTY_VALUE)
-		return
-	}
+	ensureSettingWirelessSsidNoEmpty(data, errs)
 
 	// check security
 	if isSettingWirelessSecExists(data) {

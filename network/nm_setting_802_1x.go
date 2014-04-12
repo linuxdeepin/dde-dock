@@ -68,29 +68,19 @@ func getSetting8021xAvailableKeys(data _ConnectionData) (keys []string) {
 		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PAC_FILE)
 		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PHASE2_AUTH)
 		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_IDENTITY)
-		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PASSWORD_FLAGS) // TODO
-		if getSetting8021xPasswordFlags(data) == NM_SETTING_SECRET_FLAG_NOT_SAVED {
-			keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PASSWORD)
-		}
+		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PASSWORD)
 	case "ttls":
 		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_ANONYMOUS_IDENTITY)
 		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_CA_CERT)
 		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PHASE2_AUTH)
 		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_IDENTITY)
-		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PASSWORD_FLAGS) // TODO
-		if getSetting8021xPasswordFlags(data) == NM_SETTING_SECRET_FLAG_NOT_SAVED {
-			keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PASSWORD)
-		}
+		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PASSWORD)
 	case "peap":
 		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_ANONYMOUS_IDENTITY)
 		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_CA_CERT)
-		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PHASE1_PEAPVER)
 		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PHASE2_AUTH)
 		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_IDENTITY)
-		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PASSWORD_FLAGS) // TODO
-		if getSetting8021xPasswordFlags(data) == NM_SETTING_SECRET_FLAG_NOT_SAVED {
-			keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PASSWORD)
-		}
+		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PASSWORD)
 	}
 	return
 }
@@ -131,57 +121,46 @@ func getSetting8021xAvailableValues(data _ConnectionData, key string) (values []
 	return
 }
 
-// TODO Check whether the values are correct
+// Check whether the values are correct
 func checkSetting8021xValues(data _ConnectionData) (errs map[string]string) {
 	errs = make(map[string]string)
 
 	// check eap
-	if !isSetting8021xEapExists(data) {
-		rememberError(errs, NM_SETTING_802_1X_EAP, NM_KEY_ERROR_MISSING_VALUE)
-		return
-	}
+	ensureSetting8021xEapNoEmpty(data, errs)
 	switch doGetSetting8021xEap(data) {
 	default:
 		rememberError(errs, NM_SETTING_802_1X_EAP, NM_KEY_ERROR_INVALID_VALUE)
 	case "tls":
-		// keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_IDENTITY)
-		// keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_CLIENT_CERT)
-		// keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_CA_CERT)
-		// keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PRIVATE_KEY)
-		// keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PASSWORD)
+		ensureSetting8021xIdentityNoEmpty(data, errs)
+		ensureSetting8021xClientCertNoEmpty(data, errs)
+		ensureSetting8021xCaCertNoEmpty(data, errs)
+		ensureSetting8021xPrivateKeyNoEmpty(data, errs)
+		ensureSetting8021xPasswordNoEmpty(data, errs)
+		ensureSetting8021xSystemCaCertsNoEmpty(data, errs)
 	case "leap":
-		// keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_IDENTITY)
-		// keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PASSWORD)
+		ensureSetting8021xIdentityNoEmpty(data, errs)
+		ensureSetting8021xPasswordNoEmpty(data, errs)
 	case "fast":
-		// keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_ANONYMOUS_IDENTITY)
-		// keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING)
-		// keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PAC_FILE)
-		// keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PHASE2_AUTH)
-		// keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_IDENTITY)
-		// keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PASSWORD_FLAGS) // TODO
-		// if getSetting8021xPasswordFlags(data) == NM_SETTING_SECRET_FLAG_NOT_SAVED {
-		// 	keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PASSWORD)
-		// }
+		ensureSetting8021xPhase2AuthNoEmpty(data, errs)
+		ensureSetting8021xIdentityNoEmpty(data, errs)
+		ensureSetting8021xPasswordNoEmpty(data, errs)
+		ensureSetting8021xSystemCaCertsNoEmpty(data, errs)
 	case "ttls":
-		// keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_ANONYMOUS_IDENTITY)
-		// keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_CA_CERT)
-		// keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PHASE2_AUTH)
-		// keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_IDENTITY)
-		// keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PASSWORD_FLAGS) // TODO
-		// if getSetting8021xPasswordFlags(data) == NM_SETTING_SECRET_FLAG_NOT_SAVED {
-		// 	keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PASSWORD)
-		// }
+		ensureSetting8021xPhase2AuthNoEmpty(data, errs)
+		ensureSetting8021xIdentityNoEmpty(data, errs)
+		ensureSetting8021xPasswordNoEmpty(data, errs)
+		ensureSetting8021xSystemCaCertsNoEmpty(data, errs)
 	case "peap":
-		// keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_ANONYMOUS_IDENTITY)
-		// keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_CA_CERT)
-		// keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PHASE1_PEAPVER)
-		// keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PHASE2_AUTH)
-		// keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_IDENTITY)
-		// keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PASSWORD_FLAGS) // TODO
-		// if getSetting8021xPasswordFlags(data) == NM_SETTING_SECRET_FLAG_NOT_SAVED {
-		// 	keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PASSWORD)
-		// }
+		ensureSetting8021xPhase2AuthNoEmpty(data, errs)
+		ensureSetting8021xIdentityNoEmpty(data, errs)
+		ensureSetting8021xPasswordNoEmpty(data, errs)
+		ensureSetting8021xSystemCaCertsNoEmpty(data, errs)
 	}
+
+	// TODO check value of client cert
+	// TODO check value of ca cert
+	// TODO check value of private key
+
 	return
 }
 

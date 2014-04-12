@@ -173,12 +173,8 @@ func checkSettingWirelessSecurityValues(data _ConnectionData) (errs map[string]s
 	errs = make(map[string]string)
 
 	// check key-mgmt
-	if !isSettingWirelessSecurityKeyMgmtExists(data) {
-		rememberVkError(errs, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT, NM_KEY_ERROR_MISSING_VALUE)
-		return
-	}
-	keyMgmt := getSettingWirelessSecurityKeyMgmt(data)
-	switch keyMgmt {
+	ensureSettingWirelessSecurityKeyMgmtNoEmpty(data, errs)
+	switch getSettingWirelessSecurityKeyMgmt(data) {
 	default:
 		rememberVkError(errs, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT, NM_KEY_ERROR_INVALID_VALUE)
 		return

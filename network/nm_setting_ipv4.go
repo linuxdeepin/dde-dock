@@ -189,12 +189,8 @@ func checkSettingIp4ConfigValues(data _ConnectionData) (errs map[string]string) 
 	errs = make(map[string]string)
 
 	// check method
-	if !isSettingIp4ConfigMethodExists(data) {
-		rememberError(errs, NM_SETTING_IP4_CONFIG_METHOD, NM_KEY_ERROR_MISSING_VALUE)
-		return
-	}
-	method := getSettingIp4ConfigMethod(data)
-	switch method {
+	ensureSettingIp4ConfigMethodNoEmpty(data, errs)
+	switch getSettingIp4ConfigMethod(data) {
 	default:
 		rememberError(errs, NM_SETTING_IP4_CONFIG_METHOD, NM_KEY_ERROR_INVALID_VALUE)
 		return
