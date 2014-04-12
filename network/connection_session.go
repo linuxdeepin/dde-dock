@@ -84,6 +84,23 @@ func NewConnectionSessionByOpen(uuid string) (session *ConnectionSession, err er
 	}
 	session.connectionType = getSettingConnectionType(session.data)
 
+	// get secret data
+	for _, secretFiled := range []string{fieldWirelessSecurity, field8021x} {
+		if isSettingFieldExists(session.data, secretFiled) {
+			wirelessSecrutiyData, err := nmConn.GetSecrets(fieldWirelessSecurity)
+			if err == nil {
+				for field, fieldData := range wirelessSecrutiyData {
+					if !isSettingFieldExists(session.data, field) {
+						addSettingField(session.data, field)
+					}
+					for key, value := range fieldData {
+						session.data[field][key] = value
+					}
+				}
+			}
+		}
+	}
+
 	session.updatePropErrors()
 	session.updatePropAvailableKeys()
 	// session.updatePropAllowSave(false) // TODO
