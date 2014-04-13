@@ -6,6 +6,7 @@ import (
 	"dlib/gio-2.0"
 	"dlib/glib-2.0"
 	"encoding/base64"
+	"fmt"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/ewmh"
@@ -17,6 +18,17 @@ import (
 	"io/ioutil"
 	"path"
 	"strings"
+)
+
+var (
+	XU, _                 = xgbutil.NewConn()
+	_NET_CLIENT_LIST, _   = xprop.Atm(XU, "_NET_CLIENT_LIST")
+	_NET_ACTIVE_WINDOW, _ = xprop.Atm(XU, "_NET_ACTIVE_WINDOW")
+	ATOM_WINDOW_ICON, _   = xprop.Atm(XU, "_NET_WM_ICON")
+	ATOM_WINDOW_NAME, _   = xprop.Atm(XU, "_NET_WM_NAME")
+	ATOM_WINDOW_STATE, _  = xprop.Atm(XU, "_NET_WM_STATE")
+	ATOM_WINDOW_TYPE, _   = xprop.Atm(XU, "_NET_WM_WINDOW_TYPE")
+	ATOM_DOCK_APP_ID, _   = xprop.Atm(XU, "_DDE_DOCK_APP_ID")
 )
 
 var DOCKED_APP_MANAGER *dock.DockedAppManager
@@ -358,6 +370,17 @@ func (app *RuntimeApp) updateState(xid xproto.Window) {
 	app.state, _ = ewmh.WmStateGet(XU, xid)
 }
 
+func (app *RuntimeApp) updateAppid(xid xproto.Window) {
+	if app.Id != find_app_id_by_xid(xid) {
+		app.detachXid(xid)
+		if newApp := MANAGER.createRuntimeApp(xid); newApp != nil {
+			newApp.attachXid(xid)
+		}
+		fmt.Println("APP:", app.Id, "Changed to..", find_app_id_by_xid(xid))
+		//TODO: Destroy
+	}
+}
+
 func (app *RuntimeApp) Activate(x, y int32) error {
 	//TODO: handle multiple xids
 	switch {
@@ -472,9 +495,11 @@ func (app *RuntimeApp) attachXid(xid xproto.Window) {
 		switch ev.Atom {
 		case ATOM_WINDOW_ICON:
 			app.updateIcon(xid)
+			app.updateAppid(xid)
 			app.notifyChanged()
 		case ATOM_WINDOW_NAME:
 			app.updateWmClass(xid)
+			app.updateAppid(xid)
 			app.notifyChanged()
 		case ATOM_WINDOW_STATE:
 			app.updateState(xid)
@@ -483,6 +508,9 @@ func (app *RuntimeApp) attachXid(xid xproto.Window) {
 			if !isNormalWindow(ev.Window) {
 				app.detachXid(xid)
 			}
+		case ATOM_DOCK_APP_ID:
+			app.updateAppid(xid)
+			app.notifyChanged()
 		}
 	}).Connect(XU, xid)
 	app.xids[xid] = winfo
@@ -490,4 +518,31 @@ func (app *RuntimeApp) attachXid(xid xproto.Window) {
 	app.updateWmClass(xid)
 	app.updateState(xid)
 	app.notifyChanged()
+}
+
+func listenRootWindow() {
+	var update = func() {
+		list, err := ewmh.ClientListGet(XU)
+		if err != nil {
+			LOGGER.Warning("Can't Get _NET_CLIENT_LIST", err)
+		}
+		MANAGER.runtimeAppChangged(list)
+	}
+
+	xwindow.New(XU, XU.RootWin()).Listen(xproto.EventMaskPropertyChange)
+	xevent.PropertyNotifyFun(func(XU *xgbutil.XUtil, ev xevent.PropertyNotifyEvent) {
+		switch ev.Atom {
+		case _NET_CLIENT_LIST:
+			update()
+		case _NET_ACTIVE_WINDOW:
+			if activedWindow, err := ewmh.ActiveWindowGet(XU); err == nil {
+				appId := find_app_id_by_xid(activedWindow)
+				if rApp, ok := MANAGER.runtimeApps[appId]; ok {
+					rApp.setLeader(activedWindow)
+				}
+			}
+		}
+	}).Connect(XU, XU.RootWin())
+	update()
+	xevent.Main(XU)
 }

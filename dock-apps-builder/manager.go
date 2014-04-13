@@ -5,53 +5,14 @@ import "dlib"
 import "dlib/dbus"
 import "dlib/logger"
 import "flag"
-import "github.com/BurntSushi/xgbutil"
-import "github.com/BurntSushi/xgbutil/xwindow"
-import "github.com/BurntSushi/xgbutil/xevent"
 import "github.com/BurntSushi/xgb/xproto"
-import "github.com/BurntSushi/xgbutil/xprop"
-import "github.com/BurntSushi/xgbutil/ewmh"
 import "os"
 import "path/filepath"
 
 var (
-	XU, _                 = xgbutil.NewConn()
-	TrayXU, _             = xgbutil.NewConn()
-	_NET_CLIENT_LIST, _   = xprop.Atm(XU, "_NET_CLIENT_LIST")
-	_NET_ACTIVE_WINDOW, _ = xprop.Atm(XU, "_NET_ACTIVE_WINDOW")
-	ATOM_WINDOW_ICON, _   = xprop.Atm(XU, "_NET_WM_ICON")
-	ATOM_WINDOW_NAME, _   = xprop.Atm(XU, "_NET_WM_NAME")
-	ATOM_WINDOW_STATE, _  = xprop.Atm(XU, "_NET_WM_STATE")
-	ATOM_WINDOW_TYPE, _   = xprop.Atm(XU, "_NET_WM_WINDOW_TYPE")
-	MANAGER               = initManager()
-	LOGGER                = logger.NewLogger("com.deepin.daemon.DockAppsBuilder")
+	MANAGER = initManager()
+	LOGGER  = logger.NewLogger("com.deepin.daemon.DockAppsBuilder")
 )
-
-func listenRootWindow() {
-	var update = func() {
-		list, err := ewmh.ClientListGet(XU)
-		if err != nil {
-			LOGGER.Warning("Can't Get _NET_CLIENT_LIST", err)
-		}
-		MANAGER.runtimeAppChangged(list)
-	}
-
-	xwindow.New(XU, XU.RootWin()).Listen(xproto.EventMaskPropertyChange)
-	xevent.PropertyNotifyFun(func(XU *xgbutil.XUtil, ev xevent.PropertyNotifyEvent) {
-		switch ev.Atom {
-		case _NET_CLIENT_LIST:
-			update()
-		case _NET_ACTIVE_WINDOW:
-			if activedWindow, err := ewmh.ActiveWindowGet(XU); err == nil {
-				appId := find_app_id_by_xid(activedWindow)
-				if rApp, ok := MANAGER.runtimeApps[appId]; ok {
-					rApp.setLeader(activedWindow)
-				}
-			}
-		}
-	}).Connect(XU, XU.RootWin())
-	update()
-}
 
 type Manager struct {
 	runtimeApps map[string]*RuntimeApp
@@ -178,21 +139,20 @@ func (m *Manager) updateEntry(appId string, nApp *NormalApp, rApp *RuntimeApp) {
 	}
 }
 
-func (m *Manager) createRuntimeApp(xid xproto.Window) {
+func (m *Manager) createRuntimeApp(xid xproto.Window) *RuntimeApp {
 	appId := find_app_id_by_xid(xid)
-	if _, ok := m.runtimeApps[appId]; ok {
-		return
+	if v, ok := m.runtimeApps[appId]; ok {
+		return v
 	}
-
-	//TODO: xid 未改变但appId改变的情况， 比如nautils/libreoffice就会动态改变
 
 	rApp := NewRuntimeApp(xid, appId)
 	if rApp == nil {
-		return
+		return nil
 	}
 
 	m.runtimeApps[appId] = rApp
 	m.updateEntry(appId, m.mustGetEntry(nil, rApp).nApp, rApp)
+	return rApp
 }
 func (m *Manager) destroyRuntimeApp(rApp *RuntimeApp) {
 	delete(m.runtimeApps, rApp.Id)
@@ -246,10 +206,9 @@ func main() {
 		LOGGER.Debug("load", id)
 		MANAGER.createNormalApp(id)
 	}
-	listenRootWindow()
 	initTrayManager()
 	dbus.DealWithUnhandledMessage()
-	go xevent.Main(XU)
+	go listenRootWindow()
 	if err := dbus.Wait(); err != nil {
 		LOGGER.Error("dbus.Wait error:", err)
 		os.Exit(1)

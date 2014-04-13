@@ -8,6 +8,7 @@ import (
 	"github.com/BurntSushi/xgb/damage"
 	"github.com/BurntSushi/xgb/xfixes"
 	"github.com/BurntSushi/xgb/xproto"
+	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/ewmh"
 	"github.com/BurntSushi/xgbutil/xevent"
 	"github.com/BurntSushi/xgbutil/xgraphics"
@@ -16,7 +17,7 @@ import (
 )
 
 var (
-	isListened bool = false
+	TrayXU, _ = xgbutil.NewConn()
 )
 
 const (
@@ -231,6 +232,8 @@ func (m *TrayManager) unmanage() {
 	xproto.SetSelectionOwner(TrayXU.Conn(), 0,
 		_NET_SYSTEM_TRAY_S0, xproto.Timestamp(timeStamp)).Check()
 }
+
+var isListened bool = false
 
 func (m *TrayManager) startListener() {
 	// to avoid creating too much listener when SelectionNotifyEvent occurs.
