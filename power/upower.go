@@ -43,6 +43,8 @@ const (
 func (p *Power) refreshUpower(up *upower.Upower) {
 
 	if up.OnBattery.Get() != p.OnBattery {
+		p.setPropOnBattery(up.OnBattery.Get())
+
 		if p.OnBattery {
 			p.player.PlaySystemSound("power-unplug")
 		} else {
@@ -50,7 +52,6 @@ func (p *Power) refreshUpower(up *upower.Upower) {
 		}
 		//OnBattery will effect current PowerPlan idle value
 		p.updateIdletimer()
-		p.setPropOnBattery(up.OnBattery.Get())
 	}
 
 	p.setPropLidIsPresent(up.LidIsPresent.Get())
