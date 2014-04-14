@@ -34,6 +34,10 @@ func generalIsKeyInSettingField(field, key string) bool {
 		return isKeyInSettingWireless(key)
 	case fieldWirelessSecurity:
 		return isKeyInSettingWirelessSecurity(key)
+	case fieldPppoe:
+		return isKeyInSettingPppoe(key)
+	case fieldPpp:
+		return isKeyInSettingPpp(key)
 	}
 	return false
 }
@@ -60,6 +64,10 @@ func generalGetSettingKeyType(field, key string) (t ktype) {
 		t = getSettingWirelessKeyType(key)
 	case fieldWirelessSecurity:
 		t = getSettingWirelessSecurityKeyType(key)
+	case fieldPppoe:
+		t = getSettingPppoeKeyType(key)
+	case fieldPpp:
+		t = getSettingPppKeyType(key)
 	}
 	return
 }
@@ -80,6 +88,10 @@ func generalGetSettingAvailableKeys(data _ConnectionData, field string) (keys []
 		keys = getSettingWirelessAvailableKeys(data)
 	case fieldWirelessSecurity:
 		keys = getSettingWirelessSecurityAvailableKeys(data)
+	case fieldPppoe:
+		keys = getSettingPppoeAvailableKeys(data)
+	case fieldPpp:
+		keys = getSettingPppAvailableKeys(data)
 	}
 	return
 }
@@ -104,6 +116,10 @@ func generalGetSettingAvailableValues(data _ConnectionData, field, key string) (
 		values, customizable = getSettingWirelessAvailableValues(key)
 	case fieldWirelessSecurity:
 		values, customizable = getSettingWirelessSecurityAvailableValues(key)
+	case fieldPppoe:
+		values, customizable = getSettingPppoeAvailableValues(key)
+	case fieldPpp:
+		values, customizable = getSettingPppAvailableValues(key)
 	}
 	return
 }
@@ -126,6 +142,10 @@ func generalCheckSettingValues(data _ConnectionData, field string) (errs map[str
 		errs = checkSettingWirelessValues(data)
 	case fieldWirelessSecurity:
 		errs = checkSettingWirelessSecurityValues(data)
+	case fieldPppoe:
+		errs = checkSettingPppoeValues(data)
+	case fieldPpp:
+		errs = checkSettingPppValues(data)
 	}
 	return
 }
@@ -152,6 +172,10 @@ func generalGetSettingKeyJSON(data _ConnectionData, field, key string) (valueJSO
 		valueJSON = generalGetSettingWirelessKeyJSON(data, key)
 	case fieldWirelessSecurity:
 		valueJSON = generalGetSettingWirelessSecurityKeyJSON(data, key)
+	case fieldPppoe:
+		valueJSON = generalGetSettingPppoeKeyJSON(data, key)
+	case fieldPpp:
+		valueJSON = generalGetSettingPppKeyJSON(data, key)
 	}
 	return
 }
@@ -178,6 +202,10 @@ func generalSetSettingKeyJSON(data _ConnectionData, field, key, valueJSON string
 		generalSetSettingWirelessKeyJSON(data, key, valueJSON)
 	case fieldWirelessSecurity:
 		generalSetSettingWirelessSecurityKeyJSON(data, key, valueJSON)
+	case fieldPppoe:
+		generalSetSettingPppoeKeyJSON(data, key, valueJSON)
+	case fieldPpp:
+		generalSetSettingPppKeyJSON(data, key, valueJSON)
 	}
 }
 
@@ -199,6 +227,10 @@ func getSettingKeyDefaultValueJSON(field, key string) (valueJSON string) {
 		valueJSON = getSettingWirelessKeyDefaultValueJSON(key)
 	case fieldWirelessSecurity:
 		valueJSON = getSettingWirelessSecurityKeyDefaultValueJSON(key)
+	case fieldPppoe:
+		valueJSON = getSettingPppoeKeyDefaultValueJSON(key)
+	case fieldPpp:
+		valueJSON = getSettingPppKeyDefaultValueJSON(key)
 	}
 	return
 }

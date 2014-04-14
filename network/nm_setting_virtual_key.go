@@ -106,6 +106,8 @@ func generalGetSettingVkAvailableValues(field, key string) (values []string) {
 		case NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT:
 			values = []string{"none", "wep", "wpa-psk", "wpa-eap"}
 		}
+	case fieldPppoe:
+	case fieldPpp:
 	}
 	return
 }
@@ -192,6 +194,8 @@ func generalGetVirtualKeyJSON(data _ConnectionData, field, key string) (valueJSO
 		case NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT:
 			valueJSON = getSettingVkWirelessSecurityKeyMgmtJSON(data)
 		}
+	case fieldPppoe:
+	case fieldPpp:
 	}
 	return
 }
@@ -249,6 +253,8 @@ func generalSetVirtualKeyJSON(data _ConnectionData, field, key string, valueJSON
 		case NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT:
 			logicSetSettingVkWirelessSecurityKeyMgmtJSON(data, valueJSON)
 		}
+	case fieldPppoe:
+	case fieldPpp:
 	}
 	return
 }

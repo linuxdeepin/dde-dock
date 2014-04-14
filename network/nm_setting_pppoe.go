@@ -9,8 +9,27 @@ const (
 	NM_SETTING_PPPOE_PASSWORD_FLAGS = "password-flags"
 )
 
-// Get available keys
+// TODO Get available keys
+func getSettingPppoeAvailableKeys(data _ConnectionData) (keys []string) {
+	keys = []string{
+	// NM_SETTING_CONNECTION_ID,
+	// NM_SETTING_CONNECTION_AUTOCONNECT,
+	}
+	return
+}
 
-// Get available values
+// TODO Get available values
+func getSettingPppoeAvailableValues(key string) (values []string, customizable bool) {
+	customizable = true
+	return
+}
 
-// Check whether the values are correct
+// TODO Check whether the values are correct
+func checkSettingPppoeValues(data _ConnectionData) (errs map[string]string) {
+	errs = make(map[string]string)
+
+	// TODO check id
+	// ensureSettingConnectionIdNoEmpty(data, errs)
+
+	return
+}

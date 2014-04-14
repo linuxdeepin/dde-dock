@@ -199,6 +199,10 @@ func (session *ConnectionSession) pageToFields(page string) (fields []string) {
 				fields = []string{fieldWirelessSecurity}
 			}
 		}
+	case pagePppoe:
+		fields = []string{fieldPppoe}
+	case pagePpp:
+		fields = []string{fieldPpp}
 	}
 	return
 }
