@@ -3,13 +3,14 @@ package main
 const (
 	typeWired    = NM_SETTING_WIRED_SETTING_NAME
 	typeWireless = NM_SETTING_WIRELESS_SETTING_NAME
-	// typeVpn // TODO
+	typeVpn      = NM_SETTING_VPN_SETTING_NAME
 	// typeAdsl // TODO
 )
 
 var supportedConnectionTypes = []string{
 	typeWired,
 	typeWireless,
+	// typeVpn, // TODO
 }
 
 const (

@@ -34,7 +34,7 @@ func (this *Manager) initWiredConnections() {
 	}
 }
 
-// TODO GetWiredConnectionUuid return connection uuid for target wired device.
+// GetWiredConnectionUuid return connection uuid for target wired device.
 func (this *Manager) GetWiredConnectionUuid(wiredDevPath dbus.ObjectPath) (uuid string) {
 	// check if target wired connection exists, if not, create one
 	id := "wired-connection-" + nmGetDeviceInterface(wiredDevPath)
