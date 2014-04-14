@@ -1,7 +1,9 @@
 package main
 
 import (
+	"dlib/gio-2.0"
 	"encoding/json"
+	"strings"
 )
 
 const (
@@ -73,7 +75,43 @@ func (e *AppEntry) SecondaryActivate(x, y int32)        {}
 func (e *AppEntry) OnDragEnter(x, y int32, data string) {}
 func (e *AppEntry) OnDragLeave(x, y int32, data string) {}
 func (e *AppEntry) OnDragOver(x, y int32, data string)  {}
-func (e *AppEntry) OnDragDrop(x, y int32, data string)  {}
+func (e *AppEntry) OnDragDrop(x, y int32, data string) {
+	paths := strings.Split(data, ",")
+	LOGGER.Debug("OnDragDrop:", paths)
+	if e.rApp != nil {
+		LOGGER.Info("Launch from runtime app")
+		if e.rApp.core != nil {
+			_, err := e.rApp.core.LaunchUris(paths, nil)
+			if err != nil {
+				LOGGER.Error("Launch Drop failed:", err)
+			}
+		} else {
+			app, err :=
+				gio.AppInfoCreateFromCommandline(e.rApp.exec,
+					e.rApp.Id, gio.AppInfoCreateFlagsSupportsUris)
+			if err != nil {
+				LOGGER.Error("Create Launch app failed:", err)
+				return
+			}
+
+			_, err = app.LaunchUris(paths, nil)
+			if err != nil {
+				LOGGER.Error("Launch Drop failed:", err)
+			}
+		}
+	} else if e.nApp != nil {
+		LOGGER.Info("Launch from runtime app")
+		if e.nApp.core != nil {
+			_, err := e.nApp.core.LaunchUris(paths, nil)
+			if err != nil {
+				LOGGER.Error("Launch Drop failed:", err)
+			}
+		} else {
+			// TODO:
+			LOGGER.Error("TODO: AppEntry.nApp.core == nil")
+		}
+	}
+}
 
 func (e *AppEntry) setData(key, value string) {
 	if e.Data[key] != value {
