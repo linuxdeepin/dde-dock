@@ -123,6 +123,7 @@ type dockedItemInfo struct {
 func (m *DockedAppManager) Dock(id, title, icon, cmd string) bool {
 	idElement := m.findItem(id)
 	if idElement != nil {
+		logger.Info(id, "is already docked.")
 		return false
 	}
 
