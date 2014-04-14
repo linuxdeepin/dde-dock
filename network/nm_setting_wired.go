@@ -72,7 +72,7 @@ const (
 	NM_SETTING_WIRED_S390_OPTIONS = "s390-options"
 )
 
-func newWireedConnectionData(id, uuid string) (data _ConnectionData) {
+func newWiredConnectionData(id, uuid string) (data _ConnectionData) {
 	data = make(_ConnectionData)
 
 	addSettingField(data, fieldConnection)

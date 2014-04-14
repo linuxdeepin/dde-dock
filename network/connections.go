@@ -11,9 +11,12 @@ func (this *Manager) initConnectionManage() {
 	this.WiredConnections = make([]string, 0)
 	this.WirelessConnections = make([]string, 0)
 
+	this.initWiredConnections()
+
 	conns, err := _NMSettings.ListConnections()
 	if err != nil {
-		panic(err)
+		LOGGER.Error(err)
+		return
 	}
 	for _, c := range conns {
 		this.handleConnectionChanged(OpAdded, c)
@@ -21,6 +24,27 @@ func (this *Manager) initConnectionManage() {
 	_NMSettings.ConnectNewConnection(func(path dbus.ObjectPath) {
 		this.handleConnectionChanged(OpAdded, path)
 	})
+}
+
+// create connection for each wired device if not exists
+func (this *Manager) initWiredConnections() {
+	for _, wiredDev := range this.WiredDevices {
+		uuid := this.GetWiredConnectionUuid(wiredDev.Path)
+		this.WiredConnections = append(this.WiredConnections, uuid)
+	}
+}
+
+// TODO GetWiredConnectionUuid return connection uuid for target wired device.
+func (this *Manager) GetWiredConnectionUuid(wiredDevPath dbus.ObjectPath) (uuid string) {
+	// check if target wired connection exists, if not, create one
+	id := "wired-connection-" + nmGetDeviceInterface(wiredDevPath)
+	cpath, ok := nmGetConnectionById(id)
+	if ok {
+		uuid = nmGetConnectionUuid(cpath)
+	} else {
+		uuid = newWiredConnection(id)
+	}
+	return
 }
 
 func (this *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPath) {
@@ -42,9 +66,10 @@ func (this *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPa
 		case "802-11-wireless": // TODO
 			this.WirelessConnections = append(this.WirelessConnections, uuid)
 			dbus.NotifyChange(this, "WirelessConnections")
-		case "802-3-ethernet":
-			this.WiredConnections = append(this.WiredConnections, uuid)
-			dbus.NotifyChange(this, "WiredConnections")
+		case "802-3-ethernet": // wired connection will be treatment specially
+			// TODO remove
+			// this.WiredConnections = append(this.WiredConnections, uuid)
+			// dbus.NotifyChange(this, "WiredConnections")
 		case "pppoe":
 		case "vpn":
 			this.VPNConnections = append(this.VPNConnections, uuid)
@@ -65,19 +90,19 @@ func (this *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPa
 
 }
 
+func newWiredConnection(id string) (uuid string) {
+	LOGGER.Debugf("new wired connection, id=%s", id)
+	uuid = newUUID()
+	data := newWiredConnectionData(id, uuid)
+	nmAddConnection(data)
+	return
+}
+
 func newWirelessConnection(id string, ssid []byte, keyFlag int) (uuid string) {
+	LOGGER.Debugf("new wireless connection, id=%s, ssid=%s, keyFlag=%d", id, ssid, keyFlag)
 	uuid = newUUID()
 	data := newWirelessConnectionData(id, uuid, ssid, keyFlag)
-
-	LOGGER.Debug("new wireless connection data:", data) // TODO test
-
-	// TODO
-	_, err := _NMSettings.AddConnection(data)
-	if err != nil {
-		// panic(err) // TODO fixme
-		LOGGER.Error(err)
-	}
-
+	nmAddConnection(data)
 	return
 }
 
@@ -151,7 +176,7 @@ func (this *Manager) CreateConnectionForAccessPoint(apPath dbus.ObjectPath) (uui
 	return
 }
 
-// TODO
+// TODO rename to GetActiveConnectionInfo
 func (this *Manager) GetActiveConnection(devPath dbus.ObjectPath) (ret *ActiveConnection, err error) {
 	defer func() {
 		if x := recover(); x != nil {

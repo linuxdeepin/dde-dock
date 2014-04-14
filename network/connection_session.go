@@ -47,10 +47,11 @@ func NewConnectionSessionByCreate(connectionType string) (session *ConnectionSes
 	session.objPath = dbus.ObjectPath(fmt.Sprintf("/com/deepin/daemon/ConnectionSession/%s", randString(8)))
 
 	// TODO
+	// new connection data, id is left here
 	session.connectionType = connectionType
 	switch session.connectionType {
 	case typeWired:
-		session.data = newWireedConnectionData("", session.CurrentUUID)
+		session.data = newWiredConnectionData("", session.CurrentUUID)
 	case typeWireless:
 		session.data = newWirelessConnectionData("", session.CurrentUUID, nil, ApKeyNone)
 	}

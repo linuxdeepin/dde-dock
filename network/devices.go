@@ -101,7 +101,7 @@ func (this *Manager) initDeviceManage() {
 func (this *Manager) addWirelessDevice(dev *nm.Device) {
 	wirelessDevice := NewDevice(dev)
 	if isDeviceExists(this.WirelessDevices, wirelessDevice) {
-		// device maybe is repeated added
+		// device maybe repeat added
 		return
 	}
 	LOGGER.Debug("addWirelessDevices:", wirelessDevice)
@@ -140,7 +140,7 @@ func (this *Manager) addWirelessDevice(dev *nm.Device) {
 func (this *Manager) addWiredDevice(dev *nm.Device) {
 	wiredDevice := NewDevice(dev)
 	if isDeviceExists(this.WiredDevices, wiredDevice) {
-		// device maybe is repeated added
+		// device maybe repeat added
 		return
 	}
 
@@ -161,7 +161,7 @@ func (this *Manager) addOtherDevice(dev *nm.Device) {
 
 	otherDevice := NewDevice(dev)
 	if isDeviceExists(this.OtherDevices, otherDevice) {
-		// may be repeated to add device
+		// device maybe repeat added
 		return
 	}
 
@@ -291,6 +291,8 @@ func (this *Manager) ActivateConnection(uuid string, dev dbus.ObjectPath) (err e
 	}
 	return
 }
+
+// TODO remove
 func (this *Manager) DeactivateConnection(uuid string) (err error) {
 	cpath := this.getActiveConnectionByUuid(uuid)
 	if len(cpath) == 0 {
