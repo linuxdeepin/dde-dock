@@ -49,22 +49,38 @@ func NewAccessPoint(apPath dbus.ObjectPath) (ap AccessPoint, err error) {
 	return
 }
 
-func (this *Manager) DisconnectDevice(path dbus.ObjectPath) error {
-	if dev, err := nm.NewDevice(NMDest, path); err != nil {
-		return err
-	} else {
-		dev.Disconnect()
-		nm.DestroyDevice(dev)
-		switch dev.DeviceType.Get() {
-		case NM_DEVICE_TYPE_WIFI:
-			dbus.NotifyChange(this, "WirelessConnections")
-		case NM_DEVICE_TYPE_ETHERNET:
-			LOGGER.Debug("DisconnectDevice...", path)
-			dbus.NotifyChange(this, "WiredConnections")
-		}
-		return nil
+// DisconnectDevice will disconnect all connection in target device.
+func (this *Manager) DisconnectDevice(devPath dbus.ObjectPath) (err error) {
+	dev, err := nm.NewDevice(NMDest, devPath)
+	if err != nil {
+		LOGGER.Error(err)
+		return
 	}
+	err = dev.Disconnect()
+	if err != nil {
+		LOGGER.Error(err)
+		return
+	}
+	return
 }
+
+// TODO remove
+// func (this *Manager) DisconnectDevice(path dbus.ObjectPath) error {
+// 	if dev, err := nm.NewDevice(NMDest, path); err != nil {
+// 		return err
+// 	} else {
+// 		dev.Disconnect()
+// 		nm.DestroyDevice(dev)
+// 		switch dev.DeviceType.Get() {
+// 		case NM_DEVICE_TYPE_WIFI:
+// 			dbus.NotifyChange(this, "WirelessConnections")
+// 		case NM_DEVICE_TYPE_ETHERNET:
+// 			LOGGER.Debug("DisconnectDevice...", path)
+// 			dbus.NotifyChange(this, "WiredConnections")
+// 		}
+// 		return nil
+// 	}
+// }
 
 func (this *Manager) initDeviceManage() {
 	_NMManager.ConnectDeviceAdded(func(path dbus.ObjectPath) {
