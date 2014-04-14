@@ -28,6 +28,7 @@ import (
         "dlib/logger"
         "dlib/utils"
         "os"
+        "strconv"
         "sync"
 )
 
@@ -126,8 +127,16 @@ func main() {
         //m.ThemeList = append(m.ThemeList, THEME_PATH+"Test")
         //m.ThemeList = append(m.ThemeList, THEME_PATH+"Deepin")
         updateThemeObj(objManager.pathNameMap)
+        objManager.setPropName("CurrentTheme")
+        println("Current Theme: ", objManager.CurrentTheme)
         if obj := objManager.getThemeObject(objManager.CurrentTheme); obj != nil {
                 obj.setThemeViaXSettings()
+                objManager.SetGtkTheme(obj.GtkTheme)
+                objManager.SetIconTheme(obj.IconTheme)
+                objManager.SetCursorTheme(obj.CursorTheme)
+                size, _ := strconv.ParseInt(obj.FontSize, 10, 64)
+                objManager.SetFontSize(int32(size))
+                objManager.SetBackgroundFile(obj.BackgroundFile)
         }
         objThumb := &ThumbPath{}
         dbus.InstallOnSession(objThumb)

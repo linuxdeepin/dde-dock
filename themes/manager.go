@@ -404,37 +404,11 @@ func newManager() *Manager {
 
         // the following properties should be configure at end for their values
         // depends on other property
-        m.setPropName("CurrentTheme")
+        //m.setPropName("CurrentTheme")
 
         m.listenSettingsChanged()
-        homeDir := getHomeDir()
-
-        m.listenThemeDir(THEMES_PATH)
-        m.listenThemeDir(homeDir + THEMES_LOCAL_PATH)
-
-        m.listenThemeDir(ICONS_PATH)
-        m.listenThemeDir(homeDir + ICONS_LOCAL_PATH)
-
-        m.listenThemeDir(THUMB_BASE_PATH)
-        m.listenThemeDir(homeDir + THUMB_LOCAL_BASE_PATH)
-
-        m.listenThemeDir(SOUND_THEME_PATH)
-
-        m.listenBackgroundDir(BACKGROUND_DEFAULT_DIR)
-        m.listenBackgroundDir(homeDir + THUMB_LOCAL_THEME_PATH + "/Custom/wallpappers")
-
-        m.listenThemeDir(THUMB_GTK_PATH)
-        m.listenThemeDir(PREVIEW_GTK_PATH)
-        m.listenThemeDir(THUMB_ICON_PATH)
-        m.listenThemeDir(PREVIEW_ICON_PATH)
-        m.listenThemeDir(THUMB_CURSOR_PATH)
-        m.listenThemeDir(PREVIEW_CURSOR_PATH)
-        m.listenThemeDir(homeDir + THUMB_LOCAL_GTK_PATH)
-        m.listenThemeDir(homeDir + PREVIEW_LOCAL_ICON_PATH)
-        m.listenThemeDir(homeDir + THUMB_LOCAL_ICON_PATH)
-        m.listenThemeDir(homeDir + PREVIEW_LOCAL_ICON_PATH)
-        m.listenThemeDir(homeDir + THUMB_LOCAL_CURSOR_PATH)
-        m.listenThemeDir(homeDir + PREVIEW_LOCAL_CURSOR_PATH)
+        m.startListenDirs()
+        //go m.resetListenDirs()
 
         return m
 }

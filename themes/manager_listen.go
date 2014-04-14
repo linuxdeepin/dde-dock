@@ -24,6 +24,12 @@ package main
 import (
         "github.com/howeyc/fsnotify"
         "os"
+        "regexp"
+)
+
+var (
+        watchReset = make(chan bool)
+        fsWatchMap = make(map[string]*fsnotify.Watcher)
 )
 
 func (op *Manager) listenThemeDir(dir string) {
@@ -47,48 +53,99 @@ func (op *Manager) listenThemeDir(dir string) {
                 logObject.Infof("Watch '%s' failed: %v", dir, err)
                 return
         }
+        fsWatchMap[dir] = watcher
 
         go func() {
-                defer watcher.Close()
+                defer func() {
+                        if watcher != nil {
+                                watcher.Close()
+                        }
+                        delete(fsWatchMap, dir)
+                }()
+
                 for {
                         select {
                         case ev := <-watcher.Event:
-                                if !ev.IsDelete() {
-                                        op.updateAllProps()
+                                if ev == nil {
+                                        break
                                 }
+                                if ok, _ := regexp.MatchString(`\.swa?px?$`, ev.Name); ok {
+                                        break
+                                }
+                                op.updateAllProps()
+                                //if ev.IsDelete() || ev.IsCreate() {
+                                //watchReset <- true
+                                //}
                         case err := <-watcher.Error:
-                                logObject.Warningf("Watch Error: %v", err)
+                                if err != nil {
+                                        logObject.Warningf("Watch Error: %v", err)
+                                }
                         }
                 }
         }()
 }
 
-func (op *Manager) listenBackgroundDir(dir string) {
+func (op *Manager) recursionListenDir(dir string) {
+        defer func() {
+                if err := recover(); err != nil {
+                        logObject.Warning("Recover Error: ", err)
+                        return
+                }
+        }()
+
         if ok := objUtil.IsFileExist(dir); !ok {
                 err := os.MkdirAll(dir, 0755)
                 if err != nil {
-                        logObject.Infof("mkdir '%s' failed: %v", dir, err)
+                        logObject.Infof("Make dir '%s' failed: %v", dir, err)
                         return
                 }
         }
+        op.listenThemeDir(dir)
 
-        watcher, err := fsnotify.NewWatcher()
+        f, err := os.Open(dir)
         if err != nil {
-                logObject.Infof("Create new watch failed: %v", err)
+                logObject.Warningf("Open '%s' failed: %v", dir, err)
                 return
         }
 
-        go func() {
-                defer watcher.Close()
-                for {
-                        select {
-                        case ev := <-watcher.Event:
-                                if !ev.IsDelete() {
-                                        op.setPropName("BackgroundList")
-                                }
-                        case err := <-watcher.Error:
-                                logObject.Warningf("Watch Error: %v", err)
-                        }
+        finfos, err1 := f.Readdir(0)
+        if err1 != nil {
+                logObject.Warningf("ReadDir '%s' failed: %v", dir, err1)
+                return
+        }
+
+        for _, finfo := range finfos {
+                if finfo.IsDir() {
+                        op.recursionListenDir(dir + "/" + finfo.Name())
                 }
-        }()
+        }
+}
+
+func (op *Manager) startListenDirs() {
+        homeDir := getHomeDir()
+
+        op.listenThemeDir(THEMES_PATH)
+        op.listenThemeDir(homeDir + THEMES_LOCAL_PATH)
+
+        op.listenThemeDir(ICONS_PATH)
+        op.listenThemeDir(homeDir + ICONS_LOCAL_PATH)
+
+        op.recursionListenDir(THUMB_BASE_PATH)
+        op.recursionListenDir(homeDir + THUMB_LOCAL_BASE_PATH)
+        op.recursionListenDir(SOUND_THEME_PATH)
+}
+
+func (op *Manager) resetListenDirs() {
+        for {
+                select {
+                case <-watchReset:
+                        for k, v := range fsWatchMap {
+                                if v != nil {
+                                        v.Close()
+                                }
+                                delete(fsWatchMap, k)
+                        }
+                        op.startListenDirs()
+                }
+        }
 }
