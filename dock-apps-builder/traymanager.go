@@ -14,6 +14,7 @@ import (
 	"github.com/BurntSushi/xgbutil/xgraphics"
 	"github.com/BurntSushi/xgbutil/xprop"
 	"github.com/BurntSushi/xgbutil/xwindow"
+	"time"
 )
 
 var (
@@ -73,6 +74,8 @@ func (m *TrayManager) addTrayIcon(xid xproto.Window) {
 	m.nameInfo[xid] = name
 	m.notifyInfo[xid] = true
 	if m.Added != nil {
+		//NODE: c-js-dbus's throughout is very limit, workaround it at this moment.
+		<-time.After(time.Millisecond * 100)
 		m.Added(uint32(xid))
 	}
 }
