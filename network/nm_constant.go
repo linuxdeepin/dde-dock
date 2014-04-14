@@ -4,12 +4,13 @@ const (
 	typeWired    = NM_SETTING_WIRED_SETTING_NAME
 	typeWireless = NM_SETTING_WIRELESS_SETTING_NAME
 	typeVpn      = NM_SETTING_VPN_SETTING_NAME
-	// typeAdsl // TODO
+	typePppoe    = NM_SETTING_PPPOE_SETTING_NAME
 )
 
 var supportedConnectionTypes = []string{
 	typeWired,
 	typeWireless,
+	typePppoe,
 	// typeVpn, // TODO
 }
 
@@ -21,6 +22,8 @@ const (
 	fieldWired            = NM_SETTING_WIRED_SETTING_NAME
 	fieldWireless         = NM_SETTING_WIRELESS_SETTING_NAME
 	fieldWirelessSecurity = NM_SETTING_WIRELESS_SECURITY_SETTING_NAME
+	fieldPppoe            = NM_SETTING_PPPOE_SETTING_NAME
+	fieldPpp              = NM_SETTING_PPP_SETTING_NAME
 )
 
 // page is a wrapper of field for easy to configure
@@ -31,6 +34,8 @@ const (
 	pageIPv4     = "IPv4"     // -> fieldIPv4
 	pageIPv6     = "IPv6"     // -> fieldIPv6
 	pageSecurity = "Security" // -> field8021x, fieldWirelessSecurity
+	pagePppoe    = "PPPoE"    // -> fieldPppoe
+	pagePpp      = "PPP"      // -> fieldPpp
 )
 
 const (

@@ -30,6 +30,8 @@ var jsonFiles = []string{
 	"./nm_setting_wired.json",
 	"./nm_setting_wireless.json",
 	"./nm_setting_wireless_security.json",
+	"./nm_setting_pppoe.json",
+	"./nm_setting_ppp.json",
 }
 
 type NMSettingStruct struct {
