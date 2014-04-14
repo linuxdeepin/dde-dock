@@ -165,78 +165,137 @@ func checkSetting8021xValues(data _ConnectionData) (errs map[string]string) {
 }
 
 // Set JSON value generally
-// TODO use logic setter
-func generalSetSetting8021xKeyJSON(data _ConnectionData, key, value string) {
+func generalSetSetting8021xKeyJSON(data _ConnectionData, key, valueJSON string) {
 	switch key {
 	default:
 		LOGGER.Error("generalSetSetting8021xKey: invalide key", key)
 	case NM_SETTING_802_1X_EAP:
-		// TODO
-		// logicSetSetting8021xEapJSON(data, value)
-		setSetting8021xEapJSON(data, value)
+		logicSetSetting8021xEapJSON(data, valueJSON)
 	case NM_SETTING_802_1X_IDENTITY:
-		setSetting8021xIdentityJSON(data, value)
+		setSetting8021xIdentityJSON(data, valueJSON)
 	case NM_SETTING_802_1X_ANONYMOUS_IDENTITY:
-		setSetting8021xAnonymousIdentityJSON(data, value)
+		setSetting8021xAnonymousIdentityJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PAC_FILE:
-		setSetting8021xPacFileJSON(data, value)
+		setSetting8021xPacFileJSON(data, valueJSON)
 	case NM_SETTING_802_1X_CA_CERT:
-		setSetting8021xCaCertJSON(data, value)
+		setSetting8021xCaCertJSON(data, valueJSON)
 	case NM_SETTING_802_1X_CA_PATH:
-		setSetting8021xCaPathJSON(data, value)
+		setSetting8021xCaPathJSON(data, valueJSON)
 	case NM_SETTING_802_1X_SUBJECT_MATCH:
-		setSetting8021xSubjectMatchJSON(data, value)
+		setSetting8021xSubjectMatchJSON(data, valueJSON)
 	case NM_SETTING_802_1X_ALTSUBJECT_MATCHES:
-		setSetting8021xAltsubjectMatchesJSON(data, value)
+		setSetting8021xAltsubjectMatchesJSON(data, valueJSON)
 	case NM_SETTING_802_1X_CLIENT_CERT:
-		setSetting8021xClientCertJSON(data, value)
+		setSetting8021xClientCertJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PHASE1_PEAPVER:
-		setSetting8021xPhase1PeapverJSON(data, value)
+		setSetting8021xPhase1PeapverJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PHASE1_PEAPLABEL:
-		setSetting8021xPhase1PeaplabelJSON(data, value)
+		setSetting8021xPhase1PeaplabelJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING:
-		setSetting8021xPhase1FastProvisioningJSON(data, value)
+		setSetting8021xPhase1FastProvisioningJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PHASE2_AUTH:
-		setSetting8021xPhase2AuthJSON(data, value)
+		setSetting8021xPhase2AuthJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PHASE2_AUTHEAP:
-		setSetting8021xPhase2AutheapJSON(data, value)
+		setSetting8021xPhase2AutheapJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PHASE2_CA_CERT:
-		setSetting8021xPhase2CaCertJSON(data, value)
+		setSetting8021xPhase2CaCertJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PHASE2_CA_PATH:
-		setSetting8021xPhase2CaPathJSON(data, value)
+		setSetting8021xPhase2CaPathJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH:
-		setSetting8021xPhase2SubjectMatchJSON(data, value)
+		setSetting8021xPhase2SubjectMatchJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES:
-		setSetting8021xPhase2AltsubjectMatchesJSON(data, value)
+		setSetting8021xPhase2AltsubjectMatchesJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PASSWORD:
-		setSetting8021xPasswordJSON(data, value)
+		setSetting8021xPasswordJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PASSWORD_FLAGS:
-		setSetting8021xPasswordFlagsJSON(data, value)
+		setSetting8021xPasswordFlagsJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PASSWORD_RAW:
-		setSetting8021xPasswordRawJSON(data, value)
+		setSetting8021xPasswordRawJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PASSWORD_RAW_FLAGS:
-		setSetting8021xPasswordRawFlagsJSON(data, value)
+		setSetting8021xPasswordRawFlagsJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PRIVATE_KEY:
-		setSetting8021xPrivateKeyJSON(data, value)
+		setSetting8021xPrivateKeyJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD:
-		setSetting8021xPrivateKeyPasswordJSON(data, value)
+		setSetting8021xPrivateKeyPasswordJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS:
-		setSetting8021xPrivateKeyPasswordFlagsJSON(data, value)
+		setSetting8021xPrivateKeyPasswordFlagsJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY:
-		setSetting8021xPhase2PrivateKeyJSON(data, value)
+		setSetting8021xPhase2PrivateKeyJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD:
-		setSetting8021xPhase2PrivateKeyPasswordJSON(data, value)
+		setSetting8021xPhase2PrivateKeyPasswordJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS:
-		setSetting8021xPhase2PrivateKeyPasswordFlagsJSON(data, value)
+		setSetting8021xPhase2PrivateKeyPasswordFlagsJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PIN:
-		setSetting8021xPinJSON(data, value)
+		setSetting8021xPinJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PIN_FLAGS:
-		setSetting8021xPinFlagsJSON(data, value)
+		setSetting8021xPinFlagsJSON(data, valueJSON)
 	case NM_SETTING_802_1X_SYSTEM_CA_CERTS:
-		setSetting8021xSystemCaCertsJSON(data, value)
+		setSetting8021xSystemCaCertsJSON(data, valueJSON)
 	}
 	return
 }
 
 // Logic setter
-// TODO
+func logicSetSetting8021xEapJSON(data _ConnectionData, valueJSON string) {
+	setSetting8021xEapJSON(data, valueJSON)
+
+	value := getSetting8021xEap(data)
+	logicSetSetting8021xEap(data, value)
+}
+func logicSetSetting8021xEap(data _ConnectionData, value []string) {
+	if len(value) == 0 {
+		return
+	}
+	eap := value[0]
+	switch eap {
+	case "tls":
+		removeSettingKeyBut(data, field8021x,
+			NM_SETTING_802_1X_EAP,
+			NM_SETTING_802_1X_IDENTITY,
+			NM_SETTING_802_1X_CLIENT_CERT,
+			NM_SETTING_802_1X_CA_CERT,
+			NM_SETTING_802_1X_PRIVATE_KEY,
+			NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS,
+			NM_SETTING_802_1X_SYSTEM_CA_CERTS)
+		setSetting8021xSystemCaCerts(data, true)
+	case "leap":
+		removeSettingKeyBut(data, field8021x,
+			NM_SETTING_802_1X_EAP,
+			NM_SETTING_802_1X_IDENTITY,
+			NM_SETTING_802_1X_PASSWORD_FLAGS,
+			NM_SETTING_802_1X_SYSTEM_CA_CERTS)
+		setSetting8021xSystemCaCerts(data, true)
+	case "fast":
+		removeSettingKeyBut(data, field8021x,
+			NM_SETTING_802_1X_EAP,
+			NM_SETTING_802_1X_IDENTITY,
+			NM_SETTING_802_1X_ANONYMOUS_IDENTITY,
+			NM_SETTING_802_1X_PAC_FILE,
+			NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING,
+			NM_SETTING_802_1X_PHASE2_AUTH,
+			NM_SETTING_802_1X_PASSWORD_FLAGS,
+			NM_SETTING_802_1X_SYSTEM_CA_CERTS)
+		setSetting8021xSystemCaCerts(data, true)
+	case "ttls":
+		removeSettingKeyBut(data, field8021x,
+			NM_SETTING_802_1X_EAP,
+			NM_SETTING_802_1X_IDENTITY,
+			NM_SETTING_802_1X_ANONYMOUS_IDENTITY,
+			NM_SETTING_802_1X_CA_CERT,
+			NM_SETTING_802_1X_PHASE2_AUTH,
+			NM_SETTING_802_1X_PASSWORD_FLAGS,
+			NM_SETTING_802_1X_SYSTEM_CA_CERTS)
+		setSetting8021xSystemCaCerts(data, true)
+	case "peap":
+		removeSettingKeyBut(data, field8021x,
+			NM_SETTING_802_1X_EAP,
+			NM_SETTING_802_1X_IDENTITY,
+			NM_SETTING_802_1X_ANONYMOUS_IDENTITY,
+			NM_SETTING_802_1X_CA_CERT,
+			NM_SETTING_802_1X_PHASE1_PEAPVER,
+			NM_SETTING_802_1X_PHASE2_AUTH,
+			NM_SETTING_802_1X_PASSWORD_FLAGS,
+			NM_SETTING_802_1X_SYSTEM_CA_CERTS)
+		setSetting8021xSystemCaCerts(data, true)
+	}
+}
