@@ -22,6 +22,7 @@
 package main
 
 import (
+        "dlib/dbus"
         "os"
 )
 
@@ -34,37 +35,82 @@ const (
         ICON_LOCAL_DIR  = "/var/lib/AccountsService/icons/local"
 )
 
-func (op *UserManager) SetUserName(username string) {
-        //authWithPolkit(POLKIT_CHANGED_OWN_DATA)
+func (op *UserManager) SetUserName(dbusMsg dbus.DMessage, username string) bool {
+        defer func() {
+                if err := recover(); err != nil {
+                        logObject.Warningf("Recover Error In SetUserName:%v",
+                                err)
+                }
+        }()
+
+        if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+                dbusMsg.GetSenderPID()); !ok {
+                return false
+        }
+
         if op.UserName != username {
                 op.applyPropertiesChanged("UserName", username)
                 op.setPropName("UserName")
         }
+
+        return true
 }
 
-func (op *UserManager) SetHomeDir(dir string) {
-        //authWithPolkit(POLKIT_CHANGED_OWN_DATA)
+func (op *UserManager) SetHomeDir(dbusMsg dbus.DMessage, dir string) bool {
+        defer func() {
+                if err := recover(); err != nil {
+                        logObject.Warningf("Recover Error In SetHomeDir:%v",
+                                err)
+                }
+        }()
+
+        if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+                dbusMsg.GetSenderPID()); !ok {
+                return false
+        }
+
         if op.HomeDir != dir {
                 op.applyPropertiesChanged("HomeDir", dir)
                 op.setPropName("HomeDir")
         }
+
+        return true
 }
 
-func (op *UserManager) SetShell(shell string) {
-        //authWithPolkit(POLKIT_CHANGED_OWN_DATA)
+func (op *UserManager) SetShell(dbusMsg dbus.DMessage, shell string) bool {
+        defer func() {
+                if err := recover(); err != nil {
+                        logObject.Warningf("Recover Error In SetShell:%v",
+                                err)
+                }
+        }()
+
+        if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+                dbusMsg.GetSenderPID()); !ok {
+                return false
+        }
+
         if op.Shell != shell {
                 op.applyPropertiesChanged("Shell", shell)
                 op.setPropName("Shell")
         }
+
+        return true
 }
 
-func (op *UserManager) SetPassword(words string) {
+func (op *UserManager) SetPassword(dbusMsg dbus.DMessage, words string) bool {
         defer func() {
                 if err := recover(); err != nil {
                         logObject.Warningf("Recover Error In SetPassword:%v",
                                 err)
                 }
         }()
+
+        if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+                dbusMsg.GetSenderPID()); !ok {
+                return false
+        }
+
         passwd := encodePasswd(words)
         args := []string{}
 
@@ -73,69 +119,150 @@ func (op *UserManager) SetPassword(words string) {
         args = append(args, op.UserName)
         execCommand(CMD_USERMOD, args)
 
-        op.SetLocked(false)
+        op.applyPropertiesChanged("Locked", false)
+        op.setPropName("Locked")
+
+        return true
 }
 
-func (op *UserManager) SetAutomaticLogin(auto bool) {
-        //authWithPolkit(POLKIT_SET_LOGIN_OPTION)
+func (op *UserManager) SetAutomaticLogin(dbusMsg dbus.DMessage, auto bool) bool {
+        defer func() {
+                if err := recover(); err != nil {
+                        logObject.Warningf("Recover Error In SetAutomaticLogin:%v",
+                                err)
+                }
+        }()
+
+        if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+                dbusMsg.GetSenderPID()); !ok {
+                return false
+        }
+
         if op.AutomaticLogin != auto {
                 op.applyPropertiesChanged("AutomaticLogin", auto)
                 op.setPropName("AutomaticLogin")
         }
+
+        return true
 }
 
-func (op *UserManager) SetAccountType(t int32) {
-        //authWithPolkit(POLKIT_MANAGER_USER)
+func (op *UserManager) SetAccountType(dbusMsg dbus.DMessage, t int32) bool {
+        defer func() {
+                if err := recover(); err != nil {
+                        logObject.Warningf("Recover Error In SetAccountType:%v",
+                                err)
+                }
+        }()
+
+        if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+                dbusMsg.GetSenderPID()); !ok {
+                return false
+        }
+
         if op.AccountType != t {
                 op.applyPropertiesChanged("AccountType", t)
                 op.setPropName("AccountType")
         }
+
+        return true
 }
 
-func (op *UserManager) SetLocked(locked bool) {
-        //authWithPolkit(POLKIT_MANAGER_USER)
+func (op *UserManager) SetLocked(dbusMsg dbus.DMessage, locked bool) bool {
+        defer func() {
+                if err := recover(); err != nil {
+                        logObject.Warningf("Recover Error In SetLocked:%v",
+                                err)
+                }
+        }()
+
+        if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+                dbusMsg.GetSenderPID()); !ok {
+                return false
+        }
+
         if op.Locked != locked {
                 op.applyPropertiesChanged("Locked", locked)
                 op.setPropName("Locked")
         }
+
+        return true
 }
 
-func (op *UserManager) SetIconFile(icon string) {
-        //authWithPolkit(POLKIT_CHANGED_OWN_DATA)
+func (op *UserManager) SetIconFile(dbusMsg dbus.DMessage, icon string) bool {
+        defer func() {
+                if err := recover(); err != nil {
+                        logObject.Warningf("Recover Error In SetIconFile:%v",
+                                err)
+                }
+        }()
+
+        if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+                dbusMsg.GetSenderPID()); !ok {
+                return false
+        }
+
         if ok := opUtils.IsFileExist(icon); !ok || op.IconFile == icon {
-                return
+                return false
         }
 
         if !opUtils.IsElementExist(icon, op.IconList) {
                 if ok := opUtils.IsFileExist(ICON_LOCAL_DIR); !ok {
                         if err := os.MkdirAll(ICON_LOCAL_DIR, 0755); err != nil {
-                                return
+                                return false
                         }
                 }
                 name, _ := opUtils.GetBaseName(icon)
                 dest := ICON_LOCAL_DIR + "/" + op.UserName + "-" + name
                 if ok := opUtils.CopyFile(icon, dest); !ok {
-                        return
+                        return false
                 }
                 icon = dest
         }
         op.applyPropertiesChanged("IconFile", icon)
         op.setPropName("IconFile")
+
+        return true
 }
 
-func (op *UserManager) SetBackgroundFile(bg string) {
-        //authWithPolkit(POLKIT_CHANGED_OWN_DATA)
+func (op *UserManager) SetBackgroundFile(dbusMsg dbus.DMessage, bg string) bool {
+        defer func() {
+                if err := recover(); err != nil {
+                        logObject.Warningf("Recover Error In SetBackgroundFile:%v",
+                                err)
+                }
+        }()
+
+        if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+                dbusMsg.GetSenderPID()); !ok {
+                return false
+        }
+
         if op.BackgroundFile != bg {
                 op.applyPropertiesChanged("BackgroundFile", bg)
                 op.setPropName("BackgroundFile")
         }
+
+        return true
 }
 
-func (op *UserManager) DeleteHistoryIcon(icon string) {
+func (op *UserManager) DeleteHistoryIcon(dbusMsg dbus.DMessage, icon string) bool {
+        defer func() {
+                if err := recover(); err != nil {
+                        logObject.Warningf("Recover Error In DeleteHistoryIcon:%v",
+                                err)
+                }
+        }()
+
+        if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+                dbusMsg.GetSenderPID()); !ok {
+                return false
+        }
+
         file := USER_CONFIG_FILE + op.UserName
-        //op.HistoryIcons = deleteHistoryIcon(file, icon)
         deleteHistoryIcon(file, icon)
         op.setPropName("HistoryIcons")
+
+        return true
 }
 
 func newUserManager(uid string) *UserManager {

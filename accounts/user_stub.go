@@ -94,16 +94,14 @@ func (op *UserManager) applyPropertiesChanged(propName string, value interface{}
                 println("User: ", op.UserName)
                 if v, ok := value.(string); ok && v != op.IconFile {
                         file := USER_CONFIG_FILE + op.UserName
-                        writeKeyFileValue(file, "User", "Icon",
-                                KEY_TYPE_STRING, v)
+                        opUtils.WriteKeyToKeyFile(file, "User", "Icon", v)
                         addHistoryIcon(file, v)
                         op.setPropName("HistoryIcons")
                 }
         case "BackgroundFile":
                 if v, ok := value.(string); ok && v != op.BackgroundFile {
                         file := USER_CONFIG_FILE + op.UserName
-                        writeKeyFileValue(file, "User", "Background",
-                                KEY_TYPE_STRING, v)
+                        opUtils.WriteKeyToKeyFile(file, "User", "Background", v)
                 }
         case "AutomaticLogin":
                 if v, ok := value.(bool); ok && v != op.AutomaticLogin {
@@ -167,8 +165,8 @@ func (op *UserManager) setPropName(propName string) {
                         op.applyPropertiesChanged("IconFile", path)
                         op.IconFile = path
                 } else {
-                        v, ok := readKeyFileValue(file, "User", "Icon", KEY_TYPE_STRING)
-                        if !ok {
+                        if v, ok := opUtils.ReadKeyFromKeyFile(file, "User",
+                                "Icon", ""); !ok {
                                 path := getRandUserIcon()
                                 op.applyPropertiesChanged("IconFile", path)
                                 op.IconFile = path
@@ -182,8 +180,8 @@ func (op *UserManager) setPropName(propName string) {
                         op.applyPropertiesChanged("BackgroundFile", USER_DEFAULT_BG)
                         op.BackgroundFile = USER_DEFAULT_BG
                 } else {
-                        v, ok := readKeyFileValue(file, "User", "Background", KEY_TYPE_STRING)
-                        if !ok {
+                        if v, ok := opUtils.ReadKeyFromKeyFile(file, "User",
+                                "Background", ""); !ok {
                                 op.applyPropertiesChanged("BackgroundFile", USER_DEFAULT_BG)
                                 op.BackgroundFile = USER_DEFAULT_BG
                         } else {
@@ -217,9 +215,8 @@ func (op *UserManager) setPropName(propName string) {
                         op.HistoryIcons = append(op.HistoryIcons,
                                 USER_DEFAULT_ICON)
                 } else {
-                        v, ok := readKeyFileValue(file, "User",
-                                "HistoryIcons", KEY_TYPE_STRING_LIST)
-                        if !ok {
+                        if v, ok := opUtils.ReadKeyFromKeyFile(file, "User",
+                                "HistoryIcons", []string{}); !ok {
                                 op.HistoryIcons = append(op.HistoryIcons,
                                         USER_DEFAULT_ICON)
                         } else {
@@ -262,8 +259,8 @@ func (op *UserManager) updateUserInfo() {
 }
 
 func addHistoryIcon(filename, iconPath string) []string {
-        list, _ := readKeyFileValue(filename, "User",
-                "HistoryIcons", KEY_TYPE_STRING_LIST)
+        list, _ := opUtils.ReadKeyFromKeyFile(filename, "User",
+                "HistoryIcons", []string{})
         if ok := opUtils.IsFileExist(iconPath); !ok {
                 return list.([]string)
         }
@@ -286,22 +283,20 @@ func addHistoryIcon(filename, iconPath string) []string {
                         cnt++
                 }
         }
-        writeKeyFileValue(filename, "User",
-                "HistoryIcons", KEY_TYPE_STRING_LIST, ret)
+        opUtils.WriteKeyToKeyFile(filename, "User", "HistoryIcons", ret)
 
         return ret
 }
 
 func deleteHistoryIcon(filename, iconPath string) []string {
-        list, ok := readKeyFileValue(filename, "User",
-                "HistoryIcons", KEY_TYPE_STRING_LIST)
+        list, ok := opUtils.ReadKeyFromKeyFile(filename, "User",
+                "HistoryIcons", []string{})
         if !ok || len(list.([]string)) <= 0 {
                 return []string{}
         }
 
         tmp := deleteElementFromList(iconPath, list.([]string))
-        writeKeyFileValue(filename, "User",
-                "HistoryIcons", KEY_TYPE_STRING_LIST, tmp)
+        opUtils.WriteKeyToKeyFile(filename, "User", "HistoryIcons", tmp)
 
         return tmp
 }

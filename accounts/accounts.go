@@ -22,6 +22,7 @@
 package main
 
 import (
+        "dlib/dbus"
         "io/ioutil"
         "os/user"
         "strconv"
@@ -41,10 +42,6 @@ const (
         ACCOUNT_GROUP_KEY   = "Accounts"
         ACCOUNT_KEY_GUEST   = "AllowGuest"
 )
-
-func (op *AccountManager) AuthWithPolkit(pid uint32) bool {
-        return authWithPolkit(POLKIT_MANAGER_USER, pid)
-}
 
 /*
 func (op *AccountManager) CreateGuestAccount() string {
@@ -71,21 +68,30 @@ func (op *AccountManager) CreateGuestAccount() string {
 }
 */
 
-func (op *AccountManager) AllowGuestAccount(allow bool) {
-        writeKeyFileValue(ACCOUNT_CONFIG_FILE, ACCOUNT_GROUP_KEY,
-                ACCOUNT_KEY_GUEST, KEY_TYPE_BOOL, allow)
+func (op *AccountManager) AllowGuestAccount(dbusMsg dbus.DMessage, allow bool) bool {
+        if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+                dbusMsg.GetSenderPID()); !ok {
+                return false
+        }
+        if ok := opUtils.WriteKeyToKeyFile(ACCOUNT_CONFIG_FILE,
+                ACCOUNT_GROUP_KEY, ACCOUNT_KEY_GUEST, allow); !ok {
+                return false
+        }
         op.setPropName("AllowGuest")
+        return true
 }
 
-func (op *AccountManager) CreateUser(name, fullname string, accountTyte int32) string {
+func (op *AccountManager) CreateUser(dbusMsg dbus.DMessage, name, fullname string, accountTyte int32) (string, bool) {
         defer func() {
                 if err := recover(); err != nil {
                         logObject.Warningf("Recover Error In CreateUser:%v",
                                 err)
                 }
         }()
-
-        //authWithPolkit(POLKIT_MANAGER_USER)
+        if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+                dbusMsg.GetSenderPID()); !ok {
+                return "", false
+        }
 
         args := []string{}
 
@@ -106,10 +112,10 @@ func (op *AccountManager) CreateUser(name, fullname string, accountTyte int32) s
         path := op.FindUserByName(name)
         //op.UserAdded(path)
         //op.setPropName("UserList")
-        return path
+        return path, true
 }
 
-func (op *AccountManager) DeleteUser(name string, removeFiles bool) {
+func (op *AccountManager) DeleteUser(dbusMsg dbus.DMessage, name string, removeFiles bool) bool {
         defer func() {
                 if err := recover(); err != nil {
                         logObject.Warningf("Recover Error In DeleteUser:%v",
@@ -117,7 +123,10 @@ func (op *AccountManager) DeleteUser(name string, removeFiles bool) {
                 }
         }()
 
-        //authWithPolkit(POLKIT_MANAGER_USER)
+        if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+                dbusMsg.GetSenderPID()); !ok {
+                return false
+        }
 
         args := []string{}
 
@@ -130,6 +139,7 @@ func (op *AccountManager) DeleteUser(name string, removeFiles bool) {
         execCommand(CMD_USERDEL, args)
         //op.UserDeleted(path)
         //op.setPropName("UserList")
+        return true
 }
 
 func (op *AccountManager) FindUserById(id string) string {

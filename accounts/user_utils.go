@@ -98,37 +98,37 @@ func setAutomaticLogin(name string) {
         switch dsp {
         case "lightdm":
                 if fileIsExist(ETC_LIGHTDM_CONFIG) {
-                        writeKeyFileValue(ETC_LIGHTDM_CONFIG,
+                        opUtils.WriteKeyToKeyFile(ETC_LIGHTDM_CONFIG,
                                 LIGHTDM_AUTOLOGIN_GROUP,
                                 LIGHTDM_AUTOLOGIN_USER,
-                                KEY_TYPE_STRING, name)
+                                name)
                 }
         case "gdm":
                 if fileIsExist(ETC_GDM_CONFIG) {
-                        writeKeyFileValue(ETC_GDM_CONFIG,
+                        opUtils.WriteKeyToKeyFile(ETC_GDM_CONFIG,
                                 GDM_AUTOLOGIN_GROUP,
                                 GDM_AUTOLOGIN_USER,
-                                KEY_TYPE_STRING, name)
+                                name)
                 }
         case "kdm":
                 if fileIsExist(ETC_KDM_CONFIG) {
-                        writeKeyFileValue(ETC_KDM_CONFIG,
+                        opUtils.WriteKeyToKeyFile(ETC_KDM_CONFIG,
                                 KDM_AUTOLOGIN_GROUP,
                                 KDM_AUTOLOGIN_ENABLE,
-                                KEY_TYPE_BOOL, true)
-                        writeKeyFileValue(ETC_KDM_CONFIG,
+                                true)
+                        opUtils.WriteKeyToKeyFile(ETC_KDM_CONFIG,
                                 KDM_AUTOLOGIN_GROUP,
                                 KDM_AUTOLOGIN_USER,
-                                KEY_TYPE_STRING, name)
+                                name)
                 } else if fileIsExist(USER_KDM_CONFIG) {
-                        writeKeyFileValue(ETC_KDM_CONFIG,
+                        opUtils.WriteKeyToKeyFile(ETC_KDM_CONFIG,
                                 KDM_AUTOLOGIN_GROUP,
                                 KDM_AUTOLOGIN_ENABLE,
-                                KEY_TYPE_BOOL, true)
-                        writeKeyFileValue(USER_KDM_CONFIG,
+                                true)
+                        opUtils.WriteKeyToKeyFile(USER_KDM_CONFIG,
                                 KDM_AUTOLOGIN_GROUP,
                                 KDM_AUTOLOGIN_USER,
-                                KEY_TYPE_STRING, name)
+                                name)
                 }
         default:
                 logObject.Warning("No support display manager")
@@ -141,38 +141,38 @@ func isAutoLogin(username string) bool {
         switch dsp {
         case "lightdm":
                 if fileIsExist(ETC_LIGHTDM_CONFIG) {
-                        v, ok := readKeyFileValue(ETC_LIGHTDM_CONFIG,
+                        v, ok := opUtils.ReadKeyFromKeyFile(ETC_LIGHTDM_CONFIG,
                                 LIGHTDM_AUTOLOGIN_GROUP,
                                 LIGHTDM_AUTOLOGIN_USER,
-                                KEY_TYPE_STRING)
+                                "")
                         if ok && v.(string) == username {
                                 return true
                         }
                 }
         case "gdm":
                 if fileIsExist(ETC_GDM_CONFIG) {
-                        v, ok := readKeyFileValue(ETC_GDM_CONFIG,
+                        v, ok := opUtils.ReadKeyFromKeyFile(ETC_GDM_CONFIG,
                                 GDM_AUTOLOGIN_GROUP,
                                 GDM_AUTOLOGIN_USER,
-                                KEY_TYPE_STRING)
+                                "")
                         if ok && v.(string) == username {
                                 return true
                         }
                 }
         case "kdm":
                 if fileIsExist(ETC_KDM_CONFIG) {
-                        v, ok := readKeyFileValue(ETC_KDM_CONFIG,
+                        v, ok := opUtils.ReadKeyFromKeyFile(ETC_KDM_CONFIG,
                                 KDM_AUTOLOGIN_GROUP,
                                 KDM_AUTOLOGIN_USER,
-                                KEY_TYPE_STRING)
+                                "")
                         if ok && v.(string) == username {
                                 return true
                         }
                 } else if fileIsExist(USER_KDM_CONFIG) {
-                        v, ok := readKeyFileValue(USER_KDM_CONFIG,
+                        v, ok := opUtils.ReadKeyFromKeyFile(USER_KDM_CONFIG,
                                 KDM_AUTOLOGIN_GROUP,
                                 KDM_AUTOLOGIN_USER,
-                                KEY_TYPE_STRING)
+                                "")
                         if ok && v.(string) == username {
                                 return true
                         }
