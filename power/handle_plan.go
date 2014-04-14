@@ -122,7 +122,7 @@ func (p *Power) updateIdletimer() {
 	if min > 0xffffff {
 		min = 0
 	}
-	if err := p.screensaver.SetTimeout(uint32(min)/10, 0, false); err != nil {
+	if err := p.screensaver.SetTimeout(uint32(min), 0, false); err != nil {
 		LOGGER.Error("Failed set ScreenSaver's timeout:", err)
 	} else {
 		LOGGER.Info("Set ScreenTimeout to ", uint32(min), uint32(suspendDelta))
@@ -187,7 +187,7 @@ func doIdleAction() {
 	if suspendDelta != 0 {
 		for {
 			select {
-			case <-time.After(time.Second * time.Duration(suspendDelta/10)):
+			case <-time.After(time.Second * time.Duration(suspendDelta)):
 				doSuspend()
 				return
 			case <-stoper:
