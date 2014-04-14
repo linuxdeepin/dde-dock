@@ -2,7 +2,7 @@
     "FieldName":"NM_SETTING_IP4_CONFIG_SETTING_NAME",
     "OutputFile":"../nm_setting_ipv4_autogen.go",
     "Keys":[
-	    {"Name":"NM_SETTING_IP4_CONFIG_METHOD", "Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_IP4_CONFIG_METHOD", "Type":"ktypeString", "Default":"<null>", "LogicSet":true},
 	    {"Name":"NM_SETTING_IP4_CONFIG_DNS", "Type":"ktypeWrapperIpv4Dns", "Default":"<default>"},
 	    {"Name":"NM_SETTING_IP4_CONFIG_DNS_SEARCH", "Type":"ktypeString", "Default":"<default>"},
 	    {"Name":"NM_SETTING_IP4_CONFIG_ADDRESSES", "Type":"ktypeWrapperIpv4Addresses", "Default":"<default>"},

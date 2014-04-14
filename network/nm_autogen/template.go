@@ -73,15 +73,28 @@ func get{{$fieldFuncBaseName}}KeyDefaultValueJSON(key string) (valueJSON string)
 `
 
 // get json value generally
-const tplGeneralGetterJSON = `
-{{$fieldFuncBaseName := .FieldName | ToFieldFuncBaseName}}
+const tplGeneralGetterJSON = `{{$fieldFuncBaseName := .FieldName | ToFieldFuncBaseName}}
 // Get JSON value generally
 func generalGet{{$fieldFuncBaseName}}KeyJSON(data _ConnectionData, key string) (value string) {
 	switch key {
 	default:
-		LOGGER.Error("generalGet{{.FieldName | ToFieldFuncBaseName}}KeyJSON: invalide key", key){{range .Keys}}
+		LOGGER.Error("generalGet{{$fieldFuncBaseName}}KeyJSON: invalide key", key){{range .Keys}}
 	case {{.Name}}:
 		value = get{{.Name | ToKeyFuncBaseName}}JSON(data){{end}}
+	}
+	return
+}
+`
+
+// set json value generally
+const tplGeneralSetterJSON = `{{$fieldFuncBaseName := .FieldName | ToFieldFuncBaseName}}
+// Set JSON value generally
+func generalSet{{$fieldFuncBaseName}}KeyJSON(data _ConnectionData, key, valueJSON string) {
+	switch key {
+	default:
+		LOGGER.Error("generalSet{{$fieldFuncBaseName}}KeyJSON: invalide key", key){{range .Keys}}
+	case {{.Name}}:
+		{{if .LogicSet}}logicSet{{else}}set{{end}}{{.Name | ToKeyFuncBaseName}}JSON(data, valueJSON){{end}}
 	}
 	return
 }

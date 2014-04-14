@@ -183,6 +183,51 @@ func generalGetSettingPppKeyJSON(data _ConnectionData, key string) (value string
 	return
 }
 
+// Set JSON value generally
+func generalSetSettingPppKeyJSON(data _ConnectionData, key, valueJSON string) {
+	switch key {
+	default:
+		LOGGER.Error("generalSetSettingPppKeyJSON: invalide key", key)
+	case NM_SETTING_PPP_NOAUTH:
+		setSettingPppNoauthJSON(data, valueJSON)
+	case NM_SETTING_PPP_REFUSE_EAP:
+		setSettingPppRefuseEapJSON(data, valueJSON)
+	case NM_SETTING_PPP_REFUSE_PAP:
+		setSettingPppRefusePapJSON(data, valueJSON)
+	case NM_SETTING_PPP_REFUSE_CHAP:
+		setSettingPppRefuseChapJSON(data, valueJSON)
+	case NM_SETTING_PPP_REFUSE_MSCHAP:
+		setSettingPppRefuseMschapJSON(data, valueJSON)
+	case NM_SETTING_PPP_REFUSE_MSCHAPV2:
+		setSettingPppRefuseMschapv2JSON(data, valueJSON)
+	case NM_SETTING_PPP_NOBSDCOMP:
+		setSettingPppNobsdcompJSON(data, valueJSON)
+	case NM_SETTING_PPP_NODEFLATE:
+		setSettingPppNodeflateJSON(data, valueJSON)
+	case NM_SETTING_PPP_NO_VJ_COMP:
+		setSettingPppNoVjCompJSON(data, valueJSON)
+	case NM_SETTING_PPP_REQUIRE_MPPE:
+		setSettingPppRequireMppeJSON(data, valueJSON)
+	case NM_SETTING_PPP_REQUIRE_MPPE_128:
+		setSettingPppRequireMppe128JSON(data, valueJSON)
+	case NM_SETTING_PPP_MPPE_STATEFUL:
+		setSettingPppMppeStatefulJSON(data, valueJSON)
+	case NM_SETTING_PPP_CRTSCTS:
+		setSettingPppCrtsctsJSON(data, valueJSON)
+	case NM_SETTING_PPP_BAUD:
+		setSettingPppBaudJSON(data, valueJSON)
+	case NM_SETTING_PPP_MRU:
+		setSettingPppMruJSON(data, valueJSON)
+	case NM_SETTING_PPP_MTU:
+		setSettingPppMtuJSON(data, valueJSON)
+	case NM_SETTING_PPP_LCP_ECHO_FAILURE:
+		setSettingPppLcpEchoFailureJSON(data, valueJSON)
+	case NM_SETTING_PPP_LCP_ECHO_INTERVAL:
+		setSettingPppLcpEchoIntervalJSON(data, valueJSON)
+	}
+	return
+}
+
 // Check if key exists
 func isSettingPppNoauthExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOAUTH)

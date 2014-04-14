@@ -175,6 +175,49 @@ func generalGetSettingWirelessSecurityKeyJSON(data _ConnectionData, key string) 
 	return
 }
 
+// Set JSON value generally
+func generalSetSettingWirelessSecurityKeyJSON(data _ConnectionData, key, valueJSON string) {
+	switch key {
+	default:
+		LOGGER.Error("generalSetSettingWirelessSecurityKeyJSON: invalide key", key)
+	case NM_SETTING_WIRELESS_SECURITY_KEY_MGMT:
+		setSettingWirelessSecurityKeyMgmtJSON(data, valueJSON)
+	case NM_SETTING_WIRELESS_SECURITY_WEP_TX_KEYIDX:
+		setSettingWirelessSecurityWepTxKeyidxJSON(data, valueJSON)
+	case NM_SETTING_WIRELESS_SECURITY_AUTH_ALG:
+		setSettingWirelessSecurityAuthAlgJSON(data, valueJSON)
+	case NM_SETTING_WIRELESS_SECURITY_PROTO:
+		setSettingWirelessSecurityProtoJSON(data, valueJSON)
+	case NM_SETTING_WIRELESS_SECURITY_PAIRWISE:
+		setSettingWirelessSecurityPairwiseJSON(data, valueJSON)
+	case NM_SETTING_WIRELESS_SECURITY_GROUP:
+		setSettingWirelessSecurityGroupJSON(data, valueJSON)
+	case NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME:
+		setSettingWirelessSecurityLeapUsernameJSON(data, valueJSON)
+	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY0:
+		setSettingWirelessSecurityWepKey0JSON(data, valueJSON)
+	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY1:
+		setSettingWirelessSecurityWepKey1JSON(data, valueJSON)
+	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY2:
+		setSettingWirelessSecurityWepKey2JSON(data, valueJSON)
+	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY3:
+		setSettingWirelessSecurityWepKey3JSON(data, valueJSON)
+	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY_FLAGS:
+		setSettingWirelessSecurityWepKeyFlagsJSON(data, valueJSON)
+	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE:
+		setSettingWirelessSecurityWepKeyTypeJSON(data, valueJSON)
+	case NM_SETTING_WIRELESS_SECURITY_PSK:
+		setSettingWirelessSecurityPskJSON(data, valueJSON)
+	case NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS:
+		setSettingWirelessSecurityPskFlagsJSON(data, valueJSON)
+	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD:
+		setSettingWirelessSecurityLeapPasswordJSON(data, valueJSON)
+	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS:
+		setSettingWirelessSecurityLeapPasswordFlagsJSON(data, valueJSON)
+	}
+	return
+}
+
 // Check if key exists
 func isSettingWirelessSecurityKeyMgmtExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT)

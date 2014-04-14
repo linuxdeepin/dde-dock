@@ -270,39 +270,6 @@ func checkSettingIp4ConfigAddresses(data _ConnectionData, errs map[string]string
 	}
 }
 
-// Set JSON value generally
-func generalSetSettingIp4ConfigKeyJSON(data _ConnectionData, key, valueJSON string) {
-	switch key {
-	default:
-		LOGGER.Error("generalSetSettingIp4ConfigKey: invalide key", key)
-	case NM_SETTING_IP4_CONFIG_METHOD:
-		logicSetSettingIp4ConfigMethodJSON(data, valueJSON)
-	case NM_SETTING_IP4_CONFIG_DNS:
-		setSettingIp4ConfigDnsJSON(data, valueJSON)
-	case NM_SETTING_IP4_CONFIG_DNS_SEARCH:
-		setSettingIp4ConfigDnsSearchJSON(data, valueJSON)
-	case NM_SETTING_IP4_CONFIG_ADDRESSES:
-		setSettingIp4ConfigAddressesJSON(data, valueJSON)
-	case NM_SETTING_IP4_CONFIG_ROUTES:
-		setSettingIp4ConfigRoutesJSON(data, valueJSON)
-	case NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES:
-		setSettingIp4ConfigIgnoreAutoRoutesJSON(data, valueJSON)
-	case NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS:
-		setSettingIp4ConfigIgnoreAutoDnsJSON(data, valueJSON)
-	case NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID:
-		setSettingIp4ConfigDhcpClientIdJSON(data, valueJSON)
-	case NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME:
-		setSettingIp4ConfigDhcpSendHostnameJSON(data, valueJSON)
-	case NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME:
-		setSettingIp4ConfigDhcpHostnameJSON(data, valueJSON)
-	case NM_SETTING_IP4_CONFIG_NEVER_DEFAULT:
-		setSettingIp4ConfigNeverDefaultJSON(data, valueJSON)
-	case NM_SETTING_IP4_CONFIG_MAY_FAIL:
-		setSettingIp4ConfigMayFailJSON(data, valueJSON)
-	}
-	return
-}
-
 // Logic setter
 func logicSetSettingIp4ConfigMethodJSON(data _ConnectionData, valueJSON string) {
 	// set valueJSON firstly to avoid duplication of code

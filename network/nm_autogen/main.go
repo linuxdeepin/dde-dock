@@ -38,9 +38,10 @@ type NMSettingStruct struct {
 	FieldName  string
 	OutputFile string
 	Keys       []struct {
-		Name    string
-		Type    string
-		Default string
+		Name     string
+		Type     string
+		Default  string
+		LogicSet bool
 	}
 }
 
@@ -50,6 +51,7 @@ func generateNMSettingCode(nmSetting NMSettingStruct) (content string) {
 	content += generateTemplate(nmSetting, tplIsKeyInSettingField) // check is key in current field
 	content += generateTemplate(nmSetting, tplGetDefaultValueJSON) // get default json value
 	content += generateTemplate(nmSetting, tplGeneralGetterJSON)   // general json getter
+	content += generateTemplate(nmSetting, tplGeneralSetterJSON)   // general json setter
 	content += generateTemplate(nmSetting, tplCheckExists)         // check if key exists
 	content += generateTemplate(nmSetting, tplEnsureNoEmpty)       // ensure field and key exists and not empty
 	content += generateTemplate(nmSetting, tplGetter)              // getter

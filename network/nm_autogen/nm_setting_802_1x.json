@@ -2,7 +2,7 @@
     "FieldName":"NM_SETTING_802_1X_SETTING_NAME",
     "OutputFile":"../nm_setting_802_1x_autogen.go",
     "Keys":[
-	    {"Name":"NM_SETTING_802_1X_EAP","Type":"ktypeArrayString", "Default":"<default>"},
+	    {"Name":"NM_SETTING_802_1X_EAP","Type":"ktypeArrayString", "Default":"<default>", "LogicSet":true},
 	    {"Name":"NM_SETTING_802_1X_IDENTITY","Type":"ktypeString", "Default":"<null>"},
 	    {"Name":"NM_SETTING_802_1X_ANONYMOUS_IDENTITY","Type":"ktypeString", "Default":"<null>"},
 	    {"Name":"NM_SETTING_802_1X_PAC_FILE","Type":"ktypeString", "Default":"<null>"},

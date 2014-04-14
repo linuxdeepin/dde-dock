@@ -71,6 +71,23 @@ func generalGetSettingPppoeKeyJSON(data _ConnectionData, key string) (value stri
 	return
 }
 
+// Set JSON value generally
+func generalSetSettingPppoeKeyJSON(data _ConnectionData, key, valueJSON string) {
+	switch key {
+	default:
+		LOGGER.Error("generalSetSettingPppoeKeyJSON: invalide key", key)
+	case NM_SETTING_PPPOE_SERVICE:
+		setSettingPppoeServiceJSON(data, valueJSON)
+	case NM_SETTING_PPPOE_USERNAME:
+		setSettingPppoeUsernameJSON(data, valueJSON)
+	case NM_SETTING_PPPOE_PASSWORD:
+		setSettingPppoePasswordJSON(data, valueJSON)
+	case NM_SETTING_PPPOE_PASSWORD_FLAGS:
+		setSettingPppoePasswordFlagsJSON(data, valueJSON)
+	}
+	return
+}
+
 // Check if key exists
 func isSettingPppoeServiceExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_SERVICE)

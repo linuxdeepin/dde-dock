@@ -127,6 +127,37 @@ func generalGetSettingWiredKeyJSON(data _ConnectionData, key string) (value stri
 	return
 }
 
+// Set JSON value generally
+func generalSetSettingWiredKeyJSON(data _ConnectionData, key, valueJSON string) {
+	switch key {
+	default:
+		LOGGER.Error("generalSetSettingWiredKeyJSON: invalide key", key)
+	case NM_SETTING_WIRED_PORT:
+		setSettingWiredPortJSON(data, valueJSON)
+	case NM_SETTING_WIRED_SPEED:
+		setSettingWiredSpeedJSON(data, valueJSON)
+	case NM_SETTING_WIRED_DUPLEX:
+		setSettingWiredDuplexJSON(data, valueJSON)
+	case NM_SETTING_WIRED_AUTO_NEGOTIATE:
+		setSettingWiredAutoNegotiateJSON(data, valueJSON)
+	case NM_SETTING_WIRED_MAC_ADDRESS:
+		setSettingWiredMacAddressJSON(data, valueJSON)
+	case NM_SETTING_WIRED_CLONED_MAC_ADDRESS:
+		setSettingWiredClonedMacAddressJSON(data, valueJSON)
+	case NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST:
+		setSettingWiredMacAddressBlacklistJSON(data, valueJSON)
+	case NM_SETTING_WIRED_MTU:
+		setSettingWiredMtuJSON(data, valueJSON)
+	case NM_SETTING_WIRED_S390_SUBCHANNELS:
+		setSettingWiredS390SubchannelsJSON(data, valueJSON)
+	case NM_SETTING_WIRED_S390_NETTYPE:
+		setSettingWiredS390NettypeJSON(data, valueJSON)
+	case NM_SETTING_WIRED_S390_OPTIONS:
+		setSettingWiredS390OptionsJSON(data, valueJSON)
+	}
+	return
+}
+
 // Check if key exists
 func isSettingWiredPortExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_PORT)

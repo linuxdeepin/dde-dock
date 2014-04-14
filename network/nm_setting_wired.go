@@ -113,33 +113,3 @@ func checkSettingWiredValues(data _ConnectionData) (errs map[string]string) {
 	errs = make(map[string]string)
 	return
 }
-
-func generalSetSettingWiredKeyJSON(data _ConnectionData, key, value string) {
-	switch key {
-	default:
-		LOGGER.Error("generalSetSettingWiredKey: invalide key", key)
-	case NM_SETTING_WIRED_PORT:
-		setSettingWiredPortJSON(data, value)
-	case NM_SETTING_WIRED_SPEED:
-		setSettingWiredSpeedJSON(data, value)
-	case NM_SETTING_WIRED_DUPLEX:
-		setSettingWiredDuplexJSON(data, value)
-	case NM_SETTING_WIRED_AUTO_NEGOTIATE:
-		setSettingWiredAutoNegotiateJSON(data, value)
-	case NM_SETTING_WIRED_MAC_ADDRESS:
-		setSettingWiredMacAddressJSON(data, value)
-	case NM_SETTING_WIRED_CLONED_MAC_ADDRESS:
-		setSettingWiredClonedMacAddressJSON(data, value)
-	case NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST:
-		setSettingWiredMacAddressBlacklistJSON(data, value)
-	case NM_SETTING_WIRED_MTU:
-		setSettingWiredMtuJSON(data, value)
-	case NM_SETTING_WIRED_S390_SUBCHANNELS:
-		setSettingWiredS390SubchannelsJSON(data, value)
-	case NM_SETTING_WIRED_S390_NETTYPE:
-		setSettingWiredS390NettypeJSON(data, value)
-	case NM_SETTING_WIRED_S390_OPTIONS:
-		setSettingWiredS390OptionsJSON(data, value)
-	}
-	return
-}

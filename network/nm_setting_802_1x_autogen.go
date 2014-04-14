@@ -295,6 +295,79 @@ func generalGetSetting8021xKeyJSON(data _ConnectionData, key string) (value stri
 	return
 }
 
+// Set JSON value generally
+func generalSetSetting8021xKeyJSON(data _ConnectionData, key, valueJSON string) {
+	switch key {
+	default:
+		LOGGER.Error("generalSetSetting8021xKeyJSON: invalide key", key)
+	case NM_SETTING_802_1X_EAP:
+		logicSetSetting8021xEapJSON(data, valueJSON)
+	case NM_SETTING_802_1X_IDENTITY:
+		setSetting8021xIdentityJSON(data, valueJSON)
+	case NM_SETTING_802_1X_ANONYMOUS_IDENTITY:
+		setSetting8021xAnonymousIdentityJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PAC_FILE:
+		setSetting8021xPacFileJSON(data, valueJSON)
+	case NM_SETTING_802_1X_CA_CERT:
+		setSetting8021xCaCertJSON(data, valueJSON)
+	case NM_SETTING_802_1X_CA_PATH:
+		setSetting8021xCaPathJSON(data, valueJSON)
+	case NM_SETTING_802_1X_SUBJECT_MATCH:
+		setSetting8021xSubjectMatchJSON(data, valueJSON)
+	case NM_SETTING_802_1X_ALTSUBJECT_MATCHES:
+		setSetting8021xAltsubjectMatchesJSON(data, valueJSON)
+	case NM_SETTING_802_1X_CLIENT_CERT:
+		setSetting8021xClientCertJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PHASE1_PEAPVER:
+		setSetting8021xPhase1PeapverJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PHASE1_PEAPLABEL:
+		setSetting8021xPhase1PeaplabelJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING:
+		setSetting8021xPhase1FastProvisioningJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PHASE2_AUTH:
+		setSetting8021xPhase2AuthJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PHASE2_AUTHEAP:
+		setSetting8021xPhase2AutheapJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PHASE2_CA_CERT:
+		setSetting8021xPhase2CaCertJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PHASE2_CA_PATH:
+		setSetting8021xPhase2CaPathJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH:
+		setSetting8021xPhase2SubjectMatchJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES:
+		setSetting8021xPhase2AltsubjectMatchesJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PHASE2_CLIENT_CERT:
+		setSetting8021xPhase2ClientCertJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PASSWORD:
+		setSetting8021xPasswordJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PASSWORD_FLAGS:
+		setSetting8021xPasswordFlagsJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PASSWORD_RAW:
+		setSetting8021xPasswordRawJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PASSWORD_RAW_FLAGS:
+		setSetting8021xPasswordRawFlagsJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PRIVATE_KEY:
+		setSetting8021xPrivateKeyJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD:
+		setSetting8021xPrivateKeyPasswordJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS:
+		setSetting8021xPrivateKeyPasswordFlagsJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY:
+		setSetting8021xPhase2PrivateKeyJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD:
+		setSetting8021xPhase2PrivateKeyPasswordJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS:
+		setSetting8021xPhase2PrivateKeyPasswordFlagsJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PIN:
+		setSetting8021xPinJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PIN_FLAGS:
+		setSetting8021xPinFlagsJSON(data, valueJSON)
+	case NM_SETTING_802_1X_SYSTEM_CA_CERTS:
+		setSetting8021xSystemCaCertsJSON(data, valueJSON)
+	}
+	return
+}
+
 // Check if key exists
 func isSetting8021xEapExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_EAP)

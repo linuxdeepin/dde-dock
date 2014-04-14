@@ -127,6 +127,37 @@ func generalGetSettingConnectionKeyJSON(data _ConnectionData, key string) (value
 	return
 }
 
+// Set JSON value generally
+func generalSetSettingConnectionKeyJSON(data _ConnectionData, key, valueJSON string) {
+	switch key {
+	default:
+		LOGGER.Error("generalSetSettingConnectionKeyJSON: invalide key", key)
+	case NM_SETTING_CONNECTION_ID:
+		setSettingConnectionIdJSON(data, valueJSON)
+	case NM_SETTING_CONNECTION_UUID:
+		setSettingConnectionUuidJSON(data, valueJSON)
+	case NM_SETTING_CONNECTION_TYPE:
+		setSettingConnectionTypeJSON(data, valueJSON)
+	case NM_SETTING_CONNECTION_PERMISSIONS:
+		setSettingConnectionPermissionsJSON(data, valueJSON)
+	case NM_SETTING_CONNECTION_AUTOCONNECT:
+		setSettingConnectionAutoconnectJSON(data, valueJSON)
+	case NM_SETTING_CONNECTION_TIMESTAMP:
+		setSettingConnectionTimestampJSON(data, valueJSON)
+	case NM_SETTING_CONNECTION_READ_ONLY:
+		setSettingConnectionReadOnlyJSON(data, valueJSON)
+	case NM_SETTING_CONNECTION_ZONE:
+		setSettingConnectionZoneJSON(data, valueJSON)
+	case NM_SETTING_CONNECTION_MASTER:
+		setSettingConnectionMasterJSON(data, valueJSON)
+	case NM_SETTING_CONNECTION_SLAVE_TYPE:
+		setSettingConnectionSlaveTypeJSON(data, valueJSON)
+	case NM_SETTING_CONNECTION_SECONDARIES:
+		setSettingConnectionSecondariesJSON(data, valueJSON)
+	}
+	return
+}
+
 // Check if key exists
 func isSettingConnectionIdExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_ID)

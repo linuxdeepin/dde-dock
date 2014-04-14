@@ -103,34 +103,3 @@ func checkSettingConnectionValues(data _ConnectionData) (errs map[string]string)
 
 	return
 }
-
-// Set JSON value generally
-func generalSetSettingConnectionKeyJSON(data _ConnectionData, key, value string) {
-	switch key {
-	default:
-		LOGGER.Error("generalSetSettingConnectionKey: invalide key", key)
-	case NM_SETTING_CONNECTION_ID:
-		setSettingConnectionIdJSON(data, value)
-	case NM_SETTING_CONNECTION_UUID:
-		setSettingConnectionUuidJSON(data, value)
-	case NM_SETTING_CONNECTION_TYPE:
-		setSettingConnectionTypeJSON(data, value)
-	case NM_SETTING_CONNECTION_AUTOCONNECT:
-		setSettingConnectionAutoconnectJSON(data, value)
-	case NM_SETTING_CONNECTION_TIMESTAMP:
-		setSettingConnectionTimestampJSON(data, value)
-	case NM_SETTING_CONNECTION_READ_ONLY:
-		setSettingConnectionReadOnlyJSON(data, value)
-	case NM_SETTING_CONNECTION_PERMISSIONS:
-		setSettingConnectionPermissionsJSON(data, value)
-	case NM_SETTING_CONNECTION_ZONE:
-		setSettingConnectionZoneJSON(data, value)
-	case NM_SETTING_CONNECTION_MASTER:
-		setSettingConnectionMasterJSON(data, value)
-	case NM_SETTING_CONNECTION_SLAVE_TYPE:
-		setSettingConnectionSlaveTypeJSON(data, value)
-	case NM_SETTING_CONNECTION_SECONDARIES:
-		setSettingConnectionSecondariesJSON(data, value)
-	}
-	return
-}

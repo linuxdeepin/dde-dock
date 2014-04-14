@@ -174,37 +174,6 @@ func checkSettingIp6ConfigAddresses(data _ConnectionData, errs map[string]string
 	}
 }
 
-// Set JSON value generally
-func generalSetSettingIp6ConfigKeyJSON(data _ConnectionData, key, valueJSON string) {
-	switch key {
-	default:
-		LOGGER.Error("generalSetSettingIp6ConfigKey: invalide key", key)
-	case NM_SETTING_IP6_CONFIG_METHOD:
-		logicSetSettingIp6ConfigMethodJSON(data, valueJSON)
-	case NM_SETTING_IP6_CONFIG_DNS:
-		setSettingIp6ConfigDnsJSON(data, valueJSON)
-	case NM_SETTING_IP6_CONFIG_DNS_SEARCH:
-		setSettingIp6ConfigDnsSearchJSON(data, valueJSON)
-	case NM_SETTING_IP6_CONFIG_ADDRESSES:
-		setSettingIp6ConfigAddressesJSON(data, valueJSON)
-	case NM_SETTING_IP6_CONFIG_ROUTES:
-		setSettingIp6ConfigRoutesJSON(data, valueJSON)
-	case NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES:
-		setSettingIp6ConfigIgnoreAutoRoutesJSON(data, valueJSON)
-	case NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS:
-		setSettingIp6ConfigIgnoreAutoDnsJSON(data, valueJSON)
-	case NM_SETTING_IP6_CONFIG_NEVER_DEFAULT:
-		setSettingIp6ConfigNeverDefaultJSON(data, valueJSON)
-	case NM_SETTING_IP6_CONFIG_MAY_FAIL:
-		setSettingIp6ConfigMayFailJSON(data, valueJSON)
-	case NM_SETTING_IP6_CONFIG_IP6_PRIVACY:
-		setSettingIp6ConfigIp6PrivacyJSON(data, valueJSON)
-	case NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME:
-		setSettingIp6ConfigDhcpHostnameJSON(data, valueJSON)
-	}
-	return
-}
-
 // Logic setter
 func logicSetSettingIp6ConfigMethodJSON(data _ConnectionData, valueJSON string) {
 	setSettingIp6ConfigMethodJSON(data, valueJSON)
