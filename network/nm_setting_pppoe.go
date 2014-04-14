@@ -9,27 +9,48 @@ const (
 	NM_SETTING_PPPOE_PASSWORD_FLAGS = "password-flags"
 )
 
-// TODO Get available keys
+func newPppoeConnectionData(id, uuid string) (data _ConnectionData) {
+	data = make(_ConnectionData)
+
+	addSettingField(data, fieldConnection)
+	setSettingConnectionId(data, id)
+	setSettingConnectionUuid(data, uuid)
+	setSettingConnectionType(data, typePppoe)
+
+	addSettingField(data, fieldPppoe)
+
+	addSettingField(data, fieldPpp)
+	setSettingPppLcpEchoFailure(data, 5)
+	setSettingPppLcpEchoInterval(data, 30)
+
+	addSettingField(data, fieldIPv4)
+	setSettingIp4ConfigMethod(data, NM_SETTING_IP4_CONFIG_METHOD_AUTO)
+
+	return
+}
+
+// Get available keys
 func getSettingPppoeAvailableKeys(data _ConnectionData) (keys []string) {
 	keys = []string{
-	// NM_SETTING_CONNECTION_ID,
-	// NM_SETTING_CONNECTION_AUTOCONNECT,
+		NM_SETTING_PPPOE_SERVICE,
+		NM_SETTING_PPPOE_USERNAME,
+		NM_SETTING_PPPOE_PASSWORD,
 	}
 	return
 }
 
-// TODO Get available values
+// Get available values
 func getSettingPppoeAvailableValues(key string) (values []string, customizable bool) {
 	customizable = true
 	return
 }
 
-// TODO Check whether the values are correct
+// Check whether the values are correct
 func checkSettingPppoeValues(data _ConnectionData) (errs map[string]string) {
 	errs = make(map[string]string)
 
-	// TODO check id
-	// ensureSettingConnectionIdNoEmpty(data, errs)
+	// check username
+	ensureSettingPppoeUsernameNoEmpty(data, errs)
 
 	return
 }

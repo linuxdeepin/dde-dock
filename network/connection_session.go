@@ -54,6 +54,8 @@ func NewConnectionSessionByCreate(connectionType string) (session *ConnectionSes
 		session.data = newWiredConnectionData("", session.CurrentUUID)
 	case typeWireless:
 		session.data = newWirelessConnectionData("", session.CurrentUUID, nil, ApKeyNone)
+	case typePppoe:
+		session.data = newPppoeConnectionData("", session.CurrentUUID)
 	}
 
 	session.updatePropErrors()
@@ -169,6 +171,13 @@ func (session *ConnectionSession) ListPages() (pages []string) {
 			pageIPv4,
 			pageIPv6,
 			pageSecurity,
+		}
+	case typePppoe:
+		pages = []string{
+			pageGeneral,
+			pagePppoe,
+			pageIPv4,
+			// pagePpp,			// TODO if need
 		}
 	}
 	return

@@ -106,6 +106,14 @@ func newWirelessConnection(id string, ssid []byte, keyFlag int) (uuid string) {
 	return
 }
 
+func newPppoeConnection(id string) (uuid string) {
+	LOGGER.Debugf("new pppoe connection, id=%s", id)
+	uuid = newUUID()
+	data := newPppoeConnectionData(id, uuid)
+	nmAddConnection(data)
+	return
+}
+
 // GetConnectionByAccessPoint return the connection's uuid of access point, return empty if none.
 func (this *Manager) GetConnectionByAccessPoint(apPath dbus.ObjectPath) (uuid string, err error) {
 	ap, err := nm.NewAccessPoint(NMDest, apPath)

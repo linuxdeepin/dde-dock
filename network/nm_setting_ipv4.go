@@ -168,10 +168,16 @@ func getSettingIp4ConfigAvailableKeys(data _ConnectionData) (keys []string) {
 }
 
 // Get available values
-func getSettingIp4ConfigAvailableValues(key string) (values []string, customizable bool) {
+func getSettingIp4ConfigAvailableValues(data _ConnectionData, key string) (values []string, customizable bool) {
 	customizable = true
 	switch key {
 	case NM_SETTING_IP4_CONFIG_METHOD:
+		// TODO
+		// switch getSettingConnectionType(data) {
+		// case typeWired:
+		// case typeWireless:
+		// case typePppoe:
+		// }
 		values = []string{
 			NM_SETTING_IP4_CONFIG_METHOD_AUTO,
 			// NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL, // ignore

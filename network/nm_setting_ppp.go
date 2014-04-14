@@ -25,10 +25,7 @@ const (
 
 // TODO Get available keys
 func getSettingPppAvailableKeys(data _ConnectionData) (keys []string) {
-	keys = []string{
-	// NM_SETTING_CONNECTION_ID,
-	// NM_SETTING_CONNECTION_AUTOCONNECT,
-	}
+	keys = []string{}
 	return
 }
 
@@ -41,9 +38,5 @@ func getSettingPppAvailableValues(key string) (values []string, customizable boo
 // TODO Check whether the values are correct
 func checkSettingPppValues(data _ConnectionData) (errs map[string]string) {
 	errs = make(map[string]string)
-
-	// TODO check id
-	// ensureSettingConnectionIdNoEmpty(data, errs)
-
 	return
 }

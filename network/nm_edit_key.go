@@ -107,7 +107,7 @@ func generalGetSettingAvailableValues(data _ConnectionData, field, key string) (
 	case fieldConnection:
 		values, customizable = getSettingConnectionAvailableValues(key)
 	case fieldIPv4:
-		values, customizable = getSettingIp4ConfigAvailableValues(key)
+		values, customizable = getSettingIp4ConfigAvailableValues(data, key)
 	case fieldIPv6:
 		values, customizable = getSettingIp6ConfigAvailableValues(key)
 	case fieldWired:
