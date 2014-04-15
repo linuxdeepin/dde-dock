@@ -102,10 +102,10 @@ func newWiredConnection(id string) (uuid string) {
 	return
 }
 
-func newWirelessConnection(id string, ssid []byte, keyFlag int) (uuid string) {
-	Logger.Debugf("new wireless connection, id=%s, ssid=%s, keyFlag=%d", id, ssid, keyFlag)
+func newWirelessConnection(id string, ssid []byte, secType ApSecType) (uuid string) {
+	Logger.Debugf("new wireless connection, id=%s, ssid=%s, secType=%d", id, ssid, secType)
 	uuid = newUUID()
-	data := newWirelessConnectionData(id, uuid, ssid, keyFlag)
+	data := newWirelessConnectionData(id, uuid, ssid, secType)
 	nmAddConnection(data)
 	return
 }
@@ -151,13 +151,13 @@ func (m *Manager) CreateConnectionForAccessPoint(apPath dbus.ObjectPath) (uuid s
 		return
 	}
 	// TODO FIXME
-	keyFlag := parseFlags(ap)
-	if keyFlag == ApKeyEap {
+	secType := getApSecType(ap)
+	if secType == ApSecEap {
 		Logger.Debug("ignore wireless connection:", string(ap.Ssid.Get()))
 		return "", dbus.NewNoObjectError(apPath)
 	}
 
-	uuid = newWirelessConnection(string(ap.Ssid.Get()), []byte(ap.Ssid.Get()), parseFlags(ap))
+	uuid = newWirelessConnection(string(ap.Ssid.Get()), []byte(ap.Ssid.Get()), getApSecType(ap))
 	return
 }
 
@@ -315,7 +315,7 @@ func (m *Manager) ActivateConnectionForAccessPoint(apPath, devPath dbus.ObjectPa
 		_, err = nmActivateConnection(cpath, devPath)
 	} else {
 		uuid := newUUID()
-		data := newWirelessConnectionData(string(ap.Ssid.Get()), uuid, []byte(ap.Ssid.Get()), parseFlags(ap))
+		data := newWirelessConnectionData(string(ap.Ssid.Get()), uuid, []byte(ap.Ssid.Get()), getApSecType(ap))
 		_, _, err = nmAddAndActivateConnection(data, devPath)
 	}
 	return

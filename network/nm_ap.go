@@ -5,18 +5,21 @@ import (
 	"dlib/dbus"
 )
 
+type ApSecType uint32
+
 const (
-	ApKeyNone = iota
-	ApKeyWep
-	ApKeyPsk
-	ApKeyEap
+	ApSecNone ApSecType = iota
+	ApSecWep
+	ApSecPsk
+	ApSecEap
 )
 
 type AccessPoint struct {
-	Ssid     string
-	NeedKey  bool
-	Strength uint8
-	Path     dbus.ObjectPath
+	Ssid         string
+	Secured      bool
+	SecuredInEap bool
+	Strength     uint8
+	Path         dbus.ObjectPath
 }
 
 func NewAccessPoint(apPath dbus.ObjectPath) (ap AccessPoint, err error) {
@@ -41,32 +44,34 @@ func NewAccessPoint(apPath dbus.ObjectPath) (ap AccessPoint, err error) {
 		return
 	}
 
-	ap = AccessPoint{string(nmAp.Ssid.Get()),
-		parseFlags(nmAp) != ApKeyNone,
-		calcStrength(nmAp.Strength.Get()),
-		nmAp.Path,
+	ap = AccessPoint{
+		Ssid:         string(nmAp.Ssid.Get()),
+		Secured:      getApSecType(nmAp) != ApSecNone,
+		SecuredInEap: getApSecType(nmAp) == ApSecEap,
+		Strength:     calcStrength(nmAp.Strength.Get()),
+		Path:         nmAp.Path,
 	}
 	return
 }
 
-func parseFlags(ap *nm.AccessPoint) int {
-	return doParseFlags(ap.Flags.Get(), ap.WpaFlags.Get(), ap.RsnFlags.Get())
+func getApSecType(ap *nm.AccessPoint) ApSecType {
+	return doParseApSecType(ap.Flags.Get(), ap.WpaFlags.Get(), ap.RsnFlags.Get())
 }
 
-func doParseFlags(flags, wpaFlags, rsnFlags uint32) int {
-	r := ApKeyNone
+func doParseApSecType(flags, wpaFlags, rsnFlags uint32) ApSecType {
+	r := ApSecNone
 
 	if (flags&NM_802_11_AP_FLAGS_PRIVACY != 0) && (wpaFlags == NM_802_11_AP_SEC_NONE) && (rsnFlags == NM_802_11_AP_SEC_NONE) {
-		r = ApKeyWep
+		r = ApSecWep
 	}
 	if wpaFlags != NM_802_11_AP_SEC_NONE {
-		r = ApKeyPsk
+		r = ApSecPsk
 	}
 	if rsnFlags != NM_802_11_AP_SEC_NONE {
-		r = ApKeyPsk
+		r = ApSecPsk
 	}
 	if (wpaFlags&NM_802_11_AP_SEC_KEY_MGMT_802_1X != 0) || (rsnFlags&NM_802_11_AP_SEC_KEY_MGMT_802_1X != 0) {
-		r = ApKeyEap
+		r = ApSecEap
 	}
 	return r
 }

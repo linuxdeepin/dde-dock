@@ -108,7 +108,7 @@ const (
 	NM_SETTING_WIRELESS_MODE_INFRA = "infrastructure"
 )
 
-func newWirelessConnectionData(id, uuid string, ssid []byte, keyFlag int) (data _ConnectionData) {
+func newWirelessConnectionData(id, uuid string, ssid []byte, secType ApSecType) (data _ConnectionData) {
 	data = make(_ConnectionData)
 
 	addSettingField(data, fieldConnection)
@@ -119,16 +119,16 @@ func newWirelessConnectionData(id, uuid string, ssid []byte, keyFlag int) (data 
 	addSettingField(data, fieldWireless)
 	setSettingWirelessSsid(data, ssid)
 
-	if keyFlag != ApKeyNone {
+	if secType != ApSecNone {
 		addSettingField(data, fieldWirelessSecurity)
 		setSettingWirelessSec(data, fieldWirelessSecurity)
-		switch keyFlag {
-		case ApKeyWep:
+		switch secType {
+		case ApSecWep:
 			setSettingWirelessSecurityKeyMgmt(data, "none")
 			setSettingWirelessSecurityAuthAlg(data, "open")
-		case ApKeyPsk:
+		case ApSecPsk:
 			setSettingWirelessSecurityKeyMgmt(data, "wpa-psk")
-		case ApKeyEap:
+		case ApSecEap:
 			setSettingWirelessSecurityKeyMgmt(data, "wpa-eap")
 			// TODO
 		}
@@ -156,16 +156,16 @@ func newWirelessConnectionData(id, uuid string, ssid []byte, keyFlag int) (data 
 
 	// data[fieldWireless]["ssid"] = dbus.MakeVariant([]uint8(ssid))
 
-	// if keyFlag != ApKeyNone {
+	// if secType != ApSecNone {
 	// 	data[fieldWirelessSecurity] = make(map[string]dbus.Variant)
 	// 	data[fieldWireless]["security"] = dbus.MakeVariant(fieldWirelessSecurity)
-	// 	switch keyFlag {
-	// 	case ApKeyWep:
+	// 	switch secType {
+	// 	case ApSecWep:
 	// 		data[fieldWirelessSecurity]["key-mgmt"] = dbus.MakeVariant("none")
-	// 	case ApKeyPsk:
+	// 	case ApSecPsk:
 	// 		data[fieldWirelessSecurity]["key-mgmt"] = dbus.MakeVariant("wpa-psk")
 	// 		data[fieldWirelessSecurity]["auth-alg"] = dbus.MakeVariant("open")
-	// 	case ApKeyEap:
+	// 	case ApSecEap:
 	// 		data[fieldWirelessSecurity]["key-mgmt"] = dbus.MakeVariant("wpa-eap")
 	// 		data[fieldWirelessSecurity]["auth-alg"] = dbus.MakeVariant("open")
 	// 	}
