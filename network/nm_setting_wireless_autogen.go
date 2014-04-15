@@ -81,7 +81,7 @@ func isKeyInSettingWireless(key string) bool {
 func getSettingWirelessKeyDefaultValueJSON(key string) (valueJSON string) {
 	switch key {
 	default:
-		LOGGER.Error("invalid key:", key)
+		Logger.Error("invalid key:", key)
 	case NM_SETTING_WIRELESS_SSID:
 		valueJSON = `""`
 	case NM_SETTING_WIRELESS_MODE:
@@ -118,7 +118,7 @@ func getSettingWirelessKeyDefaultValueJSON(key string) (valueJSON string) {
 func generalGetSettingWirelessKeyJSON(data _ConnectionData, key string) (value string) {
 	switch key {
 	default:
-		LOGGER.Error("generalGetSettingWirelessKeyJSON: invalide key", key)
+		Logger.Error("generalGetSettingWirelessKeyJSON: invalide key", key)
 	case NM_SETTING_WIRELESS_SSID:
 		value = getSettingWirelessSsidJSON(data)
 	case NM_SETTING_WIRELESS_MODE:
@@ -155,7 +155,7 @@ func generalGetSettingWirelessKeyJSON(data _ConnectionData, key string) (value s
 func generalSetSettingWirelessKeyJSON(data _ConnectionData, key, valueJSON string) {
 	switch key {
 	default:
-		LOGGER.Error("generalSetSettingWirelessKeyJSON: invalide key", key)
+		Logger.Error("generalSetSettingWirelessKeyJSON: invalide key", key)
 	case NM_SETTING_WIRELESS_SSID:
 		setSettingWirelessSsidJSON(data, valueJSON)
 	case NM_SETTING_WIRELESS_MODE:

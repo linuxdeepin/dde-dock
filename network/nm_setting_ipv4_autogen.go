@@ -73,7 +73,7 @@ func isKeyInSettingIp4Config(key string) bool {
 func getSettingIp4ConfigKeyDefaultValueJSON(key string) (valueJSON string) {
 	switch key {
 	default:
-		LOGGER.Error("invalid key:", key)
+		Logger.Error("invalid key:", key)
 	case NM_SETTING_IP4_CONFIG_METHOD:
 		valueJSON = `""`
 	case NM_SETTING_IP4_CONFIG_DNS:
@@ -106,7 +106,7 @@ func getSettingIp4ConfigKeyDefaultValueJSON(key string) (valueJSON string) {
 func generalGetSettingIp4ConfigKeyJSON(data _ConnectionData, key string) (value string) {
 	switch key {
 	default:
-		LOGGER.Error("generalGetSettingIp4ConfigKeyJSON: invalide key", key)
+		Logger.Error("generalGetSettingIp4ConfigKeyJSON: invalide key", key)
 	case NM_SETTING_IP4_CONFIG_METHOD:
 		value = getSettingIp4ConfigMethodJSON(data)
 	case NM_SETTING_IP4_CONFIG_DNS:
@@ -139,7 +139,7 @@ func generalGetSettingIp4ConfigKeyJSON(data _ConnectionData, key string) (value 
 func generalSetSettingIp4ConfigKeyJSON(data _ConnectionData, key, valueJSON string) {
 	switch key {
 	default:
-		LOGGER.Error("generalSetSettingIp4ConfigKeyJSON: invalide key", key)
+		Logger.Error("generalSetSettingIp4ConfigKeyJSON: invalide key", key)
 	case NM_SETTING_IP4_CONFIG_METHOD:
 		logicSetSettingIp4ConfigMethodJSON(data, valueJSON)
 	case NM_SETTING_IP4_CONFIG_DNS:

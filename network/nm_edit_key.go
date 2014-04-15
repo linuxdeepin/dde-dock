@@ -7,7 +7,7 @@ import "fmt"
 func pageGeneralGetId(con map[string]map[string]dbus.Variant) string {
 	defer func() {
 		if err := recover(); err != nil {
-			LOGGER.Warning("EditorGetID failed:", con, err)
+			Logger.Warning("EditorGetID failed:", con, err)
 		}
 	}()
 	return con[fieldConnection]["id"].Value().(string)
@@ -19,7 +19,7 @@ func generalIsKeyInSettingField(field, key string) bool {
 	}
 	switch field {
 	default:
-		LOGGER.Warning("invalid field name", field)
+		Logger.Warning("invalid field name", field)
 	case field8021x:
 		return isKeyInSetting8021x(key)
 	case fieldConnection:
@@ -49,7 +49,7 @@ func generalGetSettingKeyType(field, key string) (t ktype) {
 	}
 	switch field {
 	default:
-		LOGGER.Warning("invalid field name", field)
+		Logger.Warning("invalid field name", field)
 	case field8021x:
 		t = getSetting8021xKeyType(key)
 	case fieldConnection:
@@ -127,7 +127,7 @@ func generalGetSettingAvailableValues(data _ConnectionData, field, key string) (
 func generalCheckSettingValues(data _ConnectionData, field string) (errs map[string]string) {
 	switch field {
 	default:
-		LOGGER.Error("updatePropErrors: invalid field name", field)
+		Logger.Error("updatePropErrors: invalid field name", field)
 	case field8021x:
 		errs = checkSetting8021xValues(data)
 	case fieldConnection:
@@ -157,7 +157,7 @@ func generalGetSettingKeyJSON(data _ConnectionData, field, key string) (valueJSO
 	}
 	switch field {
 	default:
-		LOGGER.Warning("invalid field name", field)
+		Logger.Warning("invalid field name", field)
 	case field8021x:
 		valueJSON = generalGetSetting8021xKeyJSON(data, key)
 	case fieldConnection:
@@ -187,7 +187,7 @@ func generalSetSettingKeyJSON(data _ConnectionData, field, key, valueJSON string
 	}
 	switch field {
 	default:
-		LOGGER.Warning("invalid field name", field)
+		Logger.Warning("invalid field name", field)
 	case field8021x:
 		generalSetSetting8021xKeyJSON(data, key, valueJSON)
 	case fieldConnection:
@@ -212,7 +212,7 @@ func generalSetSettingKeyJSON(data _ConnectionData, field, key, valueJSON string
 func getSettingKeyDefaultValueJSON(field, key string) (valueJSON string) {
 	switch field {
 	default:
-		LOGGER.Warning("invalid field name", field)
+		Logger.Warning("invalid field name", field)
 	case field8021x:
 		valueJSON = getSetting8021xKeyDefaultValueJSON(key)
 	case fieldConnection:
@@ -282,12 +282,12 @@ func getSettingKeyJSON(data _ConnectionData, field, key string, t ktype) (valueJ
 
 	valueJSON, err := keyValueToJSON(value, t)
 	if err != nil {
-		LOGGER.Error("get connection data failed:", err)
+		Logger.Error("get connection data failed:", err)
 		return
 	}
 
 	if len(valueJSON) == 0 {
-		LOGGER.Error("getSettingKeyJSON: valueJSON is empty")
+		Logger.Error("getSettingKeyJSON: valueJSON is empty")
 	}
 
 	return
@@ -295,7 +295,7 @@ func getSettingKeyJSON(data _ConnectionData, field, key string, t ktype) (valueJ
 
 func setSettingKeyJSON(data _ConnectionData, field, key, valueJSON string, t ktype) {
 	if len(valueJSON) == 0 {
-		LOGGER.Error("setSettingKeyJSON: valueJSON is empty")
+		Logger.Error("setSettingKeyJSON: valueJSON is empty")
 		return
 	}
 
@@ -307,11 +307,11 @@ func setSettingKeyJSON(data _ConnectionData, field, key, valueJSON string, t kty
 
 	value, err := jsonToKeyValue(valueJSON, t)
 	if err != nil {
-		LOGGER.Errorf("set connection data failed, valueJSON=%s, ktype=%s, error message:%v",
+		Logger.Errorf("set connection data failed, valueJSON=%s, ktype=%s, error message:%v",
 			valueJSON, getKtypeDescription(t), err)
 		return
 	}
-	// LOGGER.Debugf("setSettingKeyJSON data[%s][%s]=%#v, valueJSON=%s", field, key, value, valueJSON) // TODO test
+	// Logger.Debugf("setSettingKeyJSON data[%s][%s]=%#v, valueJSON=%s", field, key, value, valueJSON) // TODO test
 	if isInterfaceNil(value) {
 		removeSettingKey(data, field, key)
 	} else {
@@ -323,7 +323,7 @@ func setSettingKeyJSON(data _ConnectionData, field, key, valueJSON string, t kty
 func getSettingKey(data _ConnectionData, field, key string) (value interface{}) {
 	fieldData, ok := data[field]
 	if !ok {
-		LOGGER.Errorf("invalid field: data[%s]", field)
+		Logger.Errorf("invalid field: data[%s]", field)
 		return
 	}
 
@@ -334,7 +334,7 @@ func getSettingKey(data _ConnectionData, field, key string) (value interface{}) 
 
 	value = variant.Value()
 
-	// LOGGER.Debugf("getSettingKey: data[%s][%s]=%v", field, key, value) // TODO test
+	// Logger.Debugf("getSettingKey: data[%s][%s]=%v", field, key, value) // TODO test
 	return
 }
 
@@ -342,13 +342,13 @@ func setSettingKey(data _ConnectionData, field, key string, value interface{}) {
 	var fieldData map[string]dbus.Variant
 	fieldData, ok := data[field]
 	if !ok {
-		LOGGER.Error(fmt.Errorf(`set connection data failed, field "%s" is not exits yet`, field))
+		Logger.Error(fmt.Errorf(`set connection data failed, field "%s" is not exits yet`, field))
 		return
 	}
 
 	fieldData[key] = dbus.MakeVariant(value)
 
-	// LOGGER.Debugf("setSettingKey: data[%s][%s]=%s", field, key, value) // TODO test
+	// Logger.Debugf("setSettingKey: data[%s][%s]=%s", field, key, value) // TODO test
 	return
 }
 

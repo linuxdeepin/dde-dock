@@ -36,7 +36,7 @@ func getSettingIp6ConfigAvailableKeys(data _ConnectionData) (keys []string) {
 	method := getSettingIp6ConfigMethod(data)
 	switch method {
 	default:
-		LOGGER.Error("ip6 config method is invalid:", method)
+		Logger.Error("ip6 config method is invalid:", method)
 	case NM_SETTING_IP6_CONFIG_METHOD_IGNORE:
 		keys = []string{
 			NM_SETTING_IP6_CONFIG_METHOD,

@@ -145,7 +145,7 @@ func getSettingIp4ConfigAvailableKeys(data _ConnectionData) (keys []string) {
 	method := getSettingIp4ConfigMethod(data)
 	switch method {
 	default:
-		LOGGER.Error("ip4 config method is invalid:", method)
+		Logger.Error("ip4 config method is invalid:", method)
 	case NM_SETTING_IP4_CONFIG_METHOD_AUTO:
 		keys = []string{
 			NM_SETTING_IP4_CONFIG_METHOD,

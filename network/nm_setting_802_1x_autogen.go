@@ -153,7 +153,7 @@ func isKeyInSetting8021x(key string) bool {
 func getSetting8021xKeyDefaultValueJSON(key string) (valueJSON string) {
 	switch key {
 	default:
-		LOGGER.Error("invalid key:", key)
+		Logger.Error("invalid key:", key)
 	case NM_SETTING_802_1X_EAP:
 		valueJSON = `null`
 	case NM_SETTING_802_1X_IDENTITY:
@@ -226,7 +226,7 @@ func getSetting8021xKeyDefaultValueJSON(key string) (valueJSON string) {
 func generalGetSetting8021xKeyJSON(data _ConnectionData, key string) (value string) {
 	switch key {
 	default:
-		LOGGER.Error("generalGetSetting8021xKeyJSON: invalide key", key)
+		Logger.Error("generalGetSetting8021xKeyJSON: invalide key", key)
 	case NM_SETTING_802_1X_EAP:
 		value = getSetting8021xEapJSON(data)
 	case NM_SETTING_802_1X_IDENTITY:
@@ -299,7 +299,7 @@ func generalGetSetting8021xKeyJSON(data _ConnectionData, key string) (value stri
 func generalSetSetting8021xKeyJSON(data _ConnectionData, key, valueJSON string) {
 	switch key {
 	default:
-		LOGGER.Error("generalSetSetting8021xKeyJSON: invalide key", key)
+		Logger.Error("generalSetSetting8021xKeyJSON: invalide key", key)
 	case NM_SETTING_802_1X_EAP:
 		logicSetSetting8021xEapJSON(data, valueJSON)
 	case NM_SETTING_802_1X_IDENTITY:

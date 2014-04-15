@@ -69,7 +69,7 @@ func isKeyInSettingWired(key string) bool {
 func getSettingWiredKeyDefaultValueJSON(key string) (valueJSON string) {
 	switch key {
 	default:
-		LOGGER.Error("invalid key:", key)
+		Logger.Error("invalid key:", key)
 	case NM_SETTING_WIRED_PORT:
 		valueJSON = `""`
 	case NM_SETTING_WIRED_SPEED:
@@ -100,7 +100,7 @@ func getSettingWiredKeyDefaultValueJSON(key string) (valueJSON string) {
 func generalGetSettingWiredKeyJSON(data _ConnectionData, key string) (value string) {
 	switch key {
 	default:
-		LOGGER.Error("generalGetSettingWiredKeyJSON: invalide key", key)
+		Logger.Error("generalGetSettingWiredKeyJSON: invalide key", key)
 	case NM_SETTING_WIRED_PORT:
 		value = getSettingWiredPortJSON(data)
 	case NM_SETTING_WIRED_SPEED:
@@ -131,7 +131,7 @@ func generalGetSettingWiredKeyJSON(data _ConnectionData, key string) (value stri
 func generalSetSettingWiredKeyJSON(data _ConnectionData, key, valueJSON string) {
 	switch key {
 	default:
-		LOGGER.Error("generalSetSettingWiredKeyJSON: invalide key", key)
+		Logger.Error("generalSetSettingWiredKeyJSON: invalide key", key)
 	case NM_SETTING_WIRED_PORT:
 		setSettingWiredPortJSON(data, valueJSON)
 	case NM_SETTING_WIRED_SPEED:

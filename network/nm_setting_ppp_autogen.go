@@ -97,7 +97,7 @@ func isKeyInSettingPpp(key string) bool {
 func getSettingPppKeyDefaultValueJSON(key string) (valueJSON string) {
 	switch key {
 	default:
-		LOGGER.Error("invalid key:", key)
+		Logger.Error("invalid key:", key)
 	case NM_SETTING_PPP_NOAUTH:
 		valueJSON = `true`
 	case NM_SETTING_PPP_REFUSE_EAP:
@@ -142,7 +142,7 @@ func getSettingPppKeyDefaultValueJSON(key string) (valueJSON string) {
 func generalGetSettingPppKeyJSON(data _ConnectionData, key string) (value string) {
 	switch key {
 	default:
-		LOGGER.Error("generalGetSettingPppKeyJSON: invalide key", key)
+		Logger.Error("generalGetSettingPppKeyJSON: invalide key", key)
 	case NM_SETTING_PPP_NOAUTH:
 		value = getSettingPppNoauthJSON(data)
 	case NM_SETTING_PPP_REFUSE_EAP:
@@ -187,7 +187,7 @@ func generalGetSettingPppKeyJSON(data _ConnectionData, key string) (value string
 func generalSetSettingPppKeyJSON(data _ConnectionData, key, valueJSON string) {
 	switch key {
 	default:
-		LOGGER.Error("generalSetSettingPppKeyJSON: invalide key", key)
+		Logger.Error("generalSetSettingPppKeyJSON: invalide key", key)
 	case NM_SETTING_PPP_NOAUTH:
 		setSettingPppNoauthJSON(data, valueJSON)
 	case NM_SETTING_PPP_REFUSE_EAP:

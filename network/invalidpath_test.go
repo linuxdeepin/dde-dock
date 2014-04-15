@@ -4,33 +4,31 @@ import "testing"
 import "dlib/dbus"
 import nm "dbus/com/deepin/daemon/network"
 
-// import "fmt"
-
 func init() {
-	_Manager = _NewManager()
-	dbus.InstallOnSession(_Manager)
-	_Manager.initManager()
+	manager = NewManager()
+	dbus.InstallOnSession(manager)
+	manager.initManager()
 }
 
 // TODO test case need update
 func TestInvalid(t *testing.T) {
-	// _Manager.ActiveAccessPoint("/", "/")
+	// manager.ActiveAccessPoint("/", "/")
 
-	_Manager.DisconnectDevice("/")
+	manager.DisconnectDevice("/")
 
-	// _Manager.ActiveWiredDevice("/")
+	// manager.ActiveWiredDevice("/")
 
-	_Manager.GetAccessPoints("/")
+	manager.GetAccessPoints("/")
 
-	_Manager.GetActiveConnection("/")
+	manager.GetActiveConnection("/")
 
-	_Manager.GetConnectionByAccessPoint("/")
+	manager.GetConnectionByAccessPoint("/")
 
-	_Manager.FeedSecret("xxoo", "sd", "ss")
-	_Manager.GetDBusInfo()
+	manager.FeedSecret("xxoo", "sd", "ss")
+	manager.GetDBusInfo()
 
 	// dumy := make(map[string]map[string]string)
-	// _Manager.UpdateConnection(dumy)
+	// manager.UpdateConnection(dumy)
 }
 
 func TestDBusFailed(t *testing.T) {
@@ -81,7 +79,7 @@ func TestDBusSuccess(t *testing.T) {
 			t.Fatal(err)
 		}
 		for _, ap := range aps {
-			LOGGER.Debug(ap)
+			Logger.Debug(ap)
 		}
 	}
 }

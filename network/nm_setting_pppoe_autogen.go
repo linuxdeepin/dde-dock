@@ -41,7 +41,7 @@ func isKeyInSettingPppoe(key string) bool {
 func getSettingPppoeKeyDefaultValueJSON(key string) (valueJSON string) {
 	switch key {
 	default:
-		LOGGER.Error("invalid key:", key)
+		Logger.Error("invalid key:", key)
 	case NM_SETTING_PPPOE_SERVICE:
 		valueJSON = `""`
 	case NM_SETTING_PPPOE_USERNAME:
@@ -58,7 +58,7 @@ func getSettingPppoeKeyDefaultValueJSON(key string) (valueJSON string) {
 func generalGetSettingPppoeKeyJSON(data _ConnectionData, key string) (value string) {
 	switch key {
 	default:
-		LOGGER.Error("generalGetSettingPppoeKeyJSON: invalide key", key)
+		Logger.Error("generalGetSettingPppoeKeyJSON: invalide key", key)
 	case NM_SETTING_PPPOE_SERVICE:
 		value = getSettingPppoeServiceJSON(data)
 	case NM_SETTING_PPPOE_USERNAME:
@@ -75,7 +75,7 @@ func generalGetSettingPppoeKeyJSON(data _ConnectionData, key string) (value stri
 func generalSetSettingPppoeKeyJSON(data _ConnectionData, key, valueJSON string) {
 	switch key {
 	default:
-		LOGGER.Error("generalSetSettingPppoeKeyJSON: invalide key", key)
+		Logger.Error("generalSetSettingPppoeKeyJSON: invalide key", key)
 	case NM_SETTING_PPPOE_SERVICE:
 		setSettingPppoeServiceJSON(data, valueJSON)
 	case NM_SETTING_PPPOE_USERNAME:

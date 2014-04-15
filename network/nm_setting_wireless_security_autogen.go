@@ -93,7 +93,7 @@ func isKeyInSettingWirelessSecurity(key string) bool {
 func getSettingWirelessSecurityKeyDefaultValueJSON(key string) (valueJSON string) {
 	switch key {
 	default:
-		LOGGER.Error("invalid key:", key)
+		Logger.Error("invalid key:", key)
 	case NM_SETTING_WIRELESS_SECURITY_KEY_MGMT:
 		valueJSON = `""`
 	case NM_SETTING_WIRELESS_SECURITY_WEP_TX_KEYIDX:
@@ -136,7 +136,7 @@ func getSettingWirelessSecurityKeyDefaultValueJSON(key string) (valueJSON string
 func generalGetSettingWirelessSecurityKeyJSON(data _ConnectionData, key string) (value string) {
 	switch key {
 	default:
-		LOGGER.Error("generalGetSettingWirelessSecurityKeyJSON: invalide key", key)
+		Logger.Error("generalGetSettingWirelessSecurityKeyJSON: invalide key", key)
 	case NM_SETTING_WIRELESS_SECURITY_KEY_MGMT:
 		value = getSettingWirelessSecurityKeyMgmtJSON(data)
 	case NM_SETTING_WIRELESS_SECURITY_WEP_TX_KEYIDX:
@@ -179,7 +179,7 @@ func generalGetSettingWirelessSecurityKeyJSON(data _ConnectionData, key string) 
 func generalSetSettingWirelessSecurityKeyJSON(data _ConnectionData, key, valueJSON string) {
 	switch key {
 	default:
-		LOGGER.Error("generalSetSettingWirelessSecurityKeyJSON: invalide key", key)
+		Logger.Error("generalSetSettingWirelessSecurityKeyJSON: invalide key", key)
 	case NM_SETTING_WIRELESS_SECURITY_KEY_MGMT:
 		setSettingWirelessSecurityKeyMgmtJSON(data, valueJSON)
 	case NM_SETTING_WIRELESS_SECURITY_WEP_TX_KEYIDX:

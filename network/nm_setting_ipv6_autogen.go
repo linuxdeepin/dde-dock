@@ -69,7 +69,7 @@ func isKeyInSettingIp6Config(key string) bool {
 func getSettingIp6ConfigKeyDefaultValueJSON(key string) (valueJSON string) {
 	switch key {
 	default:
-		LOGGER.Error("invalid key:", key)
+		Logger.Error("invalid key:", key)
 	case NM_SETTING_IP6_CONFIG_METHOD:
 		valueJSON = `""`
 	case NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME:
@@ -100,7 +100,7 @@ func getSettingIp6ConfigKeyDefaultValueJSON(key string) (valueJSON string) {
 func generalGetSettingIp6ConfigKeyJSON(data _ConnectionData, key string) (value string) {
 	switch key {
 	default:
-		LOGGER.Error("generalGetSettingIp6ConfigKeyJSON: invalide key", key)
+		Logger.Error("generalGetSettingIp6ConfigKeyJSON: invalide key", key)
 	case NM_SETTING_IP6_CONFIG_METHOD:
 		value = getSettingIp6ConfigMethodJSON(data)
 	case NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME:
@@ -131,7 +131,7 @@ func generalGetSettingIp6ConfigKeyJSON(data _ConnectionData, key string) (value 
 func generalSetSettingIp6ConfigKeyJSON(data _ConnectionData, key, valueJSON string) {
 	switch key {
 	default:
-		LOGGER.Error("generalSetSettingIp6ConfigKeyJSON: invalide key", key)
+		Logger.Error("generalSetSettingIp6ConfigKeyJSON: invalide key", key)
 	case NM_SETTING_IP6_CONFIG_METHOD:
 		logicSetSettingIp6ConfigMethodJSON(data, valueJSON)
 	case NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME:

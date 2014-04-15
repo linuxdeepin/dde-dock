@@ -42,7 +42,7 @@ const (
 func doGetSetting8021xEap(data _ConnectionData) (eap string) {
 	eaps := getSetting8021xEap(data)
 	if len(eaps) == 0 {
-		LOGGER.Error("eap value is empty")
+		Logger.Error("eap value is empty")
 		return
 	}
 	eap = eaps[0]

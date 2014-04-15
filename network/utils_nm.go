@@ -6,7 +6,7 @@ import "dlib/dbus"
 func nmNewDevice(devPath dbus.ObjectPath) (dev *nm.Device, err error) {
 	dev, err = nm.NewDevice(NMDest, devPath)
 	if err != nil {
-		LOGGER.Error(err)
+		Logger.Error(err)
 		return
 	}
 	return
@@ -15,7 +15,7 @@ func nmNewDevice(devPath dbus.ObjectPath) (dev *nm.Device, err error) {
 func nmNewAccessPoint(apPath dbus.ObjectPath) (ap *nm.AccessPoint, err error) {
 	ap, err = nm.NewAccessPoint(NMDest, apPath)
 	if err != nil {
-		LOGGER.Error(err)
+		Logger.Error(err)
 		return
 	}
 	return
@@ -24,8 +24,16 @@ func nmNewAccessPoint(apPath dbus.ObjectPath) (ap *nm.AccessPoint, err error) {
 func nmNewActiveConnection(apath dbus.ObjectPath) (ac *nm.ActiveConnection, err error) {
 	ac, err = nm.NewActiveConnection(NMDest, apath)
 	if err != nil {
-		LOGGER.Error(err)
+		Logger.Error(err)
 		return
+	}
+	return
+}
+
+func nmGetDevices() (devPaths []dbus.ObjectPath, err error) {
+	devPaths, err = NMManager.GetDevices()
+	if err != nil {
+		Logger.Error(err)
 	}
 	return
 }
@@ -41,9 +49,9 @@ func nmGetDeviceInterface(devPath dbus.ObjectPath) (devInterface string) {
 
 func nmAddAndActivateConnection(data _ConnectionData, devPath dbus.ObjectPath) (cpath, apath dbus.ObjectPath, err error) {
 	spath := dbus.ObjectPath("/")
-	cpath, apath, err = _NMManager.AddAndActivateConnection(data, devPath, spath)
+	cpath, apath, err = NMManager.AddAndActivateConnection(data, devPath, spath)
 	if err != nil {
-		LOGGER.Error(err)
+		Logger.Error(err)
 		return
 	}
 	return
@@ -51,16 +59,16 @@ func nmAddAndActivateConnection(data _ConnectionData, devPath dbus.ObjectPath) (
 
 func nmActivateConnection(cpath, devPath dbus.ObjectPath) (apath dbus.ObjectPath, err error) {
 	spath := dbus.ObjectPath("/")
-	apath, err = _NMManager.ActivateConnection(cpath, devPath, spath)
+	apath, err = NMManager.ActivateConnection(cpath, devPath, spath)
 	if err != nil {
-		LOGGER.Error(err)
+		Logger.Error(err)
 		return
 	}
 	return
 }
 
 func nmGetActiveConnections() (apath []dbus.ObjectPath) {
-	apath = _NMManager.ActiveConnections.Get()
+	apath = NMManager.ActiveConnections.Get()
 	return
 }
 
@@ -80,12 +88,12 @@ func nmGetActiveConnectionByUuid(uuid string) (apath dbus.ObjectPath, ok bool) {
 func nmGetConnectionData(cpath dbus.ObjectPath) (data _ConnectionData, err error) {
 	nmConn, err := nm.NewSettingsConnection(NMDest, cpath)
 	if err != nil {
-		LOGGER.Error(err)
+		Logger.Error(err)
 		return
 	}
 	data, err = nmConn.GetSettings()
 	if err != nil {
-		LOGGER.Error(err)
+		Logger.Error(err)
 		return
 	}
 	return
@@ -98,7 +106,7 @@ func nmGetConnectionUuid(cpath dbus.ObjectPath) (uuid string) {
 	}
 	uuid = getSettingConnectionUuid(data)
 	if len(uuid) == 0 {
-		LOGGER.Error("get uuid of connection failed, uuid is empty")
+		Logger.Error("get uuid of connection failed, uuid is empty")
 	}
 	return
 }
@@ -110,15 +118,15 @@ func nmGetConnectionType(cpath dbus.ObjectPath) (ctype string) {
 	}
 	ctype = getSettingConnectionType(data)
 	if len(ctype) == 0 {
-		LOGGER.Error("get type of connection failed, type is empty")
+		Logger.Error("get type of connection failed, type is empty")
 	}
 	return
 }
 
 func nmGetConnectionList() (connections []dbus.ObjectPath) {
-	connections, err := _NMSettings.ListConnections()
+	connections, err := NMSettings.ListConnections()
 	if err != nil {
-		LOGGER.Error(err)
+		Logger.Error(err)
 		return
 	}
 	return
@@ -170,9 +178,9 @@ func nmGetWirelessConnectionBySsid(ssid []byte) (cpath dbus.ObjectPath, ok bool)
 }
 
 func nmAddConnection(data _ConnectionData) {
-	_, err := _NMSettings.AddConnection(data)
+	_, err := NMSettings.AddConnection(data)
 	if err != nil {
-		LOGGER.Error(err)
+		Logger.Error(err)
 	}
 	return
 }

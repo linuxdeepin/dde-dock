@@ -38,7 +38,7 @@ func doNewConnectionSession() (session *ConnectionSession) {
 func NewConnectionSessionByCreate(connectionType string) (session *ConnectionSession, err error) {
 	if !isStringInArray(connectionType, supportedConnectionTypes) {
 		err = fmt.Errorf("connection type is out of support: %s", connectionType)
-		LOGGER.Error(err)
+		Logger.Error(err)
 		return
 	}
 
@@ -66,7 +66,7 @@ func NewConnectionSessionByCreate(connectionType string) (session *ConnectionSes
 }
 
 func NewConnectionSessionByOpen(uuid string) (session *ConnectionSession, err error) {
-	coreObjPath, err := _NMSettings.GetConnectionByUuid(uuid)
+	coreObjPath, err := NMSettings.GetConnectionByUuid(uuid)
 	if err != nil {
 		return
 	}
@@ -109,7 +109,7 @@ func NewConnectionSessionByOpen(uuid string) (session *ConnectionSession, err er
 	// session.updatePropAllowSave(false) // TODO
 
 	// TODO
-	LOGGER.Debug("NewConnectionSessionByOpen():", session.data)
+	Logger.Debug("NewConnectionSessionByOpen():", session.data)
 
 	return
 }
@@ -128,12 +128,12 @@ func (session *ConnectionSession) Save() bool {
 	// update connection data
 	nmConn, err := nm.NewSettingsConnection(NMDest, session.coreObjPath)
 	if err != nil {
-		LOGGER.Error(err)
+		Logger.Error(err)
 		return false
 	}
 	err = nmConn.Update(session.data)
 	if err != nil {
-		LOGGER.Error(err)
+		Logger.Error(err)
 		return false
 	}
 
@@ -186,7 +186,7 @@ func (session *ConnectionSession) ListPages() (pages []string) {
 func (session *ConnectionSession) pageToFields(page string) (fields []string) {
 	switch page {
 	default:
-		LOGGER.Error("pageToFields: invalid page name", page)
+		Logger.Error("pageToFields: invalid page name", page)
 	case pageGeneral:
 		fields = []string{fieldConnection}
 	case pageEthernet:
@@ -223,7 +223,7 @@ func (session *ConnectionSession) getFieldOfPageKey(page, key string) string {
 			return field
 		}
 	}
-	LOGGER.Errorf("get corresponding filed of key in page failed, page=%s, key=%s", page, key)
+	Logger.Errorf("get corresponding filed of key in page failed, page=%s, key=%s", page, key)
 	return ""
 }
 
@@ -237,7 +237,7 @@ func (session *ConnectionSession) listKeys(page string) (keys []string) {
 		}
 	}
 	if len(keys) == 0 {
-		LOGGER.Warning("there is no avaiable keys for page", page)
+		Logger.Warning("there is no avaiable keys for page", page)
 	}
 	return
 }
@@ -284,7 +284,7 @@ func (session *ConnectionSession) DebugListKeyDetail() (info string) {
 	for _, page := range session.ListPages() {
 		pageData, ok := session.AvailableKeys[page]
 		if !ok {
-			LOGGER.Warning("no available keys for page", page)
+			Logger.Warning("no available keys for page", page)
 			continue
 		}
 		for _, key := range pageData {

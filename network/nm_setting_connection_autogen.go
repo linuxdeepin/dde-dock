@@ -69,7 +69,7 @@ func isKeyInSettingConnection(key string) bool {
 func getSettingConnectionKeyDefaultValueJSON(key string) (valueJSON string) {
 	switch key {
 	default:
-		LOGGER.Error("invalid key:", key)
+		Logger.Error("invalid key:", key)
 	case NM_SETTING_CONNECTION_ID:
 		valueJSON = `""`
 	case NM_SETTING_CONNECTION_UUID:
@@ -100,7 +100,7 @@ func getSettingConnectionKeyDefaultValueJSON(key string) (valueJSON string) {
 func generalGetSettingConnectionKeyJSON(data _ConnectionData, key string) (value string) {
 	switch key {
 	default:
-		LOGGER.Error("generalGetSettingConnectionKeyJSON: invalide key", key)
+		Logger.Error("generalGetSettingConnectionKeyJSON: invalide key", key)
 	case NM_SETTING_CONNECTION_ID:
 		value = getSettingConnectionIdJSON(data)
 	case NM_SETTING_CONNECTION_UUID:
@@ -131,7 +131,7 @@ func generalGetSettingConnectionKeyJSON(data _ConnectionData, key string) (value
 func generalSetSettingConnectionKeyJSON(data _ConnectionData, key, valueJSON string) {
 	switch key {
 	default:
-		LOGGER.Error("generalSetSettingConnectionKeyJSON: invalide key", key)
+		Logger.Error("generalSetSettingConnectionKeyJSON: invalide key", key)
 	case NM_SETTING_CONNECTION_ID:
 		setSettingConnectionIdJSON(data, valueJSON)
 	case NM_SETTING_CONNECTION_UUID:

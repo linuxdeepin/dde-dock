@@ -128,7 +128,7 @@ func getSettingWirelessSecurityAvailableKeys(data _ConnectionData) (keys []strin
 	vkKeyMgmt := getSettingVkWirelessSecurityKeyMgmt(data)
 	switch vkKeyMgmt {
 	default:
-		LOGGER.Error("invalid value", vkKeyMgmt)
+		Logger.Error("invalid value", vkKeyMgmt)
 	case "none":
 		keys = getRelatedAvailableVirtualKeys(fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT)
 	case "wep":
