@@ -43,7 +43,7 @@ func NewAccessPoint(apPath dbus.ObjectPath) (ap AccessPoint, err error) {
 }
 
 // DisconnectDevice will disconnect all connection in target device.
-func (this *Manager) DisconnectDevice(devPath dbus.ObjectPath) (err error) {
+func (m *Manager) DisconnectDevice(devPath dbus.ObjectPath) (err error) {
 	dev, err := nm.NewDevice(NMDest, devPath)
 	if err != nil {
 		LOGGER.Error(err)
@@ -58,7 +58,7 @@ func (this *Manager) DisconnectDevice(devPath dbus.ObjectPath) (err error) {
 }
 
 // TODO remove
-// func (this *Manager) DisconnectDevice(path dbus.ObjectPath) error {
+// func (m *Manager) DisconnectDevice(path dbus.ObjectPath) error {
 // 	if dev, err := nm.NewDevice(NMDest, path); err != nil {
 // 		return err
 // 	} else {
@@ -66,34 +66,34 @@ func (this *Manager) DisconnectDevice(devPath dbus.ObjectPath) (err error) {
 // 		nm.DestroyDevice(dev)
 // 		switch dev.DeviceType.Get() {
 // 		case NM_DEVICE_TYPE_WIFI:
-// 			dbus.NotifyChange(this, "WirelessConnections")
+// 			dbus.NotifyChange(m, "WirelessConnections")
 // 		case NM_DEVICE_TYPE_ETHERNET:
 // 			LOGGER.Debug("DisconnectDevice...", path)
-// 			dbus.NotifyChange(this, "WiredConnections")
+// 			dbus.NotifyChange(m, "WiredConnections")
 // 		}
 // 		return nil
 // 	}
 // }
 
-func (this *Manager) initDeviceManage() {
+func (m *Manager) initDeviceManage() {
 	_NMManager.ConnectDeviceAdded(func(path dbus.ObjectPath) {
-		this.handleDeviceChanged(OpAdded, path)
+		m.handleDeviceChanged(OpAdded, path)
 	})
 	_NMManager.ConnectDeviceRemoved(func(path dbus.ObjectPath) {
-		this.handleDeviceChanged(OpRemoved, path)
+		m.handleDeviceChanged(OpRemoved, path)
 	})
 	devs, err := _NMManager.GetDevices()
 	if err != nil {
 		panic(err)
 	}
 	for _, p := range devs {
-		this.handleDeviceChanged(OpAdded, p)
+		m.handleDeviceChanged(OpAdded, p)
 	}
 }
 
-func (this *Manager) addWirelessDevice(dev *nm.Device) {
+func (m *Manager) addWirelessDevice(dev *nm.Device) {
 	wirelessDevice := NewDevice(dev)
-	if isDeviceExists(this.WirelessDevices, wirelessDevice) {
+	if isDeviceExists(m.WirelessDevices, wirelessDevice) {
 		// device maybe repeat added
 		return
 	}
@@ -102,37 +102,37 @@ func (this *Manager) addWirelessDevice(dev *nm.Device) {
 	// connect signal DeviceStateChanged()
 	dev.ConnectStateChanged(func(newState uint32, old_state uint32, reason uint32) {
 		wirelessDevice.State = newState
-		if this.DeviceStateChanged != nil {
-			this.DeviceStateChanged(string(dev.Path), newState)
+		if m.DeviceStateChanged != nil {
+			m.DeviceStateChanged(string(dev.Path), newState)
 		}
 		// TODO remove
-		dbus.NotifyChange(this, "WirelessDevices")
+		dbus.NotifyChange(m, "WirelessDevices")
 	})
 
 	// connect signal AccessPointAdded() and AccessPointRemoved()
 	if devWireless, err := nm.NewDeviceWireless(NMDest, dev.Path); err == nil {
 		devWireless.ConnectAccessPointAdded(func(apPath dbus.ObjectPath) {
-			if this.AccessPointAdded != nil {
+			if m.AccessPointAdded != nil {
 				if ap, err := NewAccessPoint(apPath); err == nil {
 					// LOGGER.Debug("AccessPointAdded:", ap.Ssid, apPath) // TODO test
-					this.AccessPointAdded(string(dev.Path), string(ap.Path))
+					m.AccessPointAdded(string(dev.Path), string(ap.Path))
 				}
 			}
 		})
 		devWireless.ConnectAccessPointRemoved(func(apPath dbus.ObjectPath) {
-			if this.AccessPointRemoved != nil {
+			if m.AccessPointRemoved != nil {
 				// LOGGER.Debug("AccessPointRemoved:", apPath) // TODO test
-				this.AccessPointRemoved(string(dev.Path), string(apPath))
+				m.AccessPointRemoved(string(dev.Path), string(apPath))
 			}
 		})
 	}
 
-	this.WirelessDevices = append(this.WirelessDevices, wirelessDevice)
-	dbus.NotifyChange(this, "WirelessDevices")
+	m.WirelessDevices = append(m.WirelessDevices, wirelessDevice)
+	dbus.NotifyChange(m, "WirelessDevices")
 }
-func (this *Manager) addWiredDevice(dev *nm.Device) {
+func (m *Manager) addWiredDevice(dev *nm.Device) {
 	wiredDevice := NewDevice(dev)
-	if isDeviceExists(this.WiredDevices, wiredDevice) {
+	if isDeviceExists(m.WiredDevices, wiredDevice) {
 		// device maybe repeat added
 		return
 	}
@@ -140,20 +140,20 @@ func (this *Manager) addWiredDevice(dev *nm.Device) {
 	// connect signal DeviceStateChanged()
 	dev.ConnectStateChanged(func(newState uint32, old_state uint32, reason uint32) {
 		wiredDevice.State = newState
-		if this.DeviceStateChanged != nil {
-			this.DeviceStateChanged(string(dev.Path), newState)
+		if m.DeviceStateChanged != nil {
+			m.DeviceStateChanged(string(dev.Path), newState)
 		}
 		// TODO remove
-		dbus.NotifyChange(this, "WirelessDevices")
+		dbus.NotifyChange(m, "WirelessDevices")
 	})
-	this.WiredDevices = append(this.WiredDevices, wiredDevice)
-	dbus.NotifyChange(this, "WiredDevices")
+	m.WiredDevices = append(m.WiredDevices, wiredDevice)
+	dbus.NotifyChange(m, "WiredDevices")
 }
-func (this *Manager) addOtherDevice(dev *nm.Device) {
-	this.OtherDevices = append(this.OtherDevices, NewDevice(dev))
+func (m *Manager) addOtherDevice(dev *nm.Device) {
+	m.OtherDevices = append(m.OtherDevices, NewDevice(dev))
 
 	otherDevice := NewDevice(dev)
-	if isDeviceExists(this.OtherDevices, otherDevice) {
+	if isDeviceExists(m.OtherDevices, otherDevice) {
 		// device maybe repeat added
 		return
 	}
@@ -161,14 +161,14 @@ func (this *Manager) addOtherDevice(dev *nm.Device) {
 	// connect signal DeviceStateChanged()
 	dev.ConnectStateChanged(func(newState uint32, old_state uint32, reason uint32) {
 		otherDevice.State = newState
-		if this.DeviceStateChanged != nil {
-			this.DeviceStateChanged(string(dev.Path), newState)
+		if m.DeviceStateChanged != nil {
+			m.DeviceStateChanged(string(dev.Path), newState)
 		}
 		// TODO remove
-		dbus.NotifyChange(this, "WirelessDevices")
+		dbus.NotifyChange(m, "WirelessDevices")
 	})
-	this.OtherDevices = append(this.OtherDevices, otherDevice)
-	dbus.NotifyChange(this, "OtherDevices")
+	m.OtherDevices = append(m.OtherDevices, otherDevice)
+	dbus.NotifyChange(m, "OtherDevices")
 }
 func isDeviceExists(devs []*Device, dev *Device) bool {
 	for _, d := range devs {
@@ -179,7 +179,7 @@ func isDeviceExists(devs []*Device, dev *Device) bool {
 	return false
 }
 
-func (this *Manager) handleDeviceChanged(operation int32, path dbus.ObjectPath) {
+func (m *Manager) handleDeviceChanged(operation int32, path dbus.ObjectPath) {
 	LOGGER.Debugf("handleDeviceChanged: operation %d, path %s", operation, path)
 	switch operation {
 	case OpAdded:
@@ -189,19 +189,19 @@ func (this *Manager) handleDeviceChanged(operation int32, path dbus.ObjectPath) 
 		}
 		switch dev.DeviceType.Get() {
 		case NM_DEVICE_TYPE_WIFI:
-			this.addWirelessDevice(dev)
+			m.addWirelessDevice(dev)
 		case NM_DEVICE_TYPE_ETHERNET:
-			this.addWiredDevice(dev)
+			m.addWiredDevice(dev)
 		default:
-			this.addOtherDevice(dev)
+			m.addOtherDevice(dev)
 		}
 	case OpRemoved:
 		var removed bool
-		if this.WirelessDevices, removed = tryRemoveDevice(path, this.WirelessDevices); removed {
-			dbus.NotifyChange(this, "WirelessDevices")
+		if m.WirelessDevices, removed = tryRemoveDevice(path, m.WirelessDevices); removed {
+			dbus.NotifyChange(m, "WirelessDevices")
 			LOGGER.Debug("WirelessRemoved..")
-		} else if this.WiredDevices, removed = tryRemoveDevice(path, this.WiredDevices); removed {
-			dbus.NotifyChange(this, "WiredDevices")
+		} else if m.WiredDevices, removed = tryRemoveDevice(path, m.WiredDevices); removed {
+			dbus.NotifyChange(m, "WiredDevices")
 		}
 	default:
 		panic("Didn't support operation")
@@ -209,7 +209,7 @@ func (this *Manager) handleDeviceChanged(operation int32, path dbus.ObjectPath) 
 }
 
 // GetAccessPoints return all access point's dbus path of target device.
-func (this *Manager) GetAccessPoints(path dbus.ObjectPath) (aps []dbus.ObjectPath, err error) {
+func (m *Manager) GetAccessPoints(path dbus.ObjectPath) (aps []dbus.ObjectPath, err error) {
 	dev, err := nm.NewDeviceWireless(NMDest, path)
 	if err != nil {
 		return
@@ -219,12 +219,12 @@ func (this *Manager) GetAccessPoints(path dbus.ObjectPath) (aps []dbus.ObjectPat
 }
 
 // GetAccessPointProperty return access point's detail information.
-func (this *Manager) GetAccessPointProperty(apPath dbus.ObjectPath) (ap AccessPoint, err error) {
+func (m *Manager) GetAccessPointProperty(apPath dbus.ObjectPath) (ap AccessPoint, err error) {
 	ap, err = NewAccessPoint(apPath)
 	return
 }
 
-func (this *Manager) getDeviceAddress(devPath dbus.ObjectPath, devType uint32) string {
+func (m *Manager) getDeviceAddress(devPath dbus.ObjectPath, devType uint32) string {
 	switch devType {
 	case NM_DEVICE_TYPE_ETHERNET:
 		dev, err := nm.NewDeviceWired(NMDest, devPath)

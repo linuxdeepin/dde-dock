@@ -58,52 +58,52 @@ type Manager struct {
 	agent *Agent
 }
 
-func (this *Manager) GetDBusInfo() dbus.DBusInfo {
+func (m *Manager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{DBusDest, DBusPath, DBusIFC}
 }
 
 func _NewManager() (m *Manager) {
-	this := &Manager{}
-	return this
+	m = &Manager{}
+	return
 }
 
-func (this *Manager) initManager() {
-	this.WiredEnabled = true
-	this.WirelessEnabled = property.NewWrapProperty(this, "WirelessEnabled", _NMManager.WirelessEnabled)
-	this.NetworkingEnabled = property.NewWrapProperty(this, "NetworkingEnabled", _NMManager.NetworkingEnabled)
+func (m *Manager) initManager() {
+	m.WiredEnabled = true
+	m.WirelessEnabled = property.NewWrapProperty(m, "WirelessEnabled", _NMManager.WirelessEnabled)
+	m.NetworkingEnabled = property.NewWrapProperty(m, "NetworkingEnabled", _NMManager.NetworkingEnabled)
 
-	this.initDeviceManage()
-	this.initConnectionManage()
+	m.initDeviceManage()
+	m.initConnectionManage()
 
 	// update property "ActiveConnections" after initilizing device
-	this.updatePropActiveConnections()
+	m.updatePropActiveConnections()
 	_NMManager.ActiveConnections.ConnectChanged(func() {
-		this.updatePropActiveConnections()
+		m.updatePropActiveConnections()
 	})
 
 	// update property "State"
-	this.updatePropState()
+	m.updatePropState()
 	_NMManager.State.ConnectChanged(func() {
-		this.updatePropState()
+		m.updatePropState()
 	})
 
-	this.agent = newAgent("org.snyh.agent")
+	m.agent = newAgent("org.snyh.agent")
 }
 
-func (this *Manager) updatePropActiveConnections() {
-	this.ActiveConnections = make([]string, 0)
+func (m *Manager) updatePropActiveConnections() {
+	m.ActiveConnections = make([]string, 0)
 	for _, cpath := range _NMManager.ActiveConnections.Get() {
 		if conn, err := nm.NewActiveConnection(NMDest, cpath); err == nil {
-			this.ActiveConnections = append(this.ActiveConnections, conn.Uuid.Get())
+			m.ActiveConnections = append(m.ActiveConnections, conn.Uuid.Get())
 			LOGGER.Debugf("ActiveConnections, uuid=%s, state=%d", conn.Uuid.Get(), conn.State.Get()) // TODO test
 		}
 	}
-	dbus.NotifyChange(this, "ActiveConnections")
+	dbus.NotifyChange(m, "ActiveConnections")
 }
 
-func (this *Manager) updatePropState() {
-	this.State = _NMManager.State.Get()
-	dbus.NotifyChange(this, "State")
+func (m *Manager) updatePropState() {
+	m.State = _NMManager.State.Get()
+	dbus.NotifyChange(m, "State")
 }
 
 func main() {
