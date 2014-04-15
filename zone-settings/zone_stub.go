@@ -47,10 +47,10 @@ func (op *Manager) listenSignal() {
                 registerZoneArea()
         })
 
-        areaObj.ConnectMotionCoordinate(func(t string, x, y, id int32) {
+        areaObj.ConnectMotionInto(func(x, y, id int32) {
                 //logObj.Infof("Type: %s, X: %d, Y: %d, ID: %d",
                 //t, x, y, id)
-                if id != areaId || t != MOTION_INSIDE {
+                if id != areaId {
                         return
                 }
 

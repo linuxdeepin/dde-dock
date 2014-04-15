@@ -39,7 +39,6 @@ type areaRange struct {
 
 const (
         DISTANCE         = int32(10)
-        MOTION_INSIDE    = "inside"
         EDGE_TOPLEFT     = "TopLeft"
         EDGE_BOTTOMLEFT  = "BottomLeft"
         EDGE_TOPRIGHT    = "TopRight"
@@ -84,7 +83,7 @@ func registerZoneArea() {
                 bottomLeftArea,
                 topRightArea,
                 bottomRightArea,
-        })
+        }, 0)
         if err != nil {
                 logObj.Info("Register area failed: ", err)
                 return
