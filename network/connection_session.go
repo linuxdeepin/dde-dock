@@ -6,8 +6,9 @@ import (
 )
 
 type ConnectionSession struct {
-	coreObjPath    dbus.ObjectPath
-	objPath        dbus.ObjectPath
+	sessionPath    dbus.ObjectPath
+	connPath       dbus.ObjectPath
+	devPath        dbus.ObjectPath
 	data           _ConnectionData
 	connectionType string
 
@@ -25,8 +26,11 @@ type ConnectionSession struct {
 
 //所有字段值都为string，后端自行转换为需要的值后提供给NM
 
-func doNewConnectionSession() (s *ConnectionSession) {
+func doNewConnectionSession(devPath dbus.ObjectPath, uuid string) (s *ConnectionSession) {
 	s = &ConnectionSession{}
+	s.sessionPath = dbus.ObjectPath(fmt.Sprintf("/com/deepin/daemon/ConnectionSession/%s", randString(8)))
+	s.devPath = devPath
+	s.CurrentUUID = uuid
 	s.data = make(_ConnectionData)
 	s.AllowSave = false // TODO
 	s.AvailableKeys = make(map[string][]string)
@@ -34,16 +38,14 @@ func doNewConnectionSession() (s *ConnectionSession) {
 	return s
 }
 
-func NewConnectionSessionByCreate(connectionType string) (s *ConnectionSession, err error) {
+func NewConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath) (s *ConnectionSession, err error) {
 	if !isStringInArray(connectionType, supportedConnectionTypes) {
 		err = fmt.Errorf("connection type is out of support: %s", connectionType)
 		Logger.Error(err)
 		return
 	}
 
-	s = doNewConnectionSession()
-	s.CurrentUUID = newUUID()
-	s.objPath = dbus.ObjectPath(fmt.Sprintf("/com/deepin/daemon/ConnectionSession/%s", randString(8)))
+	s = doNewConnectionSession(devPath, newUUID())
 
 	// TODO
 	// new connection data, id is left here
@@ -64,19 +66,17 @@ func NewConnectionSessionByCreate(connectionType string) (s *ConnectionSession, 
 	return
 }
 
-func NewConnectionSessionByOpen(uuid string) (s *ConnectionSession, err error) {
-	coreObjPath, err := nmGetConnectionByUuid(uuid)
+func NewConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *ConnectionSession, err error) {
+	connPath, err := nmGetConnectionByUuid(uuid)
 	if err != nil {
 		return
 	}
 
-	s = doNewConnectionSession()
-	s.coreObjPath = coreObjPath
-	s.CurrentUUID = uuid
-	s.objPath = dbus.ObjectPath(fmt.Sprintf("/com/deepin/daemon/ConnectionSession/%s", randString(8)))
+	s = doNewConnectionSession(devPath, uuid)
+	s.connPath = connPath
 
 	// get connection data
-	nmConn, err := nmNewSettingsConnection(coreObjPath)
+	nmConn, err := nmNewSettingsConnection(connPath)
 	if err != nil {
 		return nil, err
 	}
@@ -124,16 +124,22 @@ func (s *ConnectionSession) Save() bool {
 
 	// TODO what about the connection has been deleted?
 
-	// update connection data
-	nmConn, err := nmNewSettingsConnection(s.coreObjPath)
-	if err != nil {
-		Logger.Error(err)
-		return false
-	}
-	err = nmConn.Update(s.data)
-	if err != nil {
-		Logger.Error(err)
-		return false
+	if len(s.connPath) > 0 {
+		// update connection data and activate it
+		nmConn, err := nmNewSettingsConnection(s.connPath)
+		if err != nil {
+			Logger.Error(err)
+			return false
+		}
+		err = nmConn.Update(s.data)
+		if err != nil {
+			Logger.Error(err)
+			return false
+		}
+		nmActivateConnection(s.connPath, s.devPath)
+	} else {
+		// create new connection and activate it
+		nmAddAndActivateConnection(s.data, s.devPath)
 	}
 
 	dbus.UnInstallObject(s)

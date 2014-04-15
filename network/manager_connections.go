@@ -118,8 +118,8 @@ func newPppoeConnection(id string) (uuid string) {
 	return
 }
 
-// TODO [remove or rename] GetConnectionByAccessPoint return the connection's uuid of access point, return empty if none.
-func (m *Manager) GetConnectionByAccessPoint(apPath dbus.ObjectPath) (uuid string, err error) {
+// GetConnectionUuidByAccessPoint return the connection's uuid of access point, return empty if none.
+func (m *Manager) GetConnectionUuidByAccessPoint(apPath dbus.ObjectPath) (uuid string, err error) {
 	ap, err := nmNewAccessPoint(apPath)
 	if err != nil {
 		return
@@ -131,51 +131,15 @@ func (m *Manager) GetConnectionByAccessPoint(apPath dbus.ObjectPath) (uuid strin
 	}
 
 	uuid = nmGetConnectionUuid(cpath)
-	return
 
-	// TODO remove
-	// conns, err := NMSettings.ListConnections()
-	// if err != nil {
-	// 	Logger.Error(err)
-	// 	return
-	// }
-
-	// for _, cpath := range conns {
-	// 	if nmConn, err := nmNewSettingsConnection(cpath); err == nil {
-	// 		if cdata, err := nmConn.GetSettings(); err == nil {
-	// 			if isSettingWirelessSsidExists(cdata) && string(getSettingWirelessSsid(cdata)) == string(ap.Ssid.Get()) {
-	// 				uuid = getSettingConnectionUuid(cdata)
-	// 				Logger.Debug("connection is already exists", apPath, uuid)
-	// 				break
-	// 			}
-	// 		}
-	// 	}
-	// }
-
-	// TODO remove
-	// for _, conUuid := range m.WirelessConnections {
-	// 	if cpath, err := NMSettings.GetConnectionByUuid(conUuid); err == nil {
-	// 		if nmConn, err := nmNewSettingsConnection(cpath); err == nil {
-	// 			if cdata, err := nmConn.GetSettings(); err == nil {
-	// 				if string(getSettingWirelessSsid(cdata)) == string(ap.Ssid.Get()) { // TODO
-	// 					Logger.Debug("connection is already exists", apPath, conUuid)
-	// 					uuid = conUuid
-	// 					break
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	// }
-
-	// Logger.Debugf("GetConnectionByAccessPoint: apPath=%s, uuid=%s", apPath, uuid) // TODO test
-
+	Logger.Debugf("GetConnectionUuidByAccessPoint: apPath=%s, uuid=%s", apPath, uuid) // TODO test
 	return
 }
 
 // CreateConnectionByAccessPoint create connection for access point and return the uuid.
 func (m *Manager) CreateConnectionForAccessPoint(apPath dbus.ObjectPath) (uuid string, err error) {
 	Logger.Debug("CreateConnectionForAccessPoint: apPath", apPath)
-	uuid, err = m.GetConnectionByAccessPoint(apPath)
+	uuid, err = m.GetConnectionUuidByAccessPoint(apPath)
 	if len(uuid) != 0 {
 		// connection already exists
 		return
@@ -197,8 +161,8 @@ func (m *Manager) CreateConnectionForAccessPoint(apPath dbus.ObjectPath) (uuid s
 	return
 }
 
-// TODO rename to GetActiveConnectionInfo
-func (m *Manager) GetActiveConnection(devPath dbus.ObjectPath) (ret *ActiveConnection, err error) {
+// GetActiveConnectionInfo
+func (m *Manager) GetActiveConnectionInfo(devPath dbus.ObjectPath) (ret *ActiveConnection, err error) {
 	defer func() {
 		if x := recover(); x != nil {
 			err = x.(error)
@@ -253,8 +217,8 @@ func (m *Manager) GetActiveConnection(devPath dbus.ObjectPath) (ret *ActiveConne
 }
 
 // CreateConnection create a new connection, return ConnectionSession's dbus object path if success.
-func (m *Manager) CreateConnection(connType string) (session *ConnectionSession, err error) {
-	session, err = NewConnectionSessionByCreate(connType)
+func (m *Manager) CreateConnection(connType string, devPath dbus.ObjectPath) (session *ConnectionSession, err error) {
+	session, err = NewConnectionSessionByCreate(connType, devPath)
 	if err != nil {
 		Logger.Error(err)
 		return
@@ -271,7 +235,7 @@ func (m *Manager) CreateConnection(connType string) (session *ConnectionSession,
 }
 
 // OpenConnection open a connection through uuid, return ConnectionSession's dbus object path if success.
-func (m *Manager) EditConnection(uuid string) (session *ConnectionSession, err error) {
+func (m *Manager) EditConnection(uuid string, devPath dbus.ObjectPath) (session *ConnectionSession, err error) {
 	// if is read only connection(default system connection created by
 	// network manager), create a new connection
 	// TODO
@@ -285,10 +249,10 @@ func (m *Manager) EditConnection(uuid string) (session *ConnectionSession, err e
 	}
 	if getSettingConnectionReadOnly(connData) {
 		Logger.Debug("read only connection, create new")
-		return m.CreateConnection(getSettingConnectionType(connData))
+		return m.CreateConnection(getSettingConnectionType(connData), devPath)
 	}
 
-	session, err = NewConnectionSessionByOpen(uuid)
+	session, err = NewConnectionSessionByOpen(uuid, devPath)
 	if err != nil {
 		Logger.Error(err)
 		return

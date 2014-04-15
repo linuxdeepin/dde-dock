@@ -225,8 +225,8 @@ func nmGetWirelessConnectionBySsid(ssid []byte) (cpath dbus.ObjectPath, ok bool)
 	return
 }
 
-func nmAddConnection(data _ConnectionData) {
-	_, err := NMSettings.AddConnection(data)
+func nmAddConnection(data _ConnectionData) (cpath dbus.ObjectPath, err error) {
+	cpath, err = NMSettings.AddConnection(data)
 	if err != nil {
 		Logger.Error(err)
 	}
