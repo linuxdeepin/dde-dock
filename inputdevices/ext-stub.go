@@ -62,7 +62,7 @@ func (tpad *TPadEntry) GetDBusInfo() dbus.DBusInfo {
 
 func (keyboard *KeyboardEntry) listenLayoutChanged() {
         _layoutGSettings.Connect("changed", func(s *gio.Settings, key string) {
-                keyboard.getPropName("CurrentLayout")
+                keyboard.setPropName("CurrentLayout")
         })
 
         _infaceGSettings.Connect("changed", func(s *gio.Settings, key string) {
@@ -86,15 +86,15 @@ func (keyboard *KeyboardEntry) OnPropertiesChanged(propName string, old interfac
         switch propName {
         case "CurrentLayout":
                 if v, ok := old.(string); ok && v != keyboard.CurrentLayout {
-                        keyboard.setPropName(propName)
+                        keyboard.applyPropValue(propName, keyboard.CurrentLayout)
                 }
         }
 }
 
-func (keyboard *KeyboardEntry) setPropName(propName string) {
+func (keyboard *KeyboardEntry) applyPropValue(propName string, value interface{}) {
         switch propName {
         case "CurrentLayout":
-                strs := strings.Split(keyboard.CurrentLayout, LAYOUT_DELIM)
+                strs := strings.Split(value.(string), LAYOUT_DELIM)
                 if len(strs[0]) <= 0 {
                         strs[0] = "us"
                 }
@@ -108,14 +108,25 @@ func (keyboard *KeyboardEntry) setPropName(propName string) {
                         _layoutGSettings.SetStrv("options", []string{strs[1]})
                         setLayout(strs[0], strs[1])
                 }
-                dbus.NotifyChange(keyboard, propName)
+                //dbus.NotifyChange(keyboard, propName)
         case "UserLayoutList":
-                _keyRepeatGSettings.SetStrv("user-layout-list", keyboard.UserLayoutList)
-                dbus.NotifyChange(keyboard, propName)
+                _keyRepeatGSettings.SetStrv("user-layout-list", value.([]string))
+                //dbus.NotifyChange(keyboard, propName)
+        case "CursorBlink":
+                xsObj, err := libsm.NewXSettings(
+                        "com.deepin.SessionManager",
+                        "/com/deepin/XSettings")
+                if err != nil {
+                        logObject.Info("New XSettings Failed: ", err)
+                        return
+                }
+                v := uint32(value.(int32))
+                xsObj.SetInterger("Net/CursorBlinkTime", v)
+                setQtCursorBlink(uint32(v))
         }
 }
 
-func (keyboard *KeyboardEntry) getPropName(propName string) {
+func (keyboard *KeyboardEntry) setPropName(propName string) {
         switch propName {
         case "CurrentLayout":
                 layout := _layoutGSettings.GetStrv("layouts")
@@ -146,7 +157,7 @@ func (keyboard *KeyboardEntry) appendUserLayout(str string) {
         }
 
         keyboard.UserLayoutList = append(keyboard.UserLayoutList, str)
-        keyboard.setPropName("UserLayoutList")
+        keyboard.applyPropValue("UserLayoutList", keyboard.UserLayoutList)
 }
 
 func (keyboard *KeyboardEntry) deleteUserLayout(str string) {
@@ -167,7 +178,7 @@ func (keyboard *KeyboardEntry) deleteUserLayout(str string) {
         }
 
         keyboard.UserLayoutList = tmps
-        keyboard.setPropName("UserLayoutList")
+        keyboard.applyPropValue("UserLayoutList", keyboard.UserLayoutList)
 }
 
 func stringIsExist(str string, strs []string) bool {

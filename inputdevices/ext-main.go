@@ -1,7 +1,9 @@
 package main
 
-// #cgo pkg-config: x11 xi glib-2.0
+// #cgo pkg-config: gtk+-3.0 gnome-desktop-3.0 x11 xi xkbfile glib-2.0
+// #cgo LDFLAGS: -lm
 // #include "list-devices-info.h"
+// #include "gsd-init.h"
 // #include <stdlib.h>
 import "C"
 import (
@@ -9,7 +11,6 @@ import (
         "dlib/dbus"
         "dlib/logger"
         "os"
-        "os/exec"
         "unsafe"
 )
 
@@ -32,8 +33,8 @@ func main() {
 
         logObject.SetRestartCommand("/usr/lib/deepin-daemon/inputdevices")
 
-        go exec.Command("/usr/lib/dde-daemon/gsd-mouse").Run()
-        go exec.Command("/usr/lib/dde-daemon/gsd-keyboard").Run()
+        go C.gsd_init()
+        defer C.gsd_finalize()
 
         if !InitGSettings() {
                 return

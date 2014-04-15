@@ -88,10 +88,13 @@ func NewKeyboardEntry() *KeyboardEntry {
                 "DisableTPad", _tpadGSettings, "disable-while-typing")
         keyboard.CursorBlink = property.NewGSettingsIntProperty(keyboard,
                 "CursorBlink", _infaceGSettings, "cursor-blink-time")
-        keyboard.getPropName("CurrentLayout")
-        keyboard.getPropName("UserLayoutList")
+        keyboard.setPropName("CurrentLayout")
+        keyboard.setPropName("UserLayoutList")
         keyboard.appendUserLayout(keyboard.CurrentLayout)
         keyboard.listenLayoutChanged()
+
+        keyboard.applyPropValue("CursorBlink", keyboard.CursorBlink.GetValue())
+        keyboard.applyPropValue("CurrentLayout", keyboard.CurrentLayout)
 
         return keyboard
 }
