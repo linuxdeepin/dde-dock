@@ -221,7 +221,7 @@ func (m *Manager) GetActiveConnection(devPath dbus.ObjectPath) (ret *ActiveConne
 		}
 	}
 
-	ip, mask, route := parseDHCP4(dev.Dhcp4Config.Get())
+	ip, mask, route := nmGetDHCP4Info(dev.Dhcp4Config.Get())
 	defer func() {
 		nm.DestroyDevice(dev)
 		nm.DestroyActiveConnection(ac)

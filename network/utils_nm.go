@@ -232,3 +232,21 @@ func nmAddConnection(data _ConnectionData) {
 	}
 	return
 }
+
+func nmGetDHCP4Info(path dbus.ObjectPath) (ip string, mask string, route string) {
+	dhcp4, err := nmNewDHCP4Config(path)
+	if err != nil {
+		return
+	}
+	options := dhcp4.Options.Get()
+	if ipData, ok := options["ip_address"]; ok {
+		ip, _ = ipData.Value().(string)
+	}
+	if maskData, ok := options["subnet_mask"]; ok {
+		mask, _ = maskData.Value().(string)
+	}
+	if routeData, ok := options["routers"]; ok {
+		route, _ = routeData.Value().(string)
+	}
+	return
+}

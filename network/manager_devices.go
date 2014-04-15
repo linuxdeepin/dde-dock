@@ -193,6 +193,7 @@ func (m *Manager) GetAccessPointProperty(apPath dbus.ObjectPath) (ap AccessPoint
 	return
 }
 
+// TODO
 func (m *Manager) getDeviceAddress(devPath dbus.ObjectPath, devType uint32) string {
 	switch devType {
 	case NM_DEVICE_TYPE_ETHERNET:
@@ -211,4 +212,17 @@ func (m *Manager) getDeviceAddress(devPath dbus.ObjectPath, devType uint32) stri
 		return dev.HwAddress.Get()
 	}
 	return ""
+}
+
+func tryRemoveDevice(path dbus.ObjectPath, devices []*Device) ([]*Device, bool) {
+	var newDevices []*Device
+	found := false
+	for _, dev := range devices {
+		if dev.Path != path {
+			newDevices = append(newDevices, dev)
+		} else {
+			found = true
+		}
+	}
+	return newDevices, found
 }
