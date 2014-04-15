@@ -40,7 +40,20 @@ type CategoryInfo struct {
 }
 
 var (
-	nameIdMap     = map[string]CategoryId{}
+	nameIdMap = map[string]CategoryId{
+		"all":          AllID,
+		"other":        OtherID,
+		"internet":     NetworkID,
+		"multimedia":   MultimediaID,
+		"games":        GamesID,
+		"graphics":     GraphicsID,
+		"productivity": ProductivityID,
+		"industry":     IndustryID,
+		"education":    EducationID,
+		"development":  DevelopmentID,
+		"system":       SystemID,
+		"utilities":    UtilitiesID,
+	}
 	categoryTable = map[CategoryId]*CategoryInfo{
 		AllID:          &CategoryInfo{AllID, "all", map[ItemId]bool{}},
 		OtherID:        &CategoryInfo{OtherID, "other", map[ItemId]bool{}},
@@ -83,9 +96,9 @@ func initCategory() {
 
 func findCategoryId(categoryName string) CategoryId {
 	lowerCategoryName := strings.ToLower(categoryName)
-	// logger.Info("categoryName:", lowerCategoryName)
+	logger.Debug("categoryName:", lowerCategoryName)
 	id, ok := nameIdMap[lowerCategoryName]
-	// fmt.Printf("nameIdMap[\"%s\"]=%d\n", lowerCategoryName, id)
+	logger.Debug("nameIdMap[\"%s\"]=%d\n", lowerCategoryName, id)
 	if !ok {
 		return OtherID
 	}

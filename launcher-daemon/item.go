@@ -116,8 +116,9 @@ func getDeepinCategory(app *gio.DesktopAppInfo) (CategoryId, error) {
 	if err != nil {
 		return OtherID, err
 	}
+	logger.Debug("get category name for", basename, "is", categoryName)
 	id := findCategoryId(categoryName)
-	// logger.Info(categoryName, id)
+	logger.Debug(categoryName, id)
 	return id, nil
 }
 
@@ -144,10 +145,11 @@ func getCategories(app *gio.DesktopAppInfo) []CategoryId {
 	var categories = make([]CategoryId, 0)
 	id, err := getDeepinCategory(app)
 	if err != nil {
+		logger.Error("get category from database failed:", err)
 		return getXCategories(app)
-	} else {
-		return append(categories, id)
 	}
+	logger.Debug("get category from database:", id)
+	return append(categories, id)
 }
 
 func genId(filename string) ItemId {
@@ -189,7 +191,7 @@ func getItemInfos(id CategoryId) []ItemInfo {
 	// logger.Info(id)
 	infos := make([]ItemInfo, 0)
 	if _, ok := categoryTable[id]; !ok {
-		logger.Info("category id:", id, "not exist")
+		logger.Error("category id:", id, "not exist")
 		return infos
 	}
 

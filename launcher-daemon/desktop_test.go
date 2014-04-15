@@ -7,11 +7,11 @@ import (
 	"testing"
 )
 
-func TestIsOnDesktop(t *testing.T) {
+func _TestIsOnDesktop(t *testing.T) {
 	isOnDesktop("firefox.desktop")
 }
 
-func TestSendToDesktop(t *testing.T) {
+func _TestSendToDesktop(t *testing.T) {
 	target := "/usr/share/applications/firefox.desktop"
 	sendToDesktop(target)
 	path :=

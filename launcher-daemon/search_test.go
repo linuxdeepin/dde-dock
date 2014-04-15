@@ -54,7 +54,7 @@ func _TestSearch(t *testing.T) {
 }
 
 func _TestPinYin(t *testing.T) {
-	tree, err := pinyin.NewSearch("/com/deepin/dde/api/Search")
+	tree, err := pinyin.NewSearch("com.deepin.api.Search", "/com/deepin/api/Search")
 	if err != nil {
 		return
 	}

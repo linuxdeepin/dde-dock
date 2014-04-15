@@ -23,6 +23,7 @@ func TestGetPackageNamesFromCommandline(t *testing.T) {
 		getPackageNamesFromCommandline("/usr/share/applications/firefox.desktop")
 	if err != nil {
 		t.Error(err)
+		return
 	}
 
 	for _, name := range names {
