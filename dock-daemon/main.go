@@ -10,8 +10,8 @@ import (
 var logger = liblogger.NewLogger("dde-daemon/dock-daemon")
 
 func main() {
-	if !dlib.UniqueOnSession("com.deepin.daemon.daemon.dock-daemon") {
-		logger.Warning("Anohter com.deepin.daemon.dock-daemon is running")
+	if !dlib.UniqueOnSession("com.deepin.daemon.daemon.Dock") {
+		logger.Warning("Anohter com.deepin.daemon.Dock is running")
 		return
 	}
 	defer func() {
