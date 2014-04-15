@@ -318,20 +318,14 @@ func (m *Manager) DeleteConnection(uuid string) (err error) {
 
 // GetConnectionByUuid return connection setting dbus path by uuid
 func (m *Manager) GetConnectionByUuid(uuid string) (cpath dbus.ObjectPath, err error) {
-	cpath, err = NMSettings.GetConnectionByUuid(uuid)
+	cpath, _ = nmGetConnectionByUuid(uuid)
 	return
 }
 
 // GetActiveConnectionState get current state of the active connection.
-func (m *Manager) GetActiveConnectionState(uuid string) (state uint32) {
-	cpath, err := NMSettings.GetConnectionByUuid(uuid)
+func (m *Manager) GetActiveConnectionState(apath dbus.ObjectPath) (state uint32) {
+	conn, err := nmNewActiveConnection(apath)
 	if err != nil {
-		Logger.Error("GetActiveConnectionState,", err)
-		return
-	}
-	conn, err := nm.NewActiveConnection(NMDest, cpath)
-	if err != nil {
-		Logger.Error("GetActiveConnectionState,", err)
 		return
 	}
 	state = conn.State.Get()
