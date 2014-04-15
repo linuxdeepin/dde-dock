@@ -53,12 +53,12 @@ func main() {
 
 	go dlib.StartLoop()
 
-	swm := NewSpecialWindowManager()
-	err = dbus.InstallOnSession(swm)
-	if err != nil {
-		logger.Error("register dbus interface failed:", err)
-	}
-	go swm.listenRootWindow()
+	// swm := NewSpecialWindowManager()
+	// err = dbus.InstallOnSession(swm)
+	// if err != nil {
+	// 	logger.Error("register dbus interface failed:", err)
+	// }
+	// go swm.listenRootWindow()
 
 	dbus.DealWithUnhandledMessage()
 
