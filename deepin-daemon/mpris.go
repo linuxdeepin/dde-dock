@@ -43,6 +43,7 @@ const (
 var (
         dbusObj     *libdbus.DBusDaemon
         mediaKeyObj *libkeybind.MediaKey
+        prevSender  = ""
 )
 
 func getMprisClients() ([]string, bool) {
@@ -76,10 +77,27 @@ func getActiveMprisClient() *libmpris.Player {
                 }
                 if len(list) == 1 {
                         return obj
-                }
-                if obj.PlaybackStatus.GetValue().(string) == "Playing" {
+                } else if len(list) == 2 && strings.Contains(dest, "vlc") {
+                        // vlc create two dbus sender
                         return obj
                 }
+                if obj.PlaybackStatus.GetValue().(string) == "Playing" {
+                        prevSender = dest
+                        logObj.Info("Current Media: ", dest)
+                        return obj
+                } else if dest == prevSender {
+                        logObj.Info("Current Media: ", dest)
+                        return obj
+                }
+        }
+
+        if len(list) > 1 {
+                obj, err := libmpris.NewPlayer(list[0], MPRIS_PATH)
+                if err != nil {
+                        logObj.Warningf("New mpris player failed: '%v'' for sender: '%s'", err, list[0])
+                        return nil
+                }
+                return obj
         }
 
         return nil
@@ -91,8 +109,10 @@ func listenAudioSignal() {
                         return
                 }
 
+                logObj.Info("Received Play Signal")
                 obj := getActiveMprisClient()
                 if obj == nil {
+                        logObj.Warning("Get Active Mpris Failed")
                         return
                 }
                 //obj.Play()
@@ -103,6 +123,7 @@ func listenAudioSignal() {
                 if press {
                         return
                 }
+                logObj.Info("Received Pause Signal")
 
                 obj := getActiveMprisClient()
                 if obj == nil {
@@ -115,6 +136,7 @@ func listenAudioSignal() {
                 if press {
                         return
                 }
+                logObj.Info("Received Stop Signal")
 
                 obj := getActiveMprisClient()
                 if obj == nil {
@@ -127,30 +149,35 @@ func listenAudioSignal() {
                 if press {
                         return
                 }
+                logObj.Info("Received Previous Signal")
 
                 obj := getActiveMprisClient()
                 if obj == nil {
                         return
                 }
                 obj.Previous()
+                obj.Play()
         })
 
         mediaKeyObj.ConnectAudioNext(func(press bool) {
                 if press {
                         return
                 }
+                logObj.Info("Received Next Signal")
 
                 obj := getActiveMprisClient()
                 if obj == nil {
                         return
                 }
                 obj.Next()
+                obj.Play()
         })
 
         mediaKeyObj.ConnectAudioRewind(func(press bool) {
                 if press {
                         return
                 }
+                logObj.Info("Received Rewind Signal")
 
                 obj := getActiveMprisClient()
                 if obj == nil {
@@ -175,6 +202,7 @@ func listenAudioSignal() {
                 if press {
                         return
                 }
+                logObj.Info("Received Forward Signal")
 
                 obj := getActiveMprisClient()
                 if obj == nil {
@@ -194,6 +222,7 @@ func listenAudioSignal() {
                 if press {
                         return
                 }
+                logObj.Info("Received Repeat Signal")
 
                 obj := getActiveMprisClient()
                 if obj == nil {
