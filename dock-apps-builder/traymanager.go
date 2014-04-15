@@ -64,7 +64,6 @@ func (m *TrayManager) addTrayIcon(xid xproto.Window) {
 	icon := xwindow.New(TrayXU, xid)
 	icon.Listen(xproto.EventMaskVisibilityChange | damage.Notify | xproto.EventMaskStructureNotify)
 	icon.Change(xproto.CwBackPixel, 0)
-	icon.Map()
 
 	name, err := ewmh.WmNameGet(TrayXU, xid)
 	if err != nil {
