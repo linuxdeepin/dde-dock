@@ -3,23 +3,77 @@ package main
 import nm "dbus/org/freedesktop/networkmanager"
 import "dlib/dbus"
 
-func nmNewDevice(devPath dbus.ObjectPath) (dev *nm.Device, ok bool) {
-	dev, err := nm.NewDevice(NMDest, devPath)
+func nmNewDevice(devPath dbus.ObjectPath) (dev *nm.Device, err error) {
+	dev, err = nm.NewDevice(NMDest, devPath)
 	if err != nil {
 		LOGGER.Error(err)
-		ok = false
 		return
 	}
-	ok = true
+	return
+}
+
+func nmNewAccessPoint(apPath dbus.ObjectPath) (ap *nm.AccessPoint, err error) {
+	ap, err = nm.NewAccessPoint(NMDest, apPath)
+	if err != nil {
+		LOGGER.Error(err)
+		return
+	}
+	return
+}
+
+func nmNewActiveConnection(apath dbus.ObjectPath) (ac *nm.ActiveConnection, err error) {
+	ac, err = nm.NewActiveConnection(NMDest, apath)
+	if err != nil {
+		LOGGER.Error(err)
+		return
+	}
 	return
 }
 
 func nmGetDeviceInterface(devPath dbus.ObjectPath) (devInterface string) {
-	dev, ok := nmNewDevice(devPath)
-	if !ok {
+	dev, err := nmNewDevice(devPath)
+	if err != nil {
 		return
 	}
 	devInterface = dev.Interface.Get()
+	return
+}
+
+func nmAddAndActivateConnection(data _ConnectionData, devPath dbus.ObjectPath) (cpath, apath dbus.ObjectPath, err error) {
+	spath := dbus.ObjectPath("/")
+	cpath, apath, err = _NMManager.AddAndActivateConnection(data, devPath, spath)
+	if err != nil {
+		LOGGER.Error(err)
+		return
+	}
+	return
+}
+
+func nmActivateConnection(cpath, devPath dbus.ObjectPath) (apath dbus.ObjectPath, err error) {
+	spath := dbus.ObjectPath("/")
+	apath, err = _NMManager.ActivateConnection(cpath, devPath, spath)
+	if err != nil {
+		LOGGER.Error(err)
+		return
+	}
+	return
+}
+
+func nmGetActiveConnections() (apath []dbus.ObjectPath) {
+	apath = _NMManager.ActiveConnections.Get()
+	return
+}
+
+func nmGetActiveConnectionByUuid(uuid string) (apath dbus.ObjectPath, ok bool) {
+	for _, apath = range nmGetActiveConnections() {
+		if ac, err := nmNewActiveConnection(apath); err == nil {
+			if ac.Uuid.Get() == uuid {
+				ok = true
+				return
+			}
+		}
+	}
+	ok = false
 	return
 }
 
@@ -92,6 +146,21 @@ func nmGetConnectionByUuid(uuid string) (cpath dbus.ObjectPath, ok bool) {
 			continue
 		}
 		if getSettingConnectionUuid(data) == uuid {
+			ok = true
+			return
+		}
+	}
+	ok = false
+	return
+}
+
+func nmGetWirelessConnectionBySsid(ssid []byte) (cpath dbus.ObjectPath, ok bool) {
+	for _, cpath = range nmGetConnectionList() {
+		data, err := nmGetConnectionData(cpath)
+		if err != nil {
+			continue
+		}
+		if isSettingWirelessSsidExists(data) && string(getSettingWirelessSsid(data)) == string(ssid) {
 			ok = true
 			return
 		}

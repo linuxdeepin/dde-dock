@@ -114,31 +114,40 @@ func newPppoeConnection(id string) (uuid string) {
 	return
 }
 
-// GetConnectionByAccessPoint return the connection's uuid of access point, return empty if none.
+// TODO [remove or rename] GetConnectionByAccessPoint return the connection's uuid of access point, return empty if none.
 func (this *Manager) GetConnectionByAccessPoint(apPath dbus.ObjectPath) (uuid string, err error) {
-	ap, err := nm.NewAccessPoint(NMDest, apPath)
+	ap, err := nmNewAccessPoint(apPath)
 	if err != nil {
-		LOGGER.Error(err)
 		return
 	}
 
-	conns, err := _NMSettings.ListConnections()
-	if err != nil {
-		LOGGER.Error(err)
+	cpath, ok := nmGetWirelessConnectionBySsid(ap.Ssid.Get())
+	if !ok {
 		return
 	}
 
-	for _, cpath := range conns {
-		if nmConn, err := nm.NewSettingsConnection(NMDest, cpath); err == nil {
-			if cdata, err := nmConn.GetSettings(); err == nil {
-				if isSettingWirelessSsidExists(cdata) && string(getSettingWirelessSsid(cdata)) == string(ap.Ssid.Get()) {
-					uuid = getSettingConnectionUuid(cdata)
-					LOGGER.Debug("connection is already exists", apPath, uuid)
-					break
-				}
-			}
-		}
-	}
+	uuid = nmGetConnectionUuid(cpath)
+	return
+
+	// TODO remove
+	// conns, err := _NMSettings.ListConnections()
+	// if err != nil {
+	// 	LOGGER.Error(err)
+	// 	return
+	// }
+
+	// for _, cpath := range conns {
+	// 	if nmConn, err := nm.NewSettingsConnection(NMDest, cpath); err == nil {
+	// 		if cdata, err := nmConn.GetSettings(); err == nil {
+	// 			if isSettingWirelessSsidExists(cdata) && string(getSettingWirelessSsid(cdata)) == string(ap.Ssid.Get()) {
+	// 				uuid = getSettingConnectionUuid(cdata)
+	// 				LOGGER.Debug("connection is already exists", apPath, uuid)
+	// 				break
+	// 			}
+	// 		}
+	// 	}
+	// }
+
 	// TODO remove
 	// for _, conUuid := range this.WirelessConnections {
 	// 	if cpath, err := _NMSettings.GetConnectionByUuid(conUuid); err == nil {
@@ -169,18 +178,18 @@ func (this *Manager) CreateConnectionForAccessPoint(apPath dbus.ObjectPath) (uui
 	}
 
 	// create connection
-	if ap, err := nm.NewAccessPoint(NMDest, apPath); err == nil {
-		// TODO FIXME
-		keyFlag := parseFlags(ap.Flags.Get(), ap.WpaFlags.Get(), ap.RsnFlags.Get())
-		if keyFlag == ApKeyEap {
-			LOGGER.Debug("ignore wireless connection:", string(ap.Ssid.Get()))
-			return "", dbus.NewNoObjectError(apPath)
-		}
-
-		uuid = newWirelessConnection(string(ap.Ssid.Get()), []byte(ap.Ssid.Get()), parseFlags(ap.Flags.Get(), ap.WpaFlags.Get(), ap.RsnFlags.Get()))
-	} else {
-		err = dbus.NewNoObjectError(apPath)
+	ap, err := nmNewAccessPoint(apPath)
+	if err != nil {
+		return
 	}
+	// TODO FIXME
+	keyFlag := parseFlags(ap)
+	if keyFlag == ApKeyEap {
+		LOGGER.Debug("ignore wireless connection:", string(ap.Ssid.Get()))
+		return "", dbus.NewNoObjectError(apPath)
+	}
+
+	uuid = newWirelessConnection(string(ap.Ssid.Get()), []byte(ap.Ssid.Get()), parseFlags(ap))
 	return
 }
 
@@ -262,7 +271,16 @@ func (this *Manager) EditConnection(uuid string) (session *ConnectionSession, er
 	// if is read only connection(default system connection created by
 	// network manager), create a new connection
 	// TODO
-	connData := this.getConnectionDataByUuid(uuid)
+	cpath, ok := nmGetConnectionByUuid(uuid)
+	if !ok {
+		err = fmt.Errorf("not found connection with uuid=%s", uuid)
+		LOGGER.Error(err)
+		return
+	}
+	connData, err := nmGetConnectionData(cpath)
+	if err != nil {
+		return
+	}
 	if getSettingConnectionReadOnly(connData) {
 		LOGGER.Debug("read only connection, create new")
 		return this.CreateConnection(getSettingConnectionType(connData))
@@ -281,25 +299,6 @@ func (this *Manager) EditConnection(uuid string) (session *ConnectionSession, er
 		return
 	}
 
-	return
-}
-
-func (this *Manager) getConnectionDataByUuid(uuid string) (data _ConnectionData) {
-	coreObjPath, err := _NMSettings.GetConnectionByUuid(uuid)
-	if err != nil {
-		LOGGER.Error(err)
-		return
-	}
-	nmConn, err := nm.NewSettingsConnection(NMDest, coreObjPath)
-	if err != nil {
-		LOGGER.Error(err)
-		return
-	}
-	data, err = nmConn.GetSettings()
-	if err != nil {
-		LOGGER.Error(err)
-		return
-	}
 	return
 }
 
@@ -342,4 +341,63 @@ func (this *Manager) GetActiveConnectionState(uuid string) (state uint32) {
 // GetSupportedConnectionTypes return all supported connection types
 func (this *Manager) GetSupportedConnectionTypes() []string {
 	return supportedConnectionTypes
+}
+
+func (this *Manager) ActivateConnectionForAccessPoint(apPath, devPath dbus.ObjectPath) (err error) {
+	LOGGER.Debugf("ActivateConnectionForAccessPoint: apPath=%s, devPath=%s", apPath, devPath)
+	// if there is no connection for current access point, create one
+	ap, err := nmNewAccessPoint(apPath)
+	if err != nil {
+		return
+	}
+	cpath, ok := nmGetWirelessConnectionBySsid(ap.Ssid.Get())
+	if ok {
+		_, err = nmActivateConnection(cpath, devPath)
+	} else {
+		uuid := newUUID()
+		data := newWirelessConnectionData(string(ap.Ssid.Get()), uuid, []byte(ap.Ssid.Get()), parseFlags(ap))
+		_, _, err = nmAddAndActivateConnection(data, devPath)
+	}
+	return
+}
+
+func (this *Manager) ActivateConnection(uuid string, devPath dbus.ObjectPath) (err error) {
+	LOGGER.Debugf("ActivateConnection: uuid=%s, devPath=%s", uuid, devPath)
+	cpath, err := _NMSettings.GetConnectionByUuid(uuid)
+	if err != nil {
+		LOGGER.Error(err)
+		return
+	}
+
+	// TODO fixme
+	// if only one access point connection, do nothing for it will be
+	// activate by network manager automatic
+	if nmGetConnectionType(cpath) == typeWireless {
+		count := 0
+		for _, tmpcpath := range nmGetConnectionList() {
+			ctype := nmGetConnectionType(tmpcpath)
+			if ctype == typeWireless {
+				count++
+			}
+		}
+		if count <= 1 {
+			LOGGER.Debug("only one access point connection, will be activate by network manager automatic")
+			return
+		}
+	}
+
+	_, err = nmActivateConnection(cpath, devPath)
+	return
+}
+
+// TODO remove
+func (this *Manager) DeactivateConnection(uuid string) (err error) {
+	apath, ok := nmGetActiveConnectionByUuid(uuid)
+	if !ok {
+		LOGGER.Error("not found active connection with uuid", uuid)
+		return
+	}
+	LOGGER.Debug("DeactivateConnection:", uuid, apath)
+	err = _NMManager.DeactivateConnection(apath)
+	return
 }

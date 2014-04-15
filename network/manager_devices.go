@@ -3,13 +3,6 @@ package main
 import nm "dbus/org/freedesktop/networkmanager"
 import "dlib/dbus"
 
-type AccessPoint struct {
-	Ssid     string
-	NeedKey  bool
-	Strength uint8
-	Path     dbus.ObjectPath
-}
-
 type Device struct {
 	Path  dbus.ObjectPath
 	State uint32
@@ -42,7 +35,7 @@ func NewAccessPoint(apPath dbus.ObjectPath) (ap AccessPoint, err error) {
 	}
 
 	ap = AccessPoint{string(nmAp.Ssid.Get()),
-		parseFlags(nmAp.Flags.Get(), nmAp.WpaFlags.Get(), nmAp.RsnFlags.Get()) != ApKeyNone,
+		parseFlags(nmAp) != ApKeyNone,
 		calcStrength(nmAp.Strength.Get()),
 		nmAp.Path,
 	}
@@ -215,31 +208,6 @@ func (this *Manager) handleDeviceChanged(operation int32, path dbus.ObjectPath) 
 	}
 }
 
-const (
-	ApKeyNone = iota
-	ApKeyWep
-	ApKeyPsk
-	ApKeyEap
-)
-
-func parseFlags(flags, wpaFlags, rsnFlags uint32) int {
-	r := ApKeyNone
-
-	if (flags&NM_802_11_AP_FLAGS_PRIVACY != 0) && (wpaFlags == NM_802_11_AP_SEC_NONE) && (rsnFlags == NM_802_11_AP_SEC_NONE) {
-		r = ApKeyWep
-	}
-	if wpaFlags != NM_802_11_AP_SEC_NONE {
-		r = ApKeyPsk
-	}
-	if rsnFlags != NM_802_11_AP_SEC_NONE {
-		r = ApKeyPsk
-	}
-	if (wpaFlags&NM_802_11_AP_SEC_KEY_MGMT_802_1X != 0) || (rsnFlags&NM_802_11_AP_SEC_KEY_MGMT_802_1X != 0) {
-		r = ApKeyEap
-	}
-	return r
-}
-
 // GetAccessPoints return all access point's dbus path of target device.
 func (this *Manager) GetAccessPoints(path dbus.ObjectPath) (aps []dbus.ObjectPath, err error) {
 	dev, err := nm.NewDeviceWireless(NMDest, path)
@@ -274,78 +242,4 @@ func (this *Manager) getDeviceAddress(devPath dbus.ObjectPath, devType uint32) s
 		return dev.HwAddress.Get()
 	}
 	return ""
-}
-
-// func (this *Manager) AddAndActivateConnection(uuid string, dev dbus.ObjectPath) (err error) {
-// 	LOGGER.Debugf("AddAndActivateConnection: uuid=%s, devPath=%s", uuid, dev)
-// 	// cpath, err := _NMSettings.GetConnectionByUuid(uuid)
-// 	// if err != nil {
-// 	// 	LOGGER.Error(err)
-// 	// 	return
-// 	// }
-// 	// TODO, ap path, "/"
-// 	spath := dbus.ObjectPath("/")
-// 	// _, err = _NMManager.ActivateConnection(cpath, dev, spath)
-// 	_, err = _NMManager.AddAndActivateConnection
-// 	// ActivateConnection(cpath, dev, spath)
-// 	if err != nil {
-// 		LOGGER.Error(err)
-// 	}
-
-// 	return
-// }
-
-func (this *Manager) ActivateConnection(uuid string, dev dbus.ObjectPath) (err error) {
-	LOGGER.Debugf("ActivateConnection: uuid=%s, devPath=%s", uuid, dev)
-	cpath, err := _NMSettings.GetConnectionByUuid(uuid)
-	if err != nil {
-		LOGGER.Error(err)
-		return
-	}
-
-	// TODO fixme
-	// if only one access point connection, do nothing for it will be
-	// activate by network manager automatic
-	if nmGetConnectionType(cpath) == typeWireless {
-		count := 0
-		for _, tmpcpath := range nmGetConnectionList() {
-			ctype := nmGetConnectionType(tmpcpath)
-			if ctype == typeWireless {
-				count++
-			}
-		}
-		if count <= 1 {
-			LOGGER.Debug("only one access point connection, will be activate by network manager automatic")
-			return
-		}
-	}
-
-	// TODO, ap path, "/"
-	spath := dbus.ObjectPath("/")
-	_, err = _NMManager.ActivateConnection(cpath, dev, spath)
-	if err != nil {
-		LOGGER.Error(err)
-	}
-	return
-}
-
-// TODO remove
-func (this *Manager) DeactivateConnection(uuid string) (err error) {
-	cpath := this.getActiveConnectionByUuid(uuid)
-	if len(cpath) == 0 {
-		return
-	}
-	LOGGER.Debug("DeactivateConnection:", uuid, cpath)
-	err = _NMManager.DeactivateConnection(cpath)
-	return
-}
-func (this *Manager) getActiveConnectionByUuid(uuid string) (cpath dbus.ObjectPath) {
-	for _, path := range _NMManager.ActiveConnections.Get() {
-		if conn, err := nm.NewActiveConnection(NMDest, path); err == nil {
-			if conn.Uuid.Get() == uuid {
-				cpath = path
-			}
-		}
-	}
-	return
 }
