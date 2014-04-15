@@ -65,7 +65,7 @@ func NewConnectionSessionByCreate(connectionType string) (s *ConnectionSession, 
 }
 
 func NewConnectionSessionByOpen(uuid string) (s *ConnectionSession, err error) {
-	coreObjPath, err := NMSettings.GetConnectionByUuid(uuid)
+	coreObjPath, err := nmGetConnectionByUuid(uuid)
 	if err != nil {
 		return
 	}

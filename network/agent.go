@@ -2,7 +2,6 @@ package main
 
 import "dlib/dbus"
 import "time"
-import nm "dbus/org/freedesktop/networkmanager"
 
 type mapKey struct {
 	path dbus.ObjectPath
@@ -132,7 +131,7 @@ func newAgent(identify string) *Agent {
 
 	dbus.InstallOnSystem(c)
 
-	if manager, err := nm.NewAgentManager(NMDest, "/org/freedesktop/NetworkManager/AgentManager"); err != nil {
+	if manager, err := nmNewAgentManager(); err != nil {
 		panic(err)
 	} else {
 		manager.Register("com.deepin.daemon.Network.Agent")

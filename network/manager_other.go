@@ -2,25 +2,15 @@ package main
 
 import "fmt"
 import "dlib/dbus"
-import nm "dbus/org/freedesktop/networkmanager"
 
-type ActiveConnection struct {
-	Interface    string
-	HWAddress    string
-	IPAddress    string
-	SubnetMask   string
-	RouteAddress string
-	Speed        string
-}
-
-// TODO
+// TODO remove
 func parseIP4address(v uint32) string {
 	Logger.Debug("Parseip:", v)
 	return fmt.Sprintf("%d.%d.%d.%d", byte(v), byte(v>>8), byte(v>>16), byte(v>>24))
 }
 
 func parseDHCP4(path dbus.ObjectPath) (string, string, string) {
-	dhcp4, err := nm.NewDHCP4Config(NMDest, path)
+	dhcp4, err := nmNewDHCP4Config(path)
 	if err != nil {
 		panic(err)
 	}

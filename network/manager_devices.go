@@ -28,7 +28,7 @@ func (m *Manager) DisconnectDevice(devPath dbus.ObjectPath) (err error) {
 
 // TODO remove
 // func (m *Manager) DisconnectDevice(path dbus.ObjectPath) error {
-// 	if dev, err := nm.NewDevice(NMDest, path); err != nil {
+// 	if dev, err := nmNewDevice(path); err != nil {
 // 		return err
 // 	} else {
 // 		dev.Disconnect()
@@ -51,7 +51,7 @@ func (m *Manager) initDeviceManage() {
 	NMManager.ConnectDeviceRemoved(func(path dbus.ObjectPath) {
 		m.handleDeviceChanged(OpRemoved, path)
 	})
-	devs, err := NMManager.GetDevices()
+	devs, err := nmGetDevices()
 	if err != nil {
 		panic(err)
 	}
@@ -79,7 +79,7 @@ func (m *Manager) addWirelessDevice(dev *nm.Device) {
 	})
 
 	// connect signal AccessPointAdded() and AccessPointRemoved()
-	if devWireless, err := nm.NewDeviceWireless(NMDest, dev.Path); err == nil {
+	if devWireless, err := nmNewDeviceWireless(dev.Path); err == nil {
 		devWireless.ConnectAccessPointAdded(func(apPath dbus.ObjectPath) {
 			if m.AccessPointAdded != nil {
 				if ap, err := NewAccessPoint(apPath); err == nil {
@@ -152,7 +152,7 @@ func (m *Manager) handleDeviceChanged(operation int32, path dbus.ObjectPath) {
 	Logger.Debugf("handleDeviceChanged: operation %d, path %s", operation, path)
 	switch operation {
 	case OpAdded:
-		dev, err := nm.NewDevice(NMDest, path)
+		dev, err := nmNewDevice(path)
 		if err != nil {
 			panic(err)
 		}
@@ -179,7 +179,7 @@ func (m *Manager) handleDeviceChanged(operation int32, path dbus.ObjectPath) {
 
 // GetAccessPoints return all access point's dbus path of target device.
 func (m *Manager) GetAccessPoints(path dbus.ObjectPath) (aps []dbus.ObjectPath, err error) {
-	dev, err := nm.NewDeviceWireless(NMDest, path)
+	dev, err := nmNewDeviceWireless(path)
 	if err != nil {
 		return
 	}
@@ -196,14 +196,14 @@ func (m *Manager) GetAccessPointProperty(apPath dbus.ObjectPath) (ap AccessPoint
 func (m *Manager) getDeviceAddress(devPath dbus.ObjectPath, devType uint32) string {
 	switch devType {
 	case NM_DEVICE_TYPE_ETHERNET:
-		dev, err := nm.NewDeviceWired(NMDest, devPath)
+		dev, err := nmNewDeviceWired(devPath)
 		if err != nil {
 			panic(err)
 		}
 		defer func() { nm.DestroyDeviceWired(dev) }()
 		return dev.HwAddress.Get()
 	case NM_DEVICE_TYPE_WIFI:
-		dev, err := nm.NewDeviceWireless(NMDest, devPath)
+		dev, err := nmNewDeviceWireless(devPath)
 		if err != nil {
 			panic(err)
 		}

@@ -6,6 +6,15 @@ import "fmt"
 
 type _ConnectionData map[string]map[string]dbus.Variant
 
+type ActiveConnection struct {
+	Interface    string
+	HWAddress    string
+	IPAddress    string
+	SubnetMask   string
+	RouteAddress string
+	Speed        string
+}
+
 func (m *Manager) initConnectionManage() {
 	m.VPNConnections = make([]string, 0)
 	m.WiredConnections = make([]string, 0)
@@ -13,12 +22,7 @@ func (m *Manager) initConnectionManage() {
 
 	m.initWiredConnections()
 
-	conns, err := NMSettings.ListConnections()
-	if err != nil {
-		Logger.Error(err)
-		return
-	}
-	for _, c := range conns {
+	for _, c := range nmGetConnectionList() {
 		m.handleConnectionChanged(OpAdded, c)
 	}
 	NMSettings.ConnectNewConnection(func(path dbus.ObjectPath) {
@@ -51,7 +55,7 @@ func (m *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPath)
 	Logger.Debugf("handleConnectionChanged: operation %d, path %s", operation, path)
 	switch operation {
 	case OpAdded:
-		nmConn, _ := nm.NewSettingsConnection(NMDest, path)
+		nmConn, _ := nmNewSettingsConnection(path)
 		nmConn.ConnectRemoved(func() {
 			m.handleConnectionChanged(OpRemoved, path)
 			nm.DestroySettingsConnection(nmConn)
@@ -137,7 +141,7 @@ func (m *Manager) GetConnectionByAccessPoint(apPath dbus.ObjectPath) (uuid strin
 	// }
 
 	// for _, cpath := range conns {
-	// 	if nmConn, err := nm.NewSettingsConnection(NMDest, cpath); err == nil {
+	// 	if nmConn, err := nmNewSettingsConnection(cpath); err == nil {
 	// 		if cdata, err := nmConn.GetSettings(); err == nil {
 	// 			if isSettingWirelessSsidExists(cdata) && string(getSettingWirelessSsid(cdata)) == string(ap.Ssid.Get()) {
 	// 				uuid = getSettingConnectionUuid(cdata)
@@ -151,7 +155,7 @@ func (m *Manager) GetConnectionByAccessPoint(apPath dbus.ObjectPath) (uuid strin
 	// TODO remove
 	// for _, conUuid := range m.WirelessConnections {
 	// 	if cpath, err := NMSettings.GetConnectionByUuid(conUuid); err == nil {
-	// 		if nmConn, err := nm.NewSettingsConnection(NMDest, cpath); err == nil {
+	// 		if nmConn, err := nmNewSettingsConnection(cpath); err == nil {
 	// 			if cdata, err := nmConn.GetSettings(); err == nil {
 	// 				if string(getSettingWirelessSsid(cdata)) == string(ap.Ssid.Get()) { // TODO
 	// 					Logger.Debug("connection is already exists", apPath, conUuid)
@@ -200,16 +204,16 @@ func (m *Manager) GetActiveConnection(devPath dbus.ObjectPath) (ret *ActiveConne
 			err = x.(error)
 		}
 	}()
-	dev, err := nm.NewDevice(NMDest, devPath)
+	dev, err := nmNewDevice(devPath)
 	if err != nil {
 		return nil, err
 	}
-	ac, err := nm.NewActiveConnection(NMDest, dev.ActiveConnection.Get())
+	ac, err := nmNewActiveConnection(dev.ActiveConnection.Get())
 	if err != nil {
 		return nil, err
 	}
 	name := ""
-	if c, err := nm.NewSettingsConnection(NMDest, ac.Connection.Get()); err != nil {
+	if c, err := nmNewSettingsConnection(ac.Connection.Get()); err != nil {
 		return nil, err
 	} else {
 		if cdata, err := c.GetSettings(); err == nil {
@@ -227,12 +231,12 @@ func (m *Manager) GetActiveConnection(devPath dbus.ObjectPath) (ret *ActiveConne
 	var speed = "-"
 	switch dev.DeviceType.Get() {
 	case NM_DEVICE_TYPE_ETHERNET:
-		_dev, _ := nm.NewDeviceWired(NMDest, devPath)
+		_dev, _ := nmNewDeviceWired(devPath)
 		macaddress = _dev.HwAddress.Get()
 		speed = fmt.Sprintf("%d", _dev.Speed.Get())
 		nm.DestroyDeviceWired(_dev)
 	case NM_DEVICE_TYPE_WIFI:
-		_dev, _ := nm.NewDeviceWireless(NMDest, devPath)
+		_dev, _ := nmNewDeviceWireless(devPath)
 		macaddress = _dev.HwAddress.Get()
 		speed = fmt.Sprintf("%d", _dev.Bitrate.Get()/1024)
 		nm.DestroyDeviceWireless(_dev)
@@ -271,10 +275,8 @@ func (m *Manager) EditConnection(uuid string) (session *ConnectionSession, err e
 	// if is read only connection(default system connection created by
 	// network manager), create a new connection
 	// TODO
-	cpath, ok := nmGetConnectionByUuid(uuid)
-	if !ok {
-		err = fmt.Errorf("not found connection with uuid=%s", uuid)
-		Logger.Error(err)
+	cpath, err := nmGetConnectionByUuid(uuid)
+	if err != nil {
 		return
 	}
 	connData, err := nmGetConnectionData(cpath)
@@ -305,11 +307,11 @@ func (m *Manager) EditConnection(uuid string) (session *ConnectionSession, err e
 // DeleteConnection delete a connection through uuid.
 func (m *Manager) DeleteConnection(uuid string) (err error) {
 	//TODO: remove(uninstall dbus) editing connection_session object
-	cpath, err := NMSettings.GetConnectionByUuid(uuid)
+	cpath, err := nmGetConnectionByUuid(uuid)
 	if err != nil {
-		return err
+		return
 	}
-	conn, err := nm.NewSettingsConnection(NMDest, cpath)
+	conn, err := nmNewSettingsConnection(cpath)
 	if err != nil {
 		return err
 	}
@@ -318,7 +320,7 @@ func (m *Manager) DeleteConnection(uuid string) (err error) {
 
 // GetConnectionByUuid return connection setting dbus path by uuid
 func (m *Manager) GetConnectionByUuid(uuid string) (cpath dbus.ObjectPath, err error) {
-	cpath, _ = nmGetConnectionByUuid(uuid)
+	cpath, err = nmGetConnectionByUuid(uuid)
 	return
 }
 
@@ -357,9 +359,8 @@ func (m *Manager) ActivateConnectionForAccessPoint(apPath, devPath dbus.ObjectPa
 
 func (m *Manager) ActivateConnection(uuid string, devPath dbus.ObjectPath) (err error) {
 	Logger.Debugf("ActivateConnection: uuid=%s, devPath=%s", uuid, devPath)
-	cpath, err := NMSettings.GetConnectionByUuid(uuid)
+	cpath, err := nmGetConnectionByUuid(uuid)
 	if err != nil {
-		Logger.Error(err)
 		return
 	}
 
@@ -392,6 +393,6 @@ func (m *Manager) DeactivateConnection(uuid string) (err error) {
 		return
 	}
 	Logger.Debug("DeactivateConnection:", uuid, apath)
-	err = NMManager.DeactivateConnection(apath)
+	err = nmDeactivateConnection(apath)
 	return
 }

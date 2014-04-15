@@ -12,6 +12,24 @@ func nmNewDevice(devPath dbus.ObjectPath) (dev *nm.Device, err error) {
 	return
 }
 
+func nmNewDeviceWired(devPath dbus.ObjectPath) (dev *nm.DeviceWired, err error) {
+	dev, err = nm.NewDeviceWired(NMDest, devPath)
+	if err != nil {
+		Logger.Error(err)
+		return
+	}
+	return
+}
+
+func nmNewDeviceWireless(devPath dbus.ObjectPath) (dev *nm.DeviceWireless, err error) {
+	dev, err = nm.NewDeviceWireless(NMDest, devPath)
+	if err != nil {
+		Logger.Error(err)
+		return
+	}
+	return
+}
+
 func nmNewAccessPoint(apPath dbus.ObjectPath) (ap *nm.AccessPoint, err error) {
 	ap, err = nm.NewAccessPoint(NMDest, apPath)
 	if err != nil {
@@ -23,6 +41,24 @@ func nmNewAccessPoint(apPath dbus.ObjectPath) (ap *nm.AccessPoint, err error) {
 
 func nmNewActiveConnection(apath dbus.ObjectPath) (ac *nm.ActiveConnection, err error) {
 	ac, err = nm.NewActiveConnection(NMDest, apath)
+	if err != nil {
+		Logger.Error(err)
+		return
+	}
+	return
+}
+
+func nmNewAgentManager() (manager *nm.AgentManager, err error) {
+	manager, err = nm.NewAgentManager(NMDest, "/org/freedesktop/NetworkManager/AgentManager")
+	if err != nil {
+		Logger.Error(err)
+		return
+	}
+	return
+}
+
+func nmNewDHCP4Config(path dbus.ObjectPath) (dhcp4 *nm.DHCP4Config, err error) {
+	dhcp4, err = nm.NewDHCP4Config(NMDest, path)
 	if err != nil {
 		Logger.Error(err)
 		return
@@ -69,6 +105,15 @@ func nmAddAndActivateConnection(data _ConnectionData, devPath dbus.ObjectPath) (
 func nmActivateConnection(cpath, devPath dbus.ObjectPath) (apath dbus.ObjectPath, err error) {
 	spath := dbus.ObjectPath("/")
 	apath, err = NMManager.ActivateConnection(cpath, devPath, spath)
+	if err != nil {
+		Logger.Error(err)
+		return
+	}
+	return
+}
+
+func nmDeactivateConnection(apath dbus.ObjectPath) (err error) {
+	err = NMManager.DeactivateConnection(apath)
 	if err != nil {
 		Logger.Error(err)
 		return
@@ -156,18 +201,12 @@ func nmGetConnectionById(id string) (cpath dbus.ObjectPath, ok bool) {
 	return
 }
 
-func nmGetConnectionByUuid(uuid string) (cpath dbus.ObjectPath, ok bool) {
-	for _, cpath = range nmGetConnectionList() {
-		data, err := nmGetConnectionData(cpath)
-		if err != nil {
-			continue
-		}
-		if getSettingConnectionUuid(data) == uuid {
-			ok = true
-			return
-		}
+func nmGetConnectionByUuid(uuid string) (cpath dbus.ObjectPath, err error) {
+	cpath, err = NMSettings.GetConnectionByUuid(uuid)
+	if err != nil {
+		Logger.Error(err)
+		return
 	}
-	ok = false
 	return
 }
 
