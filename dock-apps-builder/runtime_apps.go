@@ -142,6 +142,9 @@ func (app *RuntimeApp) buildMenu() {
 		"_Close All", // TODO: i18n
 		func() {
 			LOGGER.Warning("Close All")
+			for xid := range app.xids {
+				ewmh.CloseWindow(XU, xid)
+			}
 		},
 		true,
 	)
