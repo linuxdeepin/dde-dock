@@ -1,14 +1,8 @@
 package main
 
 import (
-	"math/rand"
 	"strings"
-	"time"
 )
-
-func workaroundDelay() {
-	<-time.After(time.Millisecond * time.Duration(rand.Int31n(100)))
-}
 
 func stringInSlice(a string, list []string) bool {
 	for _, b := range list {

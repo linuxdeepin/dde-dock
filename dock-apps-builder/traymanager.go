@@ -14,13 +14,7 @@ import (
 	"github.com/BurntSushi/xgbutil/xgraphics"
 	"github.com/BurntSushi/xgbutil/xprop"
 	"github.com/BurntSushi/xgbutil/xwindow"
-	"math/rand"
-	"time"
 )
-
-func workaroundDelay() {
-	<-time.After(time.Millisecond * time.Duration(rand.Int31n(100)))
-}
 
 var (
 	TrayXU, _ = xgbutil.NewConn()
@@ -79,8 +73,6 @@ func (m *TrayManager) addTrayIcon(xid xproto.Window) {
 	m.nameInfo[xid] = name
 	m.notifyInfo[xid] = true
 	if m.Added != nil {
-		//NODE: c-js-dbus's throughout is very limit, workaround it at this moment.
-		workaroundDelay()
 		m.Added(uint32(xid))
 	}
 }
@@ -90,7 +82,6 @@ func (m *TrayManager) removeTrayIcon(xid xproto.Window) {
 	delete(m.notifyInfo, xid)
 	delete(m.md5Info, xid)
 	if m.Removed != nil {
-		workaroundDelay()
 		m.Removed(uint32(xid))
 	}
 	var newIcons []uint32
@@ -115,7 +106,6 @@ func (m *TrayManager) handleTrayDamage(xid xproto.Window) {
 		if md5 := icon2md5(xid); !md5Equal(m.md5Info[xid], md5) {
 			m.md5Info[xid] = md5
 			if m.Changed != nil {
-				workaroundDelay()
 				m.Changed(uint32(xid))
 			}
 			LOGGER.Infof("handleTrayDamage: %s(%d) changed (%v)", m.nameInfo[xid], xid, md5)

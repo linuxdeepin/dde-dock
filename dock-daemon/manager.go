@@ -106,7 +106,6 @@ func (m *Manager) registerEntry(name string) {
 
 	// send signal
 	if m.Added != nil {
-		workaroundDelay()
 		m.Added(dbus.ObjectPath(entry.GetDBusInfo().ObjectPath))
 	}
 
@@ -152,8 +151,6 @@ func (m *Manager) unregisterEntry(name string) {
 
 	// send signal
 	if m.Removed != nil {
-		workaroundDelay()
-
 		m.Removed(entry.Id)
 		// m.Removed(dbus.ObjectPath(entry.GetDBusInfo().ObjectPath))
 	}
