@@ -277,8 +277,8 @@ func (d *LauncherDBus) GetAppId(path string) string {
 func (d *LauncherDBus) listenBackgroundChanged() {
 	d.background.init()
 	go func(d *LauncherDBus) {
+		logger.Info("listen background changed")
 		for {
-			logger.Info("listen background changed")
 			select {
 			case <-d.background.changed:
 				d.BackgroundChanged(d.background.currentBg())

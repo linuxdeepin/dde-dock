@@ -4,6 +4,7 @@ import (
 	"dbus/com/deepin/api/graphic"
 	"dlib/gio-2.0"
 	"fmt"
+	"net/url"
 )
 
 const (
@@ -44,12 +45,18 @@ func (b *Background) currentBg() string {
 	// -1: invalid pict passed, return default pict
 	//  0: blur pic
 	//  1: original pic
-	status, blurPath, err := b.imgHandler.BackgroundBlurPictPath(pict, "", 30, 1)
+	status, blurUri, err := b.imgHandler.BackgroundBlurPictPath(pict, "", 30, 1)
 	if err != nil {
 		logger.Info("BackgroundBlurPictPath:", err)
 		return DefaultBackgroundImage
 	}
-
-	fmt.Printf("status:%d, pict: %s\n", status, blurPath)
-	return blurPath
+	encodedBlurUri := blurUri
+	u, err := url.Parse(blurUri)
+	if err != nil {
+		logger.Error("parse uri failed:", err)
+	} else {
+		encodedBlurUri = u.String()
+	}
+	logger.Infof("status:%d, pict: %s\n", status, encodedBlurUri)
+	return encodedBlurUri
 }
