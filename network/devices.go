@@ -276,6 +276,25 @@ func (this *Manager) getDeviceAddress(devPath dbus.ObjectPath, devType uint32) s
 	return ""
 }
 
+// func (this *Manager) AddAndActivateConnection(uuid string, dev dbus.ObjectPath) (err error) {
+// 	LOGGER.Debugf("AddAndActivateConnection: uuid=%s, devPath=%s", uuid, dev)
+// 	// cpath, err := _NMSettings.GetConnectionByUuid(uuid)
+// 	// if err != nil {
+// 	// 	LOGGER.Error(err)
+// 	// 	return
+// 	// }
+// 	// TODO, ap path, "/"
+// 	spath := dbus.ObjectPath("/")
+// 	// _, err = _NMManager.ActivateConnection(cpath, dev, spath)
+// 	_, err = _NMManager.AddAndActivateConnection
+// 	// ActivateConnection(cpath, dev, spath)
+// 	if err != nil {
+// 		LOGGER.Error(err)
+// 	}
+
+// 	return
+// }
+
 func (this *Manager) ActivateConnection(uuid string, dev dbus.ObjectPath) (err error) {
 	LOGGER.Debugf("ActivateConnection: uuid=%s, devPath=%s", uuid, dev)
 	cpath, err := _NMSettings.GetConnectionByUuid(uuid)
@@ -283,6 +302,24 @@ func (this *Manager) ActivateConnection(uuid string, dev dbus.ObjectPath) (err e
 		LOGGER.Error(err)
 		return
 	}
+
+	// TODO fixme
+	// if only one access point connection, do nothing for it will be
+	// activate by network manager automatic
+	if nmGetConnectionType(cpath) == typeWireless {
+		count := 0
+		for _, tmpcpath := range nmGetConnectionList() {
+			ctype := nmGetConnectionType(tmpcpath)
+			if ctype == typeWireless {
+				count++
+			}
+		}
+		if count <= 1 {
+			LOGGER.Debug("only one access point connection, will be activate by network manager automatic")
+			return
+		}
+	}
+
 	// TODO, ap path, "/"
 	spath := dbus.ObjectPath("/")
 	_, err = _NMManager.ActivateConnection(cpath, dev, spath)

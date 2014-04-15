@@ -49,6 +49,18 @@ func nmGetConnectionUuid(cpath dbus.ObjectPath) (uuid string) {
 	return
 }
 
+func nmGetConnectionType(cpath dbus.ObjectPath) (ctype string) {
+	data, err := nmGetConnectionData(cpath)
+	if err != nil {
+		return
+	}
+	ctype = getSettingConnectionType(data)
+	if len(ctype) == 0 {
+		LOGGER.Error("get type of connection failed, type is empty")
+	}
+	return
+}
+
 func nmGetConnectionList() (connections []dbus.ObjectPath) {
 	connections, err := _NMSettings.ListConnections()
 	if err != nil {
