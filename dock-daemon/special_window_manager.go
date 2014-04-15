@@ -22,12 +22,22 @@ const (
 )
 
 type SpecialWindowManager struct {
-	RequireDockHide func()
-	RequireDockShow func()
+	RequireDockHide              func()
+	RequireDockShow              func()
+	RequireDockHideWithAnimation func()
+	RequireDockShowWithAnimation func()
 }
 
 func NewSpecialWindowManager() *SpecialWindowManager {
 	return &SpecialWindowManager{}
+}
+
+func (m *SpecialWindowManager) ShowDockWithAnimation() {
+	m.RequireDockShowWithAnimation()
+}
+
+func (m *SpecialWindowManager) HideDockWithAnimation() {
+	m.RequireDockHideWithAnimation()
 }
 
 func (m *SpecialWindowManager) listenRootWindow() {
@@ -41,9 +51,9 @@ func (m *SpecialWindowManager) listenRootWindow() {
 				if appId == DDELauncher {
 					logger.Info("active window is launcher")
 					// TODO: hide dock
-					if m.RequireDockHide != nil {
-						m.RequireDockHide()
-					}
+					// if m.RequireDockHide != nil {
+					// 	m.RequireDockHide()
+					// }
 				} else {
 					logger.Info("active window is not launcher")
 					LAUNCHER, err :=
@@ -56,10 +66,10 @@ func (m *SpecialWindowManager) listenRootWindow() {
 					}
 
 					// TODO: show dock
-					if m.RequireDockShow != nil &&
-						lastActive == DDELauncher {
-						m.RequireDockShow()
-					}
+					// if m.RequireDockShow != nil &&
+					// 	lastActive == DDELauncher {
+					// 	m.RequireDockShow()
+					// }
 				}
 				lastActive = appId
 			}
