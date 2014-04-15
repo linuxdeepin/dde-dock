@@ -38,6 +38,15 @@ func nmGetDevices() (devPaths []dbus.ObjectPath, err error) {
 	return
 }
 
+func nmNewSettingsConnection(cpath dbus.ObjectPath) (conn *nm.SettingsConnection, err error) {
+	conn, err = nm.NewSettingsConnection(NMDest, cpath)
+	if err != nil {
+		Logger.Error(err)
+		return
+	}
+	return
+}
+
 func nmGetDeviceInterface(devPath dbus.ObjectPath) (devInterface string) {
 	dev, err := nmNewDevice(devPath)
 	if err != nil {

@@ -36,7 +36,7 @@ func NewAccessPoint(apPath dbus.ObjectPath) (ap AccessPoint, err error) {
 		return 0
 	}
 
-	nmAp, err := nm.NewAccessPoint(NMDest, apPath)
+	nmAp, err := nmNewAccessPoint(apPath)
 	if err != nil {
 		return
 	}
