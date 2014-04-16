@@ -56,7 +56,7 @@ func (m *ClientManager) CurrentActiveWindow() uint32 {
 
 // maybe move to apps-builder
 func (m *ClientManager) ActiveWindow(xid uint32) bool {
-	err := ewmh.ClientEvent(XU, xproto.Window(xid), "_NET_ACTIVE_WINDOW", 2)
+	err := ewmh.ActiveWindowReq(XU, xproto.Window(xid))
 	if err != nil {
 		logger.Error("Actice window failed:", err)
 		return false
@@ -66,7 +66,7 @@ func (m *ClientManager) ActiveWindow(xid uint32) bool {
 
 // maybe move to apps-builder
 func (m *ClientManager) CloseWindow(xid uint32) bool {
-	err := ewmh.ClientEvent(XU, xproto.Window(xid), "_NET_CLOSE_WINDOW")
+	err := ewmh.CloseWindow(XU, xproto.Window(xid))
 	if err != nil {
 		logger.Error("Actice window failed:", err)
 		return false
