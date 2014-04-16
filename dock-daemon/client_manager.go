@@ -9,44 +9,83 @@ import (
 	"github.com/BurntSushi/xgbutil/xevent"
 	"github.com/BurntSushi/xgbutil/xprop"
 	"github.com/BurntSushi/xgbutil/xwindow"
+	"os/exec"
 )
 
 var (
-	XU, _                        = xgbutil.NewConn()
-	_NET_ACTIVE_WINDOW, _        = xprop.Atm(XU, "_NET_ACTIVE_WINDOW")
-	lastActive            string = ""
+	XU, _                                 = xgbutil.NewConn()
+	_NET_ACTIVE_WINDOW, _                 = xprop.Atm(XU, "_NET_ACTIVE_WINDOW")
+	_NET_SHOWING_DESKTOP, _               = xprop.Atm(XU, "_NET_SHOWING_DESKTOP")
+	lastActive              string        = ""
+	activeWindow            xproto.Window = 0
 )
 
 const (
 	DDELauncher string = "dde-launcher"
 )
 
-type SpecialWindowManager struct {
-	RequireDockHide              func()
-	RequireDockShow              func()
+type ClientManager struct {
+	RequireDockHide func()
+	RequireDockShow func()
+
 	RequireDockHideWithAnimation func()
 	RequireDockShowWithAnimation func()
+
+	RequireDockHideWithoutChangeWorkarea func()
+	RequireDockShowWithoutChangeWorkarea func()
+
+	ActiveWindowChanged   func(xid uint32)
+	ShowingDesktopChanged func()
 }
 
-func NewSpecialWindowManager() *SpecialWindowManager {
-	return &SpecialWindowManager{}
+func NewClientManager() *ClientManager {
+	return &ClientManager{}
 }
 
-func (m *SpecialWindowManager) ShowDockWithAnimation() {
+func (m *ClientManager) ShowDockWithAnimation() {
 	m.RequireDockShowWithAnimation()
 }
 
-func (m *SpecialWindowManager) HideDockWithAnimation() {
+func (m *ClientManager) HideDockWithAnimation() {
 	m.RequireDockHideWithAnimation()
 }
 
-func (m *SpecialWindowManager) listenRootWindow() {
+func (m *ClientManager) CurrentActiveWindow() uint32 {
+	return uint32(activeWindow)
+}
+
+// maybe move to apps-builder
+func (m *ClientManager) ActiveWindow(xid uint32) bool {
+	err := ewmh.ClientEvent(XU, xproto.Window(xid), "_NET_ACTIVE_WINDOW", 2)
+	if err != nil {
+		logger.Error("Actice window failed:", err)
+		return false
+	}
+	return true
+}
+
+// maybe move to apps-builder
+func (m *ClientManager) CloseWindow(xid uint32) bool {
+	err := ewmh.ClientEvent(XU, xproto.Window(xid), "_NET_CLOSE_WINDOW")
+	if err != nil {
+		logger.Error("Actice window failed:", err)
+		return false
+	}
+	return true
+}
+
+func (m *ClientManager) ToggleShowDesktop() {
+	exec.Command("/usr/lib/deepin-daemon/desktop-toggle").Run()
+}
+
+func (m *ClientManager) listenRootWindow() {
 	xwindow.New(XU, XU.RootWin()).Listen(xproto.EventMaskPropertyChange)
 	xevent.PropertyNotifyFun(func(XU *xgbutil.XUtil, ev xevent.PropertyNotifyEvent) {
 		switch ev.Atom {
 		case _NET_ACTIVE_WINDOW:
-			if activedWindow, err := ewmh.ActiveWindowGet(XU); err == nil {
-				appId := find_app_id_by_xid(activedWindow)
+			var err error
+			if activeWindow, err = ewmh.ActiveWindowGet(XU); err == nil {
+				appId := find_app_id_by_xid(activeWindow)
 				logger.Info("current active window:", appId)
 				if appId == DDELauncher {
 					logger.Info("active window is launcher")
@@ -72,7 +111,10 @@ func (m *SpecialWindowManager) listenRootWindow() {
 					// }
 				}
 				lastActive = appId
+				m.ActiveWindowChanged(uint32(activeWindow))
 			}
+		case _NET_SHOWING_DESKTOP:
+			m.ShowingDesktopChanged()
 		}
 	}).Connect(XU, XU.RootWin())
 
