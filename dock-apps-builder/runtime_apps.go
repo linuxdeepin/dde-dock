@@ -496,6 +496,9 @@ func (app *RuntimeApp) attachXid(xid xproto.Window) {
 	xwin.Listen(xproto.EventMaskPropertyChange | xproto.EventMaskStructureNotify | xproto.EventMaskVisibilityChange)
 	winfo := &WindowInfo{Xid: xid}
 	winfo.Title, _ = ewmh.WmNameGet(XU, xid)
+	xevent.UnmapNotifyFun(func(XU *xgbutil.XUtil, ev xevent.UnmapNotifyEvent) {
+		app.detachXid(xid)
+	}).Connect(XU, xid)
 	xevent.DestroyNotifyFun(func(XU *xgbutil.XUtil, ev xevent.DestroyNotifyEvent) {
 		app.detachXid(xid)
 	}).Connect(XU, xid)
