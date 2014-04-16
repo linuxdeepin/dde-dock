@@ -121,8 +121,13 @@ func nmDeactivateConnection(apath dbus.ObjectPath) (err error) {
 	return
 }
 
-func nmGetActiveConnections() (apath []dbus.ObjectPath) {
-	apath = NMManager.ActiveConnections.Get()
+func nmGetActiveConnections() (apaths []dbus.ObjectPath) {
+	apaths = NMManager.ActiveConnections.Get()
+	return
+}
+
+func nmGetState() (state uint32) {
+	state = NMManager.State.Get()
 	return
 }
 

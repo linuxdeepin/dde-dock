@@ -26,15 +26,15 @@ type Manager struct {
 	State             uint32        // networking state
 
 	//update by devices.go
-	WirelessDevices []*Device // TODO is "Device" struct still needed?
 	WiredDevices    []*Device
+	WirelessDevices []*Device // TODO is "Device" struct still needed?
 	OtherDevices    []*Device
 
 	//update by connections.go
 	WiredConnections    []string
 	WirelessConnections []string
 	VPNConnections      []string
-	uuid2connectionType map[string]string // TODO
+	uuid2connectionType map[string]string // TODO remove
 
 	//signals
 	NeedSecrets                  func(string, string, string)
@@ -80,20 +80,4 @@ func (m *Manager) initManager() {
 	})
 
 	m.agent = newAgent("org.snyh.agent")
-}
-
-func (m *Manager) updatePropActiveConnections() {
-	m.ActiveConnections = make([]string, 0)
-	for _, cpath := range NMManager.ActiveConnections.Get() {
-		if conn, err := nmNewActiveConnection(cpath); err == nil {
-			m.ActiveConnections = append(m.ActiveConnections, conn.Uuid.Get())
-			Logger.Debugf("ActiveConnections, uuid=%s, state=%d", conn.Uuid.Get(), conn.State.Get()) // TODO test
-		}
-	}
-	dbus.NotifyChange(m, "ActiveConnections")
-}
-
-func (m *Manager) updatePropState() {
-	m.State = NMManager.State.Get()
-	dbus.NotifyChange(m, "State")
 }

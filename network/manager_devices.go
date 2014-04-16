@@ -60,6 +60,25 @@ func (m *Manager) initDeviceManage() {
 	}
 }
 
+func (m *Manager) addWiredDevice(dev *nm.Device) {
+	wiredDevice := NewDevice(dev)
+	if isDeviceExists(m.WiredDevices, wiredDevice) {
+		// device maybe repeat added
+		return
+	}
+
+	// connect signal DeviceStateChanged()
+	dev.ConnectStateChanged(func(newState uint32, old_state uint32, reason uint32) {
+		wiredDevice.State = newState
+		if m.DeviceStateChanged != nil {
+			m.DeviceStateChanged(string(dev.Path), newState)
+		}
+		// TODO remove
+		m.updatePropWiredDevices()
+	})
+	m.WiredDevices = append(m.WiredDevices, wiredDevice)
+	m.updatePropWiredDevices()
+}
 func (m *Manager) addWirelessDevice(dev *nm.Device) {
 	wirelessDevice := NewDevice(dev)
 	if isDeviceExists(m.WirelessDevices, wirelessDevice) {
@@ -75,7 +94,7 @@ func (m *Manager) addWirelessDevice(dev *nm.Device) {
 			m.DeviceStateChanged(string(dev.Path), newState)
 		}
 		// TODO remove
-		dbus.NotifyChange(m, "WirelessDevices")
+		m.updatePropWirelessDevices()
 	})
 
 	// connect signal AccessPointAdded() and AccessPointRemoved()
@@ -97,26 +116,7 @@ func (m *Manager) addWirelessDevice(dev *nm.Device) {
 	}
 
 	m.WirelessDevices = append(m.WirelessDevices, wirelessDevice)
-	dbus.NotifyChange(m, "WirelessDevices")
-}
-func (m *Manager) addWiredDevice(dev *nm.Device) {
-	wiredDevice := NewDevice(dev)
-	if isDeviceExists(m.WiredDevices, wiredDevice) {
-		// device maybe repeat added
-		return
-	}
-
-	// connect signal DeviceStateChanged()
-	dev.ConnectStateChanged(func(newState uint32, old_state uint32, reason uint32) {
-		wiredDevice.State = newState
-		if m.DeviceStateChanged != nil {
-			m.DeviceStateChanged(string(dev.Path), newState)
-		}
-		// TODO remove
-		dbus.NotifyChange(m, "WirelessDevices")
-	})
-	m.WiredDevices = append(m.WiredDevices, wiredDevice)
-	dbus.NotifyChange(m, "WiredDevices")
+	m.updatePropWirelessDevices()
 }
 func (m *Manager) addOtherDevice(dev *nm.Device) {
 	m.OtherDevices = append(m.OtherDevices, NewDevice(dev))
@@ -134,10 +134,10 @@ func (m *Manager) addOtherDevice(dev *nm.Device) {
 			m.DeviceStateChanged(string(dev.Path), newState)
 		}
 		// TODO remove
-		dbus.NotifyChange(m, "WirelessDevices")
+		m.updatePropOtherDevices()
 	})
 	m.OtherDevices = append(m.OtherDevices, otherDevice)
-	dbus.NotifyChange(m, "OtherDevices")
+	m.updatePropOtherDevices()
 }
 func isDeviceExists(devs []*Device, dev *Device) bool {
 	for _, d := range devs {
@@ -167,10 +167,10 @@ func (m *Manager) handleDeviceChanged(operation int32, path dbus.ObjectPath) {
 	case OpRemoved:
 		var removed bool
 		if m.WirelessDevices, removed = tryRemoveDevice(path, m.WirelessDevices); removed {
-			dbus.NotifyChange(m, "WirelessDevices")
+			m.updatePropWirelessDevices()
 			Logger.Debug("WirelessRemoved..")
 		} else if m.WiredDevices, removed = tryRemoveDevice(path, m.WiredDevices); removed {
-			dbus.NotifyChange(m, "WiredDevices")
+			m.updatePropWiredDevices()
 		}
 	default:
 		panic("Didn't support operation")

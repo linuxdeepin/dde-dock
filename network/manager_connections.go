@@ -20,7 +20,7 @@ func (m *Manager) initConnectionManage() {
 	m.WiredConnections = make([]string, 0)
 	m.WirelessConnections = make([]string, 0)
 
-	m.initWiredConnections()
+	m.updatePropWiredConnections()
 
 	for _, c := range nmGetConnectionList() {
 		m.handleConnectionChanged(OpAdded, c)
@@ -28,14 +28,6 @@ func (m *Manager) initConnectionManage() {
 	NMSettings.ConnectNewConnection(func(path dbus.ObjectPath) {
 		m.handleConnectionChanged(OpAdded, path)
 	})
-}
-
-// create connection for each wired device if not exists
-func (m *Manager) initWiredConnections() {
-	for _, wiredDev := range m.WiredDevices {
-		uuid := m.GetWiredConnectionUuid(wiredDev.Path)
-		m.WiredConnections = append(m.WiredConnections, uuid)
-	}
 }
 
 // GetWiredConnectionUuid return connection uuid for target wired device.
@@ -69,7 +61,7 @@ func (m *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPath)
 		switch getSettingConnectionType(cdata) {
 		case "802-11-wireless": // TODO
 			m.WirelessConnections = append(m.WirelessConnections, uuid)
-			dbus.NotifyChange(m, "WirelessConnections")
+			m.updatePropWirelessConnections()
 		case "802-3-ethernet": // wired connection will be treatment specially
 			// TODO remove
 			// m.WiredConnections = append(m.WiredConnections, uuid)
@@ -77,7 +69,7 @@ func (m *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPath)
 		case "pppoe":
 		case "vpn":
 			m.VPNConnections = append(m.VPNConnections, uuid)
-			dbus.NotifyChange(m, "VPNConnections")
+			m.updatePropVpnConnections()
 		case "cdma":
 		}
 	case OpRemoved:
