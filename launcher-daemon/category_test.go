@@ -18,18 +18,22 @@ func TestGetCategoryInfos(t *testing.T) {
 	}
 }
 
-func TestGetDeepinCategory(t *testing.T) {
-	a := gio.NewDesktopAppInfo("deepin-game-center.desktop")
+func testGetDeepinCategory(t *testing.T, name string, id CategoryId) {
+	a := gio.NewDesktopAppInfo(name)
 	if a == nil {
-		t.Error("cannot create deepin-game-center.desktop")
+		t.Error("cannot create", name)
 	}
 	defer a.Unref()
 
-	id, err := getDeepinCategory(a)
+	_id, err := getDeepinCategory(a)
 	if err != nil {
-		t.Error("get category id of deepin-game-center.desktop failed", err)
+		t.Error("get category id of", name, err)
 	}
-	if id != GamesID {
-		t.Error("deepin-game-center.desktop category id:", id)
+	if _id != id {
+		t.Error(name, "category id:", _id)
 	}
+}
+func TestGetDeepinCategory(t *testing.T) {
+	testGetDeepinCategory(t, "deepin-game-center.desktop", GamesID)
+	testGetDeepinCategory(t, "firefox.desktop", NetworkID)
 }
