@@ -9,6 +9,15 @@ import (
 )
 
 const (
+	HighPerformanceIdleTime    = 15 * 60
+	HighPerformanceSuspendTime = 0
+	BlancedIdleTime            = 10 * 60
+	BlancedSuspendTime         = 0
+	PowerSaverIdleTime         = 5 * 60
+	PowerSaverSuspendTime      = 15 * 60
+)
+
+const (
 	//sync with com.deepin.daemon.power.schema
 	PowerPlanCustom          = 0
 	PowerPlanPowerSaver      = 1
@@ -39,14 +48,14 @@ func (p *Power) setBatterySuspendDelay(delay int32) {
 func (p *Power) setBatteryPlan(plan int32) {
 	switch plan {
 	case PowerPlanHighPerformance:
-		p.setBatteryIdleDelay(0)
-		p.setBatterySuspendDelay(0)
+		p.setBatteryIdleDelay(HighPerformanceIdleTime)
+		p.setBatterySuspendDelay(HighPerformanceSuspendTime)
 	case PowerPlanBalanced:
-		p.setBatteryIdleDelay(600)
-		p.setBatterySuspendDelay(0)
+		p.setBatteryIdleDelay(BlancedIdleTime)
+		p.setBatterySuspendDelay(BlancedSuspendTime)
 	case PowerPlanPowerSaver:
-		p.setBatteryIdleDelay(300)
-		p.setBatterySuspendDelay(600)
+		p.setBatteryIdleDelay(PowerSaverIdleTime)
+		p.setBatterySuspendDelay(PowerSaverSuspendTime)
 	case PowerPlanCustom:
 		p.setBatteryIdleDelay(int32(p.coreSettings.GetInt("battery-idle-delay")))
 		p.setBatterySuspendDelay(int32(p.coreSettings.GetInt("battery-suspend-delay")))
@@ -76,14 +85,14 @@ func (p *Power) setLinePowerSuspendDelay(delay int32) {
 func (p *Power) setLinePowerPlan(plan int32) {
 	switch plan {
 	case PowerPlanHighPerformance:
-		p.setLinePowerIdleDelay(0)
-		p.setLinePowerSuspendDelay(0)
+		p.setLinePowerIdleDelay(HighPerformanceIdleTime)
+		p.setLinePowerSuspendDelay(HighPerformanceSuspendTime)
 	case PowerPlanBalanced:
-		p.setLinePowerIdleDelay(600)
-		p.setLinePowerSuspendDelay(0)
+		p.setLinePowerIdleDelay(BlancedIdleTime)
+		p.setLinePowerSuspendDelay(BlancedSuspendTime)
 	case PowerPlanPowerSaver:
-		p.setLinePowerIdleDelay(300)
-		p.setLinePowerSuspendDelay(600)
+		p.setLinePowerIdleDelay(PowerSaverIdleTime)
+		p.setLinePowerSuspendDelay(PowerSaverIdleTime)
 	case PowerPlanCustom:
 		p.setLinePowerIdleDelay(int32(p.coreSettings.GetInt("ac-idle-delay")))
 		p.setLinePowerSuspendDelay(int32(p.coreSettings.GetInt("ac-suspend-delay")))
@@ -133,7 +142,11 @@ func (p *Power) updatePlanInfo() {
 	info := fmt.Sprintf(`{
 		"PowerLine":{"Custom":[%d,%d], "PowerSaver":[300,600], "Balanced":[600,0],"HighPerformance":[0,0]},
 		"Battery":{"Custom":[%d,%d], "PowerSaver":[300,600], "Balanced":[600,0],"HighPerformance":[0,0]}
-	}`, p.LinePowerIdleDelay, p.LinePowerSuspendDelay, p.BatteryIdleDelay, p.BatterySuspendDelay)
+	}`, p.LinePowerIdleDelay, p.LinePowerSuspendDelay, PowerSaverIdleTime, PowerSaverSuspendTime,
+		BlancedIdleTime, BlancedSuspendTime, HighPerformanceIdleTime, HighPerformanceSuspendTime,
+		p.BatteryIdleDelay, p.BatterySuspendDelay, PowerSaverIdleTime, PowerSaverSuspendTime,
+		BlancedIdleTime, BlancedSuspendTime, HighPerformanceIdleTime, HighPerformanceSuspendTime,
+	)
 	p.setPropPlanInfo(info)
 }
 
