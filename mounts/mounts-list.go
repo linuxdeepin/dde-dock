@@ -347,11 +347,7 @@ func NewManager() *Manager {
 }
 
 func main() {
-        defer func() {
-                if err := recover(); err != nil {
-                        logObject.Fatalf("recover err: %s", err)
-                }
-        }()
+        defer logObject.EndTracing()
 
         if !dlib.UniqueOnSession(DISK_INFO_DEST) {
                 logObject.Warning("There already has an Mount daemon running.")

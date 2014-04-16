@@ -29,6 +29,7 @@ import (
 
 func main() {
 	logger := liblogger.NewLogger("Desktop Toggle")
+	defer logger.EndTracing()
 
 	X, err := xgbutil.NewConn()
 	if err != nil {

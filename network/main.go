@@ -9,16 +9,12 @@ import (
 
 var (
 	Logger   = logger.NewLogger("com.deepin.daemon.Network")
-	manager *Manager
+	manager  *Manager
 	argDebug bool
 )
 
 func main() {
-	defer func() {
-		if err := recover(); err != nil {
-			Logger.Fatal(err)
-		}
-	}()
+	defer Logger.EndTracing()
 
 	// configure logger
 	flag.BoolVar(&argDebug, "d", false, "debug mode")

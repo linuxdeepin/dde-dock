@@ -90,11 +90,7 @@ func updateThemeObj(pathNameMap map[string]PathInfo) {
 }
 
 func main() {
-        defer func() {
-                if err := recover(); err != nil {
-                        logObject.Fatalf("Recove error in main: %v", err)
-                }
-        }()
+        defer logObject.EndTracing()
 
         if !dlib.UniqueOnSession(MANAGER_DEST) {
                 logObject.Warning("There already has an Themes daemon running.")

@@ -1456,6 +1456,8 @@ func (client *Client) GetDBusInfo() dbus.DBusInfo {
 var audio *Audio
 
 func main() {
+    defer LOGGER.EndTracing()
+
     var err error
     if !dlib.UniqueOnSession("com.deepin.daemon.Audio") {
         LOGGER.Warning("There already has an Audio daemon running.")

@@ -19,11 +19,7 @@ var (
 )
 
 func main() {
-        defer func() {
-                if err := recover(); err != nil {
-                        logObject.Fatal("recover err:", err)
-                }
-        }()
+        defer logObject.EndTracing()
 
         if !dlib.UniqueOnSession(_EXT_DEV_NAME) {
                 logObject.Warning("There already has an InputDevices daemon running.")

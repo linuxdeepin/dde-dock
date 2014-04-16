@@ -46,11 +46,7 @@ func (media *MediaMount) GetDBusInfo() dbus.DBusInfo {
 }
 
 func main() {
-        defer func() {
-                if err := recover(); err != nil {
-                        logObject.Fatalf("Recover Error: %v", err)
-                }
-        }()
+        defer logObject.EndTracing()
 
         if !dlib.UniqueOnSession(_DEFAULT_APPS_DEST) {
                 logObject.Warning("There already has an Mime daemon running.")

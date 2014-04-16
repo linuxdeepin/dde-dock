@@ -235,6 +235,8 @@ func (dpy *Display) listener() {
 }
 
 func main() {
+	defer LOGGER.EndTracing()
+
 	if !dlib.UniqueOnSession("com.deepin.daemon.Display") {
 		LOGGER.Warning("Another com.deepin.daemon.Display is running")
 		return

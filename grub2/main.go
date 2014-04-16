@@ -40,11 +40,7 @@ var (
 )
 
 func main() {
-	defer func() {
-		if err := recover(); err != nil {
-			logger.Fatalf("%v", err)
-		}
-	}()
+	defer logger.EndTracing()
 
 	flag.BoolVar(&argDebug, "d", false, "debug mode")
 	flag.BoolVar(&argDebug, "debug", false, "debug mode")

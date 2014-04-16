@@ -10,6 +10,8 @@ import (
 var logger = liblogger.NewLogger("dde-daemon/dock-daemon")
 
 func main() {
+	defer logger.EndTracing()
+
 	if !dlib.UniqueOnSession("com.deepin.daemon.Dock") {
 		logger.Warning("Anohter com.deepin.daemon.Dock is running")
 		return

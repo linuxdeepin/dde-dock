@@ -103,11 +103,7 @@ func (op *Manager) EnableAllEdge() {
 }
 
 func main() {
-        defer func() {
-                if err := recover(); err != nil {
-                        logObj.Fatal("Recover Error: ", err)
-                }
-        }()
+        defer logObj.EndTracing()
 
         if !dlib.UniqueOnSession(ZONE_DEST) {
                 logObj.Warning("There already has an ZoneSettings daemon running.")

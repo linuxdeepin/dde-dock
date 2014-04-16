@@ -149,11 +149,7 @@ func Init() {
 }
 
 func main() {
-        defer func() {
-                if err := recover(); err != nil {
-                        logger.Fatal("recover error:%v\n", err)
-                }
-        }()
+        defer logger.EndTracing()
 
         if !dlib.UniqueOnSession(_DATE_TIME_DEST) {
                 logger.Warning("There already has an DateTime daemon running.")

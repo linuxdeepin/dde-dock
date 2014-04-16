@@ -32,11 +32,7 @@ var (
 )
 
 func main() {
-        defer func() {
-                if err := recover(); err != nil {
-                        logObj.Info("Recover Error: ", err)
-                }
-        }()
+        defer logObj.EndTracing()
 
         logObj.SetRestartCommand("/usr/lib/deepin-daemon/deepin-daemon")
         enableTouchPad()

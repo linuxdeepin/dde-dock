@@ -13,6 +13,8 @@ import (
 var logger *l.Logger = l.NewLogger("dde-daemon/launcher-daemon")
 
 func main() {
+	defer logger.EndTracing()
+
 	if !dlib.UniqueOnSession("com.deepin.dde.daemon.Launcher") {
 		logger.Warning("Another com.deepin.daemon.Launcher is running.")
 		return
