@@ -91,31 +91,6 @@ func (m *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPath)
 		//dbus.NotifyChange(m, "VPNConnections")
 		//}
 	}
-
-}
-
-func newWiredConnection(id string) (uuid string) {
-	Logger.Debugf("new wired connection, id=%s", id)
-	uuid = newUUID()
-	data := newWiredConnectionData(id, uuid)
-	nmAddConnection(data)
-	return
-}
-
-func newWirelessConnection(id string, ssid []byte, secType ApSecType) (uuid string) {
-	Logger.Debugf("new wireless connection, id=%s, ssid=%s, secType=%d", id, ssid, secType)
-	uuid = newUUID()
-	data := newWirelessConnectionData(id, uuid, ssid, secType)
-	nmAddConnection(data)
-	return
-}
-
-func newPppoeConnection(id string) (uuid string) {
-	Logger.Debugf("new pppoe connection, id=%s", id)
-	uuid = newUUID()
-	data := newPppoeConnectionData(id, uuid)
-	nmAddConnection(data)
-	return
 }
 
 // GetSupportedConnectionTypes return all supported connection types
@@ -344,7 +319,6 @@ func (m *Manager) CreateConnectionForAccessPoint(apPath dbus.ObjectPath) (uuid s
 }
 
 // TODO
-// func (m *Manager) EditConnectionForAccessPoint(apPath dbus.ObjectPath) (uuid string, err error) {
 func (m *Manager) EditConnectionForAccessPoint(apPath dbus.ObjectPath, devPath dbus.ObjectPath) (session *ConnectionSession, err error) {
 	// // if is read only connection(default system connection created by
 	// // network manager), create a new connection

@@ -108,6 +108,14 @@ const (
 	NM_SETTING_WIRELESS_MODE_INFRA = "infrastructure"
 )
 
+func newWirelessConnection(id string, ssid []byte, secType ApSecType) (uuid string) {
+	Logger.Debugf("new wireless connection, id=%s, ssid=%s, secType=%d", id, ssid, secType)
+	uuid = newUUID()
+	data := newWirelessConnectionData(id, uuid, ssid, secType)
+	nmAddConnection(data)
+	return
+}
+
 func newWirelessConnectionData(id, uuid string, ssid []byte, secType ApSecType) (data _ConnectionData) {
 	data = make(_ConnectionData)
 

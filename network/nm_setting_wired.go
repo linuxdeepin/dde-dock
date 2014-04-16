@@ -72,6 +72,14 @@ const (
 	NM_SETTING_WIRED_S390_OPTIONS = "s390-options"
 )
 
+func newWiredConnection(id string) (uuid string) {
+	Logger.Debugf("new wired connection, id=%s", id)
+	uuid = newUUID()
+	data := newWiredConnectionData(id, uuid)
+	nmAddConnection(data)
+	return
+}
+
 func newWiredConnectionData(id, uuid string) (data _ConnectionData) {
 	data = make(_ConnectionData)
 

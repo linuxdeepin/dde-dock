@@ -9,6 +9,14 @@ const (
 	NM_SETTING_PPPOE_PASSWORD_FLAGS = "password-flags"
 )
 
+func newPppoeConnection(id string) (uuid string) {
+	Logger.Debugf("new pppoe connection, id=%s", id)
+	uuid = newUUID()
+	data := newPppoeConnectionData(id, uuid)
+	nmAddConnection(data)
+	return
+}
+
 func newPppoeConnectionData(id, uuid string) (data _ConnectionData) {
 	data = make(_ConnectionData)
 
