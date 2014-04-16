@@ -22,52 +22,32 @@
 package main
 
 import (
-        liblogger "dlib/logger"
-        "github.com/BurntSushi/xgb/xproto"
-        "github.com/BurntSushi/xgbutil"
-        "github.com/BurntSushi/xgbutil/ewmh"
-        "github.com/BurntSushi/xgbutil/xevent"
-        "github.com/BurntSushi/xgbutil/xprop"
+	liblogger "dlib/logger"
+	"github.com/BurntSushi/xgbutil"
+	"github.com/BurntSushi/xgbutil/ewmh"
 )
 
-// ClientEvent is a convenience function that sends ClientMessage events
-// to the root window as specified by the EWMH spec.
-func clientEvent(xu *xgbutil.XUtil, window xproto.Window, messageType string,
-        data ...interface{}) error {
-
-        mstype, err := xprop.Atm(xu, messageType)
-        if err != nil {
-                return err
-        }
-
-        evMask := (xproto.EventMaskSubstructureNotify |
-                xproto.EventMaskSubstructureRedirect)
-        cm, err := xevent.NewClientMessage(32, window, mstype, data...)
-        if err != nil {
-                return err
-        }
-
-        return xevent.SendRootEvent(xu, cm, uint32(evMask))
-}
-
 func main() {
-        logger := liblogger.NewLogger("Desktop Toggle")
+	logger := liblogger.NewLogger("Desktop Toggle")
 
-        X, err := xgbutil.NewConn()
-        if err != nil {
-                logger.Info("New xgbutil connection failed: ", err)
-                panic(err)
-        }
+	X, err := xgbutil.NewConn()
+	if err != nil {
+		logger.Info("New xgbutil connection failed: ", err)
+		panic(err)
+	}
 
-        if ret, err := ewmh.ShowingDesktopGet(X); err == nil {
-                logger.Info("Show Desktop Status: ", ret)
-                var showInt int
-                if ret {
-                        showInt = 0
-                } else {
-                        showInt = 1
-                }
-                clientEvent(X, X.RootWin(), "_NET_SHOWING_DESKTOP", showInt)
-        }
-        X.Sync()
+	if ret, err := ewmh.ShowingDesktopGet(X); err == nil {
+		// !!! NOT using ewmh.ShowingDesktopReq
+		// because ewmh.ShowingDesktopReq passes a uint argument,
+		// and int is used on xevent.NewClientMessage.
+		logger.Info("Show Desktop Status: ", ret)
+		var showInt int
+		if ret {
+			showInt = 0
+		} else {
+			showInt = 1
+		}
+		ewmh.ClientEvent(X, X.RootWin(), "_NET_SHOWING_DESKTOP", showInt)
+	}
+	X.Sync()
 }
