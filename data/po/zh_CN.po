@@ -1,0 +1,17 @@
+#: ../../power/upower.go:86 ../../power/upower.go:101
+msgid "Battery cirtical low"
+msgstr ""
+
+#: ../../power/upower.go:86 ../../power/upower.go:101
+msgid "Computer will suspend very soon unless it is plugged in."
+msgstr ""
+
+#: ../../power/upower.go:114
+msgid "Battery low"
+msgstr ""
+
+#: ../../power/upower.go:114
+msgid ""
+"Computer will suspend very soon unless it is plugged in(TODO:Calucate "
+"remaining)."
+msgstr ""

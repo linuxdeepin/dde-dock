@@ -3,6 +3,7 @@ package main
 import "dbus/org/freedesktop/upower"
 import "dlib/gio-2.0"
 import "time"
+import "dlib"
 
 const (
 	UPOWER_BUS_NAME = "org.freedesktop.UPower"
@@ -82,7 +83,7 @@ func (p *Power) handleBatteryPercentage() {
 	case p.BatteryPercentage < float64(p.coreSettings.GetInt("percentage-action")):
 		if p.lowBatteryStatus != lowBatteryStatusAction {
 			p.lowBatteryStatus = lowBatteryStatusAction
-			p.sendNotify("battery-action", "Battery cirtical low", "Computer will suspend very soon unless it is plugged in.")
+			p.sendNotify("battery-action", dlib.Tr("Battery cirtical low"), dlib.Tr("Computer will suspend very soon unless it is plugged in."))
 			doSuspend()
 			go func() {
 				for p.lowBatteryStatus == lowBatteryStatusAction {
@@ -97,7 +98,7 @@ func (p *Power) handleBatteryPercentage() {
 	case p.BatteryPercentage < float64(p.coreSettings.GetInt("percentage-critical")):
 		if p.lowBatteryStatus != lowBatteryStatusCritcal {
 			p.lowBatteryStatus = lowBatteryStatusCritcal
-			p.sendNotify("battery-critical", "Battery cirtical low", "Computer will suspend very soon unless it is plugged in.")
+			p.sendNotify("battery-critical", dlib.Tr("Battery cirtical low"), dlib.Tr("Computer will suspend very soon unless it is plugged in."))
 
 			p.player.PlaySystemSound("power-caution")
 			go func() {
@@ -110,7 +111,7 @@ func (p *Power) handleBatteryPercentage() {
 	case p.BatteryPercentage < float64(p.coreSettings.GetInt("percentage-low")):
 		if p.lowBatteryStatus != lowBatteryStatusLow {
 			p.lowBatteryStatus = lowBatteryStatusLow
-			p.sendNotify("battery-low", "Battery low", "Computer will suspend very soon unless it is plugged in(TODO:Calucate remaining).")
+			p.sendNotify("battery-low", dlib.Tr("Battery low"), dlib.Tr("Computer will suspend very soon unless it is plugged in(TODO:Calucate remaining)."))
 			p.player.PlaySystemSound("power-low")
 		}
 	default:

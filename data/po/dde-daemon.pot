@@ -1,0 +1,36 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-04-16 23:59+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../power/upower.go:86 ../../power/upower.go:101
+msgid "Battery cirtical low"
+msgstr ""
+
+#: ../../power/upower.go:86 ../../power/upower.go:101
+msgid "Computer will suspend very soon unless it is plugged in."
+msgstr ""
+
+#: ../../power/upower.go:114
+msgid "Battery low"
+msgstr ""
+
+#: ../../power/upower.go:114
+msgid ""
+"Computer will suspend very soon unless it is plugged in(TODO:Calucate "
+"remaining)."
+msgstr ""

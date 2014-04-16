@@ -111,7 +111,8 @@ func (p *Power) sendNotify(icon, summary, body string) {
 
 func main() {
 	defer LOGGER.EndTracing()
-
+	dlib.InitI18n()
+	dlib.Textdomain("dde-daemon")
 	if !dlib.UniqueOnSession("com.deepin.daemon.Power") {
 		LOGGER.Warning("There already has an Power daemon running.")
 		return
