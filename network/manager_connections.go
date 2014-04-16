@@ -275,7 +275,7 @@ func (m *Manager) DeactivateConnection(uuid string) (err error) {
 	return
 }
 
-func (m *Manager) ActivateConnectionForAccessPoint(apPath, devPath dbus.ObjectPath) (err error) {
+func (m *Manager) ActivateConnectionForAccessPoint(apPath, devPath dbus.ObjectPath) (uuid string, err error) {
 	Logger.Debugf("ActivateConnectionForAccessPoint: apPath=%s, devPath=%s", apPath, devPath)
 	// if there is no connection for current access point, create one
 	ap, err := nmNewAccessPoint(apPath)
@@ -284,9 +284,12 @@ func (m *Manager) ActivateConnectionForAccessPoint(apPath, devPath dbus.ObjectPa
 	}
 	cpath, ok := nmGetWirelessConnectionBySsid(ap.Ssid.Get())
 	if ok {
+		Logger.Debug("activate connection") // TODO test
+		uuid = nmGetConnectionUuid(cpath)
 		_, err = nmActivateConnection(cpath, devPath)
 	} else {
-		uuid := newUUID()
+		Logger.Debug("add and activate connection") // TODO test
+		uuid = newUUID()
 		data := newWirelessConnectionData(string(ap.Ssid.Get()), uuid, []byte(ap.Ssid.Get()), getApSecType(ap))
 		_, _, err = nmAddAndActivateConnection(data, devPath)
 	}
