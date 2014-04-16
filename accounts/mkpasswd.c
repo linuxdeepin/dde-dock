@@ -29,7 +29,7 @@ char *
 mkpasswd (const char *words)
 {
     unsigned long seed[2];
-    char salt[] = "hh";
+    char salt[] = "$6$........";
     const char *const seedchars =
         "./0123456789ABCDEFGHIJKLMNOPQRST"
         "UVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -42,8 +42,8 @@ mkpasswd (const char *words)
     seed[1] = getpid() ^ (seed[0] >> 14 & 0x30000);
 
     /* Turn it into printable characters from `seedchars'. */
-    for (i = 0; i < 2; i++) {
-        salt[i] = seedchars[(seed[i / 5] >> (i % 5) * 6) & 0x3f];
+    for (i = 0; i < 8; i++) {
+        salt[3 + i] = seedchars[(seed[i / 5] >> (i % 5) * 6) & 0x3f];
     }
 
     // DES Encrypt

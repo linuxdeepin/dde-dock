@@ -23,7 +23,9 @@ package main
 
 import (
         "dlib/dbus"
+        "io/ioutil"
         "os"
+        "strings"
 )
 
 const (
@@ -33,6 +35,8 @@ const (
 
         ICON_SYSTEM_DIR = "/var/lib/AccountsService/icons"
         ICON_LOCAL_DIR  = "/var/lib/AccountsService/icons/local"
+        SHADOW_FILE     = "/etc/shadow"
+        SHADOW_BAK_FILE = "/etc/shadow.bak"
 )
 
 func (op *UserManager) SetUserName(dbusMsg dbus.DMessage, username string) bool {
@@ -112,12 +116,13 @@ func (op *UserManager) SetPassword(dbusMsg dbus.DMessage, words string) bool {
         }
 
         passwd := encodePasswd(words)
-        args := []string{}
+        changePasswd(op.UserName, passwd)
 
-        args = append(args, "-p")
-        args = append(args, passwd)
-        args = append(args, op.UserName)
-        execCommand(CMD_USERMOD, args)
+        //args := []string{}
+        //args = append(args, "-p")
+        //args = append(args, passwd)
+        //args = append(args, op.UserName)
+        //execCommand(CMD_USERMOD, args)
 
         op.applyPropertiesChanged("Locked", false)
         op.setPropName("Locked")
@@ -263,6 +268,74 @@ func (op *UserManager) DeleteHistoryIcon(dbusMsg dbus.DMessage, icon string) boo
         op.setPropName("HistoryIcons")
 
         return true
+}
+
+func changePasswd(username, password string) {
+        mutex.Lock()
+        defer mutex.Unlock()
+
+        data, err := ioutil.ReadFile(SHADOW_FILE)
+        if err != nil {
+                panic(err)
+        }
+        lines := strings.Split(string(data), "\n")
+        index := 0
+        line := ""
+        okFlag := false
+        for index, line = range lines {
+                strs := strings.Split(line, ":")
+                if strs[0] == username {
+                        if strs[1] == password {
+                                break
+                        }
+                        strs[1] = password
+                        l := len(strs)
+                        line = ""
+                        for i, s := range strs {
+                                if i == l-1 {
+                                        line += s
+                                        continue
+                                }
+                                line += s + ":"
+                        }
+                        okFlag = true
+                        break
+                }
+        }
+
+        if okFlag {
+                okFlag = false
+                contents := ""
+                l := len(lines)
+                for i, tmp := range lines {
+                        if i == index {
+                                contents += line
+                        } else {
+                                contents += tmp
+                        }
+                        if i < l-1 {
+                                contents += "\n"
+                        }
+                }
+
+                f, err := os.Create(SHADOW_BAK_FILE)
+                if err != nil {
+                        logObject.Warningf("Create '%s' failed: %v\n",
+                                SHADOW_BAK_FILE, err)
+                        panic(err)
+                }
+                defer f.Close()
+
+                _, err = f.WriteString(contents)
+                if err != nil {
+                        logObject.Warningf("WriteString '%s' failed: %v\n",
+                                SHADOW_BAK_FILE, err)
+                        panic(err)
+                }
+                f.Sync()
+                os.Rename(SHADOW_BAK_FILE, SHADOW_FILE)
+        }
+
 }
 
 func newUserManager(uid string) *UserManager {
