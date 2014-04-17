@@ -32,37 +32,37 @@ type PathInfo struct {
 }
 
 const (
-        THEMES_PATH       = "/usr/share/themes/"
-        THEMES_LOCAL_PATH = "/.themes/"
-        ICONS_LOCAL_PATH  = "/.icons/"
-        ICONS_PATH        = "/usr/share/icons/"
+        THEMES_PATH       = "/usr/share/themes"
+        THEMES_LOCAL_PATH = "/.themes"
+        ICONS_LOCAL_PATH  = "/.icons"
+        ICONS_PATH        = "/usr/share/icons"
 
         PATH_TYPE_SYSTEM = "system"
         PATH_TYPE_LOCAL  = "local"
 
-        THUMB_BASE_PATH     = "/usr/share/personalization/"
-        THUMB_THEME_PATH    = THUMB_BASE_PATH + "themes"
-        THUMB_GTK_PATH      = THUMB_BASE_PATH + "thumbnail/WindowThemes"
-        THUMB_ICON_PATH     = THUMB_BASE_PATH + "thumbnail/IconThemes"
-        THUMB_CURSOR_PATH   = THUMB_BASE_PATH + "thumbnail/CursorThemes"
-        PREVIEW_GTK_PATH    = THUMB_BASE_PATH + "preview/WindowThemes"
-        PREVIEW_ICON_PATH   = THUMB_BASE_PATH + "preview/IconThemes"
-        PREVIEW_CURSOR_PATH = THUMB_BASE_PATH + "preview/CursorThemes"
+        THUMB_BASE_PATH     = "/usr/share/personalization"
+        THUMB_THEME_PATH    = THUMB_BASE_PATH + "/" + "themes"
+        THUMB_GTK_PATH      = THUMB_BASE_PATH + "/" + "thumbnail/WindowThemes"
+        THUMB_ICON_PATH     = THUMB_BASE_PATH + "/" + "thumbnail/IconThemes"
+        THUMB_CURSOR_PATH   = THUMB_BASE_PATH + "/" + "thumbnail/CursorThemes"
+        PREVIEW_GTK_PATH    = THUMB_BASE_PATH + "/" + "preview/WindowThemes"
+        PREVIEW_ICON_PATH   = THUMB_BASE_PATH + "/" + "preview/IconThemes"
+        PREVIEW_CURSOR_PATH = THUMB_BASE_PATH + "/" + "preview/CursorThemes"
 
-        THUMB_LOCAL_BASE_PATH     = "/.local/share/personalization/"
-        THUMB_LOCAL_THEME_PATH    = THUMB_LOCAL_BASE_PATH + "themes"
-        THUMB_LOCAL_GTK_PATH      = THUMB_LOCAL_BASE_PATH + "thumbnail/WindowThemes"
-        THUMB_LOCAL_ICON_PATH     = THUMB_LOCAL_BASE_PATH + "thumbnail/IconThemes"
-        THUMB_LOCAL_CURSOR_PATH   = THUMB_LOCAL_BASE_PATH + "thumbnail/CursorThemes"
-        PREVIEW_LOCAL_GTK_PATH    = THUMB_LOCAL_BASE_PATH + "preview/WindowThemes"
-        PREVIEW_LOCAL_ICON_PATH   = THUMB_LOCAL_BASE_PATH + "preview/IconThemes"
-        PREVIEW_LOCAL_CURSOR_PATH = THUMB_LOCAL_BASE_PATH + "preview/CursorThemes"
+        THUMB_LOCAL_BASE_PATH     = "/.local/share/personalization"
+        THUMB_LOCAL_THEME_PATH    = THUMB_LOCAL_BASE_PATH + "/" + "themes"
+        THUMB_LOCAL_GTK_PATH      = THUMB_LOCAL_BASE_PATH + "/" + "thumbnail/WindowThemes"
+        THUMB_LOCAL_ICON_PATH     = THUMB_LOCAL_BASE_PATH + "/" + "thumbnail/IconThemes"
+        THUMB_LOCAL_CURSOR_PATH   = THUMB_LOCAL_BASE_PATH + "/" + "thumbnail/CursorThemes"
+        PREVIEW_LOCAL_GTK_PATH    = THUMB_LOCAL_BASE_PATH + "/" + "preview/WindowThemes"
+        PREVIEW_LOCAL_ICON_PATH   = THUMB_LOCAL_BASE_PATH + "/" + "preview/IconThemes"
+        PREVIEW_LOCAL_CURSOR_PATH = THUMB_LOCAL_BASE_PATH + "/" + "preview/CursorThemes"
 
         THEME_FILE_NAME   = "theme.ini"
         THUMB_FILE_NAME   = "thumbnail.png"
         PREVIEW_FILE_NAME = "preview.png"
 
-        SOUND_THEME_PATH = "/usr/share/sounds/"
+        SOUND_THEME_PATH = "/usr/share/sounds"
 )
 
 func getHomeDir() string {
@@ -162,7 +162,7 @@ func getValidThemes(dirs []PathInfo, conditions []string) []PathInfo {
                                 continue
                         }
 
-                        if filterTheme(dir.path+info.Name(),
+                        if filterTheme(dir.path+"/"+info.Name(),
                                 conditions) {
                                 tmp := PathInfo{info.Name(), dir.t}
                                 valid = append(valid, tmp)
@@ -205,8 +205,8 @@ func filterTheme(dir string, conditions []string) bool {
 }
 
 func getThemeThumbList() []PathInfo {
-        sysDirs := []PathInfo{PathInfo{THUMB_THEME_PATH + "/", PATH_TYPE_SYSTEM}}
-        localDir := getHomeDir() + THUMB_LOCAL_THEME_PATH + "/"
+        sysDirs := []PathInfo{PathInfo{THUMB_THEME_PATH, PATH_TYPE_SYSTEM}}
+        localDir := getHomeDir() + THUMB_LOCAL_THEME_PATH
         localDirs := []PathInfo{PathInfo{localDir, PATH_TYPE_LOCAL}}
         conditions := []string{THEME_FILE_NAME}
 
@@ -228,8 +228,8 @@ func getThemeThumbList() []PathInfo {
 }
 
 func getGtkThumbList() []PathInfo {
-        sysDirs := []PathInfo{PathInfo{THUMB_GTK_PATH + "/", PATH_TYPE_SYSTEM}}
-        localDir := getHomeDir() + THUMB_LOCAL_GTK_PATH + "/"
+        sysDirs := []PathInfo{PathInfo{THUMB_GTK_PATH, PATH_TYPE_SYSTEM}}
+        localDir := getHomeDir() + THUMB_LOCAL_GTK_PATH
         localDirs := []PathInfo{PathInfo{localDir, PATH_TYPE_LOCAL}}
         conditions := []string{THUMB_FILE_NAME}
 
@@ -249,8 +249,8 @@ func getGtkThumbList() []PathInfo {
 }
 
 func getIconThumbList() []PathInfo {
-        sysDirs := []PathInfo{PathInfo{THUMB_ICON_PATH + "/", PATH_TYPE_SYSTEM}}
-        localDir := getHomeDir() + THUMB_LOCAL_ICON_PATH + "/"
+        sysDirs := []PathInfo{PathInfo{THUMB_ICON_PATH, PATH_TYPE_SYSTEM}}
+        localDir := getHomeDir() + THUMB_LOCAL_ICON_PATH
         localDirs := []PathInfo{PathInfo{localDir, PATH_TYPE_LOCAL}}
         conditions := []string{THUMB_FILE_NAME}
 
@@ -270,8 +270,8 @@ func getIconThumbList() []PathInfo {
 }
 
 func getCursorThumbList() []PathInfo {
-        sysDirs := []PathInfo{PathInfo{THUMB_CURSOR_PATH + "/", PATH_TYPE_SYSTEM}}
-        localDir := getHomeDir() + THUMB_LOCAL_CURSOR_PATH + "/"
+        sysDirs := []PathInfo{PathInfo{THUMB_CURSOR_PATH, PATH_TYPE_SYSTEM}}
+        localDir := getHomeDir() + THUMB_LOCAL_CURSOR_PATH
         localDirs := []PathInfo{PathInfo{localDir, PATH_TYPE_LOCAL}}
         conditions := []string{THUMB_FILE_NAME}
 

@@ -408,7 +408,7 @@ func newManager() *Manager {
 
         m.listenSettingsChanged()
         m.startListenDirs()
-        //go m.resetListenDirs()
+        go m.resetListenDirs()
 
         return m
 }

@@ -27,6 +27,7 @@ import (
         "dlib/dbus"
         "dlib/logger"
         "dlib/utils"
+        "github.com/howeyc/fsnotify"
         "os"
         "strconv"
         "sync"
@@ -36,6 +37,7 @@ var (
         objManager       *Manager
         objXSettings     *xs.XSettings
         objUtil          *utils.Manager
+        watcher          *fsnotify.Watcher
         mutex            = new(sync.Mutex)
         logObject        = logger.NewLogger("daemon/themes")
         themeObjMap      = make(map[string]*Theme)
@@ -108,6 +110,12 @@ func main() {
                 "/com/deepin/XSettings")
         if err != nil {
                 logObject.Errorf("New XSettings Failed: %v", err)
+                panic(err)
+        }
+
+        watcher, err = fsnotify.NewWatcher()
+        if err != nil {
+                logObject.Warning("Create Watch Failed: ", err)
                 panic(err)
         }
 
