@@ -86,7 +86,7 @@ func (op *Theme) updateThemeInfo() {
                 return
         }
         op.GtkTheme = str
-        dbus.NotifyChange(op, "GtkTheme")
+        //dbus.NotifyChange(op, "GtkTheme")
 
         str, err1 = keyFile.GetString(THEME_GROUP_COMPONENT,
                 THEME_KEY_ICONS)
@@ -96,7 +96,7 @@ func (op *Theme) updateThemeInfo() {
                 return
         }
         op.IconTheme = str
-        dbus.NotifyChange(op, "IconTheme")
+        //dbus.NotifyChange(op, "IconTheme")
 
         str, err1 = keyFile.GetString(THEME_GROUP_COMPONENT,
                 THEME_KEY_CURSOR)
@@ -106,7 +106,7 @@ func (op *Theme) updateThemeInfo() {
                 return
         }
         op.CursorTheme = str
-        dbus.NotifyChange(op, "CursorTheme")
+        //dbus.NotifyChange(op, "CursorTheme")
 
         str, err1 = keyFile.GetString(THEME_GROUP_COMPONENT,
                 THEME_KEY_FONT_SIZE)
@@ -116,7 +116,7 @@ func (op *Theme) updateThemeInfo() {
                 return
         }
         op.FontSize = str
-        dbus.NotifyChange(op, "FontSize")
+        //dbus.NotifyChange(op, "FontSize")
 
         str, err1 = keyFile.GetString(THEME_GROUP_COMPONENT,
                 THEME_KEY_BG)
@@ -135,7 +135,7 @@ func (op *Theme) updateThemeInfo() {
         }
         fileUri, _ := objUtil.PathToFileURI(str)
         op.BackgroundFile = fileUri
-        dbus.NotifyChange(op, "BackgroundFile")
+        //dbus.NotifyChange(op, "BackgroundFile")
 
         str, err1 = keyFile.GetString(THEME_GROUP_COMPONENT,
                 THEME_KEY_SOUND)
@@ -145,5 +145,5 @@ func (op *Theme) updateThemeInfo() {
                 return
         }
         op.SoundTheme = str
-        dbus.NotifyChange(op, "SoundTheme")
+        //dbus.NotifyChange(op, "SoundTheme")
 }

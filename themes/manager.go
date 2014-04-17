@@ -171,7 +171,7 @@ func (op *Manager) SetBackgroundFile(name string) (string, bool) {
         }
 
         // sync value to gsettings
-        op.updateGSettingsKey(GKEY_CURRENT_BACKGROUND, name)
+        //op.updateGSettingsKey(GKEY_CURRENT_BACKGROUND, name)
 
         if obj := op.getThemeObject(op.CurrentTheme); obj != nil {
                 v := op.setTheme(obj.GtkTheme, obj.IconTheme,
