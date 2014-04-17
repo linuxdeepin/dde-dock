@@ -24,6 +24,7 @@ package main
 import (
         libkeybind "dbus/com/deepin/daemon/keybinding"
         libdbus "dbus/org/freedesktop/dbus"
+        liblogin1 "dbus/org/freedesktop/login1"
         libmpris "dbus/org/mpris/mediaplayer2"
         "dlib/gio-2.0"
         "os/exec"
@@ -43,6 +44,7 @@ const (
 var (
         dbusObj     *libdbus.DBusDaemon
         mediaKeyObj *libkeybind.MediaKey
+        loginObj    *liblogin1.Manager
         prevSender  = ""
 )
 
@@ -258,6 +260,29 @@ func listenAudioSignal() {
 
                 go exec.Command(CALCULATOR_CMD).Run()
         })
+
+        // Pause all media player
+        loginObj.ConnectPrepareForSleep(func(active bool) {
+                // Computer Sleep
+                if active {
+                        list, ok := getMprisClients()
+                        if !ok {
+                                logObj.Warning("Get Mpris Clients Failed")
+                                return
+                        }
+
+                        for _, l := range list {
+                                obj, err := libmpris.NewPlayer(l, MPRIS_PATH)
+                                if err != nil {
+                                        logObj.Warningf("New Mpris Player For '%s' Failed: %v",
+                                                l, err)
+                                        continue
+                                }
+                                obj.Pause()
+                                //libmpris.DestroyPlayer(obj)
+                        }
+                }
+        })
 }
 
 func startMprisDaemon() {
@@ -275,6 +300,13 @@ func startMprisDaemon() {
                 "/com/deepin/daemon/MediaKey")
         if err != nil {
                 logObj.Info("New MediaKey Object Failed: ", err)
+                panic(err)
+        }
+
+        loginObj, err = liblogin1.NewManager("org.freedesktop.login1",
+                "/org/freedesktop/login1")
+        if err != nil {
+                logObj.Warning("New Login1 Manager Failed: ", err)
                 panic(err)
         }
 
