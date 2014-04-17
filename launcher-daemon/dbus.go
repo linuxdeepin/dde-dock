@@ -1,7 +1,6 @@
 package main
 
 import (
-	"dbus/com/deepin/api/graphic"
 	"fmt"
 	"os"
 	"path"
@@ -21,8 +20,6 @@ const (
 
 	AppDirName     string      = "applications"
 	DirDefaultPerm os.FileMode = 775
-
-	DefaultBackgroundImage string = "/usr/share/background/default_background.jpg"
 )
 
 type ItemChangedStatus struct {
@@ -30,13 +27,11 @@ type ItemChangedStatus struct {
 }
 
 type LauncherDBus struct {
-	background  Background
 	ItemChanged func(
 		status string,
 		itemInfo ItemInfo,
 		categoryIds []CategoryId,
 	)
-	BackgroundChanged func(uri string)
 }
 
 func (d *LauncherDBus) GetDBusInfo() dbus.DBusInfo {
@@ -243,53 +238,12 @@ func (d *LauncherDBus) GetPackageNames(path string) []string {
 	return getPackageNames(path)
 }
 
-func (d *LauncherDBus) GetBackgroundPict() string {
-	errorHandler := func(e error) string {
-		logger.Info(e)
-		return DefaultBackgroundImage
-	}
-
-	i, err := graphic.NewGraphic("com.deepin.api.Graphic", "/com/deepin/api/Graphic")
-	if err != nil {
-		return errorHandler(err)
-	}
-
-	settings := gio.NewSettings("com.deepin.dde.personalization")
-	defer settings.Unref()
-	pict := settings.GetString("current-picture")
-	// status:
-	// -1: invalid pict passed, return default pict
-	//  0: blur pic
-	//  1: original pic
-	status, blurPath, err := i.BackgroundBlurPictPath(pict, "", 30, 1)
-	if err != nil {
-		return errorHandler(err)
-	}
-
-	fmt.Printf("status:%d, pict: %s\n", status, blurPath)
-	return blurPath
-}
-
 func (d *LauncherDBus) GetAppId(path string) string {
 	return string(genId(path))
-}
-
-func (d *LauncherDBus) listenBackgroundChanged() {
-	d.background.init()
-	go func(d *LauncherDBus) {
-		logger.Info("listen background changed")
-		for {
-			select {
-			case <-d.background.changed:
-				d.BackgroundChanged(d.background.currentBg())
-			}
-		}
-	}(d)
 }
 
 func initDBus() {
 	launcherDbus := LauncherDBus{}
 	dbus.InstallOnSession(&launcherDbus)
 	launcherDbus.listenItemChanged()
-	launcherDbus.listenBackgroundChanged()
 }
