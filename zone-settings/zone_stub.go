@@ -64,4 +64,12 @@ func (op *Manager) listenSignal() {
                         execEdgeAction(EDGE_BOTTOMRIGHT)
                 }
         })
+
+        launchObj.ConnectShown(func() {
+                enableOneEdge(getEdgeForCommand("/usr/bin/dde-launcher"))
+        })
+
+        launchObj.ConnectClosed(func() {
+                op.EnableAllEdge()
+        })
 }

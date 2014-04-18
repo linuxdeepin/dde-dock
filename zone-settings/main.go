@@ -24,6 +24,7 @@ package main
 import (
         libarea "dbus/com/deepin/api/xmousearea"
         libdsp "dbus/com/deepin/daemon/display"
+        "dbus/com/deepin/dde/launcher"
         "dlib"
         "dlib/dbus"
         "dlib/gio-2.0"
@@ -35,6 +36,7 @@ import (
 var (
         dspObj       *libdsp.Display
         areaObj      *libarea.XMouseArea
+        launchObj    *launcher.Launcher
         logObj       = Logger.NewLogger("daemon/zone")
         zoneSettings = gio.NewSettings("com.deepin.dde.zone")
 
@@ -91,10 +93,6 @@ func (op *Manager) BottomRightAction() string {
         return zoneSettings.GetString("right-down")
 }
 
-func (op *Manager) OnlyEnableLauncher() {
-        enableOneEdge(getEdgeForCommand("/usr/bin/launcher"))
-}
-
 func (op *Manager) EnableAllEdge() {
         op.SetTopLeft(op.TopLeftAction())
         op.SetBottomLeft(op.BottomLeftAction())
@@ -122,6 +120,13 @@ func main() {
                 "/com/deepin/api/XMouseArea")
         if err != nil {
                 logObj.Info("New XMouseArea Failed: ", err)
+                panic(err)
+        }
+
+        launchObj, err = launcher.NewLauncher("com.deepin.dde.launcher",
+                "/com/deepin/dde/launcher")
+        if err != nil {
+                logObj.Warning("New DDE Launcher Failed: ", err)
                 panic(err)
         }
 
