@@ -158,6 +158,7 @@ func (keyboard *KeyboardEntry) appendUserLayout(str string) {
 
         keyboard.UserLayoutList = append(keyboard.UserLayoutList, str)
         keyboard.applyPropValue("UserLayoutList", keyboard.UserLayoutList)
+        dbus.NotifyChange(keyboard, "UserLayoutList")
 }
 
 func (keyboard *KeyboardEntry) deleteUserLayout(str string) {
@@ -179,6 +180,7 @@ func (keyboard *KeyboardEntry) deleteUserLayout(str string) {
 
         keyboard.UserLayoutList = tmps
         keyboard.applyPropValue("UserLayoutList", keyboard.UserLayoutList)
+        dbus.NotifyChange(keyboard, "UserLayoutList")
 }
 
 func stringIsExist(str string, strs []string) bool {
