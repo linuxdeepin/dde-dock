@@ -24,6 +24,7 @@ package main
 import (
         "github.com/howeyc/fsnotify"
         "os"
+        "regexp"
 )
 
 func (op *AccountManager) listenUserListChanged() {
@@ -46,13 +47,24 @@ func (op *AccountManager) listenUserListChanged() {
                 for {
                         select {
                         case ev := <-watcher.Event:
+                                if ev == nil {
+                                        break
+                                }
+
+                                if ok, _ := regexp.MatchString(`\.swa?px?$`,
+                                        ev.Name); ok {
+                                        break
+                                }
+                                logObject.Info(ev)
                                 if ev.IsDelete() {
                                         watcher.Watch(ETC_PASSWD)
+                                } else if ev.IsCreate() {
+                                        break
                                 } else {
                                         op.emitUserListChanged()
                                 }
-                        case err := <-watcher.Error:
-                                logObject.Warningf("Watch Error:%v", err)
+                                //case err := <-watcher.Error:
+                                //logObject.Warningf("Watch Error:%v", err)
                         }
                 }
         }()
@@ -78,13 +90,23 @@ func (op *UserManager) listenUserInfoChanged(filename string) {
                 for {
                         select {
                         case ev := <-watcher.Event:
+                                if ev == nil {
+                                        break
+                                }
+
+                                if ok, _ := regexp.MatchString(`\.swa?px?$`,
+                                        ev.Name); ok {
+                                        break
+                                }
                                 if ev.IsDelete() {
                                         watcher.Watch(filename)
+                                } else if ev.IsCreate() {
+                                        break
                                 } else {
                                         op.updateUserInfo()
                                 }
-                        case err := <-watcher.Error:
-                                logObject.Warningf("Watch Error:%v", err)
+                                //case err := <-watcher.Error:
+                                //logObject.Warningf("Watch Error:%v", err)
                         }
                 }
         }()
@@ -115,10 +137,18 @@ func (op *UserManager) listenIconListChanged(filename string) {
                 for {
                         select {
                         case ev := <-watcher.Event:
+                                if ev == nil {
+                                        break
+                                }
+
+                                if ok, _ := regexp.MatchString(`\.swa?px?$`,
+                                        ev.Name); ok {
+                                        break
+                                }
                                 logObject.Info("Icon List Event:", ev)
                                 op.setPropName("IconList")
-                        case err := <-watcher.Error:
-                                logObject.Warningf("Watch Error:%v", err)
+                                //case err := <-watcher.Error:
+                                //logObject.Warningf("Watch Error:%v", err)
                         }
                 }
         }()

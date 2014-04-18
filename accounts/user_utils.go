@@ -94,24 +94,27 @@ func getAdministratorList() []string {
 }
 
 func setAutomaticLogin(name string) {
+        mutex.Lock()
+        defer mutex.Unlock()
         dsp := getDefaultDisplayManager()
+        logObject.Infof("Set %s Auto For: %s", name, dsp)
         switch dsp {
         case "lightdm":
-                if fileIsExist(ETC_LIGHTDM_CONFIG) {
+                if opUtils.IsFileExist(ETC_LIGHTDM_CONFIG) {
                         opUtils.WriteKeyToKeyFile(ETC_LIGHTDM_CONFIG,
                                 LIGHTDM_AUTOLOGIN_GROUP,
                                 LIGHTDM_AUTOLOGIN_USER,
                                 name)
                 }
         case "gdm":
-                if fileIsExist(ETC_GDM_CONFIG) {
+                if opUtils.IsFileExist(ETC_GDM_CONFIG) {
                         opUtils.WriteKeyToKeyFile(ETC_GDM_CONFIG,
                                 GDM_AUTOLOGIN_GROUP,
                                 GDM_AUTOLOGIN_USER,
                                 name)
                 }
         case "kdm":
-                if fileIsExist(ETC_KDM_CONFIG) {
+                if opUtils.IsFileExist(ETC_KDM_CONFIG) {
                         opUtils.WriteKeyToKeyFile(ETC_KDM_CONFIG,
                                 KDM_AUTOLOGIN_GROUP,
                                 KDM_AUTOLOGIN_ENABLE,
@@ -120,7 +123,7 @@ func setAutomaticLogin(name string) {
                                 KDM_AUTOLOGIN_GROUP,
                                 KDM_AUTOLOGIN_USER,
                                 name)
-                } else if fileIsExist(USER_KDM_CONFIG) {
+                } else if opUtils.IsFileExist(USER_KDM_CONFIG) {
                         opUtils.WriteKeyToKeyFile(ETC_KDM_CONFIG,
                                 KDM_AUTOLOGIN_GROUP,
                                 KDM_AUTOLOGIN_ENABLE,
@@ -136,21 +139,26 @@ func setAutomaticLogin(name string) {
 }
 
 func isAutoLogin(username string) bool {
+        mutex.Lock()
+        defer mutex.Unlock()
         dsp := getDefaultDisplayManager()
+        //logObject.Info("Display: ", dsp)
 
         switch dsp {
         case "lightdm":
-                if fileIsExist(ETC_LIGHTDM_CONFIG) {
+                if opUtils.IsFileExist(ETC_LIGHTDM_CONFIG) {
                         v, ok := opUtils.ReadKeyFromKeyFile(ETC_LIGHTDM_CONFIG,
                                 LIGHTDM_AUTOLOGIN_GROUP,
                                 LIGHTDM_AUTOLOGIN_USER,
                                 "")
+                        //logObject.Info("AutoUser: ", v.(string))
+                        //logObject.Info("UserName: ", username)
                         if ok && v.(string) == username {
                                 return true
                         }
                 }
         case "gdm":
-                if fileIsExist(ETC_GDM_CONFIG) {
+                if opUtils.IsFileExist(ETC_GDM_CONFIG) {
                         v, ok := opUtils.ReadKeyFromKeyFile(ETC_GDM_CONFIG,
                                 GDM_AUTOLOGIN_GROUP,
                                 GDM_AUTOLOGIN_USER,
@@ -160,7 +168,7 @@ func isAutoLogin(username string) bool {
                         }
                 }
         case "kdm":
-                if fileIsExist(ETC_KDM_CONFIG) {
+                if opUtils.IsFileExist(ETC_KDM_CONFIG) {
                         v, ok := opUtils.ReadKeyFromKeyFile(ETC_KDM_CONFIG,
                                 KDM_AUTOLOGIN_GROUP,
                                 KDM_AUTOLOGIN_USER,
@@ -168,7 +176,7 @@ func isAutoLogin(username string) bool {
                         if ok && v.(string) == username {
                                 return true
                         }
-                } else if fileIsExist(USER_KDM_CONFIG) {
+                } else if opUtils.IsFileExist(USER_KDM_CONFIG) {
                         v, ok := opUtils.ReadKeyFromKeyFile(USER_KDM_CONFIG,
                                 KDM_AUTOLOGIN_GROUP,
                                 KDM_AUTOLOGIN_USER,

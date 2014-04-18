@@ -193,8 +193,12 @@ func (op *UserManager) setPropName(propName string) {
         case "AutomaticLogin":
                 ok := isAutoLogin(op.UserName)
                 if ok {
+                        logObject.Infof("Enable %s AutomaticLogin",
+                                op.UserName)
                         op.AutomaticLogin = true
                 } else {
+                        logObject.Infof("Disable %s AutomaticLogin",
+                                op.UserName)
                         op.AutomaticLogin = false
                 }
         case "AccountType":

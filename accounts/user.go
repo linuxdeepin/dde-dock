@@ -144,8 +144,10 @@ func (op *UserManager) SetAutomaticLogin(dbusMsg dbus.DMessage, auto bool) bool 
         }
 
         if op.AutomaticLogin != auto {
+                //mutex.Lock()
                 op.applyPropertiesChanged("AutomaticLogin", auto)
                 op.setPropName("AutomaticLogin")
+                //mutex.Unlock()
         }
 
         return true
@@ -354,6 +356,16 @@ func newUserManager(uid string) *UserManager {
         m.listenUserInfoChanged(ETC_SHADOW)
         m.listenIconListChanged(ICON_SYSTEM_DIR)
         m.listenIconListChanged(ICON_LOCAL_DIR)
+
+        if opUtils.IsFileExist(ETC_LIGHTDM_CONFIG) {
+                m.listenUserInfoChanged(ETC_LIGHTDM_CONFIG)
+        }
+        if opUtils.IsFileExist(ETC_GDM_CONFIG) {
+                m.listenUserInfoChanged(ETC_GDM_CONFIG)
+        }
+        if opUtils.IsFileExist(ETC_KDM_CONFIG) {
+                m.listenUserInfoChanged(ETC_KDM_CONFIG)
+        }
 
         return m
 }
