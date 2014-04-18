@@ -96,7 +96,7 @@ func (m *ClientManager) listenRootWindow() {
 				} else {
 					logger.Info("active window is not launcher")
 					LAUNCHER, err :=
-						launcher.Newlauncher("com.deepin.dde.launcher",
+						launcher.NewLauncher("com.deepin.dde.launcher",
 							"/com/deepin/dde/launcher")
 					if err != nil {
 						logger.Error(err)
