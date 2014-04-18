@@ -22,9 +22,9 @@
 package main
 
 import (
+        "dlib"
         "dlib/dbus"
         "dlib/gio-2.0"
-        "fmt"
         "strconv"
         "strings"
 )
@@ -85,11 +85,11 @@ func (m *BindManager) updateSystemList(id int32, shortcut string) bool {
                         //info.Shortcut = shortcut
                         //dbus.NotifyChange(m, "SystemList")
                         m.setPropList("SystemList")
-                        //fmt.Printf("Prev System Pairs: %v\n", SystemPrevPairs)
+                        //logObj.Infof("Prev System Pairs: %v\n", SystemPrevPairs)
                         grabKeyPairs(SystemPrevPairs, false)
                         systemPairs := getSystemPairs()
                         grabKeyPairs(systemPairs, true)
-                        //fmt.Printf("System Pairs: %v\n", systemPairs)
+                        //logObj.Infof("System Pairs: %v\n", systemPairs)
                         return true
                 }
         }
@@ -167,11 +167,11 @@ func (m *BindManager) listenCustom() {
 
                 gs.Connect("changed::shortcut", func(s *gio.Settings, key string) {
                         m.setPropList("CustomList")
-                        //fmt.Printf("%s Changed...\n", key)
-                        //fmt.Printf("Prev Custom Pairs: %v\n", CustomPrevPairs)
+                        //logObj.Infof("%s Changed...\n", key)
+                        //logObj.Infof("Prev Custom Pairs: %v\n", CustomPrevPairs)
                         grabKeyPairs(CustomPrevPairs, false)
                         customPairs := getCustomPairs()
-                        //fmt.Printf("Custom Pairs: %v\n", customPairs)
+                        //logObj.Infof("Custom Pairs: %v\n", customPairs)
                         grabKeyPairs(customPairs, true)
                 })
         }
@@ -196,7 +196,7 @@ func getSystemKeyInfo() []ShortcutInfo {
         for i, n := range SystemIdNameMap {
                 if desc, ok := SystemNameDescMap[n]; ok {
                         shortcut := getSystemValue(n, false)
-                        tmp := newShortcutInfo(i, desc,
+                        tmp := newShortcutInfo(i, dlib.Tr(desc),
                                 formatShortcut(shortcut))
                         tmp.index = SystemIdIndexMap[i]
                         systemInfoList = append(systemInfoList, tmp)
@@ -211,7 +211,7 @@ func getMediaKeyInfo() []ShortcutInfo {
         for i, n := range MediaIdNameMap {
                 if desc, ok := MediaNameDescMap[n]; ok {
                         shortcut := mediaKeySettings.GetString(n)
-                        tmp := newShortcutInfo(i, desc, shortcut)
+                        tmp := newShortcutInfo(i, dlib.Tr(desc), shortcut)
                         tmp.index = MediaIdIndexMap[i]
                         mediaInfoList = append(mediaInfoList, tmp)
                 }
@@ -225,7 +225,7 @@ func getWindowKeyInfo() []ShortcutInfo {
         for i, n := range WindowIdNameMap {
                 if desc, ok := WindowNameDescMap[n]; ok {
                         shortcut := getSystemValue(n, false)
-                        tmp := newShortcutInfo(i, desc,
+                        tmp := newShortcutInfo(i, dlib.Tr(desc),
                                 formatShortcut(shortcut))
                         tmp.index = WindowIdIndexMap[i]
                         windowInfoList = append(windowInfoList, tmp)
@@ -240,7 +240,7 @@ func getWorkSpaceKeyInfo() []ShortcutInfo {
         for i, n := range WorkSpaceIdNameMap {
                 if desc, ok := WorkSpaceNameDescMap[n]; ok {
                         shortcut := getSystemValue(n, false)
-                        tmp := newShortcutInfo(i, desc,
+                        tmp := newShortcutInfo(i, dlib.Tr(desc),
                                 formatShortcut(shortcut))
                         tmp.index = WorkSpaceIdIndexMap[i]
                         workSpaceInfoList = append(workSpaceInfoList, tmp)
@@ -391,7 +391,7 @@ func keyIsExist(key string) bool {
 
 func newGSettingsById(id int32) *gio.Settings {
         if id < _CUSTOM_ID_BASE {
-                fmt.Println("not custom id range")
+                logObj.Info("not custom id range")
                 return nil
         }
 
@@ -443,7 +443,7 @@ func getCustomList() []int32 {
         for _, k := range strList {
                 id, err := strconv.ParseInt(k, 10, 64)
                 if err != nil {
-                        fmt.Println(err)
+                        logObj.Info(err)
                         continue
                 }
                 customList = append(customList, int32(id))

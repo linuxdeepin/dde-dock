@@ -24,7 +24,6 @@ package main
 import (
         "dlib/dbus"
         "dlib/gio-2.0"
-        "fmt"
         "strings"
 )
 
@@ -81,7 +80,7 @@ func (op *MediaKeyManager) GetDBusInfo() dbus.DBusInfo {
 func initMediaKey() {
         defer func() {
                 if err := recover(); err != nil {
-                        fmt.Println("Recover Error:", err)
+                        logObj.Info("Recover Error:", err)
                 }
         }()
 
@@ -106,7 +105,7 @@ func (op *MediaKeyManager) listenMediaKey() {
 }
 
 func (op *MediaKeyManager) emitSignal(modStr, keyStr string, press bool) bool {
-        fmt.Printf("Emit mod: %s, key: %s\n", modStr, keyStr)
+        logObj.Infof("Emit mod: %s, key: %s\n", modStr, keyStr)
         switch keyStr {
         case "XF86MonBrightnessUp":
                 op.BrightnessUp(press)

@@ -23,7 +23,6 @@ package main
 
 import (
         //"dlib/gio-2.0"
-        "fmt"
         "github.com/BurntSushi/xgbutil/keybind"
         "strconv"
         "strings"
@@ -57,12 +56,12 @@ func newKeyCodeInfo(shortcut string) (KeyCodeInfo, bool) {
         }
         mods, keys, err := keybind.ParseString(X, shortcut)
         if err != nil {
-                fmt.Println("keybind parse string failed: ", err)
+                logObj.Info("keybind parse string failed: ", err)
                 return KeyCodeInfo{}, false
         }
 
         if len(keys) <= 0 {
-                fmt.Println("no key")
+                logObj.Info("no key")
                 return KeyCodeInfo{}, false
         }
 
@@ -155,7 +154,7 @@ func conflictChecked(id int32, shortcut string) (bool, []int32) {
                 info, ok = newKeyCodeInfo(getXGBShortcut(formatShortcut(shortcut)))
         }
         if !ok {
-                fmt.Println("shortcut invalid. ", shortcut)
+                logObj.Info("shortcut invalid. ", shortcut)
                 return false, []int32{}
         }
 
@@ -319,7 +318,7 @@ func formatShortcut(shortcut string) string {
         l := len(shortcut)
 
         if l <= 0 {
-                fmt.Println("format args null")
+                logObj.Info("format args null")
                 return ""
         }
 
@@ -405,7 +404,7 @@ func convertKeyToMod(key string) string {
         }
 
         tmp := modStr + strs[l]
-        fmt.Println("Mod Key:", tmp)
+        logObj.Info("Mod Key:", tmp)
         return tmp
 }
 
@@ -431,7 +430,7 @@ func convertModToKey(key string) string {
         }
 
         tmp := keyStr + strs[l]
-        fmt.Println("String Key:", tmp)
+        logObj.Info("String Key:", tmp)
         return tmp
 }
 

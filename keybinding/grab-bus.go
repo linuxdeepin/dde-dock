@@ -28,7 +28,6 @@ import "C"
 
 import (
         "dlib/dbus"
-        "fmt"
         "github.com/BurntSushi/xgb/xproto"
         "github.com/BurntSushi/xgbutil"
         "github.com/BurntSushi/xgbutil/keybind"
@@ -91,7 +90,7 @@ func (m *GrabManager) GrabKeyboard() {
         go func() {
                 X, err := xgbutil.NewConn()
                 if err != nil {
-                        fmt.Println("Get New Connection Failed:", err)
+                        logObj.Info("Get New Connection Failed:", err)
                         return
                 }
                 keybind.Initialize(X)
@@ -99,7 +98,7 @@ func (m *GrabManager) GrabKeyboard() {
 
                 err = keybind.GrabKeyboard(X, X.RootWin())
                 if err != nil {
-                        fmt.Println("Grab Keyboard Failed:", err)
+                        logObj.Info("Grab Keyboard Failed:", err)
                         return
                 }
 
@@ -110,7 +109,7 @@ func (m *GrabManager) GrabKeyboard() {
                                 m.KeyReleaseEvent("")
                                 UngrabAllButton(X)
                                 keybind.UngrabKeyboard(X)
-                                fmt.Println("Button Press Event")
+                                logObj.Info("Button Press Event")
                                 xevent.Quit(X)
                         }).Connect(X, X.RootWin())
 
@@ -132,7 +131,7 @@ func (m *GrabManager) GrabKeyboard() {
                                 m.KeyReleaseEvent(value)
                                 UngrabAllButton(X)
                                 keybind.UngrabKeyboard(X)
-                                fmt.Printf("Key: %s\n", value)
+                                logObj.Infof("Key: %s\n", value)
                                 xevent.Quit(X)
                         }).Connect(X, X.RootWin())
 
@@ -160,7 +159,7 @@ func ConvertKeyFromMod(mod string) string {
                         v == "mod4" || v == "lock" {
                         t, ok := _ModKeyMap[v]
                         if !ok {
-                                fmt.Println("Get Key Failed From Modify")
+                                logObj.Info("Get Key Failed From Modify")
                                 return ""
                         }
                         values += t + "-"
@@ -178,19 +177,19 @@ func (m *GrabManager) GrabSingleKey(key, action string) {
 
 func GrabXRecordKey(key, action string) {
         if len(action) <= 0 {
-                fmt.Println("action is null")
+                logObj.Info("action is null")
                 return
         }
 
         mod, keys, err := keybind.ParseString(X, key)
         if err != nil {
-                fmt.Println("ParseString Failed:", err)
+                logObj.Info("ParseString Failed:", err)
                 return
         }
 
-        fmt.Printf("mod: %d, key: %d\n", mod, keys[0])
+        logObj.Infof("mod: %d, key: %d\n", mod, keys[0])
         if mod > 0 {
-                fmt.Printf("Not single key\n")
+                logObj.Infof("Not single key\n")
                 return
         }
 
@@ -206,12 +205,12 @@ func (m *GrabManager) UngrabSingleKey(key string) {
 func UngrabXRecordKey(key string) {
         mod, keys, err := keybind.ParseString(X, key)
         if err != nil {
-                fmt.Println("ParseString Failed:", err)
+                logObj.Info("ParseString Failed:", err)
                 return
         }
 
         if mod > 0 {
-                fmt.Printf("Not single key\n")
+                logObj.Infof("Not single key\n")
                 return
         }
 

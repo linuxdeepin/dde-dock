@@ -22,7 +22,6 @@
 package main
 
 import (
-        "fmt"
         "github.com/BurntSushi/xgb/xproto"
         "github.com/BurntSushi/xgbutil"
         "github.com/BurntSushi/xgbutil/keybind"
@@ -39,7 +38,7 @@ var (
 func getSystemPairs() map[string]string {
         mutex.Lock()
         defer mutex.Unlock()
-        //fmt.Println("Update SystemPairs")
+        //logObj.Info("Update SystemPairs")
         systemPairs := make(map[string]string)
         for i, k := range SystemIdNameMap {
                 if i >= 0 && i < 300 {
@@ -59,7 +58,7 @@ func getSystemPairs() map[string]string {
 func getCustomPairs() map[string]string {
         mutex.Lock()
         defer mutex.Unlock()
-        //fmt.Println("Update CustomPairs")
+        //logObj.Info("Update CustomPairs")
         customPairs := make(map[string]string)
         customList := getCustomList()
 
@@ -101,7 +100,7 @@ func grabKeyPairs(accelPairs map[string]string, grab bool) {
                 shortcut := getXGBShortcut(formatShortcut(k))
                 keyInfo, ok := newKeyCodeInfo(shortcut)
                 if !ok {
-                        fmt.Printf("Failed: key: %s, value: %s\n", k, v)
+                        logObj.Infof("Failed: key: %s, value: %s\n", k, v)
                         continue
                 }
 
@@ -110,7 +109,7 @@ func grabKeyPairs(accelPairs map[string]string, grab bool) {
                                 GrabKeyBinds[keyInfo] = v
                         }
                 } else {
-                        //fmt.Printf("Ungrab key: %s, value: %s\n", k, v)
+                        //logObj.Infof("Ungrab key: %s, value: %s\n", k, v)
                         delete(GrabKeyBinds, keyInfo)
                         ungrabKey(X.RootWin(), shortcut)
                 }
@@ -119,24 +118,24 @@ func grabKeyPairs(accelPairs map[string]string, grab bool) {
 
 func grabKeyPress(wid xproto.Window, shortcut string) bool {
         if len(shortcut) <= 0 {
-                fmt.Println("grab key args failed...")
+                logObj.Info("grab key args failed...")
                 return false
         }
 
         mod, keys, err := keybind.ParseString(X, shortcut)
         if err != nil {
-                fmt.Printf("grab parse shortcut string failed: %s\n", err)
+                logObj.Infof("grab parse shortcut string failed: %s\n", err)
                 return false
         }
 
         if len(keys) < 1 {
-                fmt.Printf("'%s' no details\n", shortcut)
+                logObj.Infof("'%s' no details\n", shortcut)
                 return false
         }
 
         err = keybind.GrabChecked(X, wid, mod, keys[0])
         if err != nil {
-                fmt.Printf("Grab '%s' Failed: %s\n", shortcut, err)
+                logObj.Infof("Grab '%s' Failed: %s\n", shortcut, err)
                 return false
         }
 
@@ -150,12 +149,12 @@ func ungrabKey(wid xproto.Window, shortcut string) bool {
 
         mod, keys, err := keybind.ParseString(X, shortcut)
         if err != nil {
-                fmt.Printf("ungrab parse shortcut string failed: %s\n", err)
+                logObj.Infof("ungrab parse shortcut string failed: %s\n", err)
                 return false
         }
 
         if len(keys) < 1 {
-                fmt.Printf("'%s' no details\n", shortcut)
+                logObj.Infof("'%s' no details\n", shortcut)
                 return false
         }
 
@@ -184,44 +183,44 @@ func execCommand(value string) {
                 for i := 1; i < l; i++ {
                         args = append(args, vals[i])
                 }
-                /*fmt.Println("args: ", args)*/
+                /*logObj.Info("args: ", args)*/
                 cmd = exec.Command(vals[0], args...)
         } else {
                 cmd = exec.Command(value)
         }
         _, err := cmd.Output()
         if err != nil {
-                fmt.Println("Exec command failed:", err)
+                logObj.Info("Exec command failed:", err)
         }
 }
 
 func (op *MediaKeyManager) listenKeyPressEvent() {
         xevent.KeyPressFun(
                 func(X *xgbutil.XUtil, e xevent.KeyPressEvent) {
-                        fmt.Printf("State: %d, Detail: %d\n",
+                        logObj.Infof("State: %d, Detail: %d\n",
                                 e.State, e.Detail)
                         modStr := keybind.ModifierString(e.State)
                         keyStr := keybind.LookupString(X, e.State, e.Detail)
                         if e.Detail == 65 {
                                 keyStr = "space"
                         }
-                        fmt.Println("modStr:", modStr, "keyStr:", keyStr)
+                        logObj.Info("modStr:", modStr, "keyStr:", keyStr)
                         if !op.emitSignal(modStr, keyStr, true) {
                                 value := ""
                                 tmp := filterModStr(modStr)
-                                fmt.Println("Filter modstr:", tmp)
+                                logObj.Info("Filter modstr:", tmp)
                                 if len(tmp) > 0 {
                                         value = tmp + "-" + keyStr
                                 } else {
                                         value = keyStr
                                 }
-                                fmt.Printf("%s pressed...\n", value)
+                                logObj.Infof("%s pressed...\n", value)
                                 tmpInfo, ok := newKeyCodeInfo(value)
                                 if !ok {
                                         return
                                 }
                                 if ok, v := getExecAction(tmpInfo); ok {
-                                        //fmt.Printf("Get '%s' Command:: %s\n",
+                                        //logObj.Infof("Get '%s' Command:: %s\n",
                                         //value, v)
                                         // 不然按键会阻塞，直到程序推出
                                         go execCommand(v)
@@ -236,7 +235,7 @@ func (op *MediaKeyManager) listenKeyPressEvent() {
                         if e.Detail == 65 {
                                 keyStr = "space"
                         }
-                        fmt.Println("Release modStr:", modStr, "keyStr:", keyStr)
+                        logObj.Info("Release modStr:", modStr, "keyStr:", keyStr)
                         op.emitSignal(modStr, keyStr, false)
                 }).Connect(X, X.RootWin())
 }

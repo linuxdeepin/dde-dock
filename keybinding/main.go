@@ -29,7 +29,7 @@ import (
         "dlib"
         "dlib/dbus"
         "dlib/gio-2.0"
-        "fmt"
+        "dlib/logger"
         "github.com/BurntSushi/xgbutil"
         "github.com/BurntSushi/xgbutil/keybind"
         "github.com/BurntSushi/xgbutil/xevent"
@@ -37,6 +37,8 @@ import (
         "strconv"
         "strings"
 )
+
+var logObj = logger.NewLogger("daemon/keybinding")
 
 type AddAccelRet struct {
         Id      int32
@@ -128,7 +130,7 @@ func keyIsValid(key string) bool {
                 }
         }
 
-        fmt.Println("keyIsValid : ", tmp)
+        logObj.Info("keyIsValid : ", tmp)
         switch tmp {
         case "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9", "f10", "f11", "f12", "print", "super_l":
                 return true
@@ -140,7 +142,7 @@ func keyIsValid(key string) bool {
 }
 
 func (m *BindManager) ChangeShortcut(id int32, shortcut string) (string, []int32) {
-        fmt.Printf("Change id: %d, key: %s\n", id, shortcut)
+        logObj.Infof("Change id: %d, key: %s", id, shortcut)
         tmpKeys := getShortcutById(id)
         tmpConflict, tmpList := conflictChecked(id, tmpKeys)
         if tmpConflict {
@@ -222,7 +224,7 @@ func InitVariable() {
 
         X, err = xgbutil.NewConn()
         if err != nil {
-                fmt.Println("Unable to connect to X server:", err)
+                logObj.Info("Unable to connect to X server:", err)
                 return
         }
         keybind.Initialize(X)
@@ -261,8 +263,11 @@ func NewBindManager() *BindManager {
 }
 
 func main() {
+        defer logObj.EndTracing()
+        dlib.InitI18n()
+        dlib.Textdomain("dde-daemon")
         if !dlib.UniqueOnSession(_BINDING_DEST) {
-                fmt.Println("There already has an KeyBinding daemon running.")
+                logObj.Info("There already has an KeyBinding daemon running.")
                 return
         }
 
@@ -273,7 +278,7 @@ func main() {
         bm := NewBindManager()
         err := dbus.InstallOnSession(bm)
         if err != nil {
-                fmt.Println("Install DBus Session Failed:", err)
+                logObj.Info("Install DBus Session Failed:", err)
                 panic(err)
         }
 
@@ -282,7 +287,7 @@ func main() {
         gm := &GrabManager{}
         err = dbus.InstallOnSession(gm)
         if err != nil {
-                fmt.Println("Install DBus Session Failed:", err)
+                logObj.Info("Install DBus Session Failed:", err)
                 panic(err)
         }
 
@@ -293,7 +298,7 @@ func main() {
         go dlib.StartLoop()
         go xevent.Main(X)
         if err = dbus.Wait(); err != nil {
-                fmt.Println("lost session bus:", err)
+                logObj.Info("lost session bus:", err)
                 os.Exit(1)
         } else {
                 os.Exit(0)
