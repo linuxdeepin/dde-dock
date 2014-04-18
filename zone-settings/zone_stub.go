@@ -70,6 +70,13 @@ func (op *Manager) listenSignal() {
         })
 
         launchObj.ConnectClosed(func() {
-                op.EnableAllEdge()
+                op.enableAllEdge()
         })
+}
+
+func (op *Manager) enableAllEdge() {
+        op.SetTopLeft(op.TopLeftAction())
+        op.SetBottomLeft(op.BottomLeftAction())
+        op.SetTopRight(op.TopRightAction())
+        op.SetBottomRight(op.BottomRightAction())
 }

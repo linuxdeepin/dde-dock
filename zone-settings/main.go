@@ -93,13 +93,6 @@ func (op *Manager) BottomRightAction() string {
         return zoneSettings.GetString("right-down")
 }
 
-func (op *Manager) EnableAllEdge() {
-        op.SetTopLeft(op.TopLeftAction())
-        op.SetBottomLeft(op.BottomLeftAction())
-        op.SetTopRight(op.TopRightAction())
-        op.SetBottomRight(op.BottomRightAction())
-}
-
 func main() {
         defer logObj.EndTracing()
 
