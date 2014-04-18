@@ -42,7 +42,7 @@ type Manager struct {
         pathNameMap    map[string]PathInfo
 }
 
-func (op *Manager) GetThemeObjectPathByName(name string) (string, bool) {
+func (op *Manager) GetThemeByName(name string) (string, bool) {
         if path, ok := themeNamePathMap[name]; ok {
                 return path, true
         }
