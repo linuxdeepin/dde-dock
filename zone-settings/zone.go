@@ -32,8 +32,8 @@ import (
 
 type areaRange struct {
         X1      int32
-        X2      int32
         Y1      int32
+        X2      int32
         Y2      int32
 }
 
@@ -67,10 +67,14 @@ func registerZoneArea() {
 
         logObj.Infof("PrimaryRect: %d, %d, %d, %d\n", x1, x2, y1, y2)
 
-        topLeftArea = areaRange{x1, x1 + DISTANCE, y1, y1 + DISTANCE}
-        bottomLeftArea = areaRange{x1, x1 + DISTANCE, y2 - DISTANCE, y2}
-        topRightArea = areaRange{x2 - DISTANCE, x2, y1, y1 + DISTANCE}
-        bottomRightArea = areaRange{x2 - DISTANCE, x2, y2 - DISTANCE, y2}
+        topLeftArea = areaRange{x1, y1, x1 + DISTANCE, y1 + DISTANCE}
+        logObj.Info("TopLeft: ", topLeftArea)
+        bottomLeftArea = areaRange{x1, y2 - DISTANCE, x1 + DISTANCE, y2}
+        logObj.Info("BottomLeft: ", bottomLeftArea)
+        topRightArea = areaRange{x2 - DISTANCE, y1, x2, y1 + DISTANCE}
+        logObj.Info("TopRight: ", topRightArea)
+        bottomRightArea = areaRange{x2 - DISTANCE, y2 - DISTANCE, x2, y2}
+        logObj.Info("BottomRight: ", bottomRightArea)
 
         logObj.Info("topLeft: ", topLeftArea)
         logObj.Info("bottomLeft: ", bottomLeftArea)
@@ -78,7 +82,7 @@ func registerZoneArea() {
         logObj.Info("bottomRight: ", bottomRightArea)
 
         var err error
-        areaId, err = areaObj.RegisterArea([]areaRange{
+        areaId, err = areaObj.RegisterAreas([]areaRange{
                 topLeftArea,
                 bottomLeftArea,
                 topRightArea,
