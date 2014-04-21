@@ -237,9 +237,10 @@ func (s *ConnectionSession) getFieldOfPageKey(page, key string) string {
 func (s *ConnectionSession) listKeys(page string) (keys []string) {
 	fields := s.pageToFields(page)
 	for _, field := range fields {
-		if isSettingFieldExists(s.data, field) {
-			keys = appendStrArrayUnion(keys, generalGetSettingAvailableKeys(s.data, field)...)
-		}
+		// TODO
+		// if isSettingFieldExists(s.data, field) {
+		// }
+		keys = appendStrArrayUnion(keys, generalGetSettingAvailableKeys(s.data, field)...)
 	}
 	if len(keys) == 0 {
 		Logger.Warning("there is no avaiable keys for page", page)
