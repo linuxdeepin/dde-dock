@@ -3,6 +3,6 @@
         "Name": "General",
         "DisplayName": "General",
         "RelatedFields": ["NM_SETTING_CONNECTION_SETTING_NAME"],
-        "FrontEndFile": "../../../dss/modules/network/components_autogen/EditSectionGeneral.qml"
+        "FrontEndFile": "../../../dss/modules/network/_components_autogen/EditSectionGeneral.qml"
     }
 ]

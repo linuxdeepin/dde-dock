@@ -33,7 +33,6 @@ type NMSettingStruct struct {
 	}
 }
 
-// TODO
 type NMPageStruct struct {
 	Name          string
 	DisplayName   string
@@ -41,20 +40,20 @@ type NMPageStruct struct {
 	FrontEndFile  string
 }
 
-func generateNMSettingCode(nmSetting NMSettingStruct) (content string) {
+func genNMSettingCode(nmSetting NMSettingStruct) (content string) {
 	content = fileHeader
-	content += generateTemplate(nmSetting, tplGetKeyType)          // get key type
-	content += generateTemplate(nmSetting, tplIsKeyInSettingField) // check is key in current field
-	content += generateTemplate(nmSetting, tplGetDefaultValueJSON) // get default json value
-	content += generateTemplate(nmSetting, tplGeneralGetterJSON)   // general json getter
-	content += generateTemplate(nmSetting, tplGeneralSetterJSON)   // general json setter
-	content += generateTemplate(nmSetting, tplCheckExists)         // check if key exists
-	content += generateTemplate(nmSetting, tplEnsureNoEmpty)       // ensure field and key exists and not empty
-	content += generateTemplate(nmSetting, tplGetter)              // getter
-	content += generateTemplate(nmSetting, tplSetter)              // setter
-	content += generateTemplate(nmSetting, tplJSONGetter)          // json getter
-	content += generateTemplate(nmSetting, tplJSONSetter)          // json setter
-	content += generateTemplate(nmSetting, tplRemover)             // remover
+	content += genTpl(nmSetting, tplGetKeyType)          // get key type
+	content += genTpl(nmSetting, tplIsKeyInSettingField) // check is key in current field
+	content += genTpl(nmSetting, tplGetDefaultValueJSON) // get default json value
+	content += genTpl(nmSetting, tplGeneralGetterJSON)   // general json getter
+	content += genTpl(nmSetting, tplGeneralSetterJSON)   // general json setter
+	content += genTpl(nmSetting, tplCheckExists)         // check if key exists
+	content += genTpl(nmSetting, tplEnsureNoEmpty)       // ensure field and key exists and not empty
+	content += genTpl(nmSetting, tplGetter)              // getter
+	content += genTpl(nmSetting, tplSetter)              // setter
+	content += genTpl(nmSetting, tplJSONGetter)          // json getter
+	content += genTpl(nmSetting, tplJSONSetter)          // json setter
+	content += genTpl(nmSetting, tplRemover)             // remover
 
 	// TODO logic setter
 	// TODO logic json setter
@@ -63,7 +62,7 @@ func generateNMSettingCode(nmSetting NMSettingStruct) (content string) {
 	return
 }
 
-func generateTemplate(nmSetting NMSettingStruct, tplstr string) (content string) {
+func genTpl(nmSetting NMSettingStruct, tplstr string) (content string) {
 	templator := template.New("nm autogen").Funcs(funcMap)
 	tpl, err := templator.Parse(tplstr)
 	if err != nil {
@@ -100,7 +99,7 @@ func main() {
 	}
 
 	for _, nmSetting := range nmSettings {
-		autogenContent := generateNMSettingCode(nmSetting)
+		autogenContent := genNMSettingCode(nmSetting)
 		if writeOutput {
 			// write to file and execute gofmt
 			err = ioutil.WriteFile(nmSetting.BackEndFile, []byte(autogenContent), 0644)
