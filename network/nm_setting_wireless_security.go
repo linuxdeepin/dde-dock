@@ -148,7 +148,7 @@ func getSettingWirelessSecurityAvailableKeys(data _ConnectionData) (keys []strin
 }
 
 // Get available values
-func getSettingWirelessSecurityAvailableValues(key string) (values []string, customizable bool) {
+func getSettingWirelessSecurityAvailableValues(data _ConnectionData, key string) (values []string, customizable bool) {
 	customizable = true
 	switch key {
 	case NM_SETTING_WIRELESS_SECURITY_KEY_MGMT:

@@ -2,10 +2,21 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path"
 	"strings"
 )
+
+func writeBackendFile(file, content string) {
+	err := ioutil.WriteFile(file, []byte(content), 0644)
+	if err != nil {
+		fmt.Println("error, write file failed:", err)
+		return
+	}
+	execAndWait(10, "gofmt", "-w", file)
+	fmt.Println(file)
+}
 
 // NM_SETTING_CONNECTION_SETTING_NAME -> ../nm_setting_connection_autogen.go
 func getBackEndFilePath(fieldName string) (filePath string) {

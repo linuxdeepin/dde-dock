@@ -8,24 +8,24 @@ func generalIsKeyInSettingField(field, key string) bool {
 	switch field {
 	default:
 		Logger.Warning("invalid field name", field)
-	case field8021x:
+	case NM_SETTING_802_1X_SETTING_NAME:
 		return isKeyInSetting8021x(key)
-	case fieldConnection:
+	case NM_SETTING_CONNECTION_SETTING_NAME:
 		return isKeyInSettingConnection(key)
-	case fieldIPv4:
+	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
 		return isKeyInSettingIp4Config(key)
-	case fieldIPv6:
+	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
 		return isKeyInSettingIp6Config(key)
-	case fieldWired:
-		return isKeyInSettingWired(key)
-	case fieldWireless:
-		return isKeyInSettingWireless(key)
-	case fieldWirelessSecurity:
-		return isKeyInSettingWirelessSecurity(key)
-	case fieldPppoe:
-		return isKeyInSettingPppoe(key)
-	case fieldPpp:
+	case NM_SETTING_PPP_SETTING_NAME:
 		return isKeyInSettingPpp(key)
+	case NM_SETTING_PPPOE_SETTING_NAME:
+		return isKeyInSettingPppoe(key)
+	case NM_SETTING_WIRED_SETTING_NAME:
+		return isKeyInSettingWired(key)
+	case NM_SETTING_WIRELESS_SETTING_NAME:
+		return isKeyInSettingWireless(key)
+	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
+		return isKeyInSettingWirelessSecurity(key)
 	}
 	return false
 }
@@ -38,48 +38,48 @@ func generalGetSettingKeyType(field, key string) (t ktype) {
 	switch field {
 	default:
 		Logger.Warning("invalid field name", field)
-	case field8021x:
+	case NM_SETTING_802_1X_SETTING_NAME:
 		t = getSetting8021xKeyType(key)
-	case fieldConnection:
+	case NM_SETTING_CONNECTION_SETTING_NAME:
 		t = getSettingConnectionKeyType(key)
-	case fieldIPv4:
+	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
 		t = getSettingIp4ConfigKeyType(key)
-	case fieldIPv6:
+	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
 		t = getSettingIp6ConfigKeyType(key)
-	case fieldWired:
-		t = getSettingWiredKeyType(key)
-	case fieldWireless:
-		t = getSettingWirelessKeyType(key)
-	case fieldWirelessSecurity:
-		t = getSettingWirelessSecurityKeyType(key)
-	case fieldPppoe:
-		t = getSettingPppoeKeyType(key)
-	case fieldPpp:
+	case NM_SETTING_PPP_SETTING_NAME:
 		t = getSettingPppKeyType(key)
+	case NM_SETTING_PPPOE_SETTING_NAME:
+		t = getSettingPppoeKeyType(key)
+	case NM_SETTING_WIRED_SETTING_NAME:
+		t = getSettingWiredKeyType(key)
+	case NM_SETTING_WIRELESS_SETTING_NAME:
+		t = getSettingWirelessKeyType(key)
+	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
+		t = getSettingWirelessSecurityKeyType(key)
 	}
 	return
 }
 
 func generalGetSettingAvailableKeys(data _ConnectionData, field string) (keys []string) {
 	switch field {
-	case field8021x:
+	case NM_SETTING_802_1X_SETTING_NAME:
 		keys = getSetting8021xAvailableKeys(data)
-	case fieldConnection:
+	case NM_SETTING_CONNECTION_SETTING_NAME:
 		keys = getSettingConnectionAvailableKeys(data)
-	case fieldIPv4:
+	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
 		keys = getSettingIp4ConfigAvailableKeys(data)
-	case fieldIPv6:
+	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
 		keys = getSettingIp6ConfigAvailableKeys(data)
-	case fieldWired:
-		keys = getSettingWiredAvailableKeys(data)
-	case fieldWireless:
-		keys = getSettingWirelessAvailableKeys(data)
-	case fieldWirelessSecurity:
-		keys = getSettingWirelessSecurityAvailableKeys(data)
-	case fieldPppoe:
-		keys = getSettingPppoeAvailableKeys(data)
-	case fieldPpp:
+	case NM_SETTING_PPP_SETTING_NAME:
 		keys = getSettingPppAvailableKeys(data)
+	case NM_SETTING_PPPOE_SETTING_NAME:
+		keys = getSettingPppoeAvailableKeys(data)
+	case NM_SETTING_WIRED_SETTING_NAME:
+		keys = getSettingWiredAvailableKeys(data)
+	case NM_SETTING_WIRELESS_SETTING_NAME:
+		keys = getSettingWirelessAvailableKeys(data)
+	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
+		keys = getSettingWirelessSecurityAvailableKeys(data)
 	}
 	return
 }
@@ -90,24 +90,24 @@ func generalGetSettingAvailableValues(data _ConnectionData, field, key string) (
 		return
 	}
 	switch field {
-	case field8021x:
+	case NM_SETTING_802_1X_SETTING_NAME:
 		values, customizable = getSetting8021xAvailableValues(data, key)
-	case fieldConnection:
-		values, customizable = getSettingConnectionAvailableValues(key)
-	case fieldIPv4:
+	case NM_SETTING_CONNECTION_SETTING_NAME:
+		values, customizable = getSettingConnectionAvailableValues(data, key)
+	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
 		values, customizable = getSettingIp4ConfigAvailableValues(data, key)
-	case fieldIPv6:
-		values, customizable = getSettingIp6ConfigAvailableValues(key)
-	case fieldWired:
-		values, customizable = getSettingWiredAvailableValues(key)
-	case fieldWireless:
-		values, customizable = getSettingWirelessAvailableValues(key)
-	case fieldWirelessSecurity:
-		values, customizable = getSettingWirelessSecurityAvailableValues(key)
-	case fieldPppoe:
-		values, customizable = getSettingPppoeAvailableValues(key)
-	case fieldPpp:
-		values, customizable = getSettingPppAvailableValues(key)
+	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
+		values, customizable = getSettingIp6ConfigAvailableValues(data, key)
+	case NM_SETTING_PPP_SETTING_NAME:
+		values, customizable = getSettingPppAvailableValues(data, key)
+	case NM_SETTING_PPPOE_SETTING_NAME:
+		values, customizable = getSettingPppoeAvailableValues(data, key)
+	case NM_SETTING_WIRED_SETTING_NAME:
+		values, customizable = getSettingWiredAvailableValues(data, key)
+	case NM_SETTING_WIRELESS_SETTING_NAME:
+		values, customizable = getSettingWirelessAvailableValues(data, key)
+	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
+		values, customizable = getSettingWirelessSecurityAvailableValues(data, key)
 	}
 	return
 }
@@ -115,25 +115,25 @@ func generalGetSettingAvailableValues(data _ConnectionData, field, key string) (
 func generalCheckSettingValues(data _ConnectionData, field string) (errs map[string]string) {
 	switch field {
 	default:
-		Logger.Error("updatePropErrors: invalid field name", field)
-	case field8021x:
+		Logger.Error("invalid field name", field)
+	case NM_SETTING_802_1X_SETTING_NAME:
 		errs = checkSetting8021xValues(data)
-	case fieldConnection:
+	case NM_SETTING_CONNECTION_SETTING_NAME:
 		errs = checkSettingConnectionValues(data)
-	case fieldIPv4:
+	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
 		errs = checkSettingIp4ConfigValues(data)
-	case fieldIPv6:
+	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
 		errs = checkSettingIp6ConfigValues(data)
-	case fieldWired:
-		errs = checkSettingWiredValues(data)
-	case fieldWireless:
-		errs = checkSettingWirelessValues(data)
-	case fieldWirelessSecurity:
-		errs = checkSettingWirelessSecurityValues(data)
-	case fieldPppoe:
-		errs = checkSettingPppoeValues(data)
-	case fieldPpp:
+	case NM_SETTING_PPP_SETTING_NAME:
 		errs = checkSettingPppValues(data)
+	case NM_SETTING_PPPOE_SETTING_NAME:
+		errs = checkSettingPppoeValues(data)
+	case NM_SETTING_WIRED_SETTING_NAME:
+		errs = checkSettingWiredValues(data)
+	case NM_SETTING_WIRELESS_SETTING_NAME:
+		errs = checkSettingWirelessValues(data)
+	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
+		errs = checkSettingWirelessSecurityValues(data)
 	}
 	return
 }
@@ -146,24 +146,24 @@ func generalGetSettingKeyJSON(data _ConnectionData, field, key string) (valueJSO
 	switch field {
 	default:
 		Logger.Warning("invalid field name", field)
-	case field8021x:
+	case NM_SETTING_802_1X_SETTING_NAME:
 		valueJSON = generalGetSetting8021xKeyJSON(data, key)
-	case fieldConnection:
+	case NM_SETTING_CONNECTION_SETTING_NAME:
 		valueJSON = generalGetSettingConnectionKeyJSON(data, key)
-	case fieldIPv4:
+	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
 		valueJSON = generalGetSettingIp4ConfigKeyJSON(data, key)
-	case fieldIPv6:
+	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
 		valueJSON = generalGetSettingIp6ConfigKeyJSON(data, key)
-	case fieldWired:
-		valueJSON = generalGetSettingWiredKeyJSON(data, key)
-	case fieldWireless:
-		valueJSON = generalGetSettingWirelessKeyJSON(data, key)
-	case fieldWirelessSecurity:
-		valueJSON = generalGetSettingWirelessSecurityKeyJSON(data, key)
-	case fieldPppoe:
-		valueJSON = generalGetSettingPppoeKeyJSON(data, key)
-	case fieldPpp:
+	case NM_SETTING_PPP_SETTING_NAME:
 		valueJSON = generalGetSettingPppKeyJSON(data, key)
+	case NM_SETTING_PPPOE_SETTING_NAME:
+		valueJSON = generalGetSettingPppoeKeyJSON(data, key)
+	case NM_SETTING_WIRED_SETTING_NAME:
+		valueJSON = generalGetSettingWiredKeyJSON(data, key)
+	case NM_SETTING_WIRELESS_SETTING_NAME:
+		valueJSON = generalGetSettingWirelessKeyJSON(data, key)
+	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
+		valueJSON = generalGetSettingWirelessSecurityKeyJSON(data, key)
 	}
 	return
 }
@@ -176,24 +176,24 @@ func generalSetSettingKeyJSON(data _ConnectionData, field, key, valueJSON string
 	switch field {
 	default:
 		Logger.Warning("invalid field name", field)
-	case field8021x:
+	case NM_SETTING_802_1X_SETTING_NAME:
 		generalSetSetting8021xKeyJSON(data, key, valueJSON)
-	case fieldConnection:
+	case NM_SETTING_CONNECTION_SETTING_NAME:
 		generalSetSettingConnectionKeyJSON(data, key, valueJSON)
-	case fieldIPv4:
+	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
 		generalSetSettingIp4ConfigKeyJSON(data, key, valueJSON)
-	case fieldIPv6:
+	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
 		generalSetSettingIp6ConfigKeyJSON(data, key, valueJSON)
-	case fieldWired:
-		generalSetSettingWiredKeyJSON(data, key, valueJSON)
-	case fieldWireless:
-		generalSetSettingWirelessKeyJSON(data, key, valueJSON)
-	case fieldWirelessSecurity:
-		generalSetSettingWirelessSecurityKeyJSON(data, key, valueJSON)
-	case fieldPppoe:
-		generalSetSettingPppoeKeyJSON(data, key, valueJSON)
-	case fieldPpp:
+	case NM_SETTING_PPP_SETTING_NAME:
 		generalSetSettingPppKeyJSON(data, key, valueJSON)
+	case NM_SETTING_PPPOE_SETTING_NAME:
+		generalSetSettingPppoeKeyJSON(data, key, valueJSON)
+	case NM_SETTING_WIRED_SETTING_NAME:
+		generalSetSettingWiredKeyJSON(data, key, valueJSON)
+	case NM_SETTING_WIRELESS_SETTING_NAME:
+		generalSetSettingWirelessKeyJSON(data, key, valueJSON)
+	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
+		generalSetSettingWirelessSecurityKeyJSON(data, key, valueJSON)
 	}
 }
 
@@ -201,24 +201,24 @@ func getSettingKeyDefaultValueJSON(field, key string) (valueJSON string) {
 	switch field {
 	default:
 		Logger.Warning("invalid field name", field)
-	case field8021x:
+	case NM_SETTING_802_1X_SETTING_NAME:
 		valueJSON = getSetting8021xKeyDefaultValueJSON(key)
-	case fieldConnection:
+	case NM_SETTING_CONNECTION_SETTING_NAME:
 		valueJSON = getSettingConnectionKeyDefaultValueJSON(key)
-	case fieldIPv4:
+	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
 		valueJSON = getSettingIp4ConfigKeyDefaultValueJSON(key)
-	case fieldIPv6:
+	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
 		valueJSON = getSettingIp6ConfigKeyDefaultValueJSON(key)
-	case fieldWired:
-		valueJSON = getSettingWiredKeyDefaultValueJSON(key)
-	case fieldWireless:
-		valueJSON = getSettingWirelessKeyDefaultValueJSON(key)
-	case fieldWirelessSecurity:
-		valueJSON = getSettingWirelessSecurityKeyDefaultValueJSON(key)
-	case fieldPppoe:
-		valueJSON = getSettingPppoeKeyDefaultValueJSON(key)
-	case fieldPpp:
+	case NM_SETTING_PPP_SETTING_NAME:
 		valueJSON = getSettingPppKeyDefaultValueJSON(key)
+	case NM_SETTING_PPPOE_SETTING_NAME:
+		valueJSON = getSettingPppoeKeyDefaultValueJSON(key)
+	case NM_SETTING_WIRED_SETTING_NAME:
+		valueJSON = getSettingWiredKeyDefaultValueJSON(key)
+	case NM_SETTING_WIRELESS_SETTING_NAME:
+		valueJSON = getSettingWirelessKeyDefaultValueJSON(key)
+	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
+		valueJSON = getSettingWirelessSecurityKeyDefaultValueJSON(key)
 	}
 	return
 }

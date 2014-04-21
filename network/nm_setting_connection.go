@@ -89,7 +89,7 @@ func getSettingConnectionAvailableKeys(data _ConnectionData) (keys []string) {
 }
 
 // Get available values
-func getSettingConnectionAvailableValues(key string) (values []string, customizable bool) {
+func getSettingConnectionAvailableValues(data _ConnectionData, key string) (values []string, customizable bool) {
 	customizable = true
 	return
 }

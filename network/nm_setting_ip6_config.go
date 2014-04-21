@@ -64,7 +64,7 @@ func getSettingIp6ConfigAvailableKeys(data _ConnectionData) (keys []string) {
 }
 
 // Get available values
-func getSettingIp6ConfigAvailableValues(key string) (values []string, customizable bool) {
+func getSettingIp6ConfigAvailableValues(data _ConnectionData, key string) (values []string, customizable bool) {
 	customizable = true
 	switch key {
 	case NM_SETTING_IP6_CONFIG_METHOD:

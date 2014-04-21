@@ -30,7 +30,7 @@ func getSettingPppAvailableKeys(data _ConnectionData) (keys []string) {
 }
 
 // TODO Get available values
-func getSettingPppAvailableValues(key string) (values []string, customizable bool) {
+func getSettingPppAvailableValues(data _ConnectionData, key string) (values []string, customizable bool) {
 	customizable = true
 	return
 }

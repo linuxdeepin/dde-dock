@@ -192,7 +192,7 @@ func getSettingWirelessAvailableKeys(data _ConnectionData) (keys []string) {
 }
 
 // Get available values
-func getSettingWirelessAvailableValues(key string) (values []string, customizable bool) {
+func getSettingWirelessAvailableValues(data _ConnectionData, key string) (values []string, customizable bool) {
 	customizable = true
 	switch key {
 	case NM_SETTING_WIRELESS_MODE:

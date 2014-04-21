@@ -6,6 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"io/ioutil"
+	"path"
 	"text/template"
 )
 
@@ -23,10 +24,11 @@ const (
 	nmSettingsJSONFile = "./nm_settings.json"
 )
 
+var nmSettingUtilsFile = path.Join(backEndDir, "nm_setting_utils_autogen.go")
+
 type NMSettingStruct struct {
-	FieldName   string // such as "NM_SETTING_CONNECTION_SETTING_NAME"
-	BackEndFile string
-	Keys        []struct {
+	FieldName string // such as "NM_SETTING_CONNECTION_SETTING_NAME"
+	Keys      []struct {
 		Name         string // such as "NM_SETTING_CONNECTION_ID"
 		Value        string // such as "id"
 		Type         string // such as "ktypeString"
@@ -34,6 +36,7 @@ type NMSettingStruct struct {
 		BackEndUsed  bool   // determine if this key will be used by back-end(golang code)
 		FrontEndUsed bool   // determine if this key will be used by front-end(qml code)
 		LogicSet     bool   // determine if this key should to generate a logic setter
+		// DisplayName   string	// TODO
 	}
 }
 
@@ -41,7 +44,7 @@ type NMPageStruct struct {
 	Name          string
 	DisplayName   string
 	RelatedFields []string
-	FrontEndFile  string
+	// FrontEndFile  string // TODO
 }
 
 func genNMSettingCode(nmSetting NMSettingStruct) (content string) {
@@ -66,7 +69,12 @@ func genNMSettingCode(nmSetting NMSettingStruct) (content string) {
 	return
 }
 
-func genTpl(nmSetting NMSettingStruct, tplstr string) (content string) {
+func genNMSettingGeneralUtilsCode(nmSettings []NMSettingStruct) (content string) {
+	content = genTpl(nmSettings, tplGeneralSettingUtils) // general setting utils
+	return
+}
+
+func genTpl(data interface{}, tplstr string) (content string) {
 	templator := template.New("nm autogen").Funcs(funcMap)
 	tpl, err := templator.Parse(tplstr)
 	if err != nil {
@@ -74,7 +82,7 @@ func genTpl(nmSetting NMSettingStruct, tplstr string) (content string) {
 		return
 	}
 	buf := bytes.NewBufferString("")
-	err = tpl.Execute(buf, nmSetting)
+	err = tpl.Execute(buf, data)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -102,21 +110,25 @@ func main() {
 		return
 	}
 
+	// back-end code
 	for _, nmSetting := range nmSettings {
 		autogenContent := genNMSettingCode(nmSetting)
 		if writeOutput {
 			// write to file and execute gofmt
 			backEndFile := getBackEndFilePath(nmSetting.FieldName)
-			err = ioutil.WriteFile(backEndFile, []byte(autogenContent), 0644)
-			if err != nil {
-				fmt.Println("error, write file failed:", err)
-				continue
-			}
-			execAndWait(10, "gofmt", "-w", backEndFile)
-			fmt.Println(backEndFile)
+			writeBackendFile(backEndFile, autogenContent)
 		} else {
 			fmt.Println(autogenContent)
 			fmt.Println()
 		}
+	}
+
+	// back-end code, general setting utils
+	autogenContent := genNMSettingGeneralUtilsCode(nmSettings)
+	if writeOutput {
+		writeBackendFile(nmSettingUtilsFile, autogenContent)
+	} else {
+		fmt.Println(autogenContent)
+		fmt.Println()
 	}
 }
