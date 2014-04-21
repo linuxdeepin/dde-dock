@@ -28,14 +28,14 @@ const (
 
 // page is a wrapper of field for easy to configure
 const (
-	pageGeneral  = "General"  // -> fieldConnection
-	pageEthernet = "Ethernet" // -> fieldWireed
-	pageWifi     = "Wifi"     // -> fieldWireless
-	pageIPv4     = "IPv4"     // -> fieldIPv4
-	pageIPv6     = "IPv6"     // -> fieldIPv6
-	pageSecurity = "Security" // -> field8021x, fieldWirelessSecurity
-	pagePppoe    = "PPPoE"    // -> fieldPppoe
-	pagePpp      = "PPP"      // -> fieldPpp
+	pageGeneral  = "general"  // -> fieldConnection
+	pageEthernet = "ethernet" // -> fieldWireed
+	pageWifi     = "wifi"     // -> fieldWireless
+	pageIPv4     = "ipv4"     // -> fieldIPv4
+	pageIPv6     = "ipv6"     // -> fieldIPv6
+	pageSecurity = "security" // -> field8021x, fieldWirelessSecurity
+	pagePppoe    = "pppoe"    // -> fieldPppoe
+	pagePpp      = "ppp"      // -> fieldPpp
 )
 
 const (
