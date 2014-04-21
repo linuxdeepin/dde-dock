@@ -17,7 +17,11 @@ var funcMap = template.FuncMap{
 	"IfNeedCheckValueLength":    IfNeedCheckValueLength,
 }
 
-const nmSettingsJSONFile = "./nm_settings.json"
+const (
+	backEndDir         = ".."
+	frontEndDir        = "../../../dss/modules/network/_components_autogen/"
+	nmSettingsJSONFile = "./nm_settings.json"
+)
 
 type NMSettingStruct struct {
 	FieldName   string // such as "NM_SETTING_CONNECTION_SETTING_NAME"
@@ -102,13 +106,14 @@ func main() {
 		autogenContent := genNMSettingCode(nmSetting)
 		if writeOutput {
 			// write to file and execute gofmt
-			err = ioutil.WriteFile(nmSetting.BackEndFile, []byte(autogenContent), 0644)
+			backEndFile := getBackEndFilePath(nmSetting.FieldName)
+			err = ioutil.WriteFile(backEndFile, []byte(autogenContent), 0644)
 			if err != nil {
 				fmt.Println("error, write file failed:", err)
 				continue
 			}
-			execAndWait(10, "gofmt", "-w", nmSetting.BackEndFile)
-			fmt.Println(nmSetting.BackEndFile)
+			execAndWait(10, "gofmt", "-w", backEndFile)
+			fmt.Println(backEndFile)
 		} else {
 			fmt.Println(autogenContent)
 			fmt.Println()

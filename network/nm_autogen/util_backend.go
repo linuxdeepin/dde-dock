@@ -3,7 +3,17 @@ package main
 import (
 	"fmt"
 	"os"
+	"path"
+	"strings"
 )
+
+// NM_SETTING_CONNECTION_SETTING_NAME -> ../nm_setting_connection_autogen.go
+func getBackEndFilePath(fieldName string) (filePath string) {
+	fileName := strings.TrimSuffix(fieldName, "_SETTING_NAME")
+	fileName = strings.ToLower(fileName) + "_autogen.go"
+	filePath = path.Join(backEndDir, fileName)
+	return
+}
 
 // "ktypeString" -> "string", "ktypeArrayByte" -> "[]byte"
 func ToKeyTypeRealData(ktype string) (realData string) {

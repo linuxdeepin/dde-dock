@@ -1,7 +1,6 @@
 [
 {
     "FieldName":"NM_SETTING_802_1X_SETTING_NAME",
-    "BackEndFile":"../nm_setting_802_1x_autogen.go",
     "Keys":[
 	    {"Name":"NM_SETTING_802_1X_EAP", "Value":"eap", "Type":"ktypeArrayString", "Default":"<default>", "BackEndUsed":true, "FrontEndUsed":true, "LogicSet":true},
 	    {"Name":"NM_SETTING_802_1X_IDENTITY", "Value":"identity", "Type":"ktypeString", "Default":"<null>", "BackEndUsed":true, "FrontEndUsed":true, "LogicSet":false},
@@ -39,7 +38,6 @@
 },
 {
     "FieldName":"NM_SETTING_CONNECTION_SETTING_NAME",
-    "BackEndFile":"../nm_setting_connection_autogen.go",
     "Keys":[
 	    {"Name":"NM_SETTING_CONNECTION_ID", "Value":"id", "Type":"ktypeString", "Default":"<null>", "BackEndUsed":true, "FrontEndUsed":true, "LogicSet":false},
 	    {"Name":"NM_SETTING_CONNECTION_UUID", "Value":"uuid", "Type":"ktypeString", "Default":"<null>", "BackEndUsed":true, "FrontEndUsed":true, "LogicSet":false},
@@ -56,7 +54,6 @@
 },
 {
     "FieldName":"NM_SETTING_IP4_CONFIG_SETTING_NAME",
-    "BackEndFile":"../nm_setting_ipv4_autogen.go",
     "Keys":[
 	    {"Name":"NM_SETTING_IP4_CONFIG_METHOD", "Value":"method", "Type":"ktypeString", "Default":"<null>", "BackEndUsed":true, "FrontEndUsed":true, "LogicSet":true},
 	    {"Name":"NM_SETTING_IP4_CONFIG_DNS", "Value":"dns", "Type":"ktypeWrapperIpv4Dns", "Default":"<default>", "BackEndUsed":true, "FrontEndUsed":true, "LogicSet":false},
@@ -74,7 +71,6 @@
 },
 {
     "FieldName":"NM_SETTING_IP6_CONFIG_SETTING_NAME",
-    "BackEndFile":"../nm_setting_ipv6_autogen.go",
     "Keys":[
 	    {"Name":"NM_SETTING_IP6_CONFIG_METHOD", "Value":"method", "Type":"ktypeString", "Default":"<null>", "BackEndUsed":true, "FrontEndUsed":true, "LogicSet":true},
 	    {"Name":"NM_SETTING_IP6_CONFIG_DNS", "Value":"dns", "Type":"ktypeWrapperIpv6Dns", "Default":"<default>", "BackEndUsed":true, "FrontEndUsed":true, "LogicSet":false},
@@ -91,7 +87,6 @@
 },
 {
     "FieldName":"NM_SETTING_PPP_SETTING_NAME",
-    "BackEndFile":"../nm_setting_ppp_autogen.go",
     "Keys":[
 	    {"Name":"NM_SETTING_PPP_NOAUTH", "Value":"noauth", "Type":"ktypeBoolean", "Default":"true", "BackEndUsed":true, "FrontEndUsed":true, "LogicSet":false},
 	    {"Name":"NM_SETTING_PPP_REFUSE_EAP", "Value":"refuse-eap", "Type":"ktypeBoolean", "Default":"<default>", "BackEndUsed":true, "FrontEndUsed":true, "LogicSet":false},
@@ -115,7 +110,6 @@
 },
 {
     "FieldName":"NM_SETTING_PPPOE_SETTING_NAME",
-    "BackEndFile":"../nm_setting_pppoe_autogen.go",
     "Keys":[
 	    {"Name":"NM_SETTING_PPPOE_SERVICE", "Value":"service", "Type":"ktypeString", "Default":"<default>", "BackEndUsed":true, "FrontEndUsed":true, "LogicSet":false},
 	    {"Name":"NM_SETTING_PPPOE_USERNAME", "Value":"username", "Type":"ktypeString", "Default":"<default>", "BackEndUsed":true, "FrontEndUsed":true, "LogicSet":false},
@@ -125,7 +119,6 @@
 },
 {
     "FieldName":"NM_SETTING_WIRED_SETTING_NAME",
-    "BackEndFile":"../nm_setting_wired_autogen.go",
     "Keys":[
 	    {"Name":"NM_SETTING_WIRED_PORT", "Value":"port", "Type":"ktypeString", "Default":"<null>", "BackEndUsed":true, "FrontEndUsed":true, "LogicSet":false},
 	    {"Name":"NM_SETTING_WIRED_SPEED", "Value":"speed", "Type":"ktypeUint32", "Default":"<default>", "BackEndUsed":true, "FrontEndUsed":true, "LogicSet":false},
@@ -142,7 +135,6 @@
 },
 {
     "FieldName":"NM_SETTING_WIRELESS_SETTING_NAME",
-    "BackEndFile":"../nm_setting_wireless_autogen.go",
     "Keys":[
 	    {"Name":"NM_SETTING_WIRELESS_SSID", "Value":"ssid", "Type":"ktypeWrapperString", "Default":"<default>", "BackEndUsed":true, "FrontEndUsed":true, "LogicSet":false},
 	    {"Name":"NM_SETTING_WIRELESS_MODE", "Value":"mode", "Type":"ktypeString", "Default":"<null>", "BackEndUsed":true, "FrontEndUsed":true, "LogicSet":false},
@@ -162,7 +154,6 @@
 },
 {
     "FieldName":"NM_SETTING_WIRELESS_SECURITY_SETTING_NAME",
-    "BackEndFile":"../nm_setting_wireless_security_autogen.go",
     "Keys":[
      {"Name":"NM_SETTING_WIRELESS_SECURITY_KEY_MGMT", "Value":"key-mgmt", "Type":"ktypeString", "Default":"<null>", "BackEndUsed":true, "FrontEndUsed":true, "LogicSet":false},
      {"Name":"NM_SETTING_WIRELESS_SECURITY_WEP_TX_KEYIDX", "Value":"wep-tx-keyidx", "Type":"ktypeUint32", "Default":"<default>", "BackEndUsed":true, "FrontEndUsed":true, "LogicSet":false},
