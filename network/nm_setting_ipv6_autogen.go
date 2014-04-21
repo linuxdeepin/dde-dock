@@ -12,8 +12,6 @@ func getSettingIp6ConfigKeyType(key string) (t ktype) {
 		t = ktypeUnknown
 	case NM_SETTING_IP6_CONFIG_METHOD:
 		t = ktypeString
-	case NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME:
-		t = ktypeString
 	case NM_SETTING_IP6_CONFIG_DNS:
 		t = ktypeWrapperIpv6Dns
 	case NM_SETTING_IP6_CONFIG_DNS_SEARCH:
@@ -32,6 +30,8 @@ func getSettingIp6ConfigKeyType(key string) (t ktype) {
 		t = ktypeBoolean
 	case NM_SETTING_IP6_CONFIG_IP6_PRIVACY:
 		t = ktypeInt32
+	case NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME:
+		t = ktypeString
 	}
 	return
 }
@@ -40,8 +40,6 @@ func getSettingIp6ConfigKeyType(key string) (t ktype) {
 func isKeyInSettingIp6Config(key string) bool {
 	switch key {
 	case NM_SETTING_IP6_CONFIG_METHOD:
-		return true
-	case NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME:
 		return true
 	case NM_SETTING_IP6_CONFIG_DNS:
 		return true
@@ -61,6 +59,8 @@ func isKeyInSettingIp6Config(key string) bool {
 		return true
 	case NM_SETTING_IP6_CONFIG_IP6_PRIVACY:
 		return true
+	case NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME:
+		return true
 	}
 	return false
 }
@@ -71,8 +71,6 @@ func getSettingIp6ConfigKeyDefaultValueJSON(key string) (valueJSON string) {
 	default:
 		Logger.Error("invalid key:", key)
 	case NM_SETTING_IP6_CONFIG_METHOD:
-		valueJSON = `""`
-	case NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME:
 		valueJSON = `""`
 	case NM_SETTING_IP6_CONFIG_DNS:
 		valueJSON = `null`
@@ -92,6 +90,8 @@ func getSettingIp6ConfigKeyDefaultValueJSON(key string) (valueJSON string) {
 		valueJSON = `true`
 	case NM_SETTING_IP6_CONFIG_IP6_PRIVACY:
 		valueJSON = `-1`
+	case NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME:
+		valueJSON = `""`
 	}
 	return
 }
@@ -103,8 +103,6 @@ func generalGetSettingIp6ConfigKeyJSON(data _ConnectionData, key string) (value 
 		Logger.Error("generalGetSettingIp6ConfigKeyJSON: invalide key", key)
 	case NM_SETTING_IP6_CONFIG_METHOD:
 		value = getSettingIp6ConfigMethodJSON(data)
-	case NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME:
-		value = getSettingIp6ConfigDhcpHostnameJSON(data)
 	case NM_SETTING_IP6_CONFIG_DNS:
 		value = getSettingIp6ConfigDnsJSON(data)
 	case NM_SETTING_IP6_CONFIG_DNS_SEARCH:
@@ -123,6 +121,8 @@ func generalGetSettingIp6ConfigKeyJSON(data _ConnectionData, key string) (value 
 		value = getSettingIp6ConfigMayFailJSON(data)
 	case NM_SETTING_IP6_CONFIG_IP6_PRIVACY:
 		value = getSettingIp6ConfigIp6PrivacyJSON(data)
+	case NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME:
+		value = getSettingIp6ConfigDhcpHostnameJSON(data)
 	}
 	return
 }
@@ -134,8 +134,6 @@ func generalSetSettingIp6ConfigKeyJSON(data _ConnectionData, key, valueJSON stri
 		Logger.Error("generalSetSettingIp6ConfigKeyJSON: invalide key", key)
 	case NM_SETTING_IP6_CONFIG_METHOD:
 		logicSetSettingIp6ConfigMethodJSON(data, valueJSON)
-	case NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME:
-		setSettingIp6ConfigDhcpHostnameJSON(data, valueJSON)
 	case NM_SETTING_IP6_CONFIG_DNS:
 		setSettingIp6ConfigDnsJSON(data, valueJSON)
 	case NM_SETTING_IP6_CONFIG_DNS_SEARCH:
@@ -154,6 +152,8 @@ func generalSetSettingIp6ConfigKeyJSON(data _ConnectionData, key, valueJSON stri
 		setSettingIp6ConfigMayFailJSON(data, valueJSON)
 	case NM_SETTING_IP6_CONFIG_IP6_PRIVACY:
 		setSettingIp6ConfigIp6PrivacyJSON(data, valueJSON)
+	case NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME:
+		setSettingIp6ConfigDhcpHostnameJSON(data, valueJSON)
 	}
 	return
 }
@@ -161,9 +161,6 @@ func generalSetSettingIp6ConfigKeyJSON(data _ConnectionData, key, valueJSON stri
 // Check if key exists
 func isSettingIp6ConfigMethodExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_METHOD)
-}
-func isSettingIp6ConfigDhcpHostnameExists(data _ConnectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME)
 }
 func isSettingIp6ConfigDnsExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS)
@@ -192,6 +189,9 @@ func isSettingIp6ConfigMayFailExists(data _ConnectionData) bool {
 func isSettingIp6ConfigIp6PrivacyExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IP6_PRIVACY)
 }
+func isSettingIp6ConfigDhcpHostnameExists(data _ConnectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME)
+}
 
 // Ensure field and key exists and not empty
 func ensureFieldSettingIp6ConfigExists(data _ConnectionData, errs map[string]string, relatedKey string) {
@@ -210,15 +210,6 @@ func ensureSettingIp6ConfigMethodNoEmpty(data _ConnectionData, errs map[string]s
 	value := getSettingIp6ConfigMethod(data)
 	if len(value) == 0 {
 		rememberError(errs, NM_SETTING_IP6_CONFIG_METHOD, NM_KEY_ERROR_EMPTY_VALUE)
-	}
-}
-func ensureSettingIp6ConfigDhcpHostnameNoEmpty(data _ConnectionData, errs map[string]string) {
-	if !isSettingIp6ConfigDhcpHostnameExists(data) {
-		rememberError(errs, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME, NM_KEY_ERROR_MISSING_VALUE)
-	}
-	value := getSettingIp6ConfigDhcpHostname(data)
-	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
 func ensureSettingIp6ConfigDnsNoEmpty(data _ConnectionData, errs map[string]string) {
@@ -282,14 +273,19 @@ func ensureSettingIp6ConfigIp6PrivacyNoEmpty(data _ConnectionData, errs map[stri
 		rememberError(errs, NM_SETTING_IP6_CONFIG_IP6_PRIVACY, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
+func ensureSettingIp6ConfigDhcpHostnameNoEmpty(data _ConnectionData, errs map[string]string) {
+	if !isSettingIp6ConfigDhcpHostnameExists(data) {
+		rememberError(errs, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME, NM_KEY_ERROR_MISSING_VALUE)
+	}
+	value := getSettingIp6ConfigDhcpHostname(data)
+	if len(value) == 0 {
+		rememberError(errs, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME, NM_KEY_ERROR_EMPTY_VALUE)
+	}
+}
 
 // Getter
 func getSettingIp6ConfigMethod(data _ConnectionData) (value string) {
 	value, _ = getSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_METHOD).(string)
-	return
-}
-func getSettingIp6ConfigDhcpHostname(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME).(string)
 	return
 }
 func getSettingIp6ConfigDns(data _ConnectionData) (value [][]byte) {
@@ -328,13 +324,14 @@ func getSettingIp6ConfigIp6Privacy(data _ConnectionData) (value int32) {
 	value, _ = getSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IP6_PRIVACY).(int32)
 	return
 }
+func getSettingIp6ConfigDhcpHostname(data _ConnectionData) (value string) {
+	value, _ = getSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME).(string)
+	return
+}
 
 // Setter
 func setSettingIp6ConfigMethod(data _ConnectionData, value string) {
 	setSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_METHOD, value)
-}
-func setSettingIp6ConfigDhcpHostname(data _ConnectionData, value string) {
-	setSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME, value)
 }
 func setSettingIp6ConfigDns(data _ConnectionData, value [][]byte) {
 	setSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS, value)
@@ -363,14 +360,13 @@ func setSettingIp6ConfigMayFail(data _ConnectionData, value bool) {
 func setSettingIp6ConfigIp6Privacy(data _ConnectionData, value int32) {
 	setSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IP6_PRIVACY, value)
 }
+func setSettingIp6ConfigDhcpHostname(data _ConnectionData, value string) {
+	setSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME, value)
+}
 
 // JSON Getter
 func getSettingIp6ConfigMethodJSON(data _ConnectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_METHOD, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_METHOD))
-	return
-}
-func getSettingIp6ConfigDhcpHostnameJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME))
 	return
 }
 func getSettingIp6ConfigDnsJSON(data _ConnectionData) (valueJSON string) {
@@ -409,13 +405,14 @@ func getSettingIp6ConfigIp6PrivacyJSON(data _ConnectionData) (valueJSON string) 
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IP6_PRIVACY, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_IP6_PRIVACY))
 	return
 }
+func getSettingIp6ConfigDhcpHostnameJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME))
+	return
+}
 
 // JSON Setter
 func setSettingIp6ConfigMethodJSON(data _ConnectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_METHOD, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_METHOD))
-}
-func setSettingIp6ConfigDhcpHostnameJSON(data _ConnectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME))
 }
 func setSettingIp6ConfigDnsJSON(data _ConnectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_DNS))
@@ -444,13 +441,13 @@ func setSettingIp6ConfigMayFailJSON(data _ConnectionData, valueJSON string) {
 func setSettingIp6ConfigIp6PrivacyJSON(data _ConnectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IP6_PRIVACY, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_IP6_PRIVACY))
 }
+func setSettingIp6ConfigDhcpHostnameJSON(data _ConnectionData, valueJSON string) {
+	setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME))
+}
 
 // Remover
 func removeSettingIp6ConfigMethod(data _ConnectionData) {
 	removeSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_METHOD)
-}
-func removeSettingIp6ConfigDhcpHostname(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME)
 }
 func removeSettingIp6ConfigDns(data _ConnectionData) {
 	removeSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS)
@@ -478,4 +475,7 @@ func removeSettingIp6ConfigMayFail(data _ConnectionData) {
 }
 func removeSettingIp6ConfigIp6Privacy(data _ConnectionData) {
 	removeSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IP6_PRIVACY)
+}
+func removeSettingIp6ConfigDhcpHostname(data _ConnectionData) {
+	removeSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME)
 }

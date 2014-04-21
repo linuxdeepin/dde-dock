@@ -24,6 +24,10 @@ func getSettingWirelessSecurityKeyType(key string) (t ktype) {
 		t = ktypeArrayString
 	case NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME:
 		t = ktypeString
+	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD:
+		t = ktypeString
+	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS:
+		t = ktypeUint32
 	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY0:
 		t = ktypeString
 	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY1:
@@ -39,10 +43,6 @@ func getSettingWirelessSecurityKeyType(key string) (t ktype) {
 	case NM_SETTING_WIRELESS_SECURITY_PSK:
 		t = ktypeString
 	case NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS:
-		t = ktypeUint32
-	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD:
-		t = ktypeString
-	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS:
 		t = ktypeUint32
 	}
 	return
@@ -65,6 +65,10 @@ func isKeyInSettingWirelessSecurity(key string) bool {
 		return true
 	case NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME:
 		return true
+	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD:
+		return true
+	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS:
+		return true
 	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY0:
 		return true
 	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY1:
@@ -80,10 +84,6 @@ func isKeyInSettingWirelessSecurity(key string) bool {
 	case NM_SETTING_WIRELESS_SECURITY_PSK:
 		return true
 	case NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS:
-		return true
-	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD:
-		return true
-	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS:
 		return true
 	}
 	return false
@@ -108,6 +108,10 @@ func getSettingWirelessSecurityKeyDefaultValueJSON(key string) (valueJSON string
 		valueJSON = `null`
 	case NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME:
 		valueJSON = `""`
+	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD:
+		valueJSON = `""`
+	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS:
+		valueJSON = `0`
 	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY0:
 		valueJSON = `""`
 	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY1:
@@ -123,10 +127,6 @@ func getSettingWirelessSecurityKeyDefaultValueJSON(key string) (valueJSON string
 	case NM_SETTING_WIRELESS_SECURITY_PSK:
 		valueJSON = `""`
 	case NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS:
-		valueJSON = `0`
-	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD:
-		valueJSON = `""`
-	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS:
 		valueJSON = `0`
 	}
 	return
@@ -151,6 +151,10 @@ func generalGetSettingWirelessSecurityKeyJSON(data _ConnectionData, key string) 
 		value = getSettingWirelessSecurityGroupJSON(data)
 	case NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME:
 		value = getSettingWirelessSecurityLeapUsernameJSON(data)
+	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD:
+		value = getSettingWirelessSecurityLeapPasswordJSON(data)
+	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS:
+		value = getSettingWirelessSecurityLeapPasswordFlagsJSON(data)
 	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY0:
 		value = getSettingWirelessSecurityWepKey0JSON(data)
 	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY1:
@@ -167,10 +171,6 @@ func generalGetSettingWirelessSecurityKeyJSON(data _ConnectionData, key string) 
 		value = getSettingWirelessSecurityPskJSON(data)
 	case NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS:
 		value = getSettingWirelessSecurityPskFlagsJSON(data)
-	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD:
-		value = getSettingWirelessSecurityLeapPasswordJSON(data)
-	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS:
-		value = getSettingWirelessSecurityLeapPasswordFlagsJSON(data)
 	}
 	return
 }
@@ -194,6 +194,10 @@ func generalSetSettingWirelessSecurityKeyJSON(data _ConnectionData, key, valueJS
 		setSettingWirelessSecurityGroupJSON(data, valueJSON)
 	case NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME:
 		setSettingWirelessSecurityLeapUsernameJSON(data, valueJSON)
+	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD:
+		setSettingWirelessSecurityLeapPasswordJSON(data, valueJSON)
+	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS:
+		setSettingWirelessSecurityLeapPasswordFlagsJSON(data, valueJSON)
 	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY0:
 		setSettingWirelessSecurityWepKey0JSON(data, valueJSON)
 	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY1:
@@ -210,10 +214,6 @@ func generalSetSettingWirelessSecurityKeyJSON(data _ConnectionData, key, valueJS
 		setSettingWirelessSecurityPskJSON(data, valueJSON)
 	case NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS:
 		setSettingWirelessSecurityPskFlagsJSON(data, valueJSON)
-	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD:
-		setSettingWirelessSecurityLeapPasswordJSON(data, valueJSON)
-	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS:
-		setSettingWirelessSecurityLeapPasswordFlagsJSON(data, valueJSON)
 	}
 	return
 }
@@ -240,6 +240,12 @@ func isSettingWirelessSecurityGroupExists(data _ConnectionData) bool {
 func isSettingWirelessSecurityLeapUsernameExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME)
 }
+func isSettingWirelessSecurityLeapPasswordExists(data _ConnectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD)
+}
+func isSettingWirelessSecurityLeapPasswordFlagsExists(data _ConnectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS)
+}
 func isSettingWirelessSecurityWepKey0Exists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY0)
 }
@@ -263,12 +269,6 @@ func isSettingWirelessSecurityPskExists(data _ConnectionData) bool {
 }
 func isSettingWirelessSecurityPskFlagsExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS)
-}
-func isSettingWirelessSecurityLeapPasswordExists(data _ConnectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD)
-}
-func isSettingWirelessSecurityLeapPasswordFlagsExists(data _ConnectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS)
 }
 
 // Ensure field and key exists and not empty
@@ -340,6 +340,20 @@ func ensureSettingWirelessSecurityLeapUsernameNoEmpty(data _ConnectionData, errs
 		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
+func ensureSettingWirelessSecurityLeapPasswordNoEmpty(data _ConnectionData, errs map[string]string) {
+	if !isSettingWirelessSecurityLeapPasswordExists(data) {
+		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD, NM_KEY_ERROR_MISSING_VALUE)
+	}
+	value := getSettingWirelessSecurityLeapPassword(data)
+	if len(value) == 0 {
+		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD, NM_KEY_ERROR_EMPTY_VALUE)
+	}
+}
+func ensureSettingWirelessSecurityLeapPasswordFlagsNoEmpty(data _ConnectionData, errs map[string]string) {
+	if !isSettingWirelessSecurityLeapPasswordFlagsExists(data) {
+		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
+	}
+}
 func ensureSettingWirelessSecurityWepKey0NoEmpty(data _ConnectionData, errs map[string]string) {
 	if !isSettingWirelessSecurityWepKey0Exists(data) {
 		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_WEP_KEY0, NM_KEY_ERROR_MISSING_VALUE)
@@ -400,20 +414,6 @@ func ensureSettingWirelessSecurityPskFlagsNoEmpty(data _ConnectionData, errs map
 		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingWirelessSecurityLeapPasswordNoEmpty(data _ConnectionData, errs map[string]string) {
-	if !isSettingWirelessSecurityLeapPasswordExists(data) {
-		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD, NM_KEY_ERROR_MISSING_VALUE)
-	}
-	value := getSettingWirelessSecurityLeapPassword(data)
-	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD, NM_KEY_ERROR_EMPTY_VALUE)
-	}
-}
-func ensureSettingWirelessSecurityLeapPasswordFlagsNoEmpty(data _ConnectionData, errs map[string]string) {
-	if !isSettingWirelessSecurityLeapPasswordFlagsExists(data) {
-		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
-	}
-}
 
 // Getter
 func getSettingWirelessSecurityKeyMgmt(data _ConnectionData) (value string) {
@@ -442,6 +442,14 @@ func getSettingWirelessSecurityGroup(data _ConnectionData) (value []string) {
 }
 func getSettingWirelessSecurityLeapUsername(data _ConnectionData) (value string) {
 	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME).(string)
+	return
+}
+func getSettingWirelessSecurityLeapPassword(data _ConnectionData) (value string) {
+	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD).(string)
+	return
+}
+func getSettingWirelessSecurityLeapPasswordFlags(data _ConnectionData) (value uint32) {
+	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS).(uint32)
 	return
 }
 func getSettingWirelessSecurityWepKey0(data _ConnectionData) (value string) {
@@ -476,14 +484,6 @@ func getSettingWirelessSecurityPskFlags(data _ConnectionData) (value uint32) {
 	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS).(uint32)
 	return
 }
-func getSettingWirelessSecurityLeapPassword(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD).(string)
-	return
-}
-func getSettingWirelessSecurityLeapPasswordFlags(data _ConnectionData) (value uint32) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS).(uint32)
-	return
-}
 
 // Setter
 func setSettingWirelessSecurityKeyMgmt(data _ConnectionData, value string) {
@@ -506,6 +506,12 @@ func setSettingWirelessSecurityGroup(data _ConnectionData, value []string) {
 }
 func setSettingWirelessSecurityLeapUsername(data _ConnectionData, value string) {
 	setSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME, value)
+}
+func setSettingWirelessSecurityLeapPassword(data _ConnectionData, value string) {
+	setSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD, value)
+}
+func setSettingWirelessSecurityLeapPasswordFlags(data _ConnectionData, value uint32) {
+	setSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS, value)
 }
 func setSettingWirelessSecurityWepKey0(data _ConnectionData, value string) {
 	setSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY0, value)
@@ -530,12 +536,6 @@ func setSettingWirelessSecurityPsk(data _ConnectionData, value string) {
 }
 func setSettingWirelessSecurityPskFlags(data _ConnectionData, value uint32) {
 	setSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS, value)
-}
-func setSettingWirelessSecurityLeapPassword(data _ConnectionData, value string) {
-	setSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD, value)
-}
-func setSettingWirelessSecurityLeapPasswordFlags(data _ConnectionData, value uint32) {
-	setSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS, value)
 }
 
 // JSON Getter
@@ -565,6 +565,14 @@ func getSettingWirelessSecurityGroupJSON(data _ConnectionData) (valueJSON string
 }
 func getSettingWirelessSecurityLeapUsernameJSON(data _ConnectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME, getSettingWirelessSecurityKeyType(NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME))
+	return
+}
+func getSettingWirelessSecurityLeapPasswordJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD, getSettingWirelessSecurityKeyType(NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD))
+	return
+}
+func getSettingWirelessSecurityLeapPasswordFlagsJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS, getSettingWirelessSecurityKeyType(NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS))
 	return
 }
 func getSettingWirelessSecurityWepKey0JSON(data _ConnectionData) (valueJSON string) {
@@ -599,14 +607,6 @@ func getSettingWirelessSecurityPskFlagsJSON(data _ConnectionData) (valueJSON str
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS, getSettingWirelessSecurityKeyType(NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS))
 	return
 }
-func getSettingWirelessSecurityLeapPasswordJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD, getSettingWirelessSecurityKeyType(NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD))
-	return
-}
-func getSettingWirelessSecurityLeapPasswordFlagsJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS, getSettingWirelessSecurityKeyType(NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS))
-	return
-}
 
 // JSON Setter
 func setSettingWirelessSecurityKeyMgmtJSON(data _ConnectionData, valueJSON string) {
@@ -629,6 +629,12 @@ func setSettingWirelessSecurityGroupJSON(data _ConnectionData, valueJSON string)
 }
 func setSettingWirelessSecurityLeapUsernameJSON(data _ConnectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME, valueJSON, getSettingWirelessSecurityKeyType(NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME))
+}
+func setSettingWirelessSecurityLeapPasswordJSON(data _ConnectionData, valueJSON string) {
+	setSettingKeyJSON(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD, valueJSON, getSettingWirelessSecurityKeyType(NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD))
+}
+func setSettingWirelessSecurityLeapPasswordFlagsJSON(data _ConnectionData, valueJSON string) {
+	setSettingKeyJSON(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS, valueJSON, getSettingWirelessSecurityKeyType(NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS))
 }
 func setSettingWirelessSecurityWepKey0JSON(data _ConnectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY0, valueJSON, getSettingWirelessSecurityKeyType(NM_SETTING_WIRELESS_SECURITY_WEP_KEY0))
@@ -654,12 +660,6 @@ func setSettingWirelessSecurityPskJSON(data _ConnectionData, valueJSON string) {
 func setSettingWirelessSecurityPskFlagsJSON(data _ConnectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS, valueJSON, getSettingWirelessSecurityKeyType(NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS))
 }
-func setSettingWirelessSecurityLeapPasswordJSON(data _ConnectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD, valueJSON, getSettingWirelessSecurityKeyType(NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD))
-}
-func setSettingWirelessSecurityLeapPasswordFlagsJSON(data _ConnectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS, valueJSON, getSettingWirelessSecurityKeyType(NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS))
-}
 
 // Remover
 func removeSettingWirelessSecurityKeyMgmt(data _ConnectionData) {
@@ -682,6 +682,12 @@ func removeSettingWirelessSecurityGroup(data _ConnectionData) {
 }
 func removeSettingWirelessSecurityLeapUsername(data _ConnectionData) {
 	removeSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME)
+}
+func removeSettingWirelessSecurityLeapPassword(data _ConnectionData) {
+	removeSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD)
+}
+func removeSettingWirelessSecurityLeapPasswordFlags(data _ConnectionData) {
+	removeSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS)
 }
 func removeSettingWirelessSecurityWepKey0(data _ConnectionData) {
 	removeSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY0)
@@ -706,10 +712,4 @@ func removeSettingWirelessSecurityPsk(data _ConnectionData) {
 }
 func removeSettingWirelessSecurityPskFlags(data _ConnectionData) {
 	removeSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS)
-}
-func removeSettingWirelessSecurityLeapPassword(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD)
-}
-func removeSettingWirelessSecurityLeapPasswordFlags(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS)
 }

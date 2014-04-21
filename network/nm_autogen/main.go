@@ -33,6 +33,14 @@ type NMSettingStruct struct {
 	}
 }
 
+// TODO
+type NMPageStruct struct {
+	Name          string
+	DisplayName   string
+	RelatedFields []string
+	FrontEndFile  string
+}
+
 func generateNMSettingCode(nmSetting NMSettingStruct) (content string) {
 	content = fileHeader
 	content += generateTemplate(nmSetting, tplGetKeyType)          // get key type
@@ -101,6 +109,7 @@ func main() {
 				continue
 			}
 			execAndWait(10, "gofmt", "-w", nmSetting.BackEndFile)
+			fmt.Println(nmSetting.BackEndFile)
 		} else {
 			fmt.Println(autogenContent)
 			fmt.Println()
