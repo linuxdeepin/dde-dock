@@ -115,15 +115,19 @@ func (op *Manager) setPropName(propName string) {
                         if !objUtil.IsElementExist(obj.GtkTheme, op.GtkThemeList) ||
                                 !objUtil.IsElementExist(obj.IconTheme, op.IconThemeList) ||
                                 !objUtil.IsElementExist(obj.CursorTheme, op.CursorThemeList) {
+                                println("---- Reset CurrentTheme: ", value)
                                 op.CurrentTheme = DEFAULT_THEME_NAME
                                 personSettings.SetString(GKEY_CURRENT_THEME, DEFAULT_THEME_NAME)
                         } else {
                                 op.CurrentTheme = value
+                                obj.updateThemeInfo()
                         }
-                } else {
-                        op.CurrentTheme = DEFAULT_THEME_NAME
-                        personSettings.SetString(GKEY_CURRENT_THEME, DEFAULT_THEME_NAME)
                 }
+                //} else {
+                //println("---- Reset CurrentTheme: ", value)
+                //op.CurrentTheme = DEFAULT_THEME_NAME
+                //personSettings.SetString(GKEY_CURRENT_THEME, DEFAULT_THEME_NAME)
+                //}
                 dbus.NotifyChange(op, propName)
         }
 }
@@ -159,11 +163,20 @@ func (op *Manager) updateAllProps() {
 }
 
 func (op *Manager) updateGSettingsKey(name string, value interface{}) {
-        logObject.Infof("Update GSettings Key: %s", name)
+        if value == nil {
+                return
+        }
+        mutex.Lock()
+        defer mutex.Unlock()
+        logObject.Infof("Update GSettings Key: %s, value: %s",
+                name, value.(string))
         switch name {
         case GKEY_CURRENT_THEME:
                 str := value.(string)
-                if v := personSettings.GetString(GKEY_CURRENT_THEME); v != str {
+                logObject.Info("Set Theme Value: ", str)
+                v := personSettings.GetString(GKEY_CURRENT_THEME)
+                logObject.Info("Cur Theme Value: ", v)
+                if v != str {
                         personSettings.SetString(GKEY_CURRENT_THEME, str)
                 }
         case GKEY_CURRENT_BACKGROUND:
@@ -181,13 +194,10 @@ func (op *Manager) updateGSettingsKey(name string, value interface{}) {
 
 func (op *Manager) listenSettingsChanged() {
         personSettings.Connect("changed", func(s *gio.Settings, key string) {
-                logObject.Infof("Theme GSettings Key Changed: %s", key)
                 switch key {
                 case GKEY_CURRENT_THEME:
                         value := personSettings.GetString(key)
-                        if value == op.CurrentTheme {
-                                break
-                        }
+                        logObject.Infof("Theme GSettings Changed: %s", value)
                         obj := op.getThemeObject(value)
                         if obj != nil {
                                 obj.setThemeViaXSettings()
@@ -195,17 +205,28 @@ func (op *Manager) listenSettingsChanged() {
                         }
                 case GKEY_CURRENT_BACKGROUND: // TODO
                         value := personSettings.GetString(key)
+                        logObject.Infof("Bg GSettings Changed: %s", value)
                         obj := op.getThemeObject(op.CurrentTheme)
                         if obj != nil && obj.BackgroundFile != value {
                                 if name := op.setTheme(obj.GtkTheme, obj.IconTheme,
                                         obj.CursorTheme, obj.FontSize,
                                         value, obj.SoundTheme); name != op.CurrentTheme {
-                                        op.updateGSettingsKey(GKEY_CURRENT_THEME, name)
+                                        if name != op.CurrentTheme {
+                                                op.updateGSettingsKey(GKEY_CURRENT_THEME, name)
+                                        } else {
+                                                //obj.BackgroundFile = value
+                                                obj.updateThemeInfo()
+                                                dbus.NotifyChange(obj, "BackgroundFile")
+                                        }
                                 }
                         }
                 case GKEY_CURRENT_SOUND_THEME: // TODO
                         value := personSettings.GetString(key)
+                        logObject.Infof("Sound GSettings Changed: %s", value)
                         obj := op.getThemeObject(op.CurrentTheme)
+                        if obj == nil {
+                                break
+                        }
                         if obj != nil && obj.SoundTheme != value {
                                 if name := op.setTheme(obj.GtkTheme, obj.IconTheme,
                                         obj.CursorTheme, obj.FontSize,

@@ -49,6 +49,12 @@ func (op *Theme) setThemeViaXSettings() {
         setIconThemeViaXSettings(op.IconTheme)
         setCursorThemeViaXSettings(op.CursorTheme)
         setFontNameViaXSettings(DEFAULT_FONT, op.FontSize)
+
+        bg := personSettings.GetString(GKEY_CURRENT_BACKGROUND)
+        if bg != op.BackgroundFile {
+                personSettings.SetString(GKEY_CURRENT_BACKGROUND,
+                        op.BackgroundFile)
+        }
 }
 
 func setGtkThemeViaXSettings(name string) {

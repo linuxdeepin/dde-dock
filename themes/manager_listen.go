@@ -52,6 +52,9 @@ func (op *Manager) watchDirs(dirs []string) {
                         if ok, _ := regexp.MatchString(`\.swa?px?$`, ev.Name); ok {
                                 break
                         }
+                        //if ok, _ := regexp.MatchString(`theme.ini$`, ev.Name); ok {
+                        //break
+                        //}
                         op.updateAllProps()
                         if ev.IsDelete() || ev.IsCreate() {
                                 curEventStr := ev.String()

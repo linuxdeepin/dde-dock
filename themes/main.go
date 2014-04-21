@@ -70,6 +70,9 @@ func destroyThemeObj(path string) {
 }
 
 func destroyAllThemeObj() {
+        if themeObjMap == nil {
+                return
+        }
         for k, obj := range themeObjMap {
                 dbus.UnInstallObject(obj)
                 delete(themeObjMap, k)
@@ -77,6 +80,8 @@ func destroyAllThemeObj() {
 }
 
 func updateThemeObj(pathNameMap map[string]PathInfo) {
+        //mutex.Lock()
+        //defer mutex.Unlock()
         destroyAllThemeObj()
         destroyId()
 
