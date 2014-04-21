@@ -22,17 +22,7 @@ var funcMap = template.FuncMap{
 	"IfNeedCheckValueLength":    IfNeedCheckValueLength,
 }
 
-var jsonFiles = []string{
-	"./nm_setting_802_1x.json",
-	"./nm_setting_connection.json",
-	"./nm_setting_ipv4.json",
-	"./nm_setting_ipv6.json",
-	"./nm_setting_wired.json",
-	"./nm_setting_wireless.json",
-	"./nm_setting_wireless_security.json",
-	"./nm_setting_pppoe.json",
-	"./nm_setting_ppp.json",
-}
+const nmSettingsJSONFile = "./nm_settings.json"
 
 type NMSettingStruct struct {
 	FieldName  string
@@ -329,20 +319,20 @@ func main() {
 	flag.BoolVar(&writeOutput, "w", false, "write to output file")
 	flag.Parse()
 
-	for _, f := range jsonFiles {
-		fileContent, err := ioutil.ReadFile(f)
-		if err != nil {
-			fmt.Println("error, open file failed:", err)
-			continue
-		}
+	fileContent, err := ioutil.ReadFile(nmSettingsJSONFile)
+	if err != nil {
+		fmt.Println("error, open file failed:", err)
+		return
+	}
 
-		var nmSetting NMSettingStruct
-		err = json.Unmarshal(fileContent, &nmSetting)
-		if err != nil {
-			fmt.Printf("error, unmarshal json %s failed: %v\n", f, err)
-			continue
-		}
+	var nmSettings []NMSettingStruct
+	err = json.Unmarshal(fileContent, &nmSettings)
+	if err != nil {
+		fmt.Printf("error, unmarshal json %s failed: %v\n", nmSettingsJSONFile, err)
+		return
+	}
 
+	for _, nmSetting := range nmSettings {
 		autogenContent := generateNMSettingCode(nmSetting)
 		if writeOutput {
 			// write to file and execute gofmt

@@ -1,0 +1,186 @@
+[
+{
+    "FieldName":"NM_SETTING_802_1X_SETTING_NAME",
+    "OutputFile":"../nm_setting_802_1x_autogen.go",
+    "Keys":[
+	    {"Name":"NM_SETTING_802_1X_EAP","Type":"ktypeArrayString", "Default":"<default>", "LogicSet":true},
+	    {"Name":"NM_SETTING_802_1X_IDENTITY","Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_802_1X_ANONYMOUS_IDENTITY","Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_802_1X_PAC_FILE","Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_802_1X_CA_CERT","Type":"ktypeWrapperString", "Default":"<default>"},
+	    {"Name":"NM_SETTING_802_1X_CA_PATH","Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_802_1X_SUBJECT_MATCH","Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_802_1X_ALTSUBJECT_MATCHES","Type":"ktypeArrayString", "Default":"<default>"},
+	    {"Name":"NM_SETTING_802_1X_CLIENT_CERT","Type":"ktypeWrapperString", "Default":"<default>"},
+	    {"Name":"NM_SETTING_802_1X_PHASE1_PEAPVER","Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_802_1X_PHASE1_PEAPLABEL","Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING","Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_802_1X_PHASE2_AUTH","Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_802_1X_PHASE2_AUTHEAP","Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_802_1X_PHASE2_CA_CERT","Type":"ktypeWrapperString", "Default":"<default>"},
+	    {"Name":"NM_SETTING_802_1X_PHASE2_CA_PATH","Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH","Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES","Type":"ktypeArrayString", "Default":"<default>"},
+	    {"Name":"NM_SETTING_802_1X_PHASE2_CLIENT_CERT","Type":"ktypeWrapperString", "Default":"<default>"},
+	    {"Name":"NM_SETTING_802_1X_PASSWORD","Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_802_1X_PASSWORD_FLAGS","Type":"ktypeUint32", "Default":"<default>"},
+	    {"Name":"NM_SETTING_802_1X_PASSWORD_RAW","Type":"ktypeArrayByte", "Default":"<default>"},
+        {"Name":"NM_SETTING_802_1X_PASSWORD_RAW_FLAGS","Type":"ktypeUint32", "Default":"<default>"},
+	    {"Name":"NM_SETTING_802_1X_PRIVATE_KEY","Type":"ktypeWrapperString", "Default":"<default>"},
+	    {"Name":"NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD","Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS","Type":"ktypeUint32", "Default":"<default>"},
+	    {"Name":"NM_SETTING_802_1X_PHASE2_PRIVATE_KEY","Type":"ktypeWrapperString", "Default":"<default>"},
+	    {"Name":"NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD","Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS","Type":"ktypeUint32", "Default":"<default>"},
+	    {"Name":"NM_SETTING_802_1X_PIN","Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_802_1X_PIN_FLAGS","Type":"ktypeUint32", "Default":"<default>"},
+	    {"Name":"NM_SETTING_802_1X_SYSTEM_CA_CERTS","Type":"ktypeBoolean", "Default":"<default>"}
+    ]
+},
+{
+    "FieldName":"NM_SETTING_CONNECTION_SETTING_NAME",
+    "OutputFile":"../nm_setting_connection_autogen.go",
+    "Keys":[
+	    {"Name":"NM_SETTING_CONNECTION_ID", "Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_CONNECTION_UUID", "Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_CONNECTION_TYPE", "Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_CONNECTION_PERMISSIONS", "Type":"ktypeArrayString", "Default":"<default>"},
+	    {"Name":"NM_SETTING_CONNECTION_AUTOCONNECT", "Type":"ktypeBoolean", "Default":"true"},
+	    {"Name":"NM_SETTING_CONNECTION_TIMESTAMP", "Type":"ktypeUint64", "Default":"<default>"},
+	    {"Name":"NM_SETTING_CONNECTION_READ_ONLY", "Type":"ktypeBoolean", "Default":"<default>"},
+	    {"Name":"NM_SETTING_CONNECTION_ZONE", "Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_CONNECTION_MASTER", "Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_CONNECTION_SLAVE_TYPE", "Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_CONNECTION_SECONDARIES", "Type":"ktypeArrayString", "Default":"<default>"}
+    ]
+},
+{
+    "FieldName":"NM_SETTING_IP4_CONFIG_SETTING_NAME",
+    "OutputFile":"../nm_setting_ipv4_autogen.go",
+    "Keys":[
+	    {"Name":"NM_SETTING_IP4_CONFIG_METHOD", "Type":"ktypeString", "Default":"<null>", "LogicSet":true},
+	    {"Name":"NM_SETTING_IP4_CONFIG_DNS", "Type":"ktypeWrapperIpv4Dns", "Default":"<default>"},
+	    {"Name":"NM_SETTING_IP4_CONFIG_DNS_SEARCH", "Type":"ktypeString", "Default":"<default>"},
+	    {"Name":"NM_SETTING_IP4_CONFIG_ADDRESSES", "Type":"ktypeWrapperIpv4Addresses", "Default":"<default>"},
+	    {"Name":"NM_SETTING_IP4_CONFIG_ROUTES", "Type":"ktypeWrapperIpv4Routes", "Default":"<default>"},
+	    {"Name":"NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES", "Type":"ktypeBoolean", "Default":"<default>"},
+	    {"Name":"NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS", "Type":"ktypeBoolean", "Default":"<default>"},
+	    {"Name":"NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID", "Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME", "Type":"ktypeBoolean", "Default":"true"},
+	    {"Name":"NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME", "Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_IP4_CONFIG_NEVER_DEFAULT", "Type":"ktypeBoolean", "Default":"<default>"},
+	    {"Name":"NM_SETTING_IP4_CONFIG_MAY_FAIL", "Type":"ktypeBoolean", "Default":"true"}
+	]
+},
+{
+    "FieldName":"NM_SETTING_IP6_CONFIG_SETTING_NAME",
+    "OutputFile":"../nm_setting_ipv6_autogen.go",
+    "Keys":[
+	    {"Name":"NM_SETTING_IP6_CONFIG_METHOD", "Type":"ktypeString", "Default":"<null>", "LogicSet":true},
+	    {"Name":"NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME", "Type":"ktypeString", "Default":"<default>"},
+	    {"Name":"NM_SETTING_IP6_CONFIG_DNS", "Type":"ktypeWrapperIpv6Dns", "Default":"<default>"},
+	    {"Name":"NM_SETTING_IP6_CONFIG_DNS_SEARCH", "Type":"ktypeArrayString", "Default":"<default>"},
+	    {"Name":"NM_SETTING_IP6_CONFIG_ADDRESSES", "Type":"ktypeWrapperIpv6Addresses", "Default":"<default>"},
+	    {"Name":"NM_SETTING_IP6_CONFIG_ROUTES", "Type":"ktypeWrapperIpv6Routes", "Default":"<default>"},
+	    {"Name":"NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES", "Type":"ktypeBoolean", "Default":"<default>"},
+	    {"Name":"NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS", "Type":"ktypeBoolean", "Default":"<default>"},
+	    {"Name":"NM_SETTING_IP6_CONFIG_NEVER_DEFAULT", "Type":"ktypeBoolean", "Default":"<default>"},
+	    {"Name":"NM_SETTING_IP6_CONFIG_MAY_FAIL", "Type":"ktypeBoolean", "Default":"true"},
+	    {"Name":"NM_SETTING_IP6_CONFIG_IP6_PRIVACY", "Type":"ktypeInt32", "Default":"-1"}
+    ]
+},
+{
+    "FieldName":"NM_SETTING_PPP_SETTING_NAME",
+    "OutputFile":"../nm_setting_ppp_autogen.go",
+    "Keys":[
+	    {"Name":"NM_SETTING_PPP_NOAUTH", "Type":"ktypeBoolean", "Default":"true"},
+	    {"Name":"NM_SETTING_PPP_REFUSE_EAP", "Type":"ktypeBoolean", "Default":"<default>"},
+	    {"Name":"NM_SETTING_PPP_REFUSE_PAP", "Type":"ktypeBoolean", "Default":"<default>"},
+	    {"Name":"NM_SETTING_PPP_REFUSE_CHAP", "Type":"ktypeBoolean", "Default":"<default>"},
+	    {"Name":"NM_SETTING_PPP_REFUSE_MSCHAP", "Type":"ktypeBoolean", "Default":"<default>"},
+	    {"Name":"NM_SETTING_PPP_REFUSE_MSCHAPV2", "Type":"ktypeBoolean", "Default":"<default>"},
+	    {"Name":"NM_SETTING_PPP_NOBSDCOMP", "Type":"ktypeBoolean", "Default":"<default>"},
+	    {"Name":"NM_SETTING_PPP_NODEFLATE", "Type":"ktypeBoolean", "Default":"<default>"},
+	    {"Name":"NM_SETTING_PPP_NO_VJ_COMP", "Type":"ktypeBoolean", "Default":"<default>"},
+	    {"Name":"NM_SETTING_PPP_REQUIRE_MPPE", "Type":"ktypeBoolean", "Default":"<default>"},
+	    {"Name":"NM_SETTING_PPP_REQUIRE_MPPE_128", "Type":"ktypeBoolean", "Default":"<default>"},
+	    {"Name":"NM_SETTING_PPP_MPPE_STATEFUL", "Type":"ktypeBoolean", "Default":"<default>"},
+	    {"Name":"NM_SETTING_PPP_CRTSCTS", "Type":"ktypeBoolean", "Default":"<default>"},
+	    {"Name":"NM_SETTING_PPP_BAUD", "Type":"ktypeUint32", "Default":"<default>"},
+	    {"Name":"NM_SETTING_PPP_MRU", "Type":"ktypeUint32", "Default":"<default>"},
+	    {"Name":"NM_SETTING_PPP_MTU", "Type":"ktypeUint32", "Default":"<default>"},
+	    {"Name":"NM_SETTING_PPP_LCP_ECHO_FAILURE", "Type":"ktypeUint32", "Default":"<default>"},
+	    {"Name":"NM_SETTING_PPP_LCP_ECHO_INTERVAL", "Type":"ktypeUint32", "Default":"<default>"}
+    ]
+},
+{
+    "FieldName":"NM_SETTING_PPPOE_SETTING_NAME",
+    "OutputFile":"../nm_setting_pppoe_autogen.go",
+    "Keys":[
+	    {"Name":"NM_SETTING_PPPOE_SERVICE", "Type":"ktypeString", "Default":"<default>"},
+	    {"Name":"NM_SETTING_PPPOE_USERNAME", "Type":"ktypeString", "Default":"<default>"},
+	    {"Name":"NM_SETTING_PPPOE_PASSWORD", "Type":"ktypeString", "Default":"<default>"},
+	    {"Name":"NM_SETTING_PPPOE_PASSWORD_FLAGS", "Type":"ktypeUint32", "Default":"<default>"}
+    ]
+},
+{
+    "FieldName":"NM_SETTING_WIRED_SETTING_NAME",
+    "OutputFile":"../nm_setting_wired_autogen.go",
+    "Keys":[
+	    {"Name":"NM_SETTING_WIRED_PORT", "Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_WIRED_SPEED", "Type":"ktypeUint32", "Default":"<default>"},
+	    {"Name":"NM_SETTING_WIRED_DUPLEX", "Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_WIRED_AUTO_NEGOTIATE", "Type":"ktypeBoolean", "Default":"true"},
+	    {"Name":"NM_SETTING_WIRED_MAC_ADDRESS", "Type":"ktypeWrapperMacAddress", "Default":"<default>"},
+	    {"Name":"NM_SETTING_WIRED_CLONED_MAC_ADDRESS", "Type":"ktypeWrapperMacAddress", "Default":"<default>"},
+	    {"Name":"NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST", "Type":"ktypeArrayString", "Default":"<default>"},
+	    {"Name":"NM_SETTING_WIRED_MTU", "Type":"ktypeUint32", "Default":"<default>"},
+	    {"Name":"NM_SETTING_WIRED_S390_SUBCHANNELS", "Type":"ktypeArrayString", "Default":"<default>"},
+	    {"Name":"NM_SETTING_WIRED_S390_NETTYPE", "Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_WIRED_S390_OPTIONS", "Type":"ktypeDictStringString", "Default":"<default>"}
+    ]
+},
+{
+    "FieldName":"NM_SETTING_WIRELESS_SETTING_NAME",
+    "OutputFile":"../nm_setting_wireless_autogen.go",
+    "Keys":[
+	    {"Name":"NM_SETTING_WIRELESS_SSID", "Type":"ktypeWrapperString", "Default":"<default>"},
+	    {"Name":"NM_SETTING_WIRELESS_MODE", "Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_WIRELESS_BAND", "Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_WIRELESS_CHANNEL", "Type":"ktypeUint32", "Default":"<default>"},
+	    {"Name":"NM_SETTING_WIRELESS_BSSID", "Type":"ktypeWrapperString", "Default":"<default>"},
+	    {"Name":"NM_SETTING_WIRELESS_RATE", "Type":"ktypeUint32", "Default":"<default>"},
+	    {"Name":"NM_SETTING_WIRELESS_TX_POWER", "Type":"ktypeUint32", "Default":"<default>"},
+	    {"Name":"NM_SETTING_WIRELESS_MAC_ADDRESS", "Type":"ktypeWrapperMacAddress", "Default":"<default>"},
+	    {"Name":"NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS", "Type":"ktypeWrapperMacAddress", "Default":"<default>"},
+	    {"Name":"NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST", "Type":"ktypeArrayString", "Default":"<default>"},
+	    {"Name":"NM_SETTING_WIRELESS_MTU", "Type":"ktypeUint32", "Default":"<default>"},
+	    {"Name":"NM_SETTING_WIRELESS_SEEN_BSSIDS", "Type":"ktypeArrayString", "Default":"<default>"},
+	    {"Name":"NM_SETTING_WIRELESS_SEC", "Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_WIRELESS_HIDDEN", "Type":"ktypeBoolean", "Default":"<default>"}
+    ]
+},
+{
+    "FieldName":"NM_SETTING_WIRELESS_SECURITY_SETTING_NAME",
+    "OutputFile":"../nm_setting_wireless_security_autogen.go",
+    "Keys":[
+	    {"Name":"NM_SETTING_WIRELESS_SECURITY_KEY_MGMT", "Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_WIRELESS_SECURITY_WEP_TX_KEYIDX", "Type":"ktypeUint32", "Default":"<default>"},
+	    {"Name":"NM_SETTING_WIRELESS_SECURITY_AUTH_ALG", "Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_WIRELESS_SECURITY_PROTO", "Type":"ktypeArrayString", "Default":"<default>"},
+	    {"Name":"NM_SETTING_WIRELESS_SECURITY_PAIRWISE", "Type":"ktypeArrayString", "Default":"<default>"},
+	    {"Name":"NM_SETTING_WIRELESS_SECURITY_GROUP", "Type":"ktypeArrayString", "Default":"<default>"},
+	    {"Name":"NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME", "Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_WIRELESS_SECURITY_WEP_KEY0", "Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_WIRELESS_SECURITY_WEP_KEY1", "Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_WIRELESS_SECURITY_WEP_KEY2", "Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_WIRELESS_SECURITY_WEP_KEY3", "Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_WIRELESS_SECURITY_WEP_KEY_FLAGS", "Type":"ktypeUint32", "Default":"<default>"},
+	    {"Name":"NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE", "Type":"ktypeUint32", "Default":"<default>"},
+	    {"Name":"NM_SETTING_WIRELESS_SECURITY_PSK", "Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS", "Type":"ktypeUint32", "Default":"<default>"},
+	    {"Name":"NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD", "Type":"ktypeString", "Default":"<null>"},
+	    {"Name":"NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS", "Type":"ktypeUint32", "Default":"<default>"}
+    ]
+}
+]
