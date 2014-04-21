@@ -29,7 +29,7 @@ const (
 	DataDir      = "/usr/share/deepin-software-center/data"
 	DataNewestId = DataDir + "/data_newest_id.ini"
 
-	CategoryNameDBPath  = DataDir + "/update/%s/desktop/desktop.db"
+	CategoryNameDBPath  = DataDir + "/update/%s/desktop/desktop2014.db"
 	CategoryIndexDBPath = DataDir + "/update/%s/category/category.db"
 )
 

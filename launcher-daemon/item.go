@@ -3,6 +3,7 @@ package main
 import (
 	// "crypto/md5"
 	"database/sql"
+	"errors"
 	// "fmt"
 	"path"
 	"strings"
@@ -116,6 +117,11 @@ func getDeepinCategory(app *gio.DesktopAppInfo) (CategoryId, error) {
 	if err != nil {
 		return OtherID, err
 	}
+
+	if categoryName == "" {
+		return OtherID, errors.New("get empty category")
+	}
+
 	logger.Debug("get category name for", basename, "is", categoryName)
 	id := findCategoryId(categoryName)
 	logger.Debug(categoryName, id)
