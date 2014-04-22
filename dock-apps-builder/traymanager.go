@@ -155,6 +155,33 @@ func initTrayManager() {
 	TRAYMANAGER.tryOwner()
 }
 
+func (m *TrayManager) RequireManagerTrayIcons() {
+	mstype, err := xprop.Atm(TrayXU, "MANAGER")
+	if err != nil {
+		LOGGER.Error("Get MANAGER Failed")
+		return
+	}
+
+	timeStamp, _ := ewmh.WmUserTimeGet(TrayXU, TRAYMANAGER.owner)
+	cm, err := xevent.NewClientMessage(
+		32,
+		TrayXU.RootWin(),
+		mstype,
+		int(timeStamp),
+		int(_NET_SYSTEM_TRAY_S0),
+		int(TRAYMANAGER.owner),
+	)
+
+	if err != nil {
+		LOGGER.Error("Send MANAGER Request failed:", err)
+		return
+	}
+
+	// !!! ewmh.ClientEvent not use EventMaskStructureNotify.
+	xevent.SendRootEvent(TrayXU, cm,
+		uint32(xproto.EventMaskStructureNotify))
+}
+
 func (m *TrayManager) tryOwner() bool {
 	// Make a check, the tray application MUST be 1.
 	_trayInstance := xproto.GetSelectionOwner(TrayXU.Conn(), _NET_SYSTEM_TRAY_S0)
@@ -179,30 +206,7 @@ func (m *TrayManager) tryOwner() bool {
 		//owner the _NET_SYSTEM_TRAY_Sn
 		LOGGER.Info("Required _NET_SYSTEM_TRAY_S0")
 
-		mstype, err := xprop.Atm(TrayXU, "MANAGER")
-		if err != nil {
-			LOGGER.Error("Get MANAGER Failed")
-			return false
-		}
-
-		timeStamp, _ = ewmh.WmUserTimeGet(TrayXU, TRAYMANAGER.owner)
-		cm, err := xevent.NewClientMessage(
-			32,
-			TrayXU.RootWin(),
-			mstype,
-			int(timeStamp),
-			int(_NET_SYSTEM_TRAY_S0),
-			int(TRAYMANAGER.owner),
-		)
-
-		if err != nil {
-			LOGGER.Error("Send MANAGER Request failed:", err)
-			return false
-		}
-
-		// !!! ewmh.ClientEvent not use EventMaskStructureNotify.
-		xevent.SendRootEvent(TrayXU, cm,
-			uint32(xproto.EventMaskStructureNotify))
+		m.RequireManagerTrayIcons()
 
 		xprop.ChangeProp32(
 			TrayXU,
