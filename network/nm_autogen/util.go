@@ -3,7 +3,9 @@ package main
 import (
 	"bufio"
 	"bytes"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"os/exec"
 	"strings"
 	"time"
@@ -44,6 +46,20 @@ func caplitalizeString(str string) (capstr string) {
 	return
 }
 
+func unmarshalJSONFile(jsonFile string, data interface{}) {
+	fileContent, err := ioutil.ReadFile(jsonFile)
+	if err != nil {
+		fmt.Println("error, open file failed:", err)
+		return
+	}
+
+	err = json.Unmarshal(fileContent, data)
+	if err != nil {
+		fmt.Printf("error, unmarshal json %s failed: %v\n", jsonFile, err)
+		return
+	}
+}
+
 func execAndWait(timeout int, name string, arg ...string) (stdout, stderr string, err error) {
 	cmd := exec.Command(name, arg...)
 	var bufStdout, bufStderr bytes.Buffer
@@ -72,6 +88,25 @@ func execAndWait(timeout int, name string, arg ...string) (stdout, stderr string
 		stderr = bufStderr.String()
 		if err != nil {
 			return
+		}
+	}
+	return
+}
+
+func isStringInArray(s string, list []string) bool {
+	for _, i := range list {
+		if i == s {
+			return true
+		}
+	}
+	return false
+}
+
+func appendStrArrayUnion(a1 []string, a2 ...string) (a []string) {
+	a = a1
+	for _, s := range a2 {
+		if !isStringInArray(s, a) {
+			a = append(a, s)
 		}
 	}
 	return

@@ -154,6 +154,10 @@ func doIsSettingIp4ConfigAddressesEmpty(data _ConnectionData) bool {
 }
 
 // Getter
+func getSettingVk8021xEap(data _ConnectionData) (value string) {
+	// TODO
+	return
+}
 func getSettingVkConnectionPermissions(data _ConnectionData) (value bool) {
 	// TODO
 	// value = getSettingConnectionPermissions(data)
@@ -256,7 +260,6 @@ func getSettingVkWirelessSecurityKeyMgmt(data _ConnectionData) (value string) {
 		value = "none"
 		return
 	}
-
 	keyMgmt := getSettingWirelessSecurityKeyMgmt(data)
 	switch keyMgmt {
 	case "none":
@@ -270,6 +273,10 @@ func getSettingVkWirelessSecurityKeyMgmt(data _ConnectionData) (value string) {
 }
 
 // Setter
+func setSettingVk8021xEap(data _ConnectionData, value string) {
+	// TODO
+	return
+}
 func setSettingVkConnectionPermissions(data _ConnectionData, value bool) {
 	// TODO
 	// setSettingConnectionPermissionsJSON(data)

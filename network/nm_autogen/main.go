@@ -2,10 +2,8 @@ package main
 
 import (
 	"bytes"
-	"encoding/json"
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"path"
 	"text/template"
 )
@@ -16,15 +14,23 @@ var funcMap = template.FuncMap{
 	"ToKeyTypeRealData":         ToKeyTypeRealData,
 	"ToKeyTypeDefaultValueJSON": ToKeyTypeDefaultValueJSON,
 	"IfNeedCheckValueLength":    IfNeedCheckValueLength,
+	"GetAllVkFields":            GetAllVkFields,
+	"GetAllVkFieldKeys":         GetAllVkFieldKeys,
+	"IsVkNeedLogicSetter":       IsVkNeedLogicSetter,
+	"ToKeyTypeShortName":        ToKeyTypeShortName,
 }
 
 const (
-	backEndDir         = ".."
-	frontEndDir        = "../../../dss/modules/network/_components_autogen/"
-	nmSettingsJSONFile = "./nm_settings.json"
+	backEndDir          = ".."
+	frontEndDir         = "../../../dss/modules/network/_components_autogen/"
+	nmSettingsJSONFile  = "./nm_settings.json"
+	nmSettingVkJSONFile = "./nm_setting_vk.json"
 )
 
-var nmSettingUtilsFile = path.Join(backEndDir, "nm_setting_utils_autogen.go")
+var (
+	nmSettingUtilsFile = path.Join(backEndDir, "nm_setting_utils_autogen.go")
+	nmSettingVkFile    = path.Join(backEndDir, "nm_setting_virtual_key_autogen.go")
+)
 
 type NMSettingStruct struct {
 	FieldName  string // such as "NM_SETTING_CONNECTION_SETTING_NAME"
@@ -41,7 +47,7 @@ type NMSettingStruct struct {
 	}
 }
 
-type NMSettingVirtualKey struct {
+type NMSettingVkStruct struct {
 	Name         string // such as "NM_SETTING_VK_802_1X_EAP"
 	Value        string // such as "vk-eap"
 	Type         string // such as "ktypeString"
@@ -49,6 +55,7 @@ type NMSettingVirtualKey struct {
 	RelatedKey   string // such as "NM_SETTING_802_1X_EAP"
 	Available    bool   // check if is used by front-end
 	Required     bool   // check if child virtual key is optional
+	LogicSet     bool   // determine if this key should to generate a logic setter
 }
 
 type NMPageStruct struct {
@@ -85,6 +92,11 @@ func genNMSettingGeneralUtilsCode(nmSettings []NMSettingStruct) (content string)
 	return
 }
 
+func genNMSettingVirtualKeyCode(nmSettings []NMSettingStruct, nmSettingVks []NMSettingVkStruct) (content string) {
+	content = genTpl(nmSettingVks, tplVirtualKey) // general setting utils
+	return
+}
+
 func genTpl(data interface{}, tplstr string) (content string) {
 	templator := template.New("nm autogen").Funcs(funcMap)
 	tpl, err := templator.Parse(tplstr)
@@ -108,24 +120,13 @@ func main() {
 	flag.BoolVar(&writeOutput, "w", false, "write to output file")
 	flag.Parse()
 
-	fileContent, err := ioutil.ReadFile(nmSettingsJSONFile)
-	if err != nil {
-		fmt.Println("error, open file failed:", err)
-		return
-	}
-
 	var nmSettings []NMSettingStruct
-	err = json.Unmarshal(fileContent, &nmSettings)
-	if err != nil {
-		fmt.Printf("error, unmarshal json %s failed: %v\n", nmSettingsJSONFile, err)
-		return
-	}
+	unmarshalJSONFile(nmSettingsJSONFile, &nmSettings)
 
-	// back-end code
+	// back-end code, echo nm setting fields
 	for _, nmSetting := range nmSettings {
 		autogenContent := genNMSettingCode(nmSetting)
 		if writeOutput {
-			// write to file and execute gofmt
 			backEndFile := getBackEndFilePath(nmSetting.FieldName)
 			writeBackendFile(backEndFile, autogenContent)
 		} else {
@@ -138,6 +139,17 @@ func main() {
 	autogenContent := genNMSettingGeneralUtilsCode(nmSettings)
 	if writeOutput {
 		writeBackendFile(nmSettingUtilsFile, autogenContent)
+	} else {
+		fmt.Println(autogenContent)
+		fmt.Println()
+	}
+
+	// back-end code, virtual key
+	var nmSettingVks []NMSettingVkStruct
+	unmarshalJSONFile(nmSettingVkJSONFile, &nmSettingVks)
+	autogenContent = genNMSettingVirtualKeyCode(nmSettings, nmSettingVks)
+	if writeOutput {
+		writeBackendFile(nmSettingVkFile, autogenContent)
 	} else {
 		fmt.Println(autogenContent)
 		fmt.Println()

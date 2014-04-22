@@ -9,6 +9,7 @@ import (
 )
 
 func writeBackendFile(file, content string) {
+	// write to .go file and execute gofmt
 	err := ioutil.WriteFile(file, []byte(content), 0644)
 	if err != nil {
 		fmt.Println("error, write file failed:", err)
@@ -24,6 +25,11 @@ func getBackEndFilePath(fieldName string) (filePath string) {
 	fileName = strings.ToLower(fileName) + "_autogen.go"
 	filePath = path.Join(backEndDir, fileName)
 	return
+}
+
+// "ktypeString" -> "String", "ktypeBoolean" -> "Boolean"
+func ToKeyTypeShortName(ktype string) string {
+	return strings.TrimPrefix(ktype, "ktype")
 }
 
 // "ktypeString" -> "string", "ktypeArrayByte" -> "[]byte"
@@ -195,4 +201,32 @@ func IfNeedCheckValueLength(ktype string) (need string) {
 		need = "t"
 	}
 	return
+}
+
+func GetAllVkFields(nmSettingVks []NMSettingVkStruct) (fields []string) {
+	for _, vk := range nmSettingVks {
+		fields = appendStrArrayUnion(fields, vk.RelatedField)
+	}
+	return
+}
+
+// get all virtual keys in target field
+func GetAllVkFieldKeys(nmSettingVks []NMSettingVkStruct, field string) (keys []string) {
+	for _, vk := range nmSettingVks {
+		if vk.RelatedField == field {
+			keys = append(keys, vk.Name)
+		}
+	}
+	return
+}
+
+func IsVkNeedLogicSetter(nmSettingVks []NMSettingVkStruct, keyName string) bool {
+	for _, vk := range nmSettingVks {
+		if vk.Name == keyName {
+			return vk.LogicSet
+		}
+	}
+	fmt.Println("invalid virtual key:", keyName)
+	os.Exit(1)
+	return false
 }
