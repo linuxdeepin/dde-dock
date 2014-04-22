@@ -89,6 +89,9 @@
       <summary>Keyboard Bell Custom Filename</summary>
       <description>File name of the bell sound to be played.</description>
     </key>
+    <key type="i" name="cursor-blink-time">
+      <default>1200</default>
+    </key>
     <key type="b" name="remember-numlock-state">
       <default>true</default>
       <summary>Remember NumLock state</summary>
