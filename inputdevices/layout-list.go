@@ -22,6 +22,7 @@
 package main
 
 import (
+        "dlib"
         "encoding/xml"
         "io/ioutil"
 )
@@ -84,13 +85,13 @@ func GetLayoutList(xmlData XKBConfigRegister) map[string]string {
         for _, layout := range xmlData.LayoutList.Layout {
                 firstName := layout.ConfigItem.Name
                 desc := layout.ConfigItem.Description
-                layouts[firstName+LAYOUT_DELIM] = desc
+                layouts[firstName+LAYOUT_DELIM] = dlib.Tr(desc)
 
                 variants := layout.VariantList.Variant
                 for _, v := range variants {
                         lastName := v.ConfigItem.Name
                         descTmp := v.ConfigItem.Description
-                        layouts[firstName+LAYOUT_DELIM+lastName] = descTmp
+                        layouts[firstName+LAYOUT_DELIM+lastName] = dlib.Tr(descTmp)
                 }
         }
 

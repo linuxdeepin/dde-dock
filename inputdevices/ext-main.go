@@ -25,6 +25,9 @@ func main() {
                 logObject.Warning("There already has an InputDevices daemon running.")
                 return
         }
+        dlib.InitI18n()
+        dlib.Textdomain("xkeyboard-config")
+
         tpadFlag := false
 
         logObject.SetRestartCommand("/usr/lib/deepin-daemon/inputdevices")

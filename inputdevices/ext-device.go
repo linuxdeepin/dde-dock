@@ -112,6 +112,17 @@ func (keyboard *KeyboardEntry) LayoutList() map[string]string {
         return layouts
 }
 
+func (keyboard *KeyboardEntry) GetDescByLayout(layout string) string {
+        listMap := keyboard.LayoutList()
+        desc, ok := listMap[layout]
+        if !ok {
+                logObject.Warningf("'%s' invalid layout", layout)
+                return ""
+        }
+
+        return desc
+}
+
 func (keyboard *KeyboardEntry) AddUserLayout(strs string) {
         keyboard.appendUserLayout(strs)
 }
