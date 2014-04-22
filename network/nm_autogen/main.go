@@ -27,8 +27,9 @@ const (
 var nmSettingUtilsFile = path.Join(backEndDir, "nm_setting_utils_autogen.go")
 
 type NMSettingStruct struct {
-	FieldName string // such as "NM_SETTING_CONNECTION_SETTING_NAME"
-	Keys      []struct {
+	FieldName  string // such as "NM_SETTING_CONNECTION_SETTING_NAME"
+	FieldValue string // such as "connection"
+	Keys       []struct {
 		Name         string // such as "NM_SETTING_CONNECTION_ID"
 		Value        string // such as "id"
 		Type         string // such as "ktypeString"
@@ -42,6 +43,7 @@ type NMSettingStruct struct {
 
 type NMSettingVirtualKey struct {
 	Name         string // such as "NM_SETTING_VK_802_1X_EAP"
+	Value        string // such as "vk-eap"
 	Type         string // such as "ktypeString"
 	RelatedField string // such as "NM_SETTING_802_1X_SETTING_NAME"
 	RelatedKey   string // such as "NM_SETTING_802_1X_EAP"
