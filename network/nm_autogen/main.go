@@ -36,27 +36,26 @@ type NMSettingStruct struct {
 	FieldName  string // such as "NM_SETTING_CONNECTION_SETTING_NAME"
 	FieldValue string // such as "connection"
 	Keys       []struct {
-		Name         string // such as "NM_SETTING_CONNECTION_ID"
-		Value        string // such as "id"
-		Type         string // such as "ktypeString"
-		Default      string // such as "<default>", "<null>" or "true"
-		BackEndUsed  bool   // determine if this key will be used by back-end(golang code)
-		FrontEndUsed bool   // determine if this key will be used by front-end(qml code)
-		LogicSet     bool   // determine if this key should to generate a logic setter
+		Name           string // such as "NM_SETTING_CONNECTION_ID"
+		Value          string // such as "id"
+		Type           string // such as "ktypeString"
+		Default        string // such as "<default>", "<null>" or "true"
+		UsedByBackEnd  bool   // determine if this key will be used by back-end(golang code)
+		UsedByFrontEnd bool   // determine if this key will be used by front-end(qml code)
+		LogicSet       bool   // determine if this key should to generate a logic setter
 		// DisplayName   string	// TODO
 	}
 }
 
 type NMSettingVkStruct struct {
-	Name         string // such as "NM_SETTING_VK_802_1X_EAP"
-	Value        string // such as "vk-eap"
-	Type         string // such as "ktypeString"
-	RelatedField string // such as "NM_SETTING_802_1X_SETTING_NAME"
-	RelatedKey   string // such as "NM_SETTING_802_1X_EAP"
-	Available    bool   // check if is used by front-end
-	Required     bool   // check if child virtual key is optional
-	// TODO if virtual key need logic setter
-	LogicSet bool // determine if this key should to generate a logic setter
+	Name           string // such as "NM_SETTING_VK_802_1X_EAP"
+	Value          string // such as "vk-eap"
+	Type           string // such as "ktypeString"
+	RelatedField   string // such as "NM_SETTING_802_1X_SETTING_NAME"
+	RelatedKey     string // such as "NM_SETTING_802_1X_EAP"
+	UsedByFrontEnd bool   // check if is used by front-end
+	Optional       bool   // if key is optional, will ignore error for it
+	// DisplayName   string	// TODO
 }
 
 type NMPageStruct struct {

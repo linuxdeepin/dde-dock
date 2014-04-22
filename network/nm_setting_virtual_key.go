@@ -48,7 +48,7 @@ type VirtualKey struct {
 	RelatedField string
 	RelatedKey   string
 	Available    bool // check if is used by front-end
-	Required     bool // check if child virtual key is optional
+	Optional     bool // if key is optional, will ignore error for it
 }
 
 func isVirtualKey(field, key string) bool {
@@ -120,11 +120,10 @@ func getRelatedVirtualKeys(field, key string) (vks []string) {
 	return
 }
 
-// check if is required child virtual key
-func isRequiredChildVirtualKeys(field, vkey string) (required bool) {
+func isOptionalChildVirtualKeys(field, vkey string) (optional bool) {
 	for _, vk := range virtualKeys {
 		if vk.RelatedField == field && vk.Name == vkey {
-			required = vk.Required
+			optional = vk.Optional
 		}
 	}
 	return
