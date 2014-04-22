@@ -64,7 +64,7 @@ func getVirtualKeysOfField(field string) (vks []string) {
 			vks = append(vks, vk.Name)
 		}
 	}
-	Logger.Debug("getVirtualKeysOfField: filed:", field, vks) // TODO test
+	// Logger.Debug("getVirtualKeysOfField: filed:", field, vks) // TODO test
 	return
 }
 

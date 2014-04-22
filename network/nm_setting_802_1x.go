@@ -68,6 +68,7 @@ func getSetting8021xAvailableKeys(data _ConnectionData) (keys []string) {
 	case "peap":
 		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_ANONYMOUS_IDENTITY)
 		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_CA_CERT)
+		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PHASE1_PEAPVER)
 		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PHASE2_AUTH)
 		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_IDENTITY)
 		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PASSWORD)
@@ -87,6 +88,12 @@ func getSetting8021xAvailableValues(data _ConnectionData, key string) (values []
 			"1", // allow unauthenticated provisioning
 			"2", // allow authenticated provisioning
 			"3", // allow both authenticated and unauthenticated provisioning
+		}
+	case NM_SETTING_802_1X_PHASE1_PEAPVER:
+		values = []string{
+			"", // auto mode
+			"0",
+			"1",
 		}
 	case NM_SETTING_802_1X_PHASE2_AUTH:
 		// 'pap', 'chap', 'mschap', 'mschapv2', 'gtc', 'otp', 'md5', and 'tls'
@@ -195,6 +202,8 @@ func logicSetSetting8021xEap(data _ConnectionData, value []string) {
 			NM_SETTING_802_1X_PHASE2_AUTH,
 			NM_SETTING_802_1X_PASSWORD_FLAGS,
 			NM_SETTING_802_1X_SYSTEM_CA_CERTS)
+		setSetting8021xPhase1FastProvisioning(data, "1")
+		setSetting8021xPhase2Auth(data, "gtc")
 		setSetting8021xSystemCaCerts(data, true)
 	case "ttls":
 		removeSettingKeyBut(data, field8021x,
@@ -205,6 +214,7 @@ func logicSetSetting8021xEap(data _ConnectionData, value []string) {
 			NM_SETTING_802_1X_PHASE2_AUTH,
 			NM_SETTING_802_1X_PASSWORD_FLAGS,
 			NM_SETTING_802_1X_SYSTEM_CA_CERTS)
+		setSetting8021xPhase2Auth(data, "pap")
 		setSetting8021xSystemCaCerts(data, true)
 	case "peap":
 		removeSettingKeyBut(data, field8021x,
@@ -216,6 +226,8 @@ func logicSetSetting8021xEap(data _ConnectionData, value []string) {
 			NM_SETTING_802_1X_PHASE2_AUTH,
 			NM_SETTING_802_1X_PASSWORD_FLAGS,
 			NM_SETTING_802_1X_SYSTEM_CA_CERTS)
+		setSetting8021xPhase1Peapver(data, "")
+		setSetting8021xPhase2Auth(data, "mschapv2")
 		setSetting8021xSystemCaCerts(data, true)
 	}
 	setSetting8021xEap(data, value)
