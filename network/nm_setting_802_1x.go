@@ -51,7 +51,7 @@ func doGetSetting8021xEap(data _ConnectionData) (eap string) {
 
 // Get available keys
 func getSetting8021xAvailableKeys(data _ConnectionData) (keys []string) {
-	keys = []string{NM_SETTING_802_1X_EAP}
+	keys = getRelatedAvailableVirtualKeys(field8021x, NM_SETTING_802_1X_EAP)
 	switch doGetSetting8021xEap(data) {
 	case "tls":
 		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_IDENTITY)
@@ -173,6 +173,7 @@ func logicSetSetting8021xEapJSON(data _ConnectionData, valueJSON string) {
 }
 func logicSetSetting8021xEap(data _ConnectionData, value []string) {
 	if len(value) == 0 {
+		Logger.Warning("eap value is empty")
 		return
 	}
 	eap := value[0]
@@ -227,4 +228,5 @@ func logicSetSetting8021xEap(data _ConnectionData, value []string) {
 			NM_SETTING_802_1X_SYSTEM_CA_CERTS)
 		setSetting8021xSystemCaCerts(data, true)
 	}
+	setSetting8021xEap(data, value)
 }

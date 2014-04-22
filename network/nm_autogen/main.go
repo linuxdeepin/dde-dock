@@ -40,6 +40,15 @@ type NMSettingStruct struct {
 	}
 }
 
+type NMSettingVirtualKey struct {
+	Name         string // such as "NM_SETTING_VK_802_1X_EAP"
+	Type         string // such as "ktypeString"
+	RelatedField string // such as "NM_SETTING_802_1X_SETTING_NAME"
+	RelatedKey   string // such as "NM_SETTING_802_1X_EAP"
+	Available    bool   // check if is used by front-end
+	Required     bool   // check if child virtual key is optional
+}
+
 type NMPageStruct struct {
 	Name          string
 	DisplayName   string

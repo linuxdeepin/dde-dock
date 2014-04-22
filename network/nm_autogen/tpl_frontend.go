@@ -1,6 +1,6 @@
 package main
 
-const tplFrontEnd = `
+const tplFrontEndSection = `
 import QtQuick 2.1
 import Deepin.Widgets 1.0
 
