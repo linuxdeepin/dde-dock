@@ -279,7 +279,7 @@ func generalSetVirtualKeyJSON(data _ConnectionData, field, key string, valueJSON
 	case {{$field}}:
 		switch key { {{range $indexKey, $key := GetAllVkFieldKeys $vks $field}}
 		case {{$key}}:
-			{{if IsVkNeedLogicSetter $vks $key}}logicSet{{else}}set{{end}}{{$key | ToKeyFuncBaseName}}JSON(data, valueJSON)
+			logicSet{{$key | ToKeyFuncBaseName}}JSON(data, valueJSON)
 			return{{end}}
 		}{{end}}
 	}
@@ -293,9 +293,9 @@ func get{{$keyBaskFuncName}}JSON(data _ConnectionData) (valueJSON string) {
 	return
 }{{end}}
 
-// JSON setter {{range $index, $vk := $vks}}{{$keyBaskFuncName := $vk.Name | ToKeyFuncBaseName}}
-func set{{$keyBaskFuncName}}JSON(data _ConnectionData, valueJSON string) {
+// Logic JSON setter {{range $index, $vk := $vks}}{{$keyBaskFuncName := $vk.Name | ToKeyFuncBaseName}}
+func logicSet{{$keyBaskFuncName}}JSON(data _ConnectionData, valueJSON string) {
 	value, _ := jsonToKeyValue{{$vk.Type | ToKeyTypeShortName}}(valueJSON)
-	set{{$keyBaskFuncName}}(data, value)
+	logicSet{{$keyBaskFuncName}}(data, value)
 }{{end}}
 `

@@ -154,8 +154,13 @@ func doIsSettingIp4ConfigAddressesEmpty(data _ConnectionData) bool {
 }
 
 // Getter
-func getSettingVk8021xEap(data _ConnectionData) (value string) {
-	// TODO
+func getSettingVk8021xEap(data _ConnectionData) (eap string) {
+	eaps := getSetting8021xEap(data)
+	if len(eaps) == 0 {
+		Logger.Error("eap value is empty")
+		return
+	}
+	eap = eaps[0]
 	return
 }
 func getSettingVkConnectionPermissions(data _ConnectionData) (value bool) {
@@ -272,16 +277,15 @@ func getSettingVkWirelessSecurityKeyMgmt(data _ConnectionData) (value string) {
 	return
 }
 
-// Setter
-func setSettingVk8021xEap(data _ConnectionData, value string) {
-	// TODO
-	return
+// Logic setter, all virtual keys has a logic setter
+func logicSetSettingVk8021xEap(data _ConnectionData, value string) {
+	logicSetSetting8021xEap(data, []string{value})
 }
-func setSettingVkConnectionPermissions(data _ConnectionData, value bool) {
+func logicSetSettingVkConnectionPermissions(data _ConnectionData, value bool) {
 	// TODO
 	// setSettingConnectionPermissionsJSON(data)
 }
-func setSettingVkIp4ConfigDns(data _ConnectionData, value string) {
+func logicSetSettingVkIp4ConfigDns(data _ConnectionData, value string) {
 	dns := getSettingIp4ConfigDns(data)
 	if len(dns) == 0 {
 		dns = make([]uint32, 1)
@@ -293,7 +297,7 @@ func setSettingVkIp4ConfigDns(data _ConnectionData, value string) {
 		removeSettingIp4ConfigDns(data)
 	}
 }
-func setSettingVkIp4ConfigAddressesAddress(data _ConnectionData, value string) {
+func logicSetSettingVkIp4ConfigAddressesAddress(data _ConnectionData, value string) {
 	addresses := doGetOrNewSettingIp4ConfigAddresses(data)
 	addr := addresses[0]
 	addr[0] = convertIpv4AddressToUint32(value)
@@ -303,7 +307,7 @@ func setSettingVkIp4ConfigAddressesAddress(data _ConnectionData, value string) {
 		removeSettingIp4ConfigAddresses(data)
 	}
 }
-func setSettingVkIp4ConfigAddressesMask(data _ConnectionData, value string) {
+func logicSetSettingVkIp4ConfigAddressesMask(data _ConnectionData, value string) {
 	addresses := doGetOrNewSettingIp4ConfigAddresses(data)
 	addr := addresses[0]
 	addr[1] = convertIpv4NetMaskToPrefix(value)
@@ -313,7 +317,7 @@ func setSettingVkIp4ConfigAddressesMask(data _ConnectionData, value string) {
 		removeSettingIp4ConfigAddresses(data)
 	}
 }
-func setSettingVkIp4ConfigAddressesGateway(data _ConnectionData, value string) {
+func logicSetSettingVkIp4ConfigAddressesGateway(data _ConnectionData, value string) {
 	if len(value) == 0 {
 		value = ipv4Zero
 	}
@@ -326,63 +330,53 @@ func setSettingVkIp4ConfigAddressesGateway(data _ConnectionData, value string) {
 		removeSettingIp4ConfigAddresses(data)
 	}
 }
-func setSettingVkIp4ConfigRoutesAddress(data _ConnectionData, value string) {
+func logicSetSettingVkIp4ConfigRoutesAddress(data _ConnectionData, value string) {
 	// TODO
 	// setSettingIp4ConfigRoutesAddressJSON(data)
 }
-func setSettingVkIp4ConfigRoutesMask(data _ConnectionData, value string) {
+func logicSetSettingVkIp4ConfigRoutesMask(data _ConnectionData, value string) {
 	// TODO
 	// setSettingIp4ConfigRoutesMaskJSON(data)
 }
-func setSettingVkIp4ConfigRoutesNexthop(data _ConnectionData, value string) {
+func logicSetSettingVkIp4ConfigRoutesNexthop(data _ConnectionData, value string) {
 	// TODO
 	// setSettingIp4ConfigRoutesNexthopJSON(data)
 }
-func setSettingVkIp4ConfigRoutesMetric(data _ConnectionData, value string) {
+func logicSetSettingVkIp4ConfigRoutesMetric(data _ConnectionData, value string) {
 	// TODO
 	// setSettingIp4ConfigRoutesMetricJSON(data)
 }
-func setSettingVkIp6ConfigDns(data _ConnectionData, value string) {
+func logicSetSettingVkIp6ConfigDns(data _ConnectionData, value string) {
 	// TODO
 	// setSettingIp6ConfigDnsJSON(data)
 }
-func setSettingVkIp6ConfigAddressesAddress(data _ConnectionData, value string) {
+func logicSetSettingVkIp6ConfigAddressesAddress(data _ConnectionData, value string) {
 	// TODO
 	// setSettingIp6ConfigAddressesAddressJSON(data)
 }
-func setSettingVkIp6ConfigAddressesPrefix(data _ConnectionData, value string) {
+func logicSetSettingVkIp6ConfigAddressesPrefix(data _ConnectionData, value string) {
 	// TODO
 	// setSettingIp6ConfigAddressesPrefixJSON(data)
 }
-func setSettingVkIp6ConfigAddressesGateway(data _ConnectionData, value string) {
+func logicSetSettingVkIp6ConfigAddressesGateway(data _ConnectionData, value string) {
 	// TODO
 	// setSettingIp6ConfigAddressesGatewayJSON(data)
 }
-func setSettingVkIp6ConfigRoutesAddress(data _ConnectionData, value string) {
+func logicSetSettingVkIp6ConfigRoutesAddress(data _ConnectionData, value string) {
 	// TODO
 	// setSettingIp6ConfigRoutesAddressJSON(data)
 }
-func setSettingVkIp6ConfigRoutesPrefix(data _ConnectionData, value string) {
+func logicSetSettingVkIp6ConfigRoutesPrefix(data _ConnectionData, value string) {
 	// TODO
 	// setSettingIp6ConfigRoutesPrefixJSON(data)
 }
-func setSettingVkIp6ConfigRoutesNexthop(data _ConnectionData, value string) {
+func logicSetSettingVkIp6ConfigRoutesNexthop(data _ConnectionData, value string) {
 	// TODO
 	// setSettingIp6ConfigRoutesNexthopJSON(data)
 }
-func setSettingVkIp6ConfigRoutesMetric(data _ConnectionData, value string) {
+func logicSetSettingVkIp6ConfigRoutesMetric(data _ConnectionData, value string) {
 	// TODO
 	// setSettingIp6ConfigRoutesMetricJSON(data)
-}
-func setSettingVkWirelessSecurityKeyMgmt(data _ConnectionData, value string) {
-	// TODO
-	// setSettingWirelessSecurityKeyMgmtJSON(data)
-}
-
-// Logic setter
-func logicSetSettingVkWirelessSecurityKeyMgmtJSON(data _ConnectionData, valueJSON string) {
-	value, _ := jsonToKeyValueString(valueJSON)
-	logicSetSettingVkWirelessSecurityKeyMgmt(data, value)
 }
 func logicSetSettingVkWirelessSecurityKeyMgmt(data _ConnectionData, value string) {
 	switch value {

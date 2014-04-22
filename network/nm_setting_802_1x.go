@@ -39,20 +39,10 @@ const (
 	NM_SETTING_802_1X_SYSTEM_CA_CERTS                   = "system-ca-certs"
 )
 
-func doGetSetting8021xEap(data _ConnectionData) (eap string) {
-	eaps := getSetting8021xEap(data)
-	if len(eaps) == 0 {
-		Logger.Error("eap value is empty")
-		return
-	}
-	eap = eaps[0]
-	return
-}
-
 // Get available keys
 func getSetting8021xAvailableKeys(data _ConnectionData) (keys []string) {
 	keys = getRelatedAvailableVirtualKeys(field8021x, NM_SETTING_802_1X_EAP)
-	switch doGetSetting8021xEap(data) {
+	switch getSettingVk8021xEap(data) {
 	case "tls":
 		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_IDENTITY)
 		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_CLIENT_CERT)
@@ -100,7 +90,7 @@ func getSetting8021xAvailableValues(data _ConnectionData, key string) (values []
 		}
 	case NM_SETTING_802_1X_PHASE2_AUTH:
 		// 'pap', 'chap', 'mschap', 'mschapv2', 'gtc', 'otp', 'md5', and 'tls'
-		switch doGetSetting8021xEap(data) {
+		switch getSettingVk8021xEap(data) {
 		case "tls":
 		case "leap":
 		case "fast":
@@ -127,7 +117,7 @@ func checkSetting8021xValues(data _ConnectionData) (errs map[string]string) {
 
 	// check eap
 	ensureSetting8021xEapNoEmpty(data, errs)
-	switch doGetSetting8021xEap(data) {
+	switch getSettingVk8021xEap(data) {
 	default:
 		rememberError(errs, NM_SETTING_802_1X_EAP, NM_KEY_ERROR_INVALID_VALUE)
 	case "tls":

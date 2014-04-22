@@ -55,7 +55,8 @@ type NMSettingVkStruct struct {
 	RelatedKey   string // such as "NM_SETTING_802_1X_EAP"
 	Available    bool   // check if is used by front-end
 	Required     bool   // check if child virtual key is optional
-	LogicSet     bool   // determine if this key should to generate a logic setter
+	// TODO if virtual key need logic setter
+	LogicSet bool // determine if this key should to generate a logic setter
 }
 
 type NMPageStruct struct {
