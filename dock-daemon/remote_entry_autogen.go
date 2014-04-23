@@ -132,6 +132,14 @@ func (obj RemoteEntry) SecondaryActivate(arg0 int32, arg1 int32) (_err error) {
 	return
 }
 
+func (obj RemoteEntry) ShowQuickWindow() (_err error) {
+	_err = obj.core.Call("dde.dock.Entry.ShowQuickWindow", 0).Store()
+	if _err != nil {
+		fmt.Println(_err)
+	}
+	return
+}
+
 func (obj RemoteEntry) ConnectDataChanged(callback func(arg0 string, arg1 string)) func() {
 	__conn.BusObject().Call("org.freedesktop.DBus.AddMatch", 0,
 		"type='signal',path='"+string(obj.Path)+"', interface='dde.dock.Entry',sender='"+obj.DestName+"',member='DataChanged'")
@@ -144,7 +152,7 @@ func (obj RemoteEntry) ConnectDataChanged(callback func(arg0 string, arg1 string
 			if reflect.TypeOf(v.Body[0]) != reflect.TypeOf((*string)(nil)).Elem() {
 				continue
 			}
-			if reflect.TypeOf(v.Body[0]) != reflect.TypeOf((*string)(nil)).Elem() {
+			if reflect.TypeOf(v.Body[1]) != reflect.TypeOf((*string)(nil)).Elem() {
 				continue
 			}
 

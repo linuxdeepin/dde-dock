@@ -35,6 +35,8 @@
 	    <arg type="i" direction="in"></arg>
 	    <arg type="i" direction="in"></arg>
 	</method>
+	<method name="ShowQuickWindow">
+	</method>
 	<signal name="DataChanged">
 	    <arg type="s"></arg>
 	    <arg type="s"></arg>
