@@ -185,9 +185,7 @@ func newWirelessConnectionData(id, uuid string, ssid []byte, secType ApSecType) 
 
 // TODO Get available keys
 func getSettingWirelessAvailableKeys(data _ConnectionData) (keys []string) {
-	keys = []string{
-		NM_SETTING_WIRELESS_MODE,
-	}
+	keys = appendAvailableKeys(keys, fieldWireless, NM_SETTING_WIRELESS_MODE)
 	return
 }
 

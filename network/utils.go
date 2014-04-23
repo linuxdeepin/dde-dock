@@ -112,14 +112,17 @@ func strToByteArrayPath(path string) (bytePath []byte) {
 	return
 }
 func byteArrayToStrPath(bytePath []byte) (path string) {
+	if len(bytePath) < 1 {
+		return
+	}
 	path = string(bytePath[:len(bytePath)-1])
 	return
 }
 
 func isFileExists(file string) bool {
-	if _, err := os.Stat(file); err == nil {
+	stat, err := os.Stat(file)
+	if err == nil && !stat.IsDir() {
 		return true
-	} else {
-		return false
 	}
+	return false
 }

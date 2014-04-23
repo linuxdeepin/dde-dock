@@ -103,10 +103,8 @@ func newWiredConnectionData(id, uuid string) (data _ConnectionData) {
 
 // Get available keys
 func getSettingWiredAvailableKeys(data _ConnectionData) (keys []string) {
-	keys = []string{
-		NM_SETTING_WIRED_MAC_ADDRESS,
-		NM_SETTING_WIRED_MTU,
-	}
+	keys = appendAvailableKeys(keys, fieldWired, NM_SETTING_WIRED_MAC_ADDRESS)
+	keys = appendAvailableKeys(keys, fieldWired, NM_SETTING_WIRED_MTU)
 	return
 }
 

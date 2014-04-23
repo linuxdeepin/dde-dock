@@ -41,37 +41,37 @@ const (
 
 // Get available keys
 func getSetting8021xAvailableKeys(data _ConnectionData) (keys []string) {
-	keys = getRelatedAvailableVirtualKeys(field8021x, NM_SETTING_802_1X_EAP)
+	keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_EAP)
 	switch getSettingVk8021xEap(data) {
 	case "tls":
-		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_IDENTITY)
-		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_CLIENT_CERT)
-		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_CA_CERT)
-		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PRIVATE_KEY)
-		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD)
+		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_IDENTITY)
+		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_CLIENT_CERT)
+		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_CA_CERT)
+		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_PRIVATE_KEY)
+		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD)
 	case "leap":
-		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_IDENTITY)
-		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PASSWORD)
+		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_IDENTITY)
+		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_PASSWORD)
 	case "fast":
-		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_ANONYMOUS_IDENTITY)
-		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING)
-		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PAC_FILE)
-		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PHASE2_AUTH)
-		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_IDENTITY)
-		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PASSWORD)
+		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_ANONYMOUS_IDENTITY)
+		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING)
+		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_PAC_FILE)
+		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_PHASE2_AUTH)
+		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_IDENTITY)
+		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_PASSWORD)
 	case "ttls":
-		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_ANONYMOUS_IDENTITY)
-		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_CA_CERT)
-		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PHASE2_AUTH)
-		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_IDENTITY)
-		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PASSWORD)
+		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_ANONYMOUS_IDENTITY)
+		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_CA_CERT)
+		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_PHASE2_AUTH)
+		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_IDENTITY)
+		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_PASSWORD)
 	case "peap":
-		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_ANONYMOUS_IDENTITY)
-		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_CA_CERT)
-		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PHASE1_PEAPVER)
-		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PHASE2_AUTH)
-		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_IDENTITY)
-		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PASSWORD)
+		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_ANONYMOUS_IDENTITY)
+		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_CA_CERT)
+		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_PHASE1_PEAPVER)
+		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_PHASE2_AUTH)
+		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_IDENTITY)
+		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_PASSWORD)
 	}
 	return
 }

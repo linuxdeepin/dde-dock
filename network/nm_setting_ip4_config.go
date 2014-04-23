@@ -147,22 +147,16 @@ func getSettingIp4ConfigAvailableKeys(data _ConnectionData) (keys []string) {
 	default:
 		Logger.Error("ip4 config method is invalid:", method)
 	case NM_SETTING_IP4_CONFIG_METHOD_AUTO:
-		keys = []string{
-			NM_SETTING_IP4_CONFIG_METHOD,
-		}
-		keys = appendStrArrayUnion(keys, getRelatedAvailableVirtualKeys(fieldIpv4, NM_SETTING_IP4_CONFIG_DNS)...)
+		keys = appendAvailableKeys(keys, fieldIpv4, NM_SETTING_IP4_CONFIG_METHOD)
+		keys = appendAvailableKeys(keys, fieldIpv4, NM_SETTING_IP4_CONFIG_DNS)
 	case NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL: // ignore
 	case NM_SETTING_IP4_CONFIG_METHOD_MANUAL:
-		keys = []string{
-			NM_SETTING_IP4_CONFIG_METHOD,
-		}
-		keys = appendStrArrayUnion(keys, getRelatedAvailableVirtualKeys(fieldIpv4, NM_SETTING_IP4_CONFIG_DNS)...)
-		keys = appendStrArrayUnion(keys, getRelatedAvailableVirtualKeys(fieldIpv4, NM_SETTING_IP4_CONFIG_ADDRESSES)...)
+		keys = appendAvailableKeys(keys, fieldIpv4, NM_SETTING_IP4_CONFIG_METHOD)
+		keys = appendAvailableKeys(keys, fieldIpv4, NM_SETTING_IP4_CONFIG_DNS)
+		keys = appendAvailableKeys(keys, fieldIpv4, NM_SETTING_IP4_CONFIG_ADDRESSES)
 	case NM_SETTING_IP4_CONFIG_METHOD_SHARED: // ignore
 	case NM_SETTING_IP4_CONFIG_METHOD_DISABLED:
-		keys = []string{
-			NM_SETTING_IP4_CONFIG_METHOD,
-		}
+		keys = appendAvailableKeys(keys, fieldIpv4, NM_SETTING_IP4_CONFIG_METHOD)
 	}
 	return
 }

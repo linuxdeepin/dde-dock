@@ -105,6 +105,16 @@ func generalGetSettingVkAvailableValues(field, key string) (values []string) {
 	return
 }
 
+func appendAvailableKeys(keys []string, field, key string) (appendKeys []string) {
+	relatedVks := getRelatedAvailableVirtualKeys(field, key)
+	if len(relatedVks) > 0 {
+		appendKeys = appendStrArrayUnion(keys, relatedVks...)
+		return
+	}
+	appendKeys = appendStrArrayUnion(keys, key)
+	return
+}
+
 func getRelatedAvailableVirtualKeys(field, key string) (vks []string) {
 	for _, vk := range virtualKeys {
 		if vk.RelatedField == field && vk.RelatedKey == key && vk.Available {
@@ -168,7 +178,9 @@ func getSettingVk8021xEap(data _ConnectionData) (eap string) {
 }
 func getSettingVk8021xPacFile(data _ConnectionData) (value string) {
 	pacFile := getSetting8021xPacFile(data)
-	value = toUriPath(pacFile)
+	if len(pacFile) > 0 {
+		value = toUriPath(pacFile)
+	}
 	return
 }
 func getSettingVk8021xCaCert(data _ConnectionData) (value string) {

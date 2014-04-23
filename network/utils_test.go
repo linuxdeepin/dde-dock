@@ -492,6 +492,8 @@ func (*Utils) TestbyteArrayToStrPath(c *C) {
 		result string
 	}{
 		{[]byte{0x2f, 0x74, 0x68, 0x65, 0x2f, 0x70, 0x61, 0x74, 0x68, 0x0}, "/the/path"},
+		{[]byte{0x0}, ""},
+		{[]byte{}, ""},
 	}
 	for _, t := range tests {
 		c.Check(t.result, Equals, byteArrayToStrPath(t.test))

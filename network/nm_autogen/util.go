@@ -64,18 +64,18 @@ func GetAllKeysInPage(pageName string) (keys []string) {
 }
 
 func GetAllKeysInField(fieldName string) (keys []string) {
+	// virtual keys in field
+	for _, vk := range nmSettingVks {
+		if vk.RelatedField == fieldName {
+			keys = append(keys, vk.Name)
+		}
+	}
 	for _, nmSetting := range nmSettings {
 		if nmSetting.FieldName == fieldName {
 			for _, k := range nmSetting.Keys {
 				keys = append(keys, k.Name)
 			}
 			break
-		}
-	}
-	// virtual keys in field
-	for _, vk := range nmSettingVks {
-		if vk.RelatedField == fieldName {
-			keys = append(keys, vk.Name)
 		}
 	}
 	return

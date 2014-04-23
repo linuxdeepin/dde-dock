@@ -13,7 +13,8 @@ const (
 )
 
 func rememberError(errs FieldKeyErrors, field, key, errMsg string) {
-	if isVirtualKey(field, key) {
+	relatedVks := getRelatedVirtualKeys(field, key)
+	if len(relatedVks) > 0 {
 		rememberVkError(errs, field, key, errMsg)
 		return
 	}

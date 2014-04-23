@@ -81,10 +81,8 @@ const (
 
 // Get available keys
 func getSettingConnectionAvailableKeys(data _ConnectionData) (keys []string) {
-	keys = []string{
-		NM_SETTING_CONNECTION_ID,
-		NM_SETTING_CONNECTION_AUTOCONNECT,
-	}
+	keys = appendAvailableKeys(keys, fieldConnection, NM_SETTING_CONNECTION_ID)
+	keys = appendAvailableKeys(keys, fieldConnection, NM_SETTING_CONNECTION_AUTOCONNECT)
 	return
 }
 

@@ -38,26 +38,18 @@ func getSettingIp6ConfigAvailableKeys(data _ConnectionData) (keys []string) {
 	default:
 		Logger.Error("ip6 config method is invalid:", method)
 	case NM_SETTING_IP6_CONFIG_METHOD_IGNORE:
-		keys = []string{
-			NM_SETTING_IP6_CONFIG_METHOD,
-		}
+		keys = appendAvailableKeys(keys, fieldIpv6, NM_SETTING_IP6_CONFIG_METHOD)
 	case NM_SETTING_IP6_CONFIG_METHOD_AUTO:
-		keys = []string{
-			NM_SETTING_IP6_CONFIG_METHOD,
-		}
-		keys = appendStrArrayUnion(keys, getRelatedAvailableVirtualKeys(fieldIpv6, NM_SETTING_IP6_CONFIG_DNS)...)
+		keys = appendAvailableKeys(keys, fieldIpv6, NM_SETTING_IP6_CONFIG_METHOD)
+		keys = appendAvailableKeys(keys, fieldIpv6, NM_SETTING_IP6_CONFIG_DNS)
 	case NM_SETTING_IP6_CONFIG_METHOD_DHCP: // ignore
-		keys = []string{
-			NM_SETTING_IP6_CONFIG_METHOD,
-		}
-		keys = appendStrArrayUnion(keys, getRelatedAvailableVirtualKeys(fieldIpv6, NM_SETTING_IP6_CONFIG_DNS)...)
+		keys = appendAvailableKeys(keys, fieldIpv6, NM_SETTING_IP6_CONFIG_METHOD)
+		keys = appendAvailableKeys(keys, fieldIpv6, NM_SETTING_IP6_CONFIG_DNS)
 	case NM_SETTING_IP6_CONFIG_METHOD_LINK_LOCAL: // ignore
 	case NM_SETTING_IP6_CONFIG_METHOD_MANUAL:
-		keys = []string{
-			NM_SETTING_IP6_CONFIG_METHOD,
-		}
-		keys = appendStrArrayUnion(keys, getRelatedAvailableVirtualKeys(fieldIpv6, NM_SETTING_IP6_CONFIG_DNS)...)
-		keys = appendStrArrayUnion(keys, getRelatedAvailableVirtualKeys(fieldIpv6, NM_SETTING_IP6_CONFIG_ADDRESSES)...)
+		keys = appendAvailableKeys(keys, fieldIpv6, NM_SETTING_IP6_CONFIG_METHOD)
+		keys = appendAvailableKeys(keys, fieldIpv6, NM_SETTING_IP6_CONFIG_DNS)
+		keys = appendAvailableKeys(keys, fieldIpv6, NM_SETTING_IP6_CONFIG_ADDRESSES)
 	case NM_SETTING_IP6_CONFIG_METHOD_SHARED: // ignore
 	}
 	return
