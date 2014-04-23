@@ -27,6 +27,7 @@ import (
         "dlib/gio-2.0"
         "dlib/gobject-2.0"
         "dlib/logger"
+        "fmt"
         "os"
         "sync"
 )
@@ -48,6 +49,7 @@ type ObjectInfo struct {
 
 type Manager struct {
         DiskList []DiskInfo
+        Error    func(string)
 }
 
 const (
@@ -76,13 +78,13 @@ var (
         }()
 )
 
-func (m *Manager) DeviceEject(id int32) {
+func (m *Manager) DeviceEject(id int32) (bool, string) {
         mutex.Lock()
         defer mutex.Unlock()
         info, ok := objectMap[id]
         if !ok {
                 logObject.Infof("Eject id - %d not in objectMap.", id)
-                return
+                return false, fmt.Sprintf("Invalid Id: %d\n", id)
         }
 
         logObject.Infof("Eject type: %s", info.Type)
@@ -92,6 +94,7 @@ func (m *Manager) DeviceEject(id int32) {
                 op.Eject(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
                         _, err := op.EjectFinish(res)
                         if err != nil {
+                                m.Error(err.Error())
                                 logObject.Infof("drive eject failed: %d, %s", id, err)
                         }
                 }))
@@ -100,6 +103,7 @@ func (m *Manager) DeviceEject(id int32) {
                 op.Eject(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
                         _, err := op.EjectFinish(res)
                         if err != nil {
+                                m.Error(err.Error())
                                 logObject.Infof("volume eject failed: %d, %s", id, err)
                         }
                 }))
@@ -108,21 +112,25 @@ func (m *Manager) DeviceEject(id int32) {
                 op.Eject(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
                         _, err := op.EjectFinish(res)
                         if err != nil {
+                                m.Error(err.Error())
                                 logObject.Infof("mount eject failed: %d, %s", id, err)
                         }
                 }))
         default:
                 logObject.Infof("'%s' invalid type", info.Type)
+                return false, fmt.Sprintf("Invalid type: '%s'\n", info.Type)
         }
+
+        return true, ""
 }
 
-func (m *Manager) DeviceMount(id int32) {
+func (m *Manager) DeviceMount(id int32) (bool, string) {
         mutex.Lock()
         defer mutex.Unlock()
         info, ok := objectMap[id]
         if !ok {
                 logObject.Infof("Mount id - %d not in objectMap.", id)
-                return
+                return false, fmt.Sprintf("Invalid Id: %d\n", id)
         }
 
         logObject.Infof("Mount type: %s", info.Type)
@@ -132,6 +140,7 @@ func (m *Manager) DeviceMount(id int32) {
                 op.Mount(gio.MountMountFlagsNone, nil, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
                         _, err := op.MountFinish(res)
                         if err != nil {
+                                m.Error(err.Error())
                                 logObject.Infof("volume mount failed: %d, %s", id, err)
                         }
                 }))
@@ -140,21 +149,25 @@ func (m *Manager) DeviceMount(id int32) {
                 op.Remount(gio.MountMountFlagsNone, nil, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
                         _, err := op.RemountFinish(res)
                         if err != nil {
+                                m.Error(err.Error())
                                 logObject.Infof("mount remount failed: %d, %s", id, err)
                         }
                 }))
         default:
                 logObject.Infof("'%s' invalid type", info.Type)
+                return false, fmt.Sprintf("Invalid type: '%s'\n", info.Type)
         }
+
+        return true, ""
 }
 
-func (m *Manager) DeviceUnmount(id int32) {
+func (m *Manager) DeviceUnmount(id int32) (bool, string) {
         mutex.Lock()
         defer mutex.Unlock()
         info, ok := objectMap[id]
         if !ok {
                 logObject.Infof("Unmount id - %d not in objectMap.", id)
-                return
+                return false, fmt.Sprintf("Invalid Id: %d\n", id)
         }
 
         logObject.Infof("Unmount type: %s", info.Type)
@@ -164,12 +177,16 @@ func (m *Manager) DeviceUnmount(id int32) {
                 op.Unmount(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
                         _, err := op.UnmountFinish(res)
                         if err != nil {
+                                m.Error(err.Error())
                                 logObject.Infof("mount unmount failed: %d, %s", id, err)
                         }
                 }))
         default:
                 logObject.Infof("'%s' invalid type", info.Type)
+                return false, fmt.Sprintf("Invalid type: '%s'\n", info.Type)
         }
+
+        return true, ""
 }
 
 func newDiskInfo(value interface{}, t string, id int32) DiskInfo {
