@@ -24,6 +24,8 @@ package main
 import (
         "dlib/dbus"
         "dlib/gio-2.0"
+        "dlib/gobject-2.0"
+        "os/exec"
 )
 
 const (
@@ -54,6 +56,10 @@ func (m *Manager) listenSignalChanged() {
         monitor.Connect("mount-added", func(volumeMonitor *gio.VolumeMonitor, mount *gio.Mount) {
                 // Judge whether the property 'mount_and_open' set true
                 // if true, open the device use exec.Command("xdg-open", "device").Run()
+                if mount.CanUnmount() {
+                        uri := mount.GetRoot().GetUri()
+                        go exec.Command("/usr/bin/xdg-open", uri).Run()
+                }
                 m.setPropName("DiskList")
                 //printDiskInfo(m.DiskList)
         })
@@ -67,7 +73,15 @@ func (m *Manager) listenSignalChanged() {
         })
 
         monitor.Connect("volume-added", func(volumeMonitor *gio.VolumeMonitor, volume *gio.Volume) {
-                m.setPropName("DiskList")
+                if volume.CanEject() {
+                        volume.Mount(gio.MountMountFlagsNone, nil, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
+                                _, err := volume.MountFinish(res)
+                                if err != nil {
+                                        logObject.Infof("volume mount failed: %s", err)
+                                }
+                        }))
+                }
+                //m.setPropName("DiskList")
                 //printDiskInfo(m.DiskList)
         })
         monitor.Connect("volume-removed", func(volumeMonitor *gio.VolumeMonitor, volume *gio.Volume) {

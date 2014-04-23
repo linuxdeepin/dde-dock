@@ -40,6 +40,8 @@ type DiskInfo struct {
         CanEject   bool
         UsableCap  int64
         TotalCap   int64
+        Path       string
+        UUID       string
 }
 
 type ObjectInfo struct {
@@ -206,6 +208,11 @@ func newDiskInfo(value interface{}, t string, id int32) DiskInfo {
                 info.CanEject = v.CanEject()
                 id := v.GetIdentifier(DEVICE_KIND)
                 info.TotalCap, info.UsableCap = getDiskCap(id)
+                info.Path = v.GetIdentifier(gio.VolumeIdentifierKindUnixDevice)
+                info.UUID = v.GetIdentifier(gio.VolumeIdentifierKindUuid)
+                if mount := v.GetMount(); mount != nil {
+                        info.CanUnmount = mount.CanUnmount()
+                }
                 if containStart("network", id) {
                         info.Type = "network"
                 } else if info.CanEject {
@@ -219,6 +226,8 @@ func newDiskInfo(value interface{}, t string, id int32) DiskInfo {
                 info.CanEject = v.CanEject()
                 id := v.GetIdentifier(DEVICE_KIND)
                 info.TotalCap, info.UsableCap = getDiskCap(id)
+                info.Path = v.GetIdentifier(gio.VolumeIdentifierKindUnixDevice)
+                info.UUID = v.GetIdentifier(gio.VolumeIdentifierKindUuid)
                 if containStart("network", id) {
                         info.Type = "network"
                 } else if info.CanEject {
@@ -239,6 +248,10 @@ func newDiskInfo(value interface{}, t string, id int32) DiskInfo {
                         info.Type = "native"
                 } else {
                         info.Type = "network"
+                }
+                if volume := v.GetVolume(); volume != nil {
+                        info.Path = volume.GetIdentifier(gio.VolumeIdentifierKindUnixDevice)
+                        info.UUID = volume.GetIdentifier(gio.VolumeIdentifierKindUuid)
                 }
         default:
                 logObject.Infof("'%s' invalid type", t)
