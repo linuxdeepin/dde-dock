@@ -3,6 +3,7 @@ package main
 
 // All virtual keys data
 var virtualKeys = []VirtualKey{
+	VirtualKey{NM_SETTING_VK_802_1X_ENABLE, ktypeBoolean, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_VK_NONE_RELATED_KEY, true, false},
 	VirtualKey{NM_SETTING_VK_802_1X_EAP, ktypeString, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_EAP, true, false},
 	VirtualKey{NM_SETTING_VK_802_1X_PAC_FILE, ktypeString, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PAC_FILE, true, false},
 	VirtualKey{NM_SETTING_VK_802_1X_CA_CERT, ktypeString, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT, true, false},
@@ -33,6 +34,8 @@ func generalGetVirtualKeyJSON(data _ConnectionData, field, key string) (valueJSO
 	switch field {
 	case NM_SETTING_802_1X_SETTING_NAME:
 		switch key {
+		case NM_SETTING_VK_802_1X_ENABLE:
+			return getSettingVk8021xEnableJSON(data)
 		case NM_SETTING_VK_802_1X_EAP:
 			return getSettingVk8021xEapJSON(data)
 		case NM_SETTING_VK_802_1X_PAC_FILE:
@@ -102,6 +105,9 @@ func generalSetVirtualKeyJSON(data _ConnectionData, field, key string, valueJSON
 	switch field {
 	case NM_SETTING_802_1X_SETTING_NAME:
 		switch key {
+		case NM_SETTING_VK_802_1X_ENABLE:
+			logicSetSettingVk8021xEnableJSON(data, valueJSON)
+			return
 		case NM_SETTING_VK_802_1X_EAP:
 			logicSetSettingVk8021xEapJSON(data, valueJSON)
 			return
@@ -190,6 +196,10 @@ func generalSetVirtualKeyJSON(data _ConnectionData, field, key string, valueJSON
 }
 
 // JSON getter
+func getSettingVk8021xEnableJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVk8021xEnable(data))
+	return
+}
 func getSettingVk8021xEapJSON(data _ConnectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVk8021xEap(data))
 	return
@@ -284,6 +294,10 @@ func getSettingVkWirelessSecurityKeyMgmtJSON(data _ConnectionData) (valueJSON st
 }
 
 // Logic JSON setter
+func logicSetSettingVk8021xEnableJSON(data _ConnectionData, valueJSON string) {
+	value, _ := jsonToKeyValueBoolean(valueJSON)
+	logicSetSettingVk8021xEnable(data, value)
+}
 func logicSetSettingVk8021xEapJSON(data _ConnectionData, valueJSON string) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	logicSetSettingVk8021xEap(data, value)

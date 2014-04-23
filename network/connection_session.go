@@ -171,6 +171,7 @@ func (s *ConnectionSession) ListPages() (pages []string) {
 			pageGeneral,
 			pageIPv4,
 			pageIPv6,
+			pageSecurity,
 		}
 	case typeWireless:
 		pages = []string{

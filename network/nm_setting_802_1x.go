@@ -41,6 +41,13 @@ const (
 
 // Get available keys
 func getSetting8021xAvailableKeys(data _ConnectionData) (keys []string) {
+	switch getSettingConnectionType(data) {
+	case typeWired:
+		keys = []string{NM_SETTING_VK_802_1X_ENABLE}
+		if !isSettingFieldExists(data, field8021x) {
+			return
+		}
+	}
 	keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_EAP)
 	switch getSettingVk8021xEap(data) {
 	case "tls":

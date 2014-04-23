@@ -2,8 +2,11 @@ package main
 
 // Virtual key names.
 
+const NM_SETTING_VK_NONE_RELATED_KEY = "<none>"
+
 // 802-1x
 const (
+	NM_SETTING_VK_802_1X_ENABLE      = "vk-enable"
 	NM_SETTING_VK_802_1X_EAP         = "vk-eap"
 	NM_SETTING_VK_802_1X_PAC_FILE    = "vk-pac-file"
 	NM_SETTING_VK_802_1X_CA_CERT     = "vk-ca-cert"
@@ -167,6 +170,12 @@ func doIsSettingIp4ConfigAddressesEmpty(data _ConnectionData) bool {
 }
 
 // Getter
+func getSettingVk8021xEnable(data _ConnectionData) (value bool) {
+	if isSettingFieldExists(data, field8021x) {
+		return true
+	}
+	return false
+}
 func getSettingVk8021xEap(data _ConnectionData) (eap string) {
 	eaps := getSetting8021xEap(data)
 	if len(eaps) == 0 {
@@ -313,6 +322,14 @@ func getSettingVkWirelessSecurityKeyMgmt(data _ConnectionData) (value string) {
 }
 
 // Logic setter, all virtual keys has a logic setter
+func logicSetSettingVk8021xEnable(data _ConnectionData, value bool) {
+	if value {
+		addSettingField(data, field8021x)
+		logicSetSettingVk8021xEap(data, "tls")
+	} else {
+		removeSettingField(data, field8021x)
+	}
+}
 func logicSetSettingVk8021xEap(data _ConnectionData, value string) {
 	logicSetSetting8021xEap(data, []string{value})
 }
