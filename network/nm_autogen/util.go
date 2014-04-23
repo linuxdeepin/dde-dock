@@ -87,6 +87,10 @@ func ToKeyDisplayName(keyName string) (displayName string) {
 		vkInfo := getVkInfo(keyName)
 		displayName = vkInfo.DisplayName
 		keyValue = vkInfo.Value
+		if displayName == "<default>" {
+			keyInfo := getKeyInfo(vkInfo.RelatedKey)
+			displayName = keyInfo.DisplayName
+		}
 	} else {
 		keyInfo := getKeyInfo(keyName)
 		displayName = keyInfo.DisplayName

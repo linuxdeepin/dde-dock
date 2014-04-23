@@ -4,7 +4,11 @@ package main
 
 // 802-1x
 const (
-	NM_SETTING_VK_802_1X_EAP = "vk-eap"
+	NM_SETTING_VK_802_1X_EAP         = "vk-eap"
+	NM_SETTING_VK_802_1X_PAC_FILE    = "vk-pac-file"
+	NM_SETTING_VK_802_1X_CA_CERT     = "vk-ca-cert"
+	NM_SETTING_VK_802_1X_CLIENT_CERT = "vk-client-cert"
+	NM_SETTING_VK_802_1X_PRIVATE_KEY = "vk-private-key"
 )
 
 // connection
@@ -162,6 +166,26 @@ func getSettingVk8021xEap(data _ConnectionData) (eap string) {
 	eap = eaps[0]
 	return
 }
+func getSettingVk8021xPacFile(data _ConnectionData) (value string) {
+	pacFile := getSetting8021xPacFile(data)
+	value = toUriPath(pacFile)
+	return
+}
+func getSettingVk8021xCaCert(data _ConnectionData) (value string) {
+	caCert := getSetting8021xCaCert(data)
+	value = byteArrayToStrPath(caCert)
+	return
+}
+func getSettingVk8021xClientCert(data _ConnectionData) (value string) {
+	clientCert := getSetting8021xClientCert(data)
+	value = byteArrayToStrPath(clientCert)
+	return
+}
+func getSettingVk8021xPrivateKey(data _ConnectionData) (value string) {
+	privateKey := getSetting8021xPrivateKey(data)
+	value = byteArrayToStrPath(privateKey)
+	return
+}
 func getSettingVkConnectionPermissions(data _ConnectionData) (value bool) {
 	// TODO
 	// value = getSettingConnectionPermissions(data)
@@ -279,6 +303,18 @@ func getSettingVkWirelessSecurityKeyMgmt(data _ConnectionData) (value string) {
 // Logic setter, all virtual keys has a logic setter
 func logicSetSettingVk8021xEap(data _ConnectionData, value string) {
 	logicSetSetting8021xEap(data, []string{value})
+}
+func logicSetSettingVk8021xPacFile(data _ConnectionData, value string) {
+	setSetting8021xPacFile(data, toLocalPath(value))
+}
+func logicSetSettingVk8021xCaCert(data _ConnectionData, value string) {
+	setSetting8021xCaCert(data, strToByteArrayPath(value))
+}
+func logicSetSettingVk8021xClientCert(data _ConnectionData, value string) {
+	setSetting8021xClientCert(data, strToByteArrayPath(value))
+}
+func logicSetSettingVk8021xPrivateKey(data _ConnectionData, value string) {
+	setSetting8021xPrivateKey(data, strToByteArrayPath(value))
 }
 func logicSetSettingVkConnectionPermissions(data _ConnectionData, value bool) {
 	// TODO

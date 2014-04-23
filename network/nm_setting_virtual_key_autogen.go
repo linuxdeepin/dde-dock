@@ -4,6 +4,10 @@ package main
 // All virtual keys data
 var virtualKeys = []VirtualKey{
 	VirtualKey{NM_SETTING_VK_802_1X_EAP, ktypeString, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_EAP, true, false},
+	VirtualKey{NM_SETTING_VK_802_1X_PAC_FILE, ktypeString, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PAC_FILE, true, false},
+	VirtualKey{NM_SETTING_VK_802_1X_CA_CERT, ktypeString, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT, true, false},
+	VirtualKey{NM_SETTING_VK_802_1X_CLIENT_CERT, ktypeString, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT, true, false},
+	VirtualKey{NM_SETTING_VK_802_1X_PRIVATE_KEY, ktypeString, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY, true, false},
 	VirtualKey{NM_SETTING_VK_CONNECTION_PERMISSIONS, ktypeBoolean, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_PERMISSIONS, false, false},
 	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ADDRESSES_ADDRESS, ktypeString, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES, true, false},
 	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ADDRESSES_MASK, ktypeString, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES, true, false},
@@ -31,6 +35,14 @@ func generalGetVirtualKeyJSON(data _ConnectionData, field, key string) (valueJSO
 		switch key {
 		case NM_SETTING_VK_802_1X_EAP:
 			return getSettingVk8021xEapJSON(data)
+		case NM_SETTING_VK_802_1X_PAC_FILE:
+			return getSettingVk8021xPacFileJSON(data)
+		case NM_SETTING_VK_802_1X_CA_CERT:
+			return getSettingVk8021xCaCertJSON(data)
+		case NM_SETTING_VK_802_1X_CLIENT_CERT:
+			return getSettingVk8021xClientCertJSON(data)
+		case NM_SETTING_VK_802_1X_PRIVATE_KEY:
+			return getSettingVk8021xPrivateKeyJSON(data)
 		}
 	case NM_SETTING_CONNECTION_SETTING_NAME:
 		switch key {
@@ -92,6 +104,18 @@ func generalSetVirtualKeyJSON(data _ConnectionData, field, key string, valueJSON
 		switch key {
 		case NM_SETTING_VK_802_1X_EAP:
 			logicSetSettingVk8021xEapJSON(data, valueJSON)
+			return
+		case NM_SETTING_VK_802_1X_PAC_FILE:
+			logicSetSettingVk8021xPacFileJSON(data, valueJSON)
+			return
+		case NM_SETTING_VK_802_1X_CA_CERT:
+			logicSetSettingVk8021xCaCertJSON(data, valueJSON)
+			return
+		case NM_SETTING_VK_802_1X_CLIENT_CERT:
+			logicSetSettingVk8021xClientCertJSON(data, valueJSON)
+			return
+		case NM_SETTING_VK_802_1X_PRIVATE_KEY:
+			logicSetSettingVk8021xPrivateKeyJSON(data, valueJSON)
 			return
 		}
 	case NM_SETTING_CONNECTION_SETTING_NAME:
@@ -168,6 +192,22 @@ func generalSetVirtualKeyJSON(data _ConnectionData, field, key string, valueJSON
 // JSON getter
 func getSettingVk8021xEapJSON(data _ConnectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVk8021xEap(data))
+	return
+}
+func getSettingVk8021xPacFileJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVk8021xPacFile(data))
+	return
+}
+func getSettingVk8021xCaCertJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVk8021xCaCert(data))
+	return
+}
+func getSettingVk8021xClientCertJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVk8021xClientCert(data))
+	return
+}
+func getSettingVk8021xPrivateKeyJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVk8021xPrivateKey(data))
 	return
 }
 func getSettingVkConnectionPermissionsJSON(data _ConnectionData) (valueJSON string) {
@@ -247,6 +287,22 @@ func getSettingVkWirelessSecurityKeyMgmtJSON(data _ConnectionData) (valueJSON st
 func logicSetSettingVk8021xEapJSON(data _ConnectionData, valueJSON string) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	logicSetSettingVk8021xEap(data, value)
+}
+func logicSetSettingVk8021xPacFileJSON(data _ConnectionData, valueJSON string) {
+	value, _ := jsonToKeyValueString(valueJSON)
+	logicSetSettingVk8021xPacFile(data, value)
+}
+func logicSetSettingVk8021xCaCertJSON(data _ConnectionData, valueJSON string) {
+	value, _ := jsonToKeyValueString(valueJSON)
+	logicSetSettingVk8021xCaCert(data, value)
+}
+func logicSetSettingVk8021xClientCertJSON(data _ConnectionData, valueJSON string) {
+	value, _ := jsonToKeyValueString(valueJSON)
+	logicSetSettingVk8021xClientCert(data, value)
+}
+func logicSetSettingVk8021xPrivateKeyJSON(data _ConnectionData, valueJSON string) {
+	value, _ := jsonToKeyValueString(valueJSON)
+	logicSetSettingVk8021xPrivateKey(data, value)
 }
 func logicSetSettingVkConnectionPermissionsJSON(data _ConnectionData, valueJSON string) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
