@@ -2,28 +2,23 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path"
 	"strings"
 )
-
-func writeBackendFile(file, content string) {
-	// write to .go file and execute gofmt
-	err := ioutil.WriteFile(file, []byte(content), 0644)
-	if err != nil {
-		fmt.Println("error, write file failed:", err)
-		return
-	}
-	execAndWait(10, "gofmt", "-w", file)
-	fmt.Println(file)
-}
 
 // NM_SETTING_CONNECTION_SETTING_NAME -> ../nm_setting_connection_autogen.go
 func getBackEndFilePath(fieldName string) (filePath string) {
 	fileName := strings.TrimSuffix(fieldName, "_SETTING_NAME")
 	fileName = strings.ToLower(fileName) + "_autogen.go"
 	filePath = path.Join(backEndDir, fileName)
+	return
+}
+
+// "general" -> "../../../dss/modules/network/components_autogen/EditSectionGeneral.qml"
+func getFrontEndFilePath(pageName string) (filePath string) {
+	fileName := "EditSection" + ToClassName(pageName) + ".qml"
+	filePath = path.Join(frontEndDir, fileName)
 	return
 }
 
@@ -220,13 +215,14 @@ func GetAllVkFieldKeys(nmSettingVks []NMSettingVkStruct, field string) (keys []s
 	return
 }
 
-func IsVkNeedLogicSetter(nmSettingVks []NMSettingVkStruct, keyName string) bool {
-	for _, vk := range nmSettingVks {
-		if vk.Name == keyName {
-			return vk.LogicSet
-		}
-	}
-	fmt.Println("invalid virtual key:", keyName)
-	os.Exit(1)
-	return false
-}
+// TODO remove
+// func IsVkNeedLogicSetter(nmSettingVks []NMSettingVkStruct, keyName string) bool {
+// 	for _, vk := range nmSettingVks {
+// 		if vk.Name == keyName {
+// 			return vk.LogicSet
+// 		}
+// 	}
+// 	fmt.Println("invalid virtual key:", keyName)
+// 	os.Exit(1)
+// 	return false
+// }

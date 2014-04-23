@@ -9,6 +9,7 @@ import (
 )
 
 var funcMap = template.FuncMap{
+	"ToCaplitalize":             ToCaplitalize,
 	"ToFieldFuncBaseName":       ToFieldFuncBaseName,
 	"ToKeyFuncBaseName":         ToKeyFuncBaseName,
 	"ToKeyTypeRealData":         ToKeyTypeRealData,
@@ -16,35 +17,52 @@ var funcMap = template.FuncMap{
 	"IfNeedCheckValueLength":    IfNeedCheckValueLength,
 	"GetAllVkFields":            GetAllVkFields,
 	"GetAllVkFieldKeys":         GetAllVkFieldKeys,
-	"IsVkNeedLogicSetter":       IsVkNeedLogicSetter,
-	"ToKeyTypeShortName":        ToKeyTypeShortName,
+	// "IsVkNeedLogicSetter":       IsVkNeedLogicSetter,
+	"ToKeyTypeShortName":  ToKeyTypeShortName,
+	"ToKeyDisplayName":    ToKeyDisplayName,
+	"ToKeyValue":          ToKeyValue,
+	"IsKeyUsedByFrontEnd": IsKeyUsedByFrontEnd,
+	"ToFrontEndWidget":    ToFrontEndWidget,
+	"ToClassName":         ToClassName,
+	"GetAllKeysInPage":    GetAllKeysInPage,
 }
 
 const (
-	backEndDir          = ".."
-	frontEndDir         = "../../../dss/modules/network/_components_autogen/"
-	nmSettingsJSONFile  = "./nm_settings.json"
-	nmSettingVkJSONFile = "./nm_setting_vk.json"
+	backEndDir            = ".."
+	frontEndDir           = "../../../dss/modules/network/components_section_autogen/"
+	nmSettingsJSONFile    = "./nm_settings.json"
+	nmSettingVkJSONFile   = "./nm_setting_vk.json"
+	nmSettingPageJSONFile = "./nm_setting_page.json"
 )
 
 var (
-	nmSettingUtilsFile = path.Join(backEndDir, "nm_setting_utils_autogen.go")
-	nmSettingVkFile    = path.Join(backEndDir, "nm_setting_virtual_key_autogen.go")
+	argWriteOutput       bool
+	argBackEnd           bool
+	argFrontEnd          bool
+	nmSettingUtilsFile   = path.Join(backEndDir, "nm_setting_utils_autogen.go")
+	nmSettingVkFile      = path.Join(backEndDir, "nm_setting_virtual_key_autogen.go")
+	frontEndConnPropFile = path.Join(frontEndDir, "BaseConnectionProperties.qml")
+	nmSettings           []NMSettingStruct
+	nmSettingVks         []NMSettingVkStruct
+	nmSettingPages       []NMSettingPageStruct
 )
 
 type NMSettingStruct struct {
 	FieldName  string // such as "NM_SETTING_CONNECTION_SETTING_NAME"
 	FieldValue string // such as "connection"
-	Keys       []struct {
-		Name           string // such as "NM_SETTING_CONNECTION_ID"
-		Value          string // such as "id"
-		Type           string // such as "ktypeString"
-		Default        string // such as "<default>", "<null>" or "true"
-		UsedByBackEnd  bool   // determine if this key will be used by back-end(golang code)
-		UsedByFrontEnd bool   // determine if this key will be used by front-end(qml code)
-		LogicSet       bool   // determine if this key should to generate a logic setter
-		// DisplayName   string	// TODO
-	}
+	Keys       []NMSettingKeyStruct
+}
+
+type NMSettingKeyStruct struct {
+	Name           string // such as "NM_SETTING_CONNECTION_ID"
+	Value          string // such as "id"
+	Type           string // such as "ktypeString"
+	Default        string // such as "<default>", "<null>" or "true"
+	UsedByBackEnd  bool   // determine if this key will be used by back-end(golang code)
+	UsedByFrontEnd bool   // determine if this key will be used by front-end(qml code)
+	FrontEndWidget string // such as "EditLinePassword"
+	LogicSet       bool   // determine if this key should to generate a logic setter
+	DisplayName    string // such as "Connection name"
 }
 
 type NMSettingVkStruct struct {
@@ -54,15 +72,16 @@ type NMSettingVkStruct struct {
 	RelatedField   string // such as "NM_SETTING_802_1X_SETTING_NAME"
 	RelatedKey     string // such as "NM_SETTING_802_1X_EAP"
 	UsedByFrontEnd bool   // check if is used by front-end
+	FrontEndWidget string // such as "EditLinePassword"
 	Optional       bool   // if key is optional, will ignore error for it
-	// DisplayName   string	// TODO
+	DisplayName    string
 }
 
-type NMPageStruct struct {
+type NMSettingPageStruct struct {
+	Ignore        bool
 	Name          string
 	DisplayName   string
 	RelatedFields []string
-	// FrontEndFile  string // TODO
 }
 
 func genNMSettingCode(nmSetting NMSettingStruct) (content string) {
@@ -97,6 +116,16 @@ func genNMSettingVirtualKeyCode(nmSettings []NMSettingStruct, nmSettingVks []NMS
 	return
 }
 
+func genFrontEndConnPropCode(nmPages []NMSettingPageStruct) (content string) {
+	content = genTpl(nmPages, tplFrontEndConnProp)
+	return
+}
+
+func genFrontEndSectionCode(nmPage NMSettingPageStruct) (content string) {
+	content = genTpl(nmPage, tplFrontEndSection)
+	return
+}
+
 func genTpl(data interface{}, tplstr string) (content string) {
 	templator := template.New("nm autogen").Funcs(funcMap)
 	tpl, err := templator.Parse(tplstr)
@@ -114,44 +143,51 @@ func genTpl(data interface{}, tplstr string) (content string) {
 	return
 }
 
-func main() {
-	var writeOutput bool
-
-	flag.BoolVar(&writeOutput, "w", false, "write to output file")
-	flag.Parse()
-
-	var nmSettings []NMSettingStruct
-	unmarshalJSONFile(nmSettingsJSONFile, &nmSettings)
-
+func genBackEndCode() {
 	// back-end code, echo nm setting fields
 	for _, nmSetting := range nmSettings {
 		autogenContent := genNMSettingCode(nmSetting)
-		if writeOutput {
-			backEndFile := getBackEndFilePath(nmSetting.FieldName)
-			writeBackendFile(backEndFile, autogenContent)
-		} else {
-			fmt.Println(autogenContent)
-			fmt.Println()
-		}
+		backEndFile := getBackEndFilePath(nmSetting.FieldName)
+		writeOrDisplayResultForBackEnd(backEndFile, autogenContent)
 	}
 
 	// back-end code, general setting utils
 	autogenContent := genNMSettingGeneralUtilsCode(nmSettings)
-	if writeOutput {
-		writeBackendFile(nmSettingUtilsFile, autogenContent)
-	} else {
-		fmt.Println(autogenContent)
-		fmt.Println()
-	}
+	writeOrDisplayResultForBackEnd(nmSettingUtilsFile, autogenContent)
 
 	// back-end code, virtual key
-	var nmSettingVks []NMSettingVkStruct
-	unmarshalJSONFile(nmSettingVkJSONFile, &nmSettingVks)
 	autogenContent = genNMSettingVirtualKeyCode(nmSettings, nmSettingVks)
-	if writeOutput {
-		writeBackendFile(nmSettingVkFile, autogenContent)
-	} else {
-		fmt.Println(autogenContent)
-		fmt.Println()
+	writeOrDisplayResultForBackEnd(nmSettingVkFile, autogenContent)
+}
+
+func genFrontEndCode() {
+	// front-end code, BaseConnectionProperties.qml
+	autogenContent := genFrontEndConnPropCode(nmSettingPages)
+	writeOrDisplayResultForFrontEnd(frontEndConnPropFile, autogenContent)
+
+	for _, nmPage := range nmSettingPages {
+		if nmPage.Ignore {
+			continue
+		}
+		autogenContent = genFrontEndSectionCode(nmPage)
+		frontEndFile := getFrontEndFilePath(nmPage.Name)
+		writeOrDisplayResultForFrontEnd(frontEndFile, autogenContent)
+	}
+}
+
+func main() {
+	flag.BoolVar(&argWriteOutput, "w", false, "write to file")
+	flag.BoolVar(&argBackEnd, "b", false, "generate back-end code")
+	flag.BoolVar(&argFrontEnd, "f", false, "generate front-end code")
+	flag.Parse()
+
+	unmarshalJSONFile(nmSettingsJSONFile, &nmSettings)
+	unmarshalJSONFile(nmSettingVkJSONFile, &nmSettingVks)
+	unmarshalJSONFile(nmSettingPageJSONFile, &nmSettingPages)
+	if argBackEnd {
+		genBackEndCode()
+	}
+	if argFrontEnd {
+		genFrontEndCode()
 	}
 }

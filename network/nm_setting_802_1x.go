@@ -84,10 +84,10 @@ func getSetting8021xAvailableValues(data _ConnectionData, key string) (values []
 		values = []string{"tls", "leap", "fast", "ttls", "peap"}
 	case NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING:
 		values = []string{
-			"0", // disabled
-			"1", // allow unauthenticated provisioning
-			"2", // allow authenticated provisioning
-			"3", // allow both authenticated and unauthenticated provisioning
+			"0", // Disabled
+			"1", // Anonymous, allow unauthenticated provisioning
+			"2", // Authenticated, allow authenticated provisioning
+			"3", // Both, allow both authenticated and unauthenticated provisioning
 		}
 	case NM_SETTING_802_1X_PHASE1_PEAPVER:
 		values = []string{
