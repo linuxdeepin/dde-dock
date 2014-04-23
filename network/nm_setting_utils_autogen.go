@@ -86,7 +86,7 @@ func generalGetSettingAvailableKeys(data _ConnectionData, field string) (keys []
 
 func generalGetSettingAvailableValues(data _ConnectionData, field, key string) (values []string, customizable bool) {
 	if isVirtualKey(field, key) {
-		values = generalGetSettingVkAvailableValues(field, key)
+		values = generalGetSettingVkAvailableValues(data, field, key)
 		return
 	}
 	switch field {

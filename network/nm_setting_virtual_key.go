@@ -85,12 +85,12 @@ func getSettingVkKeyType(field, key string) (t ktype) {
 	return
 }
 
-func generalGetSettingVkAvailableValues(field, key string) (values []string) {
+func generalGetSettingVkAvailableValues(data _ConnectionData, field, key string) (values []string) {
 	switch field {
 	case field8021x:
 		switch key {
 		case NM_SETTING_VK_802_1X_EAP:
-			values, _ = getSetting8021xAvailableValues(nil, NM_SETTING_802_1X_EAP)
+			values, _ = getSetting8021xAvailableValues(data, NM_SETTING_802_1X_EAP)
 		}
 	case fieldConnection:
 	case fieldIpv4:

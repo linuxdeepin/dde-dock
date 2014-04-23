@@ -56,6 +56,9 @@ func getSetting8021xAvailableKeys(data _ConnectionData) (keys []string) {
 		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_CA_CERT)
 		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_PRIVATE_KEY)
 		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD)
+	case "md5":
+		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_IDENTITY)
+		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_PASSWORD)
 	case "leap":
 		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_IDENTITY)
 		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_PASSWORD)
@@ -88,7 +91,11 @@ func getSetting8021xAvailableValues(data _ConnectionData, key string) (values []
 	customizable = true
 	switch key {
 	case NM_SETTING_802_1X_EAP:
-		values = []string{"tls", "leap", "fast", "ttls", "peap"}
+		if getSettingConnectionType(data) == typeWired {
+			values = []string{"tls", "md5", "fast", "ttls", "peap"}
+		} else {
+			values = []string{"tls", "leap", "fast", "ttls", "peap"}
+		}
 	case NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING:
 		values = []string{
 			"0", // Disabled
@@ -106,6 +113,7 @@ func getSetting8021xAvailableValues(data _ConnectionData, key string) (values []
 		// 'pap', 'chap', 'mschap', 'mschapv2', 'gtc', 'otp', 'md5', and 'tls'
 		switch getSettingVk8021xEap(data) {
 		case "tls":
+		case "md5":
 		case "leap":
 		case "fast":
 			values = []string{"gtc", "mschapv2"}
@@ -141,6 +149,9 @@ func checkSetting8021xValues(data _ConnectionData) (errs FieldKeyErrors) {
 		ensureSetting8021xPrivateKeyNoEmpty(data, errs)
 		ensureSetting8021xPasswordNoEmpty(data, errs)
 		ensureSetting8021xSystemCaCertsNoEmpty(data, errs)
+	case "md5":
+		ensureSetting8021xIdentityNoEmpty(data, errs)
+		ensureSetting8021xPasswordNoEmpty(data, errs)
 	case "leap":
 		ensureSetting8021xIdentityNoEmpty(data, errs)
 		ensureSetting8021xPasswordNoEmpty(data, errs)
@@ -232,6 +243,14 @@ func logicSetSetting8021xEap(data _ConnectionData, value []string) {
 			NM_SETTING_802_1X_PRIVATE_KEY,
 			NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD,
 			NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS,
+			NM_SETTING_802_1X_SYSTEM_CA_CERTS)
+		setSetting8021xSystemCaCerts(data, true)
+	case "md5":
+		removeSettingKeyBut(data, field8021x,
+			NM_SETTING_802_1X_EAP,
+			NM_SETTING_802_1X_IDENTITY,
+			NM_SETTING_802_1X_PASSWORD,
+			NM_SETTING_802_1X_PASSWORD_FLAGS,
 			NM_SETTING_802_1X_SYSTEM_CA_CERTS)
 		setSetting8021xSystemCaCerts(data, true)
 	case "leap":
