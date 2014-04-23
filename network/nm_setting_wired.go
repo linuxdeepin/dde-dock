@@ -92,10 +92,10 @@ func newWiredConnectionData(id, uuid string) (data _ConnectionData) {
 	addSettingField(data, fieldWired)
 	setSettingWiredDuplex(data, "full")
 
-	addSettingField(data, fieldIPv4)
+	addSettingField(data, fieldIpv4)
 	setSettingIp4ConfigMethod(data, NM_SETTING_IP4_CONFIG_METHOD_AUTO)
 
-	addSettingField(data, fieldIPv6)
+	addSettingField(data, fieldIpv6)
 	setSettingIp6ConfigMethod(data, NM_SETTING_IP6_CONFIG_METHOD_AUTO)
 
 	return

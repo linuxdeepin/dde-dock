@@ -86,8 +86,8 @@ func (*Utils) TestConnectionDataDefaultValue(c *C) {
 	addSettingField(data, fieldConnection)
 	addSettingField(data, fieldWired)
 	addSettingField(data, field8021x)
-	addSettingField(data, fieldIPv4)
-	addSettingField(data, fieldIPv6)
+	addSettingField(data, fieldIpv4)
+	addSettingField(data, fieldIpv6)
 
 	// ktypeBoolean
 	defaultValueJSON = `true`
@@ -128,21 +128,21 @@ func (*Utils) TestConnectionDataDefaultValue(c *C) {
 	setValueJSON = `[""]`
 	c.Check(getSettingIp4ConfigDnsJSON(data), Equals, defaultValueJSON)
 	setSettingIp4ConfigDnsJSON(data, setValueJSON)
-	c.Check(isSettingKeyExists(data, fieldIPv4, NM_SETTING_IP4_CONFIG_DNS), Equals, false)
+	c.Check(isSettingKeyExists(data, fieldIpv4, NM_SETTING_IP4_CONFIG_DNS), Equals, false)
 
 	// ktypeWrapperIpv4Addresses
 	defaultValueJSON = `null`
 	setValueJSON = `[{"Address":"","Mask":"","Gateway":""}]`
 	c.Check(getSettingIp4ConfigAddressesJSON(data), Equals, defaultValueJSON)
 	setSettingIp4ConfigAddressesJSON(data, setValueJSON)
-	c.Check(isSettingKeyExists(data, fieldIPv4, NM_SETTING_IP4_CONFIG_ADDRESSES), Equals, false)
+	c.Check(isSettingKeyExists(data, fieldIpv4, NM_SETTING_IP4_CONFIG_ADDRESSES), Equals, false)
 
 	// ktypeWrapperIpv4Routes
 	defaultValueJSON = `null`
 	setValueJSON = `[{"Address":"","Mask":"","NextHop":"","Metric":0}]`
 	c.Check(getSettingIp4ConfigRoutesJSON(data), Equals, defaultValueJSON)
 	setSettingIp4ConfigRoutesJSON(data, setValueJSON)
-	c.Check(isSettingKeyExists(data, fieldIPv4, NM_SETTING_IP4_CONFIG_ROUTES), Equals, false)
+	c.Check(isSettingKeyExists(data, fieldIpv4, NM_SETTING_IP4_CONFIG_ROUTES), Equals, false)
 
 	// ktypeWrapperIpv6Dns
 	defaultValueJSON = `null`

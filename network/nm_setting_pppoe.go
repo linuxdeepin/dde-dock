@@ -31,7 +31,7 @@ func newPppoeConnectionData(id, uuid string) (data _ConnectionData) {
 	setSettingPppLcpEchoFailure(data, 5)
 	setSettingPppLcpEchoInterval(data, 30)
 
-	addSettingField(data, fieldIPv4)
+	addSettingField(data, fieldIpv4)
 	setSettingIp4ConfigMethod(data, NM_SETTING_IP4_CONFIG_METHOD_AUTO)
 
 	return

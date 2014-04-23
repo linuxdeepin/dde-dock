@@ -202,9 +202,9 @@ func (s *ConnectionSession) pageToFields(page string) (fields []string) {
 	case pageWifi:
 		fields = []string{fieldWireless}
 	case pageIPv4:
-		fields = []string{fieldIPv4}
+		fields = []string{fieldIpv4}
 	case pageIPv6:
-		fields = []string{fieldIPv6}
+		fields = []string{fieldIpv6}
 	case pageSecurity:
 		switch s.connectionType {
 		case typeWired:

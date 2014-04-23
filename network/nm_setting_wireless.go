@@ -142,10 +142,10 @@ func newWirelessConnectionData(id, uuid string, ssid []byte, secType ApSecType) 
 		}
 	}
 
-	addSettingField(data, fieldIPv4)
+	addSettingField(data, fieldIpv4)
 	setSettingIp4ConfigMethod(data, NM_SETTING_IP4_CONFIG_METHOD_AUTO)
 
-	addSettingField(data, fieldIPv6)
+	addSettingField(data, fieldIpv6)
 	setSettingIp6ConfigMethod(data, NM_SETTING_IP6_CONFIG_METHOD_AUTO)
 
 	return
@@ -153,8 +153,8 @@ func newWirelessConnectionData(id, uuid string, ssid []byte, secType ApSecType) 
 	// TODO remove
 
 	// data[fieldConnection] = make(map[string]dbus.Variant)
-	// data[fieldIPv4] = make(map[string]dbus.Variant)
-	// data[fieldIPv6] = make(map[string]dbus.Variant)
+	// data[fieldIpv4] = make(map[string]dbus.Variant)
+	// data[fieldIpv6] = make(map[string]dbus.Variant)
 	// data[fieldWireless] = make(map[string]dbus.Variant)
 
 	// data[fieldConnection]["id"] = dbus.MakeVariant(id)
@@ -179,8 +179,8 @@ func newWirelessConnectionData(id, uuid string, ssid []byte, secType ApSecType) 
 	// 	}
 	// }
 
-	// data[fieldIPv4]["method"] = dbus.MakeVariant("auto")
-	// data[fieldIPv6]["method"] = dbus.MakeVariant("auto")
+	// data[fieldIpv4]["method"] = dbus.MakeVariant("auto")
+	// data[fieldIpv6]["method"] = dbus.MakeVariant("auto")
 }
 
 // TODO Get available keys

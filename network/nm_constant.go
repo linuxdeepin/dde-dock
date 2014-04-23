@@ -17,8 +17,8 @@ var supportedConnectionTypes = []string{
 const (
 	field8021x            = NM_SETTING_802_1X_SETTING_NAME
 	fieldConnection       = NM_SETTING_CONNECTION_SETTING_NAME
-	fieldIPv4             = NM_SETTING_IP4_CONFIG_SETTING_NAME
-	fieldIPv6             = NM_SETTING_IP6_CONFIG_SETTING_NAME
+	fieldIpv4             = NM_SETTING_IP4_CONFIG_SETTING_NAME
+	fieldIpv6             = NM_SETTING_IP6_CONFIG_SETTING_NAME
 	fieldWired            = NM_SETTING_WIRED_SETTING_NAME
 	fieldWireless         = NM_SETTING_WIRELESS_SETTING_NAME
 	fieldWirelessSecurity = NM_SETTING_WIRELESS_SECURITY_SETTING_NAME
@@ -31,8 +31,8 @@ const (
 	pageGeneral  = "general"  // -> fieldConnection
 	pageEthernet = "ethernet" // -> fieldWireed
 	pageWifi     = "wifi"     // -> fieldWireless
-	pageIPv4     = "ipv4"     // -> fieldIPv4
-	pageIPv6     = "ipv6"     // -> fieldIPv6
+	pageIPv4     = "ipv4"     // -> fieldIpv4
+	pageIPv6     = "ipv6"     // -> fieldIpv6
 	pageSecurity = "security" // -> field8021x, fieldWirelessSecurity
 	pagePppoe    = "pppoe"    // -> fieldPppoe
 	pagePpp      = "ppp"      // -> fieldPpp

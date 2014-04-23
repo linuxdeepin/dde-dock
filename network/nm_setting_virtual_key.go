@@ -86,8 +86,8 @@ func generalGetSettingVkAvailableValues(field, key string) (values []string) {
 			values, _ = getSetting8021xAvailableValues(nil, NM_SETTING_802_1X_EAP)
 		}
 	case fieldConnection:
-	case fieldIPv4:
-	case fieldIPv6:
+	case fieldIpv4:
+	case fieldIpv6:
 	case fieldWired:
 	case fieldWireless:
 	case fieldWirelessSecurity:
