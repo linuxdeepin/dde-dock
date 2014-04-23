@@ -58,9 +58,9 @@ var (
         monitor   = gio.VolumeMonitorGet()
         objectMap = make(map[int32]*ObjectInfo)
         logObject = logger.NewLogger("daemon/mounts")
+        mutex     = new(sync.Mutex)
 
         genID, destroyID = func() (func() int32, func()) {
-                var mutex sync.Mutex
                 count := int32(0)
                 return func() int32 {
                                 mutex.Lock()
@@ -77,6 +77,8 @@ var (
 )
 
 func (m *Manager) DeviceEject(id int32) {
+        mutex.Lock()
+        defer mutex.Unlock()
         info, ok := objectMap[id]
         if !ok {
                 logObject.Infof("Eject id - %d not in objectMap.", id)
@@ -115,6 +117,8 @@ func (m *Manager) DeviceEject(id int32) {
 }
 
 func (m *Manager) DeviceMount(id int32) {
+        mutex.Lock()
+        defer mutex.Unlock()
         info, ok := objectMap[id]
         if !ok {
                 logObject.Infof("Mount id - %d not in objectMap.", id)
@@ -145,6 +149,8 @@ func (m *Manager) DeviceMount(id int32) {
 }
 
 func (m *Manager) DeviceUnmount(id int32) {
+        mutex.Lock()
+        defer mutex.Unlock()
         info, ok := objectMap[id]
         if !ok {
                 logObject.Infof("Unmount id - %d not in objectMap.", id)
@@ -167,6 +173,12 @@ func (m *Manager) DeviceUnmount(id int32) {
 }
 
 func newDiskInfo(value interface{}, t string, id int32) DiskInfo {
+        defer func() {
+                if err := recover(); err != nil {
+                        logObject.Warning("Received Error: ", err)
+                }
+        }()
+
         info := DiskInfo{}
         info.Id = id
 
@@ -204,10 +216,10 @@ func newDiskInfo(value interface{}, t string, id int32) DiskInfo {
                 info.CanUnmount = v.CanUnmount()
                 root := v.GetRoot()
                 info.TotalCap, info.UsableCap = getDiskCap(root.GetPath())
-                if root.IsNative() {
-                        info.Type = "native"
-                } else if info.CanEject {
+                if info.CanEject {
                         info.Type = "removable"
+                } else if root.IsNative() {
+                        info.Type = "native"
                 } else {
                         info.Type = "network"
                 }
