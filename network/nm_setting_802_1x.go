@@ -48,7 +48,7 @@ func getSetting8021xAvailableKeys(data _ConnectionData) (keys []string) {
 		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_CLIENT_CERT)
 		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_CA_CERT)
 		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PRIVATE_KEY)
-		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PASSWORD)
+		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD)
 	case "leap":
 		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_IDENTITY)
 		keys = appendStrArrayUnion(keys, NM_SETTING_802_1X_PASSWORD)
@@ -182,6 +182,7 @@ func logicSetSetting8021xEap(data _ConnectionData, value []string) {
 			NM_SETTING_802_1X_CLIENT_CERT,
 			NM_SETTING_802_1X_CA_CERT,
 			NM_SETTING_802_1X_PRIVATE_KEY,
+			NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD,
 			NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS,
 			NM_SETTING_802_1X_SYSTEM_CA_CERTS)
 		setSetting8021xSystemCaCerts(data, true)
@@ -189,6 +190,7 @@ func logicSetSetting8021xEap(data _ConnectionData, value []string) {
 		removeSettingKeyBut(data, field8021x,
 			NM_SETTING_802_1X_EAP,
 			NM_SETTING_802_1X_IDENTITY,
+			NM_SETTING_802_1X_PASSWORD,
 			NM_SETTING_802_1X_PASSWORD_FLAGS,
 			NM_SETTING_802_1X_SYSTEM_CA_CERTS)
 		setSetting8021xSystemCaCerts(data, true)
@@ -200,6 +202,7 @@ func logicSetSetting8021xEap(data _ConnectionData, value []string) {
 			NM_SETTING_802_1X_PAC_FILE,
 			NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING,
 			NM_SETTING_802_1X_PHASE2_AUTH,
+			NM_SETTING_802_1X_PASSWORD,
 			NM_SETTING_802_1X_PASSWORD_FLAGS,
 			NM_SETTING_802_1X_SYSTEM_CA_CERTS)
 		setSetting8021xPhase1FastProvisioning(data, "1")
@@ -212,6 +215,7 @@ func logicSetSetting8021xEap(data _ConnectionData, value []string) {
 			NM_SETTING_802_1X_ANONYMOUS_IDENTITY,
 			NM_SETTING_802_1X_CA_CERT,
 			NM_SETTING_802_1X_PHASE2_AUTH,
+			NM_SETTING_802_1X_PASSWORD,
 			NM_SETTING_802_1X_PASSWORD_FLAGS,
 			NM_SETTING_802_1X_SYSTEM_CA_CERTS)
 		setSetting8021xPhase2Auth(data, "pap")
@@ -224,6 +228,7 @@ func logicSetSetting8021xEap(data _ConnectionData, value []string) {
 			NM_SETTING_802_1X_CA_CERT,
 			NM_SETTING_802_1X_PHASE1_PEAPVER,
 			NM_SETTING_802_1X_PHASE2_AUTH,
+			NM_SETTING_802_1X_PASSWORD,
 			NM_SETTING_802_1X_PASSWORD_FLAGS,
 			NM_SETTING_802_1X_SYSTEM_CA_CERTS)
 		setSetting8021xPhase1Peapver(data, "")
