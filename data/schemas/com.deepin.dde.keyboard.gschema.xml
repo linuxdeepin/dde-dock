@@ -41,18 +41,8 @@
         <description>User Add Layout List</description>
     </key>
     <key type="s" name="layout">
-        <default>"us"</default>
+        <default>"us;"</default>
         <summary>Keyboard Layout</summary>
-        <description></description>
-    </key>
-    <key type="s" name="layout-option">
-        <default>""</default>
-        <summary>Layout Option</summary>
-        <description></description>
-    </key>
-    <key type="s" name="layout-model">
-        <default>""</default>
-        <summary>Layout Mode</summary>
         <description></description>
     </key>
     <key type="b" name="repeat-enabled">
