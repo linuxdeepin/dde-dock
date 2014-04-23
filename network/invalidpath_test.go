@@ -20,9 +20,9 @@ func TestInvalid(t *testing.T) {
 
 	manager.GetAccessPoints("/")
 
-	manager.GetActiveConnection("/")
+	// manager.GetActiveConnection("/")
 
-	manager.GetConnectionByAccessPoint("/")
+	// manager.GetConnectionByAccessPoint("/")
 
 	manager.FeedSecret("xxoo", "sd", "ss")
 	manager.GetDBusInfo()
@@ -56,12 +56,12 @@ func TestDBusFailed(t *testing.T) {
 	if _, err = m.GetAccessPoints("/"); err == nil {
 		t.Fatal("GetAccessPoints")
 	}
-	if _, err = m.GetActiveConnection("/"); err == nil {
-		t.Fatal("GetActiveConnection")
-	}
-	if _, err = m.GetConnectionByAccessPoint("/"); err == nil {
-		t.Fatal("GetConnectionByAccessPoint")
-	}
+	// if _, err = m.GetActiveConnection("/"); err == nil {
+	// 	t.Fatal("GetActiveConnection")
+	// }
+	// if _, err = m.GetConnectionByAccessPoint("/"); err == nil {
+	// 	t.Fatal("GetConnectionByAccessPoint")
+	// }
 	//if err = m.FeedSecret("xxoo", "s", "sd"); err == nil {
 	////This wouldn't failed
 	//}

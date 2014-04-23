@@ -28,3 +28,22 @@ func rememberVkError(errs map[string]string, field, key, errMsg string) {
 		}
 	}
 }
+
+// start with "file://", end with null byte
+func ensureByteArrayUriPathExists(errs map[string]string, key string, bytePath []byte) {
+	path := byteArrayToStrPath(bytePath)
+	if !isUriPath(path) {
+		rememberError(errs, key, NM_KEY_ERROR_INVALID_VALUE)
+		return
+	}
+	if !isFileExists(toLocalPath(path)) {
+		rememberError(errs, key, NM_KEY_ERROR_INVALID_VALUE)
+		return
+	}
+}
+
+func ensureFileExists(errs map[string]string, key, file string) {
+	if isFileExists(file) {
+		rememberError(errs, key, NM_KEY_ERROR_INVALID_VALUE)
+	}
+}

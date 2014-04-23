@@ -6,6 +6,7 @@ import "crypto/rand"
 import "reflect"
 import "encoding/json"
 import "strings"
+import "os"
 
 func newUUID() string {
 	uuid := make([]byte, 16)
@@ -74,10 +75,51 @@ func isUint32ArrayEmpty(a []uint32) (empty bool) {
 	return
 }
 
-func uriToPath(uri string) (string, bool) {
-	tmp := strings.TrimLeft(uri, " ")
-	if strings.HasPrefix(tmp, "file://") {
-		return tmp[7:], true
+func isUriPath(path string) bool {
+	if strings.HasPrefix(path, "file://") {
+		return true
 	}
-	return "", false
+	return false
+}
+
+func isLocalPath(path string) bool {
+	if isUriPath(path) {
+		return false
+	}
+	return true
+}
+
+// "/the/path" -> "file:///the/path", "file:///the/path" -> "file:///the/path"
+func toUriPath(path string) (uriPath string) {
+	if strings.HasPrefix(path, "file://") {
+		uriPath = path
+	} else {
+		uriPath = "file://" + path
+	}
+	return
+}
+
+// "/the/path" -> "/the/path", "file:///the/path" -> "/the/path"
+func toLocalPath(path string) (localPath string) {
+	localPath = strings.TrimPrefix(path, "file://")
+	return
+}
+
+// byte array should end with null byte
+func strToByteArrayPath(path string) (bytePath []byte) {
+	bytePath = []byte(path)
+	bytePath = append(bytePath, 0)
+	return
+}
+func byteArrayToStrPath(bytePath []byte) (path string) {
+	path = string(bytePath[:len(bytePath)-1])
+	return
+}
+
+func isFileExists(file string) bool {
+	if _, err := os.Stat(file); err == nil {
+		return true
+	} else {
+		return false
+	}
 }

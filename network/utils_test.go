@@ -449,3 +449,51 @@ func (*Utils) TestJSONWrapper(c *C) {
 func (*Utils) TestGetterAndSetterForVirtualKey(c *C) {
 	// TODO
 }
+
+func (*Utils) TestToUriPath(c *C) {
+	tests := []struct {
+		test   string
+		result string
+	}{
+		{"/the/path", "file:///the/path"},
+		{"file:///the/path", "file:///the/path"},
+	}
+	for _, t := range tests {
+		c.Check(t.result, Equals, toUriPath(t.test))
+	}
+}
+func (*Utils) TestToLocalPath(c *C) {
+	tests := []struct {
+		test   string
+		result string
+	}{
+		{"/the/path", "/the/path"},
+		{"file:///the/path", "/the/path"},
+	}
+	for _, t := range tests {
+		c.Check(t.result, Equals, toLocalPath(t.test))
+	}
+}
+
+func (*Utils) TestStrToByteArrayPath(c *C) {
+	tests := []struct {
+		test   string
+		result []byte
+	}{
+		{"/the/path", []byte{0x2f, 0x74, 0x68, 0x65, 0x2f, 0x70, 0x61, 0x74, 0x68, 0x0}},
+	}
+	for _, t := range tests {
+		c.Check(t.result, DeepEquals, strToByteArrayPath(t.test))
+	}
+}
+func (*Utils) TestbyteArrayToStrPath(c *C) {
+	tests := []struct {
+		test   []byte
+		result string
+	}{
+		{[]byte{0x2f, 0x74, 0x68, 0x65, 0x2f, 0x70, 0x61, 0x74, 0x68, 0x0}, "/the/path"},
+	}
+	for _, t := range tests {
+		c.Check(t.result, Equals, byteArrayToStrPath(t.test))
+	}
+}
