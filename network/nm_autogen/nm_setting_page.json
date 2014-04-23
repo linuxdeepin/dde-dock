@@ -3,8 +3,8 @@
     {"Ignore":false, "Name": "ipv4", "DisplayName": "IPv4", "RelatedFields": ["NM_SETTING_IP4_CONFIG_SETTING_NAME"]},
     {"Ignore":false, "Name": "ipv6", "DisplayName": "IPv6", "RelatedFields": ["NM_SETTING_IP6_CONFIG_SETTING_NAME"]},
     {"Ignore":false, "Name": "pppoe", "DisplayName": "PPPoE", "RelatedFields": ["NM_SETTING_PPPOE_SETTING_NAME"]},
-    {"Ignore":true, "Name": "ppp", "DisplayName": "PPP", "RelatedFields": ["NM_SETTING_PPP_SETTING_NAME"]},
-    {"Ignore":true, "Name": "ethernet", "DisplayName": "Ethernet", "RelatedFields": ["NM_SETTING_WIRED_SETTING_NAME"]},
-    {"Ignore":true, "Name": "wifi", "DisplayName": "Wi-Fi", "RelatedFields": ["NM_SETTING_WIRELESS_SETTING_NAME"]},
+    {"Ignore":false, "Name": "ppp", "DisplayName": "PPP", "RelatedFields": ["NM_SETTING_PPP_SETTING_NAME"]},
+    {"Ignore":false, "Name": "ethernet", "DisplayName": "Ethernet", "RelatedFields": ["NM_SETTING_WIRED_SETTING_NAME"]},
+    {"Ignore":false, "Name": "wifi", "DisplayName": "Wi-Fi", "RelatedFields": ["NM_SETTING_WIRELESS_SETTING_NAME"]},
     {"Ignore":false, "Name": "security", "DisplayName": "Security", "RelatedFields": ["NM_SETTING_WIRELESS_SECURITY_SETTING_NAME","NM_SETTING_802_1X_SETTING_NAME"]}
 ]

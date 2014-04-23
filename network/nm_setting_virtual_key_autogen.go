@@ -19,13 +19,13 @@ var virtualKeys = []VirtualKey{
 	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ROUTES_NEXTHOP, ktypeString, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTES, false, false},
 	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ROUTES_METRIC, ktypeString, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTES, false, false},
 	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ADDRESSES_ADDRESS, ktypeString, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ADDRESSES, true, false},
-	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ADDRESSES_PREFIX, ktypeString, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ADDRESSES, true, false},
+	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ADDRESSES_PREFIX, ktypeUint32, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ADDRESSES, true, false},
 	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ADDRESSES_GATEWAY, ktypeString, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ADDRESSES, true, true},
 	VirtualKey{NM_SETTING_VK_IP6_CONFIG_DNS, ktypeString, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS, true, false},
 	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ROUTES_ADDRESS, ktypeString, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTES, false, false},
-	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ROUTES_PREFIX, ktypeString, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTES, false, false},
+	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ROUTES_PREFIX, ktypeUint32, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTES, false, false},
 	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ROUTES_NEXTHOP, ktypeString, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTES, false, false},
-	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ROUTES_METRIC, ktypeString, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTES, false, false},
+	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ROUTES_METRIC, ktypeUint32, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTES, false, false},
 	VirtualKey{NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT, ktypeString, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT, true, false},
 }
 
@@ -359,7 +359,7 @@ func logicSetSettingVkIp6ConfigAddressesAddressJSON(data _ConnectionData, valueJ
 	logicSetSettingVkIp6ConfigAddressesAddress(data, value)
 }
 func logicSetSettingVkIp6ConfigAddressesPrefixJSON(data _ConnectionData, valueJSON string) {
-	value, _ := jsonToKeyValueString(valueJSON)
+	value, _ := jsonToKeyValueUint32(valueJSON)
 	logicSetSettingVkIp6ConfigAddressesPrefix(data, value)
 }
 func logicSetSettingVkIp6ConfigAddressesGatewayJSON(data _ConnectionData, valueJSON string) {
@@ -375,7 +375,7 @@ func logicSetSettingVkIp6ConfigRoutesAddressJSON(data _ConnectionData, valueJSON
 	logicSetSettingVkIp6ConfigRoutesAddress(data, value)
 }
 func logicSetSettingVkIp6ConfigRoutesPrefixJSON(data _ConnectionData, valueJSON string) {
-	value, _ := jsonToKeyValueString(valueJSON)
+	value, _ := jsonToKeyValueUint32(valueJSON)
 	logicSetSettingVkIp6ConfigRoutesPrefix(data, value)
 }
 func logicSetSettingVkIp6ConfigRoutesNexthopJSON(data _ConnectionData, valueJSON string) {
@@ -383,7 +383,7 @@ func logicSetSettingVkIp6ConfigRoutesNexthopJSON(data _ConnectionData, valueJSON
 	logicSetSettingVkIp6ConfigRoutesNexthop(data, value)
 }
 func logicSetSettingVkIp6ConfigRoutesMetricJSON(data _ConnectionData, valueJSON string) {
-	value, _ := jsonToKeyValueString(valueJSON)
+	value, _ := jsonToKeyValueUint32(valueJSON)
 	logicSetSettingVkIp6ConfigRoutesMetric(data, value)
 }
 func logicSetSettingVkWirelessSecurityKeyMgmtJSON(data _ConnectionData, valueJSON string) {

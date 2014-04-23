@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	// "os"
+	"os"
 )
 
 // func GenFrontEndWidgetInfo(ktype string) (widget string) {
@@ -26,13 +26,16 @@ func ToFrontEndWidget(keyName string) (widget string) {
 	switch ktype {
 	default:
 		fmt.Println("invalid ktype:", ktype)
-		// os.Exit(1)
+		os.Exit(1)
 	case "ktypeString":
 		widget = "EditLineTextInput"
 	// case "ktypeByte":
-	// case "ktypeInt32":
-	// case "ktypeUint32":
-	// case "ktypeUint64":
+	case "ktypeInt32":
+		widget = "EditLineSpinner"
+	case "ktypeUint32":
+		widget = "EditLineSpinner"
+	case "ktypeUint64":
+		widget = "EditLineSpinner"
 	case "ktypeBoolean":
 		widget = "EditLineSwitchButton"
 	// case "ktypeArrayByte":

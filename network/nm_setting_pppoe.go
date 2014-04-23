@@ -60,5 +60,7 @@ func checkSettingPppoeValues(data _ConnectionData) (errs FieldKeyErrors) {
 	// check username
 	ensureSettingPppoeUsernameNoEmpty(data, errs)
 
+	// TODO what about if no password?
+
 	return
 }

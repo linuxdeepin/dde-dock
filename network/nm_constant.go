@@ -8,7 +8,7 @@ const (
 )
 
 var supportedConnectionTypes = []string{
-	typeWired,
+	// typeWired, // don't support multiple wired connections since now
 	typeWireless,
 	typePppoe,
 	// typeVpn, // TODO

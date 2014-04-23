@@ -85,10 +85,6 @@ func isKeyInSettingPpp(key string) bool {
 		return true
 	case NM_SETTING_PPP_MTU:
 		return true
-	case NM_SETTING_PPP_LCP_ECHO_FAILURE:
-		return true
-	case NM_SETTING_PPP_LCP_ECHO_INTERVAL:
-		return true
 	}
 	return false
 }
@@ -129,10 +125,6 @@ func getSettingPppKeyDefaultValueJSON(key string) (valueJSON string) {
 	case NM_SETTING_PPP_MRU:
 		valueJSON = `0`
 	case NM_SETTING_PPP_MTU:
-		valueJSON = `0`
-	case NM_SETTING_PPP_LCP_ECHO_FAILURE:
-		valueJSON = `0`
-	case NM_SETTING_PPP_LCP_ECHO_INTERVAL:
 		valueJSON = `0`
 	}
 	return
@@ -175,10 +167,6 @@ func generalGetSettingPppKeyJSON(data _ConnectionData, key string) (value string
 		value = getSettingPppMruJSON(data)
 	case NM_SETTING_PPP_MTU:
 		value = getSettingPppMtuJSON(data)
-	case NM_SETTING_PPP_LCP_ECHO_FAILURE:
-		value = getSettingPppLcpEchoFailureJSON(data)
-	case NM_SETTING_PPP_LCP_ECHO_INTERVAL:
-		value = getSettingPppLcpEchoIntervalJSON(data)
 	}
 	return
 }
@@ -220,10 +208,6 @@ func generalSetSettingPppKeyJSON(data _ConnectionData, key, valueJSON string) {
 		setSettingPppMruJSON(data, valueJSON)
 	case NM_SETTING_PPP_MTU:
 		setSettingPppMtuJSON(data, valueJSON)
-	case NM_SETTING_PPP_LCP_ECHO_FAILURE:
-		setSettingPppLcpEchoFailureJSON(data, valueJSON)
-	case NM_SETTING_PPP_LCP_ECHO_INTERVAL:
-		setSettingPppLcpEchoIntervalJSON(data, valueJSON)
 	}
 	return
 }
@@ -276,12 +260,6 @@ func isSettingPppMruExists(data _ConnectionData) bool {
 }
 func isSettingPppMtuExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MTU)
-}
-func isSettingPppLcpEchoFailureExists(data _ConnectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_FAILURE)
-}
-func isSettingPppLcpEchoIntervalExists(data _ConnectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_INTERVAL)
 }
 
 // Ensure field and key exists and not empty
@@ -374,16 +352,6 @@ func ensureSettingPppMtuNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MTU, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingPppLcpEchoFailureNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
-	if !isSettingPppLcpEchoFailureExists(data) {
-		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_FAILURE, NM_KEY_ERROR_MISSING_VALUE)
-	}
-}
-func ensureSettingPppLcpEchoIntervalNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
-	if !isSettingPppLcpEchoIntervalExists(data) {
-		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_INTERVAL, NM_KEY_ERROR_MISSING_VALUE)
-	}
-}
 
 // Getter
 func getSettingPppNoauth(data _ConnectionData) (value bool) {
@@ -450,14 +418,6 @@ func getSettingPppMtu(data _ConnectionData) (value uint32) {
 	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MTU).(uint32)
 	return
 }
-func getSettingPppLcpEchoFailure(data _ConnectionData) (value uint32) {
-	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_FAILURE).(uint32)
-	return
-}
-func getSettingPppLcpEchoInterval(data _ConnectionData) (value uint32) {
-	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_INTERVAL).(uint32)
-	return
-}
 
 // Setter
 func setSettingPppNoauth(data _ConnectionData, value bool) {
@@ -507,12 +467,6 @@ func setSettingPppMru(data _ConnectionData, value uint32) {
 }
 func setSettingPppMtu(data _ConnectionData, value uint32) {
 	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MTU, value)
-}
-func setSettingPppLcpEchoFailure(data _ConnectionData, value uint32) {
-	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_FAILURE, value)
-}
-func setSettingPppLcpEchoInterval(data _ConnectionData, value uint32) {
-	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_INTERVAL, value)
 }
 
 // JSON Getter
@@ -580,14 +534,6 @@ func getSettingPppMtuJSON(data _ConnectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MTU, getSettingPppKeyType(NM_SETTING_PPP_MTU))
 	return
 }
-func getSettingPppLcpEchoFailureJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_FAILURE, getSettingPppKeyType(NM_SETTING_PPP_LCP_ECHO_FAILURE))
-	return
-}
-func getSettingPppLcpEchoIntervalJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_INTERVAL, getSettingPppKeyType(NM_SETTING_PPP_LCP_ECHO_INTERVAL))
-	return
-}
 
 // JSON Setter
 func setSettingPppNoauthJSON(data _ConnectionData, valueJSON string) {
@@ -638,12 +584,6 @@ func setSettingPppMruJSON(data _ConnectionData, valueJSON string) {
 func setSettingPppMtuJSON(data _ConnectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MTU, valueJSON, getSettingPppKeyType(NM_SETTING_PPP_MTU))
 }
-func setSettingPppLcpEchoFailureJSON(data _ConnectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_FAILURE, valueJSON, getSettingPppKeyType(NM_SETTING_PPP_LCP_ECHO_FAILURE))
-}
-func setSettingPppLcpEchoIntervalJSON(data _ConnectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_INTERVAL, valueJSON, getSettingPppKeyType(NM_SETTING_PPP_LCP_ECHO_INTERVAL))
-}
 
 // Remover
 func removeSettingPppNoauth(data _ConnectionData) {
@@ -693,10 +633,4 @@ func removeSettingPppMru(data _ConnectionData) {
 }
 func removeSettingPppMtu(data _ConnectionData) {
 	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MTU)
-}
-func removeSettingPppLcpEchoFailure(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_FAILURE)
-}
-func removeSettingPppLcpEchoInterval(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_INTERVAL)
 }
