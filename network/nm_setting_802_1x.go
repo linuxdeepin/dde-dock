@@ -119,14 +119,14 @@ func getSetting8021xAvailableValues(data _ConnectionData, key string) (values []
 }
 
 // Check whether the values are correct
-func checkSetting8021xValues(data _ConnectionData) (errs map[string]string) {
+func checkSetting8021xValues(data _ConnectionData) (errs FieldKeyErrors) {
 	errs = make(map[string]string)
 
 	// check eap
 	ensureSetting8021xEapNoEmpty(data, errs)
 	switch getSettingVk8021xEap(data) {
 	default:
-		rememberError(errs, NM_SETTING_802_1X_EAP, NM_KEY_ERROR_INVALID_VALUE)
+		rememberError(errs, field8021x, NM_SETTING_802_1X_EAP, NM_KEY_ERROR_INVALID_VALUE)
 	case "tls":
 		ensureSetting8021xIdentityNoEmpty(data, errs)
 		ensureSetting8021xClientCertNoEmpty(data, errs)
@@ -169,37 +169,37 @@ func checkSetting8021xValues(data _ConnectionData) (errs map[string]string) {
 	return
 }
 
-func checkSetting8021xPacFile(data _ConnectionData, errs map[string]string) {
+func checkSetting8021xPacFile(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSetting8021xPacFileExists(data) {
 		return
 	}
 	value := getSetting8021xPacFile(data)
 	if !isLocalPath(value) {
-		rememberError(errs, NM_SETTING_802_1X_PAC_FILE, NM_KEY_ERROR_INVALID_VALUE)
+		rememberError(errs, field8021x, NM_SETTING_802_1X_PAC_FILE, NM_KEY_ERROR_INVALID_VALUE)
 		return
 	}
-	ensureFileExists(errs, NM_SETTING_802_1X_PAC_FILE, value)
+	ensureFileExists(errs, field8021x, NM_SETTING_802_1X_PAC_FILE, value)
 }
-func checkSetting8021xClientCert(data _ConnectionData, errs map[string]string) {
+func checkSetting8021xClientCert(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSetting8021xClientCertExists(data) {
 		return
 	}
 	value := getSetting8021xClientCert(data)
-	ensureByteArrayUriPathExists(errs, NM_SETTING_802_1X_CLIENT_CERT, value)
+	ensureByteArrayUriPathExists(errs, field8021x, NM_SETTING_802_1X_CLIENT_CERT, value)
 }
-func checkSetting8021xCaCert(data _ConnectionData, errs map[string]string) {
+func checkSetting8021xCaCert(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSetting8021xCaCertExists(data) {
 		return
 	}
 	value := getSetting8021xCaCert(data)
-	ensureByteArrayUriPathExists(errs, NM_SETTING_802_1X_CA_CERT, value)
+	ensureByteArrayUriPathExists(errs, field8021x, NM_SETTING_802_1X_CA_CERT, value)
 }
-func checkSetting8021xPrivateKey(data _ConnectionData, errs map[string]string) {
+func checkSetting8021xPrivateKey(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSetting8021xPrivateKeyExists(data) {
 		return
 	}
 	value := getSetting8021xPrivateKey(data)
-	ensureByteArrayUriPathExists(errs, NM_SETTING_802_1X_PRIVATE_KEY, value)
+	ensureByteArrayUriPathExists(errs, field8021x, NM_SETTING_802_1X_PRIVATE_KEY, value)
 }
 
 // Logic setter

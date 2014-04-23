@@ -169,14 +169,14 @@ func getSettingWirelessSecurityAvailableValues(data _ConnectionData, key string)
 }
 
 // Check whether the values are correct
-func checkSettingWirelessSecurityValues(data _ConnectionData) (errs map[string]string) {
+func checkSettingWirelessSecurityValues(data _ConnectionData) (errs FieldKeyErrors) {
 	errs = make(map[string]string)
 
 	// check key-mgmt
 	ensureSettingWirelessSecurityKeyMgmtNoEmpty(data, errs)
 	switch getSettingWirelessSecurityKeyMgmt(data) {
 	default:
-		rememberVkError(errs, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT, NM_KEY_ERROR_INVALID_VALUE)
+		rememberError(errs, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT, NM_KEY_ERROR_INVALID_VALUE)
 		return
 	case "none": // wep
 		ensureSettingWirelessSecurityWepKeyTypeNoEmpty(data, errs)
@@ -201,16 +201,16 @@ func checkSettingWirelessSecurityValues(data _ConnectionData) (errs map[string]s
 	return
 }
 
-func checkSettingWirelessSecurityWepKeyType(data _ConnectionData, errs map[string]string) {
+func checkSettingWirelessSecurityWepKeyType(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingWirelessSecurityWepKeyTypeExists(data) {
 		return
 	}
 	wepKeyType := getSettingWirelessSecurityWepKeyType(data)
 	if wepKeyType != 1 && wepKeyType != 2 {
-		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE, NM_KEY_ERROR_INVALID_VALUE)
+		rememberError(errs, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE, NM_KEY_ERROR_INVALID_VALUE)
 	}
 }
-func checkSettingWirelessSecurityWepKey0(data _ConnectionData, errs map[string]string) {
+func checkSettingWirelessSecurityWepKey0(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingWirelessSecurityWepKey0Exists(data) {
 		return
 	}
@@ -222,17 +222,17 @@ func checkSettingWirelessSecurityWepKey0(data _ConnectionData, errs map[string]s
 		// keys are ASCII keys, they must be either 5 or 13 characters
 		// in length.
 		if len(wepKey0) != 10 && len(wepKey0) != 26 && len(wepKey0) != 5 && len(wepKey0) != 13 {
-			rememberError(errs, NM_SETTING_WIRELESS_SECURITY_WEP_KEY0, NM_KEY_ERROR_INVALID_VALUE)
+			rememberError(errs, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_WEP_KEY0, NM_KEY_ERROR_INVALID_VALUE)
 		}
 	} else if wepKeyType == 2 {
 		// If set to 2, the passphrase is hashed using the de-facto
 		// MD5 method to derive the actual WEP key.
 		if len(wepKey0) == 0 {
-			rememberError(errs, NM_SETTING_WIRELESS_SECURITY_WEP_KEY0, NM_KEY_ERROR_INVALID_VALUE)
+			rememberError(errs, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_WEP_KEY0, NM_KEY_ERROR_INVALID_VALUE)
 		}
 	}
 }
-func checkSettingWirelessSecurityPsk(data _ConnectionData, errs map[string]string) {
+func checkSettingWirelessSecurityPsk(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingWirelessSecurityPskExists(data) {
 		return
 	}
@@ -244,6 +244,6 @@ func checkSettingWirelessSecurityPsk(data _ConnectionData, errs map[string]strin
 	// interpreted as a WPA passphrase
 	if len(psk) < 8 || len(psk) > 64 {
 		// TODO
-		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_PSK, NM_KEY_ERROR_INVALID_VALUE)
+		rememberError(errs, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_PSK, NM_KEY_ERROR_INVALID_VALUE)
 	}
 }

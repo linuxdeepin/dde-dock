@@ -112,7 +112,7 @@ func generalGetSettingAvailableValues(data _ConnectionData, field, key string) (
 	return
 }
 
-func generalCheckSettingValues(data _ConnectionData, field string) (errs map[string]string) {
+func generalCheckSettingValues(data _ConnectionData, field string) (errs FieldKeyErrors) {
 	switch field {
 	default:
 		Logger.Error("invalid field name", field)

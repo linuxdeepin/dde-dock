@@ -103,45 +103,45 @@ func isSettingPppoePasswordFlagsExists(data _ConnectionData) bool {
 }
 
 // Ensure field and key exists and not empty
-func ensureFieldSettingPppoeExists(data _ConnectionData, errs map[string]string, relatedKey string) {
+func ensureFieldSettingPppoeExists(data _ConnectionData, errs FieldKeyErrors, relatedKey string) {
 	if !isSettingFieldExists(data, NM_SETTING_PPPOE_SETTING_NAME) {
-		rememberError(errs, relatedKey, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_PPPOE_SETTING_NAME))
+		rememberError(errs, relatedKey, NM_SETTING_PPPOE_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_PPPOE_SETTING_NAME))
 	}
 	fieldData, _ := data[NM_SETTING_PPPOE_SETTING_NAME]
 	if len(fieldData) == 0 {
-		rememberError(errs, relatedKey, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_PPPOE_SETTING_NAME))
+		rememberError(errs, relatedKey, NM_SETTING_PPPOE_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_PPPOE_SETTING_NAME))
 	}
 }
-func ensureSettingPppoeServiceNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingPppoeServiceNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingPppoeServiceExists(data) {
-		rememberError(errs, NM_SETTING_PPPOE_SERVICE, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_SERVICE, NM_KEY_ERROR_MISSING_VALUE)
 	}
 	value := getSettingPppoeService(data)
 	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_PPPOE_SERVICE, NM_KEY_ERROR_EMPTY_VALUE)
+		rememberError(errs, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_SERVICE, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingPppoeUsernameNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingPppoeUsernameNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingPppoeUsernameExists(data) {
-		rememberError(errs, NM_SETTING_PPPOE_USERNAME, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_USERNAME, NM_KEY_ERROR_MISSING_VALUE)
 	}
 	value := getSettingPppoeUsername(data)
 	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_PPPOE_USERNAME, NM_KEY_ERROR_EMPTY_VALUE)
+		rememberError(errs, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_USERNAME, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingPppoePasswordNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingPppoePasswordNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingPppoePasswordExists(data) {
-		rememberError(errs, NM_SETTING_PPPOE_PASSWORD, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_PASSWORD, NM_KEY_ERROR_MISSING_VALUE)
 	}
 	value := getSettingPppoePassword(data)
 	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_PPPOE_PASSWORD, NM_KEY_ERROR_EMPTY_VALUE)
+		rememberError(errs, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_PASSWORD, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingPppoePasswordFlagsNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingPppoePasswordFlagsNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingPppoePasswordFlagsExists(data) {
-		rememberError(errs, NM_SETTING_PPPOE_PASSWORD_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_PASSWORD_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
 

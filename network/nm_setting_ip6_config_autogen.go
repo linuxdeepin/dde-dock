@@ -194,92 +194,92 @@ func isSettingIp6ConfigDhcpHostnameExists(data _ConnectionData) bool {
 }
 
 // Ensure field and key exists and not empty
-func ensureFieldSettingIp6ConfigExists(data _ConnectionData, errs map[string]string, relatedKey string) {
+func ensureFieldSettingIp6ConfigExists(data _ConnectionData, errs FieldKeyErrors, relatedKey string) {
 	if !isSettingFieldExists(data, NM_SETTING_IP6_CONFIG_SETTING_NAME) {
-		rememberError(errs, relatedKey, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_IP6_CONFIG_SETTING_NAME))
+		rememberError(errs, relatedKey, NM_SETTING_IP6_CONFIG_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_IP6_CONFIG_SETTING_NAME))
 	}
 	fieldData, _ := data[NM_SETTING_IP6_CONFIG_SETTING_NAME]
 	if len(fieldData) == 0 {
-		rememberError(errs, relatedKey, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_IP6_CONFIG_SETTING_NAME))
+		rememberError(errs, relatedKey, NM_SETTING_IP6_CONFIG_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_IP6_CONFIG_SETTING_NAME))
 	}
 }
-func ensureSettingIp6ConfigMethodNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingIp6ConfigMethodNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingIp6ConfigMethodExists(data) {
-		rememberError(errs, NM_SETTING_IP6_CONFIG_METHOD, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_METHOD, NM_KEY_ERROR_MISSING_VALUE)
 	}
 	value := getSettingIp6ConfigMethod(data)
 	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_IP6_CONFIG_METHOD, NM_KEY_ERROR_EMPTY_VALUE)
+		rememberError(errs, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_METHOD, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingIp6ConfigDnsNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingIp6ConfigDnsNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingIp6ConfigDnsExists(data) {
-		rememberError(errs, NM_SETTING_IP6_CONFIG_DNS, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS, NM_KEY_ERROR_MISSING_VALUE)
 	}
 	value := getSettingIp6ConfigDns(data)
 	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_IP6_CONFIG_DNS, NM_KEY_ERROR_EMPTY_VALUE)
+		rememberError(errs, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingIp6ConfigDnsSearchNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingIp6ConfigDnsSearchNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingIp6ConfigDnsSearchExists(data) {
-		rememberError(errs, NM_SETTING_IP6_CONFIG_DNS_SEARCH, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS_SEARCH, NM_KEY_ERROR_MISSING_VALUE)
 	}
 	value := getSettingIp6ConfigDnsSearch(data)
 	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_IP6_CONFIG_DNS_SEARCH, NM_KEY_ERROR_EMPTY_VALUE)
+		rememberError(errs, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS_SEARCH, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingIp6ConfigAddressesNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingIp6ConfigAddressesNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingIp6ConfigAddressesExists(data) {
-		rememberError(errs, NM_SETTING_IP6_CONFIG_ADDRESSES, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ADDRESSES, NM_KEY_ERROR_MISSING_VALUE)
 	}
 	value := getSettingIp6ConfigAddresses(data)
 	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_IP6_CONFIG_ADDRESSES, NM_KEY_ERROR_EMPTY_VALUE)
+		rememberError(errs, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ADDRESSES, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingIp6ConfigRoutesNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingIp6ConfigRoutesNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingIp6ConfigRoutesExists(data) {
-		rememberError(errs, NM_SETTING_IP6_CONFIG_ROUTES, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTES, NM_KEY_ERROR_MISSING_VALUE)
 	}
 	value := getSettingIp6ConfigRoutes(data)
 	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_IP6_CONFIG_ROUTES, NM_KEY_ERROR_EMPTY_VALUE)
+		rememberError(errs, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTES, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingIp6ConfigIgnoreAutoRoutesNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingIp6ConfigIgnoreAutoRoutesNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingIp6ConfigIgnoreAutoRoutesExists(data) {
-		rememberError(errs, NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingIp6ConfigIgnoreAutoDnsNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingIp6ConfigIgnoreAutoDnsNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingIp6ConfigIgnoreAutoDnsExists(data) {
-		rememberError(errs, NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingIp6ConfigNeverDefaultNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingIp6ConfigNeverDefaultNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingIp6ConfigNeverDefaultExists(data) {
-		rememberError(errs, NM_SETTING_IP6_CONFIG_NEVER_DEFAULT, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_NEVER_DEFAULT, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingIp6ConfigMayFailNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingIp6ConfigMayFailNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingIp6ConfigMayFailExists(data) {
-		rememberError(errs, NM_SETTING_IP6_CONFIG_MAY_FAIL, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_MAY_FAIL, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingIp6ConfigIp6PrivacyNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingIp6ConfigIp6PrivacyNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingIp6ConfigIp6PrivacyExists(data) {
-		rememberError(errs, NM_SETTING_IP6_CONFIG_IP6_PRIVACY, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IP6_PRIVACY, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingIp6ConfigDhcpHostnameNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingIp6ConfigDhcpHostnameNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingIp6ConfigDhcpHostnameExists(data) {
-		rememberError(errs, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME, NM_KEY_ERROR_MISSING_VALUE)
 	}
 	value := getSettingIp6ConfigDhcpHostname(data)
 	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME, NM_KEY_ERROR_EMPTY_VALUE)
+		rememberError(errs, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
 

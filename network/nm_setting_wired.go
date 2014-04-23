@@ -117,7 +117,7 @@ func getSettingWiredAvailableValues(data _ConnectionData, key string) (values []
 
 // Set JSON value generally
 // TODO Check whether the values are correct
-func checkSettingWiredValues(data _ConnectionData) (errs map[string]string) {
+func checkSettingWiredValues(data _ConnectionData) (errs FieldKeyErrors) {
 	errs = make(map[string]string)
 	return
 }

@@ -54,7 +54,7 @@ func getSettingPppoeAvailableValues(data _ConnectionData, key string) (values []
 }
 
 // Check whether the values are correct
-func checkSettingPppoeValues(data _ConnectionData) (errs map[string]string) {
+func checkSettingPppoeValues(data _ConnectionData) (errs FieldKeyErrors) {
 	errs = make(map[string]string)
 
 	// check username

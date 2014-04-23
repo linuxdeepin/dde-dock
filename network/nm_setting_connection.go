@@ -95,7 +95,7 @@ func getSettingConnectionAvailableValues(data _ConnectionData, key string) (valu
 }
 
 // Check whether the values are correct
-func checkSettingConnectionValues(data _ConnectionData) (errs map[string]string) {
+func checkSettingConnectionValues(data _ConnectionData) (errs FieldKeyErrors) {
 	errs = make(map[string]string)
 
 	// check id

@@ -12,7 +12,24 @@ const (
 	NM_KEY_ERROR_EMPTY_SECTION       = "field section %s is empty"
 )
 
-func rememberError(errs map[string]string, key, errMsg string) {
+func rememberError(errs FieldKeyErrors, field, key, errMsg string) {
+	if isVirtualKey(field, key) {
+		rememberVkError(errs, field, key, errMsg)
+		return
+	}
+	doRememberError(errs, key, errMsg)
+}
+
+func rememberVkError(errs FieldKeyErrors, field, key, errMsg string) {
+	vks := getRelatedVirtualKeys(field, key)
+	for _, vk := range vks {
+		if !isOptionalChildVirtualKeys(field, vk) {
+			doRememberError(errs, vk, errMsg)
+		}
+	}
+}
+
+func doRememberError(errs FieldKeyErrors, key, errMsg string) {
 	if _, ok := errs[key]; ok {
 		// error already exists for this key
 		return
@@ -20,30 +37,21 @@ func rememberError(errs map[string]string, key, errMsg string) {
 	errs[key] = errMsg
 }
 
-func rememberVkError(errs map[string]string, field, key, errMsg string) {
-	vks := getRelatedVirtualKeys(field, key)
-	for _, vk := range vks {
-		if !isOptionalChildVirtualKeys(field, vk) {
-			rememberError(errs, vk, errMsg)
-		}
-	}
-}
-
 // start with "file://", end with null byte
-func ensureByteArrayUriPathExists(errs map[string]string, key string, bytePath []byte) {
+func ensureByteArrayUriPathExists(errs FieldKeyErrors, field, key string, bytePath []byte) {
 	path := byteArrayToStrPath(bytePath)
 	if !isUriPath(path) {
-		rememberError(errs, key, NM_KEY_ERROR_INVALID_VALUE)
+		rememberError(errs, field, key, NM_KEY_ERROR_INVALID_VALUE)
 		return
 	}
 	if !isFileExists(toLocalPath(path)) {
-		rememberError(errs, key, NM_KEY_ERROR_INVALID_VALUE)
+		rememberError(errs, field, key, NM_KEY_ERROR_INVALID_VALUE)
 		return
 	}
 }
 
-func ensureFileExists(errs map[string]string, key, file string) {
+func ensureFileExists(errs FieldKeyErrors, field, key, file string) {
 	if isFileExists(file) {
-		rememberError(errs, key, NM_KEY_ERROR_INVALID_VALUE)
+		rememberError(errs, field, key, NM_KEY_ERROR_INVALID_VALUE)
 	}
 }

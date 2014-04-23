@@ -36,24 +36,24 @@ func isKeyIn{{.FieldName | ToFieldFuncBaseName}}(key string) bool {
 `
 
 // Ensure field and key exists and not empty
-const tplEnsureNoEmpty = `{{$fieldFuncBaseName := .FieldName | ToFieldFuncBaseName}}
+const tplEnsureNoEmpty = `{{$fieldFuncBaseName := .FieldName | ToFieldFuncBaseName}}{{$fieldName := .FieldName}}
 // Ensure field and key exists and not empty
-func ensureField{{$fieldFuncBaseName}}Exists(data _ConnectionData, errs map[string]string, relatedKey string) {
+func ensureField{{$fieldFuncBaseName}}Exists(data _ConnectionData, errs FieldKeyErrors, relatedKey string) {
 	if !isSettingFieldExists(data, {{.FieldName}}) {
-		rememberError(errs, relatedKey, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, {{.FieldName}}))
+		rememberError(errs, relatedKey, {{.FieldName}}, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, {{.FieldName}}))
 	}
 	fieldData, _ := data[{{.FieldName}}]
 	if len(fieldData) == 0 {
-		rememberError(errs, relatedKey, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, {{.FieldName}}))
+		rememberError(errs, relatedKey, {{.FieldName}}, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, {{.FieldName}}))
 	}
 }{{range $index, $key := .Keys}}{{if $key.UsedByBackEnd}}{{$keyFuncBaseName := $key.Name | ToKeyFuncBaseName}}
-func ensure{{$keyFuncBaseName}}NoEmpty(data _ConnectionData, errs map[string]string) {
+func ensure{{$keyFuncBaseName}}NoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !is{{$keyFuncBaseName}}Exists(data) {
-		rememberError(errs, {{$key.Name}}, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, {{$fieldName}}, {{$key.Name}}, NM_KEY_ERROR_MISSING_VALUE)
 	}{{if IfNeedCheckValueLength $key.Type}}
 	value := get{{$keyFuncBaseName}}(data)
 	if len(value) == 0 {
-		rememberError(errs, {{$key.Name}}, NM_KEY_ERROR_EMPTY_VALUE)
+		rememberError(errs, {{$fieldName}}, {{$key.Name}}, NM_KEY_ERROR_EMPTY_VALUE)
 	}{{end}}
 }{{end}}{{end}}
 `
@@ -204,7 +204,7 @@ func generalGetSettingAvailableValues(data _ConnectionData, field, key string) (
 	return
 }
 
-func generalCheckSettingValues(data _ConnectionData, field string) (errs map[string]string) {
+func generalCheckSettingValues(data _ConnectionData, field string) (errs FieldKeyErrors) {
 	switch field {
 	default:
 		Logger.Error("invalid field name", field){{range .}}

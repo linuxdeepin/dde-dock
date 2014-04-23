@@ -5,6 +5,9 @@ import (
 	"fmt"
 )
 
+type FieldKeyErrors map[string]string
+type PageKeyErrors map[string]FieldKeyErrors
+
 type ConnectionSession struct {
 	sessionPath    dbus.ObjectPath
 	connPath       dbus.ObjectPath
@@ -21,7 +24,7 @@ type ConnectionSession struct {
 	AvailableKeys map[string][]string
 
 	// 返回所有 page 下错误的字段和对应的错误原因
-	Errors map[string]map[string]string
+	Errors PageKeyErrors
 }
 
 //所有字段值都为string，后端自行转换为需要的值后提供给NM
@@ -34,7 +37,7 @@ func doNewConnectionSession(devPath dbus.ObjectPath, uuid string) (s *Connection
 	s.data = make(_ConnectionData)
 	s.AllowSave = false // TODO
 	s.AvailableKeys = make(map[string][]string)
-	s.Errors = make(map[string]map[string]string)
+	s.Errors = make(PageKeyErrors)
 	return s
 }
 
@@ -308,6 +311,6 @@ func (s *ConnectionSession) DebugGetConnectionData() _ConnectionData {
 	return s.data
 }
 
-func (s *ConnectionSession) DebugGetErrors() map[string]map[string]string {
+func (s *ConnectionSession) DebugGetErrors() PageKeyErrors {
 	return s.Errors
 }

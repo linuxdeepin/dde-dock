@@ -28,7 +28,7 @@ func (s *ConnectionSession) updatePropAvailableKeys() {
 
 func (s *ConnectionSession) updatePropErrors() {
 	for _, page := range s.ListPages() {
-		s.Errors[page] = make(map[string]string)
+		s.Errors[page] = make(FieldKeyErrors)
 		fields := s.pageToFields(page)
 		for _, field := range fields {
 			if isSettingFieldExists(s.data, field) { // TODO

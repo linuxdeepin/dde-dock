@@ -213,7 +213,7 @@ func getSettingWirelessAvailableValues(data _ConnectionData, key string) (values
 }
 
 // Check whether the values are correct
-func checkSettingWirelessValues(data _ConnectionData) (errs map[string]string) {
+func checkSettingWirelessValues(data _ConnectionData) (errs FieldKeyErrors) {
 	errs = make(map[string]string)
 
 	// check ssid
@@ -223,7 +223,7 @@ func checkSettingWirelessValues(data _ConnectionData) (errs map[string]string) {
 	if isSettingWirelessSecExists(data) {
 		securityField := getSettingWirelessSec(data)
 		if !isSettingFieldExists(data, securityField) {
-			rememberError(errs, NM_SETTING_WIRELESS_SEC, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, securityField))
+			rememberError(errs, fieldWireless, NM_SETTING_WIRELESS_SEC, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, securityField))
 		}
 	}
 

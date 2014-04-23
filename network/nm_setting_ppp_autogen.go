@@ -285,103 +285,103 @@ func isSettingPppLcpEchoIntervalExists(data _ConnectionData) bool {
 }
 
 // Ensure field and key exists and not empty
-func ensureFieldSettingPppExists(data _ConnectionData, errs map[string]string, relatedKey string) {
+func ensureFieldSettingPppExists(data _ConnectionData, errs FieldKeyErrors, relatedKey string) {
 	if !isSettingFieldExists(data, NM_SETTING_PPP_SETTING_NAME) {
-		rememberError(errs, relatedKey, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_PPP_SETTING_NAME))
+		rememberError(errs, relatedKey, NM_SETTING_PPP_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_PPP_SETTING_NAME))
 	}
 	fieldData, _ := data[NM_SETTING_PPP_SETTING_NAME]
 	if len(fieldData) == 0 {
-		rememberError(errs, relatedKey, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_PPP_SETTING_NAME))
+		rememberError(errs, relatedKey, NM_SETTING_PPP_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_PPP_SETTING_NAME))
 	}
 }
-func ensureSettingPppNoauthNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingPppNoauthNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingPppNoauthExists(data) {
-		rememberError(errs, NM_SETTING_PPP_NOAUTH, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOAUTH, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingPppRefuseEapNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingPppRefuseEapNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingPppRefuseEapExists(data) {
-		rememberError(errs, NM_SETTING_PPP_REFUSE_EAP, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_EAP, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingPppRefusePapNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingPppRefusePapNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingPppRefusePapExists(data) {
-		rememberError(errs, NM_SETTING_PPP_REFUSE_PAP, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_PAP, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingPppRefuseChapNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingPppRefuseChapNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingPppRefuseChapExists(data) {
-		rememberError(errs, NM_SETTING_PPP_REFUSE_CHAP, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_CHAP, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingPppRefuseMschapNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingPppRefuseMschapNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingPppRefuseMschapExists(data) {
-		rememberError(errs, NM_SETTING_PPP_REFUSE_MSCHAP, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_MSCHAP, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingPppRefuseMschapv2NoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingPppRefuseMschapv2NoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingPppRefuseMschapv2Exists(data) {
-		rememberError(errs, NM_SETTING_PPP_REFUSE_MSCHAPV2, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_MSCHAPV2, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingPppNobsdcompNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingPppNobsdcompNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingPppNobsdcompExists(data) {
-		rememberError(errs, NM_SETTING_PPP_NOBSDCOMP, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOBSDCOMP, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingPppNodeflateNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingPppNodeflateNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingPppNodeflateExists(data) {
-		rememberError(errs, NM_SETTING_PPP_NODEFLATE, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NODEFLATE, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingPppNoVjCompNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingPppNoVjCompNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingPppNoVjCompExists(data) {
-		rememberError(errs, NM_SETTING_PPP_NO_VJ_COMP, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NO_VJ_COMP, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingPppRequireMppeNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingPppRequireMppeNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingPppRequireMppeExists(data) {
-		rememberError(errs, NM_SETTING_PPP_REQUIRE_MPPE, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingPppRequireMppe128NoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingPppRequireMppe128NoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingPppRequireMppe128Exists(data) {
-		rememberError(errs, NM_SETTING_PPP_REQUIRE_MPPE_128, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE_128, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingPppMppeStatefulNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingPppMppeStatefulNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingPppMppeStatefulExists(data) {
-		rememberError(errs, NM_SETTING_PPP_MPPE_STATEFUL, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MPPE_STATEFUL, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingPppCrtsctsNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingPppCrtsctsNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingPppCrtsctsExists(data) {
-		rememberError(errs, NM_SETTING_PPP_CRTSCTS, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_CRTSCTS, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingPppBaudNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingPppBaudNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingPppBaudExists(data) {
-		rememberError(errs, NM_SETTING_PPP_BAUD, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_BAUD, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingPppMruNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingPppMruNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingPppMruExists(data) {
-		rememberError(errs, NM_SETTING_PPP_MRU, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MRU, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingPppMtuNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingPppMtuNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingPppMtuExists(data) {
-		rememberError(errs, NM_SETTING_PPP_MTU, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MTU, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingPppLcpEchoFailureNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingPppLcpEchoFailureNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingPppLcpEchoFailureExists(data) {
-		rememberError(errs, NM_SETTING_PPP_LCP_ECHO_FAILURE, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_FAILURE, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingPppLcpEchoIntervalNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingPppLcpEchoIntervalNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingPppLcpEchoIntervalExists(data) {
-		rememberError(errs, NM_SETTING_PPP_LCP_ECHO_INTERVAL, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_INTERVAL, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
 

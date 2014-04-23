@@ -233,119 +233,119 @@ func isSettingWirelessHiddenExists(data _ConnectionData) bool {
 }
 
 // Ensure field and key exists and not empty
-func ensureFieldSettingWirelessExists(data _ConnectionData, errs map[string]string, relatedKey string) {
+func ensureFieldSettingWirelessExists(data _ConnectionData, errs FieldKeyErrors, relatedKey string) {
 	if !isSettingFieldExists(data, NM_SETTING_WIRELESS_SETTING_NAME) {
-		rememberError(errs, relatedKey, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_WIRELESS_SETTING_NAME))
+		rememberError(errs, relatedKey, NM_SETTING_WIRELESS_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_WIRELESS_SETTING_NAME))
 	}
 	fieldData, _ := data[NM_SETTING_WIRELESS_SETTING_NAME]
 	if len(fieldData) == 0 {
-		rememberError(errs, relatedKey, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_WIRELESS_SETTING_NAME))
+		rememberError(errs, relatedKey, NM_SETTING_WIRELESS_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_WIRELESS_SETTING_NAME))
 	}
 }
-func ensureSettingWirelessSsidNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingWirelessSsidNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingWirelessSsidExists(data) {
-		rememberError(errs, NM_SETTING_WIRELESS_SSID, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SSID, NM_KEY_ERROR_MISSING_VALUE)
 	}
 	value := getSettingWirelessSsid(data)
 	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_WIRELESS_SSID, NM_KEY_ERROR_EMPTY_VALUE)
+		rememberError(errs, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SSID, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingWirelessModeNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingWirelessModeNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingWirelessModeExists(data) {
-		rememberError(errs, NM_SETTING_WIRELESS_MODE, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MODE, NM_KEY_ERROR_MISSING_VALUE)
 	}
 	value := getSettingWirelessMode(data)
 	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_WIRELESS_MODE, NM_KEY_ERROR_EMPTY_VALUE)
+		rememberError(errs, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MODE, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingWirelessBandNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingWirelessBandNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingWirelessBandExists(data) {
-		rememberError(errs, NM_SETTING_WIRELESS_BAND, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_BAND, NM_KEY_ERROR_MISSING_VALUE)
 	}
 	value := getSettingWirelessBand(data)
 	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_WIRELESS_BAND, NM_KEY_ERROR_EMPTY_VALUE)
+		rememberError(errs, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_BAND, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingWirelessChannelNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingWirelessChannelNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingWirelessChannelExists(data) {
-		rememberError(errs, NM_SETTING_WIRELESS_CHANNEL, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_CHANNEL, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingWirelessBssidNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingWirelessBssidNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingWirelessBssidExists(data) {
-		rememberError(errs, NM_SETTING_WIRELESS_BSSID, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_BSSID, NM_KEY_ERROR_MISSING_VALUE)
 	}
 	value := getSettingWirelessBssid(data)
 	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_WIRELESS_BSSID, NM_KEY_ERROR_EMPTY_VALUE)
+		rememberError(errs, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_BSSID, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingWirelessRateNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingWirelessRateNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingWirelessRateExists(data) {
-		rememberError(errs, NM_SETTING_WIRELESS_RATE, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_RATE, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingWirelessTxPowerNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingWirelessTxPowerNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingWirelessTxPowerExists(data) {
-		rememberError(errs, NM_SETTING_WIRELESS_TX_POWER, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_TX_POWER, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingWirelessMacAddressNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingWirelessMacAddressNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingWirelessMacAddressExists(data) {
-		rememberError(errs, NM_SETTING_WIRELESS_MAC_ADDRESS, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MAC_ADDRESS, NM_KEY_ERROR_MISSING_VALUE)
 	}
 	value := getSettingWirelessMacAddress(data)
 	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_WIRELESS_MAC_ADDRESS, NM_KEY_ERROR_EMPTY_VALUE)
+		rememberError(errs, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MAC_ADDRESS, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingWirelessClonedMacAddressNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingWirelessClonedMacAddressNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingWirelessClonedMacAddressExists(data) {
-		rememberError(errs, NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS, NM_KEY_ERROR_MISSING_VALUE)
 	}
 	value := getSettingWirelessClonedMacAddress(data)
 	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS, NM_KEY_ERROR_EMPTY_VALUE)
+		rememberError(errs, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingWirelessMacAddressBlacklistNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingWirelessMacAddressBlacklistNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingWirelessMacAddressBlacklistExists(data) {
-		rememberError(errs, NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST, NM_KEY_ERROR_MISSING_VALUE)
 	}
 	value := getSettingWirelessMacAddressBlacklist(data)
 	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST, NM_KEY_ERROR_EMPTY_VALUE)
+		rememberError(errs, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingWirelessMtuNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingWirelessMtuNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingWirelessMtuExists(data) {
-		rememberError(errs, NM_SETTING_WIRELESS_MTU, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MTU, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingWirelessSeenBssidsNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingWirelessSeenBssidsNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingWirelessSeenBssidsExists(data) {
-		rememberError(errs, NM_SETTING_WIRELESS_SEEN_BSSIDS, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEEN_BSSIDS, NM_KEY_ERROR_MISSING_VALUE)
 	}
 	value := getSettingWirelessSeenBssids(data)
 	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_WIRELESS_SEEN_BSSIDS, NM_KEY_ERROR_EMPTY_VALUE)
+		rememberError(errs, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEEN_BSSIDS, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingWirelessSecNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingWirelessSecNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingWirelessSecExists(data) {
-		rememberError(errs, NM_SETTING_WIRELESS_SEC, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEC, NM_KEY_ERROR_MISSING_VALUE)
 	}
 	value := getSettingWirelessSec(data)
 	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_WIRELESS_SEC, NM_KEY_ERROR_EMPTY_VALUE)
+		rememberError(errs, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEC, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingWirelessHiddenNoEmpty(data _ConnectionData, errs map[string]string) {
+func ensureSettingWirelessHiddenNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingWirelessHiddenExists(data) {
-		rememberError(errs, NM_SETTING_WIRELESS_HIDDEN, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_HIDDEN, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
 

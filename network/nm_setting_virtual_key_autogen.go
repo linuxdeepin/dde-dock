@@ -4,22 +4,22 @@ package main
 // All virtual keys data
 var virtualKeys = []VirtualKey{
 	VirtualKey{NM_SETTING_VK_802_1X_EAP, ktypeString, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_EAP, true, false},
-	VirtualKey{NM_SETTING_VK_CONNECTION_PERMISSIONS, ktypeBoolean, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_PERMISSIONS, true, false},
-	VirtualKey{NM_SETTING_VK_IP4_CONFIG_DNS, ktypeString, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS, true, false},
+	VirtualKey{NM_SETTING_VK_CONNECTION_PERMISSIONS, ktypeBoolean, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_PERMISSIONS, false, false},
 	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ADDRESSES_ADDRESS, ktypeString, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES, true, false},
 	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ADDRESSES_MASK, ktypeString, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES, true, false},
 	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ADDRESSES_GATEWAY, ktypeString, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES, true, true},
-	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ROUTES_ADDRESS, ktypeString, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTES, true, false},
-	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ROUTES_MASK, ktypeString, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTES, true, false},
-	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ROUTES_NEXTHOP, ktypeString, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTES, true, false},
+	VirtualKey{NM_SETTING_VK_IP4_CONFIG_DNS, ktypeString, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS, true, false},
+	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ROUTES_ADDRESS, ktypeString, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTES, false, false},
+	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ROUTES_MASK, ktypeString, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTES, false, false},
+	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ROUTES_NEXTHOP, ktypeString, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTES, false, false},
 	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ROUTES_METRIC, ktypeString, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTES, false, false},
-	VirtualKey{NM_SETTING_VK_IP6_CONFIG_DNS, ktypeString, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS, true, false},
 	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ADDRESSES_ADDRESS, ktypeString, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ADDRESSES, true, false},
 	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ADDRESSES_PREFIX, ktypeString, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ADDRESSES, true, false},
 	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ADDRESSES_GATEWAY, ktypeString, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ADDRESSES, true, true},
-	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ROUTES_ADDRESS, ktypeString, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTES, true, false},
-	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ROUTES_PREFIX, ktypeString, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTES, true, false},
-	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ROUTES_NEXTHOP, ktypeString, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTES, true, false},
+	VirtualKey{NM_SETTING_VK_IP6_CONFIG_DNS, ktypeString, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS, true, false},
+	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ROUTES_ADDRESS, ktypeString, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTES, false, false},
+	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ROUTES_PREFIX, ktypeString, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTES, false, false},
+	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ROUTES_NEXTHOP, ktypeString, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTES, false, false},
 	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ROUTES_METRIC, ktypeString, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTES, false, false},
 	VirtualKey{NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT, ktypeString, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT, true, false},
 }
@@ -39,14 +39,14 @@ func generalGetVirtualKeyJSON(data _ConnectionData, field, key string) (valueJSO
 		}
 	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
 		switch key {
-		case NM_SETTING_VK_IP4_CONFIG_DNS:
-			return getSettingVkIp4ConfigDnsJSON(data)
 		case NM_SETTING_VK_IP4_CONFIG_ADDRESSES_ADDRESS:
 			return getSettingVkIp4ConfigAddressesAddressJSON(data)
 		case NM_SETTING_VK_IP4_CONFIG_ADDRESSES_MASK:
 			return getSettingVkIp4ConfigAddressesMaskJSON(data)
 		case NM_SETTING_VK_IP4_CONFIG_ADDRESSES_GATEWAY:
 			return getSettingVkIp4ConfigAddressesGatewayJSON(data)
+		case NM_SETTING_VK_IP4_CONFIG_DNS:
+			return getSettingVkIp4ConfigDnsJSON(data)
 		case NM_SETTING_VK_IP4_CONFIG_ROUTES_ADDRESS:
 			return getSettingVkIp4ConfigRoutesAddressJSON(data)
 		case NM_SETTING_VK_IP4_CONFIG_ROUTES_MASK:
@@ -58,14 +58,14 @@ func generalGetVirtualKeyJSON(data _ConnectionData, field, key string) (valueJSO
 		}
 	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
 		switch key {
-		case NM_SETTING_VK_IP6_CONFIG_DNS:
-			return getSettingVkIp6ConfigDnsJSON(data)
 		case NM_SETTING_VK_IP6_CONFIG_ADDRESSES_ADDRESS:
 			return getSettingVkIp6ConfigAddressesAddressJSON(data)
 		case NM_SETTING_VK_IP6_CONFIG_ADDRESSES_PREFIX:
 			return getSettingVkIp6ConfigAddressesPrefixJSON(data)
 		case NM_SETTING_VK_IP6_CONFIG_ADDRESSES_GATEWAY:
 			return getSettingVkIp6ConfigAddressesGatewayJSON(data)
+		case NM_SETTING_VK_IP6_CONFIG_DNS:
+			return getSettingVkIp6ConfigDnsJSON(data)
 		case NM_SETTING_VK_IP6_CONFIG_ROUTES_ADDRESS:
 			return getSettingVkIp6ConfigRoutesAddressJSON(data)
 		case NM_SETTING_VK_IP6_CONFIG_ROUTES_PREFIX:
@@ -102,9 +102,6 @@ func generalSetVirtualKeyJSON(data _ConnectionData, field, key string, valueJSON
 		}
 	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
 		switch key {
-		case NM_SETTING_VK_IP4_CONFIG_DNS:
-			logicSetSettingVkIp4ConfigDnsJSON(data, valueJSON)
-			return
 		case NM_SETTING_VK_IP4_CONFIG_ADDRESSES_ADDRESS:
 			logicSetSettingVkIp4ConfigAddressesAddressJSON(data, valueJSON)
 			return
@@ -113,6 +110,9 @@ func generalSetVirtualKeyJSON(data _ConnectionData, field, key string, valueJSON
 			return
 		case NM_SETTING_VK_IP4_CONFIG_ADDRESSES_GATEWAY:
 			logicSetSettingVkIp4ConfigAddressesGatewayJSON(data, valueJSON)
+			return
+		case NM_SETTING_VK_IP4_CONFIG_DNS:
+			logicSetSettingVkIp4ConfigDnsJSON(data, valueJSON)
 			return
 		case NM_SETTING_VK_IP4_CONFIG_ROUTES_ADDRESS:
 			logicSetSettingVkIp4ConfigRoutesAddressJSON(data, valueJSON)
@@ -129,9 +129,6 @@ func generalSetVirtualKeyJSON(data _ConnectionData, field, key string, valueJSON
 		}
 	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
 		switch key {
-		case NM_SETTING_VK_IP6_CONFIG_DNS:
-			logicSetSettingVkIp6ConfigDnsJSON(data, valueJSON)
-			return
 		case NM_SETTING_VK_IP6_CONFIG_ADDRESSES_ADDRESS:
 			logicSetSettingVkIp6ConfigAddressesAddressJSON(data, valueJSON)
 			return
@@ -140,6 +137,9 @@ func generalSetVirtualKeyJSON(data _ConnectionData, field, key string, valueJSON
 			return
 		case NM_SETTING_VK_IP6_CONFIG_ADDRESSES_GATEWAY:
 			logicSetSettingVkIp6ConfigAddressesGatewayJSON(data, valueJSON)
+			return
+		case NM_SETTING_VK_IP6_CONFIG_DNS:
+			logicSetSettingVkIp6ConfigDnsJSON(data, valueJSON)
 			return
 		case NM_SETTING_VK_IP6_CONFIG_ROUTES_ADDRESS:
 			logicSetSettingVkIp6ConfigRoutesAddressJSON(data, valueJSON)
@@ -174,10 +174,6 @@ func getSettingVkConnectionPermissionsJSON(data _ConnectionData) (valueJSON stri
 	valueJSON, _ = marshalJSON(getSettingVkConnectionPermissions(data))
 	return
 }
-func getSettingVkIp4ConfigDnsJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON, _ = marshalJSON(getSettingVkIp4ConfigDns(data))
-	return
-}
 func getSettingVkIp4ConfigAddressesAddressJSON(data _ConnectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkIp4ConfigAddressesAddress(data))
 	return
@@ -188,6 +184,10 @@ func getSettingVkIp4ConfigAddressesMaskJSON(data _ConnectionData) (valueJSON str
 }
 func getSettingVkIp4ConfigAddressesGatewayJSON(data _ConnectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkIp4ConfigAddressesGateway(data))
+	return
+}
+func getSettingVkIp4ConfigDnsJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkIp4ConfigDns(data))
 	return
 }
 func getSettingVkIp4ConfigRoutesAddressJSON(data _ConnectionData) (valueJSON string) {
@@ -206,10 +206,6 @@ func getSettingVkIp4ConfigRoutesMetricJSON(data _ConnectionData) (valueJSON stri
 	valueJSON, _ = marshalJSON(getSettingVkIp4ConfigRoutesMetric(data))
 	return
 }
-func getSettingVkIp6ConfigDnsJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON, _ = marshalJSON(getSettingVkIp6ConfigDns(data))
-	return
-}
 func getSettingVkIp6ConfigAddressesAddressJSON(data _ConnectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkIp6ConfigAddressesAddress(data))
 	return
@@ -220,6 +216,10 @@ func getSettingVkIp6ConfigAddressesPrefixJSON(data _ConnectionData) (valueJSON s
 }
 func getSettingVkIp6ConfigAddressesGatewayJSON(data _ConnectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkIp6ConfigAddressesGateway(data))
+	return
+}
+func getSettingVkIp6ConfigDnsJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkIp6ConfigDns(data))
 	return
 }
 func getSettingVkIp6ConfigRoutesAddressJSON(data _ConnectionData) (valueJSON string) {
@@ -252,10 +252,6 @@ func logicSetSettingVkConnectionPermissionsJSON(data _ConnectionData, valueJSON 
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	logicSetSettingVkConnectionPermissions(data, value)
 }
-func logicSetSettingVkIp4ConfigDnsJSON(data _ConnectionData, valueJSON string) {
-	value, _ := jsonToKeyValueString(valueJSON)
-	logicSetSettingVkIp4ConfigDns(data, value)
-}
 func logicSetSettingVkIp4ConfigAddressesAddressJSON(data _ConnectionData, valueJSON string) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	logicSetSettingVkIp4ConfigAddressesAddress(data, value)
@@ -267,6 +263,10 @@ func logicSetSettingVkIp4ConfigAddressesMaskJSON(data _ConnectionData, valueJSON
 func logicSetSettingVkIp4ConfigAddressesGatewayJSON(data _ConnectionData, valueJSON string) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	logicSetSettingVkIp4ConfigAddressesGateway(data, value)
+}
+func logicSetSettingVkIp4ConfigDnsJSON(data _ConnectionData, valueJSON string) {
+	value, _ := jsonToKeyValueString(valueJSON)
+	logicSetSettingVkIp4ConfigDns(data, value)
 }
 func logicSetSettingVkIp4ConfigRoutesAddressJSON(data _ConnectionData, valueJSON string) {
 	value, _ := jsonToKeyValueString(valueJSON)
@@ -284,10 +284,6 @@ func logicSetSettingVkIp4ConfigRoutesMetricJSON(data _ConnectionData, valueJSON 
 	value, _ := jsonToKeyValueString(valueJSON)
 	logicSetSettingVkIp4ConfigRoutesMetric(data, value)
 }
-func logicSetSettingVkIp6ConfigDnsJSON(data _ConnectionData, valueJSON string) {
-	value, _ := jsonToKeyValueString(valueJSON)
-	logicSetSettingVkIp6ConfigDns(data, value)
-}
 func logicSetSettingVkIp6ConfigAddressesAddressJSON(data _ConnectionData, valueJSON string) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	logicSetSettingVkIp6ConfigAddressesAddress(data, value)
@@ -299,6 +295,10 @@ func logicSetSettingVkIp6ConfigAddressesPrefixJSON(data _ConnectionData, valueJS
 func logicSetSettingVkIp6ConfigAddressesGatewayJSON(data _ConnectionData, valueJSON string) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	logicSetSettingVkIp6ConfigAddressesGateway(data, value)
+}
+func logicSetSettingVkIp6ConfigDnsJSON(data _ConnectionData, valueJSON string) {
+	value, _ := jsonToKeyValueString(valueJSON)
+	logicSetSettingVkIp6ConfigDns(data, value)
 }
 func logicSetSettingVkIp6ConfigRoutesAddressJSON(data _ConnectionData, valueJSON string) {
 	value, _ := jsonToKeyValueString(valueJSON)
