@@ -22,7 +22,6 @@
 package main
 
 import (
-        "dlib"
         "dlib/dbus"
         "dlib/gio-2.0"
         "strconv"

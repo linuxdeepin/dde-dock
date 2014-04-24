@@ -193,6 +193,7 @@ func GrabXRecordKey(key, action string) {
                 return
         }
 
+        //logObj.Infof("XRecord grab 'super' value: %s", action)
         tmp := C.CString(action)
         defer C.free(unsafe.Pointer(tmp))
         C.grab_xrecord_key(C.int(keys[0]), tmp)

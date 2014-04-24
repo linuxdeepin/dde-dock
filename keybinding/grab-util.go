@@ -86,7 +86,7 @@ func grabKeyPairs(accelPairs map[string]string, grab bool) {
                 if len(k) <= 0 {
                         continue
                 }
-                if k == "super" {
+                if strings.ToLower(k) == "super" {
                         if grab {
                                 GrabXRecordKey("Super_L", v)
                                 GrabXRecordKey("Super_R", v)
