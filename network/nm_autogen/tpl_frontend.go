@@ -12,7 +12,7 @@ BaseEditPage {
     EditTitle {}
     {{range $i, $page := .}}{{if .Ignore}}{{else}}{{$id := $page.Name | ToClassName | printf "section%s"}}
     EditSectionSeparator {relatedSection: {{$id}}}
-    EditSection{{$page.Name | ToCaplitalize}} {
+    EditSection{{$page.Name | ToClassName}} {
         myIndex: {{$i}}
         id: {{$id}}
         activeExpandIndex: root.activeExpandIndex

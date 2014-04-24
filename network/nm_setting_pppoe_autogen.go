@@ -147,34 +147,34 @@ func ensureSettingPppoePasswordFlagsNoEmpty(data _ConnectionData, errs FieldKeyE
 
 // Getter
 func getSettingPppoeUsername(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_USERNAME).(string)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_PPPOE_SETTING_NAME), NM_SETTING_PPPOE_USERNAME).(string)
 	return
 }
 func getSettingPppoeService(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_SERVICE).(string)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_PPPOE_SETTING_NAME), NM_SETTING_PPPOE_SERVICE).(string)
 	return
 }
 func getSettingPppoePassword(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_PASSWORD).(string)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_PPPOE_SETTING_NAME), NM_SETTING_PPPOE_PASSWORD).(string)
 	return
 }
 func getSettingPppoePasswordFlags(data _ConnectionData) (value uint32) {
-	value, _ = getSettingKey(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_PASSWORD_FLAGS).(uint32)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_PPPOE_SETTING_NAME), NM_SETTING_PPPOE_PASSWORD_FLAGS).(uint32)
 	return
 }
 
 // Setter
 func setSettingPppoeUsername(data _ConnectionData, value string) {
-	setSettingKey(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_USERNAME, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_PPPOE_SETTING_NAME), NM_SETTING_PPPOE_USERNAME, value)
 }
 func setSettingPppoeService(data _ConnectionData, value string) {
-	setSettingKey(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_SERVICE, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_PPPOE_SETTING_NAME), NM_SETTING_PPPOE_SERVICE, value)
 }
 func setSettingPppoePassword(data _ConnectionData, value string) {
-	setSettingKey(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_PASSWORD, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_PPPOE_SETTING_NAME), NM_SETTING_PPPOE_PASSWORD, value)
 }
 func setSettingPppoePasswordFlags(data _ConnectionData, value uint32) {
-	setSettingKey(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_PASSWORD_FLAGS, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_PPPOE_SETTING_NAME), NM_SETTING_PPPOE_PASSWORD_FLAGS, value)
 }
 
 // JSON Getter
@@ -211,14 +211,14 @@ func setSettingPppoePasswordFlagsJSON(data _ConnectionData, valueJSON string) {
 
 // Remover
 func removeSettingPppoeUsername(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_USERNAME)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_PPPOE_SETTING_NAME), NM_SETTING_PPPOE_USERNAME)
 }
 func removeSettingPppoeService(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_SERVICE)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_PPPOE_SETTING_NAME), NM_SETTING_PPPOE_SERVICE)
 }
 func removeSettingPppoePassword(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_PASSWORD)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_PPPOE_SETTING_NAME), NM_SETTING_PPPOE_PASSWORD)
 }
 func removeSettingPppoePasswordFlags(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_PASSWORD_FLAGS)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_PPPOE_SETTING_NAME), NM_SETTING_PPPOE_PASSWORD_FLAGS)
 }

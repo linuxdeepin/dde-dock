@@ -23,6 +23,7 @@ package main
 // #define NM_PPTP_KEY_LCP_ECHO_FAILURE  "lcp-echo-failure"
 // #define NM_PPTP_KEY_LCP_ECHO_INTERVAL "lcp-echo-interval"
 
+// vpn key description
 // static ValidProperty valid_properties[] = {
 // 	{ NM_PPTP_KEY_GATEWAY,           G_TYPE_STRING, TRUE },
 // 	{ NM_PPTP_KEY_USER,              G_TYPE_STRING, FALSE },

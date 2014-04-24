@@ -417,125 +417,125 @@ func ensureSettingWirelessSecurityPskFlagsNoEmpty(data _ConnectionData, errs Fie
 
 // Getter
 func getSettingWirelessSecurityKeyMgmt(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT).(string)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_KEY_MGMT).(string)
 	return
 }
 func getSettingWirelessSecurityWepTxKeyidx(data _ConnectionData) (value uint32) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_TX_KEYIDX).(uint32)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_WEP_TX_KEYIDX).(uint32)
 	return
 }
 func getSettingWirelessSecurityAuthAlg(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_AUTH_ALG).(string)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_AUTH_ALG).(string)
 	return
 }
 func getSettingWirelessSecurityProto(data _ConnectionData) (value []string) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PROTO).([]string)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_PROTO).([]string)
 	return
 }
 func getSettingWirelessSecurityPairwise(data _ConnectionData) (value []string) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PAIRWISE).([]string)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_PAIRWISE).([]string)
 	return
 }
 func getSettingWirelessSecurityGroup(data _ConnectionData) (value []string) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_GROUP).([]string)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_GROUP).([]string)
 	return
 }
 func getSettingWirelessSecurityLeapUsername(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME).(string)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME).(string)
 	return
 }
 func getSettingWirelessSecurityLeapPassword(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD).(string)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD).(string)
 	return
 }
 func getSettingWirelessSecurityLeapPasswordFlags(data _ConnectionData) (value uint32) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS).(uint32)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS).(uint32)
 	return
 }
 func getSettingWirelessSecurityWepKey0(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY0).(string)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_WEP_KEY0).(string)
 	return
 }
 func getSettingWirelessSecurityWepKey1(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY1).(string)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_WEP_KEY1).(string)
 	return
 }
 func getSettingWirelessSecurityWepKey2(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY2).(string)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_WEP_KEY2).(string)
 	return
 }
 func getSettingWirelessSecurityWepKey3(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY3).(string)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_WEP_KEY3).(string)
 	return
 }
 func getSettingWirelessSecurityWepKeyFlags(data _ConnectionData) (value uint32) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY_FLAGS).(uint32)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_WEP_KEY_FLAGS).(uint32)
 	return
 }
 func getSettingWirelessSecurityWepKeyType(data _ConnectionData) (value uint32) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE).(uint32)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE).(uint32)
 	return
 }
 func getSettingWirelessSecurityPsk(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PSK).(string)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_PSK).(string)
 	return
 }
 func getSettingWirelessSecurityPskFlags(data _ConnectionData) (value uint32) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS).(uint32)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS).(uint32)
 	return
 }
 
 // Setter
 func setSettingWirelessSecurityKeyMgmt(data _ConnectionData, value string) {
-	setSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_KEY_MGMT, value)
 }
 func setSettingWirelessSecurityWepTxKeyidx(data _ConnectionData, value uint32) {
-	setSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_TX_KEYIDX, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_WEP_TX_KEYIDX, value)
 }
 func setSettingWirelessSecurityAuthAlg(data _ConnectionData, value string) {
-	setSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_AUTH_ALG, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_AUTH_ALG, value)
 }
 func setSettingWirelessSecurityProto(data _ConnectionData, value []string) {
-	setSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PROTO, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_PROTO, value)
 }
 func setSettingWirelessSecurityPairwise(data _ConnectionData, value []string) {
-	setSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PAIRWISE, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_PAIRWISE, value)
 }
 func setSettingWirelessSecurityGroup(data _ConnectionData, value []string) {
-	setSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_GROUP, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_GROUP, value)
 }
 func setSettingWirelessSecurityLeapUsername(data _ConnectionData, value string) {
-	setSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME, value)
 }
 func setSettingWirelessSecurityLeapPassword(data _ConnectionData, value string) {
-	setSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD, value)
 }
 func setSettingWirelessSecurityLeapPasswordFlags(data _ConnectionData, value uint32) {
-	setSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS, value)
 }
 func setSettingWirelessSecurityWepKey0(data _ConnectionData, value string) {
-	setSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY0, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_WEP_KEY0, value)
 }
 func setSettingWirelessSecurityWepKey1(data _ConnectionData, value string) {
-	setSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY1, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_WEP_KEY1, value)
 }
 func setSettingWirelessSecurityWepKey2(data _ConnectionData, value string) {
-	setSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY2, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_WEP_KEY2, value)
 }
 func setSettingWirelessSecurityWepKey3(data _ConnectionData, value string) {
-	setSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY3, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_WEP_KEY3, value)
 }
 func setSettingWirelessSecurityWepKeyFlags(data _ConnectionData, value uint32) {
-	setSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY_FLAGS, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_WEP_KEY_FLAGS, value)
 }
 func setSettingWirelessSecurityWepKeyType(data _ConnectionData, value uint32) {
-	setSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE, value)
 }
 func setSettingWirelessSecurityPsk(data _ConnectionData, value string) {
-	setSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PSK, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_PSK, value)
 }
 func setSettingWirelessSecurityPskFlags(data _ConnectionData, value uint32) {
-	setSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS, value)
 }
 
 // JSON Getter
@@ -663,53 +663,53 @@ func setSettingWirelessSecurityPskFlagsJSON(data _ConnectionData, valueJSON stri
 
 // Remover
 func removeSettingWirelessSecurityKeyMgmt(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_KEY_MGMT)
 }
 func removeSettingWirelessSecurityWepTxKeyidx(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_TX_KEYIDX)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_WEP_TX_KEYIDX)
 }
 func removeSettingWirelessSecurityAuthAlg(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_AUTH_ALG)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_AUTH_ALG)
 }
 func removeSettingWirelessSecurityProto(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PROTO)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_PROTO)
 }
 func removeSettingWirelessSecurityPairwise(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PAIRWISE)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_PAIRWISE)
 }
 func removeSettingWirelessSecurityGroup(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_GROUP)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_GROUP)
 }
 func removeSettingWirelessSecurityLeapUsername(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME)
 }
 func removeSettingWirelessSecurityLeapPassword(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD)
 }
 func removeSettingWirelessSecurityLeapPasswordFlags(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS)
 }
 func removeSettingWirelessSecurityWepKey0(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY0)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_WEP_KEY0)
 }
 func removeSettingWirelessSecurityWepKey1(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY1)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_WEP_KEY1)
 }
 func removeSettingWirelessSecurityWepKey2(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY2)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_WEP_KEY2)
 }
 func removeSettingWirelessSecurityWepKey3(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY3)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_WEP_KEY3)
 }
 func removeSettingWirelessSecurityWepKeyFlags(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY_FLAGS)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_WEP_KEY_FLAGS)
 }
 func removeSettingWirelessSecurityWepKeyType(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE)
 }
 func removeSettingWirelessSecurityPsk(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PSK)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_PSK)
 }
 func removeSettingWirelessSecurityPskFlags(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME), NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS)
 }

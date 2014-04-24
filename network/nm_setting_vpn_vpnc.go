@@ -47,6 +47,7 @@ package main
 // #define NM_VPNC_VENDOR_CISCO     "cisco"
 // #define NM_VPNC_VENDOR_NETSCREEN "netscreen"
 
+// vpn key description
 // static ValidProperty valid_properties[] = {
 // 	{ NM_VPNC_KEY_GATEWAY,               ITEM_TYPE_STRING, 0, 0 },
 // 	{ NM_VPNC_KEY_ID,                    ITEM_TYPE_STRING, 0, 0 },

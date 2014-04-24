@@ -151,34 +151,34 @@ func ensureSettingVpnSecretsNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 
 // Getter
 func getSettingVpnServiceType(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SERVICE_TYPE).(string)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_VPN_SETTING_NAME), NM_SETTING_VPN_SERVICE_TYPE).(string)
 	return
 }
 func getSettingVpnUserName(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_USER_NAME).(string)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_VPN_SETTING_NAME), NM_SETTING_VPN_USER_NAME).(string)
 	return
 }
 func getSettingVpnData(data _ConnectionData) (value map[string]string) {
-	value, _ = getSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_DATA).(map[string]string)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_VPN_SETTING_NAME), NM_SETTING_VPN_DATA).(map[string]string)
 	return
 }
 func getSettingVpnSecrets(data _ConnectionData) (value map[string]string) {
-	value, _ = getSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SECRETS).(map[string]string)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_VPN_SETTING_NAME), NM_SETTING_VPN_SECRETS).(map[string]string)
 	return
 }
 
 // Setter
 func setSettingVpnServiceType(data _ConnectionData, value string) {
-	setSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SERVICE_TYPE, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_VPN_SETTING_NAME), NM_SETTING_VPN_SERVICE_TYPE, value)
 }
 func setSettingVpnUserName(data _ConnectionData, value string) {
-	setSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_USER_NAME, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_VPN_SETTING_NAME), NM_SETTING_VPN_USER_NAME, value)
 }
 func setSettingVpnData(data _ConnectionData, value map[string]string) {
-	setSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_DATA, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_VPN_SETTING_NAME), NM_SETTING_VPN_DATA, value)
 }
 func setSettingVpnSecrets(data _ConnectionData, value map[string]string) {
-	setSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SECRETS, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_VPN_SETTING_NAME), NM_SETTING_VPN_SECRETS, value)
 }
 
 // JSON Getter
@@ -215,14 +215,14 @@ func setSettingVpnSecretsJSON(data _ConnectionData, valueJSON string) {
 
 // Remover
 func removeSettingVpnServiceType(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SERVICE_TYPE)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_VPN_SETTING_NAME), NM_SETTING_VPN_SERVICE_TYPE)
 }
 func removeSettingVpnUserName(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_USER_NAME)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_VPN_SETTING_NAME), NM_SETTING_VPN_USER_NAME)
 }
 func removeSettingVpnData(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_DATA)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_VPN_SETTING_NAME), NM_SETTING_VPN_DATA)
 }
 func removeSettingVpnSecrets(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SECRETS)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_VPN_SETTING_NAME), NM_SETTING_VPN_SECRETS)
 }

@@ -19,6 +19,7 @@ package main
 // #define NM_OPENCONNECT_KEY_STOKEN_SOURCE "stoken_source"
 // #define NM_OPENCONNECT_KEY_STOKEN_STRING "stoken_string"
 
+// vpn key description
 // static ValidProperty valid_properties[] = {
 // 	{ NM_OPENCONNECT_KEY_GATEWAY,     G_TYPE_STRING, 0, 0 },
 // 	{ NM_OPENCONNECT_KEY_CACERT,      G_TYPE_STRING, 0, 0 },

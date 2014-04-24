@@ -22,6 +22,12 @@ func generalIsKeyInSettingField(field, key string) bool {
 		return isKeyInSettingPppoe(key)
 	case NM_SETTING_VPN_SETTING_NAME:
 		return isKeyInSettingVpn(key)
+	case NM_SETTING_VF_VPN_L2TP_SETTING_NAME:
+		return isKeyInSettingVpnL2tp(key)
+	case NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME:
+		return isKeyInSettingVpnL2tpPpp(key)
+	case NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME:
+		return isKeyInSettingVpnL2tpIpsec(key)
 	case NM_SETTING_WIRED_SETTING_NAME:
 		return isKeyInSettingWired(key)
 	case NM_SETTING_WIRELESS_SETTING_NAME:
@@ -54,6 +60,12 @@ func generalGetSettingKeyType(field, key string) (t ktype) {
 		t = getSettingPppoeKeyType(key)
 	case NM_SETTING_VPN_SETTING_NAME:
 		t = getSettingVpnKeyType(key)
+	case NM_SETTING_VF_VPN_L2TP_SETTING_NAME:
+		t = getSettingVpnL2tpKeyType(key)
+	case NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME:
+		t = getSettingVpnL2tpPppKeyType(key)
+	case NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME:
+		t = getSettingVpnL2tpIpsecKeyType(key)
 	case NM_SETTING_WIRED_SETTING_NAME:
 		t = getSettingWiredKeyType(key)
 	case NM_SETTING_WIRELESS_SETTING_NAME:
@@ -80,6 +92,12 @@ func generalGetSettingAvailableKeys(data _ConnectionData, field string) (keys []
 		keys = getSettingPppoeAvailableKeys(data)
 	case NM_SETTING_VPN_SETTING_NAME:
 		keys = getSettingVpnAvailableKeys(data)
+	case NM_SETTING_VF_VPN_L2TP_SETTING_NAME:
+		keys = getSettingVpnL2tpAvailableKeys(data)
+	case NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME:
+		keys = getSettingVpnL2tpPppAvailableKeys(data)
+	case NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME:
+		keys = getSettingVpnL2tpIpsecAvailableKeys(data)
 	case NM_SETTING_WIRED_SETTING_NAME:
 		keys = getSettingWiredAvailableKeys(data)
 	case NM_SETTING_WIRELESS_SETTING_NAME:
@@ -110,6 +128,12 @@ func generalGetSettingAvailableValues(data _ConnectionData, field, key string) (
 		values, customizable = getSettingPppoeAvailableValues(data, key)
 	case NM_SETTING_VPN_SETTING_NAME:
 		values, customizable = getSettingVpnAvailableValues(data, key)
+	case NM_SETTING_VF_VPN_L2TP_SETTING_NAME:
+		values, customizable = getSettingVpnL2tpAvailableValues(data, key)
+	case NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME:
+		values, customizable = getSettingVpnL2tpPppAvailableValues(data, key)
+	case NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME:
+		values, customizable = getSettingVpnL2tpIpsecAvailableValues(data, key)
 	case NM_SETTING_WIRED_SETTING_NAME:
 		values, customizable = getSettingWiredAvailableValues(data, key)
 	case NM_SETTING_WIRELESS_SETTING_NAME:
@@ -138,6 +162,12 @@ func generalCheckSettingValues(data _ConnectionData, field string) (errs FieldKe
 		errs = checkSettingPppoeValues(data)
 	case NM_SETTING_VPN_SETTING_NAME:
 		errs = checkSettingVpnValues(data)
+	case NM_SETTING_VF_VPN_L2TP_SETTING_NAME:
+		errs = checkSettingVpnL2tpValues(data)
+	case NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME:
+		errs = checkSettingVpnL2tpPppValues(data)
+	case NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME:
+		errs = checkSettingVpnL2tpIpsecValues(data)
 	case NM_SETTING_WIRED_SETTING_NAME:
 		errs = checkSettingWiredValues(data)
 	case NM_SETTING_WIRELESS_SETTING_NAME:
@@ -170,6 +200,12 @@ func generalGetSettingKeyJSON(data _ConnectionData, field, key string) (valueJSO
 		valueJSON = generalGetSettingPppoeKeyJSON(data, key)
 	case NM_SETTING_VPN_SETTING_NAME:
 		valueJSON = generalGetSettingVpnKeyJSON(data, key)
+	case NM_SETTING_VF_VPN_L2TP_SETTING_NAME:
+		valueJSON = generalGetSettingVpnL2tpKeyJSON(data, key)
+	case NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME:
+		valueJSON = generalGetSettingVpnL2tpPppKeyJSON(data, key)
+	case NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME:
+		valueJSON = generalGetSettingVpnL2tpIpsecKeyJSON(data, key)
 	case NM_SETTING_WIRED_SETTING_NAME:
 		valueJSON = generalGetSettingWiredKeyJSON(data, key)
 	case NM_SETTING_WIRELESS_SETTING_NAME:
@@ -202,6 +238,12 @@ func generalSetSettingKeyJSON(data _ConnectionData, field, key, valueJSON string
 		generalSetSettingPppoeKeyJSON(data, key, valueJSON)
 	case NM_SETTING_VPN_SETTING_NAME:
 		generalSetSettingVpnKeyJSON(data, key, valueJSON)
+	case NM_SETTING_VF_VPN_L2TP_SETTING_NAME:
+		generalSetSettingVpnL2tpKeyJSON(data, key, valueJSON)
+	case NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME:
+		generalSetSettingVpnL2tpPppKeyJSON(data, key, valueJSON)
+	case NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME:
+		generalSetSettingVpnL2tpIpsecKeyJSON(data, key, valueJSON)
 	case NM_SETTING_WIRED_SETTING_NAME:
 		generalSetSettingWiredKeyJSON(data, key, valueJSON)
 	case NM_SETTING_WIRELESS_SETTING_NAME:
@@ -229,6 +271,12 @@ func getSettingKeyDefaultValueJSON(field, key string) (valueJSON string) {
 		valueJSON = getSettingPppoeKeyDefaultValueJSON(key)
 	case NM_SETTING_VPN_SETTING_NAME:
 		valueJSON = getSettingVpnKeyDefaultValueJSON(key)
+	case NM_SETTING_VF_VPN_L2TP_SETTING_NAME:
+		valueJSON = getSettingVpnL2tpKeyDefaultValueJSON(key)
+	case NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME:
+		valueJSON = getSettingVpnL2tpPppKeyDefaultValueJSON(key)
+	case NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME:
+		valueJSON = getSettingVpnL2tpIpsecKeyDefaultValueJSON(key)
 	case NM_SETTING_WIRED_SETTING_NAME:
 		valueJSON = getSettingWiredKeyDefaultValueJSON(key)
 	case NM_SETTING_WIRELESS_SETTING_NAME:

@@ -387,132 +387,132 @@ func ensureSettingPppLcpEchoIntervalNoEmpty(data _ConnectionData, errs FieldKeyE
 
 // Getter
 func getSettingPppNoauth(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOAUTH).(bool)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_NOAUTH).(bool)
 	return
 }
 func getSettingPppRefuseEap(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_EAP).(bool)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_REFUSE_EAP).(bool)
 	return
 }
 func getSettingPppRefusePap(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_PAP).(bool)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_REFUSE_PAP).(bool)
 	return
 }
 func getSettingPppRefuseChap(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_CHAP).(bool)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_REFUSE_CHAP).(bool)
 	return
 }
 func getSettingPppRefuseMschap(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_MSCHAP).(bool)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_REFUSE_MSCHAP).(bool)
 	return
 }
 func getSettingPppRefuseMschapv2(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_MSCHAPV2).(bool)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_REFUSE_MSCHAPV2).(bool)
 	return
 }
 func getSettingPppRequireMppe(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE).(bool)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_REQUIRE_MPPE).(bool)
 	return
 }
 func getSettingPppRequireMppe128(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE_128).(bool)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_REQUIRE_MPPE_128).(bool)
 	return
 }
 func getSettingPppMppeStateful(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MPPE_STATEFUL).(bool)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_MPPE_STATEFUL).(bool)
 	return
 }
 func getSettingPppNobsdcomp(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOBSDCOMP).(bool)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_NOBSDCOMP).(bool)
 	return
 }
 func getSettingPppNodeflate(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NODEFLATE).(bool)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_NODEFLATE).(bool)
 	return
 }
 func getSettingPppNoVjComp(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NO_VJ_COMP).(bool)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_NO_VJ_COMP).(bool)
 	return
 }
 func getSettingPppCrtscts(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_CRTSCTS).(bool)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_CRTSCTS).(bool)
 	return
 }
 func getSettingPppBaud(data _ConnectionData) (value uint32) {
-	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_BAUD).(uint32)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_BAUD).(uint32)
 	return
 }
 func getSettingPppMru(data _ConnectionData) (value uint32) {
-	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MRU).(uint32)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_MRU).(uint32)
 	return
 }
 func getSettingPppMtu(data _ConnectionData) (value uint32) {
-	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MTU).(uint32)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_MTU).(uint32)
 	return
 }
 func getSettingPppLcpEchoFailure(data _ConnectionData) (value uint32) {
-	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_FAILURE).(uint32)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_LCP_ECHO_FAILURE).(uint32)
 	return
 }
 func getSettingPppLcpEchoInterval(data _ConnectionData) (value uint32) {
-	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_INTERVAL).(uint32)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_LCP_ECHO_INTERVAL).(uint32)
 	return
 }
 
 // Setter
 func setSettingPppNoauth(data _ConnectionData, value bool) {
-	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOAUTH, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_NOAUTH, value)
 }
 func setSettingPppRefuseEap(data _ConnectionData, value bool) {
-	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_EAP, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_REFUSE_EAP, value)
 }
 func setSettingPppRefusePap(data _ConnectionData, value bool) {
-	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_PAP, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_REFUSE_PAP, value)
 }
 func setSettingPppRefuseChap(data _ConnectionData, value bool) {
-	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_CHAP, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_REFUSE_CHAP, value)
 }
 func setSettingPppRefuseMschap(data _ConnectionData, value bool) {
-	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_MSCHAP, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_REFUSE_MSCHAP, value)
 }
 func setSettingPppRefuseMschapv2(data _ConnectionData, value bool) {
-	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_MSCHAPV2, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_REFUSE_MSCHAPV2, value)
 }
 func setSettingPppRequireMppe(data _ConnectionData, value bool) {
-	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_REQUIRE_MPPE, value)
 }
 func setSettingPppRequireMppe128(data _ConnectionData, value bool) {
-	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE_128, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_REQUIRE_MPPE_128, value)
 }
 func setSettingPppMppeStateful(data _ConnectionData, value bool) {
-	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MPPE_STATEFUL, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_MPPE_STATEFUL, value)
 }
 func setSettingPppNobsdcomp(data _ConnectionData, value bool) {
-	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOBSDCOMP, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_NOBSDCOMP, value)
 }
 func setSettingPppNodeflate(data _ConnectionData, value bool) {
-	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NODEFLATE, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_NODEFLATE, value)
 }
 func setSettingPppNoVjComp(data _ConnectionData, value bool) {
-	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NO_VJ_COMP, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_NO_VJ_COMP, value)
 }
 func setSettingPppCrtscts(data _ConnectionData, value bool) {
-	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_CRTSCTS, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_CRTSCTS, value)
 }
 func setSettingPppBaud(data _ConnectionData, value uint32) {
-	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_BAUD, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_BAUD, value)
 }
 func setSettingPppMru(data _ConnectionData, value uint32) {
-	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MRU, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_MRU, value)
 }
 func setSettingPppMtu(data _ConnectionData, value uint32) {
-	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MTU, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_MTU, value)
 }
 func setSettingPppLcpEchoFailure(data _ConnectionData, value uint32) {
-	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_FAILURE, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_LCP_ECHO_FAILURE, value)
 }
 func setSettingPppLcpEchoInterval(data _ConnectionData, value uint32) {
-	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_INTERVAL, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_LCP_ECHO_INTERVAL, value)
 }
 
 // JSON Getter
@@ -647,56 +647,56 @@ func setSettingPppLcpEchoIntervalJSON(data _ConnectionData, valueJSON string) {
 
 // Remover
 func removeSettingPppNoauth(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOAUTH)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_NOAUTH)
 }
 func removeSettingPppRefuseEap(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_EAP)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_REFUSE_EAP)
 }
 func removeSettingPppRefusePap(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_PAP)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_REFUSE_PAP)
 }
 func removeSettingPppRefuseChap(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_CHAP)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_REFUSE_CHAP)
 }
 func removeSettingPppRefuseMschap(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_MSCHAP)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_REFUSE_MSCHAP)
 }
 func removeSettingPppRefuseMschapv2(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_MSCHAPV2)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_REFUSE_MSCHAPV2)
 }
 func removeSettingPppRequireMppe(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_REQUIRE_MPPE)
 }
 func removeSettingPppRequireMppe128(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE_128)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_REQUIRE_MPPE_128)
 }
 func removeSettingPppMppeStateful(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MPPE_STATEFUL)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_MPPE_STATEFUL)
 }
 func removeSettingPppNobsdcomp(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOBSDCOMP)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_NOBSDCOMP)
 }
 func removeSettingPppNodeflate(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NODEFLATE)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_NODEFLATE)
 }
 func removeSettingPppNoVjComp(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NO_VJ_COMP)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_NO_VJ_COMP)
 }
 func removeSettingPppCrtscts(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_CRTSCTS)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_CRTSCTS)
 }
 func removeSettingPppBaud(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_BAUD)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_BAUD)
 }
 func removeSettingPppMru(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MRU)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_MRU)
 }
 func removeSettingPppMtu(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MTU)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_MTU)
 }
 func removeSettingPppLcpEchoFailure(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_FAILURE)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_LCP_ECHO_FAILURE)
 }
 func removeSettingPppLcpEchoInterval(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_INTERVAL)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_PPP_SETTING_NAME), NM_SETTING_PPP_LCP_ECHO_INTERVAL)
 }

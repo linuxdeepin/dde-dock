@@ -140,7 +140,40 @@
 	    {"Name":"NM_SETTING_VPN_L2TP_KEY_GATEWAY", "Value":"gateway", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_L2TP_KEY_USER", "Value":"user", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_L2TP_KEY_PASSWORD", "Value":"password", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_L2TP_KEY_PASSWORD_FLAG", "Value":"password-flags", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_L2TP_KEY_DOMAIN", "Value":"domain", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"}
+    ]
+},
+{
+    "FieldName":"NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME",
+    "FieldValue":"vf-vpn-l2tp-ppp",
+    "Keys":[
+	    {"Name":"NM_SETTING_VPN_L2TP_KEY_REFUSE_EAP", "Value":"refuse-eap", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Refuse EAP Authentication", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_L2TP_KEY_REFUSE_PAP", "Value":"refuse-pap", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Refuse PAP Authentication", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_L2TP_KEY_REFUSE_CHAP", "Value":"refuse-chap", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Refuse CHAP Authentication", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_L2TP_KEY_REFUSE_MSCHAP", "Value":"refuse-mschap", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Refuse MSCHAP Authentication", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_L2TP_KEY_REFUSE_MSCHAPV2", "Value":"refuse-mschapv2", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Refuse MSCHAPv2 Authentication", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE", "Value":"require-mppe", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":true, "DisplayName":"Use MPPE", "FrontEndWidget":"<default>", "WidgetProp":{"alwaysUpdate":"true"}},
+	    {"Name":"NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_40", "Value":"require-mppe-40", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"40-bit MPPE", "FrontEndWidget":"<default>", "WidgetProp":{"alwaysUpdate":"true"}},
+	    {"Name":"NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_128", "Value":"require-mppe-128", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"128-bit MPPE", "FrontEndWidget":"<default>", "WidgetProp":{"alwaysUpdate":"true"}},
+	    {"Name":"NM_SETTING_VPN_L2TP_KEY_MPPE_STATEFUL", "Value":"mppe-stateful", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Stateful MPPE", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_L2TP_KEY_NOBSDCOMP", "Value":"nobsdcomp", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"No BSD Data Compression", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_L2TP_KEY_NODEFLATE", "Value":"nodeflate", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"No Deflate Data Compression", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_L2TP_KEY_NO_VJ_COMP", "Value":"no-vj-comp", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"No TCP Header Compression", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_L2TP_KEY_NO_PCOMP", "Value":"nopcomp", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"No Protocol Field Compression", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_L2TP_KEY_NO_ACCOMP", "Value":"noaccomp", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"No Address/Control Compression", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_FAILURE", "Value":"lcp-echo-failure", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_INTERVAL", "Value":"lcp-echo-interval", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"}
+    ]
+},
+{
+    "FieldName":"NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME",
+    "FieldValue":"vf-vpn-l2tp-ipsec",
+    "Keys":[
+	    {"Name":"NM_SETTING_VPN_L2TP_KEY_IPSEC_ENABLE", "Value":"ipsec-enabled", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":true, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID", "Value":"ipsec-gateway-id", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_L2TP_KEY_IPSEC_GROUP_NAME", "Value":"ipsec-group-name", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_L2TP_KEY_IPSEC_PSK", "Value":"ipsec-psk", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"}
     ]
 },
 {

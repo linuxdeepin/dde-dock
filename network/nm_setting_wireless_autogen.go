@@ -351,104 +351,104 @@ func ensureSettingWirelessHiddenNoEmpty(data _ConnectionData, errs FieldKeyError
 
 // Getter
 func getSettingWirelessSsid(data _ConnectionData) (value []byte) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SSID).([]byte)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_SSID).([]byte)
 	return
 }
 func getSettingWirelessMode(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MODE).(string)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_MODE).(string)
 	return
 }
 func getSettingWirelessBand(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_BAND).(string)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_BAND).(string)
 	return
 }
 func getSettingWirelessChannel(data _ConnectionData) (value uint32) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_CHANNEL).(uint32)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_CHANNEL).(uint32)
 	return
 }
 func getSettingWirelessBssid(data _ConnectionData) (value []byte) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_BSSID).([]byte)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_BSSID).([]byte)
 	return
 }
 func getSettingWirelessRate(data _ConnectionData) (value uint32) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_RATE).(uint32)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_RATE).(uint32)
 	return
 }
 func getSettingWirelessTxPower(data _ConnectionData) (value uint32) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_TX_POWER).(uint32)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_TX_POWER).(uint32)
 	return
 }
 func getSettingWirelessMacAddress(data _ConnectionData) (value []byte) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MAC_ADDRESS).([]byte)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_MAC_ADDRESS).([]byte)
 	return
 }
 func getSettingWirelessClonedMacAddress(data _ConnectionData) (value []byte) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS).([]byte)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS).([]byte)
 	return
 }
 func getSettingWirelessMacAddressBlacklist(data _ConnectionData) (value []string) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST).([]string)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST).([]string)
 	return
 }
 func getSettingWirelessMtu(data _ConnectionData) (value uint32) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MTU).(uint32)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_MTU).(uint32)
 	return
 }
 func getSettingWirelessSeenBssids(data _ConnectionData) (value []string) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEEN_BSSIDS).([]string)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_SEEN_BSSIDS).([]string)
 	return
 }
 func getSettingWirelessSec(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEC).(string)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_SEC).(string)
 	return
 }
 func getSettingWirelessHidden(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_HIDDEN).(bool)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_HIDDEN).(bool)
 	return
 }
 
 // Setter
 func setSettingWirelessSsid(data _ConnectionData, value []byte) {
-	setSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SSID, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_SSID, value)
 }
 func setSettingWirelessMode(data _ConnectionData, value string) {
-	setSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MODE, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_MODE, value)
 }
 func setSettingWirelessBand(data _ConnectionData, value string) {
-	setSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_BAND, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_BAND, value)
 }
 func setSettingWirelessChannel(data _ConnectionData, value uint32) {
-	setSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_CHANNEL, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_CHANNEL, value)
 }
 func setSettingWirelessBssid(data _ConnectionData, value []byte) {
-	setSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_BSSID, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_BSSID, value)
 }
 func setSettingWirelessRate(data _ConnectionData, value uint32) {
-	setSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_RATE, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_RATE, value)
 }
 func setSettingWirelessTxPower(data _ConnectionData, value uint32) {
-	setSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_TX_POWER, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_TX_POWER, value)
 }
 func setSettingWirelessMacAddress(data _ConnectionData, value []byte) {
-	setSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MAC_ADDRESS, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_MAC_ADDRESS, value)
 }
 func setSettingWirelessClonedMacAddress(data _ConnectionData, value []byte) {
-	setSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS, value)
 }
 func setSettingWirelessMacAddressBlacklist(data _ConnectionData, value []string) {
-	setSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST, value)
 }
 func setSettingWirelessMtu(data _ConnectionData, value uint32) {
-	setSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MTU, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_MTU, value)
 }
 func setSettingWirelessSeenBssids(data _ConnectionData, value []string) {
-	setSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEEN_BSSIDS, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_SEEN_BSSIDS, value)
 }
 func setSettingWirelessSec(data _ConnectionData, value string) {
-	setSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEC, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_SEC, value)
 }
 func setSettingWirelessHidden(data _ConnectionData, value bool) {
-	setSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_HIDDEN, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_HIDDEN, value)
 }
 
 // JSON Getter
@@ -555,44 +555,44 @@ func setSettingWirelessHiddenJSON(data _ConnectionData, valueJSON string) {
 
 // Remover
 func removeSettingWirelessSsid(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SSID)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_SSID)
 }
 func removeSettingWirelessMode(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MODE)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_MODE)
 }
 func removeSettingWirelessBand(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_BAND)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_BAND)
 }
 func removeSettingWirelessChannel(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_CHANNEL)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_CHANNEL)
 }
 func removeSettingWirelessBssid(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_BSSID)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_BSSID)
 }
 func removeSettingWirelessRate(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_RATE)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_RATE)
 }
 func removeSettingWirelessTxPower(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_TX_POWER)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_TX_POWER)
 }
 func removeSettingWirelessMacAddress(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MAC_ADDRESS)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_MAC_ADDRESS)
 }
 func removeSettingWirelessClonedMacAddress(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS)
 }
 func removeSettingWirelessMacAddressBlacklist(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST)
 }
 func removeSettingWirelessMtu(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MTU)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_MTU)
 }
 func removeSettingWirelessSeenBssids(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEEN_BSSIDS)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_SEEN_BSSIDS)
 }
 func removeSettingWirelessSec(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEC)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_SEC)
 }
 func removeSettingWirelessHidden(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_HIDDEN)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_WIRELESS_SETTING_NAME), NM_SETTING_WIRELESS_HIDDEN)
 }

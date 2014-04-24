@@ -14,33 +14,35 @@ const (
 )
 
 const (
-	NM_SETTING_L2TP_KEY_GATEWAY           = "gateway"
-	NM_SETTING_L2TP_KEY_USER              = "user"
-	NM_SETTING_L2TP_KEY_PASSWORD          = "password"
-	NM_SETTING_L2TP_KEY_DOMAIN            = "domain"
-	NM_SETTING_L2TP_KEY_REFUSE_EAP        = "refuse-eap"
-	NM_SETTING_L2TP_KEY_REFUSE_PAP        = "refuse-pap"
-	NM_SETTING_L2TP_KEY_REFUSE_CHAP       = "refuse-chap"
-	NM_SETTING_L2TP_KEY_REFUSE_MSCHAP     = "refuse-mschap"
-	NM_SETTING_L2TP_KEY_REFUSE_MSCHAPV2   = "refuse-mschapv2"
-	NM_SETTING_L2TP_KEY_REQUIRE_MPPE      = "require-mppe"
-	NM_SETTING_L2TP_KEY_REQUIRE_MPPE_40   = "require-mppe-40"
-	NM_SETTING_L2TP_KEY_REQUIRE_MPPE_128  = "require-mppe-128"
-	NM_SETTING_L2TP_KEY_MPPE_STATEFUL     = "mppe-stateful"
-	NM_SETTING_L2TP_KEY_NOBSDCOMP         = "nobsdcomp"
-	NM_SETTING_L2TP_KEY_NODEFLATE         = "nodeflate"
-	NM_SETTING_L2TP_KEY_NO_VJ_COMP        = "no-vj-comp"
-	NM_SETTING_L2TP_KEY_NO_PCOMP          = "nopcomp"
-	NM_SETTING_L2TP_KEY_NO_ACCOMP         = "noaccomp"
-	NM_SETTING_L2TP_KEY_LCP_ECHO_FAILURE  = "lcp-echo-failure"
-	NM_SETTING_L2TP_KEY_LCP_ECHO_INTERVAL = "lcp-echo-interval"
-	NM_SETTING_L2TP_KEY_IPSEC_ENABLE      = "ipsec-enabled"
-	NM_SETTING_L2TP_KEY_IPSEC_GATEWAY_ID  = "ipsec-gateway-id"
-	NM_SETTING_L2TP_KEY_IPSEC_GROUP_NAME  = "ipsec-group-name"
-	NM_SETTING_L2TP_KEY_IPSEC_PSK         = "ipsec-psk"
+	NM_SETTING_VPN_L2TP_KEY_GATEWAY           = "gateway"
+	NM_SETTING_VPN_L2TP_KEY_USER              = "user"
+	NM_SETTING_VPN_L2TP_KEY_PASSWORD          = "password"
+	NM_SETTING_VPN_L2TP_KEY_PASSWORD_FLAG     = "password-flags"
+	NM_SETTING_VPN_L2TP_KEY_DOMAIN            = "domain"
+	NM_SETTING_VPN_L2TP_KEY_REFUSE_EAP        = "refuse-eap"
+	NM_SETTING_VPN_L2TP_KEY_REFUSE_PAP        = "refuse-pap"
+	NM_SETTING_VPN_L2TP_KEY_REFUSE_CHAP       = "refuse-chap"
+	NM_SETTING_VPN_L2TP_KEY_REFUSE_MSCHAP     = "refuse-mschap"
+	NM_SETTING_VPN_L2TP_KEY_REFUSE_MSCHAPV2   = "refuse-mschapv2"
+	NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE      = "require-mppe"
+	NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_40   = "require-mppe-40"
+	NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_128  = "require-mppe-128"
+	NM_SETTING_VPN_L2TP_KEY_MPPE_STATEFUL     = "mppe-stateful"
+	NM_SETTING_VPN_L2TP_KEY_NOBSDCOMP         = "nobsdcomp"
+	NM_SETTING_VPN_L2TP_KEY_NODEFLATE         = "nodeflate"
+	NM_SETTING_VPN_L2TP_KEY_NO_VJ_COMP        = "no-vj-comp"
+	NM_SETTING_VPN_L2TP_KEY_NO_PCOMP          = "nopcomp"
+	NM_SETTING_VPN_L2TP_KEY_NO_ACCOMP         = "noaccomp"
+	NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_FAILURE  = "lcp-echo-failure"
+	NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_INTERVAL = "lcp-echo-interval"
+	NM_SETTING_VPN_L2TP_KEY_IPSEC_ENABLE      = "ipsec-enabled"
+	NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID  = "ipsec-gateway-id"
+	NM_SETTING_VPN_L2TP_KEY_IPSEC_GROUP_NAME  = "ipsec-group-name"
+	NM_SETTING_VPN_L2TP_KEY_IPSEC_PSK         = "ipsec-psk"
 )
 
-// static ValidProperty valid_properties[] = {
+// vpn key description
+// sta_VPNtic ValidProperty valid_properties[] = {
 // 	{ NM_L2TP_KEY_GATEWAY,           G_TYPE_STRING, TRUE },
 // 	{ NM_L2TP_KEY_USER,              G_TYPE_STRING, FALSE },
 // 	{ NM_L2TP_KEY_DOMAIN,            G_TYPE_STRING, FALSE },
@@ -79,7 +81,50 @@ func newVpnL2tpConnectionData(id, uuid string) (data _ConnectionData) {
 	setSettingVpnServiceType(data, NM_DBUS_SERVICE_L2TP)
 
 	// vpn-l2tp
-	// setSettingVpnP
+	setSettingVpnL2tpKeyPasswordFlag(data, NM_SETTING_SECRET_FLAG_AGENT_OWNED)
 
 	return
+}
+
+// TODO
+// vpt-l2tp
+func getSettingVpnL2tpAvailableKeys(data _ConnectionData) (keys []string) {
+	return
+}
+func getSettingVpnL2tpAvailableValues(data _ConnectionData, key string) (values []string, customizable bool) {
+	return
+}
+func checkSettingVpnL2tpValues(data _ConnectionData) (errs FieldKeyErrors) {
+	errs = make(map[string]string)
+	return
+}
+
+// vpt-l2tp-ppp
+func getSettingVpnL2tpPppAvailableKeys(data _ConnectionData) (keys []string) {
+	return
+}
+func getSettingVpnL2tpPppAvailableValues(data _ConnectionData, key string) (values []string, customizable bool) {
+	return
+}
+func checkSettingVpnL2tpPppValues(data _ConnectionData) (errs FieldKeyErrors) {
+	errs = make(map[string]string)
+	return
+}
+func logicSetSettingVpnL2tpKeyRequireMppeJSON(data _ConnectionData, valueJSON string) {
+	// TODO
+}
+
+// vpt-l2tp-ipsec
+func getSettingVpnL2tpIpsecAvailableKeys(data _ConnectionData) (keys []string) {
+	return
+}
+func getSettingVpnL2tpIpsecAvailableValues(data _ConnectionData, key string) (values []string, customizable bool) {
+	return
+}
+func checkSettingVpnL2tpIpsecValues(data _ConnectionData) (errs FieldKeyErrors) {
+	errs = make(map[string]string)
+	return
+}
+func logicSetSettingVpnL2tpKeyIpsecEnableJSON(data _ConnectionData, valueJSON string) {
+	// TODO
 }

@@ -63,6 +63,7 @@ package main
 // #define NM_OPENVPN_REM_CERT_TLS_CLIENT "client"
 // #define NM_OPENVPN_REM_CERT_TLS_SERVER "server"
 
+// vpn key description
 // static ValidProperty valid_properties[] = {
 // 	{ NM_OPENVPN_KEY_AUTH,                 G_TYPE_STRING, 0, 0, FALSE },
 // 	{ NM_OPENVPN_KEY_CA,                   G_TYPE_STRING, 0, 0, FALSE },

@@ -293,83 +293,83 @@ func ensureSettingConnectionSecondariesNoEmpty(data _ConnectionData, errs FieldK
 
 // Getter
 func getSettingConnectionId(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_ID).(string)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_CONNECTION_SETTING_NAME), NM_SETTING_CONNECTION_ID).(string)
 	return
 }
 func getSettingConnectionUuid(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_UUID).(string)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_CONNECTION_SETTING_NAME), NM_SETTING_CONNECTION_UUID).(string)
 	return
 }
 func getSettingConnectionType(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TYPE).(string)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_CONNECTION_SETTING_NAME), NM_SETTING_CONNECTION_TYPE).(string)
 	return
 }
 func getSettingConnectionAutoconnect(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_AUTOCONNECT).(bool)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_CONNECTION_SETTING_NAME), NM_SETTING_CONNECTION_AUTOCONNECT).(bool)
 	return
 }
 func getSettingConnectionPermissions(data _ConnectionData) (value []string) {
-	value, _ = getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_PERMISSIONS).([]string)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_CONNECTION_SETTING_NAME), NM_SETTING_CONNECTION_PERMISSIONS).([]string)
 	return
 }
 func getSettingConnectionTimestamp(data _ConnectionData) (value uint64) {
-	value, _ = getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TIMESTAMP).(uint64)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_CONNECTION_SETTING_NAME), NM_SETTING_CONNECTION_TIMESTAMP).(uint64)
 	return
 }
 func getSettingConnectionReadOnly(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_READ_ONLY).(bool)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_CONNECTION_SETTING_NAME), NM_SETTING_CONNECTION_READ_ONLY).(bool)
 	return
 }
 func getSettingConnectionZone(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_ZONE).(string)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_CONNECTION_SETTING_NAME), NM_SETTING_CONNECTION_ZONE).(string)
 	return
 }
 func getSettingConnectionMaster(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_MASTER).(string)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_CONNECTION_SETTING_NAME), NM_SETTING_CONNECTION_MASTER).(string)
 	return
 }
 func getSettingConnectionSlaveType(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_SLAVE_TYPE).(string)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_CONNECTION_SETTING_NAME), NM_SETTING_CONNECTION_SLAVE_TYPE).(string)
 	return
 }
 func getSettingConnectionSecondaries(data _ConnectionData) (value []string) {
-	value, _ = getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_SECONDARIES).([]string)
+	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_CONNECTION_SETTING_NAME), NM_SETTING_CONNECTION_SECONDARIES).([]string)
 	return
 }
 
 // Setter
 func setSettingConnectionId(data _ConnectionData, value string) {
-	setSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_ID, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_CONNECTION_SETTING_NAME), NM_SETTING_CONNECTION_ID, value)
 }
 func setSettingConnectionUuid(data _ConnectionData, value string) {
-	setSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_UUID, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_CONNECTION_SETTING_NAME), NM_SETTING_CONNECTION_UUID, value)
 }
 func setSettingConnectionType(data _ConnectionData, value string) {
-	setSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TYPE, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_CONNECTION_SETTING_NAME), NM_SETTING_CONNECTION_TYPE, value)
 }
 func setSettingConnectionAutoconnect(data _ConnectionData, value bool) {
-	setSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_AUTOCONNECT, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_CONNECTION_SETTING_NAME), NM_SETTING_CONNECTION_AUTOCONNECT, value)
 }
 func setSettingConnectionPermissions(data _ConnectionData, value []string) {
-	setSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_PERMISSIONS, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_CONNECTION_SETTING_NAME), NM_SETTING_CONNECTION_PERMISSIONS, value)
 }
 func setSettingConnectionTimestamp(data _ConnectionData, value uint64) {
-	setSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TIMESTAMP, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_CONNECTION_SETTING_NAME), NM_SETTING_CONNECTION_TIMESTAMP, value)
 }
 func setSettingConnectionReadOnly(data _ConnectionData, value bool) {
-	setSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_READ_ONLY, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_CONNECTION_SETTING_NAME), NM_SETTING_CONNECTION_READ_ONLY, value)
 }
 func setSettingConnectionZone(data _ConnectionData, value string) {
-	setSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_ZONE, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_CONNECTION_SETTING_NAME), NM_SETTING_CONNECTION_ZONE, value)
 }
 func setSettingConnectionMaster(data _ConnectionData, value string) {
-	setSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_MASTER, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_CONNECTION_SETTING_NAME), NM_SETTING_CONNECTION_MASTER, value)
 }
 func setSettingConnectionSlaveType(data _ConnectionData, value string) {
-	setSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_SLAVE_TYPE, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_CONNECTION_SETTING_NAME), NM_SETTING_CONNECTION_SLAVE_TYPE, value)
 }
 func setSettingConnectionSecondaries(data _ConnectionData, value []string) {
-	setSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_SECONDARIES, value)
+	setSettingKey(data, getRealFiledName(NM_SETTING_CONNECTION_SETTING_NAME), NM_SETTING_CONNECTION_SECONDARIES, value)
 }
 
 // JSON Getter
@@ -455,35 +455,35 @@ func setSettingConnectionSecondariesJSON(data _ConnectionData, valueJSON string)
 
 // Remover
 func removeSettingConnectionId(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_ID)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_CONNECTION_SETTING_NAME), NM_SETTING_CONNECTION_ID)
 }
 func removeSettingConnectionUuid(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_UUID)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_CONNECTION_SETTING_NAME), NM_SETTING_CONNECTION_UUID)
 }
 func removeSettingConnectionType(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TYPE)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_CONNECTION_SETTING_NAME), NM_SETTING_CONNECTION_TYPE)
 }
 func removeSettingConnectionAutoconnect(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_AUTOCONNECT)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_CONNECTION_SETTING_NAME), NM_SETTING_CONNECTION_AUTOCONNECT)
 }
 func removeSettingConnectionPermissions(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_PERMISSIONS)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_CONNECTION_SETTING_NAME), NM_SETTING_CONNECTION_PERMISSIONS)
 }
 func removeSettingConnectionTimestamp(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TIMESTAMP)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_CONNECTION_SETTING_NAME), NM_SETTING_CONNECTION_TIMESTAMP)
 }
 func removeSettingConnectionReadOnly(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_READ_ONLY)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_CONNECTION_SETTING_NAME), NM_SETTING_CONNECTION_READ_ONLY)
 }
 func removeSettingConnectionZone(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_ZONE)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_CONNECTION_SETTING_NAME), NM_SETTING_CONNECTION_ZONE)
 }
 func removeSettingConnectionMaster(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_MASTER)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_CONNECTION_SETTING_NAME), NM_SETTING_CONNECTION_MASTER)
 }
 func removeSettingConnectionSlaveType(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_SLAVE_TYPE)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_CONNECTION_SETTING_NAME), NM_SETTING_CONNECTION_SLAVE_TYPE)
 }
 func removeSettingConnectionSecondaries(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_SECONDARIES)
+	removeSettingKey(data, getRealFiledName(NM_SETTING_CONNECTION_SETTING_NAME), NM_SETTING_CONNECTION_SECONDARIES)
 }

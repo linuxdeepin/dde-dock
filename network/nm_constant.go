@@ -5,11 +5,7 @@ const (
 	typeWireless = NM_SETTING_WIRELESS_SETTING_NAME
 	typePppoe    = NM_SETTING_PPPOE_SETTING_NAME
 	typeVpn      = NM_SETTING_VPN_SETTING_NAME
-)
-
-// alias types
-const (
-	typeVpnL2tp = typeVpn + "-l2tp"
+	typeVpnL2tp  = NM_SETTING_VF_VPN_L2TP_SETTING_NAME
 )
 
 var supportedConnectionTypes = []string{
@@ -37,14 +33,17 @@ const (
 
 // page is a wrapper of field for easy to configure
 const (
-	pageGeneral  = "general"  // -> fieldConnection
-	pageEthernet = "ethernet" // -> fieldWireed
-	pageWifi     = "wifi"     // -> fieldWireless
-	pageIPv4     = "ipv4"     // -> fieldIpv4
-	pageIPv6     = "ipv6"     // -> fieldIpv6
-	pageSecurity = "security" // -> field8021x, fieldWirelessSecurity
-	pagePppoe    = "pppoe"    // -> fieldPppoe
-	pagePpp      = "ppp"      // -> fieldPpp
+	pageGeneral      = "general"        // -> fieldConnection
+	pageEthernet     = "ethernet"       // -> fieldWireed
+	pageWifi         = "wifi"           // -> fieldWireless
+	pageIPv4         = "ipv4"           // -> fieldIpv4
+	pageIPv6         = "ipv6"           // -> fieldIpv6
+	pageSecurity     = "security"       // -> field8021x, fieldWirelessSecurity
+	pagePppoe        = "pppoe"          // -> fieldPppoe
+	pagePpp          = "ppp"            // -> fieldPpp
+	pageVpnL2tp      = "vpn-l2tp"       // -> fieldVpnL2tp
+	pageVpnL2tpPpp   = "vpn-l2tp-ppp"   // -> fieldVpnL2tpPpp
+	pageVpnL2tpIpsec = "vpn-l2tp-ipsec" // -> fieldVpnL2tpIpsec
 )
 
 const (

@@ -190,6 +190,14 @@ func (s *ConnectionSession) ListPages() (pages []string) {
 			pagePpp,
 			pageIPv4,
 		}
+	case typeVpnL2tp:
+		pages = []string{
+			pageGeneral,
+			pageVpnL2tp,
+			pageVpnL2tpPpp,
+			pageVpnL2tpIpsec,
+			pageIPv4,
+		}
 	}
 	return
 }
@@ -223,6 +231,12 @@ func (s *ConnectionSession) pageToFields(page string) (fields []string) {
 		fields = []string{fieldPppoe}
 	case pagePpp:
 		fields = []string{fieldPpp}
+	case pageVpnL2tp:
+		fields = []string{fieldVpnL2tp}
+	case pageVpnL2tpPpp:
+		fields = []string{fieldVpnL2tpPpp}
+	case pageVpnL2tpIpsec:
+		fields = []string{fieldVpnL2tpIpsec}
 	}
 	return
 }
