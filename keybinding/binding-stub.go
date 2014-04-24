@@ -196,7 +196,7 @@ func getSystemKeyInfo() []ShortcutInfo {
         for i, n := range SystemIdNameMap {
                 if desc, ok := SystemNameDescMap[n]; ok {
                         shortcut := getSystemValue(n, false)
-                        tmp := newShortcutInfo(i, dlib.Tr(desc),
+                        tmp := newShortcutInfo(i, desc,
                                 formatShortcut(shortcut))
                         tmp.index = SystemIdIndexMap[i]
                         systemInfoList = append(systemInfoList, tmp)
@@ -211,7 +211,7 @@ func getMediaKeyInfo() []ShortcutInfo {
         for i, n := range MediaIdNameMap {
                 if desc, ok := MediaNameDescMap[n]; ok {
                         shortcut := mediaKeySettings.GetString(n)
-                        tmp := newShortcutInfo(i, dlib.Tr(desc), shortcut)
+                        tmp := newShortcutInfo(i, desc, shortcut)
                         tmp.index = MediaIdIndexMap[i]
                         mediaInfoList = append(mediaInfoList, tmp)
                 }
@@ -225,7 +225,7 @@ func getWindowKeyInfo() []ShortcutInfo {
         for i, n := range WindowIdNameMap {
                 if desc, ok := WindowNameDescMap[n]; ok {
                         shortcut := getSystemValue(n, false)
-                        tmp := newShortcutInfo(i, dlib.Tr(desc),
+                        tmp := newShortcutInfo(i, desc,
                                 formatShortcut(shortcut))
                         tmp.index = WindowIdIndexMap[i]
                         windowInfoList = append(windowInfoList, tmp)
@@ -240,7 +240,7 @@ func getWorkSpaceKeyInfo() []ShortcutInfo {
         for i, n := range WorkSpaceIdNameMap {
                 if desc, ok := WorkSpaceNameDescMap[n]; ok {
                         shortcut := getSystemValue(n, false)
-                        tmp := newShortcutInfo(i, dlib.Tr(desc),
+                        tmp := newShortcutInfo(i, desc,
                                 formatShortcut(shortcut))
                         tmp.index = WorkSpaceIdIndexMap[i]
                         workSpaceInfoList = append(workSpaceInfoList, tmp)
