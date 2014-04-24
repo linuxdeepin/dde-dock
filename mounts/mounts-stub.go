@@ -32,6 +32,13 @@ const (
         DISK_INFO_DEST = "com.deepin.daemon.DiskMount"
         DISK_INFO_PATH = "/com/deepin/daemon/DiskMount"
         DISK_INFO_IFC  = "com.deepin.daemon.DiskMount"
+
+        MEDIA_HAND_AUTO_MOUNT = "automount"
+        MEDIA_HAND_AUTO_OPEN  = "automount-open"
+)
+
+var (
+        mediaHandSetting = gio.NewSettings("org.gnome.desktop.media-handling")
 )
 
 func (m *Manager) GetDBusInfo() dbus.DBusInfo {
@@ -56,7 +63,9 @@ func (m *Manager) listenSignalChanged() {
         monitor.Connect("mount-added", func(volumeMonitor *gio.VolumeMonitor, mount *gio.Mount) {
                 // Judge whether the property 'mount_and_open' set true
                 // if true, open the device use exec.Command("xdg-open", "device").Run()
-                if mount.CanUnmount() {
+                if mount.CanUnmount() &&
+                        mediaHandSetting.GetBoolean(MEDIA_HAND_AUTO_MOUNT) &&
+                        mediaHandSetting.GetBoolean(MEDIA_HAND_AUTO_OPEN) {
                         uri := mount.GetRoot().GetUri()
                         go exec.Command("/usr/bin/xdg-open", uri).Run()
                 }
@@ -73,7 +82,7 @@ func (m *Manager) listenSignalChanged() {
         })
 
         monitor.Connect("volume-added", func(volumeMonitor *gio.VolumeMonitor, volume *gio.Volume) {
-                if volume.CanEject() {
+                if volume.CanEject() && mediaHandSetting.GetBoolean(MEDIA_HAND_AUTO_MOUNT) {
                         volume.Mount(gio.MountMountFlagsNone, nil, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
                                 _, err := volume.MountFinish(res)
                                 if err != nil {
