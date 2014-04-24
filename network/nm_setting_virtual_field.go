@@ -9,7 +9,7 @@ const (
 	NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME = "vf-vpn-l2tp-ipsec"
 )
 
-func getRealFiledName(name string) (realName string) {
+func getRealFieldName(name string) (realName string) {
 	realName = name
 	switch name {
 	case NM_SETTING_VF_VPN_L2TP_SETTING_NAME:

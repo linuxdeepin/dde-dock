@@ -60,6 +60,8 @@ func NewConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 		s.data = newWirelessConnectionData("", s.CurrentUUID, nil, ApSecNone)
 	case typePppoe:
 		s.data = newPppoeConnectionData("", s.CurrentUUID)
+	case typeVpnL2tp:
+		s.data = newVpnL2tpConnectionData("", s.CurrentUUID)
 	}
 
 	s.updatePropErrors()

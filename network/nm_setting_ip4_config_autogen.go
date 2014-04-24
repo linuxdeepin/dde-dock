@@ -307,90 +307,90 @@ func ensureSettingIp4ConfigMayFailNoEmpty(data _ConnectionData, errs FieldKeyErr
 
 // Getter
 func getSettingIp4ConfigMethod(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_METHOD).(string)
+	value, _ = getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_METHOD).(string)
 	return
 }
 func getSettingIp4ConfigAddresses(data _ConnectionData) (value [][]uint32) {
-	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_ADDRESSES).([][]uint32)
+	value, _ = getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES).([][]uint32)
 	return
 }
 func getSettingIp4ConfigDns(data _ConnectionData) (value []uint32) {
-	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_DNS).([]uint32)
+	value, _ = getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS).([]uint32)
 	return
 }
 func getSettingIp4ConfigDnsSearch(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_DNS_SEARCH).(string)
+	value, _ = getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_SEARCH).(string)
 	return
 }
 func getSettingIp4ConfigRoutes(data _ConnectionData) (value [][]uint32) {
-	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_ROUTES).([][]uint32)
+	value, _ = getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTES).([][]uint32)
 	return
 }
 func getSettingIp4ConfigIgnoreAutoRoutes(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES).(bool)
+	value, _ = getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES).(bool)
 	return
 }
 func getSettingIp4ConfigIgnoreAutoDns(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS).(bool)
+	value, _ = getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS).(bool)
 	return
 }
 func getSettingIp4ConfigDhcpClientId(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID).(string)
+	value, _ = getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID).(string)
 	return
 }
 func getSettingIp4ConfigDhcpSendHostname(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME).(bool)
+	value, _ = getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME).(bool)
 	return
 }
 func getSettingIp4ConfigDhcpHostname(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME).(string)
+	value, _ = getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME).(string)
 	return
 }
 func getSettingIp4ConfigNeverDefault(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_NEVER_DEFAULT).(bool)
+	value, _ = getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_NEVER_DEFAULT).(bool)
 	return
 }
 func getSettingIp4ConfigMayFail(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_MAY_FAIL).(bool)
+	value, _ = getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_MAY_FAIL).(bool)
 	return
 }
 
 // Setter
 func setSettingIp4ConfigMethod(data _ConnectionData, value string) {
-	setSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_METHOD, value)
+	setSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_METHOD, value)
 }
 func setSettingIp4ConfigAddresses(data _ConnectionData, value [][]uint32) {
-	setSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_ADDRESSES, value)
+	setSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES, value)
 }
 func setSettingIp4ConfigDns(data _ConnectionData, value []uint32) {
-	setSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_DNS, value)
+	setSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS, value)
 }
 func setSettingIp4ConfigDnsSearch(data _ConnectionData, value string) {
-	setSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_DNS_SEARCH, value)
+	setSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_SEARCH, value)
 }
 func setSettingIp4ConfigRoutes(data _ConnectionData, value [][]uint32) {
-	setSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_ROUTES, value)
+	setSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTES, value)
 }
 func setSettingIp4ConfigIgnoreAutoRoutes(data _ConnectionData, value bool) {
-	setSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES, value)
+	setSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES, value)
 }
 func setSettingIp4ConfigIgnoreAutoDns(data _ConnectionData, value bool) {
-	setSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS, value)
+	setSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS, value)
 }
 func setSettingIp4ConfigDhcpClientId(data _ConnectionData, value string) {
-	setSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID, value)
+	setSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID, value)
 }
 func setSettingIp4ConfigDhcpSendHostname(data _ConnectionData, value bool) {
-	setSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME, value)
+	setSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME, value)
 }
 func setSettingIp4ConfigDhcpHostname(data _ConnectionData, value string) {
-	setSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME, value)
+	setSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME, value)
 }
 func setSettingIp4ConfigNeverDefault(data _ConnectionData, value bool) {
-	setSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_NEVER_DEFAULT, value)
+	setSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_NEVER_DEFAULT, value)
 }
 func setSettingIp4ConfigMayFail(data _ConnectionData, value bool) {
-	setSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_MAY_FAIL, value)
+	setSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_MAY_FAIL, value)
 }
 
 // JSON Getter
@@ -483,38 +483,38 @@ func setSettingIp4ConfigMayFailJSON(data _ConnectionData, valueJSON string) {
 
 // Remover
 func removeSettingIp4ConfigMethod(data _ConnectionData) {
-	removeSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_METHOD)
+	removeSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_METHOD)
 }
 func removeSettingIp4ConfigAddresses(data _ConnectionData) {
-	removeSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_ADDRESSES)
+	removeSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES)
 }
 func removeSettingIp4ConfigDns(data _ConnectionData) {
-	removeSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_DNS)
+	removeSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS)
 }
 func removeSettingIp4ConfigDnsSearch(data _ConnectionData) {
-	removeSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_DNS_SEARCH)
+	removeSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_SEARCH)
 }
 func removeSettingIp4ConfigRoutes(data _ConnectionData) {
-	removeSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_ROUTES)
+	removeSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTES)
 }
 func removeSettingIp4ConfigIgnoreAutoRoutes(data _ConnectionData) {
-	removeSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES)
+	removeSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES)
 }
 func removeSettingIp4ConfigIgnoreAutoDns(data _ConnectionData) {
-	removeSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS)
+	removeSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS)
 }
 func removeSettingIp4ConfigDhcpClientId(data _ConnectionData) {
-	removeSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID)
+	removeSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID)
 }
 func removeSettingIp4ConfigDhcpSendHostname(data _ConnectionData) {
-	removeSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME)
+	removeSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME)
 }
 func removeSettingIp4ConfigDhcpHostname(data _ConnectionData) {
-	removeSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME)
+	removeSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME)
 }
 func removeSettingIp4ConfigNeverDefault(data _ConnectionData) {
-	removeSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_NEVER_DEFAULT)
+	removeSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_NEVER_DEFAULT)
 }
 func removeSettingIp4ConfigMayFail(data _ConnectionData) {
-	removeSettingKey(data, getRealFiledName(NM_SETTING_IP4_CONFIG_SETTING_NAME), NM_SETTING_IP4_CONFIG_MAY_FAIL)
+	removeSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_MAY_FAIL)
 }

@@ -52,6 +52,11 @@ const (
 	NM_SETTING_VK_PPP_LCP_ECHO_ENABLE = "vk-lcp-echo-enable"
 )
 
+// vpn-l2tp
+const (
+	NM_SETTING_VK_VPN_L2TP_LCP_ECHO_ENABLE = "vk-lcp-echo-enable"
+)
+
 // wireless security
 const (
 	NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT = "vk-key-mgmt"
@@ -321,6 +326,12 @@ func getSettingVkPppLcpEchoEnable(data _ConnectionData) (value bool) {
 	}
 	return false
 }
+func getSettingVkVpnL2tpLcpEchoEnable(data _ConnectionData) (value bool) {
+	if isSettingVpnL2tpKeyLcpEchoFailureExists(data) && isSettingVpnL2tpKeyLcpEchoIntervalExists(data) {
+		return true
+	}
+	return false
+}
 func getSettingVkWirelessSecurityKeyMgmt(data _ConnectionData) (value string) {
 	if !isSettingFieldExists(data, fieldWirelessSecurity) {
 		value = "none"
@@ -475,6 +486,15 @@ func logicSetSettingVkPppLcpEchoEnable(data _ConnectionData, value bool) {
 	} else {
 		removeSettingPppLcpEchoFailure(data)
 		removeSettingPppLcpEchoInterval(data)
+	}
+}
+func logicSetSettingVkVpnL2tpLcpEchoEnable(data _ConnectionData, value bool) {
+	if value {
+		setSettingVpnL2tpKeyLcpEchoFailure(data, 5)
+		setSettingVpnL2tpKeyLcpEchoInterval(data, 30)
+	} else {
+		removeSettingVpnL2tpKeyLcpEchoFailure(data)
+		removeSettingVpnL2tpKeyLcpEchoInterval(data)
 	}
 }
 func logicSetSettingVkWirelessSecurityKeyMgmt(data _ConnectionData, value string) {

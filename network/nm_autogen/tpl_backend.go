@@ -112,7 +112,7 @@ func is{{$key.Name | ToKeyFuncBaseName}}Exists(data _ConnectionData) bool {
 const tplGetter = `
 // Getter{{$fieldName := .FieldName}}{{range $index, $key := .Keys}}{{if $key.UsedByBackEnd}}
 func get{{$key.Name | ToKeyFuncBaseName}}(data _ConnectionData) (value {{$key.Type | ToKeyTypeRealData}}) {
-	value, _ = getSettingKey(data, getRealFiledName({{$fieldName}}), {{$key.Name}}).({{$key.Type | ToKeyTypeRealData}})
+	value, _ = getSettingKey(data, {{$fieldName}}, {{$key.Name}}).({{$key.Type | ToKeyTypeRealData}})
 	return
 }{{end}}{{end}}
 `
@@ -121,7 +121,7 @@ func get{{$key.Name | ToKeyFuncBaseName}}(data _ConnectionData) (value {{$key.Ty
 const tplSetter = `
 // Setter{{$fieldName := .FieldName}}{{range $index, $key := .Keys}}{{if $key.UsedByBackEnd}}
 func set{{$key.Name | ToKeyFuncBaseName}}(data _ConnectionData, value {{$key.Type | ToKeyTypeRealData}}) {
-	setSettingKey(data, getRealFiledName({{$fieldName}}), {{$key.Name}}, value)
+	setSettingKey(data, {{$fieldName}}, {{$key.Name}}, value)
 }{{end}}{{end}}
 `
 
@@ -146,7 +146,7 @@ func set{{$key.Name | ToKeyFuncBaseName}}JSON(data _ConnectionData, valueJSON st
 const tplRemover = `
 // Remover{{$fieldName := .FieldName}}{{range $index, $key := .Keys}}{{if $key.UsedByBackEnd}}
 func remove{{$key.Name | ToKeyFuncBaseName}}(data _ConnectionData) {
-	removeSettingKey(data, getRealFiledName({{$fieldName}}), {{$key.Name}})
+	removeSettingKey(data, {{$fieldName}}, {{$key.Name}})
 }{{end}}{{end}}
 `
 

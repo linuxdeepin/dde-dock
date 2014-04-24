@@ -49,12 +49,14 @@ func isJSONKeyValueMeansToDeleteKey(valueJSON string, t ktype) (doDelete bool) {
 }
 
 func getSettingKeyJSON(data _ConnectionData, field, key string, t ktype) (valueJSON string) {
+	_filed := field
+	field = getRealFieldName(field) // get real field name
 	var value interface{}
 	if isSettingKeyExists(data, field, key) {
 		value = getSettingKey(data, field, key)
 	} else {
 		// return default value if the key is not exists
-		valueJSON = getSettingKeyDefaultValueJSON(field, key)
+		valueJSON = getSettingKeyDefaultValueJSON(_filed, key)
 		return
 	}
 
@@ -72,6 +74,7 @@ func getSettingKeyJSON(data _ConnectionData, field, key string, t ktype) (valueJ
 }
 
 func setSettingKeyJSON(data _ConnectionData, field, key, valueJSON string, t ktype) {
+	field = getRealFieldName(field) // get real field name
 	if len(valueJSON) == 0 {
 		Logger.Error("setSettingKeyJSON: valueJSON is empty")
 		return
@@ -99,6 +102,7 @@ func setSettingKeyJSON(data _ConnectionData, field, key, valueJSON string, t kty
 }
 
 func getSettingKey(data _ConnectionData, field, key string) (value interface{}) {
+	field = getRealFieldName(field) // get real field name
 	fieldData, ok := data[field]
 	if !ok {
 		Logger.Errorf("invalid field: data[%s]", field)
@@ -117,6 +121,7 @@ func getSettingKey(data _ConnectionData, field, key string) (value interface{}) 
 }
 
 func setSettingKey(data _ConnectionData, field, key string, value interface{}) {
+	field = getRealFieldName(field) // get real field name
 	var fieldData map[string]dbus.Variant
 	fieldData, ok := data[field]
 	if !ok {
@@ -131,6 +136,7 @@ func setSettingKey(data _ConnectionData, field, key string, value interface{}) {
 }
 
 func removeSettingKey(data _ConnectionData, field, key string) {
+	field = getRealFieldName(field) // get real field name
 	fieldData, ok := data[field]
 	if !ok {
 		return
@@ -145,6 +151,7 @@ func removeSettingKey(data _ConnectionData, field, key string) {
 }
 
 func removeSettingKeyBut(data _ConnectionData, field string, keys ...string) {
+	field = getRealFieldName(field) // get real field name
 	fieldData, ok := data[field]
 	if !ok {
 		return
@@ -158,6 +165,7 @@ func removeSettingKeyBut(data _ConnectionData, field string, keys ...string) {
 }
 
 func isSettingKeyExists(data _ConnectionData, field, key string) bool {
+	field = getRealFieldName(field) // get real field name
 	fieldData, ok := data[field]
 	if !ok {
 		return false
@@ -172,6 +180,7 @@ func isSettingKeyExists(data _ConnectionData, field, key string) bool {
 }
 
 func addSettingField(data _ConnectionData, field string) {
+	field = getRealFieldName(field) // get real field name
 	var fieldData map[string]dbus.Variant
 	fieldData, ok := data[field]
 	if !ok {
@@ -182,6 +191,7 @@ func addSettingField(data _ConnectionData, field string) {
 }
 
 func removeSettingField(data _ConnectionData, field string) {
+	field = getRealFieldName(field) // get real field name
 	_, ok := data[field]
 	if ok {
 		// remove field if exists
@@ -190,6 +200,7 @@ func removeSettingField(data _ConnectionData, field string) {
 }
 
 func isSettingFieldExists(data _ConnectionData, field string) bool {
+	field = getRealFieldName(field) // get real field name
 	_, ok := data[field]
 	return ok
 }

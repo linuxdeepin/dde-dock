@@ -351,118 +351,118 @@ func ensureSettingVpnL2tpKeyLcpEchoIntervalNoEmpty(data _ConnectionData, errs Fi
 
 // Getter
 func getSettingVpnL2tpKeyRefuseEap(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_REFUSE_EAP).(bool)
+	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_REFUSE_EAP).(bool)
 	return
 }
 func getSettingVpnL2tpKeyRefusePap(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_REFUSE_PAP).(bool)
+	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_REFUSE_PAP).(bool)
 	return
 }
 func getSettingVpnL2tpKeyRefuseChap(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_REFUSE_CHAP).(bool)
+	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_REFUSE_CHAP).(bool)
 	return
 }
 func getSettingVpnL2tpKeyRefuseMschap(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_REFUSE_MSCHAP).(bool)
+	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_REFUSE_MSCHAP).(bool)
 	return
 }
 func getSettingVpnL2tpKeyRefuseMschapv2(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_REFUSE_MSCHAPV2).(bool)
+	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_REFUSE_MSCHAPV2).(bool)
 	return
 }
 func getSettingVpnL2tpKeyRequireMppe(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE).(bool)
+	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE).(bool)
 	return
 }
 func getSettingVpnL2tpKeyRequireMppe40(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_40).(bool)
+	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_40).(bool)
 	return
 }
 func getSettingVpnL2tpKeyRequireMppe128(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_128).(bool)
+	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_128).(bool)
 	return
 }
 func getSettingVpnL2tpKeyMppeStateful(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_MPPE_STATEFUL).(bool)
+	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_MPPE_STATEFUL).(bool)
 	return
 }
 func getSettingVpnL2tpKeyNobsdcomp(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_NOBSDCOMP).(bool)
+	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_NOBSDCOMP).(bool)
 	return
 }
 func getSettingVpnL2tpKeyNodeflate(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_NODEFLATE).(bool)
+	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_NODEFLATE).(bool)
 	return
 }
 func getSettingVpnL2tpKeyNoVjComp(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_NO_VJ_COMP).(bool)
+	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_NO_VJ_COMP).(bool)
 	return
 }
 func getSettingVpnL2tpKeyNoPcomp(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_NO_PCOMP).(bool)
+	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_NO_PCOMP).(bool)
 	return
 }
 func getSettingVpnL2tpKeyNoAccomp(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_NO_ACCOMP).(bool)
+	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_NO_ACCOMP).(bool)
 	return
 }
 func getSettingVpnL2tpKeyLcpEchoFailure(data _ConnectionData) (value uint32) {
-	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_FAILURE).(uint32)
+	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_FAILURE).(uint32)
 	return
 }
 func getSettingVpnL2tpKeyLcpEchoInterval(data _ConnectionData) (value uint32) {
-	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_INTERVAL).(uint32)
+	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_INTERVAL).(uint32)
 	return
 }
 
 // Setter
 func setSettingVpnL2tpKeyRefuseEap(data _ConnectionData, value bool) {
-	setSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_REFUSE_EAP, value)
+	setSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_REFUSE_EAP, value)
 }
 func setSettingVpnL2tpKeyRefusePap(data _ConnectionData, value bool) {
-	setSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_REFUSE_PAP, value)
+	setSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_REFUSE_PAP, value)
 }
 func setSettingVpnL2tpKeyRefuseChap(data _ConnectionData, value bool) {
-	setSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_REFUSE_CHAP, value)
+	setSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_REFUSE_CHAP, value)
 }
 func setSettingVpnL2tpKeyRefuseMschap(data _ConnectionData, value bool) {
-	setSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_REFUSE_MSCHAP, value)
+	setSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_REFUSE_MSCHAP, value)
 }
 func setSettingVpnL2tpKeyRefuseMschapv2(data _ConnectionData, value bool) {
-	setSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_REFUSE_MSCHAPV2, value)
+	setSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_REFUSE_MSCHAPV2, value)
 }
 func setSettingVpnL2tpKeyRequireMppe(data _ConnectionData, value bool) {
-	setSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE, value)
+	setSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE, value)
 }
 func setSettingVpnL2tpKeyRequireMppe40(data _ConnectionData, value bool) {
-	setSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_40, value)
+	setSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_40, value)
 }
 func setSettingVpnL2tpKeyRequireMppe128(data _ConnectionData, value bool) {
-	setSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_128, value)
+	setSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_128, value)
 }
 func setSettingVpnL2tpKeyMppeStateful(data _ConnectionData, value bool) {
-	setSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_MPPE_STATEFUL, value)
+	setSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_MPPE_STATEFUL, value)
 }
 func setSettingVpnL2tpKeyNobsdcomp(data _ConnectionData, value bool) {
-	setSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_NOBSDCOMP, value)
+	setSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_NOBSDCOMP, value)
 }
 func setSettingVpnL2tpKeyNodeflate(data _ConnectionData, value bool) {
-	setSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_NODEFLATE, value)
+	setSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_NODEFLATE, value)
 }
 func setSettingVpnL2tpKeyNoVjComp(data _ConnectionData, value bool) {
-	setSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_NO_VJ_COMP, value)
+	setSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_NO_VJ_COMP, value)
 }
 func setSettingVpnL2tpKeyNoPcomp(data _ConnectionData, value bool) {
-	setSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_NO_PCOMP, value)
+	setSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_NO_PCOMP, value)
 }
 func setSettingVpnL2tpKeyNoAccomp(data _ConnectionData, value bool) {
-	setSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_NO_ACCOMP, value)
+	setSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_NO_ACCOMP, value)
 }
 func setSettingVpnL2tpKeyLcpEchoFailure(data _ConnectionData, value uint32) {
-	setSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_FAILURE, value)
+	setSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_FAILURE, value)
 }
 func setSettingVpnL2tpKeyLcpEchoInterval(data _ConnectionData, value uint32) {
-	setSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_INTERVAL, value)
+	setSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_INTERVAL, value)
 }
 
 // JSON Getter
@@ -583,50 +583,50 @@ func setSettingVpnL2tpKeyLcpEchoIntervalJSON(data _ConnectionData, valueJSON str
 
 // Remover
 func removeSettingVpnL2tpKeyRefuseEap(data _ConnectionData) {
-	removeSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_REFUSE_EAP)
+	removeSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_REFUSE_EAP)
 }
 func removeSettingVpnL2tpKeyRefusePap(data _ConnectionData) {
-	removeSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_REFUSE_PAP)
+	removeSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_REFUSE_PAP)
 }
 func removeSettingVpnL2tpKeyRefuseChap(data _ConnectionData) {
-	removeSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_REFUSE_CHAP)
+	removeSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_REFUSE_CHAP)
 }
 func removeSettingVpnL2tpKeyRefuseMschap(data _ConnectionData) {
-	removeSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_REFUSE_MSCHAP)
+	removeSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_REFUSE_MSCHAP)
 }
 func removeSettingVpnL2tpKeyRefuseMschapv2(data _ConnectionData) {
-	removeSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_REFUSE_MSCHAPV2)
+	removeSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_REFUSE_MSCHAPV2)
 }
 func removeSettingVpnL2tpKeyRequireMppe(data _ConnectionData) {
-	removeSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE)
+	removeSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE)
 }
 func removeSettingVpnL2tpKeyRequireMppe40(data _ConnectionData) {
-	removeSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_40)
+	removeSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_40)
 }
 func removeSettingVpnL2tpKeyRequireMppe128(data _ConnectionData) {
-	removeSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_128)
+	removeSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_128)
 }
 func removeSettingVpnL2tpKeyMppeStateful(data _ConnectionData) {
-	removeSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_MPPE_STATEFUL)
+	removeSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_MPPE_STATEFUL)
 }
 func removeSettingVpnL2tpKeyNobsdcomp(data _ConnectionData) {
-	removeSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_NOBSDCOMP)
+	removeSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_NOBSDCOMP)
 }
 func removeSettingVpnL2tpKeyNodeflate(data _ConnectionData) {
-	removeSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_NODEFLATE)
+	removeSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_NODEFLATE)
 }
 func removeSettingVpnL2tpKeyNoVjComp(data _ConnectionData) {
-	removeSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_NO_VJ_COMP)
+	removeSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_NO_VJ_COMP)
 }
 func removeSettingVpnL2tpKeyNoPcomp(data _ConnectionData) {
-	removeSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_NO_PCOMP)
+	removeSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_NO_PCOMP)
 }
 func removeSettingVpnL2tpKeyNoAccomp(data _ConnectionData) {
-	removeSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_NO_ACCOMP)
+	removeSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_NO_ACCOMP)
 }
 func removeSettingVpnL2tpKeyLcpEchoFailure(data _ConnectionData) {
-	removeSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_FAILURE)
+	removeSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_FAILURE)
 }
 func removeSettingVpnL2tpKeyLcpEchoInterval(data _ConnectionData) {
-	removeSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_INTERVAL)
+	removeSettingKey(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_INTERVAL)
 }

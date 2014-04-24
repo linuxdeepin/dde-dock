@@ -147,34 +147,34 @@ func ensureSettingVpnL2tpKeyIpsecPskNoEmpty(data _ConnectionData, errs FieldKeyE
 
 // Getter
 func getSettingVpnL2tpKeyIpsecEnable(data _ConnectionData) (value bool) {
-	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_IPSEC_ENABLE).(bool)
+	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_ENABLE).(bool)
 	return
 }
 func getSettingVpnL2tpKeyIpsecGatewayId(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID).(string)
+	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID).(string)
 	return
 }
 func getSettingVpnL2tpKeyIpsecGroupName(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_IPSEC_GROUP_NAME).(string)
+	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GROUP_NAME).(string)
 	return
 }
 func getSettingVpnL2tpKeyIpsecPsk(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_IPSEC_PSK).(string)
+	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_PSK).(string)
 	return
 }
 
 // Setter
 func setSettingVpnL2tpKeyIpsecEnable(data _ConnectionData, value bool) {
-	setSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_IPSEC_ENABLE, value)
+	setSettingKey(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_ENABLE, value)
 }
 func setSettingVpnL2tpKeyIpsecGatewayId(data _ConnectionData, value string) {
-	setSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID, value)
+	setSettingKey(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID, value)
 }
 func setSettingVpnL2tpKeyIpsecGroupName(data _ConnectionData, value string) {
-	setSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_IPSEC_GROUP_NAME, value)
+	setSettingKey(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GROUP_NAME, value)
 }
 func setSettingVpnL2tpKeyIpsecPsk(data _ConnectionData, value string) {
-	setSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_IPSEC_PSK, value)
+	setSettingKey(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_PSK, value)
 }
 
 // JSON Getter
@@ -211,14 +211,14 @@ func setSettingVpnL2tpKeyIpsecPskJSON(data _ConnectionData, valueJSON string) {
 
 // Remover
 func removeSettingVpnL2tpKeyIpsecEnable(data _ConnectionData) {
-	removeSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_IPSEC_ENABLE)
+	removeSettingKey(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_ENABLE)
 }
 func removeSettingVpnL2tpKeyIpsecGatewayId(data _ConnectionData) {
-	removeSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID)
+	removeSettingKey(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID)
 }
 func removeSettingVpnL2tpKeyIpsecGroupName(data _ConnectionData) {
-	removeSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_IPSEC_GROUP_NAME)
+	removeSettingKey(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GROUP_NAME)
 }
 func removeSettingVpnL2tpKeyIpsecPsk(data _ConnectionData) {
-	removeSettingKey(data, getRealFiledName(NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME), NM_SETTING_VPN_L2TP_KEY_IPSEC_PSK)
+	removeSettingKey(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_PSK)
 }

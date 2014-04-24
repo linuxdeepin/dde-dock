@@ -27,6 +27,7 @@ var virtualKeys = []VirtualKey{
 	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ROUTES_NEXTHOP, ktypeString, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTES, false, false},
 	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ROUTES_METRIC, ktypeUint32, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTES, false, false},
 	VirtualKey{NM_SETTING_VK_PPP_LCP_ECHO_ENABLE, ktypeBoolean, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_FAILURE, true, false},
+	VirtualKey{NM_SETTING_VK_VPN_L2TP_LCP_ECHO_ENABLE, ktypeBoolean, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_FAILURE, true, false},
 	VirtualKey{NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT, ktypeString, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT, true, false},
 }
 
@@ -95,6 +96,11 @@ func generalGetVirtualKeyJSON(data _ConnectionData, field, key string) (valueJSO
 		switch key {
 		case NM_SETTING_VK_PPP_LCP_ECHO_ENABLE:
 			return getSettingVkPppLcpEchoEnableJSON(data)
+		}
+	case NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME:
+		switch key {
+		case NM_SETTING_VK_VPN_L2TP_LCP_ECHO_ENABLE:
+			return getSettingVkVpnL2tpLcpEchoEnableJSON(data)
 		}
 	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
 		switch key {
@@ -194,6 +200,12 @@ func generalSetVirtualKeyJSON(data _ConnectionData, field, key string, valueJSON
 		switch key {
 		case NM_SETTING_VK_PPP_LCP_ECHO_ENABLE:
 			logicSetSettingVkPppLcpEchoEnableJSON(data, valueJSON)
+			return
+		}
+	case NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME:
+		switch key {
+		case NM_SETTING_VK_VPN_L2TP_LCP_ECHO_ENABLE:
+			logicSetSettingVkVpnL2tpLcpEchoEnableJSON(data, valueJSON)
 			return
 		}
 	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
@@ -304,6 +316,10 @@ func getSettingVkPppLcpEchoEnableJSON(data _ConnectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkPppLcpEchoEnable(data))
 	return
 }
+func getSettingVkVpnL2tpLcpEchoEnableJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkVpnL2tpLcpEchoEnable(data))
+	return
+}
 func getSettingVkWirelessSecurityKeyMgmtJSON(data _ConnectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkWirelessSecurityKeyMgmt(data))
 	return
@@ -405,6 +421,10 @@ func logicSetSettingVkIp6ConfigRoutesMetricJSON(data _ConnectionData, valueJSON 
 func logicSetSettingVkPppLcpEchoEnableJSON(data _ConnectionData, valueJSON string) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	logicSetSettingVkPppLcpEchoEnable(data, value)
+}
+func logicSetSettingVkVpnL2tpLcpEchoEnableJSON(data _ConnectionData, valueJSON string) {
+	value, _ := jsonToKeyValueBoolean(valueJSON)
+	logicSetSettingVkVpnL2tpLcpEchoEnable(data, value)
 }
 func logicSetSettingVkWirelessSecurityKeyMgmtJSON(data _ConnectionData, valueJSON string) {
 	value, _ := jsonToKeyValueString(valueJSON)
