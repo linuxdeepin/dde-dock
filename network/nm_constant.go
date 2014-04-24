@@ -3,15 +3,20 @@ package main
 const (
 	typeWired    = NM_SETTING_WIRED_SETTING_NAME
 	typeWireless = NM_SETTING_WIRELESS_SETTING_NAME
-	typeVpn      = NM_SETTING_VPN_SETTING_NAME
 	typePppoe    = NM_SETTING_PPPOE_SETTING_NAME
+	typeVpn      = NM_SETTING_VPN_SETTING_NAME
+)
+
+// alias types
+const (
+	typeVpnL2tp = typeVpn + "-l2tp"
 )
 
 var supportedConnectionTypes = []string{
 	// typeWired, // don't support multiple wired connections since now
 	typeWireless,
 	typePppoe,
-	// typeVpn, // TODO
+	typeVpnL2tp,
 }
 
 const (
@@ -19,11 +24,15 @@ const (
 	fieldConnection       = NM_SETTING_CONNECTION_SETTING_NAME
 	fieldIpv4             = NM_SETTING_IP4_CONFIG_SETTING_NAME
 	fieldIpv6             = NM_SETTING_IP6_CONFIG_SETTING_NAME
+	fieldPppoe            = NM_SETTING_PPPOE_SETTING_NAME
+	fieldPpp              = NM_SETTING_PPP_SETTING_NAME
+	fieldVpn              = NM_SETTING_VPN_SETTING_NAME
+	fieldVpnL2tp          = NM_SETTING_VF_VPN_L2TP_SETTING_NAME
+	fieldVpnL2tpPpp       = NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME
+	fieldVpnL2tpIpsec     = NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME
 	fieldWired            = NM_SETTING_WIRED_SETTING_NAME
 	fieldWireless         = NM_SETTING_WIRELESS_SETTING_NAME
 	fieldWirelessSecurity = NM_SETTING_WIRELESS_SECURITY_SETTING_NAME
-	fieldPppoe            = NM_SETTING_PPPOE_SETTING_NAME
-	fieldPpp              = NM_SETTING_PPP_SETTING_NAME
 )
 
 // page is a wrapper of field for easy to configure

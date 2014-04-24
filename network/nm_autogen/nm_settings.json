@@ -124,6 +124,26 @@
     ]
 },
 {
+    "FieldName":"NM_SETTING_VPN_SETTING_NAME",
+    "FieldValue":"vpn",
+    "Keys":[
+	    {"Name":"NM_SETTING_VPN_SERVICE_TYPE", "Value":"service-type", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_USER_NAME", "Value":"user-name", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_DATA", "Value":"data", "Type":"ktypeDictStringString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_SECRETS", "Value":"secrets", "Type":"ktypeDictStringString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"}
+    ]
+},
+{
+    "FieldName":"NM_SETTING_VF_VPN_L2TP_SETTING_NAME",
+    "FieldValue":"vf-vpn-l2tp",
+    "Keys":[
+	    {"Name":"NM_SETTING_L2TP_KEY_GATEWAY", "Value":"gateway", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_L2TP_KEY_USER", "Value":"user", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_L2TP_KEY_PASSWORD", "Value":"password", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_L2TP_KEY_DOMAIN", "Value":"domain", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"}
+    ]
+},
+{
     "FieldName":"NM_SETTING_WIRED_SETTING_NAME",
     "FieldValue":"802-3-ethernet",
     "Keys":[

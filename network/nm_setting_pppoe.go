@@ -29,7 +29,6 @@ func newPppoeConnectionData(id, uuid string) (data _ConnectionData) {
 	addSettingField(data, fieldPppoe)
 
 	addSettingField(data, fieldPpp)
-
 	logicSetSettingVkPppLcpEchoEnable(data, true)
 
 	addSettingField(data, fieldIpv4)
