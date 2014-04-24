@@ -62,6 +62,8 @@ func NewConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 		s.data = newPppoeConnectionData("", s.CurrentUUID)
 	case typeVpnL2tp:
 		s.data = newVpnL2tpConnectionData("", s.CurrentUUID)
+	case typeVpnOpenconnect:
+		s.data = newVpnOpenconnectConnectionData("", s.CurrentUUID)
 	}
 
 	s.updatePropErrors()
@@ -200,6 +202,13 @@ func (s *ConnectionSession) ListPages() (pages []string) {
 			pageVpnL2tpIpsec,
 			pageIPv4,
 		}
+	case typeVpnOpenconnect:
+		pages = []string{
+			pageGeneral,
+			pageVpnOpenconnect,
+			pageIPv4,
+			pageIPv6,
+		}
 	}
 	return
 }
@@ -239,6 +248,8 @@ func (s *ConnectionSession) pageToFields(page string) (fields []string) {
 		fields = []string{fieldVpnL2tpPpp}
 	case pageVpnL2tpIpsec:
 		fields = []string{fieldVpnL2tpIpsec}
+	case pageVpnOpenconnect:
+		fields = []string{fieldVpnOpenconnect}
 	}
 	return
 }

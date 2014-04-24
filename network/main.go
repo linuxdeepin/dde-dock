@@ -31,6 +31,9 @@ func main() {
 		os.Exit(1)
 	}
 
+	// TODO test panic
+	// dbus.MakeVariant(12)
+
 	// initialize manager after configuring dbus
 	manager.initManager()
 

@@ -6,8 +6,9 @@
     {"Ignore":false, "Name": "ipv6", "DisplayName": "IPv6", "RelatedFields": ["NM_SETTING_IP6_CONFIG_SETTING_NAME"]},
     {"Ignore":false, "Name": "pppoe", "DisplayName": "PPPoE", "RelatedFields": ["NM_SETTING_PPPOE_SETTING_NAME"]},
     {"Ignore":false, "Name": "ppp", "DisplayName": "PPP", "RelatedFields": ["NM_SETTING_PPP_SETTING_NAME"]},
-    {"Ignore":false, "Name": "vpn-l2tp", "DisplayName": "L2TP", "RelatedFields": ["NM_SETTING_VF_VPN_L2TP_SETTING_NAME"]},
+    {"Ignore":false, "Name": "vpn-l2tp", "DisplayName": "VPN", "RelatedFields": ["NM_SETTING_VF_VPN_L2TP_SETTING_NAME"]},
     {"Ignore":false, "Name": "vpn-l2tp-ipsec", "DisplayName": "IPsec", "RelatedFields": ["NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME"]},
     {"Ignore":false, "Name": "vpn-l2tp-ppp", "DisplayName": "PPP", "RelatedFields": ["NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME"]},
+    {"Ignore":false, "Name": "vpn-openconnect", "DisplayName": "VPN", "RelatedFields": ["NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME"]},
     {"Ignore":false, "Name": "security", "DisplayName": "Security", "RelatedFields": ["NM_SETTING_WIRELESS_SECURITY_SETTING_NAME","NM_SETTING_802_1X_SETTING_NAME"]}
 ]
