@@ -1,42 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-  <enum id='com.deepin.dde.keyboard.BellMode'>
-    <value nick='on' value='0'/>
-    <value nick='off' value='1'/>
-    <value nick='custom' value='2'/>
-  </enum>
-  <enum id='com.deepin.dde.keyboard.NumLockState'>
-    <value nick='unknown' value='0'/>
-    <value nick='on' value='1'/>
-    <value nick='off' value='2'/>
-  </enum>
-  <enum id='com.deepin.dde.keyboard.InputSourcesSwitcher'>
-    <value nick='off' value='0'/>
-    <value nick='shift-l' value='1'/>
-    <value nick='alt-l' value='2'/>
-    <value nick='ctrl-l' value='3'/>
-    <value nick='shift-r' value='4'/>
-    <value nick='alt-r' value='5'/>
-    <value nick='ctrl-r' value='6'/>
-    <value nick='alt-shift-l' value='7'/>
-    <value nick='alt-shift-r' value='8'/>
-    <value nick='ctrl-shift-l' value='9'/>
-    <value nick='ctrl-shift-r' value='10'/>
-    <value nick='shift-l-shift-r' value='11'/>
-    <value nick='alt-l-alt-r' value='12'/>
-    <value nick='ctrl-l-ctrl-r' value='13'/>
-    <value nick='alt-shift' value='14'/>
-    <value nick='ctrl-shift' value='15'/>
-    <value nick='alt-ctrl' value='16'/>
-    <value nick='caps' value='17'/>
-    <value nick='shift-caps' value='18'/>
-    <value nick='alt-caps' value='19'/>
-    <value nick='ctrl-caps' value='20'/>
-  </enum>
-
     <schema path="/com/deepin/dde/keyboard/" id="com.deepin.dde.keyboard">
     <key type="as" name="user-layout-list">
-        <default>[]</default>
+        <default>['us;']</default>
         <summary>User Add Layout List</summary>
         <description>User Add Layout List</description>
     </key>
@@ -64,37 +30,8 @@
     <key type="i" name="click-volume">
       <default>0</default>
     </key>
-    <key name="bell-mode" enum="com.deepin.dde.keyboard.BellMode">
-      <default>'on'</default>
-      <description>Possible values are "on", "off", and "custom".</description>
-    </key>
-    <key type="i" name="bell-pitch">
-      <default>400</default>
-    </key>
-    <key type="i" name="bell-duration">
-      <default>100</default>
-    </key>
-    <key type="s" name="bell-custom-file">
-      <default>''</default>
-      <summary>Keyboard Bell Custom Filename</summary>
-      <description>File name of the bell sound to be played.</description>
-    </key>
     <key type="i" name="cursor-blink-time">
       <default>1200</default>
     </key>
-    <key type="b" name="remember-numlock-state">
-      <default>true</default>
-      <summary>Remember NumLock state</summary>
-      <description>When set to true, GNOME will remember the state of the NumLock LED between sessions.</description>
-    </key>
-    <key name="numlock-state" enum="com.deepin.dde.keyboard.NumLockState">
-      <default>'unknown'</default>
-      <summary>NumLock state</summary>
-      <description>The remembered state of the NumLock LED.</description>
-    </key>
-    <key name="input-sources-switcher" enum="com.deepin.dde.keyboard.InputSourcesSwitcher">
-      <default>'off'</default>
-      <summary>Modifiers-only input sources switcher shortcut</summary>
-    </key>
-  </schema>
+    </schema>
 </schemalist>
