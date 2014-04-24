@@ -1,8 +1,10 @@
 package main
 
-// #define NM_DBUS_SERVICE_VPNC    "org.freedesktop.NetworkManager.vpnc"
-// #define NM_DBUS_INTERFACE_VPNC  "org.freedesktop.NetworkManager.vpnc"
-// #define NM_DBUS_PATH_VPNC       "/org/freedesktop/NetworkManager/vpnc"
+const (
+	NM_DBUS_SERVICE_VPNC   = "org.freedesktop.NetworkManager.vpnc"
+	NM_DBUS_INTERFACE_VPNC = "org.freedesktop.NetworkManager.vpnc"
+	NM_DBUS_PATH_VPNC      = "/org/freedesktop/NetworkManager/vpnc"
+)
 
 // #define NM_VPNC_KEY_GATEWAY "IPSec gateway"
 // #define NM_VPNC_KEY_ID "IPSec ID"
@@ -47,7 +49,7 @@ package main
 // #define NM_VPNC_VENDOR_CISCO     "cisco"
 // #define NM_VPNC_VENDOR_NETSCREEN "netscreen"
 
-// vpn key description
+// vpn key descriptions
 // static ValidProperty valid_properties[] = {
 // 	{ NM_VPNC_KEY_GATEWAY,               ITEM_TYPE_STRING, 0, 0 },
 // 	{ NM_VPNC_KEY_ID,                    ITEM_TYPE_STRING, 0, 0 },

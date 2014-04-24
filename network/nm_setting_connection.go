@@ -83,6 +83,8 @@ const (
 func getSettingConnectionAvailableKeys(data _ConnectionData) (keys []string) {
 	keys = appendAvailableKeys(keys, fieldConnection, NM_SETTING_CONNECTION_ID)
 	keys = appendAvailableKeys(keys, fieldConnection, NM_SETTING_CONNECTION_PERMISSIONS)
+
+	// auto-connect only available for target connection types
 	switch getSettingConnectionType(data) {
 	case typeWired:
 		keys = appendAvailableKeys(keys, fieldConnection, NM_SETTING_CONNECTION_AUTOCONNECT)

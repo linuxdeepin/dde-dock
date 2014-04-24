@@ -41,7 +41,7 @@ const (
 	NM_SETTING_VPN_L2TP_KEY_IPSEC_PSK         = "ipsec-psk"
 )
 
-// vpn key description
+// vpn key descriptions
 // sta_VPNtic ValidProperty valid_properties[] = {
 // 	{ NM_L2TP_KEY_GATEWAY,           G_TYPE_STRING, TRUE },
 // 	{ NM_L2TP_KEY_USER,              G_TYPE_STRING, FALSE },
@@ -87,7 +87,6 @@ func newVpnL2tpConnectionData(id, uuid string) (data _ConnectionData) {
 	return
 }
 
-// TODO
 // vpt-l2tp
 func getSettingVpnL2tpAvailableKeys(data _ConnectionData) (keys []string) {
 	keys = appendAvailableKeys(keys, fieldVpnL2tp, NM_SETTING_VPN_L2TP_KEY_GATEWAY)
@@ -95,7 +94,6 @@ func getSettingVpnL2tpAvailableKeys(data _ConnectionData) (keys []string) {
 	keys = appendAvailableKeys(keys, fieldVpnL2tp, NM_SETTING_VPN_L2TP_KEY_PASSWORD)
 	keys = appendAvailableKeys(keys, fieldVpnL2tp, NM_SETTING_VPN_L2TP_KEY_PASSWORD_FLAG)
 	keys = appendAvailableKeys(keys, fieldVpnL2tp, NM_SETTING_VPN_L2TP_KEY_DOMAIN)
-	Logger.Debug("getSettingVpnL2tpAvailableKeys", keys) // TODO test
 	return
 }
 func getSettingVpnL2tpAvailableValues(data _ConnectionData, key string) (values []string, customizable bool) {

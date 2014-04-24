@@ -13,6 +13,34 @@ func pageGeneralGetId(con map[string]map[string]dbus.Variant) string {
 	return con[fieldConnection]["id"].Value().(string)
 }
 
+func generalGetConnectionType(data _ConnectionData) (connType string) {
+	switch getSettingConnectionType(data) {
+	case typeWired:
+		connType = typeWired
+	case typeWireless:
+		connType = typeWireless
+	case typePppoe:
+		connType = typePppoe
+	case typeVpn:
+		switch getSettingVpnServiceType(data) {
+		case NM_DBUS_SERVICE_L2TP:
+			connType = typeVpnL2tp
+		case NM_DBUS_SERVICE_OPENCONNECT:
+			connType = typeVpnOpenconnect
+		case NM_DBUS_SERVICE_OPENVPN:
+			connType = typeVpnOpenvpn
+		case NM_DBUS_SERVICE_PPTP:
+			connType = typeVpnPptp
+		case NM_DBUS_SERVICE_VPNC:
+			connType = typeVpnVpnc
+		}
+	}
+	if len(connType) == 0 {
+		Logger.Error("get connection type failed")
+	}
+	return
+}
+
 func isJSONKeyValueMeansToDeleteKey(valueJSON string, t ktype) (doDelete bool) {
 	if valueJSON == jsonNull || valueJSON == jsonEmptyString || valueJSON == jsonEmptyArray {
 		return true

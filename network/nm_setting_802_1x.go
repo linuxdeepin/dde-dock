@@ -41,7 +41,7 @@ const (
 
 // Get available keys
 func getSetting8021xAvailableKeys(data _ConnectionData) (keys []string) {
-	switch getSettingConnectionType(data) {
+	switch generalGetConnectionType(data) {
 	case typeWired:
 		keys = []string{NM_SETTING_VK_802_1X_ENABLE}
 		if !isSettingFieldExists(data, field8021x) {
@@ -91,7 +91,7 @@ func getSetting8021xAvailableValues(data _ConnectionData, key string) (values []
 	customizable = true
 	switch key {
 	case NM_SETTING_802_1X_EAP:
-		if getSettingConnectionType(data) == typeWired {
+		if generalGetConnectionType(data) == typeWired {
 			values = []string{"tls", "md5", "fast", "ttls", "peap"}
 		} else {
 			values = []string{"tls", "leap", "fast", "ttls", "peap"}

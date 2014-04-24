@@ -1,8 +1,10 @@
 package main
 
-// #define NM_DBUS_SERVICE_OPENVPN    "org.freedesktop.NetworkManager.openvpn"
-// #define NM_DBUS_INTERFACE_OPENVPN  "org.freedesktop.NetworkManager.openvpn"
-// #define NM_DBUS_PATH_OPENVPN       "/org/freedesktop/NetworkManager/openvpn"
+const (
+	NM_DBUS_SERVICE_OPENVPN   = "org.freedesktop.NetworkManager.openvpn"
+	NM_DBUS_INTERFACE_OPENVPN = "org.freedesktop.NetworkManager.openvpn"
+	NM_DBUS_PATH_OPENVPN      = "/org/freedesktop/NetworkManager/openvpn"
+)
 
 // #define NM_OPENVPN_KEY_AUTH "auth"
 // #define NM_OPENVPN_KEY_CA "ca"
@@ -63,7 +65,7 @@ package main
 // #define NM_OPENVPN_REM_CERT_TLS_CLIENT "client"
 // #define NM_OPENVPN_REM_CERT_TLS_SERVER "server"
 
-// vpn key description
+// vpn key descriptions
 // static ValidProperty valid_properties[] = {
 // 	{ NM_OPENVPN_KEY_AUTH,                 G_TYPE_STRING, 0, 0, FALSE },
 // 	{ NM_OPENVPN_KEY_CA,                   G_TYPE_STRING, 0, 0, FALSE },

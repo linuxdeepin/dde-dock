@@ -89,7 +89,7 @@ func NewConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 	if err != nil {
 		return nil, err
 	}
-	s.connectionType = getSettingConnectionType(s.data)
+	s.connectionType = generalGetConnectionType(s.data)
 
 	// get secret data
 	for _, secretFiled := range []string{fieldWirelessSecurity, field8021x} {

@@ -175,7 +175,7 @@ func nmGetConnectionType(cpath dbus.ObjectPath) (ctype string) {
 	if err != nil {
 		return
 	}
-	ctype = getSettingConnectionType(data)
+	ctype = generalGetConnectionType(data)
 	if len(ctype) == 0 {
 		Logger.Error("get type of connection failed, type is empty")
 	}

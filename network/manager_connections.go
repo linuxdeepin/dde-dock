@@ -179,7 +179,7 @@ func (m *Manager) EditConnection(uuid string, devPath dbus.ObjectPath) (session 
 	}
 	if getSettingConnectionReadOnly(connData) {
 		Logger.Debug("read only connection, create new")
-		return m.CreateConnection(getSettingConnectionType(connData), devPath)
+		return m.CreateConnection(generalGetConnectionType(connData), devPath)
 	}
 
 	session, err = NewConnectionSessionByOpen(uuid, devPath)
@@ -329,7 +329,7 @@ func (m *Manager) EditConnectionForAccessPoint(apPath dbus.ObjectPath, devPath d
 	// }
 	// if getSettingConnectionReadOnly(connData) {
 	// 	Logger.Debug("read only connection, create new")
-	// 	return m.CreateConnection(getSettingConnectionType(connData), devPath)
+	// 	return m.CreateConnection(generalGetConnectionType(connData), devPath)
 	// }
 
 	// session, err = NewConnectionSessionByOpen(uuid, devPath)

@@ -1,8 +1,10 @@
 package main
 
-// #define NM_DBUS_SERVICE_PPTP    "org.freedesktop.NetworkManager.pptp"
-// #define NM_DBUS_INTERFACE_PPTP  "org.freedesktop.NetworkManager.pptp"
-// #define NM_DBUS_PATH_PPTP       "/org/freedesktop/NetworkManager/pptp"
+const (
+	NM_DBUS_SERVICE_PPTP   = "org.freedesktop.NetworkManager.pptp"
+	NM_DBUS_INTERFACE_PPTP = "org.freedesktop.NetworkManager.pptp"
+	NM_DBUS_PATH_PPTP      = "/org/freedesktop/NetworkManager/pptp"
+)
 
 // #define NM_PPTP_KEY_GATEWAY           "gateway"
 // #define NM_PPTP_KEY_USER              "user"
@@ -23,7 +25,7 @@ package main
 // #define NM_PPTP_KEY_LCP_ECHO_FAILURE  "lcp-echo-failure"
 // #define NM_PPTP_KEY_LCP_ECHO_INTERVAL "lcp-echo-interval"
 
-// vpn key description
+// vpn key descriptions
 // static ValidProperty valid_properties[] = {
 // 	{ NM_PPTP_KEY_GATEWAY,           G_TYPE_STRING, TRUE },
 // 	{ NM_PPTP_KEY_USER,              G_TYPE_STRING, FALSE },

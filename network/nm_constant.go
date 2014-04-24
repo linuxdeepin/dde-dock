@@ -1,11 +1,15 @@
 package main
 
 const (
-	typeWired    = NM_SETTING_WIRED_SETTING_NAME
-	typeWireless = NM_SETTING_WIRELESS_SETTING_NAME
-	typePppoe    = NM_SETTING_PPPOE_SETTING_NAME
-	typeVpn      = NM_SETTING_VPN_SETTING_NAME
-	typeVpnL2tp  = NM_SETTING_VF_VPN_L2TP_SETTING_NAME
+	typeWired          = NM_SETTING_WIRED_SETTING_NAME
+	typeWireless       = NM_SETTING_WIRELESS_SETTING_NAME
+	typePppoe          = NM_SETTING_PPPOE_SETTING_NAME
+	typeVpn            = NM_SETTING_VPN_SETTING_NAME
+	typeVpnL2tp        = NM_SETTING_VF_VPN_L2TP_SETTING_NAME
+	typeVpnOpenconnect = NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME
+	typeVpnOpenvpn     = NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME
+	typeVpnPptp        = NM_SETTING_VF_VPN_PPTP_SETTING_NAME
+	typeVpnVpnc        = NM_SETTING_VF_VPN_VPNC_SETTING_NAME
 )
 
 var supportedConnectionTypes = []string{

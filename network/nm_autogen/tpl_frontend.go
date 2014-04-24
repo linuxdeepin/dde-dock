@@ -36,7 +36,6 @@ BaseEditSection {
 
     content.sourceComponent: Column { {{range $i, $key := GetAllKeysInPage .Name}}{{if IsKeyUsedByFrontEnd $key}}{{$value := $key | ToKeyValue}}{{$id := $value | ToClassName | printf "line%s"}}
         {{ToFrontEndWidget $key}} {
-            id: {{$id}}
             key: "{{$value}}"
             text: dsTr("{{$key | ToKeyDisplayName}}"){{range $propKey, $propValue := GetKeyWidgetProp $key}}
             {{$propKey}}: {{$propValue}}{{end}}
@@ -44,5 +43,3 @@ BaseEditSection {
     }
 }
 `
-
-// {{genFrontEndWidgetInfo $key.Type $key.Value}}
