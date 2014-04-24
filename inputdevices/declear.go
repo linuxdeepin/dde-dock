@@ -60,27 +60,27 @@ const (
 )
 
 type MouseEntry struct {
-        LeftHanded  *property.GSettingsBoolProperty  `access:"readwrite"`
-        MotionAccel *property.GSettingsFloatProperty `access:"readwrite"`
-        MotionThres *property.GSettingsFloatProperty `access:"readwrite"`
-        DoubleClick *property.GSettingsIntProperty   `access:"readwrite"`
-        DragThres   *property.GSettingsIntProperty   `access:"readwrite"`
-        deviceId    string
+        LeftHanded         *property.GSettingsBoolProperty  `access:"readwrite"`
+        MotionAcceleration *property.GSettingsFloatProperty `access:"readwrite"`
+        MotionThreshold    *property.GSettingsFloatProperty `access:"readwrite"`
+        DoubleClick        *property.GSettingsIntProperty   `access:"readwrite"`
+        DragThreshold      *property.GSettingsIntProperty   `access:"readwrite"`
+        deviceId           string
 }
 
 type TPadEntry struct {
-        TPadEnable      *property.GSettingsBoolProperty  `access:"readwrite"`
-        LeftHanded      *property.GSettingsBoolProperty  `access:"readwrite"`
-        DisableIfTyping *property.GSettingsBoolProperty  `access:"readwrite"`
-        NaturalScroll   *property.GSettingsBoolProperty  `access:"readwrite"`
-        EdgeScroll      *property.GSettingsBoolProperty  `access:"readwrite"`
-        HorizScroll     *property.GSettingsBoolProperty  `access:"readwrite"`
-        VertScroll      *property.GSettingsBoolProperty  `access:"readwrite"`
-        MotionAccel     *property.GSettingsFloatProperty `access:"readwrite"`
-        MotionThres     *property.GSettingsFloatProperty `access:"readwrite"`
-        DoubleClick     *property.GSettingsIntProperty   `access:"readwrite"`
-        DragThres       *property.GSettingsIntProperty   `access:"readwrite"`
-        deviceId        string
+        TPadEnable         *property.GSettingsBoolProperty  `access:"readwrite"`
+        LeftHanded         *property.GSettingsBoolProperty  `access:"readwrite"`
+        DisableIfTyping    *property.GSettingsBoolProperty  `access:"readwrite"`
+        NaturalScroll      *property.GSettingsBoolProperty  `access:"readwrite"`
+        EdgeScroll         *property.GSettingsBoolProperty  `access:"readwrite"`
+        HorizScroll        *property.GSettingsBoolProperty  `access:"readwrite"`
+        VertScroll         *property.GSettingsBoolProperty  `access:"readwrite"`
+        MotionAcceleration *property.GSettingsFloatProperty `access:"readwrite"`
+        MotionThreshold    *property.GSettingsFloatProperty `access:"readwrite"`
+        DoubleClick        *property.GSettingsIntProperty   `access:"readwrite"`
+        DragThreshold      *property.GSettingsIntProperty   `access:"readwrite"`
+        deviceId           string
 }
 
 type KbdEntry struct {

@@ -96,17 +96,17 @@ func NewMouse() *MouseEntry {
         m.LeftHanded = property.NewGSettingsBoolProperty(
                 m, "LeftHanded",
                 mouseSettings, MOUSE_KEY_LEFT_HAND)
-        m.MotionAccel = property.NewGSettingsFloatProperty(
-                m, "MotionAccel",
+        m.MotionAcceleration = property.NewGSettingsFloatProperty(
+                m, "MotionAcceleration",
                 mouseSettings, MOUSE_KEY_ACCEL)
-        m.MotionThres = property.NewGSettingsFloatProperty(
-                m, "MotionThres",
+        m.MotionThreshold = property.NewGSettingsFloatProperty(
+                m, "MotionThreshold",
                 mouseSettings, MOUSE_KEY_THRES)
         m.DoubleClick = property.NewGSettingsIntProperty(
                 m, "DoubleClick",
                 mouseSettings, MOUSE_KEY_DOUBLE_CLICK)
-        m.DragThres = property.NewGSettingsIntProperty(
-                m, "DragThres",
+        m.DragThreshold = property.NewGSettingsIntProperty(
+                m, "DragThreshold",
                 mouseSettings, MOUSE_KEY_DRAG_THRES)
         m.deviceId = "Mouse"
 
@@ -137,17 +137,17 @@ func NewTPad() *TPadEntry {
         m.VertScroll = property.NewGSettingsBoolProperty(
                 m, "VertScroll",
                 tpadSettings, TPAD_KEY_VERT_SCROLL)
-        m.MotionAccel = property.NewGSettingsFloatProperty(
-                m, "MotionAccel",
+        m.MotionAcceleration = property.NewGSettingsFloatProperty(
+                m, "MotionAcceleration",
                 tpadSettings, TPAD_KEY_ACCEL)
-        m.MotionThres = property.NewGSettingsFloatProperty(
-                m, "MotionThres",
+        m.MotionThreshold = property.NewGSettingsFloatProperty(
+                m, "MotionThreshold",
                 tpadSettings, TPAD_KEY_THRES)
         m.DoubleClick = property.NewGSettingsIntProperty(
                 m, "DoubleClick",
                 mouseSettings, MOUSE_KEY_DOUBLE_CLICK)
-        m.DragThres = property.NewGSettingsIntProperty(
-                m, "DragThres",
+        m.DragThreshold = property.NewGSettingsIntProperty(
+                m, "DragThreshold",
                 mouseSettings, MOUSE_KEY_DRAG_THRES)
         m.deviceId = "TouchPad"
 
