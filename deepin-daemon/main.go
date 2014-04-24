@@ -26,7 +26,8 @@ import (
         Logger "dlib/logger"
         libutils "dlib/utils"
 )
-import "dde-daemon/deepin-daemon/inputdevices"
+
+//import "dde-daemon/deepin-daemon/inputdevices"
 
 var (
         logObj   = Logger.NewLogger("deepin/daemon")
@@ -39,7 +40,7 @@ func main() {
         logObj.SetRestartCommand("/usr/lib/deepin-daemon/deepin-daemon")
         //enableTouchPad()
         //listenDevices()
-        inputdevices.StartInputDevices()
+        //inputdevices.StartInputDevices()
 
         startMprisDaemon()
         go dlib.StartLoop()
