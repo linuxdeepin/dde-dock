@@ -64,18 +64,33 @@ func GetAllKeysInPage(pageName string) (keys []string) {
 }
 
 func GetAllKeysInField(fieldName string) (keys []string) {
-	// virtual keys in field
+	// virtual keys in field that with none related key
 	for _, vk := range nmSettingVks {
-		if vk.RelatedField == fieldName {
+		if vk.RelatedField == fieldName && vk.RelatedKey == "NM_SETTING_VK_NONE_RELATED_KEY" {
 			keys = append(keys, vk.Name)
 		}
 	}
 	for _, nmSetting := range nmSettings {
 		if nmSetting.FieldName == fieldName {
 			for _, k := range nmSetting.Keys {
-				keys = append(keys, k.Name)
+				vks := getRelatedVks(k.Name)
+				if len(vks) > 0 {
+					keys = appendStrArrayUnion(keys, vks...)
+				} else {
+					keys = append(keys, k.Name)
+				}
 			}
 			break
+		}
+	}
+	return
+}
+
+// get all related virtual keys of real key
+func getRelatedVks(keyName string) (vks []string) {
+	for _, vk := range nmSettingVks {
+		if vk.RelatedKey == keyName {
+			vks = append(vks, vk.Name)
 		}
 	}
 	return
