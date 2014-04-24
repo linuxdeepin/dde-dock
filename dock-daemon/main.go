@@ -62,6 +62,9 @@ func main() {
 	}
 	go cm.listenRootWindow()
 
+	region := NewRegion()
+	dbus.InstallOnSession(region)
+
 	dbus.DealWithUnhandledMessage()
 
 	if err := dbus.Wait(); err != nil {
