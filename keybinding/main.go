@@ -142,6 +142,12 @@ func keyIsValid(key string) bool {
 }
 
 func (m *BindManager) ChangeShortcut(id int32, shortcut string) (string, []int32) {
+        t := strings.ToLower(shortcut)
+        if (t == "super" || t == "super_l" || t == "super_r" ||
+                t == "super-super_l" || t == "super-super_r") &&
+                (id >= 300 && id < 1000) {
+                return "Invalid", []int32{}
+        }
         logObj.Infof("Change id: %d, key: %s", id, shortcut)
         tmpKeys := getShortcutById(id)
         tmpConflict, tmpList := conflictChecked(id, tmpKeys)
