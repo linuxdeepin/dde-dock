@@ -45,6 +45,22 @@ type AddAccelRet struct {
         Check   ConflictInfo
 }
 
+func (m *BindManager) Reset() bool {
+        list := systemGSettings.ListKeys()
+        for _, key := range list {
+                systemGSettings.Reset(key)
+        }
+
+        for _, id := range m.ConflictInvalid {
+                if id >= _CUSTOM_ID_BASE {
+                        continue
+                }
+                m.ChangeShortcut(id, "")
+        }
+
+        return true
+}
+
 func (m *BindManager) AddKeyBind(name, action string) (int32, bool) {
         id := getMaxIdFromCustom() + 1
         gs := newGSettingsById(id)
