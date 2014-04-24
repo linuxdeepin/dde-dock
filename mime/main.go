@@ -26,7 +26,7 @@ const (
 
 var (
         logObject = logger.NewLogger("daemon/mime")
-        objUtils  *libutils.Manager
+        objUtils  = libutils.NewUtils()
 )
 
 func (dapp *DefaultApps) GetDBusInfo() dbus.DBusInfo {
@@ -45,6 +45,33 @@ func (media *MediaMount) GetDBusInfo() dbus.DBusInfo {
         }
 }
 
+func (dapp *DefaultApps) Reset() bool {
+        homeDir, ok := objUtils.GetHomeDir()
+        if !ok {
+                logObject.Warning("Get homeDir failed")
+                return false
+        }
+        if err := os.Remove(homeDir + "/" + MIME_CACHE_FILE); err != nil {
+                logObject.Warningf("Delete '%s' failed: %v",
+                        homeDir+"/"+MIME_CACHE_FILE, err)
+                return false
+        }
+        _TerminalGSettings.Reset("exec")
+
+        return true
+}
+
+func (media *MediaMount) Reset() bool {
+        mediaGSettings.Reset(MEDIA_KEY_AUTOMOUNT)
+        mediaGSettings.Reset(MEDIA_KEY_AUTOOPEN)
+        mediaGSettings.Reset(MEDIA_KEY_AUTORUN_NEVER)
+        mediaGSettings.Reset(MEDIA_KEY_IGNORE)
+        mediaGSettings.Reset(MEDIA_KEY_OPEN_FOLDER)
+        mediaGSettings.Reset(MEDIA_KEY_START_SOFT)
+
+        return true
+}
+
 func main() {
         defer logObject.EndTracing()
 
@@ -55,7 +82,6 @@ func main() {
 
         logObject.SetRestartCommand("/usr/lib/deepin-daemon/mime")
         var err error
-        objUtils = libutils.NewUtils()
 
         dapp := NewDefaultApps()
         if dapp == nil {
