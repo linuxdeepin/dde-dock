@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2011 ~ 2014 Deepin, Inc.
- *               2013 ~ 2014 jouyouyun
+ * Copyright (c) 2011 ~ 2013 Deepin, Inc.
+ *               2011 ~ 2013 jouyouyun
  *
  * Author:      jouyouyun <jouyouwen717@gmail.com>
  * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
@@ -19,10 +19,26 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-#ifndef __GSD_INIT_H__
-#define __GSD_INIT_H__
+#ifndef __UTILS_H__
+#define __UTILS_H__
 
-void gsd_init();
-void gsd_finalize();
+#include <glib.h>
+#include <gdk/gdk.h>
+#include <gdk/gdkx.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/Xatom.h>
+
+#include <X11/extensions/XInput.h>
+#include <X11/extensions/XIproto.h>
+
+gchar *str_to_upper(const gchar *src);
+gchar *str_to_letter(const gchar *src);
+gboolean str_is_contain (const gchar *src, const gchar *sub);
+int xi_device_exist (const char *name);
+GdkDevice* device_is_exist (const char *deviceName);
+gboolean set_device_enabled (int device_id,
+                    gboolean enabled);
+XDevice *open_gdk_device (GdkDevice *device);
 
 #endif

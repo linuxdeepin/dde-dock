@@ -19,30 +19,31 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package main
+package inputdevices
 
 import (
-        "dlib"
+        libsession "dbus/com/deepin/sessionmanager"
         Logger "dlib/logger"
-        libutils "dlib/utils"
+        libutil "dlib/utils"
 )
-import "dde-daemon/deepin-daemon/inputdevices"
 
 var (
-        logObj   = Logger.NewLogger("deepin/daemon")
-        utilsObj = libutils.NewUtils()
+        logObj  = Logger.NewLogger("input-device")
+        utilObj = libutil.NewUtils()
+        xsObj   *libsession.XSettings
 )
 
-func main() {
-        defer logObj.EndTracing()
+func StartInputDevices() {
+        var err error
+        xsObj, err = libsession.NewXSettings("com.deepin.SessionManager",
+                "/com/deepin/XSettings")
+        if err != nil {
+                logObj.Info("New XSettings Object Failed: ", err)
+                return
+        }
 
-        logObj.SetRestartCommand("/usr/lib/deepin-daemon/deepin-daemon")
-        //enableTouchPad()
-        //listenDevices()
-        inputdevices.StartInputDevices()
-
-        startMprisDaemon()
-        go dlib.StartLoop()
-
-        select {}
+        initGdkEnv()
+        listenDevsSettings()
+        //go dlib.StartLoop()
+        //select {}
 }

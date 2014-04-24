@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2011 ~ 2013 Deepin, Inc.
- *               2011 ~ 2013 jouyouyun
+ * Copyright (c) 2011 ~ 2014 Deepin, Inc.
+ *               2013 ~ 2014 jouyouyun
  *
  * Author:      jouyouyun <jouyouwen717@gmail.com>
  * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
@@ -19,16 +19,16 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-#ifndef __LIST_DEVICES_INFO_H__
-#define __LIST_DEVICES_INFO_H__
+package main
 
-#include <X11/Xlib.h>
-#include <X11/extensions/XInput.h>
-#ifdef HAVE_XI2
-#include <X11/extensions/XInput2.h>
-#endif
-#include <glib.h>
+import (
+        "dlib/dbus"
+)
 
-int find_device_by_name (char *name);
-
-#endif
+func (op *Manager) GetDBusInfo() dbus.DBusInfo {
+        return dbus.DBusInfo{
+                DEVICE_DEST,
+                MANAGER_PATH,
+                MANAGER_IFC,
+        }
+}

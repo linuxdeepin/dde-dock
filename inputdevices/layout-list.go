@@ -61,10 +61,10 @@ const (
         _LAYOUT_XML_PATH = "/usr/share/X11/xkb/rules/base.xml"
 )
 
-func ParseXML(filename string) XKBConfigRegister {
+func parseXML(filename string) XKBConfigRegister {
         xmlByte, err := ioutil.ReadFile(filename)
         if err != nil {
-                logObject.Infof("Read File '%s' Failed: %s",
+                logObj.Infof("Read File '%s' Failed: %s",
                         filename, err)
                 panic(err)
         }
@@ -72,14 +72,14 @@ func ParseXML(filename string) XKBConfigRegister {
         var v XKBConfigRegister
         err = xml.Unmarshal(xmlByte, &v)
         if err != nil {
-                logObject.Infof("Unmarshal Failed: %s", err)
+                logObj.Infof("Unmarshal Failed: %s", err)
                 panic(err)
         }
 
         return v
 }
 
-func GetLayoutList(xmlData XKBConfigRegister) map[string]string {
+func getLayoutList(xmlData XKBConfigRegister) map[string]string {
         layouts := make(map[string]string)
 
         for _, layout := range xmlData.LayoutList.Layout {
