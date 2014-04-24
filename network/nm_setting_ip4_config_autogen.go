@@ -12,12 +12,12 @@ func getSettingIp4ConfigKeyType(key string) (t ktype) {
 		t = ktypeUnknown
 	case NM_SETTING_IP4_CONFIG_METHOD:
 		t = ktypeString
+	case NM_SETTING_IP4_CONFIG_ADDRESSES:
+		t = ktypeWrapperIpv4Addresses
 	case NM_SETTING_IP4_CONFIG_DNS:
 		t = ktypeWrapperIpv4Dns
 	case NM_SETTING_IP4_CONFIG_DNS_SEARCH:
 		t = ktypeString
-	case NM_SETTING_IP4_CONFIG_ADDRESSES:
-		t = ktypeWrapperIpv4Addresses
 	case NM_SETTING_IP4_CONFIG_ROUTES:
 		t = ktypeWrapperIpv4Routes
 	case NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES:
@@ -43,11 +43,11 @@ func isKeyInSettingIp4Config(key string) bool {
 	switch key {
 	case NM_SETTING_IP4_CONFIG_METHOD:
 		return true
+	case NM_SETTING_IP4_CONFIG_ADDRESSES:
+		return true
 	case NM_SETTING_IP4_CONFIG_DNS:
 		return true
 	case NM_SETTING_IP4_CONFIG_DNS_SEARCH:
-		return true
-	case NM_SETTING_IP4_CONFIG_ADDRESSES:
 		return true
 	case NM_SETTING_IP4_CONFIG_ROUTES:
 		return true
@@ -76,12 +76,12 @@ func getSettingIp4ConfigKeyDefaultValueJSON(key string) (valueJSON string) {
 		Logger.Error("invalid key:", key)
 	case NM_SETTING_IP4_CONFIG_METHOD:
 		valueJSON = `""`
+	case NM_SETTING_IP4_CONFIG_ADDRESSES:
+		valueJSON = `null`
 	case NM_SETTING_IP4_CONFIG_DNS:
 		valueJSON = `null`
 	case NM_SETTING_IP4_CONFIG_DNS_SEARCH:
 		valueJSON = `""`
-	case NM_SETTING_IP4_CONFIG_ADDRESSES:
-		valueJSON = `null`
 	case NM_SETTING_IP4_CONFIG_ROUTES:
 		valueJSON = `null`
 	case NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES:
@@ -109,12 +109,12 @@ func generalGetSettingIp4ConfigKeyJSON(data _ConnectionData, key string) (value 
 		Logger.Error("generalGetSettingIp4ConfigKeyJSON: invalide key", key)
 	case NM_SETTING_IP4_CONFIG_METHOD:
 		value = getSettingIp4ConfigMethodJSON(data)
+	case NM_SETTING_IP4_CONFIG_ADDRESSES:
+		value = getSettingIp4ConfigAddressesJSON(data)
 	case NM_SETTING_IP4_CONFIG_DNS:
 		value = getSettingIp4ConfigDnsJSON(data)
 	case NM_SETTING_IP4_CONFIG_DNS_SEARCH:
 		value = getSettingIp4ConfigDnsSearchJSON(data)
-	case NM_SETTING_IP4_CONFIG_ADDRESSES:
-		value = getSettingIp4ConfigAddressesJSON(data)
 	case NM_SETTING_IP4_CONFIG_ROUTES:
 		value = getSettingIp4ConfigRoutesJSON(data)
 	case NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES:
@@ -142,12 +142,12 @@ func generalSetSettingIp4ConfigKeyJSON(data _ConnectionData, key, valueJSON stri
 		Logger.Error("generalSetSettingIp4ConfigKeyJSON: invalide key", key)
 	case NM_SETTING_IP4_CONFIG_METHOD:
 		logicSetSettingIp4ConfigMethodJSON(data, valueJSON)
+	case NM_SETTING_IP4_CONFIG_ADDRESSES:
+		setSettingIp4ConfigAddressesJSON(data, valueJSON)
 	case NM_SETTING_IP4_CONFIG_DNS:
 		setSettingIp4ConfigDnsJSON(data, valueJSON)
 	case NM_SETTING_IP4_CONFIG_DNS_SEARCH:
 		setSettingIp4ConfigDnsSearchJSON(data, valueJSON)
-	case NM_SETTING_IP4_CONFIG_ADDRESSES:
-		setSettingIp4ConfigAddressesJSON(data, valueJSON)
 	case NM_SETTING_IP4_CONFIG_ROUTES:
 		setSettingIp4ConfigRoutesJSON(data, valueJSON)
 	case NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES:
@@ -172,14 +172,14 @@ func generalSetSettingIp4ConfigKeyJSON(data _ConnectionData, key, valueJSON stri
 func isSettingIp4ConfigMethodExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_METHOD)
 }
+func isSettingIp4ConfigAddressesExists(data _ConnectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES)
+}
 func isSettingIp4ConfigDnsExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS)
 }
 func isSettingIp4ConfigDnsSearchExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_SEARCH)
-}
-func isSettingIp4ConfigAddressesExists(data _ConnectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES)
 }
 func isSettingIp4ConfigRoutesExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTES)
@@ -225,6 +225,15 @@ func ensureSettingIp4ConfigMethodNoEmpty(data _ConnectionData, errs FieldKeyErro
 		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_METHOD, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
+func ensureSettingIp4ConfigAddressesNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+	if !isSettingIp4ConfigAddressesExists(data) {
+		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES, NM_KEY_ERROR_MISSING_VALUE)
+	}
+	value := getSettingIp4ConfigAddresses(data)
+	if len(value) == 0 {
+		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES, NM_KEY_ERROR_EMPTY_VALUE)
+	}
+}
 func ensureSettingIp4ConfigDnsNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingIp4ConfigDnsExists(data) {
 		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS, NM_KEY_ERROR_MISSING_VALUE)
@@ -241,15 +250,6 @@ func ensureSettingIp4ConfigDnsSearchNoEmpty(data _ConnectionData, errs FieldKeyE
 	value := getSettingIp4ConfigDnsSearch(data)
 	if len(value) == 0 {
 		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_SEARCH, NM_KEY_ERROR_EMPTY_VALUE)
-	}
-}
-func ensureSettingIp4ConfigAddressesNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
-	if !isSettingIp4ConfigAddressesExists(data) {
-		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES, NM_KEY_ERROR_MISSING_VALUE)
-	}
-	value := getSettingIp4ConfigAddresses(data)
-	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
 func ensureSettingIp4ConfigRoutesNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
@@ -310,16 +310,16 @@ func getSettingIp4ConfigMethod(data _ConnectionData) (value string) {
 	value, _ = getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_METHOD).(string)
 	return
 }
+func getSettingIp4ConfigAddresses(data _ConnectionData) (value [][]uint32) {
+	value, _ = getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES).([][]uint32)
+	return
+}
 func getSettingIp4ConfigDns(data _ConnectionData) (value []uint32) {
 	value, _ = getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS).([]uint32)
 	return
 }
 func getSettingIp4ConfigDnsSearch(data _ConnectionData) (value string) {
 	value, _ = getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_SEARCH).(string)
-	return
-}
-func getSettingIp4ConfigAddresses(data _ConnectionData) (value [][]uint32) {
-	value, _ = getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES).([][]uint32)
 	return
 }
 func getSettingIp4ConfigRoutes(data _ConnectionData) (value [][]uint32) {
@@ -359,14 +359,14 @@ func getSettingIp4ConfigMayFail(data _ConnectionData) (value bool) {
 func setSettingIp4ConfigMethod(data _ConnectionData, value string) {
 	setSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_METHOD, value)
 }
+func setSettingIp4ConfigAddresses(data _ConnectionData, value [][]uint32) {
+	setSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES, value)
+}
 func setSettingIp4ConfigDns(data _ConnectionData, value []uint32) {
 	setSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS, value)
 }
 func setSettingIp4ConfigDnsSearch(data _ConnectionData, value string) {
 	setSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_SEARCH, value)
-}
-func setSettingIp4ConfigAddresses(data _ConnectionData, value [][]uint32) {
-	setSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES, value)
 }
 func setSettingIp4ConfigRoutes(data _ConnectionData, value [][]uint32) {
 	setSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTES, value)
@@ -398,16 +398,16 @@ func getSettingIp4ConfigMethodJSON(data _ConnectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_METHOD, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_METHOD))
 	return
 }
+func getSettingIp4ConfigAddressesJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_ADDRESSES))
+	return
+}
 func getSettingIp4ConfigDnsJSON(data _ConnectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DNS))
 	return
 }
 func getSettingIp4ConfigDnsSearchJSON(data _ConnectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_SEARCH, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DNS_SEARCH))
-	return
-}
-func getSettingIp4ConfigAddressesJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_ADDRESSES))
 	return
 }
 func getSettingIp4ConfigRoutesJSON(data _ConnectionData) (valueJSON string) {
@@ -447,14 +447,14 @@ func getSettingIp4ConfigMayFailJSON(data _ConnectionData) (valueJSON string) {
 func setSettingIp4ConfigMethodJSON(data _ConnectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_METHOD, valueJSON, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_METHOD))
 }
+func setSettingIp4ConfigAddressesJSON(data _ConnectionData, valueJSON string) {
+	setSettingKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES, valueJSON, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_ADDRESSES))
+}
 func setSettingIp4ConfigDnsJSON(data _ConnectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS, valueJSON, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DNS))
 }
 func setSettingIp4ConfigDnsSearchJSON(data _ConnectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_SEARCH, valueJSON, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DNS_SEARCH))
-}
-func setSettingIp4ConfigAddressesJSON(data _ConnectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES, valueJSON, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_ADDRESSES))
 }
 func setSettingIp4ConfigRoutesJSON(data _ConnectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTES, valueJSON, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_ROUTES))
@@ -485,14 +485,14 @@ func setSettingIp4ConfigMayFailJSON(data _ConnectionData, valueJSON string) {
 func removeSettingIp4ConfigMethod(data _ConnectionData) {
 	removeSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_METHOD)
 }
+func removeSettingIp4ConfigAddresses(data _ConnectionData) {
+	removeSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES)
+}
 func removeSettingIp4ConfigDns(data _ConnectionData) {
 	removeSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS)
 }
 func removeSettingIp4ConfigDnsSearch(data _ConnectionData) {
 	removeSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_SEARCH)
-}
-func removeSettingIp4ConfigAddresses(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES)
 }
 func removeSettingIp4ConfigRoutes(data _ConnectionData) {
 	removeSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTES)

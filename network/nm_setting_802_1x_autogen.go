@@ -12,29 +12,39 @@ func getSetting8021xKeyType(key string) (t ktype) {
 		t = ktypeUnknown
 	case NM_SETTING_802_1X_EAP:
 		t = ktypeArrayString
-	case NM_SETTING_802_1X_IDENTITY:
-		t = ktypeString
 	case NM_SETTING_802_1X_ANONYMOUS_IDENTITY:
+		t = ktypeString
+	case NM_SETTING_802_1X_CLIENT_CERT:
+		t = ktypeWrapperString
+	case NM_SETTING_802_1X_CA_CERT:
+		t = ktypeWrapperString
+	case NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING:
 		t = ktypeString
 	case NM_SETTING_802_1X_PAC_FILE:
 		t = ktypeString
-	case NM_SETTING_802_1X_CA_CERT:
+	case NM_SETTING_802_1X_PHASE1_PEAPVER:
+		t = ktypeString
+	case NM_SETTING_802_1X_PHASE2_AUTH:
+		t = ktypeString
+	case NM_SETTING_802_1X_PRIVATE_KEY:
 		t = ktypeWrapperString
+	case NM_SETTING_802_1X_IDENTITY:
+		t = ktypeString
+	case NM_SETTING_802_1X_PASSWORD:
+		t = ktypeString
+	case NM_SETTING_802_1X_PASSWORD_FLAGS:
+		t = ktypeUint32
+	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD:
+		t = ktypeString
+	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS:
+		t = ktypeUint32
 	case NM_SETTING_802_1X_CA_PATH:
 		t = ktypeString
 	case NM_SETTING_802_1X_SUBJECT_MATCH:
 		t = ktypeString
 	case NM_SETTING_802_1X_ALTSUBJECT_MATCHES:
 		t = ktypeArrayString
-	case NM_SETTING_802_1X_CLIENT_CERT:
-		t = ktypeWrapperString
-	case NM_SETTING_802_1X_PHASE1_PEAPVER:
-		t = ktypeString
 	case NM_SETTING_802_1X_PHASE1_PEAPLABEL:
-		t = ktypeString
-	case NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING:
-		t = ktypeString
-	case NM_SETTING_802_1X_PHASE2_AUTH:
 		t = ktypeString
 	case NM_SETTING_802_1X_PHASE2_AUTHEAP:
 		t = ktypeString
@@ -42,25 +52,15 @@ func getSetting8021xKeyType(key string) (t ktype) {
 		t = ktypeWrapperString
 	case NM_SETTING_802_1X_PHASE2_CA_PATH:
 		t = ktypeString
+	case NM_SETTING_802_1X_PHASE2_CLIENT_CERT:
+		t = ktypeWrapperString
 	case NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH:
 		t = ktypeString
 	case NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES:
 		t = ktypeArrayString
-	case NM_SETTING_802_1X_PHASE2_CLIENT_CERT:
-		t = ktypeWrapperString
-	case NM_SETTING_802_1X_PASSWORD:
-		t = ktypeString
-	case NM_SETTING_802_1X_PASSWORD_FLAGS:
-		t = ktypeUint32
 	case NM_SETTING_802_1X_PASSWORD_RAW:
 		t = ktypeArrayByte
 	case NM_SETTING_802_1X_PASSWORD_RAW_FLAGS:
-		t = ktypeUint32
-	case NM_SETTING_802_1X_PRIVATE_KEY:
-		t = ktypeWrapperString
-	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD:
-		t = ktypeString
-	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS:
 		t = ktypeUint32
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY:
 		t = ktypeWrapperString
@@ -83,13 +83,31 @@ func isKeyInSetting8021x(key string) bool {
 	switch key {
 	case NM_SETTING_802_1X_EAP:
 		return true
-	case NM_SETTING_802_1X_IDENTITY:
-		return true
 	case NM_SETTING_802_1X_ANONYMOUS_IDENTITY:
+		return true
+	case NM_SETTING_802_1X_CLIENT_CERT:
+		return true
+	case NM_SETTING_802_1X_CA_CERT:
+		return true
+	case NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING:
 		return true
 	case NM_SETTING_802_1X_PAC_FILE:
 		return true
-	case NM_SETTING_802_1X_CA_CERT:
+	case NM_SETTING_802_1X_PHASE1_PEAPVER:
+		return true
+	case NM_SETTING_802_1X_PHASE2_AUTH:
+		return true
+	case NM_SETTING_802_1X_PRIVATE_KEY:
+		return true
+	case NM_SETTING_802_1X_IDENTITY:
+		return true
+	case NM_SETTING_802_1X_PASSWORD:
+		return true
+	case NM_SETTING_802_1X_PASSWORD_FLAGS:
+		return true
+	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD:
+		return true
+	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS:
 		return true
 	case NM_SETTING_802_1X_CA_PATH:
 		return true
@@ -97,15 +115,7 @@ func isKeyInSetting8021x(key string) bool {
 		return true
 	case NM_SETTING_802_1X_ALTSUBJECT_MATCHES:
 		return true
-	case NM_SETTING_802_1X_CLIENT_CERT:
-		return true
-	case NM_SETTING_802_1X_PHASE1_PEAPVER:
-		return true
 	case NM_SETTING_802_1X_PHASE1_PEAPLABEL:
-		return true
-	case NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING:
-		return true
-	case NM_SETTING_802_1X_PHASE2_AUTH:
 		return true
 	case NM_SETTING_802_1X_PHASE2_AUTHEAP:
 		return true
@@ -113,25 +123,15 @@ func isKeyInSetting8021x(key string) bool {
 		return true
 	case NM_SETTING_802_1X_PHASE2_CA_PATH:
 		return true
+	case NM_SETTING_802_1X_PHASE2_CLIENT_CERT:
+		return true
 	case NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH:
 		return true
 	case NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES:
 		return true
-	case NM_SETTING_802_1X_PHASE2_CLIENT_CERT:
-		return true
-	case NM_SETTING_802_1X_PASSWORD:
-		return true
-	case NM_SETTING_802_1X_PASSWORD_FLAGS:
-		return true
 	case NM_SETTING_802_1X_PASSWORD_RAW:
 		return true
 	case NM_SETTING_802_1X_PASSWORD_RAW_FLAGS:
-		return true
-	case NM_SETTING_802_1X_PRIVATE_KEY:
-		return true
-	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD:
-		return true
-	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS:
 		return true
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY:
 		return true
@@ -156,29 +156,39 @@ func getSetting8021xKeyDefaultValueJSON(key string) (valueJSON string) {
 		Logger.Error("invalid key:", key)
 	case NM_SETTING_802_1X_EAP:
 		valueJSON = `null`
-	case NM_SETTING_802_1X_IDENTITY:
-		valueJSON = `""`
 	case NM_SETTING_802_1X_ANONYMOUS_IDENTITY:
 		valueJSON = `""`
-	case NM_SETTING_802_1X_PAC_FILE:
+	case NM_SETTING_802_1X_CLIENT_CERT:
 		valueJSON = `""`
 	case NM_SETTING_802_1X_CA_CERT:
 		valueJSON = `""`
+	case NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING:
+		valueJSON = `""`
+	case NM_SETTING_802_1X_PAC_FILE:
+		valueJSON = `""`
+	case NM_SETTING_802_1X_PHASE1_PEAPVER:
+		valueJSON = `""`
+	case NM_SETTING_802_1X_PHASE2_AUTH:
+		valueJSON = `""`
+	case NM_SETTING_802_1X_PRIVATE_KEY:
+		valueJSON = `""`
+	case NM_SETTING_802_1X_IDENTITY:
+		valueJSON = `""`
+	case NM_SETTING_802_1X_PASSWORD:
+		valueJSON = `""`
+	case NM_SETTING_802_1X_PASSWORD_FLAGS:
+		valueJSON = `0`
+	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD:
+		valueJSON = `""`
+	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS:
+		valueJSON = `0`
 	case NM_SETTING_802_1X_CA_PATH:
 		valueJSON = `""`
 	case NM_SETTING_802_1X_SUBJECT_MATCH:
 		valueJSON = `""`
 	case NM_SETTING_802_1X_ALTSUBJECT_MATCHES:
 		valueJSON = `null`
-	case NM_SETTING_802_1X_CLIENT_CERT:
-		valueJSON = `""`
-	case NM_SETTING_802_1X_PHASE1_PEAPVER:
-		valueJSON = `""`
 	case NM_SETTING_802_1X_PHASE1_PEAPLABEL:
-		valueJSON = `""`
-	case NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING:
-		valueJSON = `""`
-	case NM_SETTING_802_1X_PHASE2_AUTH:
 		valueJSON = `""`
 	case NM_SETTING_802_1X_PHASE2_AUTHEAP:
 		valueJSON = `""`
@@ -186,25 +196,15 @@ func getSetting8021xKeyDefaultValueJSON(key string) (valueJSON string) {
 		valueJSON = `""`
 	case NM_SETTING_802_1X_PHASE2_CA_PATH:
 		valueJSON = `""`
+	case NM_SETTING_802_1X_PHASE2_CLIENT_CERT:
+		valueJSON = `""`
 	case NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH:
 		valueJSON = `""`
 	case NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES:
 		valueJSON = `null`
-	case NM_SETTING_802_1X_PHASE2_CLIENT_CERT:
-		valueJSON = `""`
-	case NM_SETTING_802_1X_PASSWORD:
-		valueJSON = `""`
-	case NM_SETTING_802_1X_PASSWORD_FLAGS:
-		valueJSON = `0`
 	case NM_SETTING_802_1X_PASSWORD_RAW:
 		valueJSON = `""`
 	case NM_SETTING_802_1X_PASSWORD_RAW_FLAGS:
-		valueJSON = `0`
-	case NM_SETTING_802_1X_PRIVATE_KEY:
-		valueJSON = `""`
-	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD:
-		valueJSON = `""`
-	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS:
 		valueJSON = `0`
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY:
 		valueJSON = `""`
@@ -229,56 +229,56 @@ func generalGetSetting8021xKeyJSON(data _ConnectionData, key string) (value stri
 		Logger.Error("generalGetSetting8021xKeyJSON: invalide key", key)
 	case NM_SETTING_802_1X_EAP:
 		value = getSetting8021xEapJSON(data)
-	case NM_SETTING_802_1X_IDENTITY:
-		value = getSetting8021xIdentityJSON(data)
 	case NM_SETTING_802_1X_ANONYMOUS_IDENTITY:
 		value = getSetting8021xAnonymousIdentityJSON(data)
-	case NM_SETTING_802_1X_PAC_FILE:
-		value = getSetting8021xPacFileJSON(data)
+	case NM_SETTING_802_1X_CLIENT_CERT:
+		value = getSetting8021xClientCertJSON(data)
 	case NM_SETTING_802_1X_CA_CERT:
 		value = getSetting8021xCaCertJSON(data)
+	case NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING:
+		value = getSetting8021xPhase1FastProvisioningJSON(data)
+	case NM_SETTING_802_1X_PAC_FILE:
+		value = getSetting8021xPacFileJSON(data)
+	case NM_SETTING_802_1X_PHASE1_PEAPVER:
+		value = getSetting8021xPhase1PeapverJSON(data)
+	case NM_SETTING_802_1X_PHASE2_AUTH:
+		value = getSetting8021xPhase2AuthJSON(data)
+	case NM_SETTING_802_1X_PRIVATE_KEY:
+		value = getSetting8021xPrivateKeyJSON(data)
+	case NM_SETTING_802_1X_IDENTITY:
+		value = getSetting8021xIdentityJSON(data)
+	case NM_SETTING_802_1X_PASSWORD:
+		value = getSetting8021xPasswordJSON(data)
+	case NM_SETTING_802_1X_PASSWORD_FLAGS:
+		value = getSetting8021xPasswordFlagsJSON(data)
+	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD:
+		value = getSetting8021xPrivateKeyPasswordJSON(data)
+	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS:
+		value = getSetting8021xPrivateKeyPasswordFlagsJSON(data)
 	case NM_SETTING_802_1X_CA_PATH:
 		value = getSetting8021xCaPathJSON(data)
 	case NM_SETTING_802_1X_SUBJECT_MATCH:
 		value = getSetting8021xSubjectMatchJSON(data)
 	case NM_SETTING_802_1X_ALTSUBJECT_MATCHES:
 		value = getSetting8021xAltsubjectMatchesJSON(data)
-	case NM_SETTING_802_1X_CLIENT_CERT:
-		value = getSetting8021xClientCertJSON(data)
-	case NM_SETTING_802_1X_PHASE1_PEAPVER:
-		value = getSetting8021xPhase1PeapverJSON(data)
 	case NM_SETTING_802_1X_PHASE1_PEAPLABEL:
 		value = getSetting8021xPhase1PeaplabelJSON(data)
-	case NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING:
-		value = getSetting8021xPhase1FastProvisioningJSON(data)
-	case NM_SETTING_802_1X_PHASE2_AUTH:
-		value = getSetting8021xPhase2AuthJSON(data)
 	case NM_SETTING_802_1X_PHASE2_AUTHEAP:
 		value = getSetting8021xPhase2AutheapJSON(data)
 	case NM_SETTING_802_1X_PHASE2_CA_CERT:
 		value = getSetting8021xPhase2CaCertJSON(data)
 	case NM_SETTING_802_1X_PHASE2_CA_PATH:
 		value = getSetting8021xPhase2CaPathJSON(data)
+	case NM_SETTING_802_1X_PHASE2_CLIENT_CERT:
+		value = getSetting8021xPhase2ClientCertJSON(data)
 	case NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH:
 		value = getSetting8021xPhase2SubjectMatchJSON(data)
 	case NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES:
 		value = getSetting8021xPhase2AltsubjectMatchesJSON(data)
-	case NM_SETTING_802_1X_PHASE2_CLIENT_CERT:
-		value = getSetting8021xPhase2ClientCertJSON(data)
-	case NM_SETTING_802_1X_PASSWORD:
-		value = getSetting8021xPasswordJSON(data)
-	case NM_SETTING_802_1X_PASSWORD_FLAGS:
-		value = getSetting8021xPasswordFlagsJSON(data)
 	case NM_SETTING_802_1X_PASSWORD_RAW:
 		value = getSetting8021xPasswordRawJSON(data)
 	case NM_SETTING_802_1X_PASSWORD_RAW_FLAGS:
 		value = getSetting8021xPasswordRawFlagsJSON(data)
-	case NM_SETTING_802_1X_PRIVATE_KEY:
-		value = getSetting8021xPrivateKeyJSON(data)
-	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD:
-		value = getSetting8021xPrivateKeyPasswordJSON(data)
-	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS:
-		value = getSetting8021xPrivateKeyPasswordFlagsJSON(data)
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY:
 		value = getSetting8021xPhase2PrivateKeyJSON(data)
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD:
@@ -302,56 +302,56 @@ func generalSetSetting8021xKeyJSON(data _ConnectionData, key, valueJSON string) 
 		Logger.Error("generalSetSetting8021xKeyJSON: invalide key", key)
 	case NM_SETTING_802_1X_EAP:
 		logicSetSetting8021xEapJSON(data, valueJSON)
-	case NM_SETTING_802_1X_IDENTITY:
-		setSetting8021xIdentityJSON(data, valueJSON)
 	case NM_SETTING_802_1X_ANONYMOUS_IDENTITY:
 		setSetting8021xAnonymousIdentityJSON(data, valueJSON)
-	case NM_SETTING_802_1X_PAC_FILE:
-		setSetting8021xPacFileJSON(data, valueJSON)
+	case NM_SETTING_802_1X_CLIENT_CERT:
+		setSetting8021xClientCertJSON(data, valueJSON)
 	case NM_SETTING_802_1X_CA_CERT:
 		setSetting8021xCaCertJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING:
+		setSetting8021xPhase1FastProvisioningJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PAC_FILE:
+		setSetting8021xPacFileJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PHASE1_PEAPVER:
+		setSetting8021xPhase1PeapverJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PHASE2_AUTH:
+		setSetting8021xPhase2AuthJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PRIVATE_KEY:
+		setSetting8021xPrivateKeyJSON(data, valueJSON)
+	case NM_SETTING_802_1X_IDENTITY:
+		setSetting8021xIdentityJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PASSWORD:
+		setSetting8021xPasswordJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PASSWORD_FLAGS:
+		setSetting8021xPasswordFlagsJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD:
+		setSetting8021xPrivateKeyPasswordJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS:
+		setSetting8021xPrivateKeyPasswordFlagsJSON(data, valueJSON)
 	case NM_SETTING_802_1X_CA_PATH:
 		setSetting8021xCaPathJSON(data, valueJSON)
 	case NM_SETTING_802_1X_SUBJECT_MATCH:
 		setSetting8021xSubjectMatchJSON(data, valueJSON)
 	case NM_SETTING_802_1X_ALTSUBJECT_MATCHES:
 		setSetting8021xAltsubjectMatchesJSON(data, valueJSON)
-	case NM_SETTING_802_1X_CLIENT_CERT:
-		setSetting8021xClientCertJSON(data, valueJSON)
-	case NM_SETTING_802_1X_PHASE1_PEAPVER:
-		setSetting8021xPhase1PeapverJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PHASE1_PEAPLABEL:
 		setSetting8021xPhase1PeaplabelJSON(data, valueJSON)
-	case NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING:
-		setSetting8021xPhase1FastProvisioningJSON(data, valueJSON)
-	case NM_SETTING_802_1X_PHASE2_AUTH:
-		setSetting8021xPhase2AuthJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PHASE2_AUTHEAP:
 		setSetting8021xPhase2AutheapJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PHASE2_CA_CERT:
 		setSetting8021xPhase2CaCertJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PHASE2_CA_PATH:
 		setSetting8021xPhase2CaPathJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PHASE2_CLIENT_CERT:
+		setSetting8021xPhase2ClientCertJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH:
 		setSetting8021xPhase2SubjectMatchJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES:
 		setSetting8021xPhase2AltsubjectMatchesJSON(data, valueJSON)
-	case NM_SETTING_802_1X_PHASE2_CLIENT_CERT:
-		setSetting8021xPhase2ClientCertJSON(data, valueJSON)
-	case NM_SETTING_802_1X_PASSWORD:
-		setSetting8021xPasswordJSON(data, valueJSON)
-	case NM_SETTING_802_1X_PASSWORD_FLAGS:
-		setSetting8021xPasswordFlagsJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PASSWORD_RAW:
 		setSetting8021xPasswordRawJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PASSWORD_RAW_FLAGS:
 		setSetting8021xPasswordRawFlagsJSON(data, valueJSON)
-	case NM_SETTING_802_1X_PRIVATE_KEY:
-		setSetting8021xPrivateKeyJSON(data, valueJSON)
-	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD:
-		setSetting8021xPrivateKeyPasswordJSON(data, valueJSON)
-	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS:
-		setSetting8021xPrivateKeyPasswordFlagsJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY:
 		setSetting8021xPhase2PrivateKeyJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD:
@@ -372,17 +372,44 @@ func generalSetSetting8021xKeyJSON(data _ConnectionData, key, valueJSON string) 
 func isSetting8021xEapExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_EAP)
 }
-func isSetting8021xIdentityExists(data _ConnectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY)
-}
 func isSetting8021xAnonymousIdentityExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ANONYMOUS_IDENTITY)
+}
+func isSetting8021xClientCertExists(data _ConnectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT)
+}
+func isSetting8021xCaCertExists(data _ConnectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT)
+}
+func isSetting8021xPhase1FastProvisioningExists(data _ConnectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING)
 }
 func isSetting8021xPacFileExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PAC_FILE)
 }
-func isSetting8021xCaCertExists(data _ConnectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT)
+func isSetting8021xPhase1PeapverExists(data _ConnectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPVER)
+}
+func isSetting8021xPhase2AuthExists(data _ConnectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTH)
+}
+func isSetting8021xPrivateKeyExists(data _ConnectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY)
+}
+func isSetting8021xIdentityExists(data _ConnectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY)
+}
+func isSetting8021xPasswordExists(data _ConnectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD)
+}
+func isSetting8021xPasswordFlagsExists(data _ConnectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_FLAGS)
+}
+func isSetting8021xPrivateKeyPasswordExists(data _ConnectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD)
+}
+func isSetting8021xPrivateKeyPasswordFlagsExists(data _ConnectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS)
 }
 func isSetting8021xCaPathExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_PATH)
@@ -393,20 +420,8 @@ func isSetting8021xSubjectMatchExists(data _ConnectionData) bool {
 func isSetting8021xAltsubjectMatchesExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ALTSUBJECT_MATCHES)
 }
-func isSetting8021xClientCertExists(data _ConnectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT)
-}
-func isSetting8021xPhase1PeapverExists(data _ConnectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPVER)
-}
 func isSetting8021xPhase1PeaplabelExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPLABEL)
-}
-func isSetting8021xPhase1FastProvisioningExists(data _ConnectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING)
-}
-func isSetting8021xPhase2AuthExists(data _ConnectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTH)
 }
 func isSetting8021xPhase2AutheapExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTHEAP)
@@ -417,35 +432,20 @@ func isSetting8021xPhase2CaCertExists(data _ConnectionData) bool {
 func isSetting8021xPhase2CaPathExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CA_PATH)
 }
+func isSetting8021xPhase2ClientCertExists(data _ConnectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CLIENT_CERT)
+}
 func isSetting8021xPhase2SubjectMatchExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH)
 }
 func isSetting8021xPhase2AltsubjectMatchesExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES)
 }
-func isSetting8021xPhase2ClientCertExists(data _ConnectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CLIENT_CERT)
-}
-func isSetting8021xPasswordExists(data _ConnectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD)
-}
-func isSetting8021xPasswordFlagsExists(data _ConnectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_FLAGS)
-}
 func isSetting8021xPasswordRawExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW)
 }
 func isSetting8021xPasswordRawFlagsExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW_FLAGS)
-}
-func isSetting8021xPrivateKeyExists(data _ConnectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY)
-}
-func isSetting8021xPrivateKeyPasswordExists(data _ConnectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD)
-}
-func isSetting8021xPrivateKeyPasswordFlagsExists(data _ConnectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS)
 }
 func isSetting8021xPhase2PrivateKeyExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY)
@@ -485,15 +485,6 @@ func ensureSetting8021xEapNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_EAP, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSetting8021xIdentityNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
-	if !isSetting8021xIdentityExists(data) {
-		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY, NM_KEY_ERROR_MISSING_VALUE)
-	}
-	value := getSetting8021xIdentity(data)
-	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY, NM_KEY_ERROR_EMPTY_VALUE)
-	}
-}
 func ensureSetting8021xAnonymousIdentityNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSetting8021xAnonymousIdentityExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ANONYMOUS_IDENTITY, NM_KEY_ERROR_MISSING_VALUE)
@@ -501,6 +492,33 @@ func ensureSetting8021xAnonymousIdentityNoEmpty(data _ConnectionData, errs Field
 	value := getSetting8021xAnonymousIdentity(data)
 	if len(value) == 0 {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ANONYMOUS_IDENTITY, NM_KEY_ERROR_EMPTY_VALUE)
+	}
+}
+func ensureSetting8021xClientCertNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+	if !isSetting8021xClientCertExists(data) {
+		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT, NM_KEY_ERROR_MISSING_VALUE)
+	}
+	value := getSetting8021xClientCert(data)
+	if len(value) == 0 {
+		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT, NM_KEY_ERROR_EMPTY_VALUE)
+	}
+}
+func ensureSetting8021xCaCertNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+	if !isSetting8021xCaCertExists(data) {
+		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT, NM_KEY_ERROR_MISSING_VALUE)
+	}
+	value := getSetting8021xCaCert(data)
+	if len(value) == 0 {
+		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT, NM_KEY_ERROR_EMPTY_VALUE)
+	}
+}
+func ensureSetting8021xPhase1FastProvisioningNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+	if !isSetting8021xPhase1FastProvisioningExists(data) {
+		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING, NM_KEY_ERROR_MISSING_VALUE)
+	}
+	value := getSetting8021xPhase1FastProvisioning(data)
+	if len(value) == 0 {
+		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
 func ensureSetting8021xPacFileNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
@@ -512,13 +530,68 @@ func ensureSetting8021xPacFileNoEmpty(data _ConnectionData, errs FieldKeyErrors)
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PAC_FILE, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSetting8021xCaCertNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
-	if !isSetting8021xCaCertExists(data) {
-		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT, NM_KEY_ERROR_MISSING_VALUE)
+func ensureSetting8021xPhase1PeapverNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+	if !isSetting8021xPhase1PeapverExists(data) {
+		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPVER, NM_KEY_ERROR_MISSING_VALUE)
 	}
-	value := getSetting8021xCaCert(data)
+	value := getSetting8021xPhase1Peapver(data)
 	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT, NM_KEY_ERROR_EMPTY_VALUE)
+		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPVER, NM_KEY_ERROR_EMPTY_VALUE)
+	}
+}
+func ensureSetting8021xPhase2AuthNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+	if !isSetting8021xPhase2AuthExists(data) {
+		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTH, NM_KEY_ERROR_MISSING_VALUE)
+	}
+	value := getSetting8021xPhase2Auth(data)
+	if len(value) == 0 {
+		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTH, NM_KEY_ERROR_EMPTY_VALUE)
+	}
+}
+func ensureSetting8021xPrivateKeyNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+	if !isSetting8021xPrivateKeyExists(data) {
+		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY, NM_KEY_ERROR_MISSING_VALUE)
+	}
+	value := getSetting8021xPrivateKey(data)
+	if len(value) == 0 {
+		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY, NM_KEY_ERROR_EMPTY_VALUE)
+	}
+}
+func ensureSetting8021xIdentityNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+	if !isSetting8021xIdentityExists(data) {
+		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY, NM_KEY_ERROR_MISSING_VALUE)
+	}
+	value := getSetting8021xIdentity(data)
+	if len(value) == 0 {
+		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY, NM_KEY_ERROR_EMPTY_VALUE)
+	}
+}
+func ensureSetting8021xPasswordNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+	if !isSetting8021xPasswordExists(data) {
+		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD, NM_KEY_ERROR_MISSING_VALUE)
+	}
+	value := getSetting8021xPassword(data)
+	if len(value) == 0 {
+		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD, NM_KEY_ERROR_EMPTY_VALUE)
+	}
+}
+func ensureSetting8021xPasswordFlagsNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+	if !isSetting8021xPasswordFlagsExists(data) {
+		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
+	}
+}
+func ensureSetting8021xPrivateKeyPasswordNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+	if !isSetting8021xPrivateKeyPasswordExists(data) {
+		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD, NM_KEY_ERROR_MISSING_VALUE)
+	}
+	value := getSetting8021xPrivateKeyPassword(data)
+	if len(value) == 0 {
+		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD, NM_KEY_ERROR_EMPTY_VALUE)
+	}
+}
+func ensureSetting8021xPrivateKeyPasswordFlagsNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+	if !isSetting8021xPrivateKeyPasswordFlagsExists(data) {
+		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
 func ensureSetting8021xCaPathNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
@@ -548,24 +621,6 @@ func ensureSetting8021xAltsubjectMatchesNoEmpty(data _ConnectionData, errs Field
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ALTSUBJECT_MATCHES, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSetting8021xClientCertNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
-	if !isSetting8021xClientCertExists(data) {
-		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT, NM_KEY_ERROR_MISSING_VALUE)
-	}
-	value := getSetting8021xClientCert(data)
-	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT, NM_KEY_ERROR_EMPTY_VALUE)
-	}
-}
-func ensureSetting8021xPhase1PeapverNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
-	if !isSetting8021xPhase1PeapverExists(data) {
-		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPVER, NM_KEY_ERROR_MISSING_VALUE)
-	}
-	value := getSetting8021xPhase1Peapver(data)
-	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPVER, NM_KEY_ERROR_EMPTY_VALUE)
-	}
-}
 func ensureSetting8021xPhase1PeaplabelNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSetting8021xPhase1PeaplabelExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPLABEL, NM_KEY_ERROR_MISSING_VALUE)
@@ -573,24 +628,6 @@ func ensureSetting8021xPhase1PeaplabelNoEmpty(data _ConnectionData, errs FieldKe
 	value := getSetting8021xPhase1Peaplabel(data)
 	if len(value) == 0 {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPLABEL, NM_KEY_ERROR_EMPTY_VALUE)
-	}
-}
-func ensureSetting8021xPhase1FastProvisioningNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
-	if !isSetting8021xPhase1FastProvisioningExists(data) {
-		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING, NM_KEY_ERROR_MISSING_VALUE)
-	}
-	value := getSetting8021xPhase1FastProvisioning(data)
-	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING, NM_KEY_ERROR_EMPTY_VALUE)
-	}
-}
-func ensureSetting8021xPhase2AuthNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
-	if !isSetting8021xPhase2AuthExists(data) {
-		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTH, NM_KEY_ERROR_MISSING_VALUE)
-	}
-	value := getSetting8021xPhase2Auth(data)
-	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTH, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
 func ensureSetting8021xPhase2AutheapNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
@@ -620,6 +657,15 @@ func ensureSetting8021xPhase2CaPathNoEmpty(data _ConnectionData, errs FieldKeyEr
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CA_PATH, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
+func ensureSetting8021xPhase2ClientCertNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+	if !isSetting8021xPhase2ClientCertExists(data) {
+		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CLIENT_CERT, NM_KEY_ERROR_MISSING_VALUE)
+	}
+	value := getSetting8021xPhase2ClientCert(data)
+	if len(value) == 0 {
+		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CLIENT_CERT, NM_KEY_ERROR_EMPTY_VALUE)
+	}
+}
 func ensureSetting8021xPhase2SubjectMatchNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSetting8021xPhase2SubjectMatchExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH, NM_KEY_ERROR_MISSING_VALUE)
@@ -638,29 +684,6 @@ func ensureSetting8021xPhase2AltsubjectMatchesNoEmpty(data _ConnectionData, errs
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSetting8021xPhase2ClientCertNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
-	if !isSetting8021xPhase2ClientCertExists(data) {
-		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CLIENT_CERT, NM_KEY_ERROR_MISSING_VALUE)
-	}
-	value := getSetting8021xPhase2ClientCert(data)
-	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CLIENT_CERT, NM_KEY_ERROR_EMPTY_VALUE)
-	}
-}
-func ensureSetting8021xPasswordNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
-	if !isSetting8021xPasswordExists(data) {
-		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD, NM_KEY_ERROR_MISSING_VALUE)
-	}
-	value := getSetting8021xPassword(data)
-	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD, NM_KEY_ERROR_EMPTY_VALUE)
-	}
-}
-func ensureSetting8021xPasswordFlagsNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
-	if !isSetting8021xPasswordFlagsExists(data) {
-		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
-	}
-}
 func ensureSetting8021xPasswordRawNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSetting8021xPasswordRawExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW, NM_KEY_ERROR_MISSING_VALUE)
@@ -673,29 +696,6 @@ func ensureSetting8021xPasswordRawNoEmpty(data _ConnectionData, errs FieldKeyErr
 func ensureSetting8021xPasswordRawFlagsNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSetting8021xPasswordRawFlagsExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
-	}
-}
-func ensureSetting8021xPrivateKeyNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
-	if !isSetting8021xPrivateKeyExists(data) {
-		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY, NM_KEY_ERROR_MISSING_VALUE)
-	}
-	value := getSetting8021xPrivateKey(data)
-	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY, NM_KEY_ERROR_EMPTY_VALUE)
-	}
-}
-func ensureSetting8021xPrivateKeyPasswordNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
-	if !isSetting8021xPrivateKeyPasswordExists(data) {
-		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD, NM_KEY_ERROR_MISSING_VALUE)
-	}
-	value := getSetting8021xPrivateKeyPassword(data)
-	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD, NM_KEY_ERROR_EMPTY_VALUE)
-	}
-}
-func ensureSetting8021xPrivateKeyPasswordFlagsNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
-	if !isSetting8021xPrivateKeyPasswordFlagsExists(data) {
-		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
 func ensureSetting8021xPhase2PrivateKeyNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
@@ -746,20 +746,56 @@ func getSetting8021xEap(data _ConnectionData) (value []string) {
 	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_EAP).([]string)
 	return
 }
-func getSetting8021xIdentity(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY).(string)
-	return
-}
 func getSetting8021xAnonymousIdentity(data _ConnectionData) (value string) {
 	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ANONYMOUS_IDENTITY).(string)
+	return
+}
+func getSetting8021xClientCert(data _ConnectionData) (value []byte) {
+	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT).([]byte)
+	return
+}
+func getSetting8021xCaCert(data _ConnectionData) (value []byte) {
+	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT).([]byte)
+	return
+}
+func getSetting8021xPhase1FastProvisioning(data _ConnectionData) (value string) {
+	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING).(string)
 	return
 }
 func getSetting8021xPacFile(data _ConnectionData) (value string) {
 	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PAC_FILE).(string)
 	return
 }
-func getSetting8021xCaCert(data _ConnectionData) (value []byte) {
-	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT).([]byte)
+func getSetting8021xPhase1Peapver(data _ConnectionData) (value string) {
+	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPVER).(string)
+	return
+}
+func getSetting8021xPhase2Auth(data _ConnectionData) (value string) {
+	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTH).(string)
+	return
+}
+func getSetting8021xPrivateKey(data _ConnectionData) (value []byte) {
+	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY).([]byte)
+	return
+}
+func getSetting8021xIdentity(data _ConnectionData) (value string) {
+	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY).(string)
+	return
+}
+func getSetting8021xPassword(data _ConnectionData) (value string) {
+	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD).(string)
+	return
+}
+func getSetting8021xPasswordFlags(data _ConnectionData) (value uint32) {
+	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_FLAGS).(uint32)
+	return
+}
+func getSetting8021xPrivateKeyPassword(data _ConnectionData) (value string) {
+	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD).(string)
+	return
+}
+func getSetting8021xPrivateKeyPasswordFlags(data _ConnectionData) (value uint32) {
+	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS).(uint32)
 	return
 }
 func getSetting8021xCaPath(data _ConnectionData) (value string) {
@@ -774,24 +810,8 @@ func getSetting8021xAltsubjectMatches(data _ConnectionData) (value []string) {
 	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ALTSUBJECT_MATCHES).([]string)
 	return
 }
-func getSetting8021xClientCert(data _ConnectionData) (value []byte) {
-	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT).([]byte)
-	return
-}
-func getSetting8021xPhase1Peapver(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPVER).(string)
-	return
-}
 func getSetting8021xPhase1Peaplabel(data _ConnectionData) (value string) {
 	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPLABEL).(string)
-	return
-}
-func getSetting8021xPhase1FastProvisioning(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING).(string)
-	return
-}
-func getSetting8021xPhase2Auth(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTH).(string)
 	return
 }
 func getSetting8021xPhase2Autheap(data _ConnectionData) (value string) {
@@ -806,6 +826,10 @@ func getSetting8021xPhase2CaPath(data _ConnectionData) (value string) {
 	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CA_PATH).(string)
 	return
 }
+func getSetting8021xPhase2ClientCert(data _ConnectionData) (value []byte) {
+	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CLIENT_CERT).([]byte)
+	return
+}
 func getSetting8021xPhase2SubjectMatch(data _ConnectionData) (value string) {
 	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH).(string)
 	return
@@ -814,36 +838,12 @@ func getSetting8021xPhase2AltsubjectMatches(data _ConnectionData) (value []strin
 	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES).([]string)
 	return
 }
-func getSetting8021xPhase2ClientCert(data _ConnectionData) (value []byte) {
-	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CLIENT_CERT).([]byte)
-	return
-}
-func getSetting8021xPassword(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD).(string)
-	return
-}
-func getSetting8021xPasswordFlags(data _ConnectionData) (value uint32) {
-	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_FLAGS).(uint32)
-	return
-}
 func getSetting8021xPasswordRaw(data _ConnectionData) (value []byte) {
 	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW).([]byte)
 	return
 }
 func getSetting8021xPasswordRawFlags(data _ConnectionData) (value uint32) {
 	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW_FLAGS).(uint32)
-	return
-}
-func getSetting8021xPrivateKey(data _ConnectionData) (value []byte) {
-	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY).([]byte)
-	return
-}
-func getSetting8021xPrivateKeyPassword(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD).(string)
-	return
-}
-func getSetting8021xPrivateKeyPasswordFlags(data _ConnectionData) (value uint32) {
-	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS).(uint32)
 	return
 }
 func getSetting8021xPhase2PrivateKey(data _ConnectionData) (value []byte) {
@@ -875,17 +875,44 @@ func getSetting8021xSystemCaCerts(data _ConnectionData) (value bool) {
 func setSetting8021xEap(data _ConnectionData, value []string) {
 	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_EAP, value)
 }
-func setSetting8021xIdentity(data _ConnectionData, value string) {
-	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY, value)
-}
 func setSetting8021xAnonymousIdentity(data _ConnectionData, value string) {
 	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ANONYMOUS_IDENTITY, value)
+}
+func setSetting8021xClientCert(data _ConnectionData, value []byte) {
+	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT, value)
+}
+func setSetting8021xCaCert(data _ConnectionData, value []byte) {
+	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT, value)
+}
+func setSetting8021xPhase1FastProvisioning(data _ConnectionData, value string) {
+	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING, value)
 }
 func setSetting8021xPacFile(data _ConnectionData, value string) {
 	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PAC_FILE, value)
 }
-func setSetting8021xCaCert(data _ConnectionData, value []byte) {
-	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT, value)
+func setSetting8021xPhase1Peapver(data _ConnectionData, value string) {
+	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPVER, value)
+}
+func setSetting8021xPhase2Auth(data _ConnectionData, value string) {
+	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTH, value)
+}
+func setSetting8021xPrivateKey(data _ConnectionData, value []byte) {
+	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY, value)
+}
+func setSetting8021xIdentity(data _ConnectionData, value string) {
+	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY, value)
+}
+func setSetting8021xPassword(data _ConnectionData, value string) {
+	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD, value)
+}
+func setSetting8021xPasswordFlags(data _ConnectionData, value uint32) {
+	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_FLAGS, value)
+}
+func setSetting8021xPrivateKeyPassword(data _ConnectionData, value string) {
+	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD, value)
+}
+func setSetting8021xPrivateKeyPasswordFlags(data _ConnectionData, value uint32) {
+	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS, value)
 }
 func setSetting8021xCaPath(data _ConnectionData, value string) {
 	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_PATH, value)
@@ -896,20 +923,8 @@ func setSetting8021xSubjectMatch(data _ConnectionData, value string) {
 func setSetting8021xAltsubjectMatches(data _ConnectionData, value []string) {
 	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ALTSUBJECT_MATCHES, value)
 }
-func setSetting8021xClientCert(data _ConnectionData, value []byte) {
-	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT, value)
-}
-func setSetting8021xPhase1Peapver(data _ConnectionData, value string) {
-	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPVER, value)
-}
 func setSetting8021xPhase1Peaplabel(data _ConnectionData, value string) {
 	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPLABEL, value)
-}
-func setSetting8021xPhase1FastProvisioning(data _ConnectionData, value string) {
-	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING, value)
-}
-func setSetting8021xPhase2Auth(data _ConnectionData, value string) {
-	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTH, value)
 }
 func setSetting8021xPhase2Autheap(data _ConnectionData, value string) {
 	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTHEAP, value)
@@ -920,35 +935,20 @@ func setSetting8021xPhase2CaCert(data _ConnectionData, value []byte) {
 func setSetting8021xPhase2CaPath(data _ConnectionData, value string) {
 	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CA_PATH, value)
 }
+func setSetting8021xPhase2ClientCert(data _ConnectionData, value []byte) {
+	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CLIENT_CERT, value)
+}
 func setSetting8021xPhase2SubjectMatch(data _ConnectionData, value string) {
 	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH, value)
 }
 func setSetting8021xPhase2AltsubjectMatches(data _ConnectionData, value []string) {
 	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES, value)
 }
-func setSetting8021xPhase2ClientCert(data _ConnectionData, value []byte) {
-	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CLIENT_CERT, value)
-}
-func setSetting8021xPassword(data _ConnectionData, value string) {
-	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD, value)
-}
-func setSetting8021xPasswordFlags(data _ConnectionData, value uint32) {
-	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_FLAGS, value)
-}
 func setSetting8021xPasswordRaw(data _ConnectionData, value []byte) {
 	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW, value)
 }
 func setSetting8021xPasswordRawFlags(data _ConnectionData, value uint32) {
 	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW_FLAGS, value)
-}
-func setSetting8021xPrivateKey(data _ConnectionData, value []byte) {
-	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY, value)
-}
-func setSetting8021xPrivateKeyPassword(data _ConnectionData, value string) {
-	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD, value)
-}
-func setSetting8021xPrivateKeyPasswordFlags(data _ConnectionData, value uint32) {
-	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS, value)
 }
 func setSetting8021xPhase2PrivateKey(data _ConnectionData, value []byte) {
 	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY, value)
@@ -974,20 +974,56 @@ func getSetting8021xEapJSON(data _ConnectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_EAP, getSetting8021xKeyType(NM_SETTING_802_1X_EAP))
 	return
 }
-func getSetting8021xIdentityJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY, getSetting8021xKeyType(NM_SETTING_802_1X_IDENTITY))
-	return
-}
 func getSetting8021xAnonymousIdentityJSON(data _ConnectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ANONYMOUS_IDENTITY, getSetting8021xKeyType(NM_SETTING_802_1X_ANONYMOUS_IDENTITY))
+	return
+}
+func getSetting8021xClientCertJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT, getSetting8021xKeyType(NM_SETTING_802_1X_CLIENT_CERT))
+	return
+}
+func getSetting8021xCaCertJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT, getSetting8021xKeyType(NM_SETTING_802_1X_CA_CERT))
+	return
+}
+func getSetting8021xPhase1FastProvisioningJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING))
 	return
 }
 func getSetting8021xPacFileJSON(data _ConnectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PAC_FILE, getSetting8021xKeyType(NM_SETTING_802_1X_PAC_FILE))
 	return
 }
-func getSetting8021xCaCertJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT, getSetting8021xKeyType(NM_SETTING_802_1X_CA_CERT))
+func getSetting8021xPhase1PeapverJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPVER, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_PEAPVER))
+	return
+}
+func getSetting8021xPhase2AuthJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTH, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_AUTH))
+	return
+}
+func getSetting8021xPrivateKeyJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY))
+	return
+}
+func getSetting8021xIdentityJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY, getSetting8021xKeyType(NM_SETTING_802_1X_IDENTITY))
+	return
+}
+func getSetting8021xPasswordJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD))
+	return
+}
+func getSetting8021xPasswordFlagsJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_FLAGS, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD_FLAGS))
+	return
+}
+func getSetting8021xPrivateKeyPasswordJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD))
+	return
+}
+func getSetting8021xPrivateKeyPasswordFlagsJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS))
 	return
 }
 func getSetting8021xCaPathJSON(data _ConnectionData) (valueJSON string) {
@@ -1002,24 +1038,8 @@ func getSetting8021xAltsubjectMatchesJSON(data _ConnectionData) (valueJSON strin
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ALTSUBJECT_MATCHES, getSetting8021xKeyType(NM_SETTING_802_1X_ALTSUBJECT_MATCHES))
 	return
 }
-func getSetting8021xClientCertJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT, getSetting8021xKeyType(NM_SETTING_802_1X_CLIENT_CERT))
-	return
-}
-func getSetting8021xPhase1PeapverJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPVER, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_PEAPVER))
-	return
-}
 func getSetting8021xPhase1PeaplabelJSON(data _ConnectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPLABEL, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_PEAPLABEL))
-	return
-}
-func getSetting8021xPhase1FastProvisioningJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING))
-	return
-}
-func getSetting8021xPhase2AuthJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTH, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_AUTH))
 	return
 }
 func getSetting8021xPhase2AutheapJSON(data _ConnectionData) (valueJSON string) {
@@ -1034,6 +1054,10 @@ func getSetting8021xPhase2CaPathJSON(data _ConnectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CA_PATH, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_CA_PATH))
 	return
 }
+func getSetting8021xPhase2ClientCertJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CLIENT_CERT, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_CLIENT_CERT))
+	return
+}
 func getSetting8021xPhase2SubjectMatchJSON(data _ConnectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH))
 	return
@@ -1042,36 +1066,12 @@ func getSetting8021xPhase2AltsubjectMatchesJSON(data _ConnectionData) (valueJSON
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES))
 	return
 }
-func getSetting8021xPhase2ClientCertJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CLIENT_CERT, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_CLIENT_CERT))
-	return
-}
-func getSetting8021xPasswordJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD))
-	return
-}
-func getSetting8021xPasswordFlagsJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_FLAGS, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD_FLAGS))
-	return
-}
 func getSetting8021xPasswordRawJSON(data _ConnectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD_RAW))
 	return
 }
 func getSetting8021xPasswordRawFlagsJSON(data _ConnectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW_FLAGS, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD_RAW_FLAGS))
-	return
-}
-func getSetting8021xPrivateKeyJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY))
-	return
-}
-func getSetting8021xPrivateKeyPasswordJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD))
-	return
-}
-func getSetting8021xPrivateKeyPasswordFlagsJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS))
 	return
 }
 func getSetting8021xPhase2PrivateKeyJSON(data _ConnectionData) (valueJSON string) {
@@ -1103,17 +1103,44 @@ func getSetting8021xSystemCaCertsJSON(data _ConnectionData) (valueJSON string) {
 func setSetting8021xEapJSON(data _ConnectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_EAP, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_EAP))
 }
-func setSetting8021xIdentityJSON(data _ConnectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_IDENTITY))
-}
 func setSetting8021xAnonymousIdentityJSON(data _ConnectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ANONYMOUS_IDENTITY, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_ANONYMOUS_IDENTITY))
+}
+func setSetting8021xClientCertJSON(data _ConnectionData, valueJSON string) {
+	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_CLIENT_CERT))
+}
+func setSetting8021xCaCertJSON(data _ConnectionData, valueJSON string) {
+	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_CA_CERT))
+}
+func setSetting8021xPhase1FastProvisioningJSON(data _ConnectionData, valueJSON string) {
+	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING))
 }
 func setSetting8021xPacFileJSON(data _ConnectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PAC_FILE, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PAC_FILE))
 }
-func setSetting8021xCaCertJSON(data _ConnectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_CA_CERT))
+func setSetting8021xPhase1PeapverJSON(data _ConnectionData, valueJSON string) {
+	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPVER, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_PEAPVER))
+}
+func setSetting8021xPhase2AuthJSON(data _ConnectionData, valueJSON string) {
+	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTH, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_AUTH))
+}
+func setSetting8021xPrivateKeyJSON(data _ConnectionData, valueJSON string) {
+	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY))
+}
+func setSetting8021xIdentityJSON(data _ConnectionData, valueJSON string) {
+	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_IDENTITY))
+}
+func setSetting8021xPasswordJSON(data _ConnectionData, valueJSON string) {
+	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD))
+}
+func setSetting8021xPasswordFlagsJSON(data _ConnectionData, valueJSON string) {
+	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_FLAGS, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD_FLAGS))
+}
+func setSetting8021xPrivateKeyPasswordJSON(data _ConnectionData, valueJSON string) {
+	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD))
+}
+func setSetting8021xPrivateKeyPasswordFlagsJSON(data _ConnectionData, valueJSON string) {
+	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS))
 }
 func setSetting8021xCaPathJSON(data _ConnectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_PATH, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_CA_PATH))
@@ -1124,20 +1151,8 @@ func setSetting8021xSubjectMatchJSON(data _ConnectionData, valueJSON string) {
 func setSetting8021xAltsubjectMatchesJSON(data _ConnectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ALTSUBJECT_MATCHES, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_ALTSUBJECT_MATCHES))
 }
-func setSetting8021xClientCertJSON(data _ConnectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_CLIENT_CERT))
-}
-func setSetting8021xPhase1PeapverJSON(data _ConnectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPVER, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_PEAPVER))
-}
 func setSetting8021xPhase1PeaplabelJSON(data _ConnectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPLABEL, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_PEAPLABEL))
-}
-func setSetting8021xPhase1FastProvisioningJSON(data _ConnectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING))
-}
-func setSetting8021xPhase2AuthJSON(data _ConnectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTH, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_AUTH))
 }
 func setSetting8021xPhase2AutheapJSON(data _ConnectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTHEAP, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_AUTHEAP))
@@ -1148,35 +1163,20 @@ func setSetting8021xPhase2CaCertJSON(data _ConnectionData, valueJSON string) {
 func setSetting8021xPhase2CaPathJSON(data _ConnectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CA_PATH, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_CA_PATH))
 }
+func setSetting8021xPhase2ClientCertJSON(data _ConnectionData, valueJSON string) {
+	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CLIENT_CERT, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_CLIENT_CERT))
+}
 func setSetting8021xPhase2SubjectMatchJSON(data _ConnectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH))
 }
 func setSetting8021xPhase2AltsubjectMatchesJSON(data _ConnectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES))
 }
-func setSetting8021xPhase2ClientCertJSON(data _ConnectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CLIENT_CERT, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_CLIENT_CERT))
-}
-func setSetting8021xPasswordJSON(data _ConnectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD))
-}
-func setSetting8021xPasswordFlagsJSON(data _ConnectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_FLAGS, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD_FLAGS))
-}
 func setSetting8021xPasswordRawJSON(data _ConnectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD_RAW))
 }
 func setSetting8021xPasswordRawFlagsJSON(data _ConnectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW_FLAGS, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD_RAW_FLAGS))
-}
-func setSetting8021xPrivateKeyJSON(data _ConnectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY))
-}
-func setSetting8021xPrivateKeyPasswordJSON(data _ConnectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD))
-}
-func setSetting8021xPrivateKeyPasswordFlagsJSON(data _ConnectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS))
 }
 func setSetting8021xPhase2PrivateKeyJSON(data _ConnectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_PRIVATE_KEY))
@@ -1201,17 +1201,44 @@ func setSetting8021xSystemCaCertsJSON(data _ConnectionData, valueJSON string) {
 func removeSetting8021xEap(data _ConnectionData) {
 	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_EAP)
 }
-func removeSetting8021xIdentity(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY)
-}
 func removeSetting8021xAnonymousIdentity(data _ConnectionData) {
 	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ANONYMOUS_IDENTITY)
+}
+func removeSetting8021xClientCert(data _ConnectionData) {
+	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT)
+}
+func removeSetting8021xCaCert(data _ConnectionData) {
+	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT)
+}
+func removeSetting8021xPhase1FastProvisioning(data _ConnectionData) {
+	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING)
 }
 func removeSetting8021xPacFile(data _ConnectionData) {
 	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PAC_FILE)
 }
-func removeSetting8021xCaCert(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT)
+func removeSetting8021xPhase1Peapver(data _ConnectionData) {
+	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPVER)
+}
+func removeSetting8021xPhase2Auth(data _ConnectionData) {
+	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTH)
+}
+func removeSetting8021xPrivateKey(data _ConnectionData) {
+	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY)
+}
+func removeSetting8021xIdentity(data _ConnectionData) {
+	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY)
+}
+func removeSetting8021xPassword(data _ConnectionData) {
+	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD)
+}
+func removeSetting8021xPasswordFlags(data _ConnectionData) {
+	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_FLAGS)
+}
+func removeSetting8021xPrivateKeyPassword(data _ConnectionData) {
+	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD)
+}
+func removeSetting8021xPrivateKeyPasswordFlags(data _ConnectionData) {
+	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS)
 }
 func removeSetting8021xCaPath(data _ConnectionData) {
 	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_PATH)
@@ -1222,20 +1249,8 @@ func removeSetting8021xSubjectMatch(data _ConnectionData) {
 func removeSetting8021xAltsubjectMatches(data _ConnectionData) {
 	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ALTSUBJECT_MATCHES)
 }
-func removeSetting8021xClientCert(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT)
-}
-func removeSetting8021xPhase1Peapver(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPVER)
-}
 func removeSetting8021xPhase1Peaplabel(data _ConnectionData) {
 	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPLABEL)
-}
-func removeSetting8021xPhase1FastProvisioning(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING)
-}
-func removeSetting8021xPhase2Auth(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTH)
 }
 func removeSetting8021xPhase2Autheap(data _ConnectionData) {
 	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTHEAP)
@@ -1246,35 +1261,20 @@ func removeSetting8021xPhase2CaCert(data _ConnectionData) {
 func removeSetting8021xPhase2CaPath(data _ConnectionData) {
 	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CA_PATH)
 }
+func removeSetting8021xPhase2ClientCert(data _ConnectionData) {
+	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CLIENT_CERT)
+}
 func removeSetting8021xPhase2SubjectMatch(data _ConnectionData) {
 	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH)
 }
 func removeSetting8021xPhase2AltsubjectMatches(data _ConnectionData) {
 	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES)
 }
-func removeSetting8021xPhase2ClientCert(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CLIENT_CERT)
-}
-func removeSetting8021xPassword(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD)
-}
-func removeSetting8021xPasswordFlags(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_FLAGS)
-}
 func removeSetting8021xPasswordRaw(data _ConnectionData) {
 	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW)
 }
 func removeSetting8021xPasswordRawFlags(data _ConnectionData) {
 	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW_FLAGS)
-}
-func removeSetting8021xPrivateKey(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY)
-}
-func removeSetting8021xPrivateKeyPassword(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD)
-}
-func removeSetting8021xPrivateKeyPasswordFlags(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS)
 }
 func removeSetting8021xPhase2PrivateKey(data _ConnectionData) {
 	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY)

@@ -10,9 +10,9 @@ func getSettingPppoeKeyType(key string) (t ktype) {
 	switch key {
 	default:
 		t = ktypeUnknown
-	case NM_SETTING_PPPOE_SERVICE:
-		t = ktypeString
 	case NM_SETTING_PPPOE_USERNAME:
+		t = ktypeString
+	case NM_SETTING_PPPOE_SERVICE:
 		t = ktypeString
 	case NM_SETTING_PPPOE_PASSWORD:
 		t = ktypeString
@@ -25,9 +25,9 @@ func getSettingPppoeKeyType(key string) (t ktype) {
 // Check is key in current setting field
 func isKeyInSettingPppoe(key string) bool {
 	switch key {
-	case NM_SETTING_PPPOE_SERVICE:
-		return true
 	case NM_SETTING_PPPOE_USERNAME:
+		return true
+	case NM_SETTING_PPPOE_SERVICE:
 		return true
 	case NM_SETTING_PPPOE_PASSWORD:
 		return true
@@ -42,9 +42,9 @@ func getSettingPppoeKeyDefaultValueJSON(key string) (valueJSON string) {
 	switch key {
 	default:
 		Logger.Error("invalid key:", key)
-	case NM_SETTING_PPPOE_SERVICE:
-		valueJSON = `""`
 	case NM_SETTING_PPPOE_USERNAME:
+		valueJSON = `""`
+	case NM_SETTING_PPPOE_SERVICE:
 		valueJSON = `""`
 	case NM_SETTING_PPPOE_PASSWORD:
 		valueJSON = `""`
@@ -59,10 +59,10 @@ func generalGetSettingPppoeKeyJSON(data _ConnectionData, key string) (value stri
 	switch key {
 	default:
 		Logger.Error("generalGetSettingPppoeKeyJSON: invalide key", key)
-	case NM_SETTING_PPPOE_SERVICE:
-		value = getSettingPppoeServiceJSON(data)
 	case NM_SETTING_PPPOE_USERNAME:
 		value = getSettingPppoeUsernameJSON(data)
+	case NM_SETTING_PPPOE_SERVICE:
+		value = getSettingPppoeServiceJSON(data)
 	case NM_SETTING_PPPOE_PASSWORD:
 		value = getSettingPppoePasswordJSON(data)
 	case NM_SETTING_PPPOE_PASSWORD_FLAGS:
@@ -76,10 +76,10 @@ func generalSetSettingPppoeKeyJSON(data _ConnectionData, key, valueJSON string) 
 	switch key {
 	default:
 		Logger.Error("generalSetSettingPppoeKeyJSON: invalide key", key)
-	case NM_SETTING_PPPOE_SERVICE:
-		setSettingPppoeServiceJSON(data, valueJSON)
 	case NM_SETTING_PPPOE_USERNAME:
 		setSettingPppoeUsernameJSON(data, valueJSON)
+	case NM_SETTING_PPPOE_SERVICE:
+		setSettingPppoeServiceJSON(data, valueJSON)
 	case NM_SETTING_PPPOE_PASSWORD:
 		setSettingPppoePasswordJSON(data, valueJSON)
 	case NM_SETTING_PPPOE_PASSWORD_FLAGS:
@@ -89,11 +89,11 @@ func generalSetSettingPppoeKeyJSON(data _ConnectionData, key, valueJSON string) 
 }
 
 // Check if key exists
-func isSettingPppoeServiceExists(data _ConnectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_SERVICE)
-}
 func isSettingPppoeUsernameExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_USERNAME)
+}
+func isSettingPppoeServiceExists(data _ConnectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_SERVICE)
 }
 func isSettingPppoePasswordExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_PASSWORD)
@@ -112,15 +112,6 @@ func ensureFieldSettingPppoeExists(data _ConnectionData, errs FieldKeyErrors, re
 		rememberError(errs, relatedKey, NM_SETTING_PPPOE_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_PPPOE_SETTING_NAME))
 	}
 }
-func ensureSettingPppoeServiceNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
-	if !isSettingPppoeServiceExists(data) {
-		rememberError(errs, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_SERVICE, NM_KEY_ERROR_MISSING_VALUE)
-	}
-	value := getSettingPppoeService(data)
-	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_SERVICE, NM_KEY_ERROR_EMPTY_VALUE)
-	}
-}
 func ensureSettingPppoeUsernameNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingPppoeUsernameExists(data) {
 		rememberError(errs, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_USERNAME, NM_KEY_ERROR_MISSING_VALUE)
@@ -128,6 +119,15 @@ func ensureSettingPppoeUsernameNoEmpty(data _ConnectionData, errs FieldKeyErrors
 	value := getSettingPppoeUsername(data)
 	if len(value) == 0 {
 		rememberError(errs, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_USERNAME, NM_KEY_ERROR_EMPTY_VALUE)
+	}
+}
+func ensureSettingPppoeServiceNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+	if !isSettingPppoeServiceExists(data) {
+		rememberError(errs, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_SERVICE, NM_KEY_ERROR_MISSING_VALUE)
+	}
+	value := getSettingPppoeService(data)
+	if len(value) == 0 {
+		rememberError(errs, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_SERVICE, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
 func ensureSettingPppoePasswordNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
@@ -146,12 +146,12 @@ func ensureSettingPppoePasswordFlagsNoEmpty(data _ConnectionData, errs FieldKeyE
 }
 
 // Getter
-func getSettingPppoeService(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_SERVICE).(string)
-	return
-}
 func getSettingPppoeUsername(data _ConnectionData) (value string) {
 	value, _ = getSettingKey(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_USERNAME).(string)
+	return
+}
+func getSettingPppoeService(data _ConnectionData) (value string) {
+	value, _ = getSettingKey(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_SERVICE).(string)
 	return
 }
 func getSettingPppoePassword(data _ConnectionData) (value string) {
@@ -164,11 +164,11 @@ func getSettingPppoePasswordFlags(data _ConnectionData) (value uint32) {
 }
 
 // Setter
-func setSettingPppoeService(data _ConnectionData, value string) {
-	setSettingKey(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_SERVICE, value)
-}
 func setSettingPppoeUsername(data _ConnectionData, value string) {
 	setSettingKey(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_USERNAME, value)
+}
+func setSettingPppoeService(data _ConnectionData, value string) {
+	setSettingKey(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_SERVICE, value)
 }
 func setSettingPppoePassword(data _ConnectionData, value string) {
 	setSettingKey(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_PASSWORD, value)
@@ -178,12 +178,12 @@ func setSettingPppoePasswordFlags(data _ConnectionData, value uint32) {
 }
 
 // JSON Getter
-func getSettingPppoeServiceJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_SERVICE, getSettingPppoeKeyType(NM_SETTING_PPPOE_SERVICE))
-	return
-}
 func getSettingPppoeUsernameJSON(data _ConnectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_USERNAME, getSettingPppoeKeyType(NM_SETTING_PPPOE_USERNAME))
+	return
+}
+func getSettingPppoeServiceJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_SERVICE, getSettingPppoeKeyType(NM_SETTING_PPPOE_SERVICE))
 	return
 }
 func getSettingPppoePasswordJSON(data _ConnectionData) (valueJSON string) {
@@ -196,11 +196,11 @@ func getSettingPppoePasswordFlagsJSON(data _ConnectionData) (valueJSON string) {
 }
 
 // JSON Setter
-func setSettingPppoeServiceJSON(data _ConnectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_SERVICE, valueJSON, getSettingPppoeKeyType(NM_SETTING_PPPOE_SERVICE))
-}
 func setSettingPppoeUsernameJSON(data _ConnectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_USERNAME, valueJSON, getSettingPppoeKeyType(NM_SETTING_PPPOE_USERNAME))
+}
+func setSettingPppoeServiceJSON(data _ConnectionData, valueJSON string) {
+	setSettingKeyJSON(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_SERVICE, valueJSON, getSettingPppoeKeyType(NM_SETTING_PPPOE_SERVICE))
 }
 func setSettingPppoePasswordJSON(data _ConnectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_PASSWORD, valueJSON, getSettingPppoeKeyType(NM_SETTING_PPPOE_PASSWORD))
@@ -210,11 +210,11 @@ func setSettingPppoePasswordFlagsJSON(data _ConnectionData, valueJSON string) {
 }
 
 // Remover
-func removeSettingPppoeService(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_SERVICE)
-}
 func removeSettingPppoeUsername(data _ConnectionData) {
 	removeSettingKey(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_USERNAME)
+}
+func removeSettingPppoeService(data _ConnectionData) {
+	removeSettingKey(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_SERVICE)
 }
 func removeSettingPppoePassword(data _ConnectionData) {
 	removeSettingKey(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_PASSWORD)
