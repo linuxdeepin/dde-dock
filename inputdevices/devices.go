@@ -26,6 +26,33 @@ import (
         "strings"
 )
 
+func (op *MouseEntry) Reset() bool {
+        list := mouseSettings.ListKeys()
+        for _, key := range list {
+                mouseSettings.Reset(key)
+        }
+
+        return true
+}
+
+func (OP *TPadEntry) Reset() bool {
+        list := tpadSettings.ListKeys()
+        for _, key := range list {
+                tpadSettings.Reset(key)
+        }
+
+        return true
+}
+
+func (op *KbdEntry) Reset() bool {
+        list := kbdSettings.ListKeys()
+        for _, key := range list {
+                kbdSettings.Reset(key)
+        }
+
+        return true
+}
+
 func (op *KbdEntry) LayoutList() map[string]string {
         defer func() {
                 if err := recover(); err != nil {
