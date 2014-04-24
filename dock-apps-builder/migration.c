@@ -246,6 +246,7 @@ char* find_app_id(const char* exec_name, const char* key, int filter)
         _init();
     }
     g_assert(exec_name != NULL && key != NULL);
+    g_warning("exec_name: %s, key: %s", exec_name, key);
     switch (filter) {
         case APPID_FILTER_WMCLASS:
             return _find_app_id_by_filter(exec_name, key, filter_wmclass);
