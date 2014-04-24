@@ -16,10 +16,10 @@ func getSettingConnectionKeyType(key string) (t ktype) {
 		t = ktypeString
 	case NM_SETTING_CONNECTION_TYPE:
 		t = ktypeString
-	case NM_SETTING_CONNECTION_PERMISSIONS:
-		t = ktypeArrayString
 	case NM_SETTING_CONNECTION_AUTOCONNECT:
 		t = ktypeBoolean
+	case NM_SETTING_CONNECTION_PERMISSIONS:
+		t = ktypeArrayString
 	case NM_SETTING_CONNECTION_TIMESTAMP:
 		t = ktypeUint64
 	case NM_SETTING_CONNECTION_READ_ONLY:
@@ -45,9 +45,9 @@ func isKeyInSettingConnection(key string) bool {
 		return true
 	case NM_SETTING_CONNECTION_TYPE:
 		return true
-	case NM_SETTING_CONNECTION_PERMISSIONS:
-		return true
 	case NM_SETTING_CONNECTION_AUTOCONNECT:
+		return true
+	case NM_SETTING_CONNECTION_PERMISSIONS:
 		return true
 	case NM_SETTING_CONNECTION_TIMESTAMP:
 		return true
@@ -76,10 +76,10 @@ func getSettingConnectionKeyDefaultValueJSON(key string) (valueJSON string) {
 		valueJSON = `""`
 	case NM_SETTING_CONNECTION_TYPE:
 		valueJSON = `""`
-	case NM_SETTING_CONNECTION_PERMISSIONS:
-		valueJSON = `null`
 	case NM_SETTING_CONNECTION_AUTOCONNECT:
 		valueJSON = `true`
+	case NM_SETTING_CONNECTION_PERMISSIONS:
+		valueJSON = `null`
 	case NM_SETTING_CONNECTION_TIMESTAMP:
 		valueJSON = `0`
 	case NM_SETTING_CONNECTION_READ_ONLY:
@@ -107,10 +107,10 @@ func generalGetSettingConnectionKeyJSON(data _ConnectionData, key string) (value
 		value = getSettingConnectionUuidJSON(data)
 	case NM_SETTING_CONNECTION_TYPE:
 		value = getSettingConnectionTypeJSON(data)
-	case NM_SETTING_CONNECTION_PERMISSIONS:
-		value = getSettingConnectionPermissionsJSON(data)
 	case NM_SETTING_CONNECTION_AUTOCONNECT:
 		value = getSettingConnectionAutoconnectJSON(data)
+	case NM_SETTING_CONNECTION_PERMISSIONS:
+		value = getSettingConnectionPermissionsJSON(data)
 	case NM_SETTING_CONNECTION_TIMESTAMP:
 		value = getSettingConnectionTimestampJSON(data)
 	case NM_SETTING_CONNECTION_READ_ONLY:
@@ -138,10 +138,10 @@ func generalSetSettingConnectionKeyJSON(data _ConnectionData, key, valueJSON str
 		setSettingConnectionUuidJSON(data, valueJSON)
 	case NM_SETTING_CONNECTION_TYPE:
 		setSettingConnectionTypeJSON(data, valueJSON)
-	case NM_SETTING_CONNECTION_PERMISSIONS:
-		setSettingConnectionPermissionsJSON(data, valueJSON)
 	case NM_SETTING_CONNECTION_AUTOCONNECT:
 		setSettingConnectionAutoconnectJSON(data, valueJSON)
+	case NM_SETTING_CONNECTION_PERMISSIONS:
+		setSettingConnectionPermissionsJSON(data, valueJSON)
 	case NM_SETTING_CONNECTION_TIMESTAMP:
 		setSettingConnectionTimestampJSON(data, valueJSON)
 	case NM_SETTING_CONNECTION_READ_ONLY:
@@ -168,11 +168,11 @@ func isSettingConnectionUuidExists(data _ConnectionData) bool {
 func isSettingConnectionTypeExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TYPE)
 }
-func isSettingConnectionPermissionsExists(data _ConnectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_PERMISSIONS)
-}
 func isSettingConnectionAutoconnectExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_AUTOCONNECT)
+}
+func isSettingConnectionPermissionsExists(data _ConnectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_PERMISSIONS)
 }
 func isSettingConnectionTimestampExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TIMESTAMP)
@@ -230,6 +230,11 @@ func ensureSettingConnectionTypeNoEmpty(data _ConnectionData, errs FieldKeyError
 		rememberError(errs, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TYPE, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
+func ensureSettingConnectionAutoconnectNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+	if !isSettingConnectionAutoconnectExists(data) {
+		rememberError(errs, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_AUTOCONNECT, NM_KEY_ERROR_MISSING_VALUE)
+	}
+}
 func ensureSettingConnectionPermissionsNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingConnectionPermissionsExists(data) {
 		rememberError(errs, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_PERMISSIONS, NM_KEY_ERROR_MISSING_VALUE)
@@ -237,11 +242,6 @@ func ensureSettingConnectionPermissionsNoEmpty(data _ConnectionData, errs FieldK
 	value := getSettingConnectionPermissions(data)
 	if len(value) == 0 {
 		rememberError(errs, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_PERMISSIONS, NM_KEY_ERROR_EMPTY_VALUE)
-	}
-}
-func ensureSettingConnectionAutoconnectNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
-	if !isSettingConnectionAutoconnectExists(data) {
-		rememberError(errs, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_AUTOCONNECT, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
 func ensureSettingConnectionTimestampNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
@@ -304,12 +304,12 @@ func getSettingConnectionType(data _ConnectionData) (value string) {
 	value, _ = getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TYPE).(string)
 	return
 }
-func getSettingConnectionPermissions(data _ConnectionData) (value []string) {
-	value, _ = getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_PERMISSIONS).([]string)
-	return
-}
 func getSettingConnectionAutoconnect(data _ConnectionData) (value bool) {
 	value, _ = getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_AUTOCONNECT).(bool)
+	return
+}
+func getSettingConnectionPermissions(data _ConnectionData) (value []string) {
+	value, _ = getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_PERMISSIONS).([]string)
 	return
 }
 func getSettingConnectionTimestamp(data _ConnectionData) (value uint64) {
@@ -347,11 +347,11 @@ func setSettingConnectionUuid(data _ConnectionData, value string) {
 func setSettingConnectionType(data _ConnectionData, value string) {
 	setSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TYPE, value)
 }
-func setSettingConnectionPermissions(data _ConnectionData, value []string) {
-	setSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_PERMISSIONS, value)
-}
 func setSettingConnectionAutoconnect(data _ConnectionData, value bool) {
 	setSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_AUTOCONNECT, value)
+}
+func setSettingConnectionPermissions(data _ConnectionData, value []string) {
+	setSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_PERMISSIONS, value)
 }
 func setSettingConnectionTimestamp(data _ConnectionData, value uint64) {
 	setSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TIMESTAMP, value)
@@ -385,12 +385,12 @@ func getSettingConnectionTypeJSON(data _ConnectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TYPE, getSettingConnectionKeyType(NM_SETTING_CONNECTION_TYPE))
 	return
 }
-func getSettingConnectionPermissionsJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_PERMISSIONS, getSettingConnectionKeyType(NM_SETTING_CONNECTION_PERMISSIONS))
-	return
-}
 func getSettingConnectionAutoconnectJSON(data _ConnectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_AUTOCONNECT, getSettingConnectionKeyType(NM_SETTING_CONNECTION_AUTOCONNECT))
+	return
+}
+func getSettingConnectionPermissionsJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_PERMISSIONS, getSettingConnectionKeyType(NM_SETTING_CONNECTION_PERMISSIONS))
 	return
 }
 func getSettingConnectionTimestampJSON(data _ConnectionData) (valueJSON string) {
@@ -428,11 +428,11 @@ func setSettingConnectionUuidJSON(data _ConnectionData, valueJSON string) {
 func setSettingConnectionTypeJSON(data _ConnectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TYPE, valueJSON, getSettingConnectionKeyType(NM_SETTING_CONNECTION_TYPE))
 }
-func setSettingConnectionPermissionsJSON(data _ConnectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_PERMISSIONS, valueJSON, getSettingConnectionKeyType(NM_SETTING_CONNECTION_PERMISSIONS))
-}
 func setSettingConnectionAutoconnectJSON(data _ConnectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_AUTOCONNECT, valueJSON, getSettingConnectionKeyType(NM_SETTING_CONNECTION_AUTOCONNECT))
+}
+func setSettingConnectionPermissionsJSON(data _ConnectionData, valueJSON string) {
+	setSettingKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_PERMISSIONS, valueJSON, getSettingConnectionKeyType(NM_SETTING_CONNECTION_PERMISSIONS))
 }
 func setSettingConnectionTimestampJSON(data _ConnectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TIMESTAMP, valueJSON, getSettingConnectionKeyType(NM_SETTING_CONNECTION_TIMESTAMP))
@@ -463,11 +463,11 @@ func removeSettingConnectionUuid(data _ConnectionData) {
 func removeSettingConnectionType(data _ConnectionData) {
 	removeSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TYPE)
 }
-func removeSettingConnectionPermissions(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_PERMISSIONS)
-}
 func removeSettingConnectionAutoconnect(data _ConnectionData) {
 	removeSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_AUTOCONNECT)
+}
+func removeSettingConnectionPermissions(data _ConnectionData) {
+	removeSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_PERMISSIONS)
 }
 func removeSettingConnectionTimestamp(data _ConnectionData) {
 	removeSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TIMESTAMP)

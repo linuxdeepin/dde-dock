@@ -1,5 +1,9 @@
 package main
 
+import (
+	"os/user"
+)
+
 // Virtual key names.
 
 const NM_SETTING_VK_NONE_RELATED_KEY = "<none>"
@@ -16,7 +20,7 @@ const (
 
 // connection
 const (
-	NM_SETTING_VK_CONNECTION_PERMISSIONS = "vk-permissions"
+	NM_SETTING_VK_CONNECTION_NO_PERMISSION = "vk-no-permission"
 )
 
 // ipv4
@@ -212,10 +216,12 @@ func getSettingVk8021xPrivateKey(data _ConnectionData) (value string) {
 	value = byteArrayToStrPath(privateKey)
 	return
 }
-func getSettingVkConnectionPermissions(data _ConnectionData) (value bool) {
-	// TODO
-	// value = getSettingConnectionPermissions(data)
-	return
+func getSettingVkConnectionNoPermission(data _ConnectionData) (value bool) {
+	permission := getSettingConnectionPermissions(data)
+	if len(permission) > 0 {
+		return false
+	}
+	return true
 }
 func getSettingVkIp4ConfigDns(data _ConnectionData) (value string) {
 	dns := getSettingIp4ConfigDns(data)
@@ -356,9 +362,18 @@ func logicSetSettingVk8021xClientCert(data _ConnectionData, value string) {
 func logicSetSettingVk8021xPrivateKey(data _ConnectionData, value string) {
 	setSetting8021xPrivateKey(data, strToByteArrayPath(value))
 }
-func logicSetSettingVkConnectionPermissions(data _ConnectionData, value bool) {
-	// TODO
-	// setSettingConnectionPermissionsJSON(data)
+func logicSetSettingVkConnectionNoPermission(data _ConnectionData, value bool) {
+	if value {
+		removeSettingConnectionPermissions(data)
+	} else {
+		currentUser, err := user.Current()
+		if err != nil {
+			Logger.Error(err)
+			return
+		}
+		permission := "user:" + currentUser.Username + ":"
+		setSettingConnectionPermissions(data, []string{permission})
+	}
 }
 func logicSetSettingVkIp4ConfigDns(data _ConnectionData, value string) {
 	dns := getSettingIp4ConfigDns(data)

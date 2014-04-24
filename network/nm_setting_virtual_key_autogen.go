@@ -9,7 +9,7 @@ var virtualKeys = []VirtualKey{
 	VirtualKey{NM_SETTING_VK_802_1X_CA_CERT, ktypeString, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT, true, false},
 	VirtualKey{NM_SETTING_VK_802_1X_CLIENT_CERT, ktypeString, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT, true, false},
 	VirtualKey{NM_SETTING_VK_802_1X_PRIVATE_KEY, ktypeString, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY, true, false},
-	VirtualKey{NM_SETTING_VK_CONNECTION_PERMISSIONS, ktypeBoolean, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_PERMISSIONS, false, false},
+	VirtualKey{NM_SETTING_VK_CONNECTION_NO_PERMISSION, ktypeBoolean, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_PERMISSIONS, true, false},
 	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ADDRESSES_ADDRESS, ktypeString, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES, true, false},
 	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ADDRESSES_MASK, ktypeString, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES, true, false},
 	VirtualKey{NM_SETTING_VK_IP4_CONFIG_ADDRESSES_GATEWAY, ktypeString, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES, true, true},
@@ -50,8 +50,8 @@ func generalGetVirtualKeyJSON(data _ConnectionData, field, key string) (valueJSO
 		}
 	case NM_SETTING_CONNECTION_SETTING_NAME:
 		switch key {
-		case NM_SETTING_VK_CONNECTION_PERMISSIONS:
-			return getSettingVkConnectionPermissionsJSON(data)
+		case NM_SETTING_VK_CONNECTION_NO_PERMISSION:
+			return getSettingVkConnectionNoPermissionJSON(data)
 		}
 	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
 		switch key {
@@ -132,8 +132,8 @@ func generalSetVirtualKeyJSON(data _ConnectionData, field, key string, valueJSON
 		}
 	case NM_SETTING_CONNECTION_SETTING_NAME:
 		switch key {
-		case NM_SETTING_VK_CONNECTION_PERMISSIONS:
-			logicSetSettingVkConnectionPermissionsJSON(data, valueJSON)
+		case NM_SETTING_VK_CONNECTION_NO_PERMISSION:
+			logicSetSettingVkConnectionNoPermissionJSON(data, valueJSON)
 			return
 		}
 	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
@@ -232,8 +232,8 @@ func getSettingVk8021xPrivateKeyJSON(data _ConnectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVk8021xPrivateKey(data))
 	return
 }
-func getSettingVkConnectionPermissionsJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON, _ = marshalJSON(getSettingVkConnectionPermissions(data))
+func getSettingVkConnectionNoPermissionJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkConnectionNoPermission(data))
 	return
 }
 func getSettingVkIp4ConfigAddressesAddressJSON(data _ConnectionData) (valueJSON string) {
@@ -334,9 +334,9 @@ func logicSetSettingVk8021xPrivateKeyJSON(data _ConnectionData, valueJSON string
 	value, _ := jsonToKeyValueString(valueJSON)
 	logicSetSettingVk8021xPrivateKey(data, value)
 }
-func logicSetSettingVkConnectionPermissionsJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingVkConnectionNoPermissionJSON(data _ConnectionData, valueJSON string) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
-	logicSetSettingVkConnectionPermissions(data, value)
+	logicSetSettingVkConnectionNoPermission(data, value)
 }
 func logicSetSettingVkIp4ConfigAddressesAddressJSON(data _ConnectionData, valueJSON string) {
 	value, _ := jsonToKeyValueString(valueJSON)

@@ -19,7 +19,7 @@ var (
 type Manager struct {
 	//update by manager.go
 	WiredEnabled      bool          `access:"readwrite"`
-	VPNEnabled        bool          `access:"readwrite"`
+	VPNEnabled        bool          `access:"readwrite"` // TODO
 	WirelessEnabled   dbus.Property `access:"readwrite"`
 	NetworkingEnabled dbus.Property `access:"readwrite"`
 	ActiveConnections []string      // uuid collection of connections that activated
