@@ -43,6 +43,11 @@ const (
 	NM_SETTING_VK_IP6_CONFIG_ROUTES_METRIC     = "vk-routes-metric"
 )
 
+// ppp
+const (
+	NM_SETTING_VK_PPP_LCP_ECHO_ENABLE = "vk-lcp-echo-enable"
+)
+
 // wireless security
 const (
 	NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT = "vk-key-mgmt"
@@ -304,6 +309,12 @@ func getSettingVkIp6ConfigRoutesMetric(data _ConnectionData) (value string) {
 	// value := getSettingIp6ConfigRoutesMetric(data)
 	return
 }
+func getSettingVkPppLcpEchoEnable(data _ConnectionData) (value bool) {
+	if isSettingPppLcpEchoFailureExists(data) && isSettingPppLcpEchoIntervalExists(data) {
+		return true
+	}
+	return false
+}
 func getSettingVkWirelessSecurityKeyMgmt(data _ConnectionData) (value string) {
 	if !isSettingFieldExists(data, fieldWirelessSecurity) {
 		value = "none"
@@ -441,6 +452,15 @@ func logicSetSettingVkIp6ConfigRoutesNexthop(data _ConnectionData, value string)
 func logicSetSettingVkIp6ConfigRoutesMetric(data _ConnectionData, value uint32) {
 	// TODO
 	// setSettingIp6ConfigRoutesMetricJSON(data)
+}
+func logicSetSettingVkPppLcpEchoEnable(data _ConnectionData, value bool) {
+	if value {
+		setSettingPppLcpEchoFailure(data, 5)
+		setSettingPppLcpEchoInterval(data, 30)
+	} else {
+		removeSettingPppLcpEchoFailure(data)
+		removeSettingPppLcpEchoInterval(data)
+	}
 }
 func logicSetSettingVkWirelessSecurityKeyMgmt(data _ConnectionData, value string) {
 	switch value {

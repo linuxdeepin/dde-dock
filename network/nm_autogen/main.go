@@ -25,6 +25,7 @@ var funcMap = template.FuncMap{
 	"ToFrontEndWidget":    ToFrontEndWidget,
 	"ToClassName":         ToClassName,
 	"GetAllKeysInPage":    GetAllKeysInPage,
+	"GetKeyWidgetProp":    GetKeyWidgetProp,
 }
 
 const (
@@ -54,15 +55,16 @@ type NMSettingStruct struct {
 }
 
 type NMSettingKeyStruct struct {
-	Name           string // such as "NM_SETTING_CONNECTION_ID"
-	Value          string // such as "id"
-	Type           string // such as "ktypeString"
-	Default        string // such as "<default>", "<null>" or "true"
-	UsedByBackEnd  bool   // determine if this key will be used by back-end(golang code)
-	UsedByFrontEnd bool   // determine if this key will be used by front-end(qml code)
-	FrontEndWidget string // such as "EditLinePasswordInput"
-	LogicSet       bool   // determine if this key should to generate a logic setter
-	DisplayName    string // such as "Connection name"
+	Name           string            // such as "NM_SETTING_CONNECTION_ID"
+	Value          string            // such as "id"
+	Type           string            // such as "ktypeString"
+	Default        string            // such as "<default>", "<null>" or "true"
+	UsedByBackEnd  bool              // determine if this key will be used by back-end(golang code)
+	UsedByFrontEnd bool              // determine if this key will be used by front-end(qml code)
+	LogicSet       bool              // determine if this key should to generate a logic setter
+	DisplayName    string            // such as "Connection name"
+	FrontEndWidget string            // such as "EditLinePasswordInput"
+	WidgetProp     map[string]string // properties for front end widget, such as "WidgetProp":{"alwaysUpdate":"true"}
 }
 
 type NMSettingVkStruct struct {
@@ -72,9 +74,10 @@ type NMSettingVkStruct struct {
 	RelatedField   string // such as "NM_SETTING_802_1X_SETTING_NAME"
 	RelatedKey     string // such as "NM_SETTING_802_1X_EAP"
 	UsedByFrontEnd bool   // check if is used by front-end
-	FrontEndWidget string // such as "EditLinePasswordInput"
 	Optional       bool   // if key is optional, will ignore error for it
 	DisplayName    string
+	FrontEndWidget string            // such as "EditLinePasswordInput"
+	WidgetProp     map[string]string // properties for front end widget, such as "WidgetProp":{"alwaysUpdate":"true"}
 }
 
 type NMSettingPageStruct struct {

@@ -147,6 +147,7 @@ func (m *Manager) GetActiveConnectionInfo(devPath dbus.ObjectPath) (ret *ActiveC
 
 // CreateConnection create a new connection, return ConnectionSession's dbus object path if success.
 func (m *Manager) CreateConnection(connType string, devPath dbus.ObjectPath) (session *ConnectionSession, err error) {
+	Logger.Debug("CreateConnection", connType, devPath)
 	session, err = NewConnectionSessionByCreate(connType, devPath)
 	if err != nil {
 		Logger.Error(err)

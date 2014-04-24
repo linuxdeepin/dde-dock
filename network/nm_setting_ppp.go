@@ -25,18 +25,48 @@ const (
 
 // TODO Get available keys
 func getSettingPppAvailableKeys(data _ConnectionData) (keys []string) {
-	keys = []string{}
+	keys = appendAvailableKeys(keys, fieldPpp, NM_SETTING_PPP_REFUSE_EAP)
+	keys = appendAvailableKeys(keys, fieldPpp, NM_SETTING_PPP_REFUSE_PAP)
+	keys = appendAvailableKeys(keys, fieldPpp, NM_SETTING_PPP_REFUSE_CHAP)
+	keys = appendAvailableKeys(keys, fieldPpp, NM_SETTING_PPP_REFUSE_MSCHAP)
+	keys = appendAvailableKeys(keys, fieldPpp, NM_SETTING_PPP_REFUSE_MSCHAPV2)
+
+	keys = appendAvailableKeys(keys, fieldPpp, NM_SETTING_PPP_REQUIRE_MPPE)
+	if getSettingPppRequireMppe(data) {
+		keys = appendAvailableKeys(keys, fieldPpp, NM_SETTING_PPP_REQUIRE_MPPE_128)
+		keys = appendAvailableKeys(keys, fieldPpp, NM_SETTING_PPP_MPPE_STATEFUL)
+	}
+
+	keys = appendAvailableKeys(keys, fieldPpp, NM_SETTING_PPP_NOBSDCOMP)
+	keys = appendAvailableKeys(keys, fieldPpp, NM_SETTING_PPP_NODEFLATE)
+	keys = appendAvailableKeys(keys, fieldPpp, NM_SETTING_PPP_NO_VJ_COMP)
+
+	keys = appendAvailableKeys(keys, fieldPpp, NM_SETTING_PPP_LCP_ECHO_FAILURE)
 	return
 }
 
-// TODO Get available values
+// Get available values
 func getSettingPppAvailableValues(data _ConnectionData, key string) (values []string, customizable bool) {
 	customizable = true
 	return
 }
 
-// TODO Check whether the values are correct
+// Check whether the values are correct
 func checkSettingPppValues(data _ConnectionData) (errs FieldKeyErrors) {
 	errs = make(map[string]string)
 	return
+}
+
+// Logic setter
+func logicSetSettingPppRequireMppeJSON(data _ConnectionData, valueJSON string) {
+	setSettingPppRequireMppeJSON(data, valueJSON)
+	value := getSettingPppRequireMppe(data)
+	logicSetSettingPppRequireMppe(data, value)
+}
+func logicSetSettingPppRequireMppe(data _ConnectionData, value bool) {
+	if !value {
+		removeSettingPppRequireMppe128(data)
+		removeSettingPppMppeStateful(data)
+	}
+	setSettingPppRequireMppe(data, value)
 }

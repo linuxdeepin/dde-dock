@@ -38,7 +38,8 @@ BaseEditSection {
         {{ToFrontEndWidget $key}} {
             id: {{$id}}
             key: "{{$value}}"
-            text: dsTr("{{$key | ToKeyDisplayName}}")
+            text: dsTr("{{$key | ToKeyDisplayName}}"){{range $propKey, $propValue := GetKeyWidgetProp $key}}
+            {{$propKey}}: {{$propValue}}{{end}}
         }{{end}}{{end}}
     }
 }

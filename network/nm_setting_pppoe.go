@@ -28,8 +28,8 @@ func newPppoeConnectionData(id, uuid string) (data _ConnectionData) {
 	addSettingField(data, fieldPppoe)
 
 	addSettingField(data, fieldPpp)
-	setSettingPppLcpEchoFailure(data, 5)
-	setSettingPppLcpEchoInterval(data, 30)
+
+	logicSetSettingVkPppLcpEchoEnable(data, true)
 
 	addSettingField(data, fieldIpv4)
 	setSettingIp4ConfigMethod(data, NM_SETTING_IP4_CONFIG_METHOD_AUTO)
@@ -39,11 +39,9 @@ func newPppoeConnectionData(id, uuid string) (data _ConnectionData) {
 
 // Get available keys
 func getSettingPppoeAvailableKeys(data _ConnectionData) (keys []string) {
-	keys = []string{
-		NM_SETTING_PPPOE_SERVICE,
-		NM_SETTING_PPPOE_USERNAME,
-		NM_SETTING_PPPOE_PASSWORD,
-	}
+	keys = appendAvailableKeys(keys, fieldPppoe, NM_SETTING_PPPOE_SERVICE)
+	keys = appendAvailableKeys(keys, fieldPppoe, NM_SETTING_PPPOE_USERNAME)
+	keys = appendAvailableKeys(keys, fieldPppoe, NM_SETTING_PPPOE_PASSWORD)
 	return
 }
 

@@ -169,6 +169,7 @@ func (s *ConnectionSession) ListPages() (pages []string) {
 	case typeWired:
 		pages = []string{
 			pageGeneral,
+			// pageEthernet, // TODO
 			pageIPv4,
 			pageIPv6,
 			pageSecurity,
@@ -184,9 +185,10 @@ func (s *ConnectionSession) ListPages() (pages []string) {
 	case typePppoe:
 		pages = []string{
 			pageGeneral,
+			// pageEthernet, // TODO
 			pagePppoe,
+			pagePpp,
 			pageIPv4,
-			// pagePpp,			// TODO if need
 		}
 	}
 	return

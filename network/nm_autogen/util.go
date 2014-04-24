@@ -111,6 +111,15 @@ func ToKeyValue(keyName string) (keyValue string) {
 	return
 }
 
+func GetKeyWidgetProp(keyName string) (prop map[string]string) {
+	if isVk(keyName) {
+		prop = getVkInfo(keyName).WidgetProp
+	} else {
+		prop = getKeyInfo(keyName).WidgetProp
+	}
+	return
+}
+
 func IsKeyUsedByFrontEnd(keyName string) (used bool) {
 	if isVk(keyName) {
 		used = getVkInfo(keyName).UsedByFrontEnd
@@ -216,13 +225,13 @@ func unmarshalJSONFile(jsonFile string, data interface{}) {
 	fileContent, err := ioutil.ReadFile(jsonFile)
 	if err != nil {
 		fmt.Println("error, open file failed:", err)
-		return
+		os.Exit(1)
 	}
 
 	err = json.Unmarshal(fileContent, data)
 	if err != nil {
 		fmt.Printf("error, unmarshal json %s failed: %v\n", jsonFile, err)
-		return
+		os.Exit(1)
 	}
 }
 
