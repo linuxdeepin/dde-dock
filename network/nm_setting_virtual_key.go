@@ -418,7 +418,7 @@ func logicSetSettingVkIp6ConfigAddressesAddress(data _ConnectionData, value stri
 	// TODO
 	// setSettingIp6ConfigAddressesAddressJSON(data)
 }
-func logicSetSettingVkIp6ConfigAddressesPrefix(data _ConnectionData, value string) {
+func logicSetSettingVkIp6ConfigAddressesPrefix(data _ConnectionData, value uint32) {
 	// TODO
 	// setSettingIp6ConfigAddressesPrefixJSON(data)
 }
@@ -430,7 +430,7 @@ func logicSetSettingVkIp6ConfigRoutesAddress(data _ConnectionData, value string)
 	// TODO
 	// setSettingIp6ConfigRoutesAddressJSON(data)
 }
-func logicSetSettingVkIp6ConfigRoutesPrefix(data _ConnectionData, value string) {
+func logicSetSettingVkIp6ConfigRoutesPrefix(data _ConnectionData, value uint32) {
 	// TODO
 	// setSettingIp6ConfigRoutesPrefixJSON(data)
 }
@@ -438,7 +438,7 @@ func logicSetSettingVkIp6ConfigRoutesNexthop(data _ConnectionData, value string)
 	// TODO
 	// setSettingIp6ConfigRoutesNexthopJSON(data)
 }
-func logicSetSettingVkIp6ConfigRoutesMetric(data _ConnectionData, value string) {
+func logicSetSettingVkIp6ConfigRoutesMetric(data _ConnectionData, value uint32) {
 	// TODO
 	// setSettingIp6ConfigRoutesMetricJSON(data)
 }
