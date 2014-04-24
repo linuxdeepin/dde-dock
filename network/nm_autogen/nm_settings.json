@@ -137,10 +137,10 @@
     "FieldName":"NM_SETTING_VF_VPN_L2TP_SETTING_NAME",
     "FieldValue":"vf-vpn-l2tp",
     "Keys":[
-	    {"Name":"NM_SETTING_L2TP_KEY_GATEWAY", "Value":"gateway", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"},
-	    {"Name":"NM_SETTING_L2TP_KEY_USER", "Value":"user", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"},
-	    {"Name":"NM_SETTING_L2TP_KEY_PASSWORD", "Value":"password", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"},
-	    {"Name":"NM_SETTING_L2TP_KEY_DOMAIN", "Value":"domain", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"}
+	    {"Name":"NM_SETTING_VPN_L2TP_KEY_GATEWAY", "Value":"gateway", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_L2TP_KEY_USER", "Value":"user", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_L2TP_KEY_PASSWORD", "Value":"password", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_L2TP_KEY_DOMAIN", "Value":"domain", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"}
     ]
 },
 {
