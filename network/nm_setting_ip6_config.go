@@ -60,13 +60,23 @@ func getSettingIp6ConfigAvailableValues(data _ConnectionData, key string) (value
 	customizable = true
 	switch key {
 	case NM_SETTING_IP6_CONFIG_METHOD:
-		values = []string{
-			// NM_SETTING_IP6_CONFIG_METHOD_IGNORE, // ignore
-			NM_SETTING_IP6_CONFIG_METHOD_AUTO,
-			// NM_SETTING_IP6_CONFIG_METHOD_DHCP, // ignore
-			// NM_SETTING_IP6_CONFIG_METHOD_LINK_LOCAL, // ignore
-			NM_SETTING_IP6_CONFIG_METHOD_MANUAL,
-			// NM_SETTING_IP6_CONFIG_METHOD_SHARED,// ignore
+		// values = []string{
+		// 	// NM_SETTING_IP6_CONFIG_METHOD_IGNORE, // ignore
+		// 	NM_SETTING_IP6_CONFIG_METHOD_AUTO,
+		// 	// NM_SETTING_IP6_CONFIG_METHOD_DHCP, // ignore
+		// 	// NM_SETTING_IP6_CONFIG_METHOD_LINK_LOCAL, // ignore
+		// 	NM_SETTING_IP6_CONFIG_METHOD_MANUAL,
+		// 	// NM_SETTING_IP6_CONFIG_METHOD_SHARED,// ignore
+		// }
+		if getSettingConnectionType(data) != typeVpn {
+			values = []string{
+				NM_SETTING_IP6_CONFIG_METHOD_AUTO,
+				NM_SETTING_IP6_CONFIG_METHOD_MANUAL,
+			}
+		} else {
+			values = []string{
+				NM_SETTING_IP6_CONFIG_METHOD_AUTO,
+			}
 		}
 		customizable = false
 	}

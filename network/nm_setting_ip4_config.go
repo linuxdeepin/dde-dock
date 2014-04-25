@@ -172,12 +172,22 @@ func getSettingIp4ConfigAvailableValues(data _ConnectionData, key string) (value
 		// case typeWireless:
 		// case typePppoe:
 		// }
-		values = []string{
-			NM_SETTING_IP4_CONFIG_METHOD_AUTO,
-			// NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL, // ignore
-			NM_SETTING_IP4_CONFIG_METHOD_MANUAL,
-			// NM_SETTING_IP4_CONFIG_METHOD_SHARED,   // ignore
-			// NM_SETTING_IP4_CONFIG_METHOD_DISABLED, // ignore
+		// values = []string{
+		// 	NM_SETTING_IP4_CONFIG_METHOD_AUTO,
+		// 	// NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL, // ignore
+		// 	NM_SETTING_IP4_CONFIG_METHOD_MANUAL,
+		// 	// NM_SETTING_IP4_CONFIG_METHOD_SHARED,   // ignore
+		// 	// NM_SETTING_IP4_CONFIG_METHOD_DISABLED, // ignore
+		// }
+		if getSettingConnectionType(data) != typeVpn {
+			values = []string{
+				NM_SETTING_IP4_CONFIG_METHOD_AUTO,
+				NM_SETTING_IP4_CONFIG_METHOD_MANUAL,
+			}
+		} else {
+			values = []string{
+				NM_SETTING_IP4_CONFIG_METHOD_AUTO,
+			}
 		}
 		customizable = false
 	}

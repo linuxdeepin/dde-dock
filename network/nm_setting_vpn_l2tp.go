@@ -17,7 +17,7 @@ const (
 	NM_SETTING_VPN_L2TP_KEY_GATEWAY           = "gateway"
 	NM_SETTING_VPN_L2TP_KEY_USER              = "user"
 	NM_SETTING_VPN_L2TP_KEY_PASSWORD          = "password"
-	NM_SETTING_VPN_L2TP_KEY_PASSWORD_FLAG     = "password-flags"
+	NM_SETTING_VPN_L2TP_KEY_PASSWORD_FLAGS    = "password-flags"
 	NM_SETTING_VPN_L2TP_KEY_DOMAIN            = "domain"
 	NM_SETTING_VPN_L2TP_KEY_REFUSE_EAP        = "refuse-eap"
 	NM_SETTING_VPN_L2TP_KEY_REFUSE_PAP        = "refuse-pap"
@@ -76,6 +76,7 @@ func newVpnL2tpConnectionData(id, uuid string) (data _ConnectionData) {
 	setSettingConnectionId(data, id)
 	setSettingConnectionUuid(data, uuid)
 	setSettingConnectionType(data, typeVpn)
+	logicSetSettingVkConnectionNoPermission(data, false)
 
 	addSettingField(data, fieldVpn)
 	setSettingVpnServiceType(data, NM_DBUS_SERVICE_L2TP)

@@ -159,7 +159,7 @@ func setSettingKey(data _ConnectionData, field, key string, value interface{}) {
 
 	fieldData[key] = dbus.MakeVariant(value)
 
-	Logger.Debugf("setSettingKey: data[%s][%s]=%s", field, key, value) // TODO test
+	// Logger.Debugf("setSettingKey: data[%s][%s]=%s", field, key, value) // TODO test
 	return
 }
 
