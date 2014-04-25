@@ -19,7 +19,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-char* guest_app_id(long s_pid, const char* instance_name, const char* wmname, const char* wmclass, const char* icon_name);
+char* guess_app_id(long s_pid, const char* instance_name, const char* wmname, const char* wmclass, const char* icon_name);
 
 #include <glib.h>
 #include <stdlib.h>
@@ -246,7 +246,7 @@ char* find_app_id(const char* exec_name, const char* key, int filter)
         _init();
     }
     g_assert(exec_name != NULL && key != NULL);
-    g_warning("exec_name: %s, key: %s", exec_name, key);
+    // g_warning("exec_name: %s, key: %s", exec_name, key);
     switch (filter) {
         case APPID_FILTER_WMCLASS:
             return _find_app_id_by_filter(exec_name, key, filter_wmclass);
@@ -358,7 +358,7 @@ char* get_deepin_app_id_value(const char* app_id)
 
 
 
-char* guest_app_id(long s_pid, const char* instance_name, const char* wmname, const char* wmclass, const char* icon_name)
+char* guess_app_id(long s_pid, const char* instance_name, const char* wmname, const char* wmclass, const char* icon_name)
 {
     char* app_id = NULL;
 

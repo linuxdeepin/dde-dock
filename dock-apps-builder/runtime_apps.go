@@ -60,10 +60,15 @@ func NewRuntimeApp(xid xproto.Window, appId string) *RuntimeApp {
 		return nil
 	}
 	app := &RuntimeApp{
-		Id:   appId,
+		Id:   strings.ToLower(appId),
 		xids: make(map[xproto.Window]*WindowInfo),
 	}
 	app.core = gio.NewDesktopAppInfo(appId + ".desktop")
+	if app.core == nil {
+		if newId := guess_desktop_id(appId + ".desktop"); newId != "" {
+			app.core = gio.NewDesktopAppInfo(newId)
+		}
+	}
 	if app.core != nil {
 		LOGGER.Debug(appId, ", Actions:", app.core.ListActions())
 	} else {

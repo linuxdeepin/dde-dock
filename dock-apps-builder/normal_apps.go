@@ -3,6 +3,7 @@ package main
 import (
 	"dlib/gio-2.0"
 	"path/filepath"
+	"strings"
 )
 
 type NormalApp struct {
@@ -19,12 +20,17 @@ type NormalApp struct {
 }
 
 func NewNormalApp(id string) *NormalApp {
-	app := &NormalApp{Id: filepath.Base(id[:len(id)-8])}
+	app := &NormalApp{Id: strings.ToLower(filepath.Base(id[:len(id)-8]))}
 	LOGGER.Info(id)
 	if filepath.IsAbs(id) {
 		app.core = gio.NewDesktopAppInfoFromFilename(id)
 	} else {
 		app.core = gio.NewDesktopAppInfo(id)
+		if app.core == nil {
+			if newId := guess_desktop_id(app.Id + ".desktop"); newId != "" {
+				app.core = gio.NewDesktopAppInfo(newId)
+			}
+		}
 	}
 	if app.core == nil {
 		return nil
