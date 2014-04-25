@@ -19,9 +19,7 @@ const (
 )
 
 // connection
-const (
-	NM_SETTING_VK_CONNECTION_NO_PERMISSION = "vk-no-permission"
-)
+const NM_SETTING_VK_CONNECTION_NO_PERMISSION = "vk-no-permission"
 
 // ipv4
 const (
@@ -48,19 +46,16 @@ const (
 )
 
 // ppp
-const (
-	NM_SETTING_VK_PPP_LCP_ECHO_ENABLE = "vk-lcp-echo-enable"
-)
+const NM_SETTING_VK_PPP_LCP_ECHO_ENABLE = "vk-lcp-echo-enable"
 
 // vpn-l2tp
-const (
-	NM_SETTING_VK_VPN_L2TP_LCP_ECHO_ENABLE = "vk-lcp-echo-enable"
-)
+const NM_SETTING_VK_VPN_L2TP_LCP_ECHO_ENABLE = "vk-lcp-echo-enable"
+
+// vpn-pptp
+const NM_SETTING_VK_VPN_PPTP_LCP_ECHO_ENABLE = "vk-lcp-echo-enable"
 
 // wireless security
-const (
-	NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT = "vk-key-mgmt"
-)
+const NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT = "vk-key-mgmt"
 
 // VirtualKey stores virtual key info for each fields.
 type VirtualKey struct {
@@ -332,6 +327,12 @@ func getSettingVkVpnL2tpLcpEchoEnable(data _ConnectionData) (value bool) {
 	}
 	return false
 }
+func getSettingVkVpnPptpLcpEchoEnable(data _ConnectionData) (value bool) {
+	if isSettingVpnPptpKeyLcpEchoFailureExists(data) && isSettingVpnPptpKeyLcpEchoIntervalExists(data) {
+		return true
+	}
+	return false
+}
 func getSettingVkWirelessSecurityKeyMgmt(data _ConnectionData) (value string) {
 	if !isSettingFieldExists(data, fieldWirelessSecurity) {
 		value = "none"
@@ -495,6 +496,15 @@ func logicSetSettingVkVpnL2tpLcpEchoEnable(data _ConnectionData, value bool) {
 	} else {
 		removeSettingVpnL2tpKeyLcpEchoFailure(data)
 		removeSettingVpnL2tpKeyLcpEchoInterval(data)
+	}
+}
+func logicSetSettingVkVpnPptpLcpEchoEnable(data _ConnectionData, value bool) {
+	if value {
+		setSettingVpnPptpKeyLcpEchoFailure(data, 5)
+		setSettingVpnPptpKeyLcpEchoInterval(data, 30)
+	} else {
+		removeSettingVpnPptpKeyLcpEchoFailure(data)
+		removeSettingVpnPptpKeyLcpEchoInterval(data)
 	}
 }
 func logicSetSettingVkWirelessSecurityKeyMgmt(data _ConnectionData, value string) {

@@ -18,9 +18,9 @@ var supportedConnectionTypes = []string{
 	typePppoe,
 	typeVpnL2tp,
 	typeVpnOpenconnect,
-	// typeVpnOpenvpn 				// TODO
-	// typeVpnPptp 				// TODO
-	// typeVpnVpnc 				// TODO
+	// typeVpnOpenvpn, 				// TODO
+	typeVpnPptp,
+	// typeVpnVpnc, 				// TODO
 }
 
 const (
@@ -35,6 +35,8 @@ const (
 	fieldVpnL2tpPpp       = NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME
 	fieldVpnL2tpIpsec     = NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME
 	fieldVpnOpenconnect   = NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME
+	fieldVpnPptp          = NM_SETTING_VF_VPN_PPTP_SETTING_NAME
+	fieldVpnPptpPpp       = NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME
 	fieldWired            = NM_SETTING_WIRED_SETTING_NAME
 	fieldWireless         = NM_SETTING_WIRELESS_SETTING_NAME
 	fieldWirelessSecurity = NM_SETTING_WIRELESS_SECURITY_SETTING_NAME
@@ -54,6 +56,8 @@ const (
 	pageVpnL2tpPpp     = "vpn-l2tp-ppp"    // -> fieldVpnL2tpPpp
 	pageVpnL2tpIpsec   = "vpn-l2tp-ipsec"  // -> fieldVpnL2tpIpsec
 	pageVpnOpenconnect = "vpn-openconnect" // -> fieldVpnOpenconnect
+	pageVpnPptp        = "vpn-pptp"        // -> fieldVpnPptp
+	pageVpnPptpPpp     = "vpn-pptp-ppp"    // -> fieldVpnPptpPpp
 )
 
 const (

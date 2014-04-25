@@ -53,6 +53,8 @@ func newVpnOpenconnectConnectionData(id, uuid string) (data _ConnectionData) {
 	setSettingConnectionId(data, id)
 	setSettingConnectionUuid(data, uuid)
 	setSettingConnectionType(data, typeVpn)
+	setSettingConnectionAutoconnect(data, false)
+	logicSetSettingVkConnectionNoPermission(data, false)
 
 	addSettingField(data, fieldVpn)
 	setSettingVpnServiceType(data, NM_DBUS_SERVICE_OPENCONNECT)

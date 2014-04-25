@@ -12,9 +12,9 @@ func getSettingVpnL2tpIpsecKeyType(key string) (t ktype) {
 		t = ktypeUnknown
 	case NM_SETTING_VPN_L2TP_KEY_IPSEC_ENABLE:
 		t = ktypeBoolean
-	case NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID:
-		t = ktypeString
 	case NM_SETTING_VPN_L2TP_KEY_IPSEC_GROUP_NAME:
+		t = ktypeString
+	case NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID:
 		t = ktypeString
 	case NM_SETTING_VPN_L2TP_KEY_IPSEC_PSK:
 		t = ktypeString
@@ -27,9 +27,9 @@ func isKeyInSettingVpnL2tpIpsec(key string) bool {
 	switch key {
 	case NM_SETTING_VPN_L2TP_KEY_IPSEC_ENABLE:
 		return true
-	case NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID:
-		return true
 	case NM_SETTING_VPN_L2TP_KEY_IPSEC_GROUP_NAME:
+		return true
+	case NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID:
 		return true
 	case NM_SETTING_VPN_L2TP_KEY_IPSEC_PSK:
 		return true
@@ -44,9 +44,9 @@ func getSettingVpnL2tpIpsecKeyDefaultValueJSON(key string) (valueJSON string) {
 		Logger.Error("invalid key:", key)
 	case NM_SETTING_VPN_L2TP_KEY_IPSEC_ENABLE:
 		valueJSON = `false`
-	case NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID:
-		valueJSON = `""`
 	case NM_SETTING_VPN_L2TP_KEY_IPSEC_GROUP_NAME:
+		valueJSON = `""`
+	case NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID:
 		valueJSON = `""`
 	case NM_SETTING_VPN_L2TP_KEY_IPSEC_PSK:
 		valueJSON = `""`
@@ -61,10 +61,10 @@ func generalGetSettingVpnL2tpIpsecKeyJSON(data _ConnectionData, key string) (val
 		Logger.Error("generalGetSettingVpnL2tpIpsecKeyJSON: invalide key", key)
 	case NM_SETTING_VPN_L2TP_KEY_IPSEC_ENABLE:
 		value = getSettingVpnL2tpKeyIpsecEnableJSON(data)
-	case NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID:
-		value = getSettingVpnL2tpKeyIpsecGatewayIdJSON(data)
 	case NM_SETTING_VPN_L2TP_KEY_IPSEC_GROUP_NAME:
 		value = getSettingVpnL2tpKeyIpsecGroupNameJSON(data)
+	case NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID:
+		value = getSettingVpnL2tpKeyIpsecGatewayIdJSON(data)
 	case NM_SETTING_VPN_L2TP_KEY_IPSEC_PSK:
 		value = getSettingVpnL2tpKeyIpsecPskJSON(data)
 	}
@@ -78,10 +78,10 @@ func generalSetSettingVpnL2tpIpsecKeyJSON(data _ConnectionData, key, valueJSON s
 		Logger.Error("generalSetSettingVpnL2tpIpsecKeyJSON: invalide key", key)
 	case NM_SETTING_VPN_L2TP_KEY_IPSEC_ENABLE:
 		logicSetSettingVpnL2tpKeyIpsecEnableJSON(data, valueJSON)
-	case NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID:
-		setSettingVpnL2tpKeyIpsecGatewayIdJSON(data, valueJSON)
 	case NM_SETTING_VPN_L2TP_KEY_IPSEC_GROUP_NAME:
 		setSettingVpnL2tpKeyIpsecGroupNameJSON(data, valueJSON)
+	case NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID:
+		setSettingVpnL2tpKeyIpsecGatewayIdJSON(data, valueJSON)
 	case NM_SETTING_VPN_L2TP_KEY_IPSEC_PSK:
 		setSettingVpnL2tpKeyIpsecPskJSON(data, valueJSON)
 	}
@@ -92,11 +92,11 @@ func generalSetSettingVpnL2tpIpsecKeyJSON(data _ConnectionData, key, valueJSON s
 func isSettingVpnL2tpKeyIpsecEnableExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_ENABLE)
 }
-func isSettingVpnL2tpKeyIpsecGatewayIdExists(data _ConnectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID)
-}
 func isSettingVpnL2tpKeyIpsecGroupNameExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GROUP_NAME)
+}
+func isSettingVpnL2tpKeyIpsecGatewayIdExists(data _ConnectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID)
 }
 func isSettingVpnL2tpKeyIpsecPskExists(data _ConnectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_PSK)
@@ -117,15 +117,6 @@ func ensureSettingVpnL2tpKeyIpsecEnableNoEmpty(data _ConnectionData, errs FieldK
 		rememberError(errs, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_ENABLE, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnL2tpKeyIpsecGatewayIdNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
-	if !isSettingVpnL2tpKeyIpsecGatewayIdExists(data) {
-		rememberError(errs, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID, NM_KEY_ERROR_MISSING_VALUE)
-	}
-	value := getSettingVpnL2tpKeyIpsecGatewayId(data)
-	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID, NM_KEY_ERROR_EMPTY_VALUE)
-	}
-}
 func ensureSettingVpnL2tpKeyIpsecGroupNameNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 	if !isSettingVpnL2tpKeyIpsecGroupNameExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GROUP_NAME, NM_KEY_ERROR_MISSING_VALUE)
@@ -133,6 +124,15 @@ func ensureSettingVpnL2tpKeyIpsecGroupNameNoEmpty(data _ConnectionData, errs Fie
 	value := getSettingVpnL2tpKeyIpsecGroupName(data)
 	if len(value) == 0 {
 		rememberError(errs, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GROUP_NAME, NM_KEY_ERROR_EMPTY_VALUE)
+	}
+}
+func ensureSettingVpnL2tpKeyIpsecGatewayIdNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+	if !isSettingVpnL2tpKeyIpsecGatewayIdExists(data) {
+		rememberError(errs, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID, NM_KEY_ERROR_MISSING_VALUE)
+	}
+	value := getSettingVpnL2tpKeyIpsecGatewayId(data)
+	if len(value) == 0 {
+		rememberError(errs, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
 func ensureSettingVpnL2tpKeyIpsecPskNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
@@ -150,12 +150,12 @@ func getSettingVpnL2tpKeyIpsecEnable(data _ConnectionData) (value bool) {
 	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_ENABLE).(bool)
 	return
 }
-func getSettingVpnL2tpKeyIpsecGatewayId(data _ConnectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID).(string)
-	return
-}
 func getSettingVpnL2tpKeyIpsecGroupName(data _ConnectionData) (value string) {
 	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GROUP_NAME).(string)
+	return
+}
+func getSettingVpnL2tpKeyIpsecGatewayId(data _ConnectionData) (value string) {
+	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID).(string)
 	return
 }
 func getSettingVpnL2tpKeyIpsecPsk(data _ConnectionData) (value string) {
@@ -167,11 +167,11 @@ func getSettingVpnL2tpKeyIpsecPsk(data _ConnectionData) (value string) {
 func setSettingVpnL2tpKeyIpsecEnable(data _ConnectionData, value bool) {
 	setSettingKey(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_ENABLE, value)
 }
-func setSettingVpnL2tpKeyIpsecGatewayId(data _ConnectionData, value string) {
-	setSettingKey(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID, value)
-}
 func setSettingVpnL2tpKeyIpsecGroupName(data _ConnectionData, value string) {
 	setSettingKey(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GROUP_NAME, value)
+}
+func setSettingVpnL2tpKeyIpsecGatewayId(data _ConnectionData, value string) {
+	setSettingKey(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID, value)
 }
 func setSettingVpnL2tpKeyIpsecPsk(data _ConnectionData, value string) {
 	setSettingKey(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_PSK, value)
@@ -182,12 +182,12 @@ func getSettingVpnL2tpKeyIpsecEnableJSON(data _ConnectionData) (valueJSON string
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_ENABLE, getSettingVpnL2tpIpsecKeyType(NM_SETTING_VPN_L2TP_KEY_IPSEC_ENABLE))
 	return
 }
-func getSettingVpnL2tpKeyIpsecGatewayIdJSON(data _ConnectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID, getSettingVpnL2tpIpsecKeyType(NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID))
-	return
-}
 func getSettingVpnL2tpKeyIpsecGroupNameJSON(data _ConnectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GROUP_NAME, getSettingVpnL2tpIpsecKeyType(NM_SETTING_VPN_L2TP_KEY_IPSEC_GROUP_NAME))
+	return
+}
+func getSettingVpnL2tpKeyIpsecGatewayIdJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID, getSettingVpnL2tpIpsecKeyType(NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID))
 	return
 }
 func getSettingVpnL2tpKeyIpsecPskJSON(data _ConnectionData) (valueJSON string) {
@@ -199,11 +199,11 @@ func getSettingVpnL2tpKeyIpsecPskJSON(data _ConnectionData) (valueJSON string) {
 func setSettingVpnL2tpKeyIpsecEnableJSON(data _ConnectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_ENABLE, valueJSON, getSettingVpnL2tpIpsecKeyType(NM_SETTING_VPN_L2TP_KEY_IPSEC_ENABLE))
 }
-func setSettingVpnL2tpKeyIpsecGatewayIdJSON(data _ConnectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID, valueJSON, getSettingVpnL2tpIpsecKeyType(NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID))
-}
 func setSettingVpnL2tpKeyIpsecGroupNameJSON(data _ConnectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GROUP_NAME, valueJSON, getSettingVpnL2tpIpsecKeyType(NM_SETTING_VPN_L2TP_KEY_IPSEC_GROUP_NAME))
+}
+func setSettingVpnL2tpKeyIpsecGatewayIdJSON(data _ConnectionData, valueJSON string) {
+	setSettingKeyJSON(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID, valueJSON, getSettingVpnL2tpIpsecKeyType(NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID))
 }
 func setSettingVpnL2tpKeyIpsecPskJSON(data _ConnectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_PSK, valueJSON, getSettingVpnL2tpIpsecKeyType(NM_SETTING_VPN_L2TP_KEY_IPSEC_PSK))
@@ -213,11 +213,11 @@ func setSettingVpnL2tpKeyIpsecPskJSON(data _ConnectionData, valueJSON string) {
 func removeSettingVpnL2tpKeyIpsecEnable(data _ConnectionData) {
 	removeSettingKey(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_ENABLE)
 }
-func removeSettingVpnL2tpKeyIpsecGatewayId(data _ConnectionData) {
-	removeSettingKey(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID)
-}
 func removeSettingVpnL2tpKeyIpsecGroupName(data _ConnectionData) {
 	removeSettingKey(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GROUP_NAME)
+}
+func removeSettingVpnL2tpKeyIpsecGatewayId(data _ConnectionData) {
+	removeSettingKey(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID)
 }
 func removeSettingVpnL2tpKeyIpsecPsk(data _ConnectionData) {
 	removeSettingKey(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_PSK)

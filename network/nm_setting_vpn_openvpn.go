@@ -6,64 +6,72 @@ const (
 	NM_DBUS_PATH_OPENVPN      = "/org/freedesktop/NetworkManager/openvpn"
 )
 
-// #define NM_OPENVPN_KEY_AUTH "auth"
-// #define NM_OPENVPN_KEY_CA "ca"
-// #define NM_OPENVPN_KEY_CERT "cert"
-// #define NM_OPENVPN_KEY_CIPHER "cipher"
-// #define NM_OPENVPN_KEY_COMP_LZO "comp-lzo"
-// #define NM_OPENVPN_KEY_CONNECTION_TYPE "connection-type"
-// #define NM_OPENVPN_KEY_FRAGMENT_SIZE "fragment-size"
-// #define NM_OPENVPN_KEY_KEY "key"
-// #define NM_OPENVPN_KEY_LOCAL_IP "local-ip" /* ??? */
-// #define NM_OPENVPN_KEY_MSSFIX "mssfix"
-// #define NM_OPENVPN_KEY_PORT "port"
-// #define NM_OPENVPN_KEY_PROTO_TCP "proto-tcp"
-// #define NM_OPENVPN_KEY_PROXY_TYPE "proxy-type"
-// #define NM_OPENVPN_KEY_PROXY_SERVER "proxy-server"
-// #define NM_OPENVPN_KEY_PROXY_PORT "proxy-port"
-// #define NM_OPENVPN_KEY_PROXY_RETRY "proxy-retry"
-// #define NM_OPENVPN_KEY_HTTP_PROXY_USERNAME "http-proxy-username"
-// #define NM_OPENVPN_KEY_REMOTE "remote"
-// #define NM_OPENVPN_KEY_REMOTE_RANDOM "remote-random"
-// #define NM_OPENVPN_KEY_REMOTE_IP "remote-ip"
-// #define NM_OPENVPN_KEY_STATIC_KEY "static-key"
-// #define NM_OPENVPN_KEY_STATIC_KEY_DIRECTION "static-key-direction"
-// #define NM_OPENVPN_KEY_TA "ta"
-// #define NM_OPENVPN_KEY_TA_DIR "ta-dir"
-// #define NM_OPENVPN_KEY_TUNNEL_MTU "tunnel-mtu"
-// #define NM_OPENVPN_KEY_USERNAME "username"
-// #define NM_OPENVPN_KEY_TAP_DEV "tap-dev"
-// #define NM_OPENVPN_KEY_TLS_REMOTE "tls-remote"
-// #define NM_OPENVPN_KEY_REMOTE_CERT_TLS "remote-cert-tls"
+const (
+	NM_SETTING_VPN_OPENVPN_KEY_AUTH                 = "auth"
+	NM_SETTING_VPN_OPENVPN_KEY_CA                   = "ca"
+	NM_SETTING_VPN_OPENVPN_KEY_CERT                 = "cert"
+	NM_SETTING_VPN_OPENVPN_KEY_CIPHER               = "cipher"
+	NM_SETTING_VPN_OPENVPN_KEY_COMP_LZO             = "comp-lzo"
+	NM_SETTING_VPN_OPENVPN_KEY_CONNECTION_TYPE      = "connection-type"
+	NM_SETTING_VPN_OPENVPN_KEY_FRAGMENT_SIZE        = "fragment-size"
+	NM_SETTING_VPN_OPENVPN_KEY_KEY                  = "key"
+	NM_SETTING_VPN_OPENVPN_KEY_LOCAL_IP             = "local-ip" /* ??? */
+	NM_SETTING_VPN_OPENVPN_KEY_MSSFIX               = "mssfix"
+	NM_SETTING_VPN_OPENVPN_KEY_PORT                 = "port"
+	NM_SETTING_VPN_OPENVPN_KEY_PROTO_TCP            = "proto-tcp"
+	NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE           = "proxy-type"
+	NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER         = "proxy-server"
+	NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT           = "proxy-port"
+	NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY          = "proxy-retry"
+	NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME  = "http-proxy-username"
+	NM_SETTING_VPN_OPENVPN_KEY_REMOTE               = "remote"
+	NM_SETTING_VPN_OPENVPN_KEY_REMOTE_RANDOM        = "remote-random"
+	NM_SETTING_VPN_OPENVPN_KEY_REMOTE_IP            = "remote-ip"
+	NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY           = "static-key"
+	NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY_DIRECTION = "static-key-direction"
+	NM_SETTING_VPN_OPENVPN_KEY_TA                   = "ta"
+	NM_SETTING_VPN_OPENVPN_KEY_TA_DIR               = "ta-dir"
+	NM_SETTING_VPN_OPENVPN_KEY_TUNNEL_MTU           = "tunnel-mtu"
+	NM_SETTING_VPN_OPENVPN_KEY_USERNAME             = "username"
+	NM_SETTING_VPN_OPENVPN_KEY_TAP_DEV              = "tap-dev"
+	NM_SETTING_VPN_OPENVPN_KEY_TLS_REMOTE           = "tls-remote"
+	NM_SETTING_VPN_OPENVPN_KEY_REMOTE_CERT_TLS      = "remote-cert-tls"
+	NM_SETTING_VPN_OPENVPN_KEY_PASSWORD             = "password"
+	NM_SETTING_VPN_OPENVPN_KEY_CERTPASS             = "cert-pass"
+	NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD  = "http-proxy-password"
+)
 
-// #define NM_OPENVPN_KEY_PASSWORD "password"
-// #define NM_OPENVPN_KEY_CERTPASS "cert-pass"
-// #define NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD "http-proxy-password"
-// /* Internal auth-dialog -> service token indicating that no secrets are
-//  * required for the connection.
-//  */
-// #define NM_OPENVPN_KEY_NOSECRET "no-secret"
+/* Internal auth-dialog -> service token indicating that no secrets are
+ * required for the connection.
+ */
+const NM_OPENVPN_KEY_NOSECRET = "no-secret"
 
 // #define NM_OPENVPN_KEY_RENEG_SECONDS "reneg-seconds"
 
-// #define NM_OPENVPN_AUTH_NONE "none"
-// #define NM_OPENVPN_AUTH_RSA_MD4 "RSA-MD4"
-// #define NM_OPENVPN_AUTH_MD5  "MD5"
-// #define NM_OPENVPN_AUTH_SHA1 "SHA1"
-// #define NM_OPENVPN_AUTH_SHA224 "SHA224"
-// #define NM_OPENVPN_AUTH_SHA256 "SHA256"
-// #define NM_OPENVPN_AUTH_SHA384 "SHA384"
-// #define NM_OPENVPN_AUTH_SHA512 "SHA512"
-// #define NM_OPENVPN_AUTH_RIPEMD160 "RIPEMD160"
+const (
+	NM_OPENVPN_AUTH_NONE      = "none"
+	NM_OPENVPN_AUTH_RSA_MD4   = "RSA-MD4"
+	NM_OPENVPN_AUTH_MD5       = "MD5"
+	NM_OPENVPN_AUTH_SHA1      = "SHA1"
+	NM_OPENVPN_AUTH_SHA224    = "SHA224"
+	NM_OPENVPN_AUTH_SHA256    = "SHA256"
+	NM_OPENVPN_AUTH_SHA384    = "SHA384"
+	NM_OPENVPN_AUTH_SHA512    = "SHA512"
+	NM_OPENVPN_AUTH_RIPEMD160 = "RIPEMD160"
+)
 
-// #define NM_OPENVPN_CONTYPE_TLS          "tls"
-// #define NM_OPENVPN_CONTYPE_STATIC_KEY   "static-key"
-// #define NM_OPENVPN_CONTYPE_PASSWORD     "password"
-// #define NM_OPENVPN_CONTYPE_PASSWORD_TLS "password-tls"
+const (
+	NM_OPENVPN_CONTYPE_TLS          = "tls"
+	NM_OPENVPN_CONTYPE_STATIC_KEY   = "static-key"
+	NM_OPENVPN_CONTYPE_PASSWORD     = "password"
+	NM_OPENVPN_CONTYPE_PASSWORD_TLS = "password-tls"
+)
 
-// /* arguments of "--remote-cert-tls" */
-// #define NM_OPENVPN_REM_CERT_TLS_CLIENT "client"
-// #define NM_OPENVPN_REM_CERT_TLS_SERVER "server"
+/* arguments of "--remote-cert-tls" */
+const (
+	NM_OPENVPN_REM_CERT_TLS_CLIENT = "client"
+	NM_OPENVPN_REM_CERT_TLS_SERVER = "server"
+)
 
 // vpn key descriptions
 // static ValidProperty valid_properties[] = {

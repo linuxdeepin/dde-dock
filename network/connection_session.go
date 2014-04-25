@@ -64,6 +64,8 @@ func NewConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 		s.data = newVpnL2tpConnectionData("", s.CurrentUUID)
 	case typeVpnOpenconnect:
 		s.data = newVpnOpenconnectConnectionData("", s.CurrentUUID)
+	case typeVpnPptp:
+		s.data = newVpnPptpConnectionData("", s.CurrentUUID)
 	}
 
 	s.updatePropErrors()
@@ -167,7 +169,7 @@ func (s *ConnectionSession) Close() {
 	dbus.UnInstallObject(s)
 }
 
-//根据CurrentUUID返回此Connection支持的设置页面
+// ListPages return supported pages for target connection type.
 func (s *ConnectionSession) ListPages() (pages []string) {
 	switch s.connectionType {
 	case typeWired:
@@ -208,6 +210,13 @@ func (s *ConnectionSession) ListPages() (pages []string) {
 			pageVpnOpenconnect,
 			pageIPv4,
 			pageIPv6,
+		}
+	case typeVpnPptp:
+		pages = []string{
+			pageGeneral,
+			pageVpnPptp,
+			pageVpnPptpPpp,
+			pageIPv4,
 		}
 	}
 	return
@@ -250,6 +259,10 @@ func (s *ConnectionSession) pageToFields(page string) (fields []string) {
 		fields = []string{fieldVpnL2tpIpsec}
 	case pageVpnOpenconnect:
 		fields = []string{fieldVpnOpenconnect}
+	case pageVpnPptp:
+		fields = []string{fieldVpnPptp}
+	case pageVpnPptpPpp:
+		fields = []string{fieldVpnPptpPpp}
 	}
 	return
 }

@@ -19,9 +19,10 @@ const (
 	NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME = "vf-vpn-openvpn"
 )
 
-// vpn-pptp TODO
+// vpn-pptp
 const (
-	NM_SETTING_VF_VPN_PPTP_SETTING_NAME = "vf-vpn-pptp"
+	NM_SETTING_VF_VPN_PPTP_SETTING_NAME     = "vf-vpn-pptp"
+	NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME = "vf-vpn-pptp-ppp"
 )
 
 // vpn-vpnc TODO
@@ -39,6 +40,14 @@ func getRealFieldName(name string) (realName string) {
 	case NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME:
 		realName = fieldVpn
 	case NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME:
+		realName = fieldVpn
+	case NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME:
+		realName = fieldVpn
+	case NM_SETTING_VF_VPN_PPTP_SETTING_NAME:
+		realName = fieldVpn
+	case NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME:
+		realName = fieldVpn
+	case NM_SETTING_VF_VPN_VPNC_SETTING_NAME:
 		realName = fieldVpn
 	}
 	return

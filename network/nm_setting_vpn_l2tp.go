@@ -76,11 +76,12 @@ func newVpnL2tpConnectionData(id, uuid string) (data _ConnectionData) {
 	setSettingConnectionId(data, id)
 	setSettingConnectionUuid(data, uuid)
 	setSettingConnectionType(data, typeVpn)
+	setSettingConnectionAutoconnect(data, false)
 	logicSetSettingVkConnectionNoPermission(data, false)
 
 	addSettingField(data, fieldVpn)
 	setSettingVpnServiceType(data, NM_DBUS_SERVICE_L2TP)
-	setSettingVpnL2tpKeyPasswordFlag(data, NM_SETTING_SECRET_FLAG_AGENT_OWNED)
+	setSettingVpnL2tpKeyPasswordFlags(data, 1)
 
 	addSettingField(data, fieldIpv4)
 	setSettingIp4ConfigMethod(data, NM_SETTING_IP4_CONFIG_METHOD_AUTO)
@@ -88,12 +89,11 @@ func newVpnL2tpConnectionData(id, uuid string) (data _ConnectionData) {
 	return
 }
 
-// vpt-l2tp
+// vpn-l2tp
 func getSettingVpnL2tpAvailableKeys(data _ConnectionData) (keys []string) {
 	keys = appendAvailableKeys(keys, fieldVpnL2tp, NM_SETTING_VPN_L2TP_KEY_GATEWAY)
 	keys = appendAvailableKeys(keys, fieldVpnL2tp, NM_SETTING_VPN_L2TP_KEY_USER)
 	keys = appendAvailableKeys(keys, fieldVpnL2tp, NM_SETTING_VPN_L2TP_KEY_PASSWORD)
-	keys = appendAvailableKeys(keys, fieldVpnL2tp, NM_SETTING_VPN_L2TP_KEY_PASSWORD_FLAG)
 	keys = appendAvailableKeys(keys, fieldVpnL2tp, NM_SETTING_VPN_L2TP_KEY_DOMAIN)
 	return
 }
@@ -106,7 +106,7 @@ func checkSettingVpnL2tpValues(data _ConnectionData) (errs FieldKeyErrors) {
 	return
 }
 
-// vpt-l2tp-ppp
+// vpn-l2tp-ppp
 func getSettingVpnL2tpPppAvailableKeys(data _ConnectionData) (keys []string) {
 	keys = appendAvailableKeys(keys, fieldVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_REFUSE_EAP)
 	keys = appendAvailableKeys(keys, fieldVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_REFUSE_PAP)
@@ -148,7 +148,7 @@ func logicSetSettingVpnL2tpKeyRequireMppe(data _ConnectionData, value bool) {
 	setSettingVpnL2tpKeyRequireMppe(data, value)
 }
 
-// vpt-l2tp-ipsec
+// vpn-l2tp-ipsec
 func getSettingVpnL2tpIpsecAvailableKeys(data _ConnectionData) (keys []string) {
 	keys = appendAvailableKeys(keys, fieldVpnL2tpIpsec, NM_SETTING_VPN_L2TP_KEY_IPSEC_ENABLE)
 	if getSettingVpnL2tpKeyIpsecEnable(data) {
