@@ -163,6 +163,7 @@ func (op *AccountManager) emitUserListChanged() {
                 destList = append(destList, path)
         }
         list, ret := compareStrList(op.UserList, destList)
+        //logObject.Infof("***** compare ret: %v ------ %d", list, ret)
         switch ret {
         case 1:
                 updateUserList()
@@ -180,6 +181,7 @@ func (op *AccountManager) emitUserListChanged() {
                 op.setPropName("UserList")
                 //}()
                 for _, v := range list {
+                        //logObject.Info("======== User Deleted: ", v)
                         op.UserDeleted(v)
                 }
         }
@@ -189,6 +191,8 @@ func compareStrList(src, dest []string) ([]string, int) {
         sl := len(src)
         dl := len(dest)
 
+        //logObject.Info("--------Compare src: ", src)
+        //logObject.Info("--------Compare dest: ", dest)
         tmp := []string{}
         if sl < dl {
                 for i := 0; i < dl; i++ {
