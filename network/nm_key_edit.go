@@ -7,13 +7,13 @@ import "fmt"
 func pageGeneralGetId(con map[string]map[string]dbus.Variant) string {
 	defer func() {
 		if err := recover(); err != nil {
-			Logger.Warning("EditorGetID failed:", con, err)
+			logger.Warning("EditorGetID failed:", con, err)
 		}
 	}()
 	return con[fieldConnection]["id"].Value().(string)
 }
 
-func generalGetConnectionType(data _ConnectionData) (connType string) {
+func generalGetConnectionType(data connectionData) (connType string) {
 	switch getSettingConnectionType(data) {
 	case typeWired:
 		connType = typeWired
@@ -36,7 +36,7 @@ func generalGetConnectionType(data _ConnectionData) (connType string) {
 		}
 	}
 	if len(connType) == 0 {
-		Logger.Error("get connection type failed")
+		logger.Error("get connection type failed")
 	}
 	return
 }
@@ -76,7 +76,7 @@ func isJSONKeyValueMeansToDeleteKey(valueJSON string, t ktype) (doDelete bool) {
 	return
 }
 
-func getSettingKeyJSON(data _ConnectionData, field, key string, t ktype) (valueJSON string) {
+func getSettingKeyJSON(data connectionData, field, key string, t ktype) (valueJSON string) {
 	_filed := field
 	field = getRealFieldName(field) // get real field name
 	var value interface{}
@@ -90,21 +90,21 @@ func getSettingKeyJSON(data _ConnectionData, field, key string, t ktype) (valueJ
 
 	valueJSON, err := keyValueToJSON(value, t)
 	if err != nil {
-		Logger.Error("get connection data failed:", err)
+		logger.Error("get connection data failed:", err)
 		return
 	}
 
 	if len(valueJSON) == 0 {
-		Logger.Error("getSettingKeyJSON: valueJSON is empty")
+		logger.Error("getSettingKeyJSON: valueJSON is empty")
 	}
 
 	return
 }
 
-func setSettingKeyJSON(data _ConnectionData, field, key, valueJSON string, t ktype) {
+func setSettingKeyJSON(data connectionData, field, key, valueJSON string, t ktype) {
 	field = getRealFieldName(field) // get real field name
 	if len(valueJSON) == 0 {
-		Logger.Error("setSettingKeyJSON: valueJSON is empty")
+		logger.Error("setSettingKeyJSON: valueJSON is empty")
 		return
 	}
 
@@ -116,11 +116,11 @@ func setSettingKeyJSON(data _ConnectionData, field, key, valueJSON string, t kty
 
 	value, err := jsonToKeyValue(valueJSON, t)
 	if err != nil {
-		Logger.Errorf("set connection data failed, valueJSON=%s, ktype=%s, error message:%v",
+		logger.Errorf("set connection data failed, valueJSON=%s, ktype=%s, error message:%v",
 			valueJSON, getKtypeDescription(t), err)
 		return
 	}
-	// Logger.Debugf("setSettingKeyJSON data[%s][%s]=%#v, valueJSON=%s", field, key, value, valueJSON) // TODO test
+	// logger.Debugf("setSettingKeyJSON data[%s][%s]=%#v, valueJSON=%s", field, key, value, valueJSON) // TODO test
 	if isInterfaceNil(value) {
 		removeSettingKey(data, field, key)
 	} else {
@@ -129,11 +129,11 @@ func setSettingKeyJSON(data _ConnectionData, field, key, valueJSON string, t kty
 	return
 }
 
-func getSettingKey(data _ConnectionData, field, key string) (value interface{}) {
+func getSettingKey(data connectionData, field, key string) (value interface{}) {
 	field = getRealFieldName(field) // get real field name
 	fieldData, ok := data[field]
 	if !ok {
-		Logger.Errorf("invalid field: data[%s]", field)
+		logger.Errorf("invalid field: data[%s]", field)
 		return
 	}
 
@@ -144,26 +144,26 @@ func getSettingKey(data _ConnectionData, field, key string) (value interface{}) 
 
 	value = variant.Value()
 
-	// Logger.Debugf("getSettingKey: data[%s][%s]=%v", field, key, value) // TODO test
+	// logger.Debugf("getSettingKey: data[%s][%s]=%v", field, key, value) // TODO test
 	return
 }
 
-func setSettingKey(data _ConnectionData, field, key string, value interface{}) {
+func setSettingKey(data connectionData, field, key string, value interface{}) {
 	field = getRealFieldName(field) // get real field name
 	var fieldData map[string]dbus.Variant
 	fieldData, ok := data[field]
 	if !ok {
-		Logger.Error(fmt.Errorf(`set connection data failed, field "%s" is not exits yet`, field))
+		logger.Error(fmt.Errorf(`set connection data failed, field "%s" is not exits yet`, field))
 		return
 	}
 
 	fieldData[key] = dbus.MakeVariant(value)
 
-	// Logger.Debugf("setSettingKey: data[%s][%s]=%s", field, key, value) // TODO test
+	// logger.Debugf("setSettingKey: data[%s][%s]=%s", field, key, value) // TODO test
 	return
 }
 
-func removeSettingKey(data _ConnectionData, field, key string) {
+func removeSettingKey(data connectionData, field, key string) {
 	field = getRealFieldName(field) // get real field name
 	fieldData, ok := data[field]
 	if !ok {
@@ -178,7 +178,7 @@ func removeSettingKey(data _ConnectionData, field, key string) {
 	delete(fieldData, key)
 }
 
-func removeSettingKeyBut(data _ConnectionData, field string, keys ...string) {
+func removeSettingKeyBut(data connectionData, field string, keys ...string) {
 	field = getRealFieldName(field) // get real field name
 	fieldData, ok := data[field]
 	if !ok {
@@ -192,7 +192,7 @@ func removeSettingKeyBut(data _ConnectionData, field string, keys ...string) {
 	}
 }
 
-func isSettingKeyExists(data _ConnectionData, field, key string) bool {
+func isSettingKeyExists(data connectionData, field, key string) bool {
 	field = getRealFieldName(field) // get real field name
 	fieldData, ok := data[field]
 	if !ok {
@@ -207,7 +207,7 @@ func isSettingKeyExists(data _ConnectionData, field, key string) bool {
 	return true
 }
 
-func addSettingField(data _ConnectionData, field string) {
+func addSettingField(data connectionData, field string) {
 	field = getRealFieldName(field) // get real field name
 	var fieldData map[string]dbus.Variant
 	fieldData, ok := data[field]
@@ -218,7 +218,7 @@ func addSettingField(data _ConnectionData, field string) {
 	}
 }
 
-func removeSettingField(data _ConnectionData, field string) {
+func removeSettingField(data connectionData, field string) {
 	field = getRealFieldName(field) // get real field name
 	_, ok := data[field]
 	if ok {
@@ -227,7 +227,7 @@ func removeSettingField(data _ConnectionData, field string) {
 	}
 }
 
-func isSettingFieldExists(data _ConnectionData, field string) bool {
+func isSettingFieldExists(data connectionData, field string) bool {
 	field = getRealFieldName(field) // get real field name
 	_, ok := data[field]
 	return ok

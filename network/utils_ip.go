@@ -16,7 +16,7 @@ const (
 func convertMacAddressToString(v []byte) (macAddr string) {
 	if len(v) != 6 {
 		macAddr = macAddrZero
-		Logger.Error("machine address is invalid", v)
+		logger.Error("machine address is invalid", v)
 		return
 	}
 	macAddr = fmt.Sprintf("%02X:%02X:%02X:%02X:%02X:%02X", v[0], v[1], v[2], v[3], v[4], v[5])
@@ -28,13 +28,13 @@ func convertMacAddressToArrayByte(v string) (macAddr []byte) {
 	macAddr = make([]byte, 6)
 	a := strings.Split(v, ":")
 	if len(a) != 6 {
-		Logger.Error("machine address is invalid", v)
+		logger.Error("machine address is invalid", v)
 		return
 	}
 	for i := 0; i < 6; i++ {
 		n, err := strconv.ParseUint(a[i], 16, 8)
 		if err != nil {
-			Logger.Error("machine address is invalid", v)
+			logger.Error("machine address is invalid", v)
 		}
 		macAddr[i] = byte(n)
 	}
@@ -63,13 +63,13 @@ func convertIpv4AddressToUint32(v string) (ip4Addr uint32) {
 	a := strings.Split(v, ".")
 	if len(a) != 4 {
 		ip4Addr = 0
-		Logger.Error("ip address is invalid", v)
+		logger.Error("ip address is invalid", v)
 		return
 	}
 	for i := 3; i >= 0; i-- {
 		tmpn, err := strconv.ParseUint(a[i], 10, 8)
 		if err != nil {
-			Logger.Error("ip address is invalid", v)
+			logger.Error("ip address is invalid", v)
 			return
 		}
 		ip4Addr = ip4Addr<<8 + uint32(tmpn)
@@ -119,7 +119,7 @@ func convertIpv4NetMaskToPrefix(maskAddress string) (prefix uint32) {
 func convertIpv6AddressToString(v []byte) (ipv6Addr string) {
 	if len(v) != 16 {
 		ipv6Addr = ipv6AddrZero
-		Logger.Error("ipv6 address is invalid", v)
+		logger.Error("ipv6 address is invalid", v)
 		return
 	}
 	for i := 0; i < 16; i += 2 {
@@ -138,26 +138,26 @@ func convertIpv6AddressToArrayByte(v string) (ipv6Addr []byte) {
 	ipv6Addr = make([]byte, 16)
 	a := strings.Split(v, ":")
 	if len(a) != 8 {
-		Logger.Error("ipv6 address is invalid", v)
+		logger.Error("ipv6 address is invalid", v)
 		return // TODO
 	}
 	for i := 0; i < 8; i++ {
 		s := a[i]
 		if len(s) != 4 {
-			Logger.Error("ipv6 address is invalid", v)
+			logger.Error("ipv6 address is invalid", v)
 			return
 		}
 
 		n, err := strconv.ParseUint(s[:2], 16, 8)
 		ipv6Addr[i*2] = byte(n)
 		if err != nil {
-			Logger.Error("ipv6 address is invalid", v)
+			logger.Error("ipv6 address is invalid", v)
 			return
 		}
 
 		n, err = strconv.ParseUint(s[2:], 16, 8)
 		if err != nil {
-			Logger.Error("ipv6 address is invalid", v)
+			logger.Error("ipv6 address is invalid", v)
 			return
 		}
 		ipv6Addr[i*2+1] = byte(n)

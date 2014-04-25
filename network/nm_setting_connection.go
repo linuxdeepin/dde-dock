@@ -80,7 +80,7 @@ const (
 )
 
 // Get available keys
-func getSettingConnectionAvailableKeys(data _ConnectionData) (keys []string) {
+func getSettingConnectionAvailableKeys(data connectionData) (keys []string) {
 	keys = appendAvailableKeys(keys, fieldConnection, NM_SETTING_CONNECTION_ID)
 	keys = appendAvailableKeys(keys, fieldConnection, NM_SETTING_CONNECTION_PERMISSIONS)
 
@@ -98,13 +98,13 @@ func getSettingConnectionAvailableKeys(data _ConnectionData) (keys []string) {
 }
 
 // Get available values
-func getSettingConnectionAvailableValues(data _ConnectionData, key string) (values []string, customizable bool) {
+func getSettingConnectionAvailableValues(data connectionData, key string) (values []string, customizable bool) {
 	customizable = true
 	return
 }
 
 // Check whether the values are correct
-func checkSettingConnectionValues(data _ConnectionData) (errs FieldKeyErrors) {
+func checkSettingConnectionValues(data connectionData) (errs FieldKeyErrors) {
 	errs = make(map[string]string)
 
 	// check id

@@ -59,9 +59,9 @@ func ToKeyTypeRealData(ktype string) (realData string) {
 	case "ktypeDictStringString":
 		realData = "map[string]string"
 	case "ktypeIpv6Addresses":
-		realData = "Ipv6Addresses"
+		realData = "ipv6Addresses"
 	case "ktypeIpv6Routes":
-		realData = "Ipv6Routes"
+		realData = "ipv6Routes"
 	case "ktypeWrapperString":
 		realData = "[]byte"
 	case "ktypeWrapperMacAddress":
@@ -75,9 +75,9 @@ func ToKeyTypeRealData(ktype string) (realData string) {
 	case "ktypeWrapperIpv6Dns":
 		realData = "[][]byte"
 	case "ktypeWrapperIpv6Addresses":
-		realData = "Ipv6Addresses"
+		realData = "ipv6Addresses"
 	case "ktypeWrapperIpv6Routes":
-		realData = "Ipv6Routes"
+		realData = "ipv6Routes"
 	}
 	return
 }

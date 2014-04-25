@@ -37,7 +37,9 @@ const (
 	NM_SETTING_VPN_OPENVPN_KEY_TLS_REMOTE           = "tls-remote"
 	NM_SETTING_VPN_OPENVPN_KEY_REMOTE_CERT_TLS      = "remote-cert-tls"
 	NM_SETTING_VPN_OPENVPN_KEY_PASSWORD             = "password"
+	NM_SETTING_VPN_OPENVPN_KEY_PASSWORD_FLAGS       = "password-flags"
 	NM_SETTING_VPN_OPENVPN_KEY_CERTPASS             = "cert-pass"
+	NM_SETTING_VPN_OPENVPN_KEY_CERTPASS_FLAGS       = "cert-pass-flags"
 	NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD  = "http-proxy-password"
 )
 

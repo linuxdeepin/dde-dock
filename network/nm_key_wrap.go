@@ -14,14 +14,14 @@ func unwrapIpv4Dns(wrapData []string) (data []uint32) {
 	return
 }
 
-func wrapIpv4Addresses(data [][]uint32) (wrapData Ipv4AddressesWrapper) {
+func wrapIpv4Addresses(data [][]uint32) (wrapData ipv4AddressesWrapper) {
 	// wrapData = make(Ipv4AddressesWrapper, 0) // TODO
 	for _, d := range data {
 		if len(d) != 3 {
-			Logger.Error("ipv4 address invalid", d)
+			logger.Error("ipv4 address invalid", d)
 			continue
 		}
-		ipv4Addr := Ipv4AddressWrapper{}
+		ipv4Addr := ipv4AddressWrapper{}
 		ipv4Addr.Address = convertIpv4AddressToString(d[0])
 		ipv4Addr.Mask = convertIpv4PrefixToNetMask(d[1])
 		ipv4Addr.Gateway = convertIpv4AddressToString(d[2])
@@ -29,7 +29,7 @@ func wrapIpv4Addresses(data [][]uint32) (wrapData Ipv4AddressesWrapper) {
 	}
 	return
 }
-func unwrapIpv4Addresses(wrapData Ipv4AddressesWrapper) (data [][]uint32) {
+func unwrapIpv4Addresses(wrapData ipv4AddressesWrapper) (data [][]uint32) {
 	for _, d := range wrapData {
 		ipv4Addr := make([]uint32, 3)
 		ipv4Addr[0] = convertIpv4AddressToUint32(d.Address)
@@ -40,13 +40,13 @@ func unwrapIpv4Addresses(wrapData Ipv4AddressesWrapper) (data [][]uint32) {
 	return
 }
 
-func wrapIpv4Routes(data [][]uint32) (wrapData Ipv4RoutesWrapper) {
+func wrapIpv4Routes(data [][]uint32) (wrapData ipv4RoutesWrapper) {
 	for _, d := range data {
 		if len(d) != 4 {
-			Logger.Error("invalid ipv4 route", d)
+			logger.Error("invalid ipv4 route", d)
 			continue
 		}
-		ipv4Route := Ipv4RouteWrapper{}
+		ipv4Route := ipv4RouteWrapper{}
 		ipv4Route.Address = convertIpv4AddressToString(d[0])
 		ipv4Route.Mask = convertIpv4PrefixToNetMask(d[1])
 		ipv4Route.NextHop = convertIpv4AddressToString(d[2])
@@ -55,7 +55,7 @@ func wrapIpv4Routes(data [][]uint32) (wrapData Ipv4RoutesWrapper) {
 	}
 	return
 }
-func unwrapIpv4Routes(wrapData Ipv4RoutesWrapper) (data [][]uint32) {
+func unwrapIpv4Routes(wrapData ipv4RoutesWrapper) (data [][]uint32) {
 	for _, d := range wrapData {
 		ipv4Route := make([]uint32, 4)
 		ipv4Route[0] = convertIpv4AddressToUint32(d.Address)
@@ -80,9 +80,9 @@ func unwrapIpv6Dns(wrapData []string) (data [][]byte) {
 	return
 }
 
-func wrapIpv6Addresses(data Ipv6Addresses) (wrapData Ipv6AddressesWrapper) {
+func wrapIpv6Addresses(data ipv6Addresses) (wrapData ipv6AddressesWrapper) {
 	for _, d := range data {
-		ipv6Addr := Ipv6AddressWrapper{}
+		ipv6Addr := ipv6AddressWrapper{}
 		ipv6Addr.Address = convertIpv6AddressToString(d.Address)
 		ipv6Addr.Prefix = d.Prefix
 		ipv6Addr.Gateway = convertIpv6AddressToString(d.Gateway)
@@ -90,9 +90,9 @@ func wrapIpv6Addresses(data Ipv6Addresses) (wrapData Ipv6AddressesWrapper) {
 	}
 	return
 }
-func unwrapIpv6Addresses(wrapData Ipv6AddressesWrapper) (data Ipv6Addresses) {
+func unwrapIpv6Addresses(wrapData ipv6AddressesWrapper) (data ipv6Addresses) {
 	for _, d := range wrapData {
-		ipv6Addr := Ipv6Address{}
+		ipv6Addr := ipv6Address{}
 		ipv6Addr.Address = convertIpv6AddressToArrayByte(d.Address)
 		ipv6Addr.Prefix = d.Prefix
 		ipv6Addr.Gateway = convertIpv6AddressToArrayByte(d.Gateway)
@@ -101,9 +101,9 @@ func unwrapIpv6Addresses(wrapData Ipv6AddressesWrapper) (data Ipv6Addresses) {
 	return
 }
 
-func wrapIpv6Routes(data Ipv6Routes) (wrapData Ipv6RoutesWrapper) {
+func wrapIpv6Routes(data ipv6Routes) (wrapData ipv6RoutesWrapper) {
 	for _, d := range data {
-		ipv6Route := Ipv6RouteWrapper{}
+		ipv6Route := ipv6RouteWrapper{}
 		ipv6Route.Address = convertIpv6AddressToString(d.Address)
 		ipv6Route.Prefix = d.Prefix
 		ipv6Route.NextHop = convertIpv6AddressToString(d.NextHop)
@@ -112,9 +112,9 @@ func wrapIpv6Routes(data Ipv6Routes) (wrapData Ipv6RoutesWrapper) {
 	}
 	return
 }
-func unwrapIpv6Routes(wrapData Ipv6RoutesWrapper) (data Ipv6Routes) {
+func unwrapIpv6Routes(wrapData ipv6RoutesWrapper) (data ipv6Routes) {
 	for _, d := range wrapData {
-		ipv6Route := Ipv6Route{}
+		ipv6Route := ipv6Route{}
 		ipv6Route.Address = convertIpv6AddressToArrayByte(d.Address)
 		ipv6Route.Prefix = d.Prefix
 		ipv6Route.NextHop = convertIpv6AddressToArrayByte(d.NextHop)

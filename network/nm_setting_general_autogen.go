@@ -7,7 +7,7 @@ func generalIsKeyInSettingField(field, key string) bool {
 	}
 	switch field {
 	default:
-		Logger.Warning("invalid field name", field)
+		logger.Warning("invalid field name", field)
 	case NM_SETTING_802_1X_SETTING_NAME:
 		return isKeyInSetting8021x(key)
 	case NM_SETTING_CONNECTION_SETTING_NAME:
@@ -55,7 +55,7 @@ func generalGetSettingKeyType(field, key string) (t ktype) {
 	}
 	switch field {
 	default:
-		Logger.Warning("invalid field name", field)
+		logger.Warning("invalid field name", field)
 	case NM_SETTING_802_1X_SETTING_NAME:
 		t = getSetting8021xKeyType(key)
 	case NM_SETTING_CONNECTION_SETTING_NAME:
@@ -96,7 +96,7 @@ func generalGetSettingKeyType(field, key string) (t ktype) {
 	return
 }
 
-func generalGetSettingAvailableKeys(data _ConnectionData, field string) (keys []string) {
+func generalGetSettingAvailableKeys(data connectionData, field string) (keys []string) {
 	switch field {
 	case NM_SETTING_802_1X_SETTING_NAME:
 		keys = getSetting8021xAvailableKeys(data)
@@ -138,7 +138,7 @@ func generalGetSettingAvailableKeys(data _ConnectionData, field string) (keys []
 	return
 }
 
-func generalGetSettingAvailableValues(data _ConnectionData, field, key string) (values []string, customizable bool) {
+func generalGetSettingAvailableValues(data connectionData, field, key string) (values []string, customizable bool) {
 	if isVirtualKey(field, key) {
 		values = generalGetSettingVkAvailableValues(data, field, key)
 		return
@@ -184,10 +184,10 @@ func generalGetSettingAvailableValues(data _ConnectionData, field, key string) (
 	return
 }
 
-func generalCheckSettingValues(data _ConnectionData, field string) (errs FieldKeyErrors) {
+func generalCheckSettingValues(data connectionData, field string) (errs FieldKeyErrors) {
 	switch field {
 	default:
-		Logger.Error("invalid field name", field)
+		logger.Error("invalid field name", field)
 	case NM_SETTING_802_1X_SETTING_NAME:
 		errs = checkSetting8021xValues(data)
 	case NM_SETTING_CONNECTION_SETTING_NAME:
@@ -228,14 +228,14 @@ func generalCheckSettingValues(data _ConnectionData, field string) (errs FieldKe
 	return
 }
 
-func generalGetSettingKeyJSON(data _ConnectionData, field, key string) (valueJSON string) {
+func generalGetSettingKeyJSON(data connectionData, field, key string) (valueJSON string) {
 	if isVirtualKey(field, key) {
 		valueJSON = generalGetVirtualKeyJSON(data, field, key)
 		return
 	}
 	switch field {
 	default:
-		Logger.Warning("invalid field name", field)
+		logger.Warning("invalid field name", field)
 	case NM_SETTING_802_1X_SETTING_NAME:
 		valueJSON = generalGetSetting8021xKeyJSON(data, key)
 	case NM_SETTING_CONNECTION_SETTING_NAME:
@@ -276,14 +276,14 @@ func generalGetSettingKeyJSON(data _ConnectionData, field, key string) (valueJSO
 	return
 }
 
-func generalSetSettingKeyJSON(data _ConnectionData, field, key, valueJSON string) {
+func generalSetSettingKeyJSON(data connectionData, field, key, valueJSON string) {
 	if isVirtualKey(field, key) {
 		generalSetVirtualKeyJSON(data, field, key, valueJSON)
 		return
 	}
 	switch field {
 	default:
-		Logger.Warning("invalid field name", field)
+		logger.Warning("invalid field name", field)
 	case NM_SETTING_802_1X_SETTING_NAME:
 		generalSetSetting8021xKeyJSON(data, key, valueJSON)
 	case NM_SETTING_CONNECTION_SETTING_NAME:
@@ -326,7 +326,7 @@ func generalSetSettingKeyJSON(data _ConnectionData, field, key, valueJSON string
 func getSettingKeyDefaultValueJSON(field, key string) (valueJSON string) {
 	switch field {
 	default:
-		Logger.Warning("invalid field name", field)
+		logger.Warning("invalid field name", field)
 	case NM_SETTING_802_1X_SETTING_NAME:
 		valueJSON = getSetting8021xKeyDefaultValueJSON(key)
 	case NM_SETTING_CONNECTION_SETTING_NAME:

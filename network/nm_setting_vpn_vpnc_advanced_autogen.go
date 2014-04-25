@@ -69,7 +69,7 @@ func isKeyInSettingVpnVpncAdvanced(key string) bool {
 func getSettingVpnVpncAdvancedKeyDefaultValueJSON(key string) (valueJSON string) {
 	switch key {
 	default:
-		Logger.Error("invalid key:", key)
+		logger.Error("invalid key:", key)
 	case NM_SETTING_VPN_VPNC_KEY_DOMAIN:
 		valueJSON = `""`
 	case NM_SETTING_VPN_VPNC_KEY_VENDOR:
@@ -97,10 +97,10 @@ func getSettingVpnVpncAdvancedKeyDefaultValueJSON(key string) (valueJSON string)
 }
 
 // Get JSON value generally
-func generalGetSettingVpnVpncAdvancedKeyJSON(data _ConnectionData, key string) (value string) {
+func generalGetSettingVpnVpncAdvancedKeyJSON(data connectionData, key string) (value string) {
 	switch key {
 	default:
-		Logger.Error("generalGetSettingVpnVpncAdvancedKeyJSON: invalide key", key)
+		logger.Error("generalGetSettingVpnVpncAdvancedKeyJSON: invalide key", key)
 	case NM_SETTING_VPN_VPNC_KEY_DOMAIN:
 		value = getSettingVpnVpncKeyDomainJSON(data)
 	case NM_SETTING_VPN_VPNC_KEY_VENDOR:
@@ -128,10 +128,10 @@ func generalGetSettingVpnVpncAdvancedKeyJSON(data _ConnectionData, key string) (
 }
 
 // Set JSON value generally
-func generalSetSettingVpnVpncAdvancedKeyJSON(data _ConnectionData, key, valueJSON string) {
+func generalSetSettingVpnVpncAdvancedKeyJSON(data connectionData, key, valueJSON string) {
 	switch key {
 	default:
-		Logger.Error("generalSetSettingVpnVpncAdvancedKeyJSON: invalide key", key)
+		logger.Error("generalSetSettingVpnVpncAdvancedKeyJSON: invalide key", key)
 	case NM_SETTING_VPN_VPNC_KEY_DOMAIN:
 		setSettingVpnVpncKeyDomainJSON(data, valueJSON)
 	case NM_SETTING_VPN_VPNC_KEY_VENDOR:
@@ -159,42 +159,42 @@ func generalSetSettingVpnVpncAdvancedKeyJSON(data _ConnectionData, key, valueJSO
 }
 
 // Check if key exists
-func isSettingVpnVpncKeyDomainExists(data _ConnectionData) bool {
+func isSettingVpnVpncKeyDomainExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DOMAIN)
 }
-func isSettingVpnVpncKeyVendorExists(data _ConnectionData) bool {
+func isSettingVpnVpncKeyVendorExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_VENDOR)
 }
-func isSettingVpnVpncKeyAppVersionExists(data _ConnectionData) bool {
+func isSettingVpnVpncKeyAppVersionExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_APP_VERSION)
 }
-func isSettingVpnVpncKeySingleDesExists(data _ConnectionData) bool {
+func isSettingVpnVpncKeySingleDesExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_SINGLE_DES)
 }
-func isSettingVpnVpncKeyNoEncryptionExists(data _ConnectionData) bool {
+func isSettingVpnVpncKeyNoEncryptionExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_NO_ENCRYPTION)
 }
-func isSettingVpnVpncKeyNatTraversalModeExists(data _ConnectionData) bool {
+func isSettingVpnVpncKeyNatTraversalModeExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_NAT_TRAVERSAL_MODE)
 }
-func isSettingVpnVpncKeyDhgroupExists(data _ConnectionData) bool {
+func isSettingVpnVpncKeyDhgroupExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DHGROUP)
 }
-func isSettingVpnVpncKeyPerfectForwardExists(data _ConnectionData) bool {
+func isSettingVpnVpncKeyPerfectForwardExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_PERFECT_FORWARD)
 }
-func isSettingVpnVpncKeyLocalPortExists(data _ConnectionData) bool {
+func isSettingVpnVpncKeyLocalPortExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_LOCAL_PORT)
 }
-func isSettingVpnVpncKeyDpdIdleTimeoutExists(data _ConnectionData) bool {
+func isSettingVpnVpncKeyDpdIdleTimeoutExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT)
 }
-func isSettingVpnVpncKeyCiscoUdpEncapsPortExists(data _ConnectionData) bool {
+func isSettingVpnVpncKeyCiscoUdpEncapsPortExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_CISCO_UDP_ENCAPS_PORT)
 }
 
 // Ensure field and key exists and not empty
-func ensureFieldSettingVpnVpncAdvancedExists(data _ConnectionData, errs FieldKeyErrors, relatedKey string) {
+func ensureFieldSettingVpnVpncAdvancedExists(data connectionData, errs FieldKeyErrors, relatedKey string) {
 	if !isSettingFieldExists(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME) {
 		rememberError(errs, relatedKey, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME))
 	}
@@ -203,7 +203,7 @@ func ensureFieldSettingVpnVpncAdvancedExists(data _ConnectionData, errs FieldKey
 		rememberError(errs, relatedKey, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME))
 	}
 }
-func ensureSettingVpnVpncKeyDomainNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingVpnVpncKeyDomainNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingVpnVpncKeyDomainExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DOMAIN, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -212,7 +212,7 @@ func ensureSettingVpnVpncKeyDomainNoEmpty(data _ConnectionData, errs FieldKeyErr
 		rememberError(errs, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DOMAIN, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnVpncKeyVendorNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingVpnVpncKeyVendorNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingVpnVpncKeyVendorExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_VENDOR, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -221,7 +221,7 @@ func ensureSettingVpnVpncKeyVendorNoEmpty(data _ConnectionData, errs FieldKeyErr
 		rememberError(errs, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_VENDOR, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnVpncKeyAppVersionNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingVpnVpncKeyAppVersionNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingVpnVpncKeyAppVersionExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_APP_VERSION, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -230,17 +230,17 @@ func ensureSettingVpnVpncKeyAppVersionNoEmpty(data _ConnectionData, errs FieldKe
 		rememberError(errs, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_APP_VERSION, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnVpncKeySingleDesNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingVpnVpncKeySingleDesNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingVpnVpncKeySingleDesExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_SINGLE_DES, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnVpncKeyNoEncryptionNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingVpnVpncKeyNoEncryptionNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingVpnVpncKeyNoEncryptionExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_NO_ENCRYPTION, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnVpncKeyNatTraversalModeNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingVpnVpncKeyNatTraversalModeNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingVpnVpncKeyNatTraversalModeExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_NAT_TRAVERSAL_MODE, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -249,7 +249,7 @@ func ensureSettingVpnVpncKeyNatTraversalModeNoEmpty(data _ConnectionData, errs F
 		rememberError(errs, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_NAT_TRAVERSAL_MODE, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnVpncKeyDhgroupNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingVpnVpncKeyDhgroupNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingVpnVpncKeyDhgroupExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DHGROUP, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -258,7 +258,7 @@ func ensureSettingVpnVpncKeyDhgroupNoEmpty(data _ConnectionData, errs FieldKeyEr
 		rememberError(errs, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DHGROUP, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnVpncKeyPerfectForwardNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingVpnVpncKeyPerfectForwardNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingVpnVpncKeyPerfectForwardExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_PERFECT_FORWARD, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -267,215 +267,215 @@ func ensureSettingVpnVpncKeyPerfectForwardNoEmpty(data _ConnectionData, errs Fie
 		rememberError(errs, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_PERFECT_FORWARD, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnVpncKeyLocalPortNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingVpnVpncKeyLocalPortNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingVpnVpncKeyLocalPortExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_LOCAL_PORT, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnVpncKeyDpdIdleTimeoutNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingVpnVpncKeyDpdIdleTimeoutNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingVpnVpncKeyDpdIdleTimeoutExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnVpncKeyCiscoUdpEncapsPortNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingVpnVpncKeyCiscoUdpEncapsPortNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingVpnVpncKeyCiscoUdpEncapsPortExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_CISCO_UDP_ENCAPS_PORT, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
 
 // Getter
-func getSettingVpnVpncKeyDomain(data _ConnectionData) (value string) {
+func getSettingVpnVpncKeyDomain(data connectionData) (value string) {
 	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DOMAIN).(string)
 	return
 }
-func getSettingVpnVpncKeyVendor(data _ConnectionData) (value string) {
+func getSettingVpnVpncKeyVendor(data connectionData) (value string) {
 	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_VENDOR).(string)
 	return
 }
-func getSettingVpnVpncKeyAppVersion(data _ConnectionData) (value string) {
+func getSettingVpnVpncKeyAppVersion(data connectionData) (value string) {
 	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_APP_VERSION).(string)
 	return
 }
-func getSettingVpnVpncKeySingleDes(data _ConnectionData) (value bool) {
+func getSettingVpnVpncKeySingleDes(data connectionData) (value bool) {
 	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_SINGLE_DES).(bool)
 	return
 }
-func getSettingVpnVpncKeyNoEncryption(data _ConnectionData) (value bool) {
+func getSettingVpnVpncKeyNoEncryption(data connectionData) (value bool) {
 	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_NO_ENCRYPTION).(bool)
 	return
 }
-func getSettingVpnVpncKeyNatTraversalMode(data _ConnectionData) (value string) {
+func getSettingVpnVpncKeyNatTraversalMode(data connectionData) (value string) {
 	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_NAT_TRAVERSAL_MODE).(string)
 	return
 }
-func getSettingVpnVpncKeyDhgroup(data _ConnectionData) (value string) {
+func getSettingVpnVpncKeyDhgroup(data connectionData) (value string) {
 	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DHGROUP).(string)
 	return
 }
-func getSettingVpnVpncKeyPerfectForward(data _ConnectionData) (value string) {
+func getSettingVpnVpncKeyPerfectForward(data connectionData) (value string) {
 	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_PERFECT_FORWARD).(string)
 	return
 }
-func getSettingVpnVpncKeyLocalPort(data _ConnectionData) (value uint32) {
+func getSettingVpnVpncKeyLocalPort(data connectionData) (value uint32) {
 	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_LOCAL_PORT).(uint32)
 	return
 }
-func getSettingVpnVpncKeyDpdIdleTimeout(data _ConnectionData) (value uint32) {
+func getSettingVpnVpncKeyDpdIdleTimeout(data connectionData) (value uint32) {
 	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT).(uint32)
 	return
 }
-func getSettingVpnVpncKeyCiscoUdpEncapsPort(data _ConnectionData) (value uint32) {
+func getSettingVpnVpncKeyCiscoUdpEncapsPort(data connectionData) (value uint32) {
 	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_CISCO_UDP_ENCAPS_PORT).(uint32)
 	return
 }
 
 // Setter
-func setSettingVpnVpncKeyDomain(data _ConnectionData, value string) {
+func setSettingVpnVpncKeyDomain(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DOMAIN, value)
 }
-func setSettingVpnVpncKeyVendor(data _ConnectionData, value string) {
+func setSettingVpnVpncKeyVendor(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_VENDOR, value)
 }
-func setSettingVpnVpncKeyAppVersion(data _ConnectionData, value string) {
+func setSettingVpnVpncKeyAppVersion(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_APP_VERSION, value)
 }
-func setSettingVpnVpncKeySingleDes(data _ConnectionData, value bool) {
+func setSettingVpnVpncKeySingleDes(data connectionData, value bool) {
 	setSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_SINGLE_DES, value)
 }
-func setSettingVpnVpncKeyNoEncryption(data _ConnectionData, value bool) {
+func setSettingVpnVpncKeyNoEncryption(data connectionData, value bool) {
 	setSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_NO_ENCRYPTION, value)
 }
-func setSettingVpnVpncKeyNatTraversalMode(data _ConnectionData, value string) {
+func setSettingVpnVpncKeyNatTraversalMode(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_NAT_TRAVERSAL_MODE, value)
 }
-func setSettingVpnVpncKeyDhgroup(data _ConnectionData, value string) {
+func setSettingVpnVpncKeyDhgroup(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DHGROUP, value)
 }
-func setSettingVpnVpncKeyPerfectForward(data _ConnectionData, value string) {
+func setSettingVpnVpncKeyPerfectForward(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_PERFECT_FORWARD, value)
 }
-func setSettingVpnVpncKeyLocalPort(data _ConnectionData, value uint32) {
+func setSettingVpnVpncKeyLocalPort(data connectionData, value uint32) {
 	setSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_LOCAL_PORT, value)
 }
-func setSettingVpnVpncKeyDpdIdleTimeout(data _ConnectionData, value uint32) {
+func setSettingVpnVpncKeyDpdIdleTimeout(data connectionData, value uint32) {
 	setSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT, value)
 }
-func setSettingVpnVpncKeyCiscoUdpEncapsPort(data _ConnectionData, value uint32) {
+func setSettingVpnVpncKeyCiscoUdpEncapsPort(data connectionData, value uint32) {
 	setSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_CISCO_UDP_ENCAPS_PORT, value)
 }
 
 // JSON Getter
-func getSettingVpnVpncKeyDomainJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVpnVpncKeyDomainJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DOMAIN, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_DOMAIN))
 	return
 }
-func getSettingVpnVpncKeyVendorJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVpnVpncKeyVendorJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_VENDOR, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_VENDOR))
 	return
 }
-func getSettingVpnVpncKeyAppVersionJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVpnVpncKeyAppVersionJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_APP_VERSION, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_APP_VERSION))
 	return
 }
-func getSettingVpnVpncKeySingleDesJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVpnVpncKeySingleDesJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_SINGLE_DES, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_SINGLE_DES))
 	return
 }
-func getSettingVpnVpncKeyNoEncryptionJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVpnVpncKeyNoEncryptionJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_NO_ENCRYPTION, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_NO_ENCRYPTION))
 	return
 }
-func getSettingVpnVpncKeyNatTraversalModeJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVpnVpncKeyNatTraversalModeJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_NAT_TRAVERSAL_MODE, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_NAT_TRAVERSAL_MODE))
 	return
 }
-func getSettingVpnVpncKeyDhgroupJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVpnVpncKeyDhgroupJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DHGROUP, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_DHGROUP))
 	return
 }
-func getSettingVpnVpncKeyPerfectForwardJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVpnVpncKeyPerfectForwardJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_PERFECT_FORWARD, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_PERFECT_FORWARD))
 	return
 }
-func getSettingVpnVpncKeyLocalPortJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVpnVpncKeyLocalPortJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_LOCAL_PORT, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_LOCAL_PORT))
 	return
 }
-func getSettingVpnVpncKeyDpdIdleTimeoutJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVpnVpncKeyDpdIdleTimeoutJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT))
 	return
 }
-func getSettingVpnVpncKeyCiscoUdpEncapsPortJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVpnVpncKeyCiscoUdpEncapsPortJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_CISCO_UDP_ENCAPS_PORT, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_CISCO_UDP_ENCAPS_PORT))
 	return
 }
 
 // JSON Setter
-func setSettingVpnVpncKeyDomainJSON(data _ConnectionData, valueJSON string) {
+func setSettingVpnVpncKeyDomainJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DOMAIN, valueJSON, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_DOMAIN))
 }
-func setSettingVpnVpncKeyVendorJSON(data _ConnectionData, valueJSON string) {
+func setSettingVpnVpncKeyVendorJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_VENDOR, valueJSON, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_VENDOR))
 }
-func setSettingVpnVpncKeyAppVersionJSON(data _ConnectionData, valueJSON string) {
+func setSettingVpnVpncKeyAppVersionJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_APP_VERSION, valueJSON, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_APP_VERSION))
 }
-func setSettingVpnVpncKeySingleDesJSON(data _ConnectionData, valueJSON string) {
+func setSettingVpnVpncKeySingleDesJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_SINGLE_DES, valueJSON, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_SINGLE_DES))
 }
-func setSettingVpnVpncKeyNoEncryptionJSON(data _ConnectionData, valueJSON string) {
+func setSettingVpnVpncKeyNoEncryptionJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_NO_ENCRYPTION, valueJSON, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_NO_ENCRYPTION))
 }
-func setSettingVpnVpncKeyNatTraversalModeJSON(data _ConnectionData, valueJSON string) {
+func setSettingVpnVpncKeyNatTraversalModeJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_NAT_TRAVERSAL_MODE, valueJSON, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_NAT_TRAVERSAL_MODE))
 }
-func setSettingVpnVpncKeyDhgroupJSON(data _ConnectionData, valueJSON string) {
+func setSettingVpnVpncKeyDhgroupJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DHGROUP, valueJSON, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_DHGROUP))
 }
-func setSettingVpnVpncKeyPerfectForwardJSON(data _ConnectionData, valueJSON string) {
+func setSettingVpnVpncKeyPerfectForwardJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_PERFECT_FORWARD, valueJSON, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_PERFECT_FORWARD))
 }
-func setSettingVpnVpncKeyLocalPortJSON(data _ConnectionData, valueJSON string) {
+func setSettingVpnVpncKeyLocalPortJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_LOCAL_PORT, valueJSON, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_LOCAL_PORT))
 }
-func setSettingVpnVpncKeyDpdIdleTimeoutJSON(data _ConnectionData, valueJSON string) {
+func setSettingVpnVpncKeyDpdIdleTimeoutJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT, valueJSON, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT))
 }
-func setSettingVpnVpncKeyCiscoUdpEncapsPortJSON(data _ConnectionData, valueJSON string) {
+func setSettingVpnVpncKeyCiscoUdpEncapsPortJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_CISCO_UDP_ENCAPS_PORT, valueJSON, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_CISCO_UDP_ENCAPS_PORT))
 }
 
 // Remover
-func removeSettingVpnVpncKeyDomain(data _ConnectionData) {
+func removeSettingVpnVpncKeyDomain(data connectionData) {
 	removeSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DOMAIN)
 }
-func removeSettingVpnVpncKeyVendor(data _ConnectionData) {
+func removeSettingVpnVpncKeyVendor(data connectionData) {
 	removeSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_VENDOR)
 }
-func removeSettingVpnVpncKeyAppVersion(data _ConnectionData) {
+func removeSettingVpnVpncKeyAppVersion(data connectionData) {
 	removeSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_APP_VERSION)
 }
-func removeSettingVpnVpncKeySingleDes(data _ConnectionData) {
+func removeSettingVpnVpncKeySingleDes(data connectionData) {
 	removeSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_SINGLE_DES)
 }
-func removeSettingVpnVpncKeyNoEncryption(data _ConnectionData) {
+func removeSettingVpnVpncKeyNoEncryption(data connectionData) {
 	removeSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_NO_ENCRYPTION)
 }
-func removeSettingVpnVpncKeyNatTraversalMode(data _ConnectionData) {
+func removeSettingVpnVpncKeyNatTraversalMode(data connectionData) {
 	removeSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_NAT_TRAVERSAL_MODE)
 }
-func removeSettingVpnVpncKeyDhgroup(data _ConnectionData) {
+func removeSettingVpnVpncKeyDhgroup(data connectionData) {
 	removeSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DHGROUP)
 }
-func removeSettingVpnVpncKeyPerfectForward(data _ConnectionData) {
+func removeSettingVpnVpncKeyPerfectForward(data connectionData) {
 	removeSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_PERFECT_FORWARD)
 }
-func removeSettingVpnVpncKeyLocalPort(data _ConnectionData) {
+func removeSettingVpnVpncKeyLocalPort(data connectionData) {
 	removeSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_LOCAL_PORT)
 }
-func removeSettingVpnVpncKeyDpdIdleTimeout(data _ConnectionData) {
+func removeSettingVpnVpncKeyDpdIdleTimeout(data connectionData) {
 	removeSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT)
 }
-func removeSettingVpnVpncKeyCiscoUdpEncapsPort(data _ConnectionData) {
+func removeSettingVpnVpncKeyCiscoUdpEncapsPort(data connectionData) {
 	removeSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_CISCO_UDP_ENCAPS_PORT)
 }

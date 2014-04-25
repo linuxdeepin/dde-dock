@@ -59,8 +59,8 @@ const (
 // 	{ NULL,                          G_TYPE_NONE,   FALSE }
 // };
 
-func newVpnPptpConnectionData(id, uuid string) (data _ConnectionData) {
-	data = make(_ConnectionData)
+func newVpnPptpConnectionData(id, uuid string) (data connectionData) {
+	data = make(connectionData)
 
 	addSettingField(data, fieldConnection)
 	setSettingConnectionId(data, id)
@@ -80,17 +80,17 @@ func newVpnPptpConnectionData(id, uuid string) (data _ConnectionData) {
 }
 
 // vpn-pptp
-func getSettingVpnPptpAvailableKeys(data _ConnectionData) (keys []string) {
+func getSettingVpnPptpAvailableKeys(data connectionData) (keys []string) {
 	keys = appendAvailableKeys(keys, fieldVpnPptp, NM_SETTING_VPN_PPTP_KEY_GATEWAY)
 	keys = appendAvailableKeys(keys, fieldVpnPptp, NM_SETTING_VPN_PPTP_KEY_USER)
 	keys = appendAvailableKeys(keys, fieldVpnPptp, NM_SETTING_VPN_PPTP_KEY_PASSWORD)
 	keys = appendAvailableKeys(keys, fieldVpnPptp, NM_SETTING_VPN_PPTP_KEY_DOMAIN)
 	return
 }
-func getSettingVpnPptpAvailableValues(data _ConnectionData, key string) (values []string, customizable bool) {
+func getSettingVpnPptpAvailableValues(data connectionData, key string) (values []string, customizable bool) {
 	return
 }
-func checkSettingVpnPptpValues(data _ConnectionData) (errs FieldKeyErrors) {
+func checkSettingVpnPptpValues(data connectionData) (errs FieldKeyErrors) {
 	errs = make(map[string]string)
 	ensureSettingVpnPptpKeyGatewayNoEmpty(data, errs)
 	// TODO
@@ -98,7 +98,7 @@ func checkSettingVpnPptpValues(data _ConnectionData) (errs FieldKeyErrors) {
 }
 
 // vpn-pptp-ppp
-func getSettingVpnPptpPppAvailableKeys(data _ConnectionData) (keys []string) {
+func getSettingVpnPptpPppAvailableKeys(data connectionData) (keys []string) {
 	keys = appendAvailableKeys(keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_REFUSE_EAP)
 	keys = appendAvailableKeys(keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_REFUSE_PAP)
 	keys = appendAvailableKeys(keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_REFUSE_CHAP)
@@ -116,20 +116,20 @@ func getSettingVpnPptpPppAvailableKeys(data _ConnectionData) (keys []string) {
 	keys = appendAvailableKeys(keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_LCP_ECHO_FAILURE)
 	return
 }
-func getSettingVpnPptpPppAvailableValues(data _ConnectionData, key string) (values []string, customizable bool) {
+func getSettingVpnPptpPppAvailableValues(data connectionData, key string) (values []string, customizable bool) {
 	return
 }
-func checkSettingVpnPptpPppValues(data _ConnectionData) (errs FieldKeyErrors) {
+func checkSettingVpnPptpPppValues(data connectionData) (errs FieldKeyErrors) {
 	errs = make(map[string]string)
 	// TODO
 	return
 }
-func logicSetSettingVpnPptpKeyRequireMppeJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingVpnPptpKeyRequireMppeJSON(data connectionData, valueJSON string) {
 	setSettingVpnPptpKeyRequireMppeJSON(data, valueJSON)
 	value := getSettingVpnPptpKeyRequireMppe(data)
 	logicSetSettingVpnPptpKeyRequireMppe(data, value)
 }
-func logicSetSettingVpnPptpKeyRequireMppe(data _ConnectionData, value bool) {
+func logicSetSettingVpnPptpKeyRequireMppe(data connectionData, value bool) {
 	if !value {
 		removeSettingVpnPptpKeyRequireMppe40(data)
 		removeSettingVpnPptpKeyRequireMppe128(data)

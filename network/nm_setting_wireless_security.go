@@ -124,11 +124,11 @@ const (
 )
 
 // Get available keys
-func getSettingWirelessSecurityAvailableKeys(data _ConnectionData) (keys []string) {
+func getSettingWirelessSecurityAvailableKeys(data connectionData) (keys []string) {
 	vkKeyMgmt := getSettingVkWirelessSecurityKeyMgmt(data)
 	switch vkKeyMgmt {
 	default:
-		Logger.Error("invalid value", vkKeyMgmt)
+		logger.Error("invalid value", vkKeyMgmt)
 	case "none":
 		keys = appendAvailableKeys(keys, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT)
 	case "wep":
@@ -144,7 +144,7 @@ func getSettingWirelessSecurityAvailableKeys(data _ConnectionData) (keys []strin
 }
 
 // Get available values
-func getSettingWirelessSecurityAvailableValues(data _ConnectionData, key string) (values []string, customizable bool) {
+func getSettingWirelessSecurityAvailableValues(data connectionData, key string) (values []string, customizable bool) {
 	customizable = true
 	switch key {
 	case NM_SETTING_WIRELESS_SECURITY_KEY_MGMT:
@@ -165,7 +165,7 @@ func getSettingWirelessSecurityAvailableValues(data _ConnectionData, key string)
 }
 
 // Check whether the values are correct
-func checkSettingWirelessSecurityValues(data _ConnectionData) (errs FieldKeyErrors) {
+func checkSettingWirelessSecurityValues(data connectionData) (errs FieldKeyErrors) {
 	errs = make(map[string]string)
 
 	// check key-mgmt
@@ -197,7 +197,7 @@ func checkSettingWirelessSecurityValues(data _ConnectionData) (errs FieldKeyErro
 	return
 }
 
-func checkSettingWirelessSecurityWepKeyType(data _ConnectionData, errs FieldKeyErrors) {
+func checkSettingWirelessSecurityWepKeyType(data connectionData, errs FieldKeyErrors) {
 	if !isSettingWirelessSecurityWepKeyTypeExists(data) {
 		return
 	}
@@ -206,7 +206,7 @@ func checkSettingWirelessSecurityWepKeyType(data _ConnectionData, errs FieldKeyE
 		rememberError(errs, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE, NM_KEY_ERROR_INVALID_VALUE)
 	}
 }
-func checkSettingWirelessSecurityWepKey0(data _ConnectionData, errs FieldKeyErrors) {
+func checkSettingWirelessSecurityWepKey0(data connectionData, errs FieldKeyErrors) {
 	if !isSettingWirelessSecurityWepKey0Exists(data) {
 		return
 	}
@@ -228,7 +228,7 @@ func checkSettingWirelessSecurityWepKey0(data _ConnectionData, errs FieldKeyErro
 		}
 	}
 }
-func checkSettingWirelessSecurityPsk(data _ConnectionData, errs FieldKeyErrors) {
+func checkSettingWirelessSecurityPsk(data connectionData, errs FieldKeyErrors) {
 	if !isSettingWirelessSecurityPskExists(data) {
 		return
 	}

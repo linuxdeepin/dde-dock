@@ -32,22 +32,22 @@ func fillSecret(settingName string, key string) map[string]map[string]dbus.Varia
 	case "802-11-wireless-security":
 		r[settingName]["psk"] = dbus.MakeVariant(key) // TODO
 	default:
-		Logger.Warning("Unknow secrety setting name", settingName, ",please report it to linuxdeepin")
+		logger.Warning("Unknow secrety setting name", settingName, ",please report it to linuxdeepin")
 	}
 	return r
 }
 
 func (a *Agent) GetSecrets(connection map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath, settingName string, hints []string, flags uint32) map[string]map[string]dbus.Variant {
-	Logger.Info("GetSecrets:", connectionPath, settingName, hints, flags)
+	logger.Info("GetSecrets:", connectionPath, settingName, hints, flags)
 	keyId := mapKey{connectionPath, settingName}
 
 	// TODO fixme
 	// if keyValue, ok := a.savedKeys[keyId]; ok && (flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_REQUEST_NEW == 0) {
-	// Logger.Debug("GetSecrets return ", keyValue) // TODO test
+	// logger.Debug("GetSecrets return ", keyValue) // TODO test
 	// return keyValue
 	// }
 	// if flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_USER_REQUESTED == 0 {
-	// Logger.Debug("GetSecrets return") // TODO test
+	// logger.Debug("GetSecrets return") // TODO test
 	// return invalidKey
 	// }
 
@@ -57,7 +57,7 @@ func (a *Agent) GetSecrets(connection map[string]map[string]dbus.Variant, connec
 
 	// if _, ok := a.pendingKeys[keyId]; ok {
 	// 	//only wait the key when there is no other GetSecrtes runing with this uuid
-	// 	Logger.Info("Repeat GetSecrets", keyId)
+	// 	logger.Info("Repeat GetSecrets", keyId)
 	// } else {
 	select {
 	// TODO
@@ -67,20 +67,20 @@ func (a *Agent) GetSecrets(connection map[string]map[string]dbus.Variant, connec
 			a.SaveSecrets(keyValue, connectionPath)
 			return keyValue
 		}
-		Logger.Info("failed getsecrtes...", keyId)
+		logger.Info("failed getsecrtes...", keyId)
 	case <-time.After(120 * time.Second):
 		a.CancelGetSecrtes(connectionPath, settingName)
-		Logger.Info("get secrets timeout:", keyId)
+		logger.Info("get secrets timeout:", keyId)
 	}
 	// }
 	return invalidKey
 }
 func (a *Agent) createPendingKey(keyId mapKey, connectionId string) chan string {
-	Logger.Debug("createPendingKey:", keyId, connectionId) // TODO test
+	logger.Debug("createPendingKey:", keyId, connectionId) // TODO test
 	if manager.NeedSecrets != nil {
 		defer manager.NeedSecrets(string(keyId.path), keyId.name, connectionId)
 	} else {
-		Logger.Warning("createPendingKey when DNetworkManager hasn't init")
+		logger.Warning("createPendingKey when DNetworkManager hasn't init")
 	}
 	a.pendingKeys[keyId] = make(chan string)
 	return a.pendingKeys[keyId]
@@ -93,9 +93,9 @@ func (a *Agent) CancelGetSecrtes(connectionPath dbus.ObjectPath, settingName str
 		close(pendingChan)
 		delete(a.pendingKeys, keyId)
 	} else {
-		Logger.Warning("CancelGetSecrtes an unknow PendingKey:", keyId)
+		logger.Warning("CancelGetSecrtes an unknow PendingKey:", keyId)
 	}
-	Logger.Info("CancelGetSecrtes")
+	logger.Info("CancelGetSecrtes")
 }
 
 func (a *Agent) SaveSecrets(connection map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath) {
@@ -103,9 +103,9 @@ func (a *Agent) SaveSecrets(connection map[string]map[string]dbus.Variant, conne
 	// if _, ok := connection["802-11-wireless-security"]; ok {
 	// keyId := mapKey{connectionPath, "802-11-wireless-security"}
 	// a.savedKeys[keyId] = connection
-	// Logger.Debug("SaveSecrets:", connection, connectionPath) // TODO test
+	// logger.Debug("SaveSecrets:", connection, connectionPath) // TODO test
 	// }
-	Logger.Info("SaveSecretes")
+	logger.Info("SaveSecretes")
 }
 
 func (a *Agent) DeleteSecrets(connection map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath) {
@@ -113,7 +113,7 @@ func (a *Agent) DeleteSecrets(connection map[string]map[string]dbus.Variant, con
 		keyId := mapKey{connectionPath, "802-11-wireless-security"}
 		delete(a.savedKeys, keyId)
 	}
-	Logger.Info("DeleteSecretes")
+	logger.Info("DeleteSecretes")
 }
 
 func (a *Agent) feedSecret(path string, name string, key string) {

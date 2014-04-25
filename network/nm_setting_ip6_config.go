@@ -32,11 +32,11 @@ const (
 )
 
 // Get available keys
-func getSettingIp6ConfigAvailableKeys(data _ConnectionData) (keys []string) {
+func getSettingIp6ConfigAvailableKeys(data connectionData) (keys []string) {
 	method := getSettingIp6ConfigMethod(data)
 	switch method {
 	default:
-		Logger.Error("ip6 config method is invalid:", method)
+		logger.Error("ip6 config method is invalid:", method)
 	case NM_SETTING_IP6_CONFIG_METHOD_IGNORE:
 		keys = appendAvailableKeys(keys, fieldIpv6, NM_SETTING_IP6_CONFIG_METHOD)
 	case NM_SETTING_IP6_CONFIG_METHOD_AUTO:
@@ -56,7 +56,7 @@ func getSettingIp6ConfigAvailableKeys(data _ConnectionData) (keys []string) {
 }
 
 // Get available values
-func getSettingIp6ConfigAvailableValues(data _ConnectionData, key string) (values []string, customizable bool) {
+func getSettingIp6ConfigAvailableValues(data connectionData, key string) (values []string, customizable bool) {
 	customizable = true
 	switch key {
 	case NM_SETTING_IP6_CONFIG_METHOD:
@@ -84,7 +84,7 @@ func getSettingIp6ConfigAvailableValues(data _ConnectionData, key string) (value
 }
 
 // Check whether the values are correct
-func checkSettingIp6ConfigValues(data _ConnectionData) (errs FieldKeyErrors) {
+func checkSettingIp6ConfigValues(data connectionData) (errs FieldKeyErrors) {
 	errs = make(map[string]string)
 
 	// check method
@@ -116,7 +116,7 @@ func checkSettingIp6ConfigValues(data _ConnectionData) (errs FieldKeyErrors) {
 	return
 }
 
-func checkSettingIp6MethodConflict(data _ConnectionData, errs FieldKeyErrors) {
+func checkSettingIp6MethodConflict(data connectionData, errs FieldKeyErrors) {
 	// check dns
 	if isSettingIp6ConfigDnsExists(data) {
 		rememberError(errs, fieldIpv6, NM_SETTING_IP6_CONFIG_DNS, fmt.Sprintf(NM_KEY_ERROR_IP6_METHOD_CONFLICT, NM_SETTING_IP6_CONFIG_DNS))
@@ -135,7 +135,7 @@ func checkSettingIp6MethodConflict(data _ConnectionData, errs FieldKeyErrors) {
 	}
 }
 
-func checkSettingIp6ConfigDns(data _ConnectionData, errs FieldKeyErrors) {
+func checkSettingIp6ConfigDns(data connectionData, errs FieldKeyErrors) {
 	if !isSettingIp6ConfigDnsExists(data) {
 		return
 	}
@@ -152,7 +152,7 @@ func checkSettingIp6ConfigDns(data _ConnectionData, errs FieldKeyErrors) {
 	}
 }
 
-func checkSettingIp6ConfigAddresses(data _ConnectionData, errs FieldKeyErrors) {
+func checkSettingIp6ConfigAddresses(data connectionData, errs FieldKeyErrors) {
 	if !isSettingIp6ConfigAddressesExists(data) {
 		return
 	}
@@ -177,13 +177,13 @@ func checkSettingIp6ConfigAddresses(data _ConnectionData, errs FieldKeyErrors) {
 }
 
 // Logic setter
-func logicSetSettingIp6ConfigMethodJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingIp6ConfigMethodJSON(data connectionData, valueJSON string) {
 	setSettingIp6ConfigMethodJSON(data, valueJSON)
 
 	value := getSettingIp6ConfigMethod(data)
 	logicSetSettingIp6ConfigMethod(data, value)
 }
-func logicSetSettingIp6ConfigMethod(data _ConnectionData, value string) {
+func logicSetSettingIp6ConfigMethod(data connectionData, value string) {
 	switch value {
 	case NM_SETTING_IP6_CONFIG_METHOD_IGNORE: // ignore
 		removeSettingKeyBut(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_METHOD)

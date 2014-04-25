@@ -12,7 +12,7 @@ type ConnectionSession struct {
 	sessionPath    dbus.ObjectPath
 	connPath       dbus.ObjectPath
 	devPath        dbus.ObjectPath
-	data           _ConnectionData
+	data           connectionData
 	connectionType string
 
 	CurrentUUID string
@@ -34,7 +34,7 @@ func doNewConnectionSession(devPath dbus.ObjectPath, uuid string) (s *Connection
 	s.sessionPath = dbus.ObjectPath(fmt.Sprintf("/com/deepin/daemon/ConnectionSession/%s", randString(8)))
 	s.devPath = devPath
 	s.CurrentUUID = uuid
-	s.data = make(_ConnectionData)
+	s.data = make(connectionData)
 	s.AllowSave = false // TODO
 	s.AvailableKeys = make(map[string][]string)
 	s.Errors = make(PageKeyErrors)
@@ -44,7 +44,7 @@ func doNewConnectionSession(devPath dbus.ObjectPath, uuid string) (s *Connection
 func NewConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath) (s *ConnectionSession, err error) {
 	if !isStringInArray(connectionType, supportedConnectionTypes) {
 		err = fmt.Errorf("connection type is out of support: %s", connectionType)
-		Logger.Error(err)
+		logger.Error(err)
 		return
 	}
 
@@ -57,7 +57,7 @@ func NewConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 	case typeWired:
 		s.data = newWiredConnectionData("", s.CurrentUUID)
 	case typeWireless:
-		s.data = newWirelessConnectionData("", s.CurrentUUID, nil, ApSecNone)
+		s.data = newWirelessConnectionData("", s.CurrentUUID, nil, apSecNone)
 	case typePppoe:
 		s.data = newPppoeConnectionData("", s.CurrentUUID)
 	case typeVpnL2tp:
@@ -119,7 +119,7 @@ func NewConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 	// s.updatePropAllowSave(false) // TODO
 
 	// TODO
-	Logger.Debug("NewConnectionSessionByOpen():", s.data)
+	logger.Debug("NewConnectionSessionByOpen():", s.data)
 
 	return
 }
@@ -139,12 +139,12 @@ func (s *ConnectionSession) Save() bool {
 		// update connection data and activate it
 		nmConn, err := nmNewSettingsConnection(s.connPath)
 		if err != nil {
-			Logger.Error(err)
+			logger.Error(err)
 			return false
 		}
 		err = nmConn.Update(s.data)
 		if err != nil {
-			Logger.Error(err)
+			logger.Error(err)
 			return false
 		}
 		nmActivateConnection(s.connPath, s.devPath)
@@ -234,7 +234,7 @@ func (s *ConnectionSession) ListPages() (pages []string) {
 func (s *ConnectionSession) pageToFields(page string) (fields []string) {
 	switch page {
 	default:
-		Logger.Error("pageToFields: invalid page name", page)
+		logger.Error("pageToFields: invalid page name", page)
 	case pageGeneral:
 		fields = []string{fieldConnection}
 	case pageEthernet:
@@ -287,7 +287,7 @@ func (s *ConnectionSession) getFieldOfPageKey(page, key string) string {
 			return field
 		}
 	}
-	Logger.Errorf("get corresponding filed of key in page failed, page=%s, key=%s", page, key)
+	logger.Errorf("get corresponding filed of key in page failed, page=%s, key=%s", page, key)
 	return ""
 }
 
@@ -302,7 +302,7 @@ func (s *ConnectionSession) listKeys(page string) (keys []string) {
 		keys = appendStrArrayUnion(keys, generalGetSettingAvailableKeys(s.data, field)...)
 	}
 	if len(keys) == 0 {
-		Logger.Warning("there is no avaiable keys for page", page)
+		logger.Warning("there is no avaiable keys for page", page)
 	}
 	return
 }
@@ -327,7 +327,7 @@ func (s *ConnectionSession) GetKey(page, key string) (value string) {
 
 func (s *ConnectionSession) SetKey(page, key, value string) {
 	field := s.getFieldOfPageKey(page, key)
-	// Logger.Debugf("SetKey(), page=%s, filed=%s, key=%s, value=%s", page, field, key, value) // TODO test
+	// logger.Debugf("SetKey(), page=%s, filed=%s, key=%s, value=%s", page, field, key, value) // TODO test
 	generalSetSettingKeyJSON(s.data, field, key, value)
 	s.updatePropErrors()
 	s.updatePropAvailableKeys()
@@ -350,7 +350,7 @@ func (s *ConnectionSession) DebugListKeyDetail() (info string) {
 	for _, page := range s.ListPages() {
 		pageData, ok := s.AvailableKeys[page]
 		if !ok {
-			Logger.Warning("no available keys for page", page)
+			logger.Warning("no available keys for page", page)
 			continue
 		}
 		for _, key := range pageData {
@@ -363,7 +363,7 @@ func (s *ConnectionSession) DebugListKeyDetail() (info string) {
 	return
 }
 
-func (s *ConnectionSession) DebugGetConnectionData() _ConnectionData {
+func (s *ConnectionSession) DebugGetConnectionData() connectionData {
 	return s.data
 }
 

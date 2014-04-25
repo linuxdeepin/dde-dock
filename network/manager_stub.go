@@ -9,7 +9,7 @@ func (m *Manager) updatePropActiveConnections() {
 	for _, cpath := range nmGetActiveConnections() {
 		if aconn, err := nmNewActiveConnection(cpath); err == nil {
 			m.ActiveConnections = append(m.ActiveConnections, aconn.Uuid.Get())
-			Logger.Debugf("ActiveConnections, uuid=%s, state=%d", aconn.Uuid.Get(), aconn.State.Get()) // TODO test
+			logger.Debugf("ActiveConnections, uuid=%s, state=%d", aconn.Uuid.Get(), aconn.State.Get()) // TODO test
 		}
 	}
 	dbus.NotifyChange(m, "ActiveConnections")

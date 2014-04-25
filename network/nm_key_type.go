@@ -32,16 +32,16 @@ const (
 )
 
 // Ipv4AddressesWrapper
-type Ipv4AddressesWrapper []Ipv4AddressWrapper
-type Ipv4AddressWrapper struct {
+type ipv4AddressesWrapper []ipv4AddressWrapper
+type ipv4AddressWrapper struct {
 	Address string
 	Mask    string
 	Gateway string
 }
 
 // Ipv4RoutesWrapper
-type Ipv4RoutesWrapper []Ipv4RouteWrapper
-type Ipv4RouteWrapper struct {
+type ipv4RoutesWrapper []ipv4RouteWrapper
+type ipv4RouteWrapper struct {
 	Address string
 	Mask    string
 	NextHop string
@@ -49,38 +49,38 @@ type Ipv4RouteWrapper struct {
 }
 
 // Ipv6AddressesWrapper
-type Ipv6AddressesWrapper []Ipv6AddressWrapper
-type Ipv6AddressWrapper struct {
+type ipv6AddressesWrapper []ipv6AddressWrapper
+type ipv6AddressWrapper struct {
 	Address string
 	Prefix  uint32
 	Gateway string
 }
 
 // Ipv6Addresses is an array of (byte array, uint32, byte array)
-type Ipv6Addresses []Ipv6Address
-type Ipv6Address struct {
+type ipv6Addresses []ipv6Address
+type ipv6Address struct {
 	Address []byte
 	Prefix  uint32
 	Gateway []byte
 }
 
-// Ipv6RoutesWrapper
-type Ipv6RoutesWrapper []Ipv6RouteWrapper
-type Ipv6RouteWrapper struct {
+// ipv6RoutesWrapper
+type ipv6RoutesWrapper []ipv6RouteWrapper
+type ipv6RouteWrapper struct {
 	Address string
 	Prefix  uint32
 	NextHop string
 	Metric  uint32
 }
 
-// Ipv6Routes is an array of (byte array, uint32, byte array, uint32)
-type Ipv6Route struct {
+// ipv6Routes is an array of (byte array, uint32, byte array, uint32)
+type ipv6Route struct {
 	Address []byte
 	Prefix  uint32
 	NextHop []byte
 	Metric  uint32
 }
-type Ipv6Routes []Ipv6Route
+type ipv6Routes []ipv6Route
 
 func getKtypeDescription(t ktype) (desc string) {
 	switch t {
@@ -113,7 +113,7 @@ func getKtypeDescription(t ktype) (desc string) {
 	case ktypeIpv6Addresses:
 		desc = "Ipv6Addresses, array of (byte array, uint32, byte array), encode by json"
 	case ktypeIpv6Routes:
-		desc = "Ipv6Routes, array of (byte array, uint32, byte array, uint32), encode by json"
+		desc = "ipv6Routes, array of (byte array, uint32, byte array, uint32), encode by json"
 	}
 	return
 }

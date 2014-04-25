@@ -114,8 +114,8 @@ func interfaceToDictStringString(v interface{}) (d map[string]string, err error)
 	return
 }
 
-func interfaceToIpv6Addresses(v interface{}) (d Ipv6Addresses, err error) {
-	d, ok := v.(Ipv6Addresses)
+func interfaceToIpv6Addresses(v interface{}) (d ipv6Addresses, err error) {
+	d, ok := v.(ipv6Addresses)
 	if !ok {
 		err = fmt.Errorf("interfaceToIpv6Addresses() failed: %v", v)
 		return
@@ -123,8 +123,8 @@ func interfaceToIpv6Addresses(v interface{}) (d Ipv6Addresses, err error) {
 	return
 }
 
-func interfaceToIpv6Routes(v interface{}) (d Ipv6Routes, err error) {
-	d, ok := v.(Ipv6Routes)
+func interfaceToIpv6Routes(v interface{}) (d ipv6Routes, err error) {
+	d, ok := v.(ipv6Routes)
 	if !ok {
 		err = fmt.Errorf("interfaceToIpv6Routes() failed: %v", v)
 		return

@@ -16,11 +16,11 @@ const (
 	NM_SETTING_VPN_SECRET_FLAG_UNUSED = 5
 )
 
-func getSettingVpnAvailableKeys(data _ConnectionData) (keys []string) { return }
-func getSettingVpnAvailableValues(data _ConnectionData, key string) (values []string, customizable bool) {
+func getSettingVpnAvailableKeys(data connectionData) (keys []string) { return }
+func getSettingVpnAvailableValues(data connectionData, key string) (values []string, customizable bool) {
 	return
 }
-func checkSettingVpnValues(data _ConnectionData) (errs FieldKeyErrors) {
+func checkSettingVpnValues(data connectionData) (errs FieldKeyErrors) {
 	errs = make(map[string]string)
 	return
 }

@@ -52,7 +52,7 @@ const (
 )
 
 func (*Utils) TestGetSetConnectionData(c *C) {
-	data := make(_ConnectionData)
+	data := make(connectionData)
 
 	addSettingField(data, fieldConnection)
 	setSettingConnectionId(data, testConnectionId)
@@ -65,7 +65,7 @@ func (*Utils) TestGetSetConnectionData(c *C) {
 }
 
 func (*Utils) TestGetSetConnectionDataJSON(c *C) {
-	data := make(_ConnectionData)
+	data := make(connectionData)
 	addSettingField(data, fieldConnection)
 	setSettingConnectionIdJSON(data, testConnectionIdJSON)
 	setSettingConnectionUuidJSON(data, testConnectionUuidJSON)
@@ -80,7 +80,7 @@ func (*Utils) TestGetSetConnectionDataJSON(c *C) {
 }
 
 func (*Utils) TestConnectionDataDefaultValue(c *C) {
-	data := make(_ConnectionData)
+	data := make(connectionData)
 	var defaultValueJSON string
 	var setValueJSON string
 	addSettingField(data, fieldConnection)

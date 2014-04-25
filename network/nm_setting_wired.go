@@ -73,15 +73,15 @@ const (
 )
 
 func newWiredConnection(id string) (uuid string) {
-	Logger.Debugf("new wired connection, id=%s", id)
+	logger.Debugf("new wired connection, id=%s", id)
 	uuid = newUUID()
 	data := newWiredConnectionData(id, uuid)
 	nmAddConnection(data)
 	return
 }
 
-func newWiredConnectionData(id, uuid string) (data _ConnectionData) {
-	data = make(_ConnectionData)
+func newWiredConnectionData(id, uuid string) (data connectionData) {
+	data = make(connectionData)
 
 	addSettingField(data, fieldConnection)
 	setSettingConnectionId(data, id)
@@ -102,20 +102,20 @@ func newWiredConnectionData(id, uuid string) (data _ConnectionData) {
 }
 
 // Get available keys
-func getSettingWiredAvailableKeys(data _ConnectionData) (keys []string) {
+func getSettingWiredAvailableKeys(data connectionData) (keys []string) {
 	keys = appendAvailableKeys(keys, fieldWired, NM_SETTING_WIRED_MAC_ADDRESS)
 	keys = appendAvailableKeys(keys, fieldWired, NM_SETTING_WIRED_MTU)
 	return
 }
 
 // TODO Get available values
-func getSettingWiredAvailableValues(data _ConnectionData, key string) (values []string, customizable bool) {
+func getSettingWiredAvailableValues(data connectionData, key string) (values []string, customizable bool) {
 	return
 }
 
 // Set JSON value generally
 // TODO Check whether the values are correct
-func checkSettingWiredValues(data _ConnectionData) (errs FieldKeyErrors) {
+func checkSettingWiredValues(data connectionData) (errs FieldKeyErrors) {
 	errs = make(map[string]string)
 	return
 }

@@ -202,7 +202,7 @@ func init() {
 				locker.Lock()
 				defer locker.Unlock()
 				delete(currentDevices, path)
-				Logger.Error(err)
+				logger.Error(err)
 			}
 		}()
 		if dev, err := nm.NewDevice("org.freedesktop.NetworkManager", path); err == nil {
@@ -240,19 +240,19 @@ func init() {
 		}
 	}
 
-	NMManager.ConnectDeviceRemoved(func(path dbus.ObjectPath) {
+	nmManager.ConnectDeviceRemoved(func(path dbus.ObjectPath) {
 		remove(path)
 	})
-	NMManager.ConnectDeviceAdded(func(path dbus.ObjectPath) {
+	nmManager.ConnectDeviceAdded(func(path dbus.ObjectPath) {
 		watch(path)
 	})
 
-	paths, _ := NMManager.GetDevices()
+	paths, _ := nmManager.GetDevices()
 	for _, path := range paths {
 		watch(path)
 	}
 
-	NMManager.ConnectStateChanged(func(state uint32) {
+	nmManager.ConnectStateChanged(func(state uint32) {
 		switch state {
 		case NM_STATE_DISCONNECTED, NM_STATE_ASLEEP:
 			notify.Notify("Network", 0, "network-offline", dlib.Tr("Offline"), dlib.Tr("Disconnected - You are now offline."), nil, nil, 0)

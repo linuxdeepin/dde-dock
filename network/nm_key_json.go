@@ -190,11 +190,11 @@ func jsonToKeyValueDictStringString(jsonStr string) (v map[string]string, err er
 	err = json.Unmarshal([]byte(jsonStr), &v)
 	return
 }
-func jsonToKeyValueIpv6Addresses(jsonStr string) (v Ipv6Addresses, err error) {
+func jsonToKeyValueIpv6Addresses(jsonStr string) (v ipv6Addresses, err error) {
 	err = json.Unmarshal([]byte(jsonStr), &v)
 	return
 }
-func jsonToKeyValueIpv6Routes(jsonStr string) (v Ipv6Routes, err error) {
+func jsonToKeyValueIpv6Routes(jsonStr string) (v ipv6Routes, err error) {
 	err = json.Unmarshal([]byte(jsonStr), &v)
 	return
 }
@@ -232,7 +232,7 @@ func jsonToKeyValueWrapperIpv4Dns(jsonStr string) (v []uint32, err error) {
 }
 func jsonToKeyValueWrapperIpv4Addresses(jsonStr string) (v [][]uint32, err error) {
 	// wrap ktypeArrayArrayUint32 to [array of (string, uint32, string)]
-	var wrapData Ipv4AddressesWrapper
+	var wrapData ipv4AddressesWrapper
 	err = json.Unmarshal([]byte(jsonStr), &wrapData)
 	if err != nil {
 		return
@@ -242,7 +242,7 @@ func jsonToKeyValueWrapperIpv4Addresses(jsonStr string) (v [][]uint32, err error
 }
 func jsonToKeyValueWrapperIpv4Routes(jsonStr string) (v [][]uint32, err error) {
 	// wrap ktypeArrayArrayUint32 to [array of (string, uint32, string, uint32)]
-	var wrapData Ipv4RoutesWrapper
+	var wrapData ipv4RoutesWrapper
 	err = json.Unmarshal([]byte(jsonStr), &wrapData)
 	if err != nil {
 		return
@@ -260,9 +260,9 @@ func jsonToKeyValueWrapperIpv6Dns(jsonStr string) (v [][]byte, err error) {
 	v = unwrapIpv6Dns(wrapData)
 	return
 }
-func jsonToKeyValueWrapperIpv6Addresses(jsonStr string) (v Ipv6Addresses, err error) {
+func jsonToKeyValueWrapperIpv6Addresses(jsonStr string) (v ipv6Addresses, err error) {
 	// wrap ktypeIpv6Addresses to [array of (string, uint32, string)]
-	var wrapData Ipv6AddressesWrapper
+	var wrapData ipv6AddressesWrapper
 	err = json.Unmarshal([]byte(jsonStr), &wrapData)
 	if err != nil {
 		return
@@ -270,9 +270,9 @@ func jsonToKeyValueWrapperIpv6Addresses(jsonStr string) (v Ipv6Addresses, err er
 	v = unwrapIpv6Addresses(wrapData)
 	return
 }
-func jsonToKeyValueWrapperIpv6Routes(jsonStr string) (v Ipv6Routes, err error) {
+func jsonToKeyValueWrapperIpv6Routes(jsonStr string) (v ipv6Routes, err error) {
 	// wrap ktypeIpv6Routes to [array of (string, uint32, string, uint32)]
-	var wrapData Ipv6RoutesWrapper
+	var wrapData ipv6RoutesWrapper
 	err = json.Unmarshal([]byte(jsonStr), &wrapData)
 	if err != nil {
 		return

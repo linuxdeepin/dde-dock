@@ -10,7 +10,7 @@ const (
 )
 
 func newPppoeConnection(id, username string) (uuid string) {
-	Logger.Debugf("new pppoe connection, id=%s", id)
+	logger.Debugf("new pppoe connection, id=%s", id)
 	uuid = newUUID()
 	data := newPppoeConnectionData(id, uuid)
 	setSettingPppoeUsername(data, username)
@@ -18,8 +18,8 @@ func newPppoeConnection(id, username string) (uuid string) {
 	return
 }
 
-func newPppoeConnectionData(id, uuid string) (data _ConnectionData) {
-	data = make(_ConnectionData)
+func newPppoeConnectionData(id, uuid string) (data connectionData) {
+	data = make(connectionData)
 
 	addSettingField(data, fieldConnection)
 	setSettingConnectionId(data, id)
@@ -38,7 +38,7 @@ func newPppoeConnectionData(id, uuid string) (data _ConnectionData) {
 }
 
 // Get available keys
-func getSettingPppoeAvailableKeys(data _ConnectionData) (keys []string) {
+func getSettingPppoeAvailableKeys(data connectionData) (keys []string) {
 	keys = appendAvailableKeys(keys, fieldPppoe, NM_SETTING_PPPOE_SERVICE)
 	keys = appendAvailableKeys(keys, fieldPppoe, NM_SETTING_PPPOE_USERNAME)
 	keys = appendAvailableKeys(keys, fieldPppoe, NM_SETTING_PPPOE_PASSWORD)
@@ -46,13 +46,13 @@ func getSettingPppoeAvailableKeys(data _ConnectionData) (keys []string) {
 }
 
 // Get available values
-func getSettingPppoeAvailableValues(data _ConnectionData, key string) (values []string, customizable bool) {
+func getSettingPppoeAvailableValues(data connectionData, key string) (values []string, customizable bool) {
 	customizable = true
 	return
 }
 
 // Check whether the values are correct
-func checkSettingPppoeValues(data _ConnectionData) (errs FieldKeyErrors) {
+func checkSettingPppoeValues(data connectionData) (errs FieldKeyErrors) {
 	errs = make(map[string]string)
 
 	// check username

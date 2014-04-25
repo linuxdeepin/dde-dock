@@ -97,7 +97,7 @@ func isKeyInSettingPpp(key string) bool {
 func getSettingPppKeyDefaultValueJSON(key string) (valueJSON string) {
 	switch key {
 	default:
-		Logger.Error("invalid key:", key)
+		logger.Error("invalid key:", key)
 	case NM_SETTING_PPP_NOAUTH:
 		valueJSON = `true`
 	case NM_SETTING_PPP_REFUSE_EAP:
@@ -139,10 +139,10 @@ func getSettingPppKeyDefaultValueJSON(key string) (valueJSON string) {
 }
 
 // Get JSON value generally
-func generalGetSettingPppKeyJSON(data _ConnectionData, key string) (value string) {
+func generalGetSettingPppKeyJSON(data connectionData, key string) (value string) {
 	switch key {
 	default:
-		Logger.Error("generalGetSettingPppKeyJSON: invalide key", key)
+		logger.Error("generalGetSettingPppKeyJSON: invalide key", key)
 	case NM_SETTING_PPP_NOAUTH:
 		value = getSettingPppNoauthJSON(data)
 	case NM_SETTING_PPP_REFUSE_EAP:
@@ -184,10 +184,10 @@ func generalGetSettingPppKeyJSON(data _ConnectionData, key string) (value string
 }
 
 // Set JSON value generally
-func generalSetSettingPppKeyJSON(data _ConnectionData, key, valueJSON string) {
+func generalSetSettingPppKeyJSON(data connectionData, key, valueJSON string) {
 	switch key {
 	default:
-		Logger.Error("generalSetSettingPppKeyJSON: invalide key", key)
+		logger.Error("generalSetSettingPppKeyJSON: invalide key", key)
 	case NM_SETTING_PPP_NOAUTH:
 		setSettingPppNoauthJSON(data, valueJSON)
 	case NM_SETTING_PPP_REFUSE_EAP:
@@ -229,63 +229,63 @@ func generalSetSettingPppKeyJSON(data _ConnectionData, key, valueJSON string) {
 }
 
 // Check if key exists
-func isSettingPppNoauthExists(data _ConnectionData) bool {
+func isSettingPppNoauthExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOAUTH)
 }
-func isSettingPppRefuseEapExists(data _ConnectionData) bool {
+func isSettingPppRefuseEapExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_EAP)
 }
-func isSettingPppRefusePapExists(data _ConnectionData) bool {
+func isSettingPppRefusePapExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_PAP)
 }
-func isSettingPppRefuseChapExists(data _ConnectionData) bool {
+func isSettingPppRefuseChapExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_CHAP)
 }
-func isSettingPppRefuseMschapExists(data _ConnectionData) bool {
+func isSettingPppRefuseMschapExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_MSCHAP)
 }
-func isSettingPppRefuseMschapv2Exists(data _ConnectionData) bool {
+func isSettingPppRefuseMschapv2Exists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_MSCHAPV2)
 }
-func isSettingPppRequireMppeExists(data _ConnectionData) bool {
+func isSettingPppRequireMppeExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE)
 }
-func isSettingPppRequireMppe128Exists(data _ConnectionData) bool {
+func isSettingPppRequireMppe128Exists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE_128)
 }
-func isSettingPppMppeStatefulExists(data _ConnectionData) bool {
+func isSettingPppMppeStatefulExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MPPE_STATEFUL)
 }
-func isSettingPppNobsdcompExists(data _ConnectionData) bool {
+func isSettingPppNobsdcompExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOBSDCOMP)
 }
-func isSettingPppNodeflateExists(data _ConnectionData) bool {
+func isSettingPppNodeflateExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NODEFLATE)
 }
-func isSettingPppNoVjCompExists(data _ConnectionData) bool {
+func isSettingPppNoVjCompExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NO_VJ_COMP)
 }
-func isSettingPppCrtsctsExists(data _ConnectionData) bool {
+func isSettingPppCrtsctsExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_CRTSCTS)
 }
-func isSettingPppBaudExists(data _ConnectionData) bool {
+func isSettingPppBaudExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_BAUD)
 }
-func isSettingPppMruExists(data _ConnectionData) bool {
+func isSettingPppMruExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MRU)
 }
-func isSettingPppMtuExists(data _ConnectionData) bool {
+func isSettingPppMtuExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MTU)
 }
-func isSettingPppLcpEchoFailureExists(data _ConnectionData) bool {
+func isSettingPppLcpEchoFailureExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_FAILURE)
 }
-func isSettingPppLcpEchoIntervalExists(data _ConnectionData) bool {
+func isSettingPppLcpEchoIntervalExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_INTERVAL)
 }
 
 // Ensure field and key exists and not empty
-func ensureFieldSettingPppExists(data _ConnectionData, errs FieldKeyErrors, relatedKey string) {
+func ensureFieldSettingPppExists(data connectionData, errs FieldKeyErrors, relatedKey string) {
 	if !isSettingFieldExists(data, NM_SETTING_PPP_SETTING_NAME) {
 		rememberError(errs, relatedKey, NM_SETTING_PPP_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_PPP_SETTING_NAME))
 	}
@@ -294,409 +294,409 @@ func ensureFieldSettingPppExists(data _ConnectionData, errs FieldKeyErrors, rela
 		rememberError(errs, relatedKey, NM_SETTING_PPP_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_PPP_SETTING_NAME))
 	}
 }
-func ensureSettingPppNoauthNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingPppNoauthNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingPppNoauthExists(data) {
 		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOAUTH, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingPppRefuseEapNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingPppRefuseEapNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingPppRefuseEapExists(data) {
 		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_EAP, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingPppRefusePapNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingPppRefusePapNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingPppRefusePapExists(data) {
 		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_PAP, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingPppRefuseChapNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingPppRefuseChapNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingPppRefuseChapExists(data) {
 		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_CHAP, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingPppRefuseMschapNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingPppRefuseMschapNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingPppRefuseMschapExists(data) {
 		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_MSCHAP, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingPppRefuseMschapv2NoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingPppRefuseMschapv2NoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingPppRefuseMschapv2Exists(data) {
 		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_MSCHAPV2, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingPppRequireMppeNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingPppRequireMppeNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingPppRequireMppeExists(data) {
 		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingPppRequireMppe128NoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingPppRequireMppe128NoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingPppRequireMppe128Exists(data) {
 		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE_128, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingPppMppeStatefulNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingPppMppeStatefulNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingPppMppeStatefulExists(data) {
 		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MPPE_STATEFUL, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingPppNobsdcompNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingPppNobsdcompNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingPppNobsdcompExists(data) {
 		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOBSDCOMP, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingPppNodeflateNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingPppNodeflateNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingPppNodeflateExists(data) {
 		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NODEFLATE, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingPppNoVjCompNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingPppNoVjCompNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingPppNoVjCompExists(data) {
 		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NO_VJ_COMP, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingPppCrtsctsNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingPppCrtsctsNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingPppCrtsctsExists(data) {
 		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_CRTSCTS, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingPppBaudNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingPppBaudNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingPppBaudExists(data) {
 		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_BAUD, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingPppMruNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingPppMruNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingPppMruExists(data) {
 		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MRU, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingPppMtuNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingPppMtuNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingPppMtuExists(data) {
 		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MTU, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingPppLcpEchoFailureNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingPppLcpEchoFailureNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingPppLcpEchoFailureExists(data) {
 		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_FAILURE, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingPppLcpEchoIntervalNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingPppLcpEchoIntervalNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingPppLcpEchoIntervalExists(data) {
 		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_INTERVAL, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
 
 // Getter
-func getSettingPppNoauth(data _ConnectionData) (value bool) {
+func getSettingPppNoauth(data connectionData) (value bool) {
 	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOAUTH).(bool)
 	return
 }
-func getSettingPppRefuseEap(data _ConnectionData) (value bool) {
+func getSettingPppRefuseEap(data connectionData) (value bool) {
 	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_EAP).(bool)
 	return
 }
-func getSettingPppRefusePap(data _ConnectionData) (value bool) {
+func getSettingPppRefusePap(data connectionData) (value bool) {
 	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_PAP).(bool)
 	return
 }
-func getSettingPppRefuseChap(data _ConnectionData) (value bool) {
+func getSettingPppRefuseChap(data connectionData) (value bool) {
 	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_CHAP).(bool)
 	return
 }
-func getSettingPppRefuseMschap(data _ConnectionData) (value bool) {
+func getSettingPppRefuseMschap(data connectionData) (value bool) {
 	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_MSCHAP).(bool)
 	return
 }
-func getSettingPppRefuseMschapv2(data _ConnectionData) (value bool) {
+func getSettingPppRefuseMschapv2(data connectionData) (value bool) {
 	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_MSCHAPV2).(bool)
 	return
 }
-func getSettingPppRequireMppe(data _ConnectionData) (value bool) {
+func getSettingPppRequireMppe(data connectionData) (value bool) {
 	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE).(bool)
 	return
 }
-func getSettingPppRequireMppe128(data _ConnectionData) (value bool) {
+func getSettingPppRequireMppe128(data connectionData) (value bool) {
 	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE_128).(bool)
 	return
 }
-func getSettingPppMppeStateful(data _ConnectionData) (value bool) {
+func getSettingPppMppeStateful(data connectionData) (value bool) {
 	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MPPE_STATEFUL).(bool)
 	return
 }
-func getSettingPppNobsdcomp(data _ConnectionData) (value bool) {
+func getSettingPppNobsdcomp(data connectionData) (value bool) {
 	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOBSDCOMP).(bool)
 	return
 }
-func getSettingPppNodeflate(data _ConnectionData) (value bool) {
+func getSettingPppNodeflate(data connectionData) (value bool) {
 	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NODEFLATE).(bool)
 	return
 }
-func getSettingPppNoVjComp(data _ConnectionData) (value bool) {
+func getSettingPppNoVjComp(data connectionData) (value bool) {
 	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NO_VJ_COMP).(bool)
 	return
 }
-func getSettingPppCrtscts(data _ConnectionData) (value bool) {
+func getSettingPppCrtscts(data connectionData) (value bool) {
 	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_CRTSCTS).(bool)
 	return
 }
-func getSettingPppBaud(data _ConnectionData) (value uint32) {
+func getSettingPppBaud(data connectionData) (value uint32) {
 	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_BAUD).(uint32)
 	return
 }
-func getSettingPppMru(data _ConnectionData) (value uint32) {
+func getSettingPppMru(data connectionData) (value uint32) {
 	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MRU).(uint32)
 	return
 }
-func getSettingPppMtu(data _ConnectionData) (value uint32) {
+func getSettingPppMtu(data connectionData) (value uint32) {
 	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MTU).(uint32)
 	return
 }
-func getSettingPppLcpEchoFailure(data _ConnectionData) (value uint32) {
+func getSettingPppLcpEchoFailure(data connectionData) (value uint32) {
 	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_FAILURE).(uint32)
 	return
 }
-func getSettingPppLcpEchoInterval(data _ConnectionData) (value uint32) {
+func getSettingPppLcpEchoInterval(data connectionData) (value uint32) {
 	value, _ = getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_INTERVAL).(uint32)
 	return
 }
 
 // Setter
-func setSettingPppNoauth(data _ConnectionData, value bool) {
+func setSettingPppNoauth(data connectionData, value bool) {
 	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOAUTH, value)
 }
-func setSettingPppRefuseEap(data _ConnectionData, value bool) {
+func setSettingPppRefuseEap(data connectionData, value bool) {
 	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_EAP, value)
 }
-func setSettingPppRefusePap(data _ConnectionData, value bool) {
+func setSettingPppRefusePap(data connectionData, value bool) {
 	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_PAP, value)
 }
-func setSettingPppRefuseChap(data _ConnectionData, value bool) {
+func setSettingPppRefuseChap(data connectionData, value bool) {
 	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_CHAP, value)
 }
-func setSettingPppRefuseMschap(data _ConnectionData, value bool) {
+func setSettingPppRefuseMschap(data connectionData, value bool) {
 	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_MSCHAP, value)
 }
-func setSettingPppRefuseMschapv2(data _ConnectionData, value bool) {
+func setSettingPppRefuseMschapv2(data connectionData, value bool) {
 	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_MSCHAPV2, value)
 }
-func setSettingPppRequireMppe(data _ConnectionData, value bool) {
+func setSettingPppRequireMppe(data connectionData, value bool) {
 	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE, value)
 }
-func setSettingPppRequireMppe128(data _ConnectionData, value bool) {
+func setSettingPppRequireMppe128(data connectionData, value bool) {
 	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE_128, value)
 }
-func setSettingPppMppeStateful(data _ConnectionData, value bool) {
+func setSettingPppMppeStateful(data connectionData, value bool) {
 	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MPPE_STATEFUL, value)
 }
-func setSettingPppNobsdcomp(data _ConnectionData, value bool) {
+func setSettingPppNobsdcomp(data connectionData, value bool) {
 	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOBSDCOMP, value)
 }
-func setSettingPppNodeflate(data _ConnectionData, value bool) {
+func setSettingPppNodeflate(data connectionData, value bool) {
 	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NODEFLATE, value)
 }
-func setSettingPppNoVjComp(data _ConnectionData, value bool) {
+func setSettingPppNoVjComp(data connectionData, value bool) {
 	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NO_VJ_COMP, value)
 }
-func setSettingPppCrtscts(data _ConnectionData, value bool) {
+func setSettingPppCrtscts(data connectionData, value bool) {
 	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_CRTSCTS, value)
 }
-func setSettingPppBaud(data _ConnectionData, value uint32) {
+func setSettingPppBaud(data connectionData, value uint32) {
 	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_BAUD, value)
 }
-func setSettingPppMru(data _ConnectionData, value uint32) {
+func setSettingPppMru(data connectionData, value uint32) {
 	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MRU, value)
 }
-func setSettingPppMtu(data _ConnectionData, value uint32) {
+func setSettingPppMtu(data connectionData, value uint32) {
 	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MTU, value)
 }
-func setSettingPppLcpEchoFailure(data _ConnectionData, value uint32) {
+func setSettingPppLcpEchoFailure(data connectionData, value uint32) {
 	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_FAILURE, value)
 }
-func setSettingPppLcpEchoInterval(data _ConnectionData, value uint32) {
+func setSettingPppLcpEchoInterval(data connectionData, value uint32) {
 	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_INTERVAL, value)
 }
 
 // JSON Getter
-func getSettingPppNoauthJSON(data _ConnectionData) (valueJSON string) {
+func getSettingPppNoauthJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOAUTH, getSettingPppKeyType(NM_SETTING_PPP_NOAUTH))
 	return
 }
-func getSettingPppRefuseEapJSON(data _ConnectionData) (valueJSON string) {
+func getSettingPppRefuseEapJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_EAP, getSettingPppKeyType(NM_SETTING_PPP_REFUSE_EAP))
 	return
 }
-func getSettingPppRefusePapJSON(data _ConnectionData) (valueJSON string) {
+func getSettingPppRefusePapJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_PAP, getSettingPppKeyType(NM_SETTING_PPP_REFUSE_PAP))
 	return
 }
-func getSettingPppRefuseChapJSON(data _ConnectionData) (valueJSON string) {
+func getSettingPppRefuseChapJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_CHAP, getSettingPppKeyType(NM_SETTING_PPP_REFUSE_CHAP))
 	return
 }
-func getSettingPppRefuseMschapJSON(data _ConnectionData) (valueJSON string) {
+func getSettingPppRefuseMschapJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_MSCHAP, getSettingPppKeyType(NM_SETTING_PPP_REFUSE_MSCHAP))
 	return
 }
-func getSettingPppRefuseMschapv2JSON(data _ConnectionData) (valueJSON string) {
+func getSettingPppRefuseMschapv2JSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_MSCHAPV2, getSettingPppKeyType(NM_SETTING_PPP_REFUSE_MSCHAPV2))
 	return
 }
-func getSettingPppRequireMppeJSON(data _ConnectionData) (valueJSON string) {
+func getSettingPppRequireMppeJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE, getSettingPppKeyType(NM_SETTING_PPP_REQUIRE_MPPE))
 	return
 }
-func getSettingPppRequireMppe128JSON(data _ConnectionData) (valueJSON string) {
+func getSettingPppRequireMppe128JSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE_128, getSettingPppKeyType(NM_SETTING_PPP_REQUIRE_MPPE_128))
 	return
 }
-func getSettingPppMppeStatefulJSON(data _ConnectionData) (valueJSON string) {
+func getSettingPppMppeStatefulJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MPPE_STATEFUL, getSettingPppKeyType(NM_SETTING_PPP_MPPE_STATEFUL))
 	return
 }
-func getSettingPppNobsdcompJSON(data _ConnectionData) (valueJSON string) {
+func getSettingPppNobsdcompJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOBSDCOMP, getSettingPppKeyType(NM_SETTING_PPP_NOBSDCOMP))
 	return
 }
-func getSettingPppNodeflateJSON(data _ConnectionData) (valueJSON string) {
+func getSettingPppNodeflateJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NODEFLATE, getSettingPppKeyType(NM_SETTING_PPP_NODEFLATE))
 	return
 }
-func getSettingPppNoVjCompJSON(data _ConnectionData) (valueJSON string) {
+func getSettingPppNoVjCompJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NO_VJ_COMP, getSettingPppKeyType(NM_SETTING_PPP_NO_VJ_COMP))
 	return
 }
-func getSettingPppCrtsctsJSON(data _ConnectionData) (valueJSON string) {
+func getSettingPppCrtsctsJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_CRTSCTS, getSettingPppKeyType(NM_SETTING_PPP_CRTSCTS))
 	return
 }
-func getSettingPppBaudJSON(data _ConnectionData) (valueJSON string) {
+func getSettingPppBaudJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_BAUD, getSettingPppKeyType(NM_SETTING_PPP_BAUD))
 	return
 }
-func getSettingPppMruJSON(data _ConnectionData) (valueJSON string) {
+func getSettingPppMruJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MRU, getSettingPppKeyType(NM_SETTING_PPP_MRU))
 	return
 }
-func getSettingPppMtuJSON(data _ConnectionData) (valueJSON string) {
+func getSettingPppMtuJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MTU, getSettingPppKeyType(NM_SETTING_PPP_MTU))
 	return
 }
-func getSettingPppLcpEchoFailureJSON(data _ConnectionData) (valueJSON string) {
+func getSettingPppLcpEchoFailureJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_FAILURE, getSettingPppKeyType(NM_SETTING_PPP_LCP_ECHO_FAILURE))
 	return
 }
-func getSettingPppLcpEchoIntervalJSON(data _ConnectionData) (valueJSON string) {
+func getSettingPppLcpEchoIntervalJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_INTERVAL, getSettingPppKeyType(NM_SETTING_PPP_LCP_ECHO_INTERVAL))
 	return
 }
 
 // JSON Setter
-func setSettingPppNoauthJSON(data _ConnectionData, valueJSON string) {
+func setSettingPppNoauthJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOAUTH, valueJSON, getSettingPppKeyType(NM_SETTING_PPP_NOAUTH))
 }
-func setSettingPppRefuseEapJSON(data _ConnectionData, valueJSON string) {
+func setSettingPppRefuseEapJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_EAP, valueJSON, getSettingPppKeyType(NM_SETTING_PPP_REFUSE_EAP))
 }
-func setSettingPppRefusePapJSON(data _ConnectionData, valueJSON string) {
+func setSettingPppRefusePapJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_PAP, valueJSON, getSettingPppKeyType(NM_SETTING_PPP_REFUSE_PAP))
 }
-func setSettingPppRefuseChapJSON(data _ConnectionData, valueJSON string) {
+func setSettingPppRefuseChapJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_CHAP, valueJSON, getSettingPppKeyType(NM_SETTING_PPP_REFUSE_CHAP))
 }
-func setSettingPppRefuseMschapJSON(data _ConnectionData, valueJSON string) {
+func setSettingPppRefuseMschapJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_MSCHAP, valueJSON, getSettingPppKeyType(NM_SETTING_PPP_REFUSE_MSCHAP))
 }
-func setSettingPppRefuseMschapv2JSON(data _ConnectionData, valueJSON string) {
+func setSettingPppRefuseMschapv2JSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_MSCHAPV2, valueJSON, getSettingPppKeyType(NM_SETTING_PPP_REFUSE_MSCHAPV2))
 }
-func setSettingPppRequireMppeJSON(data _ConnectionData, valueJSON string) {
+func setSettingPppRequireMppeJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE, valueJSON, getSettingPppKeyType(NM_SETTING_PPP_REQUIRE_MPPE))
 }
-func setSettingPppRequireMppe128JSON(data _ConnectionData, valueJSON string) {
+func setSettingPppRequireMppe128JSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE_128, valueJSON, getSettingPppKeyType(NM_SETTING_PPP_REQUIRE_MPPE_128))
 }
-func setSettingPppMppeStatefulJSON(data _ConnectionData, valueJSON string) {
+func setSettingPppMppeStatefulJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MPPE_STATEFUL, valueJSON, getSettingPppKeyType(NM_SETTING_PPP_MPPE_STATEFUL))
 }
-func setSettingPppNobsdcompJSON(data _ConnectionData, valueJSON string) {
+func setSettingPppNobsdcompJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOBSDCOMP, valueJSON, getSettingPppKeyType(NM_SETTING_PPP_NOBSDCOMP))
 }
-func setSettingPppNodeflateJSON(data _ConnectionData, valueJSON string) {
+func setSettingPppNodeflateJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NODEFLATE, valueJSON, getSettingPppKeyType(NM_SETTING_PPP_NODEFLATE))
 }
-func setSettingPppNoVjCompJSON(data _ConnectionData, valueJSON string) {
+func setSettingPppNoVjCompJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NO_VJ_COMP, valueJSON, getSettingPppKeyType(NM_SETTING_PPP_NO_VJ_COMP))
 }
-func setSettingPppCrtsctsJSON(data _ConnectionData, valueJSON string) {
+func setSettingPppCrtsctsJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_CRTSCTS, valueJSON, getSettingPppKeyType(NM_SETTING_PPP_CRTSCTS))
 }
-func setSettingPppBaudJSON(data _ConnectionData, valueJSON string) {
+func setSettingPppBaudJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_BAUD, valueJSON, getSettingPppKeyType(NM_SETTING_PPP_BAUD))
 }
-func setSettingPppMruJSON(data _ConnectionData, valueJSON string) {
+func setSettingPppMruJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MRU, valueJSON, getSettingPppKeyType(NM_SETTING_PPP_MRU))
 }
-func setSettingPppMtuJSON(data _ConnectionData, valueJSON string) {
+func setSettingPppMtuJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MTU, valueJSON, getSettingPppKeyType(NM_SETTING_PPP_MTU))
 }
-func setSettingPppLcpEchoFailureJSON(data _ConnectionData, valueJSON string) {
+func setSettingPppLcpEchoFailureJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_FAILURE, valueJSON, getSettingPppKeyType(NM_SETTING_PPP_LCP_ECHO_FAILURE))
 }
-func setSettingPppLcpEchoIntervalJSON(data _ConnectionData, valueJSON string) {
+func setSettingPppLcpEchoIntervalJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_INTERVAL, valueJSON, getSettingPppKeyType(NM_SETTING_PPP_LCP_ECHO_INTERVAL))
 }
 
 // Remover
-func removeSettingPppNoauth(data _ConnectionData) {
+func removeSettingPppNoauth(data connectionData) {
 	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOAUTH)
 }
-func removeSettingPppRefuseEap(data _ConnectionData) {
+func removeSettingPppRefuseEap(data connectionData) {
 	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_EAP)
 }
-func removeSettingPppRefusePap(data _ConnectionData) {
+func removeSettingPppRefusePap(data connectionData) {
 	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_PAP)
 }
-func removeSettingPppRefuseChap(data _ConnectionData) {
+func removeSettingPppRefuseChap(data connectionData) {
 	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_CHAP)
 }
-func removeSettingPppRefuseMschap(data _ConnectionData) {
+func removeSettingPppRefuseMschap(data connectionData) {
 	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_MSCHAP)
 }
-func removeSettingPppRefuseMschapv2(data _ConnectionData) {
+func removeSettingPppRefuseMschapv2(data connectionData) {
 	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_MSCHAPV2)
 }
-func removeSettingPppRequireMppe(data _ConnectionData) {
+func removeSettingPppRequireMppe(data connectionData) {
 	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE)
 }
-func removeSettingPppRequireMppe128(data _ConnectionData) {
+func removeSettingPppRequireMppe128(data connectionData) {
 	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE_128)
 }
-func removeSettingPppMppeStateful(data _ConnectionData) {
+func removeSettingPppMppeStateful(data connectionData) {
 	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MPPE_STATEFUL)
 }
-func removeSettingPppNobsdcomp(data _ConnectionData) {
+func removeSettingPppNobsdcomp(data connectionData) {
 	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOBSDCOMP)
 }
-func removeSettingPppNodeflate(data _ConnectionData) {
+func removeSettingPppNodeflate(data connectionData) {
 	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NODEFLATE)
 }
-func removeSettingPppNoVjComp(data _ConnectionData) {
+func removeSettingPppNoVjComp(data connectionData) {
 	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NO_VJ_COMP)
 }
-func removeSettingPppCrtscts(data _ConnectionData) {
+func removeSettingPppCrtscts(data connectionData) {
 	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_CRTSCTS)
 }
-func removeSettingPppBaud(data _ConnectionData) {
+func removeSettingPppBaud(data connectionData) {
 	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_BAUD)
 }
-func removeSettingPppMru(data _ConnectionData) {
+func removeSettingPppMru(data connectionData) {
 	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MRU)
 }
-func removeSettingPppMtu(data _ConnectionData) {
+func removeSettingPppMtu(data connectionData) {
 	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MTU)
 }
-func removeSettingPppLcpEchoFailure(data _ConnectionData) {
+func removeSettingPppLcpEchoFailure(data connectionData) {
 	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_FAILURE)
 }
-func removeSettingPppLcpEchoInterval(data _ConnectionData) {
+func removeSettingPppLcpEchoInterval(data connectionData) {
 	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_INTERVAL)
 }

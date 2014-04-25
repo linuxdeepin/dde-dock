@@ -4,17 +4,20 @@ import "dlib/dbus"
 import "dlib/dbus/property"
 import nm "dbus/org/freedesktop/networkmanager"
 
-const NMDest = "org.freedesktop.NetworkManager"
+const nmDest = "org.freedesktop.NetworkManager"
 
+// TODO
 const (
-	OpAdded = iota
-	OpRemoved
+	opAdded = iota
+	opRemoved
 )
 
 var (
-	NMManager, _  = nm.NewManager(NMDest, "/org/freedesktop/NetworkManager")
-	NMSettings, _ = nm.NewSettings(NMDest, "/org/freedesktop/NetworkManager/Settings")
+	nmManager, _  = nm.NewManager(nmDest, "/org/freedesktop/NetworkManager")
+	nmSettings, _ = nm.NewSettings(nmDest, "/org/freedesktop/NetworkManager/Settings")
 )
+
+type connectionData map[string]map[string]dbus.Variant
 
 type Manager struct {
 	//update by manager.go
@@ -26,9 +29,9 @@ type Manager struct {
 	State             uint32        // networking state
 
 	//update by devices.go
-	WiredDevices    []*Device
-	WirelessDevices []*Device // TODO is "Device" struct still needed?
-	OtherDevices    []*Device
+	WiredDevices    []*device
+	WirelessDevices []*device // TODO is "device" struct still needed?
+	OtherDevices    []*device
 
 	//update by connections.go
 	WiredConnections    []string
@@ -61,21 +64,21 @@ func NewManager() (m *Manager) {
 
 func (m *Manager) initManager() {
 	m.WiredEnabled = true
-	m.WirelessEnabled = property.NewWrapProperty(m, "WirelessEnabled", NMManager.WirelessEnabled)
-	m.NetworkingEnabled = property.NewWrapProperty(m, "NetworkingEnabled", NMManager.NetworkingEnabled)
+	m.WirelessEnabled = property.NewWrapProperty(m, "WirelessEnabled", nmManager.WirelessEnabled)
+	m.NetworkingEnabled = property.NewWrapProperty(m, "NetworkingEnabled", nmManager.NetworkingEnabled)
 
 	m.initDeviceManage()
 	m.initConnectionManage()
 
 	// update property "ActiveConnections" after initilizing device
 	m.updatePropActiveConnections()
-	NMManager.ActiveConnections.ConnectChanged(func() {
+	nmManager.ActiveConnections.ConnectChanged(func() {
 		m.updatePropActiveConnections()
 	})
 
 	// update property "State"
 	m.updatePropState()
-	NMManager.State.ConnectChanged(func() {
+	nmManager.State.ConnectChanged(func() {
 		m.updatePropState()
 	})
 

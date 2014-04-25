@@ -41,7 +41,7 @@ func isKeyInSettingVpn(key string) bool {
 func getSettingVpnKeyDefaultValueJSON(key string) (valueJSON string) {
 	switch key {
 	default:
-		Logger.Error("invalid key:", key)
+		logger.Error("invalid key:", key)
 	case NM_SETTING_VPN_SERVICE_TYPE:
 		valueJSON = `""`
 	case NM_SETTING_VPN_USER_NAME:
@@ -55,10 +55,10 @@ func getSettingVpnKeyDefaultValueJSON(key string) (valueJSON string) {
 }
 
 // Get JSON value generally
-func generalGetSettingVpnKeyJSON(data _ConnectionData, key string) (value string) {
+func generalGetSettingVpnKeyJSON(data connectionData, key string) (value string) {
 	switch key {
 	default:
-		Logger.Error("generalGetSettingVpnKeyJSON: invalide key", key)
+		logger.Error("generalGetSettingVpnKeyJSON: invalide key", key)
 	case NM_SETTING_VPN_SERVICE_TYPE:
 		value = getSettingVpnServiceTypeJSON(data)
 	case NM_SETTING_VPN_USER_NAME:
@@ -72,10 +72,10 @@ func generalGetSettingVpnKeyJSON(data _ConnectionData, key string) (value string
 }
 
 // Set JSON value generally
-func generalSetSettingVpnKeyJSON(data _ConnectionData, key, valueJSON string) {
+func generalSetSettingVpnKeyJSON(data connectionData, key, valueJSON string) {
 	switch key {
 	default:
-		Logger.Error("generalSetSettingVpnKeyJSON: invalide key", key)
+		logger.Error("generalSetSettingVpnKeyJSON: invalide key", key)
 	case NM_SETTING_VPN_SERVICE_TYPE:
 		setSettingVpnServiceTypeJSON(data, valueJSON)
 	case NM_SETTING_VPN_USER_NAME:
@@ -89,21 +89,21 @@ func generalSetSettingVpnKeyJSON(data _ConnectionData, key, valueJSON string) {
 }
 
 // Check if key exists
-func isSettingVpnServiceTypeExists(data _ConnectionData) bool {
+func isSettingVpnServiceTypeExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SERVICE_TYPE)
 }
-func isSettingVpnUserNameExists(data _ConnectionData) bool {
+func isSettingVpnUserNameExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_USER_NAME)
 }
-func isSettingVpnDataExists(data _ConnectionData) bool {
+func isSettingVpnDataExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_DATA)
 }
-func isSettingVpnSecretsExists(data _ConnectionData) bool {
+func isSettingVpnSecretsExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SECRETS)
 }
 
 // Ensure field and key exists and not empty
-func ensureFieldSettingVpnExists(data _ConnectionData, errs FieldKeyErrors, relatedKey string) {
+func ensureFieldSettingVpnExists(data connectionData, errs FieldKeyErrors, relatedKey string) {
 	if !isSettingFieldExists(data, NM_SETTING_VPN_SETTING_NAME) {
 		rememberError(errs, relatedKey, NM_SETTING_VPN_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_VPN_SETTING_NAME))
 	}
@@ -112,7 +112,7 @@ func ensureFieldSettingVpnExists(data _ConnectionData, errs FieldKeyErrors, rela
 		rememberError(errs, relatedKey, NM_SETTING_VPN_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_VPN_SETTING_NAME))
 	}
 }
-func ensureSettingVpnServiceTypeNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingVpnServiceTypeNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingVpnServiceTypeExists(data) {
 		rememberError(errs, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SERVICE_TYPE, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -121,7 +121,7 @@ func ensureSettingVpnServiceTypeNoEmpty(data _ConnectionData, errs FieldKeyError
 		rememberError(errs, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SERVICE_TYPE, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnUserNameNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingVpnUserNameNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingVpnUserNameExists(data) {
 		rememberError(errs, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_USER_NAME, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -130,7 +130,7 @@ func ensureSettingVpnUserNameNoEmpty(data _ConnectionData, errs FieldKeyErrors) 
 		rememberError(errs, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_USER_NAME, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnDataNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingVpnDataNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingVpnDataExists(data) {
 		rememberError(errs, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_DATA, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -139,7 +139,7 @@ func ensureSettingVpnDataNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 		rememberError(errs, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_DATA, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnSecretsNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingVpnSecretsNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingVpnSecretsExists(data) {
 		rememberError(errs, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SECRETS, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -150,79 +150,79 @@ func ensureSettingVpnSecretsNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
 }
 
 // Getter
-func getSettingVpnServiceType(data _ConnectionData) (value string) {
+func getSettingVpnServiceType(data connectionData) (value string) {
 	value, _ = getSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SERVICE_TYPE).(string)
 	return
 }
-func getSettingVpnUserName(data _ConnectionData) (value string) {
+func getSettingVpnUserName(data connectionData) (value string) {
 	value, _ = getSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_USER_NAME).(string)
 	return
 }
-func getSettingVpnData(data _ConnectionData) (value map[string]string) {
+func getSettingVpnData(data connectionData) (value map[string]string) {
 	value, _ = getSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_DATA).(map[string]string)
 	return
 }
-func getSettingVpnSecrets(data _ConnectionData) (value map[string]string) {
+func getSettingVpnSecrets(data connectionData) (value map[string]string) {
 	value, _ = getSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SECRETS).(map[string]string)
 	return
 }
 
 // Setter
-func setSettingVpnServiceType(data _ConnectionData, value string) {
+func setSettingVpnServiceType(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SERVICE_TYPE, value)
 }
-func setSettingVpnUserName(data _ConnectionData, value string) {
+func setSettingVpnUserName(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_USER_NAME, value)
 }
-func setSettingVpnData(data _ConnectionData, value map[string]string) {
+func setSettingVpnData(data connectionData, value map[string]string) {
 	setSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_DATA, value)
 }
-func setSettingVpnSecrets(data _ConnectionData, value map[string]string) {
+func setSettingVpnSecrets(data connectionData, value map[string]string) {
 	setSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SECRETS, value)
 }
 
 // JSON Getter
-func getSettingVpnServiceTypeJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVpnServiceTypeJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SERVICE_TYPE, getSettingVpnKeyType(NM_SETTING_VPN_SERVICE_TYPE))
 	return
 }
-func getSettingVpnUserNameJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVpnUserNameJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_USER_NAME, getSettingVpnKeyType(NM_SETTING_VPN_USER_NAME))
 	return
 }
-func getSettingVpnDataJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVpnDataJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_DATA, getSettingVpnKeyType(NM_SETTING_VPN_DATA))
 	return
 }
-func getSettingVpnSecretsJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVpnSecretsJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SECRETS, getSettingVpnKeyType(NM_SETTING_VPN_SECRETS))
 	return
 }
 
 // JSON Setter
-func setSettingVpnServiceTypeJSON(data _ConnectionData, valueJSON string) {
+func setSettingVpnServiceTypeJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SERVICE_TYPE, valueJSON, getSettingVpnKeyType(NM_SETTING_VPN_SERVICE_TYPE))
 }
-func setSettingVpnUserNameJSON(data _ConnectionData, valueJSON string) {
+func setSettingVpnUserNameJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_USER_NAME, valueJSON, getSettingVpnKeyType(NM_SETTING_VPN_USER_NAME))
 }
-func setSettingVpnDataJSON(data _ConnectionData, valueJSON string) {
+func setSettingVpnDataJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_DATA, valueJSON, getSettingVpnKeyType(NM_SETTING_VPN_DATA))
 }
-func setSettingVpnSecretsJSON(data _ConnectionData, valueJSON string) {
+func setSettingVpnSecretsJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SECRETS, valueJSON, getSettingVpnKeyType(NM_SETTING_VPN_SECRETS))
 }
 
 // Remover
-func removeSettingVpnServiceType(data _ConnectionData) {
+func removeSettingVpnServiceType(data connectionData) {
 	removeSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SERVICE_TYPE)
 }
-func removeSettingVpnUserName(data _ConnectionData) {
+func removeSettingVpnUserName(data connectionData) {
 	removeSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_USER_NAME)
 }
-func removeSettingVpnData(data _ConnectionData) {
+func removeSettingVpnData(data connectionData) {
 	removeSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_DATA)
 }
-func removeSettingVpnSecrets(data _ConnectionData) {
+func removeSettingVpnSecrets(data connectionData) {
 	removeSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SECRETS)
 }

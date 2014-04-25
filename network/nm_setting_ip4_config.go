@@ -141,11 +141,11 @@ const (
 )
 
 // Get available keys
-func getSettingIp4ConfigAvailableKeys(data _ConnectionData) (keys []string) {
+func getSettingIp4ConfigAvailableKeys(data connectionData) (keys []string) {
 	method := getSettingIp4ConfigMethod(data)
 	switch method {
 	default:
-		Logger.Error("ip4 config method is invalid:", method)
+		logger.Error("ip4 config method is invalid:", method)
 	case NM_SETTING_IP4_CONFIG_METHOD_AUTO:
 		keys = appendAvailableKeys(keys, fieldIpv4, NM_SETTING_IP4_CONFIG_METHOD)
 		keys = appendAvailableKeys(keys, fieldIpv4, NM_SETTING_IP4_CONFIG_DNS)
@@ -162,7 +162,7 @@ func getSettingIp4ConfigAvailableKeys(data _ConnectionData) (keys []string) {
 }
 
 // Get available values
-func getSettingIp4ConfigAvailableValues(data _ConnectionData, key string) (values []string, customizable bool) {
+func getSettingIp4ConfigAvailableValues(data connectionData, key string) (values []string, customizable bool) {
 	customizable = true
 	switch key {
 	case NM_SETTING_IP4_CONFIG_METHOD:
@@ -195,7 +195,7 @@ func getSettingIp4ConfigAvailableValues(data _ConnectionData, key string) (value
 }
 
 // Check whether the values are correct
-func checkSettingIp4ConfigValues(data _ConnectionData) (errs FieldKeyErrors) {
+func checkSettingIp4ConfigValues(data connectionData) (errs FieldKeyErrors) {
 	errs = make(map[string]string)
 
 	// check method
@@ -226,7 +226,7 @@ func checkSettingIp4ConfigValues(data _ConnectionData) (errs FieldKeyErrors) {
 	return
 }
 
-func checkSettingIp4MethodConflict(data _ConnectionData, errs FieldKeyErrors) {
+func checkSettingIp4MethodConflict(data connectionData, errs FieldKeyErrors) {
 	// check dns
 	if isSettingIp4ConfigDnsExists(data) {
 		rememberError(errs, fieldIpv4, NM_SETTING_IP4_CONFIG_DNS, fmt.Sprintf(NM_KEY_ERROR_IP4_METHOD_CONFLICT, NM_SETTING_IP4_CONFIG_DNS))
@@ -244,7 +244,7 @@ func checkSettingIp4MethodConflict(data _ConnectionData, errs FieldKeyErrors) {
 		rememberError(errs, fieldIpv4, NM_SETTING_IP4_CONFIG_ROUTES, fmt.Sprintf(NM_KEY_ERROR_IP4_METHOD_CONFLICT, NM_SETTING_IP4_CONFIG_ROUTES))
 	}
 }
-func checkSettingIp4ConfigDns(data _ConnectionData, errs FieldKeyErrors) {
+func checkSettingIp4ConfigDns(data connectionData, errs FieldKeyErrors) {
 	if !isSettingIp4ConfigDnsExists(data) {
 		return
 	}
@@ -256,7 +256,7 @@ func checkSettingIp4ConfigDns(data _ConnectionData, errs FieldKeyErrors) {
 		}
 	}
 }
-func checkSettingIp4ConfigAddresses(data _ConnectionData, errs FieldKeyErrors) {
+func checkSettingIp4ConfigAddresses(data connectionData, errs FieldKeyErrors) {
 	if !isSettingIp4ConfigAddressesExists(data) {
 		return
 	}
@@ -281,7 +281,7 @@ func checkSettingIp4ConfigAddresses(data _ConnectionData, errs FieldKeyErrors) {
 }
 
 // Logic setter
-func logicSetSettingIp4ConfigMethodJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingIp4ConfigMethodJSON(data connectionData, valueJSON string) {
 	// set valueJSON firstly to avoid duplication of code
 	setSettingIp4ConfigMethodJSON(data, valueJSON)
 
@@ -290,7 +290,7 @@ func logicSetSettingIp4ConfigMethodJSON(data _ConnectionData, valueJSON string) 
 	logicSetSettingIp4ConfigMethod(data, value)
 	return
 }
-func logicSetSettingIp4ConfigMethod(data _ConnectionData, value string) {
+func logicSetSettingIp4ConfigMethod(data connectionData, value string) {
 	// just ignore error here and set value directly, error will be
 	// check in checkSettingXXXValues()
 	switch value {

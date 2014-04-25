@@ -46,8 +46,8 @@ const (
 // 	{ NULL,                       G_TYPE_NONE, 0, 0 }
 // };
 
-func newVpnOpenconnectConnectionData(id, uuid string) (data _ConnectionData) {
-	data = make(_ConnectionData)
+func newVpnOpenconnectConnectionData(id, uuid string) (data connectionData) {
+	data = make(connectionData)
 
 	addSettingField(data, fieldConnection)
 	setSettingConnectionId(data, id)
@@ -79,7 +79,7 @@ func newVpnOpenconnectConnectionData(id, uuid string) (data _ConnectionData) {
 	return
 }
 
-func getSettingVpnOpenconnectAvailableKeys(data _ConnectionData) (keys []string) {
+func getSettingVpnOpenconnectAvailableKeys(data connectionData) (keys []string) {
 	keys = appendAvailableKeys(keys, fieldVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_GATEWAY)
 	keys = appendAvailableKeys(keys, fieldVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_CACERT)
 	keys = appendAvailableKeys(keys, fieldVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_PROXY)
@@ -90,10 +90,10 @@ func getSettingVpnOpenconnectAvailableKeys(data _ConnectionData) (keys []string)
 	keys = appendAvailableKeys(keys, fieldVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_PEM_PASSPHRASE_FSID)
 	return
 }
-func getSettingVpnOpenconnectAvailableValues(data _ConnectionData, key string) (values []string, customizable bool) {
+func getSettingVpnOpenconnectAvailableValues(data connectionData, key string) (values []string, customizable bool) {
 	return
 }
-func checkSettingVpnOpenconnectValues(data _ConnectionData) (errs FieldKeyErrors) {
+func checkSettingVpnOpenconnectValues(data connectionData) (errs FieldKeyErrors) {
 	errs = make(map[string]string)
 	ensureSettingVpnOpenconnectKeyGatewayNoEmpty(data, errs)
 	// TODO

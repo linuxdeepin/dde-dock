@@ -81,7 +81,7 @@ func isKeyInSettingVpnOpenconnect(key string) bool {
 func getSettingVpnOpenconnectKeyDefaultValueJSON(key string) (valueJSON string) {
 	switch key {
 	default:
-		Logger.Error("invalid key:", key)
+		logger.Error("invalid key:", key)
 	case NM_SETTING_VPN_OPENCONNECT_KEY_GATEWAY:
 		valueJSON = `""`
 	case NM_SETTING_VPN_OPENCONNECT_KEY_CACERT:
@@ -115,10 +115,10 @@ func getSettingVpnOpenconnectKeyDefaultValueJSON(key string) (valueJSON string) 
 }
 
 // Get JSON value generally
-func generalGetSettingVpnOpenconnectKeyJSON(data _ConnectionData, key string) (value string) {
+func generalGetSettingVpnOpenconnectKeyJSON(data connectionData, key string) (value string) {
 	switch key {
 	default:
-		Logger.Error("generalGetSettingVpnOpenconnectKeyJSON: invalide key", key)
+		logger.Error("generalGetSettingVpnOpenconnectKeyJSON: invalide key", key)
 	case NM_SETTING_VPN_OPENCONNECT_KEY_GATEWAY:
 		value = getSettingVpnOpenconnectKeyGatewayJSON(data)
 	case NM_SETTING_VPN_OPENCONNECT_KEY_CACERT:
@@ -152,10 +152,10 @@ func generalGetSettingVpnOpenconnectKeyJSON(data _ConnectionData, key string) (v
 }
 
 // Set JSON value generally
-func generalSetSettingVpnOpenconnectKeyJSON(data _ConnectionData, key, valueJSON string) {
+func generalSetSettingVpnOpenconnectKeyJSON(data connectionData, key, valueJSON string) {
 	switch key {
 	default:
-		Logger.Error("generalSetSettingVpnOpenconnectKeyJSON: invalide key", key)
+		logger.Error("generalSetSettingVpnOpenconnectKeyJSON: invalide key", key)
 	case NM_SETTING_VPN_OPENCONNECT_KEY_GATEWAY:
 		setSettingVpnOpenconnectKeyGatewayJSON(data, valueJSON)
 	case NM_SETTING_VPN_OPENCONNECT_KEY_CACERT:
@@ -189,51 +189,51 @@ func generalSetSettingVpnOpenconnectKeyJSON(data _ConnectionData, key, valueJSON
 }
 
 // Check if key exists
-func isSettingVpnOpenconnectKeyGatewayExists(data _ConnectionData) bool {
+func isSettingVpnOpenconnectKeyGatewayExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_GATEWAY)
 }
-func isSettingVpnOpenconnectKeyCacertExists(data _ConnectionData) bool {
+func isSettingVpnOpenconnectKeyCacertExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_CACERT)
 }
-func isSettingVpnOpenconnectKeyProxyExists(data _ConnectionData) bool {
+func isSettingVpnOpenconnectKeyProxyExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_PROXY)
 }
-func isSettingVpnOpenconnectKeyCsdEnableExists(data _ConnectionData) bool {
+func isSettingVpnOpenconnectKeyCsdEnableExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_CSD_ENABLE)
 }
-func isSettingVpnOpenconnectKeyCsdWrapperExists(data _ConnectionData) bool {
+func isSettingVpnOpenconnectKeyCsdWrapperExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_CSD_WRAPPER)
 }
-func isSettingVpnOpenconnectKeyUsercertExists(data _ConnectionData) bool {
+func isSettingVpnOpenconnectKeyUsercertExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_USERCERT)
 }
-func isSettingVpnOpenconnectKeyPrivkeyExists(data _ConnectionData) bool {
+func isSettingVpnOpenconnectKeyPrivkeyExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_PRIVKEY)
 }
-func isSettingVpnOpenconnectKeyPemPassphraseFsidExists(data _ConnectionData) bool {
+func isSettingVpnOpenconnectKeyPemPassphraseFsidExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_PEM_PASSPHRASE_FSID)
 }
-func isSettingVpnOpenconnectKeyCookieExists(data _ConnectionData) bool {
+func isSettingVpnOpenconnectKeyCookieExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_COOKIE)
 }
-func isSettingVpnOpenconnectKeyGwcertExists(data _ConnectionData) bool {
+func isSettingVpnOpenconnectKeyGwcertExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_GWCERT)
 }
-func isSettingVpnOpenconnectKeyAuthtypeExists(data _ConnectionData) bool {
+func isSettingVpnOpenconnectKeyAuthtypeExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_AUTHTYPE)
 }
-func isSettingVpnOpenconnectKeyMtuExists(data _ConnectionData) bool {
+func isSettingVpnOpenconnectKeyMtuExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_MTU)
 }
-func isSettingVpnOpenconnectKeyStokenSourceExists(data _ConnectionData) bool {
+func isSettingVpnOpenconnectKeyStokenSourceExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_STOKEN_SOURCE)
 }
-func isSettingVpnOpenconnectKeyStokenStringExists(data _ConnectionData) bool {
+func isSettingVpnOpenconnectKeyStokenStringExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_STOKEN_STRING)
 }
 
 // Ensure field and key exists and not empty
-func ensureFieldSettingVpnOpenconnectExists(data _ConnectionData, errs FieldKeyErrors, relatedKey string) {
+func ensureFieldSettingVpnOpenconnectExists(data connectionData, errs FieldKeyErrors, relatedKey string) {
 	if !isSettingFieldExists(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME) {
 		rememberError(errs, relatedKey, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME))
 	}
@@ -242,7 +242,7 @@ func ensureFieldSettingVpnOpenconnectExists(data _ConnectionData, errs FieldKeyE
 		rememberError(errs, relatedKey, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME))
 	}
 }
-func ensureSettingVpnOpenconnectKeyGatewayNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingVpnOpenconnectKeyGatewayNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingVpnOpenconnectKeyGatewayExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_GATEWAY, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -251,7 +251,7 @@ func ensureSettingVpnOpenconnectKeyGatewayNoEmpty(data _ConnectionData, errs Fie
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_GATEWAY, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnOpenconnectKeyCacertNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingVpnOpenconnectKeyCacertNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingVpnOpenconnectKeyCacertExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_CACERT, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -260,7 +260,7 @@ func ensureSettingVpnOpenconnectKeyCacertNoEmpty(data _ConnectionData, errs Fiel
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_CACERT, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnOpenconnectKeyProxyNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingVpnOpenconnectKeyProxyNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingVpnOpenconnectKeyProxyExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_PROXY, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -269,12 +269,12 @@ func ensureSettingVpnOpenconnectKeyProxyNoEmpty(data _ConnectionData, errs Field
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_PROXY, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnOpenconnectKeyCsdEnableNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingVpnOpenconnectKeyCsdEnableNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingVpnOpenconnectKeyCsdEnableExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_CSD_ENABLE, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnOpenconnectKeyCsdWrapperNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingVpnOpenconnectKeyCsdWrapperNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingVpnOpenconnectKeyCsdWrapperExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_CSD_WRAPPER, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -283,7 +283,7 @@ func ensureSettingVpnOpenconnectKeyCsdWrapperNoEmpty(data _ConnectionData, errs 
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_CSD_WRAPPER, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnOpenconnectKeyUsercertNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingVpnOpenconnectKeyUsercertNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingVpnOpenconnectKeyUsercertExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_USERCERT, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -292,7 +292,7 @@ func ensureSettingVpnOpenconnectKeyUsercertNoEmpty(data _ConnectionData, errs Fi
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_USERCERT, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnOpenconnectKeyPrivkeyNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingVpnOpenconnectKeyPrivkeyNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingVpnOpenconnectKeyPrivkeyExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_PRIVKEY, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -301,12 +301,12 @@ func ensureSettingVpnOpenconnectKeyPrivkeyNoEmpty(data _ConnectionData, errs Fie
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_PRIVKEY, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnOpenconnectKeyPemPassphraseFsidNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingVpnOpenconnectKeyPemPassphraseFsidNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingVpnOpenconnectKeyPemPassphraseFsidExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_PEM_PASSPHRASE_FSID, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnOpenconnectKeyCookieNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingVpnOpenconnectKeyCookieNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingVpnOpenconnectKeyCookieExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_COOKIE, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -315,7 +315,7 @@ func ensureSettingVpnOpenconnectKeyCookieNoEmpty(data _ConnectionData, errs Fiel
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_COOKIE, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnOpenconnectKeyGwcertNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingVpnOpenconnectKeyGwcertNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingVpnOpenconnectKeyGwcertExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_GWCERT, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -324,7 +324,7 @@ func ensureSettingVpnOpenconnectKeyGwcertNoEmpty(data _ConnectionData, errs Fiel
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_GWCERT, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnOpenconnectKeyAuthtypeNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingVpnOpenconnectKeyAuthtypeNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingVpnOpenconnectKeyAuthtypeExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_AUTHTYPE, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -333,7 +333,7 @@ func ensureSettingVpnOpenconnectKeyAuthtypeNoEmpty(data _ConnectionData, errs Fi
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_AUTHTYPE, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnOpenconnectKeyMtuNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingVpnOpenconnectKeyMtuNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingVpnOpenconnectKeyMtuExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_MTU, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -342,7 +342,7 @@ func ensureSettingVpnOpenconnectKeyMtuNoEmpty(data _ConnectionData, errs FieldKe
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_MTU, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnOpenconnectKeyStokenSourceNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingVpnOpenconnectKeyStokenSourceNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingVpnOpenconnectKeyStokenSourceExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_STOKEN_SOURCE, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -351,7 +351,7 @@ func ensureSettingVpnOpenconnectKeyStokenSourceNoEmpty(data _ConnectionData, err
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_STOKEN_SOURCE, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnOpenconnectKeyStokenStringNoEmpty(data _ConnectionData, errs FieldKeyErrors) {
+func ensureSettingVpnOpenconnectKeyStokenStringNoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !isSettingVpnOpenconnectKeyStokenStringExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_STOKEN_STRING, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -362,249 +362,249 @@ func ensureSettingVpnOpenconnectKeyStokenStringNoEmpty(data _ConnectionData, err
 }
 
 // Getter
-func getSettingVpnOpenconnectKeyGateway(data _ConnectionData) (value string) {
+func getSettingVpnOpenconnectKeyGateway(data connectionData) (value string) {
 	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_GATEWAY).(string)
 	return
 }
-func getSettingVpnOpenconnectKeyCacert(data _ConnectionData) (value string) {
+func getSettingVpnOpenconnectKeyCacert(data connectionData) (value string) {
 	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_CACERT).(string)
 	return
 }
-func getSettingVpnOpenconnectKeyProxy(data _ConnectionData) (value string) {
+func getSettingVpnOpenconnectKeyProxy(data connectionData) (value string) {
 	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_PROXY).(string)
 	return
 }
-func getSettingVpnOpenconnectKeyCsdEnable(data _ConnectionData) (value bool) {
+func getSettingVpnOpenconnectKeyCsdEnable(data connectionData) (value bool) {
 	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_CSD_ENABLE).(bool)
 	return
 }
-func getSettingVpnOpenconnectKeyCsdWrapper(data _ConnectionData) (value string) {
+func getSettingVpnOpenconnectKeyCsdWrapper(data connectionData) (value string) {
 	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_CSD_WRAPPER).(string)
 	return
 }
-func getSettingVpnOpenconnectKeyUsercert(data _ConnectionData) (value string) {
+func getSettingVpnOpenconnectKeyUsercert(data connectionData) (value string) {
 	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_USERCERT).(string)
 	return
 }
-func getSettingVpnOpenconnectKeyPrivkey(data _ConnectionData) (value string) {
+func getSettingVpnOpenconnectKeyPrivkey(data connectionData) (value string) {
 	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_PRIVKEY).(string)
 	return
 }
-func getSettingVpnOpenconnectKeyPemPassphraseFsid(data _ConnectionData) (value bool) {
+func getSettingVpnOpenconnectKeyPemPassphraseFsid(data connectionData) (value bool) {
 	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_PEM_PASSPHRASE_FSID).(bool)
 	return
 }
-func getSettingVpnOpenconnectKeyCookie(data _ConnectionData) (value string) {
+func getSettingVpnOpenconnectKeyCookie(data connectionData) (value string) {
 	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_COOKIE).(string)
 	return
 }
-func getSettingVpnOpenconnectKeyGwcert(data _ConnectionData) (value string) {
+func getSettingVpnOpenconnectKeyGwcert(data connectionData) (value string) {
 	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_GWCERT).(string)
 	return
 }
-func getSettingVpnOpenconnectKeyAuthtype(data _ConnectionData) (value string) {
+func getSettingVpnOpenconnectKeyAuthtype(data connectionData) (value string) {
 	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_AUTHTYPE).(string)
 	return
 }
-func getSettingVpnOpenconnectKeyMtu(data _ConnectionData) (value string) {
+func getSettingVpnOpenconnectKeyMtu(data connectionData) (value string) {
 	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_MTU).(string)
 	return
 }
-func getSettingVpnOpenconnectKeyStokenSource(data _ConnectionData) (value string) {
+func getSettingVpnOpenconnectKeyStokenSource(data connectionData) (value string) {
 	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_STOKEN_SOURCE).(string)
 	return
 }
-func getSettingVpnOpenconnectKeyStokenString(data _ConnectionData) (value string) {
+func getSettingVpnOpenconnectKeyStokenString(data connectionData) (value string) {
 	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_STOKEN_STRING).(string)
 	return
 }
 
 // Setter
-func setSettingVpnOpenconnectKeyGateway(data _ConnectionData, value string) {
+func setSettingVpnOpenconnectKeyGateway(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_GATEWAY, value)
 }
-func setSettingVpnOpenconnectKeyCacert(data _ConnectionData, value string) {
+func setSettingVpnOpenconnectKeyCacert(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_CACERT, value)
 }
-func setSettingVpnOpenconnectKeyProxy(data _ConnectionData, value string) {
+func setSettingVpnOpenconnectKeyProxy(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_PROXY, value)
 }
-func setSettingVpnOpenconnectKeyCsdEnable(data _ConnectionData, value bool) {
+func setSettingVpnOpenconnectKeyCsdEnable(data connectionData, value bool) {
 	setSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_CSD_ENABLE, value)
 }
-func setSettingVpnOpenconnectKeyCsdWrapper(data _ConnectionData, value string) {
+func setSettingVpnOpenconnectKeyCsdWrapper(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_CSD_WRAPPER, value)
 }
-func setSettingVpnOpenconnectKeyUsercert(data _ConnectionData, value string) {
+func setSettingVpnOpenconnectKeyUsercert(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_USERCERT, value)
 }
-func setSettingVpnOpenconnectKeyPrivkey(data _ConnectionData, value string) {
+func setSettingVpnOpenconnectKeyPrivkey(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_PRIVKEY, value)
 }
-func setSettingVpnOpenconnectKeyPemPassphraseFsid(data _ConnectionData, value bool) {
+func setSettingVpnOpenconnectKeyPemPassphraseFsid(data connectionData, value bool) {
 	setSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_PEM_PASSPHRASE_FSID, value)
 }
-func setSettingVpnOpenconnectKeyCookie(data _ConnectionData, value string) {
+func setSettingVpnOpenconnectKeyCookie(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_COOKIE, value)
 }
-func setSettingVpnOpenconnectKeyGwcert(data _ConnectionData, value string) {
+func setSettingVpnOpenconnectKeyGwcert(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_GWCERT, value)
 }
-func setSettingVpnOpenconnectKeyAuthtype(data _ConnectionData, value string) {
+func setSettingVpnOpenconnectKeyAuthtype(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_AUTHTYPE, value)
 }
-func setSettingVpnOpenconnectKeyMtu(data _ConnectionData, value string) {
+func setSettingVpnOpenconnectKeyMtu(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_MTU, value)
 }
-func setSettingVpnOpenconnectKeyStokenSource(data _ConnectionData, value string) {
+func setSettingVpnOpenconnectKeyStokenSource(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_STOKEN_SOURCE, value)
 }
-func setSettingVpnOpenconnectKeyStokenString(data _ConnectionData, value string) {
+func setSettingVpnOpenconnectKeyStokenString(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_STOKEN_STRING, value)
 }
 
 // JSON Getter
-func getSettingVpnOpenconnectKeyGatewayJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVpnOpenconnectKeyGatewayJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_GATEWAY, getSettingVpnOpenconnectKeyType(NM_SETTING_VPN_OPENCONNECT_KEY_GATEWAY))
 	return
 }
-func getSettingVpnOpenconnectKeyCacertJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVpnOpenconnectKeyCacertJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_CACERT, getSettingVpnOpenconnectKeyType(NM_SETTING_VPN_OPENCONNECT_KEY_CACERT))
 	return
 }
-func getSettingVpnOpenconnectKeyProxyJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVpnOpenconnectKeyProxyJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_PROXY, getSettingVpnOpenconnectKeyType(NM_SETTING_VPN_OPENCONNECT_KEY_PROXY))
 	return
 }
-func getSettingVpnOpenconnectKeyCsdEnableJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVpnOpenconnectKeyCsdEnableJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_CSD_ENABLE, getSettingVpnOpenconnectKeyType(NM_SETTING_VPN_OPENCONNECT_KEY_CSD_ENABLE))
 	return
 }
-func getSettingVpnOpenconnectKeyCsdWrapperJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVpnOpenconnectKeyCsdWrapperJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_CSD_WRAPPER, getSettingVpnOpenconnectKeyType(NM_SETTING_VPN_OPENCONNECT_KEY_CSD_WRAPPER))
 	return
 }
-func getSettingVpnOpenconnectKeyUsercertJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVpnOpenconnectKeyUsercertJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_USERCERT, getSettingVpnOpenconnectKeyType(NM_SETTING_VPN_OPENCONNECT_KEY_USERCERT))
 	return
 }
-func getSettingVpnOpenconnectKeyPrivkeyJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVpnOpenconnectKeyPrivkeyJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_PRIVKEY, getSettingVpnOpenconnectKeyType(NM_SETTING_VPN_OPENCONNECT_KEY_PRIVKEY))
 	return
 }
-func getSettingVpnOpenconnectKeyPemPassphraseFsidJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVpnOpenconnectKeyPemPassphraseFsidJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_PEM_PASSPHRASE_FSID, getSettingVpnOpenconnectKeyType(NM_SETTING_VPN_OPENCONNECT_KEY_PEM_PASSPHRASE_FSID))
 	return
 }
-func getSettingVpnOpenconnectKeyCookieJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVpnOpenconnectKeyCookieJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_COOKIE, getSettingVpnOpenconnectKeyType(NM_SETTING_VPN_OPENCONNECT_KEY_COOKIE))
 	return
 }
-func getSettingVpnOpenconnectKeyGwcertJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVpnOpenconnectKeyGwcertJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_GWCERT, getSettingVpnOpenconnectKeyType(NM_SETTING_VPN_OPENCONNECT_KEY_GWCERT))
 	return
 }
-func getSettingVpnOpenconnectKeyAuthtypeJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVpnOpenconnectKeyAuthtypeJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_AUTHTYPE, getSettingVpnOpenconnectKeyType(NM_SETTING_VPN_OPENCONNECT_KEY_AUTHTYPE))
 	return
 }
-func getSettingVpnOpenconnectKeyMtuJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVpnOpenconnectKeyMtuJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_MTU, getSettingVpnOpenconnectKeyType(NM_SETTING_VPN_OPENCONNECT_KEY_MTU))
 	return
 }
-func getSettingVpnOpenconnectKeyStokenSourceJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVpnOpenconnectKeyStokenSourceJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_STOKEN_SOURCE, getSettingVpnOpenconnectKeyType(NM_SETTING_VPN_OPENCONNECT_KEY_STOKEN_SOURCE))
 	return
 }
-func getSettingVpnOpenconnectKeyStokenStringJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVpnOpenconnectKeyStokenStringJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_STOKEN_STRING, getSettingVpnOpenconnectKeyType(NM_SETTING_VPN_OPENCONNECT_KEY_STOKEN_STRING))
 	return
 }
 
 // JSON Setter
-func setSettingVpnOpenconnectKeyGatewayJSON(data _ConnectionData, valueJSON string) {
+func setSettingVpnOpenconnectKeyGatewayJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_GATEWAY, valueJSON, getSettingVpnOpenconnectKeyType(NM_SETTING_VPN_OPENCONNECT_KEY_GATEWAY))
 }
-func setSettingVpnOpenconnectKeyCacertJSON(data _ConnectionData, valueJSON string) {
+func setSettingVpnOpenconnectKeyCacertJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_CACERT, valueJSON, getSettingVpnOpenconnectKeyType(NM_SETTING_VPN_OPENCONNECT_KEY_CACERT))
 }
-func setSettingVpnOpenconnectKeyProxyJSON(data _ConnectionData, valueJSON string) {
+func setSettingVpnOpenconnectKeyProxyJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_PROXY, valueJSON, getSettingVpnOpenconnectKeyType(NM_SETTING_VPN_OPENCONNECT_KEY_PROXY))
 }
-func setSettingVpnOpenconnectKeyCsdEnableJSON(data _ConnectionData, valueJSON string) {
+func setSettingVpnOpenconnectKeyCsdEnableJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_CSD_ENABLE, valueJSON, getSettingVpnOpenconnectKeyType(NM_SETTING_VPN_OPENCONNECT_KEY_CSD_ENABLE))
 }
-func setSettingVpnOpenconnectKeyCsdWrapperJSON(data _ConnectionData, valueJSON string) {
+func setSettingVpnOpenconnectKeyCsdWrapperJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_CSD_WRAPPER, valueJSON, getSettingVpnOpenconnectKeyType(NM_SETTING_VPN_OPENCONNECT_KEY_CSD_WRAPPER))
 }
-func setSettingVpnOpenconnectKeyUsercertJSON(data _ConnectionData, valueJSON string) {
+func setSettingVpnOpenconnectKeyUsercertJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_USERCERT, valueJSON, getSettingVpnOpenconnectKeyType(NM_SETTING_VPN_OPENCONNECT_KEY_USERCERT))
 }
-func setSettingVpnOpenconnectKeyPrivkeyJSON(data _ConnectionData, valueJSON string) {
+func setSettingVpnOpenconnectKeyPrivkeyJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_PRIVKEY, valueJSON, getSettingVpnOpenconnectKeyType(NM_SETTING_VPN_OPENCONNECT_KEY_PRIVKEY))
 }
-func setSettingVpnOpenconnectKeyPemPassphraseFsidJSON(data _ConnectionData, valueJSON string) {
+func setSettingVpnOpenconnectKeyPemPassphraseFsidJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_PEM_PASSPHRASE_FSID, valueJSON, getSettingVpnOpenconnectKeyType(NM_SETTING_VPN_OPENCONNECT_KEY_PEM_PASSPHRASE_FSID))
 }
-func setSettingVpnOpenconnectKeyCookieJSON(data _ConnectionData, valueJSON string) {
+func setSettingVpnOpenconnectKeyCookieJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_COOKIE, valueJSON, getSettingVpnOpenconnectKeyType(NM_SETTING_VPN_OPENCONNECT_KEY_COOKIE))
 }
-func setSettingVpnOpenconnectKeyGwcertJSON(data _ConnectionData, valueJSON string) {
+func setSettingVpnOpenconnectKeyGwcertJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_GWCERT, valueJSON, getSettingVpnOpenconnectKeyType(NM_SETTING_VPN_OPENCONNECT_KEY_GWCERT))
 }
-func setSettingVpnOpenconnectKeyAuthtypeJSON(data _ConnectionData, valueJSON string) {
+func setSettingVpnOpenconnectKeyAuthtypeJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_AUTHTYPE, valueJSON, getSettingVpnOpenconnectKeyType(NM_SETTING_VPN_OPENCONNECT_KEY_AUTHTYPE))
 }
-func setSettingVpnOpenconnectKeyMtuJSON(data _ConnectionData, valueJSON string) {
+func setSettingVpnOpenconnectKeyMtuJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_MTU, valueJSON, getSettingVpnOpenconnectKeyType(NM_SETTING_VPN_OPENCONNECT_KEY_MTU))
 }
-func setSettingVpnOpenconnectKeyStokenSourceJSON(data _ConnectionData, valueJSON string) {
+func setSettingVpnOpenconnectKeyStokenSourceJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_STOKEN_SOURCE, valueJSON, getSettingVpnOpenconnectKeyType(NM_SETTING_VPN_OPENCONNECT_KEY_STOKEN_SOURCE))
 }
-func setSettingVpnOpenconnectKeyStokenStringJSON(data _ConnectionData, valueJSON string) {
+func setSettingVpnOpenconnectKeyStokenStringJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_STOKEN_STRING, valueJSON, getSettingVpnOpenconnectKeyType(NM_SETTING_VPN_OPENCONNECT_KEY_STOKEN_STRING))
 }
 
 // Remover
-func removeSettingVpnOpenconnectKeyGateway(data _ConnectionData) {
+func removeSettingVpnOpenconnectKeyGateway(data connectionData) {
 	removeSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_GATEWAY)
 }
-func removeSettingVpnOpenconnectKeyCacert(data _ConnectionData) {
+func removeSettingVpnOpenconnectKeyCacert(data connectionData) {
 	removeSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_CACERT)
 }
-func removeSettingVpnOpenconnectKeyProxy(data _ConnectionData) {
+func removeSettingVpnOpenconnectKeyProxy(data connectionData) {
 	removeSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_PROXY)
 }
-func removeSettingVpnOpenconnectKeyCsdEnable(data _ConnectionData) {
+func removeSettingVpnOpenconnectKeyCsdEnable(data connectionData) {
 	removeSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_CSD_ENABLE)
 }
-func removeSettingVpnOpenconnectKeyCsdWrapper(data _ConnectionData) {
+func removeSettingVpnOpenconnectKeyCsdWrapper(data connectionData) {
 	removeSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_CSD_WRAPPER)
 }
-func removeSettingVpnOpenconnectKeyUsercert(data _ConnectionData) {
+func removeSettingVpnOpenconnectKeyUsercert(data connectionData) {
 	removeSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_USERCERT)
 }
-func removeSettingVpnOpenconnectKeyPrivkey(data _ConnectionData) {
+func removeSettingVpnOpenconnectKeyPrivkey(data connectionData) {
 	removeSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_PRIVKEY)
 }
-func removeSettingVpnOpenconnectKeyPemPassphraseFsid(data _ConnectionData) {
+func removeSettingVpnOpenconnectKeyPemPassphraseFsid(data connectionData) {
 	removeSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_PEM_PASSPHRASE_FSID)
 }
-func removeSettingVpnOpenconnectKeyCookie(data _ConnectionData) {
+func removeSettingVpnOpenconnectKeyCookie(data connectionData) {
 	removeSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_COOKIE)
 }
-func removeSettingVpnOpenconnectKeyGwcert(data _ConnectionData) {
+func removeSettingVpnOpenconnectKeyGwcert(data connectionData) {
 	removeSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_GWCERT)
 }
-func removeSettingVpnOpenconnectKeyAuthtype(data _ConnectionData) {
+func removeSettingVpnOpenconnectKeyAuthtype(data connectionData) {
 	removeSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_AUTHTYPE)
 }
-func removeSettingVpnOpenconnectKeyMtu(data _ConnectionData) {
+func removeSettingVpnOpenconnectKeyMtu(data connectionData) {
 	removeSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_MTU)
 }
-func removeSettingVpnOpenconnectKeyStokenSource(data _ConnectionData) {
+func removeSettingVpnOpenconnectKeyStokenSource(data connectionData) {
 	removeSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_STOKEN_SOURCE)
 }
-func removeSettingVpnOpenconnectKeyStokenString(data _ConnectionData) {
+func removeSettingVpnOpenconnectKeyStokenString(data connectionData) {
 	removeSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_STOKEN_STRING)
 }

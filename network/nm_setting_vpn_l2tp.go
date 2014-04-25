@@ -69,8 +69,8 @@ const (
 // 	{ NULL,                          G_TYPE_NONE,   FALSE }
 // }
 
-func newVpnL2tpConnectionData(id, uuid string) (data _ConnectionData) {
-	data = make(_ConnectionData)
+func newVpnL2tpConnectionData(id, uuid string) (data connectionData) {
+	data = make(connectionData)
 
 	addSettingField(data, fieldConnection)
 	setSettingConnectionId(data, id)
@@ -90,17 +90,17 @@ func newVpnL2tpConnectionData(id, uuid string) (data _ConnectionData) {
 }
 
 // vpn-l2tp
-func getSettingVpnL2tpAvailableKeys(data _ConnectionData) (keys []string) {
+func getSettingVpnL2tpAvailableKeys(data connectionData) (keys []string) {
 	keys = appendAvailableKeys(keys, fieldVpnL2tp, NM_SETTING_VPN_L2TP_KEY_GATEWAY)
 	keys = appendAvailableKeys(keys, fieldVpnL2tp, NM_SETTING_VPN_L2TP_KEY_USER)
 	keys = appendAvailableKeys(keys, fieldVpnL2tp, NM_SETTING_VPN_L2TP_KEY_PASSWORD)
 	keys = appendAvailableKeys(keys, fieldVpnL2tp, NM_SETTING_VPN_L2TP_KEY_DOMAIN)
 	return
 }
-func getSettingVpnL2tpAvailableValues(data _ConnectionData, key string) (values []string, customizable bool) {
+func getSettingVpnL2tpAvailableValues(data connectionData, key string) (values []string, customizable bool) {
 	return
 }
-func checkSettingVpnL2tpValues(data _ConnectionData) (errs FieldKeyErrors) {
+func checkSettingVpnL2tpValues(data connectionData) (errs FieldKeyErrors) {
 	errs = make(map[string]string)
 	ensureSettingVpnL2tpKeyGatewayNoEmpty(data, errs)
 	// TODO
@@ -108,7 +108,7 @@ func checkSettingVpnL2tpValues(data _ConnectionData) (errs FieldKeyErrors) {
 }
 
 // vpn-l2tp-ppp
-func getSettingVpnL2tpPppAvailableKeys(data _ConnectionData) (keys []string) {
+func getSettingVpnL2tpPppAvailableKeys(data connectionData) (keys []string) {
 	keys = appendAvailableKeys(keys, fieldVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_REFUSE_EAP)
 	keys = appendAvailableKeys(keys, fieldVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_REFUSE_PAP)
 	keys = appendAvailableKeys(keys, fieldVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_REFUSE_CHAP)
@@ -128,19 +128,19 @@ func getSettingVpnL2tpPppAvailableKeys(data _ConnectionData) (keys []string) {
 	keys = appendAvailableKeys(keys, fieldVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_FAILURE)
 	return
 }
-func getSettingVpnL2tpPppAvailableValues(data _ConnectionData, key string) (values []string, customizable bool) {
+func getSettingVpnL2tpPppAvailableValues(data connectionData, key string) (values []string, customizable bool) {
 	return
 }
-func checkSettingVpnL2tpPppValues(data _ConnectionData) (errs FieldKeyErrors) {
+func checkSettingVpnL2tpPppValues(data connectionData) (errs FieldKeyErrors) {
 	errs = make(map[string]string)
 	return
 }
-func logicSetSettingVpnL2tpKeyRequireMppeJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingVpnL2tpKeyRequireMppeJSON(data connectionData, valueJSON string) {
 	setSettingVpnL2tpKeyRequireMppeJSON(data, valueJSON)
 	value := getSettingVpnL2tpKeyRequireMppe(data)
 	logicSetSettingVpnL2tpKeyRequireMppe(data, value)
 }
-func logicSetSettingVpnL2tpKeyRequireMppe(data _ConnectionData, value bool) {
+func logicSetSettingVpnL2tpKeyRequireMppe(data connectionData, value bool) {
 	if !value {
 		removeSettingVpnL2tpKeyRequireMppe40(data)
 		removeSettingVpnL2tpKeyRequireMppe128(data)
@@ -150,7 +150,7 @@ func logicSetSettingVpnL2tpKeyRequireMppe(data _ConnectionData, value bool) {
 }
 
 // vpn-l2tp-ipsec
-func getSettingVpnL2tpIpsecAvailableKeys(data _ConnectionData) (keys []string) {
+func getSettingVpnL2tpIpsecAvailableKeys(data connectionData) (keys []string) {
 	keys = appendAvailableKeys(keys, fieldVpnL2tpIpsec, NM_SETTING_VPN_L2TP_KEY_IPSEC_ENABLE)
 	if getSettingVpnL2tpKeyIpsecEnable(data) {
 		keys = appendAvailableKeys(keys, fieldVpnL2tpIpsec, NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID)
@@ -159,20 +159,20 @@ func getSettingVpnL2tpIpsecAvailableKeys(data _ConnectionData) (keys []string) {
 	}
 	return
 }
-func getSettingVpnL2tpIpsecAvailableValues(data _ConnectionData, key string) (values []string, customizable bool) {
+func getSettingVpnL2tpIpsecAvailableValues(data connectionData, key string) (values []string, customizable bool) {
 	return
 }
-func checkSettingVpnL2tpIpsecValues(data _ConnectionData) (errs FieldKeyErrors) {
+func checkSettingVpnL2tpIpsecValues(data connectionData) (errs FieldKeyErrors) {
 	errs = make(map[string]string)
 	// TODO
 	return
 }
-func logicSetSettingVpnL2tpKeyIpsecEnableJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingVpnL2tpKeyIpsecEnableJSON(data connectionData, valueJSON string) {
 	setSettingVpnL2tpKeyIpsecEnableJSON(data, valueJSON)
 	value := getSettingVpnL2tpKeyIpsecEnable(data)
 	logicSetSettingVpnL2tpKeyIpsecEnable(data, value)
 }
-func logicSetSettingVpnL2tpKeyIpsecEnable(data _ConnectionData, value bool) {
+func logicSetSettingVpnL2tpKeyIpsecEnable(data connectionData, value bool) {
 	if !value {
 		removeSettingVpnL2tpKeyIpsecGatewayId(data)
 		removeSettingVpnL2tpKeyIpsecGroupName(data)

@@ -36,7 +36,7 @@ var virtualKeys = []VirtualKey{
 }
 
 // Get JSON value generally
-func generalGetVirtualKeyJSON(data _ConnectionData, field, key string) (valueJSON string) {
+func generalGetVirtualKeyJSON(data connectionData, field, key string) (valueJSON string) {
 	switch field {
 	case NM_SETTING_802_1X_SETTING_NAME:
 		switch key {
@@ -129,12 +129,12 @@ func generalGetVirtualKeyJSON(data _ConnectionData, field, key string) (valueJSO
 			return getSettingVkWirelessSecurityKeyMgmtJSON(data)
 		}
 	}
-	Logger.Error("invalid virtual key:", field, key)
+	logger.Error("invalid virtual key:", field, key)
 	return
 }
 
 // Set JSON value generally
-func generalSetVirtualKeyJSON(data _ConnectionData, field, key string, valueJSON string) {
+func generalSetVirtualKeyJSON(data connectionData, field, key string, valueJSON string) {
 	switch field {
 	case NM_SETTING_802_1X_SETTING_NAME:
 		switch key {
@@ -257,250 +257,250 @@ func generalSetVirtualKeyJSON(data _ConnectionData, field, key string, valueJSON
 			return
 		}
 	}
-	Logger.Error("invalid virtual key:", field, key)
+	logger.Error("invalid virtual key:", field, key)
 	return
 }
 
 // JSON getter
-func getSettingVk8021xEnableJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVk8021xEnableJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVk8021xEnable(data))
 	return
 }
-func getSettingVk8021xEapJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVk8021xEapJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVk8021xEap(data))
 	return
 }
-func getSettingVk8021xPacFileJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVk8021xPacFileJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVk8021xPacFile(data))
 	return
 }
-func getSettingVk8021xCaCertJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVk8021xCaCertJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVk8021xCaCert(data))
 	return
 }
-func getSettingVk8021xClientCertJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVk8021xClientCertJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVk8021xClientCert(data))
 	return
 }
-func getSettingVk8021xPrivateKeyJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVk8021xPrivateKeyJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVk8021xPrivateKey(data))
 	return
 }
-func getSettingVkConnectionNoPermissionJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkConnectionNoPermissionJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkConnectionNoPermission(data))
 	return
 }
-func getSettingVkIp4ConfigAddressesAddressJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkIp4ConfigAddressesAddressJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkIp4ConfigAddressesAddress(data))
 	return
 }
-func getSettingVkIp4ConfigAddressesMaskJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkIp4ConfigAddressesMaskJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkIp4ConfigAddressesMask(data))
 	return
 }
-func getSettingVkIp4ConfigAddressesGatewayJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkIp4ConfigAddressesGatewayJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkIp4ConfigAddressesGateway(data))
 	return
 }
-func getSettingVkIp4ConfigDnsJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkIp4ConfigDnsJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkIp4ConfigDns(data))
 	return
 }
-func getSettingVkIp4ConfigRoutesAddressJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkIp4ConfigRoutesAddressJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkIp4ConfigRoutesAddress(data))
 	return
 }
-func getSettingVkIp4ConfigRoutesMaskJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkIp4ConfigRoutesMaskJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkIp4ConfigRoutesMask(data))
 	return
 }
-func getSettingVkIp4ConfigRoutesNexthopJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkIp4ConfigRoutesNexthopJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkIp4ConfigRoutesNexthop(data))
 	return
 }
-func getSettingVkIp4ConfigRoutesMetricJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkIp4ConfigRoutesMetricJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkIp4ConfigRoutesMetric(data))
 	return
 }
-func getSettingVkIp6ConfigAddressesAddressJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkIp6ConfigAddressesAddressJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkIp6ConfigAddressesAddress(data))
 	return
 }
-func getSettingVkIp6ConfigAddressesPrefixJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkIp6ConfigAddressesPrefixJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkIp6ConfigAddressesPrefix(data))
 	return
 }
-func getSettingVkIp6ConfigAddressesGatewayJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkIp6ConfigAddressesGatewayJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkIp6ConfigAddressesGateway(data))
 	return
 }
-func getSettingVkIp6ConfigDnsJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkIp6ConfigDnsJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkIp6ConfigDns(data))
 	return
 }
-func getSettingVkIp6ConfigRoutesAddressJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkIp6ConfigRoutesAddressJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkIp6ConfigRoutesAddress(data))
 	return
 }
-func getSettingVkIp6ConfigRoutesPrefixJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkIp6ConfigRoutesPrefixJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkIp6ConfigRoutesPrefix(data))
 	return
 }
-func getSettingVkIp6ConfigRoutesNexthopJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkIp6ConfigRoutesNexthopJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkIp6ConfigRoutesNexthop(data))
 	return
 }
-func getSettingVkIp6ConfigRoutesMetricJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkIp6ConfigRoutesMetricJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkIp6ConfigRoutesMetric(data))
 	return
 }
-func getSettingVkPppLcpEchoEnableJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkPppLcpEchoEnableJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkPppLcpEchoEnable(data))
 	return
 }
-func getSettingVkVpnL2tpLcpEchoEnableJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkVpnL2tpLcpEchoEnableJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkVpnL2tpLcpEchoEnable(data))
 	return
 }
-func getSettingVkVpnPptpLcpEchoEnableJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkVpnPptpLcpEchoEnableJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkVpnPptpLcpEchoEnable(data))
 	return
 }
-func getSettingVkVpnVpncKeyHybridAuthmodeJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkVpnVpncKeyHybridAuthmodeJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkVpnVpncKeyHybridAuthmode(data))
 	return
 }
-func getSettingVkVpnVpncKeyEncryptionMethodJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkVpnVpncKeyEncryptionMethodJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkVpnVpncKeyEncryptionMethod(data))
 	return
 }
-func getSettingVkVpnVpncKeyDisableDpdJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkVpnVpncKeyDisableDpdJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkVpnVpncKeyDisableDpd(data))
 	return
 }
-func getSettingVkWirelessSecurityKeyMgmtJSON(data _ConnectionData) (valueJSON string) {
+func getSettingVkWirelessSecurityKeyMgmtJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkWirelessSecurityKeyMgmt(data))
 	return
 }
 
 // Logic JSON setter
-func logicSetSettingVk8021xEnableJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingVk8021xEnableJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	logicSetSettingVk8021xEnable(data, value)
 }
-func logicSetSettingVk8021xEapJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingVk8021xEapJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	logicSetSettingVk8021xEap(data, value)
 }
-func logicSetSettingVk8021xPacFileJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingVk8021xPacFileJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	logicSetSettingVk8021xPacFile(data, value)
 }
-func logicSetSettingVk8021xCaCertJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingVk8021xCaCertJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	logicSetSettingVk8021xCaCert(data, value)
 }
-func logicSetSettingVk8021xClientCertJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingVk8021xClientCertJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	logicSetSettingVk8021xClientCert(data, value)
 }
-func logicSetSettingVk8021xPrivateKeyJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingVk8021xPrivateKeyJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	logicSetSettingVk8021xPrivateKey(data, value)
 }
-func logicSetSettingVkConnectionNoPermissionJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingVkConnectionNoPermissionJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	logicSetSettingVkConnectionNoPermission(data, value)
 }
-func logicSetSettingVkIp4ConfigAddressesAddressJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingVkIp4ConfigAddressesAddressJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	logicSetSettingVkIp4ConfigAddressesAddress(data, value)
 }
-func logicSetSettingVkIp4ConfigAddressesMaskJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingVkIp4ConfigAddressesMaskJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	logicSetSettingVkIp4ConfigAddressesMask(data, value)
 }
-func logicSetSettingVkIp4ConfigAddressesGatewayJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingVkIp4ConfigAddressesGatewayJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	logicSetSettingVkIp4ConfigAddressesGateway(data, value)
 }
-func logicSetSettingVkIp4ConfigDnsJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingVkIp4ConfigDnsJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	logicSetSettingVkIp4ConfigDns(data, value)
 }
-func logicSetSettingVkIp4ConfigRoutesAddressJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingVkIp4ConfigRoutesAddressJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	logicSetSettingVkIp4ConfigRoutesAddress(data, value)
 }
-func logicSetSettingVkIp4ConfigRoutesMaskJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingVkIp4ConfigRoutesMaskJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	logicSetSettingVkIp4ConfigRoutesMask(data, value)
 }
-func logicSetSettingVkIp4ConfigRoutesNexthopJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingVkIp4ConfigRoutesNexthopJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	logicSetSettingVkIp4ConfigRoutesNexthop(data, value)
 }
-func logicSetSettingVkIp4ConfigRoutesMetricJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingVkIp4ConfigRoutesMetricJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	logicSetSettingVkIp4ConfigRoutesMetric(data, value)
 }
-func logicSetSettingVkIp6ConfigAddressesAddressJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingVkIp6ConfigAddressesAddressJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	logicSetSettingVkIp6ConfigAddressesAddress(data, value)
 }
-func logicSetSettingVkIp6ConfigAddressesPrefixJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingVkIp6ConfigAddressesPrefixJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueUint32(valueJSON)
 	logicSetSettingVkIp6ConfigAddressesPrefix(data, value)
 }
-func logicSetSettingVkIp6ConfigAddressesGatewayJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingVkIp6ConfigAddressesGatewayJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	logicSetSettingVkIp6ConfigAddressesGateway(data, value)
 }
-func logicSetSettingVkIp6ConfigDnsJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingVkIp6ConfigDnsJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	logicSetSettingVkIp6ConfigDns(data, value)
 }
-func logicSetSettingVkIp6ConfigRoutesAddressJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingVkIp6ConfigRoutesAddressJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	logicSetSettingVkIp6ConfigRoutesAddress(data, value)
 }
-func logicSetSettingVkIp6ConfigRoutesPrefixJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingVkIp6ConfigRoutesPrefixJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueUint32(valueJSON)
 	logicSetSettingVkIp6ConfigRoutesPrefix(data, value)
 }
-func logicSetSettingVkIp6ConfigRoutesNexthopJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingVkIp6ConfigRoutesNexthopJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	logicSetSettingVkIp6ConfigRoutesNexthop(data, value)
 }
-func logicSetSettingVkIp6ConfigRoutesMetricJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingVkIp6ConfigRoutesMetricJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueUint32(valueJSON)
 	logicSetSettingVkIp6ConfigRoutesMetric(data, value)
 }
-func logicSetSettingVkPppLcpEchoEnableJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingVkPppLcpEchoEnableJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	logicSetSettingVkPppLcpEchoEnable(data, value)
 }
-func logicSetSettingVkVpnL2tpLcpEchoEnableJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingVkVpnL2tpLcpEchoEnableJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	logicSetSettingVkVpnL2tpLcpEchoEnable(data, value)
 }
-func logicSetSettingVkVpnPptpLcpEchoEnableJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingVkVpnPptpLcpEchoEnableJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	logicSetSettingVkVpnPptpLcpEchoEnable(data, value)
 }
-func logicSetSettingVkVpnVpncKeyHybridAuthmodeJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingVkVpnVpncKeyHybridAuthmodeJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	logicSetSettingVkVpnVpncKeyHybridAuthmode(data, value)
 }
-func logicSetSettingVkVpnVpncKeyEncryptionMethodJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingVkVpnVpncKeyEncryptionMethodJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	logicSetSettingVkVpnVpncKeyEncryptionMethod(data, value)
 }
-func logicSetSettingVkVpnVpncKeyDisableDpdJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingVkVpnVpncKeyDisableDpdJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	logicSetSettingVkVpnVpncKeyDisableDpd(data, value)
 }
-func logicSetSettingVkWirelessSecurityKeyMgmtJSON(data _ConnectionData, valueJSON string) {
+func logicSetSettingVkWirelessSecurityKeyMgmtJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	logicSetSettingVkWirelessSecurityKeyMgmt(data, value)
 }

@@ -40,7 +40,7 @@ const (
 )
 
 // Get available keys
-func getSetting8021xAvailableKeys(data _ConnectionData) (keys []string) {
+func getSetting8021xAvailableKeys(data connectionData) (keys []string) {
 	switch generalGetConnectionType(data) {
 	case typeWired:
 		keys = []string{NM_SETTING_VK_802_1X_ENABLE}
@@ -87,7 +87,7 @@ func getSetting8021xAvailableKeys(data _ConnectionData) (keys []string) {
 }
 
 // Get available values
-func getSetting8021xAvailableValues(data _ConnectionData, key string) (values []string, customizable bool) {
+func getSetting8021xAvailableValues(data connectionData, key string) (values []string, customizable bool) {
 	customizable = true
 	switch key {
 	case NM_SETTING_802_1X_EAP:
@@ -134,7 +134,7 @@ func getSetting8021xAvailableValues(data _ConnectionData, key string) (values []
 }
 
 // Check whether the values are correct
-func checkSetting8021xValues(data _ConnectionData) (errs FieldKeyErrors) {
+func checkSetting8021xValues(data connectionData) (errs FieldKeyErrors) {
 	errs = make(map[string]string)
 
 	// check eap
@@ -187,7 +187,7 @@ func checkSetting8021xValues(data _ConnectionData) (errs FieldKeyErrors) {
 	return
 }
 
-func checkSetting8021xPacFile(data _ConnectionData, errs FieldKeyErrors) {
+func checkSetting8021xPacFile(data connectionData, errs FieldKeyErrors) {
 	if !isSetting8021xPacFileExists(data) {
 		return
 	}
@@ -198,21 +198,21 @@ func checkSetting8021xPacFile(data _ConnectionData, errs FieldKeyErrors) {
 	}
 	ensureFileExists(errs, field8021x, NM_SETTING_802_1X_PAC_FILE, value)
 }
-func checkSetting8021xClientCert(data _ConnectionData, errs FieldKeyErrors) {
+func checkSetting8021xClientCert(data connectionData, errs FieldKeyErrors) {
 	if !isSetting8021xClientCertExists(data) {
 		return
 	}
 	value := getSetting8021xClientCert(data)
 	ensureByteArrayUriPathExists(errs, field8021x, NM_SETTING_802_1X_CLIENT_CERT, value)
 }
-func checkSetting8021xCaCert(data _ConnectionData, errs FieldKeyErrors) {
+func checkSetting8021xCaCert(data connectionData, errs FieldKeyErrors) {
 	if !isSetting8021xCaCertExists(data) {
 		return
 	}
 	value := getSetting8021xCaCert(data)
 	ensureByteArrayUriPathExists(errs, field8021x, NM_SETTING_802_1X_CA_CERT, value)
 }
-func checkSetting8021xPrivateKey(data _ConnectionData, errs FieldKeyErrors) {
+func checkSetting8021xPrivateKey(data connectionData, errs FieldKeyErrors) {
 	if !isSetting8021xPrivateKeyExists(data) {
 		return
 	}
@@ -221,15 +221,15 @@ func checkSetting8021xPrivateKey(data _ConnectionData, errs FieldKeyErrors) {
 }
 
 // Logic setter
-func logicSetSetting8021xEapJSON(data _ConnectionData, valueJSON string) {
+func logicSetSetting8021xEapJSON(data connectionData, valueJSON string) {
 	setSetting8021xEapJSON(data, valueJSON)
 
 	value := getSetting8021xEap(data)
 	logicSetSetting8021xEap(data, value)
 }
-func logicSetSetting8021xEap(data _ConnectionData, value []string) {
+func logicSetSetting8021xEap(data connectionData, value []string) {
 	if len(value) == 0 {
-		Logger.Warning("eap value is empty")
+		logger.Warning("eap value is empty")
 		return
 	}
 	eap := value[0]
