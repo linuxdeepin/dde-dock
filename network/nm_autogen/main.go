@@ -40,7 +40,7 @@ var (
 	argWriteOutput       bool
 	argBackEnd           bool
 	argFrontEnd          bool
-	nmSettingUtilsFile   = path.Join(backEndDir, "nm_setting_utils_autogen.go")
+	nmSettingUtilsFile   = path.Join(backEndDir, "nm_setting_general_autogen.go")
 	nmSettingVkFile      = path.Join(backEndDir, "nm_setting_virtual_key_autogen.go")
 	frontEndConnPropFile = path.Join(frontEndDir, "BaseConnectionProperties.qml")
 	nmSettings           []NMSettingStruct
