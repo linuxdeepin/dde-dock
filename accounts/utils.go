@@ -28,91 +28,91 @@ package main
 import "C"
 
 import (
-        "os"
-        "os/exec"
-        "strings"
-        "sync"
-        "unsafe"
+	"os"
+	"os/exec"
+	"strings"
+	"sync"
+	"unsafe"
 )
 
 var (
-        mutex   = new(sync.Mutex)
-        genId   = func() func() uint32 {
-                id := uint32(0)
-                return func() uint32 {
-                        mutex.Lock()
-                        tmp := id
-                        id += 1
-                        mutex.Unlock()
-                        return tmp
-                }
-        }()
+	mutex = new(sync.Mutex)
+	genId = func() func() uint32 {
+		id := uint32(0)
+		return func() uint32 {
+			mutex.Lock()
+			tmp := id
+			id += 1
+			mutex.Unlock()
+			return tmp
+		}
+	}()
 )
 
 const (
-        POLKIT_DEST = "org.freedesktop.PolicyKit1"
-        POLKIT_PATH = "/org/freedesktop/PolicyKit1/Authority"
-        POLKIT_IFC  = "org.freedesktop.PolicyKit1.Authority"
+	POLKIT_DEST = "org.freedesktop.PolicyKit1"
+	POLKIT_PATH = "/org/freedesktop/PolicyKit1/Authority"
+	POLKIT_IFC  = "org.freedesktop.PolicyKit1.Authority"
 )
 
 func execCommand(cmdline string, args []string) {
-        err := exec.Command(cmdline, args...).Run()
-        if err != nil {
-                logObject.Warningf("Exec '%v %v' failed:%v",
-                        cmdline, args, err)
-                panic(err)
-        }
+	err := exec.Command(cmdline, args...).Run()
+	if err != nil {
+		logObject.Warningf("Exec '%v %v' failed:%v",
+			cmdline, args, err)
+		panic(err)
+	}
 }
 
 func encodePasswd(words string) string {
-        str := C.CString(words)
-        defer C.free(unsafe.Pointer(str))
+	str := C.CString(words)
+	defer C.free(unsafe.Pointer(str))
 
-        ret := C.mkpasswd(str)
-        return C.GoString(ret)
+	ret := C.mkpasswd(str)
+	return C.GoString(ret)
 }
 
 func getBaseName(path string) string {
-        strs := strings.Split(path, "/")
-        return strs[len(strs)-1]
+	strs := strings.Split(path, "/")
+	return strs[len(strs)-1]
 }
 
 func fileIsExist(file string) bool {
-        _, err := os.Stat(file)
-        return err == nil || os.IsExist(err)
+	_, err := os.Stat(file)
+	return err == nil || os.IsExist(err)
 }
 
 func isElementExist(element string, list []string) bool {
-        for _, v := range list {
-                if v == element {
-                        return true
-                }
-        }
+	for _, v := range list {
+		if v == element {
+			return true
+		}
+	}
 
-        return false
+	return false
 }
 
 /*
  * To determine whether the character is [A-Za-z0-9]
  */
 func charIsAlNum(ch byte) bool {
-        if (ch >= '0' && ch <= '9') ||
-                (ch >= 'a' && ch <= 'z') ||
-                (ch >= 'A' && ch <= 'Z') {
-                return true
-        }
+	if (ch >= '0' && ch <= '9') ||
+		(ch >= 'a' && ch <= 'z') ||
+		(ch >= 'A' && ch <= 'Z') {
+		return true
+	}
 
-        return false
+	return false
 }
 
 func deleteElementFromList(ele string, list []string) []string {
-        tmp := []string{}
-        for _, l := range list {
-                if ele == l {
-                        continue
-                }
-                tmp = append(tmp, l)
-        }
+	tmp := []string{}
+	for _, l := range list {
+		if ele == l {
+			continue
+		}
+		tmp = append(tmp, l)
+	}
 
-        return tmp
+	return tmp
 }

@@ -22,64 +22,64 @@
 package main
 
 import (
-        "dlib/dbus"
+	"dlib/dbus"
 )
 
 type AccountManager struct {
-        UserList   []string
-        AllowGuest bool
+	UserList   []string
+	AllowGuest bool
 
-        UserAdded   func(string)
-        UserDeleted func(string)
+	UserAdded   func(string)
+	UserDeleted func(string)
 }
 
 func (op *AccountManager) GetDBusInfo() dbus.DBusInfo {
-        return dbus.DBusInfo{
-                ACCOUNT_DEST,
-                ACCOUNT_MANAGER_PATH,
-                ACCOUNT_MANAGER_IFC,
-        }
+	return dbus.DBusInfo{
+		ACCOUNT_DEST,
+		ACCOUNT_MANAGER_PATH,
+		ACCOUNT_MANAGER_IFC,
+	}
 }
 
 func (op *AccountManager) setPropName(name string) {
-        switch name {
-        case "UserList":
-                infos := getUserInfoList()
-                list := []string{}
+	switch name {
+	case "UserList":
+		infos := getUserInfoList()
+		list := []string{}
 
-                for _, info := range infos {
-                        path := USER_MANAGER_PATH + info.Uid
-                        list = append(list, path)
-                }
-                op.UserList = list
-                dbus.NotifyChange(op, name)
-        case "AllowGuest":
-                if v, ok := opUtils.ReadKeyFromKeyFile(ACCOUNT_CONFIG_FILE,
-                        ACCOUNT_GROUP_KEY, ACCOUNT_KEY_GUEST, true); !ok {
-                        op.AllowGuest = false
-                        dbus.NotifyChange(op, name)
-                        opUtils.WriteKeyToKeyFile(ACCOUNT_CONFIG_FILE,
-                                ACCOUNT_GROUP_KEY, ACCOUNT_KEY_GUEST, false)
-                        return
-                } else {
-                        op.AllowGuest = v.(bool)
-                        dbus.NotifyChange(op, name)
-                }
-        }
+		for _, info := range infos {
+			path := USER_MANAGER_PATH + info.Uid
+			list = append(list, path)
+		}
+		op.UserList = list
+		dbus.NotifyChange(op, name)
+	case "AllowGuest":
+		if v, ok := opUtils.ReadKeyFromKeyFile(ACCOUNT_CONFIG_FILE,
+			ACCOUNT_GROUP_KEY, ACCOUNT_KEY_GUEST, true); !ok {
+			op.AllowGuest = false
+			dbus.NotifyChange(op, name)
+			opUtils.WriteKeyToKeyFile(ACCOUNT_CONFIG_FILE,
+				ACCOUNT_GROUP_KEY, ACCOUNT_KEY_GUEST, false)
+			return
+		} else {
+			op.AllowGuest = v.(bool)
+			dbus.NotifyChange(op, name)
+		}
+	}
 }
 
 func newAccountManager() *AccountManager {
-        defer func() {
-                if err := recover(); err != nil {
-                        logObject.Warningf("Recover Error: %v", err)
-                }
-        }()
+	defer func() {
+		if err := recover(); err != nil {
+			logObject.Warningf("Recover Error: %v", err)
+		}
+	}()
 
-        m := &AccountManager{}
+	m := &AccountManager{}
 
-        m.setPropName("UserList")
-        m.setPropName("AllowGuest")
-        m.listenUserListChanged()
+	m.setPropName("UserList")
+	m.setPropName("AllowGuest")
+	m.listenUserListChanged()
 
-        return m
+	return m
 }
