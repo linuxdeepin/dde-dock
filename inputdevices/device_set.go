@@ -19,7 +19,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package inputdevices
+package main
 
 // #cgo pkg-config: gdk-3.0 x11 xi glib-2.0
 // #cgo CFLAGS: -Wall -g
@@ -35,38 +35,7 @@ import (
 	"unsafe"
 )
 
-const (
-	TPAD_KEY_ENABLE         = "touchpad-enabled"
-	TPAD_KEY_LEFT_HAND      = "left-handed"
-	TPAD_KEY_W_TYPING       = "disable-while-typing"
-	TPAD_KEY_NATURAL_SCROLL = "natural-scroll"
-	TPAD_KEY_EDGE_SCROLL    = "edge-scroll-enabled"
-	TPAD_KEY_HORIZ_SCROLL   = "horiz-scroll-enabled"
-	TPAD_KEY_VERT_SCROLL    = "vert-scroll-enabled"
-	TPAD_KEY_ACCEL          = "motion-acceleration"
-	TPAD_KEY_THRES          = "motion-threshold"
-
-	MOUSE_KEY_LEFT_HAND    = "left-handed"
-	MOUSE_KEY_MID_BUTTON   = "middle-button-enabled"
-	MOUSE_KEY_ACCEL        = "motion-acceleration"
-	MOUSE_KEY_THRES        = "motion-threshold"
-	MOUSE_KEY_DOUBLE_CLICK = "double-click"
-	MOUSE_KEY_DRAG_THRES   = "drag-threshold"
-
-	KBD_KEY_REPEAT_ENABLE    = "repeat-enabled"
-	KBD_KEY_REPEAT_INTERVAL  = "repeat-interval"
-	KBD_KEY_DELAY            = "delay"
-	KBD_KEY_LAYOUT           = "layout"
-	KBD_KEY_LAYOUT_MODEL     = "layout-model"
-	KBD_KEY_LAYOUT_OPTION    = "layout-option"
-	KBD_KEY_USER_LAYOUT_LIST = "user-layout-list"
-	KBD_CURSOR_BLINK_TIME    = "cursor-blink-time"
-)
-
 var (
-	tpadSettings    = gio.NewSettings("com.deepin.dde.touchpad")
-	mouseSettings   = gio.NewSettings("com.deepin.dde.mouse")
-	kbdSettings     = gio.NewSettings("com.deepin.dde.keyboard")
 	tpadTypingChan  = make(chan bool)
 	tpadTypingState = false
 )
@@ -93,13 +62,38 @@ func enableTPadWhileTyping() {
 	}
 }
 
-func setLayout(layout, option string) {
+func setLayout(key string) {
+	layout := ""
+	option := ""
+	if len(key) < 1 || !strings.Contains(key, ";") {
+		layout = "us"
+		option = ""
+	} else {
+		strs := strings.Split(key, ";")
+		if len(strs[0]) < 1 {
+			layout = "us"
+			option = ""
+		} else {
+			layout = strs[0]
+			option = strs[1]
+		}
+	}
 	args := []string{}
 	args = append(args, "-layout")
 	args = append(args, layout)
 	args = append(args, "-option")
 	args = append(args, option)
-	exec.Command("/usr/bin/setxkbmap", args...).Run()
+	if err := exec.Command("/usr/bin/setxkbmap", args...).Run(); err != nil {
+		logObj.Warningf("Set Layout: %s - %s Failed: %v",
+			layout, option, err)
+		return
+	}
+
+	list := kbdSettings.GetStrv(KBD_KEY_USER_LAYOUT_LIST)
+	if !utilObj.IsElementExist(key, list) {
+		list = append(list, key)
+		kbdSettings.SetStrv(KBD_KEY_USER_LAYOUT_LIST, list)
+	}
 }
 
 func initGdkEnv() {
@@ -250,18 +244,7 @@ func listenDevsSettings() {
 			}
 		case KBD_KEY_LAYOUT:
 			layout := kbdSettings.GetString(KBD_KEY_LAYOUT)
-			if len(layout) < 1 || !strings.Contains(layout, ";") {
-				setLayout("us", "")
-			} else {
-				strs := strings.Split(layout, ";")
-				setLayout(strs[0], strs[1])
-
-				list := kbdSettings.GetStrv(KBD_KEY_USER_LAYOUT_LIST)
-				if !utilObj.IsElementExist(layout, list) {
-					list = append(list, layout)
-					kbdSettings.SetStrv(KBD_KEY_USER_LAYOUT_LIST, list)
-				}
-			}
+			setLayout(layout)
 		case KBD_CURSOR_BLINK_TIME:
 			value := kbdSettings.GetInt(key)
 			xsObj.SetInterger("Net/CursorBlinkTime", uint32(value))

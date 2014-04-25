@@ -22,13 +22,13 @@
 package main
 
 import (
-        "dlib/dbus"
+	"dlib/dbus"
 )
 
 func (op *Manager) GetDBusInfo() dbus.DBusInfo {
-        return dbus.DBusInfo{
-                DEVICE_DEST,
-                MANAGER_PATH,
-                MANAGER_IFC,
-        }
+	return dbus.DBusInfo{
+		DEVICE_DEST,
+		MANAGER_PATH,
+		MANAGER_IFC,
+	}
 }

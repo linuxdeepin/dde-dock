@@ -22,71 +22,86 @@
 package main
 
 import (
-        "dlib"
-        "dlib/dbus"
-        "dlib/gio-2.0"
-        Logger "dlib/logger"
-        libutil "dlib/utils"
-        "os"
+	libsession "dbus/com/deepin/sessionmanager"
+	"dlib"
+	"dlib/dbus"
+	"dlib/gio-2.0"
+	Logger "dlib/logger"
+	libutil "dlib/utils"
+	"os"
 )
 
 var (
-        logObj  = Logger.NewLogger("input device")
-        utilObj = libutil.NewUtils()
+	logObj  = Logger.NewLogger("input device")
+	utilObj = libutil.NewUtils()
+	xsObj   *libsession.XSettings
 
-        tpadSettings  = gio.NewSettings("com.deepin.dde.touchpad")
-        mouseSettings = gio.NewSettings("com.deepin.dde.mouse")
-        kbdSettings   = gio.NewSettings("com.deepin.dde.keyboard")
+	tpadSettings  = gio.NewSettings("com.deepin.dde.touchpad")
+	mouseSettings = gio.NewSettings("com.deepin.dde.mouse")
+	kbdSettings   = gio.NewSettings("com.deepin.dde.keyboard")
 )
 
 func main() {
-        if !dlib.UniqueOnSession(DEVICE_DEST) {
-                logObj.Warning("Input device has running")
-                return
-        }
+	if !dlib.UniqueOnSession(DEVICE_DEST) {
+		logObj.Warning("Input device has running")
+		return
+	}
 
-        defer logObj.EndTracing()
-        dlib.InitI18n()
-        dlib.Textdomain("xkeyboard-config")
+	defer logObj.EndTracing()
+	dlib.InitI18n()
+	dlib.Textdomain("xkeyboard-config")
 
-        m := NewManager()
-        if err := dbus.InstallOnSession(m); err != nil {
-                logObj.Warning("Manager DBus Session Failed: ", err)
-                panic(err)
-        }
+	var err error
+	xsObj, err = libsession.NewXSettings("com.deepin.SessionManager",
+		"/com/deepin/XSettings")
+	if err != nil {
+		logObj.Info("New XSettings Object Failed: ", err)
+		return
+	}
 
-        for _, info := range m.Infos {
-                if info.Id == "mouse" {
-                        //logObj.Info("New Mouse")
-                        mouse := NewMouse()
-                        if err := dbus.InstallOnSession(mouse); err != nil {
-                                logObj.Warning("Mouse DBus Session Failed: ", err)
-                                panic(err)
-                        }
-                } else if info.Id == "touchpad" {
-                        //logObj.Info("New TouchPad")
-                        tpad := NewTPad()
-                        if err := dbus.InstallOnSession(tpad); err != nil {
-                                logObj.Warning("TPad DBus Session Failed: ", err)
-                                panic(err)
-                        }
-                } else if info.Id == "keyboard" {
-                        //logObj.Info("New Keyboard")
-                        kbd := NewKeyboard()
-                        if err := dbus.InstallOnSession(kbd); err != nil {
-                                logObj.Warning("Kbd DBus Session Failed: ", err)
-                                panic(err)
-                        }
-                }
-        }
-        //logObj.Info("Device Info: ", m.Infos)
+	initGdkEnv()
+	listenDevsSettings()
 
-        dbus.DealWithUnhandledMessage()
-        if err := dbus.Wait(); err != nil {
-                logObj.Warning("Lost Session DBus")
-                os.Exit(-1)
-        } else {
-                logObj.Warning("Session DBus Exit")
-                os.Exit(0)
-        }
+	m := NewManager()
+	if err = dbus.InstallOnSession(m); err != nil {
+		logObj.Warning("Manager DBus Session Failed: ", err)
+		panic(err)
+	}
+
+	for _, info := range m.Infos {
+		if info.Id == "mouse" {
+			//logObj.Info("New Mouse")
+			mouse := NewMouse()
+			if err := dbus.InstallOnSession(mouse); err != nil {
+				logObj.Warning("Mouse DBus Session Failed: ", err)
+				panic(err)
+			}
+		} else if info.Id == "touchpad" {
+			//logObj.Info("New TouchPad")
+			tpad := NewTPad()
+			if err := dbus.InstallOnSession(tpad); err != nil {
+				logObj.Warning("TPad DBus Session Failed: ", err)
+				panic(err)
+			}
+		} else if info.Id == "keyboard" {
+			//logObj.Info("New Keyboard")
+			kbd := NewKeyboard()
+			if err := dbus.InstallOnSession(kbd); err != nil {
+				logObj.Warning("Kbd DBus Session Failed: ", err)
+				panic(err)
+			}
+			setLayout(kbd.CurrentLayout.GetValue().(string))
+		}
+	}
+	//logObj.Info("Device Info: ", m.Infos)
+
+	dbus.DealWithUnhandledMessage()
+	go dlib.StartLoop()
+	if err := dbus.Wait(); err != nil {
+		logObj.Warning("Lost Session DBus")
+		os.Exit(-1)
+	} else {
+		logObj.Warning("Session DBus Exit")
+		os.Exit(0)
+	}
 }

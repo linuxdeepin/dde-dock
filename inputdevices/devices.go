@@ -22,194 +22,194 @@
 package main
 
 import (
-        "dlib/dbus/property"
-        "strings"
+	"dlib/dbus/property"
+	"strings"
 )
 
 func (op *MouseEntry) Reset() bool {
-        list := mouseSettings.ListKeys()
-        for _, key := range list {
-                mouseSettings.Reset(key)
-        }
+	list := mouseSettings.ListKeys()
+	for _, key := range list {
+		mouseSettings.Reset(key)
+	}
 
-        return true
+	return true
 }
 
 func (OP *TPadEntry) Reset() bool {
-        list := tpadSettings.ListKeys()
-        for _, key := range list {
-                tpadSettings.Reset(key)
-        }
+	list := tpadSettings.ListKeys()
+	for _, key := range list {
+		tpadSettings.Reset(key)
+	}
 
-        return true
+	return true
 }
 
 func (op *KbdEntry) Reset() bool {
-        list := kbdSettings.ListKeys()
-        for _, key := range list {
-                kbdSettings.Reset(key)
-        }
+	list := kbdSettings.ListKeys()
+	for _, key := range list {
+		kbdSettings.Reset(key)
+	}
 
-        return true
+	return true
 }
 
 func (op *KbdEntry) LayoutList() map[string]string {
-        defer func() {
-                if err := recover(); err != nil {
-                        logObj.Warning("Receive Error: ", err)
-                }
-        }()
+	defer func() {
+		if err := recover(); err != nil {
+			logObj.Warning("Receive Error: ", err)
+		}
+	}()
 
-        datas := parseXML(_LAYOUT_XML_PATH)
-        layouts := getLayoutList(datas)
+	datas := parseXML(_LAYOUT_XML_PATH)
+	layouts := getLayoutList(datas)
 
-        return layouts
+	return layouts
 }
 
 func (op *KbdEntry) GetLayoutLocale(layout string) string {
-        if len(layout) < 1 || !strings.Contains(layout, LAYOUT_DELIM) {
-                layout = "us" + LAYOUT_DELIM
-        }
-        listMap := op.LayoutList()
-        desc, ok := listMap[layout]
-        if !ok {
-                logObj.Warningf("Invalid layout: '%s'", layout)
-                return ""
-        }
+	if len(layout) < 1 || !strings.Contains(layout, LAYOUT_DELIM) {
+		layout = "us" + LAYOUT_DELIM
+	}
+	listMap := op.LayoutList()
+	desc, ok := listMap[layout]
+	if !ok {
+		logObj.Warningf("Invalid layout: '%s'", layout)
+		return ""
+	}
 
-        return desc
+	return desc
 }
 
 func (op *KbdEntry) AddUserLayout(layout string) bool {
-        if len(layout) < 1 || !strings.Contains(layout, LAYOUT_DELIM) {
-                layout = "us" + LAYOUT_DELIM
-        }
+	if len(layout) < 1 || !strings.Contains(layout, LAYOUT_DELIM) {
+		layout = "us" + LAYOUT_DELIM
+	}
 
-        list := op.UserLayoutList.GetValue().([]string)
-        if utilObj.IsElementExist(layout, list) {
-                return false
-        }
+	list := op.UserLayoutList.GetValue().([]string)
+	if utilObj.IsElementExist(layout, list) {
+		return false
+	}
 
-        list = append(list, layout)
-        kbdSettings.SetStrv(KBD_KEY_USER_LAYOUT_LIST, list)
-        return true
+	list = append(list, layout)
+	kbdSettings.SetStrv(KBD_KEY_USER_LAYOUT_LIST, list)
+	return true
 }
 
 func (op *KbdEntry) DeleteUserLayout(layout string) bool {
-        if len(layout) < 1 || !strings.Contains(layout, LAYOUT_DELIM) {
-                return false
-        }
+	if len(layout) < 1 || !strings.Contains(layout, LAYOUT_DELIM) {
+		return false
+	}
 
-        list := op.UserLayoutList.GetValue().([]string)
-        if !utilObj.IsElementExist(layout, list) {
-                return false
-        }
+	list := op.UserLayoutList.GetValue().([]string)
+	if !utilObj.IsElementExist(layout, list) {
+		return false
+	}
 
-        tmp := []string{}
-        for _, l := range list {
-                if l == layout {
-                        continue
-                }
-                tmp = append(tmp, l)
-        }
+	tmp := []string{}
+	for _, l := range list {
+		if l == layout {
+			continue
+		}
+		tmp = append(tmp, l)
+	}
 
-        kbdSettings.SetStrv(KBD_KEY_USER_LAYOUT_LIST, tmp)
-        return true
+	kbdSettings.SetStrv(KBD_KEY_USER_LAYOUT_LIST, tmp)
+	return true
 }
 
 func NewMouse() *MouseEntry {
-        m := &MouseEntry{}
+	m := &MouseEntry{}
 
-        m.LeftHanded = property.NewGSettingsBoolProperty(
-                m, "LeftHanded",
-                mouseSettings, MOUSE_KEY_LEFT_HAND)
-        m.MotionAcceleration = property.NewGSettingsFloatProperty(
-                m, "MotionAcceleration",
-                mouseSettings, MOUSE_KEY_ACCEL)
-        m.MotionThreshold = property.NewGSettingsFloatProperty(
-                m, "MotionThreshold",
-                mouseSettings, MOUSE_KEY_THRES)
-        m.DoubleClick = property.NewGSettingsIntProperty(
-                m, "DoubleClick",
-                mouseSettings, MOUSE_KEY_DOUBLE_CLICK)
-        m.DragThreshold = property.NewGSettingsIntProperty(
-                m, "DragThreshold",
-                mouseSettings, MOUSE_KEY_DRAG_THRES)
-        m.deviceId = "Mouse"
+	m.LeftHanded = property.NewGSettingsBoolProperty(
+		m, "LeftHanded",
+		mouseSettings, MOUSE_KEY_LEFT_HAND)
+	m.MotionAcceleration = property.NewGSettingsFloatProperty(
+		m, "MotionAcceleration",
+		mouseSettings, MOUSE_KEY_ACCEL)
+	m.MotionThreshold = property.NewGSettingsFloatProperty(
+		m, "MotionThreshold",
+		mouseSettings, MOUSE_KEY_THRES)
+	m.DoubleClick = property.NewGSettingsIntProperty(
+		m, "DoubleClick",
+		mouseSettings, MOUSE_KEY_DOUBLE_CLICK)
+	m.DragThreshold = property.NewGSettingsIntProperty(
+		m, "DragThreshold",
+		mouseSettings, MOUSE_KEY_DRAG_THRES)
+	m.deviceId = "Mouse"
 
-        return m
+	return m
 }
 
 func NewTPad() *TPadEntry {
-        m := &TPadEntry{}
+	m := &TPadEntry{}
 
-        m.TPadEnable = property.NewGSettingsBoolProperty(
-                m, "TPadEnable",
-                tpadSettings, TPAD_KEY_ENABLE)
-        m.LeftHanded = property.NewGSettingsBoolProperty(
-                m, "LeftHanded",
-                tpadSettings, TPAD_KEY_LEFT_HAND)
-        m.DisableIfTyping = property.NewGSettingsBoolProperty(
-                m, "DisableIfTyping",
-                tpadSettings, TPAD_KEY_W_TYPING)
-        m.NaturalScroll = property.NewGSettingsBoolProperty(
-                m, "NaturalScroll",
-                tpadSettings, TPAD_KEY_NATURAL_SCROLL)
-        m.EdgeScroll = property.NewGSettingsBoolProperty(
-                m, "EdgeScroll",
-                tpadSettings, TPAD_KEY_EDGE_SCROLL)
-        m.HorizScroll = property.NewGSettingsBoolProperty(
-                m, "HorizScroll",
-                tpadSettings, TPAD_KEY_HORIZ_SCROLL)
-        m.VertScroll = property.NewGSettingsBoolProperty(
-                m, "VertScroll",
-                tpadSettings, TPAD_KEY_VERT_SCROLL)
-        m.MotionAcceleration = property.NewGSettingsFloatProperty(
-                m, "MotionAcceleration",
-                tpadSettings, TPAD_KEY_ACCEL)
-        m.MotionThreshold = property.NewGSettingsFloatProperty(
-                m, "MotionThreshold",
-                tpadSettings, TPAD_KEY_THRES)
-        m.DoubleClick = property.NewGSettingsIntProperty(
-                m, "DoubleClick",
-                mouseSettings, MOUSE_KEY_DOUBLE_CLICK)
-        m.DragThreshold = property.NewGSettingsIntProperty(
-                m, "DragThreshold",
-                mouseSettings, MOUSE_KEY_DRAG_THRES)
-        m.deviceId = "TouchPad"
+	m.TPadEnable = property.NewGSettingsBoolProperty(
+		m, "TPadEnable",
+		tpadSettings, TPAD_KEY_ENABLE)
+	m.LeftHanded = property.NewGSettingsBoolProperty(
+		m, "LeftHanded",
+		tpadSettings, TPAD_KEY_LEFT_HAND)
+	m.DisableIfTyping = property.NewGSettingsBoolProperty(
+		m, "DisableIfTyping",
+		tpadSettings, TPAD_KEY_W_TYPING)
+	m.NaturalScroll = property.NewGSettingsBoolProperty(
+		m, "NaturalScroll",
+		tpadSettings, TPAD_KEY_NATURAL_SCROLL)
+	m.EdgeScroll = property.NewGSettingsBoolProperty(
+		m, "EdgeScroll",
+		tpadSettings, TPAD_KEY_EDGE_SCROLL)
+	m.HorizScroll = property.NewGSettingsBoolProperty(
+		m, "HorizScroll",
+		tpadSettings, TPAD_KEY_HORIZ_SCROLL)
+	m.VertScroll = property.NewGSettingsBoolProperty(
+		m, "VertScroll",
+		tpadSettings, TPAD_KEY_VERT_SCROLL)
+	m.MotionAcceleration = property.NewGSettingsFloatProperty(
+		m, "MotionAcceleration",
+		tpadSettings, TPAD_KEY_ACCEL)
+	m.MotionThreshold = property.NewGSettingsFloatProperty(
+		m, "MotionThreshold",
+		tpadSettings, TPAD_KEY_THRES)
+	m.DoubleClick = property.NewGSettingsIntProperty(
+		m, "DoubleClick",
+		mouseSettings, MOUSE_KEY_DOUBLE_CLICK)
+	m.DragThreshold = property.NewGSettingsIntProperty(
+		m, "DragThreshold",
+		mouseSettings, MOUSE_KEY_DRAG_THRES)
+	m.deviceId = "TouchPad"
 
-        return m
+	return m
 }
 
 func NewKeyboard() *KbdEntry {
-        m := &KbdEntry{}
+	m := &KbdEntry{}
 
-        m.CurrentLayout = property.NewGSettingsStringProperty(
-                m, "CurrentLayout",
-                kbdSettings, KBD_KEY_LAYOUT)
-        logObj.Debug("CurrentLayout: ", m.CurrentLayout.GetValue().(string))
-        m.RepeatEnabled = property.NewGSettingsBoolProperty(
-                m, "RepeatEnabled",
-                kbdSettings, KBD_KEY_REPEAT_ENABLE)
-        logObj.Debug("RepeatEnabled: ", m.RepeatEnabled.GetValue().(bool))
-        m.RepeatInterval = property.NewGSettingsUintProperty(
-                m, "RepeatInterval",
-                kbdSettings, KBD_KEY_REPEAT_INTERVAL)
-        logObj.Debug("RepeatInterval: ", m.RepeatInterval.GetValue().(uint32))
-        m.RepeatDelay = property.NewGSettingsUintProperty(
-                m, "RepeatDelay",
-                kbdSettings, KBD_KEY_DELAY)
-        logObj.Debug("RepeatDelay: ", m.RepeatDelay.GetValue().(uint32))
-        m.CursorBlink = property.NewGSettingsIntProperty(
-                m, "CursorBlink",
-                kbdSettings, KBD_CURSOR_BLINK_TIME)
-        logObj.Debug("CursorBlink: ", m.CursorBlink.GetValue().(int32))
-        m.UserLayoutList = property.NewGSettingsStrvProperty(
-                m, "UserLayoutList",
-                kbdSettings, KBD_KEY_USER_LAYOUT_LIST)
-        logObj.Debug("UserLayoutList: ", m.UserLayoutList.GetValue().([]string))
-        m.deviceId = "Keyboard"
-        logObj.Debug("deviceId: ", m.deviceId)
+	m.CurrentLayout = property.NewGSettingsStringProperty(
+		m, "CurrentLayout",
+		kbdSettings, KBD_KEY_LAYOUT)
+	logObj.Debug("CurrentLayout: ", m.CurrentLayout.GetValue().(string))
+	m.RepeatEnabled = property.NewGSettingsBoolProperty(
+		m, "RepeatEnabled",
+		kbdSettings, KBD_KEY_REPEAT_ENABLE)
+	logObj.Debug("RepeatEnabled: ", m.RepeatEnabled.GetValue().(bool))
+	m.RepeatInterval = property.NewGSettingsUintProperty(
+		m, "RepeatInterval",
+		kbdSettings, KBD_KEY_REPEAT_INTERVAL)
+	logObj.Debug("RepeatInterval: ", m.RepeatInterval.GetValue().(uint32))
+	m.RepeatDelay = property.NewGSettingsUintProperty(
+		m, "RepeatDelay",
+		kbdSettings, KBD_KEY_DELAY)
+	logObj.Debug("RepeatDelay: ", m.RepeatDelay.GetValue().(uint32))
+	m.CursorBlink = property.NewGSettingsIntProperty(
+		m, "CursorBlink",
+		kbdSettings, KBD_CURSOR_BLINK_TIME)
+	logObj.Debug("CursorBlink: ", m.CursorBlink.GetValue().(int32))
+	m.UserLayoutList = property.NewGSettingsStrvProperty(
+		m, "UserLayoutList",
+		kbdSettings, KBD_KEY_USER_LAYOUT_LIST)
+	logObj.Debug("UserLayoutList: ", m.UserLayoutList.GetValue().([]string))
+	m.deviceId = "Keyboard"
+	logObj.Debug("deviceId: ", m.deviceId)
 
-        return m
+	return m
 }

@@ -22,7 +22,7 @@
 package main
 
 import (
-        "dlib/dbus"
+	"dlib/dbus"
 )
 
 /*
@@ -41,25 +41,25 @@ func (op *KbdEntry) OnPropertiesChanged(key string, old interface{}) {
 */
 
 func (op *MouseEntry) GetDBusInfo() dbus.DBusInfo {
-        return dbus.DBusInfo{
-                DEVICE_DEST,
-                DEVICE_PATH + op.deviceId,
-                DEVICE_IFC + op.deviceId,
-        }
+	return dbus.DBusInfo{
+		DEVICE_DEST,
+		DEVICE_PATH + op.deviceId,
+		DEVICE_IFC + op.deviceId,
+	}
 }
 
 func (op *TPadEntry) GetDBusInfo() dbus.DBusInfo {
-        return dbus.DBusInfo{
-                DEVICE_DEST,
-                DEVICE_PATH + op.deviceId,
-                DEVICE_IFC + op.deviceId,
-        }
+	return dbus.DBusInfo{
+		DEVICE_DEST,
+		DEVICE_PATH + op.deviceId,
+		DEVICE_IFC + op.deviceId,
+	}
 }
 
 func (op *KbdEntry) GetDBusInfo() dbus.DBusInfo {
-        return dbus.DBusInfo{
-                DEVICE_DEST,
-                DEVICE_PATH + op.deviceId,
-                DEVICE_IFC + op.deviceId,
-        }
+	return dbus.DBusInfo{
+		DEVICE_DEST,
+		DEVICE_PATH + op.deviceId,
+		DEVICE_IFC + op.deviceId,
+	}
 }

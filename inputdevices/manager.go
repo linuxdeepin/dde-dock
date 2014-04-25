@@ -22,63 +22,63 @@
 package main
 
 import (
-        "io/ioutil"
-        "strings"
+	"io/ioutil"
+	"strings"
 )
 
 type Manager struct {
-        Infos []deviceInfo
+	Infos []deviceInfo
 }
 
 type deviceInfo struct {
-        Path    string
-        Id      string
+	Path string
+	Id   string
 }
 
 const (
-        _PROC_DEVICE_PATH = "/proc/bus/input/devices"
-        _PROC_KEY_NAME    = "N: Name"
+	_PROC_DEVICE_PATH = "/proc/bus/input/devices"
+	_PROC_KEY_NAME    = "N: Name"
 )
 
 func getDeviceNames() []string {
-        names := []string{}
+	names := []string{}
 
-        contents, err := ioutil.ReadFile(_PROC_DEVICE_PATH)
-        if err != nil {
-                logObj.Warningf("ReadFile '%s' failed: %v",
-                        _PROC_DEVICE_PATH, err)
-                return names
-        }
+	contents, err := ioutil.ReadFile(_PROC_DEVICE_PATH)
+	if err != nil {
+		logObj.Warningf("ReadFile '%s' failed: %v",
+			_PROC_DEVICE_PATH, err)
+		return names
+	}
 
-        lines := strings.Split(string(contents), "\n")
-        for _, line := range lines {
-                if strings.Contains(line, _PROC_KEY_NAME) {
-                        names = append(names, strings.ToLower(line))
-                }
-        }
+	lines := strings.Split(string(contents), "\n")
+	for _, line := range lines {
+		if strings.Contains(line, _PROC_KEY_NAME) {
+			names = append(names, strings.ToLower(line))
+		}
+	}
 
-        return names
+	return names
 }
 
 func NewManager() *Manager {
-        m := &Manager{}
+	m := &Manager{}
 
-        names := getDeviceNames()
-        tmps := []deviceInfo{}
-        for _, name := range names {
-                if strings.Contains(name, "mouse") {
-                        info := deviceInfo{DEVICE_PATH + "Mouse", "mouse"}
-                        tmps = append(tmps, info)
-                } else if strings.Contains(name, "touchpad") {
-                        info := deviceInfo{DEVICE_PATH + "TouchPad", "touchpad"}
-                        tmps = append(tmps, info)
-                } else if strings.Contains(name, "keyboard") {
-                        info := deviceInfo{DEVICE_PATH + "Keyboard", "keyboard"}
-                        tmps = append(tmps, info)
-                }
-        }
+	names := getDeviceNames()
+	tmps := []deviceInfo{}
+	for _, name := range names {
+		if strings.Contains(name, "mouse") {
+			info := deviceInfo{DEVICE_PATH + "Mouse", "mouse"}
+			tmps = append(tmps, info)
+		} else if strings.Contains(name, "touchpad") {
+			info := deviceInfo{DEVICE_PATH + "TouchPad", "touchpad"}
+			tmps = append(tmps, info)
+		} else if strings.Contains(name, "keyboard") {
+			info := deviceInfo{DEVICE_PATH + "Keyboard", "keyboard"}
+			tmps = append(tmps, info)
+		}
+	}
 
-        m.Infos = tmps
+	m.Infos = tmps
 
-        return m
+	return m
 }
