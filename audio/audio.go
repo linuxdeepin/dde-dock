@@ -35,9 +35,6 @@ type Audio struct {
 	sourceOutputs map[int]*SourceOutput
 	lock          sync.Mutex
 
-	//exported properties
-	HostName      string
-	UserName      string
 	Cards         []*Card
 	Sinks         []*Sink
 	Sources       []*Source
@@ -51,7 +48,8 @@ type CardProfileInfo struct {
 }
 
 type Card struct {
-	Index       int32
+	index int32
+
 	Name        string
 	ownerModule int32
 	driver      string
@@ -68,22 +66,24 @@ type SinkPortInfo struct {
 }
 
 type Sink struct {
-	Index       int32
+	index int32
+
 	Name        string
 	Description string
-	channelMap  []int32
-	driver      string
-	Mute        bool `access:"readwrite"`
-	card        int32
+	Mute        bool    `access:"readwrite"`
 	Volume      uint32  `access:"readwrite"`
 	Balance     float64 `access:"readwrite"`
 
 	//NVolumeSteps int32
 
-	nPorts int32
-	Ports  []SinkPortInfo
+	Ports []SinkPortInfo
 	//ActivePort *SinkPortInfo
 	ActivePort int32
+
+	channelMap []int32
+	driver     string
+	card       int32
+	nPorts     int32
 }
 
 //Only capitalized first character in Capitalized structure can be exposed
@@ -95,27 +95,31 @@ type SourcePortInfo struct {
 }
 
 type Source struct {
-	Index         int32
-	Name          string
-	Description   string
-	channelMap    []int32
-	driver        string
-	Mute          bool `access:"readwrite"`
-	monitorOfSink uint32
-	card          int32
-	Volume        uint32  `access:"readwrite"`
-	Balance       float64 `access:"readwrite"`
+	index int32
+
+	Name        string
+	Description string
+	Mute        bool    `access:"readwrite"`
+	Volume      uint32  `access:"readwrite"`
+	Balance     float64 `access:"readwrite"`
+
+	//ActivePort *SourcePortInfo
+	Ports      []SourcePortInfo
+	ActivePort int32
+
 	//N_formates int32
 	//NVolumeSteps int32
 
-	nPorts int32
-	Ports  []SourcePortInfo
-	//ActivePort *SourcePortInfo
-	ActivePort int32
+	channelMap    []int32
+	driver        string
+	monitorOfSink uint32
+	card          int32
+	nPorts        int32
 }
 
 type SinkInput struct {
-	Index       int32
+	index int32
+
 	Name        string
 	ownerModule int32
 	Client      int32
@@ -130,7 +134,8 @@ type SinkInput struct {
 }
 
 type SourceOutput struct {
-	Index       int32
+	index int32
+
 	Name        string
 	ownerModule int32
 	Client      int32
@@ -146,7 +151,8 @@ type SourceOutput struct {
 }
 
 type Client struct {
-	Index       int32
+	index int32
+
 	Name        string
 	ownerModule int32
 	driver      string
@@ -219,7 +225,7 @@ func getDiffProperty(x, y interface{}) map[string]interface{} {
 
 func getCardFromC(_card C.card_t) *Card {
 	card := &Card{}
-	card.Index = int32(_card.index)
+	card.index = int32(_card.index)
 	card.Name = C.GoString(&_card.name[0])
 	card.driver = C.GoString(&_card.driver[0])
 	card.ownerModule = int32(_card.owner_module)
@@ -241,7 +247,7 @@ func getCardFromC(_card C.card_t) *Card {
 
 func getSinkFromC(_sink C.sink_t) *Sink {
 	sink := &Sink{}
-	sink.Index = int32(_sink.index)
+	sink.index = int32(_sink.index)
 	sink.card = int32(_sink.card)
 	sink.Description =
 		C.GoString((*C.char)(unsafe.Pointer(&_sink.description[0])))
@@ -282,7 +288,7 @@ func getSinkFromC(_sink C.sink_t) *Sink {
 
 func getSourceFromC(_source C.source_t) *Source {
 	source := &Source{}
-	source.Index = int32(_source.index)
+	source.index = int32(_source.index)
 	source.card = int32(_source.card)
 	source.Mute = (int32(_source.mute) != 0)
 	source.monitorOfSink = uint32(_source.monitor_of_sink)
@@ -325,7 +331,7 @@ func getSourceFromC(_source C.source_t) *Source {
 
 func getSinkInputFromC(_sink_input C.sink_input_t) *SinkInput {
 	sinkInput := &SinkInput{}
-	sinkInput.Index = int32(_sink_input.index)
+	sinkInput.index = int32(_sink_input.index)
 	sinkInput.Client = int32(_sink_input.client)
 	sinkInput.Sink = int32(_sink_input.sink)
 	sinkInput.Mute = (int32(_sink_input.mute) != 0)
@@ -353,7 +359,7 @@ func getSinkInputFromC(_sink_input C.sink_input_t) *SinkInput {
 
 func getSourceOutputFromC(_source_output C.source_output_t) *SourceOutput {
 	sourceOutput := &SourceOutput{}
-	sourceOutput.Index = int32(_source_output.index)
+	sourceOutput.index = int32(_source_output.index)
 	sourceOutput.Name = C.GoString(&_source_output.name[0])
 	sourceOutput.ownerModule = int32(_source_output.owner_module)
 	sourceOutput.Client = int32(_source_output.client)
@@ -385,7 +391,6 @@ func NewAudio() (*Audio, error) {
 	audio.sourceOutputs = make(map[int]*SourceOutput)
 	audio.sinkInputs = make(map[int]*SinkInput)
 
-	audio.getServerInfo()
 	audio.getCards()
 	audio.getSinks()
 	audio.getSources()
@@ -419,7 +424,7 @@ func updateCard(_index C.int,
 		newcard := getCardFromC(audio.pa.cards[0])
 		flag := 1 //card not found in our objects
 		for i, _ := range audio.cards {
-			if audio.cards[i].Index == newcard.Index {
+			if audio.cards[i].index == newcard.index {
 				flag = 0
 				changes := getDiffProperty(audio.cards[i], newcard)
 				audio.cards[index] = newcard
@@ -470,7 +475,7 @@ func updateSink(_index C.int,
 		newsink := getSinkFromC(audio.pa.sinks[0])
 		newdevice := 1
 		for i, _ := range audio.sinks {
-			if audio.sinks[i].Index == newsink.Index {
+			if audio.sinks[i].index == newsink.index {
 				newdevice = 0
 				changes := getDiffProperty(audio.sinks[i], newsink)
 				audio.sinks[i] = newsink
@@ -517,7 +522,7 @@ func updateSource(_index C.int,
 		newsource := getSourceFromC(audio.pa.sources[0])
 		isnewsource := 1
 		for i, _ := range audio.sources {
-			if audio.sources[i].Index == newsource.Index {
+			if audio.sources[i].index == newsource.index {
 				isnewsource = 0
 				changes := getDiffProperty(audio.sources[i], newsource)
 				audio.sources[i] = newsource
@@ -572,7 +577,7 @@ func updateSinkInput(_index C.int,
 		//break
 	case C.PA_SUBSCRIPTION_EVENT_CHANGE:
 		for i, _ := range audio.sinkInputs {
-			if audio.sinkInputs[i].Index == int32(audio.pa.sink_inputs[0].index) {
+			if audio.sinkInputs[i].index == int32(audio.pa.sink_inputs[0].index) {
 				audio.sinkInputs[i] = getSinkInputFromC(audio.pa.sink_inputs[0])
 				dbus.InstallOnSession(audio.sinkInputs[i])
 				break
@@ -678,7 +683,7 @@ func (audio *Audio) setDefaultDevice() int32 {
 			if ret != "" {
 				//set the default sink which has analog ports
 				fmt.Println("found analog device: ", value.Name,
-					" index is: ", value.Index)
+					" index is: ", value.index)
 				C.pa_set_default_sink(audio.pa,
 					(*C.char)(C.CString(value.Name)))
 				audio.DefaultSink = int32(key)
@@ -708,19 +713,7 @@ func (audio *Audio) setDefaultSource(name string) int32 {
 		(*C.char)(C.CString(name))))
 }
 
-func (audio *Audio) GetServerInfo() *Audio {
-	return audio.getServerInfo()
-}
-func (audio *Audio) getServerInfo() *Audio {
-	C.pa_get_server_info(audio.pa)
-	audio.HostName = C.GoString(audio.pa.server_info.host_name)
-	audio.UserName = C.GoString(audio.pa.server_info.user_name)
-	//fmt.Print("go: " + audio.HostName + "\n")
-	//fmt.Print("go: " + C.GoString((audio.pa.server_info.host_name)) + "\n")
-
-	return audio
-}
-
+//USED
 func (audio *Audio) KillSourceOutput(index int32) int32 {
 	return int32(C.pa_kill_source_output(audio.pa, C.int(index)))
 }
@@ -863,7 +856,7 @@ func (audio *Audio) getSourceOutputs() []*SourceOutput {
 
 	for i := 0; i < n; i = i + 1 {
 		so := getSourceOutputFromC(audio.pa.source_outputs[i])
-		audio.sourceOutputs[int(so.Index)] = so
+		audio.sourceOutputs[int(so.index)] = so
 
 	}
 	sourceOutputs := make([]*SourceOutput,
@@ -888,7 +881,7 @@ func (audio *Audio) GetClients() []*Client {
 
 	for i := 0; i < n; i = i + 1 {
 		clients[i] = &Client{}
-		clients[i].Index = int32(audio.pa.clients[i].index)
+		clients[i].index = int32(audio.pa.clients[i].index)
 		clients[i].ownerModule = int32(audio.pa.clients[i].owner_module)
 		clients[i].Name = C.GoString((*C.char)(unsafe.Pointer(&audio.pa.clients[i].name[0])))
 		clients[i].driver = C.GoString((*C.char)(unsafe.Pointer(&audio.pa.clients[i].driver[0])))
@@ -932,7 +925,7 @@ func (card *Card) setCardProfile(index C.int, port *C.char) int32 {
 
 func (card *Card) SetCardProfile(i int32) int32 {
 	port := card.Profiles[i].Name
-	return card.setCardProfile(C.int(card.Index), (*C.char)(C.CString(port)))
+	return card.setCardProfile(C.int(card.index), (*C.char)(C.CString(port)))
 }
 
 func (card *Card) GetSinks() []*Sink {
@@ -940,7 +933,7 @@ func (card *Card) GetSinks() []*Sink {
 	var sinks []*Sink = make([]*Sink, n)
 	j := 0
 	for _, sink := range audio.sinks {
-		if sink.card == card.Index {
+		if sink.card == card.index {
 			sinks[j] = sink
 			j = j + 1
 		}
@@ -1006,7 +999,7 @@ func (sink *Sink) OnPropertiesChanged(name string, oldv interface{}) {
 
 func (sink *Sink) setSinkPort(port *C.char) int32 {
 	dbus.NotifyChange(sink, "ActivePort")
-	ret := C.pa_set_sink_port_by_index(audio.pa, C.int(sink.Index), port)
+	ret := C.pa_set_sink_port_by_index(audio.pa, C.int(sink.index), port)
 	return int32(ret)
 }
 
@@ -1027,7 +1020,7 @@ func (sink *Sink) SetSinkVolume(volume uint32) int32 {
 	//cvolume.values[i] = *((*C.pa_volume_t)(unsafe.Pointer(&volume.Values[i])))
 	//}
 	//return int32(C.pa_set_sink_volume_by_index(
-	//audio.pa, C.int(sink.Index), &cvolume))
+	//audio.pa, C.int(sink.index), &cvolume))
 }
 
 func (sink *Sink) setSinkVolume(volume uint32) int32 {
@@ -1058,7 +1051,7 @@ func (sink *Sink) setSinkVolume(volume uint32) int32 {
 	cvolume.values[0] = C.pa_volume_t(left)
 	cvolume.values[1] = C.pa_volume_t(right)
 	return int32(C.pa_set_sink_volume_by_index(
-		audio.pa, C.int(sink.Index), &cvolume))
+		audio.pa, C.int(sink.index), &cvolume))
 }
 
 func (sink *Sink) setSinkMute(mute bool) int32 {
@@ -1069,7 +1062,7 @@ func (sink *Sink) setSinkMute(mute bool) int32 {
 		_mute = 0
 	}
 	ret := C.pa_set_sink_mute_by_index(
-		audio.pa, C.int(sink.Index), C.int(_mute))
+		audio.pa, C.int(sink.index), C.int(_mute))
 	return int32(ret)
 }
 
@@ -1080,7 +1073,7 @@ func (sink *Sink) SetSinkMute(mute bool) int32 {
 
 func (sink *Sink) setSinkBalance(balance float64) int32 {
 	dbus.NotifyChange(sink, "Balance")
-	ret := C.pa_set_sink_balance_by_index(audio.pa, C.int(sink.Index),
+	ret := C.pa_set_sink_balance_by_index(audio.pa, C.int(sink.index),
 		C.float(balance))
 	return int32(ret)
 }
@@ -1141,10 +1134,10 @@ func (source *Source) getSourceOutputs() []*SourceOutput {
 	sourceOutputs := make([]*SourceOutput, len(all))
 	var j int = 0
 	for _, value := range all {
-		if value.Source == source.Index {
+		if value.Source == source.index {
 			sourceOutputs[j] = value
 			j = j + 1
-			audio.sourceOutputs[int(value.Index)] = value
+			audio.sourceOutputs[int(value.index)] = value
 		}
 	}
 
@@ -1161,7 +1154,7 @@ func (source *Source) GetSourceOutputs() []*SourceOutput {
 
 func (source *Source) setSourcePort(port *C.char) int32 {
 	dbus.NotifyChange(source, "ActivePort")
-	ret := C.pa_set_source_port_by_index(audio.pa, C.int(source.Index), port)
+	ret := C.pa_set_source_port_by_index(audio.pa, C.int(source.index), port)
 	return int32(ret)
 }
 
@@ -1186,7 +1179,7 @@ func (source *Source) setSourceVolume(volume uint32) int32 {
 	cvolume.values[0] = C.pa_volume_t(left)
 	cvolume.values[1] = C.pa_volume_t(right)
 	return int32(C.pa_set_source_volume_by_index(
-		audio.pa, C.int(source.Index), &cvolume))
+		audio.pa, C.int(source.index), &cvolume))
 }
 
 func (source *Source) SetSourceVolume(volume uint32) int32 {
@@ -1202,7 +1195,7 @@ func (source *Source) setSourceMute(mute bool) int32 {
 	}
 	dbus.NotifyChange(source, "Mute")
 	ret := C.pa_set_source_mute_by_index(
-		audio.pa, C.int(source.Index), C.int(_mute))
+		audio.pa, C.int(source.index), C.int(_mute))
 	return int32(ret)
 }
 
@@ -1212,7 +1205,7 @@ func (source *Source) SetSourceMute(mute bool) int32 {
 
 func (source *Source) setSourceBalance(balance float64) int32 {
 	ret := C.pa_set_source_balance_by_index(audio.pa,
-		C.int(source.Index),
+		C.int(source.index),
 		C.float(balance))
 	dbus.NotifyChange(source, "Balance")
 	return int32(ret)
@@ -1220,7 +1213,7 @@ func (source *Source) setSourceBalance(balance float64) int32 {
 
 func (sinkInput *SinkInput) setSinkInputVolume(cvolume *C.pa_cvolume) int32 {
 	return int32(C.pa_set_sink_input_volume(audio.pa,
-		C.int(sinkInput.Index),
+		C.int(sinkInput.index),
 		cvolume))
 }
 
@@ -1235,7 +1228,7 @@ func (sinkInput *SinkInput) SetVolume(volume int32) int32 {
 
 func (sinkInput *SinkInput) setSinkInputMute(mute int32) int32 {
 	return int32(C.pa_set_sink_input_mute(audio.pa,
-		C.int(sinkInput.Index), C.int(mute)))
+		C.int(sinkInput.index), C.int(mute)))
 }
 
 func (sinkInput *SinkInput) SetMute(mute bool) int32 {
@@ -1249,7 +1242,7 @@ func (sinkInput *SinkInput) SetMute(mute bool) int32 {
 
 func (sourceOutput *SourceOutput) setSourceOutputVolume(cvolume *C.pa_cvolume) int32 {
 	return int32(C.pa_set_source_output_volume(audio.pa,
-		C.int(sourceOutput.Index),
+		C.int(sourceOutput.index),
 		cvolume))
 }
 

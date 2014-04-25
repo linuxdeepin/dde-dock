@@ -1,7 +1,7 @@
 package main
 
 import "dlib/dbus"
-import "strconv"
+import "fmt"
 
 func (o *Audio) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
@@ -14,7 +14,7 @@ func (o *Audio) GetDBusInfo() dbus.DBusInfo {
 func (card *Card) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		"com.deepin.daemon.Audio",
-		"/com/deepin/daemon/Audio/Card" + strconv.FormatInt(int64(card.Index), 10),
+		fmt.Sprint("/com/deepin/daemon/Audio/Card", card.index),
 		"com.deepin.daemon.Audio.Card",
 	}
 }
@@ -22,7 +22,7 @@ func (card *Card) GetDBusInfo() dbus.DBusInfo {
 func (sink *Sink) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		"com.deepin.daemon.Audio",
-		"/com/deepin/daemon/Audio/Sink" + strconv.FormatInt(int64(sink.Index), 10),
+		fmt.Sprint("/com/deepin/daemon/Audio/Sink", sink.index),
 		"com.deepin.daemon.Audio.Sink",
 	}
 }
@@ -30,7 +30,7 @@ func (sink *Sink) GetDBusInfo() dbus.DBusInfo {
 func (source *Source) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		"com.deepin.daemon.Audio",
-		"/com/deepin/daemon/Audio/Source" + strconv.FormatInt(int64(source.Index), 10),
+		fmt.Sprint("/com/deepin/daemon/Audio/Source", source.index),
 		"com.deepin.daemon.Audio.Source",
 	}
 }
@@ -38,8 +38,7 @@ func (source *Source) GetDBusInfo() dbus.DBusInfo {
 func (sinkInput *SinkInput) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		"com.deepin.daemon.Audio",
-		"/com/deepin/daemon/Audio/Application" +
-			strconv.FormatInt(int64(sinkInput.Index), 10),
+		fmt.Sprint("/com/deepin/daemon/Audio/Application", sinkInput.index),
 		"com.deepin.daemon.Audio.Application",
 	}
 }
@@ -47,16 +46,14 @@ func (sinkInput *SinkInput) GetDBusInfo() dbus.DBusInfo {
 func (sourceOutput *SourceOutput) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		"com.deepin.daemon.Audio",
-		"/com/deepin/daemon/Audio/Application" +
-			strconv.FormatInt(int64(sourceOutput.Index), 10),
+		fmt.Sprint("/com/deepin/daemon/Audio/Application", sourceOutput.index),
 		"com.deepin.daemon.Audio.Application",
 	}
 }
 func (client *Client) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		"com.deepin.daemon.Audio",
-		"/com/deepin/daemon/Audio/Client" +
-			strconv.FormatInt(int64(client.Index), 10),
+		fmt.Sprint("/com/deepin/daemon/Audio/Client", client.index),
 		"com.deepin.daemon.Audio.Client",
 	}
 }
