@@ -10,6 +10,12 @@ const (
 	NM_SETTING_VPN_SECRETS      = "secrets"
 )
 
+const (
+	NM_SETTING_VPN_SECRET_FLAG_SAVE   = 1
+	NM_SETTING_VPN_SECRET_FLAG_ASK    = 3
+	NM_SETTING_VPN_SECRET_FLAG_UNUSED = 5
+)
+
 func getSettingVpnAvailableKeys(data _ConnectionData) (keys []string) { return }
 func getSettingVpnAvailableValues(data _ConnectionData, key string) (values []string, customizable bool) {
 	return

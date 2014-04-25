@@ -29,6 +29,9 @@ var virtualKeys = []VirtualKey{
 	VirtualKey{NM_SETTING_VK_PPP_LCP_ECHO_ENABLE, ktypeBoolean, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_FAILURE, true, false},
 	VirtualKey{NM_SETTING_VK_VPN_L2TP_LCP_ECHO_ENABLE, ktypeBoolean, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_FAILURE, true, false},
 	VirtualKey{NM_SETTING_VK_VPN_PPTP_LCP_ECHO_ENABLE, ktypeBoolean, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_LCP_ECHO_FAILURE, true, false},
+	VirtualKey{NM_SETTING_VK_VPN_VPNC_KEY_HYBRID_AUTHMODE, ktypeBoolean, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_AUTHMODE, true, false},
+	VirtualKey{NM_SETTING_VK_VPN_VPNC_KEY_ENCRYPTION_METHOD, ktypeString, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_SINGLE_DES, true, false},
+	VirtualKey{NM_SETTING_VK_VPN_VPNC_KEY_DISABLE_DPD, ktypeBoolean, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT, true, false},
 	VirtualKey{NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT, ktypeString, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT, true, false},
 }
 
@@ -107,6 +110,18 @@ func generalGetVirtualKeyJSON(data _ConnectionData, field, key string) (valueJSO
 		switch key {
 		case NM_SETTING_VK_VPN_PPTP_LCP_ECHO_ENABLE:
 			return getSettingVkVpnPptpLcpEchoEnableJSON(data)
+		}
+	case NM_SETTING_VF_VPN_VPNC_SETTING_NAME:
+		switch key {
+		case NM_SETTING_VK_VPN_VPNC_KEY_HYBRID_AUTHMODE:
+			return getSettingVkVpnVpncKeyHybridAuthmodeJSON(data)
+		}
+	case NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME:
+		switch key {
+		case NM_SETTING_VK_VPN_VPNC_KEY_ENCRYPTION_METHOD:
+			return getSettingVkVpnVpncKeyEncryptionMethodJSON(data)
+		case NM_SETTING_VK_VPN_VPNC_KEY_DISABLE_DPD:
+			return getSettingVkVpnVpncKeyDisableDpdJSON(data)
 		}
 	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
 		switch key {
@@ -218,6 +233,21 @@ func generalSetVirtualKeyJSON(data _ConnectionData, field, key string, valueJSON
 		switch key {
 		case NM_SETTING_VK_VPN_PPTP_LCP_ECHO_ENABLE:
 			logicSetSettingVkVpnPptpLcpEchoEnableJSON(data, valueJSON)
+			return
+		}
+	case NM_SETTING_VF_VPN_VPNC_SETTING_NAME:
+		switch key {
+		case NM_SETTING_VK_VPN_VPNC_KEY_HYBRID_AUTHMODE:
+			logicSetSettingVkVpnVpncKeyHybridAuthmodeJSON(data, valueJSON)
+			return
+		}
+	case NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME:
+		switch key {
+		case NM_SETTING_VK_VPN_VPNC_KEY_ENCRYPTION_METHOD:
+			logicSetSettingVkVpnVpncKeyEncryptionMethodJSON(data, valueJSON)
+			return
+		case NM_SETTING_VK_VPN_VPNC_KEY_DISABLE_DPD:
+			logicSetSettingVkVpnVpncKeyDisableDpdJSON(data, valueJSON)
 			return
 		}
 	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
@@ -336,6 +366,18 @@ func getSettingVkVpnPptpLcpEchoEnableJSON(data _ConnectionData) (valueJSON strin
 	valueJSON, _ = marshalJSON(getSettingVkVpnPptpLcpEchoEnable(data))
 	return
 }
+func getSettingVkVpnVpncKeyHybridAuthmodeJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkVpnVpncKeyHybridAuthmode(data))
+	return
+}
+func getSettingVkVpnVpncKeyEncryptionMethodJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkVpnVpncKeyEncryptionMethod(data))
+	return
+}
+func getSettingVkVpnVpncKeyDisableDpdJSON(data _ConnectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkVpnVpncKeyDisableDpd(data))
+	return
+}
 func getSettingVkWirelessSecurityKeyMgmtJSON(data _ConnectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkWirelessSecurityKeyMgmt(data))
 	return
@@ -445,6 +487,18 @@ func logicSetSettingVkVpnL2tpLcpEchoEnableJSON(data _ConnectionData, valueJSON s
 func logicSetSettingVkVpnPptpLcpEchoEnableJSON(data _ConnectionData, valueJSON string) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	logicSetSettingVkVpnPptpLcpEchoEnable(data, value)
+}
+func logicSetSettingVkVpnVpncKeyHybridAuthmodeJSON(data _ConnectionData, valueJSON string) {
+	value, _ := jsonToKeyValueBoolean(valueJSON)
+	logicSetSettingVkVpnVpncKeyHybridAuthmode(data, value)
+}
+func logicSetSettingVkVpnVpncKeyEncryptionMethodJSON(data _ConnectionData, valueJSON string) {
+	value, _ := jsonToKeyValueString(valueJSON)
+	logicSetSettingVkVpnVpncKeyEncryptionMethod(data, value)
+}
+func logicSetSettingVkVpnVpncKeyDisableDpdJSON(data _ConnectionData, valueJSON string) {
+	value, _ := jsonToKeyValueBoolean(valueJSON)
+	logicSetSettingVkVpnVpncKeyDisableDpd(data, value)
 }
 func logicSetSettingVkWirelessSecurityKeyMgmtJSON(data _ConnectionData, valueJSON string) {
 	value, _ := jsonToKeyValueString(valueJSON)

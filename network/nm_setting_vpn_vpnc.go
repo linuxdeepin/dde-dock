@@ -6,48 +6,58 @@ const (
 	NM_DBUS_PATH_VPNC      = "/org/freedesktop/NetworkManager/vpnc"
 )
 
-// #define NM_VPNC_KEY_GATEWAY "IPSec gateway"
-// #define NM_VPNC_KEY_ID "IPSec ID"
-// #define NM_VPNC_KEY_SECRET "IPSec secret"
-// #define NM_VPNC_KEY_SECRET_TYPE "ipsec-secret-type"
-// #define NM_VPNC_KEY_XAUTH_USER "Xauth username"
-// #define NM_VPNC_KEY_XAUTH_PASSWORD "Xauth password"
-// #define NM_VPNC_KEY_XAUTH_PASSWORD_TYPE "xauth-password-type"
-// #define NM_VPNC_KEY_DOMAIN "Domain"
-// #define NM_VPNC_KEY_DHGROUP "IKE DH Group"
-// #define NM_VPNC_KEY_PERFECT_FORWARD "Perfect Forward Secrecy"
-// #define NM_VPNC_KEY_VENDOR "Vendor"
-// #define NM_VPNC_KEY_APP_VERSION "Application Version"
-// #define NM_VPNC_KEY_SINGLE_DES "Enable Single DES"
-// #define NM_VPNC_KEY_NO_ENCRYPTION "Enable no encryption"
-// #define NM_VPNC_KEY_NAT_TRAVERSAL_MODE "NAT Traversal Mode"
-// #define NM_VPNC_KEY_DPD_IDLE_TIMEOUT "DPD idle timeout (our side)"
-// #define NM_VPNC_KEY_CISCO_UDP_ENCAPS_PORT "Cisco UDP Encapsulation Port"
-// #define NM_VPNC_KEY_LOCAL_PORT "Local Port"
-// #define NM_VPNC_KEY_AUTHMODE "IKE Authmode"
-// #define NM_VPNC_KEY_CA_FILE "CA-File"
+const (
+	NM_SETTING_VPN_VPNC_KEY_GATEWAY               = "IPSec gateway"
+	NM_SETTING_VPN_VPNC_KEY_XAUTH_USER            = "Xauth username"
+	NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD        = "Xauth password"
+	NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD_TYPE   = "xauth-password-type"
+	NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD_FLAGS  = "Xauth password-flags"
+	NM_SETTING_VPN_VPNC_KEY_ID                    = "IPSec ID"
+	NM_SETTING_VPN_VPNC_KEY_SECRET                = "IPSec secret"
+	NM_SETTING_VPN_VPNC_KEY_SECRET_TYPE           = "ipsec-secret-type"
+	NM_SETTING_VPN_VPNC_KEY_SECRET_FLAGS          = "IPSec secret-flags"
+	NM_SETTING_VPN_VPNC_KEY_AUTHMODE              = "IKE Authmode"
+	NM_SETTING_VPN_VPNC_KEY_CA_FILE               = "CA-File"
+	NM_SETTING_VPN_VPNC_KEY_DOMAIN                = "Domain"
+	NM_SETTING_VPN_VPNC_KEY_VENDOR                = "Vendor"
+	NM_SETTING_VPN_VPNC_KEY_APP_VERSION           = "Application Version"
+	NM_SETTING_VPN_VPNC_KEY_SINGLE_DES            = "Enable Single DES"
+	NM_SETTING_VPN_VPNC_KEY_NO_ENCRYPTION         = "Enable no encryption"
+	NM_SETTING_VPN_VPNC_KEY_NAT_TRAVERSAL_MODE    = "NAT Traversal Mode"
+	NM_SETTING_VPN_VPNC_KEY_DHGROUP               = "IKE DH Group"
+	NM_SETTING_VPN_VPNC_KEY_PERFECT_FORWARD       = "Perfect Forward Secrecy"
+	NM_SETTING_VPN_VPNC_KEY_LOCAL_PORT            = "Local Port"
+	NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT      = "DPD idle timeout (our side)"
+	NM_SETTING_VPN_VPNC_KEY_CISCO_UDP_ENCAPS_PORT = "Cisco UDP Encapsulation Port"
+)
 
-// #define NM_VPNC_NATT_MODE_NATT        "natt"
-// #define NM_VPNC_NATT_MODE_NONE        "none"
-// #define NM_VPNC_NATT_MODE_NATT_ALWAYS "force-natt"
-// #define NM_VPNC_NATT_MODE_CISCO       "cisco-udp"
-
-// #define NM_VPNC_PW_TYPE_SAVE   "save"
-// #define NM_VPNC_PW_TYPE_ASK    "ask"
-// #define NM_VPNC_PW_TYPE_UNUSED "unused"
-
-// #define NM_VPNC_DHGROUP_DH1 "dh1"
-// #define NM_VPNC_DHGROUP_DH2 "dh2"
-// #define NM_VPNC_DHGROUP_DH5 "dh5"
-
-// #define NM_VPNC_PFS_SERVER "server"
-// #define NM_VPNC_PFS_NOPFS  "nopfs"
-// #define NM_VPNC_PFS_DH1    "dh1"
-// #define NM_VPNC_PFS_DH2    "dh2"
-// #define NM_VPNC_PFS_DH5    "dh5"
-
-// #define NM_VPNC_VENDOR_CISCO     "cisco"
-// #define NM_VPNC_VENDOR_NETSCREEN "netscreen"
+const (
+	NM_VPNC_NATT_MODE_NATT        = "natt"
+	NM_VPNC_NATT_MODE_NONE        = "none"
+	NM_VPNC_NATT_MODE_NATT_ALWAYS = "force-natt"
+	NM_VPNC_NATT_MODE_CISCO       = "cisco-udp"
+)
+const (
+	NM_VPNC_PW_TYPE_SAVE   = "save"   // -> flags 1
+	NM_VPNC_PW_TYPE_ASK    = "ask"    // -> flags 3
+	NM_VPNC_PW_TYPE_UNUSED = "unused" // -> flags 5
+)
+const (
+	NM_VPNC_DHGROUP_DH1 = "dh1"
+	NM_VPNC_DHGROUP_DH2 = "dh2"
+	NM_VPNC_DHGROUP_DH5 = "dh5"
+)
+const (
+	NM_VPNC_PFS_SERVER = "server"
+	NM_VPNC_PFS_NOPFS  = "nopfs"
+	NM_VPNC_PFS_DH1    = "dh1"
+	NM_VPNC_PFS_DH2    = "dh2"
+	NM_VPNC_PFS_DH5    = "dh5"
+)
+const (
+	NM_VPNC_VENDOR_CISCO     = "cisco"
+	NM_VPNC_VENDOR_NETSCREEN = "netscreen"
+)
 
 // vpn key descriptions
 // static ValidProperty valid_properties[] = {
@@ -89,3 +99,151 @@ const (
 // 	{ NM_VPNC_KEY_XAUTH_PASSWORD,        ITEM_TYPE_STRING, 0, 0 },
 // 	{ NULL,                              ITEM_TYPE_UNKNOWN, 0, 0 }
 // };
+
+func newVpnVpncConnectionData(id, uuid string) (data _ConnectionData) {
+	data = make(_ConnectionData)
+
+	addSettingField(data, fieldConnection)
+	setSettingConnectionId(data, id)
+	setSettingConnectionUuid(data, uuid)
+	setSettingConnectionType(data, typeVpn)
+	setSettingConnectionAutoconnect(data, false)
+	logicSetSettingVkConnectionNoPermission(data, false)
+
+	addSettingField(data, fieldVpn)
+	setSettingVpnServiceType(data, NM_DBUS_SERVICE_VPNC)
+	setSettingVpnVpncKeyNatTraversalMode(data, NM_VPNC_NATT_MODE_NATT)
+	logicSetSettingVpnVpncKeySecretFlags(data, NM_SETTING_VPN_SECRET_FLAG_ASK)
+	logicSetSettingVpnVpncKeyXauthPasswordFlags(data, NM_SETTING_VPN_SECRET_FLAG_ASK)
+	setSettingVpnVpncKeyVendor(data, NM_VPNC_VENDOR_CISCO)
+	setSettingVpnVpncKeyPerfectForward(data, NM_VPNC_PFS_SERVER)
+	setSettingVpnVpncKeyDhgroup(data, NM_VPNC_DHGROUP_DH2)
+	setSettingVpnVpncKeyLocalPort(data, 0)
+
+	addSettingField(data, fieldIpv4)
+	setSettingIp4ConfigMethod(data, NM_SETTING_IP4_CONFIG_METHOD_AUTO)
+
+	return
+}
+
+// vpn-vpnc
+func getSettingVpnVpncAvailableKeys(data _ConnectionData) (keys []string) {
+	keys = appendAvailableKeys(keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_GATEWAY)
+	keys = appendAvailableKeys(keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_XAUTH_USER)
+	keys = appendAvailableKeys(keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD_FLAGS)
+	if getSettingVpnVpncKeyXauthPasswordFlags(data) == NM_SETTING_VPN_SECRET_FLAG_SAVE {
+		keys = appendAvailableKeys(keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD)
+	}
+	keys = appendAvailableKeys(keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_ID)
+	keys = appendAvailableKeys(keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_SECRET_FLAGS)
+	if getSettingVpnVpncKeySecretFlags(data) == NM_SETTING_VPN_SECRET_FLAG_SAVE {
+		keys = appendAvailableKeys(keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_SECRET)
+	}
+	keys = appendAvailableKeys(keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_AUTHMODE)
+	if getSettingVkVpnVpncKeyHybridAuthmode(data) {
+		keys = appendAvailableKeys(keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_CA_FILE)
+	}
+	return
+}
+func getSettingVpnVpncAvailableValues(data _ConnectionData, key string) (values []string, customizable bool) {
+	switch key {
+	case NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD_FLAGS:
+		// TODO values are integer
+		values = []string{"1", "3", "5"}
+	case NM_SETTING_VPN_VPNC_KEY_SECRET_FLAGS:
+		// TODO values are integer
+		values = []string{"1", "3", "5"}
+	}
+	return
+}
+func checkSettingVpnVpncValues(data _ConnectionData) (errs FieldKeyErrors) {
+	errs = make(map[string]string)
+	ensureSettingVpnVpncKeyGatewayNoEmpty(data, errs)
+	ensureSettingVpnVpncKeyIdNoEmpty(data, errs)
+	// TODO
+	return
+}
+
+// vpn-vpnc-advanced
+func getSettingVpnVpncAdvancedAvailableKeys(data _ConnectionData) (keys []string) {
+	keys = appendAvailableKeys(keys, fieldVpnVpncAdvanced, NM_SETTING_VPN_VPNC_KEY_DOMAIN)
+	keys = appendAvailableKeys(keys, fieldVpnVpncAdvanced, NM_SETTING_VPN_VPNC_KEY_VENDOR)
+	keys = appendAvailableKeys(keys, fieldVpnVpncAdvanced, NM_SETTING_VPN_VPNC_KEY_APP_VERSION)
+	keys = appendAvailableKeys(keys, fieldVpnVpncAdvanced, NM_SETTING_VPN_VPNC_KEY_SINGLE_DES)
+	keys = appendAvailableKeys(keys, fieldVpnVpncAdvanced, NM_SETTING_VPN_VPNC_KEY_NAT_TRAVERSAL_MODE)
+	keys = appendAvailableKeys(keys, fieldVpnVpncAdvanced, NM_SETTING_VPN_VPNC_KEY_DHGROUP)
+	keys = appendAvailableKeys(keys, fieldVpnVpncAdvanced, NM_SETTING_VPN_VPNC_KEY_PERFECT_FORWARD)
+	keys = appendAvailableKeys(keys, fieldVpnVpncAdvanced, NM_SETTING_VPN_VPNC_KEY_LOCAL_PORT)
+	keys = appendAvailableKeys(keys, fieldVpnVpncAdvanced, NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT)
+	return
+}
+func getSettingVpnVpncAdvancedAvailableValues(data _ConnectionData, key string) (values []string, customizable bool) {
+	switch key {
+	case NM_SETTING_VPN_VPNC_KEY_VENDOR:
+		values = []string{
+			NM_VPNC_VENDOR_CISCO,
+			NM_VPNC_VENDOR_NETSCREEN,
+		}
+	case NM_SETTING_VPN_VPNC_KEY_NAT_TRAVERSAL_MODE:
+		values = []string{
+			NM_VPNC_NATT_MODE_NATT,
+			NM_VPNC_NATT_MODE_NONE,
+			NM_VPNC_NATT_MODE_NATT_ALWAYS,
+			NM_VPNC_NATT_MODE_CISCO,
+		}
+	case NM_SETTING_VPN_VPNC_KEY_DHGROUP:
+		values = []string{
+			NM_VPNC_DHGROUP_DH1,
+			NM_VPNC_DHGROUP_DH2,
+			NM_VPNC_DHGROUP_DH5,
+		}
+	case NM_SETTING_VPN_VPNC_KEY_PERFECT_FORWARD:
+		values = []string{
+			NM_VPNC_PFS_SERVER,
+			NM_VPNC_PFS_NOPFS,
+			NM_VPNC_PFS_DH1,
+			NM_VPNC_PFS_DH2,
+			NM_VPNC_PFS_DH5,
+		}
+	}
+	return
+}
+func checkSettingVpnVpncAdvancedValues(data _ConnectionData) (errs FieldKeyErrors) {
+	errs = make(map[string]string)
+	// TODO
+	return
+}
+
+// Logic setter
+func logicSetSettingVpnVpncKeySecretFlagsJSON(data _ConnectionData, valueJSON string) {
+	setSettingVpnVpncKeySecretFlagsJSON(data, valueJSON)
+	value := getSettingVpnVpncKeySecretFlags(data)
+	logicSetSettingVpnVpncKeySecretFlags(data, value)
+}
+func logicSetSettingVpnVpncKeySecretFlags(data _ConnectionData, value uint32) {
+	switch value {
+	case NM_SETTING_VPN_SECRET_FLAG_SAVE:
+		setSettingVpnVpncKeySecretType(data, NM_VPNC_PW_TYPE_SAVE)
+	case NM_SETTING_VPN_SECRET_FLAG_ASK:
+		setSettingVpnVpncKeySecretType(data, NM_VPNC_PW_TYPE_ASK)
+	case NM_SETTING_VPN_SECRET_FLAG_UNUSED:
+		setSettingVpnVpncKeySecretType(data, NM_VPNC_PW_TYPE_UNUSED)
+	}
+	setSettingVpnVpncKeySecretFlags(data, value)
+}
+func logicSetSettingVpnVpncKeyXauthPasswordFlagsJSON(data _ConnectionData, valueJSON string) {
+	setSettingVpnVpncKeyXauthPasswordFlagsJSON(data, valueJSON)
+	value := getSettingVpnVpncKeyXauthPasswordFlags(data)
+	logicSetSettingVpnVpncKeyXauthPasswordFlags(data, value)
+}
+func logicSetSettingVpnVpncKeyXauthPasswordFlags(data _ConnectionData, value uint32) {
+	switch value {
+	case NM_SETTING_VPN_SECRET_FLAG_SAVE:
+		setSettingVpnVpncKeyXauthPasswordType(data, NM_VPNC_PW_TYPE_SAVE)
+	case NM_SETTING_VPN_SECRET_FLAG_ASK:
+		setSettingVpnVpncKeyXauthPasswordType(data, NM_VPNC_PW_TYPE_ASK)
+	case NM_SETTING_VPN_SECRET_FLAG_UNUSED:
+		setSettingVpnVpncKeyXauthPasswordType(data, NM_VPNC_PW_TYPE_UNUSED)
+	}
+	setSettingVpnVpncKeyXauthPasswordFlags(data, value)
+}

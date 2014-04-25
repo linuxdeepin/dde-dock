@@ -79,7 +79,6 @@ func newVpnPptpConnectionData(id, uuid string) (data _ConnectionData) {
 	return
 }
 
-// TODO
 // vpn-pptp
 func getSettingVpnPptpAvailableKeys(data _ConnectionData) (keys []string) {
 	keys = appendAvailableKeys(keys, fieldVpnPptp, NM_SETTING_VPN_PPTP_KEY_GATEWAY)
@@ -94,6 +93,7 @@ func getSettingVpnPptpAvailableValues(data _ConnectionData, key string) (values 
 func checkSettingVpnPptpValues(data _ConnectionData) (errs FieldKeyErrors) {
 	errs = make(map[string]string)
 	ensureSettingVpnPptpKeyGatewayNoEmpty(data, errs)
+	// TODO
 	return
 }
 
@@ -121,6 +121,7 @@ func getSettingVpnPptpPppAvailableValues(data _ConnectionData, key string) (valu
 }
 func checkSettingVpnPptpPppValues(data _ConnectionData) (errs FieldKeyErrors) {
 	errs = make(map[string]string)
+	// TODO
 	return
 }
 func logicSetSettingVpnPptpKeyRequireMppeJSON(data _ConnectionData, valueJSON string) {

@@ -20,7 +20,7 @@ var supportedConnectionTypes = []string{
 	typeVpnOpenconnect,
 	// typeVpnOpenvpn, 				// TODO
 	typeVpnPptp,
-	// typeVpnVpnc, 				// TODO
+	typeVpnVpnc,
 }
 
 const (
@@ -37,6 +37,8 @@ const (
 	fieldVpnOpenconnect   = NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME
 	fieldVpnPptp          = NM_SETTING_VF_VPN_PPTP_SETTING_NAME
 	fieldVpnPptpPpp       = NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME
+	fieldVpnVpnc          = NM_SETTING_VF_VPN_VPNC_SETTING_NAME
+	fieldVpnVpncAdvanced  = NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME
 	fieldWired            = NM_SETTING_WIRED_SETTING_NAME
 	fieldWireless         = NM_SETTING_WIRELESS_SETTING_NAME
 	fieldWirelessSecurity = NM_SETTING_WIRELESS_SECURITY_SETTING_NAME
@@ -44,20 +46,22 @@ const (
 
 // page is a wrapper of fields for easy to configure
 const (
-	pageGeneral        = "general"         // -> fieldConnection
-	pageEthernet       = "ethernet"        // -> fieldWireed
-	pageWifi           = "wifi"            // -> fieldWireless
-	pageIPv4           = "ipv4"            // -> fieldIpv4
-	pageIPv6           = "ipv6"            // -> fieldIpv6
-	pageSecurity       = "security"        // -> field8021x, fieldWirelessSecurity
-	pagePppoe          = "pppoe"           // -> fieldPppoe
-	pagePpp            = "ppp"             // -> fieldPpp
-	pageVpnL2tp        = "vpn-l2tp"        // -> fieldVpnL2tp
-	pageVpnL2tpPpp     = "vpn-l2tp-ppp"    // -> fieldVpnL2tpPpp
-	pageVpnL2tpIpsec   = "vpn-l2tp-ipsec"  // -> fieldVpnL2tpIpsec
-	pageVpnOpenconnect = "vpn-openconnect" // -> fieldVpnOpenconnect
-	pageVpnPptp        = "vpn-pptp"        // -> fieldVpnPptp
-	pageVpnPptpPpp     = "vpn-pptp-ppp"    // -> fieldVpnPptpPpp
+	pageGeneral         = "general"           // -> fieldConnection
+	pageEthernet        = "ethernet"          // -> fieldWireed
+	pageWifi            = "wifi"              // -> fieldWireless
+	pageIPv4            = "ipv4"              // -> fieldIpv4
+	pageIPv6            = "ipv6"              // -> fieldIpv6
+	pageSecurity        = "security"          // -> field8021x, fieldWirelessSecurity
+	pagePppoe           = "pppoe"             // -> fieldPppoe
+	pagePpp             = "ppp"               // -> fieldPpp
+	pageVpnL2tp         = "vpn-l2tp"          // -> fieldVpnL2tp
+	pageVpnL2tpPpp      = "vpn-l2tp-ppp"      // -> fieldVpnL2tpPpp
+	pageVpnL2tpIpsec    = "vpn-l2tp-ipsec"    // -> fieldVpnL2tpIpsec
+	pageVpnOpenconnect  = "vpn-openconnect"   // -> fieldVpnOpenconnect
+	pageVpnPptp         = "vpn-pptp"          // -> fieldVpnPptp
+	pageVpnPptpPpp      = "vpn-pptp-ppp"      // -> fieldVpnPptpPpp
+	pageVpnVpnc         = "vpn-vpnc"          // -> fieldVpnVpnc
+	pageVpnVpncAdvanced = "vpn-vpnc-advanced" // -> fieldVpnVpncAdvanced
 )
 
 const (

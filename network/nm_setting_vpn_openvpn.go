@@ -47,7 +47,6 @@ const (
 const NM_OPENVPN_KEY_NOSECRET = "no-secret"
 
 // #define NM_OPENVPN_KEY_RENEG_SECONDS "reneg-seconds"
-
 const (
 	NM_OPENVPN_AUTH_NONE      = "none"
 	NM_OPENVPN_AUTH_RSA_MD4   = "RSA-MD4"
@@ -59,7 +58,6 @@ const (
 	NM_OPENVPN_AUTH_SHA512    = "SHA512"
 	NM_OPENVPN_AUTH_RIPEMD160 = "RIPEMD160"
 )
-
 const (
 	NM_OPENVPN_CONTYPE_TLS          = "tls"
 	NM_OPENVPN_CONTYPE_STATIC_KEY   = "static-key"

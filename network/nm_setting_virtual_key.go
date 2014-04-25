@@ -54,6 +54,13 @@ const NM_SETTING_VK_VPN_L2TP_LCP_ECHO_ENABLE = "vk-lcp-echo-enable"
 // vpn-pptp
 const NM_SETTING_VK_VPN_PPTP_LCP_ECHO_ENABLE = "vk-lcp-echo-enable"
 
+// vpn-vpnc
+const (
+	NM_SETTING_VK_VPN_VPNC_KEY_HYBRID_AUTHMODE   = "vk-hybrid-authmode"
+	NM_SETTING_VK_VPN_VPNC_KEY_ENCRYPTION_METHOD = "vk-encryption-method"
+	NM_SETTING_VK_VPN_VPNC_KEY_DISABLE_DPD       = "vk-disable-dpd"
+)
+
 // wireless security
 const NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT = "vk-key-mgmt"
 
@@ -113,6 +120,14 @@ func generalGetSettingVkAvailableValues(data _ConnectionData, field, key string)
 		}
 	case fieldPppoe:
 	case fieldPpp:
+	case fieldVpnVpncAdvanced:
+		switch key {
+		case NM_SETTING_VK_VPN_VPNC_KEY_ENCRYPTION_METHOD:
+			values = []string{"secure", "weak", "none"}
+		}
+	}
+	if len(values) == 0 {
+		Logger.Warningf("there is no available values for virtual key, %s->%s", field, key)
 	}
 	return
 }
@@ -333,6 +348,26 @@ func getSettingVkVpnPptpLcpEchoEnable(data _ConnectionData) (value bool) {
 	}
 	return false
 }
+func getSettingVkVpnVpncKeyHybridAuthmode(data _ConnectionData) (value bool) {
+	if isSettingVpnVpncKeyAuthmodeExists(data) {
+		return true
+	}
+	return false
+}
+func getSettingVkVpnVpncKeyEncryptionMethod(data _ConnectionData) (value string) {
+	if getSettingVpnVpncKeySingleDes(data) {
+		return "weak"
+	} else if getSettingVpnVpncKeyNoEncryption(data) {
+		return "none"
+	}
+	return "secure"
+}
+func getSettingVkVpnVpncKeyDisableDpd(data _ConnectionData) (value bool) {
+	if isSettingVpnVpncKeyDpdIdleTimeoutExists(data) && getSettingVpnVpncKeyDpdIdleTimeout(data) == 0 {
+		return true
+	}
+	return false
+}
 func getSettingVkWirelessSecurityKeyMgmt(data _ConnectionData) (value string) {
 	if !isSettingFieldExists(data, fieldWirelessSecurity) {
 		value = "none"
@@ -505,6 +540,31 @@ func logicSetSettingVkVpnPptpLcpEchoEnable(data _ConnectionData, value bool) {
 	} else {
 		removeSettingVpnPptpKeyLcpEchoFailure(data)
 		removeSettingVpnPptpKeyLcpEchoInterval(data)
+	}
+}
+func logicSetSettingVkVpnVpncKeyHybridAuthmode(data _ConnectionData, value bool) {
+	if value {
+		setSettingVpnVpncKeyAuthmode(data, "hybrid")
+	} else {
+		removeSettingVpnVpncKeyAuthmode(data)
+	}
+}
+func logicSetSettingVkVpnVpncKeyEncryptionMethod(data _ConnectionData, value string) {
+	removeSettingVpnVpncKeySingleDes(data)
+	removeSettingVpnVpncKeyNoEncryption(data)
+	switch value {
+	case "secure":
+	case "weak":
+		setSettingVpnVpncKeySingleDes(data, true)
+	case "none":
+		setSettingVpnVpncKeyNoEncryption(data, true)
+	}
+}
+func logicSetSettingVkVpnVpncKeyDisableDpd(data _ConnectionData, value bool) {
+	if value {
+		setSettingVpnVpncKeyDpdIdleTimeout(data, 0)
+	} else {
+		removeSettingVpnVpncKeyDpdIdleTimeout(data)
 	}
 }
 func logicSetSettingVkWirelessSecurityKeyMgmt(data _ConnectionData, value string) {

@@ -96,5 +96,6 @@ func getSettingVpnOpenconnectAvailableValues(data _ConnectionData, key string) (
 func checkSettingVpnOpenconnectValues(data _ConnectionData) (errs FieldKeyErrors) {
 	errs = make(map[string]string)
 	ensureSettingVpnOpenconnectKeyGatewayNoEmpty(data, errs)
+	// TODO
 	return
 }
