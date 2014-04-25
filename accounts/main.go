@@ -69,6 +69,8 @@ func main() {
 }
 
 func updateUserList() {
+        //mutex.Lock()
+        //defer mutex.Unlock()
         destroyAllUserObject()
 
         infos := getUserInfoList()

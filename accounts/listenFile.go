@@ -25,6 +25,7 @@ import (
         "github.com/howeyc/fsnotify"
         "os"
         "regexp"
+        //"time"
 )
 
 func (op *AccountManager) listenUserListChanged() {
@@ -164,17 +165,23 @@ func (op *AccountManager) emitUserListChanged() {
         list, ret := compareStrList(op.UserList, destList)
         switch ret {
         case 1:
+                updateUserList()
+                //go func() {
+                //<-time.After(time.Millisecond * 500)
+                op.setPropName("UserList")
+                //}()
                 for _, v := range list {
                         op.UserAdded(v)
                 }
-                op.setPropName("UserList")
-                updateUserList()
         case -1:
+                updateUserList()
+                //go func() {
+                //<-time.After(time.Millisecond * 500)
+                op.setPropName("UserList")
+                //}()
                 for _, v := range list {
                         op.UserDeleted(v)
                 }
-                op.setPropName("UserList")
-                updateUserList()
         }
 }
 
