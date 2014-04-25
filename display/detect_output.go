@@ -12,7 +12,7 @@ func guestBuiltIn(ops []*Monitor) *Monitor {
 	var mirrorOP *Monitor = ops[0]
 	currentType := unknownAtom
 	for _, op := range ops {
-		t := getContentorType(op.outputs[0])
+		t := getContentorType(GetDisplay().outputNames[op.Outputs[0]])
 		if !greaterConnectorType(t, currentType) {
 			currentType = t
 			mirrorOP = op

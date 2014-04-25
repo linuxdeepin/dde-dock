@@ -11,7 +11,7 @@ const joinSeparator = "="
 
 type Monitor struct {
 	cfg       *ConfigMonitor
-	outputs   []randr.Output
+	Outputs   []string
 	rotations []uint16
 	reflects  []uint16
 	modes     []Mode
@@ -142,7 +142,7 @@ func (m *Monitor) generateShell() string {
 }
 
 func (m *Monitor) updateInfo() {
-	op := m.outputs[0]
+	op := GetDisplay().outputNames[m.Outputs[0]]
 	oinfo, err := randr.GetOutputInfo(xcon, op, LastConfigTimeStamp).Reply()
 	if err != nil {
 		fmt.Println("updateInfo error:", err)
@@ -179,14 +179,9 @@ func NewMonitor(dpy *Display, info *ConfigMonitor) *Monitor {
 	m.Rotation, m.Reflect = info.Rotation, info.Reflect
 	m.Opened = info.Enabled
 
-	outputMap := dpy.outputNames
-	for _, name := range info.Outputs {
-		if op, ok := outputMap[name]; ok {
-			m.outputs = append(m.outputs, op)
-		}
-	}
+	m.Outputs = info.Outputs
 	runtime.SetFinalizer(m, func(o interface{}) { dbus.UnInstallObject(m) })
-	m.IsComposited = len(m.outputs) > 1
+	m.IsComposited = len(m.Outputs) > 1
 
 	m.FullName = m.Name
 
@@ -232,13 +227,4 @@ func (m *Monitor) ensureSize(w, h uint16) {
 			m.scaleMode = true
 		}
 	}
-}
-
-func (m *Monitor) isContain(op randr.Output) bool {
-	for _, o := range m.outputs {
-		if o == op {
-			return true
-		}
-	}
-	return false
 }

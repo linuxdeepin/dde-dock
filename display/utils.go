@@ -36,15 +36,6 @@ func queryAtomName(c *xgb.Conn, atom xproto.Atom) string {
 
 }
 
-func queryMonitor(dpy *Display, output randr.Output) *Monitor {
-	for _, m := range dpy.Monitors {
-		if m.isContain(output) {
-			return m
-		}
-	}
-	return nil
-}
-
 var (
 	edidAtom    = getAtom(xcon, "EDID")
 	borderAtom  = getAtom(xcon, "Border")
