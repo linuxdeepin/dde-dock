@@ -8,7 +8,7 @@ import "fmt"
 import "os/exec"
 import "math"
 
-var backlightAtom = getAtom(X, "Backlight")
+var backlightAtom = getAtom(xcon, "Backlight")
 
 func runCode(code string) bool {
 	err := exec.Command("sh", "-c", code).Run()
@@ -46,9 +46,9 @@ func queryMonitor(dpy *Display, output randr.Output) *Monitor {
 }
 
 var (
-	edidAtom    = getAtom(X, "EDID")
-	borderAtom  = getAtom(X, "Border")
-	unknownAtom = getAtom(X, "unknown")
+	edidAtom    = getAtom(xcon, "EDID")
+	borderAtom  = getAtom(xcon, "Border")
+	unknownAtom = getAtom(xcon, "unknown")
 )
 
 func getOutputName(data [128]byte, defaultName string) string {
@@ -73,6 +73,17 @@ type Mode struct {
 	Height uint16
 	Rate   float64
 }
+type Modes []Mode
+
+func (m Modes) Len() int {
+	return len(m)
+}
+func (m Modes) Less(i, j int) bool {
+	return m[i].Width+m[i].Height > m[j].Width+m[j].Height
+}
+func (m Modes) Swap(i, j int) {
+	m[i], m[j] = m[j], m[i]
+}
 
 func buildMode(info randr.ModeInfo) Mode {
 	vTotal := info.Vtotal
@@ -89,61 +100,6 @@ func buildMode(info randr.ModeInfo) Mode {
 	return Mode{info.Id, info.Width, info.Height, rate}
 }
 
-// xgb/randr.GetScreenInfo will panic at this moment.( https://github.com/BurntSushi/xgb/issues/20)
-func getScreenInfo() (*randr.GetScreenInfoReply, error) {
-	cook := randr.GetScreenInfo(X, Root)
-
-	buf, err := cook.Cookie.Reply()
-	if err != nil {
-		return nil, err
-	}
-	if buf == nil {
-		return nil, nil
-	}
-	v := new(randr.GetScreenInfoReply)
-	b := 1 // skip reply determinant
-
-	v.Rotations = buf[b]
-	b += 1
-
-	v.Sequence = xgb.Get16(buf[b:])
-	b += 2
-
-	v.Length = xgb.Get32(buf[b:]) // 4-byte units
-	b += 4
-
-	v.Root = xproto.Window(xgb.Get32(buf[b:]))
-	b += 4
-
-	v.Timestamp = xproto.Timestamp(xgb.Get32(buf[b:]))
-	b += 4
-
-	v.ConfigTimestamp = xproto.Timestamp(xgb.Get32(buf[b:]))
-	b += 4
-
-	v.NSizes = xgb.Get16(buf[b:])
-	b += 2
-
-	v.SizeID = xgb.Get16(buf[b:])
-	b += 2
-
-	v.Rotation = xgb.Get16(buf[b:])
-	b += 2
-
-	v.Rate = xgb.Get16(buf[b:])
-	b += 2
-
-	v.NInfo = xgb.Get16(buf[b:])
-	b += 2
-
-	b += 2 // padding
-
-	v.Sizes = make([]randr.ScreenSize, v.NSizes)
-	b += randr.ScreenSizeReadList(buf[b:], v.Sizes)
-
-	return v, nil
-}
-
 func parseRandR(randr uint16) (uint16, uint16) {
 	rotation := randr & 0xf
 	reflect := randr & 0xf0
@@ -151,14 +107,14 @@ func parseRandR(randr uint16) (uint16, uint16) {
 	case 1, 2, 4, 8:
 		break
 	default:
-		LOGGER.Error("invalid rotation value", rotation, randr)
+		Logger.Error("invalid rotation value", rotation, randr)
 		rotation = 1
 	}
 	switch reflect {
 	case 0, 16, 32, 48:
 		break
 	default:
-		LOGGER.Error("invalid reflect value", reflect, randr)
+		Logger.Error("invalid reflect value", reflect, randr)
 		reflect = 0
 	}
 	return rotation, reflect
@@ -206,7 +162,7 @@ func isCrtcConnected(c *xgb.Conn, crtc randr.Crtc) bool {
 	} else if cinfo.NumOutputs == 0 {
 		return false
 	} else {
-		oinfo, _ := randr.GetOutputInfo(X, cinfo.Outputs[0], 0).Reply()
+		oinfo, _ := randr.GetOutputInfo(c, cinfo.Outputs[0], 0).Reply()
 		if oinfo.Crtc != crtc {
 			return false
 		}
@@ -214,22 +170,62 @@ func isCrtcConnected(c *xgb.Conn, crtc randr.Crtc) bool {
 	return true
 }
 
+func setOutputBacklight(op randr.Output, v uint32) {
+	var buf [4]byte
+	xgb.Put32(buf[0:4], v)
+
+	err := randr.ChangeOutputPropertyChecked(xcon, op, backlightAtom,
+		xproto.AtomInteger, 32, xproto.PropModeReplace, 1,
+		buf[:]).Check()
+	if err != nil {
+		Logger.Error("setOutputBacklight error:", err)
+	}
+}
 func queryBacklightRange(c *xgb.Conn, output randr.Output) int32 {
 	prop, err := randr.GetOutputProperty(c, output, backlightAtom, xproto.AtomAny, 0, 1, false, false).Reply()
-	pinfo, err := randr.QueryOutputProperty(X, output, backlightAtom).Reply()
+	pinfo, err := randr.QueryOutputProperty(c, output, backlightAtom).Reply()
 	if err != nil || prop.NumItems != 1 || !pinfo.Range || len(pinfo.ValidValues) != 2 {
 		return 0
 	}
 	return pinfo.ValidValues[1]
 }
-
 func supportedBacklight(c *xgb.Conn, output randr.Output) (bool, float64) {
 	prop, err := randr.GetOutputProperty(c, output, backlightAtom, xproto.AtomAny, 0, 1, false, false).Reply()
-	pinfo, err := randr.QueryOutputProperty(X, output, backlightAtom).Reply()
+	pinfo, err := randr.QueryOutputProperty(c, output, backlightAtom).Reply()
 	if err != nil || prop.NumItems != 1 || !pinfo.Range || len(pinfo.ValidValues) != 2 {
-		return false, 0
+		return false, 1
 	}
 	return true, float64(xgb.Get32(prop.Data)) / float64(pinfo.ValidValues[1])
+}
+
+func setBrightness(xcon *xgb.Conn, op randr.Output, v float64) {
+	if v < 0.01 {
+		Logger.Warningf("setBrightness: %v is too small adjust to 0", v)
+		v = 0
+	}
+	if v > 1 {
+		Logger.Warningf("setBrightness: %v is too big adjust to 1", v)
+		v = 1
+	}
+	oinfo, err := randr.GetOutputInfo(xcon, op, LastConfigTimeStamp).Reply()
+	if err != nil {
+		Logger.Errorf("GetOutputInfo(op=%d) failed: %v", op, err)
+		return
+	}
+	if oinfo.Crtc == 0 || oinfo.Connection != randr.ConnectionConnected {
+		Logger.Warning("Try setBrightness at an unready Output ", string(oinfo.Name))
+		return
+	}
+	gammaSize, err := randr.GetCrtcGammaSize(xcon, oinfo.Crtc).Reply()
+	if err != nil {
+		Logger.Error("GetCrtcGrammSize(crtc:%d) failed: %s", oinfo.Crtc, err.Error())
+	}
+	red, green, blue := genGammaRamp(gammaSize.Size, v)
+	randr.SetCrtcGamma(xcon, oinfo.Crtc, gammaSize.Size, red, green, blue)
+}
+
+func queryBrightness(xcon *xgb.Conn, op randr.Output) float64 {
+	return 1
 }
 
 func parseRotationSize(rotation, width, height uint16) (uint16, uint16) {
@@ -269,147 +265,25 @@ func genTransformByScale(xScale float32, yScale float32) render.Transform {
 	return m
 }
 
-func setOutputBacklight(op randr.Output, light float64) {
-	pinfo, err := randr.QueryOutputProperty(X, op, backlightAtom).Reply()
-	if err != nil || !pinfo.Range || len(pinfo.ValidValues) != 2 {
-		return
+func isOverlap(x1, y1 int16, w1, h1 uint16, x2, y2 int16, w2, h2 uint16) bool {
+	var contain = func(px int16, py int16) bool {
+		if px > x1 && px < x1+int16(w1) && py > y1 && py < y1+int16(h1) {
+			return true
+		} else {
+			return false
+		}
 	}
-	var buf [4]byte
-	xgb.Put32(buf[0:4], uint32(light*float64(pinfo.ValidValues[1])))
-
-	err = randr.ChangeOutputPropertyChecked(X, op, backlightAtom,
-		xproto.AtomInteger, 32, xproto.PropModeReplace, 1,
-		buf[:]).Check()
-	if err != nil {
-		LOGGER.Error("setOutputBacklight error:", err)
+	if contain(x2, y2) {
+		return true
 	}
-}
-
-func calcBound(m render.Transform, rotation uint16, width, height uint16) (x1, y1, x2, y2 int) {
-	var applyTransform = func(m render.Transform, x float32, y float32) (int, int, int, int) {
-		rx := fixed2double(m.Matrix11)*x + fixed2double(m.Matrix12)*y + fixed2double(m.Matrix13)*1
-		ry := fixed2double(m.Matrix21)*x + fixed2double(m.Matrix22)*y + fixed2double(m.Matrix23)*1
-		rw := fixed2double(m.Matrix31)*x + fixed2double(m.Matrix32)*y + fixed2double(m.Matrix33)*1
-
-		if rw == 0 {
-			return 0, 0, 0, 0
-		}
-
-		rx = rx / rw
-		if rx > 32767 || rx < -32767 {
-			return 0, 0, 0, 0
-		}
-
-		ry = ry / rw
-		if ry > 32767 || ry < -32767 {
-			return 0, 0, 0, 0
-		}
-
-		rw = rw / rw
-		if rw > 32767 || rw < -32767 {
-			return 0, 0, 0, 0
-		}
-		return int(math.Floor(float64(rx))), int(math.Floor(float64(ry))), int(math.Ceil(float64(rx))), int(math.Ceil(float64(ry)))
+	if contain(x2+int16(w2), y2) {
+		return true
 	}
-	switch rotation & 0xf {
-	case randr.RotationRotate90, randr.RotationRotate270:
-		width, height = height, width
+	if contain(x2, y2+int16(h2)) {
+		return true
 	}
-
-	var min = func(a, b int) int {
-		if a > b {
-			return b
-		}
-		return a
+	if contain(x2+int16(w2), y2+int16(h2)) {
+		return true
 	}
-	var max = func(a, b int) int {
-		if a < b {
-			return b
-		}
-		return a
-	}
-	x1, y1, x2, y2 = applyTransform(m, 0, 0)
-
-	tx1, ty1, tx2, ty2 := applyTransform(m, float32(width), 0)
-	x1 = min(x1, tx1)
-	y1 = min(y1, ty1)
-	x2 = max(x2, tx2)
-	y2 = max(y2, ty2)
-
-	tx1, ty1, tx2, ty2 = applyTransform(m, float32(width), float32(height))
-	x1 = min(x1, tx1)
-	y1 = min(y1, ty1)
-	x2 = max(x2, tx2)
-	y2 = max(y2, ty2)
-
-	tx1, ty1, tx2, ty2 = applyTransform(m, 0, float32(height))
-	x1 = min(x1, tx1)
-	y1 = min(y1, ty1)
-	x2 = max(x2, tx2)
-	y2 = max(y2, ty2)
-	return
-}
-func calcBound2(m render.Transform, rotation uint16, x, y float32, width, height uint16) (x1, y1, x2, y2 int) {
-	var applyTransform = func(m render.Transform, x float32, y float32) (int, int, int, int) {
-		rx := fixed2double(m.Matrix11)*x + fixed2double(m.Matrix12)*y + fixed2double(m.Matrix13)*1
-		ry := fixed2double(m.Matrix21)*x + fixed2double(m.Matrix22)*y + fixed2double(m.Matrix23)*1
-		rw := fixed2double(m.Matrix31)*x + fixed2double(m.Matrix32)*y + fixed2double(m.Matrix33)*1
-
-		if rw == 0 {
-			return 0, 0, 0, 0
-		}
-
-		rx = rx / rw
-		if rx > 32767 || rx < -32767 {
-			return 0, 0, 0, 0
-		}
-
-		ry = ry / rw
-		if ry > 32767 || ry < -32767 {
-			return 0, 0, 0, 0
-		}
-
-		rw = rw / rw
-		if rw > 32767 || rw < -32767 {
-			return 0, 0, 0, 0
-		}
-		return int(math.Floor(float64(rx))), int(math.Floor(float64(ry))), int(math.Ceil(float64(rx))), int(math.Ceil(float64(ry)))
-	}
-	switch rotation & 0xf {
-	case randr.RotationRotate90, randr.RotationRotate270:
-		width, height = height, width
-	}
-
-	var min = func(a, b int) int {
-		if a > b {
-			return b
-		}
-		return a
-	}
-	var max = func(a, b int) int {
-		if a < b {
-			return b
-		}
-		return a
-	}
-	x1, y1, x2, y2 = applyTransform(m, x, y)
-
-	tx1, ty1, tx2, ty2 := applyTransform(m, float32(width), y)
-	x1 = min(x1, tx1)
-	y1 = min(y1, ty1)
-	x2 = max(x2, tx2)
-	y2 = max(y2, ty2)
-
-	tx1, ty1, tx2, ty2 = applyTransform(m, float32(width), float32(height))
-	x1 = min(x1, tx1)
-	y1 = min(y1, ty1)
-	x2 = max(x2, tx2)
-	y2 = max(y2, ty2)
-
-	tx1, ty1, tx2, ty2 = applyTransform(m, x, float32(height))
-	x1 = min(x1, tx1)
-	y1 = min(y1, ty1)
-	x2 = max(x2, tx2)
-	y2 = max(y2, ty2)
-	return
+	return false
 }

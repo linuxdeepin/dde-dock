@@ -1,280 +1,330 @@
 package main
 
-import "encoding/json"
-import "strings"
 import "github.com/BurntSushi/xgb/randr"
+import "encoding/json"
 import "fmt"
 import "os"
 import "io/ioutil"
+import "sync"
+import "strings"
+import "sort"
 
-var __CFG__ _Configuration
+const (
+	DPModeUnknow  = -100
+	DPModeMirrors = -1
+	DPModeNormal  = 0
+	DPModeOnlyOne = 1
+)
 
 var _ConfigPath = os.Getenv("HOME") + "/.config/deepin_monitors.json"
+var configLock sync.RWMutex
 
-var _CurrentRight, _RightX = "", int16(0)
-
-type _Configuration struct {
-	Primary     string
-	DisplayMode int16
-	Monitors    map[string]*_MonitorConfiguration
-}
-
-type _MonitorConfiguration struct {
-	Name string
-
-	Width, Height uint16
-	RefreshRate   float64
-
-	X, Y         int16
-	RelativeInfo [2]string
-
-	Enabled  bool
-	Rotation uint16
-	Reflect  uint16
-
-	Brightness map[string]float64
-}
-
-func readCfg() _Configuration {
-	cfg := _Configuration{Monitors: make(map[string]*_MonitorConfiguration)}
-	f, err := os.Open(_ConfigPath)
-	if err != nil {
-		LOGGER.Warning("Failed load displayConfiguration:", err)
-		return cfg
+func (dpy *Display) QueryCurrentPlanName() string {
+	names := make([]string, 0)
+	for name, _ := range dpy.outputNames {
+		names = append(names, name)
 	}
-	defer f.Close()
-	data, err := ioutil.ReadAll(f)
-	err = json.Unmarshal(data, &cfg)
+	sort.Strings(names)
+	return strings.Join(names, ",")
+	//return base64.NewEncoding("1").EncodeToString([]byte(strings.Join(names, ",")))
+}
+
+func (cfg *ConfigDisplay) attachCurrentMonitor(dpy *Display) {
+	cfg.CurrentPlanName = dpy.QueryCurrentPlanName()
+	if _, ok := cfg.Monitors[cfg.CurrentPlanName]; ok {
+		cfg.ensureValid(dpy)
+		return
+	}
+
+	//grab and build monitors information
+	monitors := make(map[string]*ConfigMonitor)
+	for _, op := range dpy.outputNames {
+		mcfg, err := CreateConfigMonitor(dpy, op)
+		if err != nil {
+		}
+		monitors[mcfg.Name] = mcfg
+	}
+
+	//save it at CurrentPlanName slot
+	cfg.Monitors[cfg.CurrentPlanName] = monitors
+
+	cfg.Primary = guestPrimaryName()
+
+	//query brightness information
+	for name, op := range dpy.outputNames {
+		var support bool
+		if support, cfg.Brightness[name] = supportedBacklight(xcon, op); !support {
+			//Assume the brightness is 1.0 if we haven't saved information
+			cfg.Brightness[name] = 1
+		}
+	}
+	cfg.ensureValid(dpy)
+}
+
+func createConfigDisplay(dpy *Display) *ConfigDisplay {
+	cfg := &ConfigDisplay{}
+	cfg.Monitors = make(map[string]map[string]*ConfigMonitor)
+	cfg.Brightness = make(map[string]float64)
+	cfg.DisplayMode = DPModeNormal
+
+	cfg.attachCurrentMonitor(dpy)
 	return cfg
 }
 
-func writeCfg(cfg _Configuration) {
-	bytes, err := json.Marshal(cfg)
-	if err != nil {
-		panic("marshal display configuration failed:" + err.Error())
-	}
-	f, err := os.Create(_ConfigPath)
-	if err != nil {
-		fmt.Println("Couldn't save display configuration:", err)
-		return
-	}
-	defer f.Close()
-	f.Write(bytes)
-}
-func (dpy *Display) SaveChanged() {
-	__CFG__.Monitors = make(map[string]*_MonitorConfiguration)
-	for _, m := range dpy.Monitors {
-		__CFG__.Monitors[m.Name] = m.saveStatus()
-	}
-	__CFG__.Primary = dpy.Primary
-	writeCfg(__CFG__)
-	dpy.SwitchMode(DisplayModeCustom)
-	dpy.detectChanged()
+func (cfg *ConfigDisplay) updateMonitorPlan(dpy *Display) {
 }
 
-func saveBrightness(name string, v float64) {
-	cfg := readCfg()
-	for _, mcfg := range cfg.Monitors {
-		for _name, _ := range mcfg.Brightness {
-			if _name == name {
-				mcfg.Brightness[name] = v
+func (cfg *ConfigDisplay) ensureValid(dpy *Display) {
+	var opend []*ConfigMonitor
+	var any *ConfigMonitor
+
+	for _, m := range cfg.Monitors[cfg.CurrentPlanName] {
+		any = m
+		if m.Enabled {
+			opend = append(opend, m)
+		}
+
+		//1.1. ensure the output support the mode which be matched with the width/height
+		valid := false
+		for _, opName := range m.Outputs {
+			op := dpy.outputNames[opName]
+			oinfo, _ := randr.GetOutputInfo(xcon, op, LastConfigTimeStamp).Reply()
+			for _, id := range oinfo.Modes {
+				minfo := dpy.modes[id]
+				if minfo.Width == m.Width && minfo.Height == m.Height {
+					valid = true
+					break
+				}
 			}
 		}
+		if !valid {
+		}
 	}
-	writeCfg(cfg)
-}
-func initBrightness(monitors []*Monitor) {
-	for _, m := range monitors {
-		for _, mcfg := range __CFG__.Monitors {
-			if mcfg.Name == m.Name {
-				for k, v := range mcfg.Brightness {
-					m.ChangeBrightness(k, v)
+	if any == nil {
+		Logger.Fatal("Can't find any ConfigMonitor at ", cfg.CurrentPlanName)
+	}
+	//1. ensure there has a opened monitor.
+	if len(opend) == 0 {
+		any.Enabled = true
+		opend = append(opend, any)
+	}
+
+	//2. ensure primary is opened
+	primaryOk := false
+	for _, m := range opend {
+		if cfg.Primary == m.Name {
+			primaryOk = true
+			break
+		}
+	}
+	if !primaryOk {
+		cfg.Primary = any.Name
+	}
+
+	//4. avoid monitor allocation overlay
+	valid := true
+	for _, m1 := range cfg.Monitors[cfg.CurrentPlanName] {
+		for _, m2 := range cfg.Monitors[cfg.CurrentPlanName] {
+			if m1 != m2 {
+				if isOverlap(m1.X, m1.Y, m1.Width, m1.Height, m2.X, m2.Y, m2.Width, m2.Height) {
+					Logger.Warningf("%s(%d,%d,%d,%d) is ovlerlap with %s(%d,%d,%d,%d)! **rearrange all monitor**\n",
+						m1.Name, m1.X, m1.Y, m1.Width, m1.Height, m2.Name, m2.X, m2.Y, m2.Width, m2.Height)
+					valid = false
+					break
 				}
 			}
 		}
 	}
+	if !valid {
+		pm := cfg.Monitors[cfg.CurrentPlanName][cfg.Primary]
+		cx, cy, pw, ph := int16(0), int16(0), pm.Width, pm.Height
+		pm.X, pm.Y = 0, 0
+		Logger.Infof("Rearrange %s to (%d,%d,%d,%d)\n", pm.Name, pm.X, pm.Y, pm.Width, pm.Height)
+		for _, m := range cfg.Monitors[cfg.CurrentPlanName] {
+			if m != pm {
+				cx += int16(pw)
+				cy += int16(ph)
+				m.X, m.Y = cx, 0
+				Logger.Infof("Rearrange %s to (%d,%d,%d,%d)\n", m.Name, m.X, m.Y, m.Width, m.Height)
+			}
+		}
+	}
 }
 
-var __LastCode__ = ""
+func LoadConfigDisplay(dpy *Display) (r *ConfigDisplay) {
+	configLock.RLock()
+	defer configLock.RUnlock()
 
-func (dpy *Display) Apply() {
-	if dpy.HasChanged {
-		__LastCode__ = dpy.generateShell()
-		runCode(__LastCode__)
-	}
-	for _, m := range dpy.Monitors {
-		m.updateInfo()
-	}
-	dpy.detectChanged()
-}
+	defer func() {
+		if r == nil {
+			r = createConfigDisplay(dpy)
+		}
+	}()
 
-func (dpy *Display) detectChanged() {
-	if __LastCode__ != dpy.generateShell() {
-		dpy.setPropHasChanged(true)
+	if f, err := os.Open(_ConfigPath); err != nil {
+		return nil
 	} else {
-		dpy.setPropHasChanged(false)
-	}
-}
-func (dpy *Display) generateShell() string {
-	code := "xrandr "
-	for _, m := range dpy.Monitors {
-		code += m.generateShell()
-		if dpy.Primary == m.Name {
-			code += " --primary"
-		}
-	}
-	return code
-}
-
-const (
-	DisplayModeUnknow  = -100
-	DisplayModeMirrors = -1
-	DisplayModeCustom  = 0
-	DisplayModeOnlyOne = 1
-)
-
-func (dpy *Display) SwitchMode(mode int16) {
-	if dpy.DisplayMode == mode {
-		return
-	}
-
-	dpy.setPropDisplayMode(mode)
-
-	if mode == DisplayModeMirrors {
-		w, h := getMirrorSize(dpy.Monitors)
-		for _, m := range dpy.Monitors {
-			m.SwitchOn(true)
-			m.SetPos(0, 0)
-			m.ensureSize(w, h)
-		}
-	} else if mode == DisplayModeCustom {
-		dpy.ResetChanged()
-	} else if mode >= DisplayModeOnlyOne && int(mode) <= len(dpy.Monitors) {
-		for i, m := range dpy.Monitors {
-			if i+1 == int(mode) {
-				m.SetPos(0, 0)
-				m.SetMode(m.BestMode.ID)
-				m.SwitchOn(true)
-				dpy.SetPrimary(m.Name)
-				fmt.Println("SetSwitch..", m.Name, m.Opened)
-			} else {
-				m.SwitchOn(false)
-				fmt.Println("SetSwitch..", m.Name, m.Opened)
-			}
-		}
-	} else {
-		return
-	}
-	dpy.Apply()
-}
-
-func (m *Monitor) restore(cfg *_MonitorConfiguration) {
-	m.setPropXY(cfg.X, cfg.Y)
-	m.SetRelativePos(cfg.RelativeInfo[0], cfg.RelativeInfo[1])
-	m.ensureSize(cfg.Width, cfg.Height)
-	m.SwitchOn(cfg.Enabled)
-	m.setPropRotation(cfg.Rotation)
-	m.setPropReflect(cfg.Reflect)
-	for k, v := range cfg.Brightness {
-		if v != 0 {
-			m.setPropBrightness(k, v)
-		}
-	}
-}
-func (dpy *Display) ResetChanged() {
-	// dond't set the monitors which hasn't cfg information
-	__CFG__ = readCfg()
-	dpy.SetPrimary(__CFG__.Primary)
-	for _, cfg := range __CFG__.Monitors {
-		for _, m := range dpy.Monitors {
-			if m.Name == cfg.Name {
-				m.restore(cfg)
-			}
-		}
-	}
-	dpy.HasChanged = true //force apply saved configuration
-	dpy.Apply()
-
-	for _, m := range dpy.Monitors {
-		m.updateInfo()
-	}
-	dpy.detectChanged()
-}
-
-func (m *Monitor) saveStatus() *_MonitorConfiguration {
-	return &_MonitorConfiguration{
-		Name:        m.Name,
-		Width:       m.Width,
-		Height:      m.Height,
-		RefreshRate: m.CurrentMode.Rate,
-		X:           m.X,
-		Y:           m.Y,
-		//RelativeInfo: m.relativePosInfo,
-		Enabled:    m.Opened,
-		Rotation:   m.Rotation,
-		Reflect:    m.Reflect,
-		Brightness: m.Brightness,
-	}
-}
-
-func (dpy *Display) updateMonitorList() {
-	resources, err := randr.GetScreenResources(X, Root).Reply()
-	if err != nil {
-		return
-	}
-	monitors := make([]*Monitor, 0)
-	for _, op := range resources.Outputs {
-		oinfo, err := randr.GetOutputInfo(X, op, LastConfigTimeStamp).Reply()
-		if err != nil || oinfo.Connection != randr.ConnectionConnected {
-			continue
-		}
-		m := NewMonitor([]randr.Output{op})
-		//if mcfg, ok := __CFG__.Monitors[m.Name]; ok {
-		//m.relativePosInfo = mcfg.RelativeInfo
-		//}
-		monitors = append(monitors, m)
-	}
-	setAutoFlag := len(dpy.Monitors) > len(monitors)
-	dpy.setPropMonitors(monitors)
-	for _, m := range __CFG__.Monitors {
-		dpy.tryJoin(m.Name)
-	}
-
-	_CurrentRight, _RightX = "", 0
-	for _, m := range dpy.Monitors {
-		if _CurrentRight == "" {
-			_CurrentRight = m.Name
-		} else if m.X > _RightX {
-			_CurrentRight = m.Name
-			_RightX = m.X
-		}
-
-		if cfg, ok := __CFG__.Monitors[m.Name]; ok {
-			if dpy.DisplayMode == DisplayModeCustom {
-				m.restore(cfg)
-			}
+		if data, err := ioutil.ReadAll(f); err != nil {
+			return nil
 		} else {
-			m.SwitchOn(true)
-
-			m.SetRelativePos(_CurrentRight, "right-of")
-			_CurrentRight = m.Name
-			_RightX += int16(m.CurrentMode.Width)
-
-			__CFG__.Monitors[m.Name] = m.saveStatus()
+			cfg := &ConfigDisplay{
+				Brightness: make(map[string]float64),
+				Monitors:   make(map[string]map[string]*ConfigMonitor),
+			}
+			if err = json.Unmarshal(data, &cfg); err != nil {
+				return nil
+			}
+			cfg.attachCurrentMonitor(dpy)
+			return cfg
 		}
 	}
-	if setAutoFlag {
-		runCode("xrandr --auto")
-	}
-	dpy.Apply()
+	return nil
 }
 
-func (dpy *Display) tryJoin(name string) {
-	names := strings.Split(name, joinSeparator)
-	joined := names[0]
-	for i := 1; i < len(names); i++ {
-		dpy.JoinMonitor(joined, names[i])
-		fmt.Println("TryJoin:", joined, names[i])
-		joined += joinSeparator + names[i]
+type ConfigDisplay struct {
+	DisplayMode     int16
+	CurrentPlanName string
+	Monitors        map[string]map[string]*ConfigMonitor
+
+	Primary    string
+	Brightness map[string]float64
+}
+
+func (c *ConfigDisplay) Compare(cfg *ConfigDisplay) bool {
+	if c.CurrentPlanName != cfg.CurrentPlanName {
+		Logger.Error("Compare tow ConfigDisply which hasn't same CurrentPlaneName!")
+		return false
 	}
+
+	if c.Primary != cfg.Primary {
+		fmt.Println("Primary NootSame..")
+		return false
+	}
+
+	fmt.Println("PP")
+	for _, m1 := range c.Monitors[c.CurrentPlanName] {
+		if m2, ok := cfg.Monitors[c.CurrentPlanName][m1.Name]; ok {
+			return m1.Compare(m2)
+		} else {
+			return false
+		}
+	}
+
+	return true
+}
+func (c *ConfigDisplay) Save() {
+	configLock.Lock()
+	defer configLock.Unlock()
+
+	bytes, err := json.Marshal(c)
+	if err != nil {
+		Logger.Error("Can't save configure:", err)
+		return
+	}
+
+	f, err := os.Create(_ConfigPath)
+	if err != nil {
+		Logger.Error("Cant create configure:", err)
+	}
+	defer f.Close()
+	f.Write(bytes)
+}
+
+type ConfigMonitor struct {
+	Name        string
+	Outputs     []string
+	currentMode randr.Mode
+
+	Width, Height uint16
+	RefreshRate   float64
+
+	X, Y int16
+
+	Enabled  bool
+	Rotation uint16
+	Reflect  uint16
+}
+
+func mergeConfigMonitor(dpy *Display, a *ConfigMonitor, b *ConfigMonitor) *ConfigMonitor {
+	c := &ConfigMonitor{}
+	c.Outputs = append(a.Outputs, b.Outputs...)
+	c.Name = a.Name + joinSeparator + b.Name
+	c.Reflect = 0
+	c.Rotation = 1
+	c.X, c.Y = 0, 0
+
+	var ops []randr.Output
+	for _, opName := range c.Outputs {
+		if op, ok := dpy.outputNames[opName]; ok {
+			ops = append(ops, op)
+		}
+	}
+	c.Width, c.Height = getMatchedSize(ops)
+	c.Enabled = true
+	return c
+}
+
+func CreateConfigMonitor(dpy *Display, op randr.Output) (*ConfigMonitor, error) {
+	cfg := &ConfigMonitor{}
+	oinfo, err := randr.GetOutputInfo(xcon, op, LastConfigTimeStamp).Reply()
+	if err != nil {
+		return nil, err
+	}
+	cfg.Name = string(oinfo.Name)
+	cfg.Outputs = append(cfg.Outputs, cfg.Name)
+
+	if oinfo.Crtc != 0 && oinfo.Connection == randr.ConnectionConnected {
+		cinfo, err := randr.GetCrtcInfo(xcon, oinfo.Crtc, LastConfigTimeStamp).Reply()
+		if err != nil {
+			return nil, err
+		}
+		cfg.X, cfg.Y, cfg.Width, cfg.Height = cinfo.X, cinfo.Y, cinfo.Width, cinfo.Height
+
+		cfg.currentMode = cinfo.Mode
+		cfg.Enabled = true
+	} else {
+		cfg.Enabled = false
+	}
+
+	return cfg, nil
+}
+
+func (c *ConfigMonitor) Save() {
+	cfg := LoadConfigDisplay(GetDisplay())
+	configLock.Lock()
+	defer configLock.Unlock()
+
+	for i, m := range cfg.Monitors[cfg.CurrentPlanName] {
+		if m.Name == c.Name {
+			cfg.Monitors[cfg.CurrentPlanName][i] = c
+			cfg.Save()
+			return
+		}
+	}
+	panic("not reached")
+}
+
+func (m1 *ConfigMonitor) Compare(m2 *ConfigMonitor) bool {
+	if m1.Enabled != m2.Enabled {
+		return false
+	}
+	if m1.Width != m2.Width || m1.Height != m2.Height {
+		return false
+	}
+	if m1.X != m2.X || m1.Y != m2.Y {
+		return false
+	}
+	if m1.Reflect != m2.Reflect {
+		return false
+	}
+	if m1.Rotation != m2.Rotation {
+		return false
+	}
+	return true
+}
+
+func (c *ConfigDisplay) SaveBrightness(output string, v float64) {
+	cfg := LoadConfigDisplay(GetDisplay())
+	cfg.Brightness[output] = v
+	cfg.Save()
 }

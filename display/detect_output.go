@@ -3,6 +3,7 @@ package main
 import "github.com/BurntSushi/xgb/randr"
 import "github.com/BurntSushi/xgb"
 import "strings"
+import "sort"
 
 import "github.com/BurntSushi/xgb/xproto"
 
@@ -20,7 +21,59 @@ func guestBuiltIn(ops []*Monitor) *Monitor {
 	return mirrorOP
 }
 
-func getMatchedSize(ops []*Monitor) (uint16, uint16) {
+func guestPrimaryName() string {
+	//TODO:
+	return "TODO"
+}
+
+func listModes(op randr.Output) []Mode {
+	oinfo, err := randr.GetOutputInfo(xcon, op, LastConfigTimeStamp).Reply()
+	if err != nil {
+		return nil
+	}
+	var r []Mode
+	for _, id := range oinfo.Modes {
+		r = append(r, GetDisplay().modes[id])
+	}
+	return r
+}
+
+func getMatchedSize(ops []randr.Output) (uint16, uint16) {
+	if len(ops) == 0 {
+		Logger.Error("getMatchedSize with zero length []randr.Output")
+		return 0, 0
+	}
+	defer func() {
+		if err := recover(); err != nil {
+			Logger.Error(err)
+		}
+	}()
+	var allMatched []Mode
+	for _, minfo := range listModes(ops[0]) {
+		allHave := true
+		for _, op := range ops[1:] {
+			has := false
+			for _, minfo2 := range listModes(op) {
+				if minfo.Width == minfo2.Width && minfo.Height == minfo2.Height {
+					has = true
+					break
+				}
+			}
+			if !has {
+				allHave = false
+				break
+			}
+
+		}
+		if allHave {
+			allMatched = append(allMatched, minfo)
+		}
+	}
+	sort.Sort(Modes(allMatched))
+	return allMatched[0].Width, allMatched[0].Height
+}
+
+func getMatchedSize1(ops []*Monitor) (uint16, uint16) {
 	switch len(ops) {
 	case 0:
 		panic("getMatchedSize received an ops with zero length")
@@ -77,27 +130,27 @@ func getMirrorSize(ops []*Monitor) (uint16, uint16) {
 		if len(oth) == 0 {
 			return parseRotationSize(ops[0].Rotation, builtin.CurrentMode.Width, builtin.CurrentMode.Height)
 		}
-		return getMatchedSize(oth)
+		return getMatchedSize1(oth)
 	}
 }
 
 var (
-	_VGAAtom          = getAtom(X, "VGA")
-	_DVIAtom          = getAtom(X, "DVI")
-	_DVIIAtom         = getAtom(X, "DVI-I")
-	_DVIAAtom         = getAtom(X, "DVI-A")
-	_DVIDAtom         = getAtom(X, "DVI-D")
-	_HDMIAtom         = getAtom(X, "HDMI")
-	_PanelAtom        = getAtom(X, "Panel")
-	_TVAtom           = getAtom(X, "TV")
-	_TVCompositeAtom  = getAtom(X, "TV-Composite")
-	_TVSVidoeAtom     = getAtom(X, "TV-SVideo")
-	_TVSComponentAtom = getAtom(X, "TV-Component")
-	_TVSCARTAtom      = getAtom(X, "TV-SCART")
-	_TVC4Atom         = getAtom(X, "TV-C4")
-	_DisplayPort      = getAtom(X, "DisplayPort")
+	_VGAAtom          = getAtom(xcon, "VGA")
+	_DVIAtom          = getAtom(xcon, "DVI")
+	_DVIIAtom         = getAtom(xcon, "DVI-I")
+	_DVIAAtom         = getAtom(xcon, "DVI-A")
+	_DVIDAtom         = getAtom(xcon, "DVI-D")
+	_HDMIAtom         = getAtom(xcon, "HDMI")
+	_PanelAtom        = getAtom(xcon, "Panel")
+	_TVAtom           = getAtom(xcon, "TV")
+	_TVCompositeAtom  = getAtom(xcon, "TV-Composite")
+	_TVSVidoeAtom     = getAtom(xcon, "TV-SVideo")
+	_TVSComponentAtom = getAtom(xcon, "TV-Component")
+	_TVSCARTAtom      = getAtom(xcon, "TV-SCART")
+	_TVC4Atom         = getAtom(xcon, "TV-C4")
+	_DisplayPort      = getAtom(xcon, "DisplayPort")
 
-	connectorTypeAtom = getAtom(X, "ConnectorType")
+	connectorTypeAtom = getAtom(xcon, "ConnectorType")
 )
 
 var connectorTypeMap = map[xproto.Atom]int{
@@ -126,7 +179,7 @@ func greaterConnectorType(a xproto.Atom, b xproto.Atom) bool {
 }
 
 func getContentorType(op randr.Output) xproto.Atom {
-	prop, err := randr.GetOutputProperty(X, op, connectorTypeAtom, xproto.AtomAtom, 0, 1, false, false).Reply()
+	prop, err := randr.GetOutputProperty(xcon, op, connectorTypeAtom, xproto.AtomAtom, 0, 1, false, false).Reply()
 	if err != nil {
 		return unknownAtom
 	}
@@ -136,7 +189,7 @@ func getContentorType(op randr.Output) xproto.Atom {
 
 	//many drivers don't implement the ConnectorType property *and* Xserver don't thorw an error when that happend!
 	//fallback method: resort the op name
-	oinfo, err := randr.GetOutputInfo(X, op, xproto.TimeCurrentTime).Reply()
+	oinfo, err := randr.GetOutputInfo(xcon, op, xproto.TimeCurrentTime).Reply()
 	if err != nil {
 		return unknownAtom
 	}

@@ -54,10 +54,12 @@ func (dpy *Display) setPropDisplayMode(v int16) {
 func (dpy *Display) setPropMonitors(v []*Monitor) {
 	for _, m := range dpy.Monitors {
 		dbus.UnInstallObject(m)
+		m = m
 	}
 
 	dpy.Monitors = v
 	for _, m := range dpy.Monitors {
+		m = m
 		dbus.InstallOnSession(m)
 	}
 	dbus.NotifyChange(dpy, "Monitors")
