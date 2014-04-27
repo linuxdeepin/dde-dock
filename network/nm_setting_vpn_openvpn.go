@@ -40,8 +40,8 @@ const (
 
 	// tls auth
 	NM_SETTING_VPN_OPENVPN_KEY_TLS_REMOTE      = "tls-remote"
-	NM_SETTING_VPN_OPENVPN_KEY_REMOTE_CERT_TLS = "remote-cert-tls" // TODO
-	NM_SETTING_VPN_OPENVPN_KEY_TA              = "ta"              // TODO
+	NM_SETTING_VPN_OPENVPN_KEY_REMOTE_CERT_TLS = "remote-cert-tls"
+	NM_SETTING_VPN_OPENVPN_KEY_TA              = "ta"
 	NM_SETTING_VPN_OPENVPN_KEY_TA_DIR          = "ta-dir"
 
 	// proxies
@@ -210,10 +210,8 @@ func checkSettingVpnOpenvpnValues(data connectionData) (errs FieldKeyErrors) {
 	return
 }
 
-// TODO
 // openvpn-advanced
 func getSettingVpnOpenvpnAdvancedAvailableKeys(data connectionData) (keys []string) {
-	// TODO add enable wrapper property for virtual key
 	keys = appendAvailableKeys(keys, fieldVpnOpenvpnAdvanced, NM_SETTING_VPN_OPENVPN_KEY_PORT)
 	if getSettingVkVpnOpenvpnKeyEnablePort(data) {
 		keys = append(keys, NM_SETTING_VPN_OPENVPN_KEY_PORT)
@@ -223,7 +221,10 @@ func getSettingVpnOpenvpnAdvancedAvailableKeys(data connectionData) (keys []stri
 		keys = append(keys, NM_SETTING_VPN_OPENVPN_KEY_RENEG_SECONDS)
 	}
 	keys = appendAvailableKeys(keys, fieldVpnOpenvpnAdvanced, NM_SETTING_VPN_OPENVPN_KEY_COMP_LZO)
-	keys = appendAvailableKeys(keys, fieldVpnOpenvpnAdvanced, NM_SETTING_VPN_OPENVPN_KEY_PROTO_TCP)
+	if !isSettingVpnOpenvpnKeyProxyTypeExists(data) {
+		// when proxy enabled, use a tcp connection default
+		keys = appendAvailableKeys(keys, fieldVpnOpenvpnAdvanced, NM_SETTING_VPN_OPENVPN_KEY_PROTO_TCP)
+	}
 	keys = appendAvailableKeys(keys, fieldVpnOpenvpnAdvanced, NM_SETTING_VPN_OPENVPN_KEY_TAP_DEV)
 	keys = appendAvailableKeys(keys, fieldVpnOpenvpnAdvanced, NM_SETTING_VPN_OPENVPN_KEY_TUNNEL_MTU)
 	if getSettingVkVpnOpenvpnKeyEnableTunnelMtu(data) {
@@ -235,7 +236,6 @@ func getSettingVpnOpenvpnAdvancedAvailableKeys(data connectionData) (keys []stri
 	}
 	keys = appendAvailableKeys(keys, fieldVpnOpenvpnAdvanced, NM_SETTING_VPN_OPENVPN_KEY_MSSFIX)
 	keys = appendAvailableKeys(keys, fieldVpnOpenvpnAdvanced, NM_SETTING_VPN_OPENVPN_KEY_REMOTE_RANDOM)
-	// TODO when proxy enabled, use a tcp connection default
 	return
 }
 func getSettingVpnOpenvpnAdvancedAvailableValues(data connectionData, key string) (values []string, customizable bool) {
@@ -247,7 +247,6 @@ func checkSettingVpnOpenvpnAdvancedValues(data connectionData) (errs FieldKeyErr
 	return
 }
 
-// TODO
 // openvpn-security
 func getSettingVpnOpenvpnSecurityAvailableKeys(data connectionData) (keys []string) {
 	keys = appendAvailableKeys(keys, fieldVpnOpenvpnSecurity, NM_SETTING_VPN_OPENVPN_KEY_CIPHER)
@@ -255,9 +254,31 @@ func getSettingVpnOpenvpnSecurityAvailableKeys(data connectionData) (keys []stri
 	return
 }
 func getSettingVpnOpenvpnSecurityAvailableValues(data connectionData, key string) (values []string, customizable bool) {
-	// TODO
-	// cipher
 	switch key {
+	case NM_SETTING_VPN_OPENVPN_KEY_CIPHER:
+		// TODO get openvpn cipher
+		// "/usr/sbin/openvpn"
+		// "/sbin/openvpn"
+		// --show-ciphers
+		values = []string{
+			"",
+			"DES-CBC",
+			"RC2-CBC",
+			"DES-EDE-CBC",
+			"DES-EDE3-CBC",
+			"DESX-CBC",
+			"BF-CBC",
+			"RC2-40-CBC",
+			"CAST5-CBC",
+			"RC2-64-CBC",
+			"AES-128-CBC",
+			"AES-192-CBC",
+			"AES-256-CBC",
+			"CAMELLIA-128-CBC",
+			"CAMELLIA-192-CBC",
+			"CAMELLIA-256-CBC",
+			"SEED-CBC",
+		}
 	case NM_SETTING_VPN_OPENVPN_KEY_AUTH:
 		values = []string{
 			NM_OPENVPN_AUTH_NONE,
@@ -279,10 +300,8 @@ func checkSettingVpnOpenvpnSecurityValues(data connectionData) (errs FieldKeyErr
 	return
 }
 
-// TODO
 // openvpn-tlsauth
 func getSettingVpnOpenvpnTlsauthAvailableKeys(data connectionData) (keys []string) {
-	// TODO
 	keys = appendAvailableKeys(keys, fieldVpnOpenvpnTlsauth, NM_SETTING_VPN_OPENVPN_KEY_TLS_REMOTE)
 	keys = appendAvailableKeys(keys, fieldVpnOpenvpnTlsauth, NM_SETTING_VPN_OPENVPN_KEY_REMOTE_CERT_TLS)
 	keys = appendAvailableKeys(keys, fieldVpnOpenvpnTlsauth, NM_SETTING_VPN_OPENVPN_KEY_TA)
@@ -293,6 +312,7 @@ func getSettingVpnOpenvpnTlsauthAvailableValues(data connectionData, key string)
 	switch key {
 	case NM_SETTING_VPN_OPENVPN_KEY_REMOTE_CERT_TLS:
 		values = []string{
+			"", // default
 			NM_OPENVPN_REM_CERT_TLS_CLIENT,
 			NM_OPENVPN_REM_CERT_TLS_SERVER,
 		}
@@ -311,26 +331,55 @@ func checkSettingVpnOpenvpnTlsauthValues(data connectionData) (errs FieldKeyErro
 	return
 }
 
-// TODO
 // openvpn-proxies
 func getSettingVpnOpenvpnProxiesAvailableKeys(data connectionData) (keys []string) {
-
 	// proxies
 	keys = appendAvailableKeys(keys, fieldVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE)
-	keys = appendAvailableKeys(keys, fieldVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER)
-	keys = appendAvailableKeys(keys, fieldVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT)
-	keys = appendAvailableKeys(keys, fieldVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY)
-	keys = appendAvailableKeys(keys, fieldVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME)
-	keys = appendAvailableKeys(keys, fieldVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD)
-	keys = appendAvailableKeys(keys, fieldVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS)
+	if isSettingVpnOpenvpnKeyProxyTypeExists(data) {
+		switch getSettingVpnOpenvpnKeyProxyType(data) {
+		case "httpect":
+			keys = appendAvailableKeys(keys, fieldVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER)
+			keys = appendAvailableKeys(keys, fieldVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT)
+			keys = appendAvailableKeys(keys, fieldVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY)
+		case "socksct":
+			keys = appendAvailableKeys(keys, fieldVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER)
+			keys = appendAvailableKeys(keys, fieldVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT)
+			keys = appendAvailableKeys(keys, fieldVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY)
+			keys = appendAvailableKeys(keys, fieldVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME)
+			keys = appendAvailableKeys(keys, fieldVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD)
+			keys = appendAvailableKeys(keys, fieldVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS)
+		}
+	}
 	return
 }
 func getSettingVpnOpenvpnProxiesAvailableValues(data connectionData, key string) (values []string, customizable bool) {
-	// TODO proxy type
+	switch key {
+	case NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE:
+		values = []string{
+			"",
+			"httpect",
+			"socksct",
+		}
+	}
 	return
 }
 func checkSettingVpnOpenvpnProxiesValues(data connectionData) (errs FieldKeyErrors) {
 	errs = make(map[string]string)
 	// TODO
 	return
+}
+
+// Logic setter
+func logicSetSettingVpnOpenvpnKeyProxyTypeJSON(data connectionData, valueJSON string) {
+	setSettingVpnOpenvpnKeyProxyTypeJSON(data, valueJSON)
+	if isSettingVpnOpenvpnKeyProxyTypeExists(data) {
+		// TODO
+		value := getSettingVpnOpenvpnKeyProxyType(data)
+		logicSetSettingVpnOpenvpnKeyProxyType(data, value)
+	}
+}
+func logicSetSettingVpnOpenvpnKeyProxyType(data connectionData, value string) {
+	// when proxy enabled, use a tcp connection default
+	setSettingVpnOpenvpnKeyProtoTcp(data, true)
+	setSettingVpnOpenvpnKeyProxyType(data, value)
 }

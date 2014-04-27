@@ -253,12 +253,12 @@
     "FieldName":"NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME",
     "FieldValue":"vf-vpn-openvpn-proxies",
     "Keys":[
-	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE", "Value":"proxy-type", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Proxy Type", "FrontEndWidget":"EditLineComboBox"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE", "Value":"proxy-type", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":true, "DisplayName":"Proxy Type", "FrontEndWidget":"EditLineComboBox"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER", "Value":"proxy-server", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Server IP", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT", "Value":"proxy-port", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Port", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY", "Value":"proxy-retry", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Retry Indefinitely When Failed", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME", "Value":"http-proxy-username", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"User Name", "FrontEndWidget":"<default>"},
-	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD", "Value":"http-proxy-password", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Password", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD", "Value":"http-proxy-password", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Password", "FrontEndWidget":"EditLinePasswordInput"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS", "Value":"http-proxy-password-flags", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"}
     ]
 },    
