@@ -83,7 +83,10 @@ func ToKeyTypeRealData(ktype string) (realData string) {
 }
 
 // "ktypeString" -> `""`, "ktypeBool" -> `false`
-func ToKeyTypeDefaultValueJSON(ktype, customValue string) (valueJSON string) {
+func ToKeyTypeDefaultValue(keyName string) (valueJSON string) {
+	keyInfo := getKeyInfo(keyName)
+	ktype := keyInfo.Type
+	customValue := keyInfo.Default
 	if customValue == "<null>" {
 		if ktype == "ktypeString" {
 			return `""`

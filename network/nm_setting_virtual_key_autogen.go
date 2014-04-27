@@ -566,3 +566,59 @@ func logicSetSettingVkWirelessSecurityKeyMgmtJSON(data connectionData, valueJSON
 	value, _ := jsonToKeyValueString(valueJSON)
 	logicSetSettingVkWirelessSecurityKeyMgmt(data, value)
 }
+
+// Getter for enable key wrapper
+func getSettingVkVpnOpenvpnKeyEnablePort(data connectionData) (value bool) {
+	if isSettingVpnOpenvpnKeyPortExists(data) {
+		return true
+	}
+	return false
+}
+func getSettingVkVpnOpenvpnKeyEnableRenegSeconds(data connectionData) (value bool) {
+	if isSettingVpnOpenvpnKeyRenegSecondsExists(data) {
+		return true
+	}
+	return false
+}
+func getSettingVkVpnOpenvpnKeyEnableTunnelMtu(data connectionData) (value bool) {
+	if isSettingVpnOpenvpnKeyTunnelMtuExists(data) {
+		return true
+	}
+	return false
+}
+func getSettingVkVpnOpenvpnKeyEnableFragmentSize(data connectionData) (value bool) {
+	if isSettingVpnOpenvpnKeyFragmentSizeExists(data) {
+		return true
+	}
+	return false
+}
+
+// Setter for enable key wrapper
+func logicSetSettingVkVpnOpenvpnKeyEnablePort(data connectionData, value bool) {
+	if value {
+		setSettingVpnOpenvpnKeyPort(data, 1194)
+	} else {
+		removeSettingVpnOpenvpnKeyPort(data)
+	}
+}
+func logicSetSettingVkVpnOpenvpnKeyEnableRenegSeconds(data connectionData, value bool) {
+	if value {
+		setSettingVpnOpenvpnKeyRenegSeconds(data, 0)
+	} else {
+		removeSettingVpnOpenvpnKeyRenegSeconds(data)
+	}
+}
+func logicSetSettingVkVpnOpenvpnKeyEnableTunnelMtu(data connectionData, value bool) {
+	if value {
+		setSettingVpnOpenvpnKeyTunnelMtu(data, 1500)
+	} else {
+		removeSettingVpnOpenvpnKeyTunnelMtu(data)
+	}
+}
+func logicSetSettingVkVpnOpenvpnKeyEnableFragmentSize(data connectionData, value bool) {
+	if value {
+		setSettingVpnOpenvpnKeyFragmentSize(data, 1300)
+	} else {
+		removeSettingVpnOpenvpnKeyFragmentSize(data)
+	}
+}

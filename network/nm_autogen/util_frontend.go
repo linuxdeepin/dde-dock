@@ -5,9 +5,6 @@ import (
 	"os"
 )
 
-// func GenFrontEndWidgetInfo(ktype string) (widget string) {
-
-// TODO
 // "ktypeString" -> "EditLineTextInput", "ktypeBoolean" -> "EditLineSwitchButton"
 func ToFrontEndWidget(keyName string) (widget string) {
 	var ktype, customWidget string

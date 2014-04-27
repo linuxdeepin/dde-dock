@@ -46,7 +46,7 @@ func ensureField{{$fieldFuncBaseName}}Exists(data connectionData, errs FieldKeyE
 	if len(fieldData) == 0 {
 		rememberError(errs, relatedKey, {{.FieldName}}, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, {{.FieldName}}))
 	}
-}{{range $index, $key := .Keys}}{{if $key.UsedByBackEnd}}{{$keyFuncBaseName := $key.Name | ToKeyFuncBaseName}}
+}{{range $i, $key := .Keys}}{{if $key.UsedByBackEnd}}{{$keyFuncBaseName := $key.Name | ToKeyFuncBaseName}}
 func ensure{{$keyFuncBaseName}}NoEmpty(data connectionData, errs FieldKeyErrors) {
 	if !is{{$keyFuncBaseName}}Exists(data) {
 		rememberError(errs, {{$fieldName}}, {{$key.Name}}, NM_KEY_ERROR_MISSING_VALUE)
@@ -64,7 +64,7 @@ const tplGetDefaultValueJSON = `{{$fieldFuncBaseName := .FieldName | ToFieldFunc
 func get{{$fieldFuncBaseName}}KeyDefaultValueJSON(key string) (valueJSON string) {
 	switch key {
 	default:
-		logger.Error("invalid key:", key){{range .Keys}}{{if .UsedByBackEnd}}{{$default := ToKeyTypeDefaultValueJSON .Type .Default}}
+		logger.Error("invalid key:", key){{range .Keys}}{{if .UsedByBackEnd}}{{$default := ToKeyTypeDefaultValue .Name}}
 	case {{.Name}}:
 		valueJSON = ` + "`{{$default}}`" + `{{end}}{{end}}
 	}
@@ -102,7 +102,7 @@ func generalSet{{$fieldFuncBaseName}}KeyJSON(data connectionData, key, valueJSON
 
 // check if key exists
 const tplCheckExists = `
-// Check if key exists{{$fieldName := .FieldName}}{{range $index, $key := .Keys}}{{if $key.UsedByBackEnd}}
+// Check if key exists{{$fieldName := .FieldName}}{{range $i, $key := .Keys}}{{if $key.UsedByBackEnd}}
 func is{{$key.Name | ToKeyFuncBaseName}}Exists(data connectionData) bool {
 	return isSettingKeyExists(data, {{$fieldName}}, {{$key.Name}})
 }{{end}}{{end}}
@@ -110,7 +110,7 @@ func is{{$key.Name | ToKeyFuncBaseName}}Exists(data connectionData) bool {
 
 // getter
 const tplGetter = `
-// Getter{{$fieldName := .FieldName}}{{range $index, $key := .Keys}}{{if $key.UsedByBackEnd}}
+// Getter{{$fieldName := .FieldName}}{{range $i, $key := .Keys}}{{if $key.UsedByBackEnd}}
 func get{{$key.Name | ToKeyFuncBaseName}}(data connectionData) (value {{$key.Type | ToKeyTypeRealData}}) {
 	value, _ = getSettingKey(data, {{$fieldName}}, {{$key.Name}}).({{$key.Type | ToKeyTypeRealData}})
 	return
@@ -119,7 +119,7 @@ func get{{$key.Name | ToKeyFuncBaseName}}(data connectionData) (value {{$key.Typ
 
 // setter
 const tplSetter = `
-// Setter{{$fieldName := .FieldName}}{{range $index, $key := .Keys}}{{if $key.UsedByBackEnd}}
+// Setter{{$fieldName := .FieldName}}{{range $i, $key := .Keys}}{{if $key.UsedByBackEnd}}
 func set{{$key.Name | ToKeyFuncBaseName}}(data connectionData, value {{$key.Type | ToKeyTypeRealData}}) {
 	setSettingKey(data, {{$fieldName}}, {{$key.Name}}, value)
 }{{end}}{{end}}
@@ -127,7 +127,7 @@ func set{{$key.Name | ToKeyFuncBaseName}}(data connectionData, value {{$key.Type
 
 // json getter
 const tplJSONGetter = `
-// JSON Getter{{$fieldName := .FieldName}}{{range $index, $key := .Keys}}{{if $key.UsedByBackEnd}}
+// JSON Getter{{$fieldName := .FieldName}}{{range $i, $key := .Keys}}{{if $key.UsedByBackEnd}}
 func get{{$key.Name | ToKeyFuncBaseName}}JSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, {{$fieldName}}, {{$key.Name}}, get{{$fieldName | ToFieldFuncBaseName}}KeyType({{$key.Name}}))
 	return
@@ -136,7 +136,7 @@ func get{{$key.Name | ToKeyFuncBaseName}}JSON(data connectionData) (valueJSON st
 
 // json setter
 const tplJSONSetter = `
-// JSON Setter{{$fieldName := .FieldName}}{{range $index, $key := .Keys}}{{if $key.UsedByBackEnd}}
+// JSON Setter{{$fieldName := .FieldName}}{{range $i, $key := .Keys}}{{if $key.UsedByBackEnd}}
 func set{{$key.Name | ToKeyFuncBaseName}}JSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, {{$fieldName}}, {{$key.Name}}, valueJSON, get{{$fieldName | ToFieldFuncBaseName}}KeyType({{$key.Name}}))
 }{{end}}{{end}}
@@ -144,7 +144,7 @@ func set{{$key.Name | ToKeyFuncBaseName}}JSON(data connectionData, valueJSON str
 
 // remover
 const tplRemover = `
-// Remover{{$fieldName := .FieldName}}{{range $index, $key := .Keys}}{{if $key.UsedByBackEnd}}
+// Remover{{$fieldName := .FieldName}}{{range $i, $key := .Keys}}{{if $key.UsedByBackEnd}}
 func remove{{$key.Name | ToKeyFuncBaseName}}(data connectionData) {
 	removeSettingKey(data, {{$fieldName}}, {{$key.Name}})
 }{{end}}{{end}}
@@ -262,9 +262,9 @@ var virtualKeys = []VirtualKey{ {{range .}}
 
 // Get JSON value generally
 func generalGetVirtualKeyJSON(data connectionData, field, key string) (valueJSON string) {
-	switch field { {{range $indexField, $field := GetAllVkFields $vks}}
+	switch field { {{range $i, $field := GetAllVkFields $vks}}
 	case {{$field}}:
-		switch key { {{range $indexKey, $key := GetAllVkFieldKeys $vks $field}}
+		switch key { {{range $i, $key := GetAllVkFieldKeys $vks $field}}
 		case {{$key}}:
 			return get{{$key | ToKeyFuncBaseName}}JSON(data){{end}}
 		}{{end}}
@@ -275,9 +275,9 @@ func generalGetVirtualKeyJSON(data connectionData, field, key string) (valueJSON
 
 // Set JSON value generally
 func generalSetVirtualKeyJSON(data connectionData, field, key string, valueJSON string) {
-	switch field { {{range $indexField, $field := GetAllVkFields $vks}}
+	switch field { {{range $i, $field := GetAllVkFields $vks}}
 	case {{$field}}:
-		switch key { {{range $indexKey, $key := GetAllVkFieldKeys $vks $field}}
+		switch key { {{range $i, $key := GetAllVkFieldKeys $vks $field}}
 		case {{$key}}:
 			logicSet{{$key | ToKeyFuncBaseName}}JSON(data, valueJSON)
 			return{{end}}
@@ -287,15 +287,33 @@ func generalSetVirtualKeyJSON(data connectionData, field, key string, valueJSON 
 	return
 }
 
-// JSON getter {{range $index, $vk := $vks}}{{$keyBaskFuncName := $vk.Name | ToKeyFuncBaseName}}
-func get{{$keyBaskFuncName}}JSON(data connectionData) (valueJSON string) {
-	valueJSON, _ = marshalJSON(get{{$keyBaskFuncName}}(data))
+// JSON getter{{range $i, $vk := $vks}}{{$keyBaseFuncName := $vk.Name | ToKeyFuncBaseName}}
+func get{{$keyBaseFuncName}}JSON(data connectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(get{{$keyBaseFuncName}}(data))
 	return
 }{{end}}
 
-// Logic JSON setter {{range $index, $vk := $vks}}{{$keyBaskFuncName := $vk.Name | ToKeyFuncBaseName}}
-func logicSet{{$keyBaskFuncName}}JSON(data connectionData, valueJSON string) {
+// Logic JSON setter{{range $i, $vk := $vks}}{{$keyBaseFuncName := $vk.Name | ToKeyFuncBaseName}}
+func logicSet{{$keyBaseFuncName}}JSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValue{{$vk.Type | ToKeyTypeShortName}}(valueJSON)
-	logicSet{{$keyBaskFuncName}}(data, value)
+	logicSet{{$keyBaseFuncName}}(data, value)
 }{{end}}
+
+// Getter for enable key wrapper{{range $i, $vk := $vks}}{{if $vk.EnableWrapper}}{{$keyBaseFuncName := $vk.Name | ToKeyFuncBaseName}}
+func get{{$keyBaseFuncName}}(data connectionData) (value bool) {
+	if is{{$vk.RelatedKey | ToKeyFuncBaseName}}Exists(data) {
+		return true
+	}
+	return false
+}{{end}}{{end}}
+
+// Setter for enable key wrapper{{range $i, $vk := $vks}}{{if $vk.EnableWrapper}}{{$keyBaseFuncName := $vk.Name | ToKeyFuncBaseName}}
+func logicSet{{$keyBaseFuncName}}(data connectionData, value bool) {
+	if value {
+		set{{$vk.RelatedKey | ToKeyFuncBaseName}}(data, {{$vk.RelatedKey | ToKeyTypeDefaultValue}})
+	} else {
+		remove{{$vk.RelatedKey | ToKeyFuncBaseName}}(data)
+	}
+}{{end}}{{end}}
+
 `

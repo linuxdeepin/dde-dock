@@ -63,7 +63,7 @@ func getSettingVpnOpenvpnAdvancedKeyDefaultValueJSON(key string) (valueJSON stri
 	default:
 		logger.Error("invalid key:", key)
 	case NM_SETTING_VPN_OPENVPN_KEY_PORT:
-		valueJSON = `0`
+		valueJSON = `1194`
 	case NM_SETTING_VPN_OPENVPN_KEY_RENEG_SECONDS:
 		valueJSON = `0`
 	case NM_SETTING_VPN_OPENVPN_KEY_COMP_LZO:
@@ -73,9 +73,9 @@ func getSettingVpnOpenvpnAdvancedKeyDefaultValueJSON(key string) (valueJSON stri
 	case NM_SETTING_VPN_OPENVPN_KEY_TAP_DEV:
 		valueJSON = `false`
 	case NM_SETTING_VPN_OPENVPN_KEY_TUNNEL_MTU:
-		valueJSON = `0`
+		valueJSON = `1500`
 	case NM_SETTING_VPN_OPENVPN_KEY_FRAGMENT_SIZE:
-		valueJSON = `0`
+		valueJSON = `1300`
 	case NM_SETTING_VPN_OPENVPN_KEY_MSSFIX:
 		valueJSON = `false`
 	case NM_SETTING_VPN_OPENVPN_KEY_REMOTE_RANDOM:

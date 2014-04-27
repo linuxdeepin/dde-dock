@@ -63,6 +63,7 @@ func GetAllKeysInPage(pageName string) (keys []string) {
 	return
 }
 
+// GetAllKeysInField return all keys that will be used by front-end.
 func GetAllKeysInField(fieldName string) (keys []string) {
 	// virtual keys in field that with none related key
 	for _, vk := range nmSettingVks {
@@ -73,9 +74,16 @@ func GetAllKeysInField(fieldName string) (keys []string) {
 	for _, nmSetting := range nmSettings {
 		if nmSetting.FieldName == fieldName {
 			for _, k := range nmSetting.Keys {
-				vks := getRelatedVks(k.Name)
-				if len(vks) > 0 {
-					keys = appendStrArrayUnion(keys, vks...)
+				vksNames := getRelatedVks(k.Name)
+				if len(vksNames) > 0 {
+					// if virtual key is a enable wrapper, both
+					// virtual key and real key will be appended.
+					for _, vkName := range vksNames {
+						keys = appendStrArrayUnion(keys, vkName)
+						if getVkInfo(vkName).EnableWrapper {
+							keys = appendStrArrayUnion(keys, k.Name)
+						}
+					}
 				} else {
 					keys = append(keys, k.Name)
 				}

@@ -9,14 +9,14 @@ import (
 )
 
 var funcMap = template.FuncMap{
-	"ToCaplitalize":             ToCaplitalize,
-	"ToFieldFuncBaseName":       ToFieldFuncBaseName,
-	"ToKeyFuncBaseName":         ToKeyFuncBaseName,
-	"ToKeyTypeRealData":         ToKeyTypeRealData,
-	"ToKeyTypeDefaultValueJSON": ToKeyTypeDefaultValueJSON,
-	"IfNeedCheckValueLength":    IfNeedCheckValueLength,
-	"GetAllVkFields":            GetAllVkFields,
-	"GetAllVkFieldKeys":         GetAllVkFieldKeys,
+	"ToCaplitalize":          ToCaplitalize,
+	"ToFieldFuncBaseName":    ToFieldFuncBaseName,
+	"ToKeyFuncBaseName":      ToKeyFuncBaseName,
+	"ToKeyTypeRealData":      ToKeyTypeRealData,
+	"ToKeyTypeDefaultValue":  ToKeyTypeDefaultValue,
+	"IfNeedCheckValueLength": IfNeedCheckValueLength,
+	"GetAllVkFields":         GetAllVkFields,
+	"GetAllVkFieldKeys":      GetAllVkFieldKeys,
 	// "IsVkNeedLogicSetter":       IsVkNeedLogicSetter,
 	"ToKeyTypeShortName":  ToKeyTypeShortName,
 	"ToKeyDisplayName":    ToKeyDisplayName,
@@ -73,6 +73,7 @@ type NMSettingVkStruct struct {
 	Type           string // such as "ktypeString"
 	RelatedField   string // such as "NM_SETTING_802_1X_SETTING_NAME"
 	RelatedKey     string // such as "NM_SETTING_802_1X_EAP"
+	EnableWrapper  bool   // check if the virtual key is a wrapper just to enable target key
 	UsedByFrontEnd bool   // check if is used by front-end
 	Optional       bool   // if key is optional, will ignore error for it
 	DisplayName    string

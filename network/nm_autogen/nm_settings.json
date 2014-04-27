@@ -220,13 +220,13 @@
     "FieldName":"NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME",
     "FieldValue":"vf-vpn-openvpn-advanced",
     "Keys":[
-	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_PORT", "Value":"port", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Gateway Port", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_PORT", "Value":"port", "Type":"ktypeUint32", "Default":"1194", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Gateway Port", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_RENEG_SECONDS", "Value":"reneg-seconds", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Renegotiation Interval", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_COMP_LZO", "Value":"comp-lzo", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Use LZO data compression", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_PROTO_TCP", "Value":"proto-tcp", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Use a TCP connection", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_TAP_DEV", "Value":"tap-dev", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Use a TAP device", "FrontEndWidget":"<default>"},
-	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_TUNNEL_MTU", "Value":"tunnel-mtu", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"MTU", "FrontEndWidget":"<default>"},
-	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_FRAGMENT_SIZE", "Value":"fragment-size", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"UDP Fragment Size", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_TUNNEL_MTU", "Value":"tunnel-mtu", "Type":"ktypeUint32", "Default":"1500", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"MTU", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_FRAGMENT_SIZE", "Value":"fragment-size", "Type":"ktypeUint32", "Default":"1300", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"UDP Fragment Size", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_MSSFIX", "Value":"mssfix", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Restrict Tunnel TCP MSS", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_REMOTE_RANDOM", "Value":"remote-random", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Randomize Remote Hosts", "FrontEndWidget":"<default>"}
     ]
