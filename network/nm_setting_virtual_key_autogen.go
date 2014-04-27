@@ -26,13 +26,13 @@ var virtualKeys = []VirtualKey{
 	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ROUTES_PREFIX, ktypeUint32, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTES, false, false},
 	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ROUTES_NEXTHOP, ktypeString, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTES, false, false},
 	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ROUTES_METRIC, ktypeUint32, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTES, false, false},
-	VirtualKey{NM_SETTING_VK_PPP_LCP_ECHO_ENABLE, ktypeBoolean, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_FAILURE, true, false},
-	VirtualKey{NM_SETTING_VK_VPN_L2TP_LCP_ECHO_ENABLE, ktypeBoolean, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_FAILURE, true, false},
+	VirtualKey{NM_SETTING_VK_PPP_ENABLE_LCP_ECHO, ktypeBoolean, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_FAILURE, true, false},
+	VirtualKey{NM_SETTING_VK_VPN_L2TP_ENABLE_LCP_ECHO, ktypeBoolean, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_FAILURE, true, false},
 	VirtualKey{NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_PORT, ktypeBoolean, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PORT, true, false},
 	VirtualKey{NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_RENEG_SECONDS, ktypeBoolean, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_RENEG_SECONDS, true, false},
 	VirtualKey{NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_TUNNEL_MTU, ktypeBoolean, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TUNNEL_MTU, true, false},
 	VirtualKey{NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_FRAGMENT_SIZE, ktypeBoolean, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_FRAGMENT_SIZE, true, false},
-	VirtualKey{NM_SETTING_VK_VPN_PPTP_LCP_ECHO_ENABLE, ktypeBoolean, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_LCP_ECHO_FAILURE, true, false},
+	VirtualKey{NM_SETTING_VK_VPN_PPTP_ENABLE_LCP_ECHO, ktypeBoolean, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_LCP_ECHO_FAILURE, true, false},
 	VirtualKey{NM_SETTING_VK_VPN_VPNC_KEY_HYBRID_AUTHMODE, ktypeBoolean, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_AUTHMODE, true, false},
 	VirtualKey{NM_SETTING_VK_VPN_VPNC_KEY_ENCRYPTION_METHOD, ktypeString, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_SINGLE_DES, true, false},
 	VirtualKey{NM_SETTING_VK_VPN_VPNC_KEY_DISABLE_DPD, ktypeBoolean, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT, true, false},
@@ -102,13 +102,13 @@ func generalGetVirtualKeyJSON(data connectionData, field, key string) (valueJSON
 		}
 	case NM_SETTING_PPP_SETTING_NAME:
 		switch key {
-		case NM_SETTING_VK_PPP_LCP_ECHO_ENABLE:
-			return getSettingVkPppLcpEchoEnableJSON(data)
+		case NM_SETTING_VK_PPP_ENABLE_LCP_ECHO:
+			return getSettingVkPppEnableLcpEchoJSON(data)
 		}
 	case NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME:
 		switch key {
-		case NM_SETTING_VK_VPN_L2TP_LCP_ECHO_ENABLE:
-			return getSettingVkVpnL2tpLcpEchoEnableJSON(data)
+		case NM_SETTING_VK_VPN_L2TP_ENABLE_LCP_ECHO:
+			return getSettingVkVpnL2tpEnableLcpEchoJSON(data)
 		}
 	case NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME:
 		switch key {
@@ -123,8 +123,8 @@ func generalGetVirtualKeyJSON(data connectionData, field, key string) (valueJSON
 		}
 	case NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME:
 		switch key {
-		case NM_SETTING_VK_VPN_PPTP_LCP_ECHO_ENABLE:
-			return getSettingVkVpnPptpLcpEchoEnableJSON(data)
+		case NM_SETTING_VK_VPN_PPTP_ENABLE_LCP_ECHO:
+			return getSettingVkVpnPptpEnableLcpEchoJSON(data)
 		}
 	case NM_SETTING_VF_VPN_VPNC_SETTING_NAME:
 		switch key {
@@ -234,14 +234,14 @@ func generalSetVirtualKeyJSON(data connectionData, field, key string, valueJSON 
 		}
 	case NM_SETTING_PPP_SETTING_NAME:
 		switch key {
-		case NM_SETTING_VK_PPP_LCP_ECHO_ENABLE:
-			logicSetSettingVkPppLcpEchoEnableJSON(data, valueJSON)
+		case NM_SETTING_VK_PPP_ENABLE_LCP_ECHO:
+			logicSetSettingVkPppEnableLcpEchoJSON(data, valueJSON)
 			return
 		}
 	case NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME:
 		switch key {
-		case NM_SETTING_VK_VPN_L2TP_LCP_ECHO_ENABLE:
-			logicSetSettingVkVpnL2tpLcpEchoEnableJSON(data, valueJSON)
+		case NM_SETTING_VK_VPN_L2TP_ENABLE_LCP_ECHO:
+			logicSetSettingVkVpnL2tpEnableLcpEchoJSON(data, valueJSON)
 			return
 		}
 	case NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME:
@@ -261,8 +261,8 @@ func generalSetVirtualKeyJSON(data connectionData, field, key string, valueJSON 
 		}
 	case NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME:
 		switch key {
-		case NM_SETTING_VK_VPN_PPTP_LCP_ECHO_ENABLE:
-			logicSetSettingVkVpnPptpLcpEchoEnableJSON(data, valueJSON)
+		case NM_SETTING_VK_VPN_PPTP_ENABLE_LCP_ECHO:
+			logicSetSettingVkVpnPptpEnableLcpEchoJSON(data, valueJSON)
 			return
 		}
 	case NM_SETTING_VF_VPN_VPNC_SETTING_NAME:
@@ -384,12 +384,12 @@ func getSettingVkIp6ConfigRoutesMetricJSON(data connectionData) (valueJSON strin
 	valueJSON, _ = marshalJSON(getSettingVkIp6ConfigRoutesMetric(data))
 	return
 }
-func getSettingVkPppLcpEchoEnableJSON(data connectionData) (valueJSON string) {
-	valueJSON, _ = marshalJSON(getSettingVkPppLcpEchoEnable(data))
+func getSettingVkPppEnableLcpEchoJSON(data connectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkPppEnableLcpEcho(data))
 	return
 }
-func getSettingVkVpnL2tpLcpEchoEnableJSON(data connectionData) (valueJSON string) {
-	valueJSON, _ = marshalJSON(getSettingVkVpnL2tpLcpEchoEnable(data))
+func getSettingVkVpnL2tpEnableLcpEchoJSON(data connectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkVpnL2tpEnableLcpEcho(data))
 	return
 }
 func getSettingVkVpnOpenvpnKeyEnablePortJSON(data connectionData) (valueJSON string) {
@@ -408,8 +408,8 @@ func getSettingVkVpnOpenvpnKeyEnableFragmentSizeJSON(data connectionData) (value
 	valueJSON, _ = marshalJSON(getSettingVkVpnOpenvpnKeyEnableFragmentSize(data))
 	return
 }
-func getSettingVkVpnPptpLcpEchoEnableJSON(data connectionData) (valueJSON string) {
-	valueJSON, _ = marshalJSON(getSettingVkVpnPptpLcpEchoEnable(data))
+func getSettingVkVpnPptpEnableLcpEchoJSON(data connectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkVpnPptpEnableLcpEcho(data))
 	return
 }
 func getSettingVkVpnVpncKeyHybridAuthmodeJSON(data connectionData) (valueJSON string) {
@@ -522,13 +522,13 @@ func logicSetSettingVkIp6ConfigRoutesMetricJSON(data connectionData, valueJSON s
 	value, _ := jsonToKeyValueUint32(valueJSON)
 	logicSetSettingVkIp6ConfigRoutesMetric(data, value)
 }
-func logicSetSettingVkPppLcpEchoEnableJSON(data connectionData, valueJSON string) {
+func logicSetSettingVkPppEnableLcpEchoJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
-	logicSetSettingVkPppLcpEchoEnable(data, value)
+	logicSetSettingVkPppEnableLcpEcho(data, value)
 }
-func logicSetSettingVkVpnL2tpLcpEchoEnableJSON(data connectionData, valueJSON string) {
+func logicSetSettingVkVpnL2tpEnableLcpEchoJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
-	logicSetSettingVkVpnL2tpLcpEchoEnable(data, value)
+	logicSetSettingVkVpnL2tpEnableLcpEcho(data, value)
 }
 func logicSetSettingVkVpnOpenvpnKeyEnablePortJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
@@ -546,9 +546,9 @@ func logicSetSettingVkVpnOpenvpnKeyEnableFragmentSizeJSON(data connectionData, v
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	logicSetSettingVkVpnOpenvpnKeyEnableFragmentSize(data, value)
 }
-func logicSetSettingVkVpnPptpLcpEchoEnableJSON(data connectionData, valueJSON string) {
+func logicSetSettingVkVpnPptpEnableLcpEchoJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
-	logicSetSettingVkVpnPptpLcpEchoEnable(data, value)
+	logicSetSettingVkVpnPptpEnableLcpEcho(data, value)
 }
 func logicSetSettingVkVpnVpncKeyHybridAuthmodeJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)

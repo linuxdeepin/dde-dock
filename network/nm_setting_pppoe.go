@@ -29,7 +29,7 @@ func newPppoeConnectionData(id, uuid string) (data connectionData) {
 	addSettingField(data, fieldPppoe)
 
 	addSettingField(data, fieldPpp)
-	logicSetSettingVkPppLcpEchoEnable(data, true)
+	logicSetSettingVkPppEnableLcpEcho(data, true)
 
 	addSettingField(data, fieldIpv4)
 	setSettingIp4ConfigMethod(data, NM_SETTING_IP4_CONFIG_METHOD_AUTO)

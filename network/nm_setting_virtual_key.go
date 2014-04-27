@@ -46,10 +46,10 @@ const (
 )
 
 // ppp TODO rename, key, enable
-const NM_SETTING_VK_PPP_LCP_ECHO_ENABLE = "vk-lcp-echo-enable"
+const NM_SETTING_VK_PPP_ENABLE_LCP_ECHO = "vk-enable-lcp-echo"
 
 // vpn-l2tp
-const NM_SETTING_VK_VPN_L2TP_LCP_ECHO_ENABLE = "vk-lcp-echo-enable"
+const NM_SETTING_VK_VPN_L2TP_ENABLE_LCP_ECHO = "vk-enable-lcp-echo"
 
 // vpn-openvpn
 const (
@@ -60,7 +60,7 @@ const (
 )
 
 // vpn-pptp
-const NM_SETTING_VK_VPN_PPTP_LCP_ECHO_ENABLE = "vk-lcp-echo-enable"
+const NM_SETTING_VK_VPN_PPTP_ENABLE_LCP_ECHO = "vk-enable-lcp-echo"
 
 // vpn-vpnc
 const (
@@ -338,19 +338,19 @@ func getSettingVkIp6ConfigRoutesMetric(data connectionData) (value string) {
 	// value := getSettingIp6ConfigRoutesMetric(data)
 	return
 }
-func getSettingVkPppLcpEchoEnable(data connectionData) (value bool) {
+func getSettingVkPppEnableLcpEcho(data connectionData) (value bool) {
 	if isSettingPppLcpEchoFailureExists(data) && isSettingPppLcpEchoIntervalExists(data) {
 		return true
 	}
 	return false
 }
-func getSettingVkVpnL2tpLcpEchoEnable(data connectionData) (value bool) {
+func getSettingVkVpnL2tpEnableLcpEcho(data connectionData) (value bool) {
 	if isSettingVpnL2tpKeyLcpEchoFailureExists(data) && isSettingVpnL2tpKeyLcpEchoIntervalExists(data) {
 		return true
 	}
 	return false
 }
-func getSettingVkVpnPptpLcpEchoEnable(data connectionData) (value bool) {
+func getSettingVkVpnPptpEnableLcpEcho(data connectionData) (value bool) {
 	if isSettingVpnPptpKeyLcpEchoFailureExists(data) && isSettingVpnPptpKeyLcpEchoIntervalExists(data) {
 		return true
 	}
@@ -523,7 +523,7 @@ func logicSetSettingVkIp6ConfigRoutesMetric(data connectionData, value uint32) {
 	// TODO
 	// setSettingIp6ConfigRoutesMetricJSON(data)
 }
-func logicSetSettingVkPppLcpEchoEnable(data connectionData, value bool) {
+func logicSetSettingVkPppEnableLcpEcho(data connectionData, value bool) {
 	if value {
 		setSettingPppLcpEchoFailure(data, 5)
 		setSettingPppLcpEchoInterval(data, 30)
@@ -532,7 +532,7 @@ func logicSetSettingVkPppLcpEchoEnable(data connectionData, value bool) {
 		removeSettingPppLcpEchoInterval(data)
 	}
 }
-func logicSetSettingVkVpnL2tpLcpEchoEnable(data connectionData, value bool) {
+func logicSetSettingVkVpnL2tpEnableLcpEcho(data connectionData, value bool) {
 	if value {
 		setSettingVpnL2tpKeyLcpEchoFailure(data, 5)
 		setSettingVpnL2tpKeyLcpEchoInterval(data, 30)
@@ -541,7 +541,7 @@ func logicSetSettingVkVpnL2tpLcpEchoEnable(data connectionData, value bool) {
 		removeSettingVpnL2tpKeyLcpEchoInterval(data)
 	}
 }
-func logicSetSettingVkVpnPptpLcpEchoEnable(data connectionData, value bool) {
+func logicSetSettingVkVpnPptpEnableLcpEcho(data connectionData, value bool) {
 	if value {
 		setSettingVpnPptpKeyLcpEchoFailure(data, 5)
 		setSettingVpnPptpKeyLcpEchoInterval(data, 30)
