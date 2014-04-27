@@ -16,6 +16,25 @@ const (
 	NM_SETTING_VPN_SECRET_FLAG_UNUSED = 5
 )
 
+func newVpnConnectionData(id, uuid, service string) (data connectionData) {
+	data = make(connectionData)
+
+	addSettingField(data, fieldConnection)
+	setSettingConnectionId(data, id)
+	setSettingConnectionUuid(data, uuid)
+	setSettingConnectionType(data, typeVpn)
+	setSettingConnectionAutoconnect(data, false)
+	logicSetSettingVkConnectionNoPermission(data, false)
+
+	addSettingField(data, fieldVpn)
+	setSettingVpnServiceType(data, service)
+
+	addSettingField(data, fieldIpv4)
+	setSettingIp4ConfigMethod(data, NM_SETTING_IP4_CONFIG_METHOD_AUTO)
+
+	return
+}
+
 func getSettingVpnAvailableKeys(data connectionData) (keys []string) { return }
 func getSettingVpnAvailableValues(data connectionData, key string) (values []string, customizable bool) {
 	return

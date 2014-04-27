@@ -7,40 +7,41 @@ const (
 )
 
 const (
-	NM_SETTING_VPN_OPENVPN_KEY_AUTH                 = "auth"
-	NM_SETTING_VPN_OPENVPN_KEY_CA                   = "ca"
-	NM_SETTING_VPN_OPENVPN_KEY_CERT                 = "cert"
-	NM_SETTING_VPN_OPENVPN_KEY_CIPHER               = "cipher"
-	NM_SETTING_VPN_OPENVPN_KEY_COMP_LZO             = "comp-lzo"
-	NM_SETTING_VPN_OPENVPN_KEY_CONNECTION_TYPE      = "connection-type"
-	NM_SETTING_VPN_OPENVPN_KEY_FRAGMENT_SIZE        = "fragment-size"
-	NM_SETTING_VPN_OPENVPN_KEY_KEY                  = "key"
-	NM_SETTING_VPN_OPENVPN_KEY_LOCAL_IP             = "local-ip" /* ??? */
-	NM_SETTING_VPN_OPENVPN_KEY_MSSFIX               = "mssfix"
-	NM_SETTING_VPN_OPENVPN_KEY_PORT                 = "port"
-	NM_SETTING_VPN_OPENVPN_KEY_PROTO_TCP            = "proto-tcp"
-	NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE           = "proxy-type"
-	NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER         = "proxy-server"
-	NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT           = "proxy-port"
-	NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY          = "proxy-retry"
-	NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME  = "http-proxy-username"
-	NM_SETTING_VPN_OPENVPN_KEY_REMOTE               = "remote"
-	NM_SETTING_VPN_OPENVPN_KEY_REMOTE_RANDOM        = "remote-random"
-	NM_SETTING_VPN_OPENVPN_KEY_REMOTE_IP            = "remote-ip"
-	NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY           = "static-key"
-	NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY_DIRECTION = "static-key-direction"
-	NM_SETTING_VPN_OPENVPN_KEY_TA                   = "ta"
-	NM_SETTING_VPN_OPENVPN_KEY_TA_DIR               = "ta-dir"
-	NM_SETTING_VPN_OPENVPN_KEY_TUNNEL_MTU           = "tunnel-mtu"
-	NM_SETTING_VPN_OPENVPN_KEY_USERNAME             = "username"
-	NM_SETTING_VPN_OPENVPN_KEY_TAP_DEV              = "tap-dev"
-	NM_SETTING_VPN_OPENVPN_KEY_TLS_REMOTE           = "tls-remote"
-	NM_SETTING_VPN_OPENVPN_KEY_REMOTE_CERT_TLS      = "remote-cert-tls"
-	NM_SETTING_VPN_OPENVPN_KEY_PASSWORD             = "password"
-	NM_SETTING_VPN_OPENVPN_KEY_PASSWORD_FLAGS       = "password-flags"
-	NM_SETTING_VPN_OPENVPN_KEY_CERTPASS             = "cert-pass"
-	NM_SETTING_VPN_OPENVPN_KEY_CERTPASS_FLAGS       = "cert-pass-flags"
-	NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD  = "http-proxy-password"
+	NM_SETTING_VPN_OPENVPN_KEY_AUTH                      = "auth"
+	NM_SETTING_VPN_OPENVPN_KEY_CA                        = "ca"
+	NM_SETTING_VPN_OPENVPN_KEY_CERT                      = "cert"
+	NM_SETTING_VPN_OPENVPN_KEY_CIPHER                    = "cipher"
+	NM_SETTING_VPN_OPENVPN_KEY_COMP_LZO                  = "comp-lzo"
+	NM_SETTING_VPN_OPENVPN_KEY_CONNECTION_TYPE           = "connection-type"
+	NM_SETTING_VPN_OPENVPN_KEY_FRAGMENT_SIZE             = "fragment-size"
+	NM_SETTING_VPN_OPENVPN_KEY_KEY                       = "key"
+	NM_SETTING_VPN_OPENVPN_KEY_LOCAL_IP                  = "local-ip" /* ??? */
+	NM_SETTING_VPN_OPENVPN_KEY_MSSFIX                    = "mssfix"
+	NM_SETTING_VPN_OPENVPN_KEY_PORT                      = "port"
+	NM_SETTING_VPN_OPENVPN_KEY_PROTO_TCP                 = "proto-tcp"
+	NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE                = "proxy-type"
+	NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER              = "proxy-server"
+	NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT                = "proxy-port"
+	NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY               = "proxy-retry"
+	NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME       = "http-proxy-username"
+	NM_SETTING_VPN_OPENVPN_KEY_REMOTE                    = "remote"
+	NM_SETTING_VPN_OPENVPN_KEY_REMOTE_RANDOM             = "remote-random"
+	NM_SETTING_VPN_OPENVPN_KEY_REMOTE_IP                 = "remote-ip"
+	NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY                = "static-key"
+	NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY_DIRECTION      = "static-key-direction"
+	NM_SETTING_VPN_OPENVPN_KEY_TA                        = "ta"
+	NM_SETTING_VPN_OPENVPN_KEY_TA_DIR                    = "ta-dir"
+	NM_SETTING_VPN_OPENVPN_KEY_TUNNEL_MTU                = "tunnel-mtu"
+	NM_SETTING_VPN_OPENVPN_KEY_USERNAME                  = "username"
+	NM_SETTING_VPN_OPENVPN_KEY_TAP_DEV                   = "tap-dev"
+	NM_SETTING_VPN_OPENVPN_KEY_TLS_REMOTE                = "tls-remote"
+	NM_SETTING_VPN_OPENVPN_KEY_REMOTE_CERT_TLS           = "remote-cert-tls"
+	NM_SETTING_VPN_OPENVPN_KEY_PASSWORD                  = "password"
+	NM_SETTING_VPN_OPENVPN_KEY_PASSWORD_FLAGS            = "password-flags"
+	NM_SETTING_VPN_OPENVPN_KEY_CERTPASS                  = "cert-pass"
+	NM_SETTING_VPN_OPENVPN_KEY_CERTPASS_FLAGS            = "cert-pass-flags"
+	NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD       = "http-proxy-password"
+	NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS = "http-proxy-password-flags"
 )
 
 /* Internal auth-dialog -> service token indicating that no secrets are
@@ -118,3 +119,9 @@ const (
 // 	{ NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD,  G_TYPE_STRING, 0, 0, FALSE },
 // 	{ NULL,                                G_TYPE_NONE, FALSE }
 // };
+
+func newVpnOpenvpnConnectionData(id, uuid string) (data connectionData) {
+	data = newVpnConnectionData(id, uuid, NM_DBUS_SERVICE_OPENVPN)
+	// TODO
+	return
+}

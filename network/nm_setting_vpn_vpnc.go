@@ -101,17 +101,8 @@ const (
 // };
 
 func newVpnVpncConnectionData(id, uuid string) (data connectionData) {
-	data = make(connectionData)
+	data = newVpnConnectionData(id, uuid, NM_DBUS_SERVICE_VPNC)
 
-	addSettingField(data, fieldConnection)
-	setSettingConnectionId(data, id)
-	setSettingConnectionUuid(data, uuid)
-	setSettingConnectionType(data, typeVpn)
-	setSettingConnectionAutoconnect(data, false)
-	logicSetSettingVkConnectionNoPermission(data, false)
-
-	addSettingField(data, fieldVpn)
-	setSettingVpnServiceType(data, NM_DBUS_SERVICE_VPNC)
 	setSettingVpnVpncKeyNatTraversalMode(data, NM_VPNC_NATT_MODE_NATT)
 	logicSetSettingVpnVpncKeySecretFlags(data, NM_SETTING_VPN_SECRET_FLAG_ASK)
 	logicSetSettingVpnVpncKeyXauthPasswordFlags(data, NM_SETTING_VPN_SECRET_FLAG_ASK)
@@ -119,9 +110,6 @@ func newVpnVpncConnectionData(id, uuid string) (data connectionData) {
 	setSettingVpnVpncKeyPerfectForward(data, NM_VPNC_PFS_SERVER)
 	setSettingVpnVpncKeyDhgroup(data, NM_VPNC_DHGROUP_DH2)
 	setSettingVpnVpncKeyLocalPort(data, 0)
-
-	addSettingField(data, fieldIpv4)
-	setSettingIp4ConfigMethod(data, NM_SETTING_IP4_CONFIG_METHOD_AUTO)
 
 	return
 }

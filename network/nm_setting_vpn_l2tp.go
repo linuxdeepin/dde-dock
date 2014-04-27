@@ -70,22 +70,8 @@ const (
 // }
 
 func newVpnL2tpConnectionData(id, uuid string) (data connectionData) {
-	data = make(connectionData)
-
-	addSettingField(data, fieldConnection)
-	setSettingConnectionId(data, id)
-	setSettingConnectionUuid(data, uuid)
-	setSettingConnectionType(data, typeVpn)
-	setSettingConnectionAutoconnect(data, false)
-	logicSetSettingVkConnectionNoPermission(data, false)
-
-	addSettingField(data, fieldVpn)
-	setSettingVpnServiceType(data, NM_DBUS_SERVICE_L2TP)
+	data = newVpnConnectionData(id, uuid, NM_DBUS_SERVICE_L2TP)
 	setSettingVpnL2tpKeyPasswordFlags(data, 1)
-
-	addSettingField(data, fieldIpv4)
-	setSettingIp4ConfigMethod(data, NM_SETTING_IP4_CONFIG_METHOD_AUTO)
-
 	return
 }
 
