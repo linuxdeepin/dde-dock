@@ -60,7 +60,7 @@ const (
 // };
 
 func newVpnPptpConnectionData(id, uuid string) (data connectionData) {
-	data = newVpnConnectionData(id, uuid, NM_DBUS_SERVICE_PPTP)
+	data = newBasicVpnConnectionData(id, uuid, NM_DBUS_SERVICE_PPTP)
 	setSettingVpnPptpKeyPasswordFlags(data, 1)
 	return
 }

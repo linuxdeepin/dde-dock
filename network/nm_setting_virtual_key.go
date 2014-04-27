@@ -45,11 +45,19 @@ const (
 	NM_SETTING_VK_IP6_CONFIG_ROUTES_METRIC     = "vk-routes-metric"
 )
 
-// ppp
+// ppp TODO rename, key, enable
 const NM_SETTING_VK_PPP_LCP_ECHO_ENABLE = "vk-lcp-echo-enable"
 
 // vpn-l2tp
 const NM_SETTING_VK_VPN_L2TP_LCP_ECHO_ENABLE = "vk-lcp-echo-enable"
+
+// vpn-openvpn
+const (
+	NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_PORT          = "vk-enable-port"
+	NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_RENEG_SECONDS = "vk-enable-reneg-seconds"
+	NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_TUNNEL_MTU    = "vk-enable-tunnel-mtu"
+	NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_FRAGMENT_SIZE = "vk-enable-fragment-size"
+)
 
 // vpn-pptp
 const NM_SETTING_VK_VPN_PPTP_LCP_ECHO_ENABLE = "vk-lcp-echo-enable"
@@ -342,6 +350,30 @@ func getSettingVkVpnL2tpLcpEchoEnable(data connectionData) (value bool) {
 	}
 	return false
 }
+func getSettingVkVpnOpenvpnKeyEnablePort(data connectionData) (value bool) {
+	if isSettingVpnOpenvpnKeyPortExists(data) {
+		return true
+	}
+	return false
+}
+func getSettingVkVpnOpenvpnKeyEnableRenegSeconds(data connectionData) (value bool) {
+	if isSettingVpnOpenvpnKeyRenegSecondsExists(data) {
+		return true
+	}
+	return false
+}
+func getSettingVkVpnOpenvpnKeyEnableTunnelMtu(data connectionData) (value bool) {
+	if isSettingVpnOpenvpnKeyTunnelMtuExists(data) {
+		return true
+	}
+	return false
+}
+func getSettingVkVpnOpenvpnKeyEnableFragmentSize(data connectionData) (value bool) {
+	if isSettingVpnOpenvpnKeyFragmentSizeExists(data) {
+		return true
+	}
+	return false
+}
 func getSettingVkVpnPptpLcpEchoEnable(data connectionData) (value bool) {
 	if isSettingVpnPptpKeyLcpEchoFailureExists(data) && isSettingVpnPptpKeyLcpEchoIntervalExists(data) {
 		return true
@@ -531,6 +563,35 @@ func logicSetSettingVkVpnL2tpLcpEchoEnable(data connectionData, value bool) {
 	} else {
 		removeSettingVpnL2tpKeyLcpEchoFailure(data)
 		removeSettingVpnL2tpKeyLcpEchoInterval(data)
+	}
+}
+
+func logicSetSettingVkVpnOpenvpnKeyEnablePort(data connectionData, value bool) {
+	if value {
+		setSettingVpnOpenvpnKeyPort(data, 1194)
+	} else {
+		removeSettingVpnOpenvpnKeyPort(data)
+	}
+}
+func logicSetSettingVkVpnOpenvpnKeyEnableRenegSeconds(data connectionData, value bool) {
+	if value {
+		setSettingVpnOpenvpnKeyRenegSeconds(data, 0)
+	} else {
+		removeSettingVpnOpenvpnKeyRenegSeconds(data)
+	}
+}
+func logicSetSettingVkVpnOpenvpnKeyEnableTunnelMtu(data connectionData, value bool) {
+	if value {
+		setSettingVpnOpenvpnKeyTunnelMtu(data, 1500)
+	} else {
+		removeSettingVpnOpenvpnKeyTunnelMtu(data)
+	}
+}
+func logicSetSettingVkVpnOpenvpnKeyEnableFragmentSize(data connectionData, value bool) {
+	if value {
+		setSettingVpnOpenvpnKeyFragmentSize(data, 1300)
+	} else {
+		removeSettingVpnOpenvpnKeyFragmentSize(data)
 	}
 }
 func logicSetSettingVkVpnPptpLcpEchoEnable(data connectionData, value bool) {

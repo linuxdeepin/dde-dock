@@ -28,6 +28,10 @@ var virtualKeys = []VirtualKey{
 	VirtualKey{NM_SETTING_VK_IP6_CONFIG_ROUTES_METRIC, ktypeUint32, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTES, false, false},
 	VirtualKey{NM_SETTING_VK_PPP_LCP_ECHO_ENABLE, ktypeBoolean, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_FAILURE, true, false},
 	VirtualKey{NM_SETTING_VK_VPN_L2TP_LCP_ECHO_ENABLE, ktypeBoolean, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_FAILURE, true, false},
+	VirtualKey{NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_PORT, ktypeBoolean, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PORT, true, false},
+	VirtualKey{NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_RENEG_SECONDS, ktypeBoolean, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_RENEG_SECONDS, true, false},
+	VirtualKey{NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_TUNNEL_MTU, ktypeBoolean, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TUNNEL_MTU, true, false},
+	VirtualKey{NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_FRAGMENT_SIZE, ktypeBoolean, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_FRAGMENT_SIZE, true, false},
 	VirtualKey{NM_SETTING_VK_VPN_PPTP_LCP_ECHO_ENABLE, ktypeBoolean, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_LCP_ECHO_FAILURE, true, false},
 	VirtualKey{NM_SETTING_VK_VPN_VPNC_KEY_HYBRID_AUTHMODE, ktypeBoolean, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_AUTHMODE, true, false},
 	VirtualKey{NM_SETTING_VK_VPN_VPNC_KEY_ENCRYPTION_METHOD, ktypeString, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_SINGLE_DES, true, false},
@@ -105,6 +109,17 @@ func generalGetVirtualKeyJSON(data connectionData, field, key string) (valueJSON
 		switch key {
 		case NM_SETTING_VK_VPN_L2TP_LCP_ECHO_ENABLE:
 			return getSettingVkVpnL2tpLcpEchoEnableJSON(data)
+		}
+	case NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME:
+		switch key {
+		case NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_PORT:
+			return getSettingVkVpnOpenvpnKeyEnablePortJSON(data)
+		case NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_RENEG_SECONDS:
+			return getSettingVkVpnOpenvpnKeyEnableRenegSecondsJSON(data)
+		case NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_TUNNEL_MTU:
+			return getSettingVkVpnOpenvpnKeyEnableTunnelMtuJSON(data)
+		case NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_FRAGMENT_SIZE:
+			return getSettingVkVpnOpenvpnKeyEnableFragmentSizeJSON(data)
 		}
 	case NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME:
 		switch key {
@@ -227,6 +242,21 @@ func generalSetVirtualKeyJSON(data connectionData, field, key string, valueJSON 
 		switch key {
 		case NM_SETTING_VK_VPN_L2TP_LCP_ECHO_ENABLE:
 			logicSetSettingVkVpnL2tpLcpEchoEnableJSON(data, valueJSON)
+			return
+		}
+	case NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME:
+		switch key {
+		case NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_PORT:
+			logicSetSettingVkVpnOpenvpnKeyEnablePortJSON(data, valueJSON)
+			return
+		case NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_RENEG_SECONDS:
+			logicSetSettingVkVpnOpenvpnKeyEnableRenegSecondsJSON(data, valueJSON)
+			return
+		case NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_TUNNEL_MTU:
+			logicSetSettingVkVpnOpenvpnKeyEnableTunnelMtuJSON(data, valueJSON)
+			return
+		case NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_FRAGMENT_SIZE:
+			logicSetSettingVkVpnOpenvpnKeyEnableFragmentSizeJSON(data, valueJSON)
 			return
 		}
 	case NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME:
@@ -362,6 +392,22 @@ func getSettingVkVpnL2tpLcpEchoEnableJSON(data connectionData) (valueJSON string
 	valueJSON, _ = marshalJSON(getSettingVkVpnL2tpLcpEchoEnable(data))
 	return
 }
+func getSettingVkVpnOpenvpnKeyEnablePortJSON(data connectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkVpnOpenvpnKeyEnablePort(data))
+	return
+}
+func getSettingVkVpnOpenvpnKeyEnableRenegSecondsJSON(data connectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkVpnOpenvpnKeyEnableRenegSeconds(data))
+	return
+}
+func getSettingVkVpnOpenvpnKeyEnableTunnelMtuJSON(data connectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkVpnOpenvpnKeyEnableTunnelMtu(data))
+	return
+}
+func getSettingVkVpnOpenvpnKeyEnableFragmentSizeJSON(data connectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkVpnOpenvpnKeyEnableFragmentSize(data))
+	return
+}
 func getSettingVkVpnPptpLcpEchoEnableJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkVpnPptpLcpEchoEnable(data))
 	return
@@ -483,6 +529,22 @@ func logicSetSettingVkPppLcpEchoEnableJSON(data connectionData, valueJSON string
 func logicSetSettingVkVpnL2tpLcpEchoEnableJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	logicSetSettingVkVpnL2tpLcpEchoEnable(data, value)
+}
+func logicSetSettingVkVpnOpenvpnKeyEnablePortJSON(data connectionData, valueJSON string) {
+	value, _ := jsonToKeyValueBoolean(valueJSON)
+	logicSetSettingVkVpnOpenvpnKeyEnablePort(data, value)
+}
+func logicSetSettingVkVpnOpenvpnKeyEnableRenegSecondsJSON(data connectionData, valueJSON string) {
+	value, _ := jsonToKeyValueBoolean(valueJSON)
+	logicSetSettingVkVpnOpenvpnKeyEnableRenegSeconds(data, value)
+}
+func logicSetSettingVkVpnOpenvpnKeyEnableTunnelMtuJSON(data connectionData, valueJSON string) {
+	value, _ := jsonToKeyValueBoolean(valueJSON)
+	logicSetSettingVkVpnOpenvpnKeyEnableTunnelMtu(data, value)
+}
+func logicSetSettingVkVpnOpenvpnKeyEnableFragmentSizeJSON(data connectionData, valueJSON string) {
+	value, _ := jsonToKeyValueBoolean(valueJSON)
+	logicSetSettingVkVpnOpenvpnKeyEnableFragmentSize(data, value)
 }
 func logicSetSettingVkVpnPptpLcpEchoEnableJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)

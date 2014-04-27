@@ -68,6 +68,8 @@ func NewConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 		s.data = newVpnPptpConnectionData("", s.CurrentUUID)
 	case typeVpnVpnc:
 		s.data = newVpnVpncConnectionData("", s.CurrentUUID)
+	case typeVpnOpenvpn:
+		s.data = newVpnOpenvpnConnectionData("", s.CurrentUUID)
 	}
 
 	s.updatePropErrors()
@@ -213,6 +215,21 @@ func (s *ConnectionSession) ListPages() (pages []string) {
 			pageIPv4,
 			pageIPv6,
 		}
+	case typeVpnOpenvpn:
+		pages = []string{
+			pageGeneral,
+			pageVpnOpenvpn,
+			pageVpnOpenvpnAdvanced,
+			pageVpnOpenvpnSecurity,
+			pageVpnOpenvpnProxies,
+			pageIPv4,
+			pageIPv6,
+		}
+		// TODO make "Pages" as a dbus property
+		// when connection type is static key, pageVpnOpenvpnTlsauth is not availabled
+		if getSettingVpnOpenvpnKeyConnectionType(s.data) != NM_OPENVPN_CONTYPE_STATIC_KEY {
+			pages = append(pages, pageVpnOpenvpnTlsauth)
+		}
 	case typeVpnPptp:
 		pages = []string{
 			pageGeneral,
@@ -268,6 +285,16 @@ func (s *ConnectionSession) pageToFields(page string) (fields []string) {
 		fields = []string{fieldVpnL2tpIpsec}
 	case pageVpnOpenconnect:
 		fields = []string{fieldVpnOpenconnect}
+	case pageVpnOpenvpn:
+		fields = []string{fieldVpnOpenvpn}
+	case pageVpnOpenvpnAdvanced:
+		fields = []string{fieldVpnOpenvpnAdvanced}
+	case pageVpnOpenvpnSecurity:
+		fields = []string{fieldVpnOpenvpnSecurity}
+	case pageVpnOpenvpnTlsauth:
+		fields = []string{fieldVpnOpenvpnTlsauth}
+	case pageVpnOpenvpnProxies:
+		fields = []string{fieldVpnOpenvpnProxies}
 	case pageVpnPptp:
 		fields = []string{fieldVpnPptp}
 	case pageVpnPptpPpp:

@@ -70,7 +70,7 @@ const (
 // }
 
 func newVpnL2tpConnectionData(id, uuid string) (data connectionData) {
-	data = newVpnConnectionData(id, uuid, NM_DBUS_SERVICE_L2TP)
+	data = newBasicVpnConnectionData(id, uuid, NM_DBUS_SERVICE_L2TP)
 	setSettingVpnL2tpKeyPasswordFlags(data, 1)
 	return
 }

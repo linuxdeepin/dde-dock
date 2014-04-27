@@ -47,7 +47,7 @@ const (
 // };
 
 func newVpnOpenconnectConnectionData(id, uuid string) (data connectionData) {
-	data = newVpnConnectionData(id, uuid, NM_DBUS_SERVICE_OPENCONNECT)
+	data = newBasicVpnConnectionData(id, uuid, NM_DBUS_SERVICE_OPENCONNECT)
 
 	setSettingVpnOpenconnectKeyCsdEnable(data, false)
 	setSettingKey(data, fieldVpn, "xmlconfig-flags", uint32(0))

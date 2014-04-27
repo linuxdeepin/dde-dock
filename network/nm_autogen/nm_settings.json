@@ -197,6 +197,72 @@
     ]
 },
 {
+    "FieldName":"NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME",
+    "FieldValue":"vf-vpn-openvpn",
+    "Keys":[
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_REMOTE", "Value":"remote", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Gateway", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_CONNECTION_TYPE", "Value":"connection-type", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Auth Type", "FrontEndWidget":"EditLineComboBox"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_USERNAME", "Value":"username", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"User Name", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_PASSWORD_FLAGS", "Value":"password-flags", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Ask For Pwd", "FrontEndWidget":"EditLineComboBox"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_PASSWORD", "Value":"password", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Password", "FrontEndWidget":"EditLinePasswordInput"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_CERT", "Value":"cert", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"User Cert", "FrontEndWidget":"EditLineFileChooser"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_CA", "Value":"ca", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"CA Cert", "FrontEndWidget":"EditLineFileChooser"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_KEY", "Value":"key", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Private Key", "FrontEndWidget":"EditLineFileChooser"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_CERTPASS", "Value":"cert-pass", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Private Pwd", "FrontEndWidget":"EditLinePasswordInput"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_CERTPASS_FLAGS", "Value":"cert-pass-flags", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"EditLineComboBox"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY", "Value":"static-key", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Static Key", "FrontEndWidget":"EditLineFileChooser"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY_DIRECTION", "Value":"static-key-direction", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Key Direction", "FrontEndWidget":"EditLineComboBox"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_REMOTE_IP", "Value":"remote-ip", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Remote IP", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_LOCAL_IP", "Value":"local-ip", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Local IP", "FrontEndWidget":"<default>"}
+    ]
+},
+{
+    "FieldName":"NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME",
+    "FieldValue":"vf-vpn-openvpn-advanced",
+    "Keys":[
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_PORT", "Value":"port", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Gateway Port", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_RENEG_SECONDS", "Value":"reneg-seconds", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Renegotiation Interval", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_COMP_LZO", "Value":"comp-lzo", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Use LZO data compression", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_PROTO_TCP", "Value":"proto-tcp", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Use a TCP connection", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_TAP_DEV", "Value":"tap-dev", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Use a TAP device", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_TUNNEL_MTU", "Value":"tunnel-mtu", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"MTU", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_FRAGMENT_SIZE", "Value":"fragment-size", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"UDP Fragment Size", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_MSSFIX", "Value":"mssfix", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Restrict Tunnel TCP MSS", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_REMOTE_RANDOM", "Value":"remote-random", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Randomize Remote Hosts", "FrontEndWidget":"<default>"}
+    ]
+},    
+{
+    "FieldName":"NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME",
+    "FieldValue":"vf-vpn-openvpn-security",
+    "Keys":[
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_CIPHER", "Value":"cipher", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Cipher", "FrontEndWidget":"EditLineComboBox"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_AUTH", "Value":"auth", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"HMAC Auth", "FrontEndWidget":"EditLineComboBox"}
+    ]
+},    
+{
+    "FieldName":"NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME",
+    "FieldValue":"vf-vpn-openvpn-tlsauth",
+    "Keys":[
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_TLS_REMOTE", "Value":"tls-remote", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Subject Match", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_REMOTE_CERT_TLS", "Value":"remote-cert-tls", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Remote Cert", "FrontEndWidget":"EditLineComboBox"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_TA", "Value":"ta", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Key File", "FrontEndWidget":"EditLineFileChooser"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_TA_DIR", "Value":"ta-dir", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Key Direction", "FrontEndWidget":"EditLineComboBox"}
+    ]
+},    
+{
+    "FieldName":"NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME",
+    "FieldValue":"vf-vpn-openvpn-proxies",
+    "Keys":[
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE", "Value":"proxy-type", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Proxy Type", "FrontEndWidget":"EditLineComboBox"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER", "Value":"proxy-server", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Server IP", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT", "Value":"proxy-port", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Port", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY", "Value":"proxy-retry", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Retry Indefinitely When Failed", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME", "Value":"http-proxy-username", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"User Name", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD", "Value":"http-proxy-password", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Password", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS", "Value":"http-proxy-password-flags", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"}
+    ]
+},    
+{
     "FieldName":"NM_SETTING_VF_VPN_PPTP_SETTING_NAME",
     "FieldValue":"vf-vpn-pptp",
     "Keys":[

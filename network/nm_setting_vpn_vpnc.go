@@ -32,6 +32,11 @@ const (
 )
 
 const (
+	NM_VPNC_SECRET_FLAG_SAVE   = 1
+	NM_VPNC_SECRET_FLAG_ASK    = 3
+	NM_VPNC_SECRET_FLAG_UNUSED = 5
+)
+const (
 	NM_VPNC_NATT_MODE_NATT        = "natt"
 	NM_VPNC_NATT_MODE_NONE        = "none"
 	NM_VPNC_NATT_MODE_NATT_ALWAYS = "force-natt"
@@ -101,11 +106,11 @@ const (
 // };
 
 func newVpnVpncConnectionData(id, uuid string) (data connectionData) {
-	data = newVpnConnectionData(id, uuid, NM_DBUS_SERVICE_VPNC)
+	data = newBasicVpnConnectionData(id, uuid, NM_DBUS_SERVICE_VPNC)
 
 	setSettingVpnVpncKeyNatTraversalMode(data, NM_VPNC_NATT_MODE_NATT)
-	logicSetSettingVpnVpncKeySecretFlags(data, NM_SETTING_VPN_SECRET_FLAG_ASK)
-	logicSetSettingVpnVpncKeyXauthPasswordFlags(data, NM_SETTING_VPN_SECRET_FLAG_ASK)
+	logicSetSettingVpnVpncKeySecretFlags(data, NM_VPNC_SECRET_FLAG_ASK)
+	logicSetSettingVpnVpncKeyXauthPasswordFlags(data, NM_VPNC_SECRET_FLAG_ASK)
 	setSettingVpnVpncKeyVendor(data, NM_VPNC_VENDOR_CISCO)
 	setSettingVpnVpncKeyPerfectForward(data, NM_VPNC_PFS_SERVER)
 	setSettingVpnVpncKeyDhgroup(data, NM_VPNC_DHGROUP_DH2)
@@ -119,12 +124,12 @@ func getSettingVpnVpncAvailableKeys(data connectionData) (keys []string) {
 	keys = appendAvailableKeys(keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_GATEWAY)
 	keys = appendAvailableKeys(keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_XAUTH_USER)
 	keys = appendAvailableKeys(keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD_FLAGS)
-	if getSettingVpnVpncKeyXauthPasswordFlags(data) == NM_SETTING_VPN_SECRET_FLAG_SAVE {
+	if getSettingVpnVpncKeyXauthPasswordFlags(data) == NM_VPNC_SECRET_FLAG_SAVE {
 		keys = appendAvailableKeys(keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD)
 	}
 	keys = appendAvailableKeys(keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_ID)
 	keys = appendAvailableKeys(keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_SECRET_FLAGS)
-	if getSettingVpnVpncKeySecretFlags(data) == NM_SETTING_VPN_SECRET_FLAG_SAVE {
+	if getSettingVpnVpncKeySecretFlags(data) == NM_VPNC_SECRET_FLAG_SAVE {
 		keys = appendAvailableKeys(keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_SECRET)
 	}
 	keys = appendAvailableKeys(keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_AUTHMODE)
@@ -210,11 +215,11 @@ func logicSetSettingVpnVpncKeySecretFlagsJSON(data connectionData, valueJSON str
 }
 func logicSetSettingVpnVpncKeySecretFlags(data connectionData, value uint32) {
 	switch value {
-	case NM_SETTING_VPN_SECRET_FLAG_SAVE:
+	case NM_VPNC_SECRET_FLAG_SAVE:
 		setSettingVpnVpncKeySecretType(data, NM_VPNC_PW_TYPE_SAVE)
-	case NM_SETTING_VPN_SECRET_FLAG_ASK:
+	case NM_VPNC_SECRET_FLAG_ASK:
 		setSettingVpnVpncKeySecretType(data, NM_VPNC_PW_TYPE_ASK)
-	case NM_SETTING_VPN_SECRET_FLAG_UNUSED:
+	case NM_VPNC_SECRET_FLAG_UNUSED:
 		setSettingVpnVpncKeySecretType(data, NM_VPNC_PW_TYPE_UNUSED)
 	}
 	setSettingVpnVpncKeySecretFlags(data, value)
@@ -226,11 +231,11 @@ func logicSetSettingVpnVpncKeyXauthPasswordFlagsJSON(data connectionData, valueJ
 }
 func logicSetSettingVpnVpncKeyXauthPasswordFlags(data connectionData, value uint32) {
 	switch value {
-	case NM_SETTING_VPN_SECRET_FLAG_SAVE:
+	case NM_VPNC_SECRET_FLAG_SAVE:
 		setSettingVpnVpncKeyXauthPasswordType(data, NM_VPNC_PW_TYPE_SAVE)
-	case NM_SETTING_VPN_SECRET_FLAG_ASK:
+	case NM_VPNC_SECRET_FLAG_ASK:
 		setSettingVpnVpncKeyXauthPasswordType(data, NM_VPNC_PW_TYPE_ASK)
-	case NM_SETTING_VPN_SECRET_FLAG_UNUSED:
+	case NM_VPNC_SECRET_FLAG_UNUSED:
 		setSettingVpnVpncKeyXauthPasswordType(data, NM_VPNC_PW_TYPE_UNUSED)
 	}
 	setSettingVpnVpncKeyXauthPasswordFlags(data, value)

@@ -30,6 +30,16 @@ func generalIsKeyInSettingField(field, key string) bool {
 		return isKeyInSettingVpnL2tpIpsec(key)
 	case NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME:
 		return isKeyInSettingVpnOpenconnect(key)
+	case NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME:
+		return isKeyInSettingVpnOpenvpn(key)
+	case NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME:
+		return isKeyInSettingVpnOpenvpnAdvanced(key)
+	case NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME:
+		return isKeyInSettingVpnOpenvpnSecurity(key)
+	case NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
+		return isKeyInSettingVpnOpenvpnTlsauth(key)
+	case NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME:
+		return isKeyInSettingVpnOpenvpnProxies(key)
 	case NM_SETTING_VF_VPN_PPTP_SETTING_NAME:
 		return isKeyInSettingVpnPptp(key)
 	case NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME:
@@ -78,6 +88,16 @@ func generalGetSettingKeyType(field, key string) (t ktype) {
 		t = getSettingVpnL2tpIpsecKeyType(key)
 	case NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME:
 		t = getSettingVpnOpenconnectKeyType(key)
+	case NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME:
+		t = getSettingVpnOpenvpnKeyType(key)
+	case NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME:
+		t = getSettingVpnOpenvpnAdvancedKeyType(key)
+	case NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME:
+		t = getSettingVpnOpenvpnSecurityKeyType(key)
+	case NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
+		t = getSettingVpnOpenvpnTlsauthKeyType(key)
+	case NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME:
+		t = getSettingVpnOpenvpnProxiesKeyType(key)
 	case NM_SETTING_VF_VPN_PPTP_SETTING_NAME:
 		t = getSettingVpnPptpKeyType(key)
 	case NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME:
@@ -120,6 +140,16 @@ func generalGetSettingAvailableKeys(data connectionData, field string) (keys []s
 		keys = getSettingVpnL2tpIpsecAvailableKeys(data)
 	case NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME:
 		keys = getSettingVpnOpenconnectAvailableKeys(data)
+	case NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME:
+		keys = getSettingVpnOpenvpnAvailableKeys(data)
+	case NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME:
+		keys = getSettingVpnOpenvpnAdvancedAvailableKeys(data)
+	case NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME:
+		keys = getSettingVpnOpenvpnSecurityAvailableKeys(data)
+	case NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
+		keys = getSettingVpnOpenvpnTlsauthAvailableKeys(data)
+	case NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME:
+		keys = getSettingVpnOpenvpnProxiesAvailableKeys(data)
 	case NM_SETTING_VF_VPN_PPTP_SETTING_NAME:
 		keys = getSettingVpnPptpAvailableKeys(data)
 	case NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME:
@@ -166,6 +196,16 @@ func generalGetSettingAvailableValues(data connectionData, field, key string) (v
 		values, customizable = getSettingVpnL2tpIpsecAvailableValues(data, key)
 	case NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME:
 		values, customizable = getSettingVpnOpenconnectAvailableValues(data, key)
+	case NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME:
+		values, customizable = getSettingVpnOpenvpnAvailableValues(data, key)
+	case NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME:
+		values, customizable = getSettingVpnOpenvpnAdvancedAvailableValues(data, key)
+	case NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME:
+		values, customizable = getSettingVpnOpenvpnSecurityAvailableValues(data, key)
+	case NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
+		values, customizable = getSettingVpnOpenvpnTlsauthAvailableValues(data, key)
+	case NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME:
+		values, customizable = getSettingVpnOpenvpnProxiesAvailableValues(data, key)
 	case NM_SETTING_VF_VPN_PPTP_SETTING_NAME:
 		values, customizable = getSettingVpnPptpAvailableValues(data, key)
 	case NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME:
@@ -210,6 +250,16 @@ func generalCheckSettingValues(data connectionData, field string) (errs FieldKey
 		errs = checkSettingVpnL2tpIpsecValues(data)
 	case NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME:
 		errs = checkSettingVpnOpenconnectValues(data)
+	case NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME:
+		errs = checkSettingVpnOpenvpnValues(data)
+	case NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME:
+		errs = checkSettingVpnOpenvpnAdvancedValues(data)
+	case NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME:
+		errs = checkSettingVpnOpenvpnSecurityValues(data)
+	case NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
+		errs = checkSettingVpnOpenvpnTlsauthValues(data)
+	case NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME:
+		errs = checkSettingVpnOpenvpnProxiesValues(data)
 	case NM_SETTING_VF_VPN_PPTP_SETTING_NAME:
 		errs = checkSettingVpnPptpValues(data)
 	case NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME:
@@ -258,6 +308,16 @@ func generalGetSettingKeyJSON(data connectionData, field, key string) (valueJSON
 		valueJSON = generalGetSettingVpnL2tpIpsecKeyJSON(data, key)
 	case NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME:
 		valueJSON = generalGetSettingVpnOpenconnectKeyJSON(data, key)
+	case NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME:
+		valueJSON = generalGetSettingVpnOpenvpnKeyJSON(data, key)
+	case NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME:
+		valueJSON = generalGetSettingVpnOpenvpnAdvancedKeyJSON(data, key)
+	case NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME:
+		valueJSON = generalGetSettingVpnOpenvpnSecurityKeyJSON(data, key)
+	case NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
+		valueJSON = generalGetSettingVpnOpenvpnTlsauthKeyJSON(data, key)
+	case NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME:
+		valueJSON = generalGetSettingVpnOpenvpnProxiesKeyJSON(data, key)
 	case NM_SETTING_VF_VPN_PPTP_SETTING_NAME:
 		valueJSON = generalGetSettingVpnPptpKeyJSON(data, key)
 	case NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME:
@@ -306,6 +366,16 @@ func generalSetSettingKeyJSON(data connectionData, field, key, valueJSON string)
 		generalSetSettingVpnL2tpIpsecKeyJSON(data, key, valueJSON)
 	case NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME:
 		generalSetSettingVpnOpenconnectKeyJSON(data, key, valueJSON)
+	case NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME:
+		generalSetSettingVpnOpenvpnKeyJSON(data, key, valueJSON)
+	case NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME:
+		generalSetSettingVpnOpenvpnAdvancedKeyJSON(data, key, valueJSON)
+	case NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME:
+		generalSetSettingVpnOpenvpnSecurityKeyJSON(data, key, valueJSON)
+	case NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
+		generalSetSettingVpnOpenvpnTlsauthKeyJSON(data, key, valueJSON)
+	case NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME:
+		generalSetSettingVpnOpenvpnProxiesKeyJSON(data, key, valueJSON)
 	case NM_SETTING_VF_VPN_PPTP_SETTING_NAME:
 		generalSetSettingVpnPptpKeyJSON(data, key, valueJSON)
 	case NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME:
@@ -349,6 +419,16 @@ func getSettingKeyDefaultValueJSON(field, key string) (valueJSON string) {
 		valueJSON = getSettingVpnL2tpIpsecKeyDefaultValueJSON(key)
 	case NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME:
 		valueJSON = getSettingVpnOpenconnectKeyDefaultValueJSON(key)
+	case NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME:
+		valueJSON = getSettingVpnOpenvpnKeyDefaultValueJSON(key)
+	case NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME:
+		valueJSON = getSettingVpnOpenvpnAdvancedKeyDefaultValueJSON(key)
+	case NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME:
+		valueJSON = getSettingVpnOpenvpnSecurityKeyDefaultValueJSON(key)
+	case NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
+		valueJSON = getSettingVpnOpenvpnTlsauthKeyDefaultValueJSON(key)
+	case NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME:
+		valueJSON = getSettingVpnOpenvpnProxiesKeyDefaultValueJSON(key)
 	case NM_SETTING_VF_VPN_PPTP_SETTING_NAME:
 		valueJSON = getSettingVpnPptpKeyDefaultValueJSON(key)
 	case NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME:
