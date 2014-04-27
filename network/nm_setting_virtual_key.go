@@ -72,14 +72,28 @@ const (
 // wireless security
 const NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT = "vk-key-mgmt"
 
-// VirtualKey stores virtual key info for each fields.
-type VirtualKey struct {
-	Name         string
-	Type         ktype
-	RelatedField string
-	RelatedKey   string
-	Available    bool // check if is used by front-end
-	Optional     bool // if key is optional, will ignore error for it
+// virtualKey stores virtual key info for each fields.
+type virtualKey struct {
+	Name          string
+	Type          ktype
+	RelatedField  string
+	RelatedKey    string
+	EnableWrapper bool // check if the virtual key is a wrapper just to enable target key
+	Available     bool // check if is used by front-end
+	Optional      bool // if key is optional, will ignore error for it
+}
+
+func getVirtualKeyInfo(field, vkey string) (vkInfo virtualKey, ok bool) {
+	for _, vk := range virtualKeys {
+		if vk.RelatedField == field && vk.Name == vkey {
+			vkInfo = vk
+			ok = true
+			return
+		}
+	}
+	logger.Errorf("invalid virtual key, field=%s, vkey=%s", field, vkey)
+	ok = false
+	return
 }
 
 func isVirtualKey(field, key string) bool {
@@ -144,9 +158,9 @@ func appendAvailableKeys(keys []string, field, key string) (appendKeys []string)
 	relatedVks := getRelatedAvailableVirtualKeys(field, key)
 	if len(relatedVks) > 0 {
 		appendKeys = appendStrArrayUnion(keys, relatedVks...)
-		return
+	} else {
+		appendKeys = appendStrArrayUnion(keys, key)
 	}
-	appendKeys = appendStrArrayUnion(keys, key)
 	return
 }
 
@@ -167,6 +181,14 @@ func getRelatedVirtualKeys(field, key string) (vks []string) {
 		}
 	}
 	return
+}
+
+func isEnableWrapperVirtualKey(field, vkey string) bool {
+	vkInfo, ok := getVirtualKeyInfo(field, vkey)
+	if !ok {
+		return false
+	}
+	return vkInfo.EnableWrapper
 }
 
 func isOptionalChildVirtualKeys(field, vkey string) (optional bool) {

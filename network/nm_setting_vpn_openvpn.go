@@ -239,7 +239,6 @@ func getSettingVpnOpenvpnAdvancedAvailableKeys(data connectionData) (keys []stri
 	return
 }
 func getSettingVpnOpenvpnAdvancedAvailableValues(data connectionData, key string) (values []string, customizable bool) {
-
 	return
 }
 func checkSettingVpnOpenvpnAdvancedValues(data connectionData) (errs FieldKeyErrors) {
@@ -283,8 +282,7 @@ func checkSettingVpnOpenvpnSecurityValues(data connectionData) (errs FieldKeyErr
 // TODO
 // openvpn-tlsauth
 func getSettingVpnOpenvpnTlsauthAvailableKeys(data connectionData) (keys []string) {
-
-	// tls auth
+	// TODO
 	keys = appendAvailableKeys(keys, fieldVpnOpenvpnTlsauth, NM_SETTING_VPN_OPENVPN_KEY_TLS_REMOTE)
 	keys = appendAvailableKeys(keys, fieldVpnOpenvpnTlsauth, NM_SETTING_VPN_OPENVPN_KEY_REMOTE_CERT_TLS)
 	keys = appendAvailableKeys(keys, fieldVpnOpenvpnTlsauth, NM_SETTING_VPN_OPENVPN_KEY_TA)
@@ -298,8 +296,13 @@ func getSettingVpnOpenvpnTlsauthAvailableValues(data connectionData, key string)
 			NM_OPENVPN_REM_CERT_TLS_CLIENT,
 			NM_OPENVPN_REM_CERT_TLS_SERVER,
 		}
+	case NM_SETTING_VPN_OPENVPN_KEY_TA_DIR:
+		values = []string{
+			"",
+			"0",
+			"1",
+		}
 	}
-	// TODO key direction
 	return
 }
 func checkSettingVpnOpenvpnTlsauthValues(data connectionData) (errs FieldKeyErrors) {
