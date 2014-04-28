@@ -1,5 +1,9 @@
 package main
 
+import (
+	"dlib"
+)
+
 const (
 	typeWired          = "wired"
 	typeWireless       = "wireless"
@@ -13,8 +17,12 @@ const (
 )
 
 // TODO key-map values for internationalization
+type connectionType struct {
+	Value, Text string
+}
+
 var supportedConnectionTypes = []string{
-	// typeWired, // don't support multiple wired connections since now
+	// typeWired,// don't support multiple wired connections since now
 	typeWireless,
 	typePppoe,
 	typeVpnL2tp,
@@ -22,6 +30,16 @@ var supportedConnectionTypes = []string{
 	typeVpnOpenvpn,
 	typeVpnPptp,
 	typeVpnVpnc,
+}
+var supportedConnectionTypesInfo = []connectionType{
+	// connectionType{typeWired, dlib.Tr("Ethernet")},// don't support multiple wired connections since now
+	connectionType{typeWireless, dlib.Tr("Wi-Fi")},
+	connectionType{typePppoe, dlib.Tr("PPPoE")},
+	connectionType{typeVpnL2tp, dlib.Tr("VPN-L2TP (Layer 2 Tunneling Protocol)")},
+	connectionType{typeVpnOpenconnect, dlib.Tr("VPN-OpenConnect (Cisco AnyConnect Compatible VPN)")},
+	connectionType{typeVpnOpenvpn, dlib.Tr("VPN-OpenVPN")},
+	connectionType{typeVpnPptp, dlib.Tr("VPN-PPTP (Point-to-Point Tunneling Protocol))")},
+	connectionType{typeVpnVpnc, dlib.Tr("VPN-VPNC (Cisco Compatible VPN)")},
 }
 
 const (

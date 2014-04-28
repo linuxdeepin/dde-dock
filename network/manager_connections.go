@@ -84,8 +84,9 @@ func (m *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPath)
 }
 
 // GetSupportedConnectionTypes return all supported connection types
-func (m *Manager) GetSupportedConnectionTypes() []string {
-	return supportedConnectionTypes
+func (m *Manager) GetSupportedConnectionTypes() (typesJSON string) {
+	typesJSON, _ = marshalJSON(supportedConnectionTypesInfo)
+	return
 }
 
 // GetActiveConnectionInfo
