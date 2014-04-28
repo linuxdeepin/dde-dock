@@ -155,7 +155,7 @@ func initTrayManager() {
 	TRAYMANAGER.tryOwner()
 }
 
-func (m *TrayManager) RequireManagerTrayIcons() {
+func (m *TrayManager) RequireManageTrayIcons() {
 	mstype, err := xprop.Atm(TrayXU, "MANAGER")
 	if err != nil {
 		LOGGER.Error("Get MANAGER Failed")
@@ -206,7 +206,7 @@ func (m *TrayManager) tryOwner() bool {
 		//owner the _NET_SYSTEM_TRAY_Sn
 		LOGGER.Info("Required _NET_SYSTEM_TRAY_S0")
 
-		m.RequireManagerTrayIcons()
+		m.RequireManageTrayIcons()
 
 		xprop.ChangeProp32(
 			TrayXU,
