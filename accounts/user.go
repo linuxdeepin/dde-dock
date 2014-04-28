@@ -47,7 +47,8 @@ func (op *UserManager) SetUserName(dbusMsg dbus.DMessage, username string) bool 
 		}
 	}()
 
-	if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	//if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
 		dbusMsg.GetSenderPID()); !ok {
 		return false
 	}
@@ -68,7 +69,8 @@ func (op *UserManager) SetHomeDir(dbusMsg dbus.DMessage, dir string) bool {
 		}
 	}()
 
-	if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	//if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
 		dbusMsg.GetSenderPID()); !ok {
 		return false
 	}
@@ -89,7 +91,8 @@ func (op *UserManager) SetShell(dbusMsg dbus.DMessage, shell string) bool {
 		}
 	}()
 
-	if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	//if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
 		dbusMsg.GetSenderPID()); !ok {
 		return false
 	}
@@ -110,7 +113,8 @@ func (op *UserManager) SetPassword(dbusMsg dbus.DMessage, words string) bool {
 		}
 	}()
 
-	if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	//if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
 		dbusMsg.GetSenderPID()); !ok {
 		return false
 	}
@@ -138,7 +142,8 @@ func (op *UserManager) SetAutomaticLogin(dbusMsg dbus.DMessage, auto bool) bool 
 		}
 	}()
 
-	if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	//if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
 		dbusMsg.GetSenderPID()); !ok {
 		return false
 	}
@@ -161,7 +166,8 @@ func (op *UserManager) SetAccountType(dbusMsg dbus.DMessage, t int32) bool {
 		}
 	}()
 
-	if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	//if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
 		dbusMsg.GetSenderPID()); !ok {
 		return false
 	}
@@ -182,7 +188,8 @@ func (op *UserManager) SetLocked(dbusMsg dbus.DMessage, locked bool) bool {
 		}
 	}()
 
-	if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	//if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
 		dbusMsg.GetSenderPID()); !ok {
 		return false
 	}
@@ -203,7 +210,8 @@ func (op *UserManager) SetIconFile(dbusMsg dbus.DMessage, icon string) bool {
 		}
 	}()
 
-	if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	//if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
 		dbusMsg.GetSenderPID()); !ok {
 		return false
 	}
@@ -239,7 +247,8 @@ func (op *UserManager) SetBackgroundFile(dbusMsg dbus.DMessage, bg string) bool 
 		}
 	}()
 
-	if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	//if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
 		dbusMsg.GetSenderPID()); !ok {
 		return false
 	}
@@ -260,7 +269,8 @@ func (op *UserManager) DeleteHistoryIcon(dbusMsg dbus.DMessage, icon string) boo
 		}
 	}()
 
-	if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	//if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
 		dbusMsg.GetSenderPID()); !ok {
 		return false
 	}

@@ -28,12 +28,29 @@ package main
 import "C"
 
 import (
+	libpolkit1 "dbus/org/freedesktop/policykit1"
+	"dlib/dbus"
 	"os"
 	"os/exec"
 	"strings"
 	"sync"
 	"unsafe"
 )
+
+type polkitSubject struct {
+	/*
+	 * The following kinds of subjects are known:
+	 * Unix Process: should be set to unix-process with keys
+	 *                  pid (of type uint32) and
+	 *                  start-time (of type uint64)
+	 * Unix Session: should be set to unix-session with the key
+	 *                  session-id (of type string)
+	 * System Bus Name: should be set to system-bus-name with the key
+	 *                  name (of type string)
+	 */
+	SubjectKind    string
+	SubjectDetails map[string]dbus.Variant
+}
 
 var (
 	mutex = new(sync.Mutex)
@@ -115,4 +132,37 @@ func deleteElementFromList(ele string, list []string) []string {
 	}
 
 	return tmp
+}
+
+func polkitAuthWithPid(actionId string, pid uint32) bool {
+	objPolkit, err := libpolkit1.NewAuthority("org.freedesktop.PolicyKit1",
+		"/org/freedesktop/PolicyKit1/Authority")
+	if err != nil {
+		logObject.Warning("New PolicyKit Object Failed: ", err)
+		return false
+	}
+
+	subject := polkitSubject{}
+	subject.SubjectKind = "unix-process"
+	subject.SubjectDetails = make(map[string]dbus.Variant)
+	subject.SubjectDetails["pid"] = dbus.MakeVariant(uint32(pid))
+	subject.SubjectDetails["start-time"] = dbus.MakeVariant(uint64(0))
+	details := make(map[string]string)
+	details[""] = ""
+	flags := uint32(1)
+	cancelId := ""
+
+	ret, err1 := objPolkit.CheckAuthorization(subject, actionId, details,
+		flags, cancelId)
+	if err1 != nil {
+		logObject.Warning("CheckAuthorization Failed: ", err1)
+		return false
+	}
+
+	// Is Authority
+	if !ret[0].(bool) {
+		return false
+	}
+
+	return true
 }

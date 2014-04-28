@@ -69,7 +69,8 @@ func (op *AccountManager) CreateGuestAccount() string {
 */
 
 func (op *AccountManager) AllowGuestAccount(dbusMsg dbus.DMessage, allow bool) bool {
-	if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	//if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
 		dbusMsg.GetSenderPID()); !ok {
 		return false
 	}
@@ -88,7 +89,8 @@ func (op *AccountManager) CreateUser(dbusMsg dbus.DMessage, name, fullname strin
 				err)
 		}
 	}()
-	if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	//if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
 		dbusMsg.GetSenderPID()); !ok {
 		return "", false
 	}
@@ -123,7 +125,8 @@ func (op *AccountManager) DeleteUser(dbusMsg dbus.DMessage, name string, removeF
 		}
 	}()
 
-	if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	//if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
 		dbusMsg.GetSenderPID()); !ok {
 		return false
 	}
