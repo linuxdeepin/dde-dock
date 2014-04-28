@@ -1,6 +1,7 @@
 package main
 
 import (
+	"dlib"
 	"fmt"
 )
 
@@ -190,22 +191,14 @@ func getSettingWirelessAvailableKeys(data connectionData) (keys []string) {
 }
 
 // Get available values
-func getSettingWirelessAvailableValues(data connectionData, key string) (values []string, customizable bool) {
-	customizable = true
+func getSettingWirelessAvailableValues(data connectionData, key string) (values []kvalue) {
 	switch key {
 	case NM_SETTING_WIRELESS_MODE:
-		values = []string{
-			NM_SETTING_WIRELESS_MODE_ADHOC,
-			NM_SETTING_WIRELESS_MODE_AP,
-			NM_SETTING_WIRELESS_MODE_INFRA,
+		values = []kvalue{
+			kvalue{NM_SETTING_WIRELESS_MODE_INFRA, dlib.Tr("Infrastructure")},
+			kvalue{NM_SETTING_WIRELESS_MODE_ADHOC, dlib.Tr("Ad-Hoc")},
+			kvalue{NM_SETTING_WIRELESS_MODE_AP, dlib.Tr("AP/Hotspot")},
 		}
-		customizable = false
-	case NM_SETTING_WIRELESS_SEC:
-		values = []string{
-			fieldWirelessSecurity,
-			field8021x,
-		}
-		customizable = true
 	}
 	return
 }

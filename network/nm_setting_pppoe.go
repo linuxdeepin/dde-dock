@@ -46,8 +46,7 @@ func getSettingPppoeAvailableKeys(data connectionData) (keys []string) {
 }
 
 // Get available values
-func getSettingPppoeAvailableValues(data connectionData, key string) (values []string, customizable bool) {
-	customizable = true
+func getSettingPppoeAvailableValues(data connectionData, key string) (values []kvalue) {
 	return
 }
 

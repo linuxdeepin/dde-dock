@@ -1,6 +1,7 @@
 package main
 
 import (
+	"dlib"
 	"fmt"
 )
 
@@ -140,6 +141,17 @@ const (
 	NM_SETTING_IP4_CONFIG_METHOD_DISABLED = "disabled"
 )
 
+// Initialize available values
+var availableValuesIp4ConfigMethod = make(availableValues)
+
+func init() {
+	availableValuesIp4ConfigMethod[NM_SETTING_IP4_CONFIG_METHOD_AUTO] = kvalue{NM_SETTING_IP4_CONFIG_METHOD_AUTO, dlib.Tr("Auto")}
+	availableValuesIp4ConfigMethod[NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL] = kvalue{NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL, dlib.Tr("Link Local")}
+	availableValuesIp4ConfigMethod[NM_SETTING_IP4_CONFIG_METHOD_MANUAL] = kvalue{NM_SETTING_IP4_CONFIG_METHOD_MANUAL, dlib.Tr("Manual")}
+	availableValuesIp4ConfigMethod[NM_SETTING_IP4_CONFIG_METHOD_SHARED] = kvalue{NM_SETTING_IP4_CONFIG_METHOD_SHARED, dlib.Tr("Shared")}
+	availableValuesIp4ConfigMethod[NM_SETTING_IP4_CONFIG_METHOD_DISABLED] = kvalue{NM_SETTING_IP4_CONFIG_METHOD_DISABLED, dlib.Tr("Disabled")}
+}
+
 // Get available keys
 func getSettingIp4ConfigAvailableKeys(data connectionData) (keys []string) {
 	method := getSettingIp4ConfigMethod(data)
@@ -162,8 +174,7 @@ func getSettingIp4ConfigAvailableKeys(data connectionData) (keys []string) {
 }
 
 // Get available values
-func getSettingIp4ConfigAvailableValues(data connectionData, key string) (values []string, customizable bool) {
-	customizable = true
+func getSettingIp4ConfigAvailableValues(data connectionData, key string) (values []kvalue) {
 	switch key {
 	case NM_SETTING_IP4_CONFIG_METHOD:
 		// TODO be careful, ipv4 method would be limited for different connection type
@@ -180,16 +191,15 @@ func getSettingIp4ConfigAvailableValues(data connectionData, key string) (values
 		// 	// NM_SETTING_IP4_CONFIG_METHOD_DISABLED, // ignore
 		// }
 		if getSettingConnectionType(data) != typeVpn {
-			values = []string{
-				NM_SETTING_IP4_CONFIG_METHOD_AUTO,
-				NM_SETTING_IP4_CONFIG_METHOD_MANUAL,
+			values = []kvalue{
+				availableValuesIp4ConfigMethod[NM_SETTING_IP4_CONFIG_METHOD_AUTO],
+				availableValuesIp4ConfigMethod[NM_SETTING_IP4_CONFIG_METHOD_MANUAL],
 			}
 		} else {
-			values = []string{
-				NM_SETTING_IP4_CONFIG_METHOD_AUTO,
+			values = []kvalue{
+				availableValuesIp4ConfigMethod[NM_SETTING_IP4_CONFIG_METHOD_AUTO],
 			}
 		}
-		customizable = false
 	}
 	return
 }

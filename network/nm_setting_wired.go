@@ -109,7 +109,7 @@ func getSettingWiredAvailableKeys(data connectionData) (keys []string) {
 }
 
 // TODO Get available values
-func getSettingWiredAvailableValues(data connectionData, key string) (values []string, customizable bool) {
+func getSettingWiredAvailableValues(data connectionData, key string) (values []kvalue) {
 	return
 }
 

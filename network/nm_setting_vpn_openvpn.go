@@ -1,5 +1,9 @@
 package main
 
+import (
+	"dlib"
+)
+
 const (
 	NM_DBUS_SERVICE_OPENVPN   = "org.freedesktop.NetworkManager.openvpn"
 	NM_DBUS_INTERFACE_OPENVPN = "org.freedesktop.NetworkManager.openvpn"
@@ -179,27 +183,26 @@ func getSettingVpnOpenvpnAvailableKeys(data connectionData) (keys []string) {
 	}
 	return
 }
-func getSettingVpnOpenvpnAvailableValues(data connectionData, key string) (values []string, customizable bool) {
+func getSettingVpnOpenvpnAvailableValues(data connectionData, key string) (values []kvalue) {
 	switch key {
 	case NM_SETTING_VPN_OPENVPN_KEY_CONNECTION_TYPE:
-		values = []string{
-			NM_OPENVPN_CONTYPE_TLS,
-			NM_OPENVPN_CONTYPE_STATIC_KEY,
-			NM_OPENVPN_CONTYPE_PASSWORD,
-			NM_OPENVPN_CONTYPE_PASSWORD_TLS,
+		values = []kvalue{
+			kvalue{NM_OPENVPN_CONTYPE_TLS, dlib.Tr("Certificates (TLS)")},
+			kvalue{NM_OPENVPN_CONTYPE_PASSWORD, dlib.Tr("Password")},
+			kvalue{NM_OPENVPN_CONTYPE_PASSWORD_TLS, dlib.Tr("Password with Certificates (TLS)")},
+			kvalue{NM_OPENVPN_CONTYPE_STATIC_KEY, dlib.Tr("Static Key")},
 		}
 	case NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY_DIRECTION:
-		values = []string{
-			"",
-			"0",
-			"1",
+		values = []kvalue{
+			kvalue{"", dlib.Tr("None")},
+			kvalue{0, dlib.Tr("0")},
+			kvalue{1, dlib.Tr("1")},
 		}
 	case NM_SETTING_VPN_OPENVPN_KEY_PASSWORD_FLAGS:
-		// TODO
-		values = []string{
-			"0",
-			"2",
-			"4",
+		values = []kvalue{
+			kvalue{NM_OPENVPN_SECRET_FLAG_SAVE, dlib.Tr("Saved")},
+			kvalue{NM_OPENVPN_SECRET_FLAG_ASK, dlib.Tr("Always Ask")},
+			kvalue{NM_OPENVPN_SECRET_FLAG_UNUSED, dlib.Tr("Not Required")},
 		}
 	}
 	return
@@ -238,7 +241,7 @@ func getSettingVpnOpenvpnAdvancedAvailableKeys(data connectionData) (keys []stri
 	keys = appendAvailableKeys(keys, fieldVpnOpenvpnAdvanced, NM_SETTING_VPN_OPENVPN_KEY_REMOTE_RANDOM)
 	return
 }
-func getSettingVpnOpenvpnAdvancedAvailableValues(data connectionData, key string) (values []string, customizable bool) {
+func getSettingVpnOpenvpnAdvancedAvailableValues(data connectionData, key string) (values []kvalue) {
 	return
 }
 func checkSettingVpnOpenvpnAdvancedValues(data connectionData) (errs FieldKeyErrors) {
@@ -253,43 +256,44 @@ func getSettingVpnOpenvpnSecurityAvailableKeys(data connectionData) (keys []stri
 	keys = appendAvailableKeys(keys, fieldVpnOpenvpnSecurity, NM_SETTING_VPN_OPENVPN_KEY_AUTH)
 	return
 }
-func getSettingVpnOpenvpnSecurityAvailableValues(data connectionData, key string) (values []string, customizable bool) {
+func getSettingVpnOpenvpnSecurityAvailableValues(data connectionData, key string) (values []kvalue) {
 	switch key {
 	case NM_SETTING_VPN_OPENVPN_KEY_CIPHER:
 		// TODO get openvpn cipher
 		// "/usr/sbin/openvpn"
 		// "/sbin/openvpn"
 		// --show-ciphers
-		values = []string{
-			"",
-			"DES-CBC",
-			"RC2-CBC",
-			"DES-EDE-CBC",
-			"DES-EDE3-CBC",
-			"DESX-CBC",
-			"BF-CBC",
-			"RC2-40-CBC",
-			"CAST5-CBC",
-			"RC2-64-CBC",
-			"AES-128-CBC",
-			"AES-192-CBC",
-			"AES-256-CBC",
-			"CAMELLIA-128-CBC",
-			"CAMELLIA-192-CBC",
-			"CAMELLIA-256-CBC",
-			"SEED-CBC",
+		values = []kvalue{
+			kvalue{"", dlib.Tr("Default")},
+			kvalue{"DES-CBC", dlib.Tr("DES-CBC")},
+			kvalue{"RC2-CBC", dlib.Tr("RC2-CBC")},
+			kvalue{"DES-EDE-CBC", dlib.Tr("DES-EDE-CBC")},
+			kvalue{"DES-EDE3-CBC", dlib.Tr("DES-EDE3-CBC")},
+			kvalue{"DESX-CBC", dlib.Tr("DESX-CBC")},
+			kvalue{"BF-CBC", dlib.Tr("BF-CBC")},
+			kvalue{"RC2-40-CBC", dlib.Tr("RC2-40-CBC")},
+			kvalue{"CAST5-CBC", dlib.Tr("CAST5-CBC")},
+			kvalue{"RC2-64-CBC", dlib.Tr("RC2-64-CBC")},
+			kvalue{"AES-128-CBC", dlib.Tr("AES-128-CBC")},
+			kvalue{"AES-192-CBC", dlib.Tr("AES-192-CBC")},
+			kvalue{"AES-256-CBC", dlib.Tr("AES-256-CBC")},
+			kvalue{"CAMELLIA-128-CBC", dlib.Tr("CAMELLIA-128-CBC")},
+			kvalue{"CAMELLIA-192-CBC", dlib.Tr("CAMELLIA-192-CBC")},
+			kvalue{"CAMELLIA-256-CBC", dlib.Tr("CAMELLIA-256-CBC")},
+			kvalue{"SEED-CBC", dlib.Tr("SEED-CBC")},
 		}
 	case NM_SETTING_VPN_OPENVPN_KEY_AUTH:
-		values = []string{
-			NM_OPENVPN_AUTH_NONE,
-			NM_OPENVPN_AUTH_RSA_MD4,
-			NM_OPENVPN_AUTH_MD5,
-			NM_OPENVPN_AUTH_SHA1,
-			NM_OPENVPN_AUTH_SHA224,
-			NM_OPENVPN_AUTH_SHA256,
-			NM_OPENVPN_AUTH_SHA384,
-			NM_OPENVPN_AUTH_SHA512,
-			NM_OPENVPN_AUTH_RIPEMD160,
+		values = []kvalue{
+			kvalue{"", dlib.Tr("Default")},
+			kvalue{NM_OPENVPN_AUTH_NONE, dlib.Tr("None")},
+			kvalue{NM_OPENVPN_AUTH_RSA_MD4, dlib.Tr("RSA MD-4")},
+			kvalue{NM_OPENVPN_AUTH_MD5, dlib.Tr("MD-5")},
+			kvalue{NM_OPENVPN_AUTH_SHA1, dlib.Tr("SHA-1")},
+			kvalue{NM_OPENVPN_AUTH_SHA224, dlib.Tr("SHA-224")},
+			kvalue{NM_OPENVPN_AUTH_SHA256, dlib.Tr("SHA-256")},
+			kvalue{NM_OPENVPN_AUTH_SHA384, dlib.Tr("SHA-384")},
+			kvalue{NM_OPENVPN_AUTH_SHA512, dlib.Tr("SHA-512")},
+			kvalue{NM_OPENVPN_AUTH_RIPEMD160, dlib.Tr("RIPEMD-160")},
 		}
 	}
 	return
@@ -308,19 +312,19 @@ func getSettingVpnOpenvpnTlsauthAvailableKeys(data connectionData) (keys []strin
 	keys = appendAvailableKeys(keys, fieldVpnOpenvpnTlsauth, NM_SETTING_VPN_OPENVPN_KEY_TA_DIR)
 	return
 }
-func getSettingVpnOpenvpnTlsauthAvailableValues(data connectionData, key string) (values []string, customizable bool) {
+func getSettingVpnOpenvpnTlsauthAvailableValues(data connectionData, key string) (values []kvalue) {
 	switch key {
 	case NM_SETTING_VPN_OPENVPN_KEY_REMOTE_CERT_TLS:
-		values = []string{
-			"", // default
-			NM_OPENVPN_REM_CERT_TLS_CLIENT,
-			NM_OPENVPN_REM_CERT_TLS_SERVER,
+		values = []kvalue{
+			kvalue{"", dlib.Tr("Default")}, // default
+			kvalue{NM_OPENVPN_REM_CERT_TLS_CLIENT, dlib.Tr("Client")},
+			kvalue{NM_OPENVPN_REM_CERT_TLS_SERVER, dlib.Tr("Server")},
 		}
 	case NM_SETTING_VPN_OPENVPN_KEY_TA_DIR:
-		values = []string{
-			"",
-			"0",
-			"1",
+		values = []kvalue{
+			kvalue{"", dlib.Tr("None")},
+			kvalue{0, dlib.Tr("0")},
+			kvalue{1, dlib.Tr("1")},
 		}
 	}
 	return
@@ -352,13 +356,13 @@ func getSettingVpnOpenvpnProxiesAvailableKeys(data connectionData) (keys []strin
 	}
 	return
 }
-func getSettingVpnOpenvpnProxiesAvailableValues(data connectionData, key string) (values []string, customizable bool) {
+func getSettingVpnOpenvpnProxiesAvailableValues(data connectionData, key string) (values []kvalue) {
 	switch key {
 	case NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE:
-		values = []string{
-			"",
-			"httpect",
-			"socksct",
+		values = []kvalue{
+			kvalue{"", dlib.Tr("Not Required")},
+			kvalue{"httpect", dlib.Tr("HTTP")},
+			kvalue{"socksct", dlib.Tr("SOCKS")},
 		}
 	}
 	return

@@ -1,5 +1,9 @@
 package main
 
+import (
+	"dlib"
+)
+
 const (
 	NM_DBUS_SERVICE_VPNC   = "org.freedesktop.NetworkManager.vpnc"
 	NM_DBUS_INTERFACE_VPNC = "org.freedesktop.NetworkManager.vpnc"
@@ -105,6 +109,13 @@ const (
 // 	{ NULL,                              ITEM_TYPE_UNKNOWN, 0, 0 }
 // };
 
+// Initialize available values
+var availableValuesNMVpncSecretFlag = []kvalue{
+	kvalue{NM_VPNC_SECRET_FLAG_SAVE, dlib.Tr("Saved")},
+	kvalue{NM_VPNC_SECRET_FLAG_ASK, dlib.Tr("Always Ask")},
+	kvalue{NM_VPNC_SECRET_FLAG_UNUSED, dlib.Tr("Not Required")},
+}
+
 func newVpnVpncConnectionData(id, uuid string) (data connectionData) {
 	data = newBasicVpnConnectionData(id, uuid, NM_DBUS_SERVICE_VPNC)
 
@@ -138,14 +149,12 @@ func getSettingVpnVpncAvailableKeys(data connectionData) (keys []string) {
 	}
 	return
 }
-func getSettingVpnVpncAvailableValues(data connectionData, key string) (values []string, customizable bool) {
+func getSettingVpnVpncAvailableValues(data connectionData, key string) (values []kvalue) {
 	switch key {
 	case NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD_FLAGS:
-		// TODO values are integer
-		values = []string{"1", "3", "5"}
+		values = availableValuesNMVpncSecretFlag
 	case NM_SETTING_VPN_VPNC_KEY_SECRET_FLAGS:
-		// TODO values are integer
-		values = []string{"1", "3", "5"}
+		values = availableValuesNMVpncSecretFlag
 	}
 	return
 }
@@ -170,33 +179,33 @@ func getSettingVpnVpncAdvancedAvailableKeys(data connectionData) (keys []string)
 	keys = appendAvailableKeys(keys, fieldVpnVpncAdvanced, NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT)
 	return
 }
-func getSettingVpnVpncAdvancedAvailableValues(data connectionData, key string) (values []string, customizable bool) {
+func getSettingVpnVpncAdvancedAvailableValues(data connectionData, key string) (values []kvalue) {
 	switch key {
 	case NM_SETTING_VPN_VPNC_KEY_VENDOR:
-		values = []string{
-			NM_VPNC_VENDOR_CISCO,
-			NM_VPNC_VENDOR_NETSCREEN,
+		values = []kvalue{
+			kvalue{NM_VPNC_VENDOR_CISCO, dlib.Tr("Cisco (default)")},
+			kvalue{NM_VPNC_VENDOR_NETSCREEN, dlib.Tr("Netscreen")},
 		}
 	case NM_SETTING_VPN_VPNC_KEY_NAT_TRAVERSAL_MODE:
-		values = []string{
-			NM_VPNC_NATT_MODE_NATT,
-			NM_VPNC_NATT_MODE_NONE,
-			NM_VPNC_NATT_MODE_NATT_ALWAYS,
-			NM_VPNC_NATT_MODE_CISCO,
+		values = []kvalue{
+			kvalue{NM_VPNC_NATT_MODE_NATT, dlib.Tr("NAT-T When Available (default)")},
+			kvalue{NM_VPNC_NATT_MODE_NATT_ALWAYS, dlib.Tr("NAT-T Always")},
+			kvalue{NM_VPNC_NATT_MODE_CISCO, dlib.Tr("Cisco UDP")},
+			kvalue{NM_VPNC_NATT_MODE_NONE, dlib.Tr("Disabled")},
 		}
 	case NM_SETTING_VPN_VPNC_KEY_DHGROUP:
-		values = []string{
-			NM_VPNC_DHGROUP_DH1,
-			NM_VPNC_DHGROUP_DH2,
-			NM_VPNC_DHGROUP_DH5,
+		values = []kvalue{
+			kvalue{NM_VPNC_DHGROUP_DH1, dlib.Tr("DH Group 1")},
+			kvalue{NM_VPNC_DHGROUP_DH2, dlib.Tr("DH Group 2 (default)")},
+			kvalue{NM_VPNC_DHGROUP_DH5, dlib.Tr("DH Group 5")},
 		}
 	case NM_SETTING_VPN_VPNC_KEY_PERFECT_FORWARD:
-		values = []string{
-			NM_VPNC_PFS_SERVER,
-			NM_VPNC_PFS_NOPFS,
-			NM_VPNC_PFS_DH1,
-			NM_VPNC_PFS_DH2,
-			NM_VPNC_PFS_DH5,
+		values = []kvalue{
+			kvalue{NM_VPNC_PFS_SERVER, dlib.Tr("Server (default)")},
+			kvalue{NM_VPNC_PFS_NOPFS, dlib.Tr("None")},
+			kvalue{NM_VPNC_PFS_DH1, dlib.Tr("DH Group 1")},
+			kvalue{NM_VPNC_PFS_DH2, dlib.Tr("DH Group 2")},
+			kvalue{NM_VPNC_PFS_DH5, dlib.Tr("DH Group 5")},
 		}
 	}
 	return

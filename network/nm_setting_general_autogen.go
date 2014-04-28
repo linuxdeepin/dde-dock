@@ -168,58 +168,58 @@ func generalGetSettingAvailableKeys(data connectionData, field string) (keys []s
 	return
 }
 
-func generalGetSettingAvailableValues(data connectionData, field, key string) (values []string, customizable bool) {
+func generalGetSettingAvailableValues(data connectionData, field, key string) (values []kvalue) {
 	if isVirtualKey(field, key) {
 		values = generalGetSettingVkAvailableValues(data, field, key)
 		return
 	}
 	switch field {
 	case NM_SETTING_802_1X_SETTING_NAME:
-		values, customizable = getSetting8021xAvailableValues(data, key)
+		values = getSetting8021xAvailableValues(data, key)
 	case NM_SETTING_CONNECTION_SETTING_NAME:
-		values, customizable = getSettingConnectionAvailableValues(data, key)
+		values = getSettingConnectionAvailableValues(data, key)
 	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
-		values, customizable = getSettingIp4ConfigAvailableValues(data, key)
+		values = getSettingIp4ConfigAvailableValues(data, key)
 	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
-		values, customizable = getSettingIp6ConfigAvailableValues(data, key)
+		values = getSettingIp6ConfigAvailableValues(data, key)
 	case NM_SETTING_PPP_SETTING_NAME:
-		values, customizable = getSettingPppAvailableValues(data, key)
+		values = getSettingPppAvailableValues(data, key)
 	case NM_SETTING_PPPOE_SETTING_NAME:
-		values, customizable = getSettingPppoeAvailableValues(data, key)
+		values = getSettingPppoeAvailableValues(data, key)
 	case NM_SETTING_VPN_SETTING_NAME:
-		values, customizable = getSettingVpnAvailableValues(data, key)
+		values = getSettingVpnAvailableValues(data, key)
 	case NM_SETTING_VF_VPN_L2TP_SETTING_NAME:
-		values, customizable = getSettingVpnL2tpAvailableValues(data, key)
+		values = getSettingVpnL2tpAvailableValues(data, key)
 	case NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME:
-		values, customizable = getSettingVpnL2tpPppAvailableValues(data, key)
+		values = getSettingVpnL2tpPppAvailableValues(data, key)
 	case NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME:
-		values, customizable = getSettingVpnL2tpIpsecAvailableValues(data, key)
+		values = getSettingVpnL2tpIpsecAvailableValues(data, key)
 	case NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME:
-		values, customizable = getSettingVpnOpenconnectAvailableValues(data, key)
+		values = getSettingVpnOpenconnectAvailableValues(data, key)
 	case NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME:
-		values, customizable = getSettingVpnOpenvpnAvailableValues(data, key)
+		values = getSettingVpnOpenvpnAvailableValues(data, key)
 	case NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME:
-		values, customizable = getSettingVpnOpenvpnAdvancedAvailableValues(data, key)
+		values = getSettingVpnOpenvpnAdvancedAvailableValues(data, key)
 	case NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME:
-		values, customizable = getSettingVpnOpenvpnSecurityAvailableValues(data, key)
+		values = getSettingVpnOpenvpnSecurityAvailableValues(data, key)
 	case NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
-		values, customizable = getSettingVpnOpenvpnTlsauthAvailableValues(data, key)
+		values = getSettingVpnOpenvpnTlsauthAvailableValues(data, key)
 	case NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME:
-		values, customizable = getSettingVpnOpenvpnProxiesAvailableValues(data, key)
+		values = getSettingVpnOpenvpnProxiesAvailableValues(data, key)
 	case NM_SETTING_VF_VPN_PPTP_SETTING_NAME:
-		values, customizable = getSettingVpnPptpAvailableValues(data, key)
+		values = getSettingVpnPptpAvailableValues(data, key)
 	case NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME:
-		values, customizable = getSettingVpnPptpPppAvailableValues(data, key)
+		values = getSettingVpnPptpPppAvailableValues(data, key)
 	case NM_SETTING_VF_VPN_VPNC_SETTING_NAME:
-		values, customizable = getSettingVpnVpncAvailableValues(data, key)
+		values = getSettingVpnVpncAvailableValues(data, key)
 	case NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME:
-		values, customizable = getSettingVpnVpncAdvancedAvailableValues(data, key)
+		values = getSettingVpnVpncAdvancedAvailableValues(data, key)
 	case NM_SETTING_WIRED_SETTING_NAME:
-		values, customizable = getSettingWiredAvailableValues(data, key)
+		values = getSettingWiredAvailableValues(data, key)
 	case NM_SETTING_WIRELESS_SETTING_NAME:
-		values, customizable = getSettingWirelessAvailableValues(data, key)
+		values = getSettingWirelessAvailableValues(data, key)
 	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
-		values, customizable = getSettingWirelessSecurityAvailableValues(data, key)
+		values = getSettingWirelessSecurityAvailableValues(data, key)
 	}
 	return
 }

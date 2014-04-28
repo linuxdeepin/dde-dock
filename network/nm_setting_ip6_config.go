@@ -1,6 +1,7 @@
 package main
 
 import (
+	"dlib"
 	"fmt"
 )
 
@@ -31,6 +32,19 @@ const (
 	NM_SETTING_IP6_CONFIG_METHOD_SHARED     = "shared"
 )
 
+// Initialize available values
+var availableValuesIp6ConfigMethod = make(availableValues)
+
+func init() {
+	availableValuesIp6ConfigMethod[NM_SETTING_IP6_CONFIG_METHOD_IGNORE] = kvalue{NM_SETTING_IP6_CONFIG_METHOD_IGNORE, dlib.Tr("Ignore")}
+	availableValuesIp6ConfigMethod[NM_SETTING_IP6_CONFIG_METHOD_AUTO] = kvalue{NM_SETTING_IP6_CONFIG_METHOD_AUTO, dlib.Tr("Auto")}
+	availableValuesIp6ConfigMethod[NM_SETTING_IP6_CONFIG_METHOD_DHCP] = kvalue{NM_SETTING_IP6_CONFIG_METHOD_DHCP, dlib.Tr("DHCP")}
+	availableValuesIp6ConfigMethod[NM_SETTING_IP6_CONFIG_METHOD_LINK_LOCAL] = kvalue{NM_SETTING_IP6_CONFIG_METHOD_LINK_LOCAL, dlib.Tr("Link Local")}
+	availableValuesIp6ConfigMethod[NM_SETTING_IP6_CONFIG_METHOD_MANUAL] = kvalue{NM_SETTING_IP6_CONFIG_METHOD_MANUAL, dlib.Tr("Manual")}
+	availableValuesIp6ConfigMethod[NM_SETTING_IP6_CONFIG_METHOD_SHARED] = kvalue{NM_SETTING_IP6_CONFIG_METHOD_SHARED, dlib.Tr("Shared")}
+
+}
+
 // Get available keys
 func getSettingIp6ConfigAvailableKeys(data connectionData) (keys []string) {
 	method := getSettingIp6ConfigMethod(data)
@@ -56,8 +70,7 @@ func getSettingIp6ConfigAvailableKeys(data connectionData) (keys []string) {
 }
 
 // Get available values
-func getSettingIp6ConfigAvailableValues(data connectionData, key string) (values []string, customizable bool) {
-	customizable = true
+func getSettingIp6ConfigAvailableValues(data connectionData, key string) (values []kvalue) {
 	switch key {
 	case NM_SETTING_IP6_CONFIG_METHOD:
 		// values = []string{
@@ -69,16 +82,15 @@ func getSettingIp6ConfigAvailableValues(data connectionData, key string) (values
 		// 	// NM_SETTING_IP6_CONFIG_METHOD_SHARED,// ignore
 		// }
 		if getSettingConnectionType(data) != typeVpn {
-			values = []string{
-				NM_SETTING_IP6_CONFIG_METHOD_AUTO,
-				NM_SETTING_IP6_CONFIG_METHOD_MANUAL,
+			values = []kvalue{
+				availableValuesIp6ConfigMethod[NM_SETTING_IP6_CONFIG_METHOD_AUTO],
+				availableValuesIp6ConfigMethod[NM_SETTING_IP6_CONFIG_METHOD_MANUAL],
 			}
 		} else {
-			values = []string{
-				NM_SETTING_IP6_CONFIG_METHOD_AUTO,
+			values = []kvalue{
+				availableValuesIp6ConfigMethod[NM_SETTING_IP6_CONFIG_METHOD_AUTO],
 			}
 		}
-		customizable = false
 	}
 	return
 }

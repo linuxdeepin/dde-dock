@@ -30,7 +30,7 @@ func newBasicVpnConnectionData(id, uuid, service string) (data connectionData) {
 }
 
 func getSettingVpnAvailableKeys(data connectionData) (keys []string) { return }
-func getSettingVpnAvailableValues(data connectionData, key string) (values []string, customizable bool) {
+func getSettingVpnAvailableValues(data connectionData, key string) (values []kvalue) {
 	return
 }
 func checkSettingVpnValues(data connectionData) (errs FieldKeyErrors) {

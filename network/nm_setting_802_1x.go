@@ -1,5 +1,9 @@
 package main
 
+import (
+	"dlib"
+)
+
 // TODO doc
 
 const NM_SETTING_802_1X_SETTING_NAME = "802-1x"
@@ -38,6 +42,21 @@ const (
 	NM_SETTING_802_1X_PIN_FLAGS                         = "pin-flags"
 	NM_SETTING_802_1X_SYSTEM_CA_CERTS                   = "system-ca-certs"
 )
+
+// Init available values
+var availableValues8021xPhasesAuth = make(availableValues)
+
+func init() {
+	// 'pap', 'chap', 'mschap', 'mschapv2', 'gtc', 'otp', 'md5', and 'tls'
+	availableValues8021xPhasesAuth["pap"] = kvalue{"pap", dlib.Tr("PAP")}
+	availableValues8021xPhasesAuth["chap"] = kvalue{"chap", dlib.Tr("CHAP")}
+	availableValues8021xPhasesAuth["mschap"] = kvalue{"mschap", dlib.Tr("MSCHAP")}
+	availableValues8021xPhasesAuth["mschapv2"] = kvalue{"mschapv2", dlib.Tr("MSCHAPV2")}
+	availableValues8021xPhasesAuth["gtc"] = kvalue{"gtc", dlib.Tr("GTC")}
+	availableValues8021xPhasesAuth["otp"] = kvalue{"otp", dlib.Tr("OTP")}
+	availableValues8021xPhasesAuth["md5"] = kvalue{"md5", dlib.Tr("MD5")}
+	availableValues8021xPhasesAuth["tls"] = kvalue{"tls", dlib.Tr("TLS")}
+}
 
 // Get available keys
 func getSetting8021xAvailableKeys(data connectionData) (keys []string) {
@@ -87,48 +106,65 @@ func getSetting8021xAvailableKeys(data connectionData) (keys []string) {
 }
 
 // Get available values
-func getSetting8021xAvailableValues(data connectionData, key string) (values []string, customizable bool) {
-	customizable = true
+func getSetting8021xAvailableValues(data connectionData, key string) (values []kvalue) {
 	switch key {
 	case NM_SETTING_802_1X_EAP:
 		if generalGetConnectionType(data) == typeWired {
-			values = []string{"tls", "md5", "fast", "ttls", "peap"}
+			values = []kvalue{
+				kvalue{"tls", dlib.Tr("TLS")},
+				kvalue{"md5", dlib.Tr("MD5")},
+				kvalue{"fast", dlib.Tr("FAST")},
+				kvalue{"ttls", dlib.Tr("Tunneled TLS")},
+				kvalue{"peap", dlib.Tr("Protected EAP")},
+			}
 		} else {
-			values = []string{"tls", "leap", "fast", "ttls", "peap"}
+			values = []kvalue{
+				kvalue{"tls", dlib.Tr("TLS")},
+				kvalue{"leap", dlib.Tr("LEAP")},
+				kvalue{"fast", dlib.Tr("FAST")},
+				kvalue{"ttls", dlib.Tr("Tunneled TLS")},
+				kvalue{"peap", dlib.Tr("Protected EAP")},
+			}
 		}
 	case NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING:
-		values = []string{
-			"0", // Disabled
-			"1", // Anonymous, allow unauthenticated provisioning
-			"2", // Authenticated, allow authenticated provisioning
-			"3", // Both, allow both authenticated and unauthenticated provisioning
+		values = []kvalue{
+			kvalue{"0", dlib.Tr("Disabled")},      // Disabled
+			kvalue{"1", dlib.Tr("Anonymous")},     // Anonymous, allow unauthenticated provisioning
+			kvalue{"2", dlib.Tr("Authenticated")}, // Authenticated, allow authenticated provisioning
+			kvalue{"3", dlib.Tr("Both")},          // Both, allow both authenticated and unauthenticated provisioning
 		}
 	case NM_SETTING_802_1X_PHASE1_PEAPVER:
-		values = []string{
-			"", // auto mode
-			"0",
-			"1",
+		values = []kvalue{
+			kvalue{"", dlib.Tr("Automatic")}, // auto mode
+			kvalue{"0", dlib.Tr("Version 0")},
+			kvalue{"1", dlib.Tr("Version 1")},
 		}
 	case NM_SETTING_802_1X_PHASE2_AUTH:
-		// 'pap', 'chap', 'mschap', 'mschapv2', 'gtc', 'otp', 'md5', and 'tls'
 		switch getSettingVk8021xEap(data) {
 		case "tls":
 		case "md5":
 		case "leap":
 		case "fast":
-			values = []string{"gtc", "mschapv2"}
+			values = []kvalue{
+				availableValues8021xPhasesAuth["gtc"],
+				availableValues8021xPhasesAuth["mschapv2"],
+			}
 		case "ttls":
-			values = []string{"pap", "mschap", "mschapv2", "chap"}
+			values = []kvalue{
+				availableValues8021xPhasesAuth["pap"],
+				availableValues8021xPhasesAuth["mschap"],
+				availableValues8021xPhasesAuth["mschapv2"],
+				availableValues8021xPhasesAuth["chap"],
+			}
 		case "peap":
-			values = []string{"gtc", "md5", "mschapv2"}
+			values = []kvalue{
+				availableValues8021xPhasesAuth["gtc"],
+				availableValues8021xPhasesAuth["md5"],
+				availableValues8021xPhasesAuth["mschapv2"],
+			}
 		}
-	case NM_SETTING_802_1X_PASSWORD_FLAGS: // TODO available values are not string
-		// values = []string{
-		// 	NM_SETTING_SECRET_FLAG_NONE,
-		// 	NM_SETTING_SECRET_FLAG_AGENT_OWNED,
-		// 	NM_SETTING_SECRET_FLAG_NOT_SAVED,
-		// 	NM_SETTING_SECRET_FLAG_NOT_REQUIRED,
-		// }
+	case NM_SETTING_802_1X_PASSWORD_FLAGS:
+		values = availableValuesNMSettingSecretFlag
 	}
 	return
 }

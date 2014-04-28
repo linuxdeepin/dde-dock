@@ -192,14 +192,14 @@ func generalGetSettingAvailableKeys(data connectionData, field string) (keys []s
 	return
 }
 
-func generalGetSettingAvailableValues(data connectionData, field, key string) (values []string, customizable bool) {
+func generalGetSettingAvailableValues(data connectionData, field, key string) (values []kvalue) {
 	if isVirtualKey(field, key) {
 		values = generalGetSettingVkAvailableValues(data, field, key)
 		return
 	}
 	switch field { {{range .}}
 	case {{.FieldName}}:
-		values, customizable = get{{.FieldName | ToFieldFuncBaseName}}AvailableValues(data, key){{end}}
+		values = get{{.FieldName | ToFieldFuncBaseName}}AvailableValues(data, key){{end}}
 	}
 	return
 }

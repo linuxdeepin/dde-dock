@@ -46,8 +46,7 @@ func getSettingPppAvailableKeys(data connectionData) (keys []string) {
 }
 
 // Get available values
-func getSettingPppAvailableValues(data connectionData, key string) (values []string, customizable bool) {
-	customizable = true
+func getSettingPppAvailableValues(data connectionData, key string) (values []kvalue) {
 	return
 }
 

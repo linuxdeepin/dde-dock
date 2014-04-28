@@ -83,7 +83,7 @@ func getSettingVpnL2tpAvailableKeys(data connectionData) (keys []string) {
 	keys = appendAvailableKeys(keys, fieldVpnL2tp, NM_SETTING_VPN_L2TP_KEY_DOMAIN)
 	return
 }
-func getSettingVpnL2tpAvailableValues(data connectionData, key string) (values []string, customizable bool) {
+func getSettingVpnL2tpAvailableValues(data connectionData, key string) (values []kvalue) {
 	return
 }
 func checkSettingVpnL2tpValues(data connectionData) (errs FieldKeyErrors) {
@@ -114,7 +114,7 @@ func getSettingVpnL2tpPppAvailableKeys(data connectionData) (keys []string) {
 	keys = appendAvailableKeys(keys, fieldVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_FAILURE)
 	return
 }
-func getSettingVpnL2tpPppAvailableValues(data connectionData, key string) (values []string, customizable bool) {
+func getSettingVpnL2tpPppAvailableValues(data connectionData, key string) (values []kvalue) {
 	return
 }
 func checkSettingVpnL2tpPppValues(data connectionData) (errs FieldKeyErrors) {
@@ -145,7 +145,7 @@ func getSettingVpnL2tpIpsecAvailableKeys(data connectionData) (keys []string) {
 	}
 	return
 }
-func getSettingVpnL2tpIpsecAvailableValues(data connectionData, key string) (values []string, customizable bool) {
+func getSettingVpnL2tpIpsecAvailableValues(data connectionData, key string) (values []kvalue) {
 	return
 }
 func checkSettingVpnL2tpIpsecValues(data connectionData) (errs FieldKeyErrors) {

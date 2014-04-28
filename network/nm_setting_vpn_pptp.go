@@ -73,7 +73,7 @@ func getSettingVpnPptpAvailableKeys(data connectionData) (keys []string) {
 	keys = appendAvailableKeys(keys, fieldVpnPptp, NM_SETTING_VPN_PPTP_KEY_DOMAIN)
 	return
 }
-func getSettingVpnPptpAvailableValues(data connectionData, key string) (values []string, customizable bool) {
+func getSettingVpnPptpAvailableValues(data connectionData, key string) (values []kvalue) {
 	return
 }
 func checkSettingVpnPptpValues(data connectionData) (errs FieldKeyErrors) {
@@ -102,7 +102,7 @@ func getSettingVpnPptpPppAvailableKeys(data connectionData) (keys []string) {
 	keys = appendAvailableKeys(keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_LCP_ECHO_FAILURE)
 	return
 }
-func getSettingVpnPptpPppAvailableValues(data connectionData, key string) (values []string, customizable bool) {
+func getSettingVpnPptpPppAvailableValues(data connectionData, key string) (values []kvalue) {
 	return
 }
 func checkSettingVpnPptpPppValues(data connectionData) (errs FieldKeyErrors) {

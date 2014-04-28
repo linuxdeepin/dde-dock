@@ -15,13 +15,13 @@ func pageGeneralGetId(con map[string]map[string]dbus.Variant) string {
 
 func generalGetConnectionType(data connectionData) (connType string) {
 	switch getSettingConnectionType(data) {
-	case typeWired:
+	case NM_SETTING_WIRED_SETTING_NAME:
 		connType = typeWired
-	case typeWireless:
+	case NM_SETTING_WIRELESS_SETTING_NAME:
 		connType = typeWireless
-	case typePppoe:
+	case NM_SETTING_PPPOE_SETTING_NAME:
 		connType = typePppoe
-	case typeVpn:
+	case NM_SETTING_VPN_SETTING_NAME:
 		switch getSettingVpnServiceType(data) {
 		case NM_DBUS_SERVICE_L2TP:
 			connType = typeVpnL2tp
@@ -110,6 +110,7 @@ func setSettingKeyJSON(data connectionData, field, key, valueJSON string, t ktyp
 
 	// remove connection data key if valueJSON is null or empty
 	if isJSONKeyValueMeansToDeleteKey(valueJSON, t) {
+		logger.Debugf("removeSettingKey data[%s][%s], valueJSON=%s", field, key, valueJSON) // TODO test
 		removeSettingKey(data, field, key)
 		return
 	}
@@ -120,7 +121,7 @@ func setSettingKeyJSON(data connectionData, field, key, valueJSON string, t ktyp
 			valueJSON, getKtypeDescription(t), err)
 		return
 	}
-	// logger.Debugf("setSettingKeyJSON data[%s][%s]=%#v, valueJSON=%s", field, key, value, valueJSON) // TODO test
+	logger.Debugf("setSettingKeyJSON data[%s][%s]=%#v, valueJSON=%s", field, key, value, valueJSON) // TODO test
 	if isInterfaceNil(value) {
 		removeSettingKey(data, field, key)
 	} else {

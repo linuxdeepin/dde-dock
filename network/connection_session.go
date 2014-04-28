@@ -334,14 +334,31 @@ func (s *ConnectionSession) listKeys(page string) (keys []string) {
 }
 
 // GetAvailableValues get available values for target key.
-func (s *ConnectionSession) GetAvailableValues(page, key string) (values []string) {
+// TODO
+// func (s *ConnectionSession) GetAvailableValues(page, key string) (valuesJSON []map[string]string) {
+func (s *ConnectionSession) GetAvailableValues(page, key string) (valuesJSON string) {
+	// TODO
+	var values []kvalue
 	fields := s.pageToFields(page)
 	for _, field := range fields {
-		values, _ = generalGetSettingAvailableValues(s.data, field, key)
+		values = generalGetSettingAvailableValues(s.data, field, key)
 		if len(values) > 0 {
 			break
 		}
 	}
+	// TODO
+	// convert kvalue to kvalueJSON
+	// for _, v := range values {
+	// valueMap := make(map[string]string)
+	// valueMap["Value"], _ = marshalJSON(v.Value)
+	// valueMap["Text"] = v.Text
+	// valuesJSON = append(valuesJSON, valueMap)
+
+	// json, _ := marshalJSON(v.Value)
+	// valuesJSON = append(valuesJSON, kvalueJSON{json, v.Text})
+
+	// }
+	valuesJSON, _ = marshalJSON(values)
 	return
 }
 
@@ -385,7 +402,8 @@ func (s *ConnectionSession) DebugListKeyDetail() (info string) {
 		for _, key := range pageData {
 			field := s.getFieldOfPageKey(page, key)
 			t := generalGetSettingKeyType(field, key)
-			values, _ := generalGetSettingAvailableValues(s.data, field, key)
+			// TODO convert to value json
+			values := generalGetSettingAvailableValues(s.data, field, key)
 			info += fmt.Sprintf("%s->%s[%s]: %s (%s)\n", page, key, getKtypeDescription(t), s.GetKey(page, key), values)
 		}
 	}

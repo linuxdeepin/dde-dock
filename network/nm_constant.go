@@ -1,5 +1,9 @@
 package main
 
+import (
+	"dlib"
+)
+
 const (
 	NM_DEVICE_TYPE_UNKNOWN    = uint32(0)
 	NM_DEVICE_TYPE_ETHERNET   = uint32(1)
@@ -74,3 +78,10 @@ const (
 	NM_SETTING_SECRET_FLAG_NOT_SAVED    = 0x00000002
 	NM_SETTING_SECRET_FLAG_NOT_REQUIRED = 0x00000004
 )
+
+var availableValuesNMSettingSecretFlag = []kvalue{
+	// kvalue{NM_SETTING_SECRET_FLAG_NONE, dlib.Tr("System Saved")}, // most case do not need
+	kvalue{NM_SETTING_SECRET_FLAG_AGENT_OWNED, dlib.Tr("Saved")},
+	kvalue{NM_SETTING_SECRET_FLAG_NOT_SAVED, dlib.Tr("Not Saved")},
+	kvalue{NM_SETTING_SECRET_FLAG_NOT_REQUIRED, dlib.Tr("Not Required")},
+}

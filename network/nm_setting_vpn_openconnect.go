@@ -78,7 +78,7 @@ func getSettingVpnOpenconnectAvailableKeys(data connectionData) (keys []string) 
 	keys = appendAvailableKeys(keys, fieldVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_PEM_PASSPHRASE_FSID)
 	return
 }
-func getSettingVpnOpenconnectAvailableValues(data connectionData, key string) (values []string, customizable bool) {
+func getSettingVpnOpenconnectAvailableValues(data connectionData, key string) (values []kvalue) {
 	return
 }
 func checkSettingVpnOpenconnectValues(data connectionData) (errs FieldKeyErrors) {

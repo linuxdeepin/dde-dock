@@ -1,6 +1,7 @@
 package main
 
 import (
+	"dlib"
 	"os/user"
 )
 
@@ -123,12 +124,12 @@ func getSettingVkKeyType(field, key string) (t ktype) {
 	return
 }
 
-func generalGetSettingVkAvailableValues(data connectionData, field, key string) (values []string) {
+func generalGetSettingVkAvailableValues(data connectionData, field, key string) (values []kvalue) {
 	switch field {
 	case field8021x:
 		switch key {
 		case NM_SETTING_VK_802_1X_EAP:
-			values, _ = getSetting8021xAvailableValues(data, NM_SETTING_802_1X_EAP)
+			values = getSetting8021xAvailableValues(data, NM_SETTING_802_1X_EAP)
 		}
 	case fieldConnection:
 	case fieldIpv4:
@@ -138,14 +139,23 @@ func generalGetSettingVkAvailableValues(data connectionData, field, key string) 
 	case fieldWirelessSecurity:
 		switch key {
 		case NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT:
-			values = []string{"none", "wep", "wpa-psk", "wpa-eap"}
+			values = []kvalue{
+				kvalue{"none", dlib.Tr("None")},
+				kvalue{"wep", dlib.Tr("WEP 40/128-bit Key")},
+				kvalue{"wpa-psk", dlib.Tr("WPA & WPA2 Personal")},
+				kvalue{"wpa-eap", dlib.Tr("WPA & WPA2 Enterprise")},
+			}
 		}
 	case fieldPppoe:
 	case fieldPpp:
 	case fieldVpnVpncAdvanced:
 		switch key {
 		case NM_SETTING_VK_VPN_VPNC_KEY_ENCRYPTION_METHOD:
-			values = []string{"secure", "weak", "none"}
+			values = []kvalue{
+				kvalue{"secure", dlib.Tr("Secure (default)")},
+				kvalue{"weak", dlib.Tr("Weak")},
+				kvalue{"none", dlib.Tr("None")},
+			}
 		}
 	}
 	if len(values) == 0 {

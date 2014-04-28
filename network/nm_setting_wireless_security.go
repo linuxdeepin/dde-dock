@@ -1,5 +1,9 @@
 package main
 
+import (
+	"dlib"
+)
+
 // https://developer.gnome.org/libnm-util/0.9/NMSettingWirelessSecurity.html
 // https://developer.gnome.org/NetworkManager/unstable/ref-settings.html
 
@@ -144,22 +148,29 @@ func getSettingWirelessSecurityAvailableKeys(data connectionData) (keys []string
 }
 
 // Get available values
-func getSettingWirelessSecurityAvailableValues(data connectionData, key string) (values []string, customizable bool) {
-	customizable = true
+func getSettingWirelessSecurityAvailableValues(data connectionData, key string) (values []kvalue) {
 	switch key {
 	case NM_SETTING_WIRELESS_SECURITY_KEY_MGMT:
-		values = []string{
-			"none",      // wep
-			"ieee8021x", // dynamic wep
-			"wpa-none",  // wpa-psk ad-hoc
-			"wpa-psk",   // wpa-psk infrastructure
-			"wpa-eap",   // wpa enterprise
+		values = []kvalue{
+			kvalue{"none", dlib.Tr("wep")},
+			kvalue{"ieee8021x", dlib.Tr("dynamic wep")},
+			kvalue{"wpa-none", dlib.Tr("wpa-psk ad-hoc")},
+			kvalue{"wpa-psk", dlib.Tr("wpa-psk infrastructure")},
+			kvalue{"wpa-eap", dlib.Tr("wpa enterprise")},
 		}
-		customizable = false
 	case NM_SETTING_WIRELESS_SECURITY_GROUP:
-		values = []string{"wep40", "wep104", "tkip", "ccmp"} // TODO
+		values = []kvalue{
+			kvalue{"wep40", dlib.Tr("wep40")},
+			kvalue{"wep104", dlib.Tr("wep104")},
+			kvalue{"tkip", dlib.Tr("tkip")},
+			kvalue{"ccmp", dlib.Tr("ccmp")},
+		}
 	case NM_SETTING_WIRELESS_SECURITY_AUTH_ALG:
-		values = []string{"open", "shared", "leap"}
+		values = []kvalue{
+			kvalue{"open", dlib.Tr("open")},
+			kvalue{"shared", dlib.Tr("shared")},
+			kvalue{"leap", dlib.Tr("leap")},
+		}
 	}
 	return
 }

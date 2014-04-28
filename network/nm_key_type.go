@@ -1,5 +1,12 @@
 package main
 
+// available values struct
+type availableValues map[string]kvalue
+type kvalue struct {
+	Value interface{}
+	Text  string
+}
+
 // define key type
 type ktype uint32
 
