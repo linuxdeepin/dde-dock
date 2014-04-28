@@ -41,7 +41,7 @@
     "FieldName":"NM_SETTING_CONNECTION_SETTING_NAME",
     "FieldValue":"connection",
     "Keys":[
-	    {"Name":"NM_SETTING_CONNECTION_ID", "Value":"id", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_CONNECTION_ID", "Value":"id", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Connection Name", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_CONNECTION_UUID", "Value":"uuid", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_CONNECTION_TYPE", "Value":"type", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_CONNECTION_AUTOCONNECT", "Value":"autoconnect", "Type":"ktypeBoolean", "Default":"true", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Automatically connect", "FrontEndWidget":"<default>"},

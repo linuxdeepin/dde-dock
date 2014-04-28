@@ -9,7 +9,6 @@ BaseEditPage {
     id: root
     activeExpandIndex: 0
 
-    EditTitle {}
     {{range $i, $page := .}}{{if .Ignore}}{{else}}{{$id := $page.Name | ToClassName | printf "section%s"}}
     EditSectionSeparator {relatedSection: {{$id}}}
     EditSection{{$page.Name | ToClassName}} {
