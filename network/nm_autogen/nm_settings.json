@@ -246,7 +246,7 @@
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_TLS_REMOTE", "Value":"tls-remote", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Subject Match", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_REMOTE_CERT_TLS", "Value":"remote-cert-tls", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Remote Cert", "FrontEndWidget":"EditLineComboBox"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_TA", "Value":"ta", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Key File", "FrontEndWidget":"EditLineFileChooser"},
-	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_TA_DIR", "Value":"ta-dir", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Key Direction", "FrontEndWidget":"EditLineComboBox"}
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_TA_DIR", "Value":"ta-dir", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Key Direction", "FrontEndWidget":"EditLineComboBox"}
     ]
 },    
 {

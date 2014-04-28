@@ -54,10 +54,12 @@ const NM_SETTING_VK_VPN_L2TP_ENABLE_LCP_ECHO = "vk-enable-lcp-echo"
 
 // vpn-openvpn
 const (
-	NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_PORT          = "vk-enable-port"
-	NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_RENEG_SECONDS = "vk-enable-reneg-seconds"
-	NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_TUNNEL_MTU    = "vk-enable-tunnel-mtu"
-	NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_FRAGMENT_SIZE = "vk-enable-fragment-size"
+	NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_PORT                 = "vk-enable-port"
+	NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_RENEG_SECONDS        = "vk-enable-reneg-seconds"
+	NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_TUNNEL_MTU           = "vk-enable-tunnel-mtu"
+	NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_FRAGMENT_SIZE        = "vk-enable-fragment-size"
+	NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_STATIC_KEY_DIRECTION = "vk-static-key-direction"
+	NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_TA_DIR               = "vk-ta-dir"
 )
 
 // vpn-pptp

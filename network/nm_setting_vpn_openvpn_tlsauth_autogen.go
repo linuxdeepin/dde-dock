@@ -17,7 +17,7 @@ func getSettingVpnOpenvpnTlsauthKeyType(key string) (t ktype) {
 	case NM_SETTING_VPN_OPENVPN_KEY_TA:
 		t = ktypeString
 	case NM_SETTING_VPN_OPENVPN_KEY_TA_DIR:
-		t = ktypeString
+		t = ktypeUint32
 	}
 	return
 }
@@ -49,7 +49,7 @@ func getSettingVpnOpenvpnTlsauthKeyDefaultValueJSON(key string) (valueJSON strin
 	case NM_SETTING_VPN_OPENVPN_KEY_TA:
 		valueJSON = `""`
 	case NM_SETTING_VPN_OPENVPN_KEY_TA_DIR:
-		valueJSON = `""`
+		valueJSON = `0`
 	}
 	return
 }
@@ -143,10 +143,6 @@ func ensureSettingVpnOpenvpnKeyTaDirNoEmpty(data connectionData, errs FieldKeyEr
 	if !isSettingVpnOpenvpnKeyTaDirExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TA_DIR, NM_KEY_ERROR_MISSING_VALUE)
 	}
-	value := getSettingVpnOpenvpnKeyTaDir(data)
-	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TA_DIR, NM_KEY_ERROR_EMPTY_VALUE)
-	}
 }
 
 // Getter
@@ -162,8 +158,8 @@ func getSettingVpnOpenvpnKeyTa(data connectionData) (value string) {
 	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TA).(string)
 	return
 }
-func getSettingVpnOpenvpnKeyTaDir(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TA_DIR).(string)
+func getSettingVpnOpenvpnKeyTaDir(data connectionData) (value uint32) {
+	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TA_DIR).(uint32)
 	return
 }
 
@@ -177,7 +173,7 @@ func setSettingVpnOpenvpnKeyRemoteCertTls(data connectionData, value string) {
 func setSettingVpnOpenvpnKeyTa(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TA, value)
 }
-func setSettingVpnOpenvpnKeyTaDir(data connectionData, value string) {
+func setSettingVpnOpenvpnKeyTaDir(data connectionData, value uint32) {
 	setSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TA_DIR, value)
 }
 

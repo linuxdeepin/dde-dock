@@ -178,6 +178,9 @@ func getSettingVpnOpenvpnAvailableKeys(data connectionData) (keys []string) {
 	case NM_OPENVPN_CONTYPE_STATIC_KEY:
 		keys = appendAvailableKeys(keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY)
 		keys = appendAvailableKeys(keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY_DIRECTION)
+		if getSettingVkVpnOpenvpnKeyEnableStaticKeyDirection(data) {
+			keys = append(keys, NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY_DIRECTION)
+		}
 		keys = appendAvailableKeys(keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_REMOTE_IP)
 		keys = appendAvailableKeys(keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_LOCAL_IP)
 	}
@@ -194,7 +197,6 @@ func getSettingVpnOpenvpnAvailableValues(data connectionData, key string) (value
 		}
 	case NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY_DIRECTION:
 		values = []kvalue{
-			kvalue{"", dlib.Tr("None")},
 			kvalue{0, dlib.Tr("0")},
 			kvalue{1, dlib.Tr("1")},
 		}
@@ -310,6 +312,9 @@ func getSettingVpnOpenvpnTlsauthAvailableKeys(data connectionData) (keys []strin
 	keys = appendAvailableKeys(keys, fieldVpnOpenvpnTlsauth, NM_SETTING_VPN_OPENVPN_KEY_REMOTE_CERT_TLS)
 	keys = appendAvailableKeys(keys, fieldVpnOpenvpnTlsauth, NM_SETTING_VPN_OPENVPN_KEY_TA)
 	keys = appendAvailableKeys(keys, fieldVpnOpenvpnTlsauth, NM_SETTING_VPN_OPENVPN_KEY_TA_DIR)
+	if getSettingVkVpnOpenvpnKeyEnableTaDir(data) {
+		keys = append(keys, NM_SETTING_VPN_OPENVPN_KEY_TA_DIR)
+	}
 	return
 }
 func getSettingVpnOpenvpnTlsauthAvailableValues(data connectionData, key string) (values []kvalue) {
@@ -322,7 +327,6 @@ func getSettingVpnOpenvpnTlsauthAvailableValues(data connectionData, key string)
 		}
 	case NM_SETTING_VPN_OPENVPN_KEY_TA_DIR:
 		values = []kvalue{
-			kvalue{"", dlib.Tr("None")},
 			kvalue{0, dlib.Tr("0")},
 			kvalue{1, dlib.Tr("1")},
 		}

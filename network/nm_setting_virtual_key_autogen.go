@@ -32,6 +32,8 @@ var virtualKeys = []virtualKey{
 	virtualKey{NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_RENEG_SECONDS, ktypeBoolean, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_RENEG_SECONDS, true, true, false},
 	virtualKey{NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_TUNNEL_MTU, ktypeBoolean, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TUNNEL_MTU, true, true, false},
 	virtualKey{NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_FRAGMENT_SIZE, ktypeBoolean, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_FRAGMENT_SIZE, true, true, false},
+	virtualKey{NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_STATIC_KEY_DIRECTION, ktypeBoolean, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY_DIRECTION, true, true, false},
+	virtualKey{NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_TA_DIR, ktypeBoolean, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TA_DIR, true, true, false},
 	virtualKey{NM_SETTING_VK_VPN_PPTP_ENABLE_LCP_ECHO, ktypeBoolean, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_LCP_ECHO_FAILURE, false, true, false},
 	virtualKey{NM_SETTING_VK_VPN_VPNC_KEY_HYBRID_AUTHMODE, ktypeBoolean, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_AUTHMODE, false, true, false},
 	virtualKey{NM_SETTING_VK_VPN_VPNC_KEY_ENCRYPTION_METHOD, ktypeString, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_SINGLE_DES, false, true, false},
@@ -120,6 +122,16 @@ func generalGetVirtualKeyJSON(data connectionData, field, key string) (valueJSON
 			return getSettingVkVpnOpenvpnKeyEnableTunnelMtuJSON(data)
 		case NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_FRAGMENT_SIZE:
 			return getSettingVkVpnOpenvpnKeyEnableFragmentSizeJSON(data)
+		}
+	case NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME:
+		switch key {
+		case NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_STATIC_KEY_DIRECTION:
+			return getSettingVkVpnOpenvpnKeyEnableStaticKeyDirectionJSON(data)
+		}
+	case NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
+		switch key {
+		case NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_TA_DIR:
+			return getSettingVkVpnOpenvpnKeyEnableTaDirJSON(data)
 		}
 	case NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME:
 		switch key {
@@ -257,6 +269,18 @@ func generalSetVirtualKeyJSON(data connectionData, field, key string, valueJSON 
 			return
 		case NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_FRAGMENT_SIZE:
 			logicSetSettingVkVpnOpenvpnKeyEnableFragmentSizeJSON(data, valueJSON)
+			return
+		}
+	case NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME:
+		switch key {
+		case NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_STATIC_KEY_DIRECTION:
+			logicSetSettingVkVpnOpenvpnKeyEnableStaticKeyDirectionJSON(data, valueJSON)
+			return
+		}
+	case NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
+		switch key {
+		case NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_TA_DIR:
+			logicSetSettingVkVpnOpenvpnKeyEnableTaDirJSON(data, valueJSON)
 			return
 		}
 	case NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME:
@@ -408,6 +432,14 @@ func getSettingVkVpnOpenvpnKeyEnableFragmentSizeJSON(data connectionData) (value
 	valueJSON, _ = marshalJSON(getSettingVkVpnOpenvpnKeyEnableFragmentSize(data))
 	return
 }
+func getSettingVkVpnOpenvpnKeyEnableStaticKeyDirectionJSON(data connectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkVpnOpenvpnKeyEnableStaticKeyDirection(data))
+	return
+}
+func getSettingVkVpnOpenvpnKeyEnableTaDirJSON(data connectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkVpnOpenvpnKeyEnableTaDir(data))
+	return
+}
 func getSettingVkVpnPptpEnableLcpEchoJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkVpnPptpEnableLcpEcho(data))
 	return
@@ -546,6 +578,14 @@ func logicSetSettingVkVpnOpenvpnKeyEnableFragmentSizeJSON(data connectionData, v
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	logicSetSettingVkVpnOpenvpnKeyEnableFragmentSize(data, value)
 }
+func logicSetSettingVkVpnOpenvpnKeyEnableStaticKeyDirectionJSON(data connectionData, valueJSON string) {
+	value, _ := jsonToKeyValueBoolean(valueJSON)
+	logicSetSettingVkVpnOpenvpnKeyEnableStaticKeyDirection(data, value)
+}
+func logicSetSettingVkVpnOpenvpnKeyEnableTaDirJSON(data connectionData, valueJSON string) {
+	value, _ := jsonToKeyValueBoolean(valueJSON)
+	logicSetSettingVkVpnOpenvpnKeyEnableTaDir(data, value)
+}
 func logicSetSettingVkVpnPptpEnableLcpEchoJSON(data connectionData, valueJSON string) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	logicSetSettingVkVpnPptpEnableLcpEcho(data, value)
@@ -592,6 +632,18 @@ func getSettingVkVpnOpenvpnKeyEnableFragmentSize(data connectionData) (value boo
 	}
 	return false
 }
+func getSettingVkVpnOpenvpnKeyEnableStaticKeyDirection(data connectionData) (value bool) {
+	if isSettingVpnOpenvpnKeyStaticKeyDirectionExists(data) {
+		return true
+	}
+	return false
+}
+func getSettingVkVpnOpenvpnKeyEnableTaDir(data connectionData) (value bool) {
+	if isSettingVpnOpenvpnKeyTaDirExists(data) {
+		return true
+	}
+	return false
+}
 
 // Setter for enable key wrapper
 func logicSetSettingVkVpnOpenvpnKeyEnablePort(data connectionData, value bool) {
@@ -620,5 +672,19 @@ func logicSetSettingVkVpnOpenvpnKeyEnableFragmentSize(data connectionData, value
 		setSettingVpnOpenvpnKeyFragmentSize(data, 1300)
 	} else {
 		removeSettingVpnOpenvpnKeyFragmentSize(data)
+	}
+}
+func logicSetSettingVkVpnOpenvpnKeyEnableStaticKeyDirection(data connectionData, value bool) {
+	if value {
+		setSettingVpnOpenvpnKeyStaticKeyDirection(data, 0)
+	} else {
+		removeSettingVpnOpenvpnKeyStaticKeyDirection(data)
+	}
+}
+func logicSetSettingVkVpnOpenvpnKeyEnableTaDir(data connectionData, value bool) {
+	if value {
+		setSettingVpnOpenvpnKeyTaDir(data, 0)
+	} else {
+		removeSettingVpnOpenvpnKeyTaDir(data)
 	}
 }
