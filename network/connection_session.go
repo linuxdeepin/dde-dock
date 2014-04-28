@@ -160,7 +160,7 @@ func (s *ConnectionSession) Save() bool {
 
 func (s *ConnectionSession) isErrorOccured() bool {
 	for _, v := range s.Errors {
-		if len(v) > 1 {
+		if len(v) > 0 {
 			return true
 		}
 	}
