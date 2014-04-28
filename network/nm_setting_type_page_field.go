@@ -1,15 +1,15 @@
 package main
 
 const (
-	typeWired          = "type-wired"
-	typeWireless       = "type-wireless"
-	typePppoe          = "type-pppoe"
-	typeVpn            = "type-vpn"
-	typeVpnL2tp        = "type-vpn-l2tp"
-	typeVpnOpenconnect = "type-vpn-openconnect"
-	typeVpnOpenvpn     = "type-vpn-openvpn"
-	typeVpnPptp        = "type-vpn-pptp"
-	typeVpnVpnc        = "type-vpn-vpnc"
+	typeWired          = "wired"
+	typeWireless       = "wireless"
+	typePppoe          = "pppoe"
+	typeVpn            = "vpn"
+	typeVpnL2tp        = "vpn-l2tp"
+	typeVpnOpenconnect = "vpn-openconnect"
+	typeVpnOpenvpn     = "vpn-openvpn"
+	typeVpnPptp        = "vpn-pptp"
+	typeVpnVpnc        = "vpn-vpnc"
 )
 
 // TODO key-map values for internationalization

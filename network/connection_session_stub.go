@@ -18,16 +18,21 @@ func (s *ConnectionSession) updatePropAllowSave(v bool) {
 	dbus.NotifyChange(s, "AllowSave")
 }
 
+func (s *ConnectionSession) updatePropAvailablePages() {
+	s.AvailablePages = s.listPages()
+	dbus.NotifyChange(s, "AvailablePages")
+}
+
 func (s *ConnectionSession) updatePropAvailableKeys() {
 	s.AvailableKeys = make(map[string][]string) // clear structure
-	for _, page := range s.ListPages() {
+	for _, page := range s.listPages() {
 		s.AvailableKeys[page] = s.listKeys(page)
 	}
 	dbus.NotifyChange(s, "AvailableKeys")
 }
 
 func (s *ConnectionSession) updatePropErrors() {
-	for _, page := range s.ListPages() {
+	for _, page := range s.listPages() {
 		s.Errors[page] = make(FieldKeyErrors)
 		fields := s.pageToFields(page)
 		for _, field := range fields {

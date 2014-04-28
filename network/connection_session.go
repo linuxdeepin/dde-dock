@@ -17,14 +17,10 @@ type ConnectionSession struct {
 
 	CurrentUUID string
 
-	AllowSave bool // TODO really need?
-
-	// 前端只显示此列表中的字段, 会跟随当前正在编辑的值而改变
-	// TODO more documentation
-	AvailableKeys map[string][]string
-
-	// 返回所有 page 下错误的字段和对应的错误原因
-	Errors PageKeyErrors
+	AllowSave      bool // TODO really need?
+	AvailablePages []string
+	AvailableKeys  map[string][]string
+	Errors         PageKeyErrors
 }
 
 //所有字段值都为string，后端自行转换为需要的值后提供给NM
@@ -36,6 +32,7 @@ func doNewConnectionSession(devPath dbus.ObjectPath, uuid string) (s *Connection
 	s.CurrentUUID = uuid
 	s.data = make(connectionData)
 	s.AllowSave = false // TODO
+	s.AvailablePages = make([]string, 0)
 	s.AvailableKeys = make(map[string][]string)
 	s.Errors = make(PageKeyErrors)
 	return s
@@ -72,9 +69,10 @@ func NewConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 		s.data = newVpnOpenvpnConnectionData("", s.CurrentUUID)
 	}
 
-	s.updatePropErrors()
-	s.updatePropAvailableKeys()
 	// s.updatePropAllowSave(false) // TODO
+	s.updatePropAvailablePages()
+	s.updatePropAvailableKeys()
+	s.updatePropErrors()
 
 	return
 }
@@ -116,9 +114,10 @@ func NewConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 		}
 	}
 
-	s.updatePropErrors()
-	s.updatePropAvailableKeys()
 	// s.updatePropAllowSave(false) // TODO
+	s.updatePropAvailablePages()
+	s.updatePropAvailableKeys()
+	s.updatePropErrors()
 
 	// TODO
 	logger.Debug("NewConnectionSessionByOpen():", s.data)
@@ -173,8 +172,8 @@ func (s *ConnectionSession) Close() {
 	dbus.UnInstallObject(s)
 }
 
-// ListPages return supported pages for target connection type.
-func (s *ConnectionSession) ListPages() (pages []string) {
+// listPages return supported pages for target connection type.
+func (s *ConnectionSession) listPages() (pages []string) {
 	switch s.connectionType {
 	case typeWired:
 		pages = []string{
@@ -356,8 +355,11 @@ func (s *ConnectionSession) SetKey(page, key, value string) {
 	field := s.getFieldOfPageKey(page, key)
 	// logger.Debugf("SetKey(), page=%s, filed=%s, key=%s, value=%s", page, field, key, value) // TODO test
 	generalSetSettingKeyJSON(s.data, field, key, value)
-	s.updatePropErrors()
+
+	s.updatePropAvailablePages()
 	s.updatePropAvailableKeys()
+	s.updatePropErrors()
+
 	// TODO
 	// if s.isErrorOccured() {
 	// 	s.updatePropAllowSave(false)
@@ -374,7 +376,7 @@ func (s *ConnectionSession) SetKey(page, key, value string) {
 // }
 
 func (s *ConnectionSession) DebugListKeyDetail() (info string) {
-	for _, page := range s.ListPages() {
+	for _, page := range s.listPages() {
 		pageData, ok := s.AvailableKeys[page]
 		if !ok {
 			logger.Warning("no available keys for page", page)

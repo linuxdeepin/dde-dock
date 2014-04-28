@@ -45,7 +45,7 @@ const (
 	NM_SETTING_VK_IP6_CONFIG_ROUTES_METRIC     = "vk-routes-metric"
 )
 
-// ppp TODO rename, key, enable
+// ppp
 const NM_SETTING_VK_PPP_ENABLE_LCP_ECHO = "vk-enable-lcp-echo"
 
 // vpn-l2tp
