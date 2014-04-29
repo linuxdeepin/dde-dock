@@ -317,19 +317,8 @@ func logicSetSettingIp4ConfigMethod(data connectionData, value string) (err erro
 	return
 }
 
-// Virtual keys
-func doGetOrNewSettingIp4ConfigAddresses(data connectionData) (addresses [][]uint32) {
-	addresses = getSettingIp4ConfigAddresses(data)
-	if len(addresses) == 0 {
-		addresses = make([][]uint32, 1)
-		addresses[0] = make([]uint32, 3)
-	}
-	if len(addresses[0]) != 3 {
-		addresses[0] = make([]uint32, 3)
-	}
-	return
-}
-func doIsSettingIp4ConfigAddressesEmpty(data connectionData) bool {
+// Virtual key utility
+func isSettingIp4ConfigAddressesEmpty(data connectionData) bool {
 	addresses := getSettingIp4ConfigAddresses(data)
 	if len(addresses) == 0 {
 		return true
@@ -338,6 +327,15 @@ func doIsSettingIp4ConfigAddressesEmpty(data connectionData) bool {
 		return true
 	}
 	return false
+}
+func getOrNewSettingIp4ConfigAddresses(data connectionData) (addresses [][]uint32) {
+	if !isSettingIp4ConfigAddressesEmpty(data) {
+		addresses = getSettingIp4ConfigAddresses(data)
+	} else {
+		addresses = make([][]uint32, 1)
+		addresses[0] = make([]uint32, 3)
+	}
+	return
 }
 
 // Virtual key getter
@@ -350,7 +348,7 @@ func getSettingVkIp4ConfigDns(data connectionData) (value string) {
 	return
 }
 func getSettingVkIp4ConfigAddressesAddress(data connectionData) (value string) {
-	if doIsSettingIp4ConfigAddressesEmpty(data) {
+	if isSettingIp4ConfigAddressesEmpty(data) {
 		return
 	}
 	addresses := getSettingIp4ConfigAddresses(data)
@@ -358,7 +356,7 @@ func getSettingVkIp4ConfigAddressesAddress(data connectionData) (value string) {
 	return
 }
 func getSettingVkIp4ConfigAddressesMask(data connectionData) (value string) {
-	if doIsSettingIp4ConfigAddressesEmpty(data) {
+	if isSettingIp4ConfigAddressesEmpty(data) {
 		return
 	}
 	addresses := getSettingIp4ConfigAddresses(data)
@@ -366,7 +364,7 @@ func getSettingVkIp4ConfigAddressesMask(data connectionData) (value string) {
 	return
 }
 func getSettingVkIp4ConfigAddressesGateway(data connectionData) (value string) {
-	if doIsSettingIp4ConfigAddressesEmpty(data) {
+	if isSettingIp4ConfigAddressesEmpty(data) {
 		return
 	}
 	addresses := getSettingIp4ConfigAddresses(data)
@@ -421,17 +419,17 @@ func logicSetSettingVkIp4ConfigAddressesAddress(data connectionData, value strin
 	if len(value) == 0 {
 		value = ipv4Zero
 	}
-	addresses := doGetOrNewSettingIp4ConfigAddresses(data)
-	addr := addresses[0]
 	tmpn, err := convertIpv4AddressToUint32Check(value)
-	addr[0] = tmpn
 	if err != nil {
 		err = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
 		return
 	}
+	addresses := getOrNewSettingIp4ConfigAddresses(data)
+	addr := addresses[0]
+	addr[0] = tmpn
 	if !isUint32ArrayEmpty(addr) {
 		setSettingIp4ConfigAddresses(data, addresses)
-	} else if addr[1] == 0 && addr[2] == 0 {
+	} else {
 		removeSettingIp4ConfigAddresses(data)
 	}
 	return
@@ -440,17 +438,17 @@ func logicSetSettingVkIp4ConfigAddressesMask(data connectionData, value string) 
 	if len(value) == 0 {
 		value = ipv4Zero
 	}
-	addresses := doGetOrNewSettingIp4ConfigAddresses(data)
-	addr := addresses[0]
 	tmpn, err := convertIpv4NetMaskToPrefixCheck(value)
-	addr[1] = tmpn
 	if err != nil {
 		err = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
 		return
 	}
+	addresses := getOrNewSettingIp4ConfigAddresses(data)
+	addr := addresses[0]
+	addr[1] = tmpn
 	if !isUint32ArrayEmpty(addr) {
 		setSettingIp4ConfigAddresses(data, addresses)
-	} else if addr[0] == 0 && addr[2] == 0 {
+	} else {
 		removeSettingIp4ConfigAddresses(data)
 	}
 	return
@@ -459,17 +457,17 @@ func logicSetSettingVkIp4ConfigAddressesGateway(data connectionData, value strin
 	if len(value) == 0 {
 		value = ipv4Zero
 	}
-	addresses := doGetOrNewSettingIp4ConfigAddresses(data)
-	addr := addresses[0]
 	tmpn, err := convertIpv4AddressToUint32Check(value)
-	addr[2] = tmpn
 	if err != nil {
 		err = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
 		return
 	}
+	addresses := getOrNewSettingIp4ConfigAddresses(data)
+	addr := addresses[0]
+	addr[2] = tmpn
 	if !isUint32ArrayEmpty(addr) {
 		setSettingIp4ConfigAddresses(data, addresses)
-	} else if addr[0] == 0 && addr[1] == 0 {
+	} else {
 		removeSettingIp4ConfigAddresses(data)
 	}
 	return

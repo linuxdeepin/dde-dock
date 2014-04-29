@@ -171,7 +171,11 @@ func checkSettingIp6ConfigAddresses(data connectionData, errs fieldErrors) {
 	addresses := getSettingIp6ConfigAddresses(data)
 	for _, addr := range addresses {
 		// check address
-		if !isIpv6AddressValid(addr.Address) || isIpv6AddressZero(addr.Address) {
+		if !isIpv6AddressValid(addr.Address) {
+			rememberError(errs, fieldIpv6, NM_SETTING_VK_IP6_CONFIG_ADDRESSES_ADDRESS, NM_KEY_ERROR_INVALID_VALUE)
+			return
+		}
+		if isIpv6AddressZero(addr.Address) {
 			rememberError(errs, fieldIpv6, NM_SETTING_VK_IP6_CONFIG_ADDRESSES_ADDRESS, NM_KEY_ERROR_INVALID_VALUE)
 			return
 		}
@@ -212,25 +216,54 @@ func logicSetSettingIp6ConfigMethod(data connectionData, value string) (err erro
 	return
 }
 
+// Virtual key utility
+func isSettingIp6ConfigAddressesEmpty(data connectionData) bool {
+	addresses := getSettingIp6ConfigAddresses(data)
+	if len(addresses) == 0 {
+		return true
+	}
+	return false
+}
+func getOrNewSettingIp6ConfigAddresses(data connectionData) (addresses ipv6Addresses) {
+	if !isSettingIp6ConfigAddressesEmpty(data) {
+		addresses = getSettingIp6ConfigAddresses(data)
+	} else {
+		addresses = make(ipv6Addresses, 1)
+	}
+	return
+}
+
 // Virtual key getter
 func getSettingVkIp6ConfigDns(data connectionData) (value string) {
-	// TODO
-	// value := getSettingIp6ConfigDns(data)
+	dns := getSettingIp6ConfigDns(data)
+	if len(dns) == 0 {
+		return
+	}
+	value = convertIpv6AddressToString(dns[0])
 	return
 }
 func getSettingVkIp6ConfigAddressesAddress(data connectionData) (value string) {
-	// TODO
-	// value := getSettingIp6ConfigAddressesAddress(data)
+	if isSettingIp6ConfigAddressesEmpty(data) {
+		return
+	}
+	addresses := getSettingIp6ConfigAddresses(data)
+	value = convertIpv6AddressToString(addresses[0].Address)
 	return
 }
 func getSettingVkIp6ConfigAddressesPrefix(data connectionData) (value uint32) {
-	// TODO
-	// value := getSettingIp6ConfigAddressesPrefix(data)
+	if isSettingIp6ConfigAddressesEmpty(data) {
+		return
+	}
+	addresses := getSettingIp6ConfigAddresses(data)
+	value = addresses[0].Prefix
 	return
 }
 func getSettingVkIp6ConfigAddressesGateway(data connectionData) (value string) {
-	// TODO
-	// value := getSettingIp6ConfigAddressesGateway(data)
+	if isSettingIp6ConfigAddressesEmpty(data) {
+		return
+	}
+	addresses := getSettingIp6ConfigAddresses(data)
+	value = convertIpv6AddressToString(addresses[0].Gateway)
 	return
 }
 func getSettingVkIp6ConfigRoutesAddress(data connectionData) (value string) {
@@ -256,23 +289,74 @@ func getSettingVkIp6ConfigRoutesMetric(data connectionData) (value string) {
 
 // Virtual key logic setter
 func logicSetSettingVkIp6ConfigDns(data connectionData, value string) (err error) {
-	// TODO
-	// setSettingIp6ConfigDnsJSON(data)
+	if len(value) == 0 {
+		removeSettingIp6ConfigDns(data)
+		return
+	}
+	dns := getSettingIp6ConfigDns(data)
+	if len(dns) == 0 {
+		dns = make([][]byte, 1)
+	}
+	tmp, err := convertIpv6AddressToArrayByteCheck(value)
+	dns[0] = tmp
+	if err != nil {
+		err = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
+		return
+	}
+	if !isIpv6AddressZero(dns[0]) {
+		setSettingIp6ConfigDns(data, dns)
+	} else {
+		removeSettingIp6ConfigDns(data)
+	}
 	return
 }
 func logicSetSettingVkIp6ConfigAddressesAddress(data connectionData, value string) (err error) {
-	// TODO
-	// setSettingIp6ConfigAddressesAddressJSON(data)
+	if len(value) == 0 {
+		value = ipv6AddrZero
+	}
+	tmp, err := convertIpv6AddressToArrayByteCheck(value)
+	if err != nil {
+		err = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
+		return
+	}
+	addresses := getOrNewSettingIp6ConfigAddresses(data)
+	addr := addresses[0]
+	addr.Address = tmp
+	if !isIpv6AddressStructZero(addr) {
+		setSettingIp6ConfigAddresses(data, addresses)
+	} else {
+		removeSettingIp6ConfigAddresses(data)
+	}
 	return
 }
 func logicSetSettingVkIp6ConfigAddressesPrefix(data connectionData, value uint32) (err error) {
-	// TODO
-	// setSettingIp6ConfigAddressesPrefixJSON(data)
+	addresses := getOrNewSettingIp6ConfigAddresses(data)
+	addr := addresses[0]
+	addr.Prefix = value
+	if !isIpv6AddressStructZero(addr) {
+		setSettingIp6ConfigAddresses(data, addresses)
+	} else {
+		removeSettingIp6ConfigAddresses(data)
+	}
 	return
 }
 func logicSetSettingVkIp6ConfigAddressesGateway(data connectionData, value string) (err error) {
-	// TODO
-	// setSettingIp6ConfigAddressesGatewayJSON(data)
+	if len(value) == 0 {
+		value = ipv6AddrZero
+	}
+	tmp, err := convertIpv6AddressToArrayByteCheck(value)
+	if err != nil {
+		err = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
+		return
+	}
+	addresses := getOrNewSettingIp6ConfigAddresses(data)
+	addr := addresses[0]
+	addr.Gateway = tmp
+	if !isIpv6AddressStructZero(addr) {
+		setSettingIp6ConfigAddresses(data, addresses)
+	} else {
+		removeSettingIp6ConfigAddresses(data)
+	}
 	return
 }
 func logicSetSettingVkIp6ConfigRoutesAddress(data connectionData, value string) (err error) {

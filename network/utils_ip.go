@@ -139,9 +139,16 @@ func convertIpv4NetMaskToPrefixCheck(maskAddress string) (prefix uint32, err err
 
 // []byte{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0} -> "0000:0000:0000:0000:0000:0000:0000:0000"
 func convertIpv6AddressToString(v []byte) (ipv6Addr string) {
+	ipv6Addr, err := convertIpv6AddressToStringCheck(v)
+	if err != nil {
+		logger.Error(err)
+	}
+	return
+}
+func convertIpv6AddressToStringCheck(v []byte) (ipv6Addr string, err error) {
 	if len(v) != 16 {
 		ipv6Addr = ipv6AddrZero
-		logger.Error("ipv6 address is invalid", v)
+		err = fmt.Errorf("ipv6 address is invalid %s", v)
 		return
 	}
 	for i := 0; i < 16; i += 2 {
@@ -252,6 +259,7 @@ func isIpv6AddressValid(v []byte) bool {
 }
 
 func isIpv6AddressZero(v []byte) bool {
+	// don't care if ipv6 address if is valid
 	allAreZero := true
 	for _, b := range v {
 		if b != 0 {
@@ -260,4 +268,11 @@ func isIpv6AddressZero(v []byte) bool {
 		}
 	}
 	return allAreZero
+}
+
+func isIpv6AddressStructZero(addr ipv6Address) bool {
+	if isIpv6AddressZero(addr.Address) && isIpv6AddressZero(addr.Gateway) && addr.Prefix == 0 {
+		return true
+	}
+	return false
 }
