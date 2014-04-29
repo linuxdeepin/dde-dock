@@ -89,7 +89,6 @@ func getSettingVpnL2tpAvailableValues(data connectionData, key string) (values [
 func checkSettingVpnL2tpValues(data connectionData) (errs fieldErrors) {
 	errs = make(map[string]string)
 	ensureSettingVpnL2tpKeyGatewayNoEmpty(data, errs)
-	// TODO
 	return
 }
 
@@ -146,7 +145,6 @@ func getSettingVpnL2tpIpsecAvailableValues(data connectionData, key string) (val
 }
 func checkSettingVpnL2tpIpsecValues(data connectionData) (errs fieldErrors) {
 	errs = make(map[string]string)
-	// TODO
 	return
 }
 func logicSetSettingVpnL2tpKeyIpsecEnable(data connectionData, value bool) (err error) {

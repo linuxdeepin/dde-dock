@@ -84,6 +84,32 @@ func getSettingVpnOpenconnectAvailableValues(data connectionData, key string) (v
 func checkSettingVpnOpenconnectValues(data connectionData) (errs fieldErrors) {
 	errs = make(map[string]string)
 	ensureSettingVpnOpenconnectKeyGatewayNoEmpty(data, errs)
-	// TODO
+	checkSettingVpnOpenconnectKeyCacert(data, errs)
+	checkSettingVpnOpenconnectKeyUsercert(data, errs)
+	checkSettingVpnOpenconnectKeyPrivkey(data, errs)
 	return
+}
+func checkSettingVpnOpenconnectKeyCacert(data connectionData, errs fieldErrors) {
+	if !isSettingVpnOpenconnectKeyCacertExists(data) {
+		return
+	}
+	value := getSettingVpnOpenconnectKeyCacert(data)
+	ensureFileExists(errs, fieldVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_CACERT, value,
+		".pem", ".crt", ".key")
+}
+func checkSettingVpnOpenconnectKeyUsercert(data connectionData, errs fieldErrors) {
+	if !isSettingVpnOpenconnectKeyUsercertExists(data) {
+		return
+	}
+	value := getSettingVpnOpenconnectKeyUsercert(data)
+	ensureFileExists(errs, fieldVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_USERCERT, value,
+		".pem", ".crt", ".key")
+}
+func checkSettingVpnOpenconnectKeyPrivkey(data connectionData, errs fieldErrors) {
+	if !isSettingVpnOpenconnectKeyPrivkeyExists(data) {
+		return
+	}
+	value := getSettingVpnOpenconnectKeyPrivkey(data)
+	ensureFileExists(errs, fieldVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_PRIVKEY, value,
+		".pem", ".crt", ".key")
 }

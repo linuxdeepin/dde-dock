@@ -233,28 +233,31 @@ func checkSetting8021xPacFile(data connectionData, errs fieldErrors) {
 		rememberError(errs, field8021x, NM_SETTING_802_1X_PAC_FILE, NM_KEY_ERROR_INVALID_VALUE)
 		return
 	}
-	ensureFileExists(errs, field8021x, NM_SETTING_802_1X_PAC_FILE, value)
+	ensureFileExists(errs, field8021x, NM_SETTING_802_1X_PAC_FILE, value, ".pac")
 }
 func checkSetting8021xClientCert(data connectionData, errs fieldErrors) {
 	if !isSetting8021xClientCertExists(data) {
 		return
 	}
 	value := getSetting8021xClientCert(data)
-	ensureByteArrayUriPathExists(errs, field8021x, NM_SETTING_802_1X_CLIENT_CERT, value)
+	ensureByteArrayUriPathExists(errs, field8021x, NM_SETTING_802_1X_CLIENT_CERT, value,
+		".der", ".pem", ".crt", ".cer")
 }
 func checkSetting8021xCaCert(data connectionData, errs fieldErrors) {
 	if !isSetting8021xCaCertExists(data) {
 		return
 	}
 	value := getSetting8021xCaCert(data)
-	ensureByteArrayUriPathExists(errs, field8021x, NM_SETTING_802_1X_CA_CERT, value)
+	ensureByteArrayUriPathExists(errs, field8021x, NM_SETTING_802_1X_CA_CERT, value,
+		".der", ".pem", ".crt", ".cer")
 }
 func checkSetting8021xPrivateKey(data connectionData, errs fieldErrors) {
 	if !isSetting8021xPrivateKeyExists(data) {
 		return
 	}
 	value := getSetting8021xPrivateKey(data)
-	ensureByteArrayUriPathExists(errs, field8021x, NM_SETTING_802_1X_PRIVATE_KEY, value)
+	ensureByteArrayUriPathExists(errs, field8021x, NM_SETTING_802_1X_PRIVATE_KEY, value,
+		".der", ".pem", ".p12", ".key")
 }
 
 // Logic setter

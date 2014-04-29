@@ -79,7 +79,6 @@ func getSettingVpnPptpAvailableValues(data connectionData, key string) (values [
 func checkSettingVpnPptpValues(data connectionData) (errs fieldErrors) {
 	errs = make(map[string]string)
 	ensureSettingVpnPptpKeyGatewayNoEmpty(data, errs)
-	// TODO
 	return
 }
 

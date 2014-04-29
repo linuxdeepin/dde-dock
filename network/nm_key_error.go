@@ -63,7 +63,8 @@ func ensureFileExists(errs fieldErrors, field, key, file string, limitedExts ...
 			}
 		}
 		if !match {
-			rememberError(errs, field, key, NM_KEY_ERROR_INVALID_VALUE)
+			// TODO
+			// rememberError(errs, field, key, NM_KEY_ERROR_INVALID_VALUE)
 		}
 	}
 	if isFileExists(file) {

@@ -162,8 +162,16 @@ func checkSettingVpnVpncValues(data connectionData) (errs fieldErrors) {
 	errs = make(map[string]string)
 	ensureSettingVpnVpncKeyGatewayNoEmpty(data, errs)
 	ensureSettingVpnVpncKeyIdNoEmpty(data, errs)
-	// TODO
+	checkSettingVpnVpncCaFile(data, errs)
 	return
+}
+func checkSettingVpnVpncCaFile(data connectionData, errs fieldErrors) {
+	if !isSettingVpnVpncKeyCaFileExists(data) {
+		return
+	}
+	value := getSettingVpnVpncKeyCaFile(data)
+	ensureFileExists(errs, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_CA_FILE, value,
+		".pem", ".crt", ".cer")
 }
 
 // vpn-vpnc-advanced
@@ -212,7 +220,6 @@ func getSettingVpnVpncAdvancedAvailableValues(data connectionData, key string) (
 }
 func checkSettingVpnVpncAdvancedValues(data connectionData) (errs fieldErrors) {
 	errs = make(map[string]string)
-	// TODO
 	return
 }
 
