@@ -360,6 +360,7 @@ func (s *ConnectionSession) SetKey(page, key, value string) {
 	// logger.Debugf("SetKey(), page=%s, filed=%s, key=%s, value=%s", page, field, key, value) // TODO test
 	ok, errMsg := generalSetSettingKeyJSON(s.data, field, key, value)
 	s.updateErrorsWhenSettingKey(page, key, ok, errMsg)
+	logger.Debug("SetKey:", page, key, value, ok, errMsg)
 
 	s.updatePropAvailablePages()
 	s.updatePropAvailableKeys()

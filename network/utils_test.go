@@ -304,6 +304,16 @@ func (*Utils) TestConvertIpv4NetMaskToPrefix(c *C) {
 	for _, t := range tests {
 		c.Check(t.result, Equals, convertIpv4NetMaskToPrefix(t.test))
 	}
+
+	// test error mask address
+	_, err := convertIpv4NetMaskToPrefixCheck("255.255.255.250")
+	c.Check(err, NotNil)
+	_, err = convertIpv4NetMaskToPrefixCheck("255.255.100.2")
+	c.Check(err, NotNil)
+	_, err = convertIpv4NetMaskToPrefixCheck("255.100.0.0")
+	c.Check(err, NotNil)
+	_, err = convertIpv4NetMaskToPrefixCheck("191.0.0.0")
+	c.Check(err, NotNil)
 }
 
 func (*Utils) TestReverseOrderUint32(c *C) {

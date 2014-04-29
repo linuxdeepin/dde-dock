@@ -57,19 +57,24 @@ func convertIpv4AddressToStringNoZero(v uint32) (ip4Addr string) {
 }
 
 func convertIpv4AddressToUint32(v string) (ip4Addr uint32) {
-	if len(v) == 0 {
-		v = ipv4Zero // convert empty string to "0.0.0.0"
+	ip4Addr, err := convertIpv4AddressToUint32Check(v)
+	if err != nil {
+		logger.Error(err)
 	}
+	return
+}
+func convertIpv4AddressToUint32Check(v string) (ip4Addr uint32, err error) {
 	a := strings.Split(v, ".")
 	if len(a) != 4 {
 		ip4Addr = 0
-		logger.Error("ip address is invalid", v)
+		err = fmt.Errorf("ip address is invalid %s", v)
 		return
 	}
 	for i := 3; i >= 0; i-- {
-		tmpn, err := strconv.ParseUint(a[i], 10, 8)
+		var tmpn uint64
+		tmpn, err = strconv.ParseUint(a[i], 10, 8)
 		if err != nil {
-			logger.Error("ip address is invalid", v)
+			err = fmt.Errorf("ip address is invalid %s", v)
 			return
 		}
 		ip4Addr = ip4Addr<<8 + uint32(tmpn)
@@ -102,14 +107,28 @@ func convertIpv4PrefixToNetMask(prefix uint32) (maskAddress string) {
 
 // "255.255.255.0"(string format) -> 24
 func convertIpv4NetMaskToPrefix(maskAddress string) (prefix uint32) {
+	prefix, err := convertIpv4NetMaskToPrefixCheck(maskAddress)
+	if err != nil {
+		logger.Error(err)
+	}
+	return
+}
+func convertIpv4NetMaskToPrefixCheck(maskAddress string) (prefix uint32, err error) {
 	var mask uint32 // network order
 	mask = convertIpv4AddressToUint32(maskAddress)
 	mask = reverseOrderUint32(mask)
+	foundZerorBit := false
 	for i := uint32(0); i < 32; i++ {
 		if mask>>(32-i-1)&0x01 == 1 {
-			prefix++
+			if !foundZerorBit {
+				prefix++
+			} else {
+				err = fmt.Errorf("invalid value %s", maskAddress)
+				return
+			}
 		} else {
-			break
+			foundZerorBit = true
+			continue
 		}
 	}
 	return

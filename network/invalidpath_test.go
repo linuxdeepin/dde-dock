@@ -74,12 +74,13 @@ func TestDBusSuccess(t *testing.T) {
 	}
 	for _, d := range m.WirelessDevices.Get() {
 		path := d[0].(dbus.ObjectPath)
-		aps, err := m.GetAccessPoints(path)
+		// aps, err := m.GetAccessPoints(path)
+		_, err := m.GetAccessPoints(path)
 		if err != nil {
 			t.Fatal(err)
 		}
-		for _, ap := range aps {
-			logger.Debug(ap)
-		}
+		// for _, ap := range aps {
+		// logger.Debug(ap)
+		// }
 	}
 }

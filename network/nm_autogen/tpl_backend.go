@@ -246,7 +246,7 @@ func generalGetSettingKeyJSON(data connectionData, field, key string) (valueJSON
 func generalSetSettingKeyJSON(data connectionData, field, key, valueJSON string) (ok bool, errMsg string) {
 	ok = true
 	if isVirtualKey(field, key) {
-		generalSetVirtualKeyJSON(data, field, key, valueJSON)
+		ok, errMsg = generalSetVirtualKeyJSON(data, field, key, valueJSON)
 		return
 	}
 	switch field {

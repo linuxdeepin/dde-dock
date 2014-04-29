@@ -477,13 +477,22 @@ func logicSetSettingVkConnectionNoPermission(data connectionData, value bool) (o
 	return
 }
 func logicSetSettingVkIp4ConfigDns(data connectionData, value string) (ok bool, errMsg string) {
-	// TODO
 	ok = true
+	if len(value) == 0 {
+		removeSettingIp4ConfigDns(data)
+		return
+	}
 	dns := getSettingIp4ConfigDns(data)
 	if len(dns) == 0 {
 		dns = make([]uint32, 1)
 	}
-	dns[0] = convertIpv4AddressToUint32(value)
+	tmpn, err := convertIpv4AddressToUint32Check(value)
+	dns[0] = tmpn
+	if err != nil {
+		ok = false
+		errMsg = NM_KEY_ERROR_INVALID_VALUE
+		return
+	}
 	if dns[0] != 0 {
 		setSettingIp4ConfigDns(data, dns)
 	} else {
@@ -492,43 +501,64 @@ func logicSetSettingVkIp4ConfigDns(data connectionData, value string) (ok bool, 
 	return
 }
 func logicSetSettingVkIp4ConfigAddressesAddress(data connectionData, value string) (ok bool, errMsg string) {
-	// TODO
-	ok = true
-	addresses := doGetOrNewSettingIp4ConfigAddresses(data)
-	addr := addresses[0]
-	addr[0] = convertIpv4AddressToUint32(value)
-	if !isUint32ArrayEmpty(addr) {
-		setSettingIp4ConfigAddresses(data, addresses)
-	} else {
-		removeSettingIp4ConfigAddresses(data)
-	}
-	return
-}
-func logicSetSettingVkIp4ConfigAddressesMask(data connectionData, value string) (ok bool, errMsg string) {
-	// TODO
-	ok = true
-	addresses := doGetOrNewSettingIp4ConfigAddresses(data)
-	addr := addresses[0]
-	addr[1] = convertIpv4NetMaskToPrefix(value)
-	if !isUint32ArrayEmpty(addr) {
-		setSettingIp4ConfigAddresses(data, addresses)
-	} else {
-		removeSettingIp4ConfigAddresses(data)
-	}
-	return
-}
-func logicSetSettingVkIp4ConfigAddressesGateway(data connectionData, value string) (ok bool, errMsg string) {
-	// TODO
 	ok = true
 	if len(value) == 0 {
 		value = ipv4Zero
 	}
 	addresses := doGetOrNewSettingIp4ConfigAddresses(data)
 	addr := addresses[0]
-	addr[2] = convertIpv4AddressToUint32(value)
+	tmpn, err := convertIpv4AddressToUint32Check(value)
+	addr[0] = tmpn
+	if err != nil {
+		ok = false
+		errMsg = NM_KEY_ERROR_INVALID_VALUE
+		return
+	}
 	if !isUint32ArrayEmpty(addr) {
 		setSettingIp4ConfigAddresses(data, addresses)
-	} else {
+	} else if addr[1] == 0 && addr[2] == 0 {
+		removeSettingIp4ConfigAddresses(data)
+	}
+	return
+}
+func logicSetSettingVkIp4ConfigAddressesMask(data connectionData, value string) (ok bool, errMsg string) {
+	ok = true
+	if len(value) == 0 {
+		value = ipv4Zero
+	}
+	addresses := doGetOrNewSettingIp4ConfigAddresses(data)
+	addr := addresses[0]
+	tmpn, err := convertIpv4NetMaskToPrefixCheck(value)
+	addr[1] = tmpn
+	if err != nil {
+		ok = false
+		errMsg = NM_KEY_ERROR_INVALID_VALUE
+		return
+	}
+	if !isUint32ArrayEmpty(addr) {
+		setSettingIp4ConfigAddresses(data, addresses)
+	} else if addr[0] == 0 && addr[2] == 0 {
+		removeSettingIp4ConfigAddresses(data)
+	}
+	return
+}
+func logicSetSettingVkIp4ConfigAddressesGateway(data connectionData, value string) (ok bool, errMsg string) {
+	ok = true
+	if len(value) == 0 {
+		value = ipv4Zero
+	}
+	addresses := doGetOrNewSettingIp4ConfigAddresses(data)
+	addr := addresses[0]
+	tmpn, err := convertIpv4AddressToUint32Check(value)
+	addr[2] = tmpn
+	if err != nil {
+		ok = false
+		errMsg = NM_KEY_ERROR_INVALID_VALUE
+		return
+	}
+	if !isUint32ArrayEmpty(addr) {
+		setSettingIp4ConfigAddresses(data, addresses)
+	} else if addr[0] == 0 && addr[1] == 0 {
 		removeSettingIp4ConfigAddresses(data)
 	}
 	return
