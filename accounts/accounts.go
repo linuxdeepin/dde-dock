@@ -32,6 +32,7 @@ import (
 const (
 	CMD_USERADD = "/usr/sbin/useradd"
 	CMD_USERDEL = "/usr/sbin/userdel"
+	CMD_CHOWN   = "/bin/chown"
 
 	ACCOUNT_TYPE_STANDARD      = 0
 	ACCOUNT_TYPE_ADMINISTACTOR = 1
@@ -114,6 +115,9 @@ func (op *AccountManager) CreateUser(dbusMsg dbus.DMessage, name, fullname strin
 	path := op.FindUserByName(name)
 	//op.UserAdded(path)
 	//op.setPropName("UserList")
+
+	chownDir(name, name, "/home/"+name)
+
 	return path, true
 }
 

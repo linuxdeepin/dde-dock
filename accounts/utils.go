@@ -166,3 +166,12 @@ func polkitAuthWithPid(actionId string, pid uint32) bool {
 
 	return true
 }
+
+func chownDir(user, group, dir string) {
+	args := []string{}
+	args = append(args, "-R")
+	args = append(args, user+":"+group)
+	args = append(args, dir)
+
+	go execCommand(CMD_CHOWN, args)
+}
