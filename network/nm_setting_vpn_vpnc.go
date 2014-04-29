@@ -241,3 +241,55 @@ func logicSetSettingVpnVpncKeyXauthPasswordFlags(data connectionData, value uint
 	setSettingVpnVpncKeyXauthPasswordFlags(data, value)
 	return
 }
+
+// Virtual key getter
+func getSettingVkVpnVpncKeyHybridAuthmode(data connectionData) (value bool) {
+	if isSettingVpnVpncKeyAuthmodeExists(data) {
+		return true
+	}
+	return false
+}
+func getSettingVkVpnVpncKeyEncryptionMethod(data connectionData) (value string) {
+	if getSettingVpnVpncKeySingleDes(data) {
+		return "weak"
+	} else if getSettingVpnVpncKeyNoEncryption(data) {
+		return "none"
+	}
+	return "secure"
+}
+func getSettingVkVpnVpncKeyDisableDpd(data connectionData) (value bool) {
+	if isSettingVpnVpncKeyDpdIdleTimeoutExists(data) && getSettingVpnVpncKeyDpdIdleTimeout(data) == 0 {
+		return true
+	}
+	return false
+}
+
+// Virtual key logic setter, all virtual keys has a logic setter
+func logicSetSettingVkVpnVpncKeyHybridAuthmode(data connectionData, value bool) (err error) {
+	if value {
+		setSettingVpnVpncKeyAuthmode(data, "hybrid")
+	} else {
+		removeSettingVpnVpncKeyAuthmode(data)
+	}
+	return
+}
+func logicSetSettingVkVpnVpncKeyEncryptionMethod(data connectionData, value string) (err error) {
+	removeSettingVpnVpncKeySingleDes(data)
+	removeSettingVpnVpncKeyNoEncryption(data)
+	switch value {
+	case "secure":
+	case "weak":
+		setSettingVpnVpncKeySingleDes(data, true)
+	case "none":
+		setSettingVpnVpncKeyNoEncryption(data, true)
+	}
+	return
+}
+func logicSetSettingVkVpnVpncKeyDisableDpd(data connectionData, value bool) (err error) {
+	if value {
+		setSettingVpnVpncKeyDpdIdleTimeout(data, 0)
+	} else {
+		removeSettingVpnVpncKeyDpdIdleTimeout(data)
+	}
+	return
+}

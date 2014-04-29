@@ -1,5 +1,9 @@
 package main
 
+import (
+	"os/user"
+)
+
 // TODO doc
 
 const NM_SETTING_CONNECTION_SETTING_NAME = "connection"
@@ -109,5 +113,28 @@ func checkSettingConnectionValues(data connectionData) (errs fieldErrors) {
 	// check id
 	ensureSettingConnectionIdNoEmpty(data, errs)
 
+	return
+}
+
+// Virtual key getter and setter
+func getSettingVkConnectionNoPermission(data connectionData) (value bool) {
+	permission := getSettingConnectionPermissions(data)
+	if len(permission) > 0 {
+		return false
+	}
+	return true
+}
+func logicSetSettingVkConnectionNoPermission(data connectionData, value bool) (err error) {
+	if value {
+		removeSettingConnectionPermissions(data)
+	} else {
+		currentUser, err2 := user.Current()
+		if err2 != nil {
+			logger.Error(err2)
+			return
+		}
+		permission := "user:" + currentUser.Username + ":"
+		setSettingConnectionPermissions(data, []string{permission})
+	}
 	return
 }

@@ -235,7 +235,6 @@ func checkSettingIp4ConfigValues(data connectionData) (errs fieldErrors) {
 
 	return
 }
-
 func checkSettingIp4MethodConflict(data connectionData, errs fieldErrors) {
 	// check dns
 	if isSettingIp4ConfigDnsExists(data) {
@@ -315,5 +314,183 @@ func logicSetSettingIp4ConfigMethod(data connectionData, value string) (err erro
 		removeSettingIp4ConfigRoutes(data)
 	}
 	setSettingIp4ConfigMethod(data, value)
+	return
+}
+
+// Virtual keys
+func doGetOrNewSettingIp4ConfigAddresses(data connectionData) (addresses [][]uint32) {
+	addresses = getSettingIp4ConfigAddresses(data)
+	if len(addresses) == 0 {
+		addresses = make([][]uint32, 1)
+		addresses[0] = make([]uint32, 3)
+	}
+	if len(addresses[0]) != 3 {
+		addresses[0] = make([]uint32, 3)
+	}
+	return
+}
+func doIsSettingIp4ConfigAddressesEmpty(data connectionData) bool {
+	addresses := getSettingIp4ConfigAddresses(data)
+	if len(addresses) == 0 {
+		return true
+	}
+	if len(addresses[0]) != 3 {
+		return true
+	}
+	return false
+}
+
+// Virtual key getter
+func getSettingVkIp4ConfigDns(data connectionData) (value string) {
+	dns := getSettingIp4ConfigDns(data)
+	if len(dns) == 0 {
+		return
+	}
+	value = convertIpv4AddressToString(dns[0])
+	return
+}
+func getSettingVkIp4ConfigAddressesAddress(data connectionData) (value string) {
+	if doIsSettingIp4ConfigAddressesEmpty(data) {
+		return
+	}
+	addresses := getSettingIp4ConfigAddresses(data)
+	value = convertIpv4AddressToString(addresses[0][0])
+	return
+}
+func getSettingVkIp4ConfigAddressesMask(data connectionData) (value string) {
+	if doIsSettingIp4ConfigAddressesEmpty(data) {
+		return
+	}
+	addresses := getSettingIp4ConfigAddresses(data)
+	value = convertIpv4PrefixToNetMask(addresses[0][1])
+	return
+}
+func getSettingVkIp4ConfigAddressesGateway(data connectionData) (value string) {
+	if doIsSettingIp4ConfigAddressesEmpty(data) {
+		return
+	}
+	addresses := getSettingIp4ConfigAddresses(data)
+	value = convertIpv4AddressToStringNoZero(addresses[0][2])
+	return
+}
+func getSettingVkIp4ConfigRoutesAddress(data connectionData) (value string) {
+	// TODO
+	// value := getSettingIp4ConfigRoutesAddress(data)
+	return
+}
+func getSettingVkIp4ConfigRoutesMask(data connectionData) (value string) {
+	// TODO
+	// value := getSettingIp4ConfigRoutesMask(data)
+	return
+}
+func getSettingVkIp4ConfigRoutesNexthop(data connectionData) (value string) {
+	// TODO
+	// value := getSettingIp4ConfigRoutesNexthop(data)
+	return
+}
+func getSettingVkIp4ConfigRoutesMetric(data connectionData) (value string) {
+	// TODO
+	// value := getSettingIp4ConfigRoutesMetric(data)
+	return
+}
+
+// Virtual key logic setter
+func logicSetSettingVkIp4ConfigDns(data connectionData, value string) (err error) {
+	if len(value) == 0 {
+		removeSettingIp4ConfigDns(data)
+		return
+	}
+	dns := getSettingIp4ConfigDns(data)
+	if len(dns) == 0 {
+		dns = make([]uint32, 1)
+	}
+	tmpn, err := convertIpv4AddressToUint32Check(value)
+	dns[0] = tmpn
+	if err != nil {
+		err = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
+		return
+	}
+	if dns[0] != 0 {
+		setSettingIp4ConfigDns(data, dns)
+	} else {
+		removeSettingIp4ConfigDns(data)
+	}
+	return
+}
+func logicSetSettingVkIp4ConfigAddressesAddress(data connectionData, value string) (err error) {
+	if len(value) == 0 {
+		value = ipv4Zero
+	}
+	addresses := doGetOrNewSettingIp4ConfigAddresses(data)
+	addr := addresses[0]
+	tmpn, err := convertIpv4AddressToUint32Check(value)
+	addr[0] = tmpn
+	if err != nil {
+		err = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
+		return
+	}
+	if !isUint32ArrayEmpty(addr) {
+		setSettingIp4ConfigAddresses(data, addresses)
+	} else if addr[1] == 0 && addr[2] == 0 {
+		removeSettingIp4ConfigAddresses(data)
+	}
+	return
+}
+func logicSetSettingVkIp4ConfigAddressesMask(data connectionData, value string) (err error) {
+	if len(value) == 0 {
+		value = ipv4Zero
+	}
+	addresses := doGetOrNewSettingIp4ConfigAddresses(data)
+	addr := addresses[0]
+	tmpn, err := convertIpv4NetMaskToPrefixCheck(value)
+	addr[1] = tmpn
+	if err != nil {
+		err = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
+		return
+	}
+	if !isUint32ArrayEmpty(addr) {
+		setSettingIp4ConfigAddresses(data, addresses)
+	} else if addr[0] == 0 && addr[2] == 0 {
+		removeSettingIp4ConfigAddresses(data)
+	}
+	return
+}
+func logicSetSettingVkIp4ConfigAddressesGateway(data connectionData, value string) (err error) {
+	if len(value) == 0 {
+		value = ipv4Zero
+	}
+	addresses := doGetOrNewSettingIp4ConfigAddresses(data)
+	addr := addresses[0]
+	tmpn, err := convertIpv4AddressToUint32Check(value)
+	addr[2] = tmpn
+	if err != nil {
+		err = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
+		return
+	}
+	if !isUint32ArrayEmpty(addr) {
+		setSettingIp4ConfigAddresses(data, addresses)
+	} else if addr[0] == 0 && addr[1] == 0 {
+		removeSettingIp4ConfigAddresses(data)
+	}
+	return
+}
+func logicSetSettingVkIp4ConfigRoutesAddress(data connectionData, value string) (err error) {
+	// TODO
+	// setSettingIp4ConfigRoutesAddressJSON(data)
+	return
+}
+func logicSetSettingVkIp4ConfigRoutesMask(data connectionData, value string) (err error) {
+	// TODO
+	// setSettingIp4ConfigRoutesMaskJSON(data)
+	return
+}
+func logicSetSettingVkIp4ConfigRoutesNexthop(data connectionData, value string) (err error) {
+	// TODO
+	// setSettingIp4ConfigRoutesNexthopJSON(data)
+	return
+}
+func logicSetSettingVkIp4ConfigRoutesMetric(data connectionData, value string) (err error) {
+	// TODO
+	// setSettingIp4ConfigRoutesMetricJSON(data)
 	return
 }

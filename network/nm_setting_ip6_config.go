@@ -211,3 +211,87 @@ func logicSetSettingIp6ConfigMethod(data connectionData, value string) (err erro
 	setSettingIp6ConfigMethod(data, value)
 	return
 }
+
+// Virtual key getter
+func getSettingVkIp6ConfigDns(data connectionData) (value string) {
+	// TODO
+	// value := getSettingIp6ConfigDns(data)
+	return
+}
+func getSettingVkIp6ConfigAddressesAddress(data connectionData) (value string) {
+	// TODO
+	// value := getSettingIp6ConfigAddressesAddress(data)
+	return
+}
+func getSettingVkIp6ConfigAddressesPrefix(data connectionData) (value uint32) {
+	// TODO
+	// value := getSettingIp6ConfigAddressesPrefix(data)
+	return
+}
+func getSettingVkIp6ConfigAddressesGateway(data connectionData) (value string) {
+	// TODO
+	// value := getSettingIp6ConfigAddressesGateway(data)
+	return
+}
+func getSettingVkIp6ConfigRoutesAddress(data connectionData) (value string) {
+	// TODO
+	// value := getSettingIp6ConfigRoutesAddress(data)
+	return
+}
+func getSettingVkIp6ConfigRoutesPrefix(data connectionData) (value string) {
+	// TODO
+	// value := getSettingIp6ConfigRoutesPrefix(data)
+	return
+}
+func getSettingVkIp6ConfigRoutesNexthop(data connectionData) (value string) {
+	// TODO
+	// value := getSettingIp6ConfigRoutesNexthop(data)
+	return
+}
+func getSettingVkIp6ConfigRoutesMetric(data connectionData) (value string) {
+	// TODO
+	// value := getSettingIp6ConfigRoutesMetric(data)
+	return
+}
+
+// Virtual key logic setter
+func logicSetSettingVkIp6ConfigDns(data connectionData, value string) (err error) {
+	// TODO
+	// setSettingIp6ConfigDnsJSON(data)
+	return
+}
+func logicSetSettingVkIp6ConfigAddressesAddress(data connectionData, value string) (err error) {
+	// TODO
+	// setSettingIp6ConfigAddressesAddressJSON(data)
+	return
+}
+func logicSetSettingVkIp6ConfigAddressesPrefix(data connectionData, value uint32) (err error) {
+	// TODO
+	// setSettingIp6ConfigAddressesPrefixJSON(data)
+	return
+}
+func logicSetSettingVkIp6ConfigAddressesGateway(data connectionData, value string) (err error) {
+	// TODO
+	// setSettingIp6ConfigAddressesGatewayJSON(data)
+	return
+}
+func logicSetSettingVkIp6ConfigRoutesAddress(data connectionData, value string) (err error) {
+	// TODO
+	// setSettingIp6ConfigRoutesAddressJSON(data)
+	return
+}
+func logicSetSettingVkIp6ConfigRoutesPrefix(data connectionData, value uint32) (err error) {
+	// TODO
+	// setSettingIp6ConfigRoutesPrefixJSON(data)
+	return
+}
+func logicSetSettingVkIp6ConfigRoutesNexthop(data connectionData, value string) (err error) {
+	// TODO
+	// setSettingIp6ConfigRoutesNexthopJSON(data)
+	return
+}
+func logicSetSettingVkIp6ConfigRoutesMetric(data connectionData, value uint32) (err error) {
+	// TODO
+	// setSettingIp6ConfigRoutesMetricJSON(data)
+	return
+}

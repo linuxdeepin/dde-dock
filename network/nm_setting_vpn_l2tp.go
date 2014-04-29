@@ -158,3 +158,21 @@ func logicSetSettingVpnL2tpKeyIpsecEnable(data connectionData, value bool) (err 
 	setSettingVpnL2tpKeyIpsecEnable(data, value)
 	return
 }
+
+// Virtual key
+func getSettingVkVpnL2tpEnableLcpEcho(data connectionData) (value bool) {
+	if isSettingVpnL2tpKeyLcpEchoFailureExists(data) && isSettingVpnL2tpKeyLcpEchoIntervalExists(data) {
+		return true
+	}
+	return false
+}
+func logicSetSettingVkVpnL2tpEnableLcpEcho(data connectionData, value bool) (err error) {
+	if value {
+		setSettingVpnL2tpKeyLcpEchoFailure(data, 5)
+		setSettingVpnL2tpKeyLcpEchoInterval(data, 30)
+	} else {
+		removeSettingVpnL2tpKeyLcpEchoFailure(data)
+		removeSettingVpnL2tpKeyLcpEchoInterval(data)
+	}
+	return
+}

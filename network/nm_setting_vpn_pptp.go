@@ -119,3 +119,21 @@ func logicSetSettingVpnPptpKeyRequireMppe(data connectionData, value bool) (err 
 	setSettingVpnPptpKeyRequireMppe(data, value)
 	return
 }
+
+// Virtual key
+func getSettingVkVpnPptpEnableLcpEcho(data connectionData) (value bool) {
+	if isSettingVpnPptpKeyLcpEchoFailureExists(data) && isSettingVpnPptpKeyLcpEchoIntervalExists(data) {
+		return true
+	}
+	return false
+}
+func logicSetSettingVkVpnPptpEnableLcpEcho(data connectionData, value bool) (err error) {
+	if value {
+		setSettingVpnPptpKeyLcpEchoFailure(data, 5)
+		setSettingVpnPptpKeyLcpEchoInterval(data, 30)
+	} else {
+		removeSettingVpnPptpKeyLcpEchoFailure(data)
+		removeSettingVpnPptpKeyLcpEchoInterval(data)
+	}
+	return
+}

@@ -353,6 +353,12 @@ func (*Utils) TestConvertIpv6AddressToArrayByte(c *C) {
 	for _, t := range tests {
 		c.Check(t.result, DeepEquals, convertIpv6AddressToArrayByte(t.test))
 	}
+
+	// check error ipv6 format
+	_, err := convertIpv6AddressToArrayByteCheck("-1234:2345:3456:4444:5555:6666:aaAA:ffFF")
+	c.Check(err, NotNil)
+	_, err = convertIpv6AddressToArrayByteCheck("1234:2345:3456:4444:5555:6666:aaAA:ffFh")
+	c.Check(err, NotNil)
 }
 
 func (*Utils) TestExpandIpv6Address(c *C) {

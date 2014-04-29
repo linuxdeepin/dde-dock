@@ -65,3 +65,21 @@ func logicSetSettingPppRequireMppe(data connectionData, value bool) (err error) 
 	setSettingPppRequireMppe(data, value)
 	return
 }
+
+// Virtual key
+func getSettingVkPppEnableLcpEcho(data connectionData) (value bool) {
+	if isSettingPppLcpEchoFailureExists(data) && isSettingPppLcpEchoIntervalExists(data) {
+		return true
+	}
+	return false
+}
+func logicSetSettingVkPppEnableLcpEcho(data connectionData, value bool) (err error) {
+	if value {
+		setSettingPppLcpEchoFailure(data, 5)
+		setSettingPppLcpEchoInterval(data, 30)
+	} else {
+		removeSettingPppLcpEchoFailure(data)
+		removeSettingPppLcpEchoInterval(data)
+	}
+	return
+}

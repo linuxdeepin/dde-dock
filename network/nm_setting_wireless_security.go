@@ -2,6 +2,7 @@ package main
 
 import (
 	"dlib"
+	"fmt"
 )
 
 // https://developer.gnome.org/libnm-util/0.9/NMSettingWirelessSecurity.html
@@ -253,4 +254,48 @@ func checkSettingWirelessSecurityPsk(data connectionData, errs fieldErrors) {
 		// TODO
 		rememberError(errs, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_PSK, NM_KEY_ERROR_INVALID_VALUE)
 	}
+}
+
+// Virtual key getter and setter
+func getSettingVkWirelessSecurityKeyMgmt(data connectionData) (value string) {
+	if !isSettingFieldExists(data, fieldWirelessSecurity) {
+		value = "none"
+		return
+	}
+	keyMgmt := getSettingWirelessSecurityKeyMgmt(data)
+	switch keyMgmt {
+	case "none":
+		value = "wep"
+	case "wpa-psk":
+		value = "wpa-psk"
+	case "wpa-eap":
+		value = "wpa-eap"
+	}
+	return
+}
+func logicSetSettingVkWirelessSecurityKeyMgmt(data connectionData, value string) (err error) {
+	switch value {
+	default:
+		logger.Error("invalid value", value)
+		err = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
+	case "none":
+		removeSettingField(data, fieldWirelessSecurity)
+		removeSettingField(data, field8021x)
+	case "wep":
+		addSettingField(data, fieldWirelessSecurity)
+		removeSettingField(data, field8021x)
+		setSettingWirelessSecurityKeyMgmt(data, "none")
+		setSettingWirelessSecurityAuthAlg(data, "open")
+		setSettingWirelessSecurityWepKeyType(data, 1)
+	case "wpa-psk":
+		addSettingField(data, fieldWirelessSecurity)
+		removeSettingField(data, field8021x)
+		setSettingWirelessSecurityKeyMgmt(data, "wpa-psk")
+	case "wpa-eap":
+		addSettingField(data, fieldWirelessSecurity)
+		addSettingField(data, field8021x)
+		setSettingWirelessSecurityKeyMgmt(data, "wpa-eap")
+		err = logicSetSetting8021xEap(data, []string{"tls"})
+	}
+	return
 }

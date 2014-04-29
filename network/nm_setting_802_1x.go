@@ -337,3 +337,72 @@ func logicSetSetting8021xEap(data connectionData, value []string) (err error) {
 	setSetting8021xEap(data, value)
 	return
 }
+
+// Virtual key getter
+func getSettingVk8021xEnable(data connectionData) (value bool) {
+	if isSettingFieldExists(data, field8021x) {
+		return true
+	}
+	return false
+}
+func getSettingVk8021xEap(data connectionData) (eap string) {
+	eaps := getSetting8021xEap(data)
+	if len(eaps) == 0 {
+		logger.Error("eap value is empty")
+		return
+	}
+	eap = eaps[0]
+	return
+}
+func getSettingVk8021xPacFile(data connectionData) (value string) {
+	pacFile := getSetting8021xPacFile(data)
+	if len(pacFile) > 0 {
+		value = toUriPath(pacFile)
+	}
+	return
+}
+func getSettingVk8021xCaCert(data connectionData) (value string) {
+	caCert := getSetting8021xCaCert(data)
+	value = byteArrayToStrPath(caCert)
+	return
+}
+func getSettingVk8021xClientCert(data connectionData) (value string) {
+	clientCert := getSetting8021xClientCert(data)
+	value = byteArrayToStrPath(clientCert)
+	return
+}
+func getSettingVk8021xPrivateKey(data connectionData) (value string) {
+	privateKey := getSetting8021xPrivateKey(data)
+	value = byteArrayToStrPath(privateKey)
+	return
+}
+
+// Virtual key logic setter
+func logicSetSettingVk8021xEnable(data connectionData, value bool) (err error) {
+	if value {
+		addSettingField(data, field8021x)
+		err = logicSetSettingVk8021xEap(data, "tls")
+	} else {
+		removeSettingField(data, field8021x)
+	}
+	return
+}
+func logicSetSettingVk8021xEap(data connectionData, value string) (err error) {
+	return logicSetSetting8021xEap(data, []string{value})
+}
+func logicSetSettingVk8021xPacFile(data connectionData, value string) (err error) {
+	setSetting8021xPacFile(data, toLocalPath(value))
+	return
+}
+func logicSetSettingVk8021xCaCert(data connectionData, value string) (err error) {
+	setSetting8021xCaCert(data, strToByteArrayPath(value))
+	return
+}
+func logicSetSettingVk8021xClientCert(data connectionData, value string) (err error) {
+	setSetting8021xClientCert(data, strToByteArrayPath(value))
+	return
+}
+func logicSetSettingVk8021xPrivateKey(data connectionData, value string) (err error) {
+	setSetting8021xPrivateKey(data, strToByteArrayPath(value))
+	return
+}
