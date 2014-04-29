@@ -181,15 +181,15 @@ func doIdleAction() {
 
 				select {
 				case <-stoper:
-					for name, _ := range m.Brightness.Get() {
-						m.ResetBrightness(name)
+					for _, name := range m.Outputs.Get() {
+						dp.ResetBrightness(name)
 					}
 					dpmsOn()
 					return
 
 				default:
-					for name, _ := range m.Brightness.Get() {
-						m.ChangeBrightness(name, v)
+					for _, name := range m.Outputs.Get() {
+						dp.ChangeBrightness(name, v)
 					}
 				}
 			}
@@ -238,8 +238,8 @@ func (*Power) handleIdleOff() {
 	for _, p := range dp.Monitors.Get() {
 		m, _ := display.NewMonitor("com.deepin.daemon.Display", p)
 		defer display.DestroyMonitor(m)
-		for name, _ := range m.Brightness.Get() {
-			m.ResetBrightness(name)
+		for _, name := range m.Outputs.Get() {
+			dp.ResetBrightness(name)
 		}
 	}
 }
