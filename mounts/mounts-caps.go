@@ -22,60 +22,61 @@
 package main
 
 import (
-        "os/exec"
-        "strconv"
-        "strings"
+	"os/exec"
+	"strconv"
+	"strings"
 )
 
 const (
-        CMD_DF = "/bin/df"
+	CMD_DF = "/bin/df"
 )
 
 func getDiskCap(path string) (int64, int64) {
-        bytes, err := exec.Command(CMD_DF).Output()
-        if err != nil {
-                logObject.Info("Exec 'df -h' failed:", err)
-                panic(err)
-        }
+	bytes, err := exec.Command(CMD_DF).Output()
+	if err != nil {
+		logObject.Info("Exec 'df -h' failed:", err)
+		//panic(err)
+		return 0, 0
+	}
 
-        usedSize := int64(0)
-        totalSize := int64(0)
-        outStrs := strings.Split(string(bytes), "\n")
-        for _, str := range outStrs {
-                array := strings.Split(str, " ")
-                rets := delSpaceElment(array)
-                l := len(rets)
-                if l <= 2 {
-                        break
-                }
+	usedSize := int64(0)
+	totalSize := int64(0)
+	outStrs := strings.Split(string(bytes), "\n")
+	for _, str := range outStrs {
+		array := strings.Split(str, " ")
+		rets := delSpaceElment(array)
+		l := len(rets)
+		if l <= 2 {
+			break
+		}
 
-                isMatch := false
-                for _, v := range rets {
-                        if path == v {
-                                isMatch = true
-                                logObject.Info("Total:", rets[1])
-                                logObject.Info("Used:", rets[2])
-                                usedSize, _ = strconv.ParseInt(rets[2], 10, 64)
-                                totalSize, _ = strconv.ParseInt(rets[1], 10, 64)
-                                break
-                        }
-                }
-                if isMatch {
-                        break
-                }
-        }
+		isMatch := false
+		for _, v := range rets {
+			if path == v {
+				isMatch = true
+				logObject.Info("Total:", rets[1])
+				logObject.Info("Used:", rets[2])
+				usedSize, _ = strconv.ParseInt(rets[2], 10, 64)
+				totalSize, _ = strconv.ParseInt(rets[1], 10, 64)
+				break
+			}
+		}
+		if isMatch {
+			break
+		}
+	}
 
-        return totalSize, usedSize
+	return totalSize, usedSize
 }
 
 func delSpaceElment(strs []string) []string {
-        rets := []string{}
+	rets := []string{}
 
-        for _, v := range strs {
-                if len(v) > 0 {
-                        rets = append(rets, v)
-                }
-        }
+	for _, v := range strs {
+		if len(v) > 0 {
+			rets = append(rets, v)
+		}
+	}
 
-        return rets
+	return rets
 }
