@@ -1,5 +1,9 @@
 package main
 
+import (
+	"strings"
+)
+
 const (
 	NM_KEY_ERROR_MISSING_VALUE        = "missing value"
 	NM_KEY_ERROR_EMPTY_VALUE          = "value is empty"
@@ -39,19 +43,29 @@ func doRememberError(errs fieldErrors, key, errMsg string) {
 }
 
 // start with "file://", end with null byte
-func ensureByteArrayUriPathExists(errs fieldErrors, field, key string, bytePath []byte) {
+func ensureByteArrayUriPathExists(errs fieldErrors, field, key string, bytePath []byte, limitedExts ...string) {
 	path := byteArrayToStrPath(bytePath)
 	if !isUriPath(path) {
 		rememberError(errs, field, key, NM_KEY_ERROR_INVALID_VALUE)
 		return
 	}
-	if !isFileExists(toLocalPath(path)) {
-		rememberError(errs, field, key, NM_KEY_ERROR_INVALID_VALUE)
-		return
-	}
+	ensureFileExists(errs, field, key, toLocalPath(path), limitedExts...)
 }
 
-func ensureFileExists(errs fieldErrors, field, key, file string) {
+func ensureFileExists(errs fieldErrors, field, key, file string, limitedExts ...string) {
+	// ensure file suffix with target extension
+	if len(limitedExts) > 0 {
+		match := false
+		for _, ext := range limitedExts {
+			if strings.HasSuffix(strings.ToLower(file), strings.ToLower(ext)) {
+				match = true
+				break
+			}
+		}
+		if !match {
+			rememberError(errs, field, key, NM_KEY_ERROR_INVALID_VALUE)
+		}
+	}
 	if isFileExists(file) {
 		rememberError(errs, field, key, NM_KEY_ERROR_INVALID_VALUE)
 	}
