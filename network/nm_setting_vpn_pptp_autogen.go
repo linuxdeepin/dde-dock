@@ -80,7 +80,8 @@ func generalGetSettingVpnPptpKeyJSON(data connectionData, key string) (value str
 }
 
 // Set JSON value generally
-func generalSetSettingVpnPptpKeyJSON(data connectionData, key, valueJSON string) {
+func generalSetSettingVpnPptpKeyJSON(data connectionData, key, valueJSON string) (ok bool, errMsg string) {
+	ok = true
 	switch key {
 	default:
 		logger.Error("generalSetSettingVpnPptpKeyJSON: invalide key", key)
@@ -244,6 +245,8 @@ func setSettingVpnPptpKeyPasswordFlagsJSON(data connectionData, valueJSON string
 func setSettingVpnPptpKeyDomainJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VF_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_DOMAIN, valueJSON, getSettingVpnPptpKeyType(NM_SETTING_VPN_PPTP_KEY_DOMAIN))
 }
+
+// Logic JSON Setter
 
 // Remover
 func removeSettingVpnPptpKeyGateway(data connectionData) {

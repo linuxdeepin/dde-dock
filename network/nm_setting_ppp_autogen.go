@@ -184,7 +184,8 @@ func generalGetSettingPppKeyJSON(data connectionData, key string) (value string)
 }
 
 // Set JSON value generally
-func generalSetSettingPppKeyJSON(data connectionData, key, valueJSON string) {
+func generalSetSettingPppKeyJSON(data connectionData, key, valueJSON string) (ok bool, errMsg string) {
+	ok = true
 	switch key {
 	default:
 		logger.Error("generalSetSettingPppKeyJSON: invalide key", key)
@@ -201,7 +202,7 @@ func generalSetSettingPppKeyJSON(data connectionData, key, valueJSON string) {
 	case NM_SETTING_PPP_REFUSE_MSCHAPV2:
 		setSettingPppRefuseMschapv2JSON(data, valueJSON)
 	case NM_SETTING_PPP_REQUIRE_MPPE:
-		logicSetSettingPppRequireMppeJSON(data, valueJSON)
+		ok, errMsg = logicSetSettingPppRequireMppeJSON(data, valueJSON)
 	case NM_SETTING_PPP_REQUIRE_MPPE_128:
 		setSettingPppRequireMppe128JSON(data, valueJSON)
 	case NM_SETTING_PPP_MPPE_STATEFUL:
@@ -643,6 +644,17 @@ func setSettingPppLcpEchoFailureJSON(data connectionData, valueJSON string) {
 }
 func setSettingPppLcpEchoIntervalJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_INTERVAL, valueJSON, getSettingPppKeyType(NM_SETTING_PPP_LCP_ECHO_INTERVAL))
+}
+
+// Logic JSON Setter
+func logicSetSettingPppRequireMppeJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+	ok = true
+	setSettingPppRequireMppeJSON(data, valueJSON)
+	if isSettingPppRequireMppeExists(data) {
+		value := getSettingPppRequireMppe(data)
+		ok, errMsg = logicSetSettingPppRequireMppe(data, value)
+	}
+	return
 }
 
 // Remover

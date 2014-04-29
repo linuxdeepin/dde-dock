@@ -428,30 +428,41 @@ func getSettingVkWirelessSecurityKeyMgmt(data connectionData) (value string) {
 }
 
 // Logic setter, all virtual keys has a logic setter
-func logicSetSettingVk8021xEnable(data connectionData, value bool) {
+func logicSetSettingVk8021xEnable(data connectionData, value bool) (ok bool, errMsg string) {
+	ok = true
 	if value {
 		addSettingField(data, field8021x)
-		logicSetSettingVk8021xEap(data, "tls")
+		ok, errMsg = logicSetSettingVk8021xEap(data, "tls")
 	} else {
 		removeSettingField(data, field8021x)
 	}
+	return
 }
-func logicSetSettingVk8021xEap(data connectionData, value string) {
-	logicSetSetting8021xEap(data, []string{value})
+func logicSetSettingVk8021xEap(data connectionData, value string) (ok bool, errMsg string) {
+	return logicSetSetting8021xEap(data, []string{value})
 }
-func logicSetSettingVk8021xPacFile(data connectionData, value string) {
+func logicSetSettingVk8021xPacFile(data connectionData, value string) (ok bool, errMsg string) {
+	ok = true
 	setSetting8021xPacFile(data, toLocalPath(value))
+	return
 }
-func logicSetSettingVk8021xCaCert(data connectionData, value string) {
+func logicSetSettingVk8021xCaCert(data connectionData, value string) (ok bool, errMsg string) {
+	ok = true
 	setSetting8021xCaCert(data, strToByteArrayPath(value))
+	return
 }
-func logicSetSettingVk8021xClientCert(data connectionData, value string) {
+func logicSetSettingVk8021xClientCert(data connectionData, value string) (ok bool, errMsg string) {
+	ok = true
 	setSetting8021xClientCert(data, strToByteArrayPath(value))
+	return
 }
-func logicSetSettingVk8021xPrivateKey(data connectionData, value string) {
+func logicSetSettingVk8021xPrivateKey(data connectionData, value string) (ok bool, errMsg string) {
+	ok = true
 	setSetting8021xPrivateKey(data, strToByteArrayPath(value))
+	return
 }
-func logicSetSettingVkConnectionNoPermission(data connectionData, value bool) {
+func logicSetSettingVkConnectionNoPermission(data connectionData, value bool) (ok bool, errMsg string) {
+	ok = true
 	if value {
 		removeSettingConnectionPermissions(data)
 	} else {
@@ -463,8 +474,11 @@ func logicSetSettingVkConnectionNoPermission(data connectionData, value bool) {
 		permission := "user:" + currentUser.Username + ":"
 		setSettingConnectionPermissions(data, []string{permission})
 	}
+	return
 }
-func logicSetSettingVkIp4ConfigDns(data connectionData, value string) {
+func logicSetSettingVkIp4ConfigDns(data connectionData, value string) (ok bool, errMsg string) {
+	// TODO
+	ok = true
 	dns := getSettingIp4ConfigDns(data)
 	if len(dns) == 0 {
 		dns = make([]uint32, 1)
@@ -475,8 +489,11 @@ func logicSetSettingVkIp4ConfigDns(data connectionData, value string) {
 	} else {
 		removeSettingIp4ConfigDns(data)
 	}
+	return
 }
-func logicSetSettingVkIp4ConfigAddressesAddress(data connectionData, value string) {
+func logicSetSettingVkIp4ConfigAddressesAddress(data connectionData, value string) (ok bool, errMsg string) {
+	// TODO
+	ok = true
 	addresses := doGetOrNewSettingIp4ConfigAddresses(data)
 	addr := addresses[0]
 	addr[0] = convertIpv4AddressToUint32(value)
@@ -485,8 +502,11 @@ func logicSetSettingVkIp4ConfigAddressesAddress(data connectionData, value strin
 	} else {
 		removeSettingIp4ConfigAddresses(data)
 	}
+	return
 }
-func logicSetSettingVkIp4ConfigAddressesMask(data connectionData, value string) {
+func logicSetSettingVkIp4ConfigAddressesMask(data connectionData, value string) (ok bool, errMsg string) {
+	// TODO
+	ok = true
 	addresses := doGetOrNewSettingIp4ConfigAddresses(data)
 	addr := addresses[0]
 	addr[1] = convertIpv4NetMaskToPrefix(value)
@@ -495,8 +515,11 @@ func logicSetSettingVkIp4ConfigAddressesMask(data connectionData, value string) 
 	} else {
 		removeSettingIp4ConfigAddresses(data)
 	}
+	return
 }
-func logicSetSettingVkIp4ConfigAddressesGateway(data connectionData, value string) {
+func logicSetSettingVkIp4ConfigAddressesGateway(data connectionData, value string) (ok bool, errMsg string) {
+	// TODO
+	ok = true
 	if len(value) == 0 {
 		value = ipv4Zero
 	}
@@ -508,56 +531,82 @@ func logicSetSettingVkIp4ConfigAddressesGateway(data connectionData, value strin
 	} else {
 		removeSettingIp4ConfigAddresses(data)
 	}
+	return
 }
-func logicSetSettingVkIp4ConfigRoutesAddress(data connectionData, value string) {
+func logicSetSettingVkIp4ConfigRoutesAddress(data connectionData, value string) (ok bool, errMsg string) {
+	ok = true
 	// TODO
 	// setSettingIp4ConfigRoutesAddressJSON(data)
+	return
 }
-func logicSetSettingVkIp4ConfigRoutesMask(data connectionData, value string) {
+func logicSetSettingVkIp4ConfigRoutesMask(data connectionData, value string) (ok bool, errMsg string) {
+	ok = true
 	// TODO
 	// setSettingIp4ConfigRoutesMaskJSON(data)
+	return
 }
-func logicSetSettingVkIp4ConfigRoutesNexthop(data connectionData, value string) {
+func logicSetSettingVkIp4ConfigRoutesNexthop(data connectionData, value string) (ok bool, errMsg string) {
+	ok = true
 	// TODO
 	// setSettingIp4ConfigRoutesNexthopJSON(data)
+	return
 }
-func logicSetSettingVkIp4ConfigRoutesMetric(data connectionData, value string) {
+func logicSetSettingVkIp4ConfigRoutesMetric(data connectionData, value string) (ok bool, errMsg string) {
+	ok = true
 	// TODO
 	// setSettingIp4ConfigRoutesMetricJSON(data)
+	return
 }
-func logicSetSettingVkIp6ConfigDns(data connectionData, value string) {
+func logicSetSettingVkIp6ConfigDns(data connectionData, value string) (ok bool, errMsg string) {
+	ok = true
 	// TODO
 	// setSettingIp6ConfigDnsJSON(data)
+	return
 }
-func logicSetSettingVkIp6ConfigAddressesAddress(data connectionData, value string) {
+func logicSetSettingVkIp6ConfigAddressesAddress(data connectionData, value string) (ok bool, errMsg string) {
+	ok = true
 	// TODO
 	// setSettingIp6ConfigAddressesAddressJSON(data)
+	return
 }
-func logicSetSettingVkIp6ConfigAddressesPrefix(data connectionData, value uint32) {
+func logicSetSettingVkIp6ConfigAddressesPrefix(data connectionData, value uint32) (ok bool, errMsg string) {
+	ok = true
 	// TODO
 	// setSettingIp6ConfigAddressesPrefixJSON(data)
+	return
 }
-func logicSetSettingVkIp6ConfigAddressesGateway(data connectionData, value string) {
+func logicSetSettingVkIp6ConfigAddressesGateway(data connectionData, value string) (ok bool, errMsg string) {
+	ok = true
 	// TODO
 	// setSettingIp6ConfigAddressesGatewayJSON(data)
+	return
 }
-func logicSetSettingVkIp6ConfigRoutesAddress(data connectionData, value string) {
+func logicSetSettingVkIp6ConfigRoutesAddress(data connectionData, value string) (ok bool, errMsg string) {
+	ok = true
 	// TODO
 	// setSettingIp6ConfigRoutesAddressJSON(data)
+	return
 }
-func logicSetSettingVkIp6ConfigRoutesPrefix(data connectionData, value uint32) {
+func logicSetSettingVkIp6ConfigRoutesPrefix(data connectionData, value uint32) (ok bool, errMsg string) {
+	ok = true
 	// TODO
 	// setSettingIp6ConfigRoutesPrefixJSON(data)
+	return
 }
-func logicSetSettingVkIp6ConfigRoutesNexthop(data connectionData, value string) {
+func logicSetSettingVkIp6ConfigRoutesNexthop(data connectionData, value string) (ok bool, errMsg string) {
+	ok = true
 	// TODO
 	// setSettingIp6ConfigRoutesNexthopJSON(data)
+	return
 }
-func logicSetSettingVkIp6ConfigRoutesMetric(data connectionData, value uint32) {
+func logicSetSettingVkIp6ConfigRoutesMetric(data connectionData, value uint32) (ok bool, errMsg string) {
+	ok = true
 	// TODO
 	// setSettingIp6ConfigRoutesMetricJSON(data)
+	return
 }
-func logicSetSettingVkPppEnableLcpEcho(data connectionData, value bool) {
+func logicSetSettingVkPppEnableLcpEcho(data connectionData, value bool) (ok bool, errMsg string) {
+	ok = true
 	if value {
 		setSettingPppLcpEchoFailure(data, 5)
 		setSettingPppLcpEchoInterval(data, 30)
@@ -565,8 +614,10 @@ func logicSetSettingVkPppEnableLcpEcho(data connectionData, value bool) {
 		removeSettingPppLcpEchoFailure(data)
 		removeSettingPppLcpEchoInterval(data)
 	}
+	return
 }
-func logicSetSettingVkVpnL2tpEnableLcpEcho(data connectionData, value bool) {
+func logicSetSettingVkVpnL2tpEnableLcpEcho(data connectionData, value bool) (ok bool, errMsg string) {
+	ok = true
 	if value {
 		setSettingVpnL2tpKeyLcpEchoFailure(data, 5)
 		setSettingVpnL2tpKeyLcpEchoInterval(data, 30)
@@ -574,8 +625,10 @@ func logicSetSettingVkVpnL2tpEnableLcpEcho(data connectionData, value bool) {
 		removeSettingVpnL2tpKeyLcpEchoFailure(data)
 		removeSettingVpnL2tpKeyLcpEchoInterval(data)
 	}
+	return
 }
-func logicSetSettingVkVpnPptpEnableLcpEcho(data connectionData, value bool) {
+func logicSetSettingVkVpnPptpEnableLcpEcho(data connectionData, value bool) (ok bool, errMsg string) {
+	ok = true
 	if value {
 		setSettingVpnPptpKeyLcpEchoFailure(data, 5)
 		setSettingVpnPptpKeyLcpEchoInterval(data, 30)
@@ -583,15 +636,19 @@ func logicSetSettingVkVpnPptpEnableLcpEcho(data connectionData, value bool) {
 		removeSettingVpnPptpKeyLcpEchoFailure(data)
 		removeSettingVpnPptpKeyLcpEchoInterval(data)
 	}
+	return
 }
-func logicSetSettingVkVpnVpncKeyHybridAuthmode(data connectionData, value bool) {
+func logicSetSettingVkVpnVpncKeyHybridAuthmode(data connectionData, value bool) (ok bool, errMsg string) {
+	ok = true
 	if value {
 		setSettingVpnVpncKeyAuthmode(data, "hybrid")
 	} else {
 		removeSettingVpnVpncKeyAuthmode(data)
 	}
+	return
 }
-func logicSetSettingVkVpnVpncKeyEncryptionMethod(data connectionData, value string) {
+func logicSetSettingVkVpnVpncKeyEncryptionMethod(data connectionData, value string) (ok bool, errMsg string) {
+	ok = true
 	removeSettingVpnVpncKeySingleDes(data)
 	removeSettingVpnVpncKeyNoEncryption(data)
 	switch value {
@@ -601,18 +658,24 @@ func logicSetSettingVkVpnVpncKeyEncryptionMethod(data connectionData, value stri
 	case "none":
 		setSettingVpnVpncKeyNoEncryption(data, true)
 	}
+	return
 }
-func logicSetSettingVkVpnVpncKeyDisableDpd(data connectionData, value bool) {
+func logicSetSettingVkVpnVpncKeyDisableDpd(data connectionData, value bool) (ok bool, errMsg string) {
+	ok = true
 	if value {
 		setSettingVpnVpncKeyDpdIdleTimeout(data, 0)
 	} else {
 		removeSettingVpnVpncKeyDpdIdleTimeout(data)
 	}
+	return
 }
-func logicSetSettingVkWirelessSecurityKeyMgmt(data connectionData, value string) {
+func logicSetSettingVkWirelessSecurityKeyMgmt(data connectionData, value string) (ok bool, errMsg string) {
+	ok = true
 	switch value {
 	default:
 		logger.Error("invalid value", value)
+		ok = false
+		errMsg = NM_KEY_ERROR_INVALID_VALUE
 	case "none":
 		removeSettingField(data, fieldWirelessSecurity)
 		removeSettingField(data, field8021x)
@@ -630,7 +693,7 @@ func logicSetSettingVkWirelessSecurityKeyMgmt(data connectionData, value string)
 		addSettingField(data, fieldWirelessSecurity)
 		addSettingField(data, field8021x)
 		setSettingWirelessSecurityKeyMgmt(data, "wpa-eap")
-		logicSetSetting8021xEap(data, []string{"tls"})
-		// TODO
+		ok, errMsg = logicSetSetting8021xEap(data, []string{"tls"})
 	}
+	return
 }

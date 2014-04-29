@@ -110,16 +110,13 @@ func checkSettingVpnPptpPppValues(data connectionData) (errs fieldErrors) {
 	// TODO
 	return
 }
-func logicSetSettingVpnPptpKeyRequireMppeJSON(data connectionData, valueJSON string) {
-	setSettingVpnPptpKeyRequireMppeJSON(data, valueJSON)
-	value := getSettingVpnPptpKeyRequireMppe(data)
-	logicSetSettingVpnPptpKeyRequireMppe(data, value)
-}
-func logicSetSettingVpnPptpKeyRequireMppe(data connectionData, value bool) {
+func logicSetSettingVpnPptpKeyRequireMppe(data connectionData, value bool) (ok bool, errMsg string) {
+	ok = true
 	if !value {
 		removeSettingVpnPptpKeyRequireMppe40(data)
 		removeSettingVpnPptpKeyRequireMppe128(data)
 		removeSettingVpnPptpKeyMppeStateful(data)
 	}
 	setSettingVpnPptpKeyRequireMppe(data, value)
+	return
 }

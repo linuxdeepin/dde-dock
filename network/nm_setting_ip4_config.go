@@ -291,16 +291,8 @@ func checkSettingIp4ConfigAddresses(data connectionData, errs fieldErrors) {
 }
 
 // Logic setter
-func logicSetSettingIp4ConfigMethodJSON(data connectionData, valueJSON string) {
-	// set valueJSON firstly to avoid duplication of code
-	setSettingIp4ConfigMethodJSON(data, valueJSON)
-
-	// then get value and call logic setter
-	value := getSettingIp4ConfigMethod(data)
-	logicSetSettingIp4ConfigMethod(data, value)
-	return
-}
-func logicSetSettingIp4ConfigMethod(data connectionData, value string) {
+func logicSetSettingIp4ConfigMethod(data connectionData, value string) (ok bool, errMsg string) {
+	ok = true
 	// just ignore error here and set value directly, error will be
 	// check in checkSettingXXXValues()
 	switch value {
@@ -324,4 +316,5 @@ func logicSetSettingIp4ConfigMethod(data connectionData, value string) {
 		removeSettingIp4ConfigRoutes(data)
 	}
 	setSettingIp4ConfigMethod(data, value)
+	return
 }

@@ -128,7 +128,8 @@ func generalGetSettingWiredKeyJSON(data connectionData, key string) (value strin
 }
 
 // Set JSON value generally
-func generalSetSettingWiredKeyJSON(data connectionData, key, valueJSON string) {
+func generalSetSettingWiredKeyJSON(data connectionData, key, valueJSON string) (ok bool, errMsg string) {
+	ok = true
 	switch key {
 	default:
 		logger.Error("generalSetSettingWiredKeyJSON: invalide key", key)
@@ -452,6 +453,8 @@ func setSettingWiredS390NettypeJSON(data connectionData, valueJSON string) {
 func setSettingWiredS390OptionsJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_OPTIONS, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_S390_OPTIONS))
 }
+
+// Logic JSON Setter
 
 // Remover
 func removeSettingWiredPort(data connectionData) {

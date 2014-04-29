@@ -36,13 +36,19 @@ func (s *ConnectionSession) updatePropErrors() {
 		s.Errors[page] = make(fieldErrors)
 		fields := s.pageToFields(page)
 		for _, field := range fields {
+			// check error only field exists
 			if isSettingFieldExists(s.data, field) {
-				// TODO check error only field exists
 				errs := generalCheckSettingValues(s.data, field)
 				for k, v := range errs {
 					s.Errors[page][k] = v
 				}
 			}
+		}
+	}
+	// append errors when setting keys
+	for page, pageErrors := range s.errorsSetKey {
+		for k, v := range pageErrors {
+			s.Errors[page][k] = v
 		}
 	}
 	dbus.NotifyChange(s, "Errors")

@@ -80,7 +80,8 @@ func generalGetSettingVpnL2tpKeyJSON(data connectionData, key string) (value str
 }
 
 // Set JSON value generally
-func generalSetSettingVpnL2tpKeyJSON(data connectionData, key, valueJSON string) {
+func generalSetSettingVpnL2tpKeyJSON(data connectionData, key, valueJSON string) (ok bool, errMsg string) {
+	ok = true
 	switch key {
 	default:
 		logger.Error("generalSetSettingVpnL2tpKeyJSON: invalide key", key)
@@ -244,6 +245,8 @@ func setSettingVpnL2tpKeyPasswordFlagsJSON(data connectionData, valueJSON string
 func setSettingVpnL2tpKeyDomainJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VF_VPN_L2TP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_DOMAIN, valueJSON, getSettingVpnL2tpKeyType(NM_SETTING_VPN_L2TP_KEY_DOMAIN))
 }
+
+// Logic JSON Setter
 
 // Remover
 func removeSettingVpnL2tpKeyGateway(data connectionData) {

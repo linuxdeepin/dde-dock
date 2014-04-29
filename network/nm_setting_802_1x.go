@@ -257,15 +257,12 @@ func checkSetting8021xPrivateKey(data connectionData, errs fieldErrors) {
 }
 
 // Logic setter
-func logicSetSetting8021xEapJSON(data connectionData, valueJSON string) {
-	setSetting8021xEapJSON(data, valueJSON)
-
-	value := getSetting8021xEap(data)
-	logicSetSetting8021xEap(data, value)
-}
-func logicSetSetting8021xEap(data connectionData, value []string) {
+func logicSetSetting8021xEap(data connectionData, value []string) (ok bool, errMsg string) {
+	ok = true
 	if len(value) == 0 {
-		logger.Warning("eap value is empty")
+		logger.Error("eap value is empty")
+		ok = false
+		errMsg = NM_KEY_ERROR_INVALID_VALUE
 		return
 	}
 	eap := value[0]
@@ -339,4 +336,5 @@ func logicSetSetting8021xEap(data connectionData, value []string) {
 		setSetting8021xSystemCaCerts(data, true)
 	}
 	setSetting8021xEap(data, value)
+	return
 }

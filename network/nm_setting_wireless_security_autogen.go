@@ -176,7 +176,8 @@ func generalGetSettingWirelessSecurityKeyJSON(data connectionData, key string) (
 }
 
 // Set JSON value generally
-func generalSetSettingWirelessSecurityKeyJSON(data connectionData, key, valueJSON string) {
+func generalSetSettingWirelessSecurityKeyJSON(data connectionData, key, valueJSON string) (ok bool, errMsg string) {
+	ok = true
 	switch key {
 	default:
 		logger.Error("generalSetSettingWirelessSecurityKeyJSON: invalide key", key)
@@ -660,6 +661,8 @@ func setSettingWirelessSecurityPskJSON(data connectionData, valueJSON string) {
 func setSettingWirelessSecurityPskFlagsJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS, valueJSON, getSettingWirelessSecurityKeyType(NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS))
 }
+
+// Logic JSON Setter
 
 // Remover
 func removeSettingWirelessSecurityKeyMgmt(data connectionData) {

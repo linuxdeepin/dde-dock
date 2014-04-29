@@ -72,7 +72,8 @@ func generalGetSettingPppoeKeyJSON(data connectionData, key string) (value strin
 }
 
 // Set JSON value generally
-func generalSetSettingPppoeKeyJSON(data connectionData, key, valueJSON string) {
+func generalSetSettingPppoeKeyJSON(data connectionData, key, valueJSON string) (ok bool, errMsg string) {
+	ok = true
 	switch key {
 	default:
 		logger.Error("generalSetSettingPppoeKeyJSON: invalide key", key)
@@ -208,6 +209,8 @@ func setSettingPppoePasswordJSON(data connectionData, valueJSON string) {
 func setSettingPppoePasswordFlagsJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_PASSWORD_FLAGS, valueJSON, getSettingPppoeKeyType(NM_SETTING_PPPOE_PASSWORD_FLAGS))
 }
+
+// Logic JSON Setter
 
 // Remover
 func removeSettingPppoeUsername(data connectionData) {

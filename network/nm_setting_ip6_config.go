@@ -189,13 +189,8 @@ func checkSettingIp6ConfigAddresses(data connectionData, errs fieldErrors) {
 }
 
 // Logic setter
-func logicSetSettingIp6ConfigMethodJSON(data connectionData, valueJSON string) {
-	setSettingIp6ConfigMethodJSON(data, valueJSON)
-
-	value := getSettingIp6ConfigMethod(data)
-	logicSetSettingIp6ConfigMethod(data, value)
-}
-func logicSetSettingIp6ConfigMethod(data connectionData, value string) {
+func logicSetSettingIp6ConfigMethod(data connectionData, value string) (ok bool, errMsg string) {
+	ok = true
 	switch value {
 	case NM_SETTING_IP6_CONFIG_METHOD_IGNORE: // ignore
 		removeSettingKeyBut(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_METHOD)
@@ -215,4 +210,5 @@ func logicSetSettingIp6ConfigMethod(data connectionData, value string) {
 		removeSettingIp6ConfigRoutes(data)
 	}
 	setSettingIp6ConfigMethod(data, value)
+	return
 }

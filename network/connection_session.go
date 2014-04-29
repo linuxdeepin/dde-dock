@@ -227,8 +227,7 @@ func (s *ConnectionSession) listPages() (pages []string) {
 			pageIPv4,
 			pageIPv6,
 		}
-		// TODO make "Pages" as a dbus property
-		// when connection type is static key, pageVpnOpenvpnTlsauth is not availabled
+		// when connection type is static key, pageVpnOpenvpnTlsauth is not available
 		if getSettingVpnOpenvpnKeyConnectionType(s.data) != NM_OPENVPN_CONTYPE_STATIC_KEY {
 			pages = append(pages, pageVpnOpenvpnTlsauth)
 		}
@@ -336,11 +335,8 @@ func (s *ConnectionSession) listKeys(page string) (keys []string) {
 	return
 }
 
-// GetAvailableValues get available values for target key.
-// TODO
-// func (s *ConnectionSession) GetAvailableValues(page, key string) (valuesJSON []map[string]string) {
+// GetAvailableValues return available values marshaled by json for target key.
 func (s *ConnectionSession) GetAvailableValues(page, key string) (valuesJSON string) {
-	// TODO
 	var values []kvalue
 	fields := s.pageToFields(page)
 	for _, field := range fields {
@@ -349,18 +345,6 @@ func (s *ConnectionSession) GetAvailableValues(page, key string) (valuesJSON str
 			break
 		}
 	}
-	// TODO
-	// convert kvalue to kvalueJSON
-	// for _, v := range values {
-	// valueMap := make(map[string]string)
-	// valueMap["Value"], _ = marshalJSON(v.Value)
-	// valueMap["Text"] = v.Text
-	// valuesJSON = append(valuesJSON, valueMap)
-
-	// json, _ := marshalJSON(v.Value)
-	// valuesJSON = append(valuesJSON, kvalueJSON{json, v.Text})
-
-	// }
 	valuesJSON, _ = marshalJSON(values)
 	return
 }
@@ -374,15 +358,14 @@ func (s *ConnectionSession) GetKey(page, key string) (value string) {
 func (s *ConnectionSession) SetKey(page, key, value string) {
 	field := s.getFieldOfPageKey(page, key)
 	// logger.Debugf("SetKey(), page=%s, filed=%s, key=%s, value=%s", page, field, key, value) // TODO test
-	generalSetSettingKeyJSON(s.data, field, key, value)
-	// ok, errMsg := generalSetSettingKeyJSON(s.data, field, key, value)
-	// s.updateErrorsWhenSettingKey(page, key, ok, errMsg)
+	ok, errMsg := generalSetSettingKeyJSON(s.data, field, key, value)
+	s.updateErrorsWhenSettingKey(page, key, ok, errMsg)
 
 	s.updatePropAvailablePages()
 	s.updatePropAvailableKeys()
 	s.updatePropErrors()
 
-	// TODO
+	// TODO remove allowSave
 	// if s.isErrorOccured() {
 	// 	s.updatePropAllowSave(false)
 	// } else {
@@ -408,8 +391,8 @@ func (s *ConnectionSession) updateErrorsWhenSettingKey(page, key string, ok bool
 		if !ok {
 			fieldErrorsData = make(fieldErrors)
 			s.errorsSetKey[page] = fieldErrorsData
-			// TODO
 		}
+		fieldErrorsData[key] = errMsg
 	}
 }
 

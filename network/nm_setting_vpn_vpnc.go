@@ -217,12 +217,8 @@ func checkSettingVpnVpncAdvancedValues(data connectionData) (errs fieldErrors) {
 }
 
 // Logic setter
-func logicSetSettingVpnVpncKeySecretFlagsJSON(data connectionData, valueJSON string) {
-	setSettingVpnVpncKeySecretFlagsJSON(data, valueJSON)
-	value := getSettingVpnVpncKeySecretFlags(data)
-	logicSetSettingVpnVpncKeySecretFlags(data, value)
-}
-func logicSetSettingVpnVpncKeySecretFlags(data connectionData, value uint32) {
+func logicSetSettingVpnVpncKeySecretFlags(data connectionData, value uint32) (ok bool, errMsg string) {
+	ok = true
 	switch value {
 	case NM_VPNC_SECRET_FLAG_SAVE:
 		setSettingVpnVpncKeySecretType(data, NM_VPNC_PW_TYPE_SAVE)
@@ -232,13 +228,10 @@ func logicSetSettingVpnVpncKeySecretFlags(data connectionData, value uint32) {
 		setSettingVpnVpncKeySecretType(data, NM_VPNC_PW_TYPE_UNUSED)
 	}
 	setSettingVpnVpncKeySecretFlags(data, value)
+	return
 }
-func logicSetSettingVpnVpncKeyXauthPasswordFlagsJSON(data connectionData, valueJSON string) {
-	setSettingVpnVpncKeyXauthPasswordFlagsJSON(data, valueJSON)
-	value := getSettingVpnVpncKeyXauthPasswordFlags(data)
-	logicSetSettingVpnVpncKeyXauthPasswordFlags(data, value)
-}
-func logicSetSettingVpnVpncKeyXauthPasswordFlags(data connectionData, value uint32) {
+func logicSetSettingVpnVpncKeyXauthPasswordFlags(data connectionData, value uint32) (ok bool, errMsg string) {
+	ok = true
 	switch value {
 	case NM_VPNC_SECRET_FLAG_SAVE:
 		setSettingVpnVpncKeyXauthPasswordType(data, NM_VPNC_PW_TYPE_SAVE)
@@ -248,4 +241,5 @@ func logicSetSettingVpnVpncKeyXauthPasswordFlags(data connectionData, value uint
 		setSettingVpnVpncKeyXauthPasswordType(data, NM_VPNC_PW_TYPE_UNUSED)
 	}
 	setSettingVpnVpncKeyXauthPasswordFlags(data, value)
+	return
 }

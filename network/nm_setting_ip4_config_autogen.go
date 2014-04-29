@@ -136,12 +136,13 @@ func generalGetSettingIp4ConfigKeyJSON(data connectionData, key string) (value s
 }
 
 // Set JSON value generally
-func generalSetSettingIp4ConfigKeyJSON(data connectionData, key, valueJSON string) {
+func generalSetSettingIp4ConfigKeyJSON(data connectionData, key, valueJSON string) (ok bool, errMsg string) {
+	ok = true
 	switch key {
 	default:
 		logger.Error("generalSetSettingIp4ConfigKeyJSON: invalide key", key)
 	case NM_SETTING_IP4_CONFIG_METHOD:
-		logicSetSettingIp4ConfigMethodJSON(data, valueJSON)
+		ok, errMsg = logicSetSettingIp4ConfigMethodJSON(data, valueJSON)
 	case NM_SETTING_IP4_CONFIG_ADDRESSES:
 		setSettingIp4ConfigAddressesJSON(data, valueJSON)
 	case NM_SETTING_IP4_CONFIG_DNS:
@@ -479,6 +480,17 @@ func setSettingIp4ConfigNeverDefaultJSON(data connectionData, valueJSON string) 
 }
 func setSettingIp4ConfigMayFailJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_MAY_FAIL, valueJSON, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_MAY_FAIL))
+}
+
+// Logic JSON Setter
+func logicSetSettingIp4ConfigMethodJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+	ok = true
+	setSettingIp4ConfigMethodJSON(data, valueJSON)
+	if isSettingIp4ConfigMethodExists(data) {
+		value := getSettingIp4ConfigMethod(data)
+		ok, errMsg = logicSetSettingIp4ConfigMethod(data, value)
+	}
+	return
 }
 
 // Remover

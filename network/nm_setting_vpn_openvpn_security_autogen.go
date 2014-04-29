@@ -56,7 +56,8 @@ func generalGetSettingVpnOpenvpnSecurityKeyJSON(data connectionData, key string)
 }
 
 // Set JSON value generally
-func generalSetSettingVpnOpenvpnSecurityKeyJSON(data connectionData, key, valueJSON string) {
+func generalSetSettingVpnOpenvpnSecurityKeyJSON(data connectionData, key, valueJSON string) (ok bool, errMsg string) {
+	ok = true
 	switch key {
 	default:
 		logger.Error("generalSetSettingVpnOpenvpnSecurityKeyJSON: invalide key", key)
@@ -140,6 +141,8 @@ func setSettingVpnOpenvpnKeyCipherJSON(data connectionData, valueJSON string) {
 func setSettingVpnOpenvpnKeyAuthJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_AUTH, valueJSON, getSettingVpnOpenvpnSecurityKeyType(NM_SETTING_VPN_OPENVPN_KEY_AUTH))
 }
+
+// Logic JSON Setter
 
 // Remover
 func removeSettingVpnOpenvpnKeyCipher(data connectionData) {

@@ -72,7 +72,8 @@ func generalGetSettingVpnOpenvpnTlsauthKeyJSON(data connectionData, key string) 
 }
 
 // Set JSON value generally
-func generalSetSettingVpnOpenvpnTlsauthKeyJSON(data connectionData, key, valueJSON string) {
+func generalSetSettingVpnOpenvpnTlsauthKeyJSON(data connectionData, key, valueJSON string) (ok bool, errMsg string) {
+	ok = true
 	switch key {
 	default:
 		logger.Error("generalSetSettingVpnOpenvpnTlsauthKeyJSON: invalide key", key)
@@ -208,6 +209,8 @@ func setSettingVpnOpenvpnKeyTaJSON(data connectionData, valueJSON string) {
 func setSettingVpnOpenvpnKeyTaDirJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TA_DIR, valueJSON, getSettingVpnOpenvpnTlsauthKeyType(NM_SETTING_VPN_OPENVPN_KEY_TA_DIR))
 }
+
+// Logic JSON Setter
 
 // Remover
 func removeSettingVpnOpenvpnKeyTlsRemote(data connectionData) {

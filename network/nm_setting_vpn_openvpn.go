@@ -378,16 +378,10 @@ func checkSettingVpnOpenvpnProxiesValues(data connectionData) (errs fieldErrors)
 }
 
 // Logic setter
-func logicSetSettingVpnOpenvpnKeyProxyTypeJSON(data connectionData, valueJSON string) {
-	setSettingVpnOpenvpnKeyProxyTypeJSON(data, valueJSON)
-	if isSettingVpnOpenvpnKeyProxyTypeExists(data) {
-		// TODO
-		value := getSettingVpnOpenvpnKeyProxyType(data)
-		logicSetSettingVpnOpenvpnKeyProxyType(data, value)
-	}
-}
-func logicSetSettingVpnOpenvpnKeyProxyType(data connectionData, value string) {
+func logicSetSettingVpnOpenvpnKeyProxyType(data connectionData, value string) (ok bool, errMsg string) {
+	ok = true
 	// when proxy enabled, use a tcp connection default
 	setSettingVpnOpenvpnKeyProtoTcp(data, true)
 	setSettingVpnOpenvpnKeyProxyType(data, value)
+	return
 }

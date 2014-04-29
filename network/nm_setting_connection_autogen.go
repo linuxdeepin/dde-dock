@@ -128,7 +128,8 @@ func generalGetSettingConnectionKeyJSON(data connectionData, key string) (value 
 }
 
 // Set JSON value generally
-func generalSetSettingConnectionKeyJSON(data connectionData, key, valueJSON string) {
+func generalSetSettingConnectionKeyJSON(data connectionData, key, valueJSON string) (ok bool, errMsg string) {
+	ok = true
 	switch key {
 	default:
 		logger.Error("generalSetSettingConnectionKeyJSON: invalide key", key)
@@ -452,6 +453,8 @@ func setSettingConnectionSlaveTypeJSON(data connectionData, valueJSON string) {
 func setSettingConnectionSecondariesJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_SECONDARIES, valueJSON, getSettingConnectionKeyType(NM_SETTING_CONNECTION_SECONDARIES))
 }
+
+// Logic JSON Setter
 
 // Remover
 func removeSettingConnectionId(data connectionData) {

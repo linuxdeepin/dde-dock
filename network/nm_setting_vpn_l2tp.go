@@ -121,18 +121,15 @@ func checkSettingVpnL2tpPppValues(data connectionData) (errs fieldErrors) {
 	errs = make(map[string]string)
 	return
 }
-func logicSetSettingVpnL2tpKeyRequireMppeJSON(data connectionData, valueJSON string) {
-	setSettingVpnL2tpKeyRequireMppeJSON(data, valueJSON)
-	value := getSettingVpnL2tpKeyRequireMppe(data)
-	logicSetSettingVpnL2tpKeyRequireMppe(data, value)
-}
-func logicSetSettingVpnL2tpKeyRequireMppe(data connectionData, value bool) {
+func logicSetSettingVpnL2tpKeyRequireMppe(data connectionData, value bool) (ok bool, errMsg string) {
+	ok = true
 	if !value {
 		removeSettingVpnL2tpKeyRequireMppe40(data)
 		removeSettingVpnL2tpKeyRequireMppe128(data)
 		removeSettingVpnL2tpKeyMppeStateful(data)
 	}
 	setSettingVpnL2tpKeyRequireMppe(data, value)
+	return
 }
 
 // vpn-l2tp-ipsec
@@ -153,16 +150,13 @@ func checkSettingVpnL2tpIpsecValues(data connectionData) (errs fieldErrors) {
 	// TODO
 	return
 }
-func logicSetSettingVpnL2tpKeyIpsecEnableJSON(data connectionData, valueJSON string) {
-	setSettingVpnL2tpKeyIpsecEnableJSON(data, valueJSON)
-	value := getSettingVpnL2tpKeyIpsecEnable(data)
-	logicSetSettingVpnL2tpKeyIpsecEnable(data, value)
-}
-func logicSetSettingVpnL2tpKeyIpsecEnable(data connectionData, value bool) {
+func logicSetSettingVpnL2tpKeyIpsecEnable(data connectionData, value bool) (ok bool, errMsg string) {
+	ok = true
 	if !value {
 		removeSettingVpnL2tpKeyIpsecGatewayId(data)
 		removeSettingVpnL2tpKeyIpsecGroupName(data)
 		removeSettingVpnL2tpKeyIpsecPsk(data)
 	}
 	setSettingVpnL2tpKeyIpsecEnable(data, value)
+	return
 }

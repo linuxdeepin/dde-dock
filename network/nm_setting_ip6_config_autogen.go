@@ -128,12 +128,13 @@ func generalGetSettingIp6ConfigKeyJSON(data connectionData, key string) (value s
 }
 
 // Set JSON value generally
-func generalSetSettingIp6ConfigKeyJSON(data connectionData, key, valueJSON string) {
+func generalSetSettingIp6ConfigKeyJSON(data connectionData, key, valueJSON string) (ok bool, errMsg string) {
+	ok = true
 	switch key {
 	default:
 		logger.Error("generalSetSettingIp6ConfigKeyJSON: invalide key", key)
 	case NM_SETTING_IP6_CONFIG_METHOD:
-		logicSetSettingIp6ConfigMethodJSON(data, valueJSON)
+		ok, errMsg = logicSetSettingIp6ConfigMethodJSON(data, valueJSON)
 	case NM_SETTING_IP6_CONFIG_ADDRESSES:
 		setSettingIp6ConfigAddressesJSON(data, valueJSON)
 	case NM_SETTING_IP6_CONFIG_DNS:
@@ -443,6 +444,17 @@ func setSettingIp6ConfigIp6PrivacyJSON(data connectionData, valueJSON string) {
 }
 func setSettingIp6ConfigDhcpHostnameJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME))
+}
+
+// Logic JSON Setter
+func logicSetSettingIp6ConfigMethodJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+	ok = true
+	setSettingIp6ConfigMethodJSON(data, valueJSON)
+	if isSettingIp6ConfigMethodExists(data) {
+		value := getSettingIp6ConfigMethod(data)
+		ok, errMsg = logicSetSettingIp6ConfigMethod(data, value)
+	}
+	return
 }
 
 // Remover

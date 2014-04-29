@@ -101,12 +101,9 @@ func genNMSettingCode(nmSetting NMSettingStruct) (content string) {
 	content += genTpl(nmSetting, tplSetter)              // setter
 	content += genTpl(nmSetting, tplJSONGetter)          // json getter
 	content += genTpl(nmSetting, tplJSONSetter)          // json setter
+	content += genTpl(nmSetting, tplLogicJSONSetter)     // logic json setter
 	content += genTpl(nmSetting, tplRemover)             // remover
-
-	// TODO logic setter
-	// TODO logic json setter
 	// TODO get avaiable values
-
 	return
 }
 

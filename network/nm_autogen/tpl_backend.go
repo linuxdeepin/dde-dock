@@ -89,12 +89,13 @@ func generalGet{{$fieldFuncBaseName}}KeyJSON(data connectionData, key string) (v
 // set json value generally
 const tplGeneralSetterJSON = `{{$fieldFuncBaseName := .FieldName | ToFieldFuncBaseName}}
 // Set JSON value generally
-func generalSet{{$fieldFuncBaseName}}KeyJSON(data connectionData, key, valueJSON string) {
+func generalSet{{$fieldFuncBaseName}}KeyJSON(data connectionData, key, valueJSON string) (ok bool, errMsg string) {
+	ok = true
 	switch key {
 	default:
 		logger.Error("generalSet{{$fieldFuncBaseName}}KeyJSON: invalide key", key){{range .Keys}}{{if .UsedByBackEnd}}
 	case {{.Name}}:
-		{{if .LogicSet}}logicSet{{else}}set{{end}}{{.Name | ToKeyFuncBaseName}}JSON(data, valueJSON){{end}}{{end}}
+		{{if .LogicSet}}ok, errMsg = logicSet{{else}}set{{end}}{{.Name | ToKeyFuncBaseName}}JSON(data, valueJSON){{end}}{{end}}
 	}
 	return
 }
@@ -139,6 +140,20 @@ const tplJSONSetter = `
 // JSON Setter{{$fieldName := .FieldName}}{{range $i, $key := .Keys}}{{if $key.UsedByBackEnd}}
 func set{{$key.Name | ToKeyFuncBaseName}}JSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, {{$fieldName}}, {{$key.Name}}, valueJSON, get{{$fieldName | ToFieldFuncBaseName}}KeyType({{$key.Name}}))
+}{{end}}{{end}}
+`
+
+// logic json setter
+const tplLogicJSONSetter = `
+// Logic JSON Setter{{range $i, $key := .Keys}}{{if $key.LogicSet}}{{$keyFuncBaseName := $key.Name | ToKeyFuncBaseName}}
+func logicSet{{$keyFuncBaseName}}JSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+	ok = true
+	set{{$keyFuncBaseName}}JSON(data, valueJSON)
+	if is{{$keyFuncBaseName}}Exists(data) {
+		value := get{{$keyFuncBaseName}}(data)
+		ok, errMsg = logicSet{{$keyFuncBaseName}}(data, value)
+	}
+	return
 }{{end}}{{end}}
 `
 
@@ -228,7 +243,8 @@ func generalGetSettingKeyJSON(data connectionData, field, key string) (valueJSON
 	return
 }
 
-func generalSetSettingKeyJSON(data connectionData, field, key, valueJSON string) {
+func generalSetSettingKeyJSON(data connectionData, field, key, valueJSON string) (ok bool, errMsg string) {
+	ok = true
 	if isVirtualKey(field, key) {
 		generalSetVirtualKeyJSON(data, field, key, valueJSON)
 		return
@@ -237,8 +253,9 @@ func generalSetSettingKeyJSON(data connectionData, field, key, valueJSON string)
 	default:
 		logger.Warning("invalid field name", field){{range .}}
 	case {{.FieldName}}:
-		generalSet{{.FieldName | ToFieldFuncBaseName}}KeyJSON(data, key, valueJSON){{end}}
+		ok, errMsg = generalSet{{.FieldName | ToFieldFuncBaseName}}KeyJSON(data, key, valueJSON){{end}}
 	}
+	return
 }
 
 func getSettingKeyDefaultValueJSON(field, key string) (valueJSON string) {
@@ -274,12 +291,13 @@ func generalGetVirtualKeyJSON(data connectionData, field, key string) (valueJSON
 }
 
 // Set JSON value generally
-func generalSetVirtualKeyJSON(data connectionData, field, key string, valueJSON string) {
+func generalSetVirtualKeyJSON(data connectionData, field, key string, valueJSON string) (ok bool, errMsg string) {
+	ok = true
 	switch field { {{range $i, $field := GetAllVkFields $vks}}
 	case {{$field}}:
 		switch key { {{range $i, $key := GetAllVkFieldKeys $vks $field}}
 		case {{$key}}:
-			logicSet{{$key | ToKeyFuncBaseName}}JSON(data, valueJSON)
+			ok, errMsg = logicSet{{$key | ToKeyFuncBaseName}}JSON(data, valueJSON)
 			return{{end}}
 		}{{end}}
 	}
@@ -294,9 +312,9 @@ func get{{$keyBaseFuncName}}JSON(data connectionData) (valueJSON string) {
 }{{end}}
 
 // Logic JSON setter{{range $i, $vk := $vks}}{{$keyBaseFuncName := $vk.Name | ToKeyFuncBaseName}}
-func logicSet{{$keyBaseFuncName}}JSON(data connectionData, valueJSON string) {
+func logicSet{{$keyBaseFuncName}}JSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
 	value, _ := jsonToKeyValue{{$vk.Type | ToKeyTypeShortName}}(valueJSON)
-	logicSet{{$keyBaseFuncName}}(data, value)
+	return logicSet{{$keyBaseFuncName}}(data, value)
 }{{end}}
 
 // Getter for enable key wrapper{{range $i, $vk := $vks}}{{if $vk.EnableWrapper}}{{$keyBaseFuncName := $vk.Name | ToKeyFuncBaseName}}
@@ -308,12 +326,14 @@ func get{{$keyBaseFuncName}}(data connectionData) (value bool) {
 }{{end}}{{end}}
 
 // Setter for enable key wrapper{{range $i, $vk := $vks}}{{if $vk.EnableWrapper}}{{$keyBaseFuncName := $vk.Name | ToKeyFuncBaseName}}
-func logicSet{{$keyBaseFuncName}}(data connectionData, value bool) {
+func logicSet{{$keyBaseFuncName}}(data connectionData, value bool) (ok bool, errMsg string) {
+	ok = true
 	if value {
 		set{{$vk.RelatedKey | ToKeyFuncBaseName}}(data, {{$vk.RelatedKey | ToKeyTypeDefaultValue}})
 	} else {
 		remove{{$vk.RelatedKey | ToKeyFuncBaseName}}(data)
 	}
+	return
 }{{end}}{{end}}
 
 `

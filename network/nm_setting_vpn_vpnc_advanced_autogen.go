@@ -128,7 +128,8 @@ func generalGetSettingVpnVpncAdvancedKeyJSON(data connectionData, key string) (v
 }
 
 // Set JSON value generally
-func generalSetSettingVpnVpncAdvancedKeyJSON(data connectionData, key, valueJSON string) {
+func generalSetSettingVpnVpncAdvancedKeyJSON(data connectionData, key, valueJSON string) (ok bool, errMsg string) {
+	ok = true
 	switch key {
 	default:
 		logger.Error("generalSetSettingVpnVpncAdvancedKeyJSON: invalide key", key)
@@ -444,6 +445,8 @@ func setSettingVpnVpncKeyDpdIdleTimeoutJSON(data connectionData, valueJSON strin
 func setSettingVpnVpncKeyCiscoUdpEncapsPortJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_CISCO_UDP_ENCAPS_PORT, valueJSON, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_CISCO_UDP_ENCAPS_PORT))
 }
+
+// Logic JSON Setter
 
 // Remover
 func removeSettingVpnVpncKeyDomain(data connectionData) {

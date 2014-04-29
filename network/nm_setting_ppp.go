@@ -57,15 +57,12 @@ func checkSettingPppValues(data connectionData) (errs fieldErrors) {
 }
 
 // Logic setter
-func logicSetSettingPppRequireMppeJSON(data connectionData, valueJSON string) {
-	setSettingPppRequireMppeJSON(data, valueJSON)
-	value := getSettingPppRequireMppe(data)
-	logicSetSettingPppRequireMppe(data, value)
-}
-func logicSetSettingPppRequireMppe(data connectionData, value bool) {
+func logicSetSettingPppRequireMppe(data connectionData, value bool) (ok bool, errMsg string) {
+	ok = true
 	if !value {
 		removeSettingPppRequireMppe128(data)
 		removeSettingPppMppeStateful(data)
 	}
 	setSettingPppRequireMppe(data, value)
+	return
 }

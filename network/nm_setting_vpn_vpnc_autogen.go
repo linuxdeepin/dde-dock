@@ -128,7 +128,8 @@ func generalGetSettingVpnVpncKeyJSON(data connectionData, key string) (value str
 }
 
 // Set JSON value generally
-func generalSetSettingVpnVpncKeyJSON(data connectionData, key, valueJSON string) {
+func generalSetSettingVpnVpncKeyJSON(data connectionData, key, valueJSON string) (ok bool, errMsg string) {
+	ok = true
 	switch key {
 	default:
 		logger.Error("generalSetSettingVpnVpncKeyJSON: invalide key", key)
@@ -139,7 +140,7 @@ func generalSetSettingVpnVpncKeyJSON(data connectionData, key, valueJSON string)
 	case NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD_TYPE:
 		setSettingVpnVpncKeyXauthPasswordTypeJSON(data, valueJSON)
 	case NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD_FLAGS:
-		logicSetSettingVpnVpncKeyXauthPasswordFlagsJSON(data, valueJSON)
+		ok, errMsg = logicSetSettingVpnVpncKeyXauthPasswordFlagsJSON(data, valueJSON)
 	case NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD:
 		setSettingVpnVpncKeyXauthPasswordJSON(data, valueJSON)
 	case NM_SETTING_VPN_VPNC_KEY_ID:
@@ -147,7 +148,7 @@ func generalSetSettingVpnVpncKeyJSON(data connectionData, key, valueJSON string)
 	case NM_SETTING_VPN_VPNC_KEY_SECRET_TYPE:
 		setSettingVpnVpncKeySecretTypeJSON(data, valueJSON)
 	case NM_SETTING_VPN_VPNC_KEY_SECRET_FLAGS:
-		logicSetSettingVpnVpncKeySecretFlagsJSON(data, valueJSON)
+		ok, errMsg = logicSetSettingVpnVpncKeySecretFlagsJSON(data, valueJSON)
 	case NM_SETTING_VPN_VPNC_KEY_SECRET:
 		setSettingVpnVpncKeySecretJSON(data, valueJSON)
 	case NM_SETTING_VPN_VPNC_KEY_AUTHMODE:
@@ -455,6 +456,26 @@ func setSettingVpnVpncKeyAuthmodeJSON(data connectionData, valueJSON string) {
 }
 func setSettingVpnVpncKeyCaFileJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_CA_FILE, valueJSON, getSettingVpnVpncKeyType(NM_SETTING_VPN_VPNC_KEY_CA_FILE))
+}
+
+// Logic JSON Setter
+func logicSetSettingVpnVpncKeyXauthPasswordFlagsJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+	ok = true
+	setSettingVpnVpncKeyXauthPasswordFlagsJSON(data, valueJSON)
+	if isSettingVpnVpncKeyXauthPasswordFlagsExists(data) {
+		value := getSettingVpnVpncKeyXauthPasswordFlags(data)
+		ok, errMsg = logicSetSettingVpnVpncKeyXauthPasswordFlags(data, value)
+	}
+	return
+}
+func logicSetSettingVpnVpncKeySecretFlagsJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+	ok = true
+	setSettingVpnVpncKeySecretFlagsJSON(data, valueJSON)
+	if isSettingVpnVpncKeySecretFlagsExists(data) {
+		value := getSettingVpnVpncKeySecretFlags(data)
+		ok, errMsg = logicSetSettingVpnVpncKeySecretFlags(data, value)
+	}
+	return
 }
 
 // Remover

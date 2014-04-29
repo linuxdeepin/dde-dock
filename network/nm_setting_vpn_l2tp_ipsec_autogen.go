@@ -72,12 +72,13 @@ func generalGetSettingVpnL2tpIpsecKeyJSON(data connectionData, key string) (valu
 }
 
 // Set JSON value generally
-func generalSetSettingVpnL2tpIpsecKeyJSON(data connectionData, key, valueJSON string) {
+func generalSetSettingVpnL2tpIpsecKeyJSON(data connectionData, key, valueJSON string) (ok bool, errMsg string) {
+	ok = true
 	switch key {
 	default:
 		logger.Error("generalSetSettingVpnL2tpIpsecKeyJSON: invalide key", key)
 	case NM_SETTING_VPN_L2TP_KEY_IPSEC_ENABLE:
-		logicSetSettingVpnL2tpKeyIpsecEnableJSON(data, valueJSON)
+		ok, errMsg = logicSetSettingVpnL2tpKeyIpsecEnableJSON(data, valueJSON)
 	case NM_SETTING_VPN_L2TP_KEY_IPSEC_GROUP_NAME:
 		setSettingVpnL2tpKeyIpsecGroupNameJSON(data, valueJSON)
 	case NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID:
@@ -207,6 +208,17 @@ func setSettingVpnL2tpKeyIpsecGatewayIdJSON(data connectionData, valueJSON strin
 }
 func setSettingVpnL2tpKeyIpsecPskJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_PSK, valueJSON, getSettingVpnL2tpIpsecKeyType(NM_SETTING_VPN_L2TP_KEY_IPSEC_PSK))
+}
+
+// Logic JSON Setter
+func logicSetSettingVpnL2tpKeyIpsecEnableJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+	ok = true
+	setSettingVpnL2tpKeyIpsecEnableJSON(data, valueJSON)
+	if isSettingVpnL2tpKeyIpsecEnableExists(data) {
+		value := getSettingVpnL2tpKeyIpsecEnable(data)
+		ok, errMsg = logicSetSettingVpnL2tpKeyIpsecEnable(data, value)
+	}
+	return
 }
 
 // Remover

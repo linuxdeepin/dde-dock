@@ -152,7 +152,8 @@ func generalGetSettingWirelessKeyJSON(data connectionData, key string) (value st
 }
 
 // Set JSON value generally
-func generalSetSettingWirelessKeyJSON(data connectionData, key, valueJSON string) {
+func generalSetSettingWirelessKeyJSON(data connectionData, key, valueJSON string) (ok bool, errMsg string) {
+	ok = true
 	switch key {
 	default:
 		logger.Error("generalSetSettingWirelessKeyJSON: invalide key", key)
@@ -552,6 +553,8 @@ func setSettingWirelessSecJSON(data connectionData, valueJSON string) {
 func setSettingWirelessHiddenJSON(data connectionData, valueJSON string) {
 	setSettingKeyJSON(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_HIDDEN, valueJSON, getSettingWirelessKeyType(NM_SETTING_WIRELESS_HIDDEN))
 }
+
+// Logic JSON Setter
 
 // Remover
 func removeSettingWirelessSsid(data connectionData) {
