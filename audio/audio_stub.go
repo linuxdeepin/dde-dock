@@ -57,3 +57,17 @@ func (client *Client) GetDBusInfo() dbus.DBusInfo {
 		"com.deepin.daemon.Audio.Client",
 	}
 }
+
+func (op *SinkInput) setPropName(key string, value interface{}) {
+	switch key {
+	case "Mute":
+		if v, ok := value.(bool); ok && v != op.Mute {
+			op.Mute = v
+		}
+	case "Volume":
+		if v, ok := value.(uint32); ok && v != op.Volume {
+			op.Volume = v
+		}
+	}
+	dbus.NotifyChange(op, key)
+}

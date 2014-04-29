@@ -121,6 +121,7 @@ type SinkInput struct {
 	index int32
 
 	Name        string
+	Icon        string
 	ownerModule int32
 	Client      int32
 	Sink        int32
@@ -348,6 +349,17 @@ func getSinkInputFromC(_sink_input C.sink_input_t) *SinkInput {
 		sinkInput.PropList[C.GoString(key)] = C.GoString(C.pa_proplist_gets(_sink_input.proplist, key))
 		key = C.pa_proplist_iterate(_sink_input.proplist,
 			(*unsafe.Pointer)(unsafe.Pointer(&prop_state)))
+	}
+
+	if appName, ok := sinkInput.PropList["application.name"]; ok {
+		sinkInput.Name = appName
+	} else {
+		sinkInput.Name = ""
+	}
+	if appIcon, ok := sinkInput.PropList["application.icon_name"]; ok {
+		sinkInput.Icon = appIcon
+	} else {
+		sinkInput.Icon = ""
 	}
 	//sinkInputs[i].Cvolume.Channels = uint32(audio.pa.sink_inputs[i].volume.channels)
 	//for j := uint32(0); j < sinkInputs[i].Cvolume.Channels; j = j + 1 {
@@ -1223,6 +1235,7 @@ func (sinkInput *SinkInput) SetVolume(volume int32) int32 {
 	for i := 0; i < 2; i = i + 1 {
 		cvolume.values[i] = C.pa_volume_t(volume * C.PA_VOLUME_NORM / 100)
 	}
+	sinkInput.setPropName("Volume", uint32(volume))
 	return sinkInput.setSinkInputVolume(&cvolume)
 }
 
@@ -1232,6 +1245,7 @@ func (sinkInput *SinkInput) setSinkInputMute(mute int32) int32 {
 }
 
 func (sinkInput *SinkInput) SetMute(mute bool) int32 {
+	sinkInput.setPropName("Mute", mute)
 	if mute {
 		return sinkInput.setSinkInputMute(1)
 	} else {
