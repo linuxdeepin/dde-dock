@@ -396,11 +396,6 @@ func (s *ConnectionSession) updateErrorsWhenSettingKey(page, key string, err err
 	}
 }
 
-// TODO remove CheckValues check target value if is correct.
-// func (s *ConnectionSession) CheckValue(page, key, value string) (ok bool) {
-// 	return
-// }
-
 func (s *ConnectionSession) DebugListKeyDetail() (info string) {
 	for _, page := range s.listPages() {
 		pageData, ok := s.AvailableKeys[page]

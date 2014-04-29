@@ -343,7 +343,7 @@ func getSettingVkIp6ConfigAddressesAddress(data connectionData) (value string) {
 	// value := getSettingIp6ConfigAddressesAddress(data)
 	return
 }
-func getSettingVkIp6ConfigAddressesPrefix(data connectionData) (value string) {
+func getSettingVkIp6ConfigAddressesPrefix(data connectionData) (value uint32) {
 	// TODO
 	// value := getSettingIp6ConfigAddressesPrefix(data)
 	return

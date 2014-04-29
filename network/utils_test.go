@@ -355,6 +355,27 @@ func (*Utils) TestConvertIpv6AddressToArrayByte(c *C) {
 	}
 }
 
+func (*Utils) TestExpandIpv6Address(c *C) {
+	tests := []struct {
+		test   string
+		result string
+	}{
+		{"1234:2345:3456:4444:5555:6666:AAAA:FFFF", "1234:2345:3456:4444:5555:6666:AAAA:FFFF"},
+		{"0000:0000:0000:0000:0000:0000:0000:0000", "0000:0000:0000:0000:0000:0000:0000:0000"},
+		{"0::0", "0000:0000:0000:0000:0000:0000:0000:0000"},
+		{"2001:DB8:2de::e13", "2001:0DB8:02de:0000:0000:0000:0000:0e13"},
+		{"::ffff:874B:2B34", "0000:0000:0000:0000:0000:ffff:874B:2B34"},
+	}
+	for _, t := range tests {
+		r, _ := expandIpv6Address(t.test)
+		c.Check(t.result, Equals, r)
+	}
+
+	// check error ipv6 format
+	_, err := expandIpv6Address("2001::25de::cade")
+	c.Check(err, NotNil)
+}
+
 func (*Utils) TestJSONWrapper(c *C) {
 	var v interface{}
 	var s string

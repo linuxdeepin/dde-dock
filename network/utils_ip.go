@@ -115,7 +115,10 @@ func convertIpv4NetMaskToPrefix(maskAddress string) (prefix uint32) {
 }
 func convertIpv4NetMaskToPrefixCheck(maskAddress string) (prefix uint32, err error) {
 	var mask uint32 // network order
-	mask = convertIpv4AddressToUint32(maskAddress)
+	mask, err = convertIpv4AddressToUint32Check(maskAddress)
+	if err != nil {
+		return
+	}
 	mask = reverseOrderUint32(mask)
 	foundZerorBit := false
 	for i := uint32(0); i < 32; i++ {
@@ -123,7 +126,7 @@ func convertIpv4NetMaskToPrefixCheck(maskAddress string) (prefix uint32, err err
 			if !foundZerorBit {
 				prefix++
 			} else {
-				err = fmt.Errorf("invalid value %s", maskAddress)
+				err = fmt.Errorf("net mask address is invalid %s", maskAddress)
 				return
 			}
 		} else {
@@ -154,32 +157,89 @@ func convertIpv6AddressToString(v []byte) (ipv6Addr string) {
 
 // "0000:0000:0000:0000:0000:0000:0000:0000" -> []byte{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 func convertIpv6AddressToArrayByte(v string) (ipv6Addr []byte) {
+	ipv6Addr, err := convertIpv6AddressToArrayByteCheck(v)
+	if err != nil {
+		logger.Error(err)
+	}
+	return
+}
+func convertIpv6AddressToArrayByteCheck(v string) (ipv6Addr []byte, err error) {
+	v, err = expandIpv6Address(v)
+	if err != nil {
+		return
+	}
 	ipv6Addr = make([]byte, 16)
 	a := strings.Split(v, ":")
 	if len(a) != 8 {
-		logger.Error("ipv6 address is invalid", v)
-		return // TODO
+		err = fmt.Errorf("ipv6 address is invalid %s", v)
+		return
 	}
 	for i := 0; i < 8; i++ {
 		s := a[i]
 		if len(s) != 4 {
-			logger.Error("ipv6 address is invalid", v)
+			err = fmt.Errorf("ipv6 address is invalid %s", v)
 			return
 		}
 
-		n, err := strconv.ParseUint(s[:2], 16, 8)
-		ipv6Addr[i*2] = byte(n)
+		var tmpn uint64
+		tmpn, err = strconv.ParseUint(s[:2], 16, 8)
+		ipv6Addr[i*2] = byte(tmpn)
 		if err != nil {
-			logger.Error("ipv6 address is invalid", v)
+			err = fmt.Errorf("ipv6 address is invalid %s", v)
 			return
 		}
 
-		n, err = strconv.ParseUint(s[2:], 16, 8)
+		tmpn, err = strconv.ParseUint(s[2:], 16, 8)
 		if err != nil {
-			logger.Error("ipv6 address is invalid", v)
+			err = fmt.Errorf("ipv6 address is invalid %s", v)
 			return
 		}
-		ipv6Addr[i*2+1] = byte(n)
+		ipv6Addr[i*2+1] = byte(tmpn)
+	}
+	return
+}
+
+// expand ipv6 address to standard format, such as
+// "0::0" -> "0000:0000:0000:0000:0000:0000:0000:0000"
+// "2001:DB8:2de::e13" -> "2001:DB8:2de:0:0:0:0:e13"
+// "2001::25de::cade" -> error
+func expandIpv6Address(v string) (ipv6Addr string, err error) {
+	a1 := strings.Split(v, ":")
+	l1 := len(a1)
+	if l1 > 8 {
+		err = fmt.Errorf("invalid ipv6 address %s", v)
+		return
+	}
+
+	a2 := strings.Split(v, "::")
+	l2 := len(a2)
+	if l2 > 2 {
+		err = fmt.Errorf("invalid ipv6 address %s", v)
+		return
+	} else if l2 == 2 {
+		// expand "::"
+		abbrFields := ":"
+		for i := 0; i <= 8-l1; i++ {
+			abbrFields += "0000:"
+		}
+		v = strings.Replace(v, "::", abbrFields, -1)
+	}
+
+	// expand ":0:" to ":0000:"
+	a1 = strings.Split(v, ":")
+	for i, field := range a1 {
+		l := len(field)
+		if l > 4 {
+			err = fmt.Errorf("invalid ipv6 address %s", v)
+			return
+		} else if l < 4 {
+			field = strings.Repeat("0", 4-l) + field
+		}
+		if i == 0 {
+			ipv6Addr = field
+		} else {
+			ipv6Addr += ":" + field
+		}
 	}
 	return
 }
