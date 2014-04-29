@@ -96,13 +96,12 @@ func generalGetSettingVpnOpenvpnProxiesKeyJSON(data connectionData, key string) 
 }
 
 // Set JSON value generally
-func generalSetSettingVpnOpenvpnProxiesKeyJSON(data connectionData, key, valueJSON string) (ok bool, errMsg string) {
-	ok = true
+func generalSetSettingVpnOpenvpnProxiesKeyJSON(data connectionData, key, valueJSON string) (err error) {
 	switch key {
 	default:
 		logger.Error("generalSetSettingVpnOpenvpnProxiesKeyJSON: invalide key", key)
 	case NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE:
-		ok, errMsg = logicSetSettingVpnOpenvpnKeyProxyTypeJSON(data, valueJSON)
+		err = logicSetSettingVpnOpenvpnKeyProxyTypeJSON(data, valueJSON)
 	case NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER:
 		setSettingVpnOpenvpnKeyProxyServerJSON(data, valueJSON)
 	case NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT:
@@ -311,12 +310,11 @@ func setSettingVpnOpenvpnKeyHttpProxyPasswordFlagsJSON(data connectionData, valu
 }
 
 // Logic JSON Setter
-func logicSetSettingVpnOpenvpnKeyProxyTypeJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
-	ok = true
+func logicSetSettingVpnOpenvpnKeyProxyTypeJSON(data connectionData, valueJSON string) (err error) {
 	setSettingVpnOpenvpnKeyProxyTypeJSON(data, valueJSON)
 	if isSettingVpnOpenvpnKeyProxyTypeExists(data) {
 		value := getSettingVpnOpenvpnKeyProxyType(data)
-		ok, errMsg = logicSetSettingVpnOpenvpnKeyProxyType(data, value)
+		err = logicSetSettingVpnOpenvpnKeyProxyType(data, value)
 	}
 	return
 }

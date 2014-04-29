@@ -128,8 +128,7 @@ func generalGetSettingConnectionKeyJSON(data connectionData, key string) (value 
 }
 
 // Set JSON value generally
-func generalSetSettingConnectionKeyJSON(data connectionData, key, valueJSON string) (ok bool, errMsg string) {
-	ok = true
+func generalSetSettingConnectionKeyJSON(data connectionData, key, valueJSON string) (err error) {
 	switch key {
 	default:
 		logger.Error("generalSetSettingConnectionKeyJSON: invalide key", key)

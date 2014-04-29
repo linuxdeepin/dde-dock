@@ -121,8 +121,7 @@ func checkSettingVpnL2tpPppValues(data connectionData) (errs fieldErrors) {
 	errs = make(map[string]string)
 	return
 }
-func logicSetSettingVpnL2tpKeyRequireMppe(data connectionData, value bool) (ok bool, errMsg string) {
-	ok = true
+func logicSetSettingVpnL2tpKeyRequireMppe(data connectionData, value bool) (err error) {
 	if !value {
 		removeSettingVpnL2tpKeyRequireMppe40(data)
 		removeSettingVpnL2tpKeyRequireMppe128(data)
@@ -150,8 +149,7 @@ func checkSettingVpnL2tpIpsecValues(data connectionData) (errs fieldErrors) {
 	// TODO
 	return
 }
-func logicSetSettingVpnL2tpKeyIpsecEnable(data connectionData, value bool) (ok bool, errMsg string) {
-	ok = true
+func logicSetSettingVpnL2tpKeyIpsecEnable(data connectionData, value bool) (err error) {
 	if !value {
 		removeSettingVpnL2tpKeyIpsecGatewayId(data)
 		removeSettingVpnL2tpKeyIpsecGroupName(data)

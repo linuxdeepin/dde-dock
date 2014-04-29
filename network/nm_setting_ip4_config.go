@@ -291,8 +291,7 @@ func checkSettingIp4ConfigAddresses(data connectionData, errs fieldErrors) {
 }
 
 // Logic setter
-func logicSetSettingIp4ConfigMethod(data connectionData, value string) (ok bool, errMsg string) {
-	ok = true
+func logicSetSettingIp4ConfigMethod(data connectionData, value string) (err error) {
 	// just ignore error here and set value directly, error will be
 	// check in checkSettingXXXValues()
 	switch value {

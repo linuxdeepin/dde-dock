@@ -168,8 +168,7 @@ func generalGetSettingVpnL2tpPppKeyJSON(data connectionData, key string) (value 
 }
 
 // Set JSON value generally
-func generalSetSettingVpnL2tpPppKeyJSON(data connectionData, key, valueJSON string) (ok bool, errMsg string) {
-	ok = true
+func generalSetSettingVpnL2tpPppKeyJSON(data connectionData, key, valueJSON string) (err error) {
 	switch key {
 	default:
 		logger.Error("generalSetSettingVpnL2tpPppKeyJSON: invalide key", key)
@@ -184,7 +183,7 @@ func generalSetSettingVpnL2tpPppKeyJSON(data connectionData, key, valueJSON stri
 	case NM_SETTING_VPN_L2TP_KEY_REFUSE_MSCHAPV2:
 		setSettingVpnL2tpKeyRefuseMschapv2JSON(data, valueJSON)
 	case NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE:
-		ok, errMsg = logicSetSettingVpnL2tpKeyRequireMppeJSON(data, valueJSON)
+		err = logicSetSettingVpnL2tpKeyRequireMppeJSON(data, valueJSON)
 	case NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_40:
 		setSettingVpnL2tpKeyRequireMppe40JSON(data, valueJSON)
 	case NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_128:
@@ -583,12 +582,11 @@ func setSettingVpnL2tpKeyLcpEchoIntervalJSON(data connectionData, valueJSON stri
 }
 
 // Logic JSON Setter
-func logicSetSettingVpnL2tpKeyRequireMppeJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
-	ok = true
+func logicSetSettingVpnL2tpKeyRequireMppeJSON(data connectionData, valueJSON string) (err error) {
 	setSettingVpnL2tpKeyRequireMppeJSON(data, valueJSON)
 	if isSettingVpnL2tpKeyRequireMppeExists(data) {
 		value := getSettingVpnL2tpKeyRequireMppe(data)
-		ok, errMsg = logicSetSettingVpnL2tpKeyRequireMppe(data, value)
+		err = logicSetSettingVpnL2tpKeyRequireMppe(data, value)
 	}
 	return
 }

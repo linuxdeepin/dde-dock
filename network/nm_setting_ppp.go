@@ -57,8 +57,7 @@ func checkSettingPppValues(data connectionData) (errs fieldErrors) {
 }
 
 // Logic setter
-func logicSetSettingPppRequireMppe(data connectionData, value bool) (ok bool, errMsg string) {
-	ok = true
+func logicSetSettingPppRequireMppe(data connectionData, value bool) (err error) {
 	if !value {
 		removeSettingPppRequireMppe128(data)
 		removeSettingPppMppeStateful(data)

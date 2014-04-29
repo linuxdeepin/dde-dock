@@ -336,61 +336,60 @@ func generalGetSettingKeyJSON(data connectionData, field, key string) (valueJSON
 	return
 }
 
-func generalSetSettingKeyJSON(data connectionData, field, key, valueJSON string) (ok bool, errMsg string) {
-	ok = true
+func generalSetSettingKeyJSON(data connectionData, field, key, valueJSON string) (err error) {
 	if isVirtualKey(field, key) {
-		ok, errMsg = generalSetVirtualKeyJSON(data, field, key, valueJSON)
+		err = generalSetVirtualKeyJSON(data, field, key, valueJSON)
 		return
 	}
 	switch field {
 	default:
 		logger.Warning("invalid field name", field)
 	case NM_SETTING_802_1X_SETTING_NAME:
-		ok, errMsg = generalSetSetting8021xKeyJSON(data, key, valueJSON)
+		err = generalSetSetting8021xKeyJSON(data, key, valueJSON)
 	case NM_SETTING_CONNECTION_SETTING_NAME:
-		ok, errMsg = generalSetSettingConnectionKeyJSON(data, key, valueJSON)
+		err = generalSetSettingConnectionKeyJSON(data, key, valueJSON)
 	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
-		ok, errMsg = generalSetSettingIp4ConfigKeyJSON(data, key, valueJSON)
+		err = generalSetSettingIp4ConfigKeyJSON(data, key, valueJSON)
 	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
-		ok, errMsg = generalSetSettingIp6ConfigKeyJSON(data, key, valueJSON)
+		err = generalSetSettingIp6ConfigKeyJSON(data, key, valueJSON)
 	case NM_SETTING_PPP_SETTING_NAME:
-		ok, errMsg = generalSetSettingPppKeyJSON(data, key, valueJSON)
+		err = generalSetSettingPppKeyJSON(data, key, valueJSON)
 	case NM_SETTING_PPPOE_SETTING_NAME:
-		ok, errMsg = generalSetSettingPppoeKeyJSON(data, key, valueJSON)
+		err = generalSetSettingPppoeKeyJSON(data, key, valueJSON)
 	case NM_SETTING_VPN_SETTING_NAME:
-		ok, errMsg = generalSetSettingVpnKeyJSON(data, key, valueJSON)
+		err = generalSetSettingVpnKeyJSON(data, key, valueJSON)
 	case NM_SETTING_VF_VPN_L2TP_SETTING_NAME:
-		ok, errMsg = generalSetSettingVpnL2tpKeyJSON(data, key, valueJSON)
+		err = generalSetSettingVpnL2tpKeyJSON(data, key, valueJSON)
 	case NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME:
-		ok, errMsg = generalSetSettingVpnL2tpPppKeyJSON(data, key, valueJSON)
+		err = generalSetSettingVpnL2tpPppKeyJSON(data, key, valueJSON)
 	case NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME:
-		ok, errMsg = generalSetSettingVpnL2tpIpsecKeyJSON(data, key, valueJSON)
+		err = generalSetSettingVpnL2tpIpsecKeyJSON(data, key, valueJSON)
 	case NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME:
-		ok, errMsg = generalSetSettingVpnOpenconnectKeyJSON(data, key, valueJSON)
+		err = generalSetSettingVpnOpenconnectKeyJSON(data, key, valueJSON)
 	case NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME:
-		ok, errMsg = generalSetSettingVpnOpenvpnKeyJSON(data, key, valueJSON)
+		err = generalSetSettingVpnOpenvpnKeyJSON(data, key, valueJSON)
 	case NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME:
-		ok, errMsg = generalSetSettingVpnOpenvpnAdvancedKeyJSON(data, key, valueJSON)
+		err = generalSetSettingVpnOpenvpnAdvancedKeyJSON(data, key, valueJSON)
 	case NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME:
-		ok, errMsg = generalSetSettingVpnOpenvpnSecurityKeyJSON(data, key, valueJSON)
+		err = generalSetSettingVpnOpenvpnSecurityKeyJSON(data, key, valueJSON)
 	case NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
-		ok, errMsg = generalSetSettingVpnOpenvpnTlsauthKeyJSON(data, key, valueJSON)
+		err = generalSetSettingVpnOpenvpnTlsauthKeyJSON(data, key, valueJSON)
 	case NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME:
-		ok, errMsg = generalSetSettingVpnOpenvpnProxiesKeyJSON(data, key, valueJSON)
+		err = generalSetSettingVpnOpenvpnProxiesKeyJSON(data, key, valueJSON)
 	case NM_SETTING_VF_VPN_PPTP_SETTING_NAME:
-		ok, errMsg = generalSetSettingVpnPptpKeyJSON(data, key, valueJSON)
+		err = generalSetSettingVpnPptpKeyJSON(data, key, valueJSON)
 	case NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME:
-		ok, errMsg = generalSetSettingVpnPptpPppKeyJSON(data, key, valueJSON)
+		err = generalSetSettingVpnPptpPppKeyJSON(data, key, valueJSON)
 	case NM_SETTING_VF_VPN_VPNC_SETTING_NAME:
-		ok, errMsg = generalSetSettingVpnVpncKeyJSON(data, key, valueJSON)
+		err = generalSetSettingVpnVpncKeyJSON(data, key, valueJSON)
 	case NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME:
-		ok, errMsg = generalSetSettingVpnVpncAdvancedKeyJSON(data, key, valueJSON)
+		err = generalSetSettingVpnVpncAdvancedKeyJSON(data, key, valueJSON)
 	case NM_SETTING_WIRED_SETTING_NAME:
-		ok, errMsg = generalSetSettingWiredKeyJSON(data, key, valueJSON)
+		err = generalSetSettingWiredKeyJSON(data, key, valueJSON)
 	case NM_SETTING_WIRELESS_SETTING_NAME:
-		ok, errMsg = generalSetSettingWirelessKeyJSON(data, key, valueJSON)
+		err = generalSetSettingWirelessKeyJSON(data, key, valueJSON)
 	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
-		ok, errMsg = generalSetSettingWirelessSecurityKeyJSON(data, key, valueJSON)
+		err = generalSetSettingWirelessSecurityKeyJSON(data, key, valueJSON)
 	}
 	return
 }

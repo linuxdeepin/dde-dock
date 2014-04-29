@@ -2,6 +2,7 @@ package main
 
 import (
 	"dlib"
+	"fmt"
 )
 
 // TODO doc
@@ -257,12 +258,10 @@ func checkSetting8021xPrivateKey(data connectionData, errs fieldErrors) {
 }
 
 // Logic setter
-func logicSetSetting8021xEap(data connectionData, value []string) (ok bool, errMsg string) {
-	ok = true
+func logicSetSetting8021xEap(data connectionData, value []string) (err error) {
 	if len(value) == 0 {
 		logger.Error("eap value is empty")
-		ok = false
-		errMsg = NM_KEY_ERROR_INVALID_VALUE
+		err = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
 		return
 	}
 	eap := value[0]

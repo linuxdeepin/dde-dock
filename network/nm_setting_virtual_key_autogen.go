@@ -161,154 +161,153 @@ func generalGetVirtualKeyJSON(data connectionData, field, key string) (valueJSON
 }
 
 // Set JSON value generally
-func generalSetVirtualKeyJSON(data connectionData, field, key string, valueJSON string) (ok bool, errMsg string) {
-	ok = true
+func generalSetVirtualKeyJSON(data connectionData, field, key string, valueJSON string) (err error) {
 	switch field {
 	case NM_SETTING_802_1X_SETTING_NAME:
 		switch key {
 		case NM_SETTING_VK_802_1X_ENABLE:
-			ok, errMsg = logicSetSettingVk8021xEnableJSON(data, valueJSON)
+			err = logicSetSettingVk8021xEnableJSON(data, valueJSON)
 			return
 		case NM_SETTING_VK_802_1X_EAP:
-			ok, errMsg = logicSetSettingVk8021xEapJSON(data, valueJSON)
+			err = logicSetSettingVk8021xEapJSON(data, valueJSON)
 			return
 		case NM_SETTING_VK_802_1X_PAC_FILE:
-			ok, errMsg = logicSetSettingVk8021xPacFileJSON(data, valueJSON)
+			err = logicSetSettingVk8021xPacFileJSON(data, valueJSON)
 			return
 		case NM_SETTING_VK_802_1X_CA_CERT:
-			ok, errMsg = logicSetSettingVk8021xCaCertJSON(data, valueJSON)
+			err = logicSetSettingVk8021xCaCertJSON(data, valueJSON)
 			return
 		case NM_SETTING_VK_802_1X_CLIENT_CERT:
-			ok, errMsg = logicSetSettingVk8021xClientCertJSON(data, valueJSON)
+			err = logicSetSettingVk8021xClientCertJSON(data, valueJSON)
 			return
 		case NM_SETTING_VK_802_1X_PRIVATE_KEY:
-			ok, errMsg = logicSetSettingVk8021xPrivateKeyJSON(data, valueJSON)
+			err = logicSetSettingVk8021xPrivateKeyJSON(data, valueJSON)
 			return
 		}
 	case NM_SETTING_CONNECTION_SETTING_NAME:
 		switch key {
 		case NM_SETTING_VK_CONNECTION_NO_PERMISSION:
-			ok, errMsg = logicSetSettingVkConnectionNoPermissionJSON(data, valueJSON)
+			err = logicSetSettingVkConnectionNoPermissionJSON(data, valueJSON)
 			return
 		}
 	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
 		switch key {
 		case NM_SETTING_VK_IP4_CONFIG_ADDRESSES_ADDRESS:
-			ok, errMsg = logicSetSettingVkIp4ConfigAddressesAddressJSON(data, valueJSON)
+			err = logicSetSettingVkIp4ConfigAddressesAddressJSON(data, valueJSON)
 			return
 		case NM_SETTING_VK_IP4_CONFIG_ADDRESSES_MASK:
-			ok, errMsg = logicSetSettingVkIp4ConfigAddressesMaskJSON(data, valueJSON)
+			err = logicSetSettingVkIp4ConfigAddressesMaskJSON(data, valueJSON)
 			return
 		case NM_SETTING_VK_IP4_CONFIG_ADDRESSES_GATEWAY:
-			ok, errMsg = logicSetSettingVkIp4ConfigAddressesGatewayJSON(data, valueJSON)
+			err = logicSetSettingVkIp4ConfigAddressesGatewayJSON(data, valueJSON)
 			return
 		case NM_SETTING_VK_IP4_CONFIG_DNS:
-			ok, errMsg = logicSetSettingVkIp4ConfigDnsJSON(data, valueJSON)
+			err = logicSetSettingVkIp4ConfigDnsJSON(data, valueJSON)
 			return
 		case NM_SETTING_VK_IP4_CONFIG_ROUTES_ADDRESS:
-			ok, errMsg = logicSetSettingVkIp4ConfigRoutesAddressJSON(data, valueJSON)
+			err = logicSetSettingVkIp4ConfigRoutesAddressJSON(data, valueJSON)
 			return
 		case NM_SETTING_VK_IP4_CONFIG_ROUTES_MASK:
-			ok, errMsg = logicSetSettingVkIp4ConfigRoutesMaskJSON(data, valueJSON)
+			err = logicSetSettingVkIp4ConfigRoutesMaskJSON(data, valueJSON)
 			return
 		case NM_SETTING_VK_IP4_CONFIG_ROUTES_NEXTHOP:
-			ok, errMsg = logicSetSettingVkIp4ConfigRoutesNexthopJSON(data, valueJSON)
+			err = logicSetSettingVkIp4ConfigRoutesNexthopJSON(data, valueJSON)
 			return
 		case NM_SETTING_VK_IP4_CONFIG_ROUTES_METRIC:
-			ok, errMsg = logicSetSettingVkIp4ConfigRoutesMetricJSON(data, valueJSON)
+			err = logicSetSettingVkIp4ConfigRoutesMetricJSON(data, valueJSON)
 			return
 		}
 	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
 		switch key {
 		case NM_SETTING_VK_IP6_CONFIG_ADDRESSES_ADDRESS:
-			ok, errMsg = logicSetSettingVkIp6ConfigAddressesAddressJSON(data, valueJSON)
+			err = logicSetSettingVkIp6ConfigAddressesAddressJSON(data, valueJSON)
 			return
 		case NM_SETTING_VK_IP6_CONFIG_ADDRESSES_PREFIX:
-			ok, errMsg = logicSetSettingVkIp6ConfigAddressesPrefixJSON(data, valueJSON)
+			err = logicSetSettingVkIp6ConfigAddressesPrefixJSON(data, valueJSON)
 			return
 		case NM_SETTING_VK_IP6_CONFIG_ADDRESSES_GATEWAY:
-			ok, errMsg = logicSetSettingVkIp6ConfigAddressesGatewayJSON(data, valueJSON)
+			err = logicSetSettingVkIp6ConfigAddressesGatewayJSON(data, valueJSON)
 			return
 		case NM_SETTING_VK_IP6_CONFIG_DNS:
-			ok, errMsg = logicSetSettingVkIp6ConfigDnsJSON(data, valueJSON)
+			err = logicSetSettingVkIp6ConfigDnsJSON(data, valueJSON)
 			return
 		case NM_SETTING_VK_IP6_CONFIG_ROUTES_ADDRESS:
-			ok, errMsg = logicSetSettingVkIp6ConfigRoutesAddressJSON(data, valueJSON)
+			err = logicSetSettingVkIp6ConfigRoutesAddressJSON(data, valueJSON)
 			return
 		case NM_SETTING_VK_IP6_CONFIG_ROUTES_PREFIX:
-			ok, errMsg = logicSetSettingVkIp6ConfigRoutesPrefixJSON(data, valueJSON)
+			err = logicSetSettingVkIp6ConfigRoutesPrefixJSON(data, valueJSON)
 			return
 		case NM_SETTING_VK_IP6_CONFIG_ROUTES_NEXTHOP:
-			ok, errMsg = logicSetSettingVkIp6ConfigRoutesNexthopJSON(data, valueJSON)
+			err = logicSetSettingVkIp6ConfigRoutesNexthopJSON(data, valueJSON)
 			return
 		case NM_SETTING_VK_IP6_CONFIG_ROUTES_METRIC:
-			ok, errMsg = logicSetSettingVkIp6ConfigRoutesMetricJSON(data, valueJSON)
+			err = logicSetSettingVkIp6ConfigRoutesMetricJSON(data, valueJSON)
 			return
 		}
 	case NM_SETTING_PPP_SETTING_NAME:
 		switch key {
 		case NM_SETTING_VK_PPP_ENABLE_LCP_ECHO:
-			ok, errMsg = logicSetSettingVkPppEnableLcpEchoJSON(data, valueJSON)
+			err = logicSetSettingVkPppEnableLcpEchoJSON(data, valueJSON)
 			return
 		}
 	case NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME:
 		switch key {
 		case NM_SETTING_VK_VPN_L2TP_ENABLE_LCP_ECHO:
-			ok, errMsg = logicSetSettingVkVpnL2tpEnableLcpEchoJSON(data, valueJSON)
+			err = logicSetSettingVkVpnL2tpEnableLcpEchoJSON(data, valueJSON)
 			return
 		}
 	case NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME:
 		switch key {
 		case NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_PORT:
-			ok, errMsg = logicSetSettingVkVpnOpenvpnKeyEnablePortJSON(data, valueJSON)
+			err = logicSetSettingVkVpnOpenvpnKeyEnablePortJSON(data, valueJSON)
 			return
 		case NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_RENEG_SECONDS:
-			ok, errMsg = logicSetSettingVkVpnOpenvpnKeyEnableRenegSecondsJSON(data, valueJSON)
+			err = logicSetSettingVkVpnOpenvpnKeyEnableRenegSecondsJSON(data, valueJSON)
 			return
 		case NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_TUNNEL_MTU:
-			ok, errMsg = logicSetSettingVkVpnOpenvpnKeyEnableTunnelMtuJSON(data, valueJSON)
+			err = logicSetSettingVkVpnOpenvpnKeyEnableTunnelMtuJSON(data, valueJSON)
 			return
 		case NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_FRAGMENT_SIZE:
-			ok, errMsg = logicSetSettingVkVpnOpenvpnKeyEnableFragmentSizeJSON(data, valueJSON)
+			err = logicSetSettingVkVpnOpenvpnKeyEnableFragmentSizeJSON(data, valueJSON)
 			return
 		}
 	case NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME:
 		switch key {
 		case NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_STATIC_KEY_DIRECTION:
-			ok, errMsg = logicSetSettingVkVpnOpenvpnKeyEnableStaticKeyDirectionJSON(data, valueJSON)
+			err = logicSetSettingVkVpnOpenvpnKeyEnableStaticKeyDirectionJSON(data, valueJSON)
 			return
 		}
 	case NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
 		switch key {
 		case NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_TA_DIR:
-			ok, errMsg = logicSetSettingVkVpnOpenvpnKeyEnableTaDirJSON(data, valueJSON)
+			err = logicSetSettingVkVpnOpenvpnKeyEnableTaDirJSON(data, valueJSON)
 			return
 		}
 	case NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME:
 		switch key {
 		case NM_SETTING_VK_VPN_PPTP_ENABLE_LCP_ECHO:
-			ok, errMsg = logicSetSettingVkVpnPptpEnableLcpEchoJSON(data, valueJSON)
+			err = logicSetSettingVkVpnPptpEnableLcpEchoJSON(data, valueJSON)
 			return
 		}
 	case NM_SETTING_VF_VPN_VPNC_SETTING_NAME:
 		switch key {
 		case NM_SETTING_VK_VPN_VPNC_KEY_HYBRID_AUTHMODE:
-			ok, errMsg = logicSetSettingVkVpnVpncKeyHybridAuthmodeJSON(data, valueJSON)
+			err = logicSetSettingVkVpnVpncKeyHybridAuthmodeJSON(data, valueJSON)
 			return
 		}
 	case NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME:
 		switch key {
 		case NM_SETTING_VK_VPN_VPNC_KEY_ENCRYPTION_METHOD:
-			ok, errMsg = logicSetSettingVkVpnVpncKeyEncryptionMethodJSON(data, valueJSON)
+			err = logicSetSettingVkVpnVpncKeyEncryptionMethodJSON(data, valueJSON)
 			return
 		case NM_SETTING_VK_VPN_VPNC_KEY_DISABLE_DPD:
-			ok, errMsg = logicSetSettingVkVpnVpncKeyDisableDpdJSON(data, valueJSON)
+			err = logicSetSettingVkVpnVpncKeyDisableDpdJSON(data, valueJSON)
 			return
 		}
 	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
 		switch key {
 		case NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT:
-			ok, errMsg = logicSetSettingVkWirelessSecurityKeyMgmtJSON(data, valueJSON)
+			err = logicSetSettingVkWirelessSecurityKeyMgmtJSON(data, valueJSON)
 			return
 		}
 	}
@@ -463,147 +462,147 @@ func getSettingVkWirelessSecurityKeyMgmtJSON(data connectionData) (valueJSON str
 }
 
 // Logic JSON setter
-func logicSetSettingVk8021xEnableJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVk8021xEnableJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	return logicSetSettingVk8021xEnable(data, value)
 }
-func logicSetSettingVk8021xEapJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVk8021xEapJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	return logicSetSettingVk8021xEap(data, value)
 }
-func logicSetSettingVk8021xPacFileJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVk8021xPacFileJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	return logicSetSettingVk8021xPacFile(data, value)
 }
-func logicSetSettingVk8021xCaCertJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVk8021xCaCertJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	return logicSetSettingVk8021xCaCert(data, value)
 }
-func logicSetSettingVk8021xClientCertJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVk8021xClientCertJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	return logicSetSettingVk8021xClientCert(data, value)
 }
-func logicSetSettingVk8021xPrivateKeyJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVk8021xPrivateKeyJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	return logicSetSettingVk8021xPrivateKey(data, value)
 }
-func logicSetSettingVkConnectionNoPermissionJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVkConnectionNoPermissionJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	return logicSetSettingVkConnectionNoPermission(data, value)
 }
-func logicSetSettingVkIp4ConfigAddressesAddressJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVkIp4ConfigAddressesAddressJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	return logicSetSettingVkIp4ConfigAddressesAddress(data, value)
 }
-func logicSetSettingVkIp4ConfigAddressesMaskJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVkIp4ConfigAddressesMaskJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	return logicSetSettingVkIp4ConfigAddressesMask(data, value)
 }
-func logicSetSettingVkIp4ConfigAddressesGatewayJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVkIp4ConfigAddressesGatewayJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	return logicSetSettingVkIp4ConfigAddressesGateway(data, value)
 }
-func logicSetSettingVkIp4ConfigDnsJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVkIp4ConfigDnsJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	return logicSetSettingVkIp4ConfigDns(data, value)
 }
-func logicSetSettingVkIp4ConfigRoutesAddressJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVkIp4ConfigRoutesAddressJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	return logicSetSettingVkIp4ConfigRoutesAddress(data, value)
 }
-func logicSetSettingVkIp4ConfigRoutesMaskJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVkIp4ConfigRoutesMaskJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	return logicSetSettingVkIp4ConfigRoutesMask(data, value)
 }
-func logicSetSettingVkIp4ConfigRoutesNexthopJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVkIp4ConfigRoutesNexthopJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	return logicSetSettingVkIp4ConfigRoutesNexthop(data, value)
 }
-func logicSetSettingVkIp4ConfigRoutesMetricJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVkIp4ConfigRoutesMetricJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	return logicSetSettingVkIp4ConfigRoutesMetric(data, value)
 }
-func logicSetSettingVkIp6ConfigAddressesAddressJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVkIp6ConfigAddressesAddressJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	return logicSetSettingVkIp6ConfigAddressesAddress(data, value)
 }
-func logicSetSettingVkIp6ConfigAddressesPrefixJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVkIp6ConfigAddressesPrefixJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueUint32(valueJSON)
 	return logicSetSettingVkIp6ConfigAddressesPrefix(data, value)
 }
-func logicSetSettingVkIp6ConfigAddressesGatewayJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVkIp6ConfigAddressesGatewayJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	return logicSetSettingVkIp6ConfigAddressesGateway(data, value)
 }
-func logicSetSettingVkIp6ConfigDnsJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVkIp6ConfigDnsJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	return logicSetSettingVkIp6ConfigDns(data, value)
 }
-func logicSetSettingVkIp6ConfigRoutesAddressJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVkIp6ConfigRoutesAddressJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	return logicSetSettingVkIp6ConfigRoutesAddress(data, value)
 }
-func logicSetSettingVkIp6ConfigRoutesPrefixJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVkIp6ConfigRoutesPrefixJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueUint32(valueJSON)
 	return logicSetSettingVkIp6ConfigRoutesPrefix(data, value)
 }
-func logicSetSettingVkIp6ConfigRoutesNexthopJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVkIp6ConfigRoutesNexthopJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	return logicSetSettingVkIp6ConfigRoutesNexthop(data, value)
 }
-func logicSetSettingVkIp6ConfigRoutesMetricJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVkIp6ConfigRoutesMetricJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueUint32(valueJSON)
 	return logicSetSettingVkIp6ConfigRoutesMetric(data, value)
 }
-func logicSetSettingVkPppEnableLcpEchoJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVkPppEnableLcpEchoJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	return logicSetSettingVkPppEnableLcpEcho(data, value)
 }
-func logicSetSettingVkVpnL2tpEnableLcpEchoJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVkVpnL2tpEnableLcpEchoJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	return logicSetSettingVkVpnL2tpEnableLcpEcho(data, value)
 }
-func logicSetSettingVkVpnOpenvpnKeyEnablePortJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVkVpnOpenvpnKeyEnablePortJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	return logicSetSettingVkVpnOpenvpnKeyEnablePort(data, value)
 }
-func logicSetSettingVkVpnOpenvpnKeyEnableRenegSecondsJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVkVpnOpenvpnKeyEnableRenegSecondsJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	return logicSetSettingVkVpnOpenvpnKeyEnableRenegSeconds(data, value)
 }
-func logicSetSettingVkVpnOpenvpnKeyEnableTunnelMtuJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVkVpnOpenvpnKeyEnableTunnelMtuJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	return logicSetSettingVkVpnOpenvpnKeyEnableTunnelMtu(data, value)
 }
-func logicSetSettingVkVpnOpenvpnKeyEnableFragmentSizeJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVkVpnOpenvpnKeyEnableFragmentSizeJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	return logicSetSettingVkVpnOpenvpnKeyEnableFragmentSize(data, value)
 }
-func logicSetSettingVkVpnOpenvpnKeyEnableStaticKeyDirectionJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVkVpnOpenvpnKeyEnableStaticKeyDirectionJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	return logicSetSettingVkVpnOpenvpnKeyEnableStaticKeyDirection(data, value)
 }
-func logicSetSettingVkVpnOpenvpnKeyEnableTaDirJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVkVpnOpenvpnKeyEnableTaDirJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	return logicSetSettingVkVpnOpenvpnKeyEnableTaDir(data, value)
 }
-func logicSetSettingVkVpnPptpEnableLcpEchoJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVkVpnPptpEnableLcpEchoJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	return logicSetSettingVkVpnPptpEnableLcpEcho(data, value)
 }
-func logicSetSettingVkVpnVpncKeyHybridAuthmodeJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVkVpnVpncKeyHybridAuthmodeJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	return logicSetSettingVkVpnVpncKeyHybridAuthmode(data, value)
 }
-func logicSetSettingVkVpnVpncKeyEncryptionMethodJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVkVpnVpncKeyEncryptionMethodJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	return logicSetSettingVkVpnVpncKeyEncryptionMethod(data, value)
 }
-func logicSetSettingVkVpnVpncKeyDisableDpdJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVkVpnVpncKeyDisableDpdJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	return logicSetSettingVkVpnVpncKeyDisableDpd(data, value)
 }
-func logicSetSettingVkWirelessSecurityKeyMgmtJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
+func logicSetSettingVkWirelessSecurityKeyMgmtJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	return logicSetSettingVkWirelessSecurityKeyMgmt(data, value)
 }
@@ -647,8 +646,7 @@ func getSettingVkVpnOpenvpnKeyEnableTaDir(data connectionData) (value bool) {
 }
 
 // Setter for enable key wrapper
-func logicSetSettingVkVpnOpenvpnKeyEnablePort(data connectionData, value bool) (ok bool, errMsg string) {
-	ok = true
+func logicSetSettingVkVpnOpenvpnKeyEnablePort(data connectionData, value bool) (err error) {
 	if value {
 		setSettingVpnOpenvpnKeyPort(data, 1194)
 	} else {
@@ -656,8 +654,7 @@ func logicSetSettingVkVpnOpenvpnKeyEnablePort(data connectionData, value bool) (
 	}
 	return
 }
-func logicSetSettingVkVpnOpenvpnKeyEnableRenegSeconds(data connectionData, value bool) (ok bool, errMsg string) {
-	ok = true
+func logicSetSettingVkVpnOpenvpnKeyEnableRenegSeconds(data connectionData, value bool) (err error) {
 	if value {
 		setSettingVpnOpenvpnKeyRenegSeconds(data, 0)
 	} else {
@@ -665,8 +662,7 @@ func logicSetSettingVkVpnOpenvpnKeyEnableRenegSeconds(data connectionData, value
 	}
 	return
 }
-func logicSetSettingVkVpnOpenvpnKeyEnableTunnelMtu(data connectionData, value bool) (ok bool, errMsg string) {
-	ok = true
+func logicSetSettingVkVpnOpenvpnKeyEnableTunnelMtu(data connectionData, value bool) (err error) {
 	if value {
 		setSettingVpnOpenvpnKeyTunnelMtu(data, 1500)
 	} else {
@@ -674,8 +670,7 @@ func logicSetSettingVkVpnOpenvpnKeyEnableTunnelMtu(data connectionData, value bo
 	}
 	return
 }
-func logicSetSettingVkVpnOpenvpnKeyEnableFragmentSize(data connectionData, value bool) (ok bool, errMsg string) {
-	ok = true
+func logicSetSettingVkVpnOpenvpnKeyEnableFragmentSize(data connectionData, value bool) (err error) {
 	if value {
 		setSettingVpnOpenvpnKeyFragmentSize(data, 1300)
 	} else {
@@ -683,8 +678,7 @@ func logicSetSettingVkVpnOpenvpnKeyEnableFragmentSize(data connectionData, value
 	}
 	return
 }
-func logicSetSettingVkVpnOpenvpnKeyEnableStaticKeyDirection(data connectionData, value bool) (ok bool, errMsg string) {
-	ok = true
+func logicSetSettingVkVpnOpenvpnKeyEnableStaticKeyDirection(data connectionData, value bool) (err error) {
 	if value {
 		setSettingVpnOpenvpnKeyStaticKeyDirection(data, 0)
 	} else {
@@ -692,8 +686,7 @@ func logicSetSettingVkVpnOpenvpnKeyEnableStaticKeyDirection(data connectionData,
 	}
 	return
 }
-func logicSetSettingVkVpnOpenvpnKeyEnableTaDir(data connectionData, value bool) (ok bool, errMsg string) {
-	ok = true
+func logicSetSettingVkVpnOpenvpnKeyEnableTaDir(data connectionData, value bool) (err error) {
 	if value {
 		setSettingVpnOpenvpnKeyTaDir(data, 0)
 	} else {

@@ -72,8 +72,7 @@ func generalGetSettingPppoeKeyJSON(data connectionData, key string) (value strin
 }
 
 // Set JSON value generally
-func generalSetSettingPppoeKeyJSON(data connectionData, key, valueJSON string) (ok bool, errMsg string) {
-	ok = true
+func generalSetSettingPppoeKeyJSON(data connectionData, key, valueJSON string) (err error) {
 	switch key {
 	default:
 		logger.Error("generalSetSettingPppoeKeyJSON: invalide key", key)

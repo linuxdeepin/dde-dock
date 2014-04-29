@@ -152,8 +152,7 @@ func generalGetSettingVpnOpenvpnKeyJSON(data connectionData, key string) (value 
 }
 
 // Set JSON value generally
-func generalSetSettingVpnOpenvpnKeyJSON(data connectionData, key, valueJSON string) (ok bool, errMsg string) {
-	ok = true
+func generalSetSettingVpnOpenvpnKeyJSON(data connectionData, key, valueJSON string) (err error) {
 	switch key {
 	default:
 		logger.Error("generalSetSettingVpnOpenvpnKeyJSON: invalide key", key)

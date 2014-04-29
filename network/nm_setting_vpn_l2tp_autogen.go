@@ -80,8 +80,7 @@ func generalGetSettingVpnL2tpKeyJSON(data connectionData, key string) (value str
 }
 
 // Set JSON value generally
-func generalSetSettingVpnL2tpKeyJSON(data connectionData, key, valueJSON string) (ok bool, errMsg string) {
-	ok = true
+func generalSetSettingVpnL2tpKeyJSON(data connectionData, key, valueJSON string) (err error) {
 	switch key {
 	default:
 		logger.Error("generalSetSettingVpnL2tpKeyJSON: invalide key", key)

@@ -189,8 +189,7 @@ func checkSettingIp6ConfigAddresses(data connectionData, errs fieldErrors) {
 }
 
 // Logic setter
-func logicSetSettingIp6ConfigMethod(data connectionData, value string) (ok bool, errMsg string) {
-	ok = true
+func logicSetSettingIp6ConfigMethod(data connectionData, value string) (err error) {
 	switch value {
 	case NM_SETTING_IP6_CONFIG_METHOD_IGNORE: // ignore
 		removeSettingKeyBut(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_METHOD)

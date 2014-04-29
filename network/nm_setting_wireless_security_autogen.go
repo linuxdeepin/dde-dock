@@ -176,8 +176,7 @@ func generalGetSettingWirelessSecurityKeyJSON(data connectionData, key string) (
 }
 
 // Set JSON value generally
-func generalSetSettingWirelessSecurityKeyJSON(data connectionData, key, valueJSON string) (ok bool, errMsg string) {
-	ok = true
+func generalSetSettingWirelessSecurityKeyJSON(data connectionData, key, valueJSON string) (err error) {
 	switch key {
 	default:
 		logger.Error("generalSetSettingWirelessSecurityKeyJSON: invalide key", key)

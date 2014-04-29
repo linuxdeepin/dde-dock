@@ -358,9 +358,8 @@ func (s *ConnectionSession) GetKey(page, key string) (value string) {
 func (s *ConnectionSession) SetKey(page, key, value string) {
 	field := s.getFieldOfPageKey(page, key)
 	// logger.Debugf("SetKey(), page=%s, filed=%s, key=%s, value=%s", page, field, key, value) // TODO test
-	ok, errMsg := generalSetSettingKeyJSON(s.data, field, key, value)
-	s.updateErrorsWhenSettingKey(page, key, ok, errMsg)
-	logger.Debug("SetKey:", page, key, value, ok, errMsg)
+	err := generalSetSettingKeyJSON(s.data, field, key, value)
+	s.updateErrorsWhenSettingKey(page, key, err)
 
 	s.updatePropAvailablePages()
 	s.updatePropAvailableKeys()
@@ -376,8 +375,8 @@ func (s *ConnectionSession) SetKey(page, key, value string) {
 	return
 }
 
-func (s *ConnectionSession) updateErrorsWhenSettingKey(page, key string, ok bool, errMsg string) {
-	if ok {
+func (s *ConnectionSession) updateErrorsWhenSettingKey(page, key string, err error) {
+	if err == nil {
 		// delete key error if exists
 		fieldErrors, ok := s.errorsSetKey[page]
 		if ok {
@@ -393,7 +392,7 @@ func (s *ConnectionSession) updateErrorsWhenSettingKey(page, key string, ok bool
 			fieldErrorsData = make(fieldErrors)
 			s.errorsSetKey[page] = fieldErrorsData
 		}
-		fieldErrorsData[key] = errMsg
+		fieldErrorsData[key] = err.Error()
 	}
 }
 

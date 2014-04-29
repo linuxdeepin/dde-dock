@@ -378,8 +378,7 @@ func checkSettingVpnOpenvpnProxiesValues(data connectionData) (errs fieldErrors)
 }
 
 // Logic setter
-func logicSetSettingVpnOpenvpnKeyProxyType(data connectionData, value string) (ok bool, errMsg string) {
-	ok = true
+func logicSetSettingVpnOpenvpnKeyProxyType(data connectionData, value string) (err error) {
 	// when proxy enabled, use a tcp connection default
 	setSettingVpnOpenvpnKeyProtoTcp(data, true)
 	setSettingVpnOpenvpnKeyProxyType(data, value)

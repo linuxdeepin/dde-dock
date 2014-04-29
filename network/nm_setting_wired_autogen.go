@@ -128,8 +128,7 @@ func generalGetSettingWiredKeyJSON(data connectionData, key string) (value strin
 }
 
 // Set JSON value generally
-func generalSetSettingWiredKeyJSON(data connectionData, key, valueJSON string) (ok bool, errMsg string) {
-	ok = true
+func generalSetSettingWiredKeyJSON(data connectionData, key, valueJSON string) (err error) {
 	switch key {
 	default:
 		logger.Error("generalSetSettingWiredKeyJSON: invalide key", key)

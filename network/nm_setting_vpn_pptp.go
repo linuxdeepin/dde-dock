@@ -110,8 +110,7 @@ func checkSettingVpnPptpPppValues(data connectionData) (errs fieldErrors) {
 	// TODO
 	return
 }
-func logicSetSettingVpnPptpKeyRequireMppe(data connectionData, value bool) (ok bool, errMsg string) {
-	ok = true
+func logicSetSettingVpnPptpKeyRequireMppe(data connectionData, value bool) (err error) {
 	if !value {
 		removeSettingVpnPptpKeyRequireMppe40(data)
 		removeSettingVpnPptpKeyRequireMppe128(data)

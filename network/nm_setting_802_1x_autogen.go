@@ -296,13 +296,12 @@ func generalGetSetting8021xKeyJSON(data connectionData, key string) (value strin
 }
 
 // Set JSON value generally
-func generalSetSetting8021xKeyJSON(data connectionData, key, valueJSON string) (ok bool, errMsg string) {
-	ok = true
+func generalSetSetting8021xKeyJSON(data connectionData, key, valueJSON string) (err error) {
 	switch key {
 	default:
 		logger.Error("generalSetSetting8021xKeyJSON: invalide key", key)
 	case NM_SETTING_802_1X_EAP:
-		ok, errMsg = logicSetSetting8021xEapJSON(data, valueJSON)
+		err = logicSetSetting8021xEapJSON(data, valueJSON)
 	case NM_SETTING_802_1X_ANONYMOUS_IDENTITY:
 		setSetting8021xAnonymousIdentityJSON(data, valueJSON)
 	case NM_SETTING_802_1X_CLIENT_CERT:
@@ -1199,12 +1198,11 @@ func setSetting8021xSystemCaCertsJSON(data connectionData, valueJSON string) {
 }
 
 // Logic JSON Setter
-func logicSetSetting8021xEapJSON(data connectionData, valueJSON string) (ok bool, errMsg string) {
-	ok = true
+func logicSetSetting8021xEapJSON(data connectionData, valueJSON string) (err error) {
 	setSetting8021xEapJSON(data, valueJSON)
 	if isSetting8021xEapExists(data) {
 		value := getSetting8021xEap(data)
-		ok, errMsg = logicSetSetting8021xEap(data, value)
+		err = logicSetSetting8021xEap(data, value)
 	}
 	return
 }

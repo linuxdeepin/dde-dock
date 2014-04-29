@@ -217,8 +217,7 @@ func checkSettingVpnVpncAdvancedValues(data connectionData) (errs fieldErrors) {
 }
 
 // Logic setter
-func logicSetSettingVpnVpncKeySecretFlags(data connectionData, value uint32) (ok bool, errMsg string) {
-	ok = true
+func logicSetSettingVpnVpncKeySecretFlags(data connectionData, value uint32) (err error) {
 	switch value {
 	case NM_VPNC_SECRET_FLAG_SAVE:
 		setSettingVpnVpncKeySecretType(data, NM_VPNC_PW_TYPE_SAVE)
@@ -230,8 +229,7 @@ func logicSetSettingVpnVpncKeySecretFlags(data connectionData, value uint32) (ok
 	setSettingVpnVpncKeySecretFlags(data, value)
 	return
 }
-func logicSetSettingVpnVpncKeyXauthPasswordFlags(data connectionData, value uint32) (ok bool, errMsg string) {
-	ok = true
+func logicSetSettingVpnVpncKeyXauthPasswordFlags(data connectionData, value uint32) (err error) {
 	switch value {
 	case NM_VPNC_SECRET_FLAG_SAVE:
 		setSettingVpnVpncKeyXauthPasswordType(data, NM_VPNC_PW_TYPE_SAVE)
