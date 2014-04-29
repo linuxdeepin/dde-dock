@@ -158,7 +158,7 @@ func getSettingVpnVpncAvailableValues(data connectionData, key string) (values [
 	}
 	return
 }
-func checkSettingVpnVpncValues(data connectionData) (errs FieldKeyErrors) {
+func checkSettingVpnVpncValues(data connectionData) (errs fieldErrors) {
 	errs = make(map[string]string)
 	ensureSettingVpnVpncKeyGatewayNoEmpty(data, errs)
 	ensureSettingVpnVpncKeyIdNoEmpty(data, errs)
@@ -210,7 +210,7 @@ func getSettingVpnVpncAdvancedAvailableValues(data connectionData, key string) (
 	}
 	return
 }
-func checkSettingVpnVpncAdvancedValues(data connectionData) (errs FieldKeyErrors) {
+func checkSettingVpnVpncAdvancedValues(data connectionData) (errs fieldErrors) {
 	errs = make(map[string]string)
 	// TODO
 	return

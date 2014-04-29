@@ -142,7 +142,7 @@ func isSettingVpnOpenvpnKeyHttpProxyPasswordFlagsExists(data connectionData) boo
 }
 
 // Ensure field and key exists and not empty
-func ensureFieldSettingVpnOpenvpnProxiesExists(data connectionData, errs FieldKeyErrors, relatedKey string) {
+func ensureFieldSettingVpnOpenvpnProxiesExists(data connectionData, errs fieldErrors, relatedKey string) {
 	if !isSettingFieldExists(data, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME) {
 		rememberError(errs, relatedKey, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME))
 	}
@@ -151,7 +151,7 @@ func ensureFieldSettingVpnOpenvpnProxiesExists(data connectionData, errs FieldKe
 		rememberError(errs, relatedKey, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME))
 	}
 }
-func ensureSettingVpnOpenvpnKeyProxyTypeNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnOpenvpnKeyProxyTypeNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnOpenvpnKeyProxyTypeExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -160,7 +160,7 @@ func ensureSettingVpnOpenvpnKeyProxyTypeNoEmpty(data connectionData, errs FieldK
 		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnOpenvpnKeyProxyServerNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnOpenvpnKeyProxyServerNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnOpenvpnKeyProxyServerExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -169,17 +169,17 @@ func ensureSettingVpnOpenvpnKeyProxyServerNoEmpty(data connectionData, errs Fiel
 		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnOpenvpnKeyProxyPortNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnOpenvpnKeyProxyPortNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnOpenvpnKeyProxyPortExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnOpenvpnKeyProxyRetryNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnOpenvpnKeyProxyRetryNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnOpenvpnKeyProxyRetryExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnOpenvpnKeyHttpProxyUsernameNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnOpenvpnKeyHttpProxyUsernameNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnOpenvpnKeyHttpProxyUsernameExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -188,7 +188,7 @@ func ensureSettingVpnOpenvpnKeyHttpProxyUsernameNoEmpty(data connectionData, err
 		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnOpenvpnKeyHttpProxyPasswordNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnOpenvpnKeyHttpProxyPasswordNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnOpenvpnKeyHttpProxyPasswordExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -197,7 +197,7 @@ func ensureSettingVpnOpenvpnKeyHttpProxyPasswordNoEmpty(data connectionData, err
 		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnOpenvpnKeyHttpProxyPasswordFlagsNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnOpenvpnKeyHttpProxyPasswordFlagsNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnOpenvpnKeyHttpProxyPasswordFlagsExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
 	}

@@ -204,7 +204,7 @@ func getSettingWirelessAvailableValues(data connectionData, key string) (values 
 }
 
 // Check whether the values are correct
-func checkSettingWirelessValues(data connectionData) (errs FieldKeyErrors) {
+func checkSettingWirelessValues(data connectionData) (errs fieldErrors) {
 	errs = make(map[string]string)
 
 	// check ssid

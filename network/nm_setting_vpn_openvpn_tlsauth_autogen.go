@@ -103,7 +103,7 @@ func isSettingVpnOpenvpnKeyTaDirExists(data connectionData) bool {
 }
 
 // Ensure field and key exists and not empty
-func ensureFieldSettingVpnOpenvpnTlsauthExists(data connectionData, errs FieldKeyErrors, relatedKey string) {
+func ensureFieldSettingVpnOpenvpnTlsauthExists(data connectionData, errs fieldErrors, relatedKey string) {
 	if !isSettingFieldExists(data, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME) {
 		rememberError(errs, relatedKey, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME))
 	}
@@ -112,7 +112,7 @@ func ensureFieldSettingVpnOpenvpnTlsauthExists(data connectionData, errs FieldKe
 		rememberError(errs, relatedKey, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME))
 	}
 }
-func ensureSettingVpnOpenvpnKeyTlsRemoteNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnOpenvpnKeyTlsRemoteNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnOpenvpnKeyTlsRemoteExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TLS_REMOTE, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -121,7 +121,7 @@ func ensureSettingVpnOpenvpnKeyTlsRemoteNoEmpty(data connectionData, errs FieldK
 		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TLS_REMOTE, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnOpenvpnKeyRemoteCertTlsNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnOpenvpnKeyRemoteCertTlsNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnOpenvpnKeyRemoteCertTlsExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_REMOTE_CERT_TLS, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -130,7 +130,7 @@ func ensureSettingVpnOpenvpnKeyRemoteCertTlsNoEmpty(data connectionData, errs Fi
 		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_REMOTE_CERT_TLS, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnOpenvpnKeyTaNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnOpenvpnKeyTaNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnOpenvpnKeyTaExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TA, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -139,7 +139,7 @@ func ensureSettingVpnOpenvpnKeyTaNoEmpty(data connectionData, errs FieldKeyError
 		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TA, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnOpenvpnKeyTaDirNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnOpenvpnKeyTaDirNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnOpenvpnKeyTaDirExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TA_DIR, NM_KEY_ERROR_MISSING_VALUE)
 	}

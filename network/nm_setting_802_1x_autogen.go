@@ -467,7 +467,7 @@ func isSetting8021xSystemCaCertsExists(data connectionData) bool {
 }
 
 // Ensure field and key exists and not empty
-func ensureFieldSetting8021xExists(data connectionData, errs FieldKeyErrors, relatedKey string) {
+func ensureFieldSetting8021xExists(data connectionData, errs fieldErrors, relatedKey string) {
 	if !isSettingFieldExists(data, NM_SETTING_802_1X_SETTING_NAME) {
 		rememberError(errs, relatedKey, NM_SETTING_802_1X_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_802_1X_SETTING_NAME))
 	}
@@ -476,7 +476,7 @@ func ensureFieldSetting8021xExists(data connectionData, errs FieldKeyErrors, rel
 		rememberError(errs, relatedKey, NM_SETTING_802_1X_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_802_1X_SETTING_NAME))
 	}
 }
-func ensureSetting8021xEapNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSetting8021xEapNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSetting8021xEapExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_EAP, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -485,7 +485,7 @@ func ensureSetting8021xEapNoEmpty(data connectionData, errs FieldKeyErrors) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_EAP, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSetting8021xAnonymousIdentityNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSetting8021xAnonymousIdentityNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSetting8021xAnonymousIdentityExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ANONYMOUS_IDENTITY, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -494,7 +494,7 @@ func ensureSetting8021xAnonymousIdentityNoEmpty(data connectionData, errs FieldK
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ANONYMOUS_IDENTITY, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSetting8021xClientCertNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSetting8021xClientCertNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSetting8021xClientCertExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -503,7 +503,7 @@ func ensureSetting8021xClientCertNoEmpty(data connectionData, errs FieldKeyError
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSetting8021xCaCertNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSetting8021xCaCertNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSetting8021xCaCertExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -512,7 +512,7 @@ func ensureSetting8021xCaCertNoEmpty(data connectionData, errs FieldKeyErrors) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSetting8021xPhase1FastProvisioningNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSetting8021xPhase1FastProvisioningNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSetting8021xPhase1FastProvisioningExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -521,7 +521,7 @@ func ensureSetting8021xPhase1FastProvisioningNoEmpty(data connectionData, errs F
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSetting8021xPacFileNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSetting8021xPacFileNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSetting8021xPacFileExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PAC_FILE, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -530,7 +530,7 @@ func ensureSetting8021xPacFileNoEmpty(data connectionData, errs FieldKeyErrors) 
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PAC_FILE, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSetting8021xPhase1PeapverNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSetting8021xPhase1PeapverNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSetting8021xPhase1PeapverExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPVER, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -539,7 +539,7 @@ func ensureSetting8021xPhase1PeapverNoEmpty(data connectionData, errs FieldKeyEr
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPVER, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSetting8021xPhase2AuthNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSetting8021xPhase2AuthNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSetting8021xPhase2AuthExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTH, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -548,7 +548,7 @@ func ensureSetting8021xPhase2AuthNoEmpty(data connectionData, errs FieldKeyError
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTH, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSetting8021xPrivateKeyNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSetting8021xPrivateKeyNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSetting8021xPrivateKeyExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -557,7 +557,7 @@ func ensureSetting8021xPrivateKeyNoEmpty(data connectionData, errs FieldKeyError
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSetting8021xIdentityNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSetting8021xIdentityNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSetting8021xIdentityExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -566,7 +566,7 @@ func ensureSetting8021xIdentityNoEmpty(data connectionData, errs FieldKeyErrors)
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSetting8021xPasswordNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSetting8021xPasswordNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSetting8021xPasswordExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -575,12 +575,12 @@ func ensureSetting8021xPasswordNoEmpty(data connectionData, errs FieldKeyErrors)
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSetting8021xPasswordFlagsNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSetting8021xPasswordFlagsNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSetting8021xPasswordFlagsExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSetting8021xPrivateKeyPasswordNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSetting8021xPrivateKeyPasswordNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSetting8021xPrivateKeyPasswordExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -589,12 +589,12 @@ func ensureSetting8021xPrivateKeyPasswordNoEmpty(data connectionData, errs Field
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSetting8021xPrivateKeyPasswordFlagsNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSetting8021xPrivateKeyPasswordFlagsNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSetting8021xPrivateKeyPasswordFlagsExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSetting8021xCaPathNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSetting8021xCaPathNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSetting8021xCaPathExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_PATH, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -603,7 +603,7 @@ func ensureSetting8021xCaPathNoEmpty(data connectionData, errs FieldKeyErrors) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_PATH, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSetting8021xSubjectMatchNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSetting8021xSubjectMatchNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSetting8021xSubjectMatchExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_SUBJECT_MATCH, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -612,7 +612,7 @@ func ensureSetting8021xSubjectMatchNoEmpty(data connectionData, errs FieldKeyErr
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_SUBJECT_MATCH, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSetting8021xAltsubjectMatchesNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSetting8021xAltsubjectMatchesNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSetting8021xAltsubjectMatchesExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ALTSUBJECT_MATCHES, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -621,7 +621,7 @@ func ensureSetting8021xAltsubjectMatchesNoEmpty(data connectionData, errs FieldK
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ALTSUBJECT_MATCHES, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSetting8021xPhase1PeaplabelNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSetting8021xPhase1PeaplabelNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSetting8021xPhase1PeaplabelExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPLABEL, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -630,7 +630,7 @@ func ensureSetting8021xPhase1PeaplabelNoEmpty(data connectionData, errs FieldKey
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPLABEL, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSetting8021xPhase2AutheapNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSetting8021xPhase2AutheapNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSetting8021xPhase2AutheapExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTHEAP, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -639,7 +639,7 @@ func ensureSetting8021xPhase2AutheapNoEmpty(data connectionData, errs FieldKeyEr
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTHEAP, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSetting8021xPhase2CaCertNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSetting8021xPhase2CaCertNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSetting8021xPhase2CaCertExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CA_CERT, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -648,7 +648,7 @@ func ensureSetting8021xPhase2CaCertNoEmpty(data connectionData, errs FieldKeyErr
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CA_CERT, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSetting8021xPhase2CaPathNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSetting8021xPhase2CaPathNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSetting8021xPhase2CaPathExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CA_PATH, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -657,7 +657,7 @@ func ensureSetting8021xPhase2CaPathNoEmpty(data connectionData, errs FieldKeyErr
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CA_PATH, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSetting8021xPhase2ClientCertNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSetting8021xPhase2ClientCertNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSetting8021xPhase2ClientCertExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CLIENT_CERT, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -666,7 +666,7 @@ func ensureSetting8021xPhase2ClientCertNoEmpty(data connectionData, errs FieldKe
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CLIENT_CERT, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSetting8021xPhase2SubjectMatchNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSetting8021xPhase2SubjectMatchNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSetting8021xPhase2SubjectMatchExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -675,7 +675,7 @@ func ensureSetting8021xPhase2SubjectMatchNoEmpty(data connectionData, errs Field
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSetting8021xPhase2AltsubjectMatchesNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSetting8021xPhase2AltsubjectMatchesNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSetting8021xPhase2AltsubjectMatchesExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -684,7 +684,7 @@ func ensureSetting8021xPhase2AltsubjectMatchesNoEmpty(data connectionData, errs 
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSetting8021xPasswordRawNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSetting8021xPasswordRawNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSetting8021xPasswordRawExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -693,12 +693,12 @@ func ensureSetting8021xPasswordRawNoEmpty(data connectionData, errs FieldKeyErro
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSetting8021xPasswordRawFlagsNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSetting8021xPasswordRawFlagsNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSetting8021xPasswordRawFlagsExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSetting8021xPhase2PrivateKeyNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSetting8021xPhase2PrivateKeyNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSetting8021xPhase2PrivateKeyExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -707,7 +707,7 @@ func ensureSetting8021xPhase2PrivateKeyNoEmpty(data connectionData, errs FieldKe
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSetting8021xPhase2PrivateKeyPasswordNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSetting8021xPhase2PrivateKeyPasswordNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSetting8021xPhase2PrivateKeyPasswordExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -716,12 +716,12 @@ func ensureSetting8021xPhase2PrivateKeyPasswordNoEmpty(data connectionData, errs
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSetting8021xPhase2PrivateKeyPasswordFlagsNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSetting8021xPhase2PrivateKeyPasswordFlagsNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSetting8021xPhase2PrivateKeyPasswordFlagsExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSetting8021xPinNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSetting8021xPinNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSetting8021xPinExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PIN, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -730,12 +730,12 @@ func ensureSetting8021xPinNoEmpty(data connectionData, errs FieldKeyErrors) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PIN, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSetting8021xPinFlagsNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSetting8021xPinFlagsNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSetting8021xPinFlagsExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PIN_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSetting8021xSystemCaCertsNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSetting8021xSystemCaCertsNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSetting8021xSystemCaCertsExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_SYSTEM_CA_CERTS, NM_KEY_ERROR_MISSING_VALUE)
 	}

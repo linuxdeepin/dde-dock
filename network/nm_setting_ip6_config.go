@@ -96,7 +96,7 @@ func getSettingIp6ConfigAvailableValues(data connectionData, key string) (values
 }
 
 // Check whether the values are correct
-func checkSettingIp6ConfigValues(data connectionData) (errs FieldKeyErrors) {
+func checkSettingIp6ConfigValues(data connectionData) (errs fieldErrors) {
 	errs = make(map[string]string)
 
 	// check method
@@ -128,7 +128,7 @@ func checkSettingIp6ConfigValues(data connectionData) (errs FieldKeyErrors) {
 	return
 }
 
-func checkSettingIp6MethodConflict(data connectionData, errs FieldKeyErrors) {
+func checkSettingIp6MethodConflict(data connectionData, errs fieldErrors) {
 	// check dns
 	if isSettingIp6ConfigDnsExists(data) {
 		rememberError(errs, fieldIpv6, NM_SETTING_IP6_CONFIG_DNS, fmt.Sprintf(NM_KEY_ERROR_IP6_METHOD_CONFLICT, NM_SETTING_IP6_CONFIG_DNS))
@@ -147,7 +147,7 @@ func checkSettingIp6MethodConflict(data connectionData, errs FieldKeyErrors) {
 	}
 }
 
-func checkSettingIp6ConfigDns(data connectionData, errs FieldKeyErrors) {
+func checkSettingIp6ConfigDns(data connectionData, errs fieldErrors) {
 	if !isSettingIp6ConfigDnsExists(data) {
 		return
 	}
@@ -164,7 +164,7 @@ func checkSettingIp6ConfigDns(data connectionData, errs FieldKeyErrors) {
 	}
 }
 
-func checkSettingIp6ConfigAddresses(data connectionData, errs FieldKeyErrors) {
+func checkSettingIp6ConfigAddresses(data connectionData, errs fieldErrors) {
 	if !isSettingIp6ConfigAddressesExists(data) {
 		return
 	}

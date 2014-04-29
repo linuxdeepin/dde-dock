@@ -103,7 +103,7 @@ func isSettingPppoePasswordFlagsExists(data connectionData) bool {
 }
 
 // Ensure field and key exists and not empty
-func ensureFieldSettingPppoeExists(data connectionData, errs FieldKeyErrors, relatedKey string) {
+func ensureFieldSettingPppoeExists(data connectionData, errs fieldErrors, relatedKey string) {
 	if !isSettingFieldExists(data, NM_SETTING_PPPOE_SETTING_NAME) {
 		rememberError(errs, relatedKey, NM_SETTING_PPPOE_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_PPPOE_SETTING_NAME))
 	}
@@ -112,7 +112,7 @@ func ensureFieldSettingPppoeExists(data connectionData, errs FieldKeyErrors, rel
 		rememberError(errs, relatedKey, NM_SETTING_PPPOE_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_PPPOE_SETTING_NAME))
 	}
 }
-func ensureSettingPppoeUsernameNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingPppoeUsernameNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingPppoeUsernameExists(data) {
 		rememberError(errs, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_USERNAME, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -121,7 +121,7 @@ func ensureSettingPppoeUsernameNoEmpty(data connectionData, errs FieldKeyErrors)
 		rememberError(errs, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_USERNAME, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingPppoeServiceNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingPppoeServiceNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingPppoeServiceExists(data) {
 		rememberError(errs, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_SERVICE, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -130,7 +130,7 @@ func ensureSettingPppoeServiceNoEmpty(data connectionData, errs FieldKeyErrors) 
 		rememberError(errs, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_SERVICE, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingPppoePasswordNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingPppoePasswordNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingPppoePasswordExists(data) {
 		rememberError(errs, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_PASSWORD, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -139,7 +139,7 @@ func ensureSettingPppoePasswordNoEmpty(data connectionData, errs FieldKeyErrors)
 		rememberError(errs, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_PASSWORD, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingPppoePasswordFlagsNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingPppoePasswordFlagsNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingPppoePasswordFlagsExists(data) {
 		rememberError(errs, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_PASSWORD_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
 	}

@@ -116,7 +116,7 @@ func isSettingVpnPptpKeyDomainExists(data connectionData) bool {
 }
 
 // Ensure field and key exists and not empty
-func ensureFieldSettingVpnPptpExists(data connectionData, errs FieldKeyErrors, relatedKey string) {
+func ensureFieldSettingVpnPptpExists(data connectionData, errs fieldErrors, relatedKey string) {
 	if !isSettingFieldExists(data, NM_SETTING_VF_VPN_PPTP_SETTING_NAME) {
 		rememberError(errs, relatedKey, NM_SETTING_VF_VPN_PPTP_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_VF_VPN_PPTP_SETTING_NAME))
 	}
@@ -125,7 +125,7 @@ func ensureFieldSettingVpnPptpExists(data connectionData, errs FieldKeyErrors, r
 		rememberError(errs, relatedKey, NM_SETTING_VF_VPN_PPTP_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_VF_VPN_PPTP_SETTING_NAME))
 	}
 }
-func ensureSettingVpnPptpKeyGatewayNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnPptpKeyGatewayNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnPptpKeyGatewayExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_GATEWAY, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -134,7 +134,7 @@ func ensureSettingVpnPptpKeyGatewayNoEmpty(data connectionData, errs FieldKeyErr
 		rememberError(errs, NM_SETTING_VF_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_GATEWAY, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnPptpKeyUserNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnPptpKeyUserNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnPptpKeyUserExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_USER, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -143,7 +143,7 @@ func ensureSettingVpnPptpKeyUserNoEmpty(data connectionData, errs FieldKeyErrors
 		rememberError(errs, NM_SETTING_VF_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_USER, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnPptpKeyPasswordNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnPptpKeyPasswordNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnPptpKeyPasswordExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_PASSWORD, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -152,12 +152,12 @@ func ensureSettingVpnPptpKeyPasswordNoEmpty(data connectionData, errs FieldKeyEr
 		rememberError(errs, NM_SETTING_VF_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_PASSWORD, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnPptpKeyPasswordFlagsNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnPptpKeyPasswordFlagsNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnPptpKeyPasswordFlagsExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_PASSWORD_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnPptpKeyDomainNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnPptpKeyDomainNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnPptpKeyDomainExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_DOMAIN, NM_KEY_ERROR_MISSING_VALUE)
 	}

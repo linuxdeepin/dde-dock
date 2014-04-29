@@ -259,7 +259,7 @@ func isSettingVpnL2tpKeyLcpEchoIntervalExists(data connectionData) bool {
 }
 
 // Ensure field and key exists and not empty
-func ensureFieldSettingVpnL2tpPppExists(data connectionData, errs FieldKeyErrors, relatedKey string) {
+func ensureFieldSettingVpnL2tpPppExists(data connectionData, errs fieldErrors, relatedKey string) {
 	if !isSettingFieldExists(data, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME) {
 		rememberError(errs, relatedKey, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME))
 	}
@@ -268,82 +268,82 @@ func ensureFieldSettingVpnL2tpPppExists(data connectionData, errs FieldKeyErrors
 		rememberError(errs, relatedKey, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME))
 	}
 }
-func ensureSettingVpnL2tpKeyRefuseEapNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnL2tpKeyRefuseEapNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnL2tpKeyRefuseEapExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_REFUSE_EAP, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnL2tpKeyRefusePapNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnL2tpKeyRefusePapNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnL2tpKeyRefusePapExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_REFUSE_PAP, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnL2tpKeyRefuseChapNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnL2tpKeyRefuseChapNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnL2tpKeyRefuseChapExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_REFUSE_CHAP, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnL2tpKeyRefuseMschapNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnL2tpKeyRefuseMschapNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnL2tpKeyRefuseMschapExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_REFUSE_MSCHAP, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnL2tpKeyRefuseMschapv2NoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnL2tpKeyRefuseMschapv2NoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnL2tpKeyRefuseMschapv2Exists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_REFUSE_MSCHAPV2, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnL2tpKeyRequireMppeNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnL2tpKeyRequireMppeNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnL2tpKeyRequireMppeExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnL2tpKeyRequireMppe40NoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnL2tpKeyRequireMppe40NoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnL2tpKeyRequireMppe40Exists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_40, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnL2tpKeyRequireMppe128NoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnL2tpKeyRequireMppe128NoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnL2tpKeyRequireMppe128Exists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_128, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnL2tpKeyMppeStatefulNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnL2tpKeyMppeStatefulNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnL2tpKeyMppeStatefulExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_MPPE_STATEFUL, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnL2tpKeyNobsdcompNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnL2tpKeyNobsdcompNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnL2tpKeyNobsdcompExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_NOBSDCOMP, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnL2tpKeyNodeflateNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnL2tpKeyNodeflateNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnL2tpKeyNodeflateExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_NODEFLATE, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnL2tpKeyNoVjCompNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnL2tpKeyNoVjCompNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnL2tpKeyNoVjCompExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_NO_VJ_COMP, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnL2tpKeyNoPcompNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnL2tpKeyNoPcompNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnL2tpKeyNoPcompExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_NO_PCOMP, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnL2tpKeyNoAccompNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnL2tpKeyNoAccompNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnL2tpKeyNoAccompExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_NO_ACCOMP, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnL2tpKeyLcpEchoFailureNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnL2tpKeyLcpEchoFailureNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnL2tpKeyLcpEchoFailureExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_FAILURE, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnL2tpKeyLcpEchoIntervalNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnL2tpKeyLcpEchoIntervalNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnL2tpKeyLcpEchoIntervalExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_INTERVAL, NM_KEY_ERROR_MISSING_VALUE)
 	}

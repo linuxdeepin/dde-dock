@@ -38,7 +38,7 @@ func isKeyIn{{.FieldName | ToFieldFuncBaseName}}(key string) bool {
 // Ensure field and key exists and not empty
 const tplEnsureNoEmpty = `{{$fieldFuncBaseName := .FieldName | ToFieldFuncBaseName}}{{$fieldName := .FieldName}}
 // Ensure field and key exists and not empty
-func ensureField{{$fieldFuncBaseName}}Exists(data connectionData, errs FieldKeyErrors, relatedKey string) {
+func ensureField{{$fieldFuncBaseName}}Exists(data connectionData, errs fieldErrors, relatedKey string) {
 	if !isSettingFieldExists(data, {{.FieldName}}) {
 		rememberError(errs, relatedKey, {{.FieldName}}, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, {{.FieldName}}))
 	}
@@ -47,7 +47,7 @@ func ensureField{{$fieldFuncBaseName}}Exists(data connectionData, errs FieldKeyE
 		rememberError(errs, relatedKey, {{.FieldName}}, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, {{.FieldName}}))
 	}
 }{{range $i, $key := .Keys}}{{if $key.UsedByBackEnd}}{{$keyFuncBaseName := $key.Name | ToKeyFuncBaseName}}
-func ensure{{$keyFuncBaseName}}NoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensure{{$keyFuncBaseName}}NoEmpty(data connectionData, errs fieldErrors) {
 	if !is{{$keyFuncBaseName}}Exists(data) {
 		rememberError(errs, {{$fieldName}}, {{$key.Name}}, NM_KEY_ERROR_MISSING_VALUE)
 	}{{if IfNeedCheckValueLength $key.Type}}
@@ -204,7 +204,7 @@ func generalGetSettingAvailableValues(data connectionData, field, key string) (v
 	return
 }
 
-func generalCheckSettingValues(data connectionData, field string) (errs FieldKeyErrors) {
+func generalCheckSettingValues(data connectionData, field string) (errs fieldErrors) {
 	switch field {
 	default:
 		logger.Error("invalid field name", field){{range .}}

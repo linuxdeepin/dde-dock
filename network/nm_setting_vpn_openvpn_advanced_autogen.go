@@ -168,7 +168,7 @@ func isSettingVpnOpenvpnKeyRemoteRandomExists(data connectionData) bool {
 }
 
 // Ensure field and key exists and not empty
-func ensureFieldSettingVpnOpenvpnAdvancedExists(data connectionData, errs FieldKeyErrors, relatedKey string) {
+func ensureFieldSettingVpnOpenvpnAdvancedExists(data connectionData, errs fieldErrors, relatedKey string) {
 	if !isSettingFieldExists(data, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME) {
 		rememberError(errs, relatedKey, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME))
 	}
@@ -177,47 +177,47 @@ func ensureFieldSettingVpnOpenvpnAdvancedExists(data connectionData, errs FieldK
 		rememberError(errs, relatedKey, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME))
 	}
 }
-func ensureSettingVpnOpenvpnKeyPortNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnOpenvpnKeyPortNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnOpenvpnKeyPortExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PORT, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnOpenvpnKeyRenegSecondsNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnOpenvpnKeyRenegSecondsNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnOpenvpnKeyRenegSecondsExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_RENEG_SECONDS, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnOpenvpnKeyCompLzoNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnOpenvpnKeyCompLzoNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnOpenvpnKeyCompLzoExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_COMP_LZO, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnOpenvpnKeyProtoTcpNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnOpenvpnKeyProtoTcpNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnOpenvpnKeyProtoTcpExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROTO_TCP, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnOpenvpnKeyTapDevNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnOpenvpnKeyTapDevNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnOpenvpnKeyTapDevExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TAP_DEV, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnOpenvpnKeyTunnelMtuNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnOpenvpnKeyTunnelMtuNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnOpenvpnKeyTunnelMtuExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TUNNEL_MTU, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnOpenvpnKeyFragmentSizeNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnOpenvpnKeyFragmentSizeNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnOpenvpnKeyFragmentSizeExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_FRAGMENT_SIZE, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnOpenvpnKeyMssfixNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnOpenvpnKeyMssfixNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnOpenvpnKeyMssfixExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_MSSFIX, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnOpenvpnKeyRemoteRandomNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnOpenvpnKeyRemoteRandomNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnOpenvpnKeyRemoteRandomExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_REMOTE_RANDOM, NM_KEY_ERROR_MISSING_VALUE)
 	}

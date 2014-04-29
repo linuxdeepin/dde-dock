@@ -103,7 +103,7 @@ func isSettingVpnSecretsExists(data connectionData) bool {
 }
 
 // Ensure field and key exists and not empty
-func ensureFieldSettingVpnExists(data connectionData, errs FieldKeyErrors, relatedKey string) {
+func ensureFieldSettingVpnExists(data connectionData, errs fieldErrors, relatedKey string) {
 	if !isSettingFieldExists(data, NM_SETTING_VPN_SETTING_NAME) {
 		rememberError(errs, relatedKey, NM_SETTING_VPN_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_VPN_SETTING_NAME))
 	}
@@ -112,7 +112,7 @@ func ensureFieldSettingVpnExists(data connectionData, errs FieldKeyErrors, relat
 		rememberError(errs, relatedKey, NM_SETTING_VPN_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_VPN_SETTING_NAME))
 	}
 }
-func ensureSettingVpnServiceTypeNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnServiceTypeNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnServiceTypeExists(data) {
 		rememberError(errs, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SERVICE_TYPE, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -121,7 +121,7 @@ func ensureSettingVpnServiceTypeNoEmpty(data connectionData, errs FieldKeyErrors
 		rememberError(errs, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SERVICE_TYPE, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnUserNameNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnUserNameNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnUserNameExists(data) {
 		rememberError(errs, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_USER_NAME, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -130,7 +130,7 @@ func ensureSettingVpnUserNameNoEmpty(data connectionData, errs FieldKeyErrors) {
 		rememberError(errs, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_USER_NAME, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnDataNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnDataNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnDataExists(data) {
 		rememberError(errs, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_DATA, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -139,7 +139,7 @@ func ensureSettingVpnDataNoEmpty(data connectionData, errs FieldKeyErrors) {
 		rememberError(errs, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_DATA, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnSecretsNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnSecretsNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnSecretsExists(data) {
 		rememberError(errs, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SECRETS, NM_KEY_ERROR_MISSING_VALUE)
 	}

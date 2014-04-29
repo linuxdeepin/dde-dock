@@ -170,7 +170,7 @@ func getSetting8021xAvailableValues(data connectionData, key string) (values []k
 }
 
 // Check whether the values are correct
-func checkSetting8021xValues(data connectionData) (errs FieldKeyErrors) {
+func checkSetting8021xValues(data connectionData) (errs fieldErrors) {
 	errs = make(map[string]string)
 
 	// check eap
@@ -223,7 +223,7 @@ func checkSetting8021xValues(data connectionData) (errs FieldKeyErrors) {
 	return
 }
 
-func checkSetting8021xPacFile(data connectionData, errs FieldKeyErrors) {
+func checkSetting8021xPacFile(data connectionData, errs fieldErrors) {
 	if !isSetting8021xPacFileExists(data) {
 		return
 	}
@@ -234,21 +234,21 @@ func checkSetting8021xPacFile(data connectionData, errs FieldKeyErrors) {
 	}
 	ensureFileExists(errs, field8021x, NM_SETTING_802_1X_PAC_FILE, value)
 }
-func checkSetting8021xClientCert(data connectionData, errs FieldKeyErrors) {
+func checkSetting8021xClientCert(data connectionData, errs fieldErrors) {
 	if !isSetting8021xClientCertExists(data) {
 		return
 	}
 	value := getSetting8021xClientCert(data)
 	ensureByteArrayUriPathExists(errs, field8021x, NM_SETTING_802_1X_CLIENT_CERT, value)
 }
-func checkSetting8021xCaCert(data connectionData, errs FieldKeyErrors) {
+func checkSetting8021xCaCert(data connectionData, errs fieldErrors) {
 	if !isSetting8021xCaCertExists(data) {
 		return
 	}
 	value := getSetting8021xCaCert(data)
 	ensureByteArrayUriPathExists(errs, field8021x, NM_SETTING_802_1X_CA_CERT, value)
 }
-func checkSetting8021xPrivateKey(data connectionData, errs FieldKeyErrors) {
+func checkSetting8021xPrivateKey(data connectionData, errs fieldErrors) {
 	if !isSetting8021xPrivateKeyExists(data) {
 		return
 	}

@@ -5,8 +5,9 @@ import (
 	"fmt"
 )
 
-type FieldKeyErrors map[string]string
-type PageKeyErrors map[string]FieldKeyErrors
+// TODO rename
+type fieldErrors map[string]string
+type sessionErrors map[string]fieldErrors
 
 type ConnectionSession struct {
 	sessionPath    dbus.ObjectPath
@@ -20,7 +21,8 @@ type ConnectionSession struct {
 	AllowSave      bool // TODO really need?
 	AvailablePages []string
 	AvailableKeys  map[string][]string
-	Errors         PageKeyErrors
+	Errors         sessionErrors
+	errorsSetKey   sessionErrors
 }
 
 //所有字段值都为string，后端自行转换为需要的值后提供给NM
@@ -34,7 +36,8 @@ func doNewConnectionSession(devPath dbus.ObjectPath, uuid string) (s *Connection
 	s.AllowSave = false // TODO
 	s.AvailablePages = make([]string, 0)
 	s.AvailableKeys = make(map[string][]string)
-	s.Errors = make(PageKeyErrors)
+	s.Errors = make(sessionErrors)
+	s.errorsSetKey = make(sessionErrors)
 	return s
 }
 
@@ -372,6 +375,8 @@ func (s *ConnectionSession) SetKey(page, key, value string) {
 	field := s.getFieldOfPageKey(page, key)
 	// logger.Debugf("SetKey(), page=%s, filed=%s, key=%s, value=%s", page, field, key, value) // TODO test
 	generalSetSettingKeyJSON(s.data, field, key, value)
+	// ok, errMsg := generalSetSettingKeyJSON(s.data, field, key, value)
+	// s.updateErrorsWhenSettingKey(page, key, ok, errMsg)
 
 	s.updatePropAvailablePages()
 	s.updatePropAvailableKeys()
@@ -385,6 +390,27 @@ func (s *ConnectionSession) SetKey(page, key, value string) {
 	// }
 
 	return
+}
+
+func (s *ConnectionSession) updateErrorsWhenSettingKey(page, key string, ok bool, errMsg string) {
+	if ok {
+		// delete key error if exists
+		fieldErrors, ok := s.errorsSetKey[page]
+		if ok {
+			_, ok := fieldErrors[key]
+			if ok {
+				delete(fieldErrors, key)
+			}
+		}
+	} else {
+		// append key error
+		fieldErrorsData, ok := s.errorsSetKey[page]
+		if !ok {
+			fieldErrorsData = make(fieldErrors)
+			s.errorsSetKey[page] = fieldErrorsData
+			// TODO
+		}
+	}
 }
 
 // TODO remove CheckValues check target value if is correct.
@@ -414,6 +440,6 @@ func (s *ConnectionSession) DebugGetConnectionData() connectionData {
 	return s.data
 }
 
-func (s *ConnectionSession) DebugGetErrors() PageKeyErrors {
+func (s *ConnectionSession) DebugGetErrors() sessionErrors {
 	return s.Errors
 }

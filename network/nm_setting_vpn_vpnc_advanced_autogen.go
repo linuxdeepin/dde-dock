@@ -194,7 +194,7 @@ func isSettingVpnVpncKeyCiscoUdpEncapsPortExists(data connectionData) bool {
 }
 
 // Ensure field and key exists and not empty
-func ensureFieldSettingVpnVpncAdvancedExists(data connectionData, errs FieldKeyErrors, relatedKey string) {
+func ensureFieldSettingVpnVpncAdvancedExists(data connectionData, errs fieldErrors, relatedKey string) {
 	if !isSettingFieldExists(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME) {
 		rememberError(errs, relatedKey, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME))
 	}
@@ -203,7 +203,7 @@ func ensureFieldSettingVpnVpncAdvancedExists(data connectionData, errs FieldKeyE
 		rememberError(errs, relatedKey, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME))
 	}
 }
-func ensureSettingVpnVpncKeyDomainNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnVpncKeyDomainNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnVpncKeyDomainExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DOMAIN, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -212,7 +212,7 @@ func ensureSettingVpnVpncKeyDomainNoEmpty(data connectionData, errs FieldKeyErro
 		rememberError(errs, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DOMAIN, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnVpncKeyVendorNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnVpncKeyVendorNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnVpncKeyVendorExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_VENDOR, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -221,7 +221,7 @@ func ensureSettingVpnVpncKeyVendorNoEmpty(data connectionData, errs FieldKeyErro
 		rememberError(errs, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_VENDOR, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnVpncKeyAppVersionNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnVpncKeyAppVersionNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnVpncKeyAppVersionExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_APP_VERSION, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -230,17 +230,17 @@ func ensureSettingVpnVpncKeyAppVersionNoEmpty(data connectionData, errs FieldKey
 		rememberError(errs, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_APP_VERSION, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnVpncKeySingleDesNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnVpncKeySingleDesNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnVpncKeySingleDesExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_SINGLE_DES, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnVpncKeyNoEncryptionNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnVpncKeyNoEncryptionNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnVpncKeyNoEncryptionExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_NO_ENCRYPTION, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnVpncKeyNatTraversalModeNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnVpncKeyNatTraversalModeNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnVpncKeyNatTraversalModeExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_NAT_TRAVERSAL_MODE, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -249,7 +249,7 @@ func ensureSettingVpnVpncKeyNatTraversalModeNoEmpty(data connectionData, errs Fi
 		rememberError(errs, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_NAT_TRAVERSAL_MODE, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnVpncKeyDhgroupNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnVpncKeyDhgroupNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnVpncKeyDhgroupExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DHGROUP, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -258,7 +258,7 @@ func ensureSettingVpnVpncKeyDhgroupNoEmpty(data connectionData, errs FieldKeyErr
 		rememberError(errs, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DHGROUP, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnVpncKeyPerfectForwardNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnVpncKeyPerfectForwardNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnVpncKeyPerfectForwardExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_PERFECT_FORWARD, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -267,17 +267,17 @@ func ensureSettingVpnVpncKeyPerfectForwardNoEmpty(data connectionData, errs Fiel
 		rememberError(errs, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_PERFECT_FORWARD, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnVpncKeyLocalPortNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnVpncKeyLocalPortNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnVpncKeyLocalPortExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_LOCAL_PORT, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnVpncKeyDpdIdleTimeoutNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnVpncKeyDpdIdleTimeoutNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnVpncKeyDpdIdleTimeoutExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnVpncKeyCiscoUdpEncapsPortNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingVpnVpncKeyCiscoUdpEncapsPortNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnVpncKeyCiscoUdpEncapsPortExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_CISCO_UDP_ENCAPS_PORT, NM_KEY_ERROR_MISSING_VALUE)
 	}

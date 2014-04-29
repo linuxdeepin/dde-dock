@@ -194,7 +194,7 @@ func isSettingWiredS390OptionsExists(data connectionData) bool {
 }
 
 // Ensure field and key exists and not empty
-func ensureFieldSettingWiredExists(data connectionData, errs FieldKeyErrors, relatedKey string) {
+func ensureFieldSettingWiredExists(data connectionData, errs fieldErrors, relatedKey string) {
 	if !isSettingFieldExists(data, NM_SETTING_WIRED_SETTING_NAME) {
 		rememberError(errs, relatedKey, NM_SETTING_WIRED_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_WIRED_SETTING_NAME))
 	}
@@ -203,7 +203,7 @@ func ensureFieldSettingWiredExists(data connectionData, errs FieldKeyErrors, rel
 		rememberError(errs, relatedKey, NM_SETTING_WIRED_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_WIRED_SETTING_NAME))
 	}
 }
-func ensureSettingWiredPortNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingWiredPortNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingWiredPortExists(data) {
 		rememberError(errs, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_PORT, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -212,12 +212,12 @@ func ensureSettingWiredPortNoEmpty(data connectionData, errs FieldKeyErrors) {
 		rememberError(errs, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_PORT, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingWiredSpeedNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingWiredSpeedNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingWiredSpeedExists(data) {
 		rememberError(errs, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_SPEED, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingWiredDuplexNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingWiredDuplexNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingWiredDuplexExists(data) {
 		rememberError(errs, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_DUPLEX, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -226,12 +226,12 @@ func ensureSettingWiredDuplexNoEmpty(data connectionData, errs FieldKeyErrors) {
 		rememberError(errs, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_DUPLEX, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingWiredAutoNegotiateNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingWiredAutoNegotiateNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingWiredAutoNegotiateExists(data) {
 		rememberError(errs, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_AUTO_NEGOTIATE, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingWiredMacAddressNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingWiredMacAddressNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingWiredMacAddressExists(data) {
 		rememberError(errs, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -240,7 +240,7 @@ func ensureSettingWiredMacAddressNoEmpty(data connectionData, errs FieldKeyError
 		rememberError(errs, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingWiredClonedMacAddressNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingWiredClonedMacAddressNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingWiredClonedMacAddressExists(data) {
 		rememberError(errs, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_CLONED_MAC_ADDRESS, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -249,7 +249,7 @@ func ensureSettingWiredClonedMacAddressNoEmpty(data connectionData, errs FieldKe
 		rememberError(errs, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_CLONED_MAC_ADDRESS, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingWiredMacAddressBlacklistNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingWiredMacAddressBlacklistNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingWiredMacAddressBlacklistExists(data) {
 		rememberError(errs, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -258,12 +258,12 @@ func ensureSettingWiredMacAddressBlacklistNoEmpty(data connectionData, errs Fiel
 		rememberError(errs, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingWiredMtuNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingWiredMtuNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingWiredMtuExists(data) {
 		rememberError(errs, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MTU, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingWiredS390SubchannelsNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingWiredS390SubchannelsNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingWiredS390SubchannelsExists(data) {
 		rememberError(errs, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_SUBCHANNELS, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -272,7 +272,7 @@ func ensureSettingWiredS390SubchannelsNoEmpty(data connectionData, errs FieldKey
 		rememberError(errs, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_SUBCHANNELS, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingWiredS390NettypeNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingWiredS390NettypeNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingWiredS390NettypeExists(data) {
 		rememberError(errs, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_NETTYPE, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -281,7 +281,7 @@ func ensureSettingWiredS390NettypeNoEmpty(data connectionData, errs FieldKeyErro
 		rememberError(errs, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_NETTYPE, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingWiredS390OptionsNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingWiredS390OptionsNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingWiredS390OptionsExists(data) {
 		rememberError(errs, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_OPTIONS, NM_KEY_ERROR_MISSING_VALUE)
 	}

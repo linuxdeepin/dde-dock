@@ -207,7 +207,7 @@ func isSettingIp4ConfigMayFailExists(data connectionData) bool {
 }
 
 // Ensure field and key exists and not empty
-func ensureFieldSettingIp4ConfigExists(data connectionData, errs FieldKeyErrors, relatedKey string) {
+func ensureFieldSettingIp4ConfigExists(data connectionData, errs fieldErrors, relatedKey string) {
 	if !isSettingFieldExists(data, NM_SETTING_IP4_CONFIG_SETTING_NAME) {
 		rememberError(errs, relatedKey, NM_SETTING_IP4_CONFIG_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_IP4_CONFIG_SETTING_NAME))
 	}
@@ -216,7 +216,7 @@ func ensureFieldSettingIp4ConfigExists(data connectionData, errs FieldKeyErrors,
 		rememberError(errs, relatedKey, NM_SETTING_IP4_CONFIG_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_IP4_CONFIG_SETTING_NAME))
 	}
 }
-func ensureSettingIp4ConfigMethodNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingIp4ConfigMethodNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingIp4ConfigMethodExists(data) {
 		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_METHOD, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -225,7 +225,7 @@ func ensureSettingIp4ConfigMethodNoEmpty(data connectionData, errs FieldKeyError
 		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_METHOD, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingIp4ConfigAddressesNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingIp4ConfigAddressesNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingIp4ConfigAddressesExists(data) {
 		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -234,7 +234,7 @@ func ensureSettingIp4ConfigAddressesNoEmpty(data connectionData, errs FieldKeyEr
 		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingIp4ConfigDnsNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingIp4ConfigDnsNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingIp4ConfigDnsExists(data) {
 		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -243,7 +243,7 @@ func ensureSettingIp4ConfigDnsNoEmpty(data connectionData, errs FieldKeyErrors) 
 		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingIp4ConfigDnsSearchNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingIp4ConfigDnsSearchNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingIp4ConfigDnsSearchExists(data) {
 		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_SEARCH, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -252,7 +252,7 @@ func ensureSettingIp4ConfigDnsSearchNoEmpty(data connectionData, errs FieldKeyEr
 		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_SEARCH, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingIp4ConfigRoutesNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingIp4ConfigRoutesNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingIp4ConfigRoutesExists(data) {
 		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTES, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -261,17 +261,17 @@ func ensureSettingIp4ConfigRoutesNoEmpty(data connectionData, errs FieldKeyError
 		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTES, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingIp4ConfigIgnoreAutoRoutesNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingIp4ConfigIgnoreAutoRoutesNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingIp4ConfigIgnoreAutoRoutesExists(data) {
 		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingIp4ConfigIgnoreAutoDnsNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingIp4ConfigIgnoreAutoDnsNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingIp4ConfigIgnoreAutoDnsExists(data) {
 		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingIp4ConfigDhcpClientIdNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingIp4ConfigDhcpClientIdNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingIp4ConfigDhcpClientIdExists(data) {
 		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -280,12 +280,12 @@ func ensureSettingIp4ConfigDhcpClientIdNoEmpty(data connectionData, errs FieldKe
 		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingIp4ConfigDhcpSendHostnameNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingIp4ConfigDhcpSendHostnameNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingIp4ConfigDhcpSendHostnameExists(data) {
 		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingIp4ConfigDhcpHostnameNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingIp4ConfigDhcpHostnameNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingIp4ConfigDhcpHostnameExists(data) {
 		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -294,12 +294,12 @@ func ensureSettingIp4ConfigDhcpHostnameNoEmpty(data connectionData, errs FieldKe
 		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingIp4ConfigNeverDefaultNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingIp4ConfigNeverDefaultNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingIp4ConfigNeverDefaultExists(data) {
 		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_NEVER_DEFAULT, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingIp4ConfigMayFailNoEmpty(data connectionData, errs FieldKeyErrors) {
+func ensureSettingIp4ConfigMayFailNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingIp4ConfigMayFailExists(data) {
 		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_MAY_FAIL, NM_KEY_ERROR_MISSING_VALUE)
 	}

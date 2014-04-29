@@ -205,7 +205,7 @@ func getSettingIp4ConfigAvailableValues(data connectionData, key string) (values
 }
 
 // Check whether the values are correct
-func checkSettingIp4ConfigValues(data connectionData) (errs FieldKeyErrors) {
+func checkSettingIp4ConfigValues(data connectionData) (errs fieldErrors) {
 	errs = make(map[string]string)
 
 	// check method
@@ -236,7 +236,7 @@ func checkSettingIp4ConfigValues(data connectionData) (errs FieldKeyErrors) {
 	return
 }
 
-func checkSettingIp4MethodConflict(data connectionData, errs FieldKeyErrors) {
+func checkSettingIp4MethodConflict(data connectionData, errs fieldErrors) {
 	// check dns
 	if isSettingIp4ConfigDnsExists(data) {
 		rememberError(errs, fieldIpv4, NM_SETTING_IP4_CONFIG_DNS, fmt.Sprintf(NM_KEY_ERROR_IP4_METHOD_CONFLICT, NM_SETTING_IP4_CONFIG_DNS))
@@ -254,7 +254,7 @@ func checkSettingIp4MethodConflict(data connectionData, errs FieldKeyErrors) {
 		rememberError(errs, fieldIpv4, NM_SETTING_IP4_CONFIG_ROUTES, fmt.Sprintf(NM_KEY_ERROR_IP4_METHOD_CONFLICT, NM_SETTING_IP4_CONFIG_ROUTES))
 	}
 }
-func checkSettingIp4ConfigDns(data connectionData, errs FieldKeyErrors) {
+func checkSettingIp4ConfigDns(data connectionData, errs fieldErrors) {
 	if !isSettingIp4ConfigDnsExists(data) {
 		return
 	}
@@ -266,7 +266,7 @@ func checkSettingIp4ConfigDns(data connectionData, errs FieldKeyErrors) {
 		}
 	}
 }
-func checkSettingIp4ConfigAddresses(data connectionData, errs FieldKeyErrors) {
+func checkSettingIp4ConfigAddresses(data connectionData, errs fieldErrors) {
 	if !isSettingIp4ConfigAddressesExists(data) {
 		return
 	}

@@ -224,7 +224,7 @@ func generalGetSettingAvailableValues(data connectionData, field, key string) (v
 	return
 }
 
-func generalCheckSettingValues(data connectionData, field string) (errs FieldKeyErrors) {
+func generalCheckSettingValues(data connectionData, field string) (errs fieldErrors) {
 	switch field {
 	default:
 		logger.Error("invalid field name", field)

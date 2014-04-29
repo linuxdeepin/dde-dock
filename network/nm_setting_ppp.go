@@ -51,7 +51,7 @@ func getSettingPppAvailableValues(data connectionData, key string) (values []kva
 }
 
 // Check whether the values are correct
-func checkSettingPppValues(data connectionData) (errs FieldKeyErrors) {
+func checkSettingPppValues(data connectionData) (errs fieldErrors) {
 	errs = make(map[string]string)
 	return
 }

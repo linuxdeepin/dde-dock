@@ -209,7 +209,7 @@ func getSettingVpnOpenvpnAvailableValues(data connectionData, key string) (value
 	}
 	return
 }
-func checkSettingVpnOpenvpnValues(data connectionData) (errs FieldKeyErrors) {
+func checkSettingVpnOpenvpnValues(data connectionData) (errs fieldErrors) {
 	errs = make(map[string]string)
 	// TODO
 	return
@@ -246,7 +246,7 @@ func getSettingVpnOpenvpnAdvancedAvailableKeys(data connectionData) (keys []stri
 func getSettingVpnOpenvpnAdvancedAvailableValues(data connectionData, key string) (values []kvalue) {
 	return
 }
-func checkSettingVpnOpenvpnAdvancedValues(data connectionData) (errs FieldKeyErrors) {
+func checkSettingVpnOpenvpnAdvancedValues(data connectionData) (errs fieldErrors) {
 	errs = make(map[string]string)
 	// TODO
 	return
@@ -300,7 +300,7 @@ func getSettingVpnOpenvpnSecurityAvailableValues(data connectionData, key string
 	}
 	return
 }
-func checkSettingVpnOpenvpnSecurityValues(data connectionData) (errs FieldKeyErrors) {
+func checkSettingVpnOpenvpnSecurityValues(data connectionData) (errs fieldErrors) {
 	errs = make(map[string]string)
 	// TODO
 	return
@@ -333,7 +333,7 @@ func getSettingVpnOpenvpnTlsauthAvailableValues(data connectionData, key string)
 	}
 	return
 }
-func checkSettingVpnOpenvpnTlsauthValues(data connectionData) (errs FieldKeyErrors) {
+func checkSettingVpnOpenvpnTlsauthValues(data connectionData) (errs fieldErrors) {
 	errs = make(map[string]string)
 	// TODO
 	return
@@ -371,7 +371,7 @@ func getSettingVpnOpenvpnProxiesAvailableValues(data connectionData, key string)
 	}
 	return
 }
-func checkSettingVpnOpenvpnProxiesValues(data connectionData) (errs FieldKeyErrors) {
+func checkSettingVpnOpenvpnProxiesValues(data connectionData) (errs fieldErrors) {
 	errs = make(map[string]string)
 	// TODO
 	return
