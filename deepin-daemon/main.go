@@ -22,28 +22,62 @@
 package main
 
 import (
-        "dlib"
-        Logger "dlib/logger"
-        libutils "dlib/utils"
+	"dlib"
+	"dlib/dbus"
+	Logger "dlib/logger"
+	libutils "dlib/utils"
+	"os"
 )
 
 //import "dde-daemon/deepin-daemon/inputdevices"
 
 var (
-        logObj   = Logger.NewLogger("deepin/daemon")
-        utilsObj = libutils.NewUtils()
+	logObj   = Logger.NewLogger("deepin/daemon")
+	utilsObj = libutils.NewUtils()
 )
 
+type Manager struct{}
+
+func (op *Manager) GetDBusInfo() dbus.DBusInfo {
+	return dbus.DBusInfo{
+		"com.deepin.daemon.DeepinDaemon",
+		"/com/deepin/daemon/DeepinDaemon",
+		"com.deepin.daemon.DeepinDaemon",
+	}
+}
+
+func NewManager() *Manager {
+	m := &Manager{}
+
+	return m
+}
+
 func main() {
-        defer logObj.EndTracing()
+	if !dlib.UniqueOnSession("com.deepin.daemon.DeepinDaemon") {
+		logObj.Warning("deepin-daemon has running")
+		return
+	}
+	defer logObj.EndTracing()
 
-        logObj.SetRestartCommand("/usr/lib/deepin-daemon/deepin-daemon")
-        //enableTouchPad()
-        //listenDevices()
-        //inputdevices.StartInputDevices()
+	logObj.SetRestartCommand("/usr/lib/deepin-daemon/deepin-daemon")
+	//enableTouchPad()
+	//listenDevices()
+	//inputdevices.StartInputDevices()
 
-        startMprisDaemon()
-        go dlib.StartLoop()
+	m := NewManager()
+	if err := dbus.InstallOnSession(m); err != nil {
+		logObj.Warning("Install Session Bus Failed: ", err)
+		return
+	}
+	dbus.DealWithUnhandledMessage()
 
-        select {}
+	startMprisDaemon()
+	go dlib.StartLoop()
+
+	if err := dbus.Wait(); err != nil {
+		os.Exit(0)
+	} else {
+		logObj.Warning("Lost DBus")
+		os.Exit(-1)
+	}
 }
