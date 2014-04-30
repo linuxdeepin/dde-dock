@@ -109,20 +109,27 @@ func getSettingWiredAvailableKeys(data connectionData) (keys []string) {
 
 // Get available values
 func getSettingWiredAvailableValues(data connectionData, key string) (values []kvalue) {
+	switch key {
+	case NM_SETTING_WIRED_MAC_ADDRESS:
+		// get wired devices mac address
+		devPaths, err := nmGetDevices()
+		if err == nil {
+			for _, p := range devPaths {
+				if dev, err := nmNewDevice(p); err == nil && dev.DeviceType.Get() == NM_DEVICE_TYPE_ETHERNET {
+					if wiredDev, err := nmNewDeviceWired(p); err == nil {
+						hwAddr := wiredDev.HwAddress.Get()
+						values = append(values, kvalue{hwAddr, hwAddr})
+					}
+				}
+			}
+		}
+	}
 	return
 }
 
 // Check whether the values are correct
 func checkSettingWiredValues(data connectionData) (errs fieldErrors) {
 	errs = make(map[string]string)
-	// TODO
-	return
-}
-
-// Logic setter
-func logicSetSettingWiredMacAddress(data connectionData, value string) (err error) {
-	return
-}
-func logicSetSettingWiredClonedMacAddress(data connectionData, value string) (err error) {
+	// machine address format will be checked when setting key
 	return
 }

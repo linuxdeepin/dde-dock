@@ -122,7 +122,7 @@ func (m *Manager) handleDeviceChanged(operation int32, path dbus.ObjectPath) {
 	case opAdded:
 		dev, err := nmNewDevice(path)
 		if err != nil {
-			panic(err)
+			panic(err) // TODO
 		}
 		switch dev.DeviceType.Get() {
 		case NM_DEVICE_TYPE_WIFI:
