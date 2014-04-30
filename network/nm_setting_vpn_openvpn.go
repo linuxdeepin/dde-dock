@@ -211,6 +211,7 @@ func getSettingVpnOpenvpnAvailableValues(data connectionData, key string) (value
 func checkSettingVpnOpenvpnValues(data connectionData) (errs fieldErrors) {
 	errs = make(map[string]string)
 	ensureSettingVpnOpenvpnKeyRemoteNoEmpty(data, errs)
+	ensureSettingVpnOpenvpnKeyConnectionTypeNoEmpty(data, errs)
 	switch getSettingVpnOpenvpnKeyConnectionType(data) {
 	case NM_OPENVPN_CONTYPE_TLS:
 		ensureSettingVpnOpenvpnKeyCertNoEmpty(data, errs)
@@ -423,7 +424,7 @@ func getSettingVpnOpenvpnProxiesAvailableValues(data connectionData, key string)
 	switch key {
 	case NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE:
 		values = []kvalue{
-			kvalue{"", dlib.Tr("Not Required")},
+			kvalue{"none", dlib.Tr("Not Required")},
 			kvalue{"httpect", dlib.Tr("HTTP")},
 			kvalue{"socksct", dlib.Tr("SOCKS")},
 		}
@@ -448,10 +449,93 @@ func checkSettingVpnOpenvpnProxiesValues(data connectionData) (errs fieldErrors)
 }
 
 // Logic setter
+func logicSetSettingVpnOpenvpnKeyConnectionType(data connectionData, value string) (err error) {
+	allRelatedKeys := []string{
+		NM_SETTING_VPN_OPENVPN_KEY_USERNAME,
+		NM_SETTING_VPN_OPENVPN_KEY_PASSWORD_FLAGS,
+		NM_SETTING_VPN_OPENVPN_KEY_PASSWORD,
+		NM_SETTING_VPN_OPENVPN_KEY_CERT,
+		NM_SETTING_VPN_OPENVPN_KEY_CA,
+		NM_SETTING_VPN_OPENVPN_KEY_KEY,
+		NM_SETTING_VPN_OPENVPN_KEY_CERTPASS,
+		NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY,
+		NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY_DIRECTION,
+		NM_SETTING_VPN_OPENVPN_KEY_REMOTE_IP,
+		NM_SETTING_VPN_OPENVPN_KEY_LOCAL_IP,
+	}
+	switch value {
+	case NM_OPENVPN_CONTYPE_TLS:
+		removeSettingKey(data, fieldVpnOpenvpn, stringArrayBut(allRelatedKeys,
+			NM_SETTING_VPN_OPENVPN_KEY_CERT,
+			NM_SETTING_VPN_OPENVPN_KEY_CA,
+			NM_SETTING_VPN_OPENVPN_KEY_KEY,
+			NM_SETTING_VPN_OPENVPN_KEY_CERTPASS,
+		)...)
+	case NM_OPENVPN_CONTYPE_PASSWORD:
+		removeSettingKey(data, fieldVpnOpenvpn, stringArrayBut(allRelatedKeys,
+			NM_SETTING_VPN_OPENVPN_KEY_USERNAME,
+			NM_SETTING_VPN_OPENVPN_KEY_PASSWORD_FLAGS,
+			NM_SETTING_VPN_OPENVPN_KEY_PASSWORD,
+			NM_SETTING_VPN_OPENVPN_KEY_CA,
+		)...)
+	case NM_OPENVPN_CONTYPE_PASSWORD_TLS:
+		removeSettingKey(data, fieldVpnOpenvpn, stringArrayBut(allRelatedKeys,
+			NM_SETTING_VPN_OPENVPN_KEY_USERNAME,
+			NM_SETTING_VPN_OPENVPN_KEY_PASSWORD_FLAGS,
+			NM_SETTING_VPN_OPENVPN_KEY_PASSWORD,
+			NM_SETTING_VPN_OPENVPN_KEY_CERT,
+			NM_SETTING_VPN_OPENVPN_KEY_CA,
+			NM_SETTING_VPN_OPENVPN_KEY_KEY,
+			NM_SETTING_VPN_OPENVPN_KEY_CERTPASS,
+		)...)
+	case NM_OPENVPN_CONTYPE_STATIC_KEY:
+		removeSettingKey(data, fieldVpnOpenvpn, stringArrayBut(allRelatedKeys,
+			NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY,
+			NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY_DIRECTION,
+			NM_SETTING_VPN_OPENVPN_KEY_REMOTE_IP,
+			NM_SETTING_VPN_OPENVPN_KEY_LOCAL_IP,
+		)...)
+	}
+	return
+}
 func logicSetSettingVpnOpenvpnKeyProxyType(data connectionData, value string) (err error) {
+	if value == "none" {
+		removeSettingVpnOpenvpnKeyProxyServer(data)
+		removeSettingVpnOpenvpnKeyProxyPort(data)
+		removeSettingVpnOpenvpnKeyProxyRetry(data)
+		removeSettingVpnOpenvpnKeyHttpProxyUsername(data)
+		removeSettingVpnOpenvpnKeyHttpProxyPassword(data)
+		removeSettingVpnOpenvpnKeyProxyType(data)
+		return
+	}
+
 	// when proxy enabled, use a tcp connection default
 	setSettingVpnOpenvpnKeyProtoTcp(data, true)
+
+	switch value {
+	case "httpect":
+		setSettingVpnOpenvpnKeyProxyRetry(data, false)
+	case "socksct":
+		setSettingVpnOpenvpnKeyProxyRetry(data, false)
+		removeSettingVpnOpenvpnKeyHttpProxyUsername(data)
+		removeSettingVpnOpenvpnKeyHttpProxyPassword(data)
+	}
 	setSettingVpnOpenvpnKeyProxyType(data, value)
-	// TODO
+	return
+}
+func logicSetSettingVpnOpenvpnKeyCert(data connectionData, value string) (err error) {
+	setSettingVpnOpenvpnKeyCert(data, toLocalPath(value))
+	return
+}
+func logicSetSettingVpnOpenvpnKeyCa(data connectionData, value string) (err error) {
+	setSettingVpnOpenvpnKeyCa(data, toLocalPath(value))
+	return
+}
+func logicSetSettingVpnOpenvpnKeyKey(data connectionData, value string) (err error) {
+	setSettingVpnOpenvpnKeyKey(data, toLocalPath(value))
+	return
+}
+func logicSetSettingVpnOpenvpnKeyStaticKey(data connectionData, value string) (err error) {
+	setSettingVpnOpenvpnKeyStaticKey(data, toLocalPath(value))
 	return
 }

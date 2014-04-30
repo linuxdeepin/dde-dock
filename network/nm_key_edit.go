@@ -164,19 +164,20 @@ func setSettingKey(data connectionData, field, key string, value interface{}) {
 	return
 }
 
-func removeSettingKey(data connectionData, field, key string) {
+func removeSettingKey(data connectionData, field string, keys ...string) {
 	field = getRealFieldName(field) // get real field name
 	fieldData, ok := data[field]
 	if !ok {
 		return
 	}
 
-	_, ok = fieldData[key]
-	if !ok {
-		return
+	for _, k := range keys {
+		_, ok = fieldData[k]
+		if !ok {
+			continue
+		}
+		delete(fieldData, k)
 	}
-
-	delete(fieldData, key)
 }
 
 func removeSettingKeyBut(data connectionData, field string, keys ...string) {

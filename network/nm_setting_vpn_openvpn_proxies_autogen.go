@@ -55,7 +55,7 @@ func getSettingVpnOpenvpnProxiesKeyDefaultValueJSON(key string) (valueJSON strin
 	default:
 		logger.Error("invalid key:", key)
 	case NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE:
-		valueJSON = `""`
+		valueJSON = `"none"`
 	case NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER:
 		valueJSON = `""`
 	case NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT:

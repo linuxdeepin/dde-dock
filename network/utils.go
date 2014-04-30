@@ -30,6 +30,15 @@ func isStringInArray(s string, list []string) bool {
 	return false
 }
 
+func stringArrayBut(list []string, ignoreList ...string) (newList []string) {
+	for _, s := range list {
+		if !isStringInArray(s, ignoreList) {
+			newList = append(newList, s)
+		}
+	}
+	return
+}
+
 func appendStrArrayUnion(a1 []string, a2 ...string) (a []string) {
 	a = a1
 	for _, s := range a2 {
