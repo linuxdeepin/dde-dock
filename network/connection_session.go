@@ -376,8 +376,8 @@ func (s *ConnectionSession) GetKey(page, key string) (value string) {
 
 func (s *ConnectionSession) SetKey(page, key, value string) {
 	field := s.getFieldOfPageKey(page, key)
-	// logger.Debugf("SetKey(), page=%s, filed=%s, key=%s, value=%s", page, field, key, value) // TODO test
 	err := generalSetSettingKeyJSON(s.data, field, key, value)
+	// logger.Debugf("SetKey(), %v, page=%s, filed=%s, key=%s, value=%s", err == nil, page, field, key, value) // TODO test
 	s.updateErrorsWhenSettingKey(page, key, err)
 
 	s.updatePropAvailablePages()

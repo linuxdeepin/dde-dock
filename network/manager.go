@@ -28,6 +28,8 @@ type Manager struct {
 	ActiveConnections []string      // uuid collection of connections that activated
 	State             uint32        // networking state
 
+	ActivatingConnections string // TODO
+
 	//update by devices.go
 	WiredDevices    []*device
 	WirelessDevices []*device // TODO is "device" struct still needed?
@@ -37,7 +39,6 @@ type Manager struct {
 	WiredConnections    []string
 	WirelessConnections []string
 	VPNConnections      []string
-	uuid2connectionType map[string]string // TODO remove
 
 	//signals
 	NeedSecrets                  func(string, string, string)

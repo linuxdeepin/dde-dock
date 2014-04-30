@@ -12,38 +12,6 @@ func newDevice(core *nm.Device) *device {
 	return &device{core.Path, core.State.Get()}
 }
 
-// DisconnectDevice will disconnect all connection in target device.
-func (m *Manager) DisconnectDevice(devPath dbus.ObjectPath) (err error) {
-	dev, err := nmNewDevice(devPath)
-	if err != nil {
-		return
-	}
-	err = dev.Disconnect()
-	if err != nil {
-		logger.Error(err)
-		return
-	}
-	return
-}
-
-// TODO remove
-// func (m *Manager) DisconnectDevice(path dbus.ObjectPath) error {
-// 	if dev, err := nmNewDevice(path); err != nil {
-// 		return err
-// 	} else {
-// 		dev.Disconnect()
-// 		nm.DestroyDevice(dev)
-// 		switch dev.DeviceType.Get() {
-// 		case NM_DEVICE_TYPE_WIFI:
-// 			dbus.NotifyChange(m, "WirelessConnections")
-// 		case NM_DEVICE_TYPE_ETHERNET:
-// 			logger.Debug("DisconnectDevice...", path)
-// 			dbus.NotifyChange(m, "WiredConnections")
-// 		}
-// 		return nil
-// 	}
-// }
-
 func (m *Manager) initDeviceManage() {
 	nmManager.ConnectDeviceAdded(func(path dbus.ObjectPath) {
 		m.handleDeviceChanged(opAdded, path)
@@ -175,22 +143,6 @@ func (m *Manager) handleDeviceChanged(operation int32, path dbus.ObjectPath) {
 	default:
 		panic("Didn't support operation")
 	}
-}
-
-// GetAccessPoints return all access point's dbus path of target device.
-func (m *Manager) GetAccessPoints(path dbus.ObjectPath) (aps []dbus.ObjectPath, err error) {
-	dev, err := nmNewDeviceWireless(path)
-	if err != nil {
-		return
-	}
-	aps, err = dev.GetAccessPoints()
-	return
-}
-
-// GetAccessPointProperty return access point's detail information.
-func (m *Manager) GetAccessPointProperty(apPath dbus.ObjectPath) (ap accessPoint, err error) {
-	ap, err = NewAccessPoint(apPath)
-	return
 }
 
 // TODO
