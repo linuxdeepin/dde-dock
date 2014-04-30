@@ -23,9 +23,7 @@ func newBasicVpnConnectionData(id, uuid, service string) (data connectionData) {
 	addSettingField(data, fieldVpn)
 	setSettingVpnServiceType(data, service)
 
-	addSettingField(data, fieldIpv4)
-	setSettingIp4ConfigMethod(data, NM_SETTING_IP4_CONFIG_METHOD_AUTO)
-
+	initSettingFieldIpv4(data)
 	return
 }
 

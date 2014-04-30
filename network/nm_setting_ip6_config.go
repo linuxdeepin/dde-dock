@@ -32,6 +32,11 @@ const (
 	NM_SETTING_IP6_CONFIG_METHOD_SHARED     = "shared"
 )
 
+func initSettingFieldIpv6(data connectionData) {
+	addSettingField(data, fieldIpv6)
+	setSettingIp6ConfigMethod(data, NM_SETTING_IP6_CONFIG_METHOD_AUTO)
+}
+
 // Initialize available values
 var availableValuesIp6ConfigMethod = make(availableValues)
 
@@ -42,7 +47,6 @@ func init() {
 	availableValuesIp6ConfigMethod[NM_SETTING_IP6_CONFIG_METHOD_LINK_LOCAL] = kvalue{NM_SETTING_IP6_CONFIG_METHOD_LINK_LOCAL, dlib.Tr("Link Local")}
 	availableValuesIp6ConfigMethod[NM_SETTING_IP6_CONFIG_METHOD_MANUAL] = kvalue{NM_SETTING_IP6_CONFIG_METHOD_MANUAL, dlib.Tr("Manual")}
 	availableValuesIp6ConfigMethod[NM_SETTING_IP6_CONFIG_METHOD_SHARED] = kvalue{NM_SETTING_IP6_CONFIG_METHOD_SHARED, dlib.Tr("Shared")}
-
 }
 
 // Get available keys

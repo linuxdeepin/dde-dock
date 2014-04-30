@@ -101,6 +101,8 @@ func NewConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 	}
 	s.ConnectionType = generalGetConnectionType(s.data)
 
+	s.fixMissingFields()
+
 	// get secret data
 	for _, secretFiled := range []string{fieldWirelessSecurity, field8021x} {
 		if isSettingFieldExists(s.data, secretFiled) {
@@ -128,6 +130,13 @@ func NewConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 	logger.Debug("NewConnectionSessionByOpen():", s.data)
 
 	return
+}
+
+func (s *ConnectionSession) fixMissingFields() {
+	// fieldIpv6
+	if !isSettingFieldExists(s.data, fieldIpv6) && isStringInArray(fieldIpv6, s.listFields()) {
+		initSettingFieldIpv6(s.data)
+	}
 }
 
 // Save save current connection s.
@@ -175,6 +184,14 @@ func (s *ConnectionSession) isErrorOccured() bool {
 // Close cancel current connection s.
 func (s *ConnectionSession) Close() {
 	dbus.UnInstallObject(s)
+}
+
+// listFields return all pages related fields
+func (s *ConnectionSession) listFields() (fields []string) {
+	for _, page := range s.listPages() {
+		fields = appendStrArrayUnion(fields, s.pageToFields(page)...)
+	}
+	return
 }
 
 // listPages return supported pages for target connection type.

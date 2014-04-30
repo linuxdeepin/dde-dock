@@ -141,6 +141,11 @@ const (
 	NM_SETTING_IP4_CONFIG_METHOD_DISABLED = "disabled"
 )
 
+func initSettingFieldIpv4(data connectionData) {
+	addSettingField(data, fieldIpv4)
+	setSettingIp4ConfigMethod(data, NM_SETTING_IP4_CONFIG_METHOD_AUTO)
+}
+
 // Initialize available values
 var availableValuesIp4ConfigMethod = make(availableValues)
 

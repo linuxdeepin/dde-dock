@@ -141,9 +141,7 @@ func newVpnOpenvpnConnectionData(id, uuid string) (data connectionData) {
 	setSettingVpnOpenvpnKeyConnectionType(data, "tls")
 	setSettingVpnOpenvpnKeyCertpassFlags(data, 1)
 
-	addSettingField(data, fieldIpv6)
-	setSettingIp6ConfigMethod(data, NM_SETTING_IP6_CONFIG_METHOD_AUTO)
-
+	initSettingFieldIpv6(data)
 	return
 }
 

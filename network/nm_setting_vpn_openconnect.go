@@ -61,9 +61,7 @@ func newVpnOpenconnectConnectionData(id, uuid string) (data connectionData) {
 	setSettingKey(data, fieldVpn, "cookie-flags", uint32(2))
 	setSettingVpnOpenconnectKeyAuthtype(data, "password")
 
-	addSettingField(data, fieldIpv6)
-	setSettingIp6ConfigMethod(data, NM_SETTING_IP6_CONFIG_METHOD_AUTO)
-
+	initSettingFieldIpv6(data)
 	return
 }
 
