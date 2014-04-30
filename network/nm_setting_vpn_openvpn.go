@@ -147,39 +147,36 @@ func newVpnOpenvpnConnectionData(id, uuid string) (data connectionData) {
 
 // openvpn
 func getSettingVpnOpenvpnAvailableKeys(data connectionData) (keys []string) {
-	keys = appendAvailableKeys(keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_REMOTE)
-	keys = appendAvailableKeys(keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_CONNECTION_TYPE)
+	keys = appendAvailableKeys(data, keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_REMOTE)
+	keys = appendAvailableKeys(data, keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_CONNECTION_TYPE)
 	switch getSettingVpnOpenvpnKeyConnectionType(data) {
 	case NM_OPENVPN_CONTYPE_TLS:
-		keys = appendAvailableKeys(keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_CERT)
-		keys = appendAvailableKeys(keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_CA)
-		keys = appendAvailableKeys(keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_KEY)
-		keys = appendAvailableKeys(keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_CERTPASS)
+		keys = appendAvailableKeys(data, keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_CERT)
+		keys = appendAvailableKeys(data, keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_CA)
+		keys = appendAvailableKeys(data, keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_KEY)
+		keys = appendAvailableKeys(data, keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_CERTPASS)
 	case NM_OPENVPN_CONTYPE_PASSWORD:
-		keys = appendAvailableKeys(keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_USERNAME)
-		keys = appendAvailableKeys(keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_PASSWORD_FLAGS)
+		keys = appendAvailableKeys(data, keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_USERNAME)
+		keys = appendAvailableKeys(data, keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_PASSWORD_FLAGS)
 		if getSettingVpnOpenvpnKeyPasswordFlags(data) == NM_OPENVPN_SECRET_FLAG_SAVE {
-			keys = appendAvailableKeys(keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_PASSWORD)
+			keys = appendAvailableKeys(data, keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_PASSWORD)
 		}
-		keys = appendAvailableKeys(keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_CA)
+		keys = appendAvailableKeys(data, keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_CA)
 	case NM_OPENVPN_CONTYPE_PASSWORD_TLS:
-		keys = appendAvailableKeys(keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_USERNAME)
-		keys = appendAvailableKeys(keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_PASSWORD_FLAGS)
+		keys = appendAvailableKeys(data, keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_USERNAME)
+		keys = appendAvailableKeys(data, keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_PASSWORD_FLAGS)
 		if getSettingVpnOpenvpnKeyPasswordFlags(data) == NM_OPENVPN_SECRET_FLAG_SAVE {
-			keys = appendAvailableKeys(keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_PASSWORD)
+			keys = appendAvailableKeys(data, keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_PASSWORD)
 		}
-		keys = appendAvailableKeys(keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_CERT)
-		keys = appendAvailableKeys(keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_CA)
-		keys = appendAvailableKeys(keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_KEY)
-		keys = appendAvailableKeys(keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_CERTPASS)
+		keys = appendAvailableKeys(data, keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_CERT)
+		keys = appendAvailableKeys(data, keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_CA)
+		keys = appendAvailableKeys(data, keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_KEY)
+		keys = appendAvailableKeys(data, keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_CERTPASS)
 	case NM_OPENVPN_CONTYPE_STATIC_KEY:
-		keys = appendAvailableKeys(keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY)
-		keys = appendAvailableKeys(keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY_DIRECTION)
-		if getSettingVkVpnOpenvpnKeyEnableStaticKeyDirection(data) {
-			keys = append(keys, NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY_DIRECTION)
-		}
-		keys = appendAvailableKeys(keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_REMOTE_IP)
-		keys = appendAvailableKeys(keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_LOCAL_IP)
+		keys = appendAvailableKeys(data, keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY)
+		keys = appendAvailableKeys(data, keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY_DIRECTION)
+		keys = appendAvailableKeys(data, keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_REMOTE_IP)
+		keys = appendAvailableKeys(data, keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_LOCAL_IP)
 	}
 	return
 }
@@ -271,30 +268,18 @@ func checkSettingVpnOpenvpnKeyStaticKey(data connectionData, errs fieldErrors) {
 
 // openvpn-advanced general
 func getSettingVpnOpenvpnAdvancedAvailableKeys(data connectionData) (keys []string) {
-	keys = appendAvailableKeys(keys, fieldVpnOpenvpnAdvanced, NM_SETTING_VPN_OPENVPN_KEY_PORT)
-	if getSettingVkVpnOpenvpnKeyEnablePort(data) {
-		keys = append(keys, NM_SETTING_VPN_OPENVPN_KEY_PORT)
-	}
-	keys = appendAvailableKeys(keys, fieldVpnOpenvpnAdvanced, NM_SETTING_VPN_OPENVPN_KEY_RENEG_SECONDS)
-	if getSettingVkVpnOpenvpnKeyEnableRenegSeconds(data) {
-		keys = append(keys, NM_SETTING_VPN_OPENVPN_KEY_RENEG_SECONDS)
-	}
-	keys = appendAvailableKeys(keys, fieldVpnOpenvpnAdvanced, NM_SETTING_VPN_OPENVPN_KEY_COMP_LZO)
+	keys = appendAvailableKeys(data, keys, fieldVpnOpenvpnAdvanced, NM_SETTING_VPN_OPENVPN_KEY_PORT)
+	keys = appendAvailableKeys(data, keys, fieldVpnOpenvpnAdvanced, NM_SETTING_VPN_OPENVPN_KEY_RENEG_SECONDS)
+	keys = appendAvailableKeys(data, keys, fieldVpnOpenvpnAdvanced, NM_SETTING_VPN_OPENVPN_KEY_COMP_LZO)
 	if !isSettingVpnOpenvpnKeyProxyTypeExists(data) {
 		// when proxy enabled, use a tcp connection default
-		keys = appendAvailableKeys(keys, fieldVpnOpenvpnAdvanced, NM_SETTING_VPN_OPENVPN_KEY_PROTO_TCP)
+		keys = appendAvailableKeys(data, keys, fieldVpnOpenvpnAdvanced, NM_SETTING_VPN_OPENVPN_KEY_PROTO_TCP)
 	}
-	keys = appendAvailableKeys(keys, fieldVpnOpenvpnAdvanced, NM_SETTING_VPN_OPENVPN_KEY_TAP_DEV)
-	keys = appendAvailableKeys(keys, fieldVpnOpenvpnAdvanced, NM_SETTING_VPN_OPENVPN_KEY_TUNNEL_MTU)
-	if getSettingVkVpnOpenvpnKeyEnableTunnelMtu(data) {
-		keys = append(keys, NM_SETTING_VPN_OPENVPN_KEY_TUNNEL_MTU)
-	}
-	keys = appendAvailableKeys(keys, fieldVpnOpenvpnAdvanced, NM_SETTING_VPN_OPENVPN_KEY_FRAGMENT_SIZE)
-	if getSettingVkVpnOpenvpnKeyEnableFragmentSize(data) {
-		keys = append(keys, NM_SETTING_VPN_OPENVPN_KEY_FRAGMENT_SIZE)
-	}
-	keys = appendAvailableKeys(keys, fieldVpnOpenvpnAdvanced, NM_SETTING_VPN_OPENVPN_KEY_MSSFIX)
-	keys = appendAvailableKeys(keys, fieldVpnOpenvpnAdvanced, NM_SETTING_VPN_OPENVPN_KEY_REMOTE_RANDOM)
+	keys = appendAvailableKeys(data, keys, fieldVpnOpenvpnAdvanced, NM_SETTING_VPN_OPENVPN_KEY_TAP_DEV)
+	keys = appendAvailableKeys(data, keys, fieldVpnOpenvpnAdvanced, NM_SETTING_VPN_OPENVPN_KEY_TUNNEL_MTU)
+	keys = appendAvailableKeys(data, keys, fieldVpnOpenvpnAdvanced, NM_SETTING_VPN_OPENVPN_KEY_FRAGMENT_SIZE)
+	keys = appendAvailableKeys(data, keys, fieldVpnOpenvpnAdvanced, NM_SETTING_VPN_OPENVPN_KEY_MSSFIX)
+	keys = appendAvailableKeys(data, keys, fieldVpnOpenvpnAdvanced, NM_SETTING_VPN_OPENVPN_KEY_REMOTE_RANDOM)
 	return
 }
 func getSettingVpnOpenvpnAdvancedAvailableValues(data connectionData, key string) (values []kvalue) {
@@ -307,8 +292,8 @@ func checkSettingVpnOpenvpnAdvancedValues(data connectionData) (errs fieldErrors
 
 // openvpn-security
 func getSettingVpnOpenvpnSecurityAvailableKeys(data connectionData) (keys []string) {
-	keys = appendAvailableKeys(keys, fieldVpnOpenvpnSecurity, NM_SETTING_VPN_OPENVPN_KEY_CIPHER)
-	keys = appendAvailableKeys(keys, fieldVpnOpenvpnSecurity, NM_SETTING_VPN_OPENVPN_KEY_AUTH)
+	keys = appendAvailableKeys(data, keys, fieldVpnOpenvpnSecurity, NM_SETTING_VPN_OPENVPN_KEY_CIPHER)
+	keys = appendAvailableKeys(data, keys, fieldVpnOpenvpnSecurity, NM_SETTING_VPN_OPENVPN_KEY_AUTH)
 	return
 }
 func getSettingVpnOpenvpnSecurityAvailableValues(data connectionData, key string) (values []kvalue) {
@@ -360,13 +345,10 @@ func checkSettingVpnOpenvpnSecurityValues(data connectionData) (errs fieldErrors
 
 // openvpn-tlsauth
 func getSettingVpnOpenvpnTlsauthAvailableKeys(data connectionData) (keys []string) {
-	keys = appendAvailableKeys(keys, fieldVpnOpenvpnTlsauth, NM_SETTING_VPN_OPENVPN_KEY_TLS_REMOTE)
-	keys = appendAvailableKeys(keys, fieldVpnOpenvpnTlsauth, NM_SETTING_VPN_OPENVPN_KEY_REMOTE_CERT_TLS)
-	keys = appendAvailableKeys(keys, fieldVpnOpenvpnTlsauth, NM_SETTING_VPN_OPENVPN_KEY_TA)
-	keys = appendAvailableKeys(keys, fieldVpnOpenvpnTlsauth, NM_SETTING_VPN_OPENVPN_KEY_TA_DIR)
-	if getSettingVkVpnOpenvpnKeyEnableTaDir(data) {
-		keys = append(keys, NM_SETTING_VPN_OPENVPN_KEY_TA_DIR)
-	}
+	keys = appendAvailableKeys(data, keys, fieldVpnOpenvpnTlsauth, NM_SETTING_VPN_OPENVPN_KEY_TLS_REMOTE)
+	keys = appendAvailableKeys(data, keys, fieldVpnOpenvpnTlsauth, NM_SETTING_VPN_OPENVPN_KEY_REMOTE_CERT_TLS)
+	keys = appendAvailableKeys(data, keys, fieldVpnOpenvpnTlsauth, NM_SETTING_VPN_OPENVPN_KEY_TA)
+	keys = appendAvailableKeys(data, keys, fieldVpnOpenvpnTlsauth, NM_SETTING_VPN_OPENVPN_KEY_TA_DIR)
 	return
 }
 func getSettingVpnOpenvpnTlsauthAvailableValues(data connectionData, key string) (values []kvalue) {
@@ -401,19 +383,19 @@ func checkSettingVpnOpenvpnKeyTa(data connectionData, errs fieldErrors) {
 // openvpn-proxies
 func getSettingVpnOpenvpnProxiesAvailableKeys(data connectionData) (keys []string) {
 	// proxies
-	keys = appendAvailableKeys(keys, fieldVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE)
+	keys = appendAvailableKeys(data, keys, fieldVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE)
 	if isSettingVpnOpenvpnKeyProxyTypeExists(data) {
 		switch getSettingVpnOpenvpnKeyProxyType(data) {
 		case "httpect":
-			keys = appendAvailableKeys(keys, fieldVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER)
-			keys = appendAvailableKeys(keys, fieldVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT)
-			keys = appendAvailableKeys(keys, fieldVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY)
-			keys = appendAvailableKeys(keys, fieldVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME)
-			keys = appendAvailableKeys(keys, fieldVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD)
+			keys = appendAvailableKeys(data, keys, fieldVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER)
+			keys = appendAvailableKeys(data, keys, fieldVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT)
+			keys = appendAvailableKeys(data, keys, fieldVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY)
+			keys = appendAvailableKeys(data, keys, fieldVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME)
+			keys = appendAvailableKeys(data, keys, fieldVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD)
 		case "socksct":
-			keys = appendAvailableKeys(keys, fieldVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER)
-			keys = appendAvailableKeys(keys, fieldVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT)
-			keys = appendAvailableKeys(keys, fieldVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY)
+			keys = appendAvailableKeys(data, keys, fieldVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER)
+			keys = appendAvailableKeys(data, keys, fieldVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT)
+			keys = appendAvailableKeys(data, keys, fieldVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY)
 		}
 	}
 	return

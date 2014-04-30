@@ -132,20 +132,20 @@ func newVpnVpncConnectionData(id, uuid string) (data connectionData) {
 
 // vpn-vpnc
 func getSettingVpnVpncAvailableKeys(data connectionData) (keys []string) {
-	keys = appendAvailableKeys(keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_GATEWAY)
-	keys = appendAvailableKeys(keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_XAUTH_USER)
-	keys = appendAvailableKeys(keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD_FLAGS)
+	keys = appendAvailableKeys(data, keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_GATEWAY)
+	keys = appendAvailableKeys(data, keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_XAUTH_USER)
+	keys = appendAvailableKeys(data, keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD_FLAGS)
 	if getSettingVpnVpncKeyXauthPasswordFlags(data) == NM_VPNC_SECRET_FLAG_SAVE {
-		keys = appendAvailableKeys(keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD)
+		keys = appendAvailableKeys(data, keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD)
 	}
-	keys = appendAvailableKeys(keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_ID)
-	keys = appendAvailableKeys(keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_SECRET_FLAGS)
+	keys = appendAvailableKeys(data, keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_ID)
+	keys = appendAvailableKeys(data, keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_SECRET_FLAGS)
 	if getSettingVpnVpncKeySecretFlags(data) == NM_VPNC_SECRET_FLAG_SAVE {
-		keys = appendAvailableKeys(keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_SECRET)
+		keys = appendAvailableKeys(data, keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_SECRET)
 	}
-	keys = appendAvailableKeys(keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_AUTHMODE)
+	keys = appendAvailableKeys(data, keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_AUTHMODE)
 	if getSettingVkVpnVpncKeyHybridAuthmode(data) {
-		keys = appendAvailableKeys(keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_CA_FILE)
+		keys = appendAvailableKeys(data, keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_CA_FILE)
 	}
 	return
 }
@@ -176,15 +176,15 @@ func checkSettingVpnVpncCaFile(data connectionData, errs fieldErrors) {
 
 // vpn-vpnc-advanced
 func getSettingVpnVpncAdvancedAvailableKeys(data connectionData) (keys []string) {
-	keys = appendAvailableKeys(keys, fieldVpnVpncAdvanced, NM_SETTING_VPN_VPNC_KEY_DOMAIN)
-	keys = appendAvailableKeys(keys, fieldVpnVpncAdvanced, NM_SETTING_VPN_VPNC_KEY_VENDOR)
-	keys = appendAvailableKeys(keys, fieldVpnVpncAdvanced, NM_SETTING_VPN_VPNC_KEY_APP_VERSION)
-	keys = appendAvailableKeys(keys, fieldVpnVpncAdvanced, NM_SETTING_VPN_VPNC_KEY_SINGLE_DES)
-	keys = appendAvailableKeys(keys, fieldVpnVpncAdvanced, NM_SETTING_VPN_VPNC_KEY_NAT_TRAVERSAL_MODE)
-	keys = appendAvailableKeys(keys, fieldVpnVpncAdvanced, NM_SETTING_VPN_VPNC_KEY_DHGROUP)
-	keys = appendAvailableKeys(keys, fieldVpnVpncAdvanced, NM_SETTING_VPN_VPNC_KEY_PERFECT_FORWARD)
-	keys = appendAvailableKeys(keys, fieldVpnVpncAdvanced, NM_SETTING_VPN_VPNC_KEY_LOCAL_PORT)
-	keys = appendAvailableKeys(keys, fieldVpnVpncAdvanced, NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT)
+	keys = appendAvailableKeys(data, keys, fieldVpnVpncAdvanced, NM_SETTING_VPN_VPNC_KEY_DOMAIN)
+	keys = appendAvailableKeys(data, keys, fieldVpnVpncAdvanced, NM_SETTING_VPN_VPNC_KEY_VENDOR)
+	keys = appendAvailableKeys(data, keys, fieldVpnVpncAdvanced, NM_SETTING_VPN_VPNC_KEY_APP_VERSION)
+	keys = appendAvailableKeys(data, keys, fieldVpnVpncAdvanced, NM_SETTING_VPN_VPNC_KEY_SINGLE_DES)
+	keys = appendAvailableKeys(data, keys, fieldVpnVpncAdvanced, NM_SETTING_VPN_VPNC_KEY_NAT_TRAVERSAL_MODE)
+	keys = appendAvailableKeys(data, keys, fieldVpnVpncAdvanced, NM_SETTING_VPN_VPNC_KEY_DHGROUP)
+	keys = appendAvailableKeys(data, keys, fieldVpnVpncAdvanced, NM_SETTING_VPN_VPNC_KEY_PERFECT_FORWARD)
+	keys = appendAvailableKeys(data, keys, fieldVpnVpncAdvanced, NM_SETTING_VPN_VPNC_KEY_LOCAL_PORT)
+	keys = appendAvailableKeys(data, keys, fieldVpnVpncAdvanced, NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT)
 	return
 }
 func getSettingVpnVpncAdvancedAvailableValues(data connectionData, key string) (values []kvalue) {

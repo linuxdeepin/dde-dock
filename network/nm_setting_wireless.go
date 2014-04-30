@@ -148,25 +148,19 @@ func newWirelessConnectionData(id, uuid string, ssid []byte, secType apSecType) 
 
 // Get available keys
 func getSettingWirelessAvailableKeys(data connectionData) (keys []string) {
-	keys = appendAvailableKeys(keys, fieldWireless, NM_SETTING_WIRELESS_SSID)
-	keys = appendAvailableKeys(keys, fieldWireless, NM_SETTING_WIRELESS_MODE)
+	keys = appendAvailableKeys(data, keys, fieldWireless, NM_SETTING_WIRELESS_SSID)
+	keys = appendAvailableKeys(data, keys, fieldWireless, NM_SETTING_WIRELESS_MODE)
 	switch getSettingWirelessMode(data) {
 	case NM_SETTING_WIRELESS_MODE_INFRA:
 	case NM_SETTING_WIRELESS_MODE_ADHOC:
-		keys = appendAvailableKeys(keys, fieldWireless, NM_SETTING_WIRELESS_BAND)
-		keys = appendAvailableKeys(keys, fieldWireless, NM_SETTING_WIRELESS_CHANNEL)
-		if isSettingWirelessChannelExists(data) {
-			keys = append(keys, NM_SETTING_WIRELESS_CHANNEL)
-		}
+		keys = appendAvailableKeys(data, keys, fieldWireless, NM_SETTING_WIRELESS_BAND)
+		keys = appendAvailableKeys(data, keys, fieldWireless, NM_SETTING_WIRELESS_CHANNEL)
 	case NM_SETTING_WIRELESS_MODE_AP:
 		// TODO
 	}
-	keys = appendAvailableKeys(keys, fieldWireless, NM_SETTING_WIRELESS_MAC_ADDRESS)
-	keys = appendAvailableKeys(keys, fieldWireless, NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS)
-	keys = appendAvailableKeys(keys, fieldWireless, NM_SETTING_WIRELESS_MTU)
-	if isSettingWirelessMtuExists(data) {
-		keys = append(keys, NM_SETTING_WIRELESS_MTU)
-	}
+	keys = appendAvailableKeys(data, keys, fieldWireless, NM_SETTING_WIRELESS_MAC_ADDRESS)
+	keys = appendAvailableKeys(data, keys, fieldWireless, NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS)
+	keys = appendAvailableKeys(data, keys, fieldWireless, NM_SETTING_WIRELESS_MTU)
 	return
 }
 

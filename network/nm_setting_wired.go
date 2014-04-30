@@ -98,9 +98,9 @@ func newWiredConnectionData(id, uuid string) (data connectionData) {
 
 // Get available keys
 func getSettingWiredAvailableKeys(data connectionData) (keys []string) {
-	keys = appendAvailableKeys(keys, fieldWired, NM_SETTING_WIRED_MAC_ADDRESS)
-	keys = appendAvailableKeys(keys, fieldWired, NM_SETTING_WIRED_CLONED_MAC_ADDRESS)
-	keys = appendAvailableKeys(keys, fieldWired, NM_SETTING_WIRED_MTU)
+	keys = appendAvailableKeys(data, keys, fieldWired, NM_SETTING_WIRED_MAC_ADDRESS)
+	keys = appendAvailableKeys(data, keys, fieldWired, NM_SETTING_WIRED_CLONED_MAC_ADDRESS)
+	keys = appendAvailableKeys(data, keys, fieldWired, NM_SETTING_WIRED_MTU)
 	if isSettingWiredMtuExists(data) {
 		keys = append(keys, NM_SETTING_WIRED_MTU)
 	}

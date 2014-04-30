@@ -85,17 +85,17 @@ const (
 
 // Get available keys
 func getSettingConnectionAvailableKeys(data connectionData) (keys []string) {
-	keys = appendAvailableKeys(keys, fieldConnection, NM_SETTING_CONNECTION_ID)
-	keys = appendAvailableKeys(keys, fieldConnection, NM_SETTING_CONNECTION_PERMISSIONS)
+	keys = appendAvailableKeys(data, keys, fieldConnection, NM_SETTING_CONNECTION_ID)
+	keys = appendAvailableKeys(data, keys, fieldConnection, NM_SETTING_CONNECTION_PERMISSIONS)
 
 	// auto-connect only available for target connection types
 	switch getSettingConnectionType(data) {
 	case typeWired:
-		keys = appendAvailableKeys(keys, fieldConnection, NM_SETTING_CONNECTION_AUTOCONNECT)
+		keys = appendAvailableKeys(data, keys, fieldConnection, NM_SETTING_CONNECTION_AUTOCONNECT)
 	case typeWireless:
-		keys = appendAvailableKeys(keys, fieldConnection, NM_SETTING_CONNECTION_AUTOCONNECT)
+		keys = appendAvailableKeys(data, keys, fieldConnection, NM_SETTING_CONNECTION_AUTOCONNECT)
 	case typePppoe:
-		keys = appendAvailableKeys(keys, fieldConnection, NM_SETTING_CONNECTION_AUTOCONNECT)
+		keys = appendAvailableKeys(data, keys, fieldConnection, NM_SETTING_CONNECTION_AUTOCONNECT)
 	case typeVpn:
 	}
 	return

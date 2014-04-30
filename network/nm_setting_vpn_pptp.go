@@ -67,10 +67,10 @@ func newVpnPptpConnectionData(id, uuid string) (data connectionData) {
 
 // vpn-pptp
 func getSettingVpnPptpAvailableKeys(data connectionData) (keys []string) {
-	keys = appendAvailableKeys(keys, fieldVpnPptp, NM_SETTING_VPN_PPTP_KEY_GATEWAY)
-	keys = appendAvailableKeys(keys, fieldVpnPptp, NM_SETTING_VPN_PPTP_KEY_USER)
-	keys = appendAvailableKeys(keys, fieldVpnPptp, NM_SETTING_VPN_PPTP_KEY_PASSWORD)
-	keys = appendAvailableKeys(keys, fieldVpnPptp, NM_SETTING_VPN_PPTP_KEY_DOMAIN)
+	keys = appendAvailableKeys(data, keys, fieldVpnPptp, NM_SETTING_VPN_PPTP_KEY_GATEWAY)
+	keys = appendAvailableKeys(data, keys, fieldVpnPptp, NM_SETTING_VPN_PPTP_KEY_USER)
+	keys = appendAvailableKeys(data, keys, fieldVpnPptp, NM_SETTING_VPN_PPTP_KEY_PASSWORD)
+	keys = appendAvailableKeys(data, keys, fieldVpnPptp, NM_SETTING_VPN_PPTP_KEY_DOMAIN)
 	return
 }
 func getSettingVpnPptpAvailableValues(data connectionData, key string) (values []kvalue) {
@@ -84,21 +84,21 @@ func checkSettingVpnPptpValues(data connectionData) (errs fieldErrors) {
 
 // vpn-pptp-ppp
 func getSettingVpnPptpPppAvailableKeys(data connectionData) (keys []string) {
-	keys = appendAvailableKeys(keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_REFUSE_EAP)
-	keys = appendAvailableKeys(keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_REFUSE_PAP)
-	keys = appendAvailableKeys(keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_REFUSE_CHAP)
-	keys = appendAvailableKeys(keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_REFUSE_MSCHAP)
-	keys = appendAvailableKeys(keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_REFUSE_MSCHAPV2)
-	keys = appendAvailableKeys(keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE)
+	keys = appendAvailableKeys(data, keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_REFUSE_EAP)
+	keys = appendAvailableKeys(data, keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_REFUSE_PAP)
+	keys = appendAvailableKeys(data, keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_REFUSE_CHAP)
+	keys = appendAvailableKeys(data, keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_REFUSE_MSCHAP)
+	keys = appendAvailableKeys(data, keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_REFUSE_MSCHAPV2)
+	keys = appendAvailableKeys(data, keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE)
 	if getSettingVpnPptpKeyRequireMppe(data) {
-		keys = appendAvailableKeys(keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40)
-		keys = appendAvailableKeys(keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128)
-		keys = appendAvailableKeys(keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_MPPE_STATEFUL)
+		keys = appendAvailableKeys(data, keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40)
+		keys = appendAvailableKeys(data, keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128)
+		keys = appendAvailableKeys(data, keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_MPPE_STATEFUL)
 	}
-	keys = appendAvailableKeys(keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_NOBSDCOMP)
-	keys = appendAvailableKeys(keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_NODEFLATE)
-	keys = appendAvailableKeys(keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_NO_VJ_COMP)
-	keys = appendAvailableKeys(keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_LCP_ECHO_FAILURE)
+	keys = appendAvailableKeys(data, keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_NOBSDCOMP)
+	keys = appendAvailableKeys(data, keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_NODEFLATE)
+	keys = appendAvailableKeys(data, keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_NO_VJ_COMP)
+	keys = appendAvailableKeys(data, keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_LCP_ECHO_FAILURE)
 	return
 }
 func getSettingVpnPptpPppAvailableValues(data connectionData, key string) (values []kvalue) {

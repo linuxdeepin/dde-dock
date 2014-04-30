@@ -68,40 +68,40 @@ func getSetting8021xAvailableKeys(data connectionData) (keys []string) {
 			return
 		}
 	}
-	keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_EAP)
+	keys = appendAvailableKeys(data, keys, field8021x, NM_SETTING_802_1X_EAP)
 	switch getSettingVk8021xEap(data) {
 	case "tls":
-		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_IDENTITY)
-		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_CLIENT_CERT)
-		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_CA_CERT)
-		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_PRIVATE_KEY)
-		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD)
+		keys = appendAvailableKeys(data, keys, field8021x, NM_SETTING_802_1X_IDENTITY)
+		keys = appendAvailableKeys(data, keys, field8021x, NM_SETTING_802_1X_CLIENT_CERT)
+		keys = appendAvailableKeys(data, keys, field8021x, NM_SETTING_802_1X_CA_CERT)
+		keys = appendAvailableKeys(data, keys, field8021x, NM_SETTING_802_1X_PRIVATE_KEY)
+		keys = appendAvailableKeys(data, keys, field8021x, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD)
 	case "md5":
-		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_IDENTITY)
-		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_PASSWORD)
+		keys = appendAvailableKeys(data, keys, field8021x, NM_SETTING_802_1X_IDENTITY)
+		keys = appendAvailableKeys(data, keys, field8021x, NM_SETTING_802_1X_PASSWORD)
 	case "leap":
-		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_IDENTITY)
-		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_PASSWORD)
+		keys = appendAvailableKeys(data, keys, field8021x, NM_SETTING_802_1X_IDENTITY)
+		keys = appendAvailableKeys(data, keys, field8021x, NM_SETTING_802_1X_PASSWORD)
 	case "fast":
-		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_ANONYMOUS_IDENTITY)
-		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING)
-		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_PAC_FILE)
-		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_PHASE2_AUTH)
-		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_IDENTITY)
-		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_PASSWORD)
+		keys = appendAvailableKeys(data, keys, field8021x, NM_SETTING_802_1X_ANONYMOUS_IDENTITY)
+		keys = appendAvailableKeys(data, keys, field8021x, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING)
+		keys = appendAvailableKeys(data, keys, field8021x, NM_SETTING_802_1X_PAC_FILE)
+		keys = appendAvailableKeys(data, keys, field8021x, NM_SETTING_802_1X_PHASE2_AUTH)
+		keys = appendAvailableKeys(data, keys, field8021x, NM_SETTING_802_1X_IDENTITY)
+		keys = appendAvailableKeys(data, keys, field8021x, NM_SETTING_802_1X_PASSWORD)
 	case "ttls":
-		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_ANONYMOUS_IDENTITY)
-		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_CA_CERT)
-		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_PHASE2_AUTH)
-		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_IDENTITY)
-		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_PASSWORD)
+		keys = appendAvailableKeys(data, keys, field8021x, NM_SETTING_802_1X_ANONYMOUS_IDENTITY)
+		keys = appendAvailableKeys(data, keys, field8021x, NM_SETTING_802_1X_CA_CERT)
+		keys = appendAvailableKeys(data, keys, field8021x, NM_SETTING_802_1X_PHASE2_AUTH)
+		keys = appendAvailableKeys(data, keys, field8021x, NM_SETTING_802_1X_IDENTITY)
+		keys = appendAvailableKeys(data, keys, field8021x, NM_SETTING_802_1X_PASSWORD)
 	case "peap":
-		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_ANONYMOUS_IDENTITY)
-		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_CA_CERT)
-		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_PHASE1_PEAPVER)
-		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_PHASE2_AUTH)
-		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_IDENTITY)
-		keys = appendAvailableKeys(keys, field8021x, NM_SETTING_802_1X_PASSWORD)
+		keys = appendAvailableKeys(data, keys, field8021x, NM_SETTING_802_1X_ANONYMOUS_IDENTITY)
+		keys = appendAvailableKeys(data, keys, field8021x, NM_SETTING_802_1X_CA_CERT)
+		keys = appendAvailableKeys(data, keys, field8021x, NM_SETTING_802_1X_PHASE1_PEAPVER)
+		keys = appendAvailableKeys(data, keys, field8021x, NM_SETTING_802_1X_PHASE2_AUTH)
+		keys = appendAvailableKeys(data, keys, field8021x, NM_SETTING_802_1X_IDENTITY)
+		keys = appendAvailableKeys(data, keys, field8021x, NM_SETTING_802_1X_PASSWORD)
 	}
 	return
 }

@@ -135,15 +135,15 @@ func getSettingWirelessSecurityAvailableKeys(data connectionData) (keys []string
 	default:
 		logger.Error("invalid value", vkKeyMgmt)
 	case "none":
-		keys = appendAvailableKeys(keys, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT)
+		keys = appendAvailableKeys(data, keys, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT)
 	case "wep":
-		keys = appendAvailableKeys(keys, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT)
-		keys = appendAvailableKeys(keys, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_WEP_KEY0)
+		keys = appendAvailableKeys(data, keys, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT)
+		keys = appendAvailableKeys(data, keys, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_WEP_KEY0)
 	case "wpa-psk":
-		keys = appendAvailableKeys(keys, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT)
-		keys = appendAvailableKeys(keys, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_PSK)
+		keys = appendAvailableKeys(data, keys, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT)
+		keys = appendAvailableKeys(data, keys, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_PSK)
 	case "wpa-eap":
-		keys = appendAvailableKeys(keys, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT)
+		keys = appendAvailableKeys(data, keys, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT)
 	}
 	return
 }

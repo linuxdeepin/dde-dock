@@ -172,13 +172,22 @@ func generalGetSettingVkAvailableValues(data connectionData, field, key string) 
 	return
 }
 
-func appendAvailableKeys(keys []string, field, key string) (appendKeys []string) {
-	// TODO auto check enable wrapper virtual keys
+func appendAvailableKeys(data connectionData, keys []string, field, key string) (newKeys []string) {
+	newKeys = appendStrArrayUnion(keys)
 	relatedVks := getRelatedAvailableVirtualKeys(field, key)
 	if len(relatedVks) > 0 {
-		appendKeys = appendStrArrayUnion(keys, relatedVks...)
+		for _, vk := range relatedVks {
+			// if is enable wrapper virtual key, both virtual key and
+			// real key will be appended
+			if isEnableWrapperVirtualKey(field, vk) {
+				if isSettingKeyExists(data, field, key) {
+					newKeys = appendStrArrayUnion(newKeys, key)
+				}
+			}
+		}
+		newKeys = appendStrArrayUnion(newKeys, relatedVks...)
 	} else {
-		appendKeys = appendStrArrayUnion(keys, key)
+		newKeys = appendStrArrayUnion(newKeys, key)
 	}
 	return
 }

@@ -66,14 +66,14 @@ func newVpnOpenconnectConnectionData(id, uuid string) (data connectionData) {
 }
 
 func getSettingVpnOpenconnectAvailableKeys(data connectionData) (keys []string) {
-	keys = appendAvailableKeys(keys, fieldVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_GATEWAY)
-	keys = appendAvailableKeys(keys, fieldVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_CACERT)
-	keys = appendAvailableKeys(keys, fieldVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_PROXY)
-	keys = appendAvailableKeys(keys, fieldVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_CSD_ENABLE)
-	keys = appendAvailableKeys(keys, fieldVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_CSD_WRAPPER)
-	keys = appendAvailableKeys(keys, fieldVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_USERCERT)
-	keys = appendAvailableKeys(keys, fieldVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_PRIVKEY)
-	keys = appendAvailableKeys(keys, fieldVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_PEM_PASSPHRASE_FSID)
+	keys = appendAvailableKeys(data, keys, fieldVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_GATEWAY)
+	keys = appendAvailableKeys(data, keys, fieldVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_CACERT)
+	keys = appendAvailableKeys(data, keys, fieldVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_PROXY)
+	keys = appendAvailableKeys(data, keys, fieldVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_CSD_ENABLE)
+	keys = appendAvailableKeys(data, keys, fieldVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_CSD_WRAPPER)
+	keys = appendAvailableKeys(data, keys, fieldVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_USERCERT)
+	keys = appendAvailableKeys(data, keys, fieldVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_PRIVKEY)
+	keys = appendAvailableKeys(data, keys, fieldVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_PEM_PASSPHRASE_FSID)
 	return
 }
 func getSettingVpnOpenconnectAvailableValues(data connectionData, key string) (values []kvalue) {

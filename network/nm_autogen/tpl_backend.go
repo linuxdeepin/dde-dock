@@ -277,6 +277,8 @@ var virtualKeys = []virtualKey{ {{range .}}
 	virtualKey{ Name:{{.Name}}, Type:{{.Type}}, RelatedField:{{.RelatedField}}, RelatedKey:{{.RelatedKey}}, EnableWrapper:{{.EnableWrapper}}, Available:{{.UsedByFrontEnd}}, Optional:{{.Optional}} },{{end}}
 }
 
+
+
 // Get JSON value generally
 func generalGetVirtualKeyJSON(data connectionData, field, key string) (valueJSON string) {
 	switch field { {{range $i, $field := GetAllVkFields $vks}}

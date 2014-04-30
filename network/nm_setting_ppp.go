@@ -25,23 +25,23 @@ const (
 
 // TODO Get available keys
 func getSettingPppAvailableKeys(data connectionData) (keys []string) {
-	keys = appendAvailableKeys(keys, fieldPpp, NM_SETTING_PPP_REFUSE_EAP)
-	keys = appendAvailableKeys(keys, fieldPpp, NM_SETTING_PPP_REFUSE_PAP)
-	keys = appendAvailableKeys(keys, fieldPpp, NM_SETTING_PPP_REFUSE_CHAP)
-	keys = appendAvailableKeys(keys, fieldPpp, NM_SETTING_PPP_REFUSE_MSCHAP)
-	keys = appendAvailableKeys(keys, fieldPpp, NM_SETTING_PPP_REFUSE_MSCHAPV2)
+	keys = appendAvailableKeys(data, keys, fieldPpp, NM_SETTING_PPP_REFUSE_EAP)
+	keys = appendAvailableKeys(data, keys, fieldPpp, NM_SETTING_PPP_REFUSE_PAP)
+	keys = appendAvailableKeys(data, keys, fieldPpp, NM_SETTING_PPP_REFUSE_CHAP)
+	keys = appendAvailableKeys(data, keys, fieldPpp, NM_SETTING_PPP_REFUSE_MSCHAP)
+	keys = appendAvailableKeys(data, keys, fieldPpp, NM_SETTING_PPP_REFUSE_MSCHAPV2)
 
-	keys = appendAvailableKeys(keys, fieldPpp, NM_SETTING_PPP_REQUIRE_MPPE)
+	keys = appendAvailableKeys(data, keys, fieldPpp, NM_SETTING_PPP_REQUIRE_MPPE)
 	if getSettingPppRequireMppe(data) {
-		keys = appendAvailableKeys(keys, fieldPpp, NM_SETTING_PPP_REQUIRE_MPPE_128)
-		keys = appendAvailableKeys(keys, fieldPpp, NM_SETTING_PPP_MPPE_STATEFUL)
+		keys = appendAvailableKeys(data, keys, fieldPpp, NM_SETTING_PPP_REQUIRE_MPPE_128)
+		keys = appendAvailableKeys(data, keys, fieldPpp, NM_SETTING_PPP_MPPE_STATEFUL)
 	}
 
-	keys = appendAvailableKeys(keys, fieldPpp, NM_SETTING_PPP_NOBSDCOMP)
-	keys = appendAvailableKeys(keys, fieldPpp, NM_SETTING_PPP_NODEFLATE)
-	keys = appendAvailableKeys(keys, fieldPpp, NM_SETTING_PPP_NO_VJ_COMP)
+	keys = appendAvailableKeys(data, keys, fieldPpp, NM_SETTING_PPP_NOBSDCOMP)
+	keys = appendAvailableKeys(data, keys, fieldPpp, NM_SETTING_PPP_NODEFLATE)
+	keys = appendAvailableKeys(data, keys, fieldPpp, NM_SETTING_PPP_NO_VJ_COMP)
 
-	keys = appendAvailableKeys(keys, fieldPpp, NM_SETTING_PPP_LCP_ECHO_FAILURE)
+	keys = appendAvailableKeys(data, keys, fieldPpp, NM_SETTING_PPP_LCP_ECHO_FAILURE)
 	return
 }
 

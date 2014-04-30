@@ -37,9 +37,9 @@ func newPppoeConnectionData(id, uuid string) (data connectionData) {
 
 // Get available keys
 func getSettingPppoeAvailableKeys(data connectionData) (keys []string) {
-	keys = appendAvailableKeys(keys, fieldPppoe, NM_SETTING_PPPOE_SERVICE)
-	keys = appendAvailableKeys(keys, fieldPppoe, NM_SETTING_PPPOE_USERNAME)
-	keys = appendAvailableKeys(keys, fieldPppoe, NM_SETTING_PPPOE_PASSWORD)
+	keys = appendAvailableKeys(data, keys, fieldPppoe, NM_SETTING_PPPOE_SERVICE)
+	keys = appendAvailableKeys(data, keys, fieldPppoe, NM_SETTING_PPPOE_USERNAME)
+	keys = appendAvailableKeys(data, keys, fieldPppoe, NM_SETTING_PPPOE_PASSWORD)
 	return
 }
 
