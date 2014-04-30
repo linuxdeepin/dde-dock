@@ -1,5 +1,9 @@
 package main
 
+import (
+	"dlib"
+)
+
 const (
 	NM_DBUS_SERVICE_PPTP   = "org.freedesktop.NetworkManager.pptp"
 	NM_DBUS_INTERFACE_PPTP = "org.freedesktop.NetworkManager.pptp"
@@ -59,9 +63,32 @@ const (
 // 	{ NULL,                          G_TYPE_NONE,   FALSE }
 // };
 
+// Define secret flags
+const (
+	NM_PPTP_SECRET_FLAG_NONE         = 0
+	NM_PPTP_SECRET_FLAG_AGENT_OWNED  = 1
+	NM_PPTP_SECRET_FLAG_NOT_SAVED    = 3
+	NM_PPTP_SECRET_FLAG_NOT_REQUIRED = 5
+)
+
+var availableValuesNMPptpSecretFlag = []kvalue{
+	kvalue{NM_PPTP_SECRET_FLAG_NONE, dlib.Tr("Saved")}, // system saved
+	kvalue{NM_PPTP_SECRET_FLAG_NOT_SAVED, dlib.Tr("Always Ask")},
+	kvalue{NM_PPTP_SECRET_FLAG_NOT_REQUIRED, dlib.Tr("Not Required")},
+}
+
+func isVpnPptpNeedShowPassword(data connectionData) bool {
+	flag := getSettingVpnPptpKeyPasswordFlags(data)
+	if flag == NM_PPTP_SECRET_FLAG_NONE || flag == NM_PPTP_SECRET_FLAG_AGENT_OWNED {
+		return true
+	}
+	return false
+}
+
+// new connection data
 func newVpnPptpConnectionData(id, uuid string) (data connectionData) {
 	data = newBasicVpnConnectionData(id, uuid, NM_DBUS_SERVICE_PPTP)
-	setSettingVpnPptpKeyPasswordFlags(data, 1)
+	setSettingVpnPptpKeyPasswordFlags(data, NM_PPTP_SECRET_FLAG_NONE)
 	return
 }
 
@@ -69,11 +96,18 @@ func newVpnPptpConnectionData(id, uuid string) (data connectionData) {
 func getSettingVpnPptpAvailableKeys(data connectionData) (keys []string) {
 	keys = appendAvailableKeys(data, keys, fieldVpnPptp, NM_SETTING_VPN_PPTP_KEY_GATEWAY)
 	keys = appendAvailableKeys(data, keys, fieldVpnPptp, NM_SETTING_VPN_PPTP_KEY_USER)
-	keys = appendAvailableKeys(data, keys, fieldVpnPptp, NM_SETTING_VPN_PPTP_KEY_PASSWORD)
+	keys = appendAvailableKeys(data, keys, fieldVpnPptp, NM_SETTING_VPN_PPTP_KEY_PASSWORD_FLAGS)
+	if isVpnPptpNeedShowPassword(data) {
+		keys = appendAvailableKeys(data, keys, fieldVpnPptp, NM_SETTING_VPN_PPTP_KEY_PASSWORD)
+	}
 	keys = appendAvailableKeys(data, keys, fieldVpnPptp, NM_SETTING_VPN_PPTP_KEY_DOMAIN)
 	return
 }
 func getSettingVpnPptpAvailableValues(data connectionData, key string) (values []kvalue) {
+	switch key {
+	case NM_SETTING_VPN_PPTP_KEY_PASSWORD_FLAGS:
+		values = availableValuesNMPptpSecretFlag
+	}
 	return
 }
 func checkSettingVpnPptpValues(data connectionData) (errs fieldErrors) {
@@ -106,7 +140,6 @@ func getSettingVpnPptpPppAvailableValues(data connectionData, key string) (value
 }
 func checkSettingVpnPptpPppValues(data connectionData) (errs fieldErrors) {
 	errs = make(map[string]string)
-	// TODO
 	return
 }
 func logicSetSettingVpnPptpKeyRequireMppe(data connectionData, value bool) (err error) {

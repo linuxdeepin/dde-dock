@@ -30,14 +30,14 @@ func getSetting8021xKeyType(key string) (t ktype) {
 		t = ktypeWrapperString
 	case NM_SETTING_802_1X_IDENTITY:
 		t = ktypeString
-	case NM_SETTING_802_1X_PASSWORD:
-		t = ktypeString
 	case NM_SETTING_802_1X_PASSWORD_FLAGS:
 		t = ktypeUint32
-	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD:
+	case NM_SETTING_802_1X_PASSWORD:
 		t = ktypeString
 	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS:
 		t = ktypeUint32
+	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD:
+		t = ktypeString
 	case NM_SETTING_802_1X_CA_PATH:
 		t = ktypeString
 	case NM_SETTING_802_1X_SUBJECT_MATCH:
@@ -101,13 +101,13 @@ func isKeyInSetting8021x(key string) bool {
 		return true
 	case NM_SETTING_802_1X_IDENTITY:
 		return true
-	case NM_SETTING_802_1X_PASSWORD:
-		return true
 	case NM_SETTING_802_1X_PASSWORD_FLAGS:
 		return true
-	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD:
+	case NM_SETTING_802_1X_PASSWORD:
 		return true
 	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS:
+		return true
+	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD:
 		return true
 	case NM_SETTING_802_1X_CA_PATH:
 		return true
@@ -174,14 +174,14 @@ func getSetting8021xKeyDefaultValueJSON(key string) (valueJSON string) {
 		valueJSON = `""`
 	case NM_SETTING_802_1X_IDENTITY:
 		valueJSON = `""`
-	case NM_SETTING_802_1X_PASSWORD:
-		valueJSON = `""`
 	case NM_SETTING_802_1X_PASSWORD_FLAGS:
 		valueJSON = `0`
-	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD:
+	case NM_SETTING_802_1X_PASSWORD:
 		valueJSON = `""`
 	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS:
 		valueJSON = `0`
+	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD:
+		valueJSON = `""`
 	case NM_SETTING_802_1X_CA_PATH:
 		valueJSON = `""`
 	case NM_SETTING_802_1X_SUBJECT_MATCH:
@@ -247,14 +247,14 @@ func generalGetSetting8021xKeyJSON(data connectionData, key string) (value strin
 		value = getSetting8021xPrivateKeyJSON(data)
 	case NM_SETTING_802_1X_IDENTITY:
 		value = getSetting8021xIdentityJSON(data)
-	case NM_SETTING_802_1X_PASSWORD:
-		value = getSetting8021xPasswordJSON(data)
 	case NM_SETTING_802_1X_PASSWORD_FLAGS:
 		value = getSetting8021xPasswordFlagsJSON(data)
-	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD:
-		value = getSetting8021xPrivateKeyPasswordJSON(data)
+	case NM_SETTING_802_1X_PASSWORD:
+		value = getSetting8021xPasswordJSON(data)
 	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS:
 		value = getSetting8021xPrivateKeyPasswordFlagsJSON(data)
+	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD:
+		value = getSetting8021xPrivateKeyPasswordJSON(data)
 	case NM_SETTING_802_1X_CA_PATH:
 		value = getSetting8021xCaPathJSON(data)
 	case NM_SETTING_802_1X_SUBJECT_MATCH:
@@ -320,14 +320,14 @@ func generalSetSetting8021xKeyJSON(data connectionData, key, valueJSON string) (
 		err = setSetting8021xPrivateKeyJSON(data, valueJSON)
 	case NM_SETTING_802_1X_IDENTITY:
 		err = setSetting8021xIdentityJSON(data, valueJSON)
-	case NM_SETTING_802_1X_PASSWORD:
-		err = setSetting8021xPasswordJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PASSWORD_FLAGS:
 		err = setSetting8021xPasswordFlagsJSON(data, valueJSON)
-	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD:
-		err = setSetting8021xPrivateKeyPasswordJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PASSWORD:
+		err = setSetting8021xPasswordJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS:
 		err = setSetting8021xPrivateKeyPasswordFlagsJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD:
+		err = setSetting8021xPrivateKeyPasswordJSON(data, valueJSON)
 	case NM_SETTING_802_1X_CA_PATH:
 		err = setSetting8021xCaPathJSON(data, valueJSON)
 	case NM_SETTING_802_1X_SUBJECT_MATCH:
@@ -399,17 +399,17 @@ func isSetting8021xPrivateKeyExists(data connectionData) bool {
 func isSetting8021xIdentityExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY)
 }
-func isSetting8021xPasswordExists(data connectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD)
-}
 func isSetting8021xPasswordFlagsExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_FLAGS)
 }
-func isSetting8021xPrivateKeyPasswordExists(data connectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD)
+func isSetting8021xPasswordExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD)
 }
 func isSetting8021xPrivateKeyPasswordFlagsExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS)
+}
+func isSetting8021xPrivateKeyPasswordExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD)
 }
 func isSetting8021xCaPathExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_PATH)
@@ -566,6 +566,11 @@ func ensureSetting8021xIdentityNoEmpty(data connectionData, errs fieldErrors) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
+func ensureSetting8021xPasswordFlagsNoEmpty(data connectionData, errs fieldErrors) {
+	if !isSetting8021xPasswordFlagsExists(data) {
+		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
+	}
+}
 func ensureSetting8021xPasswordNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSetting8021xPasswordExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD, NM_KEY_ERROR_MISSING_VALUE)
@@ -575,9 +580,9 @@ func ensureSetting8021xPasswordNoEmpty(data connectionData, errs fieldErrors) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSetting8021xPasswordFlagsNoEmpty(data connectionData, errs fieldErrors) {
-	if !isSetting8021xPasswordFlagsExists(data) {
-		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
+func ensureSetting8021xPrivateKeyPasswordFlagsNoEmpty(data connectionData, errs fieldErrors) {
+	if !isSetting8021xPrivateKeyPasswordFlagsExists(data) {
+		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
 func ensureSetting8021xPrivateKeyPasswordNoEmpty(data connectionData, errs fieldErrors) {
@@ -587,11 +592,6 @@ func ensureSetting8021xPrivateKeyPasswordNoEmpty(data connectionData, errs field
 	value := getSetting8021xPrivateKeyPassword(data)
 	if len(value) == 0 {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD, NM_KEY_ERROR_EMPTY_VALUE)
-	}
-}
-func ensureSetting8021xPrivateKeyPasswordFlagsNoEmpty(data connectionData, errs fieldErrors) {
-	if !isSetting8021xPrivateKeyPasswordFlagsExists(data) {
-		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
 func ensureSetting8021xCaPathNoEmpty(data connectionData, errs fieldErrors) {
@@ -782,20 +782,20 @@ func getSetting8021xIdentity(data connectionData) (value string) {
 	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY).(string)
 	return
 }
-func getSetting8021xPassword(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD).(string)
-	return
-}
 func getSetting8021xPasswordFlags(data connectionData) (value uint32) {
 	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_FLAGS).(uint32)
 	return
 }
-func getSetting8021xPrivateKeyPassword(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD).(string)
+func getSetting8021xPassword(data connectionData) (value string) {
+	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD).(string)
 	return
 }
 func getSetting8021xPrivateKeyPasswordFlags(data connectionData) (value uint32) {
 	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS).(uint32)
+	return
+}
+func getSetting8021xPrivateKeyPassword(data connectionData) (value string) {
+	value, _ = getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD).(string)
 	return
 }
 func getSetting8021xCaPath(data connectionData) (value string) {
@@ -902,17 +902,17 @@ func setSetting8021xPrivateKey(data connectionData, value []byte) {
 func setSetting8021xIdentity(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY, value)
 }
-func setSetting8021xPassword(data connectionData, value string) {
-	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD, value)
-}
 func setSetting8021xPasswordFlags(data connectionData, value uint32) {
 	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_FLAGS, value)
 }
-func setSetting8021xPrivateKeyPassword(data connectionData, value string) {
-	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD, value)
+func setSetting8021xPassword(data connectionData, value string) {
+	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD, value)
 }
 func setSetting8021xPrivateKeyPasswordFlags(data connectionData, value uint32) {
 	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS, value)
+}
+func setSetting8021xPrivateKeyPassword(data connectionData, value string) {
+	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD, value)
 }
 func setSetting8021xCaPath(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_PATH, value)
@@ -1010,20 +1010,20 @@ func getSetting8021xIdentityJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY, getSetting8021xKeyType(NM_SETTING_802_1X_IDENTITY))
 	return
 }
-func getSetting8021xPasswordJSON(data connectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD))
-	return
-}
 func getSetting8021xPasswordFlagsJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_FLAGS, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD_FLAGS))
 	return
 }
-func getSetting8021xPrivateKeyPasswordJSON(data connectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD))
+func getSetting8021xPasswordJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD))
 	return
 }
 func getSetting8021xPrivateKeyPasswordFlagsJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS))
+	return
+}
+func getSetting8021xPrivateKeyPasswordJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD))
 	return
 }
 func getSetting8021xCaPathJSON(data connectionData) (valueJSON string) {
@@ -1130,17 +1130,17 @@ func setSetting8021xPrivateKeyJSON(data connectionData, valueJSON string) (err e
 func setSetting8021xIdentityJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_IDENTITY))
 }
-func setSetting8021xPasswordJSON(data connectionData, valueJSON string) (err error) {
-	return setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD))
-}
 func setSetting8021xPasswordFlagsJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_FLAGS, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD_FLAGS))
 }
-func setSetting8021xPrivateKeyPasswordJSON(data connectionData, valueJSON string) (err error) {
-	return setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD))
+func setSetting8021xPasswordJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PASSWORD))
 }
 func setSetting8021xPrivateKeyPasswordFlagsJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS))
+}
+func setSetting8021xPrivateKeyPasswordJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD))
 }
 func setSetting8021xCaPathJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_PATH, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_CA_PATH))
@@ -1241,17 +1241,17 @@ func removeSetting8021xPrivateKey(data connectionData) {
 func removeSetting8021xIdentity(data connectionData) {
 	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY)
 }
-func removeSetting8021xPassword(data connectionData) {
-	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD)
-}
 func removeSetting8021xPasswordFlags(data connectionData) {
 	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_FLAGS)
 }
-func removeSetting8021xPrivateKeyPassword(data connectionData) {
-	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD)
+func removeSetting8021xPassword(data connectionData) {
+	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD)
 }
 func removeSetting8021xPrivateKeyPasswordFlags(data connectionData) {
 	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS)
+}
+func removeSetting8021xPrivateKeyPassword(data connectionData) {
+	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD)
 }
 func removeSetting8021xCaPath(data connectionData) {
 	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_PATH)

@@ -36,11 +36,6 @@ const (
 )
 
 const (
-	NM_VPNC_SECRET_FLAG_SAVE   = 1
-	NM_VPNC_SECRET_FLAG_ASK    = 3
-	NM_VPNC_SECRET_FLAG_UNUSED = 5
-)
-const (
 	NM_VPNC_NATT_MODE_NATT        = "natt"
 	NM_VPNC_NATT_MODE_NONE        = "none"
 	NM_VPNC_NATT_MODE_NATT_ALWAYS = "force-natt"
@@ -109,24 +104,47 @@ const (
 // 	{ NULL,                              ITEM_TYPE_UNKNOWN, 0, 0 }
 // };
 
-// Initialize available values
+// Define secret flags
+const (
+	NM_VPNC_SECRET_FLAG_NONE   = 0
+	NM_VPNC_SECRET_FLAG_SAVE   = 1
+	NM_VPNC_SECRET_FLAG_ASK    = 3
+	NM_VPNC_SECRET_FLAG_UNUSED = 5
+)
+
 var availableValuesNMVpncSecretFlag = []kvalue{
-	kvalue{NM_VPNC_SECRET_FLAG_SAVE, dlib.Tr("Saved")},
+	kvalue{NM_VPNC_SECRET_FLAG_NONE, dlib.Tr("Saved")},
+	// kvalue{NM_VPNC_SECRET_FLAG_SAVE, dlib.Tr("Saved")},
 	kvalue{NM_VPNC_SECRET_FLAG_ASK, dlib.Tr("Always Ask")},
 	kvalue{NM_VPNC_SECRET_FLAG_UNUSED, dlib.Tr("Not Required")},
 }
 
+func isVpnVpncNeedShowSecret(data connectionData) bool {
+	flag := getSettingVpnVpncKeySecretFlags(data)
+	if flag == NM_VPNC_SECRET_FLAG_NONE || flag == NM_VPNC_SECRET_FLAG_SAVE {
+		return true
+	}
+	return false
+}
+
+func isVpnVpncNeedShowXauthPassword(data connectionData) bool {
+	flag := getSettingVpnVpncKeyXauthPasswordFlags(data)
+	if flag == NM_VPNC_SECRET_FLAG_NONE || flag == NM_VPNC_SECRET_FLAG_SAVE {
+		return true
+	}
+	return false
+}
+
+// new connection data
 func newVpnVpncConnectionData(id, uuid string) (data connectionData) {
 	data = newBasicVpnConnectionData(id, uuid, NM_DBUS_SERVICE_VPNC)
-
 	setSettingVpnVpncKeyNatTraversalMode(data, NM_VPNC_NATT_MODE_NATT)
-	logicSetSettingVpnVpncKeySecretFlags(data, NM_VPNC_SECRET_FLAG_ASK)
-	logicSetSettingVpnVpncKeyXauthPasswordFlags(data, NM_VPNC_SECRET_FLAG_ASK)
+	logicSetSettingVpnVpncKeySecretFlags(data, NM_VPNC_SECRET_FLAG_NONE)
+	logicSetSettingVpnVpncKeyXauthPasswordFlags(data, NM_VPNC_SECRET_FLAG_NONE)
 	setSettingVpnVpncKeyVendor(data, NM_VPNC_VENDOR_CISCO)
 	setSettingVpnVpncKeyPerfectForward(data, NM_VPNC_PFS_SERVER)
 	setSettingVpnVpncKeyDhgroup(data, NM_VPNC_DHGROUP_DH2)
 	setSettingVpnVpncKeyLocalPort(data, 0)
-
 	return
 }
 
@@ -135,12 +153,12 @@ func getSettingVpnVpncAvailableKeys(data connectionData) (keys []string) {
 	keys = appendAvailableKeys(data, keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_GATEWAY)
 	keys = appendAvailableKeys(data, keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_XAUTH_USER)
 	keys = appendAvailableKeys(data, keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD_FLAGS)
-	if getSettingVpnVpncKeyXauthPasswordFlags(data) == NM_VPNC_SECRET_FLAG_SAVE {
+	if isVpnVpncNeedShowXauthPassword(data) {
 		keys = appendAvailableKeys(data, keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD)
 	}
 	keys = appendAvailableKeys(data, keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_ID)
 	keys = appendAvailableKeys(data, keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_SECRET_FLAGS)
-	if getSettingVpnVpncKeySecretFlags(data) == NM_VPNC_SECRET_FLAG_SAVE {
+	if isVpnVpncNeedShowSecret(data) {
 		keys = appendAvailableKeys(data, keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_SECRET)
 	}
 	keys = appendAvailableKeys(data, keys, fieldVpnVpnc, NM_SETTING_VPN_VPNC_KEY_AUTHMODE)
@@ -226,6 +244,8 @@ func checkSettingVpnVpncAdvancedValues(data connectionData) (errs fieldErrors) {
 // Logic setter
 func logicSetSettingVpnVpncKeySecretFlags(data connectionData, value uint32) (err error) {
 	switch value {
+	case NM_VPNC_SECRET_FLAG_NONE:
+		setSettingVpnVpncKeySecretType(data, NM_VPNC_PW_TYPE_SAVE)
 	case NM_VPNC_SECRET_FLAG_SAVE:
 		setSettingVpnVpncKeySecretType(data, NM_VPNC_PW_TYPE_SAVE)
 	case NM_VPNC_SECRET_FLAG_ASK:
@@ -238,6 +258,8 @@ func logicSetSettingVpnVpncKeySecretFlags(data connectionData, value uint32) (er
 }
 func logicSetSettingVpnVpncKeyXauthPasswordFlags(data connectionData, value uint32) (err error) {
 	switch value {
+	case NM_VPNC_SECRET_FLAG_NONE:
+		setSettingVpnVpncKeyXauthPasswordType(data, NM_VPNC_PW_TYPE_SAVE)
 	case NM_VPNC_SECRET_FLAG_SAVE:
 		setSettingVpnVpncKeyXauthPasswordType(data, NM_VPNC_PW_TYPE_SAVE)
 	case NM_VPNC_SECRET_FLAG_ASK:

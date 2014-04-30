@@ -13,10 +13,10 @@
 	    {"Name":"NM_SETTING_802_1X_PHASE2_AUTH", "Value":"phase2-auth", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Inner Auth", "FrontEndWidget":"EditLineComboBox", "WidgetProp":{"alwaysUpdate":"true"}},
 	    {"Name":"NM_SETTING_802_1X_PRIVATE_KEY", "Value":"private-key", "Type":"ktypeWrapperString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"Private Key", "FrontEndWidget":"EditLineFileChooser"},
 	    {"Name":"NM_SETTING_802_1X_IDENTITY", "Value":"identity", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Username", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_802_1X_PASSWORD_FLAGS", "Value":"password-flags", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Ask for Pwd", "FrontEndWidget":"EditLineComboBox", "WidgetProp":{"alwaysUpdate":"true"}},
 	    {"Name":"NM_SETTING_802_1X_PASSWORD", "Value":"password", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Password", "FrontEndWidget":"EditLinePasswordInput"},
-	    {"Name":"NM_SETTING_802_1X_PASSWORD_FLAGS", "Value":"password-flags", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS", "Value":"private-key-password-flags", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Ask for Pwd", "FrontEndWidget":"EditLineComboBox"},
 	    {"Name":"NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD", "Value":"private-key-password", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Private Pwd", "FrontEndWidget":"EditLinePasswordInput"},
-	    {"Name":"NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS", "Value":"private-key-password-flags", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_802_1X_CA_PATH", "Value":"ca-path", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_802_1X_SUBJECT_MATCH", "Value":"subject-match", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_802_1X_ALTSUBJECT_MATCHES", "Value":"altsubject-matches", "Type":"ktypeArrayString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
@@ -41,7 +41,7 @@
     "FieldName":"NM_SETTING_CONNECTION_SETTING_NAME",
     "FieldValue":"connection",
     "Keys":[
-	    {"Name":"NM_SETTING_CONNECTION_ID", "Value":"id", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Connection Name", "FrontEndWidget":"EditLineConnectionId"},
+	    {"Name":"NM_SETTING_CONNECTION_ID", "Value":"id", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Name", "FrontEndWidget":"EditLineConnectionId"},
 	    {"Name":"NM_SETTING_CONNECTION_UUID", "Value":"uuid", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_CONNECTION_TYPE", "Value":"type", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_CONNECTION_AUTOCONNECT", "Value":"autoconnect", "Type":"ktypeBoolean", "Default":"true", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Automatically connect", "FrontEndWidget":"<default>"},
@@ -139,8 +139,8 @@
     "Keys":[
 	    {"Name":"NM_SETTING_VPN_L2TP_KEY_GATEWAY", "Value":"gateway", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "Displayname":"Gateway", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_L2TP_KEY_USER", "Value":"user", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "Displayname":"Username", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_L2TP_KEY_PASSWORD_FLAGS", "Value":"password-flags", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "Displayname":"Ask for Pwd", "FrontEndWidget":"EditLineComboBox"},
 	    {"Name":"NM_SETTING_VPN_L2TP_KEY_PASSWORD", "Value":"password", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "Displayname":"Password", "FrontEndWidget":"EditLinePasswordInput"},
-	    {"Name":"NM_SETTING_VPN_L2TP_KEY_PASSWORD_FLAGS", "Value":"password-flags", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "Displayname":"Save Pwd", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_L2TP_KEY_DOMAIN", "Value":"domain", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "Displayname":"Domain", "FrontEndWidget":"<default>"}
     ]
 },
@@ -203,13 +203,13 @@
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_REMOTE", "Value":"remote", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Gateway", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_CONNECTION_TYPE", "Value":"connection-type", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":true, "DisplayName":"Auth Type", "FrontEndWidget":"EditLineComboBox"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_USERNAME", "Value":"username", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"User Name", "FrontEndWidget":"<default>"},
-	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_PASSWORD_FLAGS", "Value":"password-flags", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Ask For Pwd", "FrontEndWidget":"EditLineComboBox"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_PASSWORD_FLAGS", "Value":"password-flags", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Ask for Pwd", "FrontEndWidget":"EditLineComboBox"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_PASSWORD", "Value":"password", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Password", "FrontEndWidget":"EditLinePasswordInput"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_CERT", "Value":"cert", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":true, "DisplayName":"User Cert", "FrontEndWidget":"EditLineFileChooser"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_CA", "Value":"ca", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":true, "DisplayName":"CA Cert", "FrontEndWidget":"EditLineFileChooser"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_KEY", "Value":"key", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":true, "DisplayName":"Private Key", "FrontEndWidget":"EditLineFileChooser"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_CERTPASS_FLAGS", "Value":"cert-pass-flags", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Ask for Pwd", "FrontEndWidget":"EditLineComboBox"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_CERTPASS", "Value":"cert-pass", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Private Pwd", "FrontEndWidget":"EditLinePasswordInput"},
-	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_CERTPASS_FLAGS", "Value":"cert-pass-flags", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"EditLineComboBox"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY", "Value":"static-key", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":true, "DisplayName":"Static Key", "FrontEndWidget":"EditLineFileChooser"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY_DIRECTION", "Value":"static-key-direction", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Key Direction", "FrontEndWidget":"EditLineComboBox"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_REMOTE_IP", "Value":"remote-ip", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Remote IP", "FrontEndWidget":"<default>"},
@@ -268,8 +268,8 @@
     "Keys":[
 	    {"Name":"NM_SETTING_VPN_PPTP_KEY_GATEWAY", "Value":"gateway", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "Displayname":"Gateway", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_PPTP_KEY_USER", "Value":"user", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "Displayname":"Username", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_PPTP_KEY_PASSWORD_FLAGS", "Value":"password-flags", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "Displayname":"Ask for Pwd", "FrontEndWidget":"EditLineComboBox"},
 	    {"Name":"NM_SETTING_VPN_PPTP_KEY_PASSWORD", "Value":"password", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "Displayname":"Password", "FrontEndWidget":"EditLinePasswordInput"},
-	    {"Name":"NM_SETTING_VPN_PPTP_KEY_PASSWORD_FLAGS", "Value":"password-flags", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "Displayname":"Save Pwd", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_PPTP_KEY_DOMAIN", "Value":"domain", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "Displayname":"Domain", "FrontEndWidget":"<default>"}
     ]
 },
@@ -300,11 +300,11 @@
 	    {"Name":"NM_SETTING_VPN_VPNC_KEY_GATEWAY", "Value":"IPSec gateway", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Gateway", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_VPNC_KEY_XAUTH_USER", "Value":"Xauth username", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"User Name", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD_TYPE", "Value":"xauth-password-type", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
-	    {"Name":"NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD_FLAGS", "Value":"Xauth password-flags", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":true, "DisplayName":"Ask For Pwd", "FrontEndWidget":"EditLineComboBox"},
+	    {"Name":"NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD_FLAGS", "Value":"Xauth password-flags", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":true, "DisplayName":"Ask for Pwd", "FrontEndWidget":"EditLineComboBox"},
 	    {"Name":"NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD", "Value":"Xauth password", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"User Pwd", "FrontEndWidget":"EditLinePasswordInput"},
 	    {"Name":"NM_SETTING_VPN_VPNC_KEY_ID", "Value":"IPSec ID", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Group Name", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_VPNC_KEY_SECRET_TYPE", "Value":"ipsec-secret-type", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
-	    {"Name":"NM_SETTING_VPN_VPNC_KEY_SECRET_FLAGS", "Value":"IPSec secret-flags", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":true, "DisplayName":"Ask For Pwd", "FrontEndWidget":"EditLineComboBox"},
+	    {"Name":"NM_SETTING_VPN_VPNC_KEY_SECRET_FLAGS", "Value":"IPSec secret-flags", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":true, "DisplayName":"Ask for Pwd", "FrontEndWidget":"EditLineComboBox"},
 	    {"Name":"NM_SETTING_VPN_VPNC_KEY_SECRET", "Value":"IPSec secret", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Group Pwd", "FrontEndWidget":"EditLinePasswordInput"},
 	    {"Name":"NM_SETTING_VPN_VPNC_KEY_AUTHMODE", "Value":"IKE Authmode", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_VPNC_KEY_CA_FILE", "Value":"CA-File", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"CA File", "FrontEndWidget":"EditLineFileChooser"}

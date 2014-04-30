@@ -93,6 +93,9 @@ func nmGetDeviceInterface(devPath dbus.ObjectPath) (devInterface string) {
 }
 
 func nmAddAndActivateConnection(data connectionData, devPath dbus.ObjectPath) (cpath, apath dbus.ObjectPath, err error) {
+	if len(devPath) == 0 {
+		devPath = "/"
+	}
 	spath := dbus.ObjectPath("/")
 	cpath, apath, err = nmManager.AddAndActivateConnection(data, devPath, spath)
 	if err != nil {

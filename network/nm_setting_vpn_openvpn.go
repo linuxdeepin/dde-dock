@@ -64,11 +64,6 @@ const (
 )
 
 const (
-	NM_OPENVPN_SECRET_FLAG_SAVE   = 0
-	NM_OPENVPN_SECRET_FLAG_ASK    = 2
-	NM_OPENVPN_SECRET_FLAG_UNUSED = 4
-)
-const (
 	NM_OPENVPN_CONTYPE_TLS          = "tls"
 	NM_OPENVPN_CONTYPE_STATIC_KEY   = "static-key"
 	NM_OPENVPN_CONTYPE_PASSWORD     = "password"
@@ -136,10 +131,40 @@ const (
 // 	{ NULL,                                G_TYPE_NONE, FALSE }
 // };
 
+// Define secret flags
+const (
+	NM_OPENVPN_SECRET_FLAG_SAVE   = 0
+	NM_OPENVPN_SECRET_FLAG_ASK    = 2
+	NM_OPENVPN_SECRET_FLAG_UNUSED = 4
+)
+
+var availableValuesNMOpenvpnSecretFlag = []kvalue{
+	kvalue{NM_OPENVPN_SECRET_FLAG_SAVE, dlib.Tr("Saved")}, // system saved
+	kvalue{NM_OPENVPN_SECRET_FLAG_ASK, dlib.Tr("Always Ask")},
+	kvalue{NM_OPENVPN_SECRET_FLAG_UNUSED, dlib.Tr("Not Required")},
+}
+
+func isVpnOpenvpnNeedShowPassword(data connectionData) bool {
+	flag := getSettingVpnOpenvpnKeyPasswordFlags(data)
+	if flag == NM_OPENVPN_SECRET_FLAG_SAVE {
+		return true
+	}
+	return false
+}
+
+func isVpnOpenvpnNeedShowCertpass(data connectionData) bool {
+	flag := getSettingVpnOpenvpnKeyCertpassFlags(data)
+	if flag == NM_OPENVPN_SECRET_FLAG_SAVE {
+		return true
+	}
+	return false
+}
+
+// new connection data
 func newVpnOpenvpnConnectionData(id, uuid string) (data connectionData) {
 	data = newBasicVpnConnectionData(id, uuid, NM_DBUS_SERVICE_OPENVPN)
 	setSettingVpnOpenvpnKeyConnectionType(data, "tls")
-	setSettingVpnOpenvpnKeyCertpassFlags(data, 1)
+	setSettingVpnOpenvpnKeyCertpassFlags(data, 1) // TODO
 
 	initSettingFieldIpv6(data)
 	return
@@ -154,18 +179,22 @@ func getSettingVpnOpenvpnAvailableKeys(data connectionData) (keys []string) {
 		keys = appendAvailableKeys(data, keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_CERT)
 		keys = appendAvailableKeys(data, keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_CA)
 		keys = appendAvailableKeys(data, keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_KEY)
+		// TODO
+		// keys = appendAvailableKeys(data, keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_CERTPASS_FLAGS)
+		// if isVpnOpenvpnNeedShowCertpass(data) {
 		keys = appendAvailableKeys(data, keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_CERTPASS)
+		// }
 	case NM_OPENVPN_CONTYPE_PASSWORD:
 		keys = appendAvailableKeys(data, keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_USERNAME)
 		keys = appendAvailableKeys(data, keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_PASSWORD_FLAGS)
-		if getSettingVpnOpenvpnKeyPasswordFlags(data) == NM_OPENVPN_SECRET_FLAG_SAVE {
+		if isVpnOpenvpnNeedShowPassword(data) {
 			keys = appendAvailableKeys(data, keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_PASSWORD)
 		}
 		keys = appendAvailableKeys(data, keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_CA)
 	case NM_OPENVPN_CONTYPE_PASSWORD_TLS:
 		keys = appendAvailableKeys(data, keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_USERNAME)
 		keys = appendAvailableKeys(data, keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_PASSWORD_FLAGS)
-		if getSettingVpnOpenvpnKeyPasswordFlags(data) == NM_OPENVPN_SECRET_FLAG_SAVE {
+		if isVpnOpenvpnNeedShowPassword(data) {
 			keys = appendAvailableKeys(data, keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_PASSWORD)
 		}
 		keys = appendAvailableKeys(data, keys, fieldVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_CERT)
@@ -194,12 +223,10 @@ func getSettingVpnOpenvpnAvailableValues(data connectionData, key string) (value
 			kvalue{0, dlib.Tr("0")},
 			kvalue{1, dlib.Tr("1")},
 		}
+	case NM_SETTING_VPN_OPENVPN_KEY_CERTPASS_FLAGS:
+		values = availableValuesNMOpenvpnSecretFlag
 	case NM_SETTING_VPN_OPENVPN_KEY_PASSWORD_FLAGS:
-		values = []kvalue{
-			kvalue{NM_OPENVPN_SECRET_FLAG_SAVE, dlib.Tr("Saved")},
-			kvalue{NM_OPENVPN_SECRET_FLAG_ASK, dlib.Tr("Always Ask")},
-			kvalue{NM_OPENVPN_SECRET_FLAG_UNUSED, dlib.Tr("Not Required")},
-		}
+		values = availableValuesNMOpenvpnSecretFlag
 	}
 	return
 }
@@ -438,6 +465,7 @@ func logicSetSettingVpnOpenvpnKeyConnectionType(data connectionData, value strin
 		NM_SETTING_VPN_OPENVPN_KEY_CA,
 		NM_SETTING_VPN_OPENVPN_KEY_KEY,
 		NM_SETTING_VPN_OPENVPN_KEY_CERTPASS,
+		NM_SETTING_VPN_OPENVPN_KEY_CERTPASS_FLAGS,
 		NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY,
 		NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY_DIRECTION,
 		NM_SETTING_VPN_OPENVPN_KEY_REMOTE_IP,
@@ -449,6 +477,7 @@ func logicSetSettingVpnOpenvpnKeyConnectionType(data connectionData, value strin
 			NM_SETTING_VPN_OPENVPN_KEY_CERT,
 			NM_SETTING_VPN_OPENVPN_KEY_CA,
 			NM_SETTING_VPN_OPENVPN_KEY_KEY,
+			NM_SETTING_VPN_OPENVPN_KEY_CERTPASS_FLAGS,
 			NM_SETTING_VPN_OPENVPN_KEY_CERTPASS,
 		)...)
 	case NM_OPENVPN_CONTYPE_PASSWORD:
@@ -466,6 +495,7 @@ func logicSetSettingVpnOpenvpnKeyConnectionType(data connectionData, value strin
 			NM_SETTING_VPN_OPENVPN_KEY_CERT,
 			NM_SETTING_VPN_OPENVPN_KEY_CA,
 			NM_SETTING_VPN_OPENVPN_KEY_KEY,
+			NM_SETTING_VPN_OPENVPN_KEY_CERTPASS_FLAGS,
 			NM_SETTING_VPN_OPENVPN_KEY_CERTPASS,
 		)...)
 	case NM_OPENVPN_CONTYPE_STATIC_KEY:
@@ -485,6 +515,7 @@ func logicSetSettingVpnOpenvpnKeyProxyType(data connectionData, value string) (e
 		removeSettingVpnOpenvpnKeyProxyRetry(data)
 		removeSettingVpnOpenvpnKeyHttpProxyUsername(data)
 		removeSettingVpnOpenvpnKeyHttpProxyPassword(data)
+		removeSettingVpnOpenvpnKeyHttpProxyPasswordFlags(data)
 		removeSettingVpnOpenvpnKeyProxyType(data)
 		return
 	}
@@ -495,10 +526,12 @@ func logicSetSettingVpnOpenvpnKeyProxyType(data connectionData, value string) (e
 	switch value {
 	case "httpect":
 		setSettingVpnOpenvpnKeyProxyRetry(data, false)
+		setSettingVpnOpenvpnKeyHttpProxyPasswordFlags(data, NM_OPENVPN_SECRET_FLAG_SAVE)
 	case "socksct":
 		setSettingVpnOpenvpnKeyProxyRetry(data, false)
 		removeSettingVpnOpenvpnKeyHttpProxyUsername(data)
 		removeSettingVpnOpenvpnKeyHttpProxyPassword(data)
+		removeSettingVpnOpenvpnKeyHttpProxyPasswordFlags(data)
 	}
 	setSettingVpnOpenvpnKeyProxyType(data, value)
 	return

@@ -1,5 +1,9 @@
 package main
 
+import (
+	"dlib"
+)
+
 // For the NM <-> VPN plugin service
 const (
 	NM_DBUS_SERVICE_L2TP   = "org.freedesktop.NetworkManager.l2tp"
@@ -69,9 +73,32 @@ const (
 // 	{ NULL,                          G_TYPE_NONE,   FALSE }
 // }
 
+// Define secret flags
+const (
+	NM_L2TP_SECRET_FLAG_NONE         = 0
+	NM_L2TP_SECRET_FLAG_AGENT_OWNED  = 1
+	NM_L2TP_SECRET_FLAG_NOT_SAVED    = 3
+	NM_L2TP_SECRET_FLAG_NOT_REQUIRED = 5
+)
+
+var availableValuesNML2tpSecretFlag = []kvalue{
+	kvalue{NM_L2TP_SECRET_FLAG_NONE, dlib.Tr("Saved")}, // system saved
+	kvalue{NM_L2TP_SECRET_FLAG_NOT_SAVED, dlib.Tr("Always Ask")},
+	kvalue{NM_L2TP_SECRET_FLAG_NOT_REQUIRED, dlib.Tr("Not Required")},
+}
+
+func isVpnL2tpNeedShowPassword(data connectionData) bool {
+	flag := getSettingVpnL2tpKeyPasswordFlags(data)
+	if flag == NM_L2TP_SECRET_FLAG_NONE || flag == NM_L2TP_SECRET_FLAG_AGENT_OWNED {
+		return true
+	}
+	return false
+}
+
+// new connection data
 func newVpnL2tpConnectionData(id, uuid string) (data connectionData) {
 	data = newBasicVpnConnectionData(id, uuid, NM_DBUS_SERVICE_L2TP)
-	setSettingVpnL2tpKeyPasswordFlags(data, 1)
+	setSettingVpnL2tpKeyPasswordFlags(data, NM_L2TP_SECRET_FLAG_NONE)
 	return
 }
 
@@ -79,11 +106,18 @@ func newVpnL2tpConnectionData(id, uuid string) (data connectionData) {
 func getSettingVpnL2tpAvailableKeys(data connectionData) (keys []string) {
 	keys = appendAvailableKeys(data, keys, fieldVpnL2tp, NM_SETTING_VPN_L2TP_KEY_GATEWAY)
 	keys = appendAvailableKeys(data, keys, fieldVpnL2tp, NM_SETTING_VPN_L2TP_KEY_USER)
-	keys = appendAvailableKeys(data, keys, fieldVpnL2tp, NM_SETTING_VPN_L2TP_KEY_PASSWORD)
+	keys = appendAvailableKeys(data, keys, fieldVpnL2tp, NM_SETTING_VPN_L2TP_KEY_PASSWORD_FLAGS)
+	if isVpnL2tpNeedShowPassword(data) {
+		keys = appendAvailableKeys(data, keys, fieldVpnL2tp, NM_SETTING_VPN_L2TP_KEY_PASSWORD)
+	}
 	keys = appendAvailableKeys(data, keys, fieldVpnL2tp, NM_SETTING_VPN_L2TP_KEY_DOMAIN)
 	return
 }
 func getSettingVpnL2tpAvailableValues(data connectionData, key string) (values []kvalue) {
+	switch key {
+	case NM_SETTING_VPN_L2TP_KEY_PASSWORD_FLAGS:
+		values = availableValuesNML2tpSecretFlag
+	}
 	return
 }
 func checkSettingVpnL2tpValues(data connectionData) (errs fieldErrors) {

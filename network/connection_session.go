@@ -104,6 +104,7 @@ func NewConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 	s.fixMissingFields()
 
 	// get secret data
+	// TODO fieldVpnSecurity
 	for _, secretFiled := range []string{fieldWirelessSecurity, field8021x} {
 		if isSettingFieldExists(s.data, secretFiled) {
 			wirelessSecrutiyData, err := nmConn.GetSecrets(fieldWirelessSecurity)
@@ -165,7 +166,12 @@ func (s *ConnectionSession) Save() bool {
 		nmActivateConnection(s.connPath, s.devPath)
 	} else {
 		// create new connection and activate it
-		nmAddAndActivateConnection(s.data, s.devPath)
+		// TODO vpn
+		if s.ConnectionType == typeWired || s.ConnectionType == typeWireless {
+			nmAddAndActivateConnection(s.data, s.devPath)
+		} else {
+			nmAddConnection(s.data)
+		}
 	}
 
 	dbus.UnInstallObject(s)
