@@ -398,14 +398,14 @@ func logicSetSettingVk8021xPacFile(data connectionData, value string) (err error
 	return
 }
 func logicSetSettingVk8021xCaCert(data connectionData, value string) (err error) {
-	setSetting8021xCaCert(data, strToByteArrayPath(value))
+	setSetting8021xCaCert(data, strToByteArrayPath(toUriPath(value)))
 	return
 }
 func logicSetSettingVk8021xClientCert(data connectionData, value string) (err error) {
-	setSetting8021xClientCert(data, strToByteArrayPath(value))
+	setSetting8021xClientCert(data, strToByteArrayPath(toUriPath(value)))
 	return
 }
 func logicSetSettingVk8021xPrivateKey(data connectionData, value string) (err error) {
-	setSetting8021xPrivateKey(data, strToByteArrayPath(value))
+	setSetting8021xPrivateKey(data, strToByteArrayPath(toUriPath(value)))
 	return
 }

@@ -49,10 +49,11 @@ func ensureByteArrayUriPathExists(errs fieldErrors, field, key string, bytePath 
 		rememberError(errs, field, key, NM_KEY_ERROR_INVALID_VALUE)
 		return
 	}
-	ensureFileExists(errs, field, key, toLocalPath(path), limitedExts...)
+	ensureFileExists(errs, field, key, path, limitedExts...)
 }
 
 func ensureFileExists(errs fieldErrors, field, key, file string, limitedExts ...string) {
+	file = toLocalPath(file)
 	// ensure file suffix with target extension
 	if len(limitedExts) > 0 {
 		match := false
@@ -67,7 +68,7 @@ func ensureFileExists(errs fieldErrors, field, key, file string, limitedExts ...
 			// rememberError(errs, field, key, NM_KEY_ERROR_INVALID_VALUE)
 		}
 	}
-	if isFileExists(file) {
+	if !isFileExists(file) {
 		rememberError(errs, field, key, NM_KEY_ERROR_INVALID_VALUE)
 	}
 }
