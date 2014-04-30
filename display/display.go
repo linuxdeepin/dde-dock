@@ -95,7 +95,6 @@ func (dpy *Display) updateOutputNamesAndModesInfo() {
 			continue
 		}
 		dpy.outputNames[string(oinfo.Name)] = op
-		dpy.backlightLevel[string(oinfo.Name)] = uint32(queryBacklightRange(xcon, op))
 	}
 
 	dpy.modes = make(map[randr.Mode]Mode)
