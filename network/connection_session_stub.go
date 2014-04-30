@@ -13,9 +13,13 @@ func (s *ConnectionSession) GetDBusInfo() dbus.DBusInfo {
 }
 
 // TODO
-func (s *ConnectionSession) updatePropAllowSave(v bool) {
-	s.AllowSave = v
-	dbus.NotifyChange(s, "AllowSave")
+// func (s *ConnectionSession) updatePropAllowSave(v bool) {
+// 	s.AllowSave = v
+// 	dbus.NotifyChange(s, "AllowSave")
+// }
+
+func (s *ConnectionSession) updatePropConnectionType() {
+	dbus.NotifyChange(s, "ConnectionType")
 }
 
 func (s *ConnectionSession) updatePropAvailablePages() {

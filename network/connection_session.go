@@ -10,13 +10,13 @@ type fieldErrors map[string]string
 type sessionErrors map[string]fieldErrors
 
 type ConnectionSession struct {
-	sessionPath    dbus.ObjectPath
-	connPath       dbus.ObjectPath
-	devPath        dbus.ObjectPath
-	data           connectionData
-	connectionType string
+	sessionPath dbus.ObjectPath
+	connPath    dbus.ObjectPath
+	devPath     dbus.ObjectPath
+	data        connectionData
 
-	CurrentUUID string
+	CurrentUUID    string
+	ConnectionType string
 
 	AllowSave      bool // TODO really need?
 	AvailablePages []string
@@ -52,8 +52,8 @@ func NewConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 
 	// TODO
 	// new connection data, id is left here
-	s.connectionType = connectionType
-	switch s.connectionType {
+	s.ConnectionType = connectionType
+	switch s.ConnectionType {
 	case typeWired:
 		s.data = newWiredConnectionData("", s.CurrentUUID)
 	case typeWireless:
@@ -72,6 +72,7 @@ func NewConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 		s.data = newVpnOpenvpnConnectionData("", s.CurrentUUID)
 	}
 
+	s.updatePropConnectionType()
 	// s.updatePropAllowSave(false) // TODO
 	s.updatePropAvailablePages()
 	s.updatePropAvailableKeys()
@@ -98,7 +99,7 @@ func NewConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 	if err != nil {
 		return nil, err
 	}
-	s.connectionType = generalGetConnectionType(s.data)
+	s.ConnectionType = generalGetConnectionType(s.data)
 
 	// get secret data
 	for _, secretFiled := range []string{fieldWirelessSecurity, field8021x} {
@@ -117,6 +118,7 @@ func NewConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 		}
 	}
 
+	s.updatePropConnectionType()
 	// s.updatePropAllowSave(false) // TODO
 	s.updatePropAvailablePages()
 	s.updatePropAvailableKeys()
@@ -177,7 +179,7 @@ func (s *ConnectionSession) Close() {
 
 // listPages return supported pages for target connection type.
 func (s *ConnectionSession) listPages() (pages []string) {
-	switch s.connectionType {
+	switch s.ConnectionType {
 	case typeWired:
 		pages = []string{
 			pageGeneral,
@@ -264,7 +266,7 @@ func (s *ConnectionSession) pageToFields(page string) (fields []string) {
 	case pageIPv6:
 		fields = []string{fieldIpv6}
 	case pageSecurity:
-		switch s.connectionType {
+		switch s.ConnectionType {
 		case typeWired:
 			fields = []string{field8021x}
 		case typeWireless:
