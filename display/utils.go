@@ -278,3 +278,39 @@ func isOverlap(x1, y1 int16, w1, h1 uint16, x2, y2 int16, w2, h2 uint16) bool {
 	}
 	return false
 }
+
+type setUint16 map[uint16]bool
+
+func newSetUint16() setUint16 {
+	return make(map[uint16]bool)
+}
+func (s setUint16) Add(vs ...uint16) {
+	for _, v := range vs {
+		s[v] = true
+	}
+}
+func (s setUint16) Set() []uint16 {
+	var r []uint16
+	for k, _ := range s {
+		r = append(r, k)
+	}
+	return r
+}
+
+type setMode map[Mode]bool
+
+func newSetMode() setMode {
+	return make(map[Mode]bool)
+}
+func (s setMode) Add(vs ...Mode) {
+	for _, v := range vs {
+		s[v] = true
+	}
+}
+func (s setMode) Set() []Mode {
+	var r []Mode
+	for k, _ := range s {
+		r = append(r, k)
+	}
+	return r
+}

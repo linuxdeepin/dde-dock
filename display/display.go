@@ -13,6 +13,7 @@ import (
 
 var (
 	xcon, _        = xgb.NewConn()
+	_              = initX11()
 	Root           xproto.Window
 	ScreenWidthMm  uint16
 	ScreenHeightMm uint16
@@ -24,15 +25,14 @@ var (
 	Logger = logger.NewLogger("com.deepin.daemon.Display")
 )
 
-var GetDisplay = func() func() *Display {
-	dpy := &Display{}
+func initX11() bool {
+	randr.Init(xcon)
 	sinfo := xproto.Setup(xcon).DefaultScreen(xcon)
 	Root = sinfo.Root
 	ScreenWidthMm = sinfo.WidthInMillimeters
 	ScreenHeightMm = sinfo.HeightInMillimeters
 	LastConfigTimeStamp = xproto.Timestamp(0)
 
-	randr.Init(xcon)
 	ver, err := randr.QueryVersion(xcon, 1, 3).Reply()
 	if err != nil {
 		panic(fmt.Sprintln("randr.QueryVersion error:", err))
@@ -43,13 +43,16 @@ var GetDisplay = func() func() *Display {
 	if err != nil {
 		panic(fmt.Sprintln("randr.GetSceenSizeRange failed :", err))
 	}
+	return true
+}
 
+var GetDisplay = func() func() *Display {
+	dpy := &Display{}
+
+	sinfo := xproto.Setup(xcon).DefaultScreen(xcon)
 	dpy.setPropScreenWidth(sinfo.WidthInPixels)
 	dpy.setPropScreenHeight(sinfo.HeightInPixels)
-	dpy.updateOutputNamesAndModesInfo()
-
-	//must be invoked after dpy.updateInfo
-	dpy.ResetChanges()
+	GetDisplayInfo().update()
 
 	randr.SelectInputChecked(xcon, Root, randr.NotifyMaskOutputChange|randr.NotifyMaskOutputProperty|randr.NotifyMaskCrtcChange|randr.NotifyMaskScreenChange)
 	go dpy.listener()
@@ -59,11 +62,45 @@ var GetDisplay = func() func() *Display {
 	}
 }()
 
-type Display struct {
+type DisplayInfo struct {
 	modes          map[randr.Mode]Mode
 	outputNames    map[string]randr.Output
 	backlightLevel map[string]uint32
+}
 
+var GetDisplayInfo = func() func() *DisplayInfo {
+	info := &DisplayInfo{
+		modes:          make(map[randr.Mode]Mode),
+		outputNames:    make(map[string]randr.Output),
+		backlightLevel: make(map[string]uint32),
+	}
+	info.update()
+	return func() *DisplayInfo {
+		return info
+	}
+}()
+
+func (info *DisplayInfo) update() {
+	resource, err := randr.GetScreenResources(xcon, Root).Reply()
+	if err != nil {
+	}
+	info.outputNames = make(map[string]randr.Output)
+	info.backlightLevel = make(map[string]uint32)
+	for _, op := range resource.Outputs {
+		oinfo, err := randr.GetOutputInfo(xcon, op, LastConfigTimeStamp).Reply()
+		if err != nil || oinfo.Connection != randr.ConnectionConnected {
+			continue
+		}
+		info.outputNames[string(oinfo.Name)] = op
+	}
+
+	info.modes = make(map[randr.Mode]Mode)
+	for _, minfo := range resource.Modes {
+		info.modes[randr.Mode(minfo.Id)] = buildMode(minfo)
+	}
+}
+
+type Display struct {
 	Monitors []*Monitor
 
 	ScreenWidth  uint16
@@ -81,26 +118,6 @@ type Display struct {
 
 	Brightness map[string]float64
 	cfg        *ConfigDisplay
-}
-
-func (dpy *Display) updateOutputNamesAndModesInfo() {
-	resource, err := randr.GetScreenResources(xcon, Root).Reply()
-	if err != nil {
-	}
-	dpy.outputNames = make(map[string]randr.Output)
-	dpy.backlightLevel = make(map[string]uint32)
-	for _, op := range resource.Outputs {
-		oinfo, err := randr.GetOutputInfo(xcon, op, LastConfigTimeStamp).Reply()
-		if err != nil || oinfo.Connection != randr.ConnectionConnected {
-			continue
-		}
-		dpy.outputNames[string(oinfo.Name)] = op
-	}
-
-	dpy.modes = make(map[randr.Mode]Mode)
-	for _, info := range resource.Modes {
-		dpy.modes[randr.Mode(info.Id)] = buildMode(info)
-	}
 }
 
 func (dpy *Display) listener() {
@@ -124,7 +141,7 @@ func (dpy *Display) listener() {
 			dpy.setPropScreenWidth(ee.Width)
 			dpy.setPropScreenHeight(ee.Height)
 
-			dpy.updateOutputNamesAndModesInfo()
+			GetDisplayInfo().update()
 
 			if LastConfigTimeStamp < ee.ConfigTimestamp {
 				LastConfigTimeStamp = ee.ConfigTimestamp
@@ -142,8 +159,8 @@ func (dpy *Display) listener() {
 
 func (dpy *Display) ChangeBrightness(output string, v float64) {
 	if v >= 0 && v <= 1 {
-		if op, ok := dpy.outputNames[output]; ok {
-			if max, ok := dpy.backlightLevel[output]; ok {
+		if op, ok := GetDisplayInfo().outputNames[output]; ok {
+			if max, ok := GetDisplayInfo().backlightLevel[output]; ok {
 				setOutputBacklight(op, uint32(float64(max)*v))
 			} else {
 				setBrightness(xcon, op, v)
@@ -291,7 +308,10 @@ func main() {
 	err := dbus.InstallOnSession(GetDisplay())
 	if err != nil {
 		Logger.Error("Can't install dbus display service on session:", err)
+		return
 	}
+
+	GetDisplay().ResetChanges()
 
 	dbus.DealWithUnhandledMessage()
 	if err := dbus.Wait(); err != nil {

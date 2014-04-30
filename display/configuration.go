@@ -21,7 +21,7 @@ var configLock sync.RWMutex
 
 func (dpy *Display) QueryCurrentPlanName() string {
 	names := make([]string, 0)
-	for name, _ := range dpy.outputNames {
+	for name, _ := range GetDisplayInfo().outputNames {
 		names = append(names, name)
 	}
 	sort.Strings(names)
@@ -38,7 +38,7 @@ func (cfg *ConfigDisplay) attachCurrentMonitor(dpy *Display) {
 
 	//grab and build monitors information
 	monitors := make(map[string]*ConfigMonitor)
-	for _, op := range dpy.outputNames {
+	for _, op := range GetDisplayInfo().outputNames {
 		mcfg, err := CreateConfigMonitor(dpy, op)
 		if err != nil {
 		}
@@ -51,11 +51,11 @@ func (cfg *ConfigDisplay) attachCurrentMonitor(dpy *Display) {
 	cfg.Primary = guestPrimaryName()
 
 	//query brightness information
-	for name, op := range dpy.outputNames {
+	for name, op := range GetDisplayInfo().outputNames {
 		var support bool
 		if support, cfg.Brightness[name] = supportedBacklight(xcon, op); support {
 			//Assume the brightness is 1.0 if we haven't saved information
-			dpy.backlightLevel[name] = uint32(queryBacklightRange(xcon, op))
+			GetDisplayInfo().backlightLevel[name] = uint32(queryBacklightRange(xcon, op))
 		} else {
 			cfg.Brightness[name] = 1
 		}
@@ -89,10 +89,10 @@ func (cfg *ConfigDisplay) ensureValid(dpy *Display) {
 		//1.1. ensure the output support the mode which be matched with the width/height
 		valid := false
 		for _, opName := range m.Outputs {
-			op := dpy.outputNames[opName]
+			op := GetDisplayInfo().outputNames[opName]
 			oinfo, _ := randr.GetOutputInfo(xcon, op, LastConfigTimeStamp).Reply()
 			for _, id := range oinfo.Modes {
-				minfo := dpy.modes[id]
+				minfo := GetDisplayInfo().modes[id]
 				if minfo.Width == m.Width && minfo.Height == m.Height {
 					valid = true
 					break
@@ -257,7 +257,7 @@ func mergeConfigMonitor(dpy *Display, a *ConfigMonitor, b *ConfigMonitor) *Confi
 
 	var ops []randr.Output
 	for _, opName := range c.Outputs {
-		if op, ok := dpy.outputNames[opName]; ok {
+		if op, ok := GetDisplayInfo().outputNames[opName]; ok {
 			ops = append(ops, op)
 		}
 	}
