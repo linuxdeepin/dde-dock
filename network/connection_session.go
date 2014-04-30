@@ -208,7 +208,7 @@ func (s *ConnectionSession) listPages() (pages []string) {
 	case typeWireless:
 		pages = []string{
 			pageGeneral,
-			// pageWifi, // TODO need when setup adhoc
+			pageWifi,
 			pageIPv4,
 			pageIPv6,
 			pageSecurity,

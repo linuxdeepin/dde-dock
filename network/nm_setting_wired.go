@@ -118,7 +118,7 @@ func getSettingWiredAvailableValues(data connectionData, key string) (values []k
 				if dev, err := nmNewDevice(p); err == nil && dev.DeviceType.Get() == NM_DEVICE_TYPE_ETHERNET {
 					if wiredDev, err := nmNewDeviceWired(p); err == nil {
 						hwAddr := wiredDev.HwAddress.Get()
-						values = append(values, kvalue{hwAddr, hwAddr})
+						values = append(values, kvalue{hwAddr, hwAddr + " (" + dev.Interface.Get() + ")"})
 					}
 				}
 			}
@@ -130,6 +130,6 @@ func getSettingWiredAvailableValues(data connectionData, key string) (values []k
 // Check whether the values are correct
 func checkSettingWiredValues(data connectionData) (errs fieldErrors) {
 	errs = make(map[string]string)
-	// machine address format will be checked when setting key
+	// machine address will be checked when setting key
 	return
 }

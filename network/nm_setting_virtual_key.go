@@ -24,7 +24,9 @@ const NM_SETTING_VK_CONNECTION_NO_PERMISSION = "vk-no-permission"
 // wired
 const NM_SETTING_VK_WIRED_MTU = "vk-mtu"
 
-// wifi TODO
+// wireless
+const NM_SETTING_VK_WIRELESS_CHANNEL = "vk-channel"
+const NM_SETTING_VK_WIRELESS_MTU = "vk-mtu"
 
 // ipv4
 const (

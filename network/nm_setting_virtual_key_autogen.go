@@ -39,6 +39,8 @@ var virtualKeys = []virtualKey{
 	virtualKey{NM_SETTING_VK_VPN_VPNC_KEY_ENCRYPTION_METHOD, ktypeString, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_SINGLE_DES, false, true, false},
 	virtualKey{NM_SETTING_VK_VPN_VPNC_KEY_DISABLE_DPD, ktypeBoolean, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT, false, true, false},
 	virtualKey{NM_SETTING_VK_WIRED_MTU, ktypeBoolean, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MTU, true, true, false},
+	virtualKey{NM_SETTING_VK_WIRELESS_CHANNEL, ktypeBoolean, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_CHANNEL, true, true, false},
+	virtualKey{NM_SETTING_VK_WIRELESS_MTU, ktypeBoolean, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MTU, true, true, false},
 	virtualKey{NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT, ktypeString, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT, false, true, false},
 }
 
@@ -155,6 +157,13 @@ func generalGetVirtualKeyJSON(data connectionData, field, key string) (valueJSON
 		switch key {
 		case NM_SETTING_VK_WIRED_MTU:
 			return getSettingVkWiredMtuJSON(data)
+		}
+	case NM_SETTING_WIRELESS_SETTING_NAME:
+		switch key {
+		case NM_SETTING_VK_WIRELESS_CHANNEL:
+			return getSettingVkWirelessChannelJSON(data)
+		case NM_SETTING_VK_WIRELESS_MTU:
+			return getSettingVkWirelessMtuJSON(data)
 		}
 	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
 		switch key {
@@ -317,6 +326,15 @@ func generalSetVirtualKeyJSON(data connectionData, field, key string, valueJSON 
 			err = logicSetSettingVkWiredMtuJSON(data, valueJSON)
 			return
 		}
+	case NM_SETTING_WIRELESS_SETTING_NAME:
+		switch key {
+		case NM_SETTING_VK_WIRELESS_CHANNEL:
+			err = logicSetSettingVkWirelessChannelJSON(data, valueJSON)
+			return
+		case NM_SETTING_VK_WIRELESS_MTU:
+			err = logicSetSettingVkWirelessMtuJSON(data, valueJSON)
+			return
+		}
 	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
 		switch key {
 		case NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT:
@@ -473,6 +491,14 @@ func getSettingVkWiredMtuJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkWiredMtu(data))
 	return
 }
+func getSettingVkWirelessChannelJSON(data connectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkWirelessChannel(data))
+	return
+}
+func getSettingVkWirelessMtuJSON(data connectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkWirelessMtu(data))
+	return
+}
 func getSettingVkWirelessSecurityKeyMgmtJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkWirelessSecurityKeyMgmt(data))
 	return
@@ -623,6 +649,14 @@ func logicSetSettingVkWiredMtuJSON(data connectionData, valueJSON string) (err e
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	return logicSetSettingVkWiredMtu(data, value)
 }
+func logicSetSettingVkWirelessChannelJSON(data connectionData, valueJSON string) (err error) {
+	value, _ := jsonToKeyValueBoolean(valueJSON)
+	return logicSetSettingVkWirelessChannel(data, value)
+}
+func logicSetSettingVkWirelessMtuJSON(data connectionData, valueJSON string) (err error) {
+	value, _ := jsonToKeyValueBoolean(valueJSON)
+	return logicSetSettingVkWirelessMtu(data, value)
+}
 func logicSetSettingVkWirelessSecurityKeyMgmtJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	return logicSetSettingVkWirelessSecurityKeyMgmt(data, value)
@@ -667,6 +701,18 @@ func getSettingVkVpnOpenvpnKeyEnableTaDir(data connectionData) (value bool) {
 }
 func getSettingVkWiredMtu(data connectionData) (value bool) {
 	if isSettingWiredMtuExists(data) {
+		return true
+	}
+	return false
+}
+func getSettingVkWirelessChannel(data connectionData) (value bool) {
+	if isSettingWirelessChannelExists(data) {
+		return true
+	}
+	return false
+}
+func getSettingVkWirelessMtu(data connectionData) (value bool) {
+	if isSettingWirelessMtuExists(data) {
 		return true
 	}
 	return false
@@ -726,6 +772,22 @@ func logicSetSettingVkWiredMtu(data connectionData, value bool) (err error) {
 		setSettingWiredMtu(data, 0)
 	} else {
 		removeSettingWiredMtu(data)
+	}
+	return
+}
+func logicSetSettingVkWirelessChannel(data connectionData, value bool) (err error) {
+	if value {
+		setSettingWirelessChannel(data, 0)
+	} else {
+		removeSettingWirelessChannel(data)
+	}
+	return
+}
+func logicSetSettingVkWirelessMtu(data connectionData, value bool) (err error) {
+	if value {
+		setSettingWirelessMtu(data, 0)
+	} else {
+		removeSettingWirelessMtu(data)
 	}
 	return
 }

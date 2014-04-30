@@ -127,63 +127,46 @@ func newWirelessConnectionData(id, uuid string, ssid []byte, secType apSecType) 
 
 	addSettingField(data, fieldWireless)
 	setSettingWirelessSsid(data, ssid)
+	setSettingWirelessMode(data, NM_SETTING_WIRELESS_MODE_INFRA)
 
-	if secType != apSecNone {
-		addSettingField(data, fieldWirelessSecurity)
-		setSettingWirelessSec(data, fieldWirelessSecurity)
-		switch secType {
-		case apSecWep:
-			setSettingWirelessSecurityKeyMgmt(data, "none")
-			setSettingWirelessSecurityAuthAlg(data, "open")
-		case apSecPsk:
-			setSettingWirelessSecurityKeyMgmt(data, "wpa-psk")
-		case apSecEap:
-			setSettingWirelessSecurityKeyMgmt(data, "wpa-eap")
-			// TODO
-		}
+	switch secType {
+	case apSecNone:
+		logicSetSettingVkWirelessSecurityKeyMgmt(data, "none")
+	case apSecWep:
+		logicSetSettingVkWirelessSecurityKeyMgmt(data, "wep")
+	case apSecPsk:
+		logicSetSettingVkWirelessSecurityKeyMgmt(data, "wpa-psk")
+	case apSecEap:
+		logicSetSettingVkWirelessSecurityKeyMgmt(data, "wpa-eap")
 	}
 
 	initSettingFieldIpv4(data)
 	initSettingFieldIpv6(data)
 
 	return
-
-	// TODO remove
-
-	// data[fieldConnection] = make(map[string]dbus.Variant)
-	// data[fieldIpv4] = make(map[string]dbus.Variant)
-	// data[fieldIpv6] = make(map[string]dbus.Variant)
-	// data[fieldWireless] = make(map[string]dbus.Variant)
-
-	// data[fieldConnection]["id"] = dbus.MakeVariant(id)
-	// uuid := newUUID()
-	// data[fieldConnection]["uuid"] = dbus.MakeVariant(uuid)
-	// data[fieldConnection]["type"] = dbus.MakeVariant(fieldWireless)
-
-	// data[fieldWireless]["ssid"] = dbus.MakeVariant([]uint8(ssid))
-
-	// if secType != apSecNone {
-	// 	data[fieldWirelessSecurity] = make(map[string]dbus.Variant)
-	// 	data[fieldWireless]["security"] = dbus.MakeVariant(fieldWirelessSecurity)
-	// 	switch secType {
-	// 	case apSecWep:
-	// 		data[fieldWirelessSecurity]["key-mgmt"] = dbus.MakeVariant("none")
-	// 	case apSecPsk:
-	// 		data[fieldWirelessSecurity]["key-mgmt"] = dbus.MakeVariant("wpa-psk")
-	// 		data[fieldWirelessSecurity]["auth-alg"] = dbus.MakeVariant("open")
-	// 	case apSecEap:
-	// 		data[fieldWirelessSecurity]["key-mgmt"] = dbus.MakeVariant("wpa-eap")
-	// 		data[fieldWirelessSecurity]["auth-alg"] = dbus.MakeVariant("open")
-	// 	}
-	// }
-
-	// data[fieldIpv4]["method"] = dbus.MakeVariant("auto")
-	// data[fieldIpv6]["method"] = dbus.MakeVariant("auto")
 }
 
-// TODO Get available keys
+// Get available keys
 func getSettingWirelessAvailableKeys(data connectionData) (keys []string) {
+	keys = appendAvailableKeys(keys, fieldWireless, NM_SETTING_WIRELESS_SSID)
 	keys = appendAvailableKeys(keys, fieldWireless, NM_SETTING_WIRELESS_MODE)
+	switch getSettingWirelessMode(data) {
+	case NM_SETTING_WIRELESS_MODE_INFRA:
+	case NM_SETTING_WIRELESS_MODE_ADHOC:
+		keys = appendAvailableKeys(keys, fieldWireless, NM_SETTING_WIRELESS_BAND)
+		keys = appendAvailableKeys(keys, fieldWireless, NM_SETTING_WIRELESS_CHANNEL)
+		if isSettingWirelessChannelExists(data) {
+			keys = append(keys, NM_SETTING_WIRELESS_CHANNEL)
+		}
+	case NM_SETTING_WIRELESS_MODE_AP:
+		// TODO
+	}
+	keys = appendAvailableKeys(keys, fieldWireless, NM_SETTING_WIRELESS_MAC_ADDRESS)
+	keys = appendAvailableKeys(keys, fieldWireless, NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS)
+	keys = appendAvailableKeys(keys, fieldWireless, NM_SETTING_WIRELESS_MTU)
+	if isSettingWirelessMtuExists(data) {
+		keys = append(keys, NM_SETTING_WIRELESS_MTU)
+	}
 	return
 }
 
@@ -194,7 +177,26 @@ func getSettingWirelessAvailableValues(data connectionData, key string) (values 
 		values = []kvalue{
 			kvalue{NM_SETTING_WIRELESS_MODE_INFRA, dlib.Tr("Infrastructure")},
 			kvalue{NM_SETTING_WIRELESS_MODE_ADHOC, dlib.Tr("Ad-Hoc")},
-			kvalue{NM_SETTING_WIRELESS_MODE_AP, dlib.Tr("AP/Hotspot")},
+			kvalue{NM_SETTING_WIRELESS_MODE_AP, dlib.Tr("AP-Hotspot")},
+		}
+	case NM_SETTING_WIRELESS_BAND:
+		values = []kvalue{
+			kvalue{"", dlib.Tr("Automatic")},
+			kvalue{"a", dlib.Tr("A (5 GHz)")},
+			kvalue{"bg", dlib.Tr("BG (2.4 GHz)")},
+		}
+	case NM_SETTING_WIRELESS_MAC_ADDRESS:
+		// get wireless devices mac address
+		devPaths, err := nmGetDevices()
+		if err == nil {
+			for _, p := range devPaths {
+				if dev, err := nmNewDevice(p); err == nil && dev.DeviceType.Get() == NM_DEVICE_TYPE_WIFI {
+					if wirelessDev, err := nmNewDeviceWireless(p); err == nil {
+						hwAddr := wirelessDev.HwAddress.Get()
+						values = append(values, kvalue{hwAddr, hwAddr + " (" + dev.Interface.Get() + ")"})
+					}
+				}
+			}
 		}
 	}
 	return
@@ -215,5 +217,6 @@ func checkSettingWirelessValues(data connectionData) (errs fieldErrors) {
 		}
 	}
 
+	// machine address will be checked when setting key
 	return
 }

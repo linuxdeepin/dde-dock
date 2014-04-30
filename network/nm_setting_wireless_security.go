@@ -274,24 +274,30 @@ func getSettingVkWirelessSecurityKeyMgmt(data connectionData) (value string) {
 	return
 }
 func logicSetSettingVkWirelessSecurityKeyMgmt(data connectionData, value string) (err error) {
+	// TODO remove related keys
+	// TODO password flag
 	switch value {
 	default:
 		logger.Error("invalid value", value)
 		err = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
 	case "none":
+		removeSettingWirelessSec(data)
 		removeSettingField(data, fieldWirelessSecurity)
 		removeSettingField(data, field8021x)
 	case "wep":
+		setSettingWirelessSec(data, fieldWirelessSecurity)
 		addSettingField(data, fieldWirelessSecurity)
 		removeSettingField(data, field8021x)
 		setSettingWirelessSecurityKeyMgmt(data, "none")
 		setSettingWirelessSecurityAuthAlg(data, "open")
 		setSettingWirelessSecurityWepKeyType(data, 1)
 	case "wpa-psk":
+		setSettingWirelessSec(data, fieldWirelessSecurity)
 		addSettingField(data, fieldWirelessSecurity)
 		removeSettingField(data, field8021x)
 		setSettingWirelessSecurityKeyMgmt(data, "wpa-psk")
 	case "wpa-eap":
+		setSettingWirelessSec(data, fieldWirelessSecurity)
 		addSettingField(data, fieldWirelessSecurity)
 		addSettingField(data, field8021x)
 		setSettingWirelessSecurityKeyMgmt(data, "wpa-eap")
