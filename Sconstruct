@@ -1,0 +1,57 @@
+import os
+import subprocess
+import glob
+from SCons.Script.SConscript import SConsEnvironment
+import SCons.Util
+
+os.environ['GOROOT']='/usr/lib/go'
+os.environ['GOPATH']='/usr/share/gocode'
+components = ['accounts', 'audio', 'datetime', 'desktop-toggle', 'display', 'dock-apps-builder', 'dock-daemon']
+
+SConsignFile()
+opts=Variables()
+opts.AddVariables(
+    PathVariable('PREFIX', 'install-path base', '/usr'),
+    BoolVariable('enable_i18n', 'enable i18n support', 'False'),
+    PathVariable('DESTDIR', 'install to $DESTDIR/$PREFIX', '/')
+)
+
+ipackage_instdir = os.path.join('$DESTDIR', '$PREFIX')
+ipackage_instdir_go = os.path.join(ipackage_instdir, 'lib/deepin-daemon')
+ipackage_instdir_locale = os.path.join(ipackage_instdir, 'share/locale/')
+
+env = Environment( tools = ['default', 'textfile'], options = opts, ENV = os.environ)
+
+opts.Update(env)
+
+Export('env')
+if env['enable_i18n']:
+    languages = SConscript('data/po/SConscript')
+
+owd = os.getcwd()
+for component in components:
+    try:
+        os.chdir(component)
+        print "Go build %s" % component
+        p = subprocess.Popen('go build', shell=True).wait()
+        if p != 0:
+            exit(1)
+        #env.GoProgram(component, Glob('*.go'))
+    except:
+        print "Error while building %s" % component
+        exit(1)
+    finally:
+        os.chdir(owd)
+
+
+for component in components:
+    print "install %s " % component
+    env.Install(ipackage_instdir_go, '%s/%s' % (component,component))
+
+if languages:
+    for language in languages:
+        env.Install(ipackage_instdir_locale, 'data/po/%s' % language)
+
+env.Alias('install', ipackage_instdir)
+
+Help(opts.GenerateHelpText(env))

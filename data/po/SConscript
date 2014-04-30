@@ -1,0 +1,17 @@
+Import('env')
+from os.path import join, basename, dirname, exists
+import os
+
+print '-----------------'
+languages = []
+for src in env.Glob('*.po'):
+    lang = basename(str(src))[:-3]
+    languages.append(lang)
+    dst = join(lang, 'LC_MESSAGES', 'dde-daemon.mo')
+    if not exists(dirname(dst)):
+       os.makedirs(dirname(dst)) 
+    os.system('msgfmt %s -o %s' % (src, dst))
+
+exist_lang = filter(lambda lang: exists('%s/LC_MESSAGES/dde-daemon.mo' % lang), languages)
+
+Return('exist_lang')
