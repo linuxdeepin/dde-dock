@@ -274,7 +274,7 @@ package main{{$vks := .}}
 
 // All virtual keys data
 var virtualKeys = []virtualKey{ {{range .}}
-	virtualKey{ {{.Name}}, {{.Type}}, {{.RelatedField}}, {{.RelatedKey}}, {{.EnableWrapper}}, {{.UsedByFrontEnd}}, {{.Optional}} },{{end}}
+	virtualKey{ Name:{{.Name}}, Type:{{.Type}}, RelatedField:{{.RelatedField}}, RelatedKey:{{.RelatedKey}}, EnableWrapper:{{.EnableWrapper}}, Available:{{.UsedByFrontEnd}}, Optional:{{.Optional}} },{{end}}
 }
 
 // Get JSON value generally
