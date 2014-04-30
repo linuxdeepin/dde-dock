@@ -25,16 +25,25 @@ func convertMacAddressToString(v []byte) (macAddr string) {
 
 // "00:00:00:00:00:00" -> []byte{0,0,0,0,0,0}
 func convertMacAddressToArrayByte(v string) (macAddr []byte) {
+	macAddr, err := convertMacAddressToArrayByteCheck(v)
+	if err != nil {
+		logger.Error(err)
+	}
+	return
+}
+func convertMacAddressToArrayByteCheck(v string) (macAddr []byte, err error) {
 	macAddr = make([]byte, 6)
 	a := strings.Split(v, ":")
 	if len(a) != 6 {
-		logger.Error("machine address is invalid", v)
+		err = fmt.Errorf("machine address is invalid %s", v)
 		return
 	}
 	for i := 0; i < 6; i++ {
-		n, err := strconv.ParseUint(a[i], 16, 8)
+		var n uint64
+		n, err = strconv.ParseUint(a[i], 16, 8)
 		if err != nil {
-			logger.Error("machine address is invalid", v)
+			err = fmt.Errorf("machine address is invalid %s", v)
+			return
 		}
 		macAddr[i] = byte(n)
 	}

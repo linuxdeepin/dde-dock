@@ -94,7 +94,7 @@ func generalSet{{$fieldFuncBaseName}}KeyJSON(data connectionData, key, valueJSON
 	default:
 		logger.Error("generalSet{{$fieldFuncBaseName}}KeyJSON: invalide key", key){{range .Keys}}{{if .UsedByBackEnd}}
 	case {{.Name}}:
-		{{if .LogicSet}}err = logicSet{{else}}set{{end}}{{.Name | ToKeyFuncBaseName}}JSON(data, valueJSON){{end}}{{end}}
+		err = {{if .LogicSet}}logicSet{{else}}set{{end}}{{.Name | ToKeyFuncBaseName}}JSON(data, valueJSON){{end}}{{end}}
 	}
 	return
 }
@@ -137,8 +137,8 @@ func get{{$key.Name | ToKeyFuncBaseName}}JSON(data connectionData) (valueJSON st
 // json setter
 const tplJSONSetter = `
 // JSON Setter{{$fieldName := .FieldName}}{{range $i, $key := .Keys}}{{if $key.UsedByBackEnd}}
-func set{{$key.Name | ToKeyFuncBaseName}}JSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, {{$fieldName}}, {{$key.Name}}, valueJSON, get{{$fieldName | ToFieldFuncBaseName}}KeyType({{$key.Name}}))
+func set{{$key.Name | ToKeyFuncBaseName}}JSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, {{$fieldName}}, {{$key.Name}}, valueJSON, get{{$fieldName | ToFieldFuncBaseName}}KeyType({{$key.Name}}))
 }{{end}}{{end}}
 `
 
@@ -146,7 +146,10 @@ func set{{$key.Name | ToKeyFuncBaseName}}JSON(data connectionData, valueJSON str
 const tplLogicJSONSetter = `
 // Logic JSON Setter{{range $i, $key := .Keys}}{{if $key.LogicSet}}{{$keyFuncBaseName := $key.Name | ToKeyFuncBaseName}}
 func logicSet{{$keyFuncBaseName}}JSON(data connectionData, valueJSON string) (err error) {
-	set{{$keyFuncBaseName}}JSON(data, valueJSON)
+	err = set{{$keyFuncBaseName}}JSON(data, valueJSON)
+	if err != nil {
+		return
+	}
 	if is{{$keyFuncBaseName}}Exists(data) {
 		value := get{{$keyFuncBaseName}}(data)
 		err = logicSet{{$keyFuncBaseName}}(data, value)
@@ -289,6 +292,7 @@ func generalGetVirtualKeyJSON(data connectionData, field, key string) (valueJSON
 
 // Set JSON value generally
 func generalSetVirtualKeyJSON(data connectionData, field, key string, valueJSON string) (err error) {
+	// each virtual key has a logic setter
 	switch field { {{range $i, $field := GetAllVkFields $vks}}
 	case {{$field}}:
 		switch key { {{range $i, $key := GetAllVkFieldKeys $vks $field}}

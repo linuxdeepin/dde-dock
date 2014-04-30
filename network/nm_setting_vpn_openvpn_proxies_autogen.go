@@ -103,17 +103,17 @@ func generalSetSettingVpnOpenvpnProxiesKeyJSON(data connectionData, key, valueJS
 	case NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE:
 		err = logicSetSettingVpnOpenvpnKeyProxyTypeJSON(data, valueJSON)
 	case NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER:
-		setSettingVpnOpenvpnKeyProxyServerJSON(data, valueJSON)
+		err = setSettingVpnOpenvpnKeyProxyServerJSON(data, valueJSON)
 	case NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT:
-		setSettingVpnOpenvpnKeyProxyPortJSON(data, valueJSON)
+		err = setSettingVpnOpenvpnKeyProxyPortJSON(data, valueJSON)
 	case NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY:
-		setSettingVpnOpenvpnKeyProxyRetryJSON(data, valueJSON)
+		err = setSettingVpnOpenvpnKeyProxyRetryJSON(data, valueJSON)
 	case NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME:
-		setSettingVpnOpenvpnKeyHttpProxyUsernameJSON(data, valueJSON)
+		err = setSettingVpnOpenvpnKeyHttpProxyUsernameJSON(data, valueJSON)
 	case NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD:
-		setSettingVpnOpenvpnKeyHttpProxyPasswordJSON(data, valueJSON)
+		err = setSettingVpnOpenvpnKeyHttpProxyPasswordJSON(data, valueJSON)
 	case NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS:
-		setSettingVpnOpenvpnKeyHttpProxyPasswordFlagsJSON(data, valueJSON)
+		err = setSettingVpnOpenvpnKeyHttpProxyPasswordFlagsJSON(data, valueJSON)
 	}
 	return
 }
@@ -287,31 +287,34 @@ func getSettingVpnOpenvpnKeyHttpProxyPasswordFlagsJSON(data connectionData) (val
 }
 
 // JSON Setter
-func setSettingVpnOpenvpnKeyProxyTypeJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE, valueJSON, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE))
+func setSettingVpnOpenvpnKeyProxyTypeJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE, valueJSON, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE))
 }
-func setSettingVpnOpenvpnKeyProxyServerJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER, valueJSON, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER))
+func setSettingVpnOpenvpnKeyProxyServerJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER, valueJSON, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER))
 }
-func setSettingVpnOpenvpnKeyProxyPortJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT, valueJSON, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT))
+func setSettingVpnOpenvpnKeyProxyPortJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT, valueJSON, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT))
 }
-func setSettingVpnOpenvpnKeyProxyRetryJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY, valueJSON, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY))
+func setSettingVpnOpenvpnKeyProxyRetryJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY, valueJSON, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY))
 }
-func setSettingVpnOpenvpnKeyHttpProxyUsernameJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME, valueJSON, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME))
+func setSettingVpnOpenvpnKeyHttpProxyUsernameJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME, valueJSON, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME))
 }
-func setSettingVpnOpenvpnKeyHttpProxyPasswordJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD, valueJSON, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD))
+func setSettingVpnOpenvpnKeyHttpProxyPasswordJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD, valueJSON, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD))
 }
-func setSettingVpnOpenvpnKeyHttpProxyPasswordFlagsJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS, valueJSON, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS))
+func setSettingVpnOpenvpnKeyHttpProxyPasswordFlagsJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS, valueJSON, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS))
 }
 
 // Logic JSON Setter
 func logicSetSettingVpnOpenvpnKeyProxyTypeJSON(data connectionData, valueJSON string) (err error) {
-	setSettingVpnOpenvpnKeyProxyTypeJSON(data, valueJSON)
+	err = setSettingVpnOpenvpnKeyProxyTypeJSON(data, valueJSON)
+	if err != nil {
+		return
+	}
 	if isSettingVpnOpenvpnKeyProxyTypeExists(data) {
 		value := getSettingVpnOpenvpnKeyProxyType(data)
 		err = logicSetSettingVpnOpenvpnKeyProxyType(data, value)

@@ -133,27 +133,27 @@ func generalSetSettingWiredKeyJSON(data connectionData, key, valueJSON string) (
 	default:
 		logger.Error("generalSetSettingWiredKeyJSON: invalide key", key)
 	case NM_SETTING_WIRED_PORT:
-		setSettingWiredPortJSON(data, valueJSON)
+		err = setSettingWiredPortJSON(data, valueJSON)
 	case NM_SETTING_WIRED_SPEED:
-		setSettingWiredSpeedJSON(data, valueJSON)
+		err = setSettingWiredSpeedJSON(data, valueJSON)
 	case NM_SETTING_WIRED_DUPLEX:
-		setSettingWiredDuplexJSON(data, valueJSON)
+		err = setSettingWiredDuplexJSON(data, valueJSON)
 	case NM_SETTING_WIRED_AUTO_NEGOTIATE:
-		setSettingWiredAutoNegotiateJSON(data, valueJSON)
+		err = setSettingWiredAutoNegotiateJSON(data, valueJSON)
 	case NM_SETTING_WIRED_MAC_ADDRESS:
-		setSettingWiredMacAddressJSON(data, valueJSON)
+		err = setSettingWiredMacAddressJSON(data, valueJSON)
 	case NM_SETTING_WIRED_CLONED_MAC_ADDRESS:
-		setSettingWiredClonedMacAddressJSON(data, valueJSON)
+		err = setSettingWiredClonedMacAddressJSON(data, valueJSON)
 	case NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST:
-		setSettingWiredMacAddressBlacklistJSON(data, valueJSON)
+		err = setSettingWiredMacAddressBlacklistJSON(data, valueJSON)
 	case NM_SETTING_WIRED_MTU:
-		setSettingWiredMtuJSON(data, valueJSON)
+		err = setSettingWiredMtuJSON(data, valueJSON)
 	case NM_SETTING_WIRED_S390_SUBCHANNELS:
-		setSettingWiredS390SubchannelsJSON(data, valueJSON)
+		err = setSettingWiredS390SubchannelsJSON(data, valueJSON)
 	case NM_SETTING_WIRED_S390_NETTYPE:
-		setSettingWiredS390NettypeJSON(data, valueJSON)
+		err = setSettingWiredS390NettypeJSON(data, valueJSON)
 	case NM_SETTING_WIRED_S390_OPTIONS:
-		setSettingWiredS390OptionsJSON(data, valueJSON)
+		err = setSettingWiredS390OptionsJSON(data, valueJSON)
 	}
 	return
 }
@@ -419,38 +419,38 @@ func getSettingWiredS390OptionsJSON(data connectionData) (valueJSON string) {
 }
 
 // JSON Setter
-func setSettingWiredPortJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_PORT, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_PORT))
+func setSettingWiredPortJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_PORT, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_PORT))
 }
-func setSettingWiredSpeedJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_SPEED, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_SPEED))
+func setSettingWiredSpeedJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_SPEED, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_SPEED))
 }
-func setSettingWiredDuplexJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_DUPLEX, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_DUPLEX))
+func setSettingWiredDuplexJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_DUPLEX, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_DUPLEX))
 }
-func setSettingWiredAutoNegotiateJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_AUTO_NEGOTIATE, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_AUTO_NEGOTIATE))
+func setSettingWiredAutoNegotiateJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_AUTO_NEGOTIATE, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_AUTO_NEGOTIATE))
 }
-func setSettingWiredMacAddressJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_MAC_ADDRESS))
+func setSettingWiredMacAddressJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_MAC_ADDRESS))
 }
-func setSettingWiredClonedMacAddressJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_CLONED_MAC_ADDRESS, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_CLONED_MAC_ADDRESS))
+func setSettingWiredClonedMacAddressJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_CLONED_MAC_ADDRESS, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_CLONED_MAC_ADDRESS))
 }
-func setSettingWiredMacAddressBlacklistJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST))
+func setSettingWiredMacAddressBlacklistJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST))
 }
-func setSettingWiredMtuJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MTU, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_MTU))
+func setSettingWiredMtuJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MTU, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_MTU))
 }
-func setSettingWiredS390SubchannelsJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_SUBCHANNELS, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_S390_SUBCHANNELS))
+func setSettingWiredS390SubchannelsJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_SUBCHANNELS, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_S390_SUBCHANNELS))
 }
-func setSettingWiredS390NettypeJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_NETTYPE, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_S390_NETTYPE))
+func setSettingWiredS390NettypeJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_NETTYPE, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_S390_NETTYPE))
 }
-func setSettingWiredS390OptionsJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_OPTIONS, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_S390_OPTIONS))
+func setSettingWiredS390OptionsJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_OPTIONS, valueJSON, getSettingWiredKeyType(NM_SETTING_WIRED_S390_OPTIONS))
 }
 
 // Logic JSON Setter

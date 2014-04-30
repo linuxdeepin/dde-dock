@@ -217,7 +217,7 @@ func jsonToKeyValueWrapperMacAddress(jsonStr string) (v []byte, err error) {
 	if err != nil {
 		return
 	}
-	v = convertMacAddressToArrayByte(wrapData)
+	v, err = convertMacAddressToArrayByteCheck(wrapData)
 	return
 }
 func jsonToKeyValueWrapperIpv4Dns(jsonStr string) (v []uint32, err error) {

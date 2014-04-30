@@ -117,23 +117,23 @@ func generalSetSettingVpnOpenvpnAdvancedKeyJSON(data connectionData, key, valueJ
 	default:
 		logger.Error("generalSetSettingVpnOpenvpnAdvancedKeyJSON: invalide key", key)
 	case NM_SETTING_VPN_OPENVPN_KEY_PORT:
-		setSettingVpnOpenvpnKeyPortJSON(data, valueJSON)
+		err = setSettingVpnOpenvpnKeyPortJSON(data, valueJSON)
 	case NM_SETTING_VPN_OPENVPN_KEY_RENEG_SECONDS:
-		setSettingVpnOpenvpnKeyRenegSecondsJSON(data, valueJSON)
+		err = setSettingVpnOpenvpnKeyRenegSecondsJSON(data, valueJSON)
 	case NM_SETTING_VPN_OPENVPN_KEY_COMP_LZO:
-		setSettingVpnOpenvpnKeyCompLzoJSON(data, valueJSON)
+		err = setSettingVpnOpenvpnKeyCompLzoJSON(data, valueJSON)
 	case NM_SETTING_VPN_OPENVPN_KEY_PROTO_TCP:
-		setSettingVpnOpenvpnKeyProtoTcpJSON(data, valueJSON)
+		err = setSettingVpnOpenvpnKeyProtoTcpJSON(data, valueJSON)
 	case NM_SETTING_VPN_OPENVPN_KEY_TAP_DEV:
-		setSettingVpnOpenvpnKeyTapDevJSON(data, valueJSON)
+		err = setSettingVpnOpenvpnKeyTapDevJSON(data, valueJSON)
 	case NM_SETTING_VPN_OPENVPN_KEY_TUNNEL_MTU:
-		setSettingVpnOpenvpnKeyTunnelMtuJSON(data, valueJSON)
+		err = setSettingVpnOpenvpnKeyTunnelMtuJSON(data, valueJSON)
 	case NM_SETTING_VPN_OPENVPN_KEY_FRAGMENT_SIZE:
-		setSettingVpnOpenvpnKeyFragmentSizeJSON(data, valueJSON)
+		err = setSettingVpnOpenvpnKeyFragmentSizeJSON(data, valueJSON)
 	case NM_SETTING_VPN_OPENVPN_KEY_MSSFIX:
-		setSettingVpnOpenvpnKeyMssfixJSON(data, valueJSON)
+		err = setSettingVpnOpenvpnKeyMssfixJSON(data, valueJSON)
 	case NM_SETTING_VPN_OPENVPN_KEY_REMOTE_RANDOM:
-		setSettingVpnOpenvpnKeyRemoteRandomJSON(data, valueJSON)
+		err = setSettingVpnOpenvpnKeyRemoteRandomJSON(data, valueJSON)
 	}
 	return
 }
@@ -329,32 +329,32 @@ func getSettingVpnOpenvpnKeyRemoteRandomJSON(data connectionData) (valueJSON str
 }
 
 // JSON Setter
-func setSettingVpnOpenvpnKeyPortJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PORT, valueJSON, getSettingVpnOpenvpnAdvancedKeyType(NM_SETTING_VPN_OPENVPN_KEY_PORT))
+func setSettingVpnOpenvpnKeyPortJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PORT, valueJSON, getSettingVpnOpenvpnAdvancedKeyType(NM_SETTING_VPN_OPENVPN_KEY_PORT))
 }
-func setSettingVpnOpenvpnKeyRenegSecondsJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_RENEG_SECONDS, valueJSON, getSettingVpnOpenvpnAdvancedKeyType(NM_SETTING_VPN_OPENVPN_KEY_RENEG_SECONDS))
+func setSettingVpnOpenvpnKeyRenegSecondsJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_RENEG_SECONDS, valueJSON, getSettingVpnOpenvpnAdvancedKeyType(NM_SETTING_VPN_OPENVPN_KEY_RENEG_SECONDS))
 }
-func setSettingVpnOpenvpnKeyCompLzoJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_COMP_LZO, valueJSON, getSettingVpnOpenvpnAdvancedKeyType(NM_SETTING_VPN_OPENVPN_KEY_COMP_LZO))
+func setSettingVpnOpenvpnKeyCompLzoJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_COMP_LZO, valueJSON, getSettingVpnOpenvpnAdvancedKeyType(NM_SETTING_VPN_OPENVPN_KEY_COMP_LZO))
 }
-func setSettingVpnOpenvpnKeyProtoTcpJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROTO_TCP, valueJSON, getSettingVpnOpenvpnAdvancedKeyType(NM_SETTING_VPN_OPENVPN_KEY_PROTO_TCP))
+func setSettingVpnOpenvpnKeyProtoTcpJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROTO_TCP, valueJSON, getSettingVpnOpenvpnAdvancedKeyType(NM_SETTING_VPN_OPENVPN_KEY_PROTO_TCP))
 }
-func setSettingVpnOpenvpnKeyTapDevJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TAP_DEV, valueJSON, getSettingVpnOpenvpnAdvancedKeyType(NM_SETTING_VPN_OPENVPN_KEY_TAP_DEV))
+func setSettingVpnOpenvpnKeyTapDevJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TAP_DEV, valueJSON, getSettingVpnOpenvpnAdvancedKeyType(NM_SETTING_VPN_OPENVPN_KEY_TAP_DEV))
 }
-func setSettingVpnOpenvpnKeyTunnelMtuJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TUNNEL_MTU, valueJSON, getSettingVpnOpenvpnAdvancedKeyType(NM_SETTING_VPN_OPENVPN_KEY_TUNNEL_MTU))
+func setSettingVpnOpenvpnKeyTunnelMtuJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TUNNEL_MTU, valueJSON, getSettingVpnOpenvpnAdvancedKeyType(NM_SETTING_VPN_OPENVPN_KEY_TUNNEL_MTU))
 }
-func setSettingVpnOpenvpnKeyFragmentSizeJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_FRAGMENT_SIZE, valueJSON, getSettingVpnOpenvpnAdvancedKeyType(NM_SETTING_VPN_OPENVPN_KEY_FRAGMENT_SIZE))
+func setSettingVpnOpenvpnKeyFragmentSizeJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_FRAGMENT_SIZE, valueJSON, getSettingVpnOpenvpnAdvancedKeyType(NM_SETTING_VPN_OPENVPN_KEY_FRAGMENT_SIZE))
 }
-func setSettingVpnOpenvpnKeyMssfixJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_MSSFIX, valueJSON, getSettingVpnOpenvpnAdvancedKeyType(NM_SETTING_VPN_OPENVPN_KEY_MSSFIX))
+func setSettingVpnOpenvpnKeyMssfixJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_MSSFIX, valueJSON, getSettingVpnOpenvpnAdvancedKeyType(NM_SETTING_VPN_OPENVPN_KEY_MSSFIX))
 }
-func setSettingVpnOpenvpnKeyRemoteRandomJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_REMOTE_RANDOM, valueJSON, getSettingVpnOpenvpnAdvancedKeyType(NM_SETTING_VPN_OPENVPN_KEY_REMOTE_RANDOM))
+func setSettingVpnOpenvpnKeyRemoteRandomJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_REMOTE_RANDOM, valueJSON, getSettingVpnOpenvpnAdvancedKeyType(NM_SETTING_VPN_OPENVPN_KEY_REMOTE_RANDOM))
 }
 
 // Logic JSON Setter

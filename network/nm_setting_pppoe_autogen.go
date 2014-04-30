@@ -77,13 +77,13 @@ func generalSetSettingPppoeKeyJSON(data connectionData, key, valueJSON string) (
 	default:
 		logger.Error("generalSetSettingPppoeKeyJSON: invalide key", key)
 	case NM_SETTING_PPPOE_USERNAME:
-		setSettingPppoeUsernameJSON(data, valueJSON)
+		err = setSettingPppoeUsernameJSON(data, valueJSON)
 	case NM_SETTING_PPPOE_SERVICE:
-		setSettingPppoeServiceJSON(data, valueJSON)
+		err = setSettingPppoeServiceJSON(data, valueJSON)
 	case NM_SETTING_PPPOE_PASSWORD:
-		setSettingPppoePasswordJSON(data, valueJSON)
+		err = setSettingPppoePasswordJSON(data, valueJSON)
 	case NM_SETTING_PPPOE_PASSWORD_FLAGS:
-		setSettingPppoePasswordFlagsJSON(data, valueJSON)
+		err = setSettingPppoePasswordFlagsJSON(data, valueJSON)
 	}
 	return
 }
@@ -196,17 +196,17 @@ func getSettingPppoePasswordFlagsJSON(data connectionData) (valueJSON string) {
 }
 
 // JSON Setter
-func setSettingPppoeUsernameJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_USERNAME, valueJSON, getSettingPppoeKeyType(NM_SETTING_PPPOE_USERNAME))
+func setSettingPppoeUsernameJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_USERNAME, valueJSON, getSettingPppoeKeyType(NM_SETTING_PPPOE_USERNAME))
 }
-func setSettingPppoeServiceJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_SERVICE, valueJSON, getSettingPppoeKeyType(NM_SETTING_PPPOE_SERVICE))
+func setSettingPppoeServiceJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_SERVICE, valueJSON, getSettingPppoeKeyType(NM_SETTING_PPPOE_SERVICE))
 }
-func setSettingPppoePasswordJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_PASSWORD, valueJSON, getSettingPppoeKeyType(NM_SETTING_PPPOE_PASSWORD))
+func setSettingPppoePasswordJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_PASSWORD, valueJSON, getSettingPppoeKeyType(NM_SETTING_PPPOE_PASSWORD))
 }
-func setSettingPppoePasswordFlagsJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_PASSWORD_FLAGS, valueJSON, getSettingPppoeKeyType(NM_SETTING_PPPOE_PASSWORD_FLAGS))
+func setSettingPppoePasswordFlagsJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_PASSWORD_FLAGS, valueJSON, getSettingPppoeKeyType(NM_SETTING_PPPOE_PASSWORD_FLAGS))
 }
 
 // Logic JSON Setter

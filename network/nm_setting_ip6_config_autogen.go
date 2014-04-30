@@ -135,25 +135,25 @@ func generalSetSettingIp6ConfigKeyJSON(data connectionData, key, valueJSON strin
 	case NM_SETTING_IP6_CONFIG_METHOD:
 		err = logicSetSettingIp6ConfigMethodJSON(data, valueJSON)
 	case NM_SETTING_IP6_CONFIG_ADDRESSES:
-		setSettingIp6ConfigAddressesJSON(data, valueJSON)
+		err = setSettingIp6ConfigAddressesJSON(data, valueJSON)
 	case NM_SETTING_IP6_CONFIG_DNS:
-		setSettingIp6ConfigDnsJSON(data, valueJSON)
+		err = setSettingIp6ConfigDnsJSON(data, valueJSON)
 	case NM_SETTING_IP6_CONFIG_DNS_SEARCH:
-		setSettingIp6ConfigDnsSearchJSON(data, valueJSON)
+		err = setSettingIp6ConfigDnsSearchJSON(data, valueJSON)
 	case NM_SETTING_IP6_CONFIG_ROUTES:
-		setSettingIp6ConfigRoutesJSON(data, valueJSON)
+		err = setSettingIp6ConfigRoutesJSON(data, valueJSON)
 	case NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES:
-		setSettingIp6ConfigIgnoreAutoRoutesJSON(data, valueJSON)
+		err = setSettingIp6ConfigIgnoreAutoRoutesJSON(data, valueJSON)
 	case NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS:
-		setSettingIp6ConfigIgnoreAutoDnsJSON(data, valueJSON)
+		err = setSettingIp6ConfigIgnoreAutoDnsJSON(data, valueJSON)
 	case NM_SETTING_IP6_CONFIG_NEVER_DEFAULT:
-		setSettingIp6ConfigNeverDefaultJSON(data, valueJSON)
+		err = setSettingIp6ConfigNeverDefaultJSON(data, valueJSON)
 	case NM_SETTING_IP6_CONFIG_MAY_FAIL:
-		setSettingIp6ConfigMayFailJSON(data, valueJSON)
+		err = setSettingIp6ConfigMayFailJSON(data, valueJSON)
 	case NM_SETTING_IP6_CONFIG_IP6_PRIVACY:
-		setSettingIp6ConfigIp6PrivacyJSON(data, valueJSON)
+		err = setSettingIp6ConfigIp6PrivacyJSON(data, valueJSON)
 	case NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME:
-		setSettingIp6ConfigDhcpHostnameJSON(data, valueJSON)
+		err = setSettingIp6ConfigDhcpHostnameJSON(data, valueJSON)
 	}
 	return
 }
@@ -411,43 +411,46 @@ func getSettingIp6ConfigDhcpHostnameJSON(data connectionData) (valueJSON string)
 }
 
 // JSON Setter
-func setSettingIp6ConfigMethodJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_METHOD, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_METHOD))
+func setSettingIp6ConfigMethodJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_METHOD, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_METHOD))
 }
-func setSettingIp6ConfigAddressesJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ADDRESSES, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_ADDRESSES))
+func setSettingIp6ConfigAddressesJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ADDRESSES, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_ADDRESSES))
 }
-func setSettingIp6ConfigDnsJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_DNS))
+func setSettingIp6ConfigDnsJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_DNS))
 }
-func setSettingIp6ConfigDnsSearchJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS_SEARCH, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_DNS_SEARCH))
+func setSettingIp6ConfigDnsSearchJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS_SEARCH, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_DNS_SEARCH))
 }
-func setSettingIp6ConfigRoutesJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTES, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_ROUTES))
+func setSettingIp6ConfigRoutesJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTES, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_ROUTES))
 }
-func setSettingIp6ConfigIgnoreAutoRoutesJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES))
+func setSettingIp6ConfigIgnoreAutoRoutesJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES))
 }
-func setSettingIp6ConfigIgnoreAutoDnsJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS))
+func setSettingIp6ConfigIgnoreAutoDnsJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS))
 }
-func setSettingIp6ConfigNeverDefaultJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_NEVER_DEFAULT, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_NEVER_DEFAULT))
+func setSettingIp6ConfigNeverDefaultJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_NEVER_DEFAULT, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_NEVER_DEFAULT))
 }
-func setSettingIp6ConfigMayFailJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_MAY_FAIL, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_MAY_FAIL))
+func setSettingIp6ConfigMayFailJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_MAY_FAIL, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_MAY_FAIL))
 }
-func setSettingIp6ConfigIp6PrivacyJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IP6_PRIVACY, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_IP6_PRIVACY))
+func setSettingIp6ConfigIp6PrivacyJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IP6_PRIVACY, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_IP6_PRIVACY))
 }
-func setSettingIp6ConfigDhcpHostnameJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME))
+func setSettingIp6ConfigDhcpHostnameJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME))
 }
 
 // Logic JSON Setter
 func logicSetSettingIp6ConfigMethodJSON(data connectionData, valueJSON string) (err error) {
-	setSettingIp6ConfigMethodJSON(data, valueJSON)
+	err = setSettingIp6ConfigMethodJSON(data, valueJSON)
+	if err != nil {
+		return
+	}
 	if isSettingIp6ConfigMethodExists(data) {
 		value := getSettingIp6ConfigMethod(data)
 		err = logicSetSettingIp6ConfigMethod(data, value)

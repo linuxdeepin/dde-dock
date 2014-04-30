@@ -77,13 +77,13 @@ func generalSetSettingVpnKeyJSON(data connectionData, key, valueJSON string) (er
 	default:
 		logger.Error("generalSetSettingVpnKeyJSON: invalide key", key)
 	case NM_SETTING_VPN_SERVICE_TYPE:
-		setSettingVpnServiceTypeJSON(data, valueJSON)
+		err = setSettingVpnServiceTypeJSON(data, valueJSON)
 	case NM_SETTING_VPN_USER_NAME:
-		setSettingVpnUserNameJSON(data, valueJSON)
+		err = setSettingVpnUserNameJSON(data, valueJSON)
 	case NM_SETTING_VPN_DATA:
-		setSettingVpnDataJSON(data, valueJSON)
+		err = setSettingVpnDataJSON(data, valueJSON)
 	case NM_SETTING_VPN_SECRETS:
-		setSettingVpnSecretsJSON(data, valueJSON)
+		err = setSettingVpnSecretsJSON(data, valueJSON)
 	}
 	return
 }
@@ -200,17 +200,17 @@ func getSettingVpnSecretsJSON(data connectionData) (valueJSON string) {
 }
 
 // JSON Setter
-func setSettingVpnServiceTypeJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SERVICE_TYPE, valueJSON, getSettingVpnKeyType(NM_SETTING_VPN_SERVICE_TYPE))
+func setSettingVpnServiceTypeJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SERVICE_TYPE, valueJSON, getSettingVpnKeyType(NM_SETTING_VPN_SERVICE_TYPE))
 }
-func setSettingVpnUserNameJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_USER_NAME, valueJSON, getSettingVpnKeyType(NM_SETTING_VPN_USER_NAME))
+func setSettingVpnUserNameJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_USER_NAME, valueJSON, getSettingVpnKeyType(NM_SETTING_VPN_USER_NAME))
 }
-func setSettingVpnDataJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_DATA, valueJSON, getSettingVpnKeyType(NM_SETTING_VPN_DATA))
+func setSettingVpnDataJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_DATA, valueJSON, getSettingVpnKeyType(NM_SETTING_VPN_DATA))
 }
-func setSettingVpnSecretsJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SECRETS, valueJSON, getSettingVpnKeyType(NM_SETTING_VPN_SECRETS))
+func setSettingVpnSecretsJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SECRETS, valueJSON, getSettingVpnKeyType(NM_SETTING_VPN_SECRETS))
 }
 
 // Logic JSON Setter

@@ -85,15 +85,15 @@ func generalSetSettingVpnL2tpKeyJSON(data connectionData, key, valueJSON string)
 	default:
 		logger.Error("generalSetSettingVpnL2tpKeyJSON: invalide key", key)
 	case NM_SETTING_VPN_L2TP_KEY_GATEWAY:
-		setSettingVpnL2tpKeyGatewayJSON(data, valueJSON)
+		err = setSettingVpnL2tpKeyGatewayJSON(data, valueJSON)
 	case NM_SETTING_VPN_L2TP_KEY_USER:
-		setSettingVpnL2tpKeyUserJSON(data, valueJSON)
+		err = setSettingVpnL2tpKeyUserJSON(data, valueJSON)
 	case NM_SETTING_VPN_L2TP_KEY_PASSWORD:
-		setSettingVpnL2tpKeyPasswordJSON(data, valueJSON)
+		err = setSettingVpnL2tpKeyPasswordJSON(data, valueJSON)
 	case NM_SETTING_VPN_L2TP_KEY_PASSWORD_FLAGS:
-		setSettingVpnL2tpKeyPasswordFlagsJSON(data, valueJSON)
+		err = setSettingVpnL2tpKeyPasswordFlagsJSON(data, valueJSON)
 	case NM_SETTING_VPN_L2TP_KEY_DOMAIN:
-		setSettingVpnL2tpKeyDomainJSON(data, valueJSON)
+		err = setSettingVpnL2tpKeyDomainJSON(data, valueJSON)
 	}
 	return
 }
@@ -229,20 +229,20 @@ func getSettingVpnL2tpKeyDomainJSON(data connectionData) (valueJSON string) {
 }
 
 // JSON Setter
-func setSettingVpnL2tpKeyGatewayJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_L2TP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_GATEWAY, valueJSON, getSettingVpnL2tpKeyType(NM_SETTING_VPN_L2TP_KEY_GATEWAY))
+func setSettingVpnL2tpKeyGatewayJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_L2TP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_GATEWAY, valueJSON, getSettingVpnL2tpKeyType(NM_SETTING_VPN_L2TP_KEY_GATEWAY))
 }
-func setSettingVpnL2tpKeyUserJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_L2TP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_USER, valueJSON, getSettingVpnL2tpKeyType(NM_SETTING_VPN_L2TP_KEY_USER))
+func setSettingVpnL2tpKeyUserJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_L2TP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_USER, valueJSON, getSettingVpnL2tpKeyType(NM_SETTING_VPN_L2TP_KEY_USER))
 }
-func setSettingVpnL2tpKeyPasswordJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_L2TP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_PASSWORD, valueJSON, getSettingVpnL2tpKeyType(NM_SETTING_VPN_L2TP_KEY_PASSWORD))
+func setSettingVpnL2tpKeyPasswordJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_L2TP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_PASSWORD, valueJSON, getSettingVpnL2tpKeyType(NM_SETTING_VPN_L2TP_KEY_PASSWORD))
 }
-func setSettingVpnL2tpKeyPasswordFlagsJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_L2TP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_PASSWORD_FLAGS, valueJSON, getSettingVpnL2tpKeyType(NM_SETTING_VPN_L2TP_KEY_PASSWORD_FLAGS))
+func setSettingVpnL2tpKeyPasswordFlagsJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_L2TP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_PASSWORD_FLAGS, valueJSON, getSettingVpnL2tpKeyType(NM_SETTING_VPN_L2TP_KEY_PASSWORD_FLAGS))
 }
-func setSettingVpnL2tpKeyDomainJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_L2TP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_DOMAIN, valueJSON, getSettingVpnL2tpKeyType(NM_SETTING_VPN_L2TP_KEY_DOMAIN))
+func setSettingVpnL2tpKeyDomainJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_L2TP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_DOMAIN, valueJSON, getSettingVpnL2tpKeyType(NM_SETTING_VPN_L2TP_KEY_DOMAIN))
 }
 
 // Logic JSON Setter

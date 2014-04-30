@@ -133,27 +133,27 @@ func generalSetSettingVpnVpncKeyJSON(data connectionData, key, valueJSON string)
 	default:
 		logger.Error("generalSetSettingVpnVpncKeyJSON: invalide key", key)
 	case NM_SETTING_VPN_VPNC_KEY_GATEWAY:
-		setSettingVpnVpncKeyGatewayJSON(data, valueJSON)
+		err = setSettingVpnVpncKeyGatewayJSON(data, valueJSON)
 	case NM_SETTING_VPN_VPNC_KEY_XAUTH_USER:
-		setSettingVpnVpncKeyXauthUserJSON(data, valueJSON)
+		err = setSettingVpnVpncKeyXauthUserJSON(data, valueJSON)
 	case NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD_TYPE:
-		setSettingVpnVpncKeyXauthPasswordTypeJSON(data, valueJSON)
+		err = setSettingVpnVpncKeyXauthPasswordTypeJSON(data, valueJSON)
 	case NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD_FLAGS:
 		err = logicSetSettingVpnVpncKeyXauthPasswordFlagsJSON(data, valueJSON)
 	case NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD:
-		setSettingVpnVpncKeyXauthPasswordJSON(data, valueJSON)
+		err = setSettingVpnVpncKeyXauthPasswordJSON(data, valueJSON)
 	case NM_SETTING_VPN_VPNC_KEY_ID:
-		setSettingVpnVpncKeyIdJSON(data, valueJSON)
+		err = setSettingVpnVpncKeyIdJSON(data, valueJSON)
 	case NM_SETTING_VPN_VPNC_KEY_SECRET_TYPE:
-		setSettingVpnVpncKeySecretTypeJSON(data, valueJSON)
+		err = setSettingVpnVpncKeySecretTypeJSON(data, valueJSON)
 	case NM_SETTING_VPN_VPNC_KEY_SECRET_FLAGS:
 		err = logicSetSettingVpnVpncKeySecretFlagsJSON(data, valueJSON)
 	case NM_SETTING_VPN_VPNC_KEY_SECRET:
-		setSettingVpnVpncKeySecretJSON(data, valueJSON)
+		err = setSettingVpnVpncKeySecretJSON(data, valueJSON)
 	case NM_SETTING_VPN_VPNC_KEY_AUTHMODE:
-		setSettingVpnVpncKeyAuthmodeJSON(data, valueJSON)
+		err = setSettingVpnVpncKeyAuthmodeJSON(data, valueJSON)
 	case NM_SETTING_VPN_VPNC_KEY_CA_FILE:
-		setSettingVpnVpncKeyCaFileJSON(data, valueJSON)
+		err = setSettingVpnVpncKeyCaFileJSON(data, valueJSON)
 	}
 	return
 }
@@ -423,43 +423,46 @@ func getSettingVpnVpncKeyCaFileJSON(data connectionData) (valueJSON string) {
 }
 
 // JSON Setter
-func setSettingVpnVpncKeyGatewayJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_GATEWAY, valueJSON, getSettingVpnVpncKeyType(NM_SETTING_VPN_VPNC_KEY_GATEWAY))
+func setSettingVpnVpncKeyGatewayJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_GATEWAY, valueJSON, getSettingVpnVpncKeyType(NM_SETTING_VPN_VPNC_KEY_GATEWAY))
 }
-func setSettingVpnVpncKeyXauthUserJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_XAUTH_USER, valueJSON, getSettingVpnVpncKeyType(NM_SETTING_VPN_VPNC_KEY_XAUTH_USER))
+func setSettingVpnVpncKeyXauthUserJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_XAUTH_USER, valueJSON, getSettingVpnVpncKeyType(NM_SETTING_VPN_VPNC_KEY_XAUTH_USER))
 }
-func setSettingVpnVpncKeyXauthPasswordTypeJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD_TYPE, valueJSON, getSettingVpnVpncKeyType(NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD_TYPE))
+func setSettingVpnVpncKeyXauthPasswordTypeJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD_TYPE, valueJSON, getSettingVpnVpncKeyType(NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD_TYPE))
 }
-func setSettingVpnVpncKeyXauthPasswordFlagsJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD_FLAGS, valueJSON, getSettingVpnVpncKeyType(NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD_FLAGS))
+func setSettingVpnVpncKeyXauthPasswordFlagsJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD_FLAGS, valueJSON, getSettingVpnVpncKeyType(NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD_FLAGS))
 }
-func setSettingVpnVpncKeyXauthPasswordJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD, valueJSON, getSettingVpnVpncKeyType(NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD))
+func setSettingVpnVpncKeyXauthPasswordJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD, valueJSON, getSettingVpnVpncKeyType(NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD))
 }
-func setSettingVpnVpncKeyIdJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_ID, valueJSON, getSettingVpnVpncKeyType(NM_SETTING_VPN_VPNC_KEY_ID))
+func setSettingVpnVpncKeyIdJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_ID, valueJSON, getSettingVpnVpncKeyType(NM_SETTING_VPN_VPNC_KEY_ID))
 }
-func setSettingVpnVpncKeySecretTypeJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_SECRET_TYPE, valueJSON, getSettingVpnVpncKeyType(NM_SETTING_VPN_VPNC_KEY_SECRET_TYPE))
+func setSettingVpnVpncKeySecretTypeJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_SECRET_TYPE, valueJSON, getSettingVpnVpncKeyType(NM_SETTING_VPN_VPNC_KEY_SECRET_TYPE))
 }
-func setSettingVpnVpncKeySecretFlagsJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_SECRET_FLAGS, valueJSON, getSettingVpnVpncKeyType(NM_SETTING_VPN_VPNC_KEY_SECRET_FLAGS))
+func setSettingVpnVpncKeySecretFlagsJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_SECRET_FLAGS, valueJSON, getSettingVpnVpncKeyType(NM_SETTING_VPN_VPNC_KEY_SECRET_FLAGS))
 }
-func setSettingVpnVpncKeySecretJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_SECRET, valueJSON, getSettingVpnVpncKeyType(NM_SETTING_VPN_VPNC_KEY_SECRET))
+func setSettingVpnVpncKeySecretJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_SECRET, valueJSON, getSettingVpnVpncKeyType(NM_SETTING_VPN_VPNC_KEY_SECRET))
 }
-func setSettingVpnVpncKeyAuthmodeJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_AUTHMODE, valueJSON, getSettingVpnVpncKeyType(NM_SETTING_VPN_VPNC_KEY_AUTHMODE))
+func setSettingVpnVpncKeyAuthmodeJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_AUTHMODE, valueJSON, getSettingVpnVpncKeyType(NM_SETTING_VPN_VPNC_KEY_AUTHMODE))
 }
-func setSettingVpnVpncKeyCaFileJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_CA_FILE, valueJSON, getSettingVpnVpncKeyType(NM_SETTING_VPN_VPNC_KEY_CA_FILE))
+func setSettingVpnVpncKeyCaFileJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_CA_FILE, valueJSON, getSettingVpnVpncKeyType(NM_SETTING_VPN_VPNC_KEY_CA_FILE))
 }
 
 // Logic JSON Setter
 func logicSetSettingVpnVpncKeyXauthPasswordFlagsJSON(data connectionData, valueJSON string) (err error) {
-	setSettingVpnVpncKeyXauthPasswordFlagsJSON(data, valueJSON)
+	err = setSettingVpnVpncKeyXauthPasswordFlagsJSON(data, valueJSON)
+	if err != nil {
+		return
+	}
 	if isSettingVpnVpncKeyXauthPasswordFlagsExists(data) {
 		value := getSettingVpnVpncKeyXauthPasswordFlags(data)
 		err = logicSetSettingVpnVpncKeyXauthPasswordFlags(data, value)
@@ -467,7 +470,10 @@ func logicSetSettingVpnVpncKeyXauthPasswordFlagsJSON(data connectionData, valueJ
 	return
 }
 func logicSetSettingVpnVpncKeySecretFlagsJSON(data connectionData, valueJSON string) (err error) {
-	setSettingVpnVpncKeySecretFlagsJSON(data, valueJSON)
+	err = setSettingVpnVpncKeySecretFlagsJSON(data, valueJSON)
+	if err != nil {
+		return
+	}
 	if isSettingVpnVpncKeySecretFlagsExists(data) {
 		value := getSettingVpnVpncKeySecretFlags(data)
 		err = logicSetSettingVpnVpncKeySecretFlags(data, value)

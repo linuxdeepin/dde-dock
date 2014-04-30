@@ -157,15 +157,15 @@ func generalSetSettingVpnOpenvpnKeyJSON(data connectionData, key, valueJSON stri
 	default:
 		logger.Error("generalSetSettingVpnOpenvpnKeyJSON: invalide key", key)
 	case NM_SETTING_VPN_OPENVPN_KEY_REMOTE:
-		setSettingVpnOpenvpnKeyRemoteJSON(data, valueJSON)
+		err = setSettingVpnOpenvpnKeyRemoteJSON(data, valueJSON)
 	case NM_SETTING_VPN_OPENVPN_KEY_CONNECTION_TYPE:
 		err = logicSetSettingVpnOpenvpnKeyConnectionTypeJSON(data, valueJSON)
 	case NM_SETTING_VPN_OPENVPN_KEY_USERNAME:
-		setSettingVpnOpenvpnKeyUsernameJSON(data, valueJSON)
+		err = setSettingVpnOpenvpnKeyUsernameJSON(data, valueJSON)
 	case NM_SETTING_VPN_OPENVPN_KEY_PASSWORD_FLAGS:
-		setSettingVpnOpenvpnKeyPasswordFlagsJSON(data, valueJSON)
+		err = setSettingVpnOpenvpnKeyPasswordFlagsJSON(data, valueJSON)
 	case NM_SETTING_VPN_OPENVPN_KEY_PASSWORD:
-		setSettingVpnOpenvpnKeyPasswordJSON(data, valueJSON)
+		err = setSettingVpnOpenvpnKeyPasswordJSON(data, valueJSON)
 	case NM_SETTING_VPN_OPENVPN_KEY_CERT:
 		err = logicSetSettingVpnOpenvpnKeyCertJSON(data, valueJSON)
 	case NM_SETTING_VPN_OPENVPN_KEY_CA:
@@ -173,17 +173,17 @@ func generalSetSettingVpnOpenvpnKeyJSON(data connectionData, key, valueJSON stri
 	case NM_SETTING_VPN_OPENVPN_KEY_KEY:
 		err = logicSetSettingVpnOpenvpnKeyKeyJSON(data, valueJSON)
 	case NM_SETTING_VPN_OPENVPN_KEY_CERTPASS:
-		setSettingVpnOpenvpnKeyCertpassJSON(data, valueJSON)
+		err = setSettingVpnOpenvpnKeyCertpassJSON(data, valueJSON)
 	case NM_SETTING_VPN_OPENVPN_KEY_CERTPASS_FLAGS:
-		setSettingVpnOpenvpnKeyCertpassFlagsJSON(data, valueJSON)
+		err = setSettingVpnOpenvpnKeyCertpassFlagsJSON(data, valueJSON)
 	case NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY:
 		err = logicSetSettingVpnOpenvpnKeyStaticKeyJSON(data, valueJSON)
 	case NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY_DIRECTION:
-		setSettingVpnOpenvpnKeyStaticKeyDirectionJSON(data, valueJSON)
+		err = setSettingVpnOpenvpnKeyStaticKeyDirectionJSON(data, valueJSON)
 	case NM_SETTING_VPN_OPENVPN_KEY_REMOTE_IP:
-		setSettingVpnOpenvpnKeyRemoteIpJSON(data, valueJSON)
+		err = setSettingVpnOpenvpnKeyRemoteIpJSON(data, valueJSON)
 	case NM_SETTING_VPN_OPENVPN_KEY_LOCAL_IP:
-		setSettingVpnOpenvpnKeyLocalIpJSON(data, valueJSON)
+		err = setSettingVpnOpenvpnKeyLocalIpJSON(data, valueJSON)
 	}
 	return
 }
@@ -518,52 +518,55 @@ func getSettingVpnOpenvpnKeyLocalIpJSON(data connectionData) (valueJSON string) 
 }
 
 // JSON Setter
-func setSettingVpnOpenvpnKeyRemoteJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_REMOTE, valueJSON, getSettingVpnOpenvpnKeyType(NM_SETTING_VPN_OPENVPN_KEY_REMOTE))
+func setSettingVpnOpenvpnKeyRemoteJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_REMOTE, valueJSON, getSettingVpnOpenvpnKeyType(NM_SETTING_VPN_OPENVPN_KEY_REMOTE))
 }
-func setSettingVpnOpenvpnKeyConnectionTypeJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_CONNECTION_TYPE, valueJSON, getSettingVpnOpenvpnKeyType(NM_SETTING_VPN_OPENVPN_KEY_CONNECTION_TYPE))
+func setSettingVpnOpenvpnKeyConnectionTypeJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_CONNECTION_TYPE, valueJSON, getSettingVpnOpenvpnKeyType(NM_SETTING_VPN_OPENVPN_KEY_CONNECTION_TYPE))
 }
-func setSettingVpnOpenvpnKeyUsernameJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_USERNAME, valueJSON, getSettingVpnOpenvpnKeyType(NM_SETTING_VPN_OPENVPN_KEY_USERNAME))
+func setSettingVpnOpenvpnKeyUsernameJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_USERNAME, valueJSON, getSettingVpnOpenvpnKeyType(NM_SETTING_VPN_OPENVPN_KEY_USERNAME))
 }
-func setSettingVpnOpenvpnKeyPasswordFlagsJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PASSWORD_FLAGS, valueJSON, getSettingVpnOpenvpnKeyType(NM_SETTING_VPN_OPENVPN_KEY_PASSWORD_FLAGS))
+func setSettingVpnOpenvpnKeyPasswordFlagsJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PASSWORD_FLAGS, valueJSON, getSettingVpnOpenvpnKeyType(NM_SETTING_VPN_OPENVPN_KEY_PASSWORD_FLAGS))
 }
-func setSettingVpnOpenvpnKeyPasswordJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PASSWORD, valueJSON, getSettingVpnOpenvpnKeyType(NM_SETTING_VPN_OPENVPN_KEY_PASSWORD))
+func setSettingVpnOpenvpnKeyPasswordJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PASSWORD, valueJSON, getSettingVpnOpenvpnKeyType(NM_SETTING_VPN_OPENVPN_KEY_PASSWORD))
 }
-func setSettingVpnOpenvpnKeyCertJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_CERT, valueJSON, getSettingVpnOpenvpnKeyType(NM_SETTING_VPN_OPENVPN_KEY_CERT))
+func setSettingVpnOpenvpnKeyCertJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_CERT, valueJSON, getSettingVpnOpenvpnKeyType(NM_SETTING_VPN_OPENVPN_KEY_CERT))
 }
-func setSettingVpnOpenvpnKeyCaJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_CA, valueJSON, getSettingVpnOpenvpnKeyType(NM_SETTING_VPN_OPENVPN_KEY_CA))
+func setSettingVpnOpenvpnKeyCaJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_CA, valueJSON, getSettingVpnOpenvpnKeyType(NM_SETTING_VPN_OPENVPN_KEY_CA))
 }
-func setSettingVpnOpenvpnKeyKeyJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_KEY, valueJSON, getSettingVpnOpenvpnKeyType(NM_SETTING_VPN_OPENVPN_KEY_KEY))
+func setSettingVpnOpenvpnKeyKeyJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_KEY, valueJSON, getSettingVpnOpenvpnKeyType(NM_SETTING_VPN_OPENVPN_KEY_KEY))
 }
-func setSettingVpnOpenvpnKeyCertpassJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_CERTPASS, valueJSON, getSettingVpnOpenvpnKeyType(NM_SETTING_VPN_OPENVPN_KEY_CERTPASS))
+func setSettingVpnOpenvpnKeyCertpassJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_CERTPASS, valueJSON, getSettingVpnOpenvpnKeyType(NM_SETTING_VPN_OPENVPN_KEY_CERTPASS))
 }
-func setSettingVpnOpenvpnKeyCertpassFlagsJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_CERTPASS_FLAGS, valueJSON, getSettingVpnOpenvpnKeyType(NM_SETTING_VPN_OPENVPN_KEY_CERTPASS_FLAGS))
+func setSettingVpnOpenvpnKeyCertpassFlagsJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_CERTPASS_FLAGS, valueJSON, getSettingVpnOpenvpnKeyType(NM_SETTING_VPN_OPENVPN_KEY_CERTPASS_FLAGS))
 }
-func setSettingVpnOpenvpnKeyStaticKeyJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY, valueJSON, getSettingVpnOpenvpnKeyType(NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY))
+func setSettingVpnOpenvpnKeyStaticKeyJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY, valueJSON, getSettingVpnOpenvpnKeyType(NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY))
 }
-func setSettingVpnOpenvpnKeyStaticKeyDirectionJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY_DIRECTION, valueJSON, getSettingVpnOpenvpnKeyType(NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY_DIRECTION))
+func setSettingVpnOpenvpnKeyStaticKeyDirectionJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY_DIRECTION, valueJSON, getSettingVpnOpenvpnKeyType(NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY_DIRECTION))
 }
-func setSettingVpnOpenvpnKeyRemoteIpJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_REMOTE_IP, valueJSON, getSettingVpnOpenvpnKeyType(NM_SETTING_VPN_OPENVPN_KEY_REMOTE_IP))
+func setSettingVpnOpenvpnKeyRemoteIpJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_REMOTE_IP, valueJSON, getSettingVpnOpenvpnKeyType(NM_SETTING_VPN_OPENVPN_KEY_REMOTE_IP))
 }
-func setSettingVpnOpenvpnKeyLocalIpJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_LOCAL_IP, valueJSON, getSettingVpnOpenvpnKeyType(NM_SETTING_VPN_OPENVPN_KEY_LOCAL_IP))
+func setSettingVpnOpenvpnKeyLocalIpJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_LOCAL_IP, valueJSON, getSettingVpnOpenvpnKeyType(NM_SETTING_VPN_OPENVPN_KEY_LOCAL_IP))
 }
 
 // Logic JSON Setter
 func logicSetSettingVpnOpenvpnKeyConnectionTypeJSON(data connectionData, valueJSON string) (err error) {
-	setSettingVpnOpenvpnKeyConnectionTypeJSON(data, valueJSON)
+	err = setSettingVpnOpenvpnKeyConnectionTypeJSON(data, valueJSON)
+	if err != nil {
+		return
+	}
 	if isSettingVpnOpenvpnKeyConnectionTypeExists(data) {
 		value := getSettingVpnOpenvpnKeyConnectionType(data)
 		err = logicSetSettingVpnOpenvpnKeyConnectionType(data, value)
@@ -571,7 +574,10 @@ func logicSetSettingVpnOpenvpnKeyConnectionTypeJSON(data connectionData, valueJS
 	return
 }
 func logicSetSettingVpnOpenvpnKeyCertJSON(data connectionData, valueJSON string) (err error) {
-	setSettingVpnOpenvpnKeyCertJSON(data, valueJSON)
+	err = setSettingVpnOpenvpnKeyCertJSON(data, valueJSON)
+	if err != nil {
+		return
+	}
 	if isSettingVpnOpenvpnKeyCertExists(data) {
 		value := getSettingVpnOpenvpnKeyCert(data)
 		err = logicSetSettingVpnOpenvpnKeyCert(data, value)
@@ -579,7 +585,10 @@ func logicSetSettingVpnOpenvpnKeyCertJSON(data connectionData, valueJSON string)
 	return
 }
 func logicSetSettingVpnOpenvpnKeyCaJSON(data connectionData, valueJSON string) (err error) {
-	setSettingVpnOpenvpnKeyCaJSON(data, valueJSON)
+	err = setSettingVpnOpenvpnKeyCaJSON(data, valueJSON)
+	if err != nil {
+		return
+	}
 	if isSettingVpnOpenvpnKeyCaExists(data) {
 		value := getSettingVpnOpenvpnKeyCa(data)
 		err = logicSetSettingVpnOpenvpnKeyCa(data, value)
@@ -587,7 +596,10 @@ func logicSetSettingVpnOpenvpnKeyCaJSON(data connectionData, valueJSON string) (
 	return
 }
 func logicSetSettingVpnOpenvpnKeyKeyJSON(data connectionData, valueJSON string) (err error) {
-	setSettingVpnOpenvpnKeyKeyJSON(data, valueJSON)
+	err = setSettingVpnOpenvpnKeyKeyJSON(data, valueJSON)
+	if err != nil {
+		return
+	}
 	if isSettingVpnOpenvpnKeyKeyExists(data) {
 		value := getSettingVpnOpenvpnKeyKey(data)
 		err = logicSetSettingVpnOpenvpnKeyKey(data, value)
@@ -595,7 +607,10 @@ func logicSetSettingVpnOpenvpnKeyKeyJSON(data connectionData, valueJSON string) 
 	return
 }
 func logicSetSettingVpnOpenvpnKeyStaticKeyJSON(data connectionData, valueJSON string) (err error) {
-	setSettingVpnOpenvpnKeyStaticKeyJSON(data, valueJSON)
+	err = setSettingVpnOpenvpnKeyStaticKeyJSON(data, valueJSON)
+	if err != nil {
+		return
+	}
 	if isSettingVpnOpenvpnKeyStaticKeyExists(data) {
 		value := getSettingVpnOpenvpnKeyStaticKey(data)
 		err = logicSetSettingVpnOpenvpnKeyStaticKey(data, value)

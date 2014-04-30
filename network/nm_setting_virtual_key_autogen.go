@@ -168,6 +168,7 @@ func generalGetVirtualKeyJSON(data connectionData, field, key string) (valueJSON
 
 // Set JSON value generally
 func generalSetVirtualKeyJSON(data connectionData, field, key string, valueJSON string) (err error) {
+	// each virtual key has a logic setter
 	switch field {
 	case NM_SETTING_802_1X_SETTING_NAME:
 		switch key {

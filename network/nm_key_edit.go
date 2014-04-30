@@ -101,10 +101,11 @@ func getSettingKeyJSON(data connectionData, field, key string, t ktype) (valueJS
 	return
 }
 
-func setSettingKeyJSON(data connectionData, field, key, valueJSON string, t ktype) {
+func setSettingKeyJSON(data connectionData, field, key, valueJSON string, t ktype) (kerr error) {
 	field = getRealFieldName(field) // get real field name
 	if len(valueJSON) == 0 {
 		logger.Error("setSettingKeyJSON: valueJSON is empty")
+		kerr = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
 		return
 	}
 
@@ -117,8 +118,10 @@ func setSettingKeyJSON(data connectionData, field, key, valueJSON string, t ktyp
 
 	value, err := jsonToKeyValue(valueJSON, t)
 	if err != nil {
-		logger.Errorf("set connection data failed, valueJSON=%s, ktype=%s, error message:%v",
-			valueJSON, getKtypeDescription(t), err)
+		// TODO test
+		// logger.Errorf("set connection data failed, valueJSON=%s, ktype=%s, error message:%v",
+		// valueJSON, getKtypeDescription(t), err)
+		kerr = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
 		return
 	}
 	logger.Debugf("setSettingKeyJSON data[%s][%s]=%#v, valueJSON=%s", field, key, value, valueJSON) // TODO test

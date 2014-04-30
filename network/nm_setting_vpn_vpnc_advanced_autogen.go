@@ -133,27 +133,27 @@ func generalSetSettingVpnVpncAdvancedKeyJSON(data connectionData, key, valueJSON
 	default:
 		logger.Error("generalSetSettingVpnVpncAdvancedKeyJSON: invalide key", key)
 	case NM_SETTING_VPN_VPNC_KEY_DOMAIN:
-		setSettingVpnVpncKeyDomainJSON(data, valueJSON)
+		err = setSettingVpnVpncKeyDomainJSON(data, valueJSON)
 	case NM_SETTING_VPN_VPNC_KEY_VENDOR:
-		setSettingVpnVpncKeyVendorJSON(data, valueJSON)
+		err = setSettingVpnVpncKeyVendorJSON(data, valueJSON)
 	case NM_SETTING_VPN_VPNC_KEY_APP_VERSION:
-		setSettingVpnVpncKeyAppVersionJSON(data, valueJSON)
+		err = setSettingVpnVpncKeyAppVersionJSON(data, valueJSON)
 	case NM_SETTING_VPN_VPNC_KEY_SINGLE_DES:
-		setSettingVpnVpncKeySingleDesJSON(data, valueJSON)
+		err = setSettingVpnVpncKeySingleDesJSON(data, valueJSON)
 	case NM_SETTING_VPN_VPNC_KEY_NO_ENCRYPTION:
-		setSettingVpnVpncKeyNoEncryptionJSON(data, valueJSON)
+		err = setSettingVpnVpncKeyNoEncryptionJSON(data, valueJSON)
 	case NM_SETTING_VPN_VPNC_KEY_NAT_TRAVERSAL_MODE:
-		setSettingVpnVpncKeyNatTraversalModeJSON(data, valueJSON)
+		err = setSettingVpnVpncKeyNatTraversalModeJSON(data, valueJSON)
 	case NM_SETTING_VPN_VPNC_KEY_DHGROUP:
-		setSettingVpnVpncKeyDhgroupJSON(data, valueJSON)
+		err = setSettingVpnVpncKeyDhgroupJSON(data, valueJSON)
 	case NM_SETTING_VPN_VPNC_KEY_PERFECT_FORWARD:
-		setSettingVpnVpncKeyPerfectForwardJSON(data, valueJSON)
+		err = setSettingVpnVpncKeyPerfectForwardJSON(data, valueJSON)
 	case NM_SETTING_VPN_VPNC_KEY_LOCAL_PORT:
-		setSettingVpnVpncKeyLocalPortJSON(data, valueJSON)
+		err = setSettingVpnVpncKeyLocalPortJSON(data, valueJSON)
 	case NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT:
-		setSettingVpnVpncKeyDpdIdleTimeoutJSON(data, valueJSON)
+		err = setSettingVpnVpncKeyDpdIdleTimeoutJSON(data, valueJSON)
 	case NM_SETTING_VPN_VPNC_KEY_CISCO_UDP_ENCAPS_PORT:
-		setSettingVpnVpncKeyCiscoUdpEncapsPortJSON(data, valueJSON)
+		err = setSettingVpnVpncKeyCiscoUdpEncapsPortJSON(data, valueJSON)
 	}
 	return
 }
@@ -411,38 +411,38 @@ func getSettingVpnVpncKeyCiscoUdpEncapsPortJSON(data connectionData) (valueJSON 
 }
 
 // JSON Setter
-func setSettingVpnVpncKeyDomainJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DOMAIN, valueJSON, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_DOMAIN))
+func setSettingVpnVpncKeyDomainJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DOMAIN, valueJSON, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_DOMAIN))
 }
-func setSettingVpnVpncKeyVendorJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_VENDOR, valueJSON, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_VENDOR))
+func setSettingVpnVpncKeyVendorJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_VENDOR, valueJSON, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_VENDOR))
 }
-func setSettingVpnVpncKeyAppVersionJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_APP_VERSION, valueJSON, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_APP_VERSION))
+func setSettingVpnVpncKeyAppVersionJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_APP_VERSION, valueJSON, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_APP_VERSION))
 }
-func setSettingVpnVpncKeySingleDesJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_SINGLE_DES, valueJSON, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_SINGLE_DES))
+func setSettingVpnVpncKeySingleDesJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_SINGLE_DES, valueJSON, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_SINGLE_DES))
 }
-func setSettingVpnVpncKeyNoEncryptionJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_NO_ENCRYPTION, valueJSON, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_NO_ENCRYPTION))
+func setSettingVpnVpncKeyNoEncryptionJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_NO_ENCRYPTION, valueJSON, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_NO_ENCRYPTION))
 }
-func setSettingVpnVpncKeyNatTraversalModeJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_NAT_TRAVERSAL_MODE, valueJSON, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_NAT_TRAVERSAL_MODE))
+func setSettingVpnVpncKeyNatTraversalModeJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_NAT_TRAVERSAL_MODE, valueJSON, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_NAT_TRAVERSAL_MODE))
 }
-func setSettingVpnVpncKeyDhgroupJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DHGROUP, valueJSON, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_DHGROUP))
+func setSettingVpnVpncKeyDhgroupJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DHGROUP, valueJSON, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_DHGROUP))
 }
-func setSettingVpnVpncKeyPerfectForwardJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_PERFECT_FORWARD, valueJSON, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_PERFECT_FORWARD))
+func setSettingVpnVpncKeyPerfectForwardJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_PERFECT_FORWARD, valueJSON, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_PERFECT_FORWARD))
 }
-func setSettingVpnVpncKeyLocalPortJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_LOCAL_PORT, valueJSON, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_LOCAL_PORT))
+func setSettingVpnVpncKeyLocalPortJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_LOCAL_PORT, valueJSON, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_LOCAL_PORT))
 }
-func setSettingVpnVpncKeyDpdIdleTimeoutJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT, valueJSON, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT))
+func setSettingVpnVpncKeyDpdIdleTimeoutJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT, valueJSON, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT))
 }
-func setSettingVpnVpncKeyCiscoUdpEncapsPortJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_CISCO_UDP_ENCAPS_PORT, valueJSON, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_CISCO_UDP_ENCAPS_PORT))
+func setSettingVpnVpncKeyCiscoUdpEncapsPortJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_CISCO_UDP_ENCAPS_PORT, valueJSON, getSettingVpnVpncAdvancedKeyType(NM_SETTING_VPN_VPNC_KEY_CISCO_UDP_ENCAPS_PORT))
 }
 
 // Logic JSON Setter

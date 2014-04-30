@@ -77,13 +77,13 @@ func generalSetSettingVpnOpenvpnTlsauthKeyJSON(data connectionData, key, valueJS
 	default:
 		logger.Error("generalSetSettingVpnOpenvpnTlsauthKeyJSON: invalide key", key)
 	case NM_SETTING_VPN_OPENVPN_KEY_TLS_REMOTE:
-		setSettingVpnOpenvpnKeyTlsRemoteJSON(data, valueJSON)
+		err = setSettingVpnOpenvpnKeyTlsRemoteJSON(data, valueJSON)
 	case NM_SETTING_VPN_OPENVPN_KEY_REMOTE_CERT_TLS:
-		setSettingVpnOpenvpnKeyRemoteCertTlsJSON(data, valueJSON)
+		err = setSettingVpnOpenvpnKeyRemoteCertTlsJSON(data, valueJSON)
 	case NM_SETTING_VPN_OPENVPN_KEY_TA:
-		setSettingVpnOpenvpnKeyTaJSON(data, valueJSON)
+		err = setSettingVpnOpenvpnKeyTaJSON(data, valueJSON)
 	case NM_SETTING_VPN_OPENVPN_KEY_TA_DIR:
-		setSettingVpnOpenvpnKeyTaDirJSON(data, valueJSON)
+		err = setSettingVpnOpenvpnKeyTaDirJSON(data, valueJSON)
 	}
 	return
 }
@@ -196,17 +196,17 @@ func getSettingVpnOpenvpnKeyTaDirJSON(data connectionData) (valueJSON string) {
 }
 
 // JSON Setter
-func setSettingVpnOpenvpnKeyTlsRemoteJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TLS_REMOTE, valueJSON, getSettingVpnOpenvpnTlsauthKeyType(NM_SETTING_VPN_OPENVPN_KEY_TLS_REMOTE))
+func setSettingVpnOpenvpnKeyTlsRemoteJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TLS_REMOTE, valueJSON, getSettingVpnOpenvpnTlsauthKeyType(NM_SETTING_VPN_OPENVPN_KEY_TLS_REMOTE))
 }
-func setSettingVpnOpenvpnKeyRemoteCertTlsJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_REMOTE_CERT_TLS, valueJSON, getSettingVpnOpenvpnTlsauthKeyType(NM_SETTING_VPN_OPENVPN_KEY_REMOTE_CERT_TLS))
+func setSettingVpnOpenvpnKeyRemoteCertTlsJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_REMOTE_CERT_TLS, valueJSON, getSettingVpnOpenvpnTlsauthKeyType(NM_SETTING_VPN_OPENVPN_KEY_REMOTE_CERT_TLS))
 }
-func setSettingVpnOpenvpnKeyTaJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TA, valueJSON, getSettingVpnOpenvpnTlsauthKeyType(NM_SETTING_VPN_OPENVPN_KEY_TA))
+func setSettingVpnOpenvpnKeyTaJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TA, valueJSON, getSettingVpnOpenvpnTlsauthKeyType(NM_SETTING_VPN_OPENVPN_KEY_TA))
 }
-func setSettingVpnOpenvpnKeyTaDirJSON(data connectionData, valueJSON string) {
-	setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TA_DIR, valueJSON, getSettingVpnOpenvpnTlsauthKeyType(NM_SETTING_VPN_OPENVPN_KEY_TA_DIR))
+func setSettingVpnOpenvpnKeyTaDirJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TA_DIR, valueJSON, getSettingVpnOpenvpnTlsauthKeyType(NM_SETTING_VPN_OPENVPN_KEY_TA_DIR))
 }
 
 // Logic JSON Setter
