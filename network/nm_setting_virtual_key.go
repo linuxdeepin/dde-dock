@@ -21,6 +21,11 @@ const (
 // connection
 const NM_SETTING_VK_CONNECTION_NO_PERMISSION = "vk-no-permission"
 
+// wired
+const NM_SETTING_VK_WIRED_MTU = "vk-mtu"
+
+// wifi TODO
+
 // ipv4
 const (
 	NM_SETTING_VK_IP4_CONFIG_DNS               = "vk-dns"
@@ -166,6 +171,7 @@ func generalGetSettingVkAvailableValues(data connectionData, field, key string) 
 }
 
 func appendAvailableKeys(keys []string, field, key string) (appendKeys []string) {
+	// TODO auto check enable wrapper virtual keys
 	relatedVks := getRelatedAvailableVirtualKeys(field, key)
 	if len(relatedVks) > 0 {
 		appendKeys = appendStrArrayUnion(keys, relatedVks...)

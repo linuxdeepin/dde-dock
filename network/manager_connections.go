@@ -18,6 +18,7 @@ func (m *Manager) initConnectionManage() {
 	m.WiredConnections = make([]string, 0)
 	m.WirelessConnections = make([]string, 0)
 
+	// create special wired connection if need
 	m.updatePropWiredConnections()
 
 	for _, c := range nmGetConnectionList() {

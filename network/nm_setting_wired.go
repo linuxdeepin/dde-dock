@@ -88,7 +88,6 @@ func newWiredConnectionData(id, uuid string) (data connectionData) {
 	setSettingConnectionUuid(data, uuid)
 	setSettingConnectionType(data, typeWired)
 
-	// TODO
 	addSettingField(data, fieldWired)
 	setSettingWiredDuplex(data, "full")
 
@@ -100,18 +99,30 @@ func newWiredConnectionData(id, uuid string) (data connectionData) {
 // Get available keys
 func getSettingWiredAvailableKeys(data connectionData) (keys []string) {
 	keys = appendAvailableKeys(keys, fieldWired, NM_SETTING_WIRED_MAC_ADDRESS)
+	keys = appendAvailableKeys(keys, fieldWired, NM_SETTING_WIRED_CLONED_MAC_ADDRESS)
 	keys = appendAvailableKeys(keys, fieldWired, NM_SETTING_WIRED_MTU)
+	if isSettingWiredMtuExists(data) {
+		keys = append(keys, NM_SETTING_WIRED_MTU)
+	}
 	return
 }
 
-// TODO Get available values
+// Get available values
 func getSettingWiredAvailableValues(data connectionData, key string) (values []kvalue) {
 	return
 }
 
-// Set JSON value generally
-// TODO Check whether the values are correct
+// Check whether the values are correct
 func checkSettingWiredValues(data connectionData) (errs fieldErrors) {
 	errs = make(map[string]string)
+	// TODO
+	return
+}
+
+// Logic setter
+func logicSetSettingWiredMacAddress(data connectionData, value string) (err error) {
+	return
+}
+func logicSetSettingWiredClonedMacAddress(data connectionData, value string) (err error) {
 	return
 }

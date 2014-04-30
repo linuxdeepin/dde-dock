@@ -38,6 +38,7 @@ var virtualKeys = []virtualKey{
 	virtualKey{NM_SETTING_VK_VPN_VPNC_KEY_HYBRID_AUTHMODE, ktypeBoolean, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_AUTHMODE, false, true, false},
 	virtualKey{NM_SETTING_VK_VPN_VPNC_KEY_ENCRYPTION_METHOD, ktypeString, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_SINGLE_DES, false, true, false},
 	virtualKey{NM_SETTING_VK_VPN_VPNC_KEY_DISABLE_DPD, ktypeBoolean, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT, false, true, false},
+	virtualKey{NM_SETTING_VK_WIRED_MTU, ktypeBoolean, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MTU, true, true, false},
 	virtualKey{NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT, ktypeString, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT, false, true, false},
 }
 
@@ -149,6 +150,11 @@ func generalGetVirtualKeyJSON(data connectionData, field, key string) (valueJSON
 			return getSettingVkVpnVpncKeyEncryptionMethodJSON(data)
 		case NM_SETTING_VK_VPN_VPNC_KEY_DISABLE_DPD:
 			return getSettingVkVpnVpncKeyDisableDpdJSON(data)
+		}
+	case NM_SETTING_WIRED_SETTING_NAME:
+		switch key {
+		case NM_SETTING_VK_WIRED_MTU:
+			return getSettingVkWiredMtuJSON(data)
 		}
 	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
 		switch key {
@@ -304,6 +310,12 @@ func generalSetVirtualKeyJSON(data connectionData, field, key string, valueJSON 
 			err = logicSetSettingVkVpnVpncKeyDisableDpdJSON(data, valueJSON)
 			return
 		}
+	case NM_SETTING_WIRED_SETTING_NAME:
+		switch key {
+		case NM_SETTING_VK_WIRED_MTU:
+			err = logicSetSettingVkWiredMtuJSON(data, valueJSON)
+			return
+		}
 	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
 		switch key {
 		case NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT:
@@ -456,6 +468,10 @@ func getSettingVkVpnVpncKeyDisableDpdJSON(data connectionData) (valueJSON string
 	valueJSON, _ = marshalJSON(getSettingVkVpnVpncKeyDisableDpd(data))
 	return
 }
+func getSettingVkWiredMtuJSON(data connectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkWiredMtu(data))
+	return
+}
 func getSettingVkWirelessSecurityKeyMgmtJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkWirelessSecurityKeyMgmt(data))
 	return
@@ -602,6 +618,10 @@ func logicSetSettingVkVpnVpncKeyDisableDpdJSON(data connectionData, valueJSON st
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	return logicSetSettingVkVpnVpncKeyDisableDpd(data, value)
 }
+func logicSetSettingVkWiredMtuJSON(data connectionData, valueJSON string) (err error) {
+	value, _ := jsonToKeyValueBoolean(valueJSON)
+	return logicSetSettingVkWiredMtu(data, value)
+}
 func logicSetSettingVkWirelessSecurityKeyMgmtJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	return logicSetSettingVkWirelessSecurityKeyMgmt(data, value)
@@ -640,6 +660,12 @@ func getSettingVkVpnOpenvpnKeyEnableStaticKeyDirection(data connectionData) (val
 }
 func getSettingVkVpnOpenvpnKeyEnableTaDir(data connectionData) (value bool) {
 	if isSettingVpnOpenvpnKeyTaDirExists(data) {
+		return true
+	}
+	return false
+}
+func getSettingVkWiredMtu(data connectionData) (value bool) {
+	if isSettingWiredMtuExists(data) {
 		return true
 	}
 	return false
@@ -691,6 +717,14 @@ func logicSetSettingVkVpnOpenvpnKeyEnableTaDir(data connectionData, value bool) 
 		setSettingVpnOpenvpnKeyTaDir(data, 0)
 	} else {
 		removeSettingVpnOpenvpnKeyTaDir(data)
+	}
+	return
+}
+func logicSetSettingVkWiredMtu(data connectionData, value bool) (err error) {
+	if value {
+		setSettingWiredMtu(data, 0)
+	} else {
+		removeSettingWiredMtu(data)
 	}
 	return
 }

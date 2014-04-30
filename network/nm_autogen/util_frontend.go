@@ -47,7 +47,8 @@ func ToFrontEndWidget(keyName string) (widget string) {
 	case "ktypeWrapperString":
 		widget = "EditLineTextInput"
 		// EditLineFileChooser
-		// case "ktypeWrapperMacAddress":
+	case "ktypeWrapperMacAddress":
+		widget = "EditLineTextInput"
 		// case "ktypeWrapperIpv4Dns":
 		// case "ktypeWrapperIpv4Addresses":
 		// case "ktypeWrapperIpv4Routes":
