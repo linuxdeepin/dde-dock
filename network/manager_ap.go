@@ -87,8 +87,14 @@ func (m *Manager) GetAccessPoints(path dbus.ObjectPath) (aps []dbus.ObjectPath, 
 }
 
 // GetAccessPointProperty return access point's detail information.
+// TODO
+// func (m *Manager) GetAccessPointProperty(apPath dbus.ObjectPath) (apJSON string, err error) {
 func (m *Manager) GetAccessPointProperty(apPath dbus.ObjectPath) (ap accessPoint, err error) {
 	ap, err = NewAccessPoint(apPath)
+	// if err != nil {
+	// return
+	// }
+	// apJSON, err = marshalJSON(ap)
 	return
 }
 
