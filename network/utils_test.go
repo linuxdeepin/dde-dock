@@ -38,7 +38,7 @@ const (
 	testJSONKtypeArrayArrayUint32 = `[[32,32],[32,32]]`
 	testJSONKtypeDictStringString = `{"key1":"value1","key2":"value2"}`
 	testJSONKtypeIpv6Addresses    = `[{"Address":"/oAAAAAAAAACImj//g9NCQ==","Prefix":32,"Gateway":"/oAAAAAAAAACImj//g9NCQ=="}]`
-	testJSONKtypeIpv6Routes       = `[{"Address":"/oAAAAAAAAACImj//g9NCQ==","Prefix":32,"NextHop":"/oAAAAAAAAACImj//g9NCQ==","Metric":32}]` // TODO
+	testJSONKtypeIpv6Routes       = `[{"Address":"/oAAAAAAAAACImj//g9NCQ==","Prefix":32,"NextHop":"/oAAAAAAAAACImj//g9NCQ==","Metric":32}]`
 
 	// key value wrapper
 	testJSONKtypeWrapperString        = `"test wrapper string"`
@@ -338,7 +338,7 @@ func (*Utils) TestConvertIpv6AddressToString(c *C) {
 		{[]byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, "0000:0000:0000:0000:0000:0000:0000:0000"},
 	}
 	for _, t := range tests {
-		c.Check(t.result, Equals, convertIpv6AddressToString(t.test)) // TODO
+		c.Check(t.result, Equals, convertIpv6AddressToString(t.test))
 	}
 }
 
@@ -485,6 +485,19 @@ func (*Utils) TestJSONWrapper(c *C) {
 
 func (*Utils) TestGetterAndSetterForVirtualKey(c *C) {
 	// TODO
+	data := newWirelessConnectionData("", "", nil, apSecNone)
+
+	logicSetSettingVkWirelessSecurityKeyMgmt(data, "none")
+	c.Check("none", Equals, getSettingVkWirelessSecurityKeyMgmt(data))
+
+	logicSetSettingVkWirelessSecurityKeyMgmt(data, "wep")
+	c.Check("wep", Equals, getSettingVkWirelessSecurityKeyMgmt(data))
+
+	logicSetSettingVkWirelessSecurityKeyMgmt(data, "wpa-psk")
+	c.Check("wpa-psk", Equals, getSettingVkWirelessSecurityKeyMgmt(data))
+
+	logicSetSettingVkWirelessSecurityKeyMgmt(data, "wpa-eap")
+	c.Check("wpa-eap", Equals, getSettingVkWirelessSecurityKeyMgmt(data))
 }
 
 func (*Utils) TestToUriPath(c *C) {

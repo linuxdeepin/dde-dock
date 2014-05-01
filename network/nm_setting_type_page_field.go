@@ -27,6 +27,8 @@ type connectionType struct {
 var supportedConnectionTypes = []string{
 	// typeWired,// don't support multiple wired connections since now
 	typeWireless,
+	typeWirelessAdhoc,
+	typeWirelessHotspot,
 	typePppoe,
 	typeVpnL2tp,
 	typeVpnOpenconnect,
@@ -37,6 +39,8 @@ var supportedConnectionTypes = []string{
 var supportedConnectionTypesInfo = []connectionType{
 	// connectionType{typeWired, dlib.Tr("Ethernet")},// don't support multiple wired connections since now
 	connectionType{typeWireless, dlib.Tr("Wi-Fi")},
+	connectionType{typeWirelessAdhoc, dlib.Tr("Wi-Fi Ad-Hoc")},
+	connectionType{typeWirelessHotspot, dlib.Tr("Wi-Fi Hotspot")},
 	connectionType{typePppoe, dlib.Tr("PPPoE")},
 	connectionType{typeVpnL2tp, dlib.Tr("VPN-L2TP (Layer 2 Tunneling Protocol)")},
 	connectionType{typeVpnOpenconnect, dlib.Tr("VPN-OpenConnect (Cisco AnyConnect Compatible VPN)")},

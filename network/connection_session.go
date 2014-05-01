@@ -58,6 +58,10 @@ func NewConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 		s.data = newWiredConnectionData("", s.CurrentUUID)
 	case typeWireless:
 		s.data = newWirelessConnectionData("", s.CurrentUUID, nil, apSecNone)
+	case typeWirelessAdhoc:
+		s.data = newWirelessAdhocConnectionData("", s.CurrentUUID)
+	case typeWirelessHotspot:
+		s.data = newWirelessHotspotConnectionData("", s.CurrentUUID)
 	case typePppoe:
 		s.data = newPppoeConnectionData("", s.CurrentUUID)
 	case typeVpnL2tp:
@@ -219,6 +223,22 @@ func (s *ConnectionSession) listPages() (pages []string) {
 			pageIPv6,
 			pageSecurity,
 		}
+	case typeWirelessAdhoc:
+		pages = []string{
+			pageGeneral,
+			pageWifi,
+			pageIPv4,
+			pageIPv6,
+			pageSecurity,
+		}
+	case typeWirelessHotspot:
+		pages = []string{
+			pageGeneral,
+			pageWifi,
+			pageIPv4,
+			pageIPv6,
+			pageSecurity,
+		}
 	case typePppoe:
 		pages = []string{
 			pageGeneral,
@@ -289,10 +309,11 @@ func (s *ConnectionSession) pageToFields(page string) (fields []string) {
 	case pageIPv6:
 		fields = []string{fieldIpv6}
 	case pageSecurity:
-		switch s.ConnectionType {
-		case typeWired:
+		if s.ConnectionType == typeWired {
 			fields = []string{field8021x}
-		case typeWireless:
+		} else if s.ConnectionType == typeWireless ||
+			s.ConnectionType == typeWirelessAdhoc ||
+			s.ConnectionType == typeWirelessHotspot {
 			if isSettingFieldExists(s.data, field8021x) {
 				fields = []string{fieldWirelessSecurity, field8021x}
 			} else {

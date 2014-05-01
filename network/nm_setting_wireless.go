@@ -215,6 +215,18 @@ func newWirelessConnectionData(id, uuid string, ssid []byte, secType apSecType) 
 	return
 }
 
+func newWirelessAdhocConnectionData(id, uuid string) (data connectionData) {
+	data = newWirelessConnectionData(id, uuid, nil, apSecPsk)
+	logicSetSettingWirelessMode(data, NM_SETTING_WIRELESS_MODE_ADHOC)
+	return
+}
+
+func newWirelessHotspotConnectionData(id, uuid string) (data connectionData) {
+	data = newWirelessConnectionData(id, uuid, nil, apSecPsk)
+	logicSetSettingWirelessMode(data, NM_SETTING_WIRELESS_MODE_AP)
+	return
+}
+
 // Get available keys
 func getSettingWirelessAvailableKeys(data connectionData) (keys []string) {
 	keys = appendAvailableKeys(data, keys, fieldWireless, NM_SETTING_WIRELESS_SSID)
@@ -301,7 +313,7 @@ func checkSettingWirelessValues(data connectionData) (errs fieldErrors) {
 
 // Logic setter
 func logicSetSettingWirelessMode(data connectionData, value string) (err error) {
-	// for ad-hoc or ap-hotspot, wpa-eap security is invalid
+	// for ad-hoc or ap-hotspot mode, wpa-eap security is invalid
 	if value != NM_SETTING_WIRELESS_MODE_INFRA {
 		if getSettingVkWirelessSecurityKeyMgmt(data) == "wpa-eap" {
 			logicSetSettingVkWirelessSecurityKeyMgmt(data, "wpa-psk")
