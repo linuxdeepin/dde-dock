@@ -154,6 +154,7 @@ func getSettingWirelessAvailableKeys(data connectionData) (keys []string) {
 	case NM_SETTING_WIRELESS_MODE_INFRA:
 	case NM_SETTING_WIRELESS_MODE_ADHOC:
 		keys = appendAvailableKeys(data, keys, fieldWireless, NM_SETTING_WIRELESS_BAND)
+		// TODO
 		keys = appendAvailableKeys(data, keys, fieldWireless, NM_SETTING_WIRELESS_CHANNEL)
 	case NM_SETTING_WIRELESS_MODE_AP:
 		// TODO
@@ -179,14 +180,16 @@ func getSettingWirelessAvailableValues(data connectionData, key string) (values 
 			kvalue{"a", dlib.Tr("A (5 GHz)")},
 			kvalue{"bg", dlib.Tr("BG (2.4 GHz)")},
 		}
+	case NM_SETTING_WIRELESS_CHANNEL:
+		// TODO
 	case NM_SETTING_WIRELESS_MAC_ADDRESS:
 		// get wireless devices mac address
 		devPaths, err := nmGetDevices()
 		if err == nil {
 			for _, p := range devPaths {
 				if dev, err := nmNewDevice(p); err == nil && dev.DeviceType.Get() == NM_DEVICE_TYPE_WIFI {
-					if wirelessDev, err := nmNewDeviceWireless(p); err == nil {
-						hwAddr := wirelessDev.HwAddress.Get()
+					hwAddr, err := nmGetWirelessDeviceHwAddr(p)
+					if err == nil {
 						values = append(values, kvalue{hwAddr, hwAddr + " (" + dev.Interface.Get() + ")"})
 					}
 				}

@@ -105,7 +105,7 @@ func (m *Manager) ActivateConnectionForAccessPoint(apPath, devPath dbus.ObjectPa
 	if err != nil {
 		return
 	}
-	cpath, ok := nmGetWirelessConnectionBySsid(ap.Ssid.Get())
+	cpath, ok := nmGetWirelessConnection(ap.Ssid.Get(), devPath)
 	if ok {
 		logger.Debug("activate connection") // TODO test
 		uuid = nmGetConnectionUuid(cpath)
@@ -185,7 +185,8 @@ func (m *Manager) GetConnectionUuidByAccessPoint(apPath dbus.ObjectPath) (uuid s
 		return
 	}
 
-	cpath, ok := nmGetWirelessConnectionBySsid(ap.Ssid.Get())
+	// TODO check wifi hw addr
+	cpath, ok := nmGetWirelessConnection(ap.Ssid.Get(), "")
 	if !ok {
 		return
 	}

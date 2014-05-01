@@ -2,6 +2,7 @@ package main
 
 import nm "dbus/org/freedesktop/networkmanager"
 import "dlib/dbus"
+import "strings"
 
 func nmNewDevice(devPath dbus.ObjectPath) (dev *nm.Device, err error) {
 	dev, err = nm.NewDevice(nmDest, devPath)
@@ -71,6 +72,26 @@ func nmGetDevices() (devPaths []dbus.ObjectPath, err error) {
 	if err != nil {
 		logger.Error(err)
 	}
+	return
+}
+
+func nmGetWiredDeviceHwAddr(devPath dbus.ObjectPath) (hwAddr string, err error) {
+	wiredDev, err := nmNewDeviceWired(devPath)
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+	hwAddr = strings.ToUpper(wiredDev.HwAddress.Get())
+	return
+}
+
+func nmGetWirelessDeviceHwAddr(devPath dbus.ObjectPath) (hwAddr string, err error) {
+	wirelessDev, err := nmNewDeviceWireless(devPath)
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+	hwAddr = strings.ToUpper(wirelessDev.HwAddress.Get())
 	return
 }
 
@@ -218,18 +239,46 @@ func nmGetConnectionByUuid(uuid string) (cpath dbus.ObjectPath, err error) {
 	return
 }
 
-func nmGetWirelessConnectionBySsid(ssid []byte) (cpath dbus.ObjectPath, ok bool) {
-	for _, cpath = range nmGetConnectionList() {
-		data, err := nmGetConnectionData(cpath)
+// get wireless connection by ssid, the connection with special hardware address is priority
+func nmGetWirelessConnection(ssid []byte, devPath dbus.ObjectPath) (cpath dbus.ObjectPath, ok bool) {
+	var hwAddr string
+	if len(devPath) != 0 {
+		hwAddr, _ = nmGetWirelessDeviceHwAddr(devPath)
+	}
+	ok = false
+	for _, p := range nmGetWirelessConnectionListBySsid(ssid) {
+		data, err := nmGetConnectionData(p)
 		if err != nil {
 			continue
 		}
-		if isSettingWirelessSsidExists(data) && string(getSettingWirelessSsid(data)) == string(ssid) {
+		if !ok {
+			cpath = p
 			ok = true
-			return
+		}
+		if isSettingWirelessMacAddressExists(data) {
+			if len(hwAddr) > 0 && hwAddr == string(getSettingWirelessMacAddress(data)) {
+				cpath = p
+				ok = true
+				return
+			}
 		}
 	}
-	ok = false
+	return
+}
+
+func nmGetWirelessConnectionListBySsid(ssid []byte) (cpaths []dbus.ObjectPath) {
+	for _, p := range nmGetConnectionList() {
+		data, err := nmGetConnectionData(p)
+		if err != nil {
+			continue
+		}
+		if generalGetConnectionType(data) != typeWireless {
+			continue
+		}
+		if isSettingWirelessSsidExists(data) && string(getSettingWirelessSsid(data)) == string(ssid) {
+			cpaths = append(cpaths, p)
+		}
+	}
 	return
 }
 

@@ -5,15 +5,18 @@ import (
 )
 
 const (
-	typeWired          = "wired"
-	typeWireless       = "wireless"
-	typePppoe          = "pppoe"
-	typeVpn            = "vpn"
-	typeVpnL2tp        = "vpn-l2tp"
-	typeVpnOpenconnect = "vpn-openconnect"
-	typeVpnOpenvpn     = "vpn-openvpn"
-	typeVpnPptp        = "vpn-pptp"
-	typeVpnVpnc        = "vpn-vpnc"
+	typeUnknown         = "unknown"
+	typeWired           = "wired"
+	typeWireless        = "wireless"
+	typeWirelessAdhoc   = "wireless-adhoc"
+	typeWirelessHotspot = "wireless-hotspot"
+	typePppoe           = "pppoe"
+	typeVpn             = "vpn"
+	typeVpnL2tp         = "vpn-l2tp"
+	typeVpnOpenconnect  = "vpn-openconnect"
+	typeVpnOpenvpn      = "vpn-openvpn"
+	typeVpnPptp         = "vpn-pptp"
+	typeVpnVpnc         = "vpn-vpnc"
 )
 
 // TODO key-map values for internationalization

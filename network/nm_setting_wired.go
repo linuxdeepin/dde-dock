@@ -116,8 +116,8 @@ func getSettingWiredAvailableValues(data connectionData, key string) (values []k
 		if err == nil {
 			for _, p := range devPaths {
 				if dev, err := nmNewDevice(p); err == nil && dev.DeviceType.Get() == NM_DEVICE_TYPE_ETHERNET {
-					if wiredDev, err := nmNewDeviceWired(p); err == nil {
-						hwAddr := wiredDev.HwAddress.Get()
+					hwAddr, err := nmGetWiredDeviceHwAddr(p)
+					if err == nil {
 						values = append(values, kvalue{hwAddr, hwAddr + " (" + dev.Interface.Get() + ")"})
 					}
 				}

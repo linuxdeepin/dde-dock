@@ -14,11 +14,23 @@ func pageGeneralGetId(con map[string]map[string]dbus.Variant) string {
 }
 
 func generalGetConnectionType(data connectionData) (connType string) {
-	switch getSettingConnectionType(data) {
+	t := getSettingConnectionType(data)
+	switch t {
 	case NM_SETTING_WIRED_SETTING_NAME:
 		connType = typeWired
 	case NM_SETTING_WIRELESS_SETTING_NAME:
-		connType = typeWireless
+		if isSettingWirelessModeExists(data) {
+			switch getSettingWirelessMode(data) {
+			case NM_SETTING_WIRELESS_MODE_INFRA:
+				connType = typeWireless
+			case NM_SETTING_WIRELESS_MODE_ADHOC:
+				connType = typeWirelessAdhoc
+			case NM_SETTING_WIRELESS_MODE_AP:
+				connType = typeWirelessHotspot
+			}
+		} else {
+			connType = typeWireless
+		}
 	case NM_SETTING_PPPOE_SETTING_NAME:
 		connType = typePppoe
 	case NM_SETTING_VPN_SETTING_NAME:
@@ -36,7 +48,7 @@ func generalGetConnectionType(data connectionData) (connType string) {
 		}
 	}
 	if len(connType) == 0 {
-		logger.Error("get connection type failed")
+		connType = typeUnknown
 	}
 	return
 }
