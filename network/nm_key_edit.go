@@ -131,6 +131,11 @@ func setSettingKeyJSON(data connectionData, field, key, valueJSON string, t ktyp
 }
 
 func getSettingKey(data connectionData, field, key string) (value interface{}) {
+	// special for vpn plugin keys
+	if isSettingVpnPluginKey(field) {
+		return getSettingVpnPluginKey(data, field, key)
+	}
+
 	realField := getRealFieldName(field) // get real name of virtual fields
 	fieldData, ok := data[realField]
 	if !ok {
@@ -140,6 +145,7 @@ func getSettingKey(data connectionData, field, key string) (value interface{}) {
 
 	variant, ok := fieldData[key]
 	if !ok {
+		// not exists, just return nil
 		return
 	}
 
@@ -150,11 +156,17 @@ func getSettingKey(data connectionData, field, key string) (value interface{}) {
 }
 
 func setSettingKey(data connectionData, field, key string, value interface{}) {
-	realdField := getRealFieldName(field) // get real name of virtual fields
+	// special for vpn plugin keys
+	if isSettingVpnPluginKey(field) {
+		setSettingVpnPluginKey(data, field, key, value)
+		return
+	}
+
+	realField := getRealFieldName(field) // get real name of virtual fields
 	var fieldData map[string]dbus.Variant
-	fieldData, ok := data[realdField]
+	fieldData, ok := data[realField]
 	if !ok {
-		logger.Error(fmt.Errorf(`set connection data failed, field "%s" is not exits yet`, realdField))
+		logger.Errorf(`set connection data failed, field "%s" is not exits yet`, realField)
 		return
 	}
 
@@ -164,30 +176,13 @@ func setSettingKey(data connectionData, field, key string, value interface{}) {
 	return
 }
 
-// TODO
-func setSettingVpnPluginKey(data connectionData, field, key, value string) {
-	vpnData := getSettingVpnPluginData(data, field, key)
-	if isSettingVpnPluginSecretKey(field, key) {
-		vpnData = getSettingVpnSecrets(data)
-	} else {
-		vpnData = getSettingVpnData(data)
-	}
-	vpnData[key] = value
-}
-func getSettingVpnPluginData(data connectionData, field, key string) (vpnData map[string]string) {
-	if isSettingVpnPluginSecretKey(field, key) {
-		vpnData = getSettingVpnSecrets(data)
-	} else {
-		vpnData = getSettingVpnData(data)
-	}
-	return
-}
-func isSettingVpnPluginSecretKey(field, key string) bool {
-	// TODO
-	return false
-}
-
 func removeSettingKey(data connectionData, field string, keys ...string) {
+	// special for vpn plugin keys
+	if isSettingVpnPluginKey(field) {
+		removeSettingVpnPluginKey(data, field, keys...)
+		return
+	}
+
 	realField := getRealFieldName(field) // get real name of virtual fields
 	fieldData, ok := data[realField]
 	if !ok {
@@ -195,31 +190,38 @@ func removeSettingKey(data connectionData, field string, keys ...string) {
 	}
 
 	for _, k := range keys {
-		_, ok = fieldData[k]
-		if !ok {
-			continue
-		}
 		delete(fieldData, k)
 	}
 }
 
 func removeSettingKeyBut(data connectionData, field string, keys ...string) {
-	realdField := getRealFieldName(field) // get real name of virtual fields
-	fieldData, ok := data[realdField]
+	// special for vpn plugin keys
+	if isSettingVpnPluginKey(field) {
+		removeSettingVpnPluginKeyBut(data, field, keys...)
+		return
+	}
+
+	realField := getRealFieldName(field) // get real name of virtual fields
+	fieldData, ok := data[realField]
 	if !ok {
 		return
 	}
 
 	for k := range fieldData {
-		if isStringInArray(k, keys) {
+		if !isStringInArray(k, keys) {
 			delete(fieldData, k)
 		}
 	}
 }
 
 func isSettingKeyExists(data connectionData, field, key string) bool {
-	realdField := getRealFieldName(field) // get real name of virtual fields
-	fieldData, ok := data[realdField]
+	// special for vpn plugin keys
+	if isSettingVpnPluginKey(field) {
+		return isSettingVpnPluginKeyExists(data, field, key)
+	}
+
+	realField := getRealFieldName(field) // get real name of virtual fields
+	fieldData, ok := data[realField]
 	if !ok {
 		return false
 	}
@@ -244,16 +246,16 @@ func addSettingField(data connectionData, field string) {
 }
 
 func removeSettingField(data connectionData, field string) {
-	realdField := getRealFieldName(field) // get real name of virtual fields
-	_, ok := data[realdField]
+	realField := getRealFieldName(field) // get real name of virtual fields
+	_, ok := data[realField]
 	if ok {
 		// remove field if exists
-		delete(data, realdField)
+		delete(data, realField)
 	}
 }
 
 func isSettingFieldExists(data connectionData, field string) bool {
-	realdField := getRealFieldName(field) // get real name of virtual fields
-	_, ok := data[realdField]
+	realField := getRealFieldName(field) // get real name of virtual fields
+	_, ok := data[realField]
 	return ok
 }

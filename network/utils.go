@@ -73,6 +73,11 @@ func marshalJSON(v interface{}) (jsonStr string, err error) {
 	return
 }
 
+func unmarshalJSON(jsonStr string) (v interface{}, err error) {
+	err = json.Unmarshal([]byte(jsonStr), &v)
+	return
+}
+
 func isUint32ArrayEmpty(a []uint32) (empty bool) {
 	empty = true
 	for _, v := range a {

@@ -536,3 +536,36 @@ func (*Utils) TestbyteArrayToStrPath(c *C) {
 		c.Check(t.result, Equals, byteArrayToStrPath(t.test))
 	}
 }
+
+func (*Utils) TestMarshalVpnPluginKey(c *C) {
+	tests := []struct {
+		t      ktype
+		test   interface{}
+		result string
+	}{
+		{ktypeString, "string", "string"},
+		{ktypeBoolean, true, "true"},
+		{ktypeBoolean, false, "false"},
+		{ktypeUint32, 0, "0"},
+		{ktypeUint32, 1000, "1000"},
+	}
+	for _, t := range tests {
+		c.Check(t.result, Equals, marshalVpnPluginKey(t.test, t.t))
+	}
+}
+func (*Utils) TestUnmarshalVpnPluginKey(c *C) {
+	tests := []struct {
+		t      ktype
+		test   string
+		result interface{}
+	}{
+		{ktypeString, "string", "string"},
+		{ktypeBoolean, "true", true},
+		{ktypeBoolean, "false", false},
+		{ktypeUint32, "0", uint32(0)},
+		{ktypeUint32, "1000", uint32(1000)},
+	}
+	for _, t := range tests {
+		c.Check(t.result, Equals, unmarshalVpnPluginKey(t.test, t.t))
+	}
+}
