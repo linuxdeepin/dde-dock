@@ -77,14 +77,12 @@ func isJSONKeyValueMeansToDeleteKey(valueJSON string, t ktype) (doDelete bool) {
 }
 
 func getSettingKeyJSON(data connectionData, field, key string, t ktype) (valueJSON string) {
-	_filed := field
-	field = getRealFieldName(field) // get real field name
 	var value interface{}
 	if isSettingKeyExists(data, field, key) {
 		value = getSettingKey(data, field, key)
 	} else {
 		// return default value if the key is not exists
-		valueJSON = getSettingKeyDefaultValueJSON(_filed, key)
+		valueJSON = getSettingKeyDefaultValueJSON(field, key)
 		return
 	}
 
@@ -102,7 +100,6 @@ func getSettingKeyJSON(data connectionData, field, key string, t ktype) (valueJS
 }
 
 func setSettingKeyJSON(data connectionData, field, key, valueJSON string, t ktype) (kerr error) {
-	field = getRealFieldName(field) // get real field name
 	if len(valueJSON) == 0 {
 		logger.Error("setSettingKeyJSON: valueJSON is empty")
 		kerr = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
