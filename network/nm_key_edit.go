@@ -131,10 +131,10 @@ func setSettingKeyJSON(data connectionData, field, key, valueJSON string, t ktyp
 }
 
 func getSettingKey(data connectionData, field, key string) (value interface{}) {
-	field = getRealFieldName(field) // get real field name
-	fieldData, ok := data[field]
+	realField := getRealFieldName(field) // get real name of virtual fields
+	fieldData, ok := data[realField]
 	if !ok {
-		logger.Errorf("invalid field: data[%s]", field)
+		logger.Errorf("invalid field: data[%s]", realField)
 		return
 	}
 
@@ -150,11 +150,11 @@ func getSettingKey(data connectionData, field, key string) (value interface{}) {
 }
 
 func setSettingKey(data connectionData, field, key string, value interface{}) {
-	field = getRealFieldName(field) // get real field name
+	realdField := getRealFieldName(field) // get real name of virtual fields
 	var fieldData map[string]dbus.Variant
-	fieldData, ok := data[field]
+	fieldData, ok := data[realdField]
 	if !ok {
-		logger.Error(fmt.Errorf(`set connection data failed, field "%s" is not exits yet`, field))
+		logger.Error(fmt.Errorf(`set connection data failed, field "%s" is not exits yet`, realdField))
 		return
 	}
 
@@ -164,9 +164,32 @@ func setSettingKey(data connectionData, field, key string, value interface{}) {
 	return
 }
 
+// TODO
+func setSettingVpnPluginKey(data connectionData, field, key, value string) {
+	vpnData := getSettingVpnPluginData(data, field, key)
+	if isSettingVpnPluginSecretKey(field, key) {
+		vpnData = getSettingVpnSecrets(data)
+	} else {
+		vpnData = getSettingVpnData(data)
+	}
+	vpnData[key] = value
+}
+func getSettingVpnPluginData(data connectionData, field, key string) (vpnData map[string]string) {
+	if isSettingVpnPluginSecretKey(field, key) {
+		vpnData = getSettingVpnSecrets(data)
+	} else {
+		vpnData = getSettingVpnData(data)
+	}
+	return
+}
+func isSettingVpnPluginSecretKey(field, key string) bool {
+	// TODO
+	return false
+}
+
 func removeSettingKey(data connectionData, field string, keys ...string) {
-	field = getRealFieldName(field) // get real field name
-	fieldData, ok := data[field]
+	realField := getRealFieldName(field) // get real name of virtual fields
+	fieldData, ok := data[realField]
 	if !ok {
 		return
 	}
@@ -181,8 +204,8 @@ func removeSettingKey(data connectionData, field string, keys ...string) {
 }
 
 func removeSettingKeyBut(data connectionData, field string, keys ...string) {
-	field = getRealFieldName(field) // get real field name
-	fieldData, ok := data[field]
+	realdField := getRealFieldName(field) // get real name of virtual fields
+	fieldData, ok := data[realdField]
 	if !ok {
 		return
 	}
@@ -195,8 +218,8 @@ func removeSettingKeyBut(data connectionData, field string, keys ...string) {
 }
 
 func isSettingKeyExists(data connectionData, field, key string) bool {
-	field = getRealFieldName(field) // get real field name
-	fieldData, ok := data[field]
+	realdField := getRealFieldName(field) // get real name of virtual fields
+	fieldData, ok := data[realdField]
 	if !ok {
 		return false
 	}
@@ -210,27 +233,27 @@ func isSettingKeyExists(data connectionData, field, key string) bool {
 }
 
 func addSettingField(data connectionData, field string) {
-	field = getRealFieldName(field) // get real field name
+	realField := getRealFieldName(field) // get real name of virtual fields
 	var fieldData map[string]dbus.Variant
-	fieldData, ok := data[field]
+	fieldData, ok := data[realField]
 	if !ok {
 		// add field if not exists
 		fieldData = make(map[string]dbus.Variant)
-		data[field] = fieldData
+		data[realField] = fieldData
 	}
 }
 
 func removeSettingField(data connectionData, field string) {
-	field = getRealFieldName(field) // get real field name
-	_, ok := data[field]
+	realdField := getRealFieldName(field) // get real name of virtual fields
+	_, ok := data[realdField]
 	if ok {
 		// remove field if exists
-		delete(data, field)
+		delete(data, realdField)
 	}
 }
 
 func isSettingFieldExists(data connectionData, field string) bool {
-	field = getRealFieldName(field) // get real field name
-	_, ok := data[field]
+	realdField := getRealFieldName(field) // get real name of virtual fields
+	_, ok := data[realdField]
 	return ok
 }
