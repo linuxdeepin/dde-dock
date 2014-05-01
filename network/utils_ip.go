@@ -39,6 +39,10 @@ func convertMacAddressToArrayByteCheck(v string) (macAddr []byte, err error) {
 		return
 	}
 	for i := 0; i < 6; i++ {
+		if len(a[i]) != 2 {
+			err = fmt.Errorf("machine address is invalid %s", v)
+			return
+		}
 		var n uint64
 		n, err = strconv.ParseUint(a[i], 16, 8)
 		if err != nil {

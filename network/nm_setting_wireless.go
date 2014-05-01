@@ -109,6 +109,75 @@ const (
 	NM_SETTING_WIRELESS_MODE_INFRA = "infrastructure"
 )
 
+// initialize available values
+var availableValuesWirelessChannelA = []kvalue{
+	kvalue{"", "Default"},
+	kvalue{"7", "7 (5035 MHz)"},
+	kvalue{"8", "8 (5040 MHz)"},
+	kvalue{"9", "9 (5045 MHz)"},
+	kvalue{"11", "11 (5055 MHz)"},
+	kvalue{"12", "12 (5060 MHz)"},
+	kvalue{"16", "16 (5080 MHz)"},
+	kvalue{"34", "34 (5170 MHz)"},
+	kvalue{"36", "36 (5180 MHz)"},
+	kvalue{"38", "38 (5190 MHz)"},
+	kvalue{"40", "40 (5200 MHz)"},
+	kvalue{"42", "42 (5210 MHz)"},
+	kvalue{"44", "44 (5220 MHz)"},
+	kvalue{"46", "46 (5230 MHz)"},
+	kvalue{"48", "48 (5240 MHz)"},
+	kvalue{"50", "50 (5250 MHz)"},
+	kvalue{"52", "52 (5260 MHz)"},
+	kvalue{"56", "56 (5280 MHz)"},
+	kvalue{"58", "58 (5290 MHz)"},
+	kvalue{"60", "60 (5300 MHz)"},
+	kvalue{"64", "64 (5320 MHz)"},
+	kvalue{"100", "100 (5500 MHz)"},
+	kvalue{"104", "104 (5520 MHz)"},
+	kvalue{"108", "108 (5540 MHz)"},
+	kvalue{"112", "112 (5560 MHz)"},
+	kvalue{"116", "116 (5580 MHz)"},
+	kvalue{"120", "120 (5600 MHz)"},
+	kvalue{"124", "124 (5620 MHz)"},
+	kvalue{"128", "128 (5640 MHz)"},
+	kvalue{"132", "132 (5660 MHz)"},
+	kvalue{"136", "136 (5680 MHz)"},
+	kvalue{"140", "140 (5700 MHz)"},
+	kvalue{"149", "149 (5745 MHz)"},
+	kvalue{"152", "152 (5760 MHz)"},
+	kvalue{"153", "153 (5765 MHz)"},
+	kvalue{"157", "157 (5785 MHz)"},
+	kvalue{"160", "160 (5800 MHz)"},
+	kvalue{"161", "161 (5805 MHz)"},
+	kvalue{"165", "165 (5825 MHz)"},
+	kvalue{"183", "183 (4915 MHz)"},
+	kvalue{"184", "184 (4920 MHz)"},
+	kvalue{"185", "185 (4925 MHz)"},
+	kvalue{"187", "187 (4935 MHz)"},
+	kvalue{"188", "188 (4945 MHz)"},
+	kvalue{"192", "192 (4960 MHz)"},
+	kvalue{"196", "196 (4980 MHz)"},
+}
+
+var availableValuesWirelessChannelBg = []kvalue{
+	kvalue{"", dlib.Tr("Default")},
+	kvalue{"1", "1 (2412 MHz)"},
+	kvalue{"2", "2 (2417 MHz)"},
+	kvalue{"3", "3 (2422 MHz)"},
+	kvalue{"4", "4 (2427 MHz)"},
+	kvalue{"5", "5 (2432 MHz)"},
+	kvalue{"6", "6 (2437 MHz)"},
+	kvalue{"7", "7 (2442 MHz)"},
+	kvalue{"8", "8 (2447 MHz)"},
+	kvalue{"9", "9 (2452 MHz)"},
+	kvalue{"10", "10 (2457 MHz)"},
+	kvalue{"11", "11 (2462 MHz)"},
+	kvalue{"12", "12 (2467 MHz)"},
+	kvalue{"13", "13 (2472 MHz)"},
+	kvalue{"14", "14 (2484 MHz)"},
+}
+
+// new connection data
 func newWirelessConnection(id string, ssid []byte, secType apSecType) (uuid string) {
 	logger.Debugf("new wireless connection, id=%s, ssid=%s, secType=%d", id, ssid, secType)
 	uuid = newUUID()
@@ -154,10 +223,15 @@ func getSettingWirelessAvailableKeys(data connectionData) (keys []string) {
 	case NM_SETTING_WIRELESS_MODE_INFRA:
 	case NM_SETTING_WIRELESS_MODE_ADHOC:
 		keys = appendAvailableKeys(data, keys, fieldWireless, NM_SETTING_WIRELESS_BAND)
-		// TODO
-		keys = appendAvailableKeys(data, keys, fieldWireless, NM_SETTING_WIRELESS_CHANNEL)
+		if isSettingWirelessBandExists(data) {
+			keys = appendAvailableKeys(data, keys, fieldWireless, NM_SETTING_WIRELESS_CHANNEL)
+		}
 	case NM_SETTING_WIRELESS_MODE_AP:
 		// TODO
+		keys = appendAvailableKeys(data, keys, fieldWireless, NM_SETTING_WIRELESS_BAND)
+		if isSettingWirelessBandExists(data) {
+			keys = appendAvailableKeys(data, keys, fieldWireless, NM_SETTING_WIRELESS_CHANNEL)
+		}
 	}
 	keys = appendAvailableKeys(data, keys, fieldWireless, NM_SETTING_WIRELESS_MAC_ADDRESS)
 	keys = appendAvailableKeys(data, keys, fieldWireless, NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS)
@@ -181,7 +255,14 @@ func getSettingWirelessAvailableValues(data connectionData, key string) (values 
 			kvalue{"bg", dlib.Tr("BG (2.4 GHz)")},
 		}
 	case NM_SETTING_WIRELESS_CHANNEL:
-		// TODO
+		if isSettingWirelessBandExists(data) {
+			switch getSettingWirelessBand(data) {
+			case "a":
+				values = availableValuesWirelessChannelA
+			case "bg":
+				values = availableValuesWirelessChannelBg
+			}
+		}
 	case NM_SETTING_WIRELESS_MAC_ADDRESS:
 		// get wireless devices mac address
 		devPaths, err := nmGetDevices()
@@ -215,5 +296,22 @@ func checkSettingWirelessValues(data connectionData) (errs fieldErrors) {
 	}
 
 	// machine address will be checked when setting key
+	return
+}
+
+// Logic setter
+func logicSetSettingWirelessMode(data connectionData, value string) (err error) {
+	// for ad-hoc or ap-hotspot, wpa-eap security is invalid
+	if value != NM_SETTING_WIRELESS_MODE_INFRA {
+		if getSettingVkWirelessSecurityKeyMgmt(data) == "wpa-eap" {
+			logicSetSettingVkWirelessSecurityKeyMgmt(data, "wpa-psk")
+		}
+	}
+	setSettingWirelessMode(data, value)
+	return
+}
+func logicSetSettingWirelessBand(data connectionData, value string) (err error) {
+	removeSettingWirelessChannel(data)
+	setSettingWirelessBand(data, value)
 	return
 }

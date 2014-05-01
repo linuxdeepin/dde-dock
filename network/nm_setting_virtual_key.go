@@ -22,11 +22,10 @@ const (
 const NM_SETTING_VK_CONNECTION_NO_PERMISSION = "vk-no-permission"
 
 // wired
-const NM_SETTING_VK_WIRED_MTU = "vk-mtu"
+const NM_SETTING_VK_WIRED_ENABLE_MTU = "vk-enable-mtu"
 
 // wireless
-const NM_SETTING_VK_WIRELESS_CHANNEL = "vk-channel"
-const NM_SETTING_VK_WIRELESS_MTU = "vk-mtu"
+const NM_SETTING_VK_WIRELESS_ENABLE_MTU = "vk-enable-mtu"
 
 // ipv4
 const (
@@ -147,11 +146,19 @@ func generalGetSettingVkAvailableValues(data connectionData, field, key string) 
 	case fieldWirelessSecurity:
 		switch key {
 		case NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT:
-			values = []kvalue{
-				kvalue{"none", dlib.Tr("None")},
-				kvalue{"wep", dlib.Tr("WEP 40/128-bit Key")},
-				kvalue{"wpa-psk", dlib.Tr("WPA & WPA2 Personal")},
-				kvalue{"wpa-eap", dlib.Tr("WPA & WPA2 Enterprise")},
+			if getSettingWirelessMode(data) == NM_SETTING_WIRELESS_MODE_INFRA {
+				values = []kvalue{
+					kvalue{"none", dlib.Tr("None")},
+					kvalue{"wep", dlib.Tr("WEP 40/128-bit Key")},
+					kvalue{"wpa-psk", dlib.Tr("WPA & WPA2 Personal")},
+					kvalue{"wpa-eap", dlib.Tr("WPA & WPA2 Enterprise")},
+				}
+			} else {
+				values = []kvalue{
+					kvalue{"none", dlib.Tr("None")},
+					kvalue{"wep", dlib.Tr("WEP 40/128-bit Key")},
+					kvalue{"wpa-psk", dlib.Tr("WPA & WPA2 Personal")},
+				}
 			}
 		}
 	case fieldPppoe:

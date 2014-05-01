@@ -38,9 +38,8 @@ var virtualKeys = []virtualKey{
 	virtualKey{Name: NM_SETTING_VK_VPN_VPNC_KEY_HYBRID_AUTHMODE, Type: ktypeBoolean, RelatedField: NM_SETTING_VF_VPN_VPNC_SETTING_NAME, RelatedKey: NM_SETTING_VPN_VPNC_KEY_AUTHMODE, EnableWrapper: false, Available: true, Optional: false},
 	virtualKey{Name: NM_SETTING_VK_VPN_VPNC_KEY_ENCRYPTION_METHOD, Type: ktypeString, RelatedField: NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, RelatedKey: NM_SETTING_VPN_VPNC_KEY_SINGLE_DES, EnableWrapper: false, Available: true, Optional: false},
 	virtualKey{Name: NM_SETTING_VK_VPN_VPNC_KEY_DISABLE_DPD, Type: ktypeBoolean, RelatedField: NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, RelatedKey: NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT, EnableWrapper: false, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_WIRED_MTU, Type: ktypeBoolean, RelatedField: NM_SETTING_WIRED_SETTING_NAME, RelatedKey: NM_SETTING_WIRED_MTU, EnableWrapper: true, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_WIRELESS_CHANNEL, Type: ktypeBoolean, RelatedField: NM_SETTING_WIRELESS_SETTING_NAME, RelatedKey: NM_SETTING_WIRELESS_CHANNEL, EnableWrapper: true, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_WIRELESS_MTU, Type: ktypeBoolean, RelatedField: NM_SETTING_WIRELESS_SETTING_NAME, RelatedKey: NM_SETTING_WIRELESS_MTU, EnableWrapper: true, Available: true, Optional: false},
+	virtualKey{Name: NM_SETTING_VK_WIRED_ENABLE_MTU, Type: ktypeBoolean, RelatedField: NM_SETTING_WIRED_SETTING_NAME, RelatedKey: NM_SETTING_WIRED_MTU, EnableWrapper: true, Available: true, Optional: false},
+	virtualKey{Name: NM_SETTING_VK_WIRELESS_ENABLE_MTU, Type: ktypeBoolean, RelatedField: NM_SETTING_WIRELESS_SETTING_NAME, RelatedKey: NM_SETTING_WIRELESS_MTU, EnableWrapper: true, Available: true, Optional: false},
 	virtualKey{Name: NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT, Type: ktypeString, RelatedField: NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, RelatedKey: NM_SETTING_WIRELESS_SECURITY_KEY_MGMT, EnableWrapper: false, Available: true, Optional: false},
 }
 
@@ -155,15 +154,13 @@ func generalGetVirtualKeyJSON(data connectionData, field, key string) (valueJSON
 		}
 	case NM_SETTING_WIRED_SETTING_NAME:
 		switch key {
-		case NM_SETTING_VK_WIRED_MTU:
-			return getSettingVkWiredMtuJSON(data)
+		case NM_SETTING_VK_WIRED_ENABLE_MTU:
+			return getSettingVkWiredEnableMtuJSON(data)
 		}
 	case NM_SETTING_WIRELESS_SETTING_NAME:
 		switch key {
-		case NM_SETTING_VK_WIRELESS_CHANNEL:
-			return getSettingVkWirelessChannelJSON(data)
-		case NM_SETTING_VK_WIRELESS_MTU:
-			return getSettingVkWirelessMtuJSON(data)
+		case NM_SETTING_VK_WIRELESS_ENABLE_MTU:
+			return getSettingVkWirelessEnableMtuJSON(data)
 		}
 	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
 		switch key {
@@ -322,17 +319,14 @@ func generalSetVirtualKeyJSON(data connectionData, field, key string, valueJSON 
 		}
 	case NM_SETTING_WIRED_SETTING_NAME:
 		switch key {
-		case NM_SETTING_VK_WIRED_MTU:
-			err = logicSetSettingVkWiredMtuJSON(data, valueJSON)
+		case NM_SETTING_VK_WIRED_ENABLE_MTU:
+			err = logicSetSettingVkWiredEnableMtuJSON(data, valueJSON)
 			return
 		}
 	case NM_SETTING_WIRELESS_SETTING_NAME:
 		switch key {
-		case NM_SETTING_VK_WIRELESS_CHANNEL:
-			err = logicSetSettingVkWirelessChannelJSON(data, valueJSON)
-			return
-		case NM_SETTING_VK_WIRELESS_MTU:
-			err = logicSetSettingVkWirelessMtuJSON(data, valueJSON)
+		case NM_SETTING_VK_WIRELESS_ENABLE_MTU:
+			err = logicSetSettingVkWirelessEnableMtuJSON(data, valueJSON)
 			return
 		}
 	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
@@ -487,16 +481,12 @@ func getSettingVkVpnVpncKeyDisableDpdJSON(data connectionData) (valueJSON string
 	valueJSON, _ = marshalJSON(getSettingVkVpnVpncKeyDisableDpd(data))
 	return
 }
-func getSettingVkWiredMtuJSON(data connectionData) (valueJSON string) {
-	valueJSON, _ = marshalJSON(getSettingVkWiredMtu(data))
+func getSettingVkWiredEnableMtuJSON(data connectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkWiredEnableMtu(data))
 	return
 }
-func getSettingVkWirelessChannelJSON(data connectionData) (valueJSON string) {
-	valueJSON, _ = marshalJSON(getSettingVkWirelessChannel(data))
-	return
-}
-func getSettingVkWirelessMtuJSON(data connectionData) (valueJSON string) {
-	valueJSON, _ = marshalJSON(getSettingVkWirelessMtu(data))
+func getSettingVkWirelessEnableMtuJSON(data connectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkWirelessEnableMtu(data))
 	return
 }
 func getSettingVkWirelessSecurityKeyMgmtJSON(data connectionData) (valueJSON string) {
@@ -645,17 +635,13 @@ func logicSetSettingVkVpnVpncKeyDisableDpdJSON(data connectionData, valueJSON st
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	return logicSetSettingVkVpnVpncKeyDisableDpd(data, value)
 }
-func logicSetSettingVkWiredMtuJSON(data connectionData, valueJSON string) (err error) {
+func logicSetSettingVkWiredEnableMtuJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
-	return logicSetSettingVkWiredMtu(data, value)
+	return logicSetSettingVkWiredEnableMtu(data, value)
 }
-func logicSetSettingVkWirelessChannelJSON(data connectionData, valueJSON string) (err error) {
+func logicSetSettingVkWirelessEnableMtuJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
-	return logicSetSettingVkWirelessChannel(data, value)
-}
-func logicSetSettingVkWirelessMtuJSON(data connectionData, valueJSON string) (err error) {
-	value, _ := jsonToKeyValueBoolean(valueJSON)
-	return logicSetSettingVkWirelessMtu(data, value)
+	return logicSetSettingVkWirelessEnableMtu(data, value)
 }
 func logicSetSettingVkWirelessSecurityKeyMgmtJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueString(valueJSON)
@@ -699,19 +685,13 @@ func getSettingVkVpnOpenvpnKeyEnableTaDir(data connectionData) (value bool) {
 	}
 	return false
 }
-func getSettingVkWiredMtu(data connectionData) (value bool) {
+func getSettingVkWiredEnableMtu(data connectionData) (value bool) {
 	if isSettingWiredMtuExists(data) {
 		return true
 	}
 	return false
 }
-func getSettingVkWirelessChannel(data connectionData) (value bool) {
-	if isSettingWirelessChannelExists(data) {
-		return true
-	}
-	return false
-}
-func getSettingVkWirelessMtu(data connectionData) (value bool) {
+func getSettingVkWirelessEnableMtu(data connectionData) (value bool) {
 	if isSettingWirelessMtuExists(data) {
 		return true
 	}
@@ -767,7 +747,7 @@ func logicSetSettingVkVpnOpenvpnKeyEnableTaDir(data connectionData, value bool) 
 	}
 	return
 }
-func logicSetSettingVkWiredMtu(data connectionData, value bool) (err error) {
+func logicSetSettingVkWiredEnableMtu(data connectionData, value bool) (err error) {
 	if value {
 		setSettingWiredMtu(data, 0)
 	} else {
@@ -775,15 +755,7 @@ func logicSetSettingVkWiredMtu(data connectionData, value bool) (err error) {
 	}
 	return
 }
-func logicSetSettingVkWirelessChannel(data connectionData, value bool) (err error) {
-	if value {
-		setSettingWirelessChannel(data, 0)
-	} else {
-		removeSettingWirelessChannel(data)
-	}
-	return
-}
-func logicSetSettingVkWirelessMtu(data connectionData, value bool) (err error) {
+func logicSetSettingVkWirelessEnableMtu(data connectionData, value bool) (err error) {
 	if value {
 		setSettingWirelessMtu(data, 0)
 	} else {

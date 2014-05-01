@@ -17,7 +17,7 @@ func getSettingWirelessKeyType(key string) (t ktype) {
 	case NM_SETTING_WIRELESS_BAND:
 		t = ktypeString
 	case NM_SETTING_WIRELESS_CHANNEL:
-		t = ktypeUint32
+		t = ktypeString
 	case NM_SETTING_WIRELESS_BSSID:
 		t = ktypeWrapperString
 	case NM_SETTING_WIRELESS_RATE:
@@ -89,7 +89,7 @@ func getSettingWirelessKeyDefaultValueJSON(key string) (valueJSON string) {
 	case NM_SETTING_WIRELESS_BAND:
 		valueJSON = `""`
 	case NM_SETTING_WIRELESS_CHANNEL:
-		valueJSON = `0`
+		valueJSON = `""`
 	case NM_SETTING_WIRELESS_BSSID:
 		valueJSON = `""`
 	case NM_SETTING_WIRELESS_RATE:
@@ -159,9 +159,9 @@ func generalSetSettingWirelessKeyJSON(data connectionData, key, valueJSON string
 	case NM_SETTING_WIRELESS_SSID:
 		err = setSettingWirelessSsidJSON(data, valueJSON)
 	case NM_SETTING_WIRELESS_MODE:
-		err = setSettingWirelessModeJSON(data, valueJSON)
+		err = logicSetSettingWirelessModeJSON(data, valueJSON)
 	case NM_SETTING_WIRELESS_BAND:
-		err = setSettingWirelessBandJSON(data, valueJSON)
+		err = logicSetSettingWirelessBandJSON(data, valueJSON)
 	case NM_SETTING_WIRELESS_CHANNEL:
 		err = setSettingWirelessChannelJSON(data, valueJSON)
 	case NM_SETTING_WIRELESS_BSSID:
@@ -273,6 +273,10 @@ func ensureSettingWirelessChannelNoEmpty(data connectionData, errs fieldErrors) 
 	if !isSettingWirelessChannelExists(data) {
 		rememberError(errs, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_CHANNEL, NM_KEY_ERROR_MISSING_VALUE)
 	}
+	value := getSettingWirelessChannel(data)
+	if len(value) == 0 {
+		rememberError(errs, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_CHANNEL, NM_KEY_ERROR_EMPTY_VALUE)
+	}
 }
 func ensureSettingWirelessBssidNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingWirelessBssidExists(data) {
@@ -362,8 +366,8 @@ func getSettingWirelessBand(data connectionData) (value string) {
 	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_BAND).(string)
 	return
 }
-func getSettingWirelessChannel(data connectionData) (value uint32) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_CHANNEL).(uint32)
+func getSettingWirelessChannel(data connectionData) (value string) {
+	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_CHANNEL).(string)
 	return
 }
 func getSettingWirelessBssid(data connectionData) (value []byte) {
@@ -417,7 +421,7 @@ func setSettingWirelessMode(data connectionData, value string) {
 func setSettingWirelessBand(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_BAND, value)
 }
-func setSettingWirelessChannel(data connectionData, value uint32) {
+func setSettingWirelessChannel(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_CHANNEL, value)
 }
 func setSettingWirelessBssid(data connectionData, value []byte) {
@@ -554,6 +558,28 @@ func setSettingWirelessHiddenJSON(data connectionData, valueJSON string) (err er
 }
 
 // Logic JSON Setter
+func logicSetSettingWirelessModeJSON(data connectionData, valueJSON string) (err error) {
+	err = setSettingWirelessModeJSON(data, valueJSON)
+	if err != nil {
+		return
+	}
+	if isSettingWirelessModeExists(data) {
+		value := getSettingWirelessMode(data)
+		err = logicSetSettingWirelessMode(data, value)
+	}
+	return
+}
+func logicSetSettingWirelessBandJSON(data connectionData, valueJSON string) (err error) {
+	err = setSettingWirelessBandJSON(data, valueJSON)
+	if err != nil {
+		return
+	}
+	if isSettingWirelessBandExists(data) {
+		value := getSettingWirelessBand(data)
+		err = logicSetSettingWirelessBand(data, value)
+	}
+	return
+}
 
 // Remover
 func removeSettingWirelessSsid(data connectionData) {
