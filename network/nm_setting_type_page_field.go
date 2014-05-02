@@ -11,6 +11,7 @@ const (
 	typeWirelessAdhoc   = "wireless-adhoc"
 	typeWirelessHotspot = "wireless-hotspot"
 	typePppoe           = "pppoe"
+	typeMobile          = "mobile"
 	typeVpn             = "vpn"
 	typeVpnL2tp         = "vpn-l2tp"
 	typeVpnOpenconnect  = "vpn-openconnect"
@@ -30,6 +31,7 @@ var supportedConnectionTypes = []string{
 	typeWirelessAdhoc,
 	typeWirelessHotspot,
 	typePppoe,
+	typeMobile,
 	typeVpnL2tp,
 	typeVpnOpenconnect,
 	typeVpnOpenvpn,
@@ -42,6 +44,7 @@ var supportedConnectionTypesInfo = []connectionType{
 	connectionType{typeWirelessAdhoc, dlib.Tr("Wi-Fi Ad-Hoc")},
 	connectionType{typeWirelessHotspot, dlib.Tr("Wi-Fi Hotspot")},
 	connectionType{typePppoe, dlib.Tr("PPPoE")},
+	connectionType{typeMobile, dlib.Tr("Mobile 2G/3G/4G-LTE")},
 	connectionType{typeVpnL2tp, dlib.Tr("VPN-L2TP (Layer 2 Tunneling Protocol)")},
 	connectionType{typeVpnOpenconnect, dlib.Tr("VPN-OpenConnect (Cisco AnyConnect Compatible VPN)")},
 	connectionType{typeVpnOpenvpn, dlib.Tr("VPN-OpenVPN")},
@@ -52,6 +55,7 @@ var supportedConnectionTypesInfo = []connectionType{
 const (
 	field8021x              = NM_SETTING_802_1X_SETTING_NAME
 	fieldConnection         = NM_SETTING_CONNECTION_SETTING_NAME
+	fieldGsm                = NM_SETTING_GSM_SETTING_NAME
 	fieldIpv4               = NM_SETTING_IP4_CONFIG_SETTING_NAME
 	fieldIpv6               = NM_SETTING_IP6_CONFIG_SETTING_NAME
 	fieldPppoe              = NM_SETTING_PPPOE_SETTING_NAME
@@ -79,6 +83,7 @@ const (
 const (
 	pageGeneral            = "general"              // -> fieldConnection
 	pageEthernet           = "ethernet"             // -> fieldWireed
+	pageGsm                = "gsm"                  // -> fieldGsm
 	pageWifi               = "wifi"                 // -> fieldWireless
 	pageIPv4               = "ipv4"                 // -> fieldIpv4
 	pageIPv6               = "ipv6"                 // -> fieldIpv6

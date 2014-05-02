@@ -64,6 +64,8 @@ func NewConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 		s.data = newWirelessHotspotConnectionData("", s.CurrentUUID)
 	case typePppoe:
 		s.data = newPppoeConnectionData("", s.CurrentUUID)
+	case typeMobile:
+		s.data = newGsmConnectionData("", s.CurrentUUID)
 	case typeVpnL2tp:
 		s.data = newVpnL2tpConnectionData("", s.CurrentUUID)
 	case typeVpnOpenconnect:
@@ -290,6 +292,13 @@ func (s *ConnectionSession) listPages() (pages []string) {
 			pageVpnVpncAdvanced,
 			pageIPv4,
 		}
+	case typeMobile:
+		pages = []string{
+			pageGeneral,
+			pageGsm,
+			pagePpp,
+			pageIPv4,
+		}
 	}
 	return
 }
@@ -300,6 +309,8 @@ func (s *ConnectionSession) pageToFields(page string) (fields []string) {
 		logger.Error("pageToFields: invalid page name", page)
 	case pageGeneral:
 		fields = []string{fieldConnection}
+	case pageGsm:
+		fields = []string{fieldGsm}
 	case pageEthernet:
 		fields = []string{fieldWired}
 	case pageWifi:

@@ -12,6 +12,8 @@ func generalIsKeyInSettingField(field, key string) bool {
 		return isKeyInSetting8021x(key)
 	case NM_SETTING_CONNECTION_SETTING_NAME:
 		return isKeyInSettingConnection(key)
+	case NM_SETTING_GSM_SETTING_NAME:
+		return isKeyInSettingGsm(key)
 	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
 		return isKeyInSettingIp4Config(key)
 	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
@@ -70,6 +72,8 @@ func generalGetSettingKeyType(field, key string) (t ktype) {
 		t = getSetting8021xKeyType(key)
 	case NM_SETTING_CONNECTION_SETTING_NAME:
 		t = getSettingConnectionKeyType(key)
+	case NM_SETTING_GSM_SETTING_NAME:
+		t = getSettingGsmKeyType(key)
 	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
 		t = getSettingIp4ConfigKeyType(key)
 	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
@@ -122,6 +126,8 @@ func generalGetSettingAvailableKeys(data connectionData, field string) (keys []s
 		keys = getSetting8021xAvailableKeys(data)
 	case NM_SETTING_CONNECTION_SETTING_NAME:
 		keys = getSettingConnectionAvailableKeys(data)
+	case NM_SETTING_GSM_SETTING_NAME:
+		keys = getSettingGsmAvailableKeys(data)
 	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
 		keys = getSettingIp4ConfigAvailableKeys(data)
 	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
@@ -178,6 +184,8 @@ func generalGetSettingAvailableValues(data connectionData, field, key string) (v
 		values = getSetting8021xAvailableValues(data, key)
 	case NM_SETTING_CONNECTION_SETTING_NAME:
 		values = getSettingConnectionAvailableValues(data, key)
+	case NM_SETTING_GSM_SETTING_NAME:
+		values = getSettingGsmAvailableValues(data, key)
 	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
 		values = getSettingIp4ConfigAvailableValues(data, key)
 	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
@@ -232,6 +240,8 @@ func generalCheckSettingValues(data connectionData, field string) (errs fieldErr
 		errs = checkSetting8021xValues(data)
 	case NM_SETTING_CONNECTION_SETTING_NAME:
 		errs = checkSettingConnectionValues(data)
+	case NM_SETTING_GSM_SETTING_NAME:
+		errs = checkSettingGsmValues(data)
 	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
 		errs = checkSettingIp4ConfigValues(data)
 	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
@@ -290,6 +300,8 @@ func generalGetSettingKeyJSON(data connectionData, field, key string) (valueJSON
 		valueJSON = generalGetSetting8021xKeyJSON(data, key)
 	case NM_SETTING_CONNECTION_SETTING_NAME:
 		valueJSON = generalGetSettingConnectionKeyJSON(data, key)
+	case NM_SETTING_GSM_SETTING_NAME:
+		valueJSON = generalGetSettingGsmKeyJSON(data, key)
 	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
 		valueJSON = generalGetSettingIp4ConfigKeyJSON(data, key)
 	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
@@ -348,6 +360,8 @@ func generalSetSettingKeyJSON(data connectionData, field, key, valueJSON string)
 		err = generalSetSetting8021xKeyJSON(data, key, valueJSON)
 	case NM_SETTING_CONNECTION_SETTING_NAME:
 		err = generalSetSettingConnectionKeyJSON(data, key, valueJSON)
+	case NM_SETTING_GSM_SETTING_NAME:
+		err = generalSetSettingGsmKeyJSON(data, key, valueJSON)
 	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
 		err = generalSetSettingIp4ConfigKeyJSON(data, key, valueJSON)
 	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
@@ -402,6 +416,8 @@ func getSettingKeyDefaultValueJSON(field, key string) (valueJSON string) {
 		valueJSON = getSetting8021xKeyDefaultValueJSON(key)
 	case NM_SETTING_CONNECTION_SETTING_NAME:
 		valueJSON = getSettingConnectionKeyDefaultValueJSON(key)
+	case NM_SETTING_GSM_SETTING_NAME:
+		valueJSON = getSettingGsmKeyDefaultValueJSON(key)
 	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
 		valueJSON = getSettingIp4ConfigKeyDefaultValueJSON(key)
 	case NM_SETTING_IP6_CONFIG_SETTING_NAME:

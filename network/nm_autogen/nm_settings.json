@@ -55,6 +55,23 @@
     ]
 },
 {
+    "FieldName":"NM_SETTING_GSM_SETTING_NAME",
+    "FieldValue":"gsm",
+    "Keys":[
+	    {"Name":"NM_SETTING_GSM_NUMBER", "Value":"number", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Number", "FrontEndWidget":"EditLineEditComboBox"},
+	    {"Name":"NM_SETTING_GSM_USERNAME", "Value":"username", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"User Name", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_GSM_PASSWORD_FLAGS", "Value":"password-flags", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Ask for Pwd", "FrontEndWidget":"EditLineComboBox"},
+	    {"Name":"NM_SETTING_GSM_PASSWORD", "Value":"password", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Password", "FrontEndWidget":"EditLinePasswordInput"},
+	    {"Name":"NM_SETTING_GSM_APN", "Value":"apn", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"APN", "FrontEndWidget":"EditLineEditComboBox"},
+	    {"Name":"NM_SETTING_GSM_NETWORK_ID", "Value":"network-id", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Network ID", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_GSM_NETWORK_TYPE", "Value":"network-type", "Type":"ktypeInt32", "Default":"-1", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Type", "FrontEndWidget":"EditLineComboBox"},
+	    {"Name":"NM_SETTING_GSM_ALLOWED_BANDS", "Value":"allowed-bands", "Type":"ktypeBoolean", "Default":"1", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_GSM_HOME_ONLY", "Value":"home-only", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Home Network Only", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_GSM_PIN", "Value":"pin", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"PIN", "FrontEndWidget":"EditLinePasswordInput"},
+	    {"Name":"NM_SETTING_GSM_PIN_FLAGS", "Value":"pin-flags", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"EditLineComboBox"}
+    ]
+},
+{
     "FieldName":"NM_SETTING_IP4_CONFIG_SETTING_NAME",
     "FieldValue":"ipv4",
     "Keys":[
@@ -335,7 +352,7 @@
 	    {"Name":"NM_SETTING_WIRED_SPEED", "Value":"speed", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_WIRED_DUPLEX", "Value":"duplex", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_WIRED_AUTO_NEGOTIATE", "Value":"auto-negotiate", "Type":"ktypeBoolean", "Default":"true", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
-	    {"Name":"NM_SETTING_WIRED_MAC_ADDRESS", "Value":"mac-address", "Type":"ktypeWrapperMacAddress", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Device MAC Addr", "FrontEndWidget":"EditLineInputComboBox"},
+	    {"Name":"NM_SETTING_WIRED_MAC_ADDRESS", "Value":"mac-address", "Type":"ktypeWrapperMacAddress", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Device MAC Addr", "FrontEndWidget":"EditLineEditComboBox"},
 	    {"Name":"NM_SETTING_WIRED_CLONED_MAC_ADDRESS", "Value":"cloned-mac-address", "Type":"ktypeWrapperMacAddress", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Cloned MAC Addr", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST", "Value":"mac-address-blacklist", "Type":"ktypeArrayString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_WIRED_MTU", "Value":"mtu", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"MTU", "FrontEndWidget":"<default>"},
@@ -355,7 +372,7 @@
 	    {"Name":"NM_SETTING_WIRELESS_BSSID", "Value":"bssid", "Type":"ktypeWrapperString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_WIRELESS_RATE", "Value":"rate", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_WIRELESS_TX_POWER", "Value":"tx-power", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
-	    {"Name":"NM_SETTING_WIRELESS_MAC_ADDRESS", "Value":"mac-address", "Type":"ktypeWrapperMacAddress", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Device MAC Addr", "FrontEndWidget":"EditLineInputComboBox"},
+	    {"Name":"NM_SETTING_WIRELESS_MAC_ADDRESS", "Value":"mac-address", "Type":"ktypeWrapperMacAddress", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Device MAC Addr", "FrontEndWidget":"EditLineEditComboBox"},
 	    {"Name":"NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS", "Value":"cloned-mac-address", "Type":"ktypeWrapperMacAddress", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Cloned MAC Addr", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST", "Value":"mac-address-blacklist", "Type":"ktypeArrayString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_WIRELESS_MTU", "Value":"mtu", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"MTU", "FrontEndWidget":"<default>"},
