@@ -170,7 +170,7 @@ func (s *ConnectionSession) Save() bool {
 		nmActivateConnection(s.connPath, s.devPath)
 	} else {
 		// create new connection and activate it
-		// TODO vpn
+		// TODO vpn ad-hoc hotspot
 		if s.ConnectionType == typeWired || s.ConnectionType == typeWireless {
 			nmAddAndActivateConnection(s.data, s.devPath)
 		} else {

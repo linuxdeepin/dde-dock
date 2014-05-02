@@ -20,7 +20,7 @@ func newBasicVpnConnectionData(id, uuid, service string) (data connectionData) {
 	addSettingField(data, fieldConnection)
 	setSettingConnectionId(data, id)
 	setSettingConnectionUuid(data, uuid)
-	setSettingConnectionType(data, typeVpn)
+	setSettingConnectionType(data, NM_SETTING_VPN_SETTING_NAME)
 	setSettingConnectionAutoconnect(data, false)
 	logicSetSettingVkConnectionNoPermission(data, false)
 

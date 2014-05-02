@@ -86,7 +86,7 @@ func newWiredConnectionData(id, uuid string) (data connectionData) {
 	addSettingField(data, fieldConnection)
 	setSettingConnectionId(data, id)
 	setSettingConnectionUuid(data, uuid)
-	setSettingConnectionType(data, typeWired)
+	setSettingConnectionType(data, NM_SETTING_WIRED_SETTING_NAME)
 
 	addSettingField(data, fieldWired)
 	setSettingWiredDuplex(data, "full")

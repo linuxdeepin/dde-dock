@@ -192,7 +192,7 @@ func newWirelessConnectionData(id, uuid string, ssid []byte, secType apSecType) 
 	addSettingField(data, fieldConnection)
 	setSettingConnectionId(data, id)
 	setSettingConnectionUuid(data, uuid)
-	setSettingConnectionType(data, typeWireless)
+	setSettingConnectionType(data, NM_SETTING_WIRELESS_SETTING_NAME)
 
 	addSettingField(data, fieldWireless)
 	setSettingWirelessSsid(data, ssid)
@@ -230,7 +230,8 @@ func newWirelessHotspotConnectionData(id, uuid string) (data connectionData) {
 // Get available keys
 func getSettingWirelessAvailableKeys(data connectionData) (keys []string) {
 	keys = appendAvailableKeys(data, keys, fieldWireless, NM_SETTING_WIRELESS_SSID)
-	keys = appendAvailableKeys(data, keys, fieldWireless, NM_SETTING_WIRELESS_MODE)
+	// hide wireless mode option for better user experience
+	// keys = appendAvailableKeys(data, keys, fieldWireless, NM_SETTING_WIRELESS_MODE)
 	switch getSettingWirelessMode(data) {
 	case NM_SETTING_WIRELESS_MODE_INFRA:
 	case NM_SETTING_WIRELESS_MODE_ADHOC:
@@ -239,7 +240,6 @@ func getSettingWirelessAvailableKeys(data connectionData) (keys []string) {
 			keys = appendAvailableKeys(data, keys, fieldWireless, NM_SETTING_WIRELESS_CHANNEL)
 		}
 	case NM_SETTING_WIRELESS_MODE_AP:
-		// TODO
 		keys = appendAvailableKeys(data, keys, fieldWireless, NM_SETTING_WIRELESS_BAND)
 		if isSettingWirelessBandExists(data) {
 			keys = appendAvailableKeys(data, keys, fieldWireless, NM_SETTING_WIRELESS_CHANNEL)
