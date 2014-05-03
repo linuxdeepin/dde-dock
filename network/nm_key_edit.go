@@ -33,6 +33,8 @@ func generalGetConnectionType(data connectionData) (connType string) {
 		}
 	case NM_SETTING_PPPOE_SETTING_NAME:
 		connType = typePppoe
+	case NM_SETTING_GSM_SETTING_NAME:
+		connType = typeMobile
 	case NM_SETTING_VPN_SETTING_NAME:
 		switch getSettingVpnServiceType(data) {
 		case NM_DBUS_SERVICE_L2TP:

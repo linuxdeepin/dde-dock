@@ -33,14 +33,15 @@ type Manager struct {
 	//update by devices.go
 	WiredDevices    []*device
 	WirelessDevices []*device
-	// OtherDevices    []*device // TODO remove
-	devices map[string][]*device
-	Devices string // array of device objects marshaled by json
+	devices         map[string][]*device
+	Devices         string // array of device objects and marshaled by json
 
 	//update by connections.go
 	WiredConnections    []string
 	WirelessConnections []string
 	VPNConnections      []string // TODO remove
+	connections         map[string][]connection
+	Connections         string // array of connection information and marshaled by json
 
 	//signals
 	NeedSecrets                  func(string, string, string)

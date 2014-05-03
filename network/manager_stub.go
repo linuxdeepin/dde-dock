@@ -32,7 +32,6 @@ func (m *Manager) updatePropWirelessDevices() {
 }
 func (m *Manager) updatePropDevices() {
 	m.Devices, _ = marshalJSON(m.devices)
-	logger.Debug(m.Devices) // TODO test
 	dbus.NotifyChange(m, "Devices")
 }
 
@@ -51,4 +50,9 @@ func (m *Manager) updatePropWirelessConnections() {
 }
 func (m *Manager) updatePropVpnConnections() {
 	dbus.NotifyChange(m, "VPNConnections")
+}
+func (m *Manager) updatePropConnections() {
+	m.Connections, _ = marshalJSON(m.connections)
+	// logger.Debug(m.Connections) // TODO test
+	dbus.NotifyChange(m, "Connections")
 }

@@ -4,6 +4,14 @@ import nm "dbus/org/freedesktop/networkmanager"
 import "dlib/dbus"
 import "fmt"
 
+type connection struct {
+	Path   dbus.ObjectPath
+	Uuid   string
+	Id     string
+	HwAddr string // if not empty, only works for special device
+	Ssid   string // only used for wireless connection
+}
+
 type activeConnectionInfo struct {
 	Interface    string
 	HWAddress    string
@@ -14,6 +22,7 @@ type activeConnectionInfo struct {
 }
 
 func (m *Manager) initConnectionManage() {
+	m.connections = make(map[string][]connection)
 	m.VPNConnections = make([]string, 0)
 	m.WiredConnections = make([]string, 0) // TODO remove
 	m.WirelessConnections = make([]string, 0)
@@ -29,6 +38,112 @@ func (m *Manager) initConnectionManage() {
 	})
 }
 
+func (m *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPath) {
+	logger.Debugf("handleConnectionChanged: operation %d, path %s", operation, path) // TODO test
+	conn := connection{Path: path}
+	switch operation {
+	case opAdded:
+		nmConn, _ := nmNewSettingsConnection(path)
+		nmConn.ConnectRemoved(func() { // TODO is still need?
+			m.handleConnectionChanged(opRemoved, path)
+			nm.DestroySettingsConnection(nmConn)
+		})
+
+		cdata, err := nmConn.GetSettings()
+		if err != nil {
+			return
+		}
+		uuid := getSettingConnectionUuid(cdata)
+		conn.Uuid = uuid
+		conn.Id = getSettingConnectionId(cdata)
+
+		switch getSettingConnectionType(cdata) {
+		case NM_SETTING_WIRED_SETTING_NAME:
+			// wired connection will be treatment specially
+			// TODO remove
+			// m.WiredConnections = append(m.WiredConnections, uuid)
+			// dbus.NotifyChange(m, "WiredConnections")
+		case NM_SETTING_WIRELESS_SETTING_NAME: // TODO
+			m.WirelessConnections = append(m.WirelessConnections, uuid)
+			m.updatePropWirelessConnections()
+
+			conn.Ssid = string(getSettingWirelessSsid(cdata))
+			if isSettingWirelessMacAddressExists(cdata) {
+				conn.HwAddr = convertMacAddressToString(getSettingWirelessMacAddress(cdata))
+			}
+			switch generalGetConnectionType(cdata) {
+			case typeWireless:
+				m.connections[typeWireless] = m.addConnection(m.connections[typeWireless], conn)
+			case typeWirelessAdhoc:
+				m.connections[typeWirelessAdhoc] = m.addConnection(m.connections[typeWirelessAdhoc], conn)
+			case typeWirelessHotspot:
+				m.connections[typeWirelessHotspot] = m.addConnection(m.connections[typeWirelessHotspot], conn)
+			}
+		case NM_SETTING_PPPOE_SETTING_NAME:
+			m.connections[typePppoe] = m.addConnection(m.connections[typePppoe], conn)
+		case NM_SETTING_GSM_SETTING_NAME:
+			m.connections[typeMobile] = m.addConnection(m.connections[typeMobile], conn)
+		case NM_SETTING_VPN_SETTING_NAME:
+			m.VPNConnections = append(m.VPNConnections, uuid)
+			m.updatePropVpnConnections()
+			m.connections[typeVpn] = m.addConnection(m.connections[typeVpn], conn)
+		}
+		m.updatePropConnections()
+	case opRemoved:
+		for k, conns := range m.connections {
+			if m.isConnectionExists(conns, conn) {
+				m.connections[k] = m.removeConnection(conns, conn)
+			}
+		}
+		m.updatePropConnections()
+		//TODO: remove
+		//removed := false
+		//if m.WirelessConnections, removed = tryRemoveConnection(dbus.ObjectPath(path), m.WirelessConnections); removed {
+		//dbus.NotifyChange(m, "WirelessConnections")
+		//} else if m.WiredConnections, removed = tryRemoveConnection(dbus.ObjectPath(path), m.WiredConnections); removed {
+		//dbus.NotifyChange(m, "WiredConnections")
+		//} else if m.VPNConnections, removed = tryRemoveConnection(dbus.ObjectPath(path), m.VPNConnections); removed {
+		//dbus.NotifyChange(m, "VPNConnections")
+		//}
+	}
+}
+func (m *Manager) addConnection(conns []connection, conn connection) []connection {
+	if m.isConnectionExists(conns, conn) {
+		return conns
+	}
+	conns = append(conns, conn)
+	return conns
+}
+func (m *Manager) removeConnection(conns []connection, conn connection) []connection {
+	i := m.getConnectionIndex(conns, conn)
+	if i < 0 {
+		return conns
+	}
+	copy(conns[i:], conns[i+1:])
+	conns = conns[:len(conns)-1]
+	return conns
+}
+func (m *Manager) isConnectionExists(conns []connection, conn connection) bool {
+	if m.getConnectionIndex(conns, conn) >= 0 {
+		return true
+	}
+	return false
+}
+func (m *Manager) getConnectionIndex(conns []connection, conn connection) int {
+	for i, c := range conns {
+		if c.Path == conn.Path {
+			return i
+		}
+	}
+	return -1
+}
+
+// GetSupportedConnectionTypes return all supported connection types
+func (m *Manager) GetSupportedConnectionTypes() (typesJSON string) {
+	typesJSON, _ = marshalJSON(supportedConnectionTypesInfo)
+	return
+}
+
 // GetWiredConnectionUuid return connection uuid for target wired device.
 func (m *Manager) GetWiredConnectionUuid(wiredDevPath dbus.ObjectPath) (uuid string) {
 	// check if target wired connection exists, if not, create one
@@ -40,54 +155,6 @@ func (m *Manager) GetWiredConnectionUuid(wiredDevPath dbus.ObjectPath) (uuid str
 	} else {
 		uuid = newWiredConnection(id)
 	}
-	return
-}
-
-func (m *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPath) {
-	logger.Debugf("handleConnectionChanged: operation %d, path %s", operation, path)
-	switch operation {
-	case opAdded:
-		nmConn, _ := nmNewSettingsConnection(path)
-		nmConn.ConnectRemoved(func() {
-			m.handleConnectionChanged(opRemoved, path)
-			nm.DestroySettingsConnection(nmConn)
-		})
-		cdata, err := nmConn.GetSettings()
-		if err != nil {
-			return
-		}
-		uuid := getSettingConnectionUuid(cdata)
-
-		switch getSettingConnectionType(cdata) {
-		case "802-11-wireless": // TODO
-			m.WirelessConnections = append(m.WirelessConnections, uuid)
-			m.updatePropWirelessConnections()
-		case "802-3-ethernet": // wired connection will be treatment specially
-			// TODO remove
-			// m.WiredConnections = append(m.WiredConnections, uuid)
-			// dbus.NotifyChange(m, "WiredConnections")
-		case "pppoe":
-		case "vpn":
-			m.VPNConnections = append(m.VPNConnections, uuid)
-			m.updatePropVpnConnections()
-		case "cdma":
-		}
-	case opRemoved:
-		//TODO:
-		//removed := false
-		//if m.WirelessConnections, removed = tryRemoveConnection(dbus.ObjectPath(path), m.WirelessConnections); removed {
-		//dbus.NotifyChange(m, "WirelessConnections")
-		//} else if m.WiredConnections, removed = tryRemoveConnection(dbus.ObjectPath(path), m.WiredConnections); removed {
-		//dbus.NotifyChange(m, "WiredConnections")
-		//} else if m.VPNConnections, removed = tryRemoveConnection(dbus.ObjectPath(path), m.VPNConnections); removed {
-		//dbus.NotifyChange(m, "VPNConnections")
-		//}
-	}
-}
-
-// GetSupportedConnectionTypes return all supported connection types
-func (m *Manager) GetSupportedConnectionTypes() (typesJSON string) {
-	typesJSON, _ = marshalJSON(supportedConnectionTypesInfo)
 	return
 }
 

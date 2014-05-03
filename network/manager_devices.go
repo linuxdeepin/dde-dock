@@ -4,12 +4,37 @@ import nm "dbus/org/freedesktop/networkmanager"
 import "dlib/dbus"
 
 type device struct {
-	Path  dbus.ObjectPath
-	State uint32
+	Path   dbus.ObjectPath
+	State  uint32
+	HwAddr string
 }
 
 func newDevice(nmDev *nm.Device) *device {
-	return &device{nmDev.Path, nmDev.State.Get()}
+	return &device{
+		Path:   nmDev.Path,
+		State:  nmDev.State.Get(),
+		HwAddr: getDeviceAddress(nmDev.Path, nmDev.DeviceType.Get()),
+	}
+}
+
+func getDeviceAddress(devPath dbus.ObjectPath, devType uint32) (hwAddr string) {
+	switch devType {
+	case NM_DEVICE_TYPE_ETHERNET:
+		dev, err := nmNewDeviceWired(devPath)
+		if err != nil {
+			return
+		}
+		// defer func() { nm.DestroyDeviceWired(dev) }() // TODO remove
+		hwAddr = dev.HwAddress.Get()
+	case NM_DEVICE_TYPE_WIFI:
+		dev, err := nmNewDeviceWireless(devPath)
+		if err != nil {
+			return
+		}
+		// defer func() { nm.DestroyDeviceWireless(dev) }() // TODO remove
+		hwAddr = dev.HwAddress.Get()
+	}
+	return
 }
 
 func (m *Manager) initDeviceManage() {
@@ -71,15 +96,15 @@ func (m *Manager) handleDeviceChanged(operation int32, devPath dbus.ObjectPath) 
 		}
 		m.updatePropDevices()
 	case opRemoved:
-		if isDeviceExists(m.WiredDevices, devPath) {
-			m.WiredDevices, _ = m.removeDevice(m.WiredDevices, devPath)
-		} else if isDeviceExists(m.WirelessDevices, devPath) {
-			m.WirelessDevices, _ = m.removeDevice(m.WirelessDevices, devPath)
+		if m.isDeviceExists(m.WiredDevices, devPath) {
+			m.WiredDevices = m.removeDevice(m.WiredDevices, devPath)
+		} else if m.isDeviceExists(m.WirelessDevices, devPath) {
+			m.WirelessDevices = m.removeDevice(m.WirelessDevices, devPath)
 			logger.Debug("WirelessRemoved..")
 		}
 		for devType, devs := range m.devices {
-			if isDeviceExists(devs, devPath) {
-				m.devices[devType], _ = m.removeDevice(devs, devPath)
+			if m.isDeviceExists(devs, devPath) {
+				m.devices[devType] = m.removeDevice(devs, devPath)
 				break
 			}
 		}
@@ -90,7 +115,7 @@ func (m *Manager) handleDeviceChanged(operation int32, devPath dbus.ObjectPath) 
 }
 func (m *Manager) addDevice(devs []*device, nmDev *nm.Device) []*device {
 	dev := newDevice(nmDev)
-	if isDeviceExists(devs, nmDev.Path) {
+	if m.isDeviceExists(devs, nmDev.Path) {
 		// device maybe repeat added
 		return devs
 	}
@@ -108,7 +133,7 @@ func (m *Manager) addDevice(devs []*device, nmDev *nm.Device) []*device {
 }
 func (m *Manager) addWiredDevice(nmDev *nm.Device) {
 	wiredDevice := newDevice(nmDev)
-	if isDeviceExists(m.WiredDevices, nmDev.Path) {
+	if m.isDeviceExists(m.WiredDevices, nmDev.Path) {
 		// device maybe repeat added
 		return
 	}
@@ -125,7 +150,7 @@ func (m *Manager) addWiredDevice(nmDev *nm.Device) {
 }
 func (m *Manager) addWirelessDevice(nmDev *nm.Device) {
 	wirelessDevice := newDevice(nmDev)
-	if isDeviceExists(m.WirelessDevices, nmDev.Path) {
+	if m.isDeviceExists(m.WirelessDevices, nmDev.Path) {
 		// device maybe repeat added
 		return
 	}
@@ -165,14 +190,14 @@ func (m *Manager) addWirelessDevice(nmDev *nm.Device) {
 	m.updatePropWirelessDevices()
 }
 
-func isDeviceExists(devs []*device, path dbus.ObjectPath) bool {
-	if getDeviceIndex(devs, path) >= 0 {
+func (m *Manager) isDeviceExists(devs []*device, path dbus.ObjectPath) bool {
+	if m.getDeviceIndex(devs, path) >= 0 {
 		return true
 	}
 	return false
 }
 
-func getDeviceIndex(devs []*device, path dbus.ObjectPath) int {
+func (m *Manager) getDeviceIndex(devs []*device, path dbus.ObjectPath) int {
 	for i, d := range devs {
 		if d.Path == path {
 			return i
@@ -181,34 +206,13 @@ func getDeviceIndex(devs []*device, path dbus.ObjectPath) int {
 	return -1
 }
 
-func (m *Manager) removeDevice(devs []*device, path dbus.ObjectPath) ([]*device, bool) {
-	i := getDeviceIndex(devs, path)
+func (m *Manager) removeDevice(devs []*device, path dbus.ObjectPath) []*device {
+	i := m.getDeviceIndex(devs, path)
 	if i < 0 {
-		return devs, false
+		return devs
 	}
 	copy(devs[i:], devs[i+1:])
 	devs[len(devs)-1] = nil
 	devs = devs[:len(devs)-1]
-	return devs, true
+	return devs
 }
-
-// TODO remove
-// func (m *Manager) getDeviceAddress(devPath dbus.ObjectPath, devType uint32) string {
-// 	switch devType {
-// 	case NM_DEVICE_TYPE_ETHERNET:
-// 		dev, err := nmNewDeviceWired(devPath)
-// 		if err != nil {
-// 			panic(err)
-// 		}
-// 		defer func() { nm.DestroyDeviceWired(dev) }()
-// 		return dev.HwAddress.Get()
-// 	case NM_DEVICE_TYPE_WIFI:
-// 		dev, err := nmNewDeviceWireless(devPath)
-// 		if err != nil {
-// 			panic(err)
-// 		}
-// 		defer func() { nm.DestroyDeviceWireless(dev) }()
-// 		return dev.HwAddress.Get()
-// 	}
-// 	return ""
-// }
