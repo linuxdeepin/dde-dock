@@ -90,7 +90,11 @@ func (cfg *ConfigDisplay) ensureValid(dpy *Display) {
 		valid := false
 		for _, opName := range m.Outputs {
 			op := GetDisplayInfo().outputNames[opName]
-			oinfo, _ := randr.GetOutputInfo(xcon, op, LastConfigTimeStamp).Reply()
+			oinfo, err := randr.GetOutputInfo(xcon, op, LastConfigTimeStamp).Reply()
+			if err != nil {
+				Logger.Error("ensureValid failed:", err)
+				continue
+			}
 			for _, id := range oinfo.Modes {
 				minfo := GetDisplayInfo().modes[id]
 				if minfo.Width == m.Width && minfo.Height == m.Height {
@@ -194,7 +198,7 @@ type ConfigDisplay struct {
 
 func (c *ConfigDisplay) Compare(cfg *ConfigDisplay) bool {
 	if c.CurrentPlanName != cfg.CurrentPlanName {
-		Logger.Error("Compare tow ConfigDisply which hasn't same CurrentPlaneName!")
+		Logger.Warning("Compare tow ConfigDisply which hasn't same CurrentPlaneName!")
 		return false
 	}
 
@@ -280,12 +284,18 @@ func CreateConfigMonitor(dpy *Display, op randr.Output) (*ConfigMonitor, error) 
 		if err != nil {
 			return nil, err
 		}
-		cfg.X, cfg.Y, cfg.Width, cfg.Height = cinfo.X, cinfo.Y, cinfo.Width, cinfo.Height
+		cfg.Width, cfg.Height = cinfo.Width, cinfo.Height
 
 		cfg.currentMode = cinfo.Mode
 		cfg.Enabled = true
 	} else {
-		cfg.Enabled = false
+		bestMode := oinfo.Modes[0]
+		minfo := GetDisplayInfo().modes[bestMode]
+		cfg.Width, cfg.Height = minfo.Width, minfo.Height
+		cfg.currentMode = bestMode
+		cfg.Enabled = true
+
+		randr.SetCrtcConfig(xcon, oinfo.Crtc, 0, LastConfigTimeStamp, cfg.X, cfg.Y, bestMode, 1, []randr.Output{op})
 	}
 
 	return cfg, nil

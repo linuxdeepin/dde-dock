@@ -262,12 +262,6 @@ func (dpy *Display) Apply() {
 func (dpy *Display) ResetChanges() {
 	dpy.cfg = LoadConfigDisplay(dpy)
 
-	dpy.Brightness = make(map[string]float64)
-	for name, v := range dpy.cfg.Brightness {
-		dpy.Brightness[name] = v
-		dpy.ChangeBrightness(name, v)
-	}
-
 	//must be invoked after LoadConfigDisplay(dpy)
 	dpy.Monitors = nil
 	for _, mcfg := range dpy.cfg.Monitors[dpy.cfg.CurrentPlanName] {
@@ -279,6 +273,13 @@ func (dpy *Display) ResetChanges() {
 
 	//apply the saved configurations.
 	dpy.Apply()
+
+	dpy.Brightness = make(map[string]float64)
+	for name, v := range dpy.cfg.Brightness {
+		dpy.Brightness[name] = v
+		dpy.ChangeBrightness(name, v)
+	}
+
 }
 
 func (dpy *Display) SaveChanges() {
@@ -312,6 +313,9 @@ func main() {
 	}
 
 	GetDisplay().ResetChanges()
+	for _, m := range GetDisplay().Monitors {
+		m.updateInfo()
+	}
 
 	dbus.DealWithUnhandledMessage()
 	if err := dbus.Wait(); err != nil {

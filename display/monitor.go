@@ -182,7 +182,8 @@ func (m *Monitor) updateInfo() {
 	op := GetDisplayInfo().outputNames[m.Outputs[0]]
 	oinfo, err := randr.GetOutputInfo(xcon, op, LastConfigTimeStamp).Reply()
 	if err != nil {
-		fmt.Println("updateInfo error:", err)
+		Logger.Warning("updateInfo error:", err)
+		return
 	}
 	if oinfo.Crtc == 0 {
 		m.SwitchOn(false)
