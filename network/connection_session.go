@@ -155,6 +155,10 @@ func (s *ConnectionSession) Save() bool {
 		return false
 	}
 
+	if getSettingConnectionReadOnly(s.data) {
+		logger.Debug("read only connection, don't allowed to save")
+		return false
+	}
 	// TODO what about the connection has been deleted?
 
 	if len(s.connPath) > 0 {
