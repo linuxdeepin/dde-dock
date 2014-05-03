@@ -15,11 +15,11 @@ type activeConnectionInfo struct {
 
 func (m *Manager) initConnectionManage() {
 	m.VPNConnections = make([]string, 0)
-	m.WiredConnections = make([]string, 0)
+	m.WiredConnections = make([]string, 0) // TODO remove
 	m.WirelessConnections = make([]string, 0)
 
 	// create special wired connection if need
-	m.updatePropWiredConnections()
+	m.updatePropWiredConnections() // TODO remove
 
 	for _, c := range nmGetConnectionList() {
 		m.handleConnectionChanged(opAdded, c)
@@ -33,6 +33,7 @@ func (m *Manager) initConnectionManage() {
 func (m *Manager) GetWiredConnectionUuid(wiredDevPath dbus.ObjectPath) (uuid string) {
 	// check if target wired connection exists, if not, create one
 	id := "wired-connection-" + nmGetDeviceInterface(wiredDevPath)
+	// TODO check connection type, read only
 	cpath, ok := nmGetConnectionById(id)
 	if ok {
 		uuid = nmGetConnectionUuid(cpath)
@@ -212,6 +213,7 @@ func (m *Manager) DeleteConnection(uuid string) (err error) {
 	return conn.Delete()
 }
 
+// TODO hide dbus interface
 // GetConnectionByUuid return connection setting dbus path by uuid
 func (m *Manager) GetConnectionByUuid(uuid string) (cpath dbus.ObjectPath, err error) {
 	cpath, err = nmGetConnectionByUuid(uuid)
@@ -254,8 +256,9 @@ func (m *Manager) ActivateConnection(uuid string, devPath dbus.ObjectPath) (err 
 	return
 }
 
+// TODO remove
 // use disconnect device instead
-func (m *Manager) DeactivateConnection(uuid string) (err error) {
+func (m *Manager) deactivateConnection(uuid string) (err error) {
 	apath, ok := nmGetActiveConnectionByUuid(uuid)
 	if !ok {
 		logger.Error("not found active connection with uuid", uuid)

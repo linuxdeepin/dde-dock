@@ -105,7 +105,7 @@ func (m *Manager) GetAccessPoints(path dbus.ObjectPath) (apsJSON string, err err
 
 // TODO remove
 // GetAccessPointProperty return access point object which marshaled by json.
-func (m *Manager) GetAccessPointProperty(apPath dbus.ObjectPath) (apJSON string, err error) {
+func (m *Manager) getAccessPointProperty(apPath dbus.ObjectPath) (apJSON string, err error) {
 	ap, err := NewAccessPoint(apPath)
 	if err != nil {
 		return

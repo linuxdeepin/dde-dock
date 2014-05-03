@@ -30,6 +30,7 @@ func (m *Manager) updatePropOtherDevices() {
 	dbus.NotifyChange(m, "OtherDevices")
 }
 
+// TODO remove
 // create connection for each wired device if not exists
 func (m *Manager) updatePropWiredConnections() {
 	m.WiredConnections = make([]string, 0)

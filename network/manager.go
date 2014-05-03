@@ -33,12 +33,12 @@ type Manager struct {
 	//update by devices.go
 	WiredDevices    []*device
 	WirelessDevices []*device // TODO is "device" struct still needed?
-	OtherDevices    []*device
+	OtherDevices    []*device // TODO
 
 	//update by connections.go
 	WiredConnections    []string
 	WirelessConnections []string
-	VPNConnections      []string
+	VPNConnections      []string // TODO remove
 
 	//signals
 	NeedSecrets                  func(string, string, string)
