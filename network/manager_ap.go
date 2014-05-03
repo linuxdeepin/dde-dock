@@ -76,25 +76,41 @@ func doParseApSecType(flags, wpaFlags, rsnFlags uint32) apSecType {
 	return r
 }
 
-// GetAccessPoints return all access point's dbus path of target device.
-func (m *Manager) GetAccessPoints(path dbus.ObjectPath) (aps []dbus.ObjectPath, err error) {
+// GetAccessPoints return all access points object which marshaled by json.
+func (m *Manager) GetAccessPoints(path dbus.ObjectPath) (apsJSON string, err error) {
 	dev, err := nmNewDeviceWireless(path)
 	if err != nil {
 		return
 	}
-	aps, err = dev.GetAccessPoints()
+	apPaths, err := dev.GetAccessPoints()
+	if err != nil {
+		return
+	}
+	aps := []accessPoint{}
+	for _, path := range apPaths {
+		ap, err := NewAccessPoint(path)
+		if err != nil {
+			continue
+		}
+		if len(ap.Ssid) == 0 {
+			// ignore hidden access point
+			continue
+		}
+		aps = append(aps, ap)
+	}
+	// TODO append available connections
+	apsJSON, err = marshalJSON(aps)
 	return
 }
 
-// GetAccessPointProperty return access point's detail information.
-// TODO
-// func (m *Manager) GetAccessPointProperty(apPath dbus.ObjectPath) (apJSON string, err error) {
-func (m *Manager) GetAccessPointProperty(apPath dbus.ObjectPath) (ap accessPoint, err error) {
-	ap, err = NewAccessPoint(apPath)
-	// if err != nil {
-	// return
-	// }
-	// apJSON, err = marshalJSON(ap)
+// TODO remove
+// GetAccessPointProperty return access point object which marshaled by json.
+func (m *Manager) GetAccessPointProperty(apPath dbus.ObjectPath) (apJSON string, err error) {
+	ap, err := NewAccessPoint(apPath)
+	if err != nil {
+		return
+	}
+	apJSON, err = marshalJSON(ap)
 	return
 }
 

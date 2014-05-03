@@ -43,9 +43,9 @@ type Manager struct {
 	//signals
 	NeedSecrets                  func(string, string, string)
 	DeviceStateChanged           func(devPath string, newState uint32)
-	AccessPointAdded             func(devPath string, apPath string)
-	AccessPointRemoved           func(devPath string, apPath string)
-	AccessPointPropertiesChanged func(devPath string, apPath string)
+	AccessPointAdded             func(devPath, apJSON string)
+	AccessPointRemoved           func(devPath, apJSON string)
+	AccessPointPropertiesChanged func(devPath, apJSON string)
 
 	agent *Agent
 }

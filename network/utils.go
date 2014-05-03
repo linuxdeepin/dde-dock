@@ -67,6 +67,7 @@ func isInterfaceNil(v interface{}) bool {
 func marshalJSON(v interface{}) (jsonStr string, err error) {
 	b, err := json.Marshal(v)
 	if err != nil {
+		logger.Error(err)
 		return
 	}
 	jsonStr = string(b)
@@ -75,6 +76,9 @@ func marshalJSON(v interface{}) (jsonStr string, err error) {
 
 func unmarshalJSON(jsonStr string) (v interface{}, err error) {
 	err = json.Unmarshal([]byte(jsonStr), &v)
+	if err != nil {
+		logger.Error(err)
+	}
 	return
 }
 

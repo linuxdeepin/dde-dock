@@ -70,15 +70,19 @@ func (m *Manager) addWirelessDevice(dev *nm.Device) {
 		devWireless.ConnectAccessPointAdded(func(apPath dbus.ObjectPath) {
 			if m.AccessPointAdded != nil {
 				if ap, err := NewAccessPoint(apPath); err == nil {
-					// logger.Debug("AccessPointAdded:", ap.Ssid, apPath) // TODO test
-					m.AccessPointAdded(string(dev.Path), string(ap.Path))
+					if len(ap.Ssid) == 0 {
+						// ignore hidden access point
+						return
+					}
+					apJSON, _ := marshalJSON(ap)
+					m.AccessPointAdded(string(dev.Path), apJSON)
 				}
 			}
 		})
 		devWireless.ConnectAccessPointRemoved(func(apPath dbus.ObjectPath) {
 			if m.AccessPointRemoved != nil {
-				// logger.Debug("AccessPointRemoved:", apPath) // TODO test
-				m.AccessPointRemoved(string(dev.Path), string(apPath))
+				apJSON, _ := marshalJSON(accessPoint{Path: apPath})
+				m.AccessPointRemoved(string(dev.Path), apJSON)
 			}
 		})
 	}
@@ -145,7 +149,7 @@ func (m *Manager) handleDeviceChanged(operation int32, path dbus.ObjectPath) {
 	}
 }
 
-// TODO
+// TODO remove
 func (m *Manager) getDeviceAddress(devPath dbus.ObjectPath, devType uint32) string {
 	switch devType {
 	case NM_DEVICE_TYPE_ETHERNET:
