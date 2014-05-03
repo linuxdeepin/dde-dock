@@ -15,6 +15,10 @@ func (m *Manager) updatePropActiveConnections() {
 	dbus.NotifyChange(m, "ActiveConnections")
 }
 
+func (m *Manager) updatePropActivatingConnection() {
+	dbus.NotifyChange(m, "ActivatingConnection")
+}
+
 func (m *Manager) updatePropState() {
 	m.State = nmGetState()
 	dbus.NotifyChange(m, "State")
@@ -26,8 +30,10 @@ func (m *Manager) updatePropWiredDevices() {
 func (m *Manager) updatePropWirelessDevices() {
 	dbus.NotifyChange(m, "WirelessDevices")
 }
-func (m *Manager) updatePropOtherDevices() {
-	dbus.NotifyChange(m, "OtherDevices")
+func (m *Manager) updatePropDevices() {
+	m.Devices, _ = marshalJSON(m.devices)
+	logger.Debug(m.Devices) // TODO test
+	dbus.NotifyChange(m, "Devices")
 }
 
 // TODO remove

@@ -25,15 +25,17 @@ type Manager struct {
 	VPNEnabled        bool          `access:"readwrite"` // TODO
 	WirelessEnabled   dbus.Property `access:"readwrite"`
 	NetworkingEnabled dbus.Property `access:"readwrite"`
-	ActiveConnections []string      // uuid collection of connections that activated
 	State             uint32        // networking state
 
-	ActivatingConnections string // TODO
+	ActiveConnections    []string // uuid collection of connections that activated
+	ActivatingConnection string   // TODO
 
 	//update by devices.go
 	WiredDevices    []*device
-	WirelessDevices []*device // TODO is "device" struct still needed?
-	OtherDevices    []*device // TODO
+	WirelessDevices []*device
+	// OtherDevices    []*device // TODO remove
+	devices map[string][]*device
+	Devices string // array of device objects marshaled by json
 
 	//update by connections.go
 	WiredConnections    []string
@@ -76,6 +78,11 @@ func (m *Manager) initManager() {
 	nmManager.ActiveConnections.ConnectChanged(func() {
 		m.updatePropActiveConnections()
 	})
+
+	// TODO need update dbus-factory about network-manager
+	// update property "ActivatingConnection"
+	// m.updatePropActivatingConnection()
+	// nmManager.
 
 	// update property "State"
 	m.updatePropState()
