@@ -194,6 +194,7 @@ func (m *Manager) EditConnectionForAccessPoint(apPath dbus.ObjectPath, devPath d
 	return
 }
 
+// TODO remove
 // GetConnectionUuidByAccessPoint return the connection's uuid of access point, return empty if none.
 func (m *Manager) GetConnectionUuidByAccessPoint(apPath dbus.ObjectPath) (uuid string, err error) {
 	ap, err := nmNewAccessPoint(apPath)

@@ -281,8 +281,8 @@ func (m *Manager) DeleteConnection(uuid string) (err error) {
 }
 
 // TODO hide dbus interface
-// GetConnectionByUuid return connection setting dbus path by uuid
-func (m *Manager) GetConnectionByUuid(uuid string) (cpath dbus.ObjectPath, err error) {
+// GetConnectionPathByUuid return connection setting dbus path by uuid
+func (m *Manager) GetConnectionPathByUuid(uuid string) (cpath dbus.ObjectPath, err error) {
 	cpath, err = nmGetConnectionByUuid(uuid)
 	return
 }
