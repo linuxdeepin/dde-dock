@@ -216,13 +216,13 @@ func newWirelessConnectionData(id, uuid string, ssid []byte, secType apSecType) 
 }
 
 func newWirelessAdhocConnectionData(id, uuid string) (data connectionData) {
-	data = newWirelessConnectionData(id, uuid, nil, apSecPsk)
+	data = newWirelessConnectionData(id, uuid, nil, apSecNone)
 	logicSetSettingWirelessMode(data, NM_SETTING_WIRELESS_MODE_ADHOC)
 	return
 }
 
 func newWirelessHotspotConnectionData(id, uuid string) (data connectionData) {
-	data = newWirelessConnectionData(id, uuid, nil, apSecPsk)
+	data = newWirelessConnectionData(id, uuid, nil, apSecNone)
 	logicSetSettingWirelessMode(data, NM_SETTING_WIRELESS_MODE_AP)
 	return
 }
