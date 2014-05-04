@@ -53,6 +53,7 @@ var GetDisplay = func() func() *Display {
 	dpy.setPropScreenWidth(sinfo.WidthInPixels)
 	dpy.setPropScreenHeight(sinfo.HeightInPixels)
 	GetDisplayInfo().update()
+	dpy.setPropHasChanged(false)
 
 	randr.SelectInputChecked(xcon, Root, randr.NotifyMaskOutputChange|randr.NotifyMaskOutputProperty|randr.NotifyMaskCrtcChange|randr.NotifyMaskScreenChange)
 	go dpy.listener()
@@ -218,6 +219,7 @@ func (dpy *Display) SplitMonitor(a string) error {
 
 func (dpy *Display) detectChanged() {
 	dpy.setPropHasChanged(!dpy.cfg.Compare(LoadConfigDisplay(dpy)))
+	fmt.Println("DetectChanged...", !dpy.cfg.Compare(LoadConfigDisplay(dpy)))
 }
 
 func (dpy *Display) SetPrimary(name string) error {
@@ -295,7 +297,6 @@ func (dpy *Display) Reset() {
 		m.SetMode(m.BestMode.ID)
 	}
 	dpy.Apply()
-	dpy.SaveChanges()
 }
 
 func main() {

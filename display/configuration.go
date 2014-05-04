@@ -41,6 +41,8 @@ func (cfg *ConfigDisplay) attachCurrentMonitor(dpy *Display) {
 	for _, op := range GetDisplayInfo().outputNames {
 		mcfg, err := CreateConfigMonitor(dpy, op)
 		if err != nil {
+			Logger.Warning("skip invalid monitor", op)
+			continue
 		}
 		monitors[mcfg.Name] = mcfg
 	}
@@ -95,9 +97,16 @@ func (cfg *ConfigDisplay) ensureValid(dpy *Display) {
 				Logger.Error("ensureValid failed:", err)
 				continue
 			}
+			if len(oinfo.Modes) == 0 {
+				Logger.Error("ensureValid failed:", opName, "hasn't any mode info")
+				continue
+			} else {
+				m.bestMode = oinfo.Modes[0]
+			}
 			for _, id := range oinfo.Modes {
 				minfo := GetDisplayInfo().modes[id]
 				if minfo.Width == m.Width && minfo.Height == m.Height {
+					m.currentMode = randr.Mode(minfo.ID)
 					valid = true
 					break
 				}
@@ -207,7 +216,6 @@ func (c *ConfigDisplay) Compare(cfg *ConfigDisplay) bool {
 		return false
 	}
 
-	fmt.Println("PP")
 	for _, m1 := range c.Monitors[c.CurrentPlanName] {
 		if m2, ok := cfg.Monitors[c.CurrentPlanName][m1.Name]; ok {
 			return m1.Compare(m2)
@@ -237,9 +245,11 @@ func (c *ConfigDisplay) Save() {
 }
 
 type ConfigMonitor struct {
-	Name        string
-	Outputs     []string
+	Name    string
+	Outputs []string
+
 	currentMode randr.Mode
+	bestMode    randr.Mode
 
 	Width, Height uint16
 	RefreshRate   float64
@@ -286,12 +296,17 @@ func CreateConfigMonitor(dpy *Display, op randr.Output) (*ConfigMonitor, error) 
 		}
 		cfg.Width, cfg.Height = cinfo.Width, cinfo.Height
 
+		cfg.Rotation, cfg.Reflect = parseRandR(cinfo.Rotation)
 		cfg.currentMode = cinfo.Mode
 		cfg.Enabled = true
 	} else {
+		if len(oinfo.Modes) == 0 {
+			return nil, fmt.Errorf(string(oinfo.Name), "hasn't any mode info")
+		}
 		bestMode := oinfo.Modes[0]
 		minfo := GetDisplayInfo().modes[bestMode]
 		cfg.Width, cfg.Height = minfo.Width, minfo.Height
+		cfg.Rotation, cfg.Reflect = 1, 0
 		cfg.currentMode = bestMode
 		cfg.Enabled = true
 

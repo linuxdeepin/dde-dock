@@ -99,6 +99,7 @@ func (m *Monitor) SetRotation(v uint16) error {
 	}
 	m.cfg.Rotation = v
 	m.setPropRotation(v)
+	GetDisplay().detectChanged()
 	return nil
 }
 func (m *Monitor) SetReflect(v uint16) error {
@@ -112,17 +113,20 @@ func (m *Monitor) SetReflect(v uint16) error {
 	}
 	m.cfg.Reflect = v
 	m.setPropReflect(v)
+	GetDisplay().detectChanged()
 	return nil
 }
 
 func (m *Monitor) SetPos(x, y int16) {
 	m.cfg.X, m.cfg.Y = x, y
 	m.setPropXY(x, y)
+	GetDisplay().detectChanged()
 }
 
 func (m *Monitor) SwitchOn(v bool) {
 	m.cfg.Enabled = v
 	m.setPropOpened(v)
+	GetDisplay().detectChanged()
 }
 
 func (m *Monitor) SetMode(id uint32) {
@@ -130,6 +134,7 @@ func (m *Monitor) SetMode(id uint32) {
 		if _m.ID == id {
 			m.setPropCurrentMode(_m)
 			m.cfg.Width, m.cfg.Height, m.cfg.RefreshRate = _m.Width, _m.Height, _m.Rate
+			GetDisplay().detectChanged()
 			return
 		}
 	}
@@ -233,6 +238,7 @@ func NewMonitor(dpy *Display, info *ConfigMonitor) *Monitor {
 		m.BestMode = best
 	}
 
+	m.BestMode = GetDisplayInfo().modes[info.bestMode]
 	if info.currentMode != 0 {
 		m.CurrentMode = GetDisplayInfo().modes[info.currentMode]
 	} else {
