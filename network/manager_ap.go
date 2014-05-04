@@ -114,6 +114,7 @@ func (m *Manager) getAccessPointProperty(apPath dbus.ObjectPath) (apJSON string,
 	return
 }
 
+// TODO return none
 func (m *Manager) ActivateConnectionForAccessPoint(apPath, devPath dbus.ObjectPath) (uuid string, err error) {
 	logger.Debugf("ActivateConnectionForAccessPoint: apPath=%s, devPath=%s", apPath, devPath)
 	// if there is no connection for current access point, create one
@@ -123,11 +124,11 @@ func (m *Manager) ActivateConnectionForAccessPoint(apPath, devPath dbus.ObjectPa
 	}
 	cpath, ok := nmGetWirelessConnection(ap.Ssid.Get(), devPath)
 	if ok {
-		logger.Debug("activate connection") // TODO test
+		logger.Debug("activate connection", cpath) // TODO test
 		uuid = nmGetConnectionUuid(cpath)
 		_, err = nmActivateConnection(cpath, devPath)
 	} else {
-		logger.Debug("add and activate connection") // TODO test
+		logger.Debug("add and activate connection", cpath) // TODO test
 		uuid = newUUID()
 		data := newWirelessConnectionData(string(ap.Ssid.Get()), uuid, []byte(ap.Ssid.Get()), getApSecType(ap))
 		_, _, err = nmAddAndActivateConnection(data, devPath)
@@ -135,10 +136,11 @@ func (m *Manager) ActivateConnectionForAccessPoint(apPath, devPath dbus.ObjectPa
 	return
 }
 
+// TODO remove dbus interface
 // CreateConnectionByAccessPoint create connection for access point and return the uuid.
-func (m *Manager) CreateConnectionForAccessPoint(apPath dbus.ObjectPath) (uuid string, err error) {
+func (m *Manager) createConnectionForAccessPoint(apPath dbus.ObjectPath) (uuid string, err error) {
 	logger.Debug("CreateConnectionForAccessPoint: apPath", apPath)
-	uuid, err = m.GetConnectionUuidByAccessPoint(apPath)
+	uuid, err = m.getConnectionUuidByAccessPoint(apPath)
 	if len(uuid) != 0 {
 		// connection already exists
 		return
@@ -160,8 +162,8 @@ func (m *Manager) CreateConnectionForAccessPoint(apPath dbus.ObjectPath) (uuid s
 	return
 }
 
-// TODO
-func (m *Manager) EditConnectionForAccessPoint(apPath dbus.ObjectPath, devPath dbus.ObjectPath) (session *ConnectionSession, err error) {
+// TODO remove
+func (m *Manager) editConnectionForAccessPoint(apPath dbus.ObjectPath, devPath dbus.ObjectPath) (session *ConnectionSession, err error) {
 	// // if is read only connection(default system connection created by
 	// // network manager), create a new connection
 	// // TODO
@@ -196,7 +198,7 @@ func (m *Manager) EditConnectionForAccessPoint(apPath dbus.ObjectPath, devPath d
 
 // TODO remove
 // GetConnectionUuidByAccessPoint return the connection's uuid of access point, return empty if none.
-func (m *Manager) GetConnectionUuidByAccessPoint(apPath dbus.ObjectPath) (uuid string, err error) {
+func (m *Manager) getConnectionUuidByAccessPoint(apPath dbus.ObjectPath) (uuid string, err error) {
 	ap, err := nmNewAccessPoint(apPath)
 	if err != nil {
 		return

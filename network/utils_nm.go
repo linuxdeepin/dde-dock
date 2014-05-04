@@ -251,16 +251,15 @@ func nmGetWirelessConnection(ssid []byte, devPath dbus.ObjectPath) (cpath dbus.O
 		if err != nil {
 			continue
 		}
-		if !ok {
-			cpath = p
-			ok = true
-		}
 		if isSettingWirelessMacAddressExists(data) {
-			if len(hwAddr) > 0 && hwAddr == string(getSettingWirelessMacAddress(data)) {
+			if hwAddr == convertMacAddressToString(getSettingWirelessMacAddress(data)) {
 				cpath = p
 				ok = true
 				return
 			}
+		} else if !ok {
+			cpath = p
+			ok = true
 		}
 	}
 	return

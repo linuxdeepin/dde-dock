@@ -57,6 +57,7 @@ func NewConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 	case typeWired:
 		s.data = newWiredConnectionData("", s.CurrentUUID)
 	case typeWireless:
+		// TODO more option, id, eap
 		s.data = newWirelessConnectionData("", s.CurrentUUID, nil, apSecNone)
 	case typeWirelessAdhoc:
 		s.data = newWirelessAdhocConnectionData("", s.CurrentUUID)

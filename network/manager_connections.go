@@ -286,9 +286,9 @@ func (m *Manager) DeleteConnection(uuid string) (err error) {
 	return conn.Delete()
 }
 
-// TODO hide dbus interface
+// TODO remove dbus interface
 // GetConnectionPathByUuid return connection setting dbus path by uuid
-func (m *Manager) GetConnectionPathByUuid(uuid string) (cpath dbus.ObjectPath, err error) {
+func (m *Manager) getConnectionPathByUuid(uuid string) (cpath dbus.ObjectPath, err error) {
 	cpath, err = nmGetConnectionByUuid(uuid)
 	return
 }
@@ -311,19 +311,20 @@ func (m *Manager) ActivateConnection(uuid string, devPath dbus.ObjectPath) (err 
 		return
 	}
 
-	if nmGetConnectionType(cpath) == typeWireless {
-		count := 0
-		for _, tmpcpath := range nmGetConnectionList() {
-			ctype := nmGetConnectionType(tmpcpath)
-			if ctype == typeWireless {
-				count++
-			}
-		}
-		if count <= 1 {
-			logger.Debug("only one access point connection, will be activate by network manager automatic")
-			return
-		}
-	}
+	// TODO remove
+	// if nmGetConnectionType(cpath) == typeWireless {
+	// 	count := 0
+	// 	for _, tmpcpath := range nmGetConnectionList() {
+	// 		ctype := nmGetConnectionType(tmpcpath)
+	// 		if ctype == typeWireless {
+	// 			count++
+	// 		}
+	// 	}
+	// 	if count <= 1 {
+	// 		logger.Debug("only one access point connection, will be activate by network manager automatic")
+	// 		return
+	// 	}
+	// }
 
 	_, err = nmActivateConnection(cpath, devPath)
 	return
