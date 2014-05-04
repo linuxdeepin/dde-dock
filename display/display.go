@@ -167,6 +167,7 @@ func (dpy *Display) ChangeBrightness(output string, v float64) {
 			} else {
 				setBrightness(xcon, op, v)
 			}
+			dpy.setPropBrightness(output, v)
 		}
 	} else {
 		Logger.Warningf("Try change the brightness of %s to an invalid value(%v)", output, v)
@@ -182,7 +183,6 @@ func (dpy *Display) ResetBrightness(output string) {
 func (dpy *Display) SetBrightness(output string, v float64) {
 	if v >= 0 && v <= 1 {
 		dpy.ChangeBrightness(output, v)
-		dpy.Brightness[output] = v
 		dpy.cfg.SaveBrightness(output, v)
 	} else {
 		Logger.Warningf("Try set the brightness of %s to an invalid value(%v)", output, v)
