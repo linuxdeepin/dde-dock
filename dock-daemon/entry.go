@@ -46,7 +46,10 @@ func (e *EntryProxyer) OnDragEnter(x, y int32, data string) { e.core.OnDragEnter
 func (e *EntryProxyer) OnDragLeave(x, y int32, data string) { e.core.OnDragLeave(x, y, data) }
 func (e *EntryProxyer) OnDragOver(x, y int32, data string)  { e.core.OnDragOver(x, y, data) }
 func (e *EntryProxyer) OnDragDrop(x, y int32, data string)  { e.core.OnDragDrop(x, y, data) }
-func (e *EntryProxyer) ShowQuickWindow()                    { e.core.ShowQuickWindow() }
+func (e *EntryProxyer) OnMouseWheel(x, y, delta int32) {
+	e.core.OnMouseWheel(x, y, delta)
+}
+func (e *EntryProxyer) ShowQuickWindow() { e.core.ShowQuickWindow() }
 
 func (e *EntryProxyer) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{

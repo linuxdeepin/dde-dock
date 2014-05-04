@@ -124,6 +124,14 @@ func (obj RemoteEntry) OnDragOver(arg0 int32, arg1 int32, arg2 string) (_err err
 	return
 }
 
+func (obj RemoteEntry) OnMouseWheel(arg0 int32, arg1 int32, arg2 int32) (_err error) {
+	_err = obj.core.Call("dde.dock.Entry.OnMouseWheel", 0, arg0, arg1, arg2).Store()
+	if _err != nil {
+		fmt.Println(_err)
+	}
+	return
+}
+
 func (obj RemoteEntry) SecondaryActivate(arg0 int32, arg1 int32) (_err error) {
 	_err = obj.core.Call("dde.dock.Entry.SecondaryActivate", 0, arg0, arg1).Store()
 	if _err != nil {

@@ -112,6 +112,9 @@ func (e *AppEntry) OnDragDrop(x, y int32, data string) {
 		}
 	}
 }
+func (e *AppEntry) OnMouseWheel(x, y, delta int32) {
+	LOGGER.Warning("not implement")
+}
 
 func (e *AppEntry) setData(key, value string) {
 	if e.Data[key] != value {
