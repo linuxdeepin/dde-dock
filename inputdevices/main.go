@@ -68,6 +68,7 @@ func main() {
 		panic(err)
 	}
 
+	tpadFlag := false
 	for _, info := range m.Infos {
 		if info.Id == "mouse" {
 			//logObj.Info("New Mouse")
@@ -83,6 +84,7 @@ func main() {
 				logObj.Warning("TPad DBus Session Failed: ", err)
 				panic(err)
 			}
+			tpadFlag = true
 		} else if info.Id == "keyboard" {
 			//logObj.Info("New Keyboard")
 			kbd := NewKeyboard()
@@ -94,6 +96,7 @@ func main() {
 		}
 	}
 	//logObj.Info("Device Info: ", m.Infos)
+	initGSettingsSet(tpadFlag)
 
 	dbus.DealWithUnhandledMessage()
 	go dlib.StartLoop()

@@ -252,3 +252,95 @@ func listenDevsSettings() {
 		}
 	})
 }
+
+func initGSettingsSet(tpadFlag bool) {
+	// init keyyboard gsettings value
+	layout := kbdSettings.GetString(KBD_KEY_LAYOUT)
+	setLayout(layout)
+
+	blinkTime := kbdSettings.GetInt(KBD_CURSOR_BLINK_TIME)
+	xsObj.SetInterger("Net/CursorBlinkTime", uint32(blinkTime))
+	setQtCursorBlink(uint32(blinkTime))
+
+	enable := kbdSettings.GetBoolean(KBD_KEY_REPEAT_ENABLE)
+	delay := kbdSettings.GetUint(KBD_KEY_DELAY)
+	interval := kbdSettings.GetUint(KBD_KEY_REPEAT_INTERVAL)
+	if enable {
+		C.set_keyboard_repeat(C.int(1), C.uint(interval), C.uint(delay))
+	} else {
+		C.set_keyboard_repeat(C.int(0), C.uint(interval), C.uint(delay))
+	}
+
+	// init mouse gsettings value
+	if ok := mouseSettings.GetBoolean(MOUSE_KEY_LEFT_HAND); ok {
+		C.set_left_handed(C.TRUE)
+	} else {
+		C.set_left_handed(C.FALSE)
+	}
+
+	if ok := mouseSettings.GetBoolean(MOUSE_KEY_MID_BUTTON); ok {
+		C.set_middle_button(C.TRUE)
+	} else {
+		C.set_middle_button(C.FALSE)
+	}
+
+	thres := int(tpadSettings.GetDouble(TPAD_KEY_THRES))
+	accel := tpadSettings.GetDouble(TPAD_KEY_ACCEL)
+	mouseName := C.CString("mouse")
+	defer C.free(unsafe.Pointer(mouseName))
+	C.set_motion(mouseName, C.double(accel), C.int(thres))
+
+	value := mouseSettings.GetInt(MOUSE_KEY_DOUBLE_CLICK)
+	xsObj.SetInterger("Net/DoubleClickTime", uint32(value))
+
+	value = mouseSettings.GetInt(MOUSE_KEY_DRAG_THRES)
+	xsObj.SetInterger("Net/DndDragThreshold", uint32(value))
+
+	// init touchpad gsettings value
+	if !tpadFlag {
+		return
+	}
+	if enable := tpadSettings.GetBoolean(TPAD_KEY_ENABLE); enable {
+		C.set_tpad_enable(C.TRUE)
+	} else {
+		C.set_tpad_enable(C.FALSE)
+		return
+	}
+
+	if left := tpadSettings.GetBoolean(TPAD_KEY_LEFT_HAND); left {
+		C.set_tab_to_click(C.int(1), C.TRUE)
+	} else {
+		C.set_tab_to_click(C.int(1), C.FALSE)
+	}
+
+	ok := tpadSettings.GetBoolean(TPAD_KEY_W_TYPING)
+	disableTPadWhileTyping(ok)
+
+	if ok := tpadSettings.GetBoolean(TPAD_KEY_NATURAL_SCROLL); ok {
+		C.set_natural_scroll(C.TRUE)
+	} else {
+		C.set_natural_scroll(C.FALSE)
+	}
+
+	if ok := tpadSettings.GetBoolean(TPAD_KEY_EDGE_SCROLL); ok {
+		C.set_edge_scroll(C.TRUE)
+	} else {
+		C.set_edge_scroll(C.FALSE)
+	}
+
+	vert := C.int(0)
+	horiz := C.int(0)
+	if ok := tpadSettings.GetBoolean(TPAD_KEY_VERT_SCROLL); ok {
+		vert = C.int(1)
+	}
+	if ok := tpadSettings.GetBoolean(TPAD_KEY_HORIZ_SCROLL); ok {
+		horiz = C.int(1)
+	}
+	C.set_two_finger_scroll(vert, horiz)
+
+	thres = int(tpadSettings.GetDouble(TPAD_KEY_THRES))
+	accel = tpadSettings.GetDouble(TPAD_KEY_ACCEL)
+	tpadName := C.CString("touchpad")
+	defer C.free(unsafe.Pointer(tpadName))
+	C.set_motion(tpadName, C.double(accel), C.int(thres))
+}
