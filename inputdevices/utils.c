@@ -37,11 +37,11 @@ xi_device_exist (const char *name)
 	int dev_id = -1;
 
 	for (i = 0; i < n_devices; i++) {
-		/*g_print("XID: %lu\n", infos[i].id);*/
-		/*g_print("Atom: %lu\n", infos[i].type);*/
-		/*g_print("Name: %s\n", infos[i].name);*/
-		/*g_print("Num Class: %d\n", infos[i].num_classes);*/
-		/*g_print("Use: %d\n", infos[i].use);*/
+		/*g_debug("XID: %lu\n", infos[i].id);*/
+		/*g_debug("Atom: %lu\n", infos[i].type);*/
+		/*g_debug("Name: %s\n", infos[i].name);*/
+		/*g_debug("Num Class: %d\n", infos[i].num_classes);*/
+		/*g_debug("Use: %d\n", infos[i].use);*/
 		// Filter master device
 		if ((g_strcmp0(infos[i].name, "Virtual core pointer") == 0) ||
 		        (g_strcmp0(infos[i].name, "Virtual core keyboard") == 0)) {
@@ -63,7 +63,7 @@ xi_device_exist (const char *name)
 GdkDevice *
 device_is_exist (const char *deviceName)
 {
-	g_print("Check Device Exisr: %s\n", deviceName);
+	g_debug("Check Device Exisr: %s\n", deviceName);
 	GList *devList, *l;
 	GdkDisplay *display = gdk_display_get_default ();
 
@@ -72,7 +72,7 @@ device_is_exist (const char *deviceName)
 		return NULL;
 	}
 
-	g_print("Get Device Manager\n");
+	g_debug("Get Device Manager\n");
 	GdkDeviceManager *devManager = gdk_display_get_device_manager(display);
 
 	if (devManager == NULL) {
@@ -80,7 +80,7 @@ device_is_exist (const char *deviceName)
 		return NULL;
 	}
 
-	g_print("Get Device List\n");
+	g_debug("Get Device List\n");
 	devList = gdk_device_manager_list_devices(devManager,
 	          GDK_DEVICE_TYPE_SLAVE);
 
@@ -89,7 +89,7 @@ device_is_exist (const char *deviceName)
 		return NULL;
 	}
 
-	g_print("Get Device List End\n");
+	g_debug("Get Device List End\n");
 	GdkDevice *device = NULL;
 
 	gboolean flag = FALSE;
@@ -99,7 +99,7 @@ device_is_exist (const char *deviceName)
 
 		const gchar *name = gdk_device_get_name(device);
 
-		g_print("Device Name: %s\n", name);
+		g_debug("Device Name: %s\n", name);
 
 		if ( str_is_contain (name, deviceName) ) {
 			flag = TRUE;
@@ -145,7 +145,7 @@ str_to_upper(const gchar *src)
 		return NULL;
 	}
 
-	/*g_print("To Upper: %s\n", src);*/
+	/*g_debug("To Upper: %s\n", src);*/
 	return g_utf8_strup(src, -1);
 }
 
@@ -156,7 +156,7 @@ str_to_letter(const gchar *src)
 		return NULL;
 	}
 
-	/*g_print("To Letter: %s\n", src);*/
+	/*g_debug("To Letter: %s\n", src);*/
 	return g_utf8_strdown(src, -1);
 }
 
@@ -174,13 +174,13 @@ set_device_enabled (int device_id,
 	}
 
 	gdk_error_trap_push ();
-	g_print("Start Set device\n");
+	g_debug("Start Set device\n");
 
 	value = enabled ? 1 : 0;
 	XIChangeProperty (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()),
 	                  device_id, prop, XA_INTEGER, 8, PropModeReplace, &value, 1);
 
-	g_print("Has Set end\n");
+	g_debug("Has Set end\n");
 
 	if (gdk_error_trap_pop ()) {
 		return FALSE;

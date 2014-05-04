@@ -21,7 +21,7 @@
 
 package main
 
-// #cgo pkg-config: gdk-3.0 x11 xi glib-2.0
+// #cgo pkg-config: gdk-3.0 x11 xi glib-2.0 gio-2.0
 // #cgo CFLAGS: -Wall -g
 // #cgo LDFLAGS: -lm
 // #include <stdlib.h>
@@ -125,6 +125,7 @@ func listenDevsSettings() {
 		println("TPad Settings Changed: ", key)
 		switch key {
 		case TPAD_KEY_ENABLE:
+			logObj.Info("%s changed", key)
 			if enable := tpadSettings.GetBoolean(key); enable {
 				C.set_tpad_enable(C.TRUE)
 			} else {

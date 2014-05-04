@@ -144,7 +144,7 @@ set_middle_button (int enable)
         return;
     }
 
-    g_print("Set middle button on %s\n", gdk_device_get_name(mouse));
+    g_debug("Set middle button on %s\n", gdk_device_get_name(mouse));
     gdk_error_trap_push();
     Atom act_type;
     int act_format;
@@ -180,7 +180,7 @@ set_left_handed (int left_handed)
     GdkDevice *mouse = device_is_exist(MOUSE_NAME_KEY);
 
     if (mouse == NULL) {
-        g_print("Mouse not exist\n");
+        g_debug("Mouse not exist\n");
         return;
     }
 
@@ -192,7 +192,7 @@ set_left_handed (int left_handed)
         return;
     }
 
-    g_print ("setting handedness on %s\n", gdk_device_get_name (mouse));
+    g_debug ("setting handedness on %s\n", gdk_device_get_name (mouse));
 
     gsize buttons_capacity = 16;
     guchar *buttons = g_new0 (guchar, buttons_capacity);
