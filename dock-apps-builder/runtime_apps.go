@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"dbus/com/deepin/daemon/dock"
+	"dlib"
 	"dlib/gio-2.0"
 	"dlib/glib-2.0"
 	"encoding/base64"
@@ -103,8 +104,15 @@ func (app *RuntimeApp) buildMenu() {
 	if app.core != nil {
 		itemName = strings.Title(app.core.GetDisplayName())
 	}
+
+	if strings.HasPrefix(os.Getenv("LANG"), "en") {
+		itemName = "_" + itemName
+	} else {
+		acc := itemName[0]
+		itemName = itemName + "(_" + acc + ")"
+	}
 	app.coreMenu.AppendItem(NewMenuItem(
-		"_"+itemName,
+		itemName,
 		func() {
 			var a *gio.AppInfo
 			LOGGER.Info(itemName)
@@ -144,7 +152,7 @@ func (app *RuntimeApp) buildMenu() {
 		app.coreMenu.AddSeparator()
 	}
 	closeItem := NewMenuItem(
-		"_Close All", // TODO: i18n
+		dlib.Tr("_Close All"), // TODO: i18n
 		func() {
 			LOGGER.Warning("Close All")
 			for xid := range app.xids {
@@ -171,7 +179,7 @@ func (app *RuntimeApp) buildMenu() {
 	}
 	LOGGER.Debug(app.Id, "Item is docked:", isDocked)
 	dockItem := NewMenuItem(
-		"_Dock",
+		dlib.Tr("_Dock"),
 		func() {
 			LOGGER.Warning("dock item")
 			LOGGER.Info("appid:", app.Id)
