@@ -327,3 +327,11 @@ func main() {
 		os.Exit(0)
 	}
 }
+
+func (dpy *Display) QueryOutputFeature(name string) int32 {
+	fmt.Println(name, GetDisplayInfo().backlightLevel[name])
+	if _, ok := GetDisplayInfo().backlightLevel[name]; ok {
+		return 1
+	}
+	return 0
+}
