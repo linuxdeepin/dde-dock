@@ -12,8 +12,9 @@ import (
 )
 
 var (
-	xcon, _        = xgb.NewConn()
-	_              = initX11()
+	xcon, _ = xgb.NewConn()
+	_       = initX11()
+
 	Root           xproto.Window
 	ScreenWidthMm  uint16
 	ScreenHeightMm uint16
@@ -267,11 +268,12 @@ func (dpy *Display) ResetChanges() {
 	dpy.cfg = LoadConfigDisplay(dpy)
 
 	//must be invoked after LoadConfigDisplay(dpy)
-	dpy.Monitors = nil
+	var monitors []*Monitor
 	for _, mcfg := range dpy.cfg.Monitors[dpy.cfg.CurrentPlanName] {
 		m := NewMonitor(dpy, mcfg)
-		dpy.Monitors = append(dpy.Monitors, m)
+		monitors = append(monitors, m)
 	}
+	dpy.setPropMonitors(monitors)
 
 	dpy.SetPrimary(dpy.cfg.Primary)
 
@@ -290,7 +292,7 @@ func (dpy *Display) ResetChanges() {
 			}
 		}
 	}
-
+	dpy.detectChanged()
 }
 
 func (dpy *Display) SaveChanges() {

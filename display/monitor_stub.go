@@ -34,6 +34,13 @@ func (m *Monitor) setPropCurrentMode(v Mode) {
 	}
 }
 
+func (m *Monitor) setPropBestMode(v Mode) {
+	if m.BestMode != v {
+		m.BestMode = v
+		dbus.NotifyChange(m, "BestMode")
+	}
+}
+
 func (m *Monitor) setPropRotation(v uint16) {
 	if m.Rotation != v {
 		m.Rotation = v
@@ -66,10 +73,22 @@ func (m *Monitor) setPropHeight(v uint16) {
 		dbus.NotifyChange(m, "Height")
 	}
 }
-func (m *Monitor) setPropXY(x, y int16) {
+func (m *Monitor) setPropPos(x, y int16) {
 	if m.X != x || m.Y != y {
 		m.X, m.Y = x, y
 		dbus.NotifyChange(m, "X")
 		dbus.NotifyChange(m, "Y")
 	}
+}
+
+func (m *Monitor) setPropIsComposited(v bool) {
+	if m.IsComposited != v {
+		m.IsComposited = v
+		dbus.NotifyChange(m, "IsComposited")
+	}
+}
+
+func (m *Monitor) setPropOutputs(v []string) {
+	m.Outputs = v
+	dbus.NotifyChange(m, "Outputs")
 }

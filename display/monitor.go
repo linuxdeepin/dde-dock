@@ -119,7 +119,7 @@ func (m *Monitor) SetReflect(v uint16) error {
 
 func (m *Monitor) SetPos(x, y int16) {
 	m.cfg.X, m.cfg.Y = x, y
-	m.setPropXY(x, y)
+	m.setPropPos(x, y)
 	GetDisplay().detectChanged()
 }
 
@@ -192,7 +192,7 @@ func (m *Monitor) updateInfo() {
 	}
 	if oinfo.Crtc == 0 {
 		m.SwitchOn(false)
-		m.setPropXY(0, 0)
+		m.setPropPos(0, 0)
 		m.setPropWidth(0)
 		m.setPropHeight(0)
 		m.setPropRotation(1)
@@ -204,7 +204,7 @@ func (m *Monitor) updateInfo() {
 		if err != nil {
 		}
 		m.SetMode(uint32(cinfo.Mode))
-		m.setPropXY(cinfo.X, cinfo.Y)
+		m.setPropPos(cinfo.X, cinfo.Y)
 		m.setPropWidth(cinfo.Width)
 		m.setPropHeight(cinfo.Height)
 		rotation, reflect := parseRandR(cinfo.Rotation)
@@ -218,13 +218,16 @@ func NewMonitor(dpy *Display, info *ConfigMonitor) *Monitor {
 	m := &Monitor{}
 	m.cfg = info
 	m.Name = info.Name
-	m.X, m.Y, m.Width, m.Height = info.X, info.Y, info.Width, info.Height
-	m.Rotation, m.Reflect = info.Rotation, info.Reflect
-	m.Opened = info.Enabled
+	m.setPropPos(info.X, info.Y)
+	m.setPropWidth(info.Width)
+	m.setPropHeight(info.Height)
+	m.setPropRotation(info.Rotation)
+	m.setPropReflect(info.Reflect)
+	m.setPropOpened(info.Enabled)
 
 	m.Outputs = info.Outputs
 	runtime.SetFinalizer(m, func(o interface{}) { dbus.UnInstallObject(m) })
-	m.IsComposited = len(m.Outputs) > 1
+	m.setPropIsComposited(len(m.Outputs) > 1)
 
 	m.FullName = m.Name
 
@@ -235,14 +238,14 @@ func NewMonitor(dpy *Display, info *ConfigMonitor) *Monitor {
 				best = mode
 			}
 		}
-		m.BestMode = best
+		m.setPropBestMode(best)
 	}
 
-	m.BestMode = GetDisplayInfo().modes[info.bestMode]
+	m.setPropBestMode(GetDisplayInfo().modes[info.bestMode])
 	if info.currentMode != 0 {
-		m.CurrentMode = GetDisplayInfo().modes[info.currentMode]
+		m.setPropCurrentMode(GetDisplayInfo().modes[info.currentMode])
 	} else {
-		m.CurrentMode = m.BestMode
+		m.setPropCurrentMode(m.BestMode)
 	}
 
 	return m
