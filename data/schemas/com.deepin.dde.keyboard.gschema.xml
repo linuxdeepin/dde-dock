@@ -2,12 +2,12 @@
 <schemalist>
     <schema path="/com/deepin/dde/keyboard/" id="com.deepin.dde.keyboard">
     <key type="as" name="user-layout-list">
-        <default>['us;']</default>
+        <default>[]</default>
         <summary>User Add Layout List</summary>
         <description>User Add Layout List</description>
     </key>
     <key type="s" name="layout">
-        <default>"us;"</default>
+        <default>""</default>
         <summary>Keyboard Layout</summary>
         <description></description>
     </key>

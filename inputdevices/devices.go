@@ -23,6 +23,8 @@ package main
 
 import (
 	"dlib/dbus/property"
+	"io/ioutil"
+	"regexp"
 	"strings"
 )
 
@@ -187,6 +189,11 @@ func NewKeyboard() *KbdEntry {
 	m.CurrentLayout = property.NewGSettingsStringProperty(
 		m, "CurrentLayout",
 		kbdSettings, KBD_KEY_LAYOUT)
+	if len(m.CurrentLayout.GetValue().(string)) < 1 {
+		v := getDefaultLayout()
+		m.CurrentLayout.SetValue(v)
+		kbdSettings.SetString(KBD_KEY_LAYOUT, v)
+	}
 	logObj.Debug("CurrentLayout: ", m.CurrentLayout.GetValue().(string))
 	m.RepeatEnabled = property.NewGSettingsBoolProperty(
 		m, "RepeatEnabled",
@@ -212,4 +219,32 @@ func NewKeyboard() *KbdEntry {
 	logObj.Debug("deviceId: ", m.deviceId)
 
 	return m
+}
+
+func getDefaultLayout() string {
+	layout := "us"
+	option := ""
+	contents, err := ioutil.ReadFile(KBD_DEFAULT_FILE)
+	if err != nil {
+		logObj.Warning("ReadFile Failed:", err)
+		return layout + LAYOUT_DELIM + option
+	}
+
+	lines := strings.Split(string(contents), "\n")
+	for _, line := range lines {
+		if ok, _ := regexp.MatchString(`^XKBLAYOUT`, line); ok {
+			layout = strings.Split(line, "=")[1]
+		} else if ok, _ := regexp.MatchString(`^XKBOPTIONS`, line); ok {
+			option = strings.Split(line, "=")[1]
+		}
+	}
+
+	layout = strings.Trim(layout, "\"")
+	option = strings.Trim(option, "\"")
+	if len(layout) < 1 {
+		layout = "us"
+		option = ""
+	}
+
+	return layout + LAYOUT_DELIM + option
 }

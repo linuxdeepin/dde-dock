@@ -51,6 +51,7 @@ const (
 	KBD_KEY_LAYOUT_OPTION    = "layout-option"
 	KBD_KEY_USER_LAYOUT_LIST = "user-layout-list"
 	KBD_CURSOR_BLINK_TIME    = "cursor-blink-time"
+	KBD_DEFAULT_FILE         = "/etc/default/keyboard"
 
 	DEVICE_DEST  = "com.deepin.daemon.InputDevices"
 	DEVICE_PATH  = "/com/deepin/daemon/InputDevice/"

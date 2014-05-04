@@ -2,12 +2,12 @@
 <schemalist>
   <schema path="/com/deepin/dde/touchpad/" id="com.deepin.dde.touchpad">
     <key type="b" name="disable-while-typing">
-      <default>true</default>
+      <default>false</default>
       <summary>Disable touchpad while typing</summary>
       <description>Set this to TRUE if you have problems with accidentally hitting the touchpad while typing.</description>
     </key>
     <key type="b" name="horiz-scroll-enabled">
-      <default>true</default>
+      <default>false</default>
       <summary>Enable horizontal scrolling</summary>
       <description>Set this to TRUE to allow horizontal scrolling by the same method selected with the scroll_method key.</description>
     </key>
