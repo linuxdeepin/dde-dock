@@ -120,23 +120,23 @@ func search(key string) []ItemId {
 
 // 2. add a weight for frequency.
 func searchInstalled(key string, res chan<- SearchResult, end chan<- bool) {
-	logger.Info("SearchKey:", key)
+	logger.Debug("SearchKey:", key)
 	keyMatcher := regexp.MustCompile(fmt.Sprintf("(?i)(%s)", key))
 	matchers := getMatchers(key) // just use these to name.
 	for id, v := range itemTable {
 		var score uint32 = 0
 
-		logger.Info("search", v.Name)
+		logger.Debug("search", v.Name)
 		for matcher, s := range matchers {
 			if matcher.MatchString(v.Name) {
-				logger.Info("\tName:", v.Name, "match", matcher)
+				logger.Debug("\tName:", v.Name, "match", matcher)
 				score += s
 			}
 		}
 		if v.enName != v.Name {
 			for matcher, s := range matchers {
 				if matcher.MatchString(v.enName) {
-					logger.Info("\tEnName:", v.enName, "match", matcher)
+					logger.Debug("\tEnName:", v.enName, "match", matcher)
 					score += s
 				}
 			}
@@ -144,24 +144,24 @@ func searchInstalled(key string, res chan<- SearchResult, end chan<- bool) {
 
 		for _, keyword := range v.xinfo.keywords {
 			if keyMatcher.MatchString(keyword) {
-				logger.Info("\tKeyword:", keyword, "match", keyMatcher)
+				logger.Debug("\tKeyword:", keyword, "match", keyMatcher)
 				score += VERY_GOOD
 			}
 		}
 		if keyMatcher.MatchString(v.Path) {
-			logger.Info("\tPath:", v.Path, "match", keyMatcher)
+			logger.Debug("\tPath:", v.Path, "match", keyMatcher)
 			score += AVERAGE
 		}
 		if keyMatcher.MatchString(v.xinfo.exec) {
-			logger.Info("\tExec:", v.xinfo.exec, "match", keyMatcher)
+			logger.Debug("\tExec:", v.xinfo.exec, "match", keyMatcher)
 			score += GOOD
 		}
 		if keyMatcher.MatchString(v.xinfo.genericName) {
-			logger.Info("\tGenericName:", v.xinfo.genericName, "match", keyMatcher)
+			logger.Debug("\tGenericName:", v.xinfo.genericName, "match", keyMatcher)
 			score += BELOW_AVERAGE
 		}
 		if keyMatcher.MatchString(v.xinfo.description) {
-			logger.Info("\tDescription:", v.xinfo.description, "match", keyMatcher)
+			logger.Debug("\tDescription:", v.xinfo.description, "match", keyMatcher)
 			score += POOR
 		}
 
