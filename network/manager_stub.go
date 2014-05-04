@@ -5,17 +5,31 @@ import (
 )
 
 func (m *Manager) updatePropActiveConnections() {
-	m.ActiveConnections = make([]string, 0)
+	m.activeConnections = make([]activeConnection, 0)
 	for _, cpath := range nmGetActiveConnections() {
 		if aconn, err := nmNewActiveConnection(cpath); err == nil {
-			m.ActiveConnections = append(m.ActiveConnections, aconn.Uuid.Get())
-			logger.Debugf("ActiveConnections, uuid=%s, state=%d", aconn.Uuid.Get(), aconn.State.Get()) // TODO test
+			aconnObj := activeConnection{
+				Devices: aconn.Devices.Get(),
+				Uuid:    aconn.Uuid.Get(),
+				State:   aconn.State.Get(),
+			}
+			m.activeConnections = append(m.activeConnections, aconnObj)
+			// TODO
+			// aconn.State.ConnectChanged(func() {
+			// 	aconnObj.State = aconn.State.Get()
+			// 	m.ActiveConnections, _ = marshalJSON(m.activeConnections)
+			// 	// dbus.NotifyChange(m, "ActiveConnections")
+			// 	logger.Debug("ActiveConnection:", m.ActiveConnections)
+			// })
 		}
 	}
+	m.ActiveConnections, _ = marshalJSON(m.activeConnections)
 	dbus.NotifyChange(m, "ActiveConnections")
+	logger.Debug("ActiveConnection:", m.ActiveConnections) // TODO test
 }
 
 func (m *Manager) updatePropActivatingConnection() {
+	// TODO
 	dbus.NotifyChange(m, "ActivatingConnection")
 }
 

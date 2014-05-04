@@ -27,8 +27,10 @@ type Manager struct {
 	NetworkingEnabled dbus.Property `access:"readwrite"`
 	State             uint32        // networking state
 
-	ActiveConnections    []string // uuid collection of connections that activated
-	ActivatingConnection string   // TODO
+	activeConnections []activeConnection
+	ActiveConnections string // array of connections that activated and marshaled by json
+
+	ActivatingConnection string // TODO
 
 	//update by devices.go
 	WiredDevices    []*device
@@ -74,7 +76,7 @@ func (m *Manager) initManager() {
 	m.initDeviceManage()
 	m.initConnectionManage()
 
-	// update property "ActiveConnections" after initilizing device
+	// update property "ActiveConnections" after initilizing devices
 	m.updatePropActiveConnections()
 	nmManager.ActiveConnections.ConnectChanged(func() {
 		m.updatePropActiveConnections()

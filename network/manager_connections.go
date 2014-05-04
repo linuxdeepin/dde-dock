@@ -12,6 +12,12 @@ type connection struct {
 	Ssid   string // only used for wireless connection
 }
 
+type activeConnection struct {
+	Devices []dbus.ObjectPath
+	Uuid    string
+	State   uint32
+}
+
 type activeConnectionInfo struct {
 	Interface    string
 	HWAddress    string
