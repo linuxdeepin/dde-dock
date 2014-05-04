@@ -106,7 +106,7 @@ func NewConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 	if err != nil {
 		return nil, err
 	}
-	s.ConnectionType = generalGetConnectionType(s.data)
+	s.ConnectionType = getCustomConnectinoType(s.data)
 
 	s.fixMissingFields()
 

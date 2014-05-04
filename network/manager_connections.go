@@ -77,7 +77,7 @@ func (m *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPath)
 			if isSettingWirelessMacAddressExists(cdata) {
 				conn.HwAddr = convertMacAddressToString(getSettingWirelessMacAddress(cdata))
 			}
-			switch generalGetConnectionType(cdata) {
+			switch getCustomConnectinoType(cdata) {
 			case typeWireless:
 				m.connections[typeWireless] = m.addConnection(m.connections[typeWireless], conn)
 			case typeWirelessAdhoc:
@@ -238,7 +238,7 @@ func (m *Manager) CreateConnection(connType string, devPath dbus.ObjectPath) (se
 	return
 }
 
-// OpenConnection open a connection through uuid, return ConnectionSession's dbus object path if success.
+// EditConnection open a connection through uuid, return ConnectionSession's dbus object path if success.
 func (m *Manager) EditConnection(uuid string, devPath dbus.ObjectPath) (session *ConnectionSession, err error) {
 	// if is read only connection(default system connection created by
 	// network manager), create a new connection
@@ -253,7 +253,7 @@ func (m *Manager) EditConnection(uuid string, devPath dbus.ObjectPath) (session 
 	}
 	if getSettingConnectionReadOnly(connData) {
 		logger.Debug("read only connection, create new")
-		return m.CreateConnection(generalGetConnectionType(connData), devPath)
+		return m.CreateConnection(getCustomConnectinoType(connData), devPath)
 	}
 
 	session, err = NewConnectionSessionByOpen(uuid, devPath)
@@ -293,9 +293,9 @@ func (m *Manager) getConnectionPathByUuid(uuid string) (cpath dbus.ObjectPath, e
 	return
 }
 
-// TODO
+// TODO remove
 // GetActiveConnectionState get current state of the active connection.
-func (m *Manager) GetActiveConnectionState(apath dbus.ObjectPath) (state uint32) {
+func (m *Manager) getActiveConnectionState(apath dbus.ObjectPath) (state uint32) {
 	conn, err := nmNewActiveConnection(apath)
 	if err != nil {
 		return

@@ -177,7 +177,7 @@ func (m *Manager) editConnectionForAccessPoint(apPath dbus.ObjectPath, devPath d
 	// }
 	// if getSettingConnectionReadOnly(connData) {
 	// 	logger.Debug("read only connection, create new")
-	// 	return m.CreateConnection(generalGetConnectionType(connData), devPath)
+	// 	return m.CreateConnection(getCustomConnectinoType(connData), devPath)
 	// }
 
 	// session, err = NewConnectionSessionByOpen(uuid, devPath)

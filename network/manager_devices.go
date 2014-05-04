@@ -125,7 +125,7 @@ func (m *Manager) addDevice(devs []*device, nmDev *nm.Device) []*device {
 		dev.State = newState
 		if m.DeviceStateChanged != nil {
 			m.DeviceStateChanged(string(nmDev.Path), newState)
-			// m.updatePropDevices() // TODO
+			m.updatePropDevices()
 		}
 	})
 	devs = append(devs, dev)
@@ -215,4 +215,12 @@ func (m *Manager) removeDevice(devs []*device, path dbus.ObjectPath) []*device {
 	devs[len(devs)-1] = nil
 	devs = devs[:len(devs)-1]
 	return devs
+}
+
+// TODO
+func (m *Manager) enableDevice(devPath dbus.ObjectPath) (err error) {
+	return
+}
+func (m *Manager) disableDevice(devPath dbus.ObjectPath) (err error) {
+	return
 }

@@ -13,7 +13,7 @@ func pageGeneralGetId(con map[string]map[string]dbus.Variant) string {
 	return con[fieldConnection]["id"].Value().(string)
 }
 
-func generalGetConnectionType(data connectionData) (connType string) {
+func getCustomConnectinoType(data connectionData) (connType string) {
 	t := getSettingConnectionType(data)
 	switch t {
 	case NM_SETTING_WIRED_SETTING_NAME:

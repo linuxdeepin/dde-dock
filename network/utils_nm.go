@@ -199,7 +199,7 @@ func nmGetConnectionType(cpath dbus.ObjectPath) (ctype string) {
 	if err != nil {
 		return
 	}
-	ctype = generalGetConnectionType(data)
+	ctype = getCustomConnectinoType(data)
 	if len(ctype) == 0 {
 		logger.Error("get type of connection failed, type is empty")
 	}
@@ -271,7 +271,7 @@ func nmGetWirelessConnectionListBySsid(ssid []byte) (cpaths []dbus.ObjectPath) {
 		if err != nil {
 			continue
 		}
-		if generalGetConnectionType(data) != typeWireless {
+		if getCustomConnectinoType(data) != typeWireless {
 			continue
 		}
 		if isSettingWirelessSsidExists(data) && string(getSettingWirelessSsid(data)) == string(ssid) {
