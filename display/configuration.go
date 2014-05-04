@@ -351,8 +351,13 @@ func (m1 *ConfigMonitor) Compare(m2 *ConfigMonitor) bool {
 	return true
 }
 
-func (c *ConfigDisplay) SaveBrightness(output string, v float64) {
-	cfg := LoadConfigDisplay(GetDisplay())
+func (dpy *Display) saveBrightness(output string, v float64) {
+	cfg := LoadConfigDisplay(dpy)
 	cfg.Brightness[output] = v
+	cfg.Save()
+}
+func (dpy *Display) savePrimary(output string) {
+	cfg := LoadConfigDisplay(dpy)
+	cfg.Primary = output
 	cfg.Save()
 }

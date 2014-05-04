@@ -163,7 +163,7 @@ func (dpy *Display) listener() {
 func (dpy *Display) ChangeBrightness(output string, v float64) {
 	if v >= 0 && v <= 1 {
 		if op, ok := GetDisplayInfo().outputNames[output]; ok {
-			if max, ok := GetDisplayInfo().backlightLevel[output]; ok {
+			if max, ok := GetDisplayInfo().backlightLevel[output]; ok && max != 0 {
 				setOutputBacklight(op, uint32(float64(max)*v))
 			} else {
 				setBrightness(xcon, op, v)
@@ -184,7 +184,7 @@ func (dpy *Display) ResetBrightness(output string) {
 func (dpy *Display) SetBrightness(output string, v float64) {
 	if v >= 0 && v <= 1 {
 		dpy.ChangeBrightness(output, v)
-		dpy.cfg.SaveBrightness(output, v)
+		dpy.saveBrightness(output, v)
 	} else {
 		Logger.Warningf("Try set the brightness of %s to an invalid value(%v)", output, v)
 	}
@@ -222,7 +222,6 @@ func (dpy *Display) SplitMonitor(a string) error {
 
 func (dpy *Display) detectChanged() {
 	dpy.setPropHasChanged(!dpy.cfg.Compare(LoadConfigDisplay(dpy)))
-	fmt.Println("DetectChanged...", !dpy.cfg.Compare(LoadConfigDisplay(dpy)))
 }
 
 func (dpy *Display) SetPrimary(name string) error {
@@ -230,6 +229,7 @@ func (dpy *Display) SetPrimary(name string) error {
 		if m.Enabled {
 			dpy.setPropPrimary(name)
 			dpy.cfg.Primary = name
+			dpy.savePrimary(dpy.cfg.Primary)
 			dpy.setPropPrimaryRect(xproto.Rectangle{m.X, m.Y, m.Width, m.Height})
 			return nil
 		}
@@ -243,6 +243,7 @@ func (dpy *Display) SetPrimary(name string) error {
 		if m.Name != name && m.Enabled {
 			dpy.setPropPrimary(name)
 			dpy.cfg.Primary = name
+			dpy.savePrimary(dpy.cfg.Primary)
 			dpy.setPropPrimaryRect(xproto.Rectangle{m.X, m.Y, m.Width, m.Height})
 			return nil
 		}
@@ -318,17 +319,16 @@ func main() {
 		return
 	}
 
-	err := dbus.InstallOnSession(GetDisplay())
-	if err != nil {
-		Logger.Error("Can't install dbus display service on session:", err)
-		return
-	}
-
 	GetDisplay().ResetChanges()
 	for _, m := range GetDisplay().Monitors {
 		m.updateInfo()
 	}
 
+	err := dbus.InstallOnSession(GetDisplay())
+	if err != nil {
+		Logger.Error("Can't install dbus display service on session:", err)
+		return
+	}
 	dbus.DealWithUnhandledMessage()
 	if err := dbus.Wait(); err != nil {
 		Logger.Error("lost dbus session:", err)
