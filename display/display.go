@@ -93,6 +93,7 @@ func (info *DisplayInfo) update() {
 			continue
 		}
 		info.outputNames[string(oinfo.Name)] = op
+		info.backlightLevel[string(oinfo.Name)] = uint32(queryBacklightRange(xcon, op))
 	}
 
 	info.modes = make(map[randr.Mode]Mode)
@@ -175,6 +176,7 @@ func (dpy *Display) ChangeBrightness(output string, v float64) {
 func (dpy *Display) ResetBrightness(output string) {
 	if v, ok := LoadConfigDisplay(dpy).Brightness[output]; ok {
 		dpy.SetBrightness(output, v)
+
 	}
 }
 func (dpy *Display) SetBrightness(output string, v float64) {
@@ -280,6 +282,13 @@ func (dpy *Display) ResetChanges() {
 	for name, v := range dpy.cfg.Brightness {
 		dpy.Brightness[name] = v
 		dpy.ChangeBrightness(name, v)
+
+		//set brightness to 1, if the output support backlight feature
+		if op, ok := GetDisplayInfo().outputNames[name]; ok {
+			if _, ok := GetDisplayInfo().backlightLevel[name]; ok {
+				setBrightness(xcon, op, 1)
+			}
+		}
 	}
 
 }
@@ -329,7 +338,6 @@ func main() {
 }
 
 func (dpy *Display) QueryOutputFeature(name string) int32 {
-	fmt.Println(name, GetDisplayInfo().backlightLevel[name])
 	if _, ok := GetDisplayInfo().backlightLevel[name]; ok {
 		return 1
 	}
