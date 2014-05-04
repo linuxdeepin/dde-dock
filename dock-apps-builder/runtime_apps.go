@@ -104,13 +104,6 @@ func (app *RuntimeApp) buildMenu() {
 	if app.core != nil {
 		itemName = strings.Title(app.core.GetDisplayName())
 	}
-
-	if strings.HasPrefix(os.Getenv("LANG"), "en") {
-		itemName = "_" + itemName
-	} else {
-		acc := itemName[0]
-		itemName = itemName + "(_" + acc + ")"
-	}
 	app.coreMenu.AppendItem(NewMenuItem(
 		itemName,
 		func() {
@@ -152,7 +145,7 @@ func (app *RuntimeApp) buildMenu() {
 		app.coreMenu.AddSeparator()
 	}
 	closeItem := NewMenuItem(
-		dlib.Tr("_Close All"), // TODO: i18n
+		dlib.Tr("_Close All"),
 		func() {
 			LOGGER.Warning("Close All")
 			for xid := range app.xids {
