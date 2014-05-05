@@ -288,7 +288,7 @@ func (dpy *Display) ResetChanges() {
 
 		//set brightness to 1, if the output support backlight feature
 		if op, ok := GetDisplayInfo().outputNames[name]; ok {
-			if _, ok := GetDisplayInfo().backlightLevel[name]; ok {
+			if max, ok := GetDisplayInfo().backlightLevel[name]; ok && max != 0 {
 				setBrightness(xcon, op, 1)
 			}
 		}

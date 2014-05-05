@@ -57,7 +57,7 @@ func (cfg *ConfigDisplay) attachCurrentMonitor(dpy *Display) {
 	for name, op := range GetDisplayInfo().outputNames {
 		var support bool
 		if support, cfg.Brightness[name] = supportedBacklight(xcon, op); support {
-			//Assume the brightness is 1.0 if we haven't saved information
+			//Assume the brightness is 1.0 if there hasn't any saved information
 			GetDisplayInfo().backlightLevel[name] = uint32(queryBacklightRange(xcon, op))
 		} else {
 			cfg.Brightness[name] = 1
