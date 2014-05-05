@@ -60,6 +60,7 @@ func main() {
 	dbus.DealWithUnhandledMessage()
 
 	//select {}
+	logObject.Info("^^^^<<<<=====>>>>>\n")
 	if err = dbus.Wait(); err != nil {
 		logObject.Warningf("lost dbus session:%v", err)
 		os.Exit(1)
