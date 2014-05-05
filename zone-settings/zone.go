@@ -58,14 +58,31 @@ var (
 func registerZoneArea() {
 	mutex.Lock()
 	defer mutex.Unlock()
+	var (
+		startX int32
+		startY int32
+		endX   int32
+		endY   int32
+	)
 
 	rect := dspObj.PrimaryRect.Get()
-	startX := int32(rect[0].(int16))
-	startY := int32(rect[1].(int16))
-	endX := int32(rect[2].(uint16)) + startX
-	endY := int32(rect[3].(uint16)) + startY
-
+	if v, ok := rect[0].(int16); ok {
+		startX = int32(v)
+	}
+	if v, ok := rect[1].(int16); ok {
+		startY = int32(v)
+	}
+	if v, ok := rect[2].(uint16); ok {
+		endX = int32(v) + startX
+	}
+	if v, ok := rect[3].(uint16); ok {
+		endY = int32(v) + startY
+	}
 	logObj.Infof("PrimaryRect: %d, %d, %d, %d\n", startX, endX, startY, endY)
+
+	if endX <= startX || endY <= startY {
+		return
+	}
 
 	topLeftArea = areaRange{startX, startY, startX + DISTANCE, startY + DISTANCE}
 	logObj.Info("TopLeft: ", topLeftArea)
