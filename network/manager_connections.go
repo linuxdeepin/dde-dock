@@ -28,7 +28,7 @@ type activeConnectionInfo struct {
 }
 
 func (m *Manager) initConnectionManage() {
-	m.connections = make(map[string][]connection)
+	m.connections = make(map[string][]*connection)
 	m.VPNConnections = make([]string, 0)
 	m.WiredConnections = make([]string, 0) // TODO remove
 	m.WirelessConnections = make([]string, 0)
@@ -46,7 +46,7 @@ func (m *Manager) initConnectionManage() {
 
 func (m *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPath) {
 	// logger.Debugf("handleConnectionChanged: operation %d, path %s", operation, path) // TODO test
-	conn := connection{Path: path}
+	conn := &connection{Path: path}
 	switch operation {
 	case opAdded:
 		nmConn, _ := nmNewSettingsConnection(path)
@@ -113,14 +113,14 @@ func (m *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPath)
 		//}
 	}
 }
-func (m *Manager) addConnection(conns []connection, conn connection) []connection {
+func (m *Manager) addConnection(conns []*connection, conn *connection) []*connection {
 	if m.isConnectionExists(conns, conn) {
 		return conns
 	}
 	conns = append(conns, conn)
 	return conns
 }
-func (m *Manager) removeConnection(conns []connection, conn connection) []connection {
+func (m *Manager) removeConnection(conns []*connection, conn *connection) []*connection {
 	i := m.getConnectionIndex(conns, conn)
 	if i < 0 {
 		return conns
@@ -129,13 +129,13 @@ func (m *Manager) removeConnection(conns []connection, conn connection) []connec
 	conns = conns[:len(conns)-1]
 	return conns
 }
-func (m *Manager) isConnectionExists(conns []connection, conn connection) bool {
+func (m *Manager) isConnectionExists(conns []*connection, conn *connection) bool {
 	if m.getConnectionIndex(conns, conn) >= 0 {
 		return true
 	}
 	return false
 }
-func (m *Manager) getConnectionIndex(conns []connection, conn connection) int {
+func (m *Manager) getConnectionIndex(conns []*connection, conn *connection) int {
 	for i, c := range conns {
 		if c.Path == conn.Path {
 			return i

@@ -27,7 +27,7 @@ type Manager struct {
 	NetworkingEnabled dbus.Property `access:"readwrite"`
 	State             uint32        // networking state
 
-	activeConnections []activeConnection
+	activeConnections []*activeConnection
 	ActiveConnections string // array of connections that activated and marshaled by json
 
 	ActivatingConnection string // TODO remove
@@ -44,7 +44,7 @@ type Manager struct {
 	WiredConnections    []string
 	WirelessConnections []string
 	VPNConnections      []string // TODO remove
-	connections         map[string][]connection
+	connections         map[string][]*connection
 	Connections         string // array of connection information and marshaled by json
 
 	//signals

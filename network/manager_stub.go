@@ -5,10 +5,10 @@ import (
 )
 
 func (m *Manager) updatePropActiveConnections() {
-	m.activeConnections = make([]activeConnection, 0)
+	m.activeConnections = make([]*activeConnection, 0)
 	for _, cpath := range nmGetActiveConnections() {
 		if aconn, err := nmNewActiveConnection(cpath); err == nil {
-			aconnObj := activeConnection{
+			aconnObj := &activeConnection{
 				Devices: aconn.Devices.Get(),
 				Uuid:    aconn.Uuid.Get(),
 				State:   aconn.State.Get(),
