@@ -9,6 +9,7 @@ import (
 	"github.com/BurntSushi/xgb/randr"
 	"github.com/BurntSushi/xgb/xproto"
 	"os"
+	"sync"
 )
 
 var (
@@ -104,7 +105,8 @@ func (info *DisplayInfo) update() {
 }
 
 type Display struct {
-	Monitors []*Monitor
+	Monitors    []*Monitor
+	monitorLock sync.Mutex
 
 	ScreenWidth  uint16
 	ScreenHeight uint16
@@ -121,6 +123,13 @@ type Display struct {
 
 	Brightness map[string]float64
 	cfg        *ConfigDisplay
+}
+
+func (dpy *Display) lockMonitors() {
+	dpy.monitorLock.Lock()
+}
+func (dpy *Display) unlockMonitors() {
+	dpy.monitorLock.Unlock()
 }
 
 func (dpy *Display) listener() {

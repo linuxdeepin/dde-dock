@@ -124,9 +124,23 @@ func (m *Monitor) SetPos(x, y int16) {
 }
 
 func (m *Monitor) SwitchOn(v bool) {
-	m.cfg.Enabled = v
-	m.setPropOpened(v)
-	GetDisplay().detectChanged()
+	n := 0
+	dpy := GetDisplay()
+	dpy.lockMonitors()
+	defer dpy.unlockMonitors()
+	for _, _m := range dpy.Monitors {
+		if _m != m && _m.Opened {
+			n++
+		}
+	}
+	if n > 0 || v == true {
+		m.cfg.Enabled = v
+		m.setPropOpened(v)
+		GetDisplay().detectChanged()
+		dpy.cfg.ensureValid(dpy)
+	} else {
+		Logger.Warning("reject close the last opened Output", m.Name)
+	}
 }
 
 func (m *Monitor) SetMode(id uint32) {
