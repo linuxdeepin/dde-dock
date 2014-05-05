@@ -58,7 +58,6 @@ var GetDisplay = func() func() *Display {
 	dpy.setPropHasChanged(false)
 
 	randr.SelectInputChecked(xcon, Root, randr.NotifyMaskOutputChange|randr.NotifyMaskOutputProperty|randr.NotifyMaskCrtcChange|randr.NotifyMaskScreenChange)
-	go dpy.listener()
 
 	return func() *Display {
 		return dpy
@@ -161,6 +160,11 @@ func (dpy *Display) listener() {
 					Logger.Info("Detect New ConfigTimestmap, try reset changes")
 					dpy.ResetChanges()
 				}
+			}
+
+			//sync Monitor's state
+			for _, m := range dpy.Monitors {
+				m.updateInfo()
 			}
 
 			//SetPrimary will try set the valid primary
@@ -328,12 +332,15 @@ func main() {
 		return
 	}
 
-	GetDisplay().ResetChanges()
-	for _, m := range GetDisplay().Monitors {
+	dpy := GetDisplay()
+	dpy.ResetChanges()
+	go dpy.listener()
+
+	for _, m := range dpy.Monitors {
 		m.updateInfo()
 	}
 
-	err := dbus.InstallOnSession(GetDisplay())
+	err := dbus.InstallOnSession(dpy)
 	if err != nil {
 		Logger.Error("Can't install dbus display service on session:", err)
 		return

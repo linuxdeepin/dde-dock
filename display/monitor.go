@@ -206,25 +206,19 @@ func (m *Monitor) updateInfo() {
 	}
 	if oinfo.Crtc == 0 {
 		m.SwitchOn(false)
-		m.setPropPos(0, 0)
-		m.setPropWidth(0)
-		m.setPropHeight(0)
-		m.setPropRotation(1)
-		m.setPropReflect(0)
-		m.SetMode(0)
 	} else {
 		m.SwitchOn(true)
 		cinfo, err := randr.GetCrtcInfo(xcon, oinfo.Crtc, LastConfigTimeStamp).Reply()
 		if err != nil {
+			Logger.Warning("UpdateInfo Failed:", (m.Name), oinfo.Crtc, err)
+			return
 		}
+		m.SetPos(cinfo.X, cinfo.Y)
 		m.SetMode(uint32(cinfo.Mode))
-		m.setPropPos(cinfo.X, cinfo.Y)
-		m.setPropWidth(cinfo.Width)
-		m.setPropHeight(cinfo.Height)
+
 		rotation, reflect := parseRandR(cinfo.Rotation)
-		m.setPropRotation(rotation)
-		m.setPropReflect(reflect)
-		m.setPropCurrentMode(GetDisplayInfo().modes[cinfo.Mode])
+		m.SetRotation(rotation)
+		m.SetReflect(reflect)
 	}
 }
 

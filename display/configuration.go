@@ -95,7 +95,7 @@ func (cfg *ConfigDisplay) ensureValid(dpy *Display) {
 			op := GetDisplayInfo().outputNames[opName]
 			oinfo, err := randr.GetOutputInfo(xcon, op, LastConfigTimeStamp).Reply()
 			if err != nil {
-				Logger.Error("ensureValid failed:", err)
+				Logger.Error("ensureValid failed:", opName, err)
 				continue
 			}
 			if len(oinfo.Modes) == 0 {
