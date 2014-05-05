@@ -26,148 +26,148 @@ package main
 import "C"
 
 import (
-        "os/exec"
-        "strings"
+	"os/exec"
+	"strings"
 )
 
 type areaRange struct {
-        X1      int32
-        Y1      int32
-        X2      int32
-        Y2      int32
+	X1 int32
+	Y1 int32
+	X2 int32
+	Y2 int32
 }
 
 const (
-        DISTANCE         = int32(10)
-        EDGE_TOPLEFT     = "TopLeft"
-        EDGE_BOTTOMLEFT  = "BottomLeft"
-        EDGE_TOPRIGHT    = "TopRight"
-        EDGE_BOTTOMRIGHT = "BottomRight"
-        ACTION_WORKSPACE = "workspace"
+	DISTANCE         = int32(10)
+	EDGE_TOPLEFT     = "TopLeft"
+	EDGE_BOTTOMLEFT  = "BottomLeft"
+	EDGE_TOPRIGHT    = "TopRight"
+	EDGE_BOTTOMRIGHT = "BottomRight"
+	ACTION_WORKSPACE = "workspace"
 )
 
 var (
-        areaId  int32
+	areaId int32
 
-        topLeftArea     areaRange
-        bottomLeftArea  areaRange
-        topRightArea    areaRange
-        bottomRightArea areaRange
+	topLeftArea     areaRange
+	bottomLeftArea  areaRange
+	topRightArea    areaRange
+	bottomRightArea areaRange
 )
 
 func registerZoneArea() {
-        mutex.Lock()
-        defer mutex.Unlock()
+	mutex.Lock()
+	defer mutex.Unlock()
 
-        rect := dspObj.PrimaryRect.Get()
-        x1 := int32(rect[0].(int16))
-        y1 := int32(rect[1].(int16))
-        x2 := int32(rect[2].(uint16))
-        y2 := int32(rect[3].(uint16))
+	rect := dspObj.PrimaryRect.Get()
+	startX := int32(rect[0].(int16))
+	startY := int32(rect[1].(int16))
+	endX := int32(rect[2].(uint16)) + startX
+	endY := int32(rect[3].(uint16)) + startY
 
-        logObj.Infof("PrimaryRect: %d, %d, %d, %d\n", x1, x2, y1, y2)
+	logObj.Infof("PrimaryRect: %d, %d, %d, %d\n", startX, endX, startY, endY)
 
-        topLeftArea = areaRange{x1, y1, x1 + DISTANCE, y1 + DISTANCE}
-        logObj.Info("TopLeft: ", topLeftArea)
-        bottomLeftArea = areaRange{x1, y2 - DISTANCE, x1 + DISTANCE, y2}
-        logObj.Info("BottomLeft: ", bottomLeftArea)
-        topRightArea = areaRange{x2 - DISTANCE, y1, x2, y1 + DISTANCE}
-        logObj.Info("TopRight: ", topRightArea)
-        bottomRightArea = areaRange{x2 - DISTANCE, y2 - DISTANCE, x2, y2}
-        logObj.Info("BottomRight: ", bottomRightArea)
+	topLeftArea = areaRange{startX, startY, startX + DISTANCE, startY + DISTANCE}
+	logObj.Info("TopLeft: ", topLeftArea)
+	bottomLeftArea = areaRange{startX, endY - DISTANCE, startX + DISTANCE, endY}
+	logObj.Info("BottomLeft: ", bottomLeftArea)
+	topRightArea = areaRange{endX - DISTANCE, startY, endX, startY + DISTANCE}
+	logObj.Info("TopRight: ", topRightArea)
+	bottomRightArea = areaRange{endX - DISTANCE, endY - DISTANCE, endX, endY}
+	logObj.Info("BottomRight: ", bottomRightArea)
 
-        logObj.Info("topLeft: ", topLeftArea)
-        logObj.Info("bottomLeft: ", bottomLeftArea)
-        logObj.Info("topRight: ", topRightArea)
-        logObj.Info("bottomRight: ", bottomRightArea)
+	logObj.Info("topLeft: ", topLeftArea)
+	logObj.Info("bottomLeft: ", bottomLeftArea)
+	logObj.Info("topRight: ", topRightArea)
+	logObj.Info("bottomRight: ", bottomRightArea)
 
-        var err error
-        areaId, err = areaObj.RegisterAreas([]areaRange{
-                topLeftArea,
-                bottomLeftArea,
-                topRightArea,
-                bottomRightArea,
-        }, 0)
-        if err != nil {
-                logObj.Info("Register area failed: ", err)
-                return
-        }
+	var err error
+	areaId, err = areaObj.RegisterAreas([]areaRange{
+		topLeftArea,
+		bottomLeftArea,
+		topRightArea,
+		bottomRightArea,
+	}, 0)
+	if err != nil {
+		logObj.Info("Register area failed: ", err)
+		return
+	}
 
-        logObj.Info("MouseArea Id: ", areaId)
+	logObj.Info("MouseArea Id: ", areaId)
 }
 
 func unregisterZoneArea() {
-        areaObj.UnregisterArea(areaId)
+	areaObj.UnregisterArea(areaId)
 }
 
 func execEdgeAction(edge string) {
-        if action, ok := edgeActionMap[edge]; ok {
-                if action == ACTION_WORKSPACE {
-                        C.initate_windows()
-                        return
-                }
-                strs := strings.Split(action, " ")
-                l := len(strs)
-                if l < 0 {
-                        return
-                }
+	if action, ok := edgeActionMap[edge]; ok {
+		if action == ACTION_WORKSPACE {
+			C.initate_windows()
+			return
+		}
+		strs := strings.Split(action, " ")
+		l := len(strs)
+		if l < 0 {
+			return
+		}
 
-                argv := []string{}
-                for i := 1; i < l; i++ {
-                        argv = append(argv, strs[i])
-                }
-                go exec.Command(strs[0], argv...).Run()
-        }
+		argv := []string{}
+		for i := 1; i < l; i++ {
+			argv = append(argv, strs[i])
+		}
+		go exec.Command(strs[0], argv...).Run()
+	}
 }
 
 func isInArea(x, y int32, area areaRange) bool {
-        if x >= (area.X1) && x < (area.X2) &&
-                y >= (area.Y1) && y < (area.Y2) {
-                return true
-        }
+	if x >= (area.X1) && x < (area.X2) &&
+		y >= (area.Y1) && y < (area.Y2) {
+		return true
+	}
 
-        return false
+	return false
 }
 
 func getEdgeForCommand(cmd string) string {
-        keys := zoneSettings.ListKeys()
+	keys := zoneSettings.ListKeys()
 
-        for _, key := range keys {
-                v := zoneSettings.GetString(key)
-                if v == cmd {
-                        return key
-                }
-        }
+	for _, key := range keys {
+		v := zoneSettings.GetString(key)
+		if v == cmd {
+			return key
+		}
+	}
 
-        return ""
+	return ""
 }
 
 func enableOneEdge(edge string) {
-        switch edge {
-        case "left-up":
-                edgeActionMap["BottomLeft"] = ""
-                edgeActionMap["TopRight"] = ""
-                edgeActionMap["BottomRight"] = ""
-        case "left-down":
-                edgeActionMap["TopLeft"] = ""
-                edgeActionMap["TopRight"] = ""
-                edgeActionMap["BottomRight"] = ""
-        case "right-up":
-                edgeActionMap["TopLeft"] = ""
-                edgeActionMap["BottomLeft"] = ""
-                edgeActionMap["BottomRight"] = ""
-        case "right-down":
-                edgeActionMap["TopLeft"] = ""
-                edgeActionMap["BottomLeft"] = ""
-                edgeActionMap["TopRight"] = ""
-        }
+	switch edge {
+	case "left-up":
+		edgeActionMap["BottomLeft"] = ""
+		edgeActionMap["TopRight"] = ""
+		edgeActionMap["BottomRight"] = ""
+	case "left-down":
+		edgeActionMap["TopLeft"] = ""
+		edgeActionMap["TopRight"] = ""
+		edgeActionMap["BottomRight"] = ""
+	case "right-up":
+		edgeActionMap["TopLeft"] = ""
+		edgeActionMap["BottomLeft"] = ""
+		edgeActionMap["BottomRight"] = ""
+	case "right-down":
+		edgeActionMap["TopLeft"] = ""
+		edgeActionMap["BottomLeft"] = ""
+		edgeActionMap["TopRight"] = ""
+	}
 }
 
 func newManager() *Manager {
-        m := &Manager{}
+	m := &Manager{}
 
-        registerZoneArea()
-        m.listenSignal()
+	registerZoneArea()
+	m.listenSignal()
 
-        return m
+	return m
 }
