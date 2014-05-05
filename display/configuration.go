@@ -274,12 +274,21 @@ func mergeConfigMonitor(dpy *Display, a *ConfigMonitor, b *ConfigMonitor) *Confi
 		}
 	}
 	c.Width, c.Height = getMatchedSize(ops)
+
+	var matchedMode Modes
 	for _, minfo := range GetDisplayInfo().modes {
 		if minfo.Width == c.Width && minfo.Height == c.Height {
-			c.bestMode = randr.Mode(minfo.ID)
-			c.currentMode = c.bestMode
+			matchedMode = append(matchedMode, minfo)
 		}
 	}
+	if len(matchedMode) > 0 {
+		sort.Sort(matchedMode)
+		c.bestMode = randr.Mode(matchedMode[0].ID)
+		c.currentMode = c.bestMode
+	} else {
+		Logger.Error("Can't find matched mode", a, b)
+	}
+
 	c.Enabled = true
 	return c
 }

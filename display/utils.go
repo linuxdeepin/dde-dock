@@ -70,7 +70,11 @@ func (m Modes) Len() int {
 	return len(m)
 }
 func (m Modes) Less(i, j int) bool {
-	return m[i].Width+m[i].Height > m[j].Width+m[j].Height
+	if m[i].Width == m[j].Width && m[i].Height == m[j].Height {
+		return m[i].Rate > m[j].Rate
+	} else {
+		return m[i].Width+m[i].Height > m[j].Width+m[j].Height
+	}
 }
 func (m Modes) Swap(i, j int) {
 	m[i], m[j] = m[j], m[i]
