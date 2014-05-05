@@ -647,13 +647,14 @@ func updateSourceOutputInputLevel(_index C.int,
 }
 
 func (audio *Audio) updateSinks() int32 {
-	n := len(audio.sinks)
-	audio.Sinks = make([]*Sink, n)
-	i := 0
+	sinks := []*Sink{}
 	for _, value := range audio.sinks {
-		audio.Sinks[i] = value
-		i++
+		if value == nil {
+			continue
+		}
+		sinks = append(sinks, value)
 	}
+	audio.Sinks = sinks
 	dbus.NotifyChange(audio, "Sinks")
 	return 0
 }
@@ -812,8 +813,14 @@ func (audio *Audio) getSinks() map[int]*Sink {
 
 func (audio *Audio) GetDefaultSink() *Sink {
 	sinks := audio.Sinks
+	l := len(sinks)
 	defaultN := audio.DefaultSink
+	fmt.Printf("<<<<< sinks len: %d, defaultN: %d\n", l, defaultN)
+	if defaultN >= int32(l) {
+		return nil
+	}
 	defaultSink := sinks[int(defaultN)]
+	fmt.Println(">>>> get default sink")
 	return defaultSink
 }
 
