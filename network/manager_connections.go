@@ -295,22 +295,6 @@ func (m *Manager) ActivateConnection(uuid string, devPath dbus.ObjectPath) (err 
 	if err != nil {
 		return
 	}
-
-	// TODO remove
-	// if nmGetConnectionType(cpath) == typeWireless {
-	// 	count := 0
-	// 	for _, tmpcpath := range nmGetConnectionList() {
-	// 		ctype := nmGetConnectionType(tmpcpath)
-	// 		if ctype == typeWireless {
-	// 			count++
-	// 		}
-	// 	}
-	// 	if count <= 1 {
-	// 		logger.Debug("only one access point connection, will be activate by network manager automatic")
-	// 		return
-	// 	}
-	// }
-
 	_, err = nmActivateConnection(cpath, devPath)
 	return
 }

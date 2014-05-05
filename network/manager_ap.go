@@ -181,9 +181,9 @@ func (m *Manager) getAccessPointProperty(apPath dbus.ObjectPath) (apJSON string,
 	return
 }
 
-// TODO return none
-func (m *Manager) ActivateConnectionForAccessPoint(apPath, devPath dbus.ObjectPath) (uuid string, err error) {
-	logger.Debugf("ActivateConnectionForAccessPoint: apPath=%s, devPath=%s", apPath, devPath)
+// ActivateAccessPoint add and activate connection for access point.
+func (m *Manager) ActivateAccessPoint(apPath, devPath dbus.ObjectPath) (uuid string, err error) {
+	logger.Debugf("ActivateAccessPoint: apPath=%s, devPath=%s", apPath, devPath)
 	// if there is no connection for current access point, create one
 	ap, err := nmNewAccessPoint(apPath)
 	if err != nil {
@@ -191,11 +191,11 @@ func (m *Manager) ActivateConnectionForAccessPoint(apPath, devPath dbus.ObjectPa
 	}
 	cpath, ok := nmGetWirelessConnection(ap.Ssid.Get(), devPath)
 	if ok {
-		logger.Debug("activate connection", cpath) // TODO test
+		logger.Debug("activate access point", cpath) // TODO test
 		uuid = nmGetConnectionUuid(cpath)
 		_, err = nmActivateConnection(cpath, devPath)
 	} else {
-		logger.Debug("add and activate connection", cpath) // TODO test
+		logger.Debug("add and activate access point", cpath) // TODO test
 		uuid = newUUID()
 		data := newWirelessConnectionData(string(ap.Ssid.Get()), uuid, []byte(ap.Ssid.Get()), getApSecType(ap))
 		_, _, err = nmAddAndActivateConnection(data, devPath)
@@ -203,29 +203,38 @@ func (m *Manager) ActivateConnectionForAccessPoint(apPath, devPath dbus.ObjectPa
 	return
 }
 
-// TODO remove dbus interface
-// CreateConnectionByAccessPoint create connection for access point and return the uuid.
-func (m *Manager) createConnectionForAccessPoint(apPath dbus.ObjectPath) (uuid string, err error) {
-	logger.Debug("CreateConnectionForAccessPoint: apPath", apPath)
-	uuid, err = m.getConnectionUuidByAccessPoint(apPath)
-	if len(uuid) != 0 {
-		// connection already exists
+func (m *Manager) CreateConnectionForAccessPoint(apPath, devPath dbus.ObjectPath) (session *ConnectionSession, err error) {
+	session, err = NewConnectionSessionByCreate(typeWireless, devPath)
+	if err != nil {
+		logger.Error(err)
 		return
 	}
 
-	// create connection
+	// setup access point data
 	ap, err := nmNewAccessPoint(apPath)
 	if err != nil {
 		return
 	}
-	// TODO FIXME
+	setSettingConnectionId(session.data, string(ap.Ssid.Get()))
+	setSettingWirelessSsid(session.data, []byte(ap.Ssid.Get()))
 	secType := getApSecType(ap)
-	if secType == apSecEap {
-		logger.Debug("ignore wireless connection:", string(ap.Ssid.Get()))
-		return "", dbus.NewNoObjectError(apPath)
+	switch secType {
+	case apSecNone:
+		logicSetSettingVkWirelessSecurityKeyMgmt(session.data, "none")
+	case apSecWep:
+		logicSetSettingVkWirelessSecurityKeyMgmt(session.data, "wep")
+	case apSecPsk:
+		logicSetSettingVkWirelessSecurityKeyMgmt(session.data, "wpa-psk")
+	case apSecEap:
+		logicSetSettingVkWirelessSecurityKeyMgmt(session.data, "wpa-eap")
 	}
 
-	uuid = newWirelessConnection(string(ap.Ssid.Get()), []byte(ap.Ssid.Get()), getApSecType(ap))
+	// install dbus session
+	err = dbus.InstallOnSession(session)
+	if err != nil {
+		logger.Error(err)
+		return
+	}
 	return
 }
 
