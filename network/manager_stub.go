@@ -21,11 +21,6 @@ func (m *Manager) updatePropActiveConnections() {
 	logger.Debug("ActiveConnection:", m.ActiveConnections) // TODO test
 }
 
-func (m *Manager) updatePropActivatingConnection() {
-	// TODO
-	dbus.NotifyChange(m, "ActivatingConnection")
-}
-
 func (m *Manager) updatePropState() {
 	m.State = nmGetState()
 	dbus.NotifyChange(m, "State")

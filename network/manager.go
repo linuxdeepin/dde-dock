@@ -30,8 +30,6 @@ type Manager struct {
 	activeConnections []*activeConnection
 	ActiveConnections string // array of connections that activated and marshaled by json
 
-	ActivatingConnection string // TODO remove
-
 	//update by devices.go
 	WiredDevices    []*deviceOld
 	WirelessDevices []*deviceOld
@@ -83,11 +81,6 @@ func (m *Manager) initManager() {
 	nmManager.ActiveConnections.ConnectChanged(func() {
 		m.updatePropActiveConnections()
 	})
-
-	// TODO need update dbus-factory about network-manager
-	// update property "ActivatingConnection"
-	// m.updatePropActivatingConnection()
-	// nmManager.
 
 	// update property "State"
 	m.updatePropState()
