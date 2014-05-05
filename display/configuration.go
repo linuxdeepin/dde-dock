@@ -219,9 +219,9 @@ func (c *ConfigDisplay) Compare(cfg *ConfigDisplay) bool {
 
 	for _, m1 := range c.Monitors[c.CurrentPlanName] {
 		if m2, ok := cfg.Monitors[c.CurrentPlanName][m1.Name]; ok {
-			return m1.Compare(m2)
-		} else {
-			return false
+			if m1.Compare(m2) == false {
+				return false
+			}
 		}
 	}
 
