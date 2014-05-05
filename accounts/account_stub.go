@@ -25,9 +25,14 @@ import (
 	"dlib/dbus"
 )
 
+const (
+	GUEST_DEFAULT_ICON = USER_ICON_DIR + "1.png"
+)
+
 type AccountManager struct {
 	UserList   []string
 	AllowGuest bool
+	GuestIcon  string
 
 	UserAdded   func(string)
 	UserDeleted func(string)
@@ -65,6 +70,13 @@ func (op *AccountManager) setPropName(name string) {
 			op.AllowGuest = v.(bool)
 			dbus.NotifyChange(op, name)
 		}
+	case "GuestIcon":
+		if icon, ok := op.RandUserIcon(); ok {
+			op.GuestIcon = icon
+		} else {
+			op.GuestIcon = GUEST_DEFAULT_ICON
+		}
+		dbus.NotifyChange(op, name)
 	}
 }
 
@@ -79,6 +91,7 @@ func newAccountManager() *AccountManager {
 
 	m.setPropName("UserList")
 	m.setPropName("AllowGuest")
+	m.setPropName("GuestIcon")
 	m.listenUserListChanged()
 
 	return m
