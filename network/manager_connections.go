@@ -144,6 +144,7 @@ func (m *Manager) getConnectionIndex(conns []*connection, conn *connection) int 
 	return -1
 }
 
+// TODO remove
 // GetSupportedConnectionTypes return all supported connection types
 func (m *Manager) GetSupportedConnectionTypes() (typesJSON string) {
 	typesJSON, _ = marshalJSON(supportedConnectionTypesInfo)
@@ -240,22 +241,6 @@ func (m *Manager) CreateConnection(connType string, devPath dbus.ObjectPath) (se
 
 // EditConnection open a connection through uuid, return ConnectionSession's dbus object path if success.
 func (m *Manager) EditConnection(uuid string, devPath dbus.ObjectPath) (session *ConnectionSession, err error) {
-	// if is read only connection(default system connection created by
-	// network manager), create a new connection
-	// TODO
-	cpath, err := nmGetConnectionByUuid(uuid)
-	if err != nil {
-		return
-	}
-	connData, err := nmGetConnectionData(cpath)
-	if err != nil {
-		return
-	}
-	if getSettingConnectionReadOnly(connData) {
-		logger.Debug("read only connection, create new")
-		return m.CreateConnection(getCustomConnectinoType(connData), devPath)
-	}
-
 	session, err = NewConnectionSessionByOpen(uuid, devPath)
 	if err != nil {
 		logger.Error(err)

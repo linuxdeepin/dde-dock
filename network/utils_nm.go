@@ -194,6 +194,18 @@ func nmGetConnectionData(cpath dbus.ObjectPath) (data connectionData, err error)
 	return
 }
 
+func nmGetConnectionId(cpath dbus.ObjectPath) (id string) {
+	data, err := nmGetConnectionData(cpath)
+	if err != nil {
+		return
+	}
+	id = getSettingConnectionId(data)
+	if len(id) == 0 {
+		logger.Error("get Id of connection failed, id is empty")
+	}
+	return
+}
+
 func nmGetConnectionUuid(cpath dbus.ObjectPath) (uuid string) {
 	data, err := nmGetConnectionData(cpath)
 	if err != nil {
@@ -223,6 +235,13 @@ func nmGetConnectionList() (connections []dbus.ObjectPath) {
 	if err != nil {
 		logger.Error(err)
 		return
+	}
+	return
+}
+
+func nmGetConnectionIds() (ids []string) {
+	for _, cpath := range nmGetConnectionList() {
+		ids = append(ids, nmGetConnectionId(cpath))
 	}
 	return
 }

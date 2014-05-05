@@ -50,33 +50,32 @@ func NewConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 
 	s = doNewConnectionSession(devPath, newUUID())
 
-	// TODO
-	// new connection data, id is left here
 	s.ConnectionType = connectionType
+	id := genConnectionId(s.ConnectionType)
 	switch s.ConnectionType {
 	case typeWired:
-		s.data = newWiredConnectionData("", s.CurrentUUID)
+		s.data = newWiredConnectionData(id, s.CurrentUUID)
 	case typeWireless:
 		// TODO more option, id, eap
-		s.data = newWirelessConnectionData("", s.CurrentUUID, nil, apSecNone)
+		s.data = newWirelessConnectionData(id, s.CurrentUUID, nil, apSecNone)
 	case typeWirelessAdhoc:
-		s.data = newWirelessAdhocConnectionData("", s.CurrentUUID)
+		s.data = newWirelessAdhocConnectionData(id, s.CurrentUUID)
 	case typeWirelessHotspot:
-		s.data = newWirelessHotspotConnectionData("", s.CurrentUUID)
+		s.data = newWirelessHotspotConnectionData(id, s.CurrentUUID)
 	case typePppoe:
-		s.data = newPppoeConnectionData("", s.CurrentUUID)
+		s.data = newPppoeConnectionData(id, s.CurrentUUID)
 	case typeMobile:
-		s.data = newGsmConnectionData("", s.CurrentUUID)
+		s.data = newGsmConnectionData(id, s.CurrentUUID)
 	case typeVpnL2tp:
-		s.data = newVpnL2tpConnectionData("", s.CurrentUUID)
+		s.data = newVpnL2tpConnectionData(id, s.CurrentUUID)
 	case typeVpnOpenconnect:
-		s.data = newVpnOpenconnectConnectionData("", s.CurrentUUID)
+		s.data = newVpnOpenconnectConnectionData(id, s.CurrentUUID)
 	case typeVpnPptp:
-		s.data = newVpnPptpConnectionData("", s.CurrentUUID)
+		s.data = newVpnPptpConnectionData(id, s.CurrentUUID)
 	case typeVpnVpnc:
-		s.data = newVpnVpncConnectionData("", s.CurrentUUID)
+		s.data = newVpnVpncConnectionData(id, s.CurrentUUID)
 	case typeVpnOpenvpn:
-		s.data = newVpnOpenvpnConnectionData("", s.CurrentUUID)
+		s.data = newVpnOpenvpnConnectionData(id, s.CurrentUUID)
 	}
 
 	s.updatePropConnectionType()

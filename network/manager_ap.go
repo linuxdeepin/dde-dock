@@ -230,23 +230,7 @@ func (m *Manager) createConnectionForAccessPoint(apPath dbus.ObjectPath) (uuid s
 }
 
 // TODO remove
-func (m *Manager) editConnectionForAccessPoint(apPath dbus.ObjectPath, devPath dbus.ObjectPath) (session *ConnectionSession, err error) {
-	// // if is read only connection(default system connection created by
-	// // network manager), create a new connection
-	// // TODO
-	// cpath, err := nmGetConnectionByUuid(uuid)
-	// if err != nil {
-	// 	return
-	// }
-	// connData, err := nmGetConnectionData(cpath)
-	// if err != nil {
-	// 	return
-	// }
-	// if getSettingConnectionReadOnly(connData) {
-	// 	logger.Debug("read only connection, create new")
-	// 	return m.CreateConnection(getCustomConnectinoType(connData), devPath)
-	// }
-
+func (m *Manager) editConnectionForAccessPoint(apPath, devPath dbus.ObjectPath) (session *ConnectionSession, err error) {
 	// session, err = NewConnectionSessionByOpen(uuid, devPath)
 	// if err != nil {
 	// 	logger.Error(err)

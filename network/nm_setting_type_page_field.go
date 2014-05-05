@@ -2,6 +2,7 @@ package main
 
 import (
 	"dlib"
+	"strconv"
 )
 
 // device type
@@ -204,6 +205,46 @@ func getRealFieldName(name string) (realName string) {
 		realName = fieldVpn
 	case NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME:
 		realName = fieldVpn
+	}
+	return
+}
+
+func genConnectionId(connType string) (id string) {
+	var idPrefix string
+	switch connType {
+	default:
+		idPrefix = dlib.Tr("Connection")
+	case typeWired:
+		idPrefix = dlib.Tr("Wired Connection")
+	case typeWireless:
+		idPrefix = dlib.Tr("Wireless Connection")
+	case typeWirelessAdhoc:
+		idPrefix = dlib.Tr("Wireless Ad-Hoc")
+	case typeWirelessHotspot:
+		idPrefix = dlib.Tr("Wireless Ap-Hotspot")
+	case typePppoe:
+		idPrefix = dlib.Tr("PPPoE Connection")
+	case typeMobile:
+		idPrefix = dlib.Tr("Mobile Connection")
+	case typeVpn:
+		idPrefix = dlib.Tr("VPN Connection")
+	case typeVpnL2tp:
+		idPrefix = dlib.Tr("VPN L2TP")
+	case typeVpnOpenconnect:
+		idPrefix = dlib.Tr("VPN OpenConnect")
+	case typeVpnOpenvpn:
+		idPrefix = dlib.Tr("VPN OpenVPN")
+	case typeVpnPptp:
+		idPrefix = dlib.Tr("VPN PPTP")
+	case typeVpnVpnc:
+		idPrefix = dlib.Tr("VPN VPNC")
+	}
+	allIds := nmGetConnectionIds()
+	for i := 1; ; i++ {
+		id = idPrefix + " " + strconv.Itoa(i)
+		if !isStringInArray(id, allIds) {
+			break
+		}
 	}
 	return
 }
