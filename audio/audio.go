@@ -7,6 +7,7 @@ package main
 import "C"
 
 import (
+	"dbus/com/deepin/daemon/keybinding"
 	"dlib"
 	"dlib/dbus"
 	"dlib/logger"
@@ -21,7 +22,8 @@ import (
 const _VOLUME_STEP = 10
 
 var (
-	Logger = logger.NewLogger("audio").SetLogLevel(logger.LEVEL_INFO)
+	Logger      = logger.NewLogger("audio").SetLogLevel(logger.LEVEL_INFO)
+	mediakeyObj *keybinding.MediaKey
 )
 
 type Audio struct {
@@ -1289,7 +1291,15 @@ func main() {
 		Logger.Warning("There already has an Audio daemon running.")
 		return
 	}
-	audio, err := NewAudio()
+
+	var err error
+	mediakeyObj, err = keybinding.NewMediaKey("com.deepin.daemon.KeyBinding", "/com/deepin/daemon/MediaKey")
+	if err != nil {
+		Logger.Error("Can't create keybinding.MediaKey! Mediakey support will be disabled", err)
+		return
+	}
+
+	audio, err = NewAudio()
 	if err != nil {
 		Logger.Fatal(err)
 	}
