@@ -47,6 +47,7 @@ func (m *Manager) updatePropWirelessDevices() {
 func (m *Manager) updatePropDevices() {
 	m.Devices, _ = marshalJSON(m.devices)
 	dbus.NotifyChange(m, "Devices")
+	logger.Debug("updatePropDevices", m.Devices) // TODO test
 }
 
 // TODO remove

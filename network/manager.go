@@ -33,8 +33,8 @@ type Manager struct {
 	ActivatingConnection string // TODO
 
 	//update by devices.go
-	WiredDevices    []*device
-	WirelessDevices []*device
+	WiredDevices    []*deviceOld
+	WirelessDevices []*deviceOld
 	devices         map[string][]*device
 	Devices         string // array of device objects and marshaled by json
 

@@ -22,6 +22,40 @@ const (
 	deviceTypeBridge     = "bridge"
 )
 
+func getDeviceTypeName(devType uint32) (devName string) {
+	switch devType {
+	case NM_DEVICE_TYPE_ETHERNET:
+		return deviceTypeEthernet
+	case NM_DEVICE_TYPE_WIFI:
+		return deviceTypeWifi
+	case NM_DEVICE_TYPE_UNUSED1:
+		return deviceTypeUnused1
+	case NM_DEVICE_TYPE_UNUSED2:
+		return deviceTypeUnused2
+	case NM_DEVICE_TYPE_BT:
+		return deviceTypeBt
+	case NM_DEVICE_TYPE_OLPC_MESH:
+		return deviceTypeOlpcMesh
+	case NM_DEVICE_TYPE_WIMAX:
+		return deviceTypeWimax
+	case NM_DEVICE_TYPE_MODEM:
+		return deviceTypeModem
+	case NM_DEVICE_TYPE_INFINIBAND:
+		return deviceTypeInfiniband
+	case NM_DEVICE_TYPE_BOND:
+		return deviceTypeBond
+	case NM_DEVICE_TYPE_VLAN:
+		return deviceTypeVlan
+	case NM_DEVICE_TYPE_ADSL:
+		return deviceTypeAdsl
+	case NM_DEVICE_TYPE_BRIDGE:
+		return deviceTypeBridge
+	default:
+		logger.Error("unknown device type", devType)
+	}
+	return deviceTypeUnknown
+}
+
 // connection type
 const (
 	typeUnknown         = "unknown"

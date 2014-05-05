@@ -45,7 +45,7 @@ func (m *Manager) initConnectionManage() {
 }
 
 func (m *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPath) {
-	logger.Debugf("handleConnectionChanged: operation %d, path %s", operation, path) // TODO test
+	// logger.Debugf("handleConnectionChanged: operation %d, path %s", operation, path) // TODO test
 	conn := connection{Path: path}
 	switch operation {
 	case opAdded:

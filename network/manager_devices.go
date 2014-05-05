@@ -3,18 +3,68 @@ package main
 import nm "dbus/org/freedesktop/networkmanager"
 import "dlib/dbus"
 
+type deviceOld struct {
+	Path  dbus.ObjectPath
+	State uint32
+}
 type device struct {
-	Path   dbus.ObjectPath
-	State  uint32
-	HwAddr string
+	Path          dbus.ObjectPath
+	State         uint32
+	HwAddr        string
+	ActiveAp      dbus.ObjectPath // used for wireless device
+	nmDevType     uint32
+	nmDev         *nm.Device
+	nmDevWireless *nm.DeviceWireless
 }
 
-func newDevice(nmDev *nm.Device) *device {
-	return &device{
-		Path:   nmDev.Path,
-		State:  nmDev.State.Get(),
-		HwAddr: getDeviceAddress(nmDev.Path, nmDev.DeviceType.Get()),
+func (m *Manager) newDeviceOld(nmDev *nm.Device) (dev *deviceOld) {
+	return &deviceOld{
+		Path:  nmDev.Path,
+		State: nmDev.State.Get(),
 	}
+}
+func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device) {
+	nmDev, err := nmNewDevice(devPath)
+	if err != nil {
+		return
+	}
+	dev = &device{
+		Path:      nmDev.Path,
+		State:     nmDev.State.Get(),
+		nmDev:     nmDev,
+		nmDevType: nmDev.DeviceType.Get(),
+	}
+
+	// dispatch for different device types
+	switch dev.nmDevType {
+	case NM_DEVICE_TYPE_ETHERNET:
+		if nmDevWired, err := nmNewDeviceWired(dev.Path); err == nil {
+			dev.HwAddr = nmDevWired.HwAddress.Get()
+		}
+	case NM_DEVICE_TYPE_WIFI:
+		if nmDevWireless, err := nmNewDeviceWireless(dev.Path); err == nil {
+			dev.HwAddr = nmDevWireless.HwAddress.Get()
+			dev.nmDevWireless = nmDevWireless
+
+			// connect property, about wireless active access point
+			dev.ActiveAp = nmDevWireless.ActiveAccessPoint.Get()
+			dev.nmDevWireless.ActiveAccessPoint.ConnectChanged(func() {
+				dev.ActiveAp = nmDevWireless.ActiveAccessPoint.Get()
+				m.updatePropDevices()
+			})
+		}
+	}
+
+	// connect signal, about device state
+	dev.nmDev.ConnectStateChanged(func(newState uint32, old_state uint32, reason uint32) {
+		dev.State = newState
+		if m.DeviceStateChanged != nil {
+			m.DeviceStateChanged(string(nmDev.Path), newState)
+			m.updatePropDevices()
+		}
+	})
+
+	return
 }
 
 func getDeviceAddress(devPath dbus.ObjectPath, devType uint32) (hwAddr string) {
@@ -24,15 +74,26 @@ func getDeviceAddress(devPath dbus.ObjectPath, devType uint32) (hwAddr string) {
 		if err != nil {
 			return
 		}
-		// defer func() { nm.DestroyDeviceWired(dev) }() // TODO remove
+		defer func() { nm.DestroyDeviceWired(dev) }()
 		hwAddr = dev.HwAddress.Get()
 	case NM_DEVICE_TYPE_WIFI:
 		dev, err := nmNewDeviceWireless(devPath)
 		if err != nil {
 			return
 		}
-		// defer func() { nm.DestroyDeviceWireless(dev) }() // TODO remove
+		defer func() { nm.DestroyDeviceWireless(dev) }()
 		hwAddr = dev.HwAddress.Get()
+	}
+	return
+}
+
+func getActiveAccessPoint(devPath dbus.ObjectPath, devType uint32) (activeAp dbus.ObjectPath) {
+	if devType == NM_DEVICE_TYPE_WIFI {
+		dev, err := nmNewDeviceWireless(devPath)
+		if err != nil {
+			return
+		}
+		activeAp = dev.ActiveAccessPoint.Get()
 	}
 	return
 }
@@ -58,6 +119,7 @@ func (m *Manager) handleDeviceChanged(operation int32, devPath dbus.ObjectPath) 
 	logger.Debugf("handleDeviceChanged: operation %d, devPath %s", operation, devPath)
 	switch operation {
 	case opAdded:
+		// TODO remove
 		nmDev, err := nmNewDevice(devPath)
 		if err != nil {
 			return
@@ -65,75 +127,71 @@ func (m *Manager) handleDeviceChanged(operation int32, devPath dbus.ObjectPath) 
 		switch nmDev.DeviceType.Get() {
 		case NM_DEVICE_TYPE_ETHERNET:
 			m.addWiredDevice(nmDev)
-			m.devices[deviceTypeEthernet] = m.addDevice(m.devices[deviceTypeEthernet], nmDev)
 		case NM_DEVICE_TYPE_WIFI:
 			m.addWirelessDevice(nmDev)
-			m.devices[deviceTypeWifi] = m.addDevice(m.devices[deviceTypeWifi], nmDev)
-		case NM_DEVICE_TYPE_UNUSED1:
-			m.devices[deviceTypeUnused1] = m.addDevice(m.devices[deviceTypeUnused1], nmDev)
-		case NM_DEVICE_TYPE_UNUSED2:
-			m.devices[deviceTypeUnused2] = m.addDevice(m.devices[deviceTypeUnused2], nmDev)
-		case NM_DEVICE_TYPE_BT:
-			m.devices[deviceTypeBt] = m.addDevice(m.devices[deviceTypeBt], nmDev)
-		case NM_DEVICE_TYPE_OLPC_MESH:
-			m.devices[deviceTypeOlpcMesh] = m.addDevice(m.devices[deviceTypeOlpcMesh], nmDev)
-		case NM_DEVICE_TYPE_WIMAX:
-			m.devices[deviceTypeWimax] = m.addDevice(m.devices[deviceTypeWimax], nmDev)
-		case NM_DEVICE_TYPE_MODEM:
-			m.devices[deviceTypeModem] = m.addDevice(m.devices[deviceTypeModem], nmDev)
-		case NM_DEVICE_TYPE_INFINIBAND:
-			m.devices[deviceTypeInfiniband] = m.addDevice(m.devices[deviceTypeInfiniband], nmDev)
-		case NM_DEVICE_TYPE_BOND:
-			m.devices[deviceTypeBond] = m.addDevice(m.devices[deviceTypeBond], nmDev)
-		case NM_DEVICE_TYPE_VLAN:
-			m.devices[deviceTypeVlan] = m.addDevice(m.devices[deviceTypeVlan], nmDev)
-		case NM_DEVICE_TYPE_ADSL:
-			m.devices[deviceTypeAdsl] = m.addDevice(m.devices[deviceTypeAdsl], nmDev)
-		case NM_DEVICE_TYPE_BRIDGE:
-			m.devices[deviceTypeBridge] = m.addDevice(m.devices[deviceTypeBridge], nmDev)
-		default:
-			logger.Error("unknown device type", nmDev.DeviceType.Get())
 		}
-		m.updatePropDevices()
+		m.addDevice(devPath)
 	case opRemoved:
-		if m.isDeviceExists(m.WiredDevices, devPath) {
-			m.WiredDevices = m.removeDevice(m.WiredDevices, devPath)
-		} else if m.isDeviceExists(m.WirelessDevices, devPath) {
-			m.WirelessDevices = m.removeDevice(m.WirelessDevices, devPath)
+		if m.isDeviceExistsOld(m.WiredDevices, devPath) {
+			m.WiredDevices = m.doRemoveDeviceOld(m.WiredDevices, devPath)
+		} else if m.isDeviceExistsOld(m.WirelessDevices, devPath) {
+			m.WirelessDevices = m.doRemoveDeviceOld(m.WirelessDevices, devPath)
 			logger.Debug("WirelessRemoved..")
 		}
-		for devType, devs := range m.devices {
-			if m.isDeviceExists(devs, devPath) {
-				m.devices[devType] = m.removeDevice(devs, devPath)
-				break
-			}
-		}
-		m.updatePropDevices()
+		m.removeDevice(devPath)
 	default:
 		logger.Error("didn't support operation")
 	}
 }
-func (m *Manager) addDevice(devs []*device, nmDev *nm.Device) []*device {
-	dev := newDevice(nmDev)
-	if m.isDeviceExists(devs, nmDev.Path) {
+
+func (m *Manager) addDevice(devPath dbus.ObjectPath) {
+	dev := m.newDevice(devPath)
+
+	// // connect signal about device state
+	// nmDev.ConnectStateChanged(func(newState uint32, old_state uint32, reason uint32) {
+	// 	dev.State = newState
+	// 	if m.DeviceStateChanged != nil {
+	// 		m.DeviceStateChanged(string(nmDev.Path), newState)
+	// 		m.updatePropDevices()
+	// 	}
+	// })
+
+	devName := getDeviceTypeName(dev.nmDevType)
+	m.devices[devName] = m.doAddDevice(m.devices[devName], dev)
+
+	m.updatePropDevices()
+}
+func (m *Manager) doAddDevice(devs []*device, dev *device) []*device {
+	if m.isDeviceExists(devs, dev.Path) {
 		// device maybe repeat added
 		return devs
 	}
-
-	// connect signal DeviceStateChanged()
-	nmDev.ConnectStateChanged(func(newState uint32, old_state uint32, reason uint32) {
-		dev.State = newState
-		if m.DeviceStateChanged != nil {
-			m.DeviceStateChanged(string(nmDev.Path), newState)
-			m.updatePropDevices()
-		}
-	})
 	devs = append(devs, dev)
 	return devs
 }
+
+// func (m *Manager) addDevice(devs []*device, nmDev *nm.Device) []*device {
+// 	dev := newDevice(nmDev)
+// 	if m.isDeviceExists(devs, nmDev.Path) {
+// 		// device maybe repeat added
+// 		return devs
+// 	}
+
+// 	// TODO
+// 	// connect signals, state changed and wireless active access point
+// 	nmDev.ConnectStateChanged(func(newState uint32, old_state uint32, reason uint32) {
+// 		dev.State = newState
+// 		if m.DeviceStateChanged != nil {
+// 			m.DeviceStateChanged(string(nmDev.Path), newState)
+// 			m.updatePropDevices()
+// 		}
+// 	})
+// 	devs = append(devs, dev)
+// 	return devs
+// }
 func (m *Manager) addWiredDevice(nmDev *nm.Device) {
-	wiredDevice := newDevice(nmDev)
-	if m.isDeviceExists(m.WiredDevices, nmDev.Path) {
+	wiredDevice := m.newDeviceOld(nmDev)
+	if m.isDeviceExistsOld(m.WiredDevices, nmDev.Path) {
 		// device maybe repeat added
 		return
 	}
@@ -146,11 +204,11 @@ func (m *Manager) addWiredDevice(nmDev *nm.Device) {
 		}
 	})
 	m.WiredDevices = append(m.WiredDevices, wiredDevice)
-	m.updatePropWiredDevices()
+	// m.updatePropWiredDevices()
 }
 func (m *Manager) addWirelessDevice(nmDev *nm.Device) {
-	wirelessDevice := newDevice(nmDev)
-	if m.isDeviceExists(m.WirelessDevices, nmDev.Path) {
+	wirelessDevice := m.newDeviceOld(nmDev)
+	if m.isDeviceExistsOld(m.WirelessDevices, nmDev.Path) {
 		// device maybe repeat added
 		return
 	}
@@ -189,14 +247,31 @@ func (m *Manager) addWirelessDevice(nmDev *nm.Device) {
 	m.WirelessDevices = append(m.WirelessDevices, wirelessDevice)
 	m.updatePropWirelessDevices()
 }
-
+func (m *Manager) removeDevice(path dbus.ObjectPath) {
+	for devType, devs := range m.devices {
+		if m.isDeviceExists(devs, path) {
+			m.devices[devType] = m.doRemoveDevice(devs, path)
+			break
+		}
+	}
+	m.updatePropDevices()
+}
+func (m *Manager) doRemoveDevice(devs []*device, path dbus.ObjectPath) []*device {
+	i := m.getDeviceIndex(devs, path)
+	if i < 0 {
+		return devs
+	}
+	copy(devs[i:], devs[i+1:])
+	devs[len(devs)-1] = nil
+	devs = devs[:len(devs)-1]
+	return devs
+}
 func (m *Manager) isDeviceExists(devs []*device, path dbus.ObjectPath) bool {
 	if m.getDeviceIndex(devs, path) >= 0 {
 		return true
 	}
 	return false
 }
-
 func (m *Manager) getDeviceIndex(devs []*device, path dbus.ObjectPath) int {
 	for i, d := range devs {
 		if d.Path == path {
@@ -206,8 +281,8 @@ func (m *Manager) getDeviceIndex(devs []*device, path dbus.ObjectPath) int {
 	return -1
 }
 
-func (m *Manager) removeDevice(devs []*device, path dbus.ObjectPath) []*device {
-	i := m.getDeviceIndex(devs, path)
+func (m *Manager) doRemoveDeviceOld(devs []*deviceOld, path dbus.ObjectPath) []*deviceOld {
+	i := m.getDeviceIndexOld(devs, path)
 	if i < 0 {
 		return devs
 	}
@@ -215,6 +290,20 @@ func (m *Manager) removeDevice(devs []*device, path dbus.ObjectPath) []*device {
 	devs[len(devs)-1] = nil
 	devs = devs[:len(devs)-1]
 	return devs
+}
+func (m *Manager) isDeviceExistsOld(devs []*deviceOld, path dbus.ObjectPath) bool {
+	if m.getDeviceIndexOld(devs, path) >= 0 {
+		return true
+	}
+	return false
+}
+func (m *Manager) getDeviceIndexOld(devs []*deviceOld, path dbus.ObjectPath) int {
+	for i, d := range devs {
+		if d.Path == path {
+			return i
+		}
+	}
+	return -1
 }
 
 // TODO
