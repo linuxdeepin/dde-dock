@@ -30,13 +30,15 @@ type Manager struct {
 	activeConnections []activeConnection
 	ActiveConnections string // array of connections that activated and marshaled by json
 
-	ActivatingConnection string // TODO
+	ActivatingConnection string // TODO remove
 
 	//update by devices.go
 	WiredDevices    []*deviceOld
 	WirelessDevices []*deviceOld
 	devices         map[string][]*device
 	Devices         string // array of device objects and marshaled by json
+	accessPoints    map[dbus.ObjectPath][]*accessPoint
+	// AccessPoints    string // array of access point objects and marshaled by json
 
 	//update by connections.go
 	WiredConnections    []string

@@ -100,6 +100,7 @@ func getActiveAccessPoint(devPath dbus.ObjectPath, devType uint32) (activeAp dbu
 
 func (m *Manager) initDeviceManage() {
 	m.devices = make(map[string][]*device)
+	m.accessPoints = make(map[dbus.ObjectPath][]*accessPoint)
 	nmManager.ConnectDeviceAdded(func(path dbus.ObjectPath) {
 		m.handleDeviceChanged(opAdded, path)
 	})
@@ -170,6 +171,7 @@ func (m *Manager) doAddDevice(devs []*device, dev *device) []*device {
 	return devs
 }
 
+// TODO remove
 // func (m *Manager) addDevice(devs []*device, nmDev *nm.Device) []*device {
 // 	dev := newDevice(nmDev)
 // 	if m.isDeviceExists(devs, nmDev.Path) {
@@ -223,24 +225,15 @@ func (m *Manager) addWirelessDevice(nmDev *nm.Device) {
 	})
 
 	// connect signal AccessPointAdded() and AccessPointRemoved()
+	for _, apPath := range nmGetAccessPoints(nmDev.Path) {
+		m.addAccessPoint(nmDev.Path, apPath)
+	}
 	if devWireless, err := nmNewDeviceWireless(nmDev.Path); err == nil {
 		devWireless.ConnectAccessPointAdded(func(apPath dbus.ObjectPath) {
-			if m.AccessPointAdded != nil {
-				if ap, err := NewAccessPoint(apPath); err == nil {
-					if len(ap.Ssid) == 0 {
-						// ignore hidden access point
-						return
-					}
-					apJSON, _ := marshalJSON(ap)
-					m.AccessPointAdded(string(nmDev.Path), apJSON)
-				}
-			}
+			m.addAccessPoint(nmDev.Path, apPath)
 		})
 		devWireless.ConnectAccessPointRemoved(func(apPath dbus.ObjectPath) {
-			if m.AccessPointRemoved != nil {
-				apJSON, _ := marshalJSON(accessPoint{Path: apPath})
-				m.AccessPointRemoved(string(nmDev.Path), apJSON)
-			}
+			m.removeAccessPoint(nmDev.Path, apPath)
 		})
 	}
 

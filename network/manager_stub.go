@@ -14,13 +14,6 @@ func (m *Manager) updatePropActiveConnections() {
 				State:   aconn.State.Get(),
 			}
 			m.activeConnections = append(m.activeConnections, aconnObj)
-			// TODO
-			// aconn.State.ConnectChanged(func() {
-			// 	aconnObj.State = aconn.State.Get()
-			// 	m.ActiveConnections, _ = marshalJSON(m.activeConnections)
-			// 	// dbus.NotifyChange(m, "ActiveConnections")
-			// 	logger.Debug("ActiveConnection:", m.ActiveConnections)
-			// })
 		}
 	}
 	m.ActiveConnections, _ = marshalJSON(m.activeConnections)
@@ -48,6 +41,14 @@ func (m *Manager) updatePropDevices() {
 	m.Devices, _ = marshalJSON(m.devices)
 	dbus.NotifyChange(m, "Devices")
 	logger.Debug("updatePropDevices", m.Devices) // TODO test
+}
+
+// TODO
+func (m *Manager) updatePropAccessPoints() {
+	// m.AccessPoints, _ = marshalJSON(m.accessPoints)
+	// dbus.NotifyChange(m, "AccessPoints")
+	// testJSON, _ := marshalJSON(m.accessPoints)
+	// logger.Debug("updatePropAccessPoints", testJSON) // TODO test
 }
 
 // TODO remove

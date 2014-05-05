@@ -150,6 +150,18 @@ func nmGetActiveConnections() (apaths []dbus.ObjectPath) {
 	return
 }
 
+func nmGetAccessPoints(devPath dbus.ObjectPath) (apPaths []dbus.ObjectPath) {
+	dev, err := nmNewDeviceWireless(devPath)
+	if err != nil {
+		return
+	}
+	apPaths, err = dev.GetAccessPoints()
+	if err != nil {
+		logger.Error(err)
+	}
+	return
+}
+
 func nmGetState() (state uint32) {
 	state = nmManager.State.Get()
 	return

@@ -20,25 +20,10 @@ type accessPoint struct {
 	SecuredInEap bool
 	Strength     uint8
 	Path         dbus.ObjectPath
+	nmAp         *nm.AccessPoint
 }
 
-func NewAccessPoint(apPath dbus.ObjectPath) (ap accessPoint, err error) {
-	calcStrength := func(s uint8) uint8 {
-		switch {
-		case s <= 10:
-			return 0
-		case s <= 25:
-			return 25
-		case s <= 50:
-			return 50
-		case s <= 75:
-			return 75
-		case s <= 100:
-			return 100
-		}
-		return 0
-	}
-
+func newAccessPoint(apPath dbus.ObjectPath) (ap accessPoint, err error) {
 	nmAp, err := nmNewAccessPoint(apPath)
 	if err != nil {
 		return
@@ -48,10 +33,27 @@ func NewAccessPoint(apPath dbus.ObjectPath) (ap accessPoint, err error) {
 		Ssid:         string(nmAp.Ssid.Get()),
 		Secured:      getApSecType(nmAp) != apSecNone,
 		SecuredInEap: getApSecType(nmAp) == apSecEap,
-		Strength:     calcStrength(nmAp.Strength.Get()),
+		Strength:     calcApStrength(nmAp.Strength.Get()),
 		Path:         nmAp.Path,
+		nmAp:         nmAp,
 	}
 	return
+}
+
+func calcApStrength(s uint8) uint8 {
+	switch {
+	case s <= 10:
+		return 0
+	case s <= 25:
+		return 25
+	case s <= 50:
+		return 50
+	case s <= 75:
+		return 75
+	case s <= 100:
+		return 100
+	}
+	return 0
 }
 
 func getApSecType(ap *nm.AccessPoint) apSecType {
@@ -76,19 +78,86 @@ func doParseApSecType(flags, wpaFlags, rsnFlags uint32) apSecType {
 	return r
 }
 
+func (m *Manager) addAccessPoint(devPath, apPath dbus.ObjectPath) {
+	if m.isAccessPointExists(devPath, apPath) {
+		return
+	}
+	ap, err := newAccessPoint(apPath)
+	if err != nil {
+		return
+	}
+	if len(ap.Ssid) == 0 {
+		// ignore hidden access point
+		return
+	}
+
+	// connect property, access point strength
+	ap.nmAp.Strength.ConnectChanged(func() {
+		ap.Strength = calcApStrength(ap.nmAp.Strength.Get())
+		if m.AccessPointPropertiesChanged != nil {
+			apJSON, _ := marshalJSON(ap)
+			logger.Debug(string(devPath), apJSON) // TODO test
+			m.AccessPointPropertiesChanged(string(devPath), apJSON)
+		}
+		m.updatePropAccessPoints()
+	})
+
+	// emit signal
+	if m.AccessPointAdded != nil {
+		apJSON, _ := marshalJSON(ap)
+		m.AccessPointAdded(string(devPath), apJSON)
+	}
+	m.accessPoints[devPath] = append(m.accessPoints[devPath], &ap)
+	m.updatePropAccessPoints()
+}
+func (m *Manager) removeAccessPoint(devPath, apPath dbus.ObjectPath) {
+	// emit signal
+	if m.AccessPointRemoved != nil {
+		apJSON, _ := marshalJSON(accessPoint{Path: apPath})
+		m.AccessPointRemoved(string(devPath), apJSON)
+	}
+	m.doRemoveAccessPoint(devPath, apPath)
+	m.updatePropAccessPoints()
+}
+func (m *Manager) doRemoveAccessPoint(devPath, apPath dbus.ObjectPath) {
+	i := m.getAccessPointIndex(devPath, apPath)
+	if i < 0 {
+		return
+	}
+	aps := m.accessPoints[devPath]
+	copy(aps[i:], aps[i+1:])
+	aps[len(aps)-1] = nil
+	aps = aps[:len(aps)-1]
+	m.accessPoints[devPath] = aps
+}
+func (m *Manager) isAccessPointExists(devPath, apPath dbus.ObjectPath) bool {
+	if m.getAccessPointIndex(devPath, apPath) >= 0 {
+		return true
+	}
+	return false
+}
+func (m *Manager) getAccessPointIndex(devPath, apPath dbus.ObjectPath) int {
+	for i, ap := range m.accessPoints[devPath] {
+		if ap.Path == apPath {
+			return i
+		}
+	}
+	return -1
+}
+
 // GetAccessPoints return all access points object which marshaled by json.
 func (m *Manager) GetAccessPoints(path dbus.ObjectPath) (apsJSON string, err error) {
-	dev, err := nmNewDeviceWireless(path)
+	aps, err := m.doGetAccessPoints(path)
 	if err != nil {
 		return
 	}
-	apPaths, err := dev.GetAccessPoints()
-	if err != nil {
-		return
-	}
-	aps := []accessPoint{}
+	apsJSON, err = marshalJSON(aps)
+	return
+}
+func (m *Manager) doGetAccessPoints(devPath dbus.ObjectPath) (aps []accessPoint, err error) {
+	apPaths := nmGetAccessPoints(devPath)
 	for _, path := range apPaths {
-		ap, err := NewAccessPoint(path)
+		ap, err := newAccessPoint(path)
 		if err != nil {
 			continue
 		}
@@ -98,15 +167,13 @@ func (m *Manager) GetAccessPoints(path dbus.ObjectPath) (apsJSON string, err err
 		}
 		aps = append(aps, ap)
 	}
-	// TODO append available connections
-	apsJSON, err = marshalJSON(aps)
 	return
 }
 
 // TODO remove
 // GetAccessPointProperty return access point object which marshaled by json.
 func (m *Manager) getAccessPointProperty(apPath dbus.ObjectPath) (apJSON string, err error) {
-	ap, err := NewAccessPoint(apPath)
+	ap, err := newAccessPoint(apPath)
 	if err != nil {
 		return
 	}
