@@ -4,7 +4,6 @@ import "github.com/BurntSushi/xgb/xproto"
 import "github.com/BurntSushi/xgb/randr"
 import "github.com/BurntSushi/xgb/render"
 import "github.com/BurntSushi/xgb"
-import "fmt"
 import "os/exec"
 import "math"
 
@@ -13,9 +12,9 @@ var backlightAtom = getAtom(xcon, "Backlight")
 func runCode(code string) bool {
 	err := exec.Command("sh", "-c", code).Run()
 	if err != nil {
-		fmt.Println("Run", code, "failed:", err)
+		Logger.Debug("Run", code, "failed:", err)
 	} else {
-		fmt.Println("RunCodeOK:", code)
+		Logger.Debug("RunCodeOK:", code)
 	}
 	return true
 }

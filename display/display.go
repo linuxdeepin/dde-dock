@@ -66,6 +66,7 @@ var GetDisplay = func() func() *Display {
 }()
 
 type DisplayInfo struct {
+	locker         sync.Mutex
 	modes          map[randr.Mode]Mode
 	outputNames    map[string]randr.Output
 	backlightLevel map[string]uint32
@@ -83,20 +84,50 @@ var GetDisplayInfo = func() func() *DisplayInfo {
 	}
 }()
 
+func (info *DisplayInfo) QueryModes(id randr.Mode) Mode {
+	return Mode{}
+}
+func (info *DisplayInfo) QueryOutputs(name string) randr.Output {
+	return 0
+}
+func (info *DisplayInfo) QueryBacklightLevel(name string) uint32 {
+	return 0
+}
+
 func (info *DisplayInfo) update() {
+	info.locker.Lock()
+	defer info.locker.Unlock()
+
 	resource, err := randr.GetScreenResources(xcon, Root).Reply()
 	if err != nil {
+		Logger.Error("GetScreenResouces failed", err)
+		return
 	}
 	info.outputNames = make(map[string]randr.Output)
 	info.backlightLevel = make(map[string]uint32)
 	for _, op := range resource.Outputs {
 		oinfo, err := randr.GetOutputInfo(xcon, op, LastConfigTimeStamp).Reply()
-		if err != nil || oinfo.Connection != randr.ConnectionConnected {
+		if err != nil {
+			Logger.Warning("DisplayInfo.update filter:", err)
 			continue
 		}
+		if oinfo.Connection != randr.ConnectionConnected {
+			continue
+		}
+
 		info.outputNames[string(oinfo.Name)] = op
 		info.backlightLevel[string(oinfo.Name)] = uint32(queryBacklightRange(xcon, op))
 	}
+	//if len(info.outputNames) != 2 {
+	//Logger.Warning("XX", info.outputNames, resource.Outputs)
+	//for _, op := range resource.Outputs {
+	//oinfo, err := randr.GetOutputInfo(xcon, op, LastConfigTimeStamp).Reply()
+	//if err != nil {
+	//fmt.Println("XX E:", err)
+	//}
+	//fmt.Println("XX:", string(oinfo.Name), oinfo.Connection)
+	//}
+	//}
 
 	info.modes = make(map[randr.Mode]Mode)
 	for _, minfo := range resource.Modes {
@@ -240,24 +271,29 @@ func (dpy *Display) SplitMonitor(a string) error {
 	found := false
 	for _, m := range dpy.Monitors {
 		if m.Name == a {
+			submonitors := m.split(dpy)
+			if submonitors == nil {
+				return fmt.Errorf("Can't find composited monitor: %s", a)
+			}
 			found = true
-			monitors = append(monitors, m.split(dpy)...)
+			monitors = append(monitors, submonitors...)
 		} else {
 			monitors = append(monitors, m)
 		}
 	}
 	if found {
 		dpy.setPropMonitors(monitors)
-		//dpy.cfg.ensureValid(dpy)
-		//dpy.Apply()
 		return nil
 	} else {
 		return fmt.Errorf("Can't find composited monitor: %s", a)
 	}
 }
 func (m *Monitor) split(dpy *Display) (r []*Monitor) {
-	delete(dpy.cfg.Monitors[dpy.QueryCurrentPlanName()], m.Name)
+	if !strings.Contains(m.Name, joinSeparator) {
+		return
+	}
 
+	delete(dpy.cfg.Monitors[dpy.QueryCurrentPlanName()], m.Name)
 	dpyinfo := GetDisplayInfo()
 	for _, name := range strings.Split(m.Name, joinSeparator) {
 		if op, ok := dpyinfo.outputNames[name]; ok {
