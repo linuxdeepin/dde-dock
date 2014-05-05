@@ -14,19 +14,6 @@ func (m *Monitor) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (m *Monitor) OnPropertiesChanged(name string, oldv interface{}) {
-	defer func() {
-		if err := recover(); err != nil {
-			fmt.Println(err)
-		}
-	}()
-	switch name {
-	case "Rotation":
-	case "Reflect":
-	case "Opened":
-	}
-}
-
 func (m *Monitor) setPropCurrentMode(v Mode) {
 	if m.CurrentMode != v {
 		m.CurrentMode = v

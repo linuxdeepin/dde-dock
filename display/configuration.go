@@ -101,8 +101,6 @@ func (cfg *ConfigDisplay) ensureValid(dpy *Display) {
 			if len(oinfo.Modes) == 0 {
 				Logger.Error("ensureValid failed:", opName, "hasn't any mode info")
 				continue
-			} else {
-				m.bestMode = oinfo.Modes[0]
 			}
 			for _, id := range oinfo.Modes {
 				minfo := GetDisplayInfo().modes[id]
@@ -213,7 +211,6 @@ func (c *ConfigDisplay) Compare(cfg *ConfigDisplay) bool {
 	}
 
 	if c.Primary != cfg.Primary {
-		fmt.Println("Primary NootSame..")
 		return false
 	}
 
@@ -277,6 +274,12 @@ func mergeConfigMonitor(dpy *Display, a *ConfigMonitor, b *ConfigMonitor) *Confi
 		}
 	}
 	c.Width, c.Height = getMatchedSize(ops)
+	for _, minfo := range GetDisplayInfo().modes {
+		if minfo.Width == c.Width && minfo.Height == c.Height {
+			c.bestMode = randr.Mode(minfo.ID)
+			c.currentMode = c.bestMode
+		}
+	}
 	c.Enabled = true
 	return c
 }
@@ -289,6 +292,7 @@ func CreateConfigMonitor(dpy *Display, op randr.Output) (*ConfigMonitor, error) 
 	}
 	cfg.Name = string(oinfo.Name)
 	cfg.Outputs = append(cfg.Outputs, cfg.Name)
+	cfg.bestMode = oinfo.Modes[0]
 
 	if oinfo.Crtc != 0 && oinfo.Connection == randr.ConnectionConnected {
 		cinfo, err := randr.GetCrtcInfo(xcon, oinfo.Crtc, LastConfigTimeStamp).Reply()
@@ -304,14 +308,13 @@ func CreateConfigMonitor(dpy *Display, op randr.Output) (*ConfigMonitor, error) 
 		if len(oinfo.Modes) == 0 {
 			return nil, fmt.Errorf(string(oinfo.Name), "hasn't any mode info")
 		}
-		bestMode := oinfo.Modes[0]
-		minfo := GetDisplayInfo().modes[bestMode]
+		minfo := GetDisplayInfo().modes[cfg.bestMode]
 		cfg.Width, cfg.Height = minfo.Width, minfo.Height
 		cfg.Rotation, cfg.Reflect = 1, 0
-		cfg.currentMode = bestMode
+		cfg.currentMode = cfg.bestMode
 		cfg.Enabled = true
 
-		randr.SetCrtcConfig(xcon, oinfo.Crtc, 0, LastConfigTimeStamp, cfg.X, cfg.Y, bestMode, 1, []randr.Output{op})
+		randr.SetCrtcConfig(xcon, oinfo.Crtc, 0, LastConfigTimeStamp, cfg.X, cfg.Y, cfg.currentMode, 1, []randr.Output{op})
 	}
 
 	return cfg, nil

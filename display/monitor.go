@@ -144,7 +144,7 @@ func (m *Monitor) SwitchOn(v bool) {
 }
 
 func (m *Monitor) SetMode(id uint32) {
-	for _, _m := range m.ListModes() {
+	for _, _m := range GetDisplayInfo().modes {
 		if _m.ID == id {
 			m.setPropCurrentMode(_m)
 			m.cfg.Width, m.cfg.Height, m.cfg.RefreshRate = _m.Width, _m.Height, _m.Rate
@@ -155,7 +155,7 @@ func (m *Monitor) SetMode(id uint32) {
 }
 
 func (m *Monitor) generateShell() string {
-	code := ""
+	code := " "
 	names := strings.Split(m.Name, joinSeparator)
 	for _, name := range names {
 		code = fmt.Sprintf("%s --output %s", code, name)

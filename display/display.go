@@ -9,6 +9,7 @@ import (
 	"github.com/BurntSushi/xgb/randr"
 	"github.com/BurntSushi/xgb/xproto"
 	"os"
+	"strings"
 	"sync"
 )
 
@@ -204,6 +205,9 @@ func (dpy *Display) SetBrightness(output string, v float64) {
 }
 
 func (dpy *Display) JoinMonitor(a string, b string) error {
+	dpy.lockMonitors()
+	defer dpy.unlockMonitors()
+
 	ms := dpy.cfg.Monitors[dpy.cfg.CurrentPlanName]
 	if ma, ok := ms[a]; ok {
 		if mb, ok := ms[b]; ok {
@@ -218,7 +222,6 @@ func (dpy *Display) JoinMonitor(a string, b string) error {
 					newMonitors = append(newMonitors, m)
 				}
 			}
-			mc = mc
 			newMonitors = append(newMonitors, NewMonitor(dpy, mc))
 			dpy.setPropMonitors(newMonitors)
 		} else {
@@ -230,7 +233,52 @@ func (dpy *Display) JoinMonitor(a string, b string) error {
 	return nil
 }
 func (dpy *Display) SplitMonitor(a string) error {
-	return nil
+	dpy.lockMonitors()
+	defer dpy.unlockMonitors()
+
+	var monitors []*Monitor
+	found := false
+	for _, m := range dpy.Monitors {
+		if m.Name == a {
+			found = true
+			monitors = append(monitors, m.split(dpy)...)
+		} else {
+			monitors = append(monitors, m)
+		}
+	}
+	if found {
+		dpy.setPropMonitors(monitors)
+		//dpy.cfg.ensureValid(dpy)
+		//dpy.Apply()
+		return nil
+	} else {
+		return fmt.Errorf("Can't find composited monitor: %s", a)
+	}
+}
+func (m *Monitor) split(dpy *Display) (r []*Monitor) {
+	delete(dpy.cfg.Monitors[dpy.QueryCurrentPlanName()], m.Name)
+
+	dpyinfo := GetDisplayInfo()
+	for _, name := range strings.Split(m.Name, joinSeparator) {
+		if op, ok := dpyinfo.outputNames[name]; ok {
+			mcfg, err := CreateConfigMonitor(dpy, op)
+			if err != nil {
+				Logger.Error("Failed createconfigmonitor at split", err, name, mcfg)
+				continue
+			}
+			dpy.cfg.Monitors[dpy.QueryCurrentPlanName()][name] = mcfg
+
+			minfo := dpyinfo.modes[mcfg.bestMode]
+			mcfg.Width = minfo.Width
+			mcfg.Height = minfo.Height
+			mcfg.currentMode = mcfg.bestMode
+
+			m := NewMonitor(dpy, mcfg)
+			m.SetMode(m.BestMode.ID)
+			r = append(r, m)
+		}
+	}
+	return
 }
 
 func (dpy *Display) detectChanged() {
@@ -268,6 +316,9 @@ func (dpy *Display) SetPrimary(name string) error {
 }
 
 func (dpy *Display) Apply() {
+	dpy.lockMonitors()
+	defer dpy.unlockMonitors()
+
 	code := "xrandr "
 	for _, m := range dpy.Monitors {
 		code += m.generateShell()
@@ -314,6 +365,9 @@ func (dpy *Display) SaveChanges() {
 }
 
 func (dpy *Display) Reset() {
+	dpy.lockMonitors()
+	defer dpy.unlockMonitors()
+
 	for _, m := range dpy.Monitors {
 		dpy.SetBrightness(m.Name, 1)
 		m.SwitchOn(true)
@@ -350,7 +404,6 @@ func main() {
 		Logger.Error("lost dbus session:", err)
 		os.Exit(1)
 	} else {
-		fmt.Println("hehe")
 		os.Exit(0)
 	}
 }
