@@ -38,16 +38,16 @@ func NewEntryProxyer(entryId string) (*EntryProxyer, error) {
 	}
 }
 
-func (e *EntryProxyer) ContextMenu(x, y int32)              { e.core.ContextMenu(x, y) }
-func (e *EntryProxyer) HandleMenuItem(id int32)             { e.core.HandleMenuItem(id) }
-func (e *EntryProxyer) Activate(x, y int32)                 { e.core.Activate(x, y) }
-func (e *EntryProxyer) SecondaryActivate(x, y int32)        { e.core.SecondaryActivate(x, y) }
-func (e *EntryProxyer) OnDragEnter(x, y int32, data string) { e.core.OnDragEnter(x, y, data) }
-func (e *EntryProxyer) OnDragLeave(x, y int32, data string) { e.core.OnDragLeave(x, y, data) }
-func (e *EntryProxyer) OnDragOver(x, y int32, data string)  { e.core.OnDragOver(x, y, data) }
-func (e *EntryProxyer) OnDragDrop(x, y int32, data string)  { e.core.OnDragDrop(x, y, data) }
-func (e *EntryProxyer) OnMouseWheel(x, y, delta int32) {
-	e.core.OnMouseWheel(x, y, delta)
+func (e *EntryProxyer) ContextMenu(x, y int32)                  { e.core.ContextMenu(x, y) }
+func (e *EntryProxyer) HandleMenuItem(id int32)                 { e.core.HandleMenuItem(id) }
+func (e *EntryProxyer) Activate(x, y int32)                     { e.core.Activate(x, y) }
+func (e *EntryProxyer) SecondaryActivate(x, y int32)            { e.core.SecondaryActivate(x, y) }
+func (e *EntryProxyer) HandleDragEnter(x, y int32, data string) { e.core.HandleDragEnter(x, y, data) }
+func (e *EntryProxyer) HandleDragLeave(x, y int32, data string) { e.core.HandleDragLeave(x, y, data) }
+func (e *EntryProxyer) HandleDragOver(x, y int32, data string)  { e.core.HandleDragOver(x, y, data) }
+func (e *EntryProxyer) HandleDragDrop(x, y int32, data string)  { e.core.HandleDragDrop(x, y, data) }
+func (e *EntryProxyer) HandleMouseWheel(x, y, delta int32) {
+	e.core.HandleMouseWheel(x, y, delta)
 }
 func (e *EntryProxyer) ShowQuickWindow() { e.core.ShowQuickWindow() }
 

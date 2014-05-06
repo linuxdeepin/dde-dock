@@ -70,14 +70,14 @@ func (e *AppEntry) Activate(x, y int32) {
 	}
 }
 
-func (e *AppEntry) ContextMenu(x, y int32)              {}
-func (e *AppEntry) SecondaryActivate(x, y int32)        {}
-func (e *AppEntry) OnDragEnter(x, y int32, data string) {}
-func (e *AppEntry) OnDragLeave(x, y int32, data string) {}
-func (e *AppEntry) OnDragOver(x, y int32, data string)  {}
-func (e *AppEntry) OnDragDrop(x, y int32, data string) {
+func (e *AppEntry) ContextMenu(x, y int32)                  {}
+func (e *AppEntry) SecondaryActivate(x, y int32)            {}
+func (e *AppEntry) HandleDragEnter(x, y int32, data string) {}
+func (e *AppEntry) HandleDragLeave(x, y int32, data string) {}
+func (e *AppEntry) HandleDragOver(x, y int32, data string)  {}
+func (e *AppEntry) HandleDragDrop(x, y int32, data string) {
 	paths := strings.Split(data, ",")
-	LOGGER.Debug("OnDragDrop:", paths)
+	LOGGER.Debug("HandleDragDrop:", paths)
 	if e.rApp != nil {
 		LOGGER.Info("Launch from runtime app")
 		if e.rApp.core != nil {
@@ -112,9 +112,7 @@ func (e *AppEntry) OnDragDrop(x, y int32, data string) {
 		}
 	}
 }
-func (e *AppEntry) OnMouseWheel(x, y, delta int32) {
-	LOGGER.Warning("not implement")
-}
+func (e *AppEntry) HandleMouseWheel(x, y, delta int32) {}
 
 func (e *AppEntry) setData(key, value string) {
 	if e.Data[key] != value {

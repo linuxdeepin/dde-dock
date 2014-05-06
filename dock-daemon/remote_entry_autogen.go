@@ -92,40 +92,40 @@ func (obj RemoteEntry) HandleMenuItem(arg0 int32) (_err error) {
 	return
 }
 
-func (obj RemoteEntry) OnDragDrop(arg0 int32, arg1 int32, arg2 string) (_err error) {
-	_err = obj.core.Call("dde.dock.Entry.OnDragDrop", 0, arg0, arg1, arg2).Store()
+func (obj RemoteEntry) HandleDragDrop(arg0 int32, arg1 int32, arg2 string) (_err error) {
+	_err = obj.core.Call("dde.dock.Entry.HandleDragDrop", 0, arg0, arg1, arg2).Store()
 	if _err != nil {
 		fmt.Println(_err)
 	}
 	return
 }
 
-func (obj RemoteEntry) OnDragEnter(arg0 int32, arg1 int32, arg2 string) (_err error) {
-	_err = obj.core.Call("dde.dock.Entry.OnDragEnter", 0, arg0, arg1, arg2).Store()
+func (obj RemoteEntry) HandleDragEnter(arg0 int32, arg1 int32, arg2 string) (_err error) {
+	_err = obj.core.Call("dde.dock.Entry.HandleDragEnter", 0, arg0, arg1, arg2).Store()
 	if _err != nil {
 		fmt.Println(_err)
 	}
 	return
 }
 
-func (obj RemoteEntry) OnDragLeave(arg0 int32, arg1 int32, arg2 string) (_err error) {
-	_err = obj.core.Call("dde.dock.Entry.OnDragLeave", 0, arg0, arg1, arg2).Store()
+func (obj RemoteEntry) HandleDragLeave(arg0 int32, arg1 int32, arg2 string) (_err error) {
+	_err = obj.core.Call("dde.dock.Entry.HandleDragLeave", 0, arg0, arg1, arg2).Store()
 	if _err != nil {
 		fmt.Println(_err)
 	}
 	return
 }
 
-func (obj RemoteEntry) OnDragOver(arg0 int32, arg1 int32, arg2 string) (_err error) {
-	_err = obj.core.Call("dde.dock.Entry.OnDragOver", 0, arg0, arg1, arg2).Store()
+func (obj RemoteEntry) HandleDragOver(arg0 int32, arg1 int32, arg2 string) (_err error) {
+	_err = obj.core.Call("dde.dock.Entry.HandleDragOver", 0, arg0, arg1, arg2).Store()
 	if _err != nil {
 		fmt.Println(_err)
 	}
 	return
 }
 
-func (obj RemoteEntry) OnMouseWheel(arg0 int32, arg1 int32, arg2 int32) (_err error) {
-	_err = obj.core.Call("dde.dock.Entry.OnMouseWheel", 0, arg0, arg1, arg2).Store()
+func (obj RemoteEntry) HandleMouseWheel(arg0 int32, arg1 int32, arg2 int32) (_err error) {
+	_err = obj.core.Call("dde.dock.Entry.HandleMouseWheel", 0, arg0, arg1, arg2).Store()
 	if _err != nil {
 		fmt.Println(_err)
 	}

@@ -11,27 +11,27 @@
 	<method name="HandleMenuItem">
 	    <arg type="i" direction="in"></arg>
 	</method>
-	<method name="OnDragDrop">
+	<method name="HandleDragDrop">
 	    <arg type="i" direction="in"></arg>
 	    <arg type="i" direction="in"></arg>
 	    <arg type="s" direction="in"></arg>
 	</method>
-	<method name="OnDragEnter">
+	<method name="HandleDragEnter">
 	    <arg type="i" direction="in"></arg>
 	    <arg type="i" direction="in"></arg>
 	    <arg type="s" direction="in"></arg>
 	</method>
-	<method name="OnDragLeave">
+	<method name="HandleDragLeave">
 	    <arg type="i" direction="in"></arg>
 	    <arg type="i" direction="in"></arg>
 	    <arg type="s" direction="in"></arg>
 	</method>
-	<method name="OnDragOver">
+	<method name="HandleDragOver">
 	    <arg type="i" direction="in"></arg>
 	    <arg type="i" direction="in"></arg>
 	    <arg type="s" direction="in"></arg>
 	</method>
-	<method name="OnMouseWheel">
+	<method name="HandleMouseWheel">
 	    <arg type="i" direction="in"></arg>
 	    <arg type="i" direction="in"></arg>
 	    <arg type="i" direction="in"></arg>
