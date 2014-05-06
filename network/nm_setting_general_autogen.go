@@ -10,6 +10,8 @@ func generalIsKeyInSettingField(field, key string) bool {
 		logger.Warning("invalid field name", field)
 	case NM_SETTING_802_1X_SETTING_NAME:
 		return isKeyInSetting8021x(key)
+	case NM_SETTING_CDMA_SETTING_NAME:
+		return isKeyInSettingCdma(key)
 	case NM_SETTING_CONNECTION_SETTING_NAME:
 		return isKeyInSettingConnection(key)
 	case NM_SETTING_GSM_SETTING_NAME:
@@ -22,6 +24,8 @@ func generalIsKeyInSettingField(field, key string) bool {
 		return isKeyInSettingPpp(key)
 	case NM_SETTING_PPPOE_SETTING_NAME:
 		return isKeyInSettingPppoe(key)
+	case NM_SETTING_SERIAL_SETTING_NAME:
+		return isKeyInSettingSerial(key)
 	case NM_SETTING_VPN_SETTING_NAME:
 		return isKeyInSettingVpn(key)
 	case NM_SETTING_VF_VPN_L2TP_SETTING_NAME:
@@ -70,6 +74,8 @@ func generalGetSettingKeyType(field, key string) (t ktype) {
 		logger.Warning("invalid field name", field)
 	case NM_SETTING_802_1X_SETTING_NAME:
 		t = getSetting8021xKeyType(key)
+	case NM_SETTING_CDMA_SETTING_NAME:
+		t = getSettingCdmaKeyType(key)
 	case NM_SETTING_CONNECTION_SETTING_NAME:
 		t = getSettingConnectionKeyType(key)
 	case NM_SETTING_GSM_SETTING_NAME:
@@ -82,6 +88,8 @@ func generalGetSettingKeyType(field, key string) (t ktype) {
 		t = getSettingPppKeyType(key)
 	case NM_SETTING_PPPOE_SETTING_NAME:
 		t = getSettingPppoeKeyType(key)
+	case NM_SETTING_SERIAL_SETTING_NAME:
+		t = getSettingSerialKeyType(key)
 	case NM_SETTING_VPN_SETTING_NAME:
 		t = getSettingVpnKeyType(key)
 	case NM_SETTING_VF_VPN_L2TP_SETTING_NAME:
@@ -124,6 +132,8 @@ func generalGetSettingAvailableKeys(data connectionData, field string) (keys []s
 	switch field {
 	case NM_SETTING_802_1X_SETTING_NAME:
 		keys = getSetting8021xAvailableKeys(data)
+	case NM_SETTING_CDMA_SETTING_NAME:
+		keys = getSettingCdmaAvailableKeys(data)
 	case NM_SETTING_CONNECTION_SETTING_NAME:
 		keys = getSettingConnectionAvailableKeys(data)
 	case NM_SETTING_GSM_SETTING_NAME:
@@ -136,6 +146,8 @@ func generalGetSettingAvailableKeys(data connectionData, field string) (keys []s
 		keys = getSettingPppAvailableKeys(data)
 	case NM_SETTING_PPPOE_SETTING_NAME:
 		keys = getSettingPppoeAvailableKeys(data)
+	case NM_SETTING_SERIAL_SETTING_NAME:
+		keys = getSettingSerialAvailableKeys(data)
 	case NM_SETTING_VPN_SETTING_NAME:
 		keys = getSettingVpnAvailableKeys(data)
 	case NM_SETTING_VF_VPN_L2TP_SETTING_NAME:
@@ -182,6 +194,8 @@ func generalGetSettingAvailableValues(data connectionData, field, key string) (v
 	switch field {
 	case NM_SETTING_802_1X_SETTING_NAME:
 		values = getSetting8021xAvailableValues(data, key)
+	case NM_SETTING_CDMA_SETTING_NAME:
+		values = getSettingCdmaAvailableValues(data, key)
 	case NM_SETTING_CONNECTION_SETTING_NAME:
 		values = getSettingConnectionAvailableValues(data, key)
 	case NM_SETTING_GSM_SETTING_NAME:
@@ -194,6 +208,8 @@ func generalGetSettingAvailableValues(data connectionData, field, key string) (v
 		values = getSettingPppAvailableValues(data, key)
 	case NM_SETTING_PPPOE_SETTING_NAME:
 		values = getSettingPppoeAvailableValues(data, key)
+	case NM_SETTING_SERIAL_SETTING_NAME:
+		values = getSettingSerialAvailableValues(data, key)
 	case NM_SETTING_VPN_SETTING_NAME:
 		values = getSettingVpnAvailableValues(data, key)
 	case NM_SETTING_VF_VPN_L2TP_SETTING_NAME:
@@ -238,6 +254,8 @@ func generalCheckSettingValues(data connectionData, field string) (errs fieldErr
 		logger.Error("invalid field name", field)
 	case NM_SETTING_802_1X_SETTING_NAME:
 		errs = checkSetting8021xValues(data)
+	case NM_SETTING_CDMA_SETTING_NAME:
+		errs = checkSettingCdmaValues(data)
 	case NM_SETTING_CONNECTION_SETTING_NAME:
 		errs = checkSettingConnectionValues(data)
 	case NM_SETTING_GSM_SETTING_NAME:
@@ -250,6 +268,8 @@ func generalCheckSettingValues(data connectionData, field string) (errs fieldErr
 		errs = checkSettingPppValues(data)
 	case NM_SETTING_PPPOE_SETTING_NAME:
 		errs = checkSettingPppoeValues(data)
+	case NM_SETTING_SERIAL_SETTING_NAME:
+		errs = checkSettingSerialValues(data)
 	case NM_SETTING_VPN_SETTING_NAME:
 		errs = checkSettingVpnValues(data)
 	case NM_SETTING_VF_VPN_L2TP_SETTING_NAME:
@@ -298,6 +318,8 @@ func generalGetSettingKeyJSON(data connectionData, field, key string) (valueJSON
 		logger.Warning("invalid field name", field)
 	case NM_SETTING_802_1X_SETTING_NAME:
 		valueJSON = generalGetSetting8021xKeyJSON(data, key)
+	case NM_SETTING_CDMA_SETTING_NAME:
+		valueJSON = generalGetSettingCdmaKeyJSON(data, key)
 	case NM_SETTING_CONNECTION_SETTING_NAME:
 		valueJSON = generalGetSettingConnectionKeyJSON(data, key)
 	case NM_SETTING_GSM_SETTING_NAME:
@@ -310,6 +332,8 @@ func generalGetSettingKeyJSON(data connectionData, field, key string) (valueJSON
 		valueJSON = generalGetSettingPppKeyJSON(data, key)
 	case NM_SETTING_PPPOE_SETTING_NAME:
 		valueJSON = generalGetSettingPppoeKeyJSON(data, key)
+	case NM_SETTING_SERIAL_SETTING_NAME:
+		valueJSON = generalGetSettingSerialKeyJSON(data, key)
 	case NM_SETTING_VPN_SETTING_NAME:
 		valueJSON = generalGetSettingVpnKeyJSON(data, key)
 	case NM_SETTING_VF_VPN_L2TP_SETTING_NAME:
@@ -358,6 +382,8 @@ func generalSetSettingKeyJSON(data connectionData, field, key, valueJSON string)
 		logger.Warning("invalid field name", field)
 	case NM_SETTING_802_1X_SETTING_NAME:
 		err = generalSetSetting8021xKeyJSON(data, key, valueJSON)
+	case NM_SETTING_CDMA_SETTING_NAME:
+		err = generalSetSettingCdmaKeyJSON(data, key, valueJSON)
 	case NM_SETTING_CONNECTION_SETTING_NAME:
 		err = generalSetSettingConnectionKeyJSON(data, key, valueJSON)
 	case NM_SETTING_GSM_SETTING_NAME:
@@ -370,6 +396,8 @@ func generalSetSettingKeyJSON(data connectionData, field, key, valueJSON string)
 		err = generalSetSettingPppKeyJSON(data, key, valueJSON)
 	case NM_SETTING_PPPOE_SETTING_NAME:
 		err = generalSetSettingPppoeKeyJSON(data, key, valueJSON)
+	case NM_SETTING_SERIAL_SETTING_NAME:
+		err = generalSetSettingSerialKeyJSON(data, key, valueJSON)
 	case NM_SETTING_VPN_SETTING_NAME:
 		err = generalSetSettingVpnKeyJSON(data, key, valueJSON)
 	case NM_SETTING_VF_VPN_L2TP_SETTING_NAME:
@@ -414,6 +442,8 @@ func getSettingKeyDefaultValueJSON(field, key string) (valueJSON string) {
 		logger.Warning("invalid field name", field)
 	case NM_SETTING_802_1X_SETTING_NAME:
 		valueJSON = getSetting8021xKeyDefaultValueJSON(key)
+	case NM_SETTING_CDMA_SETTING_NAME:
+		valueJSON = getSettingCdmaKeyDefaultValueJSON(key)
 	case NM_SETTING_CONNECTION_SETTING_NAME:
 		valueJSON = getSettingConnectionKeyDefaultValueJSON(key)
 	case NM_SETTING_GSM_SETTING_NAME:
@@ -426,6 +456,8 @@ func getSettingKeyDefaultValueJSON(field, key string) (valueJSON string) {
 		valueJSON = getSettingPppKeyDefaultValueJSON(key)
 	case NM_SETTING_PPPOE_SETTING_NAME:
 		valueJSON = getSettingPppoeKeyDefaultValueJSON(key)
+	case NM_SETTING_SERIAL_SETTING_NAME:
+		valueJSON = getSettingSerialKeyDefaultValueJSON(key)
 	case NM_SETTING_VPN_SETTING_NAME:
 		valueJSON = getSettingVpnKeyDefaultValueJSON(key)
 	case NM_SETTING_VF_VPN_L2TP_SETTING_NAME:

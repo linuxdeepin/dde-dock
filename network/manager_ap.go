@@ -96,7 +96,7 @@ func (m *Manager) addAccessPoint(devPath, apPath dbus.ObjectPath) {
 		ap.Strength = calcApStrength(ap.nmAp.Strength.Get())
 		if m.AccessPointPropertiesChanged != nil {
 			apJSON, _ := marshalJSON(ap)
-			logger.Debug(string(devPath), apJSON) // TODO test
+			// logger.Debug(string(devPath), apJSON) // TODO test
 			m.AccessPointPropertiesChanged(string(devPath), apJSON)
 		}
 		m.updatePropAccessPoints()

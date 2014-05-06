@@ -2,9 +2,15 @@ package main
 
 import (
 	"dlib"
+	"fmt"
 )
 
 // TODO doc
+
+const (
+	mobileServiceGsm  = "gsm"
+	mobileServiceCdma = "cdma"
+)
 
 const NM_SETTING_GSM_SETTING_NAME = "gsm"
 
@@ -50,37 +56,56 @@ const (
 	NM_SETTING_GSM_BAND_U2600   = 0x00002000 /* WCDMA 3GPP UMTS 2600 MHz     (Class VII, internal) */
 )
 
-func newGsmConnectionData(id, uuid string) (data connectionData) {
+func newMobileConnectionData(id, uuid, serviceType string) (data connectionData) {
 	data = make(connectionData)
 
 	addSettingField(data, fieldConnection)
 	setSettingConnectionId(data, id)
 	setSettingConnectionUuid(data, uuid)
-	setSettingConnectionType(data, NM_SETTING_GSM_SETTING_NAME)
+	setSettingConnectionAutoconnect(data, false)
+	logicSetSettingVkConnectionNoPermission(data, false)
 
-	addSettingField(data, fieldGsm)
-	setSettingGsmPasswordFlags(data, NM_SETTING_SECRET_FLAG_NONE)
-	setSettingGsmPinFlags(data, NM_SETTING_SECRET_FLAG_NONE)
+	logicSetSettingVkMobileServiceType(data, serviceType)
 
 	addSettingField(data, fieldPpp)
+
+	addSettingField(data, fieldSerial)
+	setSettingSerialBaud(data, 115200)
 
 	initSettingFieldIpv4(data)
 
 	return
 }
 
+func initSettingFieldGsm(data connectionData) {
+	setSettingConnectionType(data, NM_SETTING_GSM_SETTING_NAME)
+	addSettingField(data, fieldGsm)
+	setSettingGsmPasswordFlags(data, NM_SETTING_SECRET_FLAG_NONE)
+	setSettingGsmPinFlags(data, NM_SETTING_SECRET_FLAG_NONE)
+}
+
 // Get available keys
 func getSettingGsmAvailableKeys(data connectionData) (keys []string) {
+	keys = append(keys, NM_SETTING_VK_MOBILE_SERVICE_TYPE)
 	keys = appendAvailableKeys(data, keys, fieldGsm, NM_SETTING_GSM_NUMBER)
 	keys = appendAvailableKeys(data, keys, fieldGsm, NM_SETTING_GSM_USERNAME)
-	keys = appendAvailableKeys(data, keys, fieldGsm, NM_SETTING_GSM_PASSWORD)
 	keys = appendAvailableKeys(data, keys, fieldGsm, NM_SETTING_GSM_PASSWORD_FLAGS)
+	if isGsmNeedShowPassword(data) {
+		keys = appendAvailableKeys(data, keys, fieldGsm, NM_SETTING_GSM_PASSWORD)
+	}
 	keys = appendAvailableKeys(data, keys, fieldGsm, NM_SETTING_GSM_APN)
 	keys = appendAvailableKeys(data, keys, fieldGsm, NM_SETTING_GSM_NETWORK_ID)
 	keys = appendAvailableKeys(data, keys, fieldGsm, NM_SETTING_GSM_NETWORK_TYPE)
 	keys = appendAvailableKeys(data, keys, fieldGsm, NM_SETTING_GSM_HOME_ONLY)
 	keys = appendAvailableKeys(data, keys, fieldGsm, NM_SETTING_GSM_PIN)
 	return
+}
+func isGsmNeedShowPassword(data connectionData) bool {
+	flag := getSettingGsmPasswordFlags(data)
+	if flag == NM_SETTING_SECRET_FLAG_NONE || flag == NM_SETTING_SECRET_FLAG_AGENT_OWNED {
+		return true
+	}
+	return false
 }
 
 // Get available values
@@ -119,5 +144,31 @@ func getSettingGsmAvailableValues(data connectionData, key string) (values []kva
 func checkSettingGsmValues(data connectionData) (errs fieldErrors) {
 	errs = make(map[string]string)
 	// TODO
+	ensureSettingGsmNumberNoEmpty(data, errs)
+	return
+}
+
+// Virtual key
+func getSettingVkMobileServiceType(data connectionData) (serviceType string) {
+	if isSettingFieldExists(data, NM_SETTING_GSM_SETTING_NAME) {
+		serviceType = mobileServiceGsm
+	} else if isSettingFieldExists(data, NM_SETTING_CDMA_SETTING_NAME) {
+		serviceType = mobileServiceCdma
+	} else {
+		logger.Error("get mobile service type failed, neither gsm field nor cdma field")
+	}
+	return
+}
+func logicSetSettingVkMobileServiceType(data connectionData, serviceType string) (err error) {
+	switch serviceType {
+	case mobileServiceGsm:
+		removeSettingField(data, fieldCdma)
+		initSettingFieldGsm(data)
+	case mobileServiceCdma:
+		removeSettingField(data, fieldGsm)
+		initSettingFieldCdma(data)
+	default:
+		err = fmt.Errorf("invalid mobile service type", serviceType)
+	}
 	return
 }

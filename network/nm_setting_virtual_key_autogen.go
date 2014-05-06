@@ -10,6 +10,7 @@ var virtualKeys = []virtualKey{
 	virtualKey{Name: NM_SETTING_VK_802_1X_CLIENT_CERT, Type: ktypeString, RelatedField: NM_SETTING_802_1X_SETTING_NAME, RelatedKey: NM_SETTING_802_1X_CLIENT_CERT, EnableWrapper: false, Available: true, Optional: false},
 	virtualKey{Name: NM_SETTING_VK_802_1X_PRIVATE_KEY, Type: ktypeString, RelatedField: NM_SETTING_802_1X_SETTING_NAME, RelatedKey: NM_SETTING_802_1X_PRIVATE_KEY, EnableWrapper: false, Available: true, Optional: false},
 	virtualKey{Name: NM_SETTING_VK_CONNECTION_NO_PERMISSION, Type: ktypeBoolean, RelatedField: NM_SETTING_CONNECTION_SETTING_NAME, RelatedKey: NM_SETTING_CONNECTION_PERMISSIONS, EnableWrapper: false, Available: true, Optional: false},
+	virtualKey{Name: NM_SETTING_VK_MOBILE_SERVICE_TYPE, Type: ktypeString, RelatedField: NM_SETTING_VK_NONE_RELATED_FIELD, RelatedKey: NM_SETTING_VK_NONE_RELATED_KEY, EnableWrapper: false, Available: true, Optional: false},
 	virtualKey{Name: NM_SETTING_VK_IP4_CONFIG_ADDRESSES_ADDRESS, Type: ktypeString, RelatedField: NM_SETTING_IP4_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP4_CONFIG_ADDRESSES, EnableWrapper: false, Available: true, Optional: false},
 	virtualKey{Name: NM_SETTING_VK_IP4_CONFIG_ADDRESSES_MASK, Type: ktypeString, RelatedField: NM_SETTING_IP4_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP4_CONFIG_ADDRESSES, EnableWrapper: false, Available: true, Optional: false},
 	virtualKey{Name: NM_SETTING_VK_IP4_CONFIG_ADDRESSES_GATEWAY, Type: ktypeString, RelatedField: NM_SETTING_IP4_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP4_CONFIG_ADDRESSES, EnableWrapper: false, Available: true, Optional: true},
@@ -65,6 +66,11 @@ func generalGetVirtualKeyJSON(data connectionData, field, key string) (valueJSON
 		switch key {
 		case NM_SETTING_VK_CONNECTION_NO_PERMISSION:
 			return getSettingVkConnectionNoPermissionJSON(data)
+		}
+	case NM_SETTING_VK_NONE_RELATED_FIELD:
+		switch key {
+		case NM_SETTING_VK_MOBILE_SERVICE_TYPE:
+			return getSettingVkMobileServiceTypeJSON(data)
 		}
 	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
 		switch key {
@@ -201,6 +207,12 @@ func generalSetVirtualKeyJSON(data connectionData, field, key string, valueJSON 
 		switch key {
 		case NM_SETTING_VK_CONNECTION_NO_PERMISSION:
 			err = logicSetSettingVkConnectionNoPermissionJSON(data, valueJSON)
+			return
+		}
+	case NM_SETTING_VK_NONE_RELATED_FIELD:
+		switch key {
+		case NM_SETTING_VK_MOBILE_SERVICE_TYPE:
+			err = logicSetSettingVkMobileServiceTypeJSON(data, valueJSON)
 			return
 		}
 	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
@@ -369,6 +381,10 @@ func getSettingVkConnectionNoPermissionJSON(data connectionData) (valueJSON stri
 	valueJSON, _ = marshalJSON(getSettingVkConnectionNoPermission(data))
 	return
 }
+func getSettingVkMobileServiceTypeJSON(data connectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkMobileServiceType(data))
+	return
+}
 func getSettingVkIp4ConfigAddressesAddressJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkIp4ConfigAddressesAddress(data))
 	return
@@ -522,6 +538,10 @@ func logicSetSettingVk8021xPrivateKeyJSON(data connectionData, valueJSON string)
 func logicSetSettingVkConnectionNoPermissionJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	return logicSetSettingVkConnectionNoPermission(data, value)
+}
+func logicSetSettingVkMobileServiceTypeJSON(data connectionData, valueJSON string) (err error) {
+	value, _ := jsonToKeyValueString(valueJSON)
+	return logicSetSettingVkMobileServiceType(data, value)
 }
 func logicSetSettingVkIp4ConfigAddressesAddressJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueString(valueJSON)

@@ -38,6 +38,16 @@
     ]
 },
 {
+    "FieldName":"NM_SETTING_CDMA_SETTING_NAME",
+    "FieldValue":"cdma",
+    "Keys":[
+	    {"Name":"NM_SETTING_CDMA_NUMBER", "Value":"number", "Type":"ktypeString", "Default":"\"#777\"", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Number", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_CDMA_USERNAME", "Value":"username", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Username", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_CDMA_PASSWORD", "Value":"password", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Password", "FrontEndWidget":"EditLinePasswordInput"},
+	    {"Name":"NM_SETTING_CDMA_PASSWORD_FLAGS", "Value":"password-flags", "Type":"ktypeUint32", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"Ask for Pwd", "FrontEndWidget":"EditLineComboBox"}
+    ]
+},
+{
     "FieldName":"NM_SETTING_CONNECTION_SETTING_NAME",
     "FieldValue":"connection",
     "Keys":[
@@ -59,7 +69,7 @@
     "FieldValue":"gsm",
     "Keys":[
 	    {"Name":"NM_SETTING_GSM_NUMBER", "Value":"number", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Number", "FrontEndWidget":"EditLineEditComboBox"},
-	    {"Name":"NM_SETTING_GSM_USERNAME", "Value":"username", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"User Name", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_GSM_USERNAME", "Value":"username", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Username", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_GSM_PASSWORD_FLAGS", "Value":"password-flags", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Ask for Pwd", "FrontEndWidget":"EditLineComboBox"},
 	    {"Name":"NM_SETTING_GSM_PASSWORD", "Value":"password", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Password", "FrontEndWidget":"EditLinePasswordInput"},
 	    {"Name":"NM_SETTING_GSM_APN", "Value":"apn", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"APN", "FrontEndWidget":"EditLineEditComboBox"},
@@ -141,6 +151,17 @@
     ]
 },
 {
+    "FieldName":"NM_SETTING_SERIAL_SETTING_NAME",
+    "FieldValue":"serial",
+    "Keys":[
+	    {"Name":"NM_SETTING_SERIAL_BAUD", "Value":"baud", "Type":"ktypeUint32", "Default":"57600", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_SERIAL_BITS", "Value":"bits", "Type":"ktypeUint32", "Default":"8", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_SERIAL_PARITY", "Value":"parity", "Type":"ktypeByte", "Default":"110", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_SERIAL_STOPBITS", "Value":"stopbits", "Type":"ktypeUint32", "Default":"1", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_SERIAL_SEND_DELAY", "Value":"send-delay", "Type":"ktypeUint64", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"}
+    ]
+},
+{
     "FieldName":"NM_SETTING_VPN_SETTING_NAME",
     "FieldValue":"vpn",
     "Keys":[
@@ -219,7 +240,7 @@
     "Keys":[
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_REMOTE", "Value":"remote", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Gateway", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_CONNECTION_TYPE", "Value":"connection-type", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":true, "DisplayName":"Auth Type", "FrontEndWidget":"EditLineComboBox"},
-	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_USERNAME", "Value":"username", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"User Name", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_USERNAME", "Value":"username", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Username", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_PASSWORD_FLAGS", "Value":"password-flags", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Ask for Pwd", "FrontEndWidget":"EditLineComboBox"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_PASSWORD", "Value":"password", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Password", "FrontEndWidget":"EditLinePasswordInput"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_CERT", "Value":"cert", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":true, "DisplayName":"User Cert", "FrontEndWidget":"EditLineFileChooser"},
@@ -274,7 +295,7 @@
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER", "Value":"proxy-server", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Server IP", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT", "Value":"proxy-port", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Port", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY", "Value":"proxy-retry", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Retry Indefinitely When Failed", "FrontEndWidget":"<default>"},
-	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME", "Value":"http-proxy-username", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"User Name", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME", "Value":"http-proxy-username", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Username", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD", "Value":"http-proxy-password", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Password", "FrontEndWidget":"EditLinePasswordInput"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS", "Value":"http-proxy-password-flags", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"}
     ]
@@ -315,7 +336,7 @@
     "FieldValue":"vf-vpn-vpnc",
     "Keys":[
 	    {"Name":"NM_SETTING_VPN_VPNC_KEY_GATEWAY", "Value":"IPSec gateway", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Gateway", "FrontEndWidget":"<default>"},
-	    {"Name":"NM_SETTING_VPN_VPNC_KEY_XAUTH_USER", "Value":"Xauth username", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"User Name", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_VPNC_KEY_XAUTH_USER", "Value":"Xauth username", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Username", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD_TYPE", "Value":"xauth-password-type", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD_FLAGS", "Value":"Xauth password-flags", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":true, "DisplayName":"Ask for Pwd", "FrontEndWidget":"EditLineComboBox"},
 	    {"Name":"NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD", "Value":"Xauth password", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"User Pwd", "FrontEndWidget":"EditLinePasswordInput"},

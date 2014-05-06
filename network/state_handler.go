@@ -232,6 +232,7 @@ func init() {
 							default:
 								icon = "network-error"
 							}
+							// TODO: show connection name when disconnected
 							notify.Notify("Network", 0, icon, dlib.Tr("Disconnect"), DEVICEErrorTable[reason], nil, nil, 0)
 						}
 					}

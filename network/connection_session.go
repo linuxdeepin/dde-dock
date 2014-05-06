@@ -64,7 +64,9 @@ func NewConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 	case typePppoe:
 		s.data = newPppoeConnectionData(id, s.CurrentUUID)
 	case typeMobile:
-		s.data = newGsmConnectionData(id, s.CurrentUUID)
+		s.data = newMobileConnectionData(id, s.CurrentUUID, mobileServiceGsm)
+	case typeMobileCdma:
+		s.data = newMobileConnectionData(id, s.CurrentUUID, mobileServiceCdma)
 	case typeVpnL2tp:
 		s.data = newVpnL2tpConnectionData(id, s.CurrentUUID)
 	case typeVpnOpenconnect:
@@ -110,7 +112,7 @@ func NewConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 
 	// get secret data
 	// TODO fieldVpnSecurity
-	for _, secretFiled := range []string{fieldWirelessSecurity, field8021x} {
+	for _, secretFiled := range []string{fieldWirelessSecurity, field8021x, fieldGsm, fieldCdma} {
 		if isSettingFieldExists(s.data, secretFiled) {
 			wirelessSecrutiyData, err := nmConn.GetSecrets(fieldWirelessSecurity)
 			if err == nil {
@@ -298,7 +300,14 @@ func (s *ConnectionSession) listPages() (pages []string) {
 	case typeMobile:
 		pages = []string{
 			pageGeneral,
-			pageGsm,
+			pageMobile,
+			pagePpp,
+			pageIPv4,
+		}
+	case typeMobileCdma:
+		pages = []string{
+			pageGeneral,
+			pageMobileCdma,
 			pagePpp,
 			pageIPv4,
 		}
@@ -312,8 +321,10 @@ func (s *ConnectionSession) pageToFields(page string) (fields []string) {
 		logger.Error("pageToFields: invalid page name", page)
 	case pageGeneral:
 		fields = []string{fieldConnection}
-	case pageGsm:
+	case pageMobile:
 		fields = []string{fieldGsm}
+	case pageMobileCdma:
+		fields = []string{fieldCdma}
 	case pageEthernet:
 		fields = []string{fieldWired}
 	case pageWifi:
@@ -397,7 +408,7 @@ func (s *ConnectionSession) listKeys(page string) (keys []string) {
 // GetAvailableValues return available values marshaled by json for target key.
 func (s *ConnectionSession) GetAvailableValues(page, key string) (valuesJSON string) {
 	var values []kvalue
-	fields := s.pageToFields(page)
+	fields := s.pageToFields(page) // TODO
 	for _, field := range fields {
 		values = generalGetSettingAvailableValues(s.data, field, key)
 		if len(values) > 0 {

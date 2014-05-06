@@ -66,6 +66,7 @@ const (
 	typeWirelessHotspot = "wireless-hotspot"
 	typePppoe           = "pppoe"
 	typeMobile          = "mobile"
+	typeMobileCdma      = "mobile-cdma"
 	typeVpn             = "vpn"
 	typeVpnL2tp         = "vpn-l2tp"
 	typeVpnOpenconnect  = "vpn-openconnect"
@@ -86,6 +87,7 @@ var supportedConnectionTypes = []string{
 	typeWirelessHotspot,
 	typePppoe,
 	typeMobile,
+	typeMobileCdma,
 	typeVpnL2tp,
 	typeVpnOpenconnect,
 	typeVpnOpenvpn,
@@ -98,7 +100,8 @@ var supportedConnectionTypesInfo = []connectionType{
 	connectionType{typeWirelessAdhoc, dlib.Tr("Wi-Fi Ad-Hoc")},
 	connectionType{typeWirelessHotspot, dlib.Tr("Wi-Fi Hotspot")},
 	connectionType{typePppoe, dlib.Tr("PPPoE")},
-	connectionType{typeMobile, dlib.Tr("Mobile 2G/3G/4G-LTE")},
+	connectionType{typeMobile, dlib.Tr("Mobile GSM (GPRS, EDGE, UMTS, HSPA)")},
+	connectionType{typeMobileCdma, dlib.Tr("Mobile CDMA (1xRTT, EVDO)")},
 	connectionType{typeVpnL2tp, dlib.Tr("VPN-L2TP (Layer 2 Tunneling Protocol)")},
 	connectionType{typeVpnOpenconnect, dlib.Tr("VPN-OpenConnect (Cisco AnyConnect Compatible VPN)")},
 	connectionType{typeVpnOpenvpn, dlib.Tr("VPN-OpenVPN")},
@@ -110,10 +113,12 @@ const (
 	field8021x              = NM_SETTING_802_1X_SETTING_NAME
 	fieldConnection         = NM_SETTING_CONNECTION_SETTING_NAME
 	fieldGsm                = NM_SETTING_GSM_SETTING_NAME
+	fieldCdma               = NM_SETTING_CDMA_SETTING_NAME
 	fieldIpv4               = NM_SETTING_IP4_CONFIG_SETTING_NAME
 	fieldIpv6               = NM_SETTING_IP6_CONFIG_SETTING_NAME
 	fieldPppoe              = NM_SETTING_PPPOE_SETTING_NAME
 	fieldPpp                = NM_SETTING_PPP_SETTING_NAME
+	fieldSerial             = NM_SETTING_SERIAL_SETTING_NAME
 	fieldVpn                = NM_SETTING_VPN_SETTING_NAME
 	fieldVpnL2tp            = NM_SETTING_VF_VPN_L2TP_SETTING_NAME
 	fieldVpnL2tpPpp         = NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME
@@ -137,7 +142,8 @@ const (
 const (
 	pageGeneral            = "general"              // -> fieldConnection
 	pageEthernet           = "ethernet"             // -> fieldWireed
-	pageGsm                = "gsm"                  // -> fieldGsm
+	pageMobile             = "mobile"               // -> fieldGsm
+	pageMobileCdma         = "mobile-cdma"          // -> fieldCdma
 	pageWifi               = "wifi"                 // -> fieldWireless
 	pageIPv4               = "ipv4"                 // -> fieldIpv4
 	pageIPv6               = "ipv6"                 // -> fieldIpv6
@@ -225,7 +231,9 @@ func genConnectionId(connType string) (id string) {
 	case typePppoe:
 		idPrefix = dlib.Tr("PPPoE Connection")
 	case typeMobile:
-		idPrefix = dlib.Tr("Mobile Connection")
+		idPrefix = dlib.Tr("Mobile GSM Connection")
+	case typeMobileCdma:
+		idPrefix = dlib.Tr("Mobile CDMA Connection")
 	case typeVpn:
 		idPrefix = dlib.Tr("VPN Connection")
 	case typeVpnL2tp:

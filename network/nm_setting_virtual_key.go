@@ -4,9 +4,16 @@ import (
 	"dlib"
 )
 
-// Virtual key names.
+// If there is none related field for virtual key, it means that the
+// virtual key used to control multiple fields, such as change
+// connection type, and the key's name must be unique.
+const NM_SETTING_VK_NONE_RELATED_FIELD = "<none>"
 
+// For a virtual key with none related key, it is often used to
+// control multiple keys in same field.
 const NM_SETTING_VK_NONE_RELATED_KEY = "<none>"
+
+// Virtual key names
 
 // 802-1x
 const (
@@ -20,6 +27,9 @@ const (
 
 // connection
 const NM_SETTING_VK_CONNECTION_NO_PERMISSION = "vk-no-permission"
+
+// mobile
+const NM_SETTING_VK_MOBILE_SERVICE_TYPE = "vk-mobile-service-type"
 
 // wired
 const NM_SETTING_VK_WIRED_ENABLE_MTU = "vk-enable-mtu"
@@ -173,6 +183,18 @@ func generalGetSettingVkAvailableValues(data connectionData, field, key string) 
 			}
 		}
 	}
+
+	// dispatch virtual keys that with none related fields
+	if len(values) == 0 {
+		switch key {
+		case NM_SETTING_VK_MOBILE_SERVICE_TYPE:
+			values = []kvalue{
+				kvalue{"gsm", dlib.Tr("GSM (GPRS, EDGE, UMTS, HSPA)")},
+				kvalue{"cdma", dlib.Tr("CDMA (1xRTT, EVDO)")},
+			}
+		}
+	}
+
 	if len(values) == 0 {
 		logger.Warningf("there is no available values for virtual key, %s->%s", field, key)
 	}
