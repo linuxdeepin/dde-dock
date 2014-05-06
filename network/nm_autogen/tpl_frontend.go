@@ -35,14 +35,10 @@ BaseEditSection {
 
     content.sourceComponent: Column { {{range $i, $key := GetAllKeysInPage .Name}}{{if IsKeyUsedByFrontEnd $key}}{{$value := $key | ToKeyValue}}{{$id := $value | ToClassName | printf "line%s"}}
         {{$widget := ToFrontEndWidget $key}}{{$widget}} {
-            id: {{$id}}
             key: "{{$value}}"
             text: dsTr("{{$key | ToKeyDisplayName}}"){{range $propKey, $propValue := GetKeyWidgetProp $key}}
             {{$propKey}}: {{$propValue}}{{end}}
-        }{{if eq $widget  "EditLinePasswordInput"}}
-        EditLinePasswordToggle {
-            targetTextInput: {{$id}}
-        }{{end}}{{end}}{{end}}
+        }{{end}}{{end}}
     }
 }
 `
