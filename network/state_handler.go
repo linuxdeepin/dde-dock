@@ -202,7 +202,18 @@ func init() {
 					ac, _ := nm.NewActiveConnection("org.freedesktop.NetworkManager", dev.ActiveConnection.Get())
 					cc, _ := nm.NewSettingsConnection("org.freedesktop.NetworkManager", ac.Connection.Get())
 					data, _ := cc.GetSettings()
-					notify.Notify("Network", 0, "network.error", dlib.Tr("Connected"), getSettingConnectionId(data), nil, nil, 0)
+					var icon string
+					switch getCustomConnectinoType(data) {
+					case typeWired:
+						icon = "notification-network-ethernet-connected"
+					case typeWireless:
+						// TODO
+						// icon = "notification-network-wireless-connected"
+						icon = "notification-network-wireless-full"
+					default:
+						icon = "network-transmit-receive"
+					}
+					notify.Notify("Network", 0, icon, dlib.Tr("Connected"), getSettingConnectionId(data), nil, nil, 0)
 				case NM_DEVICE_STATE_FAILED, NM_DEVICE_STATE_DISCONNECTED,
 					NM_DEVICE_STATE_UNMANAGED, NM_DEVICE_STATE_UNAVAILABLE:
 					switch oldState {
@@ -212,7 +223,16 @@ func init() {
 					default:
 						//TODO: icon name can be different by device type
 						if reason != NM_DEVICE_STATE_REASON_NONE && reason != NM_DEVICE_STATE_REASON_UNKNOWN {
-							notify.Notify("Network", 0, "nm-no-connection", dlib.Tr("Disconnect"), DEVICEErrorTable[reason], nil, nil, 0)
+							var icon string
+							switch dev.DeviceType.Get() {
+							case NM_DEVICE_TYPE_ETHERNET:
+								icon = "notification-network-wired-disconnected"
+							case NM_DEVICE_TYPE_WIFI:
+								icon = "notification-network-wireless-disconnected"
+							default:
+								icon = "network-error"
+							}
+							notify.Notify("Network", 0, icon, dlib.Tr("Disconnect"), DEVICEErrorTable[reason], nil, nil, 0)
 						}
 					}
 				}
