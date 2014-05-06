@@ -88,10 +88,10 @@ func updateUserList() {
 }
 
 func destroyAllUserObject() {
-	for k, v := range idUserManagerMap {
+	//logObject.Info("\nDestroy All User Objects....")
+	for _, v := range idUserManagerMap {
 		dbus.UnInstallObject(v)
-		idUserManagerMap[k] = nil
 	}
-	idUserManagerMap = nil
+	//logObject.Info("Destroy All User Objects....\n")
 	idUserManagerMap = make(map[string]*UserManager)
 }

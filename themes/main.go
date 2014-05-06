@@ -73,11 +73,9 @@ func destroyAllThemeObj() {
 	if themeObjMap == nil {
 		return
 	}
-	for k, obj := range themeObjMap {
+	for _, obj := range themeObjMap {
 		dbus.UnInstallObject(obj)
-		themeObjMap[k] = nil
 	}
-	themeObjMap = nil
 	themeObjMap = make(map[string]*Theme)
 }
 

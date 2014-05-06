@@ -347,7 +347,7 @@ func getDiskInfoList() []DiskInfo {
 }
 
 func destroyObjectMap() {
-	for k, info := range objectMap {
+	for _, info := range objectMap {
 		switch info.Type {
 		case "drive":
 			op := info.Object.(*gio.Drive)
@@ -359,9 +359,7 @@ func destroyObjectMap() {
 			op := info.Object.(*gio.Mount)
 			op.Unref()
 		}
-		objectMap[k] = nil
 	}
-	objectMap = nil
 	objectMap = make(map[string]*ObjectInfo)
 }
 
