@@ -359,8 +359,10 @@ func destroyObjectMap() {
 			op := info.Object.(*gio.Mount)
 			op.Unref()
 		}
-		delete(objectMap, k)
+		objectMap[k] = nil
 	}
+	objectMap = nil
+	objectMap = make(map[string]*ObjectInfo)
 }
 
 func NewManager() *Manager {

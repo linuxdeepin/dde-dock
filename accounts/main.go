@@ -60,7 +60,6 @@ func main() {
 	dbus.DealWithUnhandledMessage()
 
 	//select {}
-	logObject.Info("^^^^<<<<=====>>>>>\n")
 	if err = dbus.Wait(); err != nil {
 		logObject.Warningf("lost dbus session:%v", err)
 		os.Exit(1)
@@ -91,6 +90,8 @@ func updateUserList() {
 func destroyAllUserObject() {
 	for k, v := range idUserManagerMap {
 		dbus.UnInstallObject(v)
-		delete(idUserManagerMap, k)
+		idUserManagerMap[k] = nil
 	}
+	idUserManagerMap = nil
+	idUserManagerMap = make(map[string]*UserManager)
 }
