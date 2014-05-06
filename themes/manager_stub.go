@@ -24,6 +24,7 @@ package main
 import (
 	"dlib/dbus"
 	"dlib/gio-2.0"
+	"net/url"
 	"os"
 	"strconv"
 )
@@ -59,6 +60,12 @@ func (op *Manager) copyBackgroundFile(name string) (string, bool) {
 	}
 
 	name, _ = objUtil.PathToFileURI(name)
+	if urlInfo, err := url.Parse(name); err != nil {
+		logObject.Info("Parse rawurl failed:", err)
+		return "", false
+	} else if urlInfo != nil {
+		name = urlInfo.Scheme + "://" + urlInfo.Path
+	}
 	if ok := objUtil.IsFileExist(name); !ok {
 		logObject.Warningf("BG %s not exist", name)
 		return "", false
