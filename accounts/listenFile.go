@@ -23,139 +23,194 @@ package main
 
 import (
 	"github.com/howeyc/fsnotify"
-	"os"
+	"io/ioutil"
 	"regexp"
+	"strings"
 	//"time"
 )
 
-func (op *AccountManager) listenUserListChanged() {
-	watcher, err := fsnotify.NewWatcher()
-	if err != nil {
-		logObject.Warningf("New Watcher Failed:%v", err)
-		//panic(err)
-		return
-	}
+var (
+	preGroupLine = 0
+)
 
-	err = watcher.Watch(ETC_PASSWD)
-	if err != nil {
-		logObject.Warningf("Watch File '%s' Failed: %v", ETC_PASSWD, err)
-		//panic(err)
-		return
-	}
+func watchAccountFiles() {
+	mutex.Lock()
+	defer mutex.Unlock()
+	var err error
 
-	go func() {
-		defer watcher.Close()
-		for {
-			select {
-			case ev := <-watcher.Event:
-				if ev == nil {
-					break
-				}
-
-				if ok, _ := regexp.MatchString(`\.swa?px?$`,
-					ev.Name); ok {
-					break
-				}
-				logObject.Info(ev)
-				if ev.IsDelete() {
-					watcher.Watch(ETC_PASSWD)
-				} else if ev.IsCreate() {
-					break
-				} else {
-					op.emitUserListChanged()
-				}
-				//case err := <-watcher.Error:
-				//logObject.Warningf("Watch Error:%v", err)
-			}
-		}
-	}()
-}
-
-func (op *UserManager) listenUserInfoChanged(filename string) {
-	watcher, err := fsnotify.NewWatcher()
-	if err != nil {
-		logObject.Warningf("New Watcher Failed:%v", err)
-		//panic(err)
-		return
-	}
-
-	err = watcher.Watch(filename)
-	if err != nil {
-		logObject.Warningf("Watch '%s' failed: %s", filename, err)
-		//panic(err)
-		return
-	}
-
-	go func() {
-		defer watcher.Close()
-		for {
-			select {
-			case ev := <-watcher.Event:
-				if ev == nil {
-					break
-				}
-
-				if ok, _ := regexp.MatchString(`\.swa?px?$`,
-					ev.Name); ok {
-					break
-				}
-				if ev.IsDelete() {
-					watcher.Watch(filename)
-				} else if ev.IsCreate() {
-					break
-				} else {
-					op.updateUserInfo()
-				}
-				//case err := <-watcher.Error:
-				//logObject.Warningf("Watch Error:%v", err)
-			}
-		}
-	}()
-}
-
-func (op *UserManager) listenIconListChanged(filename string) {
-	if ok := opUtils.IsFileExist(filename); !ok {
-		if err := os.MkdirAll(filename, 0755); err != nil {
+	println("BEGIN Watch Account All File")
+	if watchAct == nil {
+		watchAct, err = fsnotify.NewWatcher()
+		if err != nil {
+			logObject.Warning("New Watch Account Failed: ", err)
+			logObject.Fatal(err)
 			return
 		}
 	}
-	watcher, err := fsnotify.NewWatcher()
-	if err != nil {
-		logObject.Warningf("New Watcher Failed:%v", err)
-		//panic(err)
+
+	// User List
+	//watchAct.Watch(ETC_PASSWD)
+	watchAct.Watch(ETC_SHADOW)
+	watchAct.Watch(ETC_GROUP)
+	println("END Watch All Account File")
+}
+
+func watchUserFiles() {
+	mutex.Lock()
+	defer mutex.Unlock()
+	var err error
+
+	println("BEGIN Watch User All File")
+	if watchUser == nil {
+		watchUser, err = fsnotify.NewWatcher()
+		if err != nil {
+			logObject.Warning("New Watch User Failed: ", err)
+			logObject.Fatal(err)
+			return
+		}
+	}
+
+	// User Info
+	//watchUser.Watch(ETC_GROUP)
+	//watchUser.Watch(ETC_SHADOW)
+	watchUser.Watch(ICON_SYSTEM_DIR)
+	watchUser.Watch(ICON_LOCAL_DIR)
+	if opUtils.IsFileExist(ETC_LIGHTDM_CONFIG) {
+		watchUser.Watch(ETC_LIGHTDM_CONFIG)
+	}
+	if opUtils.IsFileExist(ETC_GDM_CONFIG) {
+		watchUser.Watch(ETC_GDM_CONFIG)
+	}
+	if opUtils.IsFileExist(ETC_KDM_CONFIG) {
+		watchUser.Watch(ETC_KDM_CONFIG)
+	}
+	println("END Watch All User File")
+}
+
+func removeWatchAccountFiles() {
+	mutex.Lock()
+	defer mutex.Unlock()
+	if watchAct == nil {
 		return
 	}
 
-	err = watcher.Watch(filename)
-	if err != nil {
-		logObject.Warningf("Watch '%s' failed: %s", filename, err)
-		//panic(err)
+	println("BEGIN Remove All Account File Watcher...")
+	// User List
+	//watchAct.RemoveWatch(ETC_PASSWD)
+	watchAct.RemoveWatch(ETC_GROUP)
+	watchAct.RemoveWatch(ETC_SHADOW)
+	println("END Remove All Account File Watcher...")
+}
+
+func removeWatchUserFiles() {
+	mutex.Lock()
+	defer mutex.Unlock()
+	if watchUser == nil {
 		return
 	}
 
-	go func() {
-		defer watcher.Close()
-		for {
-			select {
-			case ev := <-watcher.Event:
-				if ev == nil {
-					break
-				}
+	println("BEGIN Remove All User File Watcher...")
+	// User Info
+	//watchUser.RemoveWatch(ETC_GROUP)
+	//watchUser.RemoveWatch(ETC_SHADOW)
+	watchUser.RemoveWatch(ICON_SYSTEM_DIR)
+	watchUser.RemoveWatch(ICON_LOCAL_DIR)
+	if opUtils.IsFileExist(ETC_LIGHTDM_CONFIG) {
+		watchUser.RemoveWatch(ETC_LIGHTDM_CONFIG)
+	}
+	if opUtils.IsFileExist(ETC_GDM_CONFIG) {
+		watchUser.RemoveWatch(ETC_GDM_CONFIG)
+	}
+	if opUtils.IsFileExist(ETC_KDM_CONFIG) {
+		watchUser.RemoveWatch(ETC_KDM_CONFIG)
+	}
+	println("END Remove All User File Watcher...")
+}
 
-				if ok, _ := regexp.MatchString(`\.swa?px?$`,
-					ev.Name); ok {
-					break
+func (op *AccountManager) listenUserListChanged() {
+	for {
+		select {
+		case ev := <-watchAct.Event:
+			if ev == nil {
+				break
+			}
+
+			if ok, _ := regexp.MatchString(`\.swa?px?$`,
+				ev.Name); ok {
+				break
+			}
+
+			ok1, _ := regexp.MatchString(ETC_GROUP, ev.Name)
+			//ok2, _ := regexp.MatchString(ETC_SHADOW, ev.Name)
+			logObject.Info(ev)
+			if ev.IsDelete() {
+				removeWatchAccountFiles()
+				watchAccountFiles()
+			} else if ev.IsModify() {
+				println("UPDATE User List")
+				if ok1 {
+					contents, _ := ioutil.ReadFile(ETC_GROUP)
+					lines := strings.Split(string(contents), "\n")
+					curGroupLine := len(lines)
+					if preGroupLine != curGroupLine {
+						preGroupLine = curGroupLine
+						break
+					}
 				}
+				op.emitUserListChanged()
+				println("UPDATE User List END....")
+			}
+		case err := <-watchAct.Error:
+			logObject.Warningf("Watch Error:%v", err)
+		}
+	}
+}
+
+func (op *UserManager) listenUserInfoChanged() {
+	for {
+		select {
+		case ev := <-watchUser.Event:
+			if ev == nil {
+				break
+			}
+
+			if ok, _ := regexp.MatchString(`\.swa?px?$`,
+				ev.Name); ok {
+				break
+			}
+			logObject.Info(ev)
+
+			//ok1, _ := regexp.MatchString(ETC_GROUP, ev.Name)
+			//ok2, _ := regexp.MatchString(ETC_SHADOW, ev.Name)
+			ok3, _ := regexp.MatchString(ICON_SYSTEM_DIR, ev.Name)
+			ok4, _ := regexp.MatchString(ICON_LOCAL_DIR, ev.Name)
+			ok5, _ := regexp.MatchString(ETC_LIGHTDM_CONFIG, ev.Name)
+			ok6, _ := regexp.MatchString(ETC_GDM_CONFIG, ev.Name)
+			ok7, _ := regexp.MatchString(ETC_KDM_CONFIG, ev.Name)
+
+			if ok5 || ok6 || ok7 {
+				if ev.IsDelete() {
+					removeWatchUserFiles()
+					watchUserFiles()
+				} else if ev.IsModify() {
+					println("UPDATE User Info")
+					op.updateUserInfo()
+					println("UPDATE User Info END...")
+				}
+			}
+
+			if ok3 || ok4 {
 				logObject.Info("Icon List Event:", ev)
 				op.setPropName("IconList")
-				//case err := <-watcher.Error:
-				//logObject.Warningf("Watch Error:%v", err)
 			}
+		case err := <-watchUser.Error:
+			logObject.Warningf("Watch Error:%v", err)
 		}
-	}()
+	}
 }
 
 func (op *AccountManager) emitUserListChanged() {
+	logObject.Info("EMIT User List Change Signal...")
 	infos := getUserInfoList()
 	destList := []string{}
 	for _, info := range infos {
@@ -185,6 +240,7 @@ func (op *AccountManager) emitUserListChanged() {
 			op.UserDeleted(v)
 		}
 	}
+	logObject.Info("EMIT User List Change Signal END...")
 }
 
 func compareStrList(src, dest []string) ([]string, int) {

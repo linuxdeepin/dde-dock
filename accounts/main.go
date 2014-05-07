@@ -26,6 +26,7 @@ import (
 	"dlib/dbus"
 	"dlib/logger"
 	dutils "dlib/utils"
+	"github.com/howeyc/fsnotify"
 	"os"
 )
 
@@ -33,6 +34,8 @@ var (
 	idUserManagerMap = make(map[string]*UserManager)
 	logObject        = logger.NewLogger("daemon/Accounts")
 	opUtils          *dutils.Manager
+	watchAct         *fsnotify.Watcher
+	watchUser        *fsnotify.Watcher
 )
 
 func main() {
@@ -48,6 +51,18 @@ func main() {
 	var err error
 	opUtils = dutils.NewUtils()
 
+	watchAct, err = fsnotify.NewWatcher()
+	if err != nil {
+		logObject.Warning("New Watch Account Failed:", err)
+		logObject.Fatalf("%v", err)
+	}
+
+	watchUser, err = fsnotify.NewWatcher()
+	if err != nil {
+		logObject.Warning("New Watch User Failed:", err)
+		logObject.Fatalf("%v", err)
+	}
+
 	opAccount := newAccountManager()
 	err = dbus.InstallOnSystem(opAccount)
 	if err != nil {
@@ -58,6 +73,8 @@ func main() {
 	updateUserList()
 
 	dbus.DealWithUnhandledMessage()
+	watchAccountFiles()
+	watchUserFiles()
 
 	//select {}
 	if err = dbus.Wait(); err != nil {

@@ -92,7 +92,7 @@ func newAccountManager() *AccountManager {
 	m.setPropName("UserList")
 	m.setPropName("AllowGuest")
 	m.setPropName("GuestIcon")
-	m.listenUserListChanged()
+	go m.listenUserListChanged()
 
 	return m
 }

@@ -362,20 +362,21 @@ func newUserManager(uid string) *UserManager {
 	m.Uid = uid
 	m.updateUserInfo()
 	m.setPropName("IconList")
-	m.listenUserInfoChanged(ETC_GROUP)
-	m.listenUserInfoChanged(ETC_SHADOW)
-	m.listenIconListChanged(ICON_SYSTEM_DIR)
-	m.listenIconListChanged(ICON_LOCAL_DIR)
+	//m.listenUserInfoChanged(ETC_GROUP)
+	//m.listenUserInfoChanged(ETC_SHADOW)
+	//m.listenIconListChanged(ICON_SYSTEM_DIR)
+	//m.listenIconListChanged(ICON_LOCAL_DIR)
+	go m.listenUserInfoChanged()
 
-	if opUtils.IsFileExist(ETC_LIGHTDM_CONFIG) {
-		m.listenUserInfoChanged(ETC_LIGHTDM_CONFIG)
-	}
-	if opUtils.IsFileExist(ETC_GDM_CONFIG) {
-		m.listenUserInfoChanged(ETC_GDM_CONFIG)
-	}
-	if opUtils.IsFileExist(ETC_KDM_CONFIG) {
-		m.listenUserInfoChanged(ETC_KDM_CONFIG)
-	}
+	//if opUtils.IsFileExist(ETC_LIGHTDM_CONFIG) {
+	//m.listenUserInfoChanged(ETC_LIGHTDM_CONFIG)
+	//}
+	//if opUtils.IsFileExist(ETC_GDM_CONFIG) {
+	//m.listenUserInfoChanged(ETC_GDM_CONFIG)
+	//}
+	//if opUtils.IsFileExist(ETC_KDM_CONFIG) {
+	//m.listenUserInfoChanged(ETC_KDM_CONFIG)
+	//}
 
 	return m
 }

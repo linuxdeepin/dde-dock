@@ -117,6 +117,7 @@ func (op *AccountManager) CreateUser(dbusMsg dbus.DMessage, name, fullname strin
 	//op.setPropName("UserList")
 
 	chownDir(name, name, "/home/"+name)
+	op.emitUserListChanged()
 
 	return path, true
 }
@@ -144,6 +145,7 @@ func (op *AccountManager) DeleteUser(dbusMsg dbus.DMessage, name string, removeF
 
 	//path := op.FindUserByName(name)
 	execCommand(CMD_USERDEL, args)
+	op.emitUserListChanged()
 	//op.UserDeleted(path)
 	//op.setPropName("UserList")
 	return true

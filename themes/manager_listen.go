@@ -22,103 +22,104 @@
 package main
 
 import (
-        "os"
-        "regexp"
+	"os"
+	"regexp"
 )
 
 var (
-        watchReset   = make(chan bool)
-        prevEventStr string
+	watchReset   = make(chan bool)
+	prevEventStr string
 )
 
 func (op *Manager) watchDirs(dirs []string) {
-        for _, dir := range dirs {
-                if ok := objUtil.IsFileExist(dir); !ok {
-                        err := os.MkdirAll(dir, 0755)
-                        if err != nil {
-                                logObject.Infof("Make dir '%s' failed: %v", dir, err)
-                                continue
-                        }
-                }
-                watcher.Watch(dir)
-        }
+	for _, dir := range dirs {
+		if ok := objUtil.IsFileExist(dir); !ok {
+			err := os.MkdirAll(dir, 0755)
+			if err != nil {
+				logObject.Infof("Make dir '%s' failed: %v", dir, err)
+				continue
+			}
+		}
+		watcher.Watch(dir)
+	}
 
-        for {
-                select {
-                case ev := <-watcher.Event:
-                        if ev == nil {
-                                break
-                        }
-                        if ok, _ := regexp.MatchString(`\.swa?px?$`, ev.Name); ok {
-                                break
-                        }
-                        //if ok, _ := regexp.MatchString(`theme.ini$`, ev.Name); ok {
-                        //break
-                        //}
-                        op.updateAllProps()
-                        if ev.IsDelete() || ev.IsCreate() {
-                                curEventStr := ev.String()
-                                if prevEventStr == curEventStr {
-                                        break
-                                }
-                                watchReset <- true
-                                return
-                        }
-                }
-        }
+	for {
+		select {
+		case ev := <-watcher.Event:
+			if ev == nil {
+				break
+			}
+			if ok, _ := regexp.MatchString(`\.swa?px?$`, ev.Name); ok {
+				break
+			}
+			//if ok, _ := regexp.MatchString(`theme.ini$`, ev.Name); ok {
+			//break
+			//}
+			op.updateAllProps()
+			if ev.IsDelete() || ev.IsCreate() {
+				curEventStr := ev.String()
+				if prevEventStr == curEventStr {
+					break
+				}
+				prevEventStr = curEventStr
+				watchReset <- true
+				return
+			}
+		}
+	}
 }
 
 func getAllDirName(dir string) []string {
-        f, err := os.Open(dir)
-        if err != nil {
-                logObject.Infof("Open '%s' failed: %v\n", dir, err)
-                return []string{}
-        }
-        defer f.Close()
+	f, err := os.Open(dir)
+	if err != nil {
+		logObject.Infof("Open '%s' failed: %v\n", dir, err)
+		return []string{}
+	}
+	defer f.Close()
 
-        finfos, err1 := f.Readdir(0)
-        if err1 != nil {
-                logObject.Infof("Readdir '%s' failed: %v\n", dir, err1)
-                return []string{}
-        }
+	finfos, err1 := f.Readdir(0)
+	if err1 != nil {
+		logObject.Infof("Readdir '%s' failed: %v\n", dir, err1)
+		return []string{}
+	}
 
-        dirs := []string{}
-        dirs = append(dirs, dir)
-        for _, info := range finfos {
-                if info == nil || !info.IsDir() {
-                        continue
-                }
+	dirs := []string{}
+	dirs = append(dirs, dir)
+	for _, info := range finfos {
+		if info == nil || !info.IsDir() {
+			continue
+		}
 
-                tmp := getAllDirName(dir + "/" + info.Name())
-                dirs = append(dirs, tmp...)
-        }
+		tmp := getAllDirName(dir + "/" + info.Name())
+		dirs = append(dirs, tmp...)
+	}
 
-        return dirs
+	return dirs
 }
 
 func (op *Manager) startListenDirs() {
-        homeDir := getHomeDir()
-        dirs := []string{}
+	homeDir := getHomeDir()
+	dirs := []string{}
 
-        dirs = append(dirs, THEMES_PATH)
-        dirs = append(dirs, homeDir+THEMES_LOCAL_PATH)
+	dirs = append(dirs, THEMES_PATH)
+	dirs = append(dirs, homeDir+THEMES_LOCAL_PATH)
 
-        dirs = append(dirs, ICONS_PATH)
-        dirs = append(dirs, homeDir+ICONS_LOCAL_PATH)
+	dirs = append(dirs, ICONS_PATH)
+	dirs = append(dirs, homeDir+ICONS_LOCAL_PATH)
 
-        dirs = append(dirs, getAllDirName(THUMB_BASE_PATH)...)
-        dirs = append(dirs, getAllDirName(homeDir+THUMB_LOCAL_BASE_PATH)...)
-        dirs = append(dirs, getAllDirName(SOUND_THEME_PATH)...)
+	dirs = append(dirs, getAllDirName(THUMB_BASE_PATH)...)
+	dirs = append(dirs, getAllDirName(homeDir+THUMB_LOCAL_BASE_PATH)...)
+	dirs = append(dirs, getAllDirName(SOUND_THEME_PATH)...)
 
-        //logObject.Info("Watch Dirs: ", dirs)
-        go op.watchDirs(dirs)
+	//logObject.Info("Watch Dirs: ", dirs)
+	go op.watchDirs(dirs)
 }
 
 func (op *Manager) resetListenDirs() {
-        for {
-                select {
-                case <-watchReset:
-                        op.startListenDirs()
-                }
-        }
+	for {
+		select {
+		case <-watchReset:
+			op.startListenDirs()
+		}
+	}
 }
