@@ -147,7 +147,13 @@ func (m *Monitor) SetMode(id uint32) {
 	for _, _m := range GetDisplayInfo().modes {
 		if _m.ID == id {
 			m.setPropCurrentMode(_m)
-			m.cfg.Width, m.cfg.Height, m.cfg.RefreshRate = _m.Width, _m.Height, _m.Rate
+
+			w, h := parseRotationSize(m.Rotation, _m.Width, _m.Height)
+
+			m.cfg.Width, m.cfg.Height, m.cfg.RefreshRate = w, h, _m.Rate
+			m.setPropWidth(w)
+			m.setPropHeight(h)
+
 			GetDisplay().detectChanged()
 			return
 		}
@@ -213,12 +219,14 @@ func (m *Monitor) updateInfo() {
 			Logger.Warning("UpdateInfo Failed:", (m.Name), oinfo.Crtc, err)
 			return
 		}
-		m.SetPos(cinfo.X, cinfo.Y)
-		m.SetMode(uint32(cinfo.Mode))
-
 		rotation, reflect := parseRandR(cinfo.Rotation)
 		m.SetRotation(rotation)
 		m.SetReflect(reflect)
+
+		//SetMode should after SetRotation
+		m.SetPos(cinfo.X, cinfo.Y)
+		m.SetMode(uint32(cinfo.Mode))
+
 	}
 }
 
