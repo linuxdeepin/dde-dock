@@ -231,22 +231,26 @@ func (app *RuntimeApp) HandleMenuItem(id int32) {
 
 func find_app_id_by_xid(xid xproto.Window) string {
 	if id, err := xprop.PropValStr(xprop.GetProperty(XU, xid, "_DDE_DOCK_APP_ID")); err == nil {
-		return id
+		return strings.ToLower(id)
 	}
-	pid, _ := ewmh.WmPidGet(XU, xid)
-	iconName, _ := ewmh.WmIconNameGet(XU, xid)
-	name, _ := ewmh.WmNameGet(XU, xid)
 	wmClass, _ := icccm.WmClassGet(XU, xid)
 	var wmInstance, wmClassName string
 	if wmClass != nil {
 		wmInstance = wmClass.Instance
 		wmClassName = wmClass.Class
 	}
+	pid, err := ewmh.WmPidGet(XU, xid)
+	if err != nil {
+		return strings.ToLower(wmInstance)
+	}
+	iconName, _ := ewmh.WmIconNameGet(XU, xid)
+	name, _ := ewmh.WmNameGet(XU, xid)
 	if pid == 0 {
+		return strings.ToLower(wmInstance)
 	} else {
 	}
 	appId := find_app_id(pid, name, wmInstance, wmClassName, iconName)
-	return appId
+	return strings.ToLower(appId)
 }
 
 func contains(haystack []string, needle string) bool {
