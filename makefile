@@ -20,6 +20,7 @@ all:
 	cd themes/ && $(run)
 	cd zone-settings/ && $(run)
 	cd deepin-daemon/ && $(run)
+	cd clipboard/ && $(run)
 
 
 update:
