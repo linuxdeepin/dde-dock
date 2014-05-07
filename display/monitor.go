@@ -178,11 +178,11 @@ func (m *Monitor) generateShell() string {
 
 			switch m.Rotation {
 			case randr.RotationRotate90:
-				code = fmt.Sprintf("%s --rotate right", code)
+				code = fmt.Sprintf("%s --rotate left", code)
 			case randr.RotationRotate180:
 				code = fmt.Sprintf("%s --rotate inverted", code)
 			case randr.RotationRotate270:
-				code = fmt.Sprintf("%s --rotate left", code)
+				code = fmt.Sprintf("%s --rotate right", code)
 			default:
 				code = fmt.Sprintf("%s --rotate normal", code)
 			}
