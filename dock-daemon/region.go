@@ -2,6 +2,7 @@ package main
 
 import (
 	"dlib/dbus"
+	"errors"
 	"github.com/BurntSushi/xgb"
 	"github.com/BurntSushi/xgb/shape"
 	"github.com/BurntSushi/xgb/xproto"
@@ -14,21 +15,11 @@ var (
 )
 
 type Region struct {
-	dockWindow xproto.Window
 }
 
 func NewRegion() *Region {
 	shape.Init(C)
-	r := Region{0}
-
-	windows, _ := ewmh.ClientListGet(XU)
-	for _, xid := range windows {
-		res, err := icccm.WmClassGet(XU, xid)
-		if err == nil && res.Instance == "dde-dock" {
-			r.dockWindow = xid
-			break
-		}
-	}
+	r := Region{}
 
 	return &r
 }
@@ -41,10 +32,36 @@ func (r *Region) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
+func (r *Region) getDockWindow() (xproto.Window, error) {
+	windows, _ := ewmh.ClientListGet(XU)
+	for _, xid := range windows {
+		res, err := icccm.WmClassGet(XU, xid)
+		if err == nil && res.Instance == "dde-dock" {
+			return xid, nil
+		}
+	}
+	return 0, errors.New("find dock window failed, it's not existed.")
+}
+
 func (r *Region) GetDockRegion() xproto.Rectangle {
+	defer func() {
+		if err := recover(); err != nil {
+			logger.Error("Region::GetDockRegion", err)
+		}
+	}()
+
 	dockRegion := xproto.Rectangle{0, 0, 0, 0}
-	cookie := shape.GetRectangles(C, r.dockWindow, shape.SkInput)
-	rep, _ := cookie.Reply()
+	dockWindow, err := r.getDockWindow()
+	if err != nil {
+		logger.Error(err)
+		return dockRegion
+	}
+	cookie := shape.GetRectangles(C, dockWindow, shape.SkInput)
+	rep, err := cookie.Reply()
+	if err != nil {
+		logger.Error("get rectangles failed:", err)
+		return dockRegion
+	}
 	for _, rect := range rep.Rectangles {
 		logger.Infof("dock region: %dx%d(%d,%d)", rect.Width, rect.Height, rect.X, rect.Y)
 		if dockRegion.X == 0 || dockRegion.X > rect.X {
