@@ -445,7 +445,7 @@ func main() {
 }
 
 func (dpy *Display) QueryOutputFeature(name string) int32 {
-	if _, ok := GetDisplayInfo().backlightLevel[name]; ok {
+	if max, ok := GetDisplayInfo().backlightLevel[name]; ok && max != 0 {
 		return 1
 	}
 	return 0
