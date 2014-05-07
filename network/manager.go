@@ -4,7 +4,12 @@ import "dlib/dbus"
 import "dlib/dbus/property"
 import nm "dbus/org/freedesktop/networkmanager"
 
-const nmDest = "org.freedesktop.NetworkManager"
+const (
+	dbusNmDest      = "org.freedesktop.NetworkManager"
+	dbusNetworkDest = "com.deepin.daemon.Network"
+	dbusNetworkPath = "/com/deepin/daemon/Network"
+	dbusNetworkIfs  = "com.deepin.daemon.Network"
+)
 
 // TODO
 const (
@@ -13,8 +18,8 @@ const (
 )
 
 var (
-	nmManager, _  = nm.NewManager(nmDest, "/org/freedesktop/NetworkManager")
-	nmSettings, _ = nm.NewSettings(nmDest, "/org/freedesktop/NetworkManager/Settings")
+	nmManager, _  = nm.NewManager(dbusNmDest, "/org/freedesktop/NetworkManager")
+	nmSettings, _ = nm.NewSettings(dbusNmDest, "/org/freedesktop/NetworkManager/Settings")
 )
 
 type connectionData map[string]map[string]dbus.Variant
@@ -57,9 +62,9 @@ type Manager struct {
 
 func (m *Manager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		"com.deepin.daemon.Network",
-		"/com/deepin/daemon/Network",
-		"com.deepin.daemon.Network",
+		dbusNetworkDest,
+		dbusNetworkPath,
+		dbusNetworkIfs,
 	}
 }
 

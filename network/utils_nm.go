@@ -5,7 +5,7 @@ import "dlib/dbus"
 import "strings"
 
 func nmNewDevice(devPath dbus.ObjectPath) (dev *nm.Device, err error) {
-	dev, err = nm.NewDevice(nmDest, devPath)
+	dev, err = nm.NewDevice(dbusNmDest, devPath)
 	if err != nil {
 		logger.Error(err)
 		return
@@ -14,7 +14,7 @@ func nmNewDevice(devPath dbus.ObjectPath) (dev *nm.Device, err error) {
 }
 
 func nmNewDeviceWired(devPath dbus.ObjectPath) (dev *nm.DeviceWired, err error) {
-	dev, err = nm.NewDeviceWired(nmDest, devPath)
+	dev, err = nm.NewDeviceWired(dbusNmDest, devPath)
 	if err != nil {
 		logger.Error(err)
 		return
@@ -23,7 +23,7 @@ func nmNewDeviceWired(devPath dbus.ObjectPath) (dev *nm.DeviceWired, err error) 
 }
 
 func nmNewDeviceWireless(devPath dbus.ObjectPath) (dev *nm.DeviceWireless, err error) {
-	dev, err = nm.NewDeviceWireless(nmDest, devPath)
+	dev, err = nm.NewDeviceWireless(dbusNmDest, devPath)
 	if err != nil {
 		logger.Error(err)
 		return
@@ -32,7 +32,7 @@ func nmNewDeviceWireless(devPath dbus.ObjectPath) (dev *nm.DeviceWireless, err e
 }
 
 func nmNewAccessPoint(apPath dbus.ObjectPath) (ap *nm.AccessPoint, err error) {
-	ap, err = nm.NewAccessPoint(nmDest, apPath)
+	ap, err = nm.NewAccessPoint(dbusNmDest, apPath)
 	if err != nil {
 		logger.Error(err)
 		return
@@ -41,7 +41,7 @@ func nmNewAccessPoint(apPath dbus.ObjectPath) (ap *nm.AccessPoint, err error) {
 }
 
 func nmNewActiveConnection(apath dbus.ObjectPath) (ac *nm.ActiveConnection, err error) {
-	ac, err = nm.NewActiveConnection(nmDest, apath)
+	ac, err = nm.NewActiveConnection(dbusNmDest, apath)
 	if err != nil {
 		logger.Error(err)
 		return
@@ -50,7 +50,7 @@ func nmNewActiveConnection(apath dbus.ObjectPath) (ac *nm.ActiveConnection, err 
 }
 
 func nmNewAgentManager() (manager *nm.AgentManager, err error) {
-	manager, err = nm.NewAgentManager(nmDest, "/org/freedesktop/NetworkManager/AgentManager")
+	manager, err = nm.NewAgentManager(dbusNmDest, "/org/freedesktop/NetworkManager/AgentManager")
 	if err != nil {
 		logger.Error(err)
 		return
@@ -59,7 +59,7 @@ func nmNewAgentManager() (manager *nm.AgentManager, err error) {
 }
 
 func nmNewDHCP4Config(path dbus.ObjectPath) (dhcp4 *nm.DHCP4Config, err error) {
-	dhcp4, err = nm.NewDHCP4Config(nmDest, path)
+	dhcp4, err = nm.NewDHCP4Config(dbusNmDest, path)
 	if err != nil {
 		logger.Error(err)
 		return
@@ -96,7 +96,7 @@ func nmGetWirelessDeviceHwAddr(devPath dbus.ObjectPath) (hwAddr string, err erro
 }
 
 func nmNewSettingsConnection(cpath dbus.ObjectPath) (conn *nm.SettingsConnection, err error) {
-	conn, err = nm.NewSettingsConnection(nmDest, cpath)
+	conn, err = nm.NewSettingsConnection(dbusNmDest, cpath)
 	if err != nil {
 		logger.Error(err)
 		return
@@ -181,7 +181,7 @@ func nmGetActiveConnectionByUuid(uuid string) (apath dbus.ObjectPath, ok bool) {
 }
 
 func nmGetConnectionData(cpath dbus.ObjectPath) (data connectionData, err error) {
-	nmConn, err := nm.NewSettingsConnection(nmDest, cpath)
+	nmConn, err := nm.NewSettingsConnection(dbusNmDest, cpath)
 	if err != nil {
 		logger.Error(err)
 		return

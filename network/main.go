@@ -1,6 +1,7 @@
 package main
 
 import (
+	"dlib"
 	"dlib/dbus"
 	liblogger "dlib/logger"
 	"flag"
@@ -8,13 +9,18 @@ import (
 )
 
 var (
-	logger   = liblogger.NewLogger("com.deepin.daemon.Network")
+	logger   = liblogger.NewLogger(dbusNetworkDest)
 	manager  *Manager
 	argDebug bool
 )
 
 func main() {
 	defer logger.EndTracing()
+
+	if !dlib.UniqueOnSession(dbusNetworkDest) {
+		logger.Warning("There already has an daemon running:", dbusNetworkDest)
+		return
+	}
 
 	// configure logger
 	flag.BoolVar(&argDebug, "d", false, "debug mode")
@@ -31,17 +37,12 @@ func main() {
 		os.Exit(1)
 	}
 
-	// TODO test panic
-	// dbus.MakeVariant(12)
-
 	// initialize manager after configuring dbus
 	manager.initManager()
 
 	dbus.DealWithUnhandledMessage()
 	if err := dbus.Wait(); err != nil {
-		logger.Error("lost dbus session: ", err)
+		logger.Error("lost dbus session:", err)
 		os.Exit(1)
-	} else {
-		os.Exit(0)
 	}
 }
