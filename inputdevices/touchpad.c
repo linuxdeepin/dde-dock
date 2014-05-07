@@ -35,14 +35,14 @@ set_tpad_enable(int enable)
         return;
     }
 
-    g_print("Trying to set %s, id: %d\n",
+    g_debug("Trying to set %s, id: %d\n",
             enable ? "Enable TouchPad" : "Disable TouchPad", id);
 
     if (set_device_enabled (id, enable) == FALSE) {
         g_warning ("Set %s Failed: id (%d)",
                    enable ? "Enable TouchPad" : "Disable TouchPad", id);
     } else {
-        g_print ("Set %s Success: id (%d)\n",
+        g_debug ("Set %s Success: id (%d)\n",
                  enable ? "Enable TouchPad" : "Disable TouchPad", id);
     }
 }
@@ -65,17 +65,17 @@ set_natural_scroll(int enable)
         return;
     }
 
-    g_print("Trying to set %s for \"%s\"\n",
+    g_debug("Trying to set %s for \"%s\"\n",
             enable ? "natural (reverse) scrollroll" : "normal scroll",
             gdk_device_get_name(tpad));
 
     Atom scrolling_distance = XInternAtom(
                                   GDK_DISPLAY_XDISPLAY(gdk_display_get_default()),
                                   "Synaptics Scrolling Distance", FALSE);
-    g_print("Error Trap Push\n");
+    g_debug("Error Trap Push\n");
     gdk_error_trap_push();
     /*gdk_error_trap_pop_ignored();*/
-    g_print("Get Device Property\n");
+    g_debug("Get Device Property\n");
     Atom act_type;
     int act_format;
     unsigned long nitems, bytes_after;
@@ -144,7 +144,7 @@ set_edge_scroll(int enable)
         return;
     }
 
-    g_print("Trying to set %s\n",
+    g_debug("Trying to set %s\n",
             enable ? "enable edge scroll" : "disable edge scroll");
     gdk_error_trap_push();
     Atom act_type;
@@ -203,7 +203,7 @@ set_two_finger_scroll(int enable_vert, int enable_horiz)
         return;
     }
 
-    g_print("Trying to set %s, %s\n",
+    g_debug("Trying to set %s, %s\n",
             enable_vert ? "enable two finger vert scroll" : "disable two finger vert scroll",
             enable_horiz ? "enable two finger horiz scroll" : "disable two finger horiz scroll");
     gdk_error_trap_push();
@@ -248,7 +248,7 @@ set_tab_to_click (int state, int left_handed)
     GdkDevice *tpad = device_is_exist(TPAD_NAME_KEY);
 
     if (tpad == NULL) {
-        g_print("TouchPad not exist\n");
+        g_debug("TouchPad not exist\n");
         return;
     }
 
@@ -268,7 +268,7 @@ set_tab_to_click (int state, int left_handed)
         return;
     }
 
-    g_print("Settings tap to click on %s\n",
+    g_debug("Settings tap to click on %s\n",
             left_handed ? "Use Left Hand" : "Use Right Hand");
     gdk_error_trap_push();
     Atom act_type;

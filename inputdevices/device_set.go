@@ -54,9 +54,10 @@ func enableTPadWhileTyping() {
 	args = append(args, "-R")
 
 	tpadTypingState = true
-	exec.Command(cmd, args...).Run()
+	go exec.Command(cmd, args...).Run()
 	select {
 	case <-tpadTypingChan:
+		exec.Command("/usr/bin/killall", "/usr/bin/syndaemon")
 		tpadTypingState = false
 		return
 	}
@@ -102,14 +103,19 @@ func initGdkEnv() {
 
 func disableTPadWhileTyping(enable bool) {
 	if tpadEnable := tpadSettings.GetBoolean(TPAD_KEY_ENABLE); !tpadEnable {
+		if tpadTypingState {
+			tpadTypingChan <- true
+		}
 		return
 	}
 
 	if !enable {
-		tpadTypingChan <- true
+		if tpadTypingState {
+			tpadTypingChan <- true
+		}
+	} else {
+		go enableTPadWhileTyping()
 	}
-
-	go enableTPadWhileTyping()
 }
 
 func setQtCursorBlink(rate uint32) {
@@ -128,8 +134,11 @@ func listenDevsSettings() {
 			logObj.Info("%s changed", key)
 			if enable := tpadSettings.GetBoolean(key); enable {
 				C.set_tpad_enable(C.TRUE)
+				ok := tpadSettings.GetBoolean(TPAD_KEY_W_TYPING)
+				disableTPadWhileTyping(ok)
 			} else {
 				C.set_tpad_enable(C.FALSE)
+				disableTPadWhileTyping(false)
 			}
 		case TPAD_KEY_LEFT_HAND:
 			if enable := tpadSettings.GetBoolean(TPAD_KEY_ENABLE); !enable {
