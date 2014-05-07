@@ -1,0 +1,62 @@
+/**
+ * Copyright (c) 2011 ~ 2014 Deepin, Inc.
+ *               2013 ~ 2014 jouyouyun
+ *
+ * Author:      jouyouyun <jouyouwen717@gmail.com>
+ * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ **/
+
+#include <gtk/gtk.h>
+#include "gsd-clipboard-manager.h"
+
+static GsdClipboardManager *clip_manager = NULL;
+
+void
+start_clip_manager()
+{
+	gtk_init(NULL, NULL);
+	if (clip_manager != NULL) {
+		gsd_clipboard_manager_stop(clip_manager);
+		g_object_unref(G_OBJECT(clip_manager));
+		clip_manager = NULL;
+	}
+
+	clip_manager = gsd_clipboard_manager_new();
+	if ( clip_manager == NULL ) {
+		g_warning("New Clipboard Manager Failed");
+		return;
+	}
+
+	GError *err = NULL;
+	if (!gsd_clipboard_manager_start(clip_manager, &err)) {
+		g_warning("Start Clipboard Manager Failed: %s", err->message);
+		g_object_unref(G_OBJECT(clip_manager));
+		clip_manager = NULL;
+		return;
+	}
+	gtk_main();
+}
+
+void
+stop_clip_manager()
+{
+	if (clip_manager != NULL) {
+		gsd_clipboard_manager_stop(clip_manager);
+		g_object_unref(G_OBJECT(clip_manager));
+		clip_manager = NULL;
+	}
+	gtk_main_quit();
+}
