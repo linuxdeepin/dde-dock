@@ -33,5 +33,10 @@
     <key type="i" name="cursor-blink-time">
       <default>1200</default>
     </key>
+    <key type="b" name="capslock-toggle">
+	    <default>true</default>
+	    <summary>Control whether show CapsLock notify</summary>
+	    <description>Control whether show CapsLock notify</description>
+    </key>
     </schema>
 </schemalist>
