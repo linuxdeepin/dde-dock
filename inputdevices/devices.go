@@ -82,6 +82,40 @@ func (op *KbdEntry) GetLayoutLocale(layout string) string {
 	return desc
 }
 
+func (op *KbdEntry) AddLayoutOption(option string) {
+	if len(option) < 1 {
+		return
+	}
+
+	options := kbdSettings.GetStrv(KBD_KEY_LAYOUT_OPTIONS)
+	if !utilObj.IsElementExist(option, options) {
+		options = append(options, option)
+		kbdSettings.SetStrv(KBD_KEY_LAYOUT_OPTIONS, options)
+	}
+}
+
+func (op *KbdEntry) DeleteLayoutOption(option string) {
+	if len(option) < 1 {
+		return
+	}
+
+	options := kbdSettings.GetStrv(KBD_KEY_LAYOUT_OPTIONS)
+	if utilObj.IsElementExist(option, options) {
+		tmp := []string{}
+		for _, v := range options {
+			if v == option {
+				continue
+			}
+			tmp = append(tmp, v)
+		}
+		kbdSettings.SetStrv(KBD_KEY_LAYOUT_OPTIONS, tmp)
+	}
+}
+
+func (op *KbdEntry) ClearLayoutOption() {
+	kbdSettings.SetStrv(KBD_KEY_LAYOUT_OPTIONS, []string{""})
+}
+
 func (op *KbdEntry) AddUserLayout(layout string) bool {
 	if len(layout) < 1 || !strings.Contains(layout, LAYOUT_DELIM) {
 		layout = "us" + LAYOUT_DELIM

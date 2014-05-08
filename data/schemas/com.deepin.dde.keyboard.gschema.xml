@@ -6,6 +6,11 @@
         <summary>User Add Layout List</summary>
         <description>User Add Layout List</description>
     </key>
+    <key type="as" name="layout-options">
+	    <default>[]</default>
+	    <summary>Layout Option List</summary>
+	    <description>Layout Option List</description>
+    </key>
     <key type="s" name="layout">
         <default>""</default>
         <summary>Keyboard Layout</summary>

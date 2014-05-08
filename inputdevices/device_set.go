@@ -63,6 +63,26 @@ func enableTPadWhileTyping() {
 	}
 }
 
+func setLayoutOptions() {
+	options := kbdSettings.GetStrv(KBD_KEY_LAYOUT_OPTIONS)
+	setLayoutOption("")
+	for _, v := range options {
+		setLayoutOption(v)
+	}
+}
+
+func setLayoutOption(option string) bool {
+	args := []string{}
+	args = append(args, "-option")
+	args = append(args, option)
+	if err := exec.Command("/usr/bin/setxkbmap", args...).Run(); err != nil {
+		logObj.Warningf("Set option '%s' failed: %v", option, err)
+		return false
+	}
+
+	return true
+}
+
 func setLayout(key string) {
 	layout := ""
 	option := ""
@@ -82,12 +102,18 @@ func setLayout(key string) {
 	args := []string{}
 	args = append(args, "-layout")
 	args = append(args, layout)
-	args = append(args, "-option")
-	args = append(args, option)
+	//args = append(args, "-option")
+	//args = append(args, option)
 	if err := exec.Command("/usr/bin/setxkbmap", args...).Run(); err != nil {
 		logObj.Warningf("Set Layout: %s - %s Failed: %v",
 			layout, option, err)
 		return
+	}
+
+	options := kbdSettings.GetStrv(KBD_KEY_LAYOUT_OPTIONS)
+	if !utilObj.IsElementExist(option, options) {
+		options = append(options, option)
+		kbdSettings.SetStrv(KBD_KEY_LAYOUT_OPTIONS, options)
 	}
 
 	list := kbdSettings.GetStrv(KBD_KEY_USER_LAYOUT_LIST)
@@ -259,6 +285,8 @@ func listenDevsSettings() {
 			value := kbdSettings.GetInt(key)
 			xsObj.SetInterger("Net/CursorBlinkTime", uint32(value))
 			setQtCursorBlink(uint32(value))
+		case KBD_KEY_LAYOUT_OPTIONS:
+			setLayoutOptions()
 		}
 	})
 }

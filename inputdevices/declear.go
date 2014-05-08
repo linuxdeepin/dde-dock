@@ -48,7 +48,7 @@ const (
 	KBD_KEY_DELAY            = "delay"
 	KBD_KEY_LAYOUT           = "layout"
 	KBD_KEY_LAYOUT_MODEL     = "layout-model"
-	KBD_KEY_LAYOUT_OPTION    = "layout-option"
+	KBD_KEY_LAYOUT_OPTIONS   = "layout-options"
 	KBD_KEY_USER_LAYOUT_LIST = "user-layout-list"
 	KBD_CURSOR_BLINK_TIME    = "cursor-blink-time"
 	KBD_DEFAULT_FILE         = "/etc/default/keyboard"
