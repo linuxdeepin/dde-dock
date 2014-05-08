@@ -81,7 +81,7 @@
 	</key>
 
 	<key name="percentage-low" type="i">
-	    <default>20</default>
+	    <default>25</default>
 	    <summary>Percentage considered low</summary>
 	    <description>The percentage of the battery when it is considered low. Only valid when use-time-for-policy is false.</description>
 	</key>
