@@ -102,22 +102,22 @@ func getPrimaryScreenBestResolution() (w uint16, h uint16) {
 		for _, id := range bestModes {
 			if id == m.Id {
 				bw, bh := m.Width, m.Height
-				if w*h == 0 {
+				if w == 0 || h == 0 {
 					w, h = bw, bh
-				} else if bw*bh < w*h {
+				} else if uint32(bw)*uint32(bh) < uint32(w)*uint32(h) {
 					w, h = bw, bh
 				}
 			}
 		}
 	}
 
-	if w*h == 0 {
+	if w == 0 || h == 0 {
 		// get resource failed, use root window's geometry
 		rootRect := xwindow.RootGeometry(XU)
 		w, h = uint16(rootRect.Width()), uint16(rootRect.Height())
 	}
 
-	if w*h == 0 {
+	if w == 0 || h == 0 {
 		w, h = 1024, 768 // default value
 	}
 
