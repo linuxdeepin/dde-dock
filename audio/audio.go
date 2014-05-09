@@ -1,10 +1,12 @@
 package main
 
+import "dlib"
 import "dlib/dbus"
+import "dlib/logger"
 import "dlib/pulse"
-import fmtp "github.com/kr/pretty"
+import "os"
 
-var _ = fmtp.Print
+var Logger = logger.NewLogger("com.deepin.daemon.Audio")
 
 type Audio struct {
 	init bool
@@ -114,12 +116,32 @@ func (s *Source) SetPort(name string) {
 }
 
 func main() {
+	defer Logger.EndTracing()
+	if !dlib.UniqueOnSession("com.deepin.daemon.Audio") {
+		Logger.Warning("There already has an Audio daemon running.")
+		return
+	}
+
 	ctx := pulse.GetContext()
 	audio := NewAudio(ctx)
 	tester := &SourceOutputTest{}
 
-	dbus.InstallOnSession(audio)
 	dbus.InstallOnSession(tester)
 
+	if err := dbus.InstallOnSession(audio); err != nil {
+		Logger.Error("Failed InstallOnSession:", err)
+		return
+	}
+	if err := dbus.InstallOnSession(tester); err != nil {
+		Logger.Error("Failed InstallOnSession:", err)
+	}
+
+	dbus.DealWithUnhandledMessage()
+	if err := dbus.Wait(); err != nil {
+		Logger.Error("dbus.Wait recieve an error:", err)
+		os.Exit(1)
+	} else {
+		os.Exit(0)
+	}
 	dbus.Wait()
 }

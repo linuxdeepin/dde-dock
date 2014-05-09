@@ -59,7 +59,6 @@ func (a *Audio) update() {
 	sinfo := a.core.GetServer()
 	a.setPropDefaultSink(sinfo.DefaultSinkName)
 	a.setPropDefaultSource(sinfo.DefaultSourceName)
-	fmt.Println("S", a.core.GetDefaultSink())
 
 	var sinks []*Sink
 	var sources []*Source
