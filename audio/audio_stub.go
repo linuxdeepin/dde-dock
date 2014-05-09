@@ -97,6 +97,9 @@ func (s *Audio) setPropSinks(v []*Sink) {
 	for _, o := range s.Sinks {
 		dbus.UnInstallObject(o)
 	}
+	for _, o := range v {
+		dbus.InstallOnSession(o)
+	}
 	s.Sinks = v
 	dbus.NotifyChange(s, "Sinks")
 }
@@ -104,12 +107,18 @@ func (s *Audio) setPropSources(v []*Source) {
 	for _, o := range s.Sources {
 		dbus.UnInstallObject(o)
 	}
+	for _, o := range v {
+		dbus.InstallOnSession(o)
+	}
 	s.Sources = v
 	dbus.NotifyChange(s, "Sources")
 }
 func (s *Audio) setPropSinkInputs(v []*SinkInput) {
 	for _, o := range s.SinkInputs {
 		dbus.UnInstallObject(o)
+	}
+	for _, o := range v {
+		dbus.InstallOnSession(o)
 	}
 	s.SinkInputs = v
 	dbus.NotifyChange(s, "SinkInputs")
@@ -119,7 +128,7 @@ func (s *Sink) update() {
 	s.Name = s.core.Name
 	s.Description = s.core.Description
 
-	//s.BaseVolume = s.core.BaseVolume
+	s.BaseVolume = s.core.BaseVolume.ToLiner()
 	s.setPropVolume(s.core.Volume.Avg())
 	s.setPropBalance(s.core.Volume.Balance(s.core.ChannelMap))
 	s.setPropMute(s.core.Mute)
@@ -143,7 +152,7 @@ func (s *Sink) setPropVolume(v float64) {
 }
 func (s *Sink) setPropBalance(v float64) {
 	if s.Volume != v {
-		s.Volume = v
+		s.Balance = v
 		dbus.NotifyChange(s, "Balance")
 	}
 }
@@ -164,7 +173,7 @@ func (s *Source) update() {
 	s.Name = s.core.Name
 	s.Description = s.core.Description
 
-	//s.BaseVolume = s.core.BaseVolume
+	s.BaseVolume = s.core.BaseVolume.ToLiner()
 	s.setPropVolume(s.core.Volume.Avg())
 	s.setPropBalance(s.core.Volume.Balance(s.core.ChannelMap))
 	s.setPropMute(s.core.Mute)
@@ -190,7 +199,7 @@ func (s *Source) setPropVolume(v float64) {
 }
 func (s *Source) setPropBalance(v float64) {
 	if s.Volume != v {
-		s.Volume = v
+		s.Balance = v
 		dbus.NotifyChange(s, "Balance")
 	}
 }
