@@ -7,7 +7,9 @@ import fmtp "github.com/kr/pretty"
 var _ = fmtp.Print
 
 type Audio struct {
-	core          *pulse.Context
+	init bool
+	core *pulse.Context
+
 	Sinks         []*Sink
 	Sources       []*Source
 	SinkInputs    []*SinkInput
@@ -33,6 +35,7 @@ func NewSinkInput(core *pulse.SinkInput) *SinkInput {
 func NewAudio(core *pulse.Context) *Audio {
 	a := &Audio{core: core}
 	a.update()
+	a.initEventHandlers()
 	return a
 }
 

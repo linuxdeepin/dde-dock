@@ -68,7 +68,10 @@ func (a *Audio) update() {
 		sinks = append(sinks, NewSink(s))
 	}
 	for _, s := range a.core.GetSourceList() {
-		sources = append(sources, NewSource(s))
+		obj := NewSource(s)
+		if len(obj.Ports) > 0 {
+			sources = append(sources, obj)
+		}
 	}
 	for _, s := range a.core.GetSinkInputList() {
 		sinkinputs = append(sinkinputs, NewSinkInput(s))
@@ -123,7 +126,15 @@ func (s *Sink) update() {
 	s.setPropMute(s.core.Mute)
 
 	s.setPropActivePort(s.core.ActivePort.Name)
-	//s.Ports = s.core.Ports
+	var ports []string
+	for _, p := range s.core.Ports {
+		ports = append(ports, p.Name)
+	}
+	s.setPropPorts(ports)
+}
+func (s *Sink) setPropPorts(v []string) {
+	s.Ports = v
+	dbus.NotifyChange(s, "Ports")
 }
 func (s *Sink) setPropVolume(v float64) {
 	if s.Volume != v {
@@ -160,7 +171,16 @@ func (s *Source) update() {
 	s.setPropMute(s.core.Mute)
 
 	s.setPropActivePort(s.core.ActivePort.Name)
-	//s.Ports = s.core.Ports
+
+	var ports []string
+	for _, p := range s.core.Ports {
+		ports = append(ports, p.Name)
+	}
+	s.setPropPorts(ports)
+}
+func (s *Source) setPropPorts(v []string) {
+	s.Ports = v
+	dbus.NotifyChange(s, "Ports")
 }
 
 func (s *Source) setPropVolume(v float64) {
