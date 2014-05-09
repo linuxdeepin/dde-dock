@@ -230,7 +230,7 @@ func (s *SinkInput) setPropMute(v bool) {
 }
 
 func (s *SinkInput) update() {
-	s.Name = s.core.Name
+	s.Name = s.core.PropList[PropAppName]
 	s.Icon = s.core.PropList[PropAppIconName]
 	s.setPropVolume(s.core.GetAvgVolume())
 	s.setPropMute(s.core.Mute)
