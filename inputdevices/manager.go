@@ -21,6 +21,8 @@
 
 package main
 
+import "C"
+
 import (
 	"dlib/dbus"
 	"io/ioutil"
@@ -65,10 +67,11 @@ func getDeviceNames() []string {
 }
 
 //export parseDeviceAdd
-func parseDeviceAdd(devName string) {
-	s := strings.ToLower(devName)
-	switch s {
-	case "mouse":
+func parseDeviceAdd(devName *C.char) {
+	tmp := C.GoString(devName)
+	s := strings.ToLower(tmp)
+	logObj.Infof("DEVICE CHANGED: %s added", s)
+	if strings.Contains(s, "mouse") {
 		if managerObj.mouseObj == nil {
 			mouse := NewMouse()
 			if err := dbus.InstallOnSession(mouse); err != nil {
@@ -78,7 +81,7 @@ func parseDeviceAdd(devName string) {
 			managerObj.mouseObj = mouse
 			managerObj.setPropName("Infos")
 		}
-	case "touchpad":
+	} else if strings.Contains(s, "touchpad") {
 		if managerObj.tpadObj == nil {
 			tpad := NewTPad()
 			if err := dbus.InstallOnSession(tpad); err != nil {
@@ -88,7 +91,7 @@ func parseDeviceAdd(devName string) {
 			managerObj.tpadObj = tpad
 			managerObj.setPropName("Infos")
 		}
-	case "keyboard":
+	} else if strings.Contains(s, "keyboard") {
 		if managerObj.kbdObj == nil {
 			kbd := NewKeyboard()
 			if err := dbus.InstallOnSession(kbd); err != nil {
@@ -102,13 +105,16 @@ func parseDeviceAdd(devName string) {
 }
 
 //export parseDeviceDelete
-func parseDeviceDelete(devName string) {
-	s := strings.ToLower(devName)
-	switch s {
-	case "mouse":
+func parseDeviceDelete(devName *C.char) {
+	tmp := C.GoString(devName)
+	s := strings.ToLower(tmp)
+	logObj.Infof("DEVICE CHANGED: %s removed", s)
+	if strings.Contains(s, "mouse") {
 		if managerObj.mouseObj != nil {
+			logObj.Info("DELETE mouse DBus")
 			dbus.UnInstallObject(managerObj.mouseObj)
 			managerObj.mouseObj = nil
+			logObj.Info("DELETE mouse DBus end...")
 			managerObj.setPropName("Infos")
 			for _, info := range managerObj.Infos {
 				if info.Id == "touchpad" {
@@ -119,7 +125,7 @@ func parseDeviceDelete(devName string) {
 				}
 			}
 		}
-	case "touchpad":
+	} else if strings.Contains(s, "touchpad") {
 		if managerObj.tpadObj != nil {
 			managerObj.setPropName("Infos")
 			for _, info := range managerObj.Infos {
@@ -130,11 +136,16 @@ func parseDeviceDelete(devName string) {
 			dbus.UnInstallObject(managerObj.tpadObj)
 			managerObj.tpadObj = nil
 		}
-	case "keyboard":
+	} else if strings.Contains(s, "keyboard") {
 		if managerObj.kbdObj != nil {
+			managerObj.setPropName("Infos")
+			for _, info := range managerObj.Infos {
+				if info.Id == "keyboard" {
+					return
+				}
+			}
 			dbus.UnInstallObject(managerObj.kbdObj)
 			managerObj.kbdObj = nil
-			managerObj.setPropName("Infos")
 		}
 	}
 }

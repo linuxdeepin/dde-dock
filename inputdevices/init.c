@@ -62,7 +62,7 @@ device_added_cb(GdkDeviceManager *manager, GdkDevice *device,
 {
 	const gchar *name = gdk_device_get_name(device);
 	g_debug("%s device changed\n", name);
-	parseDeviceAdd(name);
+	parseDeviceAdd((gchar*)name);
 }
 
 static void
@@ -71,7 +71,7 @@ device_removed_cb(GdkDeviceManager *manager, GdkDevice *device,
 {
 	const gchar *name = gdk_device_get_name(device);
 	g_debug("%s device changed\n", name);
-	parseDeviceDelete(name);
+	parseDeviceDelete((gchar*)name);
 	/*
 	if ( str_is_contain (name, MOUSE_NAME_KEY) ) {
 	//set_tpad_enable(1);

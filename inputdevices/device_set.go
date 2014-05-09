@@ -159,7 +159,7 @@ func listenDevsSettings() {
 		println("TPad Settings Changed: ", key)
 		switch key {
 		case TPAD_KEY_ENABLE:
-			logObj.Info("%s changed", key)
+			logObj.Infof("%s changed", key)
 			if enable := tpadSettings.GetBoolean(key); enable {
 				C.set_tpad_enable(C.TRUE)
 				ok := tpadSettings.GetBoolean(TPAD_KEY_W_TYPING)
@@ -294,6 +294,7 @@ func listenDevsSettings() {
 }
 
 func initGSettingsSet(tpadFlag bool) {
+	logObj.Info("Init devices start...")
 	// init keyyboard gsettings value
 	layout := kbdSettings.GetString(KBD_KEY_LAYOUT)
 	setLayout(layout)
@@ -383,4 +384,5 @@ func initGSettingsSet(tpadFlag bool) {
 	tpadName := C.CString("touchpad")
 	defer C.free(unsafe.Pointer(tpadName))
 	C.set_motion(tpadName, C.double(accel), C.int(thres))
+	logObj.Info("Init devices end...")
 }
