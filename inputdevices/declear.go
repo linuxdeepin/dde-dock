@@ -51,6 +51,7 @@ const (
 	KBD_KEY_LAYOUT_OPTIONS   = "layout-options"
 	KBD_KEY_USER_LAYOUT_LIST = "user-layout-list"
 	KBD_CURSOR_BLINK_TIME    = "cursor-blink-time"
+	KBD_KEY_CAPSLOCK_TOGGLE  = "capslock-toggle"
 	KBD_DEFAULT_FILE         = "/etc/default/keyboard"
 
 	DEVICE_DEST  = "com.deepin.daemon.InputDevices"
@@ -90,6 +91,7 @@ type KbdEntry struct {
 	RepeatDelay    *property.GSettingsUintProperty   `access:"readwrite"`
 	CurrentLayout  *property.GSettingsStringProperty `access:"readwrite"`
 	CursorBlink    *property.GSettingsIntProperty    `access:"readwrite"`
+	CapslockToggle *property.GSettingsBoolProperty   `access:"readwrite"`
 	UserLayoutList *property.GSettingsStrvProperty
 	deviceId       string
 }

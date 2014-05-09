@@ -113,7 +113,7 @@ func (op *KbdEntry) DeleteLayoutOption(option string) {
 }
 
 func (op *KbdEntry) ClearLayoutOption() {
-	kbdSettings.SetStrv(KBD_KEY_LAYOUT_OPTIONS, []string{""})
+	kbdSettings.Reset(KBD_KEY_LAYOUT_OPTIONS)
 }
 
 func (op *KbdEntry) AddUserLayout(layout string) bool {
@@ -228,29 +228,25 @@ func NewKeyboard() *KbdEntry {
 		m.CurrentLayout.SetValue(v)
 		kbdSettings.SetString(KBD_KEY_LAYOUT, v)
 	}
-	logObj.Debug("CurrentLayout: ", m.CurrentLayout.GetValue().(string))
 	m.RepeatEnabled = property.NewGSettingsBoolProperty(
 		m, "RepeatEnabled",
 		kbdSettings, KBD_KEY_REPEAT_ENABLE)
-	logObj.Debug("RepeatEnabled: ", m.RepeatEnabled.GetValue().(bool))
 	m.RepeatInterval = property.NewGSettingsUintProperty(
 		m, "RepeatInterval",
 		kbdSettings, KBD_KEY_REPEAT_INTERVAL)
-	logObj.Debug("RepeatInterval: ", m.RepeatInterval.GetValue().(uint32))
 	m.RepeatDelay = property.NewGSettingsUintProperty(
 		m, "RepeatDelay",
 		kbdSettings, KBD_KEY_DELAY)
-	logObj.Debug("RepeatDelay: ", m.RepeatDelay.GetValue().(uint32))
 	m.CursorBlink = property.NewGSettingsIntProperty(
 		m, "CursorBlink",
 		kbdSettings, KBD_CURSOR_BLINK_TIME)
-	logObj.Debug("CursorBlink: ", m.CursorBlink.GetValue().(int32))
+	m.CapslockToggle = property.NewGSettingsBoolProperty(
+		m, "CapslockToggle",
+		kbdSettings, KBD_KEY_CAPSLOCK_TOGGLE)
 	m.UserLayoutList = property.NewGSettingsStrvProperty(
 		m, "UserLayoutList",
 		kbdSettings, KBD_KEY_USER_LAYOUT_LIST)
-	logObj.Debug("UserLayoutList: ", m.UserLayoutList.GetValue().([]string))
 	m.deviceId = "Keyboard"
-	logObj.Debug("deviceId: ", m.deviceId)
 
 	return m
 }
