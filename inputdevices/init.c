@@ -24,9 +24,13 @@
 #include <gdk/gdk.h>
 #include <gio/gio.h>
 
+#include "_cgo_export.h"
+
 static void listen_device_changed();
 static void device_removed_cb(GdkDeviceManager *manager,
                               GdkDevice *device, gpointer user_data);
+static void device_added_cb(GdkDeviceManager *manager,
+                            GdkDevice *device, gpointer user_data);
 
 void
 init_gdk_env ()
@@ -48,6 +52,17 @@ listen_device_changed ()
 
 	g_signal_connect (G_OBJECT(manager), "device-removed",
 	                  G_CALLBACK(device_removed_cb), NULL);
+	g_signal_connect (G_OBJECT(manager), "device-added",
+	                  G_CALLBACK(device_added_cb), NULL);
+}
+
+static void
+device_added_cb(GdkDeviceManager *manager, GdkDevice *device,
+                gpointer user_data)
+{
+	const gchar *name = gdk_device_get_name(device);
+	g_debug("%s device changed\n", name);
+	parseDeviceAdd(name);
 }
 
 static void
@@ -56,18 +71,20 @@ device_removed_cb(GdkDeviceManager *manager, GdkDevice *device,
 {
 	const gchar *name = gdk_device_get_name(device);
 	g_debug("%s device changed\n", name);
-
+	parseDeviceDelete(name);
+	/*
 	if ( str_is_contain (name, MOUSE_NAME_KEY) ) {
-		/*set_tpad_enable(1);*/
-		GSettings *tpad = g_settings_new("com.deepin.dde.touchpad");
+	//set_tpad_enable(1);
+	GSettings *tpad = g_settings_new("com.deepin.dde.touchpad");
 
-		if (tpad == NULL) {
-			g_warning("Get Touchpad GSettings Failed");
-			return;
-		}
-
-		g_settings_set_boolean(tpad, "touchpad-enabled", TRUE);
-		g_settings_sync();
-		g_object_unref(G_OBJECT(tpad));
+	if (tpad == NULL) {
+		g_warning("Get Touchpad GSettings Failed");
+		return;
 	}
+
+	g_settings_set_boolean(tpad, "touchpad-enabled", TRUE);
+	g_settings_sync();
+	g_object_unref(G_OBJECT(tpad));
+	}
+	*/
 }

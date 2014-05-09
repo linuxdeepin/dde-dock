@@ -23,7 +23,31 @@ package main
 
 import (
 	"dlib/dbus"
+	"strings"
 )
+
+func (op *Manager) setPropName(name string) {
+	switch name {
+	case "Infos":
+		names := getDeviceNames()
+		tmps := []deviceInfo{}
+		for _, name := range names {
+			if strings.Contains(name, "mouse") {
+				info := deviceInfo{DEVICE_PATH + "Mouse", "mouse"}
+				tmps = append(tmps, info)
+			} else if strings.Contains(name, "touchpad") {
+				info := deviceInfo{DEVICE_PATH + "TouchPad", "touchpad"}
+				tmps = append(tmps, info)
+			} else if strings.Contains(name, "keyboard") {
+				info := deviceInfo{DEVICE_PATH + "Keyboard", "keyboard"}
+				tmps = append(tmps, info)
+			}
+		}
+
+		op.Infos = tmps
+		dbus.NotifyChange(op, name)
+	}
+}
 
 func (op *Manager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{

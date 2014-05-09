@@ -32,9 +32,10 @@ import (
 )
 
 var (
-	logObj  = Logger.NewLogger("input device")
-	utilObj = libutil.NewUtils()
-	xsObj   *libsession.XSettings
+	logObj     = Logger.NewLogger("input device")
+	utilObj    = libutil.NewUtils()
+	xsObj      *libsession.XSettings
+	managerObj *Manager
 
 	tpadSettings  = gio.NewSettings("com.deepin.dde.touchpad")
 	mouseSettings = gio.NewSettings("com.deepin.dde.mouse")
@@ -62,14 +63,14 @@ func main() {
 	initGdkEnv()
 	listenDevsSettings()
 
-	m := NewManager()
-	if err = dbus.InstallOnSession(m); err != nil {
+	managerObj = NewManager()
+	if err = dbus.InstallOnSession(managerObj); err != nil {
 		logObj.Warning("Manager DBus Session Failed: ", err)
 		panic(err)
 	}
 
 	tpadFlag := false
-	for _, info := range m.Infos {
+	for _, info := range managerObj.Infos {
 		if info.Id == "mouse" {
 			//logObj.Info("New Mouse")
 			mouse := NewMouse()
@@ -77,6 +78,7 @@ func main() {
 				logObj.Warning("Mouse DBus Session Failed: ", err)
 				panic(err)
 			}
+			managerObj.mouseObj = mouse
 		} else if info.Id == "touchpad" {
 			//logObj.Info("New TouchPad")
 			tpad := NewTPad()
@@ -85,6 +87,7 @@ func main() {
 				panic(err)
 			}
 			tpadFlag = true
+			managerObj.tpadObj = tpad
 		} else if info.Id == "keyboard" {
 			//logObj.Info("New Keyboard")
 			kbd := NewKeyboard()
@@ -92,6 +95,7 @@ func main() {
 				logObj.Warning("Kbd DBus Session Failed: ", err)
 				panic(err)
 			}
+			managerObj.kbdObj = kbd
 			setLayout(kbd.CurrentLayout.GetValue().(string))
 		}
 	}

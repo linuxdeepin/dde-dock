@@ -22,12 +22,16 @@
 package main
 
 import (
+	"dlib/dbus"
 	"io/ioutil"
 	"strings"
 )
 
 type Manager struct {
-	Infos []deviceInfo
+	Infos    []deviceInfo
+	mouseObj *MouseEntry
+	tpadObj  *TPadEntry
+	kbdObj   *KbdEntry
 }
 
 type deviceInfo struct {
@@ -60,25 +64,88 @@ func getDeviceNames() []string {
 	return names
 }
 
+//export parseDeviceAdd
+func parseDeviceAdd(devName string) {
+	s := strings.ToLower(devName)
+	switch s {
+	case "mouse":
+		if managerObj.mouseObj == nil {
+			mouse := NewMouse()
+			if err := dbus.InstallOnSession(mouse); err != nil {
+				logObj.Warning("Mouse DBus Session Failed: ", err)
+				panic(err)
+			}
+			managerObj.mouseObj = mouse
+			managerObj.setPropName("Infos")
+		}
+	case "touchpad":
+		if managerObj.tpadObj == nil {
+			tpad := NewTPad()
+			if err := dbus.InstallOnSession(tpad); err != nil {
+				logObj.Warning("TPad DBus Session Failed: ", err)
+				panic(err)
+			}
+			managerObj.tpadObj = tpad
+			managerObj.setPropName("Infos")
+		}
+	case "keyboard":
+		if managerObj.kbdObj == nil {
+			kbd := NewKeyboard()
+			if err := dbus.InstallOnSession(kbd); err != nil {
+				logObj.Warning("Kbd DBus Session Failed: ", err)
+				panic(err)
+			}
+			managerObj.kbdObj = kbd
+			managerObj.setPropName("Infos")
+		}
+	}
+}
+
+//export parseDeviceDelete
+func parseDeviceDelete(devName string) {
+	s := strings.ToLower(devName)
+	switch s {
+	case "mouse":
+		if managerObj.mouseObj != nil {
+			dbus.UnInstallObject(managerObj.mouseObj)
+			managerObj.mouseObj = nil
+			managerObj.setPropName("Infos")
+			for _, info := range managerObj.Infos {
+				if info.Id == "touchpad" {
+					enable := tpadSettings.GetBoolean(TPAD_KEY_ENABLE)
+					if !enable {
+						tpadSettings.SetBoolean(TPAD_KEY_ENABLE, true)
+					}
+				}
+			}
+		}
+	case "touchpad":
+		if managerObj.tpadObj != nil {
+			managerObj.setPropName("Infos")
+			for _, info := range managerObj.Infos {
+				if info.Id == "touchpad" {
+					return
+				}
+			}
+			dbus.UnInstallObject(managerObj.tpadObj)
+			managerObj.tpadObj = nil
+		}
+	case "keyboard":
+		if managerObj.kbdObj != nil {
+			dbus.UnInstallObject(managerObj.kbdObj)
+			managerObj.kbdObj = nil
+			managerObj.setPropName("Infos")
+		}
+	}
+}
+
 func NewManager() *Manager {
 	m := &Manager{}
 
-	names := getDeviceNames()
-	tmps := []deviceInfo{}
-	for _, name := range names {
-		if strings.Contains(name, "mouse") {
-			info := deviceInfo{DEVICE_PATH + "Mouse", "mouse"}
-			tmps = append(tmps, info)
-		} else if strings.Contains(name, "touchpad") {
-			info := deviceInfo{DEVICE_PATH + "TouchPad", "touchpad"}
-			tmps = append(tmps, info)
-		} else if strings.Contains(name, "keyboard") {
-			info := deviceInfo{DEVICE_PATH + "Keyboard", "keyboard"}
-			tmps = append(tmps, info)
-		}
-	}
-
-	m.Infos = tmps
+	m.setPropName("Infos")
+	m.mouseObj = nil
+	m.tpadObj = nil
+	m.kbdObj = nil
 
 	return m
 }
