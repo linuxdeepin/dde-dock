@@ -19,6 +19,23 @@ type Audio struct {
 	DefaultSource string
 }
 
+func (s *Audio) GetDefaultSink() *Sink {
+	for _, o := range s.Sinks {
+		if o.Name == s.DefaultSink {
+			return o
+		}
+	}
+	return nil
+}
+func (s *Audio) GetDefaultSource() *Source {
+	for _, o := range s.Sources {
+		if o.Name == s.DefaultSource {
+			return o
+		}
+	}
+	return nil
+}
+
 func NewSink(core *pulse.Sink) *Sink {
 	s := &Sink{core: core}
 	s.update()
@@ -137,6 +154,7 @@ func main() {
 	}
 
 	dbus.DealWithUnhandledMessage()
+	audio.listenMediaKey()
 	if err := dbus.Wait(); err != nil {
 		Logger.Error("dbus.Wait recieve an error:", err)
 		os.Exit(1)
