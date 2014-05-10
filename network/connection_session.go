@@ -63,7 +63,7 @@ func NewConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 		s.data = newWirelessHotspotConnectionData(id, s.CurrentUUID)
 	case typePppoe:
 		s.data = newPppoeConnectionData(id, s.CurrentUUID)
-	case typeMobile:
+	case typeMobileGsm:
 		s.data = newMobileConnectionData(id, s.CurrentUUID, mobileServiceGsm)
 	case typeMobileCdma:
 		s.data = newMobileConnectionData(id, s.CurrentUUID, mobileServiceCdma)
@@ -297,7 +297,7 @@ func (s *ConnectionSession) listPages() (pages []string) {
 			pageVpnVpncAdvanced,
 			pageIPv4,
 		}
-	case typeMobile:
+	case typeMobileGsm:
 		pages = []string{
 			pageGeneral,
 			pageMobile,
@@ -334,10 +334,10 @@ func (s *ConnectionSession) pageToFields(page string) (fields []string) {
 	case pageIPv6:
 		fields = []string{fieldIpv6}
 	case pageSecurity:
-		switch getSettingConnectionType(s.data) {
-		case NM_SETTING_WIRED_SETTING_NAME:
+		switch s.ConnectionType {
+		case typeWired:
 			fields = []string{field8021x}
-		case NM_SETTING_WIRELESS_SETTING_NAME:
+		case typeWireless, typeWirelessAdhoc, typeWirelessHotspot:
 			if isSettingFieldExists(s.data, field8021x) {
 				fields = []string{fieldWirelessSecurity, field8021x}
 			} else {

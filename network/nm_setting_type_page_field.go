@@ -57,7 +57,7 @@ func getDeviceTypeName(devType uint32) (devName string) {
 	return deviceTypeUnknown
 }
 
-// connection type
+// custom connection type
 const (
 	typeUnknown         = "unknown"
 	typeWired           = "wired"
@@ -66,6 +66,7 @@ const (
 	typeWirelessHotspot = "wireless-hotspot"
 	typePppoe           = "pppoe"
 	typeMobile          = "mobile"
+	typeMobileGsm       = "mobile-gsm"
 	typeMobileCdma      = "mobile-cdma"
 	typeVpn             = "vpn"
 	typeVpnL2tp         = "vpn-l2tp"
@@ -86,7 +87,7 @@ var supportedConnectionTypes = []string{
 	typeWirelessAdhoc,
 	typeWirelessHotspot,
 	typePppoe,
-	typeMobile,
+	typeMobileGsm,
 	typeMobileCdma,
 	typeVpnL2tp,
 	typeVpnOpenconnect,
@@ -100,7 +101,7 @@ var supportedConnectionTypesInfo = []connectionType{
 	connectionType{typeWirelessAdhoc, dlib.Tr("Wi-Fi Ad-Hoc")},
 	connectionType{typeWirelessHotspot, dlib.Tr("Wi-Fi Hotspot")},
 	connectionType{typePppoe, dlib.Tr("PPPoE")},
-	connectionType{typeMobile, dlib.Tr("Mobile GSM (GPRS, EDGE, UMTS, HSPA)")},
+	connectionType{typeMobileGsm, dlib.Tr("Mobile GSM (GPRS, EDGE, UMTS, HSPA)")},
 	connectionType{typeMobileCdma, dlib.Tr("Mobile CDMA (1xRTT, EVDO)")},
 	connectionType{typeVpnL2tp, dlib.Tr("VPN-L2TP (Layer 2 Tunneling Protocol)")},
 	connectionType{typeVpnOpenconnect, dlib.Tr("VPN-OpenConnect (Cisco AnyConnect Compatible VPN)")},
@@ -230,7 +231,7 @@ func genConnectionId(connType string) (id string) {
 		idPrefix = dlib.Tr("Wireless Ap-Hotspot")
 	case typePppoe:
 		idPrefix = dlib.Tr("PPPoE Connection")
-	case typeMobile:
+	case typeMobileGsm:
 		idPrefix = dlib.Tr("Mobile GSM Connection")
 	case typeMobileCdma:
 		idPrefix = dlib.Tr("Mobile CDMA Connection")
