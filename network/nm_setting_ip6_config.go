@@ -85,7 +85,7 @@ func getSettingIp6ConfigAvailableValues(data connectionData, key string) (values
 		// 	NM_SETTING_IP6_CONFIG_METHOD_MANUAL,
 		// 	// NM_SETTING_IP6_CONFIG_METHOD_SHARED,// ignore
 		// }
-		if getSettingConnectionType(data) != typeVpn {
+		if getSettingConnectionType(data) != NM_SETTING_VPN_SETTING_NAME {
 			values = []kvalue{
 				availableValuesIp6ConfigMethod[NM_SETTING_IP6_CONFIG_METHOD_AUTO],
 				availableValuesIp6ConfigMethod[NM_SETTING_IP6_CONFIG_METHOD_MANUAL],

@@ -334,10 +334,10 @@ func (s *ConnectionSession) pageToFields(page string) (fields []string) {
 	case pageIPv6:
 		fields = []string{fieldIpv6}
 	case pageSecurity:
-		switch getSettingConnectionType(s.data) {
-		case NM_SETTING_WIRED_SETTING_NAME:
+		switch s.ConnectionType {
+		case typeWired:
 			fields = []string{field8021x}
-		case NM_SETTING_WIRELESS_SETTING_NAME:
+		case typeWireless, typeWirelessAdhoc, typeWirelessHotspot:
 			if isSettingFieldExists(s.data, field8021x) {
 				fields = []string{fieldWirelessSecurity, field8021x}
 			} else {

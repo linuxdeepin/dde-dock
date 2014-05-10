@@ -57,7 +57,7 @@ func getDeviceTypeName(devType uint32) (devName string) {
 	return deviceTypeUnknown
 }
 
-// connection type
+// custom connection type
 const (
 	typeUnknown         = "unknown"
 	typeWired           = "wired"
