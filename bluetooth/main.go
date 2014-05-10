@@ -1,20 +1,11 @@
 package main
 
 import (
-	idbus "dbus/org/freedesktop/dbus/system"
 	"dlib"
 	"dlib/dbus"
 	liblogger "dlib/logger"
 	"flag"
 	"os"
-)
-
-const (
-	dbusBluezDest     = "org.bluez"
-	dbusBluezPath     = "/org/bluez"
-	dbusBluetoothDest = "com.deepin.daemon.Bluetooth"
-	dbusBluetoothPath = "/com/deepin/daemon/Bluetooth"
-	dbusBluetoothIfs  = "com.deepin.daemon.Bluetooth"
 )
 
 var (
@@ -46,18 +37,8 @@ func main() {
 		os.Exit(1)
 	}
 
+	// initialize bluetooth after installed dbus interface
 	bluetooth.initBluetooth()
-
-	// TODO test
-	bluezObjectManager, err := idbus.NewObjectManager(dbusBluezDest, "/")
-	if err != nil {
-		panic(err)
-	}
-	bluezObjects, err := bluezObjectManager.GetManagedObjects()
-	if err != nil {
-		panic(err)
-	}
-	logger.Debug(bluezObjects)
 
 	dbus.DealWithUnhandledMessage()
 	if err := dbus.Wait(); err != nil {
