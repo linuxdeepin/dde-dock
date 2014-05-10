@@ -6,7 +6,27 @@ import SCons.Util
 
 os.environ['GOROOT']='/usr/lib/go'
 os.environ['GOPATH']='/usr/share/gocode'
-components = ['accounts', 'audio', 'bluetooth', 'clipboard', 'datetime', 'deepin-daemon', 'desktop-toggle', 'display', 'dock-apps-builder', 'dock-daemon', 'grub2', 'inputdevices', 'keybinding', 'launcher-daemon', 'mime', 'mounts', 'network', 'power', 'system-info', 'themes', 'zone-settings']
+components = ['accounts',
+              'audio',
+              'bluetooth',
+              'clipboard',
+              'datetime',
+              'deepin-daemon',
+              'desktop-toggle',
+              'display',
+              'dock-apps-builder',
+              'dock-daemon',
+              'grub2',
+              'inputdevices',
+              'keybinding',
+              'launcher-daemon',
+              'mime',
+              'mounts',
+              'network',
+              'power',
+              'system-info',
+              'themes',
+              'zone-settings']
 
 SConsignFile()
 opts=Variables()
