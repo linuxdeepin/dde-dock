@@ -63,7 +63,7 @@ func NewConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 		s.data = newWirelessHotspotConnectionData(id, s.CurrentUUID)
 	case typePppoe:
 		s.data = newPppoeConnectionData(id, s.CurrentUUID)
-	case typeMobile:
+	case typeMobileGsm:
 		s.data = newMobileConnectionData(id, s.CurrentUUID, mobileServiceGsm)
 	case typeMobileCdma:
 		s.data = newMobileConnectionData(id, s.CurrentUUID, mobileServiceCdma)
@@ -297,7 +297,7 @@ func (s *ConnectionSession) listPages() (pages []string) {
 			pageVpnVpncAdvanced,
 			pageIPv4,
 		}
-	case typeMobile:
+	case typeMobileGsm:
 		pages = []string{
 			pageGeneral,
 			pageMobile,

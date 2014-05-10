@@ -34,7 +34,7 @@ func getCustomConnectinoType(data connectionData) (connType string) {
 	case NM_SETTING_PPPOE_SETTING_NAME:
 		connType = typePppoe
 	case NM_SETTING_GSM_SETTING_NAME:
-		connType = typeMobile
+		connType = typeMobileGsm
 	case NM_SETTING_CDMA_SETTING_NAME:
 		connType = typeMobileCdma
 	case NM_SETTING_VPN_SETTING_NAME:

@@ -87,7 +87,7 @@ func (m *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPath)
 			}
 		case NM_SETTING_PPPOE_SETTING_NAME:
 			m.connections[typePppoe] = m.addConnection(m.connections[typePppoe], conn)
-		case NM_SETTING_GSM_SETTING_NAME:
+		case NM_SETTING_GSM_SETTING_NAME, NM_SETTING_CDMA_SETTING_NAME:
 			m.connections[typeMobile] = m.addConnection(m.connections[typeMobile], conn)
 		case NM_SETTING_VPN_SETTING_NAME:
 			m.VPNConnections = append(m.VPNConnections, uuid)
