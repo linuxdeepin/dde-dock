@@ -37,7 +37,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	// initialize bluetooth after installed dbus interface
+	// initialize bluetooth after dbus interface installed
 	bluetooth.initBluetooth()
 
 	dbus.DealWithUnhandledMessage()
