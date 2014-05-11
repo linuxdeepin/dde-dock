@@ -25,14 +25,14 @@ type dbusInterfacesData map[dbus.ObjectPath]map[string]map[string]dbus.Variant
 type Bluetooth struct {
 	objects dbusInterfacesData
 
-	// TODO adapter
-	PrimaryAdapter string `access:"readwrite"`
+	// adapter
+	PrimaryAdapter string `access:"readwrite"` // TODO dbus.ObjectPath
 	adapters       []*adapter
 	Adapters       string // array of adapters that marshaled by json
 	// Adapters       []string // array of adapter names
 
 	// device
-	devices []*device
+	devices map[dbus.ObjectPath][]*device
 	// Devices []dbus.ObjectPath
 	Devices string // device objects that marshaled by json
 
@@ -68,6 +68,8 @@ func (b *Bluetooth) GetDBusInfo() dbus.DBusInfo {
 }
 
 func (b *Bluetooth) initBluetooth() {
+	b.devices = make(map[dbus.ObjectPath][]*device)
+
 	// initialize dbus object manager
 	var err error
 	bluezObjectManager, err = idbus.NewObjectManager(dbusBluezDest, "/")

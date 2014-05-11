@@ -69,36 +69,46 @@ func (b *Bluetooth) newDevice(dpath dbus.ObjectPath, data map[string]dbus.Varian
 }
 
 func (b *Bluetooth) addDevice(dpath dbus.ObjectPath, data map[string]dbus.Variant) {
-	if b.isDeviceExists(dpath) {
+	d := b.newDevice(dpath, data)
+	if b.isDeviceExists(b.devices[d.Adapter], dpath) {
 		logger.Warning("repeat add device:", dpath)
 		return
 	}
-	d := b.newDevice(dpath, data)
-	b.devices = append(b.devices, d)
+	b.devices[d.Adapter] = append(b.devices[d.Adapter], d)
 	b.updatePropDevices()
 }
 
 func (b *Bluetooth) removeDevice(dpath dbus.ObjectPath) {
-	i := b.getDeviceIndex(dpath)
+	// find adapter of the device
+	for apath, devices := range b.devices {
+		if b.isDeviceExists(devices, dpath) {
+			b.devices[apath] = b.doRemoveDevice(devices, dpath)
+			b.updatePropDevices()
+		}
+	}
+}
+func (b *Bluetooth) doRemoveDevice(devices []*device, dpath dbus.ObjectPath) []*device {
+	i := b.getDeviceIndex(devices, dpath)
 	if i < 0 {
 		logger.Warning("repeat remove device:", dpath)
-		return
+		return devices
 	}
-	copy(b.devices[i:], b.devices[i+1:])
-	b.devices[len(b.devices)-1] = nil
-	b.devices = b.devices[:len(b.devices)-1]
-	b.updatePropDevices()
+
+	copy(devices[i:], devices[i+1:])
+	devices[len(devices)-1] = nil
+	devices = devices[:len(devices)-1]
+	return devices
 }
 
-func (b *Bluetooth) isDeviceExists(dpath dbus.ObjectPath) bool {
-	if b.getDeviceIndex(dpath) >= 0 {
+func (b *Bluetooth) isDeviceExists(devices []*device, dpath dbus.ObjectPath) bool {
+	if b.getDeviceIndex(devices, dpath) >= 0 {
 		return true
 	}
 	return false
 }
 
-func (b *Bluetooth) getDeviceIndex(dpath dbus.ObjectPath) int {
-	for i, d := range b.devices {
+func (b *Bluetooth) getDeviceIndex(devices []*device, dpath dbus.ObjectPath) int {
+	for i, d := range devices {
 		if d.Path == dpath {
 			return i
 		}
