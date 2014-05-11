@@ -11,6 +11,8 @@ import (
 var (
 	logger   = liblogger.NewLogger(dbusBluetoothDest)
 	argDebug bool
+
+	bluetooth *Bluetooth
 )
 
 func main() {
@@ -29,7 +31,7 @@ func main() {
 		logger.SetLogLevel(liblogger.LEVEL_DEBUG)
 	}
 
-	bluetooth := NewBluetooth()
+	bluetooth = NewBluetooth()
 	err := dbus.InstallOnSession(bluetooth)
 	if err != nil {
 		// don't panic or fatal here

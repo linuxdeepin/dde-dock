@@ -23,7 +23,7 @@ func (b *Bluetooth) newAdapter(apath dbus.ObjectPath) (a *adapter) {
 	a.Discoverable = a.bluezAdapter.Discoverable.Get()
 	a.DiscoverableTimeout = a.bluezAdapter.DiscoverableTimeout.Get()
 
-	// connect properties
+	// TODO connect properties
 	a.bluezAdapter.Alias.ConnectChanged(func() {
 		a.Alias = a.bluezAdapter.Alias.Get()
 		b.updatePropAdapters()

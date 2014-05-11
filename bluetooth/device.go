@@ -126,6 +126,11 @@ func (b *Bluetooth) ConnectDeivce(dpath dbus.ObjectPath) (err error) {
 	return
 }
 
+func (b *Bluetooth) DisconnectDeivce(dpath dbus.ObjectPath) (err error) {
+	err = bluezDisconnectDevice(dpath)
+	return
+}
+
 func (b *Bluetooth) RemoveDevice(dpath dbus.ObjectPath) (err error) {
 	err = bluezRemoveDevice(dbus.ObjectPath(b.PrimaryAdapter), dpath)
 	return

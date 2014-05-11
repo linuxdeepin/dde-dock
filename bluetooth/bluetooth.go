@@ -43,8 +43,10 @@ type Bluetooth struct {
 	// DiscoverableTimeout uint32 `access:"readwrite"`
 
 	// signals
-	DeviceAdded   func(devJSON string)
-	DeviceRemoved func(devJSON string)
+	DeviceAdded      func(devJSON string)
+	DeviceRemoved    func(devJSON string)
+	RequestPinCode   func(devJSON string)
+	AuthorizeService func(devJSON string, uuid string)
 }
 
 func NewBluetooth() (bluettoth *Bluetooth) {

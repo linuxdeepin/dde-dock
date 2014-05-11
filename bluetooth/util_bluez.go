@@ -125,6 +125,15 @@ func bluezConnectDevice(dpath dbus.ObjectPath) (err error) {
 	return
 }
 
+func bluezDisconnectDevice(dpath dbus.ObjectPath) (err error) {
+	bluezDevice, err := bluezNewDevice(dpath)
+	if err != nil {
+		return
+	}
+	err = bluezDevice.Disconnect()
+	return
+}
+
 func bluezRemoveDevice(apath, dpath dbus.ObjectPath) (err error) {
 	bluezAdapter, err := bluezNewAdapter(dpath)
 	if err != nil {
