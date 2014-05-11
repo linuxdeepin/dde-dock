@@ -87,10 +87,10 @@ type Sink struct {
 }
 
 func (s *Sink) SetVolume(v float64) {
-	s.core.SetAvgVolume(v)
+	s.core.SetVolume(s.core.Volume.SetAvg(v))
 }
 func (s *Sink) SetBalance(v float64) {
-	s.core.SetBalance(v)
+	s.core.SetVolume(s.core.Volume.SetBalance(s.core.ChannelMap, v))
 }
 func (s *Sink) SetMute(v bool) {
 	s.core.SetMute(v)
@@ -108,7 +108,10 @@ type SinkInput struct {
 }
 
 func (s *SinkInput) SetVolume(v float64) {
-	s.core.SetAvgVolume(v)
+	s.core.SetVolume(s.core.Volume.SetAvg(v))
+}
+func (s *SinkInput) SetBalance(v float64) {
+	s.core.SetVolume(s.core.Volume.SetBalance(s.core.ChannelMap, v))
 }
 func (s *SinkInput) SetMute(v bool) {
 	s.core.SetMute(v)
@@ -128,6 +131,12 @@ type Source struct {
 	Ports      []string
 }
 
+func (s *Source) SetVolume(v float64) {
+	s.core.SetVolume(s.core.Volume.SetAvg(v))
+}
+func (s *Source) SetBalance(v float64) {
+	s.core.SetVolume(s.core.Volume.SetBalance(s.core.ChannelMap, v))
+}
 func (s *Source) SetPort(name string) {
 	s.core.SetPort(name)
 }
