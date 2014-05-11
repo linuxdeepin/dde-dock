@@ -5,20 +5,9 @@ import (
 )
 
 func (m *Manager) updatePropActiveConnections() {
-	m.activeConnections = make([]*activeConnection, 0)
-	for _, cpath := range nmGetActiveConnections() {
-		if aconn, err := nmNewActiveConnection(cpath); err == nil {
-			aconnObj := &activeConnection{
-				Devices: aconn.Devices.Get(),
-				Uuid:    aconn.Uuid.Get(),
-				State:   aconn.State.Get(),
-			}
-			m.activeConnections = append(m.activeConnections, aconnObj)
-		}
-	}
 	m.ActiveConnections, _ = marshalJSON(m.activeConnections)
 	dbus.NotifyChange(m, "ActiveConnections")
-	logger.Debug("ActiveConnection:", m.ActiveConnections) // TODO test
+	// logger.Debug("ActiveConnections:", m.ActiveConnections) // TODO test
 }
 
 func (m *Manager) updatePropState() {
@@ -35,7 +24,7 @@ func (m *Manager) updatePropWirelessDevices() {
 func (m *Manager) updatePropDevices() {
 	m.Devices, _ = marshalJSON(m.devices)
 	dbus.NotifyChange(m, "Devices")
-	logger.Debug("updatePropDevices", m.Devices) // TODO test
+	// logger.Debug("updatePropDevices", m.Devices) // TODO test
 }
 
 // TODO

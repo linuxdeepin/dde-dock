@@ -13,9 +13,12 @@ type connection struct {
 }
 
 type activeConnection struct {
+	nmaconn *nm.ActiveConnection
+	path    dbus.ObjectPath
 	Devices []dbus.ObjectPath
 	Uuid    string
 	State   uint32
+	Vpn     bool
 }
 
 type activeConnectionInfo struct {

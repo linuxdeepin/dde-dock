@@ -82,9 +82,9 @@ func (m *Manager) initManager() {
 	m.initConnectionManage()
 
 	// update property "ActiveConnections" after initilizing devices
-	m.updatePropActiveConnections()
+	m.updateActiveConnections()
 	nmManager.ActiveConnections.ConnectChanged(func() {
-		m.updatePropActiveConnections()
+		m.updateActiveConnections()
 	})
 
 	// update property "State"
@@ -94,4 +94,52 @@ func (m *Manager) initManager() {
 	})
 
 	m.agent = newAgent("org.snyh.agent")
+}
+
+func (m *Manager) updateActiveConnections() {
+	// reset all exists active connection objects
+	for i, _ := range m.activeConnections {
+		// TODO how to disconnect BaseObserver.ConnectChanged()
+		nm.DestroyActiveConnection(m.activeConnections[i].nmaconn)
+		m.activeConnections[i] = nil
+	}
+	m.activeConnections = make([]*activeConnection, 0)
+	for _, acpath := range nmGetActiveConnections() {
+		if nmaconn, err := nmNewActiveConnection(acpath); err == nil {
+			aconn := &activeConnection{
+				nmaconn: nmaconn,
+				path:    acpath,
+				Devices: nmaconn.Devices.Get(),
+				Uuid:    nmaconn.Uuid.Get(),
+				State:   nmaconn.State.Get(),
+				Vpn:     nmaconn.Vpn.Get(),
+			}
+			// connect properties
+			nmaconn.Devices.ConnectChanged(func() {
+				if m.isActiveConnectionExists(aconn) {
+					aconn.Devices = nmaconn.Devices.Get()
+					m.updatePropActiveConnections()
+				}
+			})
+			nmaconn.State.ConnectChanged(func() {
+				if m.isActiveConnectionExists(aconn) {
+					aconn.State = nmaconn.State.Get()
+					m.updatePropActiveConnections()
+				}
+			})
+			m.activeConnections = append(m.activeConnections, aconn)
+		}
+	}
+	m.updatePropActiveConnections()
+}
+func (m *Manager) isActiveConnectionExists(aconn *activeConnection) bool {
+	if aconn == nil {
+		return false
+	}
+	for _, a := range m.activeConnections {
+		if &a == &aconn {
+			return true
+		}
+	}
+	return false
 }
