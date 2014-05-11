@@ -93,13 +93,17 @@ func (m *Manager) addAccessPoint(devPath, apPath dbus.ObjectPath) {
 
 	// connect property, access point strength
 	ap.nmAp.Strength.ConnectChanged(func() {
-		ap.Strength = calcApStrength(ap.nmAp.Strength.Get())
-		if m.AccessPointPropertiesChanged != nil {
-			apJSON, _ := marshalJSON(ap)
-			// logger.Debug(string(devPath), apJSON) // TODO test
-			m.AccessPointPropertiesChanged(string(devPath), apJSON)
+		// firstly, check if the access point is still exists to ignore
+		// dbus error when getting property
+		if m.isAccessPointExists(devPath, apPath) {
+			ap.Strength = calcApStrength(ap.nmAp.Strength.Get())
+			if m.AccessPointPropertiesChanged != nil {
+				apJSON, _ := marshalJSON(ap)
+				// logger.Debug(string(devPath), apJSON) // TODO test
+				m.AccessPointPropertiesChanged(string(devPath), apJSON)
+			}
+			m.updatePropAccessPoints()
 		}
-		m.updatePropAccessPoints()
 	})
 
 	// emit signal
