@@ -21,7 +21,25 @@ func bluezNewDevice(dpath dbus.ObjectPath) (bluezDevice *bluez.Device1, err erro
 	return
 }
 
-func bluezGetAdapterAlias(apath dbus.ObjectPath) (alias string, err error) {
+func bluezStartDiscovery(apath dbus.ObjectPath) (err error) {
+	bluezAdapter, err := bluezNewAdapter(apath)
+	if err != nil {
+		return
+	}
+	err = bluezAdapter.StartDiscovery()
+	return
+}
+
+func bluezStopDiscovery(apath dbus.ObjectPath) (err error) {
+	bluezAdapter, err := bluezNewAdapter(apath)
+	if err != nil {
+		return
+	}
+	err = bluezAdapter.StopDiscovery()
+	return
+}
+
+func bluezGetAdapterAlias(apath dbus.ObjectPath) (alias string) {
 	bluezAdapter, err := bluezNewAdapter(apath)
 	if err != nil {
 		return
@@ -38,7 +56,7 @@ func bluezSetAdapterAlias(apath dbus.ObjectPath, alias string) (err error) {
 	return
 }
 
-func bluezGetAdapterDiscoverable(apath dbus.ObjectPath) (discoverable bool, err error) {
+func bluezGetAdapterDiscoverable(apath dbus.ObjectPath) (discoverable bool) {
 	bluezAdapter, err := bluezNewAdapter(apath)
 	if err != nil {
 		return
@@ -55,7 +73,16 @@ func bluezSetAdapterDiscoverable(apath dbus.ObjectPath, discoverable bool) (err 
 	return
 }
 
-func bluezGetAdapterDiscoverableTimeout(apath dbus.ObjectPath) (discoverableTimeout uint32, err error) {
+func bluezGetAdapterDiscovering(apath dbus.ObjectPath) (discovering bool) {
+	bluezAdapter, err := bluezNewAdapter(apath)
+	if err != nil {
+		return
+	}
+	discovering = bluezAdapter.Discovering.Get()
+	return
+}
+
+func bluezGetAdapterDiscoverableTimeout(apath dbus.ObjectPath) (discoverableTimeout uint32) {
 	bluezAdapter, err := bluezNewAdapter(apath)
 	if err != nil {
 		return
@@ -72,7 +99,7 @@ func bluezSetAdapterDiscoverableTimeout(apath dbus.ObjectPath, discoverableTimeo
 	return
 }
 
-func bluezGetAdapterPowered(apath dbus.ObjectPath) (powered bool, err error) {
+func bluezGetAdapterPowered(apath dbus.ObjectPath) (powered bool) {
 	bluezAdapter, err := bluezNewAdapter(apath)
 	if err != nil {
 		return
@@ -86,6 +113,24 @@ func bluezSetAdapterPowered(apath dbus.ObjectPath, powered bool) (er error) {
 		return
 	}
 	bluezAdapter.Powered.Set(powered)
+	return
+}
+
+func bluezConnectDevice(dpath dbus.ObjectPath) (err error) {
+	bluezDevice, err := bluezNewDevice(dpath)
+	if err != nil {
+		return
+	}
+	err = bluezDevice.Connect()
+	return
+}
+
+func bluezRemoveDevice(apath, dpath dbus.ObjectPath) (err error) {
+	bluezAdapter, err := bluezNewAdapter(dpath)
+	if err != nil {
+		return
+	}
+	err = bluezAdapter.RemoveDevice(dpath)
 	return
 }
 

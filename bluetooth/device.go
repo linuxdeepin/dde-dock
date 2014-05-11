@@ -116,8 +116,18 @@ func (b *Bluetooth) getDeviceIndex(devices []*device, dpath dbus.ObjectPath) int
 	return -1
 }
 
-// TODO
+// GetDevices return all devices object that marshaled by json.
+func (b *Bluetooth) GetDevices() (devicesJSON string) {
+	return b.Devices
+}
+
 func (b *Bluetooth) ConnectDeivce(dpath dbus.ObjectPath) (err error) {
+	err = bluezConnectDevice(dpath)
+	return
+}
+
+func (b *Bluetooth) RemoveDevice(dpath dbus.ObjectPath) (err error) {
+	err = bluezRemoveDevice(dbus.ObjectPath(b.PrimaryAdapter), dpath)
 	return
 }
 

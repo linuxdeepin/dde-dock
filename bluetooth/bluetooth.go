@@ -23,30 +23,24 @@ type dbusInterfaceData map[string]map[string]dbus.Variant
 type dbusInterfacesData map[dbus.ObjectPath]map[string]map[string]dbus.Variant
 
 type Bluetooth struct {
-	objects dbusInterfacesData
-
 	// adapter
 	PrimaryAdapter string `access:"readwrite"` // TODO dbus.ObjectPath
 	adapters       []*adapter
 	Adapters       string // array of adapters that marshaled by json
-	// Adapters       []string // array of adapter names
 
 	// device
 	devices map[dbus.ObjectPath][]*device
-	// Devices []dbus.ObjectPath
 	Devices string // device objects that marshaled by json
 
 	// alias properties for primary adapter
-	Alias   string `access:"readwrite"`
-	Powered bool   `access:"readwrite"`
-	// Discovering         bool // TODO merge to Powered
-	Discoverable        bool   `access:"readwrite"`
-	DiscoverableTimeout uint32 `access:"readwrite"`
-
-	// Pairable        bool   `access:"readwrite"`
-	// PairableTimeout uint32 `access:"readwrite"`
-
-	// TODO after switching primary adapter, power off other adapters
+	Alias               dbus.Property `access:"readwrite"`
+	Powered             dbus.Property `access:"readwrite"`
+	Discoverable        dbus.Property `access:"readwrite"`
+	DiscoverableTimeout dbus.Property `access:"readwrite"`
+	// Alias               string `access:"readwrite"`
+	// Powered             bool   `access:"readwrite"`
+	// Discoverable        bool   `access:"readwrite"`
+	// DiscoverableTimeout uint32 `access:"readwrite"`
 
 	// signals
 	DeviceAdded   func(devJSON string)
@@ -76,25 +70,26 @@ func (b *Bluetooth) initBluetooth() {
 	if err != nil {
 		panic(err)
 	}
-	b.objects, err = bluezObjectManager.GetManagedObjects()
+	objects, err := bluezObjectManager.GetManagedObjects()
 	if err != nil {
 		panic(err)
 	}
 
 	// add exists adapters and devices
-	for path, data := range b.objects {
+	for path, data := range objects {
 		b.handleInterfacesAdded(path, data)
 	}
 
 	// connect signals
 	bluezObjectManager.ConnectInterfacesAdded(b.handleInterfacesAdded)
 	bluezObjectManager.ConnectInterfacesRemoved(b.handleInterfacesRemoved)
-
-	// TODO update properties
 }
 func (b *Bluetooth) handleInterfacesAdded(path dbus.ObjectPath, data map[string]map[string]dbus.Variant) {
 	if _, ok := data[dbusBluezIfsAdapter]; ok {
 		b.addAdapter(path)
+		if len(b.PrimaryAdapter) == 0 {
+			b.updatePropPrimaryAdapter(path)
+		}
 	}
 	if _, ok := data[dbusBluezIfsDevice]; ok {
 		b.addDevice(path, data[dbusBluezIfsDevice])
@@ -103,19 +98,15 @@ func (b *Bluetooth) handleInterfacesAdded(path dbus.ObjectPath, data map[string]
 func (b *Bluetooth) handleInterfacesRemoved(path dbus.ObjectPath, interfaces []string) {
 	if isStringInArray(dbusBluezIfsAdapter, interfaces) {
 		b.removeAdapter(path)
+		if dbus.ObjectPath(b.PrimaryAdapter) == path {
+			if len(b.adapters) > 0 {
+				b.updatePropPrimaryAdapter(b.adapters[0].Path)
+			} else {
+				b.updatePropPrimaryAdapter("")
+			}
+		}
 	}
 	if isStringInArray(dbusBluezIfsDevice, interfaces) {
 		b.removeDevice(path)
 	}
-}
-
-// GetDevices return all devices object that marshaled by json.
-func (b *Bluetooth) GetDevices() (devicesJSON string) {
-	// TODO
-	return
-}
-
-// TODO
-func (b *Bluetooth) RemoveDevice(dpath dbus.ObjectPath) (err error) {
-	return
 }
