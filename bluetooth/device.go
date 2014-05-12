@@ -9,9 +9,9 @@ const deviceRssiNotInRange = -1000 // -1000db means device not in range
 
 type device struct {
 	bluezDevice *bluez.Device1
+	adapter     dbus.ObjectPath
 
-	Adapter dbus.ObjectPath
-	Path    dbus.ObjectPath
+	Path dbus.ObjectPath
 
 	Alias     string
 	Trusted   bool
@@ -26,7 +26,7 @@ type device struct {
 func (b *Bluetooth) newDevice(dpath dbus.ObjectPath, data map[string]dbus.Variant) (d *device) {
 	d = &device{Path: dpath}
 	d.bluezDevice, _ = bluezNewDevice(dpath)
-	d.Adapter = d.bluezDevice.Adapter.Get()
+	d.adapter = d.bluezDevice.Adapter.Get()
 	d.Alias = d.bluezDevice.Alias.Get()
 	d.Trusted = d.bluezDevice.Trusted.Get()
 	d.Paired = d.bluezDevice.Paired.Get()
@@ -71,15 +71,15 @@ func (b *Bluetooth) newDevice(dpath dbus.ObjectPath, data map[string]dbus.Varian
 
 func (b *Bluetooth) addDevice(dpath dbus.ObjectPath, data map[string]dbus.Variant) {
 	d := b.newDevice(dpath, data)
-	if b.isDeviceExists(b.devices[d.Adapter], dpath) {
+	if b.isDeviceExists(b.devices[d.adapter], dpath) {
 		logger.Warning("repeat add device:", dpath)
 		return
 	}
-	b.devices[d.Adapter] = append(b.devices[d.Adapter], d)
+	b.devices[d.adapter] = append(b.devices[d.adapter], d)
 	b.updatePropDevices()
 
 	// send signal, DeviceAdded()
-	if dbus.ObjectPath(b.PrimaryAdapter) == d.Adapter {
+	if dbus.ObjectPath(b.PrimaryAdapter) == d.adapter {
 		if b.DeviceAdded != nil {
 			b.DeviceAdded(marshalJSON(d))
 		}
@@ -96,7 +96,7 @@ func (b *Bluetooth) removeDevice(dpath dbus.ObjectPath) {
 			// send signal, DeviceRemoved()
 			if dbus.ObjectPath(b.PrimaryAdapter) == apath {
 				if b.DeviceRemoved != nil {
-					d := device{Adapter: apath, Path: dpath}
+					d := device{Path: dpath}
 					b.DeviceRemoved(marshalJSON(d))
 				}
 			}
