@@ -22,6 +22,19 @@ type Audio struct {
 	MaxUIVolume float64
 }
 
+func (a *Audio) Reset() {
+	for _, s := range a.Sinks {
+		s.SetVolume(s.BaseVolume)
+		s.SetBalance(0)
+		s.SetFade(0)
+	}
+	for _, s := range a.Sources {
+		s.SetVolume(s.BaseVolume)
+		s.SetBalance(0)
+		s.SetFade(0)
+	}
+}
+
 func (s *Audio) GetDefaultSink() *Sink {
 	for _, o := range s.Sinks {
 		if o.Name == s.DefaultSink {
