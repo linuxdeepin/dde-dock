@@ -140,27 +140,28 @@ func (b *Bluetooth) GetDevices() (devicesJSON string) {
 	return
 }
 
-func (b *Bluetooth) ConnectDeivce(dpath dbus.ObjectPath) (err error) {
+func (b *Bluetooth) ConnectDevice(dpath dbus.ObjectPath) (err error) {
 	err = bluezConnectDevice(dpath)
 	return
 }
 
-func (b *Bluetooth) DisconnectDeivce(dpath dbus.ObjectPath) (err error) {
+func (b *Bluetooth) DisconnectDevice(dpath dbus.ObjectPath) (err error) {
 	err = bluezDisconnectDevice(dpath)
 	return
 }
 
 func (b *Bluetooth) RemoveDevice(dpath dbus.ObjectPath) (err error) {
+	// TODO
 	err = bluezRemoveDevice(dbus.ObjectPath(b.PrimaryAdapter), dpath)
 	return
 }
 
-func (b *Bluetooth) SetDeivceAlias(dpath dbus.ObjectPath, alias string) (err error) {
+func (b *Bluetooth) SetDeviceAlias(dpath dbus.ObjectPath, alias string) (err error) {
 	err = bluezSetDeviceAlias(dpath, alias)
 	return
 }
 
-func (b *Bluetooth) SetDeivceTrusted(dpath dbus.ObjectPath, trusted bool) (err error) {
+func (b *Bluetooth) SetDeviceTrusted(dpath dbus.ObjectPath, trusted bool) (err error) {
 	err = bluezSetDeviceTrusted(dpath, trusted)
 	return
 }
