@@ -77,9 +77,11 @@ func NewAudio(core *pulse.Context) *Audio {
 
 func (a *Audio) SetDefaultSink(name string) {
 	a.core.SetDefaultSink(name)
+	a.update()
 }
 func (a *Audio) SetDefaultSource(name string) {
 	a.core.SetDefaultSource(name)
+	a.update()
 }
 
 type Sink struct {
