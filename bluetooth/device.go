@@ -10,8 +10,9 @@ const deviceRssiNotInRange = -1000 // -1000db means device not in range
 type device struct {
 	bluezDevice *bluez.Device1
 
-	Path      dbus.ObjectPath
-	Adapter   dbus.ObjectPath
+	Adapter dbus.ObjectPath
+	Path    dbus.ObjectPath
+
 	Alias     string
 	Trusted   bool
 	Paired    bool
@@ -76,6 +77,13 @@ func (b *Bluetooth) addDevice(dpath dbus.ObjectPath, data map[string]dbus.Varian
 	}
 	b.devices[d.Adapter] = append(b.devices[d.Adapter], d)
 	b.updatePropDevices()
+
+	// send signal, DeviceAdded()
+	if dbus.ObjectPath(b.PrimaryAdapter) == d.Adapter {
+		if b.DeviceAdded != nil {
+			b.DeviceAdded(marshalJSON(d))
+		}
+	}
 }
 
 func (b *Bluetooth) removeDevice(dpath dbus.ObjectPath) {
@@ -84,6 +92,15 @@ func (b *Bluetooth) removeDevice(dpath dbus.ObjectPath) {
 		if b.isDeviceExists(devices, dpath) {
 			b.devices[apath] = b.doRemoveDevice(devices, dpath)
 			b.updatePropDevices()
+
+			// send signal, DeviceRemoved()
+			if dbus.ObjectPath(b.PrimaryAdapter) == apath {
+				if b.DeviceRemoved != nil {
+					d := device{Adapter: apath, Path: dpath}
+					b.DeviceRemoved(marshalJSON(d))
+				}
+			}
+			return
 		}
 	}
 }
