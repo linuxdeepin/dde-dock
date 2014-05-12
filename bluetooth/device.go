@@ -40,7 +40,7 @@ func (b *Bluetooth) newDevice(dpath dbus.ObjectPath, data map[string]dbus.Varian
 		d.RSSI = deviceRssiNotInRange
 	}
 
-	// connect properties
+	// TODO connect properties
 	d.bluezDevice.Alias.ConnectChanged(func() {
 		d.Alias = d.bluezDevice.Alias.Get()
 		b.updatePropDevices()
