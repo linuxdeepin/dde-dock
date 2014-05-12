@@ -153,6 +153,7 @@ func (s *ConnectionSession) Save() bool {
 	// return false
 	// }
 	if s.isErrorOccured() {
+		logger.Debug("Errors occured when saving:", s.Errors)
 		return false
 	}
 

@@ -557,8 +557,8 @@ func (*Utils) TestMarshalVpnPluginKey(c *C) {
 		result string
 	}{
 		{ktypeString, "string", "string"},
-		{ktypeBoolean, true, "true"},
-		{ktypeBoolean, false, "false"},
+		{ktypeBoolean, true, "yes"},
+		{ktypeBoolean, false, "no"},
 		{ktypeUint32, 0, "0"},
 		{ktypeUint32, 1000, "1000"},
 	}
@@ -573,8 +573,8 @@ func (*Utils) TestUnmarshalVpnPluginKey(c *C) {
 		result interface{}
 	}{
 		{ktypeString, "string", "string"},
-		{ktypeBoolean, "true", true},
-		{ktypeBoolean, "false", false},
+		{ktypeBoolean, "yes", true},
+		{ktypeBoolean, "no", false},
 		{ktypeUint32, "0", uint32(0)},
 		{ktypeUint32, "1000", uint32(1000)},
 	}

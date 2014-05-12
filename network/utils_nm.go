@@ -120,7 +120,7 @@ func nmAddAndActivateConnection(data connectionData, devPath dbus.ObjectPath) (c
 	spath := dbus.ObjectPath("/")
 	cpath, apath, err = nmManager.AddAndActivateConnection(data, devPath, spath)
 	if err != nil {
-		logger.Error(err)
+		logger.Error(err, "devPath:", devPath)
 		return
 	}
 	return

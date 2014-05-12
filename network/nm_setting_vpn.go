@@ -196,7 +196,12 @@ func marshalVpnPluginKey(value interface{}, t ktype) (valueStr string) {
 	case ktypeUint32:
 		valueStr, err = marshalJSON(value)
 	case ktypeBoolean:
-		valueStr, err = marshalJSON(value)
+		valueBoolean, _ := value.(bool)
+		if valueBoolean {
+			valueStr = "yes"
+		} else {
+			valueStr = "no"
+		}
 	}
 	if err != nil {
 		logger.Error(err)
@@ -215,7 +220,13 @@ func unmarshalVpnPluginKey(valueStr string, t ktype) (value interface{}) {
 	case ktypeUint32:
 		value, err = jsonToKeyValueUint32(valueStr)
 	case ktypeBoolean:
-		value, err = jsonToKeyValueBoolean(valueStr)
+		if valueStr == "yes" {
+			value = true
+		} else if valueStr == "no" {
+			value = false
+		} else {
+			logger.Error("invalid vpn boolean key", valueStr)
+		}
 	}
 	if err != nil {
 		logger.Error(err)

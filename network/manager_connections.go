@@ -302,6 +302,7 @@ func (m *Manager) ActivateConnection(uuid string, devPath dbus.ObjectPath) (err 
 	return
 }
 
+// TODO
 func (m *Manager) DeactivateConnection(uuid string) (err error) {
 	apath, ok := nmGetActiveConnectionByUuid(uuid)
 	if !ok {
