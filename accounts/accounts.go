@@ -44,30 +44,29 @@ const (
 	ACCOUNT_KEY_GUEST   = "AllowGuest"
 )
 
-/*
 func (op *AccountManager) CreateGuestAccount() string {
-        args := []string{}
+	args := []string{}
 
-        passwd := encodePasswd("")
-        args = append(args, "-m")
-        args = append(args, "-d")
-        args = append(args, "/tmp/"+GUEST_ACCOUNT_NAME)
-        args = append(args, "-s")
-        args = append(args, "/bin/bash")
-        args = append(args, "-l")
-        args = append(args, "-p")
-        args = append(args, passwd)
-        args = append(args, GUEST_ACCOUNT_NAME)
-        execCommand(CMD_USERADD, args)
+	passwd := encodePasswd("")
+	args = append(args, "-m")
+	args = append(args, "-d")
+	args = append(args, "/tmp/"+GUEST_ACCOUNT_NAME)
+	args = append(args, "-s")
+	args = append(args, "/bin/bash")
+	args = append(args, "-l")
+	args = append(args, "-p")
+	args = append(args, passwd)
+	args = append(args, GUEST_ACCOUNT_NAME)
+	execCommand(CMD_USERADD, args)
 
-        info, _ := getInfoViaName(GUEST_ACCOUNT_NAME)
-        newUser := newUserManager(info.Uid)
-        newUser.applyPropertiesChanged("IconFile", GUEST_USER_ICON)
-        newUser.updateUserInfo()
+	info, _ := getInfoViaName(GUEST_ACCOUNT_NAME)
+	newUser := newUserManager(info.Uid)
+	newUser.applyPropertiesChanged("IconFile", GUEST_USER_ICON)
+	newUser.updateUserInfo()
+	op.emitUserListChanged()
 
-        return op.FindUserByName(GUEST_ACCOUNT_NAME)
+	return op.FindUserByName(GUEST_ACCOUNT_NAME)
 }
-*/
 
 func (op *AccountManager) AllowGuestAccount(dbusMsg dbus.DMessage, allow bool) bool {
 	//if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
