@@ -135,7 +135,9 @@ func (b *Bluetooth) getDeviceIndex(devices []*device, dpath dbus.ObjectPath) int
 
 // GetDevices return all devices object that marshaled by json.
 func (b *Bluetooth) GetDevices() (devicesJSON string) {
-	return b.Devices
+	devices := b.devices[dbus.ObjectPath(b.PrimaryAdapter)]
+	devicesJSON = marshalJSON(devices)
+	return
 }
 
 func (b *Bluetooth) ConnectDeivce(dpath dbus.ObjectPath) (err error) {

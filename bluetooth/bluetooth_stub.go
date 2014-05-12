@@ -72,7 +72,8 @@ func (b *Bluetooth) updatePropAdapters() {
 }
 
 func (b *Bluetooth) updatePropDevices() {
-	b.Devices = marshalJSON(b.devices)
+	devices := b.devices[dbus.ObjectPath(b.PrimaryAdapter)]
+	b.Devices = marshalJSON(devices)
 	dbus.NotifyChange(b, "Devices")
 	logger.Debug(b.Devices) // TODO test
 }
