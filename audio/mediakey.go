@@ -1,19 +1,14 @@
 package main
 
-import libsound "dbus/com/deepin/api/sound"
 import "dbus/com/deepin/daemon/keybinding"
 
 var __keepMediakeyManagerAlive interface{}
-var __keepPlayerAlive interface{}
 
 func (audio *Audio) listenMediaKey() {
-	player, err := libsound.NewSound("com.deepin.api.Sound", "/com/deepin/api/Sound")
 	mediaKeyManager, err := keybinding.NewMediaKey("com.deepin.daemon.KeyBinding", "/com/deepin/daemon/MediaKey")
 	__keepMediakeyManagerAlive = mediaKeyManager
-	__keepPlayerAlive = player
-
 	if err != nil {
-		Logger.Error("Can't create com.deepin.api.Sound! Sound feedback support will be disabled", err)
+		Logger.Error("Can't create com.deepin.daemon.Keybinding! mediakey support will be disabled", err)
 	}
 
 	mediaKeyManager.ConnectAudioMute(func(pressed bool) {
@@ -24,7 +19,6 @@ func (audio *Audio) listenMediaKey() {
 				return
 			}
 			sink.SetMute(!sink.Mute)
-			player.PlaySystemSound("audio-volume-change")
 		}
 	})
 	mediaKeyManager.ConnectAudioUp(func(pressed bool) {
@@ -38,7 +32,7 @@ func (audio *Audio) listenMediaKey() {
 				Logger.Warning("ignore add volume bigger than 100% when use MediaKey")
 				return
 			}
-			player.PlaySystemSound("audio-volume-change")
+			playFeedback()
 
 			if sink.Mute {
 				sink.SetMute(false)
@@ -66,7 +60,7 @@ func (audio *Audio) listenMediaKey() {
 				nv = 0
 			}
 			sink.SetVolume(nv)
-			player.PlaySystemSound("audio-volume-change")
+			playFeedback()
 		}
 	})
 }

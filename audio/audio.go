@@ -5,6 +5,7 @@ import "dlib/dbus"
 import "dlib/logger"
 import "dlib/pulse"
 import "os"
+import libsound "dbus/com/deepin/api/sound"
 
 var Logger = logger.NewLogger("com.deepin.daemon.Audio")
 
@@ -90,15 +91,21 @@ type Sink struct {
 
 func (s *Sink) SetVolume(v float64) {
 	s.core.SetVolume(s.core.Volume.SetAvg(v))
+	playFeedback()
 }
 func (s *Sink) SetBalance(v float64) {
 	s.core.SetVolume(s.core.Volume.SetBalance(s.core.ChannelMap, v))
+	playFeedback()
 }
 func (s *Sink) SetFade(v float64) {
 	s.core.SetVolume(s.core.Volume.SetFade(s.core.ChannelMap, v))
+	playFeedback()
 }
 func (s *Sink) SetMute(v bool) {
 	s.core.SetMute(v)
+	if !v {
+		playFeedback()
+	}
 }
 func (s *Sink) SetPort(name string) {
 	s.core.SetPort(name)
@@ -119,15 +126,21 @@ type SinkInput struct {
 
 func (s *SinkInput) SetVolume(v float64) {
 	s.core.SetVolume(s.core.Volume.SetAvg(v))
+	playFeedback()
 }
 func (s *SinkInput) SetBalance(v float64) {
 	s.core.SetVolume(s.core.Volume.SetBalance(s.core.ChannelMap, v))
+	playFeedback()
 }
 func (s *SinkInput) SetFade(v float64) {
 	s.core.SetVolume(s.core.Volume.SetFade(s.core.ChannelMap, v))
+	playFeedback()
 }
 func (s *SinkInput) SetMute(v bool) {
 	s.core.SetMute(v)
+	if !v {
+		playFeedback()
+	}
 }
 
 type Source struct {
@@ -151,12 +164,21 @@ type Source struct {
 
 func (s *Source) SetVolume(v float64) {
 	s.core.SetVolume(s.core.Volume.SetAvg(v))
+	playFeedback()
 }
 func (s *Source) SetBalance(v float64) {
 	s.core.SetVolume(s.core.Volume.SetBalance(s.core.ChannelMap, v))
+	playFeedback()
 }
 func (s *Source) SetFade(v float64) {
 	s.core.SetVolume(s.core.Volume.SetFade(s.core.ChannelMap, v))
+	playFeedback()
+}
+func (s *Source) SetMute(v bool) {
+	s.core.SetMute(v)
+	if !v {
+		playFeedback()
+	}
 }
 func (s *Source) SetPort(name string) {
 	s.core.SetPort(name)
@@ -187,3 +209,13 @@ func main() {
 	}
 	dbus.Wait()
 }
+
+var playFeedback = func() func() {
+	player, err := libsound.NewSound("com.deepin.api.Sound", "/com/deepin/api/Sound")
+	if err != nil {
+		Logger.Error("Can't create com.deepin.api.Sound! Sound feedback support will be disabled", err)
+	}
+	return func() {
+		player.PlaySystemSound("audio-volume-change")
+	}
+}()
