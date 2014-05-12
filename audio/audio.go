@@ -68,13 +68,6 @@ func (a *Audio) SetDefaultSource(name string) {
 	a.core.SetDefaultSource(name)
 }
 
-type SourceOutputTest struct {
-	Volume float64
-}
-
-func (*SourceOutputTest) Tick() {
-}
-
 type Sink struct {
 	core *pulse.Sink
 
@@ -178,16 +171,10 @@ func main() {
 
 	ctx := pulse.GetContext()
 	audio := NewAudio(ctx)
-	tester := &SourceOutputTest{}
-
-	dbus.InstallOnSession(tester)
 
 	if err := dbus.InstallOnSession(audio); err != nil {
 		Logger.Error("Failed InstallOnSession:", err)
 		return
-	}
-	if err := dbus.InstallOnSession(tester); err != nil {
-		Logger.Error("Failed InstallOnSession:", err)
 	}
 
 	dbus.DealWithUnhandledMessage()

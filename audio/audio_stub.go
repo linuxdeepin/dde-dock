@@ -23,11 +23,17 @@ func (*Audio) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (*SourceOutputTest) GetDBusInfo() dbus.DBusInfo {
+func (m *Meter) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		baseBusName,
-		baseBusPath + "/SourceOutputTest",
-		baseBusIfc + ".SoureOutputTest",
+		baseBusPath + "/Meter" + m.id,
+		baseBusIfc + ".Meter",
+	}
+}
+func (m *Meter) setPropVolume(v float64) {
+	if m.Volume != v {
+		m.Volume = v
+		dbus.NotifyChange(m, "Volume")
 	}
 }
 
