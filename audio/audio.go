@@ -17,6 +17,8 @@ type Audio struct {
 	SinkInputs    []*SinkInput
 	DefaultSink   string
 	DefaultSource string
+
+	MaxUIVolume float64
 }
 
 func (s *Audio) GetDefaultSink() *Sink {
@@ -53,6 +55,7 @@ func NewSinkInput(core *pulse.SinkInput) *SinkInput {
 }
 func NewAudio(core *pulse.Context) *Audio {
 	a := &Audio{core: core}
+	a.MaxUIVolume = pulse.VolumeUIMax
 	a.update()
 	a.initEventHandlers()
 	return a
@@ -73,14 +76,20 @@ func (*SourceOutputTest) Tick() {
 }
 
 type Sink struct {
-	core        *pulse.Sink
+	core *pulse.Sink
+
 	Name        string
 	Description string
 
 	BaseVolume float64
-	Volume     float64
-	Balance    float64
-	Mute       bool
+
+	Mute bool
+
+	Volume         float64
+	Balance        float64
+	SupportBalance bool
+	Fade           float64
+	SupportFade    bool
 
 	Ports      []string
 	ActivePort string
@@ -92,6 +101,9 @@ func (s *Sink) SetVolume(v float64) {
 func (s *Sink) SetBalance(v float64) {
 	s.core.SetVolume(s.core.Volume.SetBalance(s.core.ChannelMap, v))
 }
+func (s *Sink) SetFade(v float64) {
+	s.core.SetVolume(s.core.Volume.SetFade(s.core.ChannelMap, v))
+}
 func (s *Sink) SetMute(v bool) {
 	s.core.SetMute(v)
 }
@@ -100,11 +112,16 @@ func (s *Sink) SetPort(name string) {
 }
 
 type SinkInput struct {
-	core   *pulse.SinkInput
-	Name   string
-	Icon   string
-	Volume float64
-	Mute   bool
+	core *pulse.SinkInput
+	Name string
+	Icon string
+	Mute bool
+
+	Volume         float64
+	Balance        float64
+	SupportBalance bool
+	Fade           float64
+	SupportFade    bool
 }
 
 func (s *SinkInput) SetVolume(v float64) {
@@ -112,6 +129,9 @@ func (s *SinkInput) SetVolume(v float64) {
 }
 func (s *SinkInput) SetBalance(v float64) {
 	s.core.SetVolume(s.core.Volume.SetBalance(s.core.ChannelMap, v))
+}
+func (s *SinkInput) SetFade(v float64) {
+	s.core.SetVolume(s.core.Volume.SetFade(s.core.ChannelMap, v))
 }
 func (s *SinkInput) SetMute(v bool) {
 	s.core.SetMute(v)
@@ -123,9 +143,14 @@ type Source struct {
 	Description string
 
 	BaseVolume float64
-	Volume     float64
-	Balance    float64
-	Mute       bool
+
+	Mute bool
+
+	Volume         float64
+	Balance        float64
+	SupportBalance bool
+	Fade           float64
+	SupportFade    bool
 
 	ActivePort string
 	Ports      []string
@@ -136,6 +161,9 @@ func (s *Source) SetVolume(v float64) {
 }
 func (s *Source) SetBalance(v float64) {
 	s.core.SetVolume(s.core.Volume.SetBalance(s.core.ChannelMap, v))
+}
+func (s *Source) SetFade(v float64) {
+	s.core.SetVolume(s.core.Volume.SetFade(s.core.ChannelMap, v))
 }
 func (s *Source) SetPort(name string) {
 	s.core.SetPort(name)

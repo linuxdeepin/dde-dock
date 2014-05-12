@@ -124,14 +124,21 @@ func (s *Audio) setPropSinkInputs(v []*SinkInput) {
 	dbus.NotifyChange(s, "SinkInputs")
 }
 
+func (s *Sink) setPropCanBalance(v bool) {
+}
 func (s *Sink) update() {
 	s.Name = s.core.Name
 	s.Description = s.core.Description
 
-	s.BaseVolume = s.core.BaseVolume.ToLiner()
-	s.setPropVolume(s.core.Volume.Avg())
-	s.setPropBalance(s.core.Volume.Balance(s.core.ChannelMap))
+	s.BaseVolume = s.core.BaseVolume.ToPercent()
+
 	s.setPropMute(s.core.Mute)
+	s.setPropVolume(s.core.Volume.Avg())
+
+	s.setPropSupportFade(false)
+	s.setPropFade(s.core.Volume.Fade(s.core.ChannelMap))
+	s.setPropSupportBalance(true)
+	s.setPropBalance(s.core.Volume.Balance(s.core.ChannelMap))
 
 	s.setPropActivePort(s.core.ActivePort.Name)
 	var ports []string
@@ -140,6 +147,7 @@ func (s *Sink) update() {
 	}
 	s.setPropPorts(ports)
 }
+
 func (s *Sink) setPropPorts(v []string) {
 	s.Ports = v
 	dbus.NotifyChange(s, "Ports")
@@ -154,6 +162,24 @@ func (s *Sink) setPropBalance(v float64) {
 	if s.Volume != v {
 		s.Balance = v
 		dbus.NotifyChange(s, "Balance")
+	}
+}
+func (s *Sink) setPropSupportBalance(v bool) {
+	if s.SupportBalance != v {
+		s.SupportBalance = v
+		dbus.NotifyChange(s, "SupportBalance")
+	}
+}
+func (s *Sink) setPropSupportFade(v bool) {
+	if s.SupportFade != v {
+		s.SupportFade = v
+		dbus.NotifyChange(s, "SupportFade")
+	}
+}
+func (s *Sink) setPropFade(v float64) {
+	if s.Fade != v {
+		s.Fade = v
+		dbus.NotifyChange(s, "Fade")
 	}
 }
 func (s *Sink) setPropMute(v bool) {
@@ -173,10 +199,16 @@ func (s *Source) update() {
 	s.Name = s.core.Name
 	s.Description = s.core.Description
 
-	s.BaseVolume = s.core.BaseVolume.ToLiner()
+	s.BaseVolume = s.core.BaseVolume.ToPercent()
+
 	s.setPropVolume(s.core.Volume.Avg())
-	s.setPropBalance(s.core.Volume.Balance(s.core.ChannelMap))
 	s.setPropMute(s.core.Mute)
+
+	//TODO: handle this
+	s.setPropSupportFade(false)
+	s.setPropFade(s.core.Volume.Fade(s.core.ChannelMap))
+	s.setPropSupportBalance(true)
+	s.setPropBalance(s.core.Volume.Balance(s.core.ChannelMap))
 
 	s.setPropActivePort(s.core.ActivePort.Name)
 
@@ -197,10 +229,28 @@ func (s *Source) setPropVolume(v float64) {
 		dbus.NotifyChange(s, "Volume")
 	}
 }
+func (s *Source) setPropSupportBalance(v bool) {
+	if s.SupportBalance != v {
+		s.SupportBalance = v
+		dbus.NotifyChange(s, "SupportBalance")
+	}
+}
 func (s *Source) setPropBalance(v float64) {
 	if s.Volume != v {
 		s.Balance = v
 		dbus.NotifyChange(s, "Balance")
+	}
+}
+func (s *Source) setPropSupportFade(v bool) {
+	if s.SupportFade != v {
+		s.SupportFade = v
+		dbus.NotifyChange(s, "SupportFade")
+	}
+}
+func (s *Source) setPropFade(v float64) {
+	if s.Fade != v {
+		s.Fade = v
+		dbus.NotifyChange(s, "Fade")
 	}
 }
 func (s *Source) setPropMute(v bool) {
@@ -216,6 +266,18 @@ func (s *Source) setPropActivePort(v string) {
 	}
 }
 
+func (s *SinkInput) update() {
+	s.Name = s.core.PropList[PropAppName]
+	s.Icon = s.core.PropList[PropAppIconName]
+	s.setPropVolume(s.core.Volume.Avg())
+	s.setPropMute(s.core.Mute)
+
+	s.setPropSupportFade(false)
+	s.setPropFade(s.core.Volume.Fade(s.core.ChannelMap))
+	s.setPropSupportBalance(true)
+	s.setPropBalance(s.core.Volume.Balance(s.core.ChannelMap))
+}
+
 func (s *SinkInput) setPropVolume(v float64) {
 	if s.Volume != v {
 		s.Volume = v
@@ -229,9 +291,27 @@ func (s *SinkInput) setPropMute(v bool) {
 	}
 }
 
-func (s *SinkInput) update() {
-	s.Name = s.core.PropList[PropAppName]
-	s.Icon = s.core.PropList[PropAppIconName]
-	s.setPropVolume(s.core.Volume.Avg())
-	s.setPropMute(s.core.Mute)
+func (s *SinkInput) setPropBalance(v float64) {
+	if s.Volume != v {
+		s.Balance = v
+		dbus.NotifyChange(s, "Balance")
+	}
+}
+func (s *SinkInput) setPropSupportBalance(v bool) {
+	if s.SupportBalance != v {
+		s.SupportBalance = v
+		dbus.NotifyChange(s, "SupportBalance")
+	}
+}
+func (s *SinkInput) setPropSupportFade(v bool) {
+	if s.SupportFade != v {
+		s.SupportFade = v
+		dbus.NotifyChange(s, "SupportFade")
+	}
+}
+func (s *SinkInput) setPropFade(v float64) {
+	if s.Fade != v {
+		s.Fade = v
+		dbus.NotifyChange(s, "Fade")
+	}
 }
