@@ -1,7 +1,7 @@
 [
     {"Ignore":false, "Name": "general", "DisplayName": "General", "RelatedFields": ["NM_SETTING_CONNECTION_SETTING_NAME"]},
     {"Ignore":false, "Name": "ethernet", "DisplayName": "Ethernet", "RelatedFields": ["NM_SETTING_WIRED_SETTING_NAME"]},
-    {"Ignore":false, "Name": "mobile", "DisplayName": "Mobile", "RelatedFields": ["NM_SETTING_GSM_SETTING_NAME"]},
+    {"Ignore":false, "Name": "mobile-gsm", "DisplayName": "Mobile", "RelatedFields": ["NM_SETTING_GSM_SETTING_NAME"]},
     {"Ignore":false, "Name": "mobile-cdma", "DisplayName": "Mobile", "RelatedFields": ["NM_SETTING_CDMA_SETTING_NAME"]},
     {"Ignore":false, "Name": "wifi", "DisplayName": "Wi-Fi", "RelatedFields": ["NM_SETTING_WIRELESS_SETTING_NAME"]},
     {"Ignore":false, "Name": "security", "DisplayName": "Security", "RelatedFields": ["NM_SETTING_WIRELESS_SECURITY_SETTING_NAME","NM_SETTING_802_1X_SETTING_NAME"]},
