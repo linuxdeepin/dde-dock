@@ -59,7 +59,7 @@ func isSettingVpnPluginSecretKey(field, key string) bool {
 		}
 	case fieldVpnOpenvpn:
 		switch key {
-		case NM_SETTING_VPN_OPENVPN_KEY_PASSWORD_FLAGS:
+		case NM_SETTING_VPN_OPENVPN_KEY_PASSWORD:
 			return true
 		case NM_SETTING_VPN_OPENVPN_KEY_CERTPASS:
 			return true

@@ -164,7 +164,7 @@ func isVpnOpenvpnNeedShowCertpass(data connectionData) bool {
 func newVpnOpenvpnConnectionData(id, uuid string) (data connectionData) {
 	data = newBasicVpnConnectionData(id, uuid, NM_DBUS_SERVICE_OPENVPN)
 	setSettingVpnOpenvpnKeyConnectionType(data, "tls")
-	setSettingVpnOpenvpnKeyCertpassFlags(data, 1) // TODO
+	setSettingVpnOpenvpnKeyCertpassFlags(data, NM_OPENVPN_SECRET_FLAG_SAVE)
 
 	initSettingFieldIpv6(data)
 	return
@@ -480,6 +480,7 @@ func logicSetSettingVpnOpenvpnKeyConnectionType(data connectionData, value strin
 			NM_SETTING_VPN_OPENVPN_KEY_CERTPASS_FLAGS,
 			NM_SETTING_VPN_OPENVPN_KEY_CERTPASS,
 		)...)
+		setSettingVpnOpenvpnKeyCertpassFlags(data, NM_OPENVPN_SECRET_FLAG_SAVE)
 	case NM_OPENVPN_CONTYPE_PASSWORD:
 		removeSettingKey(data, fieldVpnOpenvpn, stringArrayBut(allRelatedKeys,
 			NM_SETTING_VPN_OPENVPN_KEY_USERNAME,

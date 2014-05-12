@@ -108,7 +108,7 @@ func NewConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 	}
 	s.ConnectionType = getCustomConnectinoType(s.data)
 
-	s.fixMissingFields()
+	s.fixValues()
 
 	// get secret data
 	// TODO fieldVpnSecurity
@@ -140,11 +140,26 @@ func NewConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 	return
 }
 
-func (s *ConnectionSession) fixMissingFields() {
-	// fieldIpv6
+func (s *ConnectionSession) fixValues() {
+	// append missing fieldIpv6
 	if !isSettingFieldExists(s.data, fieldIpv6) && isStringInArray(fieldIpv6, s.listFields()) {
 		initSettingFieldIpv6(s.data)
 	}
+
+	// vpn plugin data and secret
+	if getSettingConnectionType(s.data) == NM_SETTING_VPN_SETTING_NAME {
+		if !isSettingVpnDataExists(s.data) {
+			setSettingVpnData(s.data, make(map[string]string))
+		}
+		if !isSettingVpnSecretsExists(s.data) {
+			setSettingVpnSecrets(s.data, make(map[string]string))
+		}
+	}
+
+	// TODO fix secret flags
+	// if isSettingVpnOpenvpnKeyCertpassFlagsExists(s.data) && getSettingVpnOpenvpnKeyCertpassFlags(s.data) == 1 {
+	// setSettingVpnOpenvpnKeyCertpassFlags(s.data, NM_OPENVPN_SECRET_FLAG_SAVE)
+	// }
 }
 
 // Save save current connection s.
