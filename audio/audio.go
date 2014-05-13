@@ -105,6 +105,9 @@ type Sink struct {
 }
 
 func (s *Sink) SetVolume(v float64) {
+	if v == 0 {
+		v = 0.001
+	}
 	s.core.SetVolume(s.core.Volume.SetAvg(v))
 	playFeedback()
 }
@@ -140,6 +143,9 @@ type SinkInput struct {
 }
 
 func (s *SinkInput) SetVolume(v float64) {
+	if v == 0 {
+		v = 0.001
+	}
 	s.core.SetVolume(s.core.Volume.SetAvg(v))
 	playFeedback()
 }
@@ -178,6 +184,9 @@ type Source struct {
 }
 
 func (s *Source) SetVolume(v float64) {
+	if v == 0 {
+		v = 0.001
+	}
 	s.core.SetVolume(s.core.Volume.SetAvg(v))
 	playFeedback()
 }
