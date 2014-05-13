@@ -193,9 +193,9 @@ func supportedBacklight(c *xgb.Conn, output randr.Output) (bool, float64) {
 }
 
 func setBrightness(xcon *xgb.Conn, op randr.Output, v float64) {
-	if v < 0.01 {
-		Logger.Warningf("setBrightness: %v is too small adjust to 0", v)
-		v = 0
+	if v < 0.1 {
+		Logger.Warningf("setBrightness: %v is too small adjust to 0.1", v)
+		v = 0.1
 	}
 	if v > 1 {
 		Logger.Warningf("setBrightness: %v is too big adjust to 1", v)
