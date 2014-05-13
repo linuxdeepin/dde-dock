@@ -7,7 +7,7 @@ import (
 func (m *Manager) updatePropActiveConnections() {
 	m.ActiveConnections, _ = marshalJSON(m.activeConnections)
 	dbus.NotifyChange(m, "ActiveConnections")
-	logger.Debug("ActiveConnections:", m.ActiveConnections) // TODO test
+	// logger.Debug("ActiveConnections:", m.ActiveConnections) // TODO test
 }
 
 func (m *Manager) updatePropState() {

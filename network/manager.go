@@ -114,23 +114,32 @@ func (m *Manager) updateActiveConnections() {
 				State:   nmaconn.State.Get(),
 				Vpn:     nmaconn.Vpn.Get(),
 			}
-			// connect properties
-			nmaconn.Devices.ConnectChanged(func() {
-				if m.isActiveConnectionExists(aconn) {
-					aconn.Devices = nmaconn.Devices.Get()
-					m.updatePropActiveConnections()
-				}
-			})
+			// go func() {
+			// 	time.Sleep(500 * time.Millisecond)
+			// 	logger.Debug("state changed:", aconn.Uuid, aconn.State, nmaconn.State.Get()) // TODO test
+			// 	aconn.State = nmaconn.State.Get()
+			// }()
+			// TODO connect properties
+			// nmaconn.Devices.ConnectChanged(func() {
+			// 	// if m.isActiveConnectionExists(aconn) {
+			// 	logger.Debug("state changed:", aconn.Devices, nmaconn.Devices.Get()) // TODO test
+			// 	aconn.Devices = nmaconn.Devices.Get()
+			// 	// m.updatePropActiveConnections()
+			// 	// }
+			// })
 			nmaconn.State.ConnectChanged(func() {
-				if m.isActiveConnectionExists(aconn) {
-					aconn.State = nmaconn.State.Get()
-					m.updatePropActiveConnections()
-				}
+				// TODO fix dbus property issue
+				// if m.isActiveConnectionExists(aconn) {
+				logger.Debug("state changed:", aconn.State, nmaconn.State.Get()) // TODO test
+				aconn.State = nmaconn.State.Get()
+				m.updatePropActiveConnections()
+				// }
 			})
 			m.activeConnections = append(m.activeConnections, aconn)
 		}
 	}
 	m.updatePropActiveConnections()
+	logger.Debug("active connections changed:", m.ActiveConnections) // TODO test
 }
 func (m *Manager) isActiveConnectionExists(aconn *activeConnection) bool {
 	if aconn == nil {
