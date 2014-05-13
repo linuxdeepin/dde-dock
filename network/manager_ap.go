@@ -126,7 +126,6 @@ func (m *Manager) removeAccessPoint(devPath, apPath dbus.ObjectPath) {
 		} else {
 			apJSON, _ = marshalJSON(accessPoint{Path: apPath})
 		}
-		// ap :=
 		logger.Debug("AccessPointRemoved:", apJSON) // TODO test
 		m.AccessPointRemoved(string(devPath), apJSON)
 	}
@@ -147,6 +146,7 @@ func (m *Manager) doRemoveAccessPoint(devPath, apPath dbus.ObjectPath) {
 func (m *Manager) getAccessPoint(devPath, apPath dbus.ObjectPath) (ap *accessPoint) {
 	i := m.getAccessPointIndex(devPath, apPath)
 	if i < 0 {
+		logger.Warning("could not found access point:", devPath, apPath)
 		return
 	}
 	ap = m.accessPoints[devPath][i]
@@ -169,11 +169,13 @@ func (m *Manager) getAccessPointIndex(devPath, apPath dbus.ObjectPath) int {
 
 // GetAccessPoints return all access points object which marshaled by json.
 func (m *Manager) GetAccessPoints(path dbus.ObjectPath) (apsJSON string, err error) {
-	aps, err := m.doGetAccessPoints(path)
-	if err != nil {
-		return
-	}
-	apsJSON, err = marshalJSON(aps)
+	// aps, err := m.doGetAccessPoints(path)
+	// if err != nil {
+	// 	return
+	// }
+	// apsJSON, err = marshalJSON(aps)
+	// TODO
+	apsJSON, err = marshalJSON(m.accessPoints[path])
 	return
 }
 func (m *Manager) doGetAccessPoints(devPath dbus.ObjectPath) (aps []accessPoint, err error) {

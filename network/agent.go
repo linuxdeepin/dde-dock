@@ -38,7 +38,7 @@ func fillSecret(settingName string, key string) map[string]map[string]dbus.Varia
 }
 
 func (a *Agent) GetSecrets(connection map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath, settingName string, hints []string, flags uint32) map[string]map[string]dbus.Variant {
-	logger.Info("GetSecrets:", connectionPath, settingName, hints, flags)
+	logger.Debug("GetSecrets:", connectionPath, settingName, hints, flags)
 	keyId := mapKey{connectionPath, settingName}
 
 	// TODO fixme
@@ -51,7 +51,9 @@ func (a *Agent) GetSecrets(connection map[string]map[string]dbus.Variant, connec
 	// return invalidKey
 	// }
 
-	if flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_ALLOW_INTERACTION == 0 {
+	if flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_ALLOW_INTERACTION == 0 &&
+		flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_USER_REQUESTED == 0 {
+		logger.Debug("GetSecrets: invalid key", flags)
 		return invalidKey
 	}
 
@@ -88,6 +90,7 @@ func (a *Agent) createPendingKey(keyId mapKey, connectionId string) chan string 
 }
 
 func (a *Agent) CancelGetSecrtes(connectionPath dbus.ObjectPath, settingName string) {
+	logger.Debug("CancelGetSecrtes:", connectionPath, settingName)
 	keyId := mapKey{connectionPath, settingName}
 
 	if pendingChan, ok := a.pendingKeys[keyId]; ok {
@@ -96,25 +99,24 @@ func (a *Agent) CancelGetSecrtes(connectionPath dbus.ObjectPath, settingName str
 	} else {
 		logger.Warning("CancelGetSecrtes an unknow PendingKey:", keyId)
 	}
-	logger.Info("CancelGetSecrtes")
 }
 
 func (a *Agent) SaveSecrets(connection map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath) {
+	logger.Debug("SaveSecretes:", connectionPath)
 	// TODO fixme
 	// if _, ok := connection["802-11-wireless-security"]; ok {
 	// keyId := mapKey{connectionPath, "802-11-wireless-security"}
 	// a.savedKeys[keyId] = connection
 	// logger.Debug("SaveSecrets:", connection, connectionPath) // TODO test
 	// }
-	logger.Info("SaveSecretes")
 }
 
 func (a *Agent) DeleteSecrets(connection map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath) {
+	logger.Debug("DeleteSecrets:", connectionPath) // TODO test
 	if _, ok := connection["802-11-wireless-security"]; ok {
 		keyId := mapKey{connectionPath, "802-11-wireless-security"}
 		delete(a.savedKeys, keyId)
 	}
-	logger.Info("DeleteSecretes")
 }
 
 func (a *Agent) feedSecret(path string, name string, key string) {
