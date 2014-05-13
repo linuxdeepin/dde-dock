@@ -129,7 +129,7 @@ func configFile(name string, defaultFile string) (*glib.KeyFile, error) {
 	file := glib.NewKeyFile()
 	conf := configFilePath(name)
 	if !exist(conf) {
-		os.MkdirAll(path.Dir(conf), os.FileMode(0755))
+		os.MkdirAll(path.Dir(conf), DirDefaultPerm)
 		if defaultFile == "" {
 			logger.Info("create", conf)
 			f, err := os.Create(conf)

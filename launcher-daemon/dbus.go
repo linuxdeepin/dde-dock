@@ -19,7 +19,7 @@ const (
 	launcherInterface string = launcherObject
 
 	AppDirName     string      = "applications"
-	DirDefaultPerm os.FileMode = 775
+	DirDefaultPerm os.FileMode = 0755
 )
 
 type ItemChangedStatus struct {
