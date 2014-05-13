@@ -78,6 +78,7 @@ func (a *Agent) GetSecrets(connection map[string]map[string]dbus.Variant, connec
 func (a *Agent) createPendingKey(keyId mapKey, connectionId string) chan string {
 	logger.Debug("createPendingKey:", keyId, connectionId) // TODO test
 	if manager.NeedSecrets != nil {
+		logger.Debug("OnNeedSecrets:", string(keyId.path), keyId.name, connectionId)
 		defer manager.NeedSecrets(string(keyId.path), keyId.name, connectionId)
 	} else {
 		logger.Warning("createPendingKey when DNetworkManager hasn't init")
@@ -140,8 +141,10 @@ func newAgent(identify string) *Agent {
 }
 
 func (m *Manager) FeedSecret(path string, name, key string) {
+	logger.Debug("FeedSecret:", path, name, key)
 	m.agent.feedSecret(path, name, key)
 }
 func (m *Manager) CancelSecret(path string, name string) {
+	logger.Debug("CancelSecret:", path, name)
 	m.agent.CancelGetSecrtes(dbus.ObjectPath(path), name)
 }

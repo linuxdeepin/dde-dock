@@ -92,6 +92,7 @@ func (m *Manager) addAccessPoint(devPath, apPath dbus.ObjectPath) {
 	}
 
 	// connect property, access point strength
+	// TODO connect more properties, security method
 	ap.nmAp.Strength.ConnectChanged(func() {
 		// firstly, check if the access point is still exists to ignore
 		// dbus error when getting property
@@ -109,6 +110,7 @@ func (m *Manager) addAccessPoint(devPath, apPath dbus.ObjectPath) {
 	// emit signal
 	if m.AccessPointAdded != nil {
 		apJSON, _ := marshalJSON(ap)
+		logger.Debug("AccessPointAdded:", apJSON) // TODO test
 		m.AccessPointAdded(string(devPath), apJSON)
 	}
 	m.accessPoints[devPath] = append(m.accessPoints[devPath], &ap)
@@ -117,7 +119,15 @@ func (m *Manager) addAccessPoint(devPath, apPath dbus.ObjectPath) {
 func (m *Manager) removeAccessPoint(devPath, apPath dbus.ObjectPath) {
 	// emit signal
 	if m.AccessPointRemoved != nil {
-		apJSON, _ := marshalJSON(accessPoint{Path: apPath})
+		// get access point information
+		var apJSON string
+		if ap := m.getAccessPoint(devPath, apPath); ap != nil {
+			apJSON, _ = marshalJSON(ap)
+		} else {
+			apJSON, _ = marshalJSON(accessPoint{Path: apPath})
+		}
+		// ap :=
+		logger.Debug("AccessPointRemoved:", apJSON) // TODO test
 		m.AccessPointRemoved(string(devPath), apJSON)
 	}
 	m.doRemoveAccessPoint(devPath, apPath)
@@ -133,6 +143,14 @@ func (m *Manager) doRemoveAccessPoint(devPath, apPath dbus.ObjectPath) {
 	aps[len(aps)-1] = nil
 	aps = aps[:len(aps)-1]
 	m.accessPoints[devPath] = aps
+}
+func (m *Manager) getAccessPoint(devPath, apPath dbus.ObjectPath) (ap *accessPoint) {
+	i := m.getAccessPointIndex(devPath, apPath)
+	if i < 0 {
+		return
+	}
+	ap = m.accessPoints[devPath][i]
+	return
 }
 func (m *Manager) isAccessPointExists(devPath, apPath dbus.ObjectPath) bool {
 	if m.getAccessPointIndex(devPath, apPath) >= 0 {
