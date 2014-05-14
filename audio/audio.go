@@ -84,6 +84,11 @@ func (a *Audio) SetDefaultSource(name string) {
 	a.update()
 }
 
+type Port struct {
+	Name        string
+	Description string
+	Available   byte // Unknow:0, No:1, Yes:2
+}
 type Sink struct {
 	core *pulse.Sink
 
@@ -100,8 +105,8 @@ type Sink struct {
 	Fade           float64
 	SupportFade    bool
 
-	Ports      []string
-	ActivePort string
+	Ports      []Port
+	ActivePort Port
 }
 
 func (s *Sink) SetVolume(v float64) {
@@ -179,8 +184,8 @@ type Source struct {
 	Fade           float64
 	SupportFade    bool
 
-	ActivePort string
-	Ports      []string
+	Ports      []Port
+	ActivePort Port
 }
 
 func (s *Source) SetVolume(v float64) {

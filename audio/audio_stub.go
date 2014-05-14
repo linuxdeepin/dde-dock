@@ -1,6 +1,7 @@
 package main
 
 import "dlib/dbus"
+import "dlib/pulse"
 import "fmt"
 
 const (
@@ -146,15 +147,28 @@ func (s *Sink) update() {
 	s.setPropSupportBalance(true)
 	s.setPropBalance(s.core.Volume.Balance(s.core.ChannelMap))
 
-	s.setPropActivePort(s.core.ActivePort.Name)
-	var ports []string
+	s.setPropActivePort(toPort(s.core.ActivePort))
+	var ports []Port
 	for _, p := range s.core.Ports {
-		ports = append(ports, p.Name)
+		ports = append(ports, toPort(p))
 	}
 	s.setPropPorts(ports)
 }
+func toPort(v pulse.PortInfo) Port {
+	return Port{
+		Name:        v.Name,
+		Description: v.Description,
+		Available:   byte(v.Available),
+	}
+}
 
-func (s *Sink) setPropPorts(v []string) {
+func (s *Sink) setPropActivePort(v Port) {
+	if s.ActivePort != v {
+		s.ActivePort = v
+		dbus.NotifyChange(s, "ActivePort")
+	}
+}
+func (s *Sink) setPropPorts(v []Port) {
 	s.Ports = v
 	dbus.NotifyChange(s, "Ports")
 }
@@ -194,12 +208,6 @@ func (s *Sink) setPropMute(v bool) {
 		dbus.NotifyChange(s, "Mute")
 	}
 }
-func (s *Sink) setPropActivePort(v string) {
-	if s.ActivePort != v {
-		s.ActivePort = v
-		dbus.NotifyChange(s, "ActivePort")
-	}
-}
 
 func (s *Source) update() {
 	s.Name = s.core.Name
@@ -216,15 +224,15 @@ func (s *Source) update() {
 	s.setPropSupportBalance(true)
 	s.setPropBalance(s.core.Volume.Balance(s.core.ChannelMap))
 
-	s.setPropActivePort(s.core.ActivePort.Name)
+	s.setPropActivePort(toPort(s.core.ActivePort))
 
-	var ports []string
+	var ports []Port
 	for _, p := range s.core.Ports {
-		ports = append(ports, p.Name)
+		ports = append(ports, toPort(p))
 	}
 	s.setPropPorts(ports)
 }
-func (s *Source) setPropPorts(v []string) {
+func (s *Source) setPropPorts(v []Port) {
 	s.Ports = v
 	dbus.NotifyChange(s, "Ports")
 }
@@ -265,7 +273,7 @@ func (s *Source) setPropMute(v bool) {
 		dbus.NotifyChange(s, "Mute")
 	}
 }
-func (s *Source) setPropActivePort(v string) {
+func (s *Source) setPropActivePort(v Port) {
 	if s.ActivePort != v {
 		s.ActivePort = v
 		dbus.NotifyChange(s, "ActivePort")
