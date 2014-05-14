@@ -25,10 +25,11 @@ var (
 	busConn      *dbus.Conn
 	dateSettings = gio.NewSettings(_DATE_TIME_SCHEMA)
 
-	objUtils    *libutils.Manager
-	setDate     *setdatetime.SetDateTime
-	zoneWatcher *fsnotify.Watcher
-	logger      = dlogger.NewLogger("dde-daemon/datetime")
+	objUtils         *libutils.Manager
+	setDate          *setdatetime.SetDateTime
+	zoneWatcher      *fsnotify.Watcher
+	logger           = dlogger.NewLogger("dde-daemon/datetime")
+	changeLocaleFlag = false
 )
 
 type Manager struct {
@@ -36,7 +37,7 @@ type Manager struct {
 	Use24HourDisplay *property.GSettingsBoolProperty `access:"readwrite"`
 	CurrentTimezone  string
 	UserTimezoneList []string
-	//LocaleListMap    map[string]string
+	LocaleListMap    map[string]string
 }
 
 func (op *Manager) SetDate(d string) (bool, error) {
@@ -120,6 +121,7 @@ func (op *Manager) SetLocale(locale string) {
 	}
 
 	setDate.GenLocale(locale)
+	changeLocaleFlag = true
 }
 
 func NewDateAndTime() *Manager {
@@ -137,8 +139,8 @@ func NewDateAndTime() *Manager {
 	m.listenSettings()
 	m.listenZone()
 	m.AddUserTimezoneList(m.CurrentTimezone)
-	//m.LocaleListMap = make(map[string]string)
-	//m.LocaleListMap = localDescMap
+	m.LocaleListMap = make(map[string]string)
+	m.LocaleListMap = localDescMap
 
 	return m
 }
