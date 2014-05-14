@@ -1,6 +1,25 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-05-14 17:11+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
 #: ../../bluetooth/bluez_profile.go:12
 msgid "Serial Port"
-msgstr ""
+msgstr "串行端口"
 
 #: ../../bluetooth/bluez_profile.go:13
 msgid "Dial-Up Networking"
@@ -8,2225 +27,3290 @@ msgstr "拨号网络"
 
 #: ../../bluetooth/bluez_profile.go:14
 msgid "Hands-Free unit"
-msgstr ""
+msgstr "免提装置"
 
 #: ../../bluetooth/bluez_profile.go:15
 msgid "Hands-Free Voice Gateway"
-msgstr ""
+msgstr "免提语音网关"
 
 #: ../../bluetooth/bluez_profile.go:16
 msgid "Headset Voice Gateway"
-msgstr ""
+msgstr "耳机语音网关"
 
 #: ../../bluetooth/bluez_profile.go:17
 msgid "Object Push"
-msgstr ""
+msgstr "对象推送"
 
 #: ../../bluetooth/bluez_profile.go:18
 msgid "File Transfer"
-msgstr ""
+msgstr "文件传输"
 
 #: ../../bluetooth/bluez_profile.go:19
 msgid "Synchronization"
-msgstr ""
+msgstr "同步"
 
 #: ../../bluetooth/bluez_profile.go:20
 msgid "Phone Book Access"
-msgstr ""
+msgstr "电话簿访问"
 
 #: ../../bluetooth/bluez_profile.go:21
 msgid "Phone Book Access Client"
-msgstr ""
+msgstr "电话簿访问客户端"
 
 #: ../../bluetooth/bluez_profile.go:22
 msgid "Message Access"
-msgstr ""
+msgstr "消息访问"
 
 #: ../../bluetooth/bluez_profile.go:23
 msgid "Message Notification"
+msgstr "消息通知"
+
+#: ../../datetime/locale_map.go:7
+msgid "Afar, Djibouti"
+msgstr ""
+
+#: ../../datetime/locale_map.go:8
+msgid "Afar, Eritrea"
+msgstr ""
+
+#: ../../datetime/locale_map.go:9
+msgid "Afar, Eritrea (Saaho)"
+msgstr ""
+
+#: ../../datetime/locale_map.go:10
+msgid "Afar, Ethiopia"
+msgstr ""
+
+#: ../../datetime/locale_map.go:11
+msgid "Afrikaans, South Africa"
+msgstr ""
+
+#: ../../datetime/locale_map.go:12
+msgid "Amharic, Ethiopia"
+msgstr ""
+
+#: ../../datetime/locale_map.go:13
+msgid "Aragonese, Spain"
+msgstr ""
+
+#: ../../datetime/locale_map.go:14
+#, fuzzy
+msgid "Arabic, United Arab Emirates"
+msgstr "阿拉伯联合酋长国（UTC+04）迪拜"
+
+#: ../../datetime/locale_map.go:15
+msgid "Arabic, Bahrain"
+msgstr ""
+
+#: ../../datetime/locale_map.go:16
+msgid "Arabic, Algeria"
+msgstr ""
+
+#: ../../datetime/locale_map.go:17
+msgid "Arabic, Egypt"
+msgstr ""
+
+#: ../../datetime/locale_map.go:18
+msgid "Arabic, India"
+msgstr ""
+
+#: ../../datetime/locale_map.go:19
+msgid "Arabic, Iraq"
+msgstr ""
+
+#: ../../datetime/locale_map.go:20
+msgid "Arabic, Jordan"
+msgstr ""
+
+#: ../../datetime/locale_map.go:21
+msgid "Arabic, Kuwait"
+msgstr ""
+
+#: ../../datetime/locale_map.go:22
+msgid "Arabic, Lebanon"
+msgstr ""
+
+#: ../../datetime/locale_map.go:23
+msgid "Arabic, Libya"
+msgstr ""
+
+#: ../../datetime/locale_map.go:24
+msgid "Arabic, Morocco"
+msgstr ""
+
+#: ../../datetime/locale_map.go:25
+msgid "Arabic, Oman"
+msgstr ""
+
+#: ../../datetime/locale_map.go:26
+msgid "Arabic, Qatar"
+msgstr ""
+
+#: ../../datetime/locale_map.go:27
+msgid "Arabic, Saudi Arabia"
+msgstr ""
+
+#: ../../datetime/locale_map.go:28
+msgid "Arabic, Sudan"
+msgstr ""
+
+#: ../../datetime/locale_map.go:29
+msgid "Arabic, Syria"
+msgstr ""
+
+#: ../../datetime/locale_map.go:30
+msgid "Arabic, Tunisia"
+msgstr ""
+
+#: ../../datetime/locale_map.go:31
+msgid "Arabic, Yemen"
+msgstr ""
+
+#: ../../datetime/locale_map.go:32
+msgid "Assamese, India"
+msgstr ""
+
+#: ../../datetime/locale_map.go:33
+msgid "Asturian, Spain"
+msgstr ""
+
+#: ../../datetime/locale_map.go:34
+msgid "Azeri, Azerbaijan"
+msgstr ""
+
+#: ../../datetime/locale_map.go:35 ../../datetime/locale_map.go:36
+msgid "Belarusian, Belarus"
+msgstr ""
+
+#: ../../datetime/locale_map.go:37
+msgid "Bemba, Zambia"
+msgstr ""
+
+#: ../../datetime/locale_map.go:38
+msgid "Amazigh, Algeria"
+msgstr ""
+
+#: ../../datetime/locale_map.go:39
+msgid "Amazigh, Morocco"
+msgstr ""
+
+#: ../../datetime/locale_map.go:40
+msgid "Bulgarian, Bulgaria"
+msgstr ""
+
+#: ../../datetime/locale_map.go:41
+msgid "Bhojpuri, India"
+msgstr ""
+
+#: ../../datetime/locale_map.go:42
+msgid "Bengali, Bangladesh"
+msgstr ""
+
+#: ../../datetime/locale_map.go:43
+msgid "Bengali, India"
+msgstr ""
+
+#: ../../datetime/locale_map.go:44
+msgid "Tibetan, China"
+msgstr ""
+
+#: ../../datetime/locale_map.go:45
+msgid "Tibetan, India"
+msgstr ""
+
+#: ../../datetime/locale_map.go:46
+msgid "Breton, France"
+msgstr ""
+
+#: ../../datetime/locale_map.go:47
+msgid "Bodo, India"
+msgstr ""
+
+#: ../../datetime/locale_map.go:48
+msgid "Bosnian, Bosnia and Herzegowina"
+msgstr ""
+
+#: ../../datetime/locale_map.go:49
+msgid "Blin, Eritrea"
+msgstr ""
+
+#: ../../datetime/locale_map.go:50
+msgid "Catalan, Andorra "
+msgstr ""
+
+#: ../../datetime/locale_map.go:51
+msgid "Catalan, Spain"
+msgstr ""
+
+#: ../../datetime/locale_map.go:52
+msgid "Catalan, France "
+msgstr ""
+
+#: ../../datetime/locale_map.go:53
+msgid "Catalan, Italy"
+msgstr ""
+
+#: ../../datetime/locale_map.go:54
+msgid "Crimean Tatar, Ukraine"
+msgstr ""
+
+#: ../../datetime/locale_map.go:55
+msgid "Kashubian, Poland"
+msgstr ""
+
+#: ../../datetime/locale_map.go:56
+msgid "Czech, Czech Republic"
+msgstr ""
+
+#: ../../datetime/locale_map.go:57
+msgid "Chuvash, Russia"
+msgstr ""
+
+#: ../../datetime/locale_map.go:58
+msgid "Welsh, United Kingdom"
+msgstr ""
+
+#: ../../datetime/locale_map.go:59
+msgid "Danish, Denmark"
+msgstr ""
+
+#: ../../datetime/locale_map.go:60
+msgid "German, Austria"
+msgstr ""
+
+#: ../../datetime/locale_map.go:61
+msgid "German, Belgium"
+msgstr ""
+
+#: ../../datetime/locale_map.go:62
+msgid "German, Switzerland"
+msgstr ""
+
+#: ../../datetime/locale_map.go:63
+msgid "German, Germany"
+msgstr ""
+
+#: ../../datetime/locale_map.go:64
+msgid "German, Liechtenstein"
+msgstr ""
+
+#: ../../datetime/locale_map.go:65
+msgid "German, Luxemburg"
+msgstr ""
+
+#: ../../datetime/locale_map.go:66
+msgid "Dhivehi, Maldives"
+msgstr ""
+
+#: ../../datetime/locale_map.go:67
+msgid "Dzongkha, Bhutan"
+msgstr ""
+
+#: ../../datetime/locale_map.go:68
+msgid "Greek, Cyprus"
+msgstr ""
+
+#: ../../datetime/locale_map.go:69
+msgid "Greek, Greece"
+msgstr ""
+
+#: ../../datetime/locale_map.go:70
+msgid "English, Antigua and Barbuda"
+msgstr ""
+
+#: ../../datetime/locale_map.go:71
+msgid "English, Australia"
+msgstr ""
+
+#: ../../datetime/locale_map.go:72
+msgid "English, Botswana"
+msgstr ""
+
+#: ../../datetime/locale_map.go:73
+msgid "English, Canada"
+msgstr ""
+
+#: ../../datetime/locale_map.go:74
+msgid "English, Denmark"
+msgstr ""
+
+#: ../../datetime/locale_map.go:75
+msgid "English, United Kingdom"
+msgstr ""
+
+#: ../../datetime/locale_map.go:76
+msgid "English, Hong Kong"
+msgstr ""
+
+#: ../../datetime/locale_map.go:77
+msgid "English, Ireland"
+msgstr ""
+
+#: ../../datetime/locale_map.go:78
+msgid "English, India"
+msgstr ""
+
+#: ../../datetime/locale_map.go:79
+msgid "English, Nigeria"
+msgstr ""
+
+#: ../../datetime/locale_map.go:80
+msgid "English, New Zealand"
+msgstr ""
+
+#: ../../datetime/locale_map.go:81
+msgid "English, Philippines"
+msgstr ""
+
+#: ../../datetime/locale_map.go:82
+msgid "English, Singapore"
+msgstr ""
+
+#: ../../datetime/locale_map.go:83
+msgid "English, United States"
+msgstr ""
+
+#: ../../datetime/locale_map.go:84
+msgid "English, South Africa"
+msgstr ""
+
+#: ../../datetime/locale_map.go:85
+msgid "English, Zambia"
+msgstr ""
+
+#: ../../datetime/locale_map.go:86
+msgid "English, Zimbabwe"
+msgstr ""
+
+#: ../../datetime/locale_map.go:87
+msgid "Esperanto"
+msgstr ""
+
+#: ../../datetime/locale_map.go:88
+msgid "Esperanto, United States"
+msgstr ""
+
+#: ../../datetime/locale_map.go:89
+msgid "Spanish, Argentina"
+msgstr ""
+
+#: ../../datetime/locale_map.go:90
+msgid "Spanish, Bolivia"
+msgstr ""
+
+#: ../../datetime/locale_map.go:91
+msgid "Spanish, Chile"
+msgstr ""
+
+#: ../../datetime/locale_map.go:92
+msgid "Spanish, Colombia"
+msgstr ""
+
+#: ../../datetime/locale_map.go:93
+msgid "Spanish, Costa Rica"
+msgstr ""
+
+#: ../../datetime/locale_map.go:94
+msgid "Spanish, Cuba"
+msgstr ""
+
+#: ../../datetime/locale_map.go:95
+msgid "Spanish, Dominican Republic"
+msgstr ""
+
+#: ../../datetime/locale_map.go:96
+msgid "Spanish, Ecuador"
+msgstr ""
+
+#: ../../datetime/locale_map.go:97
+msgid "Spanish, Spain"
+msgstr ""
+
+#: ../../datetime/locale_map.go:98
+msgid "Spanish, Guatemala"
+msgstr ""
+
+#: ../../datetime/locale_map.go:99
+msgid "Spanish, Honduras"
+msgstr ""
+
+#: ../../datetime/locale_map.go:100
+msgid "Spanish, Mexico"
+msgstr ""
+
+#: ../../datetime/locale_map.go:101
+msgid "Spanish, Nicaragua"
+msgstr ""
+
+#: ../../datetime/locale_map.go:102
+msgid "Spanish, Panama"
+msgstr ""
+
+#: ../../datetime/locale_map.go:103
+msgid "Spanish, Peru"
+msgstr ""
+
+#: ../../datetime/locale_map.go:104
+msgid "Spanish, Puerto Rico"
+msgstr ""
+
+#: ../../datetime/locale_map.go:105
+msgid "Spanish, Paraguay"
+msgstr ""
+
+#: ../../datetime/locale_map.go:106
+msgid "Spanish, El Salvador"
+msgstr ""
+
+#: ../../datetime/locale_map.go:107
+msgid "Spanish, United States"
+msgstr ""
+
+#: ../../datetime/locale_map.go:108
+msgid "Spanish, Uruguay"
+msgstr ""
+
+#: ../../datetime/locale_map.go:109
+msgid "Spanish, Venezuela"
+msgstr ""
+
+#: ../../datetime/locale_map.go:110
+msgid "Estonian, Estonia"
+msgstr ""
+
+#: ../../datetime/locale_map.go:111
+msgid "Basque, Spain"
+msgstr ""
+
+#: ../../datetime/locale_map.go:112
+msgid "Basque, France"
+msgstr ""
+
+#: ../../datetime/locale_map.go:113
+msgid "Persian, Iran"
+msgstr ""
+
+#: ../../datetime/locale_map.go:114
+msgid "Fulah, Senegal"
+msgstr ""
+
+#: ../../datetime/locale_map.go:115
+msgid "Finnish, Finland"
+msgstr ""
+
+#: ../../datetime/locale_map.go:116
+msgid "Filipino, Philippines"
+msgstr ""
+
+#: ../../datetime/locale_map.go:117
+msgid "Faroese, Faroe Islands"
+msgstr ""
+
+#: ../../datetime/locale_map.go:118
+msgid "French, Belgium"
+msgstr ""
+
+#: ../../datetime/locale_map.go:119
+msgid "French, Canada"
+msgstr ""
+
+#: ../../datetime/locale_map.go:120
+msgid "French, Switzerland"
+msgstr ""
+
+#: ../../datetime/locale_map.go:121
+msgid "French, France"
+msgstr ""
+
+#: ../../datetime/locale_map.go:122
+msgid "French, Luxemburg"
+msgstr ""
+
+#: ../../datetime/locale_map.go:123
+msgid "Furlan, Italy"
+msgstr ""
+
+#: ../../datetime/locale_map.go:124
+msgid "Frisian, Germany"
+msgstr ""
+
+#: ../../datetime/locale_map.go:125
+msgid "Frisian, the Netherlands"
+msgstr ""
+
+#: ../../datetime/locale_map.go:126
+msgid "Irish, Ireland"
+msgstr ""
+
+#: ../../datetime/locale_map.go:127
+msgid "Gaelic, United Kingdom"
+msgstr ""
+
+#: ../../datetime/locale_map.go:128
+msgid "Ge'ez, Eritrea (with Abegede collation)"
+msgstr ""
+
+#: ../../datetime/locale_map.go:129
+msgid "Ge'ez, Eritrea"
+msgstr ""
+
+#: ../../datetime/locale_map.go:130
+msgid "Ge'ez, Ethiopia (Abegede)"
+msgstr ""
+
+#: ../../datetime/locale_map.go:131
+msgid "Ge'ez, Ethiopia"
+msgstr ""
+
+#: ../../datetime/locale_map.go:132
+msgid "Galician, Spain"
+msgstr ""
+
+#: ../../datetime/locale_map.go:133
+msgid "Gujarati, India"
+msgstr ""
+
+#: ../../datetime/locale_map.go:134
+#, fuzzy
+msgid "Manx, United Kingdom"
+msgstr "英国（UTC+00）英国时间"
+
+#: ../../datetime/locale_map.go:135
+msgid "Hausa, Nigeria"
+msgstr ""
+
+#: ../../datetime/locale_map.go:136 ../../datetime/locale_map.go:152
+msgid "Hebrew, Israel"
+msgstr ""
+
+#: ../../datetime/locale_map.go:137
+msgid "Hindi, India"
+msgstr ""
+
+#: ../../datetime/locale_map.go:138
+msgid "Chhattisgarhi, India"
+msgstr ""
+
+#: ../../datetime/locale_map.go:139
+msgid "Croatian, Croatia"
+msgstr ""
+
+#: ../../datetime/locale_map.go:140
+msgid "Upper Sorbian, Germany"
+msgstr ""
+
+#: ../../datetime/locale_map.go:141
+msgid "Kreyol, Haiti"
+msgstr ""
+
+#: ../../datetime/locale_map.go:142
+msgid "Hungarian, Hungary"
+msgstr ""
+
+#: ../../datetime/locale_map.go:143
+msgid "Armenian, Armenia"
+msgstr ""
+
+#: ../../datetime/locale_map.go:144
+msgid "Interlingua"
+msgstr ""
+
+#: ../../datetime/locale_map.go:145
+msgid "Indonesian, Indonesia"
+msgstr ""
+
+#: ../../datetime/locale_map.go:146
+msgid "Igbo, Nigeria"
+msgstr ""
+
+#: ../../datetime/locale_map.go:147
+msgid "Inupiaq, Canada"
+msgstr ""
+
+#: ../../datetime/locale_map.go:148
+#, fuzzy
+msgid "Icelandic, Iceland"
+msgstr "冰岛（UTC+00）冰岛"
+
+#: ../../datetime/locale_map.go:149
+msgid "Italian, Switzerland"
+msgstr ""
+
+#: ../../datetime/locale_map.go:150
+msgid "Italian, Italy"
+msgstr ""
+
+#: ../../datetime/locale_map.go:151
+msgid "Inuktitut, Canada"
+msgstr ""
+
+#: ../../datetime/locale_map.go:153
+#, fuzzy
+msgid "Japanese, Japan"
+msgstr "日本（UTC+09）日本"
+
+#: ../../datetime/locale_map.go:154
+msgid "Georgian, Georgia"
+msgstr ""
+
+#: ../../datetime/locale_map.go:155
+msgid "Kazakh, Kazakhstan"
+msgstr ""
+
+#: ../../datetime/locale_map.go:156
+msgid "Greenlandic, Greenland"
+msgstr ""
+
+#: ../../datetime/locale_map.go:157
+msgid "Khmer, Cambodia"
+msgstr ""
+
+#: ../../datetime/locale_map.go:158
+msgid "Kannada, India"
+msgstr ""
+
+#: ../../datetime/locale_map.go:159
+msgid "Konkani, India"
+msgstr ""
+
+#: ../../datetime/locale_map.go:160
+msgid "Korean, Republic of Korea"
+msgstr ""
+
+#: ../../datetime/locale_map.go:161
+msgid "Kashmiri, India (devanagari)"
+msgstr ""
+
+#: ../../datetime/locale_map.go:162
+msgid "Kashmiri, India"
+msgstr ""
+
+#: ../../datetime/locale_map.go:163
+msgid "Kurdish, Turkey"
+msgstr ""
+
+#: ../../datetime/locale_map.go:164
+msgid "Cornish, United Kingdom"
+msgstr ""
+
+#: ../../datetime/locale_map.go:165
+msgid "Kyrgyz, Kyrgyzstan"
+msgstr ""
+
+#: ../../datetime/locale_map.go:166
+#, fuzzy
+msgid "Luxembourgish, Luxembourg"
+msgstr "卢森堡（UTC+01）卢森堡"
+
+#: ../../datetime/locale_map.go:167
+msgid "Luganda, Uganda"
+msgstr ""
+
+#: ../../datetime/locale_map.go:168
+msgid "Limburgish, Belgium"
+msgstr ""
+
+#: ../../datetime/locale_map.go:169
+msgid "Ligurian, Italy"
+msgstr ""
+
+#: ../../datetime/locale_map.go:170
+msgid "Limburgish, the Netherlands"
+msgstr ""
+
+#: ../../datetime/locale_map.go:171
+msgid "Lao, Laos"
+msgstr ""
+
+#: ../../datetime/locale_map.go:172
+msgid "Lithuanian, Lithuania"
+msgstr ""
+
+#: ../../datetime/locale_map.go:173
+msgid "Latvian, Latvia"
+msgstr ""
+
+#: ../../datetime/locale_map.go:174
+msgid "Maithili, India"
+msgstr ""
+
+#: ../../datetime/locale_map.go:175
+msgid "Malagasy, Madagascar"
+msgstr ""
+
+#: ../../datetime/locale_map.go:176
+msgid "Mari, Russia"
+msgstr ""
+
+#: ../../datetime/locale_map.go:177
+msgid "Maori, New Zealand"
+msgstr ""
+
+#: ../../datetime/locale_map.go:178
+msgid "Macedonian, Macedonia"
+msgstr ""
+
+#: ../../datetime/locale_map.go:179
+msgid "Malayalam, India"
+msgstr ""
+
+#: ../../datetime/locale_map.go:180
+msgid "Mongolian, Mongolia"
+msgstr ""
+
+#: ../../datetime/locale_map.go:181
+msgid "Marathi, India"
+msgstr ""
+
+#: ../../datetime/locale_map.go:182
+msgid "Malay, Malaysia"
+msgstr ""
+
+#: ../../datetime/locale_map.go:183
+msgid "Maltese, Malta"
+msgstr ""
+
+#: ../../datetime/locale_map.go:184
+msgid "Burmese, Myanmar"
+msgstr ""
+
+#: ../../datetime/locale_map.go:185
+msgid "Chinese, Taiwan (Minnan dialect, Latin alphabet)"
+msgstr ""
+
+#: ../../datetime/locale_map.go:186
+msgid "Norwegian Bokmal, Norway"
+msgstr ""
+
+#: ../../datetime/locale_map.go:187
+msgid "Low German, Germany"
+msgstr ""
+
+#: ../../datetime/locale_map.go:188
+msgid "Low German, the Netherlands"
+msgstr ""
+
+#: ../../datetime/locale_map.go:189
+msgid "Nepali, Nepal"
+msgstr ""
+
+#: ../../datetime/locale_map.go:190
+msgid "Dutch, Aruba"
+msgstr ""
+
+#: ../../datetime/locale_map.go:191
+msgid "Dutch, Belgium"
+msgstr ""
+
+#: ../../datetime/locale_map.go:192
+msgid "Dutch, the Netherlands"
+msgstr ""
+
+#: ../../datetime/locale_map.go:193
+msgid "Nynorsk, Norway"
+msgstr ""
+
+#: ../../datetime/locale_map.go:194
+msgid "Southern Ndebele, South Africa"
+msgstr ""
+
+#: ../../datetime/locale_map.go:195
+msgid "Northern Sotho, South Africa"
+msgstr ""
+
+#: ../../datetime/locale_map.go:196
+msgid "Occitan, France"
+msgstr ""
+
+#: ../../datetime/locale_map.go:197
+msgid "Oromo, Ethiopia"
+msgstr ""
+
+#: ../../datetime/locale_map.go:198
+msgid "Oromo, Kenya"
+msgstr ""
+
+#: ../../datetime/locale_map.go:199
+msgid "Oriya, India"
+msgstr ""
+
+#: ../../datetime/locale_map.go:200
+msgid "Ossetian, Russia"
+msgstr ""
+
+#: ../../datetime/locale_map.go:201
+msgid "Punjabi, India"
+msgstr ""
+
+#: ../../datetime/locale_map.go:202
+msgid "Papiamento, Antilles"
+msgstr ""
+
+#: ../../datetime/locale_map.go:203
+msgid "Punjabi, Pakistan"
+msgstr ""
+
+#: ../../datetime/locale_map.go:204
+msgid "Polish, Poland"
+msgstr ""
+
+#: ../../datetime/locale_map.go:205
+msgid "Portuguese, Brasil"
+msgstr ""
+
+#: ../../datetime/locale_map.go:206
+#, fuzzy
+msgid "Portuguese, Portugal"
+msgstr "葡萄牙（UTC+00）葡萄牙"
+
+#: ../../datetime/locale_map.go:207
+msgid "Romanian, Romania"
+msgstr ""
+
+#: ../../datetime/locale_map.go:208
+msgid "Russian, Russia"
+msgstr ""
+
+#: ../../datetime/locale_map.go:209
+#, fuzzy
+msgid "Russian, Ukraine"
+msgstr "俄罗斯（UTC+11）库页岛"
+
+#: ../../datetime/locale_map.go:210
+msgid "Kinyarwanda, Rwanda"
+msgstr ""
+
+#: ../../datetime/locale_map.go:211
+msgid "Sanskrit, India"
+msgstr ""
+
+#: ../../datetime/locale_map.go:212
+msgid "Sardinian, Italy"
+msgstr ""
+
+#: ../../datetime/locale_map.go:213 ../../datetime/locale_map.go:214
+msgid "Sindhi, India"
+msgstr ""
+
+#: ../../datetime/locale_map.go:215
+msgid "Sindhi, Pakistan"
+msgstr ""
+
+#: ../../datetime/locale_map.go:216
+msgid "Northern Sami, Norway"
+msgstr ""
+
+#: ../../datetime/locale_map.go:217
+msgid "Secwepemctsin, Canada"
+msgstr ""
+
+#: ../../datetime/locale_map.go:218
+msgid "Sidama, Ethiopia."
+msgstr ""
+
+#: ../../datetime/locale_map.go:219
+msgid "Sinhala, Sri Lanka"
+msgstr ""
+
+#: ../../datetime/locale_map.go:220
+msgid "Slovak, Slovak"
+msgstr ""
+
+#: ../../datetime/locale_map.go:221
+msgid "Slovenian, Slovenia"
+msgstr ""
+
+#: ../../datetime/locale_map.go:222
+msgid "Somali, Djibouti."
+msgstr ""
+
+#: ../../datetime/locale_map.go:223
+msgid "Somali, Ethiopia"
+msgstr ""
+
+#: ../../datetime/locale_map.go:224
+msgid "Somali, Kenya"
+msgstr ""
+
+#: ../../datetime/locale_map.go:225
+msgid "Somali, Somalia"
+msgstr ""
+
+#: ../../datetime/locale_map.go:226
+msgid "Albanian, Albania"
+msgstr ""
+
+#: ../../datetime/locale_map.go:227
+msgid "Albanian, Macedonia"
+msgstr ""
+
+#: ../../datetime/locale_map.go:228
+msgid "Serbian, Montenegro"
+msgstr ""
+
+#: ../../datetime/locale_map.go:229
+msgid "Serbian, Serbia (Latin)"
+msgstr ""
+
+#: ../../datetime/locale_map.go:230
+msgid "Serbian, Serbia"
+msgstr ""
+
+#: ../../datetime/locale_map.go:231
+msgid "Swati, South Africa"
+msgstr ""
+
+#: ../../datetime/locale_map.go:232
+msgid "Sotho, South Africa"
+msgstr ""
+
+#: ../../datetime/locale_map.go:233
+msgid "Swedish, Finland"
+msgstr ""
+
+#: ../../datetime/locale_map.go:234
+msgid "Swedish, Sweden"
+msgstr ""
+
+#: ../../datetime/locale_map.go:235
+msgid "Swahili, Kenya"
+msgstr ""
+
+#: ../../datetime/locale_map.go:236
+msgid "Swahili, Tanzania"
+msgstr ""
+
+#: ../../datetime/locale_map.go:237
+msgid "Tamil, India"
+msgstr ""
+
+#: ../../datetime/locale_map.go:238
+msgid "Tamil, Sri Lanka"
+msgstr ""
+
+#: ../../datetime/locale_map.go:239
+msgid "Telugu, India"
+msgstr ""
+
+#: ../../datetime/locale_map.go:240
+msgid "Tajik, Tajikistan"
+msgstr ""
+
+#: ../../datetime/locale_map.go:241
+msgid "Thai, Thailand"
+msgstr ""
+
+#: ../../datetime/locale_map.go:242
+msgid "Tigrigna, Eritrea."
+msgstr ""
+
+#: ../../datetime/locale_map.go:243
+msgid "Tigrigna, Ethiopia."
+msgstr ""
+
+#: ../../datetime/locale_map.go:244
+msgid "Tigre, Eritrea"
+msgstr ""
+
+#: ../../datetime/locale_map.go:245
+msgid "Turkmen, Turkmenistan"
+msgstr ""
+
+#: ../../datetime/locale_map.go:246
+msgid "Tagalog, Philippines"
+msgstr ""
+
+#: ../../datetime/locale_map.go:247
+msgid "Tswana, South Africa"
+msgstr ""
+
+#: ../../datetime/locale_map.go:248
+msgid "Turkish, Cyprus"
+msgstr ""
+
+#: ../../datetime/locale_map.go:249
+msgid "Turkish, Turkey"
+msgstr ""
+
+#: ../../datetime/locale_map.go:250
+msgid "Tsonga, South Africa"
+msgstr ""
+
+#: ../../datetime/locale_map.go:251
+msgid "Tatar, Russia (IQTElif alphabet)"
+msgstr ""
+
+#: ../../datetime/locale_map.go:252
+msgid "Tatar, Russia"
+msgstr ""
+
+#: ../../datetime/locale_map.go:253
+msgid "Uyghur, China (Latin alphabet)"
+msgstr ""
+
+#: ../../datetime/locale_map.go:254
+msgid "Uyghur, China"
+msgstr ""
+
+#: ../../datetime/locale_map.go:255
+msgid "Ukrainian, Ukraine"
+msgstr ""
+
+#: ../../datetime/locale_map.go:256
+msgid "Unami Delaware, United States"
+msgstr ""
+
+#: ../../datetime/locale_map.go:257
+msgid "Urdu, India"
+msgstr ""
+
+#: ../../datetime/locale_map.go:258
+msgid "Urdu, Pakistan"
+msgstr ""
+
+#: ../../datetime/locale_map.go:259
+msgid "Uzbek, Uzbekistan (cyrillic)"
+msgstr ""
+
+#: ../../datetime/locale_map.go:260
+msgid "Uzbek, Uzbekistan"
+msgstr ""
+
+#: ../../datetime/locale_map.go:261
+msgid "Venda, South Africa"
+msgstr ""
+
+#: ../../datetime/locale_map.go:262
+msgid "Vietnamese, Vietnam"
+msgstr ""
+
+#: ../../datetime/locale_map.go:263
+msgid "Walloon, Belgium"
+msgstr ""
+
+#: ../../datetime/locale_map.go:264
+msgid "Walser, Switzerland"
+msgstr ""
+
+#: ../../datetime/locale_map.go:265
+msgid "Walaita, Ethiopia"
+msgstr ""
+
+#: ../../datetime/locale_map.go:266
+msgid "Wolof, Senegal"
+msgstr ""
+
+#: ../../datetime/locale_map.go:267
+msgid "Xhosa, South Africa"
+msgstr ""
+
+#: ../../datetime/locale_map.go:268
+msgid "Yiddish, United States"
+msgstr ""
+
+#: ../../datetime/locale_map.go:269
+msgid "Yoruba, Nigeria"
+msgstr ""
+
+#: ../../datetime/locale_map.go:270
+msgid "Chinese, Hong Kong (Yue dialect)"
+msgstr ""
+
+#: ../../datetime/locale_map.go:271
+msgid "Chinese, China"
+msgstr ""
+
+#: ../../datetime/locale_map.go:272
+msgid "Chinese, Hong Kong"
+msgstr ""
+
+#: ../../datetime/locale_map.go:273
+msgid "Chinese, Singapore"
+msgstr ""
+
+#: ../../datetime/locale_map.go:274
+msgid "Chinese, Taiwan"
+msgstr ""
+
+#: ../../datetime/locale_map.go:275
+msgid "Zulu, South Africa"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:8
-msgid "Cte d'Ivoire (UTC+00) Abidjan"
-msgstr ""
+#, fuzzy
+msgid "Côte d'Ivoire (UTC+00) Abidjan"
+msgstr "科特迪瓦（UTC+00）阿比让"
 
 #: ../../datetime/zone_utc_map.go:9
 msgid "Ghana (UTC+00) Accra"
-msgstr ""
+msgstr "加纳（UTC+00）阿克拉"
 
 #: ../../datetime/zone_utc_map.go:10
 msgid "Ethiopia (UTC+03) Addis Ababa"
-msgstr ""
+msgstr "埃塞俄比亚（UTC+03）亚的斯亚贝巴"
 
 #: ../../datetime/zone_utc_map.go:11
 msgid "Algeria (UTC+01) Algiers"
-msgstr ""
+msgstr "阿尔及利亚（UTC+01）阿尔及尔"
 
 #: ../../datetime/zone_utc_map.go:12
 msgid "Eritrea (UTC+03) Asmara"
-msgstr ""
+msgstr "厄立特里亚（UTC+03）阿斯马拉"
 
 #: ../../datetime/zone_utc_map.go:13
 msgid "Eritrea (UTC+03) Asmera"
-msgstr ""
+msgstr "厄立特里亚（UTC+03）阿斯马拉"
 
 #: ../../datetime/zone_utc_map.go:14
 msgid "Mali (UTC+00) Bamako"
-msgstr ""
+msgstr "马里（U​​TC+00）巴马科"
 
 #: ../../datetime/zone_utc_map.go:15
 msgid "Central African Republic (UTC+01) Bangui"
-msgstr ""
+msgstr "中非共和国（UTC+01）班吉"
 
 #: ../../datetime/zone_utc_map.go:16
 msgid "The Gambia (UTC+00) Banjul"
-msgstr ""
+msgstr "冈比亚（UTC+00）班珠尔"
 
 #: ../../datetime/zone_utc_map.go:17
 msgid "Guinea-Bissau (UTC+00) Bissau"
-msgstr ""
+msgstr "几内亚比绍（UTC+00）比绍"
 
 #: ../../datetime/zone_utc_map.go:18
 msgid "Malawi (UTC+02) Blantyre"
-msgstr ""
+msgstr "马拉维（UTC+02）布兰太尔"
 
 #: ../../datetime/zone_utc_map.go:19
 msgid "Congo (UTC+01) Brazzaville"
-msgstr ""
+msgstr "刚果（UTC+01）布拉柴维​​尔"
 
 #: ../../datetime/zone_utc_map.go:20
 msgid "Burundi (UTC+02) Bujumbura"
-msgstr ""
+msgstr "布隆迪（UTC+02）布琼布拉"
 
 #: ../../datetime/zone_utc_map.go:21
 msgid "Egypt (UTC+02) Cairo"
-msgstr ""
+msgstr "埃及（UTC+02）开罗"
 
 #: ../../datetime/zone_utc_map.go:22
 msgid "Morocco (UTC+00) Casablanca"
-msgstr ""
+msgstr "摩洛哥（UTC+00）卡萨布兰卡"
 
 #: ../../datetime/zone_utc_map.go:23
 msgid "Spain (UTC+01) Ceuta"
-msgstr ""
+msgstr "西班牙（UTC+01）休达"
 
 #: ../../datetime/zone_utc_map.go:24
 msgid "Guinea (UTC+00) Conakry"
-msgstr ""
+msgstr "几内亚（UTC+00）科纳克里"
 
 #: ../../datetime/zone_utc_map.go:25
 msgid "Senegal (UTC+00) Dakar"
-msgstr ""
+msgstr "塞内加尔（UTC+00）达喀尔"
 
 #: ../../datetime/zone_utc_map.go:26
 msgid "Tanzania (UTC+03) Dar es Salaam"
-msgstr ""
+msgstr "坦桑尼亚（UTC+03）达累斯萨拉姆"
 
 #: ../../datetime/zone_utc_map.go:27
 msgid "Djibouti (UTC+03) Djibouti"
-msgstr ""
+msgstr "吉布提（UTC+03），吉布提"
 
 #: ../../datetime/zone_utc_map.go:28
 msgid "Cameroon (UTC+01) Douala"
-msgstr ""
+msgstr "喀麦隆（UTC+01）杜阿拉"
 
 #: ../../datetime/zone_utc_map.go:29
 msgid "Western Sahara (UTC+00) El Aaiun"
-msgstr ""
+msgstr "西撒哈拉（UTC+00）阿尤恩"
 
 #: ../../datetime/zone_utc_map.go:30
 msgid "Sierra Leone (UTC+00) Freetown"
-msgstr ""
+msgstr "塞拉利昂（UTC+00）弗里敦"
 
 #: ../../datetime/zone_utc_map.go:31
 msgid "Botswana (UTC+02) Gaborone"
-msgstr ""
+msgstr "博茨瓦纳（UTC+02）哈博罗内"
 
 #: ../../datetime/zone_utc_map.go:32
 msgid "Zimbabwe (UTC+02) Harare"
-msgstr ""
+msgstr "津巴布韦（UTC+02）哈拉雷"
 
 #: ../../datetime/zone_utc_map.go:33
 msgid "South Africa (UTC+02) Johannesburg"
-msgstr ""
+msgstr "南非（UTC+02）约翰内斯堡"
 
 #: ../../datetime/zone_utc_map.go:34
 msgid "South Sudan (UTC+03) Juba"
-msgstr ""
+msgstr "南苏丹（UTC+03）朱巴"
 
 #: ../../datetime/zone_utc_map.go:35
 msgid "Uganda (UTC+03) Kampala"
-msgstr ""
+msgstr "乌干达（UTC+03）坎帕拉"
 
 #: ../../datetime/zone_utc_map.go:36
 msgid "Sudan (UTC+03) Khartoum"
-msgstr ""
+msgstr "苏丹（UTC+03）喀土穆"
 
 #: ../../datetime/zone_utc_map.go:37
 msgid "Rwanda (UTC+02) Kigali"
-msgstr ""
+msgstr "卢旺达（UTC+02）基加利"
 
 #: ../../datetime/zone_utc_map.go:38
 msgid "Democratic Republic of the Congo (UTC+01) Kinshasa"
-msgstr ""
+msgstr "刚果民主共和国（UTC+01）金沙萨"
 
 #: ../../datetime/zone_utc_map.go:39
 msgid "Nigeria (UTC+01) Lagos"
-msgstr ""
+msgstr "尼日利亚（UTC+01）拉各斯"
 
 #: ../../datetime/zone_utc_map.go:40
 msgid "Gabon (UTC+01) Libreville"
-msgstr ""
+msgstr "加蓬（UTC+01）利伯维尔"
 
 #: ../../datetime/zone_utc_map.go:41
 msgid "Togo (UTC+00) Lome"
-msgstr ""
+msgstr "多哥（UTC+00）洛美"
 
 #: ../../datetime/zone_utc_map.go:42
 msgid "Angola (UTC+01) Luanda"
-msgstr ""
+msgstr "安哥拉（UTC+01）罗安达"
 
 #: ../../datetime/zone_utc_map.go:43
 msgid "Democratic Republic of the Congo (UTC+02) Lubumbashi"
-msgstr ""
+msgstr "刚果民主共和国（UTC+02）卢本巴希"
 
 #: ../../datetime/zone_utc_map.go:44
 msgid "Zambia (UTC+02) Lusaka"
-msgstr ""
+msgstr "赞比亚（UTC+02）卢萨卡"
 
 #: ../../datetime/zone_utc_map.go:45
 msgid "Equatorial Guinea (UTC+01) Malabo"
-msgstr ""
+msgstr "赤道几内亚（UTC+01）马拉博"
 
 #: ../../datetime/zone_utc_map.go:46
 msgid "Mozambique (UTC+02) Maputo"
-msgstr ""
+msgstr "莫桑比克（UTC+02）马普托"
 
 #: ../../datetime/zone_utc_map.go:47
 msgid "Lesotho (UTC+02) Maseru"
-msgstr ""
+msgstr "莱索托（UTC+02）马塞卢"
 
 #: ../../datetime/zone_utc_map.go:48
 msgid "Swaziland (UTC+02) Mbabane"
-msgstr ""
+msgstr "史瓦济兰（UTC+02）姆巴巴内"
 
 #: ../../datetime/zone_utc_map.go:49
 msgid "Somalia (UTC+03) Mogadishu"
-msgstr ""
+msgstr "索马里（UTC+03）摩加迪沙"
 
 #: ../../datetime/zone_utc_map.go:50
 msgid "Liberia (UTC+00) Monrovia"
-msgstr ""
+msgstr "利比里亚（UTC+00）蒙罗维亚"
 
 #: ../../datetime/zone_utc_map.go:51
 msgid "Kenya (UTC+03) Nairobi"
-msgstr ""
+msgstr "肯尼亚（UTC+03）内罗毕"
 
 #: ../../datetime/zone_utc_map.go:52
 msgid "Chad (UTC+01) Ndjamena"
-msgstr ""
+msgstr "乍得（UTC+01）恩贾梅纳"
 
 #: ../../datetime/zone_utc_map.go:53
 msgid "Niger (UTC+01) Niamey"
-msgstr ""
+msgstr "尼日尔（UTC+01）尼亚美"
 
 #: ../../datetime/zone_utc_map.go:54
 msgid "Mauritania (UTC+00) Nouakchott"
-msgstr ""
+msgstr "毛里塔尼亚（UTC+00）努瓦克肖特"
 
 #: ../../datetime/zone_utc_map.go:55
 msgid "Burkina Faso (UTC+00) Ouagadougou"
-msgstr ""
+msgstr "布基纳法索（UTC+00）瓦加杜古"
 
 #: ../../datetime/zone_utc_map.go:56
 msgid "Benin (UTC+01) Porto Novo"
-msgstr ""
+msgstr "贝宁（UTC+01）波多诺伏"
 
 #: ../../datetime/zone_utc_map.go:57
-msgid "So Tom and Prncipe (UTC+00) Sao Tome"
-msgstr ""
+#, fuzzy
+msgid "São Tomé and Príncipe (UTC+00) Sao Tome"
+msgstr "圣多美和普林西比（UTC+00）圣多美"
 
 #: ../../datetime/zone_utc_map.go:58
 msgid "Mali (UTC+00) Timbuktu"
-msgstr ""
+msgstr "马里（U​​TC+00）廷巴克图"
 
 #: ../../datetime/zone_utc_map.go:59
 msgid "Libya (UTC+02) Tripoli"
-msgstr ""
+msgstr "利比亚（UTC+02）的黎波里"
 
 #: ../../datetime/zone_utc_map.go:60
 msgid "Tunisia (UTC+01) Tunis"
-msgstr ""
+msgstr "突尼斯（UTC+01）突尼斯"
 
 #: ../../datetime/zone_utc_map.go:61
 msgid "Namibia (UTC+01) Windhoek"
-msgstr ""
+msgstr "纳米比亚（UTC+01）温得和克"
 
 #: ../../datetime/zone_utc_map.go:62
 msgid "USA (UTC-10) Adak"
-msgstr ""
+msgstr "美国（UTC-10）埃达克"
 
 #: ../../datetime/zone_utc_map.go:63
 msgid "USA (UTC-09) Anchorage"
-msgstr ""
+msgstr "美国（UTC-09）安克雷奇"
 
 #: ../../datetime/zone_utc_map.go:64
 msgid "USA (UTC-04) Anguilla"
-msgstr ""
+msgstr "美国（UTC-04）安圭拉"
 
 #: ../../datetime/zone_utc_map.go:65
 msgid "USA (UTC-04) Antigua"
-msgstr ""
+msgstr "美国（UTC-04）安提瓜"
 
 #: ../../datetime/zone_utc_map.go:66
 msgid "USA (UTC-03) Araguaina"
-msgstr ""
+msgstr "美国（UTC-03）阿拉瓜伊纳"
 
 #: ../../datetime/zone_utc_map.go:67 ../../datetime/zone_utc_map.go:92
 msgid "Argentina (UTC-03) Buenos Aires"
-msgstr ""
+msgstr "阿根廷（UTC-03）布宜诺斯艾利斯"
 
 #: ../../datetime/zone_utc_map.go:68
 msgid "Argentina (UTC-03) Catamarca"
-msgstr ""
+msgstr "阿根廷（UTC-03）卡塔马卡"
 
 #: ../../datetime/zone_utc_map.go:69
 msgid "Argentina (UTC-03) ComodRivadavia"
-msgstr ""
+msgstr "阿根廷（UTC-03）里瓦达维亚海军准将城"
 
 #: ../../datetime/zone_utc_map.go:70
 msgid "Argentina (UTC-03) Cordoba"
-msgstr ""
+msgstr "阿根廷（UTC-03）科尔多瓦"
 
 #: ../../datetime/zone_utc_map.go:71 ../../datetime/zone_utc_map.go:142
 msgid "Argentina (UTC-03) Jujuy"
-msgstr ""
+msgstr "阿根廷（UTC-03）胡胡伊"
 
 #: ../../datetime/zone_utc_map.go:72
 msgid "Argentina (UTC-03) La Rioja"
-msgstr ""
+msgstr "阿根廷（UTC-03）拉里奥哈"
 
 #: ../../datetime/zone_utc_map.go:73
 msgid "Argentina (UTC-03) Mendoza"
-msgstr ""
+msgstr "阿根廷（UTC-03）门多萨"
 
 #: ../../datetime/zone_utc_map.go:74
 msgid "Argentina (UTC-03) Rio Gallegos"
-msgstr ""
+msgstr "阿根廷（UTC-03）里奥加耶戈斯"
 
 #: ../../datetime/zone_utc_map.go:75
 msgid "Argentina (UTC-03) Salta"
-msgstr ""
+msgstr "阿根廷（UTC-03）萨尔塔"
 
 #: ../../datetime/zone_utc_map.go:76
 msgid "Argentina (UTC-03) San Juan"
-msgstr ""
+msgstr "阿根廷（UTC-03）圣胡安"
 
 #: ../../datetime/zone_utc_map.go:77
 msgid "Argentina (UTC-03) San Luis"
-msgstr ""
+msgstr "阿根廷（UTC-03）圣路易斯"
 
 #: ../../datetime/zone_utc_map.go:78
 msgid "Argentina (UTC-03) Tucuman"
-msgstr ""
+msgstr "阿根廷（UTC-03）图库曼"
 
 #: ../../datetime/zone_utc_map.go:79
 msgid "Argentina (UTC-03) Ushuaia"
-msgstr ""
+msgstr "阿根廷（UTC-03）乌斯怀亚"
 
 #: ../../datetime/zone_utc_map.go:80
 msgid "USA (UTC-04) Aruba"
-msgstr ""
+msgstr "美国（UTC-04）阿鲁巴"
 
 #: ../../datetime/zone_utc_map.go:81
 msgid "USA (UTC-04) Asuncion"
-msgstr ""
+msgstr "美国（UTC-04）亚松森"
 
 #: ../../datetime/zone_utc_map.go:82
 msgid "Canada (UTC-05) Atikokan"
-msgstr ""
+msgstr "加拿大（UTC-05）阿提库"
 
 #: ../../datetime/zone_utc_map.go:83
 msgid "USA (UTC-10) Atka"
-msgstr ""
+msgstr "美国（UTC-10）阿特卡"
 
 #: ../../datetime/zone_utc_map.go:84
 msgid "Brazil (UTC-03) Bahia"
-msgstr ""
+msgstr "巴西（UTC-03）巴伊亚"
 
 #: ../../datetime/zone_utc_map.go:85
 msgid "Mexico (UTC-06) Bahia Banderas"
-msgstr ""
+msgstr "墨西哥（UTC-06）巴伊亚班德拉斯"
 
 #: ../../datetime/zone_utc_map.go:86
 msgid "USA (UTC-04) Barbados"
-msgstr ""
+msgstr "美国（UTC-04）巴巴多斯"
 
 #: ../../datetime/zone_utc_map.go:87
 msgid "USA (UTC-03) Belem"
-msgstr ""
+msgstr "美国（UTC-03）贝伦"
 
 #: ../../datetime/zone_utc_map.go:88
 msgid "USA (UTC-06) Belize"
-msgstr ""
+msgstr "美国（UTC-06）伯利兹"
 
 #: ../../datetime/zone_utc_map.go:89
 msgid "USA (UTC-04) Boa Vista"
-msgstr ""
+msgstr "美国（UTC-04）博阿维斯塔"
 
 #: ../../datetime/zone_utc_map.go:90
 msgid "USA (UTC-05) Bogota"
-msgstr ""
+msgstr "美国（UTC-05）波哥大"
 
 #: ../../datetime/zone_utc_map.go:91
 msgid "USA (UTC-07) Boise"
-msgstr ""
+msgstr "美国（UTC-07）博伊西"
 
 #: ../../datetime/zone_utc_map.go:93
 msgid "USA (UTC-07) Cambridge Bay"
-msgstr ""
+msgstr "美国（UTC-07）剑桥湾"
 
 #: ../../datetime/zone_utc_map.go:94
 msgid "USA (UTC-04) Campo Grande"
-msgstr ""
+msgstr "美国（UTC-04）大坎普"
 
 #: ../../datetime/zone_utc_map.go:95
 msgid "USA (UTC-06) Cancun"
-msgstr ""
+msgstr "美国（UTC-06）坎昆"
 
 #: ../../datetime/zone_utc_map.go:96
 msgid "Ecuador (UTC-03) Caracas"
-msgstr ""
+msgstr "厄瓜多尔（UTC-03）加拉加斯"
 
 #: ../../datetime/zone_utc_map.go:97
 msgid "USA (UTC-03) Cayenne"
-msgstr ""
+msgstr "美国（UTC-03）卡宴"
 
 #: ../../datetime/zone_utc_map.go:98
 msgid "USA (UTC-05) Cayman"
-msgstr ""
+msgstr "美国（UTC-05）开曼"
 
 #: ../../datetime/zone_utc_map.go:99
 msgid "USA (UTC-06) Chicago"
-msgstr ""
+msgstr "美国（UTC-06）芝加哥"
 
 #: ../../datetime/zone_utc_map.go:100
 msgid "Mexico (UTC-07) Chihuahua"
-msgstr ""
+msgstr "墨西哥（UTC-07）奇瓦瓦"
 
 #: ../../datetime/zone_utc_map.go:101
 msgid "USA (UTC-05) Coral Harbour"
-msgstr ""
+msgstr "美国（UTC-05）珊瑚港"
 
 #: ../../datetime/zone_utc_map.go:102
 msgid "USA (UTC-03) Cordoba"
-msgstr ""
+msgstr "美国（UTC-03）科尔多瓦"
 
 #: ../../datetime/zone_utc_map.go:103
 msgid "USA (UTC-06) Costa Rica"
-msgstr ""
+msgstr "美国（UTC-06）哥斯达黎加"
 
 #: ../../datetime/zone_utc_map.go:104
 msgid "USA (UTC-07) Creston"
-msgstr ""
+msgstr "美国（UTC-07）克雷斯顿"
 
 #: ../../datetime/zone_utc_map.go:105
 msgid "USA (UTC-04) Cuiaba"
-msgstr ""
+msgstr "美国（UTC-04）库亚巴"
 
 #: ../../datetime/zone_utc_map.go:106
 msgid "USA (UTC-04) Curacao"
-msgstr ""
+msgstr "美国（UTC-04）库拉索"
 
 #: ../../datetime/zone_utc_map.go:107
 msgid "USA (UTC-08) Dawson"
-msgstr ""
+msgstr "美国（UTC-08）道森"
 
 #: ../../datetime/zone_utc_map.go:108
 msgid "USA (UTC-07) Dawson Creek"
-msgstr ""
+msgstr "美国（UTC-07）道森克里克"
 
 #: ../../datetime/zone_utc_map.go:109
 msgid "USA (UTC-07) Denver"
-msgstr ""
+msgstr "美国（UTC-07）丹佛"
 
 #: ../../datetime/zone_utc_map.go:110
 msgid "USA (UTC-05) Detroit"
-msgstr ""
+msgstr "美国（UTC-05）底特律"
 
 #: ../../datetime/zone_utc_map.go:111
 msgid "USA (UTC-04) Dominica"
-msgstr ""
+msgstr "美国（UTC-04）多米尼加"
 
 #: ../../datetime/zone_utc_map.go:112
 msgid "USA (UTC-07) Edmonton"
-msgstr ""
+msgstr "美国（UTC-07）埃德蒙顿"
 
 #: ../../datetime/zone_utc_map.go:113
 msgid "Brazil (UTC-04) Eirunepe"
-msgstr ""
+msgstr "巴西（UTC-04）艾鲁内佩"
 
 #: ../../datetime/zone_utc_map.go:114
 msgid "USA (UTC-06) El Salvador"
-msgstr ""
+msgstr "美国（UTC-06）萨尔瓦多"
 
 #: ../../datetime/zone_utc_map.go:115
 msgid "USA (UTC-08) Ensenada"
-msgstr ""
+msgstr "美国（UTC-08）恩塞纳达"
 
 #: ../../datetime/zone_utc_map.go:116
 msgid "USA (UTC-05) Fort Wayne"
-msgstr ""
+msgstr "美国（UTC-05）韦恩堡"
 
 #: ../../datetime/zone_utc_map.go:117
 msgid "USA (UTC-03) Fortaleza"
-msgstr ""
+msgstr "美国（UTC-03）福塔雷萨"
 
 #: ../../datetime/zone_utc_map.go:118
 msgid "USA (UTC-04) Glace Bay"
-msgstr ""
+msgstr "美国（UTC-04）格莱斯湾"
 
 #: ../../datetime/zone_utc_map.go:119
 msgid "Greenland (UTC-03) Godthab"
-msgstr ""
+msgstr "格陵兰（UTC-03）戈特霍布"
 
 #: ../../datetime/zone_utc_map.go:120
 msgid "USA (UTC-04) Goose Bay"
-msgstr ""
+msgstr "美国（UTC-04）古斯湾"
 
 #: ../../datetime/zone_utc_map.go:121
 msgid "USA (UTC-05) Grand Turk"
-msgstr ""
+msgstr "美国（UTC-05）大特克"
 
 #: ../../datetime/zone_utc_map.go:122
 msgid "USA (UTC-04) Grenada"
-msgstr ""
+msgstr "美国（UTC-04）格林纳达"
 
 #: ../../datetime/zone_utc_map.go:123
 msgid "Mexico (UTC-04) Guadeloupe"
-msgstr ""
+msgstr "墨西哥（UTC-04）瓜德罗普"
 
 #: ../../datetime/zone_utc_map.go:124
 msgid "Mexico (UTC-06) Guatemala"
-msgstr ""
+msgstr "墨西哥（UTC-06）危地马拉"
 
 #: ../../datetime/zone_utc_map.go:125
 msgid "Ecuador (UTC-05) Guayaquil"
-msgstr ""
+msgstr "厄瓜多尔（UTC-05）瓜亚基尔"
 
 #: ../../datetime/zone_utc_map.go:126
 msgid "Mexico (UTC-04) Guyana"
-msgstr ""
+msgstr "墨西哥（UTC-04）圭亚那"
 
 #: ../../datetime/zone_utc_map.go:127
 msgid "USA (UTC-04) Halifax"
-msgstr ""
+msgstr "美国（UTC-04）哈利法克斯"
 
 #: ../../datetime/zone_utc_map.go:128
 msgid "USA (UTC-05) Havana"
-msgstr ""
+msgstr "美国（UTC-05）哈瓦那"
 
 #: ../../datetime/zone_utc_map.go:129
 msgid "USA (UTC-07) Hermosillo"
-msgstr ""
+msgstr "美国（UTC-07）埃莫西约"
 
 #: ../../datetime/zone_utc_map.go:130 ../../datetime/zone_utc_map.go:138
 msgid "USA (UTC-05) Indianapolis"
-msgstr ""
+msgstr "美国（UTC-05）印第安纳波利斯"
 
 #: ../../datetime/zone_utc_map.go:131
 msgid "USA (UTC-06) Knox"
-msgstr ""
+msgstr "美国（UTC-06）诺克斯"
 
 #: ../../datetime/zone_utc_map.go:132
 msgid "USA (UTC-05) Marengo"
-msgstr ""
+msgstr "美国（UTC-05）马伦哥"
 
 #: ../../datetime/zone_utc_map.go:133
 msgid "USA (UTC-05) Petersburg"
-msgstr ""
+msgstr "美国（UTC-05）圣彼得堡"
 
 #: ../../datetime/zone_utc_map.go:134
 msgid "USA (UTC-06) Tell City"
-msgstr ""
+msgstr "美国（UTC-06）特尔城"
 
 #: ../../datetime/zone_utc_map.go:135
 msgid "USA (UTC-05) Vevay"
-msgstr ""
+msgstr "美国（UTC-05）韦韦"
 
 #: ../../datetime/zone_utc_map.go:136
 msgid "USA (UTC-05) Vincennes"
-msgstr ""
+msgstr "美国（UTC-05）文森斯"
 
 #: ../../datetime/zone_utc_map.go:137
 msgid "USA (UTC-05) Winamac"
-msgstr ""
+msgstr "美国（UTC-05）威纳马克"
 
 #: ../../datetime/zone_utc_map.go:139
 msgid "Canada (UTC-07) Inuvik"
-msgstr ""
+msgstr "加拿大（UTC-07）伊努维克"
 
 #: ../../datetime/zone_utc_map.go:140
 msgid "Canada (UTC-05) Iqaluit"
-msgstr ""
+msgstr "加拿大（UTC-05）伊魁特"
 
 #: ../../datetime/zone_utc_map.go:141
 msgid "USA (UTC-05) Jamaica"
-msgstr ""
+msgstr "美国（UTC-05）牙买加"
 
 #: ../../datetime/zone_utc_map.go:143
 msgid "USA (UTC-09) Juneau"
-msgstr ""
+msgstr "美国（UTC-09）朱诺"
 
 #: ../../datetime/zone_utc_map.go:144 ../../datetime/zone_utc_map.go:151
 msgid "USA (UTC-05) Louisville"
-msgstr ""
+msgstr "美国（UTC-05）路易斯维尔"
 
 #: ../../datetime/zone_utc_map.go:145
 msgid "USA (UTC-05) Monticello"
-msgstr ""
+msgstr "美国（UTC-05）蒙蒂塞洛"
 
 #: ../../datetime/zone_utc_map.go:146
 msgid "USA (UTC-06) Knox IN"
-msgstr ""
+msgstr "美国（UTC-06）诺克斯"
 
 #: ../../datetime/zone_utc_map.go:147
 msgid "Caribbean Netherlands (UTC-04) Kralendijk"
-msgstr ""
+msgstr "加勒比海荷兰（UTC-04）克拉伦代克"
 
 #: ../../datetime/zone_utc_map.go:148
 msgid "USA (UTC-04) La Paz"
-msgstr ""
+msgstr "美国（UTC-04）拉巴斯"
 
 #: ../../datetime/zone_utc_map.go:149
 msgid "USA (UTC-05) Lima"
-msgstr ""
+msgstr "美国（UTC-05）利马"
 
 #: ../../datetime/zone_utc_map.go:150
 msgid "USA (UTC-08) Los Angeles"
-msgstr ""
+msgstr "美国（UTC-08）洛杉矶"
 
 #: ../../datetime/zone_utc_map.go:152
 msgid "Canada (UTC-04) Lower Princes"
-msgstr ""
+msgstr "加拿大（UTC-04）下王子"
 
 #: ../../datetime/zone_utc_map.go:153
 msgid "Brazil (UTC-03) Maceio"
-msgstr ""
+msgstr "巴西（UTC-03）马塞约"
 
 #: ../../datetime/zone_utc_map.go:154
 msgid "Mexico (UTC-06) Managua"
-msgstr ""
+msgstr "墨西哥（UTC-06）马那瓜"
 
 #: ../../datetime/zone_utc_map.go:155
 msgid "USA (UTC-04) Manaus"
-msgstr ""
+msgstr "美国（UTC-04）马瑙斯"
 
 #: ../../datetime/zone_utc_map.go:156
 msgid "USA (UTC-04) Marigot"
-msgstr ""
+msgstr "美国（UTC-04）马里戈特"
 
 #: ../../datetime/zone_utc_map.go:157
 msgid "USA (UTC-04) Martinique"
-msgstr ""
+msgstr "美国（UTC-04）马提尼克"
 
 #: ../../datetime/zone_utc_map.go:158
 msgid "Mexico (UTC-06) Matamoros"
-msgstr ""
+msgstr "墨西哥（UTC-06）马塔莫罗斯"
 
 #: ../../datetime/zone_utc_map.go:159
 msgid "USA (UTC-07) Mazatlan"
-msgstr ""
+msgstr "美国（UTC-07）马萨特兰"
 
 #: ../../datetime/zone_utc_map.go:160
 msgid "USA (UTC-03) Mendoza"
-msgstr ""
+msgstr "美国（UTC-03）门多萨"
 
 #: ../../datetime/zone_utc_map.go:161
 msgid "USA (UTC-06) Menominee"
-msgstr ""
+msgstr "美国（UTC-06）梅诺米尼"
 
 #: ../../datetime/zone_utc_map.go:162
 msgid "USA (UTC-06) Merida"
-msgstr ""
+msgstr "美国（UTC-06）梅里达"
 
 #: ../../datetime/zone_utc_map.go:163
 msgid "USA (UTC-08) Metlakatla"
-msgstr ""
+msgstr "美国（UTC-08）梅特拉卡特拉"
 
 #: ../../datetime/zone_utc_map.go:164
 msgid "USA (UTC-06) Mexico City"
-msgstr ""
+msgstr "美国（UTC-06）墨西哥城"
 
 #: ../../datetime/zone_utc_map.go:165
 msgid "USA (UTC-03) Miquelon"
-msgstr ""
+msgstr "美国（UTC-03）密克隆"
 
 #: ../../datetime/zone_utc_map.go:166
 msgid "Canada (UTC-04) Moncton"
-msgstr ""
+msgstr "加拿大（UTC-04）蒙克顿"
 
 #: ../../datetime/zone_utc_map.go:167
 msgid "USA (UTC-06) Monterrey"
-msgstr ""
+msgstr "美国（UTC-06）蒙特雷"
 
 #: ../../datetime/zone_utc_map.go:168
 msgid "USA (UTC-03) Montevideo"
-msgstr ""
+msgstr "美国（UTC-03）蒙得维的亚"
 
 #: ../../datetime/zone_utc_map.go:169
 msgid "USA (UTC-05) Montreal"
-msgstr ""
+msgstr "美国（UTC-05）蒙特利尔"
 
 #: ../../datetime/zone_utc_map.go:170
 msgid "USA (UTC-04) Montserrat"
-msgstr ""
+msgstr "美国（UTC-04）蒙特塞拉特"
 
 #: ../../datetime/zone_utc_map.go:171
 msgid "USA (UTC-05) Nassau"
-msgstr ""
+msgstr "美国（UTC-05）拿骚"
 
 #: ../../datetime/zone_utc_map.go:172
 msgid "USA (UTC-05) New York"
-msgstr ""
+msgstr "美国（UTC-05）纽约"
 
 #: ../../datetime/zone_utc_map.go:173
 msgid "Canada (UTC-05) Nipigon"
-msgstr ""
+msgstr "加拿大（UTC-05）尼皮贡"
 
 #: ../../datetime/zone_utc_map.go:174
 msgid "USA (UTC-09) Nome"
-msgstr ""
+msgstr "美国（UTC-09）诺姆"
 
 #: ../../datetime/zone_utc_map.go:175
 msgid "Brazil (UTC-02) Noronha"
-msgstr ""
+msgstr "巴西（UTC-02）迪诺罗尼亚"
 
 #: ../../datetime/zone_utc_map.go:176
 msgid "USA (UTC-06) Beulah"
-msgstr ""
+msgstr "美国（UTC-06）比尤拉"
 
 #: ../../datetime/zone_utc_map.go:177
 msgid "USA (UTC-06) Center"
-msgstr ""
+msgstr "美国（UTC-06）中部"
 
 #: ../../datetime/zone_utc_map.go:178
 msgid "USA (UTC-06) New Salem"
-msgstr ""
+msgstr "美国（UTC-06）新塞勒姆"
 
 #: ../../datetime/zone_utc_map.go:179
 msgid "Mexico (UTC-07) Ojinaga"
-msgstr ""
+msgstr "墨西哥（UTC-07）奥希纳加"
 
 #: ../../datetime/zone_utc_map.go:180
 msgid "USA (UTC-05) Panama"
-msgstr ""
+msgstr "美国（UTC-05）巴拿马"
 
 #: ../../datetime/zone_utc_map.go:181
 msgid "Mexico (UTC-03) Paramaribo"
-msgstr ""
+msgstr "墨西哥（UTC-03）帕拉马里博"
 
 #: ../../datetime/zone_utc_map.go:182
 msgid "USA (UTC-07) Phoenix"
-msgstr ""
+msgstr "美国（UTC-07）凤凰"
 
 #: ../../datetime/zone_utc_map.go:183
 msgid "USA (UTC-04) Port of Spain"
-msgstr ""
+msgstr "美国（UTC-04）西班牙港"
 
 #: ../../datetime/zone_utc_map.go:184
 msgid "USA (UTC-05) Port au Prince"
-msgstr ""
+msgstr "美国（UTC-05）太子港"
 
 #: ../../datetime/zone_utc_map.go:185
 msgid "Brazil (UTC-05) Porto Acre"
-msgstr ""
+msgstr "巴西（UTC-05）阿克雷港"
 
 #: ../../datetime/zone_utc_map.go:186
 msgid "USA (UTC-04) Porto Velho"
-msgstr ""
+msgstr "美国（UTC-04）韦柳港"
 
 #: ../../datetime/zone_utc_map.go:187
 msgid "USA (UTC-04) Puerto Rico"
-msgstr ""
+msgstr "美国（UTC-04）波多黎各"
 
 #: ../../datetime/zone_utc_map.go:188
 msgid "USA (UTC-06) Rainy River"
-msgstr ""
+msgstr "美国（UTC-06）瑞尼河区"
 
 #: ../../datetime/zone_utc_map.go:189
 msgid "USA (UTC-03) Recife"
-msgstr ""
+msgstr "美国（UTC-03）累西腓"
 
 #: ../../datetime/zone_utc_map.go:190
 msgid "USA (UTC-06) Regina"
-msgstr ""
+msgstr "美国（UTC-06）里贾纳"
 
 #: ../../datetime/zone_utc_map.go:191
 msgid "USA (UTC-06) Resolute"
-msgstr ""
+msgstr "美国（UTC-06）雷索卢特"
 
 #: ../../datetime/zone_utc_map.go:192
 msgid "USA (UTC-05) Rio Branco"
-msgstr ""
+msgstr "美国（UTC-05）里奥布朗库"
 
 #: ../../datetime/zone_utc_map.go:193
 msgid "USA (UTC-03) Rosario"
-msgstr ""
+msgstr "美国（UTC-03）罗萨里奥"
 
 #: ../../datetime/zone_utc_map.go:194
 msgid "USA (UTC-08) Santa Isabel"
-msgstr ""
+msgstr "美国（UTC-08）圣伊莎贝尔"
 
 #: ../../datetime/zone_utc_map.go:195
 msgid "USA (UTC-03) Santarem"
-msgstr ""
+msgstr "美国（UTC-03）圣塔伦"
 
 #: ../../datetime/zone_utc_map.go:196
 msgid "USA (UTC-04) Santiago"
-msgstr ""
+msgstr "美国（UTC-04）圣地亚哥"
 
 #: ../../datetime/zone_utc_map.go:197
 msgid "USA (UTC-04) Santo Domingo"
-msgstr ""
+msgstr "美国（UTC-04）圣多明各"
 
 #: ../../datetime/zone_utc_map.go:198
 msgid "USA (UTC-03) Sao Paulo"
-msgstr ""
+msgstr "美国（UTC-03）圣保罗"
 
 #: ../../datetime/zone_utc_map.go:199
 msgid "USA (UTC-07) Shiprock"
-msgstr ""
+msgstr "美国（UTC-07）希普罗克"
 
 #: ../../datetime/zone_utc_map.go:200
 msgid "USA (UTC-09) Sitka"
-msgstr ""
+msgstr "美国（UTC-09）锡特卡"
 
 #: ../../datetime/zone_utc_map.go:201
 msgid "USA (UTC-04) St Barthelemy"
-msgstr ""
+msgstr "美国（UTC-04）圣巴夫林米"
 
 #: ../../datetime/zone_utc_map.go:202
 msgid "USA (UTC-04) St Johns"
-msgstr ""
+msgstr "美国（UTC-04）圣琼斯"
 
 #: ../../datetime/zone_utc_map.go:203
 msgid "USA (UTC-04) St Lucia"
-msgstr ""
+msgstr "美国（UTC-04）圣露西亚"
 
 #: ../../datetime/zone_utc_map.go:204
 msgid "USA (UTC-04) St Thomas"
-msgstr ""
+msgstr "美国（UTC-04）圣托马斯"
 
 #: ../../datetime/zone_utc_map.go:205
 msgid "USA (UTC-04) St Vincent"
-msgstr ""
+msgstr "美国（UTC-04）圣文森特"
 
 #: ../../datetime/zone_utc_map.go:206
 msgid "Canada (UTC-06) Swift Current"
-msgstr ""
+msgstr "加拿大（UTC-06）斯威夫特卡伦特"
 
 #: ../../datetime/zone_utc_map.go:207
 msgid "Ecuador (UTC-06) Tegucigalpa"
-msgstr ""
+msgstr "厄瓜多尔（UTC-06）特古西加尔巴"
 
 #: ../../datetime/zone_utc_map.go:208
 msgid "USA (UTC-04) Thule"
-msgstr ""
+msgstr "美国（UTC-04）图勒"
 
 #: ../../datetime/zone_utc_map.go:209
 msgid "USA (UTC-05) Thunder Bay"
-msgstr ""
+msgstr "美国（UTC-05）雷湾"
 
 #: ../../datetime/zone_utc_map.go:210
 msgid "Mexico (UTC-08) Tijuana"
-msgstr ""
+msgstr "墨西哥（UTC-08）蒂华纳"
 
 #: ../../datetime/zone_utc_map.go:211
 msgid "Canada (UTC-05) Toronto"
-msgstr ""
+msgstr "加拿大（UTC-05）多伦多"
 
 #: ../../datetime/zone_utc_map.go:212
 msgid "USA (UTC-04) Tortola"
-msgstr ""
+msgstr "美国（UTC-04）托尔托拉"
 
 #: ../../datetime/zone_utc_map.go:213
 msgid "USA (UTC-08) Vancouver"
-msgstr ""
+msgstr "美国（UTC-08）温哥华"
 
 #: ../../datetime/zone_utc_map.go:214
 msgid "USA (UTC-04) Virgin"
-msgstr ""
+msgstr "美国（UTC-04）维尔京"
 
 #: ../../datetime/zone_utc_map.go:215
 msgid "USA (UTC-08) Whitehorse"
-msgstr ""
+msgstr "美国（UTC-08）怀特霍斯"
 
 #: ../../datetime/zone_utc_map.go:216
 msgid "Canada (UTC-06) Winnipeg"
-msgstr ""
+msgstr "加拿大（UTC-06）温尼伯"
 
 #: ../../datetime/zone_utc_map.go:217
 msgid "USA (UTC-09) Yakutat"
-msgstr ""
+msgstr "美国（UTC-09）亚库塔特"
 
 #: ../../datetime/zone_utc_map.go:218
 msgid "USA (UTC-07) Yellowknife"
-msgstr ""
+msgstr "美国（UTC-07）耶洛奈夫"
 
 #: ../../datetime/zone_utc_map.go:219
 msgid "Antarctica (UTC+11) Casey"
-msgstr ""
+msgstr "南极洲（UTC+11）凯西"
 
 #: ../../datetime/zone_utc_map.go:220
 msgid "Antarctica (UTC+05) Davis"
-msgstr ""
+msgstr "南极洲（UTC+05）戴维斯"
 
 #: ../../datetime/zone_utc_map.go:221
 msgid "Antarctica (UTC+10) DumontDUrville"
-msgstr ""
+msgstr "南极洲（UTC+10）迪蒙·迪维尔"
 
 #: ../../datetime/zone_utc_map.go:222
 msgid "Antarctica (UTC+05) Mawson"
-msgstr ""
+msgstr "南极洲（UTC+05）莫森"
 
 #: ../../datetime/zone_utc_map.go:223
 msgid "Antarctica (UTC+12) McMurdo"
-msgstr ""
+msgstr "南极洲（UTC+12）麦克默多"
 
 #: ../../datetime/zone_utc_map.go:224
 msgid "Antarctica (UTC-04) Palmer"
-msgstr ""
+msgstr "南极洲（UTC-04）帕尔默"
 
 #: ../../datetime/zone_utc_map.go:225
 msgid "Antarctica (UTC-03) Rothera"
-msgstr ""
+msgstr "南极洲（UTC-03）罗西拉"
 
 #: ../../datetime/zone_utc_map.go:226
 msgid "Antarctica (UTC+12) South Pole"
-msgstr ""
+msgstr "南极洲（UTC+12）南极"
 
 #: ../../datetime/zone_utc_map.go:227
 msgid "Antarctica (UTC+06) Vostok"
-msgstr ""
+msgstr "南极洲（UTC+06）沃斯托克"
 
 #: ../../datetime/zone_utc_map.go:228
 msgid "Svalbard and Jan Mayen (UTC+01) Longyearbyen"
-msgstr ""
+msgstr "斯瓦尔巴和扬马延（UTC+01）朗伊尔城"
 
 #: ../../datetime/zone_utc_map.go:229
 msgid "Yemen (UTC+03) Aden"
-msgstr ""
+msgstr "也门（UTC+03）亚丁"
 
 #: ../../datetime/zone_utc_map.go:230
 msgid "Kazakhstan (UTC+06) Almaty"
-msgstr ""
+msgstr "哈萨克斯坦（UTC+06）阿拉木图"
 
 #: ../../datetime/zone_utc_map.go:231
 msgid "Jordan (UTC+02) Amman"
-msgstr ""
+msgstr "乔丹（UTC+02）安曼"
 
 #: ../../datetime/zone_utc_map.go:232
 msgid "Russia (UTC+12) Anadyr"
-msgstr ""
+msgstr "俄罗斯（UTC+12）阿纳德尔"
 
 #: ../../datetime/zone_utc_map.go:233
 msgid "Kazakhstan (UTC+05) Aqtau"
-msgstr ""
+msgstr "哈萨克斯坦（UTC+05）阿克陶"
 
 #: ../../datetime/zone_utc_map.go:234
 msgid "Kazakhstan (UTC+05) Aqtobe"
-msgstr ""
+msgstr "哈萨克斯坦（UTC+05）阿克托别"
 
 #: ../../datetime/zone_utc_map.go:235
 msgid "Turkmenistan (UTC+05) Ashgabat"
-msgstr ""
+msgstr "土库曼斯坦（UTC+05）阿什哈巴德"
 
 #: ../../datetime/zone_utc_map.go:236
 msgid "Turkmenistan (UTC+05) Ashkhabad"
-msgstr ""
+msgstr "土库曼斯坦（UTC+05）阿什哈巴德"
 
 #: ../../datetime/zone_utc_map.go:237
 msgid "Iraq (UTC+03) Baghdad"
-msgstr ""
+msgstr "伊拉克（UTC+03）巴格达"
 
 #: ../../datetime/zone_utc_map.go:238
 msgid "Bahrain (UTC+03) Bahrain"
-msgstr ""
+msgstr "巴林（UTC+03）巴林"
 
 #: ../../datetime/zone_utc_map.go:239
 msgid "Azerbaijan (UTC+04) Baku"
-msgstr ""
+msgstr "阿塞拜疆（UTC+04）巴库"
 
 #: ../../datetime/zone_utc_map.go:240
 msgid "Thailand (UTC+07) Bangkok"
-msgstr ""
+msgstr "泰国（UTC+07）曼谷"
 
 #: ../../datetime/zone_utc_map.go:241
 msgid "Lebanon (UTC+02) Beirut"
-msgstr ""
+msgstr "黎巴嫩（UTC+02）贝鲁特"
 
 #: ../../datetime/zone_utc_map.go:242
 msgid "Kyrgyzstan (UTC+06) Bishkek"
-msgstr ""
+msgstr "吉尔吉斯斯坦（UTC+06）比什凯克"
 
 #: ../../datetime/zone_utc_map.go:243
 msgid "Brunei (UTC+08) Brunei"
-msgstr ""
+msgstr "文莱（UTC+08）文莱"
 
 #: ../../datetime/zone_utc_map.go:244
 msgid "India (UTC+08) Calcutta"
-msgstr ""
+msgstr "印度（UTC+08）加尔各答"
 
 #: ../../datetime/zone_utc_map.go:245
 msgid "China (UTC+08) Chongqing"
-msgstr ""
+msgstr "中国（UTC+08）重庆"
 
 #: ../../datetime/zone_utc_map.go:246
 msgid "China (UTC+08) Chungking"
-msgstr ""
+msgstr "中国（UTC+08）重庆"
 
 #: ../../datetime/zone_utc_map.go:247
 msgid "Sri Lanka (UTC+06) Colombo"
-msgstr ""
+msgstr "斯里兰卡（UTC+06）科伦坡"
 
 #: ../../datetime/zone_utc_map.go:248
 msgid "Syria (UTC+02) Damascus"
-msgstr ""
+msgstr "叙利亚（UTC+02）大马士革"
 
 #: ../../datetime/zone_utc_map.go:249
 msgid "Bangladesh (UTC+06) Dhaka"
-msgstr ""
+msgstr "孟加拉国（UTC+06）达卡"
 
 #: ../../datetime/zone_utc_map.go:250
 msgid "Timor-Leste (UTC+09) Dili"
-msgstr ""
+msgstr "东帝汶（UTC+09）帝力"
 
 #: ../../datetime/zone_utc_map.go:251
 msgid "Dubai - United Arab Emirates (UTC+04) Dubai"
-msgstr ""
+msgstr "阿拉伯联合酋长国（UTC+04）迪拜"
 
 #: ../../datetime/zone_utc_map.go:252
 msgid "Tajikistan (UTC+05) Dushanbe"
-msgstr ""
+msgstr "塔吉克斯坦（UTC+05）杜尚别"
 
 #: ../../datetime/zone_utc_map.go:253
 msgid "Gaza (UTC+02) Gaza"
-msgstr ""
+msgstr "加沙（UTC+02）加沙"
 
 #: ../../datetime/zone_utc_map.go:254
 msgid "China (UTC+08) Harbin"
-msgstr ""
+msgstr "中国（UTC+08）哈尔滨"
 
 #: ../../datetime/zone_utc_map.go:255
 msgid "Hebron (UTC+02) Hebron"
-msgstr ""
+msgstr "希伯仑（UTC+02）希伯伦"
 
 #: ../../datetime/zone_utc_map.go:256
 msgid "Vietnam (UTC+07) Ho Chi Minh"
-msgstr ""
+msgstr "越南（UTC+07）胡志明市"
 
 #: ../../datetime/zone_utc_map.go:257
 msgid "Hong Kong (UTC+08) Hong Kong"
-msgstr ""
+msgstr "香港（UTC+08）香港"
 
 #: ../../datetime/zone_utc_map.go:258
 msgid "Mongolia (UTC+07) Hovd"
-msgstr ""
+msgstr "蒙古（UTC+07）科布多"
 
 #: ../../datetime/zone_utc_map.go:259
 msgid "Russia (UTC+09) Irkutsk"
-msgstr ""
+msgstr "俄罗斯（UTC+09）伊尔库茨克"
 
 #: ../../datetime/zone_utc_map.go:260 ../../datetime/zone_utc_map.go:370
 msgid "Turkey (UTC+02) Istanbul"
-msgstr ""
+msgstr "土耳其（UTC+02）伊斯坦布尔"
 
 #: ../../datetime/zone_utc_map.go:261
 msgid "Indonesia (UTC+07) Jakarta"
-msgstr ""
+msgstr "印度尼西亚（UTC+07）雅加达"
 
 #: ../../datetime/zone_utc_map.go:262
 msgid "India (UTC+09) Jayapura"
-msgstr ""
+msgstr "印度（UTC+09）查亚普拉"
 
 #: ../../datetime/zone_utc_map.go:263
 msgid "Israel (UTC+02) Jerusalem"
-msgstr ""
+msgstr "以色列（UTC+02）耶路撒冷"
 
 #: ../../datetime/zone_utc_map.go:264
 msgid "Afghanistan (UTC+12) Kabul"
-msgstr ""
+msgstr "阿富汗（UTC+12）喀布尔"
 
 #: ../../datetime/zone_utc_map.go:265
 msgid "Pakistan (UTC+05) Karachi"
-msgstr ""
+msgstr "巴基斯坦（UTC+05）卡拉奇"
 
 #: ../../datetime/zone_utc_map.go:266
 msgid "China (UTC+08) Kashgar"
-msgstr ""
+msgstr "中国（UTC+08）喀什"
 
 #: ../../datetime/zone_utc_map.go:267
 msgid "Nepal (UTC+08) Kathmandu"
-msgstr ""
+msgstr "尼泊尔（UTC+08）加德满都"
 
 #: ../../datetime/zone_utc_map.go:268
 msgid "Malaysia (UTC+08) Kuala Lumpur"
-msgstr ""
+msgstr "马来西亚（UTC+08）吉隆坡"
 
 #: ../../datetime/zone_utc_map.go:269
 msgid "Malaysia (UTC+08) Kuching"
-msgstr ""
+msgstr "马来西亚（UTC+08）古晋"
 
 #: ../../datetime/zone_utc_map.go:270
 msgid "Kuwait (UTC+03) Kuwait"
-msgstr ""
+msgstr "科威特（UTC+03）科威特"
 
 #: ../../datetime/zone_utc_map.go:271
 msgid "Macau (UTC+08) Macao"
-msgstr ""
+msgstr "澳门（UTC+08）澳门"
 
 #: ../../datetime/zone_utc_map.go:272
 msgid "Macau (UTC+08) Macau"
-msgstr ""
+msgstr "澳门（UTC+08）澳门"
 
 #: ../../datetime/zone_utc_map.go:273
 msgid "Russia (UTC+12) Magadan"
-msgstr ""
+msgstr "俄罗斯（UTC+12）马加丹"
 
 #: ../../datetime/zone_utc_map.go:274
 msgid "Indonesia (UTC+08) Makassar"
-msgstr ""
+msgstr "印度尼西亚（UTC+08）望加锡"
 
 #: ../../datetime/zone_utc_map.go:275
 msgid "Philippines (UTC+08) Manila"
-msgstr ""
+msgstr "菲律宾（UTC+08）马尼拉"
 
 #: ../../datetime/zone_utc_map.go:276
 msgid "Oman (UTC+04) Muscat"
-msgstr ""
+msgstr "阿曼（UTC+04）马斯喀特"
 
 #: ../../datetime/zone_utc_map.go:277
 msgid "Nicosia (UTC+02) Nicosia"
-msgstr ""
+msgstr "尼科西亚（UTC+02）尼科西亚"
 
 #: ../../datetime/zone_utc_map.go:278
 msgid "Russia (UTC+07) Novokuznetsk"
-msgstr ""
+msgstr "俄罗斯（UTC+07）新库兹涅茨克"
 
 #: ../../datetime/zone_utc_map.go:279
 msgid "Russia (UTC+07) Novosibirsk"
-msgstr ""
+msgstr "俄罗斯（UTC+07）新西伯利亚"
 
 #: ../../datetime/zone_utc_map.go:280
 msgid "Russia (UTC+07) Omsk"
-msgstr ""
+msgstr "俄罗斯（UTC+07）鄂木斯克"
 
 #: ../../datetime/zone_utc_map.go:281
 msgid "Kazakhstan (UTC+05) Oral"
-msgstr ""
+msgstr "哈萨克斯坦（UTC+05）乌拉尔"
 
 #: ../../datetime/zone_utc_map.go:282
 msgid "Cambodia (UTC+07) Phnom Penh"
-msgstr ""
+msgstr "柬埔寨（UTC+07）金边"
 
 #: ../../datetime/zone_utc_map.go:283
 msgid "Indonesia (UTC+07) Pontianak"
-msgstr ""
+msgstr "印度尼西亚（UTC+07）坤甸"
 
 #: ../../datetime/zone_utc_map.go:284
 msgid "North Korea (UTC+09) Pyongyang"
-msgstr ""
+msgstr "朝鲜（UTC+09）平壤"
 
 #: ../../datetime/zone_utc_map.go:285
 msgid "Qatar (UTC+03) Qatar"
-msgstr ""
+msgstr "卡塔尔（UTC+03）卡塔尔"
 
 #: ../../datetime/zone_utc_map.go:286
 msgid "Kazakhstan (UTC+06) Qyzylorda"
-msgstr ""
+msgstr "哈萨克斯坦（UTC+06）克孜勒奥尔达"
 
 #: ../../datetime/zone_utc_map.go:287
 msgid "Myanmar (Burma) (UTC+03) Rangoon"
-msgstr ""
+msgstr "缅甸（UTC+03）仰光"
 
 #: ../../datetime/zone_utc_map.go:288
 msgid "Vietnam (UTC+07) Saigon"
-msgstr ""
+msgstr "越南（UTC+07）西贡"
 
 #: ../../datetime/zone_utc_map.go:289
 msgid "Russia (UTC+11) Sakhalin"
-msgstr ""
+msgstr "俄罗斯（UTC+11）库页岛"
 
 #: ../../datetime/zone_utc_map.go:290
 msgid "Uzbekistan (UTC+05) Samarkand"
-msgstr ""
+msgstr "乌兹别克斯坦（UTC+05）撒马尔罕"
 
 #: ../../datetime/zone_utc_map.go:291
 msgid "South Korea (UTC+09) Seoul"
-msgstr ""
+msgstr "韩国（UTC+09）首尔"
 
 #: ../../datetime/zone_utc_map.go:292
 msgid "China (UTC+08) Shanghai"
-msgstr ""
+msgstr "中国（UTC+08）上海"
 
 #: ../../datetime/zone_utc_map.go:293
 msgid "China (UTC+08) Beijing"
-msgstr ""
+msgstr "中国（UTC+08）北京"
 
 #: ../../datetime/zone_utc_map.go:294
 msgid "Singapore (UTC+08) Singapore"
-msgstr ""
+msgstr "新加坡（UTC+08）新加坡"
 
 #: ../../datetime/zone_utc_map.go:295
 msgid "Taiwan (UTC+08) Taipei"
-msgstr ""
+msgstr "台湾（UTC+08）台北"
 
 #: ../../datetime/zone_utc_map.go:296
 msgid "Uzbekistan (UTC+05) Tashkent"
-msgstr ""
+msgstr "乌兹别克斯坦（UTC+05）塔什干"
 
 #: ../../datetime/zone_utc_map.go:297
 msgid "Georgia (UTC+04) Tbilisi"
-msgstr ""
+msgstr "格鲁吉亚（UTC+04）第比利斯"
 
 #: ../../datetime/zone_utc_map.go:298
 msgid "Iran (UTC+02) Tehran"
-msgstr ""
+msgstr "伊朗（UTC+02）德黑兰"
 
 #: ../../datetime/zone_utc_map.go:299
 msgid "Bhutan (UTC+06) Thimbu"
-msgstr ""
+msgstr "不丹（UTC+06）廷布"
 
 #: ../../datetime/zone_utc_map.go:300
 msgid "Bhutan (UTC+06) Thimphu"
-msgstr ""
+msgstr "不丹（UTC+06）廷布"
 
 #: ../../datetime/zone_utc_map.go:301
 msgid "Japan (UTC+09) Tokyo"
-msgstr ""
+msgstr "日本（UTC+09）东京"
 
 #: ../../datetime/zone_utc_map.go:302
 msgid "Indonesia (UTC+08) Ujung Pandang"
-msgstr ""
+msgstr "印度尼西亚（UTC+08）乌戎潘当"
 
 #: ../../datetime/zone_utc_map.go:303
 msgid "Mongolia (UTC+08) Ulaanbaatar"
-msgstr ""
+msgstr "蒙古（UTC+08）乌兰巴托"
 
 #: ../../datetime/zone_utc_map.go:304
 msgid "Mongolia (UTC+08) Ulan Bator"
-msgstr ""
+msgstr "蒙古（UTC+08）乌兰巴托"
 
 #: ../../datetime/zone_utc_map.go:305
 msgid "China (UTC+08) Urumqi"
-msgstr ""
+msgstr "中国（UTC+08）乌鲁木齐"
 
 #: ../../datetime/zone_utc_map.go:306
 msgid "Laos (UTC+07) Vientiane"
-msgstr ""
+msgstr "老挝（UTC+07）万象"
 
 #: ../../datetime/zone_utc_map.go:307
 msgid "Russia (UTC+11) Vladivostok"
-msgstr ""
+msgstr "俄罗斯（UTC+11）符拉迪沃斯托克"
 
 #: ../../datetime/zone_utc_map.go:308
 msgid "Russia (UTC+10) Yakutsk"
-msgstr ""
+msgstr "俄罗斯（UTC+10）雅库茨克"
 
 #: ../../datetime/zone_utc_map.go:309
 msgid "620000 (UTC+06) Yekaterinburg"
-msgstr ""
+msgstr "俄罗斯（UTC+06）叶卡捷琳堡"
 
 #: ../../datetime/zone_utc_map.go:310
 msgid "Armenia (UTC+04) Yerevan"
-msgstr ""
+msgstr "亚美尼亚（UTC+04）埃里温"
 
 #: ../../datetime/zone_utc_map.go:311
 msgid "USA (UTC-04) Bermuda"
-msgstr ""
+msgstr "美国（UTC-04）百慕大"
 
 #: ../../datetime/zone_utc_map.go:312
 msgid "USA (UTC+00) Canary"
-msgstr ""
+msgstr "美国（UTC+00）加那利"
 
 #: ../../datetime/zone_utc_map.go:313
 msgid "Puerto Rico (UTC-01) Cape Verde"
-msgstr ""
+msgstr "波多黎各（UTC-01）佛得角"
 
 #: ../../datetime/zone_utc_map.go:314
 msgid "USA (UTC+00) Madeira"
-msgstr ""
+msgstr "美国（UTC+00）马德拉"
 
 #: ../../datetime/zone_utc_map.go:315
 msgid "Iceland (UTC+00) Reykjavik"
-msgstr ""
+msgstr "冰岛（UTC+00）雷克雅未克"
 
 #: ../../datetime/zone_utc_map.go:316
 msgid "USA (UTC-02) South Georgia"
-msgstr ""
+msgstr "美国（UTC-02）南乔治亚"
 
 #: ../../datetime/zone_utc_map.go:317
 msgid "USA (UTC+00) St Helena"
-msgstr ""
+msgstr "美国（UTC+00）圣赫勒拿岛"
 
 #: ../../datetime/zone_utc_map.go:318
 msgid "USA (UTC-03) Stanley"
-msgstr ""
+msgstr "美国（UTC-03）斯坦利"
 
 #: ../../datetime/zone_utc_map.go:319
 msgid "Australia (UTC+10) ACT"
-msgstr ""
+msgstr "澳大利亚（UTC+10）澳大利亚首都特区"
 
 #: ../../datetime/zone_utc_map.go:320
 msgid "Australia (UTC+10) Adelaide"
-msgstr ""
+msgstr "澳大利亚（UTC+10）阿德莱德"
 
 #: ../../datetime/zone_utc_map.go:321
 msgid "Australia (UTC+10) Broken Hill"
-msgstr ""
+msgstr "澳大利亚（UTC+10）布罗肯希尔"
 
 #: ../../datetime/zone_utc_map.go:322
 msgid "Australia (UTC+10) Currie"
-msgstr ""
+msgstr "澳大利亚（UTC+10）柯里"
 
 #: ../../datetime/zone_utc_map.go:323
 msgid "Australia (UTC+10) Darwin"
-msgstr ""
+msgstr "澳大利亚（UTC+10）达尔文"
 
 #: ../../datetime/zone_utc_map.go:324
 msgid "Australia (UTC+10) Lindeman"
-msgstr ""
+msgstr "澳大利亚（UTC+10）林德曼"
 
 #: ../../datetime/zone_utc_map.go:325
 msgid "Australia (UTC+11) Lord Howe"
-msgstr ""
+msgstr "澳大利亚（UTC+11）豪勋爵"
 
 #: ../../datetime/zone_utc_map.go:326
 msgid "Australia (UTC+10) Melbourne"
-msgstr ""
+msgstr "澳大利亚（UTC+10）墨尔本"
 
 #: ../../datetime/zone_utc_map.go:327
 msgid "Australia (UTC+10) North"
-msgstr ""
+msgstr "澳大利亚（UTC+10）北部"
 
 #: ../../datetime/zone_utc_map.go:328
 msgid "Australia (UTC+08) Perth"
-msgstr ""
+msgstr "澳大利亚（UTC+08）珀斯"
 
 #: ../../datetime/zone_utc_map.go:329
 msgid "Australia (UTC+10) Queensland"
-msgstr ""
+msgstr "澳大利亚（UTC+10）昆士兰"
 
 #: ../../datetime/zone_utc_map.go:330
 msgid "Australia (UTC+10) South"
-msgstr ""
+msgstr "澳大利亚（UTC+10）南部"
 
 #: ../../datetime/zone_utc_map.go:331
 msgid "Australia (UTC+10) Tasmania"
-msgstr ""
+msgstr "澳大利亚（UTC+10）塔斯马尼亚"
 
 #: ../../datetime/zone_utc_map.go:332
 msgid "Australia (UTC+10) Victoria"
-msgstr ""
+msgstr "澳大利亚（UTC +10）维多利亚"
 
 #: ../../datetime/zone_utc_map.go:333
 msgid "Australia (UTC+08) West"
-msgstr ""
+msgstr "澳大利亚（UTC+08）西部"
 
 #: ../../datetime/zone_utc_map.go:334
 msgid "Australia (UTC-05) Yancowinna"
-msgstr ""
+msgstr "澳大利亚（UTC-05）盐科温拿"
 
 #: ../../datetime/zone_utc_map.go:335
 msgid "Brazil (UTC-03) East"
-msgstr ""
+msgstr "巴西（UTC-03）东部"
 
 #: ../../datetime/zone_utc_map.go:336
 msgid "Brazil (UTC-04) West"
-msgstr ""
+msgstr "巴西（UTC-04）西部"
 
 #: ../../datetime/zone_utc_map.go:337
 msgid "Canada (UTC-04) Atlantic"
-msgstr ""
+msgstr "加拿大（UTC-04）大西洋"
 
-#: ../../datetime/zone_utc_map.go:338 ../../datetime/zone_utc_map.go:486
+#: ../../datetime/zone_utc_map.go:338 ../../datetime/zone_utc_map.go:483
 msgid "USA (UTC-06) Central"
-msgstr ""
+msgstr "美国（UTC-06）中部"
 
 #: ../../datetime/zone_utc_map.go:339
 msgid "Canada (UTC-05) Eastern"
-msgstr ""
+msgstr "加拿大（UTC-05）东部"
 
 #: ../../datetime/zone_utc_map.go:340
 msgid "Canada (UTC-06) East Saskatchewan"
-msgstr ""
+msgstr "加拿大（UTC-06）东萨斯喀彻温"
 
 #: ../../datetime/zone_utc_map.go:341
 msgid "Canada (UTC-07) Mountain"
-msgstr ""
+msgstr "加拿大（UTC-07）山区"
 
 #: ../../datetime/zone_utc_map.go:342
 msgid "Canada (UTC-08) Newfoundland"
-msgstr ""
+msgstr "加拿大（UTC-08）纽芬兰"
 
 #: ../../datetime/zone_utc_map.go:343
 msgid "Canada (UTC-06) Saskatchewan"
-msgstr ""
+msgstr "加拿大（UTC-06）萨斯喀彻温"
 
 #: ../../datetime/zone_utc_map.go:344
 msgid "Canada (UTC-08) Yukon"
-msgstr ""
+msgstr "加拿大（UTC-08）育空"
 
 #: ../../datetime/zone_utc_map.go:345
 msgid "USA (UTC+01) CET"
-msgstr ""
+msgstr "美国（UTC+01）欧洲中部时间"
 
 #: ../../datetime/zone_utc_map.go:346
 msgid "Chile (UTC-04) Continental"
-msgstr ""
+msgstr "智利（UTC-04）大陆"
 
 #: ../../datetime/zone_utc_map.go:347
 msgid "Chile (UTC-06) EasterIsland"
-msgstr ""
+msgstr "智利（UTC-06）复活节岛"
 
 #: ../../datetime/zone_utc_map.go:348
 msgid "Cuba (UTC-05) Cuba"
-msgstr ""
+msgstr "古巴（UTC-05）古巴"
 
 #: ../../datetime/zone_utc_map.go:349
 msgid "USA (UTC+02) EET"
-msgstr ""
+msgstr "美国（UTC+02）欧洲东部时间"
 
 #: ../../datetime/zone_utc_map.go:350
 msgid "Egypt (UTC+02) Egypt"
-msgstr ""
+msgstr "埃及（UTC+02）埃及"
 
 #: ../../datetime/zone_utc_map.go:351
 msgid "Ireland (UTC+00) Eire"
-msgstr ""
+msgstr "爱尔兰（UTC+00）爱尔兰"
 
 #: ../../datetime/zone_utc_map.go:352
 msgid "Uganda (UTC-05) EST"
-msgstr ""
+msgstr "乌干达（UTC-05）东部标准时间"
 
 #: ../../datetime/zone_utc_map.go:353
 msgid "The Netherlands (UTC+01) Amsterdam"
-msgstr ""
+msgstr "荷兰（UTC+01）阿姆斯特丹"
 
 #: ../../datetime/zone_utc_map.go:354
 msgid "Andorra (UTC+01) Andorra"
-msgstr ""
+msgstr "安道​​尔（UTC+01）安道尔"
 
 #: ../../datetime/zone_utc_map.go:355
 msgid "Greece (UTC+02) Athens"
-msgstr ""
+msgstr "希腊（UTC+02）雅典"
 
 #: ../../datetime/zone_utc_map.go:356
 msgid "UK (UTC+00) Belfast"
-msgstr ""
+msgstr "英国（UTC+00）贝尔法斯特"
 
 #: ../../datetime/zone_utc_map.go:357
 msgid "Serbia (UTC+01) Belgrade"
-msgstr ""
+msgstr "塞尔维亚（UTC+01）贝尔格莱德"
 
 #: ../../datetime/zone_utc_map.go:358
 msgid "Germany (UTC+01) Berlin"
-msgstr ""
+msgstr "德国（UTC+01）柏林"
 
 #: ../../datetime/zone_utc_map.go:359
 msgid "Slovakia (UTC+01) Bratislava"
-msgstr ""
+msgstr "斯洛伐克（UTC+01）布拉迪斯拉发"
 
 #: ../../datetime/zone_utc_map.go:360
 msgid "Belgium (UTC+01) Brussels"
-msgstr ""
+msgstr "比利时（UTC+01）布鲁塞尔"
 
 #: ../../datetime/zone_utc_map.go:361
 msgid "Romania (UTC+02) Bucharest"
-msgstr ""
+msgstr "罗马尼亚（UTC+02）布加勒斯特"
 
 #: ../../datetime/zone_utc_map.go:362
 msgid "Hungary (UTC+01) Budapest"
-msgstr ""
+msgstr "匈牙利（UTC+01）布达佩斯"
 
 #: ../../datetime/zone_utc_map.go:363
 msgid "Moldova (UTC+02) Chisinau"
-msgstr ""
+msgstr "摩尔多瓦（UTC+02）基希讷乌"
 
 #: ../../datetime/zone_utc_map.go:364
 msgid "Denmark (UTC+01) Copenhagen"
-msgstr ""
+msgstr "丹麦（UTC+01）哥本哈根"
 
 #: ../../datetime/zone_utc_map.go:365
 msgid "Ireland (UTC+00) Dublin"
-msgstr ""
+msgstr "爱尔兰（UTC+00）都柏林"
 
 #: ../../datetime/zone_utc_map.go:366
 msgid "Gibraltar (UTC+01) Gibraltar"
-msgstr ""
+msgstr "直布罗陀（UTC+01）直布罗陀"
 
 #: ../../datetime/zone_utc_map.go:367
 msgid "Guernsey (UTC+00) Guernsey"
-msgstr ""
+msgstr "根西岛（UTC+00）根西岛"
 
 #: ../../datetime/zone_utc_map.go:368
 msgid "Finland (UTC+02) Helsinki"
-msgstr ""
+msgstr "芬兰（UTC+02）赫尔辛基"
 
 #: ../../datetime/zone_utc_map.go:369
 msgid "Isle of Man (UTC+00) Isle of Man"
-msgstr ""
+msgstr "马恩岛（UTC+00）马恩岛"
 
 #: ../../datetime/zone_utc_map.go:371
 msgid "Jersey (UTC+00) Jersey"
-msgstr ""
+msgstr "泽西岛（UTC+00）泽西岛"
 
 #: ../../datetime/zone_utc_map.go:372
 msgid "Russia (UTC+03) Kaliningrad"
-msgstr ""
+msgstr "俄罗斯（UTC+03）加里宁格勒"
 
 #: ../../datetime/zone_utc_map.go:373
 msgid "Ukraine (UTC+02) Kiev"
-msgstr ""
+msgstr "乌克兰（UTC+02）基辅"
 
 #: ../../datetime/zone_utc_map.go:374
 msgid "Portugal (UTC+00) Lisbon"
-msgstr ""
+msgstr "葡萄牙（UTC+00）里斯本"
 
 #: ../../datetime/zone_utc_map.go:375
 msgid "Slovenia (UTC+01) Ljubljana"
-msgstr ""
+msgstr "斯洛文尼亚（UTC+01）卢布尔雅那"
 
 #: ../../datetime/zone_utc_map.go:376
 msgid "UK (UTC+00) London"
-msgstr ""
+msgstr "英国（UTC+00）伦敦"
 
 #: ../../datetime/zone_utc_map.go:377
 msgid "Luxembourg (UTC+01) Luxembourg"
-msgstr ""
+msgstr "卢森堡（UTC+01）卢森堡"
 
 #: ../../datetime/zone_utc_map.go:378
 msgid "Spain (UTC+01) Madrid"
-msgstr ""
+msgstr "西班牙（UTC+01）马德里"
 
 #: ../../datetime/zone_utc_map.go:379
 msgid "Malta (UTC+01) Malta"
-msgstr ""
+msgstr "马耳他（UTC+01）马耳他"
 
 #: ../../datetime/zone_utc_map.go:380
 msgid "Aland Islands (UTC+02) Mariehamn"
-msgstr ""
+msgstr "奥兰群岛（UTC+02）玛丽汉姆"
 
 #: ../../datetime/zone_utc_map.go:381
 msgid "Belarus (UTC+03) Minsk"
-msgstr ""
+msgstr "白俄罗斯（UTC+03）明斯克"
 
 #: ../../datetime/zone_utc_map.go:382
 msgid "Monaco (UTC+01) Monaco"
-msgstr ""
+msgstr "摩纳哥（UTC+01）摩纳哥"
 
 #: ../../datetime/zone_utc_map.go:383
 msgid "Russia (UTC+04) Moscow"
-msgstr ""
+msgstr "俄罗斯（UTC+04）莫斯科"
 
 #: ../../datetime/zone_utc_map.go:384
 msgid "Italy (UTC+02) Nicosia"
-msgstr ""
+msgstr "意大利（UTC+02）尼科西亚"
 
 #: ../../datetime/zone_utc_map.go:385
 msgid "Norway (UTC+01) Oslo"
-msgstr ""
+msgstr "挪威（UTC+01）奥斯陆"
 
 #: ../../datetime/zone_utc_map.go:386
 msgid "France (UTC+01) Paris"
-msgstr ""
+msgstr "法国（UTC+01）巴黎"
 
 #: ../../datetime/zone_utc_map.go:387
 msgid "Montenegro (UTC+01) Podgorica"
-msgstr ""
+msgstr "黑山（UTC+01）波德戈里察"
 
 #: ../../datetime/zone_utc_map.go:388
 msgid "Czech Republic (UTC+01) Prague"
-msgstr ""
+msgstr "捷克（UTC+01）布拉格"
 
 #: ../../datetime/zone_utc_map.go:389
 msgid "Latvia (UTC+02) Riga"
-msgstr ""
+msgstr "拉脱维亚（UTC+02）里加"
 
 #: ../../datetime/zone_utc_map.go:390
 msgid "Italy (UTC+01) Rome"
-msgstr ""
+msgstr "意大利（UTC+01）罗马"
 
 #: ../../datetime/zone_utc_map.go:391
 msgid "Russia (UTC+04) Samara"
-msgstr ""
+msgstr "俄罗斯（UTC+04）萨马拉"
 
 #: ../../datetime/zone_utc_map.go:392
 msgid "San Marino (UTC+01) San Marino"
-msgstr ""
+msgstr "圣马力诺（UTC+01）圣马力诺"
 
 #: ../../datetime/zone_utc_map.go:393
 msgid "Bosnia and Herzegovina (UTC+01) Sarajevo"
-msgstr ""
+msgstr "波斯尼亚和黑塞哥维那（UTC+01）萨拉热窝"
 
 #: ../../datetime/zone_utc_map.go:394
 msgid "Ukraine (UTC+02) Simferopol"
-msgstr ""
+msgstr "乌克兰（UTC+02）辛菲罗波尔"
 
 #: ../../datetime/zone_utc_map.go:395
 msgid "Macedonia (FYROM) (UTC+01) Skopje"
-msgstr ""
+msgstr "马其顿（UTC+01）斯科普里"
 
 #: ../../datetime/zone_utc_map.go:396
 msgid "Bulgaria (UTC+02) Sofia"
-msgstr ""
+msgstr "保加利亚（UTC+02）索菲亚"
 
 #: ../../datetime/zone_utc_map.go:397
 msgid "Sweden (UTC+01) Stockholm"
-msgstr ""
+msgstr "瑞典（UTC+01）斯德哥尔摩"
 
 #: ../../datetime/zone_utc_map.go:398
 msgid "Estonia (UTC+02) Tallinn"
-msgstr ""
+msgstr "爱沙尼亚（UTC+02）塔林"
 
 #: ../../datetime/zone_utc_map.go:399
 msgid "Albania (UTC+01) Tirane"
-msgstr ""
+msgstr "阿尔巴尼亚（UTC+01）地拉那"
 
 #: ../../datetime/zone_utc_map.go:400
 msgid "Moldova (UTC+02) Tiraspol"
-msgstr ""
+msgstr "摩尔多瓦（UTC+02）蒂拉斯波尔"
 
 #: ../../datetime/zone_utc_map.go:401
 msgid "Ukraine (UTC+02) Uzhgorod"
-msgstr ""
+msgstr "乌克兰（UTC+02）乌日哥罗德"
 
 #: ../../datetime/zone_utc_map.go:402
 msgid "Liechtenstein (UTC+01) Vaduz"
-msgstr ""
+msgstr "列支敦士登（UTC+01）瓦杜兹"
 
 #: ../../datetime/zone_utc_map.go:403
 msgid "Vatican City (UTC+01) Vatican"
-msgstr ""
+msgstr "梵蒂冈（UTC+01）梵蒂冈"
 
 #: ../../datetime/zone_utc_map.go:404
 msgid "Austria (UTC+01) Vienna"
-msgstr ""
+msgstr "奥地利（UTC+01）维也纳"
 
 #: ../../datetime/zone_utc_map.go:405
 msgid "Lithuania (UTC+02) Vilnius"
-msgstr ""
+msgstr "立陶宛（UTC+02）维尔纽斯"
 
 #: ../../datetime/zone_utc_map.go:406
 msgid "Russia (UTC+04) Volgograd"
-msgstr ""
+msgstr "俄罗斯（UTC+04）伏尔加格勒"
 
 #: ../../datetime/zone_utc_map.go:407
 msgid "Poland (UTC+01) Warsaw"
-msgstr ""
+msgstr "波兰（UTC+01）华沙"
 
 #: ../../datetime/zone_utc_map.go:408
 msgid "Croatia (UTC+01) Zagreb"
-msgstr ""
+msgstr "克罗地亚（UTC+01）萨格勒布"
 
 #: ../../datetime/zone_utc_map.go:409
 msgid "Ukraine (UTC+02) Zaporozhye"
-msgstr ""
+msgstr "乌克兰（UTC+02）扎波罗热"
 
 #: ../../datetime/zone_utc_map.go:410
 msgid "Switzerland (UTC+01) Zurich"
-msgstr ""
+msgstr "瑞士（UTC+01）苏黎世"
 
 #: ../../datetime/zone_utc_map.go:411
 msgid "United Kingdom (UTC+00) GB"
-msgstr ""
+msgstr "英国（UTC+00）英国时间"
 
 #: ../../datetime/zone_utc_map.go:412
 msgid "Ireland (UTC+00) GB Eire"
-msgstr ""
+msgstr "爱尔兰（UTC+00）爱尔兰时间"
 
 #: ../../datetime/zone_utc_map.go:413
 msgid "USA (UTC+00) GMT"
-msgstr ""
+msgstr "美国（UTC+00）格林尼治平时"
 
 #: ../../datetime/zone_utc_map.go:414
-msgid "Brazil (UTC+00) GMT+0"
-msgstr ""
+msgid "Brazil (UTC+00) GMT"
+msgstr "巴西（UTC+00）格林尼治平时"
 
 #: ../../datetime/zone_utc_map.go:415
-msgid "Brazil (UTC+00) GMT0"
-msgstr ""
+msgid "UK (UTC+00) Greenwich"
+msgstr "英国（UTC+00）格林尼治"
 
 #: ../../datetime/zone_utc_map.go:416
-msgid "Brazil (UTC+00) GMT 0"
-msgstr ""
+msgid "Hong Kong (UTC+08) Hongkong"
+msgstr "香港（UTC+08）香港"
 
 #: ../../datetime/zone_utc_map.go:417
-msgid "UK (UTC+00) Greenwich"
-msgstr ""
+msgid "Indonesia (UTC-10) HST"
+msgstr "印度尼西亚（UTC-10）夏威夷-阿留申标准时间"
 
 #: ../../datetime/zone_utc_map.go:418
-msgid "Hong Kong (UTC+08) Hongkong"
-msgstr ""
+msgid "Iceland (UTC+00) Iceland"
+msgstr "冰岛（UTC+00）冰岛"
 
 #: ../../datetime/zone_utc_map.go:419
-msgid "Indonesia (UTC-10) HST"
-msgstr ""
+msgid "Madagascar (UTC+03) Antananarivo"
+msgstr "马达加斯加（UTC+03）塔那那利佛"
 
 #: ../../datetime/zone_utc_map.go:420
-msgid "Iceland (UTC+00) Iceland"
-msgstr ""
+msgid "British Indian Ocean Territory (UTC+06) Chagos"
+msgstr "英属印度洋领地（UTC+06）查戈斯"
 
 #: ../../datetime/zone_utc_map.go:421
-msgid "Madagascar (UTC+03) Antananarivo"
-msgstr ""
+msgid "Christmas Island (UTC+07) Christmas"
+msgstr "圣诞岛（UTC+07）圣诞岛"
 
 #: ../../datetime/zone_utc_map.go:422
-msgid "British Indian Ocean Territory (UTC+06) Chagos"
-msgstr ""
+msgid "Grande Terre (UTC+05) Kerguelen"
+msgstr "格朗德特尔（UTC+05）凯尔盖朗"
 
 #: ../../datetime/zone_utc_map.go:423
-msgid "Christmas Island (UTC+07) Christmas"
-msgstr ""
+msgid "Seychelles (UTC+04) Mahe"
+msgstr "塞舌尔（UTC+04）马埃"
 
 #: ../../datetime/zone_utc_map.go:424
-msgid "Grande Terre (UTC+05) Kerguelen"
-msgstr ""
+msgid "Maldives (UTC+05) Maldives"
+msgstr "马尔代夫（UTC+05）马尔代夫"
 
 #: ../../datetime/zone_utc_map.go:425
-msgid "Seychelles (UTC+04) Mahe"
-msgstr ""
+msgid "India (UTC+04) Mauritius"
+msgstr "印度（UTC+04）毛里求斯"
 
 #: ../../datetime/zone_utc_map.go:426
-msgid "Maldives (UTC+05) Maldives"
-msgstr ""
+msgid "USA (UTC+04) Reunion"
+msgstr "美国（UTC+04）留尼旺岛"
 
 #: ../../datetime/zone_utc_map.go:427
-msgid "India (UTC+04) Mauritius"
-msgstr ""
+msgid "Iran (UTC+02) Iran"
+msgstr "伊朗（UTC+02）伊朗"
 
 #: ../../datetime/zone_utc_map.go:428
-msgid "USA (UTC+04) Reunion"
-msgstr ""
+msgid "Jamaica (UTC-05) Jamaica"
+msgstr "牙买加（UTC-05）牙买加"
 
 #: ../../datetime/zone_utc_map.go:429
-msgid "Iran (UTC+02) Iran"
-msgstr ""
+msgid "Japan (UTC+09) Japan"
+msgstr "日本（UTC+09）日本"
 
-#: ../../datetime/zone_utc_map.go:430
-msgid "Jamaica (UTC-05) Jamaica"
-msgstr ""
+#: ../../datetime/zone_utc_map.go:430 ../../datetime/zone_utc_map.go:454
+msgid "RMI (UTC+12) Kwajalein"
+msgstr "RMI（UTC+12）夸贾林"
 
 #: ../../datetime/zone_utc_map.go:431
-msgid "Japan (UTC+09) Japan"
-msgstr ""
+msgid "Libya (UTC+02) Libya"
+msgstr "利比亚（UTC+02）利比亚"
 
-#: ../../datetime/zone_utc_map.go:432 ../../datetime/zone_utc_map.go:456
-msgid "RMI (UTC+12) Kwajalein"
-msgstr ""
+#: ../../datetime/zone_utc_map.go:432
+msgid "France (UTC+01) MET"
+msgstr "法国（UTC+01）欧洲中部时间"
 
 #: ../../datetime/zone_utc_map.go:433
-msgid "Libya (UTC+02) Libya"
-msgstr ""
+msgid "Mexico (UTC-08) BajaNorte"
+msgstr "墨西哥（UTC-08）下加利福尼亚"
 
 #: ../../datetime/zone_utc_map.go:434
-msgid "France (UTC+01) MET"
-msgstr ""
+msgid "Mexico (UTC-07) BajaSur"
+msgstr "墨西哥（UTC-07）南下加里福尼亚"
 
 #: ../../datetime/zone_utc_map.go:435
-msgid "Mexico (UTC-08) BajaNorte"
-msgstr ""
+msgid "Mexico (UTC-06) General"
+msgstr "墨西哥（UTC-06）通用"
 
 #: ../../datetime/zone_utc_map.go:436
-msgid "Mexico (UTC-07) BajaSur"
-msgstr ""
+msgid "The Netherlands (UTC-07) MST"
+msgstr "荷兰（UTC-07）山区标准时间"
 
 #: ../../datetime/zone_utc_map.go:437
-msgid "Mexico (UTC-06) General"
-msgstr ""
+msgid "USA (UTC-07) Navajo"
+msgstr "美国（UTC-07）纳瓦霍"
 
 #: ../../datetime/zone_utc_map.go:438
-msgid "The Netherlands (UTC-07) MST"
-msgstr ""
+msgid "New Zealand (UTC+12) NZ"
+msgstr "新西兰（UTC+12）新西兰"
 
 #: ../../datetime/zone_utc_map.go:439
-msgid "USA (UTC-07) Navajo"
-msgstr ""
+msgid "New Zealand (UTC+12) Auckland"
+msgstr "新西兰（UTC+12）奥克兰"
 
 #: ../../datetime/zone_utc_map.go:440
-msgid "New Zealand (UTC+12) NZ"
-msgstr ""
+msgid "USA (UTC+10) Chatham"
+msgstr "美国（UTC+10）查塔姆"
 
 #: ../../datetime/zone_utc_map.go:441
-msgid "New Zealand (UTC+12) Auckland"
-msgstr ""
+msgid "USA (UTC-06) Easter"
+msgstr "美国（UTC-06）复活节岛"
 
 #: ../../datetime/zone_utc_map.go:442
-msgid "USA (UTC+10) Chatham"
-msgstr ""
+msgid "Vanuatu (UTC+11) Efate"
+msgstr "瓦努阿图（UTC+11）埃法特"
 
 #: ../../datetime/zone_utc_map.go:443
-msgid "USA (UTC-06) Easter"
-msgstr ""
+msgid "Australia (UTC+13) Enderbury"
+msgstr "澳大利亚（UTC+13）恩德伯里"
 
 #: ../../datetime/zone_utc_map.go:444
-msgid "Vanuatu (UTC+11) Efate"
-msgstr ""
+msgid "Tokelau (UTC+13) Fakaofo"
+msgstr "托克劳（UTC+13）法考福"
 
 #: ../../datetime/zone_utc_map.go:445
-msgid "Australia (UTC+13) Enderbury"
-msgstr ""
+msgid "Fiji (UTC+12) Fiji"
+msgstr "斐济（UTC+12）斐济"
 
 #: ../../datetime/zone_utc_map.go:446
-msgid "Tokelau (UTC+13) Fakaofo"
-msgstr ""
+msgid "Tuvalu (UTC+12) Funafuti"
+msgstr "图瓦卢（UTC+12）富纳富提"
 
 #: ../../datetime/zone_utc_map.go:447
-msgid "Fiji (UTC+12) Fiji"
-msgstr ""
+msgid "Australia (UTC-06) Galapagos"
+msgstr "澳大利亚（UTC-06）加拉帕戈斯"
 
 #: ../../datetime/zone_utc_map.go:448
-msgid "Tuvalu (UTC+12) Funafuti"
-msgstr ""
+msgid "Australia (UTC-09) Gambier"
+msgstr "澳大利亚（UTC-09）甘比尔"
 
 #: ../../datetime/zone_utc_map.go:449
-msgid "Australia (UTC-06) Galapagos"
-msgstr ""
+msgid "Solomon Islands (UTC+11) Guadalcanal"
+msgstr "索罗门群岛（UTC+11）瓜达尔卡纳尔"
 
 #: ../../datetime/zone_utc_map.go:450
-msgid "Australia (UTC-09) Gambier"
-msgstr ""
+msgid "Guam (UTC+10) Guam"
+msgstr "关岛（UTC+10）关岛"
 
 #: ../../datetime/zone_utc_map.go:451
-msgid "Solomon Islands (UTC+11) Guadalcanal"
-msgstr ""
+msgid "Hawaii 96813 (UTC-10) Honolulu"
+msgstr "夏威夷96813（UTC-10）檀香山"
 
 #: ../../datetime/zone_utc_map.go:452
-msgid "Guam (UTC+10) Guam"
-msgstr ""
+msgid "USA (UTC-10) Johnston"
+msgstr "美国（UTC-10）约翰斯顿"
 
 #: ../../datetime/zone_utc_map.go:453
-msgid "Hawaii 96813 (UTC-10) Honolulu"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:454
-msgid "USA (UTC-10) Johnston"
-msgstr ""
+msgid "Australia (UTC+11) Kosrae"
+msgstr "澳大利亚（UTC+11）科斯雷"
 
 #: ../../datetime/zone_utc_map.go:455
-msgid "Australia (UTC+11) Kosrae"
-msgstr ""
+msgid "French Polynesia (UTC-11) Marquesas"
+msgstr "法属波利尼西亚（UTC-11）马克萨斯"
+
+#: ../../datetime/zone_utc_map.go:456
+msgid "Australia (UTC+12) Nauru"
+msgstr "澳大利亚（UTC+12）诺鲁"
 
 #: ../../datetime/zone_utc_map.go:457
-msgid "French Polynesia (UTC-11) Marquesas"
-msgstr ""
+msgid "Niue (UTC-11) Niue"
+msgstr "纽埃（UTC-11）纽埃"
 
 #: ../../datetime/zone_utc_map.go:458
-msgid "Australia (UTC+12) Nauru"
-msgstr ""
+msgid "USA (UTC+11) Norfolk"
+msgstr "美国（UTC+11）诺福克"
 
 #: ../../datetime/zone_utc_map.go:459
-msgid "Niue (UTC-11) Niue"
-msgstr ""
+msgid "Australia (UTC+09) Palau"
+msgstr "澳大利亚（UTC+09）帕劳"
 
 #: ../../datetime/zone_utc_map.go:460
-msgid "USA (UTC+11) Norfolk"
-msgstr ""
+msgid "Australia (UTC-08) Pitcairn"
+msgstr "澳大利亚（UTC-08）皮特凯恩"
 
 #: ../../datetime/zone_utc_map.go:461
-msgid "Australia (UTC+09) Palau"
-msgstr ""
+msgid "Micronesia (UTC+11) Pohnpei"
+msgstr "密克罗尼西亚（UTC+11）波纳佩"
 
 #: ../../datetime/zone_utc_map.go:462
-msgid "Australia (UTC-08) Pitcairn"
-msgstr ""
+msgid "Micronesia (UTC+11) Ponape"
+msgstr "密克罗尼西亚（UTC+11）波纳佩岛"
 
 #: ../../datetime/zone_utc_map.go:463
-msgid "Micronesia (UTC+11) Pohnpei"
-msgstr ""
+msgid "Papua New Guinea (UTC+10) Port Moresby"
+msgstr "巴布亚新几内亚（UTC+10）莫尔兹比港"
 
 #: ../../datetime/zone_utc_map.go:464
-msgid "Micronesia (UTC+11) Ponape"
-msgstr ""
+msgid "Australia (UTC-10) Rarotonga"
+msgstr "澳大利亚（UTC-10）拉罗汤加岛"
 
 #: ../../datetime/zone_utc_map.go:465
-msgid "Papua New Guinea (UTC+10) Port Moresby"
-msgstr ""
+msgid "CNMI (UTC+10) Saipan"
+msgstr "北马里亚纳群岛联邦（UTC+10）塞班岛"
 
-#: ../../datetime/zone_utc_map.go:466
-msgid "Australia (UTC-10) Rarotonga"
-msgstr ""
+#: ../../datetime/zone_utc_map.go:466 ../../datetime/zone_utc_map.go:492
+msgid "USA (UTC-11) Samoa"
+msgstr "美国（UTC-11）萨摩亚"
 
 #: ../../datetime/zone_utc_map.go:467
-msgid "CNMI (UTC+10) Saipan"
-msgstr ""
+msgid "French Polynesia (UTC-10) Tahiti"
+msgstr "法属波利尼西亚（UTC-10）大溪地"
 
-#: ../../datetime/zone_utc_map.go:468 ../../datetime/zone_utc_map.go:495
-msgid "USA (UTC-11) Samoa"
-msgstr ""
+#: ../../datetime/zone_utc_map.go:468
+msgid "Kiribati (UTC+12) Tarawa"
+msgstr "基里巴斯（UTC+12）塔拉瓦"
 
 #: ../../datetime/zone_utc_map.go:469
-msgid "French Polynesia (UTC-10) Tahiti"
-msgstr ""
+msgid "Tonga (UTC+13) Tongatapu"
+msgstr "汤加（UTC+13）汤加塔布"
 
 #: ../../datetime/zone_utc_map.go:470
-msgid "Kiribati (UTC+12) Tarawa"
-msgstr ""
+msgid "USA (UTC+10) Truk"
+msgstr "美国（UTC+10）特鲁克"
 
 #: ../../datetime/zone_utc_map.go:471
-msgid "Tonga (UTC+13) Tongatapu"
-msgstr ""
+msgid "USA (UTC+12) Wake"
+msgstr "美国（UTC+12）维克"
 
 #: ../../datetime/zone_utc_map.go:472
-msgid "USA (UTC+10) Truk"
-msgstr ""
+msgid "Australia (UTC+12) Wallis"
+msgstr "澳大利亚（UTC+12）瓦利斯"
 
 #: ../../datetime/zone_utc_map.go:473
-msgid "USA (UTC+12) Wake"
-msgstr ""
+msgid "Poland (UTC+01) Poland"
+msgstr "波兰（UTC+01）波兰"
 
 #: ../../datetime/zone_utc_map.go:474
-msgid "Australia (UTC+12) Wallis"
-msgstr ""
+msgid "Portugal (UTC+00) Portugal"
+msgstr "葡萄牙（UTC+00）葡萄牙"
 
 #: ../../datetime/zone_utc_map.go:475
-msgid "Poland (UTC+01) Poland"
-msgstr ""
+msgid "USA (UTC+08) PRC"
+msgstr "美国（UTC+08）中国"
 
 #: ../../datetime/zone_utc_map.go:476
-msgid "Portugal (UTC+00) Portugal"
-msgstr ""
+msgid "Czech Republic (UTC+09) ROK"
+msgstr "捷克共和国（UTC+09）韩国"
 
 #: ../../datetime/zone_utc_map.go:477
-msgid "USA (UTC+08) PRC"
-msgstr ""
+msgid "Turkey (UTC+02) Turkey"
+msgstr "土耳其（UTC+02）土耳其"
 
 #: ../../datetime/zone_utc_map.go:478
-msgid "USA (UTC+08) ROC"
-msgstr ""
+msgid "South Africa (UTC+00) UCT"
+msgstr "南非（UTC+00）南非"
 
 #: ../../datetime/zone_utc_map.go:479
-msgid "Czech Republic (UTC+09) ROK"
-msgstr ""
+msgid "USA (UTC+00) Universal"
+msgstr "美国（UTC+00）世界时"
 
 #: ../../datetime/zone_utc_map.go:480
-msgid "Turkey (UTC+02) Turkey"
-msgstr ""
+msgid "USA (UTC-09) Alaska"
+msgstr "美国（UTC-09）阿拉斯加"
 
 #: ../../datetime/zone_utc_map.go:481
-msgid "South Africa (UTC+00) UCT"
-msgstr ""
+msgid "USA (UTC-10) Aleutian"
+msgstr "美国（UTC-10）阿留申"
 
 #: ../../datetime/zone_utc_map.go:482
-msgid "USA (UTC+00) Universal"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:483
-msgid "USA (UTC-09) Alaska"
-msgstr ""
+msgid "USA (UTC-07) Arizona"
+msgstr "美国（UTC-07）亚利桑那"
 
 #: ../../datetime/zone_utc_map.go:484
-msgid "USA (UTC-10) Aleutian"
-msgstr ""
+msgid "USA (UTC-05) Eastern"
+msgstr "美国（UTC-05）东部"
 
 #: ../../datetime/zone_utc_map.go:485
-msgid "USA (UTC-07) Arizona"
-msgstr ""
+msgid "USA (UTC-05) East Indiana"
+msgstr "美国（UTC-05）东印第安纳州"
+
+#: ../../datetime/zone_utc_map.go:486
+msgid "USA (UTC-10) Hawaii"
+msgstr "美国（UTC-10）夏威夷"
 
 #: ../../datetime/zone_utc_map.go:487
-msgid "USA (UTC-05) Eastern"
-msgstr ""
+msgid "USA (UTC-06) Indiana Starke"
+msgstr "美国（UTC-06）印第安纳斯塔克"
 
 #: ../../datetime/zone_utc_map.go:488
-msgid "USA (UTC-05) East Indiana"
-msgstr ""
+msgid "USA (UTC-05) Michigan"
+msgstr "美国（UTC-05）密歇根"
 
 #: ../../datetime/zone_utc_map.go:489
-msgid "USA (UTC-10) Hawaii"
-msgstr ""
+msgid "USA (UTC-07) Mountain"
+msgstr "美国（UTC-07）山区"
 
 #: ../../datetime/zone_utc_map.go:490
-msgid "USA (UTC-06) Indiana Starke"
-msgstr ""
+msgid "USA (UTC-08) Pacific"
+msgstr "美国（UTC-08）太平洋"
 
 #: ../../datetime/zone_utc_map.go:491
-msgid "USA (UTC-05) Michigan"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:492
-msgid "USA (UTC-07) Mountain"
-msgstr ""
+msgid "USA (UTC-08) Pacific New"
+msgstr "美国（UTC-08）新太平洋"
 
 #: ../../datetime/zone_utc_map.go:493
-msgid "USA (UTC-08) Pacific"
-msgstr ""
+msgid "USA (UTC+00) UTC"
+msgstr "美国（UTC+00）UTC"
 
 #: ../../datetime/zone_utc_map.go:494
-msgid "USA (UTC-08) Pacific New"
-msgstr ""
+msgid "USA (UTC+00) WET"
+msgstr "美国（UTC+00）欧洲西部时间"
+
+#: ../../datetime/zone_utc_map.go:495
+msgid "WA (UTC+04) W SU"
+msgstr "华盛顿州（UTC+04）华盛顿州立大学"
 
 #: ../../datetime/zone_utc_map.go:496
-msgid "USA (UTC+00) UTC"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:497
-msgid "USA (UTC+00) WET"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:498
-msgid "WA (UTC+04) W SU"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:499
 msgid "USA (UTC+00) Zulu"
-msgstr ""
+msgstr "美国（UTC+00）祖鲁"
 
 #: ../../dock-apps-builder/normal_apps.go:48
 msgid "_Run"
-msgstr ""
+msgstr "运行(_R)"
 
 #: ../../dock-apps-builder/normal_apps.go:63
 msgid "_Undock"
-msgstr ""
+msgstr "移除驻留(_U)"
 
 #: ../../dock-apps-builder/runtime_apps.go:148
 msgid "_Close All"
-msgstr ""
+msgstr "关闭所有(_C)"
 
 #: ../../dock-apps-builder/runtime_apps.go:175
 msgid "_Dock"
-msgstr ""
+msgstr "驻留(_D)"
 
 #: ../../keybinding/system-map.go:69
 msgid "Launcher"
-msgstr ""
+msgstr "启动器"
 
 #: ../../keybinding/system-map.go:70
 msgid "Show desktop"
-msgstr ""
+msgstr "显示桌面"
 
 #: ../../keybinding/system-map.go:71
 msgid "Lock screen"
-msgstr ""
+msgstr "锁屏界面"
 
 #: ../../keybinding/system-map.go:72
 msgid "File manager"
-msgstr ""
+msgstr "文件管理器"
 
 #: ../../keybinding/system-map.go:73
 msgid "Switch applications"
-msgstr ""
+msgstr "切换程序"
 
+# msgid "Reverse switch applications"
 #: ../../keybinding/system-map.go:74
+#, fuzzy
 msgid "Reverse switch applications"
-msgstr ""
+msgstr "反向切换程序"
 
 #: ../../keybinding/system-map.go:75
 msgid "Switch applications with 3D effect"
-msgstr ""
+msgstr "使用3D效果切换程序"
 
+# msgid "Reverse switch applications with 3D effect"
 #: ../../keybinding/system-map.go:76
+#, fuzzy
 msgid "Reverse switch applications with 3D effect"
-msgstr ""
+msgstr "使用3D效果反向切换程序"
 
 #: ../../keybinding/system-map.go:77
 msgid "Show/Hide the dock"
-msgstr ""
+msgstr "显示/隐藏任务栏"
 
 #: ../../keybinding/system-map.go:78
 msgid "Take a screenshot"
-msgstr ""
+msgstr "屏幕截图"
 
 #: ../../keybinding/system-map.go:79
 msgid "Take a screenshot of full screen"
-msgstr ""
+msgstr "充分屏幕截图"
 
 #: ../../keybinding/system-map.go:80
 msgid "Take a screenshot of a window"
-msgstr ""
+msgstr "以一个窗口的屏幕截图"
 
 #: ../../keybinding/system-map.go:81
 msgid "Take a screenshot delayed"
-msgstr ""
+msgstr "采取拖延的截图"
 
 #: ../../keybinding/system-map.go:82
 msgid "Terminal"
-msgstr ""
+msgstr "终端"
 
 #: ../../keybinding/system-map.go:83
 msgid "Terminal Quake Window"
-msgstr ""
+msgstr "终端雷神之锤窗口"
 
 #: ../../keybinding/system-map.go:84
 msgid "Logout"
-msgstr ""
+msgstr "注销"
 
 #: ../../keybinding/system-map.go:85
 msgid "Disable Touchpad"
-msgstr ""
+msgstr "禁用触摸板"
 
 #: ../../keybinding/system-map.go:121
 msgid "Launch calculator"
-msgstr ""
+msgstr "启动计算器"
 
 #: ../../keybinding/system-map.go:122
 msgid "Launch email client"
-msgstr ""
+msgstr "启动电子邮件客户端"
 
 #: ../../keybinding/system-map.go:123
 msgid "Launch web browser"
-msgstr ""
+msgstr "启动网页浏览器"
 
 #: ../../keybinding/system-map.go:124
 msgid "Launch media player"
-msgstr ""
+msgstr "启动媒体播放器"
 
 #: ../../keybinding/system-map.go:125
 msgid "Play (or play/pause)"
-msgstr ""
+msgstr "播放（或播放/暂停）"
 
 #: ../../keybinding/system-map.go:126
 msgid "Pause playback"
-msgstr ""
+msgstr "暂停播放"
 
 #: ../../keybinding/system-map.go:127
 msgid "Stop playback"
-msgstr ""
+msgstr "停止播放"
 
 #: ../../keybinding/system-map.go:128
 msgid "Volume mute"
-msgstr ""
+msgstr "静音"
 
 #: ../../keybinding/system-map.go:129
 msgid "Volume down"
-msgstr ""
+msgstr "减小音量"
 
 #: ../../keybinding/system-map.go:130
 msgid "Volume up"
-msgstr ""
+msgstr "增大音量"
 
 #: ../../keybinding/system-map.go:131
 msgid "Previous track"
-msgstr ""
+msgstr "上一曲目"
 
 #: ../../keybinding/system-map.go:132
 msgid "Next track"
-msgstr ""
+msgstr "下一首曲目"
 
 #: ../../keybinding/system-map.go:133
 msgid "Eject"
-msgstr ""
+msgstr "推出"
 
 #: ../../keybinding/system-map.go:159
 msgid "Close window"
-msgstr ""
+msgstr "关闭窗口"
 
 #: ../../keybinding/system-map.go:160
 msgid "Maximize window"
-msgstr ""
+msgstr "最大化窗口"
 
 #: ../../keybinding/system-map.go:161
 msgid "Restore window"
-msgstr ""
+msgstr "恢复窗口"
 
 #: ../../keybinding/system-map.go:162
 msgid "Minimize window"
-msgstr ""
+msgstr "最小化窗口"
 
 #: ../../keybinding/system-map.go:163
 msgid "Move window"
-msgstr ""
+msgstr "移动窗口"
 
 #: ../../keybinding/system-map.go:164
 msgid "Resize window"
-msgstr ""
+msgstr "改变窗口大小"
 
 #: ../../keybinding/system-map.go:165
 msgid "Toggle shaded state"
-msgstr ""
+msgstr "切换阴影状态"
 
 #: ../../keybinding/system-map.go:166
 msgid "Activate the window menu"
-msgstr ""
+msgstr "激活窗口菜单"
 
 #: ../../keybinding/system-map.go:208
 msgid "Switch to workspace 1"
-msgstr ""
+msgstr "切换到工作区1"
 
 #: ../../keybinding/system-map.go:209
 msgid "Switch to workspace 2"
-msgstr ""
+msgstr "切换到工作区2"
 
 #: ../../keybinding/system-map.go:210
 msgid "Switch to workspace 3"
-msgstr ""
+msgstr "切换到工作区3"
 
 #: ../../keybinding/system-map.go:211
 msgid "Switch to workspace 4"
-msgstr ""
+msgstr "切换到工作区4"
 
 #: ../../keybinding/system-map.go:212
 msgid "Switch to workspace left"
-msgstr ""
+msgstr "切换到工作区左"
 
 #: ../../keybinding/system-map.go:213
 msgid "Switch to workspace right"
-msgstr ""
+msgstr "切换到合适的工作空间"
 
 #: ../../keybinding/system-map.go:214
 msgid "Switch to workspace up"
-msgstr ""
+msgstr "切换到工作区了"
 
 #: ../../keybinding/system-map.go:215
 msgid "Switch to workspace down"
-msgstr ""
+msgstr "切换到工作区向下"
 
 #: ../../keybinding/system-map.go:216
 msgid "Move to workspace 1"
-msgstr ""
+msgstr "移动到工作区1"
 
 #: ../../keybinding/system-map.go:217
 msgid "Move to workspace 2"
-msgstr ""
+msgstr "移动到工作区2"
 
 #: ../../keybinding/system-map.go:218
 msgid "Move to workspace 3"
-msgstr ""
+msgstr "移动到工作区3"
 
 #: ../../keybinding/system-map.go:219
 msgid "Move to workspace 4"
-msgstr ""
+msgstr "移动到工作区4"
 
 #: ../../keybinding/system-map.go:220
 msgid "Move to workspace left"
-msgstr ""
+msgstr "移动到工作区左"
 
 #: ../../keybinding/system-map.go:221
 msgid "Move to workspace right"
-msgstr ""
+msgstr "移动到工作区右"
 
 #: ../../keybinding/system-map.go:222
 msgid "Move to workspace up"
-msgstr ""
+msgstr "移动到工作区了"
 
 #: ../../keybinding/system-map.go:223
 msgid "Move to workspace down"
-msgstr ""
+msgstr "移动到工作区向下"
 
 #: ../../network/nm_constant.go:83 ../../network/nm_setting_vpn_l2tp.go:85
 #: ../../network/nm_setting_vpn_openvpn.go:142
 #: ../../network/nm_setting_vpn_pptp.go:75
 #: ../../network/nm_setting_vpn_vpnc.go:116
 msgid "Saved"
-msgstr ""
+msgstr "已保存的"
 
 #: ../../network/nm_constant.go:85 ../../network/nm_setting_vpn_l2tp.go:86
 #: ../../network/nm_setting_vpn_openvpn.go:143
 #: ../../network/nm_setting_vpn_pptp.go:76
 #: ../../network/nm_setting_vpn_vpnc.go:118
 msgid "Always Ask"
-msgstr ""
+msgstr "总是询问"
 
 #: ../../network/nm_constant.go:86 ../../network/nm_setting_vpn_l2tp.go:87
 #: ../../network/nm_setting_vpn_openvpn.go:144
@@ -2234,272 +3318,272 @@ msgstr ""
 #: ../../network/nm_setting_vpn_pptp.go:77
 #: ../../network/nm_setting_vpn_vpnc.go:119
 msgid "Not Required"
-msgstr ""
+msgstr "不要求"
 
 #: ../../network/nm_setting_802_1x.go:52
 msgid "PAP"
-msgstr ""
+msgstr "PAP"
 
 #: ../../network/nm_setting_802_1x.go:53
 msgid "CHAP"
-msgstr ""
+msgstr "CHAP"
 
 #: ../../network/nm_setting_802_1x.go:54
 msgid "MSCHAP"
-msgstr ""
+msgstr "MSCHAP"
 
 #: ../../network/nm_setting_802_1x.go:55
 msgid "MSCHAPV2"
-msgstr ""
+msgstr "MSCHAPV2"
 
 #: ../../network/nm_setting_802_1x.go:56
 msgid "GTC"
-msgstr ""
+msgstr "GTC"
 
 #: ../../network/nm_setting_802_1x.go:57
 msgid "OTP"
-msgstr ""
+msgstr "OTP"
 
 #: ../../network/nm_setting_802_1x.go:58
 #: ../../network/nm_setting_802_1x.go:148
 msgid "MD5"
-msgstr ""
+msgstr "MD5"
 
 #: ../../network/nm_setting_802_1x.go:59
 #: ../../network/nm_setting_802_1x.go:147
 #: ../../network/nm_setting_802_1x.go:155
 msgid "TLS"
-msgstr ""
+msgstr "TLS"
 
 #: ../../network/nm_setting_802_1x.go:149
 #: ../../network/nm_setting_802_1x.go:157
 msgid "FAST"
-msgstr ""
+msgstr "FAST"
 
 #: ../../network/nm_setting_802_1x.go:150
 #: ../../network/nm_setting_802_1x.go:158
 msgid "Tunneled TLS"
-msgstr ""
+msgstr "隧道TLS"
 
 #: ../../network/nm_setting_802_1x.go:151
 #: ../../network/nm_setting_802_1x.go:159
 msgid "Protected EAP"
-msgstr ""
+msgstr "受保护的EAP"
 
 #: ../../network/nm_setting_802_1x.go:156
 msgid "LEAP"
-msgstr ""
+msgstr "LEAP"
 
 #: ../../network/nm_setting_802_1x.go:164
 #: ../../network/nm_setting_ip4_config.go:157
 #: ../../network/nm_setting_vpn_vpnc.go:220
 msgid "Disabled"
-msgstr ""
+msgstr "已禁用"
 
 #: ../../network/nm_setting_802_1x.go:165
 msgid "Anonymous"
-msgstr ""
+msgstr "匿名"
 
 #: ../../network/nm_setting_802_1x.go:166
 msgid "Authenticated"
-msgstr ""
+msgstr "已认证"
 
 #: ../../network/nm_setting_802_1x.go:167
 msgid "Both"
-msgstr ""
+msgstr "都是"
 
 #: ../../network/nm_setting_802_1x.go:171
 #: ../../network/nm_setting_wireless.go:265
 msgid "Automatic"
-msgstr ""
+msgstr "自动"
 
 #: ../../network/nm_setting_802_1x.go:172
 msgid "Version 0"
-msgstr ""
+msgstr "0版本"
 
 #: ../../network/nm_setting_802_1x.go:173
 msgid "Version 1"
-msgstr ""
+msgstr "第1版"
 
 #: ../../network/nm_setting_gsm.go:116
 msgid "*99#"
-msgstr ""
+msgstr "* 99＃"
 
 #: ../../network/nm_setting_gsm.go:123
 msgid "China Unicom Internet"
-msgstr ""
+msgstr "中国联通互联网"
 
 #: ../../network/nm_setting_gsm.go:124
 msgid "China Unicom MMS"
-msgstr ""
+msgstr "中国联通彩信"
 
 #: ../../network/nm_setting_gsm.go:125
 msgid "China Mobile WAP"
-msgstr ""
+msgstr "中国移动WAP"
 
 #: ../../network/nm_setting_gsm.go:126
 msgid "China Mobile Internet"
-msgstr ""
+msgstr "中国移动互联网"
 
 #: ../../network/nm_setting_gsm.go:127
 msgid "China Mobile MMS"
-msgstr ""
+msgstr "中国移动彩信"
 
 #: ../../network/nm_setting_gsm.go:131
 msgid "Any"
-msgstr ""
+msgstr "任何"
 
 #: ../../network/nm_setting_gsm.go:132
 msgid "3G (UMTS/HSPA)"
-msgstr ""
+msgstr "3G（UMTS / HSPA）"
 
 #: ../../network/nm_setting_gsm.go:133
 msgid "2G (GPRS/EDGE)"
-msgstr ""
+msgstr "2G（GPRS / EDGE）"
 
 #: ../../network/nm_setting_gsm.go:134
 msgid "Prefer 3G (UMTS/HSPA)"
-msgstr ""
+msgstr "首选3G（UMTS / HSPA）"
 
 #: ../../network/nm_setting_gsm.go:135
 msgid "Prefer 2G (GPRS/EDGE)"
-msgstr ""
+msgstr "首选2G（GPRS / EDGE）"
 
 #: ../../network/nm_setting_gsm.go:136
 msgid "Prefer 4G (LTE)"
-msgstr ""
+msgstr "首选4G（LTE）"
 
 #: ../../network/nm_setting_gsm.go:137
 msgid "Use Only 4G (LTE)"
-msgstr ""
+msgstr "仅使用4G（LTE）"
 
 #: ../../network/nm_setting_ip4_config.go:153
 #: ../../network/nm_setting_ip6_config.go:45
 msgid "Auto"
-msgstr ""
+msgstr "{0}{/0} {1}{/1}(自动)"
 
 #: ../../network/nm_setting_ip4_config.go:154
 #: ../../network/nm_setting_ip6_config.go:47
 msgid "Link Local"
-msgstr ""
+msgstr "链路本地"
 
 #: ../../network/nm_setting_ip4_config.go:155
 #: ../../network/nm_setting_ip6_config.go:48
 msgid "Manual"
-msgstr ""
+msgstr "手动"
 
 #: ../../network/nm_setting_ip4_config.go:156
 #: ../../network/nm_setting_ip6_config.go:49
 msgid "Shared"
-msgstr ""
+msgstr "共享"
 
 #: ../../network/nm_setting_ip6_config.go:44
 msgid "Ignore"
-msgstr ""
+msgstr "忽略"
 
 #: ../../network/nm_setting_ip6_config.go:46
 msgid "DHCP"
-msgstr ""
+msgstr "DHCP"
 
 #: ../../network/nm_setting_type_page_field.go:100
 msgid "Wi-Fi"
-msgstr ""
+msgstr "Wi-Fi"
 
 #: ../../network/nm_setting_type_page_field.go:101
 msgid "Wi-Fi Ad-Hoc"
-msgstr ""
+msgstr "Wi-Fi点对点"
 
 #: ../../network/nm_setting_type_page_field.go:102
 msgid "Wi-Fi Hotspot"
-msgstr ""
+msgstr "Wi-Fi热点"
 
 #: ../../network/nm_setting_type_page_field.go:103
 msgid "PPPoE"
-msgstr ""
+msgstr "PPPoE"
 
 #: ../../network/nm_setting_type_page_field.go:104
 msgid "Mobile GSM (GPRS, EDGE, UMTS, HSPA)"
-msgstr ""
+msgstr "移动GSM（GPRS，EDGE，UMTS，HSPA）"
 
 #: ../../network/nm_setting_type_page_field.go:105
 msgid "Mobile CDMA (1xRTT, EVDO)"
-msgstr ""
+msgstr "移动CDMA（1xRTT的，EVDO）"
 
 #: ../../network/nm_setting_type_page_field.go:106
 msgid "VPN-L2TP (Layer 2 Tunneling Protocol)"
-msgstr ""
+msgstr "VPN-L2TP（第二层隧道协议）"
 
 #: ../../network/nm_setting_type_page_field.go:107
 msgid "VPN-OpenConnect (Cisco AnyConnect Compatible VPN)"
-msgstr ""
+msgstr "VPN-OPENCONNECT（思科的AnyConnect VPN兼容）"
 
 #: ../../network/nm_setting_type_page_field.go:108
 msgid "VPN-OpenVPN"
-msgstr ""
+msgstr "VPN-OpenVPN的"
 
 #: ../../network/nm_setting_type_page_field.go:109
 msgid "VPN-PPTP (Point-to-Point Tunneling Protocol))"
-msgstr ""
+msgstr "VPN-PPTP（点对点点对点隧道协议））"
 
 #: ../../network/nm_setting_type_page_field.go:110
 msgid "VPN-VPNC (Cisco Compatible VPN)"
-msgstr ""
+msgstr "VPN-VPNC（思科兼容的VPN）"
 
 #: ../../network/nm_setting_type_page_field.go:223
 msgid "Connection"
-msgstr ""
+msgstr "连接"
 
 #: ../../network/nm_setting_type_page_field.go:225
 msgid "Wired Connection"
-msgstr ""
+msgstr "有线连接"
 
 #: ../../network/nm_setting_type_page_field.go:227
 msgid "Wireless Connection"
-msgstr ""
+msgstr "无线连接"
 
 #: ../../network/nm_setting_type_page_field.go:229
 msgid "Wireless Ad-Hoc"
-msgstr ""
+msgstr "无线点对点"
 
 #: ../../network/nm_setting_type_page_field.go:231
 msgid "Wireless Ap-Hotspot"
-msgstr ""
+msgstr "无线AP-热点"
 
 #: ../../network/nm_setting_type_page_field.go:233
 msgid "PPPoE Connection"
-msgstr ""
+msgstr "PPPoE连接"
 
 #: ../../network/nm_setting_type_page_field.go:235
 msgid "Mobile GSM Connection"
-msgstr ""
+msgstr "移动GSM连接"
 
 #: ../../network/nm_setting_type_page_field.go:237
 msgid "Mobile CDMA Connection"
-msgstr ""
+msgstr "手机CDMA连接"
 
 #: ../../network/nm_setting_type_page_field.go:239
 msgid "VPN Connection"
-msgstr ""
+msgstr "VPN连接"
 
 #: ../../network/nm_setting_type_page_field.go:241
 msgid "VPN L2TP"
-msgstr ""
+msgstr "L2TP协议的VPN"
 
 #: ../../network/nm_setting_type_page_field.go:243
 msgid "VPN OpenConnect"
-msgstr ""
+msgstr "VPN OpenConnect"
 
 #: ../../network/nm_setting_type_page_field.go:245
 msgid "VPN OpenVPN"
-msgstr ""
+msgstr "VPN OpenVPN"
 
 #: ../../network/nm_setting_type_page_field.go:247
 msgid "VPN PPTP"
-msgstr ""
+msgstr "VPN PPTP"
 
 #: ../../network/nm_setting_type_page_field.go:249
 msgid "VPN VPNC"
-msgstr ""
+msgstr "VPN VPNC"
 
 #: ../../network/nm_setting_virtual_key.go:161
 #: ../../network/nm_setting_virtual_key.go:168
@@ -2507,584 +3591,584 @@ msgstr ""
 #: ../../network/nm_setting_vpn_openvpn.go:355
 #: ../../network/nm_setting_vpn_vpnc.go:231
 msgid "None"
-msgstr ""
+msgstr "无"
 
 #: ../../network/nm_setting_virtual_key.go:162
 #: ../../network/nm_setting_virtual_key.go:169
 msgid "WEP 40/128-bit Key"
-msgstr ""
+msgstr "WEP 40/128-bit密钥"
 
 #: ../../network/nm_setting_virtual_key.go:163
 #: ../../network/nm_setting_virtual_key.go:170
 msgid "WPA & WPA2 Personal"
-msgstr ""
+msgstr "WPA＆WPA2个人"
 
 #: ../../network/nm_setting_virtual_key.go:164
 msgid "WPA & WPA2 Enterprise"
-msgstr ""
+msgstr "WPA＆WPA2企业"
 
 #: ../../network/nm_setting_virtual_key.go:180
 msgid "Secure (default)"
-msgstr ""
+msgstr "安全（默认）"
 
 #: ../../network/nm_setting_virtual_key.go:181
 msgid "Weak"
-msgstr ""
+msgstr "弱"
 
 #: ../../network/nm_setting_virtual_key.go:192
 msgid "GSM (GPRS, EDGE, UMTS, HSPA)"
-msgstr ""
+msgstr "GSM（GPRS，EDGE，UMTS，HSPA）"
 
 #: ../../network/nm_setting_virtual_key.go:193
 msgid "CDMA (1xRTT, EVDO)"
-msgstr ""
+msgstr "CDMA（1xRTT的，EVDO）"
 
 #: ../../network/nm_setting_vpn_openvpn.go:216
 msgid "Certificates (TLS)"
-msgstr ""
+msgstr "证书（TLS）"
 
 #: ../../network/nm_setting_vpn_openvpn.go:217
 msgid "Password"
-msgstr ""
+msgstr "密码"
 
 #: ../../network/nm_setting_vpn_openvpn.go:218
 msgid "Password with Certificates (TLS)"
-msgstr ""
+msgstr "密码与证书（TLS）"
 
 #: ../../network/nm_setting_vpn_openvpn.go:219
 msgid "Static Key"
-msgstr ""
+msgstr "静态密钥"
 
 #: ../../network/nm_setting_vpn_openvpn.go:223
 #: ../../network/nm_setting_vpn_openvpn.go:391
 msgid "0"
-msgstr ""
+msgstr "0"
 
 #: ../../network/nm_setting_vpn_openvpn.go:224
 #: ../../network/nm_setting_vpn_openvpn.go:392
 msgid "1"
-msgstr ""
+msgstr " 1"
 
 #: ../../network/nm_setting_vpn_openvpn.go:334
 #: ../../network/nm_setting_vpn_openvpn.go:354
 #: ../../network/nm_setting_vpn_openvpn.go:385
 #: ../../network/nm_setting_wireless.go:163
 msgid "Default"
-msgstr ""
+msgstr "默认"
 
 #: ../../network/nm_setting_vpn_openvpn.go:335
 msgid "DES-CBC"
-msgstr ""
+msgstr "DES-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:336
 msgid "RC2-CBC"
-msgstr ""
+msgstr "RC2-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:337
 msgid "DES-EDE-CBC"
-msgstr ""
+msgstr "DES-EDE-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:338
 msgid "DES-EDE3-CBC"
-msgstr ""
+msgstr "DES-EDE3-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:339
 msgid "DESX-CBC"
-msgstr ""
+msgstr "DESX-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:340
 msgid "BF-CBC"
-msgstr ""
+msgstr "BF-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:341
 msgid "RC2-40-CBC"
-msgstr ""
+msgstr "RC2-40-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:342
 msgid "CAST5-CBC"
-msgstr ""
+msgstr "CAST5-​​CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:343
 msgid "RC2-64-CBC"
-msgstr ""
+msgstr "RC2-64-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:344
 msgid "AES-128-CBC"
-msgstr ""
+msgstr "AES-128-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:345
 msgid "AES-192-CBC"
-msgstr ""
+msgstr "AES-192-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:346
 msgid "AES-256-CBC"
-msgstr ""
+msgstr "AES-256-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:347
 msgid "CAMELLIA-128-CBC"
-msgstr ""
+msgstr "茶花-128-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:348
 msgid "CAMELLIA-192-CBC"
-msgstr ""
+msgstr "茶花-192-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:349
 msgid "CAMELLIA-256-CBC"
-msgstr ""
+msgstr "茶花-256-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:350
 msgid "SEED-CBC"
-msgstr ""
+msgstr "SEED-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:356
 msgid "RSA MD-4"
-msgstr ""
+msgstr "RSA MD-4"
 
 #: ../../network/nm_setting_vpn_openvpn.go:357
 msgid "MD-5"
-msgstr ""
+msgstr "MD-5"
 
 #: ../../network/nm_setting_vpn_openvpn.go:358
 msgid "SHA-1"
-msgstr ""
+msgstr "SHA-1"
 
 #: ../../network/nm_setting_vpn_openvpn.go:359
 msgid "SHA-224"
-msgstr ""
+msgstr "SHA-224"
 
 #: ../../network/nm_setting_vpn_openvpn.go:360
 msgid "SHA-256"
-msgstr ""
+msgstr "SHA-256"
 
 #: ../../network/nm_setting_vpn_openvpn.go:361
 msgid "SHA-384"
-msgstr ""
+msgstr "SHA-384"
 
 #: ../../network/nm_setting_vpn_openvpn.go:362
 msgid "SHA-512"
-msgstr ""
+msgstr "SHA-512"
 
 #: ../../network/nm_setting_vpn_openvpn.go:363
 msgid "RIPEMD-160"
-msgstr ""
+msgstr "RIPEMD-160"
 
 #: ../../network/nm_setting_vpn_openvpn.go:386
 msgid "Client"
-msgstr ""
+msgstr "客户"
 
 #: ../../network/nm_setting_vpn_openvpn.go:387
 msgid "Server"
-msgstr ""
+msgstr "服务器"
 
 #: ../../network/nm_setting_vpn_openvpn.go:435
 msgid "HTTP"
-msgstr ""
+msgstr "HTTP"
 
 #: ../../network/nm_setting_vpn_openvpn.go:436
 msgid "SOCKS"
-msgstr ""
+msgstr "SOCKS"
 
 #: ../../network/nm_setting_vpn_vpnc.go:212
 msgid "Cisco (default)"
-msgstr ""
+msgstr "思科（默认）"
 
 #: ../../network/nm_setting_vpn_vpnc.go:213
 msgid "Netscreen"
-msgstr ""
+msgstr "Netscreen的"
 
 #: ../../network/nm_setting_vpn_vpnc.go:217
 msgid "NAT-T When Available (default)"
-msgstr ""
+msgstr "NAT-T当可用（默认）"
 
 #: ../../network/nm_setting_vpn_vpnc.go:218
 msgid "NAT-T Always"
-msgstr ""
+msgstr "NAT-T的始终"
 
 #: ../../network/nm_setting_vpn_vpnc.go:219
 msgid "Cisco UDP"
-msgstr ""
+msgstr "思科UDP"
 
 #: ../../network/nm_setting_vpn_vpnc.go:224
 #: ../../network/nm_setting_vpn_vpnc.go:232
 msgid "DH Group 1"
-msgstr ""
+msgstr "DH组1"
 
 #: ../../network/nm_setting_vpn_vpnc.go:225
 msgid "DH Group 2 (default)"
-msgstr ""
+msgstr "DH组2（默认）"
 
 #: ../../network/nm_setting_vpn_vpnc.go:226
 #: ../../network/nm_setting_vpn_vpnc.go:234
 msgid "DH Group 5"
-msgstr ""
+msgstr "DH组5"
 
 #: ../../network/nm_setting_vpn_vpnc.go:230
 msgid "Server (default)"
-msgstr ""
+msgstr "服务器（默认）"
 
 #: ../../network/nm_setting_vpn_vpnc.go:233
 msgid "DH Group 2"
-msgstr ""
+msgstr "DH组2"
 
 #: ../../network/nm_setting_wireless.go:259
 msgid "Infrastructure"
-msgstr ""
+msgstr "基础设施"
 
 #: ../../network/nm_setting_wireless.go:260
 msgid "Ad-Hoc"
-msgstr ""
+msgstr "特设"
 
 #: ../../network/nm_setting_wireless.go:261
 msgid "AP-Hotspot"
-msgstr ""
+msgstr "AP-热点"
 
 #: ../../network/nm_setting_wireless.go:266
 msgid "A (5 GHz)"
-msgstr ""
+msgstr "A（5 GHz）的"
 
 #: ../../network/nm_setting_wireless.go:267
 msgid "BG (2.4 GHz)"
-msgstr ""
+msgstr "BG（2.4千兆赫）"
 
 #: ../../network/nm_setting_wireless_security.go:156
 msgid "wep"
-msgstr ""
+msgstr "wep"
 
 #: ../../network/nm_setting_wireless_security.go:157
 msgid "dynamic wep"
-msgstr ""
+msgstr "动态WEP"
 
 #: ../../network/nm_setting_wireless_security.go:158
 msgid "wpa-psk ad-hoc"
-msgstr ""
+msgstr "WPA-PSK即席"
 
 #: ../../network/nm_setting_wireless_security.go:159
 msgid "wpa-psk infrastructure"
-msgstr ""
+msgstr "WPA-PSK基础设施"
 
 #: ../../network/nm_setting_wireless_security.go:160
 msgid "wpa enterprise"
-msgstr ""
+msgstr "WPA企业"
 
 #: ../../network/nm_setting_wireless_security.go:164
 msgid "wep40"
-msgstr ""
+msgstr "WEP40"
 
 #: ../../network/nm_setting_wireless_security.go:165
 msgid "wep104"
-msgstr ""
+msgstr "WEP104"
 
 #: ../../network/nm_setting_wireless_security.go:166
 msgid "tkip"
-msgstr ""
+msgstr "TKIP"
 
 #: ../../network/nm_setting_wireless_security.go:167
 msgid "ccmp"
-msgstr ""
+msgstr "CCMP"
 
 #: ../../network/nm_setting_wireless_security.go:171
 msgid "open"
-msgstr ""
+msgstr "打开"
 
 #: ../../network/nm_setting_wireless_security.go:172
 msgid "shared"
-msgstr ""
+msgstr "shared"
 
 #: ../../network/nm_setting_wireless_security.go:173
 msgid "leap"
-msgstr ""
+msgstr "飞跃"
 
 #: ../../network/state_handler.go:114
 msgid "The device is now managed."
-msgstr ""
+msgstr "该设备是现在进行管理。"
 
 #: ../../network/state_handler.go:115
 msgid "The device is no longer managed."
-msgstr ""
+msgstr "该设备不再进行管理。"
 
 #: ../../network/state_handler.go:116
 msgid "The device could not be readied for configuration."
-msgstr ""
+msgstr "该设备不能被准备好进行配置。"
 
 #: ../../network/state_handler.go:117
 msgid ""
 "IP configuration could not be reserved (no available address timeout etc)."
-msgstr ""
+msgstr "IP配置不能被保留（没有可用的地址超时等）。"
 
 #: ../../network/state_handler.go:118
 msgid "The IP configuration is no longer valid."
-msgstr ""
+msgstr "IP配置不再有效。"
 
 #: ../../network/state_handler.go:119
 msgid "Secrets were required but not provided."
-msgstr ""
+msgstr "被要求保密，但不能提供的。"
 
 #: ../../network/state_handler.go:120
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server."
-msgstr ""
+msgstr "从接入点或认证服务器的802.1X客户端断开连接。"
 
 #: ../../network/state_handler.go:121
 msgid "Configuration of the 802.1X supplicant failed."
-msgstr ""
+msgstr "在802.1X客户端的配置失败。"
 
 #: ../../network/state_handler.go:122
 msgid "The 802.1X supplicant quit or failed unexpectedly."
-msgstr ""
+msgstr "在802.1X客户端退出或意外失败。"
 
 #: ../../network/state_handler.go:123
 msgid "The 802.1X supplicant took too long to authenticate."
-msgstr ""
+msgstr "在802.1X请求者的时间太长验证。"
 
 #: ../../network/state_handler.go:124
 msgid "The PPP service failed to start within the allowed time."
-msgstr ""
+msgstr "PPP服务启动失败，在允许的时间范围内。"
 
 #: ../../network/state_handler.go:125
 msgid "The PPP service disconnected unexpectedly."
-msgstr ""
+msgstr "PPP服务意外中断。"
 
 #: ../../network/state_handler.go:126
 msgid "The PPP service quit or failed unexpectedly."
-msgstr ""
+msgstr "PPP服务退出或意外失败。"
 
 #: ../../network/state_handler.go:127
 msgid "The DHCP service failed to start within the allowed time."
-msgstr ""
+msgstr "DHCP服务无法启动​​，在允许的时间范围内。"
 
 #: ../../network/state_handler.go:128
 msgid "The DHCP service reported an unexpected error."
-msgstr ""
+msgstr "DHCP服务报告了一个意外的错误。"
 
 #: ../../network/state_handler.go:129
 msgid "The DHCP service quit or failed unexpectedly."
-msgstr ""
+msgstr "DHCP服务退出或意外失败。"
 
 #: ../../network/state_handler.go:130
 msgid "The shared connection service failed to start."
-msgstr ""
+msgstr "共享连接服务启动失败。"
 
 #: ../../network/state_handler.go:131
 msgid "The shared connection service quit or failed unexpectedly."
-msgstr ""
+msgstr "共享连接服务退出或意外失败。"
 
 #: ../../network/state_handler.go:132
 msgid "The AutoIP service failed to start."
-msgstr ""
+msgstr "自动IP服务启动失败。"
 
 #: ../../network/state_handler.go:133
 msgid "The AutoIP service reported an unexpected error."
-msgstr ""
+msgstr "自动IP服务报告了一个意外的错误。"
 
 #: ../../network/state_handler.go:134
 msgid "The AutoIP service quit or failed unexpectedly."
-msgstr ""
+msgstr "自动IP服务退出或意外失败。"
 
 #: ../../network/state_handler.go:135
 msgid "Dialing failed because the line was busy."
-msgstr ""
+msgstr "拨号失败，因为线路忙。"
 
 #: ../../network/state_handler.go:136
 msgid "Dialing failed because there was no dial tone."
-msgstr ""
+msgstr "拨号失败，因为没有拨号音。"
 
 #: ../../network/state_handler.go:137
 msgid "Dialing failed because there was carrier."
-msgstr ""
+msgstr "拨号失败，因为有载体。"
 
 #: ../../network/state_handler.go:138
 msgid "Dialing timed out."
-msgstr ""
+msgstr "拨号超时。"
 
 #: ../../network/state_handler.go:139
 msgid "Dialing failed."
-msgstr ""
+msgstr "拨号失败。"
 
 #: ../../network/state_handler.go:140
 msgid "Modem initialization failed."
-msgstr ""
+msgstr "调制解调器初始化失败。"
 
 #: ../../network/state_handler.go:141
 msgid "Failed to select the specified GSM APN."
-msgstr ""
+msgstr "没有选择的，指定的GSM APN。"
 
 #: ../../network/state_handler.go:142
 msgid "Not searching for networks."
-msgstr ""
+msgstr "没有搜索网络。"
 
 #: ../../network/state_handler.go:143
 msgid "Network registration was denied."
-msgstr ""
+msgstr "网络注册被拒绝。"
 
 #: ../../network/state_handler.go:144
 msgid "Network registration timed out."
-msgstr ""
+msgstr "网络注册超时。"
 
 #: ../../network/state_handler.go:145
 msgid "Failed to register with the requested GSM network."
-msgstr ""
+msgstr "失败请求的GSM网络进行注册。"
 
 #: ../../network/state_handler.go:146
 msgid "PIN check failed."
-msgstr ""
+msgstr "PIN码检查失败。"
 
 #: ../../network/state_handler.go:147
 msgid "Necessary firmware for the device may be missing."
-msgstr ""
+msgstr "必要的固件的设备可能会丢失。"
 
 #: ../../network/state_handler.go:148
 msgid "The device was removed."
-msgstr ""
+msgstr "该设备已被删除。"
 
 #: ../../network/state_handler.go:149
 msgid "NetworkManager went to sleep."
-msgstr ""
+msgstr "NetworkManager的睡觉去了。"
 
 #: ../../network/state_handler.go:150
 msgid "The device's active connection was removed or disappeared."
-msgstr ""
+msgstr "被删除或消失设备的有效连接。"
 
 #: ../../network/state_handler.go:151
 msgid "A user or client requested the disconnection."
-msgstr ""
+msgstr "用户或客户端请求的连接断开。"
 
 #: ../../network/state_handler.go:152
 msgid "The device's carrier/link changed."
-msgstr ""
+msgstr "该器件的载/链接更改。"
 
 #: ../../network/state_handler.go:153
 msgid "The device's existing connection was assumed."
-msgstr ""
+msgstr "假定该设备的现有连接。"
 
 #: ../../network/state_handler.go:154
 msgid "The 802.1x supplicant is now available."
-msgstr ""
+msgstr "802.1x请求者现已推出。"
 
 #: ../../network/state_handler.go:155
 msgid "The modem could not be found."
-msgstr ""
+msgstr "调制解调器不能被发现。"
 
 #: ../../network/state_handler.go:156
 msgid "The Bluetooth connection timed out or failed."
-msgstr ""
+msgstr "蓝牙连接超时或失败。"
 
 #: ../../network/state_handler.go:157
 msgid "GSM Modem's SIM Card not inserted."
-msgstr ""
+msgstr "GSM调制解调器的SIM卡没有插入。"
 
 #: ../../network/state_handler.go:158
 msgid "GSM Modem's SIM Pin required."
-msgstr ""
+msgstr "GSM调制解调器的SIM卡PIN码需要。"
 
 #: ../../network/state_handler.go:159
 msgid "GSM Modem's SIM Puk required."
-msgstr ""
+msgstr "GSM调制解调器的SIM卡北辰必需的。"
 
 #: ../../network/state_handler.go:160
 msgid "GSM Modem's SIM wrong"
-msgstr ""
+msgstr "GSM调制解调器的SIM卡错误"
 
 #: ../../network/state_handler.go:161
 msgid "InfiniBand device does not support connected mode."
-msgstr ""
+msgstr "InfiniBand设备不支持连接模式。"
 
 #: ../../network/state_handler.go:162
 msgid "A dependency of the connection failed."
-msgstr ""
+msgstr "连接的依赖性失败。"
 
 #: ../../network/state_handler.go:163
 msgid "Problem with the RFC 2684 Ethernet over ADSL bridge."
-msgstr ""
+msgstr "问题与RFC 2684以太网ADSL的桥梁。"
 
 #: ../../network/state_handler.go:164
 msgid "ModemManager was not running or quit unexpectedly."
-msgstr ""
+msgstr "ModemManager未运行或意外退出。"
 
 #: ../../network/state_handler.go:165
 msgid "The 802.11 Wi-Fi network could not be found."
-msgstr ""
+msgstr "802.11 Wi-Fi网络无法找到。"
 
 #: ../../network/state_handler.go:166
 msgid "A secondary connection of the base connection failed."
-msgstr ""
+msgstr "底座连接的二次连接失败。"
 
 #: ../../network/state_handler.go:168
 msgid "The VPN connection changed state because the user disconnected it."
-msgstr ""
+msgstr "VPN连接状态发生了改变，因为用户断开了。"
 
 #: ../../network/state_handler.go:169
 #, c-format
 msgid ""
 "The VPN connection %s changed state because the device it was using was "
 "disconnected."
-msgstr ""
+msgstr "VPN连接%s状态发生了改变，因为它使用的设备已断开。"
 
 #: ../../network/state_handler.go:170
 msgid "The service providing the VPN connection was stopped."
-msgstr ""
+msgstr "提供VPN连接的服务已停止。"
 
 #: ../../network/state_handler.go:171
 msgid "The IP config of the VPN connection was invalid."
-msgstr ""
+msgstr "VPN连接的IP配置是无效的。"
 
 #: ../../network/state_handler.go:172
 msgid "The connection attempt to the VPN service timed out."
-msgstr ""
+msgstr "在尝试连接到VPN服务超时。"
 
 #: ../../network/state_handler.go:173
 msgid ""
 "A timeout occurred while starting the service providing the VPN connection."
-msgstr ""
+msgstr "同时开始提供VPN连接的服务时发生超时。"
 
 #: ../../network/state_handler.go:174
 msgid ""
 "Starting the service starting the service providing the VPN connection "
 "failed."
-msgstr ""
+msgstr "启动开始提供VPN连接的服务的服务失败。"
 
 #: ../../network/state_handler.go:175
 msgid "Necessary secrets for the VPN connection were not provided."
-msgstr ""
+msgstr "并未提供必要的秘密VPN连接。"
 
 #: ../../network/state_handler.go:176
 msgid "Authentication to the VPN server failed."
-msgstr ""
+msgstr "验证到VPN服务器失败。"
 
 #: ../../network/state_handler.go:177
 msgid "The connection was deleted from settings."
-msgstr ""
+msgstr "该连接是从设置中删除。"
 
 #: ../../network/state_handler.go:216
 msgid "Connected"
-msgstr ""
+msgstr "已连接"
 
 #: ../../network/state_handler.go:236
 msgid "Disconnect"
-msgstr ""
+msgstr "断开"
 
 #: ../../network/state_handler.go:266
 msgid "Offline"
-msgstr ""
+msgstr "离线"
 
 #: ../../network/state_handler.go:266
 msgid "Disconnected - You are now offline."
-msgstr ""
+msgstr "断开连接 - 当前已离线"
 
 #: ../../power/upower.go:86 ../../power/upower.go:101
 msgid "Battery cirtical low"
-msgstr ""
+msgstr "电池cirtical低"
 
 #: ../../power/upower.go:86 ../../power/upower.go:101
 msgid "Computer will suspend very soon unless it is plugged in."
-msgstr ""
+msgstr "计算机将很快进入待机状态，请插入电源。"
 
 #: ../../power/upower.go:114
 msgid "Battery low"
-msgstr ""
+msgstr "电池电量低"
 
 #: ../../power/upower.go:114
 msgid ""
 "Computer will suspend very soon unless it is plugged in(TODO:Calucate "
 "remaining)."
-msgstr ""
+msgstr "计算机将很快进入待机状态，请插入电源。"

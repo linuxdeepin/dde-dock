@@ -162,12 +162,14 @@ func Init() {
 }
 
 func main() {
-	defer logger.EndTracing()
-
 	if !dlib.UniqueOnSession(_DATE_TIME_DEST) {
 		logger.Warning("There already has an DateTime daemon running.")
 		return
 	}
+
+	defer logger.EndTracing()
+	dlib.InitI18n()
+	dlib.Textdomain("dde-daemon")
 
 	// configure logger
 	logger.SetRestartCommand("/usr/lib/deepin-daemon/datetime", "--debug")
