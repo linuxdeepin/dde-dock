@@ -62,30 +62,48 @@ func (s *SinkInput) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (a *Audio) update() {
-	sinfo := a.core.GetServer()
-	a.setPropDefaultSink(sinfo.DefaultSinkName)
-	a.setPropDefaultSource(sinfo.DefaultSourceName)
-
-	var sinks []*Sink
-	var sources []*Source
+func (a *Audio) rebuildSinkInputList() {
 	var sinkinputs []*SinkInput
+	for _, s := range a.core.GetSinkInputList() {
+		si := NewSinkInput(s)
+		switch si.core.PropList[pulse.PA_PROP_MEDIA_ROLE] {
+		case "video", "music", "game":
+			sinkinputs = append(sinkinputs, si)
+		case "animation", "production", "phone":
+			//TODO: what's the meaning of this type? Should we filter this SinkInput?
+			sinkinputs = append(sinkinputs, si)
+		case "event", "a11y", "test":
+			//Filter this SinkInput
+		}
+	}
+	a.setPropSinkInputs(sinkinputs)
+}
+func (a *Audio) rebuildSinkList() {
+	var sinks []*Sink
 	for _, s := range a.core.GetSinkList() {
 		sinks = append(sinks, NewSink(s))
 	}
+	a.setPropSinks(sinks)
+}
+
+func (a *Audio) rebuildSourceList() {
+	var sources []*Source
 	for _, s := range a.core.GetSourceList() {
 		obj := NewSource(s)
 		if len(obj.Ports) > 0 {
 			sources = append(sources, obj)
 		}
 	}
-	for _, s := range a.core.GetSinkInputList() {
-		sinkinputs = append(sinkinputs, NewSinkInput(s))
-	}
-
-	a.setPropSinks(sinks)
 	a.setPropSources(sources)
-	a.setPropSinkInputs(sinkinputs)
+}
+func (a *Audio) update() {
+	sinfo := a.core.GetServer()
+	a.setPropDefaultSink(sinfo.DefaultSinkName)
+	a.setPropDefaultSource(sinfo.DefaultSourceName)
+
+	a.rebuildSinkList()
+	a.rebuildSourceList()
+	a.rebuildSinkInputList()
 }
 
 func (s *Audio) setPropDefaultSink(v string) {

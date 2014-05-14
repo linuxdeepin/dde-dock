@@ -23,11 +23,7 @@ func (a *Audio) initEventHandlers() {
 func (a *Audio) handleSinkEvent(eType int, idx uint32) {
 	switch eType {
 	case pulse.EventTypeNew, pulse.EventTypeRemove:
-		var sinks []*Sink
-		for _, s := range a.core.GetSinkList() {
-			sinks = append(sinks, NewSink(s))
-		}
-		a.setPropSinks(sinks)
+		a.rebuildSinkList()
 
 	case pulse.EventTypeChange:
 		for _, s := range a.Sinks {
@@ -42,11 +38,7 @@ func (a *Audio) handleSinkEvent(eType int, idx uint32) {
 func (a *Audio) handleSinkInputEvent(eType int, idx uint32) {
 	switch eType {
 	case pulse.EventTypeNew, pulse.EventTypeRemove:
-		var sinkinputs []*SinkInput
-		for _, s := range a.core.GetSinkInputList() {
-			sinkinputs = append(sinkinputs, NewSinkInput(s))
-		}
-		a.setPropSinkInputs(sinkinputs)
+		a.rebuildSinkInputList()
 
 	case pulse.EventTypeChange:
 		for _, s := range a.SinkInputs {
@@ -61,11 +53,7 @@ func (a *Audio) handleSinkInputEvent(eType int, idx uint32) {
 func (a *Audio) handleSourceEvent(eType int, idx uint32) {
 	switch eType {
 	case pulse.EventTypeNew, pulse.EventTypeRemove:
-		var sources []*Source
-		for _, s := range a.core.GetSourceList() {
-			sources = append(sources, NewSource(s))
-		}
-		a.setPropSources(sources)
+		a.rebuildSourceList()
 
 	case pulse.EventTypeChange:
 		for _, s := range a.Sources {
