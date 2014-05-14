@@ -74,6 +74,8 @@ func (a *Audio) rebuildSinkInputList() {
 			sinkinputs = append(sinkinputs, si)
 		case "event", "a11y", "test":
 			//Filter this SinkInput
+		default:
+			sinkinputs = append(sinkinputs, si)
 		}
 	}
 	a.setPropSinkInputs(sinkinputs)
