@@ -37,8 +37,10 @@ func (a *Audio) handleSinkEvent(eType int, idx uint32) {
 }
 func (a *Audio) handleSinkInputEvent(eType int, idx uint32) {
 	switch eType {
-	case pulse.EventTypeNew, pulse.EventTypeRemove:
-		a.rebuildSinkInputList()
+	case pulse.EventTypeNew:
+		a.addSinkInput(idx)
+	case pulse.EventTypeRemove:
+		a.removeSinkInput(idx)
 
 	case pulse.EventTypeChange:
 		for _, s := range a.SinkInputs {

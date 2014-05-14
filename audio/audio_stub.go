@@ -62,24 +62,67 @@ func (s *SinkInput) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
+func filterSinkInput(c *pulse.SinkInput) bool {
+	switch c.PropList[pulse.PA_PROP_MEDIA_ROLE] {
+	case "video", "music", "game":
+		return false
+	case "animation", "production", "phone":
+		//TODO: what's the meaning of this type? Should we filter this SinkInput?
+		return false
+	default:
+		return false
+
+	case "event", "a11y", "test":
+		//Filter this SinkInput
+		return true
+	}
+}
+
 func (a *Audio) rebuildSinkInputList() {
 	var sinkinputs []*SinkInput
 	for _, s := range a.core.GetSinkInputList() {
-		si := NewSinkInput(s)
-		switch si.core.PropList[pulse.PA_PROP_MEDIA_ROLE] {
-		case "video", "music", "game":
-			sinkinputs = append(sinkinputs, si)
-		case "animation", "production", "phone":
-			//TODO: what's the meaning of this type? Should we filter this SinkInput?
-			sinkinputs = append(sinkinputs, si)
-		case "event", "a11y", "test":
-			//Filter this SinkInput
-		default:
-			sinkinputs = append(sinkinputs, si)
+		if filterSinkInput(s) {
+			continue
 		}
+		si := NewSinkInput(s)
+		sinkinputs = append(sinkinputs, si)
 	}
 	a.setPropSinkInputs(sinkinputs)
 }
+func (a *Audio) addSinkInput(idx uint32) {
+	for _, si := range a.SinkInputs {
+		if si.core.Index == idx {
+			return
+		}
+	}
+
+	core := a.core.GetSinkInput(idx)
+	if filterSinkInput(core) {
+		return
+	}
+
+	si := NewSinkInput(core)
+	dbus.InstallOnSession(si)
+	a.SinkInputs = append(a.SinkInputs, si)
+	dbus.NotifyChange(a, "SinkInputs")
+}
+func (a *Audio) removeSinkInput(idx uint32) {
+	var tryRemoveSinkInput *SinkInput
+	var newSinkInputList []*SinkInput
+	for _, si := range a.SinkInputs {
+		if si.core.Index == idx {
+			tryRemoveSinkInput = si
+		} else {
+			newSinkInputList = append(newSinkInputList, si)
+		}
+	}
+	if tryRemoveSinkInput != nil {
+		dbus.UnInstallObject(tryRemoveSinkInput)
+		a.SinkInputs = newSinkInputList
+		dbus.NotifyChange(a, "SinkInputs")
+	}
+}
+
 func (a *Audio) rebuildSinkList() {
 	var sinks []*Sink
 	for _, s := range a.core.GetSinkList() {
@@ -310,12 +353,14 @@ func (s *SinkInput) update() {
 	s.setPropFade(s.core.Volume.Fade(s.core.ChannelMap))
 	s.setPropSupportBalance(true)
 	s.setPropBalance(s.core.Volume.Balance(s.core.ChannelMap))
+
 }
 
 func (s *SinkInput) setPropVolume(v float64) {
 	if s.Volume != v {
 		s.Volume = v
 		dbus.NotifyChange(s, "Volume")
+		fmt.Println("VV:", s.Name, s.Volume)
 	}
 }
 func (s *SinkInput) setPropMute(v bool) {
