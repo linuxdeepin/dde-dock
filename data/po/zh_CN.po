@@ -4,7 +4,7 @@ msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:13
 msgid "Dial-Up Networking"
-msgstr ""
+msgstr "拨号网络"
 
 #: ../../bluetooth/bluez_profile.go:14
 msgid "Hands-Free unit"
