@@ -102,20 +102,12 @@ func setLayout(key string) {
 	args := []string{}
 	args = append(args, "-layout")
 	args = append(args, layout)
-	//args = append(args, "-option")
-	//args = append(args, option)
+	args = append(args, "-option")
+	args = append(args, option)
 	if err := exec.Command("/usr/bin/setxkbmap", args...).Run(); err != nil {
 		logObj.Warningf("Set Layout: %s - %s Failed: %v",
 			layout, option, err)
 		return
-	}
-
-	if len(option) > 0 {
-		options := kbdSettings.GetStrv(KBD_KEY_LAYOUT_OPTIONS)
-		if !utilObj.IsElementExist(option, options) {
-			options = append(options, option)
-			kbdSettings.SetStrv(KBD_KEY_LAYOUT_OPTIONS, options)
-		}
 	}
 
 	list := kbdSettings.GetStrv(KBD_KEY_USER_LAYOUT_LIST)
@@ -290,12 +282,14 @@ func listenDevsSettings() {
 			setQtCursorBlink(uint32(value))
 		case KBD_KEY_LAYOUT_OPTIONS:
 			setLayoutOptions()
+			layout := kbdSettings.GetString(KBD_KEY_LAYOUT)
+			setLayout(layout)
 		}
 	})
 }
 
 func initGSettingsSet(tpadFlag bool) {
-	logObj.Info("Init devices start...")
+	//logObj.Info("Init devices start...")
 	// init keyyboard gsettings value
 	layout := kbdSettings.GetString(KBD_KEY_LAYOUT)
 	setLayout(layout)
@@ -385,5 +379,5 @@ func initGSettingsSet(tpadFlag bool) {
 	tpadName := C.CString("touchpad")
 	defer C.free(unsafe.Pointer(tpadName))
 	C.set_motion(tpadName, C.double(accel), C.int(thres))
-	logObj.Info("Init devices end...")
+	//logObj.Info("Init devices end...")
 }

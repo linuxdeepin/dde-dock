@@ -62,10 +62,12 @@ func (op *KbdEntry) LayoutList() map[string]string {
 		}
 	}()
 
-	datas := parseXML(_LAYOUT_XML_PATH)
-	layouts := getLayoutList(datas)
+	if layoutDescMap == nil {
+		datas := parseXML(_LAYOUT_XML_PATH)
+		layoutDescMap = getLayoutList(datas)
+	}
 
-	return layouts
+	return layoutDescMap
 }
 
 func (op *KbdEntry) GetLayoutLocale(layout string) string {
@@ -225,8 +227,19 @@ func NewKeyboard() *KbdEntry {
 		kbdSettings, KBD_KEY_LAYOUT)
 	if len(m.CurrentLayout.GetValue().(string)) < 1 {
 		v := getDefaultLayout()
-		m.CurrentLayout.SetValue(v)
-		kbdSettings.SetString(KBD_KEY_LAYOUT, v)
+		if _, ok := layoutDescMap[v]; ok {
+			m.CurrentLayout.SetValue(v)
+			kbdSettings.SetString(KBD_KEY_LAYOUT, v)
+		} else {
+			strs := strings.Split(v, LAYOUT_DELIM)
+			m.CurrentLayout.SetValue(strs[0] + LAYOUT_DELIM)
+			kbdSettings.SetString(KBD_KEY_LAYOUT, strs[0]+LAYOUT_DELIM)
+			if len(strs[1]) > 0 {
+				list := kbdSettings.GetStrv(KBD_KEY_LAYOUT_OPTIONS)
+				list = append(list, strs[1])
+				kbdSettings.SetStrv(KBD_KEY_LAYOUT_OPTIONS, list)
+			}
+		}
 	}
 	m.RepeatEnabled = property.NewGSettingsBoolProperty(
 		m, "RepeatEnabled",

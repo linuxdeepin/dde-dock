@@ -40,6 +40,7 @@ var (
 	tpadSettings  = gio.NewSettings("com.deepin.dde.touchpad")
 	mouseSettings = gio.NewSettings("com.deepin.dde.mouse")
 	kbdSettings   = gio.NewSettings("com.deepin.dde.keyboard")
+	layoutDescMap = make(map[string]string)
 )
 
 func main() {
@@ -68,6 +69,9 @@ func main() {
 		logObj.Warning("Manager DBus Session Failed: ", err)
 		panic(err)
 	}
+
+	datas := parseXML(_LAYOUT_XML_PATH)
+	layoutDescMap = getLayoutList(datas)
 
 	tpadFlag := false
 	for _, info := range managerObj.Infos {
