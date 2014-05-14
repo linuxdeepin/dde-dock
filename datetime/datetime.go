@@ -36,7 +36,7 @@ type Manager struct {
 	Use24HourDisplay *property.GSettingsBoolProperty `access:"readwrite"`
 	CurrentTimezone  string
 	UserTimezoneList []string
-	LocaleListMap    map[string]string
+	//LocaleListMap    map[string]string
 }
 
 func (op *Manager) SetDate(d string) (bool, error) {
@@ -137,8 +137,8 @@ func NewDateAndTime() *Manager {
 	m.listenSettings()
 	m.listenZone()
 	m.AddUserTimezoneList(m.CurrentTimezone)
-	m.LocaleListMap = make(map[string]string)
-	m.LocaleListMap = localDescMap
+	//m.LocaleListMap = make(map[string]string)
+	//m.LocaleListMap = localDescMap
 
 	return m
 }
