@@ -1,10 +1,10 @@
 package main
 
-// available values struct
+// available values structure
 type availableValues map[string]kvalue
 type kvalue struct {
 	Value interface{}
-	Text  string
+	Text  string // used for internationalization
 }
 
 // define key type

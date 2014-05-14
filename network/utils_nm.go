@@ -4,6 +4,91 @@ import nm "dbus/org/freedesktop/networkmanager"
 import "dlib/dbus"
 import "strings"
 
+// General function wrappers for network manager
+func nmGeneralGetAllDeviceHwAddr(devType uint32) (allHwAddr map[string]string) {
+	allHwAddr = make(map[string]string)
+	for _, devPath := range nmGetDevices() {
+		if dev, err := nmNewDevice(devPath); err == nil && dev.DeviceType.Get() == devType {
+			hwAddr, err := nmGeneralGetDeviceHwAddr(devPath)
+			if err == nil {
+				allHwAddr[dev.Interface.Get()] = hwAddr
+			}
+		}
+	}
+	return
+}
+func nmGeneralGetDeviceHwAddr(devPath dbus.ObjectPath) (hwAddr string, err error) {
+	dev, err := nmNewDevice(devPath)
+	if err != nil {
+		return
+	}
+
+	devType := dev.DeviceType.Get()
+	switch devType {
+	case NM_DEVICE_TYPE_ETHERNET:
+		var devWired *nm.DeviceWired
+		devWired, err = nmNewDeviceWired(devPath)
+		if err == nil {
+			hwAddr = devWired.HwAddress.Get()
+		}
+	case NM_DEVICE_TYPE_WIFI:
+		var devWireless *nm.DeviceWireless
+		devWireless, err = nmNewDeviceWireless(devPath)
+		if err == nil {
+			hwAddr = devWireless.HwAddress.Get()
+		}
+	case NM_DEVICE_TYPE_BT:
+		var devBluetooth *nm.DeviceBluetooth
+		devBluetooth, err = nmNewDeviceBluetooth(devPath)
+		if err == nil {
+			hwAddr = devBluetooth.HwAddress.Get()
+		}
+	case NM_DEVICE_TYPE_OLPC_MESH:
+		var devOlpcMesh *nm.DeviceOlpcMesh
+		devOlpcMesh, err = nmNewDeviceOlpcMesh(devPath)
+		if err == nil {
+			hwAddr = devOlpcMesh.HwAddress.Get()
+		}
+	case NM_DEVICE_TYPE_WIMAX:
+		var devWiMax *nm.DeviceWiMax
+		devWiMax, err = nmNewDeviceWiMax(devPath)
+		if err == nil {
+			hwAddr = devWiMax.HwAddress.Get()
+		}
+	case NM_DEVICE_TYPE_INFINIBAND:
+		var devInfiniband *nm.DeviceInfiniband
+		devInfiniband, err = nmNewDeviceInfiniband(devPath)
+		if err == nil {
+			hwAddr = devInfiniband.HwAddress.Get()
+		}
+	case NM_DEVICE_TYPE_BOND:
+		var devBond *nm.DeviceBond
+		devBond, err = nmNewDeviceBond(devPath)
+		if err == nil {
+			hwAddr = devBond.HwAddress.Get()
+		}
+	case NM_DEVICE_TYPE_BRIDGE:
+		var devBridge *nm.DeviceBridge
+		devBridge, err = nmNewDeviceBridge(devPath)
+		if err == nil {
+			hwAddr = devBridge.HwAddress.Get()
+		}
+	case NM_DEVICE_TYPE_VLAN:
+		var devVlan *nm.DeviceVlan
+		devVlan, err = nmNewDeviceVlan(devPath)
+		if err == nil {
+			hwAddr = devVlan.HwAddress.Get()
+		}
+	case NM_DEVICE_TYPE_MODEM, NM_DEVICE_TYPE_ADSL:
+		// there is no hardware address for such devices
+	default:
+		logger.Error("unknown device type", devType)
+	}
+	hwAddr = strings.ToUpper(hwAddr)
+	return
+}
+
+// New network manager objects
 func nmNewDevice(devPath dbus.ObjectPath) (dev *nm.Device, err error) {
 	dev, err = nm.NewDevice(dbusNmDest, devPath)
 	if err != nil {
@@ -12,21 +97,80 @@ func nmNewDevice(devPath dbus.ObjectPath) (dev *nm.Device, err error) {
 	}
 	return
 }
-
 func nmNewDeviceWired(devPath dbus.ObjectPath) (dev *nm.DeviceWired, err error) {
 	dev, err = nm.NewDeviceWired(dbusNmDest, devPath)
 	if err != nil {
 		logger.Error(err)
-		return
 	}
 	return
 }
-
 func nmNewDeviceWireless(devPath dbus.ObjectPath) (dev *nm.DeviceWireless, err error) {
 	dev, err = nm.NewDeviceWireless(dbusNmDest, devPath)
 	if err != nil {
 		logger.Error(err)
-		return
+	}
+	return
+}
+func nmNewDeviceModem(devPath dbus.ObjectPath) (dev *nm.DeviceModem, err error) {
+	dev, err = nm.NewDeviceModem(dbusNmDest, devPath)
+	if err != nil {
+		logger.Error(err)
+	}
+	return
+}
+func nmNewDeviceBluetooth(devPath dbus.ObjectPath) (dev *nm.DeviceBluetooth, err error) {
+	dev, err = nm.NewDeviceBluetooth(dbusNmDest, devPath)
+	if err != nil {
+		logger.Error(err)
+	}
+	return
+}
+func nmNewDeviceOlpcMesh(devPath dbus.ObjectPath) (dev *nm.DeviceOlpcMesh, err error) {
+	dev, err = nm.NewDeviceOlpcMesh(dbusNmDest, devPath)
+	if err != nil {
+		logger.Error(err)
+	}
+	return
+}
+func nmNewDeviceWiMax(devPath dbus.ObjectPath) (dev *nm.DeviceWiMax, err error) {
+	dev, err = nm.NewDeviceWiMax(dbusNmDest, devPath)
+	if err != nil {
+		logger.Error(err)
+	}
+	return
+}
+func nmNewDeviceInfiniband(devPath dbus.ObjectPath) (dev *nm.DeviceInfiniband, err error) {
+	dev, err = nm.NewDeviceInfiniband(dbusNmDest, devPath)
+	if err != nil {
+		logger.Error(err)
+	}
+	return
+}
+func nmNewDeviceBond(devPath dbus.ObjectPath) (dev *nm.DeviceBond, err error) {
+	dev, err = nm.NewDeviceBond(dbusNmDest, devPath)
+	if err != nil {
+		logger.Error(err)
+	}
+	return
+}
+func nmNewDeviceBridge(devPath dbus.ObjectPath) (dev *nm.DeviceBridge, err error) {
+	dev, err = nm.NewDeviceBridge(dbusNmDest, devPath)
+	if err != nil {
+		logger.Error(err)
+	}
+	return
+}
+func nmNewDeviceVlan(devPath dbus.ObjectPath) (dev *nm.DeviceVlan, err error) {
+	dev, err = nm.NewDeviceVlan(dbusNmDest, devPath)
+	if err != nil {
+		logger.Error(err)
+	}
+	return
+}
+func nmNewDeviceAdsl(devPath dbus.ObjectPath) (dev *nm.DeviceAdsl, err error) {
+	dev, err = nm.NewDeviceAdsl(dbusNmDest, devPath)
+	if err != nil {
+		logger.Error(err)
 	}
 	return
 }
@@ -67,39 +211,20 @@ func nmNewDHCP4Config(path dbus.ObjectPath) (dhcp4 *nm.DHCP4Config, err error) {
 	return
 }
 
-func nmGetDevices() (devPaths []dbus.ObjectPath, err error) {
-	devPaths, err = nmManager.GetDevices()
-	if err != nil {
-		logger.Error(err)
-	}
-	return
-}
-
-func nmGetWiredDeviceHwAddr(devPath dbus.ObjectPath) (hwAddr string, err error) {
-	wiredDev, err := nmNewDeviceWired(devPath)
-	if err != nil {
-		logger.Error(err)
-		return
-	}
-	hwAddr = strings.ToUpper(wiredDev.HwAddress.Get())
-	return
-}
-
-func nmGetWirelessDeviceHwAddr(devPath dbus.ObjectPath) (hwAddr string, err error) {
-	wirelessDev, err := nmNewDeviceWireless(devPath)
-	if err != nil {
-		logger.Error(err)
-		return
-	}
-	hwAddr = strings.ToUpper(wirelessDev.HwAddress.Get())
-	return
-}
-
 func nmNewSettingsConnection(cpath dbus.ObjectPath) (conn *nm.SettingsConnection, err error) {
 	conn, err = nm.NewSettingsConnection(dbusNmDest, cpath)
 	if err != nil {
 		logger.Error(err)
 		return
+	}
+	return
+}
+
+// Operate wrapper for network manager
+func nmGetDevices() (devPaths []dbus.ObjectPath) {
+	devPaths, err := nmManager.GetDevices()
+	if err != nil {
+		logger.Error(err)
 	}
 	return
 }
@@ -274,7 +399,7 @@ func nmGetConnectionByUuid(uuid string) (cpath dbus.ObjectPath, err error) {
 func nmGetWirelessConnection(ssid []byte, devPath dbus.ObjectPath) (cpath dbus.ObjectPath, ok bool) {
 	var hwAddr string
 	if len(devPath) != 0 {
-		hwAddr, _ = nmGetWirelessDeviceHwAddr(devPath)
+		hwAddr, _ = nmGeneralGetDeviceHwAddr(devPath)
 	}
 	ok = false
 	for _, p := range nmGetWirelessConnectionListBySsid(ssid) {

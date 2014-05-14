@@ -111,17 +111,9 @@ func getSettingWiredAvailableKeys(data connectionData) (keys []string) {
 func getSettingWiredAvailableValues(data connectionData, key string) (values []kvalue) {
 	switch key {
 	case NM_SETTING_WIRED_MAC_ADDRESS:
-		// get wired devices mac address
-		devPaths, err := nmGetDevices()
-		if err == nil {
-			for _, p := range devPaths {
-				if dev, err := nmNewDevice(p); err == nil && dev.DeviceType.Get() == NM_DEVICE_TYPE_ETHERNET {
-					hwAddr, err := nmGetWiredDeviceHwAddr(p)
-					if err == nil {
-						values = append(values, kvalue{hwAddr, hwAddr + " (" + dev.Interface.Get() + ")"})
-					}
-				}
-			}
+		// get all wired devices mac address
+		for iface, hwAddr := range nmGeneralGetAllDeviceHwAddr(NM_DEVICE_TYPE_ETHERNET) {
+			values = append(values, kvalue{hwAddr, hwAddr + " (" + iface + ")"})
 		}
 	}
 	return
@@ -130,6 +122,6 @@ func getSettingWiredAvailableValues(data connectionData, key string) (values []k
 // Check whether the values are correct
 func checkSettingWiredValues(data connectionData) (errs fieldErrors) {
 	errs = make(map[string]string)
-	// machine address will be checked when setting key
+	// hardware address will be checked when setting key
 	return
 }

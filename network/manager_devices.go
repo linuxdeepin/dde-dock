@@ -107,11 +107,7 @@ func (m *Manager) initDeviceManage() {
 	nmManager.ConnectDeviceRemoved(func(path dbus.ObjectPath) {
 		m.handleDeviceChanged(opRemoved, path)
 	})
-	devs, err := nmGetDevices()
-	if err != nil {
-		panic(err)
-	}
-	for _, p := range devs {
+	for _, p := range nmGetDevices() {
 		m.handleDeviceChanged(opAdded, p)
 	}
 }

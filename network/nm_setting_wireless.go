@@ -277,16 +277,8 @@ func getSettingWirelessAvailableValues(data connectionData, key string) (values 
 		}
 	case NM_SETTING_WIRELESS_MAC_ADDRESS:
 		// get wireless devices mac address
-		devPaths, err := nmGetDevices()
-		if err == nil {
-			for _, p := range devPaths {
-				if dev, err := nmNewDevice(p); err == nil && dev.DeviceType.Get() == NM_DEVICE_TYPE_WIFI {
-					hwAddr, err := nmGetWirelessDeviceHwAddr(p)
-					if err == nil {
-						values = append(values, kvalue{hwAddr, hwAddr + " (" + dev.Interface.Get() + ")"})
-					}
-				}
-			}
+		for iface, hwAddr := range nmGeneralGetAllDeviceHwAddr(NM_DEVICE_TYPE_WIFI) {
+			values = append(values, kvalue{hwAddr, hwAddr + " (" + iface + ")"})
 		}
 	}
 	return
