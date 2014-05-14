@@ -195,6 +195,7 @@ func main() {
 	}
 	dbus.DealWithUnhandledMessage()
 	go dlib.StartLoop()
+	listenLocaleChange()
 
 	if err = dbus.Wait(); err != nil {
 		logger.Error("lost dbus session:", err)
