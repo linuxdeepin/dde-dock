@@ -5,7 +5,8 @@ import (
 	"strconv"
 )
 
-// device type
+// TODO refactor, name
+// custom device type
 const (
 	deviceTypeUnknown    = "unknown"
 	deviceTypeEthernet   = "wired"

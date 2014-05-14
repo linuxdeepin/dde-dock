@@ -23,12 +23,14 @@ type activeConnection struct {
 	// VpnState uint32 // TODO
 }
 
+// TODO refactor code
 type activeConnectionInfo struct {
 	Interface    string
 	HWAddress    string
 	IPAddress    string
 	SubnetMask   string
 	RouteAddress string
+	DNS          string
 	Speed        string
 }
 
@@ -172,11 +174,6 @@ func (m *Manager) GetWiredConnectionUuid(wiredDevPath dbus.ObjectPath) (uuid str
 
 // GetActiveConnectionInfo
 func (m *Manager) GetActiveConnectionInfo(devPath dbus.ObjectPath) (ret *activeConnectionInfo, err error) {
-	defer func() {
-		if x := recover(); x != nil {
-			err = x.(error)
-		}
-	}()
 	dev, err := nmNewDevice(devPath)
 	if err != nil {
 		return nil, err
@@ -194,33 +191,35 @@ func (m *Manager) GetActiveConnectionInfo(devPath dbus.ObjectPath) (ret *activeC
 		}
 	}
 
-	ip, mask, route := nmGetDHCP4Info(dev.Dhcp4Config.Get())
+	ip, mask, route, dns := nmGetDHCP4Info(dev.Dhcp4Config.Get())
 	defer func() {
 		nm.DestroyDevice(dev)
 		nm.DestroyActiveConnection(ac)
 	}()
 
-	var macaddress = "0:0:0:0:0:0"
+	var hwAddress = "00:00:00:00:00:00"
 	var speed = "-"
 	switch dev.DeviceType.Get() {
 	case NM_DEVICE_TYPE_ETHERNET:
+		// TODO get device hardware address
 		_dev, _ := nmNewDeviceWired(devPath)
-		macaddress = _dev.HwAddress.Get()
+		hwAddress = _dev.HwAddress.Get()
 		speed = fmt.Sprintf("%d", _dev.Speed.Get())
 		nm.DestroyDeviceWired(_dev)
 	case NM_DEVICE_TYPE_WIFI:
 		_dev, _ := nmNewDeviceWireless(devPath)
-		macaddress = _dev.HwAddress.Get()
+		hwAddress = _dev.HwAddress.Get()
 		speed = fmt.Sprintf("%d", _dev.Bitrate.Get()/1024)
 		nm.DestroyDeviceWireless(_dev)
 	}
 
 	return &activeConnectionInfo{
 		Interface:    name,
-		HWAddress:    macaddress,
+		HWAddress:    hwAddress,
 		IPAddress:    ip,
 		SubnetMask:   mask,
 		RouteAddress: route,
+		DNS:          dns,
 		Speed:        speed,
 	}, nil
 }

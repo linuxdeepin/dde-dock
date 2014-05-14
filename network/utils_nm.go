@@ -320,7 +320,11 @@ func nmAddConnection(data connectionData) (cpath dbus.ObjectPath, err error) {
 	return
 }
 
-func nmGetDHCP4Info(path dbus.ObjectPath) (ip string, mask string, route string) {
+func nmGetDHCP4Info(path dbus.ObjectPath) (ip, mask, route, dns string) {
+	ip = "0.0.0.0"
+	mask = "0.0.0.0"
+	route = "0.0.0.0"
+	dns = "0.0.0.0"
 	dhcp4, err := nmNewDHCP4Config(path)
 	if err != nil {
 		return
@@ -334,6 +338,9 @@ func nmGetDHCP4Info(path dbus.ObjectPath) (ip string, mask string, route string)
 	}
 	if routeData, ok := options["routers"]; ok {
 		route, _ = routeData.Value().(string)
+	}
+	if dnsData, ok := options["domain_name_servers"]; ok {
+		dns, _ = dnsData.Value().(string)
 	}
 	return
 }
