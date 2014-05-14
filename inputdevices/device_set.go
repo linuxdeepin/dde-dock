@@ -253,9 +253,10 @@ func listenDevsSettings() {
 			} else {
 				C.set_middle_button(C.FALSE)
 			}
-		case TPAD_KEY_ACCEL, TPAD_KEY_THRES:
-			thres := int(tpadSettings.GetDouble(TPAD_KEY_THRES))
-			accel := tpadSettings.GetDouble(TPAD_KEY_ACCEL)
+		case MOUSE_KEY_ACCEL, MOUSE_KEY_THRES:
+			thres := int(mouseSettings.GetDouble(MOUSE_KEY_THRES))
+			accel := mouseSettings.GetDouble(MOUSE_KEY_ACCEL)
+			//logObj.Infof("accel: %v, thres: %v", accel, thres)
 			mouseName := C.CString("mouse")
 			defer C.free(unsafe.Pointer(mouseName))
 			C.set_motion(mouseName, C.double(accel), C.int(thres))
