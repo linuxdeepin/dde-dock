@@ -203,8 +203,6 @@ func (op *Manager) updateGSettingsKey(name string, value interface{}) {
 	if value == nil {
 		return
 	}
-	mutex.Lock()
-	defer mutex.Unlock()
 	logObject.Infof("Update GSettings Key: %s, value: %s",
 		name, value.(string))
 	switch name {

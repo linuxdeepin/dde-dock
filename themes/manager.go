@@ -348,8 +348,6 @@ func createTheme(name, gtk, icon, cursor, size, bg, sound string) bool {
 		f.Close()
 	}
 
-	mutex.Lock()
-	defer mutex.Unlock()
 	keyFile := glib.NewKeyFile()
 	defer keyFile.Free()
 	ok, err := keyFile.LoadFromFile(filename, glib.KeyFileFlagsKeepComments)

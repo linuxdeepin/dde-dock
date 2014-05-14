@@ -38,13 +38,13 @@ var (
 	objXSettings     *xs.XSettings
 	objUtil          *utils.Manager
 	watcher          *fsnotify.Watcher
-	mutex            = new(sync.Mutex)
 	logObject        = logger.NewLogger("daemon/themes")
 	themeObjMap      = make(map[string]*Theme)
 	themeNamePathMap = make(map[string]string)
 
 	genId, destroyId = func() (func() int, func()) {
 		count := 0
+		var mutex sync.Mutex
 		return func() int {
 				mutex.Lock()
 				tmp := count
