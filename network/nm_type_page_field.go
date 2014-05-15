@@ -5,60 +5,59 @@ import (
 	"strconv"
 )
 
-// TODO refactor, name
-// custom device type
+// custom device types
 const (
-	deviceTypeUnknown    = "unknown"
-	deviceTypeEthernet   = "wired"
-	deviceTypeWifi       = "wireless"
-	deviceTypeUnused1    = "unused1"
-	deviceTypeUnused2    = "unused2"
-	deviceTypeBt         = "bt"
-	deviceTypeOlpcMesh   = "olpc-mesh"
-	deviceTypeWimax      = "wimax"
-	deviceTypeModem      = "modem"
-	deviceTypeInfiniband = "infiniband"
-	deviceTypeBond       = "bond"
-	deviceTypeVlan       = "vlan"
-	deviceTypeAdsl       = "adsl"
-	deviceTypeBridge     = "bridge"
+	deviceUnknown    = "unknown"
+	deviceEthernet   = "wired"
+	deviceWifi       = "wireless"
+	deviceUnused1    = "unused1"
+	deviceUnused2    = "unused2"
+	deviceBt         = "bt"
+	deviceOlpcMesh   = "olpc-mesh"
+	deviceWimax      = "wimax"
+	deviceModem      = "modem"
+	deviceInfiniband = "infiniband"
+	deviceBond       = "bond"
+	deviceVlan       = "vlan"
+	deviceAdsl       = "adsl"
+	deviceBridge     = "bridge"
 )
 
 func getDeviceTypeName(devType uint32) (devName string) {
 	switch devType {
 	case NM_DEVICE_TYPE_ETHERNET:
-		return deviceTypeEthernet
+		return deviceEthernet
 	case NM_DEVICE_TYPE_WIFI:
-		return deviceTypeWifi
+		return deviceWifi
 	case NM_DEVICE_TYPE_UNUSED1:
-		return deviceTypeUnused1
+		return deviceUnused1
 	case NM_DEVICE_TYPE_UNUSED2:
-		return deviceTypeUnused2
+		return deviceUnused2
 	case NM_DEVICE_TYPE_BT:
-		return deviceTypeBt
+		return deviceBt
 	case NM_DEVICE_TYPE_OLPC_MESH:
-		return deviceTypeOlpcMesh
+		return deviceOlpcMesh
 	case NM_DEVICE_TYPE_WIMAX:
-		return deviceTypeWimax
+		return deviceWimax
 	case NM_DEVICE_TYPE_MODEM:
-		return deviceTypeModem
+		return deviceModem
 	case NM_DEVICE_TYPE_INFINIBAND:
-		return deviceTypeInfiniband
+		return deviceInfiniband
 	case NM_DEVICE_TYPE_BOND:
-		return deviceTypeBond
+		return deviceBond
 	case NM_DEVICE_TYPE_VLAN:
-		return deviceTypeVlan
+		return deviceVlan
 	case NM_DEVICE_TYPE_ADSL:
-		return deviceTypeAdsl
+		return deviceAdsl
 	case NM_DEVICE_TYPE_BRIDGE:
-		return deviceTypeBridge
+		return deviceBridge
 	default:
 		logger.Error("unknown device type", devType)
 	}
-	return deviceTypeUnknown
+	return deviceUnknown
 }
 
-// custom connection type
+// custom connection types
 const (
 	typeUnknown         = "unknown"
 	typeWired           = "wired"

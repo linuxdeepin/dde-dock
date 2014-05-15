@@ -4,13 +4,18 @@ import nm "dbus/org/freedesktop/networkmanager"
 import "dlib/dbus"
 import "fmt"
 
+// TODO different connection structures for different types
 type connection struct {
 	Path dbus.ObjectPath
 	Uuid string
 	Id   string
+
 	// TODO rename to HwAddress
-	HwAddr string // if not empty, only works for special device
-	Ssid   string // only used for wireless connection
+	// if not empty, the connection will only apply to special device,
+	// works for wired, wireless, infiniband, wimax devices
+	HwAddr string
+
+	Ssid string // works for wireless, olpc-mesh connections
 }
 
 type activeConnection struct {
