@@ -32,7 +32,6 @@ func (dpy *Display) QueryCurrentPlanName() string {
 func (cfg *ConfigDisplay) attachCurrentMonitor(dpy *Display) {
 	cfg.CurrentPlanName = dpy.QueryCurrentPlanName()
 	if _, ok := cfg.Monitors[cfg.CurrentPlanName]; ok {
-		cfg.ensureValid(dpy)
 		return
 	}
 	Logger.Warning("attachCurrentMonitor: build info")
@@ -63,7 +62,6 @@ func (cfg *ConfigDisplay) attachCurrentMonitor(dpy *Display) {
 			cfg.Brightness[name] = 1
 		}
 	}
-	cfg.ensureValid(dpy)
 }
 
 func createConfigDisplay(dpy *Display) *ConfigDisplay {
@@ -73,6 +71,7 @@ func createConfigDisplay(dpy *Display) *ConfigDisplay {
 	cfg.DisplayMode = DPModeNormal
 
 	cfg.attachCurrentMonitor(dpy)
+	cfg.ensureValid(dpy)
 	return cfg
 }
 
