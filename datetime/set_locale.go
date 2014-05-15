@@ -37,7 +37,7 @@ const (
 func listenLocaleChange() {
 	setDate.ConnectGenLocaleStatus(func(ok bool, locale string) {
 		if ok && changeLocaleFlag {
-			setLocaleDmrc(locale)
+			//setLocaleDmrc(locale)
 			setLocalePamEnv(locale)
 			changeLocaleFlag = false
 		}
@@ -51,72 +51,70 @@ func setLocaleDmrc(locale string) {
 	}
 	utilsObj := utils.NewUtils()
 	filePath := path.Join(homeDir, DMRC_FILE)
-	strs := strings.Split(locale, ".")
 	utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
 		"LANG", locale)
 	utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
-		"LANGUAGE", strs[0]+":")
-	utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
-		"LC_CTYPE", locale)
-	utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
-		"LC_NUMERIC", locale)
-	utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
-		"LC_TIME", locale)
-	utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
-		"LC_COLLATE", locale)
-	utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
-		"LC_MONETARY", locale)
-	utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
-		"LC_MESSAGES", locale)
-	utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
-		"LC_PAPER", locale)
-	utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
-		"LC_NAME", locale)
-	utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
-		"LC_ADDRESS", locale)
-	utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
-		"LC_TELEPHONE", locale)
-	utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
-		"LC_MEASUREMENT", locale)
-	utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
-		"LC_IDENTIFICATION", locale)
-	utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
-		"LC_ALL", "")
+		"LANGUAGE", locale)
+	//utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
+	//"LC_CTYPE", locale)
+	//utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
+	//"LC_NUMERIC", locale)
+	//utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
+	//"LC_TIME", locale)
+	//utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
+	//"LC_COLLATE", locale)
+	//utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
+	//"LC_MONETARY", locale)
+	//utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
+	//"LC_MESSAGES", locale)
+	//utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
+	//"LC_PAPER", locale)
+	//utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
+	//"LC_NAME", locale)
+	//utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
+	//"LC_ADDRESS", locale)
+	//utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
+	//"LC_TELEPHONE", locale)
+	//utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
+	//"LC_MEASUREMENT", locale)
+	//utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
+	//"LC_IDENTIFICATION", locale)
+	//utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
+	//"LC_ALL", "")
 }
 
 func genPamContents(locale string) string {
 	contents := ""
-	tmp := "LANG=\"" + locale + "\"\n"
+	tmp := "LANG=" + locale + "\n"
 	contents += tmp
-	strs := strings.Split(locale, ".")
-	tmp = "LANGUAGE=\"" + strs[0] + ":\"\n"
+	tmp = "LANGUAGE=" + locale + "\n"
 	contents += tmp
-	tmp = "LC_CTYPE=\"" + locale + "\"\n"
-	contents += tmp
-	tmp = "LC_NUMERIC=\"" + locale + "\"\n"
-	contents += tmp
-	tmp = "LC_TIME=\"" + locale + "\"\n"
-	contents += tmp
-	tmp = "LC_COLLATE=\"" + locale + "\"\n"
-	contents += tmp
-	tmp = "LC_MONETARY=\"" + locale + "\"\n"
-	contents += tmp
-	tmp = "LC_MESSAGES=\"" + locale + "\"\n"
-	contents += tmp
-	tmp = "LC_PAPER=\"" + locale + "\"\n"
-	contents += tmp
-	tmp = "LC_NAME=\"" + locale + "\"\n"
-	contents += tmp
-	tmp = "LC_ADDRESS=\"" + locale + "\"\n"
-	contents += tmp
-	tmp = "LC_TELEPHONE=\"" + locale + "\"\n"
-	contents += tmp
-	tmp = "LC_MEASUREMENT=\"" + locale + "\"\n"
-	contents += tmp
-	tmp = "LC_IDENTIFICATION=\"" + locale + "\"\n"
-	contents += tmp
-	tmp = "LC_ALL=\"\"\n"
-	contents += tmp
+	//tmp = "LC_CTYPE=" + locale + "\n"
+	//contents += tmp
+	//tmp = "LC_NUMERIC=" + locale + "\n"
+	//contents += tmp
+	//tmp = "LC_TIME=" + locale + "\n"
+	//contents += tmp
+	//tmp = "LC_COLLATE=" + locale + "\n"
+	//contents += tmp
+	//tmp = "LC_MONETARY=" + locale + "\n"
+	//contents += tmp
+	//tmp = "LC_MESSAGES=" + locale + "\n"
+	//contents += tmp
+	//tmp = "LC_PAPER=" + locale + "\n"
+	//contents += tmp
+	//tmp = "LC_NAME=" + locale + "\n"
+	//contents += tmp
+	//tmp = "LC_ADDRESS=" + locale + "\n"
+	//contents += tmp
+	//tmp = "LC_TELEPHONE=" + locale + "\n"
+	//contents += tmp
+	//tmp = "LC_MEASUREMENT=" + locale + "\n"
+	//contents += tmp
+	//tmp = "LC_IDENTIFICATION=" + locale + "\n"
+	//contents += tmp
+	//tmp = "LC_ALL=\n"
+	//contents += tmp
 
 	return contents
 }
