@@ -53,29 +53,29 @@ func NewConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 	s.ConnectionType = connectionType
 	id := genConnectionId(s.ConnectionType)
 	switch s.ConnectionType {
-	case typeWired:
+	case connectionWired:
 		s.data = newWiredConnectionData(id, s.CurrentUUID)
-	case typeWireless:
+	case connectionWireless:
 		s.data = newWirelessConnectionData(id, s.CurrentUUID, nil, apSecNone)
-	case typeWirelessAdhoc:
+	case connectionWirelessAdhoc:
 		s.data = newWirelessAdhocConnectionData(id, s.CurrentUUID)
-	case typeWirelessHotspot:
+	case connectionWirelessHotspot:
 		s.data = newWirelessHotspotConnectionData(id, s.CurrentUUID)
-	case typePppoe:
+	case connectionPppoe:
 		s.data = newPppoeConnectionData(id, s.CurrentUUID)
-	case typeMobileGsm:
+	case connectionMobileGsm:
 		s.data = newMobileConnectionData(id, s.CurrentUUID, mobileServiceGsm)
-	case typeMobileCdma:
+	case connectionMobileCdma:
 		s.data = newMobileConnectionData(id, s.CurrentUUID, mobileServiceCdma)
-	case typeVpnL2tp:
+	case connectionVpnL2tp:
 		s.data = newVpnL2tpConnectionData(id, s.CurrentUUID)
-	case typeVpnOpenconnect:
+	case connectionVpnOpenconnect:
 		s.data = newVpnOpenconnectConnectionData(id, s.CurrentUUID)
-	case typeVpnPptp:
+	case connectionVpnPptp:
 		s.data = newVpnPptpConnectionData(id, s.CurrentUUID)
-	case typeVpnVpnc:
+	case connectionVpnVpnc:
 		s.data = newVpnVpncConnectionData(id, s.CurrentUUID)
-	case typeVpnOpenvpn:
+	case connectionVpnOpenvpn:
 		s.data = newVpnOpenvpnConnectionData(id, s.CurrentUUID)
 	}
 
@@ -194,7 +194,7 @@ func (s *ConnectionSession) Save() bool {
 	} else {
 		// create new connection and activate it
 		// TODO vpn ad-hoc hotspot
-		if s.ConnectionType == typeWired || s.ConnectionType == typeWireless {
+		if s.ConnectionType == connectionWired || s.ConnectionType == connectionWireless {
 			nmAddAndActivateConnection(s.data, s.devPath)
 		} else {
 			nmAddConnection(s.data)
@@ -230,7 +230,7 @@ func (s *ConnectionSession) listFields() (fields []string) {
 // listPages return supported pages for target connection type.
 func (s *ConnectionSession) listPages() (pages []string) {
 	switch s.ConnectionType {
-	case typeWired:
+	case connectionWired:
 		pages = []string{
 			pageGeneral,
 			pageEthernet,
@@ -238,7 +238,7 @@ func (s *ConnectionSession) listPages() (pages []string) {
 			pageIPv6,
 			pageSecurity,
 		}
-	case typeWireless:
+	case connectionWireless:
 		pages = []string{
 			pageGeneral,
 			pageWifi,
@@ -246,7 +246,7 @@ func (s *ConnectionSession) listPages() (pages []string) {
 			pageIPv6,
 			pageSecurity,
 		}
-	case typeWirelessAdhoc:
+	case connectionWirelessAdhoc:
 		pages = []string{
 			pageGeneral,
 			pageWifi,
@@ -254,7 +254,7 @@ func (s *ConnectionSession) listPages() (pages []string) {
 			pageIPv6,
 			pageSecurity,
 		}
-	case typeWirelessHotspot:
+	case connectionWirelessHotspot:
 		pages = []string{
 			pageGeneral,
 			pageWifi,
@@ -262,7 +262,7 @@ func (s *ConnectionSession) listPages() (pages []string) {
 			pageIPv6,
 			pageSecurity,
 		}
-	case typePppoe:
+	case connectionPppoe:
 		pages = []string{
 			pageGeneral,
 			pageEthernet,
@@ -270,7 +270,7 @@ func (s *ConnectionSession) listPages() (pages []string) {
 			pagePpp,
 			pageIPv4,
 		}
-	case typeVpnL2tp:
+	case connectionVpnL2tp:
 		pages = []string{
 			pageGeneral,
 			pageVpnL2tp,
@@ -278,14 +278,14 @@ func (s *ConnectionSession) listPages() (pages []string) {
 			pageVpnL2tpIpsec,
 			pageIPv4,
 		}
-	case typeVpnOpenconnect:
+	case connectionVpnOpenconnect:
 		pages = []string{
 			pageGeneral,
 			pageVpnOpenconnect,
 			pageIPv4,
 			pageIPv6,
 		}
-	case typeVpnOpenvpn:
+	case connectionVpnOpenvpn:
 		pages = []string{
 			pageGeneral,
 			pageVpnOpenvpn,
@@ -295,32 +295,32 @@ func (s *ConnectionSession) listPages() (pages []string) {
 			pageIPv4,
 			pageIPv6,
 		}
-		// when connection type is static key, pageVpnOpenvpnTlsauth is not available
+		// when connection connection is static key, pageVpnOpenvpnTlsauth is not available
 		if getSettingVpnOpenvpnKeyConnectionType(s.data) != NM_OPENVPN_CONTYPE_STATIC_KEY {
 			pages = append(pages, pageVpnOpenvpnTlsauth)
 		}
-	case typeVpnPptp:
+	case connectionVpnPptp:
 		pages = []string{
 			pageGeneral,
 			pageVpnPptp,
 			pageVpnPptpPpp,
 			pageIPv4,
 		}
-	case typeVpnVpnc:
+	case connectionVpnVpnc:
 		pages = []string{
 			pageGeneral,
 			pageVpnVpnc,
 			pageVpnVpncAdvanced,
 			pageIPv4,
 		}
-	case typeMobileGsm:
+	case connectionMobileGsm:
 		pages = []string{
 			pageGeneral,
 			pageMobile,
 			pagePpp,
 			pageIPv4,
 		}
-	case typeMobileCdma:
+	case connectionMobileCdma:
 		pages = []string{
 			pageGeneral,
 			pageMobileCdma,
@@ -351,9 +351,9 @@ func (s *ConnectionSession) pageToFields(page string) (fields []string) {
 		fields = []string{fieldIpv6}
 	case pageSecurity:
 		switch s.ConnectionType {
-		case typeWired:
+		case connectionWired:
 			fields = []string{field8021x}
-		case typeWireless, typeWirelessAdhoc, typeWirelessHotspot:
+		case connectionWireless, connectionWirelessAdhoc, connectionWirelessHotspot:
 			if isSettingFieldExists(s.data, field8021x) {
 				fields = []string{fieldWirelessSecurity, field8021x}
 			} else {

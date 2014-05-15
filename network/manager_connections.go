@@ -47,7 +47,7 @@ func (m *Manager) initConnectionManage() {
 	m.WirelessConnections = make([]string, 0)
 
 	// create special wired connection if need
-	m.updatePropWiredConnections() // TODO remove
+	/*m.updatePropWiredConnections() // TODO remove*/
 
 	for _, c := range nmGetConnectionList() {
 		m.handleConnectionChanged(opAdded, c)
@@ -91,21 +91,21 @@ func (m *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPath)
 				conn.HwAddr = convertMacAddressToString(getSettingWirelessMacAddress(cdata))
 			}
 			switch getCustomConnectinoType(cdata) {
-			case typeWireless:
-				m.connections[typeWireless] = m.addConnection(m.connections[typeWireless], conn)
-			case typeWirelessAdhoc:
-				m.connections[typeWirelessAdhoc] = m.addConnection(m.connections[typeWirelessAdhoc], conn)
-			case typeWirelessHotspot:
-				m.connections[typeWirelessHotspot] = m.addConnection(m.connections[typeWirelessHotspot], conn)
+			case connectionWireless:
+				m.connections[connectionWireless] = m.addConnection(m.connections[connectionWireless], conn)
+			case connectionWirelessAdhoc:
+				m.connections[connectionWirelessAdhoc] = m.addConnection(m.connections[connectionWirelessAdhoc], conn)
+			case connectionWirelessHotspot:
+				m.connections[connectionWirelessHotspot] = m.addConnection(m.connections[connectionWirelessHotspot], conn)
 			}
 		case NM_SETTING_PPPOE_SETTING_NAME:
-			m.connections[typePppoe] = m.addConnection(m.connections[typePppoe], conn)
+			m.connections[connectionPppoe] = m.addConnection(m.connections[connectionPppoe], conn)
 		case NM_SETTING_GSM_SETTING_NAME, NM_SETTING_CDMA_SETTING_NAME:
-			m.connections[typeMobile] = m.addConnection(m.connections[typeMobile], conn)
+			m.connections[connectionMobile] = m.addConnection(m.connections[connectionMobile], conn)
 		case NM_SETTING_VPN_SETTING_NAME:
 			m.VPNConnections = append(m.VPNConnections, uuid)
 			m.updatePropVpnConnections()
-			m.connections[typeVpn] = m.addConnection(m.connections[typeVpn], conn)
+			m.connections[connectionVpn] = m.addConnection(m.connections[connectionVpn], conn)
 		}
 		m.updatePropConnections()
 	case opRemoved:

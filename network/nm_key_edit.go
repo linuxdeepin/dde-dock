@@ -17,42 +17,42 @@ func getCustomConnectinoType(data connectionData) (connType string) {
 	t := getSettingConnectionType(data)
 	switch t {
 	case NM_SETTING_WIRED_SETTING_NAME:
-		connType = typeWired
+		connType = connectionWired
 	case NM_SETTING_WIRELESS_SETTING_NAME:
 		if isSettingWirelessModeExists(data) {
 			switch getSettingWirelessMode(data) {
 			case NM_SETTING_WIRELESS_MODE_INFRA:
-				connType = typeWireless
+				connType = connectionWireless
 			case NM_SETTING_WIRELESS_MODE_ADHOC:
-				connType = typeWirelessAdhoc
+				connType = connectionWirelessAdhoc
 			case NM_SETTING_WIRELESS_MODE_AP:
-				connType = typeWirelessHotspot
+				connType = connectionWirelessHotspot
 			}
 		} else {
-			connType = typeWireless
+			connType = connectionWireless
 		}
 	case NM_SETTING_PPPOE_SETTING_NAME:
-		connType = typePppoe
+		connType = connectionPppoe
 	case NM_SETTING_GSM_SETTING_NAME:
-		connType = typeMobileGsm
+		connType = connectionMobileGsm
 	case NM_SETTING_CDMA_SETTING_NAME:
-		connType = typeMobileCdma
+		connType = connectionMobileCdma
 	case NM_SETTING_VPN_SETTING_NAME:
 		switch getSettingVpnServiceType(data) {
 		case NM_DBUS_SERVICE_L2TP:
-			connType = typeVpnL2tp
+			connType = connectionVpnL2tp
 		case NM_DBUS_SERVICE_OPENCONNECT:
-			connType = typeVpnOpenconnect
+			connType = connectionVpnOpenconnect
 		case NM_DBUS_SERVICE_OPENVPN:
-			connType = typeVpnOpenvpn
+			connType = connectionVpnOpenvpn
 		case NM_DBUS_SERVICE_PPTP:
-			connType = typeVpnPptp
+			connType = connectionVpnPptp
 		case NM_DBUS_SERVICE_VPNC:
-			connType = typeVpnVpnc
+			connType = connectionVpnVpnc
 		}
 	}
 	if len(connType) == 0 {
-		connType = typeUnknown
+		connType = connectionUnknown
 	}
 	return
 }

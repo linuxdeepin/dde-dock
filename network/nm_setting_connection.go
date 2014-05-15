@@ -90,13 +90,13 @@ func getSettingConnectionAvailableKeys(data connectionData) (keys []string) {
 
 	// auto-connect only available for target connection types
 	switch getSettingConnectionType(data) {
-	case typeWired:
+	case connectionWired:
 		keys = appendAvailableKeys(data, keys, fieldConnection, NM_SETTING_CONNECTION_AUTOCONNECT)
-	case typeWireless:
+	case connectionWireless:
 		keys = appendAvailableKeys(data, keys, fieldConnection, NM_SETTING_CONNECTION_AUTOCONNECT)
-	case typePppoe:
+	case connectionPppoe:
 		keys = appendAvailableKeys(data, keys, fieldConnection, NM_SETTING_CONNECTION_AUTOCONNECT)
-	case typeVpn:
+	case connectionVpn:
 	}
 	return
 }

@@ -204,9 +204,9 @@ func init() {
 					data, _ := cc.GetSettings()
 					var icon string
 					switch getCustomConnectinoType(data) {
-					case typeWired:
+					case connectionWired:
 						icon = "notification-network-ethernet-connected"
-					case typeWireless:
+					case connectionWireless:
 						// TODO
 						// icon = "notification-network-wireless-connected"
 						icon = "notification-network-wireless-full"

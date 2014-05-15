@@ -427,7 +427,7 @@ func nmGetWirelessConnectionListBySsid(ssid []byte) (cpaths []dbus.ObjectPath) {
 		if err != nil {
 			continue
 		}
-		if getCustomConnectinoType(data) != typeWireless {
+		if getCustomConnectinoType(data) != connectionWireless {
 			continue
 		}
 		if isSettingWirelessSsidExists(data) && string(getSettingWirelessSsid(data)) == string(ssid) {

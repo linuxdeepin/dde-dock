@@ -59,21 +59,21 @@ func getDeviceTypeName(devType uint32) (devName string) {
 
 // custom connection types
 const (
-	typeUnknown         = "unknown"
-	typeWired           = "wired"
-	typeWireless        = "wireless"
-	typeWirelessAdhoc   = "wireless-adhoc"
-	typeWirelessHotspot = "wireless-hotspot"
-	typePppoe           = "pppoe"
-	typeMobile          = "mobile"
-	typeMobileGsm       = "mobile-gsm"
-	typeMobileCdma      = "mobile-cdma"
-	typeVpn             = "vpn"
-	typeVpnL2tp         = "vpn-l2tp"
-	typeVpnOpenconnect  = "vpn-openconnect"
-	typeVpnOpenvpn      = "vpn-openvpn"
-	typeVpnPptp         = "vpn-pptp"
-	typeVpnVpnc         = "vpn-vpnc"
+	connectionUnknown         = "unknown"
+	connectionWired           = "wired"
+	connectionWireless        = "wireless"
+	connectionWirelessAdhoc   = "wireless-adhoc"
+	connectionWirelessHotspot = "wireless-hotspot"
+	connectionPppoe           = "pppoe"
+	connectionMobile          = "mobile"
+	connectionMobileGsm       = "mobile-gsm"
+	connectionMobileCdma      = "mobile-cdma"
+	connectionVpn             = "vpn"
+	connectionVpnL2tp         = "vpn-l2tp"
+	connectionVpnOpenconnect  = "vpn-openconnect"
+	connectionVpnOpenvpn      = "vpn-openvpn"
+	connectionVpnPptp         = "vpn-pptp"
+	connectionVpnVpnc         = "vpn-vpnc"
 )
 
 // key-map values for internationalization
@@ -82,32 +82,32 @@ type connectionType struct {
 }
 
 var supportedConnectionTypes = []string{
-	// typeWired,// don't support multiple wired connections since now
-	typeWireless,
-	typeWirelessAdhoc,
-	typeWirelessHotspot,
-	typePppoe,
-	typeMobileGsm,
-	typeMobileCdma,
-	typeVpnL2tp,
-	typeVpnOpenconnect,
-	typeVpnOpenvpn,
-	typeVpnPptp,
-	typeVpnVpnc,
+	// connectionWired,// don't support multiple wired connections since now
+	connectionWireless,
+	connectionWirelessAdhoc,
+	connectionWirelessHotspot,
+	connectionPppoe,
+	connectionMobileGsm,
+	connectionMobileCdma,
+	connectionVpnL2tp,
+	connectionVpnOpenconnect,
+	connectionVpnOpenvpn,
+	connectionVpnPptp,
+	connectionVpnVpnc,
 }
 var supportedConnectionTypesInfo = []connectionType{
-	// connectionType{typeWired, dlib.Tr("Ethernet")},// don't support multiple wired connections since now
-	connectionType{typeWireless, dlib.Tr("Wi-Fi")},
-	connectionType{typeWirelessAdhoc, dlib.Tr("Wi-Fi Ad-Hoc")},
-	connectionType{typeWirelessHotspot, dlib.Tr("Wi-Fi Hotspot")},
-	connectionType{typePppoe, dlib.Tr("PPPoE")},
-	connectionType{typeMobileGsm, dlib.Tr("Mobile GSM (GPRS, EDGE, UMTS, HSPA)")},
-	connectionType{typeMobileCdma, dlib.Tr("Mobile CDMA (1xRTT, EVDO)")},
-	connectionType{typeVpnL2tp, dlib.Tr("VPN-L2TP (Layer 2 Tunneling Protocol)")},
-	connectionType{typeVpnOpenconnect, dlib.Tr("VPN-OpenConnect (Cisco AnyConnect Compatible VPN)")},
-	connectionType{typeVpnOpenvpn, dlib.Tr("VPN-OpenVPN")},
-	connectionType{typeVpnPptp, dlib.Tr("VPN-PPTP (Point-to-Point Tunneling Protocol))")},
-	connectionType{typeVpnVpnc, dlib.Tr("VPN-VPNC (Cisco Compatible VPN)")},
+	// connectionType{connectionWired, dlib.Tr("Ethernet")},// don't support multiple wired connections since now
+	connectionType{connectionWireless, dlib.Tr("Wi-Fi")},
+	connectionType{connectionWirelessAdhoc, dlib.Tr("Wi-Fi Ad-Hoc")},
+	connectionType{connectionWirelessHotspot, dlib.Tr("Wi-Fi Hotspot")},
+	connectionType{connectionPppoe, dlib.Tr("PPPoE")},
+	connectionType{connectionMobileGsm, dlib.Tr("Mobile GSM (GPRS, EDGE, UMTS, HSPA)")},
+	connectionType{connectionMobileCdma, dlib.Tr("Mobile CDMA (1xRTT, EVDO)")},
+	connectionType{connectionVpnL2tp, dlib.Tr("VPN-L2TP (Layer 2 Tunneling Protocol)")},
+	connectionType{connectionVpnOpenconnect, dlib.Tr("VPN-OpenConnect (Cisco AnyConnect Compatible VPN)")},
+	connectionType{connectionVpnOpenvpn, dlib.Tr("VPN-OpenVPN")},
+	connectionType{connectionVpnPptp, dlib.Tr("VPN-PPTP (Point-to-Point Tunneling Protocol))")},
+	connectionType{connectionVpnVpnc, dlib.Tr("VPN-VPNC (Cisco Compatible VPN)")},
 }
 
 const (
@@ -221,31 +221,31 @@ func genConnectionId(connType string) (id string) {
 	switch connType {
 	default:
 		idPrefix = dlib.Tr("Connection")
-	case typeWired:
+	case connectionWired:
 		idPrefix = dlib.Tr("Wired Connection")
-	case typeWireless:
+	case connectionWireless:
 		idPrefix = dlib.Tr("Wireless Connection")
-	case typeWirelessAdhoc:
+	case connectionWirelessAdhoc:
 		idPrefix = dlib.Tr("Wireless Ad-Hoc")
-	case typeWirelessHotspot:
+	case connectionWirelessHotspot:
 		idPrefix = dlib.Tr("Wireless Ap-Hotspot")
-	case typePppoe:
+	case connectionPppoe:
 		idPrefix = dlib.Tr("PPPoE Connection")
-	case typeMobileGsm:
+	case connectionMobileGsm:
 		idPrefix = dlib.Tr("Mobile GSM Connection")
-	case typeMobileCdma:
+	case connectionMobileCdma:
 		idPrefix = dlib.Tr("Mobile CDMA Connection")
-	case typeVpn:
+	case connectionVpn:
 		idPrefix = dlib.Tr("VPN Connection")
-	case typeVpnL2tp:
+	case connectionVpnL2tp:
 		idPrefix = dlib.Tr("VPN L2TP")
-	case typeVpnOpenconnect:
+	case connectionVpnOpenconnect:
 		idPrefix = dlib.Tr("VPN OpenConnect")
-	case typeVpnOpenvpn:
+	case connectionVpnOpenvpn:
 		idPrefix = dlib.Tr("VPN OpenVPN")
-	case typeVpnPptp:
+	case connectionVpnPptp:
 		idPrefix = dlib.Tr("VPN PPTP")
-	case typeVpnVpnc:
+	case connectionVpnVpnc:
 		idPrefix = dlib.Tr("VPN VPNC")
 	}
 	allIds := nmGetConnectionIds()
