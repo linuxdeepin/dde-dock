@@ -11,7 +11,7 @@ const (
 	dbusNetworkIfs  = "com.deepin.daemon.Network"
 )
 
-// TODO
+// TODO refactor code
 const (
 	opAdded = iota
 	opRemoved

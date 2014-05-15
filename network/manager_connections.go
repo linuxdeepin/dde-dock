@@ -5,9 +5,10 @@ import "dlib/dbus"
 import "fmt"
 
 type connection struct {
-	Path   dbus.ObjectPath
-	Uuid   string
-	Id     string
+	Path dbus.ObjectPath
+	Uuid string
+	Id   string
+	// TODO rename to HwAddress
 	HwAddr string // if not empty, only works for special device
 	Ssid   string // only used for wireless connection
 }
@@ -16,21 +17,21 @@ type activeConnection struct {
 	nmaconn *nm.ActiveConnection
 	path    dbus.ObjectPath
 	Devices []dbus.ObjectPath
-	// SpecificObject dbus.ObjectPath
+	// SpecificObject dbus.ObjectPath // TODO
 	Uuid  string
 	State uint32
 	Vpn   bool
 	// VpnState uint32 // TODO
 }
 
-// TODO refactor code
 type activeConnectionInfo struct {
 	Interface    string
-	HWAddress    string
-	IPAddress    string
+	HwAddress    string
+	IpAddress    string
 	SubnetMask   string
 	RouteAddress string
-	DNS          string
+	Dns1         string
+	Dns2         string
 	Speed        string
 }
 
@@ -172,56 +173,62 @@ func (m *Manager) GetWiredConnectionUuid(wiredDevPath dbus.ObjectPath) (uuid str
 	return
 }
 
-// GetActiveConnectionInfo
-func (m *Manager) GetActiveConnectionInfo(devPath dbus.ObjectPath) (ret *activeConnectionInfo, err error) {
-	dev, err := nmNewDevice(devPath)
+func (m *Manager) GetActiveConnectionInfo(devPath dbus.ObjectPath) (acinfoJSON string, err error) {
+	// get connection data
+	nmDev, err := nmNewDevice(devPath)
 	if err != nil {
-		return nil, err
+		return
 	}
-	ac, err := nmNewActiveConnection(dev.ActiveConnection.Get())
+	nmAConn, err := nmNewActiveConnection(nmDev.ActiveConnection.Get())
 	if err != nil {
-		return nil, err
+		return
 	}
+	nmConn, err := nmNewSettingsConnection(nmAConn.Connection.Get())
+	if err != nil {
+		return
+	}
+
+	// query connection data
+	cdata, err := nmConn.GetSettings()
 	name := ""
-	if c, err := nmNewSettingsConnection(ac.Connection.Get()); err != nil {
-		return nil, err
-	} else {
-		if cdata, err := c.GetSettings(); err == nil {
-			name = getSettingConnectionId(cdata)
-		}
+	dns2 := ""
+	if err == nil {
+		name = getSettingConnectionId(cdata)
+		dns2 = getSettingVkIp4ConfigDns(cdata)
 	}
 
-	ip, mask, route, dns := nmGetDHCP4Info(dev.Dhcp4Config.Get())
-	defer func() {
-		nm.DestroyDevice(dev)
-		nm.DestroyActiveConnection(ac)
-	}()
+	// query dhcp4
+	ip, mask, route, dns1 := nmGetDHCP4Info(nmDev.Dhcp4Config.Get())
 
-	var hwAddress = "00:00:00:00:00:00"
+	// get hardware address
+	hwAddress, err := nmGeneralGetDeviceHwAddr(devPath)
+	if err != nil {
+		hwAddress = "00:00:00:00:00:00"
+	}
+
+	// get network speed (Mb/s)
 	var speed = "-"
-	switch dev.DeviceType.Get() {
+	switch nmDev.DeviceType.Get() {
 	case NM_DEVICE_TYPE_ETHERNET:
-		// TODO get device hardware address
-		_dev, _ := nmNewDeviceWired(devPath)
-		hwAddress = _dev.HwAddress.Get()
-		speed = fmt.Sprintf("%d", _dev.Speed.Get())
-		nm.DestroyDeviceWired(_dev)
+		devWired, _ := nmNewDeviceWired(devPath)
+		speed = fmt.Sprintf("%d", devWired.Speed.Get())
 	case NM_DEVICE_TYPE_WIFI:
-		_dev, _ := nmNewDeviceWireless(devPath)
-		hwAddress = _dev.HwAddress.Get()
-		speed = fmt.Sprintf("%d", _dev.Bitrate.Get()/1024)
-		nm.DestroyDeviceWireless(_dev)
+		devWireless, _ := nmNewDeviceWireless(devPath)
+		speed = fmt.Sprintf("%d", devWireless.Bitrate.Get()/1024)
 	}
 
-	return &activeConnectionInfo{
+	acinfo := &activeConnectionInfo{
 		Interface:    name,
-		HWAddress:    hwAddress,
-		IPAddress:    ip,
+		HwAddress:    hwAddress,
+		IpAddress:    ip,
 		SubnetMask:   mask,
 		RouteAddress: route,
-		DNS:          dns,
+		Dns1:         dns1,
+		Dns2:         dns2,
 		Speed:        speed,
-	}, nil
+	}
+	acinfoJSON, _ = marshalJSON(acinfo)
+	return
 }
 
 // CreateConnection create a new connection, return ConnectionSession's dbus object path if success.
