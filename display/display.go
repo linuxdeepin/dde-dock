@@ -137,7 +137,7 @@ func (info *DisplayInfo) update() {
 
 type Display struct {
 	Monitors    []*Monitor
-	monitorLock sync.Mutex
+	monitorLock sync.RWMutex
 
 	ScreenWidth  uint16
 	ScreenHeight uint16
@@ -161,6 +161,12 @@ func (dpy *Display) lockMonitors() {
 }
 func (dpy *Display) unlockMonitors() {
 	dpy.monitorLock.Unlock()
+}
+func (dpy *Display) rLockMonitors() {
+	dpy.monitorLock.RLock()
+}
+func (dpy *Display) rUnlockMonitors() {
+	dpy.monitorLock.RUnlock()
 }
 
 func (dpy *Display) listener() {
@@ -351,13 +357,17 @@ func (dpy *Display) SetPrimary(name string) error {
 	return err
 }
 
-func (dpy *Display) Apply() {
-	dpy.lockMonitors()
-	defer dpy.unlockMonitors()
+func (dpy *Display) Apply(auto bool) {
+	dpy.rLockMonitors()
+	defer dpy.rUnlockMonitors()
 
 	code := "xrandr "
 	for _, m := range dpy.Monitors {
 		code += m.generateShell()
+		if auto {
+			code += " --auto"
+		}
+
 		if dpy.cfg.Primary == m.Name {
 			code += " --primary"
 		}
@@ -379,7 +389,7 @@ func (dpy *Display) ResetChanges() {
 	dpy.SetPrimary(dpy.cfg.Primary)
 
 	//apply the saved configurations.
-	dpy.Apply()
+	dpy.Apply(false)
 
 	dpy.Brightness = make(map[string]float64)
 	for name, v := range dpy.cfg.Brightness {
@@ -401,17 +411,16 @@ func (dpy *Display) SaveChanges() {
 }
 
 func (dpy *Display) Reset() {
-	dpy.lockMonitors()
-	defer dpy.unlockMonitors()
+	dpy.rLockMonitors()
+	defer dpy.rUnlockMonitors()
 
 	for _, m := range dpy.Monitors {
 		dpy.SetBrightness(m.Name, 1)
-		m.SwitchOn(true)
 		m.SetReflect(0)
 		m.SetRotation(1)
 		m.SetMode(m.BestMode.ID)
 	}
-	dpy.Apply()
+	dpy.Apply(true)
 }
 
 func main() {
