@@ -110,10 +110,13 @@ func setLayout(key string) {
 		return
 	}
 
-	list := kbdSettings.GetStrv(KBD_KEY_USER_LAYOUT_LIST)
-	if !utilObj.IsElementExist(key, list) {
-		list = append(list, key)
-		kbdSettings.SetStrv(KBD_KEY_USER_LAYOUT_LIST, list)
+	key = layout + LAYOUT_DELIM + option
+	if len(key) > 0 {
+		list := kbdSettings.GetStrv(KBD_KEY_USER_LAYOUT_LIST)
+		if !utilObj.IsElementExist(key, list) {
+			list = append(list, key)
+			kbdSettings.SetStrv(KBD_KEY_USER_LAYOUT_LIST, list)
+		}
 	}
 }
 
