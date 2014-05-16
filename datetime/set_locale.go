@@ -33,13 +33,14 @@ const (
 	PAM_ENV_FILE   = ".pam_environment"
 )
 
-func listenLocaleChange() {
+func (obj *Manager) listenLocaleChange() {
 	setDate.ConnectGenLocaleStatus(func(ok bool, locale string) {
 		if ok && changeLocaleFlag {
 			//setLocaleDmrc(locale)
 			setLocalePamEnv(locale)
 			changeLocaleFlag = false
 		}
+		obj.LocaleStatus(ok, locale)
 	})
 }
 

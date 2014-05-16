@@ -38,6 +38,8 @@ type Manager struct {
 	CurrentTimezone  string
 	UserTimezoneList []string
 	LocaleListMap    map[string]string
+
+	LocaleStatus func(bool, string)
 }
 
 func (op *Manager) SetDate(d string) (bool, error) {
@@ -195,7 +197,7 @@ func main() {
 	}
 	dbus.DealWithUnhandledMessage()
 	go dlib.StartLoop()
-	listenLocaleChange()
+	date.listenLocaleChange()
 
 	if err = dbus.Wait(); err != nil {
 		logger.Error("lost dbus session:", err)
