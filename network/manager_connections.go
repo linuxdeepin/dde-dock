@@ -10,12 +10,12 @@ type connection struct {
 	Uuid string
 	Id   string
 
-	// TODO rename to HwAddress
 	// if not empty, the connection will only apply to special device,
 	// works for wired, wireless, infiniband, wimax devices
-	HwAddr string
+	HwAddress string
 
-	Ssid string // works for wireless, olpc-mesh connections
+	// works for wireless, olpc-mesh connections
+	Ssid string
 }
 
 type activeConnection struct {
@@ -88,7 +88,7 @@ func (m *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPath)
 
 			conn.Ssid = string(getSettingWirelessSsid(cdata))
 			if isSettingWirelessMacAddressExists(cdata) {
-				conn.HwAddr = convertMacAddressToString(getSettingWirelessMacAddress(cdata))
+				conn.HwAddress = convertMacAddressToString(getSettingWirelessMacAddress(cdata))
 			}
 			switch getCustomConnectinoType(cdata) {
 			case connectionWireless:

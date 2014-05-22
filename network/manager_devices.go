@@ -8,13 +8,14 @@ type deviceOld struct {
 	State uint32
 }
 type device struct {
-	Path          dbus.ObjectPath
-	State         uint32
-	HwAddr        string
-	ActiveAp      dbus.ObjectPath // used for wireless device
 	nmDevType     uint32
 	nmDev         *nm.Device
 	nmDevWireless *nm.DeviceWireless
+
+	Path      dbus.ObjectPath
+	State     uint32
+	HwAddress string
+	ActiveAp  dbus.ObjectPath // used for wireless device
 }
 
 func (m *Manager) newDeviceOld(nmDev *nm.Device) (dev *deviceOld) {
@@ -39,11 +40,11 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device) {
 	switch dev.nmDevType {
 	case NM_DEVICE_TYPE_ETHERNET:
 		if nmDevWired, err := nmNewDeviceWired(dev.Path); err == nil {
-			dev.HwAddr = nmDevWired.HwAddress.Get()
+			dev.HwAddress = nmDevWired.HwAddress.Get()
 		}
 	case NM_DEVICE_TYPE_WIFI:
 		if nmDevWireless, err := nmNewDeviceWireless(dev.Path); err == nil {
-			dev.HwAddr = nmDevWireless.HwAddress.Get()
+			dev.HwAddress = nmDevWireless.HwAddress.Get()
 			dev.nmDevWireless = nmDevWireless
 
 			// connect property, about wireless active access point

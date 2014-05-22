@@ -25,7 +25,7 @@ var (
 type connectionData map[string]map[string]dbus.Variant
 
 type Manager struct {
-	//update by manager.go
+	// update by manager.go
 	WiredEnabled      bool          `access:"readwrite"`
 	VPNEnabled        bool          `access:"readwrite"` // TODO
 	WirelessEnabled   dbus.Property `access:"readwrite"`
@@ -35,7 +35,7 @@ type Manager struct {
 	activeConnections []*activeConnection
 	ActiveConnections string // array of connections that activated and marshaled by json
 
-	//update by devices.go
+	// update by manager_devices.go
 	WiredDevices    []*deviceOld
 	WirelessDevices []*deviceOld
 	devices         map[string][]*device
@@ -43,14 +43,14 @@ type Manager struct {
 	accessPoints    map[dbus.ObjectPath][]*accessPoint
 	// AccessPoints    string // array of access point objects and marshaled by json
 
-	//update by connections.go
+	// update by manager_connections.go
 	WiredConnections    []string
 	WirelessConnections []string
 	VPNConnections      []string // TODO remove
 	connections         map[string][]*connection
 	Connections         string // array of connection information and marshaled by json
 
-	//signals
+	// signals
 	NeedSecrets                  func(string, string, string)
 	DeviceStateChanged           func(devPath string, newState uint32)
 	AccessPointAdded             func(devPath, apJSON string)
@@ -114,26 +114,11 @@ func (m *Manager) updateActiveConnections() {
 				State:   nmaconn.State.Get(),
 				Vpn:     nmaconn.Vpn.Get(),
 			}
-			// go func() {
-			// 	time.Sleep(500 * time.Millisecond)
-			// 	logger.Debug("state changed:", aconn.Uuid, aconn.State, nmaconn.State.Get()) // TODO test
-			// 	aconn.State = nmaconn.State.Get()
-			// }()
-			// TODO connect properties
-			// nmaconn.Devices.ConnectChanged(func() {
-			// 	// if m.isActiveConnectionExists(aconn) {
-			// 	logger.Debug("state changed:", aconn.Devices, nmaconn.Devices.Get()) // TODO test
-			// 	aconn.Devices = nmaconn.Devices.Get()
-			// 	// m.updatePropActiveConnections()
-			// 	// }
-			// })
 			nmaconn.State.ConnectChanged(func() {
 				// TODO fix dbus property issue
-				// if m.isActiveConnectionExists(aconn) {
 				logger.Debug("state changed:", aconn.State, nmaconn.State.Get()) // TODO test
 				aconn.State = nmaconn.State.Get()
 				m.updatePropActiveConnections()
-				// }
 			})
 			m.activeConnections = append(m.activeConnections, aconn)
 		}
@@ -141,6 +126,8 @@ func (m *Manager) updateActiveConnections() {
 	m.updatePropActiveConnections()
 	logger.Debug("active connections changed:", m.ActiveConnections) // TODO test
 }
+
+// TODO remove
 func (m *Manager) isActiveConnectionExists(aconn *activeConnection) bool {
 	if aconn == nil {
 		return false
