@@ -23,7 +23,7 @@ const (
 	deviceBridge     = "bridge"
 )
 
-func getDeviceTypeName(devType uint32) (devName string) {
+func getDeviceName(devType uint32) (devName string) {
 	switch devType {
 	case NM_DEVICE_TYPE_ETHERNET:
 		return deviceEthernet

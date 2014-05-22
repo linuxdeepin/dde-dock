@@ -154,7 +154,7 @@ func (m *Manager) addDevice(devPath dbus.ObjectPath) {
 	// 	}
 	// })
 
-	devName := getDeviceTypeName(dev.nmDevType)
+	devName := getDeviceName(dev.nmDevType)
 	m.devices[devName] = m.doAddDevice(m.devices[devName], dev)
 
 	m.updatePropDevices()

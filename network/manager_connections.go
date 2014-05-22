@@ -21,6 +21,7 @@ type connection struct {
 type activeConnection struct {
 	nmaconn *nm.ActiveConnection
 	path    dbus.ObjectPath
+
 	Devices []dbus.ObjectPath
 	// SpecificObject dbus.ObjectPath // TODO
 	Uuid  string
@@ -30,6 +31,7 @@ type activeConnection struct {
 }
 
 type activeConnectionInfo struct {
+	DeviceType   string
 	Interface    string
 	HwAddress    string
 	IpAddress    string
@@ -184,7 +186,14 @@ func (m *Manager) GetActiveConnectionInfo(devPath dbus.ObjectPath) (acinfoJSON s
 	if err != nil {
 		return
 	}
-	nmAConn, err := nmNewActiveConnection(nmDev.ActiveConnection.Get())
+	devName := getDeviceName(nmDev.DeviceType.Get())
+
+	aconn := nmDev.ActiveConnection.Get()
+	if aconn == "/" {
+		acinfoJSON = ""
+		return
+	}
+	nmAConn, err := nmNewActiveConnection(aconn)
 	if err != nil {
 		return
 	}
@@ -223,6 +232,7 @@ func (m *Manager) GetActiveConnectionInfo(devPath dbus.ObjectPath) (acinfoJSON s
 	}
 
 	acinfo := &activeConnectionInfo{
+		DeviceType:   devName,
 		Interface:    name,
 		HwAddress:    hwAddress,
 		IpAddress:    ip,
