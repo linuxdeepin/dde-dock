@@ -62,7 +62,7 @@ func (m *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPath)
 	switch operation {
 	case opAdded:
 		nmConn, _ := nmNewSettingsConnection(path)
-		nmConn.ConnectRemoved(func() { // TODO is still need?
+		nmConn.ConnectRemoved(func() {
 			m.handleConnectionChanged(opRemoved, path)
 			nm.DestroySettingsConnection(nmConn)
 		})

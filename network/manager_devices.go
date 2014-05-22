@@ -230,6 +230,14 @@ func (m *Manager) doRemoveDevice(devs []*device, path dbus.ObjectPath) []*device
 	if i < 0 {
 		return devs
 	}
+
+	// destroy object to reset all property connects
+	dev := devs[i]
+	if dev.nmDevWireless != nil {
+		nm.DestroyDeviceWireless(dev.nmDevWireless)
+	}
+	nm.DestroyDevice(dev.nmDev)
+
 	copy(devs[i:], devs[i+1:])
 	devs[len(devs)-1] = nil
 	devs = devs[:len(devs)-1]

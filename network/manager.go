@@ -94,7 +94,7 @@ func (m *Manager) initManager() {
 func (m *Manager) updateActiveConnections() {
 	// reset all exists active connection objects
 	for i, _ := range m.activeConnections {
-		// TODO how to disconnect BaseObserver.ConnectChanged()
+		// destroy object to reset all property connects
 		nm.DestroyActiveConnection(m.activeConnections[i].nmaconn)
 		m.activeConnections[i] = nil
 	}
@@ -111,7 +111,7 @@ func (m *Manager) updateActiveConnections() {
 			}
 			nmaconn.State.ConnectChanged(func() {
 				// TODO fix dbus property issue
-				logger.Debug("state changed:", aconn.State, nmaconn.State.Get()) // TODO test
+				logger.Debug("state changed:", aconn.State, nmaconn.State.Get())
 				aconn.State = nmaconn.State.Get()
 				m.updatePropActiveConnections()
 			})

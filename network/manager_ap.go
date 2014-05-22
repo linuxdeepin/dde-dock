@@ -15,12 +15,13 @@ const (
 )
 
 type accessPoint struct {
+	nmAp *nm.AccessPoint
+
 	Ssid         string
 	Secured      bool
 	SecuredInEap bool
 	Strength     uint8
 	Path         dbus.ObjectPath
-	nmAp         *nm.AccessPoint
 }
 
 func newAccessPoint(apPath dbus.ObjectPath) (ap accessPoint, err error) {
@@ -30,12 +31,12 @@ func newAccessPoint(apPath dbus.ObjectPath) (ap accessPoint, err error) {
 	}
 
 	ap = accessPoint{
+		nmAp:         nmAp,
 		Ssid:         string(nmAp.Ssid.Get()),
 		Secured:      getApSecType(nmAp) != apSecNone,
 		SecuredInEap: getApSecType(nmAp) == apSecEap,
 		Strength:     calcApStrength(nmAp.Strength.Get()),
 		Path:         nmAp.Path,
-		nmAp:         nmAp,
 	}
 	return
 }
@@ -137,7 +138,12 @@ func (m *Manager) doRemoveAccessPoint(devPath, apPath dbus.ObjectPath) {
 	if i < 0 {
 		return
 	}
+
+	// destroy object to reset all property connects
 	aps := m.accessPoints[devPath]
+	ap := aps[i]
+	nm.DestroyAccessPoint(ap.nmAp)
+
 	copy(aps[i:], aps[i+1:])
 	aps[len(aps)-1] = nil
 	aps = aps[:len(aps)-1]
