@@ -39,7 +39,7 @@ func (m *Manager) updatePropAccessPoints() {
 // create connection for each wired device if not exists
 func (m *Manager) updatePropWiredConnections() {
 	m.WiredConnections = make([]string, 0)
-	for _, wiredDev := range m.WiredDevices {
+	for _, wiredDev := range m.devices[deviceEthernet] {
 		uuid := m.GetWiredConnectionUuid(wiredDev.Path)
 		m.WiredConnections = append(m.WiredConnections, uuid)
 	}

@@ -36,11 +36,9 @@ type Manager struct {
 	ActiveConnections string // array of connections that activated and marshaled by json
 
 	// update by manager_devices.go
-	WiredDevices    []*deviceOld
-	WirelessDevices []*deviceOld
-	devices         map[string][]*device
-	Devices         string // array of device objects and marshaled by json
-	accessPoints    map[dbus.ObjectPath][]*accessPoint
+	devices      map[string][]*device
+	Devices      string // array of device objects and marshaled by json
+	accessPoints map[dbus.ObjectPath][]*accessPoint
 	// AccessPoints    string // array of access point objects and marshaled by json
 
 	// update by manager_connections.go
