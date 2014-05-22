@@ -33,7 +33,6 @@ char* guess_app_id(long s_pid, const char* instance_name, const char* wmname, co
 #include <fcntl.h>
 
 
-
 char* get_name_by_pid(int pid);
 
 GKeyFile* load_app_config(const char* name);
@@ -360,6 +359,7 @@ char* get_deepin_app_id_value(const char* app_id)
 
 char* guess_app_id(long s_pid, const char* instance_name, const char* wmname, const char* wmclass, const char* icon_name)
 {
+    // g_setenv("G_MESSAGES_DEBUG", "all", FALSE);
     if (s_pid == 0) return g_strdup(wmclass);
     char* app_id = NULL;
 
@@ -373,8 +373,8 @@ char* guess_app_id(long s_pid, const char* instance_name, const char* wmname, co
         }
         if (app_id == NULL) {
             GKeyFile* f = load_app_config(FILTER_FILE);
-            if (f != NULL && instance_name != NULL) {
-                app_id = g_key_file_get_string(f, instance_name, "appid", NULL);
+            if (f != NULL && wmname != NULL) {
+                app_id = g_key_file_get_string(f, wmname, "appid", NULL);
             }
             g_key_file_unref(f);
             g_debug("[%s] get app id from StartupWMClass filter: %s", __func__, app_id);
@@ -383,9 +383,10 @@ char* guess_app_id(long s_pid, const char* instance_name, const char* wmname, co
             app_id = find_app_id(exec_name, wmname, APPID_FILTER_WMNAME);
             g_debug("[%s] get from wmname %s", __func__, app_id);
         }
-        if (app_id == NULL && instance_name != NULL) {
-            app_id = find_app_id(exec_name, instance_name, APPID_FILTER_WMINSTANCE);
-            g_debug("[%s] get from instance_name %s", __func__, app_id);
+        g_warning("%s %s", exec_name, wmname);
+        if (app_id == NULL && wmname != NULL) {
+            app_id = find_app_id(exec_name, wmname, APPID_FILTER_WMINSTANCE);
+            g_debug("[%s] get from wmname %s", __func__, app_id);
         }
         if (app_id == NULL && wmclass != NULL) {
             app_id = find_app_id(exec_name, wmclass, APPID_FILTER_WMCLASS);
