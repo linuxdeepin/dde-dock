@@ -27,7 +27,7 @@ type connectionData map[string]map[string]dbus.Variant
 type Manager struct {
 	// update by manager.go
 	WiredEnabled      bool          `access:"readwrite"`
-	VPNEnabled        bool          `access:"readwrite"` // TODO
+	VpnEnabled        bool          `access:"readwrite"` // TODO
 	WirelessEnabled   dbus.Property `access:"readwrite"`
 	NetworkingEnabled dbus.Property `access:"readwrite"`
 	State             uint32        // networking state
@@ -39,14 +39,11 @@ type Manager struct {
 	devices      map[string][]*device
 	Devices      string // array of device objects and marshaled by json
 	accessPoints map[dbus.ObjectPath][]*accessPoint
-	// AccessPoints    string // array of access point objects and marshaled by json
+	// AccessPoints    string // TODO array of access point objects and marshaled by json
 
 	// update by manager_connections.go
-	WiredConnections    []string
-	WirelessConnections []string
-	VPNConnections      []string // TODO remove
-	connections         map[string][]*connection
-	Connections         string // array of connection information and marshaled by json
+	connections map[string][]*connection
+	Connections string // array of connection information and marshaled by json
 
 	// signals
 	NeedSecrets                  func(string, string, string)

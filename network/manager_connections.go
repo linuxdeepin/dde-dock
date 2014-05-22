@@ -44,9 +44,6 @@ type activeConnectionInfo struct {
 
 func (m *Manager) initConnectionManage() {
 	m.connections = make(map[string][]*connection)
-	m.VPNConnections = make([]string, 0)
-	m.WiredConnections = make([]string, 0) // TODO remove
-	m.WirelessConnections = make([]string, 0)
 
 	// create special wired connection if need
 	/*m.updatePropWiredConnections() // TODO remove*/
@@ -84,10 +81,7 @@ func (m *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPath)
 			// TODO remove
 			// m.WiredConnections = append(m.WiredConnections, uuid)
 			// dbus.NotifyChange(m, "WiredConnections")
-		case NM_SETTING_WIRELESS_SETTING_NAME: // TODO
-			m.WirelessConnections = append(m.WirelessConnections, uuid)
-			m.updatePropWirelessConnections()
-
+		case NM_SETTING_WIRELESS_SETTING_NAME:
 			conn.Ssid = string(getSettingWirelessSsid(cdata))
 			if isSettingWirelessMacAddressExists(cdata) {
 				conn.HwAddress = convertMacAddressToString(getSettingWirelessMacAddress(cdata))
@@ -105,8 +99,6 @@ func (m *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPath)
 		case NM_SETTING_GSM_SETTING_NAME, NM_SETTING_CDMA_SETTING_NAME:
 			m.connections[connectionMobile] = m.addConnection(m.connections[connectionMobile], conn)
 		case NM_SETTING_VPN_SETTING_NAME:
-			m.VPNConnections = append(m.VPNConnections, uuid)
-			m.updatePropVpnConnections()
 			m.connections[connectionVpn] = m.addConnection(m.connections[connectionVpn], conn)
 		}
 		m.updatePropConnections()
@@ -117,15 +109,6 @@ func (m *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPath)
 			}
 		}
 		m.updatePropConnections()
-		//TODO: remove
-		//removed := false
-		//if m.WirelessConnections, removed = tryRemoveConnection(dbus.ObjectPath(path), m.WirelessConnections); removed {
-		//dbus.NotifyChange(m, "WirelessConnections")
-		//} else if m.WiredConnections, removed = tryRemoveConnection(dbus.ObjectPath(path), m.WiredConnections); removed {
-		//dbus.NotifyChange(m, "WiredConnections")
-		//} else if m.VPNConnections, removed = tryRemoveConnection(dbus.ObjectPath(path), m.VPNConnections); removed {
-		//dbus.NotifyChange(m, "VPNConnections")
-		//}
 	}
 }
 func (m *Manager) addConnection(conns []*connection, conn *connection) []*connection {
@@ -166,6 +149,7 @@ func (m *Manager) GetSupportedConnectionTypes() (typesJSON string) {
 	return
 }
 
+// TODO remove
 // GetWiredConnectionUuid return connection uuid for target wired device.
 func (m *Manager) GetWiredConnectionUuid(wiredDevPath dbus.ObjectPath) (uuid string) {
 	// check if target wired connection exists, if not, create one
