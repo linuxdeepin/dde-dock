@@ -35,6 +35,7 @@ const (
 	TPAD_KEY_VERT_SCROLL    = "vert-scroll-enabled"
 	TPAD_KEY_ACCEL          = "motion-acceleration"
 	TPAD_KEY_THRES          = "motion-threshold"
+	TPAD_KEY_TAP_CLICK      = "tap-to-click"
 
 	MOUSE_KEY_LEFT_HAND    = "left-handed"
 	MOUSE_KEY_MID_BUTTON   = "middle-button-enabled"

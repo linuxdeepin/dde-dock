@@ -163,15 +163,21 @@ func listenDevsSettings() {
 				C.set_tpad_enable(C.FALSE)
 				disableTPadWhileTyping(false)
 			}
-		case TPAD_KEY_LEFT_HAND:
+		case TPAD_KEY_LEFT_HAND, TPAD_KEY_TAP_CLICK:
 			if enable := tpadSettings.GetBoolean(TPAD_KEY_ENABLE); !enable {
 				return
 			}
-			if left := tpadSettings.GetBoolean(key); left {
-				C.set_tab_to_click(C.int(1), C.TRUE)
-			} else {
-				C.set_tab_to_click(C.int(1), C.FALSE)
+
+			tapEnable := C.int(0)
+			if ok := tpadSettings.GetBoolean(TPAD_KEY_TAP_CLICK); ok {
+				tapEnable = C.int(1)
 			}
+
+			leftHand := C.int(0)
+			if left := tpadSettings.GetBoolean(TPAD_KEY_LEFT_HAND); left {
+				leftHand = C.int(1)
+			}
+			C.set_tab_to_click(tapEnable, leftHand)
 		case TPAD_KEY_W_TYPING:
 			if enable := tpadSettings.GetBoolean(TPAD_KEY_ENABLE); !enable {
 				return
@@ -346,11 +352,16 @@ func initGSettingsSet(tpadFlag bool) {
 		return
 	}
 
-	if left := tpadSettings.GetBoolean(TPAD_KEY_LEFT_HAND); left {
-		C.set_tab_to_click(C.int(1), C.TRUE)
-	} else {
-		C.set_tab_to_click(C.int(1), C.FALSE)
+	tapEnable := C.int(0)
+	if ok := tpadSettings.GetBoolean(TPAD_KEY_TAP_CLICK); ok {
+		tapEnable = C.int(1)
 	}
+
+	leftHand := C.int(0)
+	if left := tpadSettings.GetBoolean(TPAD_KEY_LEFT_HAND); left {
+		leftHand = C.int(1)
+	}
+	C.set_tab_to_click(tapEnable, leftHand)
 
 	ok := tpadSettings.GetBoolean(TPAD_KEY_W_TYPING)
 	disableTPadWhileTyping(ok)
