@@ -65,6 +65,8 @@ const (
 const NM_SETTING_VK_PPP_ENABLE_LCP_ECHO = "vk-enable-lcp-echo"
 
 // vpn-l2tp
+const NM_SETTING_VK_VPN_L2TP_REQUIRE_MPPE = "vk-require-mppe"
+const NM_SETTING_VK_VPN_L2TP_MPPE_SECURITY = "vk-mppe-security"
 const NM_SETTING_VK_VPN_L2TP_ENABLE_LCP_ECHO = "vk-enable-lcp-echo"
 
 // vpn-openvpn
@@ -78,6 +80,8 @@ const (
 )
 
 // vpn-pptp
+const NM_SETTING_VK_VPN_PPTP_REQUIRE_MPPE = "vk-require-mppe"
+const NM_SETTING_VK_VPN_PPTP_MPPE_SECURITY = "vk-mppe-security"
 const NM_SETTING_VK_VPN_PPTP_ENABLE_LCP_ECHO = "vk-enable-lcp-echo"
 
 // vpn-vpnc
@@ -173,6 +177,24 @@ func generalGetSettingVkAvailableValues(data connectionData, field, key string) 
 		}
 	case fieldPppoe:
 	case fieldPpp:
+	case fieldVpnL2tpPpp:
+		switch key {
+		case NM_SETTING_VK_VPN_L2TP_MPPE_SECURITY:
+			values = []kvalue{
+				kvalue{"default", dlib.Tr("All Available (default)")},
+				kvalue{"128-bit", dlib.Tr("128-bit (most secure)")},
+				kvalue{"40-bit", dlib.Tr("40-bit (less secure)")},
+			}
+		}
+	case fieldVpnPptpPpp:
+		switch key {
+		case NM_SETTING_VK_VPN_PPTP_MPPE_SECURITY:
+			values = []kvalue{
+				kvalue{"default", dlib.Tr("All Available (default)")},
+				kvalue{"128-bit", dlib.Tr("128-bit (most secure)")},
+				kvalue{"40-bit", dlib.Tr("40-bit (less secure)")},
+			}
+		}
 	case fieldVpnVpncAdvanced:
 		switch key {
 		case NM_SETTING_VK_VPN_VPNC_KEY_ENCRYPTION_METHOD:

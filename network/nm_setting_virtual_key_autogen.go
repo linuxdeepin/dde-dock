@@ -28,6 +28,8 @@ var virtualKeys = []virtualKey{
 	virtualKey{Name: NM_SETTING_VK_IP6_CONFIG_ROUTES_NEXTHOP, Type: ktypeString, RelatedField: NM_SETTING_IP6_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP6_CONFIG_ROUTES, EnableWrapper: false, Available: false, Optional: false},
 	virtualKey{Name: NM_SETTING_VK_IP6_CONFIG_ROUTES_METRIC, Type: ktypeUint32, RelatedField: NM_SETTING_IP6_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP6_CONFIG_ROUTES, EnableWrapper: false, Available: false, Optional: false},
 	virtualKey{Name: NM_SETTING_VK_PPP_ENABLE_LCP_ECHO, Type: ktypeBoolean, RelatedField: NM_SETTING_PPP_SETTING_NAME, RelatedKey: NM_SETTING_PPP_LCP_ECHO_FAILURE, EnableWrapper: false, Available: true, Optional: false},
+	virtualKey{Name: NM_SETTING_VK_VPN_L2TP_REQUIRE_MPPE, Type: ktypeBoolean, RelatedField: NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, RelatedKey: NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE, EnableWrapper: false, Available: true, Optional: false},
+	virtualKey{Name: NM_SETTING_VK_VPN_L2TP_MPPE_SECURITY, Type: ktypeString, RelatedField: NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, RelatedKey: NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_40, EnableWrapper: false, Available: true, Optional: false},
 	virtualKey{Name: NM_SETTING_VK_VPN_L2TP_ENABLE_LCP_ECHO, Type: ktypeBoolean, RelatedField: NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, RelatedKey: NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_FAILURE, EnableWrapper: false, Available: true, Optional: false},
 	virtualKey{Name: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_PORT, Type: ktypeBoolean, RelatedField: NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, RelatedKey: NM_SETTING_VPN_OPENVPN_KEY_PORT, EnableWrapper: true, Available: true, Optional: false},
 	virtualKey{Name: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_RENEG_SECONDS, Type: ktypeBoolean, RelatedField: NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, RelatedKey: NM_SETTING_VPN_OPENVPN_KEY_RENEG_SECONDS, EnableWrapper: true, Available: true, Optional: false},
@@ -35,6 +37,8 @@ var virtualKeys = []virtualKey{
 	virtualKey{Name: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_FRAGMENT_SIZE, Type: ktypeBoolean, RelatedField: NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, RelatedKey: NM_SETTING_VPN_OPENVPN_KEY_FRAGMENT_SIZE, EnableWrapper: true, Available: true, Optional: false},
 	virtualKey{Name: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_STATIC_KEY_DIRECTION, Type: ktypeBoolean, RelatedField: NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, RelatedKey: NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY_DIRECTION, EnableWrapper: true, Available: true, Optional: false},
 	virtualKey{Name: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_TA_DIR, Type: ktypeBoolean, RelatedField: NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, RelatedKey: NM_SETTING_VPN_OPENVPN_KEY_TA_DIR, EnableWrapper: true, Available: true, Optional: false},
+	virtualKey{Name: NM_SETTING_VK_VPN_PPTP_REQUIRE_MPPE, Type: ktypeBoolean, RelatedField: NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, RelatedKey: NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE, EnableWrapper: false, Available: true, Optional: false},
+	virtualKey{Name: NM_SETTING_VK_VPN_PPTP_MPPE_SECURITY, Type: ktypeString, RelatedField: NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, RelatedKey: NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40, EnableWrapper: false, Available: true, Optional: false},
 	virtualKey{Name: NM_SETTING_VK_VPN_PPTP_ENABLE_LCP_ECHO, Type: ktypeBoolean, RelatedField: NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, RelatedKey: NM_SETTING_VPN_PPTP_KEY_LCP_ECHO_FAILURE, EnableWrapper: false, Available: true, Optional: false},
 	virtualKey{Name: NM_SETTING_VK_VPN_VPNC_KEY_HYBRID_AUTHMODE, Type: ktypeBoolean, RelatedField: NM_SETTING_VF_VPN_VPNC_SETTING_NAME, RelatedKey: NM_SETTING_VPN_VPNC_KEY_AUTHMODE, EnableWrapper: false, Available: true, Optional: false},
 	virtualKey{Name: NM_SETTING_VK_VPN_VPNC_KEY_ENCRYPTION_METHOD, Type: ktypeString, RelatedField: NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, RelatedKey: NM_SETTING_VPN_VPNC_KEY_SINGLE_DES, EnableWrapper: false, Available: true, Optional: false},
@@ -117,6 +121,10 @@ func generalGetVirtualKeyJSON(data connectionData, field, key string) (valueJSON
 		}
 	case NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME:
 		switch key {
+		case NM_SETTING_VK_VPN_L2TP_REQUIRE_MPPE:
+			return getSettingVkVpnL2tpRequireMppeJSON(data)
+		case NM_SETTING_VK_VPN_L2TP_MPPE_SECURITY:
+			return getSettingVkVpnL2tpMppeSecurityJSON(data)
 		case NM_SETTING_VK_VPN_L2TP_ENABLE_LCP_ECHO:
 			return getSettingVkVpnL2tpEnableLcpEchoJSON(data)
 		}
@@ -143,6 +151,10 @@ func generalGetVirtualKeyJSON(data connectionData, field, key string) (valueJSON
 		}
 	case NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME:
 		switch key {
+		case NM_SETTING_VK_VPN_PPTP_REQUIRE_MPPE:
+			return getSettingVkVpnPptpRequireMppeJSON(data)
+		case NM_SETTING_VK_VPN_PPTP_MPPE_SECURITY:
+			return getSettingVkVpnPptpMppeSecurityJSON(data)
 		case NM_SETTING_VK_VPN_PPTP_ENABLE_LCP_ECHO:
 			return getSettingVkVpnPptpEnableLcpEchoJSON(data)
 		}
@@ -277,6 +289,12 @@ func generalSetVirtualKeyJSON(data connectionData, field, key string, valueJSON 
 		}
 	case NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME:
 		switch key {
+		case NM_SETTING_VK_VPN_L2TP_REQUIRE_MPPE:
+			err = logicSetSettingVkVpnL2tpRequireMppeJSON(data, valueJSON)
+			return
+		case NM_SETTING_VK_VPN_L2TP_MPPE_SECURITY:
+			err = logicSetSettingVkVpnL2tpMppeSecurityJSON(data, valueJSON)
+			return
 		case NM_SETTING_VK_VPN_L2TP_ENABLE_LCP_ECHO:
 			err = logicSetSettingVkVpnL2tpEnableLcpEchoJSON(data, valueJSON)
 			return
@@ -310,6 +328,12 @@ func generalSetVirtualKeyJSON(data connectionData, field, key string, valueJSON 
 		}
 	case NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME:
 		switch key {
+		case NM_SETTING_VK_VPN_PPTP_REQUIRE_MPPE:
+			err = logicSetSettingVkVpnPptpRequireMppeJSON(data, valueJSON)
+			return
+		case NM_SETTING_VK_VPN_PPTP_MPPE_SECURITY:
+			err = logicSetSettingVkVpnPptpMppeSecurityJSON(data, valueJSON)
+			return
 		case NM_SETTING_VK_VPN_PPTP_ENABLE_LCP_ECHO:
 			err = logicSetSettingVkVpnPptpEnableLcpEchoJSON(data, valueJSON)
 			return
@@ -453,6 +477,14 @@ func getSettingVkPppEnableLcpEchoJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkPppEnableLcpEcho(data))
 	return
 }
+func getSettingVkVpnL2tpRequireMppeJSON(data connectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkVpnL2tpRequireMppe(data))
+	return
+}
+func getSettingVkVpnL2tpMppeSecurityJSON(data connectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkVpnL2tpMppeSecurity(data))
+	return
+}
 func getSettingVkVpnL2tpEnableLcpEchoJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkVpnL2tpEnableLcpEcho(data))
 	return
@@ -479,6 +511,14 @@ func getSettingVkVpnOpenvpnKeyEnableStaticKeyDirectionJSON(data connectionData) 
 }
 func getSettingVkVpnOpenvpnKeyEnableTaDirJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkVpnOpenvpnKeyEnableTaDir(data))
+	return
+}
+func getSettingVkVpnPptpRequireMppeJSON(data connectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkVpnPptpRequireMppe(data))
+	return
+}
+func getSettingVkVpnPptpMppeSecurityJSON(data connectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkVpnPptpMppeSecurity(data))
 	return
 }
 func getSettingVkVpnPptpEnableLcpEchoJSON(data connectionData) (valueJSON string) {
@@ -611,6 +651,14 @@ func logicSetSettingVkPppEnableLcpEchoJSON(data connectionData, valueJSON string
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	return logicSetSettingVkPppEnableLcpEcho(data, value)
 }
+func logicSetSettingVkVpnL2tpRequireMppeJSON(data connectionData, valueJSON string) (err error) {
+	value, _ := jsonToKeyValueBoolean(valueJSON)
+	return logicSetSettingVkVpnL2tpRequireMppe(data, value)
+}
+func logicSetSettingVkVpnL2tpMppeSecurityJSON(data connectionData, valueJSON string) (err error) {
+	value, _ := jsonToKeyValueString(valueJSON)
+	return logicSetSettingVkVpnL2tpMppeSecurity(data, value)
+}
 func logicSetSettingVkVpnL2tpEnableLcpEchoJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	return logicSetSettingVkVpnL2tpEnableLcpEcho(data, value)
@@ -638,6 +686,14 @@ func logicSetSettingVkVpnOpenvpnKeyEnableStaticKeyDirectionJSON(data connectionD
 func logicSetSettingVkVpnOpenvpnKeyEnableTaDirJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	return logicSetSettingVkVpnOpenvpnKeyEnableTaDir(data, value)
+}
+func logicSetSettingVkVpnPptpRequireMppeJSON(data connectionData, valueJSON string) (err error) {
+	value, _ := jsonToKeyValueBoolean(valueJSON)
+	return logicSetSettingVkVpnPptpRequireMppe(data, value)
+}
+func logicSetSettingVkVpnPptpMppeSecurityJSON(data connectionData, valueJSON string) (err error) {
+	value, _ := jsonToKeyValueString(valueJSON)
+	return logicSetSettingVkVpnPptpMppeSecurity(data, value)
 }
 func logicSetSettingVkVpnPptpEnableLcpEchoJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)

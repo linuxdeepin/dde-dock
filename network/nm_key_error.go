@@ -14,6 +14,7 @@ const (
 	NM_KEY_ERROR_IP6_METHOD_CONFLICT = `%s cannot be used with the 'shared', 'link-local', or 'ignore' methods`
 	NM_KEY_ERROR_MISSING_SECTION     = "missing %s field section"
 	NM_KEY_ERROR_EMPTY_SECTION       = "field section %s is empty"
+	NM_KEY_ERROR_MISSING_DEPENDS_KEY = "missing depends key %s"
 )
 
 func rememberError(errs fieldErrors, field, key, errMsg string) {

@@ -10,6 +10,14 @@ func getSettingVpnPptpPppKeyType(key string) (t ktype) {
 	switch key {
 	default:
 		t = ktypeUnknown
+	case NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE:
+		t = ktypeBoolean
+	case NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40:
+		t = ktypeBoolean
+	case NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128:
+		t = ktypeBoolean
+	case NM_SETTING_VPN_PPTP_KEY_MPPE_STATEFUL:
+		t = ktypeBoolean
 	case NM_SETTING_VPN_PPTP_KEY_REFUSE_EAP:
 		t = ktypeBoolean
 	case NM_SETTING_VPN_PPTP_KEY_REFUSE_PAP:
@@ -19,14 +27,6 @@ func getSettingVpnPptpPppKeyType(key string) (t ktype) {
 	case NM_SETTING_VPN_PPTP_KEY_REFUSE_MSCHAP:
 		t = ktypeBoolean
 	case NM_SETTING_VPN_PPTP_KEY_REFUSE_MSCHAPV2:
-		t = ktypeBoolean
-	case NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE:
-		t = ktypeBoolean
-	case NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40:
-		t = ktypeBoolean
-	case NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128:
-		t = ktypeBoolean
-	case NM_SETTING_VPN_PPTP_KEY_MPPE_STATEFUL:
 		t = ktypeBoolean
 	case NM_SETTING_VPN_PPTP_KEY_NOBSDCOMP:
 		t = ktypeBoolean
@@ -45,6 +45,14 @@ func getSettingVpnPptpPppKeyType(key string) (t ktype) {
 // Check is key in current setting field
 func isKeyInSettingVpnPptpPpp(key string) bool {
 	switch key {
+	case NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE:
+		return true
+	case NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40:
+		return true
+	case NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128:
+		return true
+	case NM_SETTING_VPN_PPTP_KEY_MPPE_STATEFUL:
+		return true
 	case NM_SETTING_VPN_PPTP_KEY_REFUSE_EAP:
 		return true
 	case NM_SETTING_VPN_PPTP_KEY_REFUSE_PAP:
@@ -54,14 +62,6 @@ func isKeyInSettingVpnPptpPpp(key string) bool {
 	case NM_SETTING_VPN_PPTP_KEY_REFUSE_MSCHAP:
 		return true
 	case NM_SETTING_VPN_PPTP_KEY_REFUSE_MSCHAPV2:
-		return true
-	case NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE:
-		return true
-	case NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40:
-		return true
-	case NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128:
-		return true
-	case NM_SETTING_VPN_PPTP_KEY_MPPE_STATEFUL:
 		return true
 	case NM_SETTING_VPN_PPTP_KEY_NOBSDCOMP:
 		return true
@@ -82,6 +82,14 @@ func getSettingVpnPptpPppKeyDefaultValueJSON(key string) (valueJSON string) {
 	switch key {
 	default:
 		logger.Error("invalid key:", key)
+	case NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE:
+		valueJSON = `false`
+	case NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40:
+		valueJSON = `false`
+	case NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128:
+		valueJSON = `false`
+	case NM_SETTING_VPN_PPTP_KEY_MPPE_STATEFUL:
+		valueJSON = `false`
 	case NM_SETTING_VPN_PPTP_KEY_REFUSE_EAP:
 		valueJSON = `false`
 	case NM_SETTING_VPN_PPTP_KEY_REFUSE_PAP:
@@ -91,14 +99,6 @@ func getSettingVpnPptpPppKeyDefaultValueJSON(key string) (valueJSON string) {
 	case NM_SETTING_VPN_PPTP_KEY_REFUSE_MSCHAP:
 		valueJSON = `false`
 	case NM_SETTING_VPN_PPTP_KEY_REFUSE_MSCHAPV2:
-		valueJSON = `false`
-	case NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE:
-		valueJSON = `false`
-	case NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40:
-		valueJSON = `false`
-	case NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128:
-		valueJSON = `false`
-	case NM_SETTING_VPN_PPTP_KEY_MPPE_STATEFUL:
 		valueJSON = `false`
 	case NM_SETTING_VPN_PPTP_KEY_NOBSDCOMP:
 		valueJSON = `false`
@@ -119,6 +119,14 @@ func generalGetSettingVpnPptpPppKeyJSON(data connectionData, key string) (value 
 	switch key {
 	default:
 		logger.Error("generalGetSettingVpnPptpPppKeyJSON: invalide key", key)
+	case NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE:
+		value = getSettingVpnPptpKeyRequireMppeJSON(data)
+	case NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40:
+		value = getSettingVpnPptpKeyRequireMppe40JSON(data)
+	case NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128:
+		value = getSettingVpnPptpKeyRequireMppe128JSON(data)
+	case NM_SETTING_VPN_PPTP_KEY_MPPE_STATEFUL:
+		value = getSettingVpnPptpKeyMppeStatefulJSON(data)
 	case NM_SETTING_VPN_PPTP_KEY_REFUSE_EAP:
 		value = getSettingVpnPptpKeyRefuseEapJSON(data)
 	case NM_SETTING_VPN_PPTP_KEY_REFUSE_PAP:
@@ -129,14 +137,6 @@ func generalGetSettingVpnPptpPppKeyJSON(data connectionData, key string) (value 
 		value = getSettingVpnPptpKeyRefuseMschapJSON(data)
 	case NM_SETTING_VPN_PPTP_KEY_REFUSE_MSCHAPV2:
 		value = getSettingVpnPptpKeyRefuseMschapv2JSON(data)
-	case NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE:
-		value = getSettingVpnPptpKeyRequireMppeJSON(data)
-	case NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40:
-		value = getSettingVpnPptpKeyRequireMppe40JSON(data)
-	case NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128:
-		value = getSettingVpnPptpKeyRequireMppe128JSON(data)
-	case NM_SETTING_VPN_PPTP_KEY_MPPE_STATEFUL:
-		value = getSettingVpnPptpKeyMppeStatefulJSON(data)
 	case NM_SETTING_VPN_PPTP_KEY_NOBSDCOMP:
 		value = getSettingVpnPptpKeyNobsdcompJSON(data)
 	case NM_SETTING_VPN_PPTP_KEY_NODEFLATE:
@@ -156,6 +156,14 @@ func generalSetSettingVpnPptpPppKeyJSON(data connectionData, key, valueJSON stri
 	switch key {
 	default:
 		logger.Error("generalSetSettingVpnPptpPppKeyJSON: invalide key", key)
+	case NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE:
+		err = setSettingVpnPptpKeyRequireMppeJSON(data, valueJSON)
+	case NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40:
+		err = setSettingVpnPptpKeyRequireMppe40JSON(data, valueJSON)
+	case NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128:
+		err = setSettingVpnPptpKeyRequireMppe128JSON(data, valueJSON)
+	case NM_SETTING_VPN_PPTP_KEY_MPPE_STATEFUL:
+		err = setSettingVpnPptpKeyMppeStatefulJSON(data, valueJSON)
 	case NM_SETTING_VPN_PPTP_KEY_REFUSE_EAP:
 		err = setSettingVpnPptpKeyRefuseEapJSON(data, valueJSON)
 	case NM_SETTING_VPN_PPTP_KEY_REFUSE_PAP:
@@ -166,14 +174,6 @@ func generalSetSettingVpnPptpPppKeyJSON(data connectionData, key, valueJSON stri
 		err = setSettingVpnPptpKeyRefuseMschapJSON(data, valueJSON)
 	case NM_SETTING_VPN_PPTP_KEY_REFUSE_MSCHAPV2:
 		err = setSettingVpnPptpKeyRefuseMschapv2JSON(data, valueJSON)
-	case NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE:
-		err = logicSetSettingVpnPptpKeyRequireMppeJSON(data, valueJSON)
-	case NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40:
-		err = setSettingVpnPptpKeyRequireMppe40JSON(data, valueJSON)
-	case NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128:
-		err = setSettingVpnPptpKeyRequireMppe128JSON(data, valueJSON)
-	case NM_SETTING_VPN_PPTP_KEY_MPPE_STATEFUL:
-		err = setSettingVpnPptpKeyMppeStatefulJSON(data, valueJSON)
 	case NM_SETTING_VPN_PPTP_KEY_NOBSDCOMP:
 		err = setSettingVpnPptpKeyNobsdcompJSON(data, valueJSON)
 	case NM_SETTING_VPN_PPTP_KEY_NODEFLATE:
@@ -189,6 +189,18 @@ func generalSetSettingVpnPptpPppKeyJSON(data connectionData, key, valueJSON stri
 }
 
 // Check if key exists
+func isSettingVpnPptpKeyRequireMppeExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE)
+}
+func isSettingVpnPptpKeyRequireMppe40Exists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40)
+}
+func isSettingVpnPptpKeyRequireMppe128Exists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128)
+}
+func isSettingVpnPptpKeyMppeStatefulExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_MPPE_STATEFUL)
+}
 func isSettingVpnPptpKeyRefuseEapExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REFUSE_EAP)
 }
@@ -203,18 +215,6 @@ func isSettingVpnPptpKeyRefuseMschapExists(data connectionData) bool {
 }
 func isSettingVpnPptpKeyRefuseMschapv2Exists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REFUSE_MSCHAPV2)
-}
-func isSettingVpnPptpKeyRequireMppeExists(data connectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE)
-}
-func isSettingVpnPptpKeyRequireMppe40Exists(data connectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40)
-}
-func isSettingVpnPptpKeyRequireMppe128Exists(data connectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128)
-}
-func isSettingVpnPptpKeyMppeStatefulExists(data connectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_MPPE_STATEFUL)
 }
 func isSettingVpnPptpKeyNobsdcompExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_NOBSDCOMP)
@@ -242,6 +242,26 @@ func ensureFieldSettingVpnPptpPppExists(data connectionData, errs fieldErrors, r
 		rememberError(errs, relatedKey, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME))
 	}
 }
+func ensureSettingVpnPptpKeyRequireMppeNoEmpty(data connectionData, errs fieldErrors) {
+	if !isSettingVpnPptpKeyRequireMppeExists(data) {
+		rememberError(errs, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE, NM_KEY_ERROR_MISSING_VALUE)
+	}
+}
+func ensureSettingVpnPptpKeyRequireMppe40NoEmpty(data connectionData, errs fieldErrors) {
+	if !isSettingVpnPptpKeyRequireMppe40Exists(data) {
+		rememberError(errs, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40, NM_KEY_ERROR_MISSING_VALUE)
+	}
+}
+func ensureSettingVpnPptpKeyRequireMppe128NoEmpty(data connectionData, errs fieldErrors) {
+	if !isSettingVpnPptpKeyRequireMppe128Exists(data) {
+		rememberError(errs, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128, NM_KEY_ERROR_MISSING_VALUE)
+	}
+}
+func ensureSettingVpnPptpKeyMppeStatefulNoEmpty(data connectionData, errs fieldErrors) {
+	if !isSettingVpnPptpKeyMppeStatefulExists(data) {
+		rememberError(errs, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_MPPE_STATEFUL, NM_KEY_ERROR_MISSING_VALUE)
+	}
+}
 func ensureSettingVpnPptpKeyRefuseEapNoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnPptpKeyRefuseEapExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REFUSE_EAP, NM_KEY_ERROR_MISSING_VALUE)
@@ -265,26 +285,6 @@ func ensureSettingVpnPptpKeyRefuseMschapNoEmpty(data connectionData, errs fieldE
 func ensureSettingVpnPptpKeyRefuseMschapv2NoEmpty(data connectionData, errs fieldErrors) {
 	if !isSettingVpnPptpKeyRefuseMschapv2Exists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REFUSE_MSCHAPV2, NM_KEY_ERROR_MISSING_VALUE)
-	}
-}
-func ensureSettingVpnPptpKeyRequireMppeNoEmpty(data connectionData, errs fieldErrors) {
-	if !isSettingVpnPptpKeyRequireMppeExists(data) {
-		rememberError(errs, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE, NM_KEY_ERROR_MISSING_VALUE)
-	}
-}
-func ensureSettingVpnPptpKeyRequireMppe40NoEmpty(data connectionData, errs fieldErrors) {
-	if !isSettingVpnPptpKeyRequireMppe40Exists(data) {
-		rememberError(errs, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40, NM_KEY_ERROR_MISSING_VALUE)
-	}
-}
-func ensureSettingVpnPptpKeyRequireMppe128NoEmpty(data connectionData, errs fieldErrors) {
-	if !isSettingVpnPptpKeyRequireMppe128Exists(data) {
-		rememberError(errs, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128, NM_KEY_ERROR_MISSING_VALUE)
-	}
-}
-func ensureSettingVpnPptpKeyMppeStatefulNoEmpty(data connectionData, errs fieldErrors) {
-	if !isSettingVpnPptpKeyMppeStatefulExists(data) {
-		rememberError(errs, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_MPPE_STATEFUL, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
 func ensureSettingVpnPptpKeyNobsdcompNoEmpty(data connectionData, errs fieldErrors) {
@@ -314,6 +314,22 @@ func ensureSettingVpnPptpKeyLcpEchoIntervalNoEmpty(data connectionData, errs fie
 }
 
 // Getter
+func getSettingVpnPptpKeyRequireMppe(data connectionData) (value bool) {
+	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE).(bool)
+	return
+}
+func getSettingVpnPptpKeyRequireMppe40(data connectionData) (value bool) {
+	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40).(bool)
+	return
+}
+func getSettingVpnPptpKeyRequireMppe128(data connectionData) (value bool) {
+	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128).(bool)
+	return
+}
+func getSettingVpnPptpKeyMppeStateful(data connectionData) (value bool) {
+	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_MPPE_STATEFUL).(bool)
+	return
+}
 func getSettingVpnPptpKeyRefuseEap(data connectionData) (value bool) {
 	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REFUSE_EAP).(bool)
 	return
@@ -332,22 +348,6 @@ func getSettingVpnPptpKeyRefuseMschap(data connectionData) (value bool) {
 }
 func getSettingVpnPptpKeyRefuseMschapv2(data connectionData) (value bool) {
 	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REFUSE_MSCHAPV2).(bool)
-	return
-}
-func getSettingVpnPptpKeyRequireMppe(data connectionData) (value bool) {
-	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE).(bool)
-	return
-}
-func getSettingVpnPptpKeyRequireMppe40(data connectionData) (value bool) {
-	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40).(bool)
-	return
-}
-func getSettingVpnPptpKeyRequireMppe128(data connectionData) (value bool) {
-	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128).(bool)
-	return
-}
-func getSettingVpnPptpKeyMppeStateful(data connectionData) (value bool) {
-	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_MPPE_STATEFUL).(bool)
 	return
 }
 func getSettingVpnPptpKeyNobsdcomp(data connectionData) (value bool) {
@@ -372,6 +372,18 @@ func getSettingVpnPptpKeyLcpEchoInterval(data connectionData) (value uint32) {
 }
 
 // Setter
+func setSettingVpnPptpKeyRequireMppe(data connectionData, value bool) {
+	setSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE, value)
+}
+func setSettingVpnPptpKeyRequireMppe40(data connectionData, value bool) {
+	setSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40, value)
+}
+func setSettingVpnPptpKeyRequireMppe128(data connectionData, value bool) {
+	setSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128, value)
+}
+func setSettingVpnPptpKeyMppeStateful(data connectionData, value bool) {
+	setSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_MPPE_STATEFUL, value)
+}
 func setSettingVpnPptpKeyRefuseEap(data connectionData, value bool) {
 	setSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REFUSE_EAP, value)
 }
@@ -386,18 +398,6 @@ func setSettingVpnPptpKeyRefuseMschap(data connectionData, value bool) {
 }
 func setSettingVpnPptpKeyRefuseMschapv2(data connectionData, value bool) {
 	setSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REFUSE_MSCHAPV2, value)
-}
-func setSettingVpnPptpKeyRequireMppe(data connectionData, value bool) {
-	setSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE, value)
-}
-func setSettingVpnPptpKeyRequireMppe40(data connectionData, value bool) {
-	setSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40, value)
-}
-func setSettingVpnPptpKeyRequireMppe128(data connectionData, value bool) {
-	setSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128, value)
-}
-func setSettingVpnPptpKeyMppeStateful(data connectionData, value bool) {
-	setSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_MPPE_STATEFUL, value)
 }
 func setSettingVpnPptpKeyNobsdcomp(data connectionData, value bool) {
 	setSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_NOBSDCOMP, value)
@@ -416,6 +416,22 @@ func setSettingVpnPptpKeyLcpEchoInterval(data connectionData, value uint32) {
 }
 
 // JSON Getter
+func getSettingVpnPptpKeyRequireMppeJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE, getSettingVpnPptpPppKeyType(NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE))
+	return
+}
+func getSettingVpnPptpKeyRequireMppe40JSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40, getSettingVpnPptpPppKeyType(NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40))
+	return
+}
+func getSettingVpnPptpKeyRequireMppe128JSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128, getSettingVpnPptpPppKeyType(NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128))
+	return
+}
+func getSettingVpnPptpKeyMppeStatefulJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_MPPE_STATEFUL, getSettingVpnPptpPppKeyType(NM_SETTING_VPN_PPTP_KEY_MPPE_STATEFUL))
+	return
+}
 func getSettingVpnPptpKeyRefuseEapJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REFUSE_EAP, getSettingVpnPptpPppKeyType(NM_SETTING_VPN_PPTP_KEY_REFUSE_EAP))
 	return
@@ -434,22 +450,6 @@ func getSettingVpnPptpKeyRefuseMschapJSON(data connectionData) (valueJSON string
 }
 func getSettingVpnPptpKeyRefuseMschapv2JSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REFUSE_MSCHAPV2, getSettingVpnPptpPppKeyType(NM_SETTING_VPN_PPTP_KEY_REFUSE_MSCHAPV2))
-	return
-}
-func getSettingVpnPptpKeyRequireMppeJSON(data connectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE, getSettingVpnPptpPppKeyType(NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE))
-	return
-}
-func getSettingVpnPptpKeyRequireMppe40JSON(data connectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40, getSettingVpnPptpPppKeyType(NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40))
-	return
-}
-func getSettingVpnPptpKeyRequireMppe128JSON(data connectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128, getSettingVpnPptpPppKeyType(NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128))
-	return
-}
-func getSettingVpnPptpKeyMppeStatefulJSON(data connectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_MPPE_STATEFUL, getSettingVpnPptpPppKeyType(NM_SETTING_VPN_PPTP_KEY_MPPE_STATEFUL))
 	return
 }
 func getSettingVpnPptpKeyNobsdcompJSON(data connectionData) (valueJSON string) {
@@ -474,6 +474,18 @@ func getSettingVpnPptpKeyLcpEchoIntervalJSON(data connectionData) (valueJSON str
 }
 
 // JSON Setter
+func setSettingVpnPptpKeyRequireMppeJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE, valueJSON, getSettingVpnPptpPppKeyType(NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE))
+}
+func setSettingVpnPptpKeyRequireMppe40JSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40, valueJSON, getSettingVpnPptpPppKeyType(NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40))
+}
+func setSettingVpnPptpKeyRequireMppe128JSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128, valueJSON, getSettingVpnPptpPppKeyType(NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128))
+}
+func setSettingVpnPptpKeyMppeStatefulJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_MPPE_STATEFUL, valueJSON, getSettingVpnPptpPppKeyType(NM_SETTING_VPN_PPTP_KEY_MPPE_STATEFUL))
+}
 func setSettingVpnPptpKeyRefuseEapJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REFUSE_EAP, valueJSON, getSettingVpnPptpPppKeyType(NM_SETTING_VPN_PPTP_KEY_REFUSE_EAP))
 }
@@ -488,18 +500,6 @@ func setSettingVpnPptpKeyRefuseMschapJSON(data connectionData, valueJSON string)
 }
 func setSettingVpnPptpKeyRefuseMschapv2JSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REFUSE_MSCHAPV2, valueJSON, getSettingVpnPptpPppKeyType(NM_SETTING_VPN_PPTP_KEY_REFUSE_MSCHAPV2))
-}
-func setSettingVpnPptpKeyRequireMppeJSON(data connectionData, valueJSON string) (err error) {
-	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE, valueJSON, getSettingVpnPptpPppKeyType(NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE))
-}
-func setSettingVpnPptpKeyRequireMppe40JSON(data connectionData, valueJSON string) (err error) {
-	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40, valueJSON, getSettingVpnPptpPppKeyType(NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40))
-}
-func setSettingVpnPptpKeyRequireMppe128JSON(data connectionData, valueJSON string) (err error) {
-	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128, valueJSON, getSettingVpnPptpPppKeyType(NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128))
-}
-func setSettingVpnPptpKeyMppeStatefulJSON(data connectionData, valueJSON string) (err error) {
-	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_MPPE_STATEFUL, valueJSON, getSettingVpnPptpPppKeyType(NM_SETTING_VPN_PPTP_KEY_MPPE_STATEFUL))
 }
 func setSettingVpnPptpKeyNobsdcompJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_NOBSDCOMP, valueJSON, getSettingVpnPptpPppKeyType(NM_SETTING_VPN_PPTP_KEY_NOBSDCOMP))
@@ -518,19 +518,20 @@ func setSettingVpnPptpKeyLcpEchoIntervalJSON(data connectionData, valueJSON stri
 }
 
 // Logic JSON Setter
-func logicSetSettingVpnPptpKeyRequireMppeJSON(data connectionData, valueJSON string) (err error) {
-	err = setSettingVpnPptpKeyRequireMppeJSON(data, valueJSON)
-	if err != nil {
-		return
-	}
-	if isSettingVpnPptpKeyRequireMppeExists(data) {
-		value := getSettingVpnPptpKeyRequireMppe(data)
-		err = logicSetSettingVpnPptpKeyRequireMppe(data, value)
-	}
-	return
-}
 
 // Remover
+func removeSettingVpnPptpKeyRequireMppe(data connectionData) {
+	removeSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE)
+}
+func removeSettingVpnPptpKeyRequireMppe40(data connectionData) {
+	removeSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40)
+}
+func removeSettingVpnPptpKeyRequireMppe128(data connectionData) {
+	removeSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128)
+}
+func removeSettingVpnPptpKeyMppeStateful(data connectionData) {
+	removeSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_MPPE_STATEFUL)
+}
 func removeSettingVpnPptpKeyRefuseEap(data connectionData) {
 	removeSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REFUSE_EAP)
 }
@@ -545,18 +546,6 @@ func removeSettingVpnPptpKeyRefuseMschap(data connectionData) {
 }
 func removeSettingVpnPptpKeyRefuseMschapv2(data connectionData) {
 	removeSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REFUSE_MSCHAPV2)
-}
-func removeSettingVpnPptpKeyRequireMppe(data connectionData) {
-	removeSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE)
-}
-func removeSettingVpnPptpKeyRequireMppe40(data connectionData) {
-	removeSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40)
-}
-func removeSettingVpnPptpKeyRequireMppe128(data connectionData) {
-	removeSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128)
-}
-func removeSettingVpnPptpKeyMppeStateful(data connectionData) {
-	removeSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_MPPE_STATEFUL)
 }
 func removeSettingVpnPptpKeyNobsdcomp(data connectionData) {
 	removeSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_NOBSDCOMP)

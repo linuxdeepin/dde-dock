@@ -2,6 +2,7 @@ package main
 
 import (
 	"dlib"
+	"fmt"
 )
 
 const (
@@ -124,9 +125,8 @@ func getSettingVpnPptpPppAvailableKeys(data connectionData) (keys []string) {
 	keys = appendAvailableKeys(data, keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_REFUSE_MSCHAP)
 	keys = appendAvailableKeys(data, keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_REFUSE_MSCHAPV2)
 	keys = appendAvailableKeys(data, keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE)
-	if getSettingVpnPptpKeyRequireMppe(data) {
+	if getSettingVkVpnPptpRequireMppe(data) {
 		keys = appendAvailableKeys(data, keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40)
-		keys = appendAvailableKeys(data, keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128)
 		keys = appendAvailableKeys(data, keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_MPPE_STATEFUL)
 	}
 	keys = appendAvailableKeys(data, keys, fieldVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_NOBSDCOMP)
@@ -142,17 +142,67 @@ func checkSettingVpnPptpPppValues(data connectionData) (errs fieldErrors) {
 	errs = make(map[string]string)
 	return
 }
-func logicSetSettingVpnPptpKeyRequireMppe(data connectionData, value bool) (err error) {
-	if !value {
+
+// Virtual key
+func getSettingVkVpnPptpRequireMppe(data connectionData) (value bool) {
+	if getSettingVpnPptpKeyRequireMppe(data) ||
+		getSettingVpnPptpKeyRequireMppe128(data) ||
+		getSettingVpnPptpKeyRequireMppe40(data) {
+		value = true
+	}
+	return
+}
+func logicSetSettingVkVpnPptpRequireMppe(data connectionData, value bool) (err error) {
+	if value {
+		// if require mppe, refuse some authentications
+		setSettingVpnPptpKeyRefuseChap(data, true)
+		setSettingVpnPptpKeyRefuseEap(data, true)
+		setSettingVpnPptpKeyRefusePap(data, true)
+	} else {
+		// if disable mppe, remove related keys
 		removeSettingVpnPptpKeyRequireMppe40(data)
 		removeSettingVpnPptpKeyRequireMppe128(data)
 		removeSettingVpnPptpKeyMppeStateful(data)
+
+		removeSettingVpnPptpKeyRefuseChap(data)
+		removeSettingVpnPptpKeyRefuseEap(data)
+		removeSettingVpnPptpKeyRefusePap(data)
 	}
 	setSettingVpnPptpKeyRequireMppe(data, value)
 	return
 }
 
-// Virtual key
+func getSettingVkVpnPptpMppeSecurity(data connectionData) (value string) {
+	if getSettingVpnPptpKeyRequireMppe128(data) {
+		value = "128-bit"
+	} else if getSettingVpnPptpKeyRequireMppe40(data) {
+		value = "40-bit"
+	} else if getSettingVpnPptpKeyRequireMppe(data) {
+		value = "default"
+	} else {
+		logger.Warning("get pptp mppe security failed")
+	}
+	return
+}
+func logicSetSettingVkVpnPptpMppeSecurity(data connectionData, value string) (err error) {
+	if !getSettingVpnPptpKeyRequireMppe(data) {
+		err = fmt.Errorf(NM_KEY_ERROR_MISSING_DEPENDS_KEY, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE)
+		return
+	}
+	switch value {
+	case "default":
+		removeSettingVpnPptpKeyRequireMppe40(data)
+		removeSettingVpnPptpKeyRequireMppe128(data)
+	case "128-bit":
+		removeSettingVpnPptpKeyRequireMppe40(data)
+		setSettingVpnPptpKeyRequireMppe128(data, true)
+	case "40-bit":
+		setSettingVpnPptpKeyRequireMppe40(data, true)
+		removeSettingVpnPptpKeyRequireMppe128(data)
+	}
+	return
+}
+
 func getSettingVkVpnPptpEnableLcpEcho(data connectionData) (value bool) {
 	if isSettingVpnPptpKeyLcpEchoFailureExists(data) && isSettingVpnPptpKeyLcpEchoIntervalExists(data) {
 		return true
