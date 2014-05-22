@@ -24,12 +24,12 @@ type Audio struct {
 
 func (a *Audio) Reset() {
 	for _, s := range a.Sinks {
-		s.SetVolume(s.BaseVolume)
+		s.SetVolume(s.BaseVolume, true)
 		s.SetBalance(0)
 		s.SetFade(0)
 	}
 	for _, s := range a.Sources {
-		s.SetVolume(s.BaseVolume)
+		s.SetVolume(s.BaseVolume, true)
 		s.SetBalance(0)
 		s.SetFade(0)
 	}
@@ -109,12 +109,14 @@ type Sink struct {
 	ActivePort Port
 }
 
-func (s *Sink) SetVolume(v float64) {
+func (s *Sink) SetVolume(v float64, isPlay bool) {
 	if v == 0 {
 		v = 0.001
 	}
 	s.core.SetVolume(s.core.Volume.SetAvg(v))
-	playFeedback()
+	if isPlay {
+		playFeedback()
+	}
 }
 func (s *Sink) SetBalance(v float64) {
 	s.core.SetVolume(s.core.Volume.SetBalance(s.core.ChannelMap, v))
@@ -147,12 +149,14 @@ type SinkInput struct {
 	SupportFade    bool
 }
 
-func (s *SinkInput) SetVolume(v float64) {
+func (s *SinkInput) SetVolume(v float64, isPlay bool) {
 	if v == 0 {
 		v = 0.001
 	}
 	s.core.SetVolume(s.core.Volume.SetAvg(v))
-	playFeedback()
+	if isPlay {
+		playFeedback()
+	}
 }
 func (s *SinkInput) SetBalance(v float64) {
 	s.core.SetVolume(s.core.Volume.SetBalance(s.core.ChannelMap, v))
@@ -188,12 +192,14 @@ type Source struct {
 	ActivePort Port
 }
 
-func (s *Source) SetVolume(v float64) {
+func (s *Source) SetVolume(v float64, isPlay bool) {
 	if v == 0 {
 		v = 0.001
 	}
 	s.core.SetVolume(s.core.Volume.SetAvg(v))
-	playFeedback()
+	if isPlay {
+		playFeedback()
+	}
 }
 func (s *Source) SetBalance(v float64) {
 	s.core.SetVolume(s.core.Volume.SetBalance(s.core.ChannelMap, v))

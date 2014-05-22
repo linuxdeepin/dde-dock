@@ -42,7 +42,7 @@ func (audio *Audio) listenMediaKey() {
 			if nv > 1 {
 				nv = 1
 			}
-			sink.SetVolume(nv)
+			sink.SetVolume(nv, true)
 		}
 	})
 	mediaKeyManager.ConnectAudioDown(func(pressed bool) {
@@ -59,7 +59,7 @@ func (audio *Audio) listenMediaKey() {
 			if nv < 0 {
 				nv = 0
 			}
-			sink.SetVolume(nv)
+			sink.SetVolume(nv, true)
 			playFeedback()
 		}
 	})
