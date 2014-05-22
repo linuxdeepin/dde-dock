@@ -30,7 +30,7 @@ var funcMap = template.FuncMap{
 
 const (
 	backEndDir            = ".."
-	frontEndDir           = "../../../dss/modules/network/components_section_autogen/"
+	frontEndDir           = "../../../dss/modules/network/components_autogen/"
 	nmSettingsJSONFile    = "./nm_settings.json"
 	nmSettingVkJSONFile   = "./nm_setting_vk.json"
 	nmSettingPageJSONFile = "./nm_setting_page.json"
