@@ -286,123 +286,57 @@ func ensureSettingGsmPinFlagsNoEmpty(data connectionData, errs fieldErrors) {
 // Getter
 func getSettingGsmNumber(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NUMBER)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSettingGsmNumber: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSettingGsmUsername(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_USERNAME)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSettingGsmUsername: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSettingGsmPasswordFlags(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_PASSWORD_FLAGS)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(uint32)
-		if !ok {
-			logger.Warningf("getSettingGsmPasswordFlags: value type is invalid, should be uint32 instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToUint32(ivalue)
 	return
 }
 func getSettingGsmPassword(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_PASSWORD)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSettingGsmPassword: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSettingGsmApn(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_APN)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSettingGsmApn: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSettingGsmNetworkId(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NETWORK_ID)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSettingGsmNetworkId: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSettingGsmNetworkType(data connectionData) (value int32) {
 	ivalue := getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NETWORK_TYPE)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(int32)
-		if !ok {
-			logger.Warningf("getSettingGsmNetworkType: value type is invalid, should be int32 instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToInt32(ivalue)
 	return
 }
 func getSettingGsmAllowedBands(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_ALLOWED_BANDS)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(bool)
-		if !ok {
-			logger.Warningf("getSettingGsmAllowedBands: value type is invalid, should be bool instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToBoolean(ivalue)
 	return
 }
 func getSettingGsmHomeOnly(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_HOME_ONLY)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(bool)
-		if !ok {
-			logger.Warningf("getSettingGsmHomeOnly: value type is invalid, should be bool instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToBoolean(ivalue)
 	return
 }
 func getSettingGsmPin(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_PIN)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSettingGsmPin: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSettingGsmPinFlags(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_PIN_FLAGS)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(uint32)
-		if !ok {
-			logger.Warningf("getSettingGsmPinFlags: value type is invalid, should be uint32 instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToUint32(ivalue)
 	return
 }
 

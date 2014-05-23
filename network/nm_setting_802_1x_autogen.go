@@ -744,354 +744,162 @@ func ensureSetting8021xSystemCaCertsNoEmpty(data connectionData, errs fieldError
 // Getter
 func getSetting8021xEap(data connectionData) (value []string) {
 	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_EAP)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.([]string)
-		if !ok {
-			logger.Warningf("getSetting8021xEap: value type is invalid, should be []string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToArrayString(ivalue)
 	return
 }
 func getSetting8021xAnonymousIdentity(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ANONYMOUS_IDENTITY)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSetting8021xAnonymousIdentity: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSetting8021xClientCert(data connectionData) (value []byte) {
 	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.([]byte)
-		if !ok {
-			logger.Warningf("getSetting8021xClientCert: value type is invalid, should be []byte instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToArrayByte(ivalue)
 	return
 }
 func getSetting8021xCaCert(data connectionData) (value []byte) {
 	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.([]byte)
-		if !ok {
-			logger.Warningf("getSetting8021xCaCert: value type is invalid, should be []byte instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToArrayByte(ivalue)
 	return
 }
 func getSetting8021xPhase1FastProvisioning(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSetting8021xPhase1FastProvisioning: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSetting8021xPacFile(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PAC_FILE)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSetting8021xPacFile: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSetting8021xPhase1Peapver(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPVER)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSetting8021xPhase1Peapver: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSetting8021xPhase2Auth(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTH)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSetting8021xPhase2Auth: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSetting8021xPrivateKey(data connectionData) (value []byte) {
 	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.([]byte)
-		if !ok {
-			logger.Warningf("getSetting8021xPrivateKey: value type is invalid, should be []byte instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToArrayByte(ivalue)
 	return
 }
 func getSetting8021xIdentity(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_IDENTITY)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSetting8021xIdentity: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSetting8021xPasswordFlags(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_FLAGS)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(uint32)
-		if !ok {
-			logger.Warningf("getSetting8021xPasswordFlags: value type is invalid, should be uint32 instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToUint32(ivalue)
 	return
 }
 func getSetting8021xPassword(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSetting8021xPassword: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSetting8021xPrivateKeyPasswordFlags(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(uint32)
-		if !ok {
-			logger.Warningf("getSetting8021xPrivateKeyPasswordFlags: value type is invalid, should be uint32 instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToUint32(ivalue)
 	return
 }
 func getSetting8021xPrivateKeyPassword(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSetting8021xPrivateKeyPassword: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSetting8021xCaPath(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_PATH)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSetting8021xCaPath: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSetting8021xSubjectMatch(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_SUBJECT_MATCH)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSetting8021xSubjectMatch: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSetting8021xAltsubjectMatches(data connectionData) (value []string) {
 	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ALTSUBJECT_MATCHES)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.([]string)
-		if !ok {
-			logger.Warningf("getSetting8021xAltsubjectMatches: value type is invalid, should be []string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToArrayString(ivalue)
 	return
 }
 func getSetting8021xPhase1Peaplabel(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPLABEL)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSetting8021xPhase1Peaplabel: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSetting8021xPhase2Autheap(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_AUTHEAP)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSetting8021xPhase2Autheap: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSetting8021xPhase2CaCert(data connectionData) (value []byte) {
 	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CA_CERT)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.([]byte)
-		if !ok {
-			logger.Warningf("getSetting8021xPhase2CaCert: value type is invalid, should be []byte instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToArrayByte(ivalue)
 	return
 }
 func getSetting8021xPhase2CaPath(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CA_PATH)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSetting8021xPhase2CaPath: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSetting8021xPhase2ClientCert(data connectionData) (value []byte) {
 	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_CLIENT_CERT)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.([]byte)
-		if !ok {
-			logger.Warningf("getSetting8021xPhase2ClientCert: value type is invalid, should be []byte instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToArrayByte(ivalue)
 	return
 }
 func getSetting8021xPhase2SubjectMatch(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSetting8021xPhase2SubjectMatch: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSetting8021xPhase2AltsubjectMatches(data connectionData) (value []string) {
 	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.([]string)
-		if !ok {
-			logger.Warningf("getSetting8021xPhase2AltsubjectMatches: value type is invalid, should be []string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToArrayString(ivalue)
 	return
 }
 func getSetting8021xPasswordRaw(data connectionData) (value []byte) {
 	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.([]byte)
-		if !ok {
-			logger.Warningf("getSetting8021xPasswordRaw: value type is invalid, should be []byte instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToArrayByte(ivalue)
 	return
 }
 func getSetting8021xPasswordRawFlags(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PASSWORD_RAW_FLAGS)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(uint32)
-		if !ok {
-			logger.Warningf("getSetting8021xPasswordRawFlags: value type is invalid, should be uint32 instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToUint32(ivalue)
 	return
 }
 func getSetting8021xPhase2PrivateKey(data connectionData) (value []byte) {
 	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.([]byte)
-		if !ok {
-			logger.Warningf("getSetting8021xPhase2PrivateKey: value type is invalid, should be []byte instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToArrayByte(ivalue)
 	return
 }
 func getSetting8021xPhase2PrivateKeyPassword(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSetting8021xPhase2PrivateKeyPassword: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSetting8021xPhase2PrivateKeyPasswordFlags(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(uint32)
-		if !ok {
-			logger.Warningf("getSetting8021xPhase2PrivateKeyPasswordFlags: value type is invalid, should be uint32 instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToUint32(ivalue)
 	return
 }
 func getSetting8021xPin(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PIN)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSetting8021xPin: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSetting8021xPinFlags(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PIN_FLAGS)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(uint32)
-		if !ok {
-			logger.Warningf("getSetting8021xPinFlags: value type is invalid, should be uint32 instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToUint32(ivalue)
 	return
 }
 func getSetting8021xSystemCaCerts(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_SYSTEM_CA_CERTS)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(bool)
-		if !ok {
-			logger.Warningf("getSetting8021xSystemCaCerts: value type is invalid, should be bool instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToBoolean(ivalue)
 	return
 }
 

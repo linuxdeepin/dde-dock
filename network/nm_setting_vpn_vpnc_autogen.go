@@ -298,123 +298,57 @@ func ensureSettingVpnVpncKeyCaFileNoEmpty(data connectionData, errs fieldErrors)
 // Getter
 func getSettingVpnVpncKeyGateway(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_GATEWAY)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSettingVpnVpncKeyGateway: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSettingVpnVpncKeyXauthUser(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_XAUTH_USER)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSettingVpnVpncKeyXauthUser: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSettingVpnVpncKeyXauthPasswordType(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD_TYPE)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSettingVpnVpncKeyXauthPasswordType: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSettingVpnVpncKeyXauthPasswordFlags(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD_FLAGS)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(uint32)
-		if !ok {
-			logger.Warningf("getSettingVpnVpncKeyXauthPasswordFlags: value type is invalid, should be uint32 instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToUint32(ivalue)
 	return
 }
 func getSettingVpnVpncKeyXauthPassword(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSettingVpnVpncKeyXauthPassword: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSettingVpnVpncKeyId(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_ID)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSettingVpnVpncKeyId: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSettingVpnVpncKeySecretType(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_SECRET_TYPE)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSettingVpnVpncKeySecretType: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSettingVpnVpncKeySecretFlags(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_SECRET_FLAGS)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(uint32)
-		if !ok {
-			logger.Warningf("getSettingVpnVpncKeySecretFlags: value type is invalid, should be uint32 instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToUint32(ivalue)
 	return
 }
 func getSettingVpnVpncKeySecret(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_SECRET)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSettingVpnVpncKeySecret: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSettingVpnVpncKeyAuthmode(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_AUTHMODE)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSettingVpnVpncKeyAuthmode: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSettingVpnVpncKeyCaFile(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_VPNC_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_CA_FILE)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSettingVpnVpncKeyCaFile: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 

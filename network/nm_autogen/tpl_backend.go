@@ -113,13 +113,7 @@ const tplGetter = `
 // Getter{{$fieldName := .FieldName}}{{range $i, $key := .Keys}}{{if $key.UsedByBackEnd}}{{$keyFuncBaseName := $key.Name | ToKeyFuncBaseName}}{{$realType := $key.Type | ToKeyTypeRealData}}
 func get{{$keyFuncBaseName}}(data connectionData) (value {{$key.Type | ToKeyTypeRealData}}) {
 	ivalue := getSettingKey(data, {{$fieldName}}, {{$key.Name}})
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.({{$realType}})
-		if !ok {
-			logger.Warningf("get{{$keyFuncBaseName}}: value type is invalid, should be {{$realType}} instead of %#v", ivalue)
-		}
-	}
+	value = {{$key.Type | ToKeyTypeInterfaceConverter}}(ivalue)
 	return
 }{{end}}{{end}}
 `

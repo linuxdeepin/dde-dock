@@ -226,101 +226,47 @@ func ensureSettingVpnOpenvpnKeyRemoteRandomNoEmpty(data connectionData, errs fie
 // Getter
 func getSettingVpnOpenvpnKeyPort(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PORT)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(uint32)
-		if !ok {
-			logger.Warningf("getSettingVpnOpenvpnKeyPort: value type is invalid, should be uint32 instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToUint32(ivalue)
 	return
 }
 func getSettingVpnOpenvpnKeyRenegSeconds(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_RENEG_SECONDS)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(uint32)
-		if !ok {
-			logger.Warningf("getSettingVpnOpenvpnKeyRenegSeconds: value type is invalid, should be uint32 instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToUint32(ivalue)
 	return
 }
 func getSettingVpnOpenvpnKeyCompLzo(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_COMP_LZO)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(bool)
-		if !ok {
-			logger.Warningf("getSettingVpnOpenvpnKeyCompLzo: value type is invalid, should be bool instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToBoolean(ivalue)
 	return
 }
 func getSettingVpnOpenvpnKeyProtoTcp(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROTO_TCP)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(bool)
-		if !ok {
-			logger.Warningf("getSettingVpnOpenvpnKeyProtoTcp: value type is invalid, should be bool instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToBoolean(ivalue)
 	return
 }
 func getSettingVpnOpenvpnKeyTapDev(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TAP_DEV)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(bool)
-		if !ok {
-			logger.Warningf("getSettingVpnOpenvpnKeyTapDev: value type is invalid, should be bool instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToBoolean(ivalue)
 	return
 }
 func getSettingVpnOpenvpnKeyTunnelMtu(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TUNNEL_MTU)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(uint32)
-		if !ok {
-			logger.Warningf("getSettingVpnOpenvpnKeyTunnelMtu: value type is invalid, should be uint32 instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToUint32(ivalue)
 	return
 }
 func getSettingVpnOpenvpnKeyFragmentSize(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_FRAGMENT_SIZE)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(uint32)
-		if !ok {
-			logger.Warningf("getSettingVpnOpenvpnKeyFragmentSize: value type is invalid, should be uint32 instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToUint32(ivalue)
 	return
 }
 func getSettingVpnOpenvpnKeyMssfix(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_MSSFIX)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(bool)
-		if !ok {
-			logger.Warningf("getSettingVpnOpenvpnKeyMssfix: value type is invalid, should be bool instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToBoolean(ivalue)
 	return
 }
 func getSettingVpnOpenvpnKeyRemoteRandom(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_REMOTE_RANDOM)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(bool)
-		if !ok {
-			logger.Warningf("getSettingVpnOpenvpnKeyRemoteRandom: value type is invalid, should be bool instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToBoolean(ivalue)
 	return
 }
 

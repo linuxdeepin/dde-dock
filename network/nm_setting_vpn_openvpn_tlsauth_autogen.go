@@ -148,46 +148,22 @@ func ensureSettingVpnOpenvpnKeyTaDirNoEmpty(data connectionData, errs fieldError
 // Getter
 func getSettingVpnOpenvpnKeyTlsRemote(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TLS_REMOTE)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSettingVpnOpenvpnKeyTlsRemote: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSettingVpnOpenvpnKeyRemoteCertTls(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_REMOTE_CERT_TLS)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSettingVpnOpenvpnKeyRemoteCertTls: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSettingVpnOpenvpnKeyTa(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TA)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSettingVpnOpenvpnKeyTa: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSettingVpnOpenvpnKeyTaDir(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TA_DIR)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(uint32)
-		if !ok {
-			logger.Warningf("getSettingVpnOpenvpnKeyTaDir: value type is invalid, should be uint32 instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToUint32(ivalue)
 	return
 }
 

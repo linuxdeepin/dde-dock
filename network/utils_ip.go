@@ -175,6 +175,14 @@ func convertIpv6AddressToStringCheck(v []byte) (ipv6Addr string, err error) {
 	return
 }
 
+// if address is 0, return empty string instead of "0.0.0.0"
+func convertIpv6AddressToStringNoZero(v []byte) (ipv6Addr string) {
+	if isIpv6AddressZero(v) {
+		return
+	}
+	return convertIpv6AddressToString(v)
+}
+
 // "0000:0000:0000:0000:0000:0000:0000:0000" -> []byte{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 func convertIpv6AddressToArrayByte(v string) (ipv6Addr []byte) {
 	ipv6Addr, err := convertIpv6AddressToArrayByteCheck(v)

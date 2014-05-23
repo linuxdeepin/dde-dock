@@ -179,21 +179,17 @@ func checkSettingIp6ConfigAddresses(data connectionData, errs fieldErrors) {
 			rememberError(errs, fieldIpv6, NM_SETTING_VK_IP6_CONFIG_ADDRESSES_ADDRESS, NM_KEY_ERROR_INVALID_VALUE)
 			// TODO test
 			logger.Warning(NM_KEY_ERROR_INVALID_VALUE, addr.Address)
-			return
 		}
 		if isIpv6AddressZero(addr.Address) {
 			rememberError(errs, fieldIpv6, NM_SETTING_VK_IP6_CONFIG_ADDRESSES_ADDRESS, NM_KEY_ERROR_INVALID_VALUE)
-			return
 		}
 		// check prefix
 		if addr.Prefix < 1 || addr.Prefix > 128 {
 			rememberError(errs, fieldIpv6, NM_SETTING_VK_IP6_CONFIG_ADDRESSES_PREFIX, NM_KEY_ERROR_INVALID_VALUE)
-			return
 		}
 		// check gateway
 		if !isIpv6AddressValid(addr.Gateway) {
 			rememberError(errs, fieldIpv6, NM_SETTING_VK_IP6_CONFIG_ADDRESSES_GATEWAY, NM_KEY_ERROR_INVALID_VALUE)
-			return
 		}
 	}
 }
@@ -235,6 +231,7 @@ func getOrNewSettingIp6ConfigAddresses(data connectionData) (addresses ipv6Addre
 		addresses = getSettingIp6ConfigAddresses(data)
 	} else {
 		addresses = make(ipv6Addresses, 1)
+		addresses[0].Gateway = make([]byte, 16)
 	}
 	return
 }
@@ -262,6 +259,7 @@ func getSettingVkIp6ConfigAddressesPrefix(data connectionData) (value uint32) {
 	}
 	addresses := getSettingIp6ConfigAddresses(data)
 	value = addresses[0].Prefix
+	logger.Info(addresses) // TODO test
 	return
 }
 func getSettingVkIp6ConfigAddressesGateway(data connectionData) (value string) {
@@ -269,7 +267,7 @@ func getSettingVkIp6ConfigAddressesGateway(data connectionData) (value string) {
 		return
 	}
 	addresses := getSettingIp6ConfigAddresses(data)
-	value = convertIpv6AddressToString(addresses[0].Gateway)
+	value = convertIpv6AddressToStringNoZero(addresses[0].Gateway)
 	return
 }
 func getSettingVkIp6ConfigRoutesAddress(data connectionData) (value string) {
@@ -328,6 +326,7 @@ func logicSetSettingVkIp6ConfigAddressesAddress(data connectionData, value strin
 	addresses := getOrNewSettingIp6ConfigAddresses(data)
 	addr := addresses[0]
 	addr.Address = tmp
+	addresses[0] = addr
 	if !isIpv6AddressStructZero(addr) {
 		setSettingIp6ConfigAddresses(data, addresses)
 	} else {
@@ -339,6 +338,7 @@ func logicSetSettingVkIp6ConfigAddressesPrefix(data connectionData, value uint32
 	addresses := getOrNewSettingIp6ConfigAddresses(data)
 	addr := addresses[0]
 	addr.Prefix = value
+	addresses[0] = addr
 	if !isIpv6AddressStructZero(addr) {
 		setSettingIp6ConfigAddresses(data, addresses)
 	} else {
@@ -358,6 +358,7 @@ func logicSetSettingVkIp6ConfigAddressesGateway(data connectionData, value strin
 	addresses := getOrNewSettingIp6ConfigAddresses(data)
 	addr := addresses[0]
 	addr.Gateway = tmp
+	addresses[0] = addr
 	if !isIpv6AddressStructZero(addr) {
 		setSettingIp6ConfigAddresses(data, addresses)
 	} else {

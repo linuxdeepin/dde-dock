@@ -18,14 +18,15 @@ var funcMap = template.FuncMap{
 	"GetAllVkFields":         GetAllVkFields,
 	"GetAllVkFieldKeys":      GetAllVkFieldKeys,
 	// "IsVkNeedLogicSetter":       IsVkNeedLogicSetter,
-	"ToKeyTypeShortName":  ToKeyTypeShortName,
-	"ToKeyDisplayName":    ToKeyDisplayName,
-	"ToKeyValue":          ToKeyValue,
-	"IsKeyUsedByFrontEnd": IsKeyUsedByFrontEnd,
-	"ToFrontEndWidget":    ToFrontEndWidget,
-	"ToClassName":         ToClassName,
-	"GetAllKeysInPage":    GetAllKeysInPage,
-	"GetKeyWidgetProp":    GetKeyWidgetProp,
+	"ToKeyTypeShortName":          ToKeyTypeShortName,
+	"ToKeyDisplayName":            ToKeyDisplayName,
+	"ToKeyValue":                  ToKeyValue,
+	"IsKeyUsedByFrontEnd":         IsKeyUsedByFrontEnd,
+	"ToFrontEndWidget":            ToFrontEndWidget,
+	"ToClassName":                 ToClassName,
+	"GetAllKeysInPage":            GetAllKeysInPage,
+	"GetKeyWidgetProp":            GetKeyWidgetProp,
+	"ToKeyTypeInterfaceConverter": ToKeyTypeInterfaceConverter,
 }
 
 const (

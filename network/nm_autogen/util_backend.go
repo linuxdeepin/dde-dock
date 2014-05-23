@@ -125,6 +125,44 @@ func ToKeyTypeDefaultValue(keyName string) (value string) {
 	return
 }
 
+// "ktypeString" -> interfaceToString, "ktypeBool" -> interfaceToBoolean
+func ToKeyTypeInterfaceConverter(ktype string) (converter string) {
+	switch ktype {
+	default:
+		fmt.Println("invalid ktype:", ktype)
+		os.Exit(1)
+	case "ktypeString":
+		converter = "interfaceToString"
+	case "ktypeByte":
+		converter = "interfaceToByte"
+	case "ktypeInt32":
+		converter = "interfaceToInt32"
+	case "ktypeUint32":
+		converter = "interfaceToUint32"
+	case "ktypeUint64":
+		converter = "interfaceToUint64"
+	case "ktypeBoolean":
+		converter = "interfaceToBoolean"
+	case "ktypeArrayByte", "ktypeWrapperString", "ktypeWrapperMacAddress":
+		converter = "interfaceToArrayByte"
+	case "ktypeArrayString":
+		converter = "interfaceToArrayString"
+	case "ktypeArrayUint32", "ktypeWrapperIpv4Dns":
+		converter = "interfaceToArrayUint32"
+	case "ktypeArrayArrayByte", "ktypeWrapperIpv6Dns":
+		converter = "interfaceToArrayArrayByte"
+	case "ktypeArrayArrayUint32", "ktypeWrapperIpv4Addresses", "ktypeWrapperIpv4Routes":
+		converter = "interfaceToArrayArrayUint32"
+	case "ktypeDictStringString":
+		converter = "interfaceToDictStringString"
+	case "ktypeIpv6Addresses", "ktypeWrapperIpv6Addresses":
+		converter = "interfaceToIpv6Addresses"
+	case "ktypeIpv6Routes", "ktypeWrapperIpv6Routes":
+		converter = "interfaceToIpv6Routes"
+	}
+	return
+}
+
 // test if need check value length to ensure value not empty
 func IfNeedCheckValueLength(ktype string) (need string) {
 	switch ktype {

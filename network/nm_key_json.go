@@ -16,28 +16,28 @@ func keyValueToJSON(v interface{}, t ktype) (jsonStr string, err error) {
 	// dispatch wrapper keys
 	switch t {
 	case ktypeWrapperString:
-		tmpv, _ := interfaceToArrayByte(v)
+		tmpv := interfaceToArrayByte(v)
 		v = string(tmpv)
 	case ktypeWrapperMacAddress:
-		tmpv, _ := interfaceToArrayByte(v)
+		tmpv := interfaceToArrayByte(v)
 		v = convertMacAddressToString(tmpv)
 	case ktypeWrapperIpv4Dns:
-		tmpv, _ := interfaceToArrayUint32(v)
+		tmpv := interfaceToArrayUint32(v)
 		v = wrapIpv4Dns(tmpv)
 	case ktypeWrapperIpv4Addresses:
-		tmpv, _ := interfaceToArrayArrayUint32(v)
+		tmpv := interfaceToArrayArrayUint32(v)
 		v = wrapIpv4Addresses(tmpv)
 	case ktypeWrapperIpv4Routes:
-		tmpv, _ := interfaceToArrayArrayUint32(v)
+		tmpv := interfaceToArrayArrayUint32(v)
 		v = wrapIpv4Routes(tmpv)
 	case ktypeWrapperIpv6Dns:
-		tmpv, _ := interfaceToArrayArrayByte(v)
+		tmpv := interfaceToArrayArrayByte(v)
 		v = wrapIpv6Dns(tmpv)
 	case ktypeWrapperIpv6Addresses:
-		tmpv, _ := interfaceToIpv6Addresses(v)
+		tmpv := interfaceToIpv6Addresses(v)
 		v = wrapIpv6Addresses(tmpv)
 	case ktypeWrapperIpv6Routes:
-		tmpv, _ := interfaceToIpv6Routes(v)
+		tmpv := interfaceToIpv6Routes(v)
 		v = wrapIpv6Routes(tmpv)
 	}
 

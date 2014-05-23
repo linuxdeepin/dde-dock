@@ -308,134 +308,62 @@ func ensureSettingIp4ConfigMayFailNoEmpty(data connectionData, errs fieldErrors)
 // Getter
 func getSettingIp4ConfigMethod(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_METHOD)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSettingIp4ConfigMethod: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSettingIp4ConfigAddresses(data connectionData) (value [][]uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.([][]uint32)
-		if !ok {
-			logger.Warningf("getSettingIp4ConfigAddresses: value type is invalid, should be [][]uint32 instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToArrayArrayUint32(ivalue)
 	return
 }
 func getSettingIp4ConfigDns(data connectionData) (value []uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.([]uint32)
-		if !ok {
-			logger.Warningf("getSettingIp4ConfigDns: value type is invalid, should be []uint32 instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToArrayUint32(ivalue)
 	return
 }
 func getSettingIp4ConfigDnsSearch(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_SEARCH)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSettingIp4ConfigDnsSearch: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSettingIp4ConfigRoutes(data connectionData) (value [][]uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTES)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.([][]uint32)
-		if !ok {
-			logger.Warningf("getSettingIp4ConfigRoutes: value type is invalid, should be [][]uint32 instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToArrayArrayUint32(ivalue)
 	return
 }
 func getSettingIp4ConfigIgnoreAutoRoutes(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(bool)
-		if !ok {
-			logger.Warningf("getSettingIp4ConfigIgnoreAutoRoutes: value type is invalid, should be bool instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToBoolean(ivalue)
 	return
 }
 func getSettingIp4ConfigIgnoreAutoDns(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(bool)
-		if !ok {
-			logger.Warningf("getSettingIp4ConfigIgnoreAutoDns: value type is invalid, should be bool instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToBoolean(ivalue)
 	return
 }
 func getSettingIp4ConfigDhcpClientId(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSettingIp4ConfigDhcpClientId: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSettingIp4ConfigDhcpSendHostname(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(bool)
-		if !ok {
-			logger.Warningf("getSettingIp4ConfigDhcpSendHostname: value type is invalid, should be bool instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToBoolean(ivalue)
 	return
 }
 func getSettingIp4ConfigDhcpHostname(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSettingIp4ConfigDhcpHostname: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSettingIp4ConfigNeverDefault(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_NEVER_DEFAULT)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(bool)
-		if !ok {
-			logger.Warningf("getSettingIp4ConfigNeverDefault: value type is invalid, should be bool instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToBoolean(ivalue)
 	return
 }
 func getSettingIp4ConfigMayFail(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_MAY_FAIL)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(bool)
-		if !ok {
-			logger.Warningf("getSettingIp4ConfigMayFail: value type is invalid, should be bool instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToBoolean(ivalue)
 	return
 }
 

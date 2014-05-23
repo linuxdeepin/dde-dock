@@ -188,13 +188,7 @@ func doGetSettingVpnPluginData(data connectionData, isSecretKey bool) (vpnData m
 			return
 		}
 	}
-	vpnData, err := interfaceToDictStringString(variantValue.Value())
-	if err != nil {
-		ok = false
-		logger.Error("invalid vpn plugin data:", err)
-	} else {
-		ok = true
-	}
+	vpnData = interfaceToDictStringString(variantValue.Value())
 	return
 }
 

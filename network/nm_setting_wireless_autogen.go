@@ -356,156 +356,72 @@ func ensureSettingWirelessHiddenNoEmpty(data connectionData, errs fieldErrors) {
 // Getter
 func getSettingWirelessSsid(data connectionData) (value []byte) {
 	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SSID)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.([]byte)
-		if !ok {
-			logger.Warningf("getSettingWirelessSsid: value type is invalid, should be []byte instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToArrayByte(ivalue)
 	return
 }
 func getSettingWirelessMode(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MODE)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSettingWirelessMode: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSettingWirelessBand(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_BAND)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSettingWirelessBand: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSettingWirelessChannel(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_CHANNEL)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSettingWirelessChannel: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSettingWirelessBssid(data connectionData) (value []byte) {
 	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_BSSID)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.([]byte)
-		if !ok {
-			logger.Warningf("getSettingWirelessBssid: value type is invalid, should be []byte instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToArrayByte(ivalue)
 	return
 }
 func getSettingWirelessRate(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_RATE)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(uint32)
-		if !ok {
-			logger.Warningf("getSettingWirelessRate: value type is invalid, should be uint32 instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToUint32(ivalue)
 	return
 }
 func getSettingWirelessTxPower(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_TX_POWER)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(uint32)
-		if !ok {
-			logger.Warningf("getSettingWirelessTxPower: value type is invalid, should be uint32 instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToUint32(ivalue)
 	return
 }
 func getSettingWirelessMacAddress(data connectionData) (value []byte) {
 	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MAC_ADDRESS)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.([]byte)
-		if !ok {
-			logger.Warningf("getSettingWirelessMacAddress: value type is invalid, should be []byte instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToArrayByte(ivalue)
 	return
 }
 func getSettingWirelessClonedMacAddress(data connectionData) (value []byte) {
 	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.([]byte)
-		if !ok {
-			logger.Warningf("getSettingWirelessClonedMacAddress: value type is invalid, should be []byte instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToArrayByte(ivalue)
 	return
 }
 func getSettingWirelessMacAddressBlacklist(data connectionData) (value []string) {
 	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.([]string)
-		if !ok {
-			logger.Warningf("getSettingWirelessMacAddressBlacklist: value type is invalid, should be []string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToArrayString(ivalue)
 	return
 }
 func getSettingWirelessMtu(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MTU)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(uint32)
-		if !ok {
-			logger.Warningf("getSettingWirelessMtu: value type is invalid, should be uint32 instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToUint32(ivalue)
 	return
 }
 func getSettingWirelessSeenBssids(data connectionData) (value []string) {
 	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEEN_BSSIDS)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.([]string)
-		if !ok {
-			logger.Warningf("getSettingWirelessSeenBssids: value type is invalid, should be []string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToArrayString(ivalue)
 	return
 }
 func getSettingWirelessSec(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEC)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(string)
-		if !ok {
-			logger.Warningf("getSettingWirelessSec: value type is invalid, should be string instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToString(ivalue)
 	return
 }
 func getSettingWirelessHidden(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_HIDDEN)
-	if !isInterfaceEmpty(ivalue) {
-		var ok bool
-		value, ok = ivalue.(bool)
-		if !ok {
-			logger.Warningf("getSettingWirelessHidden: value type is invalid, should be bool instead of %#v", ivalue)
-		}
-	}
+	value = interfaceToBoolean(ivalue)
 	return
 }
 

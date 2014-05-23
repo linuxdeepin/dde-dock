@@ -279,17 +279,14 @@ func checkSettingIp4ConfigAddresses(data connectionData, errs fieldErrors) {
 		// check address struct
 		if len(addr) != 3 {
 			rememberError(errs, fieldIpv4, NM_SETTING_IP4_CONFIG_ADDRESSES, NM_KEY_ERROR_IP4_ADDRESSES_STRUCT)
-			return
 		}
 		// check address
 		if addr[0] == 0 {
 			rememberError(errs, fieldIpv4, NM_SETTING_VK_IP4_CONFIG_ADDRESSES_ADDRESS, NM_KEY_ERROR_INVALID_VALUE)
-			return
 		}
 		// check prefix
 		if addr[1] < 1 || addr[1] > 32 {
 			rememberError(errs, fieldIpv4, NM_SETTING_VK_IP4_CONFIG_ADDRESSES_MASK, NM_KEY_ERROR_INVALID_VALUE)
-			return
 		}
 	}
 }
