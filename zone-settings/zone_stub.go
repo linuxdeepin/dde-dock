@@ -22,61 +22,66 @@
 package main
 
 import (
-        "dlib/dbus"
+	"dlib/dbus"
 )
 
 type Manager struct{}
 
 const (
-        ZONE_DEST = "com.deepin.daemon.Zone"
-        ZONE_PATH = "/com/deepin/daemon/Zone"
-        ZONE_IFC  = "com.deepin.daemon.Zone"
+	ZONE_DEST = "com.deepin.daemon.Zone"
+	ZONE_PATH = "/com/deepin/daemon/Zone"
+	ZONE_IFC  = "com.deepin.daemon.Zone"
 )
 
 func (op *Manager) GetDBusInfo() dbus.DBusInfo {
-        return dbus.DBusInfo{
-                ZONE_DEST,
-                ZONE_PATH,
-                ZONE_IFC,
-        }
+	return dbus.DBusInfo{
+		ZONE_DEST,
+		ZONE_PATH,
+		ZONE_IFC,
+	}
 }
 
 func (op *Manager) listenSignal() {
-        dspObj.ConnectPrimaryChanged(func(argv []interface{}) {
-                unregisterZoneArea()
-                registerZoneArea()
-        })
+	dspObj.ConnectPrimaryChanged(func(argv []interface{}) {
+		unregisterZoneArea()
+		registerZoneArea()
+	})
 
-        areaObj.ConnectMotionInto(func(x, y, id int32) {
-                //logObj.Infof("Type: %s, X: %d, Y: %d, ID: %d",
-                //t, x, y, id)
-                if id != areaId {
-                        return
-                }
+	areaObj.ConnectMotionInto(func(x, y, id int32) {
+		//logObj.Infof("Type: %s, X: %d, Y: %d, ID: %d",
+		//t, x, y, id)
+		if id != areaId {
+			return
+		}
 
-                if isInArea(x, y, topLeftArea) {
-                        execEdgeAction(EDGE_TOPLEFT)
-                } else if isInArea(x, y, bottomLeftArea) {
-                        execEdgeAction(EDGE_BOTTOMLEFT)
-                } else if isInArea(x, y, topRightArea) {
-                        execEdgeAction(EDGE_TOPRIGHT)
-                } else if isInArea(x, y, bottomRightArea) {
-                        execEdgeAction(EDGE_BOTTOMRIGHT)
-                }
-        })
+		if isInArea(x, y, topLeftArea) {
+			execEdgeAction(EDGE_TOPLEFT)
+		} else if isInArea(x, y, bottomLeftArea) {
+			execEdgeAction(EDGE_BOTTOMLEFT)
+		} else if isInArea(x, y, topRightArea) {
+			execEdgeAction(EDGE_TOPRIGHT)
+		} else if isInArea(x, y, bottomRightArea) {
+			execEdgeAction(EDGE_BOTTOMRIGHT)
+		}
+	})
 
-        launchObj.ConnectShown(func() {
-                enableOneEdge(getEdgeForCommand("/usr/bin/dde-launcher"))
-        })
+	areaObj.ConnectCancelAllArea(func() {
+		unregisterZoneArea()
+		registerZoneArea()
+	})
 
-        launchObj.ConnectClosed(func() {
-                op.enableAllEdge()
-        })
+	launchObj.ConnectShown(func() {
+		enableOneEdge(getEdgeForCommand("/usr/bin/dde-launcher"))
+	})
+
+	launchObj.ConnectClosed(func() {
+		op.enableAllEdge()
+	})
 }
 
 func (op *Manager) enableAllEdge() {
-        op.SetTopLeft(op.TopLeftAction())
-        op.SetBottomLeft(op.BottomLeftAction())
-        op.SetTopRight(op.TopRightAction())
-        op.SetBottomRight(op.BottomRightAction())
+	op.SetTopLeft(op.TopLeftAction())
+	op.SetBottomLeft(op.BottomLeftAction())
+	op.SetTopRight(op.TopRightAction())
+	op.SetBottomRight(op.BottomRightAction())
 }

@@ -56,8 +56,6 @@ var (
 )
 
 func registerZoneArea() {
-	mutex.Lock()
-	defer mutex.Unlock()
 	var (
 		startX int32
 		startY int32
