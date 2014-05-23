@@ -38,6 +38,7 @@ type Manager struct {
 	CurrentTimezone  string
 	UserTimezoneList []string
 	LocaleListMap    map[string]string
+	CurrentLocale    string
 
 	LocaleStatus func(bool, string)
 }
@@ -138,6 +139,7 @@ func NewDateAndTime() *Manager {
 
 	m.setPropName("CurrentTimezone")
 	m.setPropName("UserTimezoneList")
+	m.setPropName("CurrentLocale")
 	m.listenSettings()
 	m.listenZone()
 	m.AddUserTimezoneList(m.CurrentTimezone)

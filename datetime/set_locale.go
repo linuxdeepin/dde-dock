@@ -23,14 +23,18 @@ package main
 
 import (
 	"dlib/utils"
+	"io/ioutil"
 	"os"
 	"path"
+	"strings"
 )
 
 const (
 	DMRC_FILE      = ".dmrc"
 	DMRC_KEY_GROUP = "Desktop"
 	PAM_ENV_FILE   = ".pam_environment"
+
+	DEFAULT_LOCALE_FILE = "/etc/default/locale"
 )
 
 func (obj *Manager) listenLocaleChange() {
@@ -39,6 +43,7 @@ func (obj *Manager) listenLocaleChange() {
 			//setLocaleDmrc(locale)
 			setLocalePamEnv(locale)
 			changeLocaleFlag = false
+			obj.setPropName("CurrentLocale")
 		}
 		obj.LocaleStatus(ok, locale)
 	})
@@ -139,4 +144,72 @@ func setLocalePamEnv(locale string) {
 	}
 	fp.Sync()
 	os.Rename(filePath+"~", filePath)
+}
+
+func getDefaultLocale() (string, bool) {
+	if !objUtils.IsFileExist(DEFAULT_LOCALE_FILE) {
+		logger.Errorf("'%s' not exist", DEFAULT_LOCALE_FILE)
+		return "", false
+	}
+
+	contents, err := ioutil.ReadFile(DEFAULT_LOCALE_FILE)
+	if err != nil {
+		logger.Errorf("ReadFile '%s' failed: %v", DEFAULT_LOCALE_FILE, err)
+		return "", false
+	}
+
+	retStr := ""
+	retOk := false
+	lines := strings.Split(string(contents), "\n")
+	for _, line := range lines {
+		strs := strings.Split(line, "=")
+		if len(strs) != 2 {
+			continue
+		}
+
+		if strs[0] != "LANG" {
+			continue
+		}
+
+		retStr = strings.Trim(strs[1], "\"")
+		retOk = true
+		break
+	}
+
+	return retStr, retOk
+}
+
+func getUserLocale() (string, bool) {
+	homeDir, _ := objUtils.GetHomeDir()
+	filePath := path.Join(homeDir, PAM_ENV_FILE)
+	if !objUtils.IsFileExist(filePath) {
+		logger.Warningf("'%s' not exist", filePath)
+		return "", false
+	}
+
+	contents, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		logger.Warningf("ReadFile '%s' failed: %v", filePath, err)
+		return "", false
+	}
+
+	retStr := ""
+	retOk := false
+	lines := strings.Split(string(contents), "\n")
+	for _, line := range lines {
+		strs := strings.Split(line, "=")
+		if len(strs) != 2 {
+			continue
+		}
+
+		if strs[0] != "LANG" {
+			continue
+		}
+
+		retStr = strs[1]
+		retOk = true
+		break
+	}
+
+	return retStr, retOk
 }
