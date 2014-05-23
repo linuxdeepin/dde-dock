@@ -169,23 +169,43 @@ func ensureSettingVpnL2tpKeyDomainNoEmpty(data connectionData, errs fieldErrors)
 
 // Getter
 func getSettingVpnL2tpKeyGateway(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_L2TP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_GATEWAY).(string)
+	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_L2TP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_GATEWAY)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingVpnL2tpKeyGateway: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingVpnL2tpKeyUser(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_L2TP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_USER).(string)
+	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_L2TP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_USER)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingVpnL2tpKeyUser: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingVpnL2tpKeyPasswordFlags(data connectionData) (value uint32) {
-	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_L2TP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_PASSWORD_FLAGS).(uint32)
+	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_L2TP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_PASSWORD_FLAGS)
+	value, ok := ivalue.(uint32)
+	if !ok {
+		logger.Warningf("getSettingVpnL2tpKeyPasswordFlags: value type is invalid, should be uint32, %v", ivalue)
+	}
 	return
 }
 func getSettingVpnL2tpKeyPassword(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_L2TP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_PASSWORD).(string)
+	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_L2TP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_PASSWORD)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingVpnL2tpKeyPassword: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingVpnL2tpKeyDomain(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_L2TP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_DOMAIN).(string)
+	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_L2TP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_DOMAIN)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingVpnL2tpKeyDomain: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 

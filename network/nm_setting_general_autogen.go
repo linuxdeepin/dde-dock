@@ -495,9 +495,3 @@ func generalGetSettingDefaultValue(field, key string) (value interface{}) {
 	}
 	return
 }
-
-func generalGetSettingDefaultValueJSON(field, key string) (valueJSON string) {
-	value := generalGetSettingDefaultValue(field, key)
-	valueJSON, _ = marshalJSON(value)
-	return
-}

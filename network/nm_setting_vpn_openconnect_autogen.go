@@ -363,59 +363,115 @@ func ensureSettingVpnOpenconnectKeyStokenStringNoEmpty(data connectionData, errs
 
 // Getter
 func getSettingVpnOpenconnectKeyGateway(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_GATEWAY).(string)
+	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_GATEWAY)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingVpnOpenconnectKeyGateway: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingVpnOpenconnectKeyCacert(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_CACERT).(string)
+	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_CACERT)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingVpnOpenconnectKeyCacert: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingVpnOpenconnectKeyProxy(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_PROXY).(string)
+	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_PROXY)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingVpnOpenconnectKeyProxy: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingVpnOpenconnectKeyCsdEnable(data connectionData) (value bool) {
-	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_CSD_ENABLE).(bool)
+	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_CSD_ENABLE)
+	value, ok := ivalue.(bool)
+	if !ok {
+		logger.Warningf("getSettingVpnOpenconnectKeyCsdEnable: value type is invalid, should be bool, %v", ivalue)
+	}
 	return
 }
 func getSettingVpnOpenconnectKeyCsdWrapper(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_CSD_WRAPPER).(string)
+	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_CSD_WRAPPER)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingVpnOpenconnectKeyCsdWrapper: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingVpnOpenconnectKeyUsercert(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_USERCERT).(string)
+	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_USERCERT)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingVpnOpenconnectKeyUsercert: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingVpnOpenconnectKeyPrivkey(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_PRIVKEY).(string)
+	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_PRIVKEY)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingVpnOpenconnectKeyPrivkey: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingVpnOpenconnectKeyPemPassphraseFsid(data connectionData) (value bool) {
-	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_PEM_PASSPHRASE_FSID).(bool)
+	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_PEM_PASSPHRASE_FSID)
+	value, ok := ivalue.(bool)
+	if !ok {
+		logger.Warningf("getSettingVpnOpenconnectKeyPemPassphraseFsid: value type is invalid, should be bool, %v", ivalue)
+	}
 	return
 }
 func getSettingVpnOpenconnectKeyCookie(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_COOKIE).(string)
+	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_COOKIE)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingVpnOpenconnectKeyCookie: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingVpnOpenconnectKeyGwcert(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_GWCERT).(string)
+	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_GWCERT)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingVpnOpenconnectKeyGwcert: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingVpnOpenconnectKeyAuthtype(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_AUTHTYPE).(string)
+	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_AUTHTYPE)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingVpnOpenconnectKeyAuthtype: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingVpnOpenconnectKeyMtu(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_MTU).(string)
+	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_MTU)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingVpnOpenconnectKeyMtu: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingVpnOpenconnectKeyStokenSource(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_STOKEN_SOURCE).(string)
+	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_STOKEN_SOURCE)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingVpnOpenconnectKeyStokenSource: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingVpnOpenconnectKeyStokenString(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_STOKEN_STRING).(string)
+	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_STOKEN_STRING)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingVpnOpenconnectKeyStokenString: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 

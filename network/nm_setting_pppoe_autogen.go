@@ -147,19 +147,35 @@ func ensureSettingPppoePasswordFlagsNoEmpty(data connectionData, errs fieldError
 
 // Getter
 func getSettingPppoeUsername(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_USERNAME).(string)
+	ivalue := getSettingKey(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_USERNAME)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingPppoeUsername: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingPppoeService(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_SERVICE).(string)
+	ivalue := getSettingKey(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_SERVICE)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingPppoeService: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingPppoePassword(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_PASSWORD).(string)
+	ivalue := getSettingKey(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_PASSWORD)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingPppoePassword: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingPppoePasswordFlags(data connectionData) (value uint32) {
-	value, _ = getSettingKey(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_PASSWORD_FLAGS).(uint32)
+	ivalue := getSettingKey(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_PASSWORD_FLAGS)
+	value, ok := ivalue.(uint32)
+	if !ok {
+		logger.Warningf("getSettingPppoePasswordFlags: value type is invalid, should be uint32, %v", ivalue)
+	}
 	return
 }
 

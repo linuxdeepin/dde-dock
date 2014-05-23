@@ -99,6 +99,7 @@ func isSettingVpnPluginSecretKey(field, key string) bool {
 
 // Basic getter and setter for vpn plugin keys
 func getSettingVpnPluginKey(data connectionData, field, key string) (value interface{}) {
+	value = generalGetSettingDefaultValue(field, key) // get default value firstly
 	vpnData, ok := getSettingVpnPluginData(data, field, key)
 	if !ok {
 		// not exists, just return nil

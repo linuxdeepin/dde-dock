@@ -285,47 +285,91 @@ func ensureSettingGsmPinFlagsNoEmpty(data connectionData, errs fieldErrors) {
 
 // Getter
 func getSettingGsmNumber(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NUMBER).(string)
+	ivalue := getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NUMBER)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingGsmNumber: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingGsmUsername(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_USERNAME).(string)
+	ivalue := getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_USERNAME)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingGsmUsername: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingGsmPasswordFlags(data connectionData) (value uint32) {
-	value, _ = getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_PASSWORD_FLAGS).(uint32)
+	ivalue := getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_PASSWORD_FLAGS)
+	value, ok := ivalue.(uint32)
+	if !ok {
+		logger.Warningf("getSettingGsmPasswordFlags: value type is invalid, should be uint32, %v", ivalue)
+	}
 	return
 }
 func getSettingGsmPassword(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_PASSWORD).(string)
+	ivalue := getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_PASSWORD)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingGsmPassword: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingGsmApn(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_APN).(string)
+	ivalue := getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_APN)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingGsmApn: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingGsmNetworkId(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NETWORK_ID).(string)
+	ivalue := getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NETWORK_ID)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingGsmNetworkId: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingGsmNetworkType(data connectionData) (value int32) {
-	value, _ = getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NETWORK_TYPE).(int32)
+	ivalue := getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NETWORK_TYPE)
+	value, ok := ivalue.(int32)
+	if !ok {
+		logger.Warningf("getSettingGsmNetworkType: value type is invalid, should be int32, %v", ivalue)
+	}
 	return
 }
 func getSettingGsmAllowedBands(data connectionData) (value bool) {
-	value, _ = getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_ALLOWED_BANDS).(bool)
+	ivalue := getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_ALLOWED_BANDS)
+	value, ok := ivalue.(bool)
+	if !ok {
+		logger.Warningf("getSettingGsmAllowedBands: value type is invalid, should be bool, %v", ivalue)
+	}
 	return
 }
 func getSettingGsmHomeOnly(data connectionData) (value bool) {
-	value, _ = getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_HOME_ONLY).(bool)
+	ivalue := getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_HOME_ONLY)
+	value, ok := ivalue.(bool)
+	if !ok {
+		logger.Warningf("getSettingGsmHomeOnly: value type is invalid, should be bool, %v", ivalue)
+	}
 	return
 }
 func getSettingGsmPin(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_PIN).(string)
+	ivalue := getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_PIN)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingGsmPin: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingGsmPinFlags(data connectionData) (value uint32) {
-	value, _ = getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_PIN_FLAGS).(uint32)
+	ivalue := getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_PIN_FLAGS)
+	value, ok := ivalue.(uint32)
+	if !ok {
+		logger.Warningf("getSettingGsmPinFlags: value type is invalid, should be uint32, %v", ivalue)
+	}
 	return
 }
 

@@ -355,59 +355,115 @@ func ensureSettingWirelessHiddenNoEmpty(data connectionData, errs fieldErrors) {
 
 // Getter
 func getSettingWirelessSsid(data connectionData) (value []byte) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SSID).([]byte)
+	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SSID)
+	value, ok := ivalue.([]byte)
+	if !ok {
+		logger.Warningf("getSettingWirelessSsid: value type is invalid, should be []byte, %v", ivalue)
+	}
 	return
 }
 func getSettingWirelessMode(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MODE).(string)
+	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MODE)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingWirelessMode: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingWirelessBand(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_BAND).(string)
+	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_BAND)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingWirelessBand: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingWirelessChannel(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_CHANNEL).(string)
+	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_CHANNEL)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingWirelessChannel: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingWirelessBssid(data connectionData) (value []byte) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_BSSID).([]byte)
+	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_BSSID)
+	value, ok := ivalue.([]byte)
+	if !ok {
+		logger.Warningf("getSettingWirelessBssid: value type is invalid, should be []byte, %v", ivalue)
+	}
 	return
 }
 func getSettingWirelessRate(data connectionData) (value uint32) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_RATE).(uint32)
+	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_RATE)
+	value, ok := ivalue.(uint32)
+	if !ok {
+		logger.Warningf("getSettingWirelessRate: value type is invalid, should be uint32, %v", ivalue)
+	}
 	return
 }
 func getSettingWirelessTxPower(data connectionData) (value uint32) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_TX_POWER).(uint32)
+	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_TX_POWER)
+	value, ok := ivalue.(uint32)
+	if !ok {
+		logger.Warningf("getSettingWirelessTxPower: value type is invalid, should be uint32, %v", ivalue)
+	}
 	return
 }
 func getSettingWirelessMacAddress(data connectionData) (value []byte) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MAC_ADDRESS).([]byte)
+	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MAC_ADDRESS)
+	value, ok := ivalue.([]byte)
+	if !ok {
+		logger.Warningf("getSettingWirelessMacAddress: value type is invalid, should be []byte, %v", ivalue)
+	}
 	return
 }
 func getSettingWirelessClonedMacAddress(data connectionData) (value []byte) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS).([]byte)
+	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS)
+	value, ok := ivalue.([]byte)
+	if !ok {
+		logger.Warningf("getSettingWirelessClonedMacAddress: value type is invalid, should be []byte, %v", ivalue)
+	}
 	return
 }
 func getSettingWirelessMacAddressBlacklist(data connectionData) (value []string) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST).([]string)
+	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST)
+	value, ok := ivalue.([]string)
+	if !ok {
+		logger.Warningf("getSettingWirelessMacAddressBlacklist: value type is invalid, should be []string, %v", ivalue)
+	}
 	return
 }
 func getSettingWirelessMtu(data connectionData) (value uint32) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MTU).(uint32)
+	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MTU)
+	value, ok := ivalue.(uint32)
+	if !ok {
+		logger.Warningf("getSettingWirelessMtu: value type is invalid, should be uint32, %v", ivalue)
+	}
 	return
 }
 func getSettingWirelessSeenBssids(data connectionData) (value []string) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEEN_BSSIDS).([]string)
+	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEEN_BSSIDS)
+	value, ok := ivalue.([]string)
+	if !ok {
+		logger.Warningf("getSettingWirelessSeenBssids: value type is invalid, should be []string, %v", ivalue)
+	}
 	return
 }
 func getSettingWirelessSec(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEC).(string)
+	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEC)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingWirelessSec: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingWirelessHidden(data connectionData) (value bool) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_HIDDEN).(bool)
+	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_HIDDEN)
+	value, ok := ivalue.(bool)
+	if !ok {
+		logger.Warningf("getSettingWirelessHidden: value type is invalid, should be bool, %v", ivalue)
+	}
 	return
 }
 

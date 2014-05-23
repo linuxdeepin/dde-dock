@@ -293,47 +293,91 @@ func ensureSettingConnectionSecondariesNoEmpty(data connectionData, errs fieldEr
 
 // Getter
 func getSettingConnectionId(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_ID).(string)
+	ivalue := getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_ID)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingConnectionId: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingConnectionUuid(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_UUID).(string)
+	ivalue := getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_UUID)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingConnectionUuid: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingConnectionType(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TYPE).(string)
+	ivalue := getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TYPE)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingConnectionType: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingConnectionAutoconnect(data connectionData) (value bool) {
-	value, _ = getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_AUTOCONNECT).(bool)
+	ivalue := getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_AUTOCONNECT)
+	value, ok := ivalue.(bool)
+	if !ok {
+		logger.Warningf("getSettingConnectionAutoconnect: value type is invalid, should be bool, %v", ivalue)
+	}
 	return
 }
 func getSettingConnectionPermissions(data connectionData) (value []string) {
-	value, _ = getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_PERMISSIONS).([]string)
+	ivalue := getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_PERMISSIONS)
+	value, ok := ivalue.([]string)
+	if !ok {
+		logger.Warningf("getSettingConnectionPermissions: value type is invalid, should be []string, %v", ivalue)
+	}
 	return
 }
 func getSettingConnectionTimestamp(data connectionData) (value uint64) {
-	value, _ = getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TIMESTAMP).(uint64)
+	ivalue := getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TIMESTAMP)
+	value, ok := ivalue.(uint64)
+	if !ok {
+		logger.Warningf("getSettingConnectionTimestamp: value type is invalid, should be uint64, %v", ivalue)
+	}
 	return
 }
 func getSettingConnectionReadOnly(data connectionData) (value bool) {
-	value, _ = getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_READ_ONLY).(bool)
+	ivalue := getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_READ_ONLY)
+	value, ok := ivalue.(bool)
+	if !ok {
+		logger.Warningf("getSettingConnectionReadOnly: value type is invalid, should be bool, %v", ivalue)
+	}
 	return
 }
 func getSettingConnectionZone(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_ZONE).(string)
+	ivalue := getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_ZONE)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingConnectionZone: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingConnectionMaster(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_MASTER).(string)
+	ivalue := getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_MASTER)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingConnectionMaster: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingConnectionSlaveType(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_SLAVE_TYPE).(string)
+	ivalue := getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_SLAVE_TYPE)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingConnectionSlaveType: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingConnectionSecondaries(data connectionData) (value []string) {
-	value, _ = getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_SECONDARIES).([]string)
+	ivalue := getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_SECONDARIES)
+	value, ok := ivalue.([]string)
+	if !ok {
+		logger.Warningf("getSettingConnectionSecondaries: value type is invalid, should be []string, %v", ivalue)
+	}
 	return
 }
 

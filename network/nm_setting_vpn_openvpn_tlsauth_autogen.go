@@ -147,19 +147,35 @@ func ensureSettingVpnOpenvpnKeyTaDirNoEmpty(data connectionData, errs fieldError
 
 // Getter
 func getSettingVpnOpenvpnKeyTlsRemote(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TLS_REMOTE).(string)
+	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TLS_REMOTE)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingVpnOpenvpnKeyTlsRemote: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingVpnOpenvpnKeyRemoteCertTls(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_REMOTE_CERT_TLS).(string)
+	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_REMOTE_CERT_TLS)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingVpnOpenvpnKeyRemoteCertTls: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingVpnOpenvpnKeyTa(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TA).(string)
+	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TA)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingVpnOpenvpnKeyTa: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingVpnOpenvpnKeyTaDir(data connectionData) (value uint32) {
-	value, _ = getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TA_DIR).(uint32)
+	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_TA_DIR)
+	value, ok := ivalue.(uint32)
+	if !ok {
+		logger.Warningf("getSettingVpnOpenvpnKeyTaDir: value type is invalid, should be uint32, %v", ivalue)
+	}
 	return
 }
 

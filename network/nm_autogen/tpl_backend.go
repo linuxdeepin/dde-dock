@@ -110,9 +110,13 @@ func is{{$key.Name | ToKeyFuncBaseName}}Exists(data connectionData) bool {
 
 // getter
 const tplGetter = `
-// Getter{{$fieldName := .FieldName}}{{range $i, $key := .Keys}}{{if $key.UsedByBackEnd}}
-func get{{$key.Name | ToKeyFuncBaseName}}(data connectionData) (value {{$key.Type | ToKeyTypeRealData}}) {
-	value, _ = getSettingKey(data, {{$fieldName}}, {{$key.Name}}).({{$key.Type | ToKeyTypeRealData}})
+// Getter{{$fieldName := .FieldName}}{{range $i, $key := .Keys}}{{if $key.UsedByBackEnd}}{{$keyFuncBaseName := $key.Name | ToKeyFuncBaseName}}{{$realType := $key.Type | ToKeyTypeRealData}}
+func get{{$keyFuncBaseName}}(data connectionData) (value {{$key.Type | ToKeyTypeRealData}}) {
+	ivalue := getSettingKey(data, {{$fieldName}}, {{$key.Name}})
+	value, ok := ivalue.({{$realType}})
+	if !ok {
+		logger.Warningf("get{{$keyFuncBaseName}}: value type is invalid, should be {{$realType}}, %v", ivalue)
+	}
 	return
 }{{end}}{{end}}
 `
@@ -265,12 +269,6 @@ func generalGetSettingDefaultValue(field, key string) (value interface{}) {
 	case {{.FieldName}}:
 		value = get{{.FieldName | ToFieldFuncBaseName}}DefaultValue(key){{end}}
 	}
-	return
-}
-
-func generalGetSettingDefaultValueJSON(field, key string) (valueJSON string) {
-	value := generalGetSettingDefaultValue(field, key)
-	valueJSON, _ = marshalJSON(value)
 	return
 }`
 

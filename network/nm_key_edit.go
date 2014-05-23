@@ -57,7 +57,8 @@ func getCustomConnectinoType(data connectionData) (connType string) {
 	return
 }
 
-func isJSONKeyValueMeansToDeleteKey(valueJSON string, t ktype) (doDelete bool) {
+// TODO
+func isJSONValueMeansToDeleteKey(valueJSON string, t ktype) (doDelete bool) {
 	if valueJSON == jsonNull || valueJSON == jsonEmptyString || valueJSON == jsonEmptyArray {
 		return true
 	}
@@ -93,14 +94,18 @@ func isJSONKeyValueMeansToDeleteKey(valueJSON string, t ktype) (doDelete bool) {
 }
 
 func getSettingKeyJSON(data connectionData, field, key string, t ktype) (valueJSON string) {
-	var value interface{}
-	if isSettingKeyExists(data, field, key) {
-		value = getSettingKey(data, field, key)
-	} else {
-		// return default value if the key is not exists
-		valueJSON = generalGetSettingDefaultValueJSON(field, key)
-		return
-	}
+	// TODO
+	value := getSettingKey(data, field, key)
+
+	// var value interface{}
+	// if isSettingKeyExists(data, field, key) {
+	// 	value = getSettingKey(data, field, key)
+	// } else {
+	// 	// return default value if the key is not exists
+	// 	value = generalGetSettingDefaultValue(field, key)
+	// 	valueJSON, _ = marshalJSON(value)
+	// 	return
+	// }
 
 	valueJSON, err := keyValueToJSON(value, t)
 	if err != nil {
@@ -115,6 +120,36 @@ func getSettingKeyJSON(data connectionData, field, key string, t ktype) (valueJS
 	return
 }
 
+func getSettingKey(data connectionData, field, key string) (value interface{}) {
+	// special for vpn plugin keys
+	if isSettingVpnPluginKey(field) {
+		return getSettingVpnPluginKey(data, field, key)
+	}
+
+	value = generalGetSettingDefaultValue(field, key) // get default value firstly
+
+	realField := getRealFieldName(field) // get real name of virtual fields
+	fieldData, ok := data[realField]
+	if !ok {
+		logger.Errorf("invalid field: data[%s]", realField)
+		return
+	}
+
+	variant, ok := fieldData[key]
+	if !ok {
+		// not exists, just return nil
+		return
+	}
+
+	value = variant.Value()
+
+	// logger.Debugf("getSettingKey: data[%s][%s]=%v", field, key, value) // TODO test
+	if value == nil {
+		logger.Warning("getSettingKey: data[%s][%s] is nil")
+	}
+	return
+}
+
 func setSettingKeyJSON(data connectionData, field, key, valueJSON string, t ktype) (kerr error) {
 	if len(valueJSON) == 0 {
 		logger.Error("setSettingKeyJSON: valueJSON is empty")
@@ -123,8 +158,8 @@ func setSettingKeyJSON(data connectionData, field, key, valueJSON string, t ktyp
 	}
 
 	// remove connection data key if valueJSON is null or empty
-	if isJSONKeyValueMeansToDeleteKey(valueJSON, t) {
-		logger.Debugf("removeSettingKey data[%s][%s], valueJSON=%s", field, key, valueJSON) // TODO test
+	if isJSONValueMeansToDeleteKey(valueJSON, t) {
+		logger.Debugf("removeSettingKey data[%s][%s], valueJSON=%s", field, key, valueJSON)
 		removeSettingKey(data, field, key)
 		return
 	}
@@ -143,31 +178,6 @@ func setSettingKeyJSON(data connectionData, field, key, valueJSON string, t ktyp
 	} else {
 		setSettingKey(data, field, key, value)
 	}
-	return
-}
-
-func getSettingKey(data connectionData, field, key string) (value interface{}) {
-	// special for vpn plugin keys
-	if isSettingVpnPluginKey(field) {
-		return getSettingVpnPluginKey(data, field, key)
-	}
-
-	realField := getRealFieldName(field) // get real name of virtual fields
-	fieldData, ok := data[realField]
-	if !ok {
-		logger.Errorf("invalid field: data[%s]", realField)
-		return
-	}
-
-	variant, ok := fieldData[key]
-	if !ok {
-		// not exists, just return nil
-		return
-	}
-
-	value = variant.Value()
-
-	// logger.Debugf("getSettingKey: data[%s][%s]=%v", field, key, value) // TODO test
 	return
 }
 

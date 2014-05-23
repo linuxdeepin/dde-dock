@@ -293,47 +293,91 @@ func ensureSettingWiredS390OptionsNoEmpty(data connectionData, errs fieldErrors)
 
 // Getter
 func getSettingWiredPort(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_PORT).(string)
+	ivalue := getSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_PORT)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingWiredPort: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingWiredSpeed(data connectionData) (value uint32) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_SPEED).(uint32)
+	ivalue := getSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_SPEED)
+	value, ok := ivalue.(uint32)
+	if !ok {
+		logger.Warningf("getSettingWiredSpeed: value type is invalid, should be uint32, %v", ivalue)
+	}
 	return
 }
 func getSettingWiredDuplex(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_DUPLEX).(string)
+	ivalue := getSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_DUPLEX)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingWiredDuplex: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingWiredAutoNegotiate(data connectionData) (value bool) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_AUTO_NEGOTIATE).(bool)
+	ivalue := getSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_AUTO_NEGOTIATE)
+	value, ok := ivalue.(bool)
+	if !ok {
+		logger.Warningf("getSettingWiredAutoNegotiate: value type is invalid, should be bool, %v", ivalue)
+	}
 	return
 }
 func getSettingWiredMacAddress(data connectionData) (value []byte) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS).([]byte)
+	ivalue := getSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS)
+	value, ok := ivalue.([]byte)
+	if !ok {
+		logger.Warningf("getSettingWiredMacAddress: value type is invalid, should be []byte, %v", ivalue)
+	}
 	return
 }
 func getSettingWiredClonedMacAddress(data connectionData) (value []byte) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_CLONED_MAC_ADDRESS).([]byte)
+	ivalue := getSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_CLONED_MAC_ADDRESS)
+	value, ok := ivalue.([]byte)
+	if !ok {
+		logger.Warningf("getSettingWiredClonedMacAddress: value type is invalid, should be []byte, %v", ivalue)
+	}
 	return
 }
 func getSettingWiredMacAddressBlacklist(data connectionData) (value []string) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST).([]string)
+	ivalue := getSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST)
+	value, ok := ivalue.([]string)
+	if !ok {
+		logger.Warningf("getSettingWiredMacAddressBlacklist: value type is invalid, should be []string, %v", ivalue)
+	}
 	return
 }
 func getSettingWiredMtu(data connectionData) (value uint32) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MTU).(uint32)
+	ivalue := getSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_MTU)
+	value, ok := ivalue.(uint32)
+	if !ok {
+		logger.Warningf("getSettingWiredMtu: value type is invalid, should be uint32, %v", ivalue)
+	}
 	return
 }
 func getSettingWiredS390Subchannels(data connectionData) (value []string) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_SUBCHANNELS).([]string)
+	ivalue := getSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_SUBCHANNELS)
+	value, ok := ivalue.([]string)
+	if !ok {
+		logger.Warningf("getSettingWiredS390Subchannels: value type is invalid, should be []string, %v", ivalue)
+	}
 	return
 }
 func getSettingWiredS390Nettype(data connectionData) (value string) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_NETTYPE).(string)
+	ivalue := getSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_NETTYPE)
+	value, ok := ivalue.(string)
+	if !ok {
+		logger.Warningf("getSettingWiredS390Nettype: value type is invalid, should be string, %v", ivalue)
+	}
 	return
 }
 func getSettingWiredS390Options(data connectionData) (value map[string]string) {
-	value, _ = getSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_OPTIONS).(map[string]string)
+	ivalue := getSettingKey(data, NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRED_S390_OPTIONS)
+	value, ok := ivalue.(map[string]string)
+	if !ok {
+		logger.Warningf("getSettingWiredS390Options: value type is invalid, should be map[string]string, %v", ivalue)
+	}
 	return
 }
 

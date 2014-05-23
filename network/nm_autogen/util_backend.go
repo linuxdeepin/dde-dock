@@ -130,8 +130,10 @@ func ToKeyTypeDefaultValue(keyName string) (valueJSON string) {
 		valueJSON = `nil`
 	case "ktypeWrapperString":
 		valueJSON = `""`
+		// valueJSON = `nil`
 	case "ktypeWrapperMacAddress":
 		valueJSON = `""`
+		// valueJSON = `nil`
 	case "ktypeWrapperIpv4Dns":
 		valueJSON = `nil`
 	case "ktypeWrapperIpv4Addresses":
