@@ -94,19 +94,16 @@ func isJSONValueMeansToDeleteKey(valueJSON string, t ktype) (doDelete bool) {
 }
 
 func getSettingKeyJSON(data connectionData, field, key string, t ktype) (valueJSON string) {
-	// TODO
+	if isWrapperKeyType(t) && !isSettingKeyExists(data, field, key) {
+		// if the key is not exists and is a wrapper key, get its
+		// default value and marshaled to json directly instead of use
+		// keyValueToJSON(), which will dispatch wrapper keys
+		// specially
+		valueJSON, _ = marshalJSON(generalGetSettingDefaultValue(field, key))
+		return
+	}
+
 	value := getSettingKey(data, field, key)
-
-	// var value interface{}
-	// if isSettingKeyExists(data, field, key) {
-	// 	value = getSettingKey(data, field, key)
-	// } else {
-	// 	// return default value if the key is not exists
-	// 	value = generalGetSettingDefaultValue(field, key)
-	// 	valueJSON, _ = marshalJSON(value)
-	// 	return
-	// }
-
 	valueJSON, err := keyValueToJSON(value, t)
 	if err != nil {
 		logger.Error("get connection data failed:", err)
@@ -144,9 +141,10 @@ func getSettingKey(data connectionData, field, key string) (value interface{}) {
 	value = variant.Value()
 
 	// logger.Debugf("getSettingKey: data[%s][%s]=%v", field, key, value) // TODO test
-	if value == nil {
+	if isInterfaceNil(value) {
 		logger.Warning("getSettingKey: data[%s][%s] is nil")
 	}
+
 	return
 }
 

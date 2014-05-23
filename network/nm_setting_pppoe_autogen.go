@@ -148,33 +148,45 @@ func ensureSettingPppoePasswordFlagsNoEmpty(data connectionData, errs fieldError
 // Getter
 func getSettingPppoeUsername(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_USERNAME)
-	value, ok := ivalue.(string)
-	if !ok {
-		logger.Errorf("getSettingPppoeUsername: value type is invalid, should be string instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(string)
+		if !ok {
+			logger.Warningf("getSettingPppoeUsername: value type is invalid, should be string instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingPppoeService(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_SERVICE)
-	value, ok := ivalue.(string)
-	if !ok {
-		logger.Errorf("getSettingPppoeService: value type is invalid, should be string instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(string)
+		if !ok {
+			logger.Warningf("getSettingPppoeService: value type is invalid, should be string instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingPppoePassword(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_PASSWORD)
-	value, ok := ivalue.(string)
-	if !ok {
-		logger.Errorf("getSettingPppoePassword: value type is invalid, should be string instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(string)
+		if !ok {
+			logger.Warningf("getSettingPppoePassword: value type is invalid, should be string instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingPppoePasswordFlags(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_PPPOE_PASSWORD_FLAGS)
-	value, ok := ivalue.(uint32)
-	if !ok {
-		logger.Errorf("getSettingPppoePasswordFlags: value type is invalid, should be uint32 instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(uint32)
+		if !ok {
+			logger.Warningf("getSettingPppoePasswordFlags: value type is invalid, should be uint32 instead of %#v", ivalue)
+		}
 	}
 	return
 }

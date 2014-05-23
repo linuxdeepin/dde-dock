@@ -388,145 +388,199 @@ func ensureSettingPppLcpEchoIntervalNoEmpty(data connectionData, errs fieldError
 // Getter
 func getSettingPppNoauth(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOAUTH)
-	value, ok := ivalue.(bool)
-	if !ok {
-		logger.Errorf("getSettingPppNoauth: value type is invalid, should be bool instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(bool)
+		if !ok {
+			logger.Warningf("getSettingPppNoauth: value type is invalid, should be bool instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingPppRefuseEap(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_EAP)
-	value, ok := ivalue.(bool)
-	if !ok {
-		logger.Errorf("getSettingPppRefuseEap: value type is invalid, should be bool instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(bool)
+		if !ok {
+			logger.Warningf("getSettingPppRefuseEap: value type is invalid, should be bool instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingPppRefusePap(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_PAP)
-	value, ok := ivalue.(bool)
-	if !ok {
-		logger.Errorf("getSettingPppRefusePap: value type is invalid, should be bool instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(bool)
+		if !ok {
+			logger.Warningf("getSettingPppRefusePap: value type is invalid, should be bool instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingPppRefuseChap(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_CHAP)
-	value, ok := ivalue.(bool)
-	if !ok {
-		logger.Errorf("getSettingPppRefuseChap: value type is invalid, should be bool instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(bool)
+		if !ok {
+			logger.Warningf("getSettingPppRefuseChap: value type is invalid, should be bool instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingPppRefuseMschap(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_MSCHAP)
-	value, ok := ivalue.(bool)
-	if !ok {
-		logger.Errorf("getSettingPppRefuseMschap: value type is invalid, should be bool instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(bool)
+		if !ok {
+			logger.Warningf("getSettingPppRefuseMschap: value type is invalid, should be bool instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingPppRefuseMschapv2(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_MSCHAPV2)
-	value, ok := ivalue.(bool)
-	if !ok {
-		logger.Errorf("getSettingPppRefuseMschapv2: value type is invalid, should be bool instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(bool)
+		if !ok {
+			logger.Warningf("getSettingPppRefuseMschapv2: value type is invalid, should be bool instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingPppRequireMppe(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE)
-	value, ok := ivalue.(bool)
-	if !ok {
-		logger.Errorf("getSettingPppRequireMppe: value type is invalid, should be bool instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(bool)
+		if !ok {
+			logger.Warningf("getSettingPppRequireMppe: value type is invalid, should be bool instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingPppRequireMppe128(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE_128)
-	value, ok := ivalue.(bool)
-	if !ok {
-		logger.Errorf("getSettingPppRequireMppe128: value type is invalid, should be bool instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(bool)
+		if !ok {
+			logger.Warningf("getSettingPppRequireMppe128: value type is invalid, should be bool instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingPppMppeStateful(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MPPE_STATEFUL)
-	value, ok := ivalue.(bool)
-	if !ok {
-		logger.Errorf("getSettingPppMppeStateful: value type is invalid, should be bool instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(bool)
+		if !ok {
+			logger.Warningf("getSettingPppMppeStateful: value type is invalid, should be bool instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingPppNobsdcomp(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOBSDCOMP)
-	value, ok := ivalue.(bool)
-	if !ok {
-		logger.Errorf("getSettingPppNobsdcomp: value type is invalid, should be bool instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(bool)
+		if !ok {
+			logger.Warningf("getSettingPppNobsdcomp: value type is invalid, should be bool instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingPppNodeflate(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NODEFLATE)
-	value, ok := ivalue.(bool)
-	if !ok {
-		logger.Errorf("getSettingPppNodeflate: value type is invalid, should be bool instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(bool)
+		if !ok {
+			logger.Warningf("getSettingPppNodeflate: value type is invalid, should be bool instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingPppNoVjComp(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NO_VJ_COMP)
-	value, ok := ivalue.(bool)
-	if !ok {
-		logger.Errorf("getSettingPppNoVjComp: value type is invalid, should be bool instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(bool)
+		if !ok {
+			logger.Warningf("getSettingPppNoVjComp: value type is invalid, should be bool instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingPppCrtscts(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_CRTSCTS)
-	value, ok := ivalue.(bool)
-	if !ok {
-		logger.Errorf("getSettingPppCrtscts: value type is invalid, should be bool instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(bool)
+		if !ok {
+			logger.Warningf("getSettingPppCrtscts: value type is invalid, should be bool instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingPppBaud(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_BAUD)
-	value, ok := ivalue.(uint32)
-	if !ok {
-		logger.Errorf("getSettingPppBaud: value type is invalid, should be uint32 instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(uint32)
+		if !ok {
+			logger.Warningf("getSettingPppBaud: value type is invalid, should be uint32 instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingPppMru(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MRU)
-	value, ok := ivalue.(uint32)
-	if !ok {
-		logger.Errorf("getSettingPppMru: value type is invalid, should be uint32 instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(uint32)
+		if !ok {
+			logger.Warningf("getSettingPppMru: value type is invalid, should be uint32 instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingPppMtu(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MTU)
-	value, ok := ivalue.(uint32)
-	if !ok {
-		logger.Errorf("getSettingPppMtu: value type is invalid, should be uint32 instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(uint32)
+		if !ok {
+			logger.Warningf("getSettingPppMtu: value type is invalid, should be uint32 instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingPppLcpEchoFailure(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_FAILURE)
-	value, ok := ivalue.(uint32)
-	if !ok {
-		logger.Errorf("getSettingPppLcpEchoFailure: value type is invalid, should be uint32 instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(uint32)
+		if !ok {
+			logger.Warningf("getSettingPppLcpEchoFailure: value type is invalid, should be uint32 instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingPppLcpEchoInterval(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_LCP_ECHO_INTERVAL)
-	value, ok := ivalue.(uint32)
-	if !ok {
-		logger.Errorf("getSettingPppLcpEchoInterval: value type is invalid, should be uint32 instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(uint32)
+		if !ok {
+			logger.Warningf("getSettingPppLcpEchoInterval: value type is invalid, should be uint32 instead of %#v", ivalue)
+		}
 	}
 	return
 }

@@ -206,57 +206,78 @@ func ensureSettingVpnOpenvpnKeyHttpProxyPasswordFlagsNoEmpty(data connectionData
 // Getter
 func getSettingVpnOpenvpnKeyProxyType(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE)
-	value, ok := ivalue.(string)
-	if !ok {
-		logger.Errorf("getSettingVpnOpenvpnKeyProxyType: value type is invalid, should be string instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(string)
+		if !ok {
+			logger.Warningf("getSettingVpnOpenvpnKeyProxyType: value type is invalid, should be string instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingVpnOpenvpnKeyProxyServer(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER)
-	value, ok := ivalue.(string)
-	if !ok {
-		logger.Errorf("getSettingVpnOpenvpnKeyProxyServer: value type is invalid, should be string instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(string)
+		if !ok {
+			logger.Warningf("getSettingVpnOpenvpnKeyProxyServer: value type is invalid, should be string instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingVpnOpenvpnKeyProxyPort(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT)
-	value, ok := ivalue.(uint32)
-	if !ok {
-		logger.Errorf("getSettingVpnOpenvpnKeyProxyPort: value type is invalid, should be uint32 instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(uint32)
+		if !ok {
+			logger.Warningf("getSettingVpnOpenvpnKeyProxyPort: value type is invalid, should be uint32 instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingVpnOpenvpnKeyProxyRetry(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY)
-	value, ok := ivalue.(bool)
-	if !ok {
-		logger.Errorf("getSettingVpnOpenvpnKeyProxyRetry: value type is invalid, should be bool instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(bool)
+		if !ok {
+			logger.Warningf("getSettingVpnOpenvpnKeyProxyRetry: value type is invalid, should be bool instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingVpnOpenvpnKeyHttpProxyUsername(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME)
-	value, ok := ivalue.(string)
-	if !ok {
-		logger.Errorf("getSettingVpnOpenvpnKeyHttpProxyUsername: value type is invalid, should be string instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(string)
+		if !ok {
+			logger.Warningf("getSettingVpnOpenvpnKeyHttpProxyUsername: value type is invalid, should be string instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingVpnOpenvpnKeyHttpProxyPassword(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD)
-	value, ok := ivalue.(string)
-	if !ok {
-		logger.Errorf("getSettingVpnOpenvpnKeyHttpProxyPassword: value type is invalid, should be string instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(string)
+		if !ok {
+			logger.Warningf("getSettingVpnOpenvpnKeyHttpProxyPassword: value type is invalid, should be string instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingVpnOpenvpnKeyHttpProxyPasswordFlags(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS)
-	value, ok := ivalue.(uint32)
-	if !ok {
-		logger.Errorf("getSettingVpnOpenvpnKeyHttpProxyPasswordFlags: value type is invalid, should be uint32 instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(uint32)
+		if !ok {
+			logger.Warningf("getSettingVpnOpenvpnKeyHttpProxyPasswordFlags: value type is invalid, should be uint32 instead of %#v", ivalue)
+		}
 	}
 	return
 }

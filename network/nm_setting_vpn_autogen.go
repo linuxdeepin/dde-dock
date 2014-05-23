@@ -47,9 +47,9 @@ func getSettingVpnDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_VPN_USER_NAME:
 		value = ""
 	case NM_SETTING_VPN_DATA:
-		value = make(map[string]string)
+		value = nil
 	case NM_SETTING_VPN_SECRETS:
-		value = make(map[string]string)
+		value = nil
 	}
 	return
 }
@@ -152,33 +152,45 @@ func ensureSettingVpnSecretsNoEmpty(data connectionData, errs fieldErrors) {
 // Getter
 func getSettingVpnServiceType(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SERVICE_TYPE)
-	value, ok := ivalue.(string)
-	if !ok {
-		logger.Errorf("getSettingVpnServiceType: value type is invalid, should be string instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(string)
+		if !ok {
+			logger.Warningf("getSettingVpnServiceType: value type is invalid, should be string instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingVpnUserName(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_USER_NAME)
-	value, ok := ivalue.(string)
-	if !ok {
-		logger.Errorf("getSettingVpnUserName: value type is invalid, should be string instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(string)
+		if !ok {
+			logger.Warningf("getSettingVpnUserName: value type is invalid, should be string instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingVpnData(data connectionData) (value map[string]string) {
 	ivalue := getSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_DATA)
-	value, ok := ivalue.(map[string]string)
-	if !ok {
-		logger.Errorf("getSettingVpnData: value type is invalid, should be map[string]string instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(map[string]string)
+		if !ok {
+			logger.Warningf("getSettingVpnData: value type is invalid, should be map[string]string instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingVpnSecrets(data connectionData) (value map[string]string) {
 	ivalue := getSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SECRETS)
-	value, ok := ivalue.(map[string]string)
-	if !ok {
-		logger.Errorf("getSettingVpnSecrets: value type is invalid, should be map[string]string instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(map[string]string)
+		if !ok {
+			logger.Warningf("getSettingVpnSecrets: value type is invalid, should be map[string]string instead of %#v", ivalue)
+		}
 	}
 	return
 }

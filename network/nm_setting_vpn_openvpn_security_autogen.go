@@ -108,17 +108,23 @@ func ensureSettingVpnOpenvpnKeyAuthNoEmpty(data connectionData, errs fieldErrors
 // Getter
 func getSettingVpnOpenvpnKeyCipher(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_CIPHER)
-	value, ok := ivalue.(string)
-	if !ok {
-		logger.Errorf("getSettingVpnOpenvpnKeyCipher: value type is invalid, should be string instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(string)
+		if !ok {
+			logger.Warningf("getSettingVpnOpenvpnKeyCipher: value type is invalid, should be string instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingVpnOpenvpnKeyAuth(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_AUTH)
-	value, ok := ivalue.(string)
-	if !ok {
-		logger.Errorf("getSettingVpnOpenvpnKeyAuth: value type is invalid, should be string instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(string)
+		if !ok {
+			logger.Warningf("getSettingVpnOpenvpnKeyAuth: value type is invalid, should be string instead of %#v", ivalue)
+		}
 	}
 	return
 }

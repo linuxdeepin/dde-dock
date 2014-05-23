@@ -27,7 +27,8 @@ const (
 	ktypeIpv6Addresses    // [array of (byte array, uint32, byte array)]
 	ktypeIpv6Routes       // [array of (byte array, uint32, byte array, uint32)]
 
-	// wrapper for special key type, used by json setter and getter
+	// wrapper for special key type, used by json getter and setter,
+	// in other words, only works for front-end
 	ktypeWrapperString        // wrap ktypeArrayByte to [string]
 	ktypeWrapperMacAddress    // wrap ktypeArrayByte to [string]
 	ktypeWrapperIpv4Dns       // wrap ktypeArrayUint32 to [array of string]
@@ -37,6 +38,28 @@ const (
 	ktypeWrapperIpv6Addresses // wrap ktypeIpv6Addresses to [array of (string, uint32, string)]
 	ktypeWrapperIpv6Routes    // wrap ktypeIpv6Routes to [array of (string, uint32, string, uint32)]
 )
+
+func isWrapperKeyType(t ktype) bool {
+	switch t {
+	case ktypeWrapperString:
+		return true
+	case ktypeWrapperMacAddress:
+		return true
+	case ktypeWrapperIpv4Dns:
+		return true
+	case ktypeWrapperIpv4Addresses:
+		return true
+	case ktypeWrapperIpv4Routes:
+		return true
+	case ktypeWrapperIpv6Dns:
+		return true
+	case ktypeWrapperIpv6Addresses:
+		return true
+	case ktypeWrapperIpv6Routes:
+		return true
+	}
+	return false
+}
 
 // Ipv4AddressesWrapper
 type ipv4AddressesWrapper []ipv4AddressWrapper

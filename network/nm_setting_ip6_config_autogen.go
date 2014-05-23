@@ -73,13 +73,13 @@ func getSettingIp6ConfigDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_IP6_CONFIG_METHOD:
 		value = ""
 	case NM_SETTING_IP6_CONFIG_ADDRESSES:
-		value = make(ipv6Addresses, 0)
+		value = nil
 	case NM_SETTING_IP6_CONFIG_DNS:
-		value = make([][]byte, 0)
+		value = nil
 	case NM_SETTING_IP6_CONFIG_DNS_SEARCH:
-		value = make([]string, 0)
+		value = nil
 	case NM_SETTING_IP6_CONFIG_ROUTES:
-		value = make(ipv6Routes, 0)
+		value = nil
 	case NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES:
 		value = false
 	case NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS:
@@ -286,89 +286,122 @@ func ensureSettingIp6ConfigDhcpHostnameNoEmpty(data connectionData, errs fieldEr
 // Getter
 func getSettingIp6ConfigMethod(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_METHOD)
-	value, ok := ivalue.(string)
-	if !ok {
-		logger.Errorf("getSettingIp6ConfigMethod: value type is invalid, should be string instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(string)
+		if !ok {
+			logger.Warningf("getSettingIp6ConfigMethod: value type is invalid, should be string instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingIp6ConfigAddresses(data connectionData) (value ipv6Addresses) {
 	ivalue := getSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ADDRESSES)
-	value, ok := ivalue.(ipv6Addresses)
-	if !ok {
-		logger.Errorf("getSettingIp6ConfigAddresses: value type is invalid, should be ipv6Addresses instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(ipv6Addresses)
+		if !ok {
+			logger.Warningf("getSettingIp6ConfigAddresses: value type is invalid, should be ipv6Addresses instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingIp6ConfigDns(data connectionData) (value [][]byte) {
 	ivalue := getSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS)
-	value, ok := ivalue.([][]byte)
-	if !ok {
-		logger.Errorf("getSettingIp6ConfigDns: value type is invalid, should be [][]byte instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.([][]byte)
+		if !ok {
+			logger.Warningf("getSettingIp6ConfigDns: value type is invalid, should be [][]byte instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingIp6ConfigDnsSearch(data connectionData) (value []string) {
 	ivalue := getSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS_SEARCH)
-	value, ok := ivalue.([]string)
-	if !ok {
-		logger.Errorf("getSettingIp6ConfigDnsSearch: value type is invalid, should be []string instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.([]string)
+		if !ok {
+			logger.Warningf("getSettingIp6ConfigDnsSearch: value type is invalid, should be []string instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingIp6ConfigRoutes(data connectionData) (value ipv6Routes) {
 	ivalue := getSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTES)
-	value, ok := ivalue.(ipv6Routes)
-	if !ok {
-		logger.Errorf("getSettingIp6ConfigRoutes: value type is invalid, should be ipv6Routes instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(ipv6Routes)
+		if !ok {
+			logger.Warningf("getSettingIp6ConfigRoutes: value type is invalid, should be ipv6Routes instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingIp6ConfigIgnoreAutoRoutes(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES)
-	value, ok := ivalue.(bool)
-	if !ok {
-		logger.Errorf("getSettingIp6ConfigIgnoreAutoRoutes: value type is invalid, should be bool instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(bool)
+		if !ok {
+			logger.Warningf("getSettingIp6ConfigIgnoreAutoRoutes: value type is invalid, should be bool instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingIp6ConfigIgnoreAutoDns(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS)
-	value, ok := ivalue.(bool)
-	if !ok {
-		logger.Errorf("getSettingIp6ConfigIgnoreAutoDns: value type is invalid, should be bool instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(bool)
+		if !ok {
+			logger.Warningf("getSettingIp6ConfigIgnoreAutoDns: value type is invalid, should be bool instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingIp6ConfigNeverDefault(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_NEVER_DEFAULT)
-	value, ok := ivalue.(bool)
-	if !ok {
-		logger.Errorf("getSettingIp6ConfigNeverDefault: value type is invalid, should be bool instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(bool)
+		if !ok {
+			logger.Warningf("getSettingIp6ConfigNeverDefault: value type is invalid, should be bool instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingIp6ConfigMayFail(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_MAY_FAIL)
-	value, ok := ivalue.(bool)
-	if !ok {
-		logger.Errorf("getSettingIp6ConfigMayFail: value type is invalid, should be bool instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(bool)
+		if !ok {
+			logger.Warningf("getSettingIp6ConfigMayFail: value type is invalid, should be bool instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingIp6ConfigIp6Privacy(data connectionData) (value int32) {
 	ivalue := getSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IP6_PRIVACY)
-	value, ok := ivalue.(int32)
-	if !ok {
-		logger.Errorf("getSettingIp6ConfigIp6Privacy: value type is invalid, should be int32 instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(int32)
+		if !ok {
+			logger.Warningf("getSettingIp6ConfigIp6Privacy: value type is invalid, should be int32 instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingIp6ConfigDhcpHostname(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME)
-	value, ok := ivalue.(string)
-	if !ok {
-		logger.Errorf("getSettingIp6ConfigDhcpHostname: value type is invalid, should be string instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(string)
+		if !ok {
+			logger.Warningf("getSettingIp6ConfigDhcpHostname: value type is invalid, should be string instead of %#v", ivalue)
+		}
 	}
 	return
 }

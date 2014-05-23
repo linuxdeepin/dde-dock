@@ -64,6 +64,21 @@ func isInterfaceNil(v interface{}) bool {
 	return v == nil || reflect.ValueOf(v).IsNil()
 }
 
+func isInterfaceEmpty(v interface{}) bool {
+	if isInterfaceNil(v) {
+		return true
+	}
+	switch v.(type) {
+	case [][]interface{}: // ipv6Addresses
+		if vd, ok := v.([][]interface{}); ok {
+			if len(vd) == 0 {
+				return true
+			}
+		}
+	}
+	return false
+}
+
 func marshalJSON(v interface{}) (jsonStr string, err error) {
 	b, err := json.Marshal(v)
 	if err != nil {

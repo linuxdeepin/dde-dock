@@ -170,41 +170,56 @@ func ensureSettingVpnPptpKeyDomainNoEmpty(data connectionData, errs fieldErrors)
 // Getter
 func getSettingVpnPptpKeyGateway(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_GATEWAY)
-	value, ok := ivalue.(string)
-	if !ok {
-		logger.Errorf("getSettingVpnPptpKeyGateway: value type is invalid, should be string instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(string)
+		if !ok {
+			logger.Warningf("getSettingVpnPptpKeyGateway: value type is invalid, should be string instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingVpnPptpKeyUser(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_USER)
-	value, ok := ivalue.(string)
-	if !ok {
-		logger.Errorf("getSettingVpnPptpKeyUser: value type is invalid, should be string instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(string)
+		if !ok {
+			logger.Warningf("getSettingVpnPptpKeyUser: value type is invalid, should be string instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingVpnPptpKeyPasswordFlags(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_PASSWORD_FLAGS)
-	value, ok := ivalue.(uint32)
-	if !ok {
-		logger.Errorf("getSettingVpnPptpKeyPasswordFlags: value type is invalid, should be uint32 instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(uint32)
+		if !ok {
+			logger.Warningf("getSettingVpnPptpKeyPasswordFlags: value type is invalid, should be uint32 instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingVpnPptpKeyPassword(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_PASSWORD)
-	value, ok := ivalue.(string)
-	if !ok {
-		logger.Errorf("getSettingVpnPptpKeyPassword: value type is invalid, should be string instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(string)
+		if !ok {
+			logger.Warningf("getSettingVpnPptpKeyPassword: value type is invalid, should be string instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingVpnPptpKeyDomain(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_DOMAIN)
-	value, ok := ivalue.(string)
-	if !ok {
-		logger.Errorf("getSettingVpnPptpKeyDomain: value type is invalid, should be string instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(string)
+		if !ok {
+			logger.Warningf("getSettingVpnPptpKeyDomain: value type is invalid, should be string instead of %#v", ivalue)
+		}
 	}
 	return
 }

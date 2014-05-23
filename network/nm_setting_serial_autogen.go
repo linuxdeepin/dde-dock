@@ -154,41 +154,56 @@ func ensureSettingSerialSendDelayNoEmpty(data connectionData, errs fieldErrors) 
 // Getter
 func getSettingSerialBaud(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_SERIAL_SETTING_NAME, NM_SETTING_SERIAL_BAUD)
-	value, ok := ivalue.(uint32)
-	if !ok {
-		logger.Errorf("getSettingSerialBaud: value type is invalid, should be uint32 instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(uint32)
+		if !ok {
+			logger.Warningf("getSettingSerialBaud: value type is invalid, should be uint32 instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingSerialBits(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_SERIAL_SETTING_NAME, NM_SETTING_SERIAL_BITS)
-	value, ok := ivalue.(uint32)
-	if !ok {
-		logger.Errorf("getSettingSerialBits: value type is invalid, should be uint32 instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(uint32)
+		if !ok {
+			logger.Warningf("getSettingSerialBits: value type is invalid, should be uint32 instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingSerialParity(data connectionData) (value byte) {
 	ivalue := getSettingKey(data, NM_SETTING_SERIAL_SETTING_NAME, NM_SETTING_SERIAL_PARITY)
-	value, ok := ivalue.(byte)
-	if !ok {
-		logger.Errorf("getSettingSerialParity: value type is invalid, should be byte instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(byte)
+		if !ok {
+			logger.Warningf("getSettingSerialParity: value type is invalid, should be byte instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingSerialStopbits(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_SERIAL_SETTING_NAME, NM_SETTING_SERIAL_STOPBITS)
-	value, ok := ivalue.(uint32)
-	if !ok {
-		logger.Errorf("getSettingSerialStopbits: value type is invalid, should be uint32 instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(uint32)
+		if !ok {
+			logger.Warningf("getSettingSerialStopbits: value type is invalid, should be uint32 instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingSerialSendDelay(data connectionData) (value uint64) {
 	ivalue := getSettingKey(data, NM_SETTING_SERIAL_SETTING_NAME, NM_SETTING_SERIAL_SEND_DELAY)
-	value, ok := ivalue.(uint64)
-	if !ok {
-		logger.Errorf("getSettingSerialSendDelay: value type is invalid, should be uint64 instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(uint64)
+		if !ok {
+			logger.Warningf("getSettingSerialSendDelay: value type is invalid, should be uint64 instead of %#v", ivalue)
+		}
 	}
 	return
 }

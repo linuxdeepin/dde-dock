@@ -13,7 +13,7 @@ const (
 
 // dbus.Variant.Value() -> realdata -> wrapped data(if need) -> json string
 func keyValueToJSON(v interface{}, t ktype) (jsonStr string, err error) {
-	// dispatch key value wrapper
+	// dispatch wrapper keys
 	switch t {
 	case ktypeWrapperString:
 		tmpv, _ := interfaceToArrayByte(v)

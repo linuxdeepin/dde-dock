@@ -101,11 +101,11 @@ func getSettingWirelessSecurityDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_WIRELESS_SECURITY_AUTH_ALG:
 		value = ""
 	case NM_SETTING_WIRELESS_SECURITY_PROTO:
-		value = make([]string, 0)
+		value = nil
 	case NM_SETTING_WIRELESS_SECURITY_PAIRWISE:
-		value = make([]string, 0)
+		value = nil
 	case NM_SETTING_WIRELESS_SECURITY_GROUP:
-		value = make([]string, 0)
+		value = nil
 	case NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME:
 		value = ""
 	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD:
@@ -418,137 +418,188 @@ func ensureSettingWirelessSecurityPskFlagsNoEmpty(data connectionData, errs fiel
 // Getter
 func getSettingWirelessSecurityKeyMgmt(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT)
-	value, ok := ivalue.(string)
-	if !ok {
-		logger.Errorf("getSettingWirelessSecurityKeyMgmt: value type is invalid, should be string instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(string)
+		if !ok {
+			logger.Warningf("getSettingWirelessSecurityKeyMgmt: value type is invalid, should be string instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingWirelessSecurityWepTxKeyidx(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_TX_KEYIDX)
-	value, ok := ivalue.(uint32)
-	if !ok {
-		logger.Errorf("getSettingWirelessSecurityWepTxKeyidx: value type is invalid, should be uint32 instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(uint32)
+		if !ok {
+			logger.Warningf("getSettingWirelessSecurityWepTxKeyidx: value type is invalid, should be uint32 instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingWirelessSecurityAuthAlg(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_AUTH_ALG)
-	value, ok := ivalue.(string)
-	if !ok {
-		logger.Errorf("getSettingWirelessSecurityAuthAlg: value type is invalid, should be string instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(string)
+		if !ok {
+			logger.Warningf("getSettingWirelessSecurityAuthAlg: value type is invalid, should be string instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingWirelessSecurityProto(data connectionData) (value []string) {
 	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PROTO)
-	value, ok := ivalue.([]string)
-	if !ok {
-		logger.Errorf("getSettingWirelessSecurityProto: value type is invalid, should be []string instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.([]string)
+		if !ok {
+			logger.Warningf("getSettingWirelessSecurityProto: value type is invalid, should be []string instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingWirelessSecurityPairwise(data connectionData) (value []string) {
 	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PAIRWISE)
-	value, ok := ivalue.([]string)
-	if !ok {
-		logger.Errorf("getSettingWirelessSecurityPairwise: value type is invalid, should be []string instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.([]string)
+		if !ok {
+			logger.Warningf("getSettingWirelessSecurityPairwise: value type is invalid, should be []string instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingWirelessSecurityGroup(data connectionData) (value []string) {
 	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_GROUP)
-	value, ok := ivalue.([]string)
-	if !ok {
-		logger.Errorf("getSettingWirelessSecurityGroup: value type is invalid, should be []string instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.([]string)
+		if !ok {
+			logger.Warningf("getSettingWirelessSecurityGroup: value type is invalid, should be []string instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingWirelessSecurityLeapUsername(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME)
-	value, ok := ivalue.(string)
-	if !ok {
-		logger.Errorf("getSettingWirelessSecurityLeapUsername: value type is invalid, should be string instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(string)
+		if !ok {
+			logger.Warningf("getSettingWirelessSecurityLeapUsername: value type is invalid, should be string instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingWirelessSecurityLeapPassword(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD)
-	value, ok := ivalue.(string)
-	if !ok {
-		logger.Errorf("getSettingWirelessSecurityLeapPassword: value type is invalid, should be string instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(string)
+		if !ok {
+			logger.Warningf("getSettingWirelessSecurityLeapPassword: value type is invalid, should be string instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingWirelessSecurityLeapPasswordFlags(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS)
-	value, ok := ivalue.(uint32)
-	if !ok {
-		logger.Errorf("getSettingWirelessSecurityLeapPasswordFlags: value type is invalid, should be uint32 instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(uint32)
+		if !ok {
+			logger.Warningf("getSettingWirelessSecurityLeapPasswordFlags: value type is invalid, should be uint32 instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingWirelessSecurityWepKey0(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY0)
-	value, ok := ivalue.(string)
-	if !ok {
-		logger.Errorf("getSettingWirelessSecurityWepKey0: value type is invalid, should be string instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(string)
+		if !ok {
+			logger.Warningf("getSettingWirelessSecurityWepKey0: value type is invalid, should be string instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingWirelessSecurityWepKey1(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY1)
-	value, ok := ivalue.(string)
-	if !ok {
-		logger.Errorf("getSettingWirelessSecurityWepKey1: value type is invalid, should be string instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(string)
+		if !ok {
+			logger.Warningf("getSettingWirelessSecurityWepKey1: value type is invalid, should be string instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingWirelessSecurityWepKey2(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY2)
-	value, ok := ivalue.(string)
-	if !ok {
-		logger.Errorf("getSettingWirelessSecurityWepKey2: value type is invalid, should be string instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(string)
+		if !ok {
+			logger.Warningf("getSettingWirelessSecurityWepKey2: value type is invalid, should be string instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingWirelessSecurityWepKey3(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY3)
-	value, ok := ivalue.(string)
-	if !ok {
-		logger.Errorf("getSettingWirelessSecurityWepKey3: value type is invalid, should be string instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(string)
+		if !ok {
+			logger.Warningf("getSettingWirelessSecurityWepKey3: value type is invalid, should be string instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingWirelessSecurityWepKeyFlags(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY_FLAGS)
-	value, ok := ivalue.(uint32)
-	if !ok {
-		logger.Errorf("getSettingWirelessSecurityWepKeyFlags: value type is invalid, should be uint32 instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(uint32)
+		if !ok {
+			logger.Warningf("getSettingWirelessSecurityWepKeyFlags: value type is invalid, should be uint32 instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingWirelessSecurityWepKeyType(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE)
-	value, ok := ivalue.(uint32)
-	if !ok {
-		logger.Errorf("getSettingWirelessSecurityWepKeyType: value type is invalid, should be uint32 instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(uint32)
+		if !ok {
+			logger.Warningf("getSettingWirelessSecurityWepKeyType: value type is invalid, should be uint32 instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingWirelessSecurityPsk(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PSK)
-	value, ok := ivalue.(string)
-	if !ok {
-		logger.Errorf("getSettingWirelessSecurityPsk: value type is invalid, should be string instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(string)
+		if !ok {
+			logger.Warningf("getSettingWirelessSecurityPsk: value type is invalid, should be string instead of %#v", ivalue)
+		}
 	}
 	return
 }
 func getSettingWirelessSecurityPskFlags(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS)
-	value, ok := ivalue.(uint32)
-	if !ok {
-		logger.Errorf("getSettingWirelessSecurityPskFlags: value type is invalid, should be uint32 instead of %#v", ivalue)
+	if !isInterfaceEmpty(ivalue) {
+		var ok bool
+		value, ok = ivalue.(uint32)
+		if !ok {
+			logger.Warningf("getSettingWirelessSecurityPskFlags: value type is invalid, should be uint32 instead of %#v", ivalue)
+		}
 	}
 	return
 }
