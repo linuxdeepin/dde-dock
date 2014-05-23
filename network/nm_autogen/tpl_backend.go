@@ -115,7 +115,7 @@ func get{{$keyFuncBaseName}}(data connectionData) (value {{$key.Type | ToKeyType
 	ivalue := getSettingKey(data, {{$fieldName}}, {{$key.Name}})
 	value, ok := ivalue.({{$realType}})
 	if !ok {
-		logger.Warningf("get{{$keyFuncBaseName}}: value type is invalid, should be {{$realType}}, %v", ivalue)
+		logger.Errorf("get{{$keyFuncBaseName}}: value type is invalid, should be {{$realType}} instead of %#v", ivalue)
 	}
 	return
 }{{end}}{{end}}

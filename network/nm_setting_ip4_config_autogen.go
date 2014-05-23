@@ -77,13 +77,13 @@ func getSettingIp4ConfigDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_IP4_CONFIG_METHOD:
 		value = ""
 	case NM_SETTING_IP4_CONFIG_ADDRESSES:
-		value = nil
+		value = make([][]uint32, 0)
 	case NM_SETTING_IP4_CONFIG_DNS:
-		value = nil
+		value = make([]uint32, 0)
 	case NM_SETTING_IP4_CONFIG_DNS_SEARCH:
 		value = ""
 	case NM_SETTING_IP4_CONFIG_ROUTES:
-		value = nil
+		value = make([][]uint32, 0)
 	case NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES:
 		value = false
 	case NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS:
@@ -310,7 +310,7 @@ func getSettingIp4ConfigMethod(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_METHOD)
 	value, ok := ivalue.(string)
 	if !ok {
-		logger.Warningf("getSettingIp4ConfigMethod: value type is invalid, should be string, %v", ivalue)
+		logger.Errorf("getSettingIp4ConfigMethod: value type is invalid, should be string instead of %#v", ivalue)
 	}
 	return
 }
@@ -318,7 +318,7 @@ func getSettingIp4ConfigAddresses(data connectionData) (value [][]uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ADDRESSES)
 	value, ok := ivalue.([][]uint32)
 	if !ok {
-		logger.Warningf("getSettingIp4ConfigAddresses: value type is invalid, should be [][]uint32, %v", ivalue)
+		logger.Errorf("getSettingIp4ConfigAddresses: value type is invalid, should be [][]uint32 instead of %#v", ivalue)
 	}
 	return
 }
@@ -326,7 +326,7 @@ func getSettingIp4ConfigDns(data connectionData) (value []uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS)
 	value, ok := ivalue.([]uint32)
 	if !ok {
-		logger.Warningf("getSettingIp4ConfigDns: value type is invalid, should be []uint32, %v", ivalue)
+		logger.Errorf("getSettingIp4ConfigDns: value type is invalid, should be []uint32 instead of %#v", ivalue)
 	}
 	return
 }
@@ -334,7 +334,7 @@ func getSettingIp4ConfigDnsSearch(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_SEARCH)
 	value, ok := ivalue.(string)
 	if !ok {
-		logger.Warningf("getSettingIp4ConfigDnsSearch: value type is invalid, should be string, %v", ivalue)
+		logger.Errorf("getSettingIp4ConfigDnsSearch: value type is invalid, should be string instead of %#v", ivalue)
 	}
 	return
 }
@@ -342,7 +342,7 @@ func getSettingIp4ConfigRoutes(data connectionData) (value [][]uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTES)
 	value, ok := ivalue.([][]uint32)
 	if !ok {
-		logger.Warningf("getSettingIp4ConfigRoutes: value type is invalid, should be [][]uint32, %v", ivalue)
+		logger.Errorf("getSettingIp4ConfigRoutes: value type is invalid, should be [][]uint32 instead of %#v", ivalue)
 	}
 	return
 }
@@ -350,7 +350,7 @@ func getSettingIp4ConfigIgnoreAutoRoutes(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES)
 	value, ok := ivalue.(bool)
 	if !ok {
-		logger.Warningf("getSettingIp4ConfigIgnoreAutoRoutes: value type is invalid, should be bool, %v", ivalue)
+		logger.Errorf("getSettingIp4ConfigIgnoreAutoRoutes: value type is invalid, should be bool instead of %#v", ivalue)
 	}
 	return
 }
@@ -358,7 +358,7 @@ func getSettingIp4ConfigIgnoreAutoDns(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS)
 	value, ok := ivalue.(bool)
 	if !ok {
-		logger.Warningf("getSettingIp4ConfigIgnoreAutoDns: value type is invalid, should be bool, %v", ivalue)
+		logger.Errorf("getSettingIp4ConfigIgnoreAutoDns: value type is invalid, should be bool instead of %#v", ivalue)
 	}
 	return
 }
@@ -366,7 +366,7 @@ func getSettingIp4ConfigDhcpClientId(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID)
 	value, ok := ivalue.(string)
 	if !ok {
-		logger.Warningf("getSettingIp4ConfigDhcpClientId: value type is invalid, should be string, %v", ivalue)
+		logger.Errorf("getSettingIp4ConfigDhcpClientId: value type is invalid, should be string instead of %#v", ivalue)
 	}
 	return
 }
@@ -374,7 +374,7 @@ func getSettingIp4ConfigDhcpSendHostname(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME)
 	value, ok := ivalue.(bool)
 	if !ok {
-		logger.Warningf("getSettingIp4ConfigDhcpSendHostname: value type is invalid, should be bool, %v", ivalue)
+		logger.Errorf("getSettingIp4ConfigDhcpSendHostname: value type is invalid, should be bool instead of %#v", ivalue)
 	}
 	return
 }
@@ -382,7 +382,7 @@ func getSettingIp4ConfigDhcpHostname(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME)
 	value, ok := ivalue.(string)
 	if !ok {
-		logger.Warningf("getSettingIp4ConfigDhcpHostname: value type is invalid, should be string, %v", ivalue)
+		logger.Errorf("getSettingIp4ConfigDhcpHostname: value type is invalid, should be string instead of %#v", ivalue)
 	}
 	return
 }
@@ -390,7 +390,7 @@ func getSettingIp4ConfigNeverDefault(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_NEVER_DEFAULT)
 	value, ok := ivalue.(bool)
 	if !ok {
-		logger.Warningf("getSettingIp4ConfigNeverDefault: value type is invalid, should be bool, %v", ivalue)
+		logger.Errorf("getSettingIp4ConfigNeverDefault: value type is invalid, should be bool instead of %#v", ivalue)
 	}
 	return
 }
@@ -398,7 +398,7 @@ func getSettingIp4ConfigMayFail(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_MAY_FAIL)
 	value, ok := ivalue.(bool)
 	if !ok {
-		logger.Warningf("getSettingIp4ConfigMayFail: value type is invalid, should be bool, %v", ivalue)
+		logger.Errorf("getSettingIp4ConfigMayFail: value type is invalid, should be bool instead of %#v", ivalue)
 	}
 	return
 }

@@ -79,7 +79,7 @@ func getSettingConnectionDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_CONNECTION_AUTOCONNECT:
 		value = true
 	case NM_SETTING_CONNECTION_PERMISSIONS:
-		value = nil
+		value = make([]string, 0)
 	case NM_SETTING_CONNECTION_TIMESTAMP:
 		value = 0
 	case NM_SETTING_CONNECTION_READ_ONLY:
@@ -91,7 +91,7 @@ func getSettingConnectionDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_CONNECTION_SLAVE_TYPE:
 		value = ""
 	case NM_SETTING_CONNECTION_SECONDARIES:
-		value = nil
+		value = make([]string, 0)
 	}
 	return
 }
@@ -296,7 +296,7 @@ func getSettingConnectionId(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_ID)
 	value, ok := ivalue.(string)
 	if !ok {
-		logger.Warningf("getSettingConnectionId: value type is invalid, should be string, %v", ivalue)
+		logger.Errorf("getSettingConnectionId: value type is invalid, should be string instead of %#v", ivalue)
 	}
 	return
 }
@@ -304,7 +304,7 @@ func getSettingConnectionUuid(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_UUID)
 	value, ok := ivalue.(string)
 	if !ok {
-		logger.Warningf("getSettingConnectionUuid: value type is invalid, should be string, %v", ivalue)
+		logger.Errorf("getSettingConnectionUuid: value type is invalid, should be string instead of %#v", ivalue)
 	}
 	return
 }
@@ -312,7 +312,7 @@ func getSettingConnectionType(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TYPE)
 	value, ok := ivalue.(string)
 	if !ok {
-		logger.Warningf("getSettingConnectionType: value type is invalid, should be string, %v", ivalue)
+		logger.Errorf("getSettingConnectionType: value type is invalid, should be string instead of %#v", ivalue)
 	}
 	return
 }
@@ -320,7 +320,7 @@ func getSettingConnectionAutoconnect(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_AUTOCONNECT)
 	value, ok := ivalue.(bool)
 	if !ok {
-		logger.Warningf("getSettingConnectionAutoconnect: value type is invalid, should be bool, %v", ivalue)
+		logger.Errorf("getSettingConnectionAutoconnect: value type is invalid, should be bool instead of %#v", ivalue)
 	}
 	return
 }
@@ -328,7 +328,7 @@ func getSettingConnectionPermissions(data connectionData) (value []string) {
 	ivalue := getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_PERMISSIONS)
 	value, ok := ivalue.([]string)
 	if !ok {
-		logger.Warningf("getSettingConnectionPermissions: value type is invalid, should be []string, %v", ivalue)
+		logger.Errorf("getSettingConnectionPermissions: value type is invalid, should be []string instead of %#v", ivalue)
 	}
 	return
 }
@@ -336,7 +336,7 @@ func getSettingConnectionTimestamp(data connectionData) (value uint64) {
 	ivalue := getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TIMESTAMP)
 	value, ok := ivalue.(uint64)
 	if !ok {
-		logger.Warningf("getSettingConnectionTimestamp: value type is invalid, should be uint64, %v", ivalue)
+		logger.Errorf("getSettingConnectionTimestamp: value type is invalid, should be uint64 instead of %#v", ivalue)
 	}
 	return
 }
@@ -344,7 +344,7 @@ func getSettingConnectionReadOnly(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_READ_ONLY)
 	value, ok := ivalue.(bool)
 	if !ok {
-		logger.Warningf("getSettingConnectionReadOnly: value type is invalid, should be bool, %v", ivalue)
+		logger.Errorf("getSettingConnectionReadOnly: value type is invalid, should be bool instead of %#v", ivalue)
 	}
 	return
 }
@@ -352,7 +352,7 @@ func getSettingConnectionZone(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_ZONE)
 	value, ok := ivalue.(string)
 	if !ok {
-		logger.Warningf("getSettingConnectionZone: value type is invalid, should be string, %v", ivalue)
+		logger.Errorf("getSettingConnectionZone: value type is invalid, should be string instead of %#v", ivalue)
 	}
 	return
 }
@@ -360,7 +360,7 @@ func getSettingConnectionMaster(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_MASTER)
 	value, ok := ivalue.(string)
 	if !ok {
-		logger.Warningf("getSettingConnectionMaster: value type is invalid, should be string, %v", ivalue)
+		logger.Errorf("getSettingConnectionMaster: value type is invalid, should be string instead of %#v", ivalue)
 	}
 	return
 }
@@ -368,7 +368,7 @@ func getSettingConnectionSlaveType(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_SLAVE_TYPE)
 	value, ok := ivalue.(string)
 	if !ok {
-		logger.Warningf("getSettingConnectionSlaveType: value type is invalid, should be string, %v", ivalue)
+		logger.Errorf("getSettingConnectionSlaveType: value type is invalid, should be string instead of %#v", ivalue)
 	}
 	return
 }
@@ -376,7 +376,7 @@ func getSettingConnectionSecondaries(data connectionData) (value []string) {
 	ivalue := getSettingKey(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_SECONDARIES)
 	value, ok := ivalue.([]string)
 	if !ok {
-		logger.Warningf("getSettingConnectionSecondaries: value type is invalid, should be []string, %v", ivalue)
+		logger.Errorf("getSettingConnectionSecondaries: value type is invalid, should be []string instead of %#v", ivalue)
 	}
 	return
 }

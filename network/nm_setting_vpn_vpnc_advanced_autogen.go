@@ -288,7 +288,7 @@ func getSettingVpnVpncKeyDomain(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DOMAIN)
 	value, ok := ivalue.(string)
 	if !ok {
-		logger.Warningf("getSettingVpnVpncKeyDomain: value type is invalid, should be string, %v", ivalue)
+		logger.Errorf("getSettingVpnVpncKeyDomain: value type is invalid, should be string instead of %#v", ivalue)
 	}
 	return
 }
@@ -296,7 +296,7 @@ func getSettingVpnVpncKeyVendor(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_VENDOR)
 	value, ok := ivalue.(string)
 	if !ok {
-		logger.Warningf("getSettingVpnVpncKeyVendor: value type is invalid, should be string, %v", ivalue)
+		logger.Errorf("getSettingVpnVpncKeyVendor: value type is invalid, should be string instead of %#v", ivalue)
 	}
 	return
 }
@@ -304,7 +304,7 @@ func getSettingVpnVpncKeyAppVersion(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_APP_VERSION)
 	value, ok := ivalue.(string)
 	if !ok {
-		logger.Warningf("getSettingVpnVpncKeyAppVersion: value type is invalid, should be string, %v", ivalue)
+		logger.Errorf("getSettingVpnVpncKeyAppVersion: value type is invalid, should be string instead of %#v", ivalue)
 	}
 	return
 }
@@ -312,7 +312,7 @@ func getSettingVpnVpncKeySingleDes(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_SINGLE_DES)
 	value, ok := ivalue.(bool)
 	if !ok {
-		logger.Warningf("getSettingVpnVpncKeySingleDes: value type is invalid, should be bool, %v", ivalue)
+		logger.Errorf("getSettingVpnVpncKeySingleDes: value type is invalid, should be bool instead of %#v", ivalue)
 	}
 	return
 }
@@ -320,7 +320,7 @@ func getSettingVpnVpncKeyNoEncryption(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_NO_ENCRYPTION)
 	value, ok := ivalue.(bool)
 	if !ok {
-		logger.Warningf("getSettingVpnVpncKeyNoEncryption: value type is invalid, should be bool, %v", ivalue)
+		logger.Errorf("getSettingVpnVpncKeyNoEncryption: value type is invalid, should be bool instead of %#v", ivalue)
 	}
 	return
 }
@@ -328,7 +328,7 @@ func getSettingVpnVpncKeyNatTraversalMode(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_NAT_TRAVERSAL_MODE)
 	value, ok := ivalue.(string)
 	if !ok {
-		logger.Warningf("getSettingVpnVpncKeyNatTraversalMode: value type is invalid, should be string, %v", ivalue)
+		logger.Errorf("getSettingVpnVpncKeyNatTraversalMode: value type is invalid, should be string instead of %#v", ivalue)
 	}
 	return
 }
@@ -336,7 +336,7 @@ func getSettingVpnVpncKeyDhgroup(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DHGROUP)
 	value, ok := ivalue.(string)
 	if !ok {
-		logger.Warningf("getSettingVpnVpncKeyDhgroup: value type is invalid, should be string, %v", ivalue)
+		logger.Errorf("getSettingVpnVpncKeyDhgroup: value type is invalid, should be string instead of %#v", ivalue)
 	}
 	return
 }
@@ -344,7 +344,7 @@ func getSettingVpnVpncKeyPerfectForward(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_PERFECT_FORWARD)
 	value, ok := ivalue.(string)
 	if !ok {
-		logger.Warningf("getSettingVpnVpncKeyPerfectForward: value type is invalid, should be string, %v", ivalue)
+		logger.Errorf("getSettingVpnVpncKeyPerfectForward: value type is invalid, should be string instead of %#v", ivalue)
 	}
 	return
 }
@@ -352,7 +352,7 @@ func getSettingVpnVpncKeyLocalPort(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_LOCAL_PORT)
 	value, ok := ivalue.(uint32)
 	if !ok {
-		logger.Warningf("getSettingVpnVpncKeyLocalPort: value type is invalid, should be uint32, %v", ivalue)
+		logger.Errorf("getSettingVpnVpncKeyLocalPort: value type is invalid, should be uint32 instead of %#v", ivalue)
 	}
 	return
 }
@@ -360,7 +360,7 @@ func getSettingVpnVpncKeyDpdIdleTimeout(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT)
 	value, ok := ivalue.(uint32)
 	if !ok {
-		logger.Warningf("getSettingVpnVpncKeyDpdIdleTimeout: value type is invalid, should be uint32, %v", ivalue)
+		logger.Errorf("getSettingVpnVpncKeyDpdIdleTimeout: value type is invalid, should be uint32 instead of %#v", ivalue)
 	}
 	return
 }
@@ -368,7 +368,7 @@ func getSettingVpnVpncKeyCiscoUdpEncapsPort(data connectionData) (value uint32) 
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, NM_SETTING_VPN_VPNC_KEY_CISCO_UDP_ENCAPS_PORT)
 	value, ok := ivalue.(uint32)
 	if !ok {
-		logger.Warningf("getSettingVpnVpncKeyCiscoUdpEncapsPort: value type is invalid, should be uint32, %v", ivalue)
+		logger.Errorf("getSettingVpnVpncKeyCiscoUdpEncapsPort: value type is invalid, should be uint32 instead of %#v", ivalue)
 	}
 	return
 }

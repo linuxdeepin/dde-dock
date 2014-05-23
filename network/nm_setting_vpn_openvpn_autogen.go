@@ -362,7 +362,7 @@ func getSettingVpnOpenvpnKeyRemote(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_REMOTE)
 	value, ok := ivalue.(string)
 	if !ok {
-		logger.Warningf("getSettingVpnOpenvpnKeyRemote: value type is invalid, should be string, %v", ivalue)
+		logger.Errorf("getSettingVpnOpenvpnKeyRemote: value type is invalid, should be string instead of %#v", ivalue)
 	}
 	return
 }
@@ -370,7 +370,7 @@ func getSettingVpnOpenvpnKeyConnectionType(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_CONNECTION_TYPE)
 	value, ok := ivalue.(string)
 	if !ok {
-		logger.Warningf("getSettingVpnOpenvpnKeyConnectionType: value type is invalid, should be string, %v", ivalue)
+		logger.Errorf("getSettingVpnOpenvpnKeyConnectionType: value type is invalid, should be string instead of %#v", ivalue)
 	}
 	return
 }
@@ -378,7 +378,7 @@ func getSettingVpnOpenvpnKeyUsername(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_USERNAME)
 	value, ok := ivalue.(string)
 	if !ok {
-		logger.Warningf("getSettingVpnOpenvpnKeyUsername: value type is invalid, should be string, %v", ivalue)
+		logger.Errorf("getSettingVpnOpenvpnKeyUsername: value type is invalid, should be string instead of %#v", ivalue)
 	}
 	return
 }
@@ -386,7 +386,7 @@ func getSettingVpnOpenvpnKeyPasswordFlags(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PASSWORD_FLAGS)
 	value, ok := ivalue.(uint32)
 	if !ok {
-		logger.Warningf("getSettingVpnOpenvpnKeyPasswordFlags: value type is invalid, should be uint32, %v", ivalue)
+		logger.Errorf("getSettingVpnOpenvpnKeyPasswordFlags: value type is invalid, should be uint32 instead of %#v", ivalue)
 	}
 	return
 }
@@ -394,7 +394,7 @@ func getSettingVpnOpenvpnKeyPassword(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PASSWORD)
 	value, ok := ivalue.(string)
 	if !ok {
-		logger.Warningf("getSettingVpnOpenvpnKeyPassword: value type is invalid, should be string, %v", ivalue)
+		logger.Errorf("getSettingVpnOpenvpnKeyPassword: value type is invalid, should be string instead of %#v", ivalue)
 	}
 	return
 }
@@ -402,7 +402,7 @@ func getSettingVpnOpenvpnKeyCert(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_CERT)
 	value, ok := ivalue.(string)
 	if !ok {
-		logger.Warningf("getSettingVpnOpenvpnKeyCert: value type is invalid, should be string, %v", ivalue)
+		logger.Errorf("getSettingVpnOpenvpnKeyCert: value type is invalid, should be string instead of %#v", ivalue)
 	}
 	return
 }
@@ -410,7 +410,7 @@ func getSettingVpnOpenvpnKeyCa(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_CA)
 	value, ok := ivalue.(string)
 	if !ok {
-		logger.Warningf("getSettingVpnOpenvpnKeyCa: value type is invalid, should be string, %v", ivalue)
+		logger.Errorf("getSettingVpnOpenvpnKeyCa: value type is invalid, should be string instead of %#v", ivalue)
 	}
 	return
 }
@@ -418,7 +418,7 @@ func getSettingVpnOpenvpnKeyKey(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_KEY)
 	value, ok := ivalue.(string)
 	if !ok {
-		logger.Warningf("getSettingVpnOpenvpnKeyKey: value type is invalid, should be string, %v", ivalue)
+		logger.Errorf("getSettingVpnOpenvpnKeyKey: value type is invalid, should be string instead of %#v", ivalue)
 	}
 	return
 }
@@ -426,7 +426,7 @@ func getSettingVpnOpenvpnKeyCertpassFlags(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_CERTPASS_FLAGS)
 	value, ok := ivalue.(uint32)
 	if !ok {
-		logger.Warningf("getSettingVpnOpenvpnKeyCertpassFlags: value type is invalid, should be uint32, %v", ivalue)
+		logger.Errorf("getSettingVpnOpenvpnKeyCertpassFlags: value type is invalid, should be uint32 instead of %#v", ivalue)
 	}
 	return
 }
@@ -434,7 +434,7 @@ func getSettingVpnOpenvpnKeyCertpass(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_CERTPASS)
 	value, ok := ivalue.(string)
 	if !ok {
-		logger.Warningf("getSettingVpnOpenvpnKeyCertpass: value type is invalid, should be string, %v", ivalue)
+		logger.Errorf("getSettingVpnOpenvpnKeyCertpass: value type is invalid, should be string instead of %#v", ivalue)
 	}
 	return
 }
@@ -442,7 +442,7 @@ func getSettingVpnOpenvpnKeyStaticKey(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY)
 	value, ok := ivalue.(string)
 	if !ok {
-		logger.Warningf("getSettingVpnOpenvpnKeyStaticKey: value type is invalid, should be string, %v", ivalue)
+		logger.Errorf("getSettingVpnOpenvpnKeyStaticKey: value type is invalid, should be string instead of %#v", ivalue)
 	}
 	return
 }
@@ -450,7 +450,7 @@ func getSettingVpnOpenvpnKeyStaticKeyDirection(data connectionData) (value uint3
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY_DIRECTION)
 	value, ok := ivalue.(uint32)
 	if !ok {
-		logger.Warningf("getSettingVpnOpenvpnKeyStaticKeyDirection: value type is invalid, should be uint32, %v", ivalue)
+		logger.Errorf("getSettingVpnOpenvpnKeyStaticKeyDirection: value type is invalid, should be uint32 instead of %#v", ivalue)
 	}
 	return
 }
@@ -458,7 +458,7 @@ func getSettingVpnOpenvpnKeyRemoteIp(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_REMOTE_IP)
 	value, ok := ivalue.(string)
 	if !ok {
-		logger.Warningf("getSettingVpnOpenvpnKeyRemoteIp: value type is invalid, should be string, %v", ivalue)
+		logger.Errorf("getSettingVpnOpenvpnKeyRemoteIp: value type is invalid, should be string instead of %#v", ivalue)
 	}
 	return
 }
@@ -466,7 +466,7 @@ func getSettingVpnOpenvpnKeyLocalIp(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_LOCAL_IP)
 	value, ok := ivalue.(string)
 	if !ok {
-		logger.Warningf("getSettingVpnOpenvpnKeyLocalIp: value type is invalid, should be string, %v", ivalue)
+		logger.Errorf("getSettingVpnOpenvpnKeyLocalIp: value type is invalid, should be string instead of %#v", ivalue)
 	}
 	return
 }

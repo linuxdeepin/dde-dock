@@ -150,7 +150,7 @@ func getSettingVpnL2tpKeyIpsecEnable(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_ENABLE)
 	value, ok := ivalue.(bool)
 	if !ok {
-		logger.Warningf("getSettingVpnL2tpKeyIpsecEnable: value type is invalid, should be bool, %v", ivalue)
+		logger.Errorf("getSettingVpnL2tpKeyIpsecEnable: value type is invalid, should be bool instead of %#v", ivalue)
 	}
 	return
 }
@@ -158,7 +158,7 @@ func getSettingVpnL2tpKeyIpsecGroupName(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GROUP_NAME)
 	value, ok := ivalue.(string)
 	if !ok {
-		logger.Warningf("getSettingVpnL2tpKeyIpsecGroupName: value type is invalid, should be string, %v", ivalue)
+		logger.Errorf("getSettingVpnL2tpKeyIpsecGroupName: value type is invalid, should be string instead of %#v", ivalue)
 	}
 	return
 }
@@ -166,7 +166,7 @@ func getSettingVpnL2tpKeyIpsecGatewayId(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID)
 	value, ok := ivalue.(string)
 	if !ok {
-		logger.Warningf("getSettingVpnL2tpKeyIpsecGatewayId: value type is invalid, should be string, %v", ivalue)
+		logger.Errorf("getSettingVpnL2tpKeyIpsecGatewayId: value type is invalid, should be string instead of %#v", ivalue)
 	}
 	return
 }
@@ -174,7 +174,7 @@ func getSettingVpnL2tpKeyIpsecPsk(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_PSK)
 	value, ok := ivalue.(string)
 	if !ok {
-		logger.Warningf("getSettingVpnL2tpKeyIpsecPsk: value type is invalid, should be string, %v", ivalue)
+		logger.Errorf("getSettingVpnL2tpKeyIpsecPsk: value type is invalid, should be string instead of %#v", ivalue)
 	}
 	return
 }

@@ -177,6 +177,8 @@ func checkSettingIp6ConfigAddresses(data connectionData, errs fieldErrors) {
 		// check address
 		if !isIpv6AddressValid(addr.Address) {
 			rememberError(errs, fieldIpv6, NM_SETTING_VK_IP6_CONFIG_ADDRESSES_ADDRESS, NM_KEY_ERROR_INVALID_VALUE)
+			// TODO test
+			logger.Warning(NM_KEY_ERROR_INVALID_VALUE, addr.Address)
 			return
 		}
 		if isIpv6AddressZero(addr.Address) {

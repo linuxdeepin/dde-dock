@@ -150,7 +150,7 @@ func getSettingCdmaNumber(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_CDMA_SETTING_NAME, NM_SETTING_CDMA_NUMBER)
 	value, ok := ivalue.(string)
 	if !ok {
-		logger.Warningf("getSettingCdmaNumber: value type is invalid, should be string, %v", ivalue)
+		logger.Errorf("getSettingCdmaNumber: value type is invalid, should be string instead of %#v", ivalue)
 	}
 	return
 }
@@ -158,7 +158,7 @@ func getSettingCdmaUsername(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_CDMA_SETTING_NAME, NM_SETTING_CDMA_USERNAME)
 	value, ok := ivalue.(string)
 	if !ok {
-		logger.Warningf("getSettingCdmaUsername: value type is invalid, should be string, %v", ivalue)
+		logger.Errorf("getSettingCdmaUsername: value type is invalid, should be string instead of %#v", ivalue)
 	}
 	return
 }
@@ -166,7 +166,7 @@ func getSettingCdmaPassword(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_CDMA_SETTING_NAME, NM_SETTING_CDMA_PASSWORD)
 	value, ok := ivalue.(string)
 	if !ok {
-		logger.Warningf("getSettingCdmaPassword: value type is invalid, should be string, %v", ivalue)
+		logger.Errorf("getSettingCdmaPassword: value type is invalid, should be string instead of %#v", ivalue)
 	}
 	return
 }
@@ -174,7 +174,7 @@ func getSettingCdmaPasswordFlags(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_CDMA_SETTING_NAME, NM_SETTING_CDMA_PASSWORD_FLAGS)
 	value, ok := ivalue.(uint32)
 	if !ok {
-		logger.Warningf("getSettingCdmaPasswordFlags: value type is invalid, should be uint32, %v", ivalue)
+		logger.Errorf("getSettingCdmaPasswordFlags: value type is invalid, should be uint32 instead of %#v", ivalue)
 	}
 	return
 }

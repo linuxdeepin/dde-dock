@@ -46,44 +46,28 @@ func ToKeyTypeRealData(ktype string) (realData string) {
 		realData = "uint64"
 	case "ktypeBoolean":
 		realData = "bool"
-	case "ktypeArrayByte":
+	case "ktypeArrayByte", "ktypeWrapperString", "ktypeWrapperMacAddress":
 		realData = "[]byte"
 	case "ktypeArrayString":
 		realData = "[]string"
-	case "ktypeArrayUint32":
+	case "ktypeArrayUint32", "ktypeWrapperIpv4Dns":
 		realData = "[]uint32"
-	case "ktypeArrayArrayByte":
+	case "ktypeArrayArrayByte", "ktypeWrapperIpv6Dns":
 		realData = "[][]byte"
-	case "ktypeArrayArrayUint32":
+	case "ktypeArrayArrayUint32", "ktypeWrapperIpv4Addresses", "ktypeWrapperIpv4Routes":
 		realData = "[][]uint32"
 	case "ktypeDictStringString":
 		realData = "map[string]string"
-	case "ktypeIpv6Addresses":
+	case "ktypeIpv6Addresses", "ktypeWrapperIpv6Addresses":
 		realData = "ipv6Addresses"
-	case "ktypeIpv6Routes":
-		realData = "ipv6Routes"
-	case "ktypeWrapperString":
-		realData = "[]byte"
-	case "ktypeWrapperMacAddress":
-		realData = "[]byte"
-	case "ktypeWrapperIpv4Dns":
-		realData = "[]uint32"
-	case "ktypeWrapperIpv4Addresses":
-		realData = "[][]uint32"
-	case "ktypeWrapperIpv4Routes":
-		realData = "[][]uint32"
-	case "ktypeWrapperIpv6Dns":
-		realData = "[][]byte"
-	case "ktypeWrapperIpv6Addresses":
-		realData = "ipv6Addresses"
-	case "ktypeWrapperIpv6Routes":
+	case "ktypeIpv6Routes", "ktypeWrapperIpv6Routes":
 		realData = "ipv6Routes"
 	}
 	return
 }
 
 // "ktypeString" -> `""`, "ktypeBool" -> `false`
-func ToKeyTypeDefaultValue(keyName string) (valueJSON string) {
+func ToKeyTypeDefaultValue(keyName string) (value string) {
 	keyInfo := getKeyInfo(keyName)
 	ktype := keyInfo.Type
 	customValue := keyInfo.Default
@@ -101,51 +85,33 @@ func ToKeyTypeDefaultValue(keyName string) (valueJSON string) {
 		fmt.Println("invalid ktype:", ktype)
 		os.Exit(1)
 	case "ktypeString":
-		valueJSON = `""`
+		value = `""`
 	case "ktypeByte":
-		valueJSON = `0`
+		value = `0`
 	case "ktypeInt32":
-		valueJSON = `0`
+		value = `0`
 	case "ktypeUint32":
-		valueJSON = `0`
+		value = `0`
 	case "ktypeUint64":
-		valueJSON = `0`
+		value = `0`
 	case "ktypeBoolean":
-		valueJSON = `false`
-	case "ktypeArrayByte":
-		valueJSON = `""`
+		value = `false`
+	case "ktypeArrayByte", "ktypeWrapperString", "ktypeWrapperMacAddress":
+		value = `make([]byte, 0)`
 	case "ktypeArrayString":
-		valueJSON = `nil`
-	case "ktypeArrayUint32":
-		valueJSON = `nil`
-	case "ktypeArrayArrayByte":
-		valueJSON = `nil`
-	case "ktypeArrayArrayUint32":
-		valueJSON = `nil`
+		value = `make([]string, 0)`
+	case "ktypeArrayUint32", "ktypeWrapperIpv4Dns":
+		value = `make([]uint32, 0)`
+	case "ktypeArrayArrayByte", "ktypeWrapperIpv6Dns":
+		value = `make([][]byte, 0)`
+	case "ktypeArrayArrayUint32", "ktypeWrapperIpv4Addresses", "ktypeWrapperIpv4Routes":
+		value = `make([][]uint32, 0)`
 	case "ktypeDictStringString":
-		valueJSON = `nil`
-	case "ktypeIpv6Addresses":
-		valueJSON = `nil`
-	case "ktypeIpv6Routes":
-		valueJSON = `nil`
-	case "ktypeWrapperString":
-		valueJSON = `""`
-		// valueJSON = `nil`
-	case "ktypeWrapperMacAddress":
-		valueJSON = `""`
-		// valueJSON = `nil`
-	case "ktypeWrapperIpv4Dns":
-		valueJSON = `nil`
-	case "ktypeWrapperIpv4Addresses":
-		valueJSON = `nil`
-	case "ktypeWrapperIpv4Routes":
-		valueJSON = `nil`
-	case "ktypeWrapperIpv6Dns":
-		valueJSON = `nil`
-	case "ktypeWrapperIpv6Addresses":
-		valueJSON = `nil`
-	case "ktypeWrapperIpv6Routes":
-		valueJSON = `nil`
+		value = `make(map[string]string)`
+	case "ktypeIpv6Addresses", "ktypeWrapperIpv6Addresses":
+		value = `make(ipv6Addresses, 0)`
+	case "ktypeIpv6Routes", "ktypeWrapperIpv6Routes":
+		value = `make(ipv6Routes, 0)`
 	}
 	return
 }

@@ -318,7 +318,7 @@ func getSettingVpnPptpKeyRequireMppe(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE)
 	value, ok := ivalue.(bool)
 	if !ok {
-		logger.Warningf("getSettingVpnPptpKeyRequireMppe: value type is invalid, should be bool, %v", ivalue)
+		logger.Errorf("getSettingVpnPptpKeyRequireMppe: value type is invalid, should be bool instead of %#v", ivalue)
 	}
 	return
 }
@@ -326,7 +326,7 @@ func getSettingVpnPptpKeyRequireMppe40(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40)
 	value, ok := ivalue.(bool)
 	if !ok {
-		logger.Warningf("getSettingVpnPptpKeyRequireMppe40: value type is invalid, should be bool, %v", ivalue)
+		logger.Errorf("getSettingVpnPptpKeyRequireMppe40: value type is invalid, should be bool instead of %#v", ivalue)
 	}
 	return
 }
@@ -334,7 +334,7 @@ func getSettingVpnPptpKeyRequireMppe128(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128)
 	value, ok := ivalue.(bool)
 	if !ok {
-		logger.Warningf("getSettingVpnPptpKeyRequireMppe128: value type is invalid, should be bool, %v", ivalue)
+		logger.Errorf("getSettingVpnPptpKeyRequireMppe128: value type is invalid, should be bool instead of %#v", ivalue)
 	}
 	return
 }
@@ -342,7 +342,7 @@ func getSettingVpnPptpKeyMppeStateful(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_MPPE_STATEFUL)
 	value, ok := ivalue.(bool)
 	if !ok {
-		logger.Warningf("getSettingVpnPptpKeyMppeStateful: value type is invalid, should be bool, %v", ivalue)
+		logger.Errorf("getSettingVpnPptpKeyMppeStateful: value type is invalid, should be bool instead of %#v", ivalue)
 	}
 	return
 }
@@ -350,7 +350,7 @@ func getSettingVpnPptpKeyRefuseEap(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REFUSE_EAP)
 	value, ok := ivalue.(bool)
 	if !ok {
-		logger.Warningf("getSettingVpnPptpKeyRefuseEap: value type is invalid, should be bool, %v", ivalue)
+		logger.Errorf("getSettingVpnPptpKeyRefuseEap: value type is invalid, should be bool instead of %#v", ivalue)
 	}
 	return
 }
@@ -358,7 +358,7 @@ func getSettingVpnPptpKeyRefusePap(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REFUSE_PAP)
 	value, ok := ivalue.(bool)
 	if !ok {
-		logger.Warningf("getSettingVpnPptpKeyRefusePap: value type is invalid, should be bool, %v", ivalue)
+		logger.Errorf("getSettingVpnPptpKeyRefusePap: value type is invalid, should be bool instead of %#v", ivalue)
 	}
 	return
 }
@@ -366,7 +366,7 @@ func getSettingVpnPptpKeyRefuseChap(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REFUSE_CHAP)
 	value, ok := ivalue.(bool)
 	if !ok {
-		logger.Warningf("getSettingVpnPptpKeyRefuseChap: value type is invalid, should be bool, %v", ivalue)
+		logger.Errorf("getSettingVpnPptpKeyRefuseChap: value type is invalid, should be bool instead of %#v", ivalue)
 	}
 	return
 }
@@ -374,7 +374,7 @@ func getSettingVpnPptpKeyRefuseMschap(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REFUSE_MSCHAP)
 	value, ok := ivalue.(bool)
 	if !ok {
-		logger.Warningf("getSettingVpnPptpKeyRefuseMschap: value type is invalid, should be bool, %v", ivalue)
+		logger.Errorf("getSettingVpnPptpKeyRefuseMschap: value type is invalid, should be bool instead of %#v", ivalue)
 	}
 	return
 }
@@ -382,7 +382,7 @@ func getSettingVpnPptpKeyRefuseMschapv2(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_REFUSE_MSCHAPV2)
 	value, ok := ivalue.(bool)
 	if !ok {
-		logger.Warningf("getSettingVpnPptpKeyRefuseMschapv2: value type is invalid, should be bool, %v", ivalue)
+		logger.Errorf("getSettingVpnPptpKeyRefuseMschapv2: value type is invalid, should be bool instead of %#v", ivalue)
 	}
 	return
 }
@@ -390,7 +390,7 @@ func getSettingVpnPptpKeyNobsdcomp(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_NOBSDCOMP)
 	value, ok := ivalue.(bool)
 	if !ok {
-		logger.Warningf("getSettingVpnPptpKeyNobsdcomp: value type is invalid, should be bool, %v", ivalue)
+		logger.Errorf("getSettingVpnPptpKeyNobsdcomp: value type is invalid, should be bool instead of %#v", ivalue)
 	}
 	return
 }
@@ -398,7 +398,7 @@ func getSettingVpnPptpKeyNodeflate(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_NODEFLATE)
 	value, ok := ivalue.(bool)
 	if !ok {
-		logger.Warningf("getSettingVpnPptpKeyNodeflate: value type is invalid, should be bool, %v", ivalue)
+		logger.Errorf("getSettingVpnPptpKeyNodeflate: value type is invalid, should be bool instead of %#v", ivalue)
 	}
 	return
 }
@@ -406,7 +406,7 @@ func getSettingVpnPptpKeyNoVjComp(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_NO_VJ_COMP)
 	value, ok := ivalue.(bool)
 	if !ok {
-		logger.Warningf("getSettingVpnPptpKeyNoVjComp: value type is invalid, should be bool, %v", ivalue)
+		logger.Errorf("getSettingVpnPptpKeyNoVjComp: value type is invalid, should be bool instead of %#v", ivalue)
 	}
 	return
 }
@@ -414,7 +414,7 @@ func getSettingVpnPptpKeyLcpEchoFailure(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_LCP_ECHO_FAILURE)
 	value, ok := ivalue.(uint32)
 	if !ok {
-		logger.Warningf("getSettingVpnPptpKeyLcpEchoFailure: value type is invalid, should be uint32, %v", ivalue)
+		logger.Errorf("getSettingVpnPptpKeyLcpEchoFailure: value type is invalid, should be uint32 instead of %#v", ivalue)
 	}
 	return
 }
@@ -422,7 +422,7 @@ func getSettingVpnPptpKeyLcpEchoInterval(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_LCP_ECHO_INTERVAL)
 	value, ok := ivalue.(uint32)
 	if !ok {
-		logger.Warningf("getSettingVpnPptpKeyLcpEchoInterval: value type is invalid, should be uint32, %v", ivalue)
+		logger.Errorf("getSettingVpnPptpKeyLcpEchoInterval: value type is invalid, should be uint32 instead of %#v", ivalue)
 	}
 	return
 }
