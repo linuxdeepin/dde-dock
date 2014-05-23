@@ -367,7 +367,7 @@ char* guess_app_id(long s_pid, const char* instance_name, const char* wmname, co
     char* exec_args = NULL;
     get_pid_info(s_pid, &exec_name, &exec_args);
     if (exec_name != NULL) {
-        if (g_str_has_prefix(exec_name, "google-chrome-")) {
+        if (g_str_has_prefix(exec_name, "google-chrome-") || g_strcmp0(exec_name, "chrome") == 0) {
             g_free(exec_name);
             exec_name = g_strdup("google-chrome");
         }
@@ -383,7 +383,7 @@ char* guess_app_id(long s_pid, const char* instance_name, const char* wmname, co
             app_id = find_app_id(exec_name, wmname, APPID_FILTER_WMNAME);
             g_debug("[%s] get from wmname %s", __func__, app_id);
         }
-        g_warning("%s %s", exec_name, wmname);
+        g_warning("exec_name:%s wmname:%s", exec_name, wmname);
         if (app_id == NULL && wmname != NULL) {
             app_id = find_app_id(exec_name, wmname, APPID_FILTER_WMINSTANCE);
             g_debug("[%s] get from wmname %s", __func__, app_id);
