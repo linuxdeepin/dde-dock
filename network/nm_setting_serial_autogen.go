@@ -42,20 +42,20 @@ func isKeyInSettingSerial(key string) bool {
 }
 
 // Get key's default value
-func getSettingSerialKeyDefaultValueJSON(key string) (valueJSON string) {
+func getSettingSerialDefaultValue(key string) (value interface{}) {
 	switch key {
 	default:
 		logger.Error("invalid key:", key)
 	case NM_SETTING_SERIAL_BAUD:
-		valueJSON = `57600`
+		value = 57600
 	case NM_SETTING_SERIAL_BITS:
-		valueJSON = `8`
+		value = 8
 	case NM_SETTING_SERIAL_PARITY:
-		valueJSON = `110`
+		value = 110
 	case NM_SETTING_SERIAL_STOPBITS:
-		valueJSON = `1`
+		value = 1
 	case NM_SETTING_SERIAL_SEND_DELAY:
-		valueJSON = `0`
+		value = 0
 	}
 	return
 }

@@ -66,32 +66,32 @@ func isKeyInSettingVpnVpnc(key string) bool {
 }
 
 // Get key's default value
-func getSettingVpnVpncKeyDefaultValueJSON(key string) (valueJSON string) {
+func getSettingVpnVpncDefaultValue(key string) (value interface{}) {
 	switch key {
 	default:
 		logger.Error("invalid key:", key)
 	case NM_SETTING_VPN_VPNC_KEY_GATEWAY:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_VPNC_KEY_XAUTH_USER:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD_TYPE:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD_FLAGS:
-		valueJSON = `0`
+		value = 0
 	case NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_VPNC_KEY_ID:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_VPNC_KEY_SECRET_TYPE:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_VPNC_KEY_SECRET_FLAGS:
-		valueJSON = `0`
+		value = 0
 	case NM_SETTING_VPN_VPNC_KEY_SECRET:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_VPNC_KEY_AUTHMODE:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_VPNC_KEY_CA_FILE:
-		valueJSON = `""`
+		value = ""
 	}
 	return
 }

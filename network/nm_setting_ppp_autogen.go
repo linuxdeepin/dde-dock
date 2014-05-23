@@ -94,46 +94,46 @@ func isKeyInSettingPpp(key string) bool {
 }
 
 // Get key's default value
-func getSettingPppKeyDefaultValueJSON(key string) (valueJSON string) {
+func getSettingPppDefaultValue(key string) (value interface{}) {
 	switch key {
 	default:
 		logger.Error("invalid key:", key)
 	case NM_SETTING_PPP_NOAUTH:
-		valueJSON = `true`
+		value = true
 	case NM_SETTING_PPP_REFUSE_EAP:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_PPP_REFUSE_PAP:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_PPP_REFUSE_CHAP:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_PPP_REFUSE_MSCHAP:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_PPP_REFUSE_MSCHAPV2:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_PPP_REQUIRE_MPPE:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_PPP_REQUIRE_MPPE_128:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_PPP_MPPE_STATEFUL:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_PPP_NOBSDCOMP:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_PPP_NODEFLATE:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_PPP_NO_VJ_COMP:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_PPP_CRTSCTS:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_PPP_BAUD:
-		valueJSON = `0`
+		value = 0
 	case NM_SETTING_PPP_MRU:
-		valueJSON = `0`
+		value = 0
 	case NM_SETTING_PPP_MTU:
-		valueJSON = `0`
+		value = 0
 	case NM_SETTING_PPP_LCP_ECHO_FAILURE:
-		valueJSON = `0`
+		value = 0
 	case NM_SETTING_PPP_LCP_ECHO_INTERVAL:
-		valueJSON = `0`
+		value = 0
 	}
 	return
 }

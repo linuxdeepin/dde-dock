@@ -436,62 +436,68 @@ func generalSetSettingKeyJSON(data connectionData, field, key, valueJSON string)
 	return
 }
 
-func getSettingKeyDefaultValueJSON(field, key string) (valueJSON string) {
+func generalGetSettingDefaultValue(field, key string) (value interface{}) {
 	switch field {
 	default:
 		logger.Warning("invalid field name", field)
 	case NM_SETTING_802_1X_SETTING_NAME:
-		valueJSON = getSetting8021xKeyDefaultValueJSON(key)
+		value = getSetting8021xDefaultValue(key)
 	case NM_SETTING_CDMA_SETTING_NAME:
-		valueJSON = getSettingCdmaKeyDefaultValueJSON(key)
+		value = getSettingCdmaDefaultValue(key)
 	case NM_SETTING_CONNECTION_SETTING_NAME:
-		valueJSON = getSettingConnectionKeyDefaultValueJSON(key)
+		value = getSettingConnectionDefaultValue(key)
 	case NM_SETTING_GSM_SETTING_NAME:
-		valueJSON = getSettingGsmKeyDefaultValueJSON(key)
+		value = getSettingGsmDefaultValue(key)
 	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
-		valueJSON = getSettingIp4ConfigKeyDefaultValueJSON(key)
+		value = getSettingIp4ConfigDefaultValue(key)
 	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
-		valueJSON = getSettingIp6ConfigKeyDefaultValueJSON(key)
+		value = getSettingIp6ConfigDefaultValue(key)
 	case NM_SETTING_PPP_SETTING_NAME:
-		valueJSON = getSettingPppKeyDefaultValueJSON(key)
+		value = getSettingPppDefaultValue(key)
 	case NM_SETTING_PPPOE_SETTING_NAME:
-		valueJSON = getSettingPppoeKeyDefaultValueJSON(key)
+		value = getSettingPppoeDefaultValue(key)
 	case NM_SETTING_SERIAL_SETTING_NAME:
-		valueJSON = getSettingSerialKeyDefaultValueJSON(key)
+		value = getSettingSerialDefaultValue(key)
 	case NM_SETTING_VPN_SETTING_NAME:
-		valueJSON = getSettingVpnKeyDefaultValueJSON(key)
+		value = getSettingVpnDefaultValue(key)
 	case NM_SETTING_VF_VPN_L2TP_SETTING_NAME:
-		valueJSON = getSettingVpnL2tpKeyDefaultValueJSON(key)
+		value = getSettingVpnL2tpDefaultValue(key)
 	case NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME:
-		valueJSON = getSettingVpnL2tpPppKeyDefaultValueJSON(key)
+		value = getSettingVpnL2tpPppDefaultValue(key)
 	case NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME:
-		valueJSON = getSettingVpnL2tpIpsecKeyDefaultValueJSON(key)
+		value = getSettingVpnL2tpIpsecDefaultValue(key)
 	case NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME:
-		valueJSON = getSettingVpnOpenconnectKeyDefaultValueJSON(key)
+		value = getSettingVpnOpenconnectDefaultValue(key)
 	case NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME:
-		valueJSON = getSettingVpnOpenvpnKeyDefaultValueJSON(key)
+		value = getSettingVpnOpenvpnDefaultValue(key)
 	case NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME:
-		valueJSON = getSettingVpnOpenvpnAdvancedKeyDefaultValueJSON(key)
+		value = getSettingVpnOpenvpnAdvancedDefaultValue(key)
 	case NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME:
-		valueJSON = getSettingVpnOpenvpnSecurityKeyDefaultValueJSON(key)
+		value = getSettingVpnOpenvpnSecurityDefaultValue(key)
 	case NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
-		valueJSON = getSettingVpnOpenvpnTlsauthKeyDefaultValueJSON(key)
+		value = getSettingVpnOpenvpnTlsauthDefaultValue(key)
 	case NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME:
-		valueJSON = getSettingVpnOpenvpnProxiesKeyDefaultValueJSON(key)
+		value = getSettingVpnOpenvpnProxiesDefaultValue(key)
 	case NM_SETTING_VF_VPN_PPTP_SETTING_NAME:
-		valueJSON = getSettingVpnPptpKeyDefaultValueJSON(key)
+		value = getSettingVpnPptpDefaultValue(key)
 	case NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME:
-		valueJSON = getSettingVpnPptpPppKeyDefaultValueJSON(key)
+		value = getSettingVpnPptpPppDefaultValue(key)
 	case NM_SETTING_VF_VPN_VPNC_SETTING_NAME:
-		valueJSON = getSettingVpnVpncKeyDefaultValueJSON(key)
+		value = getSettingVpnVpncDefaultValue(key)
 	case NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME:
-		valueJSON = getSettingVpnVpncAdvancedKeyDefaultValueJSON(key)
+		value = getSettingVpnVpncAdvancedDefaultValue(key)
 	case NM_SETTING_WIRED_SETTING_NAME:
-		valueJSON = getSettingWiredKeyDefaultValueJSON(key)
+		value = getSettingWiredDefaultValue(key)
 	case NM_SETTING_WIRELESS_SETTING_NAME:
-		valueJSON = getSettingWirelessKeyDefaultValueJSON(key)
+		value = getSettingWirelessDefaultValue(key)
 	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
-		valueJSON = getSettingWirelessSecurityKeyDefaultValueJSON(key)
+		value = getSettingWirelessSecurityDefaultValue(key)
 	}
+	return
+}
+
+func generalGetSettingDefaultValueJSON(field, key string) (valueJSON string) {
+	value := generalGetSettingDefaultValue(field, key)
+	valueJSON, _ = marshalJSON(value)
 	return
 }

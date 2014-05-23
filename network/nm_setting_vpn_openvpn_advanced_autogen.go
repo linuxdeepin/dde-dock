@@ -58,28 +58,28 @@ func isKeyInSettingVpnOpenvpnAdvanced(key string) bool {
 }
 
 // Get key's default value
-func getSettingVpnOpenvpnAdvancedKeyDefaultValueJSON(key string) (valueJSON string) {
+func getSettingVpnOpenvpnAdvancedDefaultValue(key string) (value interface{}) {
 	switch key {
 	default:
 		logger.Error("invalid key:", key)
 	case NM_SETTING_VPN_OPENVPN_KEY_PORT:
-		valueJSON = `1194`
+		value = 1194
 	case NM_SETTING_VPN_OPENVPN_KEY_RENEG_SECONDS:
-		valueJSON = `0`
+		value = 0
 	case NM_SETTING_VPN_OPENVPN_KEY_COMP_LZO:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_VPN_OPENVPN_KEY_PROTO_TCP:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_VPN_OPENVPN_KEY_TAP_DEV:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_VPN_OPENVPN_KEY_TUNNEL_MTU:
-		valueJSON = `1500`
+		value = 1500
 	case NM_SETTING_VPN_OPENVPN_KEY_FRAGMENT_SIZE:
-		valueJSON = `1300`
+		value = 1300
 	case NM_SETTING_VPN_OPENVPN_KEY_MSSFIX:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_VPN_OPENVPN_KEY_REMOTE_RANDOM:
-		valueJSON = `false`
+		value = false
 	}
 	return
 }

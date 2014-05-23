@@ -86,42 +86,42 @@ func isKeyInSettingVpnL2tpPpp(key string) bool {
 }
 
 // Get key's default value
-func getSettingVpnL2tpPppKeyDefaultValueJSON(key string) (valueJSON string) {
+func getSettingVpnL2tpPppDefaultValue(key string) (value interface{}) {
 	switch key {
 	default:
 		logger.Error("invalid key:", key)
 	case NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_40:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_128:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_VPN_L2TP_KEY_MPPE_STATEFUL:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_VPN_L2TP_KEY_REFUSE_EAP:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_VPN_L2TP_KEY_REFUSE_PAP:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_VPN_L2TP_KEY_REFUSE_CHAP:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_VPN_L2TP_KEY_REFUSE_MSCHAP:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_VPN_L2TP_KEY_REFUSE_MSCHAPV2:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_VPN_L2TP_KEY_NOBSDCOMP:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_VPN_L2TP_KEY_NODEFLATE:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_VPN_L2TP_KEY_NO_VJ_COMP:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_VPN_L2TP_KEY_NO_PCOMP:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_VPN_L2TP_KEY_NO_ACCOMP:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_FAILURE:
-		valueJSON = `0`
+		value = 0
 	case NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_INTERVAL:
-		valueJSON = `0`
+		value = 0
 	}
 	return
 }

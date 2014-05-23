@@ -38,18 +38,18 @@ func isKeyInSettingCdma(key string) bool {
 }
 
 // Get key's default value
-func getSettingCdmaKeyDefaultValueJSON(key string) (valueJSON string) {
+func getSettingCdmaDefaultValue(key string) (value interface{}) {
 	switch key {
 	default:
 		logger.Error("invalid key:", key)
 	case NM_SETTING_CDMA_NUMBER:
-		valueJSON = `"#777"`
+		value = "#777"
 	case NM_SETTING_CDMA_USERNAME:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_CDMA_PASSWORD:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_CDMA_PASSWORD_FLAGS:
-		valueJSON = `null`
+		value = nil
 	}
 	return
 }

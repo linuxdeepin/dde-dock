@@ -91,7 +91,7 @@ func ToKeyTypeDefaultValue(keyName string) (valueJSON string) {
 		if ktype == "ktypeString" {
 			return `""`
 		} else {
-			return "null"
+			return "nil"
 		}
 	} else if customValue != "<default>" {
 		return customValue
@@ -115,35 +115,35 @@ func ToKeyTypeDefaultValue(keyName string) (valueJSON string) {
 	case "ktypeArrayByte":
 		valueJSON = `""`
 	case "ktypeArrayString":
-		valueJSON = `null`
+		valueJSON = `nil`
 	case "ktypeArrayUint32":
-		valueJSON = `null`
+		valueJSON = `nil`
 	case "ktypeArrayArrayByte":
-		valueJSON = `null`
+		valueJSON = `nil`
 	case "ktypeArrayArrayUint32":
-		valueJSON = `null`
+		valueJSON = `nil`
 	case "ktypeDictStringString":
-		valueJSON = `null`
+		valueJSON = `nil`
 	case "ktypeIpv6Addresses":
-		valueJSON = `null`
+		valueJSON = `nil`
 	case "ktypeIpv6Routes":
-		valueJSON = `null`
+		valueJSON = `nil`
 	case "ktypeWrapperString":
 		valueJSON = `""`
 	case "ktypeWrapperMacAddress":
 		valueJSON = `""`
 	case "ktypeWrapperIpv4Dns":
-		valueJSON = `null`
+		valueJSON = `nil`
 	case "ktypeWrapperIpv4Addresses":
-		valueJSON = `null`
+		valueJSON = `nil`
 	case "ktypeWrapperIpv4Routes":
-		valueJSON = `null`
+		valueJSON = `nil`
 	case "ktypeWrapperIpv6Dns":
-		valueJSON = `null`
+		valueJSON = `nil`
 	case "ktypeWrapperIpv6Addresses":
-		valueJSON = `null`
+		valueJSON = `nil`
 	case "ktypeWrapperIpv6Routes":
-		valueJSON = `null`
+		valueJSON = `nil`
 	}
 	return
 }

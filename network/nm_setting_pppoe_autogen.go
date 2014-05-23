@@ -38,18 +38,18 @@ func isKeyInSettingPppoe(key string) bool {
 }
 
 // Get key's default value
-func getSettingPppoeKeyDefaultValueJSON(key string) (valueJSON string) {
+func getSettingPppoeDefaultValue(key string) (value interface{}) {
 	switch key {
 	default:
 		logger.Error("invalid key:", key)
 	case NM_SETTING_PPPOE_USERNAME:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_PPPOE_SERVICE:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_PPPOE_PASSWORD:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_PPPOE_PASSWORD_FLAGS:
-		valueJSON = `0`
+		value = 0
 	}
 	return
 }

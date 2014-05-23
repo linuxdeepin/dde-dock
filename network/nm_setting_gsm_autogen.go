@@ -66,32 +66,32 @@ func isKeyInSettingGsm(key string) bool {
 }
 
 // Get key's default value
-func getSettingGsmKeyDefaultValueJSON(key string) (valueJSON string) {
+func getSettingGsmDefaultValue(key string) (value interface{}) {
 	switch key {
 	default:
 		logger.Error("invalid key:", key)
 	case NM_SETTING_GSM_NUMBER:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_GSM_USERNAME:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_GSM_PASSWORD_FLAGS:
-		valueJSON = `0`
+		value = 0
 	case NM_SETTING_GSM_PASSWORD:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_GSM_APN:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_GSM_NETWORK_ID:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_GSM_NETWORK_TYPE:
-		valueJSON = `-1`
+		value = -1
 	case NM_SETTING_GSM_ALLOWED_BANDS:
-		valueJSON = `1`
+		value = 1
 	case NM_SETTING_GSM_HOME_ONLY:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_GSM_PIN:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_GSM_PIN_FLAGS:
-		valueJSON = `0`
+		value = 0
 	}
 	return
 }

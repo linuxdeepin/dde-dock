@@ -38,18 +38,18 @@ func isKeyInSettingVpnOpenvpnTlsauth(key string) bool {
 }
 
 // Get key's default value
-func getSettingVpnOpenvpnTlsauthKeyDefaultValueJSON(key string) (valueJSON string) {
+func getSettingVpnOpenvpnTlsauthDefaultValue(key string) (value interface{}) {
 	switch key {
 	default:
 		logger.Error("invalid key:", key)
 	case NM_SETTING_VPN_OPENVPN_KEY_TLS_REMOTE:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_OPENVPN_KEY_REMOTE_CERT_TLS:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_OPENVPN_KEY_TA:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_OPENVPN_KEY_TA_DIR:
-		valueJSON = `0`
+		value = 0
 	}
 	return
 }

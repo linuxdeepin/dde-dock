@@ -66,32 +66,32 @@ func isKeyInSettingVpnVpncAdvanced(key string) bool {
 }
 
 // Get key's default value
-func getSettingVpnVpncAdvancedKeyDefaultValueJSON(key string) (valueJSON string) {
+func getSettingVpnVpncAdvancedDefaultValue(key string) (value interface{}) {
 	switch key {
 	default:
 		logger.Error("invalid key:", key)
 	case NM_SETTING_VPN_VPNC_KEY_DOMAIN:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_VPNC_KEY_VENDOR:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_VPNC_KEY_APP_VERSION:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_VPNC_KEY_SINGLE_DES:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_VPN_VPNC_KEY_NO_ENCRYPTION:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_VPN_VPNC_KEY_NAT_TRAVERSAL_MODE:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_VPNC_KEY_DHGROUP:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_VPNC_KEY_PERFECT_FORWARD:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_VPNC_KEY_LOCAL_PORT:
-		valueJSON = `0`
+		value = 0
 	case NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT:
-		valueJSON = `0`
+		value = 0
 	case NM_SETTING_VPN_VPNC_KEY_CISCO_UDP_ENCAPS_PORT:
-		valueJSON = `0`
+		value = 0
 	}
 	return
 }

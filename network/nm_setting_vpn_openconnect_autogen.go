@@ -78,38 +78,38 @@ func isKeyInSettingVpnOpenconnect(key string) bool {
 }
 
 // Get key's default value
-func getSettingVpnOpenconnectKeyDefaultValueJSON(key string) (valueJSON string) {
+func getSettingVpnOpenconnectDefaultValue(key string) (value interface{}) {
 	switch key {
 	default:
 		logger.Error("invalid key:", key)
 	case NM_SETTING_VPN_OPENCONNECT_KEY_GATEWAY:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_OPENCONNECT_KEY_CACERT:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_OPENCONNECT_KEY_PROXY:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_OPENCONNECT_KEY_CSD_ENABLE:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_VPN_OPENCONNECT_KEY_CSD_WRAPPER:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_OPENCONNECT_KEY_USERCERT:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_OPENCONNECT_KEY_PRIVKEY:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_OPENCONNECT_KEY_PEM_PASSPHRASE_FSID:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_VPN_OPENCONNECT_KEY_COOKIE:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_OPENCONNECT_KEY_GWCERT:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_OPENCONNECT_KEY_AUTHTYPE:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_OPENCONNECT_KEY_MTU:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_OPENCONNECT_KEY_STOKEN_SOURCE:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_OPENCONNECT_KEY_STOKEN_STRING:
-		valueJSON = `""`
+		value = ""
 	}
 	return
 }

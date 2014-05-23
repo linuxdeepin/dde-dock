@@ -78,38 +78,38 @@ func isKeyInSettingVpnOpenvpn(key string) bool {
 }
 
 // Get key's default value
-func getSettingVpnOpenvpnKeyDefaultValueJSON(key string) (valueJSON string) {
+func getSettingVpnOpenvpnDefaultValue(key string) (value interface{}) {
 	switch key {
 	default:
 		logger.Error("invalid key:", key)
 	case NM_SETTING_VPN_OPENVPN_KEY_REMOTE:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_OPENVPN_KEY_CONNECTION_TYPE:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_OPENVPN_KEY_USERNAME:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_OPENVPN_KEY_PASSWORD_FLAGS:
-		valueJSON = `0`
+		value = 0
 	case NM_SETTING_VPN_OPENVPN_KEY_PASSWORD:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_OPENVPN_KEY_CERT:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_OPENVPN_KEY_CA:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_OPENVPN_KEY_KEY:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_OPENVPN_KEY_CERTPASS_FLAGS:
-		valueJSON = `0`
+		value = 0
 	case NM_SETTING_VPN_OPENVPN_KEY_CERTPASS:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY_DIRECTION:
-		valueJSON = `0`
+		value = 0
 	case NM_SETTING_VPN_OPENVPN_KEY_REMOTE_IP:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_OPENVPN_KEY_LOCAL_IP:
-		valueJSON = `""`
+		value = ""
 	}
 	return
 }

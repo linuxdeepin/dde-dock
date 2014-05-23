@@ -92,7 +92,7 @@ func genNMSettingCode(nmSetting NMSettingStruct) (content string) {
 	content = fileHeader
 	content += genTpl(nmSetting, tplGetKeyType)          // get key type
 	content += genTpl(nmSetting, tplIsKeyInSettingField) // check is key in current field
-	content += genTpl(nmSetting, tplGetDefaultValueJSON) // get default json value
+	content += genTpl(nmSetting, tplGetDefaultValue)     // get default value
 	content += genTpl(nmSetting, tplGeneralGetterJSON)   // general json getter
 	content += genTpl(nmSetting, tplGeneralSetterJSON)   // general json setter
 	content += genTpl(nmSetting, tplCheckExists)         // check if key exists

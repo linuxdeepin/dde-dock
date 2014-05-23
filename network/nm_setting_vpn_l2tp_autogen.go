@@ -42,20 +42,20 @@ func isKeyInSettingVpnL2tp(key string) bool {
 }
 
 // Get key's default value
-func getSettingVpnL2tpKeyDefaultValueJSON(key string) (valueJSON string) {
+func getSettingVpnL2tpDefaultValue(key string) (value interface{}) {
 	switch key {
 	default:
 		logger.Error("invalid key:", key)
 	case NM_SETTING_VPN_L2TP_KEY_GATEWAY:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_L2TP_KEY_USER:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_L2TP_KEY_PASSWORD_FLAGS:
-		valueJSON = `0`
+		value = 0
 	case NM_SETTING_VPN_L2TP_KEY_PASSWORD:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_L2TP_KEY_DOMAIN:
-		valueJSON = `""`
+		value = ""
 	}
 	return
 }

@@ -58,15 +58,15 @@ func ensure{{$keyFuncBaseName}}NoEmpty(data connectionData, errs fieldErrors) {
 }{{end}}{{end}}
 `
 
-// get key's default json value
-const tplGetDefaultValueJSON = `{{$fieldFuncBaseName := .FieldName | ToFieldFuncBaseName}}
+// get key's default value
+const tplGetDefaultValue = `{{$fieldFuncBaseName := .FieldName | ToFieldFuncBaseName}}
 // Get key's default value
-func get{{$fieldFuncBaseName}}KeyDefaultValueJSON(key string) (valueJSON string) {
+func get{{$fieldFuncBaseName}}DefaultValue(key string) (value interface{}) {
 	switch key {
 	default:
 		logger.Error("invalid key:", key){{range .Keys}}{{if .UsedByBackEnd}}{{$default := ToKeyTypeDefaultValue .Name}}
 	case {{.Name}}:
-		valueJSON = ` + "`{{$default}}`" + `{{end}}{{end}}
+		value = {{$default}}{{end}}{{end}}
 	}
 	return
 }
@@ -258,13 +258,19 @@ func generalSetSettingKeyJSON(data connectionData, field, key, valueJSON string)
 	return
 }
 
-func getSettingKeyDefaultValueJSON(field, key string) (valueJSON string) {
+func generalGetSettingDefaultValue(field, key string) (value interface{}) {
 	switch field {
 	default:
 		logger.Warning("invalid field name", field){{range .}}
 	case {{.FieldName}}:
-		valueJSON = get{{.FieldName | ToFieldFuncBaseName}}KeyDefaultValueJSON(key){{end}}
+		value = get{{.FieldName | ToFieldFuncBaseName}}DefaultValue(key){{end}}
 	}
+	return
+}
+
+func generalGetSettingDefaultValueJSON(field, key string) (valueJSON string) {
+	value := generalGetSettingDefaultValue(field, key)
+	valueJSON, _ = marshalJSON(value)
 	return
 }`
 

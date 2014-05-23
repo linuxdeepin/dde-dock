@@ -37,6 +37,6 @@ func (m *Manager) updatePropAccessPoints() {
 
 func (m *Manager) updatePropConnections() {
 	m.Connections, _ = marshalJSON(m.connections)
-	// logger.Debug(m.Connections) // TODO test
+	logger.Debug(m.Connections) // TODO test
 	dbus.NotifyChange(m, "Connections")
 }

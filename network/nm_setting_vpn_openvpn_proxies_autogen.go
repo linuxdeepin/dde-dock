@@ -50,24 +50,24 @@ func isKeyInSettingVpnOpenvpnProxies(key string) bool {
 }
 
 // Get key's default value
-func getSettingVpnOpenvpnProxiesKeyDefaultValueJSON(key string) (valueJSON string) {
+func getSettingVpnOpenvpnProxiesDefaultValue(key string) (value interface{}) {
 	switch key {
 	default:
 		logger.Error("invalid key:", key)
 	case NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE:
-		valueJSON = `"none"`
+		value = "none"
 	case NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT:
-		valueJSON = `0`
+		value = 0
 	case NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS:
-		valueJSON = `0`
+		value = 0
 	}
 	return
 }

@@ -66,32 +66,32 @@ func isKeyInSettingIp6Config(key string) bool {
 }
 
 // Get key's default value
-func getSettingIp6ConfigKeyDefaultValueJSON(key string) (valueJSON string) {
+func getSettingIp6ConfigDefaultValue(key string) (value interface{}) {
 	switch key {
 	default:
 		logger.Error("invalid key:", key)
 	case NM_SETTING_IP6_CONFIG_METHOD:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_IP6_CONFIG_ADDRESSES:
-		valueJSON = `null`
+		value = nil
 	case NM_SETTING_IP6_CONFIG_DNS:
-		valueJSON = `null`
+		value = nil
 	case NM_SETTING_IP6_CONFIG_DNS_SEARCH:
-		valueJSON = `null`
+		value = nil
 	case NM_SETTING_IP6_CONFIG_ROUTES:
-		valueJSON = `null`
+		value = nil
 	case NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_IP6_CONFIG_NEVER_DEFAULT:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_IP6_CONFIG_MAY_FAIL:
-		valueJSON = `true`
+		value = true
 	case NM_SETTING_IP6_CONFIG_IP6_PRIVACY:
-		valueJSON = `-1`
+		value = -1
 	case NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME:
-		valueJSON = `""`
+		value = ""
 	}
 	return
 }

@@ -150,74 +150,74 @@ func isKeyInSetting8021x(key string) bool {
 }
 
 // Get key's default value
-func getSetting8021xKeyDefaultValueJSON(key string) (valueJSON string) {
+func getSetting8021xDefaultValue(key string) (value interface{}) {
 	switch key {
 	default:
 		logger.Error("invalid key:", key)
 	case NM_SETTING_802_1X_EAP:
-		valueJSON = `null`
+		value = nil
 	case NM_SETTING_802_1X_ANONYMOUS_IDENTITY:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_802_1X_CLIENT_CERT:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_802_1X_CA_CERT:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_802_1X_PAC_FILE:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_802_1X_PHASE1_PEAPVER:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_802_1X_PHASE2_AUTH:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_802_1X_PRIVATE_KEY:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_802_1X_IDENTITY:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_802_1X_PASSWORD_FLAGS:
-		valueJSON = `0`
+		value = 0
 	case NM_SETTING_802_1X_PASSWORD:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS:
-		valueJSON = `0`
+		value = 0
 	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_802_1X_CA_PATH:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_802_1X_SUBJECT_MATCH:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_802_1X_ALTSUBJECT_MATCHES:
-		valueJSON = `null`
+		value = nil
 	case NM_SETTING_802_1X_PHASE1_PEAPLABEL:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_802_1X_PHASE2_AUTHEAP:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_802_1X_PHASE2_CA_CERT:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_802_1X_PHASE2_CA_PATH:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_802_1X_PHASE2_CLIENT_CERT:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES:
-		valueJSON = `null`
+		value = nil
 	case NM_SETTING_802_1X_PASSWORD_RAW:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_802_1X_PASSWORD_RAW_FLAGS:
-		valueJSON = `0`
+		value = 0
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS:
-		valueJSON = `0`
+		value = 0
 	case NM_SETTING_802_1X_PIN:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_802_1X_PIN_FLAGS:
-		valueJSON = `0`
+		value = 0
 	case NM_SETTING_802_1X_SYSTEM_CA_CERTS:
-		valueJSON = `false`
+		value = false
 	}
 	return
 }

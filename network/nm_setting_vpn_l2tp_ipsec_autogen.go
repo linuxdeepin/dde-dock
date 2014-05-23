@@ -38,18 +38,18 @@ func isKeyInSettingVpnL2tpIpsec(key string) bool {
 }
 
 // Get key's default value
-func getSettingVpnL2tpIpsecKeyDefaultValueJSON(key string) (valueJSON string) {
+func getSettingVpnL2tpIpsecDefaultValue(key string) (value interface{}) {
 	switch key {
 	default:
 		logger.Error("invalid key:", key)
 	case NM_SETTING_VPN_L2TP_KEY_IPSEC_ENABLE:
-		valueJSON = `false`
+		value = false
 	case NM_SETTING_VPN_L2TP_KEY_IPSEC_GROUP_NAME:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_L2TP_KEY_IPSEC_PSK:
-		valueJSON = `""`
+		value = ""
 	}
 	return
 }

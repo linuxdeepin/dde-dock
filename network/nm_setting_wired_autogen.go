@@ -66,32 +66,32 @@ func isKeyInSettingWired(key string) bool {
 }
 
 // Get key's default value
-func getSettingWiredKeyDefaultValueJSON(key string) (valueJSON string) {
+func getSettingWiredDefaultValue(key string) (value interface{}) {
 	switch key {
 	default:
 		logger.Error("invalid key:", key)
 	case NM_SETTING_WIRED_PORT:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_WIRED_SPEED:
-		valueJSON = `0`
+		value = 0
 	case NM_SETTING_WIRED_DUPLEX:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_WIRED_AUTO_NEGOTIATE:
-		valueJSON = `true`
+		value = true
 	case NM_SETTING_WIRED_MAC_ADDRESS:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_WIRED_CLONED_MAC_ADDRESS:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST:
-		valueJSON = `null`
+		value = nil
 	case NM_SETTING_WIRED_MTU:
-		valueJSON = `0`
+		value = 0
 	case NM_SETTING_WIRED_S390_SUBCHANNELS:
-		valueJSON = `null`
+		value = nil
 	case NM_SETTING_WIRED_S390_NETTYPE:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_WIRED_S390_OPTIONS:
-		valueJSON = `null`
+		value = nil
 	}
 	return
 }

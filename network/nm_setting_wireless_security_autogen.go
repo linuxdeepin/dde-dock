@@ -90,44 +90,44 @@ func isKeyInSettingWirelessSecurity(key string) bool {
 }
 
 // Get key's default value
-func getSettingWirelessSecurityKeyDefaultValueJSON(key string) (valueJSON string) {
+func getSettingWirelessSecurityDefaultValue(key string) (value interface{}) {
 	switch key {
 	default:
 		logger.Error("invalid key:", key)
 	case NM_SETTING_WIRELESS_SECURITY_KEY_MGMT:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_WIRELESS_SECURITY_WEP_TX_KEYIDX:
-		valueJSON = `0`
+		value = 0
 	case NM_SETTING_WIRELESS_SECURITY_AUTH_ALG:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_WIRELESS_SECURITY_PROTO:
-		valueJSON = `null`
+		value = nil
 	case NM_SETTING_WIRELESS_SECURITY_PAIRWISE:
-		valueJSON = `null`
+		value = nil
 	case NM_SETTING_WIRELESS_SECURITY_GROUP:
-		valueJSON = `null`
+		value = nil
 	case NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS:
-		valueJSON = `0`
+		value = 0
 	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY0:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY1:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY2:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY3:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY_FLAGS:
-		valueJSON = `0`
+		value = 0
 	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE:
-		valueJSON = `0`
+		value = 0
 	case NM_SETTING_WIRELESS_SECURITY_PSK:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS:
-		valueJSON = `0`
+		value = 0
 	}
 	return
 }

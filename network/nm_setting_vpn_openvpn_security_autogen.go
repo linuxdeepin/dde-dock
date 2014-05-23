@@ -30,14 +30,14 @@ func isKeyInSettingVpnOpenvpnSecurity(key string) bool {
 }
 
 // Get key's default value
-func getSettingVpnOpenvpnSecurityKeyDefaultValueJSON(key string) (valueJSON string) {
+func getSettingVpnOpenvpnSecurityDefaultValue(key string) (value interface{}) {
 	switch key {
 	default:
 		logger.Error("invalid key:", key)
 	case NM_SETTING_VPN_OPENVPN_KEY_CIPHER:
-		valueJSON = `""`
+		value = ""
 	case NM_SETTING_VPN_OPENVPN_KEY_AUTH:
-		valueJSON = `""`
+		value = ""
 	}
 	return
 }

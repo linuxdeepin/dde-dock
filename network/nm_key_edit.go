@@ -98,7 +98,7 @@ func getSettingKeyJSON(data connectionData, field, key string, t ktype) (valueJS
 		value = getSettingKey(data, field, key)
 	} else {
 		// return default value if the key is not exists
-		valueJSON = getSettingKeyDefaultValueJSON(field, key)
+		valueJSON = generalGetSettingDefaultValueJSON(field, key)
 		return
 	}
 
