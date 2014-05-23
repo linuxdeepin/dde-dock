@@ -24,13 +24,13 @@ type Audio struct {
 
 func (a *Audio) Reset() {
 	for _, s := range a.Sinks {
-		s.SetVolume(s.BaseVolume, true)
-		s.SetBalance(0)
+		s.SetVolume(s.BaseVolume, false)
+		s.SetBalance(0, false)
 		s.SetFade(0)
 	}
 	for _, s := range a.Sources {
-		s.SetVolume(s.BaseVolume, true)
-		s.SetBalance(0)
+		s.SetVolume(s.BaseVolume, false)
+		s.SetBalance(0, false)
 		s.SetFade(0)
 	}
 }
@@ -118,9 +118,11 @@ func (s *Sink) SetVolume(v float64, isPlay bool) {
 		playFeedback()
 	}
 }
-func (s *Sink) SetBalance(v float64) {
+func (s *Sink) SetBalance(v float64, isPlay bool) {
 	s.core.SetVolume(s.core.Volume.SetBalance(s.core.ChannelMap, v))
-	playFeedback()
+	if isPlay {
+		playFeedback()
+	}
 }
 func (s *Sink) SetFade(v float64) {
 	s.core.SetVolume(s.core.Volume.SetFade(s.core.ChannelMap, v))
@@ -158,9 +160,11 @@ func (s *SinkInput) SetVolume(v float64, isPlay bool) {
 		playFeedback()
 	}
 }
-func (s *SinkInput) SetBalance(v float64) {
+func (s *SinkInput) SetBalance(v float64, isPlay bool) {
 	s.core.SetVolume(s.core.Volume.SetBalance(s.core.ChannelMap, v))
-	playFeedback()
+	if isPlay {
+		playFeedback()
+	}
 }
 func (s *SinkInput) SetFade(v float64) {
 	s.core.SetVolume(s.core.Volume.SetFade(s.core.ChannelMap, v))
@@ -201,9 +205,11 @@ func (s *Source) SetVolume(v float64, isPlay bool) {
 		playFeedback()
 	}
 }
-func (s *Source) SetBalance(v float64) {
+func (s *Source) SetBalance(v float64, isPlay bool) {
 	s.core.SetVolume(s.core.Volume.SetBalance(s.core.ChannelMap, v))
-	playFeedback()
+	if isPlay {
+		playFeedback()
+	}
 }
 func (s *Source) SetFade(v float64) {
 	s.core.SetVolume(s.core.Volume.SetFade(s.core.ChannelMap, v))
