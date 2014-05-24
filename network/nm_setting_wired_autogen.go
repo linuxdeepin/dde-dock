@@ -79,19 +79,19 @@ func getSettingWiredDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_WIRED_AUTO_NEGOTIATE:
 		value = true
 	case NM_SETTING_WIRED_MAC_ADDRESS:
-		value = nil
+		value = make([]byte, 0)
 	case NM_SETTING_WIRED_CLONED_MAC_ADDRESS:
-		value = nil
+		value = make([]byte, 0)
 	case NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST:
-		value = nil
+		value = make([]string, 0)
 	case NM_SETTING_WIRED_MTU:
 		value = 0
 	case NM_SETTING_WIRED_S390_SUBCHANNELS:
-		value = nil
+		value = make([]string, 0)
 	case NM_SETTING_WIRED_S390_NETTYPE:
 		value = ""
 	case NM_SETTING_WIRED_S390_OPTIONS:
-		value = nil
+		value = make(map[string]string)
 	}
 	return
 }

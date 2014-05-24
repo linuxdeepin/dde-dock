@@ -98,29 +98,29 @@ func ToKeyTypeDefaultValue(keyName string) (value string) {
 		value = `false`
 	case "ktypeArrayByte", "ktypeWrapperString", "ktypeWrapperMacAddress":
 		// TODO
-		// value = `make([]byte, 0)`
-		value = `nil`
+		value = `make([]byte, 0)`
+		// value = `nil`
 	case "ktypeArrayString":
-		// value = `make([]string, 0)`
-		value = `nil`
+		value = `make([]string, 0)`
+		// value = `nil`
 	case "ktypeArrayUint32", "ktypeWrapperIpv4Dns":
-		// value = `make([]uint32, 0)`
-		value = `nil`
+		value = `make([]uint32, 0)`
+		// value = `nil`
 	case "ktypeArrayArrayByte", "ktypeWrapperIpv6Dns":
 		// value = `make([][]byte, 0)`
 		value = `nil`
 	case "ktypeArrayArrayUint32", "ktypeWrapperIpv4Addresses", "ktypeWrapperIpv4Routes":
-		// value = `make([][]uint32, 0)`
-		value = `nil`
+		value = `make([][]uint32, 0)`
+		// value = `nil`
 	case "ktypeDictStringString":
-		// value = `make(map[string]string)`
-		value = `nil`
+		value = `make(map[string]string)`
+		// value = `nil`
 	case "ktypeIpv6Addresses", "ktypeWrapperIpv6Addresses":
-		// value = `make(ipv6Addresses, 0)`
-		value = `nil`
+		value = `make(ipv6Addresses, 0)`
+		// value = `nil`
 	case "ktypeIpv6Routes", "ktypeWrapperIpv6Routes":
-		// value = `make(ipv6Routes, 0)`
-		value = `nil`
+		value = `make(ipv6Routes, 0)`
+		// value = `nil`
 	}
 	return
 }

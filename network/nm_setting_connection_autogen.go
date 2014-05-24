@@ -79,7 +79,7 @@ func getSettingConnectionDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_CONNECTION_AUTOCONNECT:
 		value = true
 	case NM_SETTING_CONNECTION_PERMISSIONS:
-		value = nil
+		value = make([]string, 0)
 	case NM_SETTING_CONNECTION_TIMESTAMP:
 		value = 0
 	case NM_SETTING_CONNECTION_READ_ONLY:
@@ -91,7 +91,7 @@ func getSettingConnectionDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_CONNECTION_SLAVE_TYPE:
 		value = ""
 	case NM_SETTING_CONNECTION_SECONDARIES:
-		value = nil
+		value = make([]string, 0)
 	}
 	return
 }

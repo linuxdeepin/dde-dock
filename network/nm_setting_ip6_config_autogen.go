@@ -73,13 +73,13 @@ func getSettingIp6ConfigDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_IP6_CONFIG_METHOD:
 		value = ""
 	case NM_SETTING_IP6_CONFIG_ADDRESSES:
-		value = nil
+		value = make(ipv6Addresses, 0)
 	case NM_SETTING_IP6_CONFIG_DNS:
 		value = nil
 	case NM_SETTING_IP6_CONFIG_DNS_SEARCH:
-		value = nil
+		value = make([]string, 0)
 	case NM_SETTING_IP6_CONFIG_ROUTES:
-		value = nil
+		value = make(ipv6Routes, 0)
 	case NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES:
 		value = false
 	case NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS:

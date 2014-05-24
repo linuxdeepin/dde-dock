@@ -101,11 +101,11 @@ func getSettingWirelessSecurityDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_WIRELESS_SECURITY_AUTH_ALG:
 		value = ""
 	case NM_SETTING_WIRELESS_SECURITY_PROTO:
-		value = nil
+		value = make([]string, 0)
 	case NM_SETTING_WIRELESS_SECURITY_PAIRWISE:
-		value = nil
+		value = make([]string, 0)
 	case NM_SETTING_WIRELESS_SECURITY_GROUP:
-		value = nil
+		value = make([]string, 0)
 	case NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME:
 		value = ""
 	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD:

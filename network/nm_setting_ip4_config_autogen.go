@@ -77,13 +77,13 @@ func getSettingIp4ConfigDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_IP4_CONFIG_METHOD:
 		value = ""
 	case NM_SETTING_IP4_CONFIG_ADDRESSES:
-		value = nil
+		value = make([][]uint32, 0)
 	case NM_SETTING_IP4_CONFIG_DNS:
-		value = nil
+		value = make([]uint32, 0)
 	case NM_SETTING_IP4_CONFIG_DNS_SEARCH:
 		value = ""
 	case NM_SETTING_IP4_CONFIG_ROUTES:
-		value = nil
+		value = make([][]uint32, 0)
 	case NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES:
 		value = false
 	case NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS:

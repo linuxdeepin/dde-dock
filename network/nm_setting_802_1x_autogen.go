@@ -155,13 +155,13 @@ func getSetting8021xDefaultValue(key string) (value interface{}) {
 	default:
 		logger.Error("invalid key:", key)
 	case NM_SETTING_802_1X_EAP:
-		value = nil
+		value = make([]string, 0)
 	case NM_SETTING_802_1X_ANONYMOUS_IDENTITY:
 		value = ""
 	case NM_SETTING_802_1X_CLIENT_CERT:
-		value = nil
+		value = make([]byte, 0)
 	case NM_SETTING_802_1X_CA_CERT:
-		value = nil
+		value = make([]byte, 0)
 	case NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING:
 		value = ""
 	case NM_SETTING_802_1X_PAC_FILE:
@@ -171,7 +171,7 @@ func getSetting8021xDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_802_1X_PHASE2_AUTH:
 		value = ""
 	case NM_SETTING_802_1X_PRIVATE_KEY:
-		value = nil
+		value = make([]byte, 0)
 	case NM_SETTING_802_1X_IDENTITY:
 		value = ""
 	case NM_SETTING_802_1X_PASSWORD_FLAGS:
@@ -187,27 +187,27 @@ func getSetting8021xDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_802_1X_SUBJECT_MATCH:
 		value = ""
 	case NM_SETTING_802_1X_ALTSUBJECT_MATCHES:
-		value = nil
+		value = make([]string, 0)
 	case NM_SETTING_802_1X_PHASE1_PEAPLABEL:
 		value = ""
 	case NM_SETTING_802_1X_PHASE2_AUTHEAP:
 		value = ""
 	case NM_SETTING_802_1X_PHASE2_CA_CERT:
-		value = nil
+		value = make([]byte, 0)
 	case NM_SETTING_802_1X_PHASE2_CA_PATH:
 		value = ""
 	case NM_SETTING_802_1X_PHASE2_CLIENT_CERT:
-		value = nil
+		value = make([]byte, 0)
 	case NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH:
 		value = ""
 	case NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES:
-		value = nil
+		value = make([]string, 0)
 	case NM_SETTING_802_1X_PASSWORD_RAW:
-		value = nil
+		value = make([]byte, 0)
 	case NM_SETTING_802_1X_PASSWORD_RAW_FLAGS:
 		value = 0
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY:
-		value = nil
+		value = make([]byte, 0)
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD:
 		value = ""
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS:

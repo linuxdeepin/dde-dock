@@ -47,9 +47,9 @@ func getSettingVpnDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_VPN_USER_NAME:
 		value = ""
 	case NM_SETTING_VPN_DATA:
-		value = nil
+		value = make(map[string]string)
 	case NM_SETTING_VPN_SECRETS:
-		value = nil
+		value = make(map[string]string)
 	}
 	return
 }

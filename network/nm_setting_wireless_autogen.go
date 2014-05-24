@@ -83,7 +83,7 @@ func getSettingWirelessDefaultValue(key string) (value interface{}) {
 	default:
 		logger.Error("invalid key:", key)
 	case NM_SETTING_WIRELESS_SSID:
-		value = nil
+		value = make([]byte, 0)
 	case NM_SETTING_WIRELESS_MODE:
 		value = ""
 	case NM_SETTING_WIRELESS_BAND:
@@ -91,21 +91,21 @@ func getSettingWirelessDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_WIRELESS_CHANNEL:
 		value = ""
 	case NM_SETTING_WIRELESS_BSSID:
-		value = nil
+		value = make([]byte, 0)
 	case NM_SETTING_WIRELESS_RATE:
 		value = 0
 	case NM_SETTING_WIRELESS_TX_POWER:
 		value = 0
 	case NM_SETTING_WIRELESS_MAC_ADDRESS:
-		value = nil
+		value = make([]byte, 0)
 	case NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS:
-		value = nil
+		value = make([]byte, 0)
 	case NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST:
-		value = nil
+		value = make([]string, 0)
 	case NM_SETTING_WIRELESS_MTU:
 		value = 0
 	case NM_SETTING_WIRELESS_SEEN_BSSIDS:
-		value = nil
+		value = make([]string, 0)
 	case NM_SETTING_WIRELESS_SEC:
 		value = ""
 	case NM_SETTING_WIRELESS_HIDDEN:
