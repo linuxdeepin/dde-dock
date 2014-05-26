@@ -88,12 +88,16 @@ func newWiredConnectionData(id, uuid string) (data connectionData) {
 	setSettingConnectionUuid(data, uuid)
 	setSettingConnectionType(data, NM_SETTING_WIRED_SETTING_NAME)
 
-	addSettingField(data, fieldWired)
-	setSettingWiredDuplex(data, "full")
+	initSettingFieldWired(data)
 
 	initSettingFieldIpv4(data)
 	initSettingFieldIpv6(data)
 	return
+}
+
+func initSettingFieldWired(data connectionData) {
+	addSettingField(data, fieldWired)
+	setSettingWiredDuplex(data, "full")
 }
 
 // Get available keys

@@ -152,6 +152,13 @@ func (s *ConnectionSession) fixValues() {
 		}
 	}
 
+	// append missing fieldWired for pppoe
+	if s.Type == connectionPppoe {
+		if !isSettingFieldExists(s.data, fieldWired) {
+			initSettingFieldWired(s.data)
+		}
+	}
+
 	// TODO fix secret flags
 	// if isSettingVpnOpenvpnKeyCertpassFlagsExists(s.data) && getSettingVpnOpenvpnKeyCertpassFlags(s.data) == 1 {
 	// setSettingVpnOpenvpnKeyCertpassFlags(s.data, NM_OPENVPN_SECRET_FLAG_SAVE)

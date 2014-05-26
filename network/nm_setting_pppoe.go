@@ -27,6 +27,8 @@ func newPppoeConnectionData(id, uuid string) (data connectionData) {
 	setSettingConnectionType(data, NM_SETTING_PPPOE_SETTING_NAME)
 	setSettingConnectionAutoconnect(data, false)
 
+	initSettingFieldWired(data)
+
 	addSettingField(data, fieldPppoe)
 
 	addSettingField(data, fieldPpp)
