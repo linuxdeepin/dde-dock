@@ -11,14 +11,13 @@ type sessionErrors map[string]fieldErrors
 
 type ConnectionSession struct {
 	sessionPath dbus.ObjectPath
-	connPath    dbus.ObjectPath
 	devPath     dbus.ObjectPath
 	data        connectionData
 
-	CurrentUUID    string
-	ConnectionType string
+	ConnectionPath dbus.ObjectPath
+	Uuid           string
+	Type           string
 
-	AllowSave      bool // TODO really need?
 	AvailablePages []string
 	AvailableKeys  map[string][]string
 	Errors         sessionErrors
@@ -31,9 +30,8 @@ func doNewConnectionSession(devPath dbus.ObjectPath, uuid string) (s *Connection
 	s = &ConnectionSession{}
 	s.sessionPath = dbus.ObjectPath(fmt.Sprintf("/com/deepin/daemon/ConnectionSession/%s", randString(8)))
 	s.devPath = devPath
-	s.CurrentUUID = uuid
+	s.Uuid = uuid
 	s.data = make(connectionData)
-	s.AllowSave = false // TODO
 	s.AvailablePages = make([]string, 0)
 	s.AvailableKeys = make(map[string][]string)
 	s.Errors = make(sessionErrors)
@@ -50,37 +48,36 @@ func NewConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 
 	s = doNewConnectionSession(devPath, newUUID())
 
-	s.ConnectionType = connectionType
-	id := genConnectionId(s.ConnectionType)
-	switch s.ConnectionType {
+	s.Type = connectionType
+	id := genConnectionId(s.Type)
+	switch s.Type {
 	case connectionWired:
-		s.data = newWiredConnectionData(id, s.CurrentUUID)
+		s.data = newWiredConnectionData(id, s.Uuid)
 	case connectionWireless:
-		s.data = newWirelessConnectionData(id, s.CurrentUUID, nil, apSecNone)
+		s.data = newWirelessConnectionData(id, s.Uuid, nil, apSecNone)
 	case connectionWirelessAdhoc:
-		s.data = newWirelessAdhocConnectionData(id, s.CurrentUUID)
+		s.data = newWirelessAdhocConnectionData(id, s.Uuid)
 	case connectionWirelessHotspot:
-		s.data = newWirelessHotspotConnectionData(id, s.CurrentUUID)
+		s.data = newWirelessHotspotConnectionData(id, s.Uuid)
 	case connectionPppoe:
-		s.data = newPppoeConnectionData(id, s.CurrentUUID)
+		s.data = newPppoeConnectionData(id, s.Uuid)
 	case connectionMobileGsm:
-		s.data = newMobileConnectionData(id, s.CurrentUUID, mobileServiceGsm)
+		s.data = newMobileConnectionData(id, s.Uuid, mobileServiceGsm)
 	case connectionMobileCdma:
-		s.data = newMobileConnectionData(id, s.CurrentUUID, mobileServiceCdma)
+		s.data = newMobileConnectionData(id, s.Uuid, mobileServiceCdma)
 	case connectionVpnL2tp:
-		s.data = newVpnL2tpConnectionData(id, s.CurrentUUID)
+		s.data = newVpnL2tpConnectionData(id, s.Uuid)
 	case connectionVpnOpenconnect:
-		s.data = newVpnOpenconnectConnectionData(id, s.CurrentUUID)
+		s.data = newVpnOpenconnectConnectionData(id, s.Uuid)
 	case connectionVpnPptp:
-		s.data = newVpnPptpConnectionData(id, s.CurrentUUID)
+		s.data = newVpnPptpConnectionData(id, s.Uuid)
 	case connectionVpnVpnc:
-		s.data = newVpnVpncConnectionData(id, s.CurrentUUID)
+		s.data = newVpnVpncConnectionData(id, s.Uuid)
 	case connectionVpnOpenvpn:
-		s.data = newVpnOpenvpnConnectionData(id, s.CurrentUUID)
+		s.data = newVpnOpenvpnConnectionData(id, s.Uuid)
 	}
 
 	s.updatePropConnectionType()
-	// s.updatePropAllowSave(false) // TODO
 	s.updatePropAvailablePages()
 	s.updatePropAvailableKeys()
 	s.updatePropErrors()
@@ -89,16 +86,16 @@ func NewConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 }
 
 func NewConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *ConnectionSession, err error) {
-	connPath, err := nmGetConnectionByUuid(uuid)
+	connectionPath, err := nmGetConnectionByUuid(uuid)
 	if err != nil {
 		return
 	}
 
 	s = doNewConnectionSession(devPath, uuid)
-	s.connPath = connPath
+	s.ConnectionPath = connectionPath
 
 	// get connection data
-	nmConn, err := nmNewSettingsConnection(connPath)
+	nmConn, err := nmNewSettingsConnection(connectionPath)
 	if err != nil {
 		return nil, err
 	}
@@ -106,7 +103,7 @@ func NewConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 	if err != nil {
 		return nil, err
 	}
-	s.ConnectionType = getCustomConnectinoType(s.data)
+	s.Type = getCustomConnectinoType(s.data)
 
 	s.fixValues()
 
@@ -129,7 +126,6 @@ func NewConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 	}
 
 	s.updatePropConnectionType()
-	// s.updatePropAllowSave(false) // TODO
 	s.updatePropAvailablePages()
 	s.updatePropAvailableKeys()
 	s.updatePropErrors()
@@ -164,9 +160,6 @@ func (s *ConnectionSession) fixValues() {
 
 // Save save current connection s.
 func (s *ConnectionSession) Save() bool {
-	// if !s.AllowSave {
-	// return false
-	// }
 	if s.isErrorOccured() {
 		logger.Debug("Errors occured when saving:", s.Errors)
 		return false
@@ -178,9 +171,9 @@ func (s *ConnectionSession) Save() bool {
 	}
 	// TODO what about the connection has been deleted?
 
-	if len(s.connPath) > 0 {
+	if len(s.ConnectionPath) > 0 {
 		// update connection data and activate it
-		nmConn, err := nmNewSettingsConnection(s.connPath)
+		nmConn, err := nmNewSettingsConnection(s.ConnectionPath)
 		if err != nil {
 			logger.Error(err)
 			return false
@@ -190,11 +183,11 @@ func (s *ConnectionSession) Save() bool {
 			logger.Error(err)
 			return false
 		}
-		nmActivateConnection(s.connPath, s.devPath)
+		nmActivateConnection(s.ConnectionPath, s.devPath)
 	} else {
 		// create new connection and activate it
 		// TODO vpn ad-hoc hotspot
-		if s.ConnectionType == connectionWired || s.ConnectionType == connectionWireless {
+		if s.Type == connectionWired || s.Type == connectionWireless {
 			nmAddAndActivateConnection(s.data, s.devPath)
 		} else {
 			nmAddConnection(s.data)
@@ -229,7 +222,7 @@ func (s *ConnectionSession) listFields() (fields []string) {
 
 // listPages return supported pages for target connection type.
 func (s *ConnectionSession) listPages() (pages []string) {
-	switch s.ConnectionType {
+	switch s.Type {
 	case connectionWired:
 		pages = []string{
 			pageGeneral,
@@ -350,7 +343,7 @@ func (s *ConnectionSession) pageToFields(page string) (fields []string) {
 	case pageIPv6:
 		fields = []string{fieldIpv6}
 	case pageSecurity:
-		switch s.ConnectionType {
+		switch s.Type {
 		case connectionWired:
 			fields = []string{field8021x}
 		case connectionWireless, connectionWirelessAdhoc, connectionWirelessHotspot:
@@ -450,13 +443,6 @@ func (s *ConnectionSession) SetKey(page, key, value string) {
 	s.updatePropAvailablePages()
 	s.updatePropAvailableKeys()
 	s.updatePropErrors()
-
-	// TODO remove allowSave
-	// if s.isErrorOccured() {
-	// 	s.updatePropAllowSave(false)
-	// } else {
-	// 	s.updatePropAllowSave(true)
-	// }
 
 	return
 }
