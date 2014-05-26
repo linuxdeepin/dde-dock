@@ -29,6 +29,7 @@ import (
 	"dlib/logger"
 	"fmt"
 	"os"
+	"strings"
 	"sync"
 )
 
@@ -42,6 +43,7 @@ type DiskInfo struct {
 	Path       string
 	UUID       string
 	MountURI   string
+	IconName   string
 }
 
 type ObjectInfo struct {
@@ -204,6 +206,11 @@ func newDiskInfo(value interface{}, t string) DiskInfo {
 		} else {
 			info.Type = "native"
 		}
+		icons := v.GetIcon().ToString()
+		as := strings.Split(icons, " ")
+		if len(as) > 2 {
+			info.IconName = as[2]
+		}
 	case "drive":
 		v := value.(*gio.Drive)
 		info.Name = v.GetName()
@@ -218,6 +225,11 @@ func newDiskInfo(value interface{}, t string) DiskInfo {
 			info.Type = "removable"
 		} else {
 			info.Type = "native"
+		}
+		icons := v.GetIcon().ToString()
+		as := strings.Split(icons, " ")
+		if len(as) > 2 {
+			info.IconName = as[2]
 		}
 	case "mount":
 		v := value.(*gio.Mount)
@@ -237,6 +249,11 @@ func newDiskInfo(value interface{}, t string) DiskInfo {
 		if volume := v.GetVolume(); volume != nil {
 			info.Path = volume.GetIdentifier(gio.VolumeIdentifierKindUnixDevice)
 			info.UUID = volume.GetIdentifier(gio.VolumeIdentifierKindUuid)
+		}
+		icons := v.GetIcon().ToString()
+		as := strings.Split(icons, " ")
+		if len(as) > 2 {
+			info.IconName = as[2]
 		}
 	default:
 		logObject.Infof("'%s' invalid type", t)
