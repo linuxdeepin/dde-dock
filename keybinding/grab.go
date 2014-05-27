@@ -343,8 +343,9 @@ func grabKeyboardAndMouse() {
 				}
 				value := ""
 				modStr = deleteSpecialMod(modStr)
+				logObj.Infof("modStr: %s, keyStr: %s", modStr, keyStr)
 				if len(modStr) > 0 {
-					value = convertModsToKeys(modStr) + keyStr
+					value = convertModsToKeys(modStr) + "-" + keyStr
 				} else {
 					value = keyStr
 				}
