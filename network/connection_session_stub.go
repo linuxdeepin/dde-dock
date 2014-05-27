@@ -17,22 +17,22 @@ func (s *ConnectionSession) updatePropConnectionType() {
 }
 
 func (s *ConnectionSession) updatePropAvailablePages() {
-	s.AvailablePages = s.listPages()
+	s.AvailablePages = listPages(s.data)
 	dbus.NotifyChange(s, "AvailablePages")
 }
 
 func (s *ConnectionSession) updatePropAvailableKeys() {
 	s.AvailableKeys = make(map[string][]string) // clear structure
-	for _, page := range s.listPages() {
+	for _, page := range listPages(s.data) {
 		s.AvailableKeys[page] = s.listKeys(page)
 	}
 	dbus.NotifyChange(s, "AvailableKeys")
 }
 
 func (s *ConnectionSession) updatePropErrors() {
-	for _, page := range s.listPages() {
+	for _, page := range listPages(s.data) {
 		s.Errors[page] = make(sectionErrors)
-		sections := s.pageToSections(page)
+		sections := pageToSections(s.data, page)
 		for _, section := range sections {
 			// check error only section exists
 			if isSettingSectionExists(s.data, section) {

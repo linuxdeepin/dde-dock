@@ -110,6 +110,48 @@ var supportedConnectionTypesInfo = []connectionType{
 	connectionType{connectionVpnVpnc, dlib.Tr("VPN-VPNC (Cisco Compatible VPN)")},
 }
 
+func genConnectionId(connType string) (id string) {
+	var idPrefix string
+	switch connType {
+	default:
+		idPrefix = dlib.Tr("Connection")
+	case connectionWired:
+		idPrefix = dlib.Tr("Wired Connection")
+	case connectionWireless:
+		idPrefix = dlib.Tr("Wireless Connection")
+	case connectionWirelessAdhoc:
+		idPrefix = dlib.Tr("Wireless Ad-Hoc")
+	case connectionWirelessHotspot:
+		idPrefix = dlib.Tr("Wireless Ap-Hotspot")
+	case connectionPppoe:
+		idPrefix = dlib.Tr("PPPoE Connection")
+	case connectionMobileGsm:
+		idPrefix = dlib.Tr("Mobile GSM Connection")
+	case connectionMobileCdma:
+		idPrefix = dlib.Tr("Mobile CDMA Connection")
+	case connectionVpn:
+		idPrefix = dlib.Tr("VPN Connection")
+	case connectionVpnL2tp:
+		idPrefix = dlib.Tr("VPN L2TP")
+	case connectionVpnOpenconnect:
+		idPrefix = dlib.Tr("VPN OpenConnect")
+	case connectionVpnOpenvpn:
+		idPrefix = dlib.Tr("VPN OpenVPN")
+	case connectionVpnPptp:
+		idPrefix = dlib.Tr("VPN PPTP")
+	case connectionVpnVpnc:
+		idPrefix = dlib.Tr("VPN VPNC")
+	}
+	allIds := nmGetConnectionIds()
+	for i := 1; ; i++ {
+		id = idPrefix + " " + strconv.Itoa(i)
+		if !isStringInArray(id, allIds) {
+			break
+		}
+	}
+	return
+}
+
 // Sections
 const (
 	section8021x              = NM_SETTING_802_1X_SETTING_NAME
@@ -140,34 +182,7 @@ const (
 	sectionWirelessSecurity   = NM_SETTING_WIRELESS_SECURITY_SETTING_NAME
 )
 
-// Pages, page is a wrapper of sections for easy to configure
-const (
-	pageGeneral            = "general"              // -> sectionConnection
-	pageEthernet           = "ethernet"             // -> sectionWireed
-	pageMobile             = "mobile"               // -> sectionGsm
-	pageMobileCdma         = "mobile-cdma"          // -> sectionCdma
-	pageWifi               = "wifi"                 // -> sectionWireless
-	pageIPv4               = "ipv4"                 // -> sectionIpv4
-	pageIPv6               = "ipv6"                 // -> sectionIpv6
-	pageSecurity           = "security"             // -> section8021x, sectionWirelessSecurity
-	pagePppoe              = "pppoe"                // -> sectionPppoe
-	pagePpp                = "ppp"                  // -> sectionPpp
-	pageVpnL2tp            = "vpn-l2tp"             // -> sectionVpnL2tp
-	pageVpnL2tpPpp         = "vpn-l2tp-ppp"         // -> sectionVpnL2tpPpp
-	pageVpnL2tpIpsec       = "vpn-l2tp-ipsec"       // -> sectionVpnL2tpIpsec
-	pageVpnOpenconnect     = "vpn-openconnect"      // -> sectionVpnOpenconnect
-	pageVpnOpenvpn         = "vpn-openvpn"          // -> sectionVpnOpenvpn
-	pageVpnOpenvpnAdvanced = "vpn-openvpn-advanced" // -> sectionVpnOpenVpnAdvanced
-	pageVpnOpenvpnSecurity = "vpn-openvpn-security" // -> sectionVpnOpenVpnSecurity
-	pageVpnOpenvpnTlsauth  = "vpn-openvpn-tlsauth"  // -> sectionVpnOpenVpnTlsauth
-	pageVpnOpenvpnProxies  = "vpn-openvpn-proxies"  // -> sectionVpnOpenVpnProxies
-	pageVpnPptp            = "vpn-pptp"             // -> sectionVpnPptp
-	pageVpnPptpPpp         = "vpn-pptp-ppp"         // -> sectionVpnPptpPpp
-	pageVpnVpnc            = "vpn-vpnc"             // -> sectionVpnVpnc
-	pageVpnVpncAdvanced    = "vpn-vpnc-advanced"    // -> sectionVpnVpncAdvanced
-)
-
-// Virtual sections, used for split child sections for vpn connections.
+// Virtual sections, used for vpn connection which is a special key in fact
 const (
 	NM_SETTING_VS_VPN_L2TP_SETTING_NAME             = "vs-vpn-l2tp"
 	NM_SETTING_VS_VPN_L2TP_PPP_SETTING_NAME         = "vs-vpn-l2tp-ppp"
@@ -217,44 +232,199 @@ func getRealSectionName(name string) (realName string) {
 	return
 }
 
-func genConnectionId(connType string) (id string) {
-	var idPrefix string
-	switch connType {
-	default:
-		idPrefix = dlib.Tr("Connection")
+// Pages, page is a wrapper of sections for easy to configure
+const (
+	pageGeneral            = "general"              // -> sectionConnection
+	pageEthernet           = "ethernet"             // -> sectionWireed
+	pageMobile             = "mobile"               // -> sectionGsm
+	pageMobileCdma         = "mobile-cdma"          // -> sectionCdma
+	pageWifi               = "wifi"                 // -> sectionWireless
+	pageIpv4               = "ipv4"                 // -> sectionIpv4
+	pageIpv6               = "ipv6"                 // -> sectionIpv6
+	pageSecurity           = "security"             // -> section8021x, sectionWirelessSecurity
+	pagePppoe              = "pppoe"                // -> sectionPppoe
+	pagePpp                = "ppp"                  // -> sectionPpp
+	pageVpnL2tp            = "vpn-l2tp"             // -> sectionVpnL2tp
+	pageVpnL2tpPpp         = "vpn-l2tp-ppp"         // -> sectionVpnL2tpPpp
+	pageVpnL2tpIpsec       = "vpn-l2tp-ipsec"       // -> sectionVpnL2tpIpsec
+	pageVpnOpenconnect     = "vpn-openconnect"      // -> sectionVpnOpenconnect
+	pageVpnOpenvpn         = "vpn-openvpn"          // -> sectionVpnOpenvpn
+	pageVpnOpenvpnAdvanced = "vpn-openvpn-advanced" // -> sectionVpnOpenVpnAdvanced
+	pageVpnOpenvpnSecurity = "vpn-openvpn-security" // -> sectionVpnOpenVpnSecurity
+	pageVpnOpenvpnTlsauth  = "vpn-openvpn-tlsauth"  // -> sectionVpnOpenVpnTlsauth
+	pageVpnOpenvpnProxies  = "vpn-openvpn-proxies"  // -> sectionVpnOpenVpnProxies
+	pageVpnPptp            = "vpn-pptp"             // -> sectionVpnPptp
+	pageVpnPptpPpp         = "vpn-pptp-ppp"         // -> sectionVpnPptpPpp
+	pageVpnVpnc            = "vpn-vpnc"             // -> sectionVpnVpnc
+	pageVpnVpncAdvanced    = "vpn-vpnc-advanced"    // -> sectionVpnVpncAdvanced
+)
+
+// TODO rename
+// listPages return supported pages for target connection type.
+func listPages(data connectionData) (pages []string) {
+	connectionType := getCustomConnectinoType(data)
+	switch connectionType {
 	case connectionWired:
-		idPrefix = dlib.Tr("Wired Connection")
-	case connectionWireless:
-		idPrefix = dlib.Tr("Wireless Connection")
-	case connectionWirelessAdhoc:
-		idPrefix = dlib.Tr("Wireless Ad-Hoc")
-	case connectionWirelessHotspot:
-		idPrefix = dlib.Tr("Wireless Ap-Hotspot")
-	case connectionPppoe:
-		idPrefix = dlib.Tr("PPPoE Connection")
-	case connectionMobileGsm:
-		idPrefix = dlib.Tr("Mobile GSM Connection")
-	case connectionMobileCdma:
-		idPrefix = dlib.Tr("Mobile CDMA Connection")
-	case connectionVpn:
-		idPrefix = dlib.Tr("VPN Connection")
-	case connectionVpnL2tp:
-		idPrefix = dlib.Tr("VPN L2TP")
-	case connectionVpnOpenconnect:
-		idPrefix = dlib.Tr("VPN OpenConnect")
-	case connectionVpnOpenvpn:
-		idPrefix = dlib.Tr("VPN OpenVPN")
-	case connectionVpnPptp:
-		idPrefix = dlib.Tr("VPN PPTP")
-	case connectionVpnVpnc:
-		idPrefix = dlib.Tr("VPN VPNC")
-	}
-	allIds := nmGetConnectionIds()
-	for i := 1; ; i++ {
-		id = idPrefix + " " + strconv.Itoa(i)
-		if !isStringInArray(id, allIds) {
-			break
+		pages = []string{
+			pageGeneral,
+			pageEthernet,
+			pageIpv4,
+			pageIpv6,
+			pageSecurity,
 		}
+	case connectionWireless:
+		pages = []string{
+			pageGeneral,
+			pageWifi,
+			pageIpv4,
+			pageIpv6,
+			pageSecurity,
+		}
+	case connectionWirelessAdhoc:
+		pages = []string{
+			pageGeneral,
+			pageWifi,
+			pageIpv4,
+			pageIpv6,
+			pageSecurity,
+		}
+	case connectionWirelessHotspot:
+		pages = []string{
+			pageGeneral,
+			pageWifi,
+			pageIpv4,
+			pageIpv6,
+			pageSecurity,
+		}
+	case connectionPppoe:
+		pages = []string{
+			pageGeneral,
+			pageEthernet,
+			pagePppoe,
+			pagePpp,
+			pageIpv4,
+		}
+	case connectionVpnL2tp:
+		pages = []string{
+			pageGeneral,
+			pageVpnL2tp,
+			pageVpnL2tpPpp,
+			pageVpnL2tpIpsec,
+			pageIpv4,
+		}
+	case connectionVpnOpenconnect:
+		pages = []string{
+			pageGeneral,
+			pageVpnOpenconnect,
+			pageIpv4,
+			pageIpv6,
+		}
+	case connectionVpnOpenvpn:
+		pages = []string{
+			pageGeneral,
+			pageVpnOpenvpn,
+			pageVpnOpenvpnAdvanced,
+			pageVpnOpenvpnSecurity,
+			pageVpnOpenvpnProxies,
+			pageIpv4,
+			pageIpv6,
+		}
+		// when connection connection is static key, pageVpnOpenvpnTlsauth is not available
+		if getSettingVpnOpenvpnKeyConnectionType(data) != NM_OPENVPN_CONTYPE_STATIC_KEY {
+			pages = append(pages, pageVpnOpenvpnTlsauth)
+		}
+	case connectionVpnPptp:
+		pages = []string{
+			pageGeneral,
+			pageVpnPptp,
+			pageVpnPptpPpp,
+			pageIpv4,
+		}
+	case connectionVpnVpnc:
+		pages = []string{
+			pageGeneral,
+			pageVpnVpnc,
+			pageVpnVpncAdvanced,
+			pageIpv4,
+		}
+	case connectionMobileGsm:
+		pages = []string{
+			pageGeneral,
+			pageMobile,
+			pagePpp,
+			pageIpv4,
+		}
+	case connectionMobileCdma:
+		pages = []string{
+			pageGeneral,
+			pageMobileCdma,
+			pagePpp,
+			pageIpv4,
+		}
+	}
+	return
+}
+
+func pageToSections(data connectionData, page string) (sections []string) {
+	connectionType := getCustomConnectinoType(data)
+	switch page {
+	default:
+		logger.Error("pageToSections: invalid page name", page)
+	case pageGeneral:
+		sections = []string{sectionConnection}
+	case pageMobile:
+		sections = []string{sectionGsm}
+	case pageMobileCdma:
+		sections = []string{sectionCdma}
+	case pageEthernet:
+		sections = []string{sectionWired}
+	case pageWifi:
+		sections = []string{sectionWireless}
+	case pageIpv4:
+		sections = []string{sectionIpv4}
+	case pageIpv6:
+		sections = []string{sectionIpv6}
+	case pageSecurity:
+		switch connectionType {
+		case connectionWired:
+			sections = []string{section8021x}
+		case connectionWireless, connectionWirelessAdhoc, connectionWirelessHotspot:
+			if isSettingSectionExists(data, section8021x) {
+				sections = []string{sectionWirelessSecurity, section8021x}
+			} else {
+				sections = []string{sectionWirelessSecurity}
+			}
+		}
+	case pagePppoe:
+		sections = []string{sectionPppoe}
+	case pagePpp:
+		sections = []string{sectionPpp}
+	case pageVpnL2tp:
+		sections = []string{sectionVpnL2tp}
+	case pageVpnL2tpPpp:
+		sections = []string{sectionVpnL2tpPpp}
+	case pageVpnL2tpIpsec:
+		sections = []string{sectionVpnL2tpIpsec}
+	case pageVpnOpenconnect:
+		sections = []string{sectionVpnOpenconnect}
+	case pageVpnOpenvpn:
+		sections = []string{sectionVpnOpenvpn}
+	case pageVpnOpenvpnAdvanced:
+		sections = []string{sectionVpnOpenvpnAdvanced}
+	case pageVpnOpenvpnSecurity:
+		sections = []string{sectionVpnOpenvpnSecurity}
+	case pageVpnOpenvpnTlsauth:
+		sections = []string{sectionVpnOpenvpnTlsauth}
+	case pageVpnOpenvpnProxies:
+		sections = []string{sectionVpnOpenvpnProxies}
+	case pageVpnPptp:
+		sections = []string{sectionVpnPptp}
+	case pageVpnPptpPpp:
+		sections = []string{sectionVpnPptpPpp}
+	case pageVpnVpnc:
+		sections = []string{sectionVpnVpnc}
+	case pageVpnVpncAdvanced:
+		sections = []string{sectionVpnVpncAdvanced}
 	}
 	return
 }

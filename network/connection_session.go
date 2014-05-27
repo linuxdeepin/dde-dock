@@ -220,181 +220,14 @@ func (s *ConnectionSession) Close() {
 
 // listSections return all pages related sections
 func (s *ConnectionSession) listSections() (sections []string) {
-	for _, page := range s.listPages() {
-		sections = appendStrArrayUnion(sections, s.pageToSections(page)...)
-	}
-	return
-}
-
-// listPages return supported pages for target connection type.
-func (s *ConnectionSession) listPages() (pages []string) {
-	switch s.Type {
-	case connectionWired:
-		pages = []string{
-			pageGeneral,
-			pageEthernet,
-			pageIPv4,
-			pageIPv6,
-			pageSecurity,
-		}
-	case connectionWireless:
-		pages = []string{
-			pageGeneral,
-			pageWifi,
-			pageIPv4,
-			pageIPv6,
-			pageSecurity,
-		}
-	case connectionWirelessAdhoc:
-		pages = []string{
-			pageGeneral,
-			pageWifi,
-			pageIPv4,
-			pageIPv6,
-			pageSecurity,
-		}
-	case connectionWirelessHotspot:
-		pages = []string{
-			pageGeneral,
-			pageWifi,
-			pageIPv4,
-			pageIPv6,
-			pageSecurity,
-		}
-	case connectionPppoe:
-		pages = []string{
-			pageGeneral,
-			pageEthernet,
-			pagePppoe,
-			pagePpp,
-			pageIPv4,
-		}
-	case connectionVpnL2tp:
-		pages = []string{
-			pageGeneral,
-			pageVpnL2tp,
-			pageVpnL2tpPpp,
-			pageVpnL2tpIpsec,
-			pageIPv4,
-		}
-	case connectionVpnOpenconnect:
-		pages = []string{
-			pageGeneral,
-			pageVpnOpenconnect,
-			pageIPv4,
-			pageIPv6,
-		}
-	case connectionVpnOpenvpn:
-		pages = []string{
-			pageGeneral,
-			pageVpnOpenvpn,
-			pageVpnOpenvpnAdvanced,
-			pageVpnOpenvpnSecurity,
-			pageVpnOpenvpnProxies,
-			pageIPv4,
-			pageIPv6,
-		}
-		// when connection connection is static key, pageVpnOpenvpnTlsauth is not available
-		if getSettingVpnOpenvpnKeyConnectionType(s.data) != NM_OPENVPN_CONTYPE_STATIC_KEY {
-			pages = append(pages, pageVpnOpenvpnTlsauth)
-		}
-	case connectionVpnPptp:
-		pages = []string{
-			pageGeneral,
-			pageVpnPptp,
-			pageVpnPptpPpp,
-			pageIPv4,
-		}
-	case connectionVpnVpnc:
-		pages = []string{
-			pageGeneral,
-			pageVpnVpnc,
-			pageVpnVpncAdvanced,
-			pageIPv4,
-		}
-	case connectionMobileGsm:
-		pages = []string{
-			pageGeneral,
-			pageMobile,
-			pagePpp,
-			pageIPv4,
-		}
-	case connectionMobileCdma:
-		pages = []string{
-			pageGeneral,
-			pageMobileCdma,
-			pagePpp,
-			pageIPv4,
-		}
-	}
-	return
-}
-
-func (s *ConnectionSession) pageToSections(page string) (sections []string) {
-	switch page {
-	default:
-		logger.Error("pageToSections: invalid page name", page)
-	case pageGeneral:
-		sections = []string{sectionConnection}
-	case pageMobile:
-		sections = []string{sectionGsm}
-	case pageMobileCdma:
-		sections = []string{sectionCdma}
-	case pageEthernet:
-		sections = []string{sectionWired}
-	case pageWifi:
-		sections = []string{sectionWireless}
-	case pageIPv4:
-		sections = []string{sectionIpv4}
-	case pageIPv6:
-		sections = []string{sectionIpv6}
-	case pageSecurity:
-		switch s.Type {
-		case connectionWired:
-			sections = []string{section8021x}
-		case connectionWireless, connectionWirelessAdhoc, connectionWirelessHotspot:
-			if isSettingSectionExists(s.data, section8021x) {
-				sections = []string{sectionWirelessSecurity, section8021x}
-			} else {
-				sections = []string{sectionWirelessSecurity}
-			}
-		}
-	case pagePppoe:
-		sections = []string{sectionPppoe}
-	case pagePpp:
-		sections = []string{sectionPpp}
-	case pageVpnL2tp:
-		sections = []string{sectionVpnL2tp}
-	case pageVpnL2tpPpp:
-		sections = []string{sectionVpnL2tpPpp}
-	case pageVpnL2tpIpsec:
-		sections = []string{sectionVpnL2tpIpsec}
-	case pageVpnOpenconnect:
-		sections = []string{sectionVpnOpenconnect}
-	case pageVpnOpenvpn:
-		sections = []string{sectionVpnOpenvpn}
-	case pageVpnOpenvpnAdvanced:
-		sections = []string{sectionVpnOpenvpnAdvanced}
-	case pageVpnOpenvpnSecurity:
-		sections = []string{sectionVpnOpenvpnSecurity}
-	case pageVpnOpenvpnTlsauth:
-		sections = []string{sectionVpnOpenvpnTlsauth}
-	case pageVpnOpenvpnProxies:
-		sections = []string{sectionVpnOpenvpnProxies}
-	case pageVpnPptp:
-		sections = []string{sectionVpnPptp}
-	case pageVpnPptpPpp:
-		sections = []string{sectionVpnPptpPpp}
-	case pageVpnVpnc:
-		sections = []string{sectionVpnVpnc}
-	case pageVpnVpncAdvanced:
-		sections = []string{sectionVpnVpncAdvanced}
+	for _, page := range listPages(s.data) {
+		sections = appendStrArrayUnion(sections, pageToSections(s.data, page)...)
 	}
 	return
 }
 
 func (s *ConnectionSession) getSectionOfPageKey(page, key string) string {
-	sections := s.pageToSections(page)
+	sections := pageToSections(s.data, page)
 	for _, section := range sections {
 		if generalIsKeyInSettingSection(section, key) {
 			return section
@@ -407,7 +240,7 @@ func (s *ConnectionSession) getSectionOfPageKey(page, key string) string {
 // get valid keys of target page, show or hide some keys when special
 // keys toggled
 func (s *ConnectionSession) listKeys(page string) (keys []string) {
-	sections := s.pageToSections(page)
+	sections := pageToSections(s.data, page)
 	for _, section := range sections {
 		keys = appendStrArrayUnion(keys, generalGetSettingAvailableKeys(s.data, section)...)
 	}
@@ -420,7 +253,7 @@ func (s *ConnectionSession) listKeys(page string) (keys []string) {
 // GetAvailableValues return available values marshaled by json for target key.
 func (s *ConnectionSession) GetAvailableValues(page, key string) (valuesJSON string) {
 	var values []kvalue
-	sections := s.pageToSections(page)
+	sections := pageToSections(s.data, page)
 	for _, section := range sections {
 		values = generalGetSettingAvailableValues(s.data, section, key)
 		if len(values) > 0 {
@@ -479,7 +312,7 @@ func (s *ConnectionSession) DebugGetErrors() sessionErrors {
 	return s.Errors
 }
 func (s *ConnectionSession) DebugListKeyDetail() (info string) {
-	for _, page := range s.listPages() {
+	for _, page := range listPages(s.data) {
 		pageData, ok := s.AvailableKeys[page]
 		if !ok {
 			logger.Warning("no available keys for page", page)
