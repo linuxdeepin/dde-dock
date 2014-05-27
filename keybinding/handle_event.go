@@ -75,6 +75,7 @@ func (obj *MediaKeyManager) emitMediaSignal(modStr, keyStr string, press bool) b
 	case "XF86Sleep":
 		obj.PowerSleep(press)
 	case "p", "P":
+		modStr = deleteSpecialMod(modStr)
 		if strings.Contains(modStr, "-") {
 			return false
 		}
@@ -84,6 +85,7 @@ func (obj *MediaKeyManager) emitMediaSignal(modStr, keyStr string, press bool) b
 			return false
 		}
 	case "space":
+		modStr = deleteSpecialMod(modStr)
 		if strings.Contains(modStr, "-") {
 			return false
 		}
@@ -156,9 +158,9 @@ func (obj *Manager) listenKeyEvents() {
 			if e.Detail == 65 {
 				keyStr = "space"
 			}
-			modStr = deleteSpecialMod(modStr)
 			logObj.Infof("KeyStr: %s, modStr: %s", keyStr, modStr)
 			if !GetMediaManager().emitMediaSignal(modStr, keyStr, true) {
+				modStr = deleteSpecialMod(modStr)
 				value := ""
 				if len(modStr) < 1 {
 					value = keyStr
@@ -185,7 +187,7 @@ func (obj *Manager) listenKeyEvents() {
 			if e.Detail == 65 {
 				keyStr = "space"
 			}
-			modStr = deleteSpecialMod(modStr)
+			//modStr = deleteSpecialMod(modStr)
 			GetMediaManager().emitMediaSignal(modStr, keyStr, false)
 		}).Connect(X, X.RootWin())
 }
