@@ -86,7 +86,7 @@ func (m *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPath)
 			if isSettingWirelessMacAddressExists(cdata) {
 				conn.HwAddress = convertMacAddressToString(getSettingWirelessMacAddress(cdata))
 			}
-			switch getCustomConnectinoType(cdata) {
+			switch getCustomConnectionType(cdata) {
 			case connectionWireless:
 				m.connections[connectionWireless] = m.addConnection(m.connections[connectionWireless], conn)
 			case connectionWirelessAdhoc:

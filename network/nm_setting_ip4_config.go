@@ -183,7 +183,7 @@ func getSettingIp4ConfigAvailableValues(data connectionData, key string) (values
 	switch key {
 	case NM_SETTING_IP4_CONFIG_METHOD:
 		// TODO be careful, ipv4 method would be limited for different connection type
-		// switch getCustomConnectinoType(data) {
+		// switch getCustomConnectionType(data) {
 		// case typeWired:
 		// case typeWireless:
 		// case typePppoe:

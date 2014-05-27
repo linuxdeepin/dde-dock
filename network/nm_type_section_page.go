@@ -262,7 +262,7 @@ const (
 // TODO rename
 // listPages return supported pages for target connection type.
 func listPages(data connectionData) (pages []string) {
-	connectionType := getCustomConnectinoType(data)
+	connectionType := getCustomConnectionType(data)
 	switch connectionType {
 	case connectionWired:
 		pages = []string{
@@ -366,7 +366,7 @@ func listPages(data connectionData) (pages []string) {
 }
 
 func pageToSections(data connectionData, page string) (sections []string) {
-	connectionType := getCustomConnectinoType(data)
+	connectionType := getCustomConnectionType(data)
 	switch page {
 	default:
 		logger.Error("pageToSections: invalid page name", page)

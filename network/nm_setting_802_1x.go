@@ -61,7 +61,7 @@ func init() {
 
 // Get available keys
 func getSetting8021xAvailableKeys(data connectionData) (keys []string) {
-	switch getCustomConnectinoType(data) {
+	switch getCustomConnectionType(data) {
 	case connectionWired:
 		keys = []string{NM_SETTING_VK_802_1X_ENABLE}
 		if !isSettingSectionExists(data, section8021x) {
@@ -142,7 +142,7 @@ func is8021xNeedShowPassword(data connectionData) bool {
 func getSetting8021xAvailableValues(data connectionData, key string) (values []kvalue) {
 	switch key {
 	case NM_SETTING_802_1X_EAP:
-		if getCustomConnectinoType(data) == connectionWired {
+		if getCustomConnectionType(data) == connectionWired {
 			values = []kvalue{
 				kvalue{"tls", dlib.Tr("TLS")},
 				kvalue{"md5", dlib.Tr("MD5")},

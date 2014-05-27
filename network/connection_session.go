@@ -103,7 +103,7 @@ func NewConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 	if err != nil {
 		return nil, err
 	}
-	s.Type = getCustomConnectinoType(s.data)
+	s.Type = getCustomConnectionType(s.data)
 
 	s.fixValues()
 

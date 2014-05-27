@@ -203,7 +203,7 @@ func init() {
 					cc, _ := nm.NewSettingsConnection("org.freedesktop.NetworkManager", ac.Connection.Get())
 					data, _ := cc.GetSettings()
 					var icon string
-					switch getCustomConnectinoType(data) {
+					switch getCustomConnectionType(data) {
 					case connectionWired:
 						icon = "notification-network-ethernet-connected"
 					case connectionWireless:
