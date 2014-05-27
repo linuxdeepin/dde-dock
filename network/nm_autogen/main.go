@@ -10,13 +10,13 @@ import (
 
 var funcMap = template.FuncMap{
 	"ToCaplitalize":          ToCaplitalize,
-	"ToFieldFuncBaseName":    ToFieldFuncBaseName,
+	"ToSectionFuncBaseName":  ToSectionFuncBaseName,
 	"ToKeyFuncBaseName":      ToKeyFuncBaseName,
 	"ToKeyTypeRealData":      ToKeyTypeRealData,
 	"ToKeyTypeDefaultValue":  ToKeyTypeDefaultValue,
 	"IfNeedCheckValueLength": IfNeedCheckValueLength,
-	"GetAllVkFields":         GetAllVkFields,
-	"GetAllVkFieldKeys":      GetAllVkFieldKeys,
+	"GetAllVkSections":       GetAllVkSections,
+	"GetAllVkSectionKeys":    GetAllVkSectionKeys,
 	// "IsVkNeedLogicSetter":       IsVkNeedLogicSetter,
 	"ToKeyTypeShortName":          ToKeyTypeShortName,
 	"ToKeyDisplayName":            ToKeyDisplayName,
@@ -43,16 +43,16 @@ var (
 	argFrontEnd          bool
 	nmSettingUtilsFile   = path.Join(backEndDir, "nm_setting_general_autogen.go")
 	nmSettingVkFile      = path.Join(backEndDir, "nm_setting_virtual_key_autogen.go")
-	frontEndConnPropFile = path.Join(frontEndDir, "BaseConnectionProperties.qml")
+	frontEndConnPropFile = path.Join(frontEndDir, "BaseConnectionEdit.qml")
 	nmSettings           []NMSettingStruct
 	nmSettingVks         []NMSettingVkStruct
 	nmSettingPages       []NMSettingPageStruct
 )
 
 type NMSettingStruct struct {
-	FieldName  string // such as "NM_SETTING_CONNECTION_SETTING_NAME"
-	FieldValue string // such as "connection"
-	Keys       []NMSettingKeyStruct
+	SectionName  string // such as "NM_SETTING_CONNECTION_SETTING_NAME"
+	SectionValue string // such as "connection"
+	Keys         []NMSettingKeyStruct
 }
 
 type NMSettingKeyStruct struct {
@@ -72,7 +72,7 @@ type NMSettingVkStruct struct {
 	Name           string // such as "NM_SETTING_VK_802_1X_EAP"
 	Value          string // such as "vk-eap"
 	Type           string // such as "ktypeString"
-	RelatedField   string // such as "NM_SETTING_802_1X_SETTING_NAME"
+	RelatedSection string // such as "NM_SETTING_802_1X_SETTING_NAME"
 	RelatedKey     string // such as "NM_SETTING_802_1X_EAP"
 	EnableWrapper  bool   // check if the virtual key is a wrapper just to enable target key
 	UsedByFrontEnd bool   // check if is used by front-end
@@ -83,27 +83,27 @@ type NMSettingVkStruct struct {
 }
 
 type NMSettingPageStruct struct {
-	Ignore        bool
-	Name          string
-	DisplayName   string
-	RelatedFields []string
+	Ignore          bool
+	Name            string
+	DisplayName     string
+	RelatedSections []string
 }
 
 func genNMSettingCode(nmSetting NMSettingStruct) (content string) {
 	content = fileHeader
-	content += genTpl(nmSetting, tplGetKeyType)          // get key type
-	content += genTpl(nmSetting, tplIsKeyInSettingField) // check is key in current field
-	content += genTpl(nmSetting, tplGetDefaultValue)     // get default value
-	content += genTpl(nmSetting, tplGeneralGetterJSON)   // general json getter
-	content += genTpl(nmSetting, tplGeneralSetterJSON)   // general json setter
-	content += genTpl(nmSetting, tplCheckExists)         // check if key exists
-	content += genTpl(nmSetting, tplEnsureNoEmpty)       // ensure field and key exists and not empty
-	content += genTpl(nmSetting, tplGetter)              // getter
-	content += genTpl(nmSetting, tplSetter)              // setter
-	content += genTpl(nmSetting, tplJSONGetter)          // json getter
-	content += genTpl(nmSetting, tplJSONSetter)          // json setter
-	content += genTpl(nmSetting, tplLogicJSONSetter)     // logic json setter
-	content += genTpl(nmSetting, tplRemover)             // remover
+	content += genTpl(nmSetting, tplGetKeyType)            // get key type
+	content += genTpl(nmSetting, tplIsKeyInSettingSection) // check is key in current section
+	content += genTpl(nmSetting, tplGetDefaultValue)       // get default value
+	content += genTpl(nmSetting, tplGeneralGetterJSON)     // general json getter
+	content += genTpl(nmSetting, tplGeneralSetterJSON)     // general json setter
+	content += genTpl(nmSetting, tplCheckExists)           // check if key exists
+	content += genTpl(nmSetting, tplEnsureNoEmpty)         // ensure section and key exists and not empty
+	content += genTpl(nmSetting, tplGetter)                // getter
+	content += genTpl(nmSetting, tplSetter)                // setter
+	content += genTpl(nmSetting, tplJSONGetter)            // json getter
+	content += genTpl(nmSetting, tplJSONSetter)            // json setter
+	content += genTpl(nmSetting, tplLogicJSONSetter)       // logic json setter
+	content += genTpl(nmSetting, tplRemover)               // remover
 	// TODO get avaiable values
 	return
 }
@@ -146,10 +146,10 @@ func genTpl(data interface{}, tplstr string) (content string) {
 }
 
 func genBackEndCode() {
-	// back-end code, echo nm setting fields
+	// back-end code, echo nm setting sections
 	for _, nmSetting := range nmSettings {
 		autogenContent := genNMSettingCode(nmSetting)
-		backEndFile := getBackEndFilePath(nmSetting.FieldName)
+		backEndFile := getBackEndFilePath(nmSetting.SectionName)
 		writeOrDisplayResultForBackEnd(backEndFile, autogenContent)
 	}
 

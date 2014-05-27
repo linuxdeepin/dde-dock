@@ -12,30 +12,30 @@ const (
 	NM_KEY_ERROR_IP4_ADDRESSES_STRUCT = "echo IPv4 address structure is composed of 3 32-bit values, address, prefix and gateway"
 	// NM_KEY_ERROR_IP4_ADDRESSES_PREFIX = "IPv4 prefix's value should be 1-32"
 	NM_KEY_ERROR_IP6_METHOD_CONFLICT = `%s cannot be used with the 'shared', 'link-local', or 'ignore' methods`
-	NM_KEY_ERROR_MISSING_SECTION     = "missing %s field section"
-	NM_KEY_ERROR_EMPTY_SECTION       = "field section %s is empty"
+	NM_KEY_ERROR_MISSING_SECTION     = "missing section %s"
+	NM_KEY_ERROR_EMPTY_SECTION       = "section %s is empty"
 	NM_KEY_ERROR_MISSING_DEPENDS_KEY = "missing depends key %s"
 )
 
-func rememberError(errs fieldErrors, field, key, errMsg string) {
-	relatedVks := getRelatedVirtualKeys(field, key)
+func rememberError(errs sectionErrors, section, key, errMsg string) {
+	relatedVks := getRelatedVirtualKeys(section, key)
 	if len(relatedVks) > 0 {
-		rememberVkError(errs, field, key, errMsg)
+		rememberVkError(errs, section, key, errMsg)
 		return
 	}
 	doRememberError(errs, key, errMsg)
 }
 
-func rememberVkError(errs fieldErrors, field, key, errMsg string) {
-	vks := getRelatedVirtualKeys(field, key)
+func rememberVkError(errs sectionErrors, section, key, errMsg string) {
+	vks := getRelatedVirtualKeys(section, key)
 	for _, vk := range vks {
-		if !isOptionalChildVirtualKeys(field, vk) {
+		if !isOptionalChildVirtualKeys(section, vk) {
 			doRememberError(errs, vk, errMsg)
 		}
 	}
 }
 
-func doRememberError(errs fieldErrors, key, errMsg string) {
+func doRememberError(errs sectionErrors, key, errMsg string) {
 	if _, ok := errs[key]; ok {
 		// error already exists for this key
 		return
@@ -44,16 +44,16 @@ func doRememberError(errs fieldErrors, key, errMsg string) {
 }
 
 // start with "file://", end with null byte
-func ensureByteArrayUriPathExists(errs fieldErrors, field, key string, bytePath []byte, limitedExts ...string) {
+func ensureByteArrayUriPathExists(errs sectionErrors, section, key string, bytePath []byte, limitedExts ...string) {
 	path := byteArrayToStrPath(bytePath)
 	if !isUriPath(path) {
-		rememberError(errs, field, key, NM_KEY_ERROR_INVALID_VALUE)
+		rememberError(errs, section, key, NM_KEY_ERROR_INVALID_VALUE)
 		return
 	}
-	ensureFileExists(errs, field, key, path, limitedExts...)
+	ensureFileExists(errs, section, key, path, limitedExts...)
 }
 
-func ensureFileExists(errs fieldErrors, field, key, file string, limitedExts ...string) {
+func ensureFileExists(errs sectionErrors, section, key, file string, limitedExts ...string) {
 	file = toLocalPath(file)
 	// ensure file suffix with target extension
 	if len(limitedExts) > 0 {
@@ -66,10 +66,10 @@ func ensureFileExists(errs fieldErrors, field, key, file string, limitedExts ...
 		}
 		if !match {
 			// TODO
-			// rememberError(errs, field, key, NM_KEY_ERROR_INVALID_VALUE)
+			// rememberError(errs, section, key, NM_KEY_ERROR_INVALID_VALUE)
 		}
 	}
 	if !isFileExists(file) {
-		rememberError(errs, field, key, NM_KEY_ERROR_INVALID_VALUE)
+		rememberError(errs, section, key, NM_KEY_ERROR_INVALID_VALUE)
 	}
 }

@@ -22,7 +22,7 @@ func getSettingCdmaKeyType(key string) (t ktype) {
 	return
 }
 
-// Check is key in current setting field
+// Check is key in current setting section
 func isKeyInSettingCdma(key string) bool {
 	switch key {
 	case NM_SETTING_CDMA_NUMBER:
@@ -102,17 +102,17 @@ func isSettingCdmaPasswordFlagsExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_CDMA_SETTING_NAME, NM_SETTING_CDMA_PASSWORD_FLAGS)
 }
 
-// Ensure field and key exists and not empty
-func ensureFieldSettingCdmaExists(data connectionData, errs fieldErrors, relatedKey string) {
-	if !isSettingFieldExists(data, NM_SETTING_CDMA_SETTING_NAME) {
+// Ensure section and key exists and not empty
+func ensureSectionSettingCdmaExists(data connectionData, errs sectionErrors, relatedKey string) {
+	if !isSettingSectionExists(data, NM_SETTING_CDMA_SETTING_NAME) {
 		rememberError(errs, relatedKey, NM_SETTING_CDMA_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_CDMA_SETTING_NAME))
 	}
-	fieldData, _ := data[NM_SETTING_CDMA_SETTING_NAME]
-	if len(fieldData) == 0 {
+	sectionData, _ := data[NM_SETTING_CDMA_SETTING_NAME]
+	if len(sectionData) == 0 {
 		rememberError(errs, relatedKey, NM_SETTING_CDMA_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_CDMA_SETTING_NAME))
 	}
 }
-func ensureSettingCdmaNumberNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingCdmaNumberNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingCdmaNumberExists(data) {
 		rememberError(errs, NM_SETTING_CDMA_SETTING_NAME, NM_SETTING_CDMA_NUMBER, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -121,7 +121,7 @@ func ensureSettingCdmaNumberNoEmpty(data connectionData, errs fieldErrors) {
 		rememberError(errs, NM_SETTING_CDMA_SETTING_NAME, NM_SETTING_CDMA_NUMBER, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingCdmaUsernameNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingCdmaUsernameNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingCdmaUsernameExists(data) {
 		rememberError(errs, NM_SETTING_CDMA_SETTING_NAME, NM_SETTING_CDMA_USERNAME, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -130,7 +130,7 @@ func ensureSettingCdmaUsernameNoEmpty(data connectionData, errs fieldErrors) {
 		rememberError(errs, NM_SETTING_CDMA_SETTING_NAME, NM_SETTING_CDMA_USERNAME, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingCdmaPasswordNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingCdmaPasswordNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingCdmaPasswordExists(data) {
 		rememberError(errs, NM_SETTING_CDMA_SETTING_NAME, NM_SETTING_CDMA_PASSWORD, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -139,7 +139,7 @@ func ensureSettingCdmaPasswordNoEmpty(data connectionData, errs fieldErrors) {
 		rememberError(errs, NM_SETTING_CDMA_SETTING_NAME, NM_SETTING_CDMA_PASSWORD, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingCdmaPasswordFlagsNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingCdmaPasswordFlagsNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingCdmaPasswordFlagsExists(data) {
 		rememberError(errs, NM_SETTING_CDMA_SETTING_NAME, NM_SETTING_CDMA_PASSWORD_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
 	}

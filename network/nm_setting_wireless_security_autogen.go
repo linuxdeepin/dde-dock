@@ -48,7 +48,7 @@ func getSettingWirelessSecurityKeyType(key string) (t ktype) {
 	return
 }
 
-// Check is key in current setting field
+// Check is key in current setting section
 func isKeyInSettingWirelessSecurity(key string) bool {
 	switch key {
 	case NM_SETTING_WIRELESS_SECURITY_KEY_MGMT:
@@ -271,17 +271,17 @@ func isSettingWirelessSecurityPskFlagsExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS)
 }
 
-// Ensure field and key exists and not empty
-func ensureFieldSettingWirelessSecurityExists(data connectionData, errs fieldErrors, relatedKey string) {
-	if !isSettingFieldExists(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME) {
+// Ensure section and key exists and not empty
+func ensureSectionSettingWirelessSecurityExists(data connectionData, errs sectionErrors, relatedKey string) {
+	if !isSettingSectionExists(data, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME) {
 		rememberError(errs, relatedKey, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME))
 	}
-	fieldData, _ := data[NM_SETTING_WIRELESS_SECURITY_SETTING_NAME]
-	if len(fieldData) == 0 {
+	sectionData, _ := data[NM_SETTING_WIRELESS_SECURITY_SETTING_NAME]
+	if len(sectionData) == 0 {
 		rememberError(errs, relatedKey, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME))
 	}
 }
-func ensureSettingWirelessSecurityKeyMgmtNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingWirelessSecurityKeyMgmtNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingWirelessSecurityKeyMgmtExists(data) {
 		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -290,12 +290,12 @@ func ensureSettingWirelessSecurityKeyMgmtNoEmpty(data connectionData, errs field
 		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingWirelessSecurityWepTxKeyidxNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingWirelessSecurityWepTxKeyidxNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingWirelessSecurityWepTxKeyidxExists(data) {
 		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_TX_KEYIDX, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingWirelessSecurityAuthAlgNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingWirelessSecurityAuthAlgNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingWirelessSecurityAuthAlgExists(data) {
 		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_AUTH_ALG, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -304,7 +304,7 @@ func ensureSettingWirelessSecurityAuthAlgNoEmpty(data connectionData, errs field
 		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_AUTH_ALG, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingWirelessSecurityProtoNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingWirelessSecurityProtoNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingWirelessSecurityProtoExists(data) {
 		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PROTO, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -313,7 +313,7 @@ func ensureSettingWirelessSecurityProtoNoEmpty(data connectionData, errs fieldEr
 		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PROTO, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingWirelessSecurityPairwiseNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingWirelessSecurityPairwiseNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingWirelessSecurityPairwiseExists(data) {
 		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PAIRWISE, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -322,7 +322,7 @@ func ensureSettingWirelessSecurityPairwiseNoEmpty(data connectionData, errs fiel
 		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PAIRWISE, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingWirelessSecurityGroupNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingWirelessSecurityGroupNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingWirelessSecurityGroupExists(data) {
 		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_GROUP, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -331,7 +331,7 @@ func ensureSettingWirelessSecurityGroupNoEmpty(data connectionData, errs fieldEr
 		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_GROUP, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingWirelessSecurityLeapUsernameNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingWirelessSecurityLeapUsernameNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingWirelessSecurityLeapUsernameExists(data) {
 		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -340,7 +340,7 @@ func ensureSettingWirelessSecurityLeapUsernameNoEmpty(data connectionData, errs 
 		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingWirelessSecurityLeapPasswordNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingWirelessSecurityLeapPasswordNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingWirelessSecurityLeapPasswordExists(data) {
 		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -349,12 +349,12 @@ func ensureSettingWirelessSecurityLeapPasswordNoEmpty(data connectionData, errs 
 		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingWirelessSecurityLeapPasswordFlagsNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingWirelessSecurityLeapPasswordFlagsNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingWirelessSecurityLeapPasswordFlagsExists(data) {
 		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingWirelessSecurityWepKey0NoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingWirelessSecurityWepKey0NoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingWirelessSecurityWepKey0Exists(data) {
 		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY0, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -363,7 +363,7 @@ func ensureSettingWirelessSecurityWepKey0NoEmpty(data connectionData, errs field
 		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY0, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingWirelessSecurityWepKey1NoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingWirelessSecurityWepKey1NoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingWirelessSecurityWepKey1Exists(data) {
 		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY1, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -372,7 +372,7 @@ func ensureSettingWirelessSecurityWepKey1NoEmpty(data connectionData, errs field
 		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY1, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingWirelessSecurityWepKey2NoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingWirelessSecurityWepKey2NoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingWirelessSecurityWepKey2Exists(data) {
 		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY2, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -381,7 +381,7 @@ func ensureSettingWirelessSecurityWepKey2NoEmpty(data connectionData, errs field
 		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY2, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingWirelessSecurityWepKey3NoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingWirelessSecurityWepKey3NoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingWirelessSecurityWepKey3Exists(data) {
 		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY3, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -390,17 +390,17 @@ func ensureSettingWirelessSecurityWepKey3NoEmpty(data connectionData, errs field
 		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY3, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingWirelessSecurityWepKeyFlagsNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingWirelessSecurityWepKeyFlagsNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingWirelessSecurityWepKeyFlagsExists(data) {
 		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingWirelessSecurityWepKeyTypeNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingWirelessSecurityWepKeyTypeNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingWirelessSecurityWepKeyTypeExists(data) {
 		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingWirelessSecurityPskNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingWirelessSecurityPskNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingWirelessSecurityPskExists(data) {
 		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PSK, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -409,7 +409,7 @@ func ensureSettingWirelessSecurityPskNoEmpty(data connectionData, errs fieldErro
 		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PSK, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingWirelessSecurityPskFlagsNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingWirelessSecurityPskFlagsNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingWirelessSecurityPskFlagsExists(data) {
 		rememberError(errs, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
 	}

@@ -85,17 +85,17 @@ const (
 
 // Get available keys
 func getSettingConnectionAvailableKeys(data connectionData) (keys []string) {
-	keys = appendAvailableKeys(data, keys, fieldConnection, NM_SETTING_CONNECTION_ID)
-	keys = appendAvailableKeys(data, keys, fieldConnection, NM_SETTING_CONNECTION_PERMISSIONS)
+	keys = appendAvailableKeys(data, keys, sectionConnection, NM_SETTING_CONNECTION_ID)
+	keys = appendAvailableKeys(data, keys, sectionConnection, NM_SETTING_CONNECTION_PERMISSIONS)
 
 	// auto-connect only available for target connection types
 	switch getSettingConnectionType(data) {
 	case connectionWired:
-		keys = appendAvailableKeys(data, keys, fieldConnection, NM_SETTING_CONNECTION_AUTOCONNECT)
+		keys = appendAvailableKeys(data, keys, sectionConnection, NM_SETTING_CONNECTION_AUTOCONNECT)
 	case connectionWireless:
-		keys = appendAvailableKeys(data, keys, fieldConnection, NM_SETTING_CONNECTION_AUTOCONNECT)
+		keys = appendAvailableKeys(data, keys, sectionConnection, NM_SETTING_CONNECTION_AUTOCONNECT)
 	case connectionPppoe:
-		keys = appendAvailableKeys(data, keys, fieldConnection, NM_SETTING_CONNECTION_AUTOCONNECT)
+		keys = appendAvailableKeys(data, keys, sectionConnection, NM_SETTING_CONNECTION_AUTOCONNECT)
 	case connectionVpn:
 	}
 	return
@@ -107,7 +107,7 @@ func getSettingConnectionAvailableValues(data connectionData, key string) (value
 }
 
 // Check whether the values are correct
-func checkSettingConnectionValues(data connectionData) (errs fieldErrors) {
+func checkSettingConnectionValues(data connectionData) (errs sectionErrors) {
 	errs = make(map[string]string)
 
 	// check id

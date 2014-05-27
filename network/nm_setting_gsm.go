@@ -59,7 +59,7 @@ const (
 func newMobileConnectionData(id, uuid, serviceType string) (data connectionData) {
 	data = make(connectionData)
 
-	addSettingField(data, fieldConnection)
+	addSettingSection(data, sectionConnection)
 	setSettingConnectionId(data, id)
 	setSettingConnectionUuid(data, uuid)
 	setSettingConnectionAutoconnect(data, false)
@@ -67,19 +67,19 @@ func newMobileConnectionData(id, uuid, serviceType string) (data connectionData)
 
 	logicSetSettingVkMobileServiceType(data, serviceType)
 
-	addSettingField(data, fieldPpp)
+	addSettingSection(data, sectionPpp)
 
-	addSettingField(data, fieldSerial)
+	addSettingSection(data, sectionSerial)
 	setSettingSerialBaud(data, 115200)
 
-	initSettingFieldIpv4(data)
+	initSettingSectionIpv4(data)
 
 	return
 }
 
-func initSettingFieldGsm(data connectionData) {
+func initSettingSectionGsm(data connectionData) {
 	setSettingConnectionType(data, NM_SETTING_GSM_SETTING_NAME)
-	addSettingField(data, fieldGsm)
+	addSettingSection(data, sectionGsm)
 	setSettingGsmPasswordFlags(data, NM_SETTING_SECRET_FLAG_NONE)
 	setSettingGsmPinFlags(data, NM_SETTING_SECRET_FLAG_NONE)
 }
@@ -87,17 +87,17 @@ func initSettingFieldGsm(data connectionData) {
 // Get available keys
 func getSettingGsmAvailableKeys(data connectionData) (keys []string) {
 	keys = append(keys, NM_SETTING_VK_MOBILE_SERVICE_TYPE)
-	keys = appendAvailableKeys(data, keys, fieldGsm, NM_SETTING_GSM_NUMBER)
-	keys = appendAvailableKeys(data, keys, fieldGsm, NM_SETTING_GSM_USERNAME)
-	keys = appendAvailableKeys(data, keys, fieldGsm, NM_SETTING_GSM_PASSWORD_FLAGS)
+	keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_NUMBER)
+	keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_USERNAME)
+	keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_PASSWORD_FLAGS)
 	if isGsmNeedShowPassword(data) {
-		keys = appendAvailableKeys(data, keys, fieldGsm, NM_SETTING_GSM_PASSWORD)
+		keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_PASSWORD)
 	}
-	keys = appendAvailableKeys(data, keys, fieldGsm, NM_SETTING_GSM_APN)
-	keys = appendAvailableKeys(data, keys, fieldGsm, NM_SETTING_GSM_NETWORK_ID)
-	keys = appendAvailableKeys(data, keys, fieldGsm, NM_SETTING_GSM_NETWORK_TYPE)
-	keys = appendAvailableKeys(data, keys, fieldGsm, NM_SETTING_GSM_HOME_ONLY)
-	keys = appendAvailableKeys(data, keys, fieldGsm, NM_SETTING_GSM_PIN)
+	keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_APN)
+	keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_NETWORK_ID)
+	keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_NETWORK_TYPE)
+	keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_HOME_ONLY)
+	keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_PIN)
 	return
 }
 func isGsmNeedShowPassword(data connectionData) bool {
@@ -141,7 +141,7 @@ func getSettingGsmAvailableValues(data connectionData, key string) (values []kva
 }
 
 // Check whether the values are correct
-func checkSettingGsmValues(data connectionData) (errs fieldErrors) {
+func checkSettingGsmValues(data connectionData) (errs sectionErrors) {
 	errs = make(map[string]string)
 	// TODO
 	ensureSettingGsmNumberNoEmpty(data, errs)
@@ -150,23 +150,23 @@ func checkSettingGsmValues(data connectionData) (errs fieldErrors) {
 
 // Virtual key
 func getSettingVkMobileServiceType(data connectionData) (serviceType string) {
-	if isSettingFieldExists(data, NM_SETTING_GSM_SETTING_NAME) {
+	if isSettingSectionExists(data, NM_SETTING_GSM_SETTING_NAME) {
 		serviceType = mobileServiceGsm
-	} else if isSettingFieldExists(data, NM_SETTING_CDMA_SETTING_NAME) {
+	} else if isSettingSectionExists(data, NM_SETTING_CDMA_SETTING_NAME) {
 		serviceType = mobileServiceCdma
 	} else {
-		logger.Error("get mobile service type failed, neither gsm field nor cdma field")
+		logger.Error("get mobile service type failed, neither gsm section nor cdma section")
 	}
 	return
 }
 func logicSetSettingVkMobileServiceType(data connectionData, serviceType string) (err error) {
 	switch serviceType {
 	case mobileServiceGsm:
-		removeSettingField(data, fieldCdma)
-		initSettingFieldGsm(data)
+		removeSettingSection(data, sectionCdma)
+		initSettingSectionGsm(data)
 	case mobileServiceCdma:
-		removeSettingField(data, fieldGsm)
-		initSettingFieldCdma(data)
+		removeSettingSection(data, sectionGsm)
+		initSettingSectionCdma(data)
 	default:
 		err = fmt.Errorf("invalid mobile service type", serviceType)
 	}

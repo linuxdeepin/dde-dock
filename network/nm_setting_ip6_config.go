@@ -32,8 +32,8 @@ const (
 	NM_SETTING_IP6_CONFIG_METHOD_SHARED     = "shared"
 )
 
-func initSettingFieldIpv6(data connectionData) {
-	addSettingField(data, fieldIpv6)
+func initSettingSectionIpv6(data connectionData) {
+	addSettingSection(data, sectionIpv6)
 	setSettingIp6ConfigMethod(data, NM_SETTING_IP6_CONFIG_METHOD_AUTO)
 }
 
@@ -56,18 +56,18 @@ func getSettingIp6ConfigAvailableKeys(data connectionData) (keys []string) {
 	default:
 		logger.Error("ip6 config method is invalid:", method)
 	case NM_SETTING_IP6_CONFIG_METHOD_IGNORE:
-		keys = appendAvailableKeys(data, keys, fieldIpv6, NM_SETTING_IP6_CONFIG_METHOD)
+		keys = appendAvailableKeys(data, keys, sectionIpv6, NM_SETTING_IP6_CONFIG_METHOD)
 	case NM_SETTING_IP6_CONFIG_METHOD_AUTO:
-		keys = appendAvailableKeys(data, keys, fieldIpv6, NM_SETTING_IP6_CONFIG_METHOD)
-		keys = appendAvailableKeys(data, keys, fieldIpv6, NM_SETTING_IP6_CONFIG_DNS)
+		keys = appendAvailableKeys(data, keys, sectionIpv6, NM_SETTING_IP6_CONFIG_METHOD)
+		keys = appendAvailableKeys(data, keys, sectionIpv6, NM_SETTING_IP6_CONFIG_DNS)
 	case NM_SETTING_IP6_CONFIG_METHOD_DHCP: // ignore
-		keys = appendAvailableKeys(data, keys, fieldIpv6, NM_SETTING_IP6_CONFIG_METHOD)
-		keys = appendAvailableKeys(data, keys, fieldIpv6, NM_SETTING_IP6_CONFIG_DNS)
+		keys = appendAvailableKeys(data, keys, sectionIpv6, NM_SETTING_IP6_CONFIG_METHOD)
+		keys = appendAvailableKeys(data, keys, sectionIpv6, NM_SETTING_IP6_CONFIG_DNS)
 	case NM_SETTING_IP6_CONFIG_METHOD_LINK_LOCAL: // ignore
 	case NM_SETTING_IP6_CONFIG_METHOD_MANUAL:
-		keys = appendAvailableKeys(data, keys, fieldIpv6, NM_SETTING_IP6_CONFIG_METHOD)
-		keys = appendAvailableKeys(data, keys, fieldIpv6, NM_SETTING_IP6_CONFIG_DNS)
-		keys = appendAvailableKeys(data, keys, fieldIpv6, NM_SETTING_IP6_CONFIG_ADDRESSES)
+		keys = appendAvailableKeys(data, keys, sectionIpv6, NM_SETTING_IP6_CONFIG_METHOD)
+		keys = appendAvailableKeys(data, keys, sectionIpv6, NM_SETTING_IP6_CONFIG_DNS)
+		keys = appendAvailableKeys(data, keys, sectionIpv6, NM_SETTING_IP6_CONFIG_ADDRESSES)
 	case NM_SETTING_IP6_CONFIG_METHOD_SHARED: // ignore
 	}
 	return
@@ -100,14 +100,14 @@ func getSettingIp6ConfigAvailableValues(data connectionData, key string) (values
 }
 
 // Check whether the values are correct
-func checkSettingIp6ConfigValues(data connectionData) (errs fieldErrors) {
+func checkSettingIp6ConfigValues(data connectionData) (errs sectionErrors) {
 	errs = make(map[string]string)
 
 	// check method
 	ensureSettingIp6ConfigMethodNoEmpty(data, errs)
 	switch getSettingIp6ConfigMethod(data) {
 	default:
-		rememberError(errs, fieldIpv6, NM_SETTING_IP6_CONFIG_METHOD, NM_KEY_ERROR_INVALID_VALUE)
+		rememberError(errs, sectionIpv6, NM_SETTING_IP6_CONFIG_METHOD, NM_KEY_ERROR_INVALID_VALUE)
 		return
 	case NM_SETTING_IP6_CONFIG_METHOD_IGNORE: // ignore
 		checkSettingIp6MethodConflict(data, errs)
@@ -132,43 +132,43 @@ func checkSettingIp6ConfigValues(data connectionData) (errs fieldErrors) {
 	return
 }
 
-func checkSettingIp6MethodConflict(data connectionData, errs fieldErrors) {
+func checkSettingIp6MethodConflict(data connectionData, errs sectionErrors) {
 	// check dns
 	if isSettingIp6ConfigDnsExists(data) {
-		rememberError(errs, fieldIpv6, NM_SETTING_IP6_CONFIG_DNS, fmt.Sprintf(NM_KEY_ERROR_IP6_METHOD_CONFLICT, NM_SETTING_IP6_CONFIG_DNS))
+		rememberError(errs, sectionIpv6, NM_SETTING_IP6_CONFIG_DNS, fmt.Sprintf(NM_KEY_ERROR_IP6_METHOD_CONFLICT, NM_SETTING_IP6_CONFIG_DNS))
 	}
 	// check dns search
 	if isSettingIp6ConfigDnsSearchExists(data) {
-		rememberError(errs, fieldIpv6, NM_SETTING_IP6_CONFIG_DNS_SEARCH, fmt.Sprintf(NM_KEY_ERROR_IP6_METHOD_CONFLICT, NM_SETTING_IP6_CONFIG_DNS_SEARCH))
+		rememberError(errs, sectionIpv6, NM_SETTING_IP6_CONFIG_DNS_SEARCH, fmt.Sprintf(NM_KEY_ERROR_IP6_METHOD_CONFLICT, NM_SETTING_IP6_CONFIG_DNS_SEARCH))
 	}
 	// check address
 	if isSettingIp6ConfigAddressesExists(data) {
-		rememberError(errs, fieldIpv6, NM_SETTING_IP6_CONFIG_ADDRESSES, fmt.Sprintf(NM_KEY_ERROR_IP6_METHOD_CONFLICT, NM_SETTING_IP6_CONFIG_ADDRESSES))
+		rememberError(errs, sectionIpv6, NM_SETTING_IP6_CONFIG_ADDRESSES, fmt.Sprintf(NM_KEY_ERROR_IP6_METHOD_CONFLICT, NM_SETTING_IP6_CONFIG_ADDRESSES))
 	}
 	// check route
 	if isSettingIp6ConfigRoutesExists(data) {
-		rememberError(errs, fieldIpv6, NM_SETTING_IP6_CONFIG_ROUTES, fmt.Sprintf(NM_KEY_ERROR_IP6_METHOD_CONFLICT, NM_SETTING_IP6_CONFIG_ROUTES))
+		rememberError(errs, sectionIpv6, NM_SETTING_IP6_CONFIG_ROUTES, fmt.Sprintf(NM_KEY_ERROR_IP6_METHOD_CONFLICT, NM_SETTING_IP6_CONFIG_ROUTES))
 	}
 }
 
-func checkSettingIp6ConfigDns(data connectionData, errs fieldErrors) {
+func checkSettingIp6ConfigDns(data connectionData, errs sectionErrors) {
 	if !isSettingIp6ConfigDnsExists(data) {
 		return
 	}
 	dnses := getSettingIp6ConfigDns(data)
 	for _, dns := range dnses {
 		if !isIpv6AddressValid(dns) {
-			rememberError(errs, fieldIpv6, NM_SETTING_VK_IP6_CONFIG_DNS, NM_KEY_ERROR_INVALID_VALUE)
+			rememberError(errs, sectionIpv6, NM_SETTING_VK_IP6_CONFIG_DNS, NM_KEY_ERROR_INVALID_VALUE)
 			return
 		}
 		if isIpv6AddressZero(dns) {
-			rememberError(errs, fieldIpv6, NM_SETTING_VK_IP6_CONFIG_DNS, NM_KEY_ERROR_INVALID_VALUE)
+			rememberError(errs, sectionIpv6, NM_SETTING_VK_IP6_CONFIG_DNS, NM_KEY_ERROR_INVALID_VALUE)
 			return
 		}
 	}
 }
 
-func checkSettingIp6ConfigAddresses(data connectionData, errs fieldErrors) {
+func checkSettingIp6ConfigAddresses(data connectionData, errs sectionErrors) {
 	if !isSettingIp6ConfigAddressesExists(data) {
 		return
 	}
@@ -176,20 +176,20 @@ func checkSettingIp6ConfigAddresses(data connectionData, errs fieldErrors) {
 	for _, addr := range addresses {
 		// check address
 		if !isIpv6AddressValid(addr.Address) {
-			rememberError(errs, fieldIpv6, NM_SETTING_VK_IP6_CONFIG_ADDRESSES_ADDRESS, NM_KEY_ERROR_INVALID_VALUE)
+			rememberError(errs, sectionIpv6, NM_SETTING_VK_IP6_CONFIG_ADDRESSES_ADDRESS, NM_KEY_ERROR_INVALID_VALUE)
 			// TODO test
 			logger.Warning(NM_KEY_ERROR_INVALID_VALUE, addr.Address)
 		}
 		if isIpv6AddressZero(addr.Address) {
-			rememberError(errs, fieldIpv6, NM_SETTING_VK_IP6_CONFIG_ADDRESSES_ADDRESS, NM_KEY_ERROR_INVALID_VALUE)
+			rememberError(errs, sectionIpv6, NM_SETTING_VK_IP6_CONFIG_ADDRESSES_ADDRESS, NM_KEY_ERROR_INVALID_VALUE)
 		}
 		// check prefix
 		if addr.Prefix < 1 || addr.Prefix > 128 {
-			rememberError(errs, fieldIpv6, NM_SETTING_VK_IP6_CONFIG_ADDRESSES_PREFIX, NM_KEY_ERROR_INVALID_VALUE)
+			rememberError(errs, sectionIpv6, NM_SETTING_VK_IP6_CONFIG_ADDRESSES_PREFIX, NM_KEY_ERROR_INVALID_VALUE)
 		}
 		// check gateway
 		if !isIpv6AddressValid(addr.Gateway) {
-			rememberError(errs, fieldIpv6, NM_SETTING_VK_IP6_CONFIG_ADDRESSES_GATEWAY, NM_KEY_ERROR_INVALID_VALUE)
+			rememberError(errs, sectionIpv6, NM_SETTING_VK_IP6_CONFIG_ADDRESSES_GATEWAY, NM_KEY_ERROR_INVALID_VALUE)
 		}
 	}
 }

@@ -36,7 +36,7 @@ func getSettingConnectionKeyType(key string) (t ktype) {
 	return
 }
 
-// Check is key in current setting field
+// Check is key in current setting section
 func isKeyInSettingConnection(key string) bool {
 	switch key {
 	case NM_SETTING_CONNECTION_ID:
@@ -193,17 +193,17 @@ func isSettingConnectionSecondariesExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_SECONDARIES)
 }
 
-// Ensure field and key exists and not empty
-func ensureFieldSettingConnectionExists(data connectionData, errs fieldErrors, relatedKey string) {
-	if !isSettingFieldExists(data, NM_SETTING_CONNECTION_SETTING_NAME) {
+// Ensure section and key exists and not empty
+func ensureSectionSettingConnectionExists(data connectionData, errs sectionErrors, relatedKey string) {
+	if !isSettingSectionExists(data, NM_SETTING_CONNECTION_SETTING_NAME) {
 		rememberError(errs, relatedKey, NM_SETTING_CONNECTION_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_CONNECTION_SETTING_NAME))
 	}
-	fieldData, _ := data[NM_SETTING_CONNECTION_SETTING_NAME]
-	if len(fieldData) == 0 {
+	sectionData, _ := data[NM_SETTING_CONNECTION_SETTING_NAME]
+	if len(sectionData) == 0 {
 		rememberError(errs, relatedKey, NM_SETTING_CONNECTION_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_CONNECTION_SETTING_NAME))
 	}
 }
-func ensureSettingConnectionIdNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingConnectionIdNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingConnectionIdExists(data) {
 		rememberError(errs, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_ID, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -212,7 +212,7 @@ func ensureSettingConnectionIdNoEmpty(data connectionData, errs fieldErrors) {
 		rememberError(errs, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_ID, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingConnectionUuidNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingConnectionUuidNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingConnectionUuidExists(data) {
 		rememberError(errs, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_UUID, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -221,7 +221,7 @@ func ensureSettingConnectionUuidNoEmpty(data connectionData, errs fieldErrors) {
 		rememberError(errs, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_UUID, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingConnectionTypeNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingConnectionTypeNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingConnectionTypeExists(data) {
 		rememberError(errs, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TYPE, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -230,12 +230,12 @@ func ensureSettingConnectionTypeNoEmpty(data connectionData, errs fieldErrors) {
 		rememberError(errs, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TYPE, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingConnectionAutoconnectNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingConnectionAutoconnectNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingConnectionAutoconnectExists(data) {
 		rememberError(errs, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_AUTOCONNECT, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingConnectionPermissionsNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingConnectionPermissionsNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingConnectionPermissionsExists(data) {
 		rememberError(errs, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_PERMISSIONS, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -244,17 +244,17 @@ func ensureSettingConnectionPermissionsNoEmpty(data connectionData, errs fieldEr
 		rememberError(errs, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_PERMISSIONS, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingConnectionTimestampNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingConnectionTimestampNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingConnectionTimestampExists(data) {
 		rememberError(errs, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_TIMESTAMP, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingConnectionReadOnlyNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingConnectionReadOnlyNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingConnectionReadOnlyExists(data) {
 		rememberError(errs, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_READ_ONLY, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingConnectionZoneNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingConnectionZoneNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingConnectionZoneExists(data) {
 		rememberError(errs, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_ZONE, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -263,7 +263,7 @@ func ensureSettingConnectionZoneNoEmpty(data connectionData, errs fieldErrors) {
 		rememberError(errs, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_ZONE, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingConnectionMasterNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingConnectionMasterNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingConnectionMasterExists(data) {
 		rememberError(errs, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_MASTER, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -272,7 +272,7 @@ func ensureSettingConnectionMasterNoEmpty(data connectionData, errs fieldErrors)
 		rememberError(errs, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_MASTER, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingConnectionSlaveTypeNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingConnectionSlaveTypeNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingConnectionSlaveTypeExists(data) {
 		rememberError(errs, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_SLAVE_TYPE, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -281,7 +281,7 @@ func ensureSettingConnectionSlaveTypeNoEmpty(data connectionData, errs fieldErro
 		rememberError(errs, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_SLAVE_TYPE, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingConnectionSecondariesNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingConnectionSecondariesNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingConnectionSecondariesExists(data) {
 		rememberError(errs, NM_SETTING_CONNECTION_SETTING_NAME, NM_SETTING_CONNECTION_SECONDARIES, NM_KEY_ERROR_MISSING_VALUE)
 	}

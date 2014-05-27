@@ -18,7 +18,7 @@ func getSettingVpnOpenvpnSecurityKeyType(key string) (t ktype) {
 	return
 }
 
-// Check is key in current setting field
+// Check is key in current setting section
 func isKeyInSettingVpnOpenvpnSecurity(key string) bool {
 	switch key {
 	case NM_SETTING_VPN_OPENVPN_KEY_CIPHER:
@@ -76,17 +76,17 @@ func isSettingVpnOpenvpnKeyAuthExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_AUTH)
 }
 
-// Ensure field and key exists and not empty
-func ensureFieldSettingVpnOpenvpnSecurityExists(data connectionData, errs fieldErrors, relatedKey string) {
-	if !isSettingFieldExists(data, NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME) {
+// Ensure section and key exists and not empty
+func ensureSectionSettingVpnOpenvpnSecurityExists(data connectionData, errs sectionErrors, relatedKey string) {
+	if !isSettingSectionExists(data, NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME) {
 		rememberError(errs, relatedKey, NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME))
 	}
-	fieldData, _ := data[NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME]
-	if len(fieldData) == 0 {
+	sectionData, _ := data[NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME]
+	if len(sectionData) == 0 {
 		rememberError(errs, relatedKey, NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME))
 	}
 }
-func ensureSettingVpnOpenvpnKeyCipherNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingVpnOpenvpnKeyCipherNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnOpenvpnKeyCipherExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_CIPHER, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -95,7 +95,7 @@ func ensureSettingVpnOpenvpnKeyCipherNoEmpty(data connectionData, errs fieldErro
 		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_CIPHER, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnOpenvpnKeyAuthNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingVpnOpenvpnKeyAuthNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnOpenvpnKeyAuthExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_AUTH, NM_KEY_ERROR_MISSING_VALUE)
 	}

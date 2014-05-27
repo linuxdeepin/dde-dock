@@ -6,8 +6,8 @@ import (
 )
 
 // TODO rename
-type fieldErrors map[string]string
-type sessionErrors map[string]fieldErrors
+type sectionErrors map[string]string
+type sessionErrors map[string]sectionErrors
 
 type ConnectionSession struct {
 	sessionPath dbus.ObjectPath
@@ -108,17 +108,17 @@ func NewConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 	s.fixValues()
 
 	// get secret data
-	// TODO fieldVpnSecurity
-	for _, secretFiled := range []string{fieldWirelessSecurity, field8021x, fieldGsm, fieldCdma} {
-		if isSettingFieldExists(s.data, secretFiled) {
-			wirelessSecrutiyData, err := nmConn.GetSecrets(fieldWirelessSecurity)
+	// TODO sectionVpnSecurity
+	for _, secretFiled := range []string{sectionWirelessSecurity, section8021x, sectionGsm, sectionCdma} {
+		if isSettingSectionExists(s.data, secretFiled) {
+			wirelessSecrutiyData, err := nmConn.GetSecrets(sectionWirelessSecurity)
 			if err == nil {
-				for field, fieldData := range wirelessSecrutiyData {
-					if !isSettingFieldExists(s.data, field) {
-						addSettingField(s.data, field)
+				for section, sectionData := range wirelessSecrutiyData {
+					if !isSettingSectionExists(s.data, section) {
+						addSettingSection(s.data, section)
 					}
-					for key, value := range fieldData {
-						s.data[field][key] = value
+					for key, value := range sectionData {
+						s.data[section][key] = value
 					}
 				}
 			}
@@ -137,9 +137,9 @@ func NewConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 }
 
 func (s *ConnectionSession) fixValues() {
-	// append missing fieldIpv6
-	if !isSettingFieldExists(s.data, fieldIpv6) && isStringInArray(fieldIpv6, s.listFields()) {
-		initSettingFieldIpv6(s.data)
+	// append missing sectionIpv6
+	if !isSettingSectionExists(s.data, sectionIpv6) && isStringInArray(sectionIpv6, s.listSections()) {
+		initSettingSectionIpv6(s.data)
 	}
 
 	// vpn plugin data and secret
@@ -152,10 +152,10 @@ func (s *ConnectionSession) fixValues() {
 		}
 	}
 
-	// append missing fieldWired for pppoe
+	// append missing sectionWired for pppoe
 	if s.Type == connectionPppoe {
-		if !isSettingFieldExists(s.data, fieldWired) {
-			initSettingFieldWired(s.data)
+		if !isSettingSectionExists(s.data, sectionWired) {
+			initSettingSectionWired(s.data)
 		}
 	}
 
@@ -219,10 +219,10 @@ func (s *ConnectionSession) Close() {
 	dbus.UnInstallObject(s)
 }
 
-// listFields return all pages related fields
-func (s *ConnectionSession) listFields() (fields []string) {
+// listSections return all pages related sections
+func (s *ConnectionSession) listSections() (sections []string) {
 	for _, page := range s.listPages() {
-		fields = appendStrArrayUnion(fields, s.pageToFields(page)...)
+		sections = appendStrArrayUnion(sections, s.pageToSections(page)...)
 	}
 	return
 }
@@ -331,74 +331,74 @@ func (s *ConnectionSession) listPages() (pages []string) {
 	return
 }
 
-func (s *ConnectionSession) pageToFields(page string) (fields []string) {
+func (s *ConnectionSession) pageToSections(page string) (sections []string) {
 	switch page {
 	default:
-		logger.Error("pageToFields: invalid page name", page)
+		logger.Error("pageToSections: invalid page name", page)
 	case pageGeneral:
-		fields = []string{fieldConnection}
+		sections = []string{sectionConnection}
 	case pageMobile:
-		fields = []string{fieldGsm}
+		sections = []string{sectionGsm}
 	case pageMobileCdma:
-		fields = []string{fieldCdma}
+		sections = []string{sectionCdma}
 	case pageEthernet:
-		fields = []string{fieldWired}
+		sections = []string{sectionWired}
 	case pageWifi:
-		fields = []string{fieldWireless}
+		sections = []string{sectionWireless}
 	case pageIPv4:
-		fields = []string{fieldIpv4}
+		sections = []string{sectionIpv4}
 	case pageIPv6:
-		fields = []string{fieldIpv6}
+		sections = []string{sectionIpv6}
 	case pageSecurity:
 		switch s.Type {
 		case connectionWired:
-			fields = []string{field8021x}
+			sections = []string{section8021x}
 		case connectionWireless, connectionWirelessAdhoc, connectionWirelessHotspot:
-			if isSettingFieldExists(s.data, field8021x) {
-				fields = []string{fieldWirelessSecurity, field8021x}
+			if isSettingSectionExists(s.data, section8021x) {
+				sections = []string{sectionWirelessSecurity, section8021x}
 			} else {
-				fields = []string{fieldWirelessSecurity}
+				sections = []string{sectionWirelessSecurity}
 			}
 		}
 	case pagePppoe:
-		fields = []string{fieldPppoe}
+		sections = []string{sectionPppoe}
 	case pagePpp:
-		fields = []string{fieldPpp}
+		sections = []string{sectionPpp}
 	case pageVpnL2tp:
-		fields = []string{fieldVpnL2tp}
+		sections = []string{sectionVpnL2tp}
 	case pageVpnL2tpPpp:
-		fields = []string{fieldVpnL2tpPpp}
+		sections = []string{sectionVpnL2tpPpp}
 	case pageVpnL2tpIpsec:
-		fields = []string{fieldVpnL2tpIpsec}
+		sections = []string{sectionVpnL2tpIpsec}
 	case pageVpnOpenconnect:
-		fields = []string{fieldVpnOpenconnect}
+		sections = []string{sectionVpnOpenconnect}
 	case pageVpnOpenvpn:
-		fields = []string{fieldVpnOpenvpn}
+		sections = []string{sectionVpnOpenvpn}
 	case pageVpnOpenvpnAdvanced:
-		fields = []string{fieldVpnOpenvpnAdvanced}
+		sections = []string{sectionVpnOpenvpnAdvanced}
 	case pageVpnOpenvpnSecurity:
-		fields = []string{fieldVpnOpenvpnSecurity}
+		sections = []string{sectionVpnOpenvpnSecurity}
 	case pageVpnOpenvpnTlsauth:
-		fields = []string{fieldVpnOpenvpnTlsauth}
+		sections = []string{sectionVpnOpenvpnTlsauth}
 	case pageVpnOpenvpnProxies:
-		fields = []string{fieldVpnOpenvpnProxies}
+		sections = []string{sectionVpnOpenvpnProxies}
 	case pageVpnPptp:
-		fields = []string{fieldVpnPptp}
+		sections = []string{sectionVpnPptp}
 	case pageVpnPptpPpp:
-		fields = []string{fieldVpnPptpPpp}
+		sections = []string{sectionVpnPptpPpp}
 	case pageVpnVpnc:
-		fields = []string{fieldVpnVpnc}
+		sections = []string{sectionVpnVpnc}
 	case pageVpnVpncAdvanced:
-		fields = []string{fieldVpnVpncAdvanced}
+		sections = []string{sectionVpnVpncAdvanced}
 	}
 	return
 }
 
-func (s *ConnectionSession) getFieldOfPageKey(page, key string) string {
-	fields := s.pageToFields(page)
-	for _, field := range fields {
-		if generalIsKeyInSettingField(field, key) {
-			return field
+func (s *ConnectionSession) getSectionOfPageKey(page, key string) string {
+	sections := s.pageToSections(page)
+	for _, section := range sections {
+		if generalIsKeyInSettingSection(section, key) {
+			return section
 		}
 	}
 	logger.Errorf("get corresponding filed of key in page failed, page=%s, key=%s", page, key)
@@ -408,12 +408,12 @@ func (s *ConnectionSession) getFieldOfPageKey(page, key string) string {
 // get valid keys of target page, show or hide some keys when special
 // keys toggled
 func (s *ConnectionSession) listKeys(page string) (keys []string) {
-	fields := s.pageToFields(page)
-	for _, field := range fields {
+	sections := s.pageToSections(page)
+	for _, section := range sections {
 		// TODO
-		// if isSettingFieldExists(s.data, field) {
+		// if isSettingSectionExists(s.data, section) {
 		// }
-		keys = appendStrArrayUnion(keys, generalGetSettingAvailableKeys(s.data, field)...)
+		keys = appendStrArrayUnion(keys, generalGetSettingAvailableKeys(s.data, section)...)
 	}
 	if len(keys) == 0 {
 		logger.Warning("there is no avaiable keys for page", page)
@@ -424,9 +424,9 @@ func (s *ConnectionSession) listKeys(page string) (keys []string) {
 // GetAvailableValues return available values marshaled by json for target key.
 func (s *ConnectionSession) GetAvailableValues(page, key string) (valuesJSON string) {
 	var values []kvalue
-	fields := s.pageToFields(page) // TODO
-	for _, field := range fields {
-		values = generalGetSettingAvailableValues(s.data, field, key)
+	sections := s.pageToSections(page) // TODO
+	for _, section := range sections {
+		values = generalGetSettingAvailableValues(s.data, section, key)
 		if len(values) > 0 {
 			break
 		}
@@ -436,15 +436,15 @@ func (s *ConnectionSession) GetAvailableValues(page, key string) (valuesJSON str
 }
 
 func (s *ConnectionSession) GetKey(page, key string) (value string) {
-	field := s.getFieldOfPageKey(page, key)
-	value = generalGetSettingKeyJSON(s.data, field, key)
+	section := s.getSectionOfPageKey(page, key)
+	value = generalGetSettingKeyJSON(s.data, section, key)
 	return
 }
 
 func (s *ConnectionSession) SetKey(page, key, value string) {
-	field := s.getFieldOfPageKey(page, key)
-	err := generalSetSettingKeyJSON(s.data, field, key, value)
-	// logger.Debugf("SetKey(), %v, page=%s, filed=%s, key=%s, value=%s", err == nil, page, field, key, value) // TODO test
+	section := s.getSectionOfPageKey(page, key)
+	err := generalSetSettingKeyJSON(s.data, section, key, value)
+	// logger.Debugf("SetKey(), %v, page=%s, filed=%s, key=%s, value=%s", err == nil, page, section, key, value) // TODO test
 	s.updateErrorsWhenSettingKey(page, key, err)
 
 	s.updatePropAvailablePages()
@@ -457,21 +457,21 @@ func (s *ConnectionSession) SetKey(page, key, value string) {
 func (s *ConnectionSession) updateErrorsWhenSettingKey(page, key string, err error) {
 	if err == nil {
 		// delete key error if exists
-		fieldErrors, ok := s.errorsSetKey[page]
+		sectionErrors, ok := s.errorsSetKey[page]
 		if ok {
-			_, ok := fieldErrors[key]
+			_, ok := sectionErrors[key]
 			if ok {
-				delete(fieldErrors, key)
+				delete(sectionErrors, key)
 			}
 		}
 	} else {
 		// append key error
-		fieldErrorsData, ok := s.errorsSetKey[page]
+		sectionErrorsData, ok := s.errorsSetKey[page]
 		if !ok {
-			fieldErrorsData = make(fieldErrors)
-			s.errorsSetKey[page] = fieldErrorsData
+			sectionErrorsData = make(sectionErrors)
+			s.errorsSetKey[page] = sectionErrorsData
 		}
-		fieldErrorsData[key] = err.Error()
+		sectionErrorsData[key] = err.Error()
 	}
 }
 
@@ -483,10 +483,10 @@ func (s *ConnectionSession) DebugListKeyDetail() (info string) {
 			continue
 		}
 		for _, key := range pageData {
-			field := s.getFieldOfPageKey(page, key)
-			t := generalGetSettingKeyType(field, key)
+			section := s.getSectionOfPageKey(page, key)
+			t := generalGetSettingKeyType(section, key)
 			// TODO convert to value json
-			values := generalGetSettingAvailableValues(s.data, field, key)
+			values := generalGetSettingAvailableValues(s.data, section, key)
 			info += fmt.Sprintf("%s->%s[%s]: %s (%s)\n", page, key, getKtypeDescription(t), s.GetKey(page, key), values)
 		}
 	}

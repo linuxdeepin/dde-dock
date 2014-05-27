@@ -21,28 +21,28 @@ func newPppoeConnection(id, username string) (uuid string) {
 func newPppoeConnectionData(id, uuid string) (data connectionData) {
 	data = make(connectionData)
 
-	addSettingField(data, fieldConnection)
+	addSettingSection(data, sectionConnection)
 	setSettingConnectionId(data, id)
 	setSettingConnectionUuid(data, uuid)
 	setSettingConnectionType(data, NM_SETTING_PPPOE_SETTING_NAME)
 	setSettingConnectionAutoconnect(data, false)
 
-	initSettingFieldWired(data)
+	initSettingSectionWired(data)
 
-	addSettingField(data, fieldPppoe)
+	addSettingSection(data, sectionPppoe)
 
-	addSettingField(data, fieldPpp)
+	addSettingSection(data, sectionPpp)
 	logicSetSettingVkPppEnableLcpEcho(data, true)
 
-	initSettingFieldIpv4(data)
+	initSettingSectionIpv4(data)
 	return
 }
 
 // Get available keys
 func getSettingPppoeAvailableKeys(data connectionData) (keys []string) {
-	keys = appendAvailableKeys(data, keys, fieldPppoe, NM_SETTING_PPPOE_SERVICE)
-	keys = appendAvailableKeys(data, keys, fieldPppoe, NM_SETTING_PPPOE_USERNAME)
-	keys = appendAvailableKeys(data, keys, fieldPppoe, NM_SETTING_PPPOE_PASSWORD)
+	keys = appendAvailableKeys(data, keys, sectionPppoe, NM_SETTING_PPPOE_SERVICE)
+	keys = appendAvailableKeys(data, keys, sectionPppoe, NM_SETTING_PPPOE_USERNAME)
+	keys = appendAvailableKeys(data, keys, sectionPppoe, NM_SETTING_PPPOE_PASSWORD)
 	return
 }
 
@@ -52,7 +52,7 @@ func getSettingPppoeAvailableValues(data connectionData, key string) (values []k
 }
 
 // Check whether the values are correct
-func checkSettingPppoeValues(data connectionData) (errs fieldErrors) {
+func checkSettingPppoeValues(data connectionData) (errs sectionErrors) {
 	errs = make(map[string]string)
 
 	// check username

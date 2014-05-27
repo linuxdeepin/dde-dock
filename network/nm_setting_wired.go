@@ -83,28 +83,28 @@ func newWiredConnection(id string) (uuid string) {
 func newWiredConnectionData(id, uuid string) (data connectionData) {
 	data = make(connectionData)
 
-	addSettingField(data, fieldConnection)
+	addSettingSection(data, sectionConnection)
 	setSettingConnectionId(data, id)
 	setSettingConnectionUuid(data, uuid)
 	setSettingConnectionType(data, NM_SETTING_WIRED_SETTING_NAME)
 
-	initSettingFieldWired(data)
+	initSettingSectionWired(data)
 
-	initSettingFieldIpv4(data)
-	initSettingFieldIpv6(data)
+	initSettingSectionIpv4(data)
+	initSettingSectionIpv6(data)
 	return
 }
 
-func initSettingFieldWired(data connectionData) {
-	addSettingField(data, fieldWired)
+func initSettingSectionWired(data connectionData) {
+	addSettingSection(data, sectionWired)
 	setSettingWiredDuplex(data, "full")
 }
 
 // Get available keys
 func getSettingWiredAvailableKeys(data connectionData) (keys []string) {
-	keys = appendAvailableKeys(data, keys, fieldWired, NM_SETTING_WIRED_MAC_ADDRESS)
-	keys = appendAvailableKeys(data, keys, fieldWired, NM_SETTING_WIRED_CLONED_MAC_ADDRESS)
-	keys = appendAvailableKeys(data, keys, fieldWired, NM_SETTING_WIRED_MTU)
+	keys = appendAvailableKeys(data, keys, sectionWired, NM_SETTING_WIRED_MAC_ADDRESS)
+	keys = appendAvailableKeys(data, keys, sectionWired, NM_SETTING_WIRED_CLONED_MAC_ADDRESS)
+	keys = appendAvailableKeys(data, keys, sectionWired, NM_SETTING_WIRED_MTU)
 	if isSettingWiredMtuExists(data) {
 		keys = append(keys, NM_SETTING_WIRED_MTU)
 	}
@@ -124,7 +124,7 @@ func getSettingWiredAvailableValues(data connectionData, key string) (values []k
 }
 
 // Check whether the values are correct
-func checkSettingWiredValues(data connectionData) (errs fieldErrors) {
+func checkSettingWiredValues(data connectionData) (errs sectionErrors) {
 	errs = make(map[string]string)
 	// hardware address will be checked when setting key
 	return

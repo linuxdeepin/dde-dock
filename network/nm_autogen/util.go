@@ -57,22 +57,22 @@ func GetAllKeysInPage(pageName string) (keys []string) {
 		fmt.Println("invalid page name", pageName)
 		os.Exit(1)
 	}
-	for _, field := range pageInfo.RelatedFields {
-		keys = appendStrArrayUnion(keys, GetAllKeysInField(field)...)
+	for _, section := range pageInfo.RelatedSections {
+		keys = appendStrArrayUnion(keys, GetAllKeysInSection(section)...)
 	}
 	return
 }
 
-// GetAllKeysInField return all keys that will be used by front-end.
-func GetAllKeysInField(fieldName string) (keys []string) {
-	// virtual keys in field that with none related key
+// GetAllKeysInSection return all keys that will be used by front-end.
+func GetAllKeysInSection(sectionName string) (keys []string) {
+	// virtual keys in section that with none related key
 	for _, vk := range nmSettingVks {
-		if vk.RelatedField == fieldName && vk.RelatedKey == "NM_SETTING_VK_NONE_RELATED_KEY" {
+		if vk.RelatedSection == sectionName && vk.RelatedKey == "NM_SETTING_VK_NONE_RELATED_KEY" {
 			keys = append(keys, vk.Name)
 		}
 	}
 	for _, nmSetting := range nmSettings {
-		if nmSetting.FieldName == fieldName {
+		if nmSetting.SectionName == sectionName {
 			for _, k := range nmSetting.Keys {
 				vksNames := getRelatedVks(k.Name)
 				if len(vksNames) > 0 {
@@ -201,8 +201,8 @@ func isVk(keyName string) (ok bool) {
 }
 
 // NM_SETTING_CONNECTION_SETTING_NAME -> ConnectionSetting, NM_SETTING_VK_VPN_L2TP_SETTING_NAME -> VpnL2tp
-func ToFieldFuncBaseName(name string) (funcName string) {
-	name = strings.Replace(name, "NM_SETTING_VF_", "NM_SETTING_", -1) // remove virtual field tag
+func ToSectionFuncBaseName(name string) (funcName string) {
+	name = strings.Replace(name, "NM_SETTING_VF_", "NM_SETTING_", -1) // remove virtual section tag
 	funcName = strings.TrimPrefix(name, "NM_")
 	funcName = strings.TrimSuffix(funcName, "_SETTING_NAME")
 	funcName = strings.Replace(funcName, "_", " ", -1)

@@ -25,23 +25,23 @@ const (
 
 // TODO Get available keys
 func getSettingPppAvailableKeys(data connectionData) (keys []string) {
-	keys = appendAvailableKeys(data, keys, fieldPpp, NM_SETTING_PPP_REFUSE_EAP)
-	keys = appendAvailableKeys(data, keys, fieldPpp, NM_SETTING_PPP_REFUSE_PAP)
-	keys = appendAvailableKeys(data, keys, fieldPpp, NM_SETTING_PPP_REFUSE_CHAP)
-	keys = appendAvailableKeys(data, keys, fieldPpp, NM_SETTING_PPP_REFUSE_MSCHAP)
-	keys = appendAvailableKeys(data, keys, fieldPpp, NM_SETTING_PPP_REFUSE_MSCHAPV2)
+	keys = appendAvailableKeys(data, keys, sectionPpp, NM_SETTING_PPP_REFUSE_EAP)
+	keys = appendAvailableKeys(data, keys, sectionPpp, NM_SETTING_PPP_REFUSE_PAP)
+	keys = appendAvailableKeys(data, keys, sectionPpp, NM_SETTING_PPP_REFUSE_CHAP)
+	keys = appendAvailableKeys(data, keys, sectionPpp, NM_SETTING_PPP_REFUSE_MSCHAP)
+	keys = appendAvailableKeys(data, keys, sectionPpp, NM_SETTING_PPP_REFUSE_MSCHAPV2)
 
-	keys = appendAvailableKeys(data, keys, fieldPpp, NM_SETTING_PPP_REQUIRE_MPPE)
+	keys = appendAvailableKeys(data, keys, sectionPpp, NM_SETTING_PPP_REQUIRE_MPPE)
 	if getSettingPppRequireMppe(data) {
-		keys = appendAvailableKeys(data, keys, fieldPpp, NM_SETTING_PPP_REQUIRE_MPPE_128)
-		keys = appendAvailableKeys(data, keys, fieldPpp, NM_SETTING_PPP_MPPE_STATEFUL)
+		keys = appendAvailableKeys(data, keys, sectionPpp, NM_SETTING_PPP_REQUIRE_MPPE_128)
+		keys = appendAvailableKeys(data, keys, sectionPpp, NM_SETTING_PPP_MPPE_STATEFUL)
 	}
 
-	keys = appendAvailableKeys(data, keys, fieldPpp, NM_SETTING_PPP_NOBSDCOMP)
-	keys = appendAvailableKeys(data, keys, fieldPpp, NM_SETTING_PPP_NODEFLATE)
-	keys = appendAvailableKeys(data, keys, fieldPpp, NM_SETTING_PPP_NO_VJ_COMP)
+	keys = appendAvailableKeys(data, keys, sectionPpp, NM_SETTING_PPP_NOBSDCOMP)
+	keys = appendAvailableKeys(data, keys, sectionPpp, NM_SETTING_PPP_NODEFLATE)
+	keys = appendAvailableKeys(data, keys, sectionPpp, NM_SETTING_PPP_NO_VJ_COMP)
 
-	keys = appendAvailableKeys(data, keys, fieldPpp, NM_SETTING_PPP_LCP_ECHO_FAILURE)
+	keys = appendAvailableKeys(data, keys, sectionPpp, NM_SETTING_PPP_LCP_ECHO_FAILURE)
 	return
 }
 
@@ -51,7 +51,7 @@ func getSettingPppAvailableValues(data connectionData, key string) (values []kva
 }
 
 // Check whether the values are correct
-func checkSettingPppValues(data connectionData) (errs fieldErrors) {
+func checkSettingPppValues(data connectionData) (errs sectionErrors) {
 	errs = make(map[string]string)
 	return
 }

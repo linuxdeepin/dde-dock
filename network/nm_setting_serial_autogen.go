@@ -24,7 +24,7 @@ func getSettingSerialKeyType(key string) (t ktype) {
 	return
 }
 
-// Check is key in current setting field
+// Check is key in current setting section
 func isKeyInSettingSerial(key string) bool {
 	switch key {
 	case NM_SETTING_SERIAL_BAUD:
@@ -115,37 +115,37 @@ func isSettingSerialSendDelayExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_SERIAL_SETTING_NAME, NM_SETTING_SERIAL_SEND_DELAY)
 }
 
-// Ensure field and key exists and not empty
-func ensureFieldSettingSerialExists(data connectionData, errs fieldErrors, relatedKey string) {
-	if !isSettingFieldExists(data, NM_SETTING_SERIAL_SETTING_NAME) {
+// Ensure section and key exists and not empty
+func ensureSectionSettingSerialExists(data connectionData, errs sectionErrors, relatedKey string) {
+	if !isSettingSectionExists(data, NM_SETTING_SERIAL_SETTING_NAME) {
 		rememberError(errs, relatedKey, NM_SETTING_SERIAL_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_SERIAL_SETTING_NAME))
 	}
-	fieldData, _ := data[NM_SETTING_SERIAL_SETTING_NAME]
-	if len(fieldData) == 0 {
+	sectionData, _ := data[NM_SETTING_SERIAL_SETTING_NAME]
+	if len(sectionData) == 0 {
 		rememberError(errs, relatedKey, NM_SETTING_SERIAL_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_SERIAL_SETTING_NAME))
 	}
 }
-func ensureSettingSerialBaudNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingSerialBaudNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingSerialBaudExists(data) {
 		rememberError(errs, NM_SETTING_SERIAL_SETTING_NAME, NM_SETTING_SERIAL_BAUD, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingSerialBitsNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingSerialBitsNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingSerialBitsExists(data) {
 		rememberError(errs, NM_SETTING_SERIAL_SETTING_NAME, NM_SETTING_SERIAL_BITS, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingSerialParityNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingSerialParityNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingSerialParityExists(data) {
 		rememberError(errs, NM_SETTING_SERIAL_SETTING_NAME, NM_SETTING_SERIAL_PARITY, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingSerialStopbitsNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingSerialStopbitsNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingSerialStopbitsExists(data) {
 		rememberError(errs, NM_SETTING_SERIAL_SETTING_NAME, NM_SETTING_SERIAL_STOPBITS, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingSerialSendDelayNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingSerialSendDelayNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingSerialSendDelayExists(data) {
 		rememberError(errs, NM_SETTING_SERIAL_SETTING_NAME, NM_SETTING_SERIAL_SEND_DELAY, NM_KEY_ERROR_MISSING_VALUE)
 	}

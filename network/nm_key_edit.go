@@ -10,7 +10,7 @@ func pageGeneralGetId(con map[string]map[string]dbus.Variant) string {
 			logger.Warning("EditorGetID failed:", con, err)
 		}
 	}()
-	return con[fieldConnection]["id"].Value().(string)
+	return con[sectionConnection]["id"].Value().(string)
 }
 
 func getCustomConnectinoType(data connectionData) (connType string) {
@@ -93,17 +93,17 @@ func isJSONValueMeansToDeleteKey(valueJSON string, t ktype) (doDelete bool) {
 	return
 }
 
-func getSettingKeyJSON(data connectionData, field, key string, t ktype) (valueJSON string) {
-	if isWrapperKeyType(t) && !isSettingKeyExists(data, field, key) {
+func getSettingKeyJSON(data connectionData, section, key string, t ktype) (valueJSON string) {
+	if isWrapperKeyType(t) && !isSettingKeyExists(data, section, key) {
 		// if the key is not exists and is a wrapper key, get its
 		// default value and marshaled to json directly instead of use
 		// keyValueToJSON(), which will dispatch wrapper keys
 		// specially
-		valueJSON, _ = marshalJSON(generalGetSettingDefaultValue(field, key))
+		valueJSON, _ = marshalJSON(generalGetSettingDefaultValue(section, key))
 		return
 	}
 
-	value := getSettingKey(data, field, key)
+	value := getSettingKey(data, section, key)
 	valueJSON, err := keyValueToJSON(value, t)
 	if err != nil {
 		logger.Error("get connection data failed:", err)
@@ -117,22 +117,22 @@ func getSettingKeyJSON(data connectionData, field, key string, t ktype) (valueJS
 	return
 }
 
-func getSettingKey(data connectionData, field, key string) (value interface{}) {
+func getSettingKey(data connectionData, section, key string) (value interface{}) {
 	// special for vpn plugin keys
-	if isSettingVpnPluginKey(field) {
-		return getSettingVpnPluginKey(data, field, key)
+	if isSettingVpnPluginKey(section) {
+		return getSettingVpnPluginKey(data, section, key)
 	}
 
-	value = generalGetSettingDefaultValue(field, key) // get default value firstly
+	value = generalGetSettingDefaultValue(section, key) // get default value firstly
 
-	realField := getRealFieldName(field) // get real name of virtual fields
-	fieldData, ok := data[realField]
+	realSection := getRealSectionName(section) // get real name of virtual sections
+	sectionData, ok := data[realSection]
 	if !ok {
-		logger.Errorf("invalid field: data[%s]", realField)
+		logger.Errorf("invalid section: data[%s]", realSection)
 		return
 	}
 
-	variant, ok := fieldData[key]
+	variant, ok := sectionData[key]
 	if !ok {
 		// not exists, just return nil
 		return
@@ -140,7 +140,7 @@ func getSettingKey(data connectionData, field, key string) (value interface{}) {
 
 	value = variant.Value()
 
-	// logger.Debugf("getSettingKey: data[%s][%s]=%v", field, key, value) // TODO test
+	// logger.Debugf("getSettingKey: data[%s][%s]=%v", section, key, value) // TODO test
 	if isInterfaceNil(value) {
 		logger.Warning("getSettingKey: data[%s][%s] is nil")
 	}
@@ -148,7 +148,7 @@ func getSettingKey(data connectionData, field, key string) (value interface{}) {
 	return
 }
 
-func setSettingKeyJSON(data connectionData, field, key, valueJSON string, t ktype) (kerr error) {
+func setSettingKeyJSON(data connectionData, section, key, valueJSON string, t ktype) (kerr error) {
 	if len(valueJSON) == 0 {
 		logger.Error("setSettingKeyJSON: valueJSON is empty")
 		kerr = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
@@ -157,8 +157,8 @@ func setSettingKeyJSON(data connectionData, field, key, valueJSON string, t ktyp
 
 	// remove connection data key if valueJSON is null or empty
 	if isJSONValueMeansToDeleteKey(valueJSON, t) {
-		logger.Debugf("removeSettingKey data[%s][%s], valueJSON=%s", field, key, valueJSON)
-		removeSettingKey(data, field, key)
+		logger.Debugf("removeSettingKey data[%s][%s], valueJSON=%s", section, key, valueJSON)
+		removeSettingKey(data, section, key)
 		return
 	}
 
@@ -170,87 +170,87 @@ func setSettingKeyJSON(data connectionData, field, key, valueJSON string, t ktyp
 		kerr = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
 		return
 	}
-	logger.Debugf("setSettingKeyJSON data[%s][%s]=%#v, valueJSON=%s", field, key, value, valueJSON) // TODO test
+	logger.Debugf("setSettingKeyJSON data[%s][%s]=%#v, valueJSON=%s", section, key, value, valueJSON) // TODO test
 	if isInterfaceNil(value) {
-		removeSettingKey(data, field, key)
+		removeSettingKey(data, section, key)
 	} else {
-		setSettingKey(data, field, key, value)
+		setSettingKey(data, section, key, value)
 	}
 	return
 }
 
-func setSettingKey(data connectionData, field, key string, value interface{}) {
+func setSettingKey(data connectionData, section, key string, value interface{}) {
 	// special for vpn plugin keys
-	if isSettingVpnPluginKey(field) {
-		setSettingVpnPluginKey(data, field, key, value)
+	if isSettingVpnPluginKey(section) {
+		setSettingVpnPluginKey(data, section, key, value)
 		return
 	}
 
-	realField := getRealFieldName(field) // get real name of virtual fields
-	var fieldData map[string]dbus.Variant
-	fieldData, ok := data[realField]
+	realSection := getRealSectionName(section) // get real name of virtual sections
+	var sectionData map[string]dbus.Variant
+	sectionData, ok := data[realSection]
 	if !ok {
-		logger.Errorf(`set connection data failed, field "%s" is not exits yet`, realField)
+		logger.Errorf(`set connection data failed, section "%s" is not exits yet`, realSection)
 		return
 	}
 
-	fieldData[key] = dbus.MakeVariant(value)
+	sectionData[key] = dbus.MakeVariant(value)
 
-	logger.Debugf("setSettingKey: data[%s][%s]=%#v", field, key, value) // TODO test
+	logger.Debugf("setSettingKey: data[%s][%s]=%#v", section, key, value) // TODO test
 	return
 }
 
-func removeSettingKey(data connectionData, field string, keys ...string) {
+func removeSettingKey(data connectionData, section string, keys ...string) {
 	// special for vpn plugin keys
-	if isSettingVpnPluginKey(field) {
-		removeSettingVpnPluginKey(data, field, keys...)
+	if isSettingVpnPluginKey(section) {
+		removeSettingVpnPluginKey(data, section, keys...)
 		return
 	}
 
-	realField := getRealFieldName(field) // get real name of virtual fields
-	fieldData, ok := data[realField]
+	realSection := getRealSectionName(section) // get real name of virtual sections
+	sectionData, ok := data[realSection]
 	if !ok {
 		return
 	}
 
 	for _, k := range keys {
-		delete(fieldData, k)
+		delete(sectionData, k)
 	}
 }
 
-func removeSettingKeyBut(data connectionData, field string, keys ...string) {
+func removeSettingKeyBut(data connectionData, section string, keys ...string) {
 	// special for vpn plugin keys
-	if isSettingVpnPluginKey(field) {
-		removeSettingVpnPluginKeyBut(data, field, keys...)
+	if isSettingVpnPluginKey(section) {
+		removeSettingVpnPluginKeyBut(data, section, keys...)
 		return
 	}
 
-	realField := getRealFieldName(field) // get real name of virtual fields
-	fieldData, ok := data[realField]
+	realSection := getRealSectionName(section) // get real name of virtual sections
+	sectionData, ok := data[realSection]
 	if !ok {
 		return
 	}
 
-	for k := range fieldData {
+	for k := range sectionData {
 		if !isStringInArray(k, keys) {
-			delete(fieldData, k)
+			delete(sectionData, k)
 		}
 	}
 }
 
-func isSettingKeyExists(data connectionData, field, key string) bool {
+func isSettingKeyExists(data connectionData, section, key string) bool {
 	// special for vpn plugin keys
-	if isSettingVpnPluginKey(field) {
-		return isSettingVpnPluginKeyExists(data, field, key)
+	if isSettingVpnPluginKey(section) {
+		return isSettingVpnPluginKeyExists(data, section, key)
 	}
 
-	realField := getRealFieldName(field) // get real name of virtual fields
-	fieldData, ok := data[realField]
+	realSection := getRealSectionName(section) // get real name of virtual sections
+	sectionData, ok := data[realSection]
 	if !ok {
 		return false
 	}
 
-	_, ok = fieldData[key]
+	_, ok = sectionData[key]
 	if !ok {
 		return false
 	}
@@ -258,28 +258,28 @@ func isSettingKeyExists(data connectionData, field, key string) bool {
 	return true
 }
 
-func addSettingField(data connectionData, field string) {
-	realField := getRealFieldName(field) // get real name of virtual fields
-	var fieldData map[string]dbus.Variant
-	fieldData, ok := data[realField]
+func addSettingSection(data connectionData, section string) {
+	realSection := getRealSectionName(section) // get real name of virtual sections
+	var sectionData map[string]dbus.Variant
+	sectionData, ok := data[realSection]
 	if !ok {
-		// add field if not exists
-		fieldData = make(map[string]dbus.Variant)
-		data[realField] = fieldData
+		// add section if not exists
+		sectionData = make(map[string]dbus.Variant)
+		data[realSection] = sectionData
 	}
 }
 
-func removeSettingField(data connectionData, field string) {
-	realField := getRealFieldName(field) // get real name of virtual fields
-	_, ok := data[realField]
+func removeSettingSection(data connectionData, section string) {
+	realSection := getRealSectionName(section) // get real name of virtual sections
+	_, ok := data[realSection]
 	if ok {
-		// remove field if exists
-		delete(data, realField)
+		// remove section if exists
+		delete(data, realSection)
 	}
 }
 
-func isSettingFieldExists(data connectionData, field string) bool {
-	realField := getRealFieldName(field) // get real name of virtual fields
-	_, ok := data[realField]
+func isSettingSectionExists(data connectionData, section string) bool {
+	realSection := getRealSectionName(section) // get real name of virtual sections
+	_, ok := data[realSection]
 	return ok
 }

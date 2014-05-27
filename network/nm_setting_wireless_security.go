@@ -135,15 +135,15 @@ func getSettingWirelessSecurityAvailableKeys(data connectionData) (keys []string
 	default:
 		logger.Error("invalid value", vkKeyMgmt)
 	case "none":
-		keys = appendAvailableKeys(data, keys, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT)
+		keys = appendAvailableKeys(data, keys, sectionWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT)
 	case "wep":
-		keys = appendAvailableKeys(data, keys, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT)
-		keys = appendAvailableKeys(data, keys, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_WEP_KEY0)
+		keys = appendAvailableKeys(data, keys, sectionWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT)
+		keys = appendAvailableKeys(data, keys, sectionWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_WEP_KEY0)
 	case "wpa-psk":
-		keys = appendAvailableKeys(data, keys, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT)
-		keys = appendAvailableKeys(data, keys, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_PSK)
+		keys = appendAvailableKeys(data, keys, sectionWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT)
+		keys = appendAvailableKeys(data, keys, sectionWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_PSK)
 	case "wpa-eap":
-		keys = appendAvailableKeys(data, keys, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT)
+		keys = appendAvailableKeys(data, keys, sectionWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT)
 	}
 	return
 }
@@ -177,14 +177,14 @@ func getSettingWirelessSecurityAvailableValues(data connectionData, key string) 
 }
 
 // Check whether the values are correct
-func checkSettingWirelessSecurityValues(data connectionData) (errs fieldErrors) {
+func checkSettingWirelessSecurityValues(data connectionData) (errs sectionErrors) {
 	errs = make(map[string]string)
 
 	// check key-mgmt
 	ensureSettingWirelessSecurityKeyMgmtNoEmpty(data, errs)
 	switch getSettingWirelessSecurityKeyMgmt(data) {
 	default:
-		rememberError(errs, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT, NM_KEY_ERROR_INVALID_VALUE)
+		rememberError(errs, sectionWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT, NM_KEY_ERROR_INVALID_VALUE)
 		return
 	case "none": // wep
 		ensureSettingWirelessSecurityWepKeyTypeNoEmpty(data, errs)
@@ -194,7 +194,7 @@ func checkSettingWirelessSecurityValues(data connectionData) (errs fieldErrors) 
 	case "wpa-psk": // wpa-psk infrastructure
 		ensureSettingWirelessSecurityPskNoEmpty(data, errs)
 	case "wpa-eap": // wpa enterprise
-		ensureFieldSetting8021xExists(data, errs, NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT)
+		ensureSectionSetting8021xExists(data, errs, NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT)
 	}
 
 	// check wep-key-type
@@ -209,16 +209,16 @@ func checkSettingWirelessSecurityValues(data connectionData) (errs fieldErrors) 
 	return
 }
 
-func checkSettingWirelessSecurityWepKeyType(data connectionData, errs fieldErrors) {
+func checkSettingWirelessSecurityWepKeyType(data connectionData, errs sectionErrors) {
 	if !isSettingWirelessSecurityWepKeyTypeExists(data) {
 		return
 	}
 	wepKeyType := getSettingWirelessSecurityWepKeyType(data)
 	if wepKeyType != 1 && wepKeyType != 2 {
-		rememberError(errs, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE, NM_KEY_ERROR_INVALID_VALUE)
+		rememberError(errs, sectionWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE, NM_KEY_ERROR_INVALID_VALUE)
 	}
 }
-func checkSettingWirelessSecurityWepKey0(data connectionData, errs fieldErrors) {
+func checkSettingWirelessSecurityWepKey0(data connectionData, errs sectionErrors) {
 	if !isSettingWirelessSecurityWepKey0Exists(data) {
 		return
 	}
@@ -230,17 +230,17 @@ func checkSettingWirelessSecurityWepKey0(data connectionData, errs fieldErrors) 
 		// keys are ASCII keys, they must be either 5 or 13 characters
 		// in length.
 		if len(wepKey0) != 10 && len(wepKey0) != 26 && len(wepKey0) != 5 && len(wepKey0) != 13 {
-			rememberError(errs, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_WEP_KEY0, NM_KEY_ERROR_INVALID_VALUE)
+			rememberError(errs, sectionWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_WEP_KEY0, NM_KEY_ERROR_INVALID_VALUE)
 		}
 	} else if wepKeyType == 2 {
 		// If set to 2, the passphrase is hashed using the de-facto
 		// MD5 method to derive the actual WEP key.
 		if len(wepKey0) == 0 {
-			rememberError(errs, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_WEP_KEY0, NM_KEY_ERROR_INVALID_VALUE)
+			rememberError(errs, sectionWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_WEP_KEY0, NM_KEY_ERROR_INVALID_VALUE)
 		}
 	}
 }
-func checkSettingWirelessSecurityPsk(data connectionData, errs fieldErrors) {
+func checkSettingWirelessSecurityPsk(data connectionData, errs sectionErrors) {
 	if !isSettingWirelessSecurityPskExists(data) {
 		return
 	}
@@ -252,13 +252,13 @@ func checkSettingWirelessSecurityPsk(data connectionData, errs fieldErrors) {
 	// interpreted as a WPA passphrase
 	if len(psk) < 8 || len(psk) > 64 {
 		// TODO
-		rememberError(errs, fieldWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_PSK, NM_KEY_ERROR_INVALID_VALUE)
+		rememberError(errs, sectionWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_PSK, NM_KEY_ERROR_INVALID_VALUE)
 	}
 }
 
 // Virtual key getter and setter
 func getSettingVkWirelessSecurityKeyMgmt(data connectionData) (value string) {
-	if !isSettingFieldExists(data, fieldWirelessSecurity) {
+	if !isSettingSectionExists(data, sectionWirelessSecurity) {
 		value = "none"
 		return
 	}
@@ -280,14 +280,14 @@ func logicSetSettingVkWirelessSecurityKeyMgmt(data connectionData, value string)
 		err = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
 	case "none":
 		removeSettingWirelessSec(data)
-		removeSettingField(data, fieldWirelessSecurity)
-		removeSettingField(data, field8021x)
+		removeSettingSection(data, sectionWirelessSecurity)
+		removeSettingSection(data, section8021x)
 	case "wep":
-		setSettingWirelessSec(data, fieldWirelessSecurity)
-		addSettingField(data, fieldWirelessSecurity)
-		removeSettingField(data, field8021x)
+		setSettingWirelessSec(data, sectionWirelessSecurity)
+		addSettingSection(data, sectionWirelessSecurity)
+		removeSettingSection(data, section8021x)
 
-		removeSettingKeyBut(data, fieldWirelessSecurity,
+		removeSettingKeyBut(data, sectionWirelessSecurity,
 			NM_SETTING_WIRELESS_SECURITY_KEY_MGMT,
 			NM_SETTING_WIRELESS_SECURITY_AUTH_ALG,
 			NM_SETTING_WIRELESS_SECURITY_WEP_KEY0,
@@ -299,11 +299,11 @@ func logicSetSettingVkWirelessSecurityKeyMgmt(data connectionData, value string)
 		setSettingWirelessSecurityWepKeyFlags(data, NM_SETTING_SECRET_FLAG_NONE)
 		setSettingWirelessSecurityWepKeyType(data, 1)
 	case "wpa-psk":
-		setSettingWirelessSec(data, fieldWirelessSecurity)
-		addSettingField(data, fieldWirelessSecurity)
-		removeSettingField(data, field8021x)
+		setSettingWirelessSec(data, sectionWirelessSecurity)
+		addSettingSection(data, sectionWirelessSecurity)
+		removeSettingSection(data, section8021x)
 
-		removeSettingKeyBut(data, fieldWirelessSecurity,
+		removeSettingKeyBut(data, sectionWirelessSecurity,
 			NM_SETTING_WIRELESS_SECURITY_KEY_MGMT,
 			NM_SETTING_WIRELESS_SECURITY_PSK,
 			NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS,
@@ -311,11 +311,11 @@ func logicSetSettingVkWirelessSecurityKeyMgmt(data connectionData, value string)
 		setSettingWirelessSecurityKeyMgmt(data, "wpa-psk")
 		setSettingWirelessSecurityPskFlags(data, NM_SETTING_SECRET_FLAG_NONE)
 	case "wpa-eap":
-		setSettingWirelessSec(data, fieldWirelessSecurity)
-		addSettingField(data, fieldWirelessSecurity)
-		addSettingField(data, field8021x)
+		setSettingWirelessSec(data, sectionWirelessSecurity)
+		addSettingSection(data, sectionWirelessSecurity)
+		addSettingSection(data, section8021x)
 
-		removeSettingKeyBut(data, fieldWirelessSecurity,
+		removeSettingKeyBut(data, sectionWirelessSecurity,
 			NM_SETTING_WIRELESS_SECURITY_KEY_MGMT,
 		)
 		setSettingWirelessSecurityKeyMgmt(data, "wpa-eap")

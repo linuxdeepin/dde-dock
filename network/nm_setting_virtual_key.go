@@ -4,13 +4,13 @@ import (
 	"dlib"
 )
 
-// If there is none related field for virtual key, it means that the
-// virtual key used to control multiple fields, such as change
+// If there is none related section for virtual key, it means that the
+// virtual key used to control multiple sections, such as change
 // connection type, and the key's name must be unique.
 const NM_SETTING_VK_NONE_RELATED_FIELD = "<none>"
 
 // For a virtual key with none related key, it is often used to
-// control multiple keys in same field.
+// control multiple keys in same section.
 const NM_SETTING_VK_NONE_RELATED_KEY = "<none>"
 
 // Virtual key names
@@ -94,70 +94,70 @@ const (
 // wireless security
 const NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT = "vk-key-mgmt"
 
-// virtualKey stores virtual key info for each fields.
+// virtualKey stores virtual key info for each sections.
 type virtualKey struct {
 	Name          string
 	Type          ktype
-	RelatedField  string
+	RelatedSection  string
 	RelatedKey    string
 	EnableWrapper bool // check if the virtual key is a wrapper just to enable target key
 	Available     bool // check if is used by front-end
 	Optional      bool // if key is optional, will ignore error for it
 }
 
-func getVirtualKeyInfo(field, vkey string) (vkInfo virtualKey, ok bool) {
+func getVirtualKeyInfo(section, vkey string) (vkInfo virtualKey, ok bool) {
 	for _, vk := range virtualKeys {
-		if vk.RelatedField == field && vk.Name == vkey {
+		if vk.RelatedSection == section && vk.Name == vkey {
 			vkInfo = vk
 			ok = true
 			return
 		}
 	}
-	logger.Errorf("invalid virtual key, field=%s, vkey=%s", field, vkey)
+	logger.Errorf("invalid virtual key, section=%s, vkey=%s", section, vkey)
 	ok = false
 	return
 }
 
-func isVirtualKey(field, key string) bool {
-	if isStringInArray(key, getVirtualKeysOfField(field)) {
+func isVirtualKey(section, key string) bool {
+	if isStringInArray(key, getVirtualKeysOfSection(section)) {
 		return true
 	}
 	return false
 }
 
-func getVirtualKeysOfField(field string) (vks []string) {
+func getVirtualKeysOfSection(section string) (vks []string) {
 	for _, vk := range virtualKeys {
-		if vk.RelatedField == field {
+		if vk.RelatedSection == section {
 			vks = append(vks, vk.Name)
 		}
 	}
-	// logger.Debug("getVirtualKeysOfField: filed:", field, vks) // TODO test
+	// logger.Debug("getVirtualKeysOfSection: filed:", section, vks) // TODO test
 	return
 }
 
-func getSettingVkKeyType(field, key string) (t ktype) {
+func getSettingVkKeyType(section, key string) (t ktype) {
 	t = ktypeUnknown
 	for _, vk := range virtualKeys {
-		if vk.RelatedField == field && vk.Name == key {
+		if vk.RelatedSection == section && vk.Name == key {
 			t = vk.Type
 		}
 	}
 	return
 }
 
-func generalGetSettingVkAvailableValues(data connectionData, field, key string) (values []kvalue) {
-	switch field {
-	case field8021x:
+func generalGetSettingVkAvailableValues(data connectionData, section, key string) (values []kvalue) {
+	switch section {
+	case section8021x:
 		switch key {
 		case NM_SETTING_VK_802_1X_EAP:
 			values = getSetting8021xAvailableValues(data, NM_SETTING_802_1X_EAP)
 		}
-	case fieldConnection:
-	case fieldIpv4:
-	case fieldIpv6:
-	case fieldWired:
-	case fieldWireless:
-	case fieldWirelessSecurity:
+	case sectionConnection:
+	case sectionIpv4:
+	case sectionIpv6:
+	case sectionWired:
+	case sectionWireless:
+	case sectionWirelessSecurity:
 		switch key {
 		case NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT:
 			if getSettingWirelessMode(data) == NM_SETTING_WIRELESS_MODE_INFRA {
@@ -175,9 +175,9 @@ func generalGetSettingVkAvailableValues(data connectionData, field, key string) 
 				}
 			}
 		}
-	case fieldPppoe:
-	case fieldPpp:
-	case fieldVpnL2tpPpp:
+	case sectionPppoe:
+	case sectionPpp:
+	case sectionVpnL2tpPpp:
 		switch key {
 		case NM_SETTING_VK_VPN_L2TP_MPPE_SECURITY:
 			values = []kvalue{
@@ -186,7 +186,7 @@ func generalGetSettingVkAvailableValues(data connectionData, field, key string) 
 				kvalue{"40-bit", dlib.Tr("40-bit (less secure)")},
 			}
 		}
-	case fieldVpnPptpPpp:
+	case sectionVpnPptpPpp:
 		switch key {
 		case NM_SETTING_VK_VPN_PPTP_MPPE_SECURITY:
 			values = []kvalue{
@@ -195,7 +195,7 @@ func generalGetSettingVkAvailableValues(data connectionData, field, key string) 
 				kvalue{"40-bit", dlib.Tr("40-bit (less secure)")},
 			}
 		}
-	case fieldVpnVpncAdvanced:
+	case sectionVpnVpncAdvanced:
 		switch key {
 		case NM_SETTING_VK_VPN_VPNC_KEY_ENCRYPTION_METHOD:
 			values = []kvalue{
@@ -206,7 +206,7 @@ func generalGetSettingVkAvailableValues(data connectionData, field, key string) 
 		}
 	}
 
-	// dispatch virtual keys that with none related fields
+	// dispatch virtual keys that with none related sections
 	if len(values) == 0 {
 		switch key {
 		case NM_SETTING_VK_MOBILE_SERVICE_TYPE:
@@ -218,20 +218,20 @@ func generalGetSettingVkAvailableValues(data connectionData, field, key string) 
 	}
 
 	if len(values) == 0 {
-		logger.Warningf("there is no available values for virtual key, %s->%s", field, key)
+		logger.Warningf("there is no available values for virtual key, %s->%s", section, key)
 	}
 	return
 }
 
-func appendAvailableKeys(data connectionData, keys []string, field, key string) (newKeys []string) {
+func appendAvailableKeys(data connectionData, keys []string, section, key string) (newKeys []string) {
 	newKeys = appendStrArrayUnion(keys)
-	relatedVks := getRelatedAvailableVirtualKeys(field, key)
+	relatedVks := getRelatedAvailableVirtualKeys(section, key)
 	if len(relatedVks) > 0 {
 		for _, vk := range relatedVks {
 			// if is enable wrapper virtual key, both virtual key and
 			// real key will be appended
-			if isEnableWrapperVirtualKey(field, vk) {
-				if isSettingKeyExists(data, field, key) {
+			if isEnableWrapperVirtualKey(section, vk) {
+				if isSettingKeyExists(data, section, key) {
 					newKeys = appendStrArrayUnion(newKeys, key)
 				}
 			}
@@ -243,9 +243,9 @@ func appendAvailableKeys(data connectionData, keys []string, field, key string) 
 	return
 }
 
-func getRelatedAvailableVirtualKeys(field, key string) (vks []string) {
+func getRelatedAvailableVirtualKeys(section, key string) (vks []string) {
 	for _, vk := range virtualKeys {
-		if vk.RelatedField == field && vk.RelatedKey == key && vk.Available {
+		if vk.RelatedSection == section && vk.RelatedKey == key && vk.Available {
 			vks = append(vks, vk.Name)
 		}
 	}
@@ -253,26 +253,26 @@ func getRelatedAvailableVirtualKeys(field, key string) (vks []string) {
 }
 
 // get related virtual key(s) for target key
-func getRelatedVirtualKeys(field, key string) (vks []string) {
+func getRelatedVirtualKeys(section, key string) (vks []string) {
 	for _, vk := range virtualKeys {
-		if vk.RelatedField == field && vk.RelatedKey == key {
+		if vk.RelatedSection == section && vk.RelatedKey == key {
 			vks = append(vks, vk.Name)
 		}
 	}
 	return
 }
 
-func isEnableWrapperVirtualKey(field, vkey string) bool {
-	vkInfo, ok := getVirtualKeyInfo(field, vkey)
+func isEnableWrapperVirtualKey(section, vkey string) bool {
+	vkInfo, ok := getVirtualKeyInfo(section, vkey)
 	if !ok {
 		return false
 	}
 	return vkInfo.EnableWrapper
 }
 
-func isOptionalChildVirtualKeys(field, vkey string) (optional bool) {
+func isOptionalChildVirtualKeys(section, vkey string) (optional bool) {
 	for _, vk := range virtualKeys {
-		if vk.RelatedField == field && vk.Name == vkey {
+		if vk.RelatedSection == section && vk.Name == vkey {
 			optional = vk.Optional
 		}
 	}

@@ -8,9 +8,9 @@ import (
 )
 
 // NM_SETTING_CONNECTION_SETTING_NAME -> ../nm_setting_connection_autogen.go
-func getBackEndFilePath(fieldName string) (filePath string) {
-	fieldName = strings.Replace(fieldName, "NM_SETTING_VF_", "NM_SETTING_", -1) // remove virtual field tag
-	fileName := strings.TrimSuffix(fieldName, "_SETTING_NAME")
+func getBackEndFilePath(sectionName string) (filePath string) {
+	sectionName = strings.Replace(sectionName, "NM_SETTING_VF_", "NM_SETTING_", -1) // remove virtual section tag
+	fileName := strings.TrimSuffix(sectionName, "_SETTING_NAME")
 	fileName = strings.ToLower(fileName) + "_autogen.go"
 	filePath = path.Join(backEndDir, fileName)
 	return
@@ -217,17 +217,17 @@ func IfNeedCheckValueLength(ktype string) (need string) {
 	return
 }
 
-func GetAllVkFields(nmSettingVks []NMSettingVkStruct) (fields []string) {
+func GetAllVkSections(nmSettingVks []NMSettingVkStruct) (sections []string) {
 	for _, vk := range nmSettingVks {
-		fields = appendStrArrayUnion(fields, vk.RelatedField)
+		sections = appendStrArrayUnion(sections, vk.RelatedSection)
 	}
 	return
 }
 
-// get all virtual keys in target field
-func GetAllVkFieldKeys(nmSettingVks []NMSettingVkStruct, field string) (keys []string) {
+// get all virtual keys in target section
+func GetAllVkSectionKeys(nmSettingVks []NMSettingVkStruct, section string) (keys []string) {
 	for _, vk := range nmSettingVks {
-		if vk.RelatedField == field {
+		if vk.RelatedSection == section {
 			keys = append(keys, vk.Name)
 		}
 	}

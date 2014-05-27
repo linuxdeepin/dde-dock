@@ -42,7 +42,7 @@ func getSettingVpnOpenconnectKeyType(key string) (t ktype) {
 	return
 }
 
-// Check is key in current setting field
+// Check is key in current setting section
 func isKeyInSettingVpnOpenconnect(key string) bool {
 	switch key {
 	case NM_SETTING_VPN_OPENCONNECT_KEY_GATEWAY:
@@ -232,17 +232,17 @@ func isSettingVpnOpenconnectKeyStokenStringExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_STOKEN_STRING)
 }
 
-// Ensure field and key exists and not empty
-func ensureFieldSettingVpnOpenconnectExists(data connectionData, errs fieldErrors, relatedKey string) {
-	if !isSettingFieldExists(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME) {
+// Ensure section and key exists and not empty
+func ensureSectionSettingVpnOpenconnectExists(data connectionData, errs sectionErrors, relatedKey string) {
+	if !isSettingSectionExists(data, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME) {
 		rememberError(errs, relatedKey, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME))
 	}
-	fieldData, _ := data[NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME]
-	if len(fieldData) == 0 {
+	sectionData, _ := data[NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME]
+	if len(sectionData) == 0 {
 		rememberError(errs, relatedKey, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME))
 	}
 }
-func ensureSettingVpnOpenconnectKeyGatewayNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingVpnOpenconnectKeyGatewayNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnOpenconnectKeyGatewayExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_GATEWAY, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -251,7 +251,7 @@ func ensureSettingVpnOpenconnectKeyGatewayNoEmpty(data connectionData, errs fiel
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_GATEWAY, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnOpenconnectKeyCacertNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingVpnOpenconnectKeyCacertNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnOpenconnectKeyCacertExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_CACERT, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -260,7 +260,7 @@ func ensureSettingVpnOpenconnectKeyCacertNoEmpty(data connectionData, errs field
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_CACERT, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnOpenconnectKeyProxyNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingVpnOpenconnectKeyProxyNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnOpenconnectKeyProxyExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_PROXY, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -269,12 +269,12 @@ func ensureSettingVpnOpenconnectKeyProxyNoEmpty(data connectionData, errs fieldE
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_PROXY, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnOpenconnectKeyCsdEnableNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingVpnOpenconnectKeyCsdEnableNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnOpenconnectKeyCsdEnableExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_CSD_ENABLE, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnOpenconnectKeyCsdWrapperNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingVpnOpenconnectKeyCsdWrapperNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnOpenconnectKeyCsdWrapperExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_CSD_WRAPPER, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -283,7 +283,7 @@ func ensureSettingVpnOpenconnectKeyCsdWrapperNoEmpty(data connectionData, errs f
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_CSD_WRAPPER, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnOpenconnectKeyUsercertNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingVpnOpenconnectKeyUsercertNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnOpenconnectKeyUsercertExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_USERCERT, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -292,7 +292,7 @@ func ensureSettingVpnOpenconnectKeyUsercertNoEmpty(data connectionData, errs fie
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_USERCERT, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnOpenconnectKeyPrivkeyNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingVpnOpenconnectKeyPrivkeyNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnOpenconnectKeyPrivkeyExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_PRIVKEY, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -301,12 +301,12 @@ func ensureSettingVpnOpenconnectKeyPrivkeyNoEmpty(data connectionData, errs fiel
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_PRIVKEY, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnOpenconnectKeyPemPassphraseFsidNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingVpnOpenconnectKeyPemPassphraseFsidNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnOpenconnectKeyPemPassphraseFsidExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_PEM_PASSPHRASE_FSID, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnOpenconnectKeyCookieNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingVpnOpenconnectKeyCookieNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnOpenconnectKeyCookieExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_COOKIE, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -315,7 +315,7 @@ func ensureSettingVpnOpenconnectKeyCookieNoEmpty(data connectionData, errs field
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_COOKIE, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnOpenconnectKeyGwcertNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingVpnOpenconnectKeyGwcertNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnOpenconnectKeyGwcertExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_GWCERT, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -324,7 +324,7 @@ func ensureSettingVpnOpenconnectKeyGwcertNoEmpty(data connectionData, errs field
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_GWCERT, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnOpenconnectKeyAuthtypeNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingVpnOpenconnectKeyAuthtypeNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnOpenconnectKeyAuthtypeExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_AUTHTYPE, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -333,7 +333,7 @@ func ensureSettingVpnOpenconnectKeyAuthtypeNoEmpty(data connectionData, errs fie
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_AUTHTYPE, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnOpenconnectKeyMtuNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingVpnOpenconnectKeyMtuNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnOpenconnectKeyMtuExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_MTU, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -342,7 +342,7 @@ func ensureSettingVpnOpenconnectKeyMtuNoEmpty(data connectionData, errs fieldErr
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_MTU, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnOpenconnectKeyStokenSourceNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingVpnOpenconnectKeyStokenSourceNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnOpenconnectKeyStokenSourceExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_STOKEN_SOURCE, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -351,7 +351,7 @@ func ensureSettingVpnOpenconnectKeyStokenSourceNoEmpty(data connectionData, errs
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_STOKEN_SOURCE, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnOpenconnectKeyStokenStringNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingVpnOpenconnectKeyStokenStringNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnOpenconnectKeyStokenStringExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_VPN_OPENCONNECT_KEY_STOKEN_STRING, NM_KEY_ERROR_MISSING_VALUE)
 	}

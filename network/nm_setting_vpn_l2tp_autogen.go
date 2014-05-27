@@ -24,7 +24,7 @@ func getSettingVpnL2tpKeyType(key string) (t ktype) {
 	return
 }
 
-// Check is key in current setting field
+// Check is key in current setting section
 func isKeyInSettingVpnL2tp(key string) bool {
 	switch key {
 	case NM_SETTING_VPN_L2TP_KEY_GATEWAY:
@@ -115,17 +115,17 @@ func isSettingVpnL2tpKeyDomainExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VF_VPN_L2TP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_DOMAIN)
 }
 
-// Ensure field and key exists and not empty
-func ensureFieldSettingVpnL2tpExists(data connectionData, errs fieldErrors, relatedKey string) {
-	if !isSettingFieldExists(data, NM_SETTING_VF_VPN_L2TP_SETTING_NAME) {
+// Ensure section and key exists and not empty
+func ensureSectionSettingVpnL2tpExists(data connectionData, errs sectionErrors, relatedKey string) {
+	if !isSettingSectionExists(data, NM_SETTING_VF_VPN_L2TP_SETTING_NAME) {
 		rememberError(errs, relatedKey, NM_SETTING_VF_VPN_L2TP_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_VF_VPN_L2TP_SETTING_NAME))
 	}
-	fieldData, _ := data[NM_SETTING_VF_VPN_L2TP_SETTING_NAME]
-	if len(fieldData) == 0 {
+	sectionData, _ := data[NM_SETTING_VF_VPN_L2TP_SETTING_NAME]
+	if len(sectionData) == 0 {
 		rememberError(errs, relatedKey, NM_SETTING_VF_VPN_L2TP_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_VF_VPN_L2TP_SETTING_NAME))
 	}
 }
-func ensureSettingVpnL2tpKeyGatewayNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingVpnL2tpKeyGatewayNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnL2tpKeyGatewayExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_L2TP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_GATEWAY, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -134,7 +134,7 @@ func ensureSettingVpnL2tpKeyGatewayNoEmpty(data connectionData, errs fieldErrors
 		rememberError(errs, NM_SETTING_VF_VPN_L2TP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_GATEWAY, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnL2tpKeyUserNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingVpnL2tpKeyUserNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnL2tpKeyUserExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_L2TP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_USER, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -143,12 +143,12 @@ func ensureSettingVpnL2tpKeyUserNoEmpty(data connectionData, errs fieldErrors) {
 		rememberError(errs, NM_SETTING_VF_VPN_L2TP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_USER, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnL2tpKeyPasswordFlagsNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingVpnL2tpKeyPasswordFlagsNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnL2tpKeyPasswordFlagsExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_L2TP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_PASSWORD_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnL2tpKeyPasswordNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingVpnL2tpKeyPasswordNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnL2tpKeyPasswordExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_L2TP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_PASSWORD, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -157,7 +157,7 @@ func ensureSettingVpnL2tpKeyPasswordNoEmpty(data connectionData, errs fieldError
 		rememberError(errs, NM_SETTING_VF_VPN_L2TP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_PASSWORD, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnL2tpKeyDomainNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingVpnL2tpKeyDomainNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnL2tpKeyDomainExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_L2TP_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_DOMAIN, NM_KEY_ERROR_MISSING_VALUE)
 	}

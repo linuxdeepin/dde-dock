@@ -31,12 +31,12 @@ func (s *ConnectionSession) updatePropAvailableKeys() {
 
 func (s *ConnectionSession) updatePropErrors() {
 	for _, page := range s.listPages() {
-		s.Errors[page] = make(fieldErrors)
-		fields := s.pageToFields(page)
-		for _, field := range fields {
-			// check error only field exists
-			if isSettingFieldExists(s.data, field) {
-				errs := generalCheckSettingValues(s.data, field)
+		s.Errors[page] = make(sectionErrors)
+		sections := s.pageToSections(page)
+		for _, section := range sections {
+			// check error only section exists
+			if isSettingSectionExists(s.data, section) {
+				errs := generalCheckSettingValues(s.data, section)
 				for k, v := range errs {
 					s.Errors[page][k] = v
 				}

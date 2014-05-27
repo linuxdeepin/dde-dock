@@ -22,7 +22,7 @@ func getSettingVpnL2tpIpsecKeyType(key string) (t ktype) {
 	return
 }
 
-// Check is key in current setting field
+// Check is key in current setting section
 func isKeyInSettingVpnL2tpIpsec(key string) bool {
 	switch key {
 	case NM_SETTING_VPN_L2TP_KEY_IPSEC_ENABLE:
@@ -102,22 +102,22 @@ func isSettingVpnL2tpKeyIpsecPskExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_PSK)
 }
 
-// Ensure field and key exists and not empty
-func ensureFieldSettingVpnL2tpIpsecExists(data connectionData, errs fieldErrors, relatedKey string) {
-	if !isSettingFieldExists(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME) {
+// Ensure section and key exists and not empty
+func ensureSectionSettingVpnL2tpIpsecExists(data connectionData, errs sectionErrors, relatedKey string) {
+	if !isSettingSectionExists(data, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME) {
 		rememberError(errs, relatedKey, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME))
 	}
-	fieldData, _ := data[NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME]
-	if len(fieldData) == 0 {
+	sectionData, _ := data[NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME]
+	if len(sectionData) == 0 {
 		rememberError(errs, relatedKey, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME))
 	}
 }
-func ensureSettingVpnL2tpKeyIpsecEnableNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingVpnL2tpKeyIpsecEnableNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnL2tpKeyIpsecEnableExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_ENABLE, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingVpnL2tpKeyIpsecGroupNameNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingVpnL2tpKeyIpsecGroupNameNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnL2tpKeyIpsecGroupNameExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GROUP_NAME, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -126,7 +126,7 @@ func ensureSettingVpnL2tpKeyIpsecGroupNameNoEmpty(data connectionData, errs fiel
 		rememberError(errs, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GROUP_NAME, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnL2tpKeyIpsecGatewayIdNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingVpnL2tpKeyIpsecGatewayIdNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnL2tpKeyIpsecGatewayIdExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -135,7 +135,7 @@ func ensureSettingVpnL2tpKeyIpsecGatewayIdNoEmpty(data connectionData, errs fiel
 		rememberError(errs, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingVpnL2tpKeyIpsecPskNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingVpnL2tpKeyIpsecPskNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnL2tpKeyIpsecPskExists(data) {
 		rememberError(errs, NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME, NM_SETTING_VPN_L2TP_KEY_IPSEC_PSK, NM_KEY_ERROR_MISSING_VALUE)
 	}

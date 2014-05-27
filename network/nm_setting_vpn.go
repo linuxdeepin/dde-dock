@@ -29,19 +29,19 @@ const (
 func newBasicVpnConnectionData(id, uuid, service string) (data connectionData) {
 	data = make(connectionData)
 
-	addSettingField(data, fieldConnection)
+	addSettingSection(data, sectionConnection)
 	setSettingConnectionId(data, id)
 	setSettingConnectionUuid(data, uuid)
 	setSettingConnectionType(data, NM_SETTING_VPN_SETTING_NAME)
 	setSettingConnectionAutoconnect(data, false)
 	logicSetSettingVkConnectionNoPermission(data, false)
 
-	addSettingField(data, fieldVpn)
+	addSettingSection(data, sectionVpn)
 	setSettingVpnServiceType(data, service)
 	setSettingVpnData(data, make(map[string]string))
 	setSettingVpnSecrets(data, make(map[string]string))
 
-	initSettingFieldIpv4(data)
+	initSettingSectionIpv4(data)
 	return
 }
 
@@ -49,44 +49,44 @@ func getSettingVpnAvailableKeys(data connectionData) (keys []string) { return }
 func getSettingVpnAvailableValues(data connectionData, key string) (values []kvalue) {
 	return
 }
-func checkSettingVpnValues(data connectionData) (errs fieldErrors) {
+func checkSettingVpnValues(data connectionData) (errs sectionErrors) {
 	errs = make(map[string]string)
 	return
 }
 
-func isSettingVpnPluginKey(field string) bool {
-	// all keys in vpn virtual fields are vpn plugin key
-	realField := getRealFieldName(field)
-	if realField == fieldVpn && realField != field {
+func isSettingVpnPluginKey(section string) bool {
+	// all keys in vpn virtual sections are vpn plugin key
+	realSection := getRealSectionName(section)
+	if realSection == sectionVpn && realSection != section {
 		return true
 	}
 	return false
 }
-func isSettingVpnPluginSecretKey(field, key string) bool {
-	switch field {
-	case fieldVpnL2tp:
+func isSettingVpnPluginSecretKey(section, key string) bool {
+	switch section {
+	case sectionVpnL2tp:
 		switch key {
 		case NM_SETTING_VPN_L2TP_KEY_PASSWORD:
 			return true
 		}
-	case fieldVpnOpenvpn:
+	case sectionVpnOpenvpn:
 		switch key {
 		case NM_SETTING_VPN_OPENVPN_KEY_PASSWORD:
 			return true
 		case NM_SETTING_VPN_OPENVPN_KEY_CERTPASS:
 			return true
 		}
-	case fieldVpnOpenvpnProxies:
+	case sectionVpnOpenvpnProxies:
 		switch key {
 		case NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD:
 			return true
 		}
-	case fieldVpnPptp:
+	case sectionVpnPptp:
 		switch key {
 		case NM_SETTING_VPN_PPTP_KEY_PASSWORD:
 			return true
 		}
-	case fieldVpnVpnc:
+	case sectionVpnVpnc:
 		switch key {
 		case NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD:
 			return true
@@ -98,39 +98,39 @@ func isSettingVpnPluginSecretKey(field, key string) bool {
 }
 
 // Basic getter and setter for vpn plugin keys
-func getSettingVpnPluginKey(data connectionData, field, key string) (value interface{}) {
-	value = generalGetSettingDefaultValue(field, key) // get default value firstly
-	vpnData, ok := getSettingVpnPluginData(data, field, key)
+func getSettingVpnPluginKey(data connectionData, section, key string) (value interface{}) {
+	value = generalGetSettingDefaultValue(section, key) // get default value firstly
+	vpnData, ok := getSettingVpnPluginData(data, section, key)
 	if !ok {
 		// not exists, just return nil
-		logger.Errorf("invalid vpn plugin data: data[%s][%s]", field, key)
+		logger.Errorf("invalid vpn plugin data: data[%s][%s]", section, key)
 		return
 	}
 	valueStr, ok := vpnData[key]
 	if !ok {
 		return
 	}
-	value = unmarshalVpnPluginKey(valueStr, generalGetSettingKeyType(field, key))
+	value = unmarshalVpnPluginKey(valueStr, generalGetSettingKeyType(section, key))
 	return
 }
-func setSettingVpnPluginKey(data connectionData, field, key string, value interface{}) {
-	vpnData, ok := getSettingVpnPluginData(data, field, key)
+func setSettingVpnPluginKey(data connectionData, section, key string, value interface{}) {
+	vpnData, ok := getSettingVpnPluginData(data, section, key)
 	if !ok {
-		logger.Errorf("invalid vpn plugin data: data[%s][%s]", field, key)
+		logger.Errorf("invalid vpn plugin data: data[%s][%s]", section, key)
 		return
 	}
-	valueStr := marshalVpnPluginKey(value, generalGetSettingKeyType(field, key))
+	valueStr := marshalVpnPluginKey(value, generalGetSettingKeyType(section, key))
 	vpnData[key] = valueStr
 }
-func isSettingVpnPluginKeyExists(data connectionData, field, key string) (ok bool) {
-	vpnData, ok := getSettingVpnPluginData(data, field, key)
+func isSettingVpnPluginKeyExists(data connectionData, section, key string) (ok bool) {
+	vpnData, ok := getSettingVpnPluginData(data, section, key)
 	if !ok {
 		return
 	}
 	_, ok = vpnData[key]
 	return
 }
-func removeSettingVpnPluginKey(data connectionData, field string, keys ...string) {
+func removeSettingVpnPluginKey(data connectionData, section string, keys ...string) {
 	vpnSerectData, ok := doGetSettingVpnPluginData(data, true)
 	if ok {
 		doRemoveSettingVpnPluginKey(vpnSerectData, keys...)
@@ -140,7 +140,7 @@ func removeSettingVpnPluginKey(data connectionData, field string, keys ...string
 		doRemoveSettingVpnPluginKey(vpnData, keys...)
 	}
 }
-func removeSettingVpnPluginKeyBut(data connectionData, field string, keys ...string) {
+func removeSettingVpnPluginKeyBut(data connectionData, section string, keys ...string) {
 	vpnSerectData, ok := doGetSettingVpnPluginData(data, true)
 	if ok {
 		doRemoveSettingVpnPluginKeyBut(vpnSerectData, keys...)
@@ -163,8 +163,8 @@ func doRemoveSettingVpnPluginKeyBut(vpnData map[string]string, keys ...string) {
 	}
 }
 
-func getSettingVpnPluginData(data connectionData, field, key string) (vpnData map[string]string, ok bool) {
-	if isSettingVpnPluginSecretKey(field, key) {
+func getSettingVpnPluginData(data connectionData, section, key string) (vpnData map[string]string, ok bool) {
+	if isSettingVpnPluginSecretKey(section, key) {
 		vpnData, ok = doGetSettingVpnPluginData(data, true)
 	} else {
 		vpnData, ok = doGetSettingVpnPluginData(data, false)
@@ -172,18 +172,18 @@ func getSettingVpnPluginData(data connectionData, field, key string) (vpnData ma
 	return
 }
 func doGetSettingVpnPluginData(data connectionData, isSecretKey bool) (vpnData map[string]string, ok bool) {
-	vpnFieldData, ok := data[fieldVpn]
+	vpnSectionData, ok := data[sectionVpn]
 	if !ok {
 		return
 	}
 	var variantValue dbus.Variant
 	if isSecretKey {
-		variantValue, ok = vpnFieldData[NM_SETTING_VPN_SECRETS]
+		variantValue, ok = vpnSectionData[NM_SETTING_VPN_SECRETS]
 		if !ok {
 			return
 		}
 	} else {
-		variantValue, ok = vpnFieldData[NM_SETTING_VPN_DATA]
+		variantValue, ok = vpnSectionData[NM_SETTING_VPN_DATA]
 		if !ok {
 			return
 		}

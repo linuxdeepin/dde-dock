@@ -23,7 +23,7 @@ func getSettingSerialAvailableValues(data connectionData, key string) (values []
 }
 
 // Check whether the values are correct
-func checkSettingSerialValues(data connectionData) (errs fieldErrors) {
+func checkSettingSerialValues(data connectionData) (errs sectionErrors) {
 	errs = make(map[string]string)
 	return
 }

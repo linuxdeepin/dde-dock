@@ -36,7 +36,7 @@ func getSettingGsmKeyType(key string) (t ktype) {
 	return
 }
 
-// Check is key in current setting field
+// Check is key in current setting section
 func isKeyInSettingGsm(key string) bool {
 	switch key {
 	case NM_SETTING_GSM_NUMBER:
@@ -193,17 +193,17 @@ func isSettingGsmPinFlagsExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_PIN_FLAGS)
 }
 
-// Ensure field and key exists and not empty
-func ensureFieldSettingGsmExists(data connectionData, errs fieldErrors, relatedKey string) {
-	if !isSettingFieldExists(data, NM_SETTING_GSM_SETTING_NAME) {
+// Ensure section and key exists and not empty
+func ensureSectionSettingGsmExists(data connectionData, errs sectionErrors, relatedKey string) {
+	if !isSettingSectionExists(data, NM_SETTING_GSM_SETTING_NAME) {
 		rememberError(errs, relatedKey, NM_SETTING_GSM_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_GSM_SETTING_NAME))
 	}
-	fieldData, _ := data[NM_SETTING_GSM_SETTING_NAME]
-	if len(fieldData) == 0 {
+	sectionData, _ := data[NM_SETTING_GSM_SETTING_NAME]
+	if len(sectionData) == 0 {
 		rememberError(errs, relatedKey, NM_SETTING_GSM_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_GSM_SETTING_NAME))
 	}
 }
-func ensureSettingGsmNumberNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingGsmNumberNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingGsmNumberExists(data) {
 		rememberError(errs, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NUMBER, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -212,7 +212,7 @@ func ensureSettingGsmNumberNoEmpty(data connectionData, errs fieldErrors) {
 		rememberError(errs, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NUMBER, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingGsmUsernameNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingGsmUsernameNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingGsmUsernameExists(data) {
 		rememberError(errs, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_USERNAME, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -221,12 +221,12 @@ func ensureSettingGsmUsernameNoEmpty(data connectionData, errs fieldErrors) {
 		rememberError(errs, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_USERNAME, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingGsmPasswordFlagsNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingGsmPasswordFlagsNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingGsmPasswordFlagsExists(data) {
 		rememberError(errs, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_PASSWORD_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingGsmPasswordNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingGsmPasswordNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingGsmPasswordExists(data) {
 		rememberError(errs, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_PASSWORD, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -235,7 +235,7 @@ func ensureSettingGsmPasswordNoEmpty(data connectionData, errs fieldErrors) {
 		rememberError(errs, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_PASSWORD, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingGsmApnNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingGsmApnNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingGsmApnExists(data) {
 		rememberError(errs, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_APN, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -244,7 +244,7 @@ func ensureSettingGsmApnNoEmpty(data connectionData, errs fieldErrors) {
 		rememberError(errs, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_APN, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingGsmNetworkIdNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingGsmNetworkIdNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingGsmNetworkIdExists(data) {
 		rememberError(errs, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NETWORK_ID, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -253,22 +253,22 @@ func ensureSettingGsmNetworkIdNoEmpty(data connectionData, errs fieldErrors) {
 		rememberError(errs, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NETWORK_ID, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingGsmNetworkTypeNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingGsmNetworkTypeNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingGsmNetworkTypeExists(data) {
 		rememberError(errs, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NETWORK_TYPE, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingGsmAllowedBandsNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingGsmAllowedBandsNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingGsmAllowedBandsExists(data) {
 		rememberError(errs, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_ALLOWED_BANDS, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingGsmHomeOnlyNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingGsmHomeOnlyNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingGsmHomeOnlyExists(data) {
 		rememberError(errs, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_HOME_ONLY, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
-func ensureSettingGsmPinNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingGsmPinNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingGsmPinExists(data) {
 		rememberError(errs, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_PIN, NM_KEY_ERROR_MISSING_VALUE)
 	}
@@ -277,7 +277,7 @@ func ensureSettingGsmPinNoEmpty(data connectionData, errs fieldErrors) {
 		rememberError(errs, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_PIN, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingGsmPinFlagsNoEmpty(data connectionData, errs fieldErrors) {
+func ensureSettingGsmPinFlagsNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingGsmPinFlagsExists(data) {
 		rememberError(errs, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_PIN_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
 	}

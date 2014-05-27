@@ -50,36 +50,36 @@ func newVpnOpenconnectConnectionData(id, uuid string) (data connectionData) {
 	data = newBasicVpnConnectionData(id, uuid, NM_DBUS_SERVICE_OPENCONNECT)
 
 	setSettingVpnOpenconnectKeyCsdEnable(data, false)
-	setSettingKey(data, fieldVpn, "xmlconfig-flags", uint32(0))
+	setSettingKey(data, sectionVpn, "xmlconfig-flags", uint32(0))
 	setSettingVpnOpenconnectKeyPemPassphraseFsid(data, false)
-	setSettingKey(data, fieldVpn, "gwcert-flags", uint32(2))
-	setSettingKey(data, fieldVpn, "gateway-flags", uint32(2))
-	setSettingKey(data, fieldVpn, "autoconnect-flags", uint32(0))
-	setSettingKey(data, fieldVpn, "lasthost-flags", uint32(0))
+	setSettingKey(data, sectionVpn, "gwcert-flags", uint32(2))
+	setSettingKey(data, sectionVpn, "gateway-flags", uint32(2))
+	setSettingKey(data, sectionVpn, "autoconnect-flags", uint32(0))
+	setSettingKey(data, sectionVpn, "lasthost-flags", uint32(0))
 	setSettingVpnOpenconnectKeyStokenSource(data, "disabled")
-	setSettingKey(data, fieldVpn, "certsigs-flags", uint32(0))
-	setSettingKey(data, fieldVpn, "cookie-flags", uint32(2))
+	setSettingKey(data, sectionVpn, "certsigs-flags", uint32(0))
+	setSettingKey(data, sectionVpn, "cookie-flags", uint32(2))
 	setSettingVpnOpenconnectKeyAuthtype(data, "password")
 
-	initSettingFieldIpv6(data)
+	initSettingSectionIpv6(data)
 	return
 }
 
 func getSettingVpnOpenconnectAvailableKeys(data connectionData) (keys []string) {
-	keys = appendAvailableKeys(data, keys, fieldVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_GATEWAY)
-	keys = appendAvailableKeys(data, keys, fieldVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_CACERT)
-	keys = appendAvailableKeys(data, keys, fieldVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_PROXY)
-	keys = appendAvailableKeys(data, keys, fieldVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_CSD_ENABLE)
-	keys = appendAvailableKeys(data, keys, fieldVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_CSD_WRAPPER)
-	keys = appendAvailableKeys(data, keys, fieldVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_USERCERT)
-	keys = appendAvailableKeys(data, keys, fieldVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_PRIVKEY)
-	keys = appendAvailableKeys(data, keys, fieldVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_PEM_PASSPHRASE_FSID)
+	keys = appendAvailableKeys(data, keys, sectionVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_GATEWAY)
+	keys = appendAvailableKeys(data, keys, sectionVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_CACERT)
+	keys = appendAvailableKeys(data, keys, sectionVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_PROXY)
+	keys = appendAvailableKeys(data, keys, sectionVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_CSD_ENABLE)
+	keys = appendAvailableKeys(data, keys, sectionVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_CSD_WRAPPER)
+	keys = appendAvailableKeys(data, keys, sectionVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_USERCERT)
+	keys = appendAvailableKeys(data, keys, sectionVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_PRIVKEY)
+	keys = appendAvailableKeys(data, keys, sectionVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_PEM_PASSPHRASE_FSID)
 	return
 }
 func getSettingVpnOpenconnectAvailableValues(data connectionData, key string) (values []kvalue) {
 	return
 }
-func checkSettingVpnOpenconnectValues(data connectionData) (errs fieldErrors) {
+func checkSettingVpnOpenconnectValues(data connectionData) (errs sectionErrors) {
 	errs = make(map[string]string)
 	ensureSettingVpnOpenconnectKeyGatewayNoEmpty(data, errs)
 	checkSettingVpnOpenconnectKeyCacert(data, errs)
@@ -87,27 +87,27 @@ func checkSettingVpnOpenconnectValues(data connectionData) (errs fieldErrors) {
 	checkSettingVpnOpenconnectKeyPrivkey(data, errs)
 	return
 }
-func checkSettingVpnOpenconnectKeyCacert(data connectionData, errs fieldErrors) {
+func checkSettingVpnOpenconnectKeyCacert(data connectionData, errs sectionErrors) {
 	if !isSettingVpnOpenconnectKeyCacertExists(data) {
 		return
 	}
 	value := getSettingVpnOpenconnectKeyCacert(data)
-	ensureFileExists(errs, fieldVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_CACERT, value,
+	ensureFileExists(errs, sectionVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_CACERT, value,
 		".pem", ".crt", ".key")
 }
-func checkSettingVpnOpenconnectKeyUsercert(data connectionData, errs fieldErrors) {
+func checkSettingVpnOpenconnectKeyUsercert(data connectionData, errs sectionErrors) {
 	if !isSettingVpnOpenconnectKeyUsercertExists(data) {
 		return
 	}
 	value := getSettingVpnOpenconnectKeyUsercert(data)
-	ensureFileExists(errs, fieldVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_USERCERT, value,
+	ensureFileExists(errs, sectionVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_USERCERT, value,
 		".pem", ".crt", ".key")
 }
-func checkSettingVpnOpenconnectKeyPrivkey(data connectionData, errs fieldErrors) {
+func checkSettingVpnOpenconnectKeyPrivkey(data connectionData, errs sectionErrors) {
 	if !isSettingVpnOpenconnectKeyPrivkeyExists(data) {
 		return
 	}
 	value := getSettingVpnOpenconnectKeyPrivkey(data)
-	ensureFileExists(errs, fieldVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_PRIVKEY, value,
+	ensureFileExists(errs, sectionVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_PRIVKEY, value,
 		".pem", ".crt", ".key")
 }

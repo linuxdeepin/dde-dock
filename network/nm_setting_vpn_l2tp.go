@@ -105,13 +105,13 @@ func newVpnL2tpConnectionData(id, uuid string) (data connectionData) {
 
 // vpn-l2tp
 func getSettingVpnL2tpAvailableKeys(data connectionData) (keys []string) {
-	keys = appendAvailableKeys(data, keys, fieldVpnL2tp, NM_SETTING_VPN_L2TP_KEY_GATEWAY)
-	keys = appendAvailableKeys(data, keys, fieldVpnL2tp, NM_SETTING_VPN_L2TP_KEY_USER)
-	keys = appendAvailableKeys(data, keys, fieldVpnL2tp, NM_SETTING_VPN_L2TP_KEY_PASSWORD_FLAGS)
+	keys = appendAvailableKeys(data, keys, sectionVpnL2tp, NM_SETTING_VPN_L2TP_KEY_GATEWAY)
+	keys = appendAvailableKeys(data, keys, sectionVpnL2tp, NM_SETTING_VPN_L2TP_KEY_USER)
+	keys = appendAvailableKeys(data, keys, sectionVpnL2tp, NM_SETTING_VPN_L2TP_KEY_PASSWORD_FLAGS)
 	if isVpnL2tpNeedShowPassword(data) {
-		keys = appendAvailableKeys(data, keys, fieldVpnL2tp, NM_SETTING_VPN_L2TP_KEY_PASSWORD)
+		keys = appendAvailableKeys(data, keys, sectionVpnL2tp, NM_SETTING_VPN_L2TP_KEY_PASSWORD)
 	}
-	keys = appendAvailableKeys(data, keys, fieldVpnL2tp, NM_SETTING_VPN_L2TP_KEY_DOMAIN)
+	keys = appendAvailableKeys(data, keys, sectionVpnL2tp, NM_SETTING_VPN_L2TP_KEY_DOMAIN)
 	return
 }
 func getSettingVpnL2tpAvailableValues(data connectionData, key string) (values []kvalue) {
@@ -121,7 +121,7 @@ func getSettingVpnL2tpAvailableValues(data connectionData, key string) (values [
 	}
 	return
 }
-func checkSettingVpnL2tpValues(data connectionData) (errs fieldErrors) {
+func checkSettingVpnL2tpValues(data connectionData) (errs sectionErrors) {
 	errs = make(map[string]string)
 	ensureSettingVpnL2tpKeyGatewayNoEmpty(data, errs)
 	return
@@ -129,46 +129,46 @@ func checkSettingVpnL2tpValues(data connectionData) (errs fieldErrors) {
 
 // vpn-l2tp-ppp
 func getSettingVpnL2tpPppAvailableKeys(data connectionData) (keys []string) {
-	keys = appendAvailableKeys(data, keys, fieldVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_REFUSE_EAP)
-	keys = appendAvailableKeys(data, keys, fieldVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_REFUSE_PAP)
-	keys = appendAvailableKeys(data, keys, fieldVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_REFUSE_CHAP)
-	keys = appendAvailableKeys(data, keys, fieldVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_REFUSE_MSCHAP)
-	keys = appendAvailableKeys(data, keys, fieldVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_REFUSE_MSCHAPV2)
-	keys = appendAvailableKeys(data, keys, fieldVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE)
+	keys = appendAvailableKeys(data, keys, sectionVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_REFUSE_EAP)
+	keys = appendAvailableKeys(data, keys, sectionVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_REFUSE_PAP)
+	keys = appendAvailableKeys(data, keys, sectionVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_REFUSE_CHAP)
+	keys = appendAvailableKeys(data, keys, sectionVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_REFUSE_MSCHAP)
+	keys = appendAvailableKeys(data, keys, sectionVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_REFUSE_MSCHAPV2)
+	keys = appendAvailableKeys(data, keys, sectionVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE)
 	if getSettingVkVpnL2tpRequireMppe(data) {
-		keys = appendAvailableKeys(data, keys, fieldVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_40)
-		keys = appendAvailableKeys(data, keys, fieldVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_MPPE_STATEFUL)
+		keys = appendAvailableKeys(data, keys, sectionVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_40)
+		keys = appendAvailableKeys(data, keys, sectionVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_MPPE_STATEFUL)
 	}
-	keys = appendAvailableKeys(data, keys, fieldVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_NOBSDCOMP)
-	keys = appendAvailableKeys(data, keys, fieldVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_NODEFLATE)
-	keys = appendAvailableKeys(data, keys, fieldVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_NO_VJ_COMP)
-	keys = appendAvailableKeys(data, keys, fieldVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_NO_PCOMP)
-	keys = appendAvailableKeys(data, keys, fieldVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_NO_ACCOMP)
-	keys = appendAvailableKeys(data, keys, fieldVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_FAILURE)
+	keys = appendAvailableKeys(data, keys, sectionVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_NOBSDCOMP)
+	keys = appendAvailableKeys(data, keys, sectionVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_NODEFLATE)
+	keys = appendAvailableKeys(data, keys, sectionVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_NO_VJ_COMP)
+	keys = appendAvailableKeys(data, keys, sectionVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_NO_PCOMP)
+	keys = appendAvailableKeys(data, keys, sectionVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_NO_ACCOMP)
+	keys = appendAvailableKeys(data, keys, sectionVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_FAILURE)
 	return
 }
 func getSettingVpnL2tpPppAvailableValues(data connectionData, key string) (values []kvalue) {
 	return
 }
-func checkSettingVpnL2tpPppValues(data connectionData) (errs fieldErrors) {
+func checkSettingVpnL2tpPppValues(data connectionData) (errs sectionErrors) {
 	errs = make(map[string]string)
 	return
 }
 
 // vpn-l2tp-ipsec
 func getSettingVpnL2tpIpsecAvailableKeys(data connectionData) (keys []string) {
-	keys = appendAvailableKeys(data, keys, fieldVpnL2tpIpsec, NM_SETTING_VPN_L2TP_KEY_IPSEC_ENABLE)
+	keys = appendAvailableKeys(data, keys, sectionVpnL2tpIpsec, NM_SETTING_VPN_L2TP_KEY_IPSEC_ENABLE)
 	if getSettingVpnL2tpKeyIpsecEnable(data) {
-		keys = appendAvailableKeys(data, keys, fieldVpnL2tpIpsec, NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID)
-		keys = appendAvailableKeys(data, keys, fieldVpnL2tpIpsec, NM_SETTING_VPN_L2TP_KEY_IPSEC_GROUP_NAME)
-		keys = appendAvailableKeys(data, keys, fieldVpnL2tpIpsec, NM_SETTING_VPN_L2TP_KEY_IPSEC_PSK)
+		keys = appendAvailableKeys(data, keys, sectionVpnL2tpIpsec, NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID)
+		keys = appendAvailableKeys(data, keys, sectionVpnL2tpIpsec, NM_SETTING_VPN_L2TP_KEY_IPSEC_GROUP_NAME)
+		keys = appendAvailableKeys(data, keys, sectionVpnL2tpIpsec, NM_SETTING_VPN_L2TP_KEY_IPSEC_PSK)
 	}
 	return
 }
 func getSettingVpnL2tpIpsecAvailableValues(data connectionData, key string) (values []kvalue) {
 	return
 }
-func checkSettingVpnL2tpIpsecValues(data connectionData) (errs fieldErrors) {
+func checkSettingVpnL2tpIpsecValues(data connectionData) (errs sectionErrors) {
 	errs = make(map[string]string)
 	return
 }
