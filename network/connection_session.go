@@ -136,7 +136,7 @@ func NewConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 
 func (s *ConnectionSession) fixValues() {
 	// append missing sectionIpv6
-	if !isSettingSectionExists(s.data, sectionIpv6) && isStringInArray(sectionIpv6, s.listSections()) {
+	if !isSettingSectionExists(s.data, sectionIpv6) && isStringInArray(sectionIpv6, listSections(s.data)) {
 		initSettingSectionIpv6(s.data)
 	}
 
@@ -218,38 +218,6 @@ func (s *ConnectionSession) Close() {
 	dbus.UnInstallObject(s)
 }
 
-// listSections return all pages related sections
-func (s *ConnectionSession) listSections() (sections []string) {
-	for _, page := range listPages(s.data) {
-		sections = appendStrArrayUnion(sections, pageToSections(s.data, page)...)
-	}
-	return
-}
-
-func (s *ConnectionSession) getSectionOfPageKey(page, key string) string {
-	sections := pageToSections(s.data, page)
-	for _, section := range sections {
-		if generalIsKeyInSettingSection(section, key) {
-			return section
-		}
-	}
-	logger.Errorf("get corresponding filed of key in page failed, page=%s, key=%s", page, key)
-	return ""
-}
-
-// get valid keys of target page, show or hide some keys when special
-// keys toggled
-func (s *ConnectionSession) listKeys(page string) (keys []string) {
-	sections := pageToSections(s.data, page)
-	for _, section := range sections {
-		keys = appendStrArrayUnion(keys, generalGetSettingAvailableKeys(s.data, section)...)
-	}
-	if len(keys) == 0 {
-		logger.Warning("there is no avaiable keys for page", page)
-	}
-	return
-}
-
 // GetAvailableValues return available values marshaled by json for target key.
 func (s *ConnectionSession) GetAvailableValues(page, key string) (valuesJSON string) {
 	var values []kvalue
@@ -265,13 +233,13 @@ func (s *ConnectionSession) GetAvailableValues(page, key string) (valuesJSON str
 }
 
 func (s *ConnectionSession) GetKey(page, key string) (value string) {
-	section := s.getSectionOfPageKey(page, key)
+	section := getSectionOfPageKey(s.data, page, key)
 	value = generalGetSettingKeyJSON(s.data, section, key)
 	return
 }
 
 func (s *ConnectionSession) SetKey(page, key, value string) {
-	section := s.getSectionOfPageKey(page, key)
+	section := getSectionOfPageKey(s.data, page, key)
 	err := generalSetSettingKeyJSON(s.data, section, key, value)
 	// logger.Debugf("SetKey(), %v, page=%s, filed=%s, key=%s, value=%s", err == nil, page, section, key, value) // TODO test
 	s.updateErrorsWhenSettingKey(page, key, err)
@@ -312,14 +280,14 @@ func (s *ConnectionSession) DebugGetErrors() sessionErrors {
 	return s.Errors
 }
 func (s *ConnectionSession) DebugListKeyDetail() (info string) {
-	for _, page := range listPages(s.data) {
+	for _, page := range getAvailablePages(s.data) {
 		pageData, ok := s.AvailableKeys[page]
 		if !ok {
 			logger.Warning("no available keys for page", page)
 			continue
 		}
 		for _, key := range pageData {
-			section := s.getSectionOfPageKey(page, key)
+			section := getSectionOfPageKey(s.data, page, key)
 			t := generalGetSettingKeyType(section, key)
 			values := generalGetSettingAvailableValues(s.data, section, key)
 			valuesJSON, _ := marshalJSON(values)

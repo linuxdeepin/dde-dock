@@ -17,20 +17,20 @@ func (s *ConnectionSession) updatePropConnectionType() {
 }
 
 func (s *ConnectionSession) updatePropAvailablePages() {
-	s.AvailablePages = listPages(s.data)
+	s.AvailablePages = getAvailablePages(s.data)
 	dbus.NotifyChange(s, "AvailablePages")
 }
 
 func (s *ConnectionSession) updatePropAvailableKeys() {
 	s.AvailableKeys = make(map[string][]string) // clear structure
-	for _, page := range listPages(s.data) {
-		s.AvailableKeys[page] = s.listKeys(page)
+	for _, page := range getAvailablePages(s.data) {
+		s.AvailableKeys[page] = getAvailableKeys(s.data, page)
 	}
 	dbus.NotifyChange(s, "AvailableKeys")
 }
 
 func (s *ConnectionSession) updatePropErrors() {
-	for _, page := range listPages(s.data) {
+	for _, page := range getAvailablePages(s.data) {
 		s.Errors[page] = make(sectionErrors)
 		sections := pageToSections(s.data, page)
 		for _, section := range sections {
