@@ -76,13 +76,12 @@ func main() {
 	logObj.EndTracing()
 	StartKeyBinding()
 
-	obj := GetManager()
-	if err := dbus.InstallOnSession(obj); err != nil {
+	if err := dbus.InstallOnSession(GetManager()); err != nil {
 		logObj.Error("Install DBus Failed:", err)
 		panic(err)
 	}
 
-	if err := dbus.InstallOnSession(obj); err != nil {
+	if err := dbus.InstallOnSession(GetMediaManager()); err != nil {
 		logObj.Error("Install DBus Failed:", err)
 		panic(err)
 	}
