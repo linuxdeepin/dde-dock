@@ -20,11 +20,10 @@ type ConnectionSession struct {
 
 	AvailablePages []string
 	AvailableKeys  map[string][]string
-	Errors         sessionErrors
-	errorsSetKey   sessionErrors
-}
 
-//所有字段值都为string，后端自行转换为需要的值后提供给NM
+	Errors           sessionErrors
+	settingKeyErrors sessionErrors
+}
 
 func doNewConnectionSession(devPath dbus.ObjectPath, uuid string) (s *ConnectionSession) {
 	s = &ConnectionSession{}
@@ -35,7 +34,7 @@ func doNewConnectionSession(devPath dbus.ObjectPath, uuid string) (s *Connection
 	s.AvailablePages = make([]string, 0)
 	s.AvailableKeys = make(map[string][]string)
 	s.Errors = make(sessionErrors)
-	s.errorsSetKey = make(sessionErrors)
+	s.settingKeyErrors = make(sessionErrors)
 	return s
 }
 
@@ -82,6 +81,7 @@ func NewConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 	s.updatePropAvailableKeys()
 	s.updatePropErrors()
 
+	logger.Debug("NewConnectionSessionByCreate():", s.data)
 	return
 }
 
@@ -130,9 +130,7 @@ func NewConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 	s.updatePropAvailableKeys()
 	s.updatePropErrors()
 
-	// TODO
 	logger.Debug("NewConnectionSessionByOpen():", s.data)
-
 	return
 }
 
@@ -167,6 +165,8 @@ func (s *ConnectionSession) fixValues() {
 
 // Save save current connection s.
 func (s *ConnectionSession) Save() bool {
+	// TODO what about the connection has been deleted?
+
 	if s.isErrorOccured() {
 		logger.Debug("Errors occured when saving:", s.Errors)
 		return false
@@ -176,7 +176,6 @@ func (s *ConnectionSession) Save() bool {
 		logger.Debug("read only connection, don't allowed to save")
 		return false
 	}
-	// TODO what about the connection has been deleted?
 
 	if len(s.ConnectionPath) > 0 {
 		// update connection data and activate it
@@ -214,7 +213,7 @@ func (s *ConnectionSession) isErrorOccured() bool {
 	return false
 }
 
-// Close cancel current connection s.
+// Close cancel current connection.
 func (s *ConnectionSession) Close() {
 	dbus.UnInstallObject(s)
 }
@@ -410,9 +409,6 @@ func (s *ConnectionSession) getSectionOfPageKey(page, key string) string {
 func (s *ConnectionSession) listKeys(page string) (keys []string) {
 	sections := s.pageToSections(page)
 	for _, section := range sections {
-		// TODO
-		// if isSettingSectionExists(s.data, section) {
-		// }
 		keys = appendStrArrayUnion(keys, generalGetSettingAvailableKeys(s.data, section)...)
 	}
 	if len(keys) == 0 {
@@ -424,7 +420,7 @@ func (s *ConnectionSession) listKeys(page string) (keys []string) {
 // GetAvailableValues return available values marshaled by json for target key.
 func (s *ConnectionSession) GetAvailableValues(page, key string) (valuesJSON string) {
 	var values []kvalue
-	sections := s.pageToSections(page) // TODO
+	sections := s.pageToSections(page)
 	for _, section := range sections {
 		values = generalGetSettingAvailableValues(s.data, section, key)
 		if len(values) > 0 {
@@ -457,7 +453,7 @@ func (s *ConnectionSession) SetKey(page, key, value string) {
 func (s *ConnectionSession) updateErrorsWhenSettingKey(page, key string, err error) {
 	if err == nil {
 		// delete key error if exists
-		sectionErrors, ok := s.errorsSetKey[page]
+		sectionErrors, ok := s.settingKeyErrors[page]
 		if ok {
 			_, ok := sectionErrors[key]
 			if ok {
@@ -466,15 +462,22 @@ func (s *ConnectionSession) updateErrorsWhenSettingKey(page, key string, err err
 		}
 	} else {
 		// append key error
-		sectionErrorsData, ok := s.errorsSetKey[page]
+		sectionErrorsData, ok := s.settingKeyErrors[page]
 		if !ok {
 			sectionErrorsData = make(sectionErrors)
-			s.errorsSetKey[page] = sectionErrorsData
+			s.settingKeyErrors[page] = sectionErrorsData
 		}
 		sectionErrorsData[key] = err.Error()
 	}
 }
 
+// Debug functions
+func (s *ConnectionSession) DebugGetConnectionData() connectionData {
+	return s.data
+}
+func (s *ConnectionSession) DebugGetErrors() sessionErrors {
+	return s.Errors
+}
 func (s *ConnectionSession) DebugListKeyDetail() (info string) {
 	for _, page := range s.listPages() {
 		pageData, ok := s.AvailableKeys[page]
@@ -485,18 +488,10 @@ func (s *ConnectionSession) DebugListKeyDetail() (info string) {
 		for _, key := range pageData {
 			section := s.getSectionOfPageKey(page, key)
 			t := generalGetSettingKeyType(section, key)
-			// TODO convert to value json
 			values := generalGetSettingAvailableValues(s.data, section, key)
-			info += fmt.Sprintf("%s->%s[%s]: %s (%s)\n", page, key, getKtypeDescription(t), s.GetKey(page, key), values)
+			valuesJSON, _ := marshalJSON(values)
+			info += fmt.Sprintf("%s->%s[%s]: %s (%s)\n", page, key, getKtypeDescription(t), s.GetKey(page, key), valuesJSON)
 		}
 	}
 	return
-}
-
-func (s *ConnectionSession) DebugGetConnectionData() connectionData {
-	return s.data
-}
-
-func (s *ConnectionSession) DebugGetErrors() sessionErrors {
-	return s.Errors
 }

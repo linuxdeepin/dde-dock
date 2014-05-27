@@ -44,7 +44,7 @@ func (s *ConnectionSession) updatePropErrors() {
 		}
 	}
 	// append errors when setting keys
-	for page, pageErrors := range s.errorsSetKey {
+	for page, pageErrors := range s.settingKeyErrors {
 		for k, v := range pageErrors {
 			s.Errors[page][k] = v
 		}
