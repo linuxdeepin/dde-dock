@@ -21,7 +21,7 @@ func (dpy *Display) SwitchMode(mode int16) {
 		for ; n > 1; n = len(dpy.Monitors) {
 			dpy.JoinMonitor(dpy.Monitors[n-1].Name, dpy.Monitors[n-2].Name)
 		}
-		dpy.Apply(false)
+		dpy.apply(false)
 	} else if mode == DisplayModeCustom {
 		dpy.ResetChanges()
 	} else {
@@ -47,7 +47,7 @@ func (dpy *Display) SwitchMode(mode int16) {
 						m.SwitchOn(false)
 					}
 				}
-				dpy.Apply(false)
+				dpy.apply(false)
 			}
 		}()
 	}

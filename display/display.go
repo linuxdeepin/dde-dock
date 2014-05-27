@@ -357,7 +357,10 @@ func (dpy *Display) SetPrimary(name string) error {
 	return err
 }
 
-func (dpy *Display) Apply(auto bool) {
+func (dpy *Display) Apply() {
+	dpy.apply(false)
+}
+func (dpy *Display) apply(auto bool) {
 	dpy.rLockMonitors()
 	defer dpy.rUnlockMonitors()
 
@@ -389,7 +392,7 @@ func (dpy *Display) ResetChanges() {
 	dpy.SetPrimary(dpy.cfg.Primary)
 
 	//apply the saved configurations.
-	dpy.Apply(false)
+	dpy.apply(false)
 
 	dpy.Brightness = make(map[string]float64)
 	for name, v := range dpy.cfg.Brightness {
@@ -420,7 +423,7 @@ func (dpy *Display) Reset() {
 		m.SetRotation(1)
 		m.SetMode(m.BestMode.ID)
 	}
-	dpy.Apply(true)
+	dpy.apply(true)
 }
 
 func main() {
