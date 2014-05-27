@@ -12,70 +12,69 @@ const (
 	sectionPpp                = NM_SETTING_PPP_SETTING_NAME
 	sectionSerial             = NM_SETTING_SERIAL_SETTING_NAME
 	sectionVpn                = NM_SETTING_VPN_SETTING_NAME
-	sectionVpnL2tp            = NM_SETTING_VS_VPN_L2TP_SETTING_NAME
-	sectionVpnL2tpPpp         = NM_SETTING_VS_VPN_L2TP_PPP_SETTING_NAME
-	sectionVpnL2tpIpsec       = NM_SETTING_VS_VPN_L2TP_IPSEC_SETTING_NAME
-	sectionVpnOpenconnect     = NM_SETTING_VS_VPN_OPENCONNECT_SETTING_NAME
-	sectionVpnOpenvpn         = NM_SETTING_VS_VPN_OPENVPN_SETTING_NAME
-	sectionVpnOpenvpnAdvanced = NM_SETTING_VS_VPN_OPENVPN_ADVANCED_SETTING_NAME
-	sectionVpnOpenvpnSecurity = NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME
-	sectionVpnOpenvpnTlsauth  = NM_SETTING_VS_VPN_OPENVPN_TLSAUTH_SETTING_NAME
-	sectionVpnOpenvpnProxies  = NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME
-	sectionVpnPptp            = NM_SETTING_VS_VPN_PPTP_SETTING_NAME
-	sectionVpnPptpPpp         = NM_SETTING_VS_VPN_PPTP_PPP_SETTING_NAME
-	sectionVpnVpnc            = NM_SETTING_VS_VPN_VPNC_SETTING_NAME
-	sectionVpnVpncAdvanced    = NM_SETTING_VS_VPN_VPNC_ADVANCED_SETTING_NAME
+	sectionVpnL2tp            = NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME
+	sectionVpnL2tpPpp         = NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME
+	sectionVpnL2tpIpsec       = NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME
+	sectionVpnOpenconnect     = NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME
+	sectionVpnOpenvpn         = NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME
+	sectionVpnOpenvpnAdvanced = NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME
+	sectionVpnOpenvpnSecurity = NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME
+	sectionVpnOpenvpnTlsauth  = NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME
+	sectionVpnOpenvpnProxies  = NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME
+	sectionVpnPptp            = NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME
+	sectionVpnPptpPpp         = NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME
+	sectionVpnVpnc            = NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME
+	sectionVpnVpncAdvanced    = NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME
 	sectionWired              = NM_SETTING_WIRED_SETTING_NAME
 	sectionWireless           = NM_SETTING_WIRELESS_SETTING_NAME
 	sectionWirelessSecurity   = NM_SETTING_WIRELESS_SECURITY_SETTING_NAME
 )
 
-// TODO refactor, alias sections
-// Virtual sections, used for vpn connection which is a special key in fact
+// Alias sections, used for vpn connection which is a special key in fact
 const (
-	NM_SETTING_VS_VPN_L2TP_SETTING_NAME             = "vs-vpn-l2tp"
-	NM_SETTING_VS_VPN_L2TP_PPP_SETTING_NAME         = "vs-vpn-l2tp-ppp"
-	NM_SETTING_VS_VPN_L2TP_IPSEC_SETTING_NAME       = "vs-vpn-l2tp-ipsec"
-	NM_SETTING_VS_VPN_OPENCONNECT_SETTING_NAME      = "vs-vpn-openconnect"
-	NM_SETTING_VS_VPN_OPENVPN_SETTING_NAME          = "vs-vpn-openvpn"
-	NM_SETTING_VS_VPN_OPENVPN_ADVANCED_SETTING_NAME = "vs-vpn-openvpn-advanced"
-	NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME = "vs-vpn-openvpn-security"
-	NM_SETTING_VS_VPN_OPENVPN_TLSAUTH_SETTING_NAME  = "vs-vpn-openvpn-tlsauth"
-	NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME  = "vs-vpn-openvpn-proxies"
-	NM_SETTING_VS_VPN_PPTP_SETTING_NAME             = "vs-vpn-pptp"
-	NM_SETTING_VS_VPN_PPTP_PPP_SETTING_NAME         = "vs-vpn-pptp-ppp"
-	NM_SETTING_VS_VPN_VPNC_SETTING_NAME             = "vs-vpn-vpnc"
-	NM_SETTING_VS_VPN_VPNC_ADVANCED_SETTING_NAME    = "vs-vpn-advanced"
+	NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME             = "alias-vpn-l2tp"
+	NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME         = "alias-vpn-l2tp-ppp"
+	NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME       = "alias-vpn-l2tp-ipsec"
+	NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME      = "alias-vpn-openconnect"
+	NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME          = "alias-vpn-openvpn"
+	NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME = "alias-vpn-openvpn-advanced"
+	NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME = "alias-vpn-openvpn-security"
+	NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME  = "alias-vpn-openvpn-tlsauth"
+	NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME  = "alias-vpn-openvpn-proxies"
+	NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME             = "alias-vpn-pptp"
+	NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME         = "alias-vpn-pptp-ppp"
+	NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME             = "alias-vpn-vpnc"
+	NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME    = "alias-vpn-advanced"
 )
 
 func getRealSectionName(name string) (realName string) {
 	realName = name
 	switch name {
-	case NM_SETTING_VS_VPN_L2TP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME:
 		realName = sectionVpn
-	case NM_SETTING_VS_VPN_L2TP_PPP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME:
 		realName = sectionVpn
-	case NM_SETTING_VS_VPN_L2TP_IPSEC_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME:
 		realName = sectionVpn
-	case NM_SETTING_VS_VPN_OPENCONNECT_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME:
 		realName = sectionVpn
-	case NM_SETTING_VS_VPN_OPENVPN_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME:
 		realName = sectionVpn
-	case NM_SETTING_VS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
 		realName = sectionVpn
-	case NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME:
 		realName = sectionVpn
-	case NM_SETTING_VS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
 		realName = sectionVpn
-	case NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME:
 		realName = sectionVpn
-	case NM_SETTING_VS_VPN_PPTP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME:
 		realName = sectionVpn
-	case NM_SETTING_VS_VPN_PPTP_PPP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
 		realName = sectionVpn
-	case NM_SETTING_VS_VPN_VPNC_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
 		realName = sectionVpn
-	case NM_SETTING_VS_VPN_VPNC_ADVANCED_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME:
 		realName = sectionVpn
 	}
 	return

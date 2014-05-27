@@ -100,171 +100,171 @@ func generalSetSettingVpnPptpKeyJSON(data connectionData, key, valueJSON string)
 
 // Check if key exists
 func isSettingVpnPptpKeyGatewayExists(data connectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_GATEWAY)
+	return isSettingKeyExists(data, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_GATEWAY)
 }
 func isSettingVpnPptpKeyUserExists(data connectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_USER)
+	return isSettingKeyExists(data, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_USER)
 }
 func isSettingVpnPptpKeyPasswordFlagsExists(data connectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_PASSWORD_FLAGS)
+	return isSettingKeyExists(data, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_PASSWORD_FLAGS)
 }
 func isSettingVpnPptpKeyPasswordExists(data connectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_PASSWORD)
+	return isSettingKeyExists(data, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_PASSWORD)
 }
 func isSettingVpnPptpKeyDomainExists(data connectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_DOMAIN)
+	return isSettingKeyExists(data, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_DOMAIN)
 }
 
 // Ensure section and key exists and not empty
 func ensureSectionSettingVpnPptpExists(data connectionData, errs sectionErrors, relatedKey string) {
-	if !isSettingSectionExists(data, NM_SETTING_VS_VPN_PPTP_SETTING_NAME) {
-		rememberError(errs, relatedKey, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_VS_VPN_PPTP_SETTING_NAME))
+	if !isSettingSectionExists(data, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME) {
+		rememberError(errs, relatedKey, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME))
 	}
-	sectionData, _ := data[NM_SETTING_VS_VPN_PPTP_SETTING_NAME]
+	sectionData, _ := data[NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME]
 	if len(sectionData) == 0 {
-		rememberError(errs, relatedKey, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_VS_VPN_PPTP_SETTING_NAME))
+		rememberError(errs, relatedKey, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME))
 	}
 }
 func ensureSettingVpnPptpKeyGatewayNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnPptpKeyGatewayExists(data) {
-		rememberError(errs, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_GATEWAY, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_GATEWAY, NM_KEY_ERROR_MISSING_VALUE)
 	}
 	value := getSettingVpnPptpKeyGateway(data)
 	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_GATEWAY, NM_KEY_ERROR_EMPTY_VALUE)
+		rememberError(errs, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_GATEWAY, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
 func ensureSettingVpnPptpKeyUserNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnPptpKeyUserExists(data) {
-		rememberError(errs, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_USER, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_USER, NM_KEY_ERROR_MISSING_VALUE)
 	}
 	value := getSettingVpnPptpKeyUser(data)
 	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_USER, NM_KEY_ERROR_EMPTY_VALUE)
+		rememberError(errs, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_USER, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
 func ensureSettingVpnPptpKeyPasswordFlagsNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnPptpKeyPasswordFlagsExists(data) {
-		rememberError(errs, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_PASSWORD_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_PASSWORD_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
 func ensureSettingVpnPptpKeyPasswordNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnPptpKeyPasswordExists(data) {
-		rememberError(errs, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_PASSWORD, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_PASSWORD, NM_KEY_ERROR_MISSING_VALUE)
 	}
 	value := getSettingVpnPptpKeyPassword(data)
 	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_PASSWORD, NM_KEY_ERROR_EMPTY_VALUE)
+		rememberError(errs, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_PASSWORD, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
 func ensureSettingVpnPptpKeyDomainNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnPptpKeyDomainExists(data) {
-		rememberError(errs, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_DOMAIN, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_DOMAIN, NM_KEY_ERROR_MISSING_VALUE)
 	}
 	value := getSettingVpnPptpKeyDomain(data)
 	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_DOMAIN, NM_KEY_ERROR_EMPTY_VALUE)
+		rememberError(errs, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_DOMAIN, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
 
 // Getter
 func getSettingVpnPptpKeyGateway(data connectionData) (value string) {
-	ivalue := getSettingKey(data, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_GATEWAY)
+	ivalue := getSettingKey(data, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_GATEWAY)
 	value = interfaceToString(ivalue)
 	return
 }
 func getSettingVpnPptpKeyUser(data connectionData) (value string) {
-	ivalue := getSettingKey(data, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_USER)
+	ivalue := getSettingKey(data, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_USER)
 	value = interfaceToString(ivalue)
 	return
 }
 func getSettingVpnPptpKeyPasswordFlags(data connectionData) (value uint32) {
-	ivalue := getSettingKey(data, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_PASSWORD_FLAGS)
+	ivalue := getSettingKey(data, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_PASSWORD_FLAGS)
 	value = interfaceToUint32(ivalue)
 	return
 }
 func getSettingVpnPptpKeyPassword(data connectionData) (value string) {
-	ivalue := getSettingKey(data, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_PASSWORD)
+	ivalue := getSettingKey(data, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_PASSWORD)
 	value = interfaceToString(ivalue)
 	return
 }
 func getSettingVpnPptpKeyDomain(data connectionData) (value string) {
-	ivalue := getSettingKey(data, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_DOMAIN)
+	ivalue := getSettingKey(data, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_DOMAIN)
 	value = interfaceToString(ivalue)
 	return
 }
 
 // Setter
 func setSettingVpnPptpKeyGateway(data connectionData, value string) {
-	setSettingKey(data, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_GATEWAY, value)
+	setSettingKey(data, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_GATEWAY, value)
 }
 func setSettingVpnPptpKeyUser(data connectionData, value string) {
-	setSettingKey(data, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_USER, value)
+	setSettingKey(data, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_USER, value)
 }
 func setSettingVpnPptpKeyPasswordFlags(data connectionData, value uint32) {
-	setSettingKey(data, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_PASSWORD_FLAGS, value)
+	setSettingKey(data, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_PASSWORD_FLAGS, value)
 }
 func setSettingVpnPptpKeyPassword(data connectionData, value string) {
-	setSettingKey(data, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_PASSWORD, value)
+	setSettingKey(data, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_PASSWORD, value)
 }
 func setSettingVpnPptpKeyDomain(data connectionData, value string) {
-	setSettingKey(data, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_DOMAIN, value)
+	setSettingKey(data, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_DOMAIN, value)
 }
 
 // JSON Getter
 func getSettingVpnPptpKeyGatewayJSON(data connectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_GATEWAY, getSettingVpnPptpKeyType(NM_SETTING_VPN_PPTP_KEY_GATEWAY))
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_GATEWAY, getSettingVpnPptpKeyType(NM_SETTING_VPN_PPTP_KEY_GATEWAY))
 	return
 }
 func getSettingVpnPptpKeyUserJSON(data connectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_USER, getSettingVpnPptpKeyType(NM_SETTING_VPN_PPTP_KEY_USER))
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_USER, getSettingVpnPptpKeyType(NM_SETTING_VPN_PPTP_KEY_USER))
 	return
 }
 func getSettingVpnPptpKeyPasswordFlagsJSON(data connectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_PASSWORD_FLAGS, getSettingVpnPptpKeyType(NM_SETTING_VPN_PPTP_KEY_PASSWORD_FLAGS))
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_PASSWORD_FLAGS, getSettingVpnPptpKeyType(NM_SETTING_VPN_PPTP_KEY_PASSWORD_FLAGS))
 	return
 }
 func getSettingVpnPptpKeyPasswordJSON(data connectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_PASSWORD, getSettingVpnPptpKeyType(NM_SETTING_VPN_PPTP_KEY_PASSWORD))
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_PASSWORD, getSettingVpnPptpKeyType(NM_SETTING_VPN_PPTP_KEY_PASSWORD))
 	return
 }
 func getSettingVpnPptpKeyDomainJSON(data connectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_DOMAIN, getSettingVpnPptpKeyType(NM_SETTING_VPN_PPTP_KEY_DOMAIN))
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_DOMAIN, getSettingVpnPptpKeyType(NM_SETTING_VPN_PPTP_KEY_DOMAIN))
 	return
 }
 
 // JSON Setter
 func setSettingVpnPptpKeyGatewayJSON(data connectionData, valueJSON string) (err error) {
-	return setSettingKeyJSON(data, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_GATEWAY, valueJSON, getSettingVpnPptpKeyType(NM_SETTING_VPN_PPTP_KEY_GATEWAY))
+	return setSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_GATEWAY, valueJSON, getSettingVpnPptpKeyType(NM_SETTING_VPN_PPTP_KEY_GATEWAY))
 }
 func setSettingVpnPptpKeyUserJSON(data connectionData, valueJSON string) (err error) {
-	return setSettingKeyJSON(data, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_USER, valueJSON, getSettingVpnPptpKeyType(NM_SETTING_VPN_PPTP_KEY_USER))
+	return setSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_USER, valueJSON, getSettingVpnPptpKeyType(NM_SETTING_VPN_PPTP_KEY_USER))
 }
 func setSettingVpnPptpKeyPasswordFlagsJSON(data connectionData, valueJSON string) (err error) {
-	return setSettingKeyJSON(data, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_PASSWORD_FLAGS, valueJSON, getSettingVpnPptpKeyType(NM_SETTING_VPN_PPTP_KEY_PASSWORD_FLAGS))
+	return setSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_PASSWORD_FLAGS, valueJSON, getSettingVpnPptpKeyType(NM_SETTING_VPN_PPTP_KEY_PASSWORD_FLAGS))
 }
 func setSettingVpnPptpKeyPasswordJSON(data connectionData, valueJSON string) (err error) {
-	return setSettingKeyJSON(data, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_PASSWORD, valueJSON, getSettingVpnPptpKeyType(NM_SETTING_VPN_PPTP_KEY_PASSWORD))
+	return setSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_PASSWORD, valueJSON, getSettingVpnPptpKeyType(NM_SETTING_VPN_PPTP_KEY_PASSWORD))
 }
 func setSettingVpnPptpKeyDomainJSON(data connectionData, valueJSON string) (err error) {
-	return setSettingKeyJSON(data, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_DOMAIN, valueJSON, getSettingVpnPptpKeyType(NM_SETTING_VPN_PPTP_KEY_DOMAIN))
+	return setSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_DOMAIN, valueJSON, getSettingVpnPptpKeyType(NM_SETTING_VPN_PPTP_KEY_DOMAIN))
 }
 
 // Logic JSON Setter
 
 // Remover
 func removeSettingVpnPptpKeyGateway(data connectionData) {
-	removeSettingKey(data, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_GATEWAY)
+	removeSettingKey(data, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_GATEWAY)
 }
 func removeSettingVpnPptpKeyUser(data connectionData) {
-	removeSettingKey(data, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_USER)
+	removeSettingKey(data, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_USER)
 }
 func removeSettingVpnPptpKeyPasswordFlags(data connectionData) {
-	removeSettingKey(data, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_PASSWORD_FLAGS)
+	removeSettingKey(data, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_PASSWORD_FLAGS)
 }
 func removeSettingVpnPptpKeyPassword(data connectionData) {
-	removeSettingKey(data, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_PASSWORD)
+	removeSettingKey(data, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_PASSWORD)
 }
 func removeSettingVpnPptpKeyDomain(data connectionData) {
-	removeSettingKey(data, NM_SETTING_VS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_DOMAIN)
+	removeSettingKey(data, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_DOMAIN)
 }

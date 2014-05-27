@@ -157,7 +157,6 @@ func setSettingKeyJSON(data connectionData, section, key, valueJSON string, t kt
 
 	// remove connection data key if valueJSON is null or empty
 	if isJSONValueMeansToDeleteKey(valueJSON, t) {
-		logger.Debugf("removeSettingKey data[%s][%s], valueJSON=%s", section, key, valueJSON)
 		removeSettingKey(data, section, key)
 		return
 	}
@@ -201,6 +200,8 @@ func setSettingKey(data connectionData, section, key string, value interface{}) 
 }
 
 func removeSettingKey(data connectionData, section string, keys ...string) {
+	logger.Debugf("removeSettingKey data[%s], %s", section, keys)
+
 	// special for vpn plugin keys
 	if isSettingVpnPluginKey(section) {
 		removeSettingVpnPluginKey(data, section, keys...)

@@ -28,31 +28,31 @@ func generalIsKeyInSettingSection(section, key string) bool {
 		return isKeyInSettingSerial(key)
 	case NM_SETTING_VPN_SETTING_NAME:
 		return isKeyInSettingVpn(key)
-	case NM_SETTING_VS_VPN_L2TP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME:
 		return isKeyInSettingVpnL2tp(key)
-	case NM_SETTING_VS_VPN_L2TP_PPP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME:
 		return isKeyInSettingVpnL2tpPpp(key)
-	case NM_SETTING_VS_VPN_L2TP_IPSEC_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME:
 		return isKeyInSettingVpnL2tpIpsec(key)
-	case NM_SETTING_VS_VPN_OPENCONNECT_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME:
 		return isKeyInSettingVpnOpenconnect(key)
-	case NM_SETTING_VS_VPN_OPENVPN_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME:
 		return isKeyInSettingVpnOpenvpn(key)
-	case NM_SETTING_VS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
 		return isKeyInSettingVpnOpenvpnAdvanced(key)
-	case NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME:
 		return isKeyInSettingVpnOpenvpnSecurity(key)
-	case NM_SETTING_VS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
 		return isKeyInSettingVpnOpenvpnTlsauth(key)
-	case NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME:
 		return isKeyInSettingVpnOpenvpnProxies(key)
-	case NM_SETTING_VS_VPN_PPTP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME:
 		return isKeyInSettingVpnPptp(key)
-	case NM_SETTING_VS_VPN_PPTP_PPP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
 		return isKeyInSettingVpnPptpPpp(key)
-	case NM_SETTING_VS_VPN_VPNC_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
 		return isKeyInSettingVpnVpnc(key)
-	case NM_SETTING_VS_VPN_VPNC_ADVANCED_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME:
 		return isKeyInSettingVpnVpncAdvanced(key)
 	case NM_SETTING_WIRED_SETTING_NAME:
 		return isKeyInSettingWired(key)
@@ -92,31 +92,31 @@ func generalGetSettingKeyType(section, key string) (t ktype) {
 		t = getSettingSerialKeyType(key)
 	case NM_SETTING_VPN_SETTING_NAME:
 		t = getSettingVpnKeyType(key)
-	case NM_SETTING_VS_VPN_L2TP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME:
 		t = getSettingVpnL2tpKeyType(key)
-	case NM_SETTING_VS_VPN_L2TP_PPP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME:
 		t = getSettingVpnL2tpPppKeyType(key)
-	case NM_SETTING_VS_VPN_L2TP_IPSEC_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME:
 		t = getSettingVpnL2tpIpsecKeyType(key)
-	case NM_SETTING_VS_VPN_OPENCONNECT_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME:
 		t = getSettingVpnOpenconnectKeyType(key)
-	case NM_SETTING_VS_VPN_OPENVPN_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME:
 		t = getSettingVpnOpenvpnKeyType(key)
-	case NM_SETTING_VS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
 		t = getSettingVpnOpenvpnAdvancedKeyType(key)
-	case NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME:
 		t = getSettingVpnOpenvpnSecurityKeyType(key)
-	case NM_SETTING_VS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
 		t = getSettingVpnOpenvpnTlsauthKeyType(key)
-	case NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME:
 		t = getSettingVpnOpenvpnProxiesKeyType(key)
-	case NM_SETTING_VS_VPN_PPTP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME:
 		t = getSettingVpnPptpKeyType(key)
-	case NM_SETTING_VS_VPN_PPTP_PPP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
 		t = getSettingVpnPptpPppKeyType(key)
-	case NM_SETTING_VS_VPN_VPNC_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
 		t = getSettingVpnVpncKeyType(key)
-	case NM_SETTING_VS_VPN_VPNC_ADVANCED_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME:
 		t = getSettingVpnVpncAdvancedKeyType(key)
 	case NM_SETTING_WIRED_SETTING_NAME:
 		t = getSettingWiredKeyType(key)
@@ -150,31 +150,31 @@ func generalGetSettingAvailableKeys(data connectionData, section string) (keys [
 		keys = getSettingSerialAvailableKeys(data)
 	case NM_SETTING_VPN_SETTING_NAME:
 		keys = getSettingVpnAvailableKeys(data)
-	case NM_SETTING_VS_VPN_L2TP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME:
 		keys = getSettingVpnL2tpAvailableKeys(data)
-	case NM_SETTING_VS_VPN_L2TP_PPP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME:
 		keys = getSettingVpnL2tpPppAvailableKeys(data)
-	case NM_SETTING_VS_VPN_L2TP_IPSEC_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME:
 		keys = getSettingVpnL2tpIpsecAvailableKeys(data)
-	case NM_SETTING_VS_VPN_OPENCONNECT_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME:
 		keys = getSettingVpnOpenconnectAvailableKeys(data)
-	case NM_SETTING_VS_VPN_OPENVPN_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME:
 		keys = getSettingVpnOpenvpnAvailableKeys(data)
-	case NM_SETTING_VS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
 		keys = getSettingVpnOpenvpnAdvancedAvailableKeys(data)
-	case NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME:
 		keys = getSettingVpnOpenvpnSecurityAvailableKeys(data)
-	case NM_SETTING_VS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
 		keys = getSettingVpnOpenvpnTlsauthAvailableKeys(data)
-	case NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME:
 		keys = getSettingVpnOpenvpnProxiesAvailableKeys(data)
-	case NM_SETTING_VS_VPN_PPTP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME:
 		keys = getSettingVpnPptpAvailableKeys(data)
-	case NM_SETTING_VS_VPN_PPTP_PPP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
 		keys = getSettingVpnPptpPppAvailableKeys(data)
-	case NM_SETTING_VS_VPN_VPNC_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
 		keys = getSettingVpnVpncAvailableKeys(data)
-	case NM_SETTING_VS_VPN_VPNC_ADVANCED_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME:
 		keys = getSettingVpnVpncAdvancedAvailableKeys(data)
 	case NM_SETTING_WIRED_SETTING_NAME:
 		keys = getSettingWiredAvailableKeys(data)
@@ -212,31 +212,31 @@ func generalGetSettingAvailableValues(data connectionData, section, key string) 
 		values = getSettingSerialAvailableValues(data, key)
 	case NM_SETTING_VPN_SETTING_NAME:
 		values = getSettingVpnAvailableValues(data, key)
-	case NM_SETTING_VS_VPN_L2TP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME:
 		values = getSettingVpnL2tpAvailableValues(data, key)
-	case NM_SETTING_VS_VPN_L2TP_PPP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME:
 		values = getSettingVpnL2tpPppAvailableValues(data, key)
-	case NM_SETTING_VS_VPN_L2TP_IPSEC_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME:
 		values = getSettingVpnL2tpIpsecAvailableValues(data, key)
-	case NM_SETTING_VS_VPN_OPENCONNECT_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME:
 		values = getSettingVpnOpenconnectAvailableValues(data, key)
-	case NM_SETTING_VS_VPN_OPENVPN_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME:
 		values = getSettingVpnOpenvpnAvailableValues(data, key)
-	case NM_SETTING_VS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
 		values = getSettingVpnOpenvpnAdvancedAvailableValues(data, key)
-	case NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME:
 		values = getSettingVpnOpenvpnSecurityAvailableValues(data, key)
-	case NM_SETTING_VS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
 		values = getSettingVpnOpenvpnTlsauthAvailableValues(data, key)
-	case NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME:
 		values = getSettingVpnOpenvpnProxiesAvailableValues(data, key)
-	case NM_SETTING_VS_VPN_PPTP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME:
 		values = getSettingVpnPptpAvailableValues(data, key)
-	case NM_SETTING_VS_VPN_PPTP_PPP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
 		values = getSettingVpnPptpPppAvailableValues(data, key)
-	case NM_SETTING_VS_VPN_VPNC_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
 		values = getSettingVpnVpncAvailableValues(data, key)
-	case NM_SETTING_VS_VPN_VPNC_ADVANCED_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME:
 		values = getSettingVpnVpncAdvancedAvailableValues(data, key)
 	case NM_SETTING_WIRED_SETTING_NAME:
 		values = getSettingWiredAvailableValues(data, key)
@@ -272,31 +272,31 @@ func generalCheckSettingValues(data connectionData, section string) (errs sectio
 		errs = checkSettingSerialValues(data)
 	case NM_SETTING_VPN_SETTING_NAME:
 		errs = checkSettingVpnValues(data)
-	case NM_SETTING_VS_VPN_L2TP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME:
 		errs = checkSettingVpnL2tpValues(data)
-	case NM_SETTING_VS_VPN_L2TP_PPP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME:
 		errs = checkSettingVpnL2tpPppValues(data)
-	case NM_SETTING_VS_VPN_L2TP_IPSEC_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME:
 		errs = checkSettingVpnL2tpIpsecValues(data)
-	case NM_SETTING_VS_VPN_OPENCONNECT_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME:
 		errs = checkSettingVpnOpenconnectValues(data)
-	case NM_SETTING_VS_VPN_OPENVPN_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME:
 		errs = checkSettingVpnOpenvpnValues(data)
-	case NM_SETTING_VS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
 		errs = checkSettingVpnOpenvpnAdvancedValues(data)
-	case NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME:
 		errs = checkSettingVpnOpenvpnSecurityValues(data)
-	case NM_SETTING_VS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
 		errs = checkSettingVpnOpenvpnTlsauthValues(data)
-	case NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME:
 		errs = checkSettingVpnOpenvpnProxiesValues(data)
-	case NM_SETTING_VS_VPN_PPTP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME:
 		errs = checkSettingVpnPptpValues(data)
-	case NM_SETTING_VS_VPN_PPTP_PPP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
 		errs = checkSettingVpnPptpPppValues(data)
-	case NM_SETTING_VS_VPN_VPNC_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
 		errs = checkSettingVpnVpncValues(data)
-	case NM_SETTING_VS_VPN_VPNC_ADVANCED_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME:
 		errs = checkSettingVpnVpncAdvancedValues(data)
 	case NM_SETTING_WIRED_SETTING_NAME:
 		errs = checkSettingWiredValues(data)
@@ -336,31 +336,31 @@ func generalGetSettingKeyJSON(data connectionData, section, key string) (valueJS
 		valueJSON = generalGetSettingSerialKeyJSON(data, key)
 	case NM_SETTING_VPN_SETTING_NAME:
 		valueJSON = generalGetSettingVpnKeyJSON(data, key)
-	case NM_SETTING_VS_VPN_L2TP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME:
 		valueJSON = generalGetSettingVpnL2tpKeyJSON(data, key)
-	case NM_SETTING_VS_VPN_L2TP_PPP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME:
 		valueJSON = generalGetSettingVpnL2tpPppKeyJSON(data, key)
-	case NM_SETTING_VS_VPN_L2TP_IPSEC_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME:
 		valueJSON = generalGetSettingVpnL2tpIpsecKeyJSON(data, key)
-	case NM_SETTING_VS_VPN_OPENCONNECT_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME:
 		valueJSON = generalGetSettingVpnOpenconnectKeyJSON(data, key)
-	case NM_SETTING_VS_VPN_OPENVPN_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME:
 		valueJSON = generalGetSettingVpnOpenvpnKeyJSON(data, key)
-	case NM_SETTING_VS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
 		valueJSON = generalGetSettingVpnOpenvpnAdvancedKeyJSON(data, key)
-	case NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME:
 		valueJSON = generalGetSettingVpnOpenvpnSecurityKeyJSON(data, key)
-	case NM_SETTING_VS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
 		valueJSON = generalGetSettingVpnOpenvpnTlsauthKeyJSON(data, key)
-	case NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME:
 		valueJSON = generalGetSettingVpnOpenvpnProxiesKeyJSON(data, key)
-	case NM_SETTING_VS_VPN_PPTP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME:
 		valueJSON = generalGetSettingVpnPptpKeyJSON(data, key)
-	case NM_SETTING_VS_VPN_PPTP_PPP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
 		valueJSON = generalGetSettingVpnPptpPppKeyJSON(data, key)
-	case NM_SETTING_VS_VPN_VPNC_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
 		valueJSON = generalGetSettingVpnVpncKeyJSON(data, key)
-	case NM_SETTING_VS_VPN_VPNC_ADVANCED_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME:
 		valueJSON = generalGetSettingVpnVpncAdvancedKeyJSON(data, key)
 	case NM_SETTING_WIRED_SETTING_NAME:
 		valueJSON = generalGetSettingWiredKeyJSON(data, key)
@@ -400,31 +400,31 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 		err = generalSetSettingSerialKeyJSON(data, key, valueJSON)
 	case NM_SETTING_VPN_SETTING_NAME:
 		err = generalSetSettingVpnKeyJSON(data, key, valueJSON)
-	case NM_SETTING_VS_VPN_L2TP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME:
 		err = generalSetSettingVpnL2tpKeyJSON(data, key, valueJSON)
-	case NM_SETTING_VS_VPN_L2TP_PPP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME:
 		err = generalSetSettingVpnL2tpPppKeyJSON(data, key, valueJSON)
-	case NM_SETTING_VS_VPN_L2TP_IPSEC_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME:
 		err = generalSetSettingVpnL2tpIpsecKeyJSON(data, key, valueJSON)
-	case NM_SETTING_VS_VPN_OPENCONNECT_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME:
 		err = generalSetSettingVpnOpenconnectKeyJSON(data, key, valueJSON)
-	case NM_SETTING_VS_VPN_OPENVPN_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME:
 		err = generalSetSettingVpnOpenvpnKeyJSON(data, key, valueJSON)
-	case NM_SETTING_VS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
 		err = generalSetSettingVpnOpenvpnAdvancedKeyJSON(data, key, valueJSON)
-	case NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME:
 		err = generalSetSettingVpnOpenvpnSecurityKeyJSON(data, key, valueJSON)
-	case NM_SETTING_VS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
 		err = generalSetSettingVpnOpenvpnTlsauthKeyJSON(data, key, valueJSON)
-	case NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME:
 		err = generalSetSettingVpnOpenvpnProxiesKeyJSON(data, key, valueJSON)
-	case NM_SETTING_VS_VPN_PPTP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME:
 		err = generalSetSettingVpnPptpKeyJSON(data, key, valueJSON)
-	case NM_SETTING_VS_VPN_PPTP_PPP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
 		err = generalSetSettingVpnPptpPppKeyJSON(data, key, valueJSON)
-	case NM_SETTING_VS_VPN_VPNC_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
 		err = generalSetSettingVpnVpncKeyJSON(data, key, valueJSON)
-	case NM_SETTING_VS_VPN_VPNC_ADVANCED_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME:
 		err = generalSetSettingVpnVpncAdvancedKeyJSON(data, key, valueJSON)
 	case NM_SETTING_WIRED_SETTING_NAME:
 		err = generalSetSettingWiredKeyJSON(data, key, valueJSON)
@@ -460,31 +460,31 @@ func generalGetSettingDefaultValue(section, key string) (value interface{}) {
 		value = getSettingSerialDefaultValue(key)
 	case NM_SETTING_VPN_SETTING_NAME:
 		value = getSettingVpnDefaultValue(key)
-	case NM_SETTING_VS_VPN_L2TP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME:
 		value = getSettingVpnL2tpDefaultValue(key)
-	case NM_SETTING_VS_VPN_L2TP_PPP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME:
 		value = getSettingVpnL2tpPppDefaultValue(key)
-	case NM_SETTING_VS_VPN_L2TP_IPSEC_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME:
 		value = getSettingVpnL2tpIpsecDefaultValue(key)
-	case NM_SETTING_VS_VPN_OPENCONNECT_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME:
 		value = getSettingVpnOpenconnectDefaultValue(key)
-	case NM_SETTING_VS_VPN_OPENVPN_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME:
 		value = getSettingVpnOpenvpnDefaultValue(key)
-	case NM_SETTING_VS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
 		value = getSettingVpnOpenvpnAdvancedDefaultValue(key)
-	case NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME:
 		value = getSettingVpnOpenvpnSecurityDefaultValue(key)
-	case NM_SETTING_VS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
 		value = getSettingVpnOpenvpnTlsauthDefaultValue(key)
-	case NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME:
 		value = getSettingVpnOpenvpnProxiesDefaultValue(key)
-	case NM_SETTING_VS_VPN_PPTP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME:
 		value = getSettingVpnPptpDefaultValue(key)
-	case NM_SETTING_VS_VPN_PPTP_PPP_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
 		value = getSettingVpnPptpPppDefaultValue(key)
-	case NM_SETTING_VS_VPN_VPNC_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
 		value = getSettingVpnVpncDefaultValue(key)
-	case NM_SETTING_VS_VPN_VPNC_ADVANCED_SETTING_NAME:
+	case NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME:
 		value = getSettingVpnVpncAdvancedDefaultValue(key)
 	case NM_SETTING_WIRED_SETTING_NAME:
 		value = getSettingWiredDefaultValue(key)

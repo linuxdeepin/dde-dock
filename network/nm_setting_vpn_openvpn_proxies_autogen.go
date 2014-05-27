@@ -120,200 +120,200 @@ func generalSetSettingVpnOpenvpnProxiesKeyJSON(data connectionData, key, valueJS
 
 // Check if key exists
 func isSettingVpnOpenvpnKeyProxyTypeExists(data connectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE)
+	return isSettingKeyExists(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE)
 }
 func isSettingVpnOpenvpnKeyProxyServerExists(data connectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER)
+	return isSettingKeyExists(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER)
 }
 func isSettingVpnOpenvpnKeyProxyPortExists(data connectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT)
+	return isSettingKeyExists(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT)
 }
 func isSettingVpnOpenvpnKeyProxyRetryExists(data connectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY)
+	return isSettingKeyExists(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY)
 }
 func isSettingVpnOpenvpnKeyHttpProxyUsernameExists(data connectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME)
+	return isSettingKeyExists(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME)
 }
 func isSettingVpnOpenvpnKeyHttpProxyPasswordExists(data connectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD)
+	return isSettingKeyExists(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD)
 }
 func isSettingVpnOpenvpnKeyHttpProxyPasswordFlagsExists(data connectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS)
+	return isSettingKeyExists(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS)
 }
 
 // Ensure section and key exists and not empty
 func ensureSectionSettingVpnOpenvpnProxiesExists(data connectionData, errs sectionErrors, relatedKey string) {
-	if !isSettingSectionExists(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME) {
-		rememberError(errs, relatedKey, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME))
+	if !isSettingSectionExists(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME) {
+		rememberError(errs, relatedKey, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME))
 	}
-	sectionData, _ := data[NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME]
+	sectionData, _ := data[NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME]
 	if len(sectionData) == 0 {
-		rememberError(errs, relatedKey, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME))
+		rememberError(errs, relatedKey, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME))
 	}
 }
 func ensureSettingVpnOpenvpnKeyProxyTypeNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnOpenvpnKeyProxyTypeExists(data) {
-		rememberError(errs, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE, NM_KEY_ERROR_MISSING_VALUE)
 	}
 	value := getSettingVpnOpenvpnKeyProxyType(data)
 	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE, NM_KEY_ERROR_EMPTY_VALUE)
+		rememberError(errs, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
 func ensureSettingVpnOpenvpnKeyProxyServerNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnOpenvpnKeyProxyServerExists(data) {
-		rememberError(errs, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER, NM_KEY_ERROR_MISSING_VALUE)
 	}
 	value := getSettingVpnOpenvpnKeyProxyServer(data)
 	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER, NM_KEY_ERROR_EMPTY_VALUE)
+		rememberError(errs, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
 func ensureSettingVpnOpenvpnKeyProxyPortNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnOpenvpnKeyProxyPortExists(data) {
-		rememberError(errs, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
 func ensureSettingVpnOpenvpnKeyProxyRetryNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnOpenvpnKeyProxyRetryExists(data) {
-		rememberError(errs, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
 func ensureSettingVpnOpenvpnKeyHttpProxyUsernameNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnOpenvpnKeyHttpProxyUsernameExists(data) {
-		rememberError(errs, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME, NM_KEY_ERROR_MISSING_VALUE)
 	}
 	value := getSettingVpnOpenvpnKeyHttpProxyUsername(data)
 	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME, NM_KEY_ERROR_EMPTY_VALUE)
+		rememberError(errs, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
 func ensureSettingVpnOpenvpnKeyHttpProxyPasswordNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnOpenvpnKeyHttpProxyPasswordExists(data) {
-		rememberError(errs, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD, NM_KEY_ERROR_MISSING_VALUE)
 	}
 	value := getSettingVpnOpenvpnKeyHttpProxyPassword(data)
 	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD, NM_KEY_ERROR_EMPTY_VALUE)
+		rememberError(errs, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
 func ensureSettingVpnOpenvpnKeyHttpProxyPasswordFlagsNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnOpenvpnKeyHttpProxyPasswordFlagsExists(data) {
-		rememberError(errs, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
 
 // Getter
 func getSettingVpnOpenvpnKeyProxyType(data connectionData) (value string) {
-	ivalue := getSettingKey(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE)
+	ivalue := getSettingKey(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE)
 	value = interfaceToString(ivalue)
 	return
 }
 func getSettingVpnOpenvpnKeyProxyServer(data connectionData) (value string) {
-	ivalue := getSettingKey(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER)
+	ivalue := getSettingKey(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER)
 	value = interfaceToString(ivalue)
 	return
 }
 func getSettingVpnOpenvpnKeyProxyPort(data connectionData) (value uint32) {
-	ivalue := getSettingKey(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT)
+	ivalue := getSettingKey(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT)
 	value = interfaceToUint32(ivalue)
 	return
 }
 func getSettingVpnOpenvpnKeyProxyRetry(data connectionData) (value bool) {
-	ivalue := getSettingKey(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY)
+	ivalue := getSettingKey(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY)
 	value = interfaceToBoolean(ivalue)
 	return
 }
 func getSettingVpnOpenvpnKeyHttpProxyUsername(data connectionData) (value string) {
-	ivalue := getSettingKey(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME)
+	ivalue := getSettingKey(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME)
 	value = interfaceToString(ivalue)
 	return
 }
 func getSettingVpnOpenvpnKeyHttpProxyPassword(data connectionData) (value string) {
-	ivalue := getSettingKey(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD)
+	ivalue := getSettingKey(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD)
 	value = interfaceToString(ivalue)
 	return
 }
 func getSettingVpnOpenvpnKeyHttpProxyPasswordFlags(data connectionData) (value uint32) {
-	ivalue := getSettingKey(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS)
+	ivalue := getSettingKey(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS)
 	value = interfaceToUint32(ivalue)
 	return
 }
 
 // Setter
 func setSettingVpnOpenvpnKeyProxyType(data connectionData, value string) {
-	setSettingKey(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE, value)
+	setSettingKey(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE, value)
 }
 func setSettingVpnOpenvpnKeyProxyServer(data connectionData, value string) {
-	setSettingKey(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER, value)
+	setSettingKey(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER, value)
 }
 func setSettingVpnOpenvpnKeyProxyPort(data connectionData, value uint32) {
-	setSettingKey(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT, value)
+	setSettingKey(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT, value)
 }
 func setSettingVpnOpenvpnKeyProxyRetry(data connectionData, value bool) {
-	setSettingKey(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY, value)
+	setSettingKey(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY, value)
 }
 func setSettingVpnOpenvpnKeyHttpProxyUsername(data connectionData, value string) {
-	setSettingKey(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME, value)
+	setSettingKey(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME, value)
 }
 func setSettingVpnOpenvpnKeyHttpProxyPassword(data connectionData, value string) {
-	setSettingKey(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD, value)
+	setSettingKey(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD, value)
 }
 func setSettingVpnOpenvpnKeyHttpProxyPasswordFlags(data connectionData, value uint32) {
-	setSettingKey(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS, value)
+	setSettingKey(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS, value)
 }
 
 // JSON Getter
 func getSettingVpnOpenvpnKeyProxyTypeJSON(data connectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE))
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE))
 	return
 }
 func getSettingVpnOpenvpnKeyProxyServerJSON(data connectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER))
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER))
 	return
 }
 func getSettingVpnOpenvpnKeyProxyPortJSON(data connectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT))
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT))
 	return
 }
 func getSettingVpnOpenvpnKeyProxyRetryJSON(data connectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY))
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY))
 	return
 }
 func getSettingVpnOpenvpnKeyHttpProxyUsernameJSON(data connectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME))
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME))
 	return
 }
 func getSettingVpnOpenvpnKeyHttpProxyPasswordJSON(data connectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD))
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD))
 	return
 }
 func getSettingVpnOpenvpnKeyHttpProxyPasswordFlagsJSON(data connectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS))
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS))
 	return
 }
 
 // JSON Setter
 func setSettingVpnOpenvpnKeyProxyTypeJSON(data connectionData, valueJSON string) (err error) {
-	return setSettingKeyJSON(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE, valueJSON, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE))
+	return setSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE, valueJSON, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE))
 }
 func setSettingVpnOpenvpnKeyProxyServerJSON(data connectionData, valueJSON string) (err error) {
-	return setSettingKeyJSON(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER, valueJSON, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER))
+	return setSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER, valueJSON, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER))
 }
 func setSettingVpnOpenvpnKeyProxyPortJSON(data connectionData, valueJSON string) (err error) {
-	return setSettingKeyJSON(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT, valueJSON, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT))
+	return setSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT, valueJSON, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT))
 }
 func setSettingVpnOpenvpnKeyProxyRetryJSON(data connectionData, valueJSON string) (err error) {
-	return setSettingKeyJSON(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY, valueJSON, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY))
+	return setSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY, valueJSON, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY))
 }
 func setSettingVpnOpenvpnKeyHttpProxyUsernameJSON(data connectionData, valueJSON string) (err error) {
-	return setSettingKeyJSON(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME, valueJSON, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME))
+	return setSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME, valueJSON, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME))
 }
 func setSettingVpnOpenvpnKeyHttpProxyPasswordJSON(data connectionData, valueJSON string) (err error) {
-	return setSettingKeyJSON(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD, valueJSON, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD))
+	return setSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD, valueJSON, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD))
 }
 func setSettingVpnOpenvpnKeyHttpProxyPasswordFlagsJSON(data connectionData, valueJSON string) (err error) {
-	return setSettingKeyJSON(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS, valueJSON, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS))
+	return setSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS, valueJSON, getSettingVpnOpenvpnProxiesKeyType(NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS))
 }
 
 // Logic JSON Setter
@@ -331,23 +331,23 @@ func logicSetSettingVpnOpenvpnKeyProxyTypeJSON(data connectionData, valueJSON st
 
 // Remover
 func removeSettingVpnOpenvpnKeyProxyType(data connectionData) {
-	removeSettingKey(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE)
+	removeSettingKey(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE)
 }
 func removeSettingVpnOpenvpnKeyProxyServer(data connectionData) {
-	removeSettingKey(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER)
+	removeSettingKey(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER)
 }
 func removeSettingVpnOpenvpnKeyProxyPort(data connectionData) {
-	removeSettingKey(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT)
+	removeSettingKey(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT)
 }
 func removeSettingVpnOpenvpnKeyProxyRetry(data connectionData) {
-	removeSettingKey(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY)
+	removeSettingKey(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY)
 }
 func removeSettingVpnOpenvpnKeyHttpProxyUsername(data connectionData) {
-	removeSettingKey(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME)
+	removeSettingKey(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME)
 }
 func removeSettingVpnOpenvpnKeyHttpProxyPassword(data connectionData) {
-	removeSettingKey(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD)
+	removeSettingKey(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD)
 }
 func removeSettingVpnOpenvpnKeyHttpProxyPasswordFlags(data connectionData) {
-	removeSettingKey(data, NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS)
+	removeSettingKey(data, NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS)
 }
