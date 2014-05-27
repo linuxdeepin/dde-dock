@@ -70,85 +70,85 @@ func generalSetSettingVpnOpenvpnSecurityKeyJSON(data connectionData, key, valueJ
 
 // Check if key exists
 func isSettingVpnOpenvpnKeyCipherExists(data connectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_CIPHER)
+	return isSettingKeyExists(data, NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_CIPHER)
 }
 func isSettingVpnOpenvpnKeyAuthExists(data connectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_AUTH)
+	return isSettingKeyExists(data, NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_AUTH)
 }
 
 // Ensure section and key exists and not empty
 func ensureSectionSettingVpnOpenvpnSecurityExists(data connectionData, errs sectionErrors, relatedKey string) {
-	if !isSettingSectionExists(data, NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME) {
-		rememberError(errs, relatedKey, NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME))
+	if !isSettingSectionExists(data, NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME) {
+		rememberError(errs, relatedKey, NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME))
 	}
-	sectionData, _ := data[NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME]
+	sectionData, _ := data[NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME]
 	if len(sectionData) == 0 {
-		rememberError(errs, relatedKey, NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME))
+		rememberError(errs, relatedKey, NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME))
 	}
 }
 func ensureSettingVpnOpenvpnKeyCipherNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnOpenvpnKeyCipherExists(data) {
-		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_CIPHER, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_CIPHER, NM_KEY_ERROR_MISSING_VALUE)
 	}
 	value := getSettingVpnOpenvpnKeyCipher(data)
 	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_CIPHER, NM_KEY_ERROR_EMPTY_VALUE)
+		rememberError(errs, NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_CIPHER, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
 func ensureSettingVpnOpenvpnKeyAuthNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnOpenvpnKeyAuthExists(data) {
-		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_AUTH, NM_KEY_ERROR_MISSING_VALUE)
+		rememberError(errs, NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_AUTH, NM_KEY_ERROR_MISSING_VALUE)
 	}
 	value := getSettingVpnOpenvpnKeyAuth(data)
 	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_AUTH, NM_KEY_ERROR_EMPTY_VALUE)
+		rememberError(errs, NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_AUTH, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
 
 // Getter
 func getSettingVpnOpenvpnKeyCipher(data connectionData) (value string) {
-	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_CIPHER)
+	ivalue := getSettingKey(data, NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_CIPHER)
 	value = interfaceToString(ivalue)
 	return
 }
 func getSettingVpnOpenvpnKeyAuth(data connectionData) (value string) {
-	ivalue := getSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_AUTH)
+	ivalue := getSettingKey(data, NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_AUTH)
 	value = interfaceToString(ivalue)
 	return
 }
 
 // Setter
 func setSettingVpnOpenvpnKeyCipher(data connectionData, value string) {
-	setSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_CIPHER, value)
+	setSettingKey(data, NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_CIPHER, value)
 }
 func setSettingVpnOpenvpnKeyAuth(data connectionData, value string) {
-	setSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_AUTH, value)
+	setSettingKey(data, NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_AUTH, value)
 }
 
 // JSON Getter
 func getSettingVpnOpenvpnKeyCipherJSON(data connectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_CIPHER, getSettingVpnOpenvpnSecurityKeyType(NM_SETTING_VPN_OPENVPN_KEY_CIPHER))
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_CIPHER, getSettingVpnOpenvpnSecurityKeyType(NM_SETTING_VPN_OPENVPN_KEY_CIPHER))
 	return
 }
 func getSettingVpnOpenvpnKeyAuthJSON(data connectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_AUTH, getSettingVpnOpenvpnSecurityKeyType(NM_SETTING_VPN_OPENVPN_KEY_AUTH))
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_AUTH, getSettingVpnOpenvpnSecurityKeyType(NM_SETTING_VPN_OPENVPN_KEY_AUTH))
 	return
 }
 
 // JSON Setter
 func setSettingVpnOpenvpnKeyCipherJSON(data connectionData, valueJSON string) (err error) {
-	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_CIPHER, valueJSON, getSettingVpnOpenvpnSecurityKeyType(NM_SETTING_VPN_OPENVPN_KEY_CIPHER))
+	return setSettingKeyJSON(data, NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_CIPHER, valueJSON, getSettingVpnOpenvpnSecurityKeyType(NM_SETTING_VPN_OPENVPN_KEY_CIPHER))
 }
 func setSettingVpnOpenvpnKeyAuthJSON(data connectionData, valueJSON string) (err error) {
-	return setSettingKeyJSON(data, NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_AUTH, valueJSON, getSettingVpnOpenvpnSecurityKeyType(NM_SETTING_VPN_OPENVPN_KEY_AUTH))
+	return setSettingKeyJSON(data, NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_AUTH, valueJSON, getSettingVpnOpenvpnSecurityKeyType(NM_SETTING_VPN_OPENVPN_KEY_AUTH))
 }
 
 // Logic JSON Setter
 
 // Remover
 func removeSettingVpnOpenvpnKeyCipher(data connectionData) {
-	removeSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_CIPHER)
+	removeSettingKey(data, NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_CIPHER)
 }
 func removeSettingVpnOpenvpnKeyAuth(data connectionData) {
-	removeSettingKey(data, NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_AUTH)
+	removeSettingKey(data, NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME, NM_SETTING_VPN_OPENVPN_KEY_AUTH)
 }

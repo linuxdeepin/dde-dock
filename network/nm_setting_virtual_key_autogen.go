@@ -28,21 +28,21 @@ var virtualKeys = []virtualKey{
 	virtualKey{Name: NM_SETTING_VK_IP6_CONFIG_ROUTES_NEXTHOP, Type: ktypeString, RelatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP6_CONFIG_ROUTES, EnableWrapper: false, Available: false, Optional: false},
 	virtualKey{Name: NM_SETTING_VK_IP6_CONFIG_ROUTES_METRIC, Type: ktypeUint32, RelatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP6_CONFIG_ROUTES, EnableWrapper: false, Available: false, Optional: false},
 	virtualKey{Name: NM_SETTING_VK_PPP_ENABLE_LCP_ECHO, Type: ktypeBoolean, RelatedSection: NM_SETTING_PPP_SETTING_NAME, RelatedKey: NM_SETTING_PPP_LCP_ECHO_FAILURE, EnableWrapper: false, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_VPN_L2TP_REQUIRE_MPPE, Type: ktypeBoolean, RelatedSection: NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, RelatedKey: NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE, EnableWrapper: false, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_VPN_L2TP_MPPE_SECURITY, Type: ktypeString, RelatedSection: NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, RelatedKey: NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_40, EnableWrapper: false, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_VPN_L2TP_ENABLE_LCP_ECHO, Type: ktypeBoolean, RelatedSection: NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME, RelatedKey: NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_FAILURE, EnableWrapper: false, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_PORT, Type: ktypeBoolean, RelatedSection: NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, RelatedKey: NM_SETTING_VPN_OPENVPN_KEY_PORT, EnableWrapper: true, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_RENEG_SECONDS, Type: ktypeBoolean, RelatedSection: NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, RelatedKey: NM_SETTING_VPN_OPENVPN_KEY_RENEG_SECONDS, EnableWrapper: true, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_TUNNEL_MTU, Type: ktypeBoolean, RelatedSection: NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, RelatedKey: NM_SETTING_VPN_OPENVPN_KEY_TUNNEL_MTU, EnableWrapper: true, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_FRAGMENT_SIZE, Type: ktypeBoolean, RelatedSection: NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME, RelatedKey: NM_SETTING_VPN_OPENVPN_KEY_FRAGMENT_SIZE, EnableWrapper: true, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_STATIC_KEY_DIRECTION, Type: ktypeBoolean, RelatedSection: NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME, RelatedKey: NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY_DIRECTION, EnableWrapper: true, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_TA_DIR, Type: ktypeBoolean, RelatedSection: NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME, RelatedKey: NM_SETTING_VPN_OPENVPN_KEY_TA_DIR, EnableWrapper: true, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_VPN_PPTP_REQUIRE_MPPE, Type: ktypeBoolean, RelatedSection: NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, RelatedKey: NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE, EnableWrapper: false, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_VPN_PPTP_MPPE_SECURITY, Type: ktypeString, RelatedSection: NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, RelatedKey: NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40, EnableWrapper: false, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_VPN_PPTP_ENABLE_LCP_ECHO, Type: ktypeBoolean, RelatedSection: NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME, RelatedKey: NM_SETTING_VPN_PPTP_KEY_LCP_ECHO_FAILURE, EnableWrapper: false, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_VPN_VPNC_KEY_HYBRID_AUTHMODE, Type: ktypeBoolean, RelatedSection: NM_SETTING_VF_VPN_VPNC_SETTING_NAME, RelatedKey: NM_SETTING_VPN_VPNC_KEY_AUTHMODE, EnableWrapper: false, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_VPN_VPNC_KEY_ENCRYPTION_METHOD, Type: ktypeString, RelatedSection: NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, RelatedKey: NM_SETTING_VPN_VPNC_KEY_SINGLE_DES, EnableWrapper: false, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_VPN_VPNC_KEY_DISABLE_DPD, Type: ktypeBoolean, RelatedSection: NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME, RelatedKey: NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT, EnableWrapper: false, Available: true, Optional: false},
+	virtualKey{Name: NM_SETTING_VK_VPN_L2TP_REQUIRE_MPPE, Type: ktypeBoolean, RelatedSection: NM_SETTING_VS_VPN_L2TP_PPP_SETTING_NAME, RelatedKey: NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE, EnableWrapper: false, Available: true, Optional: false},
+	virtualKey{Name: NM_SETTING_VK_VPN_L2TP_MPPE_SECURITY, Type: ktypeString, RelatedSection: NM_SETTING_VS_VPN_L2TP_PPP_SETTING_NAME, RelatedKey: NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_40, EnableWrapper: false, Available: true, Optional: false},
+	virtualKey{Name: NM_SETTING_VK_VPN_L2TP_ENABLE_LCP_ECHO, Type: ktypeBoolean, RelatedSection: NM_SETTING_VS_VPN_L2TP_PPP_SETTING_NAME, RelatedKey: NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_FAILURE, EnableWrapper: false, Available: true, Optional: false},
+	virtualKey{Name: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_PORT, Type: ktypeBoolean, RelatedSection: NM_SETTING_VS_VPN_OPENVPN_ADVANCED_SETTING_NAME, RelatedKey: NM_SETTING_VPN_OPENVPN_KEY_PORT, EnableWrapper: true, Available: true, Optional: false},
+	virtualKey{Name: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_RENEG_SECONDS, Type: ktypeBoolean, RelatedSection: NM_SETTING_VS_VPN_OPENVPN_ADVANCED_SETTING_NAME, RelatedKey: NM_SETTING_VPN_OPENVPN_KEY_RENEG_SECONDS, EnableWrapper: true, Available: true, Optional: false},
+	virtualKey{Name: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_TUNNEL_MTU, Type: ktypeBoolean, RelatedSection: NM_SETTING_VS_VPN_OPENVPN_ADVANCED_SETTING_NAME, RelatedKey: NM_SETTING_VPN_OPENVPN_KEY_TUNNEL_MTU, EnableWrapper: true, Available: true, Optional: false},
+	virtualKey{Name: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_FRAGMENT_SIZE, Type: ktypeBoolean, RelatedSection: NM_SETTING_VS_VPN_OPENVPN_ADVANCED_SETTING_NAME, RelatedKey: NM_SETTING_VPN_OPENVPN_KEY_FRAGMENT_SIZE, EnableWrapper: true, Available: true, Optional: false},
+	virtualKey{Name: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_STATIC_KEY_DIRECTION, Type: ktypeBoolean, RelatedSection: NM_SETTING_VS_VPN_OPENVPN_SETTING_NAME, RelatedKey: NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY_DIRECTION, EnableWrapper: true, Available: true, Optional: false},
+	virtualKey{Name: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_TA_DIR, Type: ktypeBoolean, RelatedSection: NM_SETTING_VS_VPN_OPENVPN_TLSAUTH_SETTING_NAME, RelatedKey: NM_SETTING_VPN_OPENVPN_KEY_TA_DIR, EnableWrapper: true, Available: true, Optional: false},
+	virtualKey{Name: NM_SETTING_VK_VPN_PPTP_REQUIRE_MPPE, Type: ktypeBoolean, RelatedSection: NM_SETTING_VS_VPN_PPTP_PPP_SETTING_NAME, RelatedKey: NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE, EnableWrapper: false, Available: true, Optional: false},
+	virtualKey{Name: NM_SETTING_VK_VPN_PPTP_MPPE_SECURITY, Type: ktypeString, RelatedSection: NM_SETTING_VS_VPN_PPTP_PPP_SETTING_NAME, RelatedKey: NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40, EnableWrapper: false, Available: true, Optional: false},
+	virtualKey{Name: NM_SETTING_VK_VPN_PPTP_ENABLE_LCP_ECHO, Type: ktypeBoolean, RelatedSection: NM_SETTING_VS_VPN_PPTP_PPP_SETTING_NAME, RelatedKey: NM_SETTING_VPN_PPTP_KEY_LCP_ECHO_FAILURE, EnableWrapper: false, Available: true, Optional: false},
+	virtualKey{Name: NM_SETTING_VK_VPN_VPNC_KEY_HYBRID_AUTHMODE, Type: ktypeBoolean, RelatedSection: NM_SETTING_VS_VPN_VPNC_SETTING_NAME, RelatedKey: NM_SETTING_VPN_VPNC_KEY_AUTHMODE, EnableWrapper: false, Available: true, Optional: false},
+	virtualKey{Name: NM_SETTING_VK_VPN_VPNC_KEY_ENCRYPTION_METHOD, Type: ktypeString, RelatedSection: NM_SETTING_VS_VPN_VPNC_ADVANCED_SETTING_NAME, RelatedKey: NM_SETTING_VPN_VPNC_KEY_SINGLE_DES, EnableWrapper: false, Available: true, Optional: false},
+	virtualKey{Name: NM_SETTING_VK_VPN_VPNC_KEY_DISABLE_DPD, Type: ktypeBoolean, RelatedSection: NM_SETTING_VS_VPN_VPNC_ADVANCED_SETTING_NAME, RelatedKey: NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT, EnableWrapper: false, Available: true, Optional: false},
 	virtualKey{Name: NM_SETTING_VK_WIRED_ENABLE_MTU, Type: ktypeBoolean, RelatedSection: NM_SETTING_WIRED_SETTING_NAME, RelatedKey: NM_SETTING_WIRED_MTU, EnableWrapper: true, Available: true, Optional: false},
 	virtualKey{Name: NM_SETTING_VK_WIRELESS_ENABLE_MTU, Type: ktypeBoolean, RelatedSection: NM_SETTING_WIRELESS_SETTING_NAME, RelatedKey: NM_SETTING_WIRELESS_MTU, EnableWrapper: true, Available: true, Optional: false},
 	virtualKey{Name: NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT, Type: ktypeString, RelatedSection: NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, RelatedKey: NM_SETTING_WIRELESS_SECURITY_KEY_MGMT, EnableWrapper: false, Available: true, Optional: false},
@@ -119,7 +119,7 @@ func generalGetVirtualKeyJSON(data connectionData, section, key string) (valueJS
 		case NM_SETTING_VK_PPP_ENABLE_LCP_ECHO:
 			return getSettingVkPppEnableLcpEchoJSON(data)
 		}
-	case NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME:
+	case NM_SETTING_VS_VPN_L2TP_PPP_SETTING_NAME:
 		switch key {
 		case NM_SETTING_VK_VPN_L2TP_REQUIRE_MPPE:
 			return getSettingVkVpnL2tpRequireMppeJSON(data)
@@ -128,7 +128,7 @@ func generalGetVirtualKeyJSON(data connectionData, section, key string) (valueJS
 		case NM_SETTING_VK_VPN_L2TP_ENABLE_LCP_ECHO:
 			return getSettingVkVpnL2tpEnableLcpEchoJSON(data)
 		}
-	case NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME:
+	case NM_SETTING_VS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
 		switch key {
 		case NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_PORT:
 			return getSettingVkVpnOpenvpnKeyEnablePortJSON(data)
@@ -139,17 +139,17 @@ func generalGetVirtualKeyJSON(data connectionData, section, key string) (valueJS
 		case NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_FRAGMENT_SIZE:
 			return getSettingVkVpnOpenvpnKeyEnableFragmentSizeJSON(data)
 		}
-	case NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME:
+	case NM_SETTING_VS_VPN_OPENVPN_SETTING_NAME:
 		switch key {
 		case NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_STATIC_KEY_DIRECTION:
 			return getSettingVkVpnOpenvpnKeyEnableStaticKeyDirectionJSON(data)
 		}
-	case NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
+	case NM_SETTING_VS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
 		switch key {
 		case NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_TA_DIR:
 			return getSettingVkVpnOpenvpnKeyEnableTaDirJSON(data)
 		}
-	case NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME:
+	case NM_SETTING_VS_VPN_PPTP_PPP_SETTING_NAME:
 		switch key {
 		case NM_SETTING_VK_VPN_PPTP_REQUIRE_MPPE:
 			return getSettingVkVpnPptpRequireMppeJSON(data)
@@ -158,12 +158,12 @@ func generalGetVirtualKeyJSON(data connectionData, section, key string) (valueJS
 		case NM_SETTING_VK_VPN_PPTP_ENABLE_LCP_ECHO:
 			return getSettingVkVpnPptpEnableLcpEchoJSON(data)
 		}
-	case NM_SETTING_VF_VPN_VPNC_SETTING_NAME:
+	case NM_SETTING_VS_VPN_VPNC_SETTING_NAME:
 		switch key {
 		case NM_SETTING_VK_VPN_VPNC_KEY_HYBRID_AUTHMODE:
 			return getSettingVkVpnVpncKeyHybridAuthmodeJSON(data)
 		}
-	case NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME:
+	case NM_SETTING_VS_VPN_VPNC_ADVANCED_SETTING_NAME:
 		switch key {
 		case NM_SETTING_VK_VPN_VPNC_KEY_ENCRYPTION_METHOD:
 			return getSettingVkVpnVpncKeyEncryptionMethodJSON(data)
@@ -287,7 +287,7 @@ func generalSetVirtualKeyJSON(data connectionData, section, key string, valueJSO
 			err = logicSetSettingVkPppEnableLcpEchoJSON(data, valueJSON)
 			return
 		}
-	case NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME:
+	case NM_SETTING_VS_VPN_L2TP_PPP_SETTING_NAME:
 		switch key {
 		case NM_SETTING_VK_VPN_L2TP_REQUIRE_MPPE:
 			err = logicSetSettingVkVpnL2tpRequireMppeJSON(data, valueJSON)
@@ -299,7 +299,7 @@ func generalSetVirtualKeyJSON(data connectionData, section, key string, valueJSO
 			err = logicSetSettingVkVpnL2tpEnableLcpEchoJSON(data, valueJSON)
 			return
 		}
-	case NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME:
+	case NM_SETTING_VS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
 		switch key {
 		case NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_PORT:
 			err = logicSetSettingVkVpnOpenvpnKeyEnablePortJSON(data, valueJSON)
@@ -314,19 +314,19 @@ func generalSetVirtualKeyJSON(data connectionData, section, key string, valueJSO
 			err = logicSetSettingVkVpnOpenvpnKeyEnableFragmentSizeJSON(data, valueJSON)
 			return
 		}
-	case NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME:
+	case NM_SETTING_VS_VPN_OPENVPN_SETTING_NAME:
 		switch key {
 		case NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_STATIC_KEY_DIRECTION:
 			err = logicSetSettingVkVpnOpenvpnKeyEnableStaticKeyDirectionJSON(data, valueJSON)
 			return
 		}
-	case NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
+	case NM_SETTING_VS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
 		switch key {
 		case NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_TA_DIR:
 			err = logicSetSettingVkVpnOpenvpnKeyEnableTaDirJSON(data, valueJSON)
 			return
 		}
-	case NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME:
+	case NM_SETTING_VS_VPN_PPTP_PPP_SETTING_NAME:
 		switch key {
 		case NM_SETTING_VK_VPN_PPTP_REQUIRE_MPPE:
 			err = logicSetSettingVkVpnPptpRequireMppeJSON(data, valueJSON)
@@ -338,13 +338,13 @@ func generalSetVirtualKeyJSON(data connectionData, section, key string, valueJSO
 			err = logicSetSettingVkVpnPptpEnableLcpEchoJSON(data, valueJSON)
 			return
 		}
-	case NM_SETTING_VF_VPN_VPNC_SETTING_NAME:
+	case NM_SETTING_VS_VPN_VPNC_SETTING_NAME:
 		switch key {
 		case NM_SETTING_VK_VPN_VPNC_KEY_HYBRID_AUTHMODE:
 			err = logicSetSettingVkVpnVpncKeyHybridAuthmodeJSON(data, valueJSON)
 			return
 		}
-	case NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME:
+	case NM_SETTING_VS_VPN_VPNC_ADVANCED_SETTING_NAME:
 		switch key {
 		case NM_SETTING_VK_VPN_VPNC_KEY_ENCRYPTION_METHOD:
 			err = logicSetSettingVkVpnVpncKeyEncryptionMethodJSON(data, valueJSON)

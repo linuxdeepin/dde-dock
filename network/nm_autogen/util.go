@@ -202,7 +202,7 @@ func isVk(keyName string) (ok bool) {
 
 // NM_SETTING_CONNECTION_SETTING_NAME -> ConnectionSetting, NM_SETTING_VK_VPN_L2TP_SETTING_NAME -> VpnL2tp
 func ToSectionFuncBaseName(name string) (funcName string) {
-	name = strings.Replace(name, "NM_SETTING_VF_", "NM_SETTING_", -1) // remove virtual section tag
+	name = strings.Replace(name, "NM_SETTING_VS_", "NM_SETTING_", -1) // remove virtual section tag
 	funcName = strings.TrimPrefix(name, "NM_")
 	funcName = strings.TrimSuffix(funcName, "_SETTING_NAME")
 	funcName = strings.Replace(funcName, "_", " ", -1)

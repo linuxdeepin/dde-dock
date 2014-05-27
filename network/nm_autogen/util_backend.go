@@ -9,7 +9,7 @@ import (
 
 // NM_SETTING_CONNECTION_SETTING_NAME -> ../nm_setting_connection_autogen.go
 func getBackEndFilePath(sectionName string) (filePath string) {
-	sectionName = strings.Replace(sectionName, "NM_SETTING_VF_", "NM_SETTING_", -1) // remove virtual section tag
+	sectionName = strings.Replace(sectionName, "NM_SETTING_VS_", "NM_SETTING_", -1) // remove virtual section tag
 	fileName := strings.TrimSuffix(sectionName, "_SETTING_NAME")
 	fileName = strings.ToLower(fileName) + "_autogen.go"
 	filePath = path.Join(backEndDir, fileName)

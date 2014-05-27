@@ -5,7 +5,7 @@ import (
 	"strconv"
 )
 
-// custom device types
+// Custom device types
 const (
 	deviceUnknown    = "unknown"
 	deviceEthernet   = "wired"
@@ -57,7 +57,7 @@ func getDeviceName(devType uint32) (devName string) {
 	return deviceUnknown
 }
 
-// custom connection types
+// Custom connection types
 const (
 	connectionUnknown         = "unknown"
 	connectionWired           = "wired"
@@ -110,6 +110,7 @@ var supportedConnectionTypesInfo = []connectionType{
 	connectionType{connectionVpnVpnc, dlib.Tr("VPN-VPNC (Cisco Compatible VPN)")},
 }
 
+// Sections
 const (
 	section8021x              = NM_SETTING_802_1X_SETTING_NAME
 	sectionConnection         = NM_SETTING_CONNECTION_SETTING_NAME
@@ -121,25 +122,25 @@ const (
 	sectionPpp                = NM_SETTING_PPP_SETTING_NAME
 	sectionSerial             = NM_SETTING_SERIAL_SETTING_NAME
 	sectionVpn                = NM_SETTING_VPN_SETTING_NAME
-	sectionVpnL2tp            = NM_SETTING_VF_VPN_L2TP_SETTING_NAME
-	sectionVpnL2tpPpp         = NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME
-	sectionVpnL2tpIpsec       = NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME
-	sectionVpnOpenconnect     = NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME
-	sectionVpnOpenvpn         = NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME
-	sectionVpnOpenvpnAdvanced = NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME
-	sectionVpnOpenvpnSecurity = NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME
-	sectionVpnOpenvpnTlsauth  = NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME
-	sectionVpnOpenvpnProxies  = NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME
-	sectionVpnPptp            = NM_SETTING_VF_VPN_PPTP_SETTING_NAME
-	sectionVpnPptpPpp         = NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME
-	sectionVpnVpnc            = NM_SETTING_VF_VPN_VPNC_SETTING_NAME
-	sectionVpnVpncAdvanced    = NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME
+	sectionVpnL2tp            = NM_SETTING_VS_VPN_L2TP_SETTING_NAME
+	sectionVpnL2tpPpp         = NM_SETTING_VS_VPN_L2TP_PPP_SETTING_NAME
+	sectionVpnL2tpIpsec       = NM_SETTING_VS_VPN_L2TP_IPSEC_SETTING_NAME
+	sectionVpnOpenconnect     = NM_SETTING_VS_VPN_OPENCONNECT_SETTING_NAME
+	sectionVpnOpenvpn         = NM_SETTING_VS_VPN_OPENVPN_SETTING_NAME
+	sectionVpnOpenvpnAdvanced = NM_SETTING_VS_VPN_OPENVPN_ADVANCED_SETTING_NAME
+	sectionVpnOpenvpnSecurity = NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME
+	sectionVpnOpenvpnTlsauth  = NM_SETTING_VS_VPN_OPENVPN_TLSAUTH_SETTING_NAME
+	sectionVpnOpenvpnProxies  = NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME
+	sectionVpnPptp            = NM_SETTING_VS_VPN_PPTP_SETTING_NAME
+	sectionVpnPptpPpp         = NM_SETTING_VS_VPN_PPTP_PPP_SETTING_NAME
+	sectionVpnVpnc            = NM_SETTING_VS_VPN_VPNC_SETTING_NAME
+	sectionVpnVpncAdvanced    = NM_SETTING_VS_VPN_VPNC_ADVANCED_SETTING_NAME
 	sectionWired              = NM_SETTING_WIRED_SETTING_NAME
 	sectionWireless           = NM_SETTING_WIRELESS_SETTING_NAME
 	sectionWirelessSecurity   = NM_SETTING_WIRELESS_SECURITY_SETTING_NAME
 )
 
-// page is a wrapper of sections for easy to configure
+// Pages, page is a wrapper of sections for easy to configure
 const (
 	pageGeneral            = "general"              // -> sectionConnection
 	pageEthernet           = "ethernet"             // -> sectionWireed
@@ -166,51 +167,51 @@ const (
 	pageVpnVpncAdvanced    = "vpn-vpnc-advanced"    // -> sectionVpnVpncAdvanced
 )
 
-// Virtual sections, used for vpn connectionns.
+// Virtual sections, used for split child sections for vpn connections.
 const (
-	NM_SETTING_VF_VPN_L2TP_SETTING_NAME             = "vf-vpn-l2tp"
-	NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME         = "vf-vpn-l2tp-ppp"
-	NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME       = "vf-vpn-l2tp-ipsec"
-	NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME      = "vf-vpn-openconnect"
-	NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME          = "vf-vpn-openvpn"
-	NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME = "vf-vpn-openvpn-advanced"
-	NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME = "vf-vpn-openvpn-security"
-	NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME  = "vf-vpn-openvpn-tlsauth"
-	NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME  = "vf-vpn-openvpn-proxies"
-	NM_SETTING_VF_VPN_PPTP_SETTING_NAME             = "vf-vpn-pptp"
-	NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME         = "vf-vpn-pptp-ppp"
-	NM_SETTING_VF_VPN_VPNC_SETTING_NAME             = "vf-vpn-vpnc"
-	NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME    = "vf-vpn-advanced"
+	NM_SETTING_VS_VPN_L2TP_SETTING_NAME             = "vs-vpn-l2tp"
+	NM_SETTING_VS_VPN_L2TP_PPP_SETTING_NAME         = "vs-vpn-l2tp-ppp"
+	NM_SETTING_VS_VPN_L2TP_IPSEC_SETTING_NAME       = "vs-vpn-l2tp-ipsec"
+	NM_SETTING_VS_VPN_OPENCONNECT_SETTING_NAME      = "vs-vpn-openconnect"
+	NM_SETTING_VS_VPN_OPENVPN_SETTING_NAME          = "vs-vpn-openvpn"
+	NM_SETTING_VS_VPN_OPENVPN_ADVANCED_SETTING_NAME = "vs-vpn-openvpn-advanced"
+	NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME = "vs-vpn-openvpn-security"
+	NM_SETTING_VS_VPN_OPENVPN_TLSAUTH_SETTING_NAME  = "vs-vpn-openvpn-tlsauth"
+	NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME  = "vs-vpn-openvpn-proxies"
+	NM_SETTING_VS_VPN_PPTP_SETTING_NAME             = "vs-vpn-pptp"
+	NM_SETTING_VS_VPN_PPTP_PPP_SETTING_NAME         = "vs-vpn-pptp-ppp"
+	NM_SETTING_VS_VPN_VPNC_SETTING_NAME             = "vs-vpn-vpnc"
+	NM_SETTING_VS_VPN_VPNC_ADVANCED_SETTING_NAME    = "vs-vpn-advanced"
 )
 
 func getRealSectionName(name string) (realName string) {
 	realName = name
 	switch name {
-	case NM_SETTING_VF_VPN_L2TP_SETTING_NAME:
+	case NM_SETTING_VS_VPN_L2TP_SETTING_NAME:
 		realName = sectionVpn
-	case NM_SETTING_VF_VPN_L2TP_PPP_SETTING_NAME:
+	case NM_SETTING_VS_VPN_L2TP_PPP_SETTING_NAME:
 		realName = sectionVpn
-	case NM_SETTING_VF_VPN_L2TP_IPSEC_SETTING_NAME:
+	case NM_SETTING_VS_VPN_L2TP_IPSEC_SETTING_NAME:
 		realName = sectionVpn
-	case NM_SETTING_VF_VPN_OPENCONNECT_SETTING_NAME:
+	case NM_SETTING_VS_VPN_OPENCONNECT_SETTING_NAME:
 		realName = sectionVpn
-	case NM_SETTING_VF_VPN_OPENVPN_SETTING_NAME:
+	case NM_SETTING_VS_VPN_OPENVPN_SETTING_NAME:
 		realName = sectionVpn
-	case NM_SETTING_VF_VPN_OPENVPN_ADVANCED_SETTING_NAME:
+	case NM_SETTING_VS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
 		realName = sectionVpn
-	case NM_SETTING_VF_VPN_OPENVPN_SECURITY_SETTING_NAME:
+	case NM_SETTING_VS_VPN_OPENVPN_SECURITY_SETTING_NAME:
 		realName = sectionVpn
-	case NM_SETTING_VF_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
+	case NM_SETTING_VS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
 		realName = sectionVpn
-	case NM_SETTING_VF_VPN_OPENVPN_PROXIES_SETTING_NAME:
+	case NM_SETTING_VS_VPN_OPENVPN_PROXIES_SETTING_NAME:
 		realName = sectionVpn
-	case NM_SETTING_VF_VPN_PPTP_SETTING_NAME:
+	case NM_SETTING_VS_VPN_PPTP_SETTING_NAME:
 		realName = sectionVpn
-	case NM_SETTING_VF_VPN_PPTP_PPP_SETTING_NAME:
+	case NM_SETTING_VS_VPN_PPTP_PPP_SETTING_NAME:
 		realName = sectionVpn
-	case NM_SETTING_VF_VPN_VPNC_SETTING_NAME:
+	case NM_SETTING_VS_VPN_VPNC_SETTING_NAME:
 		realName = sectionVpn
-	case NM_SETTING_VF_VPN_VPNC_ADVANCED_SETTING_NAME:
+	case NM_SETTING_VS_VPN_VPNC_ADVANCED_SETTING_NAME:
 		realName = sectionVpn
 	}
 	return
