@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-	<schema id="com.deepin.dde.key-binding.custom" >
+	<schema id="com.deepin.dde.keybinding.custom" >
 	<key type="i" name="id">
 		<default>1000</default>
 		<summary>key id</summary>

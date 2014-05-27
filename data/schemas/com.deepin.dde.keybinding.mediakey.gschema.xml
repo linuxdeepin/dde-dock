@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-    <schema id="com.deepin.dde.key-binding.mediakey" path="/com/deepin/dde/key-binding/mediakey/" >
+    <schema id="com.deepin.dde.keybinding.mediakey" path="/com/deepin/dde/keybinding/mediakey/" >
         <key type="s" name="touchpad-toggle">
             <default>'XF86TouchpadToggle'</default>
             <summary>TouchPad Toggle</summary>

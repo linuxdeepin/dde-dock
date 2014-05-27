@@ -19,7 +19,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-#include "grab-xrecord.h"
+#include "record.h"
 
 typedef struct _XRecordGrabInfo {
     Display *ctrl_disp;

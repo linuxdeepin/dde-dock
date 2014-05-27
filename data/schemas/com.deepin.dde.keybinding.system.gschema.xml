@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-	<schema id="com.deepin.dde.key-binding.system" path="/com/deepin/dde/key-binding/system/">
+	<schema id="com.deepin.dde.keybinding.system" path="/com/deepin/dde/keybinding/system/">
 	<key type="as" name="launcher">
 		<default>['Super','/usr/bin/dde-launcher']</default>
 		<summary>shortcut</summary>
@@ -22,7 +22,7 @@
 		<description>system shortcut</description>
 	</key>
 	<key type="as" name="logout">
-		<default>['&lt;Control&gt;&lt;Alt&gt;Delete','/usr/bin/dde-dshutdown']</default>
+		<default>['&lt;Control&gt;&lt;Alt&gt;Delete','/usr/bin/dde-shutdown']</default>
 		<summary>shortcut</summary>
 		<description>system shortcut</description>
 	</key>
