@@ -62,8 +62,7 @@ func (a *Agent) GetSecrets(connection map[string]map[string]dbus.Variant, connec
 	// 	logger.Info("Repeat GetSecrets", keyId)
 	// } else {
 	select {
-	// TODO
-	case keyValue, ok := <-a.createPendingKey(keyId, pageGeneralGetId(connection)):
+	case keyValue, ok := <-a.createPendingKey(keyId, getSettingConnectionId(connection)):
 		if ok {
 			keyValue := fillSecret(settingName, keyValue)
 			a.SaveSecrets(keyValue, connectionPath)

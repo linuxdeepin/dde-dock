@@ -3,16 +3,6 @@ package main
 import "dlib/dbus"
 import "fmt"
 
-// TODO remove
-func pageGeneralGetId(con map[string]map[string]dbus.Variant) string {
-	defer func() {
-		if err := recover(); err != nil {
-			logger.Warning("EditorGetID failed:", con, err)
-		}
-	}()
-	return con[sectionConnection]["id"].Value().(string)
-}
-
 func getCustomConnectionType(data connectionData) (connType string) {
 	t := getSettingConnectionType(data)
 	switch t {
