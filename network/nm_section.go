@@ -80,18 +80,24 @@ func getRealSectionName(name string) (realName string) {
 	return
 }
 
-// Pages, page is a wrapper of sections for easy to configure
+// TODO refactor code, virtual sections for front-end
+// Virtual sections for front-end
+// Pages, page is wrapper for section to easy to configure
 const (
-	pageGeneral            = "general"              // -> sectionConnection
-	pageEthernet           = "ethernet"             // -> sectionWireed
-	pageMobile             = "mobile"               // -> sectionGsm
-	pageMobileCdma         = "mobile-cdma"          // -> sectionCdma
-	pageWifi               = "wifi"                 // -> sectionWireless
-	pageIpv4               = "ipv4"                 // -> sectionIpv4
-	pageIpv6               = "ipv6"                 // -> sectionIpv6
-	pageSecurity           = "security"             // -> section8021x, sectionWirelessSecurity
-	pagePppoe              = "pppoe"                // -> sectionPppoe
-	pagePpp                = "ppp"                  // -> sectionPpp
+	pageGeneral  = "general"  // -> sectionConnection
+	pageEthernet = "ethernet" // -> sectionWired
+	// TODO
+	// pageMobile          = "mobile"           // -> sectionGsm, sectionCdma
+	pageMobileGsm  = "mobile-gsm"  // -> sectionGsm
+	pageMobileCdma = "mobile-cdma" // -> sectionCdma
+	pageWifi       = "wifi"        // -> sectionWireless
+	pageIpv4       = "ipv4"        // -> sectionIpv4
+	pageIpv6       = "ipv6"        // -> sectionIpv6
+	pageSecurity   = "security"    // -> section8021x, sectionWirelessSecurity
+	pagePppoe      = "pppoe"       // -> sectionPppoe
+	pagePpp        = "ppp"         // -> sectionPpp
+	// TODO
+	// pageVpn            = "vpn"             // -> sectionVpnL2tp, pageVpnOpenconnect, pageVpnOpenvpn, pageVpnPptp, pageVpnVpnc
 	pageVpnL2tp            = "vpn-l2tp"             // -> sectionVpnL2tp
 	pageVpnL2tpPpp         = "vpn-l2tp-ppp"         // -> sectionVpnL2tpPpp
 	pageVpnL2tpIpsec       = "vpn-l2tp-ipsec"       // -> sectionVpnL2tpIpsec
@@ -108,7 +114,7 @@ const (
 )
 
 // TODO rename
-// listPages return supported pages for target connection type.
+// get available pages for target connection type
 func getAvailablePages(data connectionData) (pages []string) {
 	connectionType := getCustomConnectionType(data)
 	switch connectionType {
@@ -198,7 +204,7 @@ func getAvailablePages(data connectionData) (pages []string) {
 	case connectionMobileGsm:
 		pages = []string{
 			pageGeneral,
-			pageMobile,
+			pageMobileGsm,
 			pagePpp,
 			pageIpv4,
 		}
@@ -220,7 +226,7 @@ func pageToSections(data connectionData, page string) (sections []string) {
 		logger.Error("pageToSections: invalid page name", page)
 	case pageGeneral:
 		sections = []string{sectionConnection}
-	case pageMobile:
+	case pageMobileGsm:
 		sections = []string{sectionGsm}
 	case pageMobileCdma:
 		sections = []string{sectionCdma}
@@ -277,7 +283,7 @@ func pageToSections(data connectionData, page string) (sections []string) {
 	return
 }
 
-// TODO rename
+// TODO rename getAvailableSections
 // listSections return all pages related sections
 func listSections(data connectionData) (sections []string) {
 	for _, page := range getAvailablePages(data) {
@@ -286,6 +292,7 @@ func listSections(data connectionData) (sections []string) {
 	return
 }
 
+// TODO rename
 func getSectionOfPageKey(data connectionData, page, key string) string {
 	sections := pageToSections(data, page)
 	for _, section := range sections {
