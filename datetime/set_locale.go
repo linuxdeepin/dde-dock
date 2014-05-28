@@ -22,6 +22,8 @@
 package main
 
 import (
+	"dbus/org/freedesktop/notifications"
+	"dlib"
 	"dlib/utils"
 	"io/ioutil"
 	"os"
@@ -46,6 +48,11 @@ func (obj *Manager) listenLocaleChange() {
 			obj.setPropName("CurrentLocale")
 		}
 		obj.LocaleStatus(ok, locale)
+		if ok {
+			sendNotify("", "", dlib.Tr("System Language changed successfully, and will be applied after login next time"))
+		} else {
+			sendNotify("", "", dlib.Tr("System Language changed failure, please try later"))
+		}
 	})
 }
 
@@ -212,4 +219,14 @@ func getUserLocale() (string, bool) {
 	}
 
 	return retStr, retOk
+}
+
+func sendNotify(icon, summary, body string) {
+	notifier, err := notifications.NewNotifier("org.freedesktop.Notifications", "/org/freedesktop/Notifications")
+	if err != nil {
+		logger.Errorf("New Notifier Failed: %v", err)
+		return
+	}
+
+	notifier.Notify(_DATE_TIME_DEST, 0, icon, summary, body, nil, nil, 0)
 }

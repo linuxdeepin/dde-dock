@@ -123,6 +123,11 @@ func (op *Manager) SetLocale(locale string) {
 		return
 	}
 
+	if op.CurrentLocale == locale {
+		return
+	}
+
+	sendNotify("", "", dlib.Tr("Changing System Language, Please Wait"))
 	setDate.GenLocale(locale)
 	changeLocaleFlag = true
 }
