@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-14 17:19+0800\n"
+"POT-Creation-Date: 2014-05-28 14:52+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -63,6 +63,10 @@ msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:23
 msgid "Message Notification"
+msgstr ""
+
+#: ../../datetime/datetime.go:130
+msgid "Changing System Language, Please Wait"
 msgstr ""
 
 #: ../../datetime/locale_map.go:7
@@ -1127,6 +1131,16 @@ msgstr ""
 
 #: ../../datetime/locale_map.go:275
 msgid "Zulu, South Africa"
+msgstr ""
+
+#: ../../datetime/set_locale.go:52
+msgid ""
+"System Language changed successfully, and will be applied after login next "
+"time"
+msgstr ""
+
+#: ../../datetime/set_locale.go:54
+msgid "System Language changed failure, please try later"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:8
@@ -3069,240 +3083,240 @@ msgstr ""
 msgid "_Dock"
 msgstr ""
 
-#: ../../keybinding/system-map.go:69
+#: ../../keybinding/id_desc_map.go:69
 msgid "Launcher"
 msgstr ""
 
-#: ../../keybinding/system-map.go:70
+#: ../../keybinding/id_desc_map.go:70
 msgid "Show desktop"
 msgstr ""
 
-#: ../../keybinding/system-map.go:71
+#: ../../keybinding/id_desc_map.go:71
 msgid "Lock screen"
 msgstr ""
 
-#: ../../keybinding/system-map.go:72
+#: ../../keybinding/id_desc_map.go:72
 msgid "File manager"
 msgstr ""
 
-#: ../../keybinding/system-map.go:73
+#: ../../keybinding/id_desc_map.go:73
 msgid "Switch applications"
 msgstr ""
 
-#: ../../keybinding/system-map.go:74
+#: ../../keybinding/id_desc_map.go:74
 msgid "Reverse switch applications"
 msgstr ""
 
-#: ../../keybinding/system-map.go:75
+#: ../../keybinding/id_desc_map.go:75
 msgid "Switch applications with 3D effect"
 msgstr ""
 
-#: ../../keybinding/system-map.go:76
+#: ../../keybinding/id_desc_map.go:76
 msgid "Reverse switch applications with 3D effect"
 msgstr ""
 
-#: ../../keybinding/system-map.go:77
+#: ../../keybinding/id_desc_map.go:77
 msgid "Show/Hide the dock"
 msgstr ""
 
-#: ../../keybinding/system-map.go:78
+#: ../../keybinding/id_desc_map.go:78
 msgid "Take a screenshot"
 msgstr ""
 
-#: ../../keybinding/system-map.go:79
+#: ../../keybinding/id_desc_map.go:79
 msgid "Take a screenshot of full screen"
 msgstr ""
 
-#: ../../keybinding/system-map.go:80
+#: ../../keybinding/id_desc_map.go:80
 msgid "Take a screenshot of a window"
 msgstr ""
 
-#: ../../keybinding/system-map.go:81
+#: ../../keybinding/id_desc_map.go:81
 msgid "Take a screenshot delayed"
 msgstr ""
 
-#: ../../keybinding/system-map.go:82
+#: ../../keybinding/id_desc_map.go:82
 msgid "Terminal"
 msgstr ""
 
-#: ../../keybinding/system-map.go:83
+#: ../../keybinding/id_desc_map.go:83
 msgid "Terminal Quake Window"
 msgstr ""
 
-#: ../../keybinding/system-map.go:84
+#: ../../keybinding/id_desc_map.go:84
 msgid "Logout"
 msgstr ""
 
-#: ../../keybinding/system-map.go:85
+#: ../../keybinding/id_desc_map.go:85
 msgid "Disable Touchpad"
 msgstr ""
 
-#: ../../keybinding/system-map.go:121
+#: ../../keybinding/id_desc_map.go:121
 msgid "Launch calculator"
 msgstr ""
 
-#: ../../keybinding/system-map.go:122
+#: ../../keybinding/id_desc_map.go:122
 msgid "Launch email client"
 msgstr ""
 
-#: ../../keybinding/system-map.go:123
+#: ../../keybinding/id_desc_map.go:123
 msgid "Launch web browser"
 msgstr ""
 
-#: ../../keybinding/system-map.go:124
+#: ../../keybinding/id_desc_map.go:124
 msgid "Launch media player"
 msgstr ""
 
-#: ../../keybinding/system-map.go:125
+#: ../../keybinding/id_desc_map.go:125
 msgid "Play (or play/pause)"
 msgstr ""
 
-#: ../../keybinding/system-map.go:126
+#: ../../keybinding/id_desc_map.go:126
 msgid "Pause playback"
 msgstr ""
 
-#: ../../keybinding/system-map.go:127
+#: ../../keybinding/id_desc_map.go:127
 msgid "Stop playback"
 msgstr ""
 
-#: ../../keybinding/system-map.go:128
+#: ../../keybinding/id_desc_map.go:128
 msgid "Volume mute"
 msgstr ""
 
-#: ../../keybinding/system-map.go:129
+#: ../../keybinding/id_desc_map.go:129
 msgid "Volume down"
 msgstr ""
 
-#: ../../keybinding/system-map.go:130
+#: ../../keybinding/id_desc_map.go:130
 msgid "Volume up"
 msgstr ""
 
-#: ../../keybinding/system-map.go:131
+#: ../../keybinding/id_desc_map.go:131
 msgid "Previous track"
 msgstr ""
 
-#: ../../keybinding/system-map.go:132
+#: ../../keybinding/id_desc_map.go:132
 msgid "Next track"
 msgstr ""
 
-#: ../../keybinding/system-map.go:133
+#: ../../keybinding/id_desc_map.go:133
 msgid "Eject"
 msgstr ""
 
-#: ../../keybinding/system-map.go:159
+#: ../../keybinding/id_desc_map.go:159
 msgid "Close window"
 msgstr ""
 
-#: ../../keybinding/system-map.go:160
+#: ../../keybinding/id_desc_map.go:160
 msgid "Maximize window"
 msgstr ""
 
-#: ../../keybinding/system-map.go:161
+#: ../../keybinding/id_desc_map.go:161
 msgid "Restore window"
 msgstr ""
 
-#: ../../keybinding/system-map.go:162
+#: ../../keybinding/id_desc_map.go:162
 msgid "Minimize window"
 msgstr ""
 
-#: ../../keybinding/system-map.go:163
+#: ../../keybinding/id_desc_map.go:163
 msgid "Move window"
 msgstr ""
 
-#: ../../keybinding/system-map.go:164
+#: ../../keybinding/id_desc_map.go:164
 msgid "Resize window"
 msgstr ""
 
-#: ../../keybinding/system-map.go:165
+#: ../../keybinding/id_desc_map.go:165
 msgid "Toggle shaded state"
 msgstr ""
 
-#: ../../keybinding/system-map.go:166
+#: ../../keybinding/id_desc_map.go:166
 msgid "Activate the window menu"
 msgstr ""
 
-#: ../../keybinding/system-map.go:208
+#: ../../keybinding/id_desc_map.go:208
 msgid "Switch to workspace 1"
 msgstr ""
 
-#: ../../keybinding/system-map.go:209
+#: ../../keybinding/id_desc_map.go:209
 msgid "Switch to workspace 2"
 msgstr ""
 
-#: ../../keybinding/system-map.go:210
+#: ../../keybinding/id_desc_map.go:210
 msgid "Switch to workspace 3"
 msgstr ""
 
-#: ../../keybinding/system-map.go:211
+#: ../../keybinding/id_desc_map.go:211
 msgid "Switch to workspace 4"
 msgstr ""
 
-#: ../../keybinding/system-map.go:212
+#: ../../keybinding/id_desc_map.go:212
 msgid "Switch to workspace left"
 msgstr ""
 
-#: ../../keybinding/system-map.go:213
+#: ../../keybinding/id_desc_map.go:213
 msgid "Switch to workspace right"
 msgstr ""
 
-#: ../../keybinding/system-map.go:214
+#: ../../keybinding/id_desc_map.go:214
 msgid "Switch to workspace up"
 msgstr ""
 
-#: ../../keybinding/system-map.go:215
+#: ../../keybinding/id_desc_map.go:215
 msgid "Switch to workspace down"
 msgstr ""
 
-#: ../../keybinding/system-map.go:216
+#: ../../keybinding/id_desc_map.go:216
 msgid "Move to workspace 1"
 msgstr ""
 
-#: ../../keybinding/system-map.go:217
+#: ../../keybinding/id_desc_map.go:217
 msgid "Move to workspace 2"
 msgstr ""
 
-#: ../../keybinding/system-map.go:218
+#: ../../keybinding/id_desc_map.go:218
 msgid "Move to workspace 3"
 msgstr ""
 
-#: ../../keybinding/system-map.go:219
+#: ../../keybinding/id_desc_map.go:219
 msgid "Move to workspace 4"
 msgstr ""
 
-#: ../../keybinding/system-map.go:220
+#: ../../keybinding/id_desc_map.go:220
 msgid "Move to workspace left"
 msgstr ""
 
-#: ../../keybinding/system-map.go:221
+#: ../../keybinding/id_desc_map.go:221
 msgid "Move to workspace right"
 msgstr ""
 
-#: ../../keybinding/system-map.go:222
+#: ../../keybinding/id_desc_map.go:222
 msgid "Move to workspace up"
 msgstr ""
 
-#: ../../keybinding/system-map.go:223
+#: ../../keybinding/id_desc_map.go:223
 msgid "Move to workspace down"
 msgstr ""
 
-#: ../../network/nm_constant.go:83 ../../network/nm_setting_vpn_l2tp.go:85
+#: ../../network/nm_constant.go:83 ../../network/nm_setting_vpn_l2tp.go:86
 #: ../../network/nm_setting_vpn_openvpn.go:142
-#: ../../network/nm_setting_vpn_pptp.go:75
+#: ../../network/nm_setting_vpn_pptp.go:76
 #: ../../network/nm_setting_vpn_vpnc.go:116
 msgid "Saved"
 msgstr ""
 
-#: ../../network/nm_constant.go:85 ../../network/nm_setting_vpn_l2tp.go:86
+#: ../../network/nm_constant.go:85 ../../network/nm_setting_vpn_l2tp.go:87
 #: ../../network/nm_setting_vpn_openvpn.go:143
-#: ../../network/nm_setting_vpn_pptp.go:76
+#: ../../network/nm_setting_vpn_pptp.go:77
 #: ../../network/nm_setting_vpn_vpnc.go:118
 msgid "Always Ask"
 msgstr ""
 
-#: ../../network/nm_constant.go:86 ../../network/nm_setting_vpn_l2tp.go:87
+#: ../../network/nm_constant.go:86 ../../network/nm_setting_vpn_l2tp.go:88
 #: ../../network/nm_setting_vpn_openvpn.go:144
 #: ../../network/nm_setting_vpn_openvpn.go:434
-#: ../../network/nm_setting_vpn_pptp.go:77
+#: ../../network/nm_setting_vpn_pptp.go:78
 #: ../../network/nm_setting_vpn_vpnc.go:119
 msgid "Not Required"
 msgstr ""
@@ -3380,7 +3394,7 @@ msgid "Both"
 msgstr ""
 
 #: ../../network/nm_setting_802_1x.go:171
-#: ../../network/nm_setting_wireless.go:265
+#: ../../network/nm_setting_wireless.go:267
 msgid "Automatic"
 msgstr ""
 
@@ -3472,141 +3486,56 @@ msgstr ""
 msgid "DHCP"
 msgstr ""
 
-#: ../../network/nm_setting_type_page_field.go:100
-msgid "Wi-Fi"
-msgstr ""
-
-#: ../../network/nm_setting_type_page_field.go:101
-msgid "Wi-Fi Ad-Hoc"
-msgstr ""
-
-#: ../../network/nm_setting_type_page_field.go:102
-msgid "Wi-Fi Hotspot"
-msgstr ""
-
-#: ../../network/nm_setting_type_page_field.go:103
-msgid "PPPoE"
-msgstr ""
-
-#: ../../network/nm_setting_type_page_field.go:104
-msgid "Mobile GSM (GPRS, EDGE, UMTS, HSPA)"
-msgstr ""
-
-#: ../../network/nm_setting_type_page_field.go:105
-msgid "Mobile CDMA (1xRTT, EVDO)"
-msgstr ""
-
-#: ../../network/nm_setting_type_page_field.go:106
-msgid "VPN-L2TP (Layer 2 Tunneling Protocol)"
-msgstr ""
-
-#: ../../network/nm_setting_type_page_field.go:107
-msgid "VPN-OpenConnect (Cisco AnyConnect Compatible VPN)"
-msgstr ""
-
-#: ../../network/nm_setting_type_page_field.go:108
-msgid "VPN-OpenVPN"
-msgstr ""
-
-#: ../../network/nm_setting_type_page_field.go:109
-msgid "VPN-PPTP (Point-to-Point Tunneling Protocol))"
-msgstr ""
-
-#: ../../network/nm_setting_type_page_field.go:110
-msgid "VPN-VPNC (Cisco Compatible VPN)"
-msgstr ""
-
-#: ../../network/nm_setting_type_page_field.go:223
-msgid "Connection"
-msgstr ""
-
-#: ../../network/nm_setting_type_page_field.go:225
-msgid "Wired Connection"
-msgstr ""
-
-#: ../../network/nm_setting_type_page_field.go:227
-msgid "Wireless Connection"
-msgstr ""
-
-#: ../../network/nm_setting_type_page_field.go:229
-msgid "Wireless Ad-Hoc"
-msgstr ""
-
-#: ../../network/nm_setting_type_page_field.go:231
-msgid "Wireless Ap-Hotspot"
-msgstr ""
-
-#: ../../network/nm_setting_type_page_field.go:233
-msgid "PPPoE Connection"
-msgstr ""
-
-#: ../../network/nm_setting_type_page_field.go:235
-msgid "Mobile GSM Connection"
-msgstr ""
-
-#: ../../network/nm_setting_type_page_field.go:237
-msgid "Mobile CDMA Connection"
-msgstr ""
-
-#: ../../network/nm_setting_type_page_field.go:239
-msgid "VPN Connection"
-msgstr ""
-
-#: ../../network/nm_setting_type_page_field.go:241
-msgid "VPN L2TP"
-msgstr ""
-
-#: ../../network/nm_setting_type_page_field.go:243
-msgid "VPN OpenConnect"
-msgstr ""
-
-#: ../../network/nm_setting_type_page_field.go:245
-msgid "VPN OpenVPN"
-msgstr ""
-
-#: ../../network/nm_setting_type_page_field.go:247
-msgid "VPN PPTP"
-msgstr ""
-
-#: ../../network/nm_setting_type_page_field.go:249
-msgid "VPN VPNC"
-msgstr ""
-
-#: ../../network/nm_setting_virtual_key.go:161
-#: ../../network/nm_setting_virtual_key.go:168
-#: ../../network/nm_setting_virtual_key.go:182
+#: ../../network/nm_setting_virtual_key.go:165
+#: ../../network/nm_setting_virtual_key.go:172
+#: ../../network/nm_setting_virtual_key.go:204
 #: ../../network/nm_setting_vpn_openvpn.go:355
 #: ../../network/nm_setting_vpn_vpnc.go:231
 msgid "None"
 msgstr ""
 
-#: ../../network/nm_setting_virtual_key.go:162
-#: ../../network/nm_setting_virtual_key.go:169
+#: ../../network/nm_setting_virtual_key.go:166
+#: ../../network/nm_setting_virtual_key.go:173
 msgid "WEP 40/128-bit Key"
 msgstr ""
 
-#: ../../network/nm_setting_virtual_key.go:163
-#: ../../network/nm_setting_virtual_key.go:170
+#: ../../network/nm_setting_virtual_key.go:167
+#: ../../network/nm_setting_virtual_key.go:174
 msgid "WPA & WPA2 Personal"
 msgstr ""
 
-#: ../../network/nm_setting_virtual_key.go:164
+#: ../../network/nm_setting_virtual_key.go:168
 msgid "WPA & WPA2 Enterprise"
 msgstr ""
 
-#: ../../network/nm_setting_virtual_key.go:180
+#: ../../network/nm_setting_virtual_key.go:184
+#: ../../network/nm_setting_virtual_key.go:193
+msgid "All Available (default)"
+msgstr ""
+
+#: ../../network/nm_setting_virtual_key.go:185
+#: ../../network/nm_setting_virtual_key.go:194
+msgid "128-bit (most secure)"
+msgstr ""
+
+#: ../../network/nm_setting_virtual_key.go:186
+#: ../../network/nm_setting_virtual_key.go:195
+msgid "40-bit (less secure)"
+msgstr ""
+
+#: ../../network/nm_setting_virtual_key.go:202
 msgid "Secure (default)"
 msgstr ""
 
-#: ../../network/nm_setting_virtual_key.go:181
+#: ../../network/nm_setting_virtual_key.go:203
 msgid "Weak"
 msgstr ""
 
-#: ../../network/nm_setting_virtual_key.go:192
+#: ../../network/nm_setting_virtual_key.go:214
 msgid "GSM (GPRS, EDGE, UMTS, HSPA)"
 msgstr ""
 
-#: ../../network/nm_setting_virtual_key.go:193
+#: ../../network/nm_setting_virtual_key.go:215
 msgid "CDMA (1xRTT, EVDO)"
 msgstr ""
 
@@ -3797,23 +3726,23 @@ msgstr ""
 msgid "DH Group 2"
 msgstr ""
 
-#: ../../network/nm_setting_wireless.go:259
+#: ../../network/nm_setting_wireless.go:261
 msgid "Infrastructure"
 msgstr ""
 
-#: ../../network/nm_setting_wireless.go:260
+#: ../../network/nm_setting_wireless.go:262
 msgid "Ad-Hoc"
 msgstr ""
 
-#: ../../network/nm_setting_wireless.go:261
+#: ../../network/nm_setting_wireless.go:263
 msgid "AP-Hotspot"
 msgstr ""
 
-#: ../../network/nm_setting_wireless.go:266
+#: ../../network/nm_setting_wireless.go:268
 msgid "A (5 GHz)"
 msgstr ""
 
-#: ../../network/nm_setting_wireless.go:267
+#: ../../network/nm_setting_wireless.go:269
 msgid "BG (2.4 GHz)"
 msgstr ""
 
@@ -3863,6 +3792,106 @@ msgstr ""
 
 #: ../../network/nm_setting_wireless_security.go:173
 msgid "leap"
+msgstr ""
+
+#: ../../network/nm_type_page_field.go:100
+msgid "Wi-Fi"
+msgstr ""
+
+#: ../../network/nm_type_page_field.go:101
+msgid "Wi-Fi Ad-Hoc"
+msgstr ""
+
+#: ../../network/nm_type_page_field.go:102
+msgid "Wi-Fi Hotspot"
+msgstr ""
+
+#: ../../network/nm_type_page_field.go:103
+msgid "PPPoE"
+msgstr ""
+
+#: ../../network/nm_type_page_field.go:104
+msgid "Mobile GSM (GPRS, EDGE, UMTS, HSPA)"
+msgstr ""
+
+#: ../../network/nm_type_page_field.go:105
+msgid "Mobile CDMA (1xRTT, EVDO)"
+msgstr ""
+
+#: ../../network/nm_type_page_field.go:106
+msgid "VPN-L2TP (Layer 2 Tunneling Protocol)"
+msgstr ""
+
+#: ../../network/nm_type_page_field.go:107
+msgid "VPN-OpenConnect (Cisco AnyConnect Compatible VPN)"
+msgstr ""
+
+#: ../../network/nm_type_page_field.go:108
+msgid "VPN-OpenVPN"
+msgstr ""
+
+#: ../../network/nm_type_page_field.go:109
+msgid "VPN-PPTP (Point-to-Point Tunneling Protocol))"
+msgstr ""
+
+#: ../../network/nm_type_page_field.go:110
+msgid "VPN-VPNC (Cisco Compatible VPN)"
+msgstr ""
+
+#: ../../network/nm_type_page_field.go:223
+msgid "Connection"
+msgstr ""
+
+#: ../../network/nm_type_page_field.go:225
+msgid "Wired Connection"
+msgstr ""
+
+#: ../../network/nm_type_page_field.go:227
+msgid "Wireless Connection"
+msgstr ""
+
+#: ../../network/nm_type_page_field.go:229
+msgid "Wireless Ad-Hoc"
+msgstr ""
+
+#: ../../network/nm_type_page_field.go:231
+msgid "Wireless Ap-Hotspot"
+msgstr ""
+
+#: ../../network/nm_type_page_field.go:233
+msgid "PPPoE Connection"
+msgstr ""
+
+#: ../../network/nm_type_page_field.go:235
+msgid "Mobile GSM Connection"
+msgstr ""
+
+#: ../../network/nm_type_page_field.go:237
+msgid "Mobile CDMA Connection"
+msgstr ""
+
+#: ../../network/nm_type_page_field.go:239
+msgid "VPN Connection"
+msgstr ""
+
+#: ../../network/nm_type_page_field.go:241
+msgid "VPN L2TP"
+msgstr ""
+
+#: ../../network/nm_type_page_field.go:243
+msgid "VPN OpenConnect"
+msgstr ""
+
+#: ../../network/nm_type_page_field.go:245
+msgid "VPN OpenVPN"
+msgstr ""
+
+#: ../../network/nm_type_page_field.go:247
+msgid "VPN PPTP"
+msgstr ""
+
+#: ../../network/nm_type_page_field.go:249
+msgid "VPN VPNC"
 msgstr ""
 
 #: ../../network/state_handler.go:114
