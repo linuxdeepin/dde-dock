@@ -66,7 +66,7 @@ func GetAllKeysInPage(pageName string) (keys []string) {
 // GetAllKeysInSection return all keys that will be used by front-end.
 func GetAllKeysInSection(sectionName string) (keys []string) {
 	// virtual keys in section that with none related key
-	for _, vk := range nmSettingVks {
+	for _, vk := range nmSettingVkeys {
 		if vk.RelatedSection == sectionName && vk.RelatedKey == "NM_SETTING_VK_NONE_RELATED_KEY" {
 			keys = append(keys, vk.Name)
 		}
@@ -96,7 +96,7 @@ func GetAllKeysInSection(sectionName string) (keys []string) {
 
 // get all related virtual keys of real key
 func getRelatedVks(keyName string) (vks []string) {
-	for _, vk := range nmSettingVks {
+	for _, vk := range nmSettingVkeys {
 		if vk.RelatedKey == keyName {
 			vks = append(vks, vk.Name)
 		}
@@ -178,8 +178,8 @@ func getKeyInfo(keyName string) (keyInfo NMSettingKeyStruct) {
 	return
 }
 
-func getVkInfo(vkName string) (vkInfo NMSettingVkStruct) {
-	for _, vk := range nmSettingVks {
+func getVkInfo(vkName string) (vkInfo NMSettingVkeyStruct) {
+	for _, vk := range nmSettingVkeys {
 		if vk.Name == vkName {
 			vkInfo = vk
 			return
@@ -192,7 +192,7 @@ func getVkInfo(vkName string) (vkInfo NMSettingVkStruct) {
 
 // check if target key is a virtual key
 func isVk(keyName string) (ok bool) {
-	for _, vk := range nmSettingVks {
+	for _, vk := range nmSettingVkeys {
 		if vk.Name == keyName {
 			return true
 		}

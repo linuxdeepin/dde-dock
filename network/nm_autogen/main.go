@@ -9,15 +9,14 @@ import (
 )
 
 var funcMap = template.FuncMap{
-	"ToCaplitalize":          ToCaplitalize,
-	"ToSectionFuncBaseName":  ToSectionFuncBaseName,
-	"ToKeyFuncBaseName":      ToKeyFuncBaseName,
-	"ToKeyTypeRealData":      ToKeyTypeRealData,
-	"ToKeyTypeDefaultValue":  ToKeyTypeDefaultValue,
-	"IfNeedCheckValueLength": IfNeedCheckValueLength,
-	"GetAllVkSections":       GetAllVkSections,
-	"GetAllVkSectionKeys":    GetAllVkSectionKeys,
-	// "IsVkNeedLogicSetter":       IsVkNeedLogicSetter,
+	"ToCaplitalize":               ToCaplitalize,
+	"ToSectionFuncBaseName":       ToSectionFuncBaseName,
+	"ToKeyFuncBaseName":           ToKeyFuncBaseName,
+	"ToKeyTypeRealData":           ToKeyTypeRealData,
+	"ToKeyTypeDefaultValue":       ToKeyTypeDefaultValue,
+	"IfNeedCheckValueLength":      IfNeedCheckValueLength,
+	"GetAllVkeysRelatedSections":  GetAllVkeysRelatedSections,
+	"GetVkeysOfSection":           GetVkeysOfSection,
 	"ToKeyTypeShortName":          ToKeyTypeShortName,
 	"ToKeyDisplayName":            ToKeyDisplayName,
 	"ToKeyValue":                  ToKeyValue,
@@ -31,10 +30,10 @@ var funcMap = template.FuncMap{
 
 const (
 	backEndDir            = ".."
-	frontEndDir           = "../../../dss/modules/network/components_autogen/"
+	frontEndDir           = "../../../dss/modules/network/edit_autogen/"
 	nmSettingsJSONFile    = "./nm_settings.json"
-	nmSettingVkJSONFile   = "./nm_setting_vk.json"
-	nmSettingPageJSONFile = "./nm_setting_page.json"
+	nmSettingVkeyJSONFile = "./nm_setting_vkey.json"
+	nmSettingPageJSONFile = "./nm_setting_vsection.json"
 )
 
 var (
@@ -42,10 +41,10 @@ var (
 	argBackEnd           bool
 	argFrontEnd          bool
 	nmSettingUtilsFile   = path.Join(backEndDir, "nm_setting_general_autogen.go")
-	nmSettingVkFile      = path.Join(backEndDir, "nm_setting_virtual_key_autogen.go")
+	nmSettingVkeyFile    = path.Join(backEndDir, "nm_setting_virtual_key_autogen.go")
 	frontEndConnPropFile = path.Join(frontEndDir, "BaseConnectionEdit.qml")
 	nmSettings           []NMSettingStruct
-	nmSettingVks         []NMSettingVkStruct
+	nmSettingVkeys       []NMSettingVkeyStruct
 	nmSettingPages       []NMSettingPageStruct
 )
 
@@ -68,7 +67,7 @@ type NMSettingKeyStruct struct {
 	WidgetProp     map[string]string // properties for front end widget, such as "WidgetProp":{"alwaysUpdate":"true"}
 }
 
-type NMSettingVkStruct struct {
+type NMSettingVkeyStruct struct {
 	Name           string // such as "NM_SETTING_VK_802_1X_EAP"
 	Value          string // such as "vk-eap"
 	Type           string // such as "ktypeString"
@@ -104,7 +103,6 @@ func genNMSettingCode(nmSetting NMSettingStruct) (content string) {
 	content += genTpl(nmSetting, tplJSONSetter)            // json setter
 	content += genTpl(nmSetting, tplLogicJSONSetter)       // logic json setter
 	content += genTpl(nmSetting, tplRemover)               // remover
-	// TODO get avaiable values
 	return
 }
 
@@ -113,8 +111,8 @@ func genNMSettingGeneralUtilsCode(nmSettings []NMSettingStruct) (content string)
 	return
 }
 
-func genNMSettingVirtualKeyCode(nmSettings []NMSettingStruct, nmSettingVks []NMSettingVkStruct) (content string) {
-	content = genTpl(nmSettingVks, tplVirtualKey) // general setting utils
+func genNMSettingVkeyCode(nmSettings []NMSettingStruct, nmSettingVkeys []NMSettingVkeyStruct) (content string) {
+	content = genTpl(nmSettingVkeys, tplVkey) // general setting utils
 	return
 }
 
@@ -158,8 +156,8 @@ func genBackEndCode() {
 	writeOrDisplayResultForBackEnd(nmSettingUtilsFile, autogenContent)
 
 	// back-end code, virtual key
-	autogenContent = genNMSettingVirtualKeyCode(nmSettings, nmSettingVks)
-	writeOrDisplayResultForBackEnd(nmSettingVkFile, autogenContent)
+	autogenContent = genNMSettingVkeyCode(nmSettings, nmSettingVkeys)
+	writeOrDisplayResultForBackEnd(nmSettingVkeyFile, autogenContent)
 }
 
 func genFrontEndCode() {
@@ -184,7 +182,7 @@ func main() {
 	flag.Parse()
 
 	unmarshalJSONFile(nmSettingsJSONFile, &nmSettings)
-	unmarshalJSONFile(nmSettingVkJSONFile, &nmSettingVks)
+	unmarshalJSONFile(nmSettingVkeyJSONFile, &nmSettingVkeys)
 	unmarshalJSONFile(nmSettingPageJSONFile, &nmSettingPages)
 	if argBackEnd {
 		genBackEndCode()

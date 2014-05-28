@@ -2,54 +2,54 @@
 package main
 
 // All virtual keys data
-var virtualKeys = []virtualKey{
-	virtualKey{Name: NM_SETTING_VK_802_1X_ENABLE, Type: ktypeBoolean, RelatedSection: NM_SETTING_802_1X_SETTING_NAME, RelatedKey: NM_SETTING_VK_NONE_RELATED_KEY, EnableWrapper: false, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_802_1X_EAP, Type: ktypeString, RelatedSection: NM_SETTING_802_1X_SETTING_NAME, RelatedKey: NM_SETTING_802_1X_EAP, EnableWrapper: false, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_802_1X_PAC_FILE, Type: ktypeString, RelatedSection: NM_SETTING_802_1X_SETTING_NAME, RelatedKey: NM_SETTING_802_1X_PAC_FILE, EnableWrapper: false, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_802_1X_CA_CERT, Type: ktypeString, RelatedSection: NM_SETTING_802_1X_SETTING_NAME, RelatedKey: NM_SETTING_802_1X_CA_CERT, EnableWrapper: false, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_802_1X_CLIENT_CERT, Type: ktypeString, RelatedSection: NM_SETTING_802_1X_SETTING_NAME, RelatedKey: NM_SETTING_802_1X_CLIENT_CERT, EnableWrapper: false, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_802_1X_PRIVATE_KEY, Type: ktypeString, RelatedSection: NM_SETTING_802_1X_SETTING_NAME, RelatedKey: NM_SETTING_802_1X_PRIVATE_KEY, EnableWrapper: false, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_CONNECTION_NO_PERMISSION, Type: ktypeBoolean, RelatedSection: NM_SETTING_CONNECTION_SETTING_NAME, RelatedKey: NM_SETTING_CONNECTION_PERMISSIONS, EnableWrapper: false, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_MOBILE_SERVICE_TYPE, Type: ktypeString, RelatedSection: NM_SETTING_VK_NONE_RELATED_FIELD, RelatedKey: NM_SETTING_VK_NONE_RELATED_KEY, EnableWrapper: false, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_IP4_CONFIG_ADDRESSES_ADDRESS, Type: ktypeString, RelatedSection: NM_SETTING_IP4_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP4_CONFIG_ADDRESSES, EnableWrapper: false, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_IP4_CONFIG_ADDRESSES_MASK, Type: ktypeString, RelatedSection: NM_SETTING_IP4_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP4_CONFIG_ADDRESSES, EnableWrapper: false, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_IP4_CONFIG_ADDRESSES_GATEWAY, Type: ktypeString, RelatedSection: NM_SETTING_IP4_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP4_CONFIG_ADDRESSES, EnableWrapper: false, Available: true, Optional: true},
-	virtualKey{Name: NM_SETTING_VK_IP4_CONFIG_DNS, Type: ktypeString, RelatedSection: NM_SETTING_IP4_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP4_CONFIG_DNS, EnableWrapper: false, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_IP4_CONFIG_ROUTES_ADDRESS, Type: ktypeString, RelatedSection: NM_SETTING_IP4_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP4_CONFIG_ROUTES, EnableWrapper: false, Available: false, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_IP4_CONFIG_ROUTES_MASK, Type: ktypeString, RelatedSection: NM_SETTING_IP4_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP4_CONFIG_ROUTES, EnableWrapper: false, Available: false, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_IP4_CONFIG_ROUTES_NEXTHOP, Type: ktypeString, RelatedSection: NM_SETTING_IP4_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP4_CONFIG_ROUTES, EnableWrapper: false, Available: false, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_IP4_CONFIG_ROUTES_METRIC, Type: ktypeString, RelatedSection: NM_SETTING_IP4_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP4_CONFIG_ROUTES, EnableWrapper: false, Available: false, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_IP6_CONFIG_ADDRESSES_ADDRESS, Type: ktypeString, RelatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP6_CONFIG_ADDRESSES, EnableWrapper: false, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_IP6_CONFIG_ADDRESSES_PREFIX, Type: ktypeUint32, RelatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP6_CONFIG_ADDRESSES, EnableWrapper: false, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_IP6_CONFIG_ADDRESSES_GATEWAY, Type: ktypeString, RelatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP6_CONFIG_ADDRESSES, EnableWrapper: false, Available: true, Optional: true},
-	virtualKey{Name: NM_SETTING_VK_IP6_CONFIG_DNS, Type: ktypeString, RelatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP6_CONFIG_DNS, EnableWrapper: false, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_IP6_CONFIG_ROUTES_ADDRESS, Type: ktypeString, RelatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP6_CONFIG_ROUTES, EnableWrapper: false, Available: false, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_IP6_CONFIG_ROUTES_PREFIX, Type: ktypeUint32, RelatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP6_CONFIG_ROUTES, EnableWrapper: false, Available: false, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_IP6_CONFIG_ROUTES_NEXTHOP, Type: ktypeString, RelatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP6_CONFIG_ROUTES, EnableWrapper: false, Available: false, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_IP6_CONFIG_ROUTES_METRIC, Type: ktypeUint32, RelatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP6_CONFIG_ROUTES, EnableWrapper: false, Available: false, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_PPP_ENABLE_LCP_ECHO, Type: ktypeBoolean, RelatedSection: NM_SETTING_PPP_SETTING_NAME, RelatedKey: NM_SETTING_PPP_LCP_ECHO_FAILURE, EnableWrapper: false, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_VPN_L2TP_REQUIRE_MPPE, Type: ktypeBoolean, RelatedSection: NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME, RelatedKey: NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE, EnableWrapper: false, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_VPN_L2TP_MPPE_SECURITY, Type: ktypeString, RelatedSection: NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME, RelatedKey: NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_40, EnableWrapper: false, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_VPN_L2TP_ENABLE_LCP_ECHO, Type: ktypeBoolean, RelatedSection: NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME, RelatedKey: NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_FAILURE, EnableWrapper: false, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_PORT, Type: ktypeBoolean, RelatedSection: NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME, RelatedKey: NM_SETTING_VPN_OPENVPN_KEY_PORT, EnableWrapper: true, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_RENEG_SECONDS, Type: ktypeBoolean, RelatedSection: NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME, RelatedKey: NM_SETTING_VPN_OPENVPN_KEY_RENEG_SECONDS, EnableWrapper: true, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_TUNNEL_MTU, Type: ktypeBoolean, RelatedSection: NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME, RelatedKey: NM_SETTING_VPN_OPENVPN_KEY_TUNNEL_MTU, EnableWrapper: true, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_FRAGMENT_SIZE, Type: ktypeBoolean, RelatedSection: NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME, RelatedKey: NM_SETTING_VPN_OPENVPN_KEY_FRAGMENT_SIZE, EnableWrapper: true, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_STATIC_KEY_DIRECTION, Type: ktypeBoolean, RelatedSection: NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME, RelatedKey: NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY_DIRECTION, EnableWrapper: true, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_TA_DIR, Type: ktypeBoolean, RelatedSection: NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME, RelatedKey: NM_SETTING_VPN_OPENVPN_KEY_TA_DIR, EnableWrapper: true, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_VPN_PPTP_REQUIRE_MPPE, Type: ktypeBoolean, RelatedSection: NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME, RelatedKey: NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE, EnableWrapper: false, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_VPN_PPTP_MPPE_SECURITY, Type: ktypeString, RelatedSection: NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME, RelatedKey: NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40, EnableWrapper: false, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_VPN_PPTP_ENABLE_LCP_ECHO, Type: ktypeBoolean, RelatedSection: NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME, RelatedKey: NM_SETTING_VPN_PPTP_KEY_LCP_ECHO_FAILURE, EnableWrapper: false, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_VPN_VPNC_KEY_HYBRID_AUTHMODE, Type: ktypeBoolean, RelatedSection: NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME, RelatedKey: NM_SETTING_VPN_VPNC_KEY_AUTHMODE, EnableWrapper: false, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_VPN_VPNC_KEY_ENCRYPTION_METHOD, Type: ktypeString, RelatedSection: NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME, RelatedKey: NM_SETTING_VPN_VPNC_KEY_SINGLE_DES, EnableWrapper: false, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_VPN_VPNC_KEY_DISABLE_DPD, Type: ktypeBoolean, RelatedSection: NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME, RelatedKey: NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT, EnableWrapper: false, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_WIRED_ENABLE_MTU, Type: ktypeBoolean, RelatedSection: NM_SETTING_WIRED_SETTING_NAME, RelatedKey: NM_SETTING_WIRED_MTU, EnableWrapper: true, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_WIRELESS_ENABLE_MTU, Type: ktypeBoolean, RelatedSection: NM_SETTING_WIRELESS_SETTING_NAME, RelatedKey: NM_SETTING_WIRELESS_MTU, EnableWrapper: true, Available: true, Optional: false},
-	virtualKey{Name: NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT, Type: ktypeString, RelatedSection: NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, RelatedKey: NM_SETTING_WIRELESS_SECURITY_KEY_MGMT, EnableWrapper: false, Available: true, Optional: false},
+var virtualKeys = []vkeyInfo{
+	{Name: NM_SETTING_VK_802_1X_ENABLE, Type: ktypeBoolean, RelatedSection: NM_SETTING_802_1X_SETTING_NAME, RelatedKey: NM_SETTING_VK_NONE_RELATED_KEY, EnableWrapper: false, Available: true, Optional: false},
+	{Name: NM_SETTING_VK_802_1X_EAP, Type: ktypeString, RelatedSection: NM_SETTING_802_1X_SETTING_NAME, RelatedKey: NM_SETTING_802_1X_EAP, EnableWrapper: false, Available: true, Optional: false},
+	{Name: NM_SETTING_VK_802_1X_PAC_FILE, Type: ktypeString, RelatedSection: NM_SETTING_802_1X_SETTING_NAME, RelatedKey: NM_SETTING_802_1X_PAC_FILE, EnableWrapper: false, Available: true, Optional: false},
+	{Name: NM_SETTING_VK_802_1X_CA_CERT, Type: ktypeString, RelatedSection: NM_SETTING_802_1X_SETTING_NAME, RelatedKey: NM_SETTING_802_1X_CA_CERT, EnableWrapper: false, Available: true, Optional: false},
+	{Name: NM_SETTING_VK_802_1X_CLIENT_CERT, Type: ktypeString, RelatedSection: NM_SETTING_802_1X_SETTING_NAME, RelatedKey: NM_SETTING_802_1X_CLIENT_CERT, EnableWrapper: false, Available: true, Optional: false},
+	{Name: NM_SETTING_VK_802_1X_PRIVATE_KEY, Type: ktypeString, RelatedSection: NM_SETTING_802_1X_SETTING_NAME, RelatedKey: NM_SETTING_802_1X_PRIVATE_KEY, EnableWrapper: false, Available: true, Optional: false},
+	{Name: NM_SETTING_VK_CONNECTION_NO_PERMISSION, Type: ktypeBoolean, RelatedSection: NM_SETTING_CONNECTION_SETTING_NAME, RelatedKey: NM_SETTING_CONNECTION_PERMISSIONS, EnableWrapper: false, Available: true, Optional: false},
+	{Name: NM_SETTING_VK_MOBILE_SERVICE_TYPE, Type: ktypeString, RelatedSection: NM_SETTING_VK_NONE_RELATED_FIELD, RelatedKey: NM_SETTING_VK_NONE_RELATED_KEY, EnableWrapper: false, Available: true, Optional: false},
+	{Name: NM_SETTING_VK_IP4_CONFIG_ADDRESSES_ADDRESS, Type: ktypeString, RelatedSection: NM_SETTING_IP4_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP4_CONFIG_ADDRESSES, EnableWrapper: false, Available: true, Optional: false},
+	{Name: NM_SETTING_VK_IP4_CONFIG_ADDRESSES_MASK, Type: ktypeString, RelatedSection: NM_SETTING_IP4_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP4_CONFIG_ADDRESSES, EnableWrapper: false, Available: true, Optional: false},
+	{Name: NM_SETTING_VK_IP4_CONFIG_ADDRESSES_GATEWAY, Type: ktypeString, RelatedSection: NM_SETTING_IP4_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP4_CONFIG_ADDRESSES, EnableWrapper: false, Available: true, Optional: true},
+	{Name: NM_SETTING_VK_IP4_CONFIG_DNS, Type: ktypeString, RelatedSection: NM_SETTING_IP4_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP4_CONFIG_DNS, EnableWrapper: false, Available: true, Optional: false},
+	{Name: NM_SETTING_VK_IP4_CONFIG_ROUTES_ADDRESS, Type: ktypeString, RelatedSection: NM_SETTING_IP4_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP4_CONFIG_ROUTES, EnableWrapper: false, Available: false, Optional: false},
+	{Name: NM_SETTING_VK_IP4_CONFIG_ROUTES_MASK, Type: ktypeString, RelatedSection: NM_SETTING_IP4_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP4_CONFIG_ROUTES, EnableWrapper: false, Available: false, Optional: false},
+	{Name: NM_SETTING_VK_IP4_CONFIG_ROUTES_NEXTHOP, Type: ktypeString, RelatedSection: NM_SETTING_IP4_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP4_CONFIG_ROUTES, EnableWrapper: false, Available: false, Optional: false},
+	{Name: NM_SETTING_VK_IP4_CONFIG_ROUTES_METRIC, Type: ktypeString, RelatedSection: NM_SETTING_IP4_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP4_CONFIG_ROUTES, EnableWrapper: false, Available: false, Optional: false},
+	{Name: NM_SETTING_VK_IP6_CONFIG_ADDRESSES_ADDRESS, Type: ktypeString, RelatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP6_CONFIG_ADDRESSES, EnableWrapper: false, Available: true, Optional: false},
+	{Name: NM_SETTING_VK_IP6_CONFIG_ADDRESSES_PREFIX, Type: ktypeUint32, RelatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP6_CONFIG_ADDRESSES, EnableWrapper: false, Available: true, Optional: false},
+	{Name: NM_SETTING_VK_IP6_CONFIG_ADDRESSES_GATEWAY, Type: ktypeString, RelatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP6_CONFIG_ADDRESSES, EnableWrapper: false, Available: true, Optional: true},
+	{Name: NM_SETTING_VK_IP6_CONFIG_DNS, Type: ktypeString, RelatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP6_CONFIG_DNS, EnableWrapper: false, Available: true, Optional: false},
+	{Name: NM_SETTING_VK_IP6_CONFIG_ROUTES_ADDRESS, Type: ktypeString, RelatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP6_CONFIG_ROUTES, EnableWrapper: false, Available: false, Optional: false},
+	{Name: NM_SETTING_VK_IP6_CONFIG_ROUTES_PREFIX, Type: ktypeUint32, RelatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP6_CONFIG_ROUTES, EnableWrapper: false, Available: false, Optional: false},
+	{Name: NM_SETTING_VK_IP6_CONFIG_ROUTES_NEXTHOP, Type: ktypeString, RelatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP6_CONFIG_ROUTES, EnableWrapper: false, Available: false, Optional: false},
+	{Name: NM_SETTING_VK_IP6_CONFIG_ROUTES_METRIC, Type: ktypeUint32, RelatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, RelatedKey: NM_SETTING_IP6_CONFIG_ROUTES, EnableWrapper: false, Available: false, Optional: false},
+	{Name: NM_SETTING_VK_PPP_ENABLE_LCP_ECHO, Type: ktypeBoolean, RelatedSection: NM_SETTING_PPP_SETTING_NAME, RelatedKey: NM_SETTING_PPP_LCP_ECHO_FAILURE, EnableWrapper: false, Available: true, Optional: false},
+	{Name: NM_SETTING_VK_VPN_L2TP_REQUIRE_MPPE, Type: ktypeBoolean, RelatedSection: NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME, RelatedKey: NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE, EnableWrapper: false, Available: true, Optional: false},
+	{Name: NM_SETTING_VK_VPN_L2TP_MPPE_SECURITY, Type: ktypeString, RelatedSection: NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME, RelatedKey: NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_40, EnableWrapper: false, Available: true, Optional: false},
+	{Name: NM_SETTING_VK_VPN_L2TP_ENABLE_LCP_ECHO, Type: ktypeBoolean, RelatedSection: NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME, RelatedKey: NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_FAILURE, EnableWrapper: false, Available: true, Optional: false},
+	{Name: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_PORT, Type: ktypeBoolean, RelatedSection: NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME, RelatedKey: NM_SETTING_VPN_OPENVPN_KEY_PORT, EnableWrapper: true, Available: true, Optional: false},
+	{Name: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_RENEG_SECONDS, Type: ktypeBoolean, RelatedSection: NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME, RelatedKey: NM_SETTING_VPN_OPENVPN_KEY_RENEG_SECONDS, EnableWrapper: true, Available: true, Optional: false},
+	{Name: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_TUNNEL_MTU, Type: ktypeBoolean, RelatedSection: NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME, RelatedKey: NM_SETTING_VPN_OPENVPN_KEY_TUNNEL_MTU, EnableWrapper: true, Available: true, Optional: false},
+	{Name: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_FRAGMENT_SIZE, Type: ktypeBoolean, RelatedSection: NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME, RelatedKey: NM_SETTING_VPN_OPENVPN_KEY_FRAGMENT_SIZE, EnableWrapper: true, Available: true, Optional: false},
+	{Name: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_STATIC_KEY_DIRECTION, Type: ktypeBoolean, RelatedSection: NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME, RelatedKey: NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY_DIRECTION, EnableWrapper: true, Available: true, Optional: false},
+	{Name: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_TA_DIR, Type: ktypeBoolean, RelatedSection: NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME, RelatedKey: NM_SETTING_VPN_OPENVPN_KEY_TA_DIR, EnableWrapper: true, Available: true, Optional: false},
+	{Name: NM_SETTING_VK_VPN_PPTP_REQUIRE_MPPE, Type: ktypeBoolean, RelatedSection: NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME, RelatedKey: NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE, EnableWrapper: false, Available: true, Optional: false},
+	{Name: NM_SETTING_VK_VPN_PPTP_MPPE_SECURITY, Type: ktypeString, RelatedSection: NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME, RelatedKey: NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40, EnableWrapper: false, Available: true, Optional: false},
+	{Name: NM_SETTING_VK_VPN_PPTP_ENABLE_LCP_ECHO, Type: ktypeBoolean, RelatedSection: NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME, RelatedKey: NM_SETTING_VPN_PPTP_KEY_LCP_ECHO_FAILURE, EnableWrapper: false, Available: true, Optional: false},
+	{Name: NM_SETTING_VK_VPN_VPNC_KEY_HYBRID_AUTHMODE, Type: ktypeBoolean, RelatedSection: NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME, RelatedKey: NM_SETTING_VPN_VPNC_KEY_AUTHMODE, EnableWrapper: false, Available: true, Optional: false},
+	{Name: NM_SETTING_VK_VPN_VPNC_KEY_ENCRYPTION_METHOD, Type: ktypeString, RelatedSection: NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME, RelatedKey: NM_SETTING_VPN_VPNC_KEY_SINGLE_DES, EnableWrapper: false, Available: true, Optional: false},
+	{Name: NM_SETTING_VK_VPN_VPNC_KEY_DISABLE_DPD, Type: ktypeBoolean, RelatedSection: NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME, RelatedKey: NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT, EnableWrapper: false, Available: true, Optional: false},
+	{Name: NM_SETTING_VK_WIRED_ENABLE_MTU, Type: ktypeBoolean, RelatedSection: NM_SETTING_WIRED_SETTING_NAME, RelatedKey: NM_SETTING_WIRED_MTU, EnableWrapper: true, Available: true, Optional: false},
+	{Name: NM_SETTING_VK_WIRELESS_ENABLE_MTU, Type: ktypeBoolean, RelatedSection: NM_SETTING_WIRELESS_SETTING_NAME, RelatedKey: NM_SETTING_WIRELESS_MTU, EnableWrapper: true, Available: true, Optional: false},
+	{Name: NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT, Type: ktypeString, RelatedSection: NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, RelatedKey: NM_SETTING_WIRELESS_SECURITY_KEY_MGMT, EnableWrapper: false, Available: true, Optional: false},
 }
 
 // Get JSON value generally
-func generalGetVirtualKeyJSON(data connectionData, section, key string) (valueJSON string) {
+func generalGetVkeyJSON(data connectionData, section, key string) (valueJSON string) {
 	switch section {
 	case NM_SETTING_802_1X_SETTING_NAME:
 		switch key {
@@ -191,8 +191,8 @@ func generalGetVirtualKeyJSON(data connectionData, section, key string) (valueJS
 }
 
 // Set JSON value generally
-func generalSetVirtualKeyJSON(data connectionData, section, key string, valueJSON string) (err error) {
-	// each virtual key has a logic setter
+func generalSetVkeyJSON(data connectionData, section, key string, valueJSON string) (err error) {
+	// each virtual key own a logic setter
 	switch section {
 	case NM_SETTING_802_1X_SETTING_NAME:
 		switch key {

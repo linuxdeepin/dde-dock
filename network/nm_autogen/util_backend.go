@@ -217,31 +217,20 @@ func IfNeedCheckValueLength(ktype string) (need string) {
 	return
 }
 
-func GetAllVkSections(nmSettingVks []NMSettingVkStruct) (sections []string) {
-	for _, vk := range nmSettingVks {
+// get all related sections of virtual keys
+func GetAllVkeysRelatedSections(nmSettingVkeys []NMSettingVkeyStruct) (sections []string) {
+	for _, vk := range nmSettingVkeys {
 		sections = appendStrArrayUnion(sections, vk.RelatedSection)
 	}
 	return
 }
 
 // get all virtual keys in target section
-func GetAllVkSectionKeys(nmSettingVks []NMSettingVkStruct, section string) (keys []string) {
-	for _, vk := range nmSettingVks {
+func GetVkeysOfSection(nmSettingVkeys []NMSettingVkeyStruct, section string) (keys []string) {
+	for _, vk := range nmSettingVkeys {
 		if vk.RelatedSection == section {
 			keys = append(keys, vk.Name)
 		}
 	}
 	return
 }
-
-// TODO remove
-// func IsVkNeedLogicSetter(nmSettingVks []NMSettingVkStruct, keyName string) bool {
-// 	for _, vk := range nmSettingVks {
-// 		if vk.Name == keyName {
-// 			return vk.LogicSet
-// 		}
-// 	}
-// 	fmt.Println("invalid virtual key:", keyName)
-// 	os.Exit(1)
-// 	return false
-// }

@@ -18,7 +18,7 @@ const (
 )
 
 func rememberError(errs sectionErrors, section, key, errMsg string) {
-	relatedVks := getRelatedVirtualKeys(section, key)
+	relatedVks := getRelatedVkeys(section, key)
 	if len(relatedVks) > 0 {
 		rememberVkError(errs, section, key, errMsg)
 		return
@@ -27,9 +27,9 @@ func rememberError(errs sectionErrors, section, key, errMsg string) {
 }
 
 func rememberVkError(errs sectionErrors, section, key, errMsg string) {
-	vks := getRelatedVirtualKeys(section, key)
+	vks := getRelatedVkeys(section, key)
 	for _, vk := range vks {
-		if !isOptionalChildVirtualKeys(section, vk) {
+		if !isOptionalVkey(section, vk) {
 			doRememberError(errs, vk, errMsg)
 		}
 	}

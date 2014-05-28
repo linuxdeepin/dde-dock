@@ -66,7 +66,7 @@ func generalIsKeyInSettingSection(section, key string) bool {
 
 func generalGetSettingKeyType(section, key string) (t ktype) {
 	if isVirtualKey(section, key) {
-		t = getSettingVkKeyType(section, key)
+		t = getSettingVkeyType(section, key)
 		return
 	}
 	switch section {
@@ -188,7 +188,7 @@ func generalGetSettingAvailableKeys(data connectionData, section string) (keys [
 
 func generalGetSettingAvailableValues(data connectionData, section, key string) (values []kvalue) {
 	if isVirtualKey(section, key) {
-		values = generalGetSettingVkAvailableValues(data, section, key)
+		values = generalGetSettingVkeyAvailableValues(data, section, key)
 		return
 	}
 	switch section {
@@ -310,7 +310,7 @@ func generalCheckSettingValues(data connectionData, section string) (errs sectio
 
 func generalGetSettingKeyJSON(data connectionData, section, key string) (valueJSON string) {
 	if isVirtualKey(section, key) {
-		valueJSON = generalGetVirtualKeyJSON(data, section, key)
+		valueJSON = generalGetVkeyJSON(data, section, key)
 		return
 	}
 	switch section {
@@ -374,7 +374,7 @@ func generalGetSettingKeyJSON(data connectionData, section, key string) (valueJS
 
 func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON string) (err error) {
 	if isVirtualKey(section, key) {
-		err = generalSetVirtualKeyJSON(data, section, key, valueJSON)
+		err = generalSetVkeyJSON(data, section, key, valueJSON)
 		return
 	}
 	switch section {

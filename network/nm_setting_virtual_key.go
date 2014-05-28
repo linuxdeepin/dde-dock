@@ -94,21 +94,20 @@ const (
 // wireless security
 const NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT = "vk-key-mgmt"
 
-// virtualKey stores virtual key info for each sections.
-type virtualKey struct {
-	Name          string
-	Type          ktype
-	RelatedSection  string
-	RelatedKey    string
-	EnableWrapper bool // check if the virtual key is a wrapper just to enable target key
-	Available     bool // check if is used by front-end
-	Optional      bool // if key is optional, will ignore error for it
+type vkeyInfo struct {
+	Name           string
+	Type           ktype
+	RelatedSection string
+	RelatedKey     string
+	EnableWrapper  bool // check if the virtual key is a wrapper to enable related key
+	Available      bool // check if is used by front-end
+	Optional       bool // if key is optional(such as some child keys), will ignore error for it
 }
 
-func getVirtualKeyInfo(section, vkey string) (vkInfo virtualKey, ok bool) {
+func getVkeyInfo(section, vkey string) (info vkeyInfo, ok bool) {
 	for _, vk := range virtualKeys {
 		if vk.RelatedSection == section && vk.Name == vkey {
-			vkInfo = vk
+			info = vk
 			ok = true
 			return
 		}
@@ -119,23 +118,24 @@ func getVirtualKeyInfo(section, vkey string) (vkInfo virtualKey, ok bool) {
 }
 
 func isVirtualKey(section, key string) bool {
-	if isStringInArray(key, getVirtualKeysOfSection(section)) {
+	if isStringInArray(key, getVkeysOfSection(section)) {
 		return true
 	}
 	return false
 }
 
-func getVirtualKeysOfSection(section string) (vks []string) {
+// get all virtual keys in target section
+func getVkeysOfSection(section string) (vks []string) {
 	for _, vk := range virtualKeys {
 		if vk.RelatedSection == section {
 			vks = append(vks, vk.Name)
 		}
 	}
-	// logger.Debug("getVirtualKeysOfSection: filed:", section, vks) // TODO test
+	// logger.Debug("getVkeysOfSection: filed:", section, vks) // TODO test
 	return
 }
 
-func getSettingVkKeyType(section, key string) (t ktype) {
+func getSettingVkeyType(section, key string) (t ktype) {
 	t = ktypeUnknown
 	for _, vk := range virtualKeys {
 		if vk.RelatedSection == section && vk.Name == key {
@@ -145,7 +145,7 @@ func getSettingVkKeyType(section, key string) (t ktype) {
 	return
 }
 
-func generalGetSettingVkAvailableValues(data connectionData, section, key string) (values []kvalue) {
+func generalGetSettingVkeyAvailableValues(data connectionData, section, key string) (values []kvalue) {
 	switch section {
 	case section8021x:
 		switch key {
@@ -206,7 +206,7 @@ func generalGetSettingVkAvailableValues(data connectionData, section, key string
 		}
 	}
 
-	// dispatch virtual keys that with none related sections
+	// dispatch virtual keys that with none related section
 	if len(values) == 0 {
 		switch key {
 		case NM_SETTING_VK_MOBILE_SERVICE_TYPE:
@@ -223,14 +223,15 @@ func generalGetSettingVkAvailableValues(data connectionData, section, key string
 	return
 }
 
+// general function to append available keys, will dispatch virtual keys specially
 func appendAvailableKeys(data connectionData, keys []string, section, key string) (newKeys []string) {
 	newKeys = appendStrArrayUnion(keys)
-	relatedVks := getRelatedAvailableVirtualKeys(section, key)
+	relatedVks := getRelatedAvailableVkeys(section, key)
 	if len(relatedVks) > 0 {
 		for _, vk := range relatedVks {
 			// if is enable wrapper virtual key, both virtual key and
 			// real key will be appended
-			if isEnableWrapperVirtualKey(section, vk) {
+			if isEnableWrapperVkey(section, vk) {
 				if isSettingKeyExists(data, section, key) {
 					newKeys = appendStrArrayUnion(newKeys, key)
 				}
@@ -243,7 +244,7 @@ func appendAvailableKeys(data connectionData, keys []string, section, key string
 	return
 }
 
-func getRelatedAvailableVirtualKeys(section, key string) (vks []string) {
+func getRelatedAvailableVkeys(section, key string) (vks []string) {
 	for _, vk := range virtualKeys {
 		if vk.RelatedSection == section && vk.RelatedKey == key && vk.Available {
 			vks = append(vks, vk.Name)
@@ -252,8 +253,8 @@ func getRelatedAvailableVirtualKeys(section, key string) (vks []string) {
 	return
 }
 
-// get related virtual key(s) for target key
-func getRelatedVirtualKeys(section, key string) (vks []string) {
+// get related virtual keys of target key
+func getRelatedVkeys(section, key string) (vks []string) {
 	for _, vk := range virtualKeys {
 		if vk.RelatedSection == section && vk.RelatedKey == key {
 			vks = append(vks, vk.Name)
@@ -262,15 +263,15 @@ func getRelatedVirtualKeys(section, key string) (vks []string) {
 	return
 }
 
-func isEnableWrapperVirtualKey(section, vkey string) bool {
-	vkInfo, ok := getVirtualKeyInfo(section, vkey)
+func isEnableWrapperVkey(section, vkey string) bool {
+	vkInfo, ok := getVkeyInfo(section, vkey)
 	if !ok {
 		return false
 	}
 	return vkInfo.EnableWrapper
 }
 
-func isOptionalChildVirtualKeys(section, vkey string) (optional bool) {
+func isOptionalVkey(section, vkey string) (optional bool) {
 	for _, vk := range virtualKeys {
 		if vk.RelatedSection == section && vk.Name == vkey {
 			optional = vk.Optional
