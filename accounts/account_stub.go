@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2011 ~ 2013 Deepin, Inc.
- *               2011 ~ 2013 jouyouyun
+ * Copyright (c) 2011 ~ 2014 Deepin, Inc.
+ *               2013 ~ 2014 jouyouyun
  *
  * Author:      jouyouyun <jouyouwen717@gmail.com>
  * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
@@ -23,22 +23,10 @@ package main
 
 import (
 	"dlib/dbus"
+	"sync"
 )
 
-const (
-	GUEST_DEFAULT_ICON = USER_ICON_DIR + "1.png"
-)
-
-type AccountManager struct {
-	UserList   []string
-	AllowGuest bool
-	GuestIcon  string
-
-	UserAdded   func(string)
-	UserDeleted func(string)
-}
-
-func (op *AccountManager) GetDBusInfo() dbus.DBusInfo {
+func (obj *Manager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		ACCOUNT_DEST,
 		ACCOUNT_MANAGER_PATH,
@@ -46,53 +34,54 @@ func (op *AccountManager) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (op *AccountManager) setPropName(name string) {
-	switch name {
-	case "UserList":
-		infos := getUserInfoList()
-		list := []string{}
-
-		for _, info := range infos {
-			path := USER_MANAGER_PATH + info.Uid
-			list = append(list, path)
-		}
-		op.UserList = list
-		dbus.NotifyChange(op, name)
-	case "AllowGuest":
-		if v, ok := opUtils.ReadKeyFromKeyFile(ACCOUNT_CONFIG_FILE,
-			ACCOUNT_GROUP_KEY, ACCOUNT_KEY_GUEST, true); !ok {
-			op.AllowGuest = false
-			dbus.NotifyChange(op, name)
-			opUtils.WriteKeyToKeyFile(ACCOUNT_CONFIG_FILE,
-				ACCOUNT_GROUP_KEY, ACCOUNT_KEY_GUEST, false)
-			return
-		} else {
-			op.AllowGuest = v.(bool)
-			dbus.NotifyChange(op, name)
-		}
-	case "GuestIcon":
-		if icon, ok := op.RandUserIcon(); ok {
-			op.GuestIcon = icon
-		} else {
-			op.GuestIcon = GUEST_DEFAULT_ICON
-		}
-		dbus.NotifyChange(op, name)
+func (obj *Manager) setPropUserList(list []string) {
+	if !isStrListEqual(obj.UserList, list) {
+		obj.UserList = list
+		dbus.NotifyChange(obj, "UserList")
 	}
 }
 
-func newAccountManager() *AccountManager {
-	defer func() {
-		if err := recover(); err != nil {
-			logObject.Warningf("Recover Error: %v", err)
+func (obj *Manager) setPropAllowGuest(isAllow bool) {
+	if obj.AllowGuest != isAllow {
+		obj.AllowGuest = isAllow
+		dbus.NotifyChange(obj, "AllowGuest")
+	}
+}
+
+func (obj *Manager) updateUserInfo(path string) {
+	if len(path) < 1 {
+		return
+	}
+
+	u := newUser(path)
+	if u == nil {
+		return
+	}
+	if err := dbus.InstallOnSystem(u); err != nil {
+		logger.Errorf("Install DBus For %s Failed: %v", path, err)
+		panic(err)
+	}
+
+	obj.pathUserMap[path] = u
+}
+
+func (obj *Manager) destroyAllUser() {
+	var mutex sync.Mutex
+	mutex.Lock()
+	if len(obj.pathUserMap) > 0 {
+		for _, v := range obj.pathUserMap {
+			dbus.UnInstallObject(v)
 		}
-	}()
 
-	m := &AccountManager{}
+		obj.pathUserMap = make(map[string]*User)
+	}
+	mutex.Unlock()
+}
 
-	m.setPropName("UserList")
-	m.setPropName("AllowGuest")
-	m.setPropName("GuestIcon")
-	go m.listenUserListChanged()
+func (obj *Manager) updateAllUserInfo() {
+	obj.destroyAllUser()
 
-	return m
+	for _, path := range obj.UserList {
+		obj.updateUserInfo(path)
+	}
 }

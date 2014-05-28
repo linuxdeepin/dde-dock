@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2011 ~ 2013 Deepin, Inc.
- *               2011 ~ 2013 jouyouyun
+ * Copyright (c) 2011 ~ 2014 Deepin, Inc.
+ *               2013 ~ 2014 jouyouyun
  *
  * Author:      jouyouyun <jouyouwen717@gmail.com>
  * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
@@ -24,91 +24,39 @@ package main
 import (
 	"dlib"
 	"dlib/dbus"
-	"dlib/logger"
-	dutils "dlib/utils"
-	"github.com/howeyc/fsnotify"
+	Logger "dlib/logger"
+	Utils "dlib/utils"
 	"os"
 )
 
 var (
-	idUserManagerMap = make(map[string]*UserManager)
-	logObject        = logger.NewLogger("daemon/Accounts")
-	opUtils          *dutils.Manager
-	watchAct         *fsnotify.Watcher
-	watchUser        *fsnotify.Watcher
+	logger  = Logger.NewLogger(ACCOUNT_DEST)
+	objUtil = Utils.NewUtils()
 )
 
 func main() {
-	defer logObject.EndTracing()
-
 	if !dlib.UniqueOnSystem(ACCOUNT_DEST) {
-		logObject.Warning("There already has an Accounts daemon running.")
+		logger.Errorf("%s has been running", ACCOUNT_DEST)
 		return
 	}
 
-	// Configure Logger
-	logObject.SetRestartCommand("/usr/lib/deepin-daemon/Accounts")
-	var err error
-	opUtils = dutils.NewUtils()
+	logger.EndTracing()
+	logger.SetRestartCommand("/usr/lib/deepin-daemon/accounts")
 
-	watchAct, err = fsnotify.NewWatcher()
-	if err != nil {
-		logObject.Warning("New Watch Account Failed:", err)
-		logObject.Fatalf("%v", err)
+	obj := GetManager()
+	if err := dbus.InstallOnSystem(obj); err != nil {
+		logger.Error("Install DBus Failed:", err)
+		panic(err)
 	}
 
-	watchUser, err = fsnotify.NewWatcher()
-	if err != nil {
-		logObject.Warning("New Watch User Failed:", err)
-		logObject.Fatalf("%v", err)
-	}
-
-	opAccount := newAccountManager()
-	err = dbus.InstallOnSystem(opAccount)
-	if err != nil {
-		logObject.Warningf("Install Account Object On System Failed:%v", err)
-		logObject.Fatalf("%v", err)
-	}
-
-	updateUserList()
+	obj.updateAllUserInfo()
 
 	dbus.DealWithUnhandledMessage()
-	watchAccountFiles()
-	watchUserFiles()
 
-	//select {}
-	if err = dbus.Wait(); err != nil {
-		logObject.Warningf("lost dbus session:%v", err)
-		os.Exit(1)
+	if err := dbus.Wait(); err != nil {
+		logger.Error("Lost Dbus:", err)
+		os.Exit(-1)
 	} else {
 		os.Exit(0)
 	}
-}
-
-func updateUserList() {
-	//mutex.Lock()
-	//defer mutex.Unlock()
-	destroyAllUserObject()
-
-	infos := getUserInfoList()
-	for _, info := range infos {
-		opUser := newUserManager(info.Uid)
-		err := dbus.InstallOnSystem(opUser)
-		if err != nil {
-			logObject.Debugf("Install User:%s Object On System Failed:%s",
-				info.Name, err)
-			panic(err)
-		}
-
-		idUserManagerMap[info.Uid] = opUser
-	}
-}
-
-func destroyAllUserObject() {
-	//logObject.Info("\nDestroy All User Objects....")
-	for _, v := range idUserManagerMap {
-		dbus.UnInstallObject(v)
-	}
-	//logObject.Info("Destroy All User Objects....\n")
-	idUserManagerMap = make(map[string]*UserManager)
 }

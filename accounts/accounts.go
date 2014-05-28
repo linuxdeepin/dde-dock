@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2011 ~ 2013 Deepin, Inc.
- *               2011 ~ 2013 jouyouyun
+ * Copyright (c) 2011 ~ 2014 Deepin, Inc.
+ *               2013 ~ 2014 jouyouyun
  *
  * Author:      jouyouyun <jouyouwen717@gmail.com>
  * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
@@ -22,206 +22,64 @@
 package main
 
 import (
-	"dlib/dbus"
+	"github.com/howeyc/fsnotify"
 	"io/ioutil"
-	"os/user"
 	"strconv"
 	"strings"
 )
 
-const (
-	CMD_USERADD = "/usr/sbin/useradd"
-	CMD_USERDEL = "/usr/sbin/userdel"
-	CMD_CHOWN   = "/bin/chown"
+type Manager struct {
+	UserList    []string
+	AllowGuest  bool
+	GuestIcon   string
+	pathUserMap map[string]*User
 
-	ACCOUNT_TYPE_STANDARD      = 0
-	ACCOUNT_TYPE_ADMINISTACTOR = 1
+	listWatcher *fsnotify.Watcher
+	infoWatcher *fsnotify.Watcher
 
-	GUEST_ACCOUNT_NAME  = "Guest"
-	GUEST_USER_ICON     = "/var/lib/AccountsService/icons/guest.jpg"
-	ACCOUNT_CONFIG_FILE = "/var/lib/AccountsService/accounts.ini"
-	ACCOUNT_GROUP_KEY   = "Accounts"
-	ACCOUNT_KEY_GUEST   = "AllowGuest"
-)
-
-func (op *AccountManager) CreateGuestAccount() string {
-	args := []string{}
-
-	passwd := encodePasswd("")
-	args = append(args, "-m")
-	args = append(args, "-d")
-	args = append(args, "/tmp/"+GUEST_ACCOUNT_NAME)
-	args = append(args, "-s")
-	args = append(args, "/bin/bash")
-	args = append(args, "-l")
-	args = append(args, "-p")
-	args = append(args, passwd)
-	args = append(args, GUEST_ACCOUNT_NAME)
-	execCommand(CMD_USERADD, args)
-
-	info, _ := getInfoViaName(GUEST_ACCOUNT_NAME)
-	newUser := newUserManager(info.Uid)
-	newUser.applyPropertiesChanged("IconFile", GUEST_USER_ICON)
-	newUser.updateUserInfo()
-	op.emitUserListChanged()
-
-	return op.FindUserByName(GUEST_ACCOUNT_NAME)
+	UserAdded   func(string)
+	UserDeleted func(string)
 }
 
-func (op *AccountManager) AllowGuestAccount(dbusMsg dbus.DMessage, allow bool) bool {
-	//if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
-	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
-		dbusMsg.GetSenderPID()); !ok {
-		return false
+var _manager *Manager
+
+func GetManager() *Manager {
+	if _manager == nil {
+		_manager = newManager()
 	}
-	if ok := opUtils.WriteKeyToKeyFile(ACCOUNT_CONFIG_FILE,
-		ACCOUNT_GROUP_KEY, ACCOUNT_KEY_GUEST, allow); !ok {
-		return false
-	}
-	op.setPropName("AllowGuest")
-	return true
+
+	return _manager
 }
 
-func (op *AccountManager) CreateUser(dbusMsg dbus.DMessage, name, fullname string, accountTyte int32) (string, bool) {
-	defer func() {
-		if err := recover(); err != nil {
-			logObject.Warningf("Recover Error In CreateUser:%v",
-				err)
-		}
-	}()
-	//if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
-	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
-		dbusMsg.GetSenderPID()); !ok {
-		return "", false
+func newManager() *Manager {
+	obj := &Manager{}
+
+	var err error
+	if obj.listWatcher, err = fsnotify.NewWatcher(); err != nil {
+		logger.Error("New User List Watcher Failed:", err)
+		panic(err)
+	}
+	if obj.infoWatcher, err = fsnotify.NewWatcher(); err != nil {
+		logger.Error("New User Info Watcher Failed:", err)
+		panic(err)
 	}
 
-	args := []string{}
+	obj.pathUserMap = make(map[string]*User)
+	obj.setPropUserList(getUserList())
+	obj.setPropAllowGuest(isAllowGuest())
 
-	args = append(args, "-m")
-	args = append(args, "-s")
-	args = append(args, "/bin/bash")
-	args = append(args, "-c")
-	args = append(args, fullname)
-	args = append(args, name)
-	execCommand(CMD_USERADD, args)
+	obj.watchUserListFile()
+	obj.watchUserInfoFile()
+	go obj.handleUserListChanged()
+	go obj.handleUserInfoChanged()
 
-	info, _ := getInfoViaName(name)
-	newUser := newUserManager(info.Uid)
-	//newUser.AccountType = accountTyte
-	newUser.applyPropertiesChanged("AccountType", accountTyte)
-	newUser.updateUserInfo()
-
-	path := op.FindUserByName(name)
-	//op.UserAdded(path)
-	//op.setPropName("UserList")
-
-	chownDir(name, name, "/home/"+name)
-	op.emitUserListChanged()
-
-	return path, true
-}
-
-func (op *AccountManager) DeleteUser(dbusMsg dbus.DMessage, name string, removeFiles bool) bool {
-	defer func() {
-		if err := recover(); err != nil {
-			logObject.Warningf("Recover Error In DeleteUser:%v",
-				err)
-		}
-	}()
-
-	//if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
-	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
-		dbusMsg.GetSenderPID()); !ok {
-		return false
-	}
-
-	args := []string{}
-
-	if removeFiles {
-		args = append(args, "-r")
-	}
-	args = append(args, name)
-
-	//path := op.FindUserByName(name)
-	execCommand(CMD_USERDEL, args)
-	op.emitUserListChanged()
-	//op.UserDeleted(path)
-	//op.setPropName("UserList")
-	return true
-}
-
-func (op *AccountManager) FindUserById(id string) string {
-	defer func() {
-		if err := recover(); err != nil {
-			logObject.Warningf("Recover Error In FindUserById:%v",
-				err)
-		}
-	}()
-
-	path := USER_MANAGER_PATH + id
-	op.setPropName("UserList")
-
-	for _, v := range op.UserList {
-		if path == v {
-			return path
-		}
-	}
-
-	return ""
-}
-
-func (op *AccountManager) FindUserByName(name string) string {
-	defer func() {
-		if err := recover(); err != nil {
-			logObject.Warningf("Recover Error In FindUserByName:%v", err)
-		}
-	}()
-
-	userInfo, err := user.Lookup(name)
-	if err != nil {
-		logObject.Warningf("Lookup By Name Failed:%v", err)
-		return ""
-	}
-
-	return op.FindUserById(userInfo.Uid)
-}
-
-func (op *AccountManager) RandUserIcon() (string, bool) {
-	if icon := getRandUserIcon(); len(icon) > 0 {
-		return icon, true
-	}
-
-	return "", false
-}
-
-func getInfoViaUid(uid string) (UserInfo, bool) {
-	infos := getUserInfoList()
-
-	for _, info := range infos {
-		if info.Uid == uid {
-			return info, true
-		}
-	}
-
-	return UserInfo{}, false
-}
-
-func getInfoViaName(name string) (UserInfo, bool) {
-	infos := getUserInfoList()
-
-	for _, info := range infos {
-		if info.Name == name {
-			return info, true
-		}
-	}
-
-	return UserInfo{}, false
+	return obj
 }
 
 func getUserInfoList() []UserInfo {
 	contents, err := ioutil.ReadFile(ETC_PASSWD)
 	if err != nil {
-		logObject.Warningf("ReadFile '%s' failed: %s", ETC_PASSWD, err)
+		logger.Errorf("ReadFile '%s' failed: %s", ETC_PASSWD, err)
 		panic(err)
 	}
 
@@ -237,7 +95,7 @@ func getUserInfoList() []UserInfo {
 
 		info := newUserInfo(strs[0], strs[2], strs[3],
 			strs[5], strs[6])
-		if userIsHuman(&info) {
+		if checkUserIsHuman(&info) {
 			infos = append(infos, info)
 		}
 	}
@@ -253,19 +111,12 @@ func newUserInfo(name, uid, gid, home, shell string) UserInfo {
 	info.Gid = gid
 	info.Home = home
 	info.Shell = shell
+	info.Path = USER_MANAGER_PATH + uid
 
 	return info
 }
 
-func userIsFilterList(name string) bool {
-	return opUtils.IsElementExist(name, filterList)
-}
-
-func userIsHuman(info *UserInfo) bool {
-	if userIsFilterList(info.Name) {
-		return false
-	}
-
+func checkUserIsHuman(info *UserInfo) bool {
 	shells := strings.Split(info.Shell, "/")
 	tmpShell := shells[len(shells)-1]
 	if SHELL_END_FALSE == tmpShell ||
@@ -286,7 +137,7 @@ func userIsHuman(info *UserInfo) bool {
 func detetedViaShadowFile(info *UserInfo) bool {
 	contents, err := ioutil.ReadFile(ETC_SHADOW)
 	if err != nil {
-		logObject.Warningf("ReadFile '%s' failed: %s", ETC_SHADOW, err)
+		logger.Errorf("ReadFile '%s' failed: %s", ETC_SHADOW, err)
 		panic(err)
 	}
 
@@ -303,24 +154,6 @@ func detetedViaShadowFile(info *UserInfo) bool {
 			continue
 		}
 		pw := strs[1]
-		/*
-		   // modern hashes start with "$n$" && len is 98
-		   if pw[0] == '$' {
-		           if len(pw) < 4 {
-		                   continue
-		           }
-		   } else if pw[0] == '!' {
-		           info.Locked = true
-		           id, _ := strconv.ParseInt(info.Uid, 10, 64)
-		           if id < 1000 {
-		                   continue
-		           }
-		   } else if pw[0] != '.' || pw[0] != '/' ||
-		           !charIsAlNum(pw[0]) {
-		           // DES crypt is base64 encoded [./A-Za-z0-9]
-		           continue
-		   }
-		*/
 		//加盐密码最短为13
 		if len(pw) < 13 {
 			break
@@ -334,4 +167,55 @@ func detetedViaShadowFile(info *UserInfo) bool {
 	}
 
 	return isHuman
+}
+
+func getUserList() []string {
+	infos := getUserInfoList()
+	list := []string{}
+
+	for _, info := range infos {
+		list = append(list, info.Path)
+	}
+
+	return list
+}
+
+func isAllowGuest() bool {
+	if v, ok := objUtil.ReadKeyFromKeyFile(ACCOUNT_CONFIG_FILE,
+		ACCOUNT_GROUP_KEY, ACCOUNT_KEY_GUEST, true); ok {
+		objUtil.WriteKeyToKeyFile(ACCOUNT_CONFIG_FILE,
+			ACCOUNT_GROUP_KEY, ACCOUNT_KEY_GUEST, false)
+
+		return false
+	} else {
+		if ret, ok := v.(bool); ok {
+			return ret
+		}
+	}
+
+	return false
+}
+
+func getUserInfoByPath(path string) (UserInfo, bool) {
+	infos := getUserInfoList()
+
+	for _, info := range infos {
+		if path == info.Path {
+			return info, true
+		}
+	}
+
+	return UserInfo{}, false
+}
+
+func getUserInfoByName(name string) (UserInfo, bool) {
+	infos := getUserInfoList()
+
+	for _, info := range infos {
+		if name == info.Name {
+			return info, true
+		}
+	}
+
+	return UserInfo{}, false
 }

@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2011 ~ 2013 Deepin, Inc.
- *               2011 ~ 2013 jouyouyun
+ * Copyright (c) 2011 ~ 2014 Deepin, Inc.
+ *               2013 ~ 2014 jouyouyun
  *
  * Author:      jouyouyun <jouyouwen717@gmail.com>
  * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
@@ -26,247 +26,209 @@ import (
 	"strings"
 )
 
-const (
-	CMD_USERMOD = "/usr/sbin/usermod"
-	CMD_GPASSWD = "/usr/bin/gpasswd"
-
-	USER_ICON_DIR     = "/var/lib/AccountsService/icons/"
-	USER_DEFAULT_ICON = USER_ICON_DIR + "1.png"
-	USER_DEFAULT_BG   = "file:///usr/share/backgrounds/default_background.jpg"
-	USER_CONFIG_FILE  = "/var/lib/AccountsService/users/"
-)
-
-type UserManager struct {
-	Uid            string
-	Gid            string
-	UserName       string
-	HomeDir        string
-	Shell          string
-	IconFile       string
-	BackgroundFile string
-	AutomaticLogin bool
-	AccountType    int32
-	Locked         bool
-	LoginTime      uint64
-	HistoryIcons   []string
-	IconList       []string
-	objectPath     string
-}
-
-func (op *UserManager) GetDBusInfo() dbus.DBusInfo {
+func (obj *User) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		ACCOUNT_DEST,
-		USER_MANAGER_PATH + op.Uid,
+		obj.objectPath,
 		USER_MANAGER_IFC,
 	}
 }
 
-func (op *UserManager) applyPropertiesChanged(propName string, value interface{}) {
-	switch propName {
-	case "UserName":
-		if v, ok := value.(string); ok && v != op.UserName {
-			args := []string{}
-			args = append(args, "-l")
-			args = append(args, v)
-			args = append(args, op.UserName)
-			execCommand(CMD_USERMOD, args)
-		}
-	case "HomeDir":
-		if v, ok := value.(string); ok && v != op.HomeDir {
-			args := []string{}
-			args = append(args, "-m")
-			args = append(args, "-d")
-			args = append(args, v)
-			args = append(args, op.UserName)
-			execCommand(CMD_USERMOD, args)
-		}
-	case "Shell":
-		if v, ok := value.(string); ok && v != op.Shell {
-			args := []string{}
-			args = append(args, "-s")
-			args = append(args, v)
-			args = append(args, op.UserName)
-			execCommand(CMD_USERMOD, args)
-		}
-	case "IconFile":
-		println("User Icon: ", op.IconFile)
-		println("IconFile: ", value.(string))
-		println("User: ", op.UserName)
-		if v, ok := value.(string); ok && v != op.IconFile {
-			file := USER_CONFIG_FILE + op.UserName
-			opUtils.WriteKeyToKeyFile(file, "User", "Icon", v)
-			addHistoryIcon(file, v)
-			op.setPropName("HistoryIcons")
-		}
-	case "BackgroundFile":
-		if v, ok := value.(string); ok && v != op.BackgroundFile {
-			file := USER_CONFIG_FILE + op.UserName
-			opUtils.WriteKeyToKeyFile(file, "User", "Background", v)
-		}
-	case "AutomaticLogin":
-		if v, ok := value.(bool); ok && v != op.AutomaticLogin {
-			if v {
-				setAutomaticLogin(op.UserName)
-			} else {
-				setAutomaticLogin("")
-			}
-		}
-	case "AccountType":
-		if v, ok := value.(int32); ok && v != op.AccountType {
-			switch v {
-			case ACCOUNT_TYPE_STANDARD:
-				admList := getAdministratorList()
-				if opUtils.IsElementExist(op.UserName, admList) {
-					deleteUserFromAdmList(op.UserName)
-				}
-			case ACCOUNT_TYPE_ADMINISTACTOR:
-				admList := getAdministratorList()
-				if !opUtils.IsElementExist(op.UserName, admList) {
-					addUserToAdmList(op.UserName)
-				}
-			}
-		}
-	case "Locked":
-		if v, ok := value.(bool); ok && v != op.Locked {
-			args := []string{}
-			if v {
-				args = append(args, "-L")
-				args = append(args, op.UserName)
-			} else {
-				args = append(args, "-U")
-				args = append(args, op.UserName)
-			}
-			execCommand(CMD_USERMOD, args)
-		}
-	}
-}
-
-func (op *UserManager) setPropName(propName string) {
-	switch propName {
-	case "UserName":
-		info, ok := getInfoViaUid(op.Uid)
-		if ok {
-			op.UserName = info.Name
-		}
-	case "HomeDir":
-		info, ok := getInfoViaUid(op.Uid)
-		if ok {
-			op.UserName = info.Home
-		}
-	case "Shell":
-		info, ok := getInfoViaUid(op.Uid)
-		if ok {
-			op.Shell = info.Shell
-		}
-	case "IconFile":
-		file := USER_CONFIG_FILE + op.UserName
-		if !fileIsExist(file) {
-			path := getRandUserIcon()
-			op.applyPropertiesChanged("IconFile", path)
-			op.IconFile = path
-		} else {
-			if v, ok := opUtils.ReadKeyFromKeyFile(file, "User",
-				"Icon", ""); !ok {
-				path := getRandUserIcon()
-				op.applyPropertiesChanged("IconFile", path)
-				op.IconFile = path
-			} else {
-				op.IconFile = v.(string)
-			}
-		}
-	case "BackgroundFile":
-		file := USER_CONFIG_FILE + op.UserName
-		if !fileIsExist(file) {
-			op.applyPropertiesChanged("BackgroundFile", USER_DEFAULT_BG)
-			op.BackgroundFile = USER_DEFAULT_BG
-		} else {
-			if v, ok := opUtils.ReadKeyFromKeyFile(file, "User",
-				"Background", ""); !ok {
-				op.applyPropertiesChanged("BackgroundFile", USER_DEFAULT_BG)
-				op.BackgroundFile = USER_DEFAULT_BG
-			} else {
-				tmp := v.(string)
-				uri, _ := opUtils.PathToFileURI(tmp)
-				op.BackgroundFile = uri
-			}
-		}
-	case "AutomaticLogin":
-		ok := isAutoLogin(op.UserName)
-		if ok {
-			logObject.Infof("Enable %s AutomaticLogin",
-				op.UserName)
-			op.AutomaticLogin = true
-		} else {
-			logObject.Infof("Disable %s AutomaticLogin",
-				op.UserName)
-			op.AutomaticLogin = false
-		}
-	case "AccountType":
-		admList := getAdministratorList()
-		if opUtils.IsElementExist(op.UserName, admList) {
-			op.AccountType = ACCOUNT_TYPE_ADMINISTACTOR
-		} else {
-			op.AccountType = ACCOUNT_TYPE_STANDARD
-		}
-	case "Locked":
-		info, ok := getInfoViaUid(op.Uid)
-		if ok {
-			op.Locked = info.Locked
-		}
-	case "HistoryIcons":
-		file := USER_CONFIG_FILE + op.UserName
-		if !fileIsExist(file) {
-			op.HistoryIcons = append(op.HistoryIcons,
-				USER_DEFAULT_ICON)
-		} else {
-			if v, ok := opUtils.ReadKeyFromKeyFile(file, "User",
-				"HistoryIcons", []string{}); !ok {
-				op.HistoryIcons = append(op.HistoryIcons,
-					USER_DEFAULT_ICON)
-			} else {
-				op.HistoryIcons = v.([]string)
-			}
-		}
-	case "IconList":
-		list := []string{}
-
-		sysList := getIconList(ICON_SYSTEM_DIR)
-		list = append(list, sysList...)
-		localList := getIconList(ICON_LOCAL_DIR)
-		for _, l := range localList {
-			if strings.Contains(l, op.UserName+"-") {
-				list = append(list, l)
-			}
-		}
-		op.IconList = list
-	}
-	dbus.NotifyChange(op, propName)
-}
-
-func (op *UserManager) updateUserInfo() {
-	info, ok := getInfoViaUid(op.Uid)
-	if !ok {
+func (obj *User) updatePropUserName(name string) {
+	if len(name) < 1 {
 		return
 	}
 
-	op.Gid = info.Gid
-	op.UserName = info.Name
-	op.HomeDir = info.Home
-	op.Locked = info.Locked
-	op.Shell = info.Shell
-	op.setPropName("IconFile")
-	op.setPropName("BackgroundFile")
-	op.setPropName("AutomaticLogin")
-	op.setPropName("AccountType")
-	op.setPropName("LoginTime")
-	op.setPropName("HistoryIcons")
+	if obj.UserName != name {
+		obj.UserName = name
+		dbus.NotifyChange(obj, "UserName")
+	}
 }
 
-func addHistoryIcon(filename, iconPath string) []string {
-	list, _ := opUtils.ReadKeyFromKeyFile(filename, "User",
+func (obj *User) updatePropHomeDir(homeDir string) {
+	if len(homeDir) < 1 {
+		return
+	}
+
+	if obj.HomeDir != homeDir {
+		obj.HomeDir = homeDir
+		dbus.NotifyChange(obj, "HomeDir")
+	}
+}
+
+func (obj *User) updatePropShell(shell string) {
+	if len(shell) < 1 {
+		return
+	}
+
+	if obj.Shell != shell {
+		obj.Shell = shell
+		dbus.NotifyChange(obj, "Shell")
+	}
+}
+
+func (obj *User) updatePropIconFile(icon string) {
+	if len(icon) < 1 {
+		return
+	}
+
+	if obj.IconFile != icon {
+		obj.IconFile = icon
+		dbus.NotifyChange(obj, "IconFile")
+	}
+}
+
+func (obj *User) updatePropBackgroundFile(bg string) {
+	if len(bg) < 1 {
+		return
+	}
+
+	if obj.BackgroundFile != bg {
+		obj.BackgroundFile = bg
+		dbus.NotifyChange(obj, "BackgroundFile")
+	}
+}
+
+func (obj *User) updatePropAutomaticLogin(enable bool) {
+	if obj.AutomaticLogin != enable {
+		obj.AutomaticLogin = enable
+		dbus.NotifyChange(obj, "AutomaticLogin")
+	}
+}
+
+func (obj *User) updatePropAccountType(acctype int32) {
+	if obj.AccountType != acctype {
+		obj.AccountType = acctype
+		dbus.NotifyChange(obj, "AccountType")
+	}
+}
+
+func (obj *User) updatePropLocked(locked bool) {
+	if obj.Locked != locked {
+		obj.Locked = locked
+		dbus.NotifyChange(obj, "Locked")
+	}
+}
+
+func (obj *User) updatePropHistoryIcons(iconList []string) {
+	if !isStrListEqual(obj.HistoryIcons, iconList) {
+		obj.HistoryIcons = iconList
+		dbus.NotifyChange(obj, "HistoryIcons")
+	}
+}
+
+func (obj *User) updatePropIconList(iconList []string) {
+	if !isStrListEqual(obj.IconList, iconList) {
+		obj.IconList = iconList
+		dbus.NotifyChange(obj, "IconFile")
+	}
+}
+
+func (obj *User) getPropIconFile() string {
+	file := USER_CONFIG_FILE + obj.UserName
+	icon := ""
+	wFlag := false
+	if !objUtil.IsFileExist(file) {
+		icon = getRandUserIcon()
+		wFlag = true
+	} else {
+		if v, ok := objUtil.ReadKeyFromKeyFile(file, "User",
+			"Icon", ""); !ok {
+			icon = getRandUserIcon()
+			wFlag = true
+		} else {
+			icon = v.(string)
+		}
+	}
+
+	logger.Infof("%s ICON: %s", obj.UserName, icon)
+	if wFlag {
+		objUtil.WriteKeyToKeyFile(file, "User", "Icon", icon)
+	}
+
+	return icon
+}
+
+func (obj *User) getPropBackgroundFile() string {
+	file := USER_CONFIG_FILE + obj.UserName
+	bg := ""
+	wFlag := false
+	if !objUtil.IsFileExist(file) {
+		bg = USER_DEFAULT_BG
+		wFlag = true
+	} else {
+		if v, ok := objUtil.ReadKeyFromKeyFile(file, "User",
+			"Background", ""); !ok {
+			bg = USER_DEFAULT_BG
+			wFlag = true
+		} else {
+			bg = v.(string)
+		}
+	}
+
+	if wFlag {
+		objUtil.WriteKeyToKeyFile(file, "User", "Background", bg)
+	}
+
+	return bg
+}
+
+func (obj *User) getPropAutomaticLogin() bool {
+	return isAutoLogin(obj.UserName)
+}
+
+func (obj *User) getPropAccountType() int32 {
+	list := getAdministratorList()
+	if strIsInList(obj.UserName, list) {
+		return ACCOUNT_TYPE_ADMINISTACTOR
+	}
+
+	return ACCOUNT_TYPE_STANDARD
+}
+
+func (obj *User) getPropHistoryIcons() []string {
+	list := []string{}
+	file := USER_CONFIG_FILE + obj.UserName
+
+	if !objUtil.IsFileExist(file) {
+		list = append(list, obj.IconFile)
+	} else {
+		if v, ok := objUtil.ReadKeyFromKeyFile(file, "User",
+			"HistoryIcons", []string{}); !ok {
+			list = append(list, obj.IconFile)
+		} else {
+			list = append(list, v.([]string)...)
+		}
+	}
+
+	return list
+}
+
+func (obj *User) getPropIconList() []string {
+	list := []string{}
+
+	sysList := getIconList(ICON_SYSTEM_DIR)
+	list = append(list, sysList...)
+	localList := getIconList(ICON_LOCAL_DIR)
+	for _, l := range localList {
+		if strings.Contains(l, obj.UserName+"-") {
+			list = append(list, l)
+		}
+	}
+
+	return list
+}
+
+func (obj *User) addHistoryIcon(iconPath string) {
+	file := USER_CONFIG_FILE + obj.UserName
+	if !objUtil.IsFileExist(file) || !objUtil.IsFileExist(iconPath) {
+		return
+	}
+
+	list, _ := objUtil.ReadKeyFromKeyFile(file, "User",
 		"HistoryIcons", []string{})
-	if ok := opUtils.IsFileExist(iconPath); !ok {
-		return list.([]string)
+	if list == nil {
+		return
 	}
 
 	ret := []string{}
@@ -274,49 +236,129 @@ func addHistoryIcon(filename, iconPath string) []string {
 	cnt := 1
 	if list != nil {
 		strs := list.([]string)
-		as := deleteElementFromList(iconPath, strs)
+		as := deleteStrFromList(iconPath, strs)
 		for _, l := range as {
 			if cnt >= 9 {
 				break
 			}
 
-			if ok := opUtils.IsFileExist(l); !ok {
+			if ok := objUtil.IsFileExist(l); !ok {
 				continue
 			}
 			ret = append(ret, l)
 			cnt++
 		}
 	}
-	opUtils.WriteKeyToKeyFile(filename, "User", "HistoryIcons", ret)
+	objUtil.WriteKeyToKeyFile(file, "User", "HistoryIcons", ret)
 
-	return ret
+	return
 }
 
-func deleteHistoryIcon(filename, iconPath string) []string {
-	list, ok := opUtils.ReadKeyFromKeyFile(filename, "User",
-		"HistoryIcons", []string{})
-	if !ok || len(list.([]string)) <= 0 {
-		return []string{}
+func (obj *User) deleteHistoryIcon(iconPath string) {
+	file := USER_CONFIG_FILE + obj.UserName
+	if !objUtil.IsFileExist(file) {
+		return
 	}
 
-	tmp := deleteElementFromList(iconPath, list.([]string))
-	opUtils.WriteKeyToKeyFile(filename, "User", "HistoryIcons", tmp)
+	list, ok := objUtil.ReadKeyFromKeyFile(file, "User",
+		"HistoryIcons", []string{})
+	if !ok || list == nil {
+		return
+	}
 
-	return tmp
+	tmp := deleteStrFromList(iconPath, list.([]string))
+	objUtil.WriteKeyToKeyFile(file, "User", "HistoryIcons", tmp)
+
+	return
 }
 
-func addUserToAdmList(name string) {
-	tmps := []string{}
-	tmps = append(tmps, "-a")
-	tmps = append(tmps, name)
-	tmps = append(tmps, "sudo")
-	go execCommand(CMD_GPASSWD, tmps)
+func (obj *User) setPropUserName(name string) {
+	if len(name) < 1 {
+		return
+	}
+
+	args := []string{}
+	args = append(args, "-l")
+	args = append(args, name)
+	args = append(args, obj.UserName)
+	execCommand(CMD_USERMOD, args)
 }
 
-func deleteUserFromAdmList(name string) {
-	tmps := []string{}
-	tmps = append(tmps, "-d")
-	tmps = append(tmps, name)
-	tmps = append(tmps, "sudo")
-	go execCommand(CMD_GPASSWD, tmps)
+func (obj *User) setPropHomeDir(homeDir string) {
+	if len(homeDir) < 1 {
+		return
+	}
+
+	args := []string{}
+	args = append(args, "-m")
+	args = append(args, "-d")
+	args = append(args, homeDir)
+	args = append(args, obj.UserName)
+	execCommand(CMD_USERMOD, args)
+}
+
+func (obj *User) setPropShell(shell string) {
+	if len(shell) < 1 {
+		return
+	}
+
+	args := []string{}
+	args = append(args, "-s")
+	args = append(args, shell)
+	args = append(args, obj.UserName)
+	execCommand(CMD_USERMOD, args)
+}
+
+func (obj *User) setPropIconFile(icon string) {
+	if len(icon) < 1 {
+		return
+	}
+
+	file := USER_CONFIG_FILE + obj.UserName
+	objUtil.WriteKeyToKeyFile(file, "User", "Icon", icon)
+	obj.addHistoryIcon(icon)
+}
+
+func (obj *User) setPropBackgroundFile(bg string) {
+	if len(bg) < 1 {
+		return
+	}
+
+	file := USER_CONFIG_FILE + obj.UserName
+	objUtil.WriteKeyToKeyFile(file, "User", "Background", bg)
+}
+
+func (obj *User) setPropAutomaticLogin(auto bool) {
+	if auto {
+		setAutomaticLogin(obj.UserName)
+	} else {
+		setAutomaticLogin("")
+	}
+}
+
+func (obj *User) setPropAccountType(acctype int32) {
+	t := obj.getPropAccountType()
+	switch acctype {
+	case ACCOUNT_TYPE_ADMINISTACTOR:
+		if t != ACCOUNT_TYPE_ADMINISTACTOR {
+			addUserToAdmList(obj.UserName)
+		}
+	case ACCOUNT_TYPE_STANDARD:
+		if t == ACCOUNT_TYPE_ADMINISTACTOR {
+			deleteUserFromAdmList(obj.UserName)
+		}
+	}
+}
+
+func (obj *User) setPropLocked(locked bool) {
+	args := []string{}
+
+	if locked {
+		args = append(args, "-L")
+		args = append(args, obj.UserName)
+	} else {
+		args = append(args, "-U")
+		args = append(args, obj.UserName)
+	}
+	execCommand(CMD_USERMOD, args)
 }

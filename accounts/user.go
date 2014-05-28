@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2011 ~ 2013 Deepin, Inc.
- *               2011 ~ 2013 jouyouyun
+ * Copyright (c) 2011 ~ 2014 Deepin, Inc.
+ *               2013 ~ 2014 jouyouyun
  *
  * Author:      jouyouyun <jouyouwen717@gmail.com>
  * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
@@ -22,361 +22,243 @@
 package main
 
 import (
-	"dlib/dbus"
 	"io/ioutil"
+	"math/rand"
 	"os"
+	"path"
+	"regexp"
 	"strings"
 )
 
-const (
-	POLKIT_CHANGED_OWN_DATA = "com.deepin.daemon.accounts.change-own-user-data"
-	POLKIT_MANAGER_USER     = "com.deepin.daemon.accounts.user-administration"
-	POLKIT_SET_LOGIN_OPTION = "com.deepin.daemon.accounts.set-login-option"
-
-	ICON_SYSTEM_DIR = "/var/lib/AccountsService/icons"
-	ICON_LOCAL_DIR  = "/var/lib/AccountsService/icons/local"
-	SHADOW_FILE     = "/etc/shadow"
-	SHADOW_BAK_FILE = "/etc/shadow.bak"
-)
-
-func (op *UserManager) SetUserName(dbusMsg dbus.DMessage, username string) bool {
-	defer func() {
-		if err := recover(); err != nil {
-			logObject.Warningf("Recover Error In SetUserName:%v",
-				err)
-		}
-	}()
-
-	//if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
-	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
-		dbusMsg.GetSenderPID()); !ok {
-		return false
-	}
-
-	if op.UserName != username {
-		op.applyPropertiesChanged("UserName", username)
-		op.setPropName("UserName")
-	}
-
-	return true
+type User struct {
+	Uid            string
+	Gid            string
+	UserName       string
+	HomeDir        string
+	Shell          string
+	IconFile       string
+	BackgroundFile string
+	AutomaticLogin bool
+	AccountType    int32
+	Locked         bool
+	LoginTime      uint64
+	HistoryIcons   []string
+	IconList       []string
+	objectPath     string
 }
 
-func (op *UserManager) SetHomeDir(dbusMsg dbus.DMessage, dir string) bool {
-	defer func() {
-		if err := recover(); err != nil {
-			logObject.Warningf("Recover Error In SetHomeDir:%v",
-				err)
-		}
-	}()
-
-	//if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
-	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
-		dbusMsg.GetSenderPID()); !ok {
-		return false
-	}
-
-	if op.HomeDir != dir {
-		op.applyPropertiesChanged("HomeDir", dir)
-		op.setPropName("HomeDir")
-	}
-
-	return true
+func addUserToAdmList(name string) {
+	tmps := []string{}
+	tmps = append(tmps, "-a")
+	tmps = append(tmps, name)
+	tmps = append(tmps, "sudo")
+	go execCommand(CMD_GPASSWD, tmps)
 }
 
-func (op *UserManager) SetShell(dbusMsg dbus.DMessage, shell string) bool {
-	defer func() {
-		if err := recover(); err != nil {
-			logObject.Warningf("Recover Error In SetShell:%v",
-				err)
-		}
-	}()
-
-	//if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
-	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
-		dbusMsg.GetSenderPID()); !ok {
-		return false
-	}
-
-	if op.Shell != shell {
-		op.applyPropertiesChanged("Shell", shell)
-		op.setPropName("Shell")
-	}
-
-	return true
+func deleteUserFromAdmList(name string) {
+	tmps := []string{}
+	tmps = append(tmps, "-d")
+	tmps = append(tmps, name)
+	tmps = append(tmps, "sudo")
+	go execCommand(CMD_GPASSWD, tmps)
 }
 
-func (op *UserManager) SetPassword(dbusMsg dbus.DMessage, words string) bool {
-	defer func() {
-		if err := recover(); err != nil {
-			logObject.Warningf("Recover Error In SetPassword:%v",
-				err)
-		}
-	}()
-
-	//if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
-	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
-		dbusMsg.GetSenderPID()); !ok {
-		return false
+func getRandUserIcon() string {
+	list := getIconList(ICON_SYSTEM_DIR)
+	l := len(list)
+	if l <= 0 {
+		return ""
 	}
 
-	passwd := encodePasswd(words)
-	changePasswd(op.UserName, passwd)
-
-	//args := []string{}
-	//args = append(args, "-p")
-	//args = append(args, passwd)
-	//args = append(args, op.UserName)
-	//execCommand(CMD_USERMOD, args)
-
-	op.applyPropertiesChanged("Locked", false)
-	op.setPropName("Locked")
-
-	return true
+	index := rand.Int31n(int32(l))
+	return list[index]
 }
 
-func (op *UserManager) SetAutomaticLogin(dbusMsg dbus.DMessage, auto bool) bool {
-	defer func() {
-		if err := recover(); err != nil {
-			logObject.Warningf("Recover Error In SetAutomaticLogin:%v",
-				err)
-		}
-	}()
-
-	//if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
-	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
-		dbusMsg.GetSenderPID()); !ok {
-		return false
-	}
-
-	if op.AutomaticLogin != auto {
-		//mutex.Lock()
-		op.applyPropertiesChanged("AutomaticLogin", auto)
-		op.setPropName("AutomaticLogin")
-		//mutex.Unlock()
-	}
-
-	return true
-}
-
-func (op *UserManager) SetAccountType(dbusMsg dbus.DMessage, t int32) bool {
-	defer func() {
-		if err := recover(); err != nil {
-			logObject.Warningf("Recover Error In SetAccountType:%v",
-				err)
-		}
-	}()
-
-	//if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
-	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
-		dbusMsg.GetSenderPID()); !ok {
-		return false
-	}
-
-	if op.AccountType != t {
-		op.applyPropertiesChanged("AccountType", t)
-		op.setPropName("AccountType")
-	}
-
-	return true
-}
-
-func (op *UserManager) SetLocked(dbusMsg dbus.DMessage, locked bool) bool {
-	defer func() {
-		if err := recover(); err != nil {
-			logObject.Warningf("Recover Error In SetLocked:%v",
-				err)
-		}
-	}()
-
-	//if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
-	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
-		dbusMsg.GetSenderPID()); !ok {
-		return false
-	}
-
-	if op.Locked != locked {
-		op.applyPropertiesChanged("Locked", locked)
-		op.setPropName("Locked")
-	}
-
-	return true
-}
-
-func (op *UserManager) SetIconFile(dbusMsg dbus.DMessage, icon string) bool {
-	defer func() {
-		if err := recover(); err != nil {
-			logObject.Warningf("Recover Error In SetIconFile:%v",
-				err)
-		}
-	}()
-
-	//if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
-	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
-		dbusMsg.GetSenderPID()); !ok {
-		return false
-	}
-
-	if ok := opUtils.IsFileExist(icon); !ok || op.IconFile == icon {
-		return false
-	}
-
-	if !opUtils.IsElementExist(icon, op.IconList) {
-		if ok := opUtils.IsFileExist(ICON_LOCAL_DIR); !ok {
-			if err := os.MkdirAll(ICON_LOCAL_DIR, 0755); err != nil {
-				return false
-			}
-		}
-		name, _ := opUtils.GetBaseName(icon)
-		dest := ICON_LOCAL_DIR + "/" + op.UserName + "-" + name
-		if ok := opUtils.CopyFile(icon, dest); !ok {
-			return false
-		}
-		icon = dest
-	}
-	op.applyPropertiesChanged("IconFile", icon)
-	op.setPropName("IconFile")
-
-	return true
-}
-
-func (op *UserManager) SetBackgroundFile(dbusMsg dbus.DMessage, bg string) bool {
-	defer func() {
-		if err := recover(); err != nil {
-			logObject.Warningf("Recover Error In SetBackgroundFile:%v",
-				err)
-		}
-	}()
-
-	//if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
-	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
-		dbusMsg.GetSenderPID()); !ok {
-		return false
-	}
-
-	if op.BackgroundFile != bg {
-		op.applyPropertiesChanged("BackgroundFile", bg)
-		op.setPropName("BackgroundFile")
-	}
-
-	return true
-}
-
-func (op *UserManager) DeleteHistoryIcon(dbusMsg dbus.DMessage, icon string) bool {
-	defer func() {
-		if err := recover(); err != nil {
-			logObject.Warningf("Recover Error In DeleteHistoryIcon:%v",
-				err)
-		}
-	}()
-
-	//if ok := opUtils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
-	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
-		dbusMsg.GetSenderPID()); !ok {
-		return false
-	}
-
-	file := USER_CONFIG_FILE + op.UserName
-	deleteHistoryIcon(file, icon)
-	op.setPropName("HistoryIcons")
-
-	return true
-}
-
-func changePasswd(username, password string) {
-	mutex.Lock()
-	defer mutex.Unlock()
-
-	data, err := ioutil.ReadFile(SHADOW_FILE)
+func getIconList(dir string) []string {
+	iconfd, err := os.Open(dir)
 	if err != nil {
+		logger.Errorf("Open '%s' failed: %v",
+			dir, err)
+		return []string{}
+	}
+
+	names, _ := iconfd.Readdirnames(0)
+	list := []string{}
+	for _, v := range names {
+		if strings.Contains(v, "guest") {
+			continue
+		}
+
+		tmp := strings.ToLower(v)
+		//ok, _ := regexp.MatchString(`jpe?g$||png$||gif$`, tmp)
+		ok1, _ := regexp.MatchString(`\.jpe?g$`, tmp)
+		ok2, _ := regexp.MatchString(`\.png$`, tmp)
+		ok3, _ := regexp.MatchString(`\.gif$`, tmp)
+		if ok1 || ok2 || ok3 {
+			list = append(list, path.Join(dir, v))
+		}
+	}
+
+	return list
+}
+
+func getAdministratorList() []string {
+	contents, err := ioutil.ReadFile(ETC_GROUP)
+	if err != nil {
+		logger.Errorf("ReadFile '%s' failed: %s", ETC_PASSWD, err)
 		panic(err)
 	}
-	lines := strings.Split(string(data), "\n")
-	index := 0
-	line := ""
-	okFlag := false
-	for index, line = range lines {
+
+	list := ""
+	lines := strings.Split(string(contents), "\n")
+	for _, line := range lines {
 		strs := strings.Split(line, ":")
-		if strs[0] == username {
-			if strs[1] == password {
-				break
-			}
-			strs[1] = password
-			l := len(strs)
-			line = ""
-			for i, s := range strs {
-				if i == l-1 {
-					line += s
-					continue
-				}
-				line += s + ":"
-			}
-			okFlag = true
+		if len(strs) != GROUP_SPLIT_LEN {
+			continue
+		}
+
+		if strs[0] == "sudo" {
+			list = strs[3]
 			break
 		}
 	}
 
-	if okFlag {
-		okFlag = false
-		contents := ""
-		l := len(lines)
-		for i, tmp := range lines {
-			if i == index {
-				contents += line
-			} else {
-				contents += tmp
-			}
-			if i < l-1 {
-				contents += "\n"
-			}
-		}
-
-		f, err := os.Create(SHADOW_BAK_FILE)
-		if err != nil {
-			logObject.Warningf("Create '%s' failed: %v\n",
-				SHADOW_BAK_FILE, err)
-			panic(err)
-		}
-		defer f.Close()
-
-		_, err = f.WriteString(contents)
-		if err != nil {
-			logObject.Warningf("WriteString '%s' failed: %v\n",
-				SHADOW_BAK_FILE, err)
-			panic(err)
-		}
-		f.Sync()
-		os.Rename(SHADOW_BAK_FILE, SHADOW_FILE)
-	}
-
+	return strings.Split(list, ",")
 }
 
-func newUserManager(uid string) *UserManager {
-	defer func() {
-		if err := recover(); err != nil {
-			logObject.Infof("Recover Error: %v", err)
+func setAutomaticLogin(name string) {
+	dsp := getDefaultDisplayManager()
+	logger.Infof("Set %s Auto For: %s", name, dsp)
+	switch dsp {
+	case "lightdm":
+		if objUtil.IsFileExist(ETC_LIGHTDM_CONFIG) {
+			objUtil.WriteKeyToKeyFile(ETC_LIGHTDM_CONFIG,
+				LIGHTDM_AUTOLOGIN_GROUP,
+				LIGHTDM_AUTOLOGIN_USER,
+				name)
 		}
-	}()
+	case "gdm":
+		if objUtil.IsFileExist(ETC_GDM_CONFIG) {
+			objUtil.WriteKeyToKeyFile(ETC_GDM_CONFIG,
+				GDM_AUTOLOGIN_GROUP,
+				GDM_AUTOLOGIN_USER,
+				name)
+		}
+	case "kdm":
+		if objUtil.IsFileExist(ETC_KDM_CONFIG) {
+			objUtil.WriteKeyToKeyFile(ETC_KDM_CONFIG,
+				KDM_AUTOLOGIN_GROUP,
+				KDM_AUTOLOGIN_ENABLE,
+				true)
+			objUtil.WriteKeyToKeyFile(ETC_KDM_CONFIG,
+				KDM_AUTOLOGIN_GROUP,
+				KDM_AUTOLOGIN_USER,
+				name)
+		} else if objUtil.IsFileExist(USER_KDM_CONFIG) {
+			objUtil.WriteKeyToKeyFile(ETC_KDM_CONFIG,
+				KDM_AUTOLOGIN_GROUP,
+				KDM_AUTOLOGIN_ENABLE,
+				true)
+			objUtil.WriteKeyToKeyFile(USER_KDM_CONFIG,
+				KDM_AUTOLOGIN_GROUP,
+				KDM_AUTOLOGIN_USER,
+				name)
+		}
+	default:
+		logger.Error("No support display manager")
+	}
+}
 
-	m := &UserManager{}
+func isAutoLogin(username string) bool {
+	dsp := getDefaultDisplayManager()
+	//logger.Info("Display: ", dsp)
 
-	m.Uid = uid
-	m.updateUserInfo()
-	m.setPropName("IconList")
-	//m.listenUserInfoChanged(ETC_GROUP)
-	//m.listenUserInfoChanged(ETC_SHADOW)
-	//m.listenIconListChanged(ICON_SYSTEM_DIR)
-	//m.listenIconListChanged(ICON_LOCAL_DIR)
-	go m.listenUserInfoChanged()
+	switch dsp {
+	case "lightdm":
+		if objUtil.IsFileExist(ETC_LIGHTDM_CONFIG) {
+			v, ok := objUtil.ReadKeyFromKeyFile(ETC_LIGHTDM_CONFIG,
+				LIGHTDM_AUTOLOGIN_GROUP,
+				LIGHTDM_AUTOLOGIN_USER,
+				"")
+			//logger.Info("AutoUser: ", v.(string))
+			//logger.Info("UserName: ", username)
+			if ok && v.(string) == username {
+				return true
+			}
+		}
+	case "gdm":
+		if objUtil.IsFileExist(ETC_GDM_CONFIG) {
+			v, ok := objUtil.ReadKeyFromKeyFile(ETC_GDM_CONFIG,
+				GDM_AUTOLOGIN_GROUP,
+				GDM_AUTOLOGIN_USER,
+				"")
+			if ok && v.(string) == username {
+				return true
+			}
+		}
+	case "kdm":
+		if objUtil.IsFileExist(ETC_KDM_CONFIG) {
+			v, ok := objUtil.ReadKeyFromKeyFile(ETC_KDM_CONFIG,
+				KDM_AUTOLOGIN_GROUP,
+				KDM_AUTOLOGIN_USER,
+				"")
+			if ok && v.(string) == username {
+				return true
+			}
+		} else if objUtil.IsFileExist(USER_KDM_CONFIG) {
+			v, ok := objUtil.ReadKeyFromKeyFile(USER_KDM_CONFIG,
+				KDM_AUTOLOGIN_GROUP,
+				KDM_AUTOLOGIN_USER,
+				"")
+			if ok && v.(string) == username {
+				return true
+			}
+		}
+	}
 
-	//if opUtils.IsFileExist(ETC_LIGHTDM_CONFIG) {
-	//m.listenUserInfoChanged(ETC_LIGHTDM_CONFIG)
-	//}
-	//if opUtils.IsFileExist(ETC_GDM_CONFIG) {
-	//m.listenUserInfoChanged(ETC_GDM_CONFIG)
-	//}
-	//if opUtils.IsFileExist(ETC_KDM_CONFIG) {
-	//m.listenUserInfoChanged(ETC_KDM_CONFIG)
-	//}
+	return false
+}
 
-	return m
+func getDefaultDisplayManager() string {
+	contents, err := ioutil.ReadFile(ETC_DISPLAY_MANAGER)
+	if err != nil {
+		logger.Errorf("ReadFile '%s' failed: %s",
+			ETC_DISPLAY_MANAGER, err)
+		panic(err)
+	}
+
+	tmp := ""
+	for _, b := range contents {
+		if b == '\n' {
+			tmp += ""
+			continue
+		}
+		tmp += string(b)
+	}
+
+	return path.Base(tmp)
+}
+
+func newUser(path string) *User {
+	info, ok := getUserInfoByPath(path)
+	if !ok {
+		return nil
+	}
+
+	obj := &User{}
+	obj.objectPath = info.Path
+	obj.Uid = info.Uid
+	obj.Gid = info.Gid
+	obj.updatePropUserName(info.Name)
+	obj.updatePropHomeDir(info.Home)
+	obj.updatePropShell(info.Shell)
+	obj.updatePropLocked(info.Locked)
+	obj.updatePropAutomaticLogin(obj.getPropAutomaticLogin())
+	obj.updatePropAccountType(obj.getPropAccountType())
+	obj.updatePropIconList(obj.getPropIconList())
+	obj.updatePropIconFile(obj.getPropIconFile())
+	obj.updatePropBackgroundFile(obj.getPropBackgroundFile())
+	obj.updatePropHistoryIcons(obj.getPropHistoryIcons())
+
+	return obj
 }
