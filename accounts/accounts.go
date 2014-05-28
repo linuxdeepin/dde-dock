@@ -124,7 +124,7 @@ func checkUserIsHuman(info *UserInfo) bool {
 		return false
 	}
 
-	if !detetedViaShadowFile(info) {
+	if !detectedViaShadowFile(info) {
 		id, _ := strconv.ParseInt(info.Uid, 10, 64)
 		if id < 1000 {
 			return false
@@ -134,7 +134,7 @@ func checkUserIsHuman(info *UserInfo) bool {
 	return true
 }
 
-func detetedViaShadowFile(info *UserInfo) bool {
+func detectedViaShadowFile(info *UserInfo) bool {
 	contents, err := ioutil.ReadFile(ETC_SHADOW)
 	if err != nil {
 		logger.Errorf("ReadFile '%s' failed: %s", ETC_SHADOW, err)
