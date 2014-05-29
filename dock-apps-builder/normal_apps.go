@@ -1,7 +1,7 @@
 package main
 
 import (
-	"dlib"
+	. "dlib/gettext"
 	"dlib/gio-2.0"
 	"path/filepath"
 	"strings"
@@ -46,7 +46,7 @@ func NewNormalApp(id string) *NormalApp {
 
 func (app *NormalApp) buildMenu() {
 	app.coreMenu = NewMenu()
-	app.coreMenu.AppendItem(NewMenuItem(dlib.Tr("_Run"), func() {
+	app.coreMenu.AppendItem(NewMenuItem(Tr("_Run"), func() {
 		_, err := app.core.Launch(make([]*gio.File, 0), nil)
 		LOGGER.Warning("Launch App Failed: ", err)
 	}, true))
@@ -61,7 +61,7 @@ func (app *NormalApp) buildMenu() {
 	}
 	app.coreMenu.AddSeparator()
 	dockItem := NewMenuItem(
-		dlib.Tr("_Undock"),
+		Tr("_Undock"),
 		func() {
 			DOCKED_APP_MANAGER.Undock(app.Id)
 		},

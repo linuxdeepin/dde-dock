@@ -3,7 +3,7 @@ package main
 import (
 	"bytes"
 	"dbus/com/deepin/daemon/dock"
-	"dlib"
+	. "dlib/gettext"
 	"dlib/gio-2.0"
 	"dlib/glib-2.0"
 	"encoding/base64"
@@ -143,7 +143,7 @@ func (app *RuntimeApp) buildMenu() {
 		app.coreMenu.AddSeparator()
 	}
 	closeItem := NewMenuItem(
-		dlib.Tr("_Close All"),
+		Tr("_Close All"),
 		func() {
 			LOGGER.Warning("Close All")
 			for xid := range app.xids {
@@ -170,7 +170,7 @@ func (app *RuntimeApp) buildMenu() {
 	}
 	LOGGER.Debug(app.Id, "Item is docked:", isDocked)
 	dockItem := NewMenuItem(
-		dlib.Tr("_Dock"),
+		Tr("_Dock"),
 		func() {
 			LOGGER.Warning("dock item")
 			LOGGER.Info("appid:", app.Id)

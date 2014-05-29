@@ -1,8 +1,6 @@
 package main
 
-import (
-	"dlib"
-)
+import . "dlib/gettext"
 
 // If there is none related section for virtual key, it means that the
 // virtual key used to control multiple sections, such as change
@@ -162,16 +160,16 @@ func generalGetSettingVkeyAvailableValues(data connectionData, section, key stri
 		case NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT:
 			if getSettingWirelessMode(data) == NM_SETTING_WIRELESS_MODE_INFRA {
 				values = []kvalue{
-					kvalue{"none", dlib.Tr("None")},
-					kvalue{"wep", dlib.Tr("WEP 40/128-bit Key")},
-					kvalue{"wpa-psk", dlib.Tr("WPA & WPA2 Personal")},
-					kvalue{"wpa-eap", dlib.Tr("WPA & WPA2 Enterprise")},
+					kvalue{"none", Tr("None")},
+					kvalue{"wep", Tr("WEP 40/128-bit Key")},
+					kvalue{"wpa-psk", Tr("WPA & WPA2 Personal")},
+					kvalue{"wpa-eap", Tr("WPA & WPA2 Enterprise")},
 				}
 			} else {
 				values = []kvalue{
-					kvalue{"none", dlib.Tr("None")},
-					kvalue{"wep", dlib.Tr("WEP 40/128-bit Key")},
-					kvalue{"wpa-psk", dlib.Tr("WPA & WPA2 Personal")},
+					kvalue{"none", Tr("None")},
+					kvalue{"wep", Tr("WEP 40/128-bit Key")},
+					kvalue{"wpa-psk", Tr("WPA & WPA2 Personal")},
 				}
 			}
 		}
@@ -181,27 +179,27 @@ func generalGetSettingVkeyAvailableValues(data connectionData, section, key stri
 		switch key {
 		case NM_SETTING_VK_VPN_L2TP_MPPE_SECURITY:
 			values = []kvalue{
-				kvalue{"default", dlib.Tr("All Available (default)")},
-				kvalue{"128-bit", dlib.Tr("128-bit (most secure)")},
-				kvalue{"40-bit", dlib.Tr("40-bit (less secure)")},
+				kvalue{"default", Tr("All Available (default)")},
+				kvalue{"128-bit", Tr("128-bit (most secure)")},
+				kvalue{"40-bit", Tr("40-bit (less secure)")},
 			}
 		}
 	case sectionVpnPptpPpp:
 		switch key {
 		case NM_SETTING_VK_VPN_PPTP_MPPE_SECURITY:
 			values = []kvalue{
-				kvalue{"default", dlib.Tr("All Available (default)")},
-				kvalue{"128-bit", dlib.Tr("128-bit (most secure)")},
-				kvalue{"40-bit", dlib.Tr("40-bit (less secure)")},
+				kvalue{"default", Tr("All Available (default)")},
+				kvalue{"128-bit", Tr("128-bit (most secure)")},
+				kvalue{"40-bit", Tr("40-bit (less secure)")},
 			}
 		}
 	case sectionVpnVpncAdvanced:
 		switch key {
 		case NM_SETTING_VK_VPN_VPNC_KEY_ENCRYPTION_METHOD:
 			values = []kvalue{
-				kvalue{"secure", dlib.Tr("Secure (default)")},
-				kvalue{"weak", dlib.Tr("Weak")},
-				kvalue{"none", dlib.Tr("None")},
+				kvalue{"secure", Tr("Secure (default)")},
+				kvalue{"weak", Tr("Weak")},
+				kvalue{"none", Tr("None")},
 			}
 		}
 	}
@@ -211,8 +209,8 @@ func generalGetSettingVkeyAvailableValues(data connectionData, section, key stri
 		switch key {
 		case NM_SETTING_VK_MOBILE_SERVICE_TYPE:
 			values = []kvalue{
-				kvalue{"gsm", dlib.Tr("GSM (GPRS, EDGE, UMTS, HSPA)")},
-				kvalue{"cdma", dlib.Tr("CDMA (1xRTT, EVDO)")},
+				kvalue{"gsm", Tr("GSM (GPRS, EDGE, UMTS, HSPA)")},
+				kvalue{"cdma", Tr("CDMA (1xRTT, EVDO)")},
 			}
 		}
 	}

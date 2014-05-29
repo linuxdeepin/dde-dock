@@ -25,6 +25,7 @@ import (
 	xs "dbus/com/deepin/sessionmanager"
 	"dlib"
 	"dlib/dbus"
+	"dlib/glib-2.0"
 	"dlib/logger"
 	"dlib/utils"
 	"github.com/howeyc/fsnotify"
@@ -153,7 +154,7 @@ func main() {
 	dbus.InstallOnSession(objPre)
 
 	dbus.DealWithUnhandledMessage()
-	go dlib.StartLoop()
+	go glib.StartLoop()
 	if err = dbus.Wait(); err != nil {
 		logObject.Warningf("lost dbus session: %v", err)
 		os.Exit(1)

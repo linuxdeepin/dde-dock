@@ -25,7 +25,9 @@ import (
 	libsession "dbus/com/deepin/sessionmanager"
 	"dlib"
 	"dlib/dbus"
+	. "dlib/gettext"
 	"dlib/gio-2.0"
+	"dlib/glib-2.0"
 	Logger "dlib/logger"
 	libutil "dlib/utils"
 	"os"
@@ -50,8 +52,8 @@ func main() {
 	}
 
 	defer logObj.EndTracing()
-	dlib.InitI18n()
-	dlib.Textdomain("xkeyboard-config")
+	InitI18n()
+	Textdomain("xkeyboard-config")
 
 	var err error
 	xsObj, err = libsession.NewXSettings("com.deepin.SessionManager",
@@ -107,7 +109,7 @@ func main() {
 	initGSettingsSet(tpadFlag)
 
 	dbus.DealWithUnhandledMessage()
-	go dlib.StartLoop()
+	go glib.StartLoop()
 	if err := dbus.Wait(); err != nil {
 		logObj.Warning("Lost Session DBus")
 		os.Exit(-1)

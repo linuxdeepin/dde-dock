@@ -1,8 +1,6 @@
 package main
 
-import (
-	"dlib"
-)
+import . "dlib/gettext"
 
 const (
 	NM_DEVICE_TYPE_UNKNOWN    = uint32(0)
@@ -80,8 +78,8 @@ const (
 )
 
 var availableValuesNMSettingSecretFlag = []kvalue{
-	kvalue{NM_SETTING_SECRET_FLAG_NONE, dlib.Tr("Saved")}, // system saved
-	// kvalue{NM_SETTING_SECRET_FLAG_AGENT_OWNED, dlib.Tr("Saved")},
-	kvalue{NM_SETTING_SECRET_FLAG_NOT_SAVED, dlib.Tr("Always Ask")},
-	kvalue{NM_SETTING_SECRET_FLAG_NOT_REQUIRED, dlib.Tr("Not Required")},
+	kvalue{NM_SETTING_SECRET_FLAG_NONE, Tr("Saved")}, // system saved
+	// kvalue{NM_SETTING_SECRET_FLAG_AGENT_OWNED, Tr("Saved")},
+	kvalue{NM_SETTING_SECRET_FLAG_NOT_SAVED, Tr("Always Ask")},
+	kvalue{NM_SETTING_SECRET_FLAG_NOT_REQUIRED, Tr("Not Required")},
 }

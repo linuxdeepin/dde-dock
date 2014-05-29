@@ -25,6 +25,7 @@ import (
 	"dlib"
 	"dlib/dbus"
 	"dlib/gio-2.0"
+	"dlib/glib-2.0"
 	"dlib/gobject-2.0"
 	"dlib/logger"
 	"fmt"
@@ -407,7 +408,7 @@ func main() {
 	}
 	dbus.DealWithUnhandledMessage()
 
-	go dlib.StartLoop()
+	go glib.StartLoop()
 	if err = dbus.Wait(); err != nil {
 		logObject.Info("lost dbus session:", err)
 		os.Exit(1)

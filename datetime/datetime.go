@@ -5,7 +5,9 @@ import (
 	"dlib"
 	"dlib/dbus"
 	"dlib/dbus/property"
+	. "dlib/gettext"
 	"dlib/gio-2.0"
+	"dlib/glib-2.0"
 	dlogger "dlib/logger"
 	libutils "dlib/utils"
 	"github.com/howeyc/fsnotify"
@@ -127,7 +129,7 @@ func (op *Manager) SetLocale(locale string) {
 		return
 	}
 
-	sendNotify("", "", dlib.Tr("Changing System Language, Please Wait"))
+	sendNotify("", "", Tr("Changing System Language, Please Wait"))
 	setDate.GenLocale(locale)
 	changeLocaleFlag = true
 }
@@ -177,8 +179,8 @@ func main() {
 	}
 
 	defer logger.EndTracing()
-	dlib.InitI18n()
-	dlib.Textdomain("dde-daemon")
+	InitI18n()
+	Textdomain("dde-daemon")
 
 	// configure logger
 	logger.SetRestartCommand("/usr/lib/deepin-daemon/datetime", "--debug")
@@ -203,7 +205,7 @@ func main() {
 		go setDate.SetNtpUsing(true)
 	}
 	dbus.DealWithUnhandledMessage()
-	go dlib.StartLoop()
+	go glib.StartLoop()
 	date.listenLocaleChange()
 
 	if err = dbus.Wait(); err != nil {

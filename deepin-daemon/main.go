@@ -24,6 +24,7 @@ package main
 import (
 	"dlib"
 	"dlib/dbus"
+	"dlib/glib-2.0"
 	Logger "dlib/logger"
 	libutils "dlib/utils"
 	"os"
@@ -72,7 +73,7 @@ func main() {
 	dbus.DealWithUnhandledMessage()
 
 	startMprisDaemon()
-	go dlib.StartLoop()
+	go glib.StartLoop()
 
 	if err := dbus.Wait(); err != nil {
 		os.Exit(0)

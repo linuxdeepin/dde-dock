@@ -1,7 +1,7 @@
 package main
 
 import (
-	"dlib"
+	. "dlib/gettext"
 	"strconv"
 )
 
@@ -96,18 +96,18 @@ var supportedConnectionTypes = []string{
 	connectionVpnVpnc,
 }
 var supportedConnectionTypesInfo = []connectionType{
-	// connectionType{connectionWired, dlib.Tr("Ethernet")},// don't support multiple wired connections since now
-	connectionType{connectionWireless, dlib.Tr("Wi-Fi")},
-	connectionType{connectionWirelessAdhoc, dlib.Tr("Wi-Fi Ad-Hoc")},
-	connectionType{connectionWirelessHotspot, dlib.Tr("Wi-Fi Hotspot")},
-	connectionType{connectionPppoe, dlib.Tr("PPPoE")},
-	connectionType{connectionMobileGsm, dlib.Tr("Mobile GSM (GPRS, EDGE, UMTS, HSPA)")},
-	connectionType{connectionMobileCdma, dlib.Tr("Mobile CDMA (1xRTT, EVDO)")},
-	connectionType{connectionVpnL2tp, dlib.Tr("VPN-L2TP (Layer 2 Tunneling Protocol)")},
-	connectionType{connectionVpnOpenconnect, dlib.Tr("VPN-OpenConnect (Cisco AnyConnect Compatible VPN)")},
-	connectionType{connectionVpnOpenvpn, dlib.Tr("VPN-OpenVPN")},
-	connectionType{connectionVpnPptp, dlib.Tr("VPN-PPTP (Point-to-Point Tunneling Protocol))")},
-	connectionType{connectionVpnVpnc, dlib.Tr("VPN-VPNC (Cisco Compatible VPN)")},
+	// connectionType{connectionWired, Tr("Ethernet")},// don't support multiple wired connections since now
+	connectionType{connectionWireless, Tr("Wi-Fi")},
+	connectionType{connectionWirelessAdhoc, Tr("Wi-Fi Ad-Hoc")},
+	connectionType{connectionWirelessHotspot, Tr("Wi-Fi Hotspot")},
+	connectionType{connectionPppoe, Tr("PPPoE")},
+	connectionType{connectionMobileGsm, Tr("Mobile GSM (GPRS, EDGE, UMTS, HSPA)")},
+	connectionType{connectionMobileCdma, Tr("Mobile CDMA (1xRTT, EVDO)")},
+	connectionType{connectionVpnL2tp, Tr("VPN-L2TP (Layer 2 Tunneling Protocol)")},
+	connectionType{connectionVpnOpenconnect, Tr("VPN-OpenConnect (Cisco AnyConnect Compatible VPN)")},
+	connectionType{connectionVpnOpenvpn, Tr("VPN-OpenVPN")},
+	connectionType{connectionVpnPptp, Tr("VPN-PPTP (Point-to-Point Tunneling Protocol))")},
+	connectionType{connectionVpnVpnc, Tr("VPN-VPNC (Cisco Compatible VPN)")},
 }
 
 // generate connection id when creating a new connection
@@ -115,33 +115,33 @@ func genConnectionId(connType string) (id string) {
 	var idPrefix string
 	switch connType {
 	default:
-		idPrefix = dlib.Tr("Connection")
+		idPrefix = Tr("Connection")
 	case connectionWired:
-		idPrefix = dlib.Tr("Wired Connection")
+		idPrefix = Tr("Wired Connection")
 	case connectionWireless:
-		idPrefix = dlib.Tr("Wireless Connection")
+		idPrefix = Tr("Wireless Connection")
 	case connectionWirelessAdhoc:
-		idPrefix = dlib.Tr("Wireless Ad-Hoc")
+		idPrefix = Tr("Wireless Ad-Hoc")
 	case connectionWirelessHotspot:
-		idPrefix = dlib.Tr("Wireless Ap-Hotspot")
+		idPrefix = Tr("Wireless Ap-Hotspot")
 	case connectionPppoe:
-		idPrefix = dlib.Tr("PPPoE Connection")
+		idPrefix = Tr("PPPoE Connection")
 	case connectionMobileGsm:
-		idPrefix = dlib.Tr("Mobile GSM Connection")
+		idPrefix = Tr("Mobile GSM Connection")
 	case connectionMobileCdma:
-		idPrefix = dlib.Tr("Mobile CDMA Connection")
+		idPrefix = Tr("Mobile CDMA Connection")
 	case connectionVpn:
-		idPrefix = dlib.Tr("VPN Connection")
+		idPrefix = Tr("VPN Connection")
 	case connectionVpnL2tp:
-		idPrefix = dlib.Tr("VPN L2TP")
+		idPrefix = Tr("VPN L2TP")
 	case connectionVpnOpenconnect:
-		idPrefix = dlib.Tr("VPN OpenConnect")
+		idPrefix = Tr("VPN OpenConnect")
 	case connectionVpnOpenvpn:
-		idPrefix = dlib.Tr("VPN OpenVPN")
+		idPrefix = Tr("VPN OpenVPN")
 	case connectionVpnPptp:
-		idPrefix = dlib.Tr("VPN PPTP")
+		idPrefix = Tr("VPN PPTP")
 	case connectionVpnVpnc:
-		idPrefix = dlib.Tr("VPN VPNC")
+		idPrefix = Tr("VPN VPNC")
 	}
 	allIds := nmGetConnectionIds()
 	for i := 1; ; i++ {

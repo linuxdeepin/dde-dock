@@ -1,7 +1,7 @@
 package main
 
 import (
-	"dlib"
+	. "dlib/gettext"
 	"fmt"
 )
 
@@ -83,9 +83,9 @@ const (
 )
 
 var availableValuesNML2tpSecretFlag = []kvalue{
-	kvalue{NM_L2TP_SECRET_FLAG_NONE, dlib.Tr("Saved")}, // system saved
-	kvalue{NM_L2TP_SECRET_FLAG_NOT_SAVED, dlib.Tr("Always Ask")},
-	kvalue{NM_L2TP_SECRET_FLAG_NOT_REQUIRED, dlib.Tr("Not Required")},
+	kvalue{NM_L2TP_SECRET_FLAG_NONE, Tr("Saved")}, // system saved
+	kvalue{NM_L2TP_SECRET_FLAG_NOT_SAVED, Tr("Always Ask")},
+	kvalue{NM_L2TP_SECRET_FLAG_NOT_REQUIRED, Tr("Not Required")},
 }
 
 func isVpnL2tpNeedShowPassword(data connectionData) bool {

@@ -4,7 +4,9 @@ import (
 	// "code.google.com/p/gettext-go/gettext"
 	"dlib"
 	"dlib/dbus"
+	. "dlib/gettext"
 	"dlib/gio-2.0"
+	"dlib/glib-2.0"
 	l "dlib/logger"
 	"log"
 	"os"
@@ -19,7 +21,7 @@ func main() {
 		logger.Warning("Another com.deepin.daemon.Launcher is running.")
 		return
 	}
-	dlib.InitI18n()
+	InitI18n()
 	// DesktopAppInfo.ShouldShow does not know deepin.
 	gio.DesktopAppInfoSetDesktopEnv("Deepin")
 
@@ -36,7 +38,7 @@ func main() {
 		defer tree.DestroyTrie(treeId)
 	}
 	dbus.DealWithUnhandledMessage()
-	go dlib.StartLoop()
+	go glib.StartLoop()
 	if err := dbus.Wait(); err != nil {
 		log.Panicln("lost dbus session:", err)
 		os.Exit(1)

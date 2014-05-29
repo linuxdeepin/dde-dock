@@ -25,6 +25,7 @@ import (
 	"dlib"
 	"dlib/dbus"
 	"dlib/gio-2.0"
+	"dlib/glib-2.0"
 	libLogger "dlib/logger"
 	libUtils "dlib/utils"
 	"github.com/BurntSushi/xgbutil"
@@ -88,7 +89,7 @@ func main() {
 
 	dbus.DealWithUnhandledMessage()
 
-	go dlib.StartLoop()
+	go glib.StartLoop()
 	go xevent.Main(X)
 
 	if err := dbus.Wait(); err != nil {

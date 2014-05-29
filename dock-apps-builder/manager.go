@@ -2,6 +2,7 @@ package main
 
 import "dbus/com/deepin/daemon/dock"
 import "dlib"
+import . "dlib/gettext"
 import "dlib/dbus"
 import "dlib/logger"
 import "flag"
@@ -202,7 +203,7 @@ func main() {
 		LOGGER.SetLogLevel(logger.LEVEL_DEBUG)
 	}
 
-	dlib.InitI18n()
+	InitI18n()
 	initDeepin()
 	for _, id := range loadAll() {
 		LOGGER.Debug("load", id)

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"dlib"
+	. "dlib/gettext"
 	"fmt"
 )
 
@@ -49,14 +49,14 @@ var availableValues8021xPhasesAuth = make(availableValues)
 
 func init() {
 	// 'pap', 'chap', 'mschap', 'mschapv2', 'gtc', 'otp', 'md5', and 'tls'
-	availableValues8021xPhasesAuth["pap"] = kvalue{"pap", dlib.Tr("PAP")}
-	availableValues8021xPhasesAuth["chap"] = kvalue{"chap", dlib.Tr("CHAP")}
-	availableValues8021xPhasesAuth["mschap"] = kvalue{"mschap", dlib.Tr("MSCHAP")}
-	availableValues8021xPhasesAuth["mschapv2"] = kvalue{"mschapv2", dlib.Tr("MSCHAPV2")}
-	availableValues8021xPhasesAuth["gtc"] = kvalue{"gtc", dlib.Tr("GTC")}
-	availableValues8021xPhasesAuth["otp"] = kvalue{"otp", dlib.Tr("OTP")}
-	availableValues8021xPhasesAuth["md5"] = kvalue{"md5", dlib.Tr("MD5")}
-	availableValues8021xPhasesAuth["tls"] = kvalue{"tls", dlib.Tr("TLS")}
+	availableValues8021xPhasesAuth["pap"] = kvalue{"pap", Tr("PAP")}
+	availableValues8021xPhasesAuth["chap"] = kvalue{"chap", Tr("CHAP")}
+	availableValues8021xPhasesAuth["mschap"] = kvalue{"mschap", Tr("MSCHAP")}
+	availableValues8021xPhasesAuth["mschapv2"] = kvalue{"mschapv2", Tr("MSCHAPV2")}
+	availableValues8021xPhasesAuth["gtc"] = kvalue{"gtc", Tr("GTC")}
+	availableValues8021xPhasesAuth["otp"] = kvalue{"otp", Tr("OTP")}
+	availableValues8021xPhasesAuth["md5"] = kvalue{"md5", Tr("MD5")}
+	availableValues8021xPhasesAuth["tls"] = kvalue{"tls", Tr("TLS")}
 }
 
 // Get available keys
@@ -144,33 +144,33 @@ func getSetting8021xAvailableValues(data connectionData, key string) (values []k
 	case NM_SETTING_802_1X_EAP:
 		if getCustomConnectionType(data) == connectionWired {
 			values = []kvalue{
-				kvalue{"tls", dlib.Tr("TLS")},
-				kvalue{"md5", dlib.Tr("MD5")},
-				kvalue{"fast", dlib.Tr("FAST")},
-				kvalue{"ttls", dlib.Tr("Tunneled TLS")},
-				kvalue{"peap", dlib.Tr("Protected EAP")},
+				kvalue{"tls", Tr("TLS")},
+				kvalue{"md5", Tr("MD5")},
+				kvalue{"fast", Tr("FAST")},
+				kvalue{"ttls", Tr("Tunneled TLS")},
+				kvalue{"peap", Tr("Protected EAP")},
 			}
 		} else {
 			values = []kvalue{
-				kvalue{"tls", dlib.Tr("TLS")},
-				kvalue{"leap", dlib.Tr("LEAP")},
-				kvalue{"fast", dlib.Tr("FAST")},
-				kvalue{"ttls", dlib.Tr("Tunneled TLS")},
-				kvalue{"peap", dlib.Tr("Protected EAP")},
+				kvalue{"tls", Tr("TLS")},
+				kvalue{"leap", Tr("LEAP")},
+				kvalue{"fast", Tr("FAST")},
+				kvalue{"ttls", Tr("Tunneled TLS")},
+				kvalue{"peap", Tr("Protected EAP")},
 			}
 		}
 	case NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING:
 		values = []kvalue{
-			kvalue{"0", dlib.Tr("Disabled")},      // Disabled
-			kvalue{"1", dlib.Tr("Anonymous")},     // Anonymous, allow unauthenticated provisioning
-			kvalue{"2", dlib.Tr("Authenticated")}, // Authenticated, allow authenticated provisioning
-			kvalue{"3", dlib.Tr("Both")},          // Both, allow both authenticated and unauthenticated provisioning
+			kvalue{"0", Tr("Disabled")},      // Disabled
+			kvalue{"1", Tr("Anonymous")},     // Anonymous, allow unauthenticated provisioning
+			kvalue{"2", Tr("Authenticated")}, // Authenticated, allow authenticated provisioning
+			kvalue{"3", Tr("Both")},          // Both, allow both authenticated and unauthenticated provisioning
 		}
 	case NM_SETTING_802_1X_PHASE1_PEAPVER:
 		values = []kvalue{
-			kvalue{"", dlib.Tr("Automatic")}, // auto mode
-			kvalue{"0", dlib.Tr("Version 0")},
-			kvalue{"1", dlib.Tr("Version 1")},
+			kvalue{"", Tr("Automatic")}, // auto mode
+			kvalue{"0", Tr("Version 0")},
+			kvalue{"1", Tr("Version 1")},
 		}
 	case NM_SETTING_802_1X_PHASE2_AUTH:
 		switch getSettingVk8021xEap(data) {

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"dlib"
+	. "dlib/gettext"
 	"fmt"
 )
 
@@ -73,9 +73,9 @@ const (
 )
 
 var availableValuesNMPptpSecretFlag = []kvalue{
-	kvalue{NM_PPTP_SECRET_FLAG_NONE, dlib.Tr("Saved")}, // system saved
-	kvalue{NM_PPTP_SECRET_FLAG_NOT_SAVED, dlib.Tr("Always Ask")},
-	kvalue{NM_PPTP_SECRET_FLAG_NOT_REQUIRED, dlib.Tr("Not Required")},
+	kvalue{NM_PPTP_SECRET_FLAG_NONE, Tr("Saved")}, // system saved
+	kvalue{NM_PPTP_SECRET_FLAG_NOT_SAVED, Tr("Always Ask")},
+	kvalue{NM_PPTP_SECRET_FLAG_NOT_REQUIRED, Tr("Not Required")},
 }
 
 func isVpnPptpNeedShowPassword(data connectionData) bool {

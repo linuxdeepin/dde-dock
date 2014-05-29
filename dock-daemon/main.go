@@ -3,6 +3,8 @@ package main
 import (
 	"dlib"
 	"dlib/dbus"
+	. "dlib/gettext"
+	"dlib/glib-2.0"
 	liblogger "dlib/logger"
 	"os"
 )
@@ -22,7 +24,7 @@ func main() {
 		}
 	}()
 
-	dlib.InitI18n()
+	InitI18n()
 
 	// configure logger
 	logger.SetRestartCommand("/usr/lib/deepin-daemon/grub2", "--debug")
@@ -53,7 +55,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	go dlib.StartLoop()
+	go glib.StartLoop()
 
 	cm := NewClientManager()
 	err = dbus.InstallOnSession(cm)
