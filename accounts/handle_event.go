@@ -186,3 +186,49 @@ func (obj *Manager) handleUserInfoChanged() {
 		}
 	}
 }
+
+func (obj *User) watchUserConfig() {
+	if obj.watcher == nil {
+		var err error
+		if obj.watcher, err = fsnotify.NewWatcher(); err != nil {
+			logger.Error("New watcher in newUser failed:", err)
+			panic(err)
+		}
+	}
+
+	obj.watcher.Watch(USER_CONFIG_FILE + obj.UserName)
+}
+
+func (obj *User) removeUserConfigWatch() {
+	if obj.watcher == nil {
+		return
+	}
+
+	obj.watcher.RemoveWatch(USER_CONFIG_FILE + obj.UserName)
+}
+
+func (obj *User) handUserConfigChanged() {
+	for {
+		select {
+		case ev := <-obj.watcher.Event:
+			if ev == nil {
+				break
+			}
+
+			if ok, _ := regexp.MatchString(`\.swa?px?$`, ev.Name); ok {
+				break
+			}
+
+			logger.Info("User Config Event:", ev)
+			if ev.IsDelete() {
+				obj.removeUserConfigWatch()
+				obj.watchUserConfig()
+			} else if ev.IsModify() {
+				obj.updatePropIconList(obj.getPropIconList())
+				obj.updatePropIconFile(obj.getPropIconFile())
+				obj.updatePropBackgroundFile(obj.getPropBackgroundFile())
+				obj.updatePropHistoryIcons(obj.getPropHistoryIcons())
+			}
+		}
+	}
+}

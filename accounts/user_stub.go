@@ -227,9 +227,6 @@ func (obj *User) addHistoryIcon(iconPath string) {
 
 	list, _ := objUtil.ReadKeyFromKeyFile(file, "User",
 		"HistoryIcons", []string{})
-	if list == nil {
-		return
-	}
 
 	ret := []string{}
 	ret = append(ret, iconPath)
@@ -314,6 +311,7 @@ func (obj *User) setPropIconFile(icon string) {
 		return
 	}
 
+	logger.Info("Icon File:", icon)
 	file := USER_CONFIG_FILE + obj.UserName
 	objUtil.WriteKeyToKeyFile(file, "User", "Icon", icon)
 	obj.addHistoryIcon(icon)

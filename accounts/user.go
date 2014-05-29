@@ -22,6 +22,7 @@
 package main
 
 import (
+	"github.com/howeyc/fsnotify"
 	"io/ioutil"
 	"math/rand"
 	"os"
@@ -45,6 +46,7 @@ type User struct {
 	HistoryIcons   []string
 	IconList       []string
 	objectPath     string
+	watcher        *fsnotify.Watcher
 }
 
 func addUserToAdmList(name string) {
@@ -259,6 +261,14 @@ func newUser(path string) *User {
 	obj.updatePropIconFile(obj.getPropIconFile())
 	obj.updatePropBackgroundFile(obj.getPropBackgroundFile())
 	obj.updatePropHistoryIcons(obj.getPropHistoryIcons())
+
+	var err error
+	if obj.watcher, err = fsnotify.NewWatcher(); err != nil {
+		logger.Error("New watcher in newUser failed:", err)
+		panic(err)
+	}
+	obj.watchUserConfig()
+	go obj.handUserConfigChanged()
 
 	return obj
 }
