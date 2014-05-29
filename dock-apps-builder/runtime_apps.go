@@ -16,8 +16,6 @@ import (
 	"github.com/BurntSushi/xgbutil/xgraphics"
 	"github.com/BurntSushi/xgbutil/xprop"
 	"github.com/BurntSushi/xgbutil/xwindow"
-	"io/ioutil"
-	"path"
 	"strings"
 )
 
@@ -351,39 +349,23 @@ func isNormalWindow(xid xproto.Window) bool {
 
 func (app *RuntimeApp) updateIcon(xid xproto.Window) {
 	if app.core != nil {
-		gioIcon := app.core.GetIcon()
-		if gioIcon != nil {
-			LOGGER.Debug("GetIcon:", gioIcon.ToString())
-			icon := get_theme_icon(gioIcon.ToString(), 48)
-			if icon != "" {
-				LOGGER.Debug("get_theme_icon:", icon)
-				// the path.Ext return ".xxx"
-				ext := path.Ext(icon)[1:]
-				LOGGER.Debug("ext:", ext)
-				if strings.EqualFold(ext, "xpm") {
-					LOGGER.Debug("change xmp to data uri")
-					buf, err := ioutil.ReadFile(icon)
-					if err != nil {
-						app.xids[xid].Icon = "data:image/png;base64," +
-							base64.StdEncoding.EncodeToString(buf)
-						return
-					}
-				} else {
-					app.xids[xid].Icon = icon
-					return
-				}
-			}
+		icon := getAppIcon(app.core)
+		if icon != "" {
+			app.xids[xid].Icon = icon
+			return
 		}
 	}
+
 	icon, err := xgraphics.FindIcon(XU, xid, 48, 48)
 	if err == nil {
 		buf := bytes.NewBuffer(nil)
 		icon.WritePng(buf)
 		app.xids[xid].Icon = "data:image/png;base64," + base64.StdEncoding.EncodeToString(buf.Bytes())
-	} else {
-		name, _ := ewmh.WmIconNameGet(XU, xid)
-		app.xids[xid].Icon = name
+		return
 	}
+
+	name, _ := ewmh.WmIconNameGet(XU, xid)
+	app.xids[xid].Icon = name
 }
 func (app *RuntimeApp) updateWmClass(xid xproto.Window) {
 	if name, err := ewmh.WmNameGet(XU, xid); err == nil {

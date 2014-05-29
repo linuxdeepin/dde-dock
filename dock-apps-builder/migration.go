@@ -10,6 +10,7 @@ package main
 // char* get_exe_name(int pid);
 //char* icon_name_to_path(const char* name, int size);
 // void init_deepin();
+// char* get_data_uri_by_path(const char* path);
 import "C"
 import "strings"
 import "unsafe"
@@ -44,4 +45,13 @@ func get_theme_icon(name string, size int) string {
 
 func initDeepin() {
 	C.init_deepin()
+}
+
+func xpm_to_dataurl(icon string) string {
+	iconName := C.CString(icon)
+	defer func() {
+		C.free(unsafe.Pointer(iconName))
+	}()
+	return C.GoString(C.get_data_uri_by_path(iconName))
+
 }

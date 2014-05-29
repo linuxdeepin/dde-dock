@@ -36,7 +36,8 @@ func NewNormalApp(id string) *NormalApp {
 	if app.core == nil {
 		return nil
 	}
-	app.Icon = get_theme_icon(app.core.GetIcon().ToString(), 48)
+	app.Icon = getAppIcon(app.core)
+	LOGGER.Info("app icon:", app.Icon)
 	app.Name = app.core.GetDisplayName()
 	LOGGER.Info("Name", app.Name)
 	app.buildMenu()
