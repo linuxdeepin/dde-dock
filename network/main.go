@@ -7,11 +7,10 @@ import (
 )
 
 var (
-	logger             = liblogger.NewLogger(dbusNetworkDest)
-	manager            *Manager
-	connectionSessions []*ConnectionSession
-	running            bool
-	notifyStop         = make(chan int, 100)
+	logger     = liblogger.NewLogger(dbusNetworkDest)
+	manager    *Manager
+	running    bool
+	notifyStop = make(chan int, 100)
 )
 
 func Start() {
@@ -58,10 +57,7 @@ func Start() {
 	select {
 	case <-notifyStop:
 		dbus.UnInstallObject(manager)
-		// clean up connection session dbus interfaces
-		for _, cs := range connectionSessions {
-			dbus.UnInstallObject(cs)
-		}
+		clearConnectionSessions()
 	case <-notfiyDbusStop:
 	}
 }

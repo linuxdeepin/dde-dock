@@ -25,7 +25,7 @@ func TestModuleStartStop(t *testing.T) {
 	Stop()
 	Stop()
 	go func() {
-		time.Sleep(100 * time.Second)
+		time.Sleep(3 * time.Second)
 		Start()
 		Stop()
 		Stop()
@@ -33,5 +33,5 @@ func TestModuleStartStop(t *testing.T) {
 	Start()
 	Stop()
 	Stop()
-	time.Sleep(100 * time.Second)
+	time.Sleep(30 * time.Second)
 }
