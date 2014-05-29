@@ -1,4 +1,4 @@
-package main
+package audio
 
 import "dlib/dbus"
 import "dlib/pulse"

@@ -1,4 +1,4 @@
-package main
+package audio
 
 import "dlib"
 import "dlib/dbus"
@@ -225,7 +225,7 @@ func (s *Source) SetPort(name string) {
 	s.core.SetPort(name)
 }
 
-func main() {
+func Start() {
 	defer Logger.EndTracing()
 	if !dlib.UniqueOnSession("com.deepin.daemon.Audio") {
 		Logger.Warning("There already has an Audio daemon running.")

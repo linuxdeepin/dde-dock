@@ -1,4 +1,4 @@
-package main
+package display
 
 const (
 	DisplayModeUnknow  = -100

@@ -19,12 +19,13 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package main
+package inputdevices
 
 import (
 	libsession "dbus/com/deepin/sessionmanager"
 	"dlib"
 	"dlib/dbus"
+	. "dlib/gettext"
 	"dlib/gio-2.0"
 	Logger "dlib/logger"
 	libutil "dlib/utils"
@@ -43,15 +44,15 @@ var (
 	layoutDescMap = make(map[string]string)
 )
 
-func main() {
+func Start() {
 	if !dlib.UniqueOnSession(DEVICE_DEST) {
 		logObj.Warning("Input device has running")
 		return
 	}
 
 	defer logObj.EndTracing()
-	dlib.InitI18n()
-	dlib.Textdomain("xkeyboard-config")
+	InitI18n()
+	Textdomain("xkeyboard-config")
 
 	var err error
 	xsObj, err = libsession.NewXSettings("com.deepin.SessionManager",
@@ -107,7 +108,6 @@ func main() {
 	initGSettingsSet(tpadFlag)
 
 	dbus.DealWithUnhandledMessage()
-	go dlib.StartLoop()
 	if err := dbus.Wait(); err != nil {
 		logObj.Warning("Lost Session DBus")
 		os.Exit(-1)

@@ -1,4 +1,4 @@
-package main
+package display
 
 import "dbus/com/deepin/daemon/keybinding"
 

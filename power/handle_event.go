@@ -1,5 +1,5 @@
 //handle LidSwitch, PowerButton and Battery status event.
-package main
+package power
 
 import "os/exec"
 import "dbus/com/deepin/sessionmanager"

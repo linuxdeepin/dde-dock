@@ -1,4 +1,4 @@
-package main
+package display
 
 import (
 	"dlib"
@@ -426,7 +426,7 @@ func (dpy *Display) Reset() {
 	dpy.apply(true)
 }
 
-func main() {
+func Start() {
 	defer Logger.EndTracing()
 
 	if !dlib.UniqueOnSession("com.deepin.daemon.Display") {

@@ -27,7 +27,6 @@ static GsdClipboardManager *clip_manager = NULL;
 void
 start_clip_manager()
 {
-	gtk_init(NULL, NULL);
 	if (clip_manager != NULL) {
 		gsd_clipboard_manager_stop(clip_manager);
 		g_object_unref(G_OBJECT(clip_manager));

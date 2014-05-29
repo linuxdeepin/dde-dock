@@ -1,10 +1,12 @@
-package main
+package power
 
 import "dlib"
+import . "dlib/gettext"
 import "dlib/logger"
 import "dlib/dbus"
 import "dlib/dbus/property"
 import "dlib/gio-2.0"
+import "dlib/glib-2.0"
 import "dbus/com/deepin/api/sound"
 import "dbus/org/freedesktop/notifications"
 import ss "dbus/org/freedesktop/screensaver"
@@ -109,10 +111,10 @@ func (p *Power) sendNotify(icon, summary, body string) {
 	}
 }
 
-func main() {
+func Start() {
 	defer LOGGER.EndTracing()
-	dlib.InitI18n()
-	dlib.Textdomain("dde-daemon")
+	InitI18n()
+	Textdomain("dde-daemon")
 	if !dlib.UniqueOnSession("com.deepin.daemon.Power") {
 		LOGGER.Warning("There already has an Power daemon running.")
 		return
@@ -124,7 +126,7 @@ func main() {
 	if err := dbus.InstallOnSession(p); err != nil {
 		LOGGER.Error("Failed InstallOnSession:", err)
 	}
-	go dlib.StartLoop()
+	go glib.StartLoop()
 
 	dbus.DealWithUnhandledMessage()
 	go newFullScreenWorkaround().start()

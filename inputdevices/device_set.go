@@ -19,7 +19,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package main
+package inputdevices
 
 // #cgo pkg-config: gdk-3.0 x11 xi glib-2.0 gio-2.0
 // #cgo CFLAGS: -Wall -g

@@ -19,7 +19,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package main
+package clipboard
 
 // #cgo pkg-config: gtk+-3.0 x11 glib-2.0
 // #cgo CFLAGS: -Wall -g
@@ -51,7 +51,7 @@ func (op *Manager) StopClipboard() {
 	C.stop_clip_manager()
 }
 
-func main() {
+func Start() {
 	if !dlib.UniqueOnSession("com.deepin.daemon.Clipboard") {
 		logObj.Warning("Clipboard has running...")
 		return

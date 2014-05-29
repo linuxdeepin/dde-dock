@@ -1,4 +1,4 @@
-package main
+package power
 
 import (
 	"dlib/dbus"

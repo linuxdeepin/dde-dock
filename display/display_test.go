@@ -1,4 +1,4 @@
-package main
+package display
 
 import fmtp "github.com/kr/pretty"
 import "testing"

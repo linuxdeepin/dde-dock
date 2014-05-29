@@ -35,7 +35,6 @@ static void device_added_cb(GdkDeviceManager *manager,
 void
 init_gdk_env ()
 {
-	gdk_init(NULL, NULL);
 	listen_device_changed();
 }
 

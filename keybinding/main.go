@@ -19,12 +19,13 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package main
+package keybinding
 
 import (
 	"dlib"
 	"dlib/dbus"
 	"dlib/gio-2.0"
+	"dlib/glib-2.0"
 	libLogger "dlib/logger"
 	libUtils "dlib/utils"
 	"github.com/BurntSushi/xgbutil"
@@ -67,7 +68,7 @@ func StartKeyBinding() {
 	grabMediaKeys()
 }
 
-func main() {
+func Start() {
 	if !dlib.UniqueOnSession(KEYBIND_DEST) {
 		logObj.Error("keybinding has running")
 		return
@@ -88,7 +89,7 @@ func main() {
 
 	dbus.DealWithUnhandledMessage()
 
-	go dlib.StartLoop()
+	go glib.StartLoop()
 	go xevent.Main(X)
 
 	if err := dbus.Wait(); err != nil {
