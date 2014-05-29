@@ -50,8 +50,11 @@ func (obj *Manager) AllowGuestAccount(dbusMsg dbus.DMessage, allow bool) bool {
 		dbusMsg.GetSenderPID()); !ok {
 		return false
 	}
+
+	logger.Infof("Allow guest: %v", allow)
 	if ok := objUtil.WriteKeyToKeyFile(ACCOUNT_CONFIG_FILE,
 		ACCOUNT_GROUP_KEY, ACCOUNT_KEY_GUEST, allow); !ok {
+		logger.Error("AllowGuest Failed")
 		return false
 	}
 

@@ -182,7 +182,7 @@ func getUserList() []string {
 
 func isAllowGuest() bool {
 	if v, ok := objUtil.ReadKeyFromKeyFile(ACCOUNT_CONFIG_FILE,
-		ACCOUNT_GROUP_KEY, ACCOUNT_KEY_GUEST, true); ok {
+		ACCOUNT_GROUP_KEY, ACCOUNT_KEY_GUEST, true); !ok {
 		objUtil.WriteKeyToKeyFile(ACCOUNT_CONFIG_FILE,
 			ACCOUNT_GROUP_KEY, ACCOUNT_KEY_GUEST, false)
 

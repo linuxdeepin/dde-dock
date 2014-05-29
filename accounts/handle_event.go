@@ -40,6 +40,7 @@ func (obj *Manager) watchUserListFile() {
 	}
 
 	obj.listWatcher.Watch(ETC_PASSWD)
+	obj.listWatcher.Watch(ACCOUNT_CONFIG_FILE)
 }
 
 func (obj *Manager) removeUserListFileWatch() {
@@ -48,6 +49,7 @@ func (obj *Manager) removeUserListFileWatch() {
 	}
 
 	obj.listWatcher.RemoveWatch(ETC_PASSWD)
+	obj.listWatcher.RemoveWatch(ACCOUNT_CONFIG_FILE)
 }
 
 func (obj *Manager) watchUserInfoFile() {
@@ -108,10 +110,16 @@ func (obj *Manager) handleUserListChanged() {
 			}
 
 			logger.Info("User List Event:", ev)
+			ok1, _ := regexp.MatchString(ACCOUNT_CONFIG_FILE, ev.Name)
+
 			if ev.IsDelete() {
 				obj.removeUserListFileWatch()
 				obj.watchUserListFile()
 			} else if ev.IsModify() {
+				if ok1 {
+					obj.setPropAllowGuest(isAllowGuest())
+					break
+				}
 				if !_handleFlag {
 					var mutex sync.Mutex
 					mutex.Lock()
