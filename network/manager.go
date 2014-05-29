@@ -3,6 +3,7 @@ package main
 import "dlib/dbus"
 import "dlib/dbus/property"
 import nm "dbus/org/freedesktop/networkmanager"
+import . "dlib/gettext"
 
 const (
 	dbusNmDest      = "org.freedesktop.NetworkManager"
@@ -13,6 +14,12 @@ const (
 
 // TODO put here temporary
 var connectionSessions []*ConnectionSession
+
+// TODO put here temporary
+func init() {
+	InitI18n()
+	Textdomain("dde-daemon")
+}
 
 // TODO refactor code
 const (
