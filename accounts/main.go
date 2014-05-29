@@ -40,7 +40,7 @@ func main() {
 		return
 	}
 
-	logger.EndTracing()
+	defer logger.EndTracing()
 	logger.SetRestartCommand("/usr/lib/deepin-daemon/accounts")
 
 	obj := GetManager()
