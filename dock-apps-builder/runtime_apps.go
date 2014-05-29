@@ -298,6 +298,14 @@ var cannotBeDockedType []string = []string{
 }
 
 func isNormalWindow(xid xproto.Window) bool {
+	winProps, err := xproto.GetWindowAttributes(XU.Conn(), xid).Reply()
+	if err != nil {
+		LOGGER.Debug("faild Get WindowAttributes:", xid, err)
+		return false
+	}
+	if winProps.MapState != xproto.MapStateViewable {
+		return false
+	}
 	// LOGGER.Debug("enter isNormalWindow:", xid)
 	if wmClass, err := icccm.WmClassGet(XU, xid); err == nil {
 		if wmClass.Instance == "explorer.exe" && wmClass.Class == "Wine" {
