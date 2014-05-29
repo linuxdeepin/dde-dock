@@ -238,14 +238,7 @@ func (m *Manager) CreateConnection(connType string, devPath dbus.ObjectPath) (se
 		logger.Error(err)
 		return
 	}
-
-	// install dbus session
-	err = dbus.InstallOnSession(session)
-	if err != nil {
-		logger.Error(err)
-		return
-	}
-
+	addConnectionSession(session)
 	return
 }
 
@@ -256,15 +249,44 @@ func (m *Manager) EditConnection(uuid string, devPath dbus.ObjectPath) (session 
 		logger.Error(err)
 		return
 	}
+	addConnectionSession(session)
+	return
+}
 
+func addConnectionSession(session *ConnectionSession) {
 	// install dbus session
-	err = dbus.InstallOnSession(session)
+	err := dbus.InstallOnSession(session)
 	if err != nil {
 		logger.Error(err)
 		return
 	}
+	connectionSessions = append(connectionSessions, session)
+}
+func removeConnectionSession(session *ConnectionSession) {
+	i := getConnectionSessionIndex(session)
+	if i < 0 {
+		return
+	}
+	dbus.UnInstallObject(session)
 
-	return
+	copy(connectionSessions[i:], connectionSessions[i+1:])
+	newlen := len(connectionSessions) - 1
+	connectionSessions[newlen] = nil
+	connectionSessions = connectionSessions[:newlen]
+}
+func getConnectionSessionIndex(session *ConnectionSession) int {
+	for i, s := range connectionSessions {
+		if s.sessionPath == session.sessionPath {
+			return i
+		}
+	}
+	return -1
+}
+func clearConnectionSessions() {
+	for _, session := range connectionSessions {
+		dbus.UnInstallObject(session)
+	}
+	connectionSessions = nil
 }
 
 // DeleteConnection delete a connection through uuid.

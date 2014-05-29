@@ -199,7 +199,7 @@ func (s *ConnectionSession) Save() bool {
 		}
 	}
 
-	dbus.UnInstallObject(s)
+	removeConnectionSession(s)
 	return true
 }
 
@@ -214,7 +214,7 @@ func (s *ConnectionSession) isErrorOccured() bool {
 
 // Close cancel current connection.
 func (s *ConnectionSession) Close() {
-	dbus.UnInstallObject(s)
+	removeConnectionSession(s)
 }
 
 // GetAvailableValues return available values marshaled by json for target key.
