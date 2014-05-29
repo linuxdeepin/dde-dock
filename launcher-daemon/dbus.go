@@ -20,6 +20,10 @@ const (
 
 	AppDirName     string      = "applications"
 	DirDefaultPerm os.FileMode = 0755
+
+	SOFTWARE_STATUS_CREATED  string = "created"
+	SOFTWARE_STATUS_MODIFIED string = "updated"
+	SOFTWARE_STATUS_DELETED  string = "deleted"
 )
 
 type ItemChangedStatus struct {
@@ -231,10 +235,6 @@ func (d *LauncherDBus) GetFavors() FavorItemList {
 
 func (d *LauncherDBus) SaveFavors(items FavorItemList) bool {
 	return saveFavors(items)
-}
-
-func (d *LauncherDBus) GetPackageNames(path string) []string {
-	return getPackageNames(path)
 }
 
 func (d *LauncherDBus) GetAppId(path string) string {
