@@ -174,7 +174,6 @@ func nmNewDeviceAdsl(devPath dbus.ObjectPath) (dev *nm.DeviceAdsl, err error) {
 	}
 	return
 }
-
 func nmNewAccessPoint(apPath dbus.ObjectPath) (ap *nm.AccessPoint, err error) {
 	ap, err = nm.NewAccessPoint(dbusNmDest, apPath)
 	if err != nil {
@@ -182,6 +181,50 @@ func nmNewAccessPoint(apPath dbus.ObjectPath) (ap *nm.AccessPoint, err error) {
 		return
 	}
 	return
+}
+
+// Destroy network manager objects
+func nmDestroyDevice(dev *nm.Device) {
+	if dev == nil {
+		logger.Error("Device to destroy is nil")
+		return
+	}
+	nm.DestroyDevice(dev)
+}
+func nmDestroyDeviceWired(dev *nm.DeviceWired) {
+	if dev == nil {
+		logger.Error("DeviceWired to destroy is null")
+		return
+	}
+	nm.DestroyDeviceWired(dev)
+}
+func nmDestroyDeviceWireless(dev *nm.DeviceWireless) {
+	if dev == nil {
+		logger.Error("DeviceWireless to destroy is nil")
+		return
+	}
+	nm.DestroyDeviceWireless(dev)
+}
+func nmDestroyAccessPoint(ap *nm.AccessPoint) {
+	if ap == nil {
+		logger.Error("AccessPoint to destroy is nil")
+		return
+	}
+	nm.DestroyAccessPoint(ap)
+}
+func nmDestroySettingsConnection(conn *nm.SettingsConnection) {
+	if conn == nil {
+		logger.Error("SettingsConnection to destroy is nil")
+		return
+	}
+	nm.DestroySettingsConnection(conn)
+}
+func nmDestroyActiveConnection(aconn *nm.ActiveConnection) {
+	if aconn == nil {
+		logger.Error("ActiveConnection to destroy is nil")
+		return
+	}
+	nm.DestroyActiveConnection(aconn)
 }
 
 func nmNewActiveConnection(apath dbus.ObjectPath) (ac *nm.ActiveConnection, err error) {

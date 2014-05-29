@@ -107,8 +107,8 @@ func ToKeyDefaultValue(keyName string) (value string) {
 		value = `make([]uint32, 0)`
 		// value = `nil`
 	case "ktypeArrayArrayByte", "ktypeWrapperIpv6Dns":
-		// value = `make([][]byte, 0)`
-		value = `nil`
+		value = `make([][]byte, 0)`
+		// value = `nil`
 	case "ktypeArrayArrayUint32", "ktypeWrapperIpv4Addresses", "ktypeWrapperIpv4Routes":
 		value = `make([][]uint32, 0)`
 		// value = `nil`

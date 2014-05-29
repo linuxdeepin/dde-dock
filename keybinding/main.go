@@ -73,7 +73,7 @@ func main() {
 		return
 	}
 
-	logObj.EndTracing()
+	defer logObj.EndTracing()
 	StartKeyBinding()
 
 	if err := dbus.InstallOnSession(GetManager()); err != nil {

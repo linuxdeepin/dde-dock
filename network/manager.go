@@ -95,7 +95,7 @@ func (m *Manager) updateActiveConnections() {
 	// reset all exists active connection objects
 	for i, _ := range m.activeConnections {
 		// destroy object to reset all property connects
-		nm.DestroyActiveConnection(m.activeConnections[i].nmaconn)
+		nmDestroyActiveConnection(m.activeConnections[i].nmaconn)
 		m.activeConnections[i] = nil
 	}
 	m.activeConnections = make([]*activeConnection, 0)

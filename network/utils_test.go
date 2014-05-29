@@ -124,42 +124,42 @@ func (*Utils) TestConnectionDataDefaultValue(c *C) {
 	c.Check(isSettingKeyExists(data, section8021x, NM_SETTING_802_1X_CA_CERT), Equals, false)
 
 	// ktypeWrapperIpv4Dns
-	defaultValueJSON = `null`
+	defaultValueJSON = `[]`
 	setValueJSON = `[""]`
 	c.Check(getSettingIp4ConfigDnsJSON(data), Equals, defaultValueJSON)
 	setSettingIp4ConfigDnsJSON(data, setValueJSON)
 	c.Check(isSettingKeyExists(data, sectionIpv4, NM_SETTING_IP4_CONFIG_DNS), Equals, false)
 
 	// ktypeWrapperIpv4Addresses
-	defaultValueJSON = `null`
+	defaultValueJSON = `[]`
 	setValueJSON = `[{"Address":"","Mask":"","Gateway":""}]`
 	c.Check(getSettingIp4ConfigAddressesJSON(data), Equals, defaultValueJSON)
 	setSettingIp4ConfigAddressesJSON(data, setValueJSON)
 	c.Check(isSettingKeyExists(data, sectionIpv4, NM_SETTING_IP4_CONFIG_ADDRESSES), Equals, false)
 
 	// ktypeWrapperIpv4Routes
-	defaultValueJSON = `null`
+	defaultValueJSON = `[]`
 	setValueJSON = `[{"Address":"","Mask":"","NextHop":"","Metric":0}]`
 	c.Check(getSettingIp4ConfigRoutesJSON(data), Equals, defaultValueJSON)
 	setSettingIp4ConfigRoutesJSON(data, setValueJSON)
 	c.Check(isSettingKeyExists(data, sectionIpv4, NM_SETTING_IP4_CONFIG_ROUTES), Equals, false)
 
 	// ktypeWrapperIpv6Dns
-	defaultValueJSON = `null`
+	defaultValueJSON = `[]`
 	setValueJSON = `[""]`
 	c.Check(getSettingIp6ConfigDnsJSON(data), Equals, defaultValueJSON)
 	setSettingIp6ConfigDnsJSON(data, setValueJSON)
 	c.Check(isSettingIp6ConfigDnsExists(data), Equals, false)
 
 	// ktypeWrapperIpv6Addresses
-	defaultValueJSON = `null`
+	defaultValueJSON = `[]`
 	setValueJSON = `[{"Address":"","Prefix":0,"Gateway":""}]`
 	c.Check(getSettingIp6ConfigAddressesJSON(data), Equals, defaultValueJSON)
 	setSettingIp6ConfigAddressesJSON(data, setValueJSON)
 	c.Check(isSettingIp6ConfigAddressesExists(data), Equals, false)
 
 	// ktypeWrapperIpv6
-	defaultValueJSON = `null`
+	defaultValueJSON = `[]`
 	setValueJSON = `[{"Address":"","Prefix":0,"NextHop":"","Metric":0}]`
 	c.Check(getSettingIp6ConfigRoutesJSON(data), Equals, defaultValueJSON)
 	setSettingIp6ConfigRoutesJSON(data, setValueJSON)

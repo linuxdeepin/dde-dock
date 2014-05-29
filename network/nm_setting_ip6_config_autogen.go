@@ -75,7 +75,7 @@ func getSettingIp6ConfigDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_IP6_CONFIG_ADDRESSES:
 		value = make(ipv6Addresses, 0)
 	case NM_SETTING_IP6_CONFIG_DNS:
-		value = nil
+		value = make([][]byte, 0)
 	case NM_SETTING_IP6_CONFIG_DNS_SEARCH:
 		value = make([]string, 0)
 	case NM_SETTING_IP6_CONFIG_ROUTES:

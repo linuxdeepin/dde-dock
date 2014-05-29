@@ -76,14 +76,14 @@ func getDeviceAddress(devPath dbus.ObjectPath, devType uint32) (hwAddr string) {
 		if err != nil {
 			return
 		}
-		defer func() { nm.DestroyDeviceWired(dev) }()
+		defer func() { nmDestroyDeviceWired(dev) }()
 		hwAddr = dev.HwAddress.Get()
 	case NM_DEVICE_TYPE_WIFI:
 		dev, err := nmNewDeviceWireless(devPath)
 		if err != nil {
 			return
 		}
-		defer func() { nm.DestroyDeviceWireless(dev) }()
+		defer func() { nmDestroyDeviceWireless(dev) }()
 		hwAddr = dev.HwAddress.Get()
 	}
 	return
@@ -234,9 +234,11 @@ func (m *Manager) doRemoveDevice(devs []*device, path dbus.ObjectPath) []*device
 	// destroy object to reset all property connects
 	dev := devs[i]
 	if dev.nmDevWireless != nil {
-		nm.DestroyDeviceWireless(dev.nmDevWireless)
+		// nmDevWireless is optional, so check if is nil before
+		// destroy it
+		nmDestroyDeviceWireless(dev.nmDevWireless)
 	}
-	nm.DestroyDevice(dev.nmDev)
+	nmDestroyDevice(dev.nmDev)
 
 	copy(devs[i:], devs[i+1:])
 	devs[len(devs)-1] = nil

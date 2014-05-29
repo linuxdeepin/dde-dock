@@ -244,7 +244,7 @@ func init() {
 		locker.Lock()
 		defer locker.Unlock()
 		if dev, ok := currentDevices[path]; ok {
-			nm.DestroyDevice(dev)
+			nmDestroyDevice(dev)
 		}
 	}
 
