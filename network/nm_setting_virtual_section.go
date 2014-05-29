@@ -1,6 +1,6 @@
 package main
 
-// Sections
+// Sections, correspondence to "NM_SETTING_XXX" in network manager.
 const (
 	section8021x              = NM_SETTING_802_1X_SETTING_NAME
 	sectionConnection         = NM_SETTING_CONNECTION_SETTING_NAME
@@ -80,165 +80,164 @@ func getRealSectionName(name string) (realName string) {
 	return
 }
 
-// TODO refactor code, virtual sections for front-end
-// Virtual sections for front-end
-// Pages, page is wrapper for section to easy to configure
+// Virtual sections for front-end to easy to configure, do not prefix
+// with "vs-" is to hide details for front-end.
 const (
-	pageGeneral  = "general"  // -> sectionConnection
-	pageEthernet = "ethernet" // -> sectionWired
+	vsectionGeneral  = "general"  // -> sectionConnection
+	vsectionEthernet = "ethernet" // -> sectionWired
 	// TODO
-	// pageMobile          = "mobile"           // -> sectionGsm, sectionCdma
-	pageMobileGsm  = "mobile-gsm"  // -> sectionGsm
-	pageMobileCdma = "mobile-cdma" // -> sectionCdma
-	pageWifi       = "wifi"        // -> sectionWireless
-	pageIpv4       = "ipv4"        // -> sectionIpv4
-	pageIpv6       = "ipv6"        // -> sectionIpv6
-	pageSecurity   = "security"    // -> section8021x, sectionWirelessSecurity
-	pagePppoe      = "pppoe"       // -> sectionPppoe
-	pagePpp        = "ppp"         // -> sectionPpp
+	// vsectionMobile          = "mobile"           // -> sectionGsm, sectionCdma
+	vsectionMobileGsm  = "mobile-gsm"  // -> sectionGsm
+	vsectionMobileCdma = "mobile-cdma" // -> sectionCdma
+	vsectionWifi       = "wifi"        // -> sectionWireless
+	vsectionIpv4       = "ipv4"        // -> sectionIpv4
+	vsectionIpv6       = "ipv6"        // -> sectionIpv6
+	vsectionSecurity   = "security"    // -> section8021x, sectionWirelessSecurity
+	vsectionPppoe      = "pppoe"       // -> sectionPppoe
+	vsectionPpp        = "ppp"         // -> sectionPpp
 	// TODO
-	// pageVpn            = "vpn"             // -> sectionVpnL2tp, pageVpnOpenconnect, pageVpnOpenvpn, pageVpnPptp, pageVpnVpnc
-	pageVpnL2tp            = "vpn-l2tp"             // -> sectionVpnL2tp
-	pageVpnL2tpPpp         = "vpn-l2tp-ppp"         // -> sectionVpnL2tpPpp
-	pageVpnL2tpIpsec       = "vpn-l2tp-ipsec"       // -> sectionVpnL2tpIpsec
-	pageVpnOpenconnect     = "vpn-openconnect"      // -> sectionVpnOpenconnect
-	pageVpnOpenvpn         = "vpn-openvpn"          // -> sectionVpnOpenvpn
-	pageVpnOpenvpnAdvanced = "vpn-openvpn-advanced" // -> sectionVpnOpenVpnAdvanced
-	pageVpnOpenvpnSecurity = "vpn-openvpn-security" // -> sectionVpnOpenVpnSecurity
-	pageVpnOpenvpnTlsauth  = "vpn-openvpn-tlsauth"  // -> sectionVpnOpenVpnTlsauth
-	pageVpnOpenvpnProxies  = "vpn-openvpn-proxies"  // -> sectionVpnOpenVpnProxies
-	pageVpnPptp            = "vpn-pptp"             // -> sectionVpnPptp
-	pageVpnPptpPpp         = "vpn-pptp-ppp"         // -> sectionVpnPptpPpp
-	pageVpnVpnc            = "vpn-vpnc"             // -> sectionVpnVpnc
-	pageVpnVpncAdvanced    = "vpn-vpnc-advanced"    // -> sectionVpnVpncAdvanced
+	// vsectionVpn            = "vpn"             // -> sectionVpnL2tp, sectionVpnOpenconnect, sectionVpnOpenvpn, sectionVpnPptp, sectionVpnVpnc
+	vsectionVpnL2tp            = "vpn-l2tp"             // -> sectionVpnL2tp
+	vsectionVpnL2tpPpp         = "vpn-l2tp-ppp"         // -> sectionVpnL2tpPpp
+	vsectionVpnL2tpIpsec       = "vpn-l2tp-ipsec"       // -> sectionVpnL2tpIpsec
+	vsectionVpnOpenconnect     = "vpn-openconnect"      // -> sectionVpnOpenconnect
+	vsectionVpnOpenvpn         = "vpn-openvpn"          // -> sectionVpnOpenvpn
+	vsectionVpnOpenvpnAdvanced = "vpn-openvpn-advanced" // -> sectionVpnOpenVpnAdvanced
+	vsectionVpnOpenvpnSecurity = "vpn-openvpn-security" // -> sectionVpnOpenVpnSecurity
+	vsectionVpnOpenvpnTlsauth  = "vpn-openvpn-tlsauth"  // -> sectionVpnOpenVpnTlsauth
+	vsectionVpnOpenvpnProxies  = "vpn-openvpn-proxies"  // -> sectionVpnOpenVpnProxies
+	vsectionVpnPptp            = "vpn-pptp"             // -> sectionVpnPptp
+	vsectionVpnPptpPpp         = "vpn-pptp-ppp"         // -> sectionVpnPptpPpp
+	vsectionVpnVpnc            = "vpn-vpnc"             // -> sectionVpnVpnc
+	vsectionVpnVpncAdvanced    = "vpn-vpnc-advanced"    // -> sectionVpnVpncAdvanced
 )
 
-// TODO rename
-// get available pages for target connection type
-func getAvailablePages(data connectionData) (pages []string) {
+// get available virtual sections for target connection type
+func getAvailableVsections(data connectionData) (vsections []string) {
 	connectionType := getCustomConnectionType(data)
 	switch connectionType {
 	case connectionWired:
-		pages = []string{
-			pageGeneral,
-			pageEthernet,
-			pageIpv4,
-			pageIpv6,
-			pageSecurity,
+		vsections = []string{
+			vsectionGeneral,
+			vsectionEthernet,
+			vsectionIpv4,
+			vsectionIpv6,
+			vsectionSecurity,
 		}
 	case connectionWireless:
-		pages = []string{
-			pageGeneral,
-			pageWifi,
-			pageIpv4,
-			pageIpv6,
-			pageSecurity,
+		vsections = []string{
+			vsectionGeneral,
+			vsectionWifi,
+			vsectionIpv4,
+			vsectionIpv6,
+			vsectionSecurity,
 		}
 	case connectionWirelessAdhoc:
-		pages = []string{
-			pageGeneral,
-			pageWifi,
-			pageIpv4,
-			pageIpv6,
-			pageSecurity,
+		vsections = []string{
+			vsectionGeneral,
+			vsectionWifi,
+			vsectionIpv4,
+			vsectionIpv6,
+			vsectionSecurity,
 		}
 	case connectionWirelessHotspot:
-		pages = []string{
-			pageGeneral,
-			pageWifi,
-			pageIpv4,
-			pageIpv6,
-			pageSecurity,
+		vsections = []string{
+			vsectionGeneral,
+			vsectionWifi,
+			vsectionIpv4,
+			vsectionIpv6,
+			vsectionSecurity,
 		}
 	case connectionPppoe:
-		pages = []string{
-			pageGeneral,
-			pageEthernet,
-			pagePppoe,
-			pagePpp,
-			pageIpv4,
+		vsections = []string{
+			vsectionGeneral,
+			vsectionEthernet,
+			vsectionPppoe,
+			vsectionPpp,
+			vsectionIpv4,
 		}
 	case connectionVpnL2tp:
-		pages = []string{
-			pageGeneral,
-			pageVpnL2tp,
-			pageVpnL2tpPpp,
-			pageVpnL2tpIpsec,
-			pageIpv4,
+		vsections = []string{
+			vsectionGeneral,
+			vsectionVpnL2tp,
+			vsectionVpnL2tpPpp,
+			vsectionVpnL2tpIpsec,
+			vsectionIpv4,
 		}
 	case connectionVpnOpenconnect:
-		pages = []string{
-			pageGeneral,
-			pageVpnOpenconnect,
-			pageIpv4,
-			pageIpv6,
+		vsections = []string{
+			vsectionGeneral,
+			vsectionVpnOpenconnect,
+			vsectionIpv4,
+			vsectionIpv6,
 		}
 	case connectionVpnOpenvpn:
-		pages = []string{
-			pageGeneral,
-			pageVpnOpenvpn,
-			pageVpnOpenvpnAdvanced,
-			pageVpnOpenvpnSecurity,
-			pageVpnOpenvpnProxies,
-			pageIpv4,
-			pageIpv6,
+		vsections = []string{
+			vsectionGeneral,
+			vsectionVpnOpenvpn,
+			vsectionVpnOpenvpnAdvanced,
+			vsectionVpnOpenvpnSecurity,
+			vsectionVpnOpenvpnProxies,
+			vsectionIpv4,
+			vsectionIpv6,
 		}
-		// when connection connection is static key, pageVpnOpenvpnTlsauth is not available
+		// when connection connection is static key, vsectionVpnOpenvpnTlsauth is not available
 		if getSettingVpnOpenvpnKeyConnectionType(data) != NM_OPENVPN_CONTYPE_STATIC_KEY {
-			pages = append(pages, pageVpnOpenvpnTlsauth)
+			vsections = append(vsections, vsectionVpnOpenvpnTlsauth)
 		}
 	case connectionVpnPptp:
-		pages = []string{
-			pageGeneral,
-			pageVpnPptp,
-			pageVpnPptpPpp,
-			pageIpv4,
+		vsections = []string{
+			vsectionGeneral,
+			vsectionVpnPptp,
+			vsectionVpnPptpPpp,
+			vsectionIpv4,
 		}
 	case connectionVpnVpnc:
-		pages = []string{
-			pageGeneral,
-			pageVpnVpnc,
-			pageVpnVpncAdvanced,
-			pageIpv4,
+		vsections = []string{
+			vsectionGeneral,
+			vsectionVpnVpnc,
+			vsectionVpnVpncAdvanced,
+			vsectionIpv4,
 		}
 	case connectionMobileGsm:
-		pages = []string{
-			pageGeneral,
-			pageMobileGsm,
-			pagePpp,
-			pageIpv4,
+		vsections = []string{
+			vsectionGeneral,
+			vsectionMobileGsm,
+			vsectionPpp,
+			vsectionIpv4,
 		}
 	case connectionMobileCdma:
-		pages = []string{
-			pageGeneral,
-			pageMobileCdma,
-			pagePpp,
-			pageIpv4,
+		vsections = []string{
+			vsectionGeneral,
+			vsectionMobileCdma,
+			vsectionPpp,
+			vsectionIpv4,
 		}
 	}
 	return
 }
 
-func pageToSections(data connectionData, page string) (sections []string) {
+// TODO
+func getRelatedSectionsOfVsection(data connectionData, vsection string) (sections []string) {
 	connectionType := getCustomConnectionType(data)
-	switch page {
+	switch vsection {
 	default:
-		logger.Error("pageToSections: invalid page name", page)
-	case pageGeneral:
+		logger.Error("getRelatedSectionsOfVsection: invalid vsection name", vsection)
+	case vsectionGeneral:
 		sections = []string{sectionConnection}
-	case pageMobileGsm:
+	case vsectionMobileGsm:
 		sections = []string{sectionGsm}
-	case pageMobileCdma:
+	case vsectionMobileCdma:
 		sections = []string{sectionCdma}
-	case pageEthernet:
+	case vsectionEthernet:
 		sections = []string{sectionWired}
-	case pageWifi:
+	case vsectionWifi:
 		sections = []string{sectionWireless}
-	case pageIpv4:
+	case vsectionIpv4:
 		sections = []string{sectionIpv4}
-	case pageIpv6:
+	case vsectionIpv6:
 		sections = []string{sectionIpv6}
-	case pageSecurity:
+	case vsectionSecurity:
 		switch connectionType {
 		case connectionWired:
 			sections = []string{section8021x}
@@ -249,69 +248,70 @@ func pageToSections(data connectionData, page string) (sections []string) {
 				sections = []string{sectionWirelessSecurity}
 			}
 		}
-	case pagePppoe:
+	case vsectionPppoe:
 		sections = []string{sectionPppoe}
-	case pagePpp:
+	case vsectionPpp:
 		sections = []string{sectionPpp}
-	case pageVpnL2tp:
+	case vsectionVpnL2tp:
 		sections = []string{sectionVpnL2tp}
-	case pageVpnL2tpPpp:
+	case vsectionVpnL2tpPpp:
 		sections = []string{sectionVpnL2tpPpp}
-	case pageVpnL2tpIpsec:
+	case vsectionVpnL2tpIpsec:
 		sections = []string{sectionVpnL2tpIpsec}
-	case pageVpnOpenconnect:
+	case vsectionVpnOpenconnect:
 		sections = []string{sectionVpnOpenconnect}
-	case pageVpnOpenvpn:
+	case vsectionVpnOpenvpn:
 		sections = []string{sectionVpnOpenvpn}
-	case pageVpnOpenvpnAdvanced:
+	case vsectionVpnOpenvpnAdvanced:
 		sections = []string{sectionVpnOpenvpnAdvanced}
-	case pageVpnOpenvpnSecurity:
+	case vsectionVpnOpenvpnSecurity:
 		sections = []string{sectionVpnOpenvpnSecurity}
-	case pageVpnOpenvpnTlsauth:
+	case vsectionVpnOpenvpnTlsauth:
 		sections = []string{sectionVpnOpenvpnTlsauth}
-	case pageVpnOpenvpnProxies:
+	case vsectionVpnOpenvpnProxies:
 		sections = []string{sectionVpnOpenvpnProxies}
-	case pageVpnPptp:
+	case vsectionVpnPptp:
 		sections = []string{sectionVpnPptp}
-	case pageVpnPptpPpp:
+	case vsectionVpnPptpPpp:
 		sections = []string{sectionVpnPptpPpp}
-	case pageVpnVpnc:
+	case vsectionVpnVpnc:
 		sections = []string{sectionVpnVpnc}
-	case pageVpnVpncAdvanced:
+	case vsectionVpnVpncAdvanced:
 		sections = []string{sectionVpnVpncAdvanced}
 	}
 	return
 }
 
-// TODO rename getAvailableSections
-// listSections return all pages related sections
-func listSections(data connectionData) (sections []string) {
-	for _, page := range getAvailablePages(data) {
-		sections = appendStrArrayUnion(sections, pageToSections(data, page)...)
+// getAvailableSections return all virtual section related real sections
+func getAvailableSections(data connectionData) (sections []string) {
+	for _, vsection := range getAvailableVsections(data) {
+		sections = appendStrArrayUnique(sections, getRelatedSectionsOfVsection(data, vsection)...)
 	}
 	return
 }
 
-// TODO rename
-func getSectionOfPageKey(data connectionData, page, key string) string {
-	sections := pageToSections(data, page)
+// TODO
+// get real section name of target key in virtual section
+func getSectionOfKeyInVsection(data connectionData, vsection, key string) (section string) {
+	sections := getRelatedSectionsOfVsection(data, vsection)
 	for _, section := range sections {
 		if generalIsKeyInSettingSection(section, key) {
 			return section
 		}
 	}
-	logger.Errorf("get corresponding filed of key in page failed, page=%s, key=%s", page, key)
+	logger.Errorf("get corresponding section of key in virtual section failed, vsection=%s, key=%s", vsection, key)
 	return ""
 }
 
-// get available keys for target page
-func getAvailableKeys(data connectionData, page string) (keys []string) {
-	sections := pageToSections(data, page)
+// TODO
+// get available keys of virtual section
+func getAvailableKeysOfVsection(data connectionData, vsection string) (keys []string) {
+	sections := getRelatedSectionsOfVsection(data, vsection)
 	for _, section := range sections {
-		keys = appendStrArrayUnion(keys, generalGetSettingAvailableKeys(data, section)...)
+		keys = appendStrArrayUnique(keys, generalGetSettingAvailableKeys(data, section)...)
 	}
 	if len(keys) == 0 {
-		logger.Warning("there is no available keys for page", page)
+		logger.Warning("there is no available keys for virtual section", vsection)
 	}
 	return
 }

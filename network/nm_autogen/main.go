@@ -22,7 +22,7 @@ var funcMap = template.FuncMap{
 	"IsKeyUsedByFrontEnd":         IsKeyUsedByFrontEnd,
 	"ToFrontEndWidget":            ToFrontEndWidget,
 	"ToClassName":                 ToClassName,
-	"GetAllKeysInPage":            GetAllKeysInPage,
+	"GetAllKeysInVsection":            GetAllKeysInVsection,
 	"GetKeyWidgetProp":            GetKeyWidgetProp,
 	"ToKeyTypeInterfaceConverter": ToKeyTypeInterfaceConverter,
 }
@@ -32,7 +32,7 @@ const (
 	frontEndDir           = "../../../dss/modules/network/edit_autogen/"
 	nmSettingsJSONFile    = "./nm_settings.json"
 	nmSettingVkeyJSONFile = "./nm_setting_vkey.json"
-	nmSettingPageJSONFile = "./nm_setting_vsection.json"
+	nmSettingVsectionJSONFile = "./nm_setting_vsection.json"
 )
 
 var (
@@ -44,7 +44,7 @@ var (
 	frontEndConnPropFile = path.Join(frontEndDir, "BaseConnectionEdit.qml")
 	nmSettings           []NMSettingStruct
 	nmSettingVkeys       []NMSettingVkeyStruct
-	nmSettingPages       []NMSettingPageStruct
+	nmSettingVsections       []NMSettingVsectionStruct
 )
 
 type NMSettingStruct struct {
@@ -80,7 +80,7 @@ type NMSettingVkeyStruct struct {
 	WidgetProp     map[string]string // properties for front end widget, such as "WidgetProp":{"alwaysUpdate":"true"}
 }
 
-type NMSettingPageStruct struct {
+type NMSettingVsectionStruct struct {
 	Ignore          bool
 	Name            string
 	DisplayName     string
@@ -115,13 +115,13 @@ func genNMSettingVkeyCode(nmSettings []NMSettingStruct, nmSettingVkeys []NMSetti
 	return
 }
 
-func genFrontEndConnPropCode(nmPages []NMSettingPageStruct) (content string) {
-	content = genTpl(nmPages, tplFrontEndConnProp)
+func genFrontEndConnPropCode(nmVsections []NMSettingVsectionStruct) (content string) {
+	content = genTpl(nmVsections, tplFrontEndConnProp)
 	return
 }
 
-func genFrontEndSectionCode(nmPage NMSettingPageStruct) (content string) {
-	content = genTpl(nmPage, tplFrontEndSection)
+func genFrontEndSectionCode(nmVsection NMSettingVsectionStruct) (content string) {
+	content = genTpl(nmVsection, tplFrontEndSection)
 	return
 }
 
@@ -159,15 +159,15 @@ func genBackEndCode() {
 
 func genFrontEndCode() {
 	// front-end code, BaseConnectionProperties.qml
-	autogenContent := genFrontEndConnPropCode(nmSettingPages)
+	autogenContent := genFrontEndConnPropCode(nmSettingVsections)
 	writeOrDisplayResultForFrontEnd(frontEndConnPropFile, autogenContent)
 
-	for _, nmPage := range nmSettingPages {
-		if nmPage.Ignore {
+	for _, nmVsection := range nmSettingVsections {
+		if nmVsection.Ignore {
 			continue
 		}
-		autogenContent = genFrontEndSectionCode(nmPage)
-		frontEndFile := getFrontEndFilePath(nmPage.Name)
+		autogenContent = genFrontEndSectionCode(nmVsection)
+		frontEndFile := getFrontEndFilePath(nmVsection.Name)
 		writeOrDisplayResultForFrontEnd(frontEndFile, autogenContent)
 	}
 }
@@ -180,7 +180,7 @@ func main() {
 
 	unmarshalJSONFile(nmSettingsJSONFile, &nmSettings)
 	unmarshalJSONFile(nmSettingVkeyJSONFile, &nmSettingVkeys)
-	unmarshalJSONFile(nmSettingPageJSONFile, &nmSettingPages)
+	unmarshalJSONFile(nmSettingVsectionJSONFile, &nmSettingVsections)
 	if argBackEnd {
 		genBackEndCode()
 	}

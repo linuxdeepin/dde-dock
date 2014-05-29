@@ -51,14 +51,14 @@ func writeFrontEndFile(file, content string) {
 	fmt.Println(file)
 }
 
-func GetAllKeysInPage(pageName string) (keys []string) {
-	pageInfo, ok := getPageInfo(pageName)
+func GetAllKeysInVsection(vsectionName string) (keys []string) {
+	vsectionInfo, ok := getVsectionInfo(vsectionName)
 	if !ok {
-		fmt.Println("invalid page name", pageName)
+		fmt.Println("invalid vsection name", vsectionName)
 		os.Exit(1)
 	}
-	for _, section := range pageInfo.RelatedSections {
-		keys = appendStrArrayUnion(keys, GetAllKeysInSection(section)...)
+	for _, section := range vsectionInfo.RelatedSections {
+		keys = appendStrArrayUnique(keys, GetAllKeysInSection(section)...)
 	}
 	return
 }
@@ -79,9 +79,9 @@ func GetAllKeysInSection(sectionName string) (keys []string) {
 					// if virtual key is a enable wrapper, both
 					// virtual key and real key will be appended.
 					for _, vkName := range vksNames {
-						keys = appendStrArrayUnion(keys, vkName)
+						keys = appendStrArrayUnique(keys, vkName)
 						if getVkInfo(vkName).EnableWrapper {
-							keys = appendStrArrayUnion(keys, k.Name)
+							keys = appendStrArrayUnique(keys, k.Name)
 						}
 					}
 				} else {
@@ -152,10 +152,10 @@ func IsKeyUsedByFrontEnd(keyName string) (used bool) {
 	return
 }
 
-func getPageInfo(pageName string) (pageInfo NMSettingPageStruct, ok bool) {
-	for _, page := range nmSettingPages {
-		if page.Name == pageName {
-			pageInfo = page
+func getVsectionInfo(vsectionName string) (vsectionInfo NMSettingVsectionStruct, ok bool) {
+	for _, vsection := range nmSettingVsections {
+		if vsection.Name == vsectionName {
+			vsectionInfo = vsection
 			ok = true
 			return
 		}
@@ -301,7 +301,7 @@ func isStringInArray(s string, list []string) bool {
 	return false
 }
 
-func appendStrArrayUnion(a1 []string, a2 ...string) (a []string) {
+func appendStrArrayUnique(a1 []string, a2 ...string) (a []string) {
 	a = a1
 	for _, s := range a2 {
 		if !isStringInArray(s, a) {

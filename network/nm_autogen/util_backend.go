@@ -17,8 +17,8 @@ func getBackEndFilePath(sectionName string) (filePath string) {
 }
 
 // "general" -> "../../../dss/modules/network/components_autogen/EditSectionGeneral.qml"
-func getFrontEndFilePath(pageName string) (filePath string) {
-	fileName := "EditSection" + ToClassName(pageName) + ".qml"
+func getFrontEndFilePath(vsectionName string) (filePath string) {
+	fileName := "EditSection" + ToClassName(vsectionName) + ".qml"
 	filePath = path.Join(frontEndDir, fileName)
 	return
 }
@@ -220,7 +220,7 @@ func IfNeedCheckValueLength(ktype string) (need string) {
 // get all related sections of virtual keys
 func GetAllVkeysRelatedSections(nmSettingVkeys []NMSettingVkeyStruct) (sections []string) {
 	for _, vk := range nmSettingVkeys {
-		sections = appendStrArrayUnion(sections, vk.RelatedSection)
+		sections = appendStrArrayUnique(sections, vk.RelatedSection)
 	}
 	return
 }

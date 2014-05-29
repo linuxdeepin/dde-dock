@@ -39,7 +39,7 @@ func stringArrayBut(list []string, ignoreList ...string) (newList []string) {
 	return
 }
 
-func appendStrArrayUnion(a1 []string, a2 ...string) (a []string) {
+func appendStrArrayUnique(a1 []string, a2 ...string) (a []string) {
 	a = a1
 	for _, s := range a2 {
 		if !isStringInArray(s, a) {

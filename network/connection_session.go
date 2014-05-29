@@ -5,7 +5,6 @@ import (
 	"fmt"
 )
 
-// TODO rename
 type sectionErrors map[string]string
 type sessionErrors map[string]sectionErrors
 
@@ -18,8 +17,8 @@ type ConnectionSession struct {
 	Uuid           string
 	Type           string
 
-	AvailablePages []string
-	AvailableKeys  map[string][]string
+	AvailableSections []string
+	AvailableKeys     map[string][]string // TODO collection of available keys in sections(not virtual section)
 
 	Errors           sessionErrors
 	settingKeyErrors sessionErrors
@@ -31,7 +30,7 @@ func doNewConnectionSession(devPath dbus.ObjectPath, uuid string) (s *Connection
 	s.devPath = devPath
 	s.Uuid = uuid
 	s.data = make(connectionData)
-	s.AvailablePages = make([]string, 0)
+	s.AvailableSections = make([]string, 0)
 	s.AvailableKeys = make(map[string][]string)
 	s.Errors = make(sessionErrors)
 	s.settingKeyErrors = make(sessionErrors)
@@ -77,7 +76,7 @@ func NewConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 	}
 
 	s.updatePropConnectionType()
-	s.updatePropAvailablePages()
+	s.updatePropAvailableSections()
 	s.updatePropAvailableKeys()
 	s.updatePropErrors()
 
@@ -126,7 +125,7 @@ func NewConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 	}
 
 	s.updatePropConnectionType()
-	s.updatePropAvailablePages()
+	s.updatePropAvailableSections()
 	s.updatePropAvailableKeys()
 	s.updatePropErrors()
 
@@ -136,7 +135,7 @@ func NewConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 
 func (s *ConnectionSession) fixValues() {
 	// append missing sectionIpv6
-	if !isSettingSectionExists(s.data, sectionIpv6) && isStringInArray(sectionIpv6, listSections(s.data)) {
+	if !isSettingSectionExists(s.data, sectionIpv6) && isStringInArray(sectionIpv6, getAvailableSections(s.data)) {
 		initSettingSectionIpv6(s.data)
 	}
 
@@ -219,9 +218,9 @@ func (s *ConnectionSession) Close() {
 }
 
 // GetAvailableValues return available values marshaled by json for target key.
-func (s *ConnectionSession) GetAvailableValues(page, key string) (valuesJSON string) {
+func (s *ConnectionSession) GetAvailableValues(vsection, key string) (valuesJSON string) {
 	var values []kvalue
-	sections := pageToSections(s.data, page)
+	sections := getRelatedSectionsOfVsection(s.data, vsection)
 	for _, section := range sections {
 		values = generalGetSettingAvailableValues(s.data, section, key)
 		if len(values) > 0 {
@@ -232,29 +231,29 @@ func (s *ConnectionSession) GetAvailableValues(page, key string) (valuesJSON str
 	return
 }
 
-func (s *ConnectionSession) GetKey(page, key string) (value string) {
-	section := getSectionOfPageKey(s.data, page, key)
+func (s *ConnectionSession) GetKey(vsection, key string) (value string) {
+	section := getSectionOfKeyInVsection(s.data, vsection, key)
 	value = generalGetSettingKeyJSON(s.data, section, key)
 	return
 }
 
-func (s *ConnectionSession) SetKey(page, key, value string) {
-	section := getSectionOfPageKey(s.data, page, key)
+func (s *ConnectionSession) SetKey(vsection, key, value string) {
+	section := getSectionOfKeyInVsection(s.data, vsection, key)
 	err := generalSetSettingKeyJSON(s.data, section, key, value)
-	// logger.Debugf("SetKey(), %v, page=%s, filed=%s, key=%s, value=%s", err == nil, page, section, key, value) // TODO test
-	s.updateErrorsWhenSettingKey(page, key, err)
+	// logger.Debugf("SetKey(), %v, vsection=%s, filed=%s, key=%s, value=%s", err == nil, vsection, section, key, value) // TODO test
+	s.updateErrorsWhenSettingKey(vsection, key, err)
 
-	s.updatePropAvailablePages()
+	s.updatePropAvailableSections()
 	s.updatePropAvailableKeys()
 	s.updatePropErrors()
 
 	return
 }
 
-func (s *ConnectionSession) updateErrorsWhenSettingKey(page, key string, err error) {
+func (s *ConnectionSession) updateErrorsWhenSettingKey(vsection, key string, err error) {
 	if err == nil {
 		// delete key error if exists
-		sectionErrors, ok := s.settingKeyErrors[page]
+		sectionErrors, ok := s.settingKeyErrors[vsection]
 		if ok {
 			_, ok := sectionErrors[key]
 			if ok {
@@ -263,10 +262,10 @@ func (s *ConnectionSession) updateErrorsWhenSettingKey(page, key string, err err
 		}
 	} else {
 		// append key error
-		sectionErrorsData, ok := s.settingKeyErrors[page]
+		sectionErrorsData, ok := s.settingKeyErrors[vsection]
 		if !ok {
 			sectionErrorsData = make(sectionErrors)
-			s.settingKeyErrors[page] = sectionErrorsData
+			s.settingKeyErrors[vsection] = sectionErrorsData
 		}
 		sectionErrorsData[key] = err.Error()
 	}
@@ -280,18 +279,18 @@ func (s *ConnectionSession) DebugGetErrors() sessionErrors {
 	return s.Errors
 }
 func (s *ConnectionSession) DebugListKeyDetail() (info string) {
-	for _, page := range getAvailablePages(s.data) {
-		pageData, ok := s.AvailableKeys[page]
+	for _, vsection := range getAvailableVsections(s.data) {
+		vsectionData, ok := s.AvailableKeys[vsection]
 		if !ok {
-			logger.Warning("no available keys for page", page)
+			logger.Warning("no available keys for vsection", vsection)
 			continue
 		}
-		for _, key := range pageData {
-			section := getSectionOfPageKey(s.data, page, key)
+		for _, key := range vsectionData {
+			section := getSectionOfKeyInVsection(s.data, vsection, key)
 			t := generalGetSettingKeyType(section, key)
 			values := generalGetSettingAvailableValues(s.data, section, key)
 			valuesJSON, _ := marshalJSON(values)
-			info += fmt.Sprintf("%s->%s[%s]: %s (%s)\n", page, key, getKtypeDescription(t), s.GetKey(page, key), valuesJSON)
+			info += fmt.Sprintf("%s->%s[%s]: %s (%s)\n", vsection, key, getKtypeDescription(t), s.GetKey(vsection, key), valuesJSON)
 		}
 	}
 	return

@@ -16,37 +16,37 @@ func (s *ConnectionSession) updatePropConnectionType() {
 	dbus.NotifyChange(s, "ConnectionType")
 }
 
-func (s *ConnectionSession) updatePropAvailablePages() {
-	s.AvailablePages = getAvailablePages(s.data)
-	dbus.NotifyChange(s, "AvailablePages")
+func (s *ConnectionSession) updatePropAvailableSections() {
+	s.AvailableSections = getAvailableVsections(s.data)
+	dbus.NotifyChange(s, "AvailableSections")
 }
 
 func (s *ConnectionSession) updatePropAvailableKeys() {
 	s.AvailableKeys = make(map[string][]string) // clear structure
-	for _, page := range getAvailablePages(s.data) {
-		s.AvailableKeys[page] = getAvailableKeys(s.data, page)
+	for _, vsection := range getAvailableVsections(s.data) {
+		s.AvailableKeys[vsection] = getAvailableKeysOfVsection(s.data, vsection)
 	}
 	dbus.NotifyChange(s, "AvailableKeys")
 }
 
 func (s *ConnectionSession) updatePropErrors() {
-	for _, page := range getAvailablePages(s.data) {
-		s.Errors[page] = make(sectionErrors)
-		sections := pageToSections(s.data, page)
+	for _, vsection := range getAvailableVsections(s.data) {
+		s.Errors[vsection] = make(sectionErrors)
+		sections := getRelatedSectionsOfVsection(s.data, vsection)
 		for _, section := range sections {
 			// check error only section exists
 			if isSettingSectionExists(s.data, section) {
 				errs := generalCheckSettingValues(s.data, section)
 				for k, v := range errs {
-					s.Errors[page][k] = v
+					s.Errors[vsection][k] = v
 				}
 			}
 		}
 	}
 	// append errors when setting keys
-	for page, pageErrors := range s.settingKeyErrors {
-		for k, v := range pageErrors {
-			s.Errors[page][k] = v
+	for vsection, vsectionErrors := range s.settingKeyErrors {
+		for k, v := range vsectionErrors {
+			s.Errors[vsection][k] = v
 		}
 	}
 	dbus.NotifyChange(s, "Errors")

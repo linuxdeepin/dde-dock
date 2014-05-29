@@ -225,7 +225,7 @@ func generalGetSettingVkeyAvailableValues(data connectionData, section, key stri
 
 // general function to append available keys, will dispatch virtual keys specially
 func appendAvailableKeys(data connectionData, keys []string, section, key string) (newKeys []string) {
-	newKeys = appendStrArrayUnion(keys)
+	newKeys = appendStrArrayUnique(keys)
 	relatedVks := getRelatedAvailableVkeys(section, key)
 	if len(relatedVks) > 0 {
 		for _, vk := range relatedVks {
@@ -233,13 +233,13 @@ func appendAvailableKeys(data connectionData, keys []string, section, key string
 			// real key will be appended
 			if isEnableWrapperVkey(section, vk) {
 				if isSettingKeyExists(data, section, key) {
-					newKeys = appendStrArrayUnion(newKeys, key)
+					newKeys = appendStrArrayUnique(newKeys, key)
 				}
 			}
 		}
-		newKeys = appendStrArrayUnion(newKeys, relatedVks...)
+		newKeys = appendStrArrayUnique(newKeys, relatedVks...)
 	} else {
-		newKeys = appendStrArrayUnion(newKeys, key)
+		newKeys = appendStrArrayUnique(newKeys, key)
 	}
 	return
 }

@@ -8,8 +8,8 @@ import "../edit"
 BaseEditPage {
     id: root
     activeExpandIndex: 0
-    {{range $i, $page := .}}{{if .Ignore}}{{else}}{{$id := $page.Name | ToClassName | printf "section%s"}}
-    EditSection{{$page.Name | ToClassName}} {
+    {{range $i, $vsection := .}}{{if .Ignore}}{{else}}{{$id := $vsection.Name | ToClassName | printf "section%s"}}
+    EditSection{{$vsection.Name | ToClassName}} {
         myIndex: {{$i}}
         id: {{$id}}
         activeExpandIndex: root.activeExpandIndex
@@ -32,7 +32,7 @@ BaseEditSection {
         text: dsTr("{{.DisplayName}}")
     }
 
-    content.sourceComponent: Column { {{range $i, $key := GetAllKeysInPage .Name}}{{if IsKeyUsedByFrontEnd $key}}{{$value := $key | ToKeyValue}}{{$id := $value | ToClassName | printf "line%s"}}
+    content.sourceComponent: Column { {{range $i, $key := GetAllKeysInVsection .Name}}{{if IsKeyUsedByFrontEnd $key}}{{$value := $key | ToKeyValue}}{{$id := $value | ToClassName | printf "line%s"}}
         {{$widget := ToFrontEndWidget $key}}{{$widget}} {
             id: {{$id}}
             key: "{{$value}}"
