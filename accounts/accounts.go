@@ -65,8 +65,8 @@ func newManager() *Manager {
 	}
 
 	obj.pathUserMap = make(map[string]*User)
-	obj.setPropUserList(getUserList())
-	obj.setPropAllowGuest(isAllowGuest())
+	obj.updatePropUserList(getUserList())
+	obj.updatePropAllowGuest(isAllowGuest())
 
 	obj.watchUserListFile()
 	obj.watchUserInfoFile()

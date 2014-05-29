@@ -117,7 +117,7 @@ func (obj *Manager) handleUserListChanged() {
 				obj.watchUserListFile()
 			} else if ev.IsModify() {
 				if ok1 {
-					obj.setPropAllowGuest(isAllowGuest())
+					obj.updatePropAllowGuest(isAllowGuest())
 					break
 				}
 				if !_handleFlag {
@@ -127,13 +127,13 @@ func (obj *Manager) handleUserListChanged() {
 					list, ret := compareStrList(obj.UserList, getUserList())
 					switch ret {
 					case 1:
-						obj.setPropUserList(getUserList())
+						obj.updatePropUserList(getUserList())
 						obj.updateAllUserInfo()
 						for _, v := range list {
 							obj.UserAdded(v)
 						}
 					case -1:
-						obj.setPropUserList(getUserList())
+						obj.updatePropUserList(getUserList())
 						obj.updateAllUserInfo()
 						for _, v := range list {
 							obj.UserDeleted(v)

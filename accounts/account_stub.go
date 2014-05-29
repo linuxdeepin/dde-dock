@@ -34,14 +34,14 @@ func (obj *Manager) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (obj *Manager) setPropUserList(list []string) {
+func (obj *Manager) updatePropUserList(list []string) {
 	if !isStrListEqual(obj.UserList, list) {
 		obj.UserList = list
 		dbus.NotifyChange(obj, "UserList")
 	}
 }
 
-func (obj *Manager) setPropAllowGuest(isAllow bool) {
+func (obj *Manager) updatePropAllowGuest(isAllow bool) {
 	if obj.AllowGuest != isAllow {
 		obj.AllowGuest = isAllow
 		dbus.NotifyChange(obj, "AllowGuest")
