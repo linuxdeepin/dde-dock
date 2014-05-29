@@ -7,7 +7,10 @@ import (
 	"os"
 )
 
-var logger = liblogger.NewLogger("dde-daemon/dock-daemon")
+var (
+	logger = liblogger.NewLogger("dde-daemon/dock-daemon")
+	LOGGER = logger
+)
 
 func main() {
 	defer logger.EndTracing()
@@ -23,14 +26,14 @@ func main() {
 	}()
 
 	dlib.InitI18n()
+	initDeepin()
 
 	// configure logger
-	logger.SetRestartCommand("/usr/lib/deepin-daemon/grub2", "--debug")
 	if stringInSlice("-d", os.Args) || stringInSlice("--debug", os.Args) {
 		logger.SetLogLevel(liblogger.LEVEL_DEBUG)
 	}
 
-	m := NewManager()
+	m := NewEntryProxyerManager()
 	err := dbus.InstallOnSession(m)
 	if err != nil {
 		logger.Errorf("register dbus interface failed: %v", err)
@@ -66,6 +69,8 @@ func main() {
 	dbus.InstallOnSession(region)
 
 	dbus.DealWithUnhandledMessage()
+
+	initialize()
 
 	if err := dbus.Wait(); err != nil {
 		logger.Errorf("lost dbus session: %v\n", err)

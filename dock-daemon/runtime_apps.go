@@ -381,7 +381,7 @@ func (app *RuntimeApp) updateState(xid xproto.Window) {
 func (app *RuntimeApp) updateAppid(xid xproto.Window) {
 	if app.Id != find_app_id_by_xid(xid) {
 		app.detachXid(xid)
-		if newApp := MANAGER.createRuntimeApp(xid); newApp != nil {
+		if newApp := ENTRY_MANAGER.createRuntimeApp(xid); newApp != nil {
 			newApp.attachXid(xid)
 		}
 		fmt.Println("APP:", app.Id, "Changed to..", find_app_id_by_xid(xid))
@@ -465,7 +465,7 @@ func (app *RuntimeApp) detachXid(xid xproto.Window) {
 		xevent.Detach(XU, xid)
 
 		if len(app.xids) == 1 {
-			MANAGER.destroyRuntimeApp(app)
+			ENTRY_MANAGER.destroyRuntimeApp(app)
 		} else {
 			delete(app.xids, xid)
 			if info == app.CurrentInfo {
@@ -474,7 +474,7 @@ func (app *RuntimeApp) detachXid(xid xproto.Window) {
 						app.CurrentInfo = nextInfo
 						app.notifyChanged()
 					} else {
-						MANAGER.destroyRuntimeApp(app)
+						ENTRY_MANAGER.destroyRuntimeApp(app)
 					}
 					break
 				}
@@ -537,7 +537,7 @@ func listenRootWindow() {
 		if err != nil {
 			LOGGER.Warning("Can't Get _NET_CLIENT_LIST", err)
 		}
-		MANAGER.runtimeAppChangged(list)
+		ENTRY_MANAGER.runtimeAppChangged(list)
 	}
 
 	xwindow.New(XU, XU.RootWin()).Listen(xproto.EventMaskPropertyChange)
@@ -548,7 +548,7 @@ func listenRootWindow() {
 		case _NET_ACTIVE_WINDOW:
 			if activedWindow, err := ewmh.ActiveWindowGet(XU); err == nil {
 				appId := find_app_id_by_xid(activedWindow)
-				if rApp, ok := MANAGER.runtimeApps[appId]; ok {
+				if rApp, ok := ENTRY_MANAGER.runtimeApps[appId]; ok {
 					rApp.setLeader(activedWindow)
 				}
 			}

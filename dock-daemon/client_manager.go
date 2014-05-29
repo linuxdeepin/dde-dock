@@ -5,7 +5,7 @@ import (
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/ewmh"
-	"github.com/BurntSushi/xgbutil/icccm"
+	// "github.com/BurntSushi/xgbutil/icccm"
 	"github.com/BurntSushi/xgbutil/xevent"
 	"github.com/BurntSushi/xgbutil/xprop"
 	"github.com/BurntSushi/xgbutil/xwindow"
@@ -13,8 +13,8 @@ import (
 )
 
 var (
-	XU, _                                 = xgbutil.NewConn()
-	_NET_ACTIVE_WINDOW, _                 = xprop.Atm(XU, "_NET_ACTIVE_WINDOW")
+	// XU, _                                 = xgbutil.NewConn()
+	// _NET_ACTIVE_WINDOW, _                 = xprop.Atm(XU, "_NET_ACTIVE_WINDOW")
 	_NET_SHOWING_DESKTOP, _               = xprop.Atm(XU, "_NET_SHOWING_DESKTOP")
 	lastActive              string        = ""
 	activeWindow            xproto.Window = 0
@@ -121,22 +121,22 @@ func (m *ClientManager) listenRootWindow() {
 	xevent.Main(XU)
 }
 
-func find_app_id_by_xid(xid xproto.Window) string {
-	if id, err := xprop.PropValStr(xprop.GetProperty(XU, xid, "_DDE_DOCK_APP_ID")); err == nil {
-		return id
-	}
-	pid, _ := ewmh.WmPidGet(XU, xid)
-	iconName, _ := ewmh.WmIconNameGet(XU, xid)
-	name, _ := ewmh.WmNameGet(XU, xid)
-	wmClass, _ := icccm.WmClassGet(XU, xid)
-	var wmInstance, wmClassName string
-	if wmClass != nil {
-		wmInstance = wmClass.Instance
-		wmClassName = wmClass.Class
-	}
-	if pid == 0 {
-	} else {
-	}
-	appId := find_app_id(pid, name, wmInstance, wmClassName, iconName)
-	return appId
-}
+// func find_app_id_by_xid(xid xproto.Window) string {
+// 	if id, err := xprop.PropValStr(xprop.GetProperty(XU, xid, "_DDE_DOCK_APP_ID")); err == nil {
+// 		return id
+// 	}
+// 	pid, _ := ewmh.WmPidGet(XU, xid)
+// 	iconName, _ := ewmh.WmIconNameGet(XU, xid)
+// 	name, _ := ewmh.WmNameGet(XU, xid)
+// 	wmClass, _ := icccm.WmClassGet(XU, xid)
+// 	var wmInstance, wmClassName string
+// 	if wmClass != nil {
+// 		wmInstance = wmClass.Instance
+// 		wmClassName = wmClass.Class
+// 	}
+// 	if pid == 0 {
+// 	} else {
+// 	}
+// 	appId := find_app_id(pid, name, wmInstance, wmClassName, iconName)
+// 	return appId
+// }

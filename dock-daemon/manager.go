@@ -8,18 +8,18 @@ import "sync"
 var busdaemon *pkgbus.DBusDaemon
 
 const (
-	FieldTitle   = "title"
-	FieldIcon    = "icon"
-	FieldMenu    = "menu"
-	FieldAppXids = "app-xids"
-
-	FieldStatus   = "app-status"
-	ActiveStatus  = "active"
-	NormalStatus  = "normal"
-	InvalidStatus = "invalid"
+// FieldTitle   = "title"
+// FieldIcon    = "icon"
+// FieldMenu    = "menu"
+// FieldAppXids = "app-xids"
+//
+// FieldStatus   = "app-status"
+// ActiveStatus  = "active"
+// NormalStatus  = "normal"
+// InvalidStatus = "invalid"
 )
 
-type Manager struct {
+type EntryProxyerManager struct {
 	Entries       []*EntryProxyer
 	entrireLocker sync.Mutex
 
@@ -29,7 +29,7 @@ type Manager struct {
 	TrayInited func()
 }
 
-func (m *Manager) GetDBusInfo() dbus.DBusInfo {
+func (m *EntryProxyerManager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		"com.deepin.daemon.Dock",
 		"/dde/dock/EntryManager",
@@ -37,12 +37,12 @@ func (m *Manager) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func NewManager() *Manager {
-	m := &Manager{}
+func NewEntryProxyerManager() *EntryProxyerManager {
+	m := &EntryProxyerManager{}
 	return m
 }
 
-func (m *Manager) watchEntries() {
+func (m *EntryProxyerManager) watchEntries() {
 	var err error
 	busdaemon, err = pkgbus.NewDBusDaemon("org.freedesktop.DBus", "/org/freedesktop/DBus")
 	if err != nil {
@@ -82,7 +82,7 @@ func (m *Manager) watchEntries() {
 	})
 }
 
-func (m *Manager) registerEntry(name string) {
+func (m *EntryProxyerManager) registerEntry(name string) {
 	if !isEntryNameValid(name) {
 		return
 	}
@@ -112,7 +112,7 @@ func (m *Manager) registerEntry(name string) {
 	logger.Infof("register entry success: %s", name)
 }
 
-func (m *Manager) unregisterEntry(name string) {
+func (m *EntryProxyerManager) unregisterEntry(name string) {
 	if !isEntryNameValid(name) {
 		return
 	}
