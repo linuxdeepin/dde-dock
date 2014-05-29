@@ -7,15 +7,28 @@ import (
 )
 
 var (
-	logger  = liblogger.NewLogger(dbusNetworkDest)
-	manager *Manager
+	logger             = liblogger.NewLogger(dbusNetworkDest)
+	manager            *Manager
+	connectionSessions []*ConnectionSession
+	running            bool
+	notifyStop         = make(chan int, 100)
 )
 
-func start() {
+func Start() {
+	if running {
+		logger.Info(dbusNetworkDest, "already running")
+		return
+	}
+	running = true
+	defer func() {
+		running = false
+	}()
+
+	logger.BeginTracing()
 	defer logger.EndTracing()
 
 	if !dlib.UniqueOnSession(dbusNetworkDest) {
-		logger.Warning("There already has an daemon running:", dbusNetworkDest)
+		logger.Warning("dbus unique:", dbusNetworkDest)
 		return
 	}
 
@@ -28,13 +41,35 @@ func start() {
 
 	// initialize manager after dbus installed
 	manager.initManager()
-
 	dbus.DealWithUnhandledMessage()
-	if err := dbus.Wait(); err != nil {
-		logger.Error("lost dbus session:", err)
-		return
+
+	notifyStop = make(chan int, 100) // reset signal to avoid repeat stop action
+	notfiyDbusStop := make(chan int)
+	go func() {
+		err := dbus.Wait()
+		if err != nil {
+			logger.Error("lost dbus session:", err)
+		} else {
+			logger.Info("dbus session stoped")
+		}
+		notfiyDbusStop <- 1
+	}()
+
+	select {
+	case <-notifyStop:
+		dbus.UnInstallObject(manager)
+		// clean up connection session dbus interfaces
+		for _, cs := range connectionSessions {
+			dbus.UnInstallObject(cs)
+		}
+	case <-notfiyDbusStop:
 	}
 }
 
-func stop() {
+func Stop() {
+	if !running {
+		logger.Info(dbusNetworkDest, "already stopped")
+		return
+	}
+	notifyStop <- 1
 }

@@ -1,7 +1,10 @@
 package network
 
 import (
+	// liblogger "dlib/logger"
 	. "launchpad.net/gocheck"
+	"testing"
+	"time"
 )
 
 func init() {
@@ -16,3 +19,19 @@ func init() {
 // 	devs = m.doRemoveDevice(devs, "path1")
 // 	c.Check(len(devs), Equals, 1)
 // }
+
+func TestModuleStartStop(t *testing.T) {
+	// logger.SetLogLevel(liblogger.LEVEL_DEBUG)
+	Stop()
+	Stop()
+	go func() {
+		time.Sleep(100 * time.Second)
+		Start()
+		Stop()
+		Stop()
+	}()
+	Start()
+	Stop()
+	Stop()
+	time.Sleep(100 * time.Second)
+}
