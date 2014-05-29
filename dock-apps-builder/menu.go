@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 )
 
 type MenuItem struct {
@@ -46,25 +47,25 @@ type Menu struct {
 	// content         *MenuContent
 	items []*MenuItem
 
-	ids map[int32]*MenuItem
+	ids map[string]*MenuItem
 
 	checkableMenu bool
 	singleCheck   bool
 
-	genID func() int32
+	genID func() string
 }
 
 func NewMenu() *Menu {
 	return &Menu{
 		make([]*MenuItem, 0),
-		make(map[int32]*MenuItem),
+		make(map[string]*MenuItem),
 		false,
 		false,
-		func() func() int32 {
-			id := int32(0)
-			return func() int32 {
+		func() func() string {
+			id := int64(0)
+			return func() string {
 				id++
-				return id
+				return strconv.FormatInt(id, 10)
 			}
 		}(),
 	}
@@ -84,7 +85,7 @@ func (m *Menu) AppendItem(items ...*MenuItem) {
 	}
 }
 
-func (m *Menu) HandleAction(id int32) {
+func (m *Menu) HandleAction(id string) {
 	if item, ok := m.ids[id]; ok && item.isActive {
 		item.Action()
 	}
@@ -96,7 +97,7 @@ func (m *Menu) GenerateJSON() string {
 	for i, item := range m.items {
 		for id, _item := range m.ids {
 			if _item == item {
-				ret += fmt.Sprintf(`{ "itemId":"%d", "itemText": "%s", "isActive": %v, "isCheckable":%v, "checked":%v, "itemIcon":"%s", "itemIconHover":"%s", "itemIconInactive":"%s", "showCheckMark":%v, "itemSubMenu":`,
+				ret += fmt.Sprintf(`{ "itemId":"%s", "itemText": "%s", "isActive": %v, "isCheckable":%v, "checked":%v, "itemIcon":"%s", "itemIconHover":"%s", "itemIconInactive":"%s", "showCheckMark":%v, "itemSubMenu":`,
 					id,
 					item.itemText,
 					item.isActive,

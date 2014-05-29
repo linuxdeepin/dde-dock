@@ -39,7 +39,7 @@ func NewEntryProxyer(entryId string) (*EntryProxyer, error) {
 }
 
 func (e *EntryProxyer) ContextMenu(x, y int32)                  { e.core.ContextMenu(x, y) }
-func (e *EntryProxyer) HandleMenuItem(id int32)                 { e.core.HandleMenuItem(id) }
+func (e *EntryProxyer) HandleMenuItem(id string)                { e.core.HandleMenuItem(id) }
 func (e *EntryProxyer) Activate(x, y int32)                     { e.core.Activate(x, y) }
 func (e *EntryProxyer) SecondaryActivate(x, y int32)            { e.core.SecondaryActivate(x, y) }
 func (e *EntryProxyer) HandleDragEnter(x, y int32, data string) { e.core.HandleDragEnter(x, y, data) }

@@ -52,7 +52,7 @@ func NewAppEntryWithNormalApp(nApp *NormalApp) *AppEntry {
 	return e
 }
 
-func (e *AppEntry) HandleMenuItem(id int32) {
+func (e *AppEntry) HandleMenuItem(id string) {
 	switch e.Data[FieldStatus] {
 	case NormalStatus:
 		e.nApp.HandleMenuItem(id)

@@ -9,7 +9,7 @@
 	    <arg type="i" direction="in"></arg>
 	</method>
 	<method name="HandleMenuItem">
-	    <arg type="i" direction="in"></arg>
+	    <arg type="s" direction="in"></arg>
 	</method>
 	<method name="HandleDragDrop">
 	    <arg type="i" direction="in"></arg>

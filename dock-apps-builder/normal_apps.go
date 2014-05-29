@@ -72,7 +72,7 @@ func (app *NormalApp) buildMenu() {
 	app.Menu = app.coreMenu.GenerateJSON()
 }
 
-func (app *NormalApp) HandleMenuItem(id int32) {
+func (app *NormalApp) HandleMenuItem(id string) {
 	if app.coreMenu != nil {
 		app.coreMenu.HandleAction(id)
 	}

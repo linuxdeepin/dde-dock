@@ -219,7 +219,7 @@ func (app *RuntimeApp) notifyChanged() {
 	}
 }
 
-func (app *RuntimeApp) HandleMenuItem(id int32) {
+func (app *RuntimeApp) HandleMenuItem(id string) {
 	if app.coreMenu != nil {
 		app.coreMenu.HandleAction(id)
 	}

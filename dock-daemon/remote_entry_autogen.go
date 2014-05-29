@@ -66,6 +66,10 @@ func DestroyRemoteEntry(obj *RemoteEntry) {
 	}
 	obj.signals = make(map[chan *dbus.Signal]bool)
 	obj.signalsLocker.Unlock()
+
+	obj.Id.Reset()
+	obj.Type.Reset()
+	obj.Data.Reset()
 }
 
 func (obj RemoteEntry) Activate(arg0 int32, arg1 int32) (_err error) {
@@ -84,7 +88,7 @@ func (obj RemoteEntry) ContextMenu(arg0 int32, arg1 int32) (_err error) {
 	return
 }
 
-func (obj RemoteEntry) HandleMenuItem(arg0 int32) (_err error) {
+func (obj RemoteEntry) HandleMenuItem(arg0 string) (_err error) {
 	_err = obj.core.Call("dde.dock.Entry.HandleMenuItem", 0, arg0).Store()
 	if _err != nil {
 		fmt.Println(_err)
