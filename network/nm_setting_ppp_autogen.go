@@ -10,6 +10,12 @@ func getSettingPppKeyType(key string) (t ktype) {
 	switch key {
 	default:
 		t = ktypeUnknown
+	case NM_SETTING_PPP_REQUIRE_MPPE:
+		t = ktypeBoolean
+	case NM_SETTING_PPP_REQUIRE_MPPE_128:
+		t = ktypeBoolean
+	case NM_SETTING_PPP_MPPE_STATEFUL:
+		t = ktypeBoolean
 	case NM_SETTING_PPP_NOAUTH:
 		t = ktypeBoolean
 	case NM_SETTING_PPP_REFUSE_EAP:
@@ -21,12 +27,6 @@ func getSettingPppKeyType(key string) (t ktype) {
 	case NM_SETTING_PPP_REFUSE_MSCHAP:
 		t = ktypeBoolean
 	case NM_SETTING_PPP_REFUSE_MSCHAPV2:
-		t = ktypeBoolean
-	case NM_SETTING_PPP_REQUIRE_MPPE:
-		t = ktypeBoolean
-	case NM_SETTING_PPP_REQUIRE_MPPE_128:
-		t = ktypeBoolean
-	case NM_SETTING_PPP_MPPE_STATEFUL:
 		t = ktypeBoolean
 	case NM_SETTING_PPP_NOBSDCOMP:
 		t = ktypeBoolean
@@ -53,6 +53,12 @@ func getSettingPppKeyType(key string) (t ktype) {
 // Check is key in current setting section
 func isKeyInSettingPpp(key string) bool {
 	switch key {
+	case NM_SETTING_PPP_REQUIRE_MPPE:
+		return true
+	case NM_SETTING_PPP_REQUIRE_MPPE_128:
+		return true
+	case NM_SETTING_PPP_MPPE_STATEFUL:
+		return true
 	case NM_SETTING_PPP_NOAUTH:
 		return true
 	case NM_SETTING_PPP_REFUSE_EAP:
@@ -64,12 +70,6 @@ func isKeyInSettingPpp(key string) bool {
 	case NM_SETTING_PPP_REFUSE_MSCHAP:
 		return true
 	case NM_SETTING_PPP_REFUSE_MSCHAPV2:
-		return true
-	case NM_SETTING_PPP_REQUIRE_MPPE:
-		return true
-	case NM_SETTING_PPP_REQUIRE_MPPE_128:
-		return true
-	case NM_SETTING_PPP_MPPE_STATEFUL:
 		return true
 	case NM_SETTING_PPP_NOBSDCOMP:
 		return true
@@ -98,6 +98,12 @@ func getSettingPppDefaultValue(key string) (value interface{}) {
 	switch key {
 	default:
 		logger.Error("invalid key:", key)
+	case NM_SETTING_PPP_REQUIRE_MPPE:
+		value = false
+	case NM_SETTING_PPP_REQUIRE_MPPE_128:
+		value = false
+	case NM_SETTING_PPP_MPPE_STATEFUL:
+		value = false
 	case NM_SETTING_PPP_NOAUTH:
 		value = true
 	case NM_SETTING_PPP_REFUSE_EAP:
@@ -109,12 +115,6 @@ func getSettingPppDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_PPP_REFUSE_MSCHAP:
 		value = false
 	case NM_SETTING_PPP_REFUSE_MSCHAPV2:
-		value = false
-	case NM_SETTING_PPP_REQUIRE_MPPE:
-		value = false
-	case NM_SETTING_PPP_REQUIRE_MPPE_128:
-		value = false
-	case NM_SETTING_PPP_MPPE_STATEFUL:
 		value = false
 	case NM_SETTING_PPP_NOBSDCOMP:
 		value = false
@@ -143,6 +143,12 @@ func generalGetSettingPppKeyJSON(data connectionData, key string) (value string)
 	switch key {
 	default:
 		logger.Error("generalGetSettingPppKeyJSON: invalide key", key)
+	case NM_SETTING_PPP_REQUIRE_MPPE:
+		value = getSettingPppRequireMppeJSON(data)
+	case NM_SETTING_PPP_REQUIRE_MPPE_128:
+		value = getSettingPppRequireMppe128JSON(data)
+	case NM_SETTING_PPP_MPPE_STATEFUL:
+		value = getSettingPppMppeStatefulJSON(data)
 	case NM_SETTING_PPP_NOAUTH:
 		value = getSettingPppNoauthJSON(data)
 	case NM_SETTING_PPP_REFUSE_EAP:
@@ -155,12 +161,6 @@ func generalGetSettingPppKeyJSON(data connectionData, key string) (value string)
 		value = getSettingPppRefuseMschapJSON(data)
 	case NM_SETTING_PPP_REFUSE_MSCHAPV2:
 		value = getSettingPppRefuseMschapv2JSON(data)
-	case NM_SETTING_PPP_REQUIRE_MPPE:
-		value = getSettingPppRequireMppeJSON(data)
-	case NM_SETTING_PPP_REQUIRE_MPPE_128:
-		value = getSettingPppRequireMppe128JSON(data)
-	case NM_SETTING_PPP_MPPE_STATEFUL:
-		value = getSettingPppMppeStatefulJSON(data)
 	case NM_SETTING_PPP_NOBSDCOMP:
 		value = getSettingPppNobsdcompJSON(data)
 	case NM_SETTING_PPP_NODEFLATE:
@@ -188,6 +188,12 @@ func generalSetSettingPppKeyJSON(data connectionData, key, valueJSON string) (er
 	switch key {
 	default:
 		logger.Error("generalSetSettingPppKeyJSON: invalide key", key)
+	case NM_SETTING_PPP_REQUIRE_MPPE:
+		err = logicSetSettingPppRequireMppeJSON(data, valueJSON)
+	case NM_SETTING_PPP_REQUIRE_MPPE_128:
+		err = setSettingPppRequireMppe128JSON(data, valueJSON)
+	case NM_SETTING_PPP_MPPE_STATEFUL:
+		err = setSettingPppMppeStatefulJSON(data, valueJSON)
 	case NM_SETTING_PPP_NOAUTH:
 		err = setSettingPppNoauthJSON(data, valueJSON)
 	case NM_SETTING_PPP_REFUSE_EAP:
@@ -200,12 +206,6 @@ func generalSetSettingPppKeyJSON(data connectionData, key, valueJSON string) (er
 		err = setSettingPppRefuseMschapJSON(data, valueJSON)
 	case NM_SETTING_PPP_REFUSE_MSCHAPV2:
 		err = setSettingPppRefuseMschapv2JSON(data, valueJSON)
-	case NM_SETTING_PPP_REQUIRE_MPPE:
-		err = logicSetSettingPppRequireMppeJSON(data, valueJSON)
-	case NM_SETTING_PPP_REQUIRE_MPPE_128:
-		err = setSettingPppRequireMppe128JSON(data, valueJSON)
-	case NM_SETTING_PPP_MPPE_STATEFUL:
-		err = setSettingPppMppeStatefulJSON(data, valueJSON)
 	case NM_SETTING_PPP_NOBSDCOMP:
 		err = setSettingPppNobsdcompJSON(data, valueJSON)
 	case NM_SETTING_PPP_NODEFLATE:
@@ -229,6 +229,15 @@ func generalSetSettingPppKeyJSON(data connectionData, key, valueJSON string) (er
 }
 
 // Check if key exists
+func isSettingPppRequireMppeExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE)
+}
+func isSettingPppRequireMppe128Exists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE_128)
+}
+func isSettingPppMppeStatefulExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MPPE_STATEFUL)
+}
 func isSettingPppNoauthExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOAUTH)
 }
@@ -246,15 +255,6 @@ func isSettingPppRefuseMschapExists(data connectionData) bool {
 }
 func isSettingPppRefuseMschapv2Exists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_MSCHAPV2)
-}
-func isSettingPppRequireMppeExists(data connectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE)
-}
-func isSettingPppRequireMppe128Exists(data connectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE_128)
-}
-func isSettingPppMppeStatefulExists(data connectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MPPE_STATEFUL)
 }
 func isSettingPppNobsdcompExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOBSDCOMP)
@@ -294,6 +294,21 @@ func ensureSectionSettingPppExists(data connectionData, errs sectionErrors, rela
 		rememberError(errs, relatedKey, NM_SETTING_PPP_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_PPP_SETTING_NAME))
 	}
 }
+func ensureSettingPppRequireMppeNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingPppRequireMppeExists(data) {
+		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE, NM_KEY_ERROR_MISSING_VALUE)
+	}
+}
+func ensureSettingPppRequireMppe128NoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingPppRequireMppe128Exists(data) {
+		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE_128, NM_KEY_ERROR_MISSING_VALUE)
+	}
+}
+func ensureSettingPppMppeStatefulNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingPppMppeStatefulExists(data) {
+		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MPPE_STATEFUL, NM_KEY_ERROR_MISSING_VALUE)
+	}
+}
 func ensureSettingPppNoauthNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingPppNoauthExists(data) {
 		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOAUTH, NM_KEY_ERROR_MISSING_VALUE)
@@ -322,21 +337,6 @@ func ensureSettingPppRefuseMschapNoEmpty(data connectionData, errs sectionErrors
 func ensureSettingPppRefuseMschapv2NoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingPppRefuseMschapv2Exists(data) {
 		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_MSCHAPV2, NM_KEY_ERROR_MISSING_VALUE)
-	}
-}
-func ensureSettingPppRequireMppeNoEmpty(data connectionData, errs sectionErrors) {
-	if !isSettingPppRequireMppeExists(data) {
-		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE, NM_KEY_ERROR_MISSING_VALUE)
-	}
-}
-func ensureSettingPppRequireMppe128NoEmpty(data connectionData, errs sectionErrors) {
-	if !isSettingPppRequireMppe128Exists(data) {
-		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE_128, NM_KEY_ERROR_MISSING_VALUE)
-	}
-}
-func ensureSettingPppMppeStatefulNoEmpty(data connectionData, errs sectionErrors) {
-	if !isSettingPppMppeStatefulExists(data) {
-		rememberError(errs, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MPPE_STATEFUL, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
 func ensureSettingPppNobsdcompNoEmpty(data connectionData, errs sectionErrors) {
@@ -386,6 +386,21 @@ func ensureSettingPppLcpEchoIntervalNoEmpty(data connectionData, errs sectionErr
 }
 
 // Getter
+func getSettingPppRequireMppe(data connectionData) (value bool) {
+	ivalue := getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE)
+	value = interfaceToBoolean(ivalue)
+	return
+}
+func getSettingPppRequireMppe128(data connectionData) (value bool) {
+	ivalue := getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE_128)
+	value = interfaceToBoolean(ivalue)
+	return
+}
+func getSettingPppMppeStateful(data connectionData) (value bool) {
+	ivalue := getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MPPE_STATEFUL)
+	value = interfaceToBoolean(ivalue)
+	return
+}
 func getSettingPppNoauth(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOAUTH)
 	value = interfaceToBoolean(ivalue)
@@ -413,21 +428,6 @@ func getSettingPppRefuseMschap(data connectionData) (value bool) {
 }
 func getSettingPppRefuseMschapv2(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_MSCHAPV2)
-	value = interfaceToBoolean(ivalue)
-	return
-}
-func getSettingPppRequireMppe(data connectionData) (value bool) {
-	ivalue := getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE)
-	value = interfaceToBoolean(ivalue)
-	return
-}
-func getSettingPppRequireMppe128(data connectionData) (value bool) {
-	ivalue := getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE_128)
-	value = interfaceToBoolean(ivalue)
-	return
-}
-func getSettingPppMppeStateful(data connectionData) (value bool) {
-	ivalue := getSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MPPE_STATEFUL)
 	value = interfaceToBoolean(ivalue)
 	return
 }
@@ -478,6 +478,15 @@ func getSettingPppLcpEchoInterval(data connectionData) (value uint32) {
 }
 
 // Setter
+func setSettingPppRequireMppe(data connectionData, value bool) {
+	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE, value)
+}
+func setSettingPppRequireMppe128(data connectionData, value bool) {
+	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE_128, value)
+}
+func setSettingPppMppeStateful(data connectionData, value bool) {
+	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MPPE_STATEFUL, value)
+}
 func setSettingPppNoauth(data connectionData, value bool) {
 	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOAUTH, value)
 }
@@ -495,15 +504,6 @@ func setSettingPppRefuseMschap(data connectionData, value bool) {
 }
 func setSettingPppRefuseMschapv2(data connectionData, value bool) {
 	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_MSCHAPV2, value)
-}
-func setSettingPppRequireMppe(data connectionData, value bool) {
-	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE, value)
-}
-func setSettingPppRequireMppe128(data connectionData, value bool) {
-	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE_128, value)
-}
-func setSettingPppMppeStateful(data connectionData, value bool) {
-	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MPPE_STATEFUL, value)
 }
 func setSettingPppNobsdcomp(data connectionData, value bool) {
 	setSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOBSDCOMP, value)
@@ -534,6 +534,18 @@ func setSettingPppLcpEchoInterval(data connectionData, value uint32) {
 }
 
 // JSON Getter
+func getSettingPppRequireMppeJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE, getSettingPppKeyType(NM_SETTING_PPP_REQUIRE_MPPE))
+	return
+}
+func getSettingPppRequireMppe128JSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE_128, getSettingPppKeyType(NM_SETTING_PPP_REQUIRE_MPPE_128))
+	return
+}
+func getSettingPppMppeStatefulJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MPPE_STATEFUL, getSettingPppKeyType(NM_SETTING_PPP_MPPE_STATEFUL))
+	return
+}
 func getSettingPppNoauthJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOAUTH, getSettingPppKeyType(NM_SETTING_PPP_NOAUTH))
 	return
@@ -556,18 +568,6 @@ func getSettingPppRefuseMschapJSON(data connectionData) (valueJSON string) {
 }
 func getSettingPppRefuseMschapv2JSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_MSCHAPV2, getSettingPppKeyType(NM_SETTING_PPP_REFUSE_MSCHAPV2))
-	return
-}
-func getSettingPppRequireMppeJSON(data connectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE, getSettingPppKeyType(NM_SETTING_PPP_REQUIRE_MPPE))
-	return
-}
-func getSettingPppRequireMppe128JSON(data connectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE_128, getSettingPppKeyType(NM_SETTING_PPP_REQUIRE_MPPE_128))
-	return
-}
-func getSettingPppMppeStatefulJSON(data connectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MPPE_STATEFUL, getSettingPppKeyType(NM_SETTING_PPP_MPPE_STATEFUL))
 	return
 }
 func getSettingPppNobsdcompJSON(data connectionData) (valueJSON string) {
@@ -608,6 +608,15 @@ func getSettingPppLcpEchoIntervalJSON(data connectionData) (valueJSON string) {
 }
 
 // JSON Setter
+func setSettingPppRequireMppeJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE, valueJSON, getSettingPppKeyType(NM_SETTING_PPP_REQUIRE_MPPE))
+}
+func setSettingPppRequireMppe128JSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE_128, valueJSON, getSettingPppKeyType(NM_SETTING_PPP_REQUIRE_MPPE_128))
+}
+func setSettingPppMppeStatefulJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MPPE_STATEFUL, valueJSON, getSettingPppKeyType(NM_SETTING_PPP_MPPE_STATEFUL))
+}
 func setSettingPppNoauthJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOAUTH, valueJSON, getSettingPppKeyType(NM_SETTING_PPP_NOAUTH))
 }
@@ -625,15 +634,6 @@ func setSettingPppRefuseMschapJSON(data connectionData, valueJSON string) (err e
 }
 func setSettingPppRefuseMschapv2JSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_MSCHAPV2, valueJSON, getSettingPppKeyType(NM_SETTING_PPP_REFUSE_MSCHAPV2))
-}
-func setSettingPppRequireMppeJSON(data connectionData, valueJSON string) (err error) {
-	return setSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE, valueJSON, getSettingPppKeyType(NM_SETTING_PPP_REQUIRE_MPPE))
-}
-func setSettingPppRequireMppe128JSON(data connectionData, valueJSON string) (err error) {
-	return setSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE_128, valueJSON, getSettingPppKeyType(NM_SETTING_PPP_REQUIRE_MPPE_128))
-}
-func setSettingPppMppeStatefulJSON(data connectionData, valueJSON string) (err error) {
-	return setSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MPPE_STATEFUL, valueJSON, getSettingPppKeyType(NM_SETTING_PPP_MPPE_STATEFUL))
 }
 func setSettingPppNobsdcompJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOBSDCOMP, valueJSON, getSettingPppKeyType(NM_SETTING_PPP_NOBSDCOMP))
@@ -677,6 +677,15 @@ func logicSetSettingPppRequireMppeJSON(data connectionData, valueJSON string) (e
 }
 
 // Remover
+func removeSettingPppRequireMppe(data connectionData) {
+	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE)
+}
+func removeSettingPppRequireMppe128(data connectionData) {
+	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE_128)
+}
+func removeSettingPppMppeStateful(data connectionData) {
+	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MPPE_STATEFUL)
+}
 func removeSettingPppNoauth(data connectionData) {
 	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOAUTH)
 }
@@ -694,15 +703,6 @@ func removeSettingPppRefuseMschap(data connectionData) {
 }
 func removeSettingPppRefuseMschapv2(data connectionData) {
 	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REFUSE_MSCHAPV2)
-}
-func removeSettingPppRequireMppe(data connectionData) {
-	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE)
-}
-func removeSettingPppRequireMppe128(data connectionData) {
-	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_REQUIRE_MPPE_128)
-}
-func removeSettingPppMppeStateful(data connectionData) {
-	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_MPPE_STATEFUL)
 }
 func removeSettingPppNobsdcomp(data connectionData) {
 	removeSettingKey(data, NM_SETTING_PPP_SETTING_NAME, NM_SETTING_PPP_NOBSDCOMP)

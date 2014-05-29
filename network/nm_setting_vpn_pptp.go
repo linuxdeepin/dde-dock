@@ -127,12 +127,14 @@ func getSettingVpnPptpPppAvailableKeys(data connectionData) (keys []string) {
 	keys = appendAvailableKeys(data, keys, sectionVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE)
 	if getSettingVkVpnPptpRequireMppe(data) {
 		keys = appendAvailableKeys(data, keys, sectionVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40)
+		keys = appendAvailableKeys(data, keys, sectionVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128)
 		keys = appendAvailableKeys(data, keys, sectionVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_MPPE_STATEFUL)
 	}
 	keys = appendAvailableKeys(data, keys, sectionVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_NOBSDCOMP)
 	keys = appendAvailableKeys(data, keys, sectionVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_NODEFLATE)
 	keys = appendAvailableKeys(data, keys, sectionVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_NO_VJ_COMP)
 	keys = appendAvailableKeys(data, keys, sectionVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_LCP_ECHO_FAILURE)
+	keys = appendAvailableKeys(data, keys, sectionVpnPptpPpp, NM_SETTING_VPN_PPTP_KEY_LCP_ECHO_INTERVAL)
 	return
 }
 func getSettingVpnPptpPppAvailableValues(data connectionData, key string) (values []kvalue) {

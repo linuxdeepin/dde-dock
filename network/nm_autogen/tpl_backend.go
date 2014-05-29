@@ -272,7 +272,7 @@ package main{{$vks := .}}
 
 // All virtual keys data
 var virtualKeys = []vkeyInfo{ {{range .}}
-	{Name:{{.Name}}, Type:{{.Type}}, RelatedSection:{{.RelatedSection}}, RelatedKeys:[]string{ {{range $k := .RelatedKeys}}{{$k}}{{end}} }, EnableWrapper:{{.EnableWrapper}}, Available:{{.UsedByFrontEnd}}, Optional:{{.Optional}} },{{end}}
+	{Name:{{.Name}}, Type:{{.Type}}, RelatedSection:{{.RelatedSection}}, RelatedKeys:[]string{ {{range $k := .RelatedKeys}}{{$k}},{{end}} }, EnableWrapper:{{.EnableWrapper}}, Available:{{.UsedByFrontEnd}}, Optional:{{.Optional}} },{{end}}
 }
 
 // Get JSON value generally

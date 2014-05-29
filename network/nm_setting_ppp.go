@@ -42,6 +42,7 @@ func getSettingPppAvailableKeys(data connectionData) (keys []string) {
 	keys = appendAvailableKeys(data, keys, sectionPpp, NM_SETTING_PPP_NO_VJ_COMP)
 
 	keys = appendAvailableKeys(data, keys, sectionPpp, NM_SETTING_PPP_LCP_ECHO_FAILURE)
+	keys = appendAvailableKeys(data, keys, sectionPpp, NM_SETTING_PPP_LCP_ECHO_INTERVAL)
 	return
 }
 

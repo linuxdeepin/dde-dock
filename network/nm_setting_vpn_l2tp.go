@@ -137,6 +137,7 @@ func getSettingVpnL2tpPppAvailableKeys(data connectionData) (keys []string) {
 	keys = appendAvailableKeys(data, keys, sectionVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE)
 	if getSettingVkVpnL2tpRequireMppe(data) {
 		keys = appendAvailableKeys(data, keys, sectionVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_40)
+		keys = appendAvailableKeys(data, keys, sectionVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_128)
 		keys = appendAvailableKeys(data, keys, sectionVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_MPPE_STATEFUL)
 	}
 	keys = appendAvailableKeys(data, keys, sectionVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_NOBSDCOMP)
@@ -145,6 +146,7 @@ func getSettingVpnL2tpPppAvailableKeys(data connectionData) (keys []string) {
 	keys = appendAvailableKeys(data, keys, sectionVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_NO_PCOMP)
 	keys = appendAvailableKeys(data, keys, sectionVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_NO_ACCOMP)
 	keys = appendAvailableKeys(data, keys, sectionVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_FAILURE)
+	keys = appendAvailableKeys(data, keys, sectionVpnL2tpPpp, NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_INTERVAL)
 	return
 }
 func getSettingVpnL2tpPppAvailableValues(data connectionData, key string) (values []kvalue) {
