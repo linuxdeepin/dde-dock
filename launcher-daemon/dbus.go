@@ -30,7 +30,7 @@ type LauncherDBus struct {
 	ItemChanged func(
 		status string,
 		itemInfo ItemInfo,
-		categoryIds []CategoryId,
+		categoryId CategoryId,
 	)
 }
 
@@ -78,16 +78,15 @@ func (d *LauncherDBus) emitItemChanged(name, status string, info map[string]Item
 		logger.Info("get item from itemTable failed")
 		return
 	}
-	d.ItemChanged(status, *itemTable[id], itemTable[id].getCategoryIds())
+	d.ItemChanged(status, *itemTable[id], itemTable[id].getCategoryId())
 
 	if status == SOFTWARE_STATUS_DELETED {
 		itemTable[id].destroy()
 		delete(itemTable, id)
 	} else {
-		for _, cid := range itemTable[id].getCategoryIds() {
-			fmt.Printf("add id to category#%d\n", cid)
-			categoryTable[cid].items[id] = true
-		}
+		cid := itemTable[id].getCategoryId()
+		fmt.Printf("add id to category#%d\n", cid)
+		categoryTable[cid].items[id] = true
 	}
 	logger.Info(status, "successful")
 }

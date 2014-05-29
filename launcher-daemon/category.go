@@ -88,9 +88,11 @@ func getDBPath(template string) (string, error) {
 }
 
 func initCategory() {
-	for _, v := range XCategoryNameIdMap {
-		// logger.Info(v.Name(), v.Id())
-		nameIdMap[strings.ToLower(v.Name())] = v.Id()
+	for k, id := range XCategoryNameIdMap {
+		// logger.Info(k, id)
+		if _, ok := nameIdMap[k]; !ok {
+			nameIdMap[k] = id
+		}
 	}
 }
 
@@ -100,7 +102,10 @@ func findCategoryId(categoryName string) CategoryId {
 	id, ok := nameIdMap[lowerCategoryName]
 	logger.Debug("nameIdMap[\"%s\"]=%d\n", lowerCategoryName, id)
 	if !ok {
-		return OtherID
+		id, ok = extraXCategoryNameIdMap[lowerCategoryName]
+		if !ok {
+			return OtherID
+		}
 	}
 	return id
 }

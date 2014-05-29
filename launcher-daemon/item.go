@@ -32,13 +32,13 @@ type Xinfo struct {
 }
 
 type ItemInfo struct {
-	Path        string
-	Name        string
-	enName      string
-	Id          ItemId
-	Icon        string
-	categoryIds map[CategoryId]bool
-	xinfo       Xinfo
+	Path       string
+	Name       string
+	enName     string
+	Id         ItemId
+	Icon       string
+	categoryId CategoryId
+	xinfo      Xinfo
 }
 
 // TODO: add some method to ItemTable like remove/add
@@ -59,7 +59,6 @@ func (i *ItemInfo) init(app *gio.DesktopAppInfo) {
 		}
 	}
 
-	i.categoryIds = map[CategoryId]bool{}
 	i.xinfo.keywords = make([]string, 0)
 	keywords := app.GetKeywords()
 	for _, keyword := range keywords {
@@ -68,27 +67,19 @@ func (i *ItemInfo) init(app *gio.DesktopAppInfo) {
 	i.xinfo.exec = app.GetExecutable()
 	i.xinfo.genericName = app.GetGenericName()
 	i.xinfo.description = app.GetDescription()
-	for _, id := range getCategories(app) {
-		i.categoryIds[id] = true
-		categoryTable[id].items[i.Id] = true
-	}
+	i.categoryId = getCategory(app)
+	categoryTable[i.categoryId].items[i.Id] = true
 	categoryTable[AllID].items[i.Id] = true
 	itemTable[i.Id] = i
 }
 
-func (i *ItemInfo) getCategoryIds() []CategoryId {
-	ids := make([]CategoryId, 0)
-	for k, _ := range i.categoryIds {
-		ids = append(ids, k)
-	}
-	return ids
+func (i *ItemInfo) getCategoryId() CategoryId {
+	return i.categoryId
 }
 
 func (i *ItemInfo) destroy() {
-	for _, cid := range i.getCategoryIds() {
-		// fmt.Printf("delete id from category#%d\n", cid)
-		delete(categoryTable[cid].items, i.Id)
-	}
+	// fmt.Printf("delete id from category#%d\n", cid)
+	delete(categoryTable[i.getCategoryId()].items, i.Id)
 	// logger.Info("delete id from category#-1")
 	delete(categoryTable[OtherID].items, i.Id)
 }
@@ -128,11 +119,21 @@ func getDeepinCategory(app *gio.DesktopAppInfo) (CategoryId, error) {
 	return id, nil
 }
 
-func getXCategories(app *gio.DesktopAppInfo) []CategoryId {
+func getXCategory(app *gio.DesktopAppInfo) CategoryId {
 	candidateIds := map[CategoryId]bool{}
 	categories := strings.Split(app.GetCategories(), ";")
 	for _, category := range categories {
-		candidateIds[findCategoryId(category)] = true
+		if id, ok := nameIdMap[category]; ok {
+			candidateIds[id] = true
+		}
+	}
+
+	if len(candidateIds) == 0 {
+		for _, category := range categories {
+			if _, ok := nameIdMap[category]; !ok {
+				candidateIds[findCategoryId(category)] = true
+			}
+		}
 	}
 
 	if len(candidateIds) > 1 && candidateIds[OtherID] {
@@ -144,18 +145,17 @@ func getXCategories(app *gio.DesktopAppInfo) []CategoryId {
 		ids = append(ids, id)
 	}
 
-	return ids
+	return ids[0]
 }
 
-func getCategories(app *gio.DesktopAppInfo) []CategoryId {
-	var categories = make([]CategoryId, 0)
+func getCategory(app *gio.DesktopAppInfo) CategoryId {
 	id, err := getDeepinCategory(app)
 	if err != nil {
 		logger.Error("get category from database failed:", err)
-		return getXCategories(app)
+		return getXCategory(app)
 	}
 	logger.Debug("get category from database:", id)
-	return append(categories, id)
+	return id
 }
 
 func genId(filename string) ItemId {
