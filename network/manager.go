@@ -11,6 +11,9 @@ const (
 	dbusNetworkIfs  = "com.deepin.daemon.Network"
 )
 
+// TODO put here temporary
+var connectionSessions []*ConnectionSession
+
 // TODO refactor code
 const (
 	opAdded = iota
