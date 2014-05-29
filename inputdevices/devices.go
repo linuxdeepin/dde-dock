@@ -202,6 +202,9 @@ func NewTPad() *TPadEntry {
 	m.VertScroll = property.NewGSettingsBoolProperty(
 		m, "VertScroll",
 		tpadSettings, TPAD_KEY_VERT_SCROLL)
+	m.TapClick = property.NewGSettingsBoolProperty(
+		m, "TapClick",
+		tpadSettings, TPAD_KEY_TAP_CLICK)
 	m.MotionAcceleration = property.NewGSettingsFloatProperty(
 		m, "MotionAcceleration",
 		tpadSettings, TPAD_KEY_ACCEL)

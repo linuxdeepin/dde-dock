@@ -79,6 +79,7 @@ type TPadEntry struct {
 	EdgeScroll         *property.GSettingsBoolProperty  `access:"readwrite"`
 	HorizScroll        *property.GSettingsBoolProperty  `access:"readwrite"`
 	VertScroll         *property.GSettingsBoolProperty  `access:"readwrite"`
+	TapClick           *property.GSettingsBoolProperty  `access:"readwrite"`
 	MotionAcceleration *property.GSettingsFloatProperty `access:"readwrite"`
 	MotionThreshold    *property.GSettingsFloatProperty `access:"readwrite"`
 	DoubleClick        *property.GSettingsIntProperty   `access:"readwrite"`
