@@ -64,7 +64,7 @@ func (m *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPath)
 		nmConn, _ := nmNewSettingsConnection(path)
 		nmConn.ConnectRemoved(func() {
 			m.handleConnectionChanged(opRemoved, path)
-			nm.DestroySettingsConnection(nmConn)
+			nmDestroySettingsConnection(nmConn)
 		})
 
 		cdata, err := nmConn.GetSettings()

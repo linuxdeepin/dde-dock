@@ -142,7 +142,7 @@ func (m *Manager) doRemoveAccessPoint(devPath, apPath dbus.ObjectPath) {
 	// destroy object to reset all property connects
 	aps := m.accessPoints[devPath]
 	ap := aps[i]
-	nm.DestroyAccessPoint(ap.nmAp)
+	nmDestroyAccessPoint(ap.nmAp)
 
 	copy(aps[i:], aps[i+1:])
 	aps[len(aps)-1] = nil

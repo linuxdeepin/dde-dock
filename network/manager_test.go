@@ -15,5 +15,4 @@ func (m *Manager) TestRemoveDevice(c *C) {
 	devs = append(devs, &device{Path: "path2", State: 0})
 	devs = m.doRemoveDevice(devs, "path1")
 	c.Check(len(devs), Equals, 1)
-	logger.Info(devs)
 }
