@@ -8,7 +8,6 @@ import "../edit"
 BaseEditPage {
     id: root
     activeExpandIndex: 0
-
     {{range $i, $page := .}}{{if .Ignore}}{{else}}{{$id := $page.Name | ToClassName | printf "section%s"}}
     EditSection{{$page.Name | ToClassName}} {
         myIndex: {{$i}}

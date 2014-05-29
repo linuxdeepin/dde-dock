@@ -64,7 +64,7 @@ const tplGetDefaultValue = `{{$sectionFuncBaseName := .SectionName | ToSectionFu
 func get{{$sectionFuncBaseName}}DefaultValue(key string) (value interface{}) {
 	switch key {
 	default:
-		logger.Error("invalid key:", key){{range .Keys}}{{if .UsedByBackEnd}}{{$default := ToKeyTypeDefaultValue .Name}}
+		logger.Error("invalid key:", key){{range .Keys}}{{if .UsedByBackEnd}}{{$default := ToKeyDefaultValue .Name}}
 	case {{.Name}}:
 		value = {{$default}}{{end}}{{end}}
 	}
@@ -272,10 +272,8 @@ package main{{$vks := .}}
 
 // All virtual keys data
 var virtualKeys = []vkeyInfo{ {{range .}}
-	{Name:{{.Name}}, Type:{{.Type}}, RelatedSection:{{.RelatedSection}}, RelatedKey:{{.RelatedKey}}, EnableWrapper:{{.EnableWrapper}}, Available:{{.UsedByFrontEnd}}, Optional:{{.Optional}} },{{end}}
+	{Name:{{.Name}}, Type:{{.Type}}, RelatedSection:{{.RelatedSection}}, RelatedKeys:[]string{ {{range $k := .RelatedKeys}}{{$k}}{{end}} }, EnableWrapper:{{.EnableWrapper}}, Available:{{.UsedByFrontEnd}}, Optional:{{.Optional}} },{{end}}
 }
-
-
 
 // Get JSON value generally
 func generalGetVkeyJSON(data connectionData, section, key string) (valueJSON string) {
@@ -317,20 +315,20 @@ func logicSet{{$keyBaseFuncName}}JSON(data connectionData, valueJSON string) (er
 	return logicSet{{$keyBaseFuncName}}(data, value)
 }{{end}}
 
-// Getter for enable key wrapper{{range $i, $vk := $vks}}{{if $vk.EnableWrapper}}{{$keyBaseFuncName := $vk.Name | ToKeyFuncBaseName}}
-func get{{$keyBaseFuncName}}(data connectionData) (value bool) {
-	if is{{$vk.RelatedKey | ToKeyFuncBaseName}}Exists(data) {
-		return true
-	}
-	return false
+// Getter for key's enable wrapper{{range $i, $vk := $vks}}{{if $vk.EnableWrapper}}{{$keyBaseFuncName := $vk.Name | ToKeyFuncBaseName}}
+func get{{$keyBaseFuncName}}(data connectionData) (value bool) { {{range $relatedKey := $vk.RelatedKeys}}
+	if !is{{$relatedKey | ToKeyFuncBaseName}}Exists(data) {
+		return false
+	}{{end}}
+	return true
 }{{end}}{{end}}
 
-// Setter for enable key wrapper{{range $i, $vk := $vks}}{{if $vk.EnableWrapper}}{{$keyBaseFuncName := $vk.Name | ToKeyFuncBaseName}}
+// Setter for key's enable wrapper{{range $i, $vk := $vks}}{{if $vk.EnableWrapper}}{{$keyBaseFuncName := $vk.Name | ToKeyFuncBaseName}}
 func logicSet{{$keyBaseFuncName}}(data connectionData, value bool) (err error) {
-	if value {
-		set{{$vk.RelatedKey | ToKeyFuncBaseName}}(data, {{$vk.RelatedKey | ToKeyTypeDefaultValue}})
-	} else {
-		remove{{$vk.RelatedKey | ToKeyFuncBaseName}}(data)
+	if value { {{range $relatedKey := $vk.RelatedKeys}}
+		set{{$relatedKey | ToKeyFuncBaseName}}(data, {{$relatedKey | ToKeyDefaultValue}}){{end}}
+	} else { {{range $relatedKey := $vk.RelatedKeys}}
+		remove{{$relatedKey | ToKeyFuncBaseName}}(data){{end}}
 	}
 	return
 }{{end}}{{end}}

@@ -67,7 +67,7 @@ func GetAllKeysInPage(pageName string) (keys []string) {
 func GetAllKeysInSection(sectionName string) (keys []string) {
 	// virtual keys in section that with none related key
 	for _, vk := range nmSettingVkeys {
-		if vk.RelatedSection == sectionName && vk.RelatedKey == "NM_SETTING_VK_NONE_RELATED_KEY" {
+		if vk.RelatedSection == sectionName && isStringInArray("NM_SETTING_VK_NONE_RELATED_KEY", vk.RelatedKeys) {
 			keys = append(keys, vk.Name)
 		}
 	}
@@ -97,7 +97,7 @@ func GetAllKeysInSection(sectionName string) (keys []string) {
 // get all related virtual keys of real key
 func getRelatedVks(keyName string) (vks []string) {
 	for _, vk := range nmSettingVkeys {
-		if vk.RelatedKey == keyName {
+		if isStringInArray(keyName, vk.RelatedKeys) {
 			vks = append(vks, vk.Name)
 		}
 	}
@@ -111,7 +111,7 @@ func ToKeyDisplayName(keyName string) (displayName string) {
 		displayName = vkInfo.DisplayName
 		keyValue = vkInfo.Value
 		if displayName == "<default>" {
-			keyInfo := getKeyInfo(vkInfo.RelatedKey)
+			keyInfo := getKeyInfo(vkInfo.RelatedKeys[0])
 			displayName = keyInfo.DisplayName
 		}
 	} else {

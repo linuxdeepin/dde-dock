@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"flag"
-	"fmt"
 	"path"
 	"text/template"
 )
@@ -13,7 +12,7 @@ var funcMap = template.FuncMap{
 	"ToSectionFuncBaseName":       ToSectionFuncBaseName,
 	"ToKeyFuncBaseName":           ToKeyFuncBaseName,
 	"ToKeyTypeRealData":           ToKeyTypeRealData,
-	"ToKeyTypeDefaultValue":       ToKeyTypeDefaultValue,
+	"ToKeyDefaultValue":           ToKeyDefaultValue,
 	"IfNeedCheckValueLength":      IfNeedCheckValueLength,
 	"GetAllVkeysRelatedSections":  GetAllVkeysRelatedSections,
 	"GetVkeysOfSection":           GetVkeysOfSection,
@@ -68,14 +67,14 @@ type NMSettingKeyStruct struct {
 }
 
 type NMSettingVkeyStruct struct {
-	Name           string // such as "NM_SETTING_VK_802_1X_EAP"
-	Value          string // such as "vk-eap"
-	Type           string // such as "ktypeString"
-	RelatedSection string // such as "NM_SETTING_802_1X_SETTING_NAME"
-	RelatedKey     string // such as "NM_SETTING_802_1X_EAP"
-	EnableWrapper  bool   // check if the virtual key is a wrapper just to enable target key
-	UsedByFrontEnd bool   // check if is used by front-end
-	Optional       bool   // if key is optional, will ignore error for it
+	Name           string   // such as "NM_SETTING_VK_802_1X_EAP"
+	Value          string   // such as "vk-eap"
+	Type           string   // such as "ktypeString"
+	RelatedSection string   // such as "NM_SETTING_802_1X_SETTING_NAME"
+	RelatedKeys    []string // such as "NM_SETTING_802_1X_EAP"
+	EnableWrapper  bool     // check if the virtual key is a wrapper just to enable target key
+	UsedByFrontEnd bool     // check if is used by front-end
+	Optional       bool     // if key is optional, will ignore error for it
 	DisplayName    string
 	FrontEndWidget string            // such as "EditLinePasswordInput"
 	WidgetProp     map[string]string // properties for front end widget, such as "WidgetProp":{"alwaysUpdate":"true"}
@@ -130,14 +129,12 @@ func genTpl(data interface{}, tplstr string) (content string) {
 	templator := template.New("nm autogen").Funcs(funcMap)
 	tpl, err := templator.Parse(tplstr)
 	if err != nil {
-		fmt.Println(err)
-		return
+		panic(err)
 	}
 	buf := bytes.NewBufferString("")
 	err = tpl.Execute(buf, data)
 	if err != nil {
-		fmt.Println(err)
-		return
+		panic(err)
 	}
 	content = string(buf.Bytes())
 	return

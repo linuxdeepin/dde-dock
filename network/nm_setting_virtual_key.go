@@ -98,10 +98,10 @@ type vkeyInfo struct {
 	Name           string
 	Type           ktype
 	RelatedSection string
-	RelatedKey     string
+	RelatedKeys    []string
 	EnableWrapper  bool // check if the virtual key is a wrapper to enable related key
 	Available      bool // check if is used by front-end
-	Optional       bool // if key is optional(such as some child keys), will ignore error for it
+	Optional       bool // if key is optional(such as child key gateway of ip address), will ignore error for it
 }
 
 func getVkeyInfo(section, vkey string) (info vkeyInfo, ok bool) {
@@ -246,7 +246,7 @@ func appendAvailableKeys(data connectionData, keys []string, section, key string
 
 func getRelatedAvailableVkeys(section, key string) (vks []string) {
 	for _, vk := range virtualKeys {
-		if vk.RelatedSection == section && vk.RelatedKey == key && vk.Available {
+		if vk.RelatedSection == section && isStringInArray(key, vk.RelatedKeys) && vk.Available {
 			vks = append(vks, vk.Name)
 		}
 	}
@@ -256,7 +256,7 @@ func getRelatedAvailableVkeys(section, key string) (vks []string) {
 // get related virtual keys of target key
 func getRelatedVkeys(section, key string) (vks []string) {
 	for _, vk := range virtualKeys {
-		if vk.RelatedSection == section && vk.RelatedKey == key {
+		if vk.RelatedSection == section && isStringInArray(key, vk.RelatedKeys) {
 			vks = append(vks, vk.Name)
 		}
 	}
