@@ -14,6 +14,9 @@ var (
 )
 
 func Start() {
+	logger.BeginTracing()
+	defer logger.EndTracing()
+
 	if running {
 		logger.Info(dbusNetworkDest, "already running")
 		return
@@ -22,9 +25,6 @@ func Start() {
 	defer func() {
 		running = false
 	}()
-
-	logger.BeginTracing()
-	defer logger.EndTracing()
 
 	if !dlib.UniqueOnSession(dbusNetworkDest) {
 		logger.Warning("dbus unique:", dbusNetworkDest)
