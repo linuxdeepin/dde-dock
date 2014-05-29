@@ -1,4 +1,4 @@
-package main
+package network
 
 func wrapIpv4Dns(data []uint32) (wrapData []string) {
 	// wrapData = make([]string, 0) // TODO

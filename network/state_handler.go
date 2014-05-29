@@ -1,4 +1,4 @@
-package main
+package network
 
 import "dbus/org/freedesktop/notifications"
 import "dlib/dbus"

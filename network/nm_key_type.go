@@ -1,4 +1,4 @@
-package main
+package network
 
 // available values structure
 type availableValues map[string]kvalue
