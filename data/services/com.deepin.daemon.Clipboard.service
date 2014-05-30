@@ -1,3 +1,0 @@
-[D-BUS Service]
-Name=com.deepin.daemon.Clipboard
-Exec=/usr/lib/deepin-daemon/clipboard

@@ -19,111 +19,111 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package main
+package themes
 
 import (
-        "os"
-        "strings"
+	"os"
+	"strings"
 )
 
 const (
-        BACKGROUND_DEFAULT_DIR = "/usr/share/backgrounds"
-        PERSON_BG_DIR_NAME     = "wallpappers"
+	BACKGROUND_DEFAULT_DIR = "/usr/share/backgrounds"
+	PERSON_BG_DIR_NAME     = "wallpappers"
 )
 
 func getBackgroundList() []string {
-        list := []string{}
+	list := []string{}
 
-        if defaultList, ok := getImagePath(BACKGROUND_DEFAULT_DIR); ok {
-                list = append(list, defaultList...)
-        }
+	if defaultList, ok := getImagePath(BACKGROUND_DEFAULT_DIR); ok {
+		list = append(list, defaultList...)
+	}
 
-        if dirs, ok := getDirPath(THUMB_THEME_PATH); ok {
-                for _, d := range dirs {
-                        if l, ok := getImagePath(d); ok {
-                                list = append(list, l...)
-                        }
-                }
-        }
+	if dirs, ok := getDirPath(THUMB_THEME_PATH); ok {
+		for _, d := range dirs {
+			if l, ok := getImagePath(d); ok {
+				list = append(list, l...)
+			}
+		}
+	}
 
-        homeDir := getHomeDir()
-        if dirs, ok := getDirPath(homeDir + THUMB_LOCAL_THEME_PATH); ok {
-                for _, d := range dirs {
-                        if l, ok := getImagePath(d); ok {
-                                list = append(list, l...)
-                        }
-                }
-        }
+	homeDir := getHomeDir()
+	if dirs, ok := getDirPath(homeDir + THUMB_LOCAL_THEME_PATH); ok {
+		for _, d := range dirs {
+			if l, ok := getImagePath(d); ok {
+				list = append(list, l...)
+			}
+		}
+	}
 
-        //logObject.Infof("Background List: %v", list)
-        return list
+	//logObject.Infof("Background List: %v", list)
+	return list
 }
 
 func getDirPath(dir string) ([]string, bool) {
-        if ok := objUtil.IsFileExist(dir); !ok {
-                return []string{}, false
-        }
+	if ok := objUtil.IsFileExist(dir); !ok {
+		return []string{}, false
+	}
 
-        f, err := os.Open(dir)
-        if err != nil {
-                logObject.Infof("Opne '%s' failed: %v", dir, err)
-                return []string{}, false
-        }
-        defer f.Close()
+	f, err := os.Open(dir)
+	if err != nil {
+		logObject.Infof("Opne '%s' failed: %v", dir, err)
+		return []string{}, false
+	}
+	defer f.Close()
 
-        fi, err1 := f.Readdir(0)
-        if err1 != nil {
-                logObject.Infof("Readdir '%s' failed: %v", dir, err1)
-                return []string{}, false
-        }
+	fi, err1 := f.Readdir(0)
+	if err1 != nil {
+		logObject.Infof("Readdir '%s' failed: %v", dir, err1)
+		return []string{}, false
+	}
 
-        list := []string{}
-        conditions := []string{PERSON_BG_DIR_NAME}
-        for _, i := range fi {
-                if i.IsDir() {
-                        path := dir + "/" + i.Name()
-                        if filterTheme(path, conditions) {
-                                list = append(list, path+"/"+PERSON_BG_DIR_NAME)
-                        }
-                }
-        }
+	list := []string{}
+	conditions := []string{PERSON_BG_DIR_NAME}
+	for _, i := range fi {
+		if i.IsDir() {
+			path := dir + "/" + i.Name()
+			if filterTheme(path, conditions) {
+				list = append(list, path+"/"+PERSON_BG_DIR_NAME)
+			}
+		}
+	}
 
-        return list, true
+	return list, true
 }
 
 func getImagePath(dir string) ([]string, bool) {
-        if ok := objUtil.IsFileExist(dir); !ok {
-                return []string{}, false
-        }
+	if ok := objUtil.IsFileExist(dir); !ok {
+		return []string{}, false
+	}
 
-        f, err := os.Open(dir)
-        if err != nil {
-                logObject.Infof("Opne '%s' failed: %v", dir, err)
-                return []string{}, false
-        }
-        defer f.Close()
+	f, err := os.Open(dir)
+	if err != nil {
+		logObject.Infof("Opne '%s' failed: %v", dir, err)
+		return []string{}, false
+	}
+	defer f.Close()
 
-        fi, err1 := f.Readdir(0)
-        if err1 != nil {
-                logObject.Infof("Readdir '%s' failed: %v", dir, err1)
-                return []string{}, false
-        }
+	fi, err1 := f.Readdir(0)
+	if err1 != nil {
+		logObject.Infof("Readdir '%s' failed: %v", dir, err1)
+		return []string{}, false
+	}
 
-        list := []string{}
-        for _, i := range fi {
-                if i.Mode().IsRegular() {
-                        name := i.Name()
-                        if strings.Contains(name, "jpg") ||
-                                strings.Contains(name, "JPG") ||
-                                strings.Contains(name, "png") ||
-                                strings.Contains(name, "PNG") {
-                                path := dir + "/" + name
-                                if tmp, ok := objUtil.PathToFileURI(path); ok {
-                                        list = append(list, tmp)
-                                }
-                        }
-                }
-        }
+	list := []string{}
+	for _, i := range fi {
+		if i.Mode().IsRegular() {
+			name := i.Name()
+			if strings.Contains(name, "jpg") ||
+				strings.Contains(name, "JPG") ||
+				strings.Contains(name, "png") ||
+				strings.Contains(name, "PNG") {
+				path := dir + "/" + name
+				if tmp, ok := objUtil.PathToFileURI(path); ok {
+					list = append(list, tmp)
+				}
+			}
+		}
+	}
 
-        return list, true
+	return list, true
 }

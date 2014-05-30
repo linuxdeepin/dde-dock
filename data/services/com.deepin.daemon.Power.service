@@ -1,3 +1,3 @@
 [D-BUS Service]
 Name=com.deepin.daemon.Power
-Exec=/usr/lib/deepin-daemon/power
+Exec=/usr/lib/deepin-daemon/dde-session-daemon

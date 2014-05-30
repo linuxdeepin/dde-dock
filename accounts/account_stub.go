@@ -19,7 +19,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package main
+package accounts
 
 import (
 	"dlib/dbus"
@@ -70,6 +70,7 @@ func (obj *Manager) destroyAllUser() {
 	mutex.Lock()
 	if len(obj.pathUserMap) > 0 {
 		for _, v := range obj.pathUserMap {
+			v.watcher.Close()
 			dbus.UnInstallObject(v)
 		}
 

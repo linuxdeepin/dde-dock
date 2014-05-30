@@ -1,4 +1,4 @@
 [D-BUS Service]
 Name=com.deepin.daemon.SystemInfo
-Exec=/usr/lib/deepin-daemon/system-info
+Exec=/usr/lib/deepin-daemon/dde-system-daemon
 User=nobody

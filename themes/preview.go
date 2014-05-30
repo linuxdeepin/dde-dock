@@ -19,103 +19,103 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package main
+package themes
 
 import (
-        "dlib/dbus"
+	"dlib/dbus"
 )
 
 type PreviewPath struct{}
 
 const (
-        PREVIEW_IFC = "com.deepin.daemon.PreviewPath"
+	PREVIEW_IFC = "com.deepin.daemon.PreviewPath"
 )
 
 func (op *PreviewPath) GtkPath(name string) string {
-        return gtkPreviewPath(name)
+	return gtkPreviewPath(name)
 }
 
 func (op *PreviewPath) IconPath(name string) string {
-        return iconPreviewPath(name)
+	return iconPreviewPath(name)
 }
 
 func (op *PreviewPath) CursorPath(name string) string {
-        return cursorPreviewPath(name)
+	return cursorPreviewPath(name)
 }
 
 func (op *PreviewPath) GetDBusInfo() dbus.DBusInfo {
-        return dbus.DBusInfo{
-                MANAGER_DEST,
-                MANAGER_PATH,
-                PREVIEW_IFC,
-        }
+	return dbus.DBusInfo{
+		MANAGER_DEST,
+		MANAGER_PATH,
+		PREVIEW_IFC,
+	}
 }
 
 func gtkPreviewPath(name string) string {
-        path := ""
+	path := ""
 
-        list := getGtkThemeList()
-        t := getThemeType(name, list)
-        if len(t) <= 0 {
-                return ""
-        }
-        if t == PATH_TYPE_SYSTEM {
-                path = PREVIEW_GTK_PATH
-        } else if t == PATH_TYPE_LOCAL {
-                homeDir := getHomeDir()
-                path = homeDir + PREVIEW_LOCAL_GTK_PATH
-        }
+	list := getGtkThemeList()
+	t := getThemeType(name, list)
+	if len(t) <= 0 {
+		return ""
+	}
+	if t == PATH_TYPE_SYSTEM {
+		path = PREVIEW_GTK_PATH
+	} else if t == PATH_TYPE_LOCAL {
+		homeDir := getHomeDir()
+		path = homeDir + PREVIEW_LOCAL_GTK_PATH
+	}
 
-        path += "/" + name + "/preview.png"
-        if ok := objUtil.IsFileExist(path); !ok {
-                return ""
-        }
+	path += "/" + name + "/preview.png"
+	if ok := objUtil.IsFileExist(path); !ok {
+		return ""
+	}
 
-        return path
+	return path
 }
 
 func iconPreviewPath(name string) string {
-        path := ""
+	path := ""
 
-        list := getIconThemeList()
-        t := getThemeType(name, list)
-        if len(t) <= 0 {
-                return ""
-        }
-        if t == PATH_TYPE_SYSTEM {
-                path = PREVIEW_ICON_PATH
-        } else if t == PATH_TYPE_LOCAL {
-                homeDir := getHomeDir()
-                path = homeDir + PREVIEW_LOCAL_ICON_PATH
-        }
+	list := getIconThemeList()
+	t := getThemeType(name, list)
+	if len(t) <= 0 {
+		return ""
+	}
+	if t == PATH_TYPE_SYSTEM {
+		path = PREVIEW_ICON_PATH
+	} else if t == PATH_TYPE_LOCAL {
+		homeDir := getHomeDir()
+		path = homeDir + PREVIEW_LOCAL_ICON_PATH
+	}
 
-        path += "/" + name + "/preview.png"
-        if ok := objUtil.IsFileExist(path); !ok {
-                return ""
-        }
+	path += "/" + name + "/preview.png"
+	if ok := objUtil.IsFileExist(path); !ok {
+		return ""
+	}
 
-        return path
+	return path
 }
 
 func cursorPreviewPath(name string) string {
-        path := ""
+	path := ""
 
-        list := getCursorThemeList()
-        t := getThemeType(name, list)
-        if len(t) <= 0 {
-                return ""
-        }
-        if t == PATH_TYPE_SYSTEM {
-                path = PREVIEW_CURSOR_PATH
-        } else if t == PATH_TYPE_LOCAL {
-                homeDir := getHomeDir()
-                path = homeDir + PREVIEW_LOCAL_CURSOR_PATH
-        }
+	list := getCursorThemeList()
+	t := getThemeType(name, list)
+	if len(t) <= 0 {
+		return ""
+	}
+	if t == PATH_TYPE_SYSTEM {
+		path = PREVIEW_CURSOR_PATH
+	} else if t == PATH_TYPE_LOCAL {
+		homeDir := getHomeDir()
+		path = homeDir + PREVIEW_LOCAL_CURSOR_PATH
+	}
 
-        path += "/" + name + "/preview.png"
-        if ok := objUtil.IsFileExist(path); !ok {
-                return ""
-        }
+	path += "/" + name + "/preview.png"
+	if ok := objUtil.IsFileExist(path); !ok {
+		return ""
+	}
 
-        return path
+	return path
 }

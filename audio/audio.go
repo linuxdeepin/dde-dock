@@ -1,10 +1,8 @@
 package audio
 
-import "dlib"
 import "dlib/dbus"
 import "dlib/logger"
 import "dlib/pulse"
-import "os"
 import libsound "dbus/com/deepin/api/sound"
 
 var Logger = logger.NewLogger("com.deepin.daemon.Audio")
@@ -226,12 +224,6 @@ func (s *Source) SetPort(name string) {
 }
 
 func Start() {
-	defer Logger.EndTracing()
-	if !dlib.UniqueOnSession("com.deepin.daemon.Audio") {
-		Logger.Warning("There already has an Audio daemon running.")
-		return
-	}
-
 	ctx := pulse.GetContext()
 	audio := NewAudio(ctx)
 
@@ -242,13 +234,6 @@ func Start() {
 
 	dbus.DealWithUnhandledMessage()
 	audio.listenMediaKey()
-	if err := dbus.Wait(); err != nil {
-		Logger.Error("dbus.Wait recieve an error:", err)
-		os.Exit(1)
-	} else {
-		os.Exit(0)
-	}
-	dbus.Wait()
 }
 
 var playFeedback = func() func() {

@@ -19,16 +19,14 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package main
+package themes
 
 import (
 	xs "dbus/com/deepin/sessionmanager"
-	"dlib"
 	"dlib/dbus"
 	"dlib/logger"
 	"dlib/utils"
 	"github.com/howeyc/fsnotify"
-	"os"
 	"strconv"
 	"sync"
 )
@@ -96,20 +94,7 @@ func updateThemeObj(pathNameMap map[string]PathInfo) {
 	}
 }
 
-func main() {
-	defer logObject.EndTracing()
-
-	if !dlib.UniqueOnSession(MANAGER_DEST) {
-		logObject.Warning("There already has an Themes daemon running.")
-		return
-	}
-
-	// configure logger
-	logObject.SetRestartCommand("/usr/lib/deepin-daemon/themes", "--debug")
-	if isStringInArray("-d", os.Args) || isStringInArray("--debug", os.Args) {
-		logObject.SetLogLevel(logger.LEVEL_DEBUG)
-	}
-
+func Start() {
 	var err error
 	objXSettings, err = xs.NewXSettings("com.deepin.SessionManager",
 		"/com/deepin/XSettings")
@@ -133,11 +118,8 @@ func main() {
 		panic(err)
 	}
 
-	//m.ThemeList = append(m.ThemeList, THEME_PATH+"Test")
-	//m.ThemeList = append(m.ThemeList, THEME_PATH+"Deepin")
 	updateThemeObj(objManager.pathNameMap)
 	objManager.setPropName("CurrentTheme")
-	println("Current Theme: ", objManager.CurrentTheme)
 	if obj := objManager.getThemeObject(objManager.CurrentTheme); obj != nil {
 		obj.setThemeViaXSettings()
 		objManager.SetGtkTheme(obj.GtkTheme)
@@ -153,11 +135,4 @@ func main() {
 	dbus.InstallOnSession(objPre)
 
 	dbus.DealWithUnhandledMessage()
-	go dlib.StartLoop()
-	if err = dbus.Wait(); err != nil {
-		logObject.Warningf("lost dbus session: %v", err)
-		os.Exit(1)
-	} else {
-		os.Exit(0)
-	}
 }

@@ -19,11 +19,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package main
-
-// #cgo pkg-config: x11 xtst glib-2.0
-// #include "send_key_event.h"
-import "C"
+package screen_edges
 
 import (
 	"os/exec"
@@ -117,10 +113,6 @@ func unregisterZoneArea() {
 
 func execEdgeAction(edge string) {
 	if action, ok := edgeActionMap[edge]; ok {
-		if action == ACTION_WORKSPACE {
-			C.initate_windows()
-			return
-		}
 		strs := strings.Split(action, " ")
 		l := len(strs)
 		if l < 0 {

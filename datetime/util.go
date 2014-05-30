@@ -19,101 +19,101 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package main
+package datetime
 
 func timezoneIsValid(tz string) bool {
-        _, ok := zoneCityMap[tz]
-        return ok
+	_, ok := zoneCityMap[tz]
+	return ok
 }
 
 func getZoneCityList() []string {
-        list := []string{}
+	list := []string{}
 
-        for _, v := range zoneCityMap {
-                list = append(list, v)
-        }
+	for _, v := range zoneCityMap {
+		list = append(list, v)
+	}
 
-        return list
+	return list
 }
 
 func getKeyByValue(value string) string {
-        for k, v := range zoneCityMap {
-                if v == value {
-                        return k
-                }
-        }
+	for k, v := range zoneCityMap {
+		if v == value {
+			return k
+		}
+	}
 
-        return ""
+	return ""
 }
 
 func convertZoneToCity(tz string) string {
-        city := ""
-        for _, c := range tz {
-                if c == '-' || c == '_' {
-                        city = city + " "
-                } else {
-                        city = city + string(c)
-                }
-        }
+	city := ""
+	for _, c := range tz {
+		if c == '-' || c == '_' {
+			city = city + " "
+		} else {
+			city = city + string(c)
+		}
+	}
 
-        return city
+	return city
 }
 
 func convertCityToZone(city string) string {
-        tz := ""
-        if isInUnderlineList(city) {
-                for _, c := range city {
-                        if c == ' ' {
-                                tz = tz + "_"
-                        } else {
-                                tz = tz + string(c)
-                        }
-                }
-        } else {
-                for _, c := range city {
-                        if c == ' ' {
-                                tz = tz + "-"
-                        } else {
-                                tz = tz + string(c)
-                        }
-                }
-        }
+	tz := ""
+	if isInUnderlineList(city) {
+		for _, c := range city {
+			if c == ' ' {
+				tz = tz + "_"
+			} else {
+				tz = tz + string(c)
+			}
+		}
+	} else {
+		for _, c := range city {
+			if c == ' ' {
+				tz = tz + "-"
+			} else {
+				tz = tz + string(c)
+			}
+		}
+	}
 
-        return tz
+	return tz
 }
 
 func isInUnderlineList(key string) bool {
-        ok := objUtils.IsElementExist(key, noUnderlineList)
-        if ok {
-                return false
-        }
+	ok := objUtils.IsElementExist(key, noUnderlineList)
+	if ok {
+		return false
+	}
 
-        return true
+	return true
 }
 
 func isElementExist(element string, list []string) bool {
-        for _, v := range list {
-                if v == element {
-                        return true
-                }
-        }
+	for _, v := range list {
+		if v == element {
+			return true
+		}
+	}
 
-        return false
+	return false
 }
 
 func strArrayIsEqual(array1, array2 []string) bool {
-        l1 := len(array1)
-        l2 := len(array2)
+	l1 := len(array1)
+	l2 := len(array2)
 
-        if l1 != l2 {
-                return false
-        }
+	if l1 != l2 {
+		return false
+	}
 
-        for i := 0; i < l1; i++ {
-                if array1[i] != array2[i] {
-                        return false
-                }
-        }
+	for i := 0; i < l1; i++ {
+		if array1[i] != array2[i] {
+			return false
+		}
+	}
 
-        return true
+	return true
 }

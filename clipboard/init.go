@@ -19,44 +19,17 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package main
+package clipboard
 
-import (
-	"dlib"
-	"dlib/dbus"
-	Logger "dlib/logger"
-	Utils "dlib/utils"
-	"os"
-)
+// #cgo pkg-config: gtk+-3.0 x11 glib-2.0
+// #cgo CFLAGS: -Wall -g
+// #include "gsd-clipboard-manager.h"
+import "C"
 
-var (
-	logger  = Logger.NewLogger(ACCOUNT_DEST)
-	objUtil = Utils.NewUtils()
-)
+func Start() {
+	C.start_clip_manager()
+}
 
-func main() {
-	if !dlib.UniqueOnSystem(ACCOUNT_DEST) {
-		logger.Errorf("%s has been running", ACCOUNT_DEST)
-		return
-	}
-
-	defer logger.EndTracing()
-	logger.SetRestartCommand("/usr/lib/deepin-daemon/accounts")
-
-	obj := GetManager()
-	if err := dbus.InstallOnSystem(obj); err != nil {
-		logger.Error("Install DBus Failed:", err)
-		panic(err)
-	}
-
-	obj.updateAllUserInfo()
-
-	dbus.DealWithUnhandledMessage()
-
-	if err := dbus.Wait(); err != nil {
-		logger.Error("Lost Dbus:", err)
-		os.Exit(-1)
-	} else {
-		os.Exit(0)
-	}
+func Stop() {
+	C.stop_clip_manager()
 }

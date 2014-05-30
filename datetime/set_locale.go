@@ -19,11 +19,11 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package main
+package datetime
 
 import (
 	"dbus/org/freedesktop/notifications"
-	"dlib"
+	. "dlib/gettext"
 	"dlib/utils"
 	"io/ioutil"
 	"os"
@@ -49,9 +49,9 @@ func (obj *Manager) listenLocaleChange() {
 		}
 		obj.LocaleStatus(ok, locale)
 		if ok {
-			sendNotify("", "", dlib.Tr("System Language changed successfully, and will be applied after login next time"))
+			sendNotify("", "", Tr("System Language changed successfully, and will be applied after login next time"))
 		} else {
-			sendNotify("", "", dlib.Tr("System Language changed failure, please try later"))
+			sendNotify("", "", Tr("System Language changed failure, please try later"))
 		}
 	})
 }

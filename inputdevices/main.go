@@ -23,13 +23,11 @@ package inputdevices
 
 import (
 	libsession "dbus/com/deepin/sessionmanager"
-	"dlib"
 	"dlib/dbus"
 	. "dlib/gettext"
 	"dlib/gio-2.0"
 	Logger "dlib/logger"
 	libutil "dlib/utils"
-	"os"
 )
 
 var (
@@ -45,12 +43,6 @@ var (
 )
 
 func Start() {
-	if !dlib.UniqueOnSession(DEVICE_DEST) {
-		logObj.Warning("Input device has running")
-		return
-	}
-
-	defer logObj.EndTracing()
 	InitI18n()
 	Textdomain("xkeyboard-config")
 
@@ -108,11 +100,4 @@ func Start() {
 	initGSettingsSet(tpadFlag)
 
 	dbus.DealWithUnhandledMessage()
-	if err := dbus.Wait(); err != nil {
-		logObj.Warning("Lost Session DBus")
-		os.Exit(-1)
-	} else {
-		logObj.Warning("Session DBus Exit")
-		os.Exit(0)
-	}
 }

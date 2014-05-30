@@ -19,9 +19,36 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-#ifndef __SEND_KEY_EVENT_H__
-#define __SEND_KEY_EVENT_H__
+package accounts
 
-void initate_windows();
+import (
+	"dlib/dbus"
+	Logger "dlib/logger"
+	Utils "dlib/utils"
+)
 
-#endif
+var (
+	logger  = Logger.NewLogger(ACCOUNT_DEST)
+	objUtil = Utils.NewUtils()
+)
+
+func Start() {
+	obj := GetManager()
+	if err := dbus.InstallOnSystem(obj); err != nil {
+		logger.Error("Install DBus Failed:", err)
+		panic(err)
+	}
+
+	obj.updateAllUserInfo()
+
+	dbus.DealWithUnhandledMessage()
+}
+
+func Stop() {
+	obj := GetManager()
+
+	obj.infoWatcher.Close()
+	obj.listWatcher.Close()
+	obj.destroyAllUser()
+	dbus.UnInstallObject(obj)
+}

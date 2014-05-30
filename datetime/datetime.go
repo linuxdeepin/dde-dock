@@ -1,15 +1,14 @@
-package main
+package datetime
 
 import (
 	"dbus/com/deepin/api/setdatetime"
-	"dlib"
 	"dlib/dbus"
 	"dlib/dbus/property"
+	. "dlib/gettext"
 	"dlib/gio-2.0"
 	dlogger "dlib/logger"
 	libutils "dlib/utils"
 	"github.com/howeyc/fsnotify"
-	"os"
 )
 
 const (
@@ -25,7 +24,7 @@ var (
 	busConn      *dbus.Conn
 	dateSettings = gio.NewSettings(_DATE_TIME_SCHEMA)
 
-	objUtils         *libutils.Manager
+	objUtils         = libutils.NewUtils()
 	setDate          *setdatetime.SetDateTime
 	zoneWatcher      *fsnotify.Watcher
 	logger           = dlogger.NewLogger("dde-daemon/datetime")
@@ -127,7 +126,7 @@ func (op *Manager) SetLocale(locale string) {
 		return
 	}
 
-	sendNotify("", "", dlib.Tr("Changing System Language, Please Wait"))
+	sendNotify("", "", Tr("Changing System Language, Please Wait"))
 	setDate.GenLocale(locale)
 	changeLocaleFlag = true
 }
@@ -170,29 +169,22 @@ func Init() {
 	}
 }
 
-func main() {
-	if !dlib.UniqueOnSession(_DATE_TIME_DEST) {
-		logger.Warning("There already has an DateTime daemon running.")
-		return
+var _manager *Manager
+
+func GetManager() *Manager {
+	if _manager == nil {
+		_manager = NewDateAndTime()
 	}
 
-	defer logger.EndTracing()
-	dlib.InitI18n()
-	dlib.Textdomain("dde-daemon")
+	return _manager
+}
 
-	// configure logger
-	logger.SetRestartCommand("/usr/lib/deepin-daemon/datetime", "--debug")
-	if objUtils.IsElementExist("-d", os.Args) ||
-		objUtils.IsElementExist("--debug", os.Args) {
-		logger.SetLogLevel(dlogger.LEVEL_DEBUG)
-	}
-
+func Start() {
 	var err error
-	objUtils = libutils.NewUtils()
 
 	Init()
 
-	date := NewDateAndTime()
+	date := GetManager()
 	err = dbus.InstallOnSession(date)
 	if err != nil {
 		logger.Error("Install Session DBus Failed:", err)
@@ -203,13 +195,10 @@ func main() {
 		go setDate.SetNtpUsing(true)
 	}
 	dbus.DealWithUnhandledMessage()
-	go dlib.StartLoop()
 	date.listenLocaleChange()
+}
 
-	if err = dbus.Wait(); err != nil {
-		logger.Error("lost dbus session:", err)
-		os.Exit(1)
-	} else {
-		os.Exit(0)
-	}
+func Stop() {
+	zoneWatcher.Close()
+	dbus.UnInstallObject(GetManager())
 }

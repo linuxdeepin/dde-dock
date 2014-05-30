@@ -19,16 +19,14 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package main
+package mounts
 
 import (
-	"dlib"
 	"dlib/dbus"
 	"dlib/gio-2.0"
 	"dlib/gobject-2.0"
 	"dlib/logger"
 	"fmt"
-	"os"
 	"strings"
 	"sync"
 )
@@ -389,16 +387,7 @@ func NewManager() *Manager {
 	return m
 }
 
-func main() {
-	defer logObject.EndTracing()
-
-	if !dlib.UniqueOnSession(DISK_INFO_DEST) {
-		logObject.Warning("There already has an Mount daemon running.")
-		return
-	}
-
-	logObject.SetRestartCommand("/usr/lib/deepin-daemon/mounts")
-
+func Start() {
 	m := NewManager()
 	err := dbus.InstallOnSession(m)
 	if err != nil {
@@ -406,12 +395,4 @@ func main() {
 		panic(err)
 	}
 	dbus.DealWithUnhandledMessage()
-
-	go dlib.StartLoop()
-	if err = dbus.Wait(); err != nil {
-		logObject.Info("lost dbus session:", err)
-		os.Exit(1)
-	} else {
-		os.Exit(0)
-	}
 }
