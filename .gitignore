@@ -22,7 +22,7 @@ dock-apps-builder/dock-apps-builder
 dock-daemon/dock-daemon
 inputdevices/inputdevices
 keybinding/keybinding
-launcher-daemon/launcher-daemon
+launcher/launcher
 mime/mime
 mounts/mounts
 power/power
