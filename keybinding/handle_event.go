@@ -32,6 +32,10 @@ import (
 
 var _mediaManager *MediaKeyManager
 
+const (
+	CMD_DDE_OSD = "/usr/lib/deepin-daemon/dde-osd "
+)
+
 func GetMediaManager() *MediaKeyManager {
 	if _mediaManager == nil {
 		_mediaManager = &MediaKeyManager{}
@@ -43,30 +47,63 @@ func GetMediaManager() *MediaKeyManager {
 func (obj *MediaKeyManager) emitMediaSignal(modStr, keyStr string, press bool) bool {
 	switch keyStr {
 	case "XF86MonBrightnessUp":
+		if press {
+			go doAction(CMD_DDE_OSD + "--BrightnessUp")
+		}
 		obj.BrightnessUp(press)
 	case "XF86MonBrightnessDown":
+		if press {
+			go doAction(CMD_DDE_OSD + "--BrightnessDown")
+		}
 		obj.BrightnessDown(press)
 	case "XF86AudioMute":
+		if press {
+			go doAction(CMD_DDE_OSD + "--AudioMute")
+		}
 		obj.AudioMute(press)
 	case "XF86AudioLowerVolume":
+		if press {
+			go doAction(CMD_DDE_OSD + "--AudioDown")
+		}
 		obj.AudioDown(press)
 	case "XF86AudioRaiseVolume":
+		if press {
+			go doAction(CMD_DDE_OSD + "--AudioUp")
+		}
 		obj.AudioUp(press)
 	case "Num_Lock":
 		if strings.Contains(modStr, "mod2") {
+			if press {
+				go doAction(CMD_DDE_OSD + "--NumLockOff")
+			}
 			obj.NumLockOff(press)
 		} else {
+			if press {
+				go doAction(CMD_DDE_OSD + "--NumLockOn")
+			}
 			obj.NumLockOn(press)
 		}
 	case "Caps_Lock":
 		if strings.Contains(modStr, "lock") {
+			if press {
+				go doAction(CMD_DDE_OSD + "--CapsLockOff")
+			}
 			obj.CapsLockOff(press)
 		} else {
+			if press {
+				go doAction(CMD_DDE_OSD + "--CapsLockOn")
+			}
 			obj.CapsLockOn(press)
 		}
 	case "XF86TouchPadOn":
+		if press {
+			go doAction(CMD_DDE_OSD + "--TouchPadOn")
+		}
 		obj.TouchPadOn(press)
 	case "XF86TouchPadOff":
+		if press {
+			go doAction(CMD_DDE_OSD + "--TouchPadOff")
+		}
 		obj.TouchPadOff(press)
 	case "XF86Display":
 		obj.SwitchMonitors(press)
@@ -80,6 +117,9 @@ func (obj *MediaKeyManager) emitMediaSignal(modStr, keyStr string, press bool) b
 			return false
 		}
 		if strings.Contains(modStr, "mod4") {
+			if press {
+				go doAction(CMD_DDE_OSD + "--SwitchMonitors")
+			}
 			obj.SwitchMonitors(press)
 		} else {
 			return false
@@ -90,6 +130,9 @@ func (obj *MediaKeyManager) emitMediaSignal(modStr, keyStr string, press bool) b
 			return false
 		}
 		if strings.Contains(modStr, "mod4") {
+			if press {
+				go doAction(CMD_DDE_OSD + "--SwitchLayout")
+			}
 			obj.SwitchLayout(press)
 		} else {
 			return false

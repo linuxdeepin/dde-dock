@@ -125,8 +125,6 @@ func getCustomValue(id int32, key string) string {
 			logObj.Errorf("Get GSettings Failed For Id: %v", id)
 		} else {
 			ret = gs.GetString(key)
-			logObj.Infof(">>>>>>Get id: %d, key: %s, value: %s",
-				id, key, ret)
 		}
 	}
 
@@ -163,7 +161,6 @@ func getCustomListInfo() []ShortcutInfo {
 		tmp.index = index
 		index += 1
 		list = append(list, tmp)
-		logObj.Infof("%d ShortcutInfo: %v", k, tmp)
 	}
 
 	return list
