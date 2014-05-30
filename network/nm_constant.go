@@ -2,6 +2,7 @@ package main
 
 import . "dlib/gettext"
 
+// Device types
 const (
 	NM_DEVICE_TYPE_UNKNOWN    = uint32(0)
 	NM_DEVICE_TYPE_ETHERNET   = uint32(1)
@@ -19,6 +20,112 @@ const (
 	NM_DEVICE_TYPE_BRIDGE     = uint32(13)
 )
 
+// Device states
+const (
+	NM_DEVICE_STATE_UNKNOWN      = 0   // The device is in an unknown state.
+	NM_DEVICE_STATE_UNMANAGED    = 10  // The device is recognized but not managed by NetworkManager.
+	NM_DEVICE_STATE_UNAVAILABLE  = 20  // The device cannot be used (carrier off, rfkill, etc).
+	NM_DEVICE_STATE_DISCONNECTED = 30  // The device is not connected.
+	NM_DEVICE_STATE_PREPARE      = 40  // The device is preparing to connect.
+	NM_DEVICE_STATE_CONFIG       = 50  // The device is being configured.
+	NM_DEVICE_STATE_NEED_AUTH    = 60  // The device is awaiting secrets necessary to continue connection.
+	NM_DEVICE_STATE_IP_CONFIG    = 70  // The IP settings of the device are being requested and configured.
+	NM_DEVICE_STATE_IP_CHECK     = 80  // The device's IP connectivity ability is being determined.
+	NM_DEVICE_STATE_SECONDARIES  = 90  // The device is waiting for secondary connections to be activated.
+	NM_DEVICE_STATE_ACTIVATED    = 100 // The device is active.
+	NM_DEVICE_STATE_DEACTIVATING = 110 // The device's network connection is being torn down.
+	NM_DEVICE_STATE_FAILED       = 120 // The device is in a failure state following an attempt to activate it.
+)
+
+// Device state reasons
+const (
+	NM_DEVICE_STATE_REASON_UNKNOWN                        = 0
+	NM_DEVICE_STATE_REASON_NONE                           = 1
+	NM_DEVICE_STATE_REASON_NOW_MANAGED                    = 2
+	NM_DEVICE_STATE_REASON_NOW_UNMANAGED                  = 3
+	NM_DEVICE_STATE_REASON_CONFIG_FAILED                  = 4
+	NM_DEVICE_STATE_REASON_CONFIG_UNAVAILABLE             = 5
+	NM_DEVICE_STATE_REASON_CONFIG_EXPIRED                 = 6
+	NM_DEVICE_STATE_REASON_NO_SECRETS                     = 7
+	NM_DEVICE_STATE_REASON_SUPPLICANT_DISCONNECT          = 8
+	NM_DEVICE_STATE_REASON_SUPPLICANT_CONFIG_FAILED       = 9
+	NM_DEVICE_STATE_REASON_SUPPLICANT_FAILED              = 10
+	NM_DEVICE_STATE_REASON_SUPPLICANT_TIMEOUT             = 11
+	NM_DEVICE_STATE_REASON_PPP_START_FAILED               = 12
+	NM_DEVICE_STATE_REASON_PPP_DISCONNECT                 = 13
+	NM_DEVICE_STATE_REASON_PPP_FAILED                     = 14
+	NM_DEVICE_STATE_REASON_DHCP_START_FAILED              = 15
+	NM_DEVICE_STATE_REASON_DHCP_ERROR                     = 16
+	NM_DEVICE_STATE_REASON_DHCP_FAILED                    = 17
+	NM_DEVICE_STATE_REASON_SHARED_START_FAILED            = 18
+	NM_DEVICE_STATE_REASON_SHARED_FAILED                  = 19
+	NM_DEVICE_STATE_REASON_AUTOIP_START_FAILED            = 20
+	NM_DEVICE_STATE_REASON_AUTOIP_ERROR                   = 21
+	NM_DEVICE_STATE_REASON_AUTOIP_FAILED                  = 22
+	NM_DEVICE_STATE_REASON_MODEM_BUSY                     = 23
+	NM_DEVICE_STATE_REASON_MODEM_NO_DIAL_TONE             = 24
+	NM_DEVICE_STATE_REASON_MODEM_NO_CARRIER               = 25
+	NM_DEVICE_STATE_REASON_MODEM_DIAL_TIMEOUT             = 26
+	NM_DEVICE_STATE_REASON_MODEM_DIAL_FAILED              = 27
+	NM_DEVICE_STATE_REASON_MODEM_INIT_FAILED              = 28
+	NM_DEVICE_STATE_REASON_GSM_APN_FAILED                 = 29
+	NM_DEVICE_STATE_REASON_GSM_REGISTRATION_NOT_SEARCHING = 30
+	NM_DEVICE_STATE_REASON_GSM_REGISTRATION_DENIED        = 31
+	NM_DEVICE_STATE_REASON_GSM_REGISTRATION_TIMEOUT       = 32
+	NM_DEVICE_STATE_REASON_GSM_REGISTRATION_FAILED        = 33
+	NM_DEVICE_STATE_REASON_GSM_PIN_CHECK_FAILED           = 34
+	NM_DEVICE_STATE_REASON_FIRMWARE_MISSING               = 35
+	NM_DEVICE_STATE_REASON_REMOVED                        = 36
+	NM_DEVICE_STATE_REASON_SLEEPING                       = 37
+	NM_DEVICE_STATE_REASON_CONNECTION_REMOVED             = 38
+	NM_DEVICE_STATE_REASON_USER_REQUESTED                 = 39
+	NM_DEVICE_STATE_REASON_CARRIER                        = 40
+	NM_DEVICE_STATE_REASON_CONNECTION_ASSUMED             = 41
+	NM_DEVICE_STATE_REASON_SUPPLICANT_AVAILABLE           = 42
+	NM_DEVICE_STATE_REASON_MODEM_NOT_FOUND                = 43
+	NM_DEVICE_STATE_REASON_BT_FAILED                      = 44
+	NM_DEVICE_STATE_REASON_GSM_SIM_NOT_INSERTED           = 45
+	NM_DEVICE_STATE_REASON_GSM_SIM_PIN_REQUIRED           = 46
+	NM_DEVICE_STATE_REASON_GSM_SIM_PUK_REQUIRED           = 47
+	NM_DEVICE_STATE_REASON_GSM_SIM_WRONG                  = 48
+	NM_DEVICE_STATE_REASON_INFINIBAND_MODE                = 49
+	NM_DEVICE_STATE_REASON_DEPENDENCY_FAILED              = 50
+	NM_DEVICE_STATE_REASON_BR2684_FAILED                  = 51
+	NM_DEVICE_STATE_REASON_MODEM_MANAGER_UNAVAILABLE      = 52
+	NM_DEVICE_STATE_REASON_SSID_NOT_FOUND                 = 53
+	NM_DEVICE_STATE_REASON_SECONDARY_CONNECTION_FAILED    = 54
+)
+
+// VPN connection states
+const (
+	//don't use iota, the value is defined by networkmanager
+	NM_VPN_CONNECTION_STATE_REASON_UNKNOWN               = 0
+	NM_VPN_CONNECTION_STATE_REASON_NONE                  = 1
+	NM_VPN_CONNECTION_STATE_REASON_USER_DISCONNECTED     = 2
+	NM_VPN_CONNECTION_STATE_REASON_DEVICE_DISCONNECTED   = 3
+	NM_VPN_CONNECTION_STATE_REASON_SERVICE_STOPPED       = 4
+	NM_VPN_CONNECTION_STATE_REASON_IP_CONFIG_INVALID     = 5
+	NM_VPN_CONNECTION_STATE_REASON_CONNECT_TIMEOUT       = 6
+	NM_VPN_CONNECTION_STATE_REASON_SERVICE_START_TIMEOUT = 7
+	NM_VPN_CONNECTION_STATE_REASON_SERVICE_START_FAILED  = 8
+	NM_VPN_CONNECTION_STATE_REASON_NO_SECRETS            = 9
+	NM_VPN_CONNECTION_STATE_REASON_LOGIN_FAILED          = 10
+	NM_VPN_CONNECTION_STATE_REASON_CONNECTION_REMOVED    = 11
+)
+
+// Networking states
+const (
+	NM_STATE_UNKNOWN          = uint32(0)
+	NM_STATE_ASLEEP           = uint32(10)
+	NM_STATE_DISCONNECTED     = uint32(20)
+	NM_STATE_DISCONNECTING    = uint32(30)
+	NM_STATE_CONNECTING       = uint32(40)
+	NM_STATE_CONNECTED_LOCAL  = uint32(50)
+	NM_STATE_CONNECTED_SITE   = uint32(60)
+	NM_STATE_CONNECTED_GLOBAL = uint32(70)
+)
+
+// Access point secret flags
 //https://projects.gnome.org/NetworkManager/developers/api/09/spec.html#type-NM_802_11_AP_SEC
 const (
 	NM_802_11_AP_SEC_NONE            = uint32(0x0)
@@ -38,6 +145,7 @@ const (
 	NM_802_11_AP_FLAGS_PRIVACY = uint32(0x1)
 )
 
+// Agent secret flags
 const (
 	// No special behavior; by default no user interaction is allowed
 	// and requests for secrets are fulfilled from persistent storage,
@@ -62,6 +170,7 @@ const (
 	NM_SECRET_AGENT_GET_SECRETS_FLAG_USER_REQUESTED = 0x4
 )
 
+// Active connection states
 const (
 	NM_ACTIVE_CONNECTION_STATE_UNKNOWN      = 0
 	NM_ACTIVE_CONNECTION_STATE_ACTIVATING   = 1
@@ -70,6 +179,7 @@ const (
 	NM_ACTIVE_CONNECTION_STATE_DEACTIVATE   = 4
 )
 
+// Connection secret flags
 const (
 	NM_SETTING_SECRET_FLAG_NONE         = 0x00000000
 	NM_SETTING_SECRET_FLAG_AGENT_OWNED  = 0x00000001

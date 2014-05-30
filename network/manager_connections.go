@@ -233,7 +233,7 @@ func (m *Manager) GetActiveConnectionInfo(devPath dbus.ObjectPath) (acinfoJSON s
 // CreateConnection create a new connection, return ConnectionSession's dbus object path if success.
 func (m *Manager) CreateConnection(connType string, devPath dbus.ObjectPath) (session *ConnectionSession, err error) {
 	logger.Debug("CreateConnection", connType, devPath)
-	session, err = NewConnectionSessionByCreate(connType, devPath)
+	session, err = newConnectionSessionByCreate(connType, devPath)
 	if err != nil {
 		logger.Error(err)
 		return
@@ -244,7 +244,7 @@ func (m *Manager) CreateConnection(connType string, devPath dbus.ObjectPath) (se
 
 // EditConnection open a connection through uuid, return ConnectionSession's dbus object path if success.
 func (m *Manager) EditConnection(uuid string, devPath dbus.ObjectPath) (session *ConnectionSession, err error) {
-	session, err = NewConnectionSessionByOpen(uuid, devPath)
+	session, err = newConnectionSessionByOpen(uuid, devPath)
 	if err != nil {
 		logger.Error(err)
 		return

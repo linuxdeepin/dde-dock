@@ -5,7 +5,7 @@ import (
 	"strconv"
 )
 
-// Custom device types
+// Custom device types, use sting instead of number, used by front-end
 const (
 	deviceUnknown    = "unknown"
 	deviceEthernet   = "wired"

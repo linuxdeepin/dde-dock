@@ -37,7 +37,7 @@ func doNewConnectionSession(devPath dbus.ObjectPath, uuid string) (s *Connection
 	return s
 }
 
-func NewConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath) (s *ConnectionSession, err error) {
+func newConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath) (s *ConnectionSession, err error) {
 	if !isStringInArray(connectionType, supportedConnectionTypes) {
 		err = fmt.Errorf("connection type is out of support: %s", connectionType)
 		logger.Error(err)
@@ -84,7 +84,7 @@ func NewConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 	return
 }
 
-func NewConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *ConnectionSession, err error) {
+func newConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *ConnectionSession, err error) {
 	connectionPath, err := nmGetConnectionByUuid(uuid)
 	if err != nil {
 		return
