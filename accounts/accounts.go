@@ -117,6 +117,10 @@ func newUserInfo(name, uid, gid, home, shell string) UserInfo {
 }
 
 func checkUserIsHuman(info *UserInfo) bool {
+	if info.Name == "root" {
+		return false
+	}
+
 	shells := strings.Split(info.Shell, "/")
 	tmpShell := shells[len(shells)-1]
 	if SHELL_END_FALSE == tmpShell ||
