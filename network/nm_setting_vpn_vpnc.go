@@ -1,8 +1,6 @@
 package network
 
-import (
-	"dlib"
-)
+import . "dlib/gettext"
 
 const (
 	NM_DBUS_SERVICE_VPNC   = "org.freedesktop.NetworkManager.vpnc"
@@ -113,10 +111,10 @@ const (
 )
 
 var availableValuesNMVpncSecretFlag = []kvalue{
-	kvalue{NM_VPNC_SECRET_FLAG_NONE, dlib.Tr("Saved")},
-	// kvalue{NM_VPNC_SECRET_FLAG_SAVE, dlib.Tr("Saved")},
-	kvalue{NM_VPNC_SECRET_FLAG_ASK, dlib.Tr("Always Ask")},
-	kvalue{NM_VPNC_SECRET_FLAG_UNUSED, dlib.Tr("Not Required")},
+	kvalue{NM_VPNC_SECRET_FLAG_NONE, Tr("Saved")},
+	// kvalue{NM_VPNC_SECRET_FLAG_SAVE, Tr("Saved")},
+	kvalue{NM_VPNC_SECRET_FLAG_ASK, Tr("Always Ask")},
+	kvalue{NM_VPNC_SECRET_FLAG_UNUSED, Tr("Not Required")},
 }
 
 func isVpnVpncNeedShowSecret(data connectionData) bool {
@@ -210,29 +208,29 @@ func getSettingVpnVpncAdvancedAvailableValues(data connectionData, key string) (
 	switch key {
 	case NM_SETTING_VPN_VPNC_KEY_VENDOR:
 		values = []kvalue{
-			kvalue{NM_VPNC_VENDOR_CISCO, dlib.Tr("Cisco (default)")},
-			kvalue{NM_VPNC_VENDOR_NETSCREEN, dlib.Tr("Netscreen")},
+			kvalue{NM_VPNC_VENDOR_CISCO, Tr("Cisco (default)")},
+			kvalue{NM_VPNC_VENDOR_NETSCREEN, Tr("Netscreen")},
 		}
 	case NM_SETTING_VPN_VPNC_KEY_NAT_TRAVERSAL_MODE:
 		values = []kvalue{
-			kvalue{NM_VPNC_NATT_MODE_NATT, dlib.Tr("NAT-T When Available (default)")},
-			kvalue{NM_VPNC_NATT_MODE_NATT_ALWAYS, dlib.Tr("NAT-T Always")},
-			kvalue{NM_VPNC_NATT_MODE_CISCO, dlib.Tr("Cisco UDP")},
-			kvalue{NM_VPNC_NATT_MODE_NONE, dlib.Tr("Disabled")},
+			kvalue{NM_VPNC_NATT_MODE_NATT, Tr("NAT-T When Available (default)")},
+			kvalue{NM_VPNC_NATT_MODE_NATT_ALWAYS, Tr("NAT-T Always")},
+			kvalue{NM_VPNC_NATT_MODE_CISCO, Tr("Cisco UDP")},
+			kvalue{NM_VPNC_NATT_MODE_NONE, Tr("Disabled")},
 		}
 	case NM_SETTING_VPN_VPNC_KEY_DHGROUP:
 		values = []kvalue{
-			kvalue{NM_VPNC_DHGROUP_DH1, dlib.Tr("DH Group 1")},
-			kvalue{NM_VPNC_DHGROUP_DH2, dlib.Tr("DH Group 2 (default)")},
-			kvalue{NM_VPNC_DHGROUP_DH5, dlib.Tr("DH Group 5")},
+			kvalue{NM_VPNC_DHGROUP_DH1, Tr("DH Group 1")},
+			kvalue{NM_VPNC_DHGROUP_DH2, Tr("DH Group 2 (default)")},
+			kvalue{NM_VPNC_DHGROUP_DH5, Tr("DH Group 5")},
 		}
 	case NM_SETTING_VPN_VPNC_KEY_PERFECT_FORWARD:
 		values = []kvalue{
-			kvalue{NM_VPNC_PFS_SERVER, dlib.Tr("Server (default)")},
-			kvalue{NM_VPNC_PFS_NOPFS, dlib.Tr("None")},
-			kvalue{NM_VPNC_PFS_DH1, dlib.Tr("DH Group 1")},
-			kvalue{NM_VPNC_PFS_DH2, dlib.Tr("DH Group 2")},
-			kvalue{NM_VPNC_PFS_DH5, dlib.Tr("DH Group 5")},
+			kvalue{NM_VPNC_PFS_SERVER, Tr("Server (default)")},
+			kvalue{NM_VPNC_PFS_NOPFS, Tr("None")},
+			kvalue{NM_VPNC_PFS_DH1, Tr("DH Group 1")},
+			kvalue{NM_VPNC_PFS_DH2, Tr("DH Group 2")},
+			kvalue{NM_VPNC_PFS_DH5, Tr("DH Group 5")},
 		}
 	}
 	return

@@ -3,6 +3,7 @@ package network
 import nm "dbus/org/freedesktop/networkmanager"
 import "dlib/dbus"
 import "strings"
+import "fmt"
 
 // General function wrappers for network manager
 func nmGeneralGetAllDeviceHwAddr(devType uint32) (allHwAddr map[string]string) {
@@ -182,6 +183,38 @@ func nmNewAccessPoint(apPath dbus.ObjectPath) (ap *nm.AccessPoint, err error) {
 	}
 	return
 }
+func nmNewActiveConnection(apath dbus.ObjectPath) (ac *nm.ActiveConnection, err error) {
+	ac, err = nm.NewActiveConnection(dbusNmDest, apath)
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+	return
+}
+func nmNewAgentManager() (manager *nm.AgentManager, err error) {
+	manager, err = nm.NewAgentManager(dbusNmDest, "/org/freedesktop/NetworkManager/AgentManager")
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+	return
+}
+func nmNewDHCP4Config(path dbus.ObjectPath) (dhcp4 *nm.DHCP4Config, err error) {
+	dhcp4, err = nm.NewDHCP4Config(dbusNmDest, path)
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+	return
+}
+func nmNewSettingsConnection(cpath dbus.ObjectPath) (conn *nm.SettingsConnection, err error) {
+	conn, err = nm.NewSettingsConnection(dbusNmDest, cpath)
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+	return
+}
 
 // Destroy network manager objects
 func nmDestroyDevice(dev *nm.Device) {
@@ -227,43 +260,29 @@ func nmDestroyActiveConnection(aconn *nm.ActiveConnection) {
 	nm.DestroyActiveConnection(aconn)
 }
 
-func nmNewActiveConnection(apath dbus.ObjectPath) (ac *nm.ActiveConnection, err error) {
-	ac, err = nm.NewActiveConnection(dbusNmDest, apath)
-	if err != nil {
-		logger.Error(err)
-		return
-	}
-	return
-}
-
-func nmNewAgentManager() (manager *nm.AgentManager, err error) {
-	manager, err = nm.NewAgentManager(dbusNmDest, "/org/freedesktop/NetworkManager/AgentManager")
-	if err != nil {
-		logger.Error(err)
-		return
-	}
-	return
-}
-
-func nmNewDHCP4Config(path dbus.ObjectPath) (dhcp4 *nm.DHCP4Config, err error) {
-	dhcp4, err = nm.NewDHCP4Config(dbusNmDest, path)
-	if err != nil {
-		logger.Error(err)
-		return
-	}
-	return
-}
-
-func nmNewSettingsConnection(cpath dbus.ObjectPath) (conn *nm.SettingsConnection, err error) {
-	conn, err = nm.NewSettingsConnection(dbusNmDest, cpath)
-	if err != nil {
-		logger.Error(err)
-		return
-	}
-	return
-}
-
 // Operate wrapper for network manager
+func nmAgentRegister(identifier string) {
+	manager, err := nmNewAgentManager()
+	if err != nil {
+		return
+	}
+	err = manager.Register(identifier)
+	if err != nil {
+		logger.Error(err)
+	}
+}
+
+func nmAgentUnregister() {
+	manager, err := nmNewAgentManager()
+	if err != nil {
+		return
+	}
+	err = manager.Unregister()
+	if err != nil {
+		logger.Error(err)
+	}
+}
+
 func nmGetDevices() (devPaths []dbus.ObjectPath) {
 	devPaths, err := nmManager.GetDevices()
 	if err != nil {
@@ -509,6 +528,33 @@ func nmGetDHCP4Info(path dbus.ObjectPath) (ip, mask, route, dns string) {
 	}
 	if dnsData, ok := options["domain_name_servers"]; ok {
 		dns, _ = dnsData.Value().(string)
+	}
+	return
+}
+
+func nmGetDeviceActiveConnectionData(devPath dbus.ObjectPath) (data connectionData, err error) {
+	dev, err := nmNewDevice(devPath)
+	if err != nil {
+		return
+	}
+	acPath := dev.ActiveConnection.Get()
+	if len(acPath) == 0 || acPath == "/" {
+		// don't need logger error here
+		err = fmt.Errorf("there is no active connection for device", devPath)
+		return
+	}
+	aconn, err := nmNewActiveConnection(acPath)
+	if err != nil {
+		return
+	}
+	conn, err := nmNewSettingsConnection(aconn.Connection.Get())
+	if err != nil {
+		return
+	}
+	data, err = conn.GetSettings()
+	if err != nil {
+		logger.Error(err)
+		return
 	}
 	return
 }

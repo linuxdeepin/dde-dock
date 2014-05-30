@@ -17,7 +17,7 @@ var (
 	invalidKey = make(map[string]map[string]dbus.Variant)
 )
 
-func (c *Agent) GetDBusInfo() dbus.DBusInfo {
+func (a *Agent) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		".",
 		"/org/freedesktop/NetworkManager/SecretAgent",
@@ -126,19 +126,24 @@ func (a *Agent) feedSecret(path string, name string, key string) {
 	}
 }
 
-func newAgent(identify string) *Agent {
-	c := &Agent{}
-	c.pendingKeys = make(map[mapKey]chan string)
-	c.savedKeys = make(map[mapKey]map[string]map[string]dbus.Variant)
+func newAgent() (a *Agent) {
+	a = &Agent{}
+	a.pendingKeys = make(map[mapKey]chan string)
+	a.savedKeys = make(map[mapKey]map[string]map[string]dbus.Variant)
 
-	dbus.InstallOnSystem(c)
-
-	if manager, err := nmNewAgentManager(); err != nil {
-		panic(err)
-	} else {
-		manager.Register("com.deepin.daemon.Network.Agent")
+	err := dbus.InstallOnSystem(a)
+	if err != nil {
+		logger.Error("install network agent failed:", err)
+		return
 	}
-	return c
+
+	nmAgentRegister("com.deepin.daemon.Network.Agent")
+	return
+}
+
+func destroyAgent(a *Agent) {
+	nmAgentUnregister()
+	dbus.UnInstallObject(a)
 }
 
 func (m *Manager) FeedSecret(path string, name, key string) {

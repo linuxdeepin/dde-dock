@@ -1,8 +1,6 @@
 package network
 
-import (
-	"dlib"
-)
+import . "dlib/gettext"
 
 const (
 	NM_DBUS_SERVICE_OPENVPN   = "org.freedesktop.NetworkManager.openvpn"
@@ -139,9 +137,9 @@ const (
 )
 
 var availableValuesNMOpenvpnSecretFlag = []kvalue{
-	kvalue{NM_OPENVPN_SECRET_FLAG_SAVE, dlib.Tr("Saved")}, // system saved
-	kvalue{NM_OPENVPN_SECRET_FLAG_ASK, dlib.Tr("Always Ask")},
-	kvalue{NM_OPENVPN_SECRET_FLAG_UNUSED, dlib.Tr("Not Required")},
+	kvalue{NM_OPENVPN_SECRET_FLAG_SAVE, Tr("Saved")}, // system saved
+	kvalue{NM_OPENVPN_SECRET_FLAG_ASK, Tr("Always Ask")},
+	kvalue{NM_OPENVPN_SECRET_FLAG_UNUSED, Tr("Not Required")},
 }
 
 func isVpnOpenvpnNeedShowPassword(data connectionData) bool {
@@ -213,15 +211,15 @@ func getSettingVpnOpenvpnAvailableValues(data connectionData, key string) (value
 	switch key {
 	case NM_SETTING_VPN_OPENVPN_KEY_CONNECTION_TYPE:
 		values = []kvalue{
-			kvalue{NM_OPENVPN_CONTYPE_TLS, dlib.Tr("Certificates (TLS)")},
-			kvalue{NM_OPENVPN_CONTYPE_PASSWORD, dlib.Tr("Password")},
-			kvalue{NM_OPENVPN_CONTYPE_PASSWORD_TLS, dlib.Tr("Password with Certificates (TLS)")},
-			kvalue{NM_OPENVPN_CONTYPE_STATIC_KEY, dlib.Tr("Static Key")},
+			kvalue{NM_OPENVPN_CONTYPE_TLS, Tr("Certificates (TLS)")},
+			kvalue{NM_OPENVPN_CONTYPE_PASSWORD, Tr("Password")},
+			kvalue{NM_OPENVPN_CONTYPE_PASSWORD_TLS, Tr("Password with Certificates (TLS)")},
+			kvalue{NM_OPENVPN_CONTYPE_STATIC_KEY, Tr("Static Key")},
 		}
 	case NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY_DIRECTION:
 		values = []kvalue{
-			kvalue{0, dlib.Tr("0")},
-			kvalue{1, dlib.Tr("1")},
+			kvalue{0, Tr("0")},
+			kvalue{1, Tr("1")},
 		}
 	case NM_SETTING_VPN_OPENVPN_KEY_CERTPASS_FLAGS:
 		values = availableValuesNMOpenvpnSecretFlag
@@ -331,36 +329,36 @@ func getSettingVpnOpenvpnSecurityAvailableValues(data connectionData, key string
 		// "/sbin/openvpn"
 		// --show-ciphers
 		values = []kvalue{
-			kvalue{"", dlib.Tr("Default")},
-			kvalue{"DES-CBC", dlib.Tr("DES-CBC")},
-			kvalue{"RC2-CBC", dlib.Tr("RC2-CBC")},
-			kvalue{"DES-EDE-CBC", dlib.Tr("DES-EDE-CBC")},
-			kvalue{"DES-EDE3-CBC", dlib.Tr("DES-EDE3-CBC")},
-			kvalue{"DESX-CBC", dlib.Tr("DESX-CBC")},
-			kvalue{"BF-CBC", dlib.Tr("BF-CBC")},
-			kvalue{"RC2-40-CBC", dlib.Tr("RC2-40-CBC")},
-			kvalue{"CAST5-CBC", dlib.Tr("CAST5-CBC")},
-			kvalue{"RC2-64-CBC", dlib.Tr("RC2-64-CBC")},
-			kvalue{"AES-128-CBC", dlib.Tr("AES-128-CBC")},
-			kvalue{"AES-192-CBC", dlib.Tr("AES-192-CBC")},
-			kvalue{"AES-256-CBC", dlib.Tr("AES-256-CBC")},
-			kvalue{"CAMELLIA-128-CBC", dlib.Tr("CAMELLIA-128-CBC")},
-			kvalue{"CAMELLIA-192-CBC", dlib.Tr("CAMELLIA-192-CBC")},
-			kvalue{"CAMELLIA-256-CBC", dlib.Tr("CAMELLIA-256-CBC")},
-			kvalue{"SEED-CBC", dlib.Tr("SEED-CBC")},
+			kvalue{"", Tr("Default")},
+			kvalue{"DES-CBC", Tr("DES-CBC")},
+			kvalue{"RC2-CBC", Tr("RC2-CBC")},
+			kvalue{"DES-EDE-CBC", Tr("DES-EDE-CBC")},
+			kvalue{"DES-EDE3-CBC", Tr("DES-EDE3-CBC")},
+			kvalue{"DESX-CBC", Tr("DESX-CBC")},
+			kvalue{"BF-CBC", Tr("BF-CBC")},
+			kvalue{"RC2-40-CBC", Tr("RC2-40-CBC")},
+			kvalue{"CAST5-CBC", Tr("CAST5-CBC")},
+			kvalue{"RC2-64-CBC", Tr("RC2-64-CBC")},
+			kvalue{"AES-128-CBC", Tr("AES-128-CBC")},
+			kvalue{"AES-192-CBC", Tr("AES-192-CBC")},
+			kvalue{"AES-256-CBC", Tr("AES-256-CBC")},
+			kvalue{"CAMELLIA-128-CBC", Tr("CAMELLIA-128-CBC")},
+			kvalue{"CAMELLIA-192-CBC", Tr("CAMELLIA-192-CBC")},
+			kvalue{"CAMELLIA-256-CBC", Tr("CAMELLIA-256-CBC")},
+			kvalue{"SEED-CBC", Tr("SEED-CBC")},
 		}
 	case NM_SETTING_VPN_OPENVPN_KEY_AUTH:
 		values = []kvalue{
-			kvalue{"", dlib.Tr("Default")},
-			kvalue{NM_OPENVPN_AUTH_NONE, dlib.Tr("None")},
-			kvalue{NM_OPENVPN_AUTH_RSA_MD4, dlib.Tr("RSA MD-4")},
-			kvalue{NM_OPENVPN_AUTH_MD5, dlib.Tr("MD-5")},
-			kvalue{NM_OPENVPN_AUTH_SHA1, dlib.Tr("SHA-1")},
-			kvalue{NM_OPENVPN_AUTH_SHA224, dlib.Tr("SHA-224")},
-			kvalue{NM_OPENVPN_AUTH_SHA256, dlib.Tr("SHA-256")},
-			kvalue{NM_OPENVPN_AUTH_SHA384, dlib.Tr("SHA-384")},
-			kvalue{NM_OPENVPN_AUTH_SHA512, dlib.Tr("SHA-512")},
-			kvalue{NM_OPENVPN_AUTH_RIPEMD160, dlib.Tr("RIPEMD-160")},
+			kvalue{"", Tr("Default")},
+			kvalue{NM_OPENVPN_AUTH_NONE, Tr("None")},
+			kvalue{NM_OPENVPN_AUTH_RSA_MD4, Tr("RSA MD-4")},
+			kvalue{NM_OPENVPN_AUTH_MD5, Tr("MD-5")},
+			kvalue{NM_OPENVPN_AUTH_SHA1, Tr("SHA-1")},
+			kvalue{NM_OPENVPN_AUTH_SHA224, Tr("SHA-224")},
+			kvalue{NM_OPENVPN_AUTH_SHA256, Tr("SHA-256")},
+			kvalue{NM_OPENVPN_AUTH_SHA384, Tr("SHA-384")},
+			kvalue{NM_OPENVPN_AUTH_SHA512, Tr("SHA-512")},
+			kvalue{NM_OPENVPN_AUTH_RIPEMD160, Tr("RIPEMD-160")},
 		}
 	}
 	return
@@ -382,14 +380,14 @@ func getSettingVpnOpenvpnTlsauthAvailableValues(data connectionData, key string)
 	switch key {
 	case NM_SETTING_VPN_OPENVPN_KEY_REMOTE_CERT_TLS:
 		values = []kvalue{
-			kvalue{"", dlib.Tr("Default")}, // default
-			kvalue{NM_OPENVPN_REM_CERT_TLS_CLIENT, dlib.Tr("Client")},
-			kvalue{NM_OPENVPN_REM_CERT_TLS_SERVER, dlib.Tr("Server")},
+			kvalue{"", Tr("Default")}, // default
+			kvalue{NM_OPENVPN_REM_CERT_TLS_CLIENT, Tr("Client")},
+			kvalue{NM_OPENVPN_REM_CERT_TLS_SERVER, Tr("Server")},
 		}
 	case NM_SETTING_VPN_OPENVPN_KEY_TA_DIR:
 		values = []kvalue{
-			kvalue{0, dlib.Tr("0")},
-			kvalue{1, dlib.Tr("1")},
+			kvalue{0, Tr("0")},
+			kvalue{1, Tr("1")},
 		}
 	}
 	return
@@ -431,9 +429,9 @@ func getSettingVpnOpenvpnProxiesAvailableValues(data connectionData, key string)
 	switch key {
 	case NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE:
 		values = []kvalue{
-			kvalue{"none", dlib.Tr("Not Required")},
-			kvalue{"httpect", dlib.Tr("HTTP")},
-			kvalue{"socksct", dlib.Tr("SOCKS")},
+			kvalue{"none", Tr("Not Required")},
+			kvalue{"httpect", Tr("HTTP")},
+			kvalue{"socksct", Tr("SOCKS")},
 		}
 	}
 	return

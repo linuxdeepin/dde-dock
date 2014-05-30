@@ -234,7 +234,7 @@ func (m *Manager) ActivateAccessPoint(apPath, devPath dbus.ObjectPath) (uuid str
 }
 
 func (m *Manager) CreateConnectionForAccessPoint(apPath, devPath dbus.ObjectPath) (session *ConnectionSession, err error) {
-	session, err = NewConnectionSessionByCreate(connectionWireless, devPath)
+	session, err = newConnectionSessionByCreate(connectionWireless, devPath)
 	if err != nil {
 		logger.Error(err)
 		return

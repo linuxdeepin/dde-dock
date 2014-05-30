@@ -11,7 +11,7 @@ const (
 	dbusNetworkIfs  = "com.deepin.daemon.Network"
 )
 
-// TODO put here temporary
+// TODO move to main.go
 var connectionSessions []*ConnectionSession
 
 // TODO refactor code
@@ -55,7 +55,8 @@ type Manager struct {
 	AccessPointRemoved           func(devPath, apJSON string)
 	AccessPointPropertiesChanged func(devPath, apJSON string)
 
-	agent *Agent
+	agent         *Agent
+	stateNotifier *StateNotifier
 }
 
 func (m *Manager) GetDBusInfo() dbus.DBusInfo {
@@ -66,12 +67,29 @@ func (m *Manager) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
+// initialize slice code
+func initSlices() {
+	initAvailableValues8021x()
+	initAvailableValuesIp4()
+	initAvailableValuesIp6()
+	initNmStateReasons()
+}
+
 func NewManager() (m *Manager) {
 	m = &Manager{}
 	return
 }
 
+func DestroyManager(m *Manager) {
+	destroyStateNotifier(m.stateNotifier)
+	destroyAgent(m.agent)
+	clearConnectionSessions()
+	dbus.UnInstallObject(m)
+}
+
 func (m *Manager) initManager() {
+	initSlices() // TODO move to main.go
+
 	m.WiredEnabled = true
 	m.WirelessEnabled = property.NewWrapProperty(m, "WirelessEnabled", nmManager.WirelessEnabled)
 	m.NetworkingEnabled = property.NewWrapProperty(m, "NetworkingEnabled", nmManager.NetworkingEnabled)
@@ -91,7 +109,8 @@ func (m *Manager) initManager() {
 		m.updatePropState()
 	})
 
-	m.agent = newAgent("org.snyh.agent")
+	m.agent = newAgent()
+	m.stateNotifier = newStateNotifier()
 }
 
 func (m *Manager) updateActiveConnections() {

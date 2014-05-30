@@ -1,7 +1,7 @@
 package network
 
 import (
-	"dlib"
+	. "dlib/gettext"
 	"fmt"
 )
 
@@ -153,24 +153,24 @@ func getSettingWirelessSecurityAvailableValues(data connectionData, key string) 
 	switch key {
 	case NM_SETTING_WIRELESS_SECURITY_KEY_MGMT:
 		values = []kvalue{
-			kvalue{"none", dlib.Tr("wep")},
-			kvalue{"ieee8021x", dlib.Tr("dynamic wep")},
-			kvalue{"wpa-none", dlib.Tr("wpa-psk ad-hoc")},
-			kvalue{"wpa-psk", dlib.Tr("wpa-psk infrastructure")},
-			kvalue{"wpa-eap", dlib.Tr("wpa enterprise")},
+			kvalue{"none", Tr("wep")},
+			kvalue{"ieee8021x", Tr("dynamic wep")},
+			kvalue{"wpa-none", Tr("wpa-psk ad-hoc")},
+			kvalue{"wpa-psk", Tr("wpa-psk infrastructure")},
+			kvalue{"wpa-eap", Tr("wpa enterprise")},
 		}
 	case NM_SETTING_WIRELESS_SECURITY_GROUP:
 		values = []kvalue{
-			kvalue{"wep40", dlib.Tr("wep40")},
-			kvalue{"wep104", dlib.Tr("wep104")},
-			kvalue{"tkip", dlib.Tr("tkip")},
-			kvalue{"ccmp", dlib.Tr("ccmp")},
+			kvalue{"wep40", Tr("wep40")},
+			kvalue{"wep104", Tr("wep104")},
+			kvalue{"tkip", Tr("tkip")},
+			kvalue{"ccmp", Tr("ccmp")},
 		}
 	case NM_SETTING_WIRELESS_SECURITY_AUTH_ALG:
 		values = []kvalue{
-			kvalue{"open", dlib.Tr("open")},
-			kvalue{"shared", dlib.Tr("shared")},
-			kvalue{"leap", dlib.Tr("leap")},
+			kvalue{"open", Tr("open")},
+			kvalue{"shared", Tr("shared")},
+			kvalue{"leap", Tr("leap")},
 		}
 	}
 	return

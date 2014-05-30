@@ -1,7 +1,7 @@
 package network
 
 import (
-	"dlib"
+	. "dlib/gettext"
 	"fmt"
 )
 
@@ -113,28 +113,28 @@ func getSettingGsmAvailableValues(data connectionData, key string) (values []kva
 	switch key {
 	case NM_SETTING_GSM_NUMBER:
 		values = []kvalue{
-			kvalue{"*99#", dlib.Tr("*99#")},
+			kvalue{"*99#", Tr("*99#")},
 		}
 	case NM_SETTING_GSM_PASSWORD_FLAGS:
 		values = availableValuesNMSettingSecretFlag
 	case NM_SETTING_GSM_APN:
 		// TODO
 		values = []kvalue{
-			kvalue{"3gnet", dlib.Tr("China Unicom Internet")},
-			kvalue{"3gwap", dlib.Tr("China Unicom MMS")},
-			kvalue{"cmwap", dlib.Tr("China Mobile WAP")},
-			kvalue{"cmnet", dlib.Tr("China Mobile Internet")},
-			kvalue{"cmwap", dlib.Tr("China Mobile MMS")},
+			kvalue{"3gnet", Tr("China Unicom Internet")},
+			kvalue{"3gwap", Tr("China Unicom MMS")},
+			kvalue{"cmwap", Tr("China Mobile WAP")},
+			kvalue{"cmnet", Tr("China Mobile Internet")},
+			kvalue{"cmwap", Tr("China Mobile MMS")},
 		}
 	case NM_SETTING_GSM_NETWORK_TYPE:
 		values = []kvalue{
-			kvalue{NM_SETTING_GSM_NETWORK_TYPE_ANY, dlib.Tr("Any")},
-			kvalue{NM_SETTING_GSM_NETWORK_TYPE_UMTS_HSPA, dlib.Tr("3G (UMTS/HSPA)")},
-			kvalue{NM_SETTING_GSM_NETWORK_TYPE_GPRS_EDGE, dlib.Tr("2G (GPRS/EDGE)")},
-			kvalue{NM_SETTING_GSM_NETWORK_TYPE_PREFER_UMTS_HSPA, dlib.Tr("Prefer 3G (UMTS/HSPA)")},
-			kvalue{NM_SETTING_GSM_NETWORK_TYPE_PREFER_GPRS_EDGE, dlib.Tr("Prefer 2G (GPRS/EDGE)")},
-			kvalue{NM_SETTING_GSM_NETWORK_TYPE_PREFER_4G, dlib.Tr("Prefer 4G (LTE)")},
-			kvalue{NM_SETTING_GSM_NETWORK_TYPE_4G, dlib.Tr("Use Only 4G (LTE)")},
+			kvalue{NM_SETTING_GSM_NETWORK_TYPE_ANY, Tr("Any")},
+			kvalue{NM_SETTING_GSM_NETWORK_TYPE_UMTS_HSPA, Tr("3G (UMTS/HSPA)")},
+			kvalue{NM_SETTING_GSM_NETWORK_TYPE_GPRS_EDGE, Tr("2G (GPRS/EDGE)")},
+			kvalue{NM_SETTING_GSM_NETWORK_TYPE_PREFER_UMTS_HSPA, Tr("Prefer 3G (UMTS/HSPA)")},
+			kvalue{NM_SETTING_GSM_NETWORK_TYPE_PREFER_GPRS_EDGE, Tr("Prefer 2G (GPRS/EDGE)")},
+			kvalue{NM_SETTING_GSM_NETWORK_TYPE_PREFER_4G, Tr("Prefer 4G (LTE)")},
+			kvalue{NM_SETTING_GSM_NETWORK_TYPE_4G, Tr("Use Only 4G (LTE)")},
 		}
 	}
 	return

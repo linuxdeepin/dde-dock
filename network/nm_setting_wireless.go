@@ -1,7 +1,7 @@
 package network
 
 import (
-	"dlib"
+	. "dlib/gettext"
 	"fmt"
 )
 
@@ -160,7 +160,7 @@ var availableValuesWirelessChannelA = []kvalue{
 }
 
 var availableValuesWirelessChannelBg = []kvalue{
-	kvalue{"", dlib.Tr("Default")},
+	kvalue{"", Tr("Default")},
 	kvalue{"1", "1 (2412 MHz)"},
 	kvalue{"2", "2 (2417 MHz)"},
 	kvalue{"3", "3 (2422 MHz)"},
@@ -258,15 +258,15 @@ func getSettingWirelessAvailableValues(data connectionData, key string) (values 
 	switch key {
 	case NM_SETTING_WIRELESS_MODE:
 		values = []kvalue{
-			kvalue{NM_SETTING_WIRELESS_MODE_INFRA, dlib.Tr("Infrastructure")},
-			kvalue{NM_SETTING_WIRELESS_MODE_ADHOC, dlib.Tr("Ad-Hoc")},
-			kvalue{NM_SETTING_WIRELESS_MODE_AP, dlib.Tr("AP-Hotspot")},
+			kvalue{NM_SETTING_WIRELESS_MODE_INFRA, Tr("Infrastructure")},
+			kvalue{NM_SETTING_WIRELESS_MODE_ADHOC, Tr("Ad-Hoc")},
+			kvalue{NM_SETTING_WIRELESS_MODE_AP, Tr("AP-Hotspot")},
 		}
 	case NM_SETTING_WIRELESS_BAND:
 		values = []kvalue{
-			kvalue{"", dlib.Tr("Automatic")},
-			kvalue{"a", dlib.Tr("A (5 GHz)")},
-			kvalue{"bg", dlib.Tr("BG (2.4 GHz)")},
+			kvalue{"", Tr("Automatic")},
+			kvalue{"a", Tr("A (5 GHz)")},
+			kvalue{"bg", Tr("BG (2.4 GHz)")},
 		}
 	case NM_SETTING_WIRELESS_CHANNEL:
 		if isSettingWirelessBandExists(data) {
