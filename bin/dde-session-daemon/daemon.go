@@ -15,7 +15,6 @@ import "dde-daemon/themes"
 //import "dde-daemon/dock"
 //import "dde-daemon/launcher"
 
-//import "dde-daemon/inputdevices"
 import "dlib/glib-2.0"
 
 //#cgo pkg-config:gtk+-3.0
@@ -48,7 +47,6 @@ func main() {
 	//go launcher.Start()
 
 	go keybinding.Start()
-	//go inputdevices.Start()
 	go datetime.Start()
 	go mime.Start()
 	go mounts.Start()
