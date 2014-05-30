@@ -54,7 +54,6 @@ func Start() {
 		return
 	}
 
-	initGdkEnv()
 	listenDevsSettings()
 
 	managerObj = NewManager()

@@ -26,33 +26,26 @@
 
 #include "_cgo_export.h"
 
-static void listen_device_changed();
 static void device_removed_cb(GdkDeviceManager *manager,
                               GdkDevice *device, gpointer user_data);
 static void device_added_cb(GdkDeviceManager *manager,
                             GdkDevice *device, gpointer user_data);
 
-void
-init_gdk_env ()
-{
-	listen_device_changed();
-}
-
-static void
-listen_device_changed ()
+int listen_device_changed ()
 {
 	GdkDeviceManager *manager = gdk_display_get_device_manager(
 	                                gdk_display_get_default());
 
 	if (manager == NULL) {
 		g_warning("Get Devices Manager Failed");
-		return;
+		return -1;
 	}
 
 	g_signal_connect (G_OBJECT(manager), "device-removed",
 	                  G_CALLBACK(device_removed_cb), NULL);
 	g_signal_connect (G_OBJECT(manager), "device-added",
 	                  G_CALLBACK(device_added_cb), NULL);
+	return 0;
 }
 
 static void

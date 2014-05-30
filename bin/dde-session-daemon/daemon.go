@@ -8,7 +8,8 @@ import "dde-daemon/keybinding"
 import "dde-daemon/datetime"
 import "dde-daemon/mime"
 import "dde-daemon/mounts"
-import "dde-daemon/screen_edges"
+
+//import "dde-daemon/screen_edges"
 import "dde-daemon/themes"
 
 //import "dde-daemon/dock"
@@ -52,10 +53,10 @@ func main() {
 	go mime.Start()
 	go mounts.Start()
 	go themes.Start()
-	go screen_edges.Start()
 
-	startMprisDaemon()
+	go startMprisDaemon()
 
 	<-time.After(time.Second)
+	//go screen_edges.Start()
 	glib.StartLoop()
 }
