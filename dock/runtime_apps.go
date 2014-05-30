@@ -3,7 +3,7 @@ package dock
 import (
 	"bytes"
 	"dbus/com/deepin/daemon/dock"
-	"dlib"
+	. "dlib/gettext"
 	"dlib/gio-2.0"
 	"dlib/glib-2.0"
 	"encoding/base64"
@@ -69,14 +69,14 @@ func NewRuntimeApp(xid xproto.Window, appId string) *RuntimeApp {
 		}
 	}
 	if app.core != nil {
-		LOGGER.Debug(appId, ", Actions:", app.core.ListActions())
+		logger.Debug(appId, ", Actions:", app.core.ListActions())
 	} else {
-		LOGGER.Debug(appId, ", Actions:[]")
+		logger.Debug(appId, ", Actions:[]")
 	}
 	app.attachXid(xid)
 	app.CurrentInfo = app.xids[xid]
 	app.getExec(xid)
-	LOGGER.Debug("Exec:", app.exec)
+	logger.Debug("Exec:", app.exec)
 	app.buildMenu()
 	return app
 }
@@ -87,13 +87,13 @@ func find_exec_name_by_xid(xid xproto.Window) string {
 }
 func (app *RuntimeApp) getExec(xid xproto.Window) {
 	if app.core != nil {
-		LOGGER.Debug(app.Id, " Get Exec from desktop file")
+		logger.Debug(app.Id, " Get Exec from desktop file")
 		// should NOT use GetExecuable, get wrong result, like skype
 		// which gets 'env'.
 		app.exec = app.core.GetString(glib.KeyFileDesktopKeyExec)
 		return
 	}
-	LOGGER.Debug(app.Id, " Get Exec from pid")
+	logger.Debug(app.Id, " Get Exec from pid")
 	app.exec = find_exec_name_by_xid(xid)
 }
 func (app *RuntimeApp) buildMenu() {
@@ -106,19 +106,19 @@ func (app *RuntimeApp) buildMenu() {
 		itemName,
 		func() {
 			var a *gio.AppInfo
-			LOGGER.Info(itemName)
+			logger.Info(itemName)
 			if app.core != nil {
-				LOGGER.Info("DesktopAppInfo")
+				logger.Info("DesktopAppInfo")
 				a = (*gio.AppInfo)(app.core)
 			} else {
-				LOGGER.Info("Non-DesktopAppInfo")
+				logger.Info("Non-DesktopAppInfo")
 				a, err := gio.AppInfoCreateFromCommandline(
 					app.exec,
 					"",
 					gio.AppInfoCreateFlagsNone,
 				)
 				if err != nil {
-					LOGGER.Warning("Launch App Falied: ", err)
+					logger.Warning("Launch App Falied: ", err)
 					return
 				}
 
@@ -126,7 +126,7 @@ func (app *RuntimeApp) buildMenu() {
 			}
 
 			_, err := a.Launch(make([]*gio.File, 0), nil)
-			LOGGER.Warning("Launch App Failed: ", err)
+			logger.Warning("Launch App Failed: ", err)
 		},
 		true,
 	))
@@ -143,9 +143,9 @@ func (app *RuntimeApp) buildMenu() {
 		app.coreMenu.AddSeparator()
 	}
 	closeItem := NewMenuItem(
-		dlib.Tr("_Close All"),
+		DGettext("dde-daemon", "_Close All"),
 		func() {
-			LOGGER.Warning("Close All")
+			logger.Warning("Close All")
 			for xid := range app.xids {
 				ewmh.CloseWindow(XU, xid)
 			}
@@ -160,20 +160,20 @@ func (app *RuntimeApp) buildMenu() {
 			"/dde/dock/DockedAppManager",
 		)
 		if err != nil {
-			LOGGER.Warning("get DockedAppManager failed", err)
+			logger.Warning("get DockedAppManager failed", err)
 			return
 		}
 	}
 	isDocked, err := DOCKED_APP_MANAGER.IsDocked(app.Id) // TODO: status
 	if err != nil {
-		LOGGER.Error("get docked status failed:", err)
+		logger.Error("get docked status failed:", err)
 	}
-	LOGGER.Debug(app.Id, "Item is docked:", isDocked)
+	logger.Debug(app.Id, "Item is docked:", isDocked)
 	dockItem := NewMenuItem(
-		dlib.Tr("_Dock"),
+		DGettext("dde-daemon", "_Dock"),
 		func() {
-			LOGGER.Warning("dock item")
-			LOGGER.Info("appid:", app.Id)
+			logger.Warning("dock item")
+			logger.Info("appid:", app.Id)
 
 			var title, icon, exec string
 			if app.core == nil {
@@ -190,7 +190,7 @@ func (app *RuntimeApp) buildMenu() {
 					app.core.GetString(glib.KeyFileDesktopKeyExec)
 			}
 
-			LOGGER.Info("id", app.Id, "title", title, "icon", icon,
+			logger.Info("id", app.Id, "title", title, "icon", icon,
 				"exec", exec)
 			_, err = DOCKED_APP_MANAGER.Dock(
 				app.Id,
@@ -199,7 +199,7 @@ func (app *RuntimeApp) buildMenu() {
 				exec,
 			)
 			if err != nil {
-				LOGGER.Error("Docked failed: ", err)
+				logger.Error("Docked failed: ", err)
 			}
 			app.buildMenu()
 		},
@@ -271,12 +271,12 @@ func isSkipTaskbar(xid xproto.Window) bool {
 
 func canBeMinimized(xid xproto.Window) bool {
 	actions, err := ewmh.WmAllowedActionsGet(XU, xid)
-	// LOGGER.Infof("%x: %v", xid, actions)
+	// logger.Infof("%x: %v", xid, actions)
 	if err != nil {
 		return false
 	}
 	canBeMin := contains(actions, "_NET_WM_ACTION_MINIMIZE")
-	// LOGGER.Infof("%x can be minimized: %v", xid, canBeMin)
+	// logger.Infof("%x can be minimized: %v", xid, canBeMin)
 	return canBeMin
 }
 
@@ -298,13 +298,13 @@ var cannotBeDockedType []string = []string{
 func isNormalWindow(xid xproto.Window) bool {
 	winProps, err := xproto.GetWindowAttributes(XU.Conn(), xid).Reply()
 	if err != nil {
-		LOGGER.Debug("faild Get WindowAttributes:", xid, err)
+		logger.Debug("faild Get WindowAttributes:", xid, err)
 		return false
 	}
 	if winProps.MapState != xproto.MapStateViewable {
 		return false
 	}
-	// LOGGER.Debug("enter isNormalWindow:", xid)
+	// logger.Debug("enter isNormalWindow:", xid)
 	if wmClass, err := icccm.WmClassGet(XU, xid); err == nil {
 		if wmClass.Instance == "explorer.exe" && wmClass.Class == "Wine" {
 			return false
@@ -325,7 +325,7 @@ func isNormalWindow(xid xproto.Window) bool {
 	}
 	types, err := ewmh.WmWindowTypeGet(XU, xid)
 	if err != nil {
-		LOGGER.Debug("Get Window Type failed:", err)
+		logger.Debug("Get Window Type failed:", err)
 		if _, err := xprop.GetProperty(XU, xid, "_XEMBED_INFO"); err != nil {
 			return true
 		} else {
@@ -397,7 +397,7 @@ func (app *RuntimeApp) Activate(x, y int32) error {
 	case contains(app.state, "_NET_WM_STATE_FOCUSED"):
 		s, err := icccm.WmStateGet(XU, app.CurrentInfo.Xid)
 		if err != nil {
-			LOGGER.Info("WmStateGetError:", s, err)
+			logger.Info("WmStateGetError:", s, err)
 			return err
 		}
 		switch s.State {
@@ -535,7 +535,7 @@ func listenRootWindow() {
 	var update = func() {
 		list, err := ewmh.ClientListGet(XU)
 		if err != nil {
-			LOGGER.Warning("Can't Get _NET_CLIENT_LIST", err)
+			logger.Warning("Can't Get _NET_CLIENT_LIST", err)
 		}
 		ENTRY_MANAGER.runtimeAppChangged(list)
 	}

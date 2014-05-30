@@ -1,7 +1,7 @@
 package dock
 
 import (
-	"dlib"
+	. "dlib/gettext"
 	"dlib/gio-2.0"
 	"path/filepath"
 	"strings"
@@ -22,7 +22,7 @@ type NormalApp struct {
 
 func NewNormalApp(id string) *NormalApp {
 	app := &NormalApp{Id: strings.ToLower(filepath.Base(id[:len(id)-8]))}
-	LOGGER.Info(id)
+	logger.Info(id)
 	if filepath.IsAbs(id) {
 		app.core = gio.NewDesktopAppInfoFromFilename(id)
 	} else {
@@ -37,18 +37,18 @@ func NewNormalApp(id string) *NormalApp {
 		return nil
 	}
 	app.Icon = getAppIcon(app.core)
-	LOGGER.Info("app icon:", app.Icon)
+	logger.Info("app icon:", app.Icon)
 	app.Name = app.core.GetDisplayName()
-	LOGGER.Info("Name", app.Name)
+	logger.Info("Name", app.Name)
 	app.buildMenu()
 	return app
 }
 
 func (app *NormalApp) buildMenu() {
 	app.coreMenu = NewMenu()
-	app.coreMenu.AppendItem(NewMenuItem(dlib.Tr("_Run"), func() {
+	app.coreMenu.AppendItem(NewMenuItem(DGettext("dde-daemon", "_Run"), func() {
 		_, err := app.core.Launch(make([]*gio.File, 0), nil)
-		LOGGER.Warning("Launch App Failed: ", err)
+		logger.Warning("Launch App Failed: ", err)
 	}, true))
 	app.coreMenu.AddSeparator()
 	for _, actionName := range app.core.ListActions() {
@@ -61,7 +61,7 @@ func (app *NormalApp) buildMenu() {
 	}
 	app.coreMenu.AddSeparator()
 	dockItem := NewMenuItem(
-		dlib.Tr("_Undock"),
+		DGettext("dde-daemon", "_Undock"),
 		func() {
 			DOCKED_APP_MANAGER.Undock(app.Id)
 		},

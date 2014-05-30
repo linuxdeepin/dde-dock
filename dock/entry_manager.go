@@ -13,7 +13,7 @@ import "path/filepath"
 
 var (
 	ENTRY_MANAGER = initEntryManager()
-	// LOGGER  = logger.NewLogger("com.deepin.daemon.DockAppsBuilder")
+	// logger  = logger.NewLogger("com.deepin.daemon.DockAppsBuilder")
 )
 
 type EntryManager struct {
@@ -39,14 +39,14 @@ func (m *EntryManager) listenDockedApp() {
 			"/dde/dock/DockedAppManager",
 		)
 		if err != nil {
-			LOGGER.Warning("get DockedAppManager failed", err)
+			logger.Warning("get DockedAppManager failed", err)
 			return
 		}
 	}
 
 	DOCKED_APP_MANAGER.ConnectDocked(func(id string) {
 		if _, ok := m.normalApps[id]; ok {
-			LOGGER.Info(id, "is already docked")
+			logger.Info(id, "is already docked")
 			return
 		}
 		m.createNormalApp(id)
@@ -54,9 +54,9 @@ func (m *EntryManager) listenDockedApp() {
 
 	DOCKED_APP_MANAGER.ConnectUndocked(func(id string) {
 		// undocked is operated on normal app
-		LOGGER.Info("Undock", id)
+		logger.Info("Undock", id)
 		if app, ok := m.normalApps[id]; ok {
-			LOGGER.Info("destroy normal app")
+			logger.Info("destroy normal app")
 			m.destroyNormalApp(app)
 		}
 	})
@@ -117,7 +117,7 @@ func (m *EntryManager) destroyEntry(appId string) {
 		e.detachRuntimeApp()
 		dbus.ReleaseName(e)
 		dbus.UnInstallObject(e)
-		LOGGER.Info("destroyEntry:", appId)
+		logger.Info("destroyEntry:", appId)
 	}
 	delete(m.appEntries, appId)
 }
@@ -161,16 +161,16 @@ func (m *EntryManager) destroyRuntimeApp(rApp *RuntimeApp) {
 	m.updateEntry(rApp.Id, m.mustGetEntry(nil, rApp).nApp, nil)
 }
 func (m *EntryManager) createNormalApp(id string) {
-	LOGGER.Info("createNormalApp for", id)
+	logger.Info("createNormalApp for", id)
 	if _, ok := m.normalApps[id]; ok {
-		LOGGER.Info("normal app for", id, "is exist")
+		logger.Info("normal app for", id, "is exist")
 		return
 	}
 
 	desktopId := id + ".desktop"
 	nApp := NewNormalApp(desktopId)
 	if nApp == nil {
-		LOGGER.Info("create scratch file")
+		logger.Info("create scratch file")
 		newId := filepath.Join(
 			os.Getenv("HOME"),
 			".config/dock/scratch",
@@ -192,12 +192,12 @@ func (m *EntryManager) destroyNormalApp(nApp *NormalApp) {
 
 func initialize() {
 	if !dlib.UniqueOnSession("com.deepin.daemon.DockAppsBuilder") {
-		LOGGER.Warning("Another com.deepin.daemon.DockAppsBuilder running")
+		logger.Warning("Another com.deepin.daemon.DockAppsBuilder running")
 		return
 	}
 
 	for _, id := range loadAll() {
-		LOGGER.Debug("load", id)
+		logger.Debug("load", id)
 		ENTRY_MANAGER.createNormalApp(id)
 	}
 	initTrayManager()

@@ -48,18 +48,18 @@ func getAppIcon(core *gio.DesktopAppInfo) string {
 		return ""
 	}
 
-	LOGGER.Debug("GetIcon:", gioIcon.ToString())
+	logger.Debug("GetIcon:", gioIcon.ToString())
 	icon := get_theme_icon(gioIcon.ToString(), 48)
 	if icon == "" {
 		return ""
 	}
 
-	LOGGER.Debug("get_theme_icon:", icon)
+	logger.Debug("get_theme_icon:", icon)
 	// the filepath.Ext return ".xxx"
 	ext := filepath.Ext(icon)[1:]
-	LOGGER.Debug("ext:", ext)
+	logger.Debug("ext:", ext)
 	if strings.EqualFold(ext, "xpm") {
-		LOGGER.Debug("change xpm to data uri")
+		logger.Debug("change xpm to data uri")
 		return xpm_to_dataurl(icon)
 	}
 

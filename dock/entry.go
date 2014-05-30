@@ -30,7 +30,7 @@ type AppEntry struct {
 }
 
 func NewAppEntryWithRuntimeApp(rApp *RuntimeApp) *AppEntry {
-	LOGGER.Info("NewAppEntryWithRuntimeApp:", rApp.Id, rApp.CurrentInfo.Xid)
+	logger.Info("NewAppEntryWithRuntimeApp:", rApp.Id, rApp.CurrentInfo.Xid)
 	e := &AppEntry{
 		Id:   rApp.Id,
 		Type: "App",
@@ -41,7 +41,7 @@ func NewAppEntryWithRuntimeApp(rApp *RuntimeApp) *AppEntry {
 	return e
 }
 func NewAppEntryWithNormalApp(nApp *NormalApp) *AppEntry {
-	LOGGER.Info("NewAppEntryWithNormalApp:", nApp.Id)
+	logger.Info("NewAppEntryWithNormalApp:", nApp.Id)
 	e := &AppEntry{
 		Id:   nApp.Id,
 		Type: "App",
@@ -77,38 +77,38 @@ func (e *AppEntry) HandleDragLeave(x, y int32, data string) {}
 func (e *AppEntry) HandleDragOver(x, y int32, data string)  {}
 func (e *AppEntry) HandleDragDrop(x, y int32, data string) {
 	paths := strings.Split(data, ",")
-	LOGGER.Debug("HandleDragDrop:", paths)
+	logger.Debug("HandleDragDrop:", paths)
 	if e.rApp != nil {
-		LOGGER.Info("Launch from runtime app")
+		logger.Info("Launch from runtime app")
 		if e.rApp.core != nil {
 			_, err := e.rApp.core.LaunchUris(paths, nil)
 			if err != nil {
-				LOGGER.Error("Launch Drop failed:", err)
+				logger.Error("Launch Drop failed:", err)
 			}
 		} else {
 			app, err :=
 				gio.AppInfoCreateFromCommandline(e.rApp.exec,
 					e.rApp.Id, gio.AppInfoCreateFlagsSupportsUris)
 			if err != nil {
-				LOGGER.Error("Create Launch app failed:", err)
+				logger.Error("Create Launch app failed:", err)
 				return
 			}
 
 			_, err = app.LaunchUris(paths, nil)
 			if err != nil {
-				LOGGER.Error("Launch Drop failed:", err)
+				logger.Error("Launch Drop failed:", err)
 			}
 		}
 	} else if e.nApp != nil {
-		LOGGER.Info("Launch from runtime app")
+		logger.Info("Launch from runtime app")
 		if e.nApp.core != nil {
 			_, err := e.nApp.core.LaunchUris(paths, nil)
 			if err != nil {
-				LOGGER.Error("Launch Drop failed:", err)
+				logger.Error("Launch Drop failed:", err)
 			}
 		} else {
 			// TODO:
-			LOGGER.Error("TODO: AppEntry.nApp.core == nil")
+			logger.Error("TODO: AppEntry.nApp.core == nil")
 		}
 	}
 }
@@ -143,7 +143,7 @@ func (e *AppEntry) update() {
 	} else if e.nApp != nil {
 		e.setData(FieldStatus, NormalStatus)
 	} else {
-		LOGGER.Warning(e.Id + " goto an invalid status")
+		logger.Warning(e.Id + " goto an invalid status")
 		return
 	}
 	//NOTE: sync this with NormalApp/RuntimeApp
@@ -163,13 +163,13 @@ func (e *AppEntry) attachNormalApp(nApp *NormalApp) {
 		return
 	}
 	e.nApp = nApp
-	LOGGER.Info("AttachNormalApp:", e.nApp.Id)
+	logger.Info("AttachNormalApp:", e.nApp.Id)
 	e.nApp.setChangedCB(e.update)
 	e.update()
 }
 func (e *AppEntry) detachNormalApp() {
 	if e.nApp != nil {
-		LOGGER.Info("DetachNormalApp", e.nApp.Id)
+		logger.Info("DetachNormalApp", e.nApp.Id)
 		e.nApp.setChangedCB(nil)
 		e.nApp = nil
 		if e.rApp != nil {
@@ -182,13 +182,13 @@ func (e *AppEntry) attachRuntimeApp(rApp *RuntimeApp) {
 		return
 	}
 	e.rApp = rApp
-	LOGGER.Info("AttachRuntimeApp:", e.rApp.Id)
+	logger.Info("AttachRuntimeApp:", e.rApp.Id)
 	e.rApp.setChangedCB(e.update)
 	e.update()
 }
 func (e *AppEntry) detachRuntimeApp() {
 	if e.rApp != nil {
-		LOGGER.Info("DetachRuntimeApp:", e.rApp.Id)
+		logger.Info("DetachRuntimeApp:", e.rApp.Id)
 		e.rApp.setChangedCB(nil)
 		e.rApp = nil
 		if e.nApp != nil {

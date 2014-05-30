@@ -54,7 +54,7 @@ func (m *TrayManager) addTrayIcon(xid xproto.Window) {
 	} else {
 		m.dmageInfo[xid] = d
 		if err := damage.CreateChecked(TrayXU.Conn(), d, xproto.Drawable(xid), damage.ReportLevelRawRectangles).Check(); err != nil {
-			LOGGER.Debug("DamageCreate Failed:", err)
+			logger.Debug("DamageCreate Failed:", err)
 			return
 		}
 	}
@@ -67,7 +67,7 @@ func (m *TrayManager) addTrayIcon(xid xproto.Window) {
 
 	name, err := ewmh.WmNameGet(TrayXU, xid)
 	if err != nil {
-		LOGGER.Debug("WmNameGet failed:", err, xid)
+		logger.Debug("WmNameGet failed:", err, xid)
 	}
 	m.nameInfo[xid] = name
 	m.notifyInfo[xid] = true
@@ -107,7 +107,7 @@ func (m *TrayManager) handleTrayDamage(xid xproto.Window) {
 			if m.Changed != nil {
 				m.Changed(uint32(xid))
 			}
-			LOGGER.Infof("handleTrayDamage: %s(%d) changed (%v)", m.nameInfo[xid], xid, md5)
+			logger.Infof("handleTrayDamage: %s(%d) changed (%v)", m.nameInfo[xid], xid, md5)
 		}
 	}
 }
@@ -158,7 +158,7 @@ func initTrayManager() {
 func (m *TrayManager) RequireManageTrayIcons() {
 	mstype, err := xprop.Atm(TrayXU, "MANAGER")
 	if err != nil {
-		LOGGER.Error("Get MANAGER Failed")
+		logger.Error("Get MANAGER Failed")
 		return
 	}
 
@@ -173,7 +173,7 @@ func (m *TrayManager) RequireManageTrayIcons() {
 	)
 
 	if err != nil {
-		LOGGER.Error("Send MANAGER Request failed:", err)
+		logger.Error("Send MANAGER Request failed:", err)
 		return
 	}
 
@@ -187,7 +187,7 @@ func (m *TrayManager) tryOwner() bool {
 	_trayInstance := xproto.GetSelectionOwner(TrayXU.Conn(), _NET_SYSTEM_TRAY_S0)
 	reply, err := _trayInstance.Reply()
 	if err != nil {
-		LOGGER.Fatal(err)
+		logger.Fatal(err)
 	}
 	if reply.Owner == 0 {
 		timeStamp, _ := ewmh.WmUserTimeGet(TrayXU, TRAYMANAGER.owner)
@@ -198,13 +198,13 @@ func (m *TrayManager) tryOwner() bool {
 			xproto.Timestamp(timeStamp),
 		).Check()
 		if err != nil {
-			LOGGER.Info("Set Selection Owner failed: ", err)
+			logger.Info("Set Selection Owner failed: ", err)
 			return false
 		}
 		go TRAYMANAGER.startListener()
 
 		//owner the _NET_SYSTEM_TRAY_Sn
-		LOGGER.Info("Required _NET_SYSTEM_TRAY_S0")
+		logger.Info("Required _NET_SYSTEM_TRAY_S0")
 
 		m.RequireManageTrayIcons()
 
@@ -225,7 +225,7 @@ func (m *TrayManager) tryOwner() bool {
 		xfixes.SelectSelectionInput(TrayXU.Conn(), TrayXU.RootWin(), _NET_SYSTEM_TRAY_S0, xfixes.SelectionEventMaskSelectionClientClose)
 		return true
 	} else {
-		LOGGER.Info("Another System tray application is running")
+		logger.Info("Another System tray application is running")
 		return false
 	}
 }
@@ -251,16 +251,16 @@ func (m *TrayManager) startListener() {
 		if e, err := TrayXU.Conn().WaitForEvent(); err == nil {
 			switch ev := e.(type) {
 			case xproto.ClientMessageEvent:
-				// LOGGER.Info("ClientMessageEvent")
+				// logger.Info("ClientMessageEvent")
 				if ev.Type == _NET_SYSTEM_TRAY_OPCODE {
 					// timeStamp = ev.Data.Data32[0]
 					opCode := ev.Data.Data32[1]
-					// LOGGER.Info("TRAY_OPCODE")
+					// logger.Info("TRAY_OPCODE")
 
 					switch opCode {
 					case OpCodeSystemTrayRequestDock:
 						xid := xproto.Window(ev.Data.Data32[2])
-						LOGGER.Info("Tray Get Request Dock: ", xid)
+						logger.Info("Tray Get Request Dock: ", xid)
 						m.addTrayIcon(xid)
 					case OpCodeSystemTrayBeginMessage:
 					case OpCodeSystemTrayCancelMessage:
@@ -284,12 +284,12 @@ func icon2md5(xid xproto.Window) []byte {
 	pixmap, _ := xproto.NewPixmapId(TrayXU.Conn())
 	defer xproto.FreePixmap(TrayXU.Conn(), pixmap)
 	if err := composite.NameWindowPixmapChecked(TrayXU.Conn(), xid, pixmap).Check(); err != nil {
-		LOGGER.Warning("NameWindowPixmap failed:", err, xid)
+		logger.Warning("NameWindowPixmap failed:", err, xid)
 		return nil
 	}
 	im, err := xgraphics.NewDrawable(TrayXU, xproto.Drawable(pixmap))
 	if err != nil {
-		LOGGER.Warning("Create xgraphics.Image failed:", err, pixmap)
+		logger.Warning("Create xgraphics.Image failed:", err, pixmap)
 		return nil
 	}
 	buf := bytes.NewBuffer(nil)

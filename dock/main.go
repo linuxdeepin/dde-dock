@@ -3,13 +3,15 @@ package dock
 import (
 	"dlib"
 	"dlib/dbus"
+	"dlib/gettext"
+	"dlib/glib-2.0"
 	liblogger "dlib/logger"
 	"os"
+	"os/exec"
 )
 
 var (
-	logger = liblogger.NewLogger("dde-daemon/dock-daemon")
-	LOGGER = logger
+	logger = liblogger.NewLogger("dde-daemon/dock")
 )
 
 func Start() {
@@ -25,7 +27,7 @@ func Start() {
 		}
 	}()
 
-	dlib.InitI18n()
+	gettext.Bindtextdomain("dde-daemon", "/usr/share/locale")
 	initDeepin()
 
 	// configure logger
@@ -56,7 +58,7 @@ func Start() {
 		os.Exit(1)
 	}
 
-	go dlib.StartLoop()
+	go glib.StartLoop()
 
 	cm := NewClientManager()
 	err = dbus.InstallOnSession(cm)
@@ -71,6 +73,8 @@ func Start() {
 	dbus.DealWithUnhandledMessage()
 
 	initialize()
+
+	go exec.Command("/usr/bin/dde-dock").Run()
 
 	if err := dbus.Wait(); err != nil {
 		logger.Errorf("lost dbus session: %v\n", err)

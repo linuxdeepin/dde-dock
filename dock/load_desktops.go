@@ -10,7 +10,7 @@ func loadAll() []string {
 		"/dde/dock/DockedAppManager",
 	)
 	if err != nil {
-		LOGGER.Warning("get DockedAppManager failed", err)
+		logger.Warning("get DockedAppManager failed", err)
 		return make([]string, 0)
 	}
 
