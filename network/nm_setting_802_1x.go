@@ -47,7 +47,7 @@ const (
 // Init available values
 var availableValues8021xPhasesAuth = make(availableValues)
 
-func init() {
+func initAvailableValues8021x() {
 	// 'pap', 'chap', 'mschap', 'mschapv2', 'gtc', 'otp', 'md5', and 'tls'
 	availableValues8021xPhasesAuth["pap"] = kvalue{"pap", Tr("PAP")}
 	availableValues8021xPhasesAuth["chap"] = kvalue{"chap", Tr("CHAP")}

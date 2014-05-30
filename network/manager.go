@@ -3,7 +3,6 @@ package main
 import "dlib/dbus"
 import "dlib/dbus/property"
 import nm "dbus/org/freedesktop/networkmanager"
-import . "dlib/gettext"
 
 const (
 	dbusNmDest      = "org.freedesktop.NetworkManager"
@@ -14,12 +13,6 @@ const (
 
 // TODO put here temporary
 var connectionSessions []*ConnectionSession
-
-// TODO put here temporary
-func init() {
-	InitI18n()
-	Textdomain("dde-daemon")
-}
 
 // TODO refactor code
 const (
@@ -85,6 +78,7 @@ func (m *Manager) initManager() {
 
 	m.initDeviceManage()
 	m.initConnectionManage()
+	m.initAvailableValues()
 
 	// update property "ActiveConnections" after initilizing devices
 	m.updateActiveConnections()
@@ -98,7 +92,14 @@ func (m *Manager) initManager() {
 		m.updatePropState()
 	})
 
+	initNotifier()
 	m.agent = newAgent("org.snyh.agent")
+}
+
+func (m *Manager) initAvailableValues() {
+	initAvailableValues8021x()
+	initAvailableValuesIp4()
+	initAvailableValuesIp6()
 }
 
 func (m *Manager) updateActiveConnections() {

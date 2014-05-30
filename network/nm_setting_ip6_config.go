@@ -40,7 +40,7 @@ func initSettingSectionIpv6(data connectionData) {
 // Initialize available values
 var availableValuesIp6ConfigMethod = make(availableValues)
 
-func init() {
+func initAvailableValuesIp6() {
 	availableValuesIp6ConfigMethod[NM_SETTING_IP6_CONFIG_METHOD_IGNORE] = kvalue{NM_SETTING_IP6_CONFIG_METHOD_IGNORE, Tr("Ignore")}
 	availableValuesIp6ConfigMethod[NM_SETTING_IP6_CONFIG_METHOD_AUTO] = kvalue{NM_SETTING_IP6_CONFIG_METHOD_AUTO, Tr("Auto")}
 	availableValuesIp6ConfigMethod[NM_SETTING_IP6_CONFIG_METHOD_DHCP] = kvalue{NM_SETTING_IP6_CONFIG_METHOD_DHCP, Tr("DHCP")}

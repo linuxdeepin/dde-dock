@@ -149,7 +149,7 @@ func initSettingSectionIpv4(data connectionData) {
 // Initialize available values
 var availableValuesIp4ConfigMethod = make(availableValues)
 
-func init() {
+func initAvailableValuesIp4() {
 	availableValuesIp4ConfigMethod[NM_SETTING_IP4_CONFIG_METHOD_AUTO] = kvalue{NM_SETTING_IP4_CONFIG_METHOD_AUTO, Tr("Auto")}
 	availableValuesIp4ConfigMethod[NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL] = kvalue{NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL, Tr("Link Local")}
 	availableValuesIp4ConfigMethod[NM_SETTING_IP4_CONFIG_METHOD_MANUAL] = kvalue{NM_SETTING_IP4_CONFIG_METHOD_MANUAL, Tr("Manual")}
