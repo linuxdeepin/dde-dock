@@ -218,7 +218,7 @@ func checkSetting8021xValues(data connectionData) (errs sectionErrors) {
 		ensureSetting8021xClientCertNoEmpty(data, errs)
 		ensureSetting8021xCaCertNoEmpty(data, errs)
 		ensureSetting8021xPrivateKeyNoEmpty(data, errs)
-		ensureSetting8021xPasswordNoEmpty(data, errs)
+		ensureSetting8021xPrivateKeyPasswordNoEmpty(data, errs)
 		ensureSetting8021xSystemCaCertsNoEmpty(data, errs)
 	case "md5":
 		ensureSetting8021xIdentityNoEmpty(data, errs)
