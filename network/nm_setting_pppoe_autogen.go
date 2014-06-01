@@ -49,7 +49,7 @@ func getSettingPppoeDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_PPPOE_PASSWORD:
 		value = ""
 	case NM_SETTING_PPPOE_PASSWORD_FLAGS:
-		value = 0
+		value = uint32(0)
 	}
 	return
 }

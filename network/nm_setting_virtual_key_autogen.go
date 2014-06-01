@@ -785,7 +785,7 @@ func logicSetSettingVkVpnOpenvpnKeyEnablePort(data connectionData, value bool) (
 }
 func logicSetSettingVkVpnOpenvpnKeyEnableRenegSeconds(data connectionData, value bool) (err error) {
 	if value {
-		setSettingVpnOpenvpnKeyRenegSeconds(data, 0)
+		setSettingVpnOpenvpnKeyRenegSeconds(data, uint32(0))
 	} else {
 		removeSettingVpnOpenvpnKeyRenegSeconds(data)
 	}
@@ -809,7 +809,7 @@ func logicSetSettingVkVpnOpenvpnKeyEnableFragmentSize(data connectionData, value
 }
 func logicSetSettingVkVpnOpenvpnKeyEnableStaticKeyDirection(data connectionData, value bool) (err error) {
 	if value {
-		setSettingVpnOpenvpnKeyStaticKeyDirection(data, 0)
+		setSettingVpnOpenvpnKeyStaticKeyDirection(data, uint32(0))
 	} else {
 		removeSettingVpnOpenvpnKeyStaticKeyDirection(data)
 	}
@@ -817,7 +817,7 @@ func logicSetSettingVkVpnOpenvpnKeyEnableStaticKeyDirection(data connectionData,
 }
 func logicSetSettingVkVpnOpenvpnKeyEnableTaDir(data connectionData, value bool) (err error) {
 	if value {
-		setSettingVpnOpenvpnKeyTaDir(data, 0)
+		setSettingVpnOpenvpnKeyTaDir(data, uint32(0))
 	} else {
 		removeSettingVpnOpenvpnKeyTaDir(data)
 	}
@@ -825,7 +825,7 @@ func logicSetSettingVkVpnOpenvpnKeyEnableTaDir(data connectionData, value bool) 
 }
 func logicSetSettingVkWiredEnableMtu(data connectionData, value bool) (err error) {
 	if value {
-		setSettingWiredMtu(data, 0)
+		setSettingWiredMtu(data, uint32(0))
 	} else {
 		removeSettingWiredMtu(data)
 	}
@@ -833,7 +833,7 @@ func logicSetSettingVkWiredEnableMtu(data connectionData, value bool) (err error
 }
 func logicSetSettingVkWirelessEnableMtu(data connectionData, value bool) (err error) {
 	if value {
-		setSettingWirelessMtu(data, 0)
+		setSettingWirelessMtu(data, uint32(0))
 	} else {
 		removeSettingWirelessMtu(data)
 	}

@@ -75,7 +75,7 @@ func getSettingGsmDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_GSM_USERNAME:
 		value = ""
 	case NM_SETTING_GSM_PASSWORD_FLAGS:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_GSM_PASSWORD:
 		value = ""
 	case NM_SETTING_GSM_APN:
@@ -91,7 +91,7 @@ func getSettingGsmDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_GSM_PIN:
 		value = ""
 	case NM_SETTING_GSM_PIN_FLAGS:
-		value = 0
+		value = uint32(0)
 	}
 	return
 }

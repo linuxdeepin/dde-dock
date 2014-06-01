@@ -97,7 +97,7 @@ func getSettingWirelessSecurityDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_WIRELESS_SECURITY_KEY_MGMT:
 		value = ""
 	case NM_SETTING_WIRELESS_SECURITY_WEP_TX_KEYIDX:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_WIRELESS_SECURITY_AUTH_ALG:
 		value = ""
 	case NM_SETTING_WIRELESS_SECURITY_PROTO:
@@ -111,7 +111,7 @@ func getSettingWirelessSecurityDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD:
 		value = ""
 	case NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY0:
 		value = ""
 	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY1:
@@ -121,13 +121,13 @@ func getSettingWirelessSecurityDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY3:
 		value = ""
 	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY_FLAGS:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_WIRELESS_SECURITY_PSK:
 		value = ""
 	case NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS:
-		value = 0
+		value = uint32(0)
 	}
 	return
 }

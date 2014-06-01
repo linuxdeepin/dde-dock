@@ -65,7 +65,7 @@ func getSettingVpnOpenvpnAdvancedDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_VPN_OPENVPN_KEY_PORT:
 		value = 1194
 	case NM_SETTING_VPN_OPENVPN_KEY_RENEG_SECONDS:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_VPN_OPENVPN_KEY_COMP_LZO:
 		value = false
 	case NM_SETTING_VPN_OPENVPN_KEY_PROTO_TCP:

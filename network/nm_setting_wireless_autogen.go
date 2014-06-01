@@ -93,9 +93,9 @@ func getSettingWirelessDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_WIRELESS_BSSID:
 		value = make([]byte, 0)
 	case NM_SETTING_WIRELESS_RATE:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_WIRELESS_TX_POWER:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_WIRELESS_MAC_ADDRESS:
 		value = make([]byte, 0)
 	case NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS:
@@ -103,7 +103,7 @@ func getSettingWirelessDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST:
 		value = make([]string, 0)
 	case NM_SETTING_WIRELESS_MTU:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_WIRELESS_SEEN_BSSIDS:
 		value = make([]string, 0)
 	case NM_SETTING_WIRELESS_SEC:

@@ -81,7 +81,7 @@ func getSettingConnectionDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_CONNECTION_PERMISSIONS:
 		value = make([]string, 0)
 	case NM_SETTING_CONNECTION_TIMESTAMP:
-		value = 0
+		value = uint64(0)
 	case NM_SETTING_CONNECTION_READ_ONLY:
 		value = false
 	case NM_SETTING_CONNECTION_ZONE:

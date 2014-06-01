@@ -175,11 +175,11 @@ func getSetting8021xDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_802_1X_IDENTITY:
 		value = ""
 	case NM_SETTING_802_1X_PASSWORD_FLAGS:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_802_1X_PASSWORD:
 		value = ""
 	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD:
 		value = ""
 	case NM_SETTING_802_1X_CA_PATH:
@@ -205,17 +205,17 @@ func getSetting8021xDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_802_1X_PASSWORD_RAW:
 		value = make([]byte, 0)
 	case NM_SETTING_802_1X_PASSWORD_RAW_FLAGS:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY:
 		value = make([]byte, 0)
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD:
 		value = ""
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_802_1X_PIN:
 		value = ""
 	case NM_SETTING_802_1X_PIN_FLAGS:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_802_1X_SYSTEM_CA_CERTS:
 		value = false
 	}

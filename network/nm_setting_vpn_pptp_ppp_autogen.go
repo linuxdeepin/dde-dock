@@ -107,9 +107,9 @@ func getSettingVpnPptpPppDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_VPN_PPTP_KEY_NO_VJ_COMP:
 		value = false
 	case NM_SETTING_VPN_PPTP_KEY_LCP_ECHO_FAILURE:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_VPN_PPTP_KEY_LCP_ECHO_INTERVAL:
-		value = 0
+		value = uint32(0)
 	}
 	return
 }

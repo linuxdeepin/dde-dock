@@ -59,7 +59,7 @@ func getSettingVpnOpenvpnProxiesDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER:
 		value = ""
 	case NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY:
 		value = false
 	case NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME:
@@ -67,7 +67,7 @@ func getSettingVpnOpenvpnProxiesDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD:
 		value = ""
 	case NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS:
-		value = 0
+		value = uint32(0)
 	}
 	return
 }

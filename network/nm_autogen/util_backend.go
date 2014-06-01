@@ -87,13 +87,13 @@ func ToKeyDefaultValue(keyName string) (value string) {
 	case "ktypeString":
 		value = `""`
 	case "ktypeByte":
-		value = `0`
+		value = `byte(0)`
 	case "ktypeInt32":
-		value = `0`
+		value = `int32(0)`
 	case "ktypeUint32":
-		value = `0`
+		value = `uint32(0)`
 	case "ktypeUint64":
-		value = `0`
+		value = `uint64(0)`
 	case "ktypeBoolean":
 		value = `false`
 	case "ktypeArrayByte", "ktypeWrapperString", "ktypeWrapperMacAddress":
