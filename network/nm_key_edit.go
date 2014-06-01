@@ -147,6 +147,7 @@ func setSettingKeyJSON(data connectionData, section, key, valueJSON string, t kt
 
 	// remove connection data key if valueJSON is null or empty
 	if isJSONValueMeansToDeleteKey(valueJSON, t) {
+		logger.Debugf("json value means to remove key, data[%s][%s]=%#v", section, key, valueJSON)
 		removeSettingKey(data, section, key)
 		return
 	}

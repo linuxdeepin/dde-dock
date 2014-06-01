@@ -38,7 +38,7 @@ func fillSecret(settingName string, key string) map[string]map[string]dbus.Varia
 }
 
 func (a *Agent) GetSecrets(connection map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath, settingName string, hints []string, flags uint32) map[string]map[string]dbus.Variant {
-	logger.Debug("GetSecrets:", connectionPath, settingName, hints, flags)
+	logger.Info("GetSecrets:", connectionPath, settingName, hints, flags)
 	keyId := mapKey{connectionPath, settingName}
 
 	// TODO fixme
@@ -53,7 +53,7 @@ func (a *Agent) GetSecrets(connection map[string]map[string]dbus.Variant, connec
 
 	if flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_ALLOW_INTERACTION == 0 &&
 		flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_USER_REQUESTED == 0 {
-		logger.Debug("GetSecrets: invalid key", flags)
+		logger.Info("GetSecrets: invalid key", flags)
 		return invalidKey
 	}
 

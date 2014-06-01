@@ -80,7 +80,7 @@ func newConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 	s.updatePropAvailableKeys()
 	s.updatePropErrors()
 
-	logger.Debug("NewConnectionSessionByCreate():", s.data)
+	logger.Debug("newConnectionSessionByCreate():", s.data)
 	return
 }
 
@@ -94,11 +94,7 @@ func newConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 	s.ConnectionPath = connectionPath
 
 	// get connection data
-	nmConn, err := nmNewSettingsConnection(connectionPath)
-	if err != nil {
-		return nil, err
-	}
-	s.data, err = nmConn.GetSettings()
+	s.data, err = nmGetConnectionData(s.ConnectionPath)
 	if err != nil {
 		return nil, err
 	}
@@ -106,23 +102,9 @@ func newConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 
 	s.fixValues()
 
-	// get secret data
-	// TODO sectionVpnSecurity
-	for _, secretFiled := range []string{sectionWirelessSecurity, section8021x, sectionGsm, sectionCdma} {
-		if isSettingSectionExists(s.data, secretFiled) {
-			wirelessSecrutiyData, err := nmConn.GetSecrets(sectionWirelessSecurity)
-			if err == nil {
-				for section, sectionData := range wirelessSecrutiyData {
-					if !isSettingSectionExists(s.data, section) {
-						addSettingSection(s.data, section)
-					}
-					for key, value := range sectionData {
-						s.data[section][key] = value
-					}
-				}
-			}
-		}
-	}
+	// execute asynchronous to avoid front-end blocked if
+	// NeedSecrets() signal send to it
+	go s.getSecrets()
 
 	s.updatePropConnectionType()
 	s.updatePropAvailableSections()
@@ -160,6 +142,46 @@ func (s *ConnectionSession) fixValues() {
 	// if isSettingVpnOpenvpnKeyCertpassFlagsExists(s.data) && getSettingVpnOpenvpnKeyCertpassFlags(s.data) == 1 {
 	// setSettingVpnOpenvpnKeyCertpassFlags(s.data, NM_OPENVPN_SECRET_FLAG_SAVE)
 	// }
+}
+
+func (s *ConnectionSession) getSecrets() {
+	// get secret data
+	switch s.Type {
+	case connectionWired:
+		if getSettingVk8021xEnable(s.data) {
+			s.doGetSecrets(section8021x)
+		}
+	case connectionWireless, connectionWirelessAdhoc, connectionWirelessHotspot:
+		if getSettingVk8021xEnable(s.data) {
+			s.doGetSecrets(section8021x)
+		} else {
+			s.doGetSecrets(sectionWirelessSecurity)
+		}
+	case connectionPppoe:
+		s.doGetSecrets(sectionPppoe)
+	case connectionMobileGsm:
+		s.doGetSecrets(sectionGsm)
+	case connectionMobileCdma:
+		s.doGetSecrets(sectionCdma)
+	case connectionVpnL2tp, connectionVpnOpenconnect, connectionVpnPptp, connectionVpnVpnc, connectionVpnOpenvpn:
+		// TODO
+	}
+}
+
+func (s *ConnectionSession) doGetSecrets(secretField string) {
+	if isSettingSectionExists(s.data, secretField) {
+		secrets, err := nmGetConnectionSecrets(s.ConnectionPath, secretField)
+		if err == nil {
+			for section, sectionData := range secrets {
+				if !isSettingSectionExists(s.data, section) {
+					addSettingSection(s.data, section)
+				}
+				for key, value := range sectionData {
+					s.data[section][key] = value
+				}
+			}
+		}
+	}
 }
 
 // Save save current connection s.

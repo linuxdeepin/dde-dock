@@ -111,7 +111,7 @@ func (m *Manager) addAccessPoint(devPath, apPath dbus.ObjectPath) {
 	// emit signal
 	if m.AccessPointAdded != nil {
 		apJSON, _ := marshalJSON(ap)
-		logger.Debug("AccessPointAdded:", apJSON) // TODO test
+		// logger.Debug("AccessPointAdded:", apJSON) // TODO test
 		m.AccessPointAdded(string(devPath), apJSON)
 	}
 	m.accessPoints[devPath] = append(m.accessPoints[devPath], &ap)
@@ -127,7 +127,7 @@ func (m *Manager) removeAccessPoint(devPath, apPath dbus.ObjectPath) {
 		} else {
 			apJSON, _ = marshalJSON(accessPoint{Path: apPath})
 		}
-		logger.Debug("AccessPointRemoved:", apJSON) // TODO test
+		// logger.Debug("AccessPointRemoved:", apJSON) // TODO test
 		m.AccessPointRemoved(string(devPath), apJSON)
 	}
 	m.doRemoveAccessPoint(devPath, apPath)
@@ -214,6 +214,8 @@ func (m *Manager) getAccessPointProperty(apPath dbus.ObjectPath) (apJSON string,
 // ActivateAccessPoint add and activate connection for access point.
 func (m *Manager) ActivateAccessPoint(apPath, devPath dbus.ObjectPath) (uuid string, err error) {
 	logger.Debugf("ActivateAccessPoint: apPath=%s, devPath=%s", apPath, devPath)
+	defer logger.Debugf("ActivateAccessPoint end") // TODO test
+
 	// if there is no connection for current access point, create one
 	ap, err := nmNewAccessPoint(apPath)
 	if err != nil {
