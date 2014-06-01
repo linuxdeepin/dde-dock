@@ -76,24 +76,27 @@ const (
 
 // Define secret flags
 const (
-	NM_L2TP_SECRET_FLAG_NONE         = 0
+	NM_L2TP_SECRET_FLAG_NONE         = 0 // system saved
 	NM_L2TP_SECRET_FLAG_AGENT_OWNED  = 1
 	NM_L2TP_SECRET_FLAG_NOT_SAVED    = 3
 	NM_L2TP_SECRET_FLAG_NOT_REQUIRED = 5
 )
 
 var availableValuesNML2tpSecretFlag = []kvalue{
-	kvalue{NM_L2TP_SECRET_FLAG_NONE, Tr("Saved")}, // system saved
+	kvalue{NM_L2TP_SECRET_FLAG_NONE, Tr("Saved")},
 	kvalue{NM_L2TP_SECRET_FLAG_NOT_SAVED, Tr("Always Ask")},
 	kvalue{NM_L2TP_SECRET_FLAG_NOT_REQUIRED, Tr("Not Required")},
 }
 
-func isVpnL2tpNeedShowPassword(data connectionData) bool {
-	flag := getSettingVpnL2tpKeyPasswordFlags(data)
+func isVpnL2tpRequireSecret(flag uint32) bool {
 	if flag == NM_L2TP_SECRET_FLAG_NONE || flag == NM_L2TP_SECRET_FLAG_AGENT_OWNED {
 		return true
 	}
 	return false
+}
+
+func isVpnL2tpNeedShowPassword(data connectionData) bool {
+	return isVpnL2tpRequireSecret(getSettingVpnL2tpKeyPasswordFlags(data))
 }
 
 // new connection data
@@ -124,6 +127,9 @@ func getSettingVpnL2tpAvailableValues(data connectionData, key string) (values [
 func checkSettingVpnL2tpValues(data connectionData) (errs sectionErrors) {
 	errs = make(map[string]string)
 	ensureSettingVpnL2tpKeyGatewayNoEmpty(data, errs)
+	if isVpnL2tpNeedShowPassword(data) {
+		ensureSettingVpnL2tpKeyPasswordNoEmpty(data, errs)
+	}
 	return
 }
 

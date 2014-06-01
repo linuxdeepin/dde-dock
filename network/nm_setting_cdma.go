@@ -40,5 +40,8 @@ func checkSettingCdmaValues(data connectionData) (errs sectionErrors) {
 	errs = make(map[string]string)
 	// TODO
 	ensureSettingCdmaNumberNoEmpty(data, errs)
+	if isSettingRequireSecret(getSettingCdmaPasswordFlags(data)) {
+		ensureSettingCdmaPasswordNoEmpty(data, errs)
+	}
 	return
 }
