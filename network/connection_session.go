@@ -12,14 +12,17 @@ type sessionErrors map[string]sectionErrors
 type ConnectionSession struct {
 	sessionPath dbus.ObjectPath
 	devPath     dbus.ObjectPath
-	data        connectionData
 
 	ConnectionPath dbus.ObjectPath
 	Uuid           string
 	Type           string
+	Data           connectionData
 
-	AvailableSections []string
-	AvailableKeys     map[string][]string // TODO collection of available keys in sections(not virtual section)
+	AvailableVirtualSections []string
+	AvailableSections        []string
+
+	// collection of available keys in each section(not virtual section)
+	AvailableKeys map[string][]string
 
 	Errors           sessionErrors
 	settingKeyErrors sessionErrors
@@ -30,8 +33,8 @@ func doNewConnectionSession(devPath dbus.ObjectPath, uuid string) (s *Connection
 	s.sessionPath = dbus.ObjectPath(fmt.Sprintf("/com/deepin/daemon/ConnectionSession/%s", randString(8)))
 	s.devPath = devPath
 	s.Uuid = uuid
-	s.data = make(connectionData)
-	s.AvailableSections = make([]string, 0)
+	s.Data = make(connectionData)
+	s.AvailableVirtualSections = make([]string, 0)
 	s.AvailableKeys = make(map[string][]string)
 	s.Errors = make(sessionErrors)
 	s.settingKeyErrors = make(sessionErrors)
@@ -51,37 +54,38 @@ func newConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 	id := genConnectionId(s.Type)
 	switch s.Type {
 	case connectionWired:
-		s.data = newWiredConnectionData(id, s.Uuid)
+		s.Data = newWiredConnectionData(id, s.Uuid)
 	case connectionWireless:
-		s.data = newWirelessConnectionData(id, s.Uuid, nil, apSecNone)
+		s.Data = newWirelessConnectionData(id, s.Uuid, nil, apSecNone)
 	case connectionWirelessAdhoc:
-		s.data = newWirelessAdhocConnectionData(id, s.Uuid)
+		s.Data = newWirelessAdhocConnectionData(id, s.Uuid)
 	case connectionWirelessHotspot:
-		s.data = newWirelessHotspotConnectionData(id, s.Uuid)
+		s.Data = newWirelessHotspotConnectionData(id, s.Uuid)
 	case connectionPppoe:
-		s.data = newPppoeConnectionData(id, s.Uuid)
+		s.Data = newPppoeConnectionData(id, s.Uuid)
 	case connectionMobileGsm:
-		s.data = newMobileConnectionData(id, s.Uuid, mobileServiceGsm)
+		s.Data = newMobileConnectionData(id, s.Uuid, mobileServiceGsm)
 	case connectionMobileCdma:
-		s.data = newMobileConnectionData(id, s.Uuid, mobileServiceCdma)
+		s.Data = newMobileConnectionData(id, s.Uuid, mobileServiceCdma)
 	case connectionVpnL2tp:
-		s.data = newVpnL2tpConnectionData(id, s.Uuid)
+		s.Data = newVpnL2tpConnectionData(id, s.Uuid)
 	case connectionVpnOpenconnect:
-		s.data = newVpnOpenconnectConnectionData(id, s.Uuid)
+		s.Data = newVpnOpenconnectConnectionData(id, s.Uuid)
 	case connectionVpnPptp:
-		s.data = newVpnPptpConnectionData(id, s.Uuid)
+		s.Data = newVpnPptpConnectionData(id, s.Uuid)
 	case connectionVpnVpnc:
-		s.data = newVpnVpncConnectionData(id, s.Uuid)
+		s.Data = newVpnVpncConnectionData(id, s.Uuid)
 	case connectionVpnOpenvpn:
-		s.data = newVpnOpenvpnConnectionData(id, s.Uuid)
+		s.Data = newVpnOpenvpnConnectionData(id, s.Uuid)
 	}
 
 	s.updatePropConnectionType()
+	s.updatePropAvailableVirtualSections()
 	s.updatePropAvailableSections()
 	s.updatePropAvailableKeys()
 	s.updatePropErrors()
 
-	logger.Debug("newConnectionSessionByCreate():", s.data)
+	logger.Debug("newConnectionSessionByCreate():", s.Data)
 	return
 }
 
@@ -95,11 +99,11 @@ func newConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 	s.ConnectionPath = connectionPath
 
 	// get connection data
-	s.data, err = nmGetConnectionData(s.ConnectionPath)
+	s.Data, err = nmGetConnectionData(s.ConnectionPath)
 	if err != nil {
 		return nil, err
 	}
-	s.Type = getCustomConnectionType(s.data)
+	s.Type = getCustomConnectionType(s.Data)
 
 	s.fixValues()
 
@@ -116,40 +120,41 @@ func newConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 	}
 
 	s.updatePropConnectionType()
+	s.updatePropAvailableVirtualSections()
 	s.updatePropAvailableSections()
 	s.updatePropAvailableKeys()
 	s.updatePropErrors()
 
-	logger.Debug("NewConnectionSessionByOpen():", s.data)
+	logger.Debug("NewConnectionSessionByOpen():", s.Data)
 	return
 }
 
 func (s *ConnectionSession) fixValues() {
 	// append missing sectionIpv6
-	if !isSettingSectionExists(s.data, sectionIpv6) && isStringInArray(sectionIpv6, getAvailableSections(s.data)) {
-		initSettingSectionIpv6(s.data)
+	if !isSettingSectionExists(s.Data, sectionIpv6) && isStringInArray(sectionIpv6, getAvailableSections(s.Data)) {
+		initSettingSectionIpv6(s.Data)
 	}
 
 	// vpn plugin data and secret
-	if getSettingConnectionType(s.data) == NM_SETTING_VPN_SETTING_NAME {
-		if !isSettingVpnDataExists(s.data) {
-			setSettingVpnData(s.data, make(map[string]string))
+	if getSettingConnectionType(s.Data) == NM_SETTING_VPN_SETTING_NAME {
+		if !isSettingVpnDataExists(s.Data) {
+			setSettingVpnData(s.Data, make(map[string]string))
 		}
-		if !isSettingVpnSecretsExists(s.data) {
-			setSettingVpnSecrets(s.data, make(map[string]string))
+		if !isSettingVpnSecretsExists(s.Data) {
+			setSettingVpnSecrets(s.Data, make(map[string]string))
 		}
 	}
 
 	// append missing sectionWired for pppoe
 	if s.Type == connectionPppoe {
-		if !isSettingSectionExists(s.data, sectionWired) {
-			initSettingSectionWired(s.data)
+		if !isSettingSectionExists(s.Data, sectionWired) {
+			initSettingSectionWired(s.Data)
 		}
 	}
 
 	// TODO fix secret flags
-	// if isSettingVpnOpenvpnKeyCertpassFlagsExists(s.data) && getSettingVpnOpenvpnKeyCertpassFlags(s.data) == 1 {
-	// setSettingVpnOpenvpnKeyCertpassFlags(s.data, NM_OPENVPN_SECRET_FLAG_SAVE)
+	// if isSettingVpnOpenvpnKeyCertpassFlagsExists(s.Data) && getSettingVpnOpenvpnKeyCertpassFlags(s.Data) == 1 {
+	// setSettingVpnOpenvpnKeyCertpassFlags(s.Data, NM_OPENVPN_SECRET_FLAG_SAVE)
 	// }
 }
 
@@ -157,12 +162,12 @@ func (s *ConnectionSession) getSecrets() {
 	// get secret data
 	switch s.Type {
 	case connectionWired:
-		if getSettingVk8021xEnable(s.data) {
+		if getSettingVk8021xEnable(s.Data) {
 			// TODO 8021x secret
 			// s.doGetSecrets(section8021x)
 		}
 	case connectionWireless, connectionWirelessAdhoc, connectionWirelessHotspot:
-		if getSettingVk8021xEnable(s.data) {
+		if getSettingVk8021xEnable(s.Data) {
 			// TODO 8021x secret
 			// s.doGetSecrets(section8021x)
 		} else {
@@ -180,15 +185,15 @@ func (s *ConnectionSession) getSecrets() {
 }
 
 func (s *ConnectionSession) doGetSecrets(secretField string) {
-	if isSettingSectionExists(s.data, secretField) {
+	if isSettingSectionExists(s.Data, secretField) {
 		secrets, err := nmGetConnectionSecrets(s.ConnectionPath, secretField)
 		if err == nil {
 			for section, sectionData := range secrets {
-				if !isSettingSectionExists(s.data, section) {
-					addSettingSection(s.data, section)
+				if !isSettingSectionExists(s.Data, section) {
+					addSettingSection(s.Data, section)
 				}
 				for key, value := range sectionData {
-					s.data[section][key] = value
+					s.Data[section][key] = value
 				}
 			}
 		}
@@ -204,7 +209,7 @@ func (s *ConnectionSession) Save() bool {
 		return false
 	}
 
-	if getSettingConnectionReadOnly(s.data) {
+	if getSettingConnectionReadOnly(s.Data) {
 		logger.Debug("read only connection, don't allowed to save")
 		return false
 	}
@@ -216,7 +221,7 @@ func (s *ConnectionSession) Save() bool {
 			logger.Error(err)
 			return false
 		}
-		err = nmConn.Update(s.data)
+		err = nmConn.Update(s.Data)
 		if err != nil {
 			logger.Error(err)
 			return false
@@ -226,9 +231,9 @@ func (s *ConnectionSession) Save() bool {
 		// create new connection and activate it
 		// TODO vpn ad-hoc hotspot
 		if s.Type == connectionWired || s.Type == connectionWireless {
-			nmAddAndActivateConnection(s.data, s.devPath)
+			nmAddAndActivateConnection(s.Data, s.devPath)
 		} else {
-			nmAddConnection(s.data)
+			nmAddConnection(s.Data)
 		}
 	}
 
@@ -253,9 +258,9 @@ func (s *ConnectionSession) Close() {
 // GetAvailableValues return available values marshaled by json for target key.
 func (s *ConnectionSession) GetAvailableValues(vsection, key string) (valuesJSON string) {
 	var values []kvalue
-	sections := getRelatedSectionsOfVsection(s.data, vsection)
+	sections := getRelatedSectionsOfVsection(s.Data, vsection)
 	for _, section := range sections {
-		values = generalGetSettingAvailableValues(s.data, section, key)
+		values = generalGetSettingAvailableValues(s.Data, section, key)
 		if len(values) > 0 {
 			break
 		}
@@ -265,17 +270,18 @@ func (s *ConnectionSession) GetAvailableValues(vsection, key string) (valuesJSON
 }
 
 func (s *ConnectionSession) GetKey(vsection, key string) (value string) {
-	section := getSectionOfKeyInVsection(s.data, vsection, key)
-	value = generalGetSettingKeyJSON(s.data, section, key)
+	section := getSectionOfKeyInVsection(s.Data, vsection, key)
+	value = generalGetSettingKeyJSON(s.Data, section, key)
 	return
 }
 
 func (s *ConnectionSession) SetKey(vsection, key, value string) {
-	section := getSectionOfKeyInVsection(s.data, vsection, key)
-	err := generalSetSettingKeyJSON(s.data, section, key, value)
+	section := getSectionOfKeyInVsection(s.Data, vsection, key)
+	err := generalSetSettingKeyJSON(s.Data, section, key, value)
 	// logger.Debugf("SetKey(), %v, vsection=%s, filed=%s, key=%s, value=%s", err == nil, vsection, section, key, value) // TODO test
 	s.updateErrorsWhenSettingKey(vsection, key, err)
 
+	s.updatePropAvailableVirtualSections()
 	s.updatePropAvailableSections()
 	s.updatePropAvailableKeys()
 	s.updatePropErrors()
@@ -306,22 +312,22 @@ func (s *ConnectionSession) updateErrorsWhenSettingKey(vsection, key string, err
 
 // Debug functions
 func (s *ConnectionSession) DebugGetConnectionData() connectionData {
-	return s.data
+	return s.Data
 }
 func (s *ConnectionSession) DebugGetErrors() sessionErrors {
 	return s.Errors
 }
 func (s *ConnectionSession) DebugListKeyDetail() (info string) {
-	for _, vsection := range getAvailableVsections(s.data) {
+	for _, vsection := range getAvailableVsections(s.Data) {
 		vsectionData, ok := s.AvailableKeys[vsection]
 		if !ok {
 			logger.Warning("no available keys for vsection", vsection)
 			continue
 		}
 		for _, key := range vsectionData {
-			section := getSectionOfKeyInVsection(s.data, vsection, key)
+			section := getSectionOfKeyInVsection(s.Data, vsection, key)
 			t := generalGetSettingKeyType(section, key)
-			values := generalGetSettingAvailableValues(s.data, section, key)
+			values := generalGetSettingAvailableValues(s.Data, section, key)
 			valuesJSON, _ := marshalJSON(values)
 			info += fmt.Sprintf("%s->%s[%s]: %s (%s)\n", vsection, key, getKtypeDescription(t), s.GetKey(vsection, key), valuesJSON)
 		}

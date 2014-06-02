@@ -217,7 +217,6 @@ func getAvailableVsections(data connectionData) (vsections []string) {
 	return
 }
 
-// TODO
 func getRelatedSectionsOfVsection(data connectionData, vsection string) (sections []string) {
 	connectionType := getCustomConnectionType(data)
 	switch vsection {
@@ -290,7 +289,6 @@ func getAvailableSections(data connectionData) (sections []string) {
 	return
 }
 
-// TODO
 // get real section name of target key in virtual section
 func getSectionOfKeyInVsection(data connectionData, vsection, key string) (section string) {
 	sections := getRelatedSectionsOfVsection(data, vsection)
@@ -303,7 +301,6 @@ func getSectionOfKeyInVsection(data connectionData, vsection, key string) (secti
 	return ""
 }
 
-// TODO
 // get available keys of virtual section
 func getAvailableKeysOfVsection(data connectionData, vsection string) (keys []string) {
 	sections := getRelatedSectionsOfVsection(data, vsection)
