@@ -3,6 +3,7 @@ package network
 import (
 	"dlib/dbus"
 	"fmt"
+	"time"
 )
 
 type sectionErrors map[string]string
@@ -102,9 +103,17 @@ func newConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 
 	s.fixValues()
 
-	// execute asynchronous to avoid front-end blocked if
-	// NeedSecrets() signal send to it
-	go s.getSecrets()
+	// execute asynchronous to avoid front-end block if
+	// NeedSecrets() signal emit
+	chSecret := make(chan int)
+	go func() {
+		s.getSecrets()
+		chSecret <- 0
+	}()
+	select {
+	case <-time.After(500 * time.Millisecond):
+	case <-chSecret:
+	}
 
 	s.updatePropConnectionType()
 	s.updatePropAvailableSections()
@@ -149,11 +158,13 @@ func (s *ConnectionSession) getSecrets() {
 	switch s.Type {
 	case connectionWired:
 		if getSettingVk8021xEnable(s.data) {
-			s.doGetSecrets(section8021x)
+			// TODO 8021x secret
+			// s.doGetSecrets(section8021x)
 		}
 	case connectionWireless, connectionWirelessAdhoc, connectionWirelessHotspot:
 		if getSettingVk8021xEnable(s.data) {
-			s.doGetSecrets(section8021x)
+			// TODO 8021x secret
+			// s.doGetSecrets(section8021x)
 		} else {
 			s.doGetSecrets(sectionWirelessSecurity)
 		}
