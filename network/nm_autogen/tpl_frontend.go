@@ -13,7 +13,11 @@ BaseEditPage {
         myIndex: {{$i}}
         id: {{$id}}
         activeExpandIndex: editPage.activeExpandIndex
-        // connectionSession: editPage.connectionSession
+        connectionSession: editPage.connectionSession
+        availableSections: editPage.availableSections
+        availableKeys: editPage.availableKeys
+        connectionData: editPage.connectionData
+        errors: editPage.errors
     }
     EditSectionSeparator {relatedSection: {{$id}}}
     {{end}}{{end}}
@@ -36,7 +40,11 @@ BaseEditSection { {{$sectionId := .Name | ToVsClassName | printf "section%s"}}
     content.sourceComponent: Column { {{range $i, $key := GetAllKeysInVsection .Name}}{{if IsKeyUsedByFrontEnd $key}}{{$sectionValue := $key | ToKeyRelatedSectionValue}}{{$value := $key | ToKeyValue}}
         {{$widget := ToFrontEndWidget $key}}{{$widget}} {
             id: line{{$sectionValue | ToClassName}}{{$value | ToClassName}}
-            // connectionSession: {{$sectionId}}.connectionSession
+            connectionSession: {{$sectionId}}.connectionSession
+            availableSections: {{$sectionId}}.availableSections
+            availableKeys: {{$sectionId}}.availableKeys
+            connectionData: {{$sectionId}}.connectionData
+            errors: {{$sectionId}}.errors
             section: "{{$sectionValue}}"
             key: "{{$value}}"
             text: dsTr("{{$key | ToKeyDisplayName}}"){{range $propKey, $propValue := GetKeyWidgetProp $key}}

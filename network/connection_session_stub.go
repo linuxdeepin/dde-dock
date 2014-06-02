@@ -72,5 +72,7 @@ func (s *ConnectionSession) updatePropErrors() {
 	// 		s.Errors[vsection][k] = v
 	// 	}
 	// }
+
+	// TODO
 	dbus.NotifyChange(s, "Errors")
 }
