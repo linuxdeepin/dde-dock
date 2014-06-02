@@ -256,30 +256,32 @@ func (s *ConnectionSession) Close() {
 }
 
 // GetAvailableValues return available values marshaled by json for target key.
-func (s *ConnectionSession) GetAvailableValues(vsection, key string) (valuesJSON string) {
-	var values []kvalue
-	sections := getRelatedSectionsOfVsection(s.Data, vsection)
-	for _, section := range sections {
-		values = generalGetSettingAvailableValues(s.Data, section, key)
-		if len(values) > 0 {
-			break
-		}
-	}
+func (s *ConnectionSession) GetAvailableValues(section, key string) (valuesJSON string) {
+	// TODO remove
+	// var values []kvalue
+	// sections := getRelatedSectionsOfVsection(s.Data, vsection)
+	// for _, section := range sections {
+	// 	values = generalGetSettingAvailableValues(s.Data, section, key)
+	// 	if len(values) > 0 {
+	// 		break
+	// 	}
+	// }
+	values := generalGetSettingAvailableValues(s.Data, section, key)
 	valuesJSON, _ = marshalJSON(values)
 	return
 }
 
-func (s *ConnectionSession) GetKey(vsection, key string) (value string) {
-	section := getSectionOfKeyInVsection(s.Data, vsection, key)
+func (s *ConnectionSession) GetKey(section, key string) (value string) {
+	// section := getSectionOfKeyInVsection(s.Data, vsection, key)
 	value = generalGetSettingKeyJSON(s.Data, section, key)
 	return
 }
 
-func (s *ConnectionSession) SetKey(vsection, key, value string) {
-	section := getSectionOfKeyInVsection(s.Data, vsection, key)
+func (s *ConnectionSession) SetKey(section, key, value string) {
+	// section := getSectionOfKeyInVsection(s.Data, vsection, key)
 	err := generalSetSettingKeyJSON(s.Data, section, key, value)
 	// logger.Debugf("SetKey(), %v, vsection=%s, filed=%s, key=%s, value=%s", err == nil, vsection, section, key, value) // TODO test
-	s.updateErrorsWhenSettingKey(vsection, key, err)
+	s.updateErrorsWhenSettingKey(section, key, err)
 
 	s.updatePropAvailableVirtualSections()
 	s.updatePropAvailableSections()
@@ -289,10 +291,10 @@ func (s *ConnectionSession) SetKey(vsection, key, value string) {
 	return
 }
 
-func (s *ConnectionSession) updateErrorsWhenSettingKey(vsection, key string, err error) {
+func (s *ConnectionSession) updateErrorsWhenSettingKey(section, key string, err error) {
 	if err == nil {
 		// delete key error if exists
-		sectionErrors, ok := s.settingKeyErrors[vsection]
+		sectionErrors, ok := s.settingKeyErrors[section]
 		if ok {
 			_, ok := sectionErrors[key]
 			if ok {
@@ -301,10 +303,10 @@ func (s *ConnectionSession) updateErrorsWhenSettingKey(vsection, key string, err
 		}
 	} else {
 		// append key error
-		sectionErrorsData, ok := s.settingKeyErrors[vsection]
+		sectionErrorsData, ok := s.settingKeyErrors[section]
 		if !ok {
 			sectionErrorsData = make(sectionErrors)
-			s.settingKeyErrors[vsection] = sectionErrorsData
+			s.settingKeyErrors[section] = sectionErrorsData
 		}
 		sectionErrorsData[key] = err.Error()
 	}

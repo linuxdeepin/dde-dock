@@ -80,36 +80,35 @@ func getRealSectionName(name string) (realName string) {
 	return
 }
 
-// Virtual sections for front-end to easy to configure, do not prefix
-// with "vs-" is to hide details for front-end.
+// Virtual sections for front-end to easy to configure
 const (
-	vsectionGeneral  = "general"  // -> sectionConnection
-	vsectionEthernet = "ethernet" // -> sectionWired
+	vsectionGeneral  = "vs-general"  // -> sectionConnection
+	vsectionEthernet = "vs-ethernet" // -> sectionWired
 	// TODO
-	// vsectionMobile          = "mobile"           // -> sectionGsm, sectionCdma
-	vsectionMobileGsm  = "mobile-gsm"  // -> sectionGsm
-	vsectionMobileCdma = "mobile-cdma" // -> sectionCdma
-	vsectionWifi       = "wifi"        // -> sectionWireless
-	vsectionIpv4       = "ipv4"        // -> sectionIpv4
-	vsectionIpv6       = "ipv6"        // -> sectionIpv6
-	vsectionSecurity   = "security"    // -> section8021x, sectionWirelessSecurity
-	vsectionPppoe      = "pppoe"       // -> sectionPppoe
-	vsectionPpp        = "ppp"         // -> sectionPpp
+	// vsectionMobile          = "vs-mobile"           // -> sectionGsm, sectionCdma
+	vsectionMobileGsm  = "vs-mobile-gsm"  // -> sectionGsm
+	vsectionMobileCdma = "vs-mobile-cdma" // -> sectionCdma
+	vsectionWifi       = "vs-wifi"        // -> sectionWireless
+	vsectionIpv4       = "vs-ipv4"        // -> sectionIpv4
+	vsectionIpv6       = "vs-ipv6"        // -> sectionIpv6
+	vsectionSecurity   = "vs-security"    // -> section8021x, sectionWirelessSecurity
+	vsectionPppoe      = "vs-pppoe"       // -> sectionPppoe
+	vsectionPpp        = "vs-ppp"         // -> sectionPpp
 	// TODO
-	// vsectionVpn            = "vpn"             // -> sectionVpnL2tp, sectionVpnOpenconnect, sectionVpnOpenvpn, sectionVpnPptp, sectionVpnVpnc
-	vsectionVpnL2tp            = "vpn-l2tp"             // -> sectionVpnL2tp
-	vsectionVpnL2tpPpp         = "vpn-l2tp-ppp"         // -> sectionVpnL2tpPpp
-	vsectionVpnL2tpIpsec       = "vpn-l2tp-ipsec"       // -> sectionVpnL2tpIpsec
-	vsectionVpnOpenconnect     = "vpn-openconnect"      // -> sectionVpnOpenconnect
-	vsectionVpnOpenvpn         = "vpn-openvpn"          // -> sectionVpnOpenvpn
-	vsectionVpnOpenvpnAdvanced = "vpn-openvpn-advanced" // -> sectionVpnOpenVpnAdvanced
-	vsectionVpnOpenvpnSecurity = "vpn-openvpn-security" // -> sectionVpnOpenVpnSecurity
-	vsectionVpnOpenvpnTlsauth  = "vpn-openvpn-tlsauth"  // -> sectionVpnOpenVpnTlsauth
-	vsectionVpnOpenvpnProxies  = "vpn-openvpn-proxies"  // -> sectionVpnOpenVpnProxies
-	vsectionVpnPptp            = "vpn-pptp"             // -> sectionVpnPptp
-	vsectionVpnPptpPpp         = "vpn-pptp-ppp"         // -> sectionVpnPptpPpp
-	vsectionVpnVpnc            = "vpn-vpnc"             // -> sectionVpnVpnc
-	vsectionVpnVpncAdvanced    = "vpn-vpnc-advanced"    // -> sectionVpnVpncAdvanced
+	// vsectionVpn            = "vs-vs-vpn"             // -> sectionVpnL2tp, sectionVpnOpenconnect, sectionVpnOpenvpn, sectionVpnPptp, sectionVpnVpnc
+	vsectionVpnL2tp            = "vs-vpn-l2tp"             // -> sectionVpnL2tp
+	vsectionVpnL2tpPpp         = "vs-vpn-l2tp-ppp"         // -> sectionVpnL2tpPpp
+	vsectionVpnL2tpIpsec       = "vs-vpn-l2tp-ipsec"       // -> sectionVpnL2tpIpsec
+	vsectionVpnOpenconnect     = "vs-vpn-openconnect"      // -> sectionVpnOpenconnect
+	vsectionVpnOpenvpn         = "vs-vpn-openvpn"          // -> sectionVpnOpenvpn
+	vsectionVpnOpenvpnAdvanced = "vs-vpn-openvpn-advanced" // -> sectionVpnOpenVpnAdvanced
+	vsectionVpnOpenvpnSecurity = "vs-vpn-openvpn-security" // -> sectionVpnOpenVpnSecurity
+	vsectionVpnOpenvpnTlsauth  = "vs-vpn-openvpn-tlsauth"  // -> sectionVpnOpenVpnTlsauth
+	vsectionVpnOpenvpnProxies  = "vs-vpn-openvpn-proxies"  // -> sectionVpnOpenVpnProxies
+	vsectionVpnPptp            = "vs-vpn-pptp"             // -> sectionVpnPptp
+	vsectionVpnPptpPpp         = "vs-vpn-pptp-ppp"         // -> sectionVpnPptpPpp
+	vsectionVpnVpnc            = "vs-vpn-vpnc"             // -> sectionVpnVpnc
+	vsectionVpnVpncAdvanced    = "vs-vpn-vpnc-advanced"    // -> sectionVpnVpncAdvanced
 )
 
 // get available virtual sections for target connection type

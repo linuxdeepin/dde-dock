@@ -35,24 +35,42 @@ func (s *ConnectionSession) updatePropAvailableKeys() {
 }
 
 func (s *ConnectionSession) updatePropErrors() {
-	for _, vsection := range getAvailableVsections(s.Data) {
-		s.Errors[vsection] = make(sectionErrors)
-		sections := getRelatedSectionsOfVsection(s.Data, vsection)
-		for _, section := range sections {
+	for _, section := range getAvailableSections(s.Data) {
+		s.Errors[section] = make(sectionErrors)
+		if isSettingSectionExists(s.Data, section) {
 			// check error only section exists
-			if isSettingSectionExists(s.Data, section) {
-				errs := generalCheckSettingValues(s.Data, section)
-				for k, v := range errs {
-					s.Errors[vsection][k] = v
-				}
+			errs := generalCheckSettingValues(s.Data, section)
+			for k, v := range errs {
+				s.Errors[section][k] = v
 			}
 		}
 	}
 	// append errors when setting keys
-	for vsection, vsectionErrors := range s.settingKeyErrors {
-		for k, v := range vsectionErrors {
-			s.Errors[vsection][k] = v
+	for section, sectionErrors := range s.settingKeyErrors {
+		for k, v := range sectionErrors {
+			s.Errors[section][k] = v
 		}
 	}
+
+	// TODO remove
+	// for _, vsection := range getAvailableVsections(s.Data) {
+	// 	s.Errors[vsection] = make(sectionErrors)
+	// 	sections := getRelatedSectionsOfVsection(s.Data, vsection)
+	// 	for _, section := range sections {
+	// 		// check error only section exists
+	// 		if isSettingSectionExists(s.Data, section) {
+	// 			errs := generalCheckSettingValues(s.Data, section)
+	// 			for k, v := range errs {
+	// 				s.Errors[vsection][k] = v
+	// 			}
+	// 		}
+	// 	}
+	// }
+	// // append errors when setting keys
+	// for vsection, vsectionErrors := range s.settingKeyErrors {
+	// 	for k, v := range vsectionErrors {
+	// 		s.Errors[vsection][k] = v
+	// 	}
+	// }
 	dbus.NotifyChange(s, "Errors")
 }

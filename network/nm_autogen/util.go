@@ -52,11 +52,7 @@ func writeFrontEndFile(file, content string) {
 }
 
 func GetAllKeysInVsection(vsectionName string) (keys []string) {
-	vsectionInfo, ok := getVsectionInfo(vsectionName)
-	if !ok {
-		fmt.Println("invalid vsection name", vsectionName)
-		os.Exit(1)
-	}
+	vsectionInfo := getVsectionInfo(vsectionName)
 	for _, section := range vsectionInfo.RelatedSections {
 		keys = appendStrArrayUnique(keys, GetAllKeysInSection(section)...)
 	}
@@ -71,7 +67,7 @@ func GetAllKeysInSection(sectionName string) (keys []string) {
 			keys = append(keys, vk.Name)
 		}
 	}
-	for _, nmSetting := range nmSettings {
+	for _, nmSetting := range nmSections {
 		if nmSetting.SectionName == sectionName {
 			for _, k := range nmSetting.Keys {
 				vksNames := getRelatedVks(k.Name)
@@ -125,6 +121,7 @@ func ToKeyDisplayName(keyName string) (displayName string) {
 	return "!!" + keyValue
 }
 
+// "NM_SETTING_802_1X_EAP" -> "eap"
 func ToKeyValue(keyName string) (keyValue string) {
 	if isVk(keyName) {
 		keyValue = getVkInfo(keyName).Value
@@ -132,6 +129,37 @@ func ToKeyValue(keyName string) (keyValue string) {
 		keyValue = getKeyInfo(keyName).Value
 	}
 	return
+}
+
+// "NM_SETTING_802_1X_EAP" -> "802-1x"
+func ToKeyRelatedSectionValue(keyName string) (sectionValue string) {
+	if isVk(keyName) {
+		sectionName := getVkInfo(keyName).RelatedSection
+		sectionValue = ToSectionValue(sectionName)
+	} else {
+		sectionValue = getKeyRelatedSectionInfo(keyName).SectionValue
+	}
+	return
+}
+func getKeyRelatedSectionInfo(keyName string) (sectionInfo NMSectionStruct) {
+	for _, section := range nmSections {
+		for _, key := range section.Keys {
+			if key.Name == keyName {
+				sectionInfo = section
+				return
+			}
+		}
+	}
+	fmt.Println("invalid key name", keyName)
+	os.Exit(1)
+	return
+}
+
+// "NM_SETTING_802_1X_SETTING_NAME" -> "802-1x"
+func ToSectionValue(sectionName string) (sectionValue string) {
+	// TODO NM_SETTING_VK_NONE_RELATED_FIELD
+	sectionInfo := getSectionInfo(sectionName)
+	return sectionInfo.SectionValue
 }
 
 func GetKeyWidgetProp(keyName string) (prop map[string]string) {
@@ -152,21 +180,33 @@ func IsKeyUsedByFrontEnd(keyName string) (used bool) {
 	return
 }
 
-func getVsectionInfo(vsectionName string) (vsectionInfo NMSettingVsectionStruct, ok bool) {
-	for _, vsection := range nmSettingVsections {
-		if vsection.Name == vsectionName {
-			vsectionInfo = vsection
-			ok = true
+func getSectionInfo(sectionName string) (sectionInfo NMSectionStruct) {
+	for _, section := range nmSections {
+		if section.SectionName == sectionName {
+			sectionInfo = section
 			return
 		}
 	}
-	ok = false
+	fmt.Println("invalid section name", sectionName)
+	os.Exit(1)
 	return
 }
 
-func getKeyInfo(keyName string) (keyInfo NMSettingKeyStruct) {
-	for _, nmSetting := range nmSettings {
-		for _, key := range nmSetting.Keys {
+func getVsectionInfo(vsectionName string) (vsectionInfo NMVsectionStruct) {
+	for _, vsection := range nmSettingVsections {
+		if vsection.Name == vsectionName {
+			vsectionInfo = vsection
+			return
+		}
+	}
+	fmt.Println("invalid vsection name", vsectionName)
+	os.Exit(1)
+	return
+}
+
+func getKeyInfo(keyName string) (keyInfo NMKeyStruct) {
+	for _, section := range nmSections {
+		for _, key := range section.Keys {
 			if key.Name == keyName {
 				keyInfo = key
 				return
@@ -178,7 +218,7 @@ func getKeyInfo(keyName string) (keyInfo NMSettingKeyStruct) {
 	return
 }
 
-func getVkInfo(vkName string) (vkInfo NMSettingVkeyStruct) {
+func getVkInfo(vkName string) (vkInfo NMVkeyStruct) {
 	for _, vk := range nmSettingVkeys {
 		if vk.Name == vkName {
 			vkInfo = vk
@@ -243,6 +283,12 @@ func ToClassName(str string) (id string) {
 	id = ToCaplitalize(id)
 	id = strings.Replace(id, " ", "", -1)
 	return
+}
+
+// "vs-section" -> "Section"
+func ToVsClassName(str string) (id string) {
+	str = strings.TrimPrefix(str, "vs-")
+	return ToClassName(str)
 }
 
 func unmarshalJSONFile(jsonFile string, data interface{}) {
