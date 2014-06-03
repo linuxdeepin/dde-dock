@@ -1,7 +1,7 @@
 [
 {
-    "SectionName":"NM_SETTING_802_1X_SETTING_NAME",
-    "SectionValue":"802-1x",
+    "Name":"NM_SETTING_802_1X_SETTING_NAME",
+    "Value":"802-1x",
     "Keys":[
 	    {"Name":"NM_SETTING_802_1X_EAP", "Value":"eap", "Type":"ktypeArrayString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":true, "DisplayName":"EAP Auth", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_802_1X_ANONYMOUS_IDENTITY", "Value":"anonymous-identity", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Anon Identity", "FrontEndWidget":"<default>"},
@@ -38,8 +38,8 @@
     ]
 },
 {
-    "SectionName":"NM_SETTING_CDMA_SETTING_NAME",
-    "SectionValue":"cdma",
+    "Name":"NM_SETTING_CDMA_SETTING_NAME",
+    "Value":"cdma",
     "Keys":[
 	    {"Name":"NM_SETTING_CDMA_NUMBER", "Value":"number", "Type":"ktypeString", "Default":"\"#777\"", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Number", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_CDMA_USERNAME", "Value":"username", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Username", "FrontEndWidget":"<default>"},
@@ -48,8 +48,8 @@
     ]
 },
 {
-    "SectionName":"NM_SETTING_CONNECTION_SETTING_NAME",
-    "SectionValue":"connection",
+    "Name":"NM_SETTING_CONNECTION_SETTING_NAME",
+    "Value":"connection",
     "Keys":[
 	    {"Name":"NM_SETTING_CONNECTION_ID", "Value":"id", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Name", "FrontEndWidget":"EditLineConnectionId"},
 	    {"Name":"NM_SETTING_CONNECTION_UUID", "Value":"uuid", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
@@ -65,8 +65,8 @@
     ]
 },
 {
-    "SectionName":"NM_SETTING_GSM_SETTING_NAME",
-    "SectionValue":"gsm",
+    "Name":"NM_SETTING_GSM_SETTING_NAME",
+    "Value":"gsm",
     "Keys":[
 	    {"Name":"NM_SETTING_GSM_NUMBER", "Value":"number", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Number", "FrontEndWidget":"EditLineEditComboBox"},
 	    {"Name":"NM_SETTING_GSM_USERNAME", "Value":"username", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Username", "FrontEndWidget":"<default>"},
@@ -82,8 +82,8 @@
     ]
 },
 {
-    "SectionName":"NM_SETTING_IP4_CONFIG_SETTING_NAME",
-    "SectionValue":"ipv4",
+    "Name":"NM_SETTING_IP4_CONFIG_SETTING_NAME",
+    "Value":"ipv4",
     "Keys":[
 	    {"Name":"NM_SETTING_IP4_CONFIG_METHOD", "Value":"method", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":true, "DisplayName":"Method", "FrontEndWidget":"EditLineComboBox"},
 	    {"Name":"NM_SETTING_IP4_CONFIG_ADDRESSES", "Value":"addresses", "Type":"ktypeWrapperIpv4Addresses", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
@@ -100,8 +100,8 @@
 	]
 },
 {
-    "SectionName":"NM_SETTING_IP6_CONFIG_SETTING_NAME",
-    "SectionValue":"ipv6",
+    "Name":"NM_SETTING_IP6_CONFIG_SETTING_NAME",
+    "Value":"ipv6",
     "Keys":[
 	    {"Name":"NM_SETTING_IP6_CONFIG_METHOD", "Value":"method", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":true, "DisplayName":"Method", "FrontEndWidget":"EditLineComboBox"},
 	    {"Name":"NM_SETTING_IP6_CONFIG_ADDRESSES", "Value":"addresses", "Type":"ktypeWrapperIpv6Addresses", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
@@ -117,8 +117,8 @@
     ]
 },
 {
-    "SectionName":"NM_SETTING_PPP_SETTING_NAME",
-    "SectionValue":"ppp",
+    "Name":"NM_SETTING_PPP_SETTING_NAME",
+    "Value":"ppp",
     "Keys":[
 	    {"Name":"NM_SETTING_PPP_REQUIRE_MPPE", "Value":"require-mppe", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":true, "DisplayName":"Use MPPE", "FrontEndWidget":"<default>", "WidgetProp":{"alwaysUpdate":"true"}},
 	    {"Name":"NM_SETTING_PPP_REQUIRE_MPPE_128", "Value":"require-mppe-128", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"128-bit MPPE", "FrontEndWidget":"<default>", "WidgetProp":{"alwaysUpdate":"true"}},
@@ -141,8 +141,8 @@
     ]
 },
 {
-    "SectionName":"NM_SETTING_PPPOE_SETTING_NAME",
-    "SectionValue":"pppoe",
+    "Name":"NM_SETTING_PPPOE_SETTING_NAME",
+    "Value":"pppoe",
     "Keys":[
 	    {"Name":"NM_SETTING_PPPOE_USERNAME", "Value":"username", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Username", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_PPPOE_SERVICE", "Value":"service", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Service", "FrontEndWidget":"<default>"},
@@ -151,8 +151,8 @@
     ]
 },
 {
-    "SectionName":"NM_SETTING_SERIAL_SETTING_NAME",
-    "SectionValue":"serial",
+    "Name":"NM_SETTING_SERIAL_SETTING_NAME",
+    "Value":"serial",
     "Keys":[
 	    {"Name":"NM_SETTING_SERIAL_BAUD", "Value":"baud", "Type":"ktypeUint32", "Default":"57600", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_SERIAL_BITS", "Value":"bits", "Type":"ktypeUint32", "Default":"8", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"},
@@ -162,8 +162,8 @@
     ]
 },
 {
-    "SectionName":"NM_SETTING_VPN_SETTING_NAME",
-    "SectionValue":"vpn",
+    "Name":"NM_SETTING_VPN_SETTING_NAME",
+    "Value":"vpn",
     "Keys":[
 	    {"Name":"NM_SETTING_VPN_SERVICE_TYPE", "Value":"service-type", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_USER_NAME", "Value":"user-name", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"},
@@ -172,8 +172,8 @@
     ]
 },
 {
-    "SectionName":"NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME",
-    "SectionValue":"alias-vpn-l2tp",
+    "Name":"NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME",
+    "Value":"alias-vpn-l2tp",
     "Keys":[
 	    {"Name":"NM_SETTING_VPN_L2TP_KEY_GATEWAY", "Value":"gateway", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "Displayname":"Gateway", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_L2TP_KEY_USER", "Value":"user", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "Displayname":"Username", "FrontEndWidget":"<default>"},
@@ -183,8 +183,8 @@
     ]
 },
 {
-    "SectionName":"NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME",
-    "SectionValue":"alias-vpn-l2tp-ppp",
+    "Name":"NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME",
+    "Value":"alias-vpn-l2tp-ppp",
     "Keys":[
 	    {"Name":"NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE", "Value":"require-mppe", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"Use MPPE", "FrontEndWidget":"<default>", "WidgetProp":{"alwaysUpdate":"true"}},
 	    {"Name":"NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_40", "Value":"require-mppe-40", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"40-bit MPPE", "FrontEndWidget":"<default>", "WidgetProp":{"alwaysUpdate":"true"}},
@@ -205,8 +205,8 @@
     ]
 },
 {
-    "SectionName":"NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME",
-    "SectionValue":"alias-vpn-l2tp-ipsec",
+    "Name":"NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME",
+    "Value":"alias-vpn-l2tp-ipsec",
     "Keys":[
 	    {"Name":"NM_SETTING_VPN_L2TP_KEY_IPSEC_ENABLE", "Value":"ipsec-enabled", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":true, "DisplayName":"Enable IPsec", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_L2TP_KEY_IPSEC_GROUP_NAME", "Value":"ipsec-group-name", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Group Name", "FrontEndWidget":"<default>"},
@@ -215,8 +215,8 @@
     ]
 },
 {
-    "SectionName":"NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME",
-    "SectionValue":"alias-vpn-openconnect",
+    "Name":"NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME",
+    "Value":"alias-vpn-openconnect",
     "Keys":[
 	    {"Name":"NM_SETTING_VPN_OPENCONNECT_KEY_GATEWAY", "Value":"gateway", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Gateway", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_OPENCONNECT_KEY_CACERT", "Value":"cacert", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"CA Cert", "FrontEndWidget":"EditLineFileChooser"},
@@ -235,8 +235,8 @@
     ]
 },
 {
-    "SectionName":"NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME",
-    "SectionValue":"alias-vpn-openvpn",
+    "Name":"NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME",
+    "Value":"alias-vpn-openvpn",
     "Keys":[
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_REMOTE", "Value":"remote", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Gateway", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_CONNECTION_TYPE", "Value":"connection-type", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":true, "DisplayName":"Auth Type", "FrontEndWidget":"EditLineComboBox"},
@@ -255,8 +255,8 @@
     ]
 },
 {
-    "SectionName":"NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME",
-    "SectionValue":"alias-vpn-openvpn-advanced",
+    "Name":"NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME",
+    "Value":"alias-vpn-openvpn-advanced",
     "Keys":[
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_PORT", "Value":"port", "Type":"ktypeUint32", "Default":"1194", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Gateway Port", "FrontEndWidget":"<default>", "WidgetProp":{"min":"0", "max":"65535"}},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_RENEG_SECONDS", "Value":"reneg-seconds", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Renegotiation Interval", "FrontEndWidget":"<default>", "WidgetProp":{"min":"0", "max":"604800"}},
@@ -270,16 +270,16 @@
     ]
 },    
 {
-    "SectionName":"NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME",
-    "SectionValue":"alias-vpn-openvpn-security",
+    "Name":"NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME",
+    "Value":"alias-vpn-openvpn-security",
     "Keys":[
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_CIPHER", "Value":"cipher", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Cipher", "FrontEndWidget":"EditLineComboBox"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_AUTH", "Value":"auth", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"HMAC Auth", "FrontEndWidget":"EditLineComboBox"}
     ]
 },    
 {
-    "SectionName":"NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME",
-    "SectionValue":"alias-vpn-openvpn-tlsauth",
+    "Name":"NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME",
+    "Value":"alias-vpn-openvpn-tlsauth",
     "Keys":[
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_TLS_REMOTE", "Value":"tls-remote", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Subject Match", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_REMOTE_CERT_TLS", "Value":"remote-cert-tls", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Remote Cert", "FrontEndWidget":"EditLineComboBox"},
@@ -288,8 +288,8 @@
     ]
 },    
 {
-    "SectionName":"NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME",
-    "SectionValue":"alias-vpn-openvpn-proxies",
+    "Name":"NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME",
+    "Value":"alias-vpn-openvpn-proxies",
     "Keys":[
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE", "Value":"proxy-type", "Type":"ktypeString", "Default":"\"none\"", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":true, "DisplayName":"Proxy Type", "FrontEndWidget":"EditLineComboBox"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER", "Value":"proxy-server", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Server IP", "FrontEndWidget":"<default>"},
@@ -301,8 +301,8 @@
     ]
 },    
 {
-    "SectionName":"NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME",
-    "SectionValue":"alias-vpn-pptp",
+    "Name":"NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME",
+    "Value":"alias-vpn-pptp",
     "Keys":[
 	    {"Name":"NM_SETTING_VPN_PPTP_KEY_GATEWAY", "Value":"gateway", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "Displayname":"Gateway", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_PPTP_KEY_USER", "Value":"user", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "Displayname":"Username", "FrontEndWidget":"<default>"},
@@ -312,8 +312,8 @@
     ]
 },
 {
-    "SectionName":"NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME",
-    "SectionValue":"alias-vpn-pptp-ppp",
+    "Name":"NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME",
+    "Value":"alias-vpn-pptp-ppp",
     "Keys":[
 	    {"Name":"NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE", "Value":"require-mppe", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"Use MPPE", "FrontEndWidget":"<default>", "WidgetProp":{"alwaysUpdate":"true"}},
 	    {"Name":"NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40", "Value":"require-mppe-40", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"40-bit MPPE", "FrontEndWidget":"<default>", "WidgetProp":{"alwaysUpdate":"true"}},
@@ -332,8 +332,8 @@
     ]
 },    
 {
-    "SectionName":"NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME",
-    "SectionValue":"alias-vpn-vpnc",
+    "Name":"NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME",
+    "Value":"alias-vpn-vpnc",
     "Keys":[
 	    {"Name":"NM_SETTING_VPN_VPNC_KEY_GATEWAY", "Value":"IPSec gateway", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Gateway", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_VPNC_KEY_XAUTH_USER", "Value":"Xauth username", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Username", "FrontEndWidget":"<default>"},
@@ -349,8 +349,8 @@
     ]
 },    
 {
-    "SectionName":"NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME",
-    "SectionValue":"alias-vpn-vpnc-advanced",
+    "Name":"NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME",
+    "Value":"alias-vpn-vpnc-advanced",
     "Keys":[
 	    {"Name":"NM_SETTING_VPN_VPNC_KEY_DOMAIN", "Value":"Domain", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Domain", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_VPNC_KEY_VENDOR", "Value":"Vendor", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Vendor", "FrontEndWidget":"<default>"},
@@ -366,8 +366,8 @@
     ]
 },    
 {
-    "SectionName":"NM_SETTING_WIRED_SETTING_NAME",
-    "SectionValue":"802-3-ethernet",
+    "Name":"NM_SETTING_WIRED_SETTING_NAME",
+    "Value":"802-3-ethernet",
     "Keys":[
 	    {"Name":"NM_SETTING_WIRED_PORT", "Value":"port", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_WIRED_SPEED", "Value":"speed", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
@@ -383,8 +383,8 @@
     ]
 },
 {
-    "SectionName":"NM_SETTING_WIRELESS_SETTING_NAME",
-    "SectionValue":"802-11-wireless",
+    "Name":"NM_SETTING_WIRELESS_SETTING_NAME",
+    "Value":"802-11-wireless",
     "Keys":[
 	    {"Name":"NM_SETTING_WIRELESS_SSID", "Value":"ssid", "Type":"ktypeWrapperString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"SSID", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_WIRELESS_MODE", "Value":"mode", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":true, "DisplayName":"Mode", "FrontEndWidget":"EditLineComboBox"},
@@ -403,8 +403,8 @@
     ]
 },
 {
-    "SectionName":"NM_SETTING_WIRELESS_SECURITY_SETTING_NAME",
-    "SectionValue":"802-11-wireless-security",
+    "Name":"NM_SETTING_WIRELESS_SECURITY_SETTING_NAME",
+    "Value":"802-11-wireless-security",
     "Keys":[
      {"Name":"NM_SETTING_WIRELESS_SECURITY_KEY_MGMT", "Value":"key-mgmt", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"Security", "FrontEndWidget":"<default>"},
      {"Name":"NM_SETTING_WIRELESS_SECURITY_WEP_TX_KEYIDX", "Value":"wep-tx-keyidx", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},

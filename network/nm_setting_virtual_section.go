@@ -84,8 +84,8 @@ func getRealSectionName(name string) (realName string) {
 const (
 	vsectionGeneral  = "vs-general"  // -> sectionConnection
 	vsectionEthernet = "vs-ethernet" // -> sectionWired
+	vsectionMobile   = "vs-mobile"   // -> sectionGsm, sectionCdma
 	// TODO
-	// vsectionMobile          = "vs-mobile"           // -> sectionGsm, sectionCdma
 	vsectionMobileGsm  = "vs-mobile-gsm"  // -> sectionGsm
 	vsectionMobileCdma = "vs-mobile-cdma" // -> sectionCdma
 	vsectionWifi       = "vs-wifi"        // -> sectionWireless
@@ -94,8 +94,8 @@ const (
 	vsectionSecurity   = "vs-security"    // -> section8021x, sectionWirelessSecurity
 	vsectionPppoe      = "vs-pppoe"       // -> sectionPppoe
 	vsectionPpp        = "vs-ppp"         // -> sectionPpp
+	vsectionVpn        = "vs-vpn"         // -> sectionVpnL2tp, sectionVpnOpenconnect, sectionVpnOpenvpn, sectionVpnPptp, sectionVpnVpnc
 	// TODO
-	// vsectionVpn            = "vs-vs-vpn"             // -> sectionVpnL2tp, sectionVpnOpenconnect, sectionVpnOpenvpn, sectionVpnPptp, sectionVpnVpnc
 	vsectionVpnL2tp            = "vs-vpn-l2tp"             // -> sectionVpnL2tp
 	vsectionVpnL2tpPpp         = "vs-vpn-l2tp-ppp"         // -> sectionVpnL2tpPpp
 	vsectionVpnL2tpIpsec       = "vs-vpn-l2tp-ipsec"       // -> sectionVpnL2tpIpsec
@@ -158,7 +158,7 @@ func getAvailableVsections(data connectionData) (vsections []string) {
 	case connectionVpnL2tp:
 		vsections = []string{
 			vsectionGeneral,
-			vsectionVpnL2tp,
+			vsectionVpn,
 			vsectionVpnL2tpPpp,
 			vsectionVpnL2tpIpsec,
 			vsectionIpv4,
@@ -166,14 +166,14 @@ func getAvailableVsections(data connectionData) (vsections []string) {
 	case connectionVpnOpenconnect:
 		vsections = []string{
 			vsectionGeneral,
-			vsectionVpnOpenconnect,
+			vsectionVpn,
 			vsectionIpv4,
 			vsectionIpv6,
 		}
 	case connectionVpnOpenvpn:
 		vsections = []string{
 			vsectionGeneral,
-			vsectionVpnOpenvpn,
+			vsectionVpn,
 			vsectionVpnOpenvpnAdvanced,
 			vsectionVpnOpenvpnSecurity,
 			vsectionVpnOpenvpnProxies,
@@ -187,28 +187,28 @@ func getAvailableVsections(data connectionData) (vsections []string) {
 	case connectionVpnPptp:
 		vsections = []string{
 			vsectionGeneral,
-			vsectionVpnPptp,
+			vsectionVpn,
 			vsectionVpnPptpPpp,
 			vsectionIpv4,
 		}
 	case connectionVpnVpnc:
 		vsections = []string{
 			vsectionGeneral,
-			vsectionVpnVpnc,
+			vsectionVpn,
 			vsectionVpnVpncAdvanced,
 			vsectionIpv4,
 		}
 	case connectionMobileGsm:
 		vsections = []string{
 			vsectionGeneral,
-			vsectionMobileGsm,
+			vsectionMobile,
 			vsectionPpp,
 			vsectionIpv4,
 		}
 	case connectionMobileCdma:
 		vsections = []string{
 			vsectionGeneral,
-			vsectionMobileCdma,
+			vsectionMobile,
 			vsectionPpp,
 			vsectionIpv4,
 		}
@@ -223,7 +223,14 @@ func getRelatedSectionsOfVsection(data connectionData, vsection string) (section
 		logger.Error("getRelatedSectionsOfVsection: invalid vsection name", vsection)
 	case vsectionGeneral:
 		sections = []string{sectionConnection}
-	case vsectionMobileGsm:
+	case vsectionMobile:
+		switch connectionType {
+		case connectionMobileGsm:
+			sections = []string{sectionGsm}
+		case connectionMobileCdma:
+			sections = []string{sectionCdma}
+		}
+	case vsectionMobileGsm: // TODO: remove
 		sections = []string{sectionGsm}
 	case vsectionMobileCdma:
 		sections = []string{sectionCdma}
@@ -250,15 +257,28 @@ func getRelatedSectionsOfVsection(data connectionData, vsection string) (section
 		sections = []string{sectionPppoe}
 	case vsectionPpp:
 		sections = []string{sectionPpp}
-	case vsectionVpnL2tp:
+	case vsectionVpn:
+		switch connectionType {
+		case connectionVpnL2tp:
+			sections = []string{sectionVpnL2tp}
+		case connectionVpnOpenconnect:
+			sections = []string{sectionVpnOpenconnect}
+		case connectionVpnOpenvpn:
+			sections = []string{sectionVpnOpenvpn}
+		case connectionVpnPptp:
+			sections = []string{sectionVpnPptp}
+		case connectionVpnVpnc:
+			sections = []string{sectionVpnVpnc}
+		}
+	case vsectionVpnL2tp: // TODO
 		sections = []string{sectionVpnL2tp}
 	case vsectionVpnL2tpPpp:
 		sections = []string{sectionVpnL2tpPpp}
 	case vsectionVpnL2tpIpsec:
 		sections = []string{sectionVpnL2tpIpsec}
-	case vsectionVpnOpenconnect:
+	case vsectionVpnOpenconnect: // TODO
 		sections = []string{sectionVpnOpenconnect}
-	case vsectionVpnOpenvpn:
+	case vsectionVpnOpenvpn: // TODO
 		sections = []string{sectionVpnOpenvpn}
 	case vsectionVpnOpenvpnAdvanced:
 		sections = []string{sectionVpnOpenvpnAdvanced}
@@ -268,11 +288,11 @@ func getRelatedSectionsOfVsection(data connectionData, vsection string) (section
 		sections = []string{sectionVpnOpenvpnTlsauth}
 	case vsectionVpnOpenvpnProxies:
 		sections = []string{sectionVpnOpenvpnProxies}
-	case vsectionVpnPptp:
+	case vsectionVpnPptp: // TODO
 		sections = []string{sectionVpnPptp}
 	case vsectionVpnPptpPpp:
 		sections = []string{sectionVpnPptpPpp}
-	case vsectionVpnVpnc:
+	case vsectionVpnVpnc: // TODO
 		sections = []string{sectionVpnVpnc}
 	case vsectionVpnVpncAdvanced:
 		sections = []string{sectionVpnVpncAdvanced}

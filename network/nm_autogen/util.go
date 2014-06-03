@@ -62,14 +62,14 @@ func GetAllKeysInVsection(vsectionName string) (keys []string) {
 // GetAllKeysInSection return all keys that will be used by front-end.
 func GetAllKeysInSection(sectionName string) (keys []string) {
 	// virtual keys in section that with none related key
-	for _, vk := range nmSettingVkeys {
+	for _, vk := range nmVkeys {
 		if vk.RelatedSection == sectionName && isStringInArray("NM_SETTING_VK_NONE_RELATED_KEY", vk.RelatedKeys) {
 			keys = append(keys, vk.Name)
 		}
 	}
-	for _, nmSetting := range nmSections {
-		if nmSetting.SectionName == sectionName {
-			for _, k := range nmSetting.Keys {
+	for _, nmSection := range nmSections {
+		if nmSection.Name == sectionName {
+			for _, k := range nmSection.Keys {
 				vksNames := getRelatedVks(k.Name)
 				if len(vksNames) > 0 {
 					// if virtual key is a enable wrapper, both
@@ -92,7 +92,7 @@ func GetAllKeysInSection(sectionName string) (keys []string) {
 
 // get all related virtual keys of real key
 func getRelatedVks(keyName string) (vks []string) {
-	for _, vk := range nmSettingVkeys {
+	for _, vk := range nmVkeys {
 		if isStringInArray(keyName, vk.RelatedKeys) {
 			vks = append(vks, vk.Name)
 		}
@@ -137,7 +137,7 @@ func ToKeyRelatedSectionValue(keyName string) (sectionValue string) {
 		sectionName := getVkInfo(keyName).RelatedSection
 		sectionValue = ToSectionValue(sectionName)
 	} else {
-		sectionValue = getKeyRelatedSectionInfo(keyName).SectionValue
+		sectionValue = getKeyRelatedSectionInfo(keyName).Value
 	}
 	return
 }
@@ -159,7 +159,7 @@ func getKeyRelatedSectionInfo(keyName string) (sectionInfo NMSectionStruct) {
 func ToSectionValue(sectionName string) (sectionValue string) {
 	// TODO NM_SETTING_VK_NONE_RELATED_FIELD
 	sectionInfo := getSectionInfo(sectionName)
-	return sectionInfo.SectionValue
+	return sectionInfo.Value
 }
 
 func GetKeyWidgetProp(keyName string) (prop map[string]string) {
@@ -182,7 +182,7 @@ func IsKeyUsedByFrontEnd(keyName string) (used bool) {
 
 func getSectionInfo(sectionName string) (sectionInfo NMSectionStruct) {
 	for _, section := range nmSections {
-		if section.SectionName == sectionName {
+		if section.Name == sectionName {
 			sectionInfo = section
 			return
 		}
@@ -193,7 +193,7 @@ func getSectionInfo(sectionName string) (sectionInfo NMSectionStruct) {
 }
 
 func getVsectionInfo(vsectionName string) (vsectionInfo NMVsectionStruct) {
-	for _, vsection := range nmSettingVsections {
+	for _, vsection := range nmVsections {
 		if vsection.Name == vsectionName {
 			vsectionInfo = vsection
 			return
@@ -219,7 +219,7 @@ func getKeyInfo(keyName string) (keyInfo NMKeyStruct) {
 }
 
 func getVkInfo(vkName string) (vkInfo NMVkeyStruct) {
-	for _, vk := range nmSettingVkeys {
+	for _, vk := range nmVkeys {
 		if vk.Name == vkName {
 			vkInfo = vk
 			return
@@ -232,7 +232,7 @@ func getVkInfo(vkName string) (vkInfo NMVkeyStruct) {
 
 // check if target key is a virtual key
 func isVk(keyName string) (ok bool) {
-	for _, vk := range nmSettingVkeys {
+	for _, vk := range nmVkeys {
 		if vk.Name == keyName {
 			return true
 		}

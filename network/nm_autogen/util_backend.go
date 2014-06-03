@@ -218,16 +218,16 @@ func IfNeedCheckValueLength(ktype string) (need string) {
 }
 
 // get all related sections of virtual keys
-func GetAllVkeysRelatedSections(nmSettingVkeys []NMVkeyStruct) (sections []string) {
-	for _, vk := range nmSettingVkeys {
+func GetAllVkeysRelatedSections(nmVkeys []NMVkeyStruct) (sections []string) {
+	for _, vk := range nmVkeys {
 		sections = appendStrArrayUnique(sections, vk.RelatedSection)
 	}
 	return
 }
 
 // get all virtual keys in target section
-func GetVkeysOfSection(nmSettingVkeys []NMVkeyStruct, section string) (keys []string) {
-	for _, vk := range nmSettingVkeys {
+func GetVkeysOfSection(nmVkeys []NMVkeyStruct, section string) (keys []string) {
+	for _, vk := range nmVkeys {
 		if vk.RelatedSection == section {
 			keys = append(keys, vk.Name)
 		}
