@@ -240,7 +240,8 @@ func (op *Manager) listenSettingsChanged() {
 			}
 		case GKEY_CURRENT_BACKGROUND: // TODO
 			value := personSettings.GetString(key)
-			logObject.Infof("Bg GSettings Changed: %s", value)
+			gbg := gnomeBgSettings.GetString(key)
+			logObject.Infof("DEEPIN Bg GSettings Changed: %s", value)
 			obj := op.getThemeObject(op.CurrentTheme)
 			if obj != nil && obj.BackgroundFile != value {
 				path, ok := op.copyBackgroundFile(value)
@@ -257,6 +258,10 @@ func (op *Manager) listenSettingsChanged() {
 					obj.updateThemeInfo()
 					dbus.NotifyChange(obj, "BackgroundFile")
 				}
+			}
+
+			if value != gbg {
+				gnomeBgSettings.SetString("picture-uri", value)
 			}
 		case GKEY_CURRENT_SOUND_THEME: // TODO
 			value := personSettings.GetString(key)
