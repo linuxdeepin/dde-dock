@@ -40,7 +40,8 @@ import _ "net/http/pprof"
 import "net/http"
 
 func init() {
-	go http.ListenAndServe("localhost:6060", nil)
+	return
+	http.ListenAndServe("localhost:6060", nil)
 }
 
 var Logger = logger.NewLogger("com.deepin.daemon")
@@ -92,7 +93,6 @@ func dscAutoUpdate() {
 }
 
 func main() {
-	println("Test")
 	if !dlib.UniqueOnSession("com.deepin.daemon") {
 		Logger.Warning("There already has an dde-daemon running.")
 		return
@@ -101,29 +101,120 @@ func main() {
 	Textdomain("dde-daemon")
 
 	C.init()
-	go network.Start()
-	go clipboard.Start()
-	go audio.Start()
-	go power.Start()
-	go display.Start()
+
+	netFlag := false
+	clipFlag := false
+	audioFlag := false
+	powerFlag := false
+	dpyFlag := false
+	dockFlag := false
+	launFlag := false
+	keyFlag := false
+	mtFlag := false
+	dtFlag := false
+	mimeFlag := false
+	themeFlag := false
+	blueFlag := false
+	edgeFlag := false
+	mpFlag := false
+	grubFlag := false
+	l := len(os.Args)
+	if l >= 2 {
+		for i := 1; i < l; i++ {
+			switch os.Args[i] {
+			case "network":
+				netFlag = true
+			case "clipboard":
+				clipFlag = true
+			case "audio":
+				audioFlag = true
+			case "power":
+				powerFlag = true
+			case "display":
+				dpyFlag = true
+			case "dock":
+				dockFlag = true
+			case "launcher":
+				launFlag = true
+			case "keybinding":
+				keyFlag = true
+			case "mounts":
+				mtFlag = true
+			case "datetime":
+				dtFlag = true
+			case "mime":
+				mimeFlag = true
+			case "themes":
+				themeFlag = true
+			case "bluetooth":
+				blueFlag = true
+			case "screen_edges":
+				edgeFlag = true
+			case "mpris":
+				mpFlag = true
+			case "grub2":
+				grubFlag = true
+			}
+		}
+	}
+
+	if !netFlag {
+		go network.Start()
+	}
+	if !clipFlag {
+		go clipboard.Start()
+	}
+
+	if !audioFlag {
+		go audio.Start()
+	}
+	if !powerFlag {
+		go power.Start()
+	}
+	if !dpyFlag {
+		go display.Start()
+	}
 	<-time.After(time.Second * 3)
 
-	go dock.Start()
-	go launcher.Start()
+	if !dockFlag || !dpyFlag {
+		go dock.Start()
+	}
+	if !launFlag {
+		go launcher.Start()
+	}
 
-	go keybinding.Start()
-	go datetime.Start()
-	go mime.Start()
-	go mounts.Start()
-	go themes.Start()
-	go bluetooth.Start()
+	if !keyFlag {
+		go keybinding.Start()
+	}
+	if !dtFlag {
+		go datetime.Start()
+	}
+	if !mimeFlag {
+		go mime.Start()
+	}
+	if !mtFlag {
+		go mounts.Start()
+	}
+	if !themeFlag {
+		go themes.Start()
+	}
+	if !blueFlag {
+		go bluetooth.Start()
+	}
 
-	go startMprisDaemon()
+	if !mpFlag {
+		go startMprisDaemon()
+	}
 
 	dscAutoUpdate()
 
 	<-time.After(time.Second)
-	go screen_edges.Start()
+	if !dpyFlag || !edgeFlag {
+		go screen_edges.Start()
+	}
+	if !grubFlag {
+		go grub2.Start()
+	}
 	glib.StartLoop()
 
 	if err := dbus.Wait(); err != nil {
