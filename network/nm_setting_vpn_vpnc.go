@@ -117,20 +117,19 @@ var availableValuesNMVpncSecretFlag = []kvalue{
 	kvalue{NM_VPNC_SECRET_FLAG_UNUSED, Tr("Not Required")},
 }
 
-func isVpnVpncNeedShowSecret(data connectionData) bool {
-	flag := getSettingVpnVpncKeySecretFlags(data)
+func isVpnVpncRequireSecret(flag uint32) bool {
 	if flag == NM_VPNC_SECRET_FLAG_NONE || flag == NM_VPNC_SECRET_FLAG_SAVE {
 		return true
 	}
 	return false
 }
 
+func isVpnVpncNeedShowSecret(data connectionData) bool {
+	return isVpnVpncRequireSecret(getSettingVpnVpncKeySecretFlags(data))
+}
+
 func isVpnVpncNeedShowXauthPassword(data connectionData) bool {
-	flag := getSettingVpnVpncKeyXauthPasswordFlags(data)
-	if flag == NM_VPNC_SECRET_FLAG_NONE || flag == NM_VPNC_SECRET_FLAG_SAVE {
-		return true
-	}
-	return false
+	return isVpnVpncRequireSecret(getSettingVpnVpncKeyXauthPasswordFlags(data))
 }
 
 // new connection data
@@ -176,6 +175,12 @@ func getSettingVpnVpncAvailableValues(data connectionData, key string) (values [
 }
 func checkSettingVpnVpncValues(data connectionData) (errs sectionErrors) {
 	errs = make(map[string]string)
+	if isVpnVpncNeedShowXauthPassword(data) {
+		ensureSettingVpnVpncKeyXauthPasswordNoEmpty(data, errs)
+	}
+	if isVpnVpncNeedShowSecret(data) {
+		ensureSettingVpnVpncKeySecretNoEmpty(data, errs)
+	}
 	ensureSettingVpnVpncKeyGatewayNoEmpty(data, errs)
 	ensureSettingVpnVpncKeyIdNoEmpty(data, errs)
 	checkSettingVpnVpncCaFile(data, errs)

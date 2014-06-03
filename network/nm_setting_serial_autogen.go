@@ -55,7 +55,7 @@ func getSettingSerialDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_SERIAL_STOPBITS:
 		value = 1
 	case NM_SETTING_SERIAL_SEND_DELAY:
-		value = 0
+		value = uint64(0)
 	}
 	return
 }

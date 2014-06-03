@@ -197,9 +197,9 @@ func getSetting8021xAvailableValues(data connectionData, key string) (values []k
 			}
 		}
 	case NM_SETTING_802_1X_PASSWORD_FLAGS:
-		values = availableValuesNMSettingSecretFlag
+		values = availableValuesSettingSecretFlags
 	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS:
-		values = availableValuesNMSettingSecretFlag
+		values = availableValuesSettingSecretFlags
 	}
 	return
 }
@@ -218,29 +218,41 @@ func checkSetting8021xValues(data connectionData) (errs sectionErrors) {
 		ensureSetting8021xClientCertNoEmpty(data, errs)
 		ensureSetting8021xCaCertNoEmpty(data, errs)
 		ensureSetting8021xPrivateKeyNoEmpty(data, errs)
-		ensureSetting8021xPasswordNoEmpty(data, errs)
+		if isSettingRequireSecret(getSetting8021xPrivateKeyPasswordFlags(data)) {
+			ensureSetting8021xPrivateKeyPasswordNoEmpty(data, errs)
+		}
 		ensureSetting8021xSystemCaCertsNoEmpty(data, errs)
 	case "md5":
 		ensureSetting8021xIdentityNoEmpty(data, errs)
-		ensureSetting8021xPasswordNoEmpty(data, errs)
+		if isSettingRequireSecret(getSetting8021xPasswordFlags(data)) {
+			ensureSetting8021xPasswordNoEmpty(data, errs)
+		}
 	case "leap":
 		ensureSetting8021xIdentityNoEmpty(data, errs)
-		ensureSetting8021xPasswordNoEmpty(data, errs)
+		if isSettingRequireSecret(getSetting8021xPasswordFlags(data)) {
+			ensureSetting8021xPasswordNoEmpty(data, errs)
+		}
 	case "fast":
 		ensureSetting8021xPhase2AuthNoEmpty(data, errs)
 		ensureSetting8021xIdentityNoEmpty(data, errs)
-		ensureSetting8021xPasswordNoEmpty(data, errs)
 		ensureSetting8021xSystemCaCertsNoEmpty(data, errs)
+		if isSettingRequireSecret(getSetting8021xPasswordFlags(data)) {
+			ensureSetting8021xPasswordNoEmpty(data, errs)
+		}
 	case "ttls":
 		ensureSetting8021xPhase2AuthNoEmpty(data, errs)
 		ensureSetting8021xIdentityNoEmpty(data, errs)
-		ensureSetting8021xPasswordNoEmpty(data, errs)
 		ensureSetting8021xSystemCaCertsNoEmpty(data, errs)
+		if isSettingRequireSecret(getSetting8021xPasswordFlags(data)) {
+			ensureSetting8021xPasswordNoEmpty(data, errs)
+		}
 	case "peap":
 		ensureSetting8021xPhase2AuthNoEmpty(data, errs)
 		ensureSetting8021xIdentityNoEmpty(data, errs)
-		ensureSetting8021xPasswordNoEmpty(data, errs)
 		ensureSetting8021xSystemCaCertsNoEmpty(data, errs)
+		if isSettingRequireSecret(getSetting8021xPasswordFlags(data)) {
+			ensureSetting8021xPasswordNoEmpty(data, errs)
+		}
 	}
 
 	// check value of pac file

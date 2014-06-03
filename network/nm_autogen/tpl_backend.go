@@ -12,7 +12,7 @@ import (
 // get key type
 const tplGetKeyType = `
 // Get key type
-func get{{.SectionName | ToSectionFuncBaseName}}KeyType(key string) (t ktype) {
+func get{{.Name | ToSectionFuncBaseName}}KeyType(key string) (t ktype) {
 	switch key {
 	default:
 		t = ktypeUnknown{{range .Keys}}
@@ -26,7 +26,7 @@ func get{{.SectionName | ToSectionFuncBaseName}}KeyType(key string) (t ktype) {
 // check is key in current section
 const tplIsKeyInSettingSection = `
 // Check is key in current setting section
-func isKeyIn{{.SectionName | ToSectionFuncBaseName}}(key string) bool {
+func isKeyIn{{.Name | ToSectionFuncBaseName}}(key string) bool {
 	switch key { {{range .Keys}}{{if .UsedByBackEnd}}
 	case {{.Name}}:
 		return true{{end}}{{end}}
@@ -36,15 +36,15 @@ func isKeyIn{{.SectionName | ToSectionFuncBaseName}}(key string) bool {
 `
 
 // Ensure section and key exists and not empty
-const tplEnsureNoEmpty = `{{$sectionFuncBaseName := .SectionName | ToSectionFuncBaseName}}{{$sectionName := .SectionName}}
+const tplEnsureNoEmpty = `{{$sectionFuncBaseName := .Name | ToSectionFuncBaseName}}{{$sectionName := .Name}}
 // Ensure section and key exists and not empty
 func ensureSection{{$sectionFuncBaseName}}Exists(data connectionData, errs sectionErrors, relatedKey string) {
-	if !isSettingSectionExists(data, {{.SectionName}}) {
-		rememberError(errs, relatedKey, {{.SectionName}}, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, {{.SectionName}}))
+	if !isSettingSectionExists(data, {{.Name}}) {
+		rememberError(errs, relatedKey, {{.Name}}, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, {{.Name}}))
 	}
-	sectionData, _ := data[{{.SectionName}}]
+	sectionData, _ := data[{{.Name}}]
 	if len(sectionData) == 0 {
-		rememberError(errs, relatedKey, {{.SectionName}}, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, {{.SectionName}}))
+		rememberError(errs, relatedKey, {{.Name}}, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, {{.Name}}))
 	}
 }{{range $i, $key := .Keys}}{{if $key.UsedByBackEnd}}{{$keyFuncBaseName := $key.Name | ToKeyFuncBaseName}}
 func ensure{{$keyFuncBaseName}}NoEmpty(data connectionData, errs sectionErrors) {
@@ -59,7 +59,7 @@ func ensure{{$keyFuncBaseName}}NoEmpty(data connectionData, errs sectionErrors) 
 `
 
 // get key's default value
-const tplGetDefaultValue = `{{$sectionFuncBaseName := .SectionName | ToSectionFuncBaseName}}
+const tplGetDefaultValue = `{{$sectionFuncBaseName := .Name | ToSectionFuncBaseName}}
 // Get key's default value
 func get{{$sectionFuncBaseName}}DefaultValue(key string) (value interface{}) {
 	switch key {
@@ -73,7 +73,7 @@ func get{{$sectionFuncBaseName}}DefaultValue(key string) (value interface{}) {
 `
 
 // get json value generally
-const tplGeneralGetterJSON = `{{$sectionFuncBaseName := .SectionName | ToSectionFuncBaseName}}
+const tplGeneralGetterJSON = `{{$sectionFuncBaseName := .Name | ToSectionFuncBaseName}}
 // Get JSON value generally
 func generalGet{{$sectionFuncBaseName}}KeyJSON(data connectionData, key string) (value string) {
 	switch key {
@@ -87,7 +87,7 @@ func generalGet{{$sectionFuncBaseName}}KeyJSON(data connectionData, key string) 
 `
 
 // set json value generally
-const tplGeneralSetterJSON = `{{$sectionFuncBaseName := .SectionName | ToSectionFuncBaseName}}
+const tplGeneralSetterJSON = `{{$sectionFuncBaseName := .Name | ToSectionFuncBaseName}}
 // Set JSON value generally
 func generalSet{{$sectionFuncBaseName}}KeyJSON(data connectionData, key, valueJSON string) (err error) {
 	switch key {
@@ -102,7 +102,7 @@ func generalSet{{$sectionFuncBaseName}}KeyJSON(data connectionData, key, valueJS
 
 // check if key exists
 const tplCheckExists = `
-// Check if key exists{{$sectionName := .SectionName}}{{range $i, $key := .Keys}}{{if $key.UsedByBackEnd}}
+// Check if key exists{{$sectionName := .Name}}{{range $i, $key := .Keys}}{{if $key.UsedByBackEnd}}
 func is{{$key.Name | ToKeyFuncBaseName}}Exists(data connectionData) bool {
 	return isSettingKeyExists(data, {{$sectionName}}, {{$key.Name}})
 }{{end}}{{end}}
@@ -110,7 +110,7 @@ func is{{$key.Name | ToKeyFuncBaseName}}Exists(data connectionData) bool {
 
 // getter
 const tplGetter = `
-// Getter{{$sectionName := .SectionName}}{{range $i, $key := .Keys}}{{if $key.UsedByBackEnd}}{{$keyFuncBaseName := $key.Name | ToKeyFuncBaseName}}{{$realType := $key.Type | ToKeyTypeRealData}}
+// Getter{{$sectionName := .Name}}{{range $i, $key := .Keys}}{{if $key.UsedByBackEnd}}{{$keyFuncBaseName := $key.Name | ToKeyFuncBaseName}}{{$realType := $key.Type | ToKeyTypeRealData}}
 func get{{$keyFuncBaseName}}(data connectionData) (value {{$key.Type | ToKeyTypeRealData}}) {
 	ivalue := getSettingKey(data, {{$sectionName}}, {{$key.Name}})
 	value = {{$key.Type | ToKeyTypeInterfaceConverter}}(ivalue)
@@ -120,7 +120,7 @@ func get{{$keyFuncBaseName}}(data connectionData) (value {{$key.Type | ToKeyType
 
 // setter
 const tplSetter = `
-// Setter{{$sectionName := .SectionName}}{{range $i, $key := .Keys}}{{if $key.UsedByBackEnd}}
+// Setter{{$sectionName := .Name}}{{range $i, $key := .Keys}}{{if $key.UsedByBackEnd}}
 func set{{$key.Name | ToKeyFuncBaseName}}(data connectionData, value {{$key.Type | ToKeyTypeRealData}}) {
 	setSettingKey(data, {{$sectionName}}, {{$key.Name}}, value)
 }{{end}}{{end}}
@@ -128,7 +128,7 @@ func set{{$key.Name | ToKeyFuncBaseName}}(data connectionData, value {{$key.Type
 
 // json getter
 const tplJSONGetter = `
-// JSON Getter{{$sectionName := .SectionName}}{{range $i, $key := .Keys}}{{if $key.UsedByBackEnd}}
+// JSON Getter{{$sectionName := .Name}}{{range $i, $key := .Keys}}{{if $key.UsedByBackEnd}}
 func get{{$key.Name | ToKeyFuncBaseName}}JSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, {{$sectionName}}, {{$key.Name}}, get{{$sectionName | ToSectionFuncBaseName}}KeyType({{$key.Name}}))
 	return
@@ -137,7 +137,7 @@ func get{{$key.Name | ToKeyFuncBaseName}}JSON(data connectionData) (valueJSON st
 
 // json setter
 const tplJSONSetter = `
-// JSON Setter{{$sectionName := .SectionName}}{{range $i, $key := .Keys}}{{if $key.UsedByBackEnd}}
+// JSON Setter{{$sectionName := .Name}}{{range $i, $key := .Keys}}{{if $key.UsedByBackEnd}}
 func set{{$key.Name | ToKeyFuncBaseName}}JSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, {{$sectionName}}, {{$key.Name}}, valueJSON, get{{$sectionName | ToSectionFuncBaseName}}KeyType({{$key.Name}}))
 }{{end}}{{end}}
@@ -161,7 +161,7 @@ func logicSet{{$keyFuncBaseName}}JSON(data connectionData, valueJSON string) (er
 
 // remover
 const tplRemover = `
-// Remover{{$sectionName := .SectionName}}{{range $i, $key := .Keys}}{{if $key.UsedByBackEnd}}
+// Remover{{$sectionName := .Name}}{{range $i, $key := .Keys}}{{if $key.UsedByBackEnd}}
 func remove{{$key.Name | ToKeyFuncBaseName}}(data connectionData) {
 	removeSettingKey(data, {{$sectionName}}, {{$key.Name}})
 }{{end}}{{end}}
@@ -178,8 +178,8 @@ func generalIsKeyInSettingSection(section, key string) bool {
 	switch section {
 	default:
 		logger.Warning("invalid section name", section){{range .}}
-	case {{.SectionName}}:
-		return isKeyIn{{.SectionName | ToSectionFuncBaseName}}(key){{end}}
+	case {{.Name}}:
+		return isKeyIn{{.Name | ToSectionFuncBaseName}}(key){{end}}
 	}
 	return false
 }
@@ -192,16 +192,16 @@ func generalGetSettingKeyType(section, key string) (t ktype) {
 	switch section {
 	default:
 		logger.Warning("invalid section name", section){{range .}}
-	case {{.SectionName}}:
-		t = get{{.SectionName | ToSectionFuncBaseName}}KeyType(key){{end}}
+	case {{.Name}}:
+		t = get{{.Name | ToSectionFuncBaseName}}KeyType(key){{end}}
 	}
 	return
 }
 
 func generalGetSettingAvailableKeys(data connectionData, section string) (keys []string) {
 	switch section { {{range .}}
-	case {{.SectionName}}:
-		keys = get{{.SectionName | ToSectionFuncBaseName}}AvailableKeys(data){{end}}
+	case {{.Name}}:
+		keys = get{{.Name | ToSectionFuncBaseName}}AvailableKeys(data){{end}}
 	}
 	return
 }
@@ -212,8 +212,8 @@ func generalGetSettingAvailableValues(data connectionData, section, key string) 
 		return
 	}
 	switch section { {{range .}}
-	case {{.SectionName}}:
-		values = get{{.SectionName | ToSectionFuncBaseName}}AvailableValues(data, key){{end}}
+	case {{.Name}}:
+		values = get{{.Name | ToSectionFuncBaseName}}AvailableValues(data, key){{end}}
 	}
 	return
 }
@@ -222,8 +222,8 @@ func generalCheckSettingValues(data connectionData, section string) (errs sectio
 	switch section {
 	default:
 		logger.Error("invalid section name", section){{range .}}
-	case {{.SectionName}}:
-		errs = check{{.SectionName | ToSectionFuncBaseName}}Values(data){{end}}
+	case {{.Name}}:
+		errs = check{{.Name | ToSectionFuncBaseName}}Values(data){{end}}
 	}
 	return
 }
@@ -236,8 +236,8 @@ func generalGetSettingKeyJSON(data connectionData, section, key string) (valueJS
 	switch section {
 	default:
 		logger.Warning("invalid section name", section){{range.}}
-	case {{.SectionName}}:
-		valueJSON = generalGet{{.SectionName | ToSectionFuncBaseName}}KeyJSON(data, key){{end}}
+	case {{.Name}}:
+		valueJSON = generalGet{{.Name | ToSectionFuncBaseName}}KeyJSON(data, key){{end}}
 	}
 	return
 }
@@ -250,8 +250,8 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 	switch section {
 	default:
 		logger.Warning("invalid section name", section){{range .}}
-	case {{.SectionName}}:
-		err = generalSet{{.SectionName | ToSectionFuncBaseName}}KeyJSON(data, key, valueJSON){{end}}
+	case {{.Name}}:
+		err = generalSet{{.Name | ToSectionFuncBaseName}}KeyJSON(data, key, valueJSON){{end}}
 	}
 	return
 }
@@ -260,8 +260,8 @@ func generalGetSettingDefaultValue(section, key string) (value interface{}) {
 	switch section {
 	default:
 		logger.Warning("invalid section name", section){{range .}}
-	case {{.SectionName}}:
-		value = get{{.SectionName | ToSectionFuncBaseName}}DefaultValue(key){{end}}
+	case {{.Name}}:
+		value = get{{.Name | ToSectionFuncBaseName}}DefaultValue(key){{end}}
 	}
 	return
 }`

@@ -381,6 +381,20 @@ func nmGetConnectionData(cpath dbus.ObjectPath) (data connectionData, err error)
 	return
 }
 
+func nmGetConnectionSecrets(cpath dbus.ObjectPath, secretField string) (secrets connectionData, err error) {
+	nmConn, err := nm.NewSettingsConnection(dbusNmDest, cpath)
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+	secrets, err = nmConn.GetSecrets(secretField)
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+	return
+}
+
 func nmGetConnectionId(cpath dbus.ObjectPath) (id string) {
 	data, err := nmGetConnectionData(cpath)
 	if err != nil {

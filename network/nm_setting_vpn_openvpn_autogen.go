@@ -89,7 +89,7 @@ func getSettingVpnOpenvpnDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_VPN_OPENVPN_KEY_USERNAME:
 		value = ""
 	case NM_SETTING_VPN_OPENVPN_KEY_PASSWORD_FLAGS:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_VPN_OPENVPN_KEY_PASSWORD:
 		value = ""
 	case NM_SETTING_VPN_OPENVPN_KEY_CERT:
@@ -99,13 +99,13 @@ func getSettingVpnOpenvpnDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_VPN_OPENVPN_KEY_KEY:
 		value = ""
 	case NM_SETTING_VPN_OPENVPN_KEY_CERTPASS_FLAGS:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_VPN_OPENVPN_KEY_CERTPASS:
 		value = ""
 	case NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY:
 		value = ""
 	case NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY_DIRECTION:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_VPN_OPENVPN_KEY_REMOTE_IP:
 		value = ""
 	case NM_SETTING_VPN_OPENVPN_KEY_LOCAL_IP:

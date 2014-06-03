@@ -19,19 +19,21 @@ var funcMap = template.FuncMap{
 	"ToKeyTypeShortName":          ToKeyTypeShortName,
 	"ToKeyDisplayName":            ToKeyDisplayName,
 	"ToKeyValue":                  ToKeyValue,
+	"ToKeyRelatedSectionValue":    ToKeyRelatedSectionValue,
 	"IsKeyUsedByFrontEnd":         IsKeyUsedByFrontEnd,
 	"ToFrontEndWidget":            ToFrontEndWidget,
 	"ToClassName":                 ToClassName,
-	"GetAllKeysInVsection":            GetAllKeysInVsection,
+	"ToVsClassName":               ToVsClassName,
+	"GetAllKeysInVsection":        GetAllKeysInVsection,
 	"GetKeyWidgetProp":            GetKeyWidgetProp,
 	"ToKeyTypeInterfaceConverter": ToKeyTypeInterfaceConverter,
 }
 
 const (
-	backEndDir            = ".."
-	frontEndDir           = "../../../dss/modules/network/edit_autogen/"
-	nmSettingsJSONFile    = "./nm_settings.json"
-	nmSettingVkeyJSONFile = "./nm_setting_vkey.json"
+	backEndDir                = ".."
+	frontEndDir               = "../../../dss/modules/network/edit_autogen/"
+	nmSettingsJSONFile        = "./nm_settings.json"
+	nmSettingVkeyJSONFile     = "./nm_setting_vkey.json"
 	nmSettingVsectionJSONFile = "./nm_setting_vsection.json"
 )
 
@@ -42,18 +44,26 @@ var (
 	nmSettingUtilsFile   = path.Join(backEndDir, "nm_setting_general_autogen.go")
 	nmSettingVkeyFile    = path.Join(backEndDir, "nm_setting_virtual_key_autogen.go")
 	frontEndConnPropFile = path.Join(frontEndDir, "BaseConnectionEdit.qml")
-	nmSettings           []NMSettingStruct
-	nmSettingVkeys       []NMSettingVkeyStruct
-	nmSettingVsections       []NMSettingVsectionStruct
+	nmSections           []NMSectionStruct
+	nmVkeys              []NMVkeyStruct
+	nmVsections          []NMVsectionStruct
 )
 
-type NMSettingStruct struct {
-	SectionName  string // such as "NM_SETTING_CONNECTION_SETTING_NAME"
-	SectionValue string // such as "connection"
-	Keys         []NMSettingKeyStruct
+type NMSectionStruct struct {
+	Name  string // such as "NM_SETTING_CONNECTION_SETTING_NAME"
+	Value string // such as "connection"
+	Keys  []NMKeyStruct
 }
 
-type NMSettingKeyStruct struct {
+type NMVsectionStruct struct {
+	Ignore          bool
+	Name            string // such as "NM_SETTING_VS_GENERAL"
+	Value           string // such as "vs-general"
+	DisplayName     string
+	RelatedSections []string
+}
+
+type NMKeyStruct struct {
 	Name           string            // such as "NM_SETTING_CONNECTION_ID"
 	Value          string            // such as "id"
 	Type           string            // such as "ktypeString"
@@ -66,7 +76,7 @@ type NMSettingKeyStruct struct {
 	WidgetProp     map[string]string // properties for front end widget, such as "WidgetProp":{"alwaysUpdate":"true"}
 }
 
-type NMSettingVkeyStruct struct {
+type NMVkeyStruct struct {
 	Name           string   // such as "NM_SETTING_VK_802_1X_EAP"
 	Value          string   // such as "vk-eap"
 	Type           string   // such as "ktypeString"
@@ -80,47 +90,40 @@ type NMSettingVkeyStruct struct {
 	WidgetProp     map[string]string // properties for front end widget, such as "WidgetProp":{"alwaysUpdate":"true"}
 }
 
-type NMSettingVsectionStruct struct {
-	Ignore          bool
-	Name            string
-	DisplayName     string
-	RelatedSections []string
-}
-
-func genNMSettingCode(nmSetting NMSettingStruct) (content string) {
+func genNMSettingCode(nmSection NMSectionStruct) (content string) {
 	content = fileHeader
-	content += genTpl(nmSetting, tplGetKeyType)            // get key type
-	content += genTpl(nmSetting, tplIsKeyInSettingSection) // check is key in current section
-	content += genTpl(nmSetting, tplGetDefaultValue)       // get default value
-	content += genTpl(nmSetting, tplGeneralGetterJSON)     // general json getter
-	content += genTpl(nmSetting, tplGeneralSetterJSON)     // general json setter
-	content += genTpl(nmSetting, tplCheckExists)           // check if key exists
-	content += genTpl(nmSetting, tplEnsureNoEmpty)         // ensure section and key exists and not empty
-	content += genTpl(nmSetting, tplGetter)                // getter
-	content += genTpl(nmSetting, tplSetter)                // setter
-	content += genTpl(nmSetting, tplJSONGetter)            // json getter
-	content += genTpl(nmSetting, tplJSONSetter)            // json setter
-	content += genTpl(nmSetting, tplLogicJSONSetter)       // logic json setter
-	content += genTpl(nmSetting, tplRemover)               // remover
+	content += genTpl(nmSection, tplGetKeyType)            // get key type
+	content += genTpl(nmSection, tplIsKeyInSettingSection) // check is key in current section
+	content += genTpl(nmSection, tplGetDefaultValue)       // get default value
+	content += genTpl(nmSection, tplGeneralGetterJSON)     // general json getter
+	content += genTpl(nmSection, tplGeneralSetterJSON)     // general json setter
+	content += genTpl(nmSection, tplCheckExists)           // check if key exists
+	content += genTpl(nmSection, tplEnsureNoEmpty)         // ensure section and key exists and not empty
+	content += genTpl(nmSection, tplGetter)                // getter
+	content += genTpl(nmSection, tplSetter)                // setter
+	content += genTpl(nmSection, tplJSONGetter)            // json getter
+	content += genTpl(nmSection, tplJSONSetter)            // json setter
+	content += genTpl(nmSection, tplLogicJSONSetter)       // logic json setter
+	content += genTpl(nmSection, tplRemover)               // remover
 	return
 }
 
-func genNMSettingGeneralUtilsCode(nmSettings []NMSettingStruct) (content string) {
-	content = genTpl(nmSettings, tplGeneralSettingUtils) // general setting utils
+func genNMGeneralUtilsCode(nmSections []NMSectionStruct) (content string) {
+	content = genTpl(nmSections, tplGeneralSettingUtils) // general setting utils
 	return
 }
 
-func genNMSettingVkeyCode(nmSettings []NMSettingStruct, nmSettingVkeys []NMSettingVkeyStruct) (content string) {
-	content = genTpl(nmSettingVkeys, tplVkey) // general setting utils
+func genNMVkeyCode(nmSections []NMSectionStruct, nmVkeys []NMVkeyStruct) (content string) {
+	content = genTpl(nmVkeys, tplVkey) // general setting utils
 	return
 }
 
-func genFrontEndConnPropCode(nmVsections []NMSettingVsectionStruct) (content string) {
+func genFrontEndConnPropCode(nmVsections []NMVsectionStruct) (content string) {
 	content = genTpl(nmVsections, tplFrontEndConnProp)
 	return
 }
 
-func genFrontEndSectionCode(nmVsection NMSettingVsectionStruct) (content string) {
+func genFrontEndSectionCode(nmVsection NMVsectionStruct) (content string) {
 	content = genTpl(nmVsection, tplFrontEndSection)
 	return
 }
@@ -142,32 +145,32 @@ func genTpl(data interface{}, tplstr string) (content string) {
 
 func genBackEndCode() {
 	// back-end code, echo nm setting sections
-	for _, nmSetting := range nmSettings {
-		autogenContent := genNMSettingCode(nmSetting)
-		backEndFile := getBackEndFilePath(nmSetting.SectionName)
+	for _, nmSection := range nmSections {
+		autogenContent := genNMSettingCode(nmSection)
+		backEndFile := getBackEndFilePath(nmSection.Name)
 		writeOrDisplayResultForBackEnd(backEndFile, autogenContent)
 	}
 
 	// back-end code, general setting utils
-	autogenContent := genNMSettingGeneralUtilsCode(nmSettings)
+	autogenContent := genNMGeneralUtilsCode(nmSections)
 	writeOrDisplayResultForBackEnd(nmSettingUtilsFile, autogenContent)
 
 	// back-end code, virtual key
-	autogenContent = genNMSettingVkeyCode(nmSettings, nmSettingVkeys)
+	autogenContent = genNMVkeyCode(nmSections, nmVkeys)
 	writeOrDisplayResultForBackEnd(nmSettingVkeyFile, autogenContent)
 }
 
 func genFrontEndCode() {
 	// front-end code, BaseConnectionProperties.qml
-	autogenContent := genFrontEndConnPropCode(nmSettingVsections)
+	autogenContent := genFrontEndConnPropCode(nmVsections)
 	writeOrDisplayResultForFrontEnd(frontEndConnPropFile, autogenContent)
 
-	for _, nmVsection := range nmSettingVsections {
+	for _, nmVsection := range nmVsections {
 		if nmVsection.Ignore {
 			continue
 		}
 		autogenContent = genFrontEndSectionCode(nmVsection)
-		frontEndFile := getFrontEndFilePath(nmVsection.Name)
+		frontEndFile := getFrontEndFilePath(nmVsection.Value)
 		writeOrDisplayResultForFrontEnd(frontEndFile, autogenContent)
 	}
 }
@@ -178,9 +181,9 @@ func main() {
 	flag.BoolVar(&argFrontEnd, "f", false, "generate front-end code")
 	flag.Parse()
 
-	unmarshalJSONFile(nmSettingsJSONFile, &nmSettings)
-	unmarshalJSONFile(nmSettingVkeyJSONFile, &nmSettingVkeys)
-	unmarshalJSONFile(nmSettingVsectionJSONFile, &nmSettingVsections)
+	unmarshalJSONFile(nmSettingsJSONFile, &nmSections)
+	unmarshalJSONFile(nmSettingVkeyJSONFile, &nmVkeys)
+	unmarshalJSONFile(nmSettingVsectionJSONFile, &nmVsections)
 	if argBackEnd {
 		genBackEndCode()
 	}

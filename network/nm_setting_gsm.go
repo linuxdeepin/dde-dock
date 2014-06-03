@@ -90,7 +90,7 @@ func getSettingGsmAvailableKeys(data connectionData) (keys []string) {
 	keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_NUMBER)
 	keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_USERNAME)
 	keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_PASSWORD_FLAGS)
-	if isGsmNeedShowPassword(data) {
+	if isSettingRequireSecret(getSettingGsmPasswordFlags(data)) {
 		keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_PASSWORD)
 	}
 	keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_APN)
@@ -99,13 +99,6 @@ func getSettingGsmAvailableKeys(data connectionData) (keys []string) {
 	keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_HOME_ONLY)
 	keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_PIN)
 	return
-}
-func isGsmNeedShowPassword(data connectionData) bool {
-	flag := getSettingGsmPasswordFlags(data)
-	if flag == NM_SETTING_SECRET_FLAG_NONE || flag == NM_SETTING_SECRET_FLAG_AGENT_OWNED {
-		return true
-	}
-	return false
 }
 
 // Get available values
@@ -116,7 +109,7 @@ func getSettingGsmAvailableValues(data connectionData, key string) (values []kva
 			kvalue{"*99#", Tr("*99#")},
 		}
 	case NM_SETTING_GSM_PASSWORD_FLAGS:
-		values = availableValuesNMSettingSecretFlag
+		values = availableValuesSettingSecretFlags
 	case NM_SETTING_GSM_APN:
 		// TODO
 		values = []kvalue{
@@ -145,6 +138,9 @@ func checkSettingGsmValues(data connectionData) (errs sectionErrors) {
 	errs = make(map[string]string)
 	// TODO
 	ensureSettingGsmNumberNoEmpty(data, errs)
+	if isSettingRequireSecret(getSettingGsmPasswordFlags(data)) {
+		ensureSettingGsmPasswordNoEmpty(data, errs)
+	}
 	return
 }
 

@@ -73,7 +73,7 @@ func getSettingWiredDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_WIRED_PORT:
 		value = ""
 	case NM_SETTING_WIRED_SPEED:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_WIRED_DUPLEX:
 		value = ""
 	case NM_SETTING_WIRED_AUTO_NEGOTIATE:
@@ -85,7 +85,7 @@ func getSettingWiredDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST:
 		value = make([]string, 0)
 	case NM_SETTING_WIRED_MTU:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_WIRED_S390_SUBCHANNELS:
 		value = make([]string, 0)
 	case NM_SETTING_WIRED_S390_NETTYPE:

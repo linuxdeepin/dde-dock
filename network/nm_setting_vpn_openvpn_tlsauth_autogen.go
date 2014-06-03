@@ -49,7 +49,7 @@ func getSettingVpnOpenvpnTlsauthDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_VPN_OPENVPN_KEY_TA:
 		value = ""
 	case NM_SETTING_VPN_OPENVPN_KEY_TA_DIR:
-		value = 0
+		value = uint32(0)
 	}
 	return
 }

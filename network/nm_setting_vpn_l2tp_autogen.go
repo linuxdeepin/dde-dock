@@ -51,7 +51,7 @@ func getSettingVpnL2tpDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_VPN_L2TP_KEY_USER:
 		value = ""
 	case NM_SETTING_VPN_L2TP_KEY_PASSWORD_FLAGS:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_VPN_L2TP_KEY_PASSWORD:
 		value = ""
 	case NM_SETTING_VPN_L2TP_KEY_DOMAIN:

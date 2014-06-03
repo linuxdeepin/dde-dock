@@ -142,20 +142,23 @@ var availableValuesNMOpenvpnSecretFlag = []kvalue{
 	kvalue{NM_OPENVPN_SECRET_FLAG_UNUSED, Tr("Not Required")},
 }
 
-func isVpnOpenvpnNeedShowPassword(data connectionData) bool {
-	flag := getSettingVpnOpenvpnKeyPasswordFlags(data)
+func isVpnOpenvpnRequireSecret(flag uint32) bool {
 	if flag == NM_OPENVPN_SECRET_FLAG_SAVE {
 		return true
 	}
 	return false
 }
 
+func isVpnOpenvpnNeedShowPassword(data connectionData) bool {
+	return isVpnOpenvpnRequireSecret(getSettingVpnOpenvpnKeyPasswordFlags(data))
+}
+
 func isVpnOpenvpnNeedShowCertpass(data connectionData) bool {
-	flag := getSettingVpnOpenvpnKeyCertpassFlags(data)
-	if flag == NM_OPENVPN_SECRET_FLAG_SAVE {
-		return true
-	}
-	return false
+	return isVpnOpenvpnRequireSecret(getSettingVpnOpenvpnKeyCertpassFlags(data))
+}
+
+func isVpnOpenvpnNeedShowHttpProxyPassword(data connectionData) bool {
+	return isVpnOpenvpnRequireSecret(getSettingVpnOpenvpnKeyHttpProxyPasswordFlags(data))
 }
 
 // new connection data
@@ -177,11 +180,9 @@ func getSettingVpnOpenvpnAvailableKeys(data connectionData) (keys []string) {
 		keys = appendAvailableKeys(data, keys, sectionVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_CERT)
 		keys = appendAvailableKeys(data, keys, sectionVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_CA)
 		keys = appendAvailableKeys(data, keys, sectionVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_KEY)
-		// TODO
-		// keys = appendAvailableKeys(data, keys, sectionVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_CERTPASS_FLAGS)
-		// if isVpnOpenvpnNeedShowCertpass(data) {
-		keys = appendAvailableKeys(data, keys, sectionVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_CERTPASS)
-		// }
+		if isVpnOpenvpnNeedShowCertpass(data) {
+			keys = appendAvailableKeys(data, keys, sectionVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_CERTPASS)
+		}
 	case NM_OPENVPN_CONTYPE_PASSWORD:
 		keys = appendAvailableKeys(data, keys, sectionVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_USERNAME)
 		keys = appendAvailableKeys(data, keys, sectionVpnOpenvpn, NM_SETTING_VPN_OPENVPN_KEY_PASSWORD_FLAGS)
@@ -241,12 +242,20 @@ func checkSettingVpnOpenvpnValues(data connectionData) (errs sectionErrors) {
 	case NM_OPENVPN_CONTYPE_PASSWORD:
 		ensureSettingVpnOpenvpnKeyUsernameNoEmpty(data, errs)
 		ensureSettingVpnOpenvpnKeyCaNoEmpty(data, errs)
+		if isVpnOpenvpnNeedShowPassword(data) {
+			ensureSettingVpnOpenvpnKeyPasswordNoEmpty(data, errs)
+		}
 	case NM_OPENVPN_CONTYPE_PASSWORD_TLS:
 		ensureSettingVpnOpenvpnKeyUsernameNoEmpty(data, errs)
 		ensureSettingVpnOpenvpnKeyCertNoEmpty(data, errs)
 		ensureSettingVpnOpenvpnKeyCaNoEmpty(data, errs)
 		ensureSettingVpnOpenvpnKeyKeyNoEmpty(data, errs)
-		ensureSettingVpnOpenvpnKeyCertpassNoEmpty(data, errs)
+		if isVpnOpenvpnNeedShowCertpass(data) {
+			ensureSettingVpnOpenvpnKeyCertpassNoEmpty(data, errs)
+		}
+		if isVpnOpenvpnNeedShowPassword(data) {
+			ensureSettingVpnOpenvpnKeyPasswordNoEmpty(data, errs)
+		}
 	case NM_OPENVPN_CONTYPE_STATIC_KEY:
 		ensureSettingVpnOpenvpnKeyStaticKeyNoEmpty(data, errs)
 		// TODO not sure the following keys
@@ -416,7 +425,9 @@ func getSettingVpnOpenvpnProxiesAvailableKeys(data connectionData) (keys []strin
 			keys = appendAvailableKeys(data, keys, sectionVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT)
 			keys = appendAvailableKeys(data, keys, sectionVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY)
 			keys = appendAvailableKeys(data, keys, sectionVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME)
-			keys = appendAvailableKeys(data, keys, sectionVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD)
+			if isVpnOpenvpnNeedShowHttpProxyPassword(data) {
+				keys = appendAvailableKeys(data, keys, sectionVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD)
+			}
 		case "socksct":
 			keys = appendAvailableKeys(data, keys, sectionVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER)
 			keys = appendAvailableKeys(data, keys, sectionVpnOpenvpnProxies, NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT)
@@ -444,7 +455,9 @@ func checkSettingVpnOpenvpnProxiesValues(data connectionData) (errs sectionError
 		ensureSettingVpnOpenvpnKeyProxyPortNoEmpty(data, errs)
 		ensureSettingVpnOpenvpnKeyProxyRetryNoEmpty(data, errs)
 		ensureSettingVpnOpenvpnKeyHttpProxyUsernameNoEmpty(data, errs)
-		ensureSettingVpnOpenvpnKeyHttpProxyPasswordNoEmpty(data, errs)
+		if isVpnOpenvpnNeedShowHttpProxyPassword(data) {
+			ensureSettingVpnOpenvpnKeyHttpProxyPasswordNoEmpty(data, errs)
+		}
 	case "socksct":
 		ensureSettingVpnOpenvpnKeyProxyServerNoEmpty(data, errs)
 		ensureSettingVpnOpenvpnKeyProxyPortNoEmpty(data, errs)

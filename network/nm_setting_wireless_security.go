@@ -128,6 +128,14 @@ const (
 	NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS = "psk-flags"
 )
 
+func isWirelessSecurityNeedShowWepKey(data connectionData) bool {
+	return isSettingRequireSecret(getSettingWirelessSecurityWepKeyFlags(data))
+}
+
+func isWirelessSecurityNeedShowPsk(data connectionData) bool {
+	return isSettingRequireSecret(getSettingWirelessSecurityPskFlags(data))
+}
+
 // Get available keys
 func getSettingWirelessSecurityAvailableKeys(data connectionData) (keys []string) {
 	vkKeyMgmt := getSettingVkWirelessSecurityKeyMgmt(data)
@@ -138,10 +146,14 @@ func getSettingWirelessSecurityAvailableKeys(data connectionData) (keys []string
 		keys = appendAvailableKeys(data, keys, sectionWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT)
 	case "wep":
 		keys = appendAvailableKeys(data, keys, sectionWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT)
-		keys = appendAvailableKeys(data, keys, sectionWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_WEP_KEY0)
+		if isWirelessSecurityNeedShowWepKey(data) {
+			keys = appendAvailableKeys(data, keys, sectionWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_WEP_KEY0)
+		}
 	case "wpa-psk":
 		keys = appendAvailableKeys(data, keys, sectionWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT)
-		keys = appendAvailableKeys(data, keys, sectionWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_PSK)
+		if isWirelessSecurityNeedShowPsk(data) {
+			keys = appendAvailableKeys(data, keys, sectionWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_PSK)
+		}
 	case "wpa-eap":
 		keys = appendAvailableKeys(data, keys, sectionWirelessSecurity, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT)
 	}
@@ -188,11 +200,15 @@ func checkSettingWirelessSecurityValues(data connectionData) (errs sectionErrors
 		return
 	case "none": // wep
 		ensureSettingWirelessSecurityWepKeyTypeNoEmpty(data, errs)
-		ensureSettingWirelessSecurityWepKey0NoEmpty(data, errs)
+		if isWirelessSecurityNeedShowWepKey(data) {
+			ensureSettingWirelessSecurityWepKey0NoEmpty(data, errs)
+		}
 	case "ieee8021x": // dynamic wep
 	case "wpa-none": // wpa-psk ad-hoc
 	case "wpa-psk": // wpa-psk infrastructure
-		ensureSettingWirelessSecurityPskNoEmpty(data, errs)
+		if isWirelessSecurityNeedShowPsk(data) {
+			ensureSettingWirelessSecurityPskNoEmpty(data, errs)
+		}
 	case "wpa-eap": // wpa enterprise
 		ensureSectionSetting8021xExists(data, errs, NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT)
 	}

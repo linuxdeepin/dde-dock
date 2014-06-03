@@ -42,7 +42,9 @@ func newPppoeConnectionData(id, uuid string) (data connectionData) {
 func getSettingPppoeAvailableKeys(data connectionData) (keys []string) {
 	keys = appendAvailableKeys(data, keys, sectionPppoe, NM_SETTING_PPPOE_SERVICE)
 	keys = appendAvailableKeys(data, keys, sectionPppoe, NM_SETTING_PPPOE_USERNAME)
-	keys = appendAvailableKeys(data, keys, sectionPppoe, NM_SETTING_PPPOE_PASSWORD)
+	if isSettingRequireSecret(getSettingPppoePasswordFlags(data)) {
+		keys = appendAvailableKeys(data, keys, sectionPppoe, NM_SETTING_PPPOE_PASSWORD)
+	}
 	return
 }
 
@@ -54,9 +56,9 @@ func getSettingPppoeAvailableValues(data connectionData, key string) (values []k
 // Check whether the values are correct
 func checkSettingPppoeValues(data connectionData) (errs sectionErrors) {
 	errs = make(map[string]string)
-
-	// check username
 	ensureSettingPppoeUsernameNoEmpty(data, errs)
-
+	if isSettingRequireSecret(getSettingPppoePasswordFlags(data)) {
+		ensureSettingPppoePasswordNoEmpty(data, errs)
+	}
 	return
 }

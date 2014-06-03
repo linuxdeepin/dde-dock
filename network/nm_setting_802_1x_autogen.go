@@ -14,9 +14,9 @@ func getSetting8021xKeyType(key string) (t ktype) {
 		t = ktypeArrayString
 	case NM_SETTING_802_1X_ANONYMOUS_IDENTITY:
 		t = ktypeString
-	case NM_SETTING_802_1X_CLIENT_CERT:
-		t = ktypeWrapperString
 	case NM_SETTING_802_1X_CA_CERT:
+		t = ktypeWrapperString
+	case NM_SETTING_802_1X_CLIENT_CERT:
 		t = ktypeWrapperString
 	case NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING:
 		t = ktypeString
@@ -85,9 +85,9 @@ func isKeyInSetting8021x(key string) bool {
 		return true
 	case NM_SETTING_802_1X_ANONYMOUS_IDENTITY:
 		return true
-	case NM_SETTING_802_1X_CLIENT_CERT:
-		return true
 	case NM_SETTING_802_1X_CA_CERT:
+		return true
+	case NM_SETTING_802_1X_CLIENT_CERT:
 		return true
 	case NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING:
 		return true
@@ -158,9 +158,9 @@ func getSetting8021xDefaultValue(key string) (value interface{}) {
 		value = make([]string, 0)
 	case NM_SETTING_802_1X_ANONYMOUS_IDENTITY:
 		value = ""
-	case NM_SETTING_802_1X_CLIENT_CERT:
-		value = make([]byte, 0)
 	case NM_SETTING_802_1X_CA_CERT:
+		value = make([]byte, 0)
+	case NM_SETTING_802_1X_CLIENT_CERT:
 		value = make([]byte, 0)
 	case NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING:
 		value = ""
@@ -175,11 +175,11 @@ func getSetting8021xDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_802_1X_IDENTITY:
 		value = ""
 	case NM_SETTING_802_1X_PASSWORD_FLAGS:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_802_1X_PASSWORD:
 		value = ""
 	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD:
 		value = ""
 	case NM_SETTING_802_1X_CA_PATH:
@@ -205,17 +205,17 @@ func getSetting8021xDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_802_1X_PASSWORD_RAW:
 		value = make([]byte, 0)
 	case NM_SETTING_802_1X_PASSWORD_RAW_FLAGS:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY:
 		value = make([]byte, 0)
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD:
 		value = ""
 	case NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_802_1X_PIN:
 		value = ""
 	case NM_SETTING_802_1X_PIN_FLAGS:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_802_1X_SYSTEM_CA_CERTS:
 		value = false
 	}
@@ -231,10 +231,10 @@ func generalGetSetting8021xKeyJSON(data connectionData, key string) (value strin
 		value = getSetting8021xEapJSON(data)
 	case NM_SETTING_802_1X_ANONYMOUS_IDENTITY:
 		value = getSetting8021xAnonymousIdentityJSON(data)
-	case NM_SETTING_802_1X_CLIENT_CERT:
-		value = getSetting8021xClientCertJSON(data)
 	case NM_SETTING_802_1X_CA_CERT:
 		value = getSetting8021xCaCertJSON(data)
+	case NM_SETTING_802_1X_CLIENT_CERT:
+		value = getSetting8021xClientCertJSON(data)
 	case NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING:
 		value = getSetting8021xPhase1FastProvisioningJSON(data)
 	case NM_SETTING_802_1X_PAC_FILE:
@@ -304,10 +304,10 @@ func generalSetSetting8021xKeyJSON(data connectionData, key, valueJSON string) (
 		err = logicSetSetting8021xEapJSON(data, valueJSON)
 	case NM_SETTING_802_1X_ANONYMOUS_IDENTITY:
 		err = setSetting8021xAnonymousIdentityJSON(data, valueJSON)
-	case NM_SETTING_802_1X_CLIENT_CERT:
-		err = setSetting8021xClientCertJSON(data, valueJSON)
 	case NM_SETTING_802_1X_CA_CERT:
 		err = setSetting8021xCaCertJSON(data, valueJSON)
+	case NM_SETTING_802_1X_CLIENT_CERT:
+		err = setSetting8021xClientCertJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING:
 		err = setSetting8021xPhase1FastProvisioningJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PAC_FILE:
@@ -375,11 +375,11 @@ func isSetting8021xEapExists(data connectionData) bool {
 func isSetting8021xAnonymousIdentityExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ANONYMOUS_IDENTITY)
 }
-func isSetting8021xClientCertExists(data connectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT)
-}
 func isSetting8021xCaCertExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT)
+}
+func isSetting8021xClientCertExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT)
 }
 func isSetting8021xPhase1FastProvisioningExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING)
@@ -494,15 +494,6 @@ func ensureSetting8021xAnonymousIdentityNoEmpty(data connectionData, errs sectio
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ANONYMOUS_IDENTITY, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSetting8021xClientCertNoEmpty(data connectionData, errs sectionErrors) {
-	if !isSetting8021xClientCertExists(data) {
-		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT, NM_KEY_ERROR_MISSING_VALUE)
-	}
-	value := getSetting8021xClientCert(data)
-	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT, NM_KEY_ERROR_EMPTY_VALUE)
-	}
-}
 func ensureSetting8021xCaCertNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSetting8021xCaCertExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT, NM_KEY_ERROR_MISSING_VALUE)
@@ -510,6 +501,15 @@ func ensureSetting8021xCaCertNoEmpty(data connectionData, errs sectionErrors) {
 	value := getSetting8021xCaCert(data)
 	if len(value) == 0 {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT, NM_KEY_ERROR_EMPTY_VALUE)
+	}
+}
+func ensureSetting8021xClientCertNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSetting8021xClientCertExists(data) {
+		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT, NM_KEY_ERROR_MISSING_VALUE)
+	}
+	value := getSetting8021xClientCert(data)
+	if len(value) == 0 {
+		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
 func ensureSetting8021xPhase1FastProvisioningNoEmpty(data connectionData, errs sectionErrors) {
@@ -752,13 +752,13 @@ func getSetting8021xAnonymousIdentity(data connectionData) (value string) {
 	value = interfaceToString(ivalue)
 	return
 }
-func getSetting8021xClientCert(data connectionData) (value []byte) {
-	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT)
+func getSetting8021xCaCert(data connectionData) (value []byte) {
+	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT)
 	value = interfaceToArrayByte(ivalue)
 	return
 }
-func getSetting8021xCaCert(data connectionData) (value []byte) {
-	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT)
+func getSetting8021xClientCert(data connectionData) (value []byte) {
+	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT)
 	value = interfaceToArrayByte(ivalue)
 	return
 }
@@ -910,11 +910,11 @@ func setSetting8021xEap(data connectionData, value []string) {
 func setSetting8021xAnonymousIdentity(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ANONYMOUS_IDENTITY, value)
 }
-func setSetting8021xClientCert(data connectionData, value []byte) {
-	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT, value)
-}
 func setSetting8021xCaCert(data connectionData, value []byte) {
 	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT, value)
+}
+func setSetting8021xClientCert(data connectionData, value []byte) {
+	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT, value)
 }
 func setSetting8021xPhase1FastProvisioning(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING, value)
@@ -1010,12 +1010,12 @@ func getSetting8021xAnonymousIdentityJSON(data connectionData) (valueJSON string
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ANONYMOUS_IDENTITY, getSetting8021xKeyType(NM_SETTING_802_1X_ANONYMOUS_IDENTITY))
 	return
 }
-func getSetting8021xClientCertJSON(data connectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT, getSetting8021xKeyType(NM_SETTING_802_1X_CLIENT_CERT))
-	return
-}
 func getSetting8021xCaCertJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT, getSetting8021xKeyType(NM_SETTING_802_1X_CA_CERT))
+	return
+}
+func getSetting8021xClientCertJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT, getSetting8021xKeyType(NM_SETTING_802_1X_CLIENT_CERT))
 	return
 }
 func getSetting8021xPhase1FastProvisioningJSON(data connectionData) (valueJSON string) {
@@ -1138,11 +1138,11 @@ func setSetting8021xEapJSON(data connectionData, valueJSON string) (err error) {
 func setSetting8021xAnonymousIdentityJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ANONYMOUS_IDENTITY, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_ANONYMOUS_IDENTITY))
 }
-func setSetting8021xClientCertJSON(data connectionData, valueJSON string) (err error) {
-	return setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_CLIENT_CERT))
-}
 func setSetting8021xCaCertJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_CA_CERT))
+}
+func setSetting8021xClientCertJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_CLIENT_CERT))
 }
 func setSetting8021xPhase1FastProvisioningJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING))
@@ -1249,11 +1249,11 @@ func removeSetting8021xEap(data connectionData) {
 func removeSetting8021xAnonymousIdentity(data connectionData) {
 	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ANONYMOUS_IDENTITY)
 }
-func removeSetting8021xClientCert(data connectionData) {
-	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT)
-}
 func removeSetting8021xCaCert(data connectionData) {
 	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CA_CERT)
+}
+func removeSetting8021xClientCert(data connectionData) {
+	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_CLIENT_CERT)
 }
 func removeSetting8021xPhase1FastProvisioning(data connectionData) {
 	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING)

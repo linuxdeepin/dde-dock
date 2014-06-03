@@ -80,36 +80,62 @@ func getRealSectionName(name string) (realName string) {
 	return
 }
 
-// Virtual sections for front-end to easy to configure, do not prefix
-// with "vs-" is to hide details for front-end.
+// Virtual sections for front-end to easy to configure
 const (
-	vsectionGeneral  = "general"  // -> sectionConnection
-	vsectionEthernet = "ethernet" // -> sectionWired
+	NM_SETTING_VS_GENERAL              = "vs-general"
+	NM_SETTING_VS_ETHERNET             = "vs-ethernet"
+	NM_SETTING_VS_MOBILE               = "vs-mobile"
+	NM_SETTING_VS_MOBILE_GSM           = "vs-mobile-gsm"
+	NM_SETTING_VS_MOBILE_CDMA          = "vs-mobile-cdma"
+	NM_SETTING_VS_WIFI                 = "vs-wifi"
+	NM_SETTING_VS_IPV4                 = "vs-ipv4"
+	NM_SETTING_VS_IPV6                 = "vs-ipv6"
+	NM_SETTING_VS_SECURITY             = "vs-security"
+	NM_SETTING_VS_PPPOE                = "vs-pppoe"
+	NM_SETTING_VS_PPP                  = "vs-ppp"
+	NM_SETTING_VS_VPN                  = "vs-vpn"
+	NM_SETTING_VS_VPN_L2TP             = "vs-vpn-l2tp"
+	NM_SETTING_VS_VPN_L2TP_PPP         = "vs-vpn-l2tp-ppp"
+	NM_SETTING_VS_VPN_L2TP_IPSEC       = "vs-vpn-l2tp-ipsec"
+	NM_SETTING_VS_VPN_OPENCONNECT      = "vs-vpn-openconnect"
+	NM_SETTING_VS_VPN_OPENVPN          = "vs-vpn-openvpn"
+	NM_SETTING_VS_VPN_OPENVPN_ADVANCED = "vs-vpn-openvpn-advanced"
+	NM_SETTING_VS_VPN_OPENVPN_SECURITY = "vs-vpn-openvpn-security"
+	NM_SETTING_VS_VPN_OPENVPN_TLSAUTH  = "vs-vpn-openvpn-tlsauth"
+	NM_SETTING_VS_VPN_OPENVPN_PROXIES  = "vs-vpn-openvpn-proxies"
+	NM_SETTING_VS_VPN_PPTP             = "vs-vpn-pptp"
+	NM_SETTING_VS_VPN_PPTP_PPP         = "vs-vpn-pptp-ppp"
+	NM_SETTING_VS_VPN_VPNC             = "vs-vpn-vpnc"
+	NM_SETTING_VS_VPN_VPNC_ADVANCED    = "vs-vpn-vpnc-advanced"
+)
+const (
+	vsectionGeneral  = NM_SETTING_VS_GENERAL  // -> sectionConnection
+	vsectionEthernet = NM_SETTING_VS_ETHERNET // -> sectionWired
+	vsectionMobile   = NM_SETTING_VS_MOBILE   // -> sectionGsm, sectionCdma
 	// TODO
-	// vsectionMobile          = "mobile"           // -> sectionGsm, sectionCdma
-	vsectionMobileGsm  = "mobile-gsm"  // -> sectionGsm
-	vsectionMobileCdma = "mobile-cdma" // -> sectionCdma
-	vsectionWifi       = "wifi"        // -> sectionWireless
-	vsectionIpv4       = "ipv4"        // -> sectionIpv4
-	vsectionIpv6       = "ipv6"        // -> sectionIpv6
-	vsectionSecurity   = "security"    // -> section8021x, sectionWirelessSecurity
-	vsectionPppoe      = "pppoe"       // -> sectionPppoe
-	vsectionPpp        = "ppp"         // -> sectionPpp
+	vsectionMobileGsm  = NM_SETTING_VS_MOBILE_GSM  // -> sectionGsm
+	vsectionMobileCdma = NM_SETTING_VS_MOBILE_CDMA // -> sectionCdma
+	vsectionWifi       = NM_SETTING_VS_WIFI        // -> sectionWireless
+	vsectionIpv4       = NM_SETTING_VS_IPV4        // -> sectionIpv4
+	vsectionIpv6       = NM_SETTING_VS_IPV6        // -> sectionIpv6
+	vsectionSecurity   = NM_SETTING_VS_SECURITY    // -> section8021x, sectionWirelessSecurity
+	vsectionPppoe      = NM_SETTING_VS_PPPOE       // -> sectionPppoe
+	vsectionPpp        = NM_SETTING_VS_PPP         // -> sectionPpp
+	vsectionVpn        = NM_SETTING_VS_VPN         // -> sectionVpnL2tp, sectionVpnOpenconnect, sectionVpnOpenvpn, sectionVpnPptp, sectionVpnVpnc
 	// TODO
-	// vsectionVpn            = "vpn"             // -> sectionVpnL2tp, sectionVpnOpenconnect, sectionVpnOpenvpn, sectionVpnPptp, sectionVpnVpnc
-	vsectionVpnL2tp            = "vpn-l2tp"             // -> sectionVpnL2tp
-	vsectionVpnL2tpPpp         = "vpn-l2tp-ppp"         // -> sectionVpnL2tpPpp
-	vsectionVpnL2tpIpsec       = "vpn-l2tp-ipsec"       // -> sectionVpnL2tpIpsec
-	vsectionVpnOpenconnect     = "vpn-openconnect"      // -> sectionVpnOpenconnect
-	vsectionVpnOpenvpn         = "vpn-openvpn"          // -> sectionVpnOpenvpn
-	vsectionVpnOpenvpnAdvanced = "vpn-openvpn-advanced" // -> sectionVpnOpenVpnAdvanced
-	vsectionVpnOpenvpnSecurity = "vpn-openvpn-security" // -> sectionVpnOpenVpnSecurity
-	vsectionVpnOpenvpnTlsauth  = "vpn-openvpn-tlsauth"  // -> sectionVpnOpenVpnTlsauth
-	vsectionVpnOpenvpnProxies  = "vpn-openvpn-proxies"  // -> sectionVpnOpenVpnProxies
-	vsectionVpnPptp            = "vpn-pptp"             // -> sectionVpnPptp
-	vsectionVpnPptpPpp         = "vpn-pptp-ppp"         // -> sectionVpnPptpPpp
-	vsectionVpnVpnc            = "vpn-vpnc"             // -> sectionVpnVpnc
-	vsectionVpnVpncAdvanced    = "vpn-vpnc-advanced"    // -> sectionVpnVpncAdvanced
+	vsectionVpnL2tp            = NM_SETTING_VS_VPN_L2TP             // -> sectionVpnL2tp
+	vsectionVpnL2tpPpp         = NM_SETTING_VS_VPN_L2TP_PPP         // -> sectionVpnL2tpPpp
+	vsectionVpnL2tpIpsec       = NM_SETTING_VS_VPN_L2TP_IPSEC       // -> sectionVpnL2tpIpsec
+	vsectionVpnOpenconnect     = NM_SETTING_VS_VPN_OPENCONNECT      // -> sectionVpnOpenconnect
+	vsectionVpnOpenvpn         = NM_SETTING_VS_VPN_OPENVPN          // -> sectionVpnOpenvpn
+	vsectionVpnOpenvpnAdvanced = NM_SETTING_VS_VPN_OPENVPN_ADVANCED // -> sectionVpnOpenVpnAdvanced
+	vsectionVpnOpenvpnSecurity = NM_SETTING_VS_VPN_OPENVPN_SECURITY // -> sectionVpnOpenVpnSecurity
+	vsectionVpnOpenvpnTlsauth  = NM_SETTING_VS_VPN_OPENVPN_TLSAUTH  // -> sectionVpnOpenVpnTlsauth
+	vsectionVpnOpenvpnProxies  = NM_SETTING_VS_VPN_OPENVPN_PROXIES  // -> sectionVpnOpenVpnProxies
+	vsectionVpnPptp            = NM_SETTING_VS_VPN_PPTP             // -> sectionVpnPptp
+	vsectionVpnPptpPpp         = NM_SETTING_VS_VPN_PPTP_PPP         // -> sectionVpnPptpPpp
+	vsectionVpnVpnc            = NM_SETTING_VS_VPN_VPNC             // -> sectionVpnVpnc
+	vsectionVpnVpncAdvanced    = NM_SETTING_VS_VPN_VPNC_ADVANCED    // -> sectionVpnVpncAdvanced
 )
 
 // get available virtual sections for target connection type
@@ -159,7 +185,7 @@ func getAvailableVsections(data connectionData) (vsections []string) {
 	case connectionVpnL2tp:
 		vsections = []string{
 			vsectionGeneral,
-			vsectionVpnL2tp,
+			vsectionVpn,
 			vsectionVpnL2tpPpp,
 			vsectionVpnL2tpIpsec,
 			vsectionIpv4,
@@ -167,14 +193,14 @@ func getAvailableVsections(data connectionData) (vsections []string) {
 	case connectionVpnOpenconnect:
 		vsections = []string{
 			vsectionGeneral,
-			vsectionVpnOpenconnect,
+			vsectionVpn,
 			vsectionIpv4,
 			vsectionIpv6,
 		}
 	case connectionVpnOpenvpn:
 		vsections = []string{
 			vsectionGeneral,
-			vsectionVpnOpenvpn,
+			vsectionVpn,
 			vsectionVpnOpenvpnAdvanced,
 			vsectionVpnOpenvpnSecurity,
 			vsectionVpnOpenvpnProxies,
@@ -188,28 +214,28 @@ func getAvailableVsections(data connectionData) (vsections []string) {
 	case connectionVpnPptp:
 		vsections = []string{
 			vsectionGeneral,
-			vsectionVpnPptp,
+			vsectionVpn,
 			vsectionVpnPptpPpp,
 			vsectionIpv4,
 		}
 	case connectionVpnVpnc:
 		vsections = []string{
 			vsectionGeneral,
-			vsectionVpnVpnc,
+			vsectionVpn,
 			vsectionVpnVpncAdvanced,
 			vsectionIpv4,
 		}
 	case connectionMobileGsm:
 		vsections = []string{
 			vsectionGeneral,
-			vsectionMobileGsm,
+			vsectionMobile,
 			vsectionPpp,
 			vsectionIpv4,
 		}
 	case connectionMobileCdma:
 		vsections = []string{
 			vsectionGeneral,
-			vsectionMobileCdma,
+			vsectionMobile,
 			vsectionPpp,
 			vsectionIpv4,
 		}
@@ -217,7 +243,6 @@ func getAvailableVsections(data connectionData) (vsections []string) {
 	return
 }
 
-// TODO
 func getRelatedSectionsOfVsection(data connectionData, vsection string) (sections []string) {
 	connectionType := getCustomConnectionType(data)
 	switch vsection {
@@ -225,7 +250,14 @@ func getRelatedSectionsOfVsection(data connectionData, vsection string) (section
 		logger.Error("getRelatedSectionsOfVsection: invalid vsection name", vsection)
 	case vsectionGeneral:
 		sections = []string{sectionConnection}
-	case vsectionMobileGsm:
+	case vsectionMobile:
+		switch connectionType {
+		case connectionMobileGsm:
+			sections = []string{sectionGsm}
+		case connectionMobileCdma:
+			sections = []string{sectionCdma}
+		}
+	case vsectionMobileGsm: // TODO: remove
 		sections = []string{sectionGsm}
 	case vsectionMobileCdma:
 		sections = []string{sectionCdma}
@@ -252,15 +284,28 @@ func getRelatedSectionsOfVsection(data connectionData, vsection string) (section
 		sections = []string{sectionPppoe}
 	case vsectionPpp:
 		sections = []string{sectionPpp}
-	case vsectionVpnL2tp:
+	case vsectionVpn:
+		switch connectionType {
+		case connectionVpnL2tp:
+			sections = []string{sectionVpnL2tp}
+		case connectionVpnOpenconnect:
+			sections = []string{sectionVpnOpenconnect}
+		case connectionVpnOpenvpn:
+			sections = []string{sectionVpnOpenvpn}
+		case connectionVpnPptp:
+			sections = []string{sectionVpnPptp}
+		case connectionVpnVpnc:
+			sections = []string{sectionVpnVpnc}
+		}
+	case vsectionVpnL2tp: // TODO
 		sections = []string{sectionVpnL2tp}
 	case vsectionVpnL2tpPpp:
 		sections = []string{sectionVpnL2tpPpp}
 	case vsectionVpnL2tpIpsec:
 		sections = []string{sectionVpnL2tpIpsec}
-	case vsectionVpnOpenconnect:
+	case vsectionVpnOpenconnect: // TODO
 		sections = []string{sectionVpnOpenconnect}
-	case vsectionVpnOpenvpn:
+	case vsectionVpnOpenvpn: // TODO
 		sections = []string{sectionVpnOpenvpn}
 	case vsectionVpnOpenvpnAdvanced:
 		sections = []string{sectionVpnOpenvpnAdvanced}
@@ -270,11 +315,11 @@ func getRelatedSectionsOfVsection(data connectionData, vsection string) (section
 		sections = []string{sectionVpnOpenvpnTlsauth}
 	case vsectionVpnOpenvpnProxies:
 		sections = []string{sectionVpnOpenvpnProxies}
-	case vsectionVpnPptp:
+	case vsectionVpnPptp: // TODO
 		sections = []string{sectionVpnPptp}
 	case vsectionVpnPptpPpp:
 		sections = []string{sectionVpnPptpPpp}
-	case vsectionVpnVpnc:
+	case vsectionVpnVpnc: // TODO
 		sections = []string{sectionVpnVpnc}
 	case vsectionVpnVpncAdvanced:
 		sections = []string{sectionVpnVpncAdvanced}
@@ -290,7 +335,6 @@ func getAvailableSections(data connectionData) (sections []string) {
 	return
 }
 
-// TODO
 // get real section name of target key in virtual section
 func getSectionOfKeyInVsection(data connectionData, vsection, key string) (section string) {
 	sections := getRelatedSectionsOfVsection(data, vsection)
@@ -303,7 +347,6 @@ func getSectionOfKeyInVsection(data connectionData, vsection, key string) (secti
 	return ""
 }
 
-// TODO
 // get available keys of virtual section
 func getAvailableKeysOfVsection(data connectionData, vsection string) (keys []string) {
 	sections := getRelatedSectionsOfVsection(data, vsection)

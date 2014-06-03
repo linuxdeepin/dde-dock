@@ -3,6 +3,7 @@ package network
 import nm "dbus/org/freedesktop/networkmanager"
 import "dlib/dbus"
 import "fmt"
+import . "dlib/gettext"
 
 // TODO different connection structures for different types
 type connection struct {
@@ -153,7 +154,7 @@ func (m *Manager) GetSupportedConnectionTypes() (typesJSON string) {
 // GetWiredConnectionUuid return connection uuid for target wired device.
 func (m *Manager) GetWiredConnectionUuid(wiredDevPath dbus.ObjectPath) (uuid string) {
 	// check if target wired connection exists, if not, create one
-	id := "wired-connection-" + nmGetDeviceInterface(wiredDevPath)
+	id := Tr("Wired Connection ") + nmGetDeviceInterface(wiredDevPath)
 	// TODO check connection type, read only
 	cpath, ok := nmGetConnectionById(id)
 	if ok {

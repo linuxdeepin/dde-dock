@@ -87,11 +87,11 @@ func getSettingVpnVpncAdvancedDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_VPN_VPNC_KEY_PERFECT_FORWARD:
 		value = ""
 	case NM_SETTING_VPN_VPNC_KEY_LOCAL_PORT:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_VPN_VPNC_KEY_CISCO_UDP_ENCAPS_PORT:
-		value = 0
+		value = uint32(0)
 	}
 	return
 }

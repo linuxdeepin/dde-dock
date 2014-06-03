@@ -125,15 +125,15 @@ func getSettingPppDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_PPP_CRTSCTS:
 		value = false
 	case NM_SETTING_PPP_BAUD:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_PPP_MRU:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_PPP_MTU:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_PPP_LCP_ECHO_FAILURE:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_PPP_LCP_ECHO_INTERVAL:
-		value = 0
+		value = uint32(0)
 	}
 	return
 }

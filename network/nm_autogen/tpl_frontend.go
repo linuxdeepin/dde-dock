@@ -6,13 +6,18 @@ import Deepin.Widgets 1.0
 import "../edit"
 
 BaseEditPage {
-    id: root
+    id: editPage
     activeExpandIndex: 0
-    {{range $i, $vsection := .}}{{if .Ignore}}{{else}}{{$id := $vsection.Name | ToClassName | printf "section%s"}}
-    EditSection{{$vsection.Name | ToClassName}} {
+    {{range $i, $vsection := .}}{{if .Ignore}}{{else}}{{$id := $vsection.Value | ToVsClassName | printf "section%s"}}
+    EditSection{{$vsection.Value | ToVsClassName}} {
         myIndex: {{$i}}
         id: {{$id}}
-        activeExpandIndex: root.activeExpandIndex
+        activeExpandIndex: editPage.activeExpandIndex
+        connectionSession: editPage.connectionSession
+        availableSections: editPage.availableSections
+        availableKeys: editPage.availableKeys
+        connectionData: editPage.connectionData
+        errors: editPage.errors
     }
     EditSectionSeparator {relatedSection: {{$id}}}
     {{end}}{{end}}
@@ -24,17 +29,23 @@ import QtQuick 2.1
 import Deepin.Widgets 1.0
 import "../edit"
 
-BaseEditSection {
-    id: section{{.Name | ToClassName}}
-    section: "{{.Name}}"
+BaseEditSection { {{$sectionId := .Value | ToVsClassName | printf "section%s"}}
+    id: {{$sectionId}}
+    virtualSection: "{{.Value}}"
     
     header.sourceComponent: EditDownArrowHeader{
         text: dsTr("{{.DisplayName}}")
     }
 
-    content.sourceComponent: Column { {{range $i, $key := GetAllKeysInVsection .Name}}{{if IsKeyUsedByFrontEnd $key}}{{$value := $key | ToKeyValue}}{{$id := $value | ToClassName | printf "line%s"}}
+    content.sourceComponent: Column { {{range $i, $key := GetAllKeysInVsection .Value}}{{if IsKeyUsedByFrontEnd $key}}{{$sectionValue := $key | ToKeyRelatedSectionValue}}{{$value := $key | ToKeyValue}}
         {{$widget := ToFrontEndWidget $key}}{{$widget}} {
-            id: {{$id}}
+            id: line{{$sectionValue | ToClassName}}{{$value | ToClassName}}
+            connectionSession: {{$sectionId}}.connectionSession
+            availableSections: {{$sectionId}}.availableSections
+            availableKeys: {{$sectionId}}.availableKeys
+            connectionData: {{$sectionId}}.connectionData
+            errors: {{$sectionId}}.errors
+            section: "{{$sectionValue}}"
             key: "{{$value}}"
             text: dsTr("{{$key | ToKeyDisplayName}}"){{range $propKey, $propValue := GetKeyWidgetProp $key}}
             {{$propKey}}: {{$propValue}}{{end}}

@@ -119,9 +119,9 @@ func getSettingVpnL2tpPppDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_VPN_L2TP_KEY_NO_ACCOMP:
 		value = false
 	case NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_FAILURE:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_INTERVAL:
-		value = 0
+		value = uint32(0)
 	}
 	return
 }

@@ -126,6 +126,8 @@ func genConnectionId(connType string) (id string) {
 		idPrefix = Tr("Wireless Ap-Hotspot")
 	case connectionPppoe:
 		idPrefix = Tr("PPPoE Connection")
+	case connectionMobile:
+		idPrefix = Tr("Mobile Connection")
 	case connectionMobileGsm:
 		idPrefix = Tr("Mobile GSM Connection")
 	case connectionMobileCdma:

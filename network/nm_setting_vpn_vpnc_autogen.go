@@ -77,7 +77,7 @@ func getSettingVpnVpncDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD_TYPE:
 		value = ""
 	case NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD_FLAGS:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD:
 		value = ""
 	case NM_SETTING_VPN_VPNC_KEY_ID:
@@ -85,7 +85,7 @@ func getSettingVpnVpncDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_VPN_VPNC_KEY_SECRET_TYPE:
 		value = ""
 	case NM_SETTING_VPN_VPNC_KEY_SECRET_FLAGS:
-		value = 0
+		value = uint32(0)
 	case NM_SETTING_VPN_VPNC_KEY_SECRET:
 		value = ""
 	case NM_SETTING_VPN_VPNC_KEY_AUTHMODE:

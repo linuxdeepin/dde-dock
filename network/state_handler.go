@@ -81,8 +81,8 @@ type StateNotifier struct {
 	locker  sync.Mutex
 }
 type deviceStateStruct struct {
-	nmDev *nm.Device
-	acId  string
+	nmDev   *nm.Device
+	aconnId string
 }
 
 func newStateNotifier() (n *StateNotifier) {
@@ -107,14 +107,17 @@ func newStateNotifier() (n *StateNotifier) {
 			n.devices[path] = &deviceStateStruct{nmDev: dev}
 			if data, err := nmGetDeviceActiveConnectionData(path); err == nil {
 				// remember active connection id if exists
-				n.devices[path].acId = getSettingConnectionId(data)
+				n.devices[path].aconnId = getSettingConnectionId(data)
 			}
 			// connect signals
 			dev.ConnectStateChanged(func(newState, oldState, reason uint32) {
 				switch newState {
+				case NM_DEVICE_STATE_PREPARE:
+					if data, err := nmGetDeviceActiveConnectionData(path); err == nil {
+						n.devices[path].aconnId = getSettingConnectionId(data)
+					}
 				case NM_DEVICE_STATE_ACTIVATED:
 					if data, err := nmGetDeviceActiveConnectionData(path); err == nil {
-						n.devices[path].acId = getSettingConnectionId(data)
 						var icon, msg string
 						switch getCustomConnectionType(data) {
 						case connectionWired:
@@ -126,7 +129,7 @@ func newStateNotifier() (n *StateNotifier) {
 						default:
 							icon = "network-transmit-receive"
 						}
-						msg = n.devices[path].acId
+						msg = n.devices[path].aconnId
 						notify.Notify("Network", 0, icon, Tr("Connected"), msg, nil, nil, 0)
 					}
 				case NM_DEVICE_STATE_FAILED, NM_DEVICE_STATE_DISCONNECTED,
@@ -147,8 +150,8 @@ func newStateNotifier() (n *StateNotifier) {
 							default:
 								icon = "network-error"
 							}
-							if len(n.devices[path].acId) > 0 {
-								msg = n.devices[path].acId
+							if len(n.devices[path].aconnId) > 0 {
+								msg = n.devices[path].aconnId
 							} else {
 								msg = DeviceErrorTable[reason]
 							}

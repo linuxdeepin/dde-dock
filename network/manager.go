@@ -141,7 +141,7 @@ func (m *Manager) updateActiveConnections() {
 		}
 	}
 	m.updatePropActiveConnections()
-	logger.Debug("active connections changed:", m.ActiveConnections) // TODO test
+	// logger.Debug("active connections changed:", m.ActiveConnections) // TODO test
 }
 
 // TODO remove

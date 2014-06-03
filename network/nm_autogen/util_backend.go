@@ -18,7 +18,7 @@ func getBackEndFilePath(sectionName string) (filePath string) {
 
 // "general" -> "../../../dss/modules/network/components_autogen/EditSectionGeneral.qml"
 func getFrontEndFilePath(vsectionName string) (filePath string) {
-	fileName := "EditSection" + ToClassName(vsectionName) + ".qml"
+	fileName := "EditSection" + ToVsClassName(vsectionName) + ".qml"
 	filePath = path.Join(frontEndDir, fileName)
 	return
 }
@@ -87,13 +87,13 @@ func ToKeyDefaultValue(keyName string) (value string) {
 	case "ktypeString":
 		value = `""`
 	case "ktypeByte":
-		value = `0`
+		value = `byte(0)`
 	case "ktypeInt32":
-		value = `0`
+		value = `int32(0)`
 	case "ktypeUint32":
-		value = `0`
+		value = `uint32(0)`
 	case "ktypeUint64":
-		value = `0`
+		value = `uint64(0)`
 	case "ktypeBoolean":
 		value = `false`
 	case "ktypeArrayByte", "ktypeWrapperString", "ktypeWrapperMacAddress":
@@ -218,16 +218,16 @@ func IfNeedCheckValueLength(ktype string) (need string) {
 }
 
 // get all related sections of virtual keys
-func GetAllVkeysRelatedSections(nmSettingVkeys []NMSettingVkeyStruct) (sections []string) {
-	for _, vk := range nmSettingVkeys {
+func GetAllVkeysRelatedSections(nmVkeys []NMVkeyStruct) (sections []string) {
+	for _, vk := range nmVkeys {
 		sections = appendStrArrayUnique(sections, vk.RelatedSection)
 	}
 	return
 }
 
 // get all virtual keys in target section
-func GetVkeysOfSection(nmSettingVkeys []NMSettingVkeyStruct, section string) (keys []string) {
-	for _, vk := range nmSettingVkeys {
+func GetVkeysOfSection(nmVkeys []NMVkeyStruct, section string) (keys []string) {
+	for _, vk := range nmVkeys {
 		if vk.RelatedSection == section {
 			keys = append(keys, vk.Name)
 		}

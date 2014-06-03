@@ -78,12 +78,15 @@ var availableValuesNMPptpSecretFlag = []kvalue{
 	kvalue{NM_PPTP_SECRET_FLAG_NOT_REQUIRED, Tr("Not Required")},
 }
 
-func isVpnPptpNeedShowPassword(data connectionData) bool {
-	flag := getSettingVpnPptpKeyPasswordFlags(data)
+func isVpnPptpRequireSecret(flag uint32) bool {
 	if flag == NM_PPTP_SECRET_FLAG_NONE || flag == NM_PPTP_SECRET_FLAG_AGENT_OWNED {
 		return true
 	}
 	return false
+}
+
+func isVpnPptpNeedShowPassword(data connectionData) bool {
+	return isVpnPptpRequireSecret(getSettingVpnPptpKeyPasswordFlags(data))
 }
 
 // new connection data
@@ -114,6 +117,9 @@ func getSettingVpnPptpAvailableValues(data connectionData, key string) (values [
 func checkSettingVpnPptpValues(data connectionData) (errs sectionErrors) {
 	errs = make(map[string]string)
 	ensureSettingVpnPptpKeyGatewayNoEmpty(data, errs)
+	if isVpnPptpNeedShowPassword(data) {
+		ensureSettingVpnPptpKeyPasswordNoEmpty(data, errs)
+	}
 	return
 }
 
