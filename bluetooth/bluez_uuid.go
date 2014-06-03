@@ -1,4 +1,4 @@
-package main
+package bluetooth
 
 const (
 	GENERIC_AUDIO_UUID = "00001203-0000-1000-8000-00805f9b34fb"

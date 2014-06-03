@@ -1,4 +1,4 @@
-package main
+package power
 
 import "dbus/org/freedesktop/upower"
 import "dlib/gio-2.0"

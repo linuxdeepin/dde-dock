@@ -19,7 +19,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package main
+package mounts
 
 import (
 	"launchpad.net/gocheck"
@@ -48,8 +48,8 @@ func (op *Manager) TestMount(c *gocheck.C) {
 		}
 	}
 	if c.Failed() {
-                c.Error("Test Mount Failed")
-        }
+		c.Error("Test Mount Failed")
+	}
 }
 
 func (op *Manager) TestUnmount(c *gocheck.C) {
@@ -59,8 +59,8 @@ func (op *Manager) TestUnmount(c *gocheck.C) {
 		}
 	}
 	if c.Failed() {
-                c.Error("Test Mount Failed")
-        }
+		c.Error("Test Mount Failed")
+	}
 }
 
 func (op *Manager) TestEject(c *gocheck.C) {
@@ -70,6 +70,6 @@ func (op *Manager) TestEject(c *gocheck.C) {
 		}
 	}
 	if c.Failed() {
-                c.Error("Test Mount Failed")
-        }
+		c.Error("Test Mount Failed")
+	}
 }

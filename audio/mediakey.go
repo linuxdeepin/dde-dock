@@ -1,4 +1,4 @@
-package main
+package audio
 
 import "dbus/com/deepin/daemon/keybinding"
 

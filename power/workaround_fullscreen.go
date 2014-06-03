@@ -1,4 +1,4 @@
-package main
+package power
 
 //this should only use org.freedesktop.ScreenSaver interface with SimulateUserActivity
 

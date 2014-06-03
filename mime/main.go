@@ -1,9 +1,7 @@
-package main
+package mime
 
 import (
-	"dlib"
 	"dlib/dbus"
-	"dlib/glib-2.0"
 	"dlib/logger"
 	libutils "dlib/utils"
 	"os"
@@ -73,15 +71,7 @@ func (media *MediaMount) Reset() bool {
 	return true
 }
 
-func main() {
-	defer logObject.EndTracing()
-
-	if !dlib.UniqueOnSession(_DEFAULT_APPS_DEST) {
-		logObject.Warning("There already has an Mime daemon running.")
-		return
-	}
-
-	logObject.SetRestartCommand("/usr/lib/deepin-daemon/mime")
+func Start() {
 	var err error
 
 	dapp := NewDefaultApps()
@@ -101,12 +91,4 @@ func main() {
 		panic(err)
 	}
 	dbus.DealWithUnhandledMessage()
-
-	go glib.StartLoop()
-	if err = dbus.Wait(); err != nil {
-		logObject.Infof("lost dbus session: %v", err)
-		os.Exit(1)
-	} else {
-		os.Exit(0)
-	}
 }

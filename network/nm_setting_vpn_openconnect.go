@@ -1,4 +1,4 @@
-package main
+package network
 
 const (
 	NM_DBUS_SERVICE_OPENCONNECT   = "org.freedesktop.NetworkManager.openconnect"

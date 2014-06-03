@@ -1,4 +1,4 @@
-package main
+package display
 
 import "dlib/dbus"
 import "fmt"

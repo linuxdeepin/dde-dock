@@ -19,44 +19,44 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package main
+package themes
 
 import (
-        "strings"
+	"strings"
 )
 
 type Theme struct {
-        Name           string
-        Type           string  //system or local theme
-        GtkTheme       string
-        IconTheme      string
-        CursorTheme    string
-        FontSize       string
-        BackgroundFile string
-        SoundTheme     string
-        PreviewPath    string
-        ThumbnailPath  string
-        basePath       string
-        path           string
+	Name           string
+	Type           string //system or local theme
+	GtkTheme       string
+	IconTheme      string
+	CursorTheme    string
+	FontSize       string
+	BackgroundFile string
+	SoundTheme     string
+	PreviewPath    string
+	ThumbnailPath  string
+	basePath       string
+	path           string
 }
 
 func newTheme(path string, info PathInfo) *Theme {
-        m := &Theme{}
+	m := &Theme{}
 
-        m.path = path
-        m.Name = info.path
-        m.Type = strings.ToLower(info.t)
+	m.path = path
+	m.Name = info.path
+	m.Type = strings.ToLower(info.t)
 
-        if m.Type == "system" {
-                m.basePath = THUMB_THEME_PATH + "/" + m.Name
-        } else if m.Type == "local" {
-                homeDir := getHomeDir()
-                m.basePath = homeDir + THUMB_LOCAL_THEME_PATH + "/" + m.Name
-        }
-        m.PreviewPath = m.basePath + "/preview.png"
-        m.ThumbnailPath = m.basePath + "/thumbnail.png"
+	if m.Type == "system" {
+		m.basePath = THUMB_THEME_PATH + "/" + m.Name
+	} else if m.Type == "local" {
+		homeDir := getHomeDir()
+		m.basePath = homeDir + THUMB_LOCAL_THEME_PATH + "/" + m.Name
+	}
+	m.PreviewPath = m.basePath + "/preview.png"
+	m.ThumbnailPath = m.basePath + "/thumbnail.png"
 
-        m.updateThemeInfo()
+	m.updateThemeInfo()
 
-        return m
+	return m
 }

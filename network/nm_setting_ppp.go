@@ -1,4 +1,4 @@
-package main
+package network
 
 const NM_SETTING_PPP_SETTING_NAME = "ppp"
 

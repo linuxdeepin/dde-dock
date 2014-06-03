@@ -1,4 +1,4 @@
-package main
+package network
 
 // Sections, correspondence to "NM_SETTING_XXX" in network manager.
 const (

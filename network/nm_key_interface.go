@@ -1,4 +1,4 @@
-package main
+package network
 
 // Convert dbus variant's value to other data type
 

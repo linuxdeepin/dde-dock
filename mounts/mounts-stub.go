@@ -19,99 +19,99 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package main
+package mounts
 
 import (
-        "dlib/dbus"
-        "dlib/gio-2.0"
-        "dlib/gobject-2.0"
-        "os/exec"
+	"dlib/dbus"
+	"dlib/gio-2.0"
+	"dlib/gobject-2.0"
+	"os/exec"
 )
 
 const (
-        DISK_INFO_DEST = "com.deepin.daemon.DiskMount"
-        DISK_INFO_PATH = "/com/deepin/daemon/DiskMount"
-        DISK_INFO_IFC  = "com.deepin.daemon.DiskMount"
+	DISK_INFO_DEST = "com.deepin.daemon.DiskMount"
+	DISK_INFO_PATH = "/com/deepin/daemon/DiskMount"
+	DISK_INFO_IFC  = "com.deepin.daemon.DiskMount"
 
-        MEDIA_HAND_AUTO_MOUNT = "automount"
-        MEDIA_HAND_AUTO_OPEN  = "automount-open"
+	MEDIA_HAND_AUTO_MOUNT = "automount"
+	MEDIA_HAND_AUTO_OPEN  = "automount-open"
 )
 
 var (
-        mediaHandSetting = gio.NewSettings("org.gnome.desktop.media-handling")
+	mediaHandSetting = gio.NewSettings("org.gnome.desktop.media-handling")
 )
 
 func (m *Manager) GetDBusInfo() dbus.DBusInfo {
-        return dbus.DBusInfo{
-                DISK_INFO_DEST,
-                DISK_INFO_PATH,
-                DISK_INFO_IFC,
-        }
+	return dbus.DBusInfo{
+		DISK_INFO_DEST,
+		DISK_INFO_PATH,
+		DISK_INFO_IFC,
+	}
 }
 
 func (m *Manager) setPropName(name string) {
-        switch name {
-        case "DiskList":
-                m.DiskList = getDiskInfoList()
-                dbus.NotifyChange(m, name)
-        default:
-                logObject.Infof("'%s': invalid mount property")
-        }
+	switch name {
+	case "DiskList":
+		m.DiskList = getDiskInfoList()
+		dbus.NotifyChange(m, name)
+	default:
+		logObject.Infof("'%s': invalid mount property")
+	}
 }
 
 func (m *Manager) listenSignalChanged() {
-        monitor.Connect("mount-added", func(volumeMonitor *gio.VolumeMonitor, mount *gio.Mount) {
-                // Judge whether the property 'mount_and_open' set true
-                // if true, open the device use exec.Command("xdg-open", "device").Run()
-                if mount.CanUnmount() &&
-                        mediaHandSetting.GetBoolean(MEDIA_HAND_AUTO_MOUNT) &&
-                        mediaHandSetting.GetBoolean(MEDIA_HAND_AUTO_OPEN) {
-                        uri := mount.GetRoot().GetUri()
-                        go exec.Command("/usr/bin/xdg-open", uri).Run()
-                }
-                m.setPropName("DiskList")
-                //printDiskInfo(m.DiskList)
-        })
-        monitor.Connect("mount-removed", func(volumeMonitor *gio.VolumeMonitor, mount *gio.Mount) {
-                m.setPropName("DiskList")
-                //printDiskInfo(m.DiskList)
-        })
-        monitor.Connect("mount-changed", func(volumeMonitor *gio.VolumeMonitor, mount *gio.Mount) {
-                m.setPropName("DiskList")
-                //printDiskInfo(m.DiskList)
-        })
+	monitor.Connect("mount-added", func(volumeMonitor *gio.VolumeMonitor, mount *gio.Mount) {
+		// Judge whether the property 'mount_and_open' set true
+		// if true, open the device use exec.Command("xdg-open", "device").Run()
+		if mount.CanUnmount() &&
+			mediaHandSetting.GetBoolean(MEDIA_HAND_AUTO_MOUNT) &&
+			mediaHandSetting.GetBoolean(MEDIA_HAND_AUTO_OPEN) {
+			uri := mount.GetRoot().GetUri()
+			go exec.Command("/usr/bin/xdg-open", uri).Run()
+		}
+		m.setPropName("DiskList")
+		//printDiskInfo(m.DiskList)
+	})
+	monitor.Connect("mount-removed", func(volumeMonitor *gio.VolumeMonitor, mount *gio.Mount) {
+		m.setPropName("DiskList")
+		//printDiskInfo(m.DiskList)
+	})
+	monitor.Connect("mount-changed", func(volumeMonitor *gio.VolumeMonitor, mount *gio.Mount) {
+		m.setPropName("DiskList")
+		//printDiskInfo(m.DiskList)
+	})
 
-        monitor.Connect("volume-added", func(volumeMonitor *gio.VolumeMonitor, volume *gio.Volume) {
-                if volume.CanEject() && mediaHandSetting.GetBoolean(MEDIA_HAND_AUTO_MOUNT) {
-                        volume.Mount(gio.MountMountFlagsNone, nil, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
-                                _, err := volume.MountFinish(res)
-                                if err != nil {
-                                        logObject.Infof("volume mount failed: %s", err)
-                                }
-                        }))
-                }
-                //m.setPropName("DiskList")
-                //printDiskInfo(m.DiskList)
-        })
-        monitor.Connect("volume-removed", func(volumeMonitor *gio.VolumeMonitor, volume *gio.Volume) {
-                m.setPropName("DiskList")
-                //printDiskInfo(m.DiskList)
-        })
-        monitor.Connect("volume-changed", func(volumeMonitor *gio.VolumeMonitor, volume *gio.Volume) {
-                m.setPropName("DiskList")
-                //printDiskInfo(m.DiskList)
-        })
+	monitor.Connect("volume-added", func(volumeMonitor *gio.VolumeMonitor, volume *gio.Volume) {
+		if volume.CanEject() && mediaHandSetting.GetBoolean(MEDIA_HAND_AUTO_MOUNT) {
+			volume.Mount(gio.MountMountFlagsNone, nil, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
+				_, err := volume.MountFinish(res)
+				if err != nil {
+					logObject.Infof("volume mount failed: %s", err)
+				}
+			}))
+		}
+		//m.setPropName("DiskList")
+		//printDiskInfo(m.DiskList)
+	})
+	monitor.Connect("volume-removed", func(volumeMonitor *gio.VolumeMonitor, volume *gio.Volume) {
+		m.setPropName("DiskList")
+		//printDiskInfo(m.DiskList)
+	})
+	monitor.Connect("volume-changed", func(volumeMonitor *gio.VolumeMonitor, volume *gio.Volume) {
+		m.setPropName("DiskList")
+		//printDiskInfo(m.DiskList)
+	})
 
-        monitor.Connect("drive-disconnected", func(volumeMonitor *gio.VolumeMonitor, drive *gio.Drive) {
-                m.setPropName("DiskList")
-                //printDiskInfo(m.DiskList)
-        })
-        monitor.Connect("drive-connected", func(volumeMonitor *gio.VolumeMonitor, drive *gio.Drive) {
-                m.setPropName("DiskList")
-                //printDiskInfo(m.DiskList)
-        })
-        monitor.Connect("drive-changed", func(volumeMonitor *gio.VolumeMonitor, drive *gio.Drive) {
-                m.setPropName("DiskList")
-                //printDiskInfo(m.DiskList)
-        })
+	monitor.Connect("drive-disconnected", func(volumeMonitor *gio.VolumeMonitor, drive *gio.Drive) {
+		m.setPropName("DiskList")
+		//printDiskInfo(m.DiskList)
+	})
+	monitor.Connect("drive-connected", func(volumeMonitor *gio.VolumeMonitor, drive *gio.Drive) {
+		m.setPropName("DiskList")
+		//printDiskInfo(m.DiskList)
+	})
+	monitor.Connect("drive-changed", func(volumeMonitor *gio.VolumeMonitor, drive *gio.Drive) {
+		m.setPropName("DiskList")
+		//printDiskInfo(m.DiskList)
+	})
 }

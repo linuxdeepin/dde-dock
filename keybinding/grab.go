@@ -19,7 +19,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package main
+package keybinding
 
 // #cgo pkg-config: x11 xtst glib-2.0
 // #include "record.h"
@@ -334,20 +334,13 @@ func grabKeyboardAndMouse() {
 
 		xevent.KeyReleaseFun(
 			func(X *xgbutil.XUtil, e xevent.KeyReleaseEvent) {
-				logObj.Debugf("State: %v, Details: %v",
-					e.State, e.Detail)
 				modStr := keybind.ModifierString(e.State)
 				keyStr := strings.ToLower(
 					keybind.LookupString(X,
 						e.State, e.Detail))
 				if e.Detail == 65 {
 					keyStr = "space"
-				} else if e.Detail == 95 {
-					keyStr = "F11"
-				} else if e.Detail == 96 {
-					keyStr = "F12"
 				}
-
 				value := ""
 				modStr = deleteSpecialMod(modStr)
 				logObj.Infof("modStr: %s, keyStr: %s", modStr, keyStr)

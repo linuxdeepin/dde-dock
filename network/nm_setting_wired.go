@@ -1,4 +1,4 @@
-package main
+package network
 
 // https://developer.gnome.org/libnm-util/0.9/NMSettingWired.html
 // https://developer.gnome.org/NetworkManager/unstable/ref-settings.html

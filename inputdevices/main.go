@@ -19,18 +19,15 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package main
+package inputdevices
 
 import (
 	libsession "dbus/com/deepin/sessionmanager"
-	"dlib"
 	"dlib/dbus"
 	. "dlib/gettext"
 	"dlib/gio-2.0"
-	"dlib/glib-2.0"
 	Logger "dlib/logger"
 	libutil "dlib/utils"
-	"os"
 )
 
 var (
@@ -45,13 +42,7 @@ var (
 	layoutDescMap = make(map[string]string)
 )
 
-func main() {
-	if !dlib.UniqueOnSession(DEVICE_DEST) {
-		logObj.Warning("Input device has running")
-		return
-	}
-
-	defer logObj.EndTracing()
+func Start() {
 	InitI18n()
 	Textdomain("xkeyboard-config")
 
@@ -63,7 +54,6 @@ func main() {
 		return
 	}
 
-	initGdkEnv()
 	listenDevsSettings()
 
 	managerObj = NewManager()
@@ -109,12 +99,4 @@ func main() {
 	initGSettingsSet(tpadFlag)
 
 	dbus.DealWithUnhandledMessage()
-	go glib.StartLoop()
-	if err := dbus.Wait(); err != nil {
-		logObj.Warning("Lost Session DBus")
-		os.Exit(-1)
-	} else {
-		logObj.Warning("Session DBus Exit")
-		os.Exit(0)
-	}
 }

@@ -1,7 +1,6 @@
-package main
+package power
 
 import "dlib"
-import . "dlib/gettext"
 import "dlib/logger"
 import "dlib/dbus"
 import "dlib/dbus/property"
@@ -111,10 +110,8 @@ func (p *Power) sendNotify(icon, summary, body string) {
 	}
 }
 
-func main() {
+func Start() {
 	defer LOGGER.EndTracing()
-	InitI18n()
-	Textdomain("dde-daemon")
 	if !dlib.UniqueOnSession("com.deepin.daemon.Power") {
 		LOGGER.Warning("There already has an Power daemon running.")
 		return

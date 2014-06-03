@@ -1,4 +1,4 @@
-package main
+package network
 
 // TODO doc
 

@@ -1,4 +1,4 @@
-package main
+package bluetooth
 
 import (
 	idbus "dbus/org/freedesktop/dbus/system"

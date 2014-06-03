@@ -1,4 +1,4 @@
-package main
+package power
 
 import (
 	"dbus/com/deepin/daemon/display"
