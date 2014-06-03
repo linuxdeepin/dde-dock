@@ -25,8 +25,51 @@ import "time"
 import . "dlib/gettext"
 import "dlib"
 import "dlib/logger"
+import "dlib/utils"
+import "path"
+import "os/exec"
 
 var Logger = logger.NewLogger("com.deepin.daemon")
+var objUtil = utils.NewUtils()
+
+const (
+	DSC_CONFIG_PATH = ".config/deepin-software-center/config_info.ini"
+)
+
+func setDSCAutoUpdate(interval time.Duration) {
+	if interval <= 0 {
+		return
+	}
+
+	for {
+		timer := time.After(time.Hour * interval)
+		select {
+		case <-timer:
+			go exec.Command("/usr/bin/dsc-daemon", []string{"--no-daemon"}...).Run()
+		}
+	}
+}
+
+func dscAutoUpdate() {
+	homeDir, ok := objUtil.GetHomeDir()
+	if !ok {
+		return
+	}
+	filename := path.Join(homeDir, DSC_CONFIG_PATH)
+	if !objUtil.IsFileExist(filename) {
+		return
+	}
+
+	interval, _ := objUtil.ReadKeyFromKeyFile(filename,
+		"update", "interval", int32(0))
+	isUpdate, _ := objUtil.ReadKeyFromKeyFile(filename,
+		"update", "auto", false)
+	if v, ok := isUpdate.(bool); ok && v {
+		if i, ok := interval.(int32); ok {
+			go setDSCAutoUpdate(time.Duration(i))
+		}
+	}
+}
 
 func main() {
 	if !dlib.UniqueOnSession("com.deepin.daemon") {
@@ -53,6 +96,8 @@ func main() {
 	go themes.Start()
 
 	go startMprisDaemon()
+
+	dscAutoUpdate()
 
 	<-time.After(time.Second)
 	//go screen_edges.Start()
