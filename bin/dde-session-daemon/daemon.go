@@ -9,11 +9,11 @@ import "dde-daemon/datetime"
 import "dde-daemon/mime"
 import "dde-daemon/mounts"
 
-//import "dde-daemon/screen_edges"
+import "dde-daemon/screen_edges"
 import "dde-daemon/themes"
 
-//import "dde-daemon/dock"
-//import "dde-daemon/launcher"
+import "dde-daemon/dock"
+import "dde-daemon/launcher"
 
 import "dlib/glib-2.0"
 
@@ -86,8 +86,8 @@ func main() {
 	go display.Start()
 	<-time.After(time.Second * 3)
 
-	//go dock.Start()
-	//go launcher.Start()
+	go dock.Start()
+	go launcher.Start()
 
 	go keybinding.Start()
 	go datetime.Start()
@@ -100,6 +100,6 @@ func main() {
 	dscAutoUpdate()
 
 	<-time.After(time.Second)
-	//go screen_edges.Start()
+	go screen_edges.Start()
 	glib.StartLoop()
 }
