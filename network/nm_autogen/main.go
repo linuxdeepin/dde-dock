@@ -55,6 +55,14 @@ type NMSectionStruct struct {
 	Keys  []NMKeyStruct
 }
 
+type NMVsectionStruct struct {
+	Ignore          bool
+	Name            string // such as "NM_SETTING_VS_GENERAL"
+	Value           string // such as "vs-general"
+	DisplayName     string
+	RelatedSections []string
+}
+
 type NMKeyStruct struct {
 	Name           string            // such as "NM_SETTING_CONNECTION_ID"
 	Value          string            // such as "id"
@@ -80,13 +88,6 @@ type NMVkeyStruct struct {
 	DisplayName    string
 	FrontEndWidget string            // such as "EditLinePasswordInput"
 	WidgetProp     map[string]string // properties for front end widget, such as "WidgetProp":{"alwaysUpdate":"true"}
-}
-
-type NMVsectionStruct struct {
-	Ignore          bool
-	Name            string
-	DisplayName     string
-	RelatedSections []string
 }
 
 func genNMSettingCode(nmSection NMSectionStruct) (content string) {
@@ -169,7 +170,7 @@ func genFrontEndCode() {
 			continue
 		}
 		autogenContent = genFrontEndSectionCode(nmVsection)
-		frontEndFile := getFrontEndFilePath(nmVsection.Name)
+		frontEndFile := getFrontEndFilePath(nmVsection.Value)
 		writeOrDisplayResultForFrontEnd(frontEndFile, autogenContent)
 	}
 }

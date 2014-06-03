@@ -192,14 +192,14 @@ func getSectionInfo(sectionName string) (sectionInfo NMSectionStruct) {
 	return
 }
 
-func getVsectionInfo(vsectionName string) (vsectionInfo NMVsectionStruct) {
+func getVsectionInfo(vsectionValue string) (vsectionInfo NMVsectionStruct) {
 	for _, vsection := range nmVsections {
-		if vsection.Name == vsectionName {
+		if vsection.Value == vsectionValue {
 			vsectionInfo = vsection
 			return
 		}
 	}
-	fmt.Println("invalid vsection name", vsectionName)
+	fmt.Println("invalid vsection name", vsectionValue)
 	os.Exit(1)
 	return
 }

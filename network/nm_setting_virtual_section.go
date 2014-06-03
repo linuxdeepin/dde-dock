@@ -82,33 +82,60 @@ func getRealSectionName(name string) (realName string) {
 
 // Virtual sections for front-end to easy to configure
 const (
-	vsectionGeneral  = "vs-general"  // -> sectionConnection
-	vsectionEthernet = "vs-ethernet" // -> sectionWired
-	vsectionMobile   = "vs-mobile"   // -> sectionGsm, sectionCdma
+	NM_SETTING_VS_GENERAL              = "vs-general"
+	NM_SETTING_VS_ETHERNET             = "vs-ethernet"
+	NM_SETTING_VS_MOBILE               = "vs-mobile"
+	NM_SETTING_VS_MOBILE_GSM           = "vs-mobile-gsm"
+	NM_SETTING_VS_MOBILE_CDMA          = "vs-mobile-cdma"
+	NM_SETTING_VS_WIFI                 = "vs-wifi"
+	NM_SETTING_VS_IPV4                 = "vs-ipv4"
+	NM_SETTING_VS_IPV6                 = "vs-ipv6"
+	NM_SETTING_VS_SECURITY             = "vs-security"
+	NM_SETTING_VS_PPPOE                = "vs-pppoe"
+	NM_SETTING_VS_PPP                  = "vs-ppp"
+	NM_SETTING_VS_VPN                  = "vs-vpn"
+	NM_SETTING_VS_VPN_L2TP             = "vs-vpn-l2tp"
+	NM_SETTING_VS_VPN_L2TP_PPP         = "vs-vpn-l2tp-ppp"
+	NM_SETTING_VS_VPN_L2TP_IPSEC       = "vs-vpn-l2tp-ipsec"
+	NM_SETTING_VS_VPN_OPENCONNECT      = "vs-vpn-openconnect"
+	NM_SETTING_VS_VPN_OPENVPN          = "vs-vpn-openvpn"
+	NM_SETTING_VS_VPN_OPENVPN_ADVANCED = "vs-vpn-openvpn-advanced"
+	NM_SETTING_VS_VPN_OPENVPN_SECURITY = "vs-vpn-openvpn-security"
+	NM_SETTING_VS_VPN_OPENVPN_TLSAUTH  = "vs-vpn-openvpn-tlsauth"
+	NM_SETTING_VS_VPN_OPENVPN_PROXIES  = "vs-vpn-openvpn-proxies"
+	NM_SETTING_VS_VPN_PPTP             = "vs-vpn-pptp"
+	NM_SETTING_VS_VPN_PPTP_PPP         = "vs-vpn-pptp-ppp"
+	NM_SETTING_VS_VPN_VPNC             = "vs-vpn-vpnc"
+	NM_SETTING_VS_VPN_VPNC_ADVANCED    = "vs-vpn-vpnc-advanced"
+)
+const (
+	vsectionGeneral  = NM_SETTING_VS_GENERAL  // -> sectionConnection
+	vsectionEthernet = NM_SETTING_VS_ETHERNET // -> sectionWired
+	vsectionMobile   = NM_SETTING_VS_MOBILE   // -> sectionGsm, sectionCdma
 	// TODO
-	vsectionMobileGsm  = "vs-mobile-gsm"  // -> sectionGsm
-	vsectionMobileCdma = "vs-mobile-cdma" // -> sectionCdma
-	vsectionWifi       = "vs-wifi"        // -> sectionWireless
-	vsectionIpv4       = "vs-ipv4"        // -> sectionIpv4
-	vsectionIpv6       = "vs-ipv6"        // -> sectionIpv6
-	vsectionSecurity   = "vs-security"    // -> section8021x, sectionWirelessSecurity
-	vsectionPppoe      = "vs-pppoe"       // -> sectionPppoe
-	vsectionPpp        = "vs-ppp"         // -> sectionPpp
-	vsectionVpn        = "vs-vpn"         // -> sectionVpnL2tp, sectionVpnOpenconnect, sectionVpnOpenvpn, sectionVpnPptp, sectionVpnVpnc
+	vsectionMobileGsm  = NM_SETTING_VS_MOBILE_GSM  // -> sectionGsm
+	vsectionMobileCdma = NM_SETTING_VS_MOBILE_CDMA // -> sectionCdma
+	vsectionWifi       = NM_SETTING_VS_WIFI        // -> sectionWireless
+	vsectionIpv4       = NM_SETTING_VS_IPV4        // -> sectionIpv4
+	vsectionIpv6       = NM_SETTING_VS_IPV6        // -> sectionIpv6
+	vsectionSecurity   = NM_SETTING_VS_SECURITY    // -> section8021x, sectionWirelessSecurity
+	vsectionPppoe      = NM_SETTING_VS_PPPOE       // -> sectionPppoe
+	vsectionPpp        = NM_SETTING_VS_PPP         // -> sectionPpp
+	vsectionVpn        = NM_SETTING_VS_VPN         // -> sectionVpnL2tp, sectionVpnOpenconnect, sectionVpnOpenvpn, sectionVpnPptp, sectionVpnVpnc
 	// TODO
-	vsectionVpnL2tp            = "vs-vpn-l2tp"             // -> sectionVpnL2tp
-	vsectionVpnL2tpPpp         = "vs-vpn-l2tp-ppp"         // -> sectionVpnL2tpPpp
-	vsectionVpnL2tpIpsec       = "vs-vpn-l2tp-ipsec"       // -> sectionVpnL2tpIpsec
-	vsectionVpnOpenconnect     = "vs-vpn-openconnect"      // -> sectionVpnOpenconnect
-	vsectionVpnOpenvpn         = "vs-vpn-openvpn"          // -> sectionVpnOpenvpn
-	vsectionVpnOpenvpnAdvanced = "vs-vpn-openvpn-advanced" // -> sectionVpnOpenVpnAdvanced
-	vsectionVpnOpenvpnSecurity = "vs-vpn-openvpn-security" // -> sectionVpnOpenVpnSecurity
-	vsectionVpnOpenvpnTlsauth  = "vs-vpn-openvpn-tlsauth"  // -> sectionVpnOpenVpnTlsauth
-	vsectionVpnOpenvpnProxies  = "vs-vpn-openvpn-proxies"  // -> sectionVpnOpenVpnProxies
-	vsectionVpnPptp            = "vs-vpn-pptp"             // -> sectionVpnPptp
-	vsectionVpnPptpPpp         = "vs-vpn-pptp-ppp"         // -> sectionVpnPptpPpp
-	vsectionVpnVpnc            = "vs-vpn-vpnc"             // -> sectionVpnVpnc
-	vsectionVpnVpncAdvanced    = "vs-vpn-vpnc-advanced"    // -> sectionVpnVpncAdvanced
+	vsectionVpnL2tp            = NM_SETTING_VS_VPN_L2TP             // -> sectionVpnL2tp
+	vsectionVpnL2tpPpp         = NM_SETTING_VS_VPN_L2TP_PPP         // -> sectionVpnL2tpPpp
+	vsectionVpnL2tpIpsec       = NM_SETTING_VS_VPN_L2TP_IPSEC       // -> sectionVpnL2tpIpsec
+	vsectionVpnOpenconnect     = NM_SETTING_VS_VPN_OPENCONNECT      // -> sectionVpnOpenconnect
+	vsectionVpnOpenvpn         = NM_SETTING_VS_VPN_OPENVPN          // -> sectionVpnOpenvpn
+	vsectionVpnOpenvpnAdvanced = NM_SETTING_VS_VPN_OPENVPN_ADVANCED // -> sectionVpnOpenVpnAdvanced
+	vsectionVpnOpenvpnSecurity = NM_SETTING_VS_VPN_OPENVPN_SECURITY // -> sectionVpnOpenVpnSecurity
+	vsectionVpnOpenvpnTlsauth  = NM_SETTING_VS_VPN_OPENVPN_TLSAUTH  // -> sectionVpnOpenVpnTlsauth
+	vsectionVpnOpenvpnProxies  = NM_SETTING_VS_VPN_OPENVPN_PROXIES  // -> sectionVpnOpenVpnProxies
+	vsectionVpnPptp            = NM_SETTING_VS_VPN_PPTP             // -> sectionVpnPptp
+	vsectionVpnPptpPpp         = NM_SETTING_VS_VPN_PPTP_PPP         // -> sectionVpnPptpPpp
+	vsectionVpnVpnc            = NM_SETTING_VS_VPN_VPNC             // -> sectionVpnVpnc
+	vsectionVpnVpncAdvanced    = NM_SETTING_VS_VPN_VPNC_ADVANCED    // -> sectionVpnVpncAdvanced
 )
 
 // get available virtual sections for target connection type
