@@ -1,31 +1,37 @@
 import os
 import subprocess
 import glob
+import shutil
 from SCons.Script.SConscript import SConsEnvironment
 import SCons.Util
 
-os.environ['GOROOT']='/usr/lib/go'
-os.environ['GOPATH']='/usr/share/gocode'
+GOROOT='/usr/lib/go'
+GOPATH=os.getcwd()
+
+os.environ['GOROOT']=GOROOT
+os.environ['GOPATH']=GOPATH
+
+bin_components = os.listdir('bin')
 components = ['accounts',
               'audio',
               'bluetooth',
               'clipboard',
               'datetime',
-              'deepin-daemon',
-              'desktop-toggle',
-              'display',
-              'dock-daemon',
+              'display' ,
+              'dock' ,
               'grub2',
               'inputdevices',
               'keybinding',
-              'launcher-daemon',
+              'launcher',
               'mime',
               'mounts',
               'network',
+              'Planner',
               'power',
-              'system-info',
-              'themes',
-              'zone-settings']
+              'screen_edges',
+              'systeminfo',
+              'themes'
+              ]
 
 SConsignFile()
 opts=Variables()
@@ -49,15 +55,22 @@ if env['enable_i18n']:
 else :
     languages = None
 
-owd = os.getcwd()
+#prepare source dir
+if os.path.exists(os.path.join(GOPATH, 'src')):
+    shutil.rmtree(os.path.join(GOPATH,'src'))
+os.makedirs(os.path.join(GOPATH,'src','dde-daemon'))
+
 for component in components:
+    os.symlink(os.path.join(os.getcwd(),component), os.path.join(GOPATH, 'src', 'dde-daemon', component))
+
+owd = os.getcwd()
+for component in bin_components:
     try:
-        os.chdir(component)
+        os.chdir('bin/%s' % component)
         print "Go build %s" % component
         p = subprocess.Popen('go build', shell=True).wait()
         if p != 0:
             exit(1)
-        #env.GoProgram(component, Glob('*.go'))
     except:
         print "Error while building %s" % component
         exit(1)
@@ -65,9 +78,9 @@ for component in components:
         os.chdir(owd)
 
 
-for component in components:
+for component in bin_components:
     print "install %s " % component
-    env.Install(ipackage_instdir_go, '%s/%s' % (component,component))
+    env.Install(ipackage_instdir_go, 'bin/%s/%s' % (component,component))
 
 if languages:
     for language in languages:
