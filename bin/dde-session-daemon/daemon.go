@@ -1,5 +1,6 @@
 package main
 
+import "dde-daemon/network"
 import "dde-daemon/clipboard"
 import "dde-daemon/audio"
 import "dde-daemon/power"
@@ -8,6 +9,7 @@ import "dde-daemon/keybinding"
 import "dde-daemon/datetime"
 import "dde-daemon/mime"
 import "dde-daemon/mounts"
+import "dde-daemon/bluetooth"
 
 import "dde-daemon/screen_edges"
 import "dde-daemon/themes"
@@ -80,6 +82,7 @@ func main() {
 	Textdomain("dde-daemon")
 
 	C.init()
+	go network.Start()
 	go clipboard.Start()
 	go audio.Start()
 	go power.Start()
@@ -94,6 +97,7 @@ func main() {
 	go mime.Start()
 	go mounts.Start()
 	go themes.Start()
+	go bluetooth.Start()
 
 	go startMprisDaemon()
 
