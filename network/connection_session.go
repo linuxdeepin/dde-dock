@@ -241,7 +241,7 @@ func (s *ConnectionSession) Save() bool {
 		}
 	}
 
-	removeConnectionSession(s)
+	manager.removeConnectionSession(s)
 	return true
 }
 
@@ -256,7 +256,7 @@ func (s *ConnectionSession) isErrorOccured() bool {
 
 // Close cancel current connection.
 func (s *ConnectionSession) Close() {
-	removeConnectionSession(s)
+	manager.removeConnectionSession(s)
 }
 
 // GetAvailableValues return available values marshaled by json for target key.

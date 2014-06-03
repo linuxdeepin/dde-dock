@@ -34,6 +34,8 @@ func Start() {
 		}
 	*/
 
+	initSlices() // initialize slice code
+
 	manager = NewManager()
 	err := dbus.InstallOnSession(manager)
 	if err != nil {
@@ -61,10 +63,9 @@ func Start() {
 
 	select {
 	case <-notifyStop:
-		dbus.UnInstallObject(manager)
-		clearConnectionSessions()
 	case <-notfiyDbusStop:
 	}
+	DestroyManager(manager)
 }
 
 func Stop() {

@@ -11,9 +11,6 @@ const (
 	dbusNetworkIfs  = "com.deepin.daemon.Network"
 )
 
-// TODO move to main.go
-var connectionSessions []*ConnectionSession
-
 // TODO refactor code
 const (
 	opAdded = iota
@@ -45,8 +42,9 @@ type Manager struct {
 	// AccessPoints    string // TODO array of access point objects and marshaled by json
 
 	// update by manager_connections.go
-	connections map[string][]*connection
-	Connections string // array of connection information and marshaled by json
+	connectionSessions []*ConnectionSession
+	connections        map[string][]*connection
+	Connections        string // array of connection information and marshaled by json
 
 	// signals
 	NeedSecrets                  func(string, string, string)
@@ -83,13 +81,11 @@ func NewManager() (m *Manager) {
 func DestroyManager(m *Manager) {
 	destroyStateNotifier(m.stateNotifier)
 	destroyAgent(m.agent)
-	clearConnectionSessions()
+	m.clearConnectionSessions()
 	dbus.UnInstallObject(m)
 }
 
 func (m *Manager) initManager() {
-	initSlices() // TODO move to main.go
-
 	m.WiredEnabled = true
 	m.WirelessEnabled = property.NewWrapProperty(m, "WirelessEnabled", nmManager.WirelessEnabled)
 	m.NetworkingEnabled = property.NewWrapProperty(m, "NetworkingEnabled", nmManager.NetworkingEnabled)

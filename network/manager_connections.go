@@ -239,7 +239,7 @@ func (m *Manager) CreateConnection(connType string, devPath dbus.ObjectPath) (se
 		logger.Error(err)
 		return
 	}
-	addConnectionSession(session)
+	m.addConnectionSession(session)
 	return
 }
 
@@ -250,44 +250,44 @@ func (m *Manager) EditConnection(uuid string, devPath dbus.ObjectPath) (session 
 		logger.Error(err)
 		return
 	}
-	addConnectionSession(session)
+	m.addConnectionSession(session)
 	return
 }
 
-func addConnectionSession(session *ConnectionSession) {
+func (m *Manager) addConnectionSession(session *ConnectionSession) {
 	// install dbus session
 	err := dbus.InstallOnSession(session)
 	if err != nil {
 		logger.Error(err)
 		return
 	}
-	connectionSessions = append(connectionSessions, session)
+	m.connectionSessions = append(m.connectionSessions, session)
 }
-func removeConnectionSession(session *ConnectionSession) {
-	i := getConnectionSessionIndex(session)
+func (m *Manager) removeConnectionSession(session *ConnectionSession) {
+	i := m.getConnectionSessionIndex(session)
 	if i < 0 {
 		return
 	}
 	dbus.UnInstallObject(session)
 
-	copy(connectionSessions[i:], connectionSessions[i+1:])
-	newlen := len(connectionSessions) - 1
-	connectionSessions[newlen] = nil
-	connectionSessions = connectionSessions[:newlen]
+	copy(m.connectionSessions[i:], m.connectionSessions[i+1:])
+	newlen := len(m.connectionSessions) - 1
+	m.connectionSessions[newlen] = nil
+	m.connectionSessions = m.connectionSessions[:newlen]
 }
-func getConnectionSessionIndex(session *ConnectionSession) int {
-	for i, s := range connectionSessions {
+func (m *Manager) getConnectionSessionIndex(session *ConnectionSession) int {
+	for i, s := range m.connectionSessions {
 		if s.sessionPath == session.sessionPath {
 			return i
 		}
 	}
 	return -1
 }
-func clearConnectionSessions() {
-	for _, session := range connectionSessions {
+func (m *Manager) clearConnectionSessions() {
+	for _, session := range m.connectionSessions {
 		dbus.UnInstallObject(session)
 	}
-	connectionSessions = nil
+	m.connectionSessions = nil
 }
 
 // DeleteConnection delete a connection through uuid.
