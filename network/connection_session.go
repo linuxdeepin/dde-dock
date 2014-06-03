@@ -63,10 +63,14 @@ func newConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 		s.Data = newWirelessHotspotConnectionData(id, s.Uuid)
 	case connectionPppoe:
 		s.Data = newPppoeConnectionData(id, s.Uuid)
+	case connectionMobile: // TODO
+		s.Data = newMobileConnectionData(id, s.Uuid, mobileServiceGsm)
 	case connectionMobileGsm:
 		s.Data = newMobileConnectionData(id, s.Uuid, mobileServiceGsm)
 	case connectionMobileCdma:
 		s.Data = newMobileConnectionData(id, s.Uuid, mobileServiceCdma)
+	case connectionVpn: // TODO
+		s.Data = newVpnL2tpConnectionData(id, s.Uuid)
 	case connectionVpnL2tp:
 		s.Data = newVpnL2tpConnectionData(id, s.Uuid)
 	case connectionVpnOpenconnect:
