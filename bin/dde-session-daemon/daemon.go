@@ -31,6 +31,13 @@ import "dlib/utils"
 import "path"
 import "os/exec"
 
+import _ "net/http/pprof"
+import "net/http"
+
+func init() {
+	http.ListenAndServe("localhost:6060", nil)
+}
+
 var Logger = logger.NewLogger("com.deepin.daemon")
 var objUtil = utils.NewUtils()
 
