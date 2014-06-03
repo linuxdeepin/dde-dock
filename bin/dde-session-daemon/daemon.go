@@ -30,6 +30,8 @@ import "dlib/logger"
 import "dlib/utils"
 import "path"
 import "os/exec"
+import "os"
+import "dlib/dbus"
 
 import _ "net/http/pprof"
 import "net/http"
@@ -113,4 +115,11 @@ func main() {
 	<-time.After(time.Second)
 	go screen_edges.Start()
 	glib.StartLoop()
+
+	if err := dbus.Wait(); err != nil {
+		Logger.Errorf("Lost dbus: %v", err)
+		os.Exit(-1)
+	} else {
+		os.Exit(0)
+	}
 }

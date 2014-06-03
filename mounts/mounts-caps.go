@@ -25,6 +25,7 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
+	"time"
 )
 
 const (
@@ -32,16 +33,24 @@ const (
 )
 
 func getDiskCap(path string) (int64, int64) {
-	bytes, err := exec.Command(CMD_DF).Output()
-	if err != nil {
-		logObject.Info("Exec 'df -h' failed:", err)
-		//panic(err)
-		return 0, 0
+	contents := []byte{}
+	for i := 0; i < 10; i++ {
+		bytes, err := exec.Command(CMD_DF).Output()
+		if err != nil {
+			if i == 9 {
+				logObject.Info("Exec 'df -h' failed:", err)
+				return 0, 0
+			}
+			<-time.After(time.Microsecond * 500)
+		} else {
+			contents = bytes
+			break
+		}
 	}
 
 	usedSize := int64(0)
 	totalSize := int64(0)
-	outStrs := strings.Split(string(bytes), "\n")
+	outStrs := strings.Split(string(contents), "\n")
 	for _, str := range outStrs {
 		array := strings.Split(str, " ")
 		rets := delSpaceElment(array)
