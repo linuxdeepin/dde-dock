@@ -40,8 +40,7 @@ import _ "net/http/pprof"
 import "net/http"
 
 func init() {
-	return
-	http.ListenAndServe("localhost:6060", nil)
+	go http.ListenAndServe("localhost:6060", nil)
 }
 
 var Logger = logger.NewLogger("com.deepin.daemon")
