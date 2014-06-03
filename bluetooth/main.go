@@ -59,9 +59,9 @@ func Start() {
 
 	select {
 	case <-notifyStop:
-		dbus.UnInstallObject(bluetooth)
 	case <-notfiyDbusStop:
 	}
+	DestroyBluetooth(bluetooth)
 }
 
 func Stop() {

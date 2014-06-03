@@ -63,6 +63,10 @@ func (b *Bluetooth) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
+func DestroyBluetooth(b *Bluetooth) {
+	dbus.UnInstallObject(bluetooth)
+}
+
 func (b *Bluetooth) initBluetooth() {
 	b.devices = make(map[dbus.ObjectPath][]*device)
 
