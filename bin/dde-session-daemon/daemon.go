@@ -5,7 +5,6 @@ import "dde-daemon/clipboard"
 import "dde-daemon/audio"
 import "dde-daemon/power"
 
-import "dde-daemon/display"
 import "dde-daemon/keybinding"
 import "dde-daemon/datetime"
 import "dde-daemon/mime"
@@ -169,9 +168,6 @@ func main() {
 	}
 	if !powerFlag {
 		go power.Start()
-	}
-	if !dpyFlag {
-		go display.Start()
 	}
 	<-time.After(time.Second * 3)
 
