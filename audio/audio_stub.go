@@ -345,7 +345,11 @@ func (s *Source) setPropActivePort(v Port) {
 
 func (s *SinkInput) update() {
 	s.Name = s.core.PropList[PropAppName]
-	s.Icon = s.core.PropList[PropAppIconName]
+	if s.Name == "deepin-movie" {
+		s.Icon = "deepin-movie"
+	} else {
+		s.Icon = s.core.PropList[PropAppIconName]
+	}
 	s.setPropVolume(s.core.Volume.Avg())
 	s.setPropMute(s.core.Mute)
 

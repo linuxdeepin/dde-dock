@@ -33,7 +33,8 @@ import "dlib/dbus"
 
 import _ "net/http/pprof"
 import "net/http"
-import "time"
+
+//import "time"
 
 type methodInfo struct {
 	f      func()
@@ -84,11 +85,10 @@ func main() {
 		}
 	}
 
-	for k, v := range methodFilterMap {
-		Logger.Infof("Plugin: %v, filter: %v", k, v.filter)
+	for _, v := range methodFilterMap {
 		if !v.filter {
 			go v.f()
-			<-time.After(time.Millisecond * 300)
+			//<-time.After(time.Millisecond * 300)
 		}
 	}
 
