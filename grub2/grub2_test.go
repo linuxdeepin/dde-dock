@@ -102,11 +102,13 @@ func (grub *Grub2) TestParseSettings(c *C) {
 	c.Check(grub.settings["GRUB_THEME"], Equals, wantTheme)
 
 	grub.fixSettings()
-	wantSettingCount = 7
+	wantSettingCount = 8
+	wantDistro := "`lsb_release -d -s 2> /dev/null || echo Debian`"
 	wantDefaultEntry = "LinuxDeepin GNU/Linux"
 	wantTimeout = "10"
 	wantTheme = "/boot/grub/themes/deepin/theme.txt"
 	c.Check(len(grub.settings), Equals, wantSettingCount)
+	c.Check(grub.settings["GRUB_DISTRIBUTOR"], Equals, wantDistro)
 	c.Check(grub.settings["GRUB_DEFAULT"], Equals, wantDefaultEntry)
 	c.Check(grub.settings["GRUB_TIMEOUT"], Equals, wantTimeout)
 	c.Check(grub.settings["GRUB_THEME"], Equals, wantTheme)
@@ -152,6 +154,7 @@ func (grub *Grub2) TestSaveDefaultSettings(c *C) {
 `
 	wantConfigContent := `GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
 GRUB_DEFAULT="LinuxDeepin GNU/Linux"
+GRUB_DISTRIBUTOR="` + "`" + `lsb_release -d -s 2> /dev/null || echo Debian` + "`" + `"
 GRUB_THEME="/boot/grub/themes/deepin/theme.txt"
 `
 	grub.parseEntries(testMenuContent)

@@ -259,6 +259,13 @@ func (grub *Grub2) fixSettings() (needUpdate bool) {
 		needUpdate = true
 	}
 
+	// fix GRUB_DISTRIBUTOR
+	grubDistroCmd := "`lsb_release -d -s 2> /dev/null || echo Debian`"
+	if grub.settings["GRUB_DISTRIBUTOR"] != grubDistroCmd {
+		grub.settings["GRUB_DISTRIBUTOR"] = grubDistroCmd
+		needUpdate = true
+	}
+
 	// enable deepin grub2 theme default
 	if grub.getSettingTheme() != themeMainFile {
 		grub.setSettingTheme(themeMainFile)
