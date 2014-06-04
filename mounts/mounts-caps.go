@@ -41,7 +41,7 @@ func getDiskCap(path string) (int64, int64) {
 				logObject.Info("Exec 'df -h' failed:", err)
 				return 0, 0
 			}
-			<-time.After(time.Microsecond * 500)
+			<-time.After(time.Second * 1)
 		} else {
 			contents = bytes
 			break
