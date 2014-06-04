@@ -45,6 +45,12 @@ func (op *Manager) setPropName(name string) {
 		}
 		op.CurrentTimezone = tz
 		dbus.NotifyChange(op, name)
+		if obj.ntpRunning {
+			obj.quitChan <- true
+			if date.AutoSetTime.Get() {
+				date.setAutoSetTime(true)
+			}
+		}
 	case "UserTimezoneList":
 		list := dateSettings.GetStrv("user-timezone-list")
 		if !strArrayIsEqual(list, op.UserTimezoneList) {

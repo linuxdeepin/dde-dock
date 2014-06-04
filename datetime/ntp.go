@@ -36,6 +36,7 @@ func (obj *Manager) syncNtpTime() bool {
 		t, err := getNtpTime(obj.CurrentTimezone)
 		if err == nil && t != nil {
 			dStr, tStr := getDateTimeAny(t)
+			logger.Infof("Date: %s, Time: %s", dStr, tStr)
 			setDate.SetCurrentDate(dStr)
 			setDate.SetCurrentTime(tStr)
 			return true
@@ -96,6 +97,7 @@ func getNtpTime(locale string) (*time.Time, error) {
 		locale = "UTC"
 	}
 
+	logger.Info("Locale:", locale)
 	raddr, err := net.ResolveUDPAddr("udp", _NTP_HOST+":123")
 	if err != nil {
 		return nil, err
@@ -132,8 +134,8 @@ func getNtpTime(locale string) (*time.Time, error) {
 	nsec := sec * 1e9
 	nsec += (frac * 1e9) >> 32
 
-	l, err1 := time.LoadLocation(locale)
-	if err1 != nil {
+	l := time.FixedZone(locale, 0)
+	if l == nil {
 		return nil, err
 	}
 
