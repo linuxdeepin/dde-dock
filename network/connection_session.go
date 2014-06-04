@@ -13,10 +13,10 @@ type ConnectionSession struct {
 	sessionPath dbus.ObjectPath
 	devPath     dbus.ObjectPath
 
+	Data           connectionData
 	ConnectionPath dbus.ObjectPath
 	Uuid           string
 	Type           string
-	Data           connectionData
 
 	AvailableVirtualSections []string
 	AvailableSections        []string
@@ -83,6 +83,7 @@ func newConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 		s.Data = newVpnOpenvpnConnectionData(id, s.Uuid)
 	}
 
+	s.updatePropData()
 	s.updatePropConnectionType()
 	s.updatePropAvailableVirtualSections()
 	s.updatePropAvailableSections()
@@ -123,6 +124,7 @@ func newConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 	case <-chSecret:
 	}
 
+	s.updatePropData()
 	s.updatePropConnectionType()
 	s.updatePropAvailableVirtualSections()
 	s.updatePropAvailableSections()
@@ -287,6 +289,7 @@ func (s *ConnectionSession) SetKey(section, key, value string) {
 	// logger.Debugf("SetKey(), %v, vsection=%s, filed=%s, key=%s, value=%s", err == nil, vsection, section, key, value) // TODO test
 	s.updateErrorsWhenSettingKey(section, key, err)
 
+	s.updatePropData()
 	s.updatePropAvailableVirtualSections()
 	s.updatePropAvailableSections()
 	s.updatePropAvailableKeys()

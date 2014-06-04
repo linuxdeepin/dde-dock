@@ -12,6 +12,10 @@ func (s *ConnectionSession) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
+func (s *ConnectionSession) updatePropData() {
+	dbus.NotifyChange(s, "Data")
+}
+
 func (s *ConnectionSession) updatePropConnectionType() {
 	dbus.NotifyChange(s, "ConnectionType")
 }
