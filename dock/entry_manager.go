@@ -1,7 +1,6 @@
 package dock
 
 import "dbus/com/deepin/daemon/dock"
-import "dlib"
 import "dlib/dbus"
 
 // import "dlib/logger"
@@ -191,11 +190,6 @@ func (m *EntryManager) destroyNormalApp(nApp *NormalApp) {
 }
 
 func initialize() {
-	if !dlib.UniqueOnSession("com.deepin.daemon.DockAppsBuilder") {
-		logger.Warning("Another com.deepin.daemon.DockAppsBuilder running")
-		return
-	}
-
 	for _, id := range loadAll() {
 		logger.Debug("load", id)
 		ENTRY_MANAGER.createNormalApp(id)
