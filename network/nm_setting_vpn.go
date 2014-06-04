@@ -26,7 +26,7 @@ const (
 	NM_VPN_CONNECTION_STATE_DISCONNECTE   = 7
 )
 
-func newBasicVpnConnectionData(id, uuid, service string) (data connectionData) {
+func newBasicVpnConnectionData(id, uuid string) (data connectionData) {
 	data = make(connectionData)
 
 	addSettingSection(data, sectionConnection)
@@ -36,13 +36,15 @@ func newBasicVpnConnectionData(id, uuid, service string) (data connectionData) {
 	setSettingConnectionAutoconnect(data, false)
 	logicSetSettingVkConnectionNoPermission(data, false)
 
+	initSettingSectionIpv4(data)
+	return
+}
+
+func initBasicSettingSectionVpn(data connectionData, service string) {
 	addSettingSection(data, sectionVpn)
 	setSettingVpnServiceType(data, service)
 	setSettingVpnData(data, make(map[string]string))
 	setSettingVpnSecrets(data, make(map[string]string))
-
-	initSettingSectionIpv4(data)
-	return
 }
 
 func getSettingVpnAvailableKeys(data connectionData) (keys []string) { return }
@@ -192,7 +194,7 @@ func doGetSettingVpnPluginData(data connectionData, isSecretKey bool) (vpnData m
 	return
 }
 
-// "string" -> "string", 123 -> "123", true -> "true"
+// "string" -> "string", 123 -> "123", true -> "yes", false -> "no"
 func marshalVpnPluginKey(value interface{}, t ktype) (valueStr string) {
 	var err error
 	switch t {
@@ -216,7 +218,7 @@ func marshalVpnPluginKey(value interface{}, t ktype) (valueStr string) {
 	return
 }
 
-// "string" -> "string", "123" -> 123, "true" -> true
+// "string" -> "string", "123" -> 123, "yes" -> true, "no" -> false
 func unmarshalVpnPluginKey(valueStr string, t ktype) (value interface{}) {
 	var err error
 	switch t {

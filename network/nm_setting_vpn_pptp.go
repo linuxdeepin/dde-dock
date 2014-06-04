@@ -91,9 +91,14 @@ func isVpnPptpNeedShowPassword(data connectionData) bool {
 
 // new connection data
 func newVpnPptpConnectionData(id, uuid string) (data connectionData) {
-	data = newBasicVpnConnectionData(id, uuid, NM_DBUS_SERVICE_PPTP)
-	setSettingVpnPptpKeyPasswordFlags(data, NM_PPTP_SECRET_FLAG_NONE)
+	data = newBasicVpnConnectionData(id, uuid)
+	initSettingSectionVpnPptp(data)
 	return
+}
+
+func initSettingSectionVpnPptp(data connectionData) {
+	initBasicSettingSectionVpn(data, NM_DBUS_SERVICE_PPTP)
+	setSettingVpnPptpKeyPasswordFlags(data, NM_PPTP_SECRET_FLAG_NONE)
 }
 
 // vpn-pptp

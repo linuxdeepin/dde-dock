@@ -163,12 +163,16 @@ func isVpnOpenvpnNeedShowHttpProxyPassword(data connectionData) bool {
 
 // new connection data
 func newVpnOpenvpnConnectionData(id, uuid string) (data connectionData) {
-	data = newBasicVpnConnectionData(id, uuid, NM_DBUS_SERVICE_OPENVPN)
-	setSettingVpnOpenvpnKeyConnectionType(data, "tls")
-	setSettingVpnOpenvpnKeyCertpassFlags(data, NM_OPENVPN_SECRET_FLAG_SAVE)
-
+	data = newBasicVpnConnectionData(id, uuid)
+	initSettingSectionVpnOpenvpn(data)
 	initSettingSectionIpv6(data)
 	return
+}
+
+func initSettingSectionVpnOpenvpn(data connectionData) {
+	initBasicSettingSectionVpn(data, NM_DBUS_SERVICE_OPENVPN)
+	setSettingVpnOpenvpnKeyConnectionType(data, "tls")
+	setSettingVpnOpenvpnKeyCertpassFlags(data, NM_OPENVPN_SECRET_FLAG_SAVE)
 }
 
 // openvpn

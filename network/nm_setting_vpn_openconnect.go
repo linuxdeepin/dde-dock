@@ -47,8 +47,14 @@ const (
 // };
 
 func newVpnOpenconnectConnectionData(id, uuid string) (data connectionData) {
-	data = newBasicVpnConnectionData(id, uuid, NM_DBUS_SERVICE_OPENCONNECT)
+	data = newBasicVpnConnectionData(id, uuid)
+	initSettingSectionVpnOpenconnect(data)
+	initSettingSectionIpv6(data)
+	return
+}
 
+func initSettingSectionVpnOpenconnect(data connectionData) {
+	initBasicSettingSectionVpn(data, NM_DBUS_SERVICE_OPENCONNECT)
 	setSettingVpnOpenconnectKeyCsdEnable(data, false)
 	setSettingKey(data, sectionVpn, "xmlconfig-flags", uint32(0))
 	setSettingVpnOpenconnectKeyPemPassphraseFsid(data, false)
@@ -60,9 +66,6 @@ func newVpnOpenconnectConnectionData(id, uuid string) (data connectionData) {
 	setSettingKey(data, sectionVpn, "certsigs-flags", uint32(0))
 	setSettingKey(data, sectionVpn, "cookie-flags", uint32(2))
 	setSettingVpnOpenconnectKeyAuthtype(data, "password")
-
-	initSettingSectionIpv6(data)
-	return
 }
 
 func getSettingVpnOpenconnectAvailableKeys(data connectionData) (keys []string) {

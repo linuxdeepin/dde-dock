@@ -101,9 +101,14 @@ func isVpnL2tpNeedShowPassword(data connectionData) bool {
 
 // new connection data
 func newVpnL2tpConnectionData(id, uuid string) (data connectionData) {
-	data = newBasicVpnConnectionData(id, uuid, NM_DBUS_SERVICE_L2TP)
-	setSettingVpnL2tpKeyPasswordFlags(data, NM_L2TP_SECRET_FLAG_NONE)
+	data = newBasicVpnConnectionData(id, uuid)
+	initSettingSectionVpnL2tp(data)
 	return
+}
+
+func initSettingSectionVpnL2tp(data connectionData) {
+	initBasicSettingSectionVpn(data, NM_DBUS_SERVICE_L2TP)
+	setSettingVpnL2tpKeyPasswordFlags(data, NM_L2TP_SECRET_FLAG_NONE)
 }
 
 // vpn-l2tp

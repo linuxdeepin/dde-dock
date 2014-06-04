@@ -134,7 +134,13 @@ func isVpnVpncNeedShowXauthPassword(data connectionData) bool {
 
 // new connection data
 func newVpnVpncConnectionData(id, uuid string) (data connectionData) {
-	data = newBasicVpnConnectionData(id, uuid, NM_DBUS_SERVICE_VPNC)
+	data = newBasicVpnConnectionData(id, uuid)
+	initSettingSectionVpnPptp(data)
+	return
+}
+
+func initSettingSectionVpnVpnc(data connectionData) {
+	initBasicSettingSectionVpn(data, NM_DBUS_SERVICE_VPNC)
 	setSettingVpnVpncKeyNatTraversalMode(data, NM_VPNC_NATT_MODE_NATT)
 	logicSetSettingVpnVpncKeySecretFlags(data, NM_VPNC_SECRET_FLAG_NONE)
 	logicSetSettingVpnVpncKeyXauthPasswordFlags(data, NM_VPNC_SECRET_FLAG_NONE)
@@ -142,7 +148,6 @@ func newVpnVpncConnectionData(id, uuid string) (data connectionData) {
 	setSettingVpnVpncKeyPerfectForward(data, NM_VPNC_PFS_SERVER)
 	setSettingVpnVpncKeyDhgroup(data, NM_VPNC_DHGROUP_DH2)
 	setSettingVpnVpncKeyLocalPort(data, 0)
-	return
 }
 
 // vpn-vpnc
