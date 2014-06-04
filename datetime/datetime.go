@@ -40,6 +40,9 @@ type Manager struct {
 	CurrentLocale    string
 
 	LocaleStatus func(bool, string)
+
+	ntpRunning bool
+	quitChan   chan bool
 }
 
 func (op *Manager) SetDate(d string) (bool, error) {
@@ -79,8 +82,7 @@ func (op *Manager) SetTimeZone(zone string) bool {
 }
 
 func (op *Manager) SyncNtpTime() bool {
-	ret, _ := setDate.SyncNtpTime()
-	return ret
+	return op.syncNtpTime()
 }
 
 func (op *Manager) AddUserTimezoneList(tz string) {
@@ -150,6 +152,9 @@ func NewDateAndTime() *Manager {
 	m.LocaleListMap = make(map[string]string)
 	m.LocaleListMap = localDescMap
 
+	m.ntpRunning = false
+	m.quitChan = make(chan bool)
+
 	return m
 }
 
@@ -192,7 +197,7 @@ func Start() {
 	}
 
 	if date.AutoSetTime.Get() {
-		go setDate.SetNtpUsing(true)
+		date.setAutoSetTime(true)
 	}
 	dbus.DealWithUnhandledMessage()
 	date.listenLocaleChange()

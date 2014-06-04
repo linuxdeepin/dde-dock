@@ -31,24 +31,8 @@ func (m *Manager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{_DATE_TIME_DEST, _DATE_TIME_PATH, _DATA_TIME_IFC}
 }
 
-func (op *Manager) setAutoSetTime(auto bool) (bool, error) {
-	var (
-		ret bool
-		err error
-	)
-
-	if auto {
-		ret, err = setDate.SetNtpUsing(true)
-	} else {
-		ret, err = setDate.SetNtpUsing(false)
-	}
-
-	if err != nil {
-		logger.Info("Set NTP - %d Failed: %s\n",
-			auto, err)
-		return false, err
-	}
-	return ret, nil
+func (op *Manager) setAutoSetTime(auto bool) bool {
+	return op.enableNtp(auto)
 }
 
 func (op *Manager) setPropName(name string) {

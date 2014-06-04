@@ -4,10 +4,12 @@ import "dde-daemon/network"
 import "dde-daemon/clipboard"
 import "dde-daemon/audio"
 import "dde-daemon/power"
+
 import "dde-daemon/display"
 import "dde-daemon/keybinding"
 import "dde-daemon/datetime"
 import "dde-daemon/mime"
+
 import "dde-daemon/mounts"
 import "dde-daemon/bluetooth"
 
@@ -37,7 +39,7 @@ import _ "net/http/pprof"
 import "net/http"
 
 func init() {
-	http.ListenAndServe("localhost:6060", nil)
+	go http.ListenAndServe("localhost:6060", nil)
 }
 
 var Logger = logger.NewLogger("com.deepin.daemon")
@@ -71,10 +73,16 @@ func dscAutoUpdate() {
 		return
 	}
 
-	interval, _ := objUtil.ReadKeyFromKeyFile(filename,
+	interval, ok1 := objUtil.ReadKeyFromKeyFile(filename,
 		"update", "interval", int32(0))
-	isUpdate, _ := objUtil.ReadKeyFromKeyFile(filename,
+	if !ok1 {
+		interval = 3
+	}
+	isUpdate, ok2 := objUtil.ReadKeyFromKeyFile(filename,
 		"update", "auto", false)
+	if !ok2 {
+		isUpdate = true
+	}
 	if v, ok := isUpdate.(bool); ok && v {
 		if i, ok := interval.(int32); ok {
 			go setDSCAutoUpdate(time.Duration(i))
@@ -83,6 +91,7 @@ func dscAutoUpdate() {
 }
 
 func main() {
+	println("Test")
 	if !dlib.UniqueOnSession("com.deepin.daemon") {
 		Logger.Warning("There already has an dde-daemon running.")
 		return
