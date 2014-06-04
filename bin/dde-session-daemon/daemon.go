@@ -18,6 +18,7 @@ import "dde-daemon/themes"
 
 import "dde-daemon/dock"
 import "dde-daemon/launcher"
+import "dde-daemon/grub2"
 
 import "dlib/glib-2.0"
 

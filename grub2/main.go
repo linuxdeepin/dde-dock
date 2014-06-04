@@ -34,8 +34,8 @@ var (
 )
 
 func Start() {
-	logger.BeginTracing()
-	defer logger.EndTracing()
+	//logger.BeginTracing()
+	//defer logger.EndTracing()
 
 	if running {
 		logger.Info(grubDest, "already running")
@@ -65,15 +65,17 @@ func Start() {
 	dbus.DealWithUnhandledMessage()
 	notifyStop = make(chan int, 100) // reset signal to avoid repeat stop action
 	notfiyDbusStop := make(chan int)
-	go func() {
-		err := dbus.Wait()
-		if err != nil {
-			logger.Error("lost dbus session:", err)
-		} else {
-			logger.Info("dbus session stoped")
-		}
-		notfiyDbusStop <- 1
-	}()
+	/*
+		go func() {
+			err := dbus.Wait()
+			if err != nil {
+				logger.Error("lost dbus session:", err)
+			} else {
+				logger.Info("dbus session stoped")
+			}
+			notfiyDbusStop <- 1
+		}()
+	*/
 
 	select {
 	case <-notifyStop:
