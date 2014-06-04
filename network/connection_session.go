@@ -272,7 +272,13 @@ func (s *ConnectionSession) GetAvailableValues(section, key string) (valuesJSON 
 	// 		break
 	// 	}
 	// }
-	values := generalGetSettingAvailableValues(s.Data, section, key)
+	var values []kvalue
+	// TODO
+	if section == sectionNone {
+		values = getSettingNoneSectionAvailableValues(s.Data, key)
+	} else {
+		values = generalGetSettingAvailableValues(s.Data, section, key)
+	}
 	valuesJSON, _ = marshalJSON(values)
 	return
 }

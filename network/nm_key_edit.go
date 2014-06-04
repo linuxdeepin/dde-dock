@@ -3,6 +3,7 @@ package network
 import "dlib/dbus"
 import "fmt"
 
+// return custom connection type, and the wrapper type will be ignored
 func getCustomConnectionType(data connectionData) (connType string) {
 	t := getSettingConnectionType(data)
 	switch t {
@@ -47,7 +48,6 @@ func getCustomConnectionType(data connectionData) (connType string) {
 	return
 }
 
-// TODO
 func isJSONValueMeansToDeleteKey(valueJSON string, t ktype) (doDelete bool) {
 	if valueJSON == jsonNull || valueJSON == jsonEmptyString || valueJSON == jsonEmptyArray {
 		return true

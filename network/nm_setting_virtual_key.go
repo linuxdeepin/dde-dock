@@ -1,12 +1,9 @@
 package network
 
 import . "dlib/gettext"
+import "fmt"
 
-// If there is none related section for virtual key, it means that the
-// virtual key used to control multiple sections, such as change
-// connection type, and the key's name must be unique.
-const NM_SETTING_VK_NONE_RELATED_FIELD = "<none>"
-
+// TODO remove
 // For a virtual key with none related key, it is often used to
 // control multiple keys in same section.
 const NM_SETTING_VK_NONE_RELATED_KEY = "<none>"
@@ -62,6 +59,9 @@ const (
 // ppp
 const NM_SETTING_VK_PPP_ENABLE_LCP_ECHO = "vk-enable-lcp-echo"
 
+// vpn
+const NM_SETTING_VK_VPN_TYPE = "vk-vpn-type"
+
 // vpn-l2tp
 const NM_SETTING_VK_VPN_L2TP_REQUIRE_MPPE = "vk-require-mppe"
 const NM_SETTING_VK_VPN_L2TP_MPPE_SECURITY = "vk-mppe-security"
@@ -92,12 +92,22 @@ const (
 // wireless security
 const NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT = "vk-key-mgmt"
 
+const (
+	vkTypeWrapper       = "wrapper"
+	vkTypeEnableWrapper = "enable-wrapper"
+
+	// control other sections or keys, no related key, and the related
+	// section always is a virtual section, such as "vk-vpn-type", for
+	// there is no real related section, the key's name must be unique
+	vkTypeController = "controller"
+)
+
 type vkeyInfo struct {
 	Name           string
 	Type           ktype
+	VkType         string // could be "wrapper", "enable-wrapper", "control"
 	RelatedSection string
 	RelatedKeys    []string
-	EnableWrapper  bool // check if the virtual key is a wrapper to enable related key
 	Available      bool // check if is used by front-end
 	Optional       bool // if key is optional(such as child key gateway of ip address), will ignore error for it
 }
@@ -116,6 +126,7 @@ func getVkeyInfo(section, vkey string) (info vkeyInfo, ok bool) {
 }
 
 func isVirtualKey(section, key string) bool {
+	// TODO
 	if isStringInArray(key, getVkeysOfSection(section)) {
 		return true
 	}
@@ -204,17 +215,6 @@ func generalGetSettingVkeyAvailableValues(data connectionData, section, key stri
 		}
 	}
 
-	// dispatch virtual keys that with none related section
-	if len(values) == 0 {
-		switch key {
-		case NM_SETTING_VK_MOBILE_SERVICE_TYPE:
-			values = []kvalue{
-				kvalue{"gsm", Tr("GSM (GPRS, EDGE, UMTS, HSPA)")},
-				kvalue{"cdma", Tr("CDMA (1xRTT, EVDO)")},
-			}
-		}
-	}
-
 	if len(values) == 0 {
 		logger.Warningf("there is no available values for virtual key, %s->%s", section, key)
 	}
@@ -261,12 +261,37 @@ func getRelatedVkeys(section, key string) (vks []string) {
 	return
 }
 
+func isWrapperVkey(section, vkey string) bool {
+	vkInfo, ok := getVkeyInfo(section, vkey)
+	if !ok {
+		return false
+	}
+	if vkInfo.VkType == vkTypeWrapper {
+		return true
+	}
+	return false
+}
+
 func isEnableWrapperVkey(section, vkey string) bool {
 	vkInfo, ok := getVkeyInfo(section, vkey)
 	if !ok {
 		return false
 	}
-	return vkInfo.EnableWrapper
+	if vkInfo.VkType == vkTypeEnableWrapper {
+		return true
+	}
+	return false
+}
+
+func isControlVkey(section, vkey string) bool {
+	vkInfo, ok := getVkeyInfo(section, vkey)
+	if !ok {
+		return false
+	}
+	if vkInfo.VkType == vkTypeController {
+		return true
+	}
+	return false
 }
 
 func isOptionalVkey(section, vkey string) (optional bool) {
@@ -274,6 +299,52 @@ func isOptionalVkey(section, vkey string) (optional bool) {
 		if vk.RelatedSection == section && vk.Name == vkey {
 			optional = vk.Optional
 		}
+	}
+	return
+}
+
+// Virtual key with none related section
+func getSettingVkMobileServiceType(data connectionData) (serviceType string) {
+	if isSettingSectionExists(data, NM_SETTING_GSM_SETTING_NAME) {
+		serviceType = mobileServiceGsm
+	} else if isSettingSectionExists(data, NM_SETTING_CDMA_SETTING_NAME) {
+		serviceType = mobileServiceCdma
+	} else {
+		logger.Error("get mobile service type failed, neither gsm section nor cdma section")
+	}
+	return
+}
+func logicSetSettingVkMobileServiceType(data connectionData, serviceType string) (err error) {
+	switch serviceType {
+	case mobileServiceGsm:
+		removeSettingSection(data, sectionCdma)
+		initSettingSectionGsm(data)
+	case mobileServiceCdma:
+		removeSettingSection(data, sectionGsm)
+		initSettingSectionCdma(data)
+	default:
+		err = fmt.Errorf("invalid mobile service type", serviceType)
+	}
+	return
+}
+
+func getSettingVkVpnType(data connectionData) (vpnType string) {
+	vpnType = getCustomConnectionType(data)
+	return
+}
+func logicSetSettingVkVpnType(data connectionData, vpnType string) (err error) {
+	removeSettingSection(data, sectionVpn)
+	switch vpnType {
+	case connectionVpnL2tp:
+		initSettingSectionVpnL2tp(data)
+	case connectionVpnPptp:
+		initSettingSectionVpnPptp(data)
+	case connectionVpnOpenconnect:
+		initSettingSectionVpnOpenconnect(data)
+	case connectionVpnOpenvpn:
+		initSettingSectionVpnOpenvpn(data)
+	case connectionVpnVpnc:
+		initSettingSectionVpnVpnc(data)
 	}
 	return
 }

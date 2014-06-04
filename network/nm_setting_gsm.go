@@ -2,7 +2,6 @@ package network
 
 import (
 	. "dlib/gettext"
-	"fmt"
 )
 
 // TODO doc
@@ -86,7 +85,8 @@ func initSettingSectionGsm(data connectionData) {
 
 // Get available keys
 func getSettingGsmAvailableKeys(data connectionData) (keys []string) {
-	keys = append(keys, NM_SETTING_VK_MOBILE_SERVICE_TYPE)
+	// TODO remove
+	// keys = append(keys, NM_SETTING_VK_MOBILE_SERVICE_TYPE)
 	keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_NUMBER)
 	keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_USERNAME)
 	keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_PASSWORD_FLAGS)
@@ -140,31 +140,6 @@ func checkSettingGsmValues(data connectionData) (errs sectionErrors) {
 	ensureSettingGsmNumberNoEmpty(data, errs)
 	if isSettingRequireSecret(getSettingGsmPasswordFlags(data)) {
 		ensureSettingGsmPasswordNoEmpty(data, errs)
-	}
-	return
-}
-
-// Virtual key
-func getSettingVkMobileServiceType(data connectionData) (serviceType string) {
-	if isSettingSectionExists(data, NM_SETTING_GSM_SETTING_NAME) {
-		serviceType = mobileServiceGsm
-	} else if isSettingSectionExists(data, NM_SETTING_CDMA_SETTING_NAME) {
-		serviceType = mobileServiceCdma
-	} else {
-		logger.Error("get mobile service type failed, neither gsm section nor cdma section")
-	}
-	return
-}
-func logicSetSettingVkMobileServiceType(data connectionData, serviceType string) (err error) {
-	switch serviceType {
-	case mobileServiceGsm:
-		removeSettingSection(data, sectionCdma)
-		initSettingSectionGsm(data)
-	case mobileServiceCdma:
-		removeSettingSection(data, sectionGsm)
-		initSettingSectionCdma(data)
-	default:
-		err = fmt.Errorf("invalid mobile service type", serviceType)
 	}
 	return
 }

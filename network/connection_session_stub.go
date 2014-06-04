@@ -33,7 +33,12 @@ func (s *ConnectionSession) updatePropAvailableSections() {
 func (s *ConnectionSession) updatePropAvailableKeys() {
 	s.AvailableKeys = make(map[string][]string) // clear structure
 	for _, section := range getAvailableSections(s.Data) {
-		s.AvailableKeys[section] = generalGetSettingAvailableKeys(s.Data, section)
+		// TODO
+		if section == sectionNone {
+			s.AvailableKeys[section] = getSettingNoneSectionAvailableKeys(s.Data)
+		} else {
+			s.AvailableKeys[section] = generalGetSettingAvailableKeys(s.Data, section)
+		}
 	}
 	dbus.NotifyChange(s, "AvailableKeys")
 }

@@ -65,10 +65,10 @@ const (
 	connectionWirelessAdhoc   = "wireless-adhoc"
 	connectionWirelessHotspot = "wireless-hotspot"
 	connectionPppoe           = "pppoe"
-	connectionMobile          = "mobile"
+	connectionMobile          = "mobile" // wrapper for gsm and cdma
 	connectionMobileGsm       = "mobile-gsm"
 	connectionMobileCdma      = "mobile-cdma"
-	connectionVpn             = "vpn"
+	connectionVpn             = "vpn" // wrapper for all vpn types
 	connectionVpnL2tp         = "vpn-l2tp"
 	connectionVpnOpenconnect  = "vpn-openconnect"
 	connectionVpnOpenvpn      = "vpn-openvpn"

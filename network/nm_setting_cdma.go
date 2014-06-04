@@ -22,7 +22,8 @@ func initSettingSectionCdma(data connectionData) {
 
 // Get available keys
 func getSettingCdmaAvailableKeys(data connectionData) (keys []string) {
-	keys = append(keys, NM_SETTING_VK_MOBILE_SERVICE_TYPE)
+	// TODO remove
+	// keys = append(keys, NM_SETTING_VK_MOBILE_SERVICE_TYPE)
 	keys = appendAvailableKeys(data, keys, sectionCdma, NM_SETTING_CDMA_NUMBER)
 	keys = appendAvailableKeys(data, keys, sectionCdma, NM_SETTING_CDMA_USERNAME)
 	keys = appendAvailableKeys(data, keys, sectionCdma, NM_SETTING_CDMA_PASSWORD)

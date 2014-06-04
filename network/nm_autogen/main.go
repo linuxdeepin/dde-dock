@@ -7,6 +7,9 @@ import (
 	"text/template"
 )
 
+// use for setting and getting virtual key's value which type is vkTypeController
+const NM_SETTING_NONE_SECTION = "<none>"
+
 var funcMap = template.FuncMap{
 	"ToCaplitalize":               ToCaplitalize,
 	"ToSectionFuncBaseName":       ToSectionFuncBaseName,
@@ -27,6 +30,8 @@ var funcMap = template.FuncMap{
 	"GetAllKeysInVsection":        GetAllKeysInVsection,
 	"GetKeyWidgetProp":            GetKeyWidgetProp,
 	"ToKeyTypeInterfaceConverter": ToKeyTypeInterfaceConverter,
+	"IsEnableWrapperVkey":         IsEnableWrapperVkey,
+	"IsControllerVkey":            IsControllerVkey,
 }
 
 const (
@@ -80,9 +85,9 @@ type NMVkeyStruct struct {
 	Name           string   // such as "NM_SETTING_VK_802_1X_EAP"
 	Value          string   // such as "vk-eap"
 	Type           string   // such as "ktypeString"
+	VkType         string   // could be "vkTypeWrapper", "vkTypeEnableWrapper" or "vkTypeController"
 	RelatedSection string   // such as "NM_SETTING_802_1X_SETTING_NAME"
 	RelatedKeys    []string // such as "NM_SETTING_802_1X_EAP"
-	EnableWrapper  bool     // check if the virtual key is a wrapper just to enable target key
 	UsedByFrontEnd bool     // check if is used by front-end
 	Optional       bool     // if key is optional, will ignore error for it
 	DisplayName    string
@@ -170,7 +175,7 @@ func genFrontEndCode() {
 			continue
 		}
 		autogenContent = genFrontEndSectionCode(nmVsection)
-		frontEndFile := getFrontEndFilePath(nmVsection.Value)
+		frontEndFile := getFrontEndFilePath(nmVsection.Name)
 		writeOrDisplayResultForFrontEnd(frontEndFile, autogenContent)
 	}
 }
