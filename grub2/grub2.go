@@ -19,11 +19,11 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package main
+package grub2
 
 import (
 	"bufio"
-	apigrub2ext "dbus/com/deepin/api/grub2"
+	"dlib/dbus"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -36,6 +36,10 @@ import (
 
 var grubConfigFile = "/etc/default/grub"
 
+func SetDefaultGrubConfigFile(file string) {
+	grubConfigFile = file
+}
+
 const (
 	grubMenuFile       = "/boot/grub/grub.cfg"
 	grubUpdateExe      = "/usr/sbin/update-grub"
@@ -44,7 +48,6 @@ const (
 )
 
 var (
-	grub2ext               *apigrub2ext.Grub2Ext
 	entryRegexpSingleQuote = regexp.MustCompile(`^ *(menuentry|submenu) +'(.*?)'.*$`)
 	entryRegexpDoubleQuote = regexp.MustCompile(`^ *(menuentry|submenu) +"(.*?)".*$`)
 )
@@ -62,9 +65,10 @@ type Grub2 struct {
 	theme    *Theme
 	config   CacheConfig
 
-	needUpdateLock sync.Mutex
-	needUpdate     bool
-	chanUpdate     chan int
+	needUpdateLock     sync.Mutex
+	needUpdate         bool
+	chanUpdate         chan int
+	chanStopUpdateLoop chan int
 
 	DefaultEntry string `access:"readwrite"`
 	Timeout      int32  `access:"readwrite"`
@@ -79,10 +83,25 @@ func NewGrub2() *Grub2 {
 	grub.theme = NewTheme()
 	grub.config = CacheConfig{true} // default value
 	grub.chanUpdate = make(chan int)
+	grub.chanStopUpdateLoop = make(chan int)
 	return grub
 }
 
-func (grub *Grub2) load() {
+func DestroyGrub2(grub *Grub2) {
+	grub.stopUpdateLoop()
+	dbus.UnInstallObject(grub.theme)
+	dbus.UnInstallObject(grub)
+}
+
+func (grub *Grub2) initGrub2() {
+	grub.doInitGrub2()
+	grub.theme.initTheme()
+	go grub.resetGfxmodeIfNeed()
+	go grub.theme.regenerateBackgroundIfNeed()
+	grub.startUpdateLoop()
+}
+
+func (grub *Grub2) doInitGrub2() {
 	err := grub.readEntries()
 	if err != nil {
 		logger.Error(err)
@@ -123,39 +142,48 @@ func (grub *Grub2) notifyUpdate() {
 func (grub *Grub2) startUpdateLoop() {
 	// start a goroutine to update grub configuration automatically
 	go func() {
+		logger.Info("update loop started")
+		defer logger.Info("update loop stopped")
 		for {
-			<-grub.chanUpdate
-			grub.needUpdateLock.Lock()
-			grub.config.NeedUpdate = grub.needUpdate
-			grub.needUpdate = false
-			grub.needUpdateLock.Unlock()
-
-			if grub.config.NeedUpdate {
-				// send signal GenerateBegin()
-				if grub.GenerateBegin != nil {
-					grub.GenerateBegin()
-				}
-
-				grub.writeCacheConfig()
-
-				logger.Info("notify to generate a new grub configuration file")
-				grub2ext.DoGenerateGrubConfig()
-				logger.Info("generate grub configuration finished")
-
-				grub.config.NeedUpdate = false
-				grub.writeCacheConfig()
-
-				// send signal GenerateEnd() only if don't need update any more
+			select {
+			case <-grub.chanStopUpdateLoop:
+				break
+			case <-grub.chanUpdate:
 				grub.needUpdateLock.Lock()
-				if !grub.needUpdate {
-					if grub.GenerateEnd != nil {
-						grub.GenerateEnd()
-					}
-				}
+				grub.config.NeedUpdate = grub.needUpdate
+				grub.needUpdate = false
 				grub.needUpdateLock.Unlock()
+
+				if grub.config.NeedUpdate {
+					// send signal GenerateBegin()
+					if grub.GenerateBegin != nil {
+						grub.GenerateBegin()
+					}
+
+					grub.writeCacheConfig()
+
+					logger.Info("notify to generate a new grub configuration file")
+					grub2extDoGenerateGrubConfig()
+					logger.Info("generate grub configuration finished")
+
+					grub.config.NeedUpdate = false
+					grub.writeCacheConfig()
+
+					// send signal GenerateEnd() only if don't need update any more
+					grub.needUpdateLock.Lock()
+					if !grub.needUpdate {
+						if grub.GenerateEnd != nil {
+							grub.GenerateEnd()
+						}
+					}
+					grub.needUpdateLock.Unlock()
+				}
 			}
 		}
 	}()
+}
+func (grub *Grub2) stopUpdateLoop() {
+	grub.chanStopUpdateLoop <- 1
 }
 
 func (grub *Grub2) resetGfxmodeIfNeed() {
@@ -165,7 +193,7 @@ func (grub *Grub2) resetGfxmodeIfNeed() {
 
 		// regenerate theme background
 		screenWidth, screenHeight := getPrimaryScreenBestResolution()
-		grub2ext.DoGenerateThemeBackground(screenWidth, screenHeight)
+		grub2extDoGenerateThemeBackground(screenWidth, screenHeight)
 		grub.theme.setProperty("Background", grub.theme.Background)
 	}
 }
@@ -189,13 +217,21 @@ func (grub *Grub2) clearSettings() {
 	grub.settings = make(map[string]string)
 }
 
-func (grub *Grub2) readEntries() error {
+func (grub *Grub2) readEntries() (err error) {
 	fileContent, err := ioutil.ReadFile(grubMenuFile)
 	if err != nil {
-		logger.Error(err.Error())
-		return err
+		logger.Error(err)
+		return
 	}
-	return grub.parseEntries(string(fileContent))
+	err = grub.parseEntries(string(fileContent))
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+	if len(grub.entries) == 0 {
+		logger.Warning("there is no menu entry in %s", grubMenuFile)
+	}
+	return
 }
 
 func (grub *Grub2) readSettings() (err error) {
@@ -224,8 +260,8 @@ func (grub *Grub2) fixSettings() (needUpdate bool) {
 	}
 
 	// enable deepin grub2 theme default
-	if grub.getSettingTheme() != grub.theme.mainFile {
-		grub.setSettingTheme(grub.theme.mainFile)
+	if grub.getSettingTheme() != themeMainFile {
+		grub.setSettingTheme(themeMainFile)
 		needUpdate = true
 	}
 
@@ -235,7 +271,7 @@ func (grub *Grub2) fixSettings() (needUpdate bool) {
 func (grub *Grub2) writeSettings() {
 	fileContent := grub.getSettingContentToSave()
 
-	grub2ext.DoWriteSettings(fileContent)
+	grub2extDoWriteSettings(fileContent)
 }
 
 func (grub *Grub2) readCacheConfig() (err error) {
@@ -259,7 +295,7 @@ func (grub *Grub2) writeCacheConfig() (err error) {
 		return
 	}
 
-	grub2ext.DoWriteCacheConfig(string(fileContent))
+	grub2extDoWriteCacheConfig(string(fileContent))
 
 	return
 }

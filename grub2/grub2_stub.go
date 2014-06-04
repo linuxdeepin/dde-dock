@@ -19,20 +19,25 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package main
+package grub2
 
 import (
 	"dlib/dbus"
-	"errors"
 	"fmt"
+)
+
+const (
+	grubDest = "com.deepin.daemon.Grub2"
+	grubPath = "/com/deepin/daemon/Grub2"
+	grubIfs  = "com.deepin.daemon.Grub2"
 )
 
 // GetDBusInfo implements interface of dbus.DBusObject.
 func (grub *Grub2) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		"com.deepin.daemon.Grub2",
-		"/com/deepin/daemon/Grub2",
-		"com.deepin.daemon.Grub2",
+		grubDest,
+		grubPath,
+		grubIfs,
 	}
 }
 
@@ -89,9 +94,8 @@ func (grub *Grub2) GetSimpleEntryTitles() ([]string, error) {
 		}
 	}
 	if len(entryTitles) == 0 {
-		s := fmt.Sprintf("there is no menu entry in %s", grubMenuFile)
-		logger.Warning(s)
-		return entryTitles, errors.New(s)
+		err := fmt.Errorf("there is no menu entry in %s", grubMenuFile)
+		return entryTitles, err
 	}
 	return entryTitles, nil
 }

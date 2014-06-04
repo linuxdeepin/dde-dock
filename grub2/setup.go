@@ -19,7 +19,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package main
+package grub2
 
 import (
 	"dlib/graphic"
@@ -30,14 +30,16 @@ import (
 	"strings"
 )
 
-// Setup is a copy of dde-api/grub2ext, for to remove the dependency
+// SetupWrapper is a copy of dde-api/grub2ext, for to remove the dependency
 // of dbus when setup grub.
-type Setup struct{}
+type SetupWrapper struct{}
 
 // setup grub2 environment, regenerate configure and theme if need, don't depends on dbus
-func (grub *Grub2) setup(gfxmode string) {
-	setup := &Setup{}
+func (grub *Grub2) Setup(gfxmode string) {
+	setup := &SetupWrapper{}
 
+	// do not call grub.readEntries() here, for grub.cfg file maybe
+	// not exists
 	grub.readSettings()
 	grub.fixSettings()
 
@@ -51,6 +53,12 @@ func (grub *Grub2) setup(gfxmode string) {
 	setup.DoWriteSettings(settingFileContent)
 
 	// generate theme background
+	grub.SetupTheme(gfxmode)
+}
+
+func (grub *Grub2) SetupTheme(gfxmode string) {
+	setup := &SetupWrapper{}
+
 	var screenWidth, screenHeight uint16
 	if len(gfxmode) == 0 {
 		screenWidth, screenHeight = getPrimaryScreenBestResolution()
@@ -87,16 +95,8 @@ func parseGfxmode(gfxmode string) (w, h uint16) {
 	return
 }
 
-func (grub *Grub2) setupTheme() {
-	setup := &Setup{}
-
-	// generate theme background
-	screenWidth, screenHeight := getPrimaryScreenBestResolution()
-	setup.DoGenerateThemeBackground(screenWidth, screenHeight)
-}
-
 // DoWriteSettings write file content to "/etc/default/grub".
-func (setup *Setup) DoWriteSettings(fileContent string) (ok bool, err error) {
+func (setup *SetupWrapper) DoWriteSettings(fileContent string) (ok bool, err error) {
 	err = ioutil.WriteFile(grubConfigFile, []byte(fileContent), 0664)
 	if err != nil {
 		logger.Error(err.Error())
@@ -106,7 +106,7 @@ func (setup *Setup) DoWriteSettings(fileContent string) (ok bool, err error) {
 }
 
 // DoWriteCacheConfig write file content to "/var/cache/dde-daemon/grub2.json".
-func (setup *Setup) DoWriteCacheConfig(fileContent string) (ok bool, err error) {
+func (setup *SetupWrapper) DoWriteCacheConfig(fileContent string) (ok bool, err error) {
 	// ensure parent directory exists
 	if !isFileExists(grubCacheFile) {
 		os.MkdirAll(path.Dir(grubCacheFile), 0755)
@@ -121,7 +121,7 @@ func (setup *Setup) DoWriteCacheConfig(fileContent string) (ok bool, err error) 
 
 // DoGenerateGrubConfig execute command "/usr/sbin/update-grub" to
 // generate a new grub configuration.
-func (setup *Setup) DoGenerateGrubConfig() (ok bool, err error) {
+func (setup *SetupWrapper) DoGenerateGrubConfig() (ok bool, err error) {
 	logger.Info("start to generate a new grub configuration file")
 	_, stderr, err := execAndWait(30, grubUpdateExe)
 	logger.Infof("process output: %s", stderr)
@@ -136,7 +136,7 @@ func (setup *Setup) DoGenerateGrubConfig() (ok bool, err error) {
 // DoSetThemeBackgroundSourceFile setup a new background source file
 // for deepin grub2 theme, and then generate the background depends on
 // screen resolution.
-func (setup *Setup) DoSetThemeBackgroundSourceFile(imageFile string, screenWidth, screenHeight uint16) (ok bool, err error) {
+func (setup *SetupWrapper) DoSetThemeBackgroundSourceFile(imageFile string, screenWidth, screenHeight uint16) (ok bool, err error) {
 	// if background source file is a symlink, just delete it
 	if isSymlink(themeBgSrcFile) {
 		os.Remove(themeBgSrcFile)
@@ -154,7 +154,7 @@ func (setup *Setup) DoSetThemeBackgroundSourceFile(imageFile string, screenWidth
 
 // DoGenerateThemeBackground generate the background for deepin grub2
 // theme depends on screen resolution.
-func (setup *Setup) DoGenerateThemeBackground(screenWidth, screenHeight uint16) (ok bool, err error) {
+func (setup *SetupWrapper) DoGenerateThemeBackground(screenWidth, screenHeight uint16) (ok bool, err error) {
 	imgWidth, imgHeight, err := graphic.GetImageSize(themeBgSrcFile)
 	if err != nil {
 		logger.Error(err.Error())
@@ -174,7 +174,7 @@ func (setup *Setup) DoGenerateThemeBackground(screenWidth, screenHeight uint16) 
 }
 
 // DoCustomTheme write file content to "/boot/grub/themes/deepin/theme.txt".
-func (setup *Setup) DoCustomTheme(fileContent string) (ok bool, err error) {
+func (setup *SetupWrapper) DoCustomTheme(fileContent string) (ok bool, err error) {
 	err = ioutil.WriteFile(themeMainFile, []byte(fileContent), 0664)
 	if err != nil {
 		logger.Error(err.Error())
@@ -184,7 +184,7 @@ func (setup *Setup) DoCustomTheme(fileContent string) (ok bool, err error) {
 }
 
 // DoWriteThemeJSON write file content to "/boot/grub/themes/deepin/theme_tpl.json".
-func (setup *Setup) DoWriteThemeJSON(fileContent string) (ok bool, err error) {
+func (setup *SetupWrapper) DoWriteThemeJSON(fileContent string) (ok bool, err error) {
 	err = ioutil.WriteFile(themeJSONFile, []byte(fileContent), 0664)
 	if err != nil {
 		logger.Error(err.Error())
@@ -194,7 +194,7 @@ func (setup *Setup) DoWriteThemeJSON(fileContent string) (ok bool, err error) {
 }
 
 // DoResetThemeBackground link background_origin_source to background_source
-func (setup *Setup) DoResetThemeBackground() (ok bool, err error) {
+func (setup *SetupWrapper) DoResetThemeBackground() (ok bool, err error) {
 	os.Remove(themeBgSrcFile)
 	err = os.Symlink(themeBgOrigSrcFile, themeBgSrcFile)
 	if err != nil {

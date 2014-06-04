@@ -19,7 +19,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package main
+package grub2
 
 import (
 	"dlib/dbus"
@@ -93,7 +93,7 @@ func (theme *Theme) SetBackgroundSourceFile(imageFile string) {
 
 func (theme *Theme) doSetBackgroundSourceFile(imageFile string) bool {
 	screenWidth, screenHeight := getPrimaryScreenBestResolution()
-	grub2ext.DoSetThemeBackgroundSourceFile(imageFile, screenWidth, screenHeight)
+	grub2extDoSetThemeBackgroundSourceFile(imageFile, screenWidth, screenHeight)
 	theme.setProperty("Background", theme.Background)
 
 	// set item color through background's dominant color

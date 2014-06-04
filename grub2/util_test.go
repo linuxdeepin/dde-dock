@@ -1,4 +1,4 @@
-package main
+package grub2
 
 import (
 	. "launchpad.net/gocheck"

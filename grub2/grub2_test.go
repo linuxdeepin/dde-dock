@@ -1,4 +1,4 @@
-package main
+package grub2
 
 import (
 	. "launchpad.net/gocheck"
@@ -93,10 +93,19 @@ func (grub *Grub2) TestParseSettings(c *C) {
 	grub.parseSettings(testConfigContent)
 
 	wantSettingCount := 7
-	wantDefaultEntry := "LinuxDeepin GNU/Linux"
+	wantDefaultEntry := "0"
 	wantTimeout := "10"
 	wantTheme := "/boot/grub/themes/demo/theme.txt"
+	c.Check(len(grub.settings), Equals, wantSettingCount)
+	c.Check(grub.settings["GRUB_DEFAULT"], Equals, wantDefaultEntry)
+	c.Check(grub.settings["GRUB_TIMEOUT"], Equals, wantTimeout)
+	c.Check(grub.settings["GRUB_THEME"], Equals, wantTheme)
 
+	grub.fixSettings()
+	wantSettingCount = 7
+	wantDefaultEntry = "LinuxDeepin GNU/Linux"
+	wantTimeout = "10"
+	wantTheme = "/boot/grub/themes/deepin/theme.txt"
 	c.Check(len(grub.settings), Equals, wantSettingCount)
 	c.Check(grub.settings["GRUB_DEFAULT"], Equals, wantDefaultEntry)
 	c.Check(grub.settings["GRUB_TIMEOUT"], Equals, wantTimeout)
@@ -112,30 +121,30 @@ func (grub *Grub2) TestSetterAndGetter(c *C) {
 
 	// default entry
 	wantDefaultEntry := `LinuxDeepin GNU/Linux`
-	c.Check(grub.getDefaultEntry(), Equals, wantDefaultEntry)
-	grub.setDefaultEntry(`Advanced options for LinuxDeepin GNU/Linux>LinuxDeepin GNU/Linux，Linux 3.11.0-15-generic`)
-	c.Check(grub.getDefaultEntry(), Equals, wantDefaultEntry)
+	c.Check(grub.getSettingDefaultEntry(), Equals, wantDefaultEntry)
+	grub.setSettingDefaultEntry(`Advanced options for LinuxDeepin GNU/Linux>LinuxDeepin GNU/Linux，Linux 3.11.0-15-generic`)
+	c.Check(grub.getSettingDefaultEntry(), Equals, wantDefaultEntry)
 
 	// timeout
 	wantTimeout := int32(10)
-	c.Check(grub.getTimeout(), Equals, wantTimeout)
+	c.Check(grub.getSettingTimeout(), Equals, wantTimeout)
 	wantTimeout = int32(15)
-	grub.setTimeout(wantTimeout)
-	c.Check(grub.getTimeout(), Equals, wantTimeout)
+	grub.setSettingTimeout(wantTimeout)
+	c.Check(grub.getSettingTimeout(), Equals, wantTimeout)
 
 	// gfxmode
 	wantGfxmode := "1024x768"
-	c.Check(grub.getGfxmode(), Equals, wantGfxmode)
+	c.Check(grub.getSettingGfxmode(), Equals, wantGfxmode)
 	wantGfxmode = "saved"
-	grub.setGfxmode(wantGfxmode)
-	c.Check(grub.getGfxmode(), Equals, wantGfxmode)
+	grub.setSettingGfxmode(wantGfxmode)
+	c.Check(grub.getSettingGfxmode(), Equals, wantGfxmode)
 
 	// theme
 	wantTheme := "/boot/grub/themes/demo/theme.txt"
-	c.Check(grub.getTheme(), Equals, wantTheme)
+	c.Check(grub.getSettingTheme(), Equals, wantTheme)
 	wantTheme = "another_theme.txt"
-	grub.setTheme(wantTheme)
-	c.Check(grub.getTheme(), Equals, wantTheme)
+	grub.setSettingTheme(wantTheme)
+	c.Check(grub.getSettingTheme(), Equals, wantTheme)
 }
 
 func (grub *Grub2) TestSaveDefaultSettings(c *C) {
@@ -143,9 +152,11 @@ func (grub *Grub2) TestSaveDefaultSettings(c *C) {
 `
 	wantConfigContent := `GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
 GRUB_DEFAULT="LinuxDeepin GNU/Linux"
+GRUB_THEME="/boot/grub/themes/deepin/theme.txt"
 `
 	grub.parseEntries(testMenuContent)
 	grub.parseSettings(testConfigContent)
+	grub.fixSettings()
 	c.Check(grub.getSettingContentToSave(), Equals, wantConfigContent)
 }
 
@@ -165,10 +176,10 @@ GRUB_THEME="/boot/grub/themes/demo/theme.txt"
 	grub.parseEntries(testMenuContent)
 	grub.parseSettings(testConfigContent)
 
-	grub.setDefaultEntry(`LinuxDeepin GNU/Linux`)
-	grub.setTimeout(15)
-	grub.setGfxmode("auto")
-	grub.setTheme("/boot/grub/themes/demo/theme.txt")
+	grub.setSettingDefaultEntry(`LinuxDeepin GNU/Linux`)
+	grub.setSettingTimeout(15)
+	grub.setSettingGfxmode("auto")
+	grub.setSettingTheme("/boot/grub/themes/demo/theme.txt")
 	c.Check(grub.getSettingContentToSave(), Equals, wantConfigContent)
 }
 

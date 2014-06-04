@@ -19,7 +19,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package main
+package grub2
 
 import (
 	"bytes"
@@ -31,15 +31,16 @@ import (
 
 var (
 	themePath          = "/boot/grub/themes/deepin"
-	themeMainFile      string
-	themeTplFile       string
-	themeJSONFile      string
-	themeBgOrigSrcFile string
-	themeBgSrcFile     string
-	themeBgFile        string
+	themeMainFile      = themePath + "/theme.txt"
+	themeTplFile       = themePath + "/theme.tpl"
+	themeJSONFile      = themePath + "/theme_tpl.json"
+	themeBgOrigSrcFile = themePath + "/background_origin_source"
+	themeBgSrcFile     = themePath + "/background_source"
+	themeBgFile        = themePath + "/background.png"
 )
 
-func setupThemePath() {
+func SetDefaultThemePath(path string) {
+	themePath = path
 	themeMainFile = themePath + "/theme.txt"
 	themeTplFile = themePath + "/theme.tpl"
 	themeJSONFile = themePath + "/theme_tpl.json"
@@ -89,7 +90,7 @@ func NewTheme() *Theme {
 	return theme
 }
 
-func (theme *Theme) load() {
+func (theme *Theme) initTheme() {
 	var err error
 	theme.tplJSONData, err = theme.getThemeTplJSON()
 	if err != nil {
@@ -111,9 +112,9 @@ func (theme *Theme) reset() {
 
 	// reset theme background
 	go func() {
-		grub2ext.DoResetThemeBackground()
+		grub2extDoResetThemeBackground()
 		screenWidth, screenHeight := getPrimaryScreenBestResolution()
-		grub2ext.DoGenerateThemeBackground(screenWidth, screenHeight)
+		grub2extDoGenerateThemeBackground(screenWidth, screenHeight)
 		theme.setProperty("Background", theme.Background)
 	}()
 }
@@ -146,7 +147,7 @@ func (theme *Theme) regenerateBackgroundIfNeed() {
 	}
 
 	if needGenerate {
-		grub2ext.DoGenerateThemeBackground(screenWidth, screenHeight)
+		grub2extDoGenerateThemeBackground(screenWidth, screenHeight)
 		theme.setProperty("Background", theme.Background)
 		logger.Info("update background sucess")
 	}
@@ -195,7 +196,7 @@ func (theme *Theme) customTheme() {
 		logger.Error("theme content is empty")
 	}
 
-	grub2ext.DoCustomTheme(string(themeFileContent))
+	grub2extDoCustomTheme(string(themeFileContent))
 
 	// store the customized key-values to json file
 	jsonContent, err := json.Marshal(theme.tplJSONData)
@@ -203,7 +204,7 @@ func (theme *Theme) customTheme() {
 		return
 	}
 
-	grub2ext.DoWriteThemeJSON(string(jsonContent))
+	grub2extDoWriteThemeJSON(string(jsonContent))
 }
 
 func (theme *Theme) getCustomizedThemeContent(fileContent []byte, tplData interface{}) ([]byte, error) {
