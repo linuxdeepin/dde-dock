@@ -4,6 +4,7 @@ import (
 	"dlib/gio-2.0"
 	"encoding/json"
 	"strings"
+	"sync"
 )
 
 const (
@@ -19,8 +20,10 @@ const (
 )
 
 type AppEntry struct {
-	nApp *NormalApp
-	rApp *RuntimeApp
+	nApp     *NormalApp
+	rApp     *RuntimeApp
+	nAppLock sync.RWMutex
+	rAppLock sync.RWMutex
 
 	Id   string
 	Type string
@@ -159,6 +162,8 @@ func (e *AppEntry) update() {
 	}
 }
 func (e *AppEntry) attachNormalApp(nApp *NormalApp) {
+	e.nAppLock.Lock()
+	defer e.nAppLock.Unlock()
 	if e.nApp != nil {
 		return
 	}
@@ -168,6 +173,8 @@ func (e *AppEntry) attachNormalApp(nApp *NormalApp) {
 	e.update()
 }
 func (e *AppEntry) detachNormalApp() {
+	e.nAppLock.Lock()
+	defer e.nAppLock.Unlock()
 	if e.nApp != nil {
 		logger.Info("DetachNormalApp", e.nApp.Id)
 		e.nApp.setChangedCB(nil)
@@ -178,6 +185,8 @@ func (e *AppEntry) detachNormalApp() {
 	}
 }
 func (e *AppEntry) attachRuntimeApp(rApp *RuntimeApp) {
+	e.rAppLock.Lock()
+	defer e.rAppLock.Unlock()
 	if e.rApp != nil {
 		return
 	}
@@ -187,6 +196,8 @@ func (e *AppEntry) attachRuntimeApp(rApp *RuntimeApp) {
 	e.update()
 }
 func (e *AppEntry) detachRuntimeApp() {
+	e.rAppLock.Lock()
+	defer e.rAppLock.Unlock()
 	if e.rApp != nil {
 		logger.Info("DetachRuntimeApp:", e.rApp.Id)
 		e.rApp.setChangedCB(nil)

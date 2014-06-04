@@ -1,10 +1,7 @@
 package dock
 
 import (
-	"dlib"
 	"dlib/dbus"
-	"dlib/gettext"
-	"dlib/glib-2.0"
 	liblogger "dlib/logger"
 	"os"
 	"os/exec"
@@ -15,19 +12,6 @@ var (
 )
 
 func Start() {
-	defer logger.EndTracing()
-
-	if !dlib.UniqueOnSession("com.deepin.daemon.Dock") {
-		logger.Warning("Anohter com.deepin.daemon.Dock is running")
-		return
-	}
-	defer func() {
-		if err := recover(); err != nil {
-			logger.Fatalf("%v", err)
-		}
-	}()
-
-	gettext.Bindtextdomain("dde-daemon", "/usr/share/locale")
 	initDeepin()
 
 	// configure logger
@@ -58,8 +42,6 @@ func Start() {
 		os.Exit(1)
 	}
 
-	go glib.StartLoop()
-
 	cm := NewClientManager()
 	err = dbus.InstallOnSession(cm)
 	if err != nil {
@@ -75,10 +57,4 @@ func Start() {
 	initialize()
 
 	go exec.Command("/usr/bin/dde-dock").Run()
-
-	if err := dbus.Wait(); err != nil {
-		logger.Errorf("lost dbus session: %v\n", err)
-		os.Exit(1)
-	}
-	os.Exit(0)
 }
