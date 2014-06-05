@@ -28,7 +28,6 @@ var funcMap = template.FuncMap{
 	"GetKeyWidgetProp":            GetKeyWidgetProp,
 	"ToKeyTypeInterfaceConverter": ToKeyTypeInterfaceConverter,
 	"IsEnableWrapperVkey":         IsEnableWrapperVkey,
-	"IsControllerVkey":            IsControllerVkey,
 }
 
 const (

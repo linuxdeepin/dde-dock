@@ -85,13 +85,6 @@ func GetAllKeysInVsection(vsectionName string) (keys []string) {
 
 // GetAllKeysInSection return all keys that will be used by front-end.
 func GetAllKeysInSection(sectionName string) (keys []string) {
-	// virtual keys in section that with none related key
-	for _, vk := range nmVkeys {
-		// TODO
-		if vk.RelatedSection == sectionName && isStringInArray("NM_SETTING_VK_NONE_RELATED_KEY", vk.RelatedKeys) {
-			keys = append(keys, vk.Name)
-		}
-	}
 	for _, nmSection := range nmSections {
 		if nmSection.Name == sectionName {
 			for _, k := range nmSection.Keys {
@@ -291,7 +284,7 @@ func IsEnableWrapperVkey(vkName string) (ok bool) {
 	return false
 }
 
-func IsControllerVkey(vkName string) (ok bool) {
+func isControllerVkey(vkName string) (ok bool) {
 	if getVkInfo(vkName).VkType == "vkTypeController" {
 		return true
 	}

@@ -3,7 +3,7 @@ package network
 
 // All virtual keys data
 var virtualKeys = []vkeyInfo{
-	{Name: NM_SETTING_VK_802_1X_ENABLE, Type: ktypeBoolean, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_802_1X_SETTING_NAME, RelatedKeys: []string{NM_SETTING_VK_NONE_RELATED_KEY}, Available: true, Optional: false},
+	{Name: NM_SETTING_VK_802_1X_ENABLE, Type: ktypeBoolean, VkType: vkTypeController, RelatedSection: NM_SETTING_VS_SECURITY, RelatedKeys: []string{}, Available: true, Optional: false},
 	{Name: NM_SETTING_VK_802_1X_EAP, Type: ktypeString, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_802_1X_SETTING_NAME, RelatedKeys: []string{NM_SETTING_802_1X_EAP}, Available: true, Optional: false},
 	{Name: NM_SETTING_VK_802_1X_PAC_FILE, Type: ktypeString, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_802_1X_SETTING_NAME, RelatedKeys: []string{NM_SETTING_802_1X_PAC_FILE}, Available: true, Optional: false},
 	{Name: NM_SETTING_VK_802_1X_CA_CERT, Type: ktypeString, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_802_1X_SETTING_NAME, RelatedKeys: []string{NM_SETTING_802_1X_CA_CERT}, Available: true, Optional: false},
@@ -52,10 +52,13 @@ var virtualKeys = []vkeyInfo{
 // Get JSON value generally
 func generalGetVkeyJSON(data connectionData, section, key string) (valueJSON string) {
 	switch section {
-	case NM_SETTING_802_1X_SETTING_NAME:
+	case NM_SETTING_VS_SECURITY:
 		switch key {
 		case NM_SETTING_VK_802_1X_ENABLE:
 			return getSettingVk8021xEnableJSON(data)
+		}
+	case NM_SETTING_802_1X_SETTING_NAME:
+		switch key {
 		case NM_SETTING_VK_802_1X_EAP:
 			return getSettingVk8021xEapJSON(data)
 		case NM_SETTING_VK_802_1X_PAC_FILE:
@@ -200,11 +203,14 @@ func generalGetVkeyJSON(data connectionData, section, key string) (valueJSON str
 func generalSetVkeyJSON(data connectionData, section, key string, valueJSON string) (err error) {
 	// each virtual key own a logic setter
 	switch section {
-	case NM_SETTING_802_1X_SETTING_NAME:
+	case NM_SETTING_VS_SECURITY:
 		switch key {
 		case NM_SETTING_VK_802_1X_ENABLE:
 			err = logicSetSettingVk8021xEnableJSON(data, valueJSON)
 			return
+		}
+	case NM_SETTING_802_1X_SETTING_NAME:
+		switch key {
 		case NM_SETTING_VK_802_1X_EAP:
 			err = logicSetSettingVk8021xEapJSON(data, valueJSON)
 			return

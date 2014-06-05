@@ -3,16 +3,11 @@ package network
 import . "dlib/gettext"
 import "fmt"
 
-// TODO remove
-// For a virtual key with none related key, it is often used to
-// control multiple keys in same section.
-const NM_SETTING_VK_NONE_RELATED_KEY = "<none>"
-
 // Virtual key names
 
 // 802-1x
 const (
-	NM_SETTING_VK_802_1X_ENABLE      = "vk-enable"
+	NM_SETTING_VK_802_1X_ENABLE      = "vk-enable-8021x"
 	NM_SETTING_VK_802_1X_EAP         = "vk-eap"
 	NM_SETTING_VK_802_1X_PAC_FILE    = "vk-pac-file"
 	NM_SETTING_VK_802_1X_CA_CERT     = "vk-ca-cert"
@@ -155,6 +150,10 @@ func getSettingVkeyType(section, key string) (t ktype) {
 
 func generalGetSettingVsectionAvailableKeys(data connectionData, vsection string) (keys []string) {
 	switch vsection {
+	case NM_SETTING_VS_SECURITY:
+		if getCustomConnectionType(data) == connectionWired {
+			keys = []string{NM_SETTING_VK_802_1X_ENABLE}
+		}
 	case NM_SETTING_VS_MOBILE:
 		keys = []string{NM_SETTING_VK_MOBILE_SERVICE_TYPE}
 	case NM_SETTING_VS_VPN:
@@ -325,6 +324,19 @@ func isOptionalVkey(section, vkey string) (optional bool) {
 }
 
 // Controller virtual key, which with no real related section
+func logicSetSettingVk8021xEnable(data connectionData, value bool) (err error) {
+	if value {
+		addSettingSection(data, section8021x)
+		err = logicSetSettingVk8021xEap(data, "tls")
+	} else {
+		removeSettingSection(data, section8021x)
+	}
+	return
+}
+func logicSetSettingVk8021xEap(data connectionData, value string) (err error) {
+	return logicSetSetting8021xEap(data, []string{value})
+}
+
 func getSettingVkMobileServiceType(data connectionData) (serviceType string) {
 	if isSettingSectionExists(data, NM_SETTING_GSM_SETTING_NAME) {
 		serviceType = mobileServiceGsm

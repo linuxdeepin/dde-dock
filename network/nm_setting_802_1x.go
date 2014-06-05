@@ -61,13 +61,6 @@ func initAvailableValues8021x() {
 
 // Get available keys
 func getSetting8021xAvailableKeys(data connectionData) (keys []string) {
-	switch getCustomConnectionType(data) {
-	case connectionWired:
-		keys = []string{NM_SETTING_VK_802_1X_ENABLE}
-		if !isSettingSectionExists(data, section8021x) {
-			return
-		}
-	}
 	keys = appendAvailableKeys(data, keys, section8021x, NM_SETTING_802_1X_EAP)
 	switch getSettingVk8021xEap(data) {
 	case "tls":
@@ -433,18 +426,6 @@ func getSettingVk8021xPrivateKey(data connectionData) (value string) {
 }
 
 // Virtual key logic setter
-func logicSetSettingVk8021xEnable(data connectionData, value bool) (err error) {
-	if value {
-		addSettingSection(data, section8021x)
-		err = logicSetSettingVk8021xEap(data, "tls")
-	} else {
-		removeSettingSection(data, section8021x)
-	}
-	return
-}
-func logicSetSettingVk8021xEap(data connectionData, value string) (err error) {
-	return logicSetSetting8021xEap(data, []string{value})
-}
 func logicSetSettingVk8021xPacFile(data connectionData, value string) (err error) {
 	setSetting8021xPacFile(data, toLocalPath(value))
 	return

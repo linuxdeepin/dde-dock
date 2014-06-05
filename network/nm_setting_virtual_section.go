@@ -329,7 +329,10 @@ func getRelatedSectionsOfVsection(data connectionData, vsection string) (section
 	case vsectionSecurity:
 		switch connectionType {
 		case connectionWired:
-			sections = []string{section8021x}
+			if isSettingSectionExists(data, section8021x) {
+				sections = []string{section8021x}
+			}
+			sections = append(sections, vsectionSecurity)
 		case connectionWireless, connectionWirelessAdhoc, connectionWirelessHotspot:
 			if isSettingSectionExists(data, section8021x) {
 				sections = []string{sectionWirelessSecurity, section8021x}
