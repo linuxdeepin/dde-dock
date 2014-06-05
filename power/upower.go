@@ -111,7 +111,7 @@ func (p *Power) handleBatteryPercentage() {
 	case p.BatteryPercentage < float64(p.coreSettings.GetInt("percentage-low")):
 		if p.lowBatteryStatus != lowBatteryStatusLow {
 			p.lowBatteryStatus = lowBatteryStatusLow
-			p.sendNotify("battery-25", Tr("Battery low"), Tr("Computer will suspend very soon unless it is plugged in(TODO:Calucate remaining)."))
+			p.sendNotify("battery-25", Tr("Battery low"), Tr("Computer will suspend very soon unless it is plugged in."))
 			p.player.PlaySystemSound("power-low")
 		}
 	default:

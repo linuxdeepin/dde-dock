@@ -92,12 +92,14 @@ func main() {
 		}
 	}
 
-	glib.StartLoop()
+	go func() {
+		if err := dbus.Wait(); err != nil {
+			Logger.Errorf("Lost dbus: %v", err)
+			os.Exit(-1)
+		} else {
+			os.Exit(0)
+		}
+	}()
 
-	if err := dbus.Wait(); err != nil {
-		Logger.Errorf("Lost dbus: %v", err)
-		os.Exit(-1)
-	} else {
-		os.Exit(0)
-	}
+	glib.StartLoop()
 }
