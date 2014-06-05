@@ -63,13 +63,13 @@ func newConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 		s.Data = newWirelessHotspotConnectionData(id, s.Uuid)
 	case connectionPppoe:
 		s.Data = newPppoeConnectionData(id, s.Uuid)
-	case connectionMobile: // TODO
+	case connectionMobile:
 		s.Data = newMobileConnectionData(id, s.Uuid, mobileServiceGsm)
 	case connectionMobileGsm:
 		s.Data = newMobileConnectionData(id, s.Uuid, mobileServiceGsm)
 	case connectionMobileCdma:
 		s.Data = newMobileConnectionData(id, s.Uuid, mobileServiceCdma)
-	case connectionVpn: // TODO
+	case connectionVpn:
 		s.Data = newVpnL2tpConnectionData(id, s.Uuid)
 	case connectionVpnL2tp:
 		s.Data = newVpnL2tpConnectionData(id, s.Uuid)
@@ -263,22 +263,8 @@ func (s *ConnectionSession) Close() {
 
 // GetAvailableValues return available values marshaled by json for target key.
 func (s *ConnectionSession) GetAvailableValues(section, key string) (valuesJSON string) {
-	// TODO remove
-	// var values []kvalue
-	// sections := getRelatedSectionsOfVsection(s.Data, vsection)
-	// for _, section := range sections {
-	// 	values = generalGetSettingAvailableValues(s.Data, section, key)
-	// 	if len(values) > 0 {
-	// 		break
-	// 	}
-	// }
 	var values []kvalue
-	// TODO
-	if section == sectionNone {
-		values = getSettingNoneSectionAvailableValues(s.Data, key)
-	} else {
-		values = generalGetSettingAvailableValues(s.Data, section, key)
-	}
+	values = generalGetSettingAvailableValues(s.Data, section, key)
 	valuesJSON, _ = marshalJSON(values)
 	return
 }
@@ -293,12 +279,13 @@ func (s *ConnectionSession) SetKey(section, key, value string) {
 	// section := getSectionOfKeyInVsection(s.Data, vsection, key)
 	err := generalSetSettingKeyJSON(s.Data, section, key, value)
 	// logger.Debugf("SetKey(), %v, vsection=%s, filed=%s, key=%s, value=%s", err == nil, vsection, section, key, value) // TODO test
-	s.updateErrorsWhenSettingKey(section, key, err)
 
 	s.updatePropData()
 	s.updatePropAvailableVirtualSections()
 	s.updatePropAvailableSections()
 	s.updatePropAvailableKeys()
+
+	s.updateErrorsWhenSettingKey(section, key, err)
 	s.updatePropErrors()
 
 	return
@@ -322,6 +309,13 @@ func (s *ConnectionSession) updateErrorsWhenSettingKey(section, key string, err 
 			s.settingKeyErrors[section] = sectionErrorsData
 		}
 		sectionErrorsData[key] = err.Error()
+	}
+
+	// ignore errors that not available
+	for errSection, _ := range s.settingKeyErrors {
+		if !isStringInArray(errSection, s.AvailableSections) {
+			delete(s.settingKeyErrors, errSection)
+		}
 	}
 }
 

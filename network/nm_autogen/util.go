@@ -159,15 +159,8 @@ func ToKeyValue(keyName string) (keyValue string) {
 // "NM_SETTING_802_1X_EAP" -> "802-1x", "NM_SETTING_VS_GENERAL" -> "<none>"
 func ToKeyRelatedSectionValue(keyName string) (sectionValue string) {
 	if isVk(keyName) {
-		if IsControllerVkey(keyName) {
-			// if is a control virtual key, its related section should
-			// be a virtual section, just return "<none>"
-			return NM_SETTING_NONE_SECTION
-		} else {
-			sectionName := getVkInfo(keyName).RelatedSection
-			sectionValue = ToSectionValue(sectionName)
-		}
-
+		sectionName := getVkInfo(keyName).RelatedSection
+		sectionValue = ToSectionValue(sectionName)
 	} else {
 		sectionValue = getKeyRelatedSectionInfo(keyName).Value
 	}
@@ -187,10 +180,14 @@ func getKeyRelatedSectionInfo(keyName string) (sectionInfo NMSectionStruct) {
 	return
 }
 
-// "NM_SETTING_802_1X_SETTING_NAME" -> "802-1x"
+// "NM_SETTING_802_1X_SETTING_NAME" -> "802-1x", "NM_SETTING_VS_GENERAL" -> "vs-general"
 func ToSectionValue(sectionName string) (sectionValue string) {
-	sectionInfo := getSectionInfo(sectionName)
-	return sectionInfo.Value
+	if isVirtualSection(sectionName) {
+		sectionValue = getVsectionInfo(sectionName).Value
+	} else {
+		sectionValue = getSectionInfo(sectionName).Value
+	}
+	return
 }
 
 func GetKeyWidgetProp(keyName string) (prop map[string]string) {
@@ -209,6 +206,15 @@ func IsKeyUsedByFrontEnd(keyName string) (used bool) {
 		used = getKeyInfo(keyName).UsedByFrontEnd
 	}
 	return
+}
+
+func isVirtualSection(sectionName string) bool {
+	for _, vsection := range nmVsections {
+		if vsection.Name == sectionName {
+			return true
+		}
+	}
+	return false
 }
 
 func getSectionInfo(sectionName string) (sectionInfo NMSectionStruct) {
@@ -339,7 +345,7 @@ func ToClassName(str string) (className string) {
 
 // "NM_SETTING_VS_GENERAL" -> "General"
 func ToVsClassName(vsectionName string) (className string) {
-	vsectionName = strings.TrimSuffix(vsectionName, "NM_SETTING_VS_")
+	vsectionName = strings.TrimPrefix(vsectionName, "NM_SETTING_VS_")
 	className = ToClassName(vsectionName)
 	return
 }

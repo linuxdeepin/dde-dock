@@ -80,7 +80,6 @@ func ToKeyDefaultValue(keyName string) (value string) {
 	case "ktypeBoolean":
 		value = `false`
 	case "ktypeArrayByte", "ktypeWrapperString", "ktypeWrapperMacAddress":
-		// TODO
 		value = `make([]byte, 0)`
 		// value = `nil`
 	case "ktypeArrayString":

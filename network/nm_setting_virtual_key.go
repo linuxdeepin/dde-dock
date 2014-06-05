@@ -126,7 +126,6 @@ func getVkeyInfo(section, vkey string) (info vkeyInfo, ok bool) {
 }
 
 func isVirtualKey(section, key string) bool {
-	// TODO
 	if isStringInArray(key, getVkeysOfSection(section)) {
 		return true
 	}
@@ -154,18 +153,42 @@ func getSettingVkeyType(section, key string) (t ktype) {
 	return
 }
 
+func generalGetSettingVsectionAvailableKeys(data connectionData, vsection string) (keys []string) {
+	switch vsection {
+	case NM_SETTING_VS_MOBILE:
+		keys = []string{NM_SETTING_VK_MOBILE_SERVICE_TYPE}
+	case NM_SETTING_VS_VPN:
+		keys = []string{NM_SETTING_VK_VPN_TYPE}
+	}
+	return
+}
+
 func generalGetSettingVkeyAvailableValues(data connectionData, section, key string) (values []kvalue) {
 	switch section {
+	case NM_SETTING_VS_MOBILE:
+		switch key {
+		case NM_SETTING_VK_MOBILE_SERVICE_TYPE:
+			values = []kvalue{
+				kvalue{"gsm", Tr("GSM (GPRS, EDGE, UMTS, HSPA)")},
+				kvalue{"cdma", Tr("CDMA (1xRTT, EVDO)")},
+			}
+		}
+	case NM_SETTING_VS_VPN:
+		switch key {
+		case NM_SETTING_VK_VPN_TYPE:
+			values = []kvalue{
+				kvalue{connectionVpnL2tp, Tr("L2TP")},
+				kvalue{connectionVpnPptp, Tr("PPTP")},
+				kvalue{connectionVpnOpenconnect, Tr("OpenConnect")},
+				kvalue{connectionVpnOpenvpn, Tr("OpenVPN")},
+				kvalue{connectionVpnVpnc, Tr("VPNC")},
+			}
+		}
 	case section8021x:
 		switch key {
 		case NM_SETTING_VK_802_1X_EAP:
 			values = getSetting8021xAvailableValues(data, NM_SETTING_802_1X_EAP)
 		}
-	case sectionConnection:
-	case sectionIpv4:
-	case sectionIpv6:
-	case sectionWired:
-	case sectionWireless:
 	case sectionWirelessSecurity:
 		switch key {
 		case NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT:
@@ -184,8 +207,6 @@ func generalGetSettingVkeyAvailableValues(data connectionData, section, key stri
 				}
 			}
 		}
-	case sectionPppoe:
-	case sectionPpp:
 	case sectionVpnL2tpPpp:
 		switch key {
 		case NM_SETTING_VK_VPN_L2TP_MPPE_SECURITY:
@@ -303,7 +324,7 @@ func isOptionalVkey(section, vkey string) (optional bool) {
 	return
 }
 
-// Virtual key with none related section
+// Controller virtual key, which with no real related section
 func getSettingVkMobileServiceType(data connectionData) (serviceType string) {
 	if isSettingSectionExists(data, NM_SETTING_GSM_SETTING_NAME) {
 		serviceType = mobileServiceGsm
@@ -334,6 +355,7 @@ func getSettingVkVpnType(data connectionData) (vpnType string) {
 }
 func logicSetSettingVkVpnType(data connectionData, vpnType string) (err error) {
 	removeSettingSection(data, sectionVpn)
+	removeSettingSection(data, sectionIpv6)
 	switch vpnType {
 	case connectionVpnL2tp:
 		initSettingSectionVpnL2tp(data)
@@ -341,10 +363,14 @@ func logicSetSettingVkVpnType(data connectionData, vpnType string) (err error) {
 		initSettingSectionVpnPptp(data)
 	case connectionVpnOpenconnect:
 		initSettingSectionVpnOpenconnect(data)
+		initSettingSectionIpv6(data)
 	case connectionVpnOpenvpn:
 		initSettingSectionVpnOpenvpn(data)
+		initSettingSectionIpv6(data)
 	case connectionVpnVpnc:
 		initSettingSectionVpnVpnc(data)
+	default:
+		err = fmt.Errorf("invalid vpn type", vpnType)
 	}
 	return
 }

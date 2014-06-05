@@ -7,9 +7,6 @@ import (
 	"text/template"
 )
 
-// use for setting and getting virtual key's value which type is vkTypeController
-const NM_SETTING_NONE_SECTION = "<none>"
-
 var funcMap = template.FuncMap{
 	"ToCaplitalize":               ToCaplitalize,
 	"ToSectionFuncBaseName":       ToSectionFuncBaseName,

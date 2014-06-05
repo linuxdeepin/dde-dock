@@ -1,47 +1,7 @@
 package network
 
-import (
-	. "dlib/gettext"
-)
-
-// Section none, Used for setting and getting controller virtual key
-// which has no related section.
-const NM_SETTING_NONE_SECTION = "<none>"
-
-// TODO
-func getSettingNoneSectionAvailableKeys(data connectionData) (keys []string) {
-	switch getCustomConnectionType(data) {
-	case connectionMobileGsm, connectionMobileCdma:
-		keys = []string{NM_SETTING_VK_MOBILE_SERVICE_TYPE}
-	case connectionVpnL2tp, connectionVpnOpenconnect, connectionVpnOpenvpn, connectionVpnPptp, connectionVpnVpnc:
-		keys = []string{NM_SETTING_VK_VPN_TYPE}
-	}
-	return
-}
-
-// TODO
-func getSettingNoneSectionAvailableValues(data connectionData, key string) (values []kvalue) {
-	switch key {
-	case NM_SETTING_VK_MOBILE_SERVICE_TYPE:
-		values = []kvalue{
-			kvalue{"gsm", Tr("GSM (GPRS, EDGE, UMTS, HSPA)")},
-			kvalue{"cdma", Tr("CDMA (1xRTT, EVDO)")},
-		}
-	case NM_SETTING_VK_VPN_TYPE:
-		values = []kvalue{
-			kvalue{connectionVpnL2tp, Tr("L2TP")},
-			kvalue{connectionVpnPptp, Tr("PPTP")},
-			kvalue{connectionVpnOpenconnect, Tr("OpenConnect")},
-			kvalue{connectionVpnOpenvpn, Tr("OpenVPN")},
-			kvalue{connectionVpnVpnc, Tr("VPNC")},
-		}
-	}
-	return
-}
-
 // Sections, correspondence to "NM_SETTING_XXX" in network manager.
 const (
-	sectionNone               = NM_SETTING_NONE_SECTION
 	section8021x              = NM_SETTING_802_1X_SETTING_NAME
 	sectionConnection         = NM_SETTING_CONNECTION_SETTING_NAME
 	sectionGsm                = NM_SETTING_GSM_SETTING_NAME
@@ -178,6 +138,62 @@ const (
 	vsectionVpnVpncAdvanced    = NM_SETTING_VS_VPN_VPNC_ADVANCED    // -> sectionVpnVpncAdvanced
 )
 
+func isVirtualSection(section string) bool {
+	switch section {
+	case vsectionGeneral:
+		return true
+	case vsectionEthernet:
+		return true
+	case vsectionMobile:
+		return true
+	case vsectionMobileGsm:
+		return true
+	case vsectionMobileCdma:
+		return true
+	case vsectionWifi:
+		return true
+	case vsectionIpv4:
+		return true
+	case vsectionIpv6:
+		return true
+	case vsectionSecurity:
+		return true
+	case vsectionPppoe:
+		return true
+	case vsectionPpp:
+		return true
+	case vsectionVpn:
+		return true
+	case vsectionVpnL2tp:
+		return true
+	case vsectionVpnL2tpPpp:
+		return true
+	case vsectionVpnL2tpIpsec:
+		return true
+	case vsectionVpnOpenconnect:
+		return true
+	case vsectionVpnOpenvpn:
+		return true
+	case vsectionVpnOpenvpnAdvanced:
+		return true
+	case vsectionVpnOpenvpnSecurity:
+		return true
+	case vsectionVpnOpenvpnTlsauth:
+		return true
+	case vsectionVpnOpenvpnProxies:
+		return true
+	case vsectionVpnPptp:
+		return true
+	case vsectionVpnPptpPpp:
+		return true
+	case vsectionVpnVpnc:
+		return true
+	case vsectionVpnVpncAdvanced:
+		return true
+	}
+	return false
+}
+
 // get available virtual sections for target connection type
 func getAvailableVsections(data connectionData) (vsections []string) {
 	connectionType := getCustomConnectionType(data)
@@ -297,7 +313,7 @@ func getRelatedSectionsOfVsection(data connectionData, vsection string) (section
 		case connectionMobileCdma:
 			sections = []string{sectionCdma}
 		}
-		sections = append(sections, sectionNone)
+		sections = append(sections, vsectionMobile)
 	case vsectionMobileGsm: // TODO: remove
 		sections = []string{sectionGsm}
 	case vsectionMobileCdma:
@@ -338,7 +354,7 @@ func getRelatedSectionsOfVsection(data connectionData, vsection string) (section
 		case connectionVpnVpnc:
 			sections = []string{sectionVpnVpnc}
 		}
-		sections = append(sections, sectionNone)
+		sections = append(sections, vsectionVpn)
 	case vsectionVpnL2tp: // TODO
 		sections = []string{sectionVpnL2tp}
 	case vsectionVpnL2tpPpp:

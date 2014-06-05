@@ -129,6 +129,10 @@ func generalGetSettingKeyType(section, key string) (t ktype) {
 }
 
 func generalGetSettingAvailableKeys(data connectionData, section string) (keys []string) {
+	if isVirtualSection(section) {
+		keys = generalGetSettingVsectionAvailableKeys(data, section)
+		return
+	}
 	switch section {
 	case NM_SETTING_802_1X_SETTING_NAME:
 		keys = getSetting8021xAvailableKeys(data)
@@ -249,6 +253,9 @@ func generalGetSettingAvailableValues(data connectionData, section, key string) 
 }
 
 func generalCheckSettingValues(data connectionData, section string) (errs sectionErrors) {
+	if isVirtualSection(section) {
+		return
+	}
 	switch section {
 	default:
 		logger.Error("invalid section name", section)
