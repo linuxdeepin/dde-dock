@@ -143,11 +143,9 @@ func (m *Manager) getConnectionIndex(conns []*connection, conn *connection) int 
 	return -1
 }
 
-// TODO remove
 // GetSupportedConnectionTypes return all supported connection types
-func (m *Manager) GetSupportedConnectionTypes() (typesJSON string) {
-	typesJSON, _ = marshalJSON(supportedConnectionTypesInfo)
-	return
+func (m *Manager) GetSupportedConnectionTypes() (types []string) {
+	return supportedConnectionTypes
 }
 
 // TODO remove

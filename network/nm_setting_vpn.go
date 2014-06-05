@@ -47,6 +47,11 @@ func initBasicSettingSectionVpn(data connectionData, service string) {
 	setSettingVpnSecrets(data, make(map[string]string))
 }
 
+// TODO
+func getLocalSupportedVpnTypes() (vpnTypes []string) {
+	return
+}
+
 func getSettingVpnAvailableKeys(data connectionData) (keys []string) { return }
 func getSettingVpnAvailableValues(data connectionData, key string) (values []kvalue) {
 	return

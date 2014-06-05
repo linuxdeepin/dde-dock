@@ -65,15 +65,19 @@ const (
 	connectionWirelessAdhoc   = "wireless-adhoc"
 	connectionWirelessHotspot = "wireless-hotspot"
 	connectionPppoe           = "pppoe"
-	connectionMobile          = "mobile" // wrapper for gsm and cdma
 	connectionMobileGsm       = "mobile-gsm"
 	connectionMobileCdma      = "mobile-cdma"
-	connectionVpn             = "vpn" // wrapper for all vpn types
 	connectionVpnL2tp         = "vpn-l2tp"
 	connectionVpnOpenconnect  = "vpn-openconnect"
 	connectionVpnOpenvpn      = "vpn-openvpn"
 	connectionVpnPptp         = "vpn-pptp"
 	connectionVpnVpnc         = "vpn-vpnc"
+)
+
+// wrapper for custom connection types
+const (
+	connectionMobile = "mobile" // wrapper for gsm and cdma
+	connectionVpn    = "vpn"    // wrapper for all vpn types
 )
 
 // key-map values for internationalization
@@ -82,32 +86,20 @@ type connectionType struct {
 }
 
 var supportedConnectionTypes = []string{
-	// connectionWired,// don't support multiple wired connections since now
+	connectionWired,
 	connectionWireless,
 	connectionWirelessAdhoc,
 	connectionWirelessHotspot,
 	connectionPppoe,
+	connectionMobile,
 	connectionMobileGsm,
 	connectionMobileCdma,
+	connectionVpn,
 	connectionVpnL2tp,
 	connectionVpnOpenconnect,
 	connectionVpnOpenvpn,
 	connectionVpnPptp,
 	connectionVpnVpnc,
-}
-var supportedConnectionTypesInfo = []connectionType{
-	// connectionType{connectionWired, Tr("Ethernet")},// don't support multiple wired connections since now
-	connectionType{connectionWireless, Tr("Wi-Fi")},
-	connectionType{connectionWirelessAdhoc, Tr("Wi-Fi Ad-Hoc")},
-	connectionType{connectionWirelessHotspot, Tr("Wi-Fi Hotspot")},
-	connectionType{connectionPppoe, Tr("PPPoE")},
-	connectionType{connectionMobileGsm, Tr("Mobile GSM (GPRS, EDGE, UMTS, HSPA)")},
-	connectionType{connectionMobileCdma, Tr("Mobile CDMA (1xRTT, EVDO)")},
-	connectionType{connectionVpnL2tp, Tr("VPN-L2TP (Layer 2 Tunneling Protocol)")},
-	connectionType{connectionVpnOpenconnect, Tr("VPN-OpenConnect (Cisco AnyConnect Compatible VPN)")},
-	connectionType{connectionVpnOpenvpn, Tr("VPN-OpenVPN")},
-	connectionType{connectionVpnPptp, Tr("VPN-PPTP (Point-to-Point Tunneling Protocol))")},
-	connectionType{connectionVpnVpnc, Tr("VPN-VPNC (Cisco Compatible VPN)")},
 }
 
 // generate connection id when creating a new connection

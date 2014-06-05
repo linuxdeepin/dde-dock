@@ -16,8 +16,9 @@ func (s *ConnectionSession) updatePropData() {
 	dbus.NotifyChange(s, "Data")
 }
 
-func (s *ConnectionSession) updatePropConnectionType() {
-	dbus.NotifyChange(s, "ConnectionType")
+func (s *ConnectionSession) updatePropType() {
+	s.Type = getCustomConnectionType(s.Data)
+	dbus.NotifyChange(s, "Type")
 }
 
 func (s *ConnectionSession) updatePropAvailableVirtualSections() {

@@ -50,9 +50,15 @@ func newConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 
 	s = doNewConnectionSession(devPath, newUUID())
 
-	s.Type = connectionType
-	id := genConnectionId(s.Type)
-	switch s.Type {
+	// expand wrapper connection type
+	id := genConnectionId(connectionType)
+	switch connectionType {
+	case connectionMobile:
+		connectionType = connectionMobileGsm
+	case connectionVpn:
+		connectionType = connectionVpnL2tp
+	}
+	switch connectionType {
 	case connectionWired:
 		s.Data = newWiredConnectionData(id, s.Uuid)
 	case connectionWireless:
@@ -63,14 +69,10 @@ func newConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 		s.Data = newWirelessHotspotConnectionData(id, s.Uuid)
 	case connectionPppoe:
 		s.Data = newPppoeConnectionData(id, s.Uuid)
-	case connectionMobile:
-		s.Data = newMobileConnectionData(id, s.Uuid, connectionMobileGsm)
 	case connectionMobileGsm:
 		s.Data = newMobileConnectionData(id, s.Uuid, connectionMobileGsm)
 	case connectionMobileCdma:
 		s.Data = newMobileConnectionData(id, s.Uuid, connectionMobileCdma)
-	case connectionVpn:
-		s.Data = newVpnL2tpConnectionData(id, s.Uuid)
 	case connectionVpnL2tp:
 		s.Data = newVpnL2tpConnectionData(id, s.Uuid)
 	case connectionVpnOpenconnect:
@@ -84,7 +86,7 @@ func newConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 	}
 
 	s.updatePropData()
-	s.updatePropConnectionType()
+	s.updatePropType()
 	s.updatePropAvailableVirtualSections()
 	s.updatePropAvailableSections()
 	s.updatePropAvailableKeys()
@@ -108,7 +110,6 @@ func newConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 	if err != nil {
 		return nil, err
 	}
-	s.Type = getCustomConnectionType(s.Data)
 
 	s.fixValues()
 
@@ -125,7 +126,7 @@ func newConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 	}
 
 	s.updatePropData()
-	s.updatePropConnectionType()
+	s.updatePropType()
 	s.updatePropAvailableVirtualSections()
 	s.updatePropAvailableSections()
 	s.updatePropAvailableKeys()
@@ -152,7 +153,7 @@ func (s *ConnectionSession) fixValues() {
 	}
 
 	// append missing sectionWired for pppoe
-	if s.Type == connectionPppoe {
+	if getCustomConnectionType(s.Data) == connectionPppoe {
 		if !isSettingSectionExists(s.Data, sectionWired) {
 			initSettingSectionWired(s.Data)
 		}
@@ -166,7 +167,7 @@ func (s *ConnectionSession) fixValues() {
 
 func (s *ConnectionSession) getSecrets() {
 	// get secret data
-	switch s.Type {
+	switch getCustomConnectionType(s.Data) {
 	case connectionWired:
 		if getSettingVk8021xEnable(s.Data) {
 			// TODO 8021x secret
@@ -236,7 +237,8 @@ func (s *ConnectionSession) Save() bool {
 	} else {
 		// create new connection and activate it
 		// TODO vpn ad-hoc hotspot
-		if s.Type == connectionWired || s.Type == connectionWireless {
+		connectionType := getCustomConnectionType(s.Data)
+		if connectionType == connectionWired || connectionType == connectionWireless {
 			nmAddAndActivateConnection(s.Data, s.devPath)
 		} else {
 			nmAddConnection(s.Data)
@@ -281,6 +283,7 @@ func (s *ConnectionSession) SetKey(section, key, value string) {
 	// logger.Debugf("SetKey(), %v, vsection=%s, filed=%s, key=%s, value=%s", err == nil, vsection, section, key, value) // TODO test
 
 	s.updatePropData()
+	s.updatePropType()
 	s.updatePropAvailableVirtualSections()
 	s.updatePropAvailableSections()
 	s.updatePropAvailableKeys()
