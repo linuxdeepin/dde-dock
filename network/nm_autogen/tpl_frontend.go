@@ -8,6 +8,18 @@ import "../edit"
 BaseEditPage {
     id: editPage
     activeExpandIndex: 0
+
+    EditLineConnectionId {
+        id: lineConnectionId
+        connectionSession: editPage.connectionSession
+        availableSections: editPage.availableSections
+        availableKeys: editPage.availableKeys
+        connectionData: editPage.connectionData
+        errors: editPage.errors
+        section: "connection"
+        key: "id"
+        text: dsTr("Name")
+    }
     {{range $i, $vsection := .}}{{if .Ignore}}{{else}}{{$id := $vsection.Name | ToVsClassName | printf "section%s"}}
     EditSection{{$vsection.Name | ToVsClassName}} {
         myIndex: {{$i}}
