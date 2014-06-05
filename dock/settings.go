@@ -7,6 +7,10 @@ import (
 
 const (
 	HideModeKey string = "hide-mode"
+
+	HideModeKeepShowing = "keep-showing"
+	HideModeKeepHidden  = "keep-hidden"
+	HideModeAutoHide    = "auto-hide"
 )
 
 type Setting struct {
@@ -23,15 +27,17 @@ func NewSetting() *Setting {
 
 func (s *Setting) init() {
 	s.core = gio.NewSettings(SchemaId)
-	if s.core != nil {
-		logger.Info("connect to changed signal")
-		signalDetial := fmt.Sprint("changed::%s", HideModeKey)
-		s.core.Connect(signalDetial, func(g *gio.Settings, key string) {
-			value := g.GetString(key)
-			logger.Info("HideMode changed to", value)
-			s.HideModeChanged(value)
-		})
+	if s.core == nil {
+		return
 	}
+
+	logger.Debug("connect to changed::", HideModeKey, "signal")
+	signalDetial := fmt.Sprintf("changed::%s", HideModeKey)
+	s.core.Connect(signalDetial, func(g *gio.Settings, key string) {
+		value := g.GetString(key)
+		logger.Info(key, "changed to", value)
+		s.HideModeChanged(value)
+	})
 }
 
 func (s *Setting) GetHideMode() string {

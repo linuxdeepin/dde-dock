@@ -195,5 +195,4 @@ func initialize() {
 		ENTRY_MANAGER.createNormalApp(id)
 	}
 	initTrayManager()
-	go listenRootWindow()
 }

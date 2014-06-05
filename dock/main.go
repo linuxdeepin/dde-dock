@@ -9,6 +9,10 @@ import (
 
 var (
 	logger = liblogger.NewLogger("dde-daemon/dock")
+
+	region          *Region           = nil
+	setting         *Setting          = nil
+	hideModemanager *HideStateManager = nil
 )
 
 func Start() {
@@ -38,12 +42,20 @@ func Start() {
 		os.Exit(1)
 	}
 
-	s := NewSetting()
-	err = dbus.InstallOnSession(s)
+	setting = NewSetting()
+	err = dbus.InstallOnSession(setting)
 	if err != nil {
 		logger.Errorf("register dbus interface failed: %v", err)
 		os.Exit(1)
 	}
+
+	hideModemanager = NewHideStateManager(setting.GetHideMode())
+	err = dbus.InstallOnSession(hideModemanager)
+	if err != nil {
+		logger.Errorf("register dbus interface failed: %v", err)
+		os.Exit(1)
+	}
+	hideModemanager.UpdateState()
 
 	cm := NewClientManager()
 	err = dbus.InstallOnSession(cm)
@@ -52,7 +64,7 @@ func Start() {
 	}
 	go cm.listenRootWindow()
 
-	region := NewRegion()
+	region = NewRegion()
 	dbus.InstallOnSession(region)
 
 	dbus.DealWithUnhandledMessage()

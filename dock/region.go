@@ -11,14 +11,14 @@ import (
 )
 
 var (
-	C, _ = xgb.NewConn()
+	conn, _ = xgb.NewConn()
 )
 
 type Region struct {
 }
 
 func NewRegion() *Region {
-	shape.Init(C)
+	shape.Init(conn)
 	r := Region{}
 
 	return &r
@@ -56,14 +56,18 @@ func (r *Region) GetDockRegion() xproto.Rectangle {
 		logger.Error(err)
 		return dockRegion
 	}
-	cookie := shape.GetRectangles(C, dockWindow, shape.SkInput)
+	cookie := shape.GetRectangles(conn, dockWindow, shape.SkInput)
 	rep, err := cookie.Reply()
 	if err != nil {
 		logger.Error("get rectangles failed:", err)
 		return dockRegion
 	}
 	for _, rect := range rep.Rectangles {
-		logger.Infof("dock region: %dx%d(%d,%d)", rect.Width, rect.Height, rect.X, rect.Y)
+		logger.Debugf("dock region: (%d,%d)->(%d,%d)",
+			rect.X, rect.Y,
+			int32(rect.X)+int32(rect.Width),
+			int32(rect.Y)+int32(rect.Height),
+		)
 		if dockRegion.X == 0 || dockRegion.X > rect.X {
 			dockRegion.X = rect.X
 			dockRegion.Width = rect.Width
@@ -76,4 +80,28 @@ func (r *Region) GetDockRegion() xproto.Rectangle {
 	}
 
 	return dockRegion
+}
+
+func (r *Region) mouseInRegion() bool {
+	region := r.GetDockRegion()
+	cookie := xproto.QueryPointer(conn, XU.RootWin())
+	reply, err := cookie.Reply()
+	if err != nil {
+		return false
+	}
+
+	mouseX := int32(reply.RootX)
+	mouseY := int32(reply.RootY)
+
+	startX := int32(region.X)
+	startY := int32(region.Y)
+
+	endX := startX + int32(region.Width)
+	endY := startY + int32(region.Height)
+
+	inHorizontal := startX <= mouseX && mouseX <= endX
+	inVertical := startY <= mouseY && mouseY <= endY
+	inRegion := inHorizontal && inVertical
+
+	return inRegion
 }

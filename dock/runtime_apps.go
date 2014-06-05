@@ -28,6 +28,7 @@ var (
 	ATOM_WINDOW_STATE, _  = xprop.Atm(XU, "_NET_WM_STATE")
 	ATOM_WINDOW_TYPE, _   = xprop.Atm(XU, "_NET_WM_WINDOW_TYPE")
 	ATOM_DOCK_APP_ID, _   = xprop.Atm(XU, "_DDE_DOCK_APP_ID")
+	// ATOM_DEEPIN_WINDOW_VIEWPORTS, _ = xprop.Atm(XU, "DEEPIN_WINDOW_VIEWPORTS")
 )
 
 var DOCKED_APP_MANAGER *dock.DockedAppManager
@@ -50,7 +51,11 @@ type RuntimeApp struct {
 	exec string
 	core *gio.DesktopAppInfo
 
-	state     []string
+	state       []string
+	isHidden    bool
+	isMaximized bool
+	// workspaces  [][]uint
+
 	changedCB func()
 }
 
@@ -376,7 +381,28 @@ func (app *RuntimeApp) updateWmClass(xid xproto.Window) {
 func (app *RuntimeApp) updateState(xid xproto.Window) {
 	//TODO: handle state
 	app.state, _ = ewmh.WmStateGet(XU, xid)
+	app.isHidden = contains(app.state, "_NET_WM_STATE_HIDDEN")
+	app.isMaximized = contains(app.state, "_NET_WM_STATE_MAXIMIZED_VERT")
 }
+
+// TODO: using this instead of walking throught all client
+// to get the workspaces
+// func (app *RuntimeApp) updateViewports(xid xproto.Window) {
+// 	app.workspaces = nil
+// 	viewports, err := xprop.PropValNums(xprop.GetProperty(XU, xid,
+// 		"DEEPIN_WINDOW_VIEWPORTS"))
+// 	if err != nil {
+// 		logger.Error("get DEEPIN_WINDOW_VIEWPORTS failed", err)
+// 		return
+// 	}
+// 	app.workspaces = make([][]uint, 0)
+// 	for i := uint(0); i < viewports[0]; i++ {
+// 		viewport := make([]uint, 0)
+// 		viewport[0] = viewports[i+1]
+// 		viewport[1] = viewports[i+2]
+// 		app.workspaces = append(app.workspaces, viewport)
+// 	}
+// }
 
 func (app *RuntimeApp) updateAppid(xid xproto.Window) {
 	if app.Id != find_app_id_by_xid(xid) {
@@ -515,6 +541,8 @@ func (app *RuntimeApp) attachXid(xid xproto.Window) {
 		case ATOM_WINDOW_STATE:
 			app.updateState(xid)
 			app.notifyChanged()
+		// case ATOM_DEEPIN_WINDOW_VIEWPORTS:
+		// 	app.updateViewports(xid)
 		case ATOM_WINDOW_TYPE:
 			if !isNormalWindow(ev.Window) {
 				app.detachXid(xid)
@@ -528,32 +556,33 @@ func (app *RuntimeApp) attachXid(xid xproto.Window) {
 	app.updateIcon(xid)
 	app.updateWmClass(xid)
 	app.updateState(xid)
+	// app.updateViewports(xid)
 	app.notifyChanged()
 }
 
-func listenRootWindow() {
-	var update = func() {
-		list, err := ewmh.ClientListGet(XU)
-		if err != nil {
-			logger.Warning("Can't Get _NET_CLIENT_LIST", err)
-		}
-		ENTRY_MANAGER.runtimeAppChangged(list)
-	}
-
-	xwindow.New(XU, XU.RootWin()).Listen(xproto.EventMaskPropertyChange)
-	xevent.PropertyNotifyFun(func(XU *xgbutil.XUtil, ev xevent.PropertyNotifyEvent) {
-		switch ev.Atom {
-		case _NET_CLIENT_LIST:
-			update()
-		case _NET_ACTIVE_WINDOW:
-			if activedWindow, err := ewmh.ActiveWindowGet(XU); err == nil {
-				appId := find_app_id_by_xid(activedWindow)
-				if rApp, ok := ENTRY_MANAGER.runtimeApps[appId]; ok {
-					rApp.setLeader(activedWindow)
-				}
-			}
-		}
-	}).Connect(XU, XU.RootWin())
-	update()
-	xevent.Main(XU)
-}
+// func listenRootWindow() {
+// 	var update = func() {
+// 		list, err := ewmh.ClientListGet(XU)
+// 		if err != nil {
+// 			logger.Warning("Can't Get _NET_CLIENT_LIST", err)
+// 		}
+// 		ENTRY_MANAGER.runtimeAppChangged(list)
+// 	}
+//
+// 	xwindow.New(XU, XU.RootWin()).Listen(xproto.EventMaskPropertyChange)
+// 	xevent.PropertyNotifyFun(func(XU *xgbutil.XUtil, ev xevent.PropertyNotifyEvent) {
+// 		switch ev.Atom {
+// 		case _NET_CLIENT_LIST:
+// 			update()
+// 		case _NET_ACTIVE_WINDOW:
+// 			if activedWindow, err := ewmh.ActiveWindowGet(XU); err == nil {
+// 				appId := find_app_id_by_xid(activedWindow)
+// 				if rApp, ok := ENTRY_MANAGER.runtimeApps[appId]; ok {
+// 					rApp.setLeader(activedWindow)
+// 				}
+// 			}
+// 		}
+// 	}).Connect(XU, XU.RootWin())
+// 	update()
+// 	xevent.Main(XU)
+// }

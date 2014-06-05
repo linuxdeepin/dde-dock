@@ -383,7 +383,7 @@ char* guess_app_id(long s_pid, const char* instance_name, const char* wmname, co
             app_id = find_app_id(exec_name, wmname, APPID_FILTER_WMNAME);
             g_debug("[%s] get from wmname %s", __func__, app_id);
         }
-        g_warning("exec_name:%s wmname:%s", exec_name, wmname);
+        g_debug("exec_name:%s wmname:%s", exec_name, wmname);
         if (app_id == NULL && wmname != NULL) {
             app_id = find_app_id(exec_name, wmname, APPID_FILTER_WMINSTANCE);
             g_debug("[%s] get from wmname %s", __func__, app_id);

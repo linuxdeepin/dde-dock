@@ -33,7 +33,7 @@ type AppEntry struct {
 }
 
 func NewAppEntryWithRuntimeApp(rApp *RuntimeApp) *AppEntry {
-	logger.Info("NewAppEntryWithRuntimeApp:", rApp.Id, rApp.CurrentInfo.Xid)
+	logger.Debug("NewAppEntryWithRuntimeApp:", rApp.Id, rApp.CurrentInfo.Xid)
 	e := &AppEntry{
 		Id:   rApp.Id,
 		Type: "App",
@@ -143,6 +143,7 @@ func (e *AppEntry) update() {
 		}
 		b, _ := json.Marshal(xids)
 		e.setData(FieldAppXids, string(b))
+		hideModemanager.UpdateState()
 	} else if e.nApp != nil {
 		e.setData(FieldStatus, NormalStatus)
 	} else {
@@ -191,7 +192,7 @@ func (e *AppEntry) attachRuntimeApp(rApp *RuntimeApp) {
 		return
 	}
 	e.rApp = rApp
-	logger.Info("AttachRuntimeApp:", e.rApp.Id)
+	logger.Debug("AttachRuntimeApp:", e.rApp.Id)
 	e.rApp.setChangedCB(e.update)
 	e.update()
 }
@@ -199,7 +200,7 @@ func (e *AppEntry) detachRuntimeApp() {
 	e.rAppLock.Lock()
 	defer e.rAppLock.Unlock()
 	if e.rApp != nil {
-		logger.Info("DetachRuntimeApp:", e.rApp.Id)
+		logger.Debug("DetachRuntimeApp:", e.rApp.Id)
 		e.rApp.setChangedCB(nil)
 		e.rApp = nil
 		if e.nApp != nil {
