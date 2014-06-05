@@ -27,6 +27,7 @@ import (
 	"dlib/gobject-2.0"
 	"dlib/logger"
 	"fmt"
+	"regexp"
 	"strings"
 	"sync"
 )
@@ -252,6 +253,11 @@ func newDiskInfo(value interface{}, t string) DiskInfo {
 		as := strings.Split(icons, " ")
 		if len(as) > 2 {
 			info.IconName = as[2]
+		}
+
+		if ok, _ := regexp.MatchString(`^mtp://`, info.MountURI); ok {
+			info.Type = "removable"
+			info.IconName = "drive-removable-media-mtp"
 		}
 	default:
 		logObject.Infof("'%s' invalid type", t)
