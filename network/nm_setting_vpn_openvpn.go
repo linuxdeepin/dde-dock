@@ -9,6 +9,13 @@ const (
 )
 
 const (
+	nmVpnOpenvpnServiceFile = VPN_NAME_FILES_DIR + "nm-openvpn-service.name"
+	nmVpnOpenvpnServiceBin  = "/usr/lib/NetworkManager/nm-openvpn-service"
+	nmVpnOpenvpnHelperBin   = "/usr/lib/NetworkManager/nm-openvpn-service-openvpn-helper"
+	nmVpnOpenvpnAuthDlgBin  = "/usr/lib/NetworkManager/nm-openvpn-auth-dialog"
+)
+
+const (
 	// openvpn
 	NM_SETTING_VPN_OPENVPN_KEY_REMOTE               = "remote"
 	NM_SETTING_VPN_OPENVPN_KEY_CONNECTION_TYPE      = "connection-type"

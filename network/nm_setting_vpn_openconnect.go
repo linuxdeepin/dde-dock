@@ -7,6 +7,13 @@ const (
 )
 
 const (
+	nmVpnOpenconnectServiceFile = VPN_NAME_FILES_DIR + "nm-openconnect-service.name"
+	nmVpnOpenconnectServiceBin  = "/usr/lib/NetworkManager/nm-openconnect-service"
+	nmVpnOpenconnectHelperBin   = "/usr/lib/NetworkManager/nm-openconnect-service-openconnect-helper"
+	nmVpnOpenconnectAuthDlgBin  = "/usr/lib/NetworkManager/nm-openconnect-auth-dialog"
+)
+
+const (
 	NM_SETTING_VPN_OPENCONNECT_KEY_GATEWAY             = "gateway"
 	NM_SETTING_VPN_OPENCONNECT_KEY_COOKIE              = "cookie"
 	NM_SETTING_VPN_OPENCONNECT_KEY_GWCERT              = "gwcert"

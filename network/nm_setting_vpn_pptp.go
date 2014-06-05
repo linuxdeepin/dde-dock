@@ -12,6 +12,12 @@ const (
 )
 
 const (
+	nmVpnPptpServiceFile = VPN_NAME_FILES_DIR + "nm-pptp-service.name"
+	nmVpnPptpServiceBin  = "/usr/lib/NetworkManager/nm-pptp-service"
+	nmVpnPptpAuthDlgBin  = "/usr/lib/NetworkManager/nm-pptp-auth-dialog"
+)
+
+const (
 	NM_SETTING_VPN_PPTP_KEY_GATEWAY           = "gateway"
 	NM_SETTING_VPN_PPTP_KEY_USER              = "user"
 	NM_SETTING_VPN_PPTP_KEY_PASSWORD          = "password"

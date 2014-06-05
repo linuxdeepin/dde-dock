@@ -9,6 +9,13 @@ const (
 )
 
 const (
+	nmVpnVpncServiceFile = VPN_NAME_FILES_DIR + "nm-vpnc-service.name"
+	nmVpnVpncServiceBin  = "/usr/lib/NetworkManager/nm-vpnc-service"
+	nmVpnVpncHelperBin   = "/usr/lib/NetworkManager/nm-vpnc-service-vpnc-helper"
+	nmVpnVpncAuthDlgBin  = "/usr/lib/NetworkManager/nm-vpnc-auth-dialog"
+)
+
+const (
 	NM_SETTING_VPN_VPNC_KEY_GATEWAY               = "IPSec gateway"
 	NM_SETTING_VPN_VPNC_KEY_XAUTH_USER            = "Xauth username"
 	NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD        = "Xauth password"

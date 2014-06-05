@@ -4,6 +4,8 @@ import (
 	"dlib/dbus"
 )
 
+const VPN_NAME_FILES_DIR = "/etc/NetworkManager/VPN/"
+
 // TODO doc
 const NM_SETTING_VPN_SETTING_NAME = "vpn"
 
@@ -47,8 +49,22 @@ func initBasicSettingSectionVpn(data connectionData, service string) {
 	setSettingVpnSecrets(data, make(map[string]string))
 }
 
-// TODO
 func getLocalSupportedVpnTypes() (vpnTypes []string) {
+	if isFileExists(nmVpnL2tpServiceFile) {
+		vpnTypes = append(vpnTypes, connectionVpnL2tp)
+	}
+	if isFileExists(nmVpnOpenconnectServiceFile) {
+		vpnTypes = append(vpnTypes, connectionVpnOpenconnect)
+	}
+	if isFileExists(nmVpnOpenvpnServiceFile) {
+		vpnTypes = append(vpnTypes, connectionVpnOpenvpn)
+	}
+	if isFileExists(nmVpnPptpServiceFile) {
+		vpnTypes = append(vpnTypes, connectionVpnPptp)
+	}
+	if isFileExists(nmVpnVpncServiceFile) {
+		vpnTypes = append(vpnTypes, connectionVpnVpnc)
+	}
 	return
 }
 

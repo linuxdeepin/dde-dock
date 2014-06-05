@@ -19,6 +19,12 @@ const (
 )
 
 const (
+	nmVpnL2tpServiceFile = VPN_NAME_FILES_DIR + "nm-l2tp-service.name"
+	nmVpnL2tpServiceBin  = "/usr/lib/NetworkManager/nm-l2tp-service"
+	nmVpnL2tpAuthDlgBin  = "/usr/lib/NetworkManager/nm-l2tp-auth-dialog"
+)
+
+const (
 	NM_SETTING_VPN_L2TP_KEY_GATEWAY           = "gateway"
 	NM_SETTING_VPN_L2TP_KEY_USER              = "user"
 	NM_SETTING_VPN_L2TP_KEY_PASSWORD          = "password"
