@@ -56,6 +56,7 @@ const NM_SETTING_VK_PPP_ENABLE_LCP_ECHO = "vk-enable-lcp-echo"
 
 // vpn
 const NM_SETTING_VK_VPN_TYPE = "vk-vpn-type"
+const NM_SETTING_VK_VPN_MISSING_PLUGIN = "vk-vpn-missing-plugin"
 
 // vpn-l2tp
 const NM_SETTING_VK_VPN_L2TP_REQUIRE_MPPE = "vk-require-mppe"
@@ -158,6 +159,9 @@ func generalGetSettingVsectionAvailableKeys(data connectionData, vsection string
 		keys = []string{NM_SETTING_VK_MOBILE_SERVICE_TYPE}
 	case NM_SETTING_VS_VPN:
 		keys = []string{NM_SETTING_VK_VPN_TYPE}
+		if !isStringInArray(getSettingVkVpnType(data), getLocalSupportedVpnTypes()) {
+			keys = append(keys, NM_SETTING_VK_VPN_MISSING_PLUGIN)
+		}
 	}
 	return
 }
@@ -384,5 +388,29 @@ func logicSetSettingVkVpnType(data connectionData, vpnType string) (err error) {
 	default:
 		err = fmt.Errorf("invalid vpn type", vpnType)
 	}
+	return
+}
+
+func getSettingVkVpnMissingPlugin(data connectionData) (missingPlugin string) {
+	vpnType := getCustomConnectionType(data)
+	if !isStringInArray(vpnType, getLocalSupportedVpnTypes()) {
+		switch vpnType {
+		case connectionVpnL2tp:
+			missingPlugin = "network-manager-l2tp"
+		case connectionVpnPptp:
+			missingPlugin = "network-manager-pptp"
+		case connectionVpnOpenconnect:
+			missingPlugin = "network-manager-openconnect"
+		case connectionVpnOpenvpn:
+			missingPlugin = "network-manager-openvpn"
+		case connectionVpnVpnc:
+			missingPlugin = "network-manager-vpnc"
+		default:
+			fmt.Errorf("invalid vpn type", vpnType)
+		}
+	}
+	return
+}
+func logicSetSettingVkVpnMissingPlugin(data connectionData, vpnType string) (err error) {
 	return
 }

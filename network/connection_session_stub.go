@@ -2,6 +2,7 @@ package network
 
 import (
 	"dlib/dbus"
+	"fmt"
 )
 
 func (s *ConnectionSession) GetDBusInfo() dbus.DBusInfo {
@@ -51,11 +52,26 @@ func (s *ConnectionSession) updatePropErrors() {
 			}
 		}
 	}
-	// append errors when setting keys
+
+	// append errors when setting key
 	for section, sectionErrors := range s.settingKeyErrors {
 		for k, v := range sectionErrors {
 			s.Errors[section][k] = v
 		}
 	}
+
+	// check if vpn missing plugin
+	switch getCustomConnectionType(s.Data) {
+	case connectionVpnL2tp, connectionVpnOpenconnect, connectionVpnPptp, connectionVpnVpnc, connectionVpnOpenvpn:
+		if isKeyAvailable(s.Data, vsectionVpn, NM_SETTING_VK_VPN_MISSING_PLUGIN) {
+			if _, ok := s.Errors[vsectionVpn]; ok {
+				s.Errors[vsectionVpn][NM_SETTING_VK_VPN_MISSING_PLUGIN] =
+					fmt.Sprintf(NM_KEY_ERROR_MISSING_DEPENDS_PACKAGE, getSettingVkVpnMissingPlugin(s.Data))
+			} else {
+				logger.Errorf("missing section, errors[%s]", vsectionVpn)
+			}
+		}
+	}
+
 	dbus.NotifyChange(s, "Errors")
 }

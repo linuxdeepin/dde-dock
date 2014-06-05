@@ -408,6 +408,15 @@ func getSectionOfKeyInVsection(data connectionData, vsection, key string) (secti
 	return ""
 }
 
+func isKeyAvailable(data connectionData, section, key string) bool {
+	if isStringInArray(section, getAvailableSections(data)) {
+		if isStringInArray(key, generalGetSettingAvailableKeys(data, section)) {
+			return true
+		}
+	}
+	return false
+}
+
 // get available keys of virtual section
 func getAvailableKeysOfVsection(data connectionData, vsection string) (keys []string) {
 	sections := getRelatedSectionsOfVsection(data, vsection)
