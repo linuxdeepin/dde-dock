@@ -185,6 +185,9 @@ func GetManager() *Manager {
 }
 
 func Start() {
+	logger.BeginTracing()
+	defer logger.EndTracing()
+
 	var err error
 
 	Init()

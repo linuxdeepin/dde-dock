@@ -66,6 +66,9 @@ func StartKeyBinding() {
 }
 
 func Start() {
+	logObj.BeginTracing()
+	defer logObj.EndTracing()
+
 	StartKeyBinding()
 
 	if err := dbus.InstallOnSession(GetManager()); err != nil {

@@ -95,6 +95,9 @@ func updateThemeObj(pathNameMap map[string]PathInfo) {
 }
 
 func Start() {
+	logObject.BeginTracing()
+	defer logObject.EndTracing()
+
 	var err error
 	objXSettings, err = xs.NewXSettings("com.deepin.SessionManager",
 		"/com/deepin/XSettings")

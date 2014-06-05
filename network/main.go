@@ -14,9 +14,8 @@ var (
 )
 
 func Start() {
-	/*
-		logger.BeginTracing()
-	*/
+	logger.BeginTracing()
+	defer logger.EndTracing()
 
 	if running {
 		logger.Info(dbusNetworkDest, "already running")

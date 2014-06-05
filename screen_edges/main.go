@@ -92,6 +92,9 @@ func (op *Manager) BottomRightAction() string {
 }
 
 func Start() {
+	logObj.BeginTracing()
+	defer logObj.EndTracing()
+
 	var err error
 	dspObj, err = libdsp.NewDisplay("com.deepin.daemon.Display",
 		"/com/deepin/daemon/Display")

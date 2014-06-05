@@ -43,6 +43,9 @@ var (
 )
 
 func Start() {
+	logObj.BeginTracing()
+	defer logObj.EndTracing()
+
 	InitI18n()
 	Textdomain("xkeyboard-config")
 

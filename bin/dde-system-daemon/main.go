@@ -35,6 +35,7 @@ func main() {
 		return
 	}
 
+	Logger.BeginTracing()
 	defer Logger.EndTracing()
 	Logger.SetRestartCommand("/usr/lib/deepin-daemon/dde-system-daemon")
 

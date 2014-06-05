@@ -71,6 +71,11 @@ func main() {
 		Logger.Warning("There already has an dde-daemon running.")
 		return
 	}
+
+	Logger.BeginTracing()
+	defer Logger.EndTracing()
+	Logger.SetRestartCommand("/usr/lib/deepin-daemon/dde-session-daemon")
+
 	InitI18n()
 	Textdomain("dde-daemon")
 

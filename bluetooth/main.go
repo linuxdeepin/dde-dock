@@ -14,8 +14,8 @@ var (
 )
 
 func Start() {
-	//logger.BeginTracing()
-	//defer logger.EndTracing()
+	logger.BeginTracing()
+	defer logger.EndTracing()
 
 	if running {
 		logger.Info(dbusBluetoothDest, "already running")

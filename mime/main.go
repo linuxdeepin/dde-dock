@@ -72,6 +72,9 @@ func (media *MediaMount) Reset() bool {
 }
 
 func Start() {
+	logObject.BeginTracing()
+	defer logObject.EndTracing()
+
 	var err error
 
 	dapp := NewDefaultApps()

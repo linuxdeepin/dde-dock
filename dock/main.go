@@ -12,6 +12,9 @@ var (
 )
 
 func Start() {
+	logger.BeginTracing()
+	defer logger.EndTracing()
+
 	initDeepin()
 
 	// configure logger

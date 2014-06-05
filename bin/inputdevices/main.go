@@ -51,6 +51,7 @@ func main() {
 		return
 	}
 
+	logObj.BeginTracing()
 	defer logObj.EndTracing()
 	InitI18n()
 	Textdomain("xkeyboard-config")

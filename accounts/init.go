@@ -33,6 +33,9 @@ var (
 )
 
 func Start() {
+	logger.BeginTracing()
+	defer logger.EndTracing()
+
 	obj := GetManager()
 	if err := dbus.InstallOnSystem(obj); err != nil {
 		logger.Error("Install DBus Failed:", err)

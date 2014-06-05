@@ -388,6 +388,9 @@ func NewManager() *Manager {
 }
 
 func Start() {
+	logObject.BeginTracing()
+	defer logObject.EndTracing()
+
 	m := NewManager()
 	err := dbus.InstallOnSession(m)
 	if err != nil {

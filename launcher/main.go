@@ -11,6 +11,9 @@ import (
 var logger *l.Logger = l.NewLogger("dde-daemon/launcher-daemon")
 
 func Start() {
+	logger.BeginTracing()
+	defer logger.EndTracing()
+
 	InitI18n()
 	// DesktopAppInfo.ShouldShow does not know deepin.
 	gio.DesktopAppInfoSetDesktopEnv("Deepin")

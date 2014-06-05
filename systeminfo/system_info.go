@@ -208,6 +208,9 @@ func NewSystemInfo() *SystemInfo {
 }
 
 func Start() {
+	logObject.BeginTracing()
+	defer logObject.EndTracing()
+
 	sys := NewSystemInfo()
 	err := dbus.InstallOnSystem(sys)
 	if err != nil {

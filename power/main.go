@@ -108,6 +108,9 @@ func (p *Power) sendNotify(icon, summary, body string) {
 }
 
 func Start() {
+	LOGGER.BeginTracing()
+	defer LOGGER.EndTracing()
+
 	p := NewPower()
 
 	if err := dbus.InstallOnSession(p); err != nil {
