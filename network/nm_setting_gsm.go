@@ -5,12 +5,6 @@ import (
 )
 
 // TODO doc
-
-const (
-	mobileServiceGsm  = "gsm"
-	mobileServiceCdma = "cdma"
-)
-
 const NM_SETTING_GSM_SETTING_NAME = "gsm"
 
 const (

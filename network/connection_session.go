@@ -64,11 +64,11 @@ func newConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 	case connectionPppoe:
 		s.Data = newPppoeConnectionData(id, s.Uuid)
 	case connectionMobile:
-		s.Data = newMobileConnectionData(id, s.Uuid, mobileServiceGsm)
+		s.Data = newMobileConnectionData(id, s.Uuid, connectionMobileGsm)
 	case connectionMobileGsm:
-		s.Data = newMobileConnectionData(id, s.Uuid, mobileServiceGsm)
+		s.Data = newMobileConnectionData(id, s.Uuid, connectionMobileGsm)
 	case connectionMobileCdma:
-		s.Data = newMobileConnectionData(id, s.Uuid, mobileServiceCdma)
+		s.Data = newMobileConnectionData(id, s.Uuid, connectionMobileCdma)
 	case connectionVpn:
 		s.Data = newVpnL2tpConnectionData(id, s.Uuid)
 	case connectionVpnL2tp:

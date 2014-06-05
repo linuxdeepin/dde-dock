@@ -168,8 +168,8 @@ func generalGetSettingVkeyAvailableValues(data connectionData, section, key stri
 		switch key {
 		case NM_SETTING_VK_MOBILE_SERVICE_TYPE:
 			values = []kvalue{
-				kvalue{"gsm", Tr("GSM (GPRS, EDGE, UMTS, HSPA)")},
-				kvalue{"cdma", Tr("CDMA (1xRTT, EVDO)")},
+				kvalue{connectionMobileGsm, Tr("GSM (GPRS, EDGE, UMTS, HSPA)")},
+				kvalue{connectionMobileCdma, Tr("CDMA (1xRTT, EVDO)")},
 			}
 		}
 	case NM_SETTING_VS_VPN:
@@ -338,10 +338,10 @@ func logicSetSettingVk8021xEap(data connectionData, value string) (err error) {
 }
 
 func getSettingVkMobileServiceType(data connectionData) (serviceType string) {
-	if isSettingSectionExists(data, NM_SETTING_GSM_SETTING_NAME) {
-		serviceType = mobileServiceGsm
-	} else if isSettingSectionExists(data, NM_SETTING_CDMA_SETTING_NAME) {
-		serviceType = mobileServiceCdma
+	if isSettingSectionExists(data, sectionGsm) {
+		serviceType = connectionMobileGsm
+	} else if isSettingSectionExists(data, sectionCdma) {
+		serviceType = connectionMobileCdma
 	} else {
 		logger.Error("get mobile service type failed, neither gsm section nor cdma section")
 	}
@@ -349,10 +349,10 @@ func getSettingVkMobileServiceType(data connectionData) (serviceType string) {
 }
 func logicSetSettingVkMobileServiceType(data connectionData, serviceType string) (err error) {
 	switch serviceType {
-	case mobileServiceGsm:
+	case connectionMobileGsm:
 		removeSettingSection(data, sectionCdma)
 		initSettingSectionGsm(data)
-	case mobileServiceCdma:
+	case connectionMobileCdma:
 		removeSettingSection(data, sectionGsm)
 		initSettingSectionCdma(data)
 	default:
