@@ -45,12 +45,14 @@ func guess_desktop_id(oldId string) string {
 func getAppIcon(core *gio.DesktopAppInfo) string {
 	gioIcon := core.GetIcon()
 	if gioIcon == nil {
+		logger.Warning("get icon from appinfo failed")
 		return ""
 	}
 
 	logger.Debug("GetIcon:", gioIcon.ToString())
 	icon := get_theme_icon(gioIcon.ToString(), 48)
 	if icon == "" {
+		logger.Warning("get icon from theme failed")
 		return ""
 	}
 

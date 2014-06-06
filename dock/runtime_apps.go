@@ -233,8 +233,11 @@ func (app *RuntimeApp) HandleMenuItem(id string) {
 //func find_app_id(pid uint, instanceName, wmName, wmClass, iconName string) string { return "" }
 
 func find_app_id_by_xid(xid xproto.Window) string {
+	var appId string
 	if id, err := xprop.PropValStr(xprop.GetProperty(XU, xid, "_DDE_DOCK_APP_ID")); err == nil {
-		return strings.ToLower(id)
+		appId = strings.ToLower(id)
+		logger.Debug("get app id from _DDE_DOCK_APP_ID", appId)
+		return appId
 	}
 	wmClass, _ := icccm.WmClassGet(XU, xid)
 	var wmInstance, wmClassName string
@@ -244,16 +247,22 @@ func find_app_id_by_xid(xid xproto.Window) string {
 	}
 	pid, err := ewmh.WmPidGet(XU, xid)
 	if err != nil {
-		return strings.ToLower(wmInstance)
+		appId = strings.ToLower(wmInstance)
+		logger.Debug("get app id from instance name", appId)
+		return appId
 	}
 	iconName, _ := ewmh.WmIconNameGet(XU, xid)
 	name, _ := ewmh.WmNameGet(XU, xid)
 	if pid == 0 {
-		return strings.ToLower(wmInstance)
+		appId = strings.ToLower(wmInstance)
+		logger.Debug("get app id from instance name", appId)
+		return appId
 	} else {
 	}
-	appId := find_app_id(pid, name, wmInstance, wmClassName, iconName)
-	return strings.ToLower(appId)
+	appId = find_app_id(pid, name, wmInstance, wmClassName, iconName)
+	appId = strings.ToLower(appId)
+	logger.Debug("get appid", appId)
+	return appId
 }
 
 func contains(haystack []string, needle string) bool {
@@ -361,6 +370,7 @@ func (app *RuntimeApp) updateIcon(xid xproto.Window) {
 		}
 	}
 
+	logger.Warning(app.Id, "using icon from X")
 	icon, err := xgraphics.FindIcon(XU, xid, 48, 48)
 	if err == nil {
 		buf := bytes.NewBuffer(nil)
