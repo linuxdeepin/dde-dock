@@ -29,6 +29,19 @@ import (
 
 var _handleFlag = false
 
+func (obj *Manager) listenWatchQuit() {
+	for {
+		select {
+		case <-obj.listQuit:
+			obj.watchUserListFile()
+			go obj.handleUserListChanged()
+		case <-obj.infoQuit:
+			obj.watchUserInfoFile()
+			go obj.handleUserInfoChanged()
+		}
+	}
+}
+
 func (obj *Manager) watchUserListFile() {
 	var err error
 
@@ -100,7 +113,12 @@ func (obj *Manager) removeUserInfoFileWatch() {
 func (obj *Manager) handleUserListChanged() {
 	for {
 		select {
-		case ev := <-obj.listWatcher.Event:
+		case ev, ok := <-obj.listWatcher.Event:
+			if !ok {
+				obj.listWatcher = nil
+				obj.listQuit <- true
+				return
+			}
 			if ev == nil {
 				break
 			}
@@ -143,6 +161,12 @@ func (obj *Manager) handleUserListChanged() {
 					mutex.Unlock()
 				}
 			}
+		case err, ok := <-obj.listWatcher.Error:
+			if !ok || err != nil {
+				obj.listWatcher = nil
+				obj.listQuit <- true
+				return
+			}
 		}
 	}
 }
@@ -150,7 +174,12 @@ func (obj *Manager) handleUserListChanged() {
 func (obj *Manager) handleUserInfoChanged() {
 	for {
 		select {
-		case ev := <-obj.infoWatcher.Event:
+		case ev, ok := <-obj.infoWatcher.Event:
+			if !ok {
+				obj.infoWatcher = nil
+				obj.infoQuit <- true
+				return
+			}
 			if ev == nil {
 				break
 			}
@@ -183,6 +212,22 @@ func (obj *Manager) handleUserInfoChanged() {
 				_handleFlag = false
 				mutex.Unlock()
 			}
+		case err, ok := <-obj.infoWatcher.Error:
+			if !ok || err != nil {
+				obj.infoWatcher = nil
+				obj.infoQuit <- true
+				return
+			}
+		}
+	}
+}
+
+func (obj *User) listenWatchQuit() {
+	for {
+		select {
+		case <-obj.watchQuit:
+			obj.watchUserConfig()
+			obj.handUserConfigChanged()
 		}
 	}
 }
@@ -210,7 +255,12 @@ func (obj *User) removeUserConfigWatch() {
 func (obj *User) handUserConfigChanged() {
 	for {
 		select {
-		case ev := <-obj.watcher.Event:
+		case ev, ok := <-obj.watcher.Event:
+			if !ok {
+				obj.watcher = nil
+				obj.watchQuit <- true
+				return
+			}
 			if ev == nil {
 				break
 			}
@@ -228,6 +278,12 @@ func (obj *User) handUserConfigChanged() {
 				obj.updatePropIconFile(obj.getPropIconFile())
 				obj.updatePropBackgroundFile(obj.getPropBackgroundFile())
 				obj.updatePropHistoryIcons(obj.getPropHistoryIcons())
+			}
+		case err, ok := <-obj.watcher.Error:
+			if !ok || err != nil {
+				obj.watcher = nil
+				obj.watchQuit <- true
+				return
 			}
 		}
 	}

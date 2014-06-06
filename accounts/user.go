@@ -47,6 +47,7 @@ type User struct {
 	IconList       []string
 	objectPath     string
 	watcher        *fsnotify.Watcher
+	watchQuit      chan bool
 }
 
 func addUserToAdmList(name string) {
@@ -262,6 +263,8 @@ func newUser(path string) *User {
 	obj.updatePropBackgroundFile(obj.getPropBackgroundFile())
 	obj.updatePropHistoryIcons(obj.getPropHistoryIcons())
 
+	obj.watchQuit = make(chan bool)
+
 	var err error
 	if obj.watcher, err = fsnotify.NewWatcher(); err != nil {
 		logger.Error("New watcher in newUser failed:", err)
@@ -269,6 +272,8 @@ func newUser(path string) *User {
 	}
 	obj.watchUserConfig()
 	go obj.handUserConfigChanged()
+
+	go obj.listenWatchQuit()
 
 	return obj
 }
