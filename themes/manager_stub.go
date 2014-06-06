@@ -259,10 +259,6 @@ func (op *Manager) listenSettingsChanged() {
 					dbus.NotifyChange(obj, "BackgroundFile")
 				}
 			}
-
-			if value != gbg {
-				gnomeBgSettings.SetString("picture-uri", value)
-			}
 		case GKEY_CURRENT_SOUND_THEME: // TODO
 			value := personSettings.GetString(key)
 			logObject.Infof("Sound GSettings Changed: %s", value)
