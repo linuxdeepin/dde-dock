@@ -240,7 +240,6 @@ func (op *Manager) listenSettingsChanged() {
 			}
 		case GKEY_CURRENT_BACKGROUND: // TODO
 			value := personSettings.GetString(key)
-			gbg := gnomeBgSettings.GetString("picture-uri")
 			logObject.Infof("DEEPIN Bg GSettings Changed: %s", value)
 			obj := op.getThemeObject(op.CurrentTheme)
 			if obj != nil && obj.BackgroundFile != value {
