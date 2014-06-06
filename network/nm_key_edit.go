@@ -160,7 +160,7 @@ func setSettingKeyJSON(data connectionData, section, key, valueJSON string, t kt
 		kerr = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
 		return
 	}
-	logger.Debugf("setSettingKeyJSON data[%s][%s]=%#v, valueJSON=%s", section, key, value, valueJSON) // TODO test
+	// logger.Debugf("setSettingKeyJSON data[%s][%s]=%#v, valueJSON=%s", section, key, value, valueJSON) // TODO test
 	if isInterfaceNil(value) {
 		removeSettingKey(data, section, key)
 	} else {

@@ -146,6 +146,9 @@ func getSettingVkeyType(section, key string) (t ktype) {
 			t = vk.Type
 		}
 	}
+	if t == ktypeUnknown {
+		logger.Errorf("get virtual key type failed, section=%s, key=%s", section, key)
+	}
 	return
 }
 
@@ -285,6 +288,21 @@ func getRelatedVkeys(section, key string) (vks []string) {
 	return
 }
 
+// remove virtual key means to remove its related keys
+func removeVirtualKey(data connectionData, section, vkey string) {
+	if isControllerVkey(section, vkey) {
+		// ignore controller virtual key for there is no related key for it
+		return
+	}
+	vkeyInfo, ok := getVkeyInfo(section, vkey)
+	if !ok {
+		return
+	}
+	for _, key := range vkeyInfo.RelatedKeys {
+		removeSettingKey(data, vkeyInfo.RelatedSection, key)
+	}
+}
+
 func isWrapperVkey(section, vkey string) bool {
 	vkInfo, ok := getVkeyInfo(section, vkey)
 	if !ok {
@@ -307,7 +325,7 @@ func isEnableWrapperVkey(section, vkey string) bool {
 	return false
 }
 
-func isControlVkey(section, vkey string) bool {
+func isControllerVkey(section, vkey string) bool {
 	vkInfo, ok := getVkeyInfo(section, vkey)
 	if !ok {
 		return false

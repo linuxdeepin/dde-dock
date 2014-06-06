@@ -297,6 +297,11 @@ func generalGetVkeyJSON(data connectionData, section, key string) (valueJSON str
 
 // Set JSON value generally
 func generalSetVkeyJSON(data connectionData, section, key string, valueJSON string) (err error) {
+	if isJSONValueMeansToDeleteKey(valueJSON, getSettingVkeyType(section, key)) {
+		logger.Debugf("json value means to remove key, data[%s][%s]=%#v", section, key, valueJSON)
+		removeVirtualKey(data, section, key)
+		return
+	}
 	// each virtual key own a logic setter
 	switch section { {{range $i, $section := GetAllVkeysRelatedSections $vks}}
 	case {{$section}}:

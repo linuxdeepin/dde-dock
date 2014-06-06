@@ -138,6 +138,7 @@ const (
 	vsectionVpnVpncAdvanced    = NM_SETTING_VS_VPN_VPNC_ADVANCED    // -> sectionVpnVpncAdvanced
 )
 
+// TODO autogen
 func isVirtualSection(section string) bool {
 	switch section {
 	case vsectionGeneral:

@@ -271,16 +271,15 @@ func (s *ConnectionSession) GetAvailableValues(section, key string) (valuesJSON 
 	return
 }
 
-func (s *ConnectionSession) GetKey(section, key string) (value string) {
+func (s *ConnectionSession) GetKey(section, key string) (valueJSON string) {
 	// section := getSectionOfKeyInVsection(s.Data, vsection, key)
-	value = generalGetSettingKeyJSON(s.Data, section, key)
+	valueJSON = generalGetSettingKeyJSON(s.Data, section, key)
 	return
 }
 
-func (s *ConnectionSession) SetKey(section, key, value string) {
-	// section := getSectionOfKeyInVsection(s.Data, vsection, key)
-	err := generalSetSettingKeyJSON(s.Data, section, key, value)
-	// logger.Debugf("SetKey(), %v, vsection=%s, filed=%s, key=%s, value=%s", err == nil, vsection, section, key, value) // TODO test
+func (s *ConnectionSession) SetKey(section, key, valueJSON string) {
+	// logger.Debugf("SetKey(), section=%s, key=%s, valueJSON=%s", section, key, valueJSON) // TODO test
+	err := generalSetSettingKeyJSON(s.Data, section, key, valueJSON)
 
 	s.updatePropData()
 	s.updatePropType()
