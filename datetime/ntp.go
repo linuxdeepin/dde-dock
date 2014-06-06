@@ -61,7 +61,7 @@ func (obj *Manager) syncNtpThread() {
 func (obj *Manager) enableNtp(enable bool) bool {
 	if enable {
 		if obj.ntpRunning {
-			obj.syncNtpTime()
+			go obj.syncNtpTime()
 			logger.Debug("Ntp is running")
 			return true
 		}
