@@ -209,7 +209,6 @@ func checkSetting8021xValues(data connectionData) (errs sectionErrors) {
 	case "tls":
 		ensureSetting8021xIdentityNoEmpty(data, errs)
 		ensureSetting8021xClientCertNoEmpty(data, errs)
-		ensureSetting8021xCaCertNoEmpty(data, errs)
 		ensureSetting8021xPrivateKeyNoEmpty(data, errs)
 		if isSettingRequireSecret(getSetting8021xPrivateKeyPasswordFlags(data)) {
 			ensureSetting8021xPrivateKeyPasswordNoEmpty(data, errs)
