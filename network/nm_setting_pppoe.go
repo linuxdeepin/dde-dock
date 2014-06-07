@@ -11,7 +11,7 @@ const (
 
 func newPppoeConnection(id, username string) (uuid string) {
 	logger.Debugf("new pppoe connection, id=%s", id)
-	uuid = newUUID()
+	uuid = genUuid()
 	data := newPppoeConnectionData(id, uuid)
 	setSettingPppoeUsername(data, username)
 	nmAddConnection(data)

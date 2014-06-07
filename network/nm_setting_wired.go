@@ -74,7 +74,7 @@ const (
 
 func newWiredConnection(id string) (uuid string) {
 	logger.Debugf("new wired connection, id=%s", id)
-	uuid = newUUID()
+	uuid = genUuid()
 	data := newWiredConnectionData(id, uuid)
 	nmAddConnection(data)
 	return

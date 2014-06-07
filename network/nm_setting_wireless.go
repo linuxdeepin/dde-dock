@@ -180,7 +180,7 @@ var availableValuesWirelessChannelBg = []kvalue{
 // new connection data
 func newWirelessConnection(id string, ssid []byte, secType apSecType) (uuid string) {
 	logger.Debugf("new wireless connection, id=%s, ssid=%s, secType=%d", id, ssid, secType)
-	uuid = newUUID()
+	uuid = genUuid()
 	data := newWirelessConnectionData(id, uuid, ssid, secType)
 	nmAddConnection(data)
 	return

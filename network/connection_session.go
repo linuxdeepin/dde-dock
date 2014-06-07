@@ -48,7 +48,7 @@ func newConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 		return
 	}
 
-	s = doNewConnectionSession(devPath, newUUID())
+	s = doNewConnectionSession(devPath, genUuid())
 
 	// expand wrapper connection type
 	id := genConnectionId(connectionType)

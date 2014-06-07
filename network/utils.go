@@ -8,7 +8,7 @@ import "encoding/json"
 import "strings"
 import "os"
 
-func newUUID() string {
+func genUuid() string {
 	uuid := make([]byte, 16)
 	n, err := io.ReadFull(rand.Reader, uuid)
 	if n != len(uuid) || err != nil {

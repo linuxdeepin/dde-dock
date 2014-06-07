@@ -212,23 +212,20 @@ func (m *Manager) getAccessPointProperty(apPath dbus.ObjectPath) (apJSON string,
 }
 
 // ActivateAccessPoint add and activate connection for access point.
-func (m *Manager) ActivateAccessPoint(apPath, devPath dbus.ObjectPath) (uuid string, err error) {
-	logger.Debugf("ActivateAccessPoint: apPath=%s, devPath=%s", apPath, devPath)
+func (m *Manager) ActivateAccessPoint(uuid string, apPath, devPath dbus.ObjectPath) (err error) {
+	logger.Debugf("ActivateAccessPoint: uuid=%s, apPath=%s, devPath=%s", uuid, apPath, devPath)
 	defer logger.Debugf("ActivateAccessPoint end") // TODO test
 
-	// if there is no connection for current access point, create one
-	ap, err := nmNewAccessPoint(apPath)
-	if err != nil {
-		return
-	}
-	cpath, ok := nmGetWirelessConnection(ap.Ssid.Get(), devPath)
-	if ok {
-		logger.Debug("activate access point", cpath) // TODO test
-		uuid = nmGetConnectionUuid(cpath)
-		_, err = nmActivateConnection(cpath, devPath)
+	if len(uuid) > 0 {
+		err = m.ActivateConnection(uuid, devPath)
 	} else {
-		logger.Debug("add and activate access point", cpath) // TODO test
-		uuid = newUUID()
+		// if there is no connection for current access point, create one
+		var ap *nm.AccessPoint
+		ap, err = nmNewAccessPoint(apPath)
+		if err != nil {
+			return
+		}
+		uuid = genUuid()
 		data := newWirelessConnectionData(string(ap.Ssid.Get()), uuid, []byte(ap.Ssid.Get()), getApSecType(ap))
 		_, _, err = nmAddAndActivateConnection(data, devPath)
 	}
