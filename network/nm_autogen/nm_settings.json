@@ -282,7 +282,7 @@
     "Value":"alias-vpn-openvpn-tlsauth",
     "Keys":[
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_TLS_REMOTE", "Value":"tls-remote", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Subject Match", "FrontEndWidget":"<default>"},
-	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_REMOTE_CERT_TLS", "Value":"remote-cert-tls", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Remote Cert", "FrontEndWidget":"EditLineComboBox"},
+	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_REMOTE_CERT_TLS", "Value":"remote-cert-tls", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Remote Cert Type", "FrontEndWidget":"EditLineComboBox"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_TA", "Value":"ta", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Key File", "FrontEndWidget":"EditLineFileChooser"},
 	    {"Name":"NM_SETTING_VPN_OPENVPN_KEY_TA_DIR", "Value":"ta-dir", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Key Direction", "FrontEndWidget":"EditLineComboBox"}
     ]
@@ -353,13 +353,13 @@
     "Value":"alias-vpn-vpnc-advanced",
     "Keys":[
 	    {"Name":"NM_SETTING_VPN_VPNC_KEY_DOMAIN", "Value":"Domain", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Domain", "FrontEndWidget":"<default>"},
-	    {"Name":"NM_SETTING_VPN_VPNC_KEY_VENDOR", "Value":"Vendor", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Vendor", "FrontEndWidget":"<default>"},
+	    {"Name":"NM_SETTING_VPN_VPNC_KEY_VENDOR", "Value":"Vendor", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Vendor", "FrontEndWidget":"EditLineComboBox"},
 	    {"Name":"NM_SETTING_VPN_VPNC_KEY_APP_VERSION", "Value":"Application Version", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Version", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_VPNC_KEY_SINGLE_DES", "Value":"Enable Single DES", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_VPNC_KEY_NO_ENCRYPTION", "Value":"Enable no encryption", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_VPNC_KEY_NAT_TRAVERSAL_MODE", "Value":"NAT Traversal Mode", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"NAT Traversal", "FrontEndWidget":"EditLineComboBox"},
 	    {"Name":"NM_SETTING_VPN_VPNC_KEY_DHGROUP", "Value":"IKE DH Group", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"IKE DH Group", "FrontEndWidget":"EditLineComboBox"},
-	    {"Name":"NM_SETTING_VPN_VPNC_KEY_PERFECT_FORWARD", "Value":"Perfect Forward Secrecy", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Perfect Forward Secrecy", "FrontEndWidget":"EditLineComboBox"},
+	    {"Name":"NM_SETTING_VPN_VPNC_KEY_PERFECT_FORWARD", "Value":"Perfect Forward Secrecy", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Forward Secrecy", "FrontEndWidget":"EditLineComboBox"},
 	    {"Name":"NM_SETTING_VPN_VPNC_KEY_LOCAL_PORT", "Value":"Local Port", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Local Port", "FrontEndWidget":"<default>", "WidgetProp":{"min":"0", "max":"65535"}},
 	    {"Name":"NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT", "Value":"DPD idle timeout (our side)", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_VPNC_KEY_CISCO_UDP_ENCAPS_PORT", "Value":"Cisco UDP Encapsulation Port", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"}
