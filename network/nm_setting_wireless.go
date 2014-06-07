@@ -195,7 +195,9 @@ func newWirelessConnectionData(id, uuid string, ssid []byte, secType apSecType) 
 	setSettingConnectionType(data, NM_SETTING_WIRELESS_SETTING_NAME)
 
 	addSettingSection(data, sectionWireless)
-	setSettingWirelessSsid(data, ssid)
+	if ssid != nil {
+		setSettingWirelessSsid(data, ssid)
+	}
 	setSettingWirelessMode(data, NM_SETTING_WIRELESS_MODE_INFRA)
 
 	switch secType {

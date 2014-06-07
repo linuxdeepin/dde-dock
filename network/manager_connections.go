@@ -262,11 +262,13 @@ func (m *Manager) addConnectionSession(session *ConnectionSession) {
 	m.connectionSessions = append(m.connectionSessions, session)
 }
 func (m *Manager) removeConnectionSession(session *ConnectionSession) {
+	dbus.UnInstallObject(session)
+
 	i := m.getConnectionSessionIndex(session)
 	if i < 0 {
+		logger.Warning("connection session index is -1", session.sessionPath)
 		return
 	}
-	dbus.UnInstallObject(session)
 
 	copy(m.connectionSessions[i:], m.connectionSessions[i+1:])
 	newlen := len(m.connectionSessions) - 1

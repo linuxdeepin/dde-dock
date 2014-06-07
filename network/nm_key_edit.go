@@ -132,7 +132,7 @@ func getSettingKey(data connectionData, section, key string) (value interface{})
 
 	// logger.Debugf("getSettingKey: data[%s][%s]=%v", section, key, value) // TODO test
 	if isInterfaceNil(value) {
-		logger.Warning("getSettingKey: data[%s][%s] is nil")
+		logger.Errorf("getSettingKey: data[%s][%s] is nil", section, key)
 	}
 
 	return

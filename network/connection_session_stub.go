@@ -13,6 +13,20 @@ func (s *ConnectionSession) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
+func (s *ConnectionSession) updateProps() {
+	s.updatePropType()
+	s.updatePropAvailableVirtualSections()
+	s.updatePropAvailableSections()
+	s.updatePropAvailableKeys()
+	s.updatePropErrors()
+
+	// update Data property at end, for that this was used by font-end
+	// to update widget value that with proeprty "alwaysUpdate", which
+	// should only update value when visible, so it depends on
+	// "AvailableSections" and "AvailableKeys"
+	s.updatePropData()
+}
+
 func (s *ConnectionSession) updatePropData() {
 	dbus.NotifyChange(s, "Data")
 }

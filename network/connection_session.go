@@ -85,13 +85,7 @@ func newConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 		s.Data = newVpnOpenvpnConnectionData(id, s.Uuid)
 	}
 
-	s.updatePropData()
-	s.updatePropType()
-	s.updatePropAvailableVirtualSections()
-	s.updatePropAvailableSections()
-	s.updatePropAvailableKeys()
-	s.updatePropErrors()
-
+	s.updateProps()
 	logger.Debug("newConnectionSessionByCreate():", s.Data)
 	return
 }
@@ -125,13 +119,7 @@ func newConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 	case <-chSecret:
 	}
 
-	s.updatePropData()
-	s.updatePropType()
-	s.updatePropAvailableVirtualSections()
-	s.updatePropAvailableSections()
-	s.updatePropAvailableKeys()
-	s.updatePropErrors()
-
+	s.updateProps()
 	logger.Debug("NewConnectionSessionByOpen():", s.Data)
 	return
 }
@@ -280,21 +268,8 @@ func (s *ConnectionSession) GetKey(section, key string) (valueJSON string) {
 func (s *ConnectionSession) SetKey(section, key, valueJSON string) {
 	// logger.Debugf("SetKey(), section=%s, key=%s, valueJSON=%s", section, key, valueJSON) // TODO test
 	err := generalSetSettingKeyJSON(s.Data, section, key, valueJSON)
-
-	s.updatePropType()
-	s.updatePropAvailableVirtualSections()
-	s.updatePropAvailableSections()
-	s.updatePropAvailableKeys()
-
-	// update Data property at end, for that this was used by font-end
-	// to update widget value that with proeprty "alwaysUpdate", which
-	// should only update value when visible, so it depends on
-	// "AvailableSections" and "AvailableKeys"
-	s.updatePropData()
-
 	s.updateErrorsWhenSettingKey(section, key, err)
-	s.updatePropErrors()
-
+	s.updateProps()
 	return
 }
 
@@ -334,6 +309,7 @@ func (s *ConnectionSession) DebugGetErrors() sessionErrors {
 	return s.Errors
 }
 func (s *ConnectionSession) DebugListKeyDetail() (info string) {
+	// TODO
 	for _, vsection := range getAvailableVsections(s.Data) {
 		vsectionData, ok := s.AvailableKeys[vsection]
 		if !ok {

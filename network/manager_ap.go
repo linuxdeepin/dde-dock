@@ -257,13 +257,10 @@ func (m *Manager) CreateConnectionForAccessPoint(apPath, devPath dbus.ObjectPath
 	case apSecEap:
 		logicSetSettingVkWirelessSecurityKeyMgmt(session.Data, "wpa-eap")
 	}
+	session.updateProps()
 
 	// install dbus session
-	err = dbus.InstallOnSession(session)
-	if err != nil {
-		logger.Error(err)
-		return
-	}
+	m.addConnectionSession(session)
 	return
 }
 
