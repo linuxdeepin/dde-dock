@@ -281,11 +281,16 @@ func (s *ConnectionSession) SetKey(section, key, valueJSON string) {
 	// logger.Debugf("SetKey(), section=%s, key=%s, valueJSON=%s", section, key, valueJSON) // TODO test
 	err := generalSetSettingKeyJSON(s.Data, section, key, valueJSON)
 
-	s.updatePropData()
 	s.updatePropType()
 	s.updatePropAvailableVirtualSections()
 	s.updatePropAvailableSections()
 	s.updatePropAvailableKeys()
+
+	// update Data property at end, for that this was used by font-end
+	// to update widget value that with proeprty "alwaysUpdate", which
+	// should only update value when visible, so it depends on
+	// "AvailableSections" and "AvailableKeys"
+	s.updatePropData()
 
 	s.updateErrorsWhenSettingKey(section, key, err)
 	s.updatePropErrors()
