@@ -134,19 +134,19 @@ func checkSettingIp6ConfigValues(data connectionData) (errs sectionErrors) {
 
 func checkSettingIp6MethodConflict(data connectionData, errs sectionErrors) {
 	// check dns
-	if isSettingIp6ConfigDnsExists(data) {
+	if isSettingIp6ConfigDnsExists(data) && len(getSettingIp6ConfigDns(data)) > 0 {
 		rememberError(errs, sectionIpv6, NM_SETTING_IP6_CONFIG_DNS, fmt.Sprintf(NM_KEY_ERROR_IP6_METHOD_CONFLICT, NM_SETTING_IP6_CONFIG_DNS))
 	}
 	// check dns search
-	if isSettingIp6ConfigDnsSearchExists(data) {
+	if isSettingIp6ConfigDnsSearchExists(data) && len(getSettingIp6ConfigDnsSearch(data)) > 0 {
 		rememberError(errs, sectionIpv6, NM_SETTING_IP6_CONFIG_DNS_SEARCH, fmt.Sprintf(NM_KEY_ERROR_IP6_METHOD_CONFLICT, NM_SETTING_IP6_CONFIG_DNS_SEARCH))
 	}
 	// check address
-	if isSettingIp6ConfigAddressesExists(data) {
+	if isSettingIp6ConfigAddressesExists(data) && len(getSettingIp6ConfigAddresses(data)) > 0 {
 		rememberError(errs, sectionIpv6, NM_SETTING_IP6_CONFIG_ADDRESSES, fmt.Sprintf(NM_KEY_ERROR_IP6_METHOD_CONFLICT, NM_SETTING_IP6_CONFIG_ADDRESSES))
 	}
 	// check route
-	if isSettingIp6ConfigRoutesExists(data) {
+	if isSettingIp6ConfigRoutesExists(data) && len(getSettingIp6ConfigRoutes(data)) > 0 {
 		rememberError(errs, sectionIpv6, NM_SETTING_IP6_CONFIG_ROUTES, fmt.Sprintf(NM_KEY_ERROR_IP6_METHOD_CONFLICT, NM_SETTING_IP6_CONFIG_ROUTES))
 	}
 }

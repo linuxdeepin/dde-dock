@@ -241,19 +241,19 @@ func checkSettingIp4ConfigValues(data connectionData) (errs sectionErrors) {
 }
 func checkSettingIp4MethodConflict(data connectionData, errs sectionErrors) {
 	// check dns
-	if isSettingIp4ConfigDnsExists(data) {
+	if isSettingIp4ConfigDnsExists(data) && len(getSettingIp4ConfigDns(data)) > 0 {
 		rememberError(errs, sectionIpv4, NM_SETTING_IP4_CONFIG_DNS, fmt.Sprintf(NM_KEY_ERROR_IP4_METHOD_CONFLICT, NM_SETTING_IP4_CONFIG_DNS))
 	}
 	// check dns search
-	if isSettingIp4ConfigDnsSearchExists(data) {
+	if isSettingIp4ConfigDnsSearchExists(data) && len(getSettingIp4ConfigDnsSearch(data)) > 0 {
 		rememberError(errs, sectionIpv4, NM_SETTING_IP4_CONFIG_DNS_SEARCH, fmt.Sprintf(NM_KEY_ERROR_IP4_METHOD_CONFLICT, NM_SETTING_IP4_CONFIG_DNS_SEARCH))
 	}
 	// check address
-	if isSettingIp4ConfigAddressesExists(data) {
+	if isSettingIp4ConfigAddressesExists(data) && len(getSettingIp4ConfigAddresses(data)) > 0 {
 		rememberError(errs, sectionIpv4, NM_SETTING_IP4_CONFIG_ADDRESSES, fmt.Sprintf(NM_KEY_ERROR_IP4_METHOD_CONFLICT, NM_SETTING_IP4_CONFIG_ADDRESSES))
 	}
 	// check route
-	if isSettingIp4ConfigRoutesExists(data) {
+	if isSettingIp4ConfigRoutesExists(data) && len(getSettingIp4ConfigRoutes(data)) > 0 {
 		rememberError(errs, sectionIpv4, NM_SETTING_IP4_CONFIG_ROUTES, fmt.Sprintf(NM_KEY_ERROR_IP4_METHOD_CONFLICT, NM_SETTING_IP4_CONFIG_ROUTES))
 	}
 }
