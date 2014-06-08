@@ -48,6 +48,8 @@ type User struct {
 	objectPath     string
 	watcher        *fsnotify.Watcher
 	watchQuit      chan bool
+	endFlag        chan bool
+	endWatchFlag   chan bool
 }
 
 func addUserToAdmList(name string) {
@@ -264,6 +266,8 @@ func newUser(path string) *User {
 	obj.updatePropHistoryIcons(obj.getPropHistoryIcons())
 
 	obj.watchQuit = make(chan bool)
+	obj.endFlag = make(chan bool)
+	obj.endWatchFlag = make(chan bool)
 
 	var err error
 	if obj.watcher, err = fsnotify.NewWatcher(); err != nil {

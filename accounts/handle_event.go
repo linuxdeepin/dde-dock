@@ -38,6 +38,8 @@ func (obj *Manager) listenWatchQuit() {
 		case <-obj.infoQuit:
 			obj.watchUserInfoFile()
 			go obj.handleUserInfoChanged()
+		case <-obj.endFlag:
+			return
 		}
 	}
 }
@@ -113,6 +115,8 @@ func (obj *Manager) removeUserInfoFileWatch() {
 func (obj *Manager) handleUserListChanged() {
 	for {
 		select {
+		case <-obj.listEndFlag:
+			return
 		case ev, ok := <-obj.listWatcher.Event:
 			if !ok {
 				obj.listWatcher = nil
@@ -174,6 +178,8 @@ func (obj *Manager) handleUserListChanged() {
 func (obj *Manager) handleUserInfoChanged() {
 	for {
 		select {
+		case <-obj.infoEndFlag:
+			return
 		case ev, ok := <-obj.infoWatcher.Event:
 			if !ok {
 				obj.infoWatcher = nil
@@ -225,6 +231,8 @@ func (obj *Manager) handleUserInfoChanged() {
 func (obj *User) listenWatchQuit() {
 	for {
 		select {
+		case <-obj.endFlag:
+			return
 		case <-obj.watchQuit:
 			obj.watchUserConfig()
 			obj.handUserConfigChanged()
@@ -255,6 +263,8 @@ func (obj *User) removeUserConfigWatch() {
 func (obj *User) handUserConfigChanged() {
 	for {
 		select {
+		case <-obj.endWatchFlag:
+			return
 		case ev, ok := <-obj.watcher.Event:
 			if !ok {
 				obj.watcher = nil

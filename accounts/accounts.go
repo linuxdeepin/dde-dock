@@ -38,6 +38,9 @@ type Manager struct {
 	infoWatcher *fsnotify.Watcher
 	listQuit    chan bool
 	infoQuit    chan bool
+	endFlag     chan bool
+	listEndFlag chan bool
+	infoEndFlag chan bool
 
 	UserAdded   func(string)
 	UserDeleted func(string)
@@ -68,6 +71,9 @@ func newManager() *Manager {
 
 	obj.listQuit = make(chan bool)
 	obj.infoQuit = make(chan bool)
+	obj.endFlag = make(chan bool)
+	obj.listEndFlag = make(chan bool)
+	obj.infoEndFlag = make(chan bool)
 	obj.pathUserMap = make(map[string]*User)
 	obj.updatePropUserList(getUserList())
 	obj.updatePropAllowGuest(isAllowGuest())

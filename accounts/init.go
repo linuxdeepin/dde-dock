@@ -50,6 +50,9 @@ func Start() {
 func Stop() {
 	obj := GetManager()
 
+	obj.endFlag <- true
+	obj.listEndFlag <- true
+	obj.infoEndFlag <- true
 	obj.infoWatcher.Close()
 	obj.listWatcher.Close()
 	obj.destroyAllUser()
