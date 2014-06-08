@@ -201,3 +201,8 @@ func destroyStateNotifier(n *StateNotifier) {
 	}
 	n.devices = nil
 }
+
+func notifyApModeNotSupport() {
+	icon := "notification-network-wireless-disconnected"
+	notify(icon, Tr("Disconnect"), Tr("Access Point (AP) mode is not supported by this device."))
+}

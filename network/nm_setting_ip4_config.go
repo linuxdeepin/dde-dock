@@ -159,21 +159,19 @@ func initAvailableValuesIp4() {
 
 // Get available keys
 func getSettingIp4ConfigAvailableKeys(data connectionData) (keys []string) {
+	keys = appendAvailableKeys(data, keys, sectionIpv4, NM_SETTING_IP4_CONFIG_METHOD)
 	method := getSettingIp4ConfigMethod(data)
 	switch method {
 	default:
 		logger.Error("ip4 config method is invalid:", method)
 	case NM_SETTING_IP4_CONFIG_METHOD_AUTO:
-		keys = appendAvailableKeys(data, keys, sectionIpv4, NM_SETTING_IP4_CONFIG_METHOD)
 		keys = appendAvailableKeys(data, keys, sectionIpv4, NM_SETTING_IP4_CONFIG_DNS)
 	case NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL: // ignore
 	case NM_SETTING_IP4_CONFIG_METHOD_MANUAL:
-		keys = appendAvailableKeys(data, keys, sectionIpv4, NM_SETTING_IP4_CONFIG_METHOD)
 		keys = appendAvailableKeys(data, keys, sectionIpv4, NM_SETTING_IP4_CONFIG_DNS)
 		keys = appendAvailableKeys(data, keys, sectionIpv4, NM_SETTING_IP4_CONFIG_ADDRESSES)
-	case NM_SETTING_IP4_CONFIG_METHOD_SHARED: // ignore
+	case NM_SETTING_IP4_CONFIG_METHOD_SHARED:
 	case NM_SETTING_IP4_CONFIG_METHOD_DISABLED:
-		keys = appendAvailableKeys(data, keys, sectionIpv4, NM_SETTING_IP4_CONFIG_METHOD)
 	}
 	return
 }
@@ -199,6 +197,7 @@ func getSettingIp4ConfigAvailableValues(data connectionData, key string) (values
 			values = []kvalue{
 				availableValuesIp4ConfigMethod[NM_SETTING_IP4_CONFIG_METHOD_AUTO],
 				availableValuesIp4ConfigMethod[NM_SETTING_IP4_CONFIG_METHOD_MANUAL],
+				availableValuesIp4ConfigMethod[NM_SETTING_IP4_CONFIG_METHOD_SHARED],
 			}
 		} else {
 			values = []kvalue{
@@ -224,7 +223,7 @@ func checkSettingIp4ConfigValues(data connectionData) (errs sectionErrors) {
 		checkSettingIp4MethodConflict(data, errs)
 	case NM_SETTING_IP4_CONFIG_METHOD_MANUAL:
 		ensureSettingIp4ConfigAddressesNoEmpty(data, errs)
-	case NM_SETTING_IP4_CONFIG_METHOD_SHARED: // ignore
+	case NM_SETTING_IP4_CONFIG_METHOD_SHARED:
 		checkSettingIp4MethodConflict(data, errs)
 	case NM_SETTING_IP4_CONFIG_METHOD_DISABLED: // ignore
 		checkSettingIp4MethodConflict(data, errs)
@@ -295,6 +294,7 @@ func checkSettingIp4ConfigAddresses(data connectionData, errs sectionErrors) {
 func logicSetSettingIp4ConfigMethod(data connectionData, value string) (err error) {
 	// just ignore error here and set value directly, error will be
 	// check in checkSettingXXXValues()
+	// TODO check logic for different connection types
 	switch value {
 	case NM_SETTING_IP4_CONFIG_METHOD_AUTO:
 		removeSettingIp4ConfigAddresses(data)
@@ -304,7 +304,7 @@ func logicSetSettingIp4ConfigMethod(data connectionData, value string) (err erro
 		removeSettingIp4ConfigAddresses(data)
 		removeSettingIp4ConfigRoutes(data)
 	case NM_SETTING_IP4_CONFIG_METHOD_MANUAL:
-	case NM_SETTING_IP4_CONFIG_METHOD_SHARED: // ignore
+	case NM_SETTING_IP4_CONFIG_METHOD_SHARED:
 		removeSettingIp4ConfigDns(data)
 		removeSettingIp4ConfigDnsSearch(data)
 		removeSettingIp4ConfigAddresses(data)

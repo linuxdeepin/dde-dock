@@ -309,11 +309,13 @@ func checkSettingWirelessValues(data connectionData) (errs sectionErrors) {
 
 // Logic setter
 func logicSetSettingWirelessMode(data connectionData, value string) (err error) {
-	// for ad-hoc or ap-hotspot mode, wpa-eap security is invalid
+	// for ad-hoc or ap-hotspot mode, wpa-eap security is invalid, and
+	// set ip4 method to "shared"
 	if value != NM_SETTING_WIRELESS_MODE_INFRA {
 		if getSettingVkWirelessSecurityKeyMgmt(data) == "wpa-eap" {
 			logicSetSettingVkWirelessSecurityKeyMgmt(data, "wpa-psk")
 		}
+		setSettingIp4ConfigMethod(data, NM_SETTING_IP4_CONFIG_METHOD_SHARED)
 	}
 	setSettingWirelessMode(data, value)
 	return

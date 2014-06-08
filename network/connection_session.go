@@ -226,9 +226,10 @@ func (s *ConnectionSession) Save() bool {
 		// create new connection and activate it
 		// TODO vpn ad-hoc hotspot
 		connectionType := getCustomConnectionType(s.Data)
-		if connectionType == connectionWired || connectionType == connectionWireless {
+		switch connectionType {
+		case connectionWired, connectionWireless, connectionWirelessAdhoc, connectionWirelessHotspot:
 			nmAddAndActivateConnection(s.Data, s.devPath)
-		} else {
+		default:
 			nmAddConnection(s.Data)
 		}
 	}

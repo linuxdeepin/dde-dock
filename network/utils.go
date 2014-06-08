@@ -1,12 +1,15 @@
 package network
 
-import "fmt"
-import "io"
-import "crypto/rand"
-import "reflect"
-import "encoding/json"
-import "strings"
-import "os"
+import (
+	"crypto/rand"
+	"dbus/org/freedesktop/notifications"
+	"encoding/json"
+	"fmt"
+	"io"
+	"os"
+	"reflect"
+	"strings"
+)
 
 func genUuid() string {
 	uuid := make([]byte, 16)
@@ -158,4 +161,20 @@ func isFileExists(file string) bool {
 		return true
 	}
 	return false
+}
+
+func notify(icon, summary, body string) (err error) {
+	var notify *notifications.Notifier
+	notify, err = notifications.NewNotifier("org.freedesktop.Notifications", "/org/freedesktop/Notifications")
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+	appName := "Network"
+	_, err = notify.Notify(appName, 0, icon, summary, body, nil, nil, 0)
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+	return
 }
