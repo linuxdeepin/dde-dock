@@ -39,15 +39,16 @@ const (
 )
 
 var (
-	argWriteOutput       bool
-	argBackEnd           bool
-	argFrontEnd          bool
-	nmSettingUtilsFile   = path.Join(backEndDir, "nm_setting_general_autogen.go")
-	nmSettingVkeyFile    = path.Join(backEndDir, "nm_setting_virtual_key_autogen.go")
-	frontEndConnPropFile = path.Join(frontEndDir, "BaseConnectionEdit.qml")
-	nmSections           []NMSectionStruct
-	nmVkeys              []NMVkeyStruct
-	nmVsections          []NMVsectionStruct
+	argWriteOutput        bool
+	argBackEnd            bool
+	argFrontEnd           bool
+	nmSettingUtilsFile    = path.Join(backEndDir, "nm_setting_general_autogen.go")
+	nmSettingVkeyFile     = path.Join(backEndDir, "nm_setting_virtual_key_autogen.go")
+	nmSettingVsectionFile = path.Join(backEndDir, "nm_setting_virtual_section_autogen.go")
+	frontEndConnPropFile  = path.Join(frontEndDir, "BaseConnectionEdit.qml")
+	nmSections            []NMSectionStruct
+	nmVkeys               []NMVkeyStruct
+	nmVsections           []NMVsectionStruct
 )
 
 type NMSectionStruct struct {
@@ -115,7 +116,12 @@ func genNMGeneralUtilsCode(nmSections []NMSectionStruct) (content string) {
 }
 
 func genNMVkeyCode(nmSections []NMSectionStruct, nmVkeys []NMVkeyStruct) (content string) {
-	content = genTpl(nmVkeys, tplVkey) // general setting utils
+	content = genTpl(nmVkeys, tplVkey)
+	return
+}
+
+func genNMVsectionCode(nmSections []NMSectionStruct, nmVkeys []NMVsectionStruct) (content string) {
+	content = genTpl(nmVkeys, tplVsection)
 	return
 }
 
@@ -159,6 +165,10 @@ func genBackEndCode() {
 	// back-end code, virtual key
 	autogenContent = genNMVkeyCode(nmSections, nmVkeys)
 	writeOrDisplayResultForBackEnd(nmSettingVkeyFile, autogenContent)
+
+	// back-end code, virtual sections
+	autogenContent = genNMVsectionCode(nmSections, nmVsections)
+	writeOrDisplayResultForBackEnd(nmSettingVsectionFile, autogenContent)
 }
 
 func genFrontEndCode() {
