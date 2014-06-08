@@ -35,7 +35,7 @@ func newAccessPoint(apPath dbus.ObjectPath) (ap accessPoint, err error) {
 		Ssid:         string(nmAp.Ssid.Get()),
 		Secured:      getApSecType(nmAp) != apSecNone,
 		SecuredInEap: getApSecType(nmAp) == apSecEap,
-		Strength:     calcApStrength(nmAp.Strength.Get()),
+		Strength:     nmAp.Strength.Get(),
 		Path:         nmAp.Path,
 	}
 	return
@@ -98,7 +98,7 @@ func (m *Manager) addAccessPoint(devPath, apPath dbus.ObjectPath) {
 		// firstly, check if the access point is still exists to ignore
 		// dbus error when getting property
 		if m.isAccessPointExists(devPath, apPath) {
-			ap.Strength = calcApStrength(ap.nmAp.Strength.Get())
+			ap.Strength = ap.nmAp.Strength.Get()
 			if m.AccessPointPropertiesChanged != nil {
 				apJSON, _ := marshalJSON(ap)
 				// logger.Debug(string(devPath), apJSON) // TODO test
