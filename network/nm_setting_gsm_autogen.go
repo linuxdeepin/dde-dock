@@ -10,6 +10,8 @@ func getSettingGsmKeyType(key string) (t ktype) {
 	switch key {
 	default:
 		t = ktypeUnknown
+	case NM_SETTING_GSM_APN:
+		t = ktypeString
 	case NM_SETTING_GSM_NUMBER:
 		t = ktypeString
 	case NM_SETTING_GSM_USERNAME:
@@ -17,8 +19,6 @@ func getSettingGsmKeyType(key string) (t ktype) {
 	case NM_SETTING_GSM_PASSWORD_FLAGS:
 		t = ktypeUint32
 	case NM_SETTING_GSM_PASSWORD:
-		t = ktypeString
-	case NM_SETTING_GSM_APN:
 		t = ktypeString
 	case NM_SETTING_GSM_NETWORK_ID:
 		t = ktypeString
@@ -39,6 +39,8 @@ func getSettingGsmKeyType(key string) (t ktype) {
 // Check is key in current setting section
 func isKeyInSettingGsm(key string) bool {
 	switch key {
+	case NM_SETTING_GSM_APN:
+		return true
 	case NM_SETTING_GSM_NUMBER:
 		return true
 	case NM_SETTING_GSM_USERNAME:
@@ -46,8 +48,6 @@ func isKeyInSettingGsm(key string) bool {
 	case NM_SETTING_GSM_PASSWORD_FLAGS:
 		return true
 	case NM_SETTING_GSM_PASSWORD:
-		return true
-	case NM_SETTING_GSM_APN:
 		return true
 	case NM_SETTING_GSM_NETWORK_ID:
 		return true
@@ -70,6 +70,8 @@ func getSettingGsmDefaultValue(key string) (value interface{}) {
 	switch key {
 	default:
 		logger.Error("invalid key:", key)
+	case NM_SETTING_GSM_APN:
+		value = ""
 	case NM_SETTING_GSM_NUMBER:
 		value = ""
 	case NM_SETTING_GSM_USERNAME:
@@ -77,8 +79,6 @@ func getSettingGsmDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_GSM_PASSWORD_FLAGS:
 		value = uint32(0)
 	case NM_SETTING_GSM_PASSWORD:
-		value = ""
-	case NM_SETTING_GSM_APN:
 		value = ""
 	case NM_SETTING_GSM_NETWORK_ID:
 		value = ""
@@ -101,6 +101,8 @@ func generalGetSettingGsmKeyJSON(data connectionData, key string) (value string)
 	switch key {
 	default:
 		logger.Error("generalGetSettingGsmKeyJSON: invalide key", key)
+	case NM_SETTING_GSM_APN:
+		value = getSettingGsmApnJSON(data)
 	case NM_SETTING_GSM_NUMBER:
 		value = getSettingGsmNumberJSON(data)
 	case NM_SETTING_GSM_USERNAME:
@@ -109,8 +111,6 @@ func generalGetSettingGsmKeyJSON(data connectionData, key string) (value string)
 		value = getSettingGsmPasswordFlagsJSON(data)
 	case NM_SETTING_GSM_PASSWORD:
 		value = getSettingGsmPasswordJSON(data)
-	case NM_SETTING_GSM_APN:
-		value = getSettingGsmApnJSON(data)
 	case NM_SETTING_GSM_NETWORK_ID:
 		value = getSettingGsmNetworkIdJSON(data)
 	case NM_SETTING_GSM_NETWORK_TYPE:
@@ -132,6 +132,8 @@ func generalSetSettingGsmKeyJSON(data connectionData, key, valueJSON string) (er
 	switch key {
 	default:
 		logger.Error("generalSetSettingGsmKeyJSON: invalide key", key)
+	case NM_SETTING_GSM_APN:
+		err = setSettingGsmApnJSON(data, valueJSON)
 	case NM_SETTING_GSM_NUMBER:
 		err = setSettingGsmNumberJSON(data, valueJSON)
 	case NM_SETTING_GSM_USERNAME:
@@ -140,8 +142,6 @@ func generalSetSettingGsmKeyJSON(data connectionData, key, valueJSON string) (er
 		err = setSettingGsmPasswordFlagsJSON(data, valueJSON)
 	case NM_SETTING_GSM_PASSWORD:
 		err = setSettingGsmPasswordJSON(data, valueJSON)
-	case NM_SETTING_GSM_APN:
-		err = setSettingGsmApnJSON(data, valueJSON)
 	case NM_SETTING_GSM_NETWORK_ID:
 		err = setSettingGsmNetworkIdJSON(data, valueJSON)
 	case NM_SETTING_GSM_NETWORK_TYPE:
@@ -159,6 +159,9 @@ func generalSetSettingGsmKeyJSON(data connectionData, key, valueJSON string) (er
 }
 
 // Check if key exists
+func isSettingGsmApnExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_APN)
+}
 func isSettingGsmNumberExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NUMBER)
 }
@@ -170,9 +173,6 @@ func isSettingGsmPasswordFlagsExists(data connectionData) bool {
 }
 func isSettingGsmPasswordExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_PASSWORD)
-}
-func isSettingGsmApnExists(data connectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_APN)
 }
 func isSettingGsmNetworkIdExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NETWORK_ID)
@@ -201,6 +201,15 @@ func ensureSectionSettingGsmExists(data connectionData, errs sectionErrors, rela
 	sectionData, _ := data[NM_SETTING_GSM_SETTING_NAME]
 	if len(sectionData) == 0 {
 		rememberError(errs, relatedKey, NM_SETTING_GSM_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_GSM_SETTING_NAME))
+	}
+}
+func ensureSettingGsmApnNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingGsmApnExists(data) {
+		rememberError(errs, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_APN, NM_KEY_ERROR_MISSING_VALUE)
+	}
+	value := getSettingGsmApn(data)
+	if len(value) == 0 {
+		rememberError(errs, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_APN, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
 func ensureSettingGsmNumberNoEmpty(data connectionData, errs sectionErrors) {
@@ -233,15 +242,6 @@ func ensureSettingGsmPasswordNoEmpty(data connectionData, errs sectionErrors) {
 	value := getSettingGsmPassword(data)
 	if len(value) == 0 {
 		rememberError(errs, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_PASSWORD, NM_KEY_ERROR_EMPTY_VALUE)
-	}
-}
-func ensureSettingGsmApnNoEmpty(data connectionData, errs sectionErrors) {
-	if !isSettingGsmApnExists(data) {
-		rememberError(errs, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_APN, NM_KEY_ERROR_MISSING_VALUE)
-	}
-	value := getSettingGsmApn(data)
-	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_APN, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
 func ensureSettingGsmNetworkIdNoEmpty(data connectionData, errs sectionErrors) {
@@ -284,6 +284,11 @@ func ensureSettingGsmPinFlagsNoEmpty(data connectionData, errs sectionErrors) {
 }
 
 // Getter
+func getSettingGsmApn(data connectionData) (value string) {
+	ivalue := getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_APN)
+	value = interfaceToString(ivalue)
+	return
+}
 func getSettingGsmNumber(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NUMBER)
 	value = interfaceToString(ivalue)
@@ -301,11 +306,6 @@ func getSettingGsmPasswordFlags(data connectionData) (value uint32) {
 }
 func getSettingGsmPassword(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_PASSWORD)
-	value = interfaceToString(ivalue)
-	return
-}
-func getSettingGsmApn(data connectionData) (value string) {
-	ivalue := getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_APN)
 	value = interfaceToString(ivalue)
 	return
 }
@@ -341,6 +341,9 @@ func getSettingGsmPinFlags(data connectionData) (value uint32) {
 }
 
 // Setter
+func setSettingGsmApn(data connectionData, value string) {
+	setSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_APN, value)
+}
 func setSettingGsmNumber(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NUMBER, value)
 }
@@ -352,9 +355,6 @@ func setSettingGsmPasswordFlags(data connectionData, value uint32) {
 }
 func setSettingGsmPassword(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_PASSWORD, value)
-}
-func setSettingGsmApn(data connectionData, value string) {
-	setSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_APN, value)
 }
 func setSettingGsmNetworkId(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NETWORK_ID, value)
@@ -376,6 +376,10 @@ func setSettingGsmPinFlags(data connectionData, value uint32) {
 }
 
 // JSON Getter
+func getSettingGsmApnJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_APN, getSettingGsmKeyType(NM_SETTING_GSM_APN))
+	return
+}
 func getSettingGsmNumberJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NUMBER, getSettingGsmKeyType(NM_SETTING_GSM_NUMBER))
 	return
@@ -390,10 +394,6 @@ func getSettingGsmPasswordFlagsJSON(data connectionData) (valueJSON string) {
 }
 func getSettingGsmPasswordJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_PASSWORD, getSettingGsmKeyType(NM_SETTING_GSM_PASSWORD))
-	return
-}
-func getSettingGsmApnJSON(data connectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_APN, getSettingGsmKeyType(NM_SETTING_GSM_APN))
 	return
 }
 func getSettingGsmNetworkIdJSON(data connectionData) (valueJSON string) {
@@ -422,6 +422,9 @@ func getSettingGsmPinFlagsJSON(data connectionData) (valueJSON string) {
 }
 
 // JSON Setter
+func setSettingGsmApnJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_APN, valueJSON, getSettingGsmKeyType(NM_SETTING_GSM_APN))
+}
 func setSettingGsmNumberJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NUMBER, valueJSON, getSettingGsmKeyType(NM_SETTING_GSM_NUMBER))
 }
@@ -433,9 +436,6 @@ func setSettingGsmPasswordFlagsJSON(data connectionData, valueJSON string) (err 
 }
 func setSettingGsmPasswordJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_PASSWORD, valueJSON, getSettingGsmKeyType(NM_SETTING_GSM_PASSWORD))
-}
-func setSettingGsmApnJSON(data connectionData, valueJSON string) (err error) {
-	return setSettingKeyJSON(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_APN, valueJSON, getSettingGsmKeyType(NM_SETTING_GSM_APN))
 }
 func setSettingGsmNetworkIdJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NETWORK_ID, valueJSON, getSettingGsmKeyType(NM_SETTING_GSM_NETWORK_ID))
@@ -459,6 +459,9 @@ func setSettingGsmPinFlagsJSON(data connectionData, valueJSON string) (err error
 // Logic JSON Setter
 
 // Remover
+func removeSettingGsmApn(data connectionData) {
+	removeSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_APN)
+}
 func removeSettingGsmNumber(data connectionData) {
 	removeSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NUMBER)
 }
@@ -470,9 +473,6 @@ func removeSettingGsmPasswordFlags(data connectionData) {
 }
 func removeSettingGsmPassword(data connectionData) {
 	removeSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_PASSWORD)
-}
-func removeSettingGsmApn(data connectionData) {
-	removeSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_APN)
 }
 func removeSettingGsmNetworkId(data connectionData) {
 	removeSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NETWORK_ID)

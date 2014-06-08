@@ -73,17 +73,15 @@ func newMobileConnectionData(id, uuid, serviceType string) (data connectionData)
 func initSettingSectionGsm(data connectionData) {
 	setSettingConnectionType(data, NM_SETTING_GSM_SETTING_NAME)
 	addSettingSection(data, sectionGsm)
+	setSettingGsmNumber(data, "*99#")
 	setSettingGsmPasswordFlags(data, NM_SETTING_SECRET_FLAG_NONE)
 	setSettingGsmPinFlags(data, NM_SETTING_SECRET_FLAG_NONE)
 }
 
 // Get available keys
 func getSettingGsmAvailableKeys(data connectionData) (keys []string) {
-	// TODO remove
-	// keys = append(keys, NM_SETTING_VK_MOBILE_SERVICE_TYPE)
 	keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_NUMBER)
 	keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_USERNAME)
-	keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_PASSWORD_FLAGS)
 	if isSettingRequireSecret(getSettingGsmPasswordFlags(data)) {
 		keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_PASSWORD)
 	}
@@ -98,14 +96,10 @@ func getSettingGsmAvailableKeys(data connectionData) (keys []string) {
 // Get available values
 func getSettingGsmAvailableValues(data connectionData, key string) (values []kvalue) {
 	switch key {
-	case NM_SETTING_GSM_NUMBER:
-		values = []kvalue{
-			kvalue{"*99#", Tr("*99#")},
-		}
 	case NM_SETTING_GSM_PASSWORD_FLAGS:
 		values = availableValuesSettingSecretFlags
 	case NM_SETTING_GSM_APN:
-		// TODO
+		// TODO just for test
 		values = []kvalue{
 			kvalue{"3gnet", Tr("China Unicom Internet")},
 			kvalue{"3gwap", Tr("China Unicom MMS")},
@@ -131,9 +125,7 @@ func getSettingGsmAvailableValues(data connectionData, key string) (values []kva
 func checkSettingGsmValues(data connectionData) (errs sectionErrors) {
 	errs = make(map[string]string)
 	// TODO
+	ensureSettingGsmApnNoEmpty(data, errs)
 	ensureSettingGsmNumberNoEmpty(data, errs)
-	if isSettingRequireSecret(getSettingGsmPasswordFlags(data)) {
-		ensureSettingGsmPasswordNoEmpty(data, errs)
-	}
 	return
 }
