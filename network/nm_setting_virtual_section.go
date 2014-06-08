@@ -109,20 +109,18 @@ const (
 	NM_SETTING_VS_VPN_VPNC_ADVANCED    = "vs-vpn-vpnc-advanced"
 )
 const (
-	vsectionGeneral  = NM_SETTING_VS_GENERAL  // -> sectionConnection
-	vsectionEthernet = NM_SETTING_VS_ETHERNET // -> sectionWired
-	vsectionMobile   = NM_SETTING_VS_MOBILE   // -> sectionGsm, sectionCdma
-	// TODO
-	vsectionMobileGsm  = NM_SETTING_VS_MOBILE_GSM  // -> sectionGsm
-	vsectionMobileCdma = NM_SETTING_VS_MOBILE_CDMA // -> sectionCdma
-	vsectionWifi       = NM_SETTING_VS_WIFI        // -> sectionWireless
-	vsectionIpv4       = NM_SETTING_VS_IPV4        // -> sectionIpv4
-	vsectionIpv6       = NM_SETTING_VS_IPV6        // -> sectionIpv6
-	vsectionSecurity   = NM_SETTING_VS_SECURITY    // -> section8021x, sectionWirelessSecurity
-	vsectionPppoe      = NM_SETTING_VS_PPPOE       // -> sectionPppoe
-	vsectionPpp        = NM_SETTING_VS_PPP         // -> sectionPpp
-	vsectionVpn        = NM_SETTING_VS_VPN         // -> sectionVpnL2tp, sectionVpnOpenconnect, sectionVpnOpenvpn, sectionVpnPptp, sectionVpnVpnc
-	// TODO
+	vsectionGeneral            = NM_SETTING_VS_GENERAL              // -> sectionConnection
+	vsectionEthernet           = NM_SETTING_VS_ETHERNET             // -> sectionWired
+	vsectionMobile             = NM_SETTING_VS_MOBILE               // -> sectionGsm, sectionCdma
+	vsectionMobileGsm          = NM_SETTING_VS_MOBILE_GSM           // -> sectionGsm
+	vsectionMobileCdma         = NM_SETTING_VS_MOBILE_CDMA          // -> sectionCdma
+	vsectionWifi               = NM_SETTING_VS_WIFI                 // -> sectionWireless
+	vsectionIpv4               = NM_SETTING_VS_IPV4                 // -> sectionIpv4
+	vsectionIpv6               = NM_SETTING_VS_IPV6                 // -> sectionIpv6
+	vsectionSecurity           = NM_SETTING_VS_SECURITY             // -> section8021x, sectionWirelessSecurity
+	vsectionPppoe              = NM_SETTING_VS_PPPOE                // -> sectionPppoe
+	vsectionPpp                = NM_SETTING_VS_PPP                  // -> sectionPpp
+	vsectionVpn                = NM_SETTING_VS_VPN                  // -> sectionVpnL2tp, sectionVpnOpenconnect, sectionVpnOpenvpn, sectionVpnPptp, sectionVpnVpnc
 	vsectionVpnL2tp            = NM_SETTING_VS_VPN_L2TP             // -> sectionVpnL2tp
 	vsectionVpnL2tpPpp         = NM_SETTING_VS_VPN_L2TP_PPP         // -> sectionVpnL2tpPpp
 	vsectionVpnL2tpIpsec       = NM_SETTING_VS_VPN_L2TP_IPSEC       // -> sectionVpnL2tpIpsec
