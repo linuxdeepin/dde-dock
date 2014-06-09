@@ -38,7 +38,10 @@ func (m *Manager) SetProxy(proxyType, addr, port string) (err error) {
 	}
 	var proxy string
 	if len(addr) > 0 {
-		proxy = proxyType + "://" + addr + port + "/"
+		if !strings.HasPrefix(addr, proxyType+"://") {
+			addr = proxyType + "://" + addr
+		}
+		proxy = addr + ":" + port + "/"
 	}
 	err = ubuntuSetProxy(proxyType, proxy)
 	return
