@@ -4,7 +4,6 @@ import (
 	"dlib/dbus"
 	liblogger "dlib/logger"
 	"os"
-	"os/exec"
 )
 
 var (
