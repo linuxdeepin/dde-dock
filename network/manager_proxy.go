@@ -38,6 +38,10 @@ func (m *Manager) SetProxy(proxyType, addr, port string) (err error) {
 	}
 	var proxy string
 	if len(addr) > 0 {
+		if len(port) == 0 {
+			err = fmt.Errorf("proxy port is empty")
+			return
+		}
 		if !strings.HasPrefix(addr, proxyType+"://") {
 			addr = proxyType + "://" + addr
 		}
