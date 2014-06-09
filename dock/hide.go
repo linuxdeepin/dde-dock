@@ -51,7 +51,7 @@ func (m *HideStateManager) SetState(s int32) int32 {
 		return s
 	}
 
-	logger.Info(HideStateMap[m.state], HideStateMap[s], HideStateMap[s])
+	logger.Info("SetState m.state:", HideStateMap[m.state], "new state:", HideStateMap[s])
 	m.state = s
 	logger.Debug("SetState emit StateChanged signal", HideStateMap[m.state])
 	m.StateChanged(s)
@@ -70,6 +70,7 @@ func (m *HideStateManager) UpdateState() {
 		m.state = HideStateShowing
 
 		if region.mouseInRegion() {
+			logger.Debug("MouseInDockRegion")
 			break
 		}
 
@@ -80,6 +81,7 @@ func (m *HideStateManager) UpdateState() {
 	case HideModeKeepHidden:
 		logger.Debug("KeepHidden Mode")
 		if region.mouseInRegion() {
+			logger.Debug("MouseInDockRegion")
 			m.state = HideStateShowing
 			break
 		}

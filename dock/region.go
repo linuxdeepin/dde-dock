@@ -62,22 +62,40 @@ func (r *Region) GetDockRegion() xproto.Rectangle {
 		logger.Error("get rectangles failed:", err)
 		return dockRegion
 	}
-	for _, rect := range rep.Rectangles {
-		logger.Debugf("dock region: (%d,%d)->(%d,%d)",
-			rect.X, rect.Y,
+
+	firstRect := rep.Rectangles[0]
+	dockRegion.X = firstRect.X
+	dockRegion.Y = firstRect.Y
+	dockRegion.Width = firstRect.Width
+	dockRegion.Height = firstRect.Height
+
+	for i, rect := range rep.Rectangles {
+		logger.Debugf("dock region %d: (%d,%d)->(%d,%d)",
+			i, rect.X, rect.Y,
 			int32(rect.X)+int32(rect.Width),
 			int32(rect.Y)+int32(rect.Height),
 		)
-		if dockRegion.X == 0 || dockRegion.X > rect.X {
+
+		if i == 0 {
+			continue
+		}
+
+		if dockRegion.X > rect.X {
 			dockRegion.X = rect.X
 			dockRegion.Width = rect.Width
 		}
-		if dockRegion.Y == 0 || dockRegion.Y > rect.Y {
+		if dockRegion.Y > rect.Y {
 			dockRegion.Y = rect.Y
 		}
 
 		dockRegion.Height += rect.Height
 	}
+
+	logger.Debugf("Dock region: (%d, %d)->(%d, %d)",
+		dockRegion.X, dockRegion.Y,
+		int32(dockRegion.X)+int32(dockRegion.Width),
+		int32(dockRegion.Y)+int32(dockRegion.Height),
+	)
 
 	return dockRegion
 }
