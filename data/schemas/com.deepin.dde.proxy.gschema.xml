@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+    <schema path="/com/deepin/dde/proxy/" id="com.deepin.dde.proxy">
+    <key type="s" name="http-proxy">
+      <default>''</default>
+      <summary>dde system http proxy</summary>
+      <description>dde system http proxy, such as "http://127.0.0.1:8080/"</description>
+    </key>
+    <key type="s" name="https-proxy">
+      <default>''</default>
+      <summary>dde system https proxy</summary>
+      <description>dde system https proxy, such as "https://127.0.0.1:8080/"</description>
+    </key>
+    <key type="s" name="ftp-proxy">
+      <default>''</default>
+      <summary>dde system ftp proxy</summary>
+      <description>dde system ftp proxy, such as "ftp://127.0.0.1:8080/"</description>
+    </key>
+    <key type="s" name="socks-proxy">
+      <default>''</default>
+      <summary>dde system socks proxy</summary>
+      <description>dde system socks proxy, such as "socks://127.0.0.1:8080/"</description>
+    </key>
+  </schema>
+</schemalist>
