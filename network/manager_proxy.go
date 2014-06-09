@@ -2,8 +2,7 @@ package network
 
 import "strings"
 import "fmt"
-
-// TODO implement dde-api/proxy
+import "dlib/gio-2.0"
 
 // example of /etc/environment
 // http_proxy="http://127.0.0.1:0/"
@@ -11,12 +10,30 @@ import "fmt"
 // ftp_proxy="ftp://127.0.0.1:0/"
 // socks_proxy="socks://127.0.0.1:0/"
 
+const (
+	envHttpProxy  = "http-proxy"
+	envHttpsProxy = "https-proxy"
+	envFtpProxy   = "ftp-proxy"
+	envSocksProxy = "socks-proxy"
+
+	proxyHttp  = "http"
+	proxyHttps = "https"
+	proxyFtp   = "ftp"
+	proxySocks = "socks"
+
+	gsettingsIdProxy = "com.deepin.dde.proxy"
+	gkeyHttpProxy    = envHttpProxy
+	gkeyHttpsProxy   = envHttpsProxy
+	gkeyFtpProxy     = envFtpProxy
+	gkeySocksProxy   = envSocksProxy
+)
+
+var (
+	proxySettings = gio.NewSettings(gsettingsIdProxy)
+)
+
 func (m *Manager) GetProxy(proxyType string) (addr, port string, err error) {
-	err = checkProxyType(proxyType)
-	if err != nil {
-		return
-	}
-	proxy, err := ubuntuGetProxy(proxyType)
+	proxy, err := doGetProxy(proxyType)
 	if err != nil {
 		return
 	}
@@ -32,10 +49,6 @@ func (m *Manager) GetProxy(proxyType string) (addr, port string, err error) {
 
 // if address is empty, means to remove proxy setting
 func (m *Manager) SetProxy(proxyType, addr, port string) (err error) {
-	err = checkProxyType(proxyType)
-	if err != nil {
-		return
-	}
 	var proxy string
 	if len(addr) > 0 {
 		if len(port) == 0 {
@@ -47,13 +60,13 @@ func (m *Manager) SetProxy(proxyType, addr, port string) (err error) {
 		}
 		proxy = addr + ":" + port + "/"
 	}
-	err = ubuntuSetProxy(proxyType, proxy)
+	err = doSetProxy(proxyType, proxy)
 	return
 }
 
 func checkProxyType(proxyType string) (err error) {
 	switch proxyType {
-	case "http", "https", "ftp", "socks":
+	case proxyHttp, proxyHttps, proxyFtp, proxySocks:
 	default:
 		err = fmt.Errorf("not a valid proxy type: %s", proxyType)
 		logger.Error(err)
@@ -61,67 +74,41 @@ func checkProxyType(proxyType string) (err error) {
 	return
 }
 
-func newUbuntuSystemService() (s *SystemService, err error) {
-	// s, err = NewSystemService("com.ubuntu.SystemService", "/com/ubuntu/SystemService")
-	s, err = NewSystemService("com.ubuntu.SystemService", "/")
-	if err != nil {
+func doGetProxy(proxyType string) (proxy string, err error) {
+	switch proxyType {
+	case proxyHttp:
+		proxy = proxySettings.GetString(gkeyHttpProxy)
+	case proxyHttps:
+		proxy = proxySettings.GetString(gkeyHttpsProxy)
+	case proxyFtp:
+		proxy = proxySettings.GetString(gkeyFtpProxy)
+	case proxySocks:
+		proxy = proxySettings.GetString(gkeySocksProxy)
+	default:
+		err = fmt.Errorf("not a valid proxy type: %s", proxyType)
 		logger.Error(err)
 	}
 	return
 }
 
-func ubuntuGetProxy(proxyType string) (proxy string, err error) {
-	var s *SystemService
-	s, err = newUbuntuSystemService()
-	if err != nil {
+func doSetProxy(proxyType, proxy string) (err error) {
+	var ok bool
+	switch proxyType {
+	case proxyHttp:
+		ok = proxySettings.SetString(gkeyHttpProxy, proxy)
+	case proxyHttps:
+		ok = proxySettings.SetString(gkeyHttpsProxy, proxy)
+	case proxyFtp:
+		ok = proxySettings.SetString(gkeyFtpProxy, proxy)
+	case proxySocks:
+		ok = proxySettings.SetString(gkeySocksProxy, proxy)
+	default:
+		err = fmt.Errorf("not a valid proxy type: %s", proxyType)
 		logger.Error(err)
-		return
 	}
-	proxy, err = s.GetProxy(proxyType)
-	if err != nil {
-		// do not print error here, for if a proxy is not defined, it
-		// will get error too
-		return
-	}
-	return
-}
-
-func ubuntuSetProxy(proxyType, proxy string) (err error) {
-	var s *SystemService
-	s, err = newUbuntuSystemService()
-	if err != nil {
-		logger.Error(err)
-		return
-	}
-	ok, err := s.SetProxy(proxyType, proxy)
 	if !ok {
-		err = fmt.Errorf("set proxy failed: %s, %s", proxyType, proxy)
+		err = fmt.Errorf("set proxy value to gsettings failed: %s, %s", proxyType, proxy)
 		logger.Error(err)
-		return
-	}
-	if err != nil {
-		logger.Error(err)
-		return
-	}
-	return
-}
-
-func ubuntuSetNoProxy(proxyType, proxy string) (err error) {
-	var s *SystemService
-	s, err = newUbuntuSystemService()
-	if err != nil {
-		logger.Error(err)
-		return
-	}
-	ok, err := s.SetProxy(proxyType, proxy)
-	if !ok {
-		err = fmt.Errorf("set proxy failed: %s, %s", proxyType, proxy)
-		logger.Error(err)
-		return
-	}
-	if err != nil {
-		logger.Error(err)
-		return
 	}
 	return
 }
