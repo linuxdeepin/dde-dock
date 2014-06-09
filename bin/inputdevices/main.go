@@ -110,6 +110,7 @@ func main() {
 	initGSettingsSet(tpadFlag)
 
 	dbus.DealWithUnhandledMessage()
+	ddeSessionRegister()
 	go glib.StartLoop()
 	if err := dbus.Wait(); err != nil {
 		logObj.Warning("Lost Session DBus")

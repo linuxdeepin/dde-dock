@@ -106,5 +106,6 @@ func main() {
 		}
 	}()
 
+	ddeSessionRegister()
 	glib.StartLoop()
 }
