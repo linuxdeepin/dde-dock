@@ -1,4 +1,4 @@
-package systemservice
+package network
 
 import "dlib/dbus"
 

@@ -1,5 +1,5 @@
 /*This file is auto generate by dlib/dbus/proxyer. Don't edit it*/
-package systemservice
+package network
 
 import "dlib/dbus"
 import "dlib/dbus/property"

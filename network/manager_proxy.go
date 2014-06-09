@@ -1,6 +1,5 @@
 package network
 
-import systemservice "./ubuntu_systemservice"
 import "strings"
 import "fmt"
 
@@ -55,9 +54,9 @@ func checkProxyType(proxyType string) (err error) {
 	return
 }
 
-func newUbuntuSystemService() (s *systemservice.SystemService, err error) {
-	// s, err = systemservice.NewSystemService("com.ubuntu.SystemService", "/com/ubuntu/SystemService")
-	s, err = systemservice.NewSystemService("com.ubuntu.SystemService", "/")
+func newUbuntuSystemService() (s *SystemService, err error) {
+	// s, err = NewSystemService("com.ubuntu.SystemService", "/com/ubuntu/SystemService")
+	s, err = NewSystemService("com.ubuntu.SystemService", "/")
 	if err != nil {
 		logger.Error(err)
 	}
@@ -65,7 +64,7 @@ func newUbuntuSystemService() (s *systemservice.SystemService, err error) {
 }
 
 func ubuntuGetProxy(proxyType string) (proxy string, err error) {
-	var s *systemservice.SystemService
+	var s *SystemService
 	s, err = newUbuntuSystemService()
 	if err != nil {
 		logger.Error(err)
@@ -81,7 +80,7 @@ func ubuntuGetProxy(proxyType string) (proxy string, err error) {
 }
 
 func ubuntuSetProxy(proxyType, proxy string) (err error) {
-	var s *systemservice.SystemService
+	var s *SystemService
 	s, err = newUbuntuSystemService()
 	if err != nil {
 		logger.Error(err)
@@ -101,7 +100,7 @@ func ubuntuSetProxy(proxyType, proxy string) (err error) {
 }
 
 func ubuntuSetNoProxy(proxyType, proxy string) (err error) {
-	var s *systemservice.SystemService
+	var s *SystemService
 	s, err = newUbuntuSystemService()
 	if err != nil {
 		logger.Error(err)
