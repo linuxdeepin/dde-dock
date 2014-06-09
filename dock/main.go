@@ -70,6 +70,4 @@ func Start() {
 	dbus.DealWithUnhandledMessage()
 
 	initialize()
-
-	go exec.Command("/usr/bin/dde-dock").Run()
 }

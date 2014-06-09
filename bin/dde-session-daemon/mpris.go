@@ -239,7 +239,7 @@ func listenAudioSignal() {
 		}
 
 		if cmd, ok := getCommandByMimeType(MIME_TYPE_EMAIL); ok {
-			go exec.Command(cmd).Run()
+			exec.Command(cmd).Start()
 		}
 	})
 
@@ -249,7 +249,7 @@ func listenAudioSignal() {
 		}
 
 		if cmd, ok := getCommandByMimeType(MIME_TYPE_BROWSER); ok {
-			go exec.Command(cmd).Run()
+			exec.Command(cmd).Start()
 		}
 	})
 
@@ -258,7 +258,7 @@ func listenAudioSignal() {
 			return
 		}
 
-		go exec.Command(CALCULATOR_CMD).Run()
+		exec.Command(CALCULATOR_CMD).Start()
 	})
 
 	// Pause all media player

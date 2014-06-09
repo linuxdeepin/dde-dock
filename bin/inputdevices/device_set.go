@@ -54,7 +54,7 @@ func enableTPadWhileTyping() {
 	args = append(args, "-R")
 
 	tpadTypingState = true
-	go exec.Command(cmd, args...).Run()
+	exec.Command(cmd, args...).Start()
 	select {
 	case <-tpadTypingChan:
 		exec.Command("/usr/bin/killall", "/usr/bin/syndaemon")

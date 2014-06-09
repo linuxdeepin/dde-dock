@@ -67,7 +67,7 @@ func (m *Manager) listenSignalChanged() {
 			mediaHandSetting.GetBoolean(MEDIA_HAND_AUTO_MOUNT) &&
 			mediaHandSetting.GetBoolean(MEDIA_HAND_AUTO_OPEN) {
 			uri := mount.GetRoot().GetUri()
-			go exec.Command("/usr/bin/xdg-open", uri).Run()
+			exec.Command("/usr/bin/xdg-open", uri).Start()
 		}
 		m.setPropName("DiskList")
 		//printDiskInfo(m.DiskList)
