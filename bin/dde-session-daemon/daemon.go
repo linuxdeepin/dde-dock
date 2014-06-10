@@ -1,5 +1,6 @@
 package main
 
+import "dde-daemon/screensaver"
 import "dde-daemon/network"
 import "dde-daemon/clipboard"
 import "dde-daemon/audio"
@@ -40,6 +41,7 @@ type Module struct {
 
 var modules = []Module{
 	Module{"keybinding", keybinding.Start, nil, true},
+	Module{"screensaver", screensaver.Start, nil, true},
 	Module{"power", power.Start, nil, true},
 	Module{"themes", themes.Start, nil, true},
 	Module{"screen_edges", screen_edges.Start, nil, true},

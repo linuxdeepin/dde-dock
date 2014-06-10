@@ -1,4 +1,4 @@
-package power
+package screensaver
 
 import (
 	"dlib/dbus"
@@ -86,6 +86,15 @@ func NewScreenSaver() *ScreenSaver {
 
 	go s.loop()
 	return s
+}
+func Start() {
+	ssaver := NewScreenSaver()
+
+	if err := dbus.InstallOnSession(ssaver); err != nil {
+		return
+	}
+
+	dbus.DealWithUnhandledMessage()
 }
 
 func (ss *ScreenSaver) loop() {
