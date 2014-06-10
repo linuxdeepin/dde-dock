@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2011 ~ 2013 Deepin, Inc.
- *               2011 ~ 2013 jouyouyun
+ * Copyright (c) 2011 ~ 2014 Deepin, Inc.
+ *               2013 ~ 2014 jouyouyun
  *
  * Author:      jouyouyun <jouyouwen717@gmail.com>
  * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
@@ -22,41 +22,139 @@
 package themes
 
 import (
-	"strings"
+	"dlib/gio-2.0"
+	"github.com/howeyc/fsnotify"
+	"os/exec"
+	"path"
+	"strconv"
 )
 
 type Theme struct {
-	Name           string
-	Type           string //system or local theme
-	GtkTheme       string
-	IconTheme      string
-	CursorTheme    string
-	FontSize       string
-	BackgroundFile string
-	SoundTheme     string
-	PreviewPath    string
-	ThumbnailPath  string
-	basePath       string
-	path           string
+	Name        string
+	GtkTheme    string
+	IconTheme   string
+	SoundTheme  string
+	CursorTheme string
+	Background  string
+	FontSize    int32
+	Type        int32
+	filePath    string
+	objectPath  string
+
+	watcher  *fsnotify.Watcher
+	quitFlag chan bool
 }
 
-func newTheme(path string, info PathInfo) *Theme {
-	m := &Theme{}
+const (
+	QT_CONFIG_FILE    = ".config/Trolltech.conf"
+	DEFAULT_FONT_SIZE = " 11"
 
-	m.path = path
-	m.Name = info.path
-	m.Type = strings.ToLower(info.t)
+	QT_KEY_GROUP   = "Qt"
+	QT_KEY_STYLE   = "stype"
+	QT_STYLE_VALUE = "GTK+"
+	QT_KEY_FONT    = "font"
+	QT_FONT_ARGS   = ",-1,5,50,0,0,0,0,0"
 
-	if m.Type == "system" {
-		m.basePath = THUMB_THEME_PATH + "/" + m.Name
-	} else if m.Type == "local" {
-		homeDir := getHomeDir()
-		m.basePath = homeDir + THUMB_LOCAL_THEME_PATH + "/" + m.Name
+	DEFAULT_FONT      = "WenQuanYi Micro Hei"
+	DEFAULT_FONT_MONO = "WenQuanYi Micro Hei Mono"
+)
+
+var (
+	wmPreSettings = gio.NewSettings("org.gnome.desktop.wm.preferences")
+)
+
+func (obj *Theme) setAllThemes() {
+	obj.setGtkTheme()
+	obj.setIconTheme()
+	obj.setCursorTheme()
+	obj.setFontName()
+
+	bg := themeSettings.GetString(GS_KEY_CURRENT_BG)
+	if obj.Background != bg {
+		themeSettings.SetString(GS_KEY_CURRENT_BG, obj.Background)
 	}
-	m.PreviewPath = m.basePath + "/preview.png"
-	m.ThumbnailPath = m.basePath + "/thumbnail.png"
+}
 
-	m.updateThemeInfo()
+func (obj *Theme) setGtkTheme() {
+	objXS.SetString("Net/ThemeName", obj.GtkTheme)
+	wmPreSettings.SetString("theme", obj.GtkTheme)
+	homeDir, _ := objUtil.GetHomeDir()
+	if ok := objUtil.WriteKeyToKeyFile(path.Join(homeDir, QT_CONFIG_FILE),
+		QT_KEY_GROUP, QT_KEY_STYLE, QT_STYLE_VALUE); !ok {
+		Logger.Error("Set QT Style Failed")
+		return
+	}
+}
 
-	return m
+func (obj *Theme) setIconTheme() {
+	objXS.SetString("Net/IconThemeName", obj.IconTheme)
+}
+
+func (obj *Theme) setCursorTheme() {
+	objXS.SetString("Gtk/CursorThemeName", obj.CursorTheme)
+}
+
+func (obj *Theme) setFontName() {
+	size := ""
+	if obj.FontSize < 1 {
+		size = DEFAULT_FONT_SIZE
+	} else {
+		size = strconv.FormatInt(int64(obj.FontSize), 10)
+	}
+	objXS.SetString("Gtk/FontName", DEFAULT_FONT+" "+size)
+	wmPreSettings.SetString("titlebar-font", DEFAULT_FONT+" Bold "+size)
+	homeDir, _ := objUtil.GetHomeDir()
+	if ok := objUtil.WriteKeyToKeyFile(path.Join(homeDir, QT_CONFIG_FILE),
+		QT_KEY_GROUP, QT_KEY_FONT,
+		"\""+DEFAULT_FONT+","+size+QT_FONT_ARGS+"\""); !ok {
+		Logger.Error("Set QT Font Failed")
+		return
+	}
+	setMonoFont(DEFAULT_FONT_MONO, size)
+}
+
+func setMonoFont(name, size string) {
+	if len(name) <= 0 {
+		return
+	}
+
+	if len(size) <= 0 {
+		size = "10"
+	}
+
+	args := []string{}
+	args = append(args, "-t")
+	args = append(args, "string")
+	args = append(args, "-s")
+	args = append(args, "/desktop/gnome/interface/monospace_font_name")
+	args = append(args, name+" "+size)
+
+	exec.Command("/usr/bin/gconftool", args...).Run()
+}
+
+func newTheme(info ThemeInfo) *Theme {
+	t := &Theme{}
+
+	t.Type = info.T
+	t.filePath = info.Path
+
+	t.setAllProps()
+	t.objectPath = THEME_PATH + t.Name
+	//t.setAllThemes()
+
+	var err error
+	t.watcher, err = fsnotify.NewWatcher()
+	if err != nil {
+		Logger.Errorf("New Watcher Failed: %v", err)
+		panic(err)
+	}
+
+	t.quitFlag = make(chan bool)
+
+	if t.Type == THEME_TYPE_LOCAL {
+		t.startWatch()
+		go t.handleEvent()
+	}
+
+	return t
 }

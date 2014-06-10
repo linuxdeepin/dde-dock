@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2011 ~ 2013 Deepin, Inc.
- *               2011 ~ 2013 jouyouyun
+ * Copyright (c) 2011 ~ 2014 Deepin, Inc.
+ *               2013 ~ 2014 jouyouyun
  *
  * Author:      jouyouyun <jouyouwen717@gmail.com>
  * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
@@ -24,126 +24,133 @@ package themes
 import (
 	"dlib/dbus"
 	"dlib/glib-2.0"
-	"strings"
+	"path"
 )
 
-const (
-	THEME_DEST = "com.deepin.daemon.Themes"
-	THEME_PATH = "/com/deepin/daemon/Theme"
-	//THEME_PATH         = "/com/deepin/daemon/Theme/Entry"
-	THEME_IFC = "com.deepin.daemon.Theme"
-
-	BG_DIR_SYS   = "/usr/share/deepin-personalization/wallpappers"
-	BG_DIR_LOCAL = ".deepin-personalization/wallpappers"
-
-	THEME_GROUP_THEME     = "Theme"
-	THEME_KEY_NAME        = "Name"
-	THEME_GROUP_COMPONENT = "Component"
-	THEME_KEY_GTK         = "GtkTheme"
-	THEME_KEY_ICONS       = "IconTheme"
-	THEME_KEY_CURSOR      = "CursorTheme"
-	THEME_KEY_FONT_SIZE   = "FontSize"
-	THEME_KEY_BG          = "BackgroundFile"
-	THEME_KEY_SOUND       = "SoundTheme"
-)
-
-func (op *Theme) GetDBusInfo() dbus.DBusInfo {
+func (obj *Theme) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		THEME_DEST,
-		op.path,
+		MANAGER_DEST,
+		obj.objectPath,
 		THEME_IFC,
 	}
 }
 
-func (op *Theme) OnPropertiesChanged(propName string, old interface{}) {
-	switch propName {
-	case "BackgroundFile":
-		if v, ok := old.(string); ok && v != op.BackgroundFile {
-			personSettings.SetString(GKEY_CURRENT_BACKGROUND,
-				op.BackgroundFile)
-		}
+func (obj *Theme) setPropName(name string) {
+	if obj.Name != name {
+		obj.Name = name
+		dbus.NotifyChange(obj, "Name")
 	}
 }
 
-func (op *Theme) updateThemeInfo() {
-	filename := op.basePath + "/theme.ini"
-	keyFile := glib.NewKeyFile()
-	defer keyFile.Free()
+func (obj *Theme) setPropGtkTheme(theme string) {
+	if obj.GtkTheme != theme {
+		obj.GtkTheme = theme
+		dbus.NotifyChange(obj, "GtkTheme")
+	}
+}
 
-	_, err := keyFile.LoadFromFile(filename,
+func (obj *Theme) setPropIconTheme(theme string) {
+	if obj.IconTheme != theme {
+		obj.IconTheme = theme
+		dbus.NotifyChange(obj, "IconTheme")
+	}
+}
+
+func (obj *Theme) setPropSoundTheme(theme string) {
+	if obj.SoundTheme != theme {
+		obj.SoundTheme = theme
+		dbus.NotifyChange(obj, "SoundTheme")
+	}
+}
+
+func (obj *Theme) setPropCursorTheme(theme string) {
+	if obj.CursorTheme != theme {
+		obj.CursorTheme = theme
+		dbus.NotifyChange(obj, "CursorTheme")
+	}
+}
+
+func (obj *Theme) setPropBackground(bg string) {
+	if obj.Background != bg {
+		obj.Background = bg
+		dbus.NotifyChange(obj, "Background")
+	}
+}
+
+func (obj *Theme) setPropFontSize(s int32) {
+	if obj.FontSize != s {
+		obj.FontSize = s
+		dbus.NotifyChange(obj, "FontSize")
+	}
+}
+
+func (obj *Theme) setPropType(t int32) {
+	if obj.Type != t {
+		obj.Type = t
+		dbus.NotifyChange(obj, "Type")
+	}
+}
+
+func (obj *Theme) setAllProps() {
+	kf := glib.NewKeyFile()
+	defer kf.Free()
+
+	var err error
+	_, err = kf.LoadFromFile(path.Join(obj.filePath, "theme.ini"),
 		glib.KeyFileFlagsKeepComments)
 	if err != nil {
-		logObject.Infof("LoadFile '%s' failed: %v",
-			filename, err)
+		Logger.Errorf("Load KeyFile '%s' Failed: %v", obj.filePath, err)
 		return
 	}
 
-	str, err1 := keyFile.GetString(THEME_GROUP_COMPONENT,
-		THEME_KEY_GTK)
-	if err1 != nil {
-		logObject.Infof("Get key '%s' value failed: %v",
-			THEME_KEY_GTK, err1)
+	var str string
+	str, err = kf.GetString(THEME_GROUP_THEME, THEME_KEY_NAME)
+	if err != nil {
+		Logger.Warningf("Get '%s' failed: %v", THEME_KEY_NAME, err)
 		return
 	}
-	op.GtkTheme = str
-	//dbus.NotifyChange(op, "GtkTheme")
+	obj.setPropName(str)
 
-	str, err1 = keyFile.GetString(THEME_GROUP_COMPONENT,
-		THEME_KEY_ICONS)
-	if err1 != nil {
-		logObject.Infof("Get key '%s' value failed: %v",
-			THEME_KEY_CURSOR, err1)
+	str, err = kf.GetString(THEME_GROUP_COMPONENT, THEME_KEY_GTK)
+	if err != nil {
+		Logger.Warningf("Get '%s' failed: %v", THEME_KEY_GTK, err)
 		return
 	}
-	op.IconTheme = str
-	//dbus.NotifyChange(op, "IconTheme")
+	obj.setPropGtkTheme(str)
 
-	str, err1 = keyFile.GetString(THEME_GROUP_COMPONENT,
-		THEME_KEY_CURSOR)
-	if err1 != nil {
-		logObject.Infof("Get key '%s' value failed: %v",
-			THEME_KEY_CURSOR, err1)
+	str, err = kf.GetString(THEME_GROUP_COMPONENT, THEME_KEY_ICON)
+	if err != nil {
+		Logger.Warningf("Get '%s' failed: %v", THEME_KEY_ICON, err)
 		return
 	}
-	op.CursorTheme = str
-	//dbus.NotifyChange(op, "CursorTheme")
+	obj.setPropIconTheme(str)
 
-	str, err1 = keyFile.GetString(THEME_GROUP_COMPONENT,
-		THEME_KEY_FONT_SIZE)
-	if err1 != nil {
-		logObject.Infof("Get key '%s' value failed: %v",
-			THEME_KEY_FONT_SIZE, err1)
+	str, err = kf.GetString(THEME_GROUP_COMPONENT, THEME_KEY_SOUND)
+	if err != nil {
+		Logger.Warningf("Get '%s' failed: %v", THEME_KEY_SOUND, err)
 		return
 	}
-	op.FontSize = str
-	//dbus.NotifyChange(op, "FontSize")
+	obj.setPropSoundTheme(str)
 
-	str, err1 = keyFile.GetString(THEME_GROUP_COMPONENT,
-		THEME_KEY_BG)
-	if err1 != nil {
-		logObject.Infof("Get key '%s' value failed: %v",
-			THEME_KEY_BG, err1)
+	str, err = kf.GetString(THEME_GROUP_COMPONENT, THEME_KEY_CURSOR)
+	if err != nil {
+		Logger.Warningf("Get '%s' failed: %v", THEME_KEY_CURSOR, err)
 		return
 	}
-	if !strings.Contains(str, "/") {
-		if op.Type == PATH_TYPE_SYSTEM {
-			str = BG_DIR_SYS + "/" + op.Name + "/" + str
-		} else if op.Type == PATH_TYPE_LOCAL {
-			homeDir := getHomeDir()
-			str = homeDir + "/" + BG_DIR_LOCAL + "/" + op.Name + "/" + str
-		}
-	}
-	fileUri, _ := objUtil.PathToFileURI(str)
-	op.BackgroundFile = fileUri
-	//dbus.NotifyChange(op, "BackgroundFile")
+	obj.setPropCursorTheme(str)
 
-	str, err1 = keyFile.GetString(THEME_GROUP_COMPONENT,
-		THEME_KEY_SOUND)
-	if err1 != nil {
-		logObject.Infof("Get key '%s' value failed: %v",
-			THEME_KEY_SOUND, err1)
+	str, err = kf.GetString(THEME_GROUP_COMPONENT, THEME_KEY_BACKGROUND)
+	if err != nil {
+		Logger.Warningf("Get '%s' failed: %v", THEME_KEY_BACKGROUND, err)
 		return
 	}
-	op.SoundTheme = str
-	//dbus.NotifyChange(op, "SoundTheme")
+	obj.setPropBackground(str)
+
+	var interval int
+	interval, err = kf.GetInteger(THEME_GROUP_COMPONENT, THEME_KEY_FONT_SIZE)
+	if err != nil {
+		Logger.Warningf("Get '%s' failed: %v", THEME_KEY_FONT_SIZE, err)
+		return
+	}
+	obj.setPropFontSize(int32(interval))
 }

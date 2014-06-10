@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2011 ~ 2013 Deepin, Inc.
- *               2011 ~ 2013 jouyouyun
+ * Copyright (c) 2011 ~ 2014 Deepin, Inc.
+ *               2013 ~ 2014 jouyouyun
  *
  * Author:      jouyouyun <jouyouwen717@gmail.com>
  * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
@@ -22,120 +22,45 @@
 package themes
 
 import (
-	xs "dbus/com/deepin/sessionmanager"
+	"dbus/com/deepin/sessionmanager"
 	"dlib/dbus"
+	"dlib/gio-2.0"
 	"dlib/logger"
-	"dlib/utils"
-	"github.com/howeyc/fsnotify"
-	"strconv"
-	"sync"
+	Utils "dlib/utils"
 )
 
 var (
-	objManager       *Manager
-	objXSettings     *xs.XSettings
-	objUtil          *utils.Manager
-	watcher          *fsnotify.Watcher
-	logObject        = logger.NewLogger("daemon/themes")
-	themeObjMap      = make(map[string]*Theme)
-	themeNamePathMap = make(map[string]string)
+	objXS   *sessionmanager.XSettings
+	Logger  = logger.NewLogger(MANAGER_DEST)
+	objUtil = Utils.NewUtils()
 
-	genId, destroyId = func() (func() int, func()) {
-		count := 0
-		var mutex sync.Mutex
-		return func() int {
-				mutex.Lock()
-				tmp := count
-				count++
-				mutex.Unlock()
-				return tmp
-			}, func() {
-				mutex.Lock()
-				count = 0
-				mutex.Unlock()
-			}
-	}()
+	themeSettings = gio.NewSettings("com.deepin.dde.personalization")
 )
 
-func destroyThemeObj(path string) {
-	obj, ok := themeObjMap[path]
-	if !ok {
-		return
-	}
-
-	dbus.UnInstallObject(obj)
-	delete(themeObjMap, path)
-}
-
-func destroyAllThemeObj() {
-	if themeObjMap == nil {
-		return
-	}
-	for _, obj := range themeObjMap {
-		dbus.UnInstallObject(obj)
-	}
-	themeObjMap = make(map[string]*Theme)
-}
-
-func updateThemeObj(pathNameMap map[string]PathInfo) {
-	//mutex.Lock()
-	//defer mutex.Unlock()
-	destroyAllThemeObj()
-	destroyId()
-
-	for path, info := range pathNameMap {
-		obj := newTheme(path, info)
-		err := dbus.InstallOnSession(obj)
-		if err != nil {
-			logObject.Warningf("Install Session Failed: %v", err)
-			panic(err)
-		}
-		themeObjMap[path] = obj
-	}
-}
-
 func Start() {
-	logObject.BeginTracing()
-	defer logObject.EndTracing()
+	Logger.BeginTracing()
+	defer Logger.EndTracing()
+	Logger.SetRestartCommand("/usr/lib/deepin-daemon/themes")
 
 	var err error
-	objXSettings, err = xs.NewXSettings("com.deepin.SessionManager",
+	objXS, err = sessionmanager.NewXSettings("com.deepin.SessionManager",
 		"/com/deepin/XSettings")
 	if err != nil {
-		logObject.Errorf("New XSettings Failed: %v", err)
+		Logger.Error("New XSettings Failed:", err)
 		panic(err)
 	}
 
-	watcher, err = fsnotify.NewWatcher()
-	if err != nil {
-		logObject.Warning("Create Watch Failed: ", err)
+	if err = dbus.InstallOnSession(GetManager()); err != nil {
+		Logger.Error("Install DBus Failed", err)
 		panic(err)
 	}
-
-	objUtil = utils.NewUtils()
-
-	objManager = newManager()
-	err = dbus.InstallOnSession(objManager)
-	if err != nil {
-		logObject.Errorf("Install Session Failed: %v", err)
-		panic(err)
-	}
-
-	updateThemeObj(objManager.pathNameMap)
-	objManager.setPropName("CurrentTheme")
-	if obj := objManager.getThemeObject(objManager.CurrentTheme); obj != nil {
-		obj.setThemeViaXSettings()
-		objManager.SetGtkTheme(obj.GtkTheme)
-		objManager.SetIconTheme(obj.IconTheme)
-		objManager.SetCursorTheme(obj.CursorTheme)
-		size, _ := strconv.ParseInt(obj.FontSize, 10, 64)
-		objManager.SetFontSize(int32(size))
-		objManager.SetBackgroundFile(obj.BackgroundFile)
-	}
-	objThumb := &ThumbPath{}
-	dbus.InstallOnSession(objThumb)
-	objPre := &PreviewPath{}
-	dbus.InstallOnSession(objPre)
-
 	dbus.DealWithUnhandledMessage()
+}
+
+func Stop() {
+	obj := GetManager()
+	obj.destroyAllTheme()
+	obj.quitFlag <- true
+	obj.watcher.Close()
+	dbus.UnInstallObject(obj)
 }
