@@ -54,7 +54,7 @@ func main() {
 	logObj.BeginTracing()
 	defer logObj.EndTracing()
 	InitI18n()
-	Textdomain("xkeyboard-config")
+	//Textdomain("xkeyboard-config")
 
 	var err error
 	xsObj, err = libsession.NewXSettings("com.deepin.SessionManager",
