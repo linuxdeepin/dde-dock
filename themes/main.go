@@ -62,5 +62,7 @@ func Stop() {
 	obj.destroyAllTheme()
 	obj.quitFlag <- true
 	obj.watcher.Close()
+	obj.bgQuitFlag <- true
+	obj.bgWatcher.Close()
 	dbus.UnInstallObject(obj)
 }

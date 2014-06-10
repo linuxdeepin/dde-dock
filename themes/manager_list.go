@@ -461,12 +461,28 @@ func getDThemeList() []ThemeInfo {
 		THEME_TYPE_LOCAL)
 	sysList := getDThemeByDir(PERSON_SYS_THEME_PATH, THEME_TYPE_SYSTEM)
 
-	list := localList
+	list := []ThemeInfo{}
+	for _, l := range localList {
+		if l.Name == "Custom" {
+			list = append(list, l)
+			continue
+		}
+		thumb := path.Join(l.Path, "thumbnail.png")
+		if objUtil.IsFileExist(thumb) {
+			l.Thumbnail = thumb
+			list = append(list, l)
+		}
+	}
 	for _, l := range sysList {
 		if isThemeInfoInList(l, list) {
 			continue
 		}
-		list = append(list, l)
+
+		thumb := path.Join(l.Path, "thumbnail.png")
+		if objUtil.IsFileExist(thumb) {
+			l.Thumbnail = thumb
+			list = append(list, l)
+		}
 	}
 
 	return list

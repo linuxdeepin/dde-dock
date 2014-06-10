@@ -31,17 +31,21 @@ import (
 )
 
 type Manager struct {
-	ThemeList       []ThemeInfo
-	GtkThemeList    []ThemeInfo
-	IconThemeList   []ThemeInfo
-	CursorThemeList []ThemeInfo
-	SoundThemeList  []ThemeInfo
-	BackgroundList  []BgInfo
-	CurrentTheme    *property.GSettingsStringProperty
-	themeObjMap     map[string]*Theme
+	ThemeList         []ThemeInfo
+	GtkThemeList      []ThemeInfo
+	IconThemeList     []ThemeInfo
+	CursorThemeList   []ThemeInfo
+	SoundThemeList    []ThemeInfo
+	BackgroundList    []BgInfo
+	CurrentTheme      *property.GSettingsStringProperty
+	CurrentSound      *property.GSettingsStringProperty
+	CurrentBackground *property.GSettingsStringProperty
+	themeObjMap       map[string]*Theme
 
-	watcher  *fsnotify.Watcher
-	quitFlag chan bool
+	watcher    *fsnotify.Watcher
+	quitFlag   chan bool
+	bgWatcher  *fsnotify.Watcher
+	bgQuitFlag chan bool
 }
 
 var _manager *Manager
@@ -164,6 +168,12 @@ func newManager() *Manager {
 	m.CurrentTheme = property.NewGSettingsStringProperty(
 		m, "CurrentTheme",
 		themeSettings, GS_KEY_CURRENT_THEME)
+	m.CurrentTheme = property.NewGSettingsStringProperty(
+		m, "CurrentSound",
+		themeSettings, GS_KEY_CURRENT_SOUND)
+	m.CurrentTheme = property.NewGSettingsStringProperty(
+		m, "CurrentBackground",
+		themeSettings, GS_KEY_CURRENT_BG)
 
 	m.themeObjMap = make(map[string]*Theme)
 	m.rebuildThemes()
@@ -176,6 +186,19 @@ func newManager() *Manager {
 	}
 
 	m.quitFlag = make(chan bool)
+
+	m.bgWatcher, err = fsnotify.NewWatcher()
+	if err != nil {
+		Logger.Errorf("New Watcher Failed: %v", err)
+		panic(err)
+	}
+	m.bgQuitFlag = make(chan bool)
+
+	m.listenGSettings()
+	m.startWatch()
+	go m.handleEvent()
+	m.startBgWatch()
+	go m.handleBgEvent()
 
 	return m
 }

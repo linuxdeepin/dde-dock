@@ -41,6 +41,7 @@ func (obj *Manager) SetGtkTheme(theme string) {
 		if theme == l.Name {
 			t, ok := obj.themeObjMap[obj.CurrentTheme.GetValue().(string)]
 			if !ok {
+				obj.setPropCurrentTheme(DEFAULT_THEME)
 				break
 			}
 			if t.GtkTheme == theme {
@@ -66,6 +67,7 @@ func (obj *Manager) SetIconTheme(theme string) {
 		if theme == l.Name {
 			t, ok := obj.themeObjMap[obj.CurrentTheme.GetValue().(string)]
 			if !ok {
+				obj.setPropCurrentTheme(DEFAULT_THEME)
 				break
 			}
 			if t.IconTheme == theme {
@@ -91,6 +93,7 @@ func (obj *Manager) SetCursorTheme(theme string) {
 		if theme == l.Name {
 			t, ok := obj.themeObjMap[obj.CurrentTheme.GetValue().(string)]
 			if !ok {
+				obj.setPropCurrentTheme(DEFAULT_THEME)
 				break
 			}
 			if t.CursorTheme == theme {
@@ -116,6 +119,7 @@ func (obj *Manager) SetSoundTheme(theme string) {
 		if theme == l.Name {
 			t, ok := obj.themeObjMap[obj.CurrentTheme.GetValue().(string)]
 			if !ok {
+				obj.setPropCurrentTheme(DEFAULT_THEME)
 				break
 			}
 			if t.SoundTheme == theme {
@@ -155,6 +159,7 @@ func (obj *Manager) SetBackground(bg string) {
 
 	t, ok := obj.themeObjMap[obj.CurrentTheme.GetValue().(string)]
 	if !ok {
+		obj.setPropCurrentTheme(DEFAULT_THEME)
 		return
 	}
 	if t.Background == bg {
@@ -179,6 +184,7 @@ func (obj *Manager) SetFontSize(size int32) {
 
 	t, ok := obj.themeObjMap[obj.CurrentTheme.GetValue().(string)]
 	if !ok {
+		obj.setPropCurrentTheme(DEFAULT_THEME)
 		return
 	}
 	if t.FontSize == size {
@@ -278,11 +284,12 @@ func (obj *Manager) AppendBackground(bg string) bool {
 		return true
 	}
 
-	pict, ok := getUserPictureDir()
-	if !ok {
-		return false
+	pict := getUserPictureDir()
+	pict = path.Join(pict, "Wallpapers")
+	if !objUtil.IsFileExist(pict) {
+		os.MkdirAll(pict, 0755)
 	}
-	destPath := path.Join(pict, "Wallpapers", tmp.Name)
+	destPath := path.Join(pict, tmp.Name)
 	if !objUtil.CopyFile(bg, destPath) {
 		return false
 	}

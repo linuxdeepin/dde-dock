@@ -26,11 +26,11 @@ import (
 )
 
 const (
-	MANAGER_DEST = "com.deepin.daemon.ThemeManager"
-	MANAGER_PATH = "/com/deepin/daemon/ThemeManager"
-	MANAGER_IFC  = "com.deepin.daemon.ThemeManager"
+	MANAGER_DEST = "com.deepin.daemon.Themes"
+	MANAGER_PATH = "/com/deepin/daemon/Themes"
+	MANAGER_IFC  = "com.deepin.daemon.Themes"
 
-	THEME_PATH = "/com/deepin/daemon/Theme/"
+	THEME_PATH = "/com/deepin/daemon/"
 	THEME_IFC  = "com.deepin.daemon.Theme"
 )
 
@@ -44,7 +44,7 @@ const (
 	PERSON_SYS_BASE_PATH   = "/usr/share/personalization"
 	PERSON_LOCAL_BASE_PATH = ".local/share/personalization"
 
-	THEME_BG_NAME      = "wallpappers"
+	THEME_BG_NAME      = "wallpapers"
 	DEFAULT_SYS_BG_DIR = "/usr/share/backgrounds"
 
 	THEME_CONFIG_NAME = "theme.ini"
@@ -56,6 +56,7 @@ var (
 )
 
 const (
+	DEFAULT_THEME         = "Deepin"
 	THEME_GROUP_THEME     = "Theme"
 	THEME_GROUP_COMPONENT = "Component"
 	THEME_KEY_NAME        = "Name"

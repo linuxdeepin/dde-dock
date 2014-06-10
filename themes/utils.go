@@ -21,29 +21,28 @@
 
 package themes
 
+// #cgo pkg-config: glib-2.0
+// #cgo CFLAGS: -Wall -g
+// #include <stdlib.h>
+// #include "user_dir.h"
+import "C"
+
 import (
 	"crypto/md5"
 	"io/ioutil"
 	"os"
-	"os/exec"
-	"path"
 	"strconv"
+	"unsafe"
 )
 
-func getUserPictureDir() (string, bool) {
-	homeDir, _ := objUtil.GetHomeDir()
-	config := path.Join(homeDir, ".config/user-dirs.dirs")
-	cmd := exec.Command("/bin/bash", []string{
-		"-c",
-		"\"source " + config + "; echo $XDG_PICTURES_DI\"",
-	}...)
-	output, err := cmd.Output()
-	if err != nil {
-		Logger.Warning("Get XDG Pictures Dir Failed:", err)
-		return "", false
-	}
+func getUserPictureDir() string {
+	str := C.get_user_pictures_dir()
+	defer C.free(unsafe.Pointer(str))
 
-	return string(output), true
+	ret := C.GoString(str)
+
+	Logger.Debug("User Pictures Dir:", ret)
+	return ret
 }
 
 func convertMd5ByteToStr(bytes [16]byte) string {

@@ -22,10 +22,41 @@
 package themes
 
 import (
+	"dlib/gio-2.0"
 	"github.com/howeyc/fsnotify"
+	"os"
 	"path"
 	"regexp"
 )
+
+func (obj *Manager) listenGSettings() {
+	themeSettings.Connect("changed", func(s *gio.Settings, key string) {
+		switch key {
+		case GS_KEY_CURRENT_THEME:
+			value := themeSettings.GetString(key)
+			if obj.CurrentTheme.GetValue().(string) == value {
+				return
+			}
+			if t, ok := obj.themeObjMap[value]; ok {
+				t.setAllThemes()
+			} else {
+				obj.setPropCurrentTheme(DEFAULT_THEME)
+			}
+		case GS_KEY_CURRENT_SOUND:
+			value := themeSettings.GetString(key)
+			if obj.CurrentSound.GetValue().(string) == value {
+				return
+			}
+			obj.SetSoundTheme(value)
+		case GS_KEY_CURRENT_BG:
+			value := themeSettings.GetString(key)
+			if obj.CurrentBackground.GetValue().(string) == value {
+				return
+			}
+			obj.SetBackground(value)
+		}
+	})
+}
 
 func (obj *Manager) startWatch() {
 	if obj.watcher == nil {
@@ -109,6 +140,67 @@ func (obj *Manager) handleEvent() {
 			}
 		}
 	}
+}
+
+func (obj *Manager) handleBgEvent() {
+	for {
+		select {
+		case <-obj.bgQuitFlag:
+			return
+		case ev, ok := <-obj.bgWatcher.Event:
+			if !ok {
+				obj.endBgWatch()
+				obj.startBgWatch()
+			}
+
+			if ev == nil {
+				break
+			}
+
+			if ev.IsDelete() || ev.IsCreate() {
+				obj.setPropBackgroundList(getBackgroundList())
+			}
+		case err, ok := <-obj.bgWatcher.Error:
+			if !ok || err != nil {
+				obj.endBgWatch()
+				obj.startBgWatch()
+			}
+		}
+	}
+}
+
+func (obj *Manager) startBgWatch() {
+	if obj.bgWatcher == nil {
+		var err error
+		obj.bgWatcher, err = fsnotify.NewWatcher()
+		if err != nil {
+			Logger.Errorf("New Watcher Failed: %v", err)
+			panic(err)
+		}
+	}
+
+	pict := getUserPictureDir()
+	userBG := path.Join(pict, "Wallpapers")
+	if !objUtil.IsFileExist(userBG) {
+		os.MkdirAll(userBG, 0755)
+	}
+
+	obj.bgWatcher.Watch(userBG)
+	obj.bgWatcher.Watch(DEFAULT_SYS_BG_DIR)
+}
+
+func (obj *Manager) endBgWatch() {
+	if obj.bgWatcher == nil {
+		return
+	}
+
+	pict := getUserPictureDir()
+	userBG := path.Join(pict, "Wallpapers")
+	if objUtil.IsFileExist(userBG) {
+		obj.bgWatcher.RemoveWatch(userBG)
+	}
+
+	obj.bgWatcher.RemoveWatch(DEFAULT_SYS_BG_DIR)
 }
 
 func (obj *Theme) startWatch() {

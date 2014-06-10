@@ -25,6 +25,7 @@ import (
 	"dlib/dbus"
 	"dlib/glib-2.0"
 	"path"
+	"regexp"
 )
 
 func (obj *Theme) GetDBusInfo() dbus.DBusInfo {
@@ -143,6 +144,14 @@ func (obj *Theme) setAllProps() {
 	if err != nil {
 		Logger.Warningf("Get '%s' failed: %v", THEME_KEY_BACKGROUND, err)
 		return
+	}
+	if ok, _ := regexp.MatchString(`^/`, str); !ok {
+		if ok, _ = regexp.MatchString(`^file://`, str); !ok {
+			str = path.Join(obj.filePath, THEME_BG_NAME, str)
+			str, _ = objUtil.PathToFileURI(str)
+		}
+	} else {
+		str, _ = objUtil.PathToFileURI(str)
 	}
 	obj.setPropBackground(str)
 
