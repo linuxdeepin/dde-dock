@@ -376,7 +376,7 @@ func logicSetSetting8021xEap(data connectionData, value []string) (err error) {
 			NM_SETTING_802_1X_PASSWORD,
 			NM_SETTING_802_1X_PASSWORD_FLAGS,
 			NM_SETTING_802_1X_SYSTEM_CA_CERTS)
-		setSetting8021xPhase1Peapver(data, "")
+		removeSetting8021xPhase1Peapver(data)
 		setSetting8021xPhase2Auth(data, "mschapv2")
 		setSetting8021xSystemCaCerts(data, true)
 		setSetting8021xPasswordFlags(data, NM_SETTING_SECRET_FLAG_NONE)
