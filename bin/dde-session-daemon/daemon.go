@@ -31,40 +31,34 @@ import "dlib/logger"
 import "os"
 import "dlib/dbus"
 
-import _ "net/http/pprof"
-import "net/http"
-
-//import "time"
-
-type methodInfo struct {
-	f      func()
-	filter bool
+type Module struct {
+	Name   string
+	Start  func()
+	Stop   func()
+	Enable bool
 }
 
-var methodFilterMap = map[string]*methodInfo{
-	"network":      &methodInfo{network.Start, false},
-	"clipboard":    &methodInfo{clipboard.Start, false},
-	"audio":        &methodInfo{audio.Start, false},
-	"power":        &methodInfo{power.Start, false},
-	"dock":         &methodInfo{dock.Start, false},
-	"launcher":     &methodInfo{launcher.Start, false},
-	"keybinding":   &methodInfo{keybinding.Start, false},
-	"mounts":       &methodInfo{mounts.Start, false},
-	"datetime":     &methodInfo{datetime.Start, false},
-	"mime":         &methodInfo{mime.Start, false},
-	"themes":       &methodInfo{themes.Start, false},
-	"bluetooth":    &methodInfo{bluetooth.Start, false},
-	"screen_edges": &methodInfo{screen_edges.Start, false},
-	"grub2":        &methodInfo{grub2.Start, false},
-	"dsc":          &methodInfo{dscAutoUpdate, false},
-	"mpris":        &methodInfo{startMprisDaemon, false},
+var modules = []Module{
+	Module{"keybinding", keybinding.Start, nil, true},
+	Module{"power", power.Start, nil, true},
+	Module{"themes", themes.Start, nil, true},
+	Module{"screen_edges", screen_edges.Start, nil, true},
+	Module{"launcher", launcher.Start, nil, true},
+	Module{"dock", dock.Start, nil, true},
+
+	Module{"network", network.Start, nil, true},
+	Module{"audio", audio.Start, nil, true},
+	Module{"mounts", mounts.Start, nil, true},
+	Module{"datetime", datetime.Start, nil, true},
+	Module{"mime", mime.Start, nil, true},
+	Module{"bluetooth", bluetooth.Start, nil, true},
+	Module{"grub2", grub2.Start, nil, true},
+	Module{"dsc", dscAutoUpdate, nil, true},
+	Module{"mpris", startMprisDaemon, nil, true},
+	Module{"clipboard", clipboard.Start, nil, true},
 }
 
 var Logger = logger.NewLogger("com.deepin.daemon")
-
-func init() {
-	go http.ListenAndServe("localhost:6060", nil)
-}
 
 func main() {
 	if !dlib.UniqueOnSession("com.deepin.daemon") {
@@ -81,19 +75,20 @@ func main() {
 
 	C.init()
 
-	l := len(os.Args)
-	if l >= 2 {
-		for i := 1; i < l; i++ {
-			if v, ok := methodFilterMap[os.Args[i]]; ok {
-				v.filter = true
+	if len(os.Args) >= 2 {
+		for _, disabledModuleName := range os.Args[1:] {
+			for _, m := range modules {
+				if disabledModuleName == m.Name {
+					m.Enable = false
+					break
+				}
 			}
 		}
 	}
 
-	for _, v := range methodFilterMap {
-		if !v.filter {
-			go v.f()
-			//<-time.After(time.Millisecond * 300)
+	for _, module := range modules {
+		if module.Enable {
+			go module.Start()
 		}
 	}
 
