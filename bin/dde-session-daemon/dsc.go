@@ -63,12 +63,13 @@ func dscAutoUpdate() {
 	if !ok1 {
 		interval = 3
 	}
-	isUpdate, ok2 := objUtil.ReadKeyFromKeyFile(filename,
-		"update", "auto", false)
-	if !ok2 {
-		isUpdate = true
+	isUpdate := true
+	str, ok2 := objUtil.ReadKeyFromKeyFile(filename,
+		"update", "auto", "")
+	if v, ok := str.(string); ok && v == "False" {
+		isUpdate = false
 	}
-	if v, ok := isUpdate.(bool); ok && v {
+	if isUpdate {
 		if i, ok := interval.(int32); ok {
 			setDSCAutoUpdate(time.Duration(i))
 		}
