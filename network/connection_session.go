@@ -196,17 +196,18 @@ func (s *ConnectionSession) doGetSecrets(secretField string) {
 }
 
 // Save save current connection s.
-func (s *ConnectionSession) Save() bool {
+func (s *ConnectionSession) Save() (ok bool, err error) {
 	// TODO what about the connection has been deleted?
 
 	if s.isErrorOccured() {
 		logger.Debug("Errors occured when saving:", s.Errors)
-		return false
+		return false, nil
 	}
 
 	if getSettingConnectionReadOnly(s.Data) {
-		logger.Debug("read only connection, don't allowed to save")
-		return false
+		err = fmt.Errorf("read only connection, don't allowed to save")
+		logger.Debug(err)
+		return false, err
 	}
 
 	if len(s.ConnectionPath) > 0 {
@@ -214,12 +215,12 @@ func (s *ConnectionSession) Save() bool {
 		nmConn, err := nmNewSettingsConnection(s.ConnectionPath)
 		if err != nil {
 			logger.Error(err)
-			return false
+			return false, err
 		}
 		err = nmConn.Update(s.Data)
 		if err != nil {
 			logger.Error(err)
-			return false
+			return false, err
 		}
 		nmActivateConnection(s.ConnectionPath, s.devPath)
 	} else {
@@ -235,7 +236,7 @@ func (s *ConnectionSession) Save() bool {
 	}
 
 	manager.removeConnectionSession(s)
-	return true
+	return true, nil
 }
 
 func (s *ConnectionSession) isErrorOccured() bool {
