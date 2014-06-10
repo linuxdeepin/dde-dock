@@ -168,10 +168,10 @@ func newManager() *Manager {
 	m.CurrentTheme = property.NewGSettingsStringProperty(
 		m, "CurrentTheme",
 		themeSettings, GS_KEY_CURRENT_THEME)
-	m.CurrentTheme = property.NewGSettingsStringProperty(
+	m.CurrentSound = property.NewGSettingsStringProperty(
 		m, "CurrentSound",
 		themeSettings, GS_KEY_CURRENT_SOUND)
-	m.CurrentTheme = property.NewGSettingsStringProperty(
+	m.CurrentBackground = property.NewGSettingsStringProperty(
 		m, "CurrentBackground",
 		themeSettings, GS_KEY_CURRENT_BG)
 

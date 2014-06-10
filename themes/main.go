@@ -40,7 +40,6 @@ var (
 func Start() {
 	Logger.BeginTracing()
 	defer Logger.EndTracing()
-	Logger.SetRestartCommand("/usr/lib/deepin-daemon/themes")
 
 	var err error
 	objXS, err = sessionmanager.NewXSettings("com.deepin.SessionManager",

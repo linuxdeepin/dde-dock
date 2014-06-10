@@ -26,11 +26,11 @@ import (
 )
 
 const (
-	MANAGER_DEST = "com.deepin.daemon.Themes"
-	MANAGER_PATH = "/com/deepin/daemon/Themes"
-	MANAGER_IFC  = "com.deepin.daemon.Themes"
+	MANAGER_DEST = "com.deepin.daemon.ThemeManager"
+	MANAGER_PATH = "/com/deepin/daemon/ThemeManager"
+	MANAGER_IFC  = "com.deepin.daemon.ThemeManager"
 
-	THEME_PATH = "/com/deepin/daemon/"
+	THEME_PATH = "/com/deepin/daemon/Theme/"
 	THEME_IFC  = "com.deepin.daemon.Theme"
 )
 
