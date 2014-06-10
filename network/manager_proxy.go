@@ -11,21 +11,16 @@ import "dlib/gio-2.0"
 // socks_proxy="socks://127.0.0.1:0/"
 
 const (
-	envHttpProxy  = "http-proxy"
-	envHttpsProxy = "https-proxy"
-	envFtpProxy   = "ftp-proxy"
-	envSocksProxy = "socks-proxy"
-
 	proxyHttp  = "http"
 	proxyHttps = "https"
 	proxyFtp   = "ftp"
 	proxySocks = "socks"
 
 	gsettingsIdProxy = "com.deepin.dde.proxy"
-	gkeyHttpProxy    = envHttpProxy
-	gkeyHttpsProxy   = envHttpsProxy
-	gkeyFtpProxy     = envFtpProxy
-	gkeySocksProxy   = envSocksProxy
+	gkeyHttpProxy    = "http-proxy"
+	gkeyHttpsProxy   = "https-proxy"
+	gkeyFtpProxy     = "ftp-proxy"
+	gkeySocksProxy   = "socks-proxy"
 )
 
 var (
