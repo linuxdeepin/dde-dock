@@ -37,9 +37,9 @@ type Manager struct {
 	CursorThemeList   []ThemeInfo
 	SoundThemeList    []ThemeInfo
 	BackgroundList    []BgInfo
-	CurrentTheme      *property.GSettingsStringProperty
-	CurrentSound      *property.GSettingsStringProperty
-	CurrentBackground *property.GSettingsStringProperty
+	CurrentTheme      *property.GSettingsStringProperty `access:"readwrite"`
+	CurrentSound      *property.GSettingsStringProperty `access:"readwrite"`
+	CurrentBackground *property.GSettingsStringProperty `access:"readwrite"`
 	themeObjMap       map[string]*Theme
 
 	watcher    *fsnotify.Watcher
