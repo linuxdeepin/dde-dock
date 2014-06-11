@@ -61,6 +61,10 @@ if os.path.exists(os.path.join(GOPATH, 'src')):
     shutil.rmtree(os.path.join(GOPATH,'src'))
 os.makedirs(os.path.join(GOPATH,'src','dde-daemon'))
 
+for src in glob.glob(os.path.join(os.getcwd(), "*.go")):
+    name = os.path.basename(src)
+    os.symlink(src, os.path.join(GOPATH, 'src', 'dde-daemon', name))
+
 for component in components:
     os.symlink(os.path.join(os.getcwd(),component), os.path.join(GOPATH, 'src', 'dde-daemon', component))
 
