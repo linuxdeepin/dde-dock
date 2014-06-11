@@ -22,12 +22,13 @@ type NormalApp struct {
 
 func NewNormalApp(id string) *NormalApp {
 	app := &NormalApp{Id: strings.ToLower(filepath.Base(id[:len(id)-8]))}
-	logger.Info(id)
+	logger.Info("NewNormalApp:", id)
 	if filepath.IsAbs(id) {
 		app.core = gio.NewDesktopAppInfoFromFilename(id)
 	} else {
 		app.core = gio.NewDesktopAppInfo(id)
 		if app.core == nil {
+			logger.Info("guess desktop")
 			if newId := guess_desktop_id(app.Id + ".desktop"); newId != "" {
 				app.core = gio.NewDesktopAppInfo(newId)
 			}

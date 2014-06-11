@@ -269,7 +269,67 @@ char* find_app_id(const char* exec_name, const char* key, int filter)
     return NULL;
 }
 
+char** get_exec_env(int pid)
+{
+    char** envs = NULL;
+    char* row_env = NULL;
+    char* path = g_strdup_printf("/proc/%d/environ", pid);
+
+    gsize size=0;
+    if (g_file_get_contents(path, &row_env, &size, NULL) && size > 0) {
+        envs = g_new(char*, 1024);
+        gsize j = 0;
+        gsize i=0;
+        envs[j] = g_strdup(row_env);
+        for (; i<size && j<1024; i++) {
+            if (row_env[i] == 0) {
+                envs[++j] = g_strdup(row_env + i + 1);
+            }
+        }
+
+        g_free(row_env);
+        envs[j] = NULL;
+    }
+
+    return envs;
+}
+
 char* get_exe_name(int pid)
+{
+    char* exec_name = NULL;
+    char* args = NULL;
+
+    get_pid_info(pid, &exec_name, &args);
+    g_warning("%s %s", exec_name, args);
+    char* exec = NULL;
+    if (g_strcmp0(exec_name, "java") == 0) {
+        char** envs = get_exec_env(pid);
+        char* env = NULL;
+        int i = 0;
+        for (; envs[i] != NULL; ++i) {
+            if (g_str_has_prefix(envs[i], "CLASSPATH")) {
+                env = g_strdup(envs[i]);
+                break;
+            }
+        }
+        for (i = 0; envs[i] != NULL; ++i) {
+            g_free(envs[i]);
+        }
+        if (env == NULL) {
+            exec = g_strconcat(exec_name, " ", args, NULL);
+        } else {
+            exec = g_strconcat(env, " ", exec_name, " ", args, NULL);
+        }
+        g_free(env);
+    } else {
+        exec = g_strconcat(exec_name, " ", args, NULL);
+    }
+    g_free(exec_name);
+    g_free(args);
+    return exec;
+}
+
+char* get_exe(int pid)
 {
 #define BUF_LEN 8095
     char buf[BUF_LEN] = {0};
@@ -311,7 +371,7 @@ void get_pid_info(int pid, char** exec_name, char** exec_args)
         g_free(name_args);
 
     } else {
-        *exec_name = get_exe_name(pid);
+        *exec_name = get_exe(pid);
         *exec_args = NULL;
     }
     g_free(path);

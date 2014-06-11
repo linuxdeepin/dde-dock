@@ -23,6 +23,8 @@ StartupNotify=false
 `
 )
 
+var scratchDir string = filepath.Join(os.Getenv("HOME"), ".config/dock/scratch")
+
 type DockedAppManager struct {
 	core  *gio.Settings
 	items *list.List
@@ -148,11 +150,8 @@ func (m *DockedAppManager) Undock(id string) bool {
 		logger.Info("Remove", m.items.Remove(removeItem))
 		m.core.SetStrv(DockedApps, m.toSlice())
 		gio.SettingsSync()
-		os.Remove(filepath.Join(
-			os.Getenv("HOME"),
-			".config/dock/scratch",
-			id+".desktop",
-		))
+		os.Remove(filepath.Join(scratchDir, id+".desktop"))
+		os.Remove(filepath.Join(scratchDir, id+".sh"))
 		m.Undocked(id)
 		return true
 	} else {
@@ -195,8 +194,10 @@ func createScratchFile(id, title, icon, cmd string) error {
 	path := ".config/dock/scratch"
 	configDir := filepath.Join(homeDir, path)
 	os.MkdirAll(configDir, 0775)
-	f, err := os.Create(filepath.Join(configDir, id+".desktop"))
+	f, err := os.OpenFile(filepath.Join(configDir, id+".desktop"),
+		os.O_RDWR|os.O_TRUNC|os.O_CREATE, 0744)
 	if err != nil {
+		logger.Error(err)
 		return err
 	}
 	temp := template.Must(template.New("docked_item_temp").Parse(DockedItemTemp))

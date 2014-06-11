@@ -169,7 +169,7 @@ func (m *EntryManager) createNormalApp(id string) {
 	desktopId := id + ".desktop"
 	nApp := NewNormalApp(desktopId)
 	if nApp == nil {
-		logger.Info("create scratch file")
+		logger.Info("create from scratch file")
 		newId := filepath.Join(
 			os.Getenv("HOME"),
 			".config/dock/scratch",
@@ -177,6 +177,7 @@ func (m *EntryManager) createNormalApp(id string) {
 		)
 		nApp = NewNormalApp(newId)
 		if nApp == nil {
+			logger.Warning("create normal app failed:", id)
 			return
 		}
 	}

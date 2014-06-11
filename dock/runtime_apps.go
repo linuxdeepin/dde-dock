@@ -16,6 +16,9 @@ import (
 	"github.com/BurntSushi/xgbutil/xgraphics"
 	"github.com/BurntSushi/xgbutil/xprop"
 	"github.com/BurntSushi/xgbutil/xwindow"
+	"io/ioutil"
+	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -100,6 +103,7 @@ func (app *RuntimeApp) getExec(xid xproto.Window) {
 	}
 	logger.Debug(app.Id, " Get Exec from pid")
 	app.exec = find_exec_name_by_xid(xid)
+	logger.Warning("app get exec:", app.exec)
 }
 func (app *RuntimeApp) buildMenu() {
 	app.coreMenu = NewMenu()
@@ -184,8 +188,13 @@ func (app *RuntimeApp) buildMenu() {
 			if app.core == nil {
 				title = app.Id
 				// TODO:
-				icon = ""
-				exec = app.exec
+				icon = "application-default-icon"
+				execFile := filepath.Join(
+					scratchDir,
+					app.Id+".sh",
+				)
+				ioutil.WriteFile(execFile, []byte(app.exec), 0744)
+				exec = execFile
 			} else {
 				title = app.core.GetDisplayName()
 				icon =

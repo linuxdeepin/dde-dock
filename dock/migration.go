@@ -8,6 +8,8 @@ package dock
 //#include <stdlib.h>
 // char* guess_app_id(long s_pid, const char* instance_name, const char* wmname, const char* wmclass, const char* icon_name);
 // char* get_exe_name(int pid);
+// char* get_exe(int pid);
+// void get_pid_info(int pid, char** exec_name, char** exec_args);
 //char* icon_name_to_path(const char* name, int size);
 // void init_deepin();
 // char* get_data_uri_by_path(const char* path);
@@ -32,7 +34,11 @@ func find_app_id(pid uint, instanceName, wmName, wmClass, iconName string) strin
 }
 
 func find_exec_name_by_pid(pid uint) string {
-	return C.GoString(C.get_exe_name(C.int(pid)))
+	e := C.GoString(C.get_exe_name(C.int(pid)))
+	if e {
+		return e
+	}
+	return C.GoString(C.get_exe(C.int(pid)))
 }
 
 func get_theme_icon(name string, size int) string {
