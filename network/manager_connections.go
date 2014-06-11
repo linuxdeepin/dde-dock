@@ -46,8 +46,8 @@ type activeConnectionInfo struct {
 func (m *Manager) initConnectionManage() {
 	m.connections = make(map[string][]*connection)
 
-	// create special wired connection if need
-	/*m.updatePropWiredConnections() // TODO remove*/
+	// TODO create special wired connection if need
+	// m.updatePropWiredConnections()
 
 	for _, c := range nmGetConnectionList() {
 		m.handleConnectionChanged(opAdded, c)
@@ -79,7 +79,7 @@ func (m *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPath)
 		switch getSettingConnectionType(cdata) {
 		case NM_SETTING_WIRED_SETTING_NAME:
 			// wired connection will be treatment specially
-			// TODO remove
+			// TODO
 			// m.WiredConnections = append(m.WiredConnections, uuid)
 			// dbus.NotifyChange(m, "WiredConnections")
 		case NM_SETTING_WIRELESS_SETTING_NAME:
@@ -148,8 +148,7 @@ func (m *Manager) GetSupportedConnectionTypes() (types []string) {
 	return supportedConnectionTypes
 }
 
-// TODO remove
-// GetWiredConnectionUuid return connection uuid for target wired device.
+// TODO GetWiredConnectionUuid return connection uuid for target wired device.
 func (m *Manager) GetWiredConnectionUuid(wiredDevPath dbus.ObjectPath) (uuid string) {
 	// check if target wired connection exists, if not, create one
 	id := Tr("Wired Connection ") + nmGetDeviceInterface(wiredDevPath)
@@ -304,24 +303,6 @@ func (m *Manager) DeleteConnection(uuid string) (err error) {
 	return conn.Delete()
 }
 
-// TODO remove dbus interface
-// GetConnectionPathByUuid return connection setting dbus path by uuid
-func (m *Manager) getConnectionPathByUuid(uuid string) (cpath dbus.ObjectPath, err error) {
-	cpath, err = nmGetConnectionByUuid(uuid)
-	return
-}
-
-// TODO remove
-// GetActiveConnectionState get current state of the active connection.
-func (m *Manager) getActiveConnectionState(apath dbus.ObjectPath) (state uint32) {
-	conn, err := nmNewActiveConnection(apath)
-	if err != nil {
-		return
-	}
-	state = conn.State.Get()
-	return
-}
-
 func (m *Manager) ActivateConnection(uuid string, devPath dbus.ObjectPath) (err error) {
 	logger.Debugf("ActivateConnection: uuid=%s, devPath=%s", uuid, devPath)
 	cpath, err := nmGetConnectionByUuid(uuid)
@@ -332,7 +313,6 @@ func (m *Manager) ActivateConnection(uuid string, devPath dbus.ObjectPath) (err 
 	return
 }
 
-// TODO
 func (m *Manager) DeactivateConnection(uuid string) (err error) {
 	apath, ok := nmGetActiveConnectionByUuid(uuid)
 	if !ok {

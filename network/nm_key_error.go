@@ -66,7 +66,7 @@ func ensureFileExists(errs sectionErrors, section, key, file string, limitedExts
 			}
 		}
 		if !match {
-			// TODO
+			// TODO dispatch filter when select files
 			// rememberError(errs, section, key, NM_KEY_ERROR_INVALID_VALUE)
 		}
 	}

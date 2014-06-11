@@ -23,7 +23,7 @@ const (
 	NM_SETTING_PPP_LCP_ECHO_INTERVAL = "lcp-echo-interval"
 )
 
-// TODO Get available keys
+// Get available keys
 func getSettingPppAvailableKeys(data connectionData) (keys []string) {
 	keys = appendAvailableKeys(data, keys, sectionPpp, NM_SETTING_PPP_REFUSE_EAP)
 	keys = appendAvailableKeys(data, keys, sectionPpp, NM_SETTING_PPP_REFUSE_PAP)

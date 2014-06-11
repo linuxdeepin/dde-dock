@@ -174,12 +174,6 @@ func (m *Manager) getAccessPointIndex(devPath, apPath dbus.ObjectPath) int {
 
 // GetAccessPoints return all access points object which marshaled by json.
 func (m *Manager) GetAccessPoints(path dbus.ObjectPath) (apsJSON string, err error) {
-	// aps, err := m.doGetAccessPoints(path)
-	// if err != nil {
-	// 	return
-	// }
-	// apsJSON, err = marshalJSON(aps)
-	// TODO
 	apsJSON, err = marshalJSON(m.accessPoints[path])
 	return
 }
@@ -260,43 +254,5 @@ func (m *Manager) CreateConnectionForAccessPoint(apPath, devPath dbus.ObjectPath
 
 	// install dbus session
 	m.addConnectionSession(session)
-	return
-}
-
-// TODO remove
-func (m *Manager) editConnectionForAccessPoint(apPath, devPath dbus.ObjectPath) (session *ConnectionSession, err error) {
-	// session, err = NewConnectionSessionByOpen(uuid, devPath)
-	// if err != nil {
-	// 	logger.Error(err)
-	// 	return
-	// }
-
-	// // install dbus session
-	// err = dbus.InstallOnSession(session)
-	// if err != nil {
-	// 	logger.Error(err)
-	// 	return
-	// }
-
-	return
-}
-
-// TODO remove
-// GetConnectionUuidByAccessPoint return the connection's uuid of access point, return empty if none.
-func (m *Manager) getConnectionUuidByAccessPoint(apPath dbus.ObjectPath) (uuid string, err error) {
-	ap, err := nmNewAccessPoint(apPath)
-	if err != nil {
-		return
-	}
-
-	// TODO check wifi hw addr
-	cpath, ok := nmGetWirelessConnection(ap.Ssid.Get(), "")
-	if !ok {
-		return
-	}
-
-	uuid = nmGetConnectionUuid(cpath)
-
-	logger.Debugf("GetConnectionUuidByAccessPoint: apPath=%s, uuid=%s", apPath, uuid) // TODO test
 	return
 }
