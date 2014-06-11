@@ -38,6 +38,7 @@ type Theme struct {
 	Background  string
 	FontSize    int32
 	Type        int32
+	Preview     []string
 	filePath    string
 	objectPath  string
 

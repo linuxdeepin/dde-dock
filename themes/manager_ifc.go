@@ -24,21 +24,65 @@ package themes
 import (
 	"os"
 	"path"
+	"strings"
 )
 
-func (obj *Manager) GetObjectPath(name string) string {
-	for _, l := range obj.ThemeList {
-		if name == l.Name {
-			return THEME_PATH + name
-		}
+func (op *Manager) GetFlag(t, name string) int32 {
+	t = strings.ToLower(t)
+	switch t {
+	case "theme":
+	case "gtk":
+	case "icon":
+	case "sound":
+	case "cursor":
+	case "background":
 	}
 
-	return ""
+	return 0
 }
 
-func (obj *Manager) SetGtkTheme(theme string) {
+func (op *Manager) Set(t, name, value string) {
+	t = strings.ToLower(t)
+	switch t {
+	case "theme":
+	case "gtk":
+	case "icon":
+	case "sound":
+	case "cursor":
+	case "fontsize":
+	case "background":
+	}
+}
+
+func (op *Manager) GetThumbnail(t, name string) string {
+	t = strings.ToLower(t)
+	switch t {
+	case "theme":
+	case "gtk":
+	case "icon":
+	case "sound":
+	case "cursor":
+	case "background":
+	}
+
+	return "/usr/share/personalization/thumbnail/IconThemes/Deepin/thumbnail.png"
+}
+
+func (obj *Manager) Delete(t, name string) {
+	t = strings.ToLower(t)
+	switch t {
+	case "theme":
+	case "gtk":
+	case "icon":
+	case "sound":
+	case "cursor":
+	case "background":
+	}
+}
+
+func (obj *Manager) setGtkTheme(theme string) {
 	for _, l := range obj.GtkThemeList {
-		if theme == l.Name {
+		if theme == l {
 			t, ok := obj.themeObjMap[obj.CurrentTheme.GetValue().(string)]
 			if !ok {
 				obj.setPropCurrentTheme(DEFAULT_THEME)
@@ -62,9 +106,9 @@ func (obj *Manager) SetGtkTheme(theme string) {
 	}
 }
 
-func (obj *Manager) SetIconTheme(theme string) {
+func (obj *Manager) setIconTheme(theme string) {
 	for _, l := range obj.IconThemeList {
-		if theme == l.Name {
+		if theme == l {
 			t, ok := obj.themeObjMap[obj.CurrentTheme.GetValue().(string)]
 			if !ok {
 				obj.setPropCurrentTheme(DEFAULT_THEME)
@@ -88,9 +132,9 @@ func (obj *Manager) SetIconTheme(theme string) {
 	}
 }
 
-func (obj *Manager) SetCursorTheme(theme string) {
+func (obj *Manager) setCursorTheme(theme string) {
 	for _, l := range obj.CursorThemeList {
-		if theme == l.Name {
+		if theme == l {
 			t, ok := obj.themeObjMap[obj.CurrentTheme.GetValue().(string)]
 			if !ok {
 				obj.setPropCurrentTheme(DEFAULT_THEME)
@@ -114,9 +158,9 @@ func (obj *Manager) SetCursorTheme(theme string) {
 	}
 }
 
-func (obj *Manager) SetSoundTheme(theme string) {
+func (obj *Manager) setSoundTheme(theme string) {
 	for _, l := range obj.SoundThemeList {
-		if theme == l.Name {
+		if theme == l {
 			t, ok := obj.themeObjMap[obj.CurrentTheme.GetValue().(string)]
 			if !ok {
 				obj.setPropCurrentTheme(DEFAULT_THEME)
@@ -140,19 +184,20 @@ func (obj *Manager) SetSoundTheme(theme string) {
 	}
 }
 
-func (obj *Manager) SetBackground(bg string) {
+func (obj *Manager) setBackground(bg string) {
 	flag := false
 	uri, _ := objUtil.PathToFileURI(bg)
 	for _, l := range obj.BackgroundList {
-		if uri == l.Name {
+		if uri == l {
 			flag = true
+			break
 		}
 	}
 
 	// bg not in list
 	if !flag {
 		bg, _ = objUtil.URIToPath(bg)
-		if !obj.AppendBackground(bg) {
+		if !obj.appendBackground(bg) {
 			return
 		}
 	}
@@ -177,7 +222,7 @@ func (obj *Manager) SetBackground(bg string) {
 	obj.setPropCurrentTheme("Custom")
 }
 
-func (obj *Manager) SetFontSize(size int32) {
+func (obj *Manager) setFontSize(size int32) {
 	if size > 20 || size < 7 {
 		return
 	}
@@ -202,14 +247,14 @@ func (obj *Manager) SetFontSize(size int32) {
 	obj.setPropCurrentTheme("Custom")
 }
 
-func (obj *Manager) DeleteGtkTheme(theme string) {
+func (obj *Manager) deleteGtkTheme(theme string) {
 	filepath := ""
 	flag := false
 	for _, l := range obj.GtkThemeList {
-		if l.Name == theme {
-			if l.T == THEME_TYPE_LOCAL {
+		if l == theme {
+			if obj.GetFlag("gtk", l) == int32(THEME_TYPE_LOCAL) {
 				flag = true
-				filepath = l.Path
+				//filepath = l.Path
 			}
 			break
 		}
@@ -220,14 +265,14 @@ func (obj *Manager) DeleteGtkTheme(theme string) {
 	}
 }
 
-func (obj *Manager) DeleteIconTheme(theme string) {
+func (obj *Manager) deleteIconTheme(theme string) {
 	filepath := ""
 	flag := false
 	for _, l := range obj.IconThemeList {
-		if l.Name == theme {
-			if l.T == THEME_TYPE_LOCAL {
+		if l == theme {
+			if obj.GetFlag("icon", l) == int32(THEME_TYPE_LOCAL) {
 				flag = true
-				filepath = l.Path
+				//filepath = l.Path
 			}
 			break
 		}
@@ -238,14 +283,14 @@ func (obj *Manager) DeleteIconTheme(theme string) {
 	}
 }
 
-func (obj *Manager) DeleteSoundTheme(theme string) {
+func (obj *Manager) deleteSoundTheme(theme string) {
 	filepath := ""
 	flag := false
 	for _, l := range obj.SoundThemeList {
-		if l.Name == theme {
-			if l.T == THEME_TYPE_LOCAL {
+		if l == theme {
+			if obj.GetFlag("sound", l) == int32(THEME_TYPE_LOCAL) {
 				flag = true
-				filepath = l.Path
+				//filepath = l.Path
 			}
 			break
 		}
@@ -256,14 +301,14 @@ func (obj *Manager) DeleteSoundTheme(theme string) {
 	}
 }
 
-func (obj *Manager) DeleteCursorTheme(theme string) {
+func (obj *Manager) deleteCursorTheme(theme string) {
 	filepath := ""
 	flag := false
 	for _, l := range obj.CursorThemeList {
-		if l.Name == theme {
-			if l.T == THEME_TYPE_LOCAL {
+		if l == theme {
+			if obj.GetFlag("curosr", l) == int32(THEME_TYPE_LOCAL) {
 				flag = true
-				filepath = l.Path
+				//filepath = l.Path
 			}
 			break
 		}
@@ -274,13 +319,8 @@ func (obj *Manager) DeleteCursorTheme(theme string) {
 	}
 }
 
-func (obj *Manager) AppendBackground(bg string) bool {
-	tmp := BgInfo{}
-	tmp.Name = path.Base(bg)
-	tmp.Path = bg
-	tmp.T = THEME_TYPE_LOCAL
-
-	if isBgInfoInList(tmp, obj.BackgroundList) {
+func (obj *Manager) appendBackground(bg string) bool {
+	if isStrInList(bg, obj.BackgroundList) {
 		return true
 	}
 
@@ -289,7 +329,7 @@ func (obj *Manager) AppendBackground(bg string) bool {
 	if !objUtil.IsFileExist(pict) {
 		os.MkdirAll(pict, 0755)
 	}
-	destPath := path.Join(pict, tmp.Name)
+	destPath := path.Join(pict, path.Base(bg))
 	if !objUtil.CopyFile(bg, destPath) {
 		return false
 	}
@@ -297,22 +337,12 @@ func (obj *Manager) AppendBackground(bg string) bool {
 	return true
 }
 
-func (obj *Manager) DeleteBackground(bg string) {
-	flag := false
-	//tmpList := []BgInfo{}
-	for _, l := range obj.BackgroundList {
-		if isBackgroundSame(bg, l.Path) {
-			if l.T == THEME_TYPE_LOCAL {
-				flag = true
-			}
-			break
-			//continue
-		}
-		//tmpList = append(tmpList, l)
+func (obj *Manager) deleteBackground(bg string) {
+	if !isStrInList(bg, obj.BackgroundList) {
+		return
 	}
 
-	if flag {
+	if obj.GetFlag("background", bg) == int32(THEME_TYPE_LOCAL) {
 		os.RemoveAll(bg)
-		//obj.setPropBackgroundList(tmpList)
 	}
 }

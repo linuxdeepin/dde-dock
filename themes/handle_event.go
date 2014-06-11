@@ -44,16 +44,16 @@ func (obj *Manager) listenGSettings() {
 			}
 		case GS_KEY_CURRENT_SOUND:
 			value := themeSettings.GetString(key)
-			if obj.CurrentSound.GetValue().(string) == value {
+			if obj.currentSound.GetValue().(string) == value {
 				return
 			}
-			obj.SetSoundTheme(value)
+			obj.setSoundTheme(value)
 		case GS_KEY_CURRENT_BG:
 			value := themeSettings.GetString(key)
-			if obj.CurrentBackground.GetValue().(string) == value {
+			if obj.currentBackground.GetValue().(string) == value {
 				return
 			}
-			obj.SetBackground(value)
+			obj.setBackground(value)
 		}
 	})
 }
@@ -112,25 +112,25 @@ func (obj *Manager) handleEvent() {
 			ok1, _ := regexp.MatchString(THEME_SYS_PATH, ev.Name)
 			ok2, _ := regexp.MatchString(THEME_LOCAL_PATH, ev.Name)
 			if ok1 || ok2 {
-				obj.setPropGtkThemeList(getGtkThemeList())
+				obj.setPropGtkThemeList(obj.getGtkStrList())
 			}
 
 			ok1, _ = regexp.MatchString(ICON_SYS_PATH, ev.Name)
 			ok2, _ = regexp.MatchString(ICON_LOCAL_PATH, ev.Name)
 			if ok1 || ok2 {
-				obj.setPropIconThemeList(getIconThemeList())
-				obj.setPropCursorThemeList(getCursorThemeList())
+				obj.setPropIconThemeList(obj.getIconStrList())
+				obj.setPropCursorThemeList(obj.getCursorStrList())
 			}
 
 			ok1, _ = regexp.MatchString(SOUND_THEME_PATH, ev.Name)
 			if ok1 {
-				obj.setPropSoundThemeList(getSoundThemeList())
+				obj.setPropSoundThemeList(obj.getSoundStrList())
 			}
 
 			ok1, _ = regexp.MatchString(PERSON_SYS_THEME_PATH, ev.Name)
 			ok2, _ = regexp.MatchString(PERSON_LOCAL_THEME_PATH, ev.Name)
 			if ok1 || ok2 {
-				obj.setPropThemeList(getDThemeList())
+				obj.setPropThemeList(obj.getDThemeStrList())
 				obj.rebuildThemes()
 			}
 		case err, ok := <-obj.watcher.Error:
@@ -158,7 +158,7 @@ func (obj *Manager) handleBgEvent() {
 			}
 
 			if ev.IsDelete() || ev.IsCreate() {
-				obj.setPropBackgroundList(getBackgroundList())
+				obj.setPropBackgroundList(obj.getBgStrList())
 			}
 		case err, ok := <-obj.bgWatcher.Error:
 			if !ok || err != nil {

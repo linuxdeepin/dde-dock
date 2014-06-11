@@ -60,6 +60,20 @@ func convertMd5ByteToStr(bytes [16]byte) string {
 	return str
 }
 
+func getStrMd5(str string) (string, bool) {
+	if len(str) < 1 {
+		return "", false
+	}
+
+	md5Byte := md5.Sum([]byte(str))
+	md5Str := convertMd5ByteToStr(md5Byte)
+	if len(md5Str) < 32 {
+		return "", false
+	}
+
+	return md5Str, true
+}
+
 func getFileMd5(file string) (string, bool) {
 	if !objUtil.IsFileExist(file) {
 		return "", false

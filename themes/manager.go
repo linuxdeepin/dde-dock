@@ -31,15 +31,15 @@ import (
 )
 
 type Manager struct {
-	ThemeList         []ThemeInfo
-	GtkThemeList      []ThemeInfo
-	IconThemeList     []ThemeInfo
-	CursorThemeList   []ThemeInfo
-	SoundThemeList    []ThemeInfo
-	BackgroundList    []BgInfo
+	ThemeList         []string
+	GtkThemeList      []string
+	IconThemeList     []string
+	CursorThemeList   []string
+	SoundThemeList    []string
+	BackgroundList    []string
 	CurrentTheme      *property.GSettingsStringProperty `access:"readwrite"`
-	CurrentSound      *property.GSettingsStringProperty `access:"readwrite"`
-	CurrentBackground *property.GSettingsStringProperty `access:"readwrite"`
+	currentSound      *property.GSettingsStringProperty
+	currentBackground *property.GSettingsStringProperty
 	themeObjMap       map[string]*Theme
 
 	watcher    *fsnotify.Watcher
@@ -124,11 +124,18 @@ func (obj *Manager) rebuildThemes() {
 	obj.destroyAllTheme()
 
 	for _, t := range obj.ThemeList {
-		user := newTheme(t)
-		obj.themeObjMap[user.Name] = user
-		dbus.InstallOnSession(user)
-		if obj.CurrentTheme.GetValue().(string) == user.Name {
-			user.setAllThemes()
+		name := path.Base(t)
+		tList := getDThemeList()
+		for _, l := range tList {
+			if name == l.Name {
+				user := newTheme(l)
+				obj.themeObjMap[user.Name] = user
+				dbus.InstallOnSession(user)
+				if obj.CurrentTheme.GetValue().(string) == user.Name {
+					user.setAllThemes()
+				}
+				break
+			}
 		}
 	}
 }
@@ -155,24 +162,90 @@ func (obj *Manager) destroyAllTheme() {
 	obj.themeObjMap = make(map[string]*Theme)
 }
 
+func (obj *Manager) getDThemeStrList() []string {
+	list := []string{}
+	tList := getDThemeList()
+
+	for _, l := range tList {
+		list = append(list, THEME_PATH+l.Name)
+	}
+
+	return list
+}
+
+func (obj *Manager) getGtkStrList() []string {
+	list := []string{}
+	tList := getGtkThemeList()
+
+	for _, l := range tList {
+		list = append(list, l.Name)
+	}
+
+	return list
+}
+
+func (obj *Manager) getIconStrList() []string {
+	list := []string{}
+	tList := getIconThemeList()
+
+	for _, l := range tList {
+		list = append(list, l.Name)
+	}
+
+	return list
+}
+
+func (obj *Manager) getSoundStrList() []string {
+	list := []string{}
+	tList := getSoundThemeList()
+
+	for _, l := range tList {
+		list = append(list, l.Name)
+	}
+
+	return list
+}
+
+func (obj *Manager) getCursorStrList() []string {
+	list := []string{}
+	tList := getCursorThemeList()
+
+	for _, l := range tList {
+		list = append(list, l.Name)
+	}
+
+	return list
+}
+
+func (obj *Manager) getBgStrList() []string {
+	list := []string{}
+	tList := getBackgroundList()
+
+	for _, l := range tList {
+		list = append(list, l.Path)
+	}
+
+	return list
+}
+
 func newManager() *Manager {
 	m := &Manager{}
 
-	m.setPropThemeList(getDThemeList())
-	m.setPropGtkThemeList(getGtkThemeList())
-	m.setPropIconThemeList(getIconThemeList())
-	m.setPropSoundThemeList(getSoundThemeList())
-	m.setPropCursorThemeList(getCursorThemeList())
-	m.setPropBackgroundList(getBackgroundList())
+	m.setPropThemeList(m.getDThemeStrList())
+	m.setPropGtkThemeList(m.getGtkStrList())
+	m.setPropIconThemeList(m.getIconStrList())
+	m.setPropSoundThemeList(m.getSoundStrList())
+	m.setPropCursorThemeList(m.getCursorStrList())
+	m.setPropBackgroundList(m.getBgStrList())
 
 	m.CurrentTheme = property.NewGSettingsStringProperty(
 		m, "CurrentTheme",
 		themeSettings, GS_KEY_CURRENT_THEME)
-	m.CurrentSound = property.NewGSettingsStringProperty(
-		m, "CurrentSound",
+	m.currentSound = property.NewGSettingsStringProperty(
+		m, "currentSound",
 		themeSettings, GS_KEY_CURRENT_SOUND)
-	m.CurrentBackground = property.NewGSettingsStringProperty(
-		m, "CurrentBackground",
+	m.currentBackground = property.NewGSettingsStringProperty(
+		m, "currentBackground",
 		themeSettings, GS_KEY_CURRENT_BG)
 
 	m.themeObjMap = make(map[string]*Theme)

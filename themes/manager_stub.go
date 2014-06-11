@@ -41,43 +41,43 @@ func (obj *Manager) setPropCurrentTheme(theme string) {
 	}
 }
 
-func (obj *Manager) setPropThemeList(list []ThemeInfo) {
-	if !isThemeInfoListEqual(obj.ThemeList, list) {
+func (obj *Manager) setPropThemeList(list []string) {
+	if !isStrListEqual(obj.ThemeList, list) {
 		obj.ThemeList = list
 		dbus.NotifyChange(obj, "ThemeList")
 	}
 }
 
-func (obj *Manager) setPropGtkThemeList(list []ThemeInfo) {
-	if !isThemeInfoListEqual(obj.GtkThemeList, list) {
+func (obj *Manager) setPropGtkThemeList(list []string) {
+	if !isStrListEqual(obj.GtkThemeList, list) {
 		obj.GtkThemeList = list
 		dbus.NotifyChange(obj, "GtkThemeList")
 	}
 }
 
-func (obj *Manager) setPropIconThemeList(list []ThemeInfo) {
-	if !isThemeInfoListEqual(obj.IconThemeList, list) {
+func (obj *Manager) setPropIconThemeList(list []string) {
+	if !isStrListEqual(obj.IconThemeList, list) {
 		obj.IconThemeList = list
 		dbus.NotifyChange(obj, "IconThemeList")
 	}
 }
 
-func (obj *Manager) setPropSoundThemeList(list []ThemeInfo) {
-	if !isThemeInfoListEqual(obj.SoundThemeList, list) {
+func (obj *Manager) setPropSoundThemeList(list []string) {
+	if !isStrListEqual(obj.SoundThemeList, list) {
 		obj.SoundThemeList = list
 		dbus.NotifyChange(obj, "SoundThemeList")
 	}
 }
 
-func (obj *Manager) setPropCursorThemeList(list []ThemeInfo) {
-	if !isThemeInfoListEqual(obj.CursorThemeList, list) {
+func (obj *Manager) setPropCursorThemeList(list []string) {
+	if !isStrListEqual(obj.CursorThemeList, list) {
 		obj.CursorThemeList = list
 		dbus.NotifyChange(obj, "CursorThemeList")
 	}
 }
 
-func (obj *Manager) setPropBackgroundList(list []BgInfo) {
-	if !isBgInfoListEqual(obj.BackgroundList, list) {
+func (obj *Manager) setPropBackgroundList(list []string) {
+	if !isStrListEqual(obj.BackgroundList, list) {
 		obj.BackgroundList = list
 		dbus.NotifyChange(obj, "BackgroundList")
 	}

@@ -351,7 +351,7 @@ func getBgCachePath(src string) string {
 	if !objUtil.IsFileExist(bgDir) {
 		os.MkdirAll(bgDir, 0755)
 	}
-	md5Str, _ := getFileMd5(src)
+	md5Str, _ := getStrMd5(src)
 	filename := path.Join(bgDir, md5Str+".png")
 	return filename
 }
@@ -374,11 +374,11 @@ func isBackgroundSame(bg1, bg2 string) bool {
 		ok   bool
 	)
 
-	if str1, ok = getFileMd5(bg1); !ok {
+	if str1, ok = getStrMd5(bg1); !ok {
 		return false
 	}
 
-	if str2, ok = getFileMd5(bg2); !ok {
+	if str2, ok = getStrMd5(bg2); !ok {
 		return false
 	}
 
