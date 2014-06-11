@@ -123,7 +123,7 @@ func execEdgeAction(edge string) {
 		for i := 1; i < l; i++ {
 			argv = append(argv, strs[i])
 		}
-		exec.Command(strs[0], argv...).Start()
+		go exec.Command(strs[0], argv...).Run()
 	}
 }
 

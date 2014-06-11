@@ -43,7 +43,7 @@ func setDSCAutoUpdate(interval time.Duration) {
 		timer := time.After(time.Hour * interval)
 		select {
 		case <-timer:
-			exec.Command("/usr/bin/dsc-daemon", []string{"--no-daemon"}...).Start()
+			go exec.Command("/usr/bin/dsc-daemon", []string{"--no-daemon"}...).Run()
 		}
 	}
 }
