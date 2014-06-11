@@ -33,7 +33,7 @@ const (
 	THEME_TYPE_SYSTEM = 0
 	THEME_TYPE_LOCAL  = 1
 
-	BG_CACHE_DIR    = ".cache/wallpappers"
+	BG_CACHE_DIR    = ".cache/wallpapers"
 	THEME_CACHE_DIR = ".cache/themes"
 )
 
@@ -67,12 +67,6 @@ const (
 	THEME_TYPE_ICON   = 2
 	THEME_TYPE_CURSOR = 3
 )
-
-func getThemeThumbnailPath(src string) string {
-	homeDir, _ := objUtil.GetHomeDir()
-	filename := path.Join(homeDir, BG_CACHE_DIR, path.Base(src))
-	return filename
-}
 
 func genThemeThumbnail(src, dest string, t int) {
 	switch t {
@@ -291,7 +285,7 @@ func getImageList(dir string) ([]string, bool) {
 func getBackgroundList() []BgInfo {
 	bgList := []BgInfo{}
 
-	if tmpList, ok := getBackgroundDir(DEFAULT_SYS_BG_DIR); ok {
+	if tmpList, ok := getImageList(DEFAULT_SYS_BG_DIR); ok {
 		for _, l := range tmpList {
 			tmp := BgInfo{}
 			tmp.Name = path.Base(l)
@@ -353,8 +347,12 @@ func getBackgroundList() []BgInfo {
 
 func getBgCachePath(src string) string {
 	homeDir, _ := objUtil.GetHomeDir()
+	bgDir := path.Join(homeDir, BG_CACHE_DIR)
+	if !objUtil.IsFileExist(bgDir) {
+		os.MkdirAll(bgDir, 0755)
+	}
 	md5Str, _ := getFileMd5(src)
-	filename := path.Join(homeDir, BG_CACHE_DIR, md5Str)
+	filename := path.Join(bgDir, md5Str+".png")
 	return filename
 }
 
@@ -363,7 +361,10 @@ func genBgThumbnail(src, dest string) {
 		return
 	}
 
-	graphic.ThumbnailImage(src, dest, 130, 74, graphic.PNG)
+	err := graphic.ThumbnailImage(src, dest, 130, 74, graphic.PNG)
+	if err != nil {
+		Logger.Warning("Generate Bg Thumbnail Failed:", err)
+	}
 }
 
 func isBackgroundSame(bg1, bg2 string) bool {
