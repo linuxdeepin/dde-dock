@@ -35,7 +35,7 @@ func find_app_id(pid uint, instanceName, wmName, wmClass, iconName string) strin
 
 func find_exec_name_by_pid(pid uint) string {
 	e := C.GoString(C.get_exe_name(C.int(pid)))
-	if e {
+	if e != "" {
 		return e
 	}
 	return C.GoString(C.get_exe(C.int(pid)))
