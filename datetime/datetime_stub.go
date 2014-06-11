@@ -24,6 +24,7 @@ package datetime
 import (
 	"dlib/dbus"
 	"dlib/gio-2.0"
+	"github.com/howeyc/fsnotify"
 	"os"
 )
 
@@ -96,7 +97,20 @@ func (op *Manager) listenZone() {
 		defer zoneWatcher.Close()
 		for {
 			select {
-			case ev := <-zoneWatcher.Event:
+			case ev, ok := <-zoneWatcher.Event:
+				if !ok {
+					if zoneWatcher != nil {
+						zoneWatcher.RemoveWatch(_TIME_ZONE_FILE)
+					}
+					zoneWatcher, _ = fsnotify.NewWatcher()
+					zoneWatcher.Watch(_TIME_ZONE_FILE)
+					break
+				}
+
+				if ev == nil {
+					break
+				}
+
 				logger.Info("Watcher Event: ", ev)
 				if ev.IsDelete() {
 					zoneWatcher.Watch(_TIME_ZONE_FILE)
@@ -105,8 +119,16 @@ func (op *Manager) listenZone() {
 					op.setPropName("CurrentTimezone")
 					//}
 				}
-			case err := <-zoneWatcher.Error:
+			case err, ok := <-zoneWatcher.Error:
 				logger.Info("Watcher Event: ", err)
+				if !ok || err != nil {
+					if zoneWatcher != nil {
+						zoneWatcher.RemoveWatch(_TIME_ZONE_FILE)
+					}
+					zoneWatcher, _ = fsnotify.NewWatcher()
+					zoneWatcher.Watch(_TIME_ZONE_FILE)
+					break
+				}
 			}
 		}
 	}()
