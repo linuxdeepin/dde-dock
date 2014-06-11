@@ -23,7 +23,7 @@ func Register(newModule *Module) {
 			return
 		}
 	}
-	modules = append(modules, newModule)
+	modules = append([]*Module{newModule}, modules...)
 }
 
 func Run() {
