@@ -1,7 +1,6 @@
 package bluetooth
 
 import (
-	//"dlib"
 	"dlib/dbus"
 	liblogger "dlib/logger"
 )

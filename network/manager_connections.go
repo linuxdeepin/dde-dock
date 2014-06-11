@@ -55,6 +55,8 @@ func (m *Manager) initConnectionManage() {
 	nmSettings.ConnectNewConnection(func(path dbus.ObjectPath) {
 		m.handleConnectionChanged(opAdded, path)
 	})
+	// nmSettings.ConnectPropertiesChanged(func(path dbus.ObjectPath) {
+	// }
 }
 
 func (m *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPath) {
