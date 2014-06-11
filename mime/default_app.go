@@ -168,15 +168,36 @@ func (dapp *DefaultApps) listenMimeCacheFile() {
 		defer mimeWatcher.Close()
 		for {
 			select {
-			case ev := <-mimeWatcher.Event:
+			case ev, ok := <-mimeWatcher.Event:
+				if !ok {
+					if mimeWatcher != nil {
+						mimeWatcher.RemoveWatch(mimeFile)
+					}
+					mimeWatcher, _ = fsnotify.NewWatcher()
+					mimeWatcher.Watch(mimeFile)
+					break
+				}
+
+				if ev == nil {
+					break
+				}
+
 				logObject.Infof("Watch Event: %v", ev)
 				if ev.IsDelete() {
 					mimeWatcher.Watch(mimeFile)
 				} else {
 					dapp.DefaultAppChanged()
 				}
-			case err := <-mimeWatcher.Error:
+			case err, ok := <-mimeWatcher.Error:
 				logObject.Infof("Watch Error: %v", err)
+				if !ok || err != nil {
+					if mimeWatcher != nil {
+						mimeWatcher.RemoveWatch(mimeFile)
+					}
+					mimeWatcher, _ = fsnotify.NewWatcher()
+					mimeWatcher.Watch(mimeFile)
+					break
+				}
 			}
 		}
 	}()
