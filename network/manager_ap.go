@@ -31,14 +31,18 @@ func newAccessPoint(apPath dbus.ObjectPath) (ap accessPoint, err error) {
 	}
 
 	ap = accessPoint{
-		nmAp:         nmAp,
-		Ssid:         string(nmAp.Ssid.Get()),
-		Secured:      getApSecType(nmAp) != apSecNone,
-		SecuredInEap: getApSecType(nmAp) == apSecEap,
-		Strength:     nmAp.Strength.Get(),
-		Path:         nmAp.Path,
+		nmAp: nmAp,
+		Path: apPath,
 	}
+	ap.updateProperties()
 	return
+}
+
+func (a *accessPoint) updateProperties() {
+	a.Ssid = string(a.nmAp.Ssid.Get())
+	a.Secured = getApSecType(a.nmAp) != apSecNone
+	a.SecuredInEap = getApSecType(a.nmAp) == apSecEap
+	a.Strength = a.nmAp.Strength.Get()
 }
 
 func calcApStrength(s uint8) uint8 {
@@ -92,20 +96,15 @@ func (m *Manager) addAccessPoint(devPath, apPath dbus.ObjectPath) {
 		return
 	}
 
-	// connect property, access point strength
-	// TODO connect more properties, security method
-	ap.nmAp.Strength.ConnectChanged(func() {
-		// firstly, check if the access point is still exists to ignore
-		// dbus error when getting property
-		if m.isAccessPointExists(devPath, apPath) {
-			ap.Strength = ap.nmAp.Strength.Get()
-			if m.AccessPointPropertiesChanged != nil {
-				apJSON, _ := marshalJSON(ap)
-				// logger.Debug(string(devPath), apJSON) // TODO test
-				m.AccessPointPropertiesChanged(string(devPath), apJSON)
-			}
-			m.updatePropAccessPoints()
+	// connect properties changed
+	ap.nmAp.ConnectPropertiesChanged(func(properties map[string]dbus.Variant) {
+		ap.updateProperties()
+		if m.AccessPointPropertiesChanged != nil {
+			apJSON, _ := marshalJSON(ap)
+			// logger.Debug(string(devPath), apJSON) // TODO test
+			m.AccessPointPropertiesChanged(string(devPath), apJSON)
 		}
+		m.updatePropAccessPoints()
 	})
 
 	// emit signal
