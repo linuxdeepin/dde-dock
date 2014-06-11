@@ -21,11 +21,17 @@
 
 package accounts
 
+import "dde-daemon"
+
 import (
 	"dlib/dbus"
 	Logger "dlib/logger"
 	Utils "dlib/utils"
 )
+
+func init() {
+	loader.Register(&loader.Module{"accounts", Start, nil, true})
+}
 
 var (
 	logger  = Logger.NewLogger(ACCOUNT_DEST)

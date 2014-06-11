@@ -26,6 +26,12 @@ package clipboard
 // #include "gsd-clipboard-manager.h"
 import "C"
 
+import "dde-daemon"
+
+func init() {
+	loader.Register(&loader.Module{"clipboard", Start, nil, true})
+}
+
 func Start() {
 	C.start_clip_manager()
 }

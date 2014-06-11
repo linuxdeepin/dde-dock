@@ -1,24 +1,21 @@
 package main
 
-import "dde-daemon/screensaver"
-import "dde-daemon/network"
-import "dde-daemon/clipboard"
-import "dde-daemon/audio"
-import "dde-daemon/power"
+import _ "dde-daemon/screensaver"
+import _ "dde-daemon/network"
+import _ "dde-daemon/clipboard"
+import _ "dde-daemon/audio"
+import _ "dde-daemon/power"
+import _ "dde-daemon/keybinding"
+import _ "dde-daemon/datetime"
+import _ "dde-daemon/mime"
+import _ "dde-daemon/mounts"
+import _ "dde-daemon/bluetooth"
+import _ "dde-daemon/screen_edges"
+import _ "dde-daemon/themes"
 
-import "dde-daemon/keybinding"
-import "dde-daemon/datetime"
-import "dde-daemon/mime"
-
-import "dde-daemon/mounts"
-import "dde-daemon/bluetooth"
-
-import "dde-daemon/screen_edges"
-import "dde-daemon/themes"
-
-import "dde-daemon/dock"
-import "dde-daemon/launcher"
-import "dde-daemon/grub2"
+import _ "dde-daemon/dock"
+import _ "dde-daemon/launcher"
+import _ "dde-daemon/grub2"
 
 import "dlib/glib-2.0"
 
@@ -31,34 +28,7 @@ import "dlib"
 import "dlib/logger"
 import "os"
 import "dlib/dbus"
-
-type Module struct {
-	Name   string
-	Start  func()
-	Stop   func()
-	Enable bool
-}
-
-var modules = []Module{
-	Module{"keybinding", keybinding.Start, nil, true},
-	Module{"screensaver", screensaver.Start, nil, true},
-	Module{"power", power.Start, nil, true},
-	Module{"themes", themes.Start, nil, true},
-	Module{"screen_edges", screen_edges.Start, nil, true},
-	Module{"launcher", launcher.Start, nil, true},
-	Module{"dock", dock.Start, nil, true},
-
-	Module{"network", network.Start, nil, true},
-	Module{"audio", audio.Start, nil, true},
-	Module{"mounts", mounts.Start, nil, true},
-	Module{"datetime", datetime.Start, nil, true},
-	Module{"mime", mime.Start, nil, true},
-	Module{"bluetooth", bluetooth.Start, nil, true},
-	Module{"grub2", grub2.Start, nil, true},
-	Module{"dsc", dscAutoUpdate, nil, true},
-	Module{"mpris", startMprisDaemon, nil, true},
-	Module{"clipboard", clipboard.Start, nil, true},
-}
+import "dde-daemon"
 
 var Logger = logger.NewLogger("com.deepin.daemon")
 
@@ -79,20 +49,11 @@ func main() {
 
 	if len(os.Args) >= 2 {
 		for _, disabledModuleName := range os.Args[1:] {
-			for _, m := range modules {
-				if disabledModuleName == m.Name {
-					m.Enable = false
-					break
-				}
-			}
+			loader.Enable(disabledModuleName, false)
 		}
 	}
 
-	for _, module := range modules {
-		if module.Enable {
-			go module.Start()
-		}
-	}
+	loader.Run()
 
 	go func() {
 		if err := dbus.Wait(); err != nil {
