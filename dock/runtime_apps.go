@@ -17,7 +17,6 @@ import (
 	"github.com/BurntSushi/xgbutil/xprop"
 	"github.com/BurntSushi/xgbutil/xwindow"
 	"io/ioutil"
-	"os"
 	"path/filepath"
 	"strings"
 )
