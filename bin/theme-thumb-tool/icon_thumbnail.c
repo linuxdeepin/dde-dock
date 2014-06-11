@@ -30,10 +30,10 @@
 #define APP_ICON_DEEPIN "deepin-software-center"
 #define APP_ICON_NAME "google-chrome"
 
-static GdkPixbuf *get_pixbuf_from_file (const char *name);
+static GdkPixbuf *get_pixbuf_from_file (const char *name, gboolean is_bg);
 
 static GdkPixbuf *
-get_pixbuf_from_file (const char *name)
+get_pixbuf_from_file (const char *name, gboolean is_bg)
 {
 	if (!name) {
 		g_error("Get Icon Pixbuf Failed: args error");
@@ -41,7 +41,12 @@ get_pixbuf_from_file (const char *name)
 	}
 
 	GError *error = NULL;
-	GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file(name, &error);
+	GdkPixbuf *pixbuf = NULL;
+	if (!is_bg) {
+		pixbuf = gdk_pixbuf_new_from_file_at_size(name, 24, 24,&error);
+	} else {
+		pixbuf = gdk_pixbuf_new_from_file(name, &error);
+	}
 	if (!pixbuf) {
 		g_error("Create %s Pixbuf Failed: %s", name, error->message);
 		g_error_free(error);
@@ -59,7 +64,7 @@ gen_icon_preview(char *bg, char *dest, char *item1, char *item2, char *item3)
 		return -1;
 	}
 
-	GdkPixbuf *bg_pixbuf = get_pixbuf_from_file(bg);
+	GdkPixbuf *bg_pixbuf = get_pixbuf_from_file(bg, TRUE);
 	if (!bg_pixbuf) {
 		return -1;
 	}
@@ -82,9 +87,9 @@ gen_icon_preview(char *bg, char *dest, char *item1, char *item2, char *item3)
 		return -1;
 	}
 
-	GdkPixbuf *pixbuf1 = get_pixbuf_from_file(item1);
-	GdkPixbuf *pixbuf2 = get_pixbuf_from_file(item2);
-	GdkPixbuf *pixbuf3 = get_pixbuf_from_file(item3);
+	GdkPixbuf *pixbuf1 = get_pixbuf_from_file(item1, FALSE);
+	GdkPixbuf *pixbuf2 = get_pixbuf_from_file(item2, FALSE);
+	GdkPixbuf *pixbuf3 = get_pixbuf_from_file(item3, FALSE);
 	if (!pixbuf1 || !pixbuf2 || !pixbuf3) {
 		g_error("Get Icon Pixbuf Failed");
 		goto out;
@@ -107,16 +112,16 @@ gen_icon_preview(char *bg, char *dest, char *item1, char *item2, char *item3)
 		goto out;
 	}
 
-	gdk_cairo_set_source_pixbuf(bg_cairo, pixbuf1, 
-			(gdouble)(base_w), (gdouble)(base_h));
+	gdk_cairo_set_source_pixbuf(bg_cairo, pixbuf1,
+	                            (gdouble)(base_w), (gdouble)(base_h));
 	g_object_unref(pixbuf1);
 	cairo_paint(bg_cairo);
-	gdk_cairo_set_source_pixbuf(bg_cairo, pixbuf2, 
-			(gdouble)(width1 + base_w), (gdouble)(base_h));
+	gdk_cairo_set_source_pixbuf(bg_cairo, pixbuf2,
+	                            (gdouble)(width1 + base_w), (gdouble)(base_h));
 	g_object_unref(pixbuf2);
 	cairo_paint(bg_cairo);
-	gdk_cairo_set_source_pixbuf(bg_cairo, pixbuf3, 
-			(gdouble)(width2 +base_w), (gdouble)(base_h));
+	gdk_cairo_set_source_pixbuf(bg_cairo, pixbuf3,
+	                            (gdouble)(width2 +base_w), (gdouble)(base_h));
 	g_object_unref(pixbuf3);
 	cairo_paint(bg_cairo);
 
