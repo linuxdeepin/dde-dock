@@ -23,11 +23,14 @@ package inputdevices
 
 import (
 	libsession "dbus/com/deepin/sessionmanager"
+	"dlib"
 	"dlib/dbus"
 	. "dlib/gettext"
 	"dlib/gio-2.0"
+	"dlib/glib-2.0"
 	Logger "dlib/logger"
 	libutil "dlib/utils"
+	"os"
 )
 
 var (
@@ -43,11 +46,15 @@ var (
 )
 
 func Start() {
+	if !dlib.UniqueOnSession(DEVICE_DEST) {
+		logObj.Warning("There has a inputdevices running")
+		return
+	}
 	logObj.BeginTracing()
 	defer logObj.EndTracing()
-
+	logObj.SetRestartCommand("/usr/lib/deepin-daemon/inputdevices")
 	InitI18n()
-	Textdomain("xkeyboard-config")
+	//Textdomain("xkeyboard-config")
 
 	var err error
 	xsObj, err = libsession.NewXSettings("com.deepin.SessionManager",
@@ -57,6 +64,7 @@ func Start() {
 		return
 	}
 
+	initGdkEnv()
 	listenDevsSettings()
 
 	managerObj = NewManager()
@@ -102,4 +110,13 @@ func Start() {
 	initGSettingsSet(tpadFlag)
 
 	dbus.DealWithUnhandledMessage()
+	ddeSessionRegister()
+
+	go glib.StartLoop()
+	if err := dbus.Wait(); err != nil {
+		logObj.Error("Lost dbus")
+		os.Exit(-1)
+	} else {
+		os.Exit(0)
+	}
 }

@@ -85,7 +85,7 @@ func getLayoutList(xmlData XKBConfigRegister) map[string]string {
 	for _, layout := range xmlData.LayoutList.Layout {
 		firstName := layout.ConfigItem.Name
 		desc := layout.ConfigItem.Description
-		layouts[firstName+LAYOUT_DELIM] = Tr(desc)
+		layouts[firstName+LAYOUT_DELIM] = DGettext("xkeyboard-config", desc)
 
 		variants := layout.VariantList.Variant
 		for _, v := range variants {
