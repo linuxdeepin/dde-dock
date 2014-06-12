@@ -26,6 +26,7 @@ import (
 	"dlib/graphic"
 	"encoding/json"
 	"io/ioutil"
+	"sync"
 	"text/template"
 )
 
@@ -72,9 +73,11 @@ type Theme struct {
 	bgFile      string
 	tplJSONData *TplJSONData
 
-	background string // absolute background file path
-	Background string // background thumbnail, used by front-end
+	Updating   bool
+	updateLock sync.Locker
 
+	background        string // absolute background file path
+	Background        string // background thumbnail, used by front-end
 	ItemColor         string `access:"readwrite"`
 	SelectedItemColor string `access:"readwrite"`
 }
@@ -114,10 +117,14 @@ func (theme *Theme) reset() {
 
 	// reset theme background
 	go func() {
+		theme.updateLock.Lock()
+		defer theme.updateLock.Unlock()
+		theme.updatePropUpdating(true)
 		grub2extDoResetThemeBackground()
 		screenWidth, screenHeight := getPrimaryScreenBestResolution()
 		grub2extDoGenerateThemeBackground(screenWidth, screenHeight)
 		theme.updatePropBackground(theme.background)
+		theme.updatePropUpdating(false)
 	}()
 }
 

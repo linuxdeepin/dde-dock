@@ -58,6 +58,11 @@ func (theme *Theme) OnPropertiesChanged(name string, oldv interface{}) {
 	}
 }
 
+func (theme *Theme) updatePropUpdating(value bool) {
+	theme.Updating = value
+	dbus.NotifyChange(theme, "Updating")
+}
+
 func (theme *Theme) updatePropBackground(value string) {
 	theme.background = value
 	// generate background thumbnail
@@ -98,9 +103,13 @@ func (theme *Theme) SetBackgroundSourceFile(imageFile string) {
 }
 
 func (theme *Theme) doSetBackgroundSourceFile(imageFile string) bool {
+	theme.updateLock.Lock()
+	defer theme.updateLock.Unlock()
+	theme.updatePropUpdating(true)
 	screenWidth, screenHeight := getPrimaryScreenBestResolution()
 	grub2extDoSetThemeBackgroundSourceFile(imageFile, screenWidth, screenHeight)
 	theme.updatePropBackground(theme.background)
+	theme.updatePropUpdating(false)
 
 	// set item color through background's dominant color
 	_, _, v, _ := graphic.GetDominantColorOfImage(theme.bgSrcFile)

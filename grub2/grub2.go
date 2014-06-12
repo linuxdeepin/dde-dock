@@ -129,12 +129,12 @@ func (grub *Grub2) doInitGrub2() {
 }
 
 func (grub *Grub2) notifyUpdate() {
-	go func() {
-		grub.chanUpdate <- 1
-	}()
 	grub.needUpdateLock.Lock()
 	grub.needUpdate = true
 	grub.needUpdateLock.Unlock()
+	go func() {
+		grub.chanUpdate <- 1
+	}()
 }
 
 func (grub *Grub2) startUpdateLoop() {
@@ -164,7 +164,8 @@ func (grub *Grub2) startUpdateLoop() {
 					grub.config.NeedUpdate = false
 					grub.writeCacheConfig()
 
-					// send signal GenerateEnd() only if don't need update any more
+					// set property "Updating" to false only if don't
+					// need update any more
 					grub.needUpdateLock.Lock()
 					if !grub.needUpdate {
 						grub.updatePropUpdating(false)

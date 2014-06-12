@@ -5,6 +5,7 @@ package grub2
 // 	"time"
 // )
 
+// TODO
 // func TestModuleStartStop(t *testing.T) {
 // 	// logger.SetLogLevel(liblogger.LEVEL_DEBUG)
 // 	Stop()
