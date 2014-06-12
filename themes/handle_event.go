@@ -56,6 +56,14 @@ func (obj *Manager) listenGSettings() {
 			obj.setBackground(value)
 		}
 	})
+
+	gnmSettings.Connect("changed::picture-uri", func(s *gio.Settings, key string) {
+		value := gnmSettings.GetString("picture-uri")
+		bg := themeSettings.GetString(GS_KEY_CURRENT_BG)
+		if bg != value {
+			themeSettings.SetString(GS_KEY_CURRENT_BG, value)
+		}
+	})
 }
 
 func (obj *Manager) startWatch() {

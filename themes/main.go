@@ -35,6 +35,7 @@ var (
 	objUtil = Utils.NewUtils()
 
 	themeSettings = gio.NewSettings("com.deepin.dde.personalization")
+	gnmSettings   = gio.NewSettings("org.gnome.desktop.background")
 )
 
 func Start() {
