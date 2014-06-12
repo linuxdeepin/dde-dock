@@ -35,6 +35,11 @@ import (
 	"unsafe"
 )
 
+func rmAllFile(name string) {
+	name, _ = objUtil.URIToPath(name)
+	os.RemoveAll(name)
+}
+
 func getUserPictureDir() string {
 	str := C.get_user_pictures_dir()
 	defer C.free(unsafe.Pointer(str))

@@ -23,10 +23,13 @@ package themes
 
 import (
 	"dlib/graphic"
+	"math/rand"
 	"os"
+	"os/exec"
 	"path"
 	"regexp"
 	"strings"
+	"time"
 )
 
 const (
@@ -35,6 +38,8 @@ const (
 
 	BG_CACHE_DIR    = ".cache/wallpapers"
 	THEME_CACHE_DIR = ".cache/themes"
+
+	THUMB_GEN_CMD = "/usr/lib/deepin-daemon/theme-thumb-tool"
 )
 
 type pathInfo struct {
@@ -43,17 +48,9 @@ type pathInfo struct {
 }
 
 type ThemeInfo struct {
-	Name      string
-	Path      string
-	T         int32
-	Thumbnail string
-}
-
-type BgInfo struct {
-	Name    string
-	Preview string
-	Path    string
-	T       int32
+	Name string
+	Path string
+	T    int32
 }
 
 const (
@@ -62,20 +59,10 @@ const (
 	ICON_THUMB   = "/usr/share/personalization/thumbnail/IconThemes/Deepin/thumbnail.png"
 	CURSOR_THUMB = "/usr/share/personalization/thumbnail/CursorThemes/Deepin-Cursor/thumbnail.png"
 
-	THEME_TYPE_THEME  = 0
 	THEME_TYPE_GTK    = 1
 	THEME_TYPE_ICON   = 2
 	THEME_TYPE_CURSOR = 3
 )
-
-func genThemeThumbnail(src, dest string, t int) {
-	switch t {
-	case THEME_TYPE_THEME:
-	case THEME_TYPE_GTK:
-	case THEME_TYPE_ICON:
-	case THEME_TYPE_CURSOR:
-	}
-}
 
 func getThemeList(dirs []pathInfo, conditions []string) []ThemeInfo {
 	list := []ThemeInfo{}
@@ -282,19 +269,16 @@ func getImageList(dir string) ([]string, bool) {
 	return list, true
 }
 
-func getBackgroundList() []BgInfo {
-	bgList := []BgInfo{}
+func getBackgroundList() []ThemeInfo {
+	bgList := []ThemeInfo{}
 
 	if tmpList, ok := getImageList(DEFAULT_SYS_BG_DIR); ok {
 		for _, l := range tmpList {
-			tmp := BgInfo{}
+			tmp := ThemeInfo{}
 			tmp.Name = path.Base(l)
 			uri, _ := objUtil.PathToFileURI(l)
 			tmp.Path = uri
 			tmp.T = THEME_TYPE_SYSTEM
-			dest := getBgCachePath(l)
-			tmp.Preview = dest
-			go genBgThumbnail(l, dest)
 			bgList = append(bgList, tmp)
 		}
 	}
@@ -304,14 +288,11 @@ func getBackgroundList() []BgInfo {
 		for _, d := range dirs {
 			if list, ok := getImageList(d); ok {
 				for _, l := range list {
-					tmp := BgInfo{}
+					tmp := ThemeInfo{}
 					tmp.Name = path.Base(l)
 					uri, _ := objUtil.PathToFileURI(l)
 					tmp.Path = uri
 					tmp.T = THEME_TYPE_SYSTEM
-					dest := getBgCachePath(l)
-					tmp.Preview = dest
-					go genBgThumbnail(l, dest)
 					//if !isBgInfoInList(tmp, list) {
 					bgList = append(bgList, tmp)
 					//}
@@ -326,14 +307,11 @@ func getBackgroundList() []BgInfo {
 		for _, d := range dirs {
 			if list, ok := getImageList(d); ok {
 				for _, l := range list {
-					tmp := BgInfo{}
+					tmp := ThemeInfo{}
 					tmp.Name = path.Base(l)
 					uri, _ := objUtil.PathToFileURI(l)
 					tmp.Path = uri
 					tmp.T = THEME_TYPE_LOCAL
-					dest := getBgCachePath(l)
-					tmp.Preview = dest
-					go genBgThumbnail(l, dest)
 					//if !isBgInfoInList(tmp, list) {
 					bgList = append(bgList, tmp)
 					//}
@@ -346,6 +324,7 @@ func getBackgroundList() []BgInfo {
 }
 
 func getBgCachePath(src string) string {
+	src, _ = objUtil.URIToPath(src)
 	homeDir, _ := objUtil.GetHomeDir()
 	bgDir := path.Join(homeDir, BG_CACHE_DIR)
 	if !objUtil.IsFileExist(bgDir) {
@@ -356,40 +335,31 @@ func getBgCachePath(src string) string {
 	return filename
 }
 
-func genBgThumbnail(src, dest string) {
+func genBgThumbnail(src, dest string) bool {
 	if objUtil.IsFileExist(dest) {
-		return
+		return true
 	}
 
 	err := graphic.ThumbnailImage(src, dest, 130, 74, graphic.PNG)
 	if err != nil {
 		Logger.Warning("Generate Bg Thumbnail Failed:", err)
+		return false
 	}
+
+	return true
 }
 
 func isBackgroundSame(bg1, bg2 string) bool {
-	var (
-		str1 string
-		str2 string
-		ok   bool
-	)
-
-	if str1, ok = getStrMd5(bg1); !ok {
-		return false
-	}
-
-	if str2, ok = getStrMd5(bg2); !ok {
-		return false
-	}
-
-	if str1 == str2 {
+	bg1, _ = objUtil.URIToPath(bg1)
+	bg2, _ = objUtil.URIToPath(bg2)
+	if bg1 == bg2 {
 		return true
 	}
 
 	return false
 }
 
-func isBgInfoInList(bg BgInfo, list []BgInfo) bool {
+func isBgInfoInList(bg ThemeInfo, list []ThemeInfo) bool {
 	for _, l := range list {
 		if isBackgroundSame(bg.Path, l.Path) {
 			return true
@@ -399,7 +369,7 @@ func isBgInfoInList(bg BgInfo, list []BgInfo) bool {
 	return false
 }
 
-func isBgInfoListEqual(list1, list2 []BgInfo) bool {
+func isBgInfoListEqual(list1, list2 []ThemeInfo) bool {
 	l1 := len(list1)
 	l2 := len(list2)
 
@@ -463,27 +433,13 @@ func getDThemeList() []ThemeInfo {
 	sysList := getDThemeByDir(PERSON_SYS_THEME_PATH, THEME_TYPE_SYSTEM)
 
 	list := []ThemeInfo{}
-	for _, l := range localList {
-		if l.Name == "Custom" {
-			list = append(list, l)
-			continue
-		}
-		thumb := path.Join(l.Path, "thumbnail.png")
-		if objUtil.IsFileExist(thumb) {
-			l.Thumbnail = thumb
-			list = append(list, l)
-		}
-	}
+	list = localList
 	for _, l := range sysList {
 		if isThemeInfoInList(l, list) {
 			continue
 		}
 
-		thumb := path.Join(l.Path, "thumbnail.png")
-		if objUtil.IsFileExist(thumb) {
-			l.Thumbnail = thumb
-			list = append(list, l)
-		}
+		list = append(list, l)
 	}
 
 	return list
@@ -528,4 +484,146 @@ func isThemeInfoListEqual(list1, list2 []ThemeInfo) bool {
 	}
 
 	return true
+}
+
+func getThemeCachePath(src string) string {
+	src, _ = objUtil.URIToPath(src)
+	homeDir, _ := objUtil.GetHomeDir()
+	dir := path.Join(homeDir, THEME_CACHE_DIR)
+	if !objUtil.IsFileExist(dir) {
+		os.MkdirAll(dir, 0755)
+	}
+	md5Str, _ := getStrMd5(src)
+	filename := path.Join(dir, md5Str+".png")
+	return filename
+}
+
+func getThumbBg() (string, bool) {
+	list, ok := getImageList("/usr/share/personalization/thumb_bg")
+	if !ok {
+		return "", false
+	}
+
+	rand.Seed(time.Now().UnixNano())
+	l := len(list)
+	i := rand.Intn(l)
+
+	return list[i], true
+}
+
+func genThemeThumbnail(name, dest string, t int) bool {
+	switch t {
+	case THEME_TYPE_GTK:
+		out, _ := exec.Command(THUMB_GEN_CMD, []string{
+			"--gtk",
+			name,
+			dest, ""}...).Output()
+		if strings.Contains(string(out), "ERROR") {
+			return false
+		}
+	case THEME_TYPE_ICON:
+		bg, ok := getThumbBg()
+		if !ok {
+			return false
+		}
+		out, _ := exec.Command(THUMB_GEN_CMD, []string{
+			"--icon",
+			name,
+			dest, bg}...).Output()
+		if strings.Contains(string(out), "ERROR") {
+			return false
+		}
+	case THEME_TYPE_CURSOR:
+		bg, ok := getThumbBg()
+		if !ok {
+			return false
+		}
+		out, _ := exec.Command(THUMB_GEN_CMD, []string{
+			"--cursor",
+			name,
+			dest, bg}...).Output()
+		if strings.Contains(string(out), "ERROR") {
+			return false
+		}
+	}
+
+	return true
+}
+
+func getDThemeThumb(name string) string {
+	list := getDThemeList()
+	for _, l := range list {
+		if name == "Custom" {
+			if t, ok := GetManager().themeObjMap[name]; ok {
+				return GetManager().GetThumbnail("background", t.Background)
+			}
+			break
+		}
+		if name == l.Name {
+			thumb := path.Join(l.Path, "thumbnail.png")
+			if objUtil.IsFileExist(thumb) {
+				return thumb
+			}
+			break
+		}
+	}
+
+	return ""
+}
+
+func getGtkThumb(name string) string {
+	list := getGtkThemeList()
+
+	for _, l := range list {
+		if name == l.Name {
+			dest := getThemeCachePath(l.Path)
+			src, _ := objUtil.URIToPath(l.Path)
+			if genThemeThumbnail(src, dest, THEME_TYPE_GTK) {
+				return dest
+			}
+		}
+	}
+
+	return ""
+}
+
+func getIconThumb(name string) string {
+	list := getIconThemeList()
+
+	for _, l := range list {
+		if name == l.Name {
+			dest := getThemeCachePath(l.Path)
+			src, _ := objUtil.URIToPath(l.Path)
+			if genThemeThumbnail(src, dest, THEME_TYPE_ICON) {
+				return dest
+			}
+		}
+	}
+
+	return ""
+}
+
+func getCursorThumb(name string) string {
+	list := getCursorThemeList()
+
+	for _, l := range list {
+		if name == l.Name {
+			dest := getThemeCachePath(l.Path)
+			src, _ := objUtil.URIToPath(l.Path)
+			if genThemeThumbnail(src, dest, THEME_TYPE_CURSOR) {
+				return dest
+			}
+		}
+	}
+
+	return ""
+}
+
+func getBgThumb(bg string) string {
+	dest := getBgCachePath(bg)
+	if genBgThumbnail(bg, dest) {
+		return dest
+	}
+
+	return ""
 }

@@ -24,33 +24,78 @@ package themes
 import (
 	"os"
 	"path"
+	"strconv"
 	"strings"
 )
 
-func (op *Manager) GetFlag(t, name string) int32 {
+func (obj *Manager) GetFlag(t, name string) int32 {
 	t = strings.ToLower(t)
 	switch t {
 	case "theme":
+		list := getDThemeList()
+		for _, l := range list {
+			if name == l.Name {
+				return l.T
+			}
+		}
 	case "gtk":
+		list := getGtkThemeList()
+		for _, l := range list {
+			if name == l.Name {
+				return l.T
+			}
+		}
 	case "icon":
+		list := getIconThemeList()
+		for _, l := range list {
+			if name == l.Name {
+				return l.T
+			}
+		}
 	case "sound":
+		list := getSoundThemeList()
+		for _, l := range list {
+			if name == l.Name {
+				return l.T
+			}
+		}
 	case "cursor":
+		list := getCursorThemeList()
+		for _, l := range list {
+			if name == l.Name {
+				return l.T
+			}
+		}
 	case "background":
+		list := getBackgroundList()
+		for _, l := range list {
+			if name == l.Name {
+				return l.T
+			}
+		}
 	}
 
-	return 0
+	return -1
 }
 
-func (op *Manager) Set(t, name, value string) {
+func (obj *Manager) Set(t, name, value string) {
 	t = strings.ToLower(t)
 	switch t {
 	case "theme":
+		obj.setPropCurrentTheme(value)
 	case "gtk":
+		obj.setGtkTheme(value)
 	case "icon":
+		obj.setIconTheme(value)
 	case "sound":
+		obj.setSoundTheme(value)
 	case "cursor":
+		obj.setCursorTheme(value)
 	case "fontsize":
+		s, _ := strconv.ParseInt(value, 10, 64)
+		obj.setFontSize(int32(s))
 	case "background":
+		obj.setBackground(value)
 	}
 }
 
@@ -58,25 +103,35 @@ func (op *Manager) GetThumbnail(t, name string) string {
 	t = strings.ToLower(t)
 	switch t {
 	case "theme":
+		return getDThemeThumb(name)
 	case "gtk":
+		return getGtkThumb(name)
 	case "icon":
-	case "sound":
+		return getIconThumb(name)
 	case "cursor":
+		return getCursorThumb(name)
 	case "background":
+		return getBgThumb(name)
 	}
 
-	return "/usr/share/personalization/thumbnail/IconThemes/Deepin/thumbnail.png"
+	return ""
 }
 
 func (obj *Manager) Delete(t, name string) {
 	t = strings.ToLower(t)
 	switch t {
 	case "theme":
+		obj.deleteDTheme(name)
 	case "gtk":
+		obj.deleteGtkTheme(name)
 	case "icon":
+		obj.deleteIconTheme(name)
 	case "sound":
+		obj.deleteSoundTheme(name)
 	case "cursor":
+		obj.deleteCursorTheme(name)
 	case "background":
+		obj.deleteBackground(name)
 	}
 }
 
@@ -248,74 +303,66 @@ func (obj *Manager) setFontSize(size int32) {
 }
 
 func (obj *Manager) deleteGtkTheme(theme string) {
-	filepath := ""
-	flag := false
 	for _, l := range obj.GtkThemeList {
 		if l == theme {
 			if obj.GetFlag("gtk", l) == int32(THEME_TYPE_LOCAL) {
-				flag = true
-				//filepath = l.Path
+				list := getGtkThemeList()
+				for _, t := range list {
+					if theme == t.Name {
+						rmAllFile(t.Path)
+					}
+				}
 			}
 			break
 		}
-	}
-
-	if flag {
-		os.RemoveAll(filepath)
 	}
 }
 
 func (obj *Manager) deleteIconTheme(theme string) {
-	filepath := ""
-	flag := false
 	for _, l := range obj.IconThemeList {
 		if l == theme {
 			if obj.GetFlag("icon", l) == int32(THEME_TYPE_LOCAL) {
-				flag = true
-				//filepath = l.Path
+				list := getIconThemeList()
+				for _, t := range list {
+					if theme == t.Name {
+						rmAllFile(t.Path)
+					}
+				}
 			}
 			break
 		}
-	}
-
-	if flag {
-		os.RemoveAll(filepath)
 	}
 }
 
 func (obj *Manager) deleteSoundTheme(theme string) {
-	filepath := ""
-	flag := false
 	for _, l := range obj.SoundThemeList {
 		if l == theme {
 			if obj.GetFlag("sound", l) == int32(THEME_TYPE_LOCAL) {
-				flag = true
-				//filepath = l.Path
+				list := getSoundThemeList()
+				for _, t := range list {
+					if theme == t.Name {
+						rmAllFile(t.Path)
+					}
+				}
 			}
 			break
 		}
-	}
-
-	if flag {
-		os.RemoveAll(filepath)
 	}
 }
 
 func (obj *Manager) deleteCursorTheme(theme string) {
-	filepath := ""
-	flag := false
 	for _, l := range obj.CursorThemeList {
 		if l == theme {
 			if obj.GetFlag("curosr", l) == int32(THEME_TYPE_LOCAL) {
-				flag = true
-				//filepath = l.Path
+				list := getCursorThemeList()
+				for _, t := range list {
+					if theme == t.Name {
+						rmAllFile(t.Path)
+					}
+				}
 			}
 			break
 		}
-	}
-
-	if flag {
-		os.RemoveAll(filepath)
 	}
 }
 
@@ -344,5 +391,21 @@ func (obj *Manager) deleteBackground(bg string) {
 
 	if obj.GetFlag("background", bg) == int32(THEME_TYPE_LOCAL) {
 		os.RemoveAll(bg)
+	}
+}
+
+func (obj *Manager) deleteDTheme(name string) {
+	for _, l := range obj.ThemeList {
+		if l == name {
+			list := getDThemeList()
+			for _, t := range list {
+				if name == t.Name {
+					if t.T == int32(THEME_TYPE_LOCAL) {
+						rmAllFile(t.Path)
+					}
+				}
+			}
+			break
+		}
 	}
 }
