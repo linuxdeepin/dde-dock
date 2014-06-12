@@ -151,7 +151,7 @@ func getXCategory(app *gio.DesktopAppInfo) CategoryId {
 func getCategory(app *gio.DesktopAppInfo) CategoryId {
 	id, err := getDeepinCategory(app)
 	if err != nil {
-		logger.Error("get category from database failed:", err)
+		logger.Warningf("\"%s\" get category from database failed: %s", app.GetDisplayName(), err)
 		return getXCategory(app)
 	}
 	logger.Debug("get category from database:", id)
@@ -197,7 +197,7 @@ func getItemInfos(id CategoryId) []ItemInfo {
 	// logger.Info(id)
 	infos := make([]ItemInfo, 0)
 	if _, ok := categoryTable[id]; !ok {
-		logger.Error("category id:", id, "not exist")
+		logger.Warning("category id:", id, "not exist")
 		return infos
 	}
 
