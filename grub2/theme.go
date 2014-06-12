@@ -72,7 +72,9 @@ type Theme struct {
 	bgFile      string
 	tplJSONData *TplJSONData
 
-	Background        string // absolute background file path
+	background string // absolute background file path
+	Background string // background thumbnail, used by front-end
+
 	ItemColor         string `access:"readwrite"`
 	SelectedItemColor string `access:"readwrite"`
 }
@@ -115,7 +117,7 @@ func (theme *Theme) reset() {
 		grub2extDoResetThemeBackground()
 		screenWidth, screenHeight := getPrimaryScreenBestResolution()
 		grub2extDoGenerateThemeBackground(screenWidth, screenHeight)
-		theme.updatePropBackground(theme.Background)
+		theme.updatePropBackground(theme.background)
 	}()
 }
 
@@ -124,7 +126,7 @@ func (theme *Theme) reset() {
 func (theme *Theme) regenerateBackgroundIfNeed() {
 	logger.Debug("check if need regenerate theme background")
 	screenWidth, screenHeight := getPrimaryScreenBestResolution()
-	bgw, bgh, _ := graphic.GetImageSize(theme.Background)
+	bgw, bgh, _ := graphic.GetImageSize(theme.background)
 	srcbgw, srcbgh, _ := graphic.GetImageSize(theme.bgSrcFile)
 	needGenerate := false
 	logger.Debugf("screen resolution: %dx%d, source background: %dx%d, background: %dx%d",
@@ -148,7 +150,7 @@ func (theme *Theme) regenerateBackgroundIfNeed() {
 
 	if needGenerate {
 		grub2extDoGenerateThemeBackground(screenWidth, screenHeight)
-		theme.updatePropBackground(theme.Background)
+		theme.updatePropBackground(theme.background)
 		logger.Info("update background sucess")
 	}
 }

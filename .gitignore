@@ -3,6 +3,7 @@ Planner
 Test
 test-*
 test_*
+_*
 *.*~
 *.cfg
 *.ini

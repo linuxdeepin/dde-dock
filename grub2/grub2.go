@@ -187,7 +187,7 @@ func (grub *Grub2) resetGfxmodeIfNeed() {
 		// regenerate theme background
 		screenWidth, screenHeight := getPrimaryScreenBestResolution()
 		grub2extDoGenerateThemeBackground(screenWidth, screenHeight)
-		grub.theme.updatePropBackground(grub.theme.Background)
+		grub.theme.updatePropBackground(grub.theme.background)
 	}
 }
 
