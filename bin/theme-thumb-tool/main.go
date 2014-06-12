@@ -104,25 +104,29 @@ func genIconThumbnail(theme, dest, bg string) bool {
 	item2 := ""
 	item3 := ""
 
+	home, _ := objUtil.GetHomeDir()
 	for _, l := range objTM.IconThemeList.Get() {
-		if len(l) < 4 {
-			continue
-		}
-		if n, ok := l[0].(string); ok && n == theme {
-			if p, ok := l[1].(string); ok {
-				item1 = path.Join(p, ICON_DEVICE)
+		if l == theme {
+			if f, err := objTM.GetFlag("icon", theme); err == nil {
+				dir := ""
+				if f == 0 {
+					dir = path.Join("/usr/share/icons", theme)
+				} else {
+					dir = path.Join(home, ".icons", theme)
+				}
+				item1 = path.Join(dir, ICON_DEVICE)
 				if !objUtil.IsFileExist(item1) {
 					return false
 				}
 
-				item2 = path.Join(p, ICON_PLACE)
+				item2 = path.Join(dir, ICON_PLACE)
 				if !objUtil.IsFileExist(item2) {
 					return false
 				}
 
-				item3 = path.Join(p, ICON_DEEPIN_APP)
+				item3 = path.Join(dir, ICON_DEEPIN_APP)
 				if !objUtil.IsFileExist(item3) {
-					item3 = path.Join(p, ICON_APP)
+					item3 = path.Join(dir, ICON_APP)
 					if !objUtil.IsFileExist(item3) {
 						return false
 					}
