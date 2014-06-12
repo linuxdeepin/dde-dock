@@ -72,6 +72,7 @@ type Grub2 struct {
 
 	DefaultEntry string `access:"readwrite"`
 	Timeout      int32  `access:"readwrite"`
+	Updating     bool
 
 	GenerateBegin func()
 	GenerateEnd   func()
@@ -114,8 +115,8 @@ func (grub *Grub2) doInitGrub2() {
 		grub.writeSettings()
 		grub.notifyUpdate()
 	}
-	grub.setProperty("DefaultEntry", grub.getSettingDefaultEntry())
-	grub.setProperty("Timeout", grub.getSettingTimeout())
+	grub.updatePropDefaultEntry(grub.getSettingDefaultEntry())
+	grub.updatePropTimeout(grub.getSettingTimeout())
 
 	if isFileExists(grubCacheFile) {
 		err = grub.readCacheConfig()

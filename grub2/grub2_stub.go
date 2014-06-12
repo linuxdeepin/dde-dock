@@ -51,38 +51,32 @@ func (grub *Grub2) OnPropertiesChanged(name string, oldv interface{}) {
 	logger.Debug("OnPropertiesChanged: " + name)
 	switch name {
 	case "DefaultEntry":
-		if grub.DefaultEntry == oldv.(string) {
+		oldvStr, _ := oldv.(string)
+		if grub.DefaultEntry == oldvStr {
 			return
 		}
-		grub.setProperty(name, grub.DefaultEntry)
+		grub.updatePropDefaultEntry(grub.DefaultEntry)
 	case "Timeout":
-		if grub.Timeout == oldv.(int32) {
+		oldvInt, _ := oldv.(int32)
+		if grub.Timeout == oldvInt {
 			return
 		}
-		grub.setProperty(name, grub.Timeout)
+		grub.updatePropTimeout(grub.Timeout)
 	}
-
 	grub.writeSettings()
 	grub.notifyUpdate()
 }
 
-func (grub *Grub2) setProperty(name string, value interface{}) (ok bool) {
-	switch name {
-	case "DefaultEntry":
-		grub.DefaultEntry, ok = value.(string)
-		if ok {
-			grub.setSettingDefaultEntry(grub.DefaultEntry)
-		}
-	case "Timeout":
-		grub.Timeout, ok = value.(int32)
-		if ok {
-			grub.setSettingTimeout(grub.Timeout)
-		}
-	}
-	if ok {
-		dbus.NotifyChange(grub, name)
-	}
-	return
+func (grub *Grub2) updatePropDefaultEntry(value string) {
+	grub.DefaultEntry = value
+	grub.setSettingDefaultEntry(grub.DefaultEntry)
+	dbus.NotifyChange(grub, "DefaultEntry")
+}
+
+func (grub *Grub2) updatePropTimeout(value int32) {
+	grub.Timeout = value
+	grub.setSettingTimeout(grub.Timeout)
+	dbus.NotifyChange(grub, "Timeout")
 }
 
 // GetSimpleEntryTitles return entry titles in level one.
@@ -107,7 +101,7 @@ func (grub *Grub2) Reset() {
 	if len(simpleEntryTitles) > 0 {
 		firstEntry = simpleEntryTitles[0]
 	}
-	grub.setProperty("DefaultEntry", firstEntry)
-	grub.setProperty("Timeout", int32(10))
+	grub.updatePropDefaultEntry(firstEntry)
+	grub.updatePropTimeout(int32(10))
 	grub.theme.reset()
 }
