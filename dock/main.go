@@ -66,6 +66,7 @@ func Start() {
 	region = NewRegion()
 	dbus.InstallOnSession(region)
 
+	startProxy()
 	dbus.DealWithUnhandledMessage()
 
 	initialize()
