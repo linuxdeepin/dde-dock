@@ -22,24 +22,18 @@
 package themes
 
 import (
-	"dlib/graphic"
-	"math/rand"
 	"os"
-	"os/exec"
 	"path"
 	"regexp"
 	"strings"
-	"time"
 )
 
 const (
 	THEME_TYPE_SYSTEM = 0
 	THEME_TYPE_LOCAL  = 1
 
-	BG_CACHE_DIR    = ".cache/wallpapers"
-	THEME_CACHE_DIR = ".cache/themes"
-
-	THUMB_GEN_CMD = "/usr/lib/deepin-daemon/theme-thumb-tool"
+	BG_CACHE_DIR    = "cache/wallpapers"
+	THEME_CACHE_DIR = "ccache/themes"
 )
 
 type pathInfo struct {
@@ -326,27 +320,19 @@ func getBackgroundList() []ThemeInfo {
 func getBgCachePath(src string) string {
 	src, _ = objUtil.URIToPath(src)
 	homeDir, _ := objUtil.GetHomeDir()
-	bgDir := path.Join(homeDir, BG_CACHE_DIR)
-	if !objUtil.IsFileExist(bgDir) {
-		os.MkdirAll(bgDir, 0755)
-	}
+	bgDir := path.Join(homeDir, PERSON_LOCAL_BASE_PATH, BG_CACHE_DIR)
 	md5Str, _ := getStrMd5(src)
 	filename := path.Join(bgDir, md5Str+".png")
-	return filename
-}
-
-func genBgThumbnail(src, dest string) bool {
-	if objUtil.IsFileExist(dest) {
-		return true
+	if objUtil.IsFileExist(filename) {
+		return filename
 	}
 
-	err := graphic.ThumbnailImage(src, dest, 130, 74, graphic.PNG)
-	if err != nil {
-		Logger.Warning("Generate Bg Thumbnail Failed:", err)
-		return false
+	filename = path.Join(PERSON_SYS_BASE_PATH, BG_CACHE_DIR, md5Str+".png")
+	if objUtil.IsFileExist(filename) {
+		return filename
 	}
 
-	return true
+	return ""
 }
 
 func isBackgroundSame(bg1, bg2 string) bool {
@@ -489,65 +475,19 @@ func isThemeInfoListEqual(list1, list2 []ThemeInfo) bool {
 func getThemeCachePath(src string) string {
 	src, _ = objUtil.URIToPath(src)
 	homeDir, _ := objUtil.GetHomeDir()
-	dir := path.Join(homeDir, THEME_CACHE_DIR)
-	if !objUtil.IsFileExist(dir) {
-		os.MkdirAll(dir, 0755)
-	}
+	dir := path.Join(homeDir, PERSON_LOCAL_BASE_PATH, THEME_CACHE_DIR)
 	md5Str, _ := getStrMd5(src)
 	filename := path.Join(dir, md5Str+".png")
-	return filename
-}
-
-func getThumbBg() (string, bool) {
-	list, ok := getImageList("/usr/share/personalization/thumb_bg")
-	if !ok {
-		return "", false
+	if objUtil.IsFileExist(filename) {
+		return filename
 	}
 
-	rand.Seed(time.Now().UnixNano())
-	l := len(list)
-	i := rand.Intn(l)
-
-	return list[i], true
-}
-
-func genThemeThumbnail(name, dest string, t int) bool {
-	switch t {
-	case THEME_TYPE_GTK:
-		out, err := exec.Command(THUMB_GEN_CMD, []string{
-			"--gtk",
-			name,
-			dest, ""}...).Output()
-		if err != nil || strings.Contains(string(out), "ERROR") {
-			return false
-		}
-	case THEME_TYPE_ICON:
-		bg, ok := getThumbBg()
-		if !ok {
-			return false
-		}
-		out, err := exec.Command(THUMB_GEN_CMD, []string{
-			"--icon",
-			name,
-			dest, bg}...).Output()
-		if err != nil || strings.Contains(string(out), "ERROR") {
-			return false
-		}
-	case THEME_TYPE_CURSOR:
-		bg, ok := getThumbBg()
-		if !ok {
-			return false
-		}
-		out, err := exec.Command(THUMB_GEN_CMD, []string{
-			"--cursor",
-			name,
-			dest, bg}...).Output()
-		if err != nil || strings.Contains(string(out), "ERROR") {
-			return false
-		}
+	filename = path.Join(PERSON_SYS_BASE_PATH, THEME_CACHE_DIR, md5Str+".png")
+	if objUtil.IsFileExist(filename) {
+		return filename
 	}
 
-	return true
+	return ""
 }
 
 func getDThemeThumb(name string) string {
@@ -579,7 +519,7 @@ func getGtkThumb(name string) string {
 	for _, l := range list {
 		if name == l.Name {
 			dest := getThemeCachePath(l.Path)
-			if genThemeThumbnail(name, dest, THEME_TYPE_GTK) {
+			if len(dest) > 0 {
 				return dest
 			}
 		}
@@ -595,7 +535,7 @@ func getIconThumb(name string) string {
 	for _, l := range list {
 		if name == l.Name {
 			dest := getThemeCachePath(l.Path)
-			if genThemeThumbnail(name, dest, THEME_TYPE_ICON) {
+			if len(dest) > 0 {
 				return dest
 			}
 		}
@@ -611,7 +551,7 @@ func getCursorThumb(name string) string {
 	for _, l := range list {
 		if name == l.Name {
 			dest := getThemeCachePath(l.Path)
-			if genThemeThumbnail(name, dest, THEME_TYPE_CURSOR) {
+			if len(dest) > 0 {
 				return dest
 			}
 		}
@@ -623,7 +563,7 @@ func getCursorThumb(name string) string {
 func getBgThumb(bg string) string {
 	return "/usr/share/personalization/thumb_bg/10.png"
 	dest := getBgCachePath(bg)
-	if genBgThumbnail(bg, dest) {
+	if len(dest) > 0 {
 		return dest
 	}
 
