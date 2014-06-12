@@ -47,39 +47,44 @@ func (theme *Theme) OnPropertiesChanged(name string, oldv interface{}) {
 		if theme.ItemColor == oldv.(string) {
 			return
 		}
-		theme.setProperty("ItemColor", theme.ItemColor)
+		theme.updatePropItemColor(theme.ItemColor)
 		theme.customTheme()
 	case "SelectedItemColor":
 		if theme.SelectedItemColor == oldv.(string) {
 			return
 		}
-		theme.setProperty("SelectedItemColor", theme.SelectedItemColor)
+		theme.updatePropSelectedItemColor(theme.SelectedItemColor)
 		theme.customTheme()
 	}
 }
 
-func (theme *Theme) setProperty(name string, value interface{}) {
-	switch name {
-	case "Background":
-		theme.Background = value.(string)
-	case "ItemColor":
-		itemColor := value.(string)
-		if len(itemColor) == 0 {
-			// set a default value to avoid empty string
-			itemColor = theme.tplJSONData.DarkScheme.ItemColor
-		}
-		theme.ItemColor = itemColor
-		theme.tplJSONData.CurrentScheme.ItemColor = itemColor
-	case "SelectedItemColor":
-		selectedItemColor := value.(string)
-		if len(selectedItemColor) == 0 {
-			// set a default value to avoid empty string
-			selectedItemColor = theme.tplJSONData.DarkScheme.SelectedItemColor
-		}
-		theme.SelectedItemColor = selectedItemColor
-		theme.tplJSONData.CurrentScheme.SelectedItemColor = selectedItemColor
+func (theme *Theme) updatePropBackground(value string) {
+	theme.Background = value
+	// generate background thumbnail
+	// TODO
+	dbus.NotifyChange(theme, "Background")
+}
+
+func (theme *Theme) updatePropItemColor(value string) {
+	itemColor := value
+	if len(itemColor) == 0 {
+		// set a default value to avoid empty string
+		itemColor = theme.tplJSONData.DarkScheme.ItemColor
 	}
-	dbus.NotifyChange(theme, name)
+	theme.ItemColor = itemColor
+	theme.tplJSONData.CurrentScheme.ItemColor = itemColor
+	dbus.NotifyChange(theme, "ItemColor")
+}
+
+func (theme *Theme) updatePropSelectedItemColor(value string) {
+	selectedItemColor := value
+	if len(selectedItemColor) == 0 {
+		// set a default value to avoid empty string
+		selectedItemColor = theme.tplJSONData.DarkScheme.SelectedItemColor
+	}
+	theme.SelectedItemColor = selectedItemColor
+	theme.tplJSONData.CurrentScheme.SelectedItemColor = selectedItemColor
+	dbus.NotifyChange(theme, "SelectedItemColor")
 }
 
 // SetBackgroundSourceFile setup the background source file, then
@@ -94,7 +99,7 @@ func (theme *Theme) SetBackgroundSourceFile(imageFile string) {
 func (theme *Theme) doSetBackgroundSourceFile(imageFile string) bool {
 	screenWidth, screenHeight := getPrimaryScreenBestResolution()
 	grub2extDoSetThemeBackgroundSourceFile(imageFile, screenWidth, screenHeight)
-	theme.setProperty("Background", theme.Background)
+	theme.updatePropBackground(theme.Background)
 
 	// set item color through background's dominant color
 	_, _, v, _ := graphic.GetDominantColorOfImage(theme.bgSrcFile)
@@ -107,8 +112,8 @@ func (theme *Theme) doSetBackgroundSourceFile(imageFile string) bool {
 		theme.tplJSONData.CurrentScheme = theme.tplJSONData.BrightScheme
 		logger.Info("background is bright, so use the bright theme scheme")
 	}
-	theme.setProperty("ItemColor", theme.tplJSONData.CurrentScheme.ItemColor)
-	theme.setProperty("SelectedItemColor", theme.tplJSONData.CurrentScheme.SelectedItemColor)
+	theme.updatePropItemColor(theme.tplJSONData.CurrentScheme.ItemColor)
+	theme.updatePropSelectedItemColor(theme.tplJSONData.CurrentScheme.SelectedItemColor)
 	theme.customTheme()
 
 	logger.Info("update background sucess")

@@ -72,7 +72,7 @@ type Theme struct {
 	bgFile      string
 	tplJSONData *TplJSONData
 
-	Background        string `access:"read"` // absolute background file path
+	Background        string // absolute background file path
 	ItemColor         string `access:"readwrite"`
 	SelectedItemColor string `access:"readwrite"`
 }
@@ -98,16 +98,16 @@ func (theme *Theme) initTheme() {
 	}
 
 	// init properties
-	theme.setProperty("Background", theme.bgFile)
-	theme.setProperty("ItemColor", theme.tplJSONData.CurrentScheme.ItemColor)
-	theme.setProperty("SelectedItemColor", theme.tplJSONData.CurrentScheme.SelectedItemColor)
+	theme.updatePropBackground(theme.bgFile)
+	theme.updatePropItemColor(theme.tplJSONData.CurrentScheme.ItemColor)
+	theme.updatePropSelectedItemColor(theme.tplJSONData.CurrentScheme.SelectedItemColor)
 }
 
 // reset to default configuration
 func (theme *Theme) reset() {
 	theme.tplJSONData.CurrentScheme = theme.tplJSONData.DarkScheme
-	theme.setProperty("ItemColor", theme.tplJSONData.CurrentScheme.ItemColor)
-	theme.setProperty("SelectedItemColor", theme.tplJSONData.CurrentScheme.SelectedItemColor)
+	theme.updatePropItemColor(theme.tplJSONData.CurrentScheme.ItemColor)
+	theme.updatePropSelectedItemColor(theme.tplJSONData.CurrentScheme.SelectedItemColor)
 	theme.customTheme()
 
 	// reset theme background
@@ -115,7 +115,7 @@ func (theme *Theme) reset() {
 		grub2extDoResetThemeBackground()
 		screenWidth, screenHeight := getPrimaryScreenBestResolution()
 		grub2extDoGenerateThemeBackground(screenWidth, screenHeight)
-		theme.setProperty("Background", theme.Background)
+		theme.updatePropBackground(theme.Background)
 	}()
 }
 
@@ -148,7 +148,7 @@ func (theme *Theme) regenerateBackgroundIfNeed() {
 
 	if needGenerate {
 		grub2extDoGenerateThemeBackground(screenWidth, screenHeight)
-		theme.setProperty("Background", theme.Background)
+		theme.updatePropBackground(theme.Background)
 		logger.Info("update background sucess")
 	}
 }
