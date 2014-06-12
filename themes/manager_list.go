@@ -180,7 +180,7 @@ func getCursorThemeList() []ThemeInfo {
 	localDir := path.Join(homeDir, ICON_LOCAL_PATH)
 	sysDirs := []pathInfo{pathInfo{ICON_SYS_PATH, THEME_TYPE_SYSTEM}}
 	localDirs := []pathInfo{pathInfo{localDir, THEME_TYPE_LOCAL}}
-	conditions := []string{"cursors"}
+	conditions := []string{"cursors", "cursor.theme"}
 
 	sysList := getThemeList(sysDirs, conditions)
 	localList := getThemeList(localDirs, conditions)
@@ -551,14 +551,15 @@ func genThemeThumbnail(name, dest string, t int) bool {
 }
 
 func getDThemeThumb(name string) string {
+	if name == "Custom" {
+		if t, ok := GetManager().themeObjMap[name]; ok {
+			return GetManager().GetThumbnail("background", t.Background)
+		}
+		return ""
+	}
+
 	list := getDThemeList()
 	for _, l := range list {
-		if name == "Custom" {
-			if t, ok := GetManager().themeObjMap[name]; ok {
-				return GetManager().GetThumbnail("background", t.Background)
-			}
-			break
-		}
 		if name == l.Name {
 			thumb := path.Join(l.Path, "thumbnail.png")
 			if objUtil.IsFileExist(thumb) {
@@ -572,6 +573,7 @@ func getDThemeThumb(name string) string {
 }
 
 func getGtkThumb(name string) string {
+	return "/usr/share/personalization/thumb_bg/10.png"
 	list := getGtkThemeList()
 
 	for _, l := range list {
@@ -587,6 +589,7 @@ func getGtkThumb(name string) string {
 }
 
 func getIconThumb(name string) string {
+	return "/usr/share/personalization/thumb_bg/10.png"
 	list := getIconThemeList()
 
 	for _, l := range list {
@@ -602,6 +605,7 @@ func getIconThumb(name string) string {
 }
 
 func getCursorThumb(name string) string {
+	return "/usr/share/personalization/thumb_bg/10.png"
 	list := getCursorThemeList()
 
 	for _, l := range list {
@@ -617,6 +621,7 @@ func getCursorThumb(name string) string {
 }
 
 func getBgThumb(bg string) string {
+	return "/usr/share/personalization/thumb_bg/10.png"
 	dest := getBgCachePath(bg)
 	if genBgThumbnail(bg, dest) {
 		return dest
