@@ -7,15 +7,15 @@ msgid "Dial-Up Networking"
 msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:33
-msgid "Hands-Free unit"
+msgid "Hands-Free Device"
 msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:34
-msgid "Hands-Free Voice Gateway"
+msgid "Hands-Free voice gateway"
 msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:35
-msgid "Headset Voice Gateway"
+msgid "Headset voice gateway"
 msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:36
@@ -31,11 +31,11 @@ msgid "Synchronization"
 msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:39
-msgid "Phone Book Access"
+msgid "Phone book access"
 msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:40
-msgid "Phone Book Access Client"
+msgid "Phone book access client"
 msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:41
@@ -47,7 +47,7 @@ msgid "Message Notification"
 msgstr ""
 
 #: ../../datetime/datetime.go:131
-msgid "Changing System Language, Please Wait"
+msgid "Language Changing, Please Wait."
 msgstr ""
 
 #: ../../datetime/locale_map.go:7
@@ -3069,19 +3069,19 @@ msgid "Launcher"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:68
-msgid "Show desktop"
+msgid "Show Desktop"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:69
-msgid "Lock screen"
+msgid "Lock Screen"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:70
-msgid "File manager"
+msgid "File Manager"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:71
-msgid "Switch applications"
+msgid "Switch Applications"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:72
@@ -3089,11 +3089,11 @@ msgid "Reverse switch applications"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:73
-msgid "Switch applications with 3D effect"
+msgid "3D Switch Applications"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:74
-msgid "Reverse switch applications with 3D effect"
+msgid "3D Reverse switch applications"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:75
@@ -3101,19 +3101,19 @@ msgid "Show/Hide the dock"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:76
-msgid "Take a screenshot"
+msgid "Screenshot"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:77
-msgid "Take a screenshot of full screen"
+msgid "Full Screenshot"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:78
-msgid "Take a screenshot of a window"
+msgid "Window Screenshot"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:79
-msgid "Take a screenshot delayed"
+msgid "Delay Screenshot"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:80
@@ -3133,51 +3133,51 @@ msgid "Disable Touchpad"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:119
-msgid "Launch calculator"
+msgid "Calculator"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:120
-msgid "Launch email client"
+msgid "Email Client"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:121
-msgid "Launch web browser"
+msgid "Web Browser"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:122
-msgid "Launch media player"
+msgid "Media Player"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:123
-msgid "Play (or play/pause)"
+msgid "Play/Pause"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:124
-msgid "Pause playback"
+msgid "Pause"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:125
-msgid "Stop playback"
+msgid "Stop"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:126
-msgid "Volume mute"
+msgid "Volume Mute"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:127
-msgid "Volume down"
+msgid "Volume Down"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:128
-msgid "Volume up"
+msgid "Volume Up"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:129
-msgid "Previous track"
+msgid "Previous"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:130
-msgid "Next track"
+msgid "Next"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:131
@@ -3185,35 +3185,35 @@ msgid "Eject"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:157
-msgid "Close window"
+msgid "Close Window"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:158
-msgid "Maximize window"
+msgid "Maximize Window"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:159
-msgid "Restore window"
+msgid "Restore Window"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:160
-msgid "Minimize window"
+msgid "Minimize Window"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:161
-msgid "Move window"
+msgid "Move Window"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:162
-msgid "Resize window"
+msgid "Resize Window"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:163
-msgid "Toggle shaded state"
+msgid "Switch furl state"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:164
-msgid "Activate the window menu"
+msgid "Activate window menu"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:206
@@ -3233,19 +3233,19 @@ msgid "Switch to workspace 4"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:210
-msgid "Switch to workspace left"
+msgid "Switch to left workspace"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:211
-msgid "Switch to workspace right"
+msgid "Switch to right workspace"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:212
-msgid "Switch to workspace up"
+msgid "Switch to upper workspace"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:213
-msgid "Switch to workspace down"
+msgid "Switch to lower workspace"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:214
@@ -3265,19 +3265,19 @@ msgid "Move to workspace 4"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:218
-msgid "Move to workspace left"
+msgid "Move to left workspace"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:219
-msgid "Move to workspace right"
+msgid "Move to right workspace"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:220
-msgid "Move to workspace up"
+msgid "Move to upper workspace"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:221
-msgid "Move to workspace down"
+msgid "Move to lower workspace"
 msgstr ""
 
 #: ../../network/manager_connections.go:177
@@ -4131,14 +4131,14 @@ msgid "Access Point (AP) mode is not supported by this device."
 msgstr ""
 
 #: ../../power/upower.go:86 ../../power/upower.go:101
-msgid "Battery cirtical low"
+msgid "Battery critical low"
 msgstr ""
 
 #: ../../power/upower.go:86 ../../power/upower.go:101
 #: ../../power/upower.go:114
-msgid "Computer will suspend very soon unless it is plugged in."
+msgid "Computer will be in standby mode, please plug in."
 msgstr ""
 
 #: ../../power/upower.go:114
-msgid "Battery low"
+msgid "Battery Low"
 msgstr ""

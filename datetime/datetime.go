@@ -128,7 +128,7 @@ func (op *Manager) SetLocale(locale string) {
 		return
 	}
 
-	sendNotify("", "", Tr("Changing System Language, Please Wait"))
+	sendNotify("", "", Tr("Language Changing, Please Wait."))
 	setDate.GenLocale(locale)
 	changeLocaleFlag = true
 }

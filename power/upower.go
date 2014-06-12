@@ -83,7 +83,7 @@ func (p *Power) handleBatteryPercentage() {
 	case p.BatteryPercentage < float64(p.coreSettings.GetInt("percentage-action")):
 		if p.lowBatteryStatus != lowBatteryStatusAction {
 			p.lowBatteryStatus = lowBatteryStatusAction
-			p.sendNotify("battery-0", Tr("Battery cirtical low"), Tr("Computer will suspend very soon unless it is plugged in."))
+			p.sendNotify("battery-0", Tr("Battery critical low"), Tr("Computer will be in standby mode, please plug in."))
 			doSuspend()
 			go func() {
 				for p.lowBatteryStatus == lowBatteryStatusAction {
@@ -98,7 +98,7 @@ func (p *Power) handleBatteryPercentage() {
 	case p.BatteryPercentage < float64(p.coreSettings.GetInt("percentage-critical")):
 		if p.lowBatteryStatus != lowBatteryStatusCritcal {
 			p.lowBatteryStatus = lowBatteryStatusCritcal
-			p.sendNotify("battery-10", Tr("Battery cirtical low"), Tr("Computer will suspend very soon unless it is plugged in."))
+			p.sendNotify("battery-10", Tr("Battery critical low"), Tr("Computer will be in standby mode, please plug in."))
 
 			p.player.PlaySystemSound("power-caution")
 			go func() {
@@ -111,7 +111,7 @@ func (p *Power) handleBatteryPercentage() {
 	case p.BatteryPercentage < float64(p.coreSettings.GetInt("percentage-low")):
 		if p.lowBatteryStatus != lowBatteryStatusLow {
 			p.lowBatteryStatus = lowBatteryStatusLow
-			p.sendNotify("battery-25", Tr("Battery low"), Tr("Computer will suspend very soon unless it is plugged in."))
+			p.sendNotify("battery-25", Tr("Battery Low"), Tr("Computer will be in standby mode, please plug in."))
 			p.player.PlaySystemSound("power-low")
 		}
 	default:

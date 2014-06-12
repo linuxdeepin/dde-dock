@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-12 17:07+0800\n"
+"POT-Creation-Date: 2014-06-12 17:50+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,15 +26,18 @@ msgid "Dial-Up Networking"
 msgstr "拨号网络"
 
 #: ../../bluetooth/bluez_profile.go:33
-msgid "Hands-Free unit"
+#, fuzzy
+msgid "Hands-Free Device"
 msgstr "免提装置"
 
 #: ../../bluetooth/bluez_profile.go:34
-msgid "Hands-Free Voice Gateway"
+#, fuzzy
+msgid "Hands-Free voice gateway"
 msgstr "免提语音网关"
 
 #: ../../bluetooth/bluez_profile.go:35
-msgid "Headset Voice Gateway"
+#, fuzzy
+msgid "Headset voice gateway"
 msgstr "耳机语音网关"
 
 #: ../../bluetooth/bluez_profile.go:36
@@ -50,11 +53,13 @@ msgid "Synchronization"
 msgstr "同步"
 
 #: ../../bluetooth/bluez_profile.go:39
-msgid "Phone Book Access"
+#, fuzzy
+msgid "Phone book access"
 msgstr "电话簿访问"
 
 #: ../../bluetooth/bluez_profile.go:40
-msgid "Phone Book Access Client"
+#, fuzzy
+msgid "Phone book access client"
 msgstr "电话簿访问客户端"
 
 #: ../../bluetooth/bluez_profile.go:41
@@ -66,7 +71,8 @@ msgid "Message Notification"
 msgstr "消息通知"
 
 #: ../../datetime/datetime.go:131
-msgid "Changing System Language, Please Wait"
+#, fuzzy
+msgid "Language Changing, Please Wait."
 msgstr "正在更改系统语言，请稍后"
 
 #: ../../datetime/locale_map.go:7
@@ -3114,19 +3120,23 @@ msgid "Launcher"
 msgstr "启动器"
 
 #: ../../keybinding/id_desc_map.go:68
-msgid "Show desktop"
+#, fuzzy
+msgid "Show Desktop"
 msgstr "显示桌面"
 
 #: ../../keybinding/id_desc_map.go:69
-msgid "Lock screen"
+#, fuzzy
+msgid "Lock Screen"
 msgstr "锁屏界面"
 
 #: ../../keybinding/id_desc_map.go:70
-msgid "File manager"
+#, fuzzy
+msgid "File Manager"
 msgstr "文件管理器"
 
 #: ../../keybinding/id_desc_map.go:71
-msgid "Switch applications"
+#, fuzzy
+msgid "Switch Applications"
 msgstr "切换程序"
 
 # msgid "Reverse switch applications"
@@ -3136,34 +3146,38 @@ msgid "Reverse switch applications"
 msgstr "反向切换程序"
 
 #: ../../keybinding/id_desc_map.go:73
-msgid "Switch applications with 3D effect"
-msgstr "使用3D效果切换程序"
+#, fuzzy
+msgid "3D Switch Applications"
+msgstr "切换程序"
 
-# msgid "Reverse switch applications with 3D effect"
+# msgid "Reverse switch applications"
 #: ../../keybinding/id_desc_map.go:74
 #, fuzzy
-msgid "Reverse switch applications with 3D effect"
-msgstr "使用3D效果反向切换程序"
+msgid "3D Reverse switch applications"
+msgstr "反向切换程序"
 
 #: ../../keybinding/id_desc_map.go:75
 msgid "Show/Hide the dock"
 msgstr "显示/隐藏任务栏"
 
 #: ../../keybinding/id_desc_map.go:76
-msgid "Take a screenshot"
+#, fuzzy
+msgid "Screenshot"
 msgstr "屏幕截图"
 
 #: ../../keybinding/id_desc_map.go:77
-msgid "Take a screenshot of full screen"
-msgstr "充分屏幕截图"
+#, fuzzy
+msgid "Full Screenshot"
+msgstr "屏幕截图"
 
 #: ../../keybinding/id_desc_map.go:78
-msgid "Take a screenshot of a window"
-msgstr "以一个窗口的屏幕截图"
+msgid "Window Screenshot"
+msgstr ""
 
 #: ../../keybinding/id_desc_map.go:79
-msgid "Take a screenshot delayed"
-msgstr "采取拖延的截图"
+#, fuzzy
+msgid "Delay Screenshot"
+msgstr "屏幕截图"
 
 #: ../../keybinding/id_desc_map.go:80
 msgid "Terminal"
@@ -3182,87 +3196,103 @@ msgid "Disable Touchpad"
 msgstr "禁用触摸板"
 
 #: ../../keybinding/id_desc_map.go:119
-msgid "Launch calculator"
+#, fuzzy
+msgid "Calculator"
 msgstr "启动计算器"
 
 #: ../../keybinding/id_desc_map.go:120
-msgid "Launch email client"
-msgstr "启动电子邮件客户端"
+#, fuzzy
+msgid "Email Client"
+msgstr "客户"
 
 #: ../../keybinding/id_desc_map.go:121
-msgid "Launch web browser"
+#, fuzzy
+msgid "Web Browser"
 msgstr "启动网页浏览器"
 
 #: ../../keybinding/id_desc_map.go:122
-msgid "Launch media player"
+#, fuzzy
+msgid "Media Player"
 msgstr "启动媒体播放器"
 
 #: ../../keybinding/id_desc_map.go:123
-msgid "Play (or play/pause)"
+#, fuzzy
+msgid "Play/Pause"
 msgstr "播放（或播放/暂停）"
 
 #: ../../keybinding/id_desc_map.go:124
-msgid "Pause playback"
-msgstr "暂停播放"
+msgid "Pause"
+msgstr ""
 
 #: ../../keybinding/id_desc_map.go:125
-msgid "Stop playback"
-msgstr "停止播放"
+msgid "Stop"
+msgstr ""
 
 #: ../../keybinding/id_desc_map.go:126
-msgid "Volume mute"
+#, fuzzy
+msgid "Volume Mute"
 msgstr "静音"
 
 #: ../../keybinding/id_desc_map.go:127
-msgid "Volume down"
+#, fuzzy
+msgid "Volume Down"
 msgstr "减小音量"
 
 #: ../../keybinding/id_desc_map.go:128
-msgid "Volume up"
+#, fuzzy
+msgid "Volume Up"
 msgstr "增大音量"
 
 #: ../../keybinding/id_desc_map.go:129
-msgid "Previous track"
+#, fuzzy
+msgid "Previous"
 msgstr "上一曲目"
 
 #: ../../keybinding/id_desc_map.go:130
-msgid "Next track"
-msgstr "下一首曲目"
+msgid "Next"
+msgstr ""
 
 #: ../../keybinding/id_desc_map.go:131
 msgid "Eject"
 msgstr "推出"
 
 #: ../../keybinding/id_desc_map.go:157
-msgid "Close window"
+#, fuzzy
+msgid "Close Window"
 msgstr "关闭窗口"
 
 #: ../../keybinding/id_desc_map.go:158
-msgid "Maximize window"
+#, fuzzy
+msgid "Maximize Window"
 msgstr "最大化窗口"
 
 #: ../../keybinding/id_desc_map.go:159
-msgid "Restore window"
+#, fuzzy
+msgid "Restore Window"
 msgstr "恢复窗口"
 
 #: ../../keybinding/id_desc_map.go:160
-msgid "Minimize window"
+#, fuzzy
+msgid "Minimize Window"
 msgstr "最小化窗口"
 
 #: ../../keybinding/id_desc_map.go:161
-msgid "Move window"
+#, fuzzy
+msgid "Move Window"
 msgstr "移动窗口"
 
 #: ../../keybinding/id_desc_map.go:162
-msgid "Resize window"
+#, fuzzy
+msgid "Resize Window"
 msgstr "改变窗口大小"
 
 #: ../../keybinding/id_desc_map.go:163
-msgid "Toggle shaded state"
-msgstr "切换阴影状态"
+msgid "Switch furl state"
+msgstr ""
 
 #: ../../keybinding/id_desc_map.go:164
-msgid "Activate the window menu"
+#, fuzzy
+msgid "Activate window menu"
 msgstr "激活窗口菜单"
 
 #: ../../keybinding/id_desc_map.go:206
@@ -3282,20 +3312,24 @@ msgid "Switch to workspace 4"
 msgstr "切换到工作区4"
 
 #: ../../keybinding/id_desc_map.go:210
-msgid "Switch to workspace left"
-msgstr "切换到工作区左"
+#, fuzzy
+msgid "Switch to left workspace"
+msgstr "切换到工作区1"
 
 #: ../../keybinding/id_desc_map.go:211
-msgid "Switch to workspace right"
-msgstr "切换到合适的工作空间"
+#, fuzzy
+msgid "Switch to right workspace"
+msgstr "切换到工作区1"
 
 #: ../../keybinding/id_desc_map.go:212
-msgid "Switch to workspace up"
-msgstr "切换到工作区了"
+#, fuzzy
+msgid "Switch to upper workspace"
+msgstr "切换到工作区1"
 
 #: ../../keybinding/id_desc_map.go:213
-msgid "Switch to workspace down"
-msgstr "切换到工作区向下"
+#, fuzzy
+msgid "Switch to lower workspace"
+msgstr "切换到工作区1"
 
 #: ../../keybinding/id_desc_map.go:214
 msgid "Move to workspace 1"
@@ -3314,20 +3348,24 @@ msgid "Move to workspace 4"
 msgstr "移动到工作区4"
 
 #: ../../keybinding/id_desc_map.go:218
-msgid "Move to workspace left"
-msgstr "移动到工作区左"
+#, fuzzy
+msgid "Move to left workspace"
+msgstr "移动到工作区1"
 
 #: ../../keybinding/id_desc_map.go:219
-msgid "Move to workspace right"
-msgstr "移动到工作区右"
+#, fuzzy
+msgid "Move to right workspace"
+msgstr "移动到工作区1"
 
 #: ../../keybinding/id_desc_map.go:220
-msgid "Move to workspace up"
-msgstr "移动到工作区了"
+#, fuzzy
+msgid "Move to upper workspace"
+msgstr "移动到工作区1"
 
 #: ../../keybinding/id_desc_map.go:221
-msgid "Move to workspace down"
-msgstr "移动到工作区向下"
+#, fuzzy
+msgid "Move to lower workspace"
+msgstr "移动到工作区1"
 
 #: ../../network/manager_connections.go:177
 #, fuzzy
@@ -4204,17 +4242,79 @@ msgid "Access Point (AP) mode is not supported by this device."
 msgstr ""
 
 #: ../../power/upower.go:86 ../../power/upower.go:101
-msgid "Battery cirtical low"
+#, fuzzy
+msgid "Battery critical low"
 msgstr "电池cirtical低"
 
 #: ../../power/upower.go:86 ../../power/upower.go:101
 #: ../../power/upower.go:114
-msgid "Computer will suspend very soon unless it is plugged in."
+#, fuzzy
+msgid "Computer will be in standby mode, please plug in."
 msgstr "计算机将很快进入待机状态，请插入电源。"
 
 #: ../../power/upower.go:114
-msgid "Battery low"
+#, fuzzy
+msgid "Battery Low"
 msgstr "电池电量低"
+
+#~ msgid "Battery cirtical low"
+#~ msgstr "电池cirtical低"
+
+#~ msgid "Switch applications with 3D effect"
+#~ msgstr "使用3D效果切换程序"
+
+# msgid "Reverse switch applications with 3D effect"
+#, fuzzy
+#~ msgid "Reverse switch applications with 3D effect"
+#~ msgstr "使用3D效果反向切换程序"
+
+#~ msgid "Take a screenshot of full screen"
+#~ msgstr "充分屏幕截图"
+
+#~ msgid "Take a screenshot of a window"
+#~ msgstr "以一个窗口的屏幕截图"
+
+#~ msgid "Take a screenshot delayed"
+#~ msgstr "采取拖延的截图"
+
+#~ msgid "Launch email client"
+#~ msgstr "启动电子邮件客户端"
+
+#~ msgid "Pause playback"
+#~ msgstr "暂停播放"
+
+#~ msgid "Stop playback"
+#~ msgstr "停止播放"
+
+#~ msgid "Next track"
+#~ msgstr "下一首曲目"
+
+#~ msgid "Toggle shaded state"
+#~ msgstr "切换阴影状态"
+
+#~ msgid "Switch to workspace left"
+#~ msgstr "切换到工作区左"
+
+#~ msgid "Switch to workspace right"
+#~ msgstr "切换到合适的工作空间"
+
+#~ msgid "Switch to workspace up"
+#~ msgstr "切换到工作区了"
+
+#~ msgid "Switch to workspace down"
+#~ msgstr "切换到工作区向下"
+
+#~ msgid "Move to workspace left"
+#~ msgstr "移动到工作区左"
+
+#~ msgid "Move to workspace right"
+#~ msgstr "移动到工作区右"
+
+#~ msgid "Move to workspace up"
+#~ msgstr "移动到工作区了"
+
+#~ msgid "Move to workspace down"
+#~ msgstr "移动到工作区向下"
 
 #~ msgid "Wi-Fi"
 #~ msgstr "Wi-Fi"
