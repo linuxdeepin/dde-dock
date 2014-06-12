@@ -63,23 +63,10 @@ func Start() {
 	grub.initGrub2()
 
 	dbus.DealWithUnhandledMessage()
-	notifyStop = make(chan int, 100) // reset signal to avoid repeat stop action
-	notfiyDbusStop := make(chan int)
-	/*
-		go func() {
-			err := dbus.Wait()
-			if err != nil {
-				logger.Error("lost dbus session:", err)
-			} else {
-				logger.Info("dbus session stoped")
-			}
-			notfiyDbusStop <- 1
-		}()
-	*/
 
+	notifyStop = make(chan int, 100) // reset signal to avoid repeat stop action
 	select {
 	case <-notifyStop:
-	case <-notfiyDbusStop:
 	}
 	DestroyGrub2(grub)
 }

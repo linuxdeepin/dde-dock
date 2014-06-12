@@ -22,7 +22,6 @@
 package network
 
 import (
-	//"dlib"
 	"dlib/dbus"
 	liblogger "dlib/logger"
 )
@@ -47,6 +46,7 @@ func Start() {
 		running = false
 	}()
 
+	// TODO
 	/*
 		if !dlib.UniqueOnSession(dbusNetworkDest) {
 			logger.Warning("dbus unique:", dbusNetworkDest)
@@ -68,22 +68,8 @@ func Start() {
 	dbus.DealWithUnhandledMessage()
 
 	notifyStop = make(chan int, 100) // reset signal to avoid repeat stop action
-	notfiyDbusStop := make(chan int)
-	/*
-		go func() {
-			err := dbus.Wait()
-			if err != nil {
-				logger.Error("lost dbus session:", err)
-			} else {
-				logger.Info("dbus session stoped")
-			}
-			notfiyDbusStop <- 1
-		}()
-	*/
-
 	select {
 	case <-notifyStop:
-	case <-notfiyDbusStop:
 	}
 	DestroyManager(manager)
 }
