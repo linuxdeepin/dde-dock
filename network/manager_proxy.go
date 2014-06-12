@@ -24,6 +24,7 @@ package network
 import "strings"
 import "fmt"
 import "dlib/gio-2.0"
+import "regexp"
 
 // example of /etc/environment
 // http_proxy="http://127.0.0.1:0/"
@@ -45,7 +46,8 @@ const (
 )
 
 var (
-	proxySettings = gio.NewSettings(gsettingsIdProxy)
+	proxySettings  = gio.NewSettings(gsettingsIdProxy)
+	proxyPrefixReg = regexp.MustCompile(`^.*?://(.*)$`)
 )
 
 func (m *Manager) GetProxy(proxyType string) (addr, port string, err error) {
@@ -53,25 +55,33 @@ func (m *Manager) GetProxy(proxyType string) (addr, port string, err error) {
 	if err != nil {
 		return
 	}
-	proxy = strings.TrimPrefix(proxy, proxyType+"://")
+	if proxyPrefixReg.MatchString(proxy) {
+		proxy = proxyPrefixReg.FindStringSubmatch(proxy)[1]
+	}
 	proxy = strings.TrimSuffix(proxy, "/")
 	a := strings.Split(proxy, ":")
 	if len(a) == 2 {
 		addr = a[0]
 		port = a[1]
+	} else if len(a) == 3 {
+		// with user and password
+		addr = a[0] + ":" + a[1]
+		port = a[2]
 	}
+	logger.Info("GetProxy:", proxyType, addr, port)
 	return
 }
 
 // if address is empty, means to remove proxy setting
 func (m *Manager) SetProxy(proxyType, addr, port string) (err error) {
+	logger.Info("SetProxy:", proxyType, addr, port)
 	var proxy string
 	if len(addr) > 0 {
 		if len(port) == 0 {
 			err = fmt.Errorf("proxy port is empty")
 			return
 		}
-		if !strings.HasPrefix(addr, proxyType+"://") {
+		if !proxyPrefixReg.MatchString(proxy) {
 			addr = proxyType + "://" + addr
 		}
 		proxy = addr + ":" + port + "/"
@@ -104,10 +114,12 @@ func doGetProxy(proxyType string) (proxy string, err error) {
 		err = fmt.Errorf("not a valid proxy type: %s", proxyType)
 		logger.Error(err)
 	}
+	logger.Info("doGetProxy:", proxyType, proxy)
 	return
 }
 
 func doSetProxy(proxyType, proxy string) (err error) {
+	logger.Info("doSetProxy:", proxyType, proxy)
 	var ok bool
 	switch proxyType {
 	case proxyHttp:
