@@ -11,6 +11,11 @@
       <summary>dde system proxy method</summary>
       <description>dde system proxy method, could be "none", "manual", "auto"</description>
     </key>
+    <key type="s" name="auto-proxy">
+      <default>''</default>
+      <summary>dde system automatic proxy configuration file</summary>
+      <description>dde system automatic proxy configuration file, such as "http://127.0.0.1/proxy.pac"</description>
+    </key>
     <key type="s" name="http-proxy">
       <default>''</default>
       <summary>dde system http proxy</summary>

@@ -33,6 +33,7 @@ import "regexp"
 // socks_proxy="socks://127.0.0.1:0/"
 
 const (
+	proxyAuto  = "auto"
 	proxyHttp  = "http"
 	proxyHttps = "https"
 	proxyFtp   = "ftp"
@@ -40,14 +41,17 @@ const (
 
 	gsettingsIdProxy = "com.deepin.dde.proxy"
 	gkeyProxyMethod  = "proxy-method"
-	gkeyHttpProxy    = "http-proxy"
-	gkeyHttpsProxy   = "https-proxy"
-	gkeyFtpProxy     = "ftp-proxy"
-	gkeySocksProxy   = "socks-proxy"
 
 	proxyMethodNone   = "none"
 	proxyMethodManual = "manual"
 	proxyMethodAuto   = "auto"
+
+	gkeyAutoProxy = "auto-proxy"
+
+	gkeyHttpProxy  = "http-proxy"
+	gkeyHttpsProxy = "https-proxy"
+	gkeyFtpProxy   = "ftp-proxy"
+	gkeySocksProxy = "socks-proxy"
 )
 
 var (
@@ -56,14 +60,12 @@ var (
 )
 
 func (m *Manager) GetProxyMethod() (proxyMethod string, err error) {
-	err = checkProxyMethod(proxyMethod)
-	if err != nil {
-		return
-	}
-	proxyMethod = proxySettings.GetString(gkeyProxyMethod, proxyMethod)
+	proxyMethod = proxySettings.GetString(gkeyProxyMethod)
+	logger.Info("GetProxyMethod", proxyMethod)
 	return
 }
 func (m *Manager) SetProxyMethod(proxyMethod string) (err error) {
+	logger.Info("SetProxyMethod", proxyMethod)
 	err = checkProxyMethod(proxyMethod)
 	if err != nil {
 		return
@@ -79,6 +81,21 @@ func checkProxyMethod(proxyMethod string) (err error) {
 	case proxyMethodNone, proxyMethodManual, proxyMethodAuto:
 	default:
 		err = fmt.Errorf("invalid proxy method", proxyMethod)
+		logger.Error(err)
+	}
+	return
+}
+
+func (m *Manager) GetAutoProxy() (proxyAuto string, err error) {
+	proxyAuto = proxySettings.GetString(gkeyAutoProxy)
+	logger.Info("GetAutoProxy", proxyAuto)
+	return
+}
+func (m *Manager) SetAutoProxy(proxyAuto string) (err error) {
+	logger.Info("SetAutoProxy", proxyAuto)
+	ok := proxySettings.SetString(gkeyAutoProxy, proxyAuto)
+	if !ok {
+		err = fmt.Errorf("set automatic proxy through gsettings failed", proxyAuto)
 	}
 	return
 }
