@@ -61,7 +61,7 @@ func (m *ClientManager) CurrentActiveWindow() uint32 {
 func (m *ClientManager) ActiveWindow(xid uint32) bool {
 	err := ewmh.ActiveWindowReq(XU, xproto.Window(xid))
 	if err != nil {
-		logger.Error("Actice window failed:", err)
+		logger.Warning("Actice window failed:", err)
 		return false
 	}
 	return true
@@ -71,7 +71,7 @@ func (m *ClientManager) ActiveWindow(xid uint32) bool {
 func (m *ClientManager) CloseWindow(xid uint32) bool {
 	err := ewmh.CloseWindow(XU, xproto.Window(xid))
 	if err != nil {
-		logger.Error("Actice window failed:", err)
+		logger.Warning("Actice window failed:", err)
 		return false
 	}
 	return true
@@ -120,7 +120,7 @@ func onCurrentWorkspacePre(xid xproto.Window) bool {
 	viewports, err := xprop.PropValNums(xprop.GetProperty(XU, xid,
 		"DEEPIN_WINDOW_VIEWPORTS"))
 	if err != nil {
-		logger.Error("get DEEPIN_WINDOW_VIEWPORTS failed", err)
+		logger.Warning("get DEEPIN_WINDOW_VIEWPORTS failed", err)
 		return false
 	}
 
@@ -181,7 +181,7 @@ func (m *ClientManager) listenRootWindow() {
 						launcher.NewLauncher("com.deepin.dde.launcher",
 							"/com/deepin/dde/launcher")
 					if err != nil {
-						logger.Error(err)
+						logger.Warning(err)
 					} else {
 						LAUNCHER.Hide()
 					}

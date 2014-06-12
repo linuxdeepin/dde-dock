@@ -1,6 +1,7 @@
 <node>
     <interface name="dde.dock.Entry">
 	<method name="Activate">
+	    <arg type="b" direction="out"></arg>
 	    <arg type="i" direction="in"></arg>
 	    <arg type="i" direction="in"></arg>
 	</method>

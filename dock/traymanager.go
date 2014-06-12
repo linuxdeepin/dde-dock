@@ -158,7 +158,7 @@ func initTrayManager() {
 func (m *TrayManager) RequireManageTrayIcons() {
 	mstype, err := xprop.Atm(TrayXU, "MANAGER")
 	if err != nil {
-		logger.Error("Get MANAGER Failed")
+		logger.Warning("Get MANAGER Failed")
 		return
 	}
 
@@ -173,7 +173,7 @@ func (m *TrayManager) RequireManageTrayIcons() {
 	)
 
 	if err != nil {
-		logger.Error("Send MANAGER Request failed:", err)
+		logger.Warning("Send MANAGER Request failed:", err)
 		return
 	}
 

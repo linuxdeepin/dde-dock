@@ -72,8 +72,8 @@ func DestroyRemoteEntry(obj *RemoteEntry) {
 	obj.Data.Reset()
 }
 
-func (obj RemoteEntry) Activate(arg0 int32, arg1 int32) (_err error) {
-	_err = obj.core.Call("dde.dock.Entry.Activate", 0, arg0, arg1).Store()
+func (obj RemoteEntry) Activate(arg1 int32, arg2 int32) (arg0 bool, _err error) {
+	_err = obj.core.Call("dde.dock.Entry.Activate", 0, arg1, arg2).Store(&arg0)
 	if _err != nil {
 		fmt.Println(_err)
 	}

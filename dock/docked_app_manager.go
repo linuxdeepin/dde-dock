@@ -59,7 +59,7 @@ func (m *DockedAppManager) init() {
 	confFile := filepath.Join(glib.GetUserConfigDir(), "dock/apps.ini")
 	_, err := conf.LoadFromFile(confFile, glib.KeyFileFlagsNone)
 	if err != nil {
-		logger.Error("Open old dock config file failed:", err)
+		logger.Debug("Open old dock config file failed:", err)
 		return
 	}
 
@@ -70,7 +70,7 @@ func (m *DockedAppManager) init() {
 
 	_, ids, err := conf.GetStringList("__Config__", "Position")
 	if err != nil {
-		logger.Error("Read docked app from old config file failed:", err)
+		logger.Debug("Read docked app from old config file failed:", err)
 		return
 	}
 	for _, id := range ids {
@@ -102,7 +102,7 @@ func (m *DockedAppManager) init() {
 
 	err = ioutil.WriteFile(confFile, []byte(content), mode)
 	if err != nil {
-		logger.Error("Save Config file failed:", err)
+		logger.Warning("Save Config file failed:", err)
 	}
 }
 
@@ -135,7 +135,7 @@ func (m *DockedAppManager) Dock(id, title, icon, cmd string) bool {
 		app.Unref()
 	} else {
 		if e := createScratchFile(id, title, icon, cmd); e != nil {
-			logger.Error(e)
+			logger.Warning(e)
 			return false
 		}
 	}
@@ -197,7 +197,7 @@ func createScratchFile(id, title, icon, cmd string) error {
 	f, err := os.OpenFile(filepath.Join(configDir, id+".desktop"),
 		os.O_RDWR|os.O_TRUNC|os.O_CREATE, 0744)
 	if err != nil {
-		logger.Error(err)
+		logger.Warning(err)
 		return err
 	}
 	temp := template.Must(template.New("docked_item_temp").Parse(DockedItemTemp))

@@ -64,13 +64,14 @@ func (e *AppEntry) HandleMenuItem(id string) {
 	}
 }
 
-func (e *AppEntry) Activate(x, y int32) {
+func (e *AppEntry) Activate(x, y int32) bool {
 	switch e.Data[FieldStatus] {
 	case NormalStatus:
-		e.nApp.Activate(x, y)
+		return e.nApp.Activate(x, y) == nil
 	case ActiveStatus:
-		e.rApp.Activate(x, y)
+		return e.rApp.Activate(x, y) == nil
 	}
+	return false
 }
 
 func (e *AppEntry) ContextMenu(x, y int32)                  {}
@@ -86,20 +87,20 @@ func (e *AppEntry) HandleDragDrop(x, y int32, data string) {
 		if e.rApp.core != nil {
 			_, err := e.rApp.core.LaunchUris(paths, nil)
 			if err != nil {
-				logger.Error("Launch Drop failed:", err)
+				logger.Warning("Launch Drop failed:", err)
 			}
 		} else {
 			app, err :=
 				gio.AppInfoCreateFromCommandline(e.rApp.exec,
 					e.rApp.Id, gio.AppInfoCreateFlagsSupportsUris)
 			if err != nil {
-				logger.Error("Create Launch app failed:", err)
+				logger.Warning("Create Launch app failed:", err)
 				return
 			}
 
 			_, err = app.LaunchUris(paths, nil)
 			if err != nil {
-				logger.Error("Launch Drop failed:", err)
+				logger.Warning("Launch Drop failed:", err)
 			}
 		}
 	} else if e.nApp != nil {
@@ -107,11 +108,11 @@ func (e *AppEntry) HandleDragDrop(x, y int32, data string) {
 		if e.nApp.core != nil {
 			_, err := e.nApp.core.LaunchUris(paths, nil)
 			if err != nil {
-				logger.Error("Launch Drop failed:", err)
+				logger.Warning("Launch Drop failed:", err)
 			}
 		} else {
 			// TODO:
-			logger.Error("TODO: AppEntry.nApp.core == nil")
+			logger.Warning("TODO: AppEntry.nApp.core == nil")
 		}
 	}
 }

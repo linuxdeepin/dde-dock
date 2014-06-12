@@ -46,20 +46,20 @@ func (r *Region) getDockWindow() (xproto.Window, error) {
 func (r *Region) GetDockRegion() xproto.Rectangle {
 	defer func() {
 		if err := recover(); err != nil {
-			logger.Error("Region::GetDockRegion", err)
+			logger.Warning("Region::GetDockRegion", err)
 		}
 	}()
 
 	dockRegion := xproto.Rectangle{0, 0, 0, 0}
 	dockWindow, err := r.getDockWindow()
 	if err != nil {
-		logger.Error(err)
+		logger.Warning(err)
 		return dockRegion
 	}
 	cookie := shape.GetRectangles(conn, dockWindow, shape.SkInput)
 	rep, err := cookie.Reply()
 	if err != nil {
-		logger.Error("get rectangles failed:", err)
+		logger.Warning("get rectangles failed:", err)
 		return dockRegion
 	}
 

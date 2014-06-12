@@ -174,7 +174,7 @@ func (app *RuntimeApp) buildMenu() {
 	}
 	isDocked, err := DOCKED_APP_MANAGER.IsDocked(app.Id) // TODO: status
 	if err != nil {
-		logger.Error("get docked status failed:", err)
+		logger.Warning("get docked status failed:", err)
 	}
 	logger.Debug(app.Id, "Item is docked:", isDocked)
 	dockItem := NewMenuItem(
@@ -212,7 +212,7 @@ func (app *RuntimeApp) buildMenu() {
 				exec,
 			)
 			if err != nil {
-				logger.Error("Docked failed: ", err)
+				logger.Warning("Docked failed: ", err)
 			}
 			app.buildMenu()
 		},

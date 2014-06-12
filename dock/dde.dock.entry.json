@@ -5,7 +5,7 @@
 		"BusType": "Session",
 		"DestName": "dde.dock.entry.NOUSED",
 		"Target": "Golang",
-		"PkgName": "main"
+		"PkgName": "dock"
 	},
 	"Interfaces": [
 		{

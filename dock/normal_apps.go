@@ -3,6 +3,8 @@ package dock
 import (
 	. "dlib/gettext"
 	"dlib/gio-2.0"
+	"errors"
+	"os"
 	"path/filepath"
 	"strings"
 )
@@ -88,8 +90,22 @@ func NewNormalAppFromFilename(name string) *NormalApp {
 	return app
 }
 
-func (app *NormalApp) Activate(x, y int32) {
-	app.core.Launch(nil, nil)
+func (app *NormalApp) Activate(x, y int32) error {
+	// FIXME:
+	// the launch will be successful even if the desktop file is not
+	// existed.
+	f, err := os.Open(app.core.GetFilename())
+	if err != nil {
+		return errors.New("invalid")
+	}
+	f.Close()
+
+	b, err := app.core.Launch(nil, nil)
+	logger.Warning(b)
+	if err != nil {
+		logger.Warning("launch", app.Id, "failed:", err)
+	}
+	return err
 }
 
 func (app *NormalApp) setChangedCB(cb func()) {

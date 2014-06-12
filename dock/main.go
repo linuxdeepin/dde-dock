@@ -59,7 +59,7 @@ func Start() {
 	cm := NewClientManager()
 	err = dbus.InstallOnSession(cm)
 	if err != nil {
-		logger.Error("register dbus interface failed:", err)
+		logger.Errorf("register dbus interface failed: %v", err)
 	}
 	go cm.listenRootWindow()
 
