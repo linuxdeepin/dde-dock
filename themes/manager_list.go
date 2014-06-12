@@ -514,11 +514,11 @@ func getThumbBg() (string, bool) {
 func genThemeThumbnail(name, dest string, t int) bool {
 	switch t {
 	case THEME_TYPE_GTK:
-		out, _ := exec.Command(THUMB_GEN_CMD, []string{
+		out, err := exec.Command(THUMB_GEN_CMD, []string{
 			"--gtk",
 			name,
 			dest, ""}...).Output()
-		if strings.Contains(string(out), "ERROR") {
+		if err != nil || strings.Contains(string(out), "ERROR") {
 			return false
 		}
 	case THEME_TYPE_ICON:
@@ -526,11 +526,11 @@ func genThemeThumbnail(name, dest string, t int) bool {
 		if !ok {
 			return false
 		}
-		out, _ := exec.Command(THUMB_GEN_CMD, []string{
+		out, err := exec.Command(THUMB_GEN_CMD, []string{
 			"--icon",
 			name,
 			dest, bg}...).Output()
-		if strings.Contains(string(out), "ERROR") {
+		if err != nil || strings.Contains(string(out), "ERROR") {
 			return false
 		}
 	case THEME_TYPE_CURSOR:
@@ -538,11 +538,11 @@ func genThemeThumbnail(name, dest string, t int) bool {
 		if !ok {
 			return false
 		}
-		out, _ := exec.Command(THUMB_GEN_CMD, []string{
+		out, err := exec.Command(THUMB_GEN_CMD, []string{
 			"--cursor",
 			name,
 			dest, bg}...).Output()
-		if strings.Contains(string(out), "ERROR") {
+		if err != nil || strings.Contains(string(out), "ERROR") {
 			return false
 		}
 	}
@@ -577,8 +577,7 @@ func getGtkThumb(name string) string {
 	for _, l := range list {
 		if name == l.Name {
 			dest := getThemeCachePath(l.Path)
-			src, _ := objUtil.URIToPath(l.Path)
-			if genThemeThumbnail(src, dest, THEME_TYPE_GTK) {
+			if genThemeThumbnail(name, dest, THEME_TYPE_GTK) {
 				return dest
 			}
 		}
@@ -593,8 +592,7 @@ func getIconThumb(name string) string {
 	for _, l := range list {
 		if name == l.Name {
 			dest := getThemeCachePath(l.Path)
-			src, _ := objUtil.URIToPath(l.Path)
-			if genThemeThumbnail(src, dest, THEME_TYPE_ICON) {
+			if genThemeThumbnail(name, dest, THEME_TYPE_ICON) {
 				return dest
 			}
 		}
@@ -609,8 +607,7 @@ func getCursorThumb(name string) string {
 	for _, l := range list {
 		if name == l.Name {
 			dest := getThemeCachePath(l.Path)
-			src, _ := objUtil.URIToPath(l.Path)
-			if genThemeThumbnail(src, dest, THEME_TYPE_CURSOR) {
+			if genThemeThumbnail(name, dest, THEME_TYPE_CURSOR) {
 				return dest
 			}
 		}
