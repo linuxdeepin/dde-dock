@@ -79,6 +79,11 @@ func (grub *Grub2) updatePropTimeout(value int32) {
 	dbus.NotifyChange(grub, "Timeout")
 }
 
+func (grub *Grub2) updatePropUpdating(value bool) {
+	grub.Updating = value
+	dbus.NotifyChange(grub, "Updating")
+}
+
 // GetSimpleEntryTitles return entry titles in level one.
 func (grub *Grub2) GetSimpleEntryTitles() ([]string, error) {
 	entryTitles := make([]string, 0)
