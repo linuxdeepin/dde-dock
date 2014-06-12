@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
+    <enum id="com.deepin.dde.proxy.proxy-method">
+	<value nick="none" value="none"/>
+	<value nick="manual"  value="manual"/>
+    <value nick="auto"  value="auto"/>
+    </enum>
     <schema path="/com/deepin/dde/proxy/" id="com.deepin.dde.proxy">
+    <key type="s" name="proxy-method">
+      <default>'none'</default>
+      <summary>dde system proxy method</summary>
+      <description>dde system proxy method, could be "none", "manual", "auto"</description>
+    </key>
     <key type="s" name="http-proxy">
       <default>''</default>
       <summary>dde system http proxy</summary>

@@ -39,16 +39,49 @@ const (
 	proxySocks = "socks"
 
 	gsettingsIdProxy = "com.deepin.dde.proxy"
+	gkeyProxyMethod  = "proxy-method"
 	gkeyHttpProxy    = "http-proxy"
 	gkeyHttpsProxy   = "https-proxy"
 	gkeyFtpProxy     = "ftp-proxy"
 	gkeySocksProxy   = "socks-proxy"
+
+	proxyMethodNone   = "none"
+	proxyMethodManual = "manual"
+	proxyMethodAuto   = "auto"
 )
 
 var (
 	proxySettings  = gio.NewSettings(gsettingsIdProxy)
 	proxyPrefixReg = regexp.MustCompile(`^.*?://(.*)$`)
 )
+
+func (m *Manager) GetProxyMethod() (proxyMethod string, err error) {
+	err = checkProxyMethod(proxyMethod)
+	if err != nil {
+		return
+	}
+	proxyMethod = proxySettings.GetString(gkeyProxyMethod, proxyMethod)
+	return
+}
+func (m *Manager) SetProxyMethod(proxyMethod string) (err error) {
+	err = checkProxyMethod(proxyMethod)
+	if err != nil {
+		return
+	}
+	ok := proxySettings.SetString(gkeyProxyMethod, proxyMethod)
+	if !ok {
+		err = fmt.Errorf("set proxy method through gsettings failed")
+	}
+	return
+}
+func checkProxyMethod(proxyMethod string) (err error) {
+	switch proxyMethod {
+	case proxyMethodNone, proxyMethodManual, proxyMethodAuto:
+	default:
+		err = fmt.Errorf("invalid proxy method", proxyMethod)
+	}
+	return
+}
 
 func (m *Manager) GetProxy(proxyType string) (addr, port string, err error) {
 	proxy, err := doGetProxy(proxyType)
