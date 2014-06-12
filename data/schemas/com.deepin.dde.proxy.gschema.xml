@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
     <enum id="com.deepin.dde.proxy.proxy-method">
-	<value nick="none" value="none"/>
-	<value nick="manual"  value="manual"/>
-    <value nick="auto"  value="auto"/>
+	<value nick="none" value="0"/>
+	<value nick="manual"  value="1"/>
+    <value nick="auto"  value="2"/>
     </enum>
     <schema path="/com/deepin/dde/proxy/" id="com.deepin.dde.proxy">
     <key type="s" name="proxy-method">
