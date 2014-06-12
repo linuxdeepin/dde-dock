@@ -69,7 +69,7 @@ func (obj *Manager) GetFlag(t, name string) int32 {
 	case "background":
 		list := getBackgroundList()
 		for _, l := range list {
-			if name == l.Name {
+			if name == l.Path {
 				return l.T
 			}
 		}
@@ -78,7 +78,7 @@ func (obj *Manager) GetFlag(t, name string) int32 {
 	return -1
 }
 
-func (obj *Manager) Set(t, name, value string) {
+func (obj *Manager) Set(t, value string) {
 	t = strings.ToLower(t)
 	switch t {
 	case "theme":
