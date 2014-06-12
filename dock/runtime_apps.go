@@ -151,7 +151,7 @@ func (app *RuntimeApp) buildMenu() {
 		app.coreMenu.AddSeparator()
 	}
 	closeItem := NewMenuItem(
-		DGettext("dde-daemon", "_Close All"),
+		Tr("_Close All"),
 		func() {
 			logger.Warning("Close All")
 			for xid := range app.xids {
@@ -178,7 +178,7 @@ func (app *RuntimeApp) buildMenu() {
 	}
 	logger.Debug(app.Id, "Item is docked:", isDocked)
 	dockItem := NewMenuItem(
-		DGettext("dde-daemon", "_Dock"),
+		Tr("_Dock"),
 		func() {
 			logger.Warning("dock item")
 			logger.Info("appid:", app.Id)

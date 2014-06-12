@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-05 08:50+0800\n"
+"POT-Creation-Date: 2014-06-12 17:07+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,51 +17,51 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../bluetooth/bluez_profile.go:10
+#: ../../bluetooth/bluez_profile.go:31
 msgid "Serial Port"
 msgstr "串行端口"
 
-#: ../../bluetooth/bluez_profile.go:11
+#: ../../bluetooth/bluez_profile.go:32
 msgid "Dial-Up Networking"
 msgstr "拨号网络"
 
-#: ../../bluetooth/bluez_profile.go:12
+#: ../../bluetooth/bluez_profile.go:33
 msgid "Hands-Free unit"
 msgstr "免提装置"
 
-#: ../../bluetooth/bluez_profile.go:13
+#: ../../bluetooth/bluez_profile.go:34
 msgid "Hands-Free Voice Gateway"
 msgstr "免提语音网关"
 
-#: ../../bluetooth/bluez_profile.go:14
+#: ../../bluetooth/bluez_profile.go:35
 msgid "Headset Voice Gateway"
 msgstr "耳机语音网关"
 
-#: ../../bluetooth/bluez_profile.go:15
+#: ../../bluetooth/bluez_profile.go:36
 msgid "Object Push"
 msgstr "对象推送"
 
-#: ../../bluetooth/bluez_profile.go:16
+#: ../../bluetooth/bluez_profile.go:37
 msgid "File Transfer"
 msgstr "文件传输"
 
-#: ../../bluetooth/bluez_profile.go:17
+#: ../../bluetooth/bluez_profile.go:38
 msgid "Synchronization"
 msgstr "同步"
 
-#: ../../bluetooth/bluez_profile.go:18
+#: ../../bluetooth/bluez_profile.go:39
 msgid "Phone Book Access"
 msgstr "电话簿访问"
 
-#: ../../bluetooth/bluez_profile.go:19
+#: ../../bluetooth/bluez_profile.go:40
 msgid "Phone Book Access Client"
 msgstr "电话簿访问客户端"
 
-#: ../../bluetooth/bluez_profile.go:20
+#: ../../bluetooth/bluez_profile.go:41
 msgid "Message Access"
 msgstr "消息访问"
 
-#: ../../bluetooth/bluez_profile.go:21
+#: ../../bluetooth/bluez_profile.go:42
 msgid "Message Notification"
 msgstr "消息通知"
 
@@ -94,8 +94,9 @@ msgid "Amharic, Ethiopia"
 msgstr ""
 
 #: ../../datetime/locale_map.go:13
+#, fuzzy
 msgid "Aragonese, Spain"
-msgstr ""
+msgstr "日本（UTC+09）日本"
 
 #: ../../datetime/locale_map.go:14
 #, fuzzy
@@ -151,8 +152,9 @@ msgid "Arabic, Qatar"
 msgstr ""
 
 #: ../../datetime/locale_map.go:27
+#, fuzzy
 msgid "Arabic, Saudi Arabia"
-msgstr ""
+msgstr "阿拉伯联合酋长国（UTC+04）迪拜"
 
 #: ../../datetime/locale_map.go:28
 msgid "Arabic, Sudan"
@@ -255,8 +257,9 @@ msgid "Catalan, Italy"
 msgstr ""
 
 #: ../../datetime/locale_map.go:54
+#, fuzzy
 msgid "Crimean Tatar, Ukraine"
-msgstr ""
+msgstr "俄罗斯（UTC+11）库页岛"
 
 #: ../../datetime/locale_map.go:55
 msgid "Kashubian, Poland"
@@ -271,8 +274,9 @@ msgid "Chuvash, Russia"
 msgstr ""
 
 #: ../../datetime/locale_map.go:58
+#, fuzzy
 msgid "Welsh, United Kingdom"
-msgstr ""
+msgstr "英国（UTC+00）英国时间"
 
 #: ../../datetime/locale_map.go:59
 msgid "Danish, Denmark"
@@ -299,8 +303,9 @@ msgid "German, Liechtenstein"
 msgstr ""
 
 #: ../../datetime/locale_map.go:65
+#, fuzzy
 msgid "German, Luxemburg"
-msgstr ""
+msgstr "卢森堡（UTC+01）卢森堡"
 
 #: ../../datetime/locale_map.go:66
 msgid "Dhivehi, Maldives"
@@ -339,8 +344,9 @@ msgid "English, Denmark"
 msgstr ""
 
 #: ../../datetime/locale_map.go:75
+#, fuzzy
 msgid "English, United Kingdom"
-msgstr ""
+msgstr "英国（UTC+00）英国时间"
 
 #: ../../datetime/locale_map.go:76
 msgid "English, Hong Kong"
@@ -467,8 +473,9 @@ msgid "Spanish, El Salvador"
 msgstr ""
 
 #: ../../datetime/locale_map.go:107
+#, fuzzy
 msgid "Spanish, United States"
-msgstr ""
+msgstr "阿拉伯联合酋长国（UTC+04）迪拜"
 
 #: ../../datetime/locale_map.go:108
 msgid "Spanish, Uruguay"
@@ -491,8 +498,9 @@ msgid "Basque, France"
 msgstr ""
 
 #: ../../datetime/locale_map.go:113
+#, fuzzy
 msgid "Persian, Iran"
-msgstr ""
+msgstr "俄罗斯（UTC+11）库页岛"
 
 #: ../../datetime/locale_map.go:114
 msgid "Fulah, Senegal"
@@ -527,8 +535,9 @@ msgid "French, France"
 msgstr ""
 
 #: ../../datetime/locale_map.go:122
+#, fuzzy
 msgid "French, Luxemburg"
-msgstr ""
+msgstr "卢森堡（UTC+01）卢森堡"
 
 #: ../../datetime/locale_map.go:123
 msgid "Furlan, Italy"
@@ -543,12 +552,14 @@ msgid "Frisian, the Netherlands"
 msgstr ""
 
 #: ../../datetime/locale_map.go:126
+#, fuzzy
 msgid "Irish, Ireland"
-msgstr ""
+msgstr "冰岛（UTC+00）冰岛"
 
 #: ../../datetime/locale_map.go:127
+#, fuzzy
 msgid "Gaelic, United Kingdom"
-msgstr ""
+msgstr "英国（UTC+00）英国时间"
 
 #: ../../datetime/locale_map.go:128
 msgid "Ge'ez, Eritrea (with Abegede collation)"
@@ -662,8 +673,9 @@ msgid "Kazakh, Kazakhstan"
 msgstr ""
 
 #: ../../datetime/locale_map.go:156
+#, fuzzy
 msgid "Greenlandic, Greenland"
-msgstr ""
+msgstr "冰岛（UTC+00）冰岛"
 
 #: ../../datetime/locale_map.go:157
 msgid "Khmer, Cambodia"
@@ -694,8 +706,9 @@ msgid "Kurdish, Turkey"
 msgstr ""
 
 #: ../../datetime/locale_map.go:164
+#, fuzzy
 msgid "Cornish, United Kingdom"
-msgstr ""
+msgstr "英国（UTC+00）英国时间"
 
 #: ../../datetime/locale_map.go:165
 msgid "Kyrgyz, Kyrgyzstan"
@@ -859,8 +872,9 @@ msgid "Polish, Poland"
 msgstr ""
 
 #: ../../datetime/locale_map.go:205
+#, fuzzy
 msgid "Portuguese, Brasil"
-msgstr ""
+msgstr "葡萄牙（UTC+00）葡萄牙"
 
 #: ../../datetime/locale_map.go:206
 #, fuzzy
@@ -872,8 +886,9 @@ msgid "Romanian, Romania"
 msgstr ""
 
 #: ../../datetime/locale_map.go:208
+#, fuzzy
 msgid "Russian, Russia"
-msgstr ""
+msgstr "俄罗斯（UTC+11）库页岛"
 
 #: ../../datetime/locale_map.go:209
 #, fuzzy
@@ -1057,8 +1072,9 @@ msgid "Uyghur, China"
 msgstr ""
 
 #: ../../datetime/locale_map.go:255
+#, fuzzy
 msgid "Ukrainian, Ukraine"
-msgstr ""
+msgstr "俄罗斯（UTC+11）库页岛"
 
 #: ../../datetime/locale_map.go:256
 msgid "Unami Delaware, United States"
@@ -1133,8 +1149,9 @@ msgid "Chinese, Singapore"
 msgstr ""
 
 #: ../../datetime/locale_map.go:274
+#, fuzzy
 msgid "Chinese, Taiwan"
-msgstr ""
+msgstr "日本（UTC+09）日本"
 
 #: ../../datetime/locale_map.go:275
 msgid "Zulu, South Africa"
@@ -3076,6 +3093,22 @@ msgstr "华盛顿州（UTC+04）华盛顿州立大学"
 msgid "USA (UTC+00) Zulu"
 msgstr "美国（UTC+00）祖鲁"
 
+#: ../../dock/normal_apps.go:52
+msgid "_Run"
+msgstr "运行(_R)"
+
+#: ../../dock/normal_apps.go:67
+msgid "_Undock"
+msgstr "移除驻留(_U)"
+
+#: ../../dock/runtime_apps.go:154
+msgid "_Close All"
+msgstr "关闭所有(_C)"
+
+#: ../../dock/runtime_apps.go:181
+msgid "_Dock"
+msgstr "驻留(_D)"
+
 #: ../../keybinding/id_desc_map.go:67
 msgid "Launcher"
 msgstr "启动器"
@@ -3296,888 +3329,879 @@ msgstr "移动到工作区了"
 msgid "Move to workspace down"
 msgstr "移动到工作区向下"
 
-#: ../../network/manager_connections.go:157
+#: ../../network/manager_connections.go:177
 #, fuzzy
 msgid "Wired Connection "
 msgstr "有线连接"
 
-#: ../../network/nm_constant.go:191 ../../network/nm_setting_vpn_l2tp.go:86
-#: ../../network/nm_setting_vpn_openvpn.go:140
-#: ../../network/nm_setting_vpn_pptp.go:76
-#: ../../network/nm_setting_vpn_vpnc.go:114
+#: ../../network/nm_constant.go:212 ../../network/nm_setting_vpn_l2tp.go:113
+#: ../../network/nm_setting_vpn_openvpn.go:168
+#: ../../network/nm_setting_vpn_pptp.go:103
+#: ../../network/nm_setting_vpn_vpnc.go:142
 msgid "Saved"
 msgstr "已保存的"
 
-#: ../../network/nm_constant.go:193 ../../network/nm_setting_vpn_l2tp.go:87
-#: ../../network/nm_setting_vpn_openvpn.go:141
-#: ../../network/nm_setting_vpn_pptp.go:77
-#: ../../network/nm_setting_vpn_vpnc.go:116
+#: ../../network/nm_constant.go:214 ../../network/nm_setting_vpn_l2tp.go:114
+#: ../../network/nm_setting_vpn_openvpn.go:169
+#: ../../network/nm_setting_vpn_pptp.go:104
+#: ../../network/nm_setting_vpn_vpnc.go:144
 msgid "Always Ask"
 msgstr "总是询问"
 
-#: ../../network/nm_constant.go:194 ../../network/nm_setting_vpn_l2tp.go:88
-#: ../../network/nm_setting_vpn_openvpn.go:142
-#: ../../network/nm_setting_vpn_openvpn.go:443
-#: ../../network/nm_setting_vpn_pptp.go:78
-#: ../../network/nm_setting_vpn_vpnc.go:117
+#: ../../network/nm_constant.go:215 ../../network/nm_setting_vpn_l2tp.go:115
+#: ../../network/nm_setting_vpn_openvpn.go:170
+#: ../../network/nm_setting_vpn_openvpn.go:475
+#: ../../network/nm_setting_vpn_pptp.go:105
+#: ../../network/nm_setting_vpn_vpnc.go:145
 msgid "Not Required"
 msgstr "不要求"
 
-#: ../../network/nm_custom_type.go:100
-msgid "Wi-Fi"
-msgstr "Wi-Fi"
-
-#: ../../network/nm_custom_type.go:101
-msgid "Wi-Fi Ad-Hoc"
-msgstr "Wi-Fi点对点"
-
-#: ../../network/nm_custom_type.go:102
-msgid "Wi-Fi Hotspot"
-msgstr "Wi-Fi热点"
-
-#: ../../network/nm_custom_type.go:103
-msgid "PPPoE"
-msgstr "PPPoE"
-
-#: ../../network/nm_custom_type.go:104
-msgid "Mobile GSM (GPRS, EDGE, UMTS, HSPA)"
-msgstr "移动GSM（GPRS，EDGE，UMTS，HSPA）"
-
-#: ../../network/nm_custom_type.go:105
-msgid "Mobile CDMA (1xRTT, EVDO)"
-msgstr "移动CDMA（1xRTT的，EVDO）"
-
-#: ../../network/nm_custom_type.go:106
-msgid "VPN-L2TP (Layer 2 Tunneling Protocol)"
-msgstr "VPN-L2TP（第二层隧道协议）"
-
-#: ../../network/nm_custom_type.go:107
-msgid "VPN-OpenConnect (Cisco AnyConnect Compatible VPN)"
-msgstr "VPN-OPENCONNECT（思科的AnyConnect VPN兼容）"
-
-#: ../../network/nm_custom_type.go:108
-msgid "VPN-OpenVPN"
-msgstr "VPN-OpenVPN的"
-
-#: ../../network/nm_custom_type.go:109
-msgid "VPN-PPTP (Point-to-Point Tunneling Protocol))"
-msgstr "VPN-PPTP（点对点点对点隧道协议））"
-
-#: ../../network/nm_custom_type.go:110
-msgid "VPN-VPNC (Cisco Compatible VPN)"
-msgstr "VPN-VPNC（思科兼容的VPN）"
-
-#: ../../network/nm_custom_type.go:118
+#: ../../network/nm_custom_type.go:131
 msgid "Connection"
 msgstr "连接"
 
-#: ../../network/nm_custom_type.go:120
+#: ../../network/nm_custom_type.go:133
 msgid "Wired Connection"
 msgstr "有线连接"
 
-#: ../../network/nm_custom_type.go:122
+#: ../../network/nm_custom_type.go:135
 msgid "Wireless Connection"
 msgstr "无线连接"
 
-#: ../../network/nm_custom_type.go:124
+#: ../../network/nm_custom_type.go:137
 msgid "Wireless Ad-Hoc"
 msgstr "无线点对点"
 
-#: ../../network/nm_custom_type.go:126
+#: ../../network/nm_custom_type.go:139
 msgid "Wireless Ap-Hotspot"
 msgstr "无线AP-热点"
 
-#: ../../network/nm_custom_type.go:128
+#: ../../network/nm_custom_type.go:141
 msgid "PPPoE Connection"
 msgstr "PPPoE连接"
 
-#: ../../network/nm_custom_type.go:130
+#: ../../network/nm_custom_type.go:143
 #, fuzzy
 msgid "Mobile Connection"
 msgstr "移动GSM连接"
 
-#: ../../network/nm_custom_type.go:132
+#: ../../network/nm_custom_type.go:145
 msgid "Mobile GSM Connection"
 msgstr "移动GSM连接"
 
-#: ../../network/nm_custom_type.go:134
+#: ../../network/nm_custom_type.go:147
 msgid "Mobile CDMA Connection"
 msgstr "手机CDMA连接"
 
-#: ../../network/nm_custom_type.go:136
+#: ../../network/nm_custom_type.go:149
 msgid "VPN Connection"
 msgstr "VPN连接"
 
-#: ../../network/nm_custom_type.go:138
+#: ../../network/nm_custom_type.go:151
 msgid "VPN L2TP"
 msgstr "L2TP协议的VPN"
 
-#: ../../network/nm_custom_type.go:140
+#: ../../network/nm_custom_type.go:153
 msgid "VPN OpenConnect"
 msgstr "VPN OpenConnect"
 
-#: ../../network/nm_custom_type.go:142
+#: ../../network/nm_custom_type.go:155
 msgid "VPN OpenVPN"
 msgstr "VPN OpenVPN"
 
-#: ../../network/nm_custom_type.go:144
+#: ../../network/nm_custom_type.go:157
 msgid "VPN PPTP"
 msgstr "VPN PPTP"
 
-#: ../../network/nm_custom_type.go:146
+#: ../../network/nm_custom_type.go:159
 msgid "VPN VPNC"
 msgstr "VPN VPNC"
 
-#: ../../network/nm_setting_802_1x.go:52
+#: ../../network/nm_setting_802_1x.go:73
 msgid "PAP"
 msgstr "PAP"
 
-#: ../../network/nm_setting_802_1x.go:53
+#: ../../network/nm_setting_802_1x.go:74
 msgid "CHAP"
 msgstr "CHAP"
 
-#: ../../network/nm_setting_802_1x.go:54
+#: ../../network/nm_setting_802_1x.go:75
 msgid "MSCHAP"
 msgstr "MSCHAP"
 
-#: ../../network/nm_setting_802_1x.go:55
+#: ../../network/nm_setting_802_1x.go:76
 msgid "MSCHAPV2"
 msgstr "MSCHAPV2"
 
-#: ../../network/nm_setting_802_1x.go:56
+#: ../../network/nm_setting_802_1x.go:77
 msgid "GTC"
 msgstr "GTC"
 
-#: ../../network/nm_setting_802_1x.go:57
+#: ../../network/nm_setting_802_1x.go:78
 msgid "OTP"
 msgstr "OTP"
 
-#: ../../network/nm_setting_802_1x.go:58
-#: ../../network/nm_setting_802_1x.go:148
+#: ../../network/nm_setting_802_1x.go:79
+#: ../../network/nm_setting_802_1x.go:162
 msgid "MD5"
 msgstr "MD5"
 
-#: ../../network/nm_setting_802_1x.go:59
-#: ../../network/nm_setting_802_1x.go:147
-#: ../../network/nm_setting_802_1x.go:155
+#: ../../network/nm_setting_802_1x.go:80
+#: ../../network/nm_setting_802_1x.go:161
+#: ../../network/nm_setting_802_1x.go:169
 msgid "TLS"
 msgstr "TLS"
 
-#: ../../network/nm_setting_802_1x.go:149
-#: ../../network/nm_setting_802_1x.go:157
+#: ../../network/nm_setting_802_1x.go:163
+#: ../../network/nm_setting_802_1x.go:171
 msgid "FAST"
 msgstr "FAST"
 
-#: ../../network/nm_setting_802_1x.go:150
-#: ../../network/nm_setting_802_1x.go:158
+#: ../../network/nm_setting_802_1x.go:164
+#: ../../network/nm_setting_802_1x.go:172
 msgid "Tunneled TLS"
 msgstr "隧道TLS"
 
-#: ../../network/nm_setting_802_1x.go:151
-#: ../../network/nm_setting_802_1x.go:159
+#: ../../network/nm_setting_802_1x.go:165
+#: ../../network/nm_setting_802_1x.go:173
 msgid "Protected EAP"
 msgstr "受保护的EAP"
 
-#: ../../network/nm_setting_802_1x.go:156
+#: ../../network/nm_setting_802_1x.go:170
 msgid "LEAP"
 msgstr "LEAP"
 
-#: ../../network/nm_setting_802_1x.go:164
-#: ../../network/nm_setting_ip4_config.go:157
-#: ../../network/nm_setting_vpn_vpnc.go:224
+#: ../../network/nm_setting_802_1x.go:178
+#: ../../network/nm_setting_ip4_config.go:178
+#: ../../network/nm_setting_vpn_vpnc.go:257
 msgid "Disabled"
 msgstr "已禁用"
 
-#: ../../network/nm_setting_802_1x.go:165
+#: ../../network/nm_setting_802_1x.go:179
 msgid "Anonymous"
 msgstr "匿名"
 
-#: ../../network/nm_setting_802_1x.go:166
+#: ../../network/nm_setting_802_1x.go:180
 msgid "Authenticated"
 msgstr "已认证"
 
-#: ../../network/nm_setting_802_1x.go:167
+#: ../../network/nm_setting_802_1x.go:181
 msgid "Both"
 msgstr "都是"
 
-#: ../../network/nm_setting_802_1x.go:171
-#: ../../network/nm_setting_wireless.go:267
+#: ../../network/nm_setting_802_1x.go:185
+#: ../../network/nm_setting_wireless.go:290
 msgid "Automatic"
 msgstr "自动"
 
-#: ../../network/nm_setting_802_1x.go:172
+#: ../../network/nm_setting_802_1x.go:186
 msgid "Version 0"
 msgstr "0版本"
 
-#: ../../network/nm_setting_802_1x.go:173
+#: ../../network/nm_setting_802_1x.go:187
 msgid "Version 1"
 msgstr "第1版"
 
-#: ../../network/nm_setting_gsm.go:109
-msgid "*99#"
-msgstr "* 99＃"
-
-#: ../../network/nm_setting_gsm.go:116
+#: ../../network/nm_setting_gsm.go:125
 msgid "China Unicom Internet"
 msgstr "中国联通互联网"
 
-#: ../../network/nm_setting_gsm.go:117
+#: ../../network/nm_setting_gsm.go:126
 msgid "China Unicom MMS"
 msgstr "中国联通彩信"
 
-#: ../../network/nm_setting_gsm.go:118
+#: ../../network/nm_setting_gsm.go:127
 msgid "China Mobile WAP"
 msgstr "中国移动WAP"
 
-#: ../../network/nm_setting_gsm.go:119
+#: ../../network/nm_setting_gsm.go:128
 msgid "China Mobile Internet"
 msgstr "中国移动互联网"
 
-#: ../../network/nm_setting_gsm.go:120
+#: ../../network/nm_setting_gsm.go:129
 msgid "China Mobile MMS"
 msgstr "中国移动彩信"
 
-#: ../../network/nm_setting_gsm.go:124
+#: ../../network/nm_setting_gsm.go:133
 msgid "Any"
 msgstr "任何"
 
-#: ../../network/nm_setting_gsm.go:125
+#: ../../network/nm_setting_gsm.go:134
 msgid "3G (UMTS/HSPA)"
 msgstr "3G（UMTS / HSPA）"
 
-#: ../../network/nm_setting_gsm.go:126
+#: ../../network/nm_setting_gsm.go:135
 msgid "2G (GPRS/EDGE)"
 msgstr "2G（GPRS / EDGE）"
 
-#: ../../network/nm_setting_gsm.go:127
+#: ../../network/nm_setting_gsm.go:136
 msgid "Prefer 3G (UMTS/HSPA)"
 msgstr "首选3G（UMTS / HSPA）"
 
-#: ../../network/nm_setting_gsm.go:128
+#: ../../network/nm_setting_gsm.go:137
 msgid "Prefer 2G (GPRS/EDGE)"
 msgstr "首选2G（GPRS / EDGE）"
 
-#: ../../network/nm_setting_gsm.go:129
+#: ../../network/nm_setting_gsm.go:138
 msgid "Prefer 4G (LTE)"
 msgstr "首选4G（LTE）"
 
-#: ../../network/nm_setting_gsm.go:130
+#: ../../network/nm_setting_gsm.go:139
 msgid "Use Only 4G (LTE)"
 msgstr "仅使用4G（LTE）"
 
-#: ../../network/nm_setting_ip4_config.go:153
-#: ../../network/nm_setting_ip6_config.go:45
+#: ../../network/nm_setting_ip4_config.go:174
+#: ../../network/nm_setting_ip6_config.go:66
 msgid "Auto"
 msgstr "{0}{/0} {1}{/1}(自动)"
 
-#: ../../network/nm_setting_ip4_config.go:154
-#: ../../network/nm_setting_ip6_config.go:47
+#: ../../network/nm_setting_ip4_config.go:175
+#: ../../network/nm_setting_ip6_config.go:68
 msgid "Link Local"
 msgstr "链路本地"
 
-#: ../../network/nm_setting_ip4_config.go:155
-#: ../../network/nm_setting_ip6_config.go:48
+#: ../../network/nm_setting_ip4_config.go:176
+#: ../../network/nm_setting_ip6_config.go:69
 msgid "Manual"
 msgstr "手动"
 
-#: ../../network/nm_setting_ip4_config.go:156
-#: ../../network/nm_setting_ip6_config.go:49
+#: ../../network/nm_setting_ip4_config.go:177
+#: ../../network/nm_setting_ip6_config.go:70
 msgid "Shared"
 msgstr "共享"
 
-#: ../../network/nm_setting_ip6_config.go:44
+#: ../../network/nm_setting_ip6_config.go:65
 msgid "Ignore"
 msgstr "忽略"
 
-#: ../../network/nm_setting_ip6_config.go:46
+#: ../../network/nm_setting_ip6_config.go:67
 msgid "DHCP"
 msgstr "DHCP"
 
-#: ../../network/nm_setting_virtual_key.go:163
-#: ../../network/nm_setting_virtual_key.go:170
-#: ../../network/nm_setting_virtual_key.go:202
-#: ../../network/nm_setting_vpn_openvpn.go:362
-#: ../../network/nm_setting_vpn_vpnc.go:235
+#: ../../network/nm_setting_virtual_key.go:115
+msgid "GSM (GPRS, EDGE, UMTS, HSPA)"
+msgstr "GSM（GPRS，EDGE，UMTS，HSPA）"
+
+#: ../../network/nm_setting_virtual_key.go:116
+msgid "CDMA (1xRTT, EVDO)"
+msgstr "CDMA（1xRTT的，EVDO）"
+
+#: ../../network/nm_setting_virtual_key.go:123
+#, fuzzy
+msgid "L2TP"
+msgstr "L2TP协议的VPN"
+
+#: ../../network/nm_setting_virtual_key.go:124
+#, fuzzy
+msgid "PPTP"
+msgstr "VPN PPTP"
+
+#: ../../network/nm_setting_virtual_key.go:125
+#, fuzzy
+msgid "OpenConnect"
+msgstr "VPN OpenConnect"
+
+#: ../../network/nm_setting_virtual_key.go:126
+#, fuzzy
+msgid "OpenVPN"
+msgstr "VPN-OpenVPN的"
+
+#: ../../network/nm_setting_virtual_key.go:127
+#, fuzzy
+msgid "VPNC"
+msgstr "VPN VPNC"
+
+#: ../../network/nm_setting_virtual_key.go:140
+#: ../../network/nm_setting_virtual_key.go:147
+#: ../../network/nm_setting_virtual_key.go:177
+#: ../../network/nm_setting_vpn_openvpn.go:394
+#: ../../network/nm_setting_vpn_vpnc.go:268
 msgid "None"
 msgstr "无"
 
-#: ../../network/nm_setting_virtual_key.go:164
-#: ../../network/nm_setting_virtual_key.go:171
+#: ../../network/nm_setting_virtual_key.go:141
+#: ../../network/nm_setting_virtual_key.go:148
 msgid "WEP 40/128-bit Key"
 msgstr "WEP 40/128-bit密钥"
 
-#: ../../network/nm_setting_virtual_key.go:165
-#: ../../network/nm_setting_virtual_key.go:172
+#: ../../network/nm_setting_virtual_key.go:142
+#: ../../network/nm_setting_virtual_key.go:149
 msgid "WPA & WPA2 Personal"
 msgstr "WPA＆WPA2个人"
 
-#: ../../network/nm_setting_virtual_key.go:166
+#: ../../network/nm_setting_virtual_key.go:143
 msgid "WPA & WPA2 Enterprise"
 msgstr "WPA＆WPA2企业"
 
-#: ../../network/nm_setting_virtual_key.go:182
-#: ../../network/nm_setting_virtual_key.go:191
+#: ../../network/nm_setting_virtual_key.go:157
+#: ../../network/nm_setting_virtual_key.go:166
 #, fuzzy
 msgid "All Available (default)"
 msgstr "NAT-T当可用（默认）"
 
-#: ../../network/nm_setting_virtual_key.go:183
-#: ../../network/nm_setting_virtual_key.go:192
+#: ../../network/nm_setting_virtual_key.go:158
+#: ../../network/nm_setting_virtual_key.go:167
 msgid "128-bit (most secure)"
 msgstr ""
 
-#: ../../network/nm_setting_virtual_key.go:184
-#: ../../network/nm_setting_virtual_key.go:193
+#: ../../network/nm_setting_virtual_key.go:159
+#: ../../network/nm_setting_virtual_key.go:168
 msgid "40-bit (less secure)"
 msgstr ""
 
-#: ../../network/nm_setting_virtual_key.go:200
+#: ../../network/nm_setting_virtual_key.go:175
 msgid "Secure (default)"
 msgstr "安全（默认）"
 
-#: ../../network/nm_setting_virtual_key.go:201
+#: ../../network/nm_setting_virtual_key.go:176
 msgid "Weak"
 msgstr "弱"
 
-#: ../../network/nm_setting_virtual_key.go:212
-msgid "GSM (GPRS, EDGE, UMTS, HSPA)"
-msgstr "GSM（GPRS，EDGE，UMTS，HSPA）"
-
-#: ../../network/nm_setting_virtual_key.go:213
-msgid "CDMA (1xRTT, EVDO)"
-msgstr "CDMA（1xRTT的，EVDO）"
-
-#: ../../network/nm_setting_vpn_openvpn.go:215
+#: ../../network/nm_setting_vpn_openvpn.go:247
 msgid "Certificates (TLS)"
 msgstr "证书（TLS）"
 
-#: ../../network/nm_setting_vpn_openvpn.go:216
+#: ../../network/nm_setting_vpn_openvpn.go:248
 msgid "Password"
 msgstr "密码"
 
-#: ../../network/nm_setting_vpn_openvpn.go:217
+#: ../../network/nm_setting_vpn_openvpn.go:249
 msgid "Password with Certificates (TLS)"
 msgstr "密码与证书（TLS）"
 
-#: ../../network/nm_setting_vpn_openvpn.go:218
+#: ../../network/nm_setting_vpn_openvpn.go:250
 msgid "Static Key"
 msgstr "静态密钥"
 
-#: ../../network/nm_setting_vpn_openvpn.go:222
-#: ../../network/nm_setting_vpn_openvpn.go:398
+#: ../../network/nm_setting_vpn_openvpn.go:254
+#: ../../network/nm_setting_vpn_openvpn.go:430
 msgid "0"
 msgstr "0"
 
-#: ../../network/nm_setting_vpn_openvpn.go:223
-#: ../../network/nm_setting_vpn_openvpn.go:399
+#: ../../network/nm_setting_vpn_openvpn.go:255
+#: ../../network/nm_setting_vpn_openvpn.go:431
 msgid "1"
 msgstr " 1"
 
-#: ../../network/nm_setting_vpn_openvpn.go:341
-#: ../../network/nm_setting_vpn_openvpn.go:361
-#: ../../network/nm_setting_vpn_openvpn.go:392
-#: ../../network/nm_setting_wireless.go:163
+#: ../../network/nm_setting_vpn_openvpn.go:373
+#: ../../network/nm_setting_vpn_openvpn.go:393
+#: ../../network/nm_setting_vpn_openvpn.go:424
+#: ../../network/nm_setting_wireless.go:184
 msgid "Default"
 msgstr "默认"
 
-#: ../../network/nm_setting_vpn_openvpn.go:342
+#: ../../network/nm_setting_vpn_openvpn.go:374
 msgid "DES-CBC"
 msgstr "DES-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:343
+#: ../../network/nm_setting_vpn_openvpn.go:375
 msgid "RC2-CBC"
 msgstr "RC2-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:344
+#: ../../network/nm_setting_vpn_openvpn.go:376
 msgid "DES-EDE-CBC"
 msgstr "DES-EDE-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:345
+#: ../../network/nm_setting_vpn_openvpn.go:377
 msgid "DES-EDE3-CBC"
 msgstr "DES-EDE3-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:346
+#: ../../network/nm_setting_vpn_openvpn.go:378
 msgid "DESX-CBC"
 msgstr "DESX-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:347
+#: ../../network/nm_setting_vpn_openvpn.go:379
 msgid "BF-CBC"
 msgstr "BF-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:348
+#: ../../network/nm_setting_vpn_openvpn.go:380
 msgid "RC2-40-CBC"
 msgstr "RC2-40-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:349
+#: ../../network/nm_setting_vpn_openvpn.go:381
 msgid "CAST5-CBC"
 msgstr "CAST5-​​CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:350
+#: ../../network/nm_setting_vpn_openvpn.go:382
 msgid "RC2-64-CBC"
 msgstr "RC2-64-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:351
+#: ../../network/nm_setting_vpn_openvpn.go:383
 msgid "AES-128-CBC"
 msgstr "AES-128-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:352
+#: ../../network/nm_setting_vpn_openvpn.go:384
 msgid "AES-192-CBC"
 msgstr "AES-192-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:353
+#: ../../network/nm_setting_vpn_openvpn.go:385
 msgid "AES-256-CBC"
 msgstr "AES-256-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:354
+#: ../../network/nm_setting_vpn_openvpn.go:386
 msgid "CAMELLIA-128-CBC"
 msgstr "茶花-128-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:355
+#: ../../network/nm_setting_vpn_openvpn.go:387
 msgid "CAMELLIA-192-CBC"
 msgstr "茶花-192-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:356
+#: ../../network/nm_setting_vpn_openvpn.go:388
 msgid "CAMELLIA-256-CBC"
 msgstr "茶花-256-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:357
+#: ../../network/nm_setting_vpn_openvpn.go:389
 msgid "SEED-CBC"
 msgstr "SEED-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:363
+#: ../../network/nm_setting_vpn_openvpn.go:395
 msgid "RSA MD-4"
 msgstr "RSA MD-4"
 
-#: ../../network/nm_setting_vpn_openvpn.go:364
+#: ../../network/nm_setting_vpn_openvpn.go:396
 msgid "MD-5"
 msgstr "MD-5"
 
-#: ../../network/nm_setting_vpn_openvpn.go:365
+#: ../../network/nm_setting_vpn_openvpn.go:397
 msgid "SHA-1"
 msgstr "SHA-1"
 
-#: ../../network/nm_setting_vpn_openvpn.go:366
+#: ../../network/nm_setting_vpn_openvpn.go:398
 msgid "SHA-224"
 msgstr "SHA-224"
 
-#: ../../network/nm_setting_vpn_openvpn.go:367
+#: ../../network/nm_setting_vpn_openvpn.go:399
 msgid "SHA-256"
 msgstr "SHA-256"
 
-#: ../../network/nm_setting_vpn_openvpn.go:368
+#: ../../network/nm_setting_vpn_openvpn.go:400
 msgid "SHA-384"
 msgstr "SHA-384"
 
-#: ../../network/nm_setting_vpn_openvpn.go:369
+#: ../../network/nm_setting_vpn_openvpn.go:401
 msgid "SHA-512"
 msgstr "SHA-512"
 
-#: ../../network/nm_setting_vpn_openvpn.go:370
+#: ../../network/nm_setting_vpn_openvpn.go:402
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
 
-#: ../../network/nm_setting_vpn_openvpn.go:393
+#: ../../network/nm_setting_vpn_openvpn.go:425
 msgid "Client"
 msgstr "客户"
 
-#: ../../network/nm_setting_vpn_openvpn.go:394
+#: ../../network/nm_setting_vpn_openvpn.go:426
 msgid "Server"
 msgstr "服务器"
 
-#: ../../network/nm_setting_vpn_openvpn.go:444
+#: ../../network/nm_setting_vpn_openvpn.go:476
 msgid "HTTP"
 msgstr "HTTP"
 
-#: ../../network/nm_setting_vpn_openvpn.go:445
+#: ../../network/nm_setting_vpn_openvpn.go:477
 msgid "SOCKS"
 msgstr "SOCKS"
 
-#: ../../network/nm_setting_vpn_vpnc.go:216
+#: ../../network/nm_setting_vpn_vpnc.go:249
 msgid "Cisco (default)"
 msgstr "思科（默认）"
 
-#: ../../network/nm_setting_vpn_vpnc.go:217
+#: ../../network/nm_setting_vpn_vpnc.go:250
 msgid "Netscreen"
 msgstr "Netscreen的"
 
-#: ../../network/nm_setting_vpn_vpnc.go:221
+#: ../../network/nm_setting_vpn_vpnc.go:254
 msgid "NAT-T When Available (default)"
 msgstr "NAT-T当可用（默认）"
 
-#: ../../network/nm_setting_vpn_vpnc.go:222
+#: ../../network/nm_setting_vpn_vpnc.go:255
 msgid "NAT-T Always"
 msgstr "NAT-T的始终"
 
-#: ../../network/nm_setting_vpn_vpnc.go:223
+#: ../../network/nm_setting_vpn_vpnc.go:256
 msgid "Cisco UDP"
 msgstr "思科UDP"
 
-#: ../../network/nm_setting_vpn_vpnc.go:228
-#: ../../network/nm_setting_vpn_vpnc.go:236
+#: ../../network/nm_setting_vpn_vpnc.go:261
+#: ../../network/nm_setting_vpn_vpnc.go:269
 msgid "DH Group 1"
 msgstr "DH组1"
 
-#: ../../network/nm_setting_vpn_vpnc.go:229
+#: ../../network/nm_setting_vpn_vpnc.go:262
 msgid "DH Group 2 (default)"
 msgstr "DH组2（默认）"
 
-#: ../../network/nm_setting_vpn_vpnc.go:230
-#: ../../network/nm_setting_vpn_vpnc.go:238
+#: ../../network/nm_setting_vpn_vpnc.go:263
+#: ../../network/nm_setting_vpn_vpnc.go:271
 msgid "DH Group 5"
 msgstr "DH组5"
 
-#: ../../network/nm_setting_vpn_vpnc.go:234
+#: ../../network/nm_setting_vpn_vpnc.go:267
 msgid "Server (default)"
 msgstr "服务器（默认）"
 
-#: ../../network/nm_setting_vpn_vpnc.go:237
+#: ../../network/nm_setting_vpn_vpnc.go:270
 msgid "DH Group 2"
 msgstr "DH组2"
 
-#: ../../network/nm_setting_wireless.go:261
+#: ../../network/nm_setting_wireless.go:284
 msgid "Infrastructure"
 msgstr "基础设施"
 
-#: ../../network/nm_setting_wireless.go:262
+#: ../../network/nm_setting_wireless.go:285
 msgid "Ad-Hoc"
 msgstr "特设"
 
-#: ../../network/nm_setting_wireless.go:263
+#: ../../network/nm_setting_wireless.go:286
 msgid "AP-Hotspot"
 msgstr "AP-热点"
 
-#: ../../network/nm_setting_wireless.go:268
+#: ../../network/nm_setting_wireless.go:291
 msgid "A (5 GHz)"
 msgstr "A（5 GHz）的"
 
-#: ../../network/nm_setting_wireless.go:269
+#: ../../network/nm_setting_wireless.go:292
 msgid "BG (2.4 GHz)"
 msgstr "BG（2.4千兆赫）"
 
-#: ../../network/nm_setting_wireless_security.go:168
+#: ../../network/nm_setting_wireless_security.go:189
 msgid "wep"
 msgstr "wep"
 
-#: ../../network/nm_setting_wireless_security.go:169
+#: ../../network/nm_setting_wireless_security.go:190
 msgid "dynamic wep"
 msgstr "动态WEP"
 
-#: ../../network/nm_setting_wireless_security.go:170
+#: ../../network/nm_setting_wireless_security.go:191
 msgid "wpa-psk ad-hoc"
 msgstr "WPA-PSK即席"
 
-#: ../../network/nm_setting_wireless_security.go:171
+#: ../../network/nm_setting_wireless_security.go:192
 msgid "wpa-psk infrastructure"
 msgstr "WPA-PSK基础设施"
 
-#: ../../network/nm_setting_wireless_security.go:172
+#: ../../network/nm_setting_wireless_security.go:193
 msgid "wpa enterprise"
 msgstr "WPA企业"
 
-#: ../../network/nm_setting_wireless_security.go:176
+#: ../../network/nm_setting_wireless_security.go:197
 msgid "wep40"
 msgstr "WEP40"
 
-#: ../../network/nm_setting_wireless_security.go:177
+#: ../../network/nm_setting_wireless_security.go:198
 msgid "wep104"
 msgstr "WEP104"
 
-#: ../../network/nm_setting_wireless_security.go:178
+#: ../../network/nm_setting_wireless_security.go:199
 msgid "tkip"
 msgstr "TKIP"
 
-#: ../../network/nm_setting_wireless_security.go:179
+#: ../../network/nm_setting_wireless_security.go:200
 msgid "ccmp"
 msgstr "CCMP"
 
-#: ../../network/nm_setting_wireless_security.go:183
+#: ../../network/nm_setting_wireless_security.go:204
 msgid "open"
 msgstr "打开"
 
-#: ../../network/nm_setting_wireless_security.go:184
+#: ../../network/nm_setting_wireless_security.go:205
 msgid "shared"
 msgstr "shared"
 
-#: ../../network/nm_setting_wireless_security.go:185
+#: ../../network/nm_setting_wireless_security.go:206
 msgid "leap"
 msgstr "飞跃"
 
-#: ../../network/state_handler.go:13
+#: ../../network/state_handler.go:34
 msgid "The device is now managed."
 msgstr "该设备是现在进行管理。"
 
-#: ../../network/state_handler.go:14
+#: ../../network/state_handler.go:35
 msgid "The device is no longer managed."
 msgstr "该设备不再进行管理。"
 
-#: ../../network/state_handler.go:15
+#: ../../network/state_handler.go:36
 msgid "The device could not be readied for configuration."
 msgstr "该设备不能被准备好进行配置。"
 
-#: ../../network/state_handler.go:16
+#: ../../network/state_handler.go:37
 msgid ""
 "IP configuration could not be reserved (no available address timeout etc)."
 msgstr "IP配置不能被保留（没有可用的地址超时等）。"
 
-#: ../../network/state_handler.go:17
+#: ../../network/state_handler.go:38
 msgid "The IP configuration is no longer valid."
 msgstr "IP配置不再有效。"
 
-#: ../../network/state_handler.go:18
+#: ../../network/state_handler.go:39
 msgid "Secrets were required but not provided."
 msgstr "被要求保密，但不能提供的。"
 
-#: ../../network/state_handler.go:19
+#: ../../network/state_handler.go:40
+#, fuzzy
 msgid ""
-"The 802.1X supplicant disconnected from the access point or authentication "
+"The 802.1X supplication disconnected from the access point or authentication "
 "server."
 msgstr "从接入点或认证服务器的802.1X客户端断开连接。"
 
-#: ../../network/state_handler.go:20
-msgid "Configuration of the 802.1X supplicant failed."
+#: ../../network/state_handler.go:41
+#, fuzzy
+msgid "Configuration of the 802.1X supplication failed."
 msgstr "在802.1X客户端的配置失败。"
 
-#: ../../network/state_handler.go:21
-msgid "The 802.1X supplicant quit or failed unexpectedly."
+#: ../../network/state_handler.go:42
+#, fuzzy
+msgid "The 802.1X supplication quited or failed unexpectedly."
 msgstr "在802.1X客户端退出或意外失败。"
 
-#: ../../network/state_handler.go:22
-msgid "The 802.1X supplicant took too long to authenticate."
+#: ../../network/state_handler.go:43
+#, fuzzy
+msgid "The 802.1X supplication took too long to authenticate."
 msgstr "在802.1X请求者的时间太长验证。"
 
-#: ../../network/state_handler.go:23
+#: ../../network/state_handler.go:44
 msgid "The PPP service failed to start within the allowed time."
 msgstr "PPP服务启动失败，在允许的时间范围内。"
 
-#: ../../network/state_handler.go:24
+#: ../../network/state_handler.go:45
 msgid "The PPP service disconnected unexpectedly."
 msgstr "PPP服务意外中断。"
 
-#: ../../network/state_handler.go:25
-msgid "The PPP service quit or failed unexpectedly."
+#: ../../network/state_handler.go:46
+#, fuzzy
+msgid "The PPP service quited or failed unexpectedly."
 msgstr "PPP服务退出或意外失败。"
 
-#: ../../network/state_handler.go:26
+#: ../../network/state_handler.go:47
 msgid "The DHCP service failed to start within the allowed time."
 msgstr "DHCP服务无法启动​​，在允许的时间范围内。"
 
-#: ../../network/state_handler.go:27
+#: ../../network/state_handler.go:48
 msgid "The DHCP service reported an unexpected error."
 msgstr "DHCP服务报告了一个意外的错误。"
 
-#: ../../network/state_handler.go:28
-msgid "The DHCP service quit or failed unexpectedly."
+#: ../../network/state_handler.go:49
+#, fuzzy
+msgid "The DHCP service quited or failed unexpectedly."
 msgstr "DHCP服务退出或意外失败。"
 
-#: ../../network/state_handler.go:29
+#: ../../network/state_handler.go:50
 msgid "The shared connection service failed to start."
 msgstr "共享连接服务启动失败。"
 
-#: ../../network/state_handler.go:30
-msgid "The shared connection service quit or failed unexpectedly."
+#: ../../network/state_handler.go:51
+#, fuzzy
+msgid "The shared connection service quited or failed unexpectedly."
 msgstr "共享连接服务退出或意外失败。"
 
-#: ../../network/state_handler.go:31
+#: ../../network/state_handler.go:52
 msgid "The AutoIP service failed to start."
 msgstr "自动IP服务启动失败。"
 
-#: ../../network/state_handler.go:32
+#: ../../network/state_handler.go:53
 msgid "The AutoIP service reported an unexpected error."
 msgstr "自动IP服务报告了一个意外的错误。"
 
-#: ../../network/state_handler.go:33
-msgid "The AutoIP service quit or failed unexpectedly."
+#: ../../network/state_handler.go:54
+#, fuzzy
+msgid "The AutoIP service quited or failed unexpectedly."
 msgstr "自动IP服务退出或意外失败。"
 
-#: ../../network/state_handler.go:34
+#: ../../network/state_handler.go:55
 msgid "Dialing failed because the line was busy."
 msgstr "拨号失败，因为线路忙。"
 
-#: ../../network/state_handler.go:35
+#: ../../network/state_handler.go:56
 msgid "Dialing failed because there was no dial tone."
 msgstr "拨号失败，因为没有拨号音。"
 
-#: ../../network/state_handler.go:36
+#: ../../network/state_handler.go:57
 msgid "Dialing failed because there was carrier."
 msgstr "拨号失败，因为有载体。"
 
-#: ../../network/state_handler.go:37
+#: ../../network/state_handler.go:58
 msgid "Dialing timed out."
 msgstr "拨号超时。"
 
-#: ../../network/state_handler.go:38
+#: ../../network/state_handler.go:59
 msgid "Dialing failed."
 msgstr "拨号失败。"
 
-#: ../../network/state_handler.go:39
+#: ../../network/state_handler.go:60
 msgid "Modem initialization failed."
 msgstr "调制解调器初始化失败。"
 
-#: ../../network/state_handler.go:40
+#: ../../network/state_handler.go:61
 msgid "Failed to select the specified GSM APN."
 msgstr "没有选择的，指定的GSM APN。"
 
-#: ../../network/state_handler.go:41
+#: ../../network/state_handler.go:62
 msgid "Not searching for networks."
 msgstr "没有搜索网络。"
 
-#: ../../network/state_handler.go:42
+#: ../../network/state_handler.go:63
 msgid "Network registration was denied."
 msgstr "网络注册被拒绝。"
 
-#: ../../network/state_handler.go:43
+#: ../../network/state_handler.go:64
 msgid "Network registration timed out."
 msgstr "网络注册超时。"
 
-#: ../../network/state_handler.go:44
+#: ../../network/state_handler.go:65
 msgid "Failed to register with the requested GSM network."
 msgstr "失败请求的GSM网络进行注册。"
 
-#: ../../network/state_handler.go:45
+#: ../../network/state_handler.go:66
 msgid "PIN check failed."
 msgstr "PIN码检查失败。"
 
-#: ../../network/state_handler.go:46
+#: ../../network/state_handler.go:67
 msgid "Necessary firmware for the device may be missing."
 msgstr "必要的固件的设备可能会丢失。"
 
-#: ../../network/state_handler.go:47
+#: ../../network/state_handler.go:68
 msgid "The device was removed."
 msgstr "该设备已被删除。"
 
-#: ../../network/state_handler.go:48
+#: ../../network/state_handler.go:69
 msgid "NetworkManager went to sleep."
 msgstr "NetworkManager的睡觉去了。"
 
-#: ../../network/state_handler.go:49
+#: ../../network/state_handler.go:70
 msgid "The device's active connection was removed or disappeared."
 msgstr "被删除或消失设备的有效连接。"
 
-#: ../../network/state_handler.go:50
-msgid "A user or client requested the disconnection."
+#: ../../network/state_handler.go:71
+#, fuzzy
+msgid "An user or client requested the disconnection."
 msgstr "用户或客户端请求的连接断开。"
 
-#: ../../network/state_handler.go:51
+#: ../../network/state_handler.go:72
 msgid "The device's carrier/link changed."
 msgstr "该器件的载/链接更改。"
 
-#: ../../network/state_handler.go:52
+#: ../../network/state_handler.go:73
 msgid "The device's existing connection was assumed."
 msgstr "假定该设备的现有连接。"
 
-#: ../../network/state_handler.go:53
-msgid "The 802.1x supplicant is now available."
+#: ../../network/state_handler.go:74
+#, fuzzy
+msgid "The 802.1x supplication is now available."
 msgstr "802.1x请求者现已推出。"
 
-#: ../../network/state_handler.go:54
+#: ../../network/state_handler.go:75
 msgid "The modem could not be found."
 msgstr "调制解调器不能被发现。"
 
-#: ../../network/state_handler.go:55
+#: ../../network/state_handler.go:76
 msgid "The Bluetooth connection timed out or failed."
 msgstr "蓝牙连接超时或失败。"
 
-#: ../../network/state_handler.go:56
+#: ../../network/state_handler.go:77
 msgid "GSM Modem's SIM Card not inserted."
 msgstr "GSM调制解调器的SIM卡没有插入。"
 
-#: ../../network/state_handler.go:57
+#: ../../network/state_handler.go:78
 msgid "GSM Modem's SIM Pin required."
 msgstr "GSM调制解调器的SIM卡PIN码需要。"
 
-#: ../../network/state_handler.go:58
+#: ../../network/state_handler.go:79
 msgid "GSM Modem's SIM Puk required."
 msgstr "GSM调制解调器的SIM卡北辰必需的。"
 
-#: ../../network/state_handler.go:59
+#: ../../network/state_handler.go:80
 msgid "GSM Modem's SIM wrong"
 msgstr "GSM调制解调器的SIM卡错误"
 
-#: ../../network/state_handler.go:60
+#: ../../network/state_handler.go:81
 msgid "InfiniBand device does not support connected mode."
 msgstr "InfiniBand设备不支持连接模式。"
 
-#: ../../network/state_handler.go:61
+#: ../../network/state_handler.go:82
 msgid "A dependency of the connection failed."
 msgstr "连接的依赖性失败。"
 
-#: ../../network/state_handler.go:62
+#: ../../network/state_handler.go:83
 msgid "Problem with the RFC 2684 Ethernet over ADSL bridge."
 msgstr "问题与RFC 2684以太网ADSL的桥梁。"
 
-#: ../../network/state_handler.go:63
-msgid "ModemManager was not running or quit unexpectedly."
+#: ../../network/state_handler.go:84
+#, fuzzy
+msgid "ModemManager was not running or quited unexpectedly."
 msgstr "ModemManager未运行或意外退出。"
 
-#: ../../network/state_handler.go:64
+#: ../../network/state_handler.go:85
 msgid "The 802.11 Wi-Fi network could not be found."
 msgstr "802.11 Wi-Fi网络无法找到。"
 
-#: ../../network/state_handler.go:65
+#: ../../network/state_handler.go:86
 msgid "A secondary connection of the base connection failed."
 msgstr "底座连接的二次连接失败。"
 
-#: ../../network/state_handler.go:67
-msgid "The VPN connection changed state because the user disconnected it."
+#: ../../network/state_handler.go:88
+#, fuzzy
+msgid "The VPN connection changed state due to disconnection of users."
 msgstr "VPN连接状态发生了改变，因为用户断开了。"
 
-#: ../../network/state_handler.go:68
-#, c-format
-msgid ""
-"The VPN connection %s changed state because the device it was using was "
-"disconnected."
-msgstr "VPN连接%s状态发生了改变，因为它使用的设备已断开。"
+#: ../../network/state_handler.go:89
+#, fuzzy
+msgid "The VPN connection changed state due to disconnection of device used."
+msgstr "VPN连接状态发生了改变，因为用户断开了。"
 
-#: ../../network/state_handler.go:69
-msgid "The service providing the VPN connection was stopped."
-msgstr "提供VPN连接的服务已停止。"
+#: ../../network/state_handler.go:90
+msgid "VPN connection service stopped."
+msgstr ""
 
-#: ../../network/state_handler.go:70
+#: ../../network/state_handler.go:91
 msgid "The IP config of the VPN connection was invalid."
 msgstr "VPN连接的IP配置是无效的。"
 
-#: ../../network/state_handler.go:71
-msgid "The connection attempt to the VPN service timed out."
+#: ../../network/state_handler.go:92
+#, fuzzy
+msgid "The connection attempt of the VPN service timed out."
 msgstr "在尝试连接到VPN服务超时。"
 
-#: ../../network/state_handler.go:72
-msgid ""
-"A timeout occurred while starting the service providing the VPN connection."
+#: ../../network/state_handler.go:93
+#, fuzzy
+msgid "A timeout occurred while starting the VPN connection service."
 msgstr "同时开始提供VPN连接的服务时发生超时。"
 
-#: ../../network/state_handler.go:73
-msgid ""
-"Starting the service starting the service providing the VPN connection "
-"failed."
-msgstr "启动开始提供VPN连接的服务的服务失败。"
+#: ../../network/state_handler.go:94
+#, fuzzy
+msgid "VPN connection service failed to start."
+msgstr "共享连接服务启动失败。"
 
-#: ../../network/state_handler.go:74
+#: ../../network/state_handler.go:95
 msgid "Necessary secrets for the VPN connection were not provided."
 msgstr "并未提供必要的秘密VPN连接。"
 
-#: ../../network/state_handler.go:75
+#: ../../network/state_handler.go:96
 msgid "Authentication to the VPN server failed."
 msgstr "验证到VPN服务器失败。"
 
-#: ../../network/state_handler.go:76
+#: ../../network/state_handler.go:97
 msgid "The connection was deleted from settings."
 msgstr "该连接是从设置中删除。"
 
-#: ../../network/state_handler.go:133
+#: ../../network/state_handler.go:154
 msgid "Connected"
 msgstr "已连接"
 
-#: ../../network/state_handler.go:158
+#: ../../network/state_handler.go:179 ../../network/state_handler.go:228
 msgid "Disconnect"
 msgstr "断开"
 
-#: ../../network/state_handler.go:187
+#: ../../network/state_handler.go:208
 msgid "Offline"
 msgstr "离线"
 
-#: ../../network/state_handler.go:187
+#: ../../network/state_handler.go:208
 msgid "Disconnected - You are now offline."
 msgstr "断开连接 - 当前已离线"
+
+#: ../../network/state_handler.go:228
+msgid "Access Point (AP) mode is not supported by this device."
+msgstr ""
 
 #: ../../power/upower.go:86 ../../power/upower.go:101
 msgid "Battery cirtical low"
@@ -4192,14 +4216,48 @@ msgstr "计算机将很快进入待机状态，请插入电源。"
 msgid "Battery low"
 msgstr "电池电量低"
 
-#~ msgid "_Run"
-#~ msgstr "运行(_R)"
+#~ msgid "Wi-Fi"
+#~ msgstr "Wi-Fi"
 
-#~ msgid "_Undock"
-#~ msgstr "移除驻留(_U)"
+#~ msgid "Wi-Fi Ad-Hoc"
+#~ msgstr "Wi-Fi点对点"
 
-#~ msgid "_Close All"
-#~ msgstr "关闭所有(_C)"
+#~ msgid "Wi-Fi Hotspot"
+#~ msgstr "Wi-Fi热点"
 
-#~ msgid "_Dock"
-#~ msgstr "驻留(_D)"
+#~ msgid "PPPoE"
+#~ msgstr "PPPoE"
+
+#~ msgid "Mobile GSM (GPRS, EDGE, UMTS, HSPA)"
+#~ msgstr "移动GSM（GPRS，EDGE，UMTS，HSPA）"
+
+#~ msgid "Mobile CDMA (1xRTT, EVDO)"
+#~ msgstr "移动CDMA（1xRTT的，EVDO）"
+
+#~ msgid "VPN-L2TP (Layer 2 Tunneling Protocol)"
+#~ msgstr "VPN-L2TP（第二层隧道协议）"
+
+#~ msgid "VPN-OpenConnect (Cisco AnyConnect Compatible VPN)"
+#~ msgstr "VPN-OPENCONNECT（思科的AnyConnect VPN兼容）"
+
+#~ msgid "VPN-PPTP (Point-to-Point Tunneling Protocol))"
+#~ msgstr "VPN-PPTP（点对点点对点隧道协议））"
+
+#~ msgid "VPN-VPNC (Cisco Compatible VPN)"
+#~ msgstr "VPN-VPNC（思科兼容的VPN）"
+
+#~ msgid "*99#"
+#~ msgstr "* 99＃"
+
+#~ msgid ""
+#~ "The VPN connection %s changed state because the device it was using was "
+#~ "disconnected."
+#~ msgstr "VPN连接%s状态发生了改变，因为它使用的设备已断开。"
+
+#~ msgid "The service providing the VPN connection was stopped."
+#~ msgstr "提供VPN连接的服务已停止。"
+
+#~ msgid ""
+#~ "Starting the service starting the service providing the VPN connection "
+#~ "failed."
+#~ msgstr "启动开始提供VPN连接的服务的服务失败。"
