@@ -3,6 +3,9 @@ package audio
 import "dlib/dbus"
 import "dlib/pulse"
 import "fmt"
+import "io/ioutil"
+import "path"
+import "strings"
 
 const (
 	baseBusName = "com.deepin.daemon.Audio"
@@ -345,11 +348,17 @@ func (s *Source) setPropActivePort(v Port) {
 
 func (s *SinkInput) update() {
 	s.Name = s.core.PropList[PropAppName]
-	if s.Name == "deepin-movie" {
-		s.Icon = "deepin-movie"
-	} else {
-		s.Icon = s.core.PropList[PropAppIconName]
+	s.Icon = s.core.PropList[PropAppIconName]
+
+	pid := s.core.PropList[PropAppPID]
+	filePath := path.Join("/proc", pid, "cmdline")
+	contents, err := ioutil.ReadFile(filePath)
+	if err == nil {
+		if strings.Contains(string(contents), "deepin-movie") {
+			s.Name = "deepin-movie"
+		}
 	}
+
 	s.setPropVolume(s.core.Volume.Avg())
 	s.setPropMute(s.core.Mute)
 
