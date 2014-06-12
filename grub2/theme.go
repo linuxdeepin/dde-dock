@@ -74,7 +74,7 @@ type Theme struct {
 	tplJSONData *TplJSONData
 
 	Updating   bool
-	updateLock sync.Locker
+	updateLock sync.Mutex
 
 	background        string // absolute background file path
 	Background        string // background thumbnail, used by front-end
