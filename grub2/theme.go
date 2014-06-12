@@ -138,7 +138,7 @@ func (theme *Theme) regenerateBackgroundIfNeed() {
 	needGenerate := false
 	logger.Debugf("screen resolution: %dx%d, source background: %dx%d, background: %dx%d",
 		screenWidth, screenHeight, srcbgw, srcbgh, bgw, bgh)
-	if srcbgw >= int32(screenWidth) && srcbgh >= int32(screenHeight) {
+	if srcbgw >= int(screenWidth) && srcbgh >= int(screenHeight) {
 		// source background is bigger than screen resolution, so the
 		// background should equal with screen resolution
 		if delta(float64(bgw), float64(screenWidth)) > 5 ||

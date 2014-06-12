@@ -161,11 +161,9 @@ func (setup *SetupWrapper) DoGenerateThemeBackground(screenWidth, screenHeight u
 		return false, err
 	}
 	logger.Infof("source background size %dx%d", imgWidth, imgHeight)
-
-	x0, y0, x1, y1 := getImgClipRectByResolution(screenWidth, screenHeight, imgWidth, imgHeight)
-	logger.Infof("background clip rect (%d,%d), (%d,%d)", x0, y0, x1, y1)
-	logger.Infof("background size %dx%d", x1-x0, y1-y0)
-	err = graphic.ClipImage(themeBgSrcFile, themeBgFile, x0, y0, x1, y1, graphic.PNG)
+	logger.Infof("background size %dx%d", screenWidth, screenHeight)
+	err = graphic.FillImage(themeBgSrcFile, themeBgFile, int(screenWidth), int(screenHeight),
+		graphic.FillProportionCenterScale, graphic.PNG)
 	if err != nil {
 		logger.Error(err.Error())
 		return false, err
