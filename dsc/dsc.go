@@ -19,7 +19,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package main
+package dsc
 
 import (
 	"dlib/utils"
@@ -28,7 +28,8 @@ import (
 	"time"
 )
 
-var objUtil = utils.NewUtils()
+var Utils = utils.NewUtils()
+var quitFlag = make(chan bool)
 
 const (
 	DSC_CONFIG_PATH = ".config/deepin-software-center/config_info.ini"
@@ -42,36 +43,42 @@ func setDSCAutoUpdate(interval time.Duration) {
 	for {
 		timer := time.After(time.Hour * interval)
 		select {
+		case <-quitFlag:
+			return
 		case <-timer:
 			go exec.Command("/usr/bin/dsc-daemon", []string{"--no-daemon"}...).Run()
 		}
 	}
 }
 
-func dscAutoUpdate() {
-	homeDir, ok := objUtil.GetHomeDir()
+func Start() {
+	homeDir, ok := Utils.GetHomeDir()
 	if !ok {
 		return
 	}
 	filename := path.Join(homeDir, DSC_CONFIG_PATH)
-	if !objUtil.IsFileExist(filename) {
+	if !Utils.IsFileExist(filename) {
 		return
 	}
 
-	interval, ok1 := objUtil.ReadKeyFromKeyFile(filename,
+	interval, ok1 := Utils.ReadKeyFromKeyFile(filename,
 		"update", "interval", int32(0))
 	if !ok1 {
 		interval = 3
 	}
 	isUpdate := true
-	str, _ := objUtil.ReadKeyFromKeyFile(filename,
+	str, _ := Utils.ReadKeyFromKeyFile(filename,
 		"update", "auto", "")
 	if v, ok := str.(string); ok && v == "False" {
 		isUpdate = false
 	}
 	if isUpdate {
 		if i, ok := interval.(int32); ok {
-			setDSCAutoUpdate(time.Duration(i))
+			go setDSCAutoUpdate(time.Duration(i))
 		}
 	}
+}
+
+func Stop() {
+	quitFlag <- true
 }

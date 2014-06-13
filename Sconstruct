@@ -31,7 +31,9 @@ components = ['accounts',
               'power',
               'screen_edges',
               'systeminfo',
-              'themes'
+              'themes',
+              'dsc',
+              'mpris'
               ]
 
 SConsignFile()

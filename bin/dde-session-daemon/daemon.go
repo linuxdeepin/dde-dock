@@ -20,6 +20,9 @@ import _ "dde-daemon/mounts"
 import _ "dde-daemon/dock"
 import _ "dde-daemon/launcher"
 
+import _ "dde-daemon/dsc"
+import _ "dde-daemon/mpris"
+
 import "dlib/glib-2.0"
 
 //#cgo pkg-config:gtk+-3.0

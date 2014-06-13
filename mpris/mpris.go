@@ -19,7 +19,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package main
+package mpris
 
 import (
 	libkeybind "dbus/com/deepin/daemon/keybinding"
@@ -27,6 +27,7 @@ import (
 	liblogin1 "dbus/org/freedesktop/login1"
 	libmpris "dbus/org/mpris/mediaplayer2"
 	"dlib/gio-2.0"
+	"dlib/logger"
 	"os/exec"
 	"strings"
 )
@@ -42,11 +43,20 @@ const (
 )
 
 var (
+	Logger      = logger.NewLogger("mpris")
 	dbusObj     *libdbus.DBusDaemon
 	mediaKeyObj *libkeybind.MediaKey
 	loginObj    *liblogin1.Manager
 	prevSender  = ""
 )
+
+func getCommandByMimeType(mimeType string) (string, bool) {
+	if appInfo := gio.AppInfoGetDefaultForType(mimeType, false); appInfo != nil {
+		return appInfo.GetExecutable(), true
+	}
+
+	return "", false
+}
 
 func getMprisClients() ([]string, bool) {
 	list := []string{}
@@ -285,38 +295,32 @@ func listenAudioSignal() {
 	})
 }
 
-func startMprisDaemon() {
+func Start() {
+	Logger.BeginTracing()
 	var err error
 
 	dbusObj, err = libdbus.NewDBusDaemon("org.freedesktop.DBus",
 		"/")
 	if err != nil {
-		Logger.Error("New DBusDaemon Failed: ", err)
-		panic(err)
+		Logger.Fatal("New DBusDaemon Failed: ", err)
 	}
 
 	mediaKeyObj, err = libkeybind.NewMediaKey(
 		"com.deepin.daemon.KeyBinding",
 		"/com/deepin/daemon/MediaKey")
 	if err != nil {
-		Logger.Error("New MediaKey Object Failed: ", err)
-		panic(err)
+		Logger.Fatal("New MediaKey Object Failed: ", err)
 	}
 
 	loginObj, err = liblogin1.NewManager("org.freedesktop.login1",
 		"/org/freedesktop/login1")
 	if err != nil {
-		Logger.Error("New Login1 Manager Failed: ", err)
-		panic(err)
+		Logger.Fatal("New Login1 Manager Failed: ", err)
 	}
 
 	listenAudioSignal()
 }
 
-func getCommandByMimeType(mimeType string) (string, bool) {
-	if appInfo := gio.AppInfoGetDefaultForType(mimeType, false); appInfo != nil {
-		return appInfo.GetExecutable(), true
-	}
-
-	return "", false
+func Stop() {
+	Logger.EndTracing()
 }
