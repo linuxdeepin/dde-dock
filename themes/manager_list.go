@@ -34,8 +34,7 @@ const (
 	THEME_TYPE_SYSTEM = 0
 	THEME_TYPE_LOCAL  = 1
 
-	BG_CACHE_DIR    = "cache/wallpapers"
-	THEME_CACHE_DIR = "ccache/themes"
+	THUMB_CACHE_DIR = "cache"
 )
 
 type pathInfo struct {
@@ -319,17 +318,17 @@ func getBackgroundList() []ThemeInfo {
 	return bgList
 }
 
-func getBgCachePath(src string) string {
+func getCachePath(t, src string) string {
 	src, _ = objUtil.URIToPath(src)
 	homeDir, _ := objUtil.GetHomeDir()
-	bgDir := path.Join(homeDir, PERSON_LOCAL_BASE_PATH, BG_CACHE_DIR)
-	md5Str, _ := getStrMd5(src)
+	bgDir := path.Join(homeDir, PERSON_LOCAL_BASE_PATH, THUMB_CACHE_DIR)
+	md5Str, _ := getStrMd5(t + src)
 	filename := path.Join(bgDir, md5Str+".png")
 	if objUtil.IsFileExist(filename) {
 		return filename
 	}
 
-	filename = path.Join(PERSON_SYS_BASE_PATH, BG_CACHE_DIR, md5Str+".png")
+	filename = path.Join(PERSON_SYS_BASE_PATH, THUMB_CACHE_DIR, md5Str+".png")
 	if objUtil.IsFileExist(filename) {
 		return filename
 	}
@@ -474,24 +473,6 @@ func isThemeInfoListEqual(list1, list2 []ThemeInfo) bool {
 	return true
 }
 
-func getThemeCachePath(src string) string {
-	src, _ = objUtil.URIToPath(src)
-	homeDir, _ := objUtil.GetHomeDir()
-	dir := path.Join(homeDir, PERSON_LOCAL_BASE_PATH, THEME_CACHE_DIR)
-	md5Str, _ := getStrMd5(src)
-	filename := path.Join(dir, md5Str+".png")
-	if objUtil.IsFileExist(filename) {
-		return filename
-	}
-
-	filename = path.Join(PERSON_SYS_BASE_PATH, THEME_CACHE_DIR, md5Str+".png")
-	if objUtil.IsFileExist(filename) {
-		return filename
-	}
-
-	return ""
-}
-
 func getDThemeThumb(name string) string {
 	if name == "Custom" {
 		if t, ok := GetManager().themeObjMap[name]; ok {
@@ -519,7 +500,7 @@ func getGtkThumb(name string) string {
 
 	for _, l := range list {
 		if name == l.Name {
-			dest := getThemeCachePath(l.Path)
+			dest := getCachePath("--gtk", l.Path)
 			if len(dest) > 0 {
 				return dest
 			}
@@ -534,7 +515,7 @@ func getIconThumb(name string) string {
 
 	for _, l := range list {
 		if name == l.Name {
-			dest := getThemeCachePath(l.Path)
+			dest := getCachePath("--icon", l.Path)
 			if len(dest) > 0 {
 				return dest
 			}
@@ -549,7 +530,7 @@ func getCursorThumb(name string) string {
 
 	for _, l := range list {
 		if name == l.Name {
-			dest := getThemeCachePath(l.Path)
+			dest := getCachePath("--cursor", l.Path)
 			if len(dest) > 0 {
 				return dest
 			}
@@ -560,7 +541,7 @@ func getCursorThumb(name string) string {
 }
 
 func getBgThumb(bg string) string {
-	dest := getBgCachePath(bg)
+	dest := getCachePath("--background", bg)
 	if len(dest) > 0 {
 		return dest
 	}
