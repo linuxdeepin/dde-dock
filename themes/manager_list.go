@@ -22,10 +22,12 @@
 package themes
 
 import (
+	"math/rand"
 	"os"
 	"path"
 	"regexp"
 	"strings"
+	"time"
 )
 
 const (
@@ -495,7 +497,7 @@ func getDThemeThumb(name string) string {
 		if t, ok := GetManager().themeObjMap[name]; ok {
 			return GetManager().GetThumbnail("background", t.Background)
 		}
-		return ""
+		return getThumbBg()
 	}
 
 	list := getDThemeList()
@@ -509,11 +511,10 @@ func getDThemeThumb(name string) string {
 		}
 	}
 
-	return ""
+	return getThumbBg()
 }
 
 func getGtkThumb(name string) string {
-	return "/usr/share/personalization/thumb_bg/10.png"
 	list := getGtkThemeList()
 
 	for _, l := range list {
@@ -525,11 +526,10 @@ func getGtkThumb(name string) string {
 		}
 	}
 
-	return ""
+	return getThumbBg()
 }
 
 func getIconThumb(name string) string {
-	return "/usr/share/personalization/thumb_bg/10.png"
 	list := getIconThemeList()
 
 	for _, l := range list {
@@ -541,11 +541,10 @@ func getIconThumb(name string) string {
 		}
 	}
 
-	return ""
+	return getThumbBg()
 }
 
 func getCursorThumb(name string) string {
-	return "/usr/share/personalization/thumb_bg/10.png"
 	list := getCursorThemeList()
 
 	for _, l := range list {
@@ -557,15 +556,23 @@ func getCursorThumb(name string) string {
 		}
 	}
 
-	return ""
+	return getThumbBg()
 }
 
 func getBgThumb(bg string) string {
-	return "/usr/share/personalization/thumb_bg/10.png"
 	dest := getBgCachePath(bg)
 	if len(dest) > 0 {
 		return dest
 	}
 
-	return ""
+	return getThumbBg()
+}
+
+func getThumbBg() string {
+	list, _ := getImageList("/usr/share/personalization/thumb_bg")
+	l := len(list)
+	rand.Seed(time.Now().UnixNano())
+	n := rand.Intn(l)
+
+	return list[n]
 }
