@@ -139,12 +139,17 @@ func (p *Power) updateIdletimer() {
 }
 
 func (p *Power) updatePlanInfo() {
+	acDelay := p.coreSettings.GetInt("ac-idle-delay")
+	acSuspend := p.coreSettings.GetInt("ac-suspend-delay")
+	batteryDelay := p.coreSettings.GetInt("battery-idle-delay")
+	batterySuspend := p.coreSettings.GetInt("battery-suspend-delay")
+
 	info := fmt.Sprintf(`{
 		"PowerLine":{"Custom":[%d,%d], "PowerSaver":[%d,%d], "Balanced":[%d,%d],"HighPerformance":[%d,%d]},
 		"Battery":{"Custom":[%d,%d], "PowerSaver":[%d,%d], "Balanced":[%d,%d],"HighPerformance":[%d,%d]}
-	}`, p.LinePowerIdleDelay, p.LinePowerSuspendDelay, PowerSaverIdleTime, PowerSaverSuspendTime,
+	}`, acDelay, acSuspend, PowerSaverIdleTime, PowerSaverSuspendTime,
 		BlancedIdleTime, BlancedSuspendTime, HighPerformanceIdleTime, HighPerformanceSuspendTime,
-		p.BatteryIdleDelay, p.BatterySuspendDelay, PowerSaverIdleTime, PowerSaverSuspendTime,
+		batteryDelay, batterySuspend, PowerSaverIdleTime, PowerSaverSuspendTime,
 		BlancedIdleTime, BlancedSuspendTime, HighPerformanceIdleTime, HighPerformanceSuspendTime,
 	)
 	p.setPropPlanInfo(info)
