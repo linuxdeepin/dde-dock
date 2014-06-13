@@ -254,8 +254,15 @@ func (obj *Theme) handleEvent() {
 				break
 			}
 
+			if ev.IsDelete() {
+				obj.endWatch()
+				obj.startWatch()
+				break
+			}
+
 			if ev.IsModify() {
 				obj.setAllProps()
+				obj.setAllThemes()
 			}
 		case err, ok := <-obj.watcher.Error:
 			if !ok || err != nil {

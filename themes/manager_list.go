@@ -167,7 +167,18 @@ func getIconThemeList() []ThemeInfo {
 		localList = append(localList, l)
 	}
 
-	return localList
+	list := []ThemeInfo{}
+	for _, l := range localList {
+		filename := path.Join(l.Path, "index.theme")
+		_, ok := objUtil.ReadKeyFromKeyFile(filename,
+			"Icon Theme", "Directories", []string{})
+		if !ok {
+			continue
+		}
+		list = append(list, l)
+	}
+
+	return list
 }
 
 func getCursorThemeList() []ThemeInfo {

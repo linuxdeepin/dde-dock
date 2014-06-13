@@ -60,9 +60,9 @@ func GetManager() *Manager {
 
 func (obj *Manager) isThemeExit(gtk, icon, sound, cursor, bg string, fontSize int32) (string, bool) {
 	for _, t := range obj.themeObjMap {
-		if gtk == t.GtkTheme || icon == t.IconTheme ||
-			sound == t.SoundTheme || cursor == t.CursorTheme ||
-			bg == t.Background || fontSize == t.FontSize {
+		if gtk == t.GtkTheme && icon == t.IconTheme &&
+			sound == t.SoundTheme && cursor == t.CursorTheme &&
+			bg == t.Background && fontSize == t.FontSize {
 			return t.Name, true
 		}
 	}
@@ -77,10 +77,10 @@ func (obj *Manager) modifyTheme(name, gtk, icon, sound, cursor, bg string, fontS
 		if str, ok := obj.mkdirTheme(name); !ok {
 			return false
 		} else {
-			filename = path.Join(str, "them.ini")
+			filename = path.Join(str, "theme.ini")
 		}
 	} else {
-		filename = path.Join(t.filePath, "them.ini")
+		filename = path.Join(t.filePath, "theme.ini")
 	}
 
 	kf := glib.NewKeyFile()

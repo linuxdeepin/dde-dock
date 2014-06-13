@@ -143,16 +143,16 @@ func newTheme(info ThemeInfo) *Theme {
 	t.objectPath = THEME_PATH + t.Name
 	//t.setAllThemes()
 
-	var err error
-	t.watcher, err = fsnotify.NewWatcher()
-	if err != nil {
-		Logger.Errorf("New Watcher Failed: %v", err)
-		panic(err)
-	}
-
-	t.quitFlag = make(chan bool)
-
 	if t.Type == THEME_TYPE_LOCAL {
+		var err error
+		t.watcher, err = fsnotify.NewWatcher()
+		if err != nil {
+			Logger.Errorf("New Watcher Failed: %v", err)
+			panic(err)
+		}
+
+		t.quitFlag = make(chan bool)
+
 		t.startWatch()
 		go t.handleEvent()
 	}
