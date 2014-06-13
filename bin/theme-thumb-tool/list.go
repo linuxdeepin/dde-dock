@@ -208,7 +208,7 @@ func getIconList() []pathInfo {
 func getCursorList() []pathInfo {
 	list := []pathInfo{}
 	sysDirs := []pathInfo{pathInfo{ICON_SYS_PATH, THEME_TYPE_SYS}}
-	conditions := []string{"cursors", "index.theme"}
+	conditions := []string{"cursors", "cursor.theme"}
 	sysList := getThemeList(sysDirs, conditions)
 
 	homeDir, ok := objUtil.GetHomeDir()
