@@ -47,10 +47,10 @@ type connectionData map[string]map[string]dbus.Variant
 
 type Manager struct {
 	// update by manager.go
-	WiredEnabled      bool          `access:"readwrite"`
+	NetworkingEnabled bool          `access:"readwrite"`
+	WiredEnabled      bool          `access:"readwrite"` // TODO
 	VpnEnabled        bool          `access:"readwrite"` // TODO
 	WirelessEnabled   dbus.Property `access:"readwrite"`
-	NetworkingEnabled dbus.Property `access:"readwrite"`
 	State             uint32        // networking state
 
 	activeConnections []*activeConnection
@@ -109,7 +109,10 @@ func DestroyManager(m *Manager) {
 func (m *Manager) initManager() {
 	m.WiredEnabled = true // TODO
 	m.WirelessEnabled = property.NewWrapProperty(m, "WirelessEnabled", nmManager.WirelessEnabled)
-	m.NetworkingEnabled = property.NewWrapProperty(m, "NetworkingEnabled", nmManager.NetworkingEnabled)
+	m.updatePropNetworkingEnabled()
+	nmManager.NetworkingEnabled.ConnectChanged(func() {
+		m.updatePropNetworkingEnabled()
+	})
 
 	m.initDeviceManage()
 	m.initConnectionManage()

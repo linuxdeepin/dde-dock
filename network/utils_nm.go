@@ -605,3 +605,11 @@ func nmGetDeviceActiveConnectionData(devPath dbus.ObjectPath) (data connectionDa
 	}
 	return
 }
+
+func nmManagerEnable(enable bool) (err error) {
+	err = nmManager.Enable(enable)
+	if err != nil {
+		logger.Error(err)
+	}
+	return
+}

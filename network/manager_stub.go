@@ -25,6 +25,28 @@ import (
 	"dlib/dbus"
 )
 
+func (m *Manager) OnPropertiesChanged(name string, oldv interface{}) {
+	defer func() {
+		if err := recover(); err != nil {
+			logger.Errorf("%v", err)
+		}
+	}()
+	logger.Debug("OnPropertiesChanged: " + name)
+	switch name {
+	case "NetworkingEnabled":
+		if m.NetworkingEnabled != nmManager.NetworkingEnabled.Get() {
+			nmManagerEnable(m.NetworkingEnabled)
+		} else {
+			logger.Warning("NetworkingEnabled already", m.NetworkingEnabled)
+		}
+	}
+}
+
+func (m *Manager) updatePropNetworkingEnabled() {
+	m.NetworkingEnabled = nmManager.NetworkingEnabled.Get()
+	dbus.NotifyChange(m, "NetworkingEnabled")
+}
+
 func (m *Manager) updatePropActiveConnections() {
 	m.ActiveConnections, _ = marshalJSON(m.activeConnections)
 	dbus.NotifyChange(m, "ActiveConnections")
