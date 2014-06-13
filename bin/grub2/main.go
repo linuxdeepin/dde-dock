@@ -22,7 +22,6 @@
 package main
 
 import (
-	// "../../grub2" // only for test
 	"dde-daemon/grub2"
 	liblogger "dlib/logger"
 	"flag"
@@ -39,7 +38,6 @@ var (
 )
 
 func main() {
-	// TODO remove "--setup" argument and rename application to "grub2-setup"
 	flag.BoolVar(&argDebug, "d", false, "debug mode")
 	flag.BoolVar(&argDebug, "debug", false, "debug mode")
 	flag.BoolVar(&argSetup, "setup", false, "setup grub and exit")
@@ -66,10 +64,12 @@ func main() {
 		fmt.Println("gfxmode:", argGfxmode)
 	}
 
-	grub := grub2.NewGrub2()
+	g := grub2.NewGrub2()
 	if argSetupTheme {
-		grub.SetupTheme(argGfxmode)
+		g.SetupTheme(argGfxmode)
+	} else if argSetup {
+		g.Setup(argGfxmode)
 	} else {
-		grub.Setup(argGfxmode)
+		grub2.RunAsDaemon()
 	}
 }

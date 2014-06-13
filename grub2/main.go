@@ -22,31 +22,43 @@
 package grub2
 
 import (
+	"dlib"
 	"dlib/dbus"
 	liblogger "dlib/logger"
 	"os"
+	"time"
 )
 
 var (
-	logger     = liblogger.NewLogger(grubDest)
-	running    bool
-	notifyStop = make(chan int, 100)
+	logger = liblogger.NewLogger(dbusGrubDest)
+	grub   *Grub2
 )
+
+func RunAsDaemon() {
+	if !dlib.UniqueOnSession(dbusGrubDest) {
+		logger.Warning("dbus unique:", dbusGrubDest)
+		return
+	}
+	Start()
+	// TODO
+	dbus.SetAutoDestroyHandler(1*time.Second, func() bool {
+		if grub.Updating || grub.theme.Updating {
+			return false
+		} else {
+			return true
+		}
+	})
+	if err := dbus.Wait(); err != nil {
+		logger.Error("lost dbus session:", err)
+		os.Exit(1)
+	}
+}
 
 func Start() {
 	logger.BeginTracing()
 	defer logger.EndTracing()
 
-	if running {
-		logger.Info(grubDest, "already running")
-		return
-	}
-	running = true
-	defer func() {
-		running = false
-	}()
-
-	grub := NewGrub2()
+	grub = NewGrub2()
 	err := dbus.InstallOnSession(grub)
 	if err != nil {
 		logger.Errorf("register dbus interface failed: %v", err)
@@ -61,22 +73,11 @@ func Start() {
 	// initialize grub2 after dbus service installed to ensure
 	// property changed signal send success
 	grub.initGrub2()
-
 	dbus.DealWithUnhandledMessage()
-
-	notifyStop = make(chan int, 100) // reset signal to avoid repeat stop action
-	select {
-	case <-notifyStop:
-	}
-	DestroyGrub2(grub)
 }
 
 func Stop() {
-	if !running {
-		logger.Info(grubDest, "already stopped")
-		return
-	}
-	notifyStop <- 1
+	DestroyGrub2(grub)
 }
 
 func SetLoggerLevel(level liblogger.Priority) {

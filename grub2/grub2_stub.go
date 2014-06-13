@@ -27,17 +27,17 @@ import (
 )
 
 const (
-	grubDest = "com.deepin.daemon.Grub2"
-	grubPath = "/com/deepin/daemon/Grub2"
-	grubIfs  = "com.deepin.daemon.Grub2"
+	dbusGrubDest = "com.deepin.daemon.Grub2"
+	dbusGrubPath = "/com/deepin/daemon/Grub2"
+	dbusGrubIfs  = "com.deepin.daemon.Grub2"
 )
 
 // GetDBusInfo implements interface of dbus.DBusObject.
 func (grub *Grub2) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		grubDest,
-		grubPath,
-		grubIfs,
+		dbusGrubDest,
+		dbusGrubPath,
+		dbusGrubIfs,
 	}
 }
 
