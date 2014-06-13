@@ -16,6 +16,7 @@ import _ "dde-daemon/bluetooth"
 
 import _ "dde-daemon/network"
 import _ "dde-daemon/mounts"
+import _ "dde-daemon/inputdevices"
 
 import _ "dde-daemon/dock"
 import _ "dde-daemon/launcher"
@@ -35,6 +36,7 @@ import "dlib/logger"
 import "os"
 import "dlib/dbus"
 import "dde-daemon"
+import "fmt"
 
 var Logger = logger.NewLogger("com.deepin.daemon")
 
@@ -57,6 +59,7 @@ func main() {
 	C.init()
 
 	loader.Start()
+	fmt.Println("Start ok...........")
 	defer loader.Stop()
 
 	go func() {
