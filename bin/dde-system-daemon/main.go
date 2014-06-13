@@ -6,7 +6,6 @@ import "dlib"
 import "dlib/dbus"
 import "os"
 import _ "dde-daemon/accounts"
-import _ "dde-daemon/systeminfo"
 import "dde-daemon"
 
 var Logger = logger.NewLogger("com.deepin.daemon")
