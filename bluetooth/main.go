@@ -27,24 +27,13 @@ import (
 )
 
 var (
-	logger     = liblogger.NewLogger(dbusBluetoothDest)
-	bluetooth  *Bluetooth
-	running    bool
-	notifyStop = make(chan int, 100)
+	logger    = liblogger.NewLogger(dbusBluetoothDest)
+	bluetooth *Bluetooth
 )
 
 func Start() {
 	logger.BeginTracing()
 	defer logger.EndTracing()
-
-	if running {
-		logger.Info(dbusBluetoothDest, "already running")
-		return
-	}
-	running = true
-	defer func() {
-		running = false
-	}()
 
 	// TODO
 	//if !dlib.UniqueOnSession(dbusBluetoothDest) {
@@ -63,18 +52,8 @@ func Start() {
 	// initialize bluetooth after dbus interface installed
 	bluetooth.initBluetooth()
 	dbus.DealWithUnhandledMessage()
-
-	notifyStop = make(chan int, 100) // reset signal to avoid repeat stop action
-	select {
-	case <-notifyStop:
-	}
-	DestroyBluetooth(bluetooth)
 }
 
 func Stop() {
-	if !running {
-		logger.Info(dbusBluetoothDest, "already stopped")
-		return
-	}
-	notifyStop <- 1
+	DestroyBluetooth(bluetooth)
 }

@@ -27,24 +27,13 @@ import (
 )
 
 var (
-	logger     = liblogger.NewLogger(dbusNetworkDest)
-	manager    *Manager
-	running    bool
-	notifyStop = make(chan int, 100)
+	logger  = liblogger.NewLogger(dbusNetworkDest)
+	manager *Manager
 )
 
 func Start() {
 	logger.BeginTracing()
 	defer logger.EndTracing()
-
-	if running {
-		logger.Info(dbusNetworkDest, "already running")
-		return
-	}
-	running = true
-	defer func() {
-		running = false
-	}()
 
 	// TODO
 	/*
@@ -66,18 +55,8 @@ func Start() {
 	// initialize manager after dbus installed
 	manager.initManager()
 	dbus.DealWithUnhandledMessage()
-
-	notifyStop = make(chan int, 100) // reset signal to avoid repeat stop action
-	select {
-	case <-notifyStop:
-	}
-	DestroyManager(manager)
 }
 
 func Stop() {
-	if !running {
-		logger.Info(dbusNetworkDest, "already stopped")
-		return
-	}
-	notifyStop <- 1
+	DestroyManager(manager)
 }
