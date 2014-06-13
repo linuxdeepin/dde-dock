@@ -186,29 +186,55 @@ func (obj *Manager) handleUserInfoChanged() {
 			}
 
 			logger.Info("User Info Event:", ev)
+			ok3, _ := regexp.MatchString(ICON_SYSTEM_DIR, ev.Name)
+			ok4, _ := regexp.MatchString(ICON_LOCAL_DIR, ev.Name)
+			if ok3 || ok4 {
+				if !_handleFlag {
+					var mutex sync.Mutex
+					mutex.Lock()
+					_handleFlag = true
+					obj.updateAllUserInfo()
+					_handleFlag = false
+					mutex.Unlock()
+				}
+				break
+			}
+
+			if ev.IsDelete() {
+				obj.removeUserInfoFileWatch()
+				obj.watchUserInfoFile()
+				break
+			}
+
 			ok1, _ := regexp.MatchString(ETC_GROUP, ev.Name)
+			if ok1 {
+				for _, u := range obj.pathUserMap {
+					u.updatePropAccountType(u.getPropAccountType())
+				}
+				break
+			}
+
 			ok2, _ := regexp.MatchString(ETC_SHADOW, ev.Name)
-			//ok3, _ := regexp.MatchString(ICON_SYSTEM_DIR, ev.Name)
-			//ok4, _ := regexp.MatchString(ICON_LOCAL_DIR, ev.Name)
+			if ok2 {
+				infos := getUserInfoList()
+				for _, info := range infos {
+					u, ok := obj.pathUserMap[obj.FindUserByName(info.Name)]
+					if !ok {
+						continue
+					}
+					u.updatePropLocked(info.Locked)
+				}
+				break
+			}
+
 			ok5, _ := regexp.MatchString(ETC_LIGHTDM_CONFIG, ev.Name)
 			ok6, _ := regexp.MatchString(ETC_GDM_CONFIG, ev.Name)
 			ok7, _ := regexp.MatchString(ETC_KDM_CONFIG, ev.Name)
-
-			if ok1 || ok2 || ok5 || ok6 || ok7 {
-				if ev.IsDelete() {
-					obj.removeUserInfoFileWatch()
-					obj.watchUserInfoFile()
-					break
+			if ok5 || ok6 || ok7 {
+				for _, u := range obj.pathUserMap {
+					u.updatePropAutomaticLogin(u.getPropAutomaticLogin())
 				}
-			}
-
-			if !_handleFlag {
-				var mutex sync.Mutex
-				mutex.Lock()
-				_handleFlag = true
-				obj.updateAllUserInfo()
-				_handleFlag = false
-				mutex.Unlock()
+				break
 			}
 		case err, ok := <-obj.infoWatcher.Error:
 			if !ok || err != nil {
