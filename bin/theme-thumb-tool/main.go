@@ -28,7 +28,7 @@ package main
 import "C"
 
 import (
-	"dbus/com/deepin/sessionmanager"
+	//"dbus/com/deepin/sessionmanager"
 	"dlib/graphic"
 	"dlib/utils"
 	"fmt"
@@ -42,7 +42,7 @@ import (
 )
 
 var (
-	objXS   *sessionmanager.XSettings
+	//objXS   *sessionmanager.XSettings
 	objUtil = utils.NewUtils()
 )
 
@@ -92,6 +92,7 @@ func getThumbCachePath(t, src string, isSystem bool) string {
 	return ""
 }
 
+/*
 func genCursorThumbnail(info pathInfo, dest, bg string) bool {
 	theme := path.Base(info.Path)
 	if len(theme) < 1 || len(dest) < 1 || len(bg) < 1 {
@@ -123,6 +124,7 @@ func genCursorThumbnail(info pathInfo, dest, bg string) bool {
 
 	return true
 }
+*/
 
 func genIconThumbnail(info pathInfo, dest, bg string) bool {
 	if len(dest) < 1 || len(bg) < 1 {
@@ -174,12 +176,14 @@ func main() {
 		return
 	}
 
-	var err error
-	if objXS, err = sessionmanager.NewXSettings("com.deepin.SessionManager", "/com/deepin/XSettings"); err != nil {
-		fmt.Printf("ERROR\n")
-		fmt.Printf("New XSettings Failed: %v\n", err)
-		return
-	}
+	/*
+		var err error
+		if objXS, err = sessionmanager.NewXSettings("com.deepin.SessionManager", "/com/deepin/XSettings"); err != nil {
+			fmt.Printf("ERROR\n")
+			fmt.Printf("New XSettings Failed: %v\n", err)
+			return
+		}
+	*/
 
 	C.init_env()
 
@@ -218,17 +222,20 @@ func main() {
 			}
 		}
 	case "--cursor":
-		list := getCursorList()
-		for _, l := range list {
-			dest := getThumbCachePath(op, l.Path, isSystem)
-			if len(dest) < 1 {
-				continue
+		return
+		/*
+			list := getCursorList()
+			for _, l := range list {
+				dest := getThumbCachePath(op, l.Path, isSystem)
+				if len(dest) < 1 {
+					continue
+				}
+				bg := getThumbBg()
+				if !genCursorThumbnail(l, dest, bg) {
+					fmt.Printf("ERROR: Generate Cursor Thumbnail\n")
+				}
 			}
-			bg := getThumbBg()
-			if !genCursorThumbnail(l, dest, bg) {
-				fmt.Printf("ERROR: Generate Cursor Thumbnail\n")
-			}
-		}
+		*/
 	case "--background":
 		list := getBgList()
 		for _, l := range list {
