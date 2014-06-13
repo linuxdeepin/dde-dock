@@ -29,21 +29,6 @@ import (
 
 var _handleFlag = false
 
-func (obj *Manager) listenWatchQuit() {
-	for {
-		select {
-		case <-obj.listQuit:
-			obj.watchUserListFile()
-			go obj.handleUserListChanged()
-		case <-obj.infoQuit:
-			obj.watchUserInfoFile()
-			go obj.handleUserInfoChanged()
-		case <-obj.endFlag:
-			return
-		}
-	}
-}
-
 func (obj *Manager) watchUserListFile() {
 	var err error
 
@@ -115,13 +100,15 @@ func (obj *Manager) removeUserInfoFileWatch() {
 func (obj *Manager) handleUserListChanged() {
 	for {
 		select {
-		case <-obj.listEndFlag:
+		case <-obj.listQuit:
 			return
 		case ev, ok := <-obj.listWatcher.Event:
 			if !ok {
-				obj.listWatcher = nil
-				obj.listQuit <- true
-				return
+				if obj.listWatcher != nil {
+					obj.removeUserListFileWatch()
+				}
+				obj.watchUserListFile()
+				break
 			}
 			if ev == nil {
 				break
@@ -167,9 +154,11 @@ func (obj *Manager) handleUserListChanged() {
 			}
 		case err, ok := <-obj.listWatcher.Error:
 			if !ok || err != nil {
-				obj.listWatcher = nil
-				obj.listQuit <- true
-				return
+				if obj.listWatcher != nil {
+					obj.removeUserListFileWatch()
+				}
+				obj.watchUserListFile()
+				break
 			}
 		}
 	}
@@ -178,13 +167,15 @@ func (obj *Manager) handleUserListChanged() {
 func (obj *Manager) handleUserInfoChanged() {
 	for {
 		select {
-		case <-obj.infoEndFlag:
+		case <-obj.infoQuit:
 			return
 		case ev, ok := <-obj.infoWatcher.Event:
 			if !ok {
-				obj.infoWatcher = nil
-				obj.infoQuit <- true
-				return
+				if obj.infoWatcher != nil {
+					obj.removeUserInfoFileWatch()
+				}
+				obj.watchUserInfoFile()
+				break
 			}
 			if ev == nil {
 				break
@@ -207,6 +198,7 @@ func (obj *Manager) handleUserInfoChanged() {
 				if ev.IsDelete() {
 					obj.removeUserInfoFileWatch()
 					obj.watchUserInfoFile()
+					break
 				}
 			}
 
@@ -220,22 +212,12 @@ func (obj *Manager) handleUserInfoChanged() {
 			}
 		case err, ok := <-obj.infoWatcher.Error:
 			if !ok || err != nil {
-				obj.infoWatcher = nil
-				obj.infoQuit <- true
-				return
+				if obj.infoWatcher != nil {
+					obj.removeUserInfoFileWatch()
+				}
+				obj.watchUserInfoFile()
+				break
 			}
-		}
-	}
-}
-
-func (obj *User) listenWatchQuit() {
-	for {
-		select {
-		case <-obj.endFlag:
-			return
-		case <-obj.watchQuit:
-			obj.watchUserConfig()
-			obj.handUserConfigChanged()
 		}
 	}
 }
@@ -263,13 +245,15 @@ func (obj *User) removeUserConfigWatch() {
 func (obj *User) handUserConfigChanged() {
 	for {
 		select {
-		case <-obj.endWatchFlag:
+		case <-obj.quitFlag:
 			return
 		case ev, ok := <-obj.watcher.Event:
 			if !ok {
-				obj.watcher = nil
-				obj.watchQuit <- true
-				return
+				if obj.watcher != nil {
+					obj.removeUserConfigWatch()
+				}
+				obj.watchUserConfig()
+				break
 			}
 			if ev == nil {
 				break
@@ -291,9 +275,11 @@ func (obj *User) handUserConfigChanged() {
 			}
 		case err, ok := <-obj.watcher.Error:
 			if !ok || err != nil {
-				obj.watcher = nil
-				obj.watchQuit <- true
-				return
+				if obj.watcher != nil {
+					obj.removeUserConfigWatch()
+				}
+				obj.watchUserConfig()
+				break
 			}
 		}
 	}

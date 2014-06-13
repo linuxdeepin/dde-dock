@@ -71,8 +71,7 @@ func (obj *Manager) destroyAllUser() {
 	mutex.Lock()
 	if len(obj.pathUserMap) > 0 {
 		for _, v := range obj.pathUserMap {
-			v.endFlag <- true
-			v.endWatchFlag <- true
+			v.quitFlag <- true
 			v.watcher.Close()
 			dbus.UnInstallObject(v)
 		}
@@ -88,4 +87,12 @@ func (obj *Manager) updateAllUserInfo() {
 	for _, path := range obj.UserList {
 		obj.updateUserInfo(path)
 	}
+}
+
+func (obj *Manager) destroy() {
+	obj.infoQuit <- true
+	obj.listQuit <- true
+	obj.infoWatcher.Close()
+	obj.listWatcher.Close()
+	obj.destroyAllUser()
 }

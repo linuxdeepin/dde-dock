@@ -108,6 +108,12 @@ func (obj *Manager) DeleteUser(dbusMsg dbus.DMessage, name string, removeFiles b
 	}
 
 	args := []string{}
+	user, ok := obj.pathUserMap[obj.FindUserByName(name)]
+	if ok {
+		if user.AutomaticLogin {
+			user.SetAutomaticLogin(dbusMsg, false)
+		}
+	}
 
 	if removeFiles {
 		args = append(args, "-r")

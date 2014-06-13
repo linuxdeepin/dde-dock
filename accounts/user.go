@@ -47,9 +47,7 @@ type User struct {
 	IconList       []string
 	objectPath     string
 	watcher        *fsnotify.Watcher
-	watchQuit      chan bool
-	endFlag        chan bool
-	endWatchFlag   chan bool
+	quitFlag       chan bool
 }
 
 func addUserToAdmList(name string) {
@@ -269,19 +267,14 @@ func newUser(path string) *User {
 	obj.Uid = info.Uid
 	obj.Gid = info.Gid
 
-	obj.watchQuit = make(chan bool)
-	obj.endFlag = make(chan bool)
-	obj.endWatchFlag = make(chan bool)
-
 	var err error
 	if obj.watcher, err = fsnotify.NewWatcher(); err != nil {
 		logger.Error("New watcher in newUser failed:", err)
 		panic(err)
 	}
+	obj.quitFlag = make(chan bool)
 	obj.watchUserConfig()
 	go obj.handUserConfigChanged()
-
-	go obj.listenWatchQuit()
 
 	return obj
 }
