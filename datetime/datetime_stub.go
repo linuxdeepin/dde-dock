@@ -41,7 +41,7 @@ func (op *Manager) setPropName(name string) {
 	case "CurrentTimezone":
 		tz, _, err := setDate.GetTimezone()
 		if err != nil {
-			logger.Info("Get Time Zone Failed: %s\n", err)
+			Logger.Error("Get Time Zone Failed: %s\n", err)
 			return
 		}
 		op.CurrentTimezone = tz
@@ -81,7 +81,7 @@ func (op *Manager) listenZone() {
 	if ok := objUtils.IsFileExist(_TIME_ZONE_FILE); !ok {
 		f, err := os.Create(_TIME_ZONE_FILE)
 		if err != nil {
-			logger.Info("Create '%s' Failed: %v\n",
+			Logger.Error("Create '%s' Failed: %v\n",
 				_TIME_ZONE_FILE, err)
 			return
 		}
@@ -89,7 +89,7 @@ func (op *Manager) listenZone() {
 	}
 	err := zoneWatcher.Watch(_TIME_ZONE_FILE)
 	if err != nil {
-		logger.Info("Watch '%s' Failed: %s\n", _TIME_ZONE_FILE, err)
+		Logger.Error("Watch '%s' Failed: %s\n", _TIME_ZONE_FILE, err)
 		return
 	}
 
@@ -111,7 +111,7 @@ func (op *Manager) listenZone() {
 					break
 				}
 
-				logger.Info("Watcher Event: ", ev)
+				Logger.Error("Watcher Event: ", ev)
 				if ev.IsDelete() {
 					zoneWatcher.Watch(_TIME_ZONE_FILE)
 				} else {
@@ -120,7 +120,7 @@ func (op *Manager) listenZone() {
 					//}
 				}
 			case err, ok := <-zoneWatcher.Error:
-				logger.Info("Watcher Event: ", err)
+				Logger.Error("Watcher Event: ", err)
 				if !ok || err != nil {
 					if zoneWatcher != nil {
 						zoneWatcher.RemoveWatch(_TIME_ZONE_FILE)

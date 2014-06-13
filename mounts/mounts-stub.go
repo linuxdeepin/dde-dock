@@ -55,7 +55,7 @@ func (m *Manager) setPropName(name string) {
 		m.DiskList = getDiskInfoList()
 		dbus.NotifyChange(m, name)
 	default:
-		logObject.Infof("'%s': invalid mount property")
+		Logger.Errorf("'%s': invalid mount property")
 	}
 }
 
@@ -86,7 +86,7 @@ func (m *Manager) listenSignalChanged() {
 			volume.Mount(gio.MountMountFlagsNone, nil, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
 				_, err := volume.MountFinish(res)
 				if err != nil {
-					logObject.Infof("volume mount failed: %s", err)
+					Logger.Warningf("volume mount failed: %s", err)
 				}
 			}))
 		}

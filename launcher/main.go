@@ -1,8 +1,6 @@
 package launcher
 
 import (
-	// "code.google.com/p/gettext-go/gettext"
-	"dlib/dbus"
 	. "dlib/gettext"
 	"dlib/gio-2.0"
 	l "dlib/logger"
@@ -10,9 +8,12 @@ import (
 
 var logger *l.Logger = l.NewLogger("dde-daemon/launcher-daemon")
 
+func Stop() {
+	logger.EndTracing()
+}
+
 func Start() {
 	logger.BeginTracing()
-	defer logger.EndTracing()
 
 	InitI18n()
 	// DesktopAppInfo.ShouldShow does not know deepin.
@@ -30,5 +31,4 @@ func Start() {
 	if tree != nil {
 		defer tree.DestroyTrie(treeId)
 	}
-	dbus.DealWithUnhandledMessage()
 }

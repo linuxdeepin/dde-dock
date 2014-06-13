@@ -14,9 +14,11 @@ var (
 	hideModemanager *HideStateManager = nil
 )
 
+func Stop() {
+	logger.EndTracing()
+}
 func Start() {
 	logger.BeginTracing()
-	defer logger.EndTracing()
 
 	initDeepin()
 
@@ -67,7 +69,6 @@ func Start() {
 	dbus.InstallOnSession(region)
 
 	startProxy()
-	dbus.DealWithUnhandledMessage()
 
 	initialize()
 }

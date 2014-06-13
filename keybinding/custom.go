@@ -104,10 +104,10 @@ func setCustomValue(id int32, key, value string) bool {
 		key == CUSTOM_KEY_ACTION ||
 		key == CUSTOM_KEY_SHORTCUT {
 
-		logObj.Infof("Set id: %d, key : %s, value: %s", id, key, value)
+		Logger.Infof("Set id: %d, key : %s, value: %s", id, key, value)
 		gs := getSettingsById(id)
 		if gs == nil {
-			logObj.Errorf("Get GSettings Failed For Id: %v", id)
+			Logger.Errorf("Get GSettings Failed For Id: %v", id)
 		}
 		gs.SetString(key, value)
 	}
@@ -122,7 +122,7 @@ func getCustomValue(id int32, key string) string {
 		key == CUSTOM_KEY_SHORTCUT {
 		gs := getSettingsById(id)
 		if gs == nil {
-			logObj.Errorf("Get GSettings Failed For Id: %v", id)
+			Logger.Errorf("Get GSettings Failed For Id: %v", id)
 		} else {
 			ret = gs.GetString(key)
 		}

@@ -62,7 +62,7 @@ const (
 var (
 	monitor   = gio.VolumeMonitorGet()
 	objectMap = make(map[string]*ObjectInfo)
-	logObject = logger.NewLogger("daemon/mounts")
+	Logger    = logger.NewLogger("daemon/mounts")
 	mutex     = new(sync.Mutex)
 )
 
@@ -71,11 +71,11 @@ func (m *Manager) DeviceEject(uuid string) (bool, string) {
 	defer mutex.Unlock()
 	info, ok := objectMap[uuid]
 	if !ok {
-		logObject.Infof("Eject id - %s not in objectMap.", uuid)
+		Logger.Warning("Eject id - %s not in objectMap.", uuid)
 		return false, fmt.Sprintf("Invalid Id: %s\n", uuid)
 	}
 
-	logObject.Infof("Eject type: %s", info.Type)
+	Logger.Infof("Eject type: %s", info.Type)
 	switch info.Type {
 	case "drive":
 		op := info.Object.(*gio.Drive)
@@ -83,7 +83,7 @@ func (m *Manager) DeviceEject(uuid string) (bool, string) {
 			_, err := op.EjectFinish(res)
 			if err != nil {
 				m.Error(uuid, err.Error())
-				logObject.Infof("drive eject failed: %s, %s", uuid, err)
+				Logger.Warningf("drive eject failed: %s, %s", uuid, err)
 			}
 		}))
 	case "volume":
@@ -92,7 +92,7 @@ func (m *Manager) DeviceEject(uuid string) (bool, string) {
 			_, err := op.EjectFinish(res)
 			if err != nil {
 				m.Error(uuid, err.Error())
-				logObject.Infof("volume eject failed: %s, %s", uuid, err)
+				Logger.Warningf("volume eject failed: %s, %s", uuid, err)
 			}
 		}))
 	case "mount":
@@ -101,11 +101,11 @@ func (m *Manager) DeviceEject(uuid string) (bool, string) {
 			_, err := op.EjectFinish(res)
 			if err != nil {
 				m.Error(uuid, err.Error())
-				logObject.Infof("mount eject failed: %s, %s", uuid, err)
+				Logger.Warningf("mount eject failed: %s, %s", uuid, err)
 			}
 		}))
 	default:
-		logObject.Infof("'%s' invalid type", info.Type)
+		Logger.Errorf("'%s' invalid type", info.Type)
 		return false, fmt.Sprintf("Invalid type: '%s'\n", info.Type)
 	}
 
@@ -117,11 +117,11 @@ func (m *Manager) DeviceMount(uuid string) (bool, string) {
 	defer mutex.Unlock()
 	info, ok := objectMap[uuid]
 	if !ok {
-		logObject.Infof("Mount id - %s not in objectMap.", uuid)
+		Logger.Warning("Mount id - %s not in objectMap.", uuid)
 		return false, fmt.Sprintf("Invalid Id: %s\n", uuid)
 	}
 
-	logObject.Infof("Mount type: %s", info.Type)
+	Logger.Infof("Mount type: %s", info.Type)
 	switch info.Type {
 	case "volume":
 		op := info.Object.(*gio.Volume)
@@ -129,7 +129,7 @@ func (m *Manager) DeviceMount(uuid string) (bool, string) {
 			_, err := op.MountFinish(res)
 			if err != nil {
 				m.Error(uuid, err.Error())
-				logObject.Infof("volume mount failed: %s, %s", uuid, err)
+				Logger.Warningf("volume mount failed: %s, %s", uuid, err)
 			}
 		}))
 	case "mount":
@@ -138,11 +138,11 @@ func (m *Manager) DeviceMount(uuid string) (bool, string) {
 			_, err := op.RemountFinish(res)
 			if err != nil {
 				m.Error(uuid, err.Error())
-				logObject.Infof("mount remount failed: %s, %s", uuid, err)
+				Logger.Warningf("mount remount failed: %s, %s", uuid, err)
 			}
 		}))
 	default:
-		logObject.Infof("'%s' invalid type", info.Type)
+		Logger.Errorf("'%s' invalid type", info.Type)
 		return false, fmt.Sprintf("Invalid type: '%s'\n", info.Type)
 	}
 
@@ -154,11 +154,11 @@ func (m *Manager) DeviceUnmount(uuid string) (bool, string) {
 	defer mutex.Unlock()
 	info, ok := objectMap[uuid]
 	if !ok {
-		logObject.Infof("Unmount id - %s not in objectMap.", uuid)
+		Logger.Warningf("Unmount id - %s not in objectMap.", uuid)
 		return false, fmt.Sprintf("Invalid Id: %s\n", uuid)
 	}
 
-	logObject.Infof("Unmount type: %s", info.Type)
+	Logger.Infof("Unmount type: %s", info.Type)
 	switch info.Type {
 	case "mount":
 		op := info.Object.(*gio.Mount)
@@ -166,11 +166,11 @@ func (m *Manager) DeviceUnmount(uuid string) (bool, string) {
 			_, err := op.UnmountFinish(res)
 			if err != nil {
 				m.Error(uuid, err.Error())
-				logObject.Infof("mount unmount failed: %s, %s", uuid, err)
+				Logger.Warningf("mount unmount failed: %s, %s", uuid, err)
 			}
 		}))
 	default:
-		logObject.Infof("'%s' invalid type", info.Type)
+		Logger.Errorf("'%s' invalid type", info.Type)
 		return false, fmt.Sprintf("Invalid type: '%s'\n", info.Type)
 	}
 
@@ -180,7 +180,7 @@ func (m *Manager) DeviceUnmount(uuid string) (bool, string) {
 func newDiskInfo(value interface{}, t string) DiskInfo {
 	defer func() {
 		if err := recover(); err != nil {
-			logObject.Warning("Received Error: ", err)
+			Logger.Error("Received Error: ", err)
 		}
 	}()
 
@@ -260,7 +260,7 @@ func newDiskInfo(value interface{}, t string) DiskInfo {
 			info.IconName = "drive-removable-media-mtp"
 		}
 	default:
-		logObject.Infof("'%s' invalid type", t)
+		Logger.Errorf("'%s' invalid type", t)
 	}
 
 	return info
@@ -394,14 +394,15 @@ func NewManager() *Manager {
 }
 
 func Start() {
-	logObject.BeginTracing()
-	defer logObject.EndTracing()
+	Logger.BeginTracing()
 
 	m := NewManager()
 	err := dbus.InstallOnSession(m)
 	if err != nil {
-		logObject.Info("Install DBus Session Failed:", err)
-		panic(err)
+		Logger.Fatal("Install DBus Session Failed:", err)
 	}
-	dbus.DealWithUnhandledMessage()
+}
+
+func Stop() {
+	Logger.EndTracing()
 }

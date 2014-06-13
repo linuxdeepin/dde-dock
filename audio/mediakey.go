@@ -4,7 +4,7 @@ import "dbus/com/deepin/daemon/keybinding"
 
 var __keepMediakeyManagerAlive interface{}
 
-func (audio *Audio) listenMediaKey() {
+func (audio *Audio) setupMediaKeyMonitor() {
 	mediaKeyManager, err := keybinding.NewMediaKey("com.deepin.daemon.KeyBinding", "/com/deepin/daemon/MediaKey")
 	__keepMediakeyManagerAlive = mediaKeyManager
 	if err != nil {

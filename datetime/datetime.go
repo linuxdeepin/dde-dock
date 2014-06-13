@@ -6,7 +6,7 @@ import (
 	"dlib/dbus/property"
 	. "dlib/gettext"
 	"dlib/gio-2.0"
-	dlogger "dlib/logger"
+	"dlib/logger"
 	libutils "dlib/utils"
 	"github.com/howeyc/fsnotify"
 )
@@ -27,7 +27,7 @@ var (
 	objUtils         = libutils.NewUtils()
 	setDate          *setdatetime.SetDateTime
 	zoneWatcher      *fsnotify.Watcher
-	logger           = dlogger.NewLogger("dde-daemon/datetime")
+	Logger           = logger.NewLogger("dde-daemon/datetime")
 	changeLocaleFlag = false
 )
 
@@ -48,7 +48,7 @@ type Manager struct {
 func (op *Manager) SetDate(d string) (bool, error) {
 	ret, err := setDate.SetCurrentDate(d)
 	if err != nil {
-		logger.Warning("Set Date - '%s' Failed: %s\n",
+		Logger.Warning("Set Date - '%s' Failed: %s\n",
 			d, err)
 		return false, err
 	}
@@ -58,7 +58,7 @@ func (op *Manager) SetDate(d string) (bool, error) {
 func (op *Manager) SetTime(t string) (bool, error) {
 	ret, err := setDate.SetCurrentTime(t)
 	if err != nil {
-		logger.Warning("Set Time - '%s' Failed: %s\n",
+		Logger.Warning("Set Time - '%s' Failed: %s\n",
 			t, err)
 		return false, err
 	}
@@ -73,7 +73,7 @@ func (op *Manager) TimezoneCityList() map[string]string {
 func (op *Manager) SetTimeZone(zone string) bool {
 	_, err := setDate.SetTimezone(zone)
 	if err != nil {
-		logger.Warning("Set TimeZone - '%s' Failed: %s\n",
+		Logger.Warning("Set TimeZone - '%s' Failed: %s\n",
 			zone, err)
 		return false
 	}
@@ -163,13 +163,13 @@ func Init() {
 
 	setDate, err = setdatetime.NewSetDateTime("com.deepin.api.SetDateTime", "/com/deepin/api/SetDateTime")
 	if err != nil {
-		logger.Info("New SetDateTime Failed:", err)
+		Logger.Error("New SetDateTime Failed:", err)
 		panic(err)
 	}
 
 	zoneWatcher, err = fsnotify.NewWatcher()
 	if err != nil {
-		logger.Info("New FS Watcher Failed:", err)
+		Logger.Error("New FS Watcher Failed:", err)
 		panic(err)
 	}
 }
@@ -185,8 +185,7 @@ func GetManager() *Manager {
 }
 
 func Start() {
-	logger.BeginTracing()
-	defer logger.EndTracing()
+	Logger.BeginTracing()
 
 	var err error
 
@@ -195,18 +194,18 @@ func Start() {
 	date := GetManager()
 	err = dbus.InstallOnSession(date)
 	if err != nil {
-		logger.Error("Install Session DBus Failed:", err)
-		panic(err)
+		Logger.Fatal("Install Session DBus Failed:", err)
 	}
 
 	if date.AutoSetTime.Get() {
 		date.setAutoSetTime(true)
 	}
-	dbus.DealWithUnhandledMessage()
 	date.listenLocaleChange()
 }
 
 func Stop() {
 	zoneWatcher.Close()
 	dbus.UnInstallObject(GetManager())
+
+	Logger.EndTracing()
 }

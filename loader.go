@@ -23,11 +23,19 @@ func Register(newModule *Module) {
 			return
 		}
 	}
+	if newModule.Start == nil || newModule.Stop == nil {
+		panic("can't register an incomplete module " + newModule.Name)
+	}
 	modules = append([]*Module{newModule}, modules...)
 }
 
-func Run() {
+func Start() {
 	for _, m := range modules {
-		go m.Start()
+		m.Start()
+	}
+}
+func Stop() {
+	for _, m := range modules {
+		m.Stop()
 	}
 }

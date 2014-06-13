@@ -72,25 +72,25 @@ func registerZoneArea() {
 	if v, ok := rect[3].(uint16); ok {
 		endY = int32(v) + startY
 	}
-	logObj.Infof("PrimaryRect: %d, %d, %d, %d\n", startX, endX, startY, endY)
+	Logger.Debugf("PrimaryRect: %d, %d, %d, %d\n", startX, endX, startY, endY)
 
 	if endX <= startX || endY <= startY {
 		return
 	}
 
 	topLeftArea = areaRange{startX, startY, startX + DISTANCE, startY + DISTANCE}
-	logObj.Info("TopLeft: ", topLeftArea)
+	Logger.Debug("TopLeft: ", topLeftArea)
 	bottomLeftArea = areaRange{startX, endY - DISTANCE, startX + DISTANCE, endY}
-	logObj.Info("BottomLeft: ", bottomLeftArea)
+	Logger.Debug("BottomLeft: ", bottomLeftArea)
 	topRightArea = areaRange{endX - DISTANCE, startY, endX, startY + DISTANCE}
-	logObj.Info("TopRight: ", topRightArea)
+	Logger.Debug("TopRight: ", topRightArea)
 	bottomRightArea = areaRange{endX - DISTANCE, endY - DISTANCE, endX, endY}
-	logObj.Info("BottomRight: ", bottomRightArea)
+	Logger.Debug("BottomRight: ", bottomRightArea)
 
-	logObj.Info("topLeft: ", topLeftArea)
-	logObj.Info("bottomLeft: ", bottomLeftArea)
-	logObj.Info("topRight: ", topRightArea)
-	logObj.Info("bottomRight: ", bottomRightArea)
+	Logger.Debug("topLeft: ", topLeftArea)
+	Logger.Debug("bottomLeft: ", bottomLeftArea)
+	Logger.Debug("topRight: ", topRightArea)
+	Logger.Debug("bottomRight: ", bottomRightArea)
 
 	var err error
 	areaId, err = areaObj.RegisterAreas([]areaRange{
@@ -100,11 +100,11 @@ func registerZoneArea() {
 		bottomRightArea,
 	}, 0)
 	if err != nil {
-		logObj.Info("Register area failed: ", err)
+		Logger.Warning("Register area failed: ", err)
 		return
 	}
 
-	logObj.Info("MouseArea Id: ", areaId)
+	Logger.Debug("MouseArea Id: ", areaId)
 }
 
 func unregisterZoneArea() {

@@ -189,7 +189,7 @@ func doAction(action string) {
 		args = append(args, strs[1:]...)
 	}
 	if err := exec.Command(cmd, args...).Run(); err != nil {
-		logObj.Errorf("Exec '%s' failed: %v", action, err)
+		Logger.Errorf("Exec '%s' failed: %v", action, err)
 	}
 }
 
@@ -201,7 +201,7 @@ func (obj *Manager) listenKeyEvents() {
 			if e.Detail == 65 {
 				keyStr = "space"
 			}
-			logObj.Infof("KeyStr: %s, modStr: %s", keyStr, modStr)
+			Logger.Infof("KeyStr: %s, modStr: %s", keyStr, modStr)
 			if !GetMediaManager().emitMediaSignal(modStr, keyStr, true) {
 				modStr = deleteSpecialMod(modStr)
 				value := ""
@@ -390,7 +390,7 @@ func (obj *Manager) listenCustomSettings(id int32) {
 	obj.idSettingsMap[id] = gs
 
 	gs.Connect("changed", func(s *gio.Settings, key string) {
-		logObj.Infof("'%s' changed", key)
+		Logger.Infof("'%s' changed", key)
 		if key != CUSTOM_KEY_NAME {
 			grabKeyPairs(PrevCustomPairs, false)
 			grabKeyPairs(getCustomKeyPairs(), true)

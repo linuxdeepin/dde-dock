@@ -225,7 +225,6 @@ func (s *Source) SetPort(name string) {
 
 func Start() {
 	Logger.BeginTracing()
-	defer Logger.EndTracing()
 
 	ctx := pulse.GetContext()
 	audio := NewAudio(ctx)
@@ -235,8 +234,11 @@ func Start() {
 		return
 	}
 
-	dbus.DealWithUnhandledMessage()
-	audio.listenMediaKey()
+	audio.setupMediaKeyMonitor()
+}
+
+func Stop() {
+	Logger.EndTracing()
 }
 
 var playFeedback = func() func() {

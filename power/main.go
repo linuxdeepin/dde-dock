@@ -8,7 +8,7 @@ import "dbus/com/deepin/api/sound"
 import "dbus/org/freedesktop/notifications"
 import ss "dbus/org/freedesktop/screensaver"
 
-var LOGGER = logger.NewLogger("com.deepin.daemon.Power").SetLogLevel(logger.LEVEL_INFO)
+var Logger = logger.NewLogger("com.deepin.daemon.Power")
 
 type Power struct {
 	coreSettings     *gio.Settings
@@ -70,13 +70,13 @@ func NewPower() *Power {
 
 	var err error
 	if p.notifier, err = notifications.NewNotifier("org.freedesktop.Notifications", "/org/freedesktop/Notifications"); err != nil {
-		LOGGER.Warning("Can't build org.freedesktop.Notficaations:", err)
+		Logger.Warning("Can't build org.freedesktop.Notficaations:", err)
 	}
 	if p.screensaver, err = ss.NewScreenSaver("org.freedesktop.ScreenSaver", "/org/freedesktop/ScreenSaver"); err != nil {
-		LOGGER.Warning("Can't build org.freedesktop.ScreenSaver:", err)
+		Logger.Warning("Can't build org.freedesktop.ScreenSaver:", err)
 	}
 	if p.player, err = sound.NewSound("com.deepin.api.Sound", "/com/deepin/api/Sound"); err != nil {
-		LOGGER.Warning("Can't build com.deepin.api.Sound:", err)
+		Logger.Warning("Can't build com.deepin.api.Sound:", err)
 	}
 
 	p.initPlan()
@@ -103,20 +103,22 @@ func (p *Power) sendNotify(icon, summary, body string) {
 	if p.notifier != nil {
 		p.notifier.Notify("com.deepin.daemon.power", 0, icon, summary, body, nil, nil, 0)
 	} else {
-		LOGGER.Warning("failed to show notify message:", summary, body)
+		Logger.Warning("failed to show notify message:", summary, body)
 	}
 }
 
 func Start() {
-	LOGGER.BeginTracing()
-	defer LOGGER.EndTracing()
+	Logger.BeginTracing()
 
 	p := NewPower()
 
 	if err := dbus.InstallOnSession(p); err != nil {
-		LOGGER.Error("Failed InstallOnSession:", err)
+		Logger.Error("Failed InstallOnSession:", err)
 	}
 
-	dbus.DealWithUnhandledMessage()
 	go newFullScreenWorkaround().start()
+}
+
+func Stop() {
+	Logger.EndTracing()
 }

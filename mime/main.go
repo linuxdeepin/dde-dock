@@ -24,8 +24,8 @@ const (
 )
 
 var (
-	logObject = logger.NewLogger("daemon/mime")
-	objUtils  = libutils.NewUtils()
+	Logger   = logger.NewLogger("daemon/mime")
+	objUtils = libutils.NewUtils()
 )
 
 func (dapp *DefaultApps) GetDBusInfo() dbus.DBusInfo {
@@ -47,11 +47,11 @@ func (media *MediaMount) GetDBusInfo() dbus.DBusInfo {
 func (dapp *DefaultApps) Reset() bool {
 	homeDir, ok := objUtils.GetHomeDir()
 	if !ok {
-		logObject.Warning("Get homeDir failed")
+		Logger.Warning("Get homeDir failed")
 		return false
 	}
 	if err := os.Remove(homeDir + "/" + MIME_CACHE_FILE); err != nil {
-		logObject.Warningf("Delete '%s' failed: %v",
+		Logger.Warning("Delete '%s' failed: %v",
 			homeDir+"/"+MIME_CACHE_FILE, err)
 		return false
 	}
@@ -71,9 +71,12 @@ func (media *MediaMount) Reset() bool {
 	return true
 }
 
+func Stop() {
+	Logger.EndTracing()
+}
+
 func Start() {
-	logObject.BeginTracing()
-	defer logObject.EndTracing()
+	Logger.BeginTracing()
 
 	var err error
 
@@ -83,15 +86,12 @@ func Start() {
 	}
 	err = dbus.InstallOnSession(dapp)
 	if err != nil {
-		logObject.Infof("Install Session Failed: %v", err)
-		panic(err)
+		Logger.Fatal("Install Session Failed:", err)
 	}
 
 	media := NewMediaMount()
 	err = dbus.InstallOnSession(media)
 	if err != nil {
-		logObject.Infof("Install Session Failed: %v", err)
-		panic(err)
+		Logger.Fatal("Install Session Failed:", err)
 	}
-	dbus.DealWithUnhandledMessage()
 }

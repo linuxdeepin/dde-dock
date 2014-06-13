@@ -38,7 +38,7 @@ func getDiskCap(path string) (int64, int64) {
 		bytes, err := exec.Command(CMD_DF).Output()
 		if err != nil {
 			if i == 9 {
-				logObject.Info("Exec 'df -h' failed:", err)
+				Logger.Warning("Exec 'df -h' failed:", err)
 				return 0, 0
 			}
 			<-time.After(time.Second * 1)
@@ -63,8 +63,6 @@ func getDiskCap(path string) (int64, int64) {
 		for _, v := range rets {
 			if path == v {
 				isMatch = true
-				logObject.Info("Total:", rets[1])
-				logObject.Info("Used:", rets[2])
 				usedSize, _ = strconv.ParseInt(rets[2], 10, 64)
 				totalSize, _ = strconv.ParseInt(rets[1], 10, 64)
 				break

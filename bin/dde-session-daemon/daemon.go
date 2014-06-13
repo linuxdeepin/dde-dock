@@ -3,14 +3,17 @@ package main
 import _ "dde-daemon/keybinding"
 import _ "dde-daemon/screensaver"
 import _ "dde-daemon/power"
+
 import _ "dde-daemon/audio"
 import _ "dde-daemon/themes"
 
 import _ "dde-daemon/clipboard"
 import _ "dde-daemon/datetime"
 import _ "dde-daemon/mime"
+
 import _ "dde-daemon/screen_edges"
 import _ "dde-daemon/bluetooth"
+
 import _ "dde-daemon/network"
 import _ "dde-daemon/mounts"
 
@@ -32,7 +35,7 @@ import "dde-daemon"
 
 var Logger = logger.NewLogger("com.deepin.daemon")
 
-func init() {
+func main() {
 	if !dlib.UniqueOnSession("com.deepin.daemon") {
 		Logger.Warning("There already has an dde-daemon running.")
 		return
@@ -42,9 +45,6 @@ func init() {
 			loader.Enable(disabledModuleName, false)
 		}
 	}
-}
-
-func main() {
 	Logger.BeginTracing()
 	defer Logger.EndTracing()
 
@@ -53,7 +53,8 @@ func main() {
 
 	C.init()
 
-	loader.Run()
+	loader.Start()
+	defer loader.Stop()
 
 	go func() {
 		if err := dbus.Wait(); err != nil {
@@ -65,5 +66,6 @@ func main() {
 	}()
 
 	ddeSessionRegister()
+	dbus.DealWithUnhandledMessage()
 	glib.StartLoop()
 }

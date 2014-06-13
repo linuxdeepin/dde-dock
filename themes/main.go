@@ -40,21 +40,17 @@ var (
 
 func Start() {
 	Logger.BeginTracing()
-	defer Logger.EndTracing()
 
 	var err error
 	objXS, err = sessionmanager.NewXSettings("com.deepin.SessionManager",
 		"/com/deepin/XSettings")
 	if err != nil {
-		Logger.Error("New XSettings Failed:", err)
-		panic(err)
+		Logger.Fatal("New XSettings Failed:", err)
 	}
 
 	if err = dbus.InstallOnSession(GetManager()); err != nil {
-		Logger.Error("Install DBus Failed", err)
-		panic(err)
+		Logger.Fatal("Install DBus Failed", err)
 	}
-	dbus.DealWithUnhandledMessage()
 }
 
 func Stop() {
@@ -65,4 +61,6 @@ func Stop() {
 	obj.bgQuitFlag <- true
 	obj.bgWatcher.Close()
 	dbus.UnInstallObject(obj)
+
+	Logger.EndTracing()
 }

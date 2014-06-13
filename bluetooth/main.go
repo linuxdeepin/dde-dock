@@ -33,13 +33,6 @@ var (
 
 func Start() {
 	logger.BeginTracing()
-	defer logger.EndTracing()
-
-	// TODO
-	//if !dlib.UniqueOnSession(dbusBluetoothDest) {
-	//logger.Warning("dbus unique:", dbusBluetoothDest)
-	//return
-	//}
 
 	bluetooth = NewBluetooth()
 	err := dbus.InstallOnSession(bluetooth)
@@ -51,9 +44,9 @@ func Start() {
 
 	// initialize bluetooth after dbus interface installed
 	bluetooth.initBluetooth()
-	dbus.DealWithUnhandledMessage()
 }
 
 func Stop() {
 	DestroyBluetooth(bluetooth)
+	logger.EndTracing()
 }

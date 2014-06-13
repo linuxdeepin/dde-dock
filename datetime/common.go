@@ -28,7 +28,7 @@ import (
 func getHomeDir() (string, bool) {
 	info, err := user.Current()
 	if err != nil {
-		logger.Error("Get current user info failed:", err)
+		Logger.Error("Get current user info failed:", err)
 		return "", false
 	}
 

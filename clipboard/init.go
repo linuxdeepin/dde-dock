@@ -29,7 +29,7 @@ import "C"
 import "dde-daemon"
 
 func init() {
-	loader.Register(&loader.Module{"clipboard", Start, nil, true})
+	loader.Register(&loader.Module{"clipboard", Start, Stop, true})
 }
 
 func Start() {

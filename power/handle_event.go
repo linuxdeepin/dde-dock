@@ -23,10 +23,10 @@ const (
 
 func doLock() {
 	if m, err := sessionmanager.NewSessionManager("com.deepin.SessionManager", "/com/deepin/SessionManager"); err != nil {
-		LOGGER.Warning("can't build SessionManager Object:", err)
+		Logger.Warning("can't build SessionManager Object:", err)
 	} else {
 		if err = m.RequestLock(); err != nil {
-			LOGGER.Warning("Lock failed:", err)
+			Logger.Warning("Lock failed:", err)
 		}
 		sessionmanager.DestroySessionManager(m)
 	}
@@ -42,10 +42,10 @@ func doCloseLowpower() {
 
 func doShutDown() {
 	if m, err := sessionmanager.NewSessionManager("com.deepin.SessionManager", "/com/deepin/SessionManager"); err != nil {
-		LOGGER.Warning("can't build SessionManager Object:", err)
+		Logger.Warning("can't build SessionManager Object:", err)
 	} else {
 		if err = m.RequestShutdown(); err != nil {
-			LOGGER.Warning("Shutdown failed:", err)
+			Logger.Warning("Shutdown failed:", err)
 		}
 		sessionmanager.DestroySessionManager(m)
 	}
@@ -53,22 +53,22 @@ func doShutDown() {
 
 func doSuspend() {
 	if m, err := sessionmanager.NewSessionManager("com.deepin.SessionManager", "/com/deepin/SessionManager"); err != nil {
-		LOGGER.Warning("can't build SessionManager Object:", err)
+		Logger.Warning("can't build SessionManager Object:", err)
 	} else {
 		if err = m.RequestSuspend(); err != nil {
-			LOGGER.Warning("Suspend failed:", err)
+			Logger.Warning("Suspend failed:", err)
 		}
-		LOGGER.Info("RequestSuspend...", err)
+		Logger.Info("RequestSuspend...", err)
 		sessionmanager.DestroySessionManager(m)
 	}
 }
 
 func doLogout() {
 	if m, err := sessionmanager.NewSessionManager("com.deepin.SessionManager", "/com/deepin/SessionManager"); err != nil {
-		LOGGER.Warning("can't build SessionManager Object:", err)
+		Logger.Warning("can't build SessionManager Object:", err)
 	} else {
 		if err = m.Logout(); err != nil {
-			LOGGER.Warning("ShutDown failed:", err)
+			Logger.Warning("ShutDown failed:", err)
 		}
 		sessionmanager.DestroySessionManager(m)
 	}
@@ -88,7 +88,7 @@ func (up *Power) handlePowerButton() {
 		doSuspend()
 	case ActionNothing:
 	default:
-		LOGGER.Warning("invalid LidSwitchAction:", up.LidClosedAction)
+		Logger.Warning("invalid LidSwitchAction:", up.LidClosedAction)
 	}
 }
 
@@ -104,7 +104,7 @@ func (up *Power) handleLidSwitch(opend bool) {
 			doShutDownInteractive()
 		case ActionSuspend:
 			if isMultihead() && !up.coreSettings.GetBoolean("lid-close-suspend-with-external-monitor") {
-				LOGGER.Info("Prevent suspend when lidclosed because another monitor connected")
+				Logger.Info("Prevent suspend when lidclosed because another monitor connected")
 				return
 			}
 			doSuspend()
@@ -112,14 +112,14 @@ func (up *Power) handleLidSwitch(opend bool) {
 			doShutDown()
 		case ActionNothing:
 		default:
-			LOGGER.Warning("invalid LidSwitchAction:", up.LidClosedAction.Get())
+			Logger.Warning("invalid LidSwitchAction:", up.LidClosedAction.Get())
 		}
 	}
 }
 
 func isMultihead() bool {
 	if dp, err := display.NewDisplay("com.deepin.daemon.Display", "/com/deepin/daemon/Display"); err != nil {
-		LOGGER.Error("Can't build com.deepin.daemon.Display Object:", err)
+		Logger.Error("Can't build com.deepin.daemon.Display Object:", err)
 		return false
 	} else {
 		paths := dp.Monitors.Get()
@@ -141,7 +141,7 @@ func isMultihead() bool {
 func (p *Power) initEventHandle() {
 	up, err := upower.NewUpower(UPOWER_BUS_NAME, "/org/freedesktop/UPower")
 	if err != nil {
-		LOGGER.Error("Can't build org.freedesktop.UPower:", err)
+		Logger.Error("Can't build org.freedesktop.UPower:", err)
 	} else {
 		up.ConnectChanged(func() {
 			currentLidClosed := up.LidIsClosed.Get()
@@ -156,7 +156,7 @@ func (p *Power) initEventHandle() {
 
 	mediaKey, err := keybinding.NewMediaKey("com.deepin.daemon.KeyBinding", "/com/deepin/daemon/MediaKey")
 	if err != nil {
-		LOGGER.Error("Can't build com.deepin.daemon.KeyBinding:", err)
+		Logger.Error("Can't build com.deepin.daemon.KeyBinding:", err)
 	} else {
 		mediaKey.ConnectPowerOff(func(press bool) {
 			//prevent mediaKey be destroyed
@@ -170,7 +170,7 @@ func (p *Power) initEventHandle() {
 
 	login, err := login1.NewManager("org.freedesktop.login1", "/org/freedesktop/login1")
 	if err != nil {
-		LOGGER.Error("Can't build org.freedesktop.login1:", err)
+		Logger.Error("Can't build org.freedesktop.login1:", err)
 	} else {
 		login.ConnectPrepareForSleep(func(before bool) {
 			fmt.Println("Sleep change...", before)

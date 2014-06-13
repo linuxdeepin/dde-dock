@@ -33,15 +33,6 @@ var (
 
 func Start() {
 	logger.BeginTracing()
-	defer logger.EndTracing()
-
-	// TODO
-	/*
-		if !dlib.UniqueOnSession(dbusNetworkDest) {
-			logger.Warning("dbus unique:", dbusNetworkDest)
-			return
-		}
-	*/
 
 	initSlices() // initialize slice code
 
@@ -54,9 +45,9 @@ func Start() {
 
 	// initialize manager after dbus installed
 	manager.initManager()
-	dbus.DealWithUnhandledMessage()
 }
 
 func Stop() {
 	DestroyManager(manager)
+	logger.EndTracing()
 }

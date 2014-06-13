@@ -55,7 +55,6 @@ func RunAsDaemon() {
 
 func Start() {
 	logger.BeginTracing()
-	defer logger.EndTracing()
 
 	grub = NewGrub2()
 	err := dbus.InstallOnSession(grub)
@@ -72,11 +71,11 @@ func Start() {
 	// initialize grub2 after dbus service installed to ensure
 	// property changed signal send success
 	grub.initGrub2()
-	dbus.DealWithUnhandledMessage()
 }
 
 func Stop() {
 	DestroyGrub2(grub)
+	logger.EndTracing()
 }
 
 func SetLoggerLevel(level liblogger.Priority) {

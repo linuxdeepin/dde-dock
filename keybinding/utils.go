@@ -126,7 +126,7 @@ func conflictChecked(id int32, shortcut string) (bool, []int32) {
 		ok   bool
 	)
 
-	logObj.Info("Check Conflict:", shortcut)
+	Logger.Info("Check Conflict:", shortcut)
 	if tmpKey == "super-super_l" || tmpKey == "super-super_r" ||
 		tmpKey == "super" {
 		info, ok = newKeycodeInfo("Super_L")
@@ -135,7 +135,7 @@ func conflictChecked(id int32, shortcut string) (bool, []int32) {
 	}
 
 	if !ok {
-		logObj.Warning("new keycode failed:", shortcut)
+		Logger.Warning("new keycode failed:", shortcut)
 		return false, []int32{}
 	}
 
@@ -292,9 +292,9 @@ func setSystemValue(id int32, value string, action bool) {
 }
 
 func modifyShortcutById(id int32, shortcut string) {
-	logObj.Infof("Id: %d, shortcut: %s", id, shortcut)
+	Logger.Infof("Id: %d, shortcut: %s", id, shortcut)
 	if id >= CUSTOM_KEY_ID_BASE {
-		logObj.Info("---Set Custom key")
+		Logger.Info("---Set Custom key")
 		setCustomValue(id, CUSTOM_KEY_SHORTCUT, shortcut)
 		return
 	}
@@ -313,13 +313,13 @@ func newKeycodeInfo(shortcut string) (KeycodeInfo, bool) {
 
 	mod, keys, err := keybind.ParseString(X, shortcut)
 	if err != nil {
-		logObj.Warningf("newKeycodeInfo parse '%s' failed: %v",
+		Logger.Warningf("newKeycodeInfo parse '%s' failed: %v",
 			shortcut, err)
 		return KeycodeInfo{}, false
 	}
 
 	if len(keys) < 1 {
-		logObj.Warningf("'%s' no details", shortcut)
+		Logger.Warningf("'%s' no details", shortcut)
 		return KeycodeInfo{}, false
 	}
 
@@ -334,8 +334,8 @@ func isKeycodeInfoEqual(info1, info2 *KeycodeInfo) bool {
 	}
 
 	if (info1.Detail == info2.Detail) && (info1.State == info2.State) {
-		logObj.Infof("Info1: %v -- %v", info1.Detail, info1.State)
-		logObj.Infof("Info2: %v -- %v", info2.Detail, info2.State)
+		Logger.Infof("Info1: %v -- %v", info1.Detail, info1.State)
+		Logger.Infof("Info2: %v -- %v", info2.Detail, info2.State)
 		return true
 	}
 

@@ -93,8 +93,8 @@ func Start() {
 	if err := dbus.InstallOnSession(ssaver); err != nil {
 		return
 	}
-
-	dbus.DealWithUnhandledMessage()
+}
+func Stop() {
 }
 
 func (ss *ScreenSaver) loop() {

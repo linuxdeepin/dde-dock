@@ -128,7 +128,7 @@ func (p *Power) handleBatteryPercentage() {
 func (p *Power) initUpower() {
 	up, err := upower.NewUpower(UPOWER_BUS_NAME, "/org/freedesktop/UPower")
 	if err != nil {
-		LOGGER.Error("Can't build org.freedesktop.UPower:", err)
+		Logger.Error("Can't build org.freedesktop.UPower:", err)
 	} else {
 		up.ConnectChanged(func() {
 			p.refreshUpower(up)
@@ -153,11 +153,11 @@ func (p *Power) initUpower() {
 func getBattery() *upower.Device {
 	up, err := upower.NewUpower(UPOWER_BUS_NAME, "/org/freedesktop/UPower")
 	if err != nil {
-		LOGGER.Error("Can't build org.freedesktop.UPower:", err)
+		Logger.Error("Can't build org.freedesktop.UPower:", err)
 	}
 	devs, err := up.EnumerateDevices()
 	if err != nil {
-		LOGGER.Error("Can't EnumerateDevices", err)
+		Logger.Error("Can't EnumerateDevices", err)
 	}
 	for _, path := range devs {
 		dev, err := upower.NewDevice(UPOWER_BUS_NAME, path)

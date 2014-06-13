@@ -45,13 +45,11 @@ var (
 	layoutDescMap = make(map[string]string)
 )
 
+func Stop() {
+	logObj.EndTracing()
+}
 func Start() {
-	if !dlib.UniqueOnSession(DEVICE_DEST) {
-		logObj.Warning("There has a inputdevices running")
-		return
-	}
 	logObj.BeginTracing()
-	defer logObj.EndTracing()
 	logObj.SetRestartCommand("/usr/lib/deepin-daemon/inputdevices")
 	InitI18n()
 	//Textdomain("xkeyboard-config")
@@ -109,7 +107,6 @@ func Start() {
 	//logObj.Info("Device Info: ", m.Infos)
 	initGSettingsSet(tpadFlag)
 
-	dbus.DealWithUnhandledMessage()
 	ddeSessionRegister()
 
 	go glib.StartLoop()

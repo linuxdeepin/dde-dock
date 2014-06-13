@@ -48,8 +48,6 @@ func (op *Manager) listenSignal() {
 	})
 
 	areaObj.ConnectMotionInto(func(x, y, id int32) {
-		//logObj.Infof("Type: %s, X: %d, Y: %d, ID: %d",
-		//t, x, y, id)
 		if id != areaId {
 			return
 		}

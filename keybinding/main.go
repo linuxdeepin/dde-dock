@@ -33,7 +33,7 @@ import (
 
 var (
 	utilsObj = libUtils.NewUtils()
-	logObj   = libLogger.NewLogger("daemon/keybinding")
+	Logger   = libLogger.NewLogger("daemon/keybinding")
 	X        *xgbutil.XUtil
 
 	grabKeyBindsMap = make(map[KeycodeInfo]string)
@@ -54,7 +54,7 @@ func StartKeyBinding() {
 	var err error
 
 	if X, err = xgbutil.NewConn(); err != nil {
-		logObj.Warning("New XGB Util Failed:", err)
+		Logger.Warning("New XGB Util Failed:", err)
 		panic(err)
 	}
 	keybind.Initialize(X)
@@ -66,26 +66,26 @@ func StartKeyBinding() {
 }
 
 func Start() {
-	logObj.BeginTracing()
-	defer logObj.EndTracing()
+	Logger.BeginTracing()
 
 	StartKeyBinding()
 
 	if err := dbus.InstallOnSession(GetManager()); err != nil {
-		logObj.Error("Install DBus Failed:", err)
+		Logger.Error("Install DBus Failed:", err)
 		panic(err)
 	}
 
 	if err := dbus.InstallOnSession(GetMediaManager()); err != nil {
-		logObj.Error("Install DBus Failed:", err)
+		Logger.Error("Install DBus Failed:", err)
 		panic(err)
 	}
 
-	dbus.DealWithUnhandledMessage()
 	go xevent.Main(X)
 }
 
 func Stop() {
+	Logger.EndTracing()
+
 	stopXRecord()
 	xevent.Quit(X)
 	dbus.UnInstallObject(GetManager())

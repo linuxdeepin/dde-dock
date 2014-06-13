@@ -49,8 +49,6 @@ func Start() {
 	}
 
 	obj.updateAllUserInfo()
-
-	dbus.DealWithUnhandledMessage()
 }
 
 func Stop() {

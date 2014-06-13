@@ -100,7 +100,7 @@ func formatXGBShortcut(shortcut string) string {
 func formatShortcut(shortcut string) string {
 	l := len(shortcut)
 	if l < 1 {
-		logObj.Warning("formatShortcut args error")
+		Logger.Warning("formatShortcut args error")
 		return ""
 	}
 
@@ -201,13 +201,13 @@ func getCustomKeyPairs() map[string]string {
 
 	for _, i := range customList {
 		if isInvalidConflict(i) {
-			logObj.Warningf("%d is invalid conflict", i)
+			Logger.Warningf("%d is invalid conflict", i)
 			continue
 		}
 
 		gs := getSettingsById(i)
 		if gs == nil {
-			logObj.Warningf("Get Settings For '%d' Failed", i)
+			Logger.Warningf("Get Settings For '%d' Failed", i)
 			continue
 		}
 		shortcut := gs.GetString(CUSTOM_KEY_SHORTCUT)
@@ -221,23 +221,23 @@ func getCustomKeyPairs() map[string]string {
 
 func grabKeyPress(wid xproto.Window, shortcut string) bool {
 	if len(shortcut) < 1 {
-		logObj.Warning("grabKeyPress args error...")
+		Logger.Warning("grabKeyPress args error...")
 		return false
 	}
 
 	mod, keys, err := keybind.ParseString(X, shortcut)
 	if err != nil {
-		logObj.Warning("In GrabKey Parse shortcut failed:", err)
+		Logger.Warning("In GrabKey Parse shortcut failed:", err)
 		return false
 	}
 
 	if len(keys) < 1 {
-		logObj.Warningf("'%s' no details", shortcut)
+		Logger.Warningf("'%s' no details", shortcut)
 		return false
 	}
 
 	if err = keybind.GrabChecked(X, wid, mod, keys[0]); err != nil {
-		logObj.Warningf("Grab '%s' failed: %v", shortcut, err)
+		Logger.Warningf("Grab '%s' failed: %v", shortcut, err)
 		return false
 	}
 
@@ -246,18 +246,18 @@ func grabKeyPress(wid xproto.Window, shortcut string) bool {
 
 func ungrabKey(wid xproto.Window, shortcut string) bool {
 	if len(shortcut) < 1 {
-		logObj.Warning("Ungrab args failed...")
+		Logger.Warning("Ungrab args failed...")
 		return false
 	}
 
 	mod, keys, err := keybind.ParseString(X, shortcut)
 	if err != nil {
-		logObj.Warning("In UngrabKey Parse shortcut failed:", err)
+		Logger.Warning("In UngrabKey Parse shortcut failed:", err)
 		return false
 	}
 
 	if len(keys) < 1 {
-		logObj.Warningf("'%s' no details", shortcut)
+		Logger.Warningf("'%s' no details", shortcut)
 		return false
 	}
 
@@ -281,7 +281,7 @@ func grabKeyPairs(pairs map[string]string, isGrab bool) {
 		shortcut := formatXGBShortcut(formatShortcut(k))
 		keyInfo, ok := newKeycodeInfo(shortcut)
 		if !ok {
-			logObj.Warningf("New Keycode Info Failed. Key: %s, Value: %s", k, v)
+			Logger.Warningf("New Keycode Info Failed. Key: %s, Value: %s", k, v)
 			continue
 		}
 
@@ -309,7 +309,7 @@ func grabKeyboardAndMouse() {
 	go func() {
 		X, err := xgbutil.NewConn()
 		if err != nil {
-			logObj.Info("Get New Connection Failed:", err)
+			Logger.Info("Get New Connection Failed:", err)
 			return
 		}
 		keybind.Initialize(X)
@@ -317,7 +317,7 @@ func grabKeyboardAndMouse() {
 
 		err = keybind.GrabKeyboard(X, X.RootWin())
 		if err != nil {
-			logObj.Info("Grab Keyboard Failed:", err)
+			Logger.Info("Grab Keyboard Failed:", err)
 			return
 		}
 
@@ -328,7 +328,7 @@ func grabKeyboardAndMouse() {
 				GetManager().KeyReleaseEvent("")
 				ungrabAllMouseButton(X)
 				keybind.UngrabKeyboard(X)
-				logObj.Info("Button Press Event")
+				Logger.Info("Button Press Event")
 				xevent.Quit(X)
 			}).Connect(X, X.RootWin())
 
@@ -343,7 +343,7 @@ func grabKeyboardAndMouse() {
 				}
 				value := ""
 				modStr = deleteSpecialMod(modStr)
-				logObj.Infof("modStr: %s, keyStr: %s", modStr, keyStr)
+				Logger.Infof("modStr: %s, keyStr: %s", modStr, keyStr)
 				if len(modStr) > 0 {
 					value = convertModsToKeys(modStr) + "-" + keyStr
 				} else {
@@ -352,7 +352,7 @@ func grabKeyboardAndMouse() {
 				GetManager().KeyReleaseEvent(value)
 				ungrabAllMouseButton(X)
 				keybind.UngrabKeyboard(X)
-				logObj.Infof("Key: %s\n", value)
+				Logger.Infof("Key: %s\n", value)
 				xevent.Quit(X)
 			}).Connect(X, X.RootWin())
 
@@ -374,13 +374,13 @@ func ungrabAllMouseButton(X *xgbutil.XUtil) {
 
 func grabSignalShortcut(shortcut, action string, isGrab bool) {
 	if len(shortcut) < 1 {
-		logObj.Error("grabSignalKey args error")
+		Logger.Error("grabSignalKey args error")
 		return
 	}
 
 	mod, keys, err := keybind.ParseString(X, shortcut)
 	if err != nil {
-		logObj.Errorf("ParseString error: %v", err)
+		Logger.Errorf("ParseString error: %v", err)
 		return
 	}
 
@@ -407,7 +407,7 @@ func ungrabSignalShortcut(shortcut string) {
 
 	mod, keys, err := keybind.ParseString(X, shortcut)
 	if err != nil {
-		logObj.Errorf("ParseString error: %v", err)
+		Logger.Errorf("ParseString error: %v", err)
 		return
 	}
 

@@ -132,9 +132,9 @@ func (p *Power) updateIdletimer() {
 		min = 0
 	}
 	if err := p.screensaver.SetTimeout(uint32(min), 0, false); err != nil {
-		LOGGER.Error("Failed set ScreenSaver's timeout:", err)
+		Logger.Error("Failed set ScreenSaver's timeout:", err)
 	} else {
-		LOGGER.Info("Set ScreenTimeout to ", uint32(min), uint32(suspendDelta))
+		Logger.Info("Set ScreenTimeout to ", uint32(min), uint32(suspendDelta))
 	}
 }
 

@@ -3,5 +3,5 @@ package keybinding
 import "dde-daemon"
 
 func init() {
-	loader.Register(&loader.Module{"keybinding", Start, nil, true})
+	loader.Register(&loader.Module{"keybinding", Start, Stop, true})
 }
