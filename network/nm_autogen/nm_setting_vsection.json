@@ -1,5 +1,5 @@
 [
-{"Ignore":false, "Name":"NM_SETTING_VS_GENERAL", "Value":"vs-general", "DisplayName":"General", "RelatedSections":["NM_SETTING_CONNECTION_SETTING_NAME"]},
+{"Ignore":true, "Name":"NM_SETTING_VS_GENERAL", "Value":"vs-general", "DisplayName":"General", "RelatedSections":["NM_SETTING_CONNECTION_SETTING_NAME"]},
 {"Ignore":false, "Name":"NM_SETTING_VS_ETHERNET", "Value":"vs-ethernet", "DisplayName":"Ethernet", "RelatedSections":["NM_SETTING_WIRED_SETTING_NAME"]},
 {"Ignore":false, "Name":"NM_SETTING_VS_MOBILE", "Value":"vs-mobile", "DisplayName":"Mobile", "RelatedSections":["NM_SETTING_GSM_SETTING_NAME","NM_SETTING_CDMA_SETTING_NAME"]},
 {"Ignore":true, "Name":"NM_SETTING_VS_MOBILE_GSM", "Value":"vs-mobile-gsm", "DisplayName":"Mobile", "RelatedSections":["NM_SETTING_GSM_SETTING_NAME"]},

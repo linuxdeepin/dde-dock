@@ -28,7 +28,22 @@ import "../edit"
 
 BaseEditPage {
     id: editPage
-    activeExpandIndex: 0
+    activeExpandIndex: {
+        switch (connectionSession.type) {
+            case nmConnectionTypeWired: return 23;
+            case nmConnectionTypeWireless: return 5;
+            case nmConnectionTypeWirelessAdhoc: return 5;
+            case nmConnectionTypeWirelessHotspot: return 5;
+            case nmConnectionTypePppoe: return 7;
+            case nmConnectionTypeMobileGsm: return 2;
+            case nmConnectionTypeMobileCdma: return 2;
+            case nmConnectionTypeVpnL2tp: return 9;
+            case nmConnectionTypeVpnPptp: return 9;
+            case nmConnectionTypeVpnVpnc: return 9;
+            case nmConnectionTypeVpnOpenvpn: return 9;
+            case nmConnectionTypeVpnOpenconnect: return 9;
+        }
+    }
 
     EditLineConnectionId {
         id: lineConnectionId
@@ -40,6 +55,17 @@ BaseEditPage {
         section: "connection"
         key: "id"
         text: dsTr("Name")
+    }
+    EditLineSwitchButton {
+        id: lineConnectionAutoconnect
+        connectionSession: editPage.connectionSession
+        availableSections: editPage.availableSections
+        availableKeys: editPage.availableKeys
+        connectionData: editPage.connectionData
+        errors: editPage.errors
+        section: "connection"
+        key: "autoconnect"
+        text: dsTr("Automatically connect")
     }
     {{range $i, $vsection := .}}{{if .Ignore}}{{else}}{{$id := $vsection.Name | ToVsClassName | printf "section%s"}}
     EditSection{{$vsection.Name | ToVsClassName}} {

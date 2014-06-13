@@ -107,7 +107,7 @@ func DestroyManager(m *Manager) {
 }
 
 func (m *Manager) initManager() {
-	m.WiredEnabled = true
+	m.WiredEnabled = true // TODO
 	m.WirelessEnabled = property.NewWrapProperty(m, "WirelessEnabled", nmManager.WirelessEnabled)
 	m.NetworkingEnabled = property.NewWrapProperty(m, "NetworkingEnabled", nmManager.NetworkingEnabled)
 
