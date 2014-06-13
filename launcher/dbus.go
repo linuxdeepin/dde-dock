@@ -6,6 +6,7 @@ import (
 	"path"
 	"time"
 
+	"dbus/com/linuxdeepin/softwarecenter"
 	"github.com/howeyc/fsnotify"
 
 	"dlib/dbus"
@@ -31,11 +32,15 @@ type ItemChangedStatus struct {
 }
 
 type LauncherDBus struct {
+	soft *softwarecenter.SoftwareCenter
+
 	ItemChanged func(
 		status string,
 		itemInfo ItemInfo,
 		categoryId CategoryId,
 	)
+	PackageNameGet func(packagename string)
+	UpdateSignal   func([]Action)
 }
 
 func (d *LauncherDBus) GetDBusInfo() dbus.DBusInfo {
@@ -239,6 +244,55 @@ func (d *LauncherDBus) SaveFavors(items FavorItemList) bool {
 
 func (d *LauncherDBus) GetAppId(path string) string {
 	return string(genId(path))
+}
+
+func (d *LauncherDBus) GetPackageName(path string) {
+	var err error
+	d.soft, err = NewSoftwareCenter()
+	if err != nil {
+		logger.Warning("get softwarecenter dbus failed:", err)
+		return
+	}
+
+	go func(d *LauncherDBus) {
+		name := ""
+
+		logger.Warning("try to get package name from path", path)
+		name, err := d.soft.GetPkgNameFromPath(path)
+		if err != nil {
+			logger.Warning("call GetPkgNameFromPath method failed:",
+				err)
+			name = ""
+		}
+		d.PackageNameGet(name)
+	}(d)
+}
+
+func (d *LauncherDBus) Uninstall(pkgName string, purge bool) {
+	var err error
+	d.soft, err = NewSoftwareCenter()
+	if err != nil {
+		logger.Warning("get softwarecenter dbus failed:", err)
+		return
+	}
+
+	d.soft.Connectupdate_signal(func(message [][]interface{}) {
+		switch message[0][0].(string) {
+		case ActionStart, ActionUpdate, ActionFinish,
+			ActionFailed:
+			logger.Warning("update signal")
+		default:
+			return
+		}
+		msg := UpdateSignalTranslator(message)
+		d.UpdateSignal(msg)
+		logger.Warning("update signal", message)
+	})
+
+	err = d.soft.UninstallPkg(pkgName, purge)
+	if err != nil {
+		logger.Warning("call UninstallPkg method failed:", err)
+	}
 }
 
 func initDBus() {
