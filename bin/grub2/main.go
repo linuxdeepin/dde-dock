@@ -23,10 +23,16 @@ package main
 
 import (
 	"dde-daemon/grub2"
+	"dlib"
+	"dlib/dbus"
 	liblogger "dlib/logger"
 	"flag"
 	"fmt"
+	"os"
+	"time"
 )
+
+const dbusGrubDest = "com.deepin.daemon.Grub2"
 
 var (
 	argDebug      bool
@@ -70,6 +76,22 @@ func main() {
 	} else if argSetup {
 		g.Setup(argGfxmode)
 	} else {
-		grub2.RunAsDaemon()
+		runAsDaemon()
+	}
+}
+
+func runAsDaemon() {
+	if !dlib.UniqueOnSession(dbusGrubDest) {
+		fmt.Println("dbus unique:", dbusGrubDest)
+		return
+	}
+	grub2.Start()
+	dbus.SetAutoDestroyHandler(60*time.Second, func() bool {
+		return !grub2.IsUpdating()
+	})
+	dbus.DealWithUnhandledMessage()
+	if err := dbus.Wait(); err != nil {
+		fmt.Println("lost dbus session:", err)
+		os.Exit(1)
 	}
 }

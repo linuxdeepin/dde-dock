@@ -22,36 +22,15 @@
 package grub2
 
 import (
-	"dlib"
 	"dlib/dbus"
 	liblogger "dlib/logger"
 	"os"
-	"time"
 )
 
 var (
 	logger = liblogger.NewLogger(dbusGrubDest)
 	grub   *Grub2
 )
-
-func RunAsDaemon() {
-	if !dlib.UniqueOnSession(dbusGrubDest) {
-		logger.Warning("dbus unique:", dbusGrubDest)
-		return
-	}
-	Start()
-	dbus.SetAutoDestroyHandler(60*time.Second, func() bool {
-		if grub.Updating || grub.theme.Updating {
-			return false
-		} else {
-			return true
-		}
-	})
-	if err := dbus.Wait(); err != nil {
-		logger.Error("lost dbus session:", err)
-		os.Exit(1)
-	}
-}
 
 func Start() {
 	logger.BeginTracing()
@@ -80,4 +59,12 @@ func Stop() {
 
 func SetLoggerLevel(level liblogger.Priority) {
 	logger.SetLogLevel(level)
+}
+
+func IsUpdating() bool {
+	if grub.Updating || grub.theme.Updating {
+		return true
+	} else {
+		return false
+	}
 }
