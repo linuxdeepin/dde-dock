@@ -66,6 +66,7 @@ func (d *LauncherDBus) emitItemChanged(name, status string, info map[string]Item
 	logger.Info("Status:", status)
 	if status != SOFTWARE_STATUS_DELETED {
 		logger.Info(name)
+		<-time.After(time.Second * 10)
 		app := gio.NewDesktopAppInfoFromFilename(name)
 		for count := 0; app == nil; count++ {
 			<-time.After(time.Millisecond * 200)
