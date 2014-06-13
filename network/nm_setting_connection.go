@@ -110,14 +110,10 @@ func getSettingConnectionAvailableKeys(data connectionData) (keys []string) {
 	keys = appendAvailableKeys(data, keys, sectionConnection, NM_SETTING_CONNECTION_PERMISSIONS)
 
 	// auto-connect only available for target connection types
-	switch getSettingConnectionType(data) {
-	case connectionWired:
+	switch getCustomConnectionType(data) {
+	case connectionWired, connectionWireless, connectionWirelessAdhoc, connectionWirelessHotspot, connectionPppoe, connectionMobileGsm, connectionMobileCdma:
 		keys = appendAvailableKeys(data, keys, sectionConnection, NM_SETTING_CONNECTION_AUTOCONNECT)
-	case connectionWireless:
-		keys = appendAvailableKeys(data, keys, sectionConnection, NM_SETTING_CONNECTION_AUTOCONNECT)
-	case connectionPppoe:
-		keys = appendAvailableKeys(data, keys, sectionConnection, NM_SETTING_CONNECTION_AUTOCONNECT)
-	case connectionVpn:
+	case connectionVpn: // TODO
 	}
 	return
 }
