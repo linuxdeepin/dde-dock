@@ -211,7 +211,7 @@ func Start() {
 	logObject.BeginTracing()
 
 	sys := NewSystemInfo()
-	err := dbus.InstallOnSystem(sys)
+	err := dbus.InstallOnSession(sys)
 	if err != nil {
 		panic(err)
 	}

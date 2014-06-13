@@ -23,6 +23,7 @@ import _ "dde-daemon/launcher"
 
 import _ "dde-daemon/dsc"
 import _ "dde-daemon/mpris"
+import _ "dde-daemon/systeminfo"
 
 import "dlib/glib-2.0"
 
