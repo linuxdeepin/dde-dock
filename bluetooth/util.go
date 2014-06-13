@@ -23,6 +23,7 @@ package bluetooth
 
 import (
 	"encoding/json"
+	"os"
 )
 
 func isStringInArray(a string, list []string) bool {
@@ -41,6 +42,14 @@ func marshalJSON(v interface{}) (strJSON string) {
 		return
 	}
 	strJSON = string(byteJSON)
+	return
+}
+
+func unmarshalJSON(strJSON string, v interface{}) {
+	err := json.Unmarshal([]byte(strJSON), v)
+	if err != nil {
+		logger.Error(err)
+	}
 	return
 }
 
@@ -73,4 +82,20 @@ func interfaceToString(v interface{}) (r string) {
 func interfaceToInt16(v interface{}) (r int16) {
 	r, _ = v.(int16)
 	return
+}
+
+func openFileOrCreate(file string) (*os.File, error) {
+	return os.OpenFile(file, os.O_WRONLY|os.O_CREATE, 0644)
+}
+
+func isFileExists(file string) bool {
+	if _, err := os.Stat(file); err == nil {
+		return true
+	} else {
+		return false
+	}
+}
+
+func ensureDirExists(dir string) {
+	os.MkdirAll(dir, 0755)
 }

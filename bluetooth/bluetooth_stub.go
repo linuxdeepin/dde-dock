@@ -38,6 +38,7 @@ func (b *Bluetooth) OnPropertiesChanged(name string, oldv interface{}) {
 		oldPrimaryAdapter, _ := oldv.(string)
 		if b.PrimaryAdapter != oldPrimaryAdapter {
 			b.updatePropPrimaryAdapter(dbus.ObjectPath(b.PrimaryAdapter))
+			b.syncConfigPowered()
 		}
 	case "Powered":
 		b.updateAdapterScanState(dbus.ObjectPath(b.PrimaryAdapter))
@@ -94,26 +95,18 @@ func (b *Bluetooth) updatePropDevices() {
 	logger.Debug(b.Devices) // TODO test
 }
 
-// TODO
-func (b *Bluetooth) updatePropAlias(alias string) {
-	// b.Alias = alias
+func (b *Bluetooth) updatePropAlias() {
 	dbus.NotifyChange(b, "Alias")
 }
 
-// TODO
-func (b *Bluetooth) updatePropPowered(powered bool) {
-	// b.Powered = powered
+func (b *Bluetooth) updatePropPowered() {
 	dbus.NotifyChange(b, "Powered")
 }
 
-// TODO
-func (b *Bluetooth) updatePropDiscoverable(discoverable bool) {
-	// b.Discoverable = discoverable
+func (b *Bluetooth) updatePropDiscoverable() {
 	dbus.NotifyChange(b, "Discoverable")
 }
 
-// TODO
-func (b *Bluetooth) updatePropDiscoverableTimeout(discoverableTimeout uint32) {
-	// b.DiscoverableTimeout = discoverableTimeout
+func (b *Bluetooth) updatePropDiscoverableTimeout() {
 	dbus.NotifyChange(b, "DiscoverableTimeout")
 }

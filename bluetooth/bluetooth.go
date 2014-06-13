@@ -24,6 +24,7 @@ package bluetooth
 import (
 	idbus "dbus/org/freedesktop/dbus/system"
 	"dlib/dbus"
+	"dlib/dbus/property"
 )
 
 const (
@@ -44,6 +45,8 @@ type dbusInterfaceData map[string]map[string]dbus.Variant
 type dbusInterfacesData map[dbus.ObjectPath]map[string]map[string]dbus.Variant
 
 type Bluetooth struct {
+	config *config
+
 	// adapter
 	PrimaryAdapter string `access:"readwrite"` // do not use dbus.ObjectPath here due to could not be reawrite
 	adapters       []*adapter
@@ -54,10 +57,10 @@ type Bluetooth struct {
 	Devices string // device objects that marshaled by json
 
 	// alias properties for primary adapter
-	Alias               dbus.Property `access:"readwrite"`
-	Powered             dbus.Property `access:"readwrite"`
-	Discoverable        dbus.Property `access:"readwrite"`
-	DiscoverableTimeout dbus.Property `access:"readwrite"`
+	Alias               *property.WrapProperty `access:"readwrite"`
+	Powered             *property.WrapProperty `access:"readwrite"`
+	Discoverable        *property.WrapProperty `access:"readwrite"`
+	DiscoverableTimeout *property.WrapProperty `access:"readwrite"`
 
 	// signals
 	DeviceAdded      func(devJSON string)
@@ -66,8 +69,9 @@ type Bluetooth struct {
 	AuthorizeService func(devJSON string, uuid string)
 }
 
-func NewBluetooth() (bluettoth *Bluetooth) {
-	bluettoth = &Bluetooth{}
+func NewBluetooth() (b *Bluetooth) {
+	b = &Bluetooth{}
+	b.config = newConfig()
 	return
 }
 
@@ -105,6 +109,19 @@ func (b *Bluetooth) initBluetooth() {
 	// connect signals
 	bluezObjectManager.ConnectInterfacesAdded(b.handleInterfacesAdded)
 	bluezObjectManager.ConnectInterfacesRemoved(b.handleInterfacesRemoved)
+
+	// sync config
+	b.Powered.SetValue(b.config.Powered)
+	b.updatePropPowered()
+	b.syncConfigPowered()
+}
+func (b *Bluetooth) syncConfigPowered() {
+	cb := func() {
+		b.config.Powered, _ = b.Powered.GetValue().(bool)
+		b.config.save()
+	}
+	b.Powered.Reset()
+	b.Powered.ConnectChanged(cb)
 }
 func (b *Bluetooth) handleInterfacesAdded(path dbus.ObjectPath, data map[string]map[string]dbus.Variant) {
 	if _, ok := data[dbusBluezIfsAdapter]; ok {
