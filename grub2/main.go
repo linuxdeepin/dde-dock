@@ -40,8 +40,7 @@ func RunAsDaemon() {
 		return
 	}
 	Start()
-	// TODO
-	dbus.SetAutoDestroyHandler(1*time.Second, func() bool {
+	dbus.SetAutoDestroyHandler(60*time.Second, func() bool {
 		if grub.Updating || grub.theme.Updating {
 			return false
 		} else {
