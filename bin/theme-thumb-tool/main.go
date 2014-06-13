@@ -200,9 +200,10 @@ func main() {
 		list := getGtkList()
 		for _, l := range list {
 			dest := getThumbCachePath(op, l.Path, isSystem)
-			if len(dest) < 1 {
+			if len(dest) < 1 || objUtil.IsFileExist(dest) {
 				continue
 			}
+
 			name := path.Base(l.Path)
 			out, err := exec.Command(_GTK_THUMB_CMD_, name, dest).Output()
 			if err != nil || strings.Contains(string(out), "ERROR") {
@@ -213,7 +214,7 @@ func main() {
 		list := getIconList()
 		for _, l := range list {
 			dest := getThumbCachePath(op, l.Path, isSystem)
-			if len(dest) < 1 {
+			if len(dest) < 1 || objUtil.IsFileExist(dest) {
 				continue
 			}
 			bg := getThumbBg()
@@ -227,7 +228,7 @@ func main() {
 			list := getCursorList()
 			for _, l := range list {
 				dest := getThumbCachePath(op, l.Path, isSystem)
-				if len(dest) < 1 {
+				if len(dest) < 1 || objUtil.IsFileExist(dest) {
 					continue
 				}
 				bg := getThumbBg()
@@ -240,7 +241,7 @@ func main() {
 		list := getBgList()
 		for _, l := range list {
 			dest := getThumbCachePath(op, l.Path, isSystem)
-			if len(dest) < 1 {
+			if len(dest) < 1 || objUtil.IsFileExist(dest) {
 				continue
 			}
 			err := graphic.ThumbnailImage(l.Path, dest, 130, 73, graphic.PNG)
