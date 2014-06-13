@@ -61,6 +61,7 @@ func (obj *Manager) updateUserInfo(path string) {
 		logger.Errorf("Install DBus For %s Failed: %v", path, err)
 		panic(err)
 	}
+	u.updateProps()
 
 	obj.pathUserMap[path] = u
 }

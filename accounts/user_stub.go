@@ -90,24 +90,24 @@ func (obj *User) updatePropBackgroundFile(bg string) {
 }
 
 func (obj *User) updatePropAutomaticLogin(enable bool) {
-	if obj.AutomaticLogin != enable {
-		obj.AutomaticLogin = enable
-		dbus.NotifyChange(obj, "AutomaticLogin")
-	}
+	//if obj.AutomaticLogin != enable {
+	obj.AutomaticLogin = enable
+	dbus.NotifyChange(obj, "AutomaticLogin")
+	//}
 }
 
 func (obj *User) updatePropAccountType(acctype int32) {
-	if obj.AccountType != acctype {
-		obj.AccountType = acctype
-		dbus.NotifyChange(obj, "AccountType")
-	}
+	//if obj.AccountType != acctype {
+	obj.AccountType = acctype
+	dbus.NotifyChange(obj, "AccountType")
+	//}
 }
 
 func (obj *User) updatePropLocked(locked bool) {
-	if obj.Locked != locked {
-		obj.Locked = locked
-		dbus.NotifyChange(obj, "Locked")
-	}
+	//if obj.Locked != locked {
+	obj.Locked = locked
+	dbus.NotifyChange(obj, "Locked")
+	//}
 }
 
 func (obj *User) updatePropHistoryIcons(iconList []string) {

@@ -244,6 +244,20 @@ func getDefaultDisplayManager() string {
 	return path.Base(tmp)
 }
 
+func (user *User) updateProps() {
+	info, _ := getUserInfoByPath(user.objectPath)
+	user.updatePropUserName(info.Name)
+	user.updatePropHomeDir(info.Home)
+	user.updatePropShell(info.Shell)
+	user.updatePropLocked(info.Locked)
+	user.updatePropAutomaticLogin(user.getPropAutomaticLogin())
+	user.updatePropAccountType(user.getPropAccountType())
+	user.updatePropIconList(user.getPropIconList())
+	user.updatePropIconFile(user.getPropIconFile())
+	user.updatePropBackgroundFile(user.getPropBackgroundFile())
+	user.updatePropHistoryIcons(user.getPropHistoryIcons())
+}
+
 func newUser(path string) *User {
 	info, ok := getUserInfoByPath(path)
 	if !ok {
@@ -254,16 +268,6 @@ func newUser(path string) *User {
 	obj.objectPath = info.Path
 	obj.Uid = info.Uid
 	obj.Gid = info.Gid
-	obj.updatePropUserName(info.Name)
-	obj.updatePropHomeDir(info.Home)
-	obj.updatePropShell(info.Shell)
-	obj.updatePropLocked(info.Locked)
-	obj.updatePropAutomaticLogin(obj.getPropAutomaticLogin())
-	obj.updatePropAccountType(obj.getPropAccountType())
-	obj.updatePropIconList(obj.getPropIconList())
-	obj.updatePropIconFile(obj.getPropIconFile())
-	obj.updatePropBackgroundFile(obj.getPropBackgroundFile())
-	obj.updatePropHistoryIcons(obj.getPropHistoryIcons())
 
 	obj.watchQuit = make(chan bool)
 	obj.endFlag = make(chan bool)

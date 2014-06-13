@@ -30,7 +30,7 @@ import (
 )
 
 func init() {
-	loader.Register(&loader.Module{"accounts", Start, nil, true})
+	loader.Register(&loader.Module{"accounts", Start, Stop, true})
 }
 
 var (
