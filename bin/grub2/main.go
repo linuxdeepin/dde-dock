@@ -72,8 +72,10 @@ func main() {
 
 	g := grub2.NewGrub2()
 	if argSetupTheme {
+		fmt.Println("setup theme: true")
 		g.SetupTheme(argGfxmode)
 	} else if argSetup {
+		fmt.Println("setup mode: true")
 		g.Setup(argGfxmode)
 	} else {
 		runAsDaemon()
@@ -81,8 +83,12 @@ func main() {
 }
 
 func runAsDaemon() {
+	logger := liblogger.NewLogger(dbusGrubDest + ".Wrapper")
+	logger.BeginTracing()
+	defer logger.EndTracing()
+
 	if !dlib.UniqueOnSession(dbusGrubDest) {
-		fmt.Println("dbus unique:", dbusGrubDest)
+		logger.Error("dbus unique:", dbusGrubDest)
 		return
 	}
 	grub2.Start()
@@ -91,7 +97,7 @@ func runAsDaemon() {
 	})
 	dbus.DealWithUnhandledMessage()
 	if err := dbus.Wait(); err != nil {
-		fmt.Println("lost dbus session:", err)
+		logger.Error("lost dbus session:", err)
 		os.Exit(1)
 	}
 }
