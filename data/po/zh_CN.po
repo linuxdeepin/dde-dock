@@ -3591,7 +3591,7 @@ msgstr "仅使用4G（LTE）"
 #: ../../network/nm_setting_ip4_config.go:174
 #: ../../network/nm_setting_ip6_config.go:66
 msgid "Auto"
-msgstr "{0}{/0} {1}{/1}(自动)"
+msgstr "自动"
 
 #: ../../network/nm_setting_ip4_config.go:175
 #: ../../network/nm_setting_ip6_config.go:68
