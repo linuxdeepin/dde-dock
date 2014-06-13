@@ -45,7 +45,7 @@ type dbusInterfacesData map[dbus.ObjectPath]map[string]map[string]dbus.Variant
 
 type Bluetooth struct {
 	// adapter
-	PrimaryAdapter string `access:"readwrite"` // TODO dbus.ObjectPath
+	PrimaryAdapter string `access:"readwrite"` // do not use dbus.ObjectPath here due to could not be reawrite
 	adapters       []*adapter
 	Adapters       string // array of adapters that marshaled by json
 
@@ -58,10 +58,6 @@ type Bluetooth struct {
 	Powered             dbus.Property `access:"readwrite"`
 	Discoverable        dbus.Property `access:"readwrite"`
 	DiscoverableTimeout dbus.Property `access:"readwrite"`
-	// Alias               string `access:"readwrite"`
-	// Powered             bool   `access:"readwrite"`
-	// Discoverable        bool   `access:"readwrite"`
-	// DiscoverableTimeout uint32 `access:"readwrite"`
 
 	// signals
 	DeviceAdded      func(devJSON string)
@@ -72,7 +68,6 @@ type Bluetooth struct {
 
 func NewBluetooth() (bluettoth *Bluetooth) {
 	bluettoth = &Bluetooth{}
-	// TODO
 	return
 }
 

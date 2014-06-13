@@ -57,18 +57,13 @@ func (b *Bluetooth) updatePropPrimaryAdapter(apath dbus.ObjectPath) {
 		b.updateAdapterScanState(a.Path)
 	}
 
-	// TODO update alias properties
+	// update alias properties
 	if b.isAdapterExists(apath) {
 		bluezAdapter, _ := bluezNewAdapter(apath)
 		b.Alias = property.NewWrapProperty(b, "Alias", bluezAdapter.Alias)
 		b.Powered = property.NewWrapProperty(b, "Powered", bluezAdapter.Powered)
 		b.Discoverable = property.NewWrapProperty(b, "Discoverable", bluezAdapter.Discoverable)
 		b.DiscoverableTimeout = property.NewWrapProperty(b, "DiscoverableTimeout", bluezAdapter.DiscoverableTimeout)
-		// TODO remove
-		// b.updatePropAlias(bluezGetAdapterAlias(apath))
-		// b.updatePropPowered(bluezGetAdapterPowered(apath))
-		// b.updatePropDiscoverable(bluezGetAdapterDiscoverable(apath))
-		// b.updatePropDiscoverableTimeout(bluezGetAdapterDiscoverableTimeout(apath))
 	}
 
 	dbus.NotifyChange(b, "PrimaryAdapter")
