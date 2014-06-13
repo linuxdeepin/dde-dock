@@ -120,10 +120,6 @@ func setLayout(key string) {
 	}
 }
 
-func initGdkEnv() {
-	C.init_gdk_env()
-}
-
 func disableTPadWhileTyping(enable bool) {
 	if tpadEnable := tpadSettings.GetBoolean(TPAD_KEY_ENABLE); !tpadEnable {
 		if tpadTypingState {
@@ -150,6 +146,7 @@ func setQtCursorBlink(rate uint32) {
 }
 
 func listenDevsSettings() {
+	C.listen_device_changed()
 	tpadSettings.Connect("changed", func(s *gio.Settings, key string) {
 		println("TPad Settings Changed: ", key)
 		switch key {

@@ -28,7 +28,7 @@
 #define MOUSE_NAME_KEY "mouse"
 #define KEYBOARD_KEY_NAME "keyboard"
 
-void init_gdk_env ();
+void listen_device_changed ();
 
 // TouchPad Set Func
 void set_tpad_enable(int enable);

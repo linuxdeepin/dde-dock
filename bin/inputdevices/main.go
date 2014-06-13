@@ -1,30 +1,48 @@
-/**
- * Copyright (c) 2011 ~ 2014 Deepin, Inc.
- *               2013 ~ 2014 jouyouyun
- *
- * Author:      jouyouyun <jouyouwen717@gmail.com>
- * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
- **/
-
 package main
 
-import (
-	"dde-daemon/inputdevices"
-)
+import _ "dde-daemon/inputdevices"
+
+import "dlib/glib-2.0"
+
+//#cgo pkg-config:gtk+-3.0
+//#include <gtk/gtk.h>
+//void init(){gtk_init(0,0);}
+import "C"
+import . "dlib/gettext"
+import "dlib"
+import "dlib/logger"
+import "dlib/dbus"
+import "dde-daemon"
+import "os"
+
+var Logger = logger.NewLogger("com.deepin.daemon.InputDevices")
 
 func main() {
-	inputdevices.Start()
+	if !dlib.UniqueOnSession("com.deepin.daemon.InputDevices") {
+		Logger.Warning("There already has an dde-daemon running.")
+		return
+	}
+	Logger.BeginTracing()
+	defer Logger.EndTracing()
+
+	InitI18n()
+	Textdomain("dde-daemon")
+
+	C.init()
+
+	loader.Start()
+	defer loader.Stop()
+
+	go func() {
+		if err := dbus.Wait(); err != nil {
+			Logger.Errorf("Lost dbus: %v", err)
+			os.Exit(-1)
+		} else {
+			os.Exit(0)
+		}
+	}()
+
+	ddeSessionRegister()
+	dbus.DealWithUnhandledMessage()
+	glib.StartLoop()
 }

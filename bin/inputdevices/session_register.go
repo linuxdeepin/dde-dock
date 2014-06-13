@@ -1,4 +1,4 @@
-package inputdevices
+package main
 
 import "dbus/com/deepin/sessionmanager"
 import "os"

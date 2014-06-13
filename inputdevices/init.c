@@ -26,21 +26,12 @@
 
 #include "_cgo_export.h"
 
-static void listen_device_changed();
 static void device_removed_cb(GdkDeviceManager *manager,
                               GdkDevice *device, gpointer user_data);
 static void device_added_cb(GdkDeviceManager *manager,
                             GdkDevice *device, gpointer user_data);
 
-void
-init_gdk_env ()
-{
-	gdk_init(NULL, NULL);
-	listen_device_changed();
-}
-
-static void
-listen_device_changed ()
+void listen_device_changed ()
 {
 	GdkDeviceManager *manager = gdk_display_get_device_manager(
 	                                gdk_display_get_default());
