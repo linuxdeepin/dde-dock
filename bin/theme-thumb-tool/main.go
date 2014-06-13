@@ -28,7 +28,6 @@ package main
 import "C"
 
 import (
-	//"dbus/com/deepin/sessionmanager"
 	"dlib/graphic"
 	"dlib/utils"
 	"fmt"
@@ -42,7 +41,6 @@ import (
 )
 
 var (
-	//objXS   *sessionmanager.XSettings
 	objUtil = utils.NewUtils()
 )
 
@@ -92,39 +90,36 @@ func getThumbCachePath(t, src string, isSystem bool) string {
 	return ""
 }
 
-/*
 func genCursorThumbnail(info pathInfo, dest, bg string) bool {
-	theme := path.Base(info.Path)
-	if len(theme) < 1 || len(dest) < 1 || len(bg) < 1 {
+	if len(dest) < 1 || len(bg) < 1 {
 		return false
 	}
 
-	// Get Current Theme
-	curTheme, _, err := objXS.GetString("Gtk/CursorThemeName")
-	if err != nil {
-		fmt.Printf("Get Current Cusrsor Theme Failed: %v\n", err)
+	item1, item2, item3 := getCursorIcons(info)
+	if len(item1) < 1 || len(item2) < 1 || len(item3) < 1 {
+		fmt.Println("getCursorIcons Failed")
 		return false
 	}
-	// Set CursorTheme To theme
-	if theme != curTheme {
-		objXS.SetString("Gtk/CursorThemeName", theme)
-	}
+
 	cBg := C.CString(bg)
 	defer C.free(unsafe.Pointer(cBg))
 	cDest := C.CString(dest)
 	defer C.free(unsafe.Pointer(cDest))
-	cRet := C.gen_cursor_preview(cBg, cDest)
-	// Set CursorTheme To curTheme
-	if theme != curTheme {
-		objXS.SetString("Gtk/CursorThemeName", curTheme)
-	}
-	if int(cRet) == -1 {
+	cItem1 := C.CString(item1)
+	defer C.free(unsafe.Pointer(cItem1))
+	cItem2 := C.CString(item2)
+	defer C.free(unsafe.Pointer(cItem2))
+	cItem3 := C.CString(item3)
+	defer C.free(unsafe.Pointer(cItem3))
+
+	ret := C.gen_icon_preview(cBg, cDest, cItem1, cItem2, cItem3)
+	if int(ret) == -1 {
+		fmt.Println("Generate Icon Thumbnail Error")
 		return false
 	}
 
 	return true
 }
-*/
 
 func genIconThumbnail(info pathInfo, dest, bg string) bool {
 	if len(dest) < 1 || len(bg) < 1 {
@@ -171,19 +166,10 @@ func printHelper() {
 }
 
 func main() {
-	if len(os.Args) != 2 {
+	if len(os.Args) < 2 {
 		printHelper()
 		return
 	}
-
-	/*
-		var err error
-		if objXS, err = sessionmanager.NewXSettings("com.deepin.SessionManager", "/com/deepin/XSettings"); err != nil {
-			fmt.Printf("ERROR\n")
-			fmt.Printf("New XSettings Failed: %v\n", err)
-			return
-		}
-	*/
 
 	C.init_env()
 
@@ -223,20 +209,17 @@ func main() {
 			}
 		}
 	case "--cursor":
-		return
-		/*
-			list := getCursorList()
-			for _, l := range list {
-				dest := getThumbCachePath(op, l.Path, isSystem)
-				if len(dest) < 1 || objUtil.IsFileExist(dest) {
-					continue
-				}
-				bg := getThumbBg()
-				if !genCursorThumbnail(l, dest, bg) {
-					fmt.Printf("ERROR: Generate Cursor Thumbnail\n")
-				}
+		list := getCursorList()
+		for _, l := range list {
+			dest := getThumbCachePath(op, l.Path, isSystem)
+			if len(dest) < 1 || objUtil.IsFileExist(dest) {
+				continue
 			}
-		*/
+			bg := getThumbBg()
+			if !genCursorThumbnail(l, dest, bg) {
+				fmt.Printf("ERROR: Generate Cursor Thumbnail\n")
+			}
+		}
 	case "--background":
 		list := getBgList()
 		for _, l := range list {
