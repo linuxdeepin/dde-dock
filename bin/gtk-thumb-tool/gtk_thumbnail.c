@@ -67,16 +67,17 @@ void capture(GtkOffscreenWindow* w, GdkEvent* event, gpointer user_data)
 
 void padding_thumbnail(GtkFixed* thumb)
 {
-    GtkWidget *btn = gtk_button_new_with_label("      ");
+    //TODO: Should handle gtk2/gtk3 themes. 
+    /*GtkWidget *btn = gtk_button_new_with_label("      ");*/
 
-    gtk_fixed_put(thumb, btn, 72, 5);
+    /*gtk_fixed_put(thumb, btn, 72, 5);*/
 
-    btn = gtk_radio_button_new(NULL);
-    gtk_fixed_put(thumb, btn, 5, 5);
+    /*btn = gtk_radio_button_new(NULL);*/
+    /*gtk_fixed_put(thumb, btn, 5, 5);*/
 
-    btn = gtk_check_button_new();
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(btn), TRUE);
-    gtk_fixed_put(thumb, btn, 35, 5);
+    /*btn = gtk_check_button_new();*/
+    /*gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(btn), TRUE);*/
+    /*gtk_fixed_put(thumb, btn, 35, 5);*/
 }
 
 int gen_gtk_thumbnail(char *theme, char *dest)
