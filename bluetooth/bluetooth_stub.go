@@ -41,7 +41,13 @@ func (b *Bluetooth) OnPropertiesChanged(name string, oldv interface{}) {
 			b.syncConfigPowered()
 		}
 	case "Powered":
-		b.updateAdapterScanState(dbus.ObjectPath(b.PrimaryAdapter))
+		if b.isPrimaryAdapterExists() {
+			b.updateAdapterScanState(dbus.ObjectPath(b.PrimaryAdapter))
+		}
+		// else {
+		// 	b.Powered.SetValue(false)
+		// 	b.updatePropPowered()
+		// }
 	}
 }
 

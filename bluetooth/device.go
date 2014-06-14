@@ -57,6 +57,7 @@ func (b *Bluetooth) newDevice(dpath dbus.ObjectPath, data map[string]dbus.Varian
 	d.Icon = getDBusObjectValueString(data, "Icon")
 	if isDBusObjectKeyExists(data, "RSSI") {
 		d.RSSI = getDBusObjectValueInt16(data, "RSSI")
+		d.fixRssi()
 	} else {
 		d.RSSI = deviceRssiNotInRange
 	}
@@ -87,10 +88,16 @@ func (b *Bluetooth) newDevice(dpath dbus.ObjectPath, data map[string]dbus.Varian
 	})
 	d.bluezDevice.RSSI.ConnectChanged(func() {
 		d.RSSI = d.bluezDevice.RSSI.Get()
+		d.fixRssi()
 		b.updatePropDevices()
 	})
 
 	return
+}
+func (d *device) fixRssi() {
+	if d.RSSI == 0 {
+		d.RSSI = deviceRssiNotInRange
+	}
 }
 
 func (b *Bluetooth) addDevice(dpath dbus.ObjectPath, data map[string]dbus.Variant) {
@@ -102,7 +109,7 @@ func (b *Bluetooth) addDevice(dpath dbus.ObjectPath, data map[string]dbus.Varian
 	b.devices[d.adapter] = append(b.devices[d.adapter], d)
 	b.updatePropDevices()
 
-	// send signal, DeviceAdded()
+	// send signal DeviceAdded() if device is managed by primary adapter
 	if dbus.ObjectPath(b.PrimaryAdapter) == d.adapter {
 		if b.DeviceAdded != nil {
 			b.DeviceAdded(marshalJSON(d))
@@ -117,10 +124,10 @@ func (b *Bluetooth) removeDevice(dpath dbus.ObjectPath) {
 			b.devices[apath] = b.doRemoveDevice(devices, dpath)
 			b.updatePropDevices()
 
-			// send signal, DeviceRemoved()
+			// send signal DeviceRemoved() if device is managed by primary adapter
 			if dbus.ObjectPath(b.PrimaryAdapter) == apath {
 				if b.DeviceRemoved != nil {
-					d := device{Path: dpath}
+					d := &device{Path: dpath}
 					b.DeviceRemoved(marshalJSON(d))
 				}
 			}

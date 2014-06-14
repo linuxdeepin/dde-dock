@@ -63,8 +63,9 @@ type Bluetooth struct {
 	DiscoverableTimeout *property.WrapProperty `access:"readwrite"`
 
 	// signals
-	DeviceAdded      func(devJSON string)
-	DeviceRemoved    func(devJSON string)
+	DeviceAdded   func(devJSON string)
+	DeviceRemoved func(devJSON string)
+	// DeviceUpdated    func(devJSON string) // TODO
 	RequestPinCode   func(devJSON string)
 	AuthorizeService func(devJSON string, uuid string)
 }
@@ -110,6 +111,12 @@ func (b *Bluetooth) initBluetooth() {
 	bluezObjectManager.ConnectInterfacesAdded(b.handleInterfacesAdded)
 	bluezObjectManager.ConnectInterfacesRemoved(b.handleInterfacesRemoved)
 
+	// b.PrimaryAdapter.ConnectChanged(func() {
+	// 	b.Powered =
+	// 		b.updatePropPowered()
+	// }
+	// )
+
 	// sync config
 	// TODO adapter not exists, and add a new adapter temporary
 	if b.Powered != nil {
@@ -129,7 +136,7 @@ func (b *Bluetooth) syncConfigPowered() {
 func (b *Bluetooth) handleInterfacesAdded(path dbus.ObjectPath, data map[string]map[string]dbus.Variant) {
 	if _, ok := data[dbusBluezIfsAdapter]; ok {
 		b.addAdapter(path)
-		if len(b.PrimaryAdapter) == 0 {
+		if !b.isPrimaryAdapterExists() {
 			b.updatePropPrimaryAdapter(path)
 		}
 	}
@@ -151,4 +158,11 @@ func (b *Bluetooth) handleInterfacesRemoved(path dbus.ObjectPath, interfaces []s
 	if isStringInArray(dbusBluezIfsDevice, interfaces) {
 		b.removeDevice(path)
 	}
+}
+
+func (b *Bluetooth) isPrimaryAdapterExists() bool {
+	if len(b.PrimaryAdapter) > 0 {
+		return true
+	}
+	return false
 }
