@@ -38,7 +38,6 @@ import "dlib/logger"
 import "os"
 import "dlib/dbus"
 import "dde-daemon"
-import "fmt"
 
 var Logger = logger.NewLogger("com.deepin.daemon")
 
@@ -61,7 +60,6 @@ func main() {
 	C.init()
 
 	loader.Start()
-	fmt.Println("Start ok...........")
 	defer loader.Stop()
 
 	go func() {

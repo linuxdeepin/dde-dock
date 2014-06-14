@@ -1,5 +1,11 @@
 package loader
 
+import (
+	"dlib/logger"
+)
+
+var Logger = logger.NewLogger("dde.daemon.loader")
+
 type Module struct {
 	Name   string
 	Start  func()
@@ -24,18 +30,32 @@ func Register(newModule *Module) {
 		}
 	}
 	if newModule.Start == nil || newModule.Stop == nil {
-		panic("can't register an incomplete module " + newModule.Name)
+		Logger.Fatal("can't register an incomplete module " + newModule.Name)
 	}
 	modules = append([]*Module{newModule}, modules...)
 }
 
 func Start() {
 	for _, m := range modules {
-		m.Start()
+		func() {
+			defer func() {
+				if err := recover(); err != nil {
+					Logger.Error("Start module", m.Name, "failed:", err)
+				}
+			}()
+			m.Start()
+		}()
 	}
 }
 func Stop() {
 	for _, m := range modules {
-		m.Stop()
+		func() {
+			defer func() {
+				if err := recover(); err != nil {
+					Logger.Error("Stop module", m.Name, "failed:", err)
+				}
+			}()
+			m.Start()
+		}()
 	}
 }
