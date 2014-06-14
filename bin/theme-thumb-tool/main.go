@@ -166,12 +166,15 @@ func printHelper() {
 }
 
 func main() {
+	if C.init_env() == 0 {
+		fmt.Println("Can't generate thumbnails, try run this program under an X11 enviorment")
+		return
+	}
+
 	if len(os.Args) < 2 {
 		printHelper()
 		return
 	}
-
-	C.init_env()
 
 	op := os.Args[1]
 	isSystem := false

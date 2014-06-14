@@ -24,7 +24,7 @@
 
 #define ICON_SPCAE 15
 
-void init_env ();
+int init_env ();
 int gen_cursor_preview(char *bg, char *dest);
 int gen_icon_preview(char *bg, char *dest, 
 		char *item1, char *item2, char *item3);

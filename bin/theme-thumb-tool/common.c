@@ -23,10 +23,9 @@
 #include <gtk/gtk.h>
 #include "common.h"
 
-void
-init_env ()
+int init_env ()
 {
-	gtk_init(NULL, NULL);
+	return gtk_init_check(NULL, NULL);
 }
 
 int
