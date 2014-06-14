@@ -109,8 +109,8 @@ func (obj *Manager) modifyTheme(name, gtk, icon, sound, cursor, bg string, fontS
 	}
 
 	if newFlag {
-		obj.setPropThemeList(obj.getDThemeStrList())
 		obj.rebuildThemes()
+		obj.setPropThemeList(obj.getDThemeStrList())
 	}
 	changeUserThemeDir()
 
@@ -135,7 +135,8 @@ func (obj *Manager) rebuildThemes() {
 	obj.destroyAllTheme()
 
 	flag := false
-	for _, t := range obj.ThemeList {
+	list := obj.getDThemeStrList()
+	for _, t := range list {
 		name := path.Base(t)
 		tList := getDThemeList()
 		for _, l := range tList {
@@ -153,10 +154,10 @@ func (obj *Manager) rebuildThemes() {
 	}
 
 	if !flag {
-		obj.setPropCurrentTheme(DEFAULT_THEME)
 		if t, ok := obj.themeObjMap[DEFAULT_THEME]; ok {
 			t.setAllThemes()
 		}
+		obj.setPropCurrentTheme(DEFAULT_THEME)
 	}
 }
 

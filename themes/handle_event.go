@@ -168,8 +168,8 @@ func (obj *Manager) handleEvent() {
 			ok1, _ = regexp.MatchString(PERSON_SYS_THEME_PATH, ev.Name)
 			ok2, _ = regexp.MatchString(PERSON_LOCAL_THEME_PATH, ev.Name)
 			if ok1 || ok2 {
-				obj.setPropThemeList(obj.getDThemeStrList())
 				obj.rebuildThemes()
+				obj.setPropThemeList(obj.getDThemeStrList())
 			}
 		case err, ok := <-obj.watcher.Error:
 			if !ok || err != nil {
