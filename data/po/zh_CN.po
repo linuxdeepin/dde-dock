@@ -2,16 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-14 13:15+0800\n"
+"POT-Creation-Date: 2014-06-14 16:44+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Last-Translator: FULL NAME &lt;EMAIL@ADDRESS&gt;\n"
+"Language-Team: LANGUAGE &lt;LL@li.org&gt;\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -25,18 +23,18 @@ msgstr "串行端口"
 msgid "Dial-Up Networking"
 msgstr "拨号网络"
 
+# "Hands-Free Device"
 #: ../../bluetooth/bluez_profile.go:33
-#, fuzzy
 msgid "Hands-Free Device"
 msgstr "免提装置"
 
+# "免提语音网关"
 #: ../../bluetooth/bluez_profile.go:34
-#, fuzzy
 msgid "Hands-Free voice gateway"
 msgstr "免提语音网关"
 
+# "Headset voice gateway"
 #: ../../bluetooth/bluez_profile.go:35
-#, fuzzy
 msgid "Headset voice gateway"
 msgstr "耳机语音网关"
 
@@ -52,13 +50,13 @@ msgstr "文件传输"
 msgid "Synchronization"
 msgstr "同步"
 
+# "Phone book access"
 #: ../../bluetooth/bluez_profile.go:39
-#, fuzzy
 msgid "Phone book access"
 msgstr "电话簿访问"
 
+# "Phone book access client"
 #: ../../bluetooth/bluez_profile.go:40
-#, fuzzy
 msgid "Phone book access client"
 msgstr "电话簿访问客户端"
 
@@ -70,1113 +68,1089 @@ msgstr "消息访问"
 msgid "Message Notification"
 msgstr "消息通知"
 
+# "Changing system language, please wait"
 #: ../../datetime/datetime.go:131
-#, fuzzy
 msgid "Changing system language, please wait"
-msgstr "正在更改系统语言，请稍后"
+msgstr "正在更改系统语言，请稍后。"
 
 #: ../../datetime/locale_map.go:7
 msgid "Afar, Djibouti"
-msgstr ""
+msgstr "阿法尔语，吉布提"
 
 #: ../../datetime/locale_map.go:8
 msgid "Afar, Eritrea"
-msgstr ""
+msgstr "阿法尔语，厄立特里亚"
 
 #: ../../datetime/locale_map.go:9
 msgid "Afar, Eritrea (Saaho)"
-msgstr ""
+msgstr "阿法尔语，厄立特里亚 (Saaho)"
 
 #: ../../datetime/locale_map.go:10
 msgid "Afar, Ethiopia"
-msgstr ""
+msgstr "阿法尔语，埃塞俄比亚"
 
 #: ../../datetime/locale_map.go:11
 msgid "Afrikaans, South Africa"
-msgstr ""
+msgstr "南非荷兰语，南非"
 
 #: ../../datetime/locale_map.go:12
 msgid "Amharic, Ethiopia"
-msgstr ""
+msgstr "阿姆哈拉语，埃塞俄比亚"
 
 #: ../../datetime/locale_map.go:13
-#, fuzzy
 msgid "Aragonese, Spain"
-msgstr "日本（UTC+09）日本"
+msgstr "阿拉贡语，西班牙"
 
 #: ../../datetime/locale_map.go:14
-#, fuzzy
 msgid "Arabic, United Arab Emirates"
-msgstr "阿拉伯联合酋长国（UTC+04）迪拜"
+msgstr "阿拉伯语,，阿拉伯联合酋长国"
 
 #: ../../datetime/locale_map.go:15
 msgid "Arabic, Bahrain"
-msgstr ""
+msgstr "阿拉伯语，巴林"
 
 #: ../../datetime/locale_map.go:16
 msgid "Arabic, Algeria"
-msgstr ""
+msgstr "阿拉伯语，阿尔及利亚"
 
 #: ../../datetime/locale_map.go:17
 msgid "Arabic, Egypt"
-msgstr ""
+msgstr "阿拉伯语，埃及"
 
 #: ../../datetime/locale_map.go:18
 msgid "Arabic, India"
-msgstr ""
+msgstr "阿拉伯语，印度"
 
 #: ../../datetime/locale_map.go:19
 msgid "Arabic, Iraq"
-msgstr ""
+msgstr "阿拉伯语，伊拉克"
 
 #: ../../datetime/locale_map.go:20
 msgid "Arabic, Jordan"
-msgstr ""
+msgstr "阿拉伯语，约旦"
 
 #: ../../datetime/locale_map.go:21
 msgid "Arabic, Kuwait"
-msgstr ""
+msgstr "阿拉伯语，科威特"
 
 #: ../../datetime/locale_map.go:22
 msgid "Arabic, Lebanon"
-msgstr ""
+msgstr "阿拉伯语，黎巴嫩"
 
 #: ../../datetime/locale_map.go:23
 msgid "Arabic, Libya"
-msgstr ""
+msgstr "阿拉伯语，利比亚"
 
 #: ../../datetime/locale_map.go:24
 msgid "Arabic, Morocco"
-msgstr ""
+msgstr "阿拉伯语，摩洛哥"
 
 #: ../../datetime/locale_map.go:25
 msgid "Arabic, Oman"
-msgstr ""
+msgstr "阿拉伯语 ，阿曼"
 
 #: ../../datetime/locale_map.go:26
 msgid "Arabic, Qatar"
-msgstr ""
+msgstr "阿拉伯语 ，卡塔尔"
 
 #: ../../datetime/locale_map.go:27
-#, fuzzy
 msgid "Arabic, Saudi Arabia"
-msgstr "阿拉伯联合酋长国（UTC+04）迪拜"
+msgstr "阿拉伯语，沙特阿拉伯"
 
 #: ../../datetime/locale_map.go:28
 msgid "Arabic, Sudan"
-msgstr ""
+msgstr "阿拉伯语，苏丹"
 
 #: ../../datetime/locale_map.go:29
 msgid "Arabic, Syria"
-msgstr ""
+msgstr "阿拉伯语，叙利亚"
 
 #: ../../datetime/locale_map.go:30
 msgid "Arabic, Tunisia"
-msgstr ""
+msgstr "阿拉伯语，突尼斯"
 
 #: ../../datetime/locale_map.go:31
 msgid "Arabic, Yemen"
-msgstr ""
+msgstr "阿拉伯语，也门"
 
 #: ../../datetime/locale_map.go:32
 msgid "Assamese, India"
-msgstr ""
+msgstr "阿萨姆语，印度"
 
 #: ../../datetime/locale_map.go:33
 msgid "Asturian, Spain"
-msgstr ""
+msgstr "阿斯图里亚斯语，西班牙"
 
 #: ../../datetime/locale_map.go:34
 msgid "Azeri, Azerbaijan"
-msgstr ""
+msgstr "阿塞拜疆语 ，阿塞拜疆"
 
 #: ../../datetime/locale_map.go:35 ../../datetime/locale_map.go:36
 msgid "Belarusian, Belarus"
-msgstr ""
+msgstr "白俄罗斯文 ，白俄罗斯"
 
 #: ../../datetime/locale_map.go:37
 msgid "Bemba, Zambia"
-msgstr ""
+msgstr "本巴语，赞比亚"
 
 #: ../../datetime/locale_map.go:38
 msgid "Amazigh, Algeria"
-msgstr ""
+msgstr "柏柏尔语，阿尔及利亚"
 
 #: ../../datetime/locale_map.go:39
 msgid "Amazigh, Morocco"
-msgstr ""
+msgstr "柏柏尔语，摩洛哥"
 
 #: ../../datetime/locale_map.go:40
 msgid "Bulgarian, Bulgaria"
-msgstr ""
+msgstr "保加利亚语，保加利亚"
 
 #: ../../datetime/locale_map.go:41
 msgid "Bhojpuri, India"
-msgstr ""
+msgstr "比哈尔语，印度"
 
 #: ../../datetime/locale_map.go:42
 msgid "Bengali, Bangladesh"
-msgstr ""
+msgstr "孟加拉语，孟加拉"
 
 #: ../../datetime/locale_map.go:43
 msgid "Bengali, India"
-msgstr ""
+msgstr "孟加拉语，印度"
 
 #: ../../datetime/locale_map.go:44
 msgid "Tibetan, China"
-msgstr ""
+msgstr "藏语，中国"
 
 #: ../../datetime/locale_map.go:45
 msgid "Tibetan, India"
-msgstr ""
+msgstr "藏语，印度"
 
 #: ../../datetime/locale_map.go:46
 msgid "Breton, France"
-msgstr ""
+msgstr "布列塔尼语，法国"
 
 #: ../../datetime/locale_map.go:47
 msgid "Bodo, India"
-msgstr ""
+msgstr "博多语，印度"
 
 #: ../../datetime/locale_map.go:48
 msgid "Bosnian, Bosnia and Herzegowina"
-msgstr ""
+msgstr "波斯尼亚语，波斯尼亚和黑塞哥维那"
 
 #: ../../datetime/locale_map.go:49
 msgid "Blin, Eritrea"
-msgstr ""
+msgstr "比林语，厄立特里亚"
 
 #: ../../datetime/locale_map.go:50
 msgid "Catalan, Andorra "
-msgstr ""
+msgstr "加泰罗尼亚语，安道尔 "
 
 #: ../../datetime/locale_map.go:51
 msgid "Catalan, Spain"
-msgstr ""
+msgstr "加泰罗尼亚语，西班牙"
 
 #: ../../datetime/locale_map.go:52
 msgid "Catalan, France "
-msgstr ""
+msgstr "加泰罗尼亚语，法国 "
 
 #: ../../datetime/locale_map.go:53
 msgid "Catalan, Italy"
-msgstr ""
+msgstr "加泰罗尼亚语，意大利"
 
 #: ../../datetime/locale_map.go:54
-#, fuzzy
 msgid "Crimean Tatar, Ukraine"
-msgstr "俄罗斯（UTC+11）库页岛"
+msgstr "克里米亚鞑靼语，乌克兰"
 
 #: ../../datetime/locale_map.go:55
 msgid "Kashubian, Poland"
-msgstr ""
+msgstr "卡舒比语，波兰"
 
 #: ../../datetime/locale_map.go:56
 msgid "Czech, Czech Republic"
-msgstr ""
+msgstr "捷克语，捷克共和国"
 
 #: ../../datetime/locale_map.go:57
 msgid "Chuvash, Russia"
-msgstr ""
+msgstr "楚瓦什语,，俄罗斯"
 
 #: ../../datetime/locale_map.go:58
-#, fuzzy
 msgid "Welsh, United Kingdom"
-msgstr "英国（UTC+00）英国时间"
+msgstr "威尔士语，英国"
 
 #: ../../datetime/locale_map.go:59
 msgid "Danish, Denmark"
-msgstr ""
+msgstr "丹麦语，丹麦"
 
 #: ../../datetime/locale_map.go:60
 msgid "German, Austria"
-msgstr ""
+msgstr "德语，奥地利"
 
 #: ../../datetime/locale_map.go:61
 msgid "German, Belgium"
-msgstr ""
+msgstr "德语，比利时"
 
 #: ../../datetime/locale_map.go:62
 msgid "German, Switzerland"
-msgstr ""
+msgstr "德语，瑞士"
 
 #: ../../datetime/locale_map.go:63
 msgid "German, Germany"
-msgstr ""
+msgstr "德语，德国"
 
 #: ../../datetime/locale_map.go:64
 msgid "German, Liechtenstein"
-msgstr ""
+msgstr "德语，列支敦士登"
 
 #: ../../datetime/locale_map.go:65
-#, fuzzy
 msgid "German, Luxemburg"
-msgstr "卢森堡（UTC+01）卢森堡"
+msgstr "德语，卢森堡"
 
 #: ../../datetime/locale_map.go:66
 msgid "Dhivehi, Maldives"
-msgstr ""
+msgstr "迪维希语，马尔代夫"
 
 #: ../../datetime/locale_map.go:67
 msgid "Dzongkha, Bhutan"
-msgstr ""
+msgstr "宗卡语，不丹"
 
 #: ../../datetime/locale_map.go:68
 msgid "Greek, Cyprus"
-msgstr ""
+msgstr "希腊语，塞浦路斯"
 
 #: ../../datetime/locale_map.go:69
 msgid "Greek, Greece"
-msgstr ""
+msgstr "希腊语，希腊"
 
 #: ../../datetime/locale_map.go:70
 msgid "English, Antigua and Barbuda"
-msgstr ""
+msgstr "英语，安地卡及巴布达"
 
 #: ../../datetime/locale_map.go:71
 msgid "English, Australia"
-msgstr ""
+msgstr "英语，澳大利亚"
 
 #: ../../datetime/locale_map.go:72
 msgid "English, Botswana"
-msgstr ""
+msgstr "英语，博茨瓦纳"
 
 #: ../../datetime/locale_map.go:73
 msgid "English, Canada"
-msgstr ""
+msgstr "英语，加拿大"
 
 #: ../../datetime/locale_map.go:74
 msgid "English, Denmark"
-msgstr ""
+msgstr "英语，丹麦"
 
 #: ../../datetime/locale_map.go:75
-#, fuzzy
 msgid "English, United Kingdom"
-msgstr "英国（UTC+00）英国时间"
+msgstr "英语，英国"
 
 #: ../../datetime/locale_map.go:76
 msgid "English, Hong Kong"
-msgstr ""
+msgstr "英语，香港"
 
 #: ../../datetime/locale_map.go:77
 msgid "English, Ireland"
-msgstr ""
+msgstr "英语，爱尔兰"
 
 #: ../../datetime/locale_map.go:78
 msgid "English, India"
-msgstr ""
+msgstr "英语，印度"
 
 #: ../../datetime/locale_map.go:79
 msgid "English, Nigeria"
-msgstr ""
+msgstr "英语，利日尼亚"
 
 #: ../../datetime/locale_map.go:80
 msgid "English, New Zealand"
-msgstr ""
+msgstr "英语，新西兰"
 
 #: ../../datetime/locale_map.go:81
 msgid "English, Philippines"
-msgstr ""
+msgstr "英语，菲律宾"
 
 #: ../../datetime/locale_map.go:82
 msgid "English, Singapore"
-msgstr ""
+msgstr "英语，新加坡"
 
 #: ../../datetime/locale_map.go:83
 msgid "English, United States"
-msgstr ""
+msgstr "英语，美国"
 
 #: ../../datetime/locale_map.go:84
 msgid "English, South Africa"
-msgstr ""
+msgstr "英语，南非"
 
 #: ../../datetime/locale_map.go:85
 msgid "English, Zambia"
-msgstr ""
+msgstr "英语，赞比亚"
 
 #: ../../datetime/locale_map.go:86
 msgid "English, Zimbabwe"
-msgstr ""
+msgstr "英语，津巴布韦"
 
 #: ../../datetime/locale_map.go:87
 msgid "Esperanto"
-msgstr ""
+msgstr "世界语"
 
 #: ../../datetime/locale_map.go:88
 msgid "Esperanto, United States"
-msgstr ""
+msgstr "世界语，美国"
 
 #: ../../datetime/locale_map.go:89
 msgid "Spanish, Argentina"
-msgstr ""
+msgstr "西班牙语，阿根廷"
 
 #: ../../datetime/locale_map.go:90
 msgid "Spanish, Bolivia"
-msgstr ""
+msgstr "西班牙语，玻利维亚"
 
 #: ../../datetime/locale_map.go:91
 msgid "Spanish, Chile"
-msgstr ""
+msgstr "西班牙语，智利"
 
 #: ../../datetime/locale_map.go:92
 msgid "Spanish, Colombia"
-msgstr ""
+msgstr "西班牙语，哥伦比亚"
 
 #: ../../datetime/locale_map.go:93
 msgid "Spanish, Costa Rica"
-msgstr ""
+msgstr "西班牙语，哥斯达黎加"
 
 #: ../../datetime/locale_map.go:94
 msgid "Spanish, Cuba"
-msgstr ""
+msgstr "西班牙语，古巴"
 
 #: ../../datetime/locale_map.go:95
 msgid "Spanish, Dominican Republic"
-msgstr ""
+msgstr "西班牙语，多米尼加共和国"
 
 #: ../../datetime/locale_map.go:96
 msgid "Spanish, Ecuador"
-msgstr ""
+msgstr "西班牙语，厄瓜多尔"
 
 #: ../../datetime/locale_map.go:97
 msgid "Spanish, Spain"
-msgstr ""
+msgstr "西班牙语，西班牙"
 
 #: ../../datetime/locale_map.go:98
 msgid "Spanish, Guatemala"
-msgstr ""
+msgstr "西班牙语，危地马拉"
 
 #: ../../datetime/locale_map.go:99
 msgid "Spanish, Honduras"
-msgstr ""
+msgstr "西班牙语，洪都拉斯"
 
 #: ../../datetime/locale_map.go:100
 msgid "Spanish, Mexico"
-msgstr ""
+msgstr "西班牙语，墨西哥"
 
 #: ../../datetime/locale_map.go:101
 msgid "Spanish, Nicaragua"
-msgstr ""
+msgstr "西班牙语，尼加拉瓜"
 
 #: ../../datetime/locale_map.go:102
 msgid "Spanish, Panama"
-msgstr ""
+msgstr "西班牙语，巴拿马"
 
 #: ../../datetime/locale_map.go:103
 msgid "Spanish, Peru"
-msgstr ""
+msgstr "西班牙语，秘鲁"
 
 #: ../../datetime/locale_map.go:104
 msgid "Spanish, Puerto Rico"
-msgstr ""
+msgstr "西班牙语，波多黎各"
 
 #: ../../datetime/locale_map.go:105
 msgid "Spanish, Paraguay"
-msgstr ""
+msgstr "西班牙语，巴拉圭"
 
 #: ../../datetime/locale_map.go:106
 msgid "Spanish, El Salvador"
-msgstr ""
+msgstr "西班牙语，萨尔瓦多"
 
 #: ../../datetime/locale_map.go:107
-#, fuzzy
 msgid "Spanish, United States"
-msgstr "阿拉伯联合酋长国（UTC+04）迪拜"
+msgstr "西班牙语，美国"
 
 #: ../../datetime/locale_map.go:108
 msgid "Spanish, Uruguay"
-msgstr ""
+msgstr "西班牙语，乌拉圭"
 
 #: ../../datetime/locale_map.go:109
 msgid "Spanish, Venezuela"
-msgstr ""
+msgstr "西班牙语，委内瑞拉"
 
 #: ../../datetime/locale_map.go:110
 msgid "Estonian, Estonia"
-msgstr ""
+msgstr "爱沙尼亚语，爱沙尼亚"
 
 #: ../../datetime/locale_map.go:111
 msgid "Basque, Spain"
-msgstr ""
+msgstr "巴斯克语，西班牙"
 
 #: ../../datetime/locale_map.go:112
 msgid "Basque, France"
-msgstr ""
+msgstr "巴斯克语，法国"
 
 #: ../../datetime/locale_map.go:113
-#, fuzzy
 msgid "Persian, Iran"
-msgstr "俄罗斯（UTC+11）库页岛"
+msgstr "波斯语，伊朗"
 
 #: ../../datetime/locale_map.go:114
 msgid "Fulah, Senegal"
-msgstr ""
+msgstr "富拉赫语，塞内加尔"
 
 #: ../../datetime/locale_map.go:115
 msgid "Finnish, Finland"
-msgstr ""
+msgstr "芬兰语，芬兰"
 
 #: ../../datetime/locale_map.go:116
 msgid "Filipino, Philippines"
-msgstr ""
+msgstr "菲律宾语，菲律宾"
 
 #: ../../datetime/locale_map.go:117
 msgid "Faroese, Faroe Islands"
-msgstr ""
+msgstr "法罗语，法罗群岛"
 
 #: ../../datetime/locale_map.go:118
 msgid "French, Belgium"
-msgstr ""
+msgstr "法语，比利时"
 
 #: ../../datetime/locale_map.go:119
 msgid "French, Canada"
-msgstr ""
+msgstr "法语，加拿大"
 
 #: ../../datetime/locale_map.go:120
 msgid "French, Switzerland"
-msgstr ""
+msgstr "法语，瑞士"
 
 #: ../../datetime/locale_map.go:121
 msgid "French, France"
-msgstr ""
+msgstr "法语，法国"
 
 #: ../../datetime/locale_map.go:122
-#, fuzzy
 msgid "French, Luxemburg"
-msgstr "卢森堡（UTC+01）卢森堡"
+msgstr "法语，卢森堡"
 
 #: ../../datetime/locale_map.go:123
 msgid "Furlan, Italy"
-msgstr ""
+msgstr "弗留利语，意大利"
 
 #: ../../datetime/locale_map.go:124
 msgid "Frisian, Germany"
-msgstr ""
+msgstr "弗里斯兰语，德国"
 
 #: ../../datetime/locale_map.go:125
 msgid "Frisian, the Netherlands"
-msgstr ""
+msgstr "弗里斯兰语，荷兰"
 
 #: ../../datetime/locale_map.go:126
-#, fuzzy
 msgid "Irish, Ireland"
-msgstr "冰岛（UTC+00）冰岛"
+msgstr "爱尔兰语，爱尔兰"
 
 #: ../../datetime/locale_map.go:127
-#, fuzzy
 msgid "Gaelic, United Kingdom"
-msgstr "英国（UTC+00）英国时间"
+msgstr "盖尔语，英国"
 
+# "Ge'ez, Eritrea (Abegede)"
 #: ../../datetime/locale_map.go:128
 msgid "Ge'ez, Eritrea (Abegede)"
-msgstr ""
+msgstr "吉兹语，厄立特里亚国(带元音附标)"
 
 #: ../../datetime/locale_map.go:129
 msgid "Ge'ez, Eritrea"
-msgstr ""
+msgstr "吉兹语， 厄立特里亚国"
 
 #: ../../datetime/locale_map.go:130
 msgid "Ge'ez, Ethiopia (Abegede)"
-msgstr ""
+msgstr "吉兹语， 埃塞俄比亚(带元音附标)"
 
 #: ../../datetime/locale_map.go:131
 msgid "Ge'ez, Ethiopia"
-msgstr ""
+msgstr "吉兹语， 埃塞俄比亚"
 
 #: ../../datetime/locale_map.go:132
 msgid "Galician, Spain"
-msgstr ""
+msgstr "加里西亚语，西班牙"
 
 #: ../../datetime/locale_map.go:133
 msgid "Gujarati, India"
-msgstr ""
+msgstr "古吉拉特语，印度"
 
 #: ../../datetime/locale_map.go:134
-#, fuzzy
 msgid "Manx, United Kingdom"
-msgstr "英国（UTC+00）英国时间"
+msgstr "马恩岛语，英国"
 
 #: ../../datetime/locale_map.go:135
 msgid "Hausa, Nigeria"
-msgstr ""
+msgstr "豪萨语，尼日利亚"
 
 #: ../../datetime/locale_map.go:136 ../../datetime/locale_map.go:152
 msgid "Hebrew, Israel"
-msgstr ""
+msgstr "希伯来语，以色列"
 
 #: ../../datetime/locale_map.go:137
 msgid "Hindi, India"
-msgstr ""
+msgstr "北印度语，印度"
 
 #: ../../datetime/locale_map.go:138
 msgid "Chhattisgarhi, India"
-msgstr ""
+msgstr "恰蒂斯加尔语，印度"
 
 #: ../../datetime/locale_map.go:139
 msgid "Croatian, Croatia"
-msgstr ""
+msgstr "克罗地亚语，克罗地亚"
 
 #: ../../datetime/locale_map.go:140
 msgid "Upper Sorbian, Germany"
-msgstr ""
+msgstr " 上索布语，德国"
 
 #: ../../datetime/locale_map.go:141
 msgid "Kreyol, Haiti"
-msgstr ""
+msgstr "克里奥尔语，海地"
 
 #: ../../datetime/locale_map.go:142
 msgid "Hungarian, Hungary"
-msgstr ""
+msgstr "匈牙利语，匈牙利"
 
 #: ../../datetime/locale_map.go:143
 msgid "Armenian, Armenia"
-msgstr ""
+msgstr "亚美尼亚语，亚美尼亚"
 
 #: ../../datetime/locale_map.go:144
 msgid "Interlingua"
-msgstr ""
+msgstr "国际语"
 
 #: ../../datetime/locale_map.go:145
 msgid "Indonesian, Indonesia"
-msgstr ""
+msgstr "印度尼西亚语，印度尼西亚"
 
 #: ../../datetime/locale_map.go:146
 msgid "Igbo, Nigeria"
-msgstr ""
+msgstr "伊博语，尼日利亚"
 
 #: ../../datetime/locale_map.go:147
 msgid "Inupiaq, Canada"
-msgstr ""
+msgstr "伊努皮克语加拿大"
 
 #: ../../datetime/locale_map.go:148
-#, fuzzy
 msgid "Icelandic, Iceland"
-msgstr "冰岛（UTC+00）冰岛"
+msgstr "冰岛语，冰岛"
 
 #: ../../datetime/locale_map.go:149
 msgid "Italian, Switzerland"
-msgstr ""
+msgstr "意大利语，瑞士"
 
 #: ../../datetime/locale_map.go:150
 msgid "Italian, Italy"
-msgstr ""
+msgstr "意大利语，意大利"
 
 #: ../../datetime/locale_map.go:151
 msgid "Inuktitut, Canada"
-msgstr ""
+msgstr "因纽特语，加拿大"
 
 #: ../../datetime/locale_map.go:153
-#, fuzzy
 msgid "Japanese, Japan"
-msgstr "日本（UTC+09）日本"
+msgstr "日语，日本"
 
 #: ../../datetime/locale_map.go:154
 msgid "Georgian, Georgia"
-msgstr ""
+msgstr "格鲁吉亚语，格鲁吉亚"
 
 #: ../../datetime/locale_map.go:155
 msgid "Kazakh, Kazakhstan"
-msgstr ""
+msgstr "哈萨克语，哈萨克斯坦"
 
 #: ../../datetime/locale_map.go:156
-#, fuzzy
 msgid "Greenlandic, Greenland"
-msgstr "冰岛（UTC+00）冰岛"
+msgstr "格陵兰语，格陵兰"
 
 #: ../../datetime/locale_map.go:157
 msgid "Khmer, Cambodia"
-msgstr ""
+msgstr "高棉语，柬埔寨"
 
 #: ../../datetime/locale_map.go:158
 msgid "Kannada, India"
-msgstr ""
+msgstr "坎那达语，印度"
 
 #: ../../datetime/locale_map.go:159
 msgid "Konkani, India"
-msgstr ""
+msgstr "贡根语，印度"
 
 #: ../../datetime/locale_map.go:160
 msgid "Korean, Republic of Korea"
-msgstr ""
+msgstr "韩语，韩国"
 
 #: ../../datetime/locale_map.go:161
 msgid "Kashmiri, India (devanagari)"
-msgstr ""
+msgstr "克什米尔语，印度（天城体）"
 
 #: ../../datetime/locale_map.go:162
 msgid "Kashmiri, India"
-msgstr ""
+msgstr "克什米尔语，印度"
 
 #: ../../datetime/locale_map.go:163
 msgid "Kurdish, Turkey"
-msgstr ""
+msgstr "库尔德语，土耳其"
 
 #: ../../datetime/locale_map.go:164
-#, fuzzy
 msgid "Cornish, United Kingdom"
-msgstr "英国（UTC+00）英国时间"
+msgstr "凯尔特语，英国"
 
 #: ../../datetime/locale_map.go:165
 msgid "Kyrgyz, Kyrgyzstan"
-msgstr ""
+msgstr "吉尔吉斯坦语，吉尔吉斯坦"
 
 #: ../../datetime/locale_map.go:166
-#, fuzzy
 msgid "Luxembourgish, Luxembourg"
-msgstr "卢森堡（UTC+01）卢森堡"
+msgstr "卢森堡语，卢森堡"
 
 #: ../../datetime/locale_map.go:167
 msgid "Luganda, Uganda"
-msgstr ""
+msgstr "卢干达语，乌干达"
 
 #: ../../datetime/locale_map.go:168
 msgid "Limburgish, Belgium"
-msgstr ""
+msgstr "卢森堡语，比利时"
 
 #: ../../datetime/locale_map.go:169
 msgid "Ligurian, Italy"
-msgstr ""
+msgstr "利古里亚语，意大利"
 
 #: ../../datetime/locale_map.go:170
 msgid "Limburgish, the Netherlands"
-msgstr ""
+msgstr "卢森堡语，荷兰"
 
 #: ../../datetime/locale_map.go:171
 msgid "Lao, Laos"
-msgstr ""
+msgstr "老挝语，老挝"
 
 #: ../../datetime/locale_map.go:172
 msgid "Lithuanian, Lithuania"
-msgstr ""
+msgstr "立陶宛语，立陶宛 "
 
 #: ../../datetime/locale_map.go:173
 msgid "Latvian, Latvia"
-msgstr ""
+msgstr "拉脱维亚语，拉脱维亚"
 
 #: ../../datetime/locale_map.go:174
 msgid "Maithili, India"
-msgstr ""
+msgstr "迈蒂利语，印度"
 
 #: ../../datetime/locale_map.go:175
 msgid "Malagasy, Madagascar"
-msgstr ""
+msgstr "马达加斯加语，马达加斯加"
 
 #: ../../datetime/locale_map.go:176
 msgid "Mari, Russia"
-msgstr ""
+msgstr "马里语，俄罗斯"
 
 #: ../../datetime/locale_map.go:177
 msgid "Maori, New Zealand"
-msgstr ""
+msgstr "毛利语， 新西兰"
 
 #: ../../datetime/locale_map.go:178
 msgid "Macedonian, Macedonia"
-msgstr ""
+msgstr "马其顿语， 马其顿"
 
 #: ../../datetime/locale_map.go:179
 msgid "Malayalam, India"
-msgstr ""
+msgstr "马拉雅拉姆语，印度"
 
 #: ../../datetime/locale_map.go:180
 msgid "Mongolian, Mongolia"
-msgstr ""
+msgstr "蒙古语，蒙古"
 
 #: ../../datetime/locale_map.go:181
 msgid "Marathi, India"
-msgstr ""
+msgstr "马拉地语，印度"
 
 #: ../../datetime/locale_map.go:182
 msgid "Malay, Malaysia"
-msgstr ""
+msgstr "马来语，马来西亚"
 
 #: ../../datetime/locale_map.go:183
 msgid "Maltese, Malta"
-msgstr ""
+msgstr "马耳他语，马耳他"
 
 #: ../../datetime/locale_map.go:184
 msgid "Burmese, Myanmar"
-msgstr ""
+msgstr "缅甸语，缅甸"
 
 #: ../../datetime/locale_map.go:185
 msgid "Chinese, Taiwan (Minnan dialect, Latin alphabet)"
-msgstr ""
+msgstr "中文，台湾（闽南方言，拉丁字母）"
 
 #: ../../datetime/locale_map.go:186
 msgid "Norwegian Bokmal, Norway"
-msgstr ""
+msgstr "书面挪威语，挪威"
 
 #: ../../datetime/locale_map.go:187
 msgid "Low German, Germany"
-msgstr ""
+msgstr "低地德语，德国"
 
 #: ../../datetime/locale_map.go:188
 msgid "Low German, the Netherlands"
-msgstr ""
+msgstr "低地德语，荷兰"
 
 #: ../../datetime/locale_map.go:189
 msgid "Nepali, Nepal"
-msgstr ""
+msgstr "尼泊尔语，尼泊尔"
 
 #: ../../datetime/locale_map.go:190
 msgid "Dutch, Aruba"
-msgstr ""
+msgstr "荷兰语，阿鲁巴岛"
 
 #: ../../datetime/locale_map.go:191
 msgid "Dutch, Belgium"
-msgstr ""
+msgstr "荷兰语，比利时"
 
 #: ../../datetime/locale_map.go:192
 msgid "Dutch, the Netherlands"
-msgstr ""
+msgstr "荷兰，荷兰语"
 
 #: ../../datetime/locale_map.go:193
 msgid "Nynorsk, Norway"
-msgstr ""
+msgstr "尼诺斯克语，挪威"
 
 #: ../../datetime/locale_map.go:194
 msgid "Southern Ndebele, South Africa"
-msgstr ""
+msgstr "南部恩德贝勒语，南非"
 
 #: ../../datetime/locale_map.go:195
 msgid "Northern Sotho, South Africa"
-msgstr ""
+msgstr "北索托语，南非"
 
 #: ../../datetime/locale_map.go:196
 msgid "Occitan, France"
-msgstr ""
+msgstr "奥克西唐语，法国"
 
 #: ../../datetime/locale_map.go:197
 msgid "Oromo, Ethiopia"
-msgstr ""
+msgstr "奥罗莫语，埃塞俄比亚"
 
 #: ../../datetime/locale_map.go:198
 msgid "Oromo, Kenya"
-msgstr ""
+msgstr "奥罗莫语，肯尼亚"
 
 #: ../../datetime/locale_map.go:199
 msgid "Oriya, India"
-msgstr ""
+msgstr "奥里雅语，印度"
 
 #: ../../datetime/locale_map.go:200
 msgid "Ossetian, Russia"
-msgstr ""
+msgstr "奥塞特语，俄罗斯"
 
 #: ../../datetime/locale_map.go:201
 msgid "Punjabi, India"
-msgstr ""
+msgstr "旁遮普语，印度"
 
 #: ../../datetime/locale_map.go:202
 msgid "Papiamento, Antilles"
-msgstr ""
+msgstr "帕皮阿门托语，安的列斯群岛"
 
 #: ../../datetime/locale_map.go:203
 msgid "Punjabi, Pakistan"
-msgstr ""
+msgstr "旁遮普语，巴基斯坦"
 
 #: ../../datetime/locale_map.go:204
 msgid "Polish, Poland"
-msgstr ""
+msgstr "波兰语，波兰"
 
 #: ../../datetime/locale_map.go:205
-#, fuzzy
 msgid "Portuguese, Brasil"
-msgstr "葡萄牙（UTC+00）葡萄牙"
+msgstr "葡萄牙语，巴西"
 
 #: ../../datetime/locale_map.go:206
-#, fuzzy
 msgid "Portuguese, Portugal"
-msgstr "葡萄牙（UTC+00）葡萄牙"
+msgstr "葡萄牙语，葡萄牙"
 
 #: ../../datetime/locale_map.go:207
 msgid "Romanian, Romania"
-msgstr ""
+msgstr "罗马尼亚语，罗马尼亚"
 
 #: ../../datetime/locale_map.go:208
-#, fuzzy
 msgid "Russian, Russia"
-msgstr "俄罗斯（UTC+11）库页岛"
+msgstr "俄语，俄罗斯"
 
 #: ../../datetime/locale_map.go:209
-#, fuzzy
 msgid "Russian, Ukraine"
-msgstr "俄罗斯（UTC+11）库页岛"
+msgstr "俄语，乌克兰"
 
 #: ../../datetime/locale_map.go:210
 msgid "Kinyarwanda, Rwanda"
-msgstr ""
+msgstr "卢旺达语，卢旺达"
 
 #: ../../datetime/locale_map.go:211
 msgid "Sanskrit, India"
-msgstr ""
+msgstr "梵文，印度"
 
 #: ../../datetime/locale_map.go:212
 msgid "Sardinian, Italy"
-msgstr ""
+msgstr "撒丁语，意大利"
 
 #: ../../datetime/locale_map.go:213 ../../datetime/locale_map.go:214
 msgid "Sindhi, India"
-msgstr ""
+msgstr "信德语，印度"
 
 #: ../../datetime/locale_map.go:215
 msgid "Sindhi, Pakistan"
-msgstr ""
+msgstr "信德语，巴基斯坦"
 
 #: ../../datetime/locale_map.go:216
 msgid "Northern Sami, Norway"
-msgstr ""
+msgstr "北方萨米语，挪威"
 
 #: ../../datetime/locale_map.go:217
 msgid "Secwepemctsin, Canada"
-msgstr ""
+msgstr "Secwepemctsin,加拿大"
 
 #: ../../datetime/locale_map.go:218
 msgid "Sidama, Ethiopia."
-msgstr ""
+msgstr "Sidama, 埃塞俄比亚"
 
 #: ../../datetime/locale_map.go:219
 msgid "Sinhala, Sri Lanka"
-msgstr ""
+msgstr "僧伽罗语，斯里兰卡"
 
 #: ../../datetime/locale_map.go:220
 msgid "Slovak, Slovak"
-msgstr ""
+msgstr "斯洛伐克语，斯洛伐克"
 
 #: ../../datetime/locale_map.go:221
 msgid "Slovenian, Slovenia"
-msgstr ""
+msgstr "斯洛维尼亚语，斯洛维尼亚"
 
 #: ../../datetime/locale_map.go:222
 msgid "Somali, Djibouti."
-msgstr ""
+msgstr "索马里语，吉布提"
 
 #: ../../datetime/locale_map.go:223
 msgid "Somali, Ethiopia"
-msgstr ""
+msgstr "索马里语，埃塞俄比亚"
 
 #: ../../datetime/locale_map.go:224
 msgid "Somali, Kenya"
-msgstr ""
+msgstr "索马里语，肯尼亚"
 
 #: ../../datetime/locale_map.go:225
 msgid "Somali, Somalia"
-msgstr ""
+msgstr "索马里语，索马里"
 
 #: ../../datetime/locale_map.go:226
 msgid "Albanian, Albania"
-msgstr ""
+msgstr "阿尔巴尼亚语，阿尔巴尼亚"
 
 #: ../../datetime/locale_map.go:227
 msgid "Albanian, Macedonia"
-msgstr ""
+msgstr "阿尔巴尼亚语， 马其顿"
 
 #: ../../datetime/locale_map.go:228
 msgid "Serbian, Montenegro"
-msgstr ""
+msgstr "塞尔维亚语，黑山共和国"
 
 #: ../../datetime/locale_map.go:229
 msgid "Serbian, Serbia (Latin)"
-msgstr ""
+msgstr "塞尔维亚语，塞尔维亚（拉丁语）"
 
 #: ../../datetime/locale_map.go:230
 msgid "Serbian, Serbia"
-msgstr ""
+msgstr "塞尔维亚语，塞尔维亚"
 
 #: ../../datetime/locale_map.go:231
 msgid "Swati, South Africa"
-msgstr ""
+msgstr "Swati南非"
 
 #: ../../datetime/locale_map.go:232
 msgid "Sotho, South Africa"
-msgstr ""
+msgstr "梭托语，南非"
 
 #: ../../datetime/locale_map.go:233
 msgid "Swedish, Finland"
-msgstr ""
+msgstr "瑞典语，芬兰"
 
 #: ../../datetime/locale_map.go:234
 msgid "Swedish, Sweden"
-msgstr ""
+msgstr "瑞典语，瑞典"
 
 #: ../../datetime/locale_map.go:235
 msgid "Swahili, Kenya"
-msgstr ""
+msgstr "斯瓦希里语，肯尼亚"
 
 #: ../../datetime/locale_map.go:236
 msgid "Swahili, Tanzania"
-msgstr ""
+msgstr "斯瓦希里语，坦桑尼亚"
 
 #: ../../datetime/locale_map.go:237
 msgid "Tamil, India"
-msgstr ""
+msgstr "泰米尔语，印度"
 
 #: ../../datetime/locale_map.go:238
 msgid "Tamil, Sri Lanka"
-msgstr ""
+msgstr "泰米尔语，斯里兰卡"
 
 #: ../../datetime/locale_map.go:239
 msgid "Telugu, India"
-msgstr ""
+msgstr "泰卢固语，印度"
 
 #: ../../datetime/locale_map.go:240
 msgid "Tajik, Tajikistan"
-msgstr ""
+msgstr "塔吉克语， 塔吉克斯坦"
 
 #: ../../datetime/locale_map.go:241
 msgid "Thai, Thailand"
-msgstr ""
+msgstr "泰国语，泰国"
 
 #: ../../datetime/locale_map.go:242
 msgid "Tigrigna, Eritrea."
-msgstr ""
+msgstr "提松雷语，厄立特里亚"
 
 #: ../../datetime/locale_map.go:243
 msgid "Tigrigna, Ethiopia."
-msgstr ""
+msgstr "提松雷语，埃塞俄比亚"
 
 #: ../../datetime/locale_map.go:244
 msgid "Tigre, Eritrea"
-msgstr ""
+msgstr "蒂格雷语，厄立特里亚"
 
 #: ../../datetime/locale_map.go:245
 msgid "Turkmen, Turkmenistan"
-msgstr ""
+msgstr "土库曼语， 土库曼斯坦"
 
 #: ../../datetime/locale_map.go:246
 msgid "Tagalog, Philippines"
-msgstr ""
+msgstr "塔加拉族语，菲律宾"
 
 #: ../../datetime/locale_map.go:247
 msgid "Tswana, South Africa"
-msgstr ""
+msgstr "茨瓦纳语，南非"
 
 #: ../../datetime/locale_map.go:248
 msgid "Turkish, Cyprus"
-msgstr ""
+msgstr "土耳其语，塞浦路斯"
 
 #: ../../datetime/locale_map.go:249
 msgid "Turkish, Turkey"
-msgstr ""
+msgstr "土耳其语，土耳其"
 
 #: ../../datetime/locale_map.go:250
 msgid "Tsonga, South Africa"
-msgstr ""
+msgstr "聪加语，南非"
 
 #: ../../datetime/locale_map.go:251
 msgid "Tatar, Russia (IQTElif alphabet)"
-msgstr ""
+msgstr "鞑靼语，俄罗斯(IQTElif alphabet)"
 
 #: ../../datetime/locale_map.go:252
 msgid "Tatar, Russia"
-msgstr ""
+msgstr "鞑靼语，俄罗斯"
 
 #: ../../datetime/locale_map.go:253
 msgid "Uyghur, China (Latin alphabet)"
-msgstr ""
+msgstr "维吾尔语，中国（拉丁字母）"
 
 #: ../../datetime/locale_map.go:254
 msgid "Uyghur, China"
-msgstr ""
+msgstr "维吾尔语，中国"
 
 #: ../../datetime/locale_map.go:255
-#, fuzzy
 msgid "Ukrainian, Ukraine"
-msgstr "俄罗斯（UTC+11）库页岛"
+msgstr "乌克兰语，乌克兰"
 
 #: ../../datetime/locale_map.go:256
 msgid "Unami Delaware, United States"
-msgstr ""
+msgstr "Unami Delaware，美国"
 
 #: ../../datetime/locale_map.go:257
 msgid "Urdu, India"
-msgstr ""
+msgstr "乌尔都语，印度"
 
 #: ../../datetime/locale_map.go:258
 msgid "Urdu, Pakistan"
-msgstr ""
+msgstr "乌尔都语，巴基斯坦"
 
 #: ../../datetime/locale_map.go:259
 msgid "Uzbek, Uzbekistan (cyrillic)"
-msgstr ""
+msgstr "乌兹别克语，乌兹别克斯坦 （斯拉夫语）"
 
 #: ../../datetime/locale_map.go:260
 msgid "Uzbek, Uzbekistan"
-msgstr ""
+msgstr "乌兹别克语，乌兹别克斯坦"
 
 #: ../../datetime/locale_map.go:261
 msgid "Venda, South Africa"
-msgstr ""
+msgstr "文达语，南非"
 
 #: ../../datetime/locale_map.go:262
 msgid "Vietnamese, Vietnam"
-msgstr ""
+msgstr "越南语，越南"
 
 #: ../../datetime/locale_map.go:263
 msgid "Walloon, Belgium"
-msgstr ""
+msgstr "窝龙语，比利时"
 
 #: ../../datetime/locale_map.go:264
 msgid "Walser, Switzerland"
-msgstr ""
+msgstr "瓦尔瑟语，瑞士"
 
 #: ../../datetime/locale_map.go:265
 msgid "Walaita, Ethiopia"
-msgstr ""
+msgstr "Valletta 瓦莱塔，埃塞俄比亚"
 
 #: ../../datetime/locale_map.go:266
 msgid "Wolof, Senegal"
-msgstr ""
+msgstr "沃洛夫语， 塞内加尔"
 
 #: ../../datetime/locale_map.go:267
 msgid "Xhosa, South Africa"
-msgstr ""
+msgstr "科萨语，南非"
 
 #: ../../datetime/locale_map.go:268
 msgid "Yiddish, United States"
-msgstr ""
+msgstr "意第绪语，美国"
 
 #: ../../datetime/locale_map.go:269
 msgid "Yoruba, Nigeria"
-msgstr ""
+msgstr "约鲁巴语，尼日利亚"
 
 #: ../../datetime/locale_map.go:270
 msgid "Chinese, Hong Kong (Yue dialect)"
-msgstr ""
+msgstr "中文，香港（粤语）"
 
 #: ../../datetime/locale_map.go:271
 msgid "Chinese, China"
-msgstr ""
+msgstr "中文，中国"
 
 #: ../../datetime/locale_map.go:272
 msgid "Chinese, Hong Kong"
-msgstr ""
+msgstr "中文，香港"
 
 #: ../../datetime/locale_map.go:273
 msgid "Chinese, Singapore"
-msgstr ""
+msgstr "中文，新加坡"
 
 #: ../../datetime/locale_map.go:274
-#, fuzzy
 msgid "Chinese, Taiwan"
-msgstr "日本（UTC+09）日本"
+msgstr "中文，台湾"
 
 #: ../../datetime/locale_map.go:275
 msgid "Zulu, South Africa"
-msgstr ""
+msgstr "祖鲁语，南非"
 
+# "Language changed successfully and effective after logout."
 #: ../../datetime/set_locale.go:52
-#, fuzzy
 msgid "Language changed successfully and effective after logout."
-msgstr "系统语言更改成功，注销后生效"
+msgstr "系统语言更改成功，注销后生效。"
 
+# "Language failed to change, please try later."
 #: ../../datetime/set_locale.go:54
-#, fuzzy
 msgid "Language failed to change, please try later."
-msgstr "系统语言更改失败，请稍后重试"
+msgstr "系统语言更改失败，请稍后重试。"
 
 #: ../../datetime/zone_utc_map.go:6
-#, fuzzy
 msgid "Côte d'Ivoire (UTC+00) Abidjan"
-msgstr "科特迪瓦（UTC+00）阿比让"
+msgstr " 科特迪瓦（UTC+00）阿比让"
 
 #: ../../datetime/zone_utc_map.go:7
 msgid "Ghana (UTC+00) Accra"
@@ -1371,7 +1345,6 @@ msgid "Benin (UTC+01) Porto Novo"
 msgstr "贝宁（UTC+01）波多诺伏"
 
 #: ../../datetime/zone_utc_map.go:55
-#, fuzzy
 msgid "São Tomé and Príncipe (UTC+00) Sao Tome"
 msgstr "圣多美和普林西比（UTC+00）圣多美"
 
@@ -3120,65 +3093,60 @@ msgid "Launcher"
 msgstr "启动器"
 
 #: ../../keybinding/id_desc_map.go:68
-#, fuzzy
-msgid "Show Desktop"
+msgid "Show desktop"
 msgstr "显示桌面"
 
 #: ../../keybinding/id_desc_map.go:69
-#, fuzzy
-msgid "Lock Screen"
+msgid "Lock screen"
 msgstr "锁屏界面"
 
 #: ../../keybinding/id_desc_map.go:70
-#, fuzzy
-msgid "File Manager"
+msgid "File manager"
 msgstr "文件管理器"
 
 #: ../../keybinding/id_desc_map.go:71
-#, fuzzy
 msgid "Switch applications"
 msgstr "切换程序"
 
 # msgid "Reverse switch applications"
 #: ../../keybinding/id_desc_map.go:72
-#, fuzzy
 msgid "Reverse switch applications"
-msgstr "反向切换程序"
+msgstr " 反向切换程序"
 
+# "3D switch applications"
 #: ../../keybinding/id_desc_map.go:73
-#, fuzzy
 msgid "3D switch applications"
-msgstr "切换程序"
+msgstr "3D切换程序"
 
-# msgid "Reverse switch applications"
+# "3D reverse switch applications"
+# msgid "Reverse switch applications with 3D effect"
 #: ../../keybinding/id_desc_map.go:74
-#, fuzzy
 msgid "3D reverse switch applications"
-msgstr "反向切换程序"
+msgstr "3D反向切换程序"
 
 #: ../../keybinding/id_desc_map.go:75
 msgid "Show/Hide the dock"
 msgstr "显示/隐藏任务栏"
 
+# "Screenshot"
 #: ../../keybinding/id_desc_map.go:76
-#, fuzzy
 msgid "Screenshot"
 msgstr "屏幕截图"
 
+# "Full screenshot"
 #: ../../keybinding/id_desc_map.go:77
-#, fuzzy
 msgid "Full screenshot"
-msgstr "屏幕截图"
+msgstr "全屏截图"
 
+# "Window screenshot"
 #: ../../keybinding/id_desc_map.go:78
-#, fuzzy
 msgid "Window screenshot"
-msgstr "屏幕截图"
+msgstr "窗口截图"
 
+# "Delay screenshot"
 #: ../../keybinding/id_desc_map.go:79
-#, fuzzy
 msgid "Delay screenshot"
-msgstr "屏幕截图"
+msgstr "延时截图"
 
 #: ../../keybinding/id_desc_map.go:80
 msgid "Terminal"
@@ -3186,7 +3154,7 @@ msgstr "终端"
 
 #: ../../keybinding/id_desc_map.go:81
 msgid "Terminal Quake Window"
-msgstr "终端雷神之锤窗口"
+msgstr "终端雷神模式"
 
 #: ../../keybinding/id_desc_map.go:82
 msgid "Logout"
@@ -3196,102 +3164,99 @@ msgstr "注销"
 msgid "Disable Touchpad"
 msgstr "禁用触摸板"
 
+# "Calculator"
 #: ../../keybinding/id_desc_map.go:119
-#, fuzzy
 msgid "Calculator"
-msgstr "启动计算器"
+msgstr "计算器"
 
+# ""Email client"
 #: ../../keybinding/id_desc_map.go:120
-#, fuzzy
 msgid "Email client"
-msgstr "客户"
+msgstr "邮件客户端"
 
+# "Web browser"
 #: ../../keybinding/id_desc_map.go:121
-#, fuzzy
 msgid "Web browser"
-msgstr "启动网页浏览器"
+msgstr "网页浏览器"
 
+# "Media player"
 #: ../../keybinding/id_desc_map.go:122
-#, fuzzy
 msgid "Media player"
-msgstr "启动媒体播放器"
+msgstr "多媒体播放器"
 
+# "Play/Pause"
 #: ../../keybinding/id_desc_map.go:123
-#, fuzzy
 msgid "Play/Pause"
-msgstr "播放（或播放/暂停）"
+msgstr "播放/暂停"
 
+# "Pause"
 #: ../../keybinding/id_desc_map.go:124
 msgid "Pause"
-msgstr ""
+msgstr "暂停播放"
 
+# "Stop"
 #: ../../keybinding/id_desc_map.go:125
 msgid "Stop"
-msgstr ""
+msgstr "停止播放"
 
+# "Mute"
 #: ../../keybinding/id_desc_map.go:126
 msgid "Mute"
-msgstr ""
+msgstr "静音"
 
 #: ../../keybinding/id_desc_map.go:127
-#, fuzzy
 msgid "Volume down"
 msgstr "减小音量"
 
 #: ../../keybinding/id_desc_map.go:128
-#, fuzzy
 msgid "Volume up"
 msgstr "增大音量"
 
+# "Previous"
 #: ../../keybinding/id_desc_map.go:129
-#, fuzzy
 msgid "Previous"
-msgstr "上一曲目"
+msgstr "上一个"
 
+# "Next"
 #: ../../keybinding/id_desc_map.go:130
 msgid "Next"
-msgstr ""
+msgstr "下一个"
 
 #: ../../keybinding/id_desc_map.go:131
 msgid "Eject"
 msgstr "推出"
 
 #: ../../keybinding/id_desc_map.go:157
-#, fuzzy
 msgid "Close window"
 msgstr "关闭窗口"
 
 #: ../../keybinding/id_desc_map.go:158
-#, fuzzy
 msgid "Maximize window"
 msgstr "最大化窗口"
 
 #: ../../keybinding/id_desc_map.go:159
-#, fuzzy
 msgid "Restore window"
 msgstr "恢复窗口"
 
 #: ../../keybinding/id_desc_map.go:160
-#, fuzzy
 msgid "Minimize window"
 msgstr "最小化窗口"
 
 #: ../../keybinding/id_desc_map.go:161
-#, fuzzy
 msgid "Move window"
 msgstr "移动窗口"
 
 #: ../../keybinding/id_desc_map.go:162
-#, fuzzy
 msgid "Resize window"
 msgstr "改变窗口大小"
 
+# "Switch furl state"
 #: ../../keybinding/id_desc_map.go:163
 msgid "Switch furl state"
-msgstr ""
+msgstr "切换卷起状态"
 
+# "Activate window menu"
 #: ../../keybinding/id_desc_map.go:164
-#, fuzzy
 msgid "Activate window menu"
 msgstr "激活窗口菜单"
 
@@ -3311,25 +3276,25 @@ msgstr "切换到工作区3"
 msgid "Switch to workspace 4"
 msgstr "切换到工作区4"
 
+# "Switch to left workspace"
 #: ../../keybinding/id_desc_map.go:210
-#, fuzzy
 msgid "Switch to left workspace"
-msgstr "切换到工作区1"
+msgstr "切换到左边工作区"
 
+# "Switch to right workspace"
 #: ../../keybinding/id_desc_map.go:211
-#, fuzzy
 msgid "Switch to right workspace"
-msgstr "切换到工作区1"
+msgstr "切换到右边工作区"
 
+# "Switch to up workspace"
 #: ../../keybinding/id_desc_map.go:212
-#, fuzzy
 msgid "Switch to up workspace"
-msgstr "切换到工作区1"
+msgstr "切换到上方工作区"
 
+# "Switch to down workspace"
 #: ../../keybinding/id_desc_map.go:213
-#, fuzzy
 msgid "Switch to down workspace"
-msgstr "切换到工作区1"
+msgstr "切换到下方工作区"
 
 #: ../../keybinding/id_desc_map.go:214
 msgid "Move to workspace 1"
@@ -3347,30 +3312,29 @@ msgstr "移动到工作区3"
 msgid "Move to workspace 4"
 msgstr "移动到工作区4"
 
+# "Move to left workspace"
 #: ../../keybinding/id_desc_map.go:218
-#, fuzzy
 msgid "Move to left workspace"
-msgstr "移动到工作区1"
+msgstr "移动到左边工作区"
 
+# "Move to right workspace"
 #: ../../keybinding/id_desc_map.go:219
-#, fuzzy
 msgid "Move to right workspace"
-msgstr "移动到工作区1"
+msgstr "移动到右边工作区"
 
+# "Move to up workspace"
 #: ../../keybinding/id_desc_map.go:220
-#, fuzzy
 msgid "Move to up workspace"
-msgstr "移动到工作区1"
+msgstr "移动到上方工作区"
 
+# "Move to down workspace"
 #: ../../keybinding/id_desc_map.go:221
-#, fuzzy
 msgid "Move to down workspace"
-msgstr "移动到工作区1"
+msgstr "移动到下方工作区"
 
 #: ../../network/manager_connections.go:177
-#, fuzzy
 msgid "Wired Connection "
-msgstr "有线连接"
+msgstr "有线连接 "
 
 #: ../../network/nm_constant.go:212 ../../network/nm_setting_vpn_l2tp.go:113
 #: ../../network/nm_setting_vpn_openvpn.go:168
@@ -3408,20 +3372,19 @@ msgstr "无线连接"
 
 #: ../../network/nm_custom_type.go:137
 msgid "Wireless Ad-Hoc"
-msgstr "无线点对点"
+msgstr "无线 Ad-Hoc"
 
 #: ../../network/nm_custom_type.go:139
 msgid "Wireless Ap-Hotspot"
-msgstr "无线AP-热点"
+msgstr "无线Ap-Hotspot"
 
 #: ../../network/nm_custom_type.go:141
 msgid "PPPoE Connection"
 msgstr "PPPoE连接"
 
 #: ../../network/nm_custom_type.go:143
-#, fuzzy
 msgid "Mobile Connection"
-msgstr "移动GSM连接"
+msgstr "移动连接"
 
 #: ../../network/nm_custom_type.go:145
 msgid "Mobile GSM Connection"
@@ -3429,7 +3392,7 @@ msgstr "移动GSM连接"
 
 #: ../../network/nm_custom_type.go:147
 msgid "Mobile CDMA Connection"
-msgstr "手机CDMA连接"
+msgstr "移动CDMA连接"
 
 #: ../../network/nm_custom_type.go:149
 msgid "VPN Connection"
@@ -3437,7 +3400,7 @@ msgstr "VPN连接"
 
 #: ../../network/nm_custom_type.go:151
 msgid "VPN L2TP"
-msgstr "L2TP协议的VPN"
+msgstr "VPN L2TP"
 
 #: ../../network/nm_custom_type.go:153
 msgid "VPN OpenConnect"
@@ -3534,7 +3497,7 @@ msgstr "自动"
 
 #: ../../network/nm_setting_802_1x.go:186
 msgid "Version 0"
-msgstr "0版本"
+msgstr "第0版"
 
 #: ../../network/nm_setting_802_1x.go:187
 msgid "Version 1"
@@ -3562,7 +3525,7 @@ msgstr "中国移动彩信"
 
 #: ../../network/nm_setting_gsm.go:133
 msgid "Any"
-msgstr "任何"
+msgstr "任一"
 
 #: ../../network/nm_setting_gsm.go:134
 msgid "3G (UMTS/HSPA)"
@@ -3591,12 +3554,13 @@ msgstr "仅使用4G（LTE）"
 #: ../../network/nm_setting_ip4_config.go:174
 #: ../../network/nm_setting_ip6_config.go:66
 msgid "Auto"
-msgstr "自动"
+msgstr "{0}{/0} {1}{/1}(自动)"
 
+# "Local Link"
 #: ../../network/nm_setting_ip4_config.go:175
 #: ../../network/nm_setting_ip6_config.go:68
 msgid "Link Local"
-msgstr "链路本地"
+msgstr "本地链路"
 
 #: ../../network/nm_setting_ip4_config.go:176
 #: ../../network/nm_setting_ip6_config.go:69
@@ -3622,12 +3586,12 @@ msgstr "GSM（GPRS，EDGE，UMTS，HSPA）"
 
 #: ../../network/nm_setting_virtual_key.go:116
 msgid "CDMA (1xRTT, EVDO)"
-msgstr "CDMA（1xRTT的，EVDO）"
+msgstr "CDMA（1xRTT，EVDO）"
 
 #: ../../network/nm_setting_virtual_key.go:123
 #, fuzzy
 msgid "L2TP"
-msgstr "L2TP协议的VPN"
+msgstr "VPN L2TP"
 
 #: ../../network/nm_setting_virtual_key.go:124
 #, fuzzy
@@ -3642,7 +3606,7 @@ msgstr "VPN OpenConnect"
 #: ../../network/nm_setting_virtual_key.go:126
 #, fuzzy
 msgid "OpenVPN"
-msgstr "VPN-OpenVPN的"
+msgstr "VPN-OpenVPN"
 
 #: ../../network/nm_setting_virtual_key.go:127
 #, fuzzy
@@ -3660,32 +3624,33 @@ msgstr "无"
 #: ../../network/nm_setting_virtual_key.go:141
 #: ../../network/nm_setting_virtual_key.go:148
 msgid "WEP 40/128-bit Key"
-msgstr "WEP 40/128-bit密钥"
+msgstr "WEP 40/128-比特 密钥"
 
 #: ../../network/nm_setting_virtual_key.go:142
 #: ../../network/nm_setting_virtual_key.go:149
+#, fuzzy
 msgid "WPA & WPA2 Personal"
-msgstr "WPA＆WPA2个人"
+msgstr "WPA &amp; WPA2 个人"
 
 #: ../../network/nm_setting_virtual_key.go:143
+#, fuzzy
 msgid "WPA & WPA2 Enterprise"
-msgstr "WPA＆WPA2企业"
+msgstr "WPA &amp; WPA2 企业"
 
 #: ../../network/nm_setting_virtual_key.go:157
 #: ../../network/nm_setting_virtual_key.go:166
-#, fuzzy
 msgid "All Available (default)"
-msgstr "NAT-T当可用（默认）"
+msgstr "都可用（默认）"
 
 #: ../../network/nm_setting_virtual_key.go:158
 #: ../../network/nm_setting_virtual_key.go:167
 msgid "128-bit (most secure)"
-msgstr ""
+msgstr "128-比特（最安全）"
 
 #: ../../network/nm_setting_virtual_key.go:159
 #: ../../network/nm_setting_virtual_key.go:168
 msgid "40-bit (less secure)"
-msgstr ""
+msgstr "40-比特（较安全）"
 
 #: ../../network/nm_setting_virtual_key.go:175
 msgid "Secure (default)"
@@ -3705,7 +3670,7 @@ msgstr "密码"
 
 #: ../../network/nm_setting_vpn_openvpn.go:249
 msgid "Password with Certificates (TLS)"
-msgstr "密码与证书（TLS）"
+msgstr "证书密码（TLS）"
 
 #: ../../network/nm_setting_vpn_openvpn.go:250
 msgid "Static Key"
@@ -3719,7 +3684,7 @@ msgstr "0"
 #: ../../network/nm_setting_vpn_openvpn.go:255
 #: ../../network/nm_setting_vpn_openvpn.go:431
 msgid "1"
-msgstr " 1"
+msgstr "&nbsp;1"
 
 #: ../../network/nm_setting_vpn_openvpn.go:373
 #: ../../network/nm_setting_vpn_openvpn.go:393
@@ -3734,7 +3699,7 @@ msgstr "DES-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:375
 msgid "RC2-CBC"
-msgstr "RC2-CBC"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:376
 msgid "DES-EDE-CBC"
@@ -3778,15 +3743,15 @@ msgstr "AES-256-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:386
 msgid "CAMELLIA-128-CBC"
-msgstr "茶花-128-CBC"
+msgstr "CAMELLIA-128-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:387
 msgid "CAMELLIA-192-CBC"
-msgstr "茶花-192-CBC"
+msgstr "CAMELLIA-192-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:388
 msgid "CAMELLIA-256-CBC"
-msgstr "茶花-256-CBC"
+msgstr "CAMELLIA-256-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:389
 msgid "SEED-CBC"
@@ -3798,7 +3763,7 @@ msgstr "RSA MD-4"
 
 #: ../../network/nm_setting_vpn_openvpn.go:396
 msgid "MD-5"
-msgstr "MD-5"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:397
 msgid "SHA-1"
@@ -3826,7 +3791,7 @@ msgstr "RIPEMD-160"
 
 #: ../../network/nm_setting_vpn_openvpn.go:425
 msgid "Client"
-msgstr "客户"
+msgstr "客户端"
 
 #: ../../network/nm_setting_vpn_openvpn.go:426
 msgid "Server"
@@ -3846,15 +3811,15 @@ msgstr "思科（默认）"
 
 #: ../../network/nm_setting_vpn_vpnc.go:250
 msgid "Netscreen"
-msgstr "Netscreen的"
+msgstr "网屏"
 
 #: ../../network/nm_setting_vpn_vpnc.go:254
 msgid "NAT-T When Available (default)"
-msgstr "NAT-T当可用（默认）"
+msgstr "NAT-T可用时（默认）"
 
 #: ../../network/nm_setting_vpn_vpnc.go:255
 msgid "NAT-T Always"
-msgstr "NAT-T的始终"
+msgstr "NAT-T总是"
 
 #: ../../network/nm_setting_vpn_vpnc.go:256
 msgid "Cisco UDP"
@@ -3888,32 +3853,36 @@ msgstr "基础设施"
 
 #: ../../network/nm_setting_wireless.go:285
 msgid "Ad-Hoc"
-msgstr "特设"
+msgstr "Ad-Hoc"
 
 #: ../../network/nm_setting_wireless.go:286
 msgid "AP-Hotspot"
-msgstr "AP-热点"
+msgstr "AP-Hotspot"
 
 #: ../../network/nm_setting_wireless.go:291
 msgid "A (5 GHz)"
-msgstr "A（5 GHz）的"
+msgstr "A（5 GHz）"
 
 #: ../../network/nm_setting_wireless.go:292
 msgid "BG (2.4 GHz)"
-msgstr "BG（2.4千兆赫）"
+msgstr "BG（2.4 GHz）"
 
+# "WEP"
 #: ../../network/nm_setting_wireless_security.go:189
 msgid "wep"
-msgstr "wep"
+msgstr "WEP"
 
+# "Dynamic WEP"
 #: ../../network/nm_setting_wireless_security.go:190
 msgid "dynamic wep"
 msgstr "动态WEP"
 
+# "WPA-PSK ad-hoc"
 #: ../../network/nm_setting_wireless_security.go:191
 msgid "wpa-psk ad-hoc"
-msgstr "WPA-PSK即席"
+msgstr "WPA-PSK ad-hoc"
 
+# "WPA-PSK Infrastructure"
 #: ../../network/nm_setting_wireless_security.go:192
 msgid "wpa-psk infrastructure"
 msgstr "WPA-PSK基础设施"
@@ -3922,117 +3891,131 @@ msgstr "WPA-PSK基础设施"
 msgid "wpa enterprise"
 msgstr "WPA企业"
 
+# "WEP40"
 #: ../../network/nm_setting_wireless_security.go:197
 msgid "wep40"
 msgstr "WEP40"
 
+# "WEP104"
 #: ../../network/nm_setting_wireless_security.go:198
 msgid "wep104"
 msgstr "WEP104"
 
+# "TKIP"
 #: ../../network/nm_setting_wireless_security.go:199
 msgid "tkip"
 msgstr "TKIP"
 
+# "CCMP"
 #: ../../network/nm_setting_wireless_security.go:200
 msgid "ccmp"
 msgstr "CCMP"
 
+# "Open"
 #: ../../network/nm_setting_wireless_security.go:204
 msgid "open"
 msgstr "打开"
 
+# "Shared"
 #: ../../network/nm_setting_wireless_security.go:205
 msgid "shared"
-msgstr "shared"
+msgstr "分享"
 
+# "Leap"
 #: ../../network/nm_setting_wireless_security.go:206
 msgid "leap"
 msgstr "飞跃"
 
 #: ../../network/state_handler.go:34
 msgid "The device is now managed."
-msgstr "该设备是现在进行管理。"
+msgstr "设备正在托管。"
 
 #: ../../network/state_handler.go:35
 msgid "The device is no longer managed."
-msgstr "该设备不再进行管理。"
+msgstr "设备不再托管。"
 
+# "The device have not been ready for configuration."
 #: ../../network/state_handler.go:36
 #, fuzzy
 msgid "The device have not been ready for configuration."
-msgstr "该设备不能被准备好进行配置。"
+msgstr "设备配置未就绪。"
 
 #: ../../network/state_handler.go:37
 msgid ""
 "IP configuration could not be reserved (no available address timeout etc)."
-msgstr "IP配置不能被保留（没有可用的地址超时等）。"
+msgstr "IP配置无法保存（无可用地址、超时等）。"
 
 #: ../../network/state_handler.go:38
 msgid "The IP configuration is no longer valid."
 msgstr "IP配置不再有效。"
 
+# "Passwords were required but not provided."
 #: ../../network/state_handler.go:39
 #, fuzzy
 msgid "Passwords were required but not provided."
-msgstr "被要求保密，但不能提供的。"
+msgstr "需要密码，但未提供。"
 
 #: ../../network/state_handler.go:40
 #, fuzzy
 msgid ""
 "The 802.1X supplication disconnected from the access point or authentication "
 "server."
-msgstr "从接入点或认证服务器的802.1X客户端断开连接。"
+msgstr "802.1X supplicant从接入点或认证服务器断开连接。"
 
 #: ../../network/state_handler.go:41
 #, fuzzy
 msgid "Configuration of the 802.1X supplication failed."
-msgstr "在802.1X客户端的配置失败。"
+msgstr "802.1X supplicant配置失败。"
 
+# "The 802.1X supplicant quitted or failed unexpectedly."
 #: ../../network/state_handler.go:42
 #, fuzzy
 msgid "The 802.1X supplicant quitted or failed unexpectedly."
-msgstr "在802.1X客户端退出或意外失败。"
+msgstr "802.1X supplicant异常退出或失败。"
 
+# "The 802.1X supplicant took too long time to authenticate."
 #: ../../network/state_handler.go:43
 #, fuzzy
 msgid "The 802.1X supplicant took too long time to authenticate."
-msgstr "在802.1X请求者的时间太长验证。"
+msgstr "802.1X supplicant验证时间过长。"
 
 #: ../../network/state_handler.go:44
 msgid "The PPP service failed to start within the allowed time."
-msgstr "PPP服务启动失败，在允许的时间范围内。"
+msgstr "PPP服务无法在限定时间内启动。"
 
 #: ../../network/state_handler.go:45
 msgid "The PPP service disconnected unexpectedly."
-msgstr "PPP服务意外中断。"
+msgstr "PPP服务异常中断。"
 
+# "The PPP service quitted or failed unexpectedly."
 #: ../../network/state_handler.go:46
 #, fuzzy
 msgid "The PPP service quitted or failed unexpectedly."
-msgstr "PPP服务退出或意外失败。"
+msgstr "PPP服务异常退出或失败。"
 
 #: ../../network/state_handler.go:47
 msgid "The DHCP service failed to start within the allowed time."
-msgstr "DHCP服务无法启动​​，在允许的时间范围内。"
+msgstr "DHCP服务无法在限定时间内启动。"
 
 #: ../../network/state_handler.go:48
 msgid "The DHCP service reported an unexpected error."
-msgstr "DHCP服务报告了一个意外的错误。"
+msgstr "DHCP服务报告了一个异常错误。"
 
+# "The DHCP service quitted or failed unexpectedly."
 #: ../../network/state_handler.go:49
 #, fuzzy
 msgid "The DHCP service quitted or failed unexpectedly."
-msgstr "DHCP服务退出或意外失败。"
+msgstr "DHCP服务异常退出或失败。"
 
 #: ../../network/state_handler.go:50
 msgid "The shared connection service failed to start."
 msgstr "共享连接服务启动失败。"
 
+# "The shared connection service quitted or failed unexpectedly."
 #: ../../network/state_handler.go:51
 #, fuzzy
 msgid "The shared connection service quitted or failed unexpectedly."
-msgstr "共享连接服务退出或意外失败。"
+msgstr "共享连接服务异常退出或失败。"
 
 #: ../../network/state_handler.go:52
 msgid "The AutoIP service failed to start."
@@ -4040,27 +4023,31 @@ msgstr "自动IP服务启动失败。"
 
 #: ../../network/state_handler.go:53
 msgid "The AutoIP service reported an unexpected error."
-msgstr "自动IP服务报告了一个意外的错误。"
+msgstr "自动IP服务报告了一个异常错误。"
 
+# "The AutoIP service quitted or failed unexpectedly."
 #: ../../network/state_handler.go:54
 #, fuzzy
 msgid "The AutoIP service quitted or failed unexpectedly."
-msgstr "自动IP服务退出或意外失败。"
+msgstr "自动IP服务异常退出或失败。"
 
+# "Dialing failed due to busy lines."
 #: ../../network/state_handler.go:55
 #, fuzzy
 msgid "Dialing failed due to busy lines."
-msgstr "拨号失败，因为线路忙。"
+msgstr "线路繁忙致使拨号失败。"
 
+# "Dialing failed due to no dial tone."
 #: ../../network/state_handler.go:56
 #, fuzzy
 msgid "Dialing failed due to no dial tone."
-msgstr "拨号失败，因为没有拨号音。"
+msgstr "无拨号音致使拨号失败。"
 
+# "Dialing failed due to the carrier."
 #: ../../network/state_handler.go:57
 #, fuzzy
 msgid "Dialing failed due to the carrier."
-msgstr "拨号失败，因为有载体。"
+msgstr "载体致使拨号失败。"
 
 #: ../../network/state_handler.go:58
 msgid "Dialing timed out."
@@ -4076,7 +4063,7 @@ msgstr "调制解调器初始化失败。"
 
 #: ../../network/state_handler.go:61
 msgid "Failed to select the specified GSM APN."
-msgstr "没有选择的，指定的GSM APN。"
+msgstr "无法选择指定的GSM APN。"
 
 #: ../../network/state_handler.go:62
 msgid "No networks searched."
@@ -4090,40 +4077,44 @@ msgstr "网络注册被拒绝。"
 msgid "Network registration timed out."
 msgstr "网络注册超时。"
 
+# "Register to the requested GSM network failed."
 #: ../../network/state_handler.go:65
 #, fuzzy
 msgid "Register to the requested GSM network failed."
-msgstr "失败请求的GSM网络进行注册。"
+msgstr "注册GSM网络失败。"
 
 #: ../../network/state_handler.go:66
 msgid "PIN check failed."
 msgstr "PIN码检查失败。"
 
+# "Necessary firmware for the device may be missed."
 #: ../../network/state_handler.go:67
 #, fuzzy
 msgid "Necessary firmware for the device may be missed."
-msgstr "必要的固件的设备可能会丢失。"
+msgstr "设备必要固件可能会丢失。"
 
 #: ../../network/state_handler.go:68
 msgid "The device was removed."
 msgstr "该设备已被删除。"
 
+# "NetworkManager went to sleep."
 #: ../../network/state_handler.go:69
 msgid "NetworkManager went to sleep."
-msgstr "NetworkManager的睡觉去了。"
+msgstr "NetworkManager即将进入休眠。"
 
 #: ../../network/state_handler.go:70
 msgid "The device's active connection was removed or disappeared."
-msgstr "被删除或消失设备的有效连接。"
+msgstr "设备有效连接被删除或消失。"
 
+# "An user or client requested to disconnect."
 #: ../../network/state_handler.go:71
 #, fuzzy
 msgid "An user or client requested to disconnect."
-msgstr "用户或客户端请求的连接断开。"
+msgstr "用户或客户端请求断开连接。"
 
 #: ../../network/state_handler.go:72
 msgid "The device's carrier/link changed."
-msgstr "该器件的载/链接更改。"
+msgstr "设备载体/链接更改。"
 
 #: ../../network/state_handler.go:73
 msgid "The device's existing connection was assumed."
@@ -4132,11 +4123,11 @@ msgstr "假定该设备的现有连接。"
 #: ../../network/state_handler.go:74
 #, fuzzy
 msgid "The 802.1x supplication is now available."
-msgstr "802.1x请求者现已推出。"
+msgstr "802.1x supplicant现在可用"
 
 #: ../../network/state_handler.go:75
 msgid "The modem could not be found."
-msgstr "调制解调器不能被发现。"
+msgstr "未找到调制解调器。"
 
 #: ../../network/state_handler.go:76
 msgid "The Bluetooth connection timed out or failed."
@@ -4144,19 +4135,20 @@ msgstr "蓝牙连接超时或失败。"
 
 #: ../../network/state_handler.go:77
 msgid "GSM Modem's SIM Card not inserted."
-msgstr "GSM调制解调器的SIM卡没有插入。"
+msgstr "未插入GSM调制解调器SIM卡。"
 
 #: ../../network/state_handler.go:78
 msgid "GSM Modem's SIM Pin required."
-msgstr "GSM调制解调器的SIM卡PIN码需要。"
+msgstr "需要GSM调制解调器的SIM卡PIN码。"
 
 #: ../../network/state_handler.go:79
 msgid "GSM Modem's SIM Puk required."
-msgstr "GSM调制解调器的SIM卡北辰必需的。"
+msgstr "需要GSM调制解调器SIM卡Puk码。"
 
+# "Wrong GSM Modem's SIM "
 #: ../../network/state_handler.go:80
 msgid "GSM Modem's SIM wrong"
-msgstr "GSM调制解调器的SIM卡错误"
+msgstr "GSM调制解调器SIM卡错误 "
 
 #: ../../network/state_handler.go:81
 msgid "InfiniBand device does not support connected mode."
@@ -4165,16 +4157,17 @@ msgstr "InfiniBand设备不支持连接模式。"
 #: ../../network/state_handler.go:82
 #, fuzzy
 msgid "A connection dependency failed."
-msgstr "共享连接服务启动失败。"
+msgstr "底座连接的二次连接失败。"
 
 #: ../../network/state_handler.go:83
 msgid "Problem with the RFC 2684 Ethernet over ADSL bridge."
-msgstr "问题与RFC 2684以太网ADSL的桥梁。"
+msgstr "RFC 2684以太网桥接到ADSL上错误。"
 
+# "ModemManager was not running or quitted unexpectedly."
 #: ../../network/state_handler.go:84
 #, fuzzy
 msgid "ModemManager was not running or quitted unexpectedly."
-msgstr "ModemManager未运行或意外退出。"
+msgstr "调制解调器管理器未运行或异常退出。"
 
 #: ../../network/state_handler.go:85
 msgid "The 802.11 Wi-Fi network could not be found."
@@ -4184,45 +4177,52 @@ msgstr "802.11 Wi-Fi网络无法找到。"
 msgid "A secondary connection of the base connection failed."
 msgstr "底座连接的二次连接失败。"
 
+# "VPN connection changed state due to disconnection from users."
 #: ../../network/state_handler.go:88
 #, fuzzy
 msgid "VPN connection changed state due to disconnection from users."
-msgstr "VPN连接状态发生了改变，因为用户断开了。"
+msgstr "用户断开致使VPN连接状态改变。"
 
+# "VPN connection changed state due to disconnection from users."
 #: ../../network/state_handler.go:89
 #, fuzzy, c-format
 msgid "VPN connection %s changed state due to disconnection of the device."
-msgstr "VPN连接状态发生了改变，因为用户断开了。"
+msgstr "用户断开致使VPN连接状态改变。"
 
 #: ../../network/state_handler.go:90
 msgid "VPN connection service stopped."
 msgstr ""
 
+# "IP config of VPN connection was invalid."
 #: ../../network/state_handler.go:91
 #, fuzzy
 msgid "IP config of VPN connection was invalid."
-msgstr "VPN连接的IP配置是无效的。"
+msgstr "VPN连接的IP配置无效。"
 
+# "The connection attempt to VPN  service timed out."
 #: ../../network/state_handler.go:92
 #, fuzzy
 msgid "The connection attempt to VPN  service timed out."
-msgstr "在尝试连接到VPN服务超时。"
+msgstr "VPN服务连接尝试超时。"
 
+# "VPN connection service start timed out."
 #: ../../network/state_handler.go:93
 #, fuzzy
 msgid "A timeout occurred while starting the VPN connection service."
-msgstr "同时开始提供VPN连接的服务时发生超时。"
+msgstr "VPN连接服务启动超时。"
 
 #: ../../network/state_handler.go:94
 #, fuzzy
 msgid "VPN connection service failed to start."
 msgstr "共享连接服务启动失败。"
 
+# "Necessary password for VPN connection was not provided."
 #: ../../network/state_handler.go:95
 #, fuzzy
 msgid "Necessary password for VPN connection was not provided."
-msgstr "并未提供必要的秘密VPN连接。"
+msgstr "未提供VPN连接所需的密码。"
 
+# "Authentication to VPN server failed."
 #: ../../network/state_handler.go:96
 #, fuzzy
 msgid "Authentication to VPN server failed."
@@ -4252,99 +4252,30 @@ msgstr "断开连接 - 当前已离线"
 msgid "Access Point (AP) mode is not supported by this device."
 msgstr ""
 
+# "Battery critical low"
 #: ../../power/upower.go:86 ../../power/upower.go:101
-#, fuzzy
 msgid "Battery critical low"
-msgstr "电池cirtical低"
+msgstr "电池电量耗尽"
 
+# "Computer will be in standby mode, please plug in."
 #: ../../power/upower.go:86 ../../power/upower.go:101
 #: ../../power/upower.go:114
-#, fuzzy
 msgid "Computer will be in standby mode, please plug in."
-msgstr "计算机将很快进入待机状态，请插入电源。"
+msgstr "计算机将很快进入待机状态，请连接电源。"
 
+# "Battery Low"
 #: ../../power/upower.go:114
-#, fuzzy
 msgid "Battery Low"
 msgstr "电池电量低"
-
-#, fuzzy
-#~ msgid "Volume Mute"
-#~ msgstr "静音"
-
-#~ msgid "Not searching for networks."
-#~ msgstr "没有搜索网络。"
-
-#~ msgid "A dependency of the connection failed."
-#~ msgstr "连接的依赖性失败。"
-
-#~ msgid "Battery cirtical low"
-#~ msgstr "电池cirtical低"
-
-#~ msgid "Switch applications with 3D effect"
-#~ msgstr "使用3D效果切换程序"
-
-# msgid "Reverse switch applications with 3D effect"
-#, fuzzy
-#~ msgid "Reverse switch applications with 3D effect"
-#~ msgstr "使用3D效果反向切换程序"
-
-#~ msgid "Take a screenshot of full screen"
-#~ msgstr "充分屏幕截图"
-
-#~ msgid "Take a screenshot of a window"
-#~ msgstr "以一个窗口的屏幕截图"
-
-#~ msgid "Take a screenshot delayed"
-#~ msgstr "采取拖延的截图"
-
-#~ msgid "Launch email client"
-#~ msgstr "启动电子邮件客户端"
-
-#~ msgid "Pause playback"
-#~ msgstr "暂停播放"
-
-#~ msgid "Stop playback"
-#~ msgstr "停止播放"
-
-#~ msgid "Next track"
-#~ msgstr "下一首曲目"
-
-#~ msgid "Toggle shaded state"
-#~ msgstr "切换阴影状态"
-
-#~ msgid "Switch to workspace left"
-#~ msgstr "切换到工作区左"
-
-#~ msgid "Switch to workspace right"
-#~ msgstr "切换到合适的工作空间"
-
-#~ msgid "Switch to workspace up"
-#~ msgstr "切换到工作区了"
-
-#~ msgid "Switch to workspace down"
-#~ msgstr "切换到工作区向下"
-
-#~ msgid "Move to workspace left"
-#~ msgstr "移动到工作区左"
-
-#~ msgid "Move to workspace right"
-#~ msgstr "移动到工作区右"
-
-#~ msgid "Move to workspace up"
-#~ msgstr "移动到工作区了"
-
-#~ msgid "Move to workspace down"
-#~ msgstr "移动到工作区向下"
 
 #~ msgid "Wi-Fi"
 #~ msgstr "Wi-Fi"
 
 #~ msgid "Wi-Fi Ad-Hoc"
-#~ msgstr "Wi-Fi点对点"
+#~ msgstr "Wi-FiAd-Hoc"
 
 #~ msgid "Wi-Fi Hotspot"
-#~ msgstr "Wi-Fi热点"
+#~ msgstr "Wi-FiHotspot"
 
 #~ msgid "PPPoE"
 #~ msgstr "PPPoE"
@@ -4353,32 +4284,44 @@ msgstr "电池电量低"
 #~ msgstr "移动GSM（GPRS，EDGE，UMTS，HSPA）"
 
 #~ msgid "Mobile CDMA (1xRTT, EVDO)"
-#~ msgstr "移动CDMA（1xRTT的，EVDO）"
+#~ msgstr "移动CDMA（1xRTT，EVDO）"
 
 #~ msgid "VPN-L2TP (Layer 2 Tunneling Protocol)"
 #~ msgstr "VPN-L2TP（第二层隧道协议）"
 
 #~ msgid "VPN-OpenConnect (Cisco AnyConnect Compatible VPN)"
-#~ msgstr "VPN-OPENCONNECT（思科的AnyConnect VPN兼容）"
+#~ msgstr "VPN-OPENCONNECT（思科AnyConnect  Compatible VPN）"
 
+# "VPN-PPTP (Point-to-Point Tunneling Protocol)"
 #~ msgid "VPN-PPTP (Point-to-Point Tunneling Protocol))"
-#~ msgstr "VPN-PPTP（点对点点对点隧道协议））"
+#~ msgstr "VPN-PPTP（点对点点对点隧道协议）"
 
 #~ msgid "VPN-VPNC (Cisco Compatible VPN)"
-#~ msgstr "VPN-VPNC（思科兼容的VPN）"
+#~ msgstr "VPN-VPNC（思科Compatible VPN）"
 
 #~ msgid "*99#"
-#~ msgstr "* 99＃"
+#~ msgstr "*99＃"
 
+# "No networks searched."
+#~ msgid "Not searching for networks."
+#~ msgstr "未找到网络。"
+
+# "A connection dependency failed."
+#~ msgid "A dependency of the connection failed."
+#~ msgstr "连接依赖失败。"
+
+# "VPN connection %s changed state due to disconnection of the device."
 #~ msgid ""
 #~ "The VPN connection %s changed state because the device it was using was "
 #~ "disconnected."
-#~ msgstr "VPN连接%s状态发生了改变，因为它使用的设备已断开。"
+#~ msgstr "设备断开致使VPN连接 %s 状态改变。"
 
+# "VPN connection service stopped."
 #~ msgid "The service providing the VPN connection was stopped."
-#~ msgstr "提供VPN连接的服务已停止。"
+#~ msgstr "VPN连接服务已停止。"
 
+# "VPN connection service failed to start."
 #~ msgid ""
 #~ "Starting the service starting the service providing the VPN connection "
 #~ "failed."
-#~ msgstr "启动开始提供VPN连接的服务的服务失败。"
+#~ msgstr "VPN连接服务启动失败。"

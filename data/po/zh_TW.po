@@ -3067,15 +3067,15 @@ msgid "Launcher"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:68
-msgid "Show Desktop"
+msgid "Show desktop"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:69
-msgid "Lock Screen"
+msgid "Lock screen"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:70
-msgid "File Manager"
+msgid "File manager"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:71

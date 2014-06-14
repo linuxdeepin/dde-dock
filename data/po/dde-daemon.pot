@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-14 13:15+0800\n"
+"POT-Creation-Date: 2014-06-14 16:44+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3086,15 +3086,15 @@ msgid "Launcher"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:68
-msgid "Show Desktop"
+msgid "Show desktop"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:69
-msgid "Lock Screen"
+msgid "Lock screen"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:70
-msgid "File Manager"
+msgid "File manager"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:71

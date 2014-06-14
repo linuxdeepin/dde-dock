@@ -65,9 +65,9 @@ var SystemIdIndexMap = map[int32]int32{
 
 var SystemNameDescMap = map[string]string{
 	"launcher":                     Tr("Launcher"),
-	"show-desktop":                 Tr("Show Desktop"),
-	"lock-screen":                  Tr("Lock Screen"),
-	"file-manager":                 Tr("File Manager"),
+	"show-desktop":                 Tr("Show desktop"),
+	"lock-screen":                  Tr("Lock screen"),
+	"file-manager":                 Tr("File manager"),
 	"switch-applications":          Tr("Switch applications"),
 	"switch-applications-backward": Tr("Reverse switch applications"),
 	"prev-key":                     Tr("3D switch applications"),
