@@ -24,4 +24,6 @@
 
 int gen_gtk_thumbnail(char *theme, char *dest);
 
+int try_init();
+
 #endif

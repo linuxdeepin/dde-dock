@@ -33,6 +33,9 @@
 #include <metacity-private/gradient.h>
 #include <metacity-private/preview-widget.h>
 
+
+#define THUMB_WIDTH 128
+#define THUMB_HEIGHT 72
 GtkWidget *get_meta_theme (const char* theme_name)
 {
 	MetaTheme *meta = meta_theme_load(theme_name, NULL);
@@ -58,7 +61,22 @@ void capture(GtkOffscreenWindow* w, GdkEvent* event, gpointer user_data)
 	gchar *dest = (gchar*)user_data;
 	GdkPixbuf* pbuf = gtk_offscreen_window_get_pixbuf(w);
 	gdk_pixbuf_save(pbuf, dest, "png", NULL, NULL);
+	printf("Saaveto:%s", dest);
 	gtk_main_quit();
+}
+
+void padding_thumbnail(GtkFixed* thumb)
+{
+    GtkWidget *btn = gtk_button_new_with_label("      ");
+
+    gtk_fixed_put(thumb, btn, 72, 5);
+
+    btn = gtk_radio_button_new(NULL);
+    gtk_fixed_put(thumb, btn, 5, 5);
+
+    btn = gtk_check_button_new();
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(btn), TRUE);
+    gtk_fixed_put(thumb, btn, 35, 5);
 }
 
 int gen_gtk_thumbnail(char *theme, char *dest)
@@ -67,30 +85,28 @@ int gen_gtk_thumbnail(char *theme, char *dest)
 		g_error("gen_gtk_thumbnail args error");
 		return -1;
 	}
-	gtk_init(NULL, NULL);
 
 	GtkWidget* w = gtk_offscreen_window_new();
-	gtk_widget_set_size_request(w, 150, 73);
+	gtk_widget_set_size_request(w, 128, 72);
 	GtkWidget *t = get_meta_theme(theme);
 	if (t == NULL) {
 		g_error("Get Meta Theme Failed");
 		return -1;
 	}
-	/*gtk_widget_set_size_request(t, 130, 70);*/
 	gtk_container_add((GtkContainer*)w,t);
+	GtkWidget* fixed = gtk_fixed_new();
+	gtk_container_add(GTK_CONTAINER(t), fixed);
 
-	GtkWidget *btn = gtk_button_new_with_label("Button");
-	if (btn == NULL) {
-		g_error("New Button Failed");
-		return -1;
-	}
-	/*gtk_widget_set_size_request(btn, 45, 30);*/
-	gtk_container_add((GtkContainer*)t, btn);
+	padding_thumbnail(GTK_FIXED(fixed));
 
 	g_signal_connect(G_OBJECT(w), "damage-event", G_CALLBACK(capture), dest);
 	gtk_widget_show_all(w);
-
 	gtk_main();
 
 	return 0;
+}
+
+int try_init()
+{
+    return gtk_init_check(NULL, NULL);
 }

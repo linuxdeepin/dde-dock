@@ -33,6 +33,9 @@ import (
 )
 
 func main() {
+	if C.try_init() == 0 {
+		return
+	}
 	if len(os.Args) != 3 {
 		fmt.Printf("ERROR\n")
 		fmt.Printf("Usage: %s <Theme> <Dest>\n", os.Args[0])
@@ -49,8 +52,6 @@ func main() {
 
 	ret := C.gen_gtk_thumbnail(cTheme, cDest)
 	if int(ret) == -1 {
-		fmt.Printf("ERROR\n")
-		fmt.Printf("Generate Gtk Thumbnail Failed")
-		return
+		fmt.Printf("Generate Gtk Thumbnail Failed", cTheme, cDest)
 	}
 }
