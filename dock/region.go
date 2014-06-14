@@ -111,6 +111,8 @@ func (r *Region) mouseInRegion() bool {
 	mouseX := int32(reply.RootX)
 	mouseY := int32(reply.RootY)
 
+	logger.Debugf("mouse position: (%d, %d)", mouseX, mouseY)
+
 	startX := int32(region.X)
 	startY := int32(region.Y)
 

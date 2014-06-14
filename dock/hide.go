@@ -2,6 +2,7 @@ package dock
 
 import (
 	"dlib/dbus"
+	"time"
 )
 
 const (
@@ -69,6 +70,7 @@ func (m *HideStateManager) UpdateState() {
 		logger.Debug("AutoHide Mode")
 		m.state = HideStateShowing
 
+		<-time.After(time.Millisecond * 100)
 		if region.mouseInRegion() {
 			logger.Debug("MouseInDockRegion")
 			break
@@ -80,6 +82,7 @@ func (m *HideStateManager) UpdateState() {
 		}
 	case HideModeKeepHidden:
 		logger.Debug("KeepHidden Mode")
+		<-time.After(time.Millisecond * 100)
 		if region.mouseInRegion() {
 			logger.Debug("MouseInDockRegion")
 			m.state = HideStateShowing
