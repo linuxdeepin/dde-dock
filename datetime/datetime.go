@@ -191,6 +191,9 @@ func Start() {
 
 	Init()
 
+	initLocalDescMap()
+	initZoneCityMap()
+
 	date := GetManager()
 	err = dbus.InstallOnSession(date)
 	if err != nil {

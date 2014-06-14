@@ -2,7 +2,9 @@ package datetime
 
 import . "dlib/gettext"
 
-var (
+var localDescMap map[string]string
+
+func initLocalDescMap() {
 	localDescMap = map[string]string{
 		"aa_DJ.UTF-8":      Tr("Afar, Djibouti"),
 		"aa_ER":            Tr("Afar, Eritrea"),
@@ -274,4 +276,4 @@ var (
 		"zh_TW.UTF-8":      Tr("Chinese, Taiwan"),
 		"zu_ZA.UTF-8":      Tr("Zulu, South Africa"),
 	}
-)
+}

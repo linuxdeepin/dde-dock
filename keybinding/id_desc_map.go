@@ -63,24 +63,28 @@ var SystemIdIndexMap = map[int32]int32{
 	11:  16,
 }
 
-var SystemNameDescMap = map[string]string{
-	"launcher":                     Tr("Launcher"),
-	"show-desktop":                 Tr("Show desktop"),
-	"lock-screen":                  Tr("Lock screen"),
-	"file-manager":                 Tr("File manager"),
-	"switch-applications":          Tr("Switch applications"),
-	"switch-applications-backward": Tr("Reverse switch applications"),
-	"prev-key":                     Tr("3D switch applications"),
-	"next-key":                     Tr("3D reverse switch applications"),
-	"show-dock":                    Tr("Show/Hide the dock"),
-	"screenshot":                   Tr("Screenshot"),
-	"screenshot-full-screen":       Tr("Full screenshot"),
-	"screenshot-window":            Tr("Window screenshot"),
-	"screenshot-delayed":           Tr("Delay screenshot"),
-	"terminal":                     Tr("Terminal"),
-	"terminal-quake":               Tr("Terminal Quake Window"),
-	"logout":                       Tr("Logout"),
-	"disable-touchpad":             Tr("Disable Touchpad"),
+var SystemNameDescMap map[string]string
+
+func initSystemNameDescMap() {
+	SystemNameDescMap = map[string]string{
+		"launcher":                     Tr("Launcher"),
+		"show-desktop":                 Tr("Show desktop"),
+		"lock-screen":                  Tr("Lock screen"),
+		"file-manager":                 Tr("File manager"),
+		"switch-applications":          Tr("Switch applications"),
+		"switch-applications-backward": Tr("Reverse switch applications"),
+		"prev-key":                     Tr("3D switch applications"),
+		"next-key":                     Tr("3D reverse switch applications"),
+		"show-dock":                    Tr("Show/Hide the dock"),
+		"screenshot":                   Tr("Screenshot"),
+		"screenshot-full-screen":       Tr("Full screenshot"),
+		"screenshot-window":            Tr("Window screenshot"),
+		"screenshot-delayed":           Tr("Delay screenshot"),
+		"terminal":                     Tr("Terminal"),
+		"terminal-quake":               Tr("Terminal Quake Window"),
+		"logout":                       Tr("Logout"),
+		"disable-touchpad":             Tr("Disable Touchpad"),
+	}
 }
 
 var MediaIdNameMap = map[int32]string{
@@ -115,20 +119,24 @@ var MediaIdIndexMap = map[int32]int32{
 	301: 12,
 }
 
-var MediaNameDescMap = map[string]string{
-	"calculator":  Tr("Calculator"),
-	"email":       Tr("Email client"),
-	"www":         Tr("Web browser"),
-	"media":       Tr("Media player"),
-	"play":        Tr("Play/Pause"),
-	"pause":       Tr("Pause"),
-	"stop":        Tr("Stop"),
-	"volume-mute": Tr("Mute"),
-	"volume-down": Tr("Volume down"),
-	"volume-up":   Tr("Volume up"),
-	"previous":    Tr("Previous"),
-	"next":        Tr("Next"),
-	"eject":       Tr("Eject"),
+var MediaNameDescMap map[string]string
+
+func initMediaNameDescMap() {
+	MediaNameDescMap = map[string]string{
+		"calculator":  Tr("Calculator"),
+		"email":       Tr("Email client"),
+		"www":         Tr("Web browser"),
+		"media":       Tr("Media player"),
+		"play":        Tr("Play/Pause"),
+		"pause":       Tr("Pause"),
+		"stop":        Tr("Stop"),
+		"volume-mute": Tr("Mute"),
+		"volume-down": Tr("Volume down"),
+		"volume-up":   Tr("Volume up"),
+		"previous":    Tr("Previous"),
+		"next":        Tr("Next"),
+		"eject":       Tr("Eject"),
+	}
 }
 
 var WindowIdNameMap = map[int32]string{
@@ -153,15 +161,19 @@ var WindowIdIndexMap = map[int32]int32{
 	600: 7,
 }
 
-var WindowNameDescMap = map[string]string{
-	"close":                Tr("Close window"),
-	"maximize":             Tr("Maximize window"),
-	"unmaximize":           Tr("Restore window"),
-	"minimize":             Tr("Minimize window"),
-	"begin-move":           Tr("Move window"),
-	"begin-resize":         Tr("Resize window"),
-	"toggle-shaded":        Tr("Switch furl state"),
-	"activate-window-menu": Tr("Activate window menu"),
+var WindowNameDescMap map[string]string
+
+func initWindowNameDescMap() {
+	WindowNameDescMap = map[string]string{
+		"close":                Tr("Close window"),
+		"maximize":             Tr("Maximize window"),
+		"unmaximize":           Tr("Restore window"),
+		"minimize":             Tr("Minimize window"),
+		"begin-move":           Tr("Move window"),
+		"begin-resize":         Tr("Resize window"),
+		"toggle-shaded":        Tr("Switch furl state"),
+		"activate-window-menu": Tr("Activate window menu"),
+	}
 }
 
 var WorkspaceIdNameMap = map[int32]string{
@@ -202,23 +214,27 @@ var WorkspaceIdIndexMap = map[int32]int32{
 	616: 15,
 }
 
-var WorkspaceNameDescMap = map[string]string{
-	"switch-to-workspace-1":     Tr("Switch to workspace 1"),
-	"switch-to-workspace-2":     Tr("Switch to workspace 2"),
-	"switch-to-workspace-3":     Tr("Switch to workspace 3"),
-	"switch-to-workspace-4":     Tr("Switch to workspace 4"),
-	"switch-to-workspace-left":  Tr("Switch to left workspace"),
-	"switch-to-workspace-right": Tr("Switch to right workspace"),
-	"switch-to-workspace-up":    Tr("Switch to up workspace"),
-	"switch-to-workspace-down":  Tr("Switch to down workspace"),
-	"put-viewport-1-key":        Tr("Move to workspace 1"),
-	"put-viewport-2-key":        Tr("Move to workspace 2"),
-	"put-viewport-3-key":        Tr("Move to workspace 3"),
-	"put-viewport-4-key":        Tr("Move to workspace 4"),
-	"move-to-workspace-left":    Tr("Move to left workspace"),
-	"move-to-workspace-right":   Tr("Move to right workspace"),
-	"move-to-workspace-up":      Tr("Move to up workspace"),
-	"move-to-workspace-down":    Tr("Move to down workspace"),
+var WorkspaceNameDescMap map[string]string
+
+func initWorkspaceNameDescMap() {
+	WorkspaceNameDescMap = map[string]string{
+		"switch-to-workspace-1":     Tr("Switch to workspace 1"),
+		"switch-to-workspace-2":     Tr("Switch to workspace 2"),
+		"switch-to-workspace-3":     Tr("Switch to workspace 3"),
+		"switch-to-workspace-4":     Tr("Switch to workspace 4"),
+		"switch-to-workspace-left":  Tr("Switch to left workspace"),
+		"switch-to-workspace-right": Tr("Switch to right workspace"),
+		"switch-to-workspace-up":    Tr("Switch to up workspace"),
+		"switch-to-workspace-down":  Tr("Switch to down workspace"),
+		"put-viewport-1-key":        Tr("Move to workspace 1"),
+		"put-viewport-2-key":        Tr("Move to workspace 2"),
+		"put-viewport-3-key":        Tr("Move to workspace 3"),
+		"put-viewport-4-key":        Tr("Move to workspace 4"),
+		"move-to-workspace-left":    Tr("Move to left workspace"),
+		"move-to-workspace-right":   Tr("Move to right workspace"),
+		"move-to-workspace-up":      Tr("Move to up workspace"),
+		"move-to-workspace-down":    Tr("Move to down workspace"),
+	}
 }
 
 var IdNameMap = map[int32]string{

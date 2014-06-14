@@ -60,6 +60,11 @@ func StartKeyBinding() {
 	keybind.Initialize(X)
 	initXRecord()
 
+	initSystemNameDescMap()
+	initWindowNameDescMap()
+	initMediaNameDescMap()
+	initWorkspaceNameDescMap()
+
 	grabKeyPairs(getSystemKeyPairs(), true)
 	grabKeyPairs(getCustomKeyPairs(), true)
 	grabMediaKeys()
