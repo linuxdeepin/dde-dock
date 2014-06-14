@@ -34,9 +34,9 @@ func (obj *Manager) listenGSettings() {
 		switch key {
 		case GS_KEY_CURRENT_THEME:
 			value := themeSettings.GetString(key)
-			if obj.CurrentTheme.GetValue().(string) == value {
-				return
-			}
+			//if obj.CurrentTheme.GetValue().(string) == value {
+			//return
+			//}
 			if t, ok := obj.themeObjMap[value]; ok {
 				t.setAllThemes()
 			} else {
@@ -44,15 +44,15 @@ func (obj *Manager) listenGSettings() {
 			}
 		case GS_KEY_CURRENT_SOUND:
 			value := themeSettings.GetString(key)
-			if obj.currentSound.GetValue().(string) == value {
-				return
-			}
+			//if obj.currentSound.GetValue().(string) == value {
+			//return
+			//}
 			obj.setSoundTheme(value)
 		case GS_KEY_CURRENT_BG:
 			value := themeSettings.GetString(key)
-			if obj.currentBackground.GetValue().(string) == value {
-				return
-			}
+			//if obj.currentBackground.GetValue().(string) == value {
+			//return
+			//}
 			obj.setBackground(value)
 		}
 	})
