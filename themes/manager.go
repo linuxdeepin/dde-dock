@@ -72,11 +72,13 @@ func (obj *Manager) isThemeExit(gtk, icon, sound, cursor, bg string, fontSize in
 
 func (obj *Manager) modifyTheme(name, gtk, icon, sound, cursor, bg string, fontSize int32) bool {
 	filename := ""
+	newFlag := false
 	t, ok := obj.themeObjMap[name]
 	if !ok {
 		if str, ok := obj.mkdirTheme(name); !ok {
 			return false
 		} else {
+			newFlag = true
 			filename = path.Join(str, "theme.ini")
 		}
 	} else {
@@ -105,7 +107,11 @@ func (obj *Manager) modifyTheme(name, gtk, icon, sound, cursor, bg string, fontS
 		Logger.Errorf("Write '%s' failed", filename)
 		return false
 	}
-	//obj.setPropThemeList(obj.getDThemeStrList())
+
+	if newFlag {
+		obj.setPropThemeList(obj.getDThemeStrList())
+		obj.rebuildThemes()
+	}
 	changeUserThemeDir()
 
 	return true
@@ -134,12 +140,12 @@ func (obj *Manager) rebuildThemes() {
 		tList := getDThemeList()
 		for _, l := range tList {
 			if name == l.Name {
-				user := newTheme(l)
-				obj.themeObjMap[user.Name] = user
-				dbus.InstallOnSession(user)
-				if obj.CurrentTheme.GetValue().(string) == user.Name {
+				t := newTheme(l)
+				obj.themeObjMap[t.Name] = t
+				dbus.InstallOnSession(t)
+				if obj.CurrentTheme.GetValue().(string) == t.Name {
 					flag = true
-					user.setAllThemes()
+					t.setAllThemes()
 				}
 				break
 			}
@@ -148,6 +154,9 @@ func (obj *Manager) rebuildThemes() {
 
 	if !flag {
 		obj.setPropCurrentTheme(DEFAULT_THEME)
+		if t, ok := obj.themeObjMap[DEFAULT_THEME]; ok {
+			t.setAllThemes()
+		}
 	}
 }
 

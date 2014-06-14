@@ -82,26 +82,20 @@ func (obj *Manager) Set(t, value string) {
 	t = strings.ToLower(t)
 	switch t {
 	case "theme":
-		if obj.CurrentTheme.GetValue().(string) != value {
-			obj.setPropCurrentTheme(value)
-		}
+		obj.setPropCurrentTheme(value)
 	case "gtk":
 		obj.setGtkTheme(value)
 	case "icon":
 		obj.setIconTheme(value)
 	case "sound":
-		if obj.currentSound.GetValue().(string) != value {
-			obj.setSoundTheme(value)
-		}
+		obj.setSoundTheme(value)
 	case "cursor":
 		obj.setCursorTheme(value)
 	case "fontsize":
 		s, _ := strconv.ParseInt(value, 10, 64)
 		obj.setFontSize(int32(s))
 	case "background":
-		if obj.currentBackground.GetValue().(string) != value {
-			obj.setBackground(value)
-		}
+		obj.setBackground(value)
 	}
 }
 
