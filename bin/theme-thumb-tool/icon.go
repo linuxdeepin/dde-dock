@@ -38,7 +38,7 @@ func getIconTypeDir(info pathInfo) (string, string, string) {
 		return "", "", ""
 	}
 
-	value, ok := objUtil.ReadKeyFromKeyFile("/usr/share/icons/Deepin/index.theme", "Icon Theme", "Directories", []string{})
+	value, ok := objUtil.ReadKeyFromKeyFile(filename, "Icon Theme", "Directories", []string{})
 	if !ok {
 		return "", "", ""
 	}
@@ -48,25 +48,67 @@ func getIconTypeDir(info pathInfo) (string, string, string) {
 		return "", "", ""
 	}
 
-	appsDir := ""
-	placesDir := ""
-	devicesDir := ""
+	appsDir := []string{}
+	placesDir := []string{}
+	devicesDir := []string{}
 	for _, l := range list {
 		strs := strings.Split(l, ",")
 		for _, t := range strs {
-			if strings.Contains(t, "48") {
-				if strings.Contains(t, "places") {
-					placesDir = path.Join(info.Path, t)
-				} else if strings.Contains(t, "apps") {
-					appsDir = path.Join(info.Path, t)
-				} else if strings.Contains(t, "devices") {
-					devicesDir = path.Join(info.Path, t)
+			if strings.Contains(t, "places") {
+				if strings.Contains(t, "scalable") {
+					continue
 				}
+				placesDir = append(placesDir, t)
+			} else if strings.Contains(t, "apps") {
+				if strings.Contains(t, "scalable") {
+					continue
+				}
+				appsDir = append(appsDir, t)
+			} else if strings.Contains(t, "devices") {
+				if strings.Contains(t, "scalable") {
+					continue
+				}
+				devicesDir = append(devicesDir, t)
 			}
 		}
 	}
 
-	return devicesDir, placesDir, appsDir
+	if len(appsDir) < 1 || len(devicesDir) < 1 || len(placesDir) < 1 {
+		return "", "", ""
+	}
+
+	appDir := getAppDir(info.Path, appsDir)
+	placeDir := getAppDir(info.Path, placesDir)
+	deviceDir := getAppDir(info.Path, devicesDir)
+
+	return deviceDir, placeDir, appDir
+}
+
+func isSizeExit(size string, list []string) (string, bool) {
+	for _, l := range list {
+		if strings.Contains(l, size) {
+			return l, true
+		}
+	}
+
+	return "", false
+}
+
+func getAppDir(dir string, list []string) string {
+	if d, ok := isSizeExit("48", list); ok {
+		dir = path.Join(dir, d)
+		return dir
+	}
+	if d, ok := isSizeExit("32", list); ok {
+		dir = path.Join(dir, d)
+		return dir
+	}
+	if d, ok := isSizeExit("24", list); ok {
+		dir = path.Join(dir, d)
+		return dir
+	}
+
+	return path.Join(dir, list[0])
 }
 
 func getPngFile(dir string) string {
