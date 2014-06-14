@@ -111,9 +111,12 @@ func (b *Bluetooth) initBluetooth() {
 	bluezObjectManager.ConnectInterfacesRemoved(b.handleInterfacesRemoved)
 
 	// sync config
-	// b.Powered.SetValue(b.config.Powered)
-	// b.updatePropPowered()
-	// b.syncConfigPowered()
+	// TODO adapter not exists, and add a new adpater
+	if b.Powered != nil {
+		b.Powered.SetValue(b.config.Powered)
+		b.updatePropPowered()
+		b.syncConfigPowered()
+	}
 }
 func (b *Bluetooth) syncConfigPowered() {
 	cb := func() {
