@@ -52,17 +52,17 @@ func (b *Bluetooth) newDevice(dpath dbus.ObjectPath, data map[string]dbus.Varian
 	d.Trusted = d.bluezDevice.Trusted.Get()
 	d.Paired = d.bluezDevice.Paired.Get()
 	d.Connected = d.bluezDevice.Connected.Get()
-
+	d.connectProeprties()
+	return
+}
+func (d *device) connectProeprties() {
 	// optional properties, read from dbus object data in order to check if property is exists
 	d.Icon = getDBusObjectValueString(data, "Icon")
 	if isDBusObjectKeyExists(data, "RSSI") {
 		d.RSSI = getDBusObjectValueInt16(data, "RSSI")
-		d.fixRssi()
-	} else {
-		d.RSSI = deviceRssiNotInRange
 	}
+	d.fixRssi()
 
-	// connect properties
 	d.bluezDevice.Connected.ConnectChanged(func() {
 		d.Connected = d.bluezDevice.Connected.Get()
 		if d.Connected {
@@ -91,12 +91,22 @@ func (b *Bluetooth) newDevice(dpath dbus.ObjectPath, data map[string]dbus.Varian
 		d.fixRssi()
 		b.updatePropDevices()
 	})
-
-	return
+}
+func (d *device) resetConnect() {
+	d.bluezDevice.Connected.Reset()
+	d.bluezDevice.Alias.Reset()
+	d.bluezDevice.Trusted.Reset()
+	d.bluezDevice.Paired.Reset()
+	d.bluezDevice.Icon.Reset()
+	d.bluezDevice.RSSI.Reset()
 }
 func (d *device) fixRssi() {
 	if d.RSSI == 0 {
-		d.RSSI = deviceRssiNotInRange
+		if d.Trusted {
+			d.RSSI = deviceRssiNotInRange / 2
+		} else {
+			d.RSSI = deviceRssiNotInRange
+		}
 	}
 }
 
@@ -116,7 +126,6 @@ func (b *Bluetooth) addDevice(dpath dbus.ObjectPath, data map[string]dbus.Varian
 		}
 	}
 }
-
 func (b *Bluetooth) removeDevice(dpath dbus.ObjectPath) {
 	// find adapter of the device
 	for apath, devices := range b.devices {
@@ -141,20 +150,18 @@ func (b *Bluetooth) doRemoveDevice(devices []*device, dpath dbus.ObjectPath) []*
 		logger.Warning("repeat remove device:", dpath)
 		return devices
 	}
-
+	devices[i].resetConnect()
 	copy(devices[i:], devices[i+1:])
 	devices[len(devices)-1] = nil
 	devices = devices[:len(devices)-1]
 	return devices
 }
-
 func (b *Bluetooth) isDeviceExists(devices []*device, dpath dbus.ObjectPath) bool {
 	if b.getDeviceIndex(devices, dpath) >= 0 {
 		return true
 	}
 	return false
 }
-
 func (b *Bluetooth) getDeviceIndex(devices []*device, dpath dbus.ObjectPath) int {
 	for i, d := range devices {
 		if d.Path == dpath {
