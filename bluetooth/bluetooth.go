@@ -111,7 +111,7 @@ func (b *Bluetooth) initBluetooth() {
 	bluezObjectManager.ConnectInterfacesRemoved(b.handleInterfacesRemoved)
 
 	// sync config
-	// TODO adapter not exists, and add a new adpater
+	// TODO adapter not exists, and add a new adapter temporary
 	if b.Powered != nil {
 		b.Powered.SetValue(b.config.Powered)
 		b.updatePropPowered()

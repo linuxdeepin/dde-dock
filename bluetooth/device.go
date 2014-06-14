@@ -61,7 +61,14 @@ func (b *Bluetooth) newDevice(dpath dbus.ObjectPath, data map[string]dbus.Varian
 		d.RSSI = deviceRssiNotInRange
 	}
 
-	// TODO connect properties
+	// connect properties
+	d.bluezDevice.Connected.ConnectChanged(func() {
+		d.Connected = d.bluezDevice.Connected.Get()
+		if d.Connected {
+			bluezSetDeviceTrusted(d.Path, true)
+		}
+		b.updatePropDevices()
+	})
 	d.bluezDevice.Alias.ConnectChanged(func() {
 		d.Alias = d.bluezDevice.Alias.Get()
 		b.updatePropDevices()
@@ -72,10 +79,6 @@ func (b *Bluetooth) newDevice(dpath dbus.ObjectPath, data map[string]dbus.Varian
 	})
 	d.bluezDevice.Paired.ConnectChanged(func() {
 		d.Paired = d.bluezDevice.Paired.Get()
-		b.updatePropDevices()
-	})
-	d.bluezDevice.Connected.ConnectChanged(func() {
-		d.Connected = d.bluezDevice.Connected.Get()
 		b.updatePropDevices()
 	})
 	d.bluezDevice.Icon.ConnectChanged(func() {
@@ -163,10 +166,7 @@ func (b *Bluetooth) GetDevices() (devicesJSON string) {
 
 func (b *Bluetooth) ConnectDevice(dpath dbus.ObjectPath) (err error) {
 	go func() {
-		err = bluezConnectDevice(dpath)
-		if err != nil {
-			bluezSetDeviceTrusted(dpath, true)
-		}
+		bluezConnectDevice(dpath)
 	}()
 	return
 }
