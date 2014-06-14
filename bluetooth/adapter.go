@@ -50,19 +50,19 @@ func (b *Bluetooth) newAdapter(apath dbus.ObjectPath) (a *adapter) {
 func (a *adapter) connectProeprties() {
 	a.bluezAdapter.Alias.ConnectChanged(func() {
 		a.Alias = a.bluezAdapter.Alias.Get()
-		b.updatePropAdapters()
+		bluetooth.updatePropAdapters()
 	})
 	a.bluezAdapter.Powered.ConnectChanged(func() {
 		a.Powered = a.bluezAdapter.Powered.Get()
-		b.updatePropAdapters()
+		bluetooth.updatePropAdapters()
 	})
 	a.bluezAdapter.Discoverable.ConnectChanged(func() {
 		a.Discoverable = a.bluezAdapter.Discoverable.Get()
-		b.updatePropAdapters()
+		bluetooth.updatePropAdapters()
 	})
 	a.bluezAdapter.DiscoverableTimeout.ConnectChanged(func() {
 		a.DiscoverableTimeout = a.bluezAdapter.DiscoverableTimeout.Get()
-		b.updatePropAdapters()
+		bluetooth.updatePropAdapters()
 	})
 }
 func (a *adapter) resetConnect() {

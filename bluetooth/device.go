@@ -52,10 +52,7 @@ func (b *Bluetooth) newDevice(dpath dbus.ObjectPath, data map[string]dbus.Varian
 	d.Trusted = d.bluezDevice.Trusted.Get()
 	d.Paired = d.bluezDevice.Paired.Get()
 	d.Connected = d.bluezDevice.Connected.Get()
-	d.connectProeprties()
-	return
-}
-func (d *device) connectProeprties() {
+
 	// optional properties, read from dbus object data in order to check if property is exists
 	d.Icon = getDBusObjectValueString(data, "Icon")
 	if isDBusObjectKeyExists(data, "RSSI") {
@@ -63,33 +60,37 @@ func (d *device) connectProeprties() {
 	}
 	d.fixRssi()
 
+	d.connectProeprties()
+	return
+}
+func (d *device) connectProeprties() {
 	d.bluezDevice.Connected.ConnectChanged(func() {
 		d.Connected = d.bluezDevice.Connected.Get()
 		if d.Connected {
 			bluezSetDeviceTrusted(d.Path, true)
 		}
-		b.updatePropDevices()
+		bluetooth.updatePropDevices()
 	})
 	d.bluezDevice.Alias.ConnectChanged(func() {
 		d.Alias = d.bluezDevice.Alias.Get()
-		b.updatePropDevices()
+		bluetooth.updatePropDevices()
 	})
 	d.bluezDevice.Trusted.ConnectChanged(func() {
 		d.Trusted = d.bluezDevice.Trusted.Get()
-		b.updatePropDevices()
+		bluetooth.updatePropDevices()
 	})
 	d.bluezDevice.Paired.ConnectChanged(func() {
 		d.Paired = d.bluezDevice.Paired.Get()
-		b.updatePropDevices()
+		bluetooth.updatePropDevices()
 	})
 	d.bluezDevice.Icon.ConnectChanged(func() {
 		d.Icon = d.bluezDevice.Icon.Get()
-		b.updatePropDevices()
+		bluetooth.updatePropDevices()
 	})
 	d.bluezDevice.RSSI.ConnectChanged(func() {
 		d.RSSI = d.bluezDevice.RSSI.Get()
 		d.fixRssi()
-		b.updatePropDevices()
+		bluetooth.updatePropDevices()
 	})
 }
 func (d *device) resetConnect() {
