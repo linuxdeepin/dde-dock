@@ -1,9 +1,13 @@
 package dock
 
 import (
+	"bytes"
 	"dlib/gio-2.0"
+	"fmt"
+	"os/exec"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 func stringInSlice(a string, list []string) bool {
@@ -66,4 +70,44 @@ func getAppIcon(core *gio.DesktopAppInfo) string {
 	}
 
 	return icon
+}
+
+func unsetEnv(env string) {
+	_, _, err := execAndWait(5, "/usr/bin/env", "-u", env)
+	if err != nil {
+		logger.Error(err)
+	}
+}
+
+func execAndWait(timeout int, name string, arg ...string) (stdout, stderr string, err error) {
+	cmd := exec.Command(name, arg...)
+	var bufStdout, bufStderr bytes.Buffer
+	cmd.Stdout = &bufStdout
+	cmd.Stderr = &bufStderr
+	err = cmd.Start()
+	if err != nil {
+		return
+	}
+
+	// wait for process finished
+	done := make(chan error)
+	go func() {
+		done <- cmd.Wait()
+	}()
+
+	select {
+	case <-time.After(time.Duration(timeout) * time.Second):
+		if err = cmd.Process.Kill(); err != nil {
+			return
+		}
+		<-done
+		err = fmt.Errorf("time out and process was killed")
+	case err = <-done:
+		stdout = bufStdout.String()
+		stderr = bufStderr.String()
+		if err != nil {
+			return
+		}
+	}
+	return
 }
