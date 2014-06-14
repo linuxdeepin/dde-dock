@@ -89,6 +89,12 @@ func DestroyBluetooth(b *Bluetooth) {
 }
 
 func (b *Bluetooth) initBluetooth() {
+	defer func() {
+		if err := recover(); err != nil {
+			logger.Error(err)
+		}
+	}()
+
 	b.devices = make(map[dbus.ObjectPath][]*device)
 
 	// initialize dbus object manager
