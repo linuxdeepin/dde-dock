@@ -13,7 +13,7 @@ import _ "dde-daemon/mime"
 
 import _ "dde-daemon/screen_edges"
 
-// import _ "dde-daemon/bluetooth"
+import _ "dde-daemon/bluetooth"
 
 import _ "dde-daemon/network"
 import _ "dde-daemon/mounts"
