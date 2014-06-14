@@ -60,34 +60,27 @@ func getThumbBg() string {
 	return list[n]
 }
 
-func getThumbCachePath(t, src string, isSystem bool) string {
+func getThumbCachePath(t, src, outDir string) string {
+	if len(outDir) < 1 {
+		fmt.Println("Output Dir Error")
+		return ""
+	}
+
 	src, _ = objUtil.URIToPath(src)
 	md5Str, ok := getStrMd5(t + src)
 	if !ok {
 		return ""
 	}
 
-	if isSystem {
-		filename := path.Join(PERSON_SYS_PATH, THUMB_CACHE_DIR)
-		if !objUtil.IsFileExist(filename) {
-			os.MkdirAll(filename, 0755)
-		}
-		filename = path.Join(filename, md5Str+".png")
-		return filename
-	} else {
-		homeDir, ok := objUtil.GetHomeDir()
-		if !ok {
+	filename := path.Join(outDir, THUMB_CACHE_DIR)
+	if !objUtil.IsFileExist(filename) {
+		err := os.MkdirAll(filename, 0755)
+		if err != nil {
 			return ""
 		}
-		filename := path.Join(homeDir, PERSON_LOCAL_PATH, THUMB_CACHE_DIR)
-		if !objUtil.IsFileExist(filename) {
-			os.MkdirAll(filename, 0755)
-		}
-		filename = path.Join(filename, md5Str+".png")
-		return filename
 	}
-
-	return ""
+	filename = path.Join(filename, md5Str+".png")
+	return filename
 }
 
 func genCursorThumbnail(info pathInfo, dest, bg string) bool {
@@ -154,15 +147,12 @@ func genIconThumbnail(info pathInfo, dest, bg string) bool {
 
 func printHelper() {
 	fmt.Printf("Name\n\t%s: Theme Thumbnail Tool\n", _CMD_)
-	fmt.Printf("Usage\n\t%s [Option] [Type]\n", _CMD_)
+	fmt.Printf("Usage\n\t%s [Option] [Output Dir]\n", _CMD_)
 	fmt.Printf("Options:\n")
 	fmt.Printf("\t--gtk:    Generate Gtk Theme Thumbnail\n")
 	fmt.Printf("\t--icon:   Generate Icon Theme Thumbnail\n")
 	fmt.Printf("\t--cursor: Generate Cursor Theme Thumbnail\n")
 	fmt.Printf("\t--background: Generate Background Thumbnail\n")
-	fmt.Printf("Types:\n")
-	fmt.Printf("\tsystem: Save file to system dir\n")
-	fmt.Printf("\tlocale: Save file to user dir\n")
 }
 
 func main() {
@@ -177,18 +167,20 @@ func main() {
 	}
 
 	op := os.Args[1]
-	isSystem := false
+	outDir := ""
+	homeDir, ok := objUtil.GetHomeDir()
+	if ok {
+		outDir = path.Join(homeDir, PERSON_LOCAL_PATH)
+	}
 	if len(os.Args) == 3 {
-		if os.Args[2] == "system" {
-			isSystem = true
-		}
+		outDir = os.Args[2]
 	}
 
 	switch op {
 	case "--gtk":
 		list := getGtkList()
 		for _, l := range list {
-			dest := getThumbCachePath(op, l.Path, isSystem)
+			dest := getThumbCachePath(op, l.Path, outDir)
 			if len(dest) < 1 || objUtil.IsFileExist(dest) {
 				continue
 			}
@@ -202,7 +194,7 @@ func main() {
 	case "--icon":
 		list := getIconList()
 		for _, l := range list {
-			dest := getThumbCachePath(op, l.Path, isSystem)
+			dest := getThumbCachePath(op, l.Path, outDir)
 			if len(dest) < 1 || objUtil.IsFileExist(dest) {
 				continue
 			}
@@ -214,7 +206,7 @@ func main() {
 	case "--cursor":
 		list := getCursorList()
 		for _, l := range list {
-			dest := getThumbCachePath(op, l.Path, isSystem)
+			dest := getThumbCachePath(op, l.Path, outDir)
 			if len(dest) < 1 || objUtil.IsFileExist(dest) {
 				continue
 			}
@@ -226,11 +218,11 @@ func main() {
 	case "--background":
 		list := getBgList()
 		for _, l := range list {
-			dest := getThumbCachePath(op, l.Path, isSystem)
+			dest := getThumbCachePath(op, l.Path, outDir)
 			if len(dest) < 1 || objUtil.IsFileExist(dest) {
 				continue
 			}
-			err := graphic.ThumbnailImage(l.Path, dest, 130, 73, graphic.PNG)
+			err := graphic.ThumbnailImage(l.Path, dest, 128, 72, graphic.PNG)
 			if err != nil {
 				fmt.Println("ERROR:", err)
 			}
