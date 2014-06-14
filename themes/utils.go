@@ -31,9 +31,20 @@ import (
 	"crypto/md5"
 	"io/ioutil"
 	"os"
+	"path"
 	"strconv"
 	"unsafe"
 )
+
+func changeUserThemeDir() {
+	homeDir, _ := objUtil.GetHomeDir()
+	filename := path.Join(homeDir, PERSON_LOCAL_THEME_PATH, "test-dir")
+	if !objUtil.IsFileExist(filename) {
+		os.MkdirAll(filename, 0755)
+	} else {
+		rmAllFile(filename)
+	}
+}
 
 func rmAllFile(name string) {
 	name, _ = objUtil.URIToPath(name)

@@ -159,6 +159,7 @@ func (obj *Manager) setGtkTheme(theme string) {
 				break
 			}
 
+			Logger.Info("Theme: Custom,", theme, t.IconTheme, t.SoundTheme, t.CursorTheme, t.Background, t.FontSize)
 			obj.modifyTheme("Custom", theme, t.IconTheme, t.SoundTheme,
 				t.CursorTheme, t.Background, t.FontSize)
 			obj.setPropCurrentTheme("Custom")
@@ -407,6 +408,9 @@ func (obj *Manager) deleteDTheme(name string) {
 			for _, t := range list {
 				if name == t.Name {
 					if t.T == int32(THEME_TYPE_LOCAL) {
+						if obj.CurrentTheme.GetValue().(string) == name {
+							obj.setPropCurrentTheme(DEFAULT_THEME)
+						}
 						rmAllFile(t.Path)
 					}
 				}

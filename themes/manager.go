@@ -83,9 +83,11 @@ func (obj *Manager) modifyTheme(name, gtk, icon, sound, cursor, bg string, fontS
 		filename = path.Join(t.filePath, "theme.ini")
 	}
 
+	Logger.Info("Modify Theme:", filename, name, gtk, icon, sound, cursor, bg, fontSize)
 	kf := glib.NewKeyFile()
 	defer kf.Free()
 	_, err := kf.LoadFromFile(filename, glib.KeyFileFlagsKeepComments)
+	kf.SetString(THEME_GROUP_THEME, THEME_KEY_NAME, name)
 	kf.SetString(THEME_GROUP_COMPONENT, THEME_KEY_GTK, gtk)
 	kf.SetString(THEME_GROUP_COMPONENT, THEME_KEY_ICON, icon)
 	kf.SetString(THEME_GROUP_COMPONENT, THEME_KEY_SOUND, sound)
@@ -100,8 +102,11 @@ func (obj *Manager) modifyTheme(name, gtk, icon, sound, cursor, bg string, fontS
 	}
 
 	if !writeStringToKeyFile(filename, contents) {
+		Logger.Errorf("Write '%s' failed", filename)
 		return false
 	}
+	//obj.setPropThemeList(obj.getDThemeStrList())
+	changeUserThemeDir()
 
 	return true
 }
@@ -123,6 +128,7 @@ func (obj *Manager) mkdirTheme(name string) (string, bool) {
 func (obj *Manager) rebuildThemes() {
 	obj.destroyAllTheme()
 
+	flag := false
 	for _, t := range obj.ThemeList {
 		name := path.Base(t)
 		tList := getDThemeList()
@@ -132,11 +138,16 @@ func (obj *Manager) rebuildThemes() {
 				obj.themeObjMap[user.Name] = user
 				dbus.InstallOnSession(user)
 				if obj.CurrentTheme.GetValue().(string) == user.Name {
+					flag = true
 					user.setAllThemes()
 				}
 				break
 			}
 		}
+	}
+
+	if !flag {
+		obj.setPropCurrentTheme(DEFAULT_THEME)
 	}
 }
 

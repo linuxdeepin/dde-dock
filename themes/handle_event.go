@@ -78,12 +78,33 @@ func (obj *Manager) startWatch() {
 
 	homeDir, _ := objUtil.GetHomeDir()
 	obj.watcher.Watch(THEME_SYS_PATH)
-	obj.watcher.Watch(path.Join(homeDir, THEME_LOCAL_PATH))
+	dir := path.Join(homeDir, THEME_LOCAL_PATH)
+	if !objUtil.IsFileExist(dir) {
+		if err := os.MkdirAll(dir, 0755); err != nil {
+			Logger.Errorf("Mkdir '%s' failed: %v", dir, err)
+		} else {
+			obj.watcher.Watch(dir)
+		}
+	}
 	obj.watcher.Watch(ICON_SYS_PATH)
-	obj.watcher.Watch(path.Join(homeDir, ICON_LOCAL_PATH))
+	dir = path.Join(homeDir, ICON_LOCAL_PATH)
+	if !objUtil.IsFileExist(dir) {
+		if err := os.MkdirAll(dir, 0755); err != nil {
+			Logger.Errorf("Mkdir '%s' failed: %v", dir, err)
+		} else {
+			obj.watcher.Watch(dir)
+		}
+	}
 	obj.watcher.Watch(SOUND_THEME_PATH)
 	obj.watcher.Watch(PERSON_SYS_THEME_PATH)
-	obj.watcher.Watch(path.Join(homeDir, PERSON_LOCAL_THEME_PATH))
+	dir = path.Join(homeDir, PERSON_LOCAL_THEME_PATH)
+	if !objUtil.IsFileExist(dir) {
+		if err := os.MkdirAll(dir, 0755); err != nil {
+			Logger.Errorf("Mkdir '%s' failed: %v", dir, err)
+		} else {
+			obj.watcher.Watch(dir)
+		}
+	}
 }
 
 func (obj *Manager) endWatch() {
@@ -93,12 +114,21 @@ func (obj *Manager) endWatch() {
 
 	homeDir, _ := objUtil.GetHomeDir()
 	obj.watcher.RemoveWatch(THEME_SYS_PATH)
-	obj.watcher.RemoveWatch(path.Join(homeDir, THEME_LOCAL_PATH))
+	dir := path.Join(homeDir, THEME_LOCAL_PATH)
+	if objUtil.IsFileExist(dir) {
+		obj.watcher.RemoveWatch(dir)
+	}
 	obj.watcher.RemoveWatch(ICON_SYS_PATH)
-	obj.watcher.RemoveWatch(path.Join(homeDir, ICON_LOCAL_PATH))
+	dir = path.Join(homeDir, ICON_LOCAL_PATH)
+	if objUtil.IsFileExist(dir) {
+		obj.watcher.RemoveWatch(dir)
+	}
 	obj.watcher.RemoveWatch(SOUND_THEME_PATH)
 	obj.watcher.RemoveWatch(PERSON_SYS_THEME_PATH)
-	obj.watcher.RemoveWatch(path.Join(homeDir, PERSON_LOCAL_THEME_PATH))
+	dir = path.Join(homeDir, PERSON_LOCAL_THEME_PATH)
+	if objUtil.IsFileExist(dir) {
+		obj.watcher.RemoveWatch(dir)
+	}
 }
 
 func (obj *Manager) handleEvent() {
