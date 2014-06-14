@@ -124,7 +124,7 @@ func getPngFile(dir string) string {
 	}
 
 	for _, info := range infos {
-		if info.IsDir() {
+		if info.IsDir() || !info.Mode().IsRegular() {
 			continue
 		}
 		if ok, _ := regexp.MatchString(`\.png$`, info.Name()); ok {
