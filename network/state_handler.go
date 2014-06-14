@@ -165,7 +165,7 @@ func newStateNotifier() (n *StateNotifier) {
 							var icon, msg string
 							switch dev.DeviceType.Get() {
 							case NM_DEVICE_TYPE_ETHERNET:
-								icon = "notification-network-wired-disconnected"
+								icon = "notification-network-ethernet-disconnected"
 							case NM_DEVICE_TYPE_WIFI:
 								icon = "notification-network-wireless-disconnected"
 							default:
