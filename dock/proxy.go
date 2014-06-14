@@ -23,6 +23,7 @@ package dock
 
 import (
 	"dlib/gio-2.0"
+	libutils "dlib/utils"
 	"os"
 )
 
@@ -50,6 +51,7 @@ const (
 
 var (
 	proxySettings = gio.NewSettings(gsettingsIdProxy)
+	utils         = libutils.NewUtils()
 )
 
 func startProxy() {
@@ -61,20 +63,20 @@ func updateProxyEnvs() {
 	proxyMethod := proxySettings.GetString(gkeyProxyMethod)
 	switch proxyMethod {
 	case proxyMethodNone:
-		unsetEnv(envAutoProxy)
-		unsetEnv(envHttpProxy)
-		unsetEnv(envHttpsProxy)
-		unsetEnv(envFtpProxy)
-		unsetEnv(envSocksProxy)
+		utils.UnsetEnv(envAutoProxy)
+		utils.UnsetEnv(envHttpProxy)
+		utils.UnsetEnv(envHttpsProxy)
+		utils.UnsetEnv(envFtpProxy)
+		utils.UnsetEnv(envSocksProxy)
 	case proxyMethodAuto:
 		autoProxy := proxySettings.GetString(gkeyAutoProxy)
 		os.Setenv(envAutoProxy, autoProxy)
-		unsetEnv(envHttpProxy)
-		unsetEnv(envHttpsProxy)
-		unsetEnv(envFtpProxy)
-		unsetEnv(envSocksProxy)
+		utils.UnsetEnv(envHttpProxy)
+		utils.UnsetEnv(envHttpsProxy)
+		utils.UnsetEnv(envFtpProxy)
+		utils.UnsetEnv(envSocksProxy)
 	case proxyMethodManual:
-		unsetEnv(envAutoProxy)
+		utils.UnsetEnv(envAutoProxy)
 		httpProxy := proxySettings.GetString(gkeyHttpProxy)
 		os.Setenv(envHttpProxy, httpProxy)
 		logger.Debug("update proxy envs, httpProxy:", httpProxy)
