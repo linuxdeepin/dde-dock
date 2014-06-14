@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-12 17:50+0800\n"
+"POT-Creation-Date: 2014-06-14 13:15+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -72,7 +72,7 @@ msgstr "消息通知"
 
 #: ../../datetime/datetime.go:131
 #, fuzzy
-msgid "Language Changing, Please Wait."
+msgid "Changing system language, please wait"
 msgstr "正在更改系统语言，请稍后"
 
 #: ../../datetime/locale_map.go:7
@@ -568,7 +568,7 @@ msgid "Gaelic, United Kingdom"
 msgstr "英国（UTC+00）英国时间"
 
 #: ../../datetime/locale_map.go:128
-msgid "Ge'ez, Eritrea (with Abegede collation)"
+msgid "Ge'ez, Eritrea (Abegede)"
 msgstr ""
 
 #: ../../datetime/locale_map.go:129
@@ -1164,13 +1164,13 @@ msgid "Zulu, South Africa"
 msgstr ""
 
 #: ../../datetime/set_locale.go:52
-msgid ""
-"System Language changed successfully, and will be applied after login next "
-"time"
+#, fuzzy
+msgid "Language changed successfully and effective after logout."
 msgstr "系统语言更改成功，注销后生效"
 
 #: ../../datetime/set_locale.go:54
-msgid "System Language changed failure, please try later"
+#, fuzzy
+msgid "Language failed to change, please try later."
 msgstr "系统语言更改失败，请稍后重试"
 
 #: ../../datetime/zone_utc_map.go:6
@@ -3136,7 +3136,7 @@ msgstr "文件管理器"
 
 #: ../../keybinding/id_desc_map.go:71
 #, fuzzy
-msgid "Switch Applications"
+msgid "Switch applications"
 msgstr "切换程序"
 
 # msgid "Reverse switch applications"
@@ -3147,13 +3147,13 @@ msgstr "反向切换程序"
 
 #: ../../keybinding/id_desc_map.go:73
 #, fuzzy
-msgid "3D Switch Applications"
+msgid "3D switch applications"
 msgstr "切换程序"
 
 # msgid "Reverse switch applications"
 #: ../../keybinding/id_desc_map.go:74
 #, fuzzy
-msgid "3D Reverse switch applications"
+msgid "3D reverse switch applications"
 msgstr "反向切换程序"
 
 #: ../../keybinding/id_desc_map.go:75
@@ -3167,16 +3167,17 @@ msgstr "屏幕截图"
 
 #: ../../keybinding/id_desc_map.go:77
 #, fuzzy
-msgid "Full Screenshot"
+msgid "Full screenshot"
 msgstr "屏幕截图"
 
 #: ../../keybinding/id_desc_map.go:78
-msgid "Window Screenshot"
-msgstr ""
+#, fuzzy
+msgid "Window screenshot"
+msgstr "屏幕截图"
 
 #: ../../keybinding/id_desc_map.go:79
 #, fuzzy
-msgid "Delay Screenshot"
+msgid "Delay screenshot"
 msgstr "屏幕截图"
 
 #: ../../keybinding/id_desc_map.go:80
@@ -3202,17 +3203,17 @@ msgstr "启动计算器"
 
 #: ../../keybinding/id_desc_map.go:120
 #, fuzzy
-msgid "Email Client"
+msgid "Email client"
 msgstr "客户"
 
 #: ../../keybinding/id_desc_map.go:121
 #, fuzzy
-msgid "Web Browser"
+msgid "Web browser"
 msgstr "启动网页浏览器"
 
 #: ../../keybinding/id_desc_map.go:122
 #, fuzzy
-msgid "Media Player"
+msgid "Media player"
 msgstr "启动媒体播放器"
 
 #: ../../keybinding/id_desc_map.go:123
@@ -3229,18 +3230,17 @@ msgid "Stop"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:126
-#, fuzzy
-msgid "Volume Mute"
-msgstr "静音"
+msgid "Mute"
+msgstr ""
 
 #: ../../keybinding/id_desc_map.go:127
 #, fuzzy
-msgid "Volume Down"
+msgid "Volume down"
 msgstr "减小音量"
 
 #: ../../keybinding/id_desc_map.go:128
 #, fuzzy
-msgid "Volume Up"
+msgid "Volume up"
 msgstr "增大音量"
 
 #: ../../keybinding/id_desc_map.go:129
@@ -3258,32 +3258,32 @@ msgstr "推出"
 
 #: ../../keybinding/id_desc_map.go:157
 #, fuzzy
-msgid "Close Window"
+msgid "Close window"
 msgstr "关闭窗口"
 
 #: ../../keybinding/id_desc_map.go:158
 #, fuzzy
-msgid "Maximize Window"
+msgid "Maximize window"
 msgstr "最大化窗口"
 
 #: ../../keybinding/id_desc_map.go:159
 #, fuzzy
-msgid "Restore Window"
+msgid "Restore window"
 msgstr "恢复窗口"
 
 #: ../../keybinding/id_desc_map.go:160
 #, fuzzy
-msgid "Minimize Window"
+msgid "Minimize window"
 msgstr "最小化窗口"
 
 #: ../../keybinding/id_desc_map.go:161
 #, fuzzy
-msgid "Move Window"
+msgid "Move window"
 msgstr "移动窗口"
 
 #: ../../keybinding/id_desc_map.go:162
 #, fuzzy
-msgid "Resize Window"
+msgid "Resize window"
 msgstr "改变窗口大小"
 
 #: ../../keybinding/id_desc_map.go:163
@@ -3323,12 +3323,12 @@ msgstr "切换到工作区1"
 
 #: ../../keybinding/id_desc_map.go:212
 #, fuzzy
-msgid "Switch to upper workspace"
+msgid "Switch to up workspace"
 msgstr "切换到工作区1"
 
 #: ../../keybinding/id_desc_map.go:213
 #, fuzzy
-msgid "Switch to lower workspace"
+msgid "Switch to down workspace"
 msgstr "切换到工作区1"
 
 #: ../../keybinding/id_desc_map.go:214
@@ -3359,12 +3359,12 @@ msgstr "移动到工作区1"
 
 #: ../../keybinding/id_desc_map.go:220
 #, fuzzy
-msgid "Move to upper workspace"
+msgid "Move to up workspace"
 msgstr "移动到工作区1"
 
 #: ../../keybinding/id_desc_map.go:221
 #, fuzzy
-msgid "Move to lower workspace"
+msgid "Move to down workspace"
 msgstr "移动到工作区1"
 
 #: ../../network/manager_connections.go:177
@@ -3959,7 +3959,8 @@ msgid "The device is no longer managed."
 msgstr "该设备不再进行管理。"
 
 #: ../../network/state_handler.go:36
-msgid "The device could not be readied for configuration."
+#, fuzzy
+msgid "The device have not been ready for configuration."
 msgstr "该设备不能被准备好进行配置。"
 
 #: ../../network/state_handler.go:37
@@ -3972,7 +3973,8 @@ msgid "The IP configuration is no longer valid."
 msgstr "IP配置不再有效。"
 
 #: ../../network/state_handler.go:39
-msgid "Secrets were required but not provided."
+#, fuzzy
+msgid "Passwords were required but not provided."
 msgstr "被要求保密，但不能提供的。"
 
 #: ../../network/state_handler.go:40
@@ -3989,12 +3991,12 @@ msgstr "在802.1X客户端的配置失败。"
 
 #: ../../network/state_handler.go:42
 #, fuzzy
-msgid "The 802.1X supplication quited or failed unexpectedly."
+msgid "The 802.1X supplicant quitted or failed unexpectedly."
 msgstr "在802.1X客户端退出或意外失败。"
 
 #: ../../network/state_handler.go:43
 #, fuzzy
-msgid "The 802.1X supplication took too long to authenticate."
+msgid "The 802.1X supplicant took too long time to authenticate."
 msgstr "在802.1X请求者的时间太长验证。"
 
 #: ../../network/state_handler.go:44
@@ -4007,7 +4009,7 @@ msgstr "PPP服务意外中断。"
 
 #: ../../network/state_handler.go:46
 #, fuzzy
-msgid "The PPP service quited or failed unexpectedly."
+msgid "The PPP service quitted or failed unexpectedly."
 msgstr "PPP服务退出或意外失败。"
 
 #: ../../network/state_handler.go:47
@@ -4020,7 +4022,7 @@ msgstr "DHCP服务报告了一个意外的错误。"
 
 #: ../../network/state_handler.go:49
 #, fuzzy
-msgid "The DHCP service quited or failed unexpectedly."
+msgid "The DHCP service quitted or failed unexpectedly."
 msgstr "DHCP服务退出或意外失败。"
 
 #: ../../network/state_handler.go:50
@@ -4029,7 +4031,7 @@ msgstr "共享连接服务启动失败。"
 
 #: ../../network/state_handler.go:51
 #, fuzzy
-msgid "The shared connection service quited or failed unexpectedly."
+msgid "The shared connection service quitted or failed unexpectedly."
 msgstr "共享连接服务退出或意外失败。"
 
 #: ../../network/state_handler.go:52
@@ -4042,19 +4044,22 @@ msgstr "自动IP服务报告了一个意外的错误。"
 
 #: ../../network/state_handler.go:54
 #, fuzzy
-msgid "The AutoIP service quited or failed unexpectedly."
+msgid "The AutoIP service quitted or failed unexpectedly."
 msgstr "自动IP服务退出或意外失败。"
 
 #: ../../network/state_handler.go:55
-msgid "Dialing failed because the line was busy."
+#, fuzzy
+msgid "Dialing failed due to busy lines."
 msgstr "拨号失败，因为线路忙。"
 
 #: ../../network/state_handler.go:56
-msgid "Dialing failed because there was no dial tone."
+#, fuzzy
+msgid "Dialing failed due to no dial tone."
 msgstr "拨号失败，因为没有拨号音。"
 
 #: ../../network/state_handler.go:57
-msgid "Dialing failed because there was carrier."
+#, fuzzy
+msgid "Dialing failed due to the carrier."
 msgstr "拨号失败，因为有载体。"
 
 #: ../../network/state_handler.go:58
@@ -4074,8 +4079,8 @@ msgid "Failed to select the specified GSM APN."
 msgstr "没有选择的，指定的GSM APN。"
 
 #: ../../network/state_handler.go:62
-msgid "Not searching for networks."
-msgstr "没有搜索网络。"
+msgid "No networks searched."
+msgstr ""
 
 #: ../../network/state_handler.go:63
 msgid "Network registration was denied."
@@ -4086,7 +4091,8 @@ msgid "Network registration timed out."
 msgstr "网络注册超时。"
 
 #: ../../network/state_handler.go:65
-msgid "Failed to register with the requested GSM network."
+#, fuzzy
+msgid "Register to the requested GSM network failed."
 msgstr "失败请求的GSM网络进行注册。"
 
 #: ../../network/state_handler.go:66
@@ -4094,7 +4100,8 @@ msgid "PIN check failed."
 msgstr "PIN码检查失败。"
 
 #: ../../network/state_handler.go:67
-msgid "Necessary firmware for the device may be missing."
+#, fuzzy
+msgid "Necessary firmware for the device may be missed."
 msgstr "必要的固件的设备可能会丢失。"
 
 #: ../../network/state_handler.go:68
@@ -4111,7 +4118,7 @@ msgstr "被删除或消失设备的有效连接。"
 
 #: ../../network/state_handler.go:71
 #, fuzzy
-msgid "An user or client requested the disconnection."
+msgid "An user or client requested to disconnect."
 msgstr "用户或客户端请求的连接断开。"
 
 #: ../../network/state_handler.go:72
@@ -4156,8 +4163,9 @@ msgid "InfiniBand device does not support connected mode."
 msgstr "InfiniBand设备不支持连接模式。"
 
 #: ../../network/state_handler.go:82
-msgid "A dependency of the connection failed."
-msgstr "连接的依赖性失败。"
+#, fuzzy
+msgid "A connection dependency failed."
+msgstr "共享连接服务启动失败。"
 
 #: ../../network/state_handler.go:83
 msgid "Problem with the RFC 2684 Ethernet over ADSL bridge."
@@ -4165,7 +4173,7 @@ msgstr "问题与RFC 2684以太网ADSL的桥梁。"
 
 #: ../../network/state_handler.go:84
 #, fuzzy
-msgid "ModemManager was not running or quited unexpectedly."
+msgid "ModemManager was not running or quitted unexpectedly."
 msgstr "ModemManager未运行或意外退出。"
 
 #: ../../network/state_handler.go:85
@@ -4178,12 +4186,12 @@ msgstr "底座连接的二次连接失败。"
 
 #: ../../network/state_handler.go:88
 #, fuzzy
-msgid "The VPN connection changed state due to disconnection of users."
+msgid "VPN connection changed state due to disconnection from users."
 msgstr "VPN连接状态发生了改变，因为用户断开了。"
 
 #: ../../network/state_handler.go:89
-#, fuzzy
-msgid "The VPN connection changed state due to disconnection of device used."
+#, fuzzy, c-format
+msgid "VPN connection %s changed state due to disconnection of the device."
 msgstr "VPN连接状态发生了改变，因为用户断开了。"
 
 #: ../../network/state_handler.go:90
@@ -4191,12 +4199,13 @@ msgid "VPN connection service stopped."
 msgstr ""
 
 #: ../../network/state_handler.go:91
-msgid "The IP config of the VPN connection was invalid."
+#, fuzzy
+msgid "IP config of VPN connection was invalid."
 msgstr "VPN连接的IP配置是无效的。"
 
 #: ../../network/state_handler.go:92
 #, fuzzy
-msgid "The connection attempt of the VPN service timed out."
+msgid "The connection attempt to VPN  service timed out."
 msgstr "在尝试连接到VPN服务超时。"
 
 #: ../../network/state_handler.go:93
@@ -4210,11 +4219,13 @@ msgid "VPN connection service failed to start."
 msgstr "共享连接服务启动失败。"
 
 #: ../../network/state_handler.go:95
-msgid "Necessary secrets for the VPN connection were not provided."
+#, fuzzy
+msgid "Necessary password for VPN connection was not provided."
 msgstr "并未提供必要的秘密VPN连接。"
 
 #: ../../network/state_handler.go:96
-msgid "Authentication to the VPN server failed."
+#, fuzzy
+msgid "Authentication to VPN server failed."
 msgstr "验证到VPN服务器失败。"
 
 #: ../../network/state_handler.go:97
@@ -4256,6 +4267,16 @@ msgstr "计算机将很快进入待机状态，请插入电源。"
 #, fuzzy
 msgid "Battery Low"
 msgstr "电池电量低"
+
+#, fuzzy
+#~ msgid "Volume Mute"
+#~ msgstr "静音"
+
+#~ msgid "Not searching for networks."
+#~ msgstr "没有搜索网络。"
+
+#~ msgid "A dependency of the connection failed."
+#~ msgstr "连接的依赖性失败。"
 
 #~ msgid "Battery cirtical low"
 #~ msgstr "电池cirtical低"

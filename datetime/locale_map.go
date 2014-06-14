@@ -125,7 +125,7 @@ var (
 		"fy_NL":            Tr("Frisian, the Netherlands"),
 		"ga_IE.UTF-8":      Tr("Irish, Ireland"),
 		"gd_GB.UTF-8":      Tr("Gaelic, United Kingdom"),
-		"gez_ER@abegede":   Tr("Ge'ez, Eritrea (with Abegede collation)"),
+		"gez_ER@abegede":   Tr("Ge'ez, Eritrea (Abegede)"),
 		"gez_ER":           Tr("Ge'ez, Eritrea"),
 		"gez_ET@abegede":   Tr("Ge'ez, Ethiopia (Abegede)"),
 		"gez_ET":           Tr("Ge'ez, Ethiopia"),

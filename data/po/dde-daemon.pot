@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-12 17:50+0800\n"
+"POT-Creation-Date: 2014-06-14 13:15+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -66,7 +66,7 @@ msgid "Message Notification"
 msgstr ""
 
 #: ../../datetime/datetime.go:131
-msgid "Language Changing, Please Wait."
+msgid "Changing system language, please wait"
 msgstr ""
 
 #: ../../datetime/locale_map.go:7
@@ -550,7 +550,7 @@ msgid "Gaelic, United Kingdom"
 msgstr ""
 
 #: ../../datetime/locale_map.go:128
-msgid "Ge'ez, Eritrea (with Abegede collation)"
+msgid "Ge'ez, Eritrea (Abegede)"
 msgstr ""
 
 #: ../../datetime/locale_map.go:129
@@ -1134,13 +1134,11 @@ msgid "Zulu, South Africa"
 msgstr ""
 
 #: ../../datetime/set_locale.go:52
-msgid ""
-"System Language changed successfully, and will be applied after login next "
-"time"
+msgid "Language changed successfully and effective after logout."
 msgstr ""
 
 #: ../../datetime/set_locale.go:54
-msgid "System Language changed failure, please try later"
+msgid "Language failed to change, please try later."
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:6
@@ -3100,7 +3098,7 @@ msgid "File Manager"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:71
-msgid "Switch Applications"
+msgid "Switch applications"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:72
@@ -3108,11 +3106,11 @@ msgid "Reverse switch applications"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:73
-msgid "3D Switch Applications"
+msgid "3D switch applications"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:74
-msgid "3D Reverse switch applications"
+msgid "3D reverse switch applications"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:75
@@ -3124,15 +3122,15 @@ msgid "Screenshot"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:77
-msgid "Full Screenshot"
+msgid "Full screenshot"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:78
-msgid "Window Screenshot"
+msgid "Window screenshot"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:79
-msgid "Delay Screenshot"
+msgid "Delay screenshot"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:80
@@ -3156,15 +3154,15 @@ msgid "Calculator"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:120
-msgid "Email Client"
+msgid "Email client"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:121
-msgid "Web Browser"
+msgid "Web browser"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:122
-msgid "Media Player"
+msgid "Media player"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:123
@@ -3180,15 +3178,15 @@ msgid "Stop"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:126
-msgid "Volume Mute"
+msgid "Mute"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:127
-msgid "Volume Down"
+msgid "Volume down"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:128
-msgid "Volume Up"
+msgid "Volume up"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:129
@@ -3204,27 +3202,27 @@ msgid "Eject"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:157
-msgid "Close Window"
+msgid "Close window"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:158
-msgid "Maximize Window"
+msgid "Maximize window"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:159
-msgid "Restore Window"
+msgid "Restore window"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:160
-msgid "Minimize Window"
+msgid "Minimize window"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:161
-msgid "Move Window"
+msgid "Move window"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:162
-msgid "Resize Window"
+msgid "Resize window"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:163
@@ -3260,11 +3258,11 @@ msgid "Switch to right workspace"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:212
-msgid "Switch to upper workspace"
+msgid "Switch to up workspace"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:213
-msgid "Switch to lower workspace"
+msgid "Switch to down workspace"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:214
@@ -3292,11 +3290,11 @@ msgid "Move to right workspace"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:220
-msgid "Move to upper workspace"
+msgid "Move to up workspace"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:221
-msgid "Move to lower workspace"
+msgid "Move to down workspace"
 msgstr ""
 
 #: ../../network/manager_connections.go:177
@@ -3883,7 +3881,7 @@ msgid "The device is no longer managed."
 msgstr ""
 
 #: ../../network/state_handler.go:36
-msgid "The device could not be readied for configuration."
+msgid "The device have not been ready for configuration."
 msgstr ""
 
 #: ../../network/state_handler.go:37
@@ -3896,7 +3894,7 @@ msgid "The IP configuration is no longer valid."
 msgstr ""
 
 #: ../../network/state_handler.go:39
-msgid "Secrets were required but not provided."
+msgid "Passwords were required but not provided."
 msgstr ""
 
 #: ../../network/state_handler.go:40
@@ -3910,11 +3908,11 @@ msgid "Configuration of the 802.1X supplication failed."
 msgstr ""
 
 #: ../../network/state_handler.go:42
-msgid "The 802.1X supplication quited or failed unexpectedly."
+msgid "The 802.1X supplicant quitted or failed unexpectedly."
 msgstr ""
 
 #: ../../network/state_handler.go:43
-msgid "The 802.1X supplication took too long to authenticate."
+msgid "The 802.1X supplicant took too long time to authenticate."
 msgstr ""
 
 #: ../../network/state_handler.go:44
@@ -3926,7 +3924,7 @@ msgid "The PPP service disconnected unexpectedly."
 msgstr ""
 
 #: ../../network/state_handler.go:46
-msgid "The PPP service quited or failed unexpectedly."
+msgid "The PPP service quitted or failed unexpectedly."
 msgstr ""
 
 #: ../../network/state_handler.go:47
@@ -3938,7 +3936,7 @@ msgid "The DHCP service reported an unexpected error."
 msgstr ""
 
 #: ../../network/state_handler.go:49
-msgid "The DHCP service quited or failed unexpectedly."
+msgid "The DHCP service quitted or failed unexpectedly."
 msgstr ""
 
 #: ../../network/state_handler.go:50
@@ -3946,7 +3944,7 @@ msgid "The shared connection service failed to start."
 msgstr ""
 
 #: ../../network/state_handler.go:51
-msgid "The shared connection service quited or failed unexpectedly."
+msgid "The shared connection service quitted or failed unexpectedly."
 msgstr ""
 
 #: ../../network/state_handler.go:52
@@ -3958,19 +3956,19 @@ msgid "The AutoIP service reported an unexpected error."
 msgstr ""
 
 #: ../../network/state_handler.go:54
-msgid "The AutoIP service quited or failed unexpectedly."
+msgid "The AutoIP service quitted or failed unexpectedly."
 msgstr ""
 
 #: ../../network/state_handler.go:55
-msgid "Dialing failed because the line was busy."
+msgid "Dialing failed due to busy lines."
 msgstr ""
 
 #: ../../network/state_handler.go:56
-msgid "Dialing failed because there was no dial tone."
+msgid "Dialing failed due to no dial tone."
 msgstr ""
 
 #: ../../network/state_handler.go:57
-msgid "Dialing failed because there was carrier."
+msgid "Dialing failed due to the carrier."
 msgstr ""
 
 #: ../../network/state_handler.go:58
@@ -3990,7 +3988,7 @@ msgid "Failed to select the specified GSM APN."
 msgstr ""
 
 #: ../../network/state_handler.go:62
-msgid "Not searching for networks."
+msgid "No networks searched."
 msgstr ""
 
 #: ../../network/state_handler.go:63
@@ -4002,7 +4000,7 @@ msgid "Network registration timed out."
 msgstr ""
 
 #: ../../network/state_handler.go:65
-msgid "Failed to register with the requested GSM network."
+msgid "Register to the requested GSM network failed."
 msgstr ""
 
 #: ../../network/state_handler.go:66
@@ -4010,7 +4008,7 @@ msgid "PIN check failed."
 msgstr ""
 
 #: ../../network/state_handler.go:67
-msgid "Necessary firmware for the device may be missing."
+msgid "Necessary firmware for the device may be missed."
 msgstr ""
 
 #: ../../network/state_handler.go:68
@@ -4026,7 +4024,7 @@ msgid "The device's active connection was removed or disappeared."
 msgstr ""
 
 #: ../../network/state_handler.go:71
-msgid "An user or client requested the disconnection."
+msgid "An user or client requested to disconnect."
 msgstr ""
 
 #: ../../network/state_handler.go:72
@@ -4070,7 +4068,7 @@ msgid "InfiniBand device does not support connected mode."
 msgstr ""
 
 #: ../../network/state_handler.go:82
-msgid "A dependency of the connection failed."
+msgid "A connection dependency failed."
 msgstr ""
 
 #: ../../network/state_handler.go:83
@@ -4078,7 +4076,7 @@ msgid "Problem with the RFC 2684 Ethernet over ADSL bridge."
 msgstr ""
 
 #: ../../network/state_handler.go:84
-msgid "ModemManager was not running or quited unexpectedly."
+msgid "ModemManager was not running or quitted unexpectedly."
 msgstr ""
 
 #: ../../network/state_handler.go:85
@@ -4090,11 +4088,12 @@ msgid "A secondary connection of the base connection failed."
 msgstr ""
 
 #: ../../network/state_handler.go:88
-msgid "The VPN connection changed state due to disconnection of users."
+msgid "VPN connection changed state due to disconnection from users."
 msgstr ""
 
 #: ../../network/state_handler.go:89
-msgid "The VPN connection changed state due to disconnection of device used."
+#, c-format
+msgid "VPN connection %s changed state due to disconnection of the device."
 msgstr ""
 
 #: ../../network/state_handler.go:90
@@ -4102,11 +4101,11 @@ msgid "VPN connection service stopped."
 msgstr ""
 
 #: ../../network/state_handler.go:91
-msgid "The IP config of the VPN connection was invalid."
+msgid "IP config of VPN connection was invalid."
 msgstr ""
 
 #: ../../network/state_handler.go:92
-msgid "The connection attempt of the VPN service timed out."
+msgid "The connection attempt to VPN  service timed out."
 msgstr ""
 
 #: ../../network/state_handler.go:93
@@ -4118,11 +4117,11 @@ msgid "VPN connection service failed to start."
 msgstr ""
 
 #: ../../network/state_handler.go:95
-msgid "Necessary secrets for the VPN connection were not provided."
+msgid "Necessary password for VPN connection was not provided."
 msgstr ""
 
 #: ../../network/state_handler.go:96
-msgid "Authentication to the VPN server failed."
+msgid "Authentication to VPN server failed."
 msgstr ""
 
 #: ../../network/state_handler.go:97
