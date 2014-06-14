@@ -40,13 +40,13 @@ GtkWidget *get_meta_theme (const char* theme_name)
 {
 	MetaTheme *meta = meta_theme_load(theme_name, NULL);
 	if (!meta) {
-		g_error("Get Current Meta Theme Failed");
+		g_warning("Get Current Meta Theme Failed");
 		return NULL;
 	}
 
 	GtkWidget *preview =  meta_preview_new();
 	if (!preview) {
-		g_error("Get Meta Preview Failed");
+		g_warning("Get Meta Preview Failed");
 		return NULL;
 	}
 
@@ -83,7 +83,7 @@ void padding_thumbnail(GtkFixed* thumb)
 int gen_gtk_thumbnail(char *theme, char *dest)
 {
 	if (theme == NULL || dest == NULL) {
-		g_error("gen_gtk_thumbnail args error");
+		g_warning("gen_gtk_thumbnail args error");
 		return -1;
 	}
 
@@ -91,7 +91,7 @@ int gen_gtk_thumbnail(char *theme, char *dest)
 	gtk_widget_set_size_request(w, 128, 72);
 	GtkWidget *t = get_meta_theme(theme);
 	if (t == NULL) {
-		g_error("Get Meta Theme Failed");
+		g_warning("Get Meta Theme Failed");
 		return -1;
 	}
 	gtk_container_add((GtkContainer*)w,t);

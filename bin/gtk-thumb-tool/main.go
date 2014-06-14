@@ -33,6 +33,13 @@ import (
 )
 
 func main() {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Printf("Error: %v\n", err)
+			os.Exit(0)
+		}
+	}()
+
 	if C.try_init() == 0 {
 		return
 	}

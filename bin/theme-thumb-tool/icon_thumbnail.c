@@ -36,7 +36,7 @@ static GdkPixbuf *
 get_pixbuf_from_file (const char *name, gboolean is_bg)
 {
 	if (!name) {
-		g_error("Get Icon Pixbuf Failed: args error");
+		g_warning("Get Icon Pixbuf Failed: args error");
 		return NULL;
 	}
 
@@ -48,7 +48,7 @@ get_pixbuf_from_file (const char *name, gboolean is_bg)
 		pixbuf = gdk_pixbuf_new_from_file(name, &error);
 	}
 	if (!pixbuf) {
-		g_error("Create %s Pixbuf Failed: %s", name, error->message);
+		g_warning("Create %s Pixbuf Failed: %s", name, error->message);
 		g_error_free(error);
 		return NULL;
 	}
@@ -60,7 +60,7 @@ int
 gen_icon_preview(char *bg, char *dest, char *item1, char *item2, char *item3)
 {
 	if (!bg || !dest || !item1 || !item2 || !item3) {
-		g_error("Generate Icon Preview Failed: args error");
+		g_warning("Generate Icon Preview Failed: args error");
 		return -1;
 	}
 
@@ -76,13 +76,13 @@ gen_icon_preview(char *bg, char *dest, char *item1, char *item2, char *item3)
 	                                  bg_pixbuf, 0, NULL);
 	g_object_unref(bg_pixbuf);
 	if (!bg_surface) {
-		g_error("Create Bg Surface Failed");
+		g_warning("Create Bg Surface Failed");
 		return -1;
 	}
 
 	cairo_t *bg_cairo = cairo_create(bg_surface);
 	if (!bg_cairo) {
-		g_error("Create Bg Cairo Failed");
+		g_warning("Create Bg Cairo Failed");
 		cairo_surface_destroy(bg_surface);
 		return -1;
 	}
@@ -91,7 +91,7 @@ gen_icon_preview(char *bg, char *dest, char *item1, char *item2, char *item3)
 	GdkPixbuf *pixbuf2 = get_pixbuf_from_file(item2, FALSE);
 	GdkPixbuf *pixbuf3 = get_pixbuf_from_file(item3, FALSE);
 	if (!pixbuf1 || !pixbuf2 || !pixbuf3) {
-		g_error("Get Icon Pixbuf Failed");
+		g_warning("Get Icon Pixbuf Failed");
 		goto out;
 	}
 

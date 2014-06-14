@@ -34,19 +34,19 @@ static GdkPixbuf *
 gen_pixbuf_from_cursor(const gchar *name)
 {
 	if (!name) {
-		g_error("Cursor Name Is NULL");
+		g_warning("Cursor Name Is NULL");
 		return NULL;
 	}
 
 	GdkDisplay *dsp = gdk_display_get_default();
 	if (!dsp) {
-		g_error("Get Default Display Failed");
+		g_warning("Get Default Display Failed");
 		return NULL;
 	}
 
 	GdkCursor *cursor = gdk_cursor_new_from_name(dsp, name);
 	if (!cursor) {
-		g_error ("New Cursor From Name Failed");
+		g_warning ("New Cursor From Name Failed");
 		return NULL;
 	}
 
@@ -60,14 +60,14 @@ int
 gen_cursor_preview(char *bg, char *dest)
 {
 	if (!bg || !dest) {
-		g_error("Cursor Preview Args NULL");
+		g_warning("Cursor Preview Args NULL");
 		return -1;
 	}
 
 	GError *error = NULL;
 	GdkPixbuf *bg_pixbuf = gdk_pixbuf_new_from_file(bg, &error);
 	if (!bg_pixbuf) {
-		g_error("Create Bg Pixbuf Failed: %s", error->message);
+		g_warning("Create Bg Pixbuf Failed: %s", error->message);
 		g_error_free(error);
 		return -1;
 	}
@@ -79,13 +79,13 @@ gen_cursor_preview(char *bg, char *dest)
 			bg_pixbuf, 0, NULL);
 	g_object_unref(bg_pixbuf);
 	if (!bg_surface) {
-		g_error("Create Bg Cairo Surface Failed");
+		g_warning("Create Bg Cairo Surface Failed");
 		return -1;
 	}
 
 	cairo_t *bg_cairo = cairo_create(bg_surface);
 	if (!bg_cairo) {
-		g_error("Create Bg Cairo Failed");
+		g_warning("Create Bg Cairo Failed");
 		g_error_free(error);
 		cairo_surface_destroy(bg_surface);
 		return -1;
@@ -95,7 +95,7 @@ gen_cursor_preview(char *bg, char *dest)
 	GdkPixbuf *pixbuf2 = gen_pixbuf_from_cursor(LEFT_PTR_WATCH);
 	GdkPixbuf *pixbuf3 = gen_pixbuf_from_cursor(QUESTION_ARROW);
 	if (!pixbuf1 || !pixbuf2 || !pixbuf3) {
-		g_error("Create Pixbuf From Cursor Failed");
+		g_warning("Create Pixbuf From Cursor Failed");
 		goto out;
 	}
 	int width1 = gdk_pixbuf_get_width(pixbuf1) + ICON_SPCAE;

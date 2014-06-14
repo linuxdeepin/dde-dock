@@ -156,6 +156,13 @@ func printHelper() {
 }
 
 func main() {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Printf("Error: %v\n", err)
+			os.Exit(0)
+		}
+	}()
+
 	if C.init_env() == 0 {
 		fmt.Println("Can't generate thumbnails, try run this program under an X11 enviorment")
 		return
