@@ -97,15 +97,21 @@ func isSizeExit(size string, list []string) (string, bool) {
 func getAppDir(dir string, list []string) string {
 	if d, ok := isSizeExit("48", list); ok {
 		dir = path.Join(dir, d)
-		return dir
+		if objUtil.IsFileExist(dir) {
+			return dir
+		}
 	}
 	if d, ok := isSizeExit("32", list); ok {
 		dir = path.Join(dir, d)
-		return dir
+		if objUtil.IsFileExist(dir) {
+			return dir
+		}
 	}
 	if d, ok := isSizeExit("24", list); ok {
 		dir = path.Join(dir, d)
-		return dir
+		if objUtil.IsFileExist(dir) {
+			return dir
+		}
 	}
 
 	return path.Join(dir, list[0])
