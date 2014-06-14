@@ -137,12 +137,27 @@ func bluezSetAdapterPowered(apath dbus.ObjectPath, powered bool) (er error) {
 	return
 }
 
+func bluezPairDevice(dpath dbus.ObjectPath) (err error) {
+	bluezDevice, err := bluezNewDevice(dpath)
+	if err != nil {
+		return
+	}
+	err = bluezDevice.Pair()
+	if err != nil {
+		logger.Error(err)
+	}
+	return
+}
+
 func bluezConnectDevice(dpath dbus.ObjectPath) (err error) {
 	bluezDevice, err := bluezNewDevice(dpath)
 	if err != nil {
 		return
 	}
 	err = bluezDevice.Connect()
+	if err != nil {
+		logger.Error(err)
+	}
 	return
 }
 
@@ -152,6 +167,9 @@ func bluezDisconnectDevice(dpath dbus.ObjectPath) (err error) {
 		return
 	}
 	err = bluezDevice.Disconnect()
+	if err != nil {
+		logger.Error(err)
+	}
 	return
 }
 
@@ -161,6 +179,9 @@ func bluezRemoveDevice(apath, dpath dbus.ObjectPath) (err error) {
 		return
 	}
 	err = bluezAdapter.RemoveDevice(dpath)
+	if err != nil {
+		logger.Error(err)
+	}
 	return
 }
 

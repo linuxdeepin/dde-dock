@@ -66,9 +66,6 @@ func (b *Bluetooth) newDevice(dpath dbus.ObjectPath, data map[string]dbus.Varian
 func (d *device) connectProeprties() {
 	d.bluezDevice.Connected.ConnectChanged(func() {
 		d.Connected = d.bluezDevice.Connected.Get()
-		if d.Connected {
-			bluezSetDeviceTrusted(d.Path, true)
-		}
 		bluetooth.updatePropDevices()
 	})
 	d.bluezDevice.Alias.ConnectChanged(func() {
@@ -181,6 +178,8 @@ func (b *Bluetooth) GetDevices() (devicesJSON string) {
 
 func (b *Bluetooth) ConnectDevice(dpath dbus.ObjectPath) (err error) {
 	go func() {
+		bluezSetDeviceTrusted(dpath, true)
+		bluezPairDevice(dpath)
 		bluezConnectDevice(dpath)
 	}()
 	return
