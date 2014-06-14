@@ -60,44 +60,49 @@ func startProxy() {
 }
 
 func updateProxyEnvs() {
+	utils.UnsetEnv(envAutoProxy)
+	utils.UnsetEnv(envHttpProxy)
+	utils.UnsetEnv(envHttpsProxy)
+	utils.UnsetEnv(envFtpProxy)
+	utils.UnsetEnv(envSocksProxy)
 	proxyMethod := proxySettings.GetString(gkeyProxyMethod)
 	switch proxyMethod {
 	case proxyMethodNone:
-		utils.UnsetEnv(envAutoProxy)
-		utils.UnsetEnv(envHttpProxy)
-		utils.UnsetEnv(envHttpsProxy)
-		utils.UnsetEnv(envFtpProxy)
-		utils.UnsetEnv(envSocksProxy)
 	case proxyMethodAuto:
 		autoProxy := proxySettings.GetString(gkeyAutoProxy)
-		os.Setenv(envAutoProxy, autoProxy)
-		utils.UnsetEnv(envHttpProxy)
-		utils.UnsetEnv(envHttpsProxy)
-		utils.UnsetEnv(envFtpProxy)
-		utils.UnsetEnv(envSocksProxy)
+		if len(autoProxy) > 0 {
+			os.Setenv(envAutoProxy, autoProxy)
+		}
 	case proxyMethodManual:
-		utils.UnsetEnv(envAutoProxy)
 		httpProxy := proxySettings.GetString(gkeyHttpProxy)
-		os.Setenv(envHttpProxy, httpProxy)
-		logger.Debug("update proxy envs, httpProxy:", httpProxy)
+		if len(httpProxy) > 0 {
+			os.Setenv(envHttpProxy, httpProxy)
+			logger.Debug("update proxy envs, httpProxy:", httpProxy)
+		}
 
 		httpsProxy := proxySettings.GetString(gkeyHttpsProxy)
-		os.Setenv(envHttpsProxy, httpsProxy)
-		logger.Debug("update proxy envs, httpsProxy:", httpsProxy)
+		if len(httpsProxy) > 0 {
+			os.Setenv(envHttpsProxy, httpsProxy)
+			logger.Debug("update proxy envs, httpsProxy:", httpsProxy)
+		}
 
 		ftpProxy := proxySettings.GetString(gkeyFtpProxy)
-		os.Setenv(envFtpProxy, ftpProxy)
-		logger.Debug("update proxy envs, ftpProxy:", ftpProxy)
+		if len(ftpProxy) > 0 {
+			os.Setenv(envFtpProxy, ftpProxy)
+			logger.Debug("update proxy envs, ftpProxy:", ftpProxy)
+		}
 
 		socksProxy := proxySettings.GetString(gkeySocksProxy)
-		os.Setenv(envSocksProxy, socksProxy)
-		logger.Debug("update proxy envs, socksProxy:", socksProxy)
+		if len(socksProxy) > 0 {
+			os.Setenv(envSocksProxy, socksProxy)
+			logger.Debug("update proxy envs, socksProxy:", socksProxy)
+		}
 	}
 }
 
 func listenProxyGsettings() {
 	proxySettings.Connect("changed", func(s *gio.Settings, key string) {
-		logger.Debug("proxy value in gsettings changed:", key, s.GetString(key))
+		logger.Info("proxy value in gsettings changed:", key, s.GetString(key))
 		updateProxyEnvs()
 	})
 }
