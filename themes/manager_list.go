@@ -489,7 +489,7 @@ func getDThemeThumb(name string) string {
 		if t, ok := GetManager().themeObjMap[name]; ok {
 			return GetManager().GetThumbnail("background", t.Background)
 		}
-		return getThumbBg()
+		return ""
 	}
 
 	list := getDThemeList()
@@ -503,7 +503,7 @@ func getDThemeThumb(name string) string {
 		}
 	}
 
-	return getThumbBg()
+	return ""
 }
 
 func getGtkThumb(name string) string {
@@ -518,7 +518,7 @@ func getGtkThumb(name string) string {
 		}
 	}
 
-	return getThumbBg()
+	return ""
 }
 
 func getIconThumb(name string) string {
@@ -533,7 +533,7 @@ func getIconThumb(name string) string {
 		}
 	}
 
-	return getThumbBg()
+	return ""
 }
 
 func getCursorThumb(name string) string {
@@ -548,7 +548,7 @@ func getCursorThumb(name string) string {
 		}
 	}
 
-	return getThumbBg()
+	return ""
 }
 
 func getBgThumb(bg string) string {
@@ -557,7 +557,7 @@ func getBgThumb(bg string) string {
 		return dest
 	}
 
-	return getThumbBg()
+	return ""
 }
 
 func getThumbBg() string {
