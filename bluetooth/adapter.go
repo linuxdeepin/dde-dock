@@ -43,8 +43,11 @@ func (b *Bluetooth) newAdapter(apath dbus.ObjectPath) (a *adapter) {
 	a.Powered = a.bluezAdapter.Powered.Get()
 	a.Discoverable = a.bluezAdapter.Discoverable.Get()
 	a.DiscoverableTimeout = a.bluezAdapter.DiscoverableTimeout.Get()
+	a.connectProeprties()
+	return
+}
 
-	// TODO connect properties
+func (a *adapter) connectProeprties() {
 	a.bluezAdapter.Alias.ConnectChanged(func() {
 		a.Alias = a.bluezAdapter.Alias.Get()
 		b.updatePropAdapters()
@@ -61,8 +64,12 @@ func (b *Bluetooth) newAdapter(apath dbus.ObjectPath) (a *adapter) {
 		a.DiscoverableTimeout = a.bluezAdapter.DiscoverableTimeout.Get()
 		b.updatePropAdapters()
 	})
-
-	return
+}
+func (a *adapter) resetConnect() {
+	a.bluezAdapter.Alias.Reset()
+	a.bluezAdapter.Powered.Reset()
+	a.bluezAdapter.Discoverable.Reset()
+	a.bluezAdapter.DiscoverableTimeout.Reset()
 }
 
 func (b *Bluetooth) addAdapter(apath dbus.ObjectPath) {
@@ -74,26 +81,24 @@ func (b *Bluetooth) addAdapter(apath dbus.ObjectPath) {
 	b.adapters = append(b.adapters, a)
 	b.updatePropAdapters()
 }
-
 func (b *Bluetooth) removeAdapter(apath dbus.ObjectPath) {
 	i := b.getAdapterIndex(apath)
 	if i < 0 {
 		logger.Warning("repeat remove adapter:", apath)
 		return
 	}
+	b.adapters[i].resetConnect()
 	copy(b.adapters[i:], b.adapters[i+1:])
 	b.adapters[len(b.adapters)-1] = nil
 	b.adapters = b.adapters[:len(b.adapters)-1]
 	b.updatePropAdapters()
 }
-
 func (b *Bluetooth) isAdapterExists(apath dbus.ObjectPath) bool {
 	if b.getAdapterIndex(apath) >= 0 {
 		return true
 	}
 	return false
 }
-
 func (b *Bluetooth) getAdapterIndex(apath dbus.ObjectPath) int {
 	for i, a := range b.adapters {
 		if a.Path == apath {
