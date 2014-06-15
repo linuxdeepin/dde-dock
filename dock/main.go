@@ -25,6 +25,7 @@ func Start() {
 	// configure logger
 	if stringInSlice("-d", os.Args) || stringInSlice("--debug", os.Args) {
 		logger.SetLogLevel(liblogger.LEVEL_DEBUG)
+		os.Setenv("G_MESSAGES_DEBUG", "all")
 	}
 
 	m := NewEntryProxyerManager()
