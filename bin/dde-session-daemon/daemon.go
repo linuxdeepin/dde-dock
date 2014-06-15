@@ -5,7 +5,8 @@ import _ "dde-daemon/screensaver"
 import _ "dde-daemon/power"
 
 import _ "dde-daemon/audio"
-import _ "dde-daemon/themes"
+
+//import _ "dde-daemon/themes"
 
 import _ "dde-daemon/clipboard"
 import _ "dde-daemon/datetime"

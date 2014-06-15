@@ -52,6 +52,15 @@ const (
 	THUMB_CACHE_DIR = "cache"
 )
 
+func getUserPictureDir() string {
+	str := C.get_user_pictures_dir()
+	//defer C.free(unsafe.Pointer(str))
+
+	ret := C.GoString(str)
+
+	return ret
+}
+
 func getThumbBg() string {
 	list, _ := getImageList("/usr/share/personalization/thumb_bg")
 	l := len(list)

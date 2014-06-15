@@ -37,3 +37,9 @@ get_base_space (int total, int dest)
 
 	return (total/2) - (dest/2);
 }
+
+char *
+get_user_pictures_dir ()
+{
+	return (char*)g_get_user_special_dir (G_USER_DIRECTORY_PICTURES);
+}

@@ -30,5 +30,6 @@ int gen_icon_preview(char *bg, char *dest,
 		char *item1, char *item2, char *item3);
 
 int get_base_space (int total, int dest);
+char *get_user_pictures_dir ();
 
 #endif

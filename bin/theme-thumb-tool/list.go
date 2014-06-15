@@ -387,6 +387,19 @@ func getBgList() []pathInfo {
 			}
 		}
 	}
+	pict := getUserPictureDir()
+	userBG := path.Join(pict, "Wallpapers")
+	if !objUtil.IsFileExist(userBG) {
+		return list
+	}
+	if tmpList, ok := getImageList(userBG); ok {
+		for _, l := range tmpList {
+			tmp := pathInfo{}
+			tmp.Path = l
+			tmp.T = THEME_TYPE_LOCAL
+			list = append(list, tmp)
+		}
+	}
 
 	return list
 }
