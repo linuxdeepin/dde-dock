@@ -44,15 +44,9 @@ func (obj *Manager) listenGSettings() {
 			}
 		case GS_KEY_CURRENT_SOUND:
 			value := themeSettings.GetString(key)
-			//if obj.currentSound.GetValue().(string) == value {
-			//return
-			//}
 			obj.setSoundTheme(value)
 		case GS_KEY_CURRENT_BG:
 			value := themeSettings.GetString(key)
-			//if obj.currentBackground.GetValue().(string) == value {
-			//return
-			//}
 			obj.setBackground(value)
 		}
 	})

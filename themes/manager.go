@@ -31,16 +31,14 @@ import (
 )
 
 type Manager struct {
-	ThemeList         []string
-	GtkThemeList      []string
-	IconThemeList     []string
-	CursorThemeList   []string
-	SoundThemeList    []string
-	BackgroundList    []string
-	CurrentTheme      *property.GSettingsStringProperty `access:"readwrite"`
-	currentSound      *property.GSettingsStringProperty
-	currentBackground *property.GSettingsStringProperty
-	themeObjMap       map[string]*Theme
+	ThemeList       []string
+	GtkThemeList    []string
+	IconThemeList   []string
+	CursorThemeList []string
+	SoundThemeList  []string
+	BackgroundList  []string
+	CurrentTheme    *property.GSettingsStringProperty `access:"readwrite"`
+	themeObjMap     map[string]*Theme
 
 	watcher    *fsnotify.Watcher
 	quitFlag   chan bool
@@ -262,12 +260,6 @@ func newManager() *Manager {
 	m.CurrentTheme = property.NewGSettingsStringProperty(
 		m, "CurrentTheme",
 		themeSettings, GS_KEY_CURRENT_THEME)
-	m.currentSound = property.NewGSettingsStringProperty(
-		m, "currentSound",
-		themeSettings, GS_KEY_CURRENT_SOUND)
-	m.currentBackground = property.NewGSettingsStringProperty(
-		m, "currentBackground",
-		themeSettings, GS_KEY_CURRENT_BG)
 
 	m.themeObjMap = make(map[string]*Theme)
 	m.rebuildThemes()
