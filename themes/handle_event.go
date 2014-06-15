@@ -65,39 +65,54 @@ func (obj *Manager) startWatch() {
 		var err error
 		obj.watcher, err = fsnotify.NewWatcher()
 		if err != nil {
-			Logger.Errorf("New Watcher Failed: %v", err)
+			Logger.Warningf("New Watcher Failed: %v", err)
 			panic(err)
 		}
 	}
 
-	homeDir, _ := objUtil.GetHomeDir()
 	obj.watcher.Watch(THEME_SYS_PATH)
+
+	homeDir, _ := objUtil.GetHomeDir()
+	errFlag := false
 	dir := path.Join(homeDir, THEME_LOCAL_PATH)
 	if !objUtil.IsFileExist(dir) {
 		if err := os.MkdirAll(dir, 0755); err != nil {
-			Logger.Errorf("Mkdir '%s' failed: %v", dir, err)
-		} else {
-			obj.watcher.Watch(dir)
+			errFlag = true
+			Logger.Warningf("Mkdir '%s' failed: %v", dir, err)
 		}
 	}
+	if !errFlag {
+		obj.watcher.Watch(dir)
+	}
+
 	obj.watcher.Watch(ICON_SYS_PATH)
+
+	errFlag = false
 	dir = path.Join(homeDir, ICON_LOCAL_PATH)
 	if !objUtil.IsFileExist(dir) {
 		if err := os.MkdirAll(dir, 0755); err != nil {
-			Logger.Errorf("Mkdir '%s' failed: %v", dir, err)
-		} else {
-			obj.watcher.Watch(dir)
+			errFlag = true
+			Logger.Warningf("Mkdir '%s' failed: %v", dir, err)
 		}
 	}
+	if !errFlag {
+		obj.watcher.Watch(dir)
+	}
+
 	obj.watcher.Watch(SOUND_THEME_PATH)
+
 	obj.watcher.Watch(PERSON_SYS_THEME_PATH)
+
+	errFlag = false
 	dir = path.Join(homeDir, PERSON_LOCAL_THEME_PATH)
 	if !objUtil.IsFileExist(dir) {
 		if err := os.MkdirAll(dir, 0755); err != nil {
-			Logger.Errorf("Mkdir '%s' failed: %v", dir, err)
-		} else {
-			obj.watcher.Watch(dir)
+			errFlag = true
+			Logger.Warningf("Mkdir '%s' failed: %v", dir, err)
 		}
+	}
+	if !errFlag {
+		obj.watcher.Watch(dir)
 	}
 }
 
@@ -132,7 +147,9 @@ func (obj *Manager) handleEvent() {
 			return
 		case ev, ok := <-obj.watcher.Event:
 			if !ok {
-				obj.endWatch()
+				if obj.watcher != nil {
+					obj.endWatch()
+				}
 				obj.startWatch()
 				break
 			}
@@ -141,22 +158,24 @@ func (obj *Manager) handleEvent() {
 				break
 			}
 
-			ok1, _ := regexp.MatchString(THEME_SYS_PATH, ev.Name)
-			ok2, _ := regexp.MatchString(THEME_LOCAL_PATH, ev.Name)
-			if ok1 || ok2 {
-				obj.setPropGtkThemeList(obj.getGtkStrList())
-			}
+			Logger.Debugf("Manager Event: %v", ev)
+			ok1 := false
+			ok2 := false
 
 			ok1, _ = regexp.MatchString(ICON_SYS_PATH, ev.Name)
 			ok2, _ = regexp.MatchString(ICON_LOCAL_PATH, ev.Name)
 			if ok1 || ok2 {
+				Logger.Debugf("Update IconList")
 				obj.setPropIconThemeList(obj.getIconStrList())
 				obj.setPropCursorThemeList(obj.getCursorStrList())
+				break
 			}
 
 			ok1, _ = regexp.MatchString(SOUND_THEME_PATH, ev.Name)
 			if ok1 {
+				Logger.Debugf("Update SoundTheme")
 				obj.setPropSoundThemeList(obj.getSoundStrList())
+				break
 			}
 
 			ok1, _ = regexp.MatchString(PERSON_SYS_THEME_PATH, ev.Name)
@@ -164,38 +183,22 @@ func (obj *Manager) handleEvent() {
 			if ok1 || ok2 {
 				obj.rebuildThemes()
 				obj.setPropThemeList(obj.getDThemeStrList())
-			}
-		case err, ok := <-obj.watcher.Error:
-			if !ok || err != nil {
-				obj.endWatch()
-				obj.startWatch()
-			}
-		}
-	}
-}
-
-func (obj *Manager) handleBgEvent() {
-	for {
-		select {
-		case <-obj.bgQuitFlag:
-			return
-		case ev, ok := <-obj.bgWatcher.Event:
-			if !ok {
-				obj.endBgWatch()
-				obj.startBgWatch()
-			}
-
-			if ev == nil {
 				break
 			}
 
-			if ev.IsDelete() || ev.IsCreate() {
-				obj.setPropBackgroundList(obj.getBgStrList())
+			ok1, _ = regexp.MatchString(THEME_SYS_PATH, ev.Name)
+			ok2, _ = regexp.MatchString(THEME_LOCAL_PATH, ev.Name)
+			if ok1 || ok2 {
+				Logger.Debugf("Update GtkList")
+				obj.setPropGtkThemeList(obj.getGtkStrList())
+				break
 			}
-		case err, ok := <-obj.bgWatcher.Error:
+		case err, ok := <-obj.watcher.Error:
 			if !ok || err != nil {
-				obj.endBgWatch()
-				obj.startBgWatch()
+				if obj.watcher != nil {
+					obj.endWatch()
+				}
+				obj.startWatch()
 			}
 		}
 	}
@@ -206,19 +209,21 @@ func (obj *Manager) startBgWatch() {
 		var err error
 		obj.bgWatcher, err = fsnotify.NewWatcher()
 		if err != nil {
-			Logger.Errorf("New Watcher Failed: %v", err)
-			panic(err)
+			Logger.Fatalf("New Watcher Failed: %v", err)
 		}
 	}
 
+	obj.bgWatcher.Watch(DEFAULT_SYS_BG_DIR)
+
 	pict := getUserPictureDir()
 	userBG := path.Join(pict, "Wallpapers")
+	Logger.Debugf("User Special Bg: %v", userBG)
 	if !objUtil.IsFileExist(userBG) {
-		os.MkdirAll(userBG, 0755)
+		if err := os.MkdirAll(userBG, 0755); err != nil {
+			return
+		}
 	}
-
 	obj.bgWatcher.Watch(userBG)
-	obj.bgWatcher.Watch(DEFAULT_SYS_BG_DIR)
 }
 
 func (obj *Manager) endBgWatch() {
@@ -235,6 +240,37 @@ func (obj *Manager) endBgWatch() {
 	obj.bgWatcher.RemoveWatch(DEFAULT_SYS_BG_DIR)
 }
 
+func (obj *Manager) handleBgEvent() {
+	for {
+		select {
+		case <-obj.bgQuitFlag:
+			return
+		case ev, ok := <-obj.bgWatcher.Event:
+			if !ok {
+				if obj.bgWatcher != nil {
+					obj.endBgWatch()
+				}
+				obj.startBgWatch()
+				break
+			}
+
+			if ev == nil {
+				break
+			}
+
+			Logger.Debugf("Bg Event: %v", ev)
+			obj.setPropBackgroundList(obj.getBgStrList())
+		case err, ok := <-obj.bgWatcher.Error:
+			if !ok || err != nil {
+				if obj.bgWatcher != nil {
+					obj.endBgWatch()
+				}
+				obj.startBgWatch()
+			}
+		}
+	}
+}
+
 func (obj *Theme) startWatch() {
 	if obj.Type == THEME_TYPE_SYSTEM {
 		return
@@ -244,7 +280,7 @@ func (obj *Theme) startWatch() {
 		var err error
 		obj.watcher, err = fsnotify.NewWatcher()
 		if err != nil {
-			Logger.Errorf("New Watcher Failed: %v", err)
+			Logger.Warningf("New Watcher Failed: %v", err)
 			panic(err)
 		}
 	}
@@ -269,7 +305,9 @@ func (obj *Theme) handleEvent() {
 			return
 		case ev, ok := <-obj.watcher.Event:
 			if !ok {
-				obj.endWatch()
+				if obj.watcher != nil {
+					obj.endWatch()
+				}
 				obj.startWatch()
 				break
 			}
@@ -279,7 +317,9 @@ func (obj *Theme) handleEvent() {
 			}
 
 			if ev.IsDelete() {
-				obj.endWatch()
+				if obj.watcher != nil {
+					obj.endWatch()
+				}
 				obj.startWatch()
 				break
 			}
@@ -290,7 +330,9 @@ func (obj *Theme) handleEvent() {
 			}
 		case err, ok := <-obj.watcher.Error:
 			if !ok || err != nil {
-				obj.endWatch()
+				if obj.watcher != nil {
+					obj.endWatch()
+				}
 				obj.startWatch()
 			}
 		}

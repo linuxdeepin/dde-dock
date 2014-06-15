@@ -325,6 +325,21 @@ func getBackgroundList() []ThemeInfo {
 			}
 		}
 	}
+	pict := getUserPictureDir()
+	userBG := path.Join(pict, "Wallpapers")
+	if !objUtil.IsFileExist(userBG) {
+		return bgList
+	}
+	if tmpList, ok := getImageList(userBG); ok {
+		for _, l := range tmpList {
+			tmp := ThemeInfo{}
+			tmp.Name = path.Base(l)
+			uri, _ := objUtil.PathToFileURI(l)
+			tmp.Path = uri
+			tmp.T = THEME_TYPE_LOCAL
+			bgList = append(bgList, tmp)
+		}
+	}
 
 	return bgList
 }

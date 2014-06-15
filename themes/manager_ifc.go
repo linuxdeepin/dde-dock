@@ -391,23 +391,20 @@ func (obj *Manager) deleteBackground(bg string) {
 	}
 
 	if obj.GetFlag("background", bg) == int32(THEME_TYPE_LOCAL) {
-		os.RemoveAll(bg)
+		filename, _ := objUtil.URIToPath(bg)
+		os.RemoveAll(filename)
 	}
 }
 
 func (obj *Manager) deleteDTheme(name string) {
-	for _, l := range obj.ThemeList {
-		if l == name {
-			list := getDThemeList()
-			for _, t := range list {
-				if name == t.Name {
-					if t.T == int32(THEME_TYPE_LOCAL) {
-						if obj.CurrentTheme.GetValue().(string) == name {
-							obj.setPropCurrentTheme(DEFAULT_THEME)
-						}
-						rmAllFile(t.Path)
-					}
+	list := getDThemeList()
+	for _, t := range list {
+		if name == t.Name {
+			if t.T == int32(THEME_TYPE_LOCAL) {
+				if obj.CurrentTheme.GetValue().(string) == name {
+					obj.setPropCurrentTheme(DEFAULT_THEME)
 				}
+				rmAllFile(t.Path)
 			}
 			break
 		}

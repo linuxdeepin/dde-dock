@@ -33,7 +33,7 @@ import (
 	"os"
 	"path"
 	"strconv"
-	"unsafe"
+	//"unsafe"
 )
 
 func changeUserThemeDir() {
@@ -53,7 +53,7 @@ func rmAllFile(name string) {
 
 func getUserPictureDir() string {
 	str := C.get_user_pictures_dir()
-	defer C.free(unsafe.Pointer(str))
+	//defer C.free(unsafe.Pointer(str))
 
 	ret := C.GoString(str)
 

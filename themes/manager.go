@@ -83,7 +83,7 @@ func (obj *Manager) modifyTheme(name, gtk, icon, sound, cursor, bg string, fontS
 		filename = path.Join(t.filePath, "theme.ini")
 	}
 
-	Logger.Info("Modify Theme:", filename, name, gtk, icon, sound, cursor, bg, fontSize)
+	Logger.Debug("Modify Theme:", filename, name, gtk, icon, sound, cursor, bg, fontSize)
 	kf := glib.NewKeyFile()
 	defer kf.Free()
 	_, err := kf.LoadFromFile(filename, glib.KeyFileFlagsKeepComments)
@@ -110,7 +110,6 @@ func (obj *Manager) modifyTheme(name, gtk, icon, sound, cursor, bg string, fontS
 		obj.rebuildThemes()
 		obj.setPropThemeList(obj.getDThemeStrList())
 	}
-	changeUserThemeDir()
 
 	return true
 }
