@@ -326,8 +326,8 @@ func initGSettingsSet(tpadFlag bool) {
 		C.set_middle_button(C.FALSE)
 	}
 
-	thres := int(tpadSettings.GetDouble(TPAD_KEY_THRES))
-	accel := tpadSettings.GetDouble(TPAD_KEY_ACCEL)
+	thres := int(mouseSettings.GetDouble(MOUSE_KEY_THRES))
+	accel := mouseSettings.GetDouble(MOUSE_KEY_ACCEL)
 	mouseName := C.CString("mouse")
 	defer C.free(unsafe.Pointer(mouseName))
 	C.set_motion(mouseName, C.double(accel), C.int(thres))
