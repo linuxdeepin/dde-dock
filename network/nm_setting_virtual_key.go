@@ -139,14 +139,14 @@ func generalGetSettingVkeyAvailableValues(data connectionData, section, key stri
 				values = []kvalue{
 					kvalue{"none", Tr("None")},
 					kvalue{"wep", Tr("WEP 40/128-bit Key")},
-					kvalue{"wpa-psk", Tr("WPA & WPA2 Personal")},
-					kvalue{"wpa-eap", Tr("WPA & WPA2 Enterprise")},
+					kvalue{"wpa-psk", Tr("WPA/WPA2 Personal")},
+					kvalue{"wpa-eap", Tr("WPA/WPA2 Enterprise")},
 				}
 			} else {
 				values = []kvalue{
 					kvalue{"none", Tr("None")},
 					kvalue{"wep", Tr("WEP 40/128-bit Key")},
-					kvalue{"wpa-psk", Tr("WPA & WPA2 Personal")},
+					kvalue{"wpa-psk", Tr("WPA/WPA2 Personal")},
 				}
 			}
 		}

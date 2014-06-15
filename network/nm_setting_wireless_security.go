@@ -186,24 +186,24 @@ func getSettingWirelessSecurityAvailableValues(data connectionData, key string) 
 	switch key {
 	case NM_SETTING_WIRELESS_SECURITY_KEY_MGMT:
 		values = []kvalue{
-			kvalue{"none", Tr("wep")},
-			kvalue{"ieee8021x", Tr("dynamic wep")},
-			kvalue{"wpa-none", Tr("wpa-psk ad-hoc")},
-			kvalue{"wpa-psk", Tr("wpa-psk infrastructure")},
-			kvalue{"wpa-eap", Tr("wpa enterprise")},
+			kvalue{"none", Tr("WEP")},
+			kvalue{"ieee8021x", Tr("Dynamic WEP")},
+			kvalue{"wpa-none", Tr("Ad-Hoc WPA-PSK")},
+			kvalue{"wpa-psk", Tr("WPA-PSK Infrastructure")},
+			kvalue{"wpa-eap", Tr("WPA Enterprise")},
 		}
 	case NM_SETTING_WIRELESS_SECURITY_GROUP:
 		values = []kvalue{
-			kvalue{"wep40", Tr("wep40")},
-			kvalue{"wep104", Tr("wep104")},
-			kvalue{"tkip", Tr("tkip")},
-			kvalue{"ccmp", Tr("ccmp")},
+			kvalue{"wep40", Tr("WEP40")},
+			kvalue{"wep104", Tr("WEP104")},
+			kvalue{"tkip", Tr("TKIP")},
+			kvalue{"ccmp", Tr("CCMP")},
 		}
 	case NM_SETTING_WIRELESS_SECURITY_AUTH_ALG:
 		values = []kvalue{
-			kvalue{"open", Tr("open")},
-			kvalue{"shared", Tr("shared")},
-			kvalue{"leap", Tr("leap")},
+			kvalue{"open", Tr("Open")},
+			kvalue{"shared", Tr("Shared")},
+			kvalue{"leap", Tr("LEAP")},
 		}
 	}
 	return
