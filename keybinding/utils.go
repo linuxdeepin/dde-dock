@@ -179,7 +179,7 @@ func getSystemListInfo() []ShortcutInfo {
 		}
 	}
 
-	return list
+	return sortShortcutList(list)
 }
 
 func getWindowListInfo() []ShortcutInfo {
@@ -195,7 +195,7 @@ func getWindowListInfo() []ShortcutInfo {
 		}
 	}
 
-	return list
+	return sortShortcutList(list)
 }
 
 func getWorkspaceListInfo() []ShortcutInfo {
@@ -211,7 +211,7 @@ func getWorkspaceListInfo() []ShortcutInfo {
 		}
 	}
 
-	return list
+	return sortShortcutList(list)
 }
 
 func getValidConflictList() []int32 {
