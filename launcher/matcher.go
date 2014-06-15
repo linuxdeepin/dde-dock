@@ -51,11 +51,18 @@ func getMatchers(key string) map[*regexp.Regexp]uint32 {
 		addMatcher(`(?i)\b(%s)`, strings.Join(words, `).+\b(`), GOOD, m)
 	}
 	addMatcher("(?i)(%s)", key, BELOW_AVERAGE, m)
-	chars := regexp.MustCompile(`\s*`).Split(key, -1)
+	charSpliter, err := regexp.Compile(`\s*`)
+	if err != nil {
+		logger.Warning("get char spliter failed:", err)
+		return m
+	}
+
+	chars := charSpliter.Split(key, -1)
 	if len(words) == 1 && len(chars) <= 5 {
 		addMatcher(`(?i)\b(%s)`, strings.Join(chars, `).+\b(`),
 			ABOVE_AVERAGE, m)
 	}
 	addMatcher(`(?i)\b(%s)`, strings.Join(chars, ").*("), POOR, m)
+
 	return m
 }

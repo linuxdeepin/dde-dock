@@ -88,8 +88,9 @@ func search(key string) []ItemId {
 
 	done := make(chan bool, 1)
 	for _, k := range keys {
+		escapedKey := regexp.QuoteMeta(k)
 		for _, fn := range searchFuncs {
-			go fn(k, resChan, done)
+			go fn(escapedKey, resChan, done)
 		}
 	}
 
@@ -121,7 +122,10 @@ func search(key string) []ItemId {
 // 2. add a weight for frequency.
 func searchInstalled(key string, res chan<- SearchResult, end chan<- bool) {
 	logger.Debug("SearchKey:", key)
-	keyMatcher := regexp.MustCompile(fmt.Sprintf("(?i)(%s)", key))
+	keyMatcher, err := regexp.Compile(fmt.Sprintf("(?i)(%s)", key))
+	if err != nil {
+		logger.Warning("get key matcher failed:", err)
+	}
 	matchers := getMatchers(key) // just use these to name.
 	for id, v := range itemTable {
 		var score uint32 = 0
