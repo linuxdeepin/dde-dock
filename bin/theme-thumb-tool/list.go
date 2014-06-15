@@ -22,7 +22,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"path"
 	"regexp"
@@ -62,14 +61,14 @@ func getThemeList(dirs []pathInfo, conditions []string) []pathInfo {
 		var err error
 
 		if f, err = os.Open(dir.Path); err != nil {
-			fmt.Errorf("Open '%s' failed: %v", dir.Path, err)
+			Logger.Debugf("Open '%s' failed: %v", dir.Path, err)
 			continue
 		}
 		defer f.Close()
 
 		var infos []os.FileInfo
 		if infos, err = f.Readdir(0); err != nil {
-			fmt.Errorf("Readdir '%s' failed: %v", dir.Path, err)
+			Logger.Debugf("Readdir '%s' failed: %v", dir.Path, err)
 			continue
 		}
 
@@ -96,14 +95,14 @@ func filterTheme(dir string, conditions []string) bool {
 
 	var f *os.File
 	if f, err = os.Open(dir); err != nil {
-		fmt.Errorf("Open '%s' failed: %v", dir, err)
+		Logger.Debugf("Open '%s' failed: %v", dir, err)
 		return false
 	}
 	defer f.Close()
 
 	names := []string{}
 	if names, err = f.Readdirnames(0); err != nil {
-		fmt.Errorf("Readdirnames '%s' failed: %v", dir, err)
+		Logger.Debugf("Readdirnames '%s' failed: %v", dir, err)
 		return false
 	}
 
@@ -284,13 +283,13 @@ func getBgDir(dir string) ([]string, bool) {
 
 	f, err := os.Open(dir)
 	if err != nil {
-		fmt.Errorf("Open '%s' failed: %v", dir, err)
+		Logger.Debugf("Open '%s' failed: %v", dir, err)
 		return list, false
 	}
 	defer f.Close()
 
 	if infos, err := f.Readdir(0); err != nil {
-		fmt.Errorf("Readdir '%s' failed: %v", dir, err)
+		Logger.Debugf("Readdir '%s' failed: %v", dir, err)
 		return list, false
 	} else {
 		conditions := []string{PERSON_BG_NAME}
@@ -316,13 +315,13 @@ func getImageList(dir string) ([]string, bool) {
 
 	f, err := os.Open(dir)
 	if err != nil {
-		fmt.Errorf("Open '%s' failed: %v", dir, err)
+		Logger.Debugf("Open '%s' failed: %v", dir, err)
 		return list, false
 	}
 	defer f.Close()
 
 	if infos, err := f.Readdir(0); err != nil {
-		fmt.Errorf("Readdir '%s' failed: %v", dir, err)
+		Logger.Debugf("Readdir '%s' failed: %v", dir, err)
 		return list, false
 	} else {
 		for _, i := range infos {

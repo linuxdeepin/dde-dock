@@ -23,7 +23,6 @@ package main
 
 import (
 	"crypto/md5"
-	"fmt"
 	"io/ioutil"
 	"strconv"
 )
@@ -64,7 +63,7 @@ func getFileMd5(file string) (string, bool) {
 
 	contents, err := ioutil.ReadFile(file)
 	if err != nil {
-		fmt.Errorf("ReadFile '%s' failed: %v", file, err)
+		Logger.Debugf("ReadFile '%s' failed: %v", file, err)
 		return "", false
 	}
 

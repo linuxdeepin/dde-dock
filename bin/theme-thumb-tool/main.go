@@ -29,8 +29,8 @@ import "C"
 
 import (
 	"dlib/graphic"
+	"dlib/logger"
 	"dlib/utils"
-	"fmt"
 	"math/rand"
 	"os"
 	"os/exec"
@@ -42,6 +42,7 @@ import (
 
 var (
 	objUtil = utils.NewUtils()
+	Logger  = logger.NewLogger("theme-thumb-tool")
 )
 
 const (
@@ -62,7 +63,7 @@ func getThumbBg() string {
 
 func getThumbCachePath(t, src, outDir string) string {
 	if len(outDir) < 1 {
-		fmt.Println("Output Dir Error")
+		Logger.Debug("Output Dir Error")
 		return ""
 	}
 
@@ -90,7 +91,7 @@ func genCursorThumbnail(info pathInfo, dest, bg string) bool {
 
 	item1, item2, item3 := getCursorIcons(info)
 	if len(item1) < 1 || len(item2) < 1 || len(item3) < 1 {
-		fmt.Println("getCursorIcons Failed")
+		Logger.Debug("getCursorIcons Failed")
 		return false
 	}
 
@@ -107,7 +108,7 @@ func genCursorThumbnail(info pathInfo, dest, bg string) bool {
 
 	ret := C.gen_icon_preview(cBg, cDest, cItem1, cItem2, cItem3)
 	if int(ret) == -1 {
-		fmt.Println("Generate Icon Thumbnail Error")
+		Logger.Debug("Generate Icon Thumbnail Error")
 		return false
 	}
 
@@ -121,7 +122,7 @@ func genIconThumbnail(info pathInfo, dest, bg string) bool {
 
 	item1, item2, item3 := getIconTypeFile(info)
 	if len(item1) < 1 || len(item2) < 1 || len(item3) < 1 {
-		fmt.Println("getIconTypeFile Failed")
+		Logger.Debug("getIconTypeFile Failed")
 		return false
 	}
 
@@ -138,7 +139,7 @@ func genIconThumbnail(info pathInfo, dest, bg string) bool {
 
 	ret := C.gen_icon_preview(cBg, cDest, cItem1, cItem2, cItem3)
 	if int(ret) == -1 {
-		fmt.Println("Generate Icon Thumbnail Error")
+		Logger.Debug("Generate Icon Thumbnail Error")
 		return false
 	}
 
@@ -146,25 +147,25 @@ func genIconThumbnail(info pathInfo, dest, bg string) bool {
 }
 
 func printHelper() {
-	fmt.Printf("Name\n\t%s: Theme Thumbnail Tool\n", _CMD_)
-	fmt.Printf("Usage\n\t%s [Option] [Output Dir]\n", _CMD_)
-	fmt.Printf("Options:\n")
-	fmt.Printf("\t--gtk:    Generate Gtk Theme Thumbnail\n")
-	fmt.Printf("\t--icon:   Generate Icon Theme Thumbnail\n")
-	fmt.Printf("\t--cursor: Generate Cursor Theme Thumbnail\n")
-	fmt.Printf("\t--background: Generate Background Thumbnail\n")
+	Logger.Debugf("Name\n\t%s: Theme Thumbnail Tool\n", _CMD_)
+	Logger.Debugf("Usage\n\t%s [Option] [Output Dir]\n", _CMD_)
+	Logger.Debugf("Options:\n")
+	Logger.Debugf("\t--gtk:    Generate Gtk Theme Thumbnail\n")
+	Logger.Debugf("\t--icon:   Generate Icon Theme Thumbnail\n")
+	Logger.Debugf("\t--cursor: Generate Cursor Theme Thumbnail\n")
+	Logger.Debugf("\t--background: Generate Background Thumbnail\n")
 }
 
 func main() {
 	defer func() {
 		if err := recover(); err != nil {
-			fmt.Printf("Error: %v\n", err)
+			Logger.Debugf("Error: %v\n", err)
 			os.Exit(0)
 		}
 	}()
 
 	if C.init_env() == 0 {
-		fmt.Println("Can't generate thumbnails, try run this program under an X11 enviorment")
+		Logger.Debug("Can't generate thumbnails, try run this program under an X11 enviorment")
 		return
 	}
 
@@ -195,7 +196,7 @@ func main() {
 			name := path.Base(l.Path)
 			out, err := exec.Command(_GTK_THUMB_CMD_, name, dest).Output()
 			if err != nil || strings.Contains(string(out), "ERROR") {
-				fmt.Printf("ERROR: Generate Gtk Thumbnail\n")
+				Logger.Debugf("ERROR: Generate Gtk Thumbnail\n")
 			}
 		}
 	case "--icon":
@@ -207,7 +208,7 @@ func main() {
 			}
 			bg := getThumbBg()
 			if !genIconThumbnail(l, dest, bg) {
-				fmt.Printf("ERROR: Generate Icon Thumbnail\n")
+				Logger.Debugf("ERROR: Generate Icon Thumbnail\n")
 			}
 		}
 	case "--cursor":
@@ -219,7 +220,7 @@ func main() {
 			}
 			bg := getThumbBg()
 			if !genCursorThumbnail(l, dest, bg) {
-				fmt.Printf("ERROR: Generate Cursor Thumbnail\n")
+				Logger.Debugf("ERROR: Generate Cursor Thumbnail\n")
 			}
 		}
 	case "--background":
@@ -231,11 +232,11 @@ func main() {
 			}
 			err := graphic.ThumbnailImage(l.Path, dest, 128, 72, graphic.PNG)
 			if err != nil {
-				fmt.Println("ERROR:", err)
+				Logger.Debug("ERROR:", err)
 			}
 		}
 	default:
-		fmt.Printf("Invalid option: %s\n\n", op)
+		Logger.Debugf("Invalid option: %s\n\n", op)
 		printHelper()
 	}
 }
