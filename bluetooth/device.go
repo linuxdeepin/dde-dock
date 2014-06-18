@@ -179,7 +179,9 @@ func (b *Bluetooth) GetDevices() (devicesJSON string) {
 func (b *Bluetooth) ConnectDevice(dpath dbus.ObjectPath) (err error) {
 	go func() {
 		bluezSetDeviceTrusted(dpath, true)
-		bluezPairDevice(dpath)
+		if !bluezGetDevicePaired(dpath) {
+			bluezPairDevice(dpath)
+		}
 		bluezConnectDevice(dpath)
 	}()
 	return
