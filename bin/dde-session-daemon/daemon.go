@@ -3,6 +3,7 @@ package main
 import _ "dde-daemon/keybinding"
 import _ "dde-daemon/screensaver"
 import _ "dde-daemon/power"
+import "dlib/proxy"
 
 import _ "dde-daemon/audio"
 
@@ -59,6 +60,7 @@ func main() {
 	Textdomain("dde-daemon")
 
 	C.init()
+	proxy.SetupProxy()
 
 	loader.Start()
 	defer loader.Stop()

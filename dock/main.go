@@ -69,7 +69,5 @@ func Start() {
 	region = NewRegion()
 	dbus.InstallOnSession(region)
 
-	startProxy()
-
 	initialize()
 }
