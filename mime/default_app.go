@@ -3,6 +3,7 @@ package mime
 import (
 	"dlib/gio-2.0"
 	"dlib/glib-2.0"
+	dutils "dlib/utils"
 	"github.com/howeyc/fsnotify"
 	"io/ioutil"
 	"os"
@@ -148,7 +149,7 @@ func (dapp *DefaultApps) listenMimeCacheFile() {
 	}
 
 	mimeFile := userInfo.HomeDir + "/" + MIME_CACHE_FILE
-	if ok := objUtils.IsFileExist(mimeFile); !ok {
+	if ok := dutils.IsFileExist(mimeFile); !ok {
 		f, err := os.Create(mimeFile)
 		if err != nil {
 			Logger.Warningf("Create '%s' failed: %v",

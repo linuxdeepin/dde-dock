@@ -24,7 +24,7 @@ package datetime
 import (
 	"dbus/org/freedesktop/notifications"
 	. "dlib/gettext"
-	"dlib/utils"
+	dutils "dlib/utils"
 	"io/ioutil"
 	"os"
 	"path"
@@ -61,37 +61,36 @@ func setLocaleDmrc(locale string) {
 	if !ok {
 		return
 	}
-	utilsObj := utils.NewUtils()
 	filePath := path.Join(homeDir, DMRC_FILE)
-	utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
+	dutils.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
 		"LANG", locale)
-	utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
+	dutils.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
 		"LANGUAGE", locale)
-	//utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
+	//dutils.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
 	//"LC_CTYPE", locale)
-	//utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
+	//dutils.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
 	//"LC_NUMERIC", locale)
-	//utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
+	//dutils.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
 	//"LC_TIME", locale)
-	//utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
+	//dutils.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
 	//"LC_COLLATE", locale)
-	//utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
+	//dutils.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
 	//"LC_MONETARY", locale)
-	//utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
+	//dutils.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
 	//"LC_MESSAGES", locale)
-	//utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
+	//dutils.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
 	//"LC_PAPER", locale)
-	//utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
+	//dutils.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
 	//"LC_NAME", locale)
-	//utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
+	//dutils.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
 	//"LC_ADDRESS", locale)
-	//utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
+	//dutils.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
 	//"LC_TELEPHONE", locale)
-	//utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
+	//dutils.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
 	//"LC_MEASUREMENT", locale)
-	//utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
+	//dutils.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
 	//"LC_IDENTIFICATION", locale)
-	//utilsObj.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
+	//dutils.WriteKeyToKeyFile(filePath, DMRC_KEY_GROUP,
 	//"LC_ALL", "")
 }
 
@@ -154,7 +153,7 @@ func setLocalePamEnv(locale string) {
 }
 
 func getDefaultLocale() (string, bool) {
-	if !objUtils.IsFileExist(DEFAULT_LOCALE_FILE) {
+	if !dutils.IsFileExist(DEFAULT_LOCALE_FILE) {
 		Logger.Errorf("'%s' not exist", DEFAULT_LOCALE_FILE)
 		return "", false
 	}
@@ -187,9 +186,9 @@ func getDefaultLocale() (string, bool) {
 }
 
 func getUserLocale() (string, bool) {
-	homeDir, _ := objUtils.GetHomeDir()
+	homeDir := dutils.GetHomeDir()
 	filePath := path.Join(homeDir, PAM_ENV_FILE)
-	if !objUtils.IsFileExist(filePath) {
+	if !dutils.IsFileExist(filePath) {
 		Logger.Warningf("'%s' not exist", filePath)
 		return "", false
 	}

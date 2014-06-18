@@ -23,6 +23,7 @@ package accounts
 
 import (
 	"dlib/dbus"
+	dutils "dlib/utils"
 )
 
 func (obj *Manager) CreateGuestAccount() string {
@@ -52,7 +53,7 @@ func (obj *Manager) AllowGuestAccount(dbusMsg dbus.DMessage, allow bool) bool {
 	}
 
 	logger.Infof("Allow guest: %v", allow)
-	if ok := objUtil.WriteKeyToKeyFile(ACCOUNT_CONFIG_FILE,
+	if ok := dutils.WriteKeyToKeyFile(ACCOUNT_CONFIG_FILE,
 		ACCOUNT_GROUP_KEY, ACCOUNT_KEY_GUEST, allow); !ok {
 		logger.Error("AllowGuest Failed")
 		return false

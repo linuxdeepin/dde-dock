@@ -3,7 +3,7 @@ package mime
 import (
 	"dlib/dbus"
 	"dlib/logger"
-	libutils "dlib/utils"
+	dutils "dlib/utils"
 	"os"
 )
 
@@ -24,8 +24,7 @@ const (
 )
 
 var (
-	Logger   = logger.NewLogger("daemon/mime")
-	objUtils = libutils.NewUtils()
+	Logger = logger.NewLogger("daemon/mime")
 )
 
 func (dapp *DefaultApps) GetDBusInfo() dbus.DBusInfo {
@@ -45,8 +44,8 @@ func (media *MediaMount) GetDBusInfo() dbus.DBusInfo {
 }
 
 func (dapp *DefaultApps) Reset() bool {
-	homeDir, ok := objUtils.GetHomeDir()
-	if !ok {
+	homeDir := dutils.GetHomeDir()
+	if len(homeDir) < 1 {
 		Logger.Warning("Get homeDir failed")
 		return false
 	}

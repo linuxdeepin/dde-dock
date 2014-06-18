@@ -22,6 +22,7 @@
 package main
 
 import (
+	dutils "dlib/utils"
 	"os"
 	"path"
 	"regexp"
@@ -129,8 +130,8 @@ func getDThemeList() []pathInfo {
 	conditions := []string{"theme.ini"}
 	sysList := getThemeList(sysDirs, conditions)
 
-	homeDir, ok := objUtil.GetHomeDir()
-	if !ok {
+	homeDir := dutils.GetHomeDir()
+	if len(homeDir) < 1 {
 		list = sysList
 		return list
 	}
@@ -156,8 +157,8 @@ func getGtkList() []pathInfo {
 	conditions := []string{"gtk-2.0", "gtk-3.0", "metacity-1"}
 	sysList := getThemeList(sysDirs, conditions)
 
-	homeDir, ok := objUtil.GetHomeDir()
-	if !ok {
+	homeDir := dutils.GetHomeDir()
+	if len(homeDir) < 1 {
 		list = sysList
 		return list
 	}
@@ -183,8 +184,8 @@ func getIconList() []pathInfo {
 	conditions := []string{"index.theme"}
 	sysList := getThemeList(sysDirs, conditions)
 
-	homeDir, ok := objUtil.GetHomeDir()
-	if !ok {
+	homeDir := dutils.GetHomeDir()
+	if len(homeDir) < 1 {
 		list = sysList
 		return list
 	}
@@ -210,8 +211,8 @@ func getCursorList() []pathInfo {
 	conditions := []string{"cursors", "cursor.theme"}
 	sysList := getThemeList(sysDirs, conditions)
 
-	homeDir, ok := objUtil.GetHomeDir()
-	if !ok {
+	homeDir := dutils.GetHomeDir()
+	if len(homeDir) < 1 {
 		list = sysList
 		return list
 	}
@@ -277,7 +278,7 @@ func isPathBgInList(info pathInfo, list []pathInfo) bool {
 
 func getBgDir(dir string) ([]string, bool) {
 	list := []string{}
-	if !objUtil.IsFileExist(dir) {
+	if !dutils.IsFileExist(dir) {
 		return list, false
 	}
 
@@ -309,7 +310,7 @@ func getBgDir(dir string) ([]string, bool) {
 
 func getImageList(dir string) ([]string, bool) {
 	list := []string{}
-	if !objUtil.IsFileExist(dir) {
+	if !dutils.IsFileExist(dir) {
 		return list, false
 	}
 
@@ -368,8 +369,8 @@ func getBgList() []pathInfo {
 		}
 	}
 
-	homeDir, ok := objUtil.GetHomeDir()
-	if !ok {
+	homeDir := dutils.GetHomeDir()
+	if len(homeDir) < 1 {
 		return list
 	}
 	// local bg
@@ -389,7 +390,7 @@ func getBgList() []pathInfo {
 	}
 	pict := getUserPictureDir()
 	userBG := path.Join(pict, "Wallpapers")
-	if !objUtil.IsFileExist(userBG) {
+	if !dutils.IsFileExist(userBG) {
 		return list
 	}
 	if tmpList, ok := getImageList(userBG); ok {

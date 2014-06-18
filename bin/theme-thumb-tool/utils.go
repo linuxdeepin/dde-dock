@@ -23,6 +23,7 @@ package main
 
 import (
 	"crypto/md5"
+	dutils "dlib/utils"
 	"io/ioutil"
 	"strconv"
 )
@@ -57,7 +58,7 @@ func getStrMd5(str string) (string, bool) {
 }
 
 func getFileMd5(file string) (string, bool) {
-	if !objUtil.IsFileExist(file) {
+	if !dutils.IsFileExist(file) {
 		return "", false
 	}
 

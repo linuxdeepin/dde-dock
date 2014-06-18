@@ -30,6 +30,7 @@ import "C"
 
 import (
 	"dlib/gio-2.0"
+	dutils "dlib/utils"
 	"os/exec"
 	"strings"
 	"unsafe"
@@ -113,7 +114,7 @@ func setLayout(key string) {
 	key = layout + LAYOUT_DELIM + option
 	if len(key) > 0 {
 		list := kbdSettings.GetStrv(KBD_KEY_USER_LAYOUT_LIST)
-		if !utilObj.IsElementExist(key, list) {
+		if !isStrInList(key, list) {
 			list = append(list, key)
 			kbdSettings.SetStrv(KBD_KEY_USER_LAYOUT_LIST, list)
 		}
@@ -138,9 +139,9 @@ func disableTPadWhileTyping(enable bool) {
 }
 
 func setQtCursorBlink(rate uint32) {
-	if configDir, ok := utilObj.GetConfigDir(); ok {
+	if configDir := dutils.GetConfigDir(); len(configDir) > 0 {
 		qtPath := configDir + "/Trolltech.conf"
-		utilObj.WriteKeyToKeyFile(qtPath, "Qt",
+		dutils.WriteKeyToKeyFile(qtPath, "Qt",
 			"cursorFlashTime", rate)
 	}
 }

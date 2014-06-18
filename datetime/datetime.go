@@ -7,7 +7,6 @@ import (
 	. "dlib/gettext"
 	"dlib/gio-2.0"
 	"dlib/logger"
-	libutils "dlib/utils"
 	"github.com/howeyc/fsnotify"
 )
 
@@ -24,7 +23,6 @@ var (
 	busConn      *dbus.Conn
 	dateSettings = gio.NewSettings(_DATE_TIME_SCHEMA)
 
-	objUtils         = libutils.NewUtils()
 	setDate          *setdatetime.SetDateTime
 	zoneWatcher      *fsnotify.Watcher
 	Logger           = logger.NewLogger("dde-daemon/datetime")
@@ -91,7 +89,7 @@ func (op *Manager) AddUserTimezoneList(tz string) {
 	}
 
 	list := dateSettings.GetStrv("user-timezone-list")
-	if objUtils.IsElementExist(tz, list) {
+	if isElementExist(tz, list) {
 		return
 	}
 
@@ -105,7 +103,7 @@ func (op *Manager) DeleteTimezoneList(tz string) {
 	}
 
 	list := dateSettings.GetStrv("user-timezone-list")
-	if !objUtils.IsElementExist(tz, list) {
+	if !isElementExist(tz, list) {
 		return
 	}
 

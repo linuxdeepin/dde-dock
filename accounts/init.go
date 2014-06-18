@@ -26,7 +26,6 @@ import "dde-daemon"
 import (
 	"dlib/dbus"
 	Logger "dlib/logger"
-	Utils "dlib/utils"
 )
 
 func init() {
@@ -34,8 +33,7 @@ func init() {
 }
 
 var (
-	logger  = Logger.NewLogger(ACCOUNT_DEST)
-	objUtil = Utils.NewUtils()
+	logger = Logger.NewLogger(ACCOUNT_DEST)
 )
 
 func Start() {

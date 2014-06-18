@@ -24,6 +24,7 @@ package themes
 import (
 	"dlib/dbus"
 	"dlib/glib-2.0"
+	dutils "dlib/utils"
 	"path"
 	"regexp"
 )
@@ -148,10 +149,10 @@ func (obj *Theme) setAllProps() {
 	if ok, _ := regexp.MatchString(`^/`, str); !ok {
 		if ok, _ = regexp.MatchString(`^file://`, str); !ok {
 			str = path.Join(obj.filePath, THEME_BG_NAME, str)
-			str, _ = objUtil.PathToFileURI(str)
+			str = dutils.PathToURI(str, dutils.SCHEME_FILE)
 		}
 	} else {
-		str, _ = objUtil.PathToFileURI(str)
+		str = dutils.PathToURI(str, dutils.SCHEME_FILE)
 	}
 	obj.setPropBackground(str)
 

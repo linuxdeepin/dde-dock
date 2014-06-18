@@ -22,6 +22,7 @@
 package accounts
 
 import (
+	dutils "dlib/utils"
 	"github.com/howeyc/fsnotify"
 	"regexp"
 	"sync"
@@ -66,13 +67,13 @@ func (obj *Manager) watchUserInfoFile() {
 	obj.infoWatcher.Watch(ETC_SHADOW)
 	obj.infoWatcher.Watch(ICON_SYSTEM_DIR)
 	obj.infoWatcher.Watch(ICON_LOCAL_DIR)
-	if objUtil.IsFileExist(ETC_LIGHTDM_CONFIG) {
+	if dutils.IsFileExist(ETC_LIGHTDM_CONFIG) {
 		obj.infoWatcher.Watch(ETC_LIGHTDM_CONFIG)
 	}
-	if objUtil.IsFileExist(ETC_GDM_CONFIG) {
+	if dutils.IsFileExist(ETC_GDM_CONFIG) {
 		obj.infoWatcher.Watch(ETC_GDM_CONFIG)
 	}
-	if objUtil.IsFileExist(ETC_KDM_CONFIG) {
+	if dutils.IsFileExist(ETC_KDM_CONFIG) {
 		obj.infoWatcher.Watch(ETC_KDM_CONFIG)
 	}
 }
@@ -86,13 +87,13 @@ func (obj *Manager) removeUserInfoFileWatch() {
 	obj.infoWatcher.RemoveWatch(ETC_SHADOW)
 	obj.infoWatcher.RemoveWatch(ICON_SYSTEM_DIR)
 	obj.infoWatcher.RemoveWatch(ICON_LOCAL_DIR)
-	if objUtil.IsFileExist(ETC_LIGHTDM_CONFIG) {
+	if dutils.IsFileExist(ETC_LIGHTDM_CONFIG) {
 		obj.infoWatcher.RemoveWatch(ETC_LIGHTDM_CONFIG)
 	}
-	if objUtil.IsFileExist(ETC_GDM_CONFIG) {
+	if dutils.IsFileExist(ETC_GDM_CONFIG) {
 		obj.infoWatcher.RemoveWatch(ETC_GDM_CONFIG)
 	}
-	if objUtil.IsFileExist(ETC_KDM_CONFIG) {
+	if dutils.IsFileExist(ETC_KDM_CONFIG) {
 		obj.infoWatcher.RemoveWatch(ETC_KDM_CONFIG)
 	}
 }

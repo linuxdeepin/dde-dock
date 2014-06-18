@@ -22,6 +22,7 @@
 package themes
 
 import (
+	dutils "dlib/utils"
 	"math/rand"
 	"os"
 	"path"
@@ -131,7 +132,7 @@ func filterTheme(dir string, conditions []string) bool {
 }
 
 func getGtkThemeList() []ThemeInfo {
-	homeDir, _ := objUtil.GetHomeDir()
+	homeDir := dutils.GetHomeDir()
 	localDir := path.Join(homeDir, THEME_LOCAL_PATH)
 	sysDirs := []pathInfo{pathInfo{THEME_SYS_PATH, THEME_TYPE_SYSTEM}}
 	localDirs := []pathInfo{pathInfo{localDir, THEME_TYPE_LOCAL}}
@@ -151,7 +152,7 @@ func getGtkThemeList() []ThemeInfo {
 }
 
 func getIconThemeList() []ThemeInfo {
-	homeDir, _ := objUtil.GetHomeDir()
+	homeDir := dutils.GetHomeDir()
 	localDir := path.Join(homeDir, ICON_LOCAL_PATH)
 	sysDirs := []pathInfo{pathInfo{ICON_SYS_PATH, THEME_TYPE_SYSTEM}}
 	localDirs := []pathInfo{pathInfo{localDir, THEME_TYPE_LOCAL}}
@@ -170,7 +171,7 @@ func getIconThemeList() []ThemeInfo {
 	list := []ThemeInfo{}
 	for _, l := range localList {
 		filename := path.Join(l.Path, "index.theme")
-		_, ok := objUtil.ReadKeyFromKeyFile(filename,
+		_, ok := dutils.ReadKeyFromKeyFile(filename,
 			"Icon Theme", "Directories", []string{})
 		if !ok {
 			continue
@@ -182,7 +183,7 @@ func getIconThemeList() []ThemeInfo {
 }
 
 func getCursorThemeList() []ThemeInfo {
-	homeDir, _ := objUtil.GetHomeDir()
+	homeDir := dutils.GetHomeDir()
 	localDir := path.Join(homeDir, ICON_LOCAL_PATH)
 	sysDirs := []pathInfo{pathInfo{ICON_SYS_PATH, THEME_TYPE_SYSTEM}}
 	localDirs := []pathInfo{pathInfo{localDir, THEME_TYPE_LOCAL}}
@@ -212,7 +213,7 @@ func getSoundThemeList() []ThemeInfo {
 
 func getBackgroundDir(dir string) ([]string, bool) {
 	list := []string{}
-	if !objUtil.IsFileExist(dir) {
+	if !dutils.IsFileExist(dir) {
 		return list, false
 	}
 
@@ -244,7 +245,7 @@ func getBackgroundDir(dir string) ([]string, bool) {
 
 func getImageList(dir string) ([]string, bool) {
 	list := []string{}
-	if !objUtil.IsFileExist(dir) {
+	if !dutils.IsFileExist(dir) {
 		return list, false
 	}
 
@@ -282,7 +283,7 @@ func getBackgroundList() []ThemeInfo {
 		for _, l := range tmpList {
 			tmp := ThemeInfo{}
 			tmp.Name = path.Base(l)
-			uri, _ := objUtil.PathToFileURI(l)
+			uri := dutils.PathToURI(l, dutils.SCHEME_FILE)
 			tmp.Path = uri
 			tmp.T = THEME_TYPE_SYSTEM
 			bgList = append(bgList, tmp)
@@ -296,7 +297,7 @@ func getBackgroundList() []ThemeInfo {
 				for _, l := range list {
 					tmp := ThemeInfo{}
 					tmp.Name = path.Base(l)
-					uri, _ := objUtil.PathToFileURI(l)
+					uri := dutils.PathToURI(l, dutils.SCHEME_FILE)
 					tmp.Path = uri
 					tmp.T = THEME_TYPE_SYSTEM
 					//if !isBgInfoInList(tmp, list) {
@@ -308,14 +309,14 @@ func getBackgroundList() []ThemeInfo {
 	}
 
 	// local personalization theme
-	homeDir, _ := objUtil.GetHomeDir()
+	homeDir := dutils.GetHomeDir()
 	if dirs, ok := getBackgroundDir(path.Join(homeDir, PERSON_LOCAL_THEME_PATH)); ok {
 		for _, d := range dirs {
 			if list, ok := getImageList(d); ok {
 				for _, l := range list {
 					tmp := ThemeInfo{}
 					tmp.Name = path.Base(l)
-					uri, _ := objUtil.PathToFileURI(l)
+					uri := dutils.PathToURI(l, dutils.SCHEME_FILE)
 					tmp.Path = uri
 					tmp.T = THEME_TYPE_LOCAL
 					//if !isBgInfoInList(tmp, list) {
@@ -327,14 +328,14 @@ func getBackgroundList() []ThemeInfo {
 	}
 	pict := getUserPictureDir()
 	userBG := path.Join(pict, "Wallpapers")
-	if !objUtil.IsFileExist(userBG) {
+	if !dutils.IsFileExist(userBG) {
 		return bgList
 	}
 	if tmpList, ok := getImageList(userBG); ok {
 		for _, l := range tmpList {
 			tmp := ThemeInfo{}
 			tmp.Name = path.Base(l)
-			uri, _ := objUtil.PathToFileURI(l)
+			uri := dutils.PathToURI(l, dutils.SCHEME_FILE)
 			tmp.Path = uri
 			tmp.T = THEME_TYPE_LOCAL
 			bgList = append(bgList, tmp)
@@ -345,17 +346,17 @@ func getBackgroundList() []ThemeInfo {
 }
 
 func getCachePath(t, src string) string {
-	src, _ = objUtil.URIToPath(src)
-	homeDir, _ := objUtil.GetHomeDir()
+	src = dutils.URIToPath(src)
+	homeDir := dutils.GetHomeDir()
 	bgDir := path.Join(homeDir, PERSON_LOCAL_BASE_PATH, THUMB_CACHE_DIR)
 	md5Str, _ := getStrMd5(t + src)
 	filename := path.Join(bgDir, md5Str+".png")
-	if objUtil.IsFileExist(filename) {
+	if dutils.IsFileExist(filename) {
 		return filename
 	}
 
 	filename = path.Join(PERSON_SYS_BASE_PATH, THUMB_CACHE_DIR, md5Str+".png")
-	if objUtil.IsFileExist(filename) {
+	if dutils.IsFileExist(filename) {
 		return filename
 	}
 
@@ -363,8 +364,8 @@ func getCachePath(t, src string) string {
 }
 
 func isBackgroundSame(bg1, bg2 string) bool {
-	bg1, _ = objUtil.URIToPath(bg1)
-	bg2, _ = objUtil.URIToPath(bg2)
+	bg1 = dutils.URIToPath(bg1)
+	bg2 = dutils.URIToPath(bg2)
 	if bg1 == bg2 {
 		return true
 	}
@@ -436,8 +437,8 @@ func getDThemeByDir(dir string, t int32) []ThemeInfo {
 }
 
 func getDThemeList() []ThemeInfo {
-	homeDir, ok := objUtil.GetHomeDir()
-	if !ok {
+	homeDir := dutils.GetHomeDir()
+	if len(homeDir) < 1 {
 		return []ThemeInfo{}
 	}
 
@@ -511,7 +512,7 @@ func getDThemeThumb(name string) string {
 	for _, l := range list {
 		if name == l.Name {
 			thumb := path.Join(l.Path, "thumbnail.png")
-			if objUtil.IsFileExist(thumb) {
+			if dutils.IsFileExist(thumb) {
 				return thumb
 			}
 			break
@@ -573,7 +574,7 @@ func getBgThumb(bg string) string {
 	}
 
 	genThemeThumb()
-	bg, _ = objUtil.PathToFileURI(bg)
+	bg = dutils.PathToURI(bg, dutils.SCHEME_FILE)
 	return bg
 }
 

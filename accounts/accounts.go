@@ -22,6 +22,7 @@
 package accounts
 
 import (
+	dutils "dlib/utils"
 	"github.com/howeyc/fsnotify"
 	"io/ioutil"
 	"strconv"
@@ -189,9 +190,9 @@ func getUserList() []string {
 }
 
 func isAllowGuest() bool {
-	if v, ok := objUtil.ReadKeyFromKeyFile(ACCOUNT_CONFIG_FILE,
+	if v, ok := dutils.ReadKeyFromKeyFile(ACCOUNT_CONFIG_FILE,
 		ACCOUNT_GROUP_KEY, ACCOUNT_KEY_GUEST, true); !ok {
-		objUtil.WriteKeyToKeyFile(ACCOUNT_CONFIG_FILE,
+		dutils.WriteKeyToKeyFile(ACCOUNT_CONFIG_FILE,
 			ACCOUNT_GROUP_KEY, ACCOUNT_KEY_GUEST, false)
 
 		return false

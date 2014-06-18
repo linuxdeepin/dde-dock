@@ -22,6 +22,7 @@
 package themes
 
 import (
+	dutils "dlib/utils"
 	"os"
 	"path"
 	"strconv"
@@ -261,7 +262,7 @@ func (obj *Manager) setBackground(bg string) bool {
 		return false
 	}
 	flag := false
-	uri, _ := objUtil.PathToFileURI(bg)
+	uri := dutils.PathToURI(bg, dutils.SCHEME_FILE)
 	for _, l := range obj.BackgroundList {
 		if uri == l {
 			flag = true
@@ -271,7 +272,7 @@ func (obj *Manager) setBackground(bg string) bool {
 
 	// bg not in list
 	if !flag {
-		bg, _ = objUtil.URIToPath(bg)
+		bg = dutils.URIToPath(bg)
 		if !obj.appendBackground(bg) {
 			return false
 		}
@@ -397,11 +398,11 @@ func (obj *Manager) appendBackground(bg string) bool {
 
 	pict := getUserPictureDir()
 	pict = path.Join(pict, "Wallpapers")
-	if !objUtil.IsFileExist(pict) {
+	if !dutils.IsFileExist(pict) {
 		os.MkdirAll(pict, 0755)
 	}
 	destPath := path.Join(pict, path.Base(bg))
-	if !objUtil.CopyFile(bg, destPath) {
+	if !dutils.CopyFile(bg, destPath) {
 		return false
 	}
 
@@ -414,7 +415,7 @@ func (obj *Manager) deleteBackground(bg string) {
 	}
 
 	if obj.GetFlag("background", bg) == int32(THEME_TYPE_LOCAL) {
-		filename, _ := objUtil.URIToPath(bg)
+		filename := dutils.URIToPath(bg)
 		os.RemoveAll(filename)
 	}
 }

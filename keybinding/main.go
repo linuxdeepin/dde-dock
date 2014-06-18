@@ -25,16 +25,14 @@ import (
 	"dlib/dbus"
 	"dlib/gio-2.0"
 	libLogger "dlib/logger"
-	libUtils "dlib/utils"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/keybind"
 	"github.com/BurntSushi/xgbutil/xevent"
 )
 
 var (
-	utilsObj = libUtils.NewUtils()
-	Logger   = libLogger.NewLogger("daemon/keybinding")
-	X        *xgbutil.XUtil
+	Logger = libLogger.NewLogger("daemon/keybinding")
+	X      *xgbutil.XUtil
 
 	grabKeyBindsMap = make(map[KeycodeInfo]string)
 	PrevSystemPairs = make(map[string]string)

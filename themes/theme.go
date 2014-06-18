@@ -23,6 +23,7 @@ package themes
 
 import (
 	"dlib/gio-2.0"
+	dutils "dlib/utils"
 	"github.com/howeyc/fsnotify"
 	"os/exec"
 	"path"
@@ -81,8 +82,8 @@ func (obj *Theme) setAllThemes() {
 func (obj *Theme) setGtkTheme() {
 	objXS.SetString("Net/ThemeName", obj.GtkTheme)
 	wmPreSettings.SetString("theme", obj.GtkTheme)
-	homeDir, _ := objUtil.GetHomeDir()
-	if ok := objUtil.WriteKeyToKeyFile(path.Join(homeDir, QT_CONFIG_FILE),
+	homeDir := dutils.GetHomeDir()
+	if ok := dutils.WriteKeyToKeyFile(path.Join(homeDir, QT_CONFIG_FILE),
 		QT_KEY_GROUP, QT_KEY_STYLE, QT_STYLE_VALUE); !ok {
 		Logger.Error("Set QT Style Failed")
 		return
@@ -106,8 +107,8 @@ func (obj *Theme) setFontName() {
 	}
 	objXS.SetString("Gtk/FontName", DEFAULT_FONT+" "+size)
 	wmPreSettings.SetString("titlebar-font", DEFAULT_FONT+" Bold "+size)
-	homeDir, _ := objUtil.GetHomeDir()
-	if ok := objUtil.WriteKeyToKeyFile(path.Join(homeDir, QT_CONFIG_FILE),
+	homeDir := dutils.GetHomeDir()
+	if ok := dutils.WriteKeyToKeyFile(path.Join(homeDir, QT_CONFIG_FILE),
 		QT_KEY_GROUP, QT_KEY_FONT,
 		"\""+DEFAULT_FONT+","+size+QT_FONT_ARGS+"\""); !ok {
 		Logger.Error("Set QT Font Failed")

@@ -23,6 +23,7 @@ package themes
 
 import (
 	"dlib/gio-2.0"
+	dutils "dlib/utils"
 	"github.com/howeyc/fsnotify"
 	"os"
 	"path"
@@ -77,10 +78,10 @@ func (obj *Manager) startWatch() {
 
 	obj.watcher.Watch(THEME_SYS_PATH)
 
-	homeDir, _ := objUtil.GetHomeDir()
+	homeDir := dutils.GetHomeDir()
 	errFlag := false
 	dir := path.Join(homeDir, THEME_LOCAL_PATH)
-	if !objUtil.IsFileExist(dir) {
+	if !dutils.IsFileExist(dir) {
 		if err := os.MkdirAll(dir, 0755); err != nil {
 			errFlag = true
 			Logger.Warningf("Mkdir '%s' failed: %v", dir, err)
@@ -94,7 +95,7 @@ func (obj *Manager) startWatch() {
 
 	errFlag = false
 	dir = path.Join(homeDir, ICON_LOCAL_PATH)
-	if !objUtil.IsFileExist(dir) {
+	if !dutils.IsFileExist(dir) {
 		if err := os.MkdirAll(dir, 0755); err != nil {
 			errFlag = true
 			Logger.Warningf("Mkdir '%s' failed: %v", dir, err)
@@ -110,7 +111,7 @@ func (obj *Manager) startWatch() {
 
 	errFlag = false
 	dir = path.Join(homeDir, PERSON_LOCAL_THEME_PATH)
-	if !objUtil.IsFileExist(dir) {
+	if !dutils.IsFileExist(dir) {
 		if err := os.MkdirAll(dir, 0755); err != nil {
 			errFlag = true
 			Logger.Warningf("Mkdir '%s' failed: %v", dir, err)
@@ -126,21 +127,21 @@ func (obj *Manager) endWatch() {
 		return
 	}
 
-	homeDir, _ := objUtil.GetHomeDir()
+	homeDir := dutils.GetHomeDir()
 	obj.watcher.RemoveWatch(THEME_SYS_PATH)
 	dir := path.Join(homeDir, THEME_LOCAL_PATH)
-	if objUtil.IsFileExist(dir) {
+	if dutils.IsFileExist(dir) {
 		obj.watcher.RemoveWatch(dir)
 	}
 	obj.watcher.RemoveWatch(ICON_SYS_PATH)
 	dir = path.Join(homeDir, ICON_LOCAL_PATH)
-	if objUtil.IsFileExist(dir) {
+	if dutils.IsFileExist(dir) {
 		obj.watcher.RemoveWatch(dir)
 	}
 	obj.watcher.RemoveWatch(SOUND_THEME_PATH)
 	obj.watcher.RemoveWatch(PERSON_SYS_THEME_PATH)
 	dir = path.Join(homeDir, PERSON_LOCAL_THEME_PATH)
-	if objUtil.IsFileExist(dir) {
+	if dutils.IsFileExist(dir) {
 		obj.watcher.RemoveWatch(dir)
 	}
 }
@@ -223,7 +224,7 @@ func (obj *Manager) startBgWatch() {
 	pict := getUserPictureDir()
 	userBG := path.Join(pict, "Wallpapers")
 	Logger.Debugf("User Special Bg: %v", userBG)
-	if !objUtil.IsFileExist(userBG) {
+	if !dutils.IsFileExist(userBG) {
 		if err := os.MkdirAll(userBG, 0755); err != nil {
 			return
 		}
@@ -238,7 +239,7 @@ func (obj *Manager) endBgWatch() {
 
 	pict := getUserPictureDir()
 	userBG := path.Join(pict, "Wallpapers")
-	if objUtil.IsFileExist(userBG) {
+	if dutils.IsFileExist(userBG) {
 		obj.bgWatcher.RemoveWatch(userBG)
 	}
 

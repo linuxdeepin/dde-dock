@@ -22,6 +22,7 @@
 package main
 
 import (
+	dutils "dlib/utils"
 	"os"
 	"path"
 	"regexp"
@@ -34,11 +35,11 @@ const (
 
 func getIconTypeDir(info pathInfo) (string, string, string) {
 	filename := path.Join(info.Path, ICON_CONFIG)
-	if !objUtil.IsFileExist(filename) {
+	if !dutils.IsFileExist(filename) {
 		return "", "", ""
 	}
 
-	value, ok := objUtil.ReadKeyFromKeyFile(filename, "Icon Theme", "Directories", []string{})
+	value, ok := dutils.ReadKeyFromKeyFile(filename, "Icon Theme", "Directories", []string{})
 	if !ok {
 		return "", "", ""
 	}
@@ -97,19 +98,19 @@ func isSizeExit(size string, list []string) (string, bool) {
 func getAppDir(dir string, list []string) string {
 	if d, ok := isSizeExit("48", list); ok {
 		dir = path.Join(dir, d)
-		if objUtil.IsFileExist(dir) {
+		if dutils.IsFileExist(dir) {
 			return dir
 		}
 	}
 	if d, ok := isSizeExit("32", list); ok {
 		dir = path.Join(dir, d)
-		if objUtil.IsFileExist(dir) {
+		if dutils.IsFileExist(dir) {
 			return dir
 		}
 	}
 	if d, ok := isSizeExit("24", list); ok {
 		dir = path.Join(dir, d)
-		if objUtil.IsFileExist(dir) {
+		if dutils.IsFileExist(dir) {
 			return dir
 		}
 	}

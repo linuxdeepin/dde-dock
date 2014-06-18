@@ -26,12 +26,10 @@ import (
 	"dlib/dbus"
 	"dlib/gio-2.0"
 	Logger "dlib/logger"
-	libutil "dlib/utils"
 )
 
 var (
 	logObj     = Logger.NewLogger("input device")
-	utilObj    = libutil.NewUtils()
 	xsObj      *libsession.XSettings
 	managerObj *Manager
 

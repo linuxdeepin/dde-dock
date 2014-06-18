@@ -90,7 +90,7 @@ func (op *KbdEntry) AddLayoutOption(option string) {
 	}
 
 	options := kbdSettings.GetStrv(KBD_KEY_LAYOUT_OPTIONS)
-	if !utilObj.IsElementExist(option, options) {
+	if !isStrInList(option, options) {
 		options = append(options, option)
 		kbdSettings.SetStrv(KBD_KEY_LAYOUT_OPTIONS, options)
 	}
@@ -102,7 +102,7 @@ func (op *KbdEntry) DeleteLayoutOption(option string) {
 	}
 
 	options := kbdSettings.GetStrv(KBD_KEY_LAYOUT_OPTIONS)
-	if utilObj.IsElementExist(option, options) {
+	if isStrInList(option, options) {
 		tmp := []string{}
 		for _, v := range options {
 			if v == option {
@@ -124,7 +124,7 @@ func (op *KbdEntry) AddUserLayout(layout string) bool {
 	}
 
 	list := op.UserLayoutList.GetValue().([]string)
-	if utilObj.IsElementExist(layout, list) {
+	if isStrInList(layout, list) {
 		return false
 	}
 
@@ -139,7 +139,7 @@ func (op *KbdEntry) DeleteUserLayout(layout string) bool {
 	}
 
 	list := op.UserLayoutList.GetValue().([]string)
-	if !utilObj.IsElementExist(layout, list) {
+	if !isStrInList(layout, list) {
 		return false
 	}
 
@@ -293,4 +293,14 @@ func getDefaultLayout() string {
 	}
 
 	return layout + LAYOUT_DELIM + option
+}
+
+func isStrInList(str string, list []string) bool {
+	for _, l := range list {
+		if str == l {
+			return true
+		}
+	}
+
+	return false
 }

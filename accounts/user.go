@@ -22,6 +22,7 @@
 package accounts
 
 import (
+	dutils "dlib/utils"
 	"github.com/howeyc/fsnotify"
 	"io/ioutil"
 	"math/rand"
@@ -134,35 +135,35 @@ func setAutomaticLogin(name string) {
 	logger.Infof("Set %s Auto For: %s", name, dsp)
 	switch dsp {
 	case "lightdm":
-		if objUtil.IsFileExist(ETC_LIGHTDM_CONFIG) {
-			objUtil.WriteKeyToKeyFile(ETC_LIGHTDM_CONFIG,
+		if dutils.IsFileExist(ETC_LIGHTDM_CONFIG) {
+			dutils.WriteKeyToKeyFile(ETC_LIGHTDM_CONFIG,
 				LIGHTDM_AUTOLOGIN_GROUP,
 				LIGHTDM_AUTOLOGIN_USER,
 				name)
 		}
 	case "gdm":
-		if objUtil.IsFileExist(ETC_GDM_CONFIG) {
-			objUtil.WriteKeyToKeyFile(ETC_GDM_CONFIG,
+		if dutils.IsFileExist(ETC_GDM_CONFIG) {
+			dutils.WriteKeyToKeyFile(ETC_GDM_CONFIG,
 				GDM_AUTOLOGIN_GROUP,
 				GDM_AUTOLOGIN_USER,
 				name)
 		}
 	case "kdm":
-		if objUtil.IsFileExist(ETC_KDM_CONFIG) {
-			objUtil.WriteKeyToKeyFile(ETC_KDM_CONFIG,
+		if dutils.IsFileExist(ETC_KDM_CONFIG) {
+			dutils.WriteKeyToKeyFile(ETC_KDM_CONFIG,
 				KDM_AUTOLOGIN_GROUP,
 				KDM_AUTOLOGIN_ENABLE,
 				true)
-			objUtil.WriteKeyToKeyFile(ETC_KDM_CONFIG,
+			dutils.WriteKeyToKeyFile(ETC_KDM_CONFIG,
 				KDM_AUTOLOGIN_GROUP,
 				KDM_AUTOLOGIN_USER,
 				name)
-		} else if objUtil.IsFileExist(USER_KDM_CONFIG) {
-			objUtil.WriteKeyToKeyFile(ETC_KDM_CONFIG,
+		} else if dutils.IsFileExist(USER_KDM_CONFIG) {
+			dutils.WriteKeyToKeyFile(ETC_KDM_CONFIG,
 				KDM_AUTOLOGIN_GROUP,
 				KDM_AUTOLOGIN_ENABLE,
 				true)
-			objUtil.WriteKeyToKeyFile(USER_KDM_CONFIG,
+			dutils.WriteKeyToKeyFile(USER_KDM_CONFIG,
 				KDM_AUTOLOGIN_GROUP,
 				KDM_AUTOLOGIN_USER,
 				name)
@@ -178,8 +179,8 @@ func isAutoLogin(username string) bool {
 
 	switch dsp {
 	case "lightdm":
-		if objUtil.IsFileExist(ETC_LIGHTDM_CONFIG) {
-			v, ok := objUtil.ReadKeyFromKeyFile(ETC_LIGHTDM_CONFIG,
+		if dutils.IsFileExist(ETC_LIGHTDM_CONFIG) {
+			v, ok := dutils.ReadKeyFromKeyFile(ETC_LIGHTDM_CONFIG,
 				LIGHTDM_AUTOLOGIN_GROUP,
 				LIGHTDM_AUTOLOGIN_USER,
 				"")
@@ -190,8 +191,8 @@ func isAutoLogin(username string) bool {
 			}
 		}
 	case "gdm":
-		if objUtil.IsFileExist(ETC_GDM_CONFIG) {
-			v, ok := objUtil.ReadKeyFromKeyFile(ETC_GDM_CONFIG,
+		if dutils.IsFileExist(ETC_GDM_CONFIG) {
+			v, ok := dutils.ReadKeyFromKeyFile(ETC_GDM_CONFIG,
 				GDM_AUTOLOGIN_GROUP,
 				GDM_AUTOLOGIN_USER,
 				"")
@@ -200,16 +201,16 @@ func isAutoLogin(username string) bool {
 			}
 		}
 	case "kdm":
-		if objUtil.IsFileExist(ETC_KDM_CONFIG) {
-			v, ok := objUtil.ReadKeyFromKeyFile(ETC_KDM_CONFIG,
+		if dutils.IsFileExist(ETC_KDM_CONFIG) {
+			v, ok := dutils.ReadKeyFromKeyFile(ETC_KDM_CONFIG,
 				KDM_AUTOLOGIN_GROUP,
 				KDM_AUTOLOGIN_USER,
 				"")
 			if ok && v.(string) == username {
 				return true
 			}
-		} else if objUtil.IsFileExist(USER_KDM_CONFIG) {
-			v, ok := objUtil.ReadKeyFromKeyFile(USER_KDM_CONFIG,
+		} else if dutils.IsFileExist(USER_KDM_CONFIG) {
+			v, ok := dutils.ReadKeyFromKeyFile(USER_KDM_CONFIG,
 				KDM_AUTOLOGIN_GROUP,
 				KDM_AUTOLOGIN_USER,
 				"")

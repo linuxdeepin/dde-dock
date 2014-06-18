@@ -24,6 +24,7 @@ package datetime
 import (
 	"dlib/dbus"
 	"dlib/gio-2.0"
+	dutils "dlib/utils"
 	"github.com/howeyc/fsnotify"
 	"os"
 )
@@ -78,7 +79,7 @@ func (op *Manager) listenSettings() {
 }
 
 func (op *Manager) listenZone() {
-	if ok := objUtils.IsFileExist(_TIME_ZONE_FILE); !ok {
+	if ok := dutils.IsFileExist(_TIME_ZONE_FILE); !ok {
 		f, err := os.Create(_TIME_ZONE_FILE)
 		if err != nil {
 			Logger.Error("Create '%s' Failed: %v\n",

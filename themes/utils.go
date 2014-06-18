@@ -29,6 +29,7 @@ import "C"
 
 import (
 	"crypto/md5"
+	dutils "dlib/utils"
 	"io/ioutil"
 	"net/url"
 	"os"
@@ -40,14 +41,14 @@ import (
 var thumbTool = false
 
 func encodeURI(str string) string {
-	filepath, ok := objUtil.URIToPath(str)
-	if !ok {
+	filepath := dutils.URIToPath(str)
+	if len(filepath) < 1 {
 		return ""
 	}
 
 	u := url.URL{}
 	u.Path = filepath
-	v, _ := objUtil.PathToFileURI(u.String())
+	v := dutils.PathToURI(u.String(), dutils.SCHEME_FILE)
 	return v
 }
 
@@ -63,9 +64,9 @@ func decodeURI(str string) string {
 }
 
 func changeUserThemeDir() {
-	homeDir, _ := objUtil.GetHomeDir()
+	homeDir := dutils.GetHomeDir()
 	filename := path.Join(homeDir, PERSON_LOCAL_THEME_PATH, "test-dir")
-	if !objUtil.IsFileExist(filename) {
+	if !dutils.IsFileExist(filename) {
 		os.MkdirAll(filename, 0755)
 	} else {
 		rmAllFile(filename)
@@ -73,7 +74,7 @@ func changeUserThemeDir() {
 }
 
 func rmAllFile(name string) {
-	name, _ = objUtil.URIToPath(name)
+	name = dutils.URIToPath(name)
 	os.RemoveAll(name)
 }
 
@@ -117,7 +118,7 @@ func getStrMd5(str string) (string, bool) {
 }
 
 func getFileMd5(file string) (string, bool) {
-	if !objUtil.IsFileExist(file) {
+	if !dutils.IsFileExist(file) {
 		return "", false
 	}
 

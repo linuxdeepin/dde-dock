@@ -26,13 +26,11 @@ import (
 	"dlib/dbus"
 	"dlib/gio-2.0"
 	"dlib/logger"
-	Utils "dlib/utils"
 )
 
 var (
-	objXS   *sessionmanager.XSettings
-	Logger  = logger.NewLogger(MANAGER_DEST)
-	objUtil = Utils.NewUtils()
+	objXS  *sessionmanager.XSettings
+	Logger = logger.NewLogger(MANAGER_DEST)
 
 	themeSettings = gio.NewSettings("com.deepin.dde.personalization")
 	gnmSettings   = gio.NewSettings("org.gnome.desktop.background")

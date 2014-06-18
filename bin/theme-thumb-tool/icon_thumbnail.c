@@ -43,7 +43,7 @@ get_pixbuf_from_file (const char *name, gboolean is_bg)
 	GError *error = NULL;
 	GdkPixbuf *pixbuf = NULL;
 	if (!is_bg) {
-		pixbuf = gdk_pixbuf_new_from_file_at_size(name, 24, 24,&error);
+		pixbuf = gdk_pixbuf_new_from_file_at_size(name, 32, 32,&error);
 	} else {
 		pixbuf = gdk_pixbuf_new_from_file(name, &error);
 	}

@@ -23,6 +23,7 @@ package accounts
 
 import (
 	"dlib/dbus"
+	dutils "dlib/utils"
 	"os"
 	"path"
 )
@@ -35,7 +36,7 @@ func (obj *User) SetUserName(dbusMsg dbus.DMessage, username string) bool {
 		}
 	}()
 
-	//if ok := objUtil.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	//if ok := dutils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
 	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
 		dbusMsg.GetSenderPID()); !ok {
 		return false
@@ -56,7 +57,7 @@ func (obj *User) SetHomeDir(dbusMsg dbus.DMessage, dir string) bool {
 		}
 	}()
 
-	//if ok := objUtil.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	//if ok := dutils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
 	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
 		dbusMsg.GetSenderPID()); !ok {
 		return false
@@ -77,7 +78,7 @@ func (obj *User) SetShell(dbusMsg dbus.DMessage, shell string) bool {
 		}
 	}()
 
-	//if ok := objUtil.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	//if ok := dutils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
 	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
 		dbusMsg.GetSenderPID()); !ok {
 		return false
@@ -98,7 +99,7 @@ func (obj *User) SetPassword(dbusMsg dbus.DMessage, words string) bool {
 		}
 	}()
 
-	//if ok := objUtil.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	//if ok := dutils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
 	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
 		dbusMsg.GetSenderPID()); !ok {
 		return false
@@ -120,7 +121,7 @@ func (obj *User) SetAutomaticLogin(dbusMsg dbus.DMessage, auto bool) bool {
 		}
 	}()
 
-	//if ok := objUtil.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	//if ok := dutils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
 	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
 		dbusMsg.GetSenderPID()); !ok {
 		return false
@@ -141,7 +142,7 @@ func (obj *User) SetAccountType(dbusMsg dbus.DMessage, t int32) bool {
 		}
 	}()
 
-	//if ok := objUtil.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	//if ok := dutils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
 	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
 		dbusMsg.GetSenderPID()); !ok {
 		return false
@@ -162,7 +163,7 @@ func (obj *User) SetLocked(dbusMsg dbus.DMessage, locked bool) bool {
 		}
 	}()
 
-	//if ok := objUtil.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	//if ok := dutils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
 	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
 		dbusMsg.GetSenderPID()); !ok {
 		return false
@@ -183,25 +184,25 @@ func (obj *User) SetIconFile(dbusMsg dbus.DMessage, icon string) bool {
 		}
 	}()
 
-	//if ok := objUtil.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	//if ok := dutils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
 	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
 		dbusMsg.GetSenderPID()); !ok {
 		return false
 	}
 
-	if ok := objUtil.IsFileExist(icon); !ok || obj.IconFile == icon {
+	if ok := dutils.IsFileExist(icon); !ok || obj.IconFile == icon {
 		return false
 	}
 
 	if !strIsInList(icon, obj.IconList) {
-		if ok := objUtil.IsFileExist(ICON_LOCAL_DIR); !ok {
+		if ok := dutils.IsFileExist(ICON_LOCAL_DIR); !ok {
 			if err := os.MkdirAll(ICON_LOCAL_DIR, 0755); err != nil {
 				return false
 			}
 		}
 		name := path.Base(icon)
 		dest := path.Join(ICON_LOCAL_DIR, obj.UserName+"-"+name)
-		if ok := objUtil.CopyFile(icon, dest); !ok {
+		if ok := dutils.CopyFile(icon, dest); !ok {
 			return false
 		}
 		icon = dest
@@ -219,7 +220,7 @@ func (obj *User) SetBackgroundFile(dbusMsg dbus.DMessage, bg string) bool {
 		}
 	}()
 
-	//if ok := objUtil.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	//if ok := dutils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
 	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
 		dbusMsg.GetSenderPID()); !ok {
 		return false
@@ -240,7 +241,7 @@ func (obj *User) DeleteHistoryIcon(dbusMsg dbus.DMessage, icon string) bool {
 		}
 	}()
 
-	//if ok := objUtil.PolkitAuthWithPid(POLKIT_MANAGER_USER,
+	//if ok := dutils.PolkitAuthWithPid(POLKIT_MANAGER_USER,
 	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
 		dbusMsg.GetSenderPID()); !ok {
 		return false

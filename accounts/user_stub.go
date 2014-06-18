@@ -23,6 +23,7 @@ package accounts
 
 import (
 	"dlib/dbus"
+	dutils "dlib/utils"
 	"strings"
 )
 
@@ -128,11 +129,11 @@ func (obj *User) getPropIconFile() string {
 	file := USER_CONFIG_FILE + obj.UserName
 	icon := ""
 	wFlag := false
-	if !objUtil.IsFileExist(file) {
+	if !dutils.IsFileExist(file) {
 		icon = getRandUserIcon()
 		wFlag = true
 	} else {
-		if v, ok := objUtil.ReadKeyFromKeyFile(file, "User",
+		if v, ok := dutils.ReadKeyFromKeyFile(file, "User",
 			"Icon", ""); !ok {
 			icon = getRandUserIcon()
 			wFlag = true
@@ -143,7 +144,7 @@ func (obj *User) getPropIconFile() string {
 
 	logger.Infof("%s ICON: %s", obj.UserName, icon)
 	if wFlag {
-		objUtil.WriteKeyToKeyFile(file, "User", "Icon", icon)
+		dutils.WriteKeyToKeyFile(file, "User", "Icon", icon)
 	}
 
 	return icon
@@ -153,11 +154,11 @@ func (obj *User) getPropBackgroundFile() string {
 	file := USER_CONFIG_FILE + obj.UserName
 	bg := ""
 	wFlag := false
-	if !objUtil.IsFileExist(file) {
+	if !dutils.IsFileExist(file) {
 		bg = USER_DEFAULT_BG
 		wFlag = true
 	} else {
-		if v, ok := objUtil.ReadKeyFromKeyFile(file, "User",
+		if v, ok := dutils.ReadKeyFromKeyFile(file, "User",
 			"Background", ""); !ok {
 			bg = USER_DEFAULT_BG
 			wFlag = true
@@ -167,7 +168,7 @@ func (obj *User) getPropBackgroundFile() string {
 	}
 
 	if wFlag {
-		objUtil.WriteKeyToKeyFile(file, "User", "Background", bg)
+		dutils.WriteKeyToKeyFile(file, "User", "Background", bg)
 	}
 
 	return bg
@@ -190,10 +191,10 @@ func (obj *User) getPropHistoryIcons() []string {
 	list := []string{}
 	file := USER_CONFIG_FILE + obj.UserName
 
-	if !objUtil.IsFileExist(file) {
+	if !dutils.IsFileExist(file) {
 		list = append(list, obj.IconFile)
 	} else {
-		if v, ok := objUtil.ReadKeyFromKeyFile(file, "User",
+		if v, ok := dutils.ReadKeyFromKeyFile(file, "User",
 			"HistoryIcons", []string{}); !ok {
 			list = append(list, obj.IconFile)
 		} else {
@@ -221,11 +222,11 @@ func (obj *User) getPropIconList() []string {
 
 func (obj *User) addHistoryIcon(iconPath string) {
 	file := USER_CONFIG_FILE + obj.UserName
-	if !objUtil.IsFileExist(file) || !objUtil.IsFileExist(iconPath) {
+	if !dutils.IsFileExist(file) || !dutils.IsFileExist(iconPath) {
 		return
 	}
 
-	list, _ := objUtil.ReadKeyFromKeyFile(file, "User",
+	list, _ := dutils.ReadKeyFromKeyFile(file, "User",
 		"HistoryIcons", []string{})
 
 	ret := []string{}
@@ -239,32 +240,32 @@ func (obj *User) addHistoryIcon(iconPath string) {
 				break
 			}
 
-			if ok := objUtil.IsFileExist(l); !ok {
+			if ok := dutils.IsFileExist(l); !ok {
 				continue
 			}
 			ret = append(ret, l)
 			cnt++
 		}
 	}
-	objUtil.WriteKeyToKeyFile(file, "User", "HistoryIcons", ret)
+	dutils.WriteKeyToKeyFile(file, "User", "HistoryIcons", ret)
 
 	return
 }
 
 func (obj *User) deleteHistoryIcon(iconPath string) {
 	file := USER_CONFIG_FILE + obj.UserName
-	if !objUtil.IsFileExist(file) {
+	if !dutils.IsFileExist(file) {
 		return
 	}
 
-	list, ok := objUtil.ReadKeyFromKeyFile(file, "User",
+	list, ok := dutils.ReadKeyFromKeyFile(file, "User",
 		"HistoryIcons", []string{})
 	if !ok || list == nil {
 		return
 	}
 
 	tmp := deleteStrFromList(iconPath, list.([]string))
-	objUtil.WriteKeyToKeyFile(file, "User", "HistoryIcons", tmp)
+	dutils.WriteKeyToKeyFile(file, "User", "HistoryIcons", tmp)
 
 	return
 }
@@ -313,7 +314,7 @@ func (obj *User) setPropIconFile(icon string) {
 
 	logger.Info("Icon File:", icon)
 	file := USER_CONFIG_FILE + obj.UserName
-	objUtil.WriteKeyToKeyFile(file, "User", "Icon", icon)
+	dutils.WriteKeyToKeyFile(file, "User", "Icon", icon)
 	obj.addHistoryIcon(icon)
 }
 
@@ -323,7 +324,7 @@ func (obj *User) setPropBackgroundFile(bg string) {
 	}
 
 	file := USER_CONFIG_FILE + obj.UserName
-	objUtil.WriteKeyToKeyFile(file, "User", "Background", bg)
+	dutils.WriteKeyToKeyFile(file, "User", "Background", bg)
 }
 
 func (obj *User) setPropAutomaticLogin(auto bool) {

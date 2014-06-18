@@ -22,6 +22,7 @@
 package main
 
 import (
+	dutils "dlib/utils"
 	"os/exec"
 	"path"
 )
@@ -46,7 +47,7 @@ func convertCursor2Png(filename string) string {
 	}
 
 	dest := path.Join("/tmp", path.Base(filename)+"_024.png")
-	if objUtil.IsFileExist(dest) {
+	if dutils.IsFileExist(dest) {
 		return dest
 	}
 

@@ -30,7 +30,7 @@ import "C"
 import (
 	"dlib/graphic"
 	"dlib/logger"
-	"dlib/utils"
+	dutils "dlib/utils"
 	"math/rand"
 	"os"
 	"os/exec"
@@ -41,8 +41,7 @@ import (
 )
 
 var (
-	objUtil = utils.NewUtils()
-	Logger  = logger.NewLogger("theme-thumb-tool")
+	Logger = logger.NewLogger("theme-thumb-tool")
 )
 
 const (
@@ -76,14 +75,14 @@ func getThumbCachePath(t, src, outDir string) string {
 		return ""
 	}
 
-	src, _ = objUtil.URIToPath(src)
+	src = dutils.URIToPath(src)
 	md5Str, ok := getStrMd5(t + src)
 	if !ok {
 		return ""
 	}
 
 	filename := path.Join(outDir, THUMB_CACHE_DIR)
-	if !objUtil.IsFileExist(filename) {
+	if !dutils.IsFileExist(filename) {
 		err := os.MkdirAll(filename, 0755)
 		if err != nil {
 			return ""
@@ -185,8 +184,8 @@ func main() {
 
 	op := os.Args[1]
 	outDir := ""
-	homeDir, ok := objUtil.GetHomeDir()
-	if ok {
+	homeDir := dutils.GetHomeDir()
+	if len(homeDir) > 0 {
 		outDir = path.Join(homeDir, PERSON_LOCAL_PATH)
 	}
 	if len(os.Args) == 3 {
@@ -198,7 +197,7 @@ func main() {
 		list := getGtkList()
 		for _, l := range list {
 			dest := getThumbCachePath(op, l.Path, outDir)
-			if len(dest) < 1 || objUtil.IsFileExist(dest) {
+			if len(dest) < 1 || dutils.IsFileExist(dest) {
 				continue
 			}
 
@@ -212,7 +211,7 @@ func main() {
 		list := getIconList()
 		for _, l := range list {
 			dest := getThumbCachePath(op, l.Path, outDir)
-			if len(dest) < 1 || objUtil.IsFileExist(dest) {
+			if len(dest) < 1 || dutils.IsFileExist(dest) {
 				continue
 			}
 			bg := getThumbBg()
@@ -224,7 +223,7 @@ func main() {
 		list := getCursorList()
 		for _, l := range list {
 			dest := getThumbCachePath(op, l.Path, outDir)
-			if len(dest) < 1 || objUtil.IsFileExist(dest) {
+			if len(dest) < 1 || dutils.IsFileExist(dest) {
 				continue
 			}
 			bg := getThumbBg()
@@ -236,7 +235,7 @@ func main() {
 		list := getBgList()
 		for _, l := range list {
 			dest := getThumbCachePath(op, l.Path, outDir)
-			if len(dest) < 1 || objUtil.IsFileExist(dest) {
+			if len(dest) < 1 || dutils.IsFileExist(dest) {
 				continue
 			}
 			err := graphic.ThumbnailImage(l.Path, dest, 128, 72, graphic.PNG)

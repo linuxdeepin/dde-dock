@@ -22,13 +22,12 @@
 package dsc
 
 import (
-	"dlib/utils"
+	dutils "dlib/utils"
 	"os/exec"
 	"path"
 	"time"
 )
 
-var Utils = utils.NewUtils()
 var quitFlag = make(chan bool)
 
 const (
@@ -52,22 +51,22 @@ func setDSCAutoUpdate(interval time.Duration) {
 }
 
 func Start() {
-	homeDir, ok := Utils.GetHomeDir()
-	if !ok {
+	homeDir := dutils.GetHomeDir()
+	if len(homeDir) < 1 {
 		return
 	}
 	filename := path.Join(homeDir, DSC_CONFIG_PATH)
-	if !Utils.IsFileExist(filename) {
+	if !dutils.IsFileExist(filename) {
 		return
 	}
 
-	interval, ok1 := Utils.ReadKeyFromKeyFile(filename,
+	interval, ok1 := dutils.ReadKeyFromKeyFile(filename,
 		"update", "interval", int32(0))
 	if !ok1 {
 		interval = 3
 	}
 	isUpdate := true
-	str, _ := Utils.ReadKeyFromKeyFile(filename,
+	str, _ := dutils.ReadKeyFromKeyFile(filename,
 		"update", "auto", "")
 	if v, ok := str.(string); ok && v == "False" {
 		isUpdate = false
