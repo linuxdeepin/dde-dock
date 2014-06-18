@@ -30,11 +30,34 @@ import "C"
 import (
 	"crypto/md5"
 	"io/ioutil"
+	"net/url"
 	"os"
 	"path"
 	"strconv"
-	//"unsafe"
 )
+
+func encodeURI(str string) string {
+	filepath, ok := objUtil.URIToPath(str)
+	if !ok {
+		return ""
+	}
+
+	u := url.URL{}
+	u.Path = filepath
+	v, _ := objUtil.PathToFileURI(u.String())
+	return v
+}
+
+func decodeURI(str string) string {
+	u, err := url.Parse(str)
+	if err != nil {
+		Logger.Warningf("Url parse '%s' failed: %v", str, err)
+		return ""
+	}
+
+	v := u.Scheme + "://" + u.Path
+	return v
+}
 
 func changeUserThemeDir() {
 	homeDir, _ := objUtil.GetHomeDir()

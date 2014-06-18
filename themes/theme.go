@@ -71,8 +71,10 @@ func (obj *Theme) setAllThemes() {
 	obj.setFontName()
 
 	bg := themeSettings.GetString(GS_KEY_CURRENT_BG)
+	bg = decodeURI(bg)
 	if obj.Background != bg {
-		themeSettings.SetString(GS_KEY_CURRENT_BG, obj.Background)
+		themeSettings.SetString(GS_KEY_CURRENT_BG,
+			encodeURI(obj.Background))
 	}
 }
 

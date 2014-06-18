@@ -47,14 +47,19 @@ func (obj *Manager) listenGSettings() {
 			obj.setSoundTheme(value)
 		case GS_KEY_CURRENT_BG:
 			value := themeSettings.GetString(key)
-			obj.setBackground(value)
+			if !obj.setBackground(decodeURI(value)) {
+				obj.setBackground(DEFAULT_BG)
+			}
 		}
 	})
 
 	gnmSettings.Connect("changed::picture-uri", func(s *gio.Settings, key string) {
 		value := gnmSettings.GetString("picture-uri")
+		value = decodeURI(value)
 		bg := themeSettings.GetString(GS_KEY_CURRENT_BG)
+		bg = decodeURI(bg)
 		if bg != value {
+			value = encodeURI(value)
 			themeSettings.SetString(GS_KEY_CURRENT_BG, value)
 		}
 	})

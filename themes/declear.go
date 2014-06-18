@@ -35,6 +35,9 @@ const (
 )
 
 const (
+	DEFAULT_THEME = "Deepin"
+	DEFAULT_BG    = "/usr/share/backgrounds/default_background.jpg"
+
 	THEME_SYS_PATH   = "/usr/share/themes"
 	THEME_LOCAL_PATH = ".themes"
 	ICON_SYS_PATH    = "/usr/share/icons"
@@ -56,7 +59,6 @@ var (
 )
 
 const (
-	DEFAULT_THEME         = "Deepin"
 	THEME_GROUP_THEME     = "Theme"
 	THEME_GROUP_COMPONENT = "Component"
 	THEME_KEY_NAME        = "Name"
