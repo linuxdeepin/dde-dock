@@ -232,8 +232,8 @@ func initWorkspaceNameDescMap() {
 		"put-viewport-4-key":        Tr("Move to workspace 4"),
 		"move-to-workspace-left":    Tr("Move to left workspace"),
 		"move-to-workspace-right":   Tr("Move to right workspace"),
-		"move-to-workspace-up":      Tr("Move to up workspace"),
-		"move-to-workspace-down":    Tr("Move to down workspace"),
+		"move-to-workspace-up":      Tr("Move to upper workspace"),
+		"move-to-workspace-down":    Tr("Move to lower workspace"),
 	}
 }
 

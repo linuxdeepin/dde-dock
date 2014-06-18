@@ -65,7 +65,7 @@ func initAvailableValuesIp6() {
 	availableValuesIp6ConfigMethod[NM_SETTING_IP6_CONFIG_METHOD_IGNORE] = kvalue{NM_SETTING_IP6_CONFIG_METHOD_IGNORE, Tr("Ignore")}
 	availableValuesIp6ConfigMethod[NM_SETTING_IP6_CONFIG_METHOD_AUTO] = kvalue{NM_SETTING_IP6_CONFIG_METHOD_AUTO, Tr("Auto")}
 	availableValuesIp6ConfigMethod[NM_SETTING_IP6_CONFIG_METHOD_DHCP] = kvalue{NM_SETTING_IP6_CONFIG_METHOD_DHCP, Tr("DHCP")}
-	availableValuesIp6ConfigMethod[NM_SETTING_IP6_CONFIG_METHOD_LINK_LOCAL] = kvalue{NM_SETTING_IP6_CONFIG_METHOD_LINK_LOCAL, Tr("Link Local")}
+	availableValuesIp6ConfigMethod[NM_SETTING_IP6_CONFIG_METHOD_LINK_LOCAL] = kvalue{NM_SETTING_IP6_CONFIG_METHOD_LINK_LOCAL, Tr("Link-Local Only")}
 	availableValuesIp6ConfigMethod[NM_SETTING_IP6_CONFIG_METHOD_MANUAL] = kvalue{NM_SETTING_IP6_CONFIG_METHOD_MANUAL, Tr("Manual")}
 	availableValuesIp6ConfigMethod[NM_SETTING_IP6_CONFIG_METHOD_SHARED] = kvalue{NM_SETTING_IP6_CONFIG_METHOD_SHARED, Tr("Shared")}
 }
