@@ -174,7 +174,7 @@ func (m *Manager) GetSupportedConnectionTypes() (types []string) {
 // TODO GetWiredConnectionUuid return connection uuid for target wired device.
 func (m *Manager) GetWiredConnectionUuid(wiredDevPath dbus.ObjectPath) (uuid string) {
 	// check if target wired connection exists, if not, create one
-	id := Tr("Wired Connection ") + nmGetDeviceInterface(wiredDevPath)
+	id := Tr("Wired Connection") + " " + nmGetDeviceInterface(wiredDevPath)
 	// TODO check connection type, read only
 	cpath, ok := nmGetConnectionById(id)
 	if ok {

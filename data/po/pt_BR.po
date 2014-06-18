@@ -47,7 +47,7 @@ msgid "Message notification"
 msgstr ""
 
 #: ../../datetime/datetime.go:131
-msgid "Changing system language, please wait"
+msgid "Language changing, please wait"
 msgstr ""
 
 #: ../../datetime/locale_map.go:9
@@ -59,7 +59,7 @@ msgid "Afar, Eritrea"
 msgstr ""
 
 #: ../../datetime/locale_map.go:11
-msgid "Afar, Eritrea (Saaho)"
+msgid "Afar, Eritrea (Saho)"
 msgstr ""
 
 #: ../../datetime/locale_map.go:12
@@ -3239,11 +3239,11 @@ msgid "Switch to right workspace"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:227
-msgid "Switch to up workspace"
+msgid "Switch to upper workspace"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:228
-msgid "Switch to down workspace"
+msgid "Switch to lower workspace"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:229
@@ -3271,15 +3271,16 @@ msgid "Move to right workspace"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:235
-msgid "Move to up workspace"
+msgid "Move to upper workspace"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:236
-msgid "Move to down workspace"
+msgid "Move to lower workspace"
 msgstr ""
 
 #: ../../network/manager_connections.go:177
-msgid "Wired Connection "
+#: ../../network/nm_custom_type.go:133
+msgid "Wired Connection"
 msgstr ""
 
 #: ../../network/nm_constant.go:212 ../../network/nm_setting_vpn_l2tp.go:113
@@ -3306,10 +3307,6 @@ msgstr ""
 
 #: ../../network/nm_custom_type.go:131
 msgid "Connection"
-msgstr ""
-
-#: ../../network/nm_custom_type.go:133
-msgid "Wired Connection"
 msgstr ""
 
 #: ../../network/nm_custom_type.go:135
@@ -3505,7 +3502,7 @@ msgstr ""
 
 #: ../../network/nm_setting_ip4_config.go:175
 #: ../../network/nm_setting_ip6_config.go:68
-msgid "Link Local"
+msgid "Link-Local Only"
 msgstr ""
 
 #: ../../network/nm_setting_ip4_config.go:176
@@ -3569,15 +3566,12 @@ msgid "WEP 40/128-bit Key"
 msgstr ""
 
 #: ../../network/nm_setting_virtual_key.go:142
+#: ../../network/nm_setting_virtual_key.go:149
 msgid "WPA/WPA2 Personal"
 msgstr ""
 
 #: ../../network/nm_setting_virtual_key.go:143
 msgid "WPA/WPA2 Enterprise"
-msgstr ""
-
-#: ../../network/nm_setting_virtual_key.go:149
-msgid "WPA & WPA2 Personal"
 msgstr ""
 
 #: ../../network/nm_setting_virtual_key.go:157
@@ -3864,7 +3858,7 @@ msgstr ""
 
 #: ../../network/state_handler.go:37
 msgid ""
-"IP configuration could not be reserved (no available address timeout etc)."
+"IP configuration could not be reserved (no available address, timeout, etc)."
 msgstr ""
 
 #: ../../network/state_handler.go:38
@@ -4002,7 +3996,7 @@ msgid "The device's active connection was removed or disappeared."
 msgstr ""
 
 #: ../../network/state_handler.go:71
-msgid "An user or client requested to disconnect."
+msgid "A user or client requested to disconnect."
 msgstr ""
 
 #: ../../network/state_handler.go:72
@@ -4030,11 +4024,11 @@ msgid "GSM Modem's SIM Card not inserted."
 msgstr ""
 
 #: ../../network/state_handler.go:78
-msgid "GSM Modem's SIM Pin required."
+msgid "GSM Modem's SIM PIN required."
 msgstr ""
 
 #: ../../network/state_handler.go:79
-msgid "GSM Modem's SIM Puk required."
+msgid "GSM Modem's SIM PUK required."
 msgstr ""
 
 #: ../../network/state_handler.go:80
@@ -4066,35 +4060,35 @@ msgid "A secondary connection of the base connection failed."
 msgstr ""
 
 #: ../../network/state_handler.go:88
-msgid "VPN connection changed state due to disconnection from users."
+msgid "The VPN connection changed state due to disconnection from users."
 msgstr ""
 
 #: ../../network/state_handler.go:89
-msgid "VPN connection changed state due to disconnection from device."
+msgid "The VPN connection changed state due to disconnection from devices."
 msgstr ""
 
 #: ../../network/state_handler.go:90
-msgid "VPN connection service stopped."
+msgid "VPN service stopped."
 msgstr ""
 
 #: ../../network/state_handler.go:91
-msgid "IP config of VPN connection was invalid."
+msgid "The IP config of VPN connection was invalid."
 msgstr ""
 
 #: ../../network/state_handler.go:92
-msgid "The connection attempt to VPN  service timed out."
+msgid "The connection attempt to VPN service timed out."
 msgstr ""
 
 #: ../../network/state_handler.go:93
-msgid "VPN connection service start timed out."
+msgid "The VPN service start timed out."
 msgstr ""
 
 #: ../../network/state_handler.go:94
-msgid "VPN connection service failed to start."
+msgid "The VPN service failed to start."
 msgstr ""
 
 #: ../../network/state_handler.go:95
-msgid "Necessary password for VPN connection was not provided."
+msgid "Necessary password for the VPN connection was not provided."
 msgstr ""
 
 #: ../../network/state_handler.go:96
@@ -4118,22 +4112,29 @@ msgid "Offline"
 msgstr ""
 
 #: ../../network/state_handler.go:208
-msgid "Disconnected - You are now offline."
+msgid "Disconnected,  you are now offline."
 msgstr ""
 
 #: ../../network/state_handler.go:228
-msgid "Access Point (AP) mode is not supported by this device."
+msgid "Access Point mode is not supported by this device."
 msgstr ""
 
 #: ../../power/upower.go:86 ../../power/upower.go:101
-msgid "Battery critical low"
+msgid "Battery Critical Low"
 msgstr ""
 
-#: ../../power/upower.go:86 ../../power/upower.go:101
-#: ../../power/upower.go:114
-msgid "Computer will be in standby mode, please plug in."
+#: ../../power/upower.go:86
+msgid "Computer has been in suspend mode, please plug in."
+msgstr ""
+
+#: ../../power/upower.go:101
+msgid "Computer will being in suspend mode, please plug in."
 msgstr ""
 
 #: ../../power/upower.go:114
 msgid "Battery Low"
+msgstr ""
+
+#: ../../power/upower.go:114
+msgid "Computer will be in suspend mode, please plug in."
 msgstr ""

@@ -8,7 +8,7 @@ func initLocalDescMap() {
 	localDescMap = map[string]string{
 		"aa_DJ.UTF-8":      Tr("Afar, Djibouti"),
 		"aa_ER":            Tr("Afar, Eritrea"),
-		"aa_ER@saho":       Tr("Afar, Eritrea (Saho)"),
+		"aa_ER@saaho":      Tr("Afar, Eritrea (Saho)"),
 		"aa_ET":            Tr("Afar, Ethiopia"),
 		"af_ZA.UTF-8":      Tr("Afrikaans, South Africa"),
 		"am_ET":            Tr("Amharic, Ethiopia"),
