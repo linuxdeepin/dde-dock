@@ -572,7 +572,9 @@ func getBgThumb(bg string) string {
 		return dest
 	}
 
-	return ""
+	genThemeThumb()
+	bg, _ = objUtil.PathToFileURI(bg)
+	return bg
 }
 
 func getThumbBg() string {

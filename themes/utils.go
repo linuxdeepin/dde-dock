@@ -32,9 +32,12 @@ import (
 	"io/ioutil"
 	"net/url"
 	"os"
+	"os/exec"
 	"path"
 	"strconv"
 )
+
+var thumbTool = false
 
 func encodeURI(str string) string {
 	filepath, ok := objUtil.URIToPath(str)
@@ -182,4 +185,26 @@ func writeStringToKeyFile(filename, contents string) bool {
 	os.Rename(filename+"~", filename)
 
 	return true
+}
+
+func genThemeThumb() {
+	if thumbTool {
+		Logger.Infof("There has a theme-thumb-tool running")
+		return
+	}
+
+	go func() {
+		thumbTool = true
+		cmd := "/usr/lib/deepin-daemon/theme-thumb-tool"
+		m := GetManager()
+		exec.Command(cmd, "--background").Run()
+		m.setPropBackgroundList(m.getBgStrList())
+		exec.Command(cmd, "--gtk").Run()
+		m.setPropGtkThemeList(m.getGtkStrList())
+		exec.Command(cmd, "--icon").Run()
+		m.setPropIconThemeList(m.getIconStrList())
+		exec.Command(cmd, "--cursor").Run()
+		m.setPropCursorThemeList(m.getCursorStrList())
+		thumbTool = false
+	}()
 }
