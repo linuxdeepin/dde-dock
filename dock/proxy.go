@@ -51,7 +51,6 @@ const (
 
 var (
 	proxySettings = gio.NewSettings(gsettingsIdProxy)
-	utils         = libutils.NewUtils()
 )
 
 func startProxy() {
@@ -60,11 +59,11 @@ func startProxy() {
 }
 
 func updateProxyEnvs() {
-	utils.UnsetEnv(envAutoProxy)
-	utils.UnsetEnv(envHttpProxy)
-	utils.UnsetEnv(envHttpsProxy)
-	utils.UnsetEnv(envFtpProxy)
-	utils.UnsetEnv(envSocksProxy)
+	libutils.UnsetEnv(envAutoProxy)
+	libutils.UnsetEnv(envHttpProxy)
+	libutils.UnsetEnv(envHttpsProxy)
+	libutils.UnsetEnv(envFtpProxy)
+	libutils.UnsetEnv(envSocksProxy)
 	proxyMethod := proxySettings.GetString(gkeyProxyMethod)
 	switch proxyMethod {
 	case proxyMethodNone:
