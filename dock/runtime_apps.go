@@ -255,14 +255,14 @@ func find_app_id_by_xid(xid xproto.Window) string {
 	}
 	pid, err := ewmh.WmPidGet(XU, xid)
 	if err != nil {
-		appId = strings.ToLower(wmInstance)
+		appId = strings.ToLower(wmClassName)
 		logger.Debug("get app id from wm class name", appId)
 		return appId
 	}
 	iconName, _ := ewmh.WmIconNameGet(XU, xid)
 	name, _ := ewmh.WmNameGet(XU, xid)
 	if pid == 0 {
-		appId = strings.ToLower(wmInstance)
+		appId = strings.ToLower(wmClassName)
 		logger.Debug("get app id from wm class name", appId)
 		return appId
 	} else {
