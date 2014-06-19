@@ -81,6 +81,7 @@ func newMobileConnectionData(id, uuid, serviceType string) (data connectionData)
 	logicSetSettingVkMobileServiceType(data, serviceType)
 
 	addSettingSection(data, sectionPpp)
+	logicSetSettingVkPppEnableLcpEcho(data, true)
 
 	addSettingSection(data, sectionSerial)
 	setSettingSerialBaud(data, 115200)
