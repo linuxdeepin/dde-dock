@@ -53,6 +53,7 @@ func (obj *Manager) syncNtpThread() {
 		select {
 		case <-timer.C:
 		case <-obj.quitChan:
+			obj.ntpRunning = false
 			return
 		}
 	}
