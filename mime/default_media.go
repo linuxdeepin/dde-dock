@@ -2,6 +2,7 @@ package mime
 
 import (
 	"dlib/dbus/property"
+	. "dlib/gettext"
 	"dlib/gio-2.0"
 )
 
@@ -68,13 +69,14 @@ func getActionByMime(mime string) AppInfo {
 	runSoftList := mediaGSettings.GetStrv(MEDIA_KEY_START_SOFT)
 
 	if isMimeExist(mime, ignoreList) {
-		return AppInfo{ID: "Nothing", Name: "Nothing", Exec: ""}
+		return AppInfo{ID: "Nothing", Name: Tr("Nothing"), Exec: ""}
 	}
 	if isMimeExist(mime, openFolderList) {
-		return AppInfo{ID: "Open Folder", Name: "Open Folder", Exec: ""}
+		return AppInfo{ID: "Open Folder", Name: Tr("Open Folder"), Exec: ""}
 	}
+
 	if isMimeExist(mime, runSoftList) {
-		return AppInfo{ID: "Run Soft", Name: "Run Soft", Exec: ""}
+		return AppInfo{ID: "Run Soft", Name: Tr("Run Soft"), Exec: ""}
 	}
 
 	m := DefaultApps{}
@@ -84,16 +86,16 @@ func getActionByMime(mime string) AppInfo {
 func getActionsByMime(mime string) []AppInfo {
 	apps := []AppInfo{}
 	defaultApps := []AppInfo{
-		AppInfo{ID: "Nothing", Name: "Nothing", Exec: ""},
-		AppInfo{ID: "Open Folder", Name: "Open Folder", Exec: ""},
+		AppInfo{ID: "Nothing", Name: Tr("Nothing"), Exec: ""},
+		AppInfo{ID: "Open Folder", Name: Tr("Open Folder"), Exec: ""},
 	}
 	m := DefaultApps{}
 	apps = m.AppsListViaType(mime)
 	apps = append(apps, defaultApps...)
-	if mime == "x-content/unix-software" {
-		apps = append(apps,
-			AppInfo{ID: "Run Soft", Name: "Run Soft", Exec: ""})
-	}
+	//if mime == "x-content/unix-software" {
+	//apps = append(apps,
+	//AppInfo{ID: "Run Soft", Name: Tr("Run Soft", Exec: ""})
+	//}
 
 	return apps
 }

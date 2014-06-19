@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-19 09:52+0800\n"
+"POT-Creation-Date: 2014-06-19 23:01+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,7 +65,7 @@ msgstr ""
 msgid "Message notification"
 msgstr ""
 
-#: ../../datetime/datetime.go:131
+#: ../../datetime/datetime.go:129
 msgid "Language changing, please wait"
 msgstr ""
 
@@ -3295,6 +3295,18 @@ msgstr ""
 
 #: ../../keybinding/id_desc_map.go:236
 msgid "Move to lower workspace"
+msgstr ""
+
+#: ../../mime/default_media.go:72 ../../mime/default_media.go:89
+msgid "Nothing"
+msgstr ""
+
+#: ../../mime/default_media.go:75 ../../mime/default_media.go:90
+msgid "Open Folder"
+msgstr ""
+
+#: ../../mime/default_media.go:79
+msgid "Run Soft"
 msgstr ""
 
 #: ../../network/manager_connections.go:177
