@@ -76,8 +76,13 @@ func search(key string) []ItemId {
 
 	keys := []string{key}
 	var tkeys []string
-	if tree != nil {
-		tkeys, _ = tree.SearchKeys(key, treeId)
+	if tree != nil && treeId != "" {
+		var err error
+		tkeys, err = tree.SearchKeys(key, treeId)
+		if err != nil {
+			logger.Warning("Search Keys failed:", err)
+		}
+		logger.Debug("get tree searchKeys:", tkeys)
 	}
 
 	for _, v := range tkeys {
@@ -86,6 +91,7 @@ func search(key string) []ItemId {
 		}
 	}
 
+	logger.Debug("searchKeys:", keys)
 	done := make(chan bool, 1)
 	for _, k := range keys {
 		escapedKey := regexp.QuoteMeta(k)

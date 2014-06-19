@@ -53,7 +53,7 @@ func _TestSearch(t *testing.T) {
 	}
 }
 
-func _TestPinYin(t *testing.T) {
+func TestPinYin(t *testing.T) {
 	tree, err := pinyin.NewSearch("com.deepin.api.Search", "/com/deepin/api/Search")
 	if err != nil {
 		return
@@ -64,21 +64,24 @@ func _TestPinYin(t *testing.T) {
 		app := gio.NewDesktopAppInfo(n)
 		defer app.Unref()
 		name := app.GetDisplayName()
-		t.Log(name)
+		// t.Log("search:", name)
 		m[name] = name
 	}
 	addName(names, "deepin-software-center.desktop")
 	addName(names, "firefox.desktop")
-	t.Log(names)
+	t.Log("names:", names)
 	treeId, _ := tree.NewTrieWithString(names, "DDELauncherDaemonTest")
-	var keys []string
-	keys, _ = tree.SearchKeys("ruan", treeId)
-	t.Log(keys)
-	keys, _ = tree.SearchKeys("firefox", treeId)
-	t.Log(keys)
-	keys, _ = tree.SearchKeys("wang", treeId)
-	t.Log(keys)
-	keys, _ = tree.SearchKeys("网络", treeId)
-	t.Log(keys)
+	search := func(key string, treeId string) {
+		keys, err := tree.SearchKeys(key, treeId)
+		if err != nil {
+			t.Error(err)
+			return
+		}
+		t.Log("Search Key:", key, ", Search Result:", keys)
+	}
+	search("ruan", treeId)
+	search("firefox", treeId)
+	search("wang", treeId)
+	search("网络", treeId)
 	tree.DestroyTrie(treeId)
 }

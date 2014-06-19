@@ -27,8 +27,4 @@ func Start() {
 
 	initDBus()
 	logger.Info("init dbus done")
-
-	if tree != nil {
-		defer tree.DestroyTrie(treeId)
-	}
 }

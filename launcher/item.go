@@ -169,6 +169,10 @@ func getId(app *gio.DesktopAppInfo) ItemId {
 }
 
 func initItems() {
+	if tree != nil {
+		defer tree.DestroyTrie(treeId)
+	}
+
 	allApps := gio.AppInfoGetAll()
 
 	for _, app := range allApps {
@@ -190,7 +194,12 @@ func initItems() {
 	for _, v := range itemTable {
 		names[v.Name] = v.Name
 	}
-	treeId, _ = tree.NewTrieWithString(names, "DDELauncherDaemon")
+	logger.Warning("Names:", names)
+	treeId, err = tree.NewTrieWithString(names, "DDELauncherDaemon")
+	if err != nil {
+		logger.Warning("build Trie tree failed:", err)
+	}
+	logger.Debug("trie tree id:", treeId)
 }
 
 func getItemInfos(id CategoryId) []ItemInfo {
