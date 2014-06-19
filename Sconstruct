@@ -33,6 +33,7 @@ components = ['accounts',
               'systeminfo',
               'themes',
               'dsc',
+              'search',
               'mpris'
               ]
 
