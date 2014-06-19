@@ -21,6 +21,7 @@ import _ "dde-daemon/network"
 import _ "dde-daemon/mounts"
 import _ "dde-daemon/inputdevices"
 
+import _ "dde-daemon/search"
 import _ "dde-daemon/dock"
 import _ "dde-daemon/launcher"
 
