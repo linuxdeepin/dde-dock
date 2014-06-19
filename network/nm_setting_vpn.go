@@ -57,7 +57,6 @@ func newBasicVpnConnectionData(id, uuid string) (data connectionData) {
 	setSettingConnectionUuid(data, uuid)
 	setSettingConnectionType(data, NM_SETTING_VPN_SETTING_NAME)
 	setSettingConnectionAutoconnect(data, false)
-	logicSetSettingVkConnectionNoPermission(data, false)
 
 	initSettingSectionIpv4(data)
 	return

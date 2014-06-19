@@ -77,7 +77,6 @@ func newMobileConnectionData(id, uuid, serviceType string) (data connectionData)
 	setSettingConnectionId(data, id)
 	setSettingConnectionUuid(data, uuid)
 	setSettingConnectionAutoconnect(data, false)
-	logicSetSettingVkConnectionNoPermission(data, false)
 
 	logicSetSettingVkMobileServiceType(data, serviceType)
 
