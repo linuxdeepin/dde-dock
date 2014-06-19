@@ -10,7 +10,7 @@ import (
 
 	_ "github.com/mattn/go-sqlite3"
 
-	pinyin "dbus/com/deepin/api/search"
+	pinyin "dbus/com/deepin/daemon/search"
 	"dlib/gio-2.0"
 )
 
@@ -186,7 +186,8 @@ func initItems() {
 	}
 
 	var err error
-	tree, err = pinyin.NewSearch("com.deepin.api.Search", "/com/deepin/api/Search")
+	tree, err = pinyin.NewSearch("com.deepin.daemon.Search",
+		"/com/deepin/daemon/Search")
 	if err != nil {
 		return
 	}

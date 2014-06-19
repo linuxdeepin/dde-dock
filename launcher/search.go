@@ -8,7 +8,7 @@ import (
 	"sync"
 	"time"
 
-	pinyin "dbus/com/deepin/api/search"
+	pinyin "dbus/com/deepin/daemon/search"
 )
 
 var tree *pinyin.Search = nil
