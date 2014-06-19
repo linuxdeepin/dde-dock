@@ -38,9 +38,11 @@
 #define THUMB_HEIGHT 72
 GtkWidget *get_meta_theme (const char* theme_name)
 {
-	MetaTheme *meta = meta_theme_load(theme_name, NULL);
+	GError *error = NULL;
+	MetaTheme *meta = meta_theme_load(theme_name, &error);
 	if (!meta) {
-		g_warning("Get Current Meta Theme Failed");
+		g_warning("Get Current Meta Theme Failed:%s", error->message);
+		g_error_free(error);
 		return NULL;
 	}
 
