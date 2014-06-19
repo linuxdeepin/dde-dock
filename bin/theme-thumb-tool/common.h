@@ -22,7 +22,7 @@
 #ifndef __COMMON_H__
 #define __COMMON_H__
 
-#define ICON_SPCAE 15
+#define ICON_SPCAE 5
 
 int init_env ();
 int gen_cursor_preview(char *bg, char *dest);
