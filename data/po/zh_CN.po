@@ -3297,7 +3297,7 @@ msgstr "移动到下方工作区"
 
 #: ../../mime/default_media.go:72 ../../mime/default_media.go:89
 msgid "Nothing"
-msgstr "什么也不做"
+msgstr "无操作"
 
 ../..mime/default_media.go:75 ../../mime/default_media.go:90
 msgid "Open Folder"
