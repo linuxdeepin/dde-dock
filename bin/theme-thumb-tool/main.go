@@ -48,7 +48,7 @@ const (
 	_CMD_           = "theme-thumb-tool"
 	_GTK_THUMB_CMD_ = "/usr/lib/deepin-daemon/gtk-thumb-tool"
 
-	THUMB_CACHE_DIR = "cache"
+	THUMB_CACHE_DIR = "autogen"
 )
 
 func getUserPictureDir() string {
@@ -61,7 +61,7 @@ func getUserPictureDir() string {
 }
 
 func getThumbBg() string {
-	list, _ := getImageList("/usr/share/personalization/thumb_bg")
+	list, _ := getImageList("/usr/share/personalization/thumbnail/autogen/thumb_bg")
 	l := len(list)
 	rand.Seed(time.Now().UnixNano())
 	n := rand.Intn(l)
@@ -116,7 +116,7 @@ func genCursorThumbnail(info pathInfo, dest, bg string) bool {
 
 	ret := C.gen_icon_preview(cBg, cDest, cItem1, cItem2, cItem3)
 	if int(ret) == -1 {
-		Logger.Debug("Generate Icon Thumbnail Error")
+		Logger.Debug("Generate Cursor Thumbnail Error")
 		return false
 	}
 
@@ -186,7 +186,7 @@ func main() {
 	outDir := ""
 	homeDir := dutils.GetHomeDir()
 	if len(homeDir) > 0 {
-		outDir = path.Join(homeDir, PERSON_LOCAL_PATH)
+		outDir = path.Join(homeDir, PERSON_LOCAL_THUMB_PATH)
 	}
 	if len(os.Args) == 3 {
 		outDir = os.Args[2]

@@ -49,6 +49,11 @@ const (
 	PERSON_BG_NAME  = "wallpapers"
 )
 
+var (
+	PERSON_SYS_THUMB_PATH   = path.Join(PERSON_SYS_PATH, "thumbnail")
+	PERSON_LOCAL_THUMB_PATH = path.Join(PERSON_LOCAL_PATH, "thumbnail")
+)
+
 type pathInfo struct {
 	Path string
 	T    int32
