@@ -41,7 +41,8 @@ import (
 )
 
 var (
-	Logger = logger.NewLogger("theme-thumb-tool")
+	forceFlag = false
+	Logger    = logger.NewLogger("theme-thumb-tool")
 )
 
 const (
@@ -189,6 +190,7 @@ func main() {
 		outDir = path.Join(homeDir, PERSON_LOCAL_THUMB_PATH)
 	}
 	if len(os.Args) == 3 {
+		forceFlag = true
 		outDir = os.Args[2]
 	}
 
@@ -197,7 +199,7 @@ func main() {
 		list := getGtkList()
 		for _, l := range list {
 			dest := getThumbCachePath(op, l.Path, outDir)
-			if len(dest) < 1 || dutils.IsFileExist(dest) {
+			if len(dest) < 1 || (!forceFlag && dutils.IsFileExist(dest)) {
 				continue
 			}
 
@@ -211,7 +213,7 @@ func main() {
 		list := getIconList()
 		for _, l := range list {
 			dest := getThumbCachePath(op, l.Path, outDir)
-			if len(dest) < 1 || dutils.IsFileExist(dest) {
+			if len(dest) < 1 || (!forceFlag && dutils.IsFileExist(dest)) {
 				continue
 			}
 			bg := getThumbBg()
@@ -223,7 +225,7 @@ func main() {
 		list := getCursorList()
 		for _, l := range list {
 			dest := getThumbCachePath(op, l.Path, outDir)
-			if len(dest) < 1 || dutils.IsFileExist(dest) {
+			if len(dest) < 1 || (!forceFlag && dutils.IsFileExist(dest)) {
 				continue
 			}
 			bg := getThumbBg()
@@ -235,7 +237,7 @@ func main() {
 		list := getBgList()
 		for _, l := range list {
 			dest := getThumbCachePath(op, l.Path, outDir)
-			if len(dest) < 1 || dutils.IsFileExist(dest) {
+			if len(dest) < 1 || (!forceFlag && dutils.IsFileExist(dest)) {
 				continue
 			}
 			err := graphic.ThumbnailImage(l.Path, dest, 128, 72, graphic.PNG)
