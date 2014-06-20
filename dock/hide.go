@@ -52,7 +52,7 @@ func (m *HideStateManager) SetState(s int32) int32 {
 		return s
 	}
 
-	logger.Info("SetState m.state:", HideStateMap[m.state], "new state:", HideStateMap[s])
+	logger.Debug("SetState m.state:", HideStateMap[m.state], "new state:", HideStateMap[s])
 	m.state = s
 	logger.Debug("SetState emit StateChanged signal", HideStateMap[m.state])
 	m.StateChanged(s)
@@ -61,7 +61,7 @@ func (m *HideStateManager) SetState(s int32) int32 {
 }
 
 func (m *HideStateManager) UpdateState() {
-	logger.Info("UpdateState, HideState:", HideStateMap[m.state])
+	logger.Debug("UpdateState, HideState:", HideStateMap[m.state])
 	switch setting.GetHideMode() {
 	case HideModeKeepShowing:
 		logger.Debug("KeepShowing Mode")

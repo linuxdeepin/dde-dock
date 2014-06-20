@@ -24,7 +24,7 @@ type NormalApp struct {
 
 func NewNormalApp(id string) *NormalApp {
 	app := &NormalApp{Id: strings.ToLower(filepath.Base(id[:len(id)-8]))}
-	logger.Info("NewNormalApp:", id)
+	logger.Debug("NewNormalApp:", id)
 	var core *gio.DesktopAppInfo
 	if filepath.IsAbs(id) {
 		core = gio.NewDesktopAppInfoFromFilename(id)
@@ -43,9 +43,9 @@ func NewNormalApp(id string) *NormalApp {
 	defer core.Unref()
 	app.path = core.GetFilename()
 	app.Icon = getAppIcon(core)
-	logger.Info("app icon:", app.Icon)
+	logger.Debug("app icon:", app.Icon)
 	app.Name = core.GetDisplayName()
-	logger.Info("Name", app.Name)
+	logger.Debug("Name", app.Name)
 	app.buildMenu()
 	return app
 }

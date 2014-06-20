@@ -195,7 +195,7 @@ func initItems() {
 	for _, v := range itemTable {
 		names[v.Name] = v.Name
 	}
-	logger.Warning("Names:", names)
+	logger.Debug("Names:", names)
 	treeId, err = tree.NewTrieWithString(names, "DDELauncherDaemon")
 	if err != nil {
 		logger.Warning("build Trie tree failed:", err)

@@ -94,12 +94,12 @@ func (m *EntryProxyerManager) registerEntry(name string) {
 	logger.Debugf("register entry id: %s", entryId)
 	entry, err := NewEntryProxyer(entryId)
 	if err != nil {
-		logger.Errorf("register entry failed: %v", err)
+		logger.Warningf("register entry failed: %v", err)
 		return
 	}
 	err = dbus.InstallOnSession(entry)
 	if err != nil {
-		logger.Errorf("register entry failed: %v", err)
+		logger.Warningf("register entry failed: %v", err)
 		return
 	}
 	m.Entries = append(m.Entries, entry)
