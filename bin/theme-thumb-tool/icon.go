@@ -31,6 +31,10 @@ import (
 
 const (
 	ICON_CONFIG = "index.theme"
+
+	FOLDER       = "folder.png"
+	USER_TRASH   = "user-trash.png"
+	FILE_MANAGER = "system-file-manager.png"
 )
 
 func getIconTypeDir(info pathInfo) (string, string, string) {
@@ -148,9 +152,20 @@ func getIconTypeFile(info pathInfo) (string, string, string) {
 		return "", "", ""
 	}
 
-	dFile := getPngFile(device)
-	pFile := getPngFile(place)
-	aFile := getPngFile(app)
+	dFile := path.Join(place, FOLDER)
+	if !dutils.IsFileExist(dFile) {
+		dFile = getPngFile(device)
+	}
+
+	pFile := path.Join(place, USER_TRASH)
+	if !dutils.IsFileExist(pFile) {
+		pFile = getPngFile(place)
+	}
+
+	aFile := path.Join(app, FILE_MANAGER)
+	if !dutils.IsFileExist(aFile) {
+		aFile = getPngFile(app)
+	}
 	if (len(dFile) < 1) || (len(pFile) < 1) || (len(aFile) < 1) {
 		return "", "", ""
 	}
