@@ -46,7 +46,7 @@ func newPppoeConnectionData(id, uuid string) (data connectionData) {
 	setSettingConnectionId(data, id)
 	setSettingConnectionUuid(data, uuid)
 	setSettingConnectionType(data, NM_SETTING_PPPOE_SETTING_NAME)
-	setSettingConnectionAutoconnect(data, false)
+	setSettingConnectionAutoconnect(data, true)
 
 	initSettingSectionWired(data)
 
