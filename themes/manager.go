@@ -25,7 +25,6 @@ import (
 	"dlib/dbus"
 	"dlib/dbus/property"
 	"dlib/glib-2.0"
-	dutils "dlib/utils"
 	"github.com/howeyc/fsnotify"
 	"os"
 	"path"
@@ -120,7 +119,6 @@ func (obj *Manager) mkdirTheme(name string) (string, bool) {
 		return "", false
 	}
 
-	homeDir := dutils.GetHomeDir()
 	filePath := path.Join(homeDir, PERSON_LOCAL_THEME_PATH, name)
 
 	Logger.Debugf("%s path: %s", name, filePath)

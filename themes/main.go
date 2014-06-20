@@ -26,6 +26,7 @@ import (
 	"dlib/dbus"
 	"dlib/gio-2.0"
 	"dlib/logger"
+	dutils "dlib/utils"
 )
 
 var (
@@ -34,6 +35,8 @@ var (
 
 	themeSettings = gio.NewSettings("com.deepin.dde.personalization")
 	gnmSettings   = gio.NewSettings("org.gnome.desktop.background")
+
+	homeDir = dutils.GetHomeDir()
 )
 
 func Start() {

@@ -78,7 +78,6 @@ func (obj *Manager) startWatch() {
 
 	obj.watcher.Watch(THEME_SYS_PATH)
 
-	homeDir := dutils.GetHomeDir()
 	errFlag := false
 	dir := path.Join(homeDir, THEME_LOCAL_PATH)
 	if !dutils.IsFileExist(dir) {
@@ -127,7 +126,6 @@ func (obj *Manager) endWatch() {
 		return
 	}
 
-	homeDir := dutils.GetHomeDir()
 	obj.watcher.RemoveWatch(THEME_SYS_PATH)
 	dir := path.Join(homeDir, THEME_LOCAL_PATH)
 	if dutils.IsFileExist(dir) {

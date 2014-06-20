@@ -64,7 +64,6 @@ func decodeURI(str string) string {
 }
 
 func changeUserThemeDir() {
-	homeDir := dutils.GetHomeDir()
 	filename := path.Join(homeDir, PERSON_LOCAL_THEME_PATH, "test-dir")
 	if !dutils.IsFileExist(filename) {
 		os.MkdirAll(filename, 0755)
