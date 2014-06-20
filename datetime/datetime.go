@@ -129,6 +129,8 @@ func (op *Manager) SetLocale(locale string) {
 	sendNotify("", "", Tr("Language changing, please wait"))
 	setDate.GenLocale(locale)
 	changeLocaleFlag = true
+	op.CurrentLocale = locale
+	dbus.NotifyChange(op, "CurrentLocale")
 }
 
 func NewDateAndTime() *Manager {
