@@ -144,8 +144,9 @@ func (app *RuntimeApp) buildMenu() {
 				a = (*gio.AppInfo)(core)
 				defer core.Unref()
 			} else {
-				logger.Info("Non-DesktopAppInfo")
-				a, err := gio.AppInfoCreateFromCommandline(
+				logger.Info("Non-DesktopAppInfo", app.exec)
+				var err error = nil
+				a, err = gio.AppInfoCreateFromCommandline(
 					app.exec,
 					"",
 					gio.AppInfoCreateFlagsNone,
@@ -156,6 +157,11 @@ func (app *RuntimeApp) buildMenu() {
 				}
 
 				defer a.Unref()
+			}
+
+			if a == nil {
+				logger.Warning("create app info to run program failed")
+				return
 			}
 
 			_, err := a.Launch(make([]*gio.File, 0), nil)
