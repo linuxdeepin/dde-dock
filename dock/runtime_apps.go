@@ -51,7 +51,7 @@ type RuntimeApp struct {
 	coreMenu    *Menu
 
 	exec string
-	core *gio.DesktopAppInfo
+	path string
 
 	state       []string
 	isHidden    bool
@@ -59,6 +59,23 @@ type RuntimeApp struct {
 	// workspaces  [][]uint
 
 	changedCB func()
+}
+
+func (app *RuntimeApp) createDesktopAppInfo() *gio.DesktopAppInfo {
+	core := gio.NewDesktopAppInfo(app.Id)
+
+	if core != nil {
+		return core
+	}
+
+	if newId := guess_desktop_id(app.Id + ".desktop"); newId != "" {
+		core = gio.NewDesktopAppInfo(newId)
+		if core != nil {
+			return core
+		}
+	}
+
+	return gio.NewDesktopAppInfoFromFilename(app.path)
 }
 
 func NewRuntimeApp(xid xproto.Window, appId string) *RuntimeApp {
@@ -69,14 +86,16 @@ func NewRuntimeApp(xid xproto.Window, appId string) *RuntimeApp {
 		Id:   strings.ToLower(appId),
 		xids: make(map[xproto.Window]*WindowInfo),
 	}
-	app.core = gio.NewDesktopAppInfo(appId + ".desktop")
-	if app.core == nil {
+	core := gio.NewDesktopAppInfo(appId + ".desktop")
+	if core == nil {
 		if newId := guess_desktop_id(appId + ".desktop"); newId != "" {
-			app.core = gio.NewDesktopAppInfo(newId)
+			core = gio.NewDesktopAppInfo(newId)
 		}
 	}
-	if app.core != nil {
-		logger.Debug(appId, ", Actions:", app.core.ListActions())
+	if core != nil {
+		logger.Debug(appId, ", Actions:", core.ListActions())
+		app.path = core.GetFilename()
+		core.Unref()
 	} else {
 		logger.Debug(appId, ", Actions:[]")
 	}
@@ -93,11 +112,13 @@ func find_exec_name_by_xid(xid xproto.Window) string {
 	return find_exec_name_by_pid(pid)
 }
 func (app *RuntimeApp) getExec(xid xproto.Window) {
-	if app.core != nil {
+	core := app.createDesktopAppInfo()
+	if core != nil {
 		logger.Debug(app.Id, " Get Exec from desktop file")
 		// should NOT use GetExecuable, get wrong result, like skype
 		// which gets 'env'.
-		app.exec = app.core.GetString(glib.KeyFileDesktopKeyExec)
+		app.exec = core.GetString(glib.KeyFileDesktopKeyExec)
+		core.Unref()
 		return
 	}
 	logger.Debug(app.Id, " Get Exec from pid")
@@ -107,17 +128,21 @@ func (app *RuntimeApp) getExec(xid xproto.Window) {
 func (app *RuntimeApp) buildMenu() {
 	app.coreMenu = NewMenu()
 	itemName := strings.Title(app.Id)
-	if app.core != nil {
-		itemName = strings.Title(app.core.GetDisplayName())
+	core := app.createDesktopAppInfo()
+	if core != nil {
+		itemName = strings.Title(core.GetDisplayName())
+		defer core.Unref()
 	}
 	app.coreMenu.AppendItem(NewMenuItem(
 		itemName,
 		func() {
 			var a *gio.AppInfo
 			logger.Info(itemName)
-			if app.core != nil {
+			core := app.createDesktopAppInfo()
+			if core != nil {
 				logger.Info("DesktopAppInfo")
-				a = (*gio.AppInfo)(app.core)
+				a = (*gio.AppInfo)(core)
+				defer core.Unref()
 			} else {
 				logger.Info("Non-DesktopAppInfo")
 				a, err := gio.AppInfoCreateFromCommandline(
@@ -134,17 +159,26 @@ func (app *RuntimeApp) buildMenu() {
 			}
 
 			_, err := a.Launch(make([]*gio.File, 0), nil)
-			logger.Warning("Launch App Failed: ", err)
+			if err != nil {
+				logger.Warning("Launch App Failed: ", err)
+			}
 		},
 		true,
 	))
 	app.coreMenu.AddSeparator()
-	if app.core != nil {
-		for _, actionName := range app.core.ListActions() {
+	if core != nil {
+		for _, actionName := range core.ListActions() {
 			name := actionName //NOTE: don't directly use 'actionName' with closure in an forloop
 			app.coreMenu.AppendItem(NewMenuItem(
-				app.core.GetActionName(actionName),
-				func() { app.core.LaunchAction(name, nil) },
+				core.GetActionName(actionName),
+				func() {
+					core := app.createDesktopAppInfo()
+					if core == nil {
+						return
+					}
+					defer core.Unref()
+					core.LaunchAction(name, nil)
+				},
 				true,
 			))
 		}
@@ -184,7 +218,8 @@ func (app *RuntimeApp) buildMenu() {
 			logger.Info("appid:", app.Id)
 
 			var title, icon, exec string
-			if app.core == nil {
+			core := app.createDesktopAppInfo()
+			if core == nil {
 				title = app.Id
 				// TODO:
 				icon = "application-default-icon"
@@ -195,12 +230,10 @@ func (app *RuntimeApp) buildMenu() {
 				ioutil.WriteFile(execFile, []byte(app.exec), 0744)
 				exec = execFile
 			} else {
-				title = app.core.GetDisplayName()
-				icon =
-					get_theme_icon(app.core.GetIcon().ToString(),
-						48)
-				exec =
-					app.core.GetString(glib.KeyFileDesktopKeyExec)
+				defer core.Unref()
+				title = core.GetDisplayName()
+				icon = get_theme_icon(core.GetIcon().ToString(), 48)
+				exec = core.GetString(glib.KeyFileDesktopKeyExec)
 			}
 
 			logger.Info("id", app.Id, "title", title, "icon", icon,
@@ -370,8 +403,10 @@ func isNormalWindow(xid xproto.Window) bool {
 }
 
 func (app *RuntimeApp) updateIcon(xid xproto.Window) {
-	if app.core != nil {
-		icon := getAppIcon(app.core)
+	core := app.createDesktopAppInfo()
+	if core != nil {
+		defer core.Unref()
+		icon := getAppIcon(core)
 		if icon != "" {
 			app.xids[xid].Icon = icon
 			return

@@ -84,8 +84,10 @@ func (e *AppEntry) HandleDragDrop(x, y int32, data string) {
 	logger.Debug("HandleDragDrop:", paths)
 	if e.rApp != nil {
 		logger.Info("Launch from runtime app")
-		if e.rApp.core != nil {
-			_, err := e.rApp.core.LaunchUris(paths, nil)
+		core := e.rApp.createDesktopAppInfo()
+		if core != nil {
+			defer core.Unref()
+			_, err := core.LaunchUris(paths, nil)
 			if err != nil {
 				logger.Warning("Launch Drop failed:", err)
 			}
@@ -105,8 +107,10 @@ func (e *AppEntry) HandleDragDrop(x, y int32, data string) {
 		}
 	} else if e.nApp != nil {
 		logger.Info("Launch from runtime app")
-		if e.nApp.core != nil {
-			_, err := e.nApp.core.LaunchUris(paths, nil)
+		core := e.nApp.createDesktopAppInfo()
+		if core != nil {
+			defer core.Unref()
+			_, err := core.LaunchUris(paths, nil)
 			if err != nil {
 				logger.Warning("Launch Drop failed:", err)
 			}

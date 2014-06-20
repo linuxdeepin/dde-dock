@@ -3,8 +3,8 @@ package dock
 import (
 	. "dlib/gettext"
 	"dlib/gio-2.0"
+	"dlib/utils"
 	"errors"
-	"os"
 	"path/filepath"
 	"strings"
 )
@@ -17,7 +17,7 @@ type NormalApp struct {
 
 	changedCB func()
 
-	core     *gio.DesktopAppInfo
+	path     string
 	coreMenu *Menu
 	dockItem *MenuItem
 }
@@ -25,40 +25,84 @@ type NormalApp struct {
 func NewNormalApp(id string) *NormalApp {
 	app := &NormalApp{Id: strings.ToLower(filepath.Base(id[:len(id)-8]))}
 	logger.Info("NewNormalApp:", id)
+	var core *gio.DesktopAppInfo
 	if filepath.IsAbs(id) {
-		app.core = gio.NewDesktopAppInfoFromFilename(id)
+		core = gio.NewDesktopAppInfoFromFilename(id)
 	} else {
-		app.core = gio.NewDesktopAppInfo(id)
-		if app.core == nil {
+		core = gio.NewDesktopAppInfo(id)
+		if core == nil {
 			logger.Info("guess desktop")
 			if newId := guess_desktop_id(app.Id + ".desktop"); newId != "" {
-				app.core = gio.NewDesktopAppInfo(newId)
+				core = gio.NewDesktopAppInfo(newId)
 			}
 		}
 	}
-	if app.core == nil {
+	if core == nil {
 		return nil
 	}
-	app.Icon = getAppIcon(app.core)
+	defer core.Unref()
+	app.path = core.GetFilename()
+	app.Icon = getAppIcon(core)
 	logger.Info("app icon:", app.Icon)
-	app.Name = app.core.GetDisplayName()
+	app.Name = core.GetDisplayName()
 	logger.Info("Name", app.Name)
 	app.buildMenu()
 	return app
 }
 
+func (app *NormalApp) createDesktopAppInfo() *gio.DesktopAppInfo {
+	core := gio.NewDesktopAppInfo(app.Id)
+
+	if core != nil {
+		return core
+	}
+
+	if newId := guess_desktop_id(app.Id + ".desktop"); newId != "" {
+		core = gio.NewDesktopAppInfo(newId)
+		if core != nil {
+			return core
+		}
+	}
+
+	return gio.NewDesktopAppInfoFromFilename(app.path)
+}
+
 func (app *NormalApp) buildMenu() {
+	core := app.createDesktopAppInfo()
+	if core == nil {
+		logger.Warning("buildMenu: create desktop app info failed")
+		return
+	}
+	defer core.Unref()
+
 	app.coreMenu = NewMenu()
 	app.coreMenu.AppendItem(NewMenuItem(Tr("_Run"), func() {
-		_, err := app.core.Launch(make([]*gio.File, 0), nil)
-		logger.Warning("Launch App Failed: ", err)
+		core := app.createDesktopAppInfo()
+		if core == nil {
+			logger.Warning("Run app failed")
+			return
+		}
+		defer core.Unref()
+		_, err := core.Launch(make([]*gio.File, 0), nil)
+		if err != nil {
+			logger.Warning("Launch App Failed: ", err)
+		}
 	}, true))
 	app.coreMenu.AddSeparator()
-	for _, actionName := range app.core.ListActions() {
+	for _, actionName := range core.ListActions() {
 		name := actionName //NOTE: don't directly use 'actionName' with closure in an forloop
 		app.coreMenu.AppendItem(NewMenuItem(
-			app.core.GetActionName(actionName),
-			func() { app.core.LaunchAction(name, nil) },
+			core.GetActionName(actionName),
+			func() {
+				core := app.createDesktopAppInfo()
+				if core == nil {
+					logger.Warning("start action", name,
+						"failed")
+					return
+				}
+				defer core.Unref()
+				core.LaunchAction(name, nil)
+			},
 			true,
 		))
 	}
@@ -83,9 +127,14 @@ func (app *NormalApp) HandleMenuItem(id string) {
 
 func NewNormalAppFromFilename(name string) *NormalApp {
 	app := &NormalApp{}
-	app.core = gio.NewDesktopAppInfoFromFilename(name)
-	app.Icon = app.core.GetIcon().ToString()
-	app.Name = app.core.GetDisplayName()
+	core := gio.NewDesktopAppInfoFromFilename(name)
+	if core == nil {
+		return nil
+	}
+	defer core.Unref()
+	app.path = core.GetFilename()
+	app.Icon = core.GetIcon().ToString()
+	app.Name = core.GetDisplayName()
 	app.buildMenu()
 	return app
 }
@@ -94,14 +143,16 @@ func (app *NormalApp) Activate(x, y int32) error {
 	// FIXME:
 	// the launch will be successful even if the desktop file is not
 	// existed.
-	f, err := os.Open(app.core.GetFilename())
-	if err != nil {
+	if !utils.IsFileExist(app.path) {
 		return errors.New("invalid")
 	}
-	f.Close()
 
-	b, err := app.core.Launch(nil, nil)
-	logger.Warning(b)
+	core := app.createDesktopAppInfo()
+	if core == nil {
+		return errors.New("create desktop app info failed")
+	}
+	defer core.Unref()
+	_, err := core.Launch(nil, nil)
 	if err != nil {
 		logger.Warning("launch", app.Id, "failed:", err)
 	}
