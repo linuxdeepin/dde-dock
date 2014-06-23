@@ -253,6 +253,7 @@ var IdNameMap = map[int32]string{
 	9:   "screenshot-delayed",
 	10:  "file-manager",
 	11:  "disable-touchpad",
+	12:  "deepin-translator",
 	620: "show-desktop",
 	621: "switch-applications",
 	622: "switch-applications-backward",

@@ -282,11 +282,13 @@ func getShortcutById(id int32) string {
 func setSystemValue(id int32, value string, action bool) {
 	if key, ok := IdNameMap[id]; ok {
 		list := sysGSettings.GetStrv(key)
+		Logger.Infof("Key: %v, Value: %v", key, list)
 		if len(list) > 1 && action {
 			list[1] = value
 		} else if len(list) > 0 && !action {
 			list[0] = value
 		}
+		Logger.Infof("Set Value: %v", key, list)
 		sysGSettings.SetStrv(key, list)
 	}
 }
