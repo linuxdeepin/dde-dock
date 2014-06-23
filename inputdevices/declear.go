@@ -38,6 +38,7 @@ const (
 	TPAD_KEY_TAP_CLICK      = "tap-to-click"
 
 	MOUSE_KEY_LEFT_HAND    = "left-handed"
+	MOUSE_KEY_DISABLE_TPAD = "disable-touchpad"
 	MOUSE_KEY_MID_BUTTON   = "middle-button-enabled"
 	MOUSE_KEY_ACCEL        = "motion-acceleration"
 	MOUSE_KEY_THRES        = "motion-threshold"
@@ -64,6 +65,7 @@ const (
 
 type MouseEntry struct {
 	LeftHanded         *property.GSettingsBoolProperty  `access:"readwrite"`
+	DisableTpad        *property.GSettingsBoolProperty  `access:"readwrite"`
 	MotionAcceleration *property.GSettingsFloatProperty `access:"readwrite"`
 	MotionThreshold    *property.GSettingsFloatProperty `access:"readwrite"`
 	DoubleClick        *property.GSettingsIntProperty   `access:"readwrite"`

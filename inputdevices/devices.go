@@ -161,6 +161,9 @@ func NewMouse() *MouseEntry {
 	m.LeftHanded = property.NewGSettingsBoolProperty(
 		m, "LeftHanded",
 		mouseSettings, MOUSE_KEY_LEFT_HAND)
+	m.DisableTpad = property.NewGSettingsBoolProperty(
+		m, "DisableTpad",
+		mouseSettings, MOUSE_KEY_DISABLE_TPAD)
 	m.MotionAcceleration = property.NewGSettingsFloatProperty(
 		m, "MotionAcceleration",
 		mouseSettings, MOUSE_KEY_ACCEL)

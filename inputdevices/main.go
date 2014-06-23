@@ -66,6 +66,7 @@ func Start() {
 	layoutDescMap = getLayoutList(datas)
 
 	tpadFlag := false
+	mouseFlag := false
 	for _, info := range managerObj.Infos {
 		if info.Id == "mouse" {
 			mouse := NewMouse()
@@ -73,6 +74,7 @@ func Start() {
 				logObj.Warning("Mouse DBus Session Failed: ", err)
 				panic(err)
 			}
+			mouseFlag = true
 			managerObj.mouseObj = mouse
 		} else if info.Id == "touchpad" {
 			tpad := NewTPad()
@@ -93,4 +95,8 @@ func Start() {
 		}
 	}
 	initGSettingsSet(tpadFlag)
+
+	if mouseFlag {
+		disableTPadWhenMouse()
+	}
 }

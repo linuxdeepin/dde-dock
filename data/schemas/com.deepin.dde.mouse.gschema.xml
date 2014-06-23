@@ -10,6 +10,11 @@
       <summary>Mouse button orientation</summary>
       <description>Swap left and right mouse buttons for left-handed mice.</description>
     </key>
+    <key type="b" name="disable-touchpad">
+      <default>false</default>
+      <summary>Disable touchpad when has mouse</summary>
+      <description>Disable touchpad when has mouse.</description>
+    </key>
     <key type="d" name="motion-acceleration">
       <default>1.0</default>
       <summary>Single Click</summary>

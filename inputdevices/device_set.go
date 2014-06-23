@@ -246,6 +246,12 @@ func listenDevsSettings() {
 			} else {
 				C.set_left_handed(C.FALSE)
 			}
+		case MOUSE_KEY_DISABLE_TPAD:
+			if mouseSettings.GetBoolean(MOUSE_KEY_DISABLE_TPAD) {
+				tpadSettings.SetBoolean(TPAD_KEY_ENABLE, false)
+			} else {
+				tpadSettings.SetBoolean(TPAD_KEY_ENABLE, true)
+			}
 		case MOUSE_KEY_MID_BUTTON:
 			if ok := mouseSettings.GetBoolean(key); ok {
 				C.set_middle_button(C.TRUE)
@@ -392,4 +398,11 @@ func initGSettingsSet(tpadFlag bool) {
 	defer C.free(unsafe.Pointer(tpadName))
 	C.set_motion(tpadName, C.double(accel), C.int(thres))
 	//logObj.Info("Init devices end...")
+}
+
+func disableTPadWhenMouse() {
+	if mouseSettings.GetBoolean(MOUSE_KEY_DISABLE_TPAD) {
+		//C.set_tpad_enable(C.FALSE)
+		tpadSettings.SetBoolean(TPAD_KEY_ENABLE, false)
+	}
 }
