@@ -72,24 +72,21 @@ func initAvailableValuesIp6() {
 
 // Get available keys
 func getSettingIp6ConfigAvailableKeys(data connectionData) (keys []string) {
+	keys = appendAvailableKeys(data, keys, sectionIpv6, NM_SETTING_IP6_CONFIG_METHOD)
 	method := getSettingIp6ConfigMethod(data)
 	switch method {
 	default:
 		logger.Error("ip6 config method is invalid:", method)
 	case NM_SETTING_IP6_CONFIG_METHOD_IGNORE:
-		keys = appendAvailableKeys(data, keys, sectionIpv6, NM_SETTING_IP6_CONFIG_METHOD)
 	case NM_SETTING_IP6_CONFIG_METHOD_AUTO:
-		keys = appendAvailableKeys(data, keys, sectionIpv6, NM_SETTING_IP6_CONFIG_METHOD)
 		keys = appendAvailableKeys(data, keys, sectionIpv6, NM_SETTING_IP6_CONFIG_DNS)
 	case NM_SETTING_IP6_CONFIG_METHOD_DHCP: // ignore
-		keys = appendAvailableKeys(data, keys, sectionIpv6, NM_SETTING_IP6_CONFIG_METHOD)
 		keys = appendAvailableKeys(data, keys, sectionIpv6, NM_SETTING_IP6_CONFIG_DNS)
 	case NM_SETTING_IP6_CONFIG_METHOD_LINK_LOCAL: // ignore
 	case NM_SETTING_IP6_CONFIG_METHOD_MANUAL:
-		keys = appendAvailableKeys(data, keys, sectionIpv6, NM_SETTING_IP6_CONFIG_METHOD)
 		keys = appendAvailableKeys(data, keys, sectionIpv6, NM_SETTING_IP6_CONFIG_DNS)
 		keys = appendAvailableKeys(data, keys, sectionIpv6, NM_SETTING_IP6_CONFIG_ADDRESSES)
-	case NM_SETTING_IP6_CONFIG_METHOD_SHARED: // ignore
+	case NM_SETTING_IP6_CONFIG_METHOD_SHARED:
 	}
 	return
 }
@@ -106,14 +103,16 @@ func getSettingIp6ConfigAvailableValues(data connectionData, key string) (values
 		// 	NM_SETTING_IP6_CONFIG_METHOD_MANUAL,
 		// 	// NM_SETTING_IP6_CONFIG_METHOD_SHARED,// ignore
 		// }
-		if getSettingConnectionType(data) != NM_SETTING_VPN_SETTING_NAME {
+		if getSettingConnectionType(data) == NM_SETTING_VPN_SETTING_NAME {
 			values = []kvalue{
 				availableValuesIp6ConfigMethod[NM_SETTING_IP6_CONFIG_METHOD_AUTO],
-				availableValuesIp6ConfigMethod[NM_SETTING_IP6_CONFIG_METHOD_MANUAL],
+				availableValuesIp6ConfigMethod[NM_SETTING_IP6_CONFIG_METHOD_IGNORE],
 			}
 		} else {
 			values = []kvalue{
 				availableValuesIp6ConfigMethod[NM_SETTING_IP6_CONFIG_METHOD_AUTO],
+				availableValuesIp6ConfigMethod[NM_SETTING_IP6_CONFIG_METHOD_MANUAL],
+				availableValuesIp6ConfigMethod[NM_SETTING_IP6_CONFIG_METHOD_IGNORE],
 			}
 		}
 	}
@@ -138,7 +137,7 @@ func checkSettingIp6ConfigValues(data connectionData) (errs sectionErrors) {
 		checkSettingIp6MethodConflict(data, errs)
 	case NM_SETTING_IP6_CONFIG_METHOD_MANUAL:
 		ensureSettingIp6ConfigAddressesNoEmpty(data, errs)
-	case NM_SETTING_IP6_CONFIG_METHOD_SHARED: // ignore
+	case NM_SETTING_IP6_CONFIG_METHOD_SHARED:
 		checkSettingIp6MethodConflict(data, errs)
 	}
 
@@ -229,7 +228,7 @@ func logicSetSettingIp6ConfigMethod(data connectionData, value string) (err erro
 		removeSettingIp6ConfigAddresses(data)
 		removeSettingIp6ConfigRoutes(data)
 	case NM_SETTING_IP6_CONFIG_METHOD_MANUAL:
-	case NM_SETTING_IP6_CONFIG_METHOD_SHARED: // ignore
+	case NM_SETTING_IP6_CONFIG_METHOD_SHARED:
 		removeSettingIp6ConfigDns(data)
 		removeSettingIp6ConfigDnsSearch(data)
 		removeSettingIp6ConfigAddresses(data)
