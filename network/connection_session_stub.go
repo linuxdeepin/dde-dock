@@ -88,6 +88,19 @@ func (s *ConnectionSession) updatePropErrors() {
 		}
 	}
 
+	// clear setting key errors that not available
+	for errSection, _ := range s.settingKeyErrors {
+		if !isStringInArray(errSection, s.AvailableSections) {
+			delete(s.settingKeyErrors, errSection)
+		} else {
+			for errKey, _ := range s.settingKeyErrors[errSection] {
+				if !isStringInArray(errKey, s.AvailableKeys[errSection]) {
+					delete(s.settingKeyErrors[errSection], errKey)
+				}
+			}
+		}
+	}
+
 	// append errors when setting key
 	for section, sectionErrors := range s.settingKeyErrors {
 		for k, v := range sectionErrors {

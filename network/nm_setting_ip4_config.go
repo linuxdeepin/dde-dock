@@ -214,15 +214,14 @@ func getSettingIp4ConfigAvailableValues(data connectionData, key string) (values
 		// 	// NM_SETTING_IP4_CONFIG_METHOD_SHARED,   // ignore
 		// 	// NM_SETTING_IP4_CONFIG_METHOD_DISABLED, // ignore
 		// }
-		if getSettingConnectionType(data) != NM_SETTING_VPN_SETTING_NAME {
+		if getSettingConnectionType(data) == NM_SETTING_VPN_SETTING_NAME {
 			values = []kvalue{
 				availableValuesIp4ConfigMethod[NM_SETTING_IP4_CONFIG_METHOD_AUTO],
-				availableValuesIp4ConfigMethod[NM_SETTING_IP4_CONFIG_METHOD_MANUAL],
-				availableValuesIp4ConfigMethod[NM_SETTING_IP4_CONFIG_METHOD_SHARED],
 			}
 		} else {
 			values = []kvalue{
 				availableValuesIp4ConfigMethod[NM_SETTING_IP4_CONFIG_METHOD_AUTO],
+				availableValuesIp4ConfigMethod[NM_SETTING_IP4_CONFIG_METHOD_MANUAL],
 			}
 		}
 	}

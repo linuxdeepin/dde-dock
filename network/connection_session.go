@@ -221,7 +221,8 @@ func (s *ConnectionSession) Save() (ok bool, err error) {
 	// TODO what about the connection has been deleted?
 
 	if s.isErrorOccured() {
-		logger.Debug("Errors occured when saving:", s.Errors)
+		logger.Debug("Errors:", s.Errors)
+		logger.Debug("settingKeyErrors:", s.settingKeyErrors)
 		return false, nil
 	}
 
@@ -314,13 +315,6 @@ func (s *ConnectionSession) updateErrorsWhenSettingKey(section, key string, err 
 			s.settingKeyErrors[section] = sectionErrorsData
 		}
 		sectionErrorsData[key] = err.Error()
-	}
-
-	// ignore errors that not available
-	for errSection, _ := range s.settingKeyErrors {
-		if !isStringInArray(errSection, s.AvailableSections) {
-			delete(s.settingKeyErrors, errSection)
-		}
 	}
 }
 
