@@ -54,5 +54,11 @@
         <summary>Current Sound Theme</summary>
         <description>Current System Sound Theme</description>
     </key>
+    <key type="s" name="greeter-theme">
+        <default>'sky'</default>
+        <summary>theme of greeter and lock</summary>
+        <description>the theme of greeter and lock</description>
+    </key>
+    </schema>
   </schema>
 </schemalist>
