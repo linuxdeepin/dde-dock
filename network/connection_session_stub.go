@@ -41,47 +41,45 @@ func (s *ConnectionSession) updateProps() {
 	s.updatePropAvailableKeys()
 	s.updatePropErrors()
 
-	// update Data property at end, for that this was used by font-end
-	// to update widget value that with proeprty "alwaysUpdate", which
-	// should only update value when visible, so it depends on
-	// "AvailableSections" and "AvailableKeys"
-	s.updatePropData()
-}
-
-func (s *ConnectionSession) updatePropData() {
-	dbus.NotifyChange(s, "Data")
+	// notify connection data changed at end, for that this was used
+	// by font-end to update widget value that with proeprty
+	// "alwaysUpdate", which should only update value when visible, so
+	// it depends on "AvailableSections" and "AvailableKeys"
+	if s.ConnectionDataChanged != nil {
+		s.ConnectionDataChanged()
+	}
 }
 
 func (s *ConnectionSession) updatePropType() {
-	s.Type = getCustomConnectionType(s.Data)
+	s.Type = getCustomConnectionType(s.data)
 	dbus.NotifyChange(s, "Type")
 }
 
 func (s *ConnectionSession) updatePropAvailableVirtualSections() {
-	s.AvailableVirtualSections = getAvailableVsections(s.Data)
+	s.AvailableVirtualSections = getAvailableVsections(s.data)
 	dbus.NotifyChange(s, "AvailableVirtualSections")
 }
 
 func (s *ConnectionSession) updatePropAvailableSections() {
-	s.AvailableSections = getAvailableSections(s.Data)
+	s.AvailableSections = getAvailableSections(s.data)
 	dbus.NotifyChange(s, "AvailableSections")
 }
 
 func (s *ConnectionSession) updatePropAvailableKeys() {
 	s.AvailableKeys = make(map[string][]string) // clear structure
-	for _, section := range getAvailableSections(s.Data) {
-		s.AvailableKeys[section] = generalGetSettingAvailableKeys(s.Data, section)
+	for _, section := range getAvailableSections(s.data) {
+		s.AvailableKeys[section] = generalGetSettingAvailableKeys(s.data, section)
 	}
 	dbus.NotifyChange(s, "AvailableKeys")
 }
 
 func (s *ConnectionSession) updatePropErrors() {
 	s.Errors = make(sessionErrors)
-	for _, section := range getAvailableSections(s.Data) {
+	for _, section := range getAvailableSections(s.data) {
 		s.Errors[section] = make(sectionErrors)
-		if isSettingSectionExists(s.Data, section) {
+		if isSettingSectionExists(s.data, section) {
 			// check error only section exists
-			errs := generalCheckSettingValues(s.Data, section)
+			errs := generalCheckSettingValues(s.data, section)
 			for k, v := range errs {
 				s.Errors[section][k] = v
 			}
@@ -109,12 +107,12 @@ func (s *ConnectionSession) updatePropErrors() {
 	}
 
 	// check if vpn missing plugin
-	switch getCustomConnectionType(s.Data) {
+	switch getCustomConnectionType(s.data) {
 	case connectionVpnL2tp, connectionVpnOpenconnect, connectionVpnPptp, connectionVpnVpnc, connectionVpnOpenvpn:
-		if isKeyAvailable(s.Data, vsectionVpn, NM_SETTING_VK_VPN_MISSING_PLUGIN) {
+		if isKeyAvailable(s.data, vsectionVpn, NM_SETTING_VK_VPN_MISSING_PLUGIN) {
 			if _, ok := s.Errors[vsectionVpn]; ok {
 				s.Errors[vsectionVpn][NM_SETTING_VK_VPN_MISSING_PLUGIN] =
-					fmt.Sprintf(NM_KEY_ERROR_MISSING_DEPENDS_PACKAGE, getSettingVkVpnMissingPlugin(s.Data))
+					fmt.Sprintf(NM_KEY_ERROR_MISSING_DEPENDS_PACKAGE, getSettingVkVpnMissingPlugin(s.data))
 			} else {
 				logger.Errorf("missing section, errors[%s]", vsectionVpn)
 			}

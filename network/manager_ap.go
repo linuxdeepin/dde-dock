@@ -258,18 +258,18 @@ func (m *Manager) CreateConnectionForAccessPoint(apPath, devPath dbus.ObjectPath
 	if err != nil {
 		return
 	}
-	setSettingConnectionId(session.Data, string(ap.Ssid.Get()))
-	setSettingWirelessSsid(session.Data, []byte(ap.Ssid.Get()))
+	setSettingConnectionId(session.data, string(ap.Ssid.Get()))
+	setSettingWirelessSsid(session.data, []byte(ap.Ssid.Get()))
 	secType := getApSecType(ap)
 	switch secType {
 	case apSecNone:
-		logicSetSettingVkWirelessSecurityKeyMgmt(session.Data, "none")
+		logicSetSettingVkWirelessSecurityKeyMgmt(session.data, "none")
 	case apSecWep:
-		logicSetSettingVkWirelessSecurityKeyMgmt(session.Data, "wep")
+		logicSetSettingVkWirelessSecurityKeyMgmt(session.data, "wep")
 	case apSecPsk:
-		logicSetSettingVkWirelessSecurityKeyMgmt(session.Data, "wpa-psk")
+		logicSetSettingVkWirelessSecurityKeyMgmt(session.data, "wpa-psk")
 	case apSecEap:
-		logicSetSettingVkWirelessSecurityKeyMgmt(session.Data, "wpa-eap")
+		logicSetSettingVkWirelessSecurityKeyMgmt(session.data, "wpa-eap")
 	}
 	session.updateProps()
 
