@@ -153,6 +153,11 @@ func getIconTypeFile(info pathInfo) (string, string, string) {
 		return "", "", ""
 	}
 
+	aFile := path.Join(app, FILE_MANAGER)
+	if !dutils.IsFileExist(aFile) {
+		aFile = getPngFile(app)
+	}
+
 	dFile := path.Join(place, FOLDER)
 	if !dutils.IsFileExist(dFile) {
 		dFile = getPngFile(device)
@@ -165,14 +170,9 @@ func getIconTypeFile(info pathInfo) (string, string, string) {
 			pFile = getPngFile(place)
 		}
 	}
-
-	aFile := path.Join(app, FILE_MANAGER)
-	if !dutils.IsFileExist(aFile) {
-		aFile = getPngFile(app)
-	}
 	if (len(dFile) < 1) || (len(pFile) < 1) || (len(aFile) < 1) {
 		return "", "", ""
 	}
 
-	return dFile, pFile, aFile
+	return aFile, dFile, pFile
 }
