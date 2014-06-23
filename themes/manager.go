@@ -198,7 +198,7 @@ func (obj *Manager) getGtkStrList() []string {
 		list = append(list, l.Name)
 	}
 
-	return list
+	return sortByDeepin(list)
 }
 
 func (obj *Manager) getIconStrList() []string {
@@ -209,7 +209,7 @@ func (obj *Manager) getIconStrList() []string {
 		list = append(list, l.Name)
 	}
 
-	return list
+	return sortByDeepin(list)
 }
 
 func (obj *Manager) getSoundStrList() []string {

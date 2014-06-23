@@ -167,9 +167,13 @@ func getIconThemeList() []ThemeInfo {
 		filename := path.Join(l.Path, "index.theme")
 		_, ok := dutils.ReadKeyFromKeyFile(filename,
 			"Icon Theme", "Directories", []string{})
-		if !ok {
+		value, _ := dutils.ReadKeyFromKeyFile(filename,
+			"Icon Theme", "Hidden", false)
+		v, ok1 := value.(bool)
+		if !ok || (ok1 && v) {
 			continue
 		}
+
 		list = append(list, l)
 	}
 

@@ -208,3 +208,26 @@ func genThemeThumb() {
 		thumbTool = false
 	}()
 }
+
+func sortByDeepin(list []string) []string {
+	if !dutils.IsElementInList("Deepin", list) {
+		Logger.Infof("Deepin not exist in list: %v", list)
+		return list
+	}
+
+	l := len(list)
+	ret := make([]string, l)
+	i := 1
+
+	for _, v := range list {
+		if v == "Deepin" {
+			ret[0] = v
+			continue
+		}
+
+		ret[i] = v
+		i++
+	}
+
+	return ret
+}
