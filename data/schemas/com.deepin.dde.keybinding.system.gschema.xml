@@ -17,7 +17,7 @@
 		<description>system shortcut</description>
 	</key>
 	<key type="as" name="deepin-translator">
-		<default>['&lt;Control&gt;&lt;Alt&gt;F','/usr/bin/deepin-translator']</default>
+		<default>['&lt;Control&gt;&lt;Alt&gt;F','/usr/bin/deepin-translator --search']</default>
 		<summary>shortcut</summary>
 		<description>system shortcut</description>
 	</key>
