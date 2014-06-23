@@ -2847,7 +2847,7 @@ msgid "Guam (UTC+10) Guam"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:440
-msgid "Hawaii 96813 (UTC-10) Honolulu"
+msgid "Hawaii (UTC-10) Honolulu"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:441

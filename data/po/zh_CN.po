@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-23 10:30+0800\n"
+"POT-Creation-Date: 2014-06-23 11:14+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME &lt;EMAIL@ADDRESS&gt;\n"
 "Language-Team: LANGUAGE &lt;LL@li.org&gt;\n"
@@ -1213,7 +1213,7 @@ msgstr "坦桑尼亚（UTC+03）达累斯萨拉姆"
 
 #: ../../datetime/zone_utc_map.go:27
 msgid "Djibouti (UTC+03) Djibouti"
-msgstr "吉布提（UTC+03），吉布提"
+msgstr "吉布提（UTC+03） 吉布提"
 
 #: ../../datetime/zone_utc_map.go:28
 msgid "Cameroon (UTC+01) Douala"
@@ -2864,8 +2864,8 @@ msgid "Guam (UTC+10) Guam"
 msgstr "关岛（UTC+10）关岛"
 
 #: ../../datetime/zone_utc_map.go:440
-msgid "Hawaii 96813 (UTC-10) Honolulu"
-msgstr "夏威夷96813（UTC-10）檀香山"
+msgid "Hawaii (UTC-10) Honolulu"
+msgstr "夏威夷（UTC-10）檀香山"
 
 #: ../../datetime/zone_utc_map.go:441
 msgid "USA (UTC-10) Johnston"
@@ -2961,7 +2961,7 @@ msgstr "美国（UTC+08）中国"
 
 #: ../../datetime/zone_utc_map.go:464
 msgid "Czech Republic (UTC+09) ROK"
-msgstr "捷克共和国（UTC+09）韩国"
+msgstr "捷克共和国（UTC+09）ROK"
 
 #: ../../datetime/zone_utc_map.go:465
 msgid "Turkey (UTC+02) Turkey"

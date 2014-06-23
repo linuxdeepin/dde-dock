@@ -437,7 +437,7 @@ func initZoneCityMap() {
 		"Pacific/Gambier":                  Tr("Australia (UTC-09) Gambier"),
 		"Pacific/Guadalcanal":              Tr("Solomon Islands (UTC+11) Guadalcanal"),
 		"Pacific/Guam":                     Tr("Guam (UTC+10) Guam"),
-		"Pacific/Honolulu":                 Tr("Hawaii 96813 (UTC-10) Honolulu"),
+		"Pacific/Honolulu":                 Tr("Hawaii (UTC-10) Honolulu"),
 		"Pacific/Johnston":                 Tr("USA (UTC-10) Johnston"),
 		"Pacific/Kosrae":                   Tr("Australia (UTC+11) Kosrae"),
 		"Pacific/Kwajalein":                Tr("RMI (UTC+12) Kwajalein"),
