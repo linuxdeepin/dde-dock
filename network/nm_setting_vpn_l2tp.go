@@ -136,6 +136,7 @@ func newVpnL2tpConnectionData(id, uuid string) (data connectionData) {
 func initSettingSectionVpnL2tp(data connectionData) {
 	initBasicSettingSectionVpn(data, NM_DBUS_SERVICE_L2TP)
 	setSettingVpnL2tpKeyPasswordFlags(data, NM_L2TP_SECRET_FLAG_NONE)
+	logicSetSettingVkVpnL2tpRequireMppe(data, true)
 }
 
 // vpn-l2tp

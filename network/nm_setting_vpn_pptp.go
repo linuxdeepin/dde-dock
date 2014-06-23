@@ -126,6 +126,7 @@ func newVpnPptpConnectionData(id, uuid string) (data connectionData) {
 func initSettingSectionVpnPptp(data connectionData) {
 	initBasicSettingSectionVpn(data, NM_DBUS_SERVICE_PPTP)
 	setSettingVpnPptpKeyPasswordFlags(data, NM_PPTP_SECRET_FLAG_NONE)
+	logicSetSettingVkVpnPptpRequireMppe(data, true)
 }
 
 // vpn-pptp
