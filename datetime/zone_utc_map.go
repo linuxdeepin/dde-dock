@@ -434,6 +434,7 @@ func initZoneCityMap() {
 		"Pacific/Chatham":                  Tr("USA (UTC+10) Chatham"),
 		"Pacific/Easter":                   Tr("USA (UTC-06) Easter"),
 		"Pacific/Efate":                    Tr("Vanuatu (UTC+11) Efate"),
+		"Pacific/Efate":                    Tr("New Caledonia (UTC+11) Nouméa"),
 		"Pacific/Enderbury":                Tr("Australia (UTC+13) Enderbury"),
 		"Pacific/Fakaofo":                  Tr("Tokelau (UTC+13) Fakaofo"),
 		"Pacific/Fiji":                     Tr("Fiji (UTC+12) Fiji"),
