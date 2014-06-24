@@ -154,6 +154,14 @@ func (s *ConnectionSession) fixValues() {
 		initSettingSectionIpv6(s.data)
 	}
 
+	// fix ipv6 addresses and routes data structure, interface{}
+	if isSettingIp6ConfigAddressesExists(s.data) {
+		setSettingIp6ConfigAddresses(s.data, getSettingIp6ConfigAddresses(s.data))
+	}
+	if isSettingIp6ConfigRoutesExists(s.data) {
+		setSettingIp6ConfigRoutes(s.data, getSettingIp6ConfigRoutes(s.data))
+	}
+
 	// vpn plugin data and secret
 	if getSettingConnectionType(s.data) == NM_SETTING_VPN_SETTING_NAME {
 		if !isSettingVpnDataExists(s.data) {
@@ -289,9 +297,9 @@ func (s *ConnectionSession) GetAvailableValues(section, key string) (valuesJSON 
 }
 
 func (s *ConnectionSession) GetKey(section, key string) (valueJSON string) {
-	logger.Debugf("GetKey(), section=%s, key=%s", section, key) // TODO test
+	// logger.Debugf("GetKey(), section=%s, key=%s", section, key) // TODO test
 	valueJSON = generalGetSettingKeyJSON(s.data, section, key)
-	logger.Debugf("GetKey(), section=%s, key=%s, valueJSON=%s", section, key, valueJSON) // TODO test
+	// logger.Debugf("GetKey(), section=%s, key=%s, valueJSON=%s", section, key, valueJSON) // TODO test
 	return
 }
 
