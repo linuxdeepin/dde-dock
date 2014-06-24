@@ -22,28 +22,13 @@
 package datetime
 
 func timezoneIsValid(tz string) bool {
-	_, ok := zoneCityMap[tz]
-	return ok
-}
-
-func getZoneCityList() []string {
-	list := []string{}
-
-	for _, v := range zoneCityMap {
-		list = append(list, v)
-	}
-
-	return list
-}
-
-func getKeyByValue(value string) string {
-	for k, v := range zoneCityMap {
-		if v == value {
-			return k
+	for _, info := range zoneInfos {
+		if tz == info.Zone {
+			return true
 		}
 	}
 
-	return ""
+	return false
 }
 
 func convertZoneToCity(tz string) string {

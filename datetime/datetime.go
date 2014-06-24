@@ -63,9 +63,8 @@ func (op *Manager) SetTime(t string) (bool, error) {
 	return ret, nil
 }
 
-func (op *Manager) TimezoneCityList() map[string]string {
-	//return getZoneCityList()
-	return zoneCityMap
+func (op *Manager) TimezoneCityList() []zoneCityInfo {
+	return zoneInfos
 }
 
 func (op *Manager) SetTimeZone(zone string) bool {
@@ -192,7 +191,7 @@ func Start() {
 	Init()
 
 	initLocalDescMap()
-	initZoneCityMap()
+	initZoneInfos()
 
 	date := GetManager()
 	err = dbus.InstallOnSession(date)

@@ -10,6 +10,7 @@ var noUnderlineList = []string{
 	"US/Pacific-New",
 }
 
+/*
 var zoneCityInfo = []string{
 	"Africa/Abidjan",
 	"Africa/Accra",
@@ -508,3 +509,4 @@ var zoneCityInfo = []string{
 	"US/Pacific-New",
 	"US/Samoa",
 }
+*/

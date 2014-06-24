@@ -93,7 +93,7 @@ func getNtpTime(locale string) (*time.Time, error) {
 		locale = "UTC"
 	}
 
-	if _, ok := zoneCityMap[locale]; !ok {
+	if !timezoneIsValid(locale) {
 		Logger.Warningf("'%s': invalid locale", locale)
 		locale = "UTC"
 	}
