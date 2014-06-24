@@ -24,8 +24,8 @@ package network
 import (
 	// liblogger "pkg.linuxdeepin.com/lib/logger"
 	. "launchpad.net/gocheck"
-	"testing"
-	"time"
+	// "testing"
+	// "time"
 )
 
 func init() {

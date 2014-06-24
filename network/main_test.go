@@ -21,25 +21,28 @@
 
 package network
 
-// import (
-// 	// liblogger "pkg.linuxdeepin.com/lib/logger"
-// 	. "launchpad.net/gocheck"
-// 	"testing"
-// 	"time"
-// )
+import (
+	// liblogger "pkg.linuxdeepin.com/lib/logger"
+	// . "launchpad.net/gocheck"
+	"testing"
+	// "time"
+	"dlib/glib-2.0"
+)
 
-// func TestModuleStartStop(t *testing.T) {
-// 	// logger.SetLogLevel(liblogger.LEVEL_DEBUG)
-// 	Stop()
-// 	Stop()
-// 	go func() {
-// 		time.Sleep(3 * time.Second)
-// 		Start()
-// 		Stop()
-// 		Stop()
-// 	}()
-// 	Start()
-// 	Stop()
-// 	Stop()
-// 	time.Sleep(30 * time.Second)
-// }
+func TestModuleStartStop(t *testing.T) {
+	// logger.SetLogLevel(liblogger.LEVEL_DEBUG)
+	// Stop()
+	// Stop()
+	// go func() {
+	// 	time.Sleep(3 * time.Second)
+	// 	Start()
+	// 	Stop()
+	// 	Stop()
+	// }()
+	// Start()
+	// Stop()
+	// Stop()
+	// time.Sleep(30 * time.Second)
+	Start()
+	glib.StartLoop()
+}

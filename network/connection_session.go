@@ -110,7 +110,7 @@ func newConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 	}
 
 	s.updateProps()
-	logger.Debug("newConnectionSessionByCreate():", s.data)
+	logger.Infof("newConnectionSessionByCreate(): %#v", s.data)
 	return
 }
 
@@ -144,7 +144,7 @@ func newConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 	}
 
 	s.updateProps()
-	logger.Debug("NewConnectionSessionByOpen():", s.data)
+	logger.Infof("NewConnectionSessionByOpen(): %#v", s.data)
 	return
 }
 
@@ -222,6 +222,8 @@ func (s *ConnectionSession) doGetSecrets(secretField string) {
 // Save save current connection s.
 func (s *ConnectionSession) Save() (ok bool, err error) {
 	// TODO what about the connection has been deleted?
+
+	logger.Infof("Save connection: %#v", s.data)
 
 	if s.isErrorOccured() {
 		logger.Debug("Errors:", s.Errors)
