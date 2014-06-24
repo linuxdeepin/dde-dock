@@ -129,7 +129,7 @@ func checkSettingIp6ConfigValues(data connectionData) (errs sectionErrors) {
 	default:
 		rememberError(errs, sectionIpv6, NM_SETTING_IP6_CONFIG_METHOD, NM_KEY_ERROR_INVALID_VALUE)
 		return
-	case NM_SETTING_IP6_CONFIG_METHOD_IGNORE: // ignore
+	case NM_SETTING_IP6_CONFIG_METHOD_IGNORE:
 		checkSettingIp6MethodConflict(data, errs)
 	case NM_SETTING_IP6_CONFIG_METHOD_AUTO:
 	case NM_SETTING_IP6_CONFIG_METHOD_DHCP: // ignore
@@ -217,7 +217,7 @@ func checkSettingIp6ConfigAddresses(data connectionData, errs sectionErrors) {
 // Logic setter
 func logicSetSettingIp6ConfigMethod(data connectionData, value string) (err error) {
 	switch value {
-	case NM_SETTING_IP6_CONFIG_METHOD_IGNORE: // ignore
+	case NM_SETTING_IP6_CONFIG_METHOD_IGNORE:
 		removeSettingKeyBut(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_METHOD)
 	case NM_SETTING_IP6_CONFIG_METHOD_AUTO:
 		removeSettingIp6ConfigAddresses(data)
@@ -270,7 +270,9 @@ func getSettingVkIp6ConfigAddressesAddress(data connectionData) (value string) {
 		return
 	}
 	addresses := getSettingIp6ConfigAddresses(data)
-	value = convertIpv6AddressToString(addresses[0].Address)
+	if isIpv6AddressValid(addresses[0].Address) {
+		value = convertIpv6AddressToString(addresses[0].Address)
+	}
 	return
 }
 func getSettingVkIp6ConfigAddressesPrefix(data connectionData) (value uint32) {
