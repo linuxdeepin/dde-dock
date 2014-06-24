@@ -46,7 +46,7 @@ msgstr ""
 msgid "Message notification"
 msgstr ""
 
-#: ../../datetime/datetime.go:129
+#: ../../datetime/datetime.go:128
 msgid "Language changing, please wait"
 msgstr ""
 
@@ -1122,1904 +1122,1888 @@ msgstr ""
 msgid "Language failed to change, please try later."
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:9
-msgid "Cte d'Ivoire (UTC+00) Abidjan"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:10
-msgid "Ghana (UTC+00) Accra"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:11
-msgid "Ethiopia (UTC+03) Addis Ababa"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:12
-msgid "Algeria (UTC+01) Algiers"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:13
-msgid "Eritrea (UTC+03) Asmara"
-msgstr ""
-
 #: ../../datetime/zone_utc_map.go:14
-msgid "Mali (UTC+00) Bamako"
+msgid "Cape Verde"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:15
-msgid "Central African Republic (UTC+01) Bangui"
+msgid "Noronha"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:16
-msgid "The Gambia (UTC+00) Banjul"
+msgid "South Georgia"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:17
-msgid "Guinea-Bissau (UTC+00) Bissau"
+msgid "Araguaina"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:18
-msgid "Malawi (UTC+02) Blantyre"
+msgid "Catamarca"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:19
-msgid "Congo (UTC+01) Brazzaville"
+msgid "ComodRivadavia"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:20
-msgid "Burundi (UTC+02) Bujumbura"
+msgid "Jujuy"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:21
-msgid "Egypt (UTC+02) Cairo"
+msgid "La Rioja"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:22
-msgid "Morocco (UTC+00) Casablanca"
+msgid "Rio Gallegos"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:23
-msgid "Spain (UTC+01) Ceuta"
+msgid "Salta"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:24
-msgid "Guinea (UTC+00) Conakry"
+msgid "San Juan"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:25
-msgid "Senegal (UTC+00) Dakar"
+msgid "San Luis"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:26
-msgid "Tanzania (UTC+03) Dar es Salaam"
+msgid "Tucuman"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:27
-msgid "Djibouti (UTC+03) Djibouti"
+msgid "Ushuaia"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:28
-msgid "Cameroon (UTC+01) Douala"
+msgid "Bahia"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:29
-msgid "Western Sahara (UTC+00) El Aaiun"
+msgid "Belem"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:30
-msgid "Sierra Leone (UTC+00) Freetown"
+msgid "Buenos Aires"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:31
-msgid "Botswana (UTC+02) Gaborone"
+msgid "Caracas"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:32
-msgid "Zimbabwe (UTC+02) Harare"
+msgid "Cayenne"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:33
-msgid "South Africa (UTC+02) Johannesburg"
+msgid "Cordoba"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:34
-msgid "South Sudan (UTC+03) Juba"
+msgid "Fortaleza"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:35
-msgid "Uganda (UTC+03) Kampala"
+msgid "Godthab"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:36
-msgid "Sudan (UTC+03) Khartoum"
+msgid "Maceio"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:37
-msgid "Rwanda (UTC+02) Kigali"
+msgid "Mendoza"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:38
-msgid "Democratic Republic of the Congo (UTC+01) Kinshasa"
+msgid "Miquelon"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:39
-msgid "Nigeria (UTC+01) Lagos"
+msgid "Montevideo"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:40
-msgid "Gabon (UTC+01) Libreville"
+msgid "Paramaribo"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:41
-msgid "Togo (UTC+00) Lome"
+msgid "Recife"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:42
-msgid "Angola (UTC+01) Luanda"
+msgid "Rosario"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:43
-msgid "Democratic Republic of the Congo (UTC+02) Lubumbashi"
+msgid "Santarem"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:44
-msgid "Zambia (UTC+02) Lusaka"
+msgid "Sao Paulo"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:45
-msgid "Equatorial Guinea (UTC+01) Malabo"
+msgid "Rothera"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:46
-msgid "Mozambique (UTC+02) Maputo"
+msgid "Stanley"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:47
-msgid "Lesotho (UTC+02) Maseru"
+msgid "Brazil East"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:48
-msgid "Swaziland (UTC+02) Mbabane"
+msgid "Anguilla"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:49
-msgid "Somalia (UTC+03) Mogadishu"
+msgid "Antigua"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:50
-msgid "Liberia (UTC+00) Monrovia"
+msgid "Aruba"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:51
-msgid "Kenya (UTC+03) Nairobi"
+msgid "Asuncion"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:52
-msgid "Chad (UTC+01) Ndjamena"
+msgid "Barbados"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:53
-msgid "Niger (UTC+01) Niamey"
+msgid "Boa Vista"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:54
-msgid "Mauritania (UTC+00) Nouakchott"
+msgid "Campo Grande"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:55
-msgid "Burkina Faso (UTC+00) Ouagadougou"
+msgid "Cuiaba"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:56
-msgid "Benin (UTC+01) Porto Novo"
+msgid "Curacao"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:57
-msgid "So Tom and Prncipe (UTC+00) Sao Tome"
+msgid "Dominica"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:58
-msgid "Mali (UTC+00) Timbuktu"
+msgid "Eirunepe"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:59
-msgid "Libya (UTC+02) Tripoli"
+msgid "Glace Bay"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:60
-msgid "Tunisia (UTC+01) Tunis"
+msgid "Goose Bay"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:61
-msgid "Namibia (UTC+01) Windhoek"
+msgid "Grenada"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:62
-msgid "USA (UTC-10) Adak"
+msgid "Guadeloupe"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:63
-msgid "USA (UTC-09) Anchorage"
+msgid "Guyana"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:64
-msgid "USA (UTC-04) Anguilla"
+msgid "Halifax"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:65
-msgid "USA (UTC-04) Antigua"
+msgid "Kralendijk"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:66
-msgid "USA (UTC-03) Araguaina"
+msgid "La Paz"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:67
-msgid "Argentina (UTC-03) Catamarca"
+msgid "Lower Princes"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:68
-msgid "Argentina (UTC-03) ComodRivadavia"
+msgid "Manaus"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:69
-msgid "Argentina (UTC-03) Cordoba"
+msgid "Marigot"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:70
-msgid "Argentina (UTC-03) Jujuy"
+msgid "Martinique"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:71
-msgid "Argentina (UTC-03) La Rioja"
+msgid "Moncton"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:72
-msgid "Argentina (UTC-03) Mendoza"
+msgid "Montserrat"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:73
-msgid "Argentina (UTC-03) Rio Gallegos"
+msgid "Port of Spain"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:74
-msgid "Argentina (UTC-03) Salta"
+msgid "Porto Velho"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:75
-msgid "Argentina (UTC-03) San Juan"
+msgid "Puerto Rico"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:76
-msgid "Argentina (UTC-03) San Luis"
+msgid "Santiago"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:77
-msgid "Argentina (UTC-03) Tucuman"
+msgid "Santo Domingo"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:78
-msgid "Argentina (UTC-03) Ushuaia"
+msgid "St Barthelemy"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:79
-msgid "USA (UTC-04) Aruba"
+msgid "St Johns"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:80
-msgid "USA (UTC-04) Asuncion"
+msgid "St Lucia"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:81
-msgid "Canada (UTC-05) Atikokan"
+msgid "St Thomas"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:82
-msgid "USA (UTC-10) Atka"
+msgid "St Vincent"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:83
-msgid "Brazil (UTC-03) Bahia"
+msgid "Thule"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:84
-msgid "Mexico (UTC-06) Bahia Banderas"
+msgid "Tortola"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:85
-msgid "USA (UTC-04) Barbados"
+msgid "Virgin"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:86
-msgid "USA (UTC-03) Belem"
+msgid "Palmer"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:87
-msgid "USA (UTC-06) Belize"
+msgid "Bermuda"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:88
-msgid "USA (UTC-04) Boa Vista"
+msgid "Brazil West"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:89
-msgid "USA (UTC-05) Bogota"
+msgid "Atlantic"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:90
-msgid "USA (UTC-07) Boise"
+msgid "Continental"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:91
-msgid "Argentina (UTC-03) Buenos Aires"
+msgid "Atikokan"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:92
-msgid "USA (UTC-07) Cambridge Bay"
+msgid "Bogota"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:93
-msgid "USA (UTC-04) Campo Grande"
+msgid "Cayman"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:94
-msgid "USA (UTC-06) Cancun"
+msgid "Coral Harbour"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:95
-msgid "Ecuador (UTC-03) Caracas"
+msgid "Detroit"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:96
-msgid "USA (UTC-03) Cayenne"
+msgid "Fort Wayne"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:97
-msgid "USA (UTC-05) Cayman"
+msgid "Grand Turk"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:98
-msgid "USA (UTC-06) Chicago"
+msgid "Guayaquil"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:99
-msgid "Mexico (UTC-07) Chihuahua"
+msgid "Havana"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:100
-msgid "USA (UTC-05) Coral Harbour"
+msgid "Marengo"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:101
-msgid "USA (UTC-03) Cordoba"
+msgid "Petersburg"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:102
-msgid "USA (UTC-06) Costa Rica"
+msgid "Vevay"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:103
-msgid "USA (UTC-07) Creston"
+msgid "Vincennes"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:104
-msgid "USA (UTC-04) Cuiaba"
+msgid "Winamac"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:105
-msgid "USA (UTC-04) Curacao"
+msgid "Indianapolis"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:106
-msgid "USA (UTC-08) Dawson"
+msgid "Iqaluit"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:107
-msgid "USA (UTC-07) Dawson Creek"
+msgid "Jamaica"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:108
-msgid "USA (UTC-07) Denver"
+msgid "Lima"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:109
-msgid "USA (UTC-05) Detroit"
+msgid "Louisville"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:110
-msgid "USA (UTC-04) Dominica"
+msgid "Monticello"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:111
-msgid "USA (UTC-07) Edmonton"
+msgid "Montreal"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:112
-msgid "Brazil (UTC-04) Eirunepe"
+msgid "Nassau"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:113
-msgid "USA (UTC-06) El Salvador"
+msgid "New York"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:114
-msgid "USA (UTC-08) Ensenada"
+msgid "Nipigon"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:115
-msgid "USA (UTC-05) Fort Wayne"
+msgid "Panama"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:116
-msgid "USA (UTC-03) Fortaleza"
+msgid "Port au Prince"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:117
-msgid "USA (UTC-04) Glace Bay"
+msgid "Porto Acre"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:118
-msgid "Greenland (UTC-03) Godthab"
+msgid "Rio Branco"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:119
-msgid "USA (UTC-04) Goose Bay"
+msgid "Thunder Bay"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:120
-msgid "USA (UTC-05) Grand Turk"
+msgid "Toronto"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:121
-msgid "USA (UTC-04) Grenada"
+msgid "Yancowinna"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:122
-msgid "Mexico (UTC-04) Guadeloupe"
+msgid "Canada Eastern"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:123
-msgid "Mexico (UTC-06) Guatemala"
+msgid "Cuba"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:124
-msgid "Ecuador (UTC-05) Guayaquil"
+msgid "EST"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:125
-msgid "Mexico (UTC-04) Guyana"
+msgid "USA Eastern"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:126
-msgid "USA (UTC-04) Halifax"
+msgid "East Indiana"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:127
-msgid "USA (UTC-05) Havana"
+msgid "Michigan"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:128
-msgid "USA (UTC-07) Hermosillo"
+msgid "Bahia Banderas"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:129
-msgid "USA (UTC-06) Knox"
+msgid "Belize"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:130
-msgid "USA (UTC-05) Marengo"
+msgid "Cancun"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:131
-msgid "USA (UTC-05) Petersburg"
+msgid "Chicago"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:132
-msgid "USA (UTC-06) Tell City"
+msgid "Costa Rica"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:133
-msgid "USA (UTC-05) Vevay"
+msgid "El Salvador"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:134
-msgid "USA (UTC-05) Vincennes"
+msgid "Guatemala"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:135
-msgid "USA (UTC-05) Winamac"
+msgid "Knox"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:136
-msgid "USA (UTC-05) Indianapolis"
+msgid "Tell City"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:137
-msgid "Canada (UTC-07) Inuvik"
+msgid "Managua"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:138
-msgid "Canada (UTC-05) Iqaluit"
+msgid "Matamoros"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:139
-msgid "USA (UTC-05) Jamaica"
+msgid "Menominee"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:140
-msgid "USA (UTC-09) Juneau"
+msgid "Merida"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:141
-msgid "USA (UTC-05) Monticello"
+msgid "Mexico City"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:142
-msgid "Caribbean Netherlands (UTC-04) Kralendijk"
+msgid "Monterrey"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:143
-msgid "USA (UTC-04) La Paz"
+msgid "Beulah"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:144
-msgid "USA (UTC-05) Lima"
+msgid "Center"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:145
-msgid "USA (UTC-08) Los Angeles"
+msgid "New Salem"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:146
-msgid "USA (UTC-05) Louisville"
+msgid "Rainy River"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:147
-msgid "Canada (UTC-04) Lower Princes"
+msgid "Swift Current"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:148
-msgid "Brazil (UTC-03) Maceio"
+msgid "Regina"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:149
-msgid "Mexico (UTC-06) Managua"
+msgid "Resolute"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:150
-msgid "USA (UTC-04) Manaus"
+msgid "Tegucigalpa"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:151
-msgid "USA (UTC-04) Marigot"
+msgid "Winnipeg"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:152
-msgid "USA (UTC-04) Martinique"
+msgid "East Saskatchewan"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:153
-msgid "Mexico (UTC-06) Matamoros"
+msgid "Saskatchewan"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:154
-msgid "USA (UTC-07) Mazatlan"
+msgid "EasterIsland"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:155
-msgid "USA (UTC-03) Mendoza"
+msgid "General"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:156
-msgid "USA (UTC-06) Menominee"
+msgid "Pacific Easter"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:157
-msgid "USA (UTC-06) Merida"
+msgid "Galapagos"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:158
-msgid "USA (UTC-08) Metlakatla"
+msgid "USA Central"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:159
-msgid "USA (UTC-06) Mexico City"
+msgid "Indiana Starke"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:160
-msgid "USA (UTC-03) Miquelon"
+msgid "Boise"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:161
-msgid "Canada (UTC-04) Moncton"
+msgid "Cambridge Bay"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:162
-msgid "USA (UTC-06) Monterrey"
+msgid "Chihuahua"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:163
-msgid "USA (UTC-03) Montevideo"
+msgid "Creston"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:164
-msgid "USA (UTC-05) Montreal"
+msgid "Dawson Creek"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:165
-msgid "USA (UTC-04) Montserrat"
+msgid "Denver"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:166
-msgid "USA (UTC-05) Nassau"
+msgid "Edmonton"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:167
-msgid "USA (UTC-05) New York"
+msgid "Hermosillo"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:168
-msgid "Canada (UTC-05) Nipigon"
+msgid "Inuvik"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:169
-msgid "USA (UTC-09) Nome"
+msgid "Mazatlan"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:170
-msgid "Brazil (UTC-02) Noronha"
+msgid "Ojinaga"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:171
-msgid "USA (UTC-06) Beulah"
+msgid "Phoenix"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:172
-msgid "USA (UTC-06) Center"
+msgid "Shiprock"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:173
-msgid "USA (UTC-06) New Salem"
+msgid "Yellowknife"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:174
-msgid "Mexico (UTC-07) Ojinaga"
+msgid "Canada Mountain"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:175
-msgid "USA (UTC-05) Panama"
+msgid "BajaSur"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:176
-msgid "Mexico (UTC-03) Paramaribo"
+msgid "MST"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:177
-msgid "USA (UTC-07) Phoenix"
+msgid "Navajo"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:178
-msgid "USA (UTC-04) Port of Spain"
+msgid "Arizona"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:179
-msgid "USA (UTC-05) Port au Prince"
+msgid "USA Mountain"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:180
-msgid "Brazil (UTC-05) Porto Acre"
+msgid "Dawson"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:181
-msgid "USA (UTC-04) Porto Velho"
+msgid "Ensenada"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:182
-msgid "USA (UTC-04) Puerto Rico"
+msgid "Los Angeles"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:183
-msgid "USA (UTC-06) Rainy River"
+msgid "Metlakatla"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:184
-msgid "USA (UTC-03) Recife"
+msgid "Santa Isabel"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:185
-msgid "USA (UTC-06) Regina"
+msgid "Tijuana"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:186
-msgid "USA (UTC-06) Resolute"
+msgid "Vancouver"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:187
-msgid "USA (UTC-05) Rio Branco"
+msgid "Whitehorse"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:188
-msgid "USA (UTC-03) Rosario"
+msgid "Newfoundland"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:189
-msgid "USA (UTC-08) Santa Isabel"
+msgid "Yukon"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:190
-msgid "USA (UTC-03) Santarem"
+msgid "BajaNorte"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:191
-msgid "USA (UTC-04) Santiago"
+msgid "Pitcairn"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:192
-msgid "USA (UTC-04) Santo Domingo"
+msgid "Pacific"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:193
-msgid "USA (UTC-03) Sao Paulo"
+msgid "Pacific New"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:194
-msgid "USA (UTC-07) Shiprock"
+msgid "Anchorage"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:195
-msgid "USA (UTC-09) Sitka"
+msgid "Juneau"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:196
-msgid "USA (UTC-04) St Barthelemy"
+msgid "Nome"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:197
-msgid "USA (UTC-04) St Johns"
+msgid "Sitka"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:198
-msgid "USA (UTC-04) St Lucia"
+msgid "Yakutat"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:199
-msgid "USA (UTC-04) St Thomas"
+msgid "Gambier"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:200
-msgid "USA (UTC-04) St Vincent"
+msgid "Alaska"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:201
-msgid "Canada (UTC-06) Swift Current"
+msgid "Adak"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:202
-msgid "Ecuador (UTC-06) Tegucigalpa"
+msgid "Atka"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:203
-msgid "USA (UTC-04) Thule"
+msgid "HST"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:204
-msgid "USA (UTC-05) Thunder Bay"
+msgid "Honolulu"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:205
-msgid "Mexico (UTC-08) Tijuana"
+msgid "Johnston"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:206
-msgid "Canada (UTC-05) Toronto"
+msgid "Rarotonga"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:207
-msgid "USA (UTC-04) Tortola"
+msgid "Tahiti"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:208
-msgid "USA (UTC-08) Vancouver"
+msgid "Aleutian"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:209
-msgid "USA (UTC-04) Virgin"
+msgid "Hawaii"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:210
-msgid "USA (UTC-08) Whitehorse"
+msgid "Marquesas"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:211
-msgid "Canada (UTC-06) Winnipeg"
+msgid "Niue"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:212
-msgid "USA (UTC-09) Yakutat"
+msgid "Samoa"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:213
-msgid "USA (UTC-07) Yellowknife"
+msgid "Abidjan"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:214
-msgid "Antarctica (UTC+11) Casey"
+msgid "Accra"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:215
-msgid "Antarctica (UTC+05) Davis"
+msgid "Bamako"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:216
-msgid "Antarctica (UTC+10) DumontDUrville"
+msgid "Banjul"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:217
-msgid "Antarctica (UTC+05) Mawson"
+msgid "Bissau"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:218
-msgid "Antarctica (UTC+12) McMurdo"
+msgid "Casablanca"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:219
-msgid "Antarctica (UTC-04) Palmer"
+msgid "Conakry"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:220
-msgid "Antarctica (UTC-03) Rothera"
+msgid "Dakar"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:221
-msgid "Antarctica (UTC+12) South Pole"
+msgid "El Aaiun"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:222
-msgid "Antarctica (UTC+06) Vostok"
+msgid "Freetown"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:223
-msgid "Svalbard and Jan Mayen (UTC+01) Longyearbyen"
+msgid "Lome"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:224
-msgid "Yemen (UTC+03) Aden"
+msgid "Monrovia"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:225
-msgid "Kazakhstan (UTC+06) Almaty"
+msgid "Nouakchott"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:226
-msgid "Jordan (UTC+02) Amman"
+msgid "Ouagadougou"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:227
-msgid "Russia (UTC+12) Anadyr"
+msgid "Sao Tome"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:228
-msgid "Kazakhstan (UTC+05) Aqtau"
+msgid "Timbuktu"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:229
-msgid "Kazakhstan (UTC+05) Aqtobe"
+msgid "Canary"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:230
-msgid "Turkmenistan (UTC+05) Ashkhabad"
+msgid "Madeira"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:231
-msgid "Iraq (UTC+03) Baghdad"
+msgid "Reykjavik"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:232
-msgid "Bahrain (UTC+03) Bahrain"
+msgid "St Helena"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:233
-msgid "Azerbaijan (UTC+04) Baku"
+msgid "Eire"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:234
-msgid "Thailand (UTC+07) Bangkok"
+msgid "Belfast"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:235
-msgid "Lebanon (UTC+02) Beirut"
+msgid "Dublin"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:236
-msgid "Kyrgyzstan (UTC+06) Bishkek"
+msgid "Guernsey"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:237
-msgid "Brunei (UTC+08) Brunei"
+msgid "Isle of Man"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:238
-msgid "India (UTC+08) Calcutta"
+msgid "Jersey"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:239
-msgid "China (UTC+08) Chongqing"
+msgid "Lisbon"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:240
-msgid "China (UTC+08) Chungking"
+msgid "London"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:241
-msgid "Sri Lanka (UTC+06) Colombo"
+msgid "GB"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:242
-msgid "Syria (UTC+02) Damascus"
+msgid "GB Eire"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:243
-msgid "Bangladesh (UTC+06) Dhaka"
+msgid "USA GMT"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:244
-msgid "Timor-Leste (UTC+09) Dili"
+msgid "Brazil GMT"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:245
-msgid "Dubai - United Arab Emirates (UTC+04) Dubai"
+msgid "Greenwich"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:246
-msgid "Tajikistan (UTC+05) Dushanbe"
+msgid "Iceland"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:247
-msgid "Gaza (UTC+02) Gaza"
+msgid "Portugal"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:248
-msgid "China (UTC+08) Harbin"
+msgid "UCT"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:249
-msgid "Hebron (UTC+02) Hebron"
+msgid "Universal"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:250
-msgid "Vietnam (UTC+07) Ho Chi Minh"
+msgid "UTC"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:251
-msgid "Hong Kong (UTC+08) Hong Kong"
+msgid "WET"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:252
-msgid "Mongolia (UTC+07) Hovd"
+msgid "Zulu"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:253
-msgid "Russia (UTC+09) Irkutsk"
+msgid "Algiers"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:254
-msgid "Indonesia (UTC+07) Jakarta"
+msgid "Bangui"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:255
-msgid "India (UTC+09) Jayapura"
+msgid "Brazzaville"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:256
-msgid "Israel (UTC+02) Jerusalem"
+msgid "Ceuta"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:257
-msgid "Afghanistan (UTC+12) Kabul"
+msgid "Douala"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:258
-msgid "Pakistan (UTC+05) Karachi"
+msgid "Kinshasa"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:259
-msgid "China (UTC+08) Kashgar"
+msgid "Lagos"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:260
-msgid "Nepal (UTC+08) Kathmandu"
+msgid "Libreville"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:261
-msgid "Malaysia (UTC+08) Kuala Lumpur"
+msgid "Luanda"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:262
-msgid "Malaysia (UTC+08) Kuching"
+msgid "Malabo"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:263
-msgid "Kuwait (UTC+03) Kuwait"
+msgid "Ndjamena"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:264
-msgid "Macau (UTC+08) Macao"
+msgid "Niamey"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:265
-msgid "Russia (UTC+12) Magadan"
+msgid "Porto Novo"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:266
-msgid "Indonesia (UTC+08) Makassar"
+msgid "Tunis"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:267
-msgid "Philippines (UTC+08) Manila"
+msgid "Windhoek"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:268
-msgid "Oman (UTC+04) Muscat"
+msgid "Longyearbyen"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:269
-msgid "Nicosia (UTC+02) Nicosia"
+msgid "CET"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:270
-msgid "Russia (UTC+07) Novokuznetsk"
+msgid "Amsterdam"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:271
-msgid "Russia (UTC+07) Novosibirsk"
+msgid "Andorra"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:272
-msgid "Russia (UTC+07) Omsk"
+msgid "Belgrade"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:273
-msgid "Kazakhstan (UTC+05) Oral"
+msgid "Berlin"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:274
-msgid "Cambodia (UTC+07) Phnom Penh"
+msgid "Bratislava"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:275
-msgid "Indonesia (UTC+07) Pontianak"
+msgid "Brussels"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:276
-msgid "North Korea (UTC+09) Pyongyang"
+msgid "Budapest"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:277
-msgid "Qatar (UTC+03) Qatar"
+msgid "Copenhagen"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:278
-msgid "Kazakhstan (UTC+06) Qyzylorda"
+msgid "Gibraltar"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:279
-msgid "Myanmar (Burma) (UTC+03) Rangoon"
+msgid "Ljubljana"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:280
-msgid "Vietnam (UTC+07) Saigon"
+msgid "Luxembourg"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:281
-msgid "Russia (UTC+11) Sakhalin"
+msgid "Madrid"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:282
-msgid "Uzbekistan (UTC+05) Samarkand"
+msgid "Malta"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:283
-msgid "South Korea (UTC+09) Seoul"
+msgid "Monaco"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:284
-msgid "China (UTC+08) Shanghai"
+msgid "Oslo"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:285
-msgid "China (UTC+08) Beijing"
+msgid "Paris"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:286
-msgid "Singapore (UTC+08) Singapore"
+msgid "Podgorica"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:287
-msgid "Taiwan (UTC+08) Taipei"
+msgid "Prague"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:288
-msgid "Uzbekistan (UTC+05) Tashkent"
+msgid "Rome"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:289
-msgid "Georgia (UTC+04) Tbilisi"
+msgid "San Marino"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:290
-msgid "Iran (UTC+02) Tehran"
+msgid "Sarajevo"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:291
-msgid "Bhutan (UTC+06) Thimbu"
+msgid "Skopje"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:292
-msgid "Bhutan (UTC+06) Thimphu"
+msgid "Stockholm"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:293
-msgid "Japan (UTC+09) Tokyo"
+msgid "Tirane"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:294
-msgid "Indonesia (UTC+08) Ujung Pandang"
+msgid "Vaduz"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:295
-msgid "Mongolia (UTC+08) Ulan Bator"
+msgid "Vatican"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:296
-msgid "China (UTC+08) Urumqi"
+msgid "Vienna"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:297
-msgid "Laos (UTC+07) Vientiane"
+msgid "Warsaw"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:298
-msgid "Russia (UTC+11) Vladivostok"
+msgid "Zagreb"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:299
-msgid "Russia (UTC+10) Yakutsk"
+msgid "Zurich"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:300
-msgid "620000 (UTC+06) Yekaterinburg"
+msgid "MET"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:301
-msgid "Armenia (UTC+04) Yerevan"
+msgid "Poland"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:302
-msgid "USA (UTC-04) Bermuda"
+msgid "Blantyre"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:303
-msgid "USA (UTC+00) Canary"
+msgid "Bujumbura"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:304
-msgid "Puerto Rico (UTC-01) Cape Verde"
+msgid "Cairo"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:305
-msgid "USA (UTC+00) Madeira"
+msgid "Gaborone"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:306
-msgid "Iceland (UTC+00) Reykjavik"
+msgid "Harare"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:307
-msgid "USA (UTC-02) South Georgia"
+msgid "Johannesburg"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:308
-msgid "USA (UTC+00) St Helena"
+msgid "Kigali"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:309
-msgid "USA (UTC-03) Stanley"
+msgid "Lubumbashi"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:310
-msgid "Australia (UTC+10) ACT"
+msgid "Lusaka"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:311
-msgid "Australia (UTC+10) Adelaide"
+msgid "Maputo"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:312
-msgid "Australia (UTC+10) Broken Hill"
+msgid "Maseru"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:313
-msgid "Australia (UTC+10) Currie"
+msgid "Mbabane"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:314
-msgid "Australia (UTC+10) Darwin"
+msgid "Tripoli"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:315
-msgid "Australia (UTC+10) Lindeman"
+msgid "Amman"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:316
-msgid "Australia (UTC+11) Lord Howe"
+msgid "Beirut"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:317
-msgid "Australia (UTC+10) Melbourne"
+msgid "Damascus"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:318
-msgid "Australia (UTC+10) North"
+msgid "Gaza"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:319
-msgid "Australia (UTC+08) Perth"
+msgid "Hebron"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:320
-msgid "Australia (UTC+10) Queensland"
+msgid "Jerusalem"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:321
-msgid "Australia (UTC+10) South"
+msgid "Tehran"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:322
-msgid "Australia (UTC+10) Tasmania"
+msgid "EET"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:323
-msgid "Australia (UTC+10) Victoria"
+msgid "Egypt"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:324
-msgid "Australia (UTC+08) West"
+msgid "Athens"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:325
-msgid "Australia (UTC-05) Yancowinna"
+msgid "Bucharest"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:326
-msgid "Brazil (UTC-03) East"
+msgid "Chisinau"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:327
-msgid "Brazil (UTC-04) West"
+msgid "Helsinki"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:328
-msgid "Canada (UTC-04) Atlantic"
+msgid "Istanbul"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:329
-msgid "Canada (UTC-05) Eastern"
+msgid "Kiev"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:330
-msgid "Canada (UTC-06) East Saskatchewan"
+msgid "Mariehamn"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:331
-msgid "Canada (UTC-07) Mountain"
+msgid "Nicosia"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:332
-msgid "Canada (UTC-08) Newfoundland"
+msgid "Riga"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:333
-msgid "Canada (UTC-06) Saskatchewan"
+msgid "Simferopol"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:334
-msgid "Canada (UTC-08) Yukon"
+msgid "Sofia"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:335
-msgid "USA (UTC+01) CET"
+msgid "Tallinn"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:336
-msgid "Chile (UTC-04) Continental"
+msgid "Uzhgorod"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:337
-msgid "Chile (UTC-06) EasterIsland"
+msgid "Vilnius"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:338
-msgid "Cuba (UTC-05) Cuba"
+msgid "Zaporozhye"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:339
-msgid "USA (UTC+02) EET"
+msgid "Iran"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:340
-msgid "Egypt (UTC+02) Egypt"
+msgid "Libya"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:341
-msgid "Ireland (UTC+00) Eire"
+msgid "Turkey"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:342
-msgid "Uganda (UTC-05) EST"
+msgid "Addis Ababa"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:343
-msgid "The Netherlands (UTC+01) Amsterdam"
+msgid "Asmara"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:344
-msgid "Andorra (UTC+01) Andorra"
+msgid "Dar es Salaam"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:345
-msgid "Greece (UTC+02) Athens"
+msgid "Djibouti"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:346
-msgid "UK (UTC+00) Belfast"
+msgid "Juba"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:347
-msgid "Serbia (UTC+01) Belgrade"
+msgid "Kampala"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:348
-msgid "Germany (UTC+01) Berlin"
+msgid "Khartoum"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:349
-msgid "Slovakia (UTC+01) Bratislava"
+msgid "Mogadishu"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:350
-msgid "Belgium (UTC+01) Brussels"
+msgid "Nairobi"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:351
-msgid "Romania (UTC+02) Bucharest"
+msgid "Aden"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:352
-msgid "Hungary (UTC+01) Budapest"
+msgid "Baghdad"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:353
-msgid "Moldova (UTC+02) Chisinau"
+msgid "Bahrain"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:354
-msgid "Denmark (UTC+01) Copenhagen"
+msgid "Kuwait"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:355
-msgid "Ireland (UTC+00) Dublin"
+msgid "Rangoon"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:356
-msgid "Gibraltar (UTC+01) Gibraltar"
+msgid "Qatar"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:357
-msgid "Guernsey (UTC+00) Guernsey"
+msgid "Kaliningrad"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:358
-msgid "Finland (UTC+02) Helsinki"
+msgid "Minsk"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:359
-msgid "Isle of Man (UTC+00) Isle of Man"
+msgid "Antananarivo"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:360
-msgid "Turkey (UTC+02) Istanbul"
+msgid "Baku"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:361
-msgid "Jersey (UTC+00) Jersey"
+msgid "Dubai"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:362
-msgid "Russia (UTC+03) Kaliningrad"
+msgid "Muscat"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:363
-msgid "Ukraine (UTC+02) Kiev"
+msgid "Tbilisi"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:364
-msgid "Portugal (UTC+00) Lisbon"
+msgid "Yerevan"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:365
-msgid "Slovenia (UTC+01) Ljubljana"
+msgid "Moscow"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:366
-msgid "UK (UTC+00) London"
+msgid "Samara"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:367
-msgid "Luxembourg (UTC+01) Luxembourg"
+msgid "Volgograd"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:368
-msgid "Spain (UTC+01) Madrid"
+msgid "Mahe"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:369
-msgid "Malta (UTC+01) Malta"
+msgid "Mauritius"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:370
-msgid "Aland Islands (UTC+02) Mariehamn"
+msgid "Reunion"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:371
-msgid "Belarus (UTC+03) Minsk"
+msgid "W SU"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:372
-msgid "Monaco (UTC+01) Monaco"
+msgid "Davis"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:373
-msgid "Russia (UTC+04) Moscow"
+msgid "Mawson"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:374
-msgid "Italy (UTC+02) Nicosia"
+msgid "Aqtau"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:375
-msgid "Norway (UTC+01) Oslo"
+msgid "Aqtobe"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:376
-msgid "France (UTC+01) Paris"
+msgid "Ashkhabad"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:377
-msgid "Montenegro (UTC+01) Podgorica"
+msgid "Dushanbe"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:378
-msgid "Czech Republic (UTC+01) Prague"
+msgid "Karachi"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:379
-msgid "Latvia (UTC+02) Riga"
+msgid "Oral"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:380
-msgid "Italy (UTC+01) Rome"
+msgid "Samarkand"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:381
-msgid "Russia (UTC+04) Samara"
+msgid "Tashkent"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:382
-msgid "San Marino (UTC+01) San Marino"
+msgid "Kerguelen"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:383
-msgid "Bosnia and Herzegovina (UTC+01) Sarajevo"
+msgid "Maldives"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:384
-msgid "Ukraine (UTC+02) Simferopol"
+msgid "Vostok"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:385
-msgid "Macedonia (FYROM) (UTC+01) Skopje"
+msgid "Almaty"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:386
-msgid "Bulgaria (UTC+02) Sofia"
+msgid "Bishkek"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:387
-msgid "Sweden (UTC+01) Stockholm"
+msgid "Colombo"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:388
-msgid "Estonia (UTC+02) Tallinn"
+msgid "Dhaka"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:389
-msgid "Albania (UTC+01) Tirane"
+msgid "Qyzylorda"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:390
-msgid "Moldova (UTC+02) Tiraspol"
+msgid "Thimbu"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:391
-msgid "Ukraine (UTC+02) Uzhgorod"
+msgid "Thimphu"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:392
-msgid "Liechtenstein (UTC+01) Vaduz"
+msgid "Yekaterinburg"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:393
-msgid "Vatican City (UTC+01) Vatican"
+msgid "Chagos"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:394
-msgid "Austria (UTC+01) Vienna"
+msgid "Bangkok"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:395
-msgid "Lithuania (UTC+02) Vilnius"
+msgid "Ho Chi Minh"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:396
-msgid "Russia (UTC+04) Volgograd"
+msgid "Hovd"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:397
-msgid "Poland (UTC+01) Warsaw"
+msgid "Jakarta"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:398
-msgid "Croatia (UTC+01) Zagreb"
+msgid "Novokuznetsk"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:399
-msgid "Ukraine (UTC+02) Zaporozhye"
+msgid "Novosibirsk"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:400
-msgid "Switzerland (UTC+01) Zurich"
+msgid "Omsk"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:401
-msgid "United Kingdom (UTC+00) GB"
+msgid "Phnom Penh"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:402
-msgid "Ireland (UTC+00) GB Eire"
+msgid "Pontianak"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:403
-msgid "USA (UTC+00) GMT"
+msgid "Saigon"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:404
-msgid "Brazil (UTC+00) GMT"
+msgid "Vientiane"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:405
-msgid "UK (UTC+00) Greenwich"
+msgid "Christmas"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:406
-msgid "Indonesia (UTC-10) HST"
+msgid "Brunei"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:407
-msgid "Iceland (UTC+00) Iceland"
+msgid "Calcutta"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:408
-msgid "Madagascar (UTC+03) Antananarivo"
+msgid "Chongqing"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:409
-msgid "British Indian Ocean Territory (UTC+06) Chagos"
+msgid "Chungking"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:410
-msgid "Christmas Island (UTC+07) Christmas"
+msgid "Harbin"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:411
-msgid "Grande Terre (UTC+05) Kerguelen"
+msgid "Hong Kong"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:412
-msgid "Seychelles (UTC+04) Mahe"
+msgid "Kashgar"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:413
-msgid "Maldives (UTC+05) Maldives"
+msgid "Kathmandu"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:414
-msgid "India (UTC+04) Mauritius"
+msgid "Kuala Lumpur"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:415
-msgid "USA (UTC+04) Reunion"
+msgid "Kuching"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:416
-msgid "Iran (UTC+02) Iran"
+msgid "Macao"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:417
-msgid "Jamaica (UTC-05) Jamaica"
+msgid "Makassar"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:418
-msgid "Japan (UTC+09) Japan"
+msgid "Manila"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:419
-msgid "Libya (UTC+02) Libya"
+msgid "Shanghai"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:420
-msgid "France (UTC+01) MET"
+msgid "Beijing"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:421
-msgid "Mexico (UTC-08) BajaNorte"
+msgid "Singapore"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:422
-msgid "Mexico (UTC-07) BajaSur"
+msgid "Taipei"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:423
-msgid "Mexico (UTC-06) General"
+msgid "Ujung Pandang"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:424
-msgid "The Netherlands (UTC-07) MST"
+msgid "Ulan Bator"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:425
-msgid "USA (UTC-07) Navajo"
+msgid "Urumqi"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:426
-msgid "New Zealand (UTC+12) NZ"
+msgid "Perth"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:427
-msgid "New Zealand (UTC+12) Auckland"
+msgid "Australia West"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:428
-msgid "USA (UTC+10) Chatham"
+msgid "PRC"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:429
-msgid "USA (UTC-06) Easter"
+msgid "Dili"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:430
-msgid "Vanuatu (UTC+11) Efate"
+msgid "Irkutsk"
+msgstr ""
+
+#: ../../datetime/zone_utc_map.go:431
+msgid "Jayapura"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:432
-msgid "Australia (UTC+13) Enderbury"
+msgid "Pyongyang"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:433
-msgid "Tokelau (UTC+13) Fakaofo"
+msgid "Seoul"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:434
-msgid "Fiji (UTC+12) Fiji"
+msgid "Tokyo"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:435
-msgid "Tuvalu (UTC+12) Funafuti"
+msgid "Japan"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:436
-msgid "Australia (UTC-06) Galapagos"
+msgid "Palau"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:437
-msgid "Australia (UTC-09) Gambier"
+msgid "ROK"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:438
-msgid "Solomon Islands (UTC+11) Guadalcanal"
+msgid "DumontDUrville"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:439
-msgid "Guam (UTC+10) Guam"
+msgid "Yakutsk"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:440
-msgid "Hawaii (UTC-10) Honolulu"
+msgid "ACT"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:441
-msgid "USA (UTC-10) Johnston"
+msgid "Adelaide"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:442
-msgid "Australia (UTC+11) Kosrae"
+msgid "Broken Hill"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:443
-msgid "RMI (UTC+12) Kwajalein"
+msgid "Currie"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:444
-msgid "French Polynesia (UTC-11) Marquesas"
+msgid "Darwin"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:445
-msgid "Australia (UTC+12) Nauru"
+msgid "Lindeman"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:446
-msgid "Niue (UTC-11) Niue"
+msgid "Melbourne"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:447
-msgid "USA (UTC+11) Norfolk"
+msgid "Australia North"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:448
-msgid "Australia (UTC+09) Palau"
+msgid "Queensland"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:449
-msgid "Australia (UTC-08) Pitcairn"
+msgid "Australia South"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:450
-msgid "Micronesia (UTC+11) Pohnpei"
+msgid "Tasmania"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:451
-msgid "Micronesia (UTC+11) Ponape"
+msgid "Victoria"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:452
-msgid "Papua New Guinea (UTC+10) Port Moresby"
+msgid "Chatham"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:453
-msgid "Australia (UTC-10) Rarotonga"
+msgid "Guam"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:454
-msgid "CNMI (UTC+10) Saipan"
+msgid "Port Moresby"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:455
-msgid "French Polynesia (UTC-10) Tahiti"
+msgid "Saipan"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:456
-msgid "Kiribati (UTC+12) Tarawa"
+msgid "Truk"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:457
-msgid "Tonga (UTC+13) Tongatapu"
+msgid "Casey"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:458
-msgid "USA (UTC+10) Truk"
+msgid "Sakhalin"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:459
-msgid "USA (UTC+12) Wake"
+msgid "Vladivostok"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:460
-msgid "Australia (UTC+12) Wallis"
+msgid "Lord Howe"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:461
-msgid "Poland (UTC+01) Poland"
+msgid "Efate"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:462
-msgid "Portugal (UTC+00) Portugal"
+msgid "Nouma"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:463
-msgid "USA (UTC+08) PRC"
+msgid "Guadalcanal"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:464
-msgid "Czech Republic (UTC+09) ROK"
+msgid "Kosrae"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:465
-msgid "Turkey (UTC+02) Turkey"
+msgid "Norfolk"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:466
-msgid "South Africa (UTC+00) UCT"
+msgid "Pohnpei"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:467
-msgid "USA (UTC+00) Universal"
+msgid "Ponape"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:468
-msgid "USA (UTC-09) Alaska"
+msgid "McMurdo"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:469
-msgid "USA (UTC-10) Aleutian"
+msgid "South Pole"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:470
-msgid "USA (UTC-07) Arizona"
+msgid "Anadyr"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:471
-msgid "USA (UTC-06) Central"
+msgid "Kabul"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:472
-msgid "USA (UTC-05) Eastern"
+msgid "Magadan"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:473
-msgid "USA (UTC-05) East Indiana"
+msgid "New Zealand"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:474
-msgid "USA (UTC-10) Hawaii"
+msgid "Auckland"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:475
-msgid "USA (UTC-06) Indiana Starke"
+msgid "Fiji"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:476
-msgid "USA (UTC-05) Michigan"
+msgid "Funafuti"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:477
-msgid "USA (UTC-07) Mountain"
+msgid "Kwajalein"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:478
-msgid "USA (UTC-08) Pacific"
+msgid "Nauru"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:479
-msgid "USA (UTC-08) Pacific New"
+msgid "Tarawa"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:480
-msgid "USA (UTC-11) Samoa"
+msgid "Wake"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:481
-msgid "USA (UTC+00) UTC"
+msgid "Wallis"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:482
-msgid "USA (UTC+00) WET"
+msgid "Enderbury"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:483
-msgid "WA (UTC+04) W SU"
+msgid "Fakaofo"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:484
-msgid "USA (UTC+00) Zulu"
+msgid "Tongatapu"
 msgstr ""
 
 #: ../../dock/normal_apps.go:79
