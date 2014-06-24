@@ -3009,19 +3009,19 @@ msgstr "汤加塔布"
 
 #: ../../dock/normal_apps.go:79
 msgid "_Run"
-msgstr "(_R)运行"
+msgstr "运行(_R)"
 
 #: ../../dock/normal_apps.go:111
 msgid "_Undock"
-msgstr "(_U)移除驻留"
+msgstr "移除驻留(_U)"
 
 #: ../../dock/runtime_apps.go:194
 msgid "_Close All"
-msgstr "(_C)关闭所有"
+msgstr "关闭所有(_C)"
 
 #: ../../dock/runtime_apps.go:221
 msgid "_Dock"
-msgstr "(_D)驻留"
+msgstr "驻留(_D)"
 
 #: ../../keybinding/id_desc_map.go:72
 msgid "Launcher"
