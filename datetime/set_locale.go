@@ -23,8 +23,8 @@ package datetime
 
 import (
 	"dbus/org/freedesktop/notifications"
-	. "dlib/gettext"
-	dutils "dlib/utils"
+	. "pkg.linuxdeepin.com/lib/gettext"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 	"io/ioutil"
 	"os"
 	"path"

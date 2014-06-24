@@ -22,7 +22,7 @@
 package search
 
 import (
-	dpinyin "dlib/pinyin"
+	dpinyin "pkg.linuxdeepin.com/lib/pinyin"
 	"strings"
 )
 

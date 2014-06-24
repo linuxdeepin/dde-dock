@@ -7,7 +7,7 @@ import (
 	"os"
 	"path"
 
-	"dlib/glib-2.0"
+	"pkg.linuxdeepin.com/lib/glib-2.0"
 )
 
 func exist(name string) bool {

@@ -1,9 +1,9 @@
 package main
 
-import "dlib/logger"
+import "pkg.linuxdeepin.com/lib/logger"
 
-import "dlib"
-import "dlib/dbus"
+import "pkg.linuxdeepin.com/lib"
+import "pkg.linuxdeepin.com/lib/dbus"
 import "os"
 import _ "dde-daemon/accounts"
 import "dde-daemon"
@@ -14,7 +14,7 @@ func main() {
 	Logger.BeginTracing()
 	defer Logger.EndTracing()
 
-	if !dlib.UniqueOnSystem("com.deepin.daemon") {
+	if !lib.UniqueOnSystem("com.deepin.daemon") {
 		Logger.Warning("There already has an dde-daemon running.")
 		return
 	}

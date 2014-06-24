@@ -22,8 +22,8 @@
 package grub2
 
 import (
-	"dlib/dbus"
-	"dlib/graphic"
+	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/graphic"
 )
 
 // GetDBusInfo implements interface of dbus.DBusObject.

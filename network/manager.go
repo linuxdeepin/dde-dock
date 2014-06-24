@@ -21,8 +21,8 @@
 
 package network
 
-import "dlib/dbus"
-import "dlib/dbus/property"
+import "pkg.linuxdeepin.com/lib/dbus"
+import "pkg.linuxdeepin.com/lib/dbus/property"
 import nm "dbus/org/freedesktop/networkmanager"
 
 const (

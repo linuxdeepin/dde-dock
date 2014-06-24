@@ -1,9 +1,9 @@
 package mime
 
 import (
-	"dlib/dbus"
-	"dlib/logger"
-	dutils "dlib/utils"
+	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/logger"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 	"os"
 )
 

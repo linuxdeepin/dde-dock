@@ -5,7 +5,7 @@ import (
 	"os"
 	p "path"
 
-	"dlib/glib-2.0"
+	"pkg.linuxdeepin.com/lib/glib-2.0"
 )
 
 func isOnDesktop(name string) bool {

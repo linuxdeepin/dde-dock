@@ -24,7 +24,7 @@ package inputdevices
 import "C"
 
 import (
-	"dlib/dbus"
+	"pkg.linuxdeepin.com/lib/dbus"
 	"io/ioutil"
 	"strings"
 )

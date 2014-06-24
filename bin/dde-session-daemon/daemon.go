@@ -3,7 +3,7 @@ package main
 import _ "dde-daemon/keybinding"
 import _ "dde-daemon/screensaver"
 import _ "dde-daemon/power"
-import "dlib/proxy"
+import "pkg.linuxdeepin.com/lib/proxy"
 
 import _ "dde-daemon/audio"
 
@@ -29,23 +29,23 @@ import _ "dde-daemon/dsc"
 import _ "dde-daemon/mpris"
 import _ "dde-daemon/systeminfo"
 
-import "dlib/glib-2.0"
+import "pkg.linuxdeepin.com/lib/glib-2.0"
 
 //#cgo pkg-config:gtk+-3.0
 //#include <gtk/gtk.h>
 //void init(){gtk_init(0,0);}
 import "C"
-import . "dlib/gettext"
-import "dlib"
-import "dlib/logger"
+import . "pkg.linuxdeepin.com/lib/gettext"
+import "pkg.linuxdeepin.com/lib"
+import "pkg.linuxdeepin.com/lib/logger"
 import "os"
-import "dlib/dbus"
+import "pkg.linuxdeepin.com/lib/dbus"
 import "dde-daemon"
 
 var Logger = logger.NewLogger("com.deepin.daemon")
 
 func main() {
-	if !dlib.UniqueOnSession("com.deepin.daemon") {
+	if !lib.UniqueOnSession("com.deepin.daemon") {
 		Logger.Warning("There already has an dde-daemon running.")
 		return
 	}

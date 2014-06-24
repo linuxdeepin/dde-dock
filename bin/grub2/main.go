@@ -23,12 +23,12 @@ package main
 
 import (
 	"dde-daemon/grub2"
-	"dlib"
-	"dlib/dbus"
-	liblogger "dlib/logger"
 	"flag"
 	"fmt"
 	"os"
+	"pkg.linuxdeepin.com/lib"
+	"pkg.linuxdeepin.com/lib/dbus"
+	liblogger "pkg.linuxdeepin.com/lib/logger"
 	"time"
 )
 
@@ -87,7 +87,7 @@ func runAsDaemon() {
 	logger.BeginTracing()
 	defer logger.EndTracing()
 
-	if !dlib.UniqueOnSession(dbusGrubDest) {
+	if !lib.UniqueOnSession(dbusGrubDest) {
 		logger.Error("dbus unique:", dbusGrubDest)
 		return
 	}

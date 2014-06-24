@@ -22,7 +22,7 @@
 package inputdevices
 
 import (
-	"dlib/dbus/property"
+	"pkg.linuxdeepin.com/lib/dbus/property"
 )
 
 const (

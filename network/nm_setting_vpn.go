@@ -22,7 +22,7 @@
 package network
 
 import (
-	"dlib/dbus"
+	"pkg.linuxdeepin.com/lib/dbus"
 )
 
 const VPN_NAME_FILES_DIR = "/etc/NetworkManager/VPN/"

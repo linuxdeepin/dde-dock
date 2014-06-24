@@ -22,7 +22,7 @@
 package bluetooth
 
 import (
-	"dlib/dbus"
+	"pkg.linuxdeepin.com/lib/dbus"
 )
 
 type Agent struct {

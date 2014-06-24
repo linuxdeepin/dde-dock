@@ -22,7 +22,7 @@
 package main
 
 import (
-	dutils "dlib/utils"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 	"os/exec"
 	"path"
 )

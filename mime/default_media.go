@@ -1,9 +1,9 @@
 package mime
 
 import (
-	"dlib/dbus/property"
-	. "dlib/gettext"
-	"dlib/gio-2.0"
+	"pkg.linuxdeepin.com/lib/dbus/property"
+	. "pkg.linuxdeepin.com/lib/gettext"
+	"pkg.linuxdeepin.com/lib/gio-2.0"
 )
 
 const (

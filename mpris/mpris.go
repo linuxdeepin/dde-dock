@@ -26,8 +26,8 @@ import (
 	libdbus "dbus/org/freedesktop/dbus"
 	liblogin1 "dbus/org/freedesktop/login1"
 	libmpris "dbus/org/mpris/mediaplayer2"
-	"dlib/gio-2.0"
-	"dlib/logger"
+	"pkg.linuxdeepin.com/lib/gio-2.0"
+	"pkg.linuxdeepin.com/lib/logger"
 	"os/exec"
 	"strings"
 )

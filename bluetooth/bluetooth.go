@@ -23,8 +23,8 @@ package bluetooth
 
 import (
 	idbus "dbus/org/freedesktop/dbus/system"
-	"dlib/dbus"
-	"dlib/dbus/property"
+	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/dbus/property"
 )
 
 const (

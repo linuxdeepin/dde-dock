@@ -21,7 +21,7 @@
 
 package network
 
-import "dlib/dbus"
+import "pkg.linuxdeepin.com/lib/dbus"
 import "time"
 
 type mapKey struct {

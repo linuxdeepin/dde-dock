@@ -22,8 +22,8 @@
 package bluetooth
 
 import (
-	"dlib/dbus"
-	liblogger "dlib/logger"
+	"pkg.linuxdeepin.com/lib/dbus"
+	liblogger "pkg.linuxdeepin.com/lib/logger"
 )
 
 var (

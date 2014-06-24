@@ -22,8 +22,8 @@
 package themes
 
 import (
-	"dlib/gio-2.0"
-	dutils "dlib/utils"
+	"pkg.linuxdeepin.com/lib/gio-2.0"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 	"github.com/howeyc/fsnotify"
 	"os/exec"
 	"path"

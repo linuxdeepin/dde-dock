@@ -4,7 +4,7 @@ package power
 
 import (
 	"dbus/org/freedesktop/screensaver"
-	//"dlib/logger"
+	//"pkg.linuxdeepin.com/lib/logger"
 	"fmt"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"

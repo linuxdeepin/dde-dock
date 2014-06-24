@@ -24,8 +24,8 @@ package accounts
 import "dde-daemon"
 
 import (
-	"dlib/dbus"
-	Logger "dlib/logger"
+	"pkg.linuxdeepin.com/lib/dbus"
+	Logger "pkg.linuxdeepin.com/lib/logger"
 )
 
 func init() {

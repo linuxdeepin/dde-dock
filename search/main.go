@@ -22,8 +22,8 @@
 package search
 
 import (
-	"dlib/dbus"
-	"dlib/logger"
+	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/logger"
 )
 
 var Logger = logger.NewLogger("com.deepin.daemon.Search")

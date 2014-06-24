@@ -2,7 +2,7 @@ package launcher
 
 import (
 	"dbus/com/linuxdeepin/softwarecenter"
-	"dlib/dbus"
+	"pkg.linuxdeepin.com/lib/dbus"
 )
 
 const (

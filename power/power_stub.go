@@ -1,6 +1,6 @@
 package power
 
-import "dlib/dbus"
+import "pkg.linuxdeepin.com/lib/dbus"
 
 func (p *Power) setPropLidIsPresent(v bool) {
 	if p.LidIsPresent != v {

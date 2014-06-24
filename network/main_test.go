@@ -22,7 +22,7 @@
 package network
 
 // import (
-// 	// liblogger "dlib/logger"
+// 	// liblogger "pkg.linuxdeepin.com/lib/logger"
 // 	. "launchpad.net/gocheck"
 // 	"testing"
 // 	"time"

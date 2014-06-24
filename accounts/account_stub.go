@@ -22,7 +22,7 @@
 package accounts
 
 import (
-	"dlib/dbus"
+	"pkg.linuxdeepin.com/lib/dbus"
 	"sync"
 )
 

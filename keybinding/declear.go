@@ -22,7 +22,7 @@
 package keybinding
 
 import (
-	"dlib/gio-2.0"
+	"pkg.linuxdeepin.com/lib/gio-2.0"
 	"github.com/BurntSushi/xgb/xproto"
 )
 

@@ -22,7 +22,7 @@
 package themes
 
 import (
-	dutils "dlib/utils"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 	"path"
 )
 

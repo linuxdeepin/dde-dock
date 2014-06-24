@@ -1,7 +1,7 @@
 package launcher
 
 import (
-	"dlib/gio-2.0"
+	"pkg.linuxdeepin.com/lib/gio-2.0"
 	"sort"
 	"testing"
 )

@@ -11,7 +11,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 
 	pinyin "dbus/com/deepin/daemon/search"
-	"dlib/gio-2.0"
+	"pkg.linuxdeepin.com/lib/gio-2.0"
 )
 
 type ItemId string

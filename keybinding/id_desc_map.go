@@ -21,7 +21,7 @@
 
 package keybinding
 
-import . "dlib/gettext"
+import . "pkg.linuxdeepin.com/lib/gettext"
 
 var SystemIdNameMap = map[int32]string{
 	0:   "launcher",

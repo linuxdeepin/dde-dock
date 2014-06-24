@@ -3,7 +3,7 @@ package dock
 import (
 	"bytes"
 	"crypto/md5"
-	"dlib/dbus"
+	"pkg.linuxdeepin.com/lib/dbus"
 	"github.com/BurntSushi/xgb/composite"
 	"github.com/BurntSushi/xgb/damage"
 	"github.com/BurntSushi/xgb/xfixes"

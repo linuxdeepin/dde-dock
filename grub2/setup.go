@@ -22,7 +22,7 @@
 package grub2
 
 import (
-	"dlib/graphic"
+	"pkg.linuxdeepin.com/lib/graphic"
 	"io/ioutil"
 	"os"
 	"path"

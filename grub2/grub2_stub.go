@@ -22,7 +22,7 @@
 package grub2
 
 import (
-	"dlib/dbus"
+	"pkg.linuxdeepin.com/lib/dbus"
 	"fmt"
 )
 

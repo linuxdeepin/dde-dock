@@ -22,9 +22,9 @@
 package mounts
 
 import (
-	"dlib/dbus"
-	"dlib/gio-2.0"
-	"dlib/gobject-2.0"
+	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/gio-2.0"
+	"pkg.linuxdeepin.com/lib/gobject-2.0"
 	"os/exec"
 )
 

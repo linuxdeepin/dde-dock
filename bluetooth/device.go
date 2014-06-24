@@ -23,7 +23,7 @@ package bluetooth
 
 import (
 	"dbus/org/bluez"
-	"dlib/dbus"
+	"pkg.linuxdeepin.com/lib/dbus"
 )
 
 const deviceRssiNotInRange = -1000 // -1000db means device not in range

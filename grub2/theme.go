@@ -23,7 +23,7 @@ package grub2
 
 import (
 	"bytes"
-	"dlib/graphic"
+	"pkg.linuxdeepin.com/lib/graphic"
 	"encoding/json"
 	"io/ioutil"
 	"sync"

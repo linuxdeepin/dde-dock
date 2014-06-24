@@ -1,7 +1,7 @@
 package loader
 
 import (
-	"dlib/logger"
+	"pkg.linuxdeepin.com/lib/logger"
 )
 
 var Logger = logger.NewLogger("dde.daemon.loader")

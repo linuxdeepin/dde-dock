@@ -2,8 +2,8 @@ package systeminfo
 
 import (
 	"dbus/org/freedesktop/udisks2"
-	"dlib/dbus"
-	"dlib/logger"
+	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/logger"
 	"io/ioutil"
 	"os"
 	"os/exec"

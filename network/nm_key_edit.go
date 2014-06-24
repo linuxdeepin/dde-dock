@@ -21,7 +21,7 @@
 
 package network
 
-import "dlib/dbus"
+import "pkg.linuxdeepin.com/lib/dbus"
 import "fmt"
 
 // return custom connection type, and the wrapper type will be ignored

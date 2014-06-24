@@ -23,7 +23,7 @@ package grub2
 
 import (
 	"bufio"
-	"dlib/dbus"
+	"pkg.linuxdeepin.com/lib/dbus"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"

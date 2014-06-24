@@ -22,7 +22,7 @@
 package main
 
 import (
-	liblogger "dlib/logger"
+	liblogger "pkg.linuxdeepin.com/lib/logger"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/ewmh"
 )

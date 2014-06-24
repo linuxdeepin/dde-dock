@@ -22,7 +22,7 @@
 package network
 
 // import "testing"
-// import "dlib/dbus"
+// import "pkg.linuxdeepin.com/lib/dbus"
 // import nm "dbus/com/deepin/daemon/network"
 
 // func init() {

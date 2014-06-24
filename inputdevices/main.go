@@ -23,9 +23,9 @@ package inputdevices
 
 import (
 	libsession "dbus/com/deepin/sessionmanager"
-	"dlib/dbus"
-	"dlib/gio-2.0"
-	Logger "dlib/logger"
+	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/gio-2.0"
+	Logger "pkg.linuxdeepin.com/lib/logger"
 )
 
 var (

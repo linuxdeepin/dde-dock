@@ -22,7 +22,7 @@
 package accounts
 
 import (
-	dutils "dlib/utils"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 	"github.com/howeyc/fsnotify"
 	"io/ioutil"
 	"strconv"

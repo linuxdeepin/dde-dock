@@ -1,9 +1,9 @@
 package dock
 
 import (
-	. "dlib/gettext"
-	"dlib/gio-2.0"
-	"dlib/utils"
+	. "pkg.linuxdeepin.com/lib/gettext"
+	"pkg.linuxdeepin.com/lib/gio-2.0"
+	"pkg.linuxdeepin.com/lib/utils"
 	"errors"
 	"path/filepath"
 	"strings"

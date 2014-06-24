@@ -23,10 +23,10 @@ package themes
 
 import (
 	"dbus/com/deepin/sessionmanager"
-	"dlib/dbus"
-	"dlib/gio-2.0"
-	"dlib/logger"
-	dutils "dlib/utils"
+	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/gio-2.0"
+	"pkg.linuxdeepin.com/lib/logger"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 )
 
 var (

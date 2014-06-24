@@ -23,7 +23,7 @@ package main
 
 import (
 	"crypto/md5"
-	dutils "dlib/utils"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 	"io/ioutil"
 	"strconv"
 )

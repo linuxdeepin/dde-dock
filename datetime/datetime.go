@@ -2,11 +2,11 @@ package datetime
 
 import (
 	"dbus/com/deepin/api/setdatetime"
-	"dlib/dbus"
-	"dlib/dbus/property"
-	. "dlib/gettext"
-	"dlib/gio-2.0"
-	"dlib/logger"
+	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/dbus/property"
+	. "pkg.linuxdeepin.com/lib/gettext"
+	"pkg.linuxdeepin.com/lib/gio-2.0"
+	"pkg.linuxdeepin.com/lib/logger"
 	"github.com/howeyc/fsnotify"
 )
 

@@ -22,7 +22,7 @@
 package network
 
 import (
-	. "dlib/gettext"
+	. "pkg.linuxdeepin.com/lib/gettext"
 	"fmt"
 )
 

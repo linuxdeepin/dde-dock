@@ -3,7 +3,7 @@ package dock
 import "crypto/md5"
 import "encoding/hex"
 
-import "dlib/dbus"
+import "pkg.linuxdeepin.com/lib/dbus"
 import "strings"
 
 func (e *AppEntry) GetDBusInfo() dbus.DBusInfo {

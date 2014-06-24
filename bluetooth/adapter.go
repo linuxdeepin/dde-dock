@@ -23,7 +23,7 @@ package bluetooth
 
 import (
 	"dbus/org/bluez"
-	"dlib/dbus"
+	"pkg.linuxdeepin.com/lib/dbus"
 )
 
 type adapter struct {

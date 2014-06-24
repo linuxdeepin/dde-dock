@@ -22,7 +22,7 @@
 package inputdevices
 
 import (
-	"dlib/dbus"
+	"pkg.linuxdeepin.com/lib/dbus"
 	"strings"
 )
 

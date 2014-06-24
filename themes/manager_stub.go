@@ -22,7 +22,7 @@
 package themes
 
 import (
-	"dlib/dbus"
+	"pkg.linuxdeepin.com/lib/dbus"
 )
 
 func (obj *Manager) GetDBusInfo() dbus.DBusInfo {

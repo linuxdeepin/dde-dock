@@ -22,10 +22,10 @@
 package network
 
 import "dbus/org/freedesktop/notifications"
-import "dlib/dbus"
+import "pkg.linuxdeepin.com/lib/dbus"
 import "sync"
 import nm "dbus/org/freedesktop/networkmanager"
-import . "dlib/gettext"
+import . "pkg.linuxdeepin.com/lib/gettext"
 
 var VpnErrorTable = make(map[uint32]string)
 var DeviceErrorTable = make(map[uint32]string)

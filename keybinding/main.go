@@ -22,9 +22,9 @@
 package keybinding
 
 import (
-	"dlib/dbus"
-	"dlib/gio-2.0"
-	libLogger "dlib/logger"
+	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/gio-2.0"
+	libLogger "pkg.linuxdeepin.com/lib/logger"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/keybind"
 	"github.com/BurntSushi/xgbutil/xevent"

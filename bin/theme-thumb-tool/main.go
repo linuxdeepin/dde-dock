@@ -28,13 +28,13 @@ package main
 import "C"
 
 import (
-	"dlib/graphic"
-	"dlib/logger"
-	dutils "dlib/utils"
 	"math/rand"
 	"os"
 	"os/exec"
 	"path"
+	"pkg.linuxdeepin.com/lib/graphic"
+	"pkg.linuxdeepin.com/lib/logger"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 	"strings"
 	"time"
 	"unsafe"

@@ -1,7 +1,7 @@
 package audio
 
-import "dlib/dbus"
-import "dlib/pulse"
+import "pkg.linuxdeepin.com/lib/dbus"
+import "pkg.linuxdeepin.com/lib/pulse"
 import "fmt"
 import "io/ioutil"
 import "path"

@@ -22,9 +22,9 @@
 package themes
 
 import (
-	"dlib/dbus"
-	"dlib/dbus/property"
-	"dlib/glib-2.0"
+	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/dbus/property"
+	"pkg.linuxdeepin.com/lib/glib-2.0"
 	"github.com/howeyc/fsnotify"
 	"os"
 	"path"

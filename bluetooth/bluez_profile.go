@@ -21,7 +21,7 @@
 
 package bluetooth
 
-import . "dlib/gettext"
+import . "pkg.linuxdeepin.com/lib/gettext"
 
 type profile struct {
 	uuid, name string

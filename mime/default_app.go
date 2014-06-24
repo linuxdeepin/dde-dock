@@ -1,9 +1,9 @@
 package mime
 
 import (
-	"dlib/gio-2.0"
-	"dlib/glib-2.0"
-	dutils "dlib/utils"
+	"pkg.linuxdeepin.com/lib/gio-2.0"
+	"pkg.linuxdeepin.com/lib/glib-2.0"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 	"github.com/howeyc/fsnotify"
 	"io/ioutil"
 	"os"

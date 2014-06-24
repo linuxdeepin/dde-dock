@@ -3,9 +3,9 @@ package dock
 import (
 	"bytes"
 	"dbus/com/deepin/daemon/dock"
-	. "dlib/gettext"
-	"dlib/gio-2.0"
-	"dlib/glib-2.0"
+	. "pkg.linuxdeepin.com/lib/gettext"
+	"pkg.linuxdeepin.com/lib/gio-2.0"
+	"pkg.linuxdeepin.com/lib/glib-2.0"
 	"encoding/base64"
 	"fmt"
 	"github.com/BurntSushi/xgb/xproto"

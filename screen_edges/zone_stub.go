@@ -22,7 +22,7 @@
 package screen_edges
 
 import (
-	"dlib/dbus"
+	"pkg.linuxdeepin.com/lib/dbus"
 )
 
 type Manager struct{}

@@ -29,10 +29,10 @@ import "C"
 
 import (
 	libpolkit1 "dbus/org/freedesktop/policykit1"
-	"dlib/dbus"
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"pkg.linuxdeepin.com/lib/dbus"
 	"strings"
 	"sync"
 	"unsafe"

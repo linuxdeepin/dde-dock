@@ -1,7 +1,7 @@
 package dock
 
 import (
-	"dlib/dbus"
+	"pkg.linuxdeepin.com/lib/dbus"
 	"errors"
 	"github.com/BurntSushi/xgb"
 	"github.com/BurntSushi/xgb/shape"

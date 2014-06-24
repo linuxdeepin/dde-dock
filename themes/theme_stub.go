@@ -22,9 +22,9 @@
 package themes
 
 import (
-	"dlib/dbus"
-	"dlib/glib-2.0"
-	dutils "dlib/utils"
+	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/glib-2.0"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 	"path"
 	"regexp"
 )

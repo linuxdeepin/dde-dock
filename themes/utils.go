@@ -29,12 +29,12 @@ import "C"
 
 import (
 	"crypto/md5"
-	dutils "dlib/utils"
 	"io/ioutil"
 	"net/url"
 	"os"
 	"os/exec"
 	"path"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 	"strconv"
 )
 

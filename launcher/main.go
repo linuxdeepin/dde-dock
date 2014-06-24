@@ -1,9 +1,9 @@
 package launcher
 
 import (
-	. "dlib/gettext"
-	"dlib/gio-2.0"
-	l "dlib/logger"
+	. "pkg.linuxdeepin.com/lib/gettext"
+	"pkg.linuxdeepin.com/lib/gio-2.0"
+	l "pkg.linuxdeepin.com/lib/logger"
 )
 
 var logger *l.Logger = l.NewLogger("dde-daemon/launcher-daemon")

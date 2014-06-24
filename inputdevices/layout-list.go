@@ -22,7 +22,7 @@
 package inputdevices
 
 import (
-	. "dlib/gettext"
+	. "pkg.linuxdeepin.com/lib/gettext"
 	"encoding/xml"
 	"io/ioutil"
 )

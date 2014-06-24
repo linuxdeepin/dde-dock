@@ -22,9 +22,9 @@
 package network
 
 import nm "dbus/org/freedesktop/networkmanager"
-import "dlib/dbus"
+import "pkg.linuxdeepin.com/lib/dbus"
 import "fmt"
-import . "dlib/gettext"
+import . "pkg.linuxdeepin.com/lib/gettext"
 
 // TODO different connection structures for different types
 type connection struct {

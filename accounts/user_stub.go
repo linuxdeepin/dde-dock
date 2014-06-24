@@ -22,8 +22,8 @@
 package accounts
 
 import (
-	"dlib/dbus"
-	dutils "dlib/utils"
+	"pkg.linuxdeepin.com/lib/dbus"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 	"strings"
 )
 

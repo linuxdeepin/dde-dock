@@ -1,8 +1,8 @@
 package audio
 
-import "dlib/dbus"
-import "dlib/logger"
-import "dlib/pulse"
+import "pkg.linuxdeepin.com/lib/dbus"
+import "pkg.linuxdeepin.com/lib/logger"
+import "pkg.linuxdeepin.com/lib/pulse"
 import libsound "dbus/com/deepin/api/sound"
 
 var Logger = logger.NewLogger("com.deepin.daemon.Audio")

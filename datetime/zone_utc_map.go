@@ -1,6 +1,6 @@
 package datetime
 
-import . "dlib/gettext"
+import . "pkg.linuxdeepin.com/lib/gettext"
 
 var zoneCityMap map[string]string
 

@@ -1,9 +1,9 @@
 package power
 
-import "dlib/logger"
-import "dlib/dbus"
-import "dlib/dbus/property"
-import "dlib/gio-2.0"
+import "pkg.linuxdeepin.com/lib/logger"
+import "pkg.linuxdeepin.com/lib/dbus"
+import "pkg.linuxdeepin.com/lib/dbus/property"
+import "pkg.linuxdeepin.com/lib/gio-2.0"
 import "dbus/com/deepin/api/sound"
 import "dbus/org/freedesktop/notifications"
 import ss "dbus/org/freedesktop/screensaver"

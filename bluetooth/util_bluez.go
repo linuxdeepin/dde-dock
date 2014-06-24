@@ -23,7 +23,7 @@ package bluetooth
 
 import (
 	"dbus/org/bluez"
-	"dlib/dbus"
+	"pkg.linuxdeepin.com/lib/dbus"
 )
 
 func bluezNewAdapter(apath dbus.ObjectPath) (bluezAdapter *bluez.Adapter1, err error) {

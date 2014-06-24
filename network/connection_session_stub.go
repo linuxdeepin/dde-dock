@@ -22,7 +22,7 @@
 package network
 
 import (
-	"dlib/dbus"
+	"pkg.linuxdeepin.com/lib/dbus"
 	"fmt"
 )
 

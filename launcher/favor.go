@@ -1,7 +1,7 @@
 package launcher
 
 import (
-	"dlib/glib-2.0"
+	"pkg.linuxdeepin.com/lib/glib-2.0"
 	"fmt"
 	"os"
 	"strings"

@@ -21,7 +21,7 @@
 
 package network
 
-import . "dlib/gettext"
+import . "pkg.linuxdeepin.com/lib/gettext"
 import "fmt"
 
 // virtual key types
