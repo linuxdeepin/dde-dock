@@ -22,11 +22,11 @@
 package themes
 
 import (
-	"pkg.linuxdeepin.com/lib/gio-2.0"
-	dutils "pkg.linuxdeepin.com/lib/utils"
 	"github.com/howeyc/fsnotify"
 	"os"
 	"path"
+	"pkg.linuxdeepin.com/lib/gio-2.0"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 	"regexp"
 )
 
@@ -218,6 +218,7 @@ func (obj *Manager) startBgWatch() {
 	}
 
 	obj.bgWatcher.Watch(DEFAULT_SYS_BG_DIR)
+	obj.bgWatcher.Watch("/usr/share/personalization/thumbnail/autogen")
 
 	pict := getUserPictureDir()
 	userBG := path.Join(pict, "Wallpapers")
@@ -242,6 +243,7 @@ func (obj *Manager) endBgWatch() {
 	}
 
 	obj.bgWatcher.RemoveWatch(DEFAULT_SYS_BG_DIR)
+	obj.bgWatcher.RemoveWatch("/usr/share/personalization/thumbnail/autogen")
 }
 
 func (obj *Manager) handleBgEvent() {
@@ -263,6 +265,13 @@ func (obj *Manager) handleBgEvent() {
 			}
 
 			Logger.Debugf("Bg Event: %v", ev)
+			if ok, _ := regexp.MatchString(`autogen`, ev.Name); ok {
+				obj.setPropGtkThemeList(obj.getGtkStrList())
+				obj.setPropIconThemeList(obj.getIconStrList())
+				obj.setPropBackgroundList(obj.getBgStrList())
+				break
+			}
+
 			obj.setPropBackgroundList(obj.getBgStrList())
 		case err, ok := <-obj.bgWatcher.Error:
 			if !ok || err != nil {
