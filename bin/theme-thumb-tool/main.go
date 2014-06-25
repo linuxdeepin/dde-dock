@@ -233,6 +233,9 @@ func main() {
 				Logger.Debugf("ERROR: Generate Cursor Thumbnail\n")
 			}
 		}
+		if dutils.IsFileExist(XCUR2PNG_OUTDIR) {
+			os.RemoveAll(XCUR2PNG_OUTDIR)
+		}
 	case "--background":
 		list := getBgList()
 		for _, l := range list {

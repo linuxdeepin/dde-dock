@@ -22,13 +22,15 @@
 package main
 
 import (
-	dutils "pkg.linuxdeepin.com/lib/utils"
+	"os"
 	"os/exec"
 	"path"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 )
 
 const (
-	CMD_XCUR2PNG = "/usr/bin/xcur2png"
+	CMD_XCUR2PNG    = "/usr/bin/xcur2png"
+	XCUR2PNG_OUTDIR = "/tmp/xcur2png"
 
 	LEFT_PTR       = "cursors/left_ptr"
 	LEFT_PTR_WATCH = "cursors/left_ptr_watch"
@@ -36,17 +38,22 @@ const (
 )
 
 func convertCursor2Png(filename string) string {
+	if !dutils.IsFileExist(XCUR2PNG_OUTDIR) {
+		if err := os.MkdirAll(XCUR2PNG_OUTDIR, 0755); err != nil {
+			return ""
+		}
+	}
 	_, err := exec.Command(CMD_XCUR2PNG,
 		"-i", "24",
-		"-c", "/tmp",
-		"-d", "/tmp",
+		"-c", XCUR2PNG_OUTDIR,
+		"-d", XCUR2PNG_OUTDIR,
 		"-q",
 		filename).Output()
 	if err != nil {
 		return ""
 	}
 
-	dest := path.Join("/tmp", path.Base(filename)+"_024.png")
+	dest := path.Join(XCUR2PNG_OUTDIR, path.Base(filename)+"_024.png")
 	if dutils.IsFileExist(dest) {
 		return dest
 	}
