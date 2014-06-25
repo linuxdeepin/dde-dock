@@ -113,7 +113,7 @@ func marshalJSON(v interface{}) (jsonStr string, err error) {
 	return
 }
 
-func unmarshalJSON(jsonStr string) (v interface{}, err error) {
+func unmarshalJSON(jsonStr string, v interface{}) (err error) {
 	err = json.Unmarshal([]byte(jsonStr), &v)
 	if err != nil {
 		logger.Error(err)
@@ -182,6 +182,10 @@ func isFileExists(file string) bool {
 		return true
 	}
 	return false
+}
+
+func ensureDirExists(dir string) {
+	os.MkdirAll(dir, 0755)
 }
 
 func notify(icon, summary, body string) (err error) {

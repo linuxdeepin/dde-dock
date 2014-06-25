@@ -46,15 +46,18 @@ var (
 type connectionData map[string]map[string]dbus.Variant
 
 type Manager struct {
-	// update by manager.go
-	NetworkingEnabled bool          `access:"readwrite"`
-	WiredEnabled      bool          `access:"readwrite"` // TODO
-	VpnEnabled        bool          `access:"readwrite"` // TODO
-	WirelessEnabled   dbus.Property `access:"readwrite"`
-	State             uint32        // networking state
+	config *config
 
+	// update by manager.go
+	State             uint32 // networking state
 	activeConnections []*activeConnection
 	ActiveConnections string // array of connections that activated and marshaled by json
+
+	NetworkingEnabled bool          `access:"readwrite"`
+	WirelessEnabled   dbus.Property `access:"readwrite"`
+	WwanEnabled       bool          `access:"readwrite"`
+	WiredEnabled      bool          `access:"readwrite"`
+	VpnEnabled        bool          `access:"readwrite"`
 
 	// update by manager_devices.go
 	devices      map[string][]*device
@@ -73,6 +76,7 @@ type Manager struct {
 	AccessPointAdded             func(devPath, apJSON string)
 	AccessPointRemoved           func(devPath, apJSON string)
 	AccessPointPropertiesChanged func(devPath, apJSON string)
+	DeviceEnabled                func(enabled bool)
 
 	agent         *Agent
 	stateNotifier *StateNotifier
@@ -96,6 +100,7 @@ func initSlices() {
 
 func NewManager() (m *Manager) {
 	m = &Manager{}
+	m.config = newConfig()
 	return
 }
 
@@ -117,7 +122,7 @@ func (m *Manager) initManager() {
 	m.initDeviceManage()
 	m.initConnectionManage()
 
-	// update property "ActiveConnections" after initilizing devices
+	// update property "ActiveConnections" after devices initialized
 	m.updateActiveConnections()
 	nmManager.ActiveConnections.ConnectChanged(func() {
 		m.updateActiveConnections()
