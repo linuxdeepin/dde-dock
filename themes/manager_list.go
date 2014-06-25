@@ -22,9 +22,9 @@
 package themes
 
 import (
-	dutils "pkg.linuxdeepin.com/lib/utils"
 	"os"
 	"path"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 	"regexp"
 	"strings"
 )
@@ -475,4 +475,53 @@ func isThemeInfoListEqual(list1, list2 []ThemeInfo) bool {
 	}
 
 	return true
+}
+
+func getGreeterThemeList() []ThemeInfo {
+	homeDir := dutils.GetHomeDir()
+	list := filterGreeterTheme(path.Join(homeDir, PERSON_LOCAL_GREETER_PATH), THEME_TYPE_LOCAL)
+	tList := filterGreeterTheme(PERSON_SYS_GREETER_PATH, THEME_TYPE_SYSTEM)
+
+	for _, l := range tList {
+		if isThemeInfoInList(l, list) {
+			continue
+		}
+
+		list = append(list, l)
+	}
+
+	return list
+}
+
+func filterGreeterTheme(dir string, t int32) []ThemeInfo {
+	list := []ThemeInfo{}
+	if !dutils.IsFileExist(dir) {
+		return list
+	}
+
+	fp, err := os.Open(dir)
+	if err != nil {
+		Logger.Warningf("Open '%s' failed: %v", dir, err)
+		return list
+	}
+
+	infos, err1 := fp.Readdir(0)
+	if err1 != nil {
+		Logger.Warningf("Readdir '%s' failed: %v", dir, err)
+		return list
+	}
+
+	for _, info := range infos {
+		if !info.Mode().IsDir() {
+			continue
+		}
+
+		filepath := path.Join(dir, info.Name())
+		if dutils.IsFileExist(path.Join(filepath, "thumb.png")) {
+			tmp := ThemeInfo{info.Name(), filepath, t}
+			list = append(list, tmp)
+		}
+	}
+
+	return list
 }

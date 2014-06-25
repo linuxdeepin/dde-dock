@@ -22,23 +22,25 @@
 package themes
 
 import (
-	"pkg.linuxdeepin.com/lib/dbus"
-	"pkg.linuxdeepin.com/lib/dbus/property"
-	"pkg.linuxdeepin.com/lib/glib-2.0"
 	"github.com/howeyc/fsnotify"
 	"os"
 	"path"
+	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/dbus/property"
+	"pkg.linuxdeepin.com/lib/glib-2.0"
 )
 
 type Manager struct {
-	ThemeList       []string
-	GtkThemeList    []string
-	IconThemeList   []string
-	CursorThemeList []string
-	SoundThemeList  []string
-	BackgroundList  []string
-	CurrentTheme    *property.GSettingsStringProperty `access:"readwrite"`
-	themeObjMap     map[string]*Theme
+	ThemeList        []string
+	GtkThemeList     []string
+	IconThemeList    []string
+	CursorThemeList  []string
+	SoundThemeList   []string
+	BackgroundList   []string
+	GreeterThemeList []string
+	CurrentTheme     *property.GSettingsStringProperty `access:"readwrite"`
+	GreeterTheme     *property.GSettingsStringProperty `access:"readwrite"`
+	themeObjMap      map[string]*Theme
 
 	watcher    *fsnotify.Watcher
 	quitFlag   chan bool
@@ -245,6 +247,17 @@ func (obj *Manager) getBgStrList() []string {
 	return list
 }
 
+func (obj *Manager) getGreeterStrList() []string {
+	list := []string{}
+	tList := getGreeterThemeList()
+
+	for _, l := range tList {
+		list = append(list, l.Name)
+	}
+
+	return list
+}
+
 func newManager() *Manager {
 	m := &Manager{}
 
@@ -254,10 +267,14 @@ func newManager() *Manager {
 	m.setPropSoundThemeList(m.getSoundStrList())
 	m.setPropCursorThemeList(m.getCursorStrList())
 	m.setPropBackgroundList(m.getBgStrList())
+	m.setPropGreeterList(m.getGreeterStrList())
 
 	m.CurrentTheme = property.NewGSettingsStringProperty(
 		m, "CurrentTheme",
 		themeSettings, GS_KEY_CURRENT_THEME)
+	m.GreeterTheme = property.NewGSettingsStringProperty(
+		m, "GreeterTheme",
+		themeSettings, GS_KEY_CURRENT_GREETER)
 
 	m.themeObjMap = make(map[string]*Theme)
 	m.rebuildThemes()

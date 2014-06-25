@@ -119,6 +119,19 @@ func (obj *Manager) startWatch() {
 	if !errFlag {
 		obj.watcher.Watch(dir)
 	}
+
+	obj.watcher.Watch(PERSON_SYS_GREETER_PATH)
+	errFlag = false
+	dir = path.Join(homeDir, PERSON_LOCAL_GREETER_PATH)
+	if !dutils.IsFileExist(dir) {
+		if err := os.MkdirAll(dir, 0755); err != nil {
+			errFlag = true
+			Logger.Warningf("Mkdir '%s' failed: %v", dir, err)
+		}
+	}
+	if !errFlag {
+		obj.watcher.Watch(dir)
+	}
 }
 
 func (obj *Manager) endWatch() {
@@ -131,14 +144,23 @@ func (obj *Manager) endWatch() {
 	if dutils.IsFileExist(dir) {
 		obj.watcher.RemoveWatch(dir)
 	}
+
 	obj.watcher.RemoveWatch(ICON_SYS_PATH)
 	dir = path.Join(homeDir, ICON_LOCAL_PATH)
 	if dutils.IsFileExist(dir) {
 		obj.watcher.RemoveWatch(dir)
 	}
+
 	obj.watcher.RemoveWatch(SOUND_THEME_PATH)
+
 	obj.watcher.RemoveWatch(PERSON_SYS_THEME_PATH)
 	dir = path.Join(homeDir, PERSON_LOCAL_THEME_PATH)
+	if dutils.IsFileExist(dir) {
+		obj.watcher.RemoveWatch(dir)
+	}
+
+	obj.watcher.RemoveWatch(PERSON_SYS_GREETER_PATH)
+	dir = path.Join(homeDir, PERSON_LOCAL_GREETER_PATH)
 	if dutils.IsFileExist(dir) {
 		obj.watcher.RemoveWatch(dir)
 	}
@@ -179,6 +201,12 @@ func (obj *Manager) handleEvent() {
 			if ok1 {
 				Logger.Debugf("Update SoundTheme")
 				obj.setPropSoundThemeList(obj.getSoundStrList())
+				break
+			}
+
+			ok1, _ = regexp.MatchString(`greeter-theme`, ev.Name)
+			if ok1 {
+				obj.setPropGreeterList(obj.getGreeterStrList())
 				break
 			}
 

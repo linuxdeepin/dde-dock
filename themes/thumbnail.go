@@ -22,8 +22,8 @@
 package themes
 
 import (
-	dutils "pkg.linuxdeepin.com/lib/utils"
 	"path"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 )
 
 const (
@@ -167,4 +167,16 @@ func getBgThumb(bg string) string {
 	genThemeThumb()
 	bg = dutils.PathToURI(bg, dutils.SCHEME_FILE)
 	return bg
+}
+
+func getGreeterThumb(name string) string {
+	list := getGreeterThemeList()
+
+	for _, l := range list {
+		if name == l.Name {
+			return path.Join(l.Path, "thumb.png")
+		}
+	}
+
+	return ""
 }

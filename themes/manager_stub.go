@@ -82,3 +82,10 @@ func (obj *Manager) setPropBackgroundList(list []string) {
 		dbus.NotifyChange(obj, "BackgroundList")
 	}
 }
+
+func (obj *Manager) setPropGreeterList(list []string) {
+	if !isStrListEqual(obj.GreeterThemeList, list) {
+		obj.GreeterThemeList = list
+		dbus.NotifyChange(obj, "GreeterThemeList")
+	}
+}

@@ -54,8 +54,10 @@ const (
 )
 
 var (
-	PERSON_SYS_THEME_PATH   = path.Join(PERSON_SYS_BASE_PATH, "themes")
-	PERSON_LOCAL_THEME_PATH = path.Join(PERSON_LOCAL_BASE_PATH, "themes")
+	PERSON_SYS_THEME_PATH     = path.Join(PERSON_SYS_BASE_PATH, "themes")
+	PERSON_LOCAL_THEME_PATH   = path.Join(PERSON_LOCAL_BASE_PATH, "themes")
+	PERSON_SYS_GREETER_PATH   = path.Join(PERSON_SYS_BASE_PATH, "greeter-theme")
+	PERSON_LOCAL_GREETER_PATH = path.Join(PERSON_LOCAL_BASE_PATH, "greeter-theme")
 )
 
 const (
@@ -71,7 +73,8 @@ const (
 )
 
 const (
-	GS_KEY_CURRENT_THEME = "current-theme"
-	GS_KEY_CURRENT_BG    = "current-picture"
-	GS_KEY_CURRENT_SOUND = "current-sound-theme"
+	GS_KEY_CURRENT_THEME   = "current-theme"
+	GS_KEY_CURRENT_BG      = "current-picture"
+	GS_KEY_CURRENT_SOUND   = "current-sound-theme"
+	GS_KEY_CURRENT_GREETER = "greeter-theme"
 )

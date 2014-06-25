@@ -22,9 +22,9 @@
 package themes
 
 import (
-	dutils "pkg.linuxdeepin.com/lib/utils"
 	"os"
 	"path"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 	"strconv"
 	"strings"
 )
@@ -74,6 +74,13 @@ func (obj *Manager) GetFlag(t, name string) int32 {
 				return l.T
 			}
 		}
+	case "greeter":
+		list := getGreeterThemeList()
+		for _, l := range list {
+			if name == l.Path {
+				return l.T
+			}
+		}
 	}
 
 	return -1
@@ -97,6 +104,17 @@ func (obj *Manager) Set(t, value string) {
 		obj.setFontSize(int32(s))
 	case "background":
 		obj.setBackground(value)
+	case "greeter":
+		if value == obj.GreeterTheme.GetValue().(string) {
+			break
+		}
+
+		for _, n := range obj.GreeterThemeList {
+			if value == n {
+				themeSettings.SetString(GS_KEY_CURRENT_GREETER, value)
+				break
+			}
+		}
 	}
 }
 
@@ -113,6 +131,8 @@ func (op *Manager) GetThumbnail(t, name string) string {
 		return getCursorThumb(name)
 	case "background":
 		return getBgThumb(name)
+	case "greeter":
+		return getGreeterThumb(name)
 	}
 
 	return ""
@@ -133,6 +153,16 @@ func (obj *Manager) Delete(t, name string) {
 		obj.deleteCursorTheme(name)
 	case "background":
 		obj.deleteBackground(name)
+	case "greeter":
+		list := getGreeterThemeList()
+		for _, l := range list {
+			if name == l.Name {
+				if l.T == THEME_TYPE_LOCAL {
+					rmAllFile(l.Path)
+				}
+			}
+			break
+		}
 	}
 }
 
