@@ -617,15 +617,36 @@ func nmGetDHCP4Info(path dbus.ObjectPath) (ip, mask, route, dns string) {
 	return
 }
 
-func nmGetDeviceActiveConnectionData(devPath dbus.ObjectPath) (data connectionData, err error) {
+func nmGetDeviceActiveConnection(devPath dbus.ObjectPath) (acPath dbus.ObjectPath, err error) {
 	dev, err := nmNewDevice(devPath)
 	if err != nil {
 		return
 	}
-	acPath := dev.ActiveConnection.Get()
+	acPath = dev.ActiveConnection.Get()
 	if len(acPath) == 0 || acPath == "/" {
 		// don't need logger error here
 		err = fmt.Errorf("there is no active connection for device", devPath)
+		return
+	}
+	return
+}
+
+func nmGetDeviceActiveConnectionUuid(devPath dbus.ObjectPath) (uuid string, err error) {
+	acPath, err := nmGetDeviceActiveConnection(devPath)
+	if err != nil {
+		return
+	}
+	aconn, err := nmNewActiveConnection(acPath)
+	if err != nil {
+		return
+	}
+	uuid = aconn.Uuid.Get()
+	return
+}
+
+func nmGetDeviceActiveConnectionData(devPath dbus.ObjectPath) (data connectionData, err error) {
+	acPath, err := nmGetDeviceActiveConnection(devPath)
+	if err != nil {
 		return
 	}
 	aconn, err := nmNewActiveConnection(acPath)

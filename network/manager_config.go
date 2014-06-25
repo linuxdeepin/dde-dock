@@ -22,16 +22,20 @@
 package network
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path"
 	"pkg.linuxdeepin.com/lib/dbus"
+	"sync"
 )
 
 var networkConfigFile = os.Getenv("HOME") + "/.config/deepin_network.json"
 
 type config struct {
-	configFile   string
+	configFile string
+	saveLock   sync.Mutex
+
 	WiredEnabled bool
 	VpnEnabled   bool
 	Devices      map[string]*deviceConfig
@@ -74,8 +78,9 @@ func (c *config) load() {
 		c.save()
 	}
 }
-
 func (c *config) save() {
+	c.saveLock.Lock()
+	defer c.saveLock.Unlock()
 	ensureDirExists(path.Dir(c.configFile))
 	fileContent, _ := marshalJSON(c)
 	err := ioutil.WriteFile(c.configFile, []byte(fileContent), 0644)
@@ -84,27 +89,87 @@ func (c *config) save() {
 	}
 }
 
-func (c *config) getDeviceConfig(hwAddr string) (d *deviceConfig) {
-	d, ok := c.Devices[hwAddr]
-	if !ok {
-		logger.Errorf("device config for %s not exists", hwAddr)
-	}
+func (c *config) isDeviceConfigExists(devId string) (ok bool) {
+	_, ok = c.Devices[devId]
 	return
+}
+func (c *config) getDeviceConfig(devId string) (d *deviceConfig, err error) {
+	if !c.isDeviceConfigExists(devId) {
+		err = fmt.Errorf("device config for %s not exists", devId)
+		logger.Error(err)
+		return
+	}
+	d, _ = c.Devices[devId]
+	return
+}
+func (c *config) addDeviceConfig(devPath dbus.ObjectPath) {
+	devId, err := nmGeneralGetDeviceIdentifier(devPath)
+	if err != nil {
+		return
+	}
+	if !c.isDeviceConfigExists(devId) {
+		d := newDeviceConfig()
+		d.LastConnection, _ = nmGetDeviceActiveConnectionUuid(devPath)
+		c.Devices[devId] = d
+	}
+	c.save()
+}
+func (c *config) removeDeviceConfig(devId string) {
+	if !c.isDeviceConfigExists(devId) {
+		logger.Errorf("device config for %s not exists", devId)
+	}
+	delete(c.Devices, devId)
+	c.save()
+}
+func (c *config) updateDeviceLastConnection(devPath dbus.ObjectPath) {
+	devId, err := nmGeneralGetDeviceIdentifier(devPath)
+	if err != nil {
+		return
+	}
+	if !c.isDeviceConfigExists(devId) {
+		logger.Errorf("device config for %s not exists", devId)
+	}
+	d, _ := c.Devices[devId]
+	d.LastConnection, _ = nmGetDeviceActiveConnectionUuid(devPath)
+	c.save()
 }
 
 func (m *Manager) IsDeviceEnabled(devPath dbus.ObjectPath) (enabled bool, err error) {
-	// TODO
+	devId, err := nmGeneralGetDeviceIdentifier(devPath)
+	if err != nil {
+		enabled = true // return true as default
+		return
+	}
+	devConfig, err := m.config.getDeviceConfig(devId)
+	if err != nil {
+		return
+	}
+	enabled = devConfig.Enabled
 	return
 }
 func (m *Manager) EnableDevice(devPath dbus.ObjectPath, enabled bool) (err error) {
-	// TODO
-	// hwAddr, err := nmGeneralGetDeviceHwAddr(devPath)
-	if enabled {
-		// devconf := m.config.getDeviceConfig(hwAddr)
-	} else {
+	devId, err := nmGeneralGetDeviceIdentifier(devPath)
+	if err != nil {
+		return
 	}
+	devConfig, err := m.config.getDeviceConfig(devId)
+	if err != nil {
+		return
+	}
+
+	if enabled {
+		if len(devConfig.LastConnection) > 0 {
+			// TODO
+		}
+	} else {
+		// TODO
+	}
+
+	// send signal
 	if m.DeviceEnabled != nil {
 		m.DeviceEnabled(enabled)
 	}
+
+	m.config.save()
 	return
 }

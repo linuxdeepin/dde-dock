@@ -25,9 +25,10 @@ import nm "dbus/org/freedesktop/networkmanager"
 import "pkg.linuxdeepin.com/lib/dbus"
 
 type device struct {
-	nmDevType     uint32
 	nmDev         *nm.Device
 	nmDevWireless *nm.DeviceWireless
+	nmDevType     uint32
+	id            string
 
 	Path      dbus.ObjectPath
 	State     uint32
@@ -41,11 +42,18 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device) {
 		return
 	}
 	dev = &device{
-		Path:      nmDev.Path,
-		State:     nmDev.State.Get(),
 		nmDev:     nmDev,
 		nmDevType: nmDev.DeviceType.Get(),
+		Path:      nmDev.Path,
+		State:     nmDev.State.Get(),
 	}
+	dev.id, _ = nmGeneralGetDeviceIdentifier(devPath)
+
+	// add device config
+	m.config.addDeviceConfig(devPath)
+	nmDev.ActiveConnection.ConnectChanged(func() {
+		m.config.updateDeviceLastConnection(devPath)
+	})
 
 	// dispatch for different device types
 	switch dev.nmDevType {
@@ -88,6 +96,18 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device) {
 	})
 
 	return
+}
+func (m *Manager) destroyDevice(dev *device) {
+	// remove device config
+	m.config.removeDeviceConfig(dev.id)
+
+	// destroy object to reset all property connects
+	if dev.nmDevWireless != nil {
+		// nmDevWireless is optional, so check if is nil before
+		// destroy it
+		nmDestroyDeviceWireless(dev.nmDevWireless)
+	}
+	nmDestroyDevice(dev.nmDev)
 }
 
 func getDeviceAddress(devPath dbus.ObjectPath, devType uint32) (hwAddr string) {
@@ -177,15 +197,7 @@ func (m *Manager) doRemoveDevice(devs []*device, path dbus.ObjectPath) []*device
 		return devs
 	}
 
-	// destroy object to reset all property connects
-	dev := devs[i]
-	if dev.nmDevWireless != nil {
-		// nmDevWireless is optional, so check if is nil before
-		// destroy it
-		nmDestroyDeviceWireless(dev.nmDevWireless)
-	}
-	nmDestroyDevice(dev.nmDev)
-
+	m.destroyDevice(devs[i])
 	copy(devs[i:], devs[i+1:])
 	devs[len(devs)-1] = nil
 	devs = devs[:len(devs)-1]
