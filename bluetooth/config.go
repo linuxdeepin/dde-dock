@@ -25,6 +25,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
+	"sync"
 )
 
 var (
@@ -32,7 +33,8 @@ var (
 )
 
 type config struct {
-	Powered bool
+	saveLock sync.Mutex
+	Powered  bool
 }
 
 func newConfig() (c *config) {
@@ -55,6 +57,8 @@ func (c *config) load() {
 }
 
 func (c *config) save() {
+	c.saveLock.Lock()
+	defer c.saveLock.Unlock()
 	ensureDirExists(path.Dir(bluetoothConfigFile))
 	fileContent := marshalJSON(c)
 	err := ioutil.WriteFile(bluetoothConfigFile, []byte(fileContent), 0644)
