@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-24 16:21+0800\n"
+"POT-Creation-Date: 2014-06-25 15:13+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME &lt;EMAIL@ADDRESS&gt;\n"
 "Language-Team: LANGUAGE &lt;LL@li.org&gt;\n"
@@ -1140,1888 +1140,1872 @@ msgid "Language failed to change, please try later."
 msgstr "系统语言更改失败，请稍后重试。"
 
 #: ../../datetime/zone_utc_map.go:14
-msgid "Cape Verde"
-msgstr ""
+msgid "Marquesas"
+msgstr "马克萨斯"
 
 #: ../../datetime/zone_utc_map.go:15
-msgid "Noronha"
-msgstr ""
+msgid "Niue"
+msgstr "纽埃"
 
 #: ../../datetime/zone_utc_map.go:16
-msgid "South Georgia"
-msgstr "南乔治亚"
+msgid "Samoa"
+msgstr "萨摩亚"
 
 #: ../../datetime/zone_utc_map.go:17
-msgid "Araguaina"
-msgstr ""
+msgid "Adak"
+msgstr "埃达克"
 
 #: ../../datetime/zone_utc_map.go:18
-msgid "Catamarca"
-msgstr ""
+msgid "Atka"
+msgstr "阿特卡"
 
 #: ../../datetime/zone_utc_map.go:19
-msgid "ComodRivadavia"
-msgstr ""
+msgid "HST"
+msgstr "夏威夷-阿留申标准时间"
 
 #: ../../datetime/zone_utc_map.go:20
-msgid "Jujuy"
-msgstr ""
+msgid "Honolulu"
+msgstr "檀香山"
 
 #: ../../datetime/zone_utc_map.go:21
-msgid "La Rioja"
-msgstr ""
+msgid "Johnston"
+msgstr "约翰斯顿"
 
 #: ../../datetime/zone_utc_map.go:22
-msgid "Rio Gallegos"
-msgstr ""
+msgid "Rarotonga"
+msgstr "拉罗汤加岛"
 
 #: ../../datetime/zone_utc_map.go:23
-msgid "Salta"
-msgstr ""
+msgid "Tahiti"
+msgstr "大溪地"
 
 #: ../../datetime/zone_utc_map.go:24
-msgid "San Juan"
-msgstr ""
+msgid "Aleutian"
+msgstr "阿留申"
 
 #: ../../datetime/zone_utc_map.go:25
-msgid "San Luis"
-msgstr ""
+msgid "Hawaii"
+msgstr "夏威夷"
 
 #: ../../datetime/zone_utc_map.go:26
-msgid "Tucuman"
-msgstr ""
+msgid "Anchorage"
+msgstr "安克雷奇"
 
 #: ../../datetime/zone_utc_map.go:27
-msgid "Ushuaia"
-msgstr ""
+msgid "Juneau"
+msgstr "朱诺"
 
 #: ../../datetime/zone_utc_map.go:28
-msgid "Bahia"
-msgstr ""
+msgid "Nome"
+msgstr "诺姆"
 
 #: ../../datetime/zone_utc_map.go:29
-msgid "Belem"
-msgstr ""
+msgid "Sitka"
+msgstr "锡特卡"
 
 #: ../../datetime/zone_utc_map.go:30
-msgid "Buenos Aires"
-msgstr ""
+msgid "Yakutat"
+msgstr "亚库塔特"
 
 #: ../../datetime/zone_utc_map.go:31
-msgid "Caracas"
-msgstr ""
+msgid "Gambier"
+msgstr "甘比尔"
 
 #: ../../datetime/zone_utc_map.go:32
-msgid "Cayenne"
-msgstr ""
+msgid "Alaska"
+msgstr "阿拉斯加"
 
 #: ../../datetime/zone_utc_map.go:33
-msgid "Cordoba"
-msgstr ""
+msgid "Dawson"
+msgstr "道森"
 
 #: ../../datetime/zone_utc_map.go:34
-msgid "Fortaleza"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:35
-msgid "Godthab"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:36
-msgid "Maceio"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:37
-msgid "Mendoza"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:38
-msgid "Miquelon"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:39
-msgid "Montevideo"
-msgstr "蒙得维的亚"
-
-#: ../../datetime/zone_utc_map.go:40
-msgid "Paramaribo"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:41
-msgid "Recife"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:42
-msgid "Rosario"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:43
-msgid "Santarem"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:44
-msgid "Sao Paulo"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:45
-msgid "Rothera"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:46
-msgid "Stanley"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:47
-msgid "Brazil East"
-msgstr "巴西东部"
-
-#: ../../datetime/zone_utc_map.go:48
-msgid "Anguilla"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:49
-msgid "Antigua"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:50
-msgid "Aruba"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:51
-msgid "Asuncion"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:52
-msgid "Barbados"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:53
-msgid "Boa Vista"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:54
-msgid "Campo Grande"
-msgstr "大坎普"
-
-#: ../../datetime/zone_utc_map.go:55
-msgid "Cuiaba"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:56
-msgid "Curacao"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:57
-msgid "Dominica"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:58
-msgid "Eirunepe"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:59
-msgid "Glace Bay"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:60
-msgid "Goose Bay"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:61
-msgid "Grenada"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:62
-msgid "Guadeloupe"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:63
-msgid "Guyana"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:64
-msgid "Halifax"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:65
-msgid "Kralendijk"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:66
-msgid "La Paz"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:67
-msgid "Lower Princes"
-msgstr "下王子"
-
-#: ../../datetime/zone_utc_map.go:68
-msgid "Manaus"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:69
-msgid "Marigot"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:70
-msgid "Martinique"
-msgstr "马提尼克"
-
-#: ../../datetime/zone_utc_map.go:71
-msgid "Moncton"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:72
-msgid "Montserrat"
-msgstr "蒙特塞拉特"
-
-#: ../../datetime/zone_utc_map.go:73
-msgid "Port of Spain"
-msgstr "西班牙港"
-
-#: ../../datetime/zone_utc_map.go:74
-msgid "Porto Velho"
-msgstr "韦柳港"
-
-#: ../../datetime/zone_utc_map.go:75
-msgid "Puerto Rico"
-msgstr "波多黎各"
-
-#: ../../datetime/zone_utc_map.go:76
-msgid "Santiago"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:77
-msgid "Santo Domingo"
-msgstr "圣多明各"
-
-#: ../../datetime/zone_utc_map.go:78
-msgid "St Barthelemy"
-msgstr "圣巴夫林米"
-
-#: ../../datetime/zone_utc_map.go:79
-msgid "St Johns"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:80
-msgid "St Lucia"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:81
-msgid "St Thomas"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:82
-msgid "St Vincent"
-msgstr "圣文森特"
-
-#: ../../datetime/zone_utc_map.go:83
-msgid "Thule"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:84
-msgid "Tortola"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:85
-msgid "Virgin"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:86
-msgid "Palmer"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:87
-msgid "Bermuda"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:88
-msgid "Brazil West"
-msgstr "巴西西部"
-
-#: ../../datetime/zone_utc_map.go:89
-msgid "Atlantic"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:90
-msgid "Continental"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:91
-msgid "Atikokan"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:92
-msgid "Bogota"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:93
-msgid "Cayman"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:94
-msgid "Coral Harbour"
-msgstr "珊瑚港"
-
-#: ../../datetime/zone_utc_map.go:95
-msgid "Detroit"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:96
-msgid "Fort Wayne"
-msgstr "韦恩堡"
-
-#: ../../datetime/zone_utc_map.go:97
-msgid "Grand Turk"
-msgstr "大特克"
-
-#: ../../datetime/zone_utc_map.go:98
-msgid "Guayaquil"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:99
-msgid "Havana"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:100
-msgid "Marengo"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:101
-msgid "Petersburg"
-msgstr "圣彼得堡"
-
-#: ../../datetime/zone_utc_map.go:102
-msgid "Vevay"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:103
-msgid "Vincennes"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:104
-msgid "Winamac"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:105
-msgid "Indianapolis"
-msgstr "印第安纳波利斯"
-
-#: ../../datetime/zone_utc_map.go:106
-msgid "Iqaluit"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:107
-msgid "Jamaica"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:108
-msgid "Lima"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:109
-msgid "Louisville"
-msgstr "路易斯维尔"
-
-#: ../../datetime/zone_utc_map.go:110
-msgid "Monticello"
-msgstr "蒙蒂塞洛"
-
-#: ../../datetime/zone_utc_map.go:111
-msgid "Montreal"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:112
-msgid "Nassau"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:113
-msgid "New York"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:114
-msgid "Nipigon"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:115
-msgid "Panama"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:116
-msgid "Port au Prince"
-msgstr "太子港"
-
-#: ../../datetime/zone_utc_map.go:117
-msgid "Porto Acre"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:118
-msgid "Rio Branco"
-msgstr "里奥布朗库"
-
-#: ../../datetime/zone_utc_map.go:119
-msgid "Thunder Bay"
-msgstr "雷湾"
-
-#: ../../datetime/zone_utc_map.go:120
-msgid "Toronto"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:121
-msgid "Yancowinna"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:122
-msgid "Canada Eastern"
-msgstr "加拿大东部"
-
-#: ../../datetime/zone_utc_map.go:123
-msgid "Cuba"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:124
-msgid "EST"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:125
-msgid "USA Eastern"
-msgstr "美国东部"
-
-#: ../../datetime/zone_utc_map.go:126
-msgid "East Indiana"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:127
-msgid "Michigan"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:128
-msgid "Bahia Banderas"
-msgstr "巴伊亚班德拉斯"
-
-#: ../../datetime/zone_utc_map.go:129
-msgid "Belize"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:130
-msgid "Cancun"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:131
-msgid "Chicago"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:132
-msgid "Costa Rica"
-msgstr "哥斯达黎加"
-
-#: ../../datetime/zone_utc_map.go:133
-msgid "El Salvador"
-msgstr "萨尔瓦多"
-
-#: ../../datetime/zone_utc_map.go:134
-msgid "Guatemala"
-msgstr "危地马拉"
-
-#: ../../datetime/zone_utc_map.go:135
-msgid "Knox"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:136
-msgid "Tell City"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:137
-msgid "Managua"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:138
-msgid "Matamoros"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:139
-msgid "Menominee"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:140
-msgid "Merida"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:141
-msgid "Mexico City"
-msgstr "墨西哥城"
-
-#: ../../datetime/zone_utc_map.go:142
-msgid "Monterrey"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:143
-msgid "Beulah"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:144
-msgid "Center"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:145
-msgid "New Salem"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:146
-msgid "Rainy River"
-msgstr "瑞尼河区"
-
-#: ../../datetime/zone_utc_map.go:147
-msgid "Swift Current"
-msgstr "斯威夫特卡伦特"
-
-#: ../../datetime/zone_utc_map.go:148
-msgid "Regina"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:149
-msgid "Resolute"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:150
-msgid "Tegucigalpa"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:151
-msgid "Winnipeg"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:152
-msgid "East Saskatchewan"
-msgstr "东萨斯喀彻温"
-
-#: ../../datetime/zone_utc_map.go:153
-msgid "Saskatchewan"
-msgstr "萨斯喀彻温"
-
-#: ../../datetime/zone_utc_map.go:154
-msgid "EasterIsland"
-msgstr "复活节岛"
-
-#: ../../datetime/zone_utc_map.go:155
-msgid "General"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:156
-msgid "Pacific Easter"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:157
-msgid "Galapagos"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:158
-msgid "USA Central"
-msgstr "美国中部"
-
-#: ../../datetime/zone_utc_map.go:159
-msgid "Indiana Starke"
-msgstr "印第安纳斯塔克"
-
-#: ../../datetime/zone_utc_map.go:160
-msgid "Boise"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:161
-msgid "Cambridge Bay"
-msgstr "剑桥湾"
-
-#: ../../datetime/zone_utc_map.go:162
-msgid "Chihuahua"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:163
-msgid "Creston"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:164
-msgid "Dawson Creek"
-msgstr "道森克里克"
-
-#: ../../datetime/zone_utc_map.go:165
-msgid "Denver"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:166
-msgid "Edmonton"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:167
-msgid "Hermosillo"
-msgstr "埃莫西约"
-
-#: ../../datetime/zone_utc_map.go:168
-msgid "Inuvik"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:169
-msgid "Mazatlan"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:170
-msgid "Ojinaga"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:171
-msgid "Phoenix"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:172
-msgid "Shiprock"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:173
-msgid "Yellowknife"
-msgstr "耶洛奈夫"
-
-#: ../../datetime/zone_utc_map.go:174
-msgid "Canada Mountain"
-msgstr "加拿大山区"
-
-#: ../../datetime/zone_utc_map.go:175
-msgid "BajaSur"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:176
-msgid "MST"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:177
-msgid "Navajo"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:178
-msgid "Arizona"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:179
-msgid "USA Mountain"
-msgstr "美国山区"
-
-#: ../../datetime/zone_utc_map.go:180
-msgid "Dawson"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:181
 msgid "Ensenada"
 msgstr "加拿大"
 
-#: ../../datetime/zone_utc_map.go:182
+#: ../../datetime/zone_utc_map.go:35
 msgid "Los Angeles"
 msgstr "洛杉矶"
 
-#: ../../datetime/zone_utc_map.go:183
+#: ../../datetime/zone_utc_map.go:36
 msgid "Metlakatla"
 msgstr "梅特拉卡特拉"
 
-#: ../../datetime/zone_utc_map.go:184
+#: ../../datetime/zone_utc_map.go:37
 msgid "Santa Isabel"
 msgstr "圣伊莎贝尔"
 
-#: ../../datetime/zone_utc_map.go:185
+#: ../../datetime/zone_utc_map.go:38
 msgid "Tijuana"
-msgstr ""
+msgstr "蒂华纳"
 
-#: ../../datetime/zone_utc_map.go:186
+#: ../../datetime/zone_utc_map.go:39
 msgid "Vancouver"
-msgstr ""
+msgstr "温哥华"
 
-#: ../../datetime/zone_utc_map.go:187
+#: ../../datetime/zone_utc_map.go:40
 msgid "Whitehorse"
 msgstr "怀特霍斯"
 
-#: ../../datetime/zone_utc_map.go:188
+#: ../../datetime/zone_utc_map.go:41
 msgid "Newfoundland"
 msgstr "纽芬兰"
 
-#: ../../datetime/zone_utc_map.go:189
+#: ../../datetime/zone_utc_map.go:42
 msgid "Yukon"
-msgstr ""
+msgstr "育空"
 
-#: ../../datetime/zone_utc_map.go:190
+#: ../../datetime/zone_utc_map.go:43
 msgid "BajaNorte"
-msgstr ""
+msgstr "下加利福尼亚"
 
-#: ../../datetime/zone_utc_map.go:191
+#: ../../datetime/zone_utc_map.go:44
 msgid "Pitcairn"
-msgstr ""
+msgstr "皮特凯恩"
 
-#: ../../datetime/zone_utc_map.go:192
+#: ../../datetime/zone_utc_map.go:45
 msgid "Pacific"
-msgstr ""
+msgstr "太平洋"
 
-#: ../../datetime/zone_utc_map.go:193
+#: ../../datetime/zone_utc_map.go:46
 msgid "Pacific New"
 msgstr "新太平洋"
 
+#: ../../datetime/zone_utc_map.go:47
+msgid "Boise"
+msgstr "博伊西"
+
+#: ../../datetime/zone_utc_map.go:48
+msgid "Cambridge Bay"
+msgstr "剑桥湾"
+
+#: ../../datetime/zone_utc_map.go:49
+msgid "Chihuahua"
+msgstr "奇瓦瓦"
+
+#: ../../datetime/zone_utc_map.go:50
+msgid "Creston"
+msgstr "克雷斯顿"
+
+#: ../../datetime/zone_utc_map.go:51
+msgid "Dawson Creek"
+msgstr "道森克里克"
+
+#: ../../datetime/zone_utc_map.go:52
+msgid "Denver"
+msgstr "丹佛"
+
+#: ../../datetime/zone_utc_map.go:53
+msgid "Edmonton"
+msgstr "埃德蒙顿"
+
+#: ../../datetime/zone_utc_map.go:54
+msgid "Hermosillo"
+msgstr "埃莫西约"
+
+#: ../../datetime/zone_utc_map.go:55
+msgid "Inuvik"
+msgstr "伊努维克"
+
+#: ../../datetime/zone_utc_map.go:56
+msgid "Mazatlan"
+msgstr "马萨特兰"
+
+#: ../../datetime/zone_utc_map.go:57
+msgid "Ojinaga"
+msgstr "奥希纳加"
+
+#: ../../datetime/zone_utc_map.go:58
+msgid "Phoenix"
+msgstr "凤凰"
+
+#: ../../datetime/zone_utc_map.go:59
+msgid "Shiprock"
+msgstr "希普罗克"
+
+#: ../../datetime/zone_utc_map.go:60
+msgid "Yellowknife"
+msgstr "耶洛奈夫"
+
+#: ../../datetime/zone_utc_map.go:61
+msgid "Canada Mountain"
+msgstr "加拿大山区"
+
+#: ../../datetime/zone_utc_map.go:62
+msgid "BajaSur"
+msgstr "南下加里福尼亚"
+
+#: ../../datetime/zone_utc_map.go:63
+msgid "MST"
+msgstr "山区标准时间"
+
+#: ../../datetime/zone_utc_map.go:64
+msgid "Navajo"
+msgstr "纳瓦霍"
+
+#: ../../datetime/zone_utc_map.go:65
+msgid "Arizona"
+msgstr "亚利桑那"
+
+#: ../../datetime/zone_utc_map.go:66
+msgid "USA Mountain"
+msgstr "美国山区"
+
+#: ../../datetime/zone_utc_map.go:67
+msgid "Bahia Banderas"
+msgstr "巴伊亚班德拉斯"
+
+#: ../../datetime/zone_utc_map.go:68
+msgid "Belize"
+msgstr "伯利兹"
+
+#: ../../datetime/zone_utc_map.go:69
+msgid "Cancun"
+msgstr "坎昆"
+
+#: ../../datetime/zone_utc_map.go:70
+msgid "Chicago"
+msgstr "芝加哥"
+
+#: ../../datetime/zone_utc_map.go:71
+msgid "Costa Rica"
+msgstr "哥斯达黎加"
+
+#: ../../datetime/zone_utc_map.go:72
+msgid "El Salvador"
+msgstr "萨尔瓦多"
+
+#: ../../datetime/zone_utc_map.go:73
+msgid "Guatemala"
+msgstr "危地马拉"
+
+#: ../../datetime/zone_utc_map.go:74
+msgid "Knox"
+msgstr "诺克斯"
+
+#: ../../datetime/zone_utc_map.go:75
+msgid "Tell City"
+msgstr "特尔城"
+
+#: ../../datetime/zone_utc_map.go:76
+msgid "Managua"
+msgstr "马那瓜"
+
+#: ../../datetime/zone_utc_map.go:77
+msgid "Matamoros"
+msgstr "马塔莫罗斯"
+
+#: ../../datetime/zone_utc_map.go:78
+msgid "Menominee"
+msgstr "梅诺米尼"
+
+#: ../../datetime/zone_utc_map.go:79
+msgid "Merida"
+msgstr "梅里达"
+
+#: ../../datetime/zone_utc_map.go:80
+msgid "Mexico City"
+msgstr "墨西哥城"
+
+#: ../../datetime/zone_utc_map.go:81
+msgid "Monterrey"
+msgstr "蒙特雷"
+
+#: ../../datetime/zone_utc_map.go:82
+msgid "Beulah"
+msgstr "比尤拉"
+
+#: ../../datetime/zone_utc_map.go:83
+msgid "New Salem"
+msgstr "新塞勒姆"
+
+#: ../../datetime/zone_utc_map.go:84
+msgid "Rainy River"
+msgstr "瑞尼河区"
+
+#: ../../datetime/zone_utc_map.go:85
+msgid "Swift Current"
+msgstr "斯威夫特卡伦特"
+
+#: ../../datetime/zone_utc_map.go:86
+msgid "Regina"
+msgstr "里贾纳"
+
+#: ../../datetime/zone_utc_map.go:87
+msgid "Resolute"
+msgstr "雷索卢特"
+
+#: ../../datetime/zone_utc_map.go:88
+msgid "Tegucigalpa"
+msgstr "特古西加尔巴"
+
+#: ../../datetime/zone_utc_map.go:89
+msgid "Winnipeg"
+msgstr "温尼伯"
+
+#: ../../datetime/zone_utc_map.go:90
+msgid "East Saskatchewan"
+msgstr "东萨斯喀彻温"
+
+#: ../../datetime/zone_utc_map.go:91
+msgid "Saskatchewan"
+msgstr "萨斯喀彻温"
+
+#: ../../datetime/zone_utc_map.go:92
+msgid "EasterIsland"
+msgstr "复活节岛"
+
+#: ../../datetime/zone_utc_map.go:93
+msgid "General"
+msgstr "通用"
+
+#: ../../datetime/zone_utc_map.go:94
+msgid "Pacific East"
+msgstr "东太平洋"
+
+#: ../../datetime/zone_utc_map.go:95
+msgid "Galapagos"
+msgstr "加拉帕戈斯"
+
+#: ../../datetime/zone_utc_map.go:96
+msgid "USA Central"
+msgstr "美国中部"
+
+#: ../../datetime/zone_utc_map.go:97
+msgid "Indiana Starke"
+msgstr "印第安纳斯塔克"
+
+#: ../../datetime/zone_utc_map.go:98
+msgid "Atikokan"
+msgstr "阿提库"
+
+#: ../../datetime/zone_utc_map.go:99
+msgid "Bogota"
+msgstr "波哥大"
+
+#: ../../datetime/zone_utc_map.go:100
+msgid "Cayman"
+msgstr "开曼"
+
+#: ../../datetime/zone_utc_map.go:101
+msgid "Coral Harbour"
+msgstr "珊瑚港"
+
+#: ../../datetime/zone_utc_map.go:102
+msgid "Detroit"
+msgstr "底特律"
+
+#: ../../datetime/zone_utc_map.go:103
+msgid "Fort Wayne"
+msgstr "韦恩堡"
+
+#: ../../datetime/zone_utc_map.go:104
+msgid "Grand Turk"
+msgstr "大特克"
+
+#: ../../datetime/zone_utc_map.go:105
+msgid "Guayaquil"
+msgstr "瓜亚基尔"
+
+#: ../../datetime/zone_utc_map.go:106
+msgid "Havana"
+msgstr "哈瓦那"
+
+#: ../../datetime/zone_utc_map.go:107
+msgid "Marengo"
+msgstr "马伦哥"
+
+#: ../../datetime/zone_utc_map.go:108
+msgid "Petersburg"
+msgstr "圣彼得堡"
+
+#: ../../datetime/zone_utc_map.go:109
+msgid "Vevay"
+msgstr "韦韦"
+
+#: ../../datetime/zone_utc_map.go:110
+msgid "Vincennes"
+msgstr "文森斯"
+
+#: ../../datetime/zone_utc_map.go:111
+msgid "Winamac"
+msgstr "威纳马克"
+
+#: ../../datetime/zone_utc_map.go:112
+msgid "Indianapolis"
+msgstr "印第安纳波利斯"
+
+#: ../../datetime/zone_utc_map.go:113
+msgid "Iqaluit"
+msgstr "伊魁特"
+
+#: ../../datetime/zone_utc_map.go:114
+msgid "Jamaica"
+msgstr "牙买加"
+
+#: ../../datetime/zone_utc_map.go:115
+msgid "Lima"
+msgstr "利马"
+
+#: ../../datetime/zone_utc_map.go:116
+msgid "Louisville"
+msgstr "路易斯维尔"
+
+#: ../../datetime/zone_utc_map.go:117
+msgid "Monticello"
+msgstr "蒙蒂塞洛"
+
+#: ../../datetime/zone_utc_map.go:118
+msgid "Montreal"
+msgstr "蒙特利尔"
+
+#: ../../datetime/zone_utc_map.go:119
+msgid "Nassau"
+msgstr "拿骚"
+
+#: ../../datetime/zone_utc_map.go:120
+msgid "New York"
+msgstr "纽约"
+
+#: ../../datetime/zone_utc_map.go:121
+msgid "Nipigon"
+msgstr "尼皮贡"
+
+#: ../../datetime/zone_utc_map.go:122
+msgid "Panama"
+msgstr "巴拿马"
+
+#: ../../datetime/zone_utc_map.go:123
+msgid "Port au Prince"
+msgstr "太子港"
+
+#: ../../datetime/zone_utc_map.go:124
+msgid "Porto Acre"
+msgstr "阿克雷港"
+
+#: ../../datetime/zone_utc_map.go:125
+msgid "Rio Branco"
+msgstr "里奥布朗库"
+
+#: ../../datetime/zone_utc_map.go:126
+msgid "Thunder Bay"
+msgstr "雷湾"
+
+#: ../../datetime/zone_utc_map.go:127
+msgid "Toronto"
+msgstr "多伦多"
+
+#: ../../datetime/zone_utc_map.go:128
+msgid "Yancowinna"
+msgstr "盐科温拿"
+
+#: ../../datetime/zone_utc_map.go:129
+msgid "Canada Eastern"
+msgstr "加拿大东部"
+
+#: ../../datetime/zone_utc_map.go:130
+msgid "Cuba"
+msgstr "古巴"
+
+#: ../../datetime/zone_utc_map.go:131
+msgid "EST"
+msgstr "东部标准时间"
+
+#: ../../datetime/zone_utc_map.go:132
+msgid "USA Eastern"
+msgstr "美国东部"
+
+#: ../../datetime/zone_utc_map.go:133
+msgid "East Indiana"
+msgstr "东印第安纳州"
+
+#: ../../datetime/zone_utc_map.go:134
+msgid "Michigan"
+msgstr "密歇根"
+
+#: ../../datetime/zone_utc_map.go:135
+msgid "Anguilla"
+msgstr "安圭拉"
+
+#: ../../datetime/zone_utc_map.go:136
+msgid "Antigua"
+msgstr "安地卡"
+
+#: ../../datetime/zone_utc_map.go:137
+msgid "Aruba"
+msgstr "阿鲁巴"
+
+#: ../../datetime/zone_utc_map.go:138
+msgid "Asuncion"
+msgstr "亚松森"
+
+#: ../../datetime/zone_utc_map.go:139
+msgid "Barbados"
+msgstr "巴巴多斯"
+
+#: ../../datetime/zone_utc_map.go:140
+msgid "Boa Vista"
+msgstr "博阿维斯塔"
+
+#: ../../datetime/zone_utc_map.go:141
+msgid "Campo Grande"
+msgstr "大坎普"
+
+#: ../../datetime/zone_utc_map.go:142
+msgid "Cuiaba"
+msgstr "库亚巴"
+
+#: ../../datetime/zone_utc_map.go:143
+msgid "Curacao"
+msgstr "库拉索"
+
+#: ../../datetime/zone_utc_map.go:144
+msgid "Dominica"
+msgstr "多米尼加"
+
+#: ../../datetime/zone_utc_map.go:145
+msgid "Eirunepe"
+msgstr "艾鲁内佩"
+
+#: ../../datetime/zone_utc_map.go:146
+msgid "Glace Bay"
+msgstr "格莱斯湾"
+
+#: ../../datetime/zone_utc_map.go:147
+msgid "Goose Bay"
+msgstr "古斯湾"
+
+#: ../../datetime/zone_utc_map.go:148
+msgid "Grenada"
+msgstr "格林纳达"
+
+#: ../../datetime/zone_utc_map.go:149
+msgid "Guadeloupe"
+msgstr "瓜德罗普"
+
+#: ../../datetime/zone_utc_map.go:150
+msgid "Guyana"
+msgstr "圭亚那"
+
+#: ../../datetime/zone_utc_map.go:151
+msgid "Halifax"
+msgstr "哈利法克斯"
+
+#: ../../datetime/zone_utc_map.go:152
+msgid "Kralendijk"
+msgstr "克拉伦代克"
+
+#: ../../datetime/zone_utc_map.go:153
+msgid "La Paz"
+msgstr "拉巴斯"
+
+#: ../../datetime/zone_utc_map.go:154
+msgid "Lower Princes"
+msgstr "下王子"
+
+#: ../../datetime/zone_utc_map.go:155
+msgid "Manaus"
+msgstr "马瑙斯"
+
+#: ../../datetime/zone_utc_map.go:156
+msgid "Marigot"
+msgstr "马里戈特"
+
+#: ../../datetime/zone_utc_map.go:157
+msgid "Martinique"
+msgstr "马提尼克"
+
+#: ../../datetime/zone_utc_map.go:158
+msgid "Moncton"
+msgstr "蒙克顿"
+
+#: ../../datetime/zone_utc_map.go:159
+msgid "Montserrat"
+msgstr "蒙特塞拉特"
+
+#: ../../datetime/zone_utc_map.go:160
+msgid "Port of Spain"
+msgstr "西班牙港"
+
+#: ../../datetime/zone_utc_map.go:161
+msgid "Porto Velho"
+msgstr "韦柳港"
+
+#: ../../datetime/zone_utc_map.go:162
+msgid "Puerto Rico"
+msgstr "波多黎各"
+
+#: ../../datetime/zone_utc_map.go:163
+msgid "Santiago"
+msgstr "圣地亚哥"
+
+#: ../../datetime/zone_utc_map.go:164
+msgid "Santo Domingo"
+msgstr "圣多明各"
+
+#: ../../datetime/zone_utc_map.go:165
+msgid "St Barthelemy"
+msgstr "圣巴夫林米"
+
+#: ../../datetime/zone_utc_map.go:166
+msgid "St Johns"
+msgstr "圣琼斯"
+
+#: ../../datetime/zone_utc_map.go:167
+msgid "St Lucia"
+msgstr "圣露西亚"
+
+#: ../../datetime/zone_utc_map.go:168
+msgid "St Thomas"
+msgstr "圣托马斯"
+
+#: ../../datetime/zone_utc_map.go:169
+msgid "St Vincent"
+msgstr "圣文森特"
+
+#: ../../datetime/zone_utc_map.go:170
+msgid "Thule"
+msgstr "图勒"
+
+#: ../../datetime/zone_utc_map.go:171
+msgid "Tortola"
+msgstr "托尔托拉"
+
+#: ../../datetime/zone_utc_map.go:172
+msgid "Virgin"
+msgstr "维尔京"
+
+#: ../../datetime/zone_utc_map.go:173
+msgid "Palmer"
+msgstr "帕尔默"
+
+#: ../../datetime/zone_utc_map.go:174
+msgid "Bermuda"
+msgstr "百慕大"
+
+#: ../../datetime/zone_utc_map.go:175
+msgid "Brazil West"
+msgstr "巴西西部"
+
+#: ../../datetime/zone_utc_map.go:176
+msgid "Atlantic"
+msgstr "大西洋"
+
+#: ../../datetime/zone_utc_map.go:177
+msgid "Continental"
+msgstr "大陆"
+
+#: ../../datetime/zone_utc_map.go:178
+msgid "Araguaina"
+msgstr "阿拉瓜伊纳"
+
+#: ../../datetime/zone_utc_map.go:179
+msgid "Catamarca"
+msgstr "卡塔马卡"
+
+#: ../../datetime/zone_utc_map.go:180
+msgid "ComodRivadavia"
+msgstr "里瓦达维亚海军准将城"
+
+#: ../../datetime/zone_utc_map.go:181
+msgid "Jujuy"
+msgstr "胡胡伊"
+
+#: ../../datetime/zone_utc_map.go:182
+msgid "La Rioja"
+msgstr "拉里奥哈"
+
+#: ../../datetime/zone_utc_map.go:183
+msgid "Rio Gallegos"
+msgstr "里奥加耶戈斯"
+
+#: ../../datetime/zone_utc_map.go:184
+msgid "Salta"
+msgstr "萨尔塔"
+
+#: ../../datetime/zone_utc_map.go:185
+msgid "San Juan"
+msgstr "圣胡安"
+
+#: ../../datetime/zone_utc_map.go:186
+msgid "San Luis"
+msgstr "圣路易斯"
+
+#: ../../datetime/zone_utc_map.go:187
+msgid "Tucuman"
+msgstr "图库曼"
+
+#: ../../datetime/zone_utc_map.go:188
+msgid "Ushuaia"
+msgstr "乌斯怀亚"
+
+#: ../../datetime/zone_utc_map.go:189
+msgid "Bahia"
+msgstr "巴伊亚"
+
+#: ../../datetime/zone_utc_map.go:190
+msgid "Belem"
+msgstr "贝伦"
+
+#: ../../datetime/zone_utc_map.go:191
+msgid "Buenos Aires"
+msgstr "贝伦"
+
+#: ../../datetime/zone_utc_map.go:192
+msgid "Caracas"
+msgstr "加拉加斯"
+
+#: ../../datetime/zone_utc_map.go:193
+msgid "Cayenne"
+msgstr "卡宴"
+
 #: ../../datetime/zone_utc_map.go:194
-msgid "Anchorage"
-msgstr ""
+msgid "Cordoba"
+msgstr "科尔多瓦"
 
 #: ../../datetime/zone_utc_map.go:195
-msgid "Juneau"
-msgstr ""
+msgid "Fortaleza"
+msgstr "福塔雷萨"
 
 #: ../../datetime/zone_utc_map.go:196
-msgid "Nome"
-msgstr ""
+msgid "Godthab"
+msgstr "戈特霍布"
 
 #: ../../datetime/zone_utc_map.go:197
-msgid "Sitka"
-msgstr ""
+msgid "Maceio"
+msgstr "马塞约"
 
 #: ../../datetime/zone_utc_map.go:198
-msgid "Yakutat"
-msgstr ""
+msgid "Mendoza"
+msgstr "门多萨"
 
 #: ../../datetime/zone_utc_map.go:199
-msgid "Gambier"
-msgstr ""
+msgid "Miquelon"
+msgstr "密克隆"
 
 #: ../../datetime/zone_utc_map.go:200
-msgid "Alaska"
-msgstr ""
+msgid "Montevideo"
+msgstr "蒙得维的亚"
 
 #: ../../datetime/zone_utc_map.go:201
-msgid "Adak"
-msgstr ""
+msgid "Paramaribo"
+msgstr "帕拉马里博"
 
 #: ../../datetime/zone_utc_map.go:202
-msgid "Atka"
-msgstr ""
+msgid "Recife"
+msgstr "累西腓"
 
 #: ../../datetime/zone_utc_map.go:203
-msgid "HST"
-msgstr ""
+msgid "Rosario"
+msgstr "罗萨里奥"
 
 #: ../../datetime/zone_utc_map.go:204
-msgid "Honolulu"
-msgstr ""
+msgid "Santarem"
+msgstr "圣塔伦"
 
 #: ../../datetime/zone_utc_map.go:205
-msgid "Johnston"
-msgstr ""
+msgid "Sao Paulo"
+msgstr "圣保罗"
 
 #: ../../datetime/zone_utc_map.go:206
-msgid "Rarotonga"
-msgstr ""
+msgid "Rothera"
+msgstr "罗西拉"
 
 #: ../../datetime/zone_utc_map.go:207
-msgid "Tahiti"
-msgstr ""
+msgid "Stanley"
+msgstr "斯坦利"
 
 #: ../../datetime/zone_utc_map.go:208
-msgid "Aleutian"
-msgstr ""
+msgid "Brazil East"
+msgstr "巴西东部"
 
 #: ../../datetime/zone_utc_map.go:209
-msgid "Hawaii"
-msgstr ""
+msgid "Noronha"
+msgstr "迪诺罗尼亚"
 
 #: ../../datetime/zone_utc_map.go:210
-msgid "Marquesas"
-msgstr ""
+msgid "South Georgia"
+msgstr "南乔治亚"
 
 #: ../../datetime/zone_utc_map.go:211
-msgid "Niue"
-msgstr ""
+msgid "Cape Verde"
+msgstr "佛得角"
 
 #: ../../datetime/zone_utc_map.go:212
-msgid "Samoa"
-msgstr ""
+msgid "Abidjan"
+msgstr "阿比让"
 
 #: ../../datetime/zone_utc_map.go:213
-msgid "Abidjan"
-msgstr ""
+msgid "Accra"
+msgstr "阿克拉"
 
 #: ../../datetime/zone_utc_map.go:214
-msgid "Accra"
-msgstr ""
+msgid "Bamako"
+msgstr "巴马科"
 
 #: ../../datetime/zone_utc_map.go:215
-msgid "Bamako"
-msgstr ""
+msgid "Banjul"
+msgstr "班珠尔"
 
 #: ../../datetime/zone_utc_map.go:216
-msgid "Banjul"
-msgstr ""
+msgid "Bissau"
+msgstr "比绍"
 
 #: ../../datetime/zone_utc_map.go:217
-msgid "Bissau"
-msgstr ""
+msgid "Casablanca"
+msgstr "卡萨布兰卡"
 
 #: ../../datetime/zone_utc_map.go:218
-msgid "Casablanca"
-msgstr ""
+msgid "Conakry"
+msgstr "科纳克里"
 
 #: ../../datetime/zone_utc_map.go:219
-msgid "Conakry"
-msgstr ""
+msgid "Dakar"
+msgstr "达喀尔"
 
 #: ../../datetime/zone_utc_map.go:220
-msgid "Dakar"
-msgstr ""
+msgid "El Aaiun"
+msgstr "阿尤恩"
 
 #: ../../datetime/zone_utc_map.go:221
-msgid "El Aaiun"
-msgstr ""
+msgid "Freetown"
+msgstr "弗里敦"
 
 #: ../../datetime/zone_utc_map.go:222
-msgid "Freetown"
-msgstr ""
+msgid "Lome"
+msgstr "洛美"
 
 #: ../../datetime/zone_utc_map.go:223
-msgid "Lome"
-msgstr ""
+msgid "Monrovia"
+msgstr "蒙罗维亚"
 
 #: ../../datetime/zone_utc_map.go:224
-msgid "Monrovia"
-msgstr ""
+msgid "Nouakchott"
+msgstr "努瓦克肖特"
 
 #: ../../datetime/zone_utc_map.go:225
-msgid "Nouakchott"
-msgstr ""
+msgid "Ouagadougou"
+msgstr "瓦加杜古"
 
 #: ../../datetime/zone_utc_map.go:226
-msgid "Ouagadougou"
-msgstr ""
+msgid "Sao Tome"
+msgstr "圣多美"
 
 #: ../../datetime/zone_utc_map.go:227
-msgid "Sao Tome"
-msgstr ""
+msgid "Timbuktu"
+msgstr "廷巴克图"
 
 #: ../../datetime/zone_utc_map.go:228
-msgid "Timbuktu"
-msgstr ""
+msgid "Canary"
+msgstr "加那利"
 
 #: ../../datetime/zone_utc_map.go:229
-msgid "Canary"
-msgstr ""
+msgid "Madeira"
+msgstr "马德拉"
 
 #: ../../datetime/zone_utc_map.go:230
-msgid "Madeira"
-msgstr ""
+msgid "Reykjavik"
+msgstr "雷克雅未克"
 
 #: ../../datetime/zone_utc_map.go:231
-msgid "Reykjavik"
-msgstr ""
+msgid "St Helena"
+msgstr "圣赫勒拿岛"
 
 #: ../../datetime/zone_utc_map.go:232
-msgid "St Helena"
-msgstr ""
+msgid "Eire"
+msgstr "爱尔兰"
 
 #: ../../datetime/zone_utc_map.go:233
-msgid "Eire"
-msgstr ""
+msgid "Belfast"
+msgstr "贝尔法斯特"
 
 #: ../../datetime/zone_utc_map.go:234
-msgid "Belfast"
-msgstr ""
+msgid "Dublin"
+msgstr "都柏林"
 
 #: ../../datetime/zone_utc_map.go:235
-msgid "Dublin"
-msgstr ""
+msgid "Guernsey"
+msgstr "根西岛"
 
 #: ../../datetime/zone_utc_map.go:236
-msgid "Guernsey"
-msgstr ""
+msgid "Isle of Man"
+msgstr "马恩岛"
 
 #: ../../datetime/zone_utc_map.go:237
-msgid "Isle of Man"
-msgstr ""
+msgid "Jersey"
+msgstr "泽西岛"
 
 #: ../../datetime/zone_utc_map.go:238
-msgid "Jersey"
-msgstr ""
+msgid "Lisbon"
+msgstr "里斯本"
 
 #: ../../datetime/zone_utc_map.go:239
-msgid "Lisbon"
-msgstr ""
+msgid "London"
+msgstr "伦敦"
 
 #: ../../datetime/zone_utc_map.go:240
-msgid "London"
-msgstr ""
+msgid "GB"
+msgstr "GB"
 
 #: ../../datetime/zone_utc_map.go:241
-msgid "GB"
-msgstr ""
+msgid "GB Eire"
+msgstr "爱尔兰时间"
 
 #: ../../datetime/zone_utc_map.go:242
-msgid "GB Eire"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:243
 msgid "USA GMT"
 msgstr "美国格林尼治平时"
 
-#: ../../datetime/zone_utc_map.go:244
+#: ../../datetime/zone_utc_map.go:243
 msgid "Brazil GMT"
 msgstr "巴西格林尼治平时"
 
-#: ../../datetime/zone_utc_map.go:245
+#: ../../datetime/zone_utc_map.go:244
 msgid "Greenwich"
 msgstr "英国格林尼治"
 
-#: ../../datetime/zone_utc_map.go:246
+#: ../../datetime/zone_utc_map.go:245
 msgid "Iceland"
-msgstr ""
+msgstr "冰岛"
+
+#: ../../datetime/zone_utc_map.go:246
+msgid "Portugal"
+msgstr "葡萄牙"
 
 #: ../../datetime/zone_utc_map.go:247
-msgid "Portugal"
-msgstr "巴西"
+msgid "UCT"
+msgstr "UCT"
 
 #: ../../datetime/zone_utc_map.go:248
-msgid "UCT"
-msgstr ""
+msgid "Universal"
+msgstr "世界时"
 
 #: ../../datetime/zone_utc_map.go:249
-msgid "Universal"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:250
 msgid "UTC"
 msgstr "UTC"
 
-#: ../../datetime/zone_utc_map.go:251
+#: ../../datetime/zone_utc_map.go:250
 msgid "WET"
 msgstr "WET"
 
-#: ../../datetime/zone_utc_map.go:252
+#: ../../datetime/zone_utc_map.go:251
 msgid "Zulu"
-msgstr ""
+msgstr "祖鲁"
+
+#: ../../datetime/zone_utc_map.go:252
+msgid "Algiers"
+msgstr "阿尔及尔"
 
 #: ../../datetime/zone_utc_map.go:253
-msgid "Algiers"
-msgstr ""
+msgid "Bangui"
+msgstr "班吉"
 
 #: ../../datetime/zone_utc_map.go:254
-msgid "Bangui"
-msgstr ""
+msgid "Brazzaville"
+msgstr "布拉柴维尔"
 
 #: ../../datetime/zone_utc_map.go:255
-msgid "Brazzaville"
-msgstr ""
+msgid "Ceuta"
+msgstr "休达"
 
 #: ../../datetime/zone_utc_map.go:256
-msgid "Ceuta"
-msgstr ""
+msgid "Douala"
+msgstr "杜阿拉"
 
 #: ../../datetime/zone_utc_map.go:257
-msgid "Douala"
-msgstr ""
+msgid "Kinshasa"
+msgstr "金沙萨"
 
 #: ../../datetime/zone_utc_map.go:258
-msgid "Kinshasa"
-msgstr ""
+msgid "Lagos"
+msgstr "拉各斯"
 
 #: ../../datetime/zone_utc_map.go:259
-msgid "Lagos"
-msgstr ""
+msgid "Libreville"
+msgstr "利伯维尔"
 
 #: ../../datetime/zone_utc_map.go:260
-msgid "Libreville"
-msgstr ""
+msgid "Luanda"
+msgstr "罗安达"
 
 #: ../../datetime/zone_utc_map.go:261
-msgid "Luanda"
-msgstr ""
+msgid "Malabo"
+msgstr "马拉博"
 
 #: ../../datetime/zone_utc_map.go:262
-msgid "Malabo"
-msgstr ""
+msgid "Ndjamena"
+msgstr "恩贾梅纳"
 
 #: ../../datetime/zone_utc_map.go:263
-msgid "Ndjamena"
-msgstr ""
+msgid "Niamey"
+msgstr "尼亚美"
 
 #: ../../datetime/zone_utc_map.go:264
-msgid "Niamey"
-msgstr ""
+msgid "Porto Novo"
+msgstr "波多诺伏"
 
 #: ../../datetime/zone_utc_map.go:265
-msgid "Porto Novo"
-msgstr ""
+msgid "Tunis"
+msgstr "突尼斯"
 
 #: ../../datetime/zone_utc_map.go:266
-msgid "Tunis"
-msgstr ""
+msgid "Windhoek"
+msgstr "温得和克"
 
 #: ../../datetime/zone_utc_map.go:267
-msgid "Windhoek"
-msgstr ""
+msgid "Longyearbyen"
+msgstr "朗伊尔城"
 
 #: ../../datetime/zone_utc_map.go:268
-msgid "Longyearbyen"
-msgstr ""
+msgid "CET"
+msgstr "中欧标准时间"
 
 #: ../../datetime/zone_utc_map.go:269
-msgid "CET"
-msgstr ""
+msgid "Amsterdam"
+msgstr "阿姆斯特丹"
 
 #: ../../datetime/zone_utc_map.go:270
-msgid "Amsterdam"
-msgstr ""
+msgid "Andorra"
+msgstr "安道尔"
 
 #: ../../datetime/zone_utc_map.go:271
-msgid "Andorra"
-msgstr ""
+msgid "Belgrade"
+msgstr "贝尔格莱德"
 
 #: ../../datetime/zone_utc_map.go:272
-msgid "Belgrade"
-msgstr ""
+msgid "Berlin"
+msgstr "柏林"
 
 #: ../../datetime/zone_utc_map.go:273
-msgid "Berlin"
-msgstr ""
+msgid "Bratislava"
+msgstr "布拉迪斯拉发"
 
 #: ../../datetime/zone_utc_map.go:274
-msgid "Bratislava"
-msgstr ""
+msgid "Brussels"
+msgstr "布鲁塞尔"
 
 #: ../../datetime/zone_utc_map.go:275
-msgid "Brussels"
-msgstr ""
+msgid "Budapest"
+msgstr "布达佩斯"
 
 #: ../../datetime/zone_utc_map.go:276
-msgid "Budapest"
-msgstr ""
+msgid "Copenhagen"
+msgstr "哥本哈根"
 
 #: ../../datetime/zone_utc_map.go:277
-msgid "Copenhagen"
-msgstr ""
+msgid "Gibraltar"
+msgstr "直布罗陀"
 
 #: ../../datetime/zone_utc_map.go:278
-msgid "Gibraltar"
-msgstr ""
+msgid "Ljubljana"
+msgstr "卢布尔雅那"
 
 #: ../../datetime/zone_utc_map.go:279
-msgid "Ljubljana"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:280
 msgid "Luxembourg"
 msgstr "卢森堡"
 
-#: ../../datetime/zone_utc_map.go:281
+#: ../../datetime/zone_utc_map.go:280
 msgid "Madrid"
-msgstr ""
+msgstr "马德里"
+
+#: ../../datetime/zone_utc_map.go:281
+msgid "Malta"
+msgstr "马耳他"
 
 #: ../../datetime/zone_utc_map.go:282
-msgid "Malta"
-msgstr ""
+msgid "Monaco"
+msgstr "摩纳哥"
 
 #: ../../datetime/zone_utc_map.go:283
-msgid "Monaco"
-msgstr ""
+msgid "Oslo"
+msgstr "奥斯陆"
 
 #: ../../datetime/zone_utc_map.go:284
-msgid "Oslo"
-msgstr ""
+msgid "Paris"
+msgstr "巴黎"
 
 #: ../../datetime/zone_utc_map.go:285
-msgid "Paris"
-msgstr ""
+msgid "Podgorica"
+msgstr "波德戈里察"
 
 #: ../../datetime/zone_utc_map.go:286
-msgid "Podgorica"
-msgstr ""
+msgid "Prague"
+msgstr "布拉格"
 
 #: ../../datetime/zone_utc_map.go:287
-msgid "Prague"
-msgstr ""
+msgid "Rome"
+msgstr "罗马"
 
 #: ../../datetime/zone_utc_map.go:288
-msgid "Rome"
-msgstr ""
+msgid "San Marino"
+msgstr "圣马力诺"
 
 #: ../../datetime/zone_utc_map.go:289
-msgid "San Marino"
-msgstr ""
+msgid "Sarajevo"
+msgstr "萨拉热窝"
 
 #: ../../datetime/zone_utc_map.go:290
-msgid "Sarajevo"
-msgstr ""
+msgid "Skopje"
+msgstr "斯科普里"
 
 #: ../../datetime/zone_utc_map.go:291
-msgid "Skopje"
-msgstr ""
+msgid "Stockholm"
+msgstr "斯德哥尔摩"
 
 #: ../../datetime/zone_utc_map.go:292
-msgid "Stockholm"
-msgstr ""
+msgid "Tirane"
+msgstr "Tirane"
 
 #: ../../datetime/zone_utc_map.go:293
-msgid "Tirane"
-msgstr ""
+msgid "Vaduz"
+msgstr "瓦杜兹"
 
 #: ../../datetime/zone_utc_map.go:294
-msgid "Vaduz"
-msgstr ""
+msgid "Vatican"
+msgstr "梵蒂冈"
 
 #: ../../datetime/zone_utc_map.go:295
-msgid "Vatican"
-msgstr ""
+msgid "Vienna"
+msgstr "维也纳"
 
 #: ../../datetime/zone_utc_map.go:296
-msgid "Vienna"
-msgstr ""
+msgid "Warsaw"
+msgstr "华沙"
 
 #: ../../datetime/zone_utc_map.go:297
-msgid "Warsaw"
-msgstr ""
+msgid "Zagreb"
+msgstr "萨格勒布"
 
 #: ../../datetime/zone_utc_map.go:298
-msgid "Zagreb"
-msgstr ""
+msgid "Zurich"
+msgstr "苏黎世"
 
 #: ../../datetime/zone_utc_map.go:299
-msgid "Zurich"
-msgstr ""
+msgid "MET"
+msgstr "中欧时间"
 
 #: ../../datetime/zone_utc_map.go:300
-msgid "MET"
-msgstr ""
+msgid "Blantyre"
+msgstr "布兰太尔"
 
 #: ../../datetime/zone_utc_map.go:301
-msgid "Poland"
-msgstr "波兰"
+msgid "Bujumbura"
+msgstr "布琼布拉"
 
 #: ../../datetime/zone_utc_map.go:302
-msgid "Blantyre"
-msgstr ""
+msgid "Cairo"
+msgstr "开罗"
 
 #: ../../datetime/zone_utc_map.go:303
-msgid "Bujumbura"
-msgstr ""
+msgid "Gaborone"
+msgstr "哈博罗内"
 
 #: ../../datetime/zone_utc_map.go:304
-msgid "Cairo"
-msgstr ""
+msgid "Harare"
+msgstr "哈拉雷"
 
 #: ../../datetime/zone_utc_map.go:305
-msgid "Gaborone"
-msgstr ""
+msgid "Johannesburg"
+msgstr "约翰内斯堡"
 
 #: ../../datetime/zone_utc_map.go:306
-msgid "Harare"
-msgstr ""
+msgid "Kigali"
+msgstr "基加利"
 
 #: ../../datetime/zone_utc_map.go:307
-msgid "Johannesburg"
-msgstr ""
+msgid "Lubumbashi"
+msgstr "卢本巴希"
 
 #: ../../datetime/zone_utc_map.go:308
-msgid "Kigali"
-msgstr ""
+msgid "Lusaka"
+msgstr "卢萨卡"
 
 #: ../../datetime/zone_utc_map.go:309
-msgid "Lubumbashi"
-msgstr ""
+msgid "Maputo"
+msgstr "马普托"
 
 #: ../../datetime/zone_utc_map.go:310
-msgid "Lusaka"
-msgstr ""
+msgid "Maseru"
+msgstr "马塞卢"
 
 #: ../../datetime/zone_utc_map.go:311
-msgid "Maputo"
-msgstr ""
+msgid "Mbabane"
+msgstr "姆巴巴内"
 
 #: ../../datetime/zone_utc_map.go:312
-msgid "Maseru"
-msgstr ""
+msgid "Tripoli"
+msgstr "的黎波里"
 
 #: ../../datetime/zone_utc_map.go:313
-msgid "Mbabane"
-msgstr ""
+msgid "Amman"
+msgstr "安曼"
 
 #: ../../datetime/zone_utc_map.go:314
-msgid "Tripoli"
-msgstr ""
+msgid "Beirut"
+msgstr "贝鲁特"
 
 #: ../../datetime/zone_utc_map.go:315
-msgid "Amman"
-msgstr ""
+msgid "Damascus"
+msgstr "大马士革"
 
 #: ../../datetime/zone_utc_map.go:316
-msgid "Beirut"
-msgstr ""
+msgid "Gaza"
+msgstr "加沙"
 
 #: ../../datetime/zone_utc_map.go:317
-msgid "Damascus"
-msgstr ""
+msgid "Hebron"
+msgstr "希伯伦"
 
 #: ../../datetime/zone_utc_map.go:318
-msgid "Gaza"
-msgstr ""
+msgid "Jerusalem"
+msgstr "耶路撒冷"
 
 #: ../../datetime/zone_utc_map.go:319
-msgid "Hebron"
-msgstr ""
+msgid "Tehran"
+msgstr "德黑兰"
 
 #: ../../datetime/zone_utc_map.go:320
-msgid "Jerusalem"
-msgstr ""
+msgid "EET"
+msgstr "欧洲东部时间"
 
 #: ../../datetime/zone_utc_map.go:321
-msgid "Tehran"
-msgstr ""
+msgid "Egypt"
+msgstr "埃及"
 
 #: ../../datetime/zone_utc_map.go:322
-msgid "EET"
-msgstr ""
+msgid "Athens"
+msgstr "雅典"
 
 #: ../../datetime/zone_utc_map.go:323
-msgid "Egypt"
-msgstr ""
+msgid "Bucharest"
+msgstr "布加勒斯特"
 
 #: ../../datetime/zone_utc_map.go:324
-msgid "Athens"
-msgstr ""
+msgid "Chisinau"
+msgstr "基希讷乌"
 
 #: ../../datetime/zone_utc_map.go:325
-msgid "Bucharest"
-msgstr ""
+msgid "Helsinki"
+msgstr "赫尔辛基"
 
 #: ../../datetime/zone_utc_map.go:326
-msgid "Chisinau"
-msgstr ""
+msgid "Istanbul"
+msgstr "伊斯坦布尔"
 
 #: ../../datetime/zone_utc_map.go:327
-msgid "Helsinki"
-msgstr ""
+msgid "Kiev"
+msgstr "基辅"
 
 #: ../../datetime/zone_utc_map.go:328
-msgid "Istanbul"
-msgstr ""
+msgid "Mariehamn"
+msgstr "玛丽汉姆"
 
 #: ../../datetime/zone_utc_map.go:329
-msgid "Kiev"
-msgstr ""
+msgid "Nicosia"
+msgstr "尼科西亚"
 
 #: ../../datetime/zone_utc_map.go:330
-msgid "Mariehamn"
-msgstr ""
+msgid "Riga"
+msgstr "里加"
 
 #: ../../datetime/zone_utc_map.go:331
-msgid "Nicosia"
-msgstr ""
+msgid "Simferopol"
+msgstr "辛菲罗波尔"
 
 #: ../../datetime/zone_utc_map.go:332
-msgid "Riga"
-msgstr ""
+msgid "Sofia"
+msgstr "索菲亚"
 
 #: ../../datetime/zone_utc_map.go:333
-msgid "Simferopol"
-msgstr ""
+msgid "Tallinn"
+msgstr "塔林"
 
 #: ../../datetime/zone_utc_map.go:334
-msgid "Sofia"
-msgstr ""
+msgid "Uzhgorod"
+msgstr "乌日哥罗德"
 
 #: ../../datetime/zone_utc_map.go:335
-msgid "Tallinn"
-msgstr ""
+msgid "Vilnius"
+msgstr "维尔纽斯"
 
 #: ../../datetime/zone_utc_map.go:336
-msgid "Uzhgorod"
-msgstr ""
+msgid "Zaporozhye"
+msgstr "扎波罗热"
 
 #: ../../datetime/zone_utc_map.go:337
-msgid "Vilnius"
-msgstr ""
+msgid "Iran"
+msgstr "伊朗"
 
 #: ../../datetime/zone_utc_map.go:338
-msgid "Zaporozhye"
-msgstr ""
+msgid "Libya"
+msgstr "利比亚"
 
 #: ../../datetime/zone_utc_map.go:339
-msgid "Iran"
-msgstr ""
+msgid "Turkey"
+msgstr "土耳其"
 
 #: ../../datetime/zone_utc_map.go:340
-msgid "Libya"
-msgstr ""
+msgid "Addis Ababa"
+msgstr "亚的斯亚贝巴"
 
 #: ../../datetime/zone_utc_map.go:341
-msgid "Turkey"
-msgstr ""
+msgid "Asmara"
+msgstr "阿斯马拉"
 
 #: ../../datetime/zone_utc_map.go:342
-msgid "Addis Ababa"
-msgstr ""
+msgid "Dar es Salaam"
+msgstr "达累斯萨拉姆"
 
 #: ../../datetime/zone_utc_map.go:343
-msgid "Asmara"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:344
-msgid "Dar es Salaam"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:345
 msgid "Djibouti"
 msgstr "吉布提"
 
-#: ../../datetime/zone_utc_map.go:346
+#: ../../datetime/zone_utc_map.go:344
 msgid "Juba"
-msgstr ""
+msgstr "朱巴"
+
+#: ../../datetime/zone_utc_map.go:345
+msgid "Kampala"
+msgstr "坎帕拉"
+
+#: ../../datetime/zone_utc_map.go:346
+msgid "Khartoum"
+msgstr "喀土穆"
 
 #: ../../datetime/zone_utc_map.go:347
-msgid "Kampala"
-msgstr ""
+msgid "Mogadishu"
+msgstr "摩加迪沙"
 
 #: ../../datetime/zone_utc_map.go:348
-msgid "Khartoum"
-msgstr ""
+msgid "Nairobi"
+msgstr "内罗毕"
 
 #: ../../datetime/zone_utc_map.go:349
-msgid "Mogadishu"
-msgstr ""
+msgid "Aden"
+msgstr "亚丁"
 
 #: ../../datetime/zone_utc_map.go:350
-msgid "Nairobi"
-msgstr ""
+msgid "Baghdad"
+msgstr "巴格达"
 
 #: ../../datetime/zone_utc_map.go:351
-msgid "Aden"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:352
-msgid "Baghdad"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:353
 msgid "Bahrain"
 msgstr "巴林"
 
-#: ../../datetime/zone_utc_map.go:354
+#: ../../datetime/zone_utc_map.go:352
 msgid "Kuwait"
 msgstr "科威特"
 
-#: ../../datetime/zone_utc_map.go:355
+#: ../../datetime/zone_utc_map.go:353
 msgid "Rangoon"
-msgstr ""
+msgstr "仰光"
+
+#: ../../datetime/zone_utc_map.go:354
+msgid "Qatar"
+msgstr "卡塔尔"
+
+#: ../../datetime/zone_utc_map.go:355
+msgid "Kaliningrad"
+msgstr "加里宁格勒"
 
 #: ../../datetime/zone_utc_map.go:356
-msgid "Qatar"
-msgstr ""
+msgid "Minsk"
+msgstr "明斯克"
 
 #: ../../datetime/zone_utc_map.go:357
-msgid "Kaliningrad"
-msgstr ""
+msgid "Antananarivo"
+msgstr "塔那那利佛"
 
 #: ../../datetime/zone_utc_map.go:358
-msgid "Minsk"
-msgstr ""
+msgid "Baku"
+msgstr "巴库"
 
 #: ../../datetime/zone_utc_map.go:359
-msgid "Antananarivo"
-msgstr ""
+msgid "Dubai"
+msgstr "迪拜"
 
 #: ../../datetime/zone_utc_map.go:360
-msgid "Baku"
-msgstr ""
+msgid "Muscat"
+msgstr "马斯喀特"
 
 #: ../../datetime/zone_utc_map.go:361
-msgid "Dubai"
-msgstr ""
+msgid "Tbilisi"
+msgstr "第比利斯"
 
 #: ../../datetime/zone_utc_map.go:362
-msgid "Muscat"
-msgstr ""
+msgid "Yerevan"
+msgstr "埃里温"
 
 #: ../../datetime/zone_utc_map.go:363
-msgid "Tbilisi"
-msgstr ""
+msgid "Moscow"
+msgstr "莫斯科"
 
 #: ../../datetime/zone_utc_map.go:364
-msgid "Yerevan"
-msgstr ""
+msgid "Samara"
+msgstr "萨马拉"
 
 #: ../../datetime/zone_utc_map.go:365
-msgid "Moscow"
-msgstr ""
+msgid "Volgograd"
+msgstr "伏尔加格勒"
 
 #: ../../datetime/zone_utc_map.go:366
-msgid "Samara"
-msgstr ""
+msgid "Mahe"
+msgstr "马埃"
 
 #: ../../datetime/zone_utc_map.go:367
-msgid "Volgograd"
-msgstr ""
+msgid "Mauritius"
+msgstr "毛里求斯"
 
 #: ../../datetime/zone_utc_map.go:368
-msgid "Mahe"
-msgstr ""
+msgid "Reunion"
+msgstr "留尼旺岛"
 
 #: ../../datetime/zone_utc_map.go:369
-msgid "Mauritius"
-msgstr ""
+msgid "W SU"
+msgstr "W SU"
 
 #: ../../datetime/zone_utc_map.go:370
-msgid "Reunion"
-msgstr ""
+msgid "Davis"
+msgstr "戴维斯"
 
 #: ../../datetime/zone_utc_map.go:371
-msgid "W SU"
-msgstr ""
+msgid "Mawson"
+msgstr "莫森"
 
 #: ../../datetime/zone_utc_map.go:372
-msgid "Davis"
-msgstr ""
+msgid "Aqtau"
+msgstr "阿克陶"
 
 #: ../../datetime/zone_utc_map.go:373
-msgid "Mawson"
-msgstr ""
+msgid "Aqtobe"
+msgstr "阿克托别"
 
 #: ../../datetime/zone_utc_map.go:374
-msgid "Aqtau"
-msgstr ""
+msgid "Ashkhabad"
+msgstr "阿什哈巴德"
 
 #: ../../datetime/zone_utc_map.go:375
-msgid "Aqtobe"
-msgstr ""
+msgid "Dushanbe"
+msgstr "杜尚别"
 
 #: ../../datetime/zone_utc_map.go:376
-msgid "Ashkhabad"
-msgstr ""
+msgid "Karachi"
+msgstr "卡拉奇"
 
 #: ../../datetime/zone_utc_map.go:377
-msgid "Dushanbe"
-msgstr ""
+msgid "Oral"
+msgstr "乌拉尔"
 
 #: ../../datetime/zone_utc_map.go:378
-msgid "Karachi"
-msgstr ""
+msgid "Samarkand"
+msgstr "撒马尔罕"
 
 #: ../../datetime/zone_utc_map.go:379
-msgid "Oral"
-msgstr ""
+msgid "Tashkent"
+msgstr "塔什干"
 
 #: ../../datetime/zone_utc_map.go:380
-msgid "Samarkand"
-msgstr ""
+msgid "Kerguelen"
+msgstr "凯尔盖朗"
 
 #: ../../datetime/zone_utc_map.go:381
-msgid "Tashkent"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:382
-msgid "Kerguelen"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:383
 msgid "Maldives"
 msgstr "马尔代夫"
 
-#: ../../datetime/zone_utc_map.go:384
+#: ../../datetime/zone_utc_map.go:382
 msgid "Vostok"
-msgstr ""
+msgstr "沃斯托克"
+
+#: ../../datetime/zone_utc_map.go:383
+msgid "Almaty"
+msgstr "阿拉木图"
+
+#: ../../datetime/zone_utc_map.go:384
+msgid "Bishkek"
+msgstr "比什凯克"
 
 #: ../../datetime/zone_utc_map.go:385
-msgid "Almaty"
-msgstr ""
+msgid "Colombo"
+msgstr "科伦坡"
 
 #: ../../datetime/zone_utc_map.go:386
-msgid "Bishkek"
-msgstr ""
+msgid "Dhaka"
+msgstr "达卡"
 
 #: ../../datetime/zone_utc_map.go:387
-msgid "Colombo"
-msgstr ""
+msgid "Qyzylorda"
+msgstr "克孜勒奥尔达"
 
 #: ../../datetime/zone_utc_map.go:388
-msgid "Dhaka"
-msgstr ""
+msgid "Thimbu"
+msgstr "廷布"
 
 #: ../../datetime/zone_utc_map.go:389
-msgid "Qyzylorda"
-msgstr ""
+msgid "Thimphu"
+msgstr "廷布"
 
 #: ../../datetime/zone_utc_map.go:390
-msgid "Thimbu"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:391
-msgid "Thimphu"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:392
 msgid "Yekaterinburg"
 msgstr "叶卡捷琳堡"
 
-#: ../../datetime/zone_utc_map.go:393
+#: ../../datetime/zone_utc_map.go:391
 msgid "Chagos"
-msgstr ""
+msgstr "查戈斯"
+
+#: ../../datetime/zone_utc_map.go:392
+msgid "Bangkok"
+msgstr "曼谷"
+
+#: ../../datetime/zone_utc_map.go:393
+msgid "Ho Chi Minh"
+msgstr "胡志明市"
 
 #: ../../datetime/zone_utc_map.go:394
-msgid "Bangkok"
-msgstr ""
+msgid "Hovd"
+msgstr "科布多"
 
 #: ../../datetime/zone_utc_map.go:395
-msgid "Ho Chi Minh"
-msgstr ""
+msgid "Jakarta"
+msgstr "雅加达"
 
 #: ../../datetime/zone_utc_map.go:396
-msgid "Hovd"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:397
-msgid "Jakarta"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:398
 msgid "Novokuznetsk"
 msgstr "新库兹涅茨克"
 
-#: ../../datetime/zone_utc_map.go:399
+#: ../../datetime/zone_utc_map.go:397
 msgid "Novosibirsk"
-msgstr ""
+msgstr "新西伯利亚"
+
+#: ../../datetime/zone_utc_map.go:398
+msgid "Omsk"
+msgstr "鄂木斯克"
+
+#: ../../datetime/zone_utc_map.go:399
+msgid "Phnom Penh"
+msgstr "金边"
 
 #: ../../datetime/zone_utc_map.go:400
-msgid "Omsk"
-msgstr ""
+msgid "Pontianak"
+msgstr "坤甸"
 
 #: ../../datetime/zone_utc_map.go:401
-msgid "Phnom Penh"
-msgstr ""
+msgid "Saigon"
+msgstr "西贡"
 
 #: ../../datetime/zone_utc_map.go:402
-msgid "Pontianak"
-msgstr ""
+msgid "Vientiane"
+msgstr "万象"
 
 #: ../../datetime/zone_utc_map.go:403
-msgid "Saigon"
-msgstr ""
+msgid "Christmas"
+msgstr "圣诞岛"
 
 #: ../../datetime/zone_utc_map.go:404
-msgid "Vientiane"
-msgstr ""
+msgid "Brunei"
+msgstr "文莱"
 
 #: ../../datetime/zone_utc_map.go:405
-msgid "Christmas"
-msgstr ""
+msgid "Calcutta"
+msgstr "加尔各答"
 
 #: ../../datetime/zone_utc_map.go:406
-msgid "Brunei"
-msgstr ""
+msgid "Chongqing"
+msgstr "重庆"
 
 #: ../../datetime/zone_utc_map.go:407
-msgid "Calcutta"
-msgstr ""
+msgid "Chungking"
+msgstr "重庆"
 
 #: ../../datetime/zone_utc_map.go:408
-msgid "Chongqing"
-msgstr ""
+msgid "Harbin"
+msgstr "哈尔滨"
 
 #: ../../datetime/zone_utc_map.go:409
-msgid "Chungking"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:410
-msgid "Harbin"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:411
 msgid "Hong Kong"
 msgstr "香港"
 
-#: ../../datetime/zone_utc_map.go:412
+#: ../../datetime/zone_utc_map.go:410
 msgid "Kashgar"
-msgstr ""
+msgstr "喀什"
+
+#: ../../datetime/zone_utc_map.go:411
+msgid "Kathmandu"
+msgstr "加德满都"
+
+#: ../../datetime/zone_utc_map.go:412
+msgid "Kuala Lumpur"
+msgstr "吉隆坡"
 
 #: ../../datetime/zone_utc_map.go:413
-msgid "Kathmandu"
-msgstr ""
+msgid "Kuching"
+msgstr "古晋"
 
 #: ../../datetime/zone_utc_map.go:414
-msgid "Kuala Lumpur"
-msgstr ""
+msgid "Macao"
+msgstr "澳门"
 
 #: ../../datetime/zone_utc_map.go:415
-msgid "Kuching"
-msgstr ""
+msgid "Makassar"
+msgstr "望加锡"
 
 #: ../../datetime/zone_utc_map.go:416
-msgid "Macao"
-msgstr ""
+msgid "Manila"
+msgstr "马尼拉"
 
 #: ../../datetime/zone_utc_map.go:417
-msgid "Makassar"
-msgstr ""
+msgid "Shanghai"
+msgstr "上海"
 
 #: ../../datetime/zone_utc_map.go:418
-msgid "Manila"
-msgstr ""
+msgid "Beijing"
+msgstr "北京"
 
 #: ../../datetime/zone_utc_map.go:419
-msgid "Shanghai"
-msgstr ""
+msgid "Singapore"
+msgstr "新加坡城"
 
 #: ../../datetime/zone_utc_map.go:420
-msgid "Beijing"
-msgstr ""
+msgid "Taipei"
+msgstr "台北"
 
 #: ../../datetime/zone_utc_map.go:421
-msgid "Singapore"
-msgstr "新加坡"
+msgid "Ujung Pandang"
+msgstr "乌戎潘当"
 
 #: ../../datetime/zone_utc_map.go:422
-msgid "Taipei"
-msgstr ""
+msgid "Ulan Bator"
+msgstr "乌兰巴托"
 
 #: ../../datetime/zone_utc_map.go:423
-msgid "Ujung Pandang"
-msgstr ""
+msgid "Urumqi"
+msgstr "乌鲁木齐"
 
 #: ../../datetime/zone_utc_map.go:424
-msgid "Ulan Bator"
-msgstr ""
+msgid "Perth"
+msgstr "珀斯"
 
 #: ../../datetime/zone_utc_map.go:425
-msgid "Urumqi"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:426
-msgid "Perth"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:427
 msgid "Australia West"
 msgstr "澳大利亚西部"
 
-#: ../../datetime/zone_utc_map.go:428
+#: ../../datetime/zone_utc_map.go:426
 msgid "PRC"
-msgstr ""
+msgstr "PRC"
+
+#: ../../datetime/zone_utc_map.go:427
+msgid "Dili"
+msgstr "帝力"
+
+#: ../../datetime/zone_utc_map.go:428
+msgid "Irkutsk"
+msgstr "伊尔库茨克"
 
 #: ../../datetime/zone_utc_map.go:429
-msgid "Dili"
-msgstr ""
+msgid "Jayapura"
+msgstr "查亚普拉"
 
 #: ../../datetime/zone_utc_map.go:430
-msgid "Irkutsk"
-msgstr ""
+msgid "Pyongyang"
+msgstr "平壤"
 
 #: ../../datetime/zone_utc_map.go:431
-msgid "Jayapura"
-msgstr ""
+msgid "Seoul"
+msgstr "首尔"
 
 #: ../../datetime/zone_utc_map.go:432
-msgid "Pyongyang"
-msgstr ""
+msgid "Tokyo"
+msgstr "东京"
 
 #: ../../datetime/zone_utc_map.go:433
-msgid "Seoul"
-msgstr ""
+msgid "Palau"
+msgstr "帕劳"
 
 #: ../../datetime/zone_utc_map.go:434
-msgid "Tokyo"
-msgstr ""
+msgid "ROK"
+msgstr "ROK"
 
 #: ../../datetime/zone_utc_map.go:435
-msgid "Japan"
-msgstr ""
+msgid "DumontDUrville"
+msgstr "迪蒙·迪维尔"
 
 #: ../../datetime/zone_utc_map.go:436
-msgid "Palau"
-msgstr ""
+msgid "Yakutsk"
+msgstr "雅库茨克"
 
 #: ../../datetime/zone_utc_map.go:437
-msgid "ROK"
-msgstr ""
+msgid "ACT"
+msgstr "澳大利亚首都特区"
 
 #: ../../datetime/zone_utc_map.go:438
-msgid "DumontDUrville"
-msgstr ""
+msgid "Adelaide"
+msgstr "阿德莱德"
 
 #: ../../datetime/zone_utc_map.go:439
-msgid "Yakutsk"
-msgstr ""
+msgid "Broken Hill"
+msgstr "布罗肯希尔"
 
 #: ../../datetime/zone_utc_map.go:440
-msgid "ACT"
-msgstr ""
+msgid "Currie"
+msgstr "柯里"
 
 #: ../../datetime/zone_utc_map.go:441
-msgid "Adelaide"
-msgstr ""
+msgid "Darwin"
+msgstr "达尔文"
 
 #: ../../datetime/zone_utc_map.go:442
-msgid "Broken Hill"
-msgstr ""
+msgid "Lindeman"
+msgstr "林德曼"
 
 #: ../../datetime/zone_utc_map.go:443
-msgid "Currie"
-msgstr ""
+msgid "Melbourne"
+msgstr "墨尔本"
 
 #: ../../datetime/zone_utc_map.go:444
-msgid "Darwin"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:445
-msgid "Lindeman"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:446
-msgid "Melbourne"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:447
 msgid "Australia North"
 msgstr "澳大利亚北部"
 
-#: ../../datetime/zone_utc_map.go:448
+#: ../../datetime/zone_utc_map.go:445
 msgid "Queensland"
-msgstr ""
+msgstr "昆士兰"
 
-#: ../../datetime/zone_utc_map.go:449
+#: ../../datetime/zone_utc_map.go:446
 msgid "Australia South"
 msgstr "澳大利亚南部"
 
-#: ../../datetime/zone_utc_map.go:450
+#: ../../datetime/zone_utc_map.go:447
 msgid "Tasmania"
-msgstr ""
+msgstr "塔斯马尼亚"
+
+#: ../../datetime/zone_utc_map.go:448
+msgid "Victoria"
+msgstr "维多利亚"
+
+#: ../../datetime/zone_utc_map.go:449
+msgid "Chatham"
+msgstr "查塔姆"
+
+#: ../../datetime/zone_utc_map.go:450
+msgid "Guam"
+msgstr "关岛"
 
 #: ../../datetime/zone_utc_map.go:451
-msgid "Victoria"
-msgstr ""
+msgid "Port Moresby"
+msgstr "莫尔兹比港"
 
 #: ../../datetime/zone_utc_map.go:452
-msgid "Chatham"
-msgstr ""
+msgid "Saipan"
+msgstr "塞班岛"
 
 #: ../../datetime/zone_utc_map.go:453
-msgid "Guam"
-msgstr ""
+msgid "Truk"
+msgstr "特鲁克"
 
 #: ../../datetime/zone_utc_map.go:454
-msgid "Port Moresby"
-msgstr ""
+msgid "Casey"
+msgstr "凯西"
 
 #: ../../datetime/zone_utc_map.go:455
-msgid "Saipan"
-msgstr ""
+msgid "Sakhalin"
+msgstr "库页岛"
 
 #: ../../datetime/zone_utc_map.go:456
-msgid "Truk"
-msgstr ""
+msgid "Vladivostok"
+msgstr "符拉迪沃斯托克"
 
 #: ../../datetime/zone_utc_map.go:457
-msgid "Casey"
-msgstr ""
+msgid "Lord Howe"
+msgstr "豪勋爵"
 
 #: ../../datetime/zone_utc_map.go:458
-msgid "Sakhalin"
-msgstr ""
+msgid "Efate"
+msgstr "埃法特"
 
 #: ../../datetime/zone_utc_map.go:459
-msgid "Vladivostok"
-msgstr ""
+msgid "Nouméa"
+msgstr "努美阿"
 
 #: ../../datetime/zone_utc_map.go:460
-msgid "Lord Howe"
-msgstr ""
+msgid "Guadalcanal"
+msgstr "瓜达尔卡纳尔"
 
 #: ../../datetime/zone_utc_map.go:461
-msgid "Efate"
-msgstr ""
+msgid "Kosrae"
+msgstr "科斯雷"
 
 #: ../../datetime/zone_utc_map.go:462
-msgid "Nouméa"
-msgstr ""
+msgid "Norfolk"
+msgstr "诺福克"
 
 #: ../../datetime/zone_utc_map.go:463
-msgid "Guadalcanal"
-msgstr ""
+msgid "Ponape"
+msgstr "波纳佩"
 
 #: ../../datetime/zone_utc_map.go:464
-msgid "Kosrae"
-msgstr ""
+msgid "McMurdo"
+msgstr "麦克默多"
 
 #: ../../datetime/zone_utc_map.go:465
-msgid "Norfolk"
-msgstr ""
+msgid "South Pole"
+msgstr "南极"
 
 #: ../../datetime/zone_utc_map.go:466
-msgid "Pohnpei"
-msgstr ""
+msgid "Anadyr"
+msgstr "阿纳德尔"
 
 #: ../../datetime/zone_utc_map.go:467
-msgid "Ponape"
-msgstr ""
+msgid "Kabul"
+msgstr "喀布尔"
 
 #: ../../datetime/zone_utc_map.go:468
-msgid "McMurdo"
-msgstr ""
+msgid "Magadan"
+msgstr "马加丹"
 
 #: ../../datetime/zone_utc_map.go:469
-msgid "South Pole"
-msgstr ""
+msgid "Wellington"
+msgstr "惠灵顿"
 
 #: ../../datetime/zone_utc_map.go:470
-msgid "Anadyr"
-msgstr ""
+msgid "Auckland"
+msgstr "奥克兰"
 
 #: ../../datetime/zone_utc_map.go:471
-msgid "Kabul"
-msgstr ""
+msgid "Fiji"
+msgstr "斐济"
 
 #: ../../datetime/zone_utc_map.go:472
-msgid "Magadan"
-msgstr ""
+msgid "Funafuti"
+msgstr "富纳富提"
 
 #: ../../datetime/zone_utc_map.go:473
-msgid "New Zealand"
-msgstr "新西兰"
+msgid "Kwajalein"
+msgstr "夸贾林"
 
 #: ../../datetime/zone_utc_map.go:474
-msgid "Auckland"
-msgstr ""
+msgid "Nauru"
+msgstr "诺鲁"
 
 #: ../../datetime/zone_utc_map.go:475
-msgid "Fiji"
-msgstr ""
+msgid "Tarawa"
+msgstr "塔拉瓦"
 
 #: ../../datetime/zone_utc_map.go:476
-msgid "Funafuti"
-msgstr ""
+msgid "Wake"
+msgstr "维克"
 
 #: ../../datetime/zone_utc_map.go:477
-msgid "Kwajalein"
-msgstr ""
+msgid "Wallis"
+msgstr "瓦利斯"
 
 #: ../../datetime/zone_utc_map.go:478
-msgid "Nauru"
-msgstr ""
+msgid "Enderbury"
+msgstr "恩德伯里"
 
 #: ../../datetime/zone_utc_map.go:479
-msgid "Tarawa"
-msgstr ""
+msgid "Fakaofo"
+msgstr "法考福"
 
 #: ../../datetime/zone_utc_map.go:480
-msgid "Wake"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:481
-msgid "Wallis"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:482
-msgid "Enderbury"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:483
-msgid "Fakaofo"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:484
 msgid "Tongatapu"
-msgstr ""
+msgstr "汤加塔布"
 
 #: ../../dock/normal_apps.go:79
 msgid "_Run"
@@ -4133,1287 +4117,3 @@ msgstr "电池电量低"
 #: ../../power/upower.go:114
 msgid "Computer will be in suspend mode, please plug in."
 msgstr "计算机将要进入待机状态，请连接电源。"
-
-#~ msgid "Côte d'Ivoire (UTC+00) Abidjan"
-#~ msgstr "科特迪瓦（UTC+00）阿比让"
-
-#~ msgid "Ghana (UTC+00) Accra"
-#~ msgstr "加纳（UTC+00）阿克拉"
-
-#~ msgid "Ethiopia (UTC+03) Addis Ababa"
-#~ msgstr "埃塞俄比亚（UTC+03）亚的斯亚贝巴"
-
-#~ msgid "Algeria (UTC+01) Algiers"
-#~ msgstr "阿尔及利亚（UTC+01）阿尔及尔"
-
-#~ msgid "Eritrea (UTC+03) Asmara"
-#~ msgstr "厄立特里亚（UTC+03）阿斯马拉"
-
-#~ msgid "Mali (UTC+00) Bamako"
-#~ msgstr "马里（UTC+00）巴马科"
-
-#~ msgid "Central African Republic (UTC+01) Bangui"
-#~ msgstr "中非共和国（UTC+01）班吉"
-
-#~ msgid "The Gambia (UTC+00) Banjul"
-#~ msgstr "冈比亚（UTC+00）班珠尔"
-
-#~ msgid "Guinea-Bissau (UTC+00) Bissau"
-#~ msgstr "几内亚比绍（UTC+00）比绍"
-
-#~ msgid "Malawi (UTC+02) Blantyre"
-#~ msgstr "马拉维（UTC+02）布兰太尔"
-
-#~ msgid "Congo (UTC+01) Brazzaville"
-#~ msgstr "刚果（UTC+01）布拉柴维尔"
-
-#~ msgid "Burundi (UTC+02) Bujumbura"
-#~ msgstr "布隆迪（UTC+02）布琼布拉"
-
-#~ msgid "Egypt (UTC+02) Cairo"
-#~ msgstr "埃及（UTC+02）开罗"
-
-#~ msgid "Morocco (UTC+00) Casablanca"
-#~ msgstr "摩洛哥（UTC+00）卡萨布兰卡"
-
-#~ msgid "Spain (UTC+01) Ceuta"
-#~ msgstr "西班牙（UTC+01）休达"
-
-#~ msgid "Guinea (UTC+00) Conakry"
-#~ msgstr "几内亚（UTC+00）科纳克里"
-
-#~ msgid "Senegal (UTC+00) Dakar"
-#~ msgstr "塞内加尔（UTC+00）达喀尔"
-
-#~ msgid "Tanzania (UTC+03) Dar es Salaam"
-#~ msgstr "坦桑尼亚（UTC+03）达累斯萨拉姆"
-
-#~ msgid "Djibouti (UTC+03) Djibouti"
-#~ msgstr "吉布提（UTC+03） 吉布提"
-
-#~ msgid "Cameroon (UTC+01) Douala"
-#~ msgstr "喀麦隆（UTC+01）杜阿拉"
-
-#~ msgid "Western Sahara (UTC+00) El Aaiun"
-#~ msgstr "西撒哈拉（UTC+00）阿尤恩"
-
-#~ msgid "Sierra Leone (UTC+00) Freetown"
-#~ msgstr "塞拉利昂（UTC+00）弗里敦"
-
-#~ msgid "Botswana (UTC+02) Gaborone"
-#~ msgstr "博茨瓦纳（UTC+02）哈博罗内"
-
-#~ msgid "Zimbabwe (UTC+02) Harare"
-#~ msgstr "津巴布韦（UTC+02）哈拉雷"
-
-#~ msgid "South Africa (UTC+02) Johannesburg"
-#~ msgstr "南非（UTC+02）约翰内斯堡"
-
-#~ msgid "South Sudan (UTC+03) Juba"
-#~ msgstr "南苏丹（UTC+03）朱巴"
-
-#~ msgid "Uganda (UTC+03) Kampala"
-#~ msgstr "乌干达（UTC+03）坎帕拉"
-
-#~ msgid "Sudan (UTC+03) Khartoum"
-#~ msgstr "苏丹（UTC+03）喀土穆"
-
-#~ msgid "Rwanda (UTC+02) Kigali"
-#~ msgstr "卢旺达（UTC+02）基加利"
-
-#~ msgid "Democratic Republic of the Congo (UTC+01) Kinshasa"
-#~ msgstr "刚果民主共和国（UTC+01）金沙萨"
-
-#~ msgid "Nigeria (UTC+01) Lagos"
-#~ msgstr "尼日利亚（UTC+01）拉各斯"
-
-#~ msgid "Gabon (UTC+01) Libreville"
-#~ msgstr "加蓬（UTC+01）利伯维尔"
-
-#~ msgid "Togo (UTC+00) Lome"
-#~ msgstr "多哥（UTC+00）洛美"
-
-#~ msgid "Angola (UTC+01) Luanda"
-#~ msgstr "安哥拉（UTC+01）罗安达"
-
-#~ msgid "Democratic Republic of the Congo (UTC+02) Lubumbashi"
-#~ msgstr "刚果民主共和国（UTC+02）卢本巴希"
-
-#~ msgid "Zambia (UTC+02) Lusaka"
-#~ msgstr "赞比亚（UTC+02）卢萨卡"
-
-#~ msgid "Equatorial Guinea (UTC+01) Malabo"
-#~ msgstr "赤道几内亚（UTC+01）马拉博"
-
-#~ msgid "Mozambique (UTC+02) Maputo"
-#~ msgstr "莫桑比克（UTC+02）马普托"
-
-#~ msgid "Lesotho (UTC+02) Maseru"
-#~ msgstr "莱索托（UTC+02）马塞卢"
-
-#~ msgid "Swaziland (UTC+02) Mbabane"
-#~ msgstr "史瓦济兰（UTC+02）姆巴巴内"
-
-#~ msgid "Somalia (UTC+03) Mogadishu"
-#~ msgstr "索马里（UTC+03）摩加迪沙"
-
-#~ msgid "Liberia (UTC+00) Monrovia"
-#~ msgstr "利比里亚（UTC+00）蒙罗维亚"
-
-#~ msgid "Kenya (UTC+03) Nairobi"
-#~ msgstr "肯尼亚（UTC+03）内罗毕"
-
-#~ msgid "Chad (UTC+01) Ndjamena"
-#~ msgstr "乍得（UTC+01）恩贾梅纳"
-
-#~ msgid "Niger (UTC+01) Niamey"
-#~ msgstr "尼日尔（UTC+01）尼亚美"
-
-#~ msgid "Mauritania (UTC+00) Nouakchott"
-#~ msgstr "毛里塔尼亚（UTC+00）努瓦克肖特"
-
-#~ msgid "Burkina Faso (UTC+00) Ouagadougou"
-#~ msgstr "布基纳法索（UTC+00）瓦加杜古"
-
-#~ msgid "Benin (UTC+01) Porto Novo"
-#~ msgstr "贝宁（UTC+01）波多诺伏"
-
-#~ msgid "São Tomé and Príncipe (UTC+00) Sao Tome"
-#~ msgstr "圣多美和普林西比（UTC+00）圣多美"
-
-#~ msgid "Mali (UTC+00) Timbuktu"
-#~ msgstr "马里（UTC+00）廷巴克图"
-
-#~ msgid "Libya (UTC+02) Tripoli"
-#~ msgstr "利比亚（UTC+02）的黎波里"
-
-#~ msgid "Tunisia (UTC+01) Tunis"
-#~ msgstr "突尼斯（UTC+01）突尼斯"
-
-#~ msgid "Namibia (UTC+01) Windhoek"
-#~ msgstr "纳米比亚（UTC+01）温得和克"
-
-#~ msgid "USA (UTC-10) Adak"
-#~ msgstr "美国（UTC-10）埃达克"
-
-#~ msgid "USA (UTC-09) Anchorage"
-#~ msgstr "美国（UTC-09）安克雷奇"
-
-#~ msgid "USA (UTC-04) Anguilla"
-#~ msgstr "美国（UTC-04）安圭拉"
-
-#~ msgid "USA (UTC-04) Antigua"
-#~ msgstr "美国（UTC-04）安提瓜"
-
-#~ msgid "USA (UTC-03) Araguaina"
-#~ msgstr "美国（UTC-03）阿拉瓜伊纳"
-
-#~ msgid "Argentina (UTC-03) Catamarca"
-#~ msgstr "阿根廷（UTC-03）卡塔马卡"
-
-#~ msgid "Argentina (UTC-03) ComodRivadavia"
-#~ msgstr "阿根廷（UTC-03）里瓦达维亚海军准将城"
-
-#~ msgid "Argentina (UTC-03) Cordoba"
-#~ msgstr "阿根廷（UTC-03）科尔多瓦"
-
-#~ msgid "Argentina (UTC-03) Jujuy"
-#~ msgstr "阿根廷（UTC-03）胡胡伊"
-
-#~ msgid "Argentina (UTC-03) La Rioja"
-#~ msgstr "阿根廷（UTC-03）拉里奥哈"
-
-#~ msgid "Argentina (UTC-03) Mendoza"
-#~ msgstr "阿根廷（UTC-03）门多萨"
-
-#~ msgid "Argentina (UTC-03) Rio Gallegos"
-#~ msgstr "阿根廷（UTC-03）里奥加耶戈斯"
-
-#~ msgid "Argentina (UTC-03) Salta"
-#~ msgstr "阿根廷（UTC-03）萨尔塔"
-
-#~ msgid "Argentina (UTC-03) San Juan"
-#~ msgstr "阿根廷（UTC-03）圣胡安"
-
-#~ msgid "Argentina (UTC-03) San Luis"
-#~ msgstr "阿根廷（UTC-03）圣路易斯"
-
-#~ msgid "Argentina (UTC-03) Tucuman"
-#~ msgstr "阿根廷（UTC-03）图库曼"
-
-#~ msgid "Argentina (UTC-03) Ushuaia"
-#~ msgstr "阿根廷（UTC-03）乌斯怀亚"
-
-#~ msgid "USA (UTC-04) Aruba"
-#~ msgstr "美国（UTC-04）阿鲁巴"
-
-#~ msgid "USA (UTC-04) Asuncion"
-#~ msgstr "美国（UTC-04）亚松森"
-
-#~ msgid "Canada (UTC-05) Atikokan"
-#~ msgstr "加拿大（UTC-05）阿提库"
-
-#~ msgid "USA (UTC-10) Atka"
-#~ msgstr "美国（UTC-10）阿特卡"
-
-#~ msgid "Brazil (UTC-03) Bahia"
-#~ msgstr "巴西（UTC-03）巴伊亚"
-
-#~ msgid "USA (UTC-04) Barbados"
-#~ msgstr "美国（UTC-04）巴巴多斯"
-
-#~ msgid "USA (UTC-03) Belem"
-#~ msgstr "美国（UTC-03）贝伦"
-
-#~ msgid "USA (UTC-06) Belize"
-#~ msgstr "美国（UTC-06）伯利兹"
-
-#~ msgid "USA (UTC-04) Boa Vista"
-#~ msgstr "美国（UTC-04）博阿维斯塔"
-
-#~ msgid "USA (UTC-05) Bogota"
-#~ msgstr "美国（UTC-05）波哥大"
-
-#~ msgid "USA (UTC-07) Boise"
-#~ msgstr "美国（UTC-07）博伊西"
-
-#~ msgid "Argentina (UTC-03) Buenos Aires"
-#~ msgstr "阿根廷（UTC-03）布宜诺斯艾利斯"
-
-#~ msgid "USA (UTC-06) Cancun"
-#~ msgstr "美国（UTC-06）坎昆"
-
-#~ msgid "Ecuador (UTC-03) Caracas"
-#~ msgstr "厄瓜多尔（UTC-03）加拉加斯"
-
-#~ msgid "USA (UTC-03) Cayenne"
-#~ msgstr "美国（UTC-03）卡宴"
-
-#~ msgid "USA (UTC-05) Cayman"
-#~ msgstr "美国（UTC-05）开曼"
-
-#~ msgid "USA (UTC-06) Chicago"
-#~ msgstr "美国（UTC-06）芝加哥"
-
-#~ msgid "Mexico (UTC-07) Chihuahua"
-#~ msgstr "墨西哥（UTC-07）奇瓦瓦"
-
-#~ msgid "USA (UTC-03) Cordoba"
-#~ msgstr "美国（UTC-03）科尔多瓦"
-
-#~ msgid "USA (UTC-06) Costa Rica"
-#~ msgstr "美国（UTC-06）哥斯达黎加"
-
-#~ msgid "USA (UTC-07) Creston"
-#~ msgstr "美国（UTC-07）克雷斯顿"
-
-#~ msgid "USA (UTC-04) Cuiaba"
-#~ msgstr "美国（UTC-04）库亚巴"
-
-#~ msgid "USA (UTC-04) Curacao"
-#~ msgstr "美国（UTC-04）库拉索"
-
-#~ msgid "USA (UTC-08) Dawson"
-#~ msgstr "美国（UTC-08）道森"
-
-#~ msgid "USA (UTC-07) Denver"
-#~ msgstr "美国（UTC-07）丹佛"
-
-#~ msgid "USA (UTC-05) Detroit"
-#~ msgstr "美国（UTC-05）底特律"
-
-#~ msgid "USA (UTC-04) Dominica"
-#~ msgstr "美国（UTC-04）多米尼加"
-
-#~ msgid "USA (UTC-07) Edmonton"
-#~ msgstr "美国（UTC-07）埃德蒙顿"
-
-#~ msgid "Brazil (UTC-04) Eirunepe"
-#~ msgstr "巴西（UTC-04）艾鲁内佩"
-
-#~ msgid "USA (UTC-06) El Salvador"
-#~ msgstr "美国（UTC-06）萨尔瓦多"
-
-#~ msgid "USA (UTC-08) Ensenada"
-#~ msgstr "美国（UTC-08）恩塞纳达"
-
-#~ msgid "USA (UTC-03) Fortaleza"
-#~ msgstr "美国（UTC-03）福塔雷萨"
-
-#~ msgid "USA (UTC-04) Glace Bay"
-#~ msgstr "美国（UTC-04）格莱斯湾"
-
-#~ msgid "Greenland (UTC-03) Godthab"
-#~ msgstr "格陵兰（UTC-03）戈特霍布"
-
-#~ msgid "USA (UTC-04) Goose Bay"
-#~ msgstr "美国（UTC-04）古斯湾"
-
-#~ msgid "USA (UTC-04) Grenada"
-#~ msgstr "美国（UTC-04）格林纳达"
-
-#~ msgid "Mexico (UTC-04) Guadeloupe"
-#~ msgstr "墨西哥（UTC-04）瓜德罗普"
-
-#~ msgid "Mexico (UTC-06) Guatemala"
-#~ msgstr "墨西哥（UTC-06）危地马拉"
-
-#~ msgid "Ecuador (UTC-05) Guayaquil"
-#~ msgstr "厄瓜多尔（UTC-05）瓜亚基尔"
-
-#~ msgid "Mexico (UTC-04) Guyana"
-#~ msgstr "墨西哥（UTC-04）圭亚那"
-
-#~ msgid "USA (UTC-04) Halifax"
-#~ msgstr "美国（UTC-04）哈利法克斯"
-
-#~ msgid "USA (UTC-05) Havana"
-#~ msgstr "美国（UTC-05）哈瓦那"
-
-#~ msgid "USA (UTC-06) Knox"
-#~ msgstr "美国（UTC-06）诺克斯"
-
-#~ msgid "USA (UTC-05) Marengo"
-#~ msgstr "美国（UTC-05）马伦哥"
-
-#~ msgid "USA (UTC-06) Tell City"
-#~ msgstr "美国（UTC-06）特尔城"
-
-#~ msgid "USA (UTC-05) Vevay"
-#~ msgstr "美国（UTC-05）韦韦"
-
-#~ msgid "USA (UTC-05) Vincennes"
-#~ msgstr "美国（UTC-05）文森斯"
-
-#~ msgid "USA (UTC-05) Winamac"
-#~ msgstr "美国（UTC-05）威纳马克"
-
-#~ msgid "Canada (UTC-07) Inuvik"
-#~ msgstr "加拿大（UTC-07）伊努维克"
-
-#~ msgid "Canada (UTC-05) Iqaluit"
-#~ msgstr "加拿大（UTC-05）伊魁特"
-
-#~ msgid "USA (UTC-05) Jamaica"
-#~ msgstr "美国（UTC-05）牙买加"
-
-#~ msgid "USA (UTC-09) Juneau"
-#~ msgstr "美国（UTC-09）朱诺"
-
-#~ msgid "Caribbean Netherlands (UTC-04) Kralendijk"
-#~ msgstr "加勒比海荷兰（UTC-04）克拉伦代克"
-
-#~ msgid "USA (UTC-04) La Paz"
-#~ msgstr "美国（UTC-04）拉巴斯"
-
-#~ msgid "USA (UTC-05) Lima"
-#~ msgstr "美国（UTC-05）利马"
-
-#~ msgid "Brazil (UTC-03) Maceio"
-#~ msgstr "巴西（UTC-03）马塞约"
-
-#~ msgid "Mexico (UTC-06) Managua"
-#~ msgstr "墨西哥（UTC-06）马那瓜"
-
-#~ msgid "USA (UTC-04) Manaus"
-#~ msgstr "美国（UTC-04）马瑙斯"
-
-#~ msgid "USA (UTC-04) Marigot"
-#~ msgstr "美国（UTC-04）马里戈特"
-
-#~ msgid "Mexico (UTC-06) Matamoros"
-#~ msgstr "墨西哥（UTC-06）马塔莫罗斯"
-
-#~ msgid "USA (UTC-07) Mazatlan"
-#~ msgstr "美国（UTC-07）马萨特兰"
-
-#~ msgid "USA (UTC-03) Mendoza"
-#~ msgstr "美国（UTC-03）门多萨"
-
-#~ msgid "USA (UTC-06) Menominee"
-#~ msgstr "美国（UTC-06）梅诺米尼"
-
-#~ msgid "USA (UTC-06) Merida"
-#~ msgstr "美国（UTC-06）梅里达"
-
-#~ msgid "USA (UTC-03) Miquelon"
-#~ msgstr "美国（UTC-03）密克隆"
-
-#~ msgid "Canada (UTC-04) Moncton"
-#~ msgstr "加拿大（UTC-04）蒙克顿"
-
-#~ msgid "USA (UTC-06) Monterrey"
-#~ msgstr "美国（UTC-06）蒙特雷"
-
-#~ msgid "USA (UTC-05) Montreal"
-#~ msgstr "美国（UTC-05）蒙特利尔"
-
-#~ msgid "USA (UTC-05) Nassau"
-#~ msgstr "美国（UTC-05）拿骚"
-
-#~ msgid "USA (UTC-05) New York"
-#~ msgstr "美国（UTC-05）纽约"
-
-#~ msgid "Canada (UTC-05) Nipigon"
-#~ msgstr "加拿大（UTC-05）尼皮贡"
-
-#~ msgid "USA (UTC-09) Nome"
-#~ msgstr "美国（UTC-09）诺姆"
-
-#~ msgid "Brazil (UTC-02) Noronha"
-#~ msgstr "巴西（UTC-02）迪诺罗尼亚"
-
-#~ msgid "USA (UTC-06) Beulah"
-#~ msgstr "美国（UTC-06）比尤拉"
-
-#~ msgid "USA (UTC-06) Center"
-#~ msgstr "美国（UTC-06）中部"
-
-#~ msgid "USA (UTC-06) New Salem"
-#~ msgstr "美国（UTC-06）新塞勒姆"
-
-#~ msgid "Mexico (UTC-07) Ojinaga"
-#~ msgstr "墨西哥（UTC-07）奥希纳加"
-
-#~ msgid "USA (UTC-05) Panama"
-#~ msgstr "美国（UTC-05）巴拿马"
-
-#~ msgid "Mexico (UTC-03) Paramaribo"
-#~ msgstr "墨西哥（UTC-03）帕拉马里博"
-
-#~ msgid "USA (UTC-07) Phoenix"
-#~ msgstr "美国（UTC-07）凤凰"
-
-#~ msgid "Brazil (UTC-05) Porto Acre"
-#~ msgstr "巴西（UTC-05）阿克雷港"
-
-#~ msgid "USA (UTC-04) Puerto Rico"
-#~ msgstr "美国（UTC-04）波多黎各"
-
-#~ msgid "USA (UTC-03) Recife"
-#~ msgstr "美国（UTC-03）累西腓"
-
-#~ msgid "USA (UTC-06) Regina"
-#~ msgstr "美国（UTC-06）里贾纳"
-
-#~ msgid "USA (UTC-06) Resolute"
-#~ msgstr "美国（UTC-06）雷索卢特"
-
-#~ msgid "USA (UTC-03) Rosario"
-#~ msgstr "美国（UTC-03）罗萨里奥"
-
-#~ msgid "USA (UTC-03) Santarem"
-#~ msgstr "美国（UTC-03）圣塔伦"
-
-#~ msgid "USA (UTC-04) Santiago"
-#~ msgstr "美国（UTC-04）圣地亚哥"
-
-#~ msgid "USA (UTC-03) Sao Paulo"
-#~ msgstr "美国（UTC-03）圣保罗"
-
-#~ msgid "USA (UTC-07) Shiprock"
-#~ msgstr "美国（UTC-07）希普罗克"
-
-#~ msgid "USA (UTC-09) Sitka"
-#~ msgstr "美国（UTC-09）锡特卡"
-
-#~ msgid "USA (UTC-04) St Johns"
-#~ msgstr "美国（UTC-04）圣琼斯"
-
-#~ msgid "USA (UTC-04) St Lucia"
-#~ msgstr "美国（UTC-04）圣露西亚"
-
-#~ msgid "USA (UTC-04) St Thomas"
-#~ msgstr "美国（UTC-04）圣托马斯"
-
-#~ msgid "Ecuador (UTC-06) Tegucigalpa"
-#~ msgstr "厄瓜多尔（UTC-06）特古西加尔巴"
-
-#~ msgid "USA (UTC-04) Thule"
-#~ msgstr "美国（UTC-04）图勒"
-
-#~ msgid "Mexico (UTC-08) Tijuana"
-#~ msgstr "墨西哥（UTC-08）蒂华纳"
-
-#~ msgid "Canada (UTC-05) Toronto"
-#~ msgstr "加拿大（UTC-05）多伦多"
-
-#~ msgid "USA (UTC-04) Tortola"
-#~ msgstr "美国（UTC-04）托尔托拉"
-
-#~ msgid "USA (UTC-08) Vancouver"
-#~ msgstr "美国（UTC-08）温哥华"
-
-#~ msgid "USA (UTC-04) Virgin"
-#~ msgstr "美国（UTC-04）维尔京"
-
-#~ msgid "Canada (UTC-06) Winnipeg"
-#~ msgstr "加拿大（UTC-06）温尼伯"
-
-#~ msgid "USA (UTC-09) Yakutat"
-#~ msgstr "美国（UTC-09）亚库塔特"
-
-#~ msgid "Antarctica (UTC+11) Casey"
-#~ msgstr "南极洲（UTC+11）凯西"
-
-#~ msgid "Antarctica (UTC+05) Davis"
-#~ msgstr "南极洲（UTC+05）戴维斯"
-
-#~ msgid "Antarctica (UTC+10) DumontDUrville"
-#~ msgstr "南极洲（UTC+10）迪蒙·迪维尔"
-
-#~ msgid "Antarctica (UTC+05) Mawson"
-#~ msgstr "南极洲（UTC+05）莫森"
-
-#~ msgid "Antarctica (UTC+12) McMurdo"
-#~ msgstr "南极洲（UTC+12）麦克默多"
-
-#~ msgid "Antarctica (UTC-04) Palmer"
-#~ msgstr "南极洲（UTC-04）帕尔默"
-
-#~ msgid "Antarctica (UTC-03) Rothera"
-#~ msgstr "南极洲（UTC-03）罗西拉"
-
-#~ msgid "Antarctica (UTC+12) South Pole"
-#~ msgstr "南极洲（UTC+12）南极"
-
-#~ msgid "Antarctica (UTC+06) Vostok"
-#~ msgstr "南极洲（UTC+06）沃斯托克"
-
-#~ msgid "Svalbard and Jan Mayen (UTC+01) Longyearbyen"
-#~ msgstr "斯瓦尔巴和扬马延（UTC+01）朗伊尔城"
-
-#~ msgid "Yemen (UTC+03) Aden"
-#~ msgstr "也门（UTC+03）亚丁"
-
-#~ msgid "Kazakhstan (UTC+06) Almaty"
-#~ msgstr "哈萨克斯坦（UTC+06）阿拉木图"
-
-#~ msgid "Jordan (UTC+02) Amman"
-#~ msgstr "乔丹（UTC+02）安曼"
-
-#~ msgid "Russia (UTC+12) Anadyr"
-#~ msgstr "俄罗斯（UTC+12）阿纳德尔"
-
-#~ msgid "Kazakhstan (UTC+05) Aqtau"
-#~ msgstr "哈萨克斯坦（UTC+05）阿克陶"
-
-#~ msgid "Kazakhstan (UTC+05) Aqtobe"
-#~ msgstr "哈萨克斯坦（UTC+05）阿克托别"
-
-#~ msgid "Turkmenistan (UTC+05) Ashkhabad"
-#~ msgstr "土库曼斯坦（UTC+05）阿什哈巴德"
-
-#~ msgid "Iraq (UTC+03) Baghdad"
-#~ msgstr "伊拉克（UTC+03）巴格达"
-
-#~ msgid "Bahrain (UTC+03) Bahrain"
-#~ msgstr "巴林（UTC+03）巴林"
-
-#~ msgid "Azerbaijan (UTC+04) Baku"
-#~ msgstr "阿塞拜疆（UTC+04）巴库"
-
-#~ msgid "Thailand (UTC+07) Bangkok"
-#~ msgstr "泰国（UTC+07）曼谷"
-
-#~ msgid "Lebanon (UTC+02) Beirut"
-#~ msgstr "黎巴嫩（UTC+02）贝鲁特"
-
-#~ msgid "Kyrgyzstan (UTC+06) Bishkek"
-#~ msgstr "吉尔吉斯斯坦（UTC+06）比什凯克"
-
-#~ msgid "Brunei (UTC+08) Brunei"
-#~ msgstr "文莱（UTC+08）文莱"
-
-#~ msgid "India (UTC+08) Calcutta"
-#~ msgstr "印度（UTC+08）加尔各答"
-
-#~ msgid "China (UTC+08) Chongqing"
-#~ msgstr "中国（UTC+08）重庆"
-
-#~ msgid "China (UTC+08) Chungking"
-#~ msgstr "中国（UTC+08）重庆"
-
-#~ msgid "Sri Lanka (UTC+06) Colombo"
-#~ msgstr "斯里兰卡（UTC+06）科伦坡"
-
-#~ msgid "Syria (UTC+02) Damascus"
-#~ msgstr "叙利亚（UTC+02）大马士革"
-
-#~ msgid "Bangladesh (UTC+06) Dhaka"
-#~ msgstr "孟加拉国（UTC+06）达卡"
-
-#~ msgid "Timor-Leste (UTC+09) Dili"
-#~ msgstr "东帝汶（UTC+09）帝力"
-
-#~ msgid "Dubai - United Arab Emirates (UTC+04) Dubai"
-#~ msgstr "阿拉伯联合酋长国（UTC+04）迪拜"
-
-#~ msgid "Tajikistan (UTC+05) Dushanbe"
-#~ msgstr "塔吉克斯坦（UTC+05）杜尚别"
-
-#~ msgid "Gaza (UTC+02) Gaza"
-#~ msgstr "加沙（UTC+02）加沙"
-
-#~ msgid "China (UTC+08) Harbin"
-#~ msgstr "中国（UTC+08）哈尔滨"
-
-#~ msgid "Hebron (UTC+02) Hebron"
-#~ msgstr "希伯仑（UTC+02）希伯伦"
-
-#~ msgid "Vietnam (UTC+07) Ho Chi Minh"
-#~ msgstr "越南（UTC+07）胡志明市"
-
-#~ msgid "Hong Kong (UTC+08) Hong Kong"
-#~ msgstr "香港（UTC+08）香港"
-
-#~ msgid "Mongolia (UTC+07) Hovd"
-#~ msgstr "蒙古（UTC+07）科布多"
-
-#~ msgid "Russia (UTC+09) Irkutsk"
-#~ msgstr "俄罗斯（UTC+09）伊尔库茨克"
-
-#~ msgid "Indonesia (UTC+07) Jakarta"
-#~ msgstr "印度尼西亚（UTC+07）雅加达"
-
-#~ msgid "India (UTC+09) Jayapura"
-#~ msgstr "印度（UTC+09）查亚普拉"
-
-#~ msgid "Israel (UTC+02) Jerusalem"
-#~ msgstr "以色列（UTC+02）耶路撒冷"
-
-#~ msgid "Afghanistan (UTC+12) Kabul"
-#~ msgstr "阿富汗（UTC+12）喀布尔"
-
-#~ msgid "Pakistan (UTC+05) Karachi"
-#~ msgstr "巴基斯坦（UTC+05）卡拉奇"
-
-#~ msgid "China (UTC+08) Kashgar"
-#~ msgstr "中国（UTC+08）喀什"
-
-#~ msgid "Nepal (UTC+08) Kathmandu"
-#~ msgstr "尼泊尔（UTC+08）加德满都"
-
-#~ msgid "Malaysia (UTC+08) Kuala Lumpur"
-#~ msgstr "马来西亚（UTC+08）吉隆坡"
-
-#~ msgid "Malaysia (UTC+08) Kuching"
-#~ msgstr "马来西亚（UTC+08）古晋"
-
-#~ msgid "Kuwait (UTC+03) Kuwait"
-#~ msgstr "科威特（UTC+03）科威特"
-
-#~ msgid "Macau (UTC+08) Macao"
-#~ msgstr "澳门（UTC+08）澳门"
-
-#~ msgid "Russia (UTC+12) Magadan"
-#~ msgstr "俄罗斯（UTC+12）马加丹"
-
-#~ msgid "Indonesia (UTC+08) Makassar"
-#~ msgstr "印度尼西亚（UTC+08）望加锡"
-
-#~ msgid "Philippines (UTC+08) Manila"
-#~ msgstr "菲律宾（UTC+08）马尼拉"
-
-#~ msgid "Oman (UTC+04) Muscat"
-#~ msgstr "阿曼（UTC+04）马斯喀特"
-
-#~ msgid "Nicosia (UTC+02) Nicosia"
-#~ msgstr "尼科西亚（UTC+02）尼科西亚"
-
-#~ msgid "Russia (UTC+07) Novosibirsk"
-#~ msgstr "俄罗斯（UTC+07）新西伯利亚"
-
-#~ msgid "Russia (UTC+07) Omsk"
-#~ msgstr "俄罗斯（UTC+07）鄂木斯克"
-
-#~ msgid "Kazakhstan (UTC+05) Oral"
-#~ msgstr "哈萨克斯坦（UTC+05）乌拉尔"
-
-#~ msgid "Cambodia (UTC+07) Phnom Penh"
-#~ msgstr "柬埔寨（UTC+07）金边"
-
-#~ msgid "Indonesia (UTC+07) Pontianak"
-#~ msgstr "印度尼西亚（UTC+07）坤甸"
-
-#~ msgid "North Korea (UTC+09) Pyongyang"
-#~ msgstr "朝鲜（UTC+09）平壤"
-
-#~ msgid "Qatar (UTC+03) Qatar"
-#~ msgstr "卡塔尔（UTC+03）卡塔尔"
-
-#~ msgid "Kazakhstan (UTC+06) Qyzylorda"
-#~ msgstr "哈萨克斯坦（UTC+06）克孜勒奥尔达"
-
-#~ msgid "Myanmar (Burma) (UTC+03) Rangoon"
-#~ msgstr "缅甸（UTC+03）仰光"
-
-#~ msgid "Vietnam (UTC+07) Saigon"
-#~ msgstr "越南（UTC+07）西贡"
-
-#~ msgid "Russia (UTC+11) Sakhalin"
-#~ msgstr "俄罗斯（UTC+11）库页岛"
-
-#~ msgid "Uzbekistan (UTC+05) Samarkand"
-#~ msgstr "乌兹别克斯坦（UTC+05）撒马尔罕"
-
-#~ msgid "South Korea (UTC+09) Seoul"
-#~ msgstr "韩国（UTC+09）首尔"
-
-#~ msgid "China (UTC+08) Shanghai"
-#~ msgstr "中国（UTC+08）上海"
-
-#~ msgid "China (UTC+08) Beijing"
-#~ msgstr "中国（UTC+08）北京"
-
-#~ msgid "Singapore (UTC+08) Singapore"
-#~ msgstr "新加坡（UTC+08）新加坡"
-
-#~ msgid "Taiwan (UTC+08) Taipei"
-#~ msgstr "台湾（UTC+08）台北"
-
-#~ msgid "Uzbekistan (UTC+05) Tashkent"
-#~ msgstr "乌兹别克斯坦（UTC+05）塔什干"
-
-#~ msgid "Georgia (UTC+04) Tbilisi"
-#~ msgstr "格鲁吉亚（UTC+04）第比利斯"
-
-#~ msgid "Iran (UTC+02) Tehran"
-#~ msgstr "伊朗（UTC+02）德黑兰"
-
-#~ msgid "Bhutan (UTC+06) Thimbu"
-#~ msgstr "不丹（UTC+06）廷布"
-
-#~ msgid "Bhutan (UTC+06) Thimphu"
-#~ msgstr "不丹（UTC+06）廷布"
-
-#~ msgid "Japan (UTC+09) Tokyo"
-#~ msgstr "日本（UTC+09）东京"
-
-#~ msgid "Indonesia (UTC+08) Ujung Pandang"
-#~ msgstr "印度尼西亚（UTC+08）乌戎潘当"
-
-#~ msgid "Mongolia (UTC+08) Ulan Bator"
-#~ msgstr "蒙古（UTC+08）乌兰巴托"
-
-#~ msgid "China (UTC+08) Urumqi"
-#~ msgstr "中国（UTC+08）乌鲁木齐"
-
-#~ msgid "Laos (UTC+07) Vientiane"
-#~ msgstr "老挝（UTC+07）万象"
-
-#~ msgid "Russia (UTC+11) Vladivostok"
-#~ msgstr "俄罗斯（UTC+11）符拉迪沃斯托克"
-
-#~ msgid "Russia (UTC+10) Yakutsk"
-#~ msgstr "俄罗斯（UTC+10）雅库茨克"
-
-#~ msgid "Armenia (UTC+04) Yerevan"
-#~ msgstr "亚美尼亚（UTC+04）埃里温"
-
-#~ msgid "USA (UTC-04) Bermuda"
-#~ msgstr "美国（UTC-04）百慕大"
-
-#~ msgid "USA (UTC+00) Canary"
-#~ msgstr "美国（UTC+00）加那利"
-
-#~ msgid "Puerto Rico (UTC-01) Cape Verde"
-#~ msgstr "波多黎各（UTC-01）佛得角"
-
-#~ msgid "USA (UTC+00) Madeira"
-#~ msgstr "美国（UTC+00）马德拉"
-
-#~ msgid "Iceland (UTC+00) Reykjavik"
-#~ msgstr "冰岛（UTC+00）雷克雅未克"
-
-#~ msgid "USA (UTC+00) St Helena"
-#~ msgstr "美国（UTC+00）圣赫勒拿岛"
-
-#~ msgid "USA (UTC-03) Stanley"
-#~ msgstr "美国（UTC-03）斯坦利"
-
-#~ msgid "Australia (UTC+10) ACT"
-#~ msgstr "澳大利亚（UTC+10）澳大利亚首都特区"
-
-#~ msgid "Australia (UTC+10) Adelaide"
-#~ msgstr "澳大利亚（UTC+10）阿德莱德"
-
-#~ msgid "Australia (UTC+10) Broken Hill"
-#~ msgstr "澳大利亚（UTC+10）布罗肯希尔"
-
-#~ msgid "Australia (UTC+10) Currie"
-#~ msgstr "澳大利亚（UTC+10）柯里"
-
-#~ msgid "Australia (UTC+10) Darwin"
-#~ msgstr "澳大利亚（UTC+10）达尔文"
-
-#~ msgid "Australia (UTC+10) Lindeman"
-#~ msgstr "澳大利亚（UTC+10）林德曼"
-
-#~ msgid "Australia (UTC+11) Lord Howe"
-#~ msgstr "澳大利亚（UTC+11）豪勋爵"
-
-#~ msgid "Australia (UTC+10) Melbourne"
-#~ msgstr "澳大利亚（UTC+10）墨尔本"
-
-#~ msgid "Australia (UTC+08) Perth"
-#~ msgstr "澳大利亚（UTC+08）珀斯"
-
-#~ msgid "Australia (UTC+10) Queensland"
-#~ msgstr "澳大利亚（UTC+10）昆士兰"
-
-#~ msgid "Australia (UTC+10) Tasmania"
-#~ msgstr "澳大利亚（UTC+10）塔斯马尼亚"
-
-#~ msgid "Australia (UTC+10) Victoria"
-#~ msgstr "澳大利亚（UTC +10）维多利亚"
-
-#~ msgid "Australia (UTC-05) Yancowinna"
-#~ msgstr "澳大利亚（UTC-05）盐科温拿"
-
-#~ msgid "Canada (UTC-04) Atlantic"
-#~ msgstr "加拿大（UTC-04）大西洋"
-
-#~ msgid "Canada (UTC-08) Yukon"
-#~ msgstr "加拿大（UTC-08）育空"
-
-#~ msgid "USA (UTC+01) CET"
-#~ msgstr "美国（UTC+01）欧洲中部时间"
-
-#~ msgid "Chile (UTC-04) Continental"
-#~ msgstr "智利（UTC-04）大陆"
-
-#~ msgid "Cuba (UTC-05) Cuba"
-#~ msgstr "古巴（UTC-05）古巴"
-
-#~ msgid "USA (UTC+02) EET"
-#~ msgstr "美国（UTC+02）欧洲东部时间"
-
-#~ msgid "Egypt (UTC+02) Egypt"
-#~ msgstr "埃及（UTC+02）埃及"
-
-#~ msgid "Ireland (UTC+00) Eire"
-#~ msgstr "爱尔兰（UTC+00）爱尔兰"
-
-#~ msgid "Uganda (UTC-05) EST"
-#~ msgstr "乌干达（UTC-05）东部标准时间"
-
-#~ msgid "The Netherlands (UTC+01) Amsterdam"
-#~ msgstr "荷兰（UTC+01）阿姆斯特丹"
-
-#~ msgid "Andorra (UTC+01) Andorra"
-#~ msgstr "安道尔（UTC+01）安道尔"
-
-#~ msgid "Greece (UTC+02) Athens"
-#~ msgstr "希腊（UTC+02）雅典"
-
-#~ msgid "UK (UTC+00) Belfast"
-#~ msgstr "英国（UTC+00）贝尔法斯特"
-
-#~ msgid "Serbia (UTC+01) Belgrade"
-#~ msgstr "塞尔维亚（UTC+01）贝尔格莱德"
-
-#~ msgid "Germany (UTC+01) Berlin"
-#~ msgstr "德国（UTC+01）柏林"
-
-#~ msgid "Slovakia (UTC+01) Bratislava"
-#~ msgstr "斯洛伐克（UTC+01）布拉迪斯拉发"
-
-#~ msgid "Belgium (UTC+01) Brussels"
-#~ msgstr "比利时（UTC+01）布鲁塞尔"
-
-#~ msgid "Romania (UTC+02) Bucharest"
-#~ msgstr "罗马尼亚（UTC+02）布加勒斯特"
-
-#~ msgid "Hungary (UTC+01) Budapest"
-#~ msgstr "匈牙利（UTC+01）布达佩斯"
-
-#~ msgid "Moldova (UTC+02) Chisinau"
-#~ msgstr "摩尔多瓦（UTC+02）基希讷乌"
-
-#~ msgid "Denmark (UTC+01) Copenhagen"
-#~ msgstr "丹麦（UTC+01）哥本哈根"
-
-#~ msgid "Ireland (UTC+00) Dublin"
-#~ msgstr "爱尔兰（UTC+00）都柏林"
-
-#~ msgid "Gibraltar (UTC+01) Gibraltar"
-#~ msgstr "直布罗陀（UTC+01）直布罗陀"
-
-#~ msgid "Guernsey (UTC+00) Guernsey"
-#~ msgstr "根西岛（UTC+00）根西岛"
-
-#~ msgid "Finland (UTC+02) Helsinki"
-#~ msgstr "芬兰（UTC+02）赫尔辛基"
-
-#~ msgid "Isle of Man (UTC+00) Isle of Man"
-#~ msgstr "马恩岛（UTC+00）马恩岛"
-
-#~ msgid "Turkey (UTC+02) Istanbul"
-#~ msgstr "土耳其（UTC+02）伊斯坦布尔"
-
-#~ msgid "Jersey (UTC+00) Jersey"
-#~ msgstr "泽西岛（UTC+00）泽西岛"
-
-#~ msgid "Russia (UTC+03) Kaliningrad"
-#~ msgstr "俄罗斯（UTC+03）加里宁格勒"
-
-#~ msgid "Ukraine (UTC+02) Kiev"
-#~ msgstr "乌克兰（UTC+02）基辅"
-
-#~ msgid "Portugal (UTC+00) Lisbon"
-#~ msgstr "葡萄牙（UTC+00）里斯本"
-
-#~ msgid "Slovenia (UTC+01) Ljubljana"
-#~ msgstr "斯洛文尼亚（UTC+01）卢布尔雅那"
-
-#~ msgid "UK (UTC+00) London"
-#~ msgstr "英国（UTC+00）伦敦"
-
-#~ msgid "Luxembourg (UTC+01) Luxembourg"
-#~ msgstr "卢森堡（UTC+01）卢森堡"
-
-#~ msgid "Spain (UTC+01) Madrid"
-#~ msgstr "西班牙（UTC+01）马德里"
-
-#~ msgid "Malta (UTC+01) Malta"
-#~ msgstr "马耳他（UTC+01）马耳他"
-
-#~ msgid "Aland Islands (UTC+02) Mariehamn"
-#~ msgstr "奥兰群岛（UTC+02）玛丽汉姆"
-
-#~ msgid "Belarus (UTC+03) Minsk"
-#~ msgstr "白俄罗斯（UTC+03）明斯克"
-
-#~ msgid "Monaco (UTC+01) Monaco"
-#~ msgstr "摩纳哥（UTC+01）摩纳哥"
-
-#~ msgid "Russia (UTC+04) Moscow"
-#~ msgstr "俄罗斯（UTC+04）莫斯科"
-
-#~ msgid "Italy (UTC+02) Nicosia"
-#~ msgstr "意大利（UTC+02）尼科西亚"
-
-#~ msgid "Norway (UTC+01) Oslo"
-#~ msgstr "挪威（UTC+01）奥斯陆"
-
-#~ msgid "France (UTC+01) Paris"
-#~ msgstr "法国（UTC+01）巴黎"
-
-#~ msgid "Montenegro (UTC+01) Podgorica"
-#~ msgstr "黑山（UTC+01）波德戈里察"
-
-#~ msgid "Czech Republic (UTC+01) Prague"
-#~ msgstr "捷克（UTC+01）布拉格"
-
-#~ msgid "Latvia (UTC+02) Riga"
-#~ msgstr "拉脱维亚（UTC+02）里加"
-
-#~ msgid "Italy (UTC+01) Rome"
-#~ msgstr "意大利（UTC+01）罗马"
-
-#~ msgid "Russia (UTC+04) Samara"
-#~ msgstr "俄罗斯（UTC+04）萨马拉"
-
-#~ msgid "San Marino (UTC+01) San Marino"
-#~ msgstr "圣马力诺（UTC+01）圣马力诺"
-
-#~ msgid "Bosnia and Herzegovina (UTC+01) Sarajevo"
-#~ msgstr "波斯尼亚和黑塞哥维那（UTC+01）萨拉热窝"
-
-#~ msgid "Ukraine (UTC+02) Simferopol"
-#~ msgstr "乌克兰（UTC+02）辛菲罗波尔"
-
-#~ msgid "Macedonia (FYROM) (UTC+01) Skopje"
-#~ msgstr "马其顿（UTC+01）斯科普里"
-
-#~ msgid "Bulgaria (UTC+02) Sofia"
-#~ msgstr "保加利亚（UTC+02）索菲亚"
-
-#~ msgid "Sweden (UTC+01) Stockholm"
-#~ msgstr "瑞典（UTC+01）斯德哥尔摩"
-
-#~ msgid "Estonia (UTC+02) Tallinn"
-#~ msgstr "爱沙尼亚（UTC+02）塔林"
-
-#~ msgid "Albania (UTC+01) Tirane"
-#~ msgstr "阿尔巴尼亚（UTC+01）地拉那"
-
-#~ msgid "Moldova (UTC+02) Tiraspol"
-#~ msgstr "摩尔多瓦（UTC+02）蒂拉斯波尔"
-
-#~ msgid "Ukraine (UTC+02) Uzhgorod"
-#~ msgstr "乌克兰（UTC+02）乌日哥罗德"
-
-#~ msgid "Liechtenstein (UTC+01) Vaduz"
-#~ msgstr "列支敦士登（UTC+01）瓦杜兹"
-
-#~ msgid "Vatican City (UTC+01) Vatican"
-#~ msgstr "梵蒂冈（UTC+01）梵蒂冈"
-
-#~ msgid "Austria (UTC+01) Vienna"
-#~ msgstr "奥地利（UTC+01）维也纳"
-
-#~ msgid "Lithuania (UTC+02) Vilnius"
-#~ msgstr "立陶宛（UTC+02）维尔纽斯"
-
-#~ msgid "Russia (UTC+04) Volgograd"
-#~ msgstr "俄罗斯（UTC+04）伏尔加格勒"
-
-#~ msgid "Poland (UTC+01) Warsaw"
-#~ msgstr "波兰（UTC+01）华沙"
-
-#~ msgid "Croatia (UTC+01) Zagreb"
-#~ msgstr "克罗地亚（UTC+01）萨格勒布"
-
-#~ msgid "Ukraine (UTC+02) Zaporozhye"
-#~ msgstr "乌克兰（UTC+02）扎波罗热"
-
-#~ msgid "Switzerland (UTC+01) Zurich"
-#~ msgstr "瑞士（UTC+01）苏黎世"
-
-#~ msgid "United Kingdom (UTC+00) GB"
-#~ msgstr "英国（UTC+00）英国时间"
-
-#~ msgid "Ireland (UTC+00) GB Eire"
-#~ msgstr "爱尔兰（UTC+00）爱尔兰时间"
-
-#~ msgid "Indonesia (UTC-10) HST"
-#~ msgstr "印度尼西亚（UTC-10）夏威夷-阿留申标准时间"
-
-#~ msgid "Iceland (UTC+00) Iceland"
-#~ msgstr "冰岛（UTC+00）冰岛"
-
-#~ msgid "Madagascar (UTC+03) Antananarivo"
-#~ msgstr "马达加斯加（UTC+03）塔那那利佛"
-
-#~ msgid "British Indian Ocean Territory (UTC+06) Chagos"
-#~ msgstr "英属印度洋领地（UTC+06）查戈斯"
-
-#~ msgid "Christmas Island (UTC+07) Christmas"
-#~ msgstr "圣诞岛（UTC+07）圣诞岛"
-
-#~ msgid "Grande Terre (UTC+05) Kerguelen"
-#~ msgstr "格朗德特尔（UTC+05）凯尔盖朗"
-
-#~ msgid "Seychelles (UTC+04) Mahe"
-#~ msgstr "塞舌尔（UTC+04）马埃"
-
-#~ msgid "Maldives (UTC+05) Maldives"
-#~ msgstr "马尔代夫（UTC+05）马尔代夫"
-
-#~ msgid "India (UTC+04) Mauritius"
-#~ msgstr "印度（UTC+04）毛里求斯"
-
-#~ msgid "USA (UTC+04) Reunion"
-#~ msgstr "美国（UTC+04）留尼旺岛"
-
-#~ msgid "Iran (UTC+02) Iran"
-#~ msgstr "伊朗（UTC+02）伊朗"
-
-#~ msgid "Jamaica (UTC-05) Jamaica"
-#~ msgstr "牙买加（UTC-05）牙买加"
-
-#~ msgid "Japan (UTC+09) Japan"
-#~ msgstr "日本（UTC+09）日本"
-
-#~ msgid "Libya (UTC+02) Libya"
-#~ msgstr "利比亚（UTC+02）利比亚"
-
-#~ msgid "France (UTC+01) MET"
-#~ msgstr "法国（UTC+01）欧洲中部时间"
-
-#~ msgid "Mexico (UTC-08) BajaNorte"
-#~ msgstr "墨西哥（UTC-08）下加利福尼亚"
-
-#~ msgid "Mexico (UTC-07) BajaSur"
-#~ msgstr "墨西哥（UTC-07）南下加里福尼亚"
-
-#~ msgid "Mexico (UTC-06) General"
-#~ msgstr "墨西哥（UTC-06）通用"
-
-#~ msgid "The Netherlands (UTC-07) MST"
-#~ msgstr "荷兰（UTC-07）山区标准时间"
-
-#~ msgid "USA (UTC-07) Navajo"
-#~ msgstr "美国（UTC-07）纳瓦霍"
-
-#~ msgid "New Zealand (UTC+12) NZ"
-#~ msgstr "新西兰（UTC+12）新西兰"
-
-#~ msgid "New Zealand (UTC+12) Auckland"
-#~ msgstr "新西兰（UTC+12）奥克兰"
-
-#~ msgid "USA (UTC+10) Chatham"
-#~ msgstr "美国（UTC+10）查塔姆"
-
-#~ msgid "USA (UTC-06) Easter"
-#~ msgstr "美国（UTC-06）复活节岛"
-
-#~ msgid "Vanuatu (UTC+11) Efate"
-#~ msgstr "瓦努阿图（UTC+11）埃法特"
-
-#~ msgid "Australia (UTC+13) Enderbury"
-#~ msgstr "澳大利亚（UTC+13）恩德伯里"
-
-#~ msgid "Tokelau (UTC+13) Fakaofo"
-#~ msgstr "托克劳（UTC+13）法考福"
-
-#~ msgid "Fiji (UTC+12) Fiji"
-#~ msgstr "斐济（UTC+12）斐济"
-
-#~ msgid "Tuvalu (UTC+12) Funafuti"
-#~ msgstr "图瓦卢（UTC+12）富纳富提"
-
-#~ msgid "Australia (UTC-06) Galapagos"
-#~ msgstr "澳大利亚（UTC-06）加拉帕戈斯"
-
-#~ msgid "Australia (UTC-09) Gambier"
-#~ msgstr "澳大利亚（UTC-09）甘比尔"
-
-#~ msgid "Solomon Islands (UTC+11) Guadalcanal"
-#~ msgstr "索罗门群岛（UTC+11）瓜达尔卡纳尔"
-
-#~ msgid "Guam (UTC+10) Guam"
-#~ msgstr "关岛（UTC+10）关岛"
-
-#~ msgid "Hawaii (UTC-10) Honolulu"
-#~ msgstr "夏威夷（UTC-10）檀香山"
-
-#~ msgid "USA (UTC-10) Johnston"
-#~ msgstr "美国（UTC-10）约翰斯顿"
-
-#~ msgid "Australia (UTC+11) Kosrae"
-#~ msgstr "澳大利亚（UTC+11）科斯雷"
-
-#~ msgid "RMI (UTC+12) Kwajalein"
-#~ msgstr "RMI（UTC+12）夸贾林"
-
-#~ msgid "French Polynesia (UTC-11) Marquesas"
-#~ msgstr "法属波利尼西亚（UTC-11）马克萨斯"
-
-#~ msgid "Australia (UTC+12) Nauru"
-#~ msgstr "澳大利亚（UTC+12）诺鲁"
-
-#~ msgid "Niue (UTC-11) Niue"
-#~ msgstr "纽埃（UTC-11）纽埃"
-
-#~ msgid "USA (UTC+11) Norfolk"
-#~ msgstr "美国（UTC+11）诺福克"
-
-#~ msgid "Australia (UTC+09) Palau"
-#~ msgstr "澳大利亚（UTC+09）帕劳"
-
-#~ msgid "Australia (UTC-08) Pitcairn"
-#~ msgstr "澳大利亚（UTC-08）皮特凯恩"
-
-#~ msgid "Micronesia (UTC+11) Pohnpei"
-#~ msgstr "密克罗尼西亚（UTC+11）波纳佩"
-
-#~ msgid "Micronesia (UTC+11) Ponape"
-#~ msgstr "密克罗尼西亚（UTC+11）波纳佩岛"
-
-#~ msgid "Papua New Guinea (UTC+10) Port Moresby"
-#~ msgstr "巴布亚新几内亚（UTC+10）莫尔兹比港"
-
-#~ msgid "Australia (UTC-10) Rarotonga"
-#~ msgstr "澳大利亚（UTC-10）拉罗汤加岛"
-
-#~ msgid "CNMI (UTC+10) Saipan"
-#~ msgstr "北马里亚纳群岛联邦（UTC+10）塞班岛"
-
-#~ msgid "French Polynesia (UTC-10) Tahiti"
-#~ msgstr "法属波利尼西亚（UTC-10）大溪地"
-
-#~ msgid "Kiribati (UTC+12) Tarawa"
-#~ msgstr "基里巴斯（UTC+12）塔拉瓦"
-
-#~ msgid "Tonga (UTC+13) Tongatapu"
-#~ msgstr "汤加（UTC+13）汤加塔布"
-
-#~ msgid "USA (UTC+10) Truk"
-#~ msgstr "美国（UTC+10）特鲁克"
-
-#~ msgid "USA (UTC+12) Wake"
-#~ msgstr "美国（UTC+12）维克"
-
-#~ msgid "Australia (UTC+12) Wallis"
-#~ msgstr "澳大利亚（UTC+12）瓦利斯"
-
-#~ msgid "Poland (UTC+01) Poland"
-#~ msgstr "波兰（UTC+01）波兰"
-
-#~ msgid "Portugal (UTC+00) Portugal"
-#~ msgstr "葡萄牙（UTC+00）葡萄牙"
-
-#~ msgid "USA (UTC+08) PRC"
-#~ msgstr "美国（UTC+08）中国"
-
-#~ msgid "Czech Republic (UTC+09) ROK"
-#~ msgstr "捷克共和国（UTC+09）ROK"
-
-#~ msgid "Turkey (UTC+02) Turkey"
-#~ msgstr "土耳其（UTC+02）土耳其"
-
-#~ msgid "South Africa (UTC+00) UCT"
-#~ msgstr "南非（UTC+00）南非"
-
-#~ msgid "USA (UTC+00) Universal"
-#~ msgstr "美国（UTC+00）世界时"
-
-#~ msgid "USA (UTC-09) Alaska"
-#~ msgstr "美国（UTC-09）阿拉斯加"
-
-#~ msgid "USA (UTC-10) Aleutian"
-#~ msgstr "美国（UTC-10）阿留申"
-
-#~ msgid "USA (UTC-07) Arizona"
-#~ msgstr "美国（UTC-07）亚利桑那"
-
-#~ msgid "USA (UTC-05) East Indiana"
-#~ msgstr "美国（UTC-05）东印第安纳州"
-
-#~ msgid "USA (UTC-10) Hawaii"
-#~ msgstr "美国（UTC-10）夏威夷"
-
-#~ msgid "USA (UTC-05) Michigan"
-#~ msgstr "美国（UTC-05）密歇根"
-
-#~ msgid "USA (UTC-08) Pacific"
-#~ msgstr "美国（UTC-08）太平洋"
-
-#~ msgid "USA (UTC-11) Samoa"
-#~ msgstr "美国（UTC-11）萨摩亚"
-
-#~ msgid "USA (UTC+00) UTC"
-#~ msgstr "美国（UTC+00）UTC"
-
-#~ msgid "USA (UTC+00) WET"
-#~ msgstr "美国（UTC+00）欧洲西部时间"
-
-#~ msgid "WA (UTC+04) W SU"
-#~ msgstr "华盛顿州（UTC+04）华盛顿州立大学"
-
-#~ msgid "USA (UTC+00) Zulu"
-#~ msgstr "美国（UTC+00）祖鲁"
-
-#~ msgid "New Caledonia (UTC+11) Nouméa"
-#~ msgstr "新喀里多尼亚（UTC+12）努美阿"
-
-#~ msgid "USA (UTC-06) Knox IN"
-#~ msgstr "美国（UTC-06）诺克斯"
-
-#~ msgid "Turkmenistan (UTC+05) Ashgabat"
-#~ msgstr "土库曼斯坦（UTC+05）阿什哈巴德"
-
-#~ msgid "Macau (UTC+08) Macau"
-#~ msgstr "澳门（UTC+08）澳门"
-
-#~ msgid "Mongolia (UTC+08) Ulaanbaatar"
-#~ msgstr "蒙古（UTC+08）乌兰巴托"
-
-#~ msgid "Hong Kong (UTC+08) Hongkong"
-#~ msgstr "香港（UTC+08）香港"
-
-#~ msgid "Eritrea (UTC+03) Asmera"
-#~ msgstr "厄立特里亚（UTC+03）阿斯马拉"
