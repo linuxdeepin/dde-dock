@@ -40,6 +40,7 @@ func (obj *Manager) listenGSettings() {
 			//}
 			if t, ok := obj.themeObjMap[value]; ok {
 				t.setAllThemes()
+				//t.setAllProps()
 			} else {
 				obj.setPropCurrentTheme(DEFAULT_THEME)
 			}
@@ -367,7 +368,9 @@ func (obj *Theme) handleEvent() {
 
 			if ev.IsModify() {
 				obj.setAllProps()
-				obj.setAllThemes()
+				if GetManager().CurrentTheme.GetValue().(string) == obj.Name {
+					obj.setAllThemes()
+				}
 			}
 		case err, ok := <-obj.watcher.Error:
 			if !ok || err != nil {
