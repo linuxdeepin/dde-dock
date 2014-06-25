@@ -21,10 +21,19 @@
 
 package network
 
-import nm "dbus/org/freedesktop/networkmanager"
-import "pkg.linuxdeepin.com/lib/dbus"
-import "strings"
-import "fmt"
+import (
+	nm "dbus/org/freedesktop/networkmanager"
+	"fmt"
+	"pkg.linuxdeepin.com/lib/dbus"
+	"strings"
+)
+
+const dbusNmDest = "org.freedesktop.NetworkManager"
+
+var (
+	nmManager, _  = nm.NewManager(dbusNmDest, "/org/freedesktop/NetworkManager")
+	nmSettings, _ = nm.NewSettings(dbusNmDest, "/org/freedesktop/NetworkManager/Settings")
+)
 
 // General function wrappers for network manager
 func nmGeneralGetAllDeviceHwAddr(devType uint32) (allHwAddr map[string]string) {
@@ -103,10 +112,39 @@ func nmGeneralGetDeviceHwAddr(devPath dbus.ObjectPath) (hwAddr string, err error
 		}
 	case NM_DEVICE_TYPE_MODEM, NM_DEVICE_TYPE_ADSL:
 		// there is no hardware address for such devices
+		err = fmt.Errorf("there is no hardware address for device modem and adsl")
 	default:
-		logger.Error("unknown device type", devType)
+		err = fmt.Errorf("unknown device type %d", devType)
+		logger.Error(err)
 	}
 	hwAddr = strings.ToUpper(hwAddr)
+	return
+}
+func nmGeneralGetDeviceIdentifier(devPath dbus.ObjectPath) (devId string, err error) {
+	// get device unique identifier, use hardware address if exists
+	hwAddr, err := nmGeneralGetDeviceHwAddr(devPath)
+	if err == nil {
+		devId = hwAddr
+		return
+	}
+
+	dev, err := nmNewDevice(devPath)
+	if err != nil {
+		return
+	}
+
+	devType := dev.DeviceType.Get()
+	switch devType {
+	case NM_DEVICE_TYPE_MODEM:
+		modemPath := dev.Udi.Get()
+		devId, err = mmGetModemDeviceIdentifier(dbus.ObjectPath(modemPath))
+	case NM_DEVICE_TYPE_ADSL:
+		err = fmt.Errorf("could not get adsl device identifier now")
+		logger.Error(err)
+	default:
+		err = fmt.Errorf("unknown device type %d", devType)
+		logger.Error(err)
+	}
 	return
 }
 

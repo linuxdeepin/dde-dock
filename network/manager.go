@@ -23,10 +23,8 @@ package network
 
 import "pkg.linuxdeepin.com/lib/dbus"
 import "pkg.linuxdeepin.com/lib/dbus/property"
-import nm "dbus/org/freedesktop/networkmanager"
 
 const (
-	dbusNmDest      = "org.freedesktop.NetworkManager"
 	dbusNetworkDest = "com.deepin.daemon.Network"
 	dbusNetworkPath = "/com/deepin/daemon/Network"
 	dbusNetworkIfs  = "com.deepin.daemon.Network"
@@ -36,11 +34,6 @@ const (
 const (
 	opAdded = iota
 	opRemoved
-)
-
-var (
-	nmManager, _  = nm.NewManager(dbusNmDest, "/org/freedesktop/NetworkManager")
-	nmSettings, _ = nm.NewSettings(dbusNmDest, "/org/freedesktop/NetworkManager/Settings")
 )
 
 type connectionData map[string]map[string]dbus.Variant
