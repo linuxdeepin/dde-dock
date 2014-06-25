@@ -96,10 +96,14 @@ func (theme *Theme) updatePropSelectedItemColor(value string) {
 // SetBackgroundSourceFile setup the background source file, then
 // generate the background to fit the screen resolution, support png
 // and jpeg image format.
-func (theme *Theme) SetBackgroundSourceFile(imageFile string) {
-	go func() {
-		theme.doSetBackgroundSourceFile(imageFile)
-	}()
+func (theme *Theme) SetBackgroundSourceFile(imageFile string) (ok bool, err error) {
+	ok = graphic.IsSupportedImage(imageFile)
+	if ok {
+		go func() {
+			theme.doSetBackgroundSourceFile(imageFile)
+		}()
+	}
+	return
 }
 
 func (theme *Theme) doSetBackgroundSourceFile(imageFile string) bool {
