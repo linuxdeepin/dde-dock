@@ -46,11 +46,11 @@ type Manager struct {
 	activeConnections []*activeConnection
 	ActiveConnections string // array of connections that activated and marshaled by json
 
-	NetworkingEnabled bool          `access:"readwrite"`
-	WirelessEnabled   dbus.Property `access:"readwrite"`
-	WwanEnabled       bool          `access:"readwrite"`
-	WiredEnabled      bool          `access:"readwrite"`
-	VpnEnabled        bool          `access:"readwrite"`
+	NetworkingEnabled bool `access:"readwrite"`
+	WirelessEnabled   bool `access:"readwrite"`
+	WwanEnabled       bool `access:"readwrite"`
+	WiredEnabled      bool `access:"readwrite"`
+	VpnEnabled        bool `access:"readwrite"`
 
 	// update by manager_devices.go
 	devices      map[string][]*device
@@ -105,18 +105,23 @@ func DestroyManager(m *Manager) {
 }
 
 func (m *Manager) initManager() {
-	// load configuration
-	m.WiredEnabled = m.config.WiredEnabled
-	m.updatePropWiredEnabled()
-
-	m.VpnEnabled = m.config.VpnEnabled // TODO
-	m.updatePropVpnEnabled()
-
-	m.WirelessEnabled = property.NewWrapProperty(m, "WirelessEnabled", nmManager.WirelessEnabled)
+	// setup global switches
 	m.updatePropNetworkingEnabled()
 	nmManager.NetworkingEnabled.ConnectChanged(func() {
 		m.updatePropNetworkingEnabled()
 	})
+
+	m.updatePropWirelessEnabled()
+	nmManager.WirelessEnabled.ConnectChanged(func() {
+		m.updatePropWirelessEnabled()
+	})
+
+	// load virtual global switches information from configuration file
+	m.WiredEnabled = m.config.WiredEnabled
+	m.updatePropWiredEnabled()
+	// TODO
+	m.VpnEnabled = m.config.VpnEnabled
+	m.updatePropVpnEnabled()
 
 	m.initDeviceManage()
 	m.initConnectionManage()

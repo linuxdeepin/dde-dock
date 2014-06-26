@@ -37,20 +37,46 @@ func (m *Manager) OnPropertiesChanged(name string, oldv interface{}) {
 		if m.NetworkingEnabled != nmManager.NetworkingEnabled.Get() {
 			nmManagerEnable(m.NetworkingEnabled)
 		} else {
-			logger.Warning("NetworkingEnabled already", m.NetworkingEnabled)
+			logger.Warning("NetworkingEnabled already set as", m.NetworkingEnabled)
+		}
+	case "WirelessEnabled":
+		if m.WirelessEnabled != nmManager.WirelessEnabled.Get() {
+			nmManager.WirelessEnabled.Set(m.WirelessEnabled)
+		} else {
+			logger.Warning("WirelessEnabled already set as", m.WirelessEnabled)
 		}
 	case "WiredEnabled":
 		m.updatePropWiredEnabled()
+	case "VpnEnabled":
+		m.updatePropVpnEnabled()
 	}
 }
 
 func (m *Manager) updatePropNetworkingEnabled() {
 	m.NetworkingEnabled = nmManager.NetworkingEnabled.Get()
+
+	// TODO setup other global switches
+
 	dbus.NotifyChange(m, "NetworkingEnabled")
 }
 
+func (m *Manager) updatePropWirelessEnabled() {
+	m.WirelessEnabled = nmManager.WirelessEnabled.Get()
+
+	// TODO setup devices switches
+	for _, devPath := range nmGetSpecialDevices(NM_DEVICE_TYPE_WIFI) {
+		if m.WirelessEnabled {
+			m.restoreDeviceState(devPath)
+		} else {
+			m.EnableDevice(devPath, false)
+		}
+	}
+
+	dbus.NotifyChange(m, "WirelessEnabled")
+}
+
 func (m *Manager) updatePropWiredEnabled() {
-	// TODO
+	// setup devices switches
 	for _, devPath := range nmGetSpecialDevices(NM_DEVICE_TYPE_ETHERNET) {
 		if m.WiredEnabled {
 			m.restoreDeviceState(devPath)
