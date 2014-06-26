@@ -24,6 +24,7 @@ package bluetooth
 import (
 	"dbus/org/bluez"
 	"pkg.linuxdeepin.com/lib/dbus"
+	"time"
 )
 
 const deviceRssiNotInRange = -1000 // -1000db means device not in range
@@ -181,6 +182,7 @@ func (b *Bluetooth) ConnectDevice(dpath dbus.ObjectPath) (err error) {
 		bluezSetDeviceTrusted(dpath, true)
 		if !bluezGetDevicePaired(dpath) {
 			bluezPairDevice(dpath)
+			time.Sleep(200 * time.Millisecond)
 		}
 		bluezConnectDevice(dpath)
 	}()
