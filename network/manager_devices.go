@@ -59,6 +59,8 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device) {
 			if aconUuid, err := nmGetDeviceActiveConnectionUuid(dev.Path); err == nil {
 				m.config.setDeviceLastConnectionUuid(dev.Path, aconUuid)
 			}
+		} else {
+			m.config.setDeviceLastConnectionUuid(dev.Path, "")
 		}
 		if m.DeviceStateChanged != nil { // TODO
 			m.DeviceStateChanged(string(dev.Path), dev.State)
