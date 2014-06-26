@@ -116,6 +116,11 @@ func (m *Manager) initManager() {
 		m.updatePropWirelessEnabled()
 	})
 
+	m.updatePropWwanEnabled()
+	nmManager.WwanEnabled.ConnectChanged(func() {
+		m.updatePropWwanEnabled()
+	})
+
 	// load virtual global switches information from configuration file
 	m.WiredEnabled = m.config.WiredEnabled
 	m.updatePropWiredEnabled()
