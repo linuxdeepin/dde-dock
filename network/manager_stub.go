@@ -39,12 +39,33 @@ func (m *Manager) OnPropertiesChanged(name string, oldv interface{}) {
 		} else {
 			logger.Warning("NetworkingEnabled already", m.NetworkingEnabled)
 		}
+	case "WiredEnabled":
+		m.updatePropWiredEnabled()
 	}
 }
 
 func (m *Manager) updatePropNetworkingEnabled() {
 	m.NetworkingEnabled = nmManager.NetworkingEnabled.Get()
 	dbus.NotifyChange(m, "NetworkingEnabled")
+}
+
+func (m *Manager) updatePropWiredEnabled() {
+	// TODO
+	for _, devPath := range nmGetSpecialDevices(NM_DEVICE_TYPE_ETHERNET) {
+		if m.WiredEnabled {
+			m.restoreDeviceState(devPath)
+		} else {
+			m.EnableDevice(devPath, false)
+		}
+	}
+	m.config.setWiredEnabled(m.WiredEnabled)
+	dbus.NotifyChange(m, "WiredEnabled")
+}
+
+func (m *Manager) updatePropVpnEnabled() {
+	// TODO
+	m.config.setVpnEnabled(m.VpnEnabled)
+	dbus.NotifyChange(m, "VpnEnabled")
 }
 
 func (m *Manager) updatePropActiveConnections() {
@@ -54,7 +75,7 @@ func (m *Manager) updatePropActiveConnections() {
 }
 
 func (m *Manager) updatePropState() {
-	m.State = nmGetState()
+	m.State = nmGetManagerState()
 	dbus.NotifyChange(m, "State")
 }
 

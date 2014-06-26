@@ -65,11 +65,11 @@ type Manager struct {
 
 	// signals
 	NeedSecrets                  func(string, string, string)
-	DeviceStateChanged           func(devPath string, newState uint32)
+	DeviceStateChanged           func(devPath string, newState uint32) // TODO remove
 	AccessPointAdded             func(devPath, apJSON string)
 	AccessPointRemoved           func(devPath, apJSON string)
 	AccessPointPropertiesChanged func(devPath, apJSON string)
-	DeviceEnabled                func(enabled bool)
+	DeviceEnabled                func(devPath string, enabled bool)
 
 	agent         *Agent
 	stateNotifier *StateNotifier
@@ -105,7 +105,13 @@ func DestroyManager(m *Manager) {
 }
 
 func (m *Manager) initManager() {
-	m.WiredEnabled = true // TODO
+	// load configuration
+	m.WiredEnabled = m.config.WiredEnabled
+	m.updatePropWiredEnabled()
+
+	m.VpnEnabled = m.config.VpnEnabled // TODO
+	m.updatePropVpnEnabled()
+
 	m.WirelessEnabled = property.NewWrapProperty(m, "WirelessEnabled", nmManager.WirelessEnabled)
 	m.updatePropNetworkingEnabled()
 	nmManager.NetworkingEnabled.ConnectChanged(func() {

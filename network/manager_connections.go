@@ -147,6 +147,7 @@ func (m *Manager) removeConnection(conns []*connection, conn *connection) []*con
 	if i < 0 {
 		return conns
 	}
+	m.config.clearConnection(conns[i].Uuid)
 	copy(conns[i:], conns[i+1:])
 	conns = conns[:len(conns)-1]
 	return conns
@@ -349,14 +350,21 @@ func (m *Manager) DeactivateConnection(uuid string) (err error) {
 
 // DisconnectDevice will disconnect all connection in target device.
 func (m *Manager) DisconnectDevice(devPath dbus.ObjectPath) (err error) {
+	m.config.setDeviceLastConnectionUuid(devPath, "")
+	err = m.doDisconnectDevice(devPath)
+	return
+}
+func (m *Manager) doDisconnectDevice(devPath dbus.ObjectPath) (err error) {
 	dev, err := nmNewDevice(devPath)
 	if err != nil {
 		return
 	}
-	err = dev.Disconnect()
-	if err != nil {
-		logger.Error(err)
-		return
+	devState := dev.State.Get()
+	if isDeviceActivated(devState) {
+		err = dev.Disconnect()
+		if err != nil {
+			logger.Error(err)
+		}
 	}
 	return
 }

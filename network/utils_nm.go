@@ -350,6 +350,18 @@ func nmGetDevices() (devPaths []dbus.ObjectPath) {
 	return
 }
 
+func nmGetSpecialDevices(devType uint32) (specDevPaths []dbus.ObjectPath) {
+	for _, p := range nmGetDevices() {
+		dev, err := nmNewDevice(p)
+		if err != nil {
+			if dev.DeviceType.Get() == devType {
+				specDevPaths = append(specDevPaths, p)
+			}
+		}
+	}
+	return
+}
+
 func nmGetDeviceInterface(devPath dbus.ObjectPath) (devInterface string) {
 	dev, err := nmNewDevice(devPath)
 	if err != nil {
@@ -420,7 +432,7 @@ func nmGetAccessPoints(devPath dbus.ObjectPath) (apPaths []dbus.ObjectPath) {
 	return
 }
 
-func nmGetState() (state uint32) {
+func nmGetManagerState() (state uint32) {
 	state = nmManager.State.Get()
 	return
 }
@@ -614,6 +626,15 @@ func nmGetDHCP4Info(path dbus.ObjectPath) (ip, mask, route, dns string) {
 	if dnsData, ok := options["domain_name_servers"]; ok {
 		dns, _ = dnsData.Value().(string)
 	}
+	return
+}
+
+func nmGetDeviceState(devPath dbus.ObjectPath) (state uint32, err error) {
+	dev, err := nmNewDevice(devPath)
+	if err != nil {
+		return
+	}
+	state = dev.State.Get()
 	return
 }
 

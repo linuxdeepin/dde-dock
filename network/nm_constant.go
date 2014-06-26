@@ -58,6 +58,19 @@ const (
 	NM_DEVICE_STATE_FAILED       = 120 // The device is in a failure state following an attempt to activate it.
 )
 
+func isDeviceAvailable(state uint32) bool {
+	if state > NM_DEVICE_STATE_UNAVAILABLE {
+		return true
+	}
+	return false
+}
+func isDeviceActivated(state uint32) bool {
+	if state >= NM_DEVICE_STATE_PREPARE && state <= NM_DEVICE_STATE_ACTIVATED {
+		return true
+	}
+	return false
+}
+
 // Device state reasons
 const (
 	NM_DEVICE_STATE_REASON_UNKNOWN                        = 0

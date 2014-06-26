@@ -51,8 +51,19 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device) {
 
 	// add device config
 	m.config.addDeviceConfig(devPath)
-	nmDev.ActiveConnection.ConnectChanged(func() {
-		m.config.updateDeviceLastConnection(devPath)
+
+	// connect signal, about device state
+	dev.nmDev.ConnectStateChanged(func(newState, oldState, reason uint32) {
+		dev.State = newState
+		if isDeviceActivated(dev.State) {
+			if aconUuid, err := nmGetDeviceActiveConnectionUuid(dev.Path); err == nil {
+				m.config.setDeviceLastConnectionUuid(dev.Path, aconUuid)
+			}
+		}
+		if m.DeviceStateChanged != nil { // TODO
+			m.DeviceStateChanged(string(dev.Path), dev.State)
+			m.updatePropDevices()
+		}
 	})
 
 	// dispatch for different device types
@@ -85,15 +96,6 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device) {
 			})
 		}
 	}
-
-	// connect signal, about device state
-	dev.nmDev.ConnectStateChanged(func(newState uint32, oldState uint32, reason uint32) {
-		dev.State = newState
-		if m.DeviceStateChanged != nil {
-			m.DeviceStateChanged(string(dev.Path), newState)
-			m.updatePropDevices()
-		}
-	})
 
 	return
 }
@@ -216,12 +218,4 @@ func (m *Manager) getDeviceIndex(devs []*device, path dbus.ObjectPath) int {
 		}
 	}
 	return -1
-}
-
-// TODO
-func (m *Manager) enableDevice(devPath dbus.ObjectPath) (err error) {
-	return
-}
-func (m *Manager) disableDevice(devPath dbus.ObjectPath) (err error) {
-	return
 }
