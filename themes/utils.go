@@ -36,6 +36,7 @@ import (
 	"path"
 	dutils "pkg.linuxdeepin.com/lib/utils"
 	"strconv"
+	"strings"
 )
 
 var thumbTool = false
@@ -210,24 +211,20 @@ func genThemeThumb() {
 }
 
 func sortByDeepin(list []string) []string {
-	if !dutils.IsElementInList("Deepin", list) {
-		Logger.Infof("Deepin not exist in list: %v", list)
-		return list
-	}
+	deepinList := []string{}
+	tmpList := []string{}
 
-	l := len(list)
-	ret := make([]string, l)
-	i := 1
-
-	for _, v := range list {
-		if v == "Deepin" {
-			ret[0] = v
+	for _, l := range list {
+		t := strings.ToLower(l)
+		if strings.Contains(t, "deepin") {
+			deepinList = append(deepinList, l)
 			continue
 		}
 
-		ret[i] = v
-		i++
+		tmpList = append(tmpList, l)
 	}
 
-	return ret
+	deepinList = append(deepinList, tmpList...)
+
+	return deepinList
 }
