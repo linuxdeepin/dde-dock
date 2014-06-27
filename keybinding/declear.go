@@ -22,8 +22,8 @@
 package keybinding
 
 import (
-	"pkg.linuxdeepin.com/lib/gio-2.0"
 	"github.com/BurntSushi/xgb/xproto"
+	"pkg.linuxdeepin.com/lib/gio-2.0"
 )
 
 const (
@@ -94,6 +94,7 @@ type Manager struct {
 	idSettingsMap map[int32]*gio.Settings
 
 	KeyReleaseEvent func(string)
+	KeyPressEvent   func(string)
 }
 
 type MediaKeyManager struct {

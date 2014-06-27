@@ -332,23 +332,15 @@ func grabKeyboardAndMouse() {
 				xevent.Quit(X)
 			}).Connect(X, X.RootWin())
 
+		xevent.KeyPressFun(
+			func(X *xgbutil.XUtil, e xevent.KeyPressEvent) {
+				value := parseKeyEnvent(X, e.State, e.Detail)
+				GetManager().KeyPressEvent(value)
+			}).Connect(X, X.RootWin())
+
 		xevent.KeyReleaseFun(
 			func(X *xgbutil.XUtil, e xevent.KeyReleaseEvent) {
-				modStr := keybind.ModifierString(e.State)
-				keyStr := strings.ToLower(
-					keybind.LookupString(X,
-						e.State, e.Detail))
-				if e.Detail == 65 {
-					keyStr = "space"
-				}
-				value := ""
-				modStr = deleteSpecialMod(modStr)
-				Logger.Infof("modStr: %s, keyStr: %s", modStr, keyStr)
-				if len(modStr) > 0 {
-					value = convertModsToKeys(modStr) + "-" + keyStr
-				} else {
-					value = keyStr
-				}
+				value := parseKeyEnvent(X, e.State, e.Detail)
 				GetManager().KeyReleaseEvent(value)
 				ungrabAllMouseButton(X)
 				keybind.UngrabKeyboard(X)
@@ -424,4 +416,33 @@ func initXRecord() {
 
 func stopXRecord() {
 	C.grab_xrecord_finalize()
+}
+
+func parseKeyEnvent(X *xgbutil.XUtil, state uint16, detail xproto.Keycode) string {
+	modStr := keybind.ModifierString(state)
+	keyStr := strings.ToLower(
+		keybind.LookupString(X,
+			state, detail))
+	if detail == 65 {
+		keyStr = "space"
+	}
+
+	if keyStr == "l1" {
+		keyStr = "f11"
+	}
+
+	if keyStr == "l2" {
+		keyStr = "f12"
+	}
+
+	value := ""
+	modStr = deleteSpecialMod(modStr)
+	Logger.Infof("modStr: %s, keyStr: %s", modStr, keyStr)
+	if len(modStr) > 0 {
+		value = convertModsToKeys(modStr) + "-" + keyStr
+	} else {
+		value = keyStr
+	}
+
+	return value
 }
