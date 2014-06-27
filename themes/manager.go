@@ -28,6 +28,7 @@ import (
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/dbus/property"
 	"pkg.linuxdeepin.com/lib/glib-2.0"
+	"sort"
 )
 
 type Manager struct {
@@ -185,8 +186,15 @@ func (obj *Manager) getDThemeStrList() []string {
 	list := []string{}
 	tList := getDThemeList()
 
+	tmpList := []string{}
 	for _, l := range tList {
-		list = append(list, THEME_PATH+l.Name)
+		tmpList = append(tmpList, l.Name)
+	}
+
+	sort.Strings(tmpList)
+	tmpList = sortByDeepin(tmpList)
+	for _, l := range tmpList {
+		list = append(list, THEME_PATH+l)
 	}
 
 	return list
@@ -200,6 +208,7 @@ func (obj *Manager) getGtkStrList() []string {
 		list = append(list, l.Name)
 	}
 
+	sort.Strings(list)
 	return sortByDeepin(list)
 }
 
@@ -211,6 +220,7 @@ func (obj *Manager) getIconStrList() []string {
 		list = append(list, l.Name)
 	}
 
+	sort.Strings(list)
 	return sortByDeepin(list)
 }
 
@@ -222,7 +232,8 @@ func (obj *Manager) getSoundStrList() []string {
 		list = append(list, l.Name)
 	}
 
-	return list
+	sort.Strings(list)
+	return sortByDeepin(list)
 }
 
 func (obj *Manager) getCursorStrList() []string {
@@ -233,7 +244,8 @@ func (obj *Manager) getCursorStrList() []string {
 		list = append(list, l.Name)
 	}
 
-	return list
+	sort.Strings(list)
+	return sortByDeepin(list)
 }
 
 func (obj *Manager) getBgStrList() []string {
