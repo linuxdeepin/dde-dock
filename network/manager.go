@@ -21,8 +21,9 @@
 
 package network
 
-import "pkg.linuxdeepin.com/lib/dbus"
-import "pkg.linuxdeepin.com/lib/dbus/property"
+import (
+	"pkg.linuxdeepin.com/lib/dbus"
+)
 
 const (
 	dbusNetworkDest = "com.deepin.daemon.Network"
@@ -46,7 +47,7 @@ type Manager struct {
 	activeConnections []*activeConnection
 	ActiveConnections string // array of connections that activated and marshaled by json
 
-	NetworkingEnabled bool `access:"readwrite"`
+	NetworkingEnabled bool `access:"readwrite"` // airplane mode for NetworkManager
 	WirelessEnabled   bool `access:"readwrite"`
 	WwanEnabled       bool `access:"readwrite"`
 	WiredEnabled      bool `access:"readwrite"`
@@ -122,11 +123,8 @@ func (m *Manager) initManager() {
 	})
 
 	// load virtual global switches information from configuration file
-	m.WiredEnabled = m.config.WiredEnabled
-	m.updatePropWiredEnabled()
-	// TODO
-	m.VpnEnabled = m.config.VpnEnabled
-	m.updatePropVpnEnabled()
+	m.updatePropWiredEnabled(m.config.WiredEnabled)
+	m.updatePropVpnEnabled(m.config.VpnEnabled) // TODO
 
 	m.initDeviceManage()
 	m.initConnectionManage()

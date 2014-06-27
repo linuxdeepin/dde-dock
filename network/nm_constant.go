@@ -64,6 +64,8 @@ func isDeviceAvailable(state uint32) bool {
 	}
 	return false
 }
+
+// check if device is activating or activated
 func isDeviceActivated(state uint32) bool {
 	if state >= NM_DEVICE_STATE_PREPARE && state <= NM_DEVICE_STATE_ACTIVATED {
 		return true

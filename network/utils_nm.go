@@ -693,3 +693,29 @@ func nmManagerEnable(enable bool) (err error) {
 	}
 	return
 }
+
+func nmSetNetworkingEnabled(enabled bool) {
+	if nmManager.NetworkingEnabled.Get() == enabled {
+		nmManagerEnable(enabled)
+	} else {
+		logger.Warning("NetworkingEnabled already set as", enabled)
+	}
+	return
+}
+
+func nmSetWirelessEnabled(enabled bool) {
+	if nmManager.WirelessEnabled.Get() != enabled {
+		nmManager.WirelessEnabled.Set(enabled)
+	} else {
+		logger.Warning("WirelessEnabled already set as", enabled)
+	}
+	return
+}
+
+func nmSetWwanEnabled(enabled bool) {
+	if nmManager.WwanEnabled.Get() != enabled {
+		nmManager.WwanEnabled.Set(enabled)
+	} else {
+		logger.Warning("WwanEnabled already set as", enabled)
+	}
+}

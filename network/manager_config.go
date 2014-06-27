@@ -40,6 +40,11 @@ type config struct {
 	VpnEnabled   bool
 	Devices      map[string]*deviceConfig
 	// VpnConnections map // TODO
+
+	LastWirelessEnabled bool
+	LastWwanEnabled     bool
+	LastWiredEnabled    bool
+	LastVpnEnabled      bool
 }
 
 type deviceConfig struct {
@@ -59,6 +64,10 @@ func newConfig() (c *config) {
 	c.WiredEnabled = true
 	c.VpnEnabled = true
 	c.Devices = make(map[string]*deviceConfig)
+	c.LastWirelessEnabled = true
+	c.LastWwanEnabled = true
+	c.LastWiredEnabled = true
+	c.LastVpnEnabled = true
 	c.load()
 	return
 }
@@ -97,14 +106,48 @@ func (c *config) save() {
 	}
 }
 
+func (c *config) setLastGlobalSwithes(enabled bool) {
+	c.LastWirelessEnabled = enabled
+	c.LastWwanEnabled = enabled
+	c.LastWiredEnabled = enabled
+	c.LastVpnEnabled = enabled
+	c.save()
+}
+func (c *config) setLastWirelessEnabled(enabled bool) {
+	if c.LastWirelessEnabled != enabled {
+		c.LastWirelessEnabled = enabled
+		c.save()
+	}
+}
+func (c *config) setLastWwanEnabled(enabled bool) {
+	if c.LastWwanEnabled != enabled {
+		c.LastWwanEnabled = enabled
+		c.save()
+	}
+}
+func (c *config) setLastWiredEnabled(enabled bool) {
+	if c.LastWiredEnabled != enabled {
+		c.LastWiredEnabled = enabled
+		c.save()
+	}
+}
+func (c *config) setLastVpnEnabled(enabled bool) {
+	if c.LastVpnEnabled != enabled {
+		c.LastVpnEnabled = enabled
+		c.save()
+	}
+}
+
 func (c *config) setWiredEnabled(enabled bool) {
 	if c.WiredEnabled != enabled {
+		c.LastWiredEnabled = c.WiredEnabled
 		c.WiredEnabled = enabled
 		c.save()
 	}
 }
 func (c *config) setVpnEnabled(enabled bool) {
 	if c.VpnEnabled != enabled {
+		c.LastVpnEnabled = c.VpnEnabled
 		c.VpnEnabled = enabled
 		c.save()
 	}
