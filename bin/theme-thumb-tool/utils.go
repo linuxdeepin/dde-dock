@@ -23,9 +23,10 @@ package main
 
 import (
 	"crypto/md5"
-	dutils "pkg.linuxdeepin.com/lib/utils"
 	"io/ioutil"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 	"strconv"
+	"strings"
 )
 
 func convertMd5ByteToStr(bytes [16]byte) string {
@@ -75,4 +76,13 @@ func getFileMd5(file string) (string, bool) {
 	}
 
 	return md5Str, true
+}
+
+func isStrInList(str string, list []string) (string, bool) {
+	for _, l := range list {
+		if strings.Contains(l, str) {
+			return l, true
+		}
+	}
+	return "", false
 }

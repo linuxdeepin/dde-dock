@@ -129,7 +129,7 @@ func genIconThumbnail(info pathInfo, dest, bg string) bool {
 		return false
 	}
 
-	item1, item2, item3 := getIconTypeFile(info)
+	item1, item2, item3 := getIconFiles(info.Path)
 	if len(item1) < 1 || len(item2) < 1 || len(item3) < 1 {
 		Logger.Debug("getIconTypeFile Failed")
 		return false
