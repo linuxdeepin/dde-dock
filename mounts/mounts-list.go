@@ -22,11 +22,11 @@
 package mounts
 
 import (
+	"fmt"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
 	"pkg.linuxdeepin.com/lib/gobject-2.0"
 	"pkg.linuxdeepin.com/lib/logger"
-	"fmt"
 	"regexp"
 	"strings"
 	"sync"
@@ -237,7 +237,6 @@ func newDiskInfo(value interface{}, t string) DiskInfo {
 		info.CanUnmount = v.CanUnmount()
 		root := v.GetRoot()
 		info.MountURI = root.GetUri()
-		info.TotalCap, info.UsableCap = getDiskCap(root.GetPath())
 		if info.CanEject {
 			info.Type = "removable"
 		} else if root.IsNative() {
@@ -259,6 +258,8 @@ func newDiskInfo(value interface{}, t string) DiskInfo {
 			info.Type = "removable"
 			info.IconName = "drive-removable-media-mtp"
 		}
+
+		info.TotalCap, info.UsableCap = getDiskCap(info.Path)
 	default:
 		Logger.Errorf("'%s' invalid type", t)
 	}
