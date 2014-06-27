@@ -2,12 +2,12 @@ package datetime
 
 import (
 	"dbus/com/deepin/api/setdatetime"
+	"github.com/howeyc/fsnotify"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/dbus/property"
 	. "pkg.linuxdeepin.com/lib/gettext"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
 	"pkg.linuxdeepin.com/lib/logger"
-	"github.com/howeyc/fsnotify"
 )
 
 const (
@@ -34,7 +34,6 @@ type Manager struct {
 	Use24HourDisplay *property.GSettingsBoolProperty `access:"readwrite"`
 	CurrentTimezone  string
 	UserTimezoneList []string
-	LocaleListMap    map[string]string
 	CurrentLocale    string
 
 	LocaleStatus func(bool, string)
@@ -132,6 +131,10 @@ func (op *Manager) SetLocale(locale string) {
 	dbus.NotifyChange(op, "CurrentLocale")
 }
 
+func (m *Manager) GetLocaleList() []localeInfo {
+	return getLocaleInfoList()
+}
+
 func NewDateAndTime() *Manager {
 	m := &Manager{}
 
@@ -148,8 +151,6 @@ func NewDateAndTime() *Manager {
 	m.listenSettings()
 	m.listenZone()
 	m.AddUserTimezoneList(m.CurrentTimezone)
-	m.LocaleListMap = make(map[string]string)
-	m.LocaleListMap = localDescMap
 
 	m.ntpRunning = false
 	m.quitChan = make(chan bool)
@@ -190,7 +191,6 @@ func Start() {
 
 	Init()
 
-	initLocalDescMap()
 	initZoneInfos()
 
 	date := GetManager()

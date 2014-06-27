@@ -23,13 +23,19 @@ package datetime
 
 import (
 	"dbus/org/freedesktop/notifications"
-	. "pkg.linuxdeepin.com/lib/gettext"
-	dutils "pkg.linuxdeepin.com/lib/utils"
 	"io/ioutil"
 	"os"
 	"path"
+	. "pkg.linuxdeepin.com/lib/gettext"
+	"pkg.linuxdeepin.com/lib/glib-2.0"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 	"strings"
 )
+
+type localeInfo struct {
+	Locale string
+	Desc   string
+}
 
 const (
 	DMRC_FILE      = ".dmrc"
@@ -228,4 +234,58 @@ func sendNotify(icon, summary, body string) {
 	}
 
 	notifier.Notify(_DATE_TIME_DEST, 0, icon, summary, body, nil, nil, 0)
+}
+
+func getLocaleInfo(keyFile *glib.KeyFile, l string) (localeInfo, bool) {
+	if keyFile == nil {
+		return localeInfo{}, false
+	}
+
+	lang := os.Getenv("LANG")
+	if len(lang) < 1 {
+		lang = "en_GB"
+	} else {
+		strs := strings.Split(lang, ".")
+		if dutils.IsElementInList(strs[0], localeList) {
+			lang = strs[0]
+		} else {
+			tmps := strings.Split(strs[0], "_")
+			if dutils.IsElementInList(tmps[0], localeList) {
+				lang = tmps[0]
+			} else {
+				lang = "en_GB"
+			}
+		}
+	}
+
+	info := localeInfo{}
+	if v, err := keyFile.GetLocaleString(l, "Name", lang); err != nil {
+		return info, false
+	} else {
+		info.Locale = l
+		info.Desc = v
+		return info, true
+	}
+
+	return info, false
+}
+
+func getLocaleInfoList() (list []localeInfo) {
+	keyFile := glib.NewKeyFile()
+	defer keyFile.Free()
+	if _, err := keyFile.LoadFromFile("/usr/share/dde-daemon/lang/all_languages",
+		glib.KeyFileFlagsKeepTranslations); err != nil {
+		return list
+	}
+
+	for _, n := range localeList {
+		info, ok := getLocaleInfo(keyFile, n)
+		if !ok {
+			continue
+		}
+
+		list = append(list, info)
+	}
+
+	return
 }
