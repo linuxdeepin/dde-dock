@@ -124,7 +124,7 @@ func (m *Manager) initManager() {
 
 	// load virtual global switches information from configuration file
 	m.updatePropWiredEnabled(m.config.WiredEnabled)
-	m.updatePropVpnEnabled(m.config.VpnEnabled) // TODO
+	m.updatePropVpnEnabled(m.config.VpnEnabled)
 
 	m.initDeviceManage()
 	m.initConnectionManage()
@@ -153,11 +153,11 @@ func (m *Manager) updateActiveConnections() {
 		m.activeConnections[i] = nil
 	}
 	m.activeConnections = make([]*activeConnection, 0)
-	for _, acpath := range nmGetActiveConnections() {
-		if nmaconn, err := nmNewActiveConnection(acpath); err == nil {
+	for _, acPath := range nmGetActiveConnections() {
+		if nmaconn, err := nmNewActiveConnection(acPath); err == nil {
 			aconn := &activeConnection{
 				nmaconn: nmaconn,
-				path:    acpath,
+				path:    acPath,
 				Devices: nmaconn.Devices.Get(),
 				Uuid:    nmaconn.Uuid.Get(),
 				State:   nmaconn.State.Get(),
@@ -165,8 +165,13 @@ func (m *Manager) updateActiveConnections() {
 			}
 			nmaconn.State.ConnectChanged(func() {
 				// TODO fix dbus property issue
-				logger.Debug("state changed:", aconn.State, nmaconn.State.Get())
+				logger.Debug("active connection state changed:", aconn.State, nmaconn.State.Get())
 				aconn.State = nmaconn.State.Get()
+				if aconn.Vpn {
+					// TODO notification for vpn
+					// update vpn config
+					m.config.setVpnConnectionActivated(aconn.Uuid, isConnectionStateActivated(aconn.State))
+				}
 				m.updatePropActiveConnections()
 			})
 			m.activeConnections = append(m.activeConnections, aconn)

@@ -36,10 +36,10 @@ type config struct {
 	configFile string
 	saveLock   sync.Mutex
 
-	WiredEnabled bool
-	VpnEnabled   bool
-	Devices      map[string]*deviceConfig
-	// VpnConnections map // TODO
+	WiredEnabled   bool
+	VpnEnabled     bool
+	Devices        map[string]*deviceConfig // config for each device
+	VpnConnections map[string]*vpnConfig    // config for each vpn connection
 
 	LastWirelessEnabled bool
 	LastWwanEnabled     bool
@@ -58,12 +58,21 @@ type deviceConfig struct {
 	lastConnectionUuid string
 }
 
+type vpnConfig struct {
+	AutoConnect bool
+
+	// don't need to save activated state
+	activated     bool
+	lastActivated bool
+}
+
 func newConfig() (c *config) {
 	c = &config{}
 	c.setConfigFile(networkConfigFile)
 	c.WiredEnabled = true
 	c.VpnEnabled = true
 	c.Devices = make(map[string]*deviceConfig)
+	c.VpnConnections = make(map[string]*vpnConfig)
 	c.LastWirelessEnabled = true
 	c.LastWwanEnabled = true
 	c.LastWiredEnabled = true
@@ -76,6 +85,14 @@ func newDeviceConfig() (d *deviceConfig) {
 	d = &deviceConfig{}
 	d.Enabled = true
 	d.LastEnabled = d.Enabled
+	return
+}
+
+func newVpnConfig() (v *vpnConfig) {
+	v = &vpnConfig{}
+	v.AutoConnect = false
+	v.activated = false
+	v.lastActivated = v.activated
 	return
 }
 
@@ -153,6 +170,17 @@ func (c *config) setVpnEnabled(enabled bool) {
 	}
 }
 
+func (c *config) removeConnection(uuid string) {
+	for _, devConfig := range c.Devices {
+		if devConfig.lastConnectionUuid == uuid {
+			devConfig.lastConnectionUuid = ""
+		}
+	}
+	c.removeVpnConfig(uuid)
+	c.save()
+}
+
+// deviceConfig related functions
 func (c *config) isDeviceConfigExists(devId string) (ok bool) {
 	_, ok = c.Devices[devId]
 	return
@@ -175,8 +203,8 @@ func (c *config) addDeviceConfig(devPath dbus.ObjectPath) {
 		devConfig := newDeviceConfig()
 		devConfig.lastConnectionUuid, _ = nmGetDeviceActiveConnectionUuid(devPath)
 		c.Devices[devId] = devConfig
+		c.save()
 	}
-	c.save()
 }
 func (c *config) removeDeviceConfig(devId string) {
 	if !c.isDeviceConfigExists(devId) {
@@ -185,12 +213,10 @@ func (c *config) removeDeviceConfig(devId string) {
 	delete(c.Devices, devId)
 	c.save()
 }
-
 func (c *config) setAllDeviceLastEnabled(enabled bool) {
 	for _, devConfig := range c.Devices {
 		devConfig.LastEnabled = enabled
 	}
-	// TODO vpn
 	c.save()
 }
 func (c *config) setDeviceLastConnectionUuid(devPath dbus.ObjectPath, uuid string) {
@@ -198,26 +224,55 @@ func (c *config) setDeviceLastConnectionUuid(devPath dbus.ObjectPath, uuid strin
 	if err != nil {
 		return
 	}
-	if !c.isDeviceConfigExists(devId) {
-		logger.Errorf("device config for %s not exists", devId)
+	devConfig, err := c.getDeviceConfig(devId)
+	if err != nil {
+		return
 	}
-	devConfig, _ := c.Devices[devId]
 	if devConfig.lastConnectionUuid != uuid {
 		devConfig.lastConnectionUuid = uuid
 		c.save()
 	}
 }
 
-func (c *config) clearConnection(uuid string) {
-	for _, devConfig := range c.Devices {
-		if devConfig.lastConnectionUuid == uuid {
-			devConfig.lastConnectionUuid = ""
-		}
+// vpnConfig related functions
+func (c *config) isVpnConfigExists(uuid string) (ok bool) {
+	_, ok = c.VpnConnections[uuid]
+	return
+}
+func (c *config) getVpnConfig(uuid string) (v *vpnConfig, err error) {
+	if !c.isVpnConfigExists(uuid) {
+		err = fmt.Errorf("vpn config for %s not exists", uuid)
+		logger.Error(err)
+		return
 	}
-	// TODO vpn connections
-	c.save()
+	v, _ = c.VpnConnections[uuid]
+	return
+}
+func (c *config) addVpnConfig(uuid string) {
+	if !c.isVpnConfigExists(uuid) {
+		vpnConfig := newVpnConfig()
+		c.VpnConnections[uuid] = vpnConfig
+		c.save()
+	}
+}
+func (c *config) removeVpnConfig(uuid string) {
+	if c.isVpnConfigExists(uuid) {
+		delete(c.VpnConnections, uuid)
+		c.save()
+	}
+}
+func (c *config) setVpnConnectionActivated(uuid string, activated bool) {
+	vpnConfig, err := c.getVpnConfig(uuid)
+	if err != nil {
+		return
+	}
+	if vpnConfig.activated != activated {
+		vpnConfig.activated = activated
+		c.save()
+	}
 }
 
+// Manager related functions
 func (m *Manager) IsDeviceEnabled(devPath dbus.ObjectPath) (enabled bool, err error) {
 	devId, err := nmGeneralGetDeviceIdentifier(devPath)
 	if err != nil {
@@ -232,6 +287,18 @@ func (m *Manager) IsDeviceEnabled(devPath dbus.ObjectPath) (enabled bool, err er
 	return
 }
 
+func (m *Manager) restoreDeviceState(devPath dbus.ObjectPath) (err error) {
+	devId, err := nmGeneralGetDeviceIdentifier(devPath)
+	if err != nil {
+		return
+	}
+	devConfig, err := m.config.getDeviceConfig(devId)
+	if err != nil {
+		return
+	}
+	err = m.EnableDevice(devPath, devConfig.LastEnabled)
+	return
+}
 func (m *Manager) EnableDevice(devPath dbus.ObjectPath, enabled bool) (err error) {
 	if enabled && m.trunOnGlobalDeviceSwitchIfNeed(devPath) {
 		return
@@ -254,7 +321,7 @@ func (m *Manager) EnableDevice(devPath dbus.ObjectPath, enabled bool) (err error
 			if _, err := nmGetConnectionByUuid(devConfig.lastConnectionUuid); err == nil {
 				devState, err := nmGetDeviceState(devPath)
 				if err == nil {
-					if !isDeviceActivated(devState) {
+					if !isDeviceStateActivated(devState) {
 						err = m.ActivateConnection(devConfig.lastConnectionUuid, devPath)
 					}
 				}
@@ -273,16 +340,27 @@ func (m *Manager) EnableDevice(devPath dbus.ObjectPath, enabled bool) (err error
 	return
 }
 
-func (m *Manager) restoreDeviceState(devPath dbus.ObjectPath) (err error) {
-	devId, err := nmGeneralGetDeviceIdentifier(devPath)
+func (m *Manager) restoreVpnConnectionState(uuid string) (err error) {
+	vpnConfig, err := m.config.getVpnConfig(uuid)
 	if err != nil {
 		return
 	}
-	devConfig, err := m.config.getDeviceConfig(devId)
+	if vpnConfig.lastActivated {
+		err = m.ActivateConnection(uuid, "/")
+	} else {
+		err = m.DeactivateConnection(uuid)
+	}
+	m.config.save()
+	return
+}
+func (m *Manager) deactivateVpnConnection(uuid string) (err error) {
+	vpnConfig, err := m.config.getVpnConfig(uuid)
 	if err != nil {
 		return
 	}
-	err = m.EnableDevice(devPath, devConfig.LastEnabled)
+	vpnConfig.lastActivated = vpnConfig.activated
+	err = m.DeactivateConnection(uuid)
+	m.config.save()
 	return
 }
 

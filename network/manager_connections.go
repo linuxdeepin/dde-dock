@@ -139,6 +139,9 @@ func (m *Manager) addConnection(conns []*connection, conn *connection) []*connec
 	if m.isConnectionExists(conns, conn) {
 		return conns
 	}
+	if nmGetConnectionType(conn.Path) == NM_SETTING_VPN_SETTING_NAME {
+		m.config.addVpnConfig(conn.Uuid)
+	}
 	conns = append(conns, conn)
 	return conns
 }
@@ -147,7 +150,7 @@ func (m *Manager) removeConnection(conns []*connection, conn *connection) []*con
 	if i < 0 {
 		return conns
 	}
-	m.config.clearConnection(conns[i].Uuid)
+	m.config.removeConnection(conns[i].Uuid)
 	copy(conns[i:], conns[i+1:])
 	conns = conns[:len(conns)-1]
 	return conns
@@ -179,7 +182,7 @@ func (m *Manager) GetWiredConnectionUuid(wiredDevPath dbus.ObjectPath) (uuid str
 	// TODO check connection type, read only
 	cpath, ok := nmGetConnectionById(id)
 	if ok {
-		uuid = nmGetConnectionUuid(cpath)
+		uuid, _ = nmGetConnectionUuid(cpath)
 	} else {
 		uuid = newWiredConnection(id)
 	}
@@ -344,7 +347,9 @@ func (m *Manager) DeactivateConnection(uuid string) (err error) {
 		return
 	}
 	logger.Debug("DeactivateConnection:", uuid, apath)
-	err = nmDeactivateConnection(apath)
+	if isConnectionStateActivated(nmGetActiveConnectionState(apath)) {
+		err = nmDeactivateConnection(apath)
+	}
 	return
 }
 
@@ -355,7 +360,7 @@ func (m *Manager) DisconnectDevice(devPath dbus.ObjectPath) (err error) {
 		return
 	}
 	devState := dev.State.Get()
-	if isDeviceActivated(devState) {
+	if isDeviceStateActivated(devState) {
 		err = dev.Disconnect()
 		if err != nil {
 			logger.Error(err)

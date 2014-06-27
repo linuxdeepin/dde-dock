@@ -55,13 +55,16 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device) {
 	// connect signal, about device state
 	dev.nmDev.ConnectStateChanged(func(newState, oldState, reason uint32) {
 		dev.State = newState
-		if isDeviceActivated(dev.State) {
-			if aconUuid, err := nmGetDeviceActiveConnectionUuid(dev.Path); err == nil {
-				m.config.setDeviceLastConnectionUuid(dev.Path, aconUuid)
+
+		// update device config
+		if isDeviceStateActivated(dev.State) {
+			if aconnUuid, err := nmGetDeviceActiveConnectionUuid(dev.Path); err == nil {
+				m.config.setDeviceLastConnectionUuid(dev.Path, aconnUuid)
 			}
 		} else {
 			m.config.setDeviceLastConnectionUuid(dev.Path, "")
 		}
+
 		if m.DeviceStateChanged != nil { // TODO
 			m.DeviceStateChanged(string(dev.Path), dev.State)
 			m.updatePropDevices()

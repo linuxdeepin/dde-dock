@@ -450,6 +450,15 @@ func nmGetActiveConnectionByUuid(uuid string) (apath dbus.ObjectPath, ok bool) {
 	return
 }
 
+func nmGetActiveConnectionState(apath dbus.ObjectPath) (state uint32) {
+	aconn, err := nmNewActiveConnection(apath)
+	if err != nil {
+		return
+	}
+	state = aconn.State.Get()
+	return
+}
+
 func nmGetConnectionData(cpath dbus.ObjectPath) (data connectionData, err error) {
 	nmConn, err := nm.NewSettingsConnection(dbusNmDest, cpath)
 	if err != nil {
@@ -490,15 +499,12 @@ func nmGetConnectionId(cpath dbus.ObjectPath) (id string) {
 	return
 }
 
-func nmGetConnectionUuid(cpath dbus.ObjectPath) (uuid string) {
+func nmGetConnectionUuid(cpath dbus.ObjectPath) (uuid string, err error) {
 	data, err := nmGetConnectionData(cpath)
 	if err != nil {
 		return
 	}
 	uuid = getSettingConnectionUuid(data)
-	if len(uuid) == 0 {
-		logger.Error("get uuid of connection failed, uuid is empty")
-	}
 	return
 }
 
@@ -507,7 +513,7 @@ func nmGetConnectionType(cpath dbus.ObjectPath) (ctype string) {
 	if err != nil {
 		return
 	}
-	ctype = getCustomConnectionType(data)
+	ctype = getSettingConnectionType(data)
 	if len(ctype) == 0 {
 		logger.Error("get type of connection failed, type is empty")
 	}
@@ -519,6 +525,26 @@ func nmGetConnectionList() (connections []dbus.ObjectPath) {
 	if err != nil {
 		logger.Error(err)
 		return
+	}
+	return
+}
+
+func nmGetConnectionUuids() (uuids []string) {
+	for _, cpath := range nmGetConnectionList() {
+		if uuid, err := nmGetConnectionUuid(cpath); err == nil {
+			uuids = append(uuids, uuid)
+		}
+	}
+	return
+}
+
+func nmGetSpecialConnectionUuids(connType string) (uuids []string) {
+	for _, cpath := range nmGetConnectionList() {
+		if nmGetConnectionType(cpath) == connType {
+			if uuid, err := nmGetConnectionUuid(cpath); err == nil {
+				uuids = append(uuids, uuid)
+			}
+		}
 	}
 	return
 }

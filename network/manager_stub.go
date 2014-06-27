@@ -165,8 +165,15 @@ func (m *Manager) updatePropWiredEnabled(enabled bool) {
 }
 func (m *Manager) updatePropVpnEnabled(enabled bool) {
 	m.VpnEnabled = enabled
-	// TODO
 	m.config.setVpnEnabled(enabled)
+	// setup vpn connections
+	for _, uuid := range nmGetSpecialConnectionUuids(NM_SETTING_VPN_SETTING_NAME) {
+		if enabled {
+			m.restoreVpnConnectionState(uuid)
+		} else {
+			m.deactivateVpnConnection(uuid)
+		}
+	}
 	dbus.NotifyChange(m, "VpnEnabled")
 }
 

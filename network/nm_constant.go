@@ -58,7 +58,7 @@ const (
 	NM_DEVICE_STATE_FAILED       = 120 // The device is in a failure state following an attempt to activate it.
 )
 
-func isDeviceAvailable(state uint32) bool {
+func isDeviceStateAvailable(state uint32) bool {
 	if state > NM_DEVICE_STATE_UNAVAILABLE {
 		return true
 	}
@@ -66,7 +66,7 @@ func isDeviceAvailable(state uint32) bool {
 }
 
 // check if device is activating or activated
-func isDeviceActivated(state uint32) bool {
+func isDeviceStateActivated(state uint32) bool {
 	if state >= NM_DEVICE_STATE_PREPARE && state <= NM_DEVICE_STATE_ACTIVATED {
 		return true
 	}
@@ -210,10 +210,19 @@ const (
 const (
 	NM_ACTIVE_CONNECTION_STATE_UNKNOWN      = 0
 	NM_ACTIVE_CONNECTION_STATE_ACTIVATING   = 1
-	NM_ACTIVE_CONNECTION_STATE_ACTIVATED    = 2
+	hNM_ACTIVE_CONNECTION_STATE_ACTIVATED   = 2
 	NM_ACTIVE_CONNECTION_STATE_DEACTIVATING = 3
 	NM_ACTIVE_CONNECTION_STATE_DEACTIVATE   = 4
 )
+
+// check if connection activating or activated
+func isConnectionStateActivated(state uint32) bool {
+	if state == NM_ACTIVE_CONNECTION_STATE_ACTIVATING ||
+		state == hNM_ACTIVE_CONNECTION_STATE_ACTIVATED {
+		return true
+	}
+	return false
+}
 
 // Connection secret flags
 const (
