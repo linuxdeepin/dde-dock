@@ -56,54 +56,6 @@ func (m *Manager) setNetworkingEnabled(enabled bool) {
 	}
 	nmSetNetworkingEnabled(enabled)
 }
-func (m *Manager) setWirelessEnabled(enabled bool) {
-	m.WirelessEnabled = enabled
-	if m.NetworkingEnabled {
-		nmSetWirelessEnabled(enabled)
-	} else {
-		// if NetworkingEnabled is off, switch if on, and only keep
-		// current global device switch alive
-		m.config.setLastGlobalSwithes(false)
-		m.config.setLastWirelessEnabled(true)
-		m.setNetworkingEnabled(true)
-	}
-}
-func (m *Manager) setWwanEnabled(enabled bool) {
-	m.WwanEnabled = enabled
-	if m.NetworkingEnabled {
-		nmSetWwanEnabled(enabled)
-	} else {
-		// if NetworkingEnabled is off, switch if on, and only keep
-		// current global device switch alive
-		m.config.setLastGlobalSwithes(false)
-		m.config.setLastWwanEnabled(true)
-		m.setNetworkingEnabled(true)
-	}
-}
-func (m *Manager) setWiredEnabled(enabled bool) {
-	m.WiredEnabled = enabled
-	if m.NetworkingEnabled {
-		m.updatePropWiredEnabled(enabled)
-	} else {
-		// if NetworkingEnabled is off, switch if on, and only keep
-		// current global device switch alive
-		m.config.setLastGlobalSwithes(false)
-		m.config.setLastWiredEnabled(true)
-		m.setNetworkingEnabled(true)
-	}
-}
-func (m *Manager) setVpnEnabled(enabled bool) {
-	m.VpnEnabled = enabled
-	if m.NetworkingEnabled {
-		m.updatePropVpnEnabled(enabled)
-	} else {
-		// if NetworkingEnabled is off, switch if on, and only keep
-		// current global device switch alive
-		m.config.setLastGlobalSwithes(false)
-		m.config.setLastVpnEnabled(true)
-		m.setNetworkingEnabled(true)
-	}
-}
 func (m *Manager) restoreGlobalDeviceSwitches() {
 	nmSetWirelessEnabled(m.config.LastWirelessEnabled)
 	nmSetWwanEnabled(m.config.LastWwanEnabled)
@@ -119,6 +71,55 @@ func (m *Manager) disableGlobalDeviceSwitches() {
 
 	m.updatePropWiredEnabled(false)
 	m.updatePropVpnEnabled(false)
+}
+
+func (m *Manager) setWirelessEnabled(enabled bool) {
+	m.WirelessEnabled = enabled
+	if m.NetworkingEnabled {
+		nmSetWirelessEnabled(enabled)
+	} else {
+		// if NetworkingEnabled is off, turn it on, and only keep
+		// current global device alive
+		m.config.setLastGlobalSwithes(false)
+		m.config.setLastWirelessEnabled(true)
+		m.setNetworkingEnabled(true)
+	}
+}
+func (m *Manager) setWwanEnabled(enabled bool) {
+	m.WwanEnabled = enabled
+	if m.NetworkingEnabled {
+		nmSetWwanEnabled(enabled)
+	} else {
+		// if NetworkingEnabled is off, turn it on, and only keep
+		// current global device alive
+		m.config.setLastGlobalSwithes(false)
+		m.config.setLastWwanEnabled(true)
+		m.setNetworkingEnabled(true)
+	}
+}
+func (m *Manager) setWiredEnabled(enabled bool) {
+	m.WiredEnabled = enabled
+	if m.NetworkingEnabled {
+		m.updatePropWiredEnabled(enabled)
+	} else {
+		// if NetworkingEnabled is off, turn it on, and only keep
+		// current global device alive
+		m.config.setLastGlobalSwithes(false)
+		m.config.setLastWiredEnabled(true)
+		m.setNetworkingEnabled(true)
+	}
+}
+func (m *Manager) setVpnEnabled(enabled bool) {
+	m.VpnEnabled = enabled
+	if m.NetworkingEnabled {
+		m.updatePropVpnEnabled(enabled)
+	} else {
+		// if NetworkingEnabled is off, turn it on, and only keep
+		// current global device alive
+		m.config.setLastGlobalSwithes(false)
+		m.config.setLastVpnEnabled(true)
+		m.setNetworkingEnabled(true)
+	}
 }
 
 func (m *Manager) updatePropNetworkingEnabled() {
