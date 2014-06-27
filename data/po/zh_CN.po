@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-25 15:13+0800\n"
+"POT-Creation-Date: 2014-06-27 11:21+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME &lt;EMAIL@ADDRESS&gt;\n"
 "Language-Team: LANGUAGE &lt;LL@li.org&gt;\n"
@@ -66,1070 +66,6 @@ msgstr "消息通知"
 #: ../../datetime/datetime.go:128
 msgid "Language changing, please wait"
 msgstr "正在更改系统语言，请稍后。"
-
-#: ../../datetime/locale_map.go:9
-msgid "Afar, Djibouti"
-msgstr "阿法尔语，吉布提"
-
-#: ../../datetime/locale_map.go:10
-msgid "Afar, Eritrea"
-msgstr "阿法尔语，厄立特里亚"
-
-#: ../../datetime/locale_map.go:11
-msgid "Afar, Eritrea (Saho)"
-msgstr "阿法尔语，厄立特里亚 (萨霍)"
-
-#: ../../datetime/locale_map.go:12
-msgid "Afar, Ethiopia"
-msgstr "阿法尔语，埃塞俄比亚"
-
-#: ../../datetime/locale_map.go:13
-msgid "Afrikaans, South Africa"
-msgstr "南非荷兰语，南非"
-
-#: ../../datetime/locale_map.go:14
-msgid "Amharic, Ethiopia"
-msgstr "阿姆哈拉语，埃塞俄比亚"
-
-#: ../../datetime/locale_map.go:15
-msgid "Aragonese, Spain"
-msgstr "阿拉贡语，西班牙"
-
-#: ../../datetime/locale_map.go:16
-msgid "Arabic, United Arab Emirates"
-msgstr "阿拉伯语，阿拉伯联合酋长国"
-
-#: ../../datetime/locale_map.go:17
-msgid "Arabic, Bahrain"
-msgstr "阿拉伯语，巴林"
-
-#: ../../datetime/locale_map.go:18
-msgid "Arabic, Algeria"
-msgstr "阿拉伯语，阿尔及利亚"
-
-#: ../../datetime/locale_map.go:19
-msgid "Arabic, Egypt"
-msgstr "阿拉伯语，埃及"
-
-#: ../../datetime/locale_map.go:20
-msgid "Arabic, India"
-msgstr "阿拉伯语，印度"
-
-#: ../../datetime/locale_map.go:21
-msgid "Arabic, Iraq"
-msgstr "阿拉伯语，伊拉克"
-
-#: ../../datetime/locale_map.go:22
-msgid "Arabic, Jordan"
-msgstr "阿拉伯语，约旦"
-
-#: ../../datetime/locale_map.go:23
-msgid "Arabic, Kuwait"
-msgstr "阿拉伯语，科威特"
-
-#: ../../datetime/locale_map.go:24
-msgid "Arabic, Lebanon"
-msgstr "阿拉伯语，黎巴嫩"
-
-#: ../../datetime/locale_map.go:25
-msgid "Arabic, Libya"
-msgstr "阿拉伯语，利比亚"
-
-#: ../../datetime/locale_map.go:26
-msgid "Arabic, Morocco"
-msgstr "阿拉伯语，摩洛哥"
-
-#: ../../datetime/locale_map.go:27
-msgid "Arabic, Oman"
-msgstr "阿拉伯语，阿曼"
-
-#: ../../datetime/locale_map.go:28
-msgid "Arabic, Qatar"
-msgstr "阿拉伯语，卡塔尔"
-
-#: ../../datetime/locale_map.go:29
-msgid "Arabic, Saudi Arabia"
-msgstr "阿拉伯语，沙特阿拉伯"
-
-#: ../../datetime/locale_map.go:30
-msgid "Arabic, Sudan"
-msgstr "阿拉伯语，苏丹"
-
-#: ../../datetime/locale_map.go:31
-msgid "Arabic, Syria"
-msgstr "阿拉伯语，叙利亚"
-
-#: ../../datetime/locale_map.go:32
-msgid "Arabic, Tunisia"
-msgstr "阿拉伯语，突尼斯"
-
-#: ../../datetime/locale_map.go:33
-msgid "Arabic, Yemen"
-msgstr "阿拉伯语，也门"
-
-#: ../../datetime/locale_map.go:34
-msgid "Assamese, India"
-msgstr "阿萨姆语，印度"
-
-#: ../../datetime/locale_map.go:35
-msgid "Asturian, Spain"
-msgstr "阿斯图里亚斯语，西班牙"
-
-#: ../../datetime/locale_map.go:36
-msgid "Azeri, Azerbaijan"
-msgstr "阿塞拜疆语 ，阿塞拜疆"
-
-#: ../../datetime/locale_map.go:37 ../../datetime/locale_map.go:38
-msgid "Belarusian, Belarus"
-msgstr "白俄罗斯文 ，白俄罗斯"
-
-#: ../../datetime/locale_map.go:39
-msgid "Bemba, Zambia"
-msgstr "本巴语，赞比亚"
-
-#: ../../datetime/locale_map.go:40
-msgid "Amazigh, Algeria"
-msgstr "柏柏尔语，阿尔及利亚"
-
-#: ../../datetime/locale_map.go:41
-msgid "Amazigh, Morocco"
-msgstr "柏柏尔语，摩洛哥"
-
-#: ../../datetime/locale_map.go:42
-msgid "Bulgarian, Bulgaria"
-msgstr "保加利亚语，保加利亚"
-
-#: ../../datetime/locale_map.go:43
-msgid "Bhojpuri, India"
-msgstr "比哈尔语，印度"
-
-#: ../../datetime/locale_map.go:44
-msgid "Bengali, Bangladesh"
-msgstr "孟加拉语，孟加拉"
-
-#: ../../datetime/locale_map.go:45
-msgid "Bengali, India"
-msgstr "孟加拉语，印度"
-
-#: ../../datetime/locale_map.go:46
-msgid "Tibetan, China"
-msgstr "藏语，中国"
-
-#: ../../datetime/locale_map.go:47
-msgid "Tibetan, India"
-msgstr "藏语，印度"
-
-#: ../../datetime/locale_map.go:48
-msgid "Breton, France"
-msgstr "布列塔尼语，法国"
-
-#: ../../datetime/locale_map.go:49
-msgid "Bodo, India"
-msgstr "博多语，印度"
-
-#: ../../datetime/locale_map.go:50
-msgid "Bosnian, Bosnia and Herzegowina"
-msgstr "波斯尼亚语，波斯尼亚和黑塞哥维那"
-
-#: ../../datetime/locale_map.go:51
-msgid "Blin, Eritrea"
-msgstr "比林语，厄立特里亚"
-
-#: ../../datetime/locale_map.go:52
-msgid "Catalan, Andorra "
-msgstr "加泰罗尼亚语，安道尔 "
-
-#: ../../datetime/locale_map.go:53
-msgid "Catalan, Spain"
-msgstr "加泰罗尼亚语，西班牙"
-
-#: ../../datetime/locale_map.go:54
-msgid "Catalan, France "
-msgstr "加泰罗尼亚语，法国 "
-
-#: ../../datetime/locale_map.go:55
-msgid "Catalan, Italy"
-msgstr "加泰罗尼亚语，意大利"
-
-#: ../../datetime/locale_map.go:56
-msgid "Crimean Tatar, Ukraine"
-msgstr "克里米亚鞑靼语，乌克兰"
-
-#: ../../datetime/locale_map.go:57
-msgid "Kashubian, Poland"
-msgstr "卡舒比语，波兰"
-
-#: ../../datetime/locale_map.go:58
-msgid "Czech, Czech Republic"
-msgstr "捷克语，捷克共和国"
-
-#: ../../datetime/locale_map.go:59
-msgid "Chuvash, Russia"
-msgstr "楚瓦什语，俄罗斯"
-
-#: ../../datetime/locale_map.go:60
-msgid "Welsh, United Kingdom"
-msgstr "威尔士语，英国"
-
-#: ../../datetime/locale_map.go:61
-msgid "Danish, Denmark"
-msgstr "丹麦语，丹麦"
-
-#: ../../datetime/locale_map.go:62
-msgid "German, Austria"
-msgstr "德语，奥地利"
-
-#: ../../datetime/locale_map.go:63
-msgid "German, Belgium"
-msgstr "德语，比利时"
-
-#: ../../datetime/locale_map.go:64
-msgid "German, Switzerland"
-msgstr "德语，瑞士"
-
-#: ../../datetime/locale_map.go:65
-msgid "German, Germany"
-msgstr "德语，德国"
-
-#: ../../datetime/locale_map.go:66
-msgid "German, Liechtenstein"
-msgstr "德语，列支敦士登"
-
-#: ../../datetime/locale_map.go:67
-msgid "German, Luxemburg"
-msgstr "德语，卢森堡"
-
-#: ../../datetime/locale_map.go:68
-msgid "Dhivehi, Maldives"
-msgstr "迪维希语，马尔代夫"
-
-#: ../../datetime/locale_map.go:69
-msgid "Dzongkha, Bhutan"
-msgstr "宗卡语，不丹"
-
-#: ../../datetime/locale_map.go:70
-msgid "Greek, Cyprus"
-msgstr "希腊语，塞浦路斯"
-
-#: ../../datetime/locale_map.go:71
-msgid "Greek, Greece"
-msgstr "希腊语，希腊"
-
-#: ../../datetime/locale_map.go:72
-msgid "English, Antigua and Barbuda"
-msgstr "英语，安地卡及巴布达"
-
-#: ../../datetime/locale_map.go:73
-msgid "English, Australia"
-msgstr "英语，澳大利亚"
-
-#: ../../datetime/locale_map.go:74
-msgid "English, Botswana"
-msgstr "英语，博茨瓦纳"
-
-#: ../../datetime/locale_map.go:75
-msgid "English, Canada"
-msgstr "英语，加拿大"
-
-#: ../../datetime/locale_map.go:76
-msgid "English, Denmark"
-msgstr "英语，丹麦"
-
-#: ../../datetime/locale_map.go:77
-msgid "English, United Kingdom"
-msgstr "英语，英国"
-
-#: ../../datetime/locale_map.go:78
-msgid "English, Hong Kong"
-msgstr "英语，香港"
-
-#: ../../datetime/locale_map.go:79
-msgid "English, Ireland"
-msgstr "英语，爱尔兰"
-
-#: ../../datetime/locale_map.go:80
-msgid "English, India"
-msgstr "英语，印度"
-
-#: ../../datetime/locale_map.go:81
-msgid "English, Nigeria"
-msgstr "英语，利日尼亚"
-
-#: ../../datetime/locale_map.go:82
-msgid "English, New Zealand"
-msgstr "英语，新西兰"
-
-#: ../../datetime/locale_map.go:83
-msgid "English, Philippines"
-msgstr "英语，菲律宾"
-
-#: ../../datetime/locale_map.go:84
-msgid "English, Singapore"
-msgstr "英语，新加坡"
-
-#: ../../datetime/locale_map.go:85
-msgid "English, United States"
-msgstr "英语，美国"
-
-#: ../../datetime/locale_map.go:86
-msgid "English, South Africa"
-msgstr "英语，南非"
-
-#: ../../datetime/locale_map.go:87
-msgid "English, Zambia"
-msgstr "英语，赞比亚"
-
-#: ../../datetime/locale_map.go:88
-msgid "English, Zimbabwe"
-msgstr "英语，津巴布韦"
-
-#: ../../datetime/locale_map.go:89
-msgid "Esperanto"
-msgstr "世界语"
-
-#: ../../datetime/locale_map.go:90
-msgid "Esperanto, United States"
-msgstr "世界语，美国"
-
-#: ../../datetime/locale_map.go:91
-msgid "Spanish, Argentina"
-msgstr "西班牙语，阿根廷"
-
-#: ../../datetime/locale_map.go:92
-msgid "Spanish, Bolivia"
-msgstr "西班牙语，玻利维亚"
-
-#: ../../datetime/locale_map.go:93
-msgid "Spanish, Chile"
-msgstr "西班牙语，智利"
-
-#: ../../datetime/locale_map.go:94
-msgid "Spanish, Colombia"
-msgstr "西班牙语，哥伦比亚"
-
-#: ../../datetime/locale_map.go:95
-msgid "Spanish, Costa Rica"
-msgstr "西班牙语，哥斯达黎加"
-
-#: ../../datetime/locale_map.go:96
-msgid "Spanish, Cuba"
-msgstr "西班牙语，古巴"
-
-#: ../../datetime/locale_map.go:97
-msgid "Spanish, Dominican Republic"
-msgstr "西班牙语，多米尼加共和国"
-
-#: ../../datetime/locale_map.go:98
-msgid "Spanish, Ecuador"
-msgstr "西班牙语，厄瓜多尔"
-
-#: ../../datetime/locale_map.go:99
-msgid "Spanish, Spain"
-msgstr "西班牙语，西班牙"
-
-#: ../../datetime/locale_map.go:100
-msgid "Spanish, Guatemala"
-msgstr "西班牙语，危地马拉"
-
-#: ../../datetime/locale_map.go:101
-msgid "Spanish, Honduras"
-msgstr "西班牙语，洪都拉斯"
-
-#: ../../datetime/locale_map.go:102
-msgid "Spanish, Mexico"
-msgstr "西班牙语，墨西哥"
-
-#: ../../datetime/locale_map.go:103
-msgid "Spanish, Nicaragua"
-msgstr "西班牙语，尼加拉瓜"
-
-#: ../../datetime/locale_map.go:104
-msgid "Spanish, Panama"
-msgstr "西班牙语，巴拿马"
-
-#: ../../datetime/locale_map.go:105
-msgid "Spanish, Peru"
-msgstr "西班牙语，秘鲁"
-
-#: ../../datetime/locale_map.go:106
-msgid "Spanish, Puerto Rico"
-msgstr "西班牙语，波多黎各"
-
-#: ../../datetime/locale_map.go:107
-msgid "Spanish, Paraguay"
-msgstr "西班牙语，巴拉圭"
-
-#: ../../datetime/locale_map.go:108
-msgid "Spanish, El Salvador"
-msgstr "西班牙语，萨尔瓦多"
-
-#: ../../datetime/locale_map.go:109
-msgid "Spanish, United States"
-msgstr "西班牙语，美国"
-
-#: ../../datetime/locale_map.go:110
-msgid "Spanish, Uruguay"
-msgstr "西班牙语，乌拉圭"
-
-#: ../../datetime/locale_map.go:111
-msgid "Spanish, Venezuela"
-msgstr "西班牙语，委内瑞拉"
-
-#: ../../datetime/locale_map.go:112
-msgid "Estonian, Estonia"
-msgstr "爱沙尼亚语，爱沙尼亚"
-
-#: ../../datetime/locale_map.go:113
-msgid "Basque, Spain"
-msgstr "巴斯克语，西班牙"
-
-#: ../../datetime/locale_map.go:114
-msgid "Basque, France"
-msgstr "巴斯克语，法国"
-
-#: ../../datetime/locale_map.go:115
-msgid "Persian, Iran"
-msgstr "波斯语，伊朗"
-
-#: ../../datetime/locale_map.go:116
-msgid "Fulah, Senegal"
-msgstr "富拉赫语，塞内加尔"
-
-#: ../../datetime/locale_map.go:117
-msgid "Finnish, Finland"
-msgstr "芬兰语，芬兰"
-
-#: ../../datetime/locale_map.go:118
-msgid "Filipino, Philippines"
-msgstr "菲律宾语，菲律宾"
-
-#: ../../datetime/locale_map.go:119
-msgid "Faroese, Faroe Islands"
-msgstr "法罗语，法罗群岛"
-
-#: ../../datetime/locale_map.go:120
-msgid "French, Belgium"
-msgstr "法语，比利时"
-
-#: ../../datetime/locale_map.go:121
-msgid "French, Canada"
-msgstr "法语，加拿大"
-
-#: ../../datetime/locale_map.go:122
-msgid "French, Switzerland"
-msgstr "法语，瑞士"
-
-#: ../../datetime/locale_map.go:123
-msgid "French, France"
-msgstr "法语，法国"
-
-#: ../../datetime/locale_map.go:124
-msgid "French, Luxemburg"
-msgstr "法语，卢森堡"
-
-#: ../../datetime/locale_map.go:125
-msgid "Furlan, Italy"
-msgstr "弗留利语，意大利"
-
-#: ../../datetime/locale_map.go:126
-msgid "Frisian, Germany"
-msgstr "弗里斯兰语，德国"
-
-#: ../../datetime/locale_map.go:127
-msgid "Frisian, the Netherlands"
-msgstr "弗里斯兰语，荷兰"
-
-#: ../../datetime/locale_map.go:128
-msgid "Irish, Ireland"
-msgstr "爱尔兰语，爱尔兰"
-
-#: ../../datetime/locale_map.go:129
-msgid "Gaelic, United Kingdom"
-msgstr "盖尔语，英国"
-
-#: ../../datetime/locale_map.go:130
-msgid "Ge'ez, Eritrea (Abegede)"
-msgstr "吉兹语，厄立特里亚国(带元音附标文字)"
-
-#: ../../datetime/locale_map.go:131
-msgid "Ge'ez, Eritrea"
-msgstr "吉兹语，厄立特里亚国"
-
-#: ../../datetime/locale_map.go:132
-msgid "Ge'ez, Ethiopia (Abegede)"
-msgstr "吉兹语，埃塞俄比亚(带元音附标文字)"
-
-#: ../../datetime/locale_map.go:133
-msgid "Ge'ez, Ethiopia"
-msgstr "吉兹语，埃塞俄比亚"
-
-#: ../../datetime/locale_map.go:134
-msgid "Galician, Spain"
-msgstr "加里西亚语，西班牙"
-
-#: ../../datetime/locale_map.go:135
-msgid "Gujarati, India"
-msgstr "古吉拉特语，印度"
-
-#: ../../datetime/locale_map.go:136
-msgid "Manx, United Kingdom"
-msgstr "马恩岛语，英国"
-
-#: ../../datetime/locale_map.go:137
-msgid "Hausa, Nigeria"
-msgstr "豪萨语，尼日利亚"
-
-#: ../../datetime/locale_map.go:138 ../../datetime/locale_map.go:154
-msgid "Hebrew, Israel"
-msgstr "希伯来语，以色列"
-
-#: ../../datetime/locale_map.go:139
-msgid "Hindi, India"
-msgstr "北印度语，印度"
-
-#: ../../datetime/locale_map.go:140
-msgid "Chhattisgarhi, India"
-msgstr "恰蒂斯加尔语，印度"
-
-#: ../../datetime/locale_map.go:141
-msgid "Croatian, Croatia"
-msgstr "克罗地亚语，克罗地亚"
-
-#: ../../datetime/locale_map.go:142
-msgid "Upper Sorbian, Germany"
-msgstr "上索布语，德国"
-
-#: ../../datetime/locale_map.go:143
-msgid "Kreyol, Haiti"
-msgstr "克里奥尔语，海地"
-
-#: ../../datetime/locale_map.go:144
-msgid "Hungarian, Hungary"
-msgstr "匈牙利语，匈牙利"
-
-#: ../../datetime/locale_map.go:145
-msgid "Armenian, Armenia"
-msgstr "亚美尼亚语，亚美尼亚"
-
-#: ../../datetime/locale_map.go:146
-msgid "Interlingua"
-msgstr "国际语"
-
-#: ../../datetime/locale_map.go:147
-msgid "Indonesian, Indonesia"
-msgstr "印度尼西亚语，印度尼西亚"
-
-#: ../../datetime/locale_map.go:148
-msgid "Igbo, Nigeria"
-msgstr "伊博语，尼日利亚"
-
-#: ../../datetime/locale_map.go:149
-msgid "Inupiaq, Canada"
-msgstr "伊努皮克语加拿大"
-
-#: ../../datetime/locale_map.go:150
-msgid "Icelandic, Iceland"
-msgstr "冰岛语，冰岛"
-
-#: ../../datetime/locale_map.go:151
-msgid "Italian, Switzerland"
-msgstr "意大利语，瑞士"
-
-#: ../../datetime/locale_map.go:152
-msgid "Italian, Italy"
-msgstr "意大利语，意大利"
-
-#: ../../datetime/locale_map.go:153
-msgid "Inuktitut, Canada"
-msgstr "因纽特语，加拿大"
-
-#: ../../datetime/locale_map.go:155
-msgid "Japanese, Japan"
-msgstr "日语，日本"
-
-#: ../../datetime/locale_map.go:156
-msgid "Georgian, Georgia"
-msgstr "格鲁吉亚语，格鲁吉亚"
-
-#: ../../datetime/locale_map.go:157
-msgid "Kazakh, Kazakhstan"
-msgstr "哈萨克语，哈萨克斯坦"
-
-#: ../../datetime/locale_map.go:158
-msgid "Greenlandic, Greenland"
-msgstr "格陵兰语，格陵兰"
-
-#: ../../datetime/locale_map.go:159
-msgid "Khmer, Cambodia"
-msgstr "高棉语，柬埔寨"
-
-#: ../../datetime/locale_map.go:160
-msgid "Kannada, India"
-msgstr "坎那达语，印度"
-
-#: ../../datetime/locale_map.go:161
-msgid "Konkani, India"
-msgstr "贡根语，印度"
-
-#: ../../datetime/locale_map.go:162
-msgid "Korean, Republic of Korea"
-msgstr "韩语，韩国"
-
-#: ../../datetime/locale_map.go:163
-msgid "Kashmiri, India (devanagari)"
-msgstr "克什米尔语，印度（天城体）"
-
-#: ../../datetime/locale_map.go:164
-msgid "Kashmiri, India"
-msgstr "克什米尔语，印度"
-
-#: ../../datetime/locale_map.go:165
-msgid "Kurdish, Turkey"
-msgstr "库尔德语，土耳其"
-
-#: ../../datetime/locale_map.go:166
-msgid "Cornish, United Kingdom"
-msgstr "凯尔特语，英国"
-
-#: ../../datetime/locale_map.go:167
-msgid "Kyrgyz, Kyrgyzstan"
-msgstr "吉尔吉斯坦语，吉尔吉斯坦"
-
-#: ../../datetime/locale_map.go:168
-msgid "Luxembourgish, Luxembourg"
-msgstr "卢森堡语，卢森堡"
-
-#: ../../datetime/locale_map.go:169
-msgid "Luganda, Uganda"
-msgstr "卢干达语，乌干达"
-
-#: ../../datetime/locale_map.go:170
-msgid "Limburgish, Belgium"
-msgstr "卢森堡语，比利时"
-
-#: ../../datetime/locale_map.go:171
-msgid "Ligurian, Italy"
-msgstr "利古里亚语，意大利"
-
-#: ../../datetime/locale_map.go:172
-msgid "Limburgish, the Netherlands"
-msgstr "卢森堡语，荷兰"
-
-#: ../../datetime/locale_map.go:173
-msgid "Lao, Laos"
-msgstr "老挝语，老挝"
-
-#: ../../datetime/locale_map.go:174
-msgid "Lithuanian, Lithuania"
-msgstr "立陶宛语，立陶宛 "
-
-#: ../../datetime/locale_map.go:175
-msgid "Latvian, Latvia"
-msgstr "拉脱维亚语，拉脱维亚"
-
-#: ../../datetime/locale_map.go:176
-msgid "Maithili, India"
-msgstr "迈蒂利语，印度"
-
-#: ../../datetime/locale_map.go:177
-msgid "Malagasy, Madagascar"
-msgstr "马达加斯加语，马达加斯加"
-
-#: ../../datetime/locale_map.go:178
-msgid "Mari, Russia"
-msgstr "马里语，俄罗斯"
-
-#: ../../datetime/locale_map.go:179
-msgid "Maori, New Zealand"
-msgstr "毛利语，新西兰"
-
-#: ../../datetime/locale_map.go:180
-msgid "Macedonian, Macedonia"
-msgstr "马其顿语，马其顿"
-
-#: ../../datetime/locale_map.go:181
-msgid "Malayalam, India"
-msgstr "马拉雅拉姆语，印度"
-
-#: ../../datetime/locale_map.go:182
-msgid "Mongolian, Mongolia"
-msgstr "蒙古语，蒙古"
-
-#: ../../datetime/locale_map.go:183
-msgid "Marathi, India"
-msgstr "马拉地语，印度"
-
-#: ../../datetime/locale_map.go:184
-msgid "Malay, Malaysia"
-msgstr "马来语，马来西亚"
-
-#: ../../datetime/locale_map.go:185
-msgid "Maltese, Malta"
-msgstr "马耳他语，马耳他"
-
-#: ../../datetime/locale_map.go:186
-msgid "Burmese, Myanmar"
-msgstr "缅甸语，缅甸"
-
-#: ../../datetime/locale_map.go:187
-msgid "Chinese, Taiwan (Minnan dialect, Latin alphabet)"
-msgstr "中文，台湾（闽南方言，拉丁字母）"
-
-#: ../../datetime/locale_map.go:188
-msgid "Norwegian Bokmal, Norway"
-msgstr "书面挪威语，挪威"
-
-#: ../../datetime/locale_map.go:189
-msgid "Low German, Germany"
-msgstr "低地德语，德国"
-
-#: ../../datetime/locale_map.go:190
-msgid "Low German, the Netherlands"
-msgstr "低地德语，荷兰"
-
-#: ../../datetime/locale_map.go:191
-msgid "Nepali, Nepal"
-msgstr "尼泊尔语，尼泊尔"
-
-#: ../../datetime/locale_map.go:192
-msgid "Dutch, Aruba"
-msgstr "荷兰语，阿鲁巴岛"
-
-#: ../../datetime/locale_map.go:193
-msgid "Dutch, Belgium"
-msgstr "荷兰语，比利时"
-
-#: ../../datetime/locale_map.go:194
-msgid "Dutch, the Netherlands"
-msgstr "荷兰，荷兰语"
-
-#: ../../datetime/locale_map.go:195
-msgid "Nynorsk, Norway"
-msgstr "尼诺斯克语，挪威"
-
-#: ../../datetime/locale_map.go:196
-msgid "Southern Ndebele, South Africa"
-msgstr "南部恩德贝勒语，南非"
-
-#: ../../datetime/locale_map.go:197
-msgid "Northern Sotho, South Africa"
-msgstr "北索托语，南非"
-
-#: ../../datetime/locale_map.go:198
-msgid "Occitan, France"
-msgstr "奥克西唐语，法国"
-
-#: ../../datetime/locale_map.go:199
-msgid "Oromo, Ethiopia"
-msgstr "奥罗莫语，埃塞俄比亚"
-
-#: ../../datetime/locale_map.go:200
-msgid "Oromo, Kenya"
-msgstr "奥罗莫语，肯尼亚"
-
-#: ../../datetime/locale_map.go:201
-msgid "Oriya, India"
-msgstr "奥里雅语，印度"
-
-#: ../../datetime/locale_map.go:202
-msgid "Ossetian, Russia"
-msgstr "奥塞特语，俄罗斯"
-
-#: ../../datetime/locale_map.go:203
-msgid "Punjabi, India"
-msgstr "旁遮普语，印度"
-
-#: ../../datetime/locale_map.go:204
-msgid "Papiamento, Antilles"
-msgstr "帕皮阿门托语，安的列斯群岛"
-
-#: ../../datetime/locale_map.go:205
-msgid "Punjabi, Pakistan"
-msgstr "旁遮普语，巴基斯坦"
-
-#: ../../datetime/locale_map.go:206
-msgid "Polish, Poland"
-msgstr "波兰语，波兰"
-
-#: ../../datetime/locale_map.go:207
-msgid "Portuguese, Brasil"
-msgstr "葡萄牙语，巴西"
-
-#: ../../datetime/locale_map.go:208
-msgid "Portuguese, Portugal"
-msgstr "葡萄牙语，葡萄牙"
-
-#: ../../datetime/locale_map.go:209
-msgid "Romanian, Romania"
-msgstr "罗马尼亚语，罗马尼亚"
-
-#: ../../datetime/locale_map.go:210
-msgid "Russian, Russia"
-msgstr "俄语，俄罗斯"
-
-#: ../../datetime/locale_map.go:211
-msgid "Russian, Ukraine"
-msgstr "俄语，乌克兰"
-
-#: ../../datetime/locale_map.go:212
-msgid "Kinyarwanda, Rwanda"
-msgstr "卢旺达语，卢旺达"
-
-#: ../../datetime/locale_map.go:213
-msgid "Sanskrit, India"
-msgstr "梵文，印度"
-
-#: ../../datetime/locale_map.go:214
-msgid "Sardinian, Italy"
-msgstr "撒丁语，意大利"
-
-#: ../../datetime/locale_map.go:215 ../../datetime/locale_map.go:216
-msgid "Sindhi, India"
-msgstr "信德语，印度"
-
-#: ../../datetime/locale_map.go:217
-msgid "Sindhi, Pakistan"
-msgstr "信德语，巴基斯坦"
-
-#: ../../datetime/locale_map.go:218
-msgid "Northern Sami, Norway"
-msgstr "北方萨米语，挪威"
-
-#: ../../datetime/locale_map.go:219
-msgid "Secwepemctsin, Canada"
-msgstr "萨利什诸语言,加拿大"
-
-#: ../../datetime/locale_map.go:220
-msgid "Sidama, Ethiopia."
-msgstr "Sidama, 埃塞俄比亚"
-
-#: ../../datetime/locale_map.go:221
-msgid "Sinhala, Sri Lanka"
-msgstr "僧伽罗语，斯里兰卡"
-
-#: ../../datetime/locale_map.go:222
-msgid "Slovak, Slovak"
-msgstr "斯洛伐克语，斯洛伐克"
-
-#: ../../datetime/locale_map.go:223
-msgid "Slovenian, Slovenia"
-msgstr "斯洛维尼亚语，斯洛维尼亚"
-
-#: ../../datetime/locale_map.go:224
-msgid "Somali, Djibouti."
-msgstr "索马里语，吉布提"
-
-#: ../../datetime/locale_map.go:225
-msgid "Somali, Ethiopia"
-msgstr "索马里语，埃塞俄比亚"
-
-#: ../../datetime/locale_map.go:226
-msgid "Somali, Kenya"
-msgstr "索马里语，肯尼亚"
-
-#: ../../datetime/locale_map.go:227
-msgid "Somali, Somalia"
-msgstr "索马里语，索马里"
-
-#: ../../datetime/locale_map.go:228
-msgid "Albanian, Albania"
-msgstr "阿尔巴尼亚语，阿尔巴尼亚"
-
-#: ../../datetime/locale_map.go:229
-msgid "Albanian, Macedonia"
-msgstr "阿尔巴尼亚语，马其顿"
-
-#: ../../datetime/locale_map.go:230
-msgid "Serbian, Montenegro"
-msgstr "塞尔维亚语，黑山共和国"
-
-#: ../../datetime/locale_map.go:231
-msgid "Serbian, Serbia (Latin)"
-msgstr "塞尔维亚语，塞尔维亚（拉丁语）"
-
-#: ../../datetime/locale_map.go:232
-msgid "Serbian, Serbia"
-msgstr "塞尔维亚语，塞尔维亚"
-
-#: ../../datetime/locale_map.go:233
-msgid "Swati, South Africa"
-msgstr "Swati南非"
-
-#: ../../datetime/locale_map.go:234
-msgid "Sotho, South Africa"
-msgstr "梭托语，南非"
-
-#: ../../datetime/locale_map.go:235
-msgid "Swedish, Finland"
-msgstr "瑞典语，芬兰"
-
-#: ../../datetime/locale_map.go:236
-msgid "Swedish, Sweden"
-msgstr "瑞典语，瑞典"
-
-#: ../../datetime/locale_map.go:237
-msgid "Swahili, Kenya"
-msgstr "斯瓦希里语，肯尼亚"
-
-#: ../../datetime/locale_map.go:238
-msgid "Swahili, Tanzania"
-msgstr "斯瓦希里语，坦桑尼亚"
-
-#: ../../datetime/locale_map.go:239
-msgid "Tamil, India"
-msgstr "泰米尔语，印度"
-
-#: ../../datetime/locale_map.go:240
-msgid "Tamil, Sri Lanka"
-msgstr "泰米尔语，斯里兰卡"
-
-#: ../../datetime/locale_map.go:241
-msgid "Telugu, India"
-msgstr "泰卢固语，印度"
-
-#: ../../datetime/locale_map.go:242
-msgid "Tajik, Tajikistan"
-msgstr "塔吉克语，塔吉克斯坦"
-
-#: ../../datetime/locale_map.go:243
-msgid "Thai, Thailand"
-msgstr "泰国语，泰国"
-
-#: ../../datetime/locale_map.go:244
-msgid "Tigrigna, Eritrea."
-msgstr "提松雷语，厄立特里亚"
-
-#: ../../datetime/locale_map.go:245
-msgid "Tigrigna, Ethiopia."
-msgstr "提松雷语，埃塞俄比亚"
-
-#: ../../datetime/locale_map.go:246
-msgid "Tigre, Eritrea"
-msgstr "蒂格雷语，厄立特里亚"
-
-#: ../../datetime/locale_map.go:247
-msgid "Turkmen, Turkmenistan"
-msgstr "土库曼语，土库曼斯坦"
-
-#: ../../datetime/locale_map.go:248
-msgid "Tagalog, Philippines"
-msgstr "塔加拉族语，菲律宾"
-
-#: ../../datetime/locale_map.go:249
-msgid "Tswana, South Africa"
-msgstr "茨瓦纳语，南非"
-
-#: ../../datetime/locale_map.go:250
-msgid "Turkish, Cyprus"
-msgstr "土耳其语，塞浦路斯"
-
-#: ../../datetime/locale_map.go:251
-msgid "Turkish, Turkey"
-msgstr "土耳其语，土耳其"
-
-#: ../../datetime/locale_map.go:252
-msgid "Tsonga, South Africa"
-msgstr "聪加语，南非"
-
-#: ../../datetime/locale_map.go:253
-msgid "Tatar, Russia (IQTElif alphabet)"
-msgstr "鞑靼语，俄罗斯(IQTElif alphabet)"
-
-#: ../../datetime/locale_map.go:254
-msgid "Tatar, Russia"
-msgstr "鞑靼语，俄罗斯"
-
-#: ../../datetime/locale_map.go:255
-msgid "Uyghur, China (Latin alphabet)"
-msgstr "维吾尔语，中国（拉丁字母）"
-
-#: ../../datetime/locale_map.go:256
-msgid "Uyghur, China"
-msgstr "维吾尔语，中国"
-
-#: ../../datetime/locale_map.go:257
-msgid "Ukrainian, Ukraine"
-msgstr "乌克兰语，乌克兰"
-
-#: ../../datetime/locale_map.go:258
-msgid "Unami Delaware, United States"
-msgstr "Unami Delaware，美国"
-
-#: ../../datetime/locale_map.go:259
-msgid "Urdu, India"
-msgstr "乌尔都语，印度"
-
-#: ../../datetime/locale_map.go:260
-msgid "Urdu, Pakistan"
-msgstr "乌尔都语，巴基斯坦"
-
-#: ../../datetime/locale_map.go:261
-msgid "Uzbek, Uzbekistan (cyrillic)"
-msgstr "乌兹别克语，乌兹别克斯坦 （斯拉夫语）"
-
-#: ../../datetime/locale_map.go:262
-msgid "Uzbek, Uzbekistan"
-msgstr "乌兹别克语，乌兹别克斯坦"
-
-#: ../../datetime/locale_map.go:263
-msgid "Venda, South Africa"
-msgstr "文达语，南非"
-
-#: ../../datetime/locale_map.go:264
-msgid "Vietnamese, Vietnam"
-msgstr "越南语，越南"
-
-#: ../../datetime/locale_map.go:265
-msgid "Walloon, Belgium"
-msgstr "窝龙语，比利时"
-
-#: ../../datetime/locale_map.go:266
-msgid "Walser, Switzerland"
-msgstr "瓦尔瑟语，瑞士"
-
-#: ../../datetime/locale_map.go:267
-msgid "Walaita, Ethiopia"
-msgstr "Valletta 瓦莱塔，埃塞俄比亚"
-
-#: ../../datetime/locale_map.go:268
-msgid "Wolof, Senegal"
-msgstr "沃洛夫语，塞内加尔"
-
-#: ../../datetime/locale_map.go:269
-msgid "Xhosa, South Africa"
-msgstr "科萨语，南非"
-
-#: ../../datetime/locale_map.go:270
-msgid "Yiddish, United States"
-msgstr "意第绪语，美国"
-
-#: ../../datetime/locale_map.go:271
-msgid "Yoruba, Nigeria"
-msgstr "约鲁巴语，尼日利亚"
-
-#: ../../datetime/locale_map.go:272
-msgid "Chinese, Hong Kong (Yue dialect)"
-msgstr "中文，香港（粤语）"
-
-#: ../../datetime/locale_map.go:273
-msgid "Chinese, China"
-msgstr "中文，中国"
-
-#: ../../datetime/locale_map.go:274
-msgid "Chinese, Hong Kong"
-msgstr "中文，香港"
-
-#: ../../datetime/locale_map.go:275
-msgid "Chinese, Singapore"
-msgstr "中文，新加坡"
-
-#: ../../datetime/locale_map.go:276
-msgid "Chinese, Taiwan"
-msgstr "中文，台湾"
-
-#: ../../datetime/locale_map.go:277
-msgid "Zulu, South Africa"
-msgstr "祖鲁语，南非"
 
 #: ../../datetime/set_locale.go:52
 msgid "Language changed successfully and effective after logout."
@@ -2560,450 +1496,442 @@ msgid "Reunion"
 msgstr "留尼旺岛"
 
 #: ../../datetime/zone_utc_map.go:369
-msgid "W SU"
-msgstr "W SU"
-
-#: ../../datetime/zone_utc_map.go:370
 msgid "Davis"
 msgstr "戴维斯"
 
-#: ../../datetime/zone_utc_map.go:371
+#: ../../datetime/zone_utc_map.go:370
 msgid "Mawson"
 msgstr "莫森"
 
-#: ../../datetime/zone_utc_map.go:372
+#: ../../datetime/zone_utc_map.go:371
 msgid "Aqtau"
 msgstr "阿克陶"
 
-#: ../../datetime/zone_utc_map.go:373
+#: ../../datetime/zone_utc_map.go:372
 msgid "Aqtobe"
 msgstr "阿克托别"
 
-#: ../../datetime/zone_utc_map.go:374
+#: ../../datetime/zone_utc_map.go:373
 msgid "Ashkhabad"
 msgstr "阿什哈巴德"
 
-#: ../../datetime/zone_utc_map.go:375
+#: ../../datetime/zone_utc_map.go:374
 msgid "Dushanbe"
 msgstr "杜尚别"
 
-#: ../../datetime/zone_utc_map.go:376
+#: ../../datetime/zone_utc_map.go:375
 msgid "Karachi"
 msgstr "卡拉奇"
 
-#: ../../datetime/zone_utc_map.go:377
+#: ../../datetime/zone_utc_map.go:376
 msgid "Oral"
 msgstr "乌拉尔"
 
-#: ../../datetime/zone_utc_map.go:378
+#: ../../datetime/zone_utc_map.go:377
 msgid "Samarkand"
 msgstr "撒马尔罕"
 
-#: ../../datetime/zone_utc_map.go:379
+#: ../../datetime/zone_utc_map.go:378
 msgid "Tashkent"
 msgstr "塔什干"
 
-#: ../../datetime/zone_utc_map.go:380
+#: ../../datetime/zone_utc_map.go:379
 msgid "Kerguelen"
 msgstr "凯尔盖朗"
 
-#: ../../datetime/zone_utc_map.go:381
+#: ../../datetime/zone_utc_map.go:380
 msgid "Maldives"
 msgstr "马尔代夫"
 
-#: ../../datetime/zone_utc_map.go:382
+#: ../../datetime/zone_utc_map.go:381
 msgid "Vostok"
 msgstr "沃斯托克"
 
-#: ../../datetime/zone_utc_map.go:383
+#: ../../datetime/zone_utc_map.go:382
 msgid "Almaty"
 msgstr "阿拉木图"
 
-#: ../../datetime/zone_utc_map.go:384
+#: ../../datetime/zone_utc_map.go:383
 msgid "Bishkek"
 msgstr "比什凯克"
 
-#: ../../datetime/zone_utc_map.go:385
+#: ../../datetime/zone_utc_map.go:384
 msgid "Colombo"
 msgstr "科伦坡"
 
-#: ../../datetime/zone_utc_map.go:386
+#: ../../datetime/zone_utc_map.go:385
 msgid "Dhaka"
 msgstr "达卡"
 
-#: ../../datetime/zone_utc_map.go:387
+#: ../../datetime/zone_utc_map.go:386
 msgid "Qyzylorda"
 msgstr "克孜勒奥尔达"
 
-#: ../../datetime/zone_utc_map.go:388
+#: ../../datetime/zone_utc_map.go:387
 msgid "Thimbu"
 msgstr "廷布"
 
-#: ../../datetime/zone_utc_map.go:389
+#: ../../datetime/zone_utc_map.go:388
 msgid "Thimphu"
 msgstr "廷布"
 
-#: ../../datetime/zone_utc_map.go:390
+#: ../../datetime/zone_utc_map.go:389
 msgid "Yekaterinburg"
 msgstr "叶卡捷琳堡"
 
-#: ../../datetime/zone_utc_map.go:391
+#: ../../datetime/zone_utc_map.go:390
 msgid "Chagos"
 msgstr "查戈斯"
 
-#: ../../datetime/zone_utc_map.go:392
+#: ../../datetime/zone_utc_map.go:391
 msgid "Bangkok"
 msgstr "曼谷"
 
-#: ../../datetime/zone_utc_map.go:393
+#: ../../datetime/zone_utc_map.go:392
 msgid "Ho Chi Minh"
 msgstr "胡志明市"
 
-#: ../../datetime/zone_utc_map.go:394
+#: ../../datetime/zone_utc_map.go:393
 msgid "Hovd"
 msgstr "科布多"
 
-#: ../../datetime/zone_utc_map.go:395
+#: ../../datetime/zone_utc_map.go:394
 msgid "Jakarta"
 msgstr "雅加达"
 
-#: ../../datetime/zone_utc_map.go:396
+#: ../../datetime/zone_utc_map.go:395
 msgid "Novokuznetsk"
 msgstr "新库兹涅茨克"
 
-#: ../../datetime/zone_utc_map.go:397
+#: ../../datetime/zone_utc_map.go:396
 msgid "Novosibirsk"
 msgstr "新西伯利亚"
 
-#: ../../datetime/zone_utc_map.go:398
+#: ../../datetime/zone_utc_map.go:397
 msgid "Omsk"
 msgstr "鄂木斯克"
 
-#: ../../datetime/zone_utc_map.go:399
+#: ../../datetime/zone_utc_map.go:398
 msgid "Phnom Penh"
 msgstr "金边"
 
-#: ../../datetime/zone_utc_map.go:400
+#: ../../datetime/zone_utc_map.go:399
 msgid "Pontianak"
 msgstr "坤甸"
 
-#: ../../datetime/zone_utc_map.go:401
+#: ../../datetime/zone_utc_map.go:400
 msgid "Saigon"
 msgstr "西贡"
 
-#: ../../datetime/zone_utc_map.go:402
+#: ../../datetime/zone_utc_map.go:401
 msgid "Vientiane"
 msgstr "万象"
 
-#: ../../datetime/zone_utc_map.go:403
+#: ../../datetime/zone_utc_map.go:402
 msgid "Christmas"
 msgstr "圣诞岛"
 
-#: ../../datetime/zone_utc_map.go:404
+#: ../../datetime/zone_utc_map.go:403
 msgid "Brunei"
 msgstr "文莱"
 
-#: ../../datetime/zone_utc_map.go:405
+#: ../../datetime/zone_utc_map.go:404
 msgid "Calcutta"
 msgstr "加尔各答"
 
-#: ../../datetime/zone_utc_map.go:406
+#: ../../datetime/zone_utc_map.go:405
 msgid "Chongqing"
 msgstr "重庆"
 
-#: ../../datetime/zone_utc_map.go:407
+#: ../../datetime/zone_utc_map.go:406
 msgid "Chungking"
 msgstr "重庆"
 
-#: ../../datetime/zone_utc_map.go:408
+#: ../../datetime/zone_utc_map.go:407
 msgid "Harbin"
 msgstr "哈尔滨"
 
-#: ../../datetime/zone_utc_map.go:409
+#: ../../datetime/zone_utc_map.go:408
 msgid "Hong Kong"
 msgstr "香港"
 
-#: ../../datetime/zone_utc_map.go:410
+#: ../../datetime/zone_utc_map.go:409
 msgid "Kashgar"
 msgstr "喀什"
 
-#: ../../datetime/zone_utc_map.go:411
+#: ../../datetime/zone_utc_map.go:410
 msgid "Kathmandu"
 msgstr "加德满都"
 
-#: ../../datetime/zone_utc_map.go:412
+#: ../../datetime/zone_utc_map.go:411
 msgid "Kuala Lumpur"
 msgstr "吉隆坡"
 
-#: ../../datetime/zone_utc_map.go:413
+#: ../../datetime/zone_utc_map.go:412
 msgid "Kuching"
 msgstr "古晋"
 
-#: ../../datetime/zone_utc_map.go:414
+#: ../../datetime/zone_utc_map.go:413
 msgid "Macao"
 msgstr "澳门"
 
-#: ../../datetime/zone_utc_map.go:415
+#: ../../datetime/zone_utc_map.go:414
 msgid "Makassar"
 msgstr "望加锡"
 
-#: ../../datetime/zone_utc_map.go:416
+#: ../../datetime/zone_utc_map.go:415
 msgid "Manila"
 msgstr "马尼拉"
 
-#: ../../datetime/zone_utc_map.go:417
+#: ../../datetime/zone_utc_map.go:416
 msgid "Shanghai"
 msgstr "上海"
 
-#: ../../datetime/zone_utc_map.go:418
+#: ../../datetime/zone_utc_map.go:417
 msgid "Beijing"
 msgstr "北京"
 
-#: ../../datetime/zone_utc_map.go:419
+#: ../../datetime/zone_utc_map.go:418
 msgid "Singapore"
 msgstr "新加坡城"
 
-#: ../../datetime/zone_utc_map.go:420
+#: ../../datetime/zone_utc_map.go:419
 msgid "Taipei"
 msgstr "台北"
 
-#: ../../datetime/zone_utc_map.go:421
+#: ../../datetime/zone_utc_map.go:420
 msgid "Ujung Pandang"
 msgstr "乌戎潘当"
 
-#: ../../datetime/zone_utc_map.go:422
+#: ../../datetime/zone_utc_map.go:421
 msgid "Ulan Bator"
 msgstr "乌兰巴托"
 
-#: ../../datetime/zone_utc_map.go:423
+#: ../../datetime/zone_utc_map.go:422
 msgid "Urumqi"
 msgstr "乌鲁木齐"
 
-#: ../../datetime/zone_utc_map.go:424
+#: ../../datetime/zone_utc_map.go:423
 msgid "Perth"
 msgstr "珀斯"
 
-#: ../../datetime/zone_utc_map.go:425
+#: ../../datetime/zone_utc_map.go:424
 msgid "Australia West"
 msgstr "澳大利亚西部"
 
-#: ../../datetime/zone_utc_map.go:426
-msgid "PRC"
-msgstr "PRC"
-
-#: ../../datetime/zone_utc_map.go:427
+#: ../../datetime/zone_utc_map.go:425
 msgid "Dili"
 msgstr "帝力"
 
-#: ../../datetime/zone_utc_map.go:428
+#: ../../datetime/zone_utc_map.go:426
 msgid "Irkutsk"
 msgstr "伊尔库茨克"
 
-#: ../../datetime/zone_utc_map.go:429
+#: ../../datetime/zone_utc_map.go:427
 msgid "Jayapura"
 msgstr "查亚普拉"
 
-#: ../../datetime/zone_utc_map.go:430
+#: ../../datetime/zone_utc_map.go:428
 msgid "Pyongyang"
 msgstr "平壤"
 
-#: ../../datetime/zone_utc_map.go:431
+#: ../../datetime/zone_utc_map.go:429
 msgid "Seoul"
 msgstr "首尔"
 
-#: ../../datetime/zone_utc_map.go:432
+#: ../../datetime/zone_utc_map.go:430
 msgid "Tokyo"
 msgstr "东京"
 
-#: ../../datetime/zone_utc_map.go:433
+#: ../../datetime/zone_utc_map.go:431
 msgid "Palau"
 msgstr "帕劳"
 
-#: ../../datetime/zone_utc_map.go:434
+#: ../../datetime/zone_utc_map.go:432
 msgid "ROK"
 msgstr "ROK"
 
-#: ../../datetime/zone_utc_map.go:435
+#: ../../datetime/zone_utc_map.go:433
 msgid "DumontDUrville"
 msgstr "迪蒙·迪维尔"
 
-#: ../../datetime/zone_utc_map.go:436
+#: ../../datetime/zone_utc_map.go:434
 msgid "Yakutsk"
 msgstr "雅库茨克"
 
-#: ../../datetime/zone_utc_map.go:437
+#: ../../datetime/zone_utc_map.go:435
 msgid "ACT"
 msgstr "澳大利亚首都特区"
 
-#: ../../datetime/zone_utc_map.go:438
+#: ../../datetime/zone_utc_map.go:436
 msgid "Adelaide"
 msgstr "阿德莱德"
 
-#: ../../datetime/zone_utc_map.go:439
+#: ../../datetime/zone_utc_map.go:437
 msgid "Broken Hill"
 msgstr "布罗肯希尔"
 
-#: ../../datetime/zone_utc_map.go:440
+#: ../../datetime/zone_utc_map.go:438
 msgid "Currie"
 msgstr "柯里"
 
-#: ../../datetime/zone_utc_map.go:441
+#: ../../datetime/zone_utc_map.go:439
 msgid "Darwin"
 msgstr "达尔文"
 
-#: ../../datetime/zone_utc_map.go:442
+#: ../../datetime/zone_utc_map.go:440
 msgid "Lindeman"
 msgstr "林德曼"
 
-#: ../../datetime/zone_utc_map.go:443
+#: ../../datetime/zone_utc_map.go:441
 msgid "Melbourne"
 msgstr "墨尔本"
 
-#: ../../datetime/zone_utc_map.go:444
+#: ../../datetime/zone_utc_map.go:442
 msgid "Australia North"
 msgstr "澳大利亚北部"
 
-#: ../../datetime/zone_utc_map.go:445
+#: ../../datetime/zone_utc_map.go:443
 msgid "Queensland"
 msgstr "昆士兰"
 
-#: ../../datetime/zone_utc_map.go:446
+#: ../../datetime/zone_utc_map.go:444
 msgid "Australia South"
 msgstr "澳大利亚南部"
 
-#: ../../datetime/zone_utc_map.go:447
+#: ../../datetime/zone_utc_map.go:445
 msgid "Tasmania"
 msgstr "塔斯马尼亚"
 
-#: ../../datetime/zone_utc_map.go:448
+#: ../../datetime/zone_utc_map.go:446
 msgid "Victoria"
 msgstr "维多利亚"
 
-#: ../../datetime/zone_utc_map.go:449
+#: ../../datetime/zone_utc_map.go:447
 msgid "Chatham"
 msgstr "查塔姆"
 
-#: ../../datetime/zone_utc_map.go:450
+#: ../../datetime/zone_utc_map.go:448
 msgid "Guam"
 msgstr "关岛"
 
-#: ../../datetime/zone_utc_map.go:451
+#: ../../datetime/zone_utc_map.go:449
 msgid "Port Moresby"
 msgstr "莫尔兹比港"
 
-#: ../../datetime/zone_utc_map.go:452
+#: ../../datetime/zone_utc_map.go:450
 msgid "Saipan"
 msgstr "塞班岛"
 
-#: ../../datetime/zone_utc_map.go:453
+#: ../../datetime/zone_utc_map.go:451
 msgid "Truk"
 msgstr "特鲁克"
 
-#: ../../datetime/zone_utc_map.go:454
+#: ../../datetime/zone_utc_map.go:452
 msgid "Casey"
 msgstr "凯西"
 
-#: ../../datetime/zone_utc_map.go:455
+#: ../../datetime/zone_utc_map.go:453
 msgid "Sakhalin"
 msgstr "库页岛"
 
-#: ../../datetime/zone_utc_map.go:456
+#: ../../datetime/zone_utc_map.go:454
 msgid "Vladivostok"
 msgstr "符拉迪沃斯托克"
 
-#: ../../datetime/zone_utc_map.go:457
+#: ../../datetime/zone_utc_map.go:455
 msgid "Lord Howe"
 msgstr "豪勋爵"
 
-#: ../../datetime/zone_utc_map.go:458
+#: ../../datetime/zone_utc_map.go:456
 msgid "Efate"
 msgstr "埃法特"
 
-#: ../../datetime/zone_utc_map.go:459
+#: ../../datetime/zone_utc_map.go:457
 msgid "Nouméa"
 msgstr "努美阿"
 
-#: ../../datetime/zone_utc_map.go:460
+#: ../../datetime/zone_utc_map.go:458
 msgid "Guadalcanal"
 msgstr "瓜达尔卡纳尔"
 
-#: ../../datetime/zone_utc_map.go:461
+#: ../../datetime/zone_utc_map.go:459
 msgid "Kosrae"
 msgstr "科斯雷"
 
-#: ../../datetime/zone_utc_map.go:462
+#: ../../datetime/zone_utc_map.go:460
 msgid "Norfolk"
 msgstr "诺福克"
 
-#: ../../datetime/zone_utc_map.go:463
+#: ../../datetime/zone_utc_map.go:461
 msgid "Ponape"
 msgstr "波纳佩"
 
-#: ../../datetime/zone_utc_map.go:464
+#: ../../datetime/zone_utc_map.go:462
 msgid "McMurdo"
 msgstr "麦克默多"
 
-#: ../../datetime/zone_utc_map.go:465
+#: ../../datetime/zone_utc_map.go:463
 msgid "South Pole"
 msgstr "南极"
 
-#: ../../datetime/zone_utc_map.go:466
+#: ../../datetime/zone_utc_map.go:464
 msgid "Anadyr"
 msgstr "阿纳德尔"
 
-#: ../../datetime/zone_utc_map.go:467
+#: ../../datetime/zone_utc_map.go:465
 msgid "Kabul"
 msgstr "喀布尔"
 
-#: ../../datetime/zone_utc_map.go:468
+#: ../../datetime/zone_utc_map.go:466
 msgid "Magadan"
 msgstr "马加丹"
 
-#: ../../datetime/zone_utc_map.go:469
+#: ../../datetime/zone_utc_map.go:467
 msgid "Wellington"
 msgstr "惠灵顿"
 
-#: ../../datetime/zone_utc_map.go:470
+#: ../../datetime/zone_utc_map.go:468
 msgid "Auckland"
 msgstr "奥克兰"
 
-#: ../../datetime/zone_utc_map.go:471
+#: ../../datetime/zone_utc_map.go:469
 msgid "Fiji"
 msgstr "斐济"
 
-#: ../../datetime/zone_utc_map.go:472
+#: ../../datetime/zone_utc_map.go:470
 msgid "Funafuti"
 msgstr "富纳富提"
 
-#: ../../datetime/zone_utc_map.go:473
+#: ../../datetime/zone_utc_map.go:471
 msgid "Kwajalein"
 msgstr "夸贾林"
 
-#: ../../datetime/zone_utc_map.go:474
+#: ../../datetime/zone_utc_map.go:472
 msgid "Nauru"
 msgstr "诺鲁"
 
-#: ../../datetime/zone_utc_map.go:475
+#: ../../datetime/zone_utc_map.go:473
 msgid "Tarawa"
 msgstr "塔拉瓦"
 
-#: ../../datetime/zone_utc_map.go:476
+#: ../../datetime/zone_utc_map.go:474
 msgid "Wake"
 msgstr "维克"
 
-#: ../../datetime/zone_utc_map.go:477
+#: ../../datetime/zone_utc_map.go:475
 msgid "Wallis"
 msgstr "瓦利斯"
 
-#: ../../datetime/zone_utc_map.go:478
+#: ../../datetime/zone_utc_map.go:476
 msgid "Enderbury"
 msgstr "恩德伯里"
 
-#: ../../datetime/zone_utc_map.go:479
+#: ../../datetime/zone_utc_map.go:477
 msgid "Fakaofo"
 msgstr "法考福"
 
-#: ../../datetime/zone_utc_map.go:480
+#: ../../datetime/zone_utc_map.go:478
 msgid "Tongatapu"
 msgstr "汤加塔布"
 
@@ -4117,3 +3045,9 @@ msgstr "电池电量低"
 #: ../../power/upower.go:114
 msgid "Computer will be in suspend mode, please plug in."
 msgstr "计算机将要进入待机状态，请连接电源。"
+
+#~ msgid "W SU"
+#~ msgstr "W SU"
+
+#~ msgid "PRC"
+#~ msgstr "PRC"

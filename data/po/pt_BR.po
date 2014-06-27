@@ -50,1070 +50,6 @@ msgstr ""
 msgid "Language changing, please wait"
 msgstr ""
 
-#: ../../datetime/locale_map.go:9
-msgid "Afar, Djibouti"
-msgstr ""
-
-#: ../../datetime/locale_map.go:10
-msgid "Afar, Eritrea"
-msgstr ""
-
-#: ../../datetime/locale_map.go:11
-msgid "Afar, Eritrea (Saho)"
-msgstr ""
-
-#: ../../datetime/locale_map.go:12
-msgid "Afar, Ethiopia"
-msgstr ""
-
-#: ../../datetime/locale_map.go:13
-msgid "Afrikaans, South Africa"
-msgstr ""
-
-#: ../../datetime/locale_map.go:14
-msgid "Amharic, Ethiopia"
-msgstr ""
-
-#: ../../datetime/locale_map.go:15
-msgid "Aragonese, Spain"
-msgstr ""
-
-#: ../../datetime/locale_map.go:16
-msgid "Arabic, United Arab Emirates"
-msgstr ""
-
-#: ../../datetime/locale_map.go:17
-msgid "Arabic, Bahrain"
-msgstr ""
-
-#: ../../datetime/locale_map.go:18
-msgid "Arabic, Algeria"
-msgstr ""
-
-#: ../../datetime/locale_map.go:19
-msgid "Arabic, Egypt"
-msgstr ""
-
-#: ../../datetime/locale_map.go:20
-msgid "Arabic, India"
-msgstr ""
-
-#: ../../datetime/locale_map.go:21
-msgid "Arabic, Iraq"
-msgstr ""
-
-#: ../../datetime/locale_map.go:22
-msgid "Arabic, Jordan"
-msgstr ""
-
-#: ../../datetime/locale_map.go:23
-msgid "Arabic, Kuwait"
-msgstr ""
-
-#: ../../datetime/locale_map.go:24
-msgid "Arabic, Lebanon"
-msgstr ""
-
-#: ../../datetime/locale_map.go:25
-msgid "Arabic, Libya"
-msgstr ""
-
-#: ../../datetime/locale_map.go:26
-msgid "Arabic, Morocco"
-msgstr ""
-
-#: ../../datetime/locale_map.go:27
-msgid "Arabic, Oman"
-msgstr ""
-
-#: ../../datetime/locale_map.go:28
-msgid "Arabic, Qatar"
-msgstr ""
-
-#: ../../datetime/locale_map.go:29
-msgid "Arabic, Saudi Arabia"
-msgstr ""
-
-#: ../../datetime/locale_map.go:30
-msgid "Arabic, Sudan"
-msgstr ""
-
-#: ../../datetime/locale_map.go:31
-msgid "Arabic, Syria"
-msgstr ""
-
-#: ../../datetime/locale_map.go:32
-msgid "Arabic, Tunisia"
-msgstr ""
-
-#: ../../datetime/locale_map.go:33
-msgid "Arabic, Yemen"
-msgstr ""
-
-#: ../../datetime/locale_map.go:34
-msgid "Assamese, India"
-msgstr ""
-
-#: ../../datetime/locale_map.go:35
-msgid "Asturian, Spain"
-msgstr ""
-
-#: ../../datetime/locale_map.go:36
-msgid "Azeri, Azerbaijan"
-msgstr ""
-
-#: ../../datetime/locale_map.go:37 ../../datetime/locale_map.go:38
-msgid "Belarusian, Belarus"
-msgstr ""
-
-#: ../../datetime/locale_map.go:39
-msgid "Bemba, Zambia"
-msgstr ""
-
-#: ../../datetime/locale_map.go:40
-msgid "Amazigh, Algeria"
-msgstr ""
-
-#: ../../datetime/locale_map.go:41
-msgid "Amazigh, Morocco"
-msgstr ""
-
-#: ../../datetime/locale_map.go:42
-msgid "Bulgarian, Bulgaria"
-msgstr ""
-
-#: ../../datetime/locale_map.go:43
-msgid "Bhojpuri, India"
-msgstr ""
-
-#: ../../datetime/locale_map.go:44
-msgid "Bengali, Bangladesh"
-msgstr ""
-
-#: ../../datetime/locale_map.go:45
-msgid "Bengali, India"
-msgstr ""
-
-#: ../../datetime/locale_map.go:46
-msgid "Tibetan, China"
-msgstr ""
-
-#: ../../datetime/locale_map.go:47
-msgid "Tibetan, India"
-msgstr ""
-
-#: ../../datetime/locale_map.go:48
-msgid "Breton, France"
-msgstr ""
-
-#: ../../datetime/locale_map.go:49
-msgid "Bodo, India"
-msgstr ""
-
-#: ../../datetime/locale_map.go:50
-msgid "Bosnian, Bosnia and Herzegowina"
-msgstr ""
-
-#: ../../datetime/locale_map.go:51
-msgid "Blin, Eritrea"
-msgstr ""
-
-#: ../../datetime/locale_map.go:52
-msgid "Catalan, Andorra "
-msgstr ""
-
-#: ../../datetime/locale_map.go:53
-msgid "Catalan, Spain"
-msgstr ""
-
-#: ../../datetime/locale_map.go:54
-msgid "Catalan, France "
-msgstr ""
-
-#: ../../datetime/locale_map.go:55
-msgid "Catalan, Italy"
-msgstr ""
-
-#: ../../datetime/locale_map.go:56
-msgid "Crimean Tatar, Ukraine"
-msgstr ""
-
-#: ../../datetime/locale_map.go:57
-msgid "Kashubian, Poland"
-msgstr ""
-
-#: ../../datetime/locale_map.go:58
-msgid "Czech, Czech Republic"
-msgstr ""
-
-#: ../../datetime/locale_map.go:59
-msgid "Chuvash, Russia"
-msgstr ""
-
-#: ../../datetime/locale_map.go:60
-msgid "Welsh, United Kingdom"
-msgstr ""
-
-#: ../../datetime/locale_map.go:61
-msgid "Danish, Denmark"
-msgstr ""
-
-#: ../../datetime/locale_map.go:62
-msgid "German, Austria"
-msgstr ""
-
-#: ../../datetime/locale_map.go:63
-msgid "German, Belgium"
-msgstr ""
-
-#: ../../datetime/locale_map.go:64
-msgid "German, Switzerland"
-msgstr ""
-
-#: ../../datetime/locale_map.go:65
-msgid "German, Germany"
-msgstr ""
-
-#: ../../datetime/locale_map.go:66
-msgid "German, Liechtenstein"
-msgstr ""
-
-#: ../../datetime/locale_map.go:67
-msgid "German, Luxemburg"
-msgstr ""
-
-#: ../../datetime/locale_map.go:68
-msgid "Dhivehi, Maldives"
-msgstr ""
-
-#: ../../datetime/locale_map.go:69
-msgid "Dzongkha, Bhutan"
-msgstr ""
-
-#: ../../datetime/locale_map.go:70
-msgid "Greek, Cyprus"
-msgstr ""
-
-#: ../../datetime/locale_map.go:71
-msgid "Greek, Greece"
-msgstr ""
-
-#: ../../datetime/locale_map.go:72
-msgid "English, Antigua and Barbuda"
-msgstr ""
-
-#: ../../datetime/locale_map.go:73
-msgid "English, Australia"
-msgstr ""
-
-#: ../../datetime/locale_map.go:74
-msgid "English, Botswana"
-msgstr ""
-
-#: ../../datetime/locale_map.go:75
-msgid "English, Canada"
-msgstr ""
-
-#: ../../datetime/locale_map.go:76
-msgid "English, Denmark"
-msgstr ""
-
-#: ../../datetime/locale_map.go:77
-msgid "English, United Kingdom"
-msgstr ""
-
-#: ../../datetime/locale_map.go:78
-msgid "English, Hong Kong"
-msgstr ""
-
-#: ../../datetime/locale_map.go:79
-msgid "English, Ireland"
-msgstr ""
-
-#: ../../datetime/locale_map.go:80
-msgid "English, India"
-msgstr ""
-
-#: ../../datetime/locale_map.go:81
-msgid "English, Nigeria"
-msgstr ""
-
-#: ../../datetime/locale_map.go:82
-msgid "English, New Zealand"
-msgstr ""
-
-#: ../../datetime/locale_map.go:83
-msgid "English, Philippines"
-msgstr ""
-
-#: ../../datetime/locale_map.go:84
-msgid "English, Singapore"
-msgstr ""
-
-#: ../../datetime/locale_map.go:85
-msgid "English, United States"
-msgstr ""
-
-#: ../../datetime/locale_map.go:86
-msgid "English, South Africa"
-msgstr ""
-
-#: ../../datetime/locale_map.go:87
-msgid "English, Zambia"
-msgstr ""
-
-#: ../../datetime/locale_map.go:88
-msgid "English, Zimbabwe"
-msgstr ""
-
-#: ../../datetime/locale_map.go:89
-msgid "Esperanto"
-msgstr ""
-
-#: ../../datetime/locale_map.go:90
-msgid "Esperanto, United States"
-msgstr ""
-
-#: ../../datetime/locale_map.go:91
-msgid "Spanish, Argentina"
-msgstr ""
-
-#: ../../datetime/locale_map.go:92
-msgid "Spanish, Bolivia"
-msgstr ""
-
-#: ../../datetime/locale_map.go:93
-msgid "Spanish, Chile"
-msgstr ""
-
-#: ../../datetime/locale_map.go:94
-msgid "Spanish, Colombia"
-msgstr ""
-
-#: ../../datetime/locale_map.go:95
-msgid "Spanish, Costa Rica"
-msgstr ""
-
-#: ../../datetime/locale_map.go:96
-msgid "Spanish, Cuba"
-msgstr ""
-
-#: ../../datetime/locale_map.go:97
-msgid "Spanish, Dominican Republic"
-msgstr ""
-
-#: ../../datetime/locale_map.go:98
-msgid "Spanish, Ecuador"
-msgstr ""
-
-#: ../../datetime/locale_map.go:99
-msgid "Spanish, Spain"
-msgstr ""
-
-#: ../../datetime/locale_map.go:100
-msgid "Spanish, Guatemala"
-msgstr ""
-
-#: ../../datetime/locale_map.go:101
-msgid "Spanish, Honduras"
-msgstr ""
-
-#: ../../datetime/locale_map.go:102
-msgid "Spanish, Mexico"
-msgstr ""
-
-#: ../../datetime/locale_map.go:103
-msgid "Spanish, Nicaragua"
-msgstr ""
-
-#: ../../datetime/locale_map.go:104
-msgid "Spanish, Panama"
-msgstr ""
-
-#: ../../datetime/locale_map.go:105
-msgid "Spanish, Peru"
-msgstr ""
-
-#: ../../datetime/locale_map.go:106
-msgid "Spanish, Puerto Rico"
-msgstr ""
-
-#: ../../datetime/locale_map.go:107
-msgid "Spanish, Paraguay"
-msgstr ""
-
-#: ../../datetime/locale_map.go:108
-msgid "Spanish, El Salvador"
-msgstr ""
-
-#: ../../datetime/locale_map.go:109
-msgid "Spanish, United States"
-msgstr ""
-
-#: ../../datetime/locale_map.go:110
-msgid "Spanish, Uruguay"
-msgstr ""
-
-#: ../../datetime/locale_map.go:111
-msgid "Spanish, Venezuela"
-msgstr ""
-
-#: ../../datetime/locale_map.go:112
-msgid "Estonian, Estonia"
-msgstr ""
-
-#: ../../datetime/locale_map.go:113
-msgid "Basque, Spain"
-msgstr ""
-
-#: ../../datetime/locale_map.go:114
-msgid "Basque, France"
-msgstr ""
-
-#: ../../datetime/locale_map.go:115
-msgid "Persian, Iran"
-msgstr ""
-
-#: ../../datetime/locale_map.go:116
-msgid "Fulah, Senegal"
-msgstr ""
-
-#: ../../datetime/locale_map.go:117
-msgid "Finnish, Finland"
-msgstr ""
-
-#: ../../datetime/locale_map.go:118
-msgid "Filipino, Philippines"
-msgstr ""
-
-#: ../../datetime/locale_map.go:119
-msgid "Faroese, Faroe Islands"
-msgstr ""
-
-#: ../../datetime/locale_map.go:120
-msgid "French, Belgium"
-msgstr ""
-
-#: ../../datetime/locale_map.go:121
-msgid "French, Canada"
-msgstr ""
-
-#: ../../datetime/locale_map.go:122
-msgid "French, Switzerland"
-msgstr ""
-
-#: ../../datetime/locale_map.go:123
-msgid "French, France"
-msgstr ""
-
-#: ../../datetime/locale_map.go:124
-msgid "French, Luxemburg"
-msgstr ""
-
-#: ../../datetime/locale_map.go:125
-msgid "Furlan, Italy"
-msgstr ""
-
-#: ../../datetime/locale_map.go:126
-msgid "Frisian, Germany"
-msgstr ""
-
-#: ../../datetime/locale_map.go:127
-msgid "Frisian, the Netherlands"
-msgstr ""
-
-#: ../../datetime/locale_map.go:128
-msgid "Irish, Ireland"
-msgstr ""
-
-#: ../../datetime/locale_map.go:129
-msgid "Gaelic, United Kingdom"
-msgstr ""
-
-#: ../../datetime/locale_map.go:130
-msgid "Ge'ez, Eritrea (Abegede)"
-msgstr ""
-
-#: ../../datetime/locale_map.go:131
-msgid "Ge'ez, Eritrea"
-msgstr ""
-
-#: ../../datetime/locale_map.go:132
-msgid "Ge'ez, Ethiopia (Abegede)"
-msgstr ""
-
-#: ../../datetime/locale_map.go:133
-msgid "Ge'ez, Ethiopia"
-msgstr ""
-
-#: ../../datetime/locale_map.go:134
-msgid "Galician, Spain"
-msgstr ""
-
-#: ../../datetime/locale_map.go:135
-msgid "Gujarati, India"
-msgstr ""
-
-#: ../../datetime/locale_map.go:136
-msgid "Manx, United Kingdom"
-msgstr ""
-
-#: ../../datetime/locale_map.go:137
-msgid "Hausa, Nigeria"
-msgstr ""
-
-#: ../../datetime/locale_map.go:138 ../../datetime/locale_map.go:154
-msgid "Hebrew, Israel"
-msgstr ""
-
-#: ../../datetime/locale_map.go:139
-msgid "Hindi, India"
-msgstr ""
-
-#: ../../datetime/locale_map.go:140
-msgid "Chhattisgarhi, India"
-msgstr ""
-
-#: ../../datetime/locale_map.go:141
-msgid "Croatian, Croatia"
-msgstr ""
-
-#: ../../datetime/locale_map.go:142
-msgid "Upper Sorbian, Germany"
-msgstr ""
-
-#: ../../datetime/locale_map.go:143
-msgid "Kreyol, Haiti"
-msgstr ""
-
-#: ../../datetime/locale_map.go:144
-msgid "Hungarian, Hungary"
-msgstr ""
-
-#: ../../datetime/locale_map.go:145
-msgid "Armenian, Armenia"
-msgstr ""
-
-#: ../../datetime/locale_map.go:146
-msgid "Interlingua"
-msgstr ""
-
-#: ../../datetime/locale_map.go:147
-msgid "Indonesian, Indonesia"
-msgstr ""
-
-#: ../../datetime/locale_map.go:148
-msgid "Igbo, Nigeria"
-msgstr ""
-
-#: ../../datetime/locale_map.go:149
-msgid "Inupiaq, Canada"
-msgstr ""
-
-#: ../../datetime/locale_map.go:150
-msgid "Icelandic, Iceland"
-msgstr ""
-
-#: ../../datetime/locale_map.go:151
-msgid "Italian, Switzerland"
-msgstr ""
-
-#: ../../datetime/locale_map.go:152
-msgid "Italian, Italy"
-msgstr ""
-
-#: ../../datetime/locale_map.go:153
-msgid "Inuktitut, Canada"
-msgstr ""
-
-#: ../../datetime/locale_map.go:155
-msgid "Japanese, Japan"
-msgstr ""
-
-#: ../../datetime/locale_map.go:156
-msgid "Georgian, Georgia"
-msgstr ""
-
-#: ../../datetime/locale_map.go:157
-msgid "Kazakh, Kazakhstan"
-msgstr ""
-
-#: ../../datetime/locale_map.go:158
-msgid "Greenlandic, Greenland"
-msgstr ""
-
-#: ../../datetime/locale_map.go:159
-msgid "Khmer, Cambodia"
-msgstr ""
-
-#: ../../datetime/locale_map.go:160
-msgid "Kannada, India"
-msgstr ""
-
-#: ../../datetime/locale_map.go:161
-msgid "Konkani, India"
-msgstr ""
-
-#: ../../datetime/locale_map.go:162
-msgid "Korean, Republic of Korea"
-msgstr ""
-
-#: ../../datetime/locale_map.go:163
-msgid "Kashmiri, India (devanagari)"
-msgstr ""
-
-#: ../../datetime/locale_map.go:164
-msgid "Kashmiri, India"
-msgstr ""
-
-#: ../../datetime/locale_map.go:165
-msgid "Kurdish, Turkey"
-msgstr ""
-
-#: ../../datetime/locale_map.go:166
-msgid "Cornish, United Kingdom"
-msgstr ""
-
-#: ../../datetime/locale_map.go:167
-msgid "Kyrgyz, Kyrgyzstan"
-msgstr ""
-
-#: ../../datetime/locale_map.go:168
-msgid "Luxembourgish, Luxembourg"
-msgstr ""
-
-#: ../../datetime/locale_map.go:169
-msgid "Luganda, Uganda"
-msgstr ""
-
-#: ../../datetime/locale_map.go:170
-msgid "Limburgish, Belgium"
-msgstr ""
-
-#: ../../datetime/locale_map.go:171
-msgid "Ligurian, Italy"
-msgstr ""
-
-#: ../../datetime/locale_map.go:172
-msgid "Limburgish, the Netherlands"
-msgstr ""
-
-#: ../../datetime/locale_map.go:173
-msgid "Lao, Laos"
-msgstr ""
-
-#: ../../datetime/locale_map.go:174
-msgid "Lithuanian, Lithuania"
-msgstr ""
-
-#: ../../datetime/locale_map.go:175
-msgid "Latvian, Latvia"
-msgstr ""
-
-#: ../../datetime/locale_map.go:176
-msgid "Maithili, India"
-msgstr ""
-
-#: ../../datetime/locale_map.go:177
-msgid "Malagasy, Madagascar"
-msgstr ""
-
-#: ../../datetime/locale_map.go:178
-msgid "Mari, Russia"
-msgstr ""
-
-#: ../../datetime/locale_map.go:179
-msgid "Maori, New Zealand"
-msgstr ""
-
-#: ../../datetime/locale_map.go:180
-msgid "Macedonian, Macedonia"
-msgstr ""
-
-#: ../../datetime/locale_map.go:181
-msgid "Malayalam, India"
-msgstr ""
-
-#: ../../datetime/locale_map.go:182
-msgid "Mongolian, Mongolia"
-msgstr ""
-
-#: ../../datetime/locale_map.go:183
-msgid "Marathi, India"
-msgstr ""
-
-#: ../../datetime/locale_map.go:184
-msgid "Malay, Malaysia"
-msgstr ""
-
-#: ../../datetime/locale_map.go:185
-msgid "Maltese, Malta"
-msgstr ""
-
-#: ../../datetime/locale_map.go:186
-msgid "Burmese, Myanmar"
-msgstr ""
-
-#: ../../datetime/locale_map.go:187
-msgid "Chinese, Taiwan (Minnan dialect, Latin alphabet)"
-msgstr ""
-
-#: ../../datetime/locale_map.go:188
-msgid "Norwegian Bokmal, Norway"
-msgstr ""
-
-#: ../../datetime/locale_map.go:189
-msgid "Low German, Germany"
-msgstr ""
-
-#: ../../datetime/locale_map.go:190
-msgid "Low German, the Netherlands"
-msgstr ""
-
-#: ../../datetime/locale_map.go:191
-msgid "Nepali, Nepal"
-msgstr ""
-
-#: ../../datetime/locale_map.go:192
-msgid "Dutch, Aruba"
-msgstr ""
-
-#: ../../datetime/locale_map.go:193
-msgid "Dutch, Belgium"
-msgstr ""
-
-#: ../../datetime/locale_map.go:194
-msgid "Dutch, the Netherlands"
-msgstr ""
-
-#: ../../datetime/locale_map.go:195
-msgid "Nynorsk, Norway"
-msgstr ""
-
-#: ../../datetime/locale_map.go:196
-msgid "Southern Ndebele, South Africa"
-msgstr ""
-
-#: ../../datetime/locale_map.go:197
-msgid "Northern Sotho, South Africa"
-msgstr ""
-
-#: ../../datetime/locale_map.go:198
-msgid "Occitan, France"
-msgstr ""
-
-#: ../../datetime/locale_map.go:199
-msgid "Oromo, Ethiopia"
-msgstr ""
-
-#: ../../datetime/locale_map.go:200
-msgid "Oromo, Kenya"
-msgstr ""
-
-#: ../../datetime/locale_map.go:201
-msgid "Oriya, India"
-msgstr ""
-
-#: ../../datetime/locale_map.go:202
-msgid "Ossetian, Russia"
-msgstr ""
-
-#: ../../datetime/locale_map.go:203
-msgid "Punjabi, India"
-msgstr ""
-
-#: ../../datetime/locale_map.go:204
-msgid "Papiamento, Antilles"
-msgstr ""
-
-#: ../../datetime/locale_map.go:205
-msgid "Punjabi, Pakistan"
-msgstr ""
-
-#: ../../datetime/locale_map.go:206
-msgid "Polish, Poland"
-msgstr ""
-
-#: ../../datetime/locale_map.go:207
-msgid "Portuguese, Brasil"
-msgstr ""
-
-#: ../../datetime/locale_map.go:208
-msgid "Portuguese, Portugal"
-msgstr ""
-
-#: ../../datetime/locale_map.go:209
-msgid "Romanian, Romania"
-msgstr ""
-
-#: ../../datetime/locale_map.go:210
-msgid "Russian, Russia"
-msgstr ""
-
-#: ../../datetime/locale_map.go:211
-msgid "Russian, Ukraine"
-msgstr ""
-
-#: ../../datetime/locale_map.go:212
-msgid "Kinyarwanda, Rwanda"
-msgstr ""
-
-#: ../../datetime/locale_map.go:213
-msgid "Sanskrit, India"
-msgstr ""
-
-#: ../../datetime/locale_map.go:214
-msgid "Sardinian, Italy"
-msgstr ""
-
-#: ../../datetime/locale_map.go:215 ../../datetime/locale_map.go:216
-msgid "Sindhi, India"
-msgstr ""
-
-#: ../../datetime/locale_map.go:217
-msgid "Sindhi, Pakistan"
-msgstr ""
-
-#: ../../datetime/locale_map.go:218
-msgid "Northern Sami, Norway"
-msgstr ""
-
-#: ../../datetime/locale_map.go:219
-msgid "Secwepemctsin, Canada"
-msgstr ""
-
-#: ../../datetime/locale_map.go:220
-msgid "Sidama, Ethiopia."
-msgstr ""
-
-#: ../../datetime/locale_map.go:221
-msgid "Sinhala, Sri Lanka"
-msgstr ""
-
-#: ../../datetime/locale_map.go:222
-msgid "Slovak, Slovak"
-msgstr ""
-
-#: ../../datetime/locale_map.go:223
-msgid "Slovenian, Slovenia"
-msgstr ""
-
-#: ../../datetime/locale_map.go:224
-msgid "Somali, Djibouti."
-msgstr ""
-
-#: ../../datetime/locale_map.go:225
-msgid "Somali, Ethiopia"
-msgstr ""
-
-#: ../../datetime/locale_map.go:226
-msgid "Somali, Kenya"
-msgstr ""
-
-#: ../../datetime/locale_map.go:227
-msgid "Somali, Somalia"
-msgstr ""
-
-#: ../../datetime/locale_map.go:228
-msgid "Albanian, Albania"
-msgstr ""
-
-#: ../../datetime/locale_map.go:229
-msgid "Albanian, Macedonia"
-msgstr ""
-
-#: ../../datetime/locale_map.go:230
-msgid "Serbian, Montenegro"
-msgstr ""
-
-#: ../../datetime/locale_map.go:231
-msgid "Serbian, Serbia (Latin)"
-msgstr ""
-
-#: ../../datetime/locale_map.go:232
-msgid "Serbian, Serbia"
-msgstr ""
-
-#: ../../datetime/locale_map.go:233
-msgid "Swati, South Africa"
-msgstr ""
-
-#: ../../datetime/locale_map.go:234
-msgid "Sotho, South Africa"
-msgstr ""
-
-#: ../../datetime/locale_map.go:235
-msgid "Swedish, Finland"
-msgstr ""
-
-#: ../../datetime/locale_map.go:236
-msgid "Swedish, Sweden"
-msgstr ""
-
-#: ../../datetime/locale_map.go:237
-msgid "Swahili, Kenya"
-msgstr ""
-
-#: ../../datetime/locale_map.go:238
-msgid "Swahili, Tanzania"
-msgstr ""
-
-#: ../../datetime/locale_map.go:239
-msgid "Tamil, India"
-msgstr ""
-
-#: ../../datetime/locale_map.go:240
-msgid "Tamil, Sri Lanka"
-msgstr ""
-
-#: ../../datetime/locale_map.go:241
-msgid "Telugu, India"
-msgstr ""
-
-#: ../../datetime/locale_map.go:242
-msgid "Tajik, Tajikistan"
-msgstr ""
-
-#: ../../datetime/locale_map.go:243
-msgid "Thai, Thailand"
-msgstr ""
-
-#: ../../datetime/locale_map.go:244
-msgid "Tigrigna, Eritrea."
-msgstr ""
-
-#: ../../datetime/locale_map.go:245
-msgid "Tigrigna, Ethiopia."
-msgstr ""
-
-#: ../../datetime/locale_map.go:246
-msgid "Tigre, Eritrea"
-msgstr ""
-
-#: ../../datetime/locale_map.go:247
-msgid "Turkmen, Turkmenistan"
-msgstr ""
-
-#: ../../datetime/locale_map.go:248
-msgid "Tagalog, Philippines"
-msgstr ""
-
-#: ../../datetime/locale_map.go:249
-msgid "Tswana, South Africa"
-msgstr ""
-
-#: ../../datetime/locale_map.go:250
-msgid "Turkish, Cyprus"
-msgstr ""
-
-#: ../../datetime/locale_map.go:251
-msgid "Turkish, Turkey"
-msgstr ""
-
-#: ../../datetime/locale_map.go:252
-msgid "Tsonga, South Africa"
-msgstr ""
-
-#: ../../datetime/locale_map.go:253
-msgid "Tatar, Russia (IQTElif alphabet)"
-msgstr ""
-
-#: ../../datetime/locale_map.go:254
-msgid "Tatar, Russia"
-msgstr ""
-
-#: ../../datetime/locale_map.go:255
-msgid "Uyghur, China (Latin alphabet)"
-msgstr ""
-
-#: ../../datetime/locale_map.go:256
-msgid "Uyghur, China"
-msgstr ""
-
-#: ../../datetime/locale_map.go:257
-msgid "Ukrainian, Ukraine"
-msgstr ""
-
-#: ../../datetime/locale_map.go:258
-msgid "Unami Delaware, United States"
-msgstr ""
-
-#: ../../datetime/locale_map.go:259
-msgid "Urdu, India"
-msgstr ""
-
-#: ../../datetime/locale_map.go:260
-msgid "Urdu, Pakistan"
-msgstr ""
-
-#: ../../datetime/locale_map.go:261
-msgid "Uzbek, Uzbekistan (cyrillic)"
-msgstr ""
-
-#: ../../datetime/locale_map.go:262
-msgid "Uzbek, Uzbekistan"
-msgstr ""
-
-#: ../../datetime/locale_map.go:263
-msgid "Venda, South Africa"
-msgstr ""
-
-#: ../../datetime/locale_map.go:264
-msgid "Vietnamese, Vietnam"
-msgstr ""
-
-#: ../../datetime/locale_map.go:265
-msgid "Walloon, Belgium"
-msgstr ""
-
-#: ../../datetime/locale_map.go:266
-msgid "Walser, Switzerland"
-msgstr ""
-
-#: ../../datetime/locale_map.go:267
-msgid "Walaita, Ethiopia"
-msgstr ""
-
-#: ../../datetime/locale_map.go:268
-msgid "Wolof, Senegal"
-msgstr ""
-
-#: ../../datetime/locale_map.go:269
-msgid "Xhosa, South Africa"
-msgstr ""
-
-#: ../../datetime/locale_map.go:270
-msgid "Yiddish, United States"
-msgstr ""
-
-#: ../../datetime/locale_map.go:271
-msgid "Yoruba, Nigeria"
-msgstr ""
-
-#: ../../datetime/locale_map.go:272
-msgid "Chinese, Hong Kong (Yue dialect)"
-msgstr ""
-
-#: ../../datetime/locale_map.go:273
-msgid "Chinese, China"
-msgstr ""
-
-#: ../../datetime/locale_map.go:274
-msgid "Chinese, Hong Kong"
-msgstr ""
-
-#: ../../datetime/locale_map.go:275
-msgid "Chinese, Singapore"
-msgstr ""
-
-#: ../../datetime/locale_map.go:276
-msgid "Chinese, Taiwan"
-msgstr ""
-
-#: ../../datetime/locale_map.go:277
-msgid "Zulu, South Africa"
-msgstr ""
-
 #: ../../datetime/set_locale.go:52
 msgid "Language changed successfully and effective after logout."
 msgstr ""
@@ -2543,450 +1479,442 @@ msgid "Reunion"
 msgstr ""
 
 #: ../../datetime/zone_utc_map.go:369
-msgid "W SU"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:370
 msgid "Davis"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:371
+#: ../../datetime/zone_utc_map.go:370
 msgid "Mawson"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:372
+#: ../../datetime/zone_utc_map.go:371
 msgid "Aqtau"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:373
+#: ../../datetime/zone_utc_map.go:372
 msgid "Aqtobe"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:374
+#: ../../datetime/zone_utc_map.go:373
 msgid "Ashkhabad"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:375
+#: ../../datetime/zone_utc_map.go:374
 msgid "Dushanbe"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:376
+#: ../../datetime/zone_utc_map.go:375
 msgid "Karachi"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:377
+#: ../../datetime/zone_utc_map.go:376
 msgid "Oral"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:378
+#: ../../datetime/zone_utc_map.go:377
 msgid "Samarkand"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:379
+#: ../../datetime/zone_utc_map.go:378
 msgid "Tashkent"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:380
+#: ../../datetime/zone_utc_map.go:379
 msgid "Kerguelen"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:381
+#: ../../datetime/zone_utc_map.go:380
 msgid "Maldives"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:382
+#: ../../datetime/zone_utc_map.go:381
 msgid "Vostok"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:383
+#: ../../datetime/zone_utc_map.go:382
 msgid "Almaty"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:384
+#: ../../datetime/zone_utc_map.go:383
 msgid "Bishkek"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:385
+#: ../../datetime/zone_utc_map.go:384
 msgid "Colombo"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:386
+#: ../../datetime/zone_utc_map.go:385
 msgid "Dhaka"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:387
+#: ../../datetime/zone_utc_map.go:386
 msgid "Qyzylorda"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:388
+#: ../../datetime/zone_utc_map.go:387
 msgid "Thimbu"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:389
+#: ../../datetime/zone_utc_map.go:388
 msgid "Thimphu"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:390
+#: ../../datetime/zone_utc_map.go:389
 msgid "Yekaterinburg"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:391
+#: ../../datetime/zone_utc_map.go:390
 msgid "Chagos"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:392
+#: ../../datetime/zone_utc_map.go:391
 msgid "Bangkok"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:393
+#: ../../datetime/zone_utc_map.go:392
 msgid "Ho Chi Minh"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:394
+#: ../../datetime/zone_utc_map.go:393
 msgid "Hovd"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:395
+#: ../../datetime/zone_utc_map.go:394
 msgid "Jakarta"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:396
+#: ../../datetime/zone_utc_map.go:395
 msgid "Novokuznetsk"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:397
+#: ../../datetime/zone_utc_map.go:396
 msgid "Novosibirsk"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:398
+#: ../../datetime/zone_utc_map.go:397
 msgid "Omsk"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:399
+#: ../../datetime/zone_utc_map.go:398
 msgid "Phnom Penh"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:400
+#: ../../datetime/zone_utc_map.go:399
 msgid "Pontianak"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:401
+#: ../../datetime/zone_utc_map.go:400
 msgid "Saigon"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:402
+#: ../../datetime/zone_utc_map.go:401
 msgid "Vientiane"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:403
+#: ../../datetime/zone_utc_map.go:402
 msgid "Christmas"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:404
+#: ../../datetime/zone_utc_map.go:403
 msgid "Brunei"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:405
+#: ../../datetime/zone_utc_map.go:404
 msgid "Calcutta"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:406
+#: ../../datetime/zone_utc_map.go:405
 msgid "Chongqing"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:407
+#: ../../datetime/zone_utc_map.go:406
 msgid "Chungking"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:408
+#: ../../datetime/zone_utc_map.go:407
 msgid "Harbin"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:409
+#: ../../datetime/zone_utc_map.go:408
 msgid "Hong Kong"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:410
+#: ../../datetime/zone_utc_map.go:409
 msgid "Kashgar"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:411
+#: ../../datetime/zone_utc_map.go:410
 msgid "Kathmandu"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:412
+#: ../../datetime/zone_utc_map.go:411
 msgid "Kuala Lumpur"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:413
+#: ../../datetime/zone_utc_map.go:412
 msgid "Kuching"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:414
+#: ../../datetime/zone_utc_map.go:413
 msgid "Macao"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:415
+#: ../../datetime/zone_utc_map.go:414
 msgid "Makassar"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:416
+#: ../../datetime/zone_utc_map.go:415
 msgid "Manila"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:417
+#: ../../datetime/zone_utc_map.go:416
 msgid "Shanghai"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:418
+#: ../../datetime/zone_utc_map.go:417
 msgid "Beijing"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:419
+#: ../../datetime/zone_utc_map.go:418
 msgid "Singapore"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:420
+#: ../../datetime/zone_utc_map.go:419
 msgid "Taipei"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:421
+#: ../../datetime/zone_utc_map.go:420
 msgid "Ujung Pandang"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:422
+#: ../../datetime/zone_utc_map.go:421
 msgid "Ulan Bator"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:423
+#: ../../datetime/zone_utc_map.go:422
 msgid "Urumqi"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:424
+#: ../../datetime/zone_utc_map.go:423
 msgid "Perth"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:425
+#: ../../datetime/zone_utc_map.go:424
 msgid "Australia West"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:426
-msgid "PRC"
-msgstr ""
-
-#: ../../datetime/zone_utc_map.go:427
+#: ../../datetime/zone_utc_map.go:425
 msgid "Dili"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:428
+#: ../../datetime/zone_utc_map.go:426
 msgid "Irkutsk"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:429
+#: ../../datetime/zone_utc_map.go:427
 msgid "Jayapura"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:430
+#: ../../datetime/zone_utc_map.go:428
 msgid "Pyongyang"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:431
+#: ../../datetime/zone_utc_map.go:429
 msgid "Seoul"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:432
+#: ../../datetime/zone_utc_map.go:430
 msgid "Tokyo"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:433
+#: ../../datetime/zone_utc_map.go:431
 msgid "Palau"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:434
+#: ../../datetime/zone_utc_map.go:432
 msgid "ROK"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:435
+#: ../../datetime/zone_utc_map.go:433
 msgid "DumontDUrville"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:436
+#: ../../datetime/zone_utc_map.go:434
 msgid "Yakutsk"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:437
+#: ../../datetime/zone_utc_map.go:435
 msgid "ACT"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:438
+#: ../../datetime/zone_utc_map.go:436
 msgid "Adelaide"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:439
+#: ../../datetime/zone_utc_map.go:437
 msgid "Broken Hill"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:440
+#: ../../datetime/zone_utc_map.go:438
 msgid "Currie"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:441
+#: ../../datetime/zone_utc_map.go:439
 msgid "Darwin"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:442
+#: ../../datetime/zone_utc_map.go:440
 msgid "Lindeman"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:443
+#: ../../datetime/zone_utc_map.go:441
 msgid "Melbourne"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:444
+#: ../../datetime/zone_utc_map.go:442
 msgid "Australia North"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:445
+#: ../../datetime/zone_utc_map.go:443
 msgid "Queensland"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:446
+#: ../../datetime/zone_utc_map.go:444
 msgid "Australia South"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:447
+#: ../../datetime/zone_utc_map.go:445
 msgid "Tasmania"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:448
+#: ../../datetime/zone_utc_map.go:446
 msgid "Victoria"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:449
+#: ../../datetime/zone_utc_map.go:447
 msgid "Chatham"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:450
+#: ../../datetime/zone_utc_map.go:448
 msgid "Guam"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:451
+#: ../../datetime/zone_utc_map.go:449
 msgid "Port Moresby"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:452
+#: ../../datetime/zone_utc_map.go:450
 msgid "Saipan"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:453
+#: ../../datetime/zone_utc_map.go:451
 msgid "Truk"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:454
+#: ../../datetime/zone_utc_map.go:452
 msgid "Casey"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:455
+#: ../../datetime/zone_utc_map.go:453
 msgid "Sakhalin"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:456
+#: ../../datetime/zone_utc_map.go:454
 msgid "Vladivostok"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:457
+#: ../../datetime/zone_utc_map.go:455
 msgid "Lord Howe"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:458
+#: ../../datetime/zone_utc_map.go:456
 msgid "Efate"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:459
+#: ../../datetime/zone_utc_map.go:457
 msgid "Nouma"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:460
+#: ../../datetime/zone_utc_map.go:458
 msgid "Guadalcanal"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:461
+#: ../../datetime/zone_utc_map.go:459
 msgid "Kosrae"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:462
+#: ../../datetime/zone_utc_map.go:460
 msgid "Norfolk"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:463
+#: ../../datetime/zone_utc_map.go:461
 msgid "Ponape"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:464
+#: ../../datetime/zone_utc_map.go:462
 msgid "McMurdo"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:465
+#: ../../datetime/zone_utc_map.go:463
 msgid "South Pole"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:466
+#: ../../datetime/zone_utc_map.go:464
 msgid "Anadyr"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:467
+#: ../../datetime/zone_utc_map.go:465
 msgid "Kabul"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:468
+#: ../../datetime/zone_utc_map.go:466
 msgid "Magadan"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:469
+#: ../../datetime/zone_utc_map.go:467
 msgid "Wellington"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:470
+#: ../../datetime/zone_utc_map.go:468
 msgid "Auckland"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:471
+#: ../../datetime/zone_utc_map.go:469
 msgid "Fiji"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:472
+#: ../../datetime/zone_utc_map.go:470
 msgid "Funafuti"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:473
+#: ../../datetime/zone_utc_map.go:471
 msgid "Kwajalein"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:474
+#: ../../datetime/zone_utc_map.go:472
 msgid "Nauru"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:475
+#: ../../datetime/zone_utc_map.go:473
 msgid "Tarawa"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:476
+#: ../../datetime/zone_utc_map.go:474
 msgid "Wake"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:477
+#: ../../datetime/zone_utc_map.go:475
 msgid "Wallis"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:478
+#: ../../datetime/zone_utc_map.go:476
 msgid "Enderbury"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:479
+#: ../../datetime/zone_utc_map.go:477
 msgid "Fakaofo"
 msgstr ""
 
-#: ../../datetime/zone_utc_map.go:480
+#: ../../datetime/zone_utc_map.go:478
 msgid "Tongatapu"
 msgstr ""
 
