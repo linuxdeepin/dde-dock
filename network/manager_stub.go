@@ -74,7 +74,6 @@ func (m *Manager) disableGlobalDeviceSwitches() {
 }
 
 func (m *Manager) setWirelessEnabled(enabled bool) {
-	m.WirelessEnabled = enabled
 	if m.NetworkingEnabled {
 		nmSetWirelessEnabled(enabled)
 	} else {
@@ -86,7 +85,6 @@ func (m *Manager) setWirelessEnabled(enabled bool) {
 	}
 }
 func (m *Manager) setWwanEnabled(enabled bool) {
-	m.WwanEnabled = enabled
 	if m.NetworkingEnabled {
 		nmSetWwanEnabled(enabled)
 	} else {
@@ -98,7 +96,6 @@ func (m *Manager) setWwanEnabled(enabled bool) {
 	}
 }
 func (m *Manager) setWiredEnabled(enabled bool) {
-	m.WiredEnabled = enabled
 	if m.NetworkingEnabled {
 		m.updatePropWiredEnabled(enabled)
 	} else {
@@ -110,7 +107,6 @@ func (m *Manager) setWiredEnabled(enabled bool) {
 	}
 }
 func (m *Manager) setVpnEnabled(enabled bool) {
-	m.VpnEnabled = enabled
 	if m.NetworkingEnabled {
 		m.updatePropVpnEnabled(enabled)
 	} else {

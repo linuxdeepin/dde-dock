@@ -249,7 +249,7 @@ func (c *config) updateDeviceConfig(devPath dbus.ObjectPath) {
 		devConfig.lastConnectionUuid, _ = nmGetDeviceActiveConnectionUuid(devPath)
 		c.setDeviceEnabled(devPath, true)
 	}
-	logger.Debug("updateDeviceConfig", devPath, devConfig) // TODO test
+	logger.Debugf("updateDeviceConfig %s %#v", devPath, devConfig) // TODO test
 }
 func (c *config) setDeviceEnabled(devPath dbus.ObjectPath, enabled bool) {
 	devConfig, err := c.getDeviceConfigByPath(devPath)
@@ -373,8 +373,8 @@ func (m *Manager) EnableDevice(devPath dbus.ObjectPath, enabled bool) (err error
 	if err != nil {
 		return
 	}
+	logger.Debugf("EnableDevice %s %v %#v", devPath, enabled, devConfig) // TODO test
 
-	logger.Debug("EnableDevice", devPath, enabled, devConfig) // TODO test
 	if enabled {
 		// active last connection if device is disconnected
 		if len(devConfig.lastConnectionUuid) > 0 {
@@ -420,7 +420,20 @@ func (m *Manager) deactivateVpnConnection(uuid string) (err error) {
 	return
 }
 
-func (m *Manager) generalGetGlobalDeviceSwitchEnabled(devPath dbus.ObjectPath) (enabled bool) {
+func (m *Manager) trunOnGlobalDeviceSwitchIfNeed(devPath dbus.ObjectPath) (need bool) {
+	// if global device switch is off, turn it on, and only keep
+	// current device alive
+	need = (m.generalGetGlobalDeviceEnabled(devPath) == false)
+	if !need {
+		return
+	}
+	m.config.setAllDeviceLastEnabled(false)
+	m.config.setDeviceLastEnabled(devPath, true)
+	m.generalSetGlobalDeviceEnabled(devPath, true)
+	return
+}
+
+func (m *Manager) generalGetGlobalDeviceEnabled(devPath dbus.ObjectPath) (enabled bool) {
 	devType, _ := nmGetDeviceType(devPath)
 	switch devType {
 	case NM_DEVICE_TYPE_ETHERNET:
@@ -432,7 +445,7 @@ func (m *Manager) generalGetGlobalDeviceSwitchEnabled(devPath dbus.ObjectPath) (
 	}
 	return
 }
-func (m *Manager) generalSetGlobalDeviceSwitchEnabled(devPath dbus.ObjectPath, enabled bool) {
+func (m *Manager) generalSetGlobalDeviceEnabled(devPath dbus.ObjectPath, enabled bool) {
 	devType, _ := nmGetDeviceType(devPath)
 	switch devType {
 	case NM_DEVICE_TYPE_ETHERNET:
@@ -442,18 +455,4 @@ func (m *Manager) generalSetGlobalDeviceSwitchEnabled(devPath dbus.ObjectPath, e
 	case NM_DEVICE_TYPE_MODEM:
 		m.setWwanEnabled(enabled)
 	}
-}
-
-func (m *Manager) trunOnGlobalDeviceSwitchIfNeed(devPath dbus.ObjectPath) (need bool) {
-	// if global device switch is off, turn it on, and only keep
-	// current device alive
-	globalDeviceSwitchEnabled := m.generalGetGlobalDeviceSwitchEnabled(devPath)
-	need = (globalDeviceSwitchEnabled == false)
-	if !need {
-		return
-	}
-	m.config.setAllDeviceLastEnabled(false)
-	m.config.setDeviceLastEnabled(devPath, true)
-	m.generalSetGlobalDeviceSwitchEnabled(devPath, true)
-	return
 }
