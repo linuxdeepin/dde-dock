@@ -78,6 +78,7 @@ func newConfig() (c *config) {
 	c.LastWiredEnabled = true
 	c.LastVpnEnabled = true
 	c.load()
+	c.clearSpareConfig()
 	return
 }
 
@@ -120,6 +121,22 @@ func (c *config) save() {
 	err := ioutil.WriteFile(c.configFile, []byte(fileContent), 0644)
 	if err != nil {
 		logger.Error(err)
+	}
+}
+
+func (c *config) clearSpareConfig() {
+	// remove spare device and vpn config
+	devIds := nmGetDeviceIdentifiers()
+	for id, _ := range c.Devices {
+		if !isStringInArray(id, devIds) {
+			c.removeDeviceConfig(id)
+		}
+	}
+	vpnUuids := nmGetSpecialConnectionUuids(NM_SETTING_VPN_SETTING_NAME)
+	for uuid, _ := range c.VpnConnections {
+		if !isStringInArray(uuid, vpnUuids) {
+			c.removeVpnConfig(uuid)
+		}
 	}
 }
 
@@ -195,7 +212,7 @@ func (c *config) getDeviceConfig(devId string) (d *deviceConfig, err error) {
 	return
 }
 func (c *config) addDeviceConfig(devPath dbus.ObjectPath) {
-	devId, err := nmGeneralGetDeviceIdentifier(devPath)
+	devId, err := nmGetDeviceIdentifier(devPath)
 	if err != nil {
 		return
 	}
@@ -220,7 +237,7 @@ func (c *config) setAllDeviceLastEnabled(enabled bool) {
 	c.save()
 }
 func (c *config) setDeviceLastConnectionUuid(devPath dbus.ObjectPath, uuid string) {
-	devId, err := nmGeneralGetDeviceIdentifier(devPath)
+	devId, err := nmGetDeviceIdentifier(devPath)
 	if err != nil {
 		return
 	}
@@ -274,7 +291,7 @@ func (c *config) setVpnConnectionActivated(uuid string, activated bool) {
 
 // Manager related functions
 func (m *Manager) IsDeviceEnabled(devPath dbus.ObjectPath) (enabled bool, err error) {
-	devId, err := nmGeneralGetDeviceIdentifier(devPath)
+	devId, err := nmGetDeviceIdentifier(devPath)
 	if err != nil {
 		enabled = true // return true as default
 		return
@@ -288,7 +305,7 @@ func (m *Manager) IsDeviceEnabled(devPath dbus.ObjectPath) (enabled bool, err er
 }
 
 func (m *Manager) restoreDeviceState(devPath dbus.ObjectPath) (err error) {
-	devId, err := nmGeneralGetDeviceIdentifier(devPath)
+	devId, err := nmGetDeviceIdentifier(devPath)
 	if err != nil {
 		return
 	}
@@ -304,7 +321,7 @@ func (m *Manager) EnableDevice(devPath dbus.ObjectPath, enabled bool) (err error
 		return
 	}
 
-	devId, err := nmGeneralGetDeviceIdentifier(devPath)
+	devId, err := nmGetDeviceIdentifier(devPath)
 	if err != nil {
 		return
 	}
@@ -385,7 +402,7 @@ func (m *Manager) trunOnGlobalDeviceSwitchIfNeed(devPath dbus.ObjectPath) (need 
 		return
 	}
 
-	devId, err := nmGeneralGetDeviceIdentifier(devPath)
+	devId, err := nmGetDeviceIdentifier(devPath)
 	if err != nil {
 		return
 	}
@@ -407,7 +424,7 @@ func (m *Manager) trunOnGlobalDeviceSwitchIfNeed(devPath dbus.ObjectPath) (need 
 }
 
 func (m *Manager) syncDeviceState(devPath dbus.ObjectPath, state uint32) {
-	devId, err := nmGeneralGetDeviceIdentifier(devPath)
+	devId, err := nmGetDeviceIdentifier(devPath)
 	if err != nil {
 		return
 	}

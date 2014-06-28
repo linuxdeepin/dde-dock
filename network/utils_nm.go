@@ -120,7 +120,7 @@ func nmGeneralGetDeviceHwAddr(devPath dbus.ObjectPath) (hwAddr string, err error
 	hwAddr = strings.ToUpper(hwAddr)
 	return
 }
-func nmGeneralGetDeviceIdentifier(devPath dbus.ObjectPath) (devId string, err error) {
+func nmGetDeviceIdentifier(devPath dbus.ObjectPath) (devId string, err error) {
 	// get device unique identifier, use hardware address if exists
 	hwAddr, err := nmGeneralGetDeviceHwAddr(devPath)
 	if err == nil {
@@ -139,11 +139,19 @@ func nmGeneralGetDeviceIdentifier(devPath dbus.ObjectPath) (devId string, err er
 		modemPath := dev.Udi.Get()
 		devId, err = mmGetModemDeviceIdentifier(dbus.ObjectPath(modemPath))
 	case NM_DEVICE_TYPE_ADSL:
+		// TODO
 		err = fmt.Errorf("could not get adsl device identifier now")
 		logger.Error(err)
 	default:
 		err = fmt.Errorf("unknown device type %d", devType)
 		logger.Error(err)
+	}
+	return
+}
+func nmGetDeviceIdentifiers() (devIds []string) {
+	for _, devPath := range nmGetDevices() {
+		id, _ := nmGetDeviceIdentifier(devPath)
+		devIds = append(devIds, id)
 	}
 	return
 }
