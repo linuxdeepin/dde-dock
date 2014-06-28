@@ -110,24 +110,24 @@ func (m *Manager) initManager() {
 	m.initConnectionManage()
 
 	// setup global switches
-	m.updatePropNetworkingEnabled()
+	m.doUpdatePropNetworkingEnabled()
 	nmManager.NetworkingEnabled.ConnectChanged(func() {
 		m.updatePropNetworkingEnabled()
 	})
 
-	m.updatePropWirelessEnabled()
+	m.doUpdatePropWirelessEnabled()
 	nmManager.WirelessEnabled.ConnectChanged(func() {
 		m.updatePropWirelessEnabled()
 	})
 
-	m.updatePropWwanEnabled()
+	m.doUpdatePropWwanEnabled()
 	nmManager.WwanEnabled.ConnectChanged(func() {
 		m.updatePropWwanEnabled()
 	})
 
 	// load virtual global switches information from configuration file
-	m.updatePropWiredEnabled(m.config.WiredEnabled)
-	m.updatePropVpnEnabled(m.config.VpnEnabled)
+	m.doUpdatePropWiredEnabled(m.config.WiredEnabled)
+	m.doUpdatePropVpnEnabled(m.config.VpnEnabled)
 
 	// update property "ActiveConnections" after devices initialized
 	m.updateActiveConnections()

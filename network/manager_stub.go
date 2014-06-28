@@ -123,10 +123,23 @@ func (m *Manager) setVpnEnabled(enabled bool) {
 }
 
 func (m *Manager) updatePropNetworkingEnabled() {
+	if m.NetworkingEnabled == nmManager.NetworkingEnabled.Get() {
+		return
+	}
+	m.doUpdatePropNetworkingEnabled()
+}
+func (m *Manager) doUpdatePropNetworkingEnabled() {
 	m.NetworkingEnabled = nmManager.NetworkingEnabled.Get()
 	dbus.NotifyChange(m, "NetworkingEnabled")
 }
+
 func (m *Manager) updatePropWirelessEnabled() {
+	if m.WirelessEnabled == nmManager.WirelessEnabled.Get() {
+		return
+	}
+	m.doUpdatePropWirelessEnabled()
+}
+func (m *Manager) doUpdatePropWirelessEnabled() {
 	m.WirelessEnabled = nmManager.WirelessEnabled.Get()
 	// setup wireless devices switches
 	for _, devPath := range nmGetSpecialDevices(NM_DEVICE_TYPE_WIFI) {
@@ -138,7 +151,14 @@ func (m *Manager) updatePropWirelessEnabled() {
 	}
 	dbus.NotifyChange(m, "WirelessEnabled")
 }
+
 func (m *Manager) updatePropWwanEnabled() {
+	if m.WwanEnabled == nmManager.WwanEnabled.Get() {
+		return
+	}
+	m.doUpdatePropWwanEnabled()
+}
+func (m *Manager) doUpdatePropWwanEnabled() {
 	m.WwanEnabled = nmManager.WwanEnabled.Get()
 	// setup modem devices switches
 	for _, devPath := range nmGetSpecialDevices(NM_DEVICE_TYPE_MODEM) {
@@ -150,7 +170,14 @@ func (m *Manager) updatePropWwanEnabled() {
 	}
 	dbus.NotifyChange(m, "WwanEnabled")
 }
+
 func (m *Manager) updatePropWiredEnabled(enabled bool) {
+	if m.WiredEnabled == enabled {
+		return
+	}
+	m.doUpdatePropWiredEnabled(enabled)
+}
+func (m *Manager) doUpdatePropWiredEnabled(enabled bool) {
 	m.WiredEnabled = enabled
 	// setup wired devices switches
 	for _, devPath := range nmGetSpecialDevices(NM_DEVICE_TYPE_ETHERNET) {
@@ -164,7 +191,14 @@ func (m *Manager) updatePropWiredEnabled(enabled bool) {
 	m.config.setWiredEnabled(enabled)
 	dbus.NotifyChange(m, "WiredEnabled")
 }
+
 func (m *Manager) updatePropVpnEnabled(enabled bool) {
+	if m.VpnEnabled == enabled {
+		return
+	}
+	m.doUpdatePropVpnEnabled(enabled)
+}
+func (m *Manager) doUpdatePropVpnEnabled(enabled bool) {
 	m.VpnEnabled = enabled
 	m.config.setVpnEnabled(enabled)
 	// setup vpn connections
