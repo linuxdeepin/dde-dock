@@ -202,8 +202,13 @@ func (c *config) isDeviceConfigExists(devId string) (ok bool) {
 	_, ok = c.Devices[devId]
 	return
 }
-
-// TODO getDeviceConfigByPath
+func (c *config) getDeviceConfigByPath(devPath dbus.ObjectPath) (d *deviceConfig, err error) {
+	devId, err := nmGetDeviceIdentifier(devPath)
+	if err != nil {
+		return
+	}
+	return c.getDeviceConfig(devId)
+}
 func (c *config) getDeviceConfig(devId string) (d *deviceConfig, err error) {
 	if !c.isDeviceConfigExists(devId) {
 		err = fmt.Errorf("device config for %s not exists", devId)
@@ -235,11 +240,7 @@ func (c *config) removeDeviceConfig(devId string) {
 	c.save()
 }
 func (c *config) updateDeviceConfig(devPath dbus.ObjectPath) {
-	devId, err := nmGetDeviceIdentifier(devPath)
-	if err != nil {
-		return
-	}
-	devConfig, err := c.getDeviceConfig(devId)
+	devConfig, err := c.getDeviceConfigByPath(devPath)
 	if err != nil {
 		return
 	}
@@ -257,11 +258,7 @@ func (c *config) setAllDeviceLastEnabled(enabled bool) {
 	c.save()
 }
 func (c *config) setDeviceLastConnectionUuid(devPath dbus.ObjectPath, uuid string) {
-	devId, err := nmGetDeviceIdentifier(devPath)
-	if err != nil {
-		return
-	}
-	devConfig, err := c.getDeviceConfig(devId)
+	devConfig, err := c.getDeviceConfigByPath(devPath)
 	if err != nil {
 		return
 	}
@@ -311,13 +308,9 @@ func (c *config) setVpnConnectionActivated(uuid string, activated bool) {
 
 // Manager related functions
 func (m *Manager) IsDeviceEnabled(devPath dbus.ObjectPath) (enabled bool, err error) {
-	devId, err := nmGetDeviceIdentifier(devPath)
+	devConfig, err := m.config.getDeviceConfigByPath(devPath)
 	if err != nil {
 		enabled = true // return true as default
-		return
-	}
-	devConfig, err := m.config.getDeviceConfig(devId)
-	if err != nil {
 		return
 	}
 	enabled = devConfig.Enabled
@@ -325,11 +318,7 @@ func (m *Manager) IsDeviceEnabled(devPath dbus.ObjectPath) (enabled bool, err er
 }
 
 func (m *Manager) restoreDeviceState(devPath dbus.ObjectPath) (err error) {
-	devId, err := nmGetDeviceIdentifier(devPath)
-	if err != nil {
-		return
-	}
-	devConfig, err := m.config.getDeviceConfig(devId)
+	devConfig, err := m.config.getDeviceConfigByPath(devPath)
 	if err != nil {
 		return
 	}
@@ -340,11 +329,7 @@ func (m *Manager) EnableDevice(devPath dbus.ObjectPath, enabled bool) (err error
 	if enabled && m.trunOnGlobalDeviceSwitchIfNeed(devPath) {
 		return
 	}
-	devId, err := nmGetDeviceIdentifier(devPath)
-	if err != nil {
-		return
-	}
-	devConfig, err := m.config.getDeviceConfig(devId)
+	devConfig, err := m.config.getDeviceConfigByPath(devPath)
 	if err != nil {
 		return
 	}
@@ -422,11 +407,7 @@ func (m *Manager) trunOnGlobalDeviceSwitchIfNeed(devPath dbus.ObjectPath) (need 
 		return
 	}
 
-	devId, err := nmGetDeviceIdentifier(devPath)
-	if err != nil {
-		return
-	}
-	devConfig, err := m.config.getDeviceConfig(devId)
+	devConfig, err := m.config.getDeviceConfigByPath(devPath)
 	if err != nil {
 		return
 	}
