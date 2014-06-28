@@ -137,18 +137,19 @@ func (m *Manager) updatePropWirelessEnabled() {
 	if m.WirelessEnabled == nmManager.WirelessEnabled.Get() {
 		return
 	}
-	m.doUpdatePropWirelessEnabled()
-}
-func (m *Manager) doUpdatePropWirelessEnabled() {
 	m.WirelessEnabled = nmManager.WirelessEnabled.Get()
 	// setup wireless devices switches
 	for _, devPath := range nmGetSpecialDevices(NM_DEVICE_TYPE_WIFI) {
 		if m.WirelessEnabled {
 			m.restoreDeviceState(devPath)
 		} else {
-			m.EnableDevice(devPath, false)
+			m.disconnectAndSaveDeviceState(devPath)
 		}
 	}
+	m.doUpdatePropWirelessEnabled()
+}
+func (m *Manager) doUpdatePropWirelessEnabled() {
+	m.WirelessEnabled = nmManager.WirelessEnabled.Get()
 	dbus.NotifyChange(m, "WirelessEnabled")
 }
 
@@ -165,7 +166,7 @@ func (m *Manager) doUpdatePropWwanEnabled() {
 		if m.WwanEnabled {
 			m.restoreDeviceState(devPath)
 		} else {
-			m.EnableDevice(devPath, false)
+			m.disconnectAndSaveDeviceState(devPath)
 		}
 	}
 	dbus.NotifyChange(m, "WwanEnabled")
@@ -185,7 +186,7 @@ func (m *Manager) doUpdatePropWiredEnabled(enabled bool) {
 		if enabled {
 			m.restoreDeviceState(devPath)
 		} else {
-			m.EnableDevice(devPath, false)
+			m.disconnectAndSaveDeviceState(devPath)
 		}
 	}
 	m.config.setWiredEnabled(enabled)

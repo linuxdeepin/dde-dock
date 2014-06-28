@@ -671,6 +671,15 @@ func nmGetDeviceState(devPath dbus.ObjectPath) (state uint32, err error) {
 	return
 }
 
+func nmGetDeviceType(devPath dbus.ObjectPath) (devType uint32, err error) {
+	dev, err := nmNewDevice(devPath)
+	if err != nil {
+		return
+	}
+	devType = dev.DeviceType.Get()
+	return
+}
+
 func nmGetDeviceActiveConnection(devPath dbus.ObjectPath) (acPath dbus.ObjectPath, err error) {
 	dev, err := nmNewDevice(devPath)
 	if err != nil {

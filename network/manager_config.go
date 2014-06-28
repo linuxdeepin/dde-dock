@@ -246,16 +246,24 @@ func (c *config) updateDeviceConfig(devPath dbus.ObjectPath) {
 	}
 	devState, _ := nmGetDeviceState(devPath)
 	if isDeviceStateActivated(devState) {
-		devConfig.Enabled = true
 		devConfig.lastConnectionUuid, _ = nmGetDeviceActiveConnectionUuid(devPath)
+		c.setDeviceEnabled(devPath, true)
 	}
 	logger.Debug("updateDeviceConfig", devPath, devConfig) // TODO test
 }
-func (c *config) setAllDeviceLastEnabled(enabled bool) {
-	for _, devConfig := range c.Devices {
-		devConfig.LastEnabled = enabled
+func (c *config) setDeviceEnabled(devPath dbus.ObjectPath, enabled bool) {
+	devConfig, err := c.getDeviceConfigByPath(devPath)
+	if err != nil {
+		return
 	}
-	c.save()
+	if devConfig.Enabled == enabled {
+		return
+	}
+	devConfig.Enabled = enabled
+	if manager.DeviceEnabled != nil {
+		logger.Debug("DeviceEnabled", devPath, enabled) //  TODO test
+		manager.DeviceEnabled(string(devPath), enabled)
+	}
 }
 func (c *config) setDeviceLastConnectionUuid(devPath dbus.ObjectPath, uuid string) {
 	devConfig, err := c.getDeviceConfigByPath(devPath)
@@ -264,6 +272,32 @@ func (c *config) setDeviceLastConnectionUuid(devPath dbus.ObjectPath, uuid strin
 	}
 	if devConfig.lastConnectionUuid != uuid {
 		devConfig.lastConnectionUuid = uuid
+		c.save()
+	}
+}
+func (c *config) setDeviceLastEnabled(devPath dbus.ObjectPath, enabled bool) {
+	devConfig, err := c.getDeviceConfigByPath(devPath)
+	if err != nil {
+		return
+	}
+	if devConfig.LastEnabled != enabled {
+		devConfig.LastEnabled = enabled
+		c.save()
+	}
+}
+func (c *config) setAllDeviceLastEnabled(enabled bool) {
+	for _, devConfig := range c.Devices {
+		devConfig.LastEnabled = enabled
+	}
+	c.save()
+}
+func (c *config) saveDeviceState(devPath dbus.ObjectPath) {
+	devConfig, err := c.getDeviceConfigByPath(devPath)
+	if err != nil {
+		return
+	}
+	if devConfig.LastEnabled != devConfig.Enabled {
+		devConfig.LastEnabled = devConfig.Enabled
 		c.save()
 	}
 }
@@ -325,6 +359,12 @@ func (m *Manager) restoreDeviceState(devPath dbus.ObjectPath) (err error) {
 	err = m.EnableDevice(devPath, devConfig.LastEnabled)
 	return
 }
+func (m *Manager) disconnectAndSaveDeviceState(devPath dbus.ObjectPath) (err error) {
+	m.config.saveDeviceState(devPath)
+	err = m.EnableDevice(devPath, false)
+	return
+}
+
 func (m *Manager) EnableDevice(devPath dbus.ObjectPath, enabled bool) (err error) {
 	if enabled && m.trunOnGlobalDeviceSwitchIfNeed(devPath) {
 		return
@@ -334,8 +374,6 @@ func (m *Manager) EnableDevice(devPath dbus.ObjectPath, enabled bool) (err error
 		return
 	}
 
-	devConfig.LastEnabled = devConfig.Enabled
-	devConfig.Enabled = enabled
 	logger.Debug("EnableDevice", devPath, enabled, devConfig) // TODO test
 	if enabled {
 		// active last connection if device is disconnected
@@ -353,11 +391,7 @@ func (m *Manager) EnableDevice(devPath dbus.ObjectPath, enabled bool) (err error
 		err = m.doDisconnectDevice(devPath)
 	}
 
-	// send signal
-	if m.DeviceEnabled != nil {
-		m.DeviceEnabled(string(devPath), enabled)
-	}
-
+	m.config.setDeviceEnabled(devPath, enabled)
 	m.config.save()
 	return
 }
@@ -386,40 +420,40 @@ func (m *Manager) deactivateVpnConnection(uuid string) (err error) {
 	return
 }
 
+func (m *Manager) generalGetGlobalDeviceSwitchEnabled(devPath dbus.ObjectPath) (enabled bool) {
+	devType, _ := nmGetDeviceType(devPath)
+	switch devType {
+	case NM_DEVICE_TYPE_ETHERNET:
+		enabled = m.WiredEnabled
+	case NM_DEVICE_TYPE_WIFI:
+		enabled = m.WirelessEnabled
+	case NM_DEVICE_TYPE_MODEM:
+		enabled = m.WwanEnabled
+	}
+	return
+}
+func (m *Manager) generalSetGlobalDeviceSwitchEnabled(devPath dbus.ObjectPath, enabled bool) {
+	devType, _ := nmGetDeviceType(devPath)
+	switch devType {
+	case NM_DEVICE_TYPE_ETHERNET:
+		m.setWiredEnabled(enabled)
+	case NM_DEVICE_TYPE_WIFI:
+		m.setWirelessEnabled(enabled)
+	case NM_DEVICE_TYPE_MODEM:
+		m.setWwanEnabled(enabled)
+	}
+}
+
 func (m *Manager) trunOnGlobalDeviceSwitchIfNeed(devPath dbus.ObjectPath) (need bool) {
 	// if global device switch is off, turn it on, and only keep
 	// current device alive
-	nmDev, err := nmNewDevice(devPath)
-	if err != nil {
-		return
-	}
-	devType := nmDev.DeviceType.Get()
-
-	switch devType {
-	case NM_DEVICE_TYPE_ETHERNET:
-		need = (m.WiredEnabled == false)
-	case NM_DEVICE_TYPE_WIFI:
-		need = (m.WirelessEnabled == false)
-	case NM_DEVICE_TYPE_MODEM:
-		need = (m.WwanEnabled == false)
-	}
+	globalDeviceSwitchEnabled := m.generalGetGlobalDeviceSwitchEnabled(devPath)
+	need = (globalDeviceSwitchEnabled == false)
 	if !need {
 		return
 	}
-
-	devConfig, err := m.config.getDeviceConfigByPath(devPath)
-	if err != nil {
-		return
-	}
 	m.config.setAllDeviceLastEnabled(false)
-	devConfig.LastEnabled = true
-	switch devType {
-	case NM_DEVICE_TYPE_ETHERNET:
-		m.setWiredEnabled(true)
-	case NM_DEVICE_TYPE_WIFI:
-		m.setWirelessEnabled(true)
-	case NM_DEVICE_TYPE_MODEM:
-		m.setWwanEnabled(true)
-	}
+	m.config.setDeviceLastEnabled(devPath, true)
+	m.generalSetGlobalDeviceSwitchEnabled(devPath, true)
 	return
 }
