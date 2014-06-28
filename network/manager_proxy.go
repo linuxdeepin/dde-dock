@@ -88,7 +88,6 @@ func checkProxyMethod(proxyMethod string) (err error) {
 
 func (m *Manager) GetAutoProxy() (proxyAuto string, err error) {
 	proxyAuto = proxySettings.GetString(gkeyAutoProxy)
-	logger.Info("GetAutoProxy", proxyAuto)
 	return
 }
 func (m *Manager) SetAutoProxy(proxyAuto string) (err error) {
@@ -118,13 +117,11 @@ func (m *Manager) GetProxy(proxyType string) (addr, port string, err error) {
 		addr = a[0] + ":" + a[1]
 		port = a[2]
 	}
-	logger.Info("GetProxy:", proxyType, addr, port)
 	return
 }
 
 // if address is empty, means to remove proxy setting
 func (m *Manager) SetProxy(proxyType, addr, port string) (err error) {
-	logger.Info("SetProxy:", proxyType, addr, port)
 	var proxy string
 	if len(addr) > 0 {
 		if len(port) == 0 {
@@ -164,12 +161,10 @@ func doGetProxy(proxyType string) (proxy string, err error) {
 		err = fmt.Errorf("not a valid proxy type: %s", proxyType)
 		logger.Error(err)
 	}
-	logger.Info("doGetProxy:", proxyType, proxy)
 	return
 }
 
 func doSetProxy(proxyType, proxy string) (err error) {
-	logger.Info("doSetProxy:", proxyType, proxy)
 	var ok bool
 	switch proxyType {
 	case proxyHttp:

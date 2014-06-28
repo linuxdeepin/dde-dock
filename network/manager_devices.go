@@ -64,6 +64,7 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device) {
 		} else {
 			m.config.setDeviceLastConnectionUuid(dev.Path, "")
 		}
+		m.syncDeviceState(dev.Path, dev.State)
 
 		if m.DeviceStateChanged != nil { // TODO
 			m.DeviceStateChanged(string(dev.Path), dev.State)

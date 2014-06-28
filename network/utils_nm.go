@@ -352,8 +352,7 @@ func nmGetDevices() (devPaths []dbus.ObjectPath) {
 
 func nmGetSpecialDevices(devType uint32) (specDevPaths []dbus.ObjectPath) {
 	for _, p := range nmGetDevices() {
-		dev, err := nmNewDevice(p)
-		if err != nil {
+		if dev, err := nmNewDevice(p); err == nil {
 			if dev.DeviceType.Get() == devType {
 				specDevPaths = append(specDevPaths, p)
 			}

@@ -36,15 +36,15 @@ type config struct {
 	configFile string
 	saveLock   sync.Mutex
 
-	WiredEnabled   bool
-	VpnEnabled     bool
-	Devices        map[string]*deviceConfig // config for each device
-	VpnConnections map[string]*vpnConfig    // config for each vpn connection
-
+	WiredEnabled        bool
+	VpnEnabled          bool
 	LastWirelessEnabled bool
 	LastWwanEnabled     bool
 	LastWiredEnabled    bool
 	LastVpnEnabled      bool
+
+	Devices        map[string]*deviceConfig // config for each device
+	VpnConnections map[string]*vpnConfig    // config for each vpn connection
 }
 
 type deviceConfig struct {
@@ -404,4 +404,23 @@ func (m *Manager) trunOnGlobalDeviceSwitchIfNeed(devPath dbus.ObjectPath) (need 
 		m.setWwanEnabled(true)
 	}
 	return
+}
+
+func (m *Manager) syncDeviceState(devPath dbus.ObjectPath, state uint32) {
+	devId, err := nmGeneralGetDeviceIdentifier(devPath)
+	if err != nil {
+		return
+	}
+	devConfig, err := m.config.getDeviceConfig(devId)
+	if err != nil {
+		return
+	}
+	if isDeviceStateActivated(state) {
+		// device is activated but our device switch is still off,
+		// turn it on
+		devConfig.Enabled = true
+		// if !devConfig.Enabled {
+		// 	m.EnableDevice(devPath, true)
+		// }
+	}
 }

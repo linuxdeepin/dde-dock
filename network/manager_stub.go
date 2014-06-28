@@ -154,6 +154,7 @@ func (m *Manager) updatePropWiredEnabled(enabled bool) {
 	m.WiredEnabled = enabled
 	// setup wired devices switches
 	for _, devPath := range nmGetSpecialDevices(NM_DEVICE_TYPE_ETHERNET) {
+		logger.Debug("wired enabled to", enabled, devPath) // TODO test
 		if enabled {
 			m.restoreDeviceState(devPath)
 		} else {

@@ -343,7 +343,7 @@ func (m *Manager) ActivateConnection(uuid string, devPath dbus.ObjectPath) (err 
 func (m *Manager) DeactivateConnection(uuid string) (err error) {
 	apath, ok := nmGetActiveConnectionByUuid(uuid)
 	if !ok {
-		logger.Error("not found active connection with uuid", uuid)
+		// not found active connection with uuid
 		return
 	}
 	logger.Debug("DeactivateConnection:", uuid, apath)
