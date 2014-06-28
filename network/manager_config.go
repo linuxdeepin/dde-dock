@@ -202,6 +202,8 @@ func (c *config) isDeviceConfigExists(devId string) (ok bool) {
 	_, ok = c.Devices[devId]
 	return
 }
+
+// TODO getDeviceConfigByPath
 func (c *config) getDeviceConfig(devId string) (d *deviceConfig, err error) {
 	if !c.isDeviceConfigExists(devId) {
 		err = fmt.Errorf("device config for %s not exists", devId)
@@ -221,6 +223,8 @@ func (c *config) addDeviceConfig(devPath dbus.ObjectPath) {
 		devConfig.lastConnectionUuid, _ = nmGetDeviceActiveConnectionUuid(devPath)
 		c.Devices[devId] = devConfig
 		c.save()
+	} else {
+		c.updateDeviceConfig(devPath)
 	}
 }
 func (c *config) removeDeviceConfig(devId string) {
@@ -229,6 +233,22 @@ func (c *config) removeDeviceConfig(devId string) {
 	}
 	delete(c.Devices, devId)
 	c.save()
+}
+func (c *config) updateDeviceConfig(devPath dbus.ObjectPath) {
+	devId, err := nmGetDeviceIdentifier(devPath)
+	if err != nil {
+		return
+	}
+	devConfig, err := c.getDeviceConfig(devId)
+	if err != nil {
+		return
+	}
+	devState, _ := nmGetDeviceState(devPath)
+	if isDeviceStateActivated(devState) {
+		devConfig.Enabled = true
+		devConfig.lastConnectionUuid, _ = nmGetDeviceActiveConnectionUuid(devPath)
+	}
+	logger.Debug("updateDeviceConfig", devPath, devConfig) // TODO test
 }
 func (c *config) setAllDeviceLastEnabled(enabled bool) {
 	for _, devConfig := range c.Devices {
@@ -320,7 +340,6 @@ func (m *Manager) EnableDevice(devPath dbus.ObjectPath, enabled bool) (err error
 	if enabled && m.trunOnGlobalDeviceSwitchIfNeed(devPath) {
 		return
 	}
-
 	devId, err := nmGetDeviceIdentifier(devPath)
 	if err != nil {
 		return
@@ -332,6 +351,7 @@ func (m *Manager) EnableDevice(devPath dbus.ObjectPath, enabled bool) (err error
 
 	devConfig.LastEnabled = devConfig.Enabled
 	devConfig.Enabled = enabled
+	logger.Debug("EnableDevice", devPath, enabled, devConfig) // TODO test
 	if enabled {
 		// active last connection if device is disconnected
 		if len(devConfig.lastConnectionUuid) > 0 {
@@ -421,23 +441,4 @@ func (m *Manager) trunOnGlobalDeviceSwitchIfNeed(devPath dbus.ObjectPath) (need 
 		m.setWwanEnabled(true)
 	}
 	return
-}
-
-func (m *Manager) syncDeviceState(devPath dbus.ObjectPath, state uint32) {
-	devId, err := nmGetDeviceIdentifier(devPath)
-	if err != nil {
-		return
-	}
-	devConfig, err := m.config.getDeviceConfig(devId)
-	if err != nil {
-		return
-	}
-	if isDeviceStateActivated(state) {
-		// device is activated but our device switch is still off,
-		// turn it on
-		devConfig.Enabled = true
-		// if !devConfig.Enabled {
-		// 	m.EnableDevice(devPath, true)
-		// }
-	}
 }
