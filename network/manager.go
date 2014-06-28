@@ -126,8 +126,8 @@ func (m *Manager) initManager() {
 	})
 
 	// load virtual global switches information from configuration file
-	m.doUpdatePropWiredEnabled(m.config.WiredEnabled)
-	m.doUpdatePropVpnEnabled(m.config.VpnEnabled)
+	m.initPropWiredEnabled()
+	m.initPropVpnEnabled()
 
 	// update property "ActiveConnections" after devices initialized
 	m.updateActiveConnections()

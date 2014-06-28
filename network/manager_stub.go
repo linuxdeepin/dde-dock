@@ -32,17 +32,32 @@ func (m *Manager) OnPropertiesChanged(name string, oldv interface{}) {
 		}
 	}()
 	logger.Debug("OnPropertiesChanged: " + name)
+	var oldBool bool
+	switch oldv.(type) {
+	case bool:
+		oldBool, _ = oldv.(bool)
+	}
 	switch name {
 	case "NetworkingEnabled":
-		m.setNetworkingEnabled(m.NetworkingEnabled)
+		if oldBool != m.NetworkingEnabled {
+			m.setNetworkingEnabled(m.NetworkingEnabled)
+		}
 	case "WirelessEnabled":
-		m.setWirelessEnabled(m.WirelessEnabled)
+		if oldBool != m.WirelessEnabled {
+			m.setWirelessEnabled(m.WirelessEnabled)
+		}
 	case "WwanEnabled":
-		m.setWwanEnabled(m.WwanEnabled)
+		if oldBool != m.WwanEnabled {
+			m.setWwanEnabled(m.WwanEnabled)
+		}
 	case "WiredEnabled":
-		m.setWiredEnabled(m.WiredEnabled)
+		if oldBool != m.WiredEnabled {
+			m.setWiredEnabled(m.WiredEnabled)
+		}
 	case "VpnEnabled":
-		m.setVpnEnabled(m.VpnEnabled)
+		if oldBool != m.VpnEnabled {
+			m.setVpnEnabled(m.VpnEnabled)
+		}
 	}
 }
 
@@ -153,9 +168,6 @@ func (m *Manager) updatePropWwanEnabled() {
 	if m.WwanEnabled == nmManager.WwanEnabled.Get() {
 		return
 	}
-	m.doUpdatePropWwanEnabled()
-}
-func (m *Manager) doUpdatePropWwanEnabled() {
 	m.WwanEnabled = nmManager.WwanEnabled.Get()
 	// setup modem devices switches
 	for _, devPath := range nmGetSpecialDevices(NM_DEVICE_TYPE_MODEM) {
@@ -165,17 +177,26 @@ func (m *Manager) doUpdatePropWwanEnabled() {
 			m.disconnectAndSaveDeviceState(devPath)
 		}
 	}
+	m.doUpdatePropWwanEnabled()
+}
+func (m *Manager) doUpdatePropWwanEnabled() {
+	m.WwanEnabled = nmManager.WwanEnabled.Get()
 	dbus.NotifyChange(m, "WwanEnabled")
 }
 
-func (m *Manager) updatePropWiredEnabled(enabled bool) {
-	if m.WiredEnabled == enabled {
-		return
+func (m *Manager) initPropWiredEnabled() {
+	m.WiredEnabled = m.config.WiredEnabled
+	for _, devPath := range nmGetSpecialDevices(NM_DEVICE_TYPE_ETHERNET) {
+		if !m.WiredEnabled {
+			m.EnableDevice(devPath, false)
+		}
 	}
-	m.doUpdatePropWiredEnabled(enabled)
+	m.doUpdatePropWiredEnabled()
 }
-func (m *Manager) doUpdatePropWiredEnabled(enabled bool) {
+func (m *Manager) updatePropWiredEnabled(enabled bool) {
+	// TODO
 	m.WiredEnabled = enabled
+	m.config.setWiredEnabled(enabled)
 	// setup wired devices switches
 	for _, devPath := range nmGetSpecialDevices(NM_DEVICE_TYPE_ETHERNET) {
 		logger.Debug("wired enabled to", enabled, devPath) // TODO test
@@ -185,17 +206,24 @@ func (m *Manager) doUpdatePropWiredEnabled(enabled bool) {
 			m.disconnectAndSaveDeviceState(devPath)
 		}
 	}
-	m.config.setWiredEnabled(enabled)
+	m.doUpdatePropWiredEnabled()
+}
+func (m *Manager) doUpdatePropWiredEnabled() {
 	dbus.NotifyChange(m, "WiredEnabled")
 }
 
-func (m *Manager) updatePropVpnEnabled(enabled bool) {
-	if m.VpnEnabled == enabled {
-		return
-	}
-	m.doUpdatePropVpnEnabled(enabled)
+func (m *Manager) initPropVpnEnabled() {
+	m.VpnEnabled = m.config.VpnEnabled
+	// TODO
+	// for _, uuid := range nmGetSpecialConnectionUuids(NM_SETTING_VPN_SETTING_NAME) {
+	// if m.VpnEnabled {
+	// 	// enable vpn if is autoconnect
+	// 	m.ActivateConnection(uuid, "/")
+	// }
+	// }
+	m.doUpdatePropVpnEnabled()
 }
-func (m *Manager) doUpdatePropVpnEnabled(enabled bool) {
+func (m *Manager) updatePropVpnEnabled(enabled bool) {
 	m.VpnEnabled = enabled
 	m.config.setVpnEnabled(enabled)
 	// setup vpn connections
@@ -206,6 +234,9 @@ func (m *Manager) doUpdatePropVpnEnabled(enabled bool) {
 			m.deactivateVpnConnection(uuid)
 		}
 	}
+	m.doUpdatePropVpnEnabled()
+}
+func (m *Manager) doUpdatePropVpnEnabled() {
 	dbus.NotifyChange(m, "VpnEnabled")
 }
 
