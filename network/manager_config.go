@@ -343,7 +343,7 @@ func (m *Manager) EnableDevice(devPath dbus.ObjectPath, enabled bool) (err error
 			if _, err := nmGetConnectionByUuid(devConfig.lastConnectionUuid); err == nil {
 				devState, err := nmGetDeviceState(devPath)
 				if err == nil {
-					if !isDeviceStateActivated(devState) {
+					if isDeviceStateAvailable(devState) && !isDeviceStateActivated(devState) {
 						err = m.ActivateConnection(devConfig.lastConnectionUuid, devPath)
 					}
 				}
