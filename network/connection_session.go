@@ -22,8 +22,8 @@
 package network
 
 import (
-	"pkg.linuxdeepin.com/lib/dbus"
 	"fmt"
+	"pkg.linuxdeepin.com/lib/dbus"
 	"time"
 )
 
@@ -257,7 +257,7 @@ func (s *ConnectionSession) Save() (ok bool, err error) {
 			logger.Error(err)
 			return false, err
 		}
-		nmActivateConnection(s.ConnectionPath, s.devPath)
+		manager.ActivateConnection(s.Uuid, s.devPath)
 	} else {
 		// create new connection and activate it
 		// TODO vpn ad-hoc hotspot

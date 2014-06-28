@@ -355,6 +355,10 @@ func (m *Manager) DeactivateConnection(uuid string) (err error) {
 
 // DisconnectDevice will disconnect all connection in target device.
 func (m *Manager) DisconnectDevice(devPath dbus.ObjectPath) (err error) {
+	m.config.setDeviceLastConnectionUuid(devPath, "")
+	return m.doDisconnectDevice(devPath)
+}
+func (m *Manager) doDisconnectDevice(devPath dbus.ObjectPath) (err error) {
 	dev, err := nmNewDevice(devPath)
 	if err != nil {
 		return

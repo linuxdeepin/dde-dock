@@ -350,7 +350,7 @@ func (m *Manager) EnableDevice(devPath dbus.ObjectPath, enabled bool) (err error
 			}
 		}
 	} else {
-		err = m.DisconnectDevice(devPath)
+		err = m.doDisconnectDevice(devPath)
 	}
 
 	// send signal
