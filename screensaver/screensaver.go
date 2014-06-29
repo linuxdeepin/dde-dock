@@ -1,13 +1,16 @@
 package screensaver
 
 import (
-	"pkg.linuxdeepin.com/lib/dbus"
 	"github.com/BurntSushi/xgb/dpms"
 	"github.com/BurntSushi/xgb/screensaver"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
+	"pkg.linuxdeepin.com/lib/dbus"
+	log "pkg.linuxdeepin.com/lib/logger"
 	"sync"
 )
+
+var logger = log.NewLogger("org.freedesktop.ScreenSaver")
 
 type inhibitor struct {
 	cookie uint32
@@ -28,6 +31,15 @@ type ScreenSaver struct {
 	inhibitors  map[uint32]inhibitor
 	counter     uint32
 	counterLock sync.Mutex
+
+	//Inhibit state, we need save the SetTimeout value,
+	//so we can recover the correct state when enter UnInhibit state.
+	lastVals *timeoutVals
+}
+
+type timeoutVals struct {
+	seconds, interval uint32
+	blank             bool
 }
 
 func (ss *ScreenSaver) Inhibit(name, reason string) uint32 {
@@ -39,8 +51,9 @@ func (ss *ScreenSaver) Inhibit(name, reason string) uint32 {
 	ss.inhibitors[ss.counter] = inhibitor{ss.counter, name, reason}
 
 	if len(ss.inhibitors) == 1 {
-		ss.SetTimeout(0, 0, false)
+		ss.setTimeout(0, 0, false)
 	}
+	logger.Infof("\"%s\" want system enter inhibit, because: \"%s\"", name, reason)
 
 	return ss.counter
 }
@@ -52,13 +65,38 @@ func (ss *ScreenSaver) SimulateUserActivity() {
 func (ss *ScreenSaver) UnInhibit(cookie uint32) {
 	ss.counterLock.Lock()
 	defer ss.counterLock.Unlock()
+
+	inhibitor, ok := ss.inhibitors[cookie]
+	if !ok {
+		logger.Warning("no valid inhibit cookie", cookie)
+		return
+	}
+
+	logger.Infof("\"%s\" no need inhibit.", inhibitor.name)
+
 	delete(ss.inhibitors, cookie)
 	if len(ss.inhibitors) == 0 {
-		ss.SetTimeout(ss.idleTime, ss.idleInterval, ss.blank == 1)
+		logger.Info("Enter uninhibit state")
+		if ss.lastVals != nil {
+			logger.Info("recover from ", ss.lastVals)
+			ss.setTimeout(ss.lastVals.seconds, ss.lastVals.interval, ss.lastVals.blank)
+			ss.lastVals = nil
+		} else {
+			ss.setTimeout(ss.idleTime, ss.idleInterval, ss.blank == 1)
+		}
 	}
 }
 
 func (ss *ScreenSaver) SetTimeout(seconds, interval uint32, blank bool) {
+	if len(ss.inhibitors) > 0 {
+		ss.lastVals = &timeoutVals{seconds, interval, blank}
+		logger.Info("Current is inhibit state, the value", ss.lastVals, "will apply when in unhibit state")
+	} else {
+		ss.setTimeout(seconds, interval, blank)
+	}
+}
+
+func (ss *ScreenSaver) setTimeout(seconds, interval uint32, blank bool) {
 	if blank {
 		ss.blank = 1
 	} else {
@@ -66,6 +104,7 @@ func (ss *ScreenSaver) SetTimeout(seconds, interval uint32, blank bool) {
 	}
 	xproto.SetScreenSaver(ss.xu.Conn(), int16(seconds), int16(interval), ss.blank, 0)
 	dpms.SetTimeouts(ss.xu.Conn(), 0, 0, 0)
+	logger.Info("SetTimeout to ", seconds, interval, blank)
 }
 
 func (*ScreenSaver) GetDBusInfo() dbus.DBusInfo {
