@@ -247,7 +247,11 @@ func (c *config) updateDeviceConfig(devPath dbus.ObjectPath) {
 	devState, _ := nmGetDeviceState(devPath)
 	if isDeviceStateInActivating(devState) {
 		devConfig.lastConnectionUuid, _ = nmGetDeviceActiveConnectionUuid(devPath)
-		c.setDeviceEnabled(devPath, true)
+		if !manager.generalGetGlobalDeviceEnabled(devPath) {
+			manager.generalSetGlobalDeviceEnabled(devPath, true)
+		} else {
+			c.setDeviceEnabled(devPath, true)
+		}
 	}
 	logger.Debugf("updateDeviceConfig %s %#v", devPath, devConfig) // TODO test
 }
