@@ -737,7 +737,7 @@ func nmManagerEnable(enable bool) (err error) {
 }
 
 func nmSetNetworkingEnabled(enabled bool) {
-	if nmManager.NetworkingEnabled.Get() == enabled {
+	if nmManager.NetworkingEnabled.Get() != enabled {
 		nmManagerEnable(enabled)
 	} else {
 		logger.Warning("NetworkingEnabled already set as", enabled)

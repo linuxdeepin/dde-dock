@@ -37,18 +37,28 @@ func (m *Manager) OnPropertiesChanged(name string, oldv interface{}) {
 	case bool:
 		oldBool, _ = oldv.(bool)
 	}
+
+	// NetworkingEnabled, WirelessEnabled and WwanEnabled were managed
+	// by NetworkManager, so restore to their old value here and get
+	// the right value from NetworkManager.
 	switch name {
 	case "NetworkingEnabled":
 		if oldBool != m.NetworkingEnabled {
-			m.setNetworkingEnabled(m.NetworkingEnabled)
+			newValue := m.NetworkingEnabled
+			m.NetworkingEnabled = oldBool
+			m.setNetworkingEnabled(newValue)
 		}
 	case "WirelessEnabled":
 		if oldBool != m.WirelessEnabled {
-			m.setWirelessEnabled(m.WirelessEnabled)
+			newValue := m.WirelessEnabled
+			m.WirelessEnabled = oldBool
+			m.setWirelessEnabled(newValue)
 		}
 	case "WwanEnabled":
 		if oldBool != m.WwanEnabled {
-			m.setWwanEnabled(m.WwanEnabled)
+			newValue := m.WwanEnabled
+			m.WwanEnabled = oldBool
+			m.setWwanEnabled(newValue)
 		}
 	case "WiredEnabled":
 		if oldBool != m.WiredEnabled {
@@ -62,6 +72,7 @@ func (m *Manager) OnPropertiesChanged(name string, oldv interface{}) {
 }
 
 func (m *Manager) setNetworkingEnabled(enabled bool) {
+	logger.Debug("setNetworkingEnabled", enabled) // TODO test
 	nmSetNetworkingEnabled(enabled)
 }
 func (m *Manager) setWirelessEnabled(enabled bool) {
