@@ -304,7 +304,7 @@ const ({{range .}}
 
 // Virtual key data
 var virtualKeys = []vkeyInfo{ {{range .}}
-	{Value:{{.Name}}, Type:{{.Type}}, VkType:{{.VkType}}, RelatedSection:{{.RelatedSection}}, RelatedKeys:[]string{ {{range $k := .RelatedKeys}}{{$k}},{{end}} }, Available:{{.UsedByFrontEnd}}, Optional:{{.Optional}} },{{end}}
+	{Value:{{.Name}}, Type:{{.Type}}, VkType:{{.VkType}}, RelatedSection:{{.RelatedSection}}, RelatedKeys:[]string{ {{range $k := .RelatedKeys}}{{$k}},{{end}} }, Available:{{.UsedByFrontEnd}}, ChildKey:{{.ChildKey}}, Optional:{{.Optional}} },{{end}}
 }
 
 // Get JSON value generally
@@ -322,7 +322,7 @@ func generalGetVkeyJSON(data connectionData, section, key string) (valueJSON str
 
 // Set JSON value generally
 func generalSetVkeyJSON(data connectionData, section, key string, valueJSON string) (err error) {
-	if isJSONValueMeansToDeleteKey(valueJSON, getSettingVkeyType(section, key)) {
+	if isJSONValueMeansToDeleteKey(valueJSON, getSettingVkeyType(section, key)) && !isChildVkey(section, key) {
 		logger.Debugf("json value means to remove key, data[%s][%s]=%#v", section, key, valueJSON)
 		removeVirtualKey(data, section, key)
 		return

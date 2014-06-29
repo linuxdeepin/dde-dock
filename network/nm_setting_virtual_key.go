@@ -42,6 +42,7 @@ type vkeyInfo struct {
 	RelatedSection string
 	RelatedKeys    []string
 	Available      bool // check if is used by front-end
+	ChildKey       bool // such as ip address, mask and gateway
 	Optional       bool // if key is optional(such as child key gateway of ip address), will ignore error for it
 }
 
@@ -228,7 +229,11 @@ func getRelatedVkeys(section, key string) (vks []string) {
 // remove virtual key means to remove its related keys
 func removeVirtualKey(data connectionData, section, vkey string) {
 	if isControllerVkey(section, vkey) {
-		// ignore controller virtual key for there is no related key for it
+		// ignore controller virtual key for that there is no related key for it
+		return
+	}
+	if isChildVkey(section, vkey) {
+		// ignore child virtual key or its brother keys will be affected
 		return
 	}
 	vkeyInfo, ok := getVkeyInfo(section, vkey)
@@ -271,6 +276,15 @@ func isControllerVkey(section, vkey string) bool {
 		return true
 	}
 	return false
+}
+
+func isChildVkey(section, vkey string) (childKey bool) {
+	for _, vk := range virtualKeys {
+		if vk.RelatedSection == section && vk.Value == vkey {
+			childKey = vk.ChildKey
+		}
+	}
+	return
 }
 
 func isOptionalVkey(section, vkey string) (optional bool) {

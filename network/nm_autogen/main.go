@@ -24,6 +24,7 @@ package main
 import (
 	"bytes"
 	"flag"
+	"os"
 	"path"
 	"text/template"
 )
@@ -53,7 +54,6 @@ var funcMap = template.FuncMap{
 
 const (
 	backEndDir                = ".."
-	frontEndDir               = "../../../dss/modules/network/edit_autogen/"
 	nmSettingsJSONFile        = "./nm_settings.json"
 	nmSettingVkeyJSONFile     = "./nm_setting_vkey.json"
 	nmSettingVsectionJSONFile = "./nm_setting_vsection.json"
@@ -63,6 +63,7 @@ var (
 	argWriteOutput        bool
 	argBackEnd            bool
 	argFrontEnd           bool
+	frontEndDir           = os.Getenv("HOME") + "/workspace/deepin/dde-control-center/modules/network/edit_autogen/"
 	nmSettingUtilsFile    = path.Join(backEndDir, "nm_setting_general_autogen.go")
 	nmSettingVkeyFile     = path.Join(backEndDir, "nm_setting_virtual_key_autogen.go")
 	nmSettingVsectionFile = path.Join(backEndDir, "nm_setting_virtual_section_autogen.go")
@@ -107,6 +108,7 @@ type NMVkeyStruct struct {
 	RelatedSection string   // such as "NM_SETTING_802_1X_SETTING_NAME"
 	RelatedKeys    []string // such as "NM_SETTING_802_1X_EAP"
 	UsedByFrontEnd bool     // check if is used by front-end
+	ChildKey       bool     // such as ip address, mask and gateway
 	Optional       bool     // if key is optional, will ignore error for it
 	DisplayName    string
 	FrontEndWidget string            // such as "EditLinePasswordInput"
