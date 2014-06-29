@@ -69,14 +69,14 @@ type vpnConfig struct {
 func newConfig() (c *config) {
 	c = &config{}
 	c.setConfigFile(networkConfigFile)
-	c.WiredEnabled = true
-	c.VpnEnabled = true
 	c.Devices = make(map[string]*deviceConfig)
 	c.VpnConnections = make(map[string]*vpnConfig)
+	c.WiredEnabled = true
+	c.VpnEnabled = false
 	c.LastWirelessEnabled = true
 	c.LastWwanEnabled = true
-	c.LastWiredEnabled = true
-	c.LastVpnEnabled = true
+	c.LastWiredEnabled = c.WiredEnabled
+	c.LastVpnEnabled = c.VpnEnabled
 	c.load()
 	c.clearSpareConfig()
 	return
