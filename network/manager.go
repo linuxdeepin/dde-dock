@@ -163,14 +163,24 @@ func (m *Manager) updateActiveConnections() {
 				State:   nmaconn.State.Get(),
 				Vpn:     nmaconn.Vpn.Get(),
 			}
+			if cpath, err := nmGetConnectionByUuid(aconn.Uuid); err == nil {
+				aconn.Id = nmGetConnectionId(cpath)
+			}
+
 			nmaconn.State.ConnectChanged(func() {
 				// TODO fix dbus property issue
 				logger.Debug("active connection state changed:", aconn.State, nmaconn.State.Get())
 				aconn.State = nmaconn.State.Get()
 				if aconn.Vpn {
-					// TODO notification for vpn
 					// update vpn config
-					m.config.setVpnConnectionActivated(aconn.Uuid, isConnectionStateActivated(aconn.State))
+					m.config.setVpnConnectionActivated(aconn.Uuid, isConnectionStateInActivating(aconn.State))
+
+					// notification for vpn
+					if isConnectionStateActivated(aconn.State) {
+						notifyVpnConnected(aconn.Id)
+					} else if isConnectionStateDeactivate(aconn.State) {
+						notifyVpnDisconnected(aconn.Id)
+					}
 				}
 				m.updatePropActiveConnections()
 			})

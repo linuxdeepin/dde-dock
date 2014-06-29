@@ -46,6 +46,7 @@ type activeConnection struct {
 
 	Devices []dbus.ObjectPath
 	// SpecificObject dbus.ObjectPath // TODO
+	Id    string
 	Uuid  string
 	State uint32
 	Vpn   bool
@@ -348,7 +349,7 @@ func (m *Manager) DeactivateConnection(uuid string) (err error) {
 		return
 	}
 	logger.Debug("DeactivateConnection:", uuid, apath)
-	if isConnectionStateActivated(nmGetActiveConnectionState(apath)) {
+	if isConnectionStateInActivating(nmGetActiveConnectionState(apath)) {
 		err = nmDeactivateConnection(apath)
 	}
 	return
@@ -365,7 +366,7 @@ func (m *Manager) doDisconnectDevice(devPath dbus.ObjectPath) (err error) {
 		return
 	}
 	devState := dev.State.Get()
-	if isDeviceStateActivated(devState) {
+	if isDeviceStateInActivating(devState) {
 		err = dev.Disconnect()
 		if err != nil {
 			logger.Error(err)

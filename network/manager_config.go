@@ -245,7 +245,7 @@ func (c *config) updateDeviceConfig(devPath dbus.ObjectPath) {
 		return
 	}
 	devState, _ := nmGetDeviceState(devPath)
-	if isDeviceStateActivated(devState) {
+	if isDeviceStateInActivating(devState) {
 		devConfig.lastConnectionUuid, _ = nmGetDeviceActiveConnectionUuid(devPath)
 		c.setDeviceEnabled(devPath, true)
 	}
@@ -380,7 +380,7 @@ func (m *Manager) EnableDevice(devPath dbus.ObjectPath, enabled bool) (err error
 			if _, err := nmGetConnectionByUuid(devConfig.lastConnectionUuid); err == nil {
 				devState, err := nmGetDeviceState(devPath)
 				if err == nil {
-					if isDeviceStateAvailable(devState) && !isDeviceStateActivated(devState) {
+					if isDeviceStateAvailable(devState) && !isDeviceStateInActivating(devState) {
 						err = m.ActivateConnection(devConfig.lastConnectionUuid, devPath)
 					}
 				}

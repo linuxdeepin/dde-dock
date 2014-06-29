@@ -66,7 +66,7 @@ func isDeviceStateAvailable(state uint32) bool {
 }
 
 // check if device is activating or activated
-func isDeviceStateActivated(state uint32) bool {
+func isDeviceStateInActivating(state uint32) bool {
 	if state >= NM_DEVICE_STATE_PREPARE && state <= NM_DEVICE_STATE_ACTIVATED {
 		return true
 	}
@@ -210,15 +210,28 @@ const (
 const (
 	NM_ACTIVE_CONNECTION_STATE_UNKNOWN      = 0
 	NM_ACTIVE_CONNECTION_STATE_ACTIVATING   = 1
-	hNM_ACTIVE_CONNECTION_STATE_ACTIVATED   = 2
+	NM_ACTIVE_CONNECTION_STATE_ACTIVATED    = 2
 	NM_ACTIVE_CONNECTION_STATE_DEACTIVATING = 3
 	NM_ACTIVE_CONNECTION_STATE_DEACTIVATE   = 4
 )
 
 // check if connection activating or activated
-func isConnectionStateActivated(state uint32) bool {
+func isConnectionStateInActivating(state uint32) bool {
 	if state == NM_ACTIVE_CONNECTION_STATE_ACTIVATING ||
-		state == hNM_ACTIVE_CONNECTION_STATE_ACTIVATED {
+		state == NM_ACTIVE_CONNECTION_STATE_ACTIVATED {
+		return true
+	}
+	return false
+}
+
+func isConnectionStateActivated(state uint32) bool {
+	if state == NM_ACTIVE_CONNECTION_STATE_ACTIVATED {
+		return true
+	}
+	return false
+}
+func isConnectionStateDeactivate(state uint32) bool {
+	if state == NM_ACTIVE_CONNECTION_STATE_DEACTIVATE {
 		return true
 	}
 	return false

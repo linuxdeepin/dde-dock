@@ -176,7 +176,7 @@ func newStateNotifier() (n *StateNotifier) {
 							} else {
 								msg = DeviceErrorTable[reason]
 							}
-							notify.Notify("Network", 0, icon, Tr("Disconnect"), msg, nil, nil, 0)
+							notify.Notify("Network", 0, icon, Tr("Disconnected"), msg, nil, nil, 0)
 						}
 					}
 				}
@@ -209,8 +209,6 @@ func newStateNotifier() (n *StateNotifier) {
 		}
 	})
 
-	//TODO: VPN state
-
 	return
 }
 
@@ -223,7 +221,16 @@ func destroyStateNotifier(n *StateNotifier) {
 	n.devices = nil
 }
 
+func notifyVpnConnected(id string) {
+	icon := "network-vpn"
+	notify(icon, Tr("Connected"), id)
+}
+func notifyVpnDisconnected(id string) {
+	icon := "network-error" // TODO change vpn icon
+	notify(icon, Tr("Disconnected"), id)
+}
+
 func notifyApModeNotSupport() {
 	icon := "notification-network-wireless-disconnected"
-	notify(icon, Tr("Disconnect"), Tr("Access Point mode is not supported by this device."))
+	notify(icon, Tr("Disconnected"), Tr("Access Point mode is not supported by this device."))
 }
