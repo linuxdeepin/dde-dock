@@ -174,14 +174,14 @@ func (c *config) setLastVpnEnabled(enabled bool) {
 
 func (c *config) setWiredEnabled(enabled bool) {
 	if c.WiredEnabled != enabled {
-		c.LastWiredEnabled = c.WiredEnabled
+		// c.LastWiredEnabled = c.WiredEnabled
 		c.WiredEnabled = enabled
 		c.save()
 	}
 }
 func (c *config) setVpnEnabled(enabled bool) {
 	if c.VpnEnabled != enabled {
-		c.LastVpnEnabled = c.VpnEnabled
+		// c.LastVpnEnabled = c.VpnEnabled
 		c.VpnEnabled = enabled
 		c.save()
 	}
@@ -360,7 +360,6 @@ func (m *Manager) restoreDeviceState(devPath dbus.ObjectPath) (err error) {
 	return
 }
 func (m *Manager) disconnectAndSaveDeviceState(devPath dbus.ObjectPath) (err error) {
-	m.config.saveDeviceState(devPath)
 	err = m.EnableDevice(devPath, false)
 	return
 }
@@ -391,8 +390,8 @@ func (m *Manager) EnableDevice(devPath dbus.ObjectPath, enabled bool) (err error
 		err = m.doDisconnectDevice(devPath)
 	}
 
+	m.config.saveDeviceState(devPath)
 	m.config.setDeviceEnabled(devPath, enabled)
-	m.config.save()
 	return
 }
 

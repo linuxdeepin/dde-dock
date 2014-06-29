@@ -62,32 +62,8 @@ func (m *Manager) OnPropertiesChanged(name string, oldv interface{}) {
 }
 
 func (m *Manager) setNetworkingEnabled(enabled bool) {
-	m.NetworkingEnabled = enabled
-	// setup global device switches
-	if enabled {
-		m.restoreGlobalDeviceSwitches()
-	} else {
-		m.saveAndDisableGlobalDeviceSwitches()
-	}
 	nmSetNetworkingEnabled(enabled)
 }
-func (m *Manager) restoreGlobalDeviceSwitches() {
-	nmSetWirelessEnabled(m.config.LastWirelessEnabled)
-	nmSetWwanEnabled(m.config.LastWwanEnabled)
-	m.updatePropWiredEnabled(m.config.LastWiredEnabled)
-	m.updatePropVpnEnabled(m.config.LastVpnEnabled)
-}
-func (m *Manager) saveAndDisableGlobalDeviceSwitches() {
-	m.config.setLastWirelessEnabled(m.WirelessEnabled)
-	nmSetWirelessEnabled(false)
-
-	m.config.setLastWwanEnabled(m.WwanEnabled)
-	nmSetWwanEnabled(false)
-
-	m.updatePropWiredEnabled(false)
-	m.updatePropVpnEnabled(false)
-}
-
 func (m *Manager) setWirelessEnabled(enabled bool) {
 	if m.NetworkingEnabled {
 		nmSetWirelessEnabled(enabled)
@@ -136,7 +112,7 @@ func (m *Manager) setVpnEnabled(enabled bool) {
 func (m *Manager) initPropNetworkingEnabled() {
 	m.NetworkingEnabled = nmManager.NetworkingEnabled.Get()
 	if !m.NetworkingEnabled {
-		m.saveAndDisableGlobalDeviceSwitches()
+		m.saveAndTurnOffGlobalDeviceSwitches()
 	}
 	m.doUpdatePropNetworkingEnabled()
 }
@@ -144,11 +120,34 @@ func (m *Manager) updatePropNetworkingEnabled() {
 	if m.NetworkingEnabled == nmManager.NetworkingEnabled.Get() {
 		return
 	}
+	m.NetworkingEnabled = nmManager.NetworkingEnabled.Get()
+	// setup global device switches
+	if m.NetworkingEnabled {
+		m.restoreGlobalDeviceSwitches()
+	} else {
+		m.saveAndTurnOffGlobalDeviceSwitches()
+	}
 	m.doUpdatePropNetworkingEnabled()
 }
 func (m *Manager) doUpdatePropNetworkingEnabled() {
 	m.NetworkingEnabled = nmManager.NetworkingEnabled.Get()
 	dbus.NotifyChange(m, "NetworkingEnabled")
+}
+func (m *Manager) restoreGlobalDeviceSwitches() {
+	nmSetWirelessEnabled(m.config.LastWirelessEnabled)
+	nmSetWwanEnabled(m.config.LastWwanEnabled)
+	m.updatePropWiredEnabled(m.config.LastWiredEnabled)
+	m.updatePropVpnEnabled(m.config.LastVpnEnabled)
+}
+func (m *Manager) saveAndTurnOffGlobalDeviceSwitches() {
+	m.config.setLastWirelessEnabled(m.WirelessEnabled)
+	m.config.setLastWwanEnabled(m.WwanEnabled)
+	m.config.setLastWiredEnabled(m.WiredEnabled)
+	m.config.setLastVpnEnabled(m.VpnEnabled)
+	nmSetWirelessEnabled(false)
+	nmSetWwanEnabled(false)
+	m.updatePropWiredEnabled(false)
+	m.updatePropVpnEnabled(false)
 }
 
 func (m *Manager) initPropWirelessEnabled() {
@@ -165,6 +164,7 @@ func (m *Manager) updatePropWirelessEnabled() {
 		return
 	}
 	m.WirelessEnabled = nmManager.WirelessEnabled.Get()
+	logger.Debug("updatePropWirelessEnabled", m.WirelessEnabled)
 	// setup wireless devices switches
 	for _, devPath := range nmGetSpecialDevices(NM_DEVICE_TYPE_WIFI) {
 		if m.WirelessEnabled {
@@ -219,6 +219,7 @@ func (m *Manager) initPropWiredEnabled() {
 	m.doUpdatePropWiredEnabled()
 }
 func (m *Manager) updatePropWiredEnabled(enabled bool) {
+	logger.Debug("updatePropWiredEnabled", enabled)
 	m.WiredEnabled = enabled
 	m.config.setWiredEnabled(enabled)
 	// setup wired devices switches
