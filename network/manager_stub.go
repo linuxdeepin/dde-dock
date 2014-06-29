@@ -67,7 +67,7 @@ func (m *Manager) setNetworkingEnabled(enabled bool) {
 	if enabled {
 		m.restoreGlobalDeviceSwitches()
 	} else {
-		m.disableGlobalDeviceSwitches()
+		m.saveAndDisableGlobalDeviceSwitches()
 	}
 	nmSetNetworkingEnabled(enabled)
 }
@@ -77,7 +77,7 @@ func (m *Manager) restoreGlobalDeviceSwitches() {
 	m.updatePropWiredEnabled(m.config.LastWiredEnabled)
 	m.updatePropVpnEnabled(m.config.LastVpnEnabled)
 }
-func (m *Manager) disableGlobalDeviceSwitches() {
+func (m *Manager) saveAndDisableGlobalDeviceSwitches() {
 	m.config.setLastWirelessEnabled(m.WirelessEnabled)
 	nmSetWirelessEnabled(false)
 
@@ -133,6 +133,13 @@ func (m *Manager) setVpnEnabled(enabled bool) {
 	}
 }
 
+func (m *Manager) initPropNetworkingEnabled() {
+	m.NetworkingEnabled = nmManager.NetworkingEnabled.Get()
+	if !m.NetworkingEnabled {
+		m.saveAndDisableGlobalDeviceSwitches()
+	}
+	m.doUpdatePropNetworkingEnabled()
+}
 func (m *Manager) updatePropNetworkingEnabled() {
 	if m.NetworkingEnabled == nmManager.NetworkingEnabled.Get() {
 		return
@@ -144,6 +151,15 @@ func (m *Manager) doUpdatePropNetworkingEnabled() {
 	dbus.NotifyChange(m, "NetworkingEnabled")
 }
 
+func (m *Manager) initPropWirelessEnabled() {
+	m.WirelessEnabled = nmManager.WirelessEnabled.Get()
+	if !m.WirelessEnabled {
+		for _, devPath := range nmGetSpecialDevices(NM_DEVICE_TYPE_WIFI) {
+			m.disconnectAndSaveDeviceState(devPath)
+		}
+	}
+	m.doUpdatePropWirelessEnabled()
+}
 func (m *Manager) updatePropWirelessEnabled() {
 	if m.WirelessEnabled == nmManager.WirelessEnabled.Get() {
 		return
@@ -164,6 +180,15 @@ func (m *Manager) doUpdatePropWirelessEnabled() {
 	dbus.NotifyChange(m, "WirelessEnabled")
 }
 
+func (m *Manager) initPropWwanEnabled() {
+	m.WwanEnabled = nmManager.WwanEnabled.Get()
+	if !m.WwanEnabled {
+		for _, devPath := range nmGetSpecialDevices(NM_DEVICE_TYPE_MODEM) {
+			m.disconnectAndSaveDeviceState(devPath)
+		}
+	}
+	m.doUpdatePropWwanEnabled()
+}
 func (m *Manager) updatePropWwanEnabled() {
 	if m.WwanEnabled == nmManager.WwanEnabled.Get() {
 		return
@@ -186,15 +211,14 @@ func (m *Manager) doUpdatePropWwanEnabled() {
 
 func (m *Manager) initPropWiredEnabled() {
 	m.WiredEnabled = m.config.WiredEnabled
-	for _, devPath := range nmGetSpecialDevices(NM_DEVICE_TYPE_ETHERNET) {
-		if !m.WiredEnabled {
-			m.EnableDevice(devPath, false)
+	if !m.WiredEnabled {
+		for _, devPath := range nmGetSpecialDevices(NM_DEVICE_TYPE_ETHERNET) {
+			m.disconnectAndSaveDeviceState(devPath)
 		}
 	}
 	m.doUpdatePropWiredEnabled()
 }
 func (m *Manager) updatePropWiredEnabled(enabled bool) {
-	// TODO
 	m.WiredEnabled = enabled
 	m.config.setWiredEnabled(enabled)
 	// setup wired devices switches

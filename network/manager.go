@@ -110,17 +110,17 @@ func (m *Manager) initManager() {
 	m.initConnectionManage()
 
 	// setup global switches
-	m.doUpdatePropNetworkingEnabled()
+	m.initPropNetworkingEnabled()
 	nmManager.NetworkingEnabled.ConnectChanged(func() {
 		m.updatePropNetworkingEnabled()
 	})
 
-	m.doUpdatePropWirelessEnabled()
+	m.initPropWirelessEnabled()
 	nmManager.WirelessEnabled.ConnectChanged(func() {
 		m.updatePropWirelessEnabled()
 	})
 
-	m.doUpdatePropWwanEnabled()
+	m.initPropWwanEnabled()
 	nmManager.WwanEnabled.ConnectChanged(func() {
 		m.updatePropWwanEnabled()
 	})
