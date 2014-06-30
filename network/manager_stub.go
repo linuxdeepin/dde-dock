@@ -165,7 +165,7 @@ func (m *Manager) initPropWirelessEnabled() {
 	m.WirelessEnabled = nmManager.WirelessEnabled.Get()
 	if !m.WirelessEnabled {
 		for _, devPath := range nmGetSpecialDevices(NM_DEVICE_TYPE_WIFI) {
-			m.disconnectAndSaveDeviceState(devPath)
+			m.saveAndDisconnectDevice(devPath)
 		}
 	}
 	m.doUpdatePropWirelessEnabled()
@@ -181,7 +181,7 @@ func (m *Manager) updatePropWirelessEnabled() {
 		if m.WirelessEnabled {
 			m.restoreDeviceState(devPath)
 		} else {
-			m.disconnectAndSaveDeviceState(devPath)
+			m.saveAndDisconnectDevice(devPath)
 		}
 	}
 	m.doUpdatePropWirelessEnabled()
@@ -195,7 +195,7 @@ func (m *Manager) initPropWwanEnabled() {
 	m.WwanEnabled = nmManager.WwanEnabled.Get()
 	if !m.WwanEnabled {
 		for _, devPath := range nmGetSpecialDevices(NM_DEVICE_TYPE_MODEM) {
-			m.disconnectAndSaveDeviceState(devPath)
+			m.saveAndDisconnectDevice(devPath)
 		}
 	}
 	m.doUpdatePropWwanEnabled()
@@ -210,7 +210,7 @@ func (m *Manager) updatePropWwanEnabled() {
 		if m.WwanEnabled {
 			m.restoreDeviceState(devPath)
 		} else {
-			m.disconnectAndSaveDeviceState(devPath)
+			m.saveAndDisconnectDevice(devPath)
 		}
 	}
 	m.doUpdatePropWwanEnabled()
@@ -224,12 +224,15 @@ func (m *Manager) initPropWiredEnabled() {
 	m.WiredEnabled = m.config.WiredEnabled
 	if !m.WiredEnabled {
 		for _, devPath := range nmGetSpecialDevices(NM_DEVICE_TYPE_ETHERNET) {
-			m.disconnectAndSaveDeviceState(devPath)
+			m.saveAndDisconnectDevice(devPath)
 		}
 	}
 	m.doUpdatePropWiredEnabled()
 }
 func (m *Manager) updatePropWiredEnabled(enabled bool) {
+	if m.config.WiredEnabled == enabled {
+		return
+	}
 	logger.Debug("updatePropWiredEnabled", enabled)
 	m.WiredEnabled = enabled
 	m.config.setWiredEnabled(enabled)
@@ -239,7 +242,7 @@ func (m *Manager) updatePropWiredEnabled(enabled bool) {
 		if enabled {
 			m.restoreDeviceState(devPath)
 		} else {
-			m.disconnectAndSaveDeviceState(devPath)
+			m.saveAndDisconnectDevice(devPath)
 		}
 	}
 	m.doUpdatePropWiredEnabled()
@@ -260,6 +263,9 @@ func (m *Manager) initPropVpnEnabled() {
 	m.doUpdatePropVpnEnabled()
 }
 func (m *Manager) updatePropVpnEnabled(enabled bool) {
+	if m.config.VpnEnabled == enabled {
+		return
+	}
 	m.VpnEnabled = enabled
 	m.config.setVpnEnabled(enabled)
 	// setup vpn connections

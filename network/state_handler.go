@@ -134,6 +134,7 @@ func newStateNotifier() (n *StateNotifier) {
 			dev.ConnectStateChanged(func(newState, oldState, reason uint32) {
 				switch newState {
 				case NM_DEVICE_STATE_PREPARE:
+					// case NM_DEVICE_STATE_CONFIG: // TODO
 					if data, err := nmGetDeviceActiveConnectionData(path); err == nil {
 						n.devices[path].aconnId = getSettingConnectionId(data)
 					}

@@ -48,9 +48,8 @@ type config struct {
 }
 
 type deviceConfig struct {
-	Enabled       bool
-	LastEnabled   bool
-	stateRestored bool // ignore device state repeat restore
+	Enabled     bool
+	LastEnabled bool
 
 	// uuid of last activated connection, don't need to save it to
 	// configuration file for that NetworkManager will decide which
@@ -175,14 +174,12 @@ func (c *config) setLastVpnEnabled(enabled bool) {
 
 func (c *config) setWiredEnabled(enabled bool) {
 	if c.WiredEnabled != enabled {
-		// c.LastWiredEnabled = c.WiredEnabled
 		c.WiredEnabled = enabled
 		c.save()
 	}
 }
 func (c *config) setVpnEnabled(enabled bool) {
 	if c.VpnEnabled != enabled {
-		// c.LastVpnEnabled = c.VpnEnabled
 		c.VpnEnabled = enabled
 		c.save()
 	}
@@ -247,18 +244,14 @@ func (c *config) updateDeviceConfig(devPath dbus.ObjectPath) {
 	}
 	devState, _ := nmGetDeviceState(devPath)
 	if isDeviceStateInActivating(devState) {
-		devConfig.lastConnectionUuid, _ = nmGetDeviceActiveConnectionUuid(devPath)
 		// sync device state
-		if !manager.generalGetGlobalDeviceEnabled(devPath) || !devConfig.Enabled {
+		if manager.generalGetGlobalDeviceEnabled(devPath) && devConfig.Enabled {
+			devConfig.lastConnectionUuid, _ = nmGetDeviceActiveConnectionUuid(devPath)
+			logger.Debugf("updateDeviceConfig %s %#v", devPath, devConfig) // TODO test
+		} else {
 			manager.doDisconnectDevice(devPath)
 		}
-		// if !manager.generalGetGlobalDeviceEnabled(devPath) {
-		// 	manager.generalSetGlobalDeviceEnabled(devPath, true)
-		// } else {
-		// 	c.setDeviceEnabled(devPath, true)
-		// }
 	}
-	// logger.Debugf("updateDeviceConfig %s %#v", devPath, devConfig) // TODO test
 }
 func (c *config) getDeviceEnabled(devPath dbus.ObjectPath) (enabled bool) {
 	devConfig, err := c.getDeviceConfigByPath(devPath)
@@ -277,7 +270,7 @@ func (c *config) setDeviceEnabled(devPath dbus.ObjectPath, enabled bool) {
 	devConfig.Enabled = enabled
 	// send signal
 	if manager.DeviceEnabled != nil {
-		logger.Debug("DeviceEnabled", devPath, enabled) //  TODO test
+		logger.Debug("signal DeviceEnabled", devPath, enabled) //  TODO test
 		manager.DeviceEnabled(string(devPath), enabled)
 	}
 	c.save()
@@ -325,15 +318,10 @@ func (c *config) restoreDeviceState(devPath dbus.ObjectPath) {
 	if err != nil {
 		return
 	}
-	// TODO
-	// if devConfig.stateRestored {
-	// return
-	// }
 	if devConfig.Enabled != devConfig.LastEnabled {
 		devConfig.Enabled = devConfig.LastEnabled
 		c.save()
 	}
-	// devConfig.stateRestored = true
 }
 
 // vpnConfig related functions
@@ -385,14 +373,13 @@ func (m *Manager) restoreDeviceState(devPath dbus.ObjectPath) (err error) {
 	err = m.doEnableDevice(devPath, m.config.getDeviceEnabled(devPath))
 	return
 }
-func (m *Manager) disconnectAndSaveDeviceState(devPath dbus.ObjectPath) (err error) {
+func (m *Manager) saveAndDisconnectDevice(devPath dbus.ObjectPath) (err error) {
 	m.config.saveDeviceState(devPath)
 	err = m.doEnableDevice(devPath, false)
 	return
 }
 
 func (m *Manager) EnableDevice(devPath dbus.ObjectPath, enabled bool) (err error) {
-	m.config.saveDeviceState(devPath)
 	return m.doEnableDevice(devPath, enabled)
 }
 func (m *Manager) doEnableDevice(devPath dbus.ObjectPath, enabled bool) (err error) {
