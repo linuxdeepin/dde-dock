@@ -311,7 +311,6 @@ func (c *config) saveDeviceState(devPath dbus.ObjectPath) {
 		devConfig.LastEnabled = devConfig.Enabled
 		c.save()
 	}
-	devConfig.stateRestored = false
 }
 func (c *config) restoreDeviceState(devPath dbus.ObjectPath) {
 	devConfig, err := c.getDeviceConfigByPath(devPath)
