@@ -204,7 +204,8 @@ func main() {
 			}
 
 			name := path.Base(l.Path)
-			out, err := exec.Command(_GTK_THUMB_CMD_, name, dest).Output()
+			bg := getThumbBg()
+			out, err := exec.Command(_GTK_THUMB_CMD_, name, dest, bg).Output()
 			if err != nil || strings.Contains(string(out), "ERROR") {
 				Logger.Debugf("ERROR: Generate Gtk Thumbnail\n")
 			}
