@@ -247,27 +247,39 @@ func (c *config) updateDeviceConfig(devPath dbus.ObjectPath) {
 	devState, _ := nmGetDeviceState(devPath)
 	if isDeviceStateInActivating(devState) {
 		devConfig.lastConnectionUuid, _ = nmGetDeviceActiveConnectionUuid(devPath)
-		if !manager.generalGetGlobalDeviceEnabled(devPath) {
-			manager.generalSetGlobalDeviceEnabled(devPath, true)
-		} else {
-			c.setDeviceEnabled(devPath, true)
+		// sync device state
+		if !devConfig.Enabled {
+			manager.doDisconnectDevice(devPath)
 		}
+		// if !manager.generalGetGlobalDeviceEnabled(devPath) {
+		// 	manager.generalSetGlobalDeviceEnabled(devPath, true)
+		// } else {
+		// 	c.setDeviceEnabled(devPath, true)
+		// }
 	}
 	logger.Debugf("updateDeviceConfig %s %#v", devPath, devConfig) // TODO test
+}
+func (c *config) getDeviceEnabled(devPath dbus.ObjectPath) (enabled bool) {
+	devConfig, err := c.getDeviceConfigByPath(devPath)
+	if err != nil {
+		enabled = true // return true as default
+		return
+	}
+	enabled = devConfig.Enabled
+	return
 }
 func (c *config) setDeviceEnabled(devPath dbus.ObjectPath, enabled bool) {
 	devConfig, err := c.getDeviceConfigByPath(devPath)
 	if err != nil {
 		return
 	}
-	if devConfig.Enabled == enabled {
-		return
-	}
 	devConfig.Enabled = enabled
+	// send signal
 	if manager.DeviceEnabled != nil {
 		logger.Debug("DeviceEnabled", devPath, enabled) //  TODO test
 		manager.DeviceEnabled(string(devPath), enabled)
 	}
+	c.save()
 }
 func (c *config) setDeviceLastConnectionUuid(devPath dbus.ObjectPath, uuid string) {
 	devConfig, err := c.getDeviceConfigByPath(devPath)
@@ -302,6 +314,16 @@ func (c *config) saveDeviceState(devPath dbus.ObjectPath) {
 	}
 	if devConfig.LastEnabled != devConfig.Enabled {
 		devConfig.LastEnabled = devConfig.Enabled
+		c.save()
+	}
+}
+func (c *config) restoreDeviceState(devPath dbus.ObjectPath) {
+	devConfig, err := c.getDeviceConfigByPath(devPath)
+	if err != nil {
+		return
+	}
+	if devConfig.Enabled != devConfig.LastEnabled {
+		devConfig.Enabled = devConfig.LastEnabled
 		c.save()
 	}
 }
@@ -346,29 +368,26 @@ func (c *config) setVpnConnectionActivated(uuid string, activated bool) {
 
 // Manager related functions
 func (m *Manager) IsDeviceEnabled(devPath dbus.ObjectPath) (enabled bool, err error) {
-	devConfig, err := m.config.getDeviceConfigByPath(devPath)
-	if err != nil {
-		enabled = true // return true as default
-		return
-	}
-	enabled = devConfig.Enabled
+	enabled = m.config.getDeviceEnabled(devPath)
 	return
 }
 
 func (m *Manager) restoreDeviceState(devPath dbus.ObjectPath) (err error) {
-	devConfig, err := m.config.getDeviceConfigByPath(devPath)
-	if err != nil {
-		return
-	}
-	err = m.EnableDevice(devPath, devConfig.LastEnabled)
+	m.config.restoreDeviceState(devPath)
+	err = m.doEnableDevice(devPath, m.config.getDeviceEnabled(devPath))
 	return
 }
 func (m *Manager) disconnectAndSaveDeviceState(devPath dbus.ObjectPath) (err error) {
-	err = m.EnableDevice(devPath, false)
+	m.config.saveDeviceState(devPath)
+	err = m.doEnableDevice(devPath, false)
 	return
 }
 
 func (m *Manager) EnableDevice(devPath dbus.ObjectPath, enabled bool) (err error) {
+	m.config.saveDeviceState(devPath)
+	return m.doEnableDevice(devPath, enabled)
+}
+func (m *Manager) doEnableDevice(devPath dbus.ObjectPath, enabled bool) (err error) {
 	if enabled && m.trunOnGlobalDeviceSwitchIfNeed(devPath) {
 		return
 	}
@@ -376,8 +395,9 @@ func (m *Manager) EnableDevice(devPath dbus.ObjectPath, enabled bool) (err error
 	if err != nil {
 		return
 	}
-	logger.Debugf("EnableDevice %s %v %#v", devPath, enabled, devConfig) // TODO test
+	logger.Debugf("doEnableDevice %s %v %#v", devPath, enabled, devConfig) // TODO test
 
+	m.config.setDeviceEnabled(devPath, enabled)
 	if enabled {
 		// active last connection if device is disconnected
 		if len(devConfig.lastConnectionUuid) > 0 {
@@ -393,9 +413,6 @@ func (m *Manager) EnableDevice(devPath dbus.ObjectPath, enabled bool) (err error
 	} else {
 		err = m.doDisconnectDevice(devPath)
 	}
-
-	m.config.saveDeviceState(devPath)
-	m.config.setDeviceEnabled(devPath, enabled)
 	return
 }
 
