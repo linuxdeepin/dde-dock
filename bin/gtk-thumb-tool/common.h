@@ -22,7 +22,7 @@
 #ifndef __COMMON_H__
 #define __COMMON_H__
 
-int gen_gtk_thumbnail(char *theme, char *dest);
+int gen_gtk_thumbnail(char *theme, char *dest, char *bg);
 
 int try_init();
 

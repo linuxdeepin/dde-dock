@@ -33,6 +33,11 @@
 #include <metacity-private/gradient.h>
 #include <metacity-private/preview-widget.h>
 
+typedef struct _UserData {
+	char *dest;
+	char *bg;
+} UserData;
+
 
 #define THUMB_WIDTH 128
 #define THUMB_HEIGHT 72
@@ -60,10 +65,23 @@ GtkWidget *get_meta_theme (const char* theme_name)
 
 void capture(GtkOffscreenWindow* w, GdkEvent* event, gpointer user_data)
 {
-	gchar *dest = (gchar*)user_data;
+	UserData *datas = (UserData*)user_data;
+	char *dest = datas->dest;
+	char *bg = datas->bg;
+
+	cairo_surface_t *target = cairo_image_surface_create_from_png(bg);
+	cairo_t *cairo = cairo_create(target);
 	GdkPixbuf* pbuf = gtk_offscreen_window_get_pixbuf(w);
-	gdk_pixbuf_save(pbuf, dest, "png", NULL, NULL);
+
+	gdk_cairo_set_source_pixbuf (cairo, pbuf, -15, 15);
+	cairo_paint(cairo);
+	cairo_surface_write_to_png (target, dest);
 	printf("Saaveto:%s", dest);
+
+	g_object_unref(G_OBJECT(pbuf));
+	cairo_destroy(cairo);
+	cairo_surface_destroy(target);
+
 	gtk_main_quit();
 }
 
@@ -82,9 +100,9 @@ void padding_thumbnail(GtkFixed* thumb)
     /*gtk_fixed_put(thumb, btn, 35, 5);*/
 }
 
-int gen_gtk_thumbnail(char *theme, char *dest)
+int gen_gtk_thumbnail(char *theme, char *dest, char *bg)
 {
-	if (theme == NULL || dest == NULL) {
+	if (theme == NULL || dest == NULL || bg == NULL) {
 		g_warning("gen_gtk_thumbnail args error");
 		return -1;
 	}
@@ -102,7 +120,11 @@ int gen_gtk_thumbnail(char *theme, char *dest)
 
 	padding_thumbnail(GTK_FIXED(fixed));
 
-	g_signal_connect(G_OBJECT(w), "damage-event", G_CALLBACK(capture), dest);
+	UserData user_data;
+	user_data.dest = dest;
+	user_data.bg = bg;
+	g_signal_connect(G_OBJECT(w), "damage-event", 
+			G_CALLBACK(capture), &user_data);
 	gtk_widget_show_all(w);
 	gtk_main();
 

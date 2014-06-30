@@ -43,21 +43,24 @@ func main() {
 	if C.try_init() == 0 {
 		return
 	}
-	if len(os.Args) != 3 {
+	if len(os.Args) != 4 {
 		fmt.Printf("ERROR\n")
-		fmt.Printf("Usage: %s <Theme> <Dest>\n", os.Args[0])
+		fmt.Printf("Usage: %s <Theme> <Dest> <Bg>\n", os.Args[0])
 		return
 	}
 
 	theme := os.Args[1]
 	dest := os.Args[2]
+	bg := os.Args[3]
 
 	cTheme := C.CString(theme)
 	defer C.free(unsafe.Pointer(cTheme))
 	cDest := C.CString(dest)
 	defer C.free(unsafe.Pointer(cDest))
+	cBg := C.CString(bg)
+	defer C.free(unsafe.Pointer(cBg))
 
-	ret := C.gen_gtk_thumbnail(cTheme, cDest)
+	ret := C.gen_gtk_thumbnail(cTheme, cDest, cBg)
 	if int(ret) == -1 {
 		fmt.Printf("Generate Gtk Thumbnail Failed", cTheme, cDest)
 	}
