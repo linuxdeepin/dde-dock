@@ -80,7 +80,7 @@ func (m *Manager) setWirelessEnabled(enabled bool) {
 		nmSetWirelessEnabled(enabled)
 	} else {
 		// if NetworkingEnabled is off, turn it on, and only keep
-		// current global device alive
+		// current global device switch alive
 		m.config.setLastGlobalSwithes(false)
 		m.config.setLastWirelessEnabled(true)
 		m.setNetworkingEnabled(true)
@@ -91,7 +91,7 @@ func (m *Manager) setWwanEnabled(enabled bool) {
 		nmSetWwanEnabled(enabled)
 	} else {
 		// if NetworkingEnabled is off, turn it on, and only keep
-		// current global device alive
+		// current global device switch alive
 		m.config.setLastGlobalSwithes(false)
 		m.config.setLastWwanEnabled(true)
 		m.setNetworkingEnabled(true)
@@ -102,7 +102,7 @@ func (m *Manager) setWiredEnabled(enabled bool) {
 		m.updatePropWiredEnabled(enabled)
 	} else {
 		// if NetworkingEnabled is off, turn it on, and only keep
-		// current global device alive
+		// current global device switch alive
 		m.config.setLastGlobalSwithes(false)
 		m.config.setLastWiredEnabled(true)
 		m.setNetworkingEnabled(true)
@@ -113,7 +113,7 @@ func (m *Manager) setVpnEnabled(enabled bool) {
 		m.updatePropVpnEnabled(enabled)
 	} else {
 		// if NetworkingEnabled is off, turn it on, and only keep
-		// current global device alive
+		// current global device switch alive
 		m.config.setLastGlobalSwithes(false)
 		m.config.setLastVpnEnabled(true)
 		m.setNetworkingEnabled(true)

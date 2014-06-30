@@ -785,3 +785,23 @@ func nmSetWwanEnabled(enabled bool) {
 		logger.Warning("WwanEnabled already set as", enabled)
 	}
 }
+
+func nmRunOnceUntilDeviceReady(devPath dbus.ObjectPath, cb func()) {
+	dev, err := nmNewDevice(devPath)
+	if err != nil {
+		return
+	}
+	state := dev.State.Get()
+	if isDeviceStateAvailable(state) {
+		cb()
+	} else {
+		hasRun := false
+		dev.ConnectStateChanged(func(newState uint32, oldState uint32, reason uint32) {
+			if !hasRun && isDeviceStateAvailable(newState) {
+				cb()
+				nmDestroyDevice(dev)
+				hasRun = true
+			}
+		})
+	}
+}

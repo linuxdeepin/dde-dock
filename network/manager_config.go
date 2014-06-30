@@ -48,8 +48,9 @@ type config struct {
 }
 
 type deviceConfig struct {
-	Enabled     bool
-	LastEnabled bool
+	Enabled       bool
+	LastEnabled   bool
+	stateRestored bool // ignore device state repeat restore
 
 	// uuid of last activated connection, don't need to save it to
 	// configuration file for that NetworkManager will decide which
@@ -248,7 +249,7 @@ func (c *config) updateDeviceConfig(devPath dbus.ObjectPath) {
 	if isDeviceStateInActivating(devState) {
 		devConfig.lastConnectionUuid, _ = nmGetDeviceActiveConnectionUuid(devPath)
 		// sync device state
-		if !devConfig.Enabled {
+		if !manager.generalGetGlobalDeviceEnabled(devPath) || !devConfig.Enabled {
 			manager.doDisconnectDevice(devPath)
 		}
 		// if !manager.generalGetGlobalDeviceEnabled(devPath) {
@@ -257,7 +258,7 @@ func (c *config) updateDeviceConfig(devPath dbus.ObjectPath) {
 		// 	c.setDeviceEnabled(devPath, true)
 		// }
 	}
-	logger.Debugf("updateDeviceConfig %s %#v", devPath, devConfig) // TODO test
+	// logger.Debugf("updateDeviceConfig %s %#v", devPath, devConfig) // TODO test
 }
 func (c *config) getDeviceEnabled(devPath dbus.ObjectPath) (enabled bool) {
 	devConfig, err := c.getDeviceConfigByPath(devPath)
@@ -307,6 +308,7 @@ func (c *config) setAllDeviceLastEnabled(enabled bool) {
 	}
 	c.save()
 }
+
 func (c *config) saveDeviceState(devPath dbus.ObjectPath) {
 	devConfig, err := c.getDeviceConfigByPath(devPath)
 	if err != nil {
@@ -316,16 +318,22 @@ func (c *config) saveDeviceState(devPath dbus.ObjectPath) {
 		devConfig.LastEnabled = devConfig.Enabled
 		c.save()
 	}
+	devConfig.stateRestored = false
 }
 func (c *config) restoreDeviceState(devPath dbus.ObjectPath) {
 	devConfig, err := c.getDeviceConfigByPath(devPath)
 	if err != nil {
 		return
 	}
+	// TODO
+	// if devConfig.stateRestored {
+	// return
+	// }
 	if devConfig.Enabled != devConfig.LastEnabled {
 		devConfig.Enabled = devConfig.LastEnabled
 		c.save()
 	}
+	// devConfig.stateRestored = true
 }
 
 // vpnConfig related functions
@@ -401,14 +409,9 @@ func (m *Manager) doEnableDevice(devPath dbus.ObjectPath, enabled bool) (err err
 	if enabled {
 		// active last connection if device is disconnected
 		if len(devConfig.lastConnectionUuid) > 0 {
-			if _, err := nmGetConnectionByUuid(devConfig.lastConnectionUuid); err == nil {
-				devState, err := nmGetDeviceState(devPath)
-				if err == nil {
-					if isDeviceStateAvailable(devState) && !isDeviceStateInActivating(devState) {
-						err = m.ActivateConnection(devConfig.lastConnectionUuid, devPath)
-					}
-				}
-			}
+			nmRunOnceUntilDeviceReady(devPath, func() {
+				m.ActivateConnection(devConfig.lastConnectionUuid, devPath)
+			})
 		}
 	} else {
 		err = m.doDisconnectDevice(devPath)
