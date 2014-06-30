@@ -41,8 +41,9 @@ type connection struct {
 }
 
 type activeConnection struct {
-	nmaconn *nm.ActiveConnection
-	path    dbus.ObjectPath
+	nmAConn   *nm.ActiveConnection
+	nmVpnConn *nm.VPNConnection
+	path      dbus.ObjectPath
 
 	Devices []dbus.ObjectPath
 	// SpecificObject dbus.ObjectPath // TODO

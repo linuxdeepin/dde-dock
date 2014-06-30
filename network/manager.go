@@ -149,41 +149,52 @@ func (m *Manager) updateActiveConnections() {
 	// reset all exists active connection objects
 	for i, _ := range m.activeConnections {
 		// destroy object to reset all property connects
-		nmDestroyActiveConnection(m.activeConnections[i].nmaconn)
+		if m.activeConnections[i].nmVpnConn != nil {
+			nmDestroyVpnConnection(m.activeConnections[i].nmVpnConn)
+		}
+		nmDestroyActiveConnection(m.activeConnections[i].nmAConn)
 		m.activeConnections[i] = nil
 	}
 	m.activeConnections = make([]*activeConnection, 0)
 	for _, acPath := range nmGetActiveConnections() {
-		if nmaconn, err := nmNewActiveConnection(acPath); err == nil {
+		if nmAConn, err := nmNewActiveConnection(acPath); err == nil {
 			aconn := &activeConnection{
-				nmaconn: nmaconn,
+				nmAConn: nmAConn,
 				path:    acPath,
-				Devices: nmaconn.Devices.Get(),
-				Uuid:    nmaconn.Uuid.Get(),
-				State:   nmaconn.State.Get(),
-				Vpn:     nmaconn.Vpn.Get(),
+				Devices: nmAConn.Devices.Get(),
+				Uuid:    nmAConn.Uuid.Get(),
+				State:   nmAConn.State.Get(),
+				Vpn:     nmAConn.Vpn.Get(),
 			}
 			if cpath, err := nmGetConnectionByUuid(aconn.Uuid); err == nil {
 				aconn.Id = nmGetConnectionId(cpath)
 			}
 
-			nmaconn.State.ConnectChanged(func() {
+			nmAConn.State.ConnectChanged(func() {
 				// TODO fix dbus property issue
-				logger.Debug("active connection state changed:", aconn.State, nmaconn.State.Get())
-				aconn.State = nmaconn.State.Get()
-				if aconn.Vpn {
-					// update vpn config
-					m.config.setVpnConnectionActivated(aconn.Uuid, isConnectionStateInActivating(aconn.State))
-
-					// notification for vpn
-					if isConnectionStateActivated(aconn.State) {
-						notifyVpnConnected(aconn.Id)
-					} else if isConnectionStateDeactivate(aconn.State) {
-						notifyVpnDisconnected(aconn.Id)
-					}
-				}
+				logger.Debug("active connection state changed:", aconn.State, nmAConn.State.Get())
 				m.updatePropActiveConnections()
 			})
+
+			// dispatch vpn connection
+			if aconn.Vpn {
+				if nmVpnConn, err := nmNewVpnConnection(acPath); err == nil {
+					aconn.nmVpnConn = nmVpnConn
+					nmVpnConn.ConnectVpnStateChanged(func(state, reason uint32) {
+						// update vpn config
+						m.config.setVpnConnectionActivated(aconn.Uuid, isVpnConnectionStateInActivating(state))
+
+						// notification for vpn
+						if isVpnConnectionStateActivated(state) {
+							notifyVpnConnected(aconn.Id)
+						} else if isVpnConnectionStateDeactivate(state) {
+							notifyVpnDisconnected(aconn.Id)
+						} else if isVpnConnectionStateFailed(state) {
+							notifyVpnFailed(aconn.Id, reason)
+						}
+					})
+				}
+			}
 			m.activeConnections = append(m.activeConnections, aconn)
 		}
 	}

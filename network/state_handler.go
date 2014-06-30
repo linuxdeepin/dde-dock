@@ -229,6 +229,11 @@ func notifyVpnDisconnected(id string) {
 	icon := "network-error" // TODO change vpn icon
 	notify(icon, Tr("Disconnected"), id)
 }
+func notifyVpnFailed(id string, reason uint32) {
+	icon := "network-error" // TODO change vpn icon
+	msg := VpnErrorTable[reason]
+	notify(icon, Tr("Disconnected"), msg)
+}
 
 func notifyApModeNotSupport() {
 	icon := "notification-network-wireless-disconnected"

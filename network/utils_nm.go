@@ -282,6 +282,14 @@ func nmNewSettingsConnection(cpath dbus.ObjectPath) (conn *nm.SettingsConnection
 	}
 	return
 }
+func nmNewVpnConnection(apath dbus.ObjectPath) (vpnConn *nm.VPNConnection, err error) {
+	vpnConn, err = nm.NewVPNConnection(dbusNmDest, apath)
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+	return
+}
 
 // Destroy network manager objects
 func nmDestroyDevice(dev *nm.Device) {
@@ -325,6 +333,13 @@ func nmDestroyActiveConnection(aconn *nm.ActiveConnection) {
 		return
 	}
 	nm.DestroyActiveConnection(aconn)
+}
+func nmDestroyVpnConnection(vpnConn *nm.VPNConnection) {
+	if vpnConn == nil {
+		logger.Error("ActiveConnection to destroy is nil")
+		return
+	}
+	nm.DestroyVPNConnection(vpnConn)
 }
 
 // Operate wrapper for network manager
@@ -424,6 +439,15 @@ func nmDeactivateConnection(apath dbus.ObjectPath) (err error) {
 
 func nmGetActiveConnections() (apaths []dbus.ObjectPath) {
 	apaths = nmManager.ActiveConnections.Get()
+	return
+}
+
+func nmGetVpnConnectionState(apath dbus.ObjectPath) (state uint32) {
+	vpnConn, err := nmNewVpnConnection(apath)
+	if err != nil {
+		return
+	}
+	state = vpnConn.VpnState.Get()
 	return
 }
 

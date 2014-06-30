@@ -134,6 +134,45 @@ const (
 
 // VPN connection states
 const (
+	NM_VPN_CONNECTION_STATE_UNKNOWN       = 0
+	NM_VPN_CONNECTION_STATE_PREPARE       = 1
+	NM_VPN_CONNECTION_STATE_NEED_AUTH     = 2
+	NM_VPN_CONNECTION_STATE_CONNECT       = 3
+	NM_VPN_CONNECTION_STATE_IP_CONFIG_GET = 4
+	NM_VPN_CONNECTION_STATE_ACTIVATED     = 5
+	NM_VPN_CONNECTION_STATE_FAILED        = 6
+	NM_VPN_CONNECTION_STATE_DISCONNECTE   = 7
+)
+
+// check if vpn connection activating or activated
+func isVpnConnectionStateInActivating(state uint32) bool {
+	if state >= NM_VPN_CONNECTION_STATE_PREPARE &&
+		state <= NM_VPN_CONNECTION_STATE_ACTIVATED {
+		return true
+	}
+	return false
+}
+func isVpnConnectionStateActivated(state uint32) bool {
+	if state == NM_VPN_CONNECTION_STATE_ACTIVATED {
+		return true
+	}
+	return false
+}
+func isVpnConnectionStateDeactivate(state uint32) bool {
+	if state == NM_VPN_CONNECTION_STATE_DISCONNECTE {
+		return true
+	}
+	return false
+}
+func isVpnConnectionStateFailed(state uint32) bool {
+	if state == NM_VPN_CONNECTION_STATE_FAILED {
+		return true
+	}
+	return false
+}
+
+// VPN connection state reason
+const (
 	//don't use iota, the value is defined by networkmanager
 	NM_VPN_CONNECTION_STATE_REASON_UNKNOWN               = 0
 	NM_VPN_CONNECTION_STATE_REASON_NONE                  = 1
@@ -223,7 +262,6 @@ func isConnectionStateInActivating(state uint32) bool {
 	}
 	return false
 }
-
 func isConnectionStateActivated(state uint32) bool {
 	if state == NM_ACTIVE_CONNECTION_STATE_ACTIVATED {
 		return true

@@ -37,18 +37,6 @@ const (
 	NM_SETTING_VPN_SECRETS      = "secrets"
 )
 
-// VPN connection states
-const (
-	NM_VPN_CONNECTION_STATE_UNKNOWN       = 0
-	NM_VPN_CONNECTION_STATE_PREPARE       = 1
-	NM_VPN_CONNECTION_STATE_NEED_AUTH     = 2
-	NM_VPN_CONNECTION_STATE_CONNECT       = 3
-	NM_VPN_CONNECTION_STATE_IP_CONFIG_GET = 4
-	NM_VPN_CONNECTION_STATE_ACTIVATED     = 5
-	NM_VPN_CONNECTION_STATE_FAILED        = 6
-	NM_VPN_CONNECTION_STATE_DISCONNECTE   = 7
-)
-
 func newBasicVpnConnectionData(id, uuid string) (data connectionData) {
 	data = make(connectionData)
 
