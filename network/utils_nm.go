@@ -28,11 +28,15 @@ import (
 	"strings"
 )
 
-const dbusNmDest = "org.freedesktop.NetworkManager"
+const (
+	dbusNmDest        = "org.freedesktop.NetworkManager"
+	dbusNmPath        = "/org/freedesktop/NetworkManager"
+	dbusNmSettingPath = "/org/freedesktop/NetworkManager/Settings"
+)
 
 var (
-	nmManager, _  = nm.NewManager(dbusNmDest, "/org/freedesktop/NetworkManager")
-	nmSettings, _ = nm.NewSettings(dbusNmDest, "/org/freedesktop/NetworkManager/Settings")
+	nmManager, _  = nm.NewManager(dbusNmDest, dbusNmPath)
+	nmSettings, _ = nm.NewSettings(dbusNmDest, dbusNmSettingPath)
 )
 
 // General function wrappers for network manager
@@ -157,6 +161,14 @@ func nmGetDeviceIdentifiers() (devIds []string) {
 }
 
 // New network manager objects
+func nmNewManager() (m *nm.Manager, err error) {
+	m, err = nm.NewManager(dbusNmDest, dbusNmPath)
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+	return
+}
 func nmNewDevice(devPath dbus.ObjectPath) (dev *nm.Device, err error) {
 	dev, err = nm.NewDevice(dbusNmDest, devPath)
 	if err != nil {
@@ -292,6 +304,13 @@ func nmNewVpnConnection(apath dbus.ObjectPath) (vpnConn *nm.VPNConnection, err e
 }
 
 // Destroy network manager objects
+func nmDestroyManager(m *nm.Manager) {
+	if m == nil {
+		logger.Error("Manager to destroy is nil")
+		return
+	}
+	nm.DestroyManager(m)
+}
 func nmDestroyDevice(dev *nm.Device) {
 	if dev == nil {
 		logger.Error("Device to destroy is nil")
@@ -786,7 +805,7 @@ func nmSetWwanEnabled(enabled bool) {
 	}
 }
 
-func nmRunOnceUntilDeviceReady(devPath dbus.ObjectPath, cb func()) {
+func nmRunOnceUntilDeviceAvailable(devPath dbus.ObjectPath, cb func()) {
 	dev, err := nmNewDevice(devPath)
 	if err != nil {
 		return
@@ -800,6 +819,26 @@ func nmRunOnceUntilDeviceReady(devPath dbus.ObjectPath, cb func()) {
 			if !hasRun && isDeviceStateAvailable(newState) {
 				cb()
 				nmDestroyDevice(dev)
+				hasRun = true
+			}
+		})
+	}
+}
+
+func nmRunOnceUtilNetworkAvailable(cb func()) {
+	manager, err := nmNewManager()
+	if err != nil {
+		return
+	}
+	state := manager.State.Get()
+	if state >= NM_STATE_CONNECTED_LOCAL {
+		cb()
+	} else {
+		hasRun := false
+		manager.ConnectStateChanged(func(state uint32) {
+			if !hasRun && state >= NM_STATE_CONNECTED_LOCAL {
+				cb()
+				nmDestroyManager(manager)
 				hasRun = true
 			}
 		})
