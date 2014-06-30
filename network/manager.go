@@ -172,6 +172,7 @@ func (m *Manager) updateActiveConnections() {
 
 			nmAConn.State.ConnectChanged(func() {
 				// TODO fix dbus property issue
+				aconn.State = nmAConn.State.Get()
 				logger.Debug("active connection state changed:", aconn.State, nmAConn.State.Get())
 				m.updatePropActiveConnections()
 			})
