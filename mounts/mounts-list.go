@@ -237,6 +237,7 @@ func newDiskInfo(value interface{}, t string) DiskInfo {
 		info.CanUnmount = v.CanUnmount()
 		root := v.GetRoot()
 		info.MountURI = root.GetUri()
+		info.TotalCap, info.UsableCap = getDiskCap(root.GetPath())
 		if info.CanEject {
 			info.Type = "removable"
 		} else if root.IsNative() {
@@ -259,7 +260,9 @@ func newDiskInfo(value interface{}, t string) DiskInfo {
 			info.IconName = "drive-removable-media-mtp"
 		}
 
-		info.TotalCap, info.UsableCap = getDiskCap(info.Path)
+		if info.TotalCap == 0 {
+			info.TotalCap, info.UsableCap = getDiskCap(info.Path)
+		}
 	default:
 		Logger.Errorf("'%s' invalid type", t)
 	}
