@@ -402,9 +402,12 @@ func (m *Manager) doEnableDevice(devPath dbus.ObjectPath, enabled bool) (err err
 	if enabled {
 		// active last connection if device is disconnected
 		if len(devConfig.LastConnectionUuid) > 0 {
-			nmRunOnceUntilDeviceAvailable(devPath, func() {
-				m.ActivateConnection(devConfig.LastConnectionUuid, devPath)
-			})
+			activeUuid, _ := nmGetDeviceActiveConnectionUuid(devPath)
+			if devConfig.LastConnectionUuid != activeUuid {
+				nmRunOnceUntilDeviceAvailable(devPath, func() {
+					m.ActivateConnection(devConfig.LastConnectionUuid, devPath)
+				})
+			}
 		}
 	} else {
 		err = m.doDisconnectDevice(devPath)
@@ -412,6 +415,7 @@ func (m *Manager) doEnableDevice(devPath dbus.ObjectPath, enabled bool) (err err
 	return
 }
 
+// TODO save, restore, doEnableVpnnConnection
 func (m *Manager) restoreVpnConnectionState(uuid string) (err error) {
 	vpnConfig, err := m.config.getVpnConfig(uuid)
 	if err != nil {

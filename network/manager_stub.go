@@ -123,7 +123,7 @@ func (m *Manager) setVpnEnabled(enabled bool) {
 func (m *Manager) initPropNetworkingEnabled() {
 	m.NetworkingEnabled = nmManager.NetworkingEnabled.Get()
 	if !m.NetworkingEnabled {
-		m.saveAndTurnOffGlobalDeviceSwitches()
+		m.doTurnOffGlobalDeviceSwitches()
 	}
 	m.doUpdatePropNetworkingEnabled()
 }
@@ -155,6 +155,9 @@ func (m *Manager) saveAndTurnOffGlobalDeviceSwitches() {
 	m.config.setLastWwanEnabled(m.WwanEnabled)
 	m.config.setLastWiredEnabled(m.WiredEnabled)
 	m.config.setLastVpnEnabled(m.VpnEnabled)
+	m.doTurnOffGlobalDeviceSwitches()
+}
+func (m *Manager) doTurnOffGlobalDeviceSwitches() {
 	nmSetWirelessEnabled(false)
 	nmSetWwanEnabled(false)
 	m.updatePropWiredEnabled(false)
@@ -163,8 +166,10 @@ func (m *Manager) saveAndTurnOffGlobalDeviceSwitches() {
 
 func (m *Manager) initPropWirelessEnabled() {
 	m.WirelessEnabled = nmManager.WirelessEnabled.Get()
-	if !m.WirelessEnabled {
-		for _, devPath := range nmGetSpecialDevices(NM_DEVICE_TYPE_WIFI) {
+	for _, devPath := range nmGetSpecialDevices(NM_DEVICE_TYPE_WIFI) {
+		if m.WirelessEnabled {
+			m.doEnableDevice(devPath, m.config.getDeviceEnabled(devPath))
+		} else {
 			m.doEnableDevice(devPath, false)
 		}
 	}
@@ -193,8 +198,10 @@ func (m *Manager) doUpdatePropWirelessEnabled() {
 
 func (m *Manager) initPropWwanEnabled() {
 	m.WwanEnabled = nmManager.WwanEnabled.Get()
-	if !m.WwanEnabled {
-		for _, devPath := range nmGetSpecialDevices(NM_DEVICE_TYPE_MODEM) {
+	for _, devPath := range nmGetSpecialDevices(NM_DEVICE_TYPE_MODEM) {
+		if m.WwanEnabled {
+			m.doEnableDevice(devPath, m.config.getDeviceEnabled(devPath))
+		} else {
 			m.doEnableDevice(devPath, false)
 		}
 	}
@@ -222,8 +229,10 @@ func (m *Manager) doUpdatePropWwanEnabled() {
 
 func (m *Manager) initPropWiredEnabled() {
 	m.WiredEnabled = m.config.WiredEnabled
-	if !m.WiredEnabled {
-		for _, devPath := range nmGetSpecialDevices(NM_DEVICE_TYPE_ETHERNET) {
+	for _, devPath := range nmGetSpecialDevices(NM_DEVICE_TYPE_ETHERNET) {
+		if m.WiredEnabled {
+			m.doEnableDevice(devPath, m.config.getDeviceEnabled(devPath))
+		} else {
 			m.doEnableDevice(devPath, false)
 		}
 	}
