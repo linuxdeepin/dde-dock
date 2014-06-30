@@ -56,6 +56,7 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device) {
 	dev.nmDev.ConnectStateChanged(func(newState, oldState, reason uint32) {
 		dev.State = newState
 		m.config.updateDeviceConfig(dev.Path)
+		m.config.syncDeviceState(dev.Path)
 		if m.DeviceStateChanged != nil { // TODO
 			m.DeviceStateChanged(string(dev.Path), dev.State)
 			m.updatePropDevices()

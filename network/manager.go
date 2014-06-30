@@ -112,6 +112,7 @@ func DestroyManager(m *Manager) {
 }
 
 func (m *Manager) initManager() {
+	// update devices and connections
 	m.initDeviceManage()
 	m.initConnectionManage()
 

@@ -48,14 +48,9 @@ type config struct {
 }
 
 type deviceConfig struct {
-	Enabled     bool
-	LastEnabled bool
-
-	// uuid of last activated connection, don't need to save it to
-	// configuration file for that NetworkManager will decide which
-	// connection to activate for each device after login, so just
-	// follow NetworkManager's choice.
-	lastConnectionUuid string
+	Enabled            bool
+	LastEnabled        bool
+	LastConnectionUuid string
 }
 
 type vpnConfig struct {
@@ -187,8 +182,8 @@ func (c *config) setVpnEnabled(enabled bool) {
 
 func (c *config) removeConnection(uuid string) {
 	for _, devConfig := range c.Devices {
-		if devConfig.lastConnectionUuid == uuid {
-			devConfig.lastConnectionUuid = ""
+		if devConfig.LastConnectionUuid == uuid {
+			devConfig.LastConnectionUuid = ""
 		}
 	}
 	c.removeVpnConfig(uuid)
@@ -223,7 +218,7 @@ func (c *config) addDeviceConfig(devPath dbus.ObjectPath) {
 	}
 	if !c.isDeviceConfigExists(devId) {
 		devConfig := newDeviceConfig()
-		devConfig.lastConnectionUuid, _ = nmGetDeviceActiveConnectionUuid(devPath)
+		devConfig.LastConnectionUuid, _ = nmGetDeviceActiveConnectionUuid(devPath)
 		c.Devices[devId] = devConfig
 		c.save()
 	} else {
@@ -243,12 +238,24 @@ func (c *config) updateDeviceConfig(devPath dbus.ObjectPath) {
 		return
 	}
 	devState, _ := nmGetDeviceState(devPath)
+	// if manager.generalGetGlobalDeviceEnabled(devPath) && devConfig.Enabled {
+	if devConfig.Enabled {
+		if isDeviceStateInActivating(devState) {
+			devConfig.LastConnectionUuid, _ = nmGetDeviceActiveConnectionUuid(devPath)
+			logger.Debugf("updateDeviceConfig %s %#v", devPath, devConfig) // TODO test
+			c.save()
+		}
+	}
+}
+func (c *config) syncDeviceState(devPath dbus.ObjectPath) {
+	devConfig, err := c.getDeviceConfigByPath(devPath)
+	if err != nil {
+		return
+	}
+	devState, _ := nmGetDeviceState(devPath)
 	if isDeviceStateInActivating(devState) {
 		// sync device state
-		if manager.generalGetGlobalDeviceEnabled(devPath) && devConfig.Enabled {
-			devConfig.lastConnectionUuid, _ = nmGetDeviceActiveConnectionUuid(devPath)
-			logger.Debugf("updateDeviceConfig %s %#v", devPath, devConfig) // TODO test
-		} else {
+		if !devConfig.Enabled {
 			manager.doDisconnectDevice(devPath)
 		}
 	}
@@ -280,8 +287,8 @@ func (c *config) setDeviceLastConnectionUuid(devPath dbus.ObjectPath, uuid strin
 	if err != nil {
 		return
 	}
-	if devConfig.lastConnectionUuid != uuid {
-		devConfig.lastConnectionUuid = uuid
+	if devConfig.LastConnectionUuid != uuid {
+		devConfig.LastConnectionUuid = uuid
 		c.save()
 	}
 }
@@ -394,9 +401,9 @@ func (m *Manager) doEnableDevice(devPath dbus.ObjectPath, enabled bool) (err err
 	m.config.setDeviceEnabled(devPath, enabled)
 	if enabled {
 		// active last connection if device is disconnected
-		if len(devConfig.lastConnectionUuid) > 0 {
+		if len(devConfig.LastConnectionUuid) > 0 {
 			nmRunOnceUntilDeviceAvailable(devPath, func() {
-				m.ActivateConnection(devConfig.lastConnectionUuid, devPath)
+				m.ActivateConnection(devConfig.LastConnectionUuid, devPath)
 			})
 		}
 	} else {

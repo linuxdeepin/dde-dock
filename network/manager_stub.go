@@ -165,7 +165,7 @@ func (m *Manager) initPropWirelessEnabled() {
 	m.WirelessEnabled = nmManager.WirelessEnabled.Get()
 	if !m.WirelessEnabled {
 		for _, devPath := range nmGetSpecialDevices(NM_DEVICE_TYPE_WIFI) {
-			m.saveAndDisconnectDevice(devPath)
+			m.doEnableDevice(devPath, false)
 		}
 	}
 	m.doUpdatePropWirelessEnabled()
@@ -195,7 +195,7 @@ func (m *Manager) initPropWwanEnabled() {
 	m.WwanEnabled = nmManager.WwanEnabled.Get()
 	if !m.WwanEnabled {
 		for _, devPath := range nmGetSpecialDevices(NM_DEVICE_TYPE_MODEM) {
-			m.saveAndDisconnectDevice(devPath)
+			m.doEnableDevice(devPath, false)
 		}
 	}
 	m.doUpdatePropWwanEnabled()
@@ -224,7 +224,7 @@ func (m *Manager) initPropWiredEnabled() {
 	m.WiredEnabled = m.config.WiredEnabled
 	if !m.WiredEnabled {
 		for _, devPath := range nmGetSpecialDevices(NM_DEVICE_TYPE_ETHERNET) {
-			m.saveAndDisconnectDevice(devPath)
+			m.doEnableDevice(devPath, false)
 		}
 	}
 	m.doUpdatePropWiredEnabled()
