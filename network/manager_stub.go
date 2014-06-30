@@ -247,12 +247,13 @@ func (m *Manager) updatePropWiredEnabled(enabled bool) {
 	m.config.setWiredEnabled(enabled)
 	// setup wired devices switches
 	for _, devPath := range nmGetSpecialDevices(NM_DEVICE_TYPE_ETHERNET) {
-		logger.Debug("wired enabled to", enabled, devPath) // TODO test
 		if enabled {
 			m.restoreDeviceState(devPath)
 		} else {
 			m.saveAndDisconnectDevice(devPath)
 		}
+		// FIXME keep wired device state same with WiredEnabled to avoid issue
+		m.config.setDeviceEnabled(devPath, enabled)
 	}
 	m.doUpdatePropWiredEnabled()
 }
