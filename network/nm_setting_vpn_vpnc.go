@@ -138,11 +138,15 @@ const (
 	NM_VPNC_SECRET_FLAG_UNUSED = 5
 )
 
-var availableValuesNMVpncSecretFlag = []kvalue{
-	kvalue{NM_VPNC_SECRET_FLAG_NONE, Tr("Saved")},
-	// kvalue{NM_VPNC_SECRET_FLAG_SAVE, Tr("Saved")},
-	kvalue{NM_VPNC_SECRET_FLAG_ASK, Tr("Always Ask")},
-	kvalue{NM_VPNC_SECRET_FLAG_UNUSED, Tr("Not Required")},
+var availableValuesNmVpncSecretFlags []kvalue
+
+func initAvailableValuesNmVpncSecretFlags() {
+	availableValuesNmVpncSecretFlags = []kvalue{
+		kvalue{NM_VPNC_SECRET_FLAG_NONE, Tr("Saved")},
+		// kvalue{NM_VPNC_SECRET_FLAG_SAVE, Tr("Saved")},
+		kvalue{NM_VPNC_SECRET_FLAG_ASK, Tr("Always Ask")},
+		kvalue{NM_VPNC_SECRET_FLAG_UNUSED, Tr("Not Required")},
+	}
 }
 
 func isVpnVpncRequireSecret(flag uint32) bool {
@@ -200,9 +204,9 @@ func getSettingVpnVpncAvailableKeys(data connectionData) (keys []string) {
 func getSettingVpnVpncAvailableValues(data connectionData, key string) (values []kvalue) {
 	switch key {
 	case NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD_FLAGS:
-		values = availableValuesNMVpncSecretFlag
+		values = availableValuesNmVpncSecretFlags
 	case NM_SETTING_VPN_VPNC_KEY_SECRET_FLAGS:
-		values = availableValuesNMVpncSecretFlag
+		values = availableValuesNmVpncSecretFlags
 	}
 	return
 }

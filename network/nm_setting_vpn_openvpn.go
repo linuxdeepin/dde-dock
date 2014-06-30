@@ -164,10 +164,14 @@ const (
 	NM_OPENVPN_SECRET_FLAG_UNUSED = 4
 )
 
-var availableValuesNMOpenvpnSecretFlag = []kvalue{
-	kvalue{NM_OPENVPN_SECRET_FLAG_SAVE, Tr("Saved")}, // system saved
-	kvalue{NM_OPENVPN_SECRET_FLAG_ASK, Tr("Always Ask")},
-	kvalue{NM_OPENVPN_SECRET_FLAG_UNUSED, Tr("Not Required")},
+var availableValuesNmOpenvpnSecretFlags []kvalue
+
+func initAvailableValuesNmOpenvpnSecretFlags() {
+	availableValuesNmOpenvpnSecretFlags = []kvalue{
+		kvalue{NM_OPENVPN_SECRET_FLAG_SAVE, Tr("Saved")}, // system saved
+		kvalue{NM_OPENVPN_SECRET_FLAG_ASK, Tr("Always Ask")},
+		kvalue{NM_OPENVPN_SECRET_FLAG_UNUSED, Tr("Not Required")},
+	}
 }
 
 func isVpnOpenvpnRequireSecret(flag uint32) bool {
@@ -255,9 +259,9 @@ func getSettingVpnOpenvpnAvailableValues(data connectionData, key string) (value
 			kvalue{1, Tr("1")},
 		}
 	case NM_SETTING_VPN_OPENVPN_KEY_CERTPASS_FLAGS:
-		values = availableValuesNMOpenvpnSecretFlag
+		values = availableValuesNmOpenvpnSecretFlags
 	case NM_SETTING_VPN_OPENVPN_KEY_PASSWORD_FLAGS:
-		values = availableValuesNMOpenvpnSecretFlag
+		values = availableValuesNmOpenvpnSecretFlags
 	}
 	return
 }

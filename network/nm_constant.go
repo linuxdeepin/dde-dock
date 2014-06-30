@@ -289,11 +289,15 @@ const (
 	NM_SETTING_SECRET_FLAG_NOT_REQUIRED = 0x00000004
 )
 
-var availableValuesSettingSecretFlags = []kvalue{
-	kvalue{NM_SETTING_SECRET_FLAG_NONE, Tr("Saved")}, // system saved
-	// kvalue{NM_SETTING_SECRET_FLAG_AGENT_OWNED, Tr("Saved")},
-	kvalue{NM_SETTING_SECRET_FLAG_NOT_SAVED, Tr("Always Ask")},
-	kvalue{NM_SETTING_SECRET_FLAG_NOT_REQUIRED, Tr("Not Required")},
+var availableValuesSettingSecretFlags []kvalue
+
+func initAvailableValuesSecretFlags() {
+	availableValuesSettingSecretFlags = []kvalue{
+		kvalue{NM_SETTING_SECRET_FLAG_NONE, Tr("Saved")}, // system saved
+		// kvalue{NM_SETTING_SECRET_FLAG_AGENT_OWNED, Tr("Saved")},
+		kvalue{NM_SETTING_SECRET_FLAG_NOT_SAVED, Tr("Always Ask")},
+		kvalue{NM_SETTING_SECRET_FLAG_NOT_REQUIRED, Tr("Not Required")},
+	}
 }
 
 func isSettingRequireSecret(flag uint32) bool {

@@ -22,8 +22,8 @@
 package network
 
 import (
-	. "pkg.linuxdeepin.com/lib/gettext"
 	"fmt"
+	. "pkg.linuxdeepin.com/lib/gettext"
 )
 
 const (
@@ -99,10 +99,14 @@ const (
 	NM_PPTP_SECRET_FLAG_NOT_REQUIRED = 5
 )
 
-var availableValuesNMPptpSecretFlag = []kvalue{
-	kvalue{NM_PPTP_SECRET_FLAG_NONE, Tr("Saved")}, // system saved
-	kvalue{NM_PPTP_SECRET_FLAG_NOT_SAVED, Tr("Always Ask")},
-	kvalue{NM_PPTP_SECRET_FLAG_NOT_REQUIRED, Tr("Not Required")},
+var availableValuesNmPptpSecretFlags []kvalue
+
+func initAvailableValuesNmPptpSecretFlags() {
+	availableValuesNmPptpSecretFlags = []kvalue{
+		kvalue{NM_PPTP_SECRET_FLAG_NONE, Tr("Saved")}, // system saved
+		kvalue{NM_PPTP_SECRET_FLAG_NOT_SAVED, Tr("Always Ask")},
+		kvalue{NM_PPTP_SECRET_FLAG_NOT_REQUIRED, Tr("Not Required")},
+	}
 }
 
 func isVpnPptpRequireSecret(flag uint32) bool {
@@ -143,7 +147,7 @@ func getSettingVpnPptpAvailableKeys(data connectionData) (keys []string) {
 func getSettingVpnPptpAvailableValues(data connectionData, key string) (values []kvalue) {
 	switch key {
 	case NM_SETTING_VPN_PPTP_KEY_PASSWORD_FLAGS:
-		values = availableValuesNMPptpSecretFlag
+		values = availableValuesNmPptpSecretFlags
 	}
 	return
 }

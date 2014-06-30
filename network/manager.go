@@ -86,6 +86,12 @@ func (m *Manager) GetDBusInfo() dbus.DBusInfo {
 
 // initialize slice code
 func initSlices() {
+	initAvailableValuesSecretFlags()
+	initAvailableValuesNmPptpSecretFlags()
+	initAvailableValuesNmL2tpSecretFlags()
+	initAvailableValuesNmVpncSecretFlags()
+	initAvailableValuesNmOpenvpnSecretFlags()
+	initAvailableValuesWirelessChannel()
 	initAvailableValues8021x()
 	initAvailableValuesIp4()
 	initAvailableValuesIp6()

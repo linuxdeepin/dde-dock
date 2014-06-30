@@ -22,8 +22,8 @@
 package network
 
 import (
-	. "pkg.linuxdeepin.com/lib/gettext"
 	"fmt"
+	. "pkg.linuxdeepin.com/lib/gettext"
 )
 
 // For the NM <-> VPN plugin service
@@ -109,10 +109,14 @@ const (
 	NM_L2TP_SECRET_FLAG_NOT_REQUIRED = 5
 )
 
-var availableValuesNML2tpSecretFlag = []kvalue{
-	kvalue{NM_L2TP_SECRET_FLAG_NONE, Tr("Saved")},
-	kvalue{NM_L2TP_SECRET_FLAG_NOT_SAVED, Tr("Always Ask")},
-	kvalue{NM_L2TP_SECRET_FLAG_NOT_REQUIRED, Tr("Not Required")},
+var availableValuesNmL2tpSecretFlags []kvalue
+
+func initAvailableValuesNmL2tpSecretFlags() {
+	availableValuesNmL2tpSecretFlags = []kvalue{
+		kvalue{NM_L2TP_SECRET_FLAG_NONE, Tr("Saved")},
+		kvalue{NM_L2TP_SECRET_FLAG_NOT_SAVED, Tr("Always Ask")},
+		kvalue{NM_L2TP_SECRET_FLAG_NOT_REQUIRED, Tr("Not Required")},
+	}
 }
 
 func isVpnL2tpRequireSecret(flag uint32) bool {
@@ -153,7 +157,7 @@ func getSettingVpnL2tpAvailableKeys(data connectionData) (keys []string) {
 func getSettingVpnL2tpAvailableValues(data connectionData, key string) (values []kvalue) {
 	switch key {
 	case NM_SETTING_VPN_L2TP_KEY_PASSWORD_FLAGS:
-		values = availableValuesNML2tpSecretFlag
+		values = availableValuesNmL2tpSecretFlags
 	}
 	return
 }
