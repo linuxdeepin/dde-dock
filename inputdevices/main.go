@@ -107,5 +107,6 @@ func Start() {
 			panic(err)
 		}
 		managerObj.mouseObj = mouse
+		tpadSettings.SetBoolean(TPAD_KEY_ENABLE, true)
 	}
 }
