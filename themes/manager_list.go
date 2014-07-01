@@ -441,7 +441,7 @@ func isThemeInfoSame(info1, info2 *ThemeInfo) bool {
 		return false
 	}
 
-	if info1.Name == info2.Name && info1.T == info2.T {
+	if info1.Name == info2.Name {
 		return true
 	}
 
