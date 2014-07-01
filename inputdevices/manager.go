@@ -21,12 +21,14 @@
 
 package inputdevices
 
+// #include <stdlib.h>
+// #include "utils.h"
 import "C"
 
 import (
 	"pkg.linuxdeepin.com/lib/dbus"
-	"io/ioutil"
 	"strings"
+	"unsafe"
 )
 
 type Manager struct {
@@ -49,20 +51,18 @@ const (
 func getDeviceNames() []string {
 	names := []string{}
 
-	contents, err := ioutil.ReadFile(_PROC_DEVICE_PATH)
-	if err != nil {
-		logObj.Warningf("ReadFile '%s' failed: %v",
-			_PROC_DEVICE_PATH, err)
-		return names
+	n_devices := C.int(0)
+	list := C.get_device_info_list(&n_devices)
+	tmp := uintptr(unsafe.Pointer(list))
+	l := unsafe.Sizeof(list)
+
+	for i := C.int(0); i < n_devices; i++ {
+		info := (*C.DeviceInfo)(unsafe.Pointer(tmp + uintptr(i)*l))
+		name := C.GoString(info.atom_name)
+		names = append(names, strings.ToLower(name))
 	}
 
-	lines := strings.Split(string(contents), "\n")
-	for _, line := range lines {
-		if strings.Contains(line, _PROC_KEY_NAME) {
-			names = append(names, strings.ToLower(line))
-		}
-	}
-
+	C.free(unsafe.Pointer(list))
 	return names
 }
 

@@ -65,27 +65,17 @@ func Start() {
 	datas := parseXML(_LAYOUT_XML_PATH)
 	layoutDescMap = getLayoutList(datas)
 
-	mouse := NewMouse()
-	if err := dbus.InstallOnSession(mouse); err != nil {
-		logObj.Warning("Mouse DBus Session Failed: ", err)
-		panic(err)
-	}
-	managerObj.mouseObj = mouse
-
-	kbd := NewKeyboard()
-	if err := dbus.InstallOnSession(kbd); err != nil {
-		logObj.Warning("Kbd DBus Session Failed: ", err)
-		panic(err)
-	}
-	managerObj.kbdObj = kbd
-	setLayout(kbd.CurrentLayout.GetValue().(string))
-
 	tpadFlag := false
 	mouseFlag := false
 	for _, info := range managerObj.Infos {
 		if info.Id == "mouse" {
-			mouseFlag = true
+			mouse := NewMouse()
+			if err := dbus.InstallOnSession(mouse); err != nil {
+				logObj.Warning("Mouse DBus Session Failed: ", err)
+				panic(err)
+			}
 			managerObj.mouseObj = mouse
+			mouseFlag = true
 		} else if info.Id == "touchpad" {
 			tpad := NewTPad()
 			if err := dbus.InstallOnSession(tpad); err != nil {
@@ -94,11 +84,28 @@ func Start() {
 			}
 			tpadFlag = true
 			managerObj.tpadObj = tpad
+		} else if info.Id == "keyboard" {
+			kbd := NewKeyboard()
+			if err := dbus.InstallOnSession(kbd); err != nil {
+				logObj.Warning("Kbd DBus Session Failed: ", err)
+				panic(err)
+			}
+			managerObj.kbdObj = kbd
+			setLayout(kbd.CurrentLayout.GetValue().(string))
 		}
 	}
 	initGSettingsSet(tpadFlag)
 
 	if mouseFlag {
 		disableTPadWhenMouse()
+	} else {
+		info := deviceInfo{DEVICE_PATH + "Mouse", "mouse"}
+		managerObj.Infos = append(managerObj.Infos, info)
+		mouse := NewMouse()
+		if err := dbus.InstallOnSession(mouse); err != nil {
+			logObj.Warning("Mouse DBus Session Failed: ", err)
+			panic(err)
+		}
+		managerObj.mouseObj = mouse
 	}
 }

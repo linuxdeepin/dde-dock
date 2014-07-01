@@ -48,4 +48,6 @@ gboolean set_device_enabled (int device_id,
                     gboolean enabled);
 XDevice *open_gdk_device (GdkDevice *device);
 
+DeviceInfo *get_device_info_list(int *num);
+
 #endif

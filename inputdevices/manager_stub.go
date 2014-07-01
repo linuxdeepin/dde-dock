@@ -38,12 +38,11 @@ func (op *Manager) setPropName(name string) {
 			} else if strings.Contains(name, "touchpad") {
 				info := deviceInfo{DEVICE_PATH + "TouchPad", "touchpad"}
 				tmps = append(tmps, info)
-			} else if strings.Contains(name, "keyboard") {
-				info := deviceInfo{DEVICE_PATH + "Keyboard", "keyboard"}
-				tmps = append(tmps, info)
 			}
 		}
 
+		info := deviceInfo{DEVICE_PATH + "Keyboard", "keyboard"}
+		tmps = append(tmps, info)
 		op.Infos = tmps
 		dbus.NotifyChange(op, name)
 	}

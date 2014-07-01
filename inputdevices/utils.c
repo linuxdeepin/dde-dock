@@ -20,37 +20,48 @@
  **/
 
 #include "utils.h"
+#include <stdlib.h>
+#include <string.h>
 #include <X11/extensions/XInput2.h>
 
-DeviceInfo *get_device_info_list ()
+DeviceInfo *get_device_info_list (int *num)
 {
 	int n_devices;
 	XDeviceInfo *infos = XListInputDevices(
 	                         GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()),
 	                         &n_devices);
 	int i;
-
-	DeviceInfo *list = (DeviceInfo*)g_new0(DeviceInfo, n_devices);
-	if (list == NULL) {
-		return NULL;
-	}
-
+	int j = 0;
+	DeviceInfo *list = NULL;
 	for (i = 0; i < n_devices; i++) {
 		if (infos[i].use != IsXExtensionPointer ||
 		        infos[i].type < 1) {
 			continue;
 		}
 
-		DeviceInfo info;
+		DeviceInfo *tmp = calloc(j+1, sizeof(DeviceInfo));
+		if (tmp == NULL) {
+			free(list);
+			list = NULL;
+			break;
+		}
 
-		info.name = infos[i].name;
-		info.xid = infos[i].id;
-		info.atom = infos[i].type;
-		info.atom_name =(char*)gdk_x11_get_xatom_name(infos[i].type);
+		if (j != 0) {
+			memcpy(tmp, list, j * sizeof(DeviceInfo));
+			free(list);
+			list = NULL;
+		}
 
-		*(list+i) = info;
+		tmp[j].name = infos[i].name;
+		tmp[j].atom_name = (char*)gdk_x11_get_xatom_name(infos[i].type);
+		tmp[j].xid = infos[i].id;
+		tmp[j].atom = infos[i].type;
+
+		list = tmp;
+		j++;
 	}
 
+	*num = j;
 	XFreeDeviceList(infos);
 
 	return list;
