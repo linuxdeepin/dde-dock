@@ -32,6 +32,13 @@
 #include <X11/extensions/XInput.h>
 #include <X11/extensions/XIproto.h>
 
+typedef struct _DeviceInfo {
+	char *name;
+	char *atom_name;
+	int xid;
+	int atom;
+} DeviceInfo;
+
 gchar *str_to_upper(const gchar *src);
 gchar *str_to_letter(const gchar *src);
 gboolean str_is_contain (const gchar *src, const gchar *sub);

@@ -22,6 +22,40 @@
 #include "utils.h"
 #include <X11/extensions/XInput2.h>
 
+DeviceInfo *get_device_info_list ()
+{
+	int n_devices;
+	XDeviceInfo *infos = XListInputDevices(
+	                         GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()),
+	                         &n_devices);
+	int i;
+
+	DeviceInfo *list = (DeviceInfo*)g_new0(DeviceInfo, n_devices);
+	if (list == NULL) {
+		return NULL;
+	}
+
+	for (i = 0; i < n_devices; i++) {
+		if (infos[i].use != IsXExtensionPointer ||
+		        infos[i].type < 1) {
+			continue;
+		}
+
+		DeviceInfo info;
+
+		info.name = infos[i].name;
+		info.xid = infos[i].id;
+		info.atom = infos[i].type;
+		info.atom_name =(char*)gdk_x11_get_xatom_name(infos[i].type);
+
+		*(list+i) = info;
+	}
+
+	XFreeDeviceList(infos);
+
+	return list;
+}
+
 int
 xi_device_exist (const char *name)
 {
@@ -37,18 +71,14 @@ xi_device_exist (const char *name)
 	int dev_id = -1;
 
 	for (i = 0; i < n_devices; i++) {
-		/*g_debug("XID: %lu\n", infos[i].id);*/
-		/*g_debug("Atom: %lu\n", infos[i].type);*/
-		/*g_debug("Name: %s\n", infos[i].name);*/
-		/*g_debug("Num Class: %d\n", infos[i].num_classes);*/
-		/*g_debug("Use: %d\n", infos[i].use);*/
-		// Filter master device
-		if ((g_strcmp0(infos[i].name, "Virtual core pointer") == 0) ||
-		        (g_strcmp0(infos[i].name, "Virtual core keyboard") == 0)) {
+		if (infos[i].use != IsXExtensionPointer ||
+		        infos[i].type < 1) {
 			continue;
+
 		}
 
-		if ( str_is_contain (infos[i].name, name) ) {
+		const char *atom_name = gdk_x11_get_xatom_name(infos[i].type);
+		if ( str_is_contain (atom_name, name) ) {
 			dev_id = infos[i].id;
 			break;
 		}

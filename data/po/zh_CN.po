@@ -2884,7 +2884,7 @@ msgstr "该设备已被删除。"
 
 #: ../../network/state_handler.go:69
 msgid "NetworkManager went to sleep."
-msgstr "NetworkManager进入休眠状态。"
+msgstr "NetworkManager进入待机状态。"
 
 #: ../../network/state_handler.go:70
 msgid "The device's active connection was removed or disappeared."
