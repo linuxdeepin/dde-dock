@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-30 10:24+0800\n"
+"POT-Creation-Date: 2014-07-01 17:35+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME &lt;EMAIL@ADDRESS&gt;\n"
 "Language-Team: LANGUAGE &lt;LL@li.org&gt;\n"
@@ -2171,30 +2171,30 @@ msgstr "打开文件夹"
 msgid "Run Soft"
 msgstr "运行软件"
 
-#: ../../network/manager_connections.go:182
+#: ../../network/manager_connections.go:183
 #: ../../network/nm_custom_type.go:133
 msgid "Wired Connection"
 msgstr "有线连接"
 
-#: ../../network/nm_constant.go:249 ../../network/nm_setting_vpn_l2tp.go:113
-#: ../../network/nm_setting_vpn_openvpn.go:168
-#: ../../network/nm_setting_vpn_pptp.go:103
-#: ../../network/nm_setting_vpn_vpnc.go:142
+#: ../../network/nm_constant.go:296 ../../network/nm_setting_vpn_l2tp.go:116
+#: ../../network/nm_setting_vpn_openvpn.go:171
+#: ../../network/nm_setting_vpn_pptp.go:106
+#: ../../network/nm_setting_vpn_vpnc.go:145
 msgid "Saved"
 msgstr "已保存的"
 
-#: ../../network/nm_constant.go:251 ../../network/nm_setting_vpn_l2tp.go:114
-#: ../../network/nm_setting_vpn_openvpn.go:169
-#: ../../network/nm_setting_vpn_pptp.go:104
-#: ../../network/nm_setting_vpn_vpnc.go:144
+#: ../../network/nm_constant.go:298 ../../network/nm_setting_vpn_l2tp.go:117
+#: ../../network/nm_setting_vpn_openvpn.go:172
+#: ../../network/nm_setting_vpn_pptp.go:107
+#: ../../network/nm_setting_vpn_vpnc.go:147
 msgid "Always Ask"
 msgstr "总是询问"
 
-#: ../../network/nm_constant.go:252 ../../network/nm_setting_vpn_l2tp.go:115
-#: ../../network/nm_setting_vpn_openvpn.go:170
-#: ../../network/nm_setting_vpn_openvpn.go:475
-#: ../../network/nm_setting_vpn_pptp.go:105
-#: ../../network/nm_setting_vpn_vpnc.go:145
+#: ../../network/nm_constant.go:299 ../../network/nm_setting_vpn_l2tp.go:118
+#: ../../network/nm_setting_vpn_openvpn.go:173
+#: ../../network/nm_setting_vpn_openvpn.go:479
+#: ../../network/nm_setting_vpn_pptp.go:108
+#: ../../network/nm_setting_vpn_vpnc.go:148
 msgid "Not Required"
 msgstr "不要求"
 
@@ -2311,7 +2311,7 @@ msgstr "LEAP"
 
 #: ../../network/nm_setting_802_1x.go:178
 #: ../../network/nm_setting_ip4_config.go:178
-#: ../../network/nm_setting_vpn_vpnc.go:257
+#: ../../network/nm_setting_vpn_vpnc.go:261
 msgid "Disabled"
 msgstr "已禁用"
 
@@ -2328,7 +2328,7 @@ msgid "Both"
 msgstr "都是"
 
 #: ../../network/nm_setting_802_1x.go:185
-#: ../../network/nm_setting_wireless.go:290
+#: ../../network/nm_setting_wireless.go:295
 msgid "Automatic"
 msgstr "自动"
 
@@ -2448,8 +2448,8 @@ msgstr "VPNC"
 #: ../../network/nm_setting_virtual_key.go:141
 #: ../../network/nm_setting_virtual_key.go:148
 #: ../../network/nm_setting_virtual_key.go:178
-#: ../../network/nm_setting_vpn_openvpn.go:394
-#: ../../network/nm_setting_vpn_vpnc.go:268
+#: ../../network/nm_setting_vpn_openvpn.go:398
+#: ../../network/nm_setting_vpn_vpnc.go:272
 msgid "None"
 msgstr "无"
 
@@ -2490,210 +2490,211 @@ msgstr "安全（默认）"
 msgid "Weak"
 msgstr "弱"
 
-#: ../../network/nm_setting_vpn_openvpn.go:247
+#: ../../network/nm_setting_vpn_openvpn.go:251
 msgid "Certificates (TLS)"
 msgstr "证书（TLS）"
 
-#: ../../network/nm_setting_vpn_openvpn.go:248
+#: ../../network/nm_setting_vpn_openvpn.go:252
 msgid "Password"
 msgstr "密码"
 
-#: ../../network/nm_setting_vpn_openvpn.go:249
+#: ../../network/nm_setting_vpn_openvpn.go:253
 msgid "Password with Certificates (TLS)"
 msgstr "证书密码（TLS）"
 
-#: ../../network/nm_setting_vpn_openvpn.go:250
+#: ../../network/nm_setting_vpn_openvpn.go:254
 msgid "Static Key"
 msgstr "静态密钥"
 
-#: ../../network/nm_setting_vpn_openvpn.go:254
-#: ../../network/nm_setting_vpn_openvpn.go:430
+#: ../../network/nm_setting_vpn_openvpn.go:258
+#: ../../network/nm_setting_vpn_openvpn.go:434
 msgid "0"
 msgstr "0"
 
-#: ../../network/nm_setting_vpn_openvpn.go:255
-#: ../../network/nm_setting_vpn_openvpn.go:431
+#: ../../network/nm_setting_vpn_openvpn.go:259
+#: ../../network/nm_setting_vpn_openvpn.go:435
 msgid "1"
 msgstr "1"
 
-#: ../../network/nm_setting_vpn_openvpn.go:373
-#: ../../network/nm_setting_vpn_openvpn.go:393
-#: ../../network/nm_setting_vpn_openvpn.go:424
-#: ../../network/nm_setting_wireless.go:184
+#: ../../network/nm_setting_vpn_openvpn.go:377
+#: ../../network/nm_setting_vpn_openvpn.go:397
+#: ../../network/nm_setting_vpn_openvpn.go:428
+#: ../../network/nm_setting_wireless.go:139
+#: ../../network/nm_setting_wireless.go:188
 msgid "Default"
 msgstr "默认"
 
-#: ../../network/nm_setting_vpn_openvpn.go:374
+#: ../../network/nm_setting_vpn_openvpn.go:378
 msgid "DES-CBC"
 msgstr "DES-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:375
+#: ../../network/nm_setting_vpn_openvpn.go:379
 msgid "RC2-CBC"
 msgstr "RC2-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:376
+#: ../../network/nm_setting_vpn_openvpn.go:380
 msgid "DES-EDE-CBC"
 msgstr "DES-EDE-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:377
+#: ../../network/nm_setting_vpn_openvpn.go:381
 msgid "DES-EDE3-CBC"
 msgstr "DES-EDE3-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:378
+#: ../../network/nm_setting_vpn_openvpn.go:382
 msgid "DESX-CBC"
 msgstr "DESX-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:379
+#: ../../network/nm_setting_vpn_openvpn.go:383
 msgid "BF-CBC"
 msgstr "BF-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:380
+#: ../../network/nm_setting_vpn_openvpn.go:384
 msgid "RC2-40-CBC"
 msgstr "RC2-40-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:381
+#: ../../network/nm_setting_vpn_openvpn.go:385
 msgid "CAST5-CBC"
 msgstr "CAST5-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:382
+#: ../../network/nm_setting_vpn_openvpn.go:386
 msgid "RC2-64-CBC"
 msgstr "RC2-64-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:383
+#: ../../network/nm_setting_vpn_openvpn.go:387
 msgid "AES-128-CBC"
 msgstr "AES-128-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:384
+#: ../../network/nm_setting_vpn_openvpn.go:388
 msgid "AES-192-CBC"
 msgstr "AES-192-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:385
+#: ../../network/nm_setting_vpn_openvpn.go:389
 msgid "AES-256-CBC"
 msgstr "AES-256-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:386
+#: ../../network/nm_setting_vpn_openvpn.go:390
 msgid "CAMELLIA-128-CBC"
 msgstr "CAMELLIA-128-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:387
+#: ../../network/nm_setting_vpn_openvpn.go:391
 msgid "CAMELLIA-192-CBC"
 msgstr "CAMELLIA-192-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:388
+#: ../../network/nm_setting_vpn_openvpn.go:392
 msgid "CAMELLIA-256-CBC"
 msgstr "CAMELLIA-256-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:389
+#: ../../network/nm_setting_vpn_openvpn.go:393
 msgid "SEED-CBC"
 msgstr "SEED-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:395
+#: ../../network/nm_setting_vpn_openvpn.go:399
 msgid "RSA MD-4"
 msgstr "RSA MD-4"
 
-#: ../../network/nm_setting_vpn_openvpn.go:396
+#: ../../network/nm_setting_vpn_openvpn.go:400
 msgid "MD-5"
 msgstr "MD-5"
 
-#: ../../network/nm_setting_vpn_openvpn.go:397
+#: ../../network/nm_setting_vpn_openvpn.go:401
 msgid "SHA-1"
 msgstr "SHA-1"
 
-#: ../../network/nm_setting_vpn_openvpn.go:398
+#: ../../network/nm_setting_vpn_openvpn.go:402
 msgid "SHA-224"
 msgstr "SHA-224"
 
-#: ../../network/nm_setting_vpn_openvpn.go:399
+#: ../../network/nm_setting_vpn_openvpn.go:403
 msgid "SHA-256"
 msgstr "SHA-256"
 
-#: ../../network/nm_setting_vpn_openvpn.go:400
+#: ../../network/nm_setting_vpn_openvpn.go:404
 msgid "SHA-384"
 msgstr "SHA-384"
 
-#: ../../network/nm_setting_vpn_openvpn.go:401
+#: ../../network/nm_setting_vpn_openvpn.go:405
 msgid "SHA-512"
 msgstr "SHA-512"
 
-#: ../../network/nm_setting_vpn_openvpn.go:402
+#: ../../network/nm_setting_vpn_openvpn.go:406
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
 
-#: ../../network/nm_setting_vpn_openvpn.go:425
+#: ../../network/nm_setting_vpn_openvpn.go:429
 msgid "Client"
 msgstr "客户端"
 
-#: ../../network/nm_setting_vpn_openvpn.go:426
+#: ../../network/nm_setting_vpn_openvpn.go:430
 msgid "Server"
 msgstr "服务器"
 
-#: ../../network/nm_setting_vpn_openvpn.go:476
+#: ../../network/nm_setting_vpn_openvpn.go:480
 msgid "HTTP"
 msgstr "HTTP"
 
-#: ../../network/nm_setting_vpn_openvpn.go:477
+#: ../../network/nm_setting_vpn_openvpn.go:481
 msgid "SOCKS"
 msgstr "SOCKS"
 
-#: ../../network/nm_setting_vpn_vpnc.go:249
+#: ../../network/nm_setting_vpn_vpnc.go:253
 msgid "Cisco (default)"
 msgstr "思科（默认）"
 
-#: ../../network/nm_setting_vpn_vpnc.go:250
+#: ../../network/nm_setting_vpn_vpnc.go:254
 msgid "Netscreen"
 msgstr "网屏"
 
-#: ../../network/nm_setting_vpn_vpnc.go:254
+#: ../../network/nm_setting_vpn_vpnc.go:258
 msgid "NAT-T When Available (default)"
 msgstr "NAT-T可用时（默认）"
 
-#: ../../network/nm_setting_vpn_vpnc.go:255
+#: ../../network/nm_setting_vpn_vpnc.go:259
 msgid "NAT-T Always"
 msgstr "NAT-T总是"
 
-#: ../../network/nm_setting_vpn_vpnc.go:256
+#: ../../network/nm_setting_vpn_vpnc.go:260
 msgid "Cisco UDP"
 msgstr "思科UDP"
 
-#: ../../network/nm_setting_vpn_vpnc.go:261
-#: ../../network/nm_setting_vpn_vpnc.go:269
+#: ../../network/nm_setting_vpn_vpnc.go:265
+#: ../../network/nm_setting_vpn_vpnc.go:273
 msgid "DH Group 1"
 msgstr "DH Group 1"
 
-#: ../../network/nm_setting_vpn_vpnc.go:262
+#: ../../network/nm_setting_vpn_vpnc.go:266
 msgid "DH Group 2 (default)"
 msgstr "DH Group 2（默认）"
 
-#: ../../network/nm_setting_vpn_vpnc.go:263
-#: ../../network/nm_setting_vpn_vpnc.go:271
+#: ../../network/nm_setting_vpn_vpnc.go:267
+#: ../../network/nm_setting_vpn_vpnc.go:275
 msgid "DH Group 5"
 msgstr "DH Group 5"
 
-#: ../../network/nm_setting_vpn_vpnc.go:267
+#: ../../network/nm_setting_vpn_vpnc.go:271
 msgid "Server (default)"
 msgstr "服务器（默认）"
 
-#: ../../network/nm_setting_vpn_vpnc.go:270
+#: ../../network/nm_setting_vpn_vpnc.go:274
 msgid "DH Group 2"
 msgstr "DH Group 2"
 
-#: ../../network/nm_setting_wireless.go:284
+#: ../../network/nm_setting_wireless.go:289
 msgid "Infrastructure"
 msgstr "基础架构"
 
-#: ../../network/nm_setting_wireless.go:285
+#: ../../network/nm_setting_wireless.go:290
 msgid "Ad-Hoc"
 msgstr "临时网络"
 
-#: ../../network/nm_setting_wireless.go:286
+#: ../../network/nm_setting_wireless.go:291
 msgid "AP-Hotspot"
 msgstr "AP热点"
 
-#: ../../network/nm_setting_wireless.go:291
+#: ../../network/nm_setting_wireless.go:296
 msgid "A (5 GHz)"
 msgstr "A（5 GHz）"
 
-#: ../../network/nm_setting_wireless.go:292
+#: ../../network/nm_setting_wireless.go:297
 msgid "BG (2.4 GHz)"
 msgstr "BG（2.4 GHz）"
 
@@ -2994,25 +2995,24 @@ msgstr "验证到VPN服务器失败。"
 msgid "The connection was deleted from settings."
 msgstr "该连接已从设置中删除。"
 
-#: ../../network/state_handler.go:154 ../../network/state_handler.go:226
+#: ../../network/state_handler.go:155 ../../network/state_handler.go:227
 msgid "Connected"
 msgstr "已连接"
 
-#: ../../network/state_handler.go:179 ../../network/state_handler.go:230
-#: ../../network/state_handler.go:235
-#, fuzzy
+#: ../../network/state_handler.go:180 ../../network/state_handler.go:231
+#: ../../network/state_handler.go:236 ../../network/state_handler.go:241
 msgid "Disconnected"
 msgstr "断开"
 
-#: ../../network/state_handler.go:208
+#: ../../network/state_handler.go:209
 msgid "Offline"
 msgstr "离线"
 
-#: ../../network/state_handler.go:208
+#: ../../network/state_handler.go:209
 msgid "Disconnected,  you are now offline."
 msgstr "断开连接，当前已离线"
 
-#: ../../network/state_handler.go:235
+#: ../../network/state_handler.go:241
 msgid "Access Point mode is not supported by this device."
 msgstr "此设备不支持热点模式"
 
