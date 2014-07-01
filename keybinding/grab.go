@@ -435,6 +435,8 @@ func parseKeyEnvent(X *xgbutil.XUtil, state uint16, detail xproto.Keycode) strin
 		keyStr = "f12"
 	}
 
+	keyStr = parseModifierKey(modStr, keyStr)
+
 	value := ""
 	modStr = deleteSpecialMod(modStr)
 	Logger.Infof("modStr: %s, keyStr: %s", modStr, keyStr)
@@ -445,4 +447,20 @@ func parseKeyEnvent(X *xgbutil.XUtil, state uint16, detail xproto.Keycode) strin
 	}
 
 	return value
+}
+
+func parseModifierKey(mod, key string) string {
+	if strings.Contains(key, "control") {
+		key = "control"
+	} else if strings.Contains(key, "alt") {
+		key = "alt"
+	} else if strings.Contains(key, "shift") {
+		key = "shift"
+	} else if strings.Contains(key, "super") {
+		if len(mod) > 0 {
+			key = "super"
+		}
+	}
+
+	return key
 }

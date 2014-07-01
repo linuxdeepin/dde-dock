@@ -99,14 +99,15 @@ func Start() {
 	if mouseFlag {
 		disableTPadWhenMouse()
 	} else {
-		info := deviceInfo{DEVICE_PATH + "Mouse", "mouse"}
-		managerObj.Infos = append(managerObj.Infos, info)
-		mouse := NewMouse()
-		if err := dbus.InstallOnSession(mouse); err != nil {
-			logObj.Warning("Mouse DBus Session Failed: ", err)
-			panic(err)
-		}
-		managerObj.mouseObj = mouse
+		//info := deviceInfo{DEVICE_PATH + "Mouse", "mouse"}
+		//managerObj.Infos = append(managerObj.Infos, info)
+		//dbus.NotifyChange(managerObj, "Infos")
+		//mouse := NewMouse()
+		//if err := dbus.InstallOnSession(mouse); err != nil {
+		//logObj.Warning("Mouse DBus Session Failed: ", err)
+		//panic(err)
+		//}
+		//managerObj.mouseObj = mouse
 		tpadSettings.SetBoolean(TPAD_KEY_ENABLE, true)
 	}
 }

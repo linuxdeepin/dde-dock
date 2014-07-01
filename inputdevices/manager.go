@@ -43,11 +43,6 @@ type deviceInfo struct {
 	Id   string
 }
 
-const (
-	_PROC_DEVICE_PATH = "/proc/bus/input/devices"
-	_PROC_KEY_NAME    = "N: Name"
-)
-
 func getDeviceNames() []string {
 	names := []string{}
 
