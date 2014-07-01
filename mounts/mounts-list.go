@@ -53,6 +53,8 @@ type ObjectInfo struct {
 type Manager struct {
 	DiskList []DiskInfo
 	Error    func(string, string)
+
+	quitFlag chan bool
 }
 
 const (
@@ -392,21 +394,34 @@ func NewManager() *Manager {
 	m := &Manager{}
 	m.setPropName("DiskList")
 	m.listenSignalChanged()
+	m.quitFlag = make(chan bool)
 
-	//printDiskInfo(m.DiskList)
 	return m
+}
+
+var _manager *Manager
+
+func GetManager() *Manager {
+	if _manager == nil {
+		_manager = NewManager()
+	}
+
+	return _manager
 }
 
 func Start() {
 	Logger.BeginTracing()
 
-	m := NewManager()
+	m := GetManager()
 	err := dbus.InstallOnSession(m)
 	if err != nil {
 		Logger.Fatal("Install DBus Session Failed:", err)
 	}
+
+	go m.refrashDiskInfoList()
 }
 
 func Stop() {
+	GetManager().quitFlag <- true
 	Logger.EndTracing()
 }

@@ -53,8 +53,9 @@ func getDeviceNames() []string {
 
 	n_devices := C.int(0)
 	list := C.get_device_info_list(&n_devices)
+	defer C.free(unsafe.Pointer(list))
 	tmp := uintptr(unsafe.Pointer(list))
-	l := unsafe.Sizeof(list)
+	l := unsafe.Sizeof(*list)
 
 	for i := C.int(0); i < n_devices; i++ {
 		info := (*C.DeviceInfo)(unsafe.Pointer(tmp + uintptr(i)*l))
@@ -62,7 +63,6 @@ func getDeviceNames() []string {
 		names = append(names, strings.ToLower(name))
 	}
 
-	C.free(unsafe.Pointer(list))
 	return names
 }
 
