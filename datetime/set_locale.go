@@ -236,7 +236,7 @@ func sendNotify(icon, summary, body string) {
 	notifier.Notify(_DATE_TIME_DEST, 0, icon, summary, body, nil, nil, 0)
 }
 
-func getLocaleInfo(keyFile *glib.KeyFile, l string) (localeInfo, bool) {
+func getLocaleInfo(keyFile *glib.KeyFile, l, locale string) (localeInfo, bool) {
 	if keyFile == nil {
 		return localeInfo{}, false
 	}
@@ -262,7 +262,7 @@ func getLocaleInfo(keyFile *glib.KeyFile, l string) (localeInfo, bool) {
 	if v, err := keyFile.GetLocaleString(l, "Name", lang); err != nil {
 		return info, false
 	} else {
-		info.Locale = l
+		info.Locale = locale
 		info.Desc = v
 		return info, true
 	}
@@ -278,8 +278,8 @@ func getLocaleInfoList() (list []localeInfo) {
 		return list
 	}
 
-	for _, n := range localeList {
-		info, ok := getLocaleInfo(keyFile, n)
+	for n, v := range localeListMap {
+		info, ok := getLocaleInfo(keyFile, n, v)
 		if !ok {
 			continue
 		}
