@@ -89,7 +89,8 @@ xi_device_exist (const char *name)
 		}
 
 		const char *atom_name = gdk_x11_get_xatom_name(infos[i].type);
-		if ( str_is_contain (atom_name, name) ) {
+		if ( str_is_contain (atom_name, name) ||
+		        str_is_contain(infos[i].name, name) ) {
 			dev_id = infos[i].id;
 			break;
 		}

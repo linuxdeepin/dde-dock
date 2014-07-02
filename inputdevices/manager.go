@@ -54,8 +54,18 @@ func getDeviceNames() []string {
 
 	for i := C.int(0); i < n_devices; i++ {
 		info := (*C.DeviceInfo)(unsafe.Pointer(tmp + uintptr(i)*l))
-		name := C.GoString(info.atom_name)
-		names = append(names, strings.ToLower(name))
+		name := C.GoString(info.name)
+		atomName := C.GoString(info.atom_name)
+
+		name = strings.ToLower(name)
+		atomName = strings.ToLower(atomName)
+		if strings.Contains(name, "touchpad") ||
+			atomName == "touchpad" {
+			names = append(names, "touchpad")
+			continue
+		}
+
+		names = append(names, atomName)
 	}
 
 	return names
