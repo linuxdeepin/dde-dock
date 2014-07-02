@@ -22,11 +22,16 @@
 package datetime
 
 import (
+	"github.com/howeyc/fsnotify"
+	"os"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
 	dutils "pkg.linuxdeepin.com/lib/utils"
-	"github.com/howeyc/fsnotify"
-	"os"
+)
+
+const (
+	DEFAULT_LOCALE = "en_US.UTF-8"
+	DEFAULT_ZONE   = "UTC"
 )
 
 func (m *Manager) GetDBusInfo() dbus.DBusInfo {
@@ -45,19 +50,39 @@ func (op *Manager) setPropName(name string) {
 			Logger.Error("Get Time Zone Failed: %s\n", err)
 			return
 		}
-		op.CurrentTimezone = tz
+		if timezoneIsValid(tz) {
+			op.CurrentTimezone = tz
+		} else {
+			op.CurrentTimezone = DEFAULT_ZONE
+		}
 		dbus.NotifyChange(op, name)
 	case "UserTimezoneList":
 		list := dateSettings.GetStrv("user-timezone-list")
+		tmp := []string{}
+		for _, l := range list {
+			if timezoneIsValid(l) {
+				tmp = append(tmp, l)
+			}
+		}
+		list = tmp
 		if !strArrayIsEqual(list, op.UserTimezoneList) {
 			op.UserTimezoneList = list
 			dbus.NotifyChange(op, "UserTimezoneList")
 		}
 	case "CurrentLocale":
+		valid := false
 		if locale, ok := getUserLocale(); ok {
-			op.CurrentLocale = locale
-		} else {
+			if checkLocaleValid(locale) {
+				op.CurrentLocale = locale
+				valid = true
+			}
+		}
+
+		if !valid {
 			op.CurrentLocale, _ = getDefaultLocale()
+			if !checkLocaleValid(op.CurrentLocale) {
+				op.CurrentLocale = DEFAULT_LOCALE
+			}
 		}
 		dbus.NotifyChange(op, name)
 	}

@@ -21,6 +21,16 @@
 
 package datetime
 
+func checkLocaleValid(locale string) bool {
+	for _, v := range localeListMap {
+		if v == locale {
+			return true
+		}
+	}
+
+	return false
+}
+
 func timezoneIsValid(tz string) bool {
 	for _, info := range zoneInfos {
 		if tz == info.Zone {
