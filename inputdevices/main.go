@@ -22,6 +22,7 @@
 package inputdevices
 
 import (
+	"dbus/com/deepin/api/greeterutils"
 	libsession "dbus/com/deepin/sessionmanager"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
@@ -31,6 +32,7 @@ import (
 var (
 	logObj     = Logger.NewLogger("input device")
 	xsObj      *libsession.XSettings
+	greeterObj *greeterutils.GreeterUtils
 	managerObj *Manager
 
 	tpadSettings  = gio.NewSettings("com.deepin.dde.touchpad")
@@ -50,7 +52,12 @@ func Start() {
 	xsObj, err = libsession.NewXSettings("com.deepin.SessionManager",
 		"/com/deepin/XSettings")
 	if err != nil {
-		logObj.Info("New XSettings Object Failed: ", err)
+		logObj.Warning("New XSettings Object Failed: ", err)
+		return
+	}
+
+	if greeterObj, err = greeterutils.NewGreeterUtils("com.deepin.api.GreeterUtils", "/com/deepin/api/GreeterUtils"); err != nil {
+		logObj.Warning("New GreeterUtils failed:", err)
 		return
 	}
 

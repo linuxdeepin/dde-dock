@@ -22,6 +22,7 @@
 package themes
 
 import (
+	"dbus/com/deepin/api/greeterutils"
 	"dbus/com/deepin/sessionmanager"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
@@ -30,8 +31,9 @@ import (
 )
 
 var (
-	objXS  *sessionmanager.XSettings
-	Logger = logger.NewLogger(MANAGER_DEST)
+	objXS      *sessionmanager.XSettings
+	greeterObj *greeterutils.GreeterUtils
+	Logger     = logger.NewLogger(MANAGER_DEST)
 
 	themeSettings = gio.NewSettings("com.deepin.dde.personalization")
 	gnmSettings   = gio.NewSettings("org.gnome.desktop.background")
@@ -49,8 +51,18 @@ func Start() {
 		Logger.Fatal("New XSettings Failed:", err)
 	}
 
+	if greeterObj, err = greeterutils.NewGreeterUtils("com.deepin.api.GreeterUtils", "/com/deepin/api/GreeterUtils"); err != nil {
+		Logger.Fatal("New GreeterUtils Failed:", err)
+	}
+
 	if err = dbus.InstallOnSession(GetManager()); err != nil {
 		Logger.Fatal("Install DBus Failed", err)
+	}
+
+	username := dutils.GetUserName()
+	if len(username) > 0 {
+		greeterTheme := GetManager().GreeterTheme.GetValue().(string)
+		greeterObj.SetGreeterTheme(username, greeterTheme)
 	}
 }
 

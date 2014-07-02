@@ -118,6 +118,12 @@ func setLayout(key string) {
 			list = append(list, key)
 			kbdSettings.SetStrv(KBD_KEY_USER_LAYOUT_LIST, list)
 		}
+
+		username := dutils.GetUserName()
+		if len(username) > 0 {
+			greeterObj.SetKbdLayout(username, key)
+			greeterObj.SetKbdLayoutList(username, list)
+		}
 	}
 }
 
