@@ -200,17 +200,20 @@ func newDiskInfo(value interface{}, t string) DiskInfo {
 		if mount := v.GetMount(); mount != nil {
 			info.CanUnmount = mount.CanUnmount()
 		}
-		if containStart("network", id) {
-			info.Type = "network"
-		} else if info.CanEject {
-			info.Type = "removable"
-		} else {
-			info.Type = "native"
-		}
+
 		icons := v.GetIcon().ToString()
 		as := strings.Split(icons, " ")
 		if len(as) > 2 {
 			info.IconName = as[2]
+		}
+
+		if containStart("network", id) {
+			info.Type = "network"
+		} else if info.CanEject ||
+			strings.Contains(info.IconName, "usb") {
+			info.Type = "removable"
+		} else {
+			info.Type = "native"
 		}
 	case "drive":
 		v := value.(*gio.Drive)
@@ -220,17 +223,18 @@ func newDiskInfo(value interface{}, t string) DiskInfo {
 		//info.TotalCap, info.UsableCap = getDiskCap(id)
 		info.Path = v.GetIdentifier(gio.VolumeIdentifierKindUnixDevice)
 		info.UUID = v.GetIdentifier(gio.VolumeIdentifierKindUuid)
-		if containStart("network", id) {
-			info.Type = "network"
-		} else if info.CanEject {
-			info.Type = "removable"
-		} else {
-			info.Type = "native"
-		}
 		icons := v.GetIcon().ToString()
 		as := strings.Split(icons, " ")
 		if len(as) > 2 {
 			info.IconName = as[2]
+		}
+		if containStart("network", id) {
+			info.Type = "network"
+		} else if info.CanEject ||
+			strings.Contains(info.IconName, "usb") {
+			info.Type = "removable"
+		} else {
+			info.Type = "native"
 		}
 	case "mount":
 		v := value.(*gio.Mount)
@@ -240,7 +244,15 @@ func newDiskInfo(value interface{}, t string) DiskInfo {
 		root := v.GetRoot()
 		info.MountURI = root.GetUri()
 		info.TotalCap, info.UsableCap = getDiskCap(root.GetPath())
-		if info.CanEject {
+
+		icons := v.GetIcon().ToString()
+		as := strings.Split(icons, " ")
+		if len(as) > 2 {
+			info.IconName = as[2]
+		}
+
+		if info.CanEject ||
+			strings.Contains(info.IconName, "usb") {
 			info.Type = "removable"
 		} else if root.IsNative() {
 			info.Type = "native"
@@ -250,11 +262,6 @@ func newDiskInfo(value interface{}, t string) DiskInfo {
 		if volume := v.GetVolume(); volume != nil {
 			info.Path = volume.GetIdentifier(gio.VolumeIdentifierKindUnixDevice)
 			info.UUID = volume.GetIdentifier(gio.VolumeIdentifierKindUuid)
-		}
-		icons := v.GetIcon().ToString()
-		as := strings.Split(icons, " ")
-		if len(as) > 2 {
-			info.IconName = as[2]
 		}
 
 		if ok, _ := regexp.MatchString(`^mtp://`, info.MountURI); ok {

@@ -25,6 +25,7 @@ import (
 	"os/exec"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
 	"pkg.linuxdeepin.com/lib/gobject-2.0"
+	"strings"
 	"time"
 )
 
@@ -74,15 +75,24 @@ func (m *Manager) listenSignalChanged() {
 	})
 
 	monitor.Connect("volume-added", func(volumeMonitor *gio.VolumeMonitor, volume *gio.Volume) {
-		if volume.CanEject() && mediaHandSetting.GetBoolean(MEDIA_HAND_AUTO_MOUNT) {
+		icons := volume.GetIcon().ToString()
+		as := strings.Split(icons, " ")
+		iconName := ""
+		if len(as) > 2 {
+			iconName = as[2]
+		}
+		if (volume.CanEject() || strings.Contains(iconName, "usb")) &&
+			mediaHandSetting.GetBoolean(MEDIA_HAND_AUTO_MOUNT) {
 			volume.Mount(gio.MountMountFlagsNone, nil, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
 				_, err := volume.MountFinish(res)
 				if err != nil {
 					Logger.Warningf("volume mount failed: %s", err)
+					m.setPropName("DiskList")
 				}
 			}))
+		} else {
+			m.setPropName("DiskList")
 		}
-		//m.setPropName("DiskList")
 	})
 	monitor.Connect("volume-removed", func(volumeMonitor *gio.VolumeMonitor, volume *gio.Volume) {
 		m.setPropName("DiskList")
