@@ -24,11 +24,10 @@
 #include <gtk/gtk.h>
 #include "common.h"
 
-#define ICON_SIZE 48
-#define PLACE_ICON_NAME "folder_home"
-#define DEVICE_ICON_NAME "block-device"
-#define APP_ICON_DEEPIN "deepin-software-center"
-#define APP_ICON_NAME "google-chrome"
+#define FILE_MANAGER "system-file-manager"
+#define FOLDER "folder"
+#define USER_TRASH_FULL "user-trash-full"
+#define USER_TRASH "user-trash"
 
 static GdkPixbuf *get_pixbuf_from_file (const char *name, gboolean is_bg);
 
@@ -138,4 +137,33 @@ out:
 	}
 
 	return -1;
+}
+
+const char *get_icon_filepath (const char *theme, const char *icon_name)
+{
+	if (theme == NULL || icon_name == NULL) {
+		return NULL;
+	}
+
+	GtkIconTheme *icon = gtk_icon_theme_new();
+	gtk_icon_theme_set_custom_theme(icon, theme);
+
+	const char *filepath = NULL;
+	GtkIconInfo *info = gtk_icon_theme_lookup_icon(icon,
+	                    icon_name, 48,
+	                    GTK_ICON_LOOKUP_NO_SVG);
+	if (info == NULL) {
+		info = gtk_icon_theme_lookup_icon(icon,
+		                                  icon_name, 32,
+		                                  GTK_ICON_LOOKUP_NO_SVG);
+		if (info != NULL) {
+			filepath = gtk_icon_info_get_filename(info);
+		}
+	} else {
+		filepath = gtk_icon_info_get_filename(info);
+	}
+
+	g_object_unref(G_OBJECT(icon));
+
+	return filepath;
 }

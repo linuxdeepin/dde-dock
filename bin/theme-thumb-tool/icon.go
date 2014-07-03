@@ -49,10 +49,10 @@ const (
 	NAME_STATUS_DIR  = "status"
 	NAME_EMBLEMS_DIR = "emblems"
 
-	FOLDER          = "folder.png"
-	USER_TRASH      = "user-trash.png"
-	USER_TRASH_FULL = "user-trash-full.png"
-	FILE_MANAGER    = "system-file-manager.png"
+	FOLDER          = "folder"
+	USER_TRASH      = "user-trash"
+	USER_TRASH_FULL = "user-trash-full"
+	FILE_MANAGER    = "system-file-manager"
 )
 
 func getIconDirList(iconPath string) []string {
@@ -379,6 +379,7 @@ func getTypePngFiles(list []string, num int) []string {
 	return []string{}
 }
 
+/*
 func getIconFiles(iconPath string) (f1, f2, f3 string) {
 	if !dutils.IsFileExist(iconPath) {
 		return
@@ -446,3 +447,4 @@ func getIconFiles(iconPath string) (f1, f2, f3 string) {
 	}
 	return
 }
+*/

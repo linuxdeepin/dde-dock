@@ -25,6 +25,7 @@
 #define ICON_SPCAE 5
 
 int init_env ();
+const char *get_icon_filepath (const char *theme, const char *icon_name);
 int gen_cursor_preview(char *bg, char *dest);
 int gen_icon_preview(char *bg, char *dest, 
 		char *item1, char *item2, char *item3);
