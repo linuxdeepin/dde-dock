@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-03 16:11+0800\n"
+"POT-Creation-Date: 2014-07-03 15:21+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME &lt;EMAIL@ADDRESS&gt;\n"
 "Language-Team: LANGUAGE &lt;LL@li.org&gt;\n"
@@ -84,7 +84,6 @@ msgid "Niue"
 msgstr "纽埃"
 
 #: ../../datetime/zone_utc_list.go:26
-#, fuzzy
 msgid "Pago Pago"
 msgstr "圣保罗"
 
@@ -253,7 +252,6 @@ msgid "Yellowknife"
 msgstr "耶洛奈夫"
 
 #: ../../datetime/zone_utc_list.go:78
-#, fuzzy
 msgid "Canada/Mountain"
 msgstr "加拿大山区"
 
@@ -270,7 +268,6 @@ msgid "Arizona"
 msgstr "亚利桑那"
 
 #: ../../datetime/zone_utc_list.go:82
-#, fuzzy
 msgid "US/Mountain"
 msgstr "美国山区"
 
@@ -303,17 +300,14 @@ msgid "Guatemala"
 msgstr "危地马拉"
 
 #: ../../datetime/zone_utc_list.go:93
-#, fuzzy
 msgid "Tell City"
 msgstr "特尔城"
 
 #: ../../datetime/zone_utc_list.go:94
-#, fuzzy
 msgid "Valparaiso"
 msgstr "印第安纳波利斯"
 
 #: ../../datetime/zone_utc_list.go:96
-#, fuzzy
 msgid "Knox IN"
 msgstr "诺克斯"
 
@@ -382,7 +376,6 @@ msgid "Winnipeg"
 msgstr "温尼伯"
 
 #: ../../datetime/zone_utc_list.go:114
-#, fuzzy
 msgid "East-Saskatchewan"
 msgstr "东萨斯喀彻温"
 
@@ -395,7 +388,6 @@ msgid "General"
 msgstr "通用"
 
 #: ../../datetime/zone_utc_list.go:118
-#, fuzzy
 msgid "Easter Island"
 msgstr "复活节岛"
 
@@ -404,7 +396,6 @@ msgid "Galapagos"
 msgstr "加拉帕戈斯"
 
 #: ../../datetime/zone_utc_list.go:121
-#, fuzzy
 msgid "Indiana-Starke"
 msgstr "印第安纳斯塔克"
 
@@ -453,7 +444,6 @@ msgid "Marengo"
 msgstr "马伦哥"
 
 #: ../../datetime/zone_utc_list.go:135
-#, fuzzy
 msgid "Petersburg"
 msgstr "圣彼得堡"
 
@@ -462,12 +452,10 @@ msgid "Vevay"
 msgstr "韦韦"
 
 #: ../../datetime/zone_utc_list.go:137
-#, fuzzy
 msgid "Vincennes"
 msgstr "文森斯"
 
 #: ../../datetime/zone_utc_list.go:138
-#, fuzzy
 msgid "Winamac"
 msgstr "威纳马克"
 
@@ -484,9 +472,8 @@ msgid "Jamaica"
 msgstr "牙买加"
 
 #: ../../datetime/zone_utc_list.go:143
-#, fuzzy
 msgid "Monticello"
-msgstr "蒙得维的亚"
+msgstr "蒙蒂塞洛"
 
 #: ../../datetime/zone_utc_list.go:144
 msgid "Lima"
@@ -521,7 +508,6 @@ msgid "Pangnirtung"
 msgstr ""
 
 #: ../../datetime/zone_utc_list.go:152
-#, fuzzy
 msgid "Port-au-Prince"
 msgstr "太子港"
 
@@ -546,7 +532,6 @@ msgid "Acre"
 msgstr ""
 
 #: ../../datetime/zone_utc_list.go:158
-#, fuzzy
 msgid "Canada/Eastern"
 msgstr "加拿大东部"
 
@@ -555,12 +540,10 @@ msgid "Cuba"
 msgstr "古巴"
 
 #: ../../datetime/zone_utc_list.go:161
-#, fuzzy
 msgid "US/Eastern"
 msgstr "美国东部"
 
 #: ../../datetime/zone_utc_list.go:162
-#, fuzzy
 msgid "East-Indiana"
 msgstr "东印第安纳州"
 
@@ -733,7 +716,6 @@ msgid "Bermuda"
 msgstr "百慕大"
 
 #: ../../datetime/zone_utc_list.go:207
-#, fuzzy
 msgid "Brazil/West"
 msgstr "巴西西部"
 
@@ -758,17 +740,14 @@ msgid "Araguaina"
 msgstr "阿拉瓜伊纳"
 
 #: ../../datetime/zone_utc_list.go:217
-#, fuzzy
 msgid "ComodRivadavia"
 msgstr "里瓦达维亚海军准将城"
 
 #: ../../datetime/zone_utc_list.go:220
-#, fuzzy
 msgid "La Rioja"
 msgstr "拉里奥哈"
 
 #: ../../datetime/zone_utc_list.go:222
-#, fuzzy
 msgid "Rio Gallegos"
 msgstr "里奥加耶戈斯"
 
@@ -777,12 +756,10 @@ msgid "Salta"
 msgstr "萨尔塔"
 
 #: ../../datetime/zone_utc_list.go:224
-#, fuzzy
 msgid "San Juan"
-msgstr "圣马力诺"
+msgstr "圣胡安"
 
 #: ../../datetime/zone_utc_list.go:225
-#, fuzzy
 msgid "San Luis"
 msgstr "圣路易斯"
 
@@ -879,7 +856,6 @@ msgid "East"
 msgstr ""
 
 #: ../../datetime/zone_utc_list.go:250
-#, fuzzy
 msgid "Americaoronha"
 msgstr "迪诺罗尼亚"
 
@@ -888,7 +864,6 @@ msgid "South Georgia"
 msgstr "南乔治亚"
 
 #: ../../datetime/zone_utc_list.go:252
-#, fuzzy
 msgid "DeNoronha"
 msgstr "迪诺罗尼亚"
 
@@ -969,9 +944,8 @@ msgid "Timbuktu"
 msgstr "廷巴克图"
 
 #: ../../datetime/zone_utc_list.go:274
-#, fuzzy
 msgid "Danmarkshavn"
-msgstr "撒马尔罕"
+msgstr "丹马沙"
 
 #: ../../datetime/zone_utc_list.go:275
 msgid "Troll"
@@ -1006,7 +980,6 @@ msgid "Eire"
 msgstr "爱尔兰"
 
 #: ../../datetime/zone_utc_list.go:283 ../../datetime/zone_utc_list.go:297
-#, fuzzy
 msgid "GMT"
 msgstr "山区标准时间"
 
@@ -1051,7 +1024,6 @@ msgid "GB"
 msgstr "GB"
 
 #: ../../datetime/zone_utc_list.go:296
-#, fuzzy
 msgid "GB-Eire"
 msgstr "爱尔兰时间"
 
@@ -1132,7 +1104,6 @@ msgid "Niamey"
 msgstr "尼亚美"
 
 #: ../../datetime/zone_utc_list.go:321
-#, fuzzy
 msgid "Porto-Novo"
 msgstr "波多诺伏"
 
@@ -1149,9 +1120,8 @@ msgid "Longyearbyen"
 msgstr "朗伊尔城"
 
 #: ../../datetime/zone_utc_list.go:325
-#, fuzzy
 msgid "Jan Mayen"
-msgstr "圣马力诺"
+msgstr "扬马延岛"
 
 #: ../../datetime/zone_utc_list.go:326
 msgid "Amsterdam"
@@ -1278,9 +1248,8 @@ msgid "Zurich"
 msgstr "苏黎世"
 
 #: ../../datetime/zone_utc_list.go:357
-#, fuzzy
 msgid "Poland"
-msgstr "冰岛"
+msgstr "波兰"
 
 #: ../../datetime/zone_utc_list.go:359
 msgid "Blantyre"
@@ -1427,9 +1396,8 @@ msgid "Zaporozhye"
 msgstr "扎波罗热"
 
 #: ../../datetime/zone_utc_list.go:397
-#, fuzzy
 msgid "Israel"
-msgstr "科斯雷"
+msgstr "以色列"
 
 #: ../../datetime/zone_utc_list.go:398
 msgid "Libya"
@@ -1664,7 +1632,6 @@ msgid "Kathmandu"
 msgstr "加德满都"
 
 #: ../../datetime/zone_utc_list.go:464
-#, fuzzy
 msgid "Katmandu"
 msgstr "加德满都"
 
@@ -1853,7 +1820,6 @@ msgid "Perth"
 msgstr "珀斯"
 
 #: ../../datetime/zone_utc_list.go:516
-#, fuzzy
 msgid "Australia/West"
 msgstr "澳大利亚西部"
 
@@ -1862,9 +1828,8 @@ msgid "PRC"
 msgstr "PRC"
 
 #: ../../datetime/zone_utc_list.go:519
-#, fuzzy
 msgid "ROC"
-msgstr "ROK"
+msgstr "ROC"
 
 #: ../../datetime/zone_utc_list.go:522
 msgid "Eucla"
@@ -1911,7 +1876,6 @@ msgid "Adelaide"
 msgstr "阿德莱德"
 
 #: ../../datetime/zone_utc_list.go:535
-#, fuzzy
 msgid "Broke Hill"
 msgstr "布罗肯希尔"
 
@@ -1920,13 +1884,12 @@ msgid "Darwin"
 msgstr "达尔文"
 
 #: ../../datetime/zone_utc_list.go:537
-msgid "North"
-msgstr ""
+msgid "Australia/North"
+msgstr "澳大利亚北部"
 
 #: ../../datetime/zone_utc_list.go:538
-#, fuzzy
-msgid "South"
-msgstr "南极"
+msgid "Australia/South"
+msgstr "澳大利亚南部"
 
 #: ../../datetime/zone_utc_list.go:539
 msgid "Yancowinna"
@@ -2057,7 +2020,6 @@ msgid "Kosrae"
 msgstr "科斯雷"
 
 #: ../../datetime/zone_utc_list.go:574
-#, fuzzy
 msgid "Noumea"
 msgstr "努美阿"
 
@@ -3270,75 +3232,53 @@ msgstr "电池电量低"
 msgid "Computer will be in suspend mode, please plug in."
 msgstr "计算机将要进入待机状态，请连接电源。"
 
-#, fuzzy
 #~ msgid "Argentina/Buenos Aires"
 #~ msgstr "贝伦"
 
-#, fuzzy
 #~ msgid "Argentina/Catamarca"
 #~ msgstr "卡塔马卡"
 
-#, fuzzy
 #~ msgid "Argentina/San Juan"
 #~ msgstr "圣胡安"
 
-#, fuzzy
 #~ msgid "Canada/Central"
 #~ msgstr "加拿大山区"
 
-#, fuzzy
 #~ msgid "Canada/Pacific"
 #~ msgstr "太平洋"
 
-#, fuzzy
 #~ msgid "Easter"
 #~ msgstr "美国东部"
 
-#, fuzzy
 #~ msgid "Etc/Universal"
 #~ msgstr "世界时"
 
-#, fuzzy
 #~ msgid "Etc/Zulu"
 #~ msgstr "祖鲁"
 
-#, fuzzy
 #~ msgid "Hongkong"
 #~ msgstr "香港"
 
-#, fuzzy
 #~ msgid "Indiana/Indianapolis"
 #~ msgstr "印第安纳波利斯"
 
-#, fuzzy
 #~ msgid "Indiana/Knox"
 #~ msgstr "印第安纳波利斯"
 
-#, fuzzy
 #~ msgid "Indiana/Marengo"
 #~ msgstr "印第安纳斯塔克"
 
-#, fuzzy
 #~ msgid "Kentucky/Louisville"
 #~ msgstr "路易斯维尔"
 
-#, fuzzy
 #~ msgid "Kentucky/Monticello"
 #~ msgstr "蒙蒂塞洛"
 
-#, fuzzy
 #~ msgid "US/Central"
 #~ msgstr "美国中部"
 
-#, fuzzy
 #~ msgid "US/Pacific"
 #~ msgstr "太平洋"
-
-#~ msgid "Australia North"
-#~ msgstr "澳大利亚北部"
-
-#~ msgid "Australia South"
-#~ msgstr "澳大利亚南部"
 
 #~ msgid "Brazil East"
 #~ msgstr "巴西东部"

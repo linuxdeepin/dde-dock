@@ -534,8 +534,8 @@ func initZoneInfos() {
 	checkZoneValid("+09:30", "Australia/Adelaide", Tr("Adelaide"))
 	checkZoneValid("+09:30", "Australia/Broken_Hill", Tr("Broke Hill"))
 	checkZoneValid("+09:30", "Australia/Darwin", Tr("Darwin"))
-	checkZoneValid("+09:30", "Australia/North", Tr("North"))
-	checkZoneValid("+09:30", "Australia/South", Tr("South"))
+	checkZoneValid("+09:30", "Australia/North", Tr("Australia/North"))
+	checkZoneValid("+09:30", "Australia/South", Tr("Australia/South"))
 	checkZoneValid("+09:30", "Australia/Yancowinna", Tr("Yancowinna"))
 
 	checkZoneValid("+10:00", "Antarctica/DumontDUrville", Tr("DumontDUrville"))

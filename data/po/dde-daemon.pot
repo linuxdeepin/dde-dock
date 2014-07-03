@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-03 16:11+0800\n"
+"POT-Creation-Date: 2014-07-03 15:21+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1886,11 +1886,11 @@ msgid "Darwin"
 msgstr ""
 
 #: ../../datetime/zone_utc_list.go:537
-msgid "North"
+msgid "Australia/North"
 msgstr ""
 
 #: ../../datetime/zone_utc_list.go:538
-msgid "South"
+msgid "Australia/South"
 msgstr ""
 
 #: ../../datetime/zone_utc_list.go:539
