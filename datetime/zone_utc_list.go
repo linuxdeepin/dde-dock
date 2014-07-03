@@ -16,7 +16,7 @@ func checkZoneValid(offset, zone, desc string) {
 		return
 	}
 
-	info := zoneCityInfo{zone, offset + " " + desc}
+	info := zoneCityInfo{zone, "UTC" + offset + " " + desc}
 	zoneInfos = append(zoneInfos, info)
 }
 
@@ -247,7 +247,7 @@ func initZoneInfos() {
 	checkZoneValid("-03:00", "Atlantic/Stanley", Tr("Stanley"))
 	checkZoneValid("-03:00", "Brazil/East", Tr("East"))
 
-	checkZoneValid("-02:00", "America/Noronha", Tr("Americaoronha"))
+	//checkZoneValid("-02:00", "America/Noronha", Tr("Americaoronha"))
 	checkZoneValid("-02:00", "Atlantic/South_Georgia", Tr("South Georgia"))
 	checkZoneValid("-02:00", "Brazil/DeNoronha", Tr("DeNoronha"))
 
