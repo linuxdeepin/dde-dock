@@ -93,6 +93,38 @@ func getThumbCachePath(t, src, outDir string) string {
 	return filename
 }
 
+func getIconFiles(theme string) (string, string, string) {
+	if len(theme) < 1 {
+		return "", "", ""
+	}
+
+	cTheme := C.CString(theme)
+	defer C.free(unsafe.Pointer(cTheme))
+
+	cFileM := C.CString(FILE_MANAGER)
+	defer C.free(unsafe.Pointer(cFileM))
+	cFileManager := C.get_icon_filepath(cTheme, cFileM)
+	fileManager := C.GoString(cFileManager)
+
+	cFolderName := C.CString(FOLDER)
+	defer C.free(unsafe.Pointer(cFolderName))
+	cFolder := C.get_icon_filepath(cTheme, cFolderName)
+	folderName := C.GoString(cFolder)
+
+	cFullTrash := C.CString(USER_TRASH_FULL)
+	defer C.free(unsafe.Pointer(cFullTrash))
+	cTrash := C.get_icon_filepath(cTheme, cFullTrash)
+	userTrash := C.GoString(cTrash)
+	if len(userTrash) < 1 {
+		cUserTrash := C.CString(USER_TRASH)
+		defer C.free(unsafe.Pointer(cUserTrash))
+		cTrash = C.get_icon_filepath(cTheme, cUserTrash)
+		userTrash = C.GoString(cTrash)
+	}
+
+	return fileManager, folderName, userTrash
+}
+
 func genCursorThumbnail(info pathInfo, dest, bg string) bool {
 	if len(dest) < 1 || len(bg) < 1 {
 		return false
@@ -129,7 +161,8 @@ func genIconThumbnail(info pathInfo, dest, bg string) bool {
 		return false
 	}
 
-	item1, item2, item3 := getIconFiles(info.Path)
+	theme := path.Base(info.Path)
+	item1, item2, item3 := getIconFiles(theme)
 	if len(item1) < 1 || len(item2) < 1 || len(item3) < 1 {
 		Logger.Debug("getIconTypeFile Failed")
 		return false
