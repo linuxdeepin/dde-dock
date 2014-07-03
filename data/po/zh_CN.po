@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-01 17:35+0800\n"
+"POT-Creation-Date: 2014-07-03 14:37+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME &lt;EMAIL@ADDRESS&gt;\n"
 "Language-Team: LANGUAGE &lt;LL@li.org&gt;\n"
@@ -15,3038 +15,3401 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../bluetooth/bluez_profile.go:31
-msgid "Serial port"
-msgstr "串行端口"
-
-#: ../../bluetooth/bluez_profile.go:32
-msgid "Dial-Up networking"
-msgstr "拨号网络"
-
-#: ../../bluetooth/bluez_profile.go:33
-msgid "Hands-Free device"
-msgstr "免提装置"
-
-#: ../../bluetooth/bluez_profile.go:34
-msgid "Hands-Free voice gateway"
-msgstr "免提语音网关"
-
-#: ../../bluetooth/bluez_profile.go:35
-msgid "Headset voice gateway"
-msgstr "耳机语音网关"
-
-#: ../../bluetooth/bluez_profile.go:36
-msgid "Object push"
-msgstr "对象交换"
-
-#: ../../bluetooth/bluez_profile.go:37
-msgid "File transfer"
-msgstr "文件传输"
-
-#: ../../bluetooth/bluez_profile.go:38
-msgid "Synchronization"
-msgstr "同步"
-
-#: ../../bluetooth/bluez_profile.go:39
-msgid "Phone book access"
-msgstr "电话簿访问"
-
-#: ../../bluetooth/bluez_profile.go:40
-msgid "Phone book access client"
-msgstr "电话簿访问客户端"
-
-#: ../../bluetooth/bluez_profile.go:41
-msgid "Message access"
-msgstr "消息访问"
-
-#: ../../bluetooth/bluez_profile.go:42
-msgid "Message notification"
-msgstr "消息通知"
-
-#: ../../datetime/datetime.go:127
-msgid "Language changing, please wait"
-msgstr "正在更改系统语言，请稍后。"
-
-#: ../../datetime/set_locale.go:58
-msgid "Language changed successfully and effective after logout."
-msgstr "系统语言更改成功，注销后生效。"
-
-#: ../../datetime/set_locale.go:60
-msgid "Language failed to change, please try later."
-msgstr "系统语言更改失败，请稍后重试。"
-
-#: ../../datetime/zone_utc_map.go:14
-msgid "Marquesas"
-msgstr "马克萨斯"
-
-#: ../../datetime/zone_utc_map.go:15
-msgid "Niue"
-msgstr "纽埃"
-
-#: ../../datetime/zone_utc_map.go:16
-msgid "Samoa"
-msgstr "萨摩亚"
-
-#: ../../datetime/zone_utc_map.go:17
-msgid "Adak"
-msgstr "埃达克"
-
-#: ../../datetime/zone_utc_map.go:18
-msgid "Atka"
-msgstr "阿特卡"
-
-#: ../../datetime/zone_utc_map.go:19
-msgid "HST"
-msgstr "夏威夷-阿留申标准时间"
-
-#: ../../datetime/zone_utc_map.go:20
-msgid "Honolulu"
-msgstr "檀香山"
-
-#: ../../datetime/zone_utc_map.go:21
-msgid "Johnston"
-msgstr "约翰斯顿"
-
-#: ../../datetime/zone_utc_map.go:22
-msgid "Rarotonga"
-msgstr "拉罗汤加岛"
-
-#: ../../datetime/zone_utc_map.go:23
-msgid "Tahiti"
-msgstr "大溪地"
-
-#: ../../datetime/zone_utc_map.go:24
-msgid "Aleutian"
-msgstr "阿留申"
-
-#: ../../datetime/zone_utc_map.go:25
-msgid "Hawaii"
-msgstr "夏威夷"
-
-#: ../../datetime/zone_utc_map.go:26
-msgid "Anchorage"
-msgstr "安克雷奇"
-
-#: ../../datetime/zone_utc_map.go:27
-msgid "Juneau"
-msgstr "朱诺"
-
-#: ../../datetime/zone_utc_map.go:28
-msgid "Nome"
-msgstr "诺姆"
-
-#: ../../datetime/zone_utc_map.go:29
-msgid "Sitka"
-msgstr "锡特卡"
-
-#: ../../datetime/zone_utc_map.go:30
-msgid "Yakutat"
-msgstr "亚库塔特"
-
-#: ../../datetime/zone_utc_map.go:31
-msgid "Gambier"
-msgstr "甘比尔"
-
-#: ../../datetime/zone_utc_map.go:32
-msgid "Alaska"
-msgstr "阿拉斯加"
-
-#: ../../datetime/zone_utc_map.go:33
-msgid "Dawson"
-msgstr "道森"
-
-#: ../../datetime/zone_utc_map.go:34
-msgid "Ensenada"
-msgstr "加拿大"
-
-#: ../../datetime/zone_utc_map.go:35
-msgid "Los Angeles"
-msgstr "洛杉矶"
-
-#: ../../datetime/zone_utc_map.go:36
-msgid "Metlakatla"
-msgstr "梅特拉卡特拉"
-
-#: ../../datetime/zone_utc_map.go:37
-msgid "Santa Isabel"
-msgstr "圣伊莎贝尔"
-
-#: ../../datetime/zone_utc_map.go:38
-msgid "Tijuana"
-msgstr "蒂华纳"
-
-#: ../../datetime/zone_utc_map.go:39
-msgid "Vancouver"
-msgstr "温哥华"
-
-#: ../../datetime/zone_utc_map.go:40
-msgid "Whitehorse"
-msgstr "怀特霍斯"
-
-#: ../../datetime/zone_utc_map.go:41
-msgid "Newfoundland"
-msgstr "纽芬兰"
-
-#: ../../datetime/zone_utc_map.go:42
-msgid "Yukon"
-msgstr "育空"
-
-#: ../../datetime/zone_utc_map.go:43
-msgid "BajaNorte"
-msgstr "下加利福尼亚"
-
-#: ../../datetime/zone_utc_map.go:44
-msgid "Pitcairn"
-msgstr "皮特凯恩"
-
-#: ../../datetime/zone_utc_map.go:45
-msgid "Pacific"
-msgstr "太平洋"
-
-#: ../../datetime/zone_utc_map.go:46
-msgid "Pacific New"
-msgstr "新太平洋"
-
-#: ../../datetime/zone_utc_map.go:47
-msgid "Boise"
-msgstr "博伊西"
-
-#: ../../datetime/zone_utc_map.go:48
-msgid "Cambridge Bay"
-msgstr "剑桥湾"
-
-#: ../../datetime/zone_utc_map.go:49
-msgid "Chihuahua"
-msgstr "奇瓦瓦"
-
-#: ../../datetime/zone_utc_map.go:50
-msgid "Creston"
-msgstr "克雷斯顿"
-
-#: ../../datetime/zone_utc_map.go:51
-msgid "Dawson Creek"
-msgstr "道森克里克"
-
-#: ../../datetime/zone_utc_map.go:52
-msgid "Denver"
-msgstr "丹佛"
-
-#: ../../datetime/zone_utc_map.go:53
-msgid "Edmonton"
-msgstr "埃德蒙顿"
-
-#: ../../datetime/zone_utc_map.go:54
-msgid "Hermosillo"
-msgstr "埃莫西约"
-
-#: ../../datetime/zone_utc_map.go:55
-msgid "Inuvik"
-msgstr "伊努维克"
-
-#: ../../datetime/zone_utc_map.go:56
-msgid "Mazatlan"
-msgstr "马萨特兰"
-
-#: ../../datetime/zone_utc_map.go:57
-msgid "Ojinaga"
-msgstr "奥希纳加"
-
-#: ../../datetime/zone_utc_map.go:58
-msgid "Phoenix"
-msgstr "凤凰"
-
-#: ../../datetime/zone_utc_map.go:59
-msgid "Shiprock"
-msgstr "希普罗克"
-
-#: ../../datetime/zone_utc_map.go:60
-msgid "Yellowknife"
-msgstr "耶洛奈夫"
-
-#: ../../datetime/zone_utc_map.go:61
-msgid "Canada Mountain"
-msgstr "加拿大山区"
-
-#: ../../datetime/zone_utc_map.go:62
-msgid "BajaSur"
-msgstr "南下加里福尼亚"
-
-#: ../../datetime/zone_utc_map.go:63
-msgid "MST"
-msgstr "山区标准时间"
-
-#: ../../datetime/zone_utc_map.go:64
-msgid "Navajo"
-msgstr "纳瓦霍"
-
-#: ../../datetime/zone_utc_map.go:65
-msgid "Arizona"
-msgstr "亚利桑那"
-
-#: ../../datetime/zone_utc_map.go:66
-msgid "USA Mountain"
-msgstr "美国山区"
-
-#: ../../datetime/zone_utc_map.go:67
-msgid "Bahia Banderas"
-msgstr "巴伊亚班德拉斯"
-
-#: ../../datetime/zone_utc_map.go:68
-msgid "Belize"
-msgstr "伯利兹"
-
-#: ../../datetime/zone_utc_map.go:69
-msgid "Cancun"
-msgstr "坎昆"
-
-#: ../../datetime/zone_utc_map.go:70
-msgid "Chicago"
-msgstr "芝加哥"
-
-#: ../../datetime/zone_utc_map.go:71
-msgid "Costa Rica"
-msgstr "哥斯达黎加"
-
-#: ../../datetime/zone_utc_map.go:72
-msgid "El Salvador"
-msgstr "萨尔瓦多"
-
-#: ../../datetime/zone_utc_map.go:73
-msgid "Guatemala"
-msgstr "危地马拉"
-
-#: ../../datetime/zone_utc_map.go:74
-msgid "Knox"
-msgstr "诺克斯"
-
-#: ../../datetime/zone_utc_map.go:75
-msgid "Tell City"
-msgstr "特尔城"
-
-#: ../../datetime/zone_utc_map.go:76
-msgid "Managua"
-msgstr "马那瓜"
-
-#: ../../datetime/zone_utc_map.go:77
-msgid "Matamoros"
-msgstr "马塔莫罗斯"
-
-#: ../../datetime/zone_utc_map.go:78
-msgid "Menominee"
-msgstr "梅诺米尼"
-
-#: ../../datetime/zone_utc_map.go:79
-msgid "Merida"
-msgstr "梅里达"
-
-#: ../../datetime/zone_utc_map.go:80
-msgid "Mexico City"
-msgstr "墨西哥城"
-
-#: ../../datetime/zone_utc_map.go:81
-msgid "Monterrey"
-msgstr "蒙特雷"
-
-#: ../../datetime/zone_utc_map.go:82
-msgid "Beulah"
-msgstr "比尤拉"
-
-#: ../../datetime/zone_utc_map.go:83
-msgid "New Salem"
-msgstr "新塞勒姆"
-
-#: ../../datetime/zone_utc_map.go:84
-msgid "Rainy River"
-msgstr "瑞尼河区"
-
-#: ../../datetime/zone_utc_map.go:85
-msgid "Swift Current"
-msgstr "斯威夫特卡伦特"
-
-#: ../../datetime/zone_utc_map.go:86
-msgid "Regina"
-msgstr "里贾纳"
-
-#: ../../datetime/zone_utc_map.go:87
-msgid "Resolute"
-msgstr "雷索卢特"
-
-#: ../../datetime/zone_utc_map.go:88
-msgid "Tegucigalpa"
-msgstr "特古西加尔巴"
-
-#: ../../datetime/zone_utc_map.go:89
-msgid "Winnipeg"
-msgstr "温尼伯"
-
-#: ../../datetime/zone_utc_map.go:90
-msgid "East Saskatchewan"
-msgstr "东萨斯喀彻温"
-
-#: ../../datetime/zone_utc_map.go:91
-msgid "Saskatchewan"
-msgstr "萨斯喀彻温"
-
-#: ../../datetime/zone_utc_map.go:92
-msgid "EasterIsland"
-msgstr "复活节岛"
-
-#: ../../datetime/zone_utc_map.go:93
-msgid "General"
-msgstr "通用"
-
-#: ../../datetime/zone_utc_map.go:94
-msgid "Pacific East"
-msgstr "东太平洋"
-
-#: ../../datetime/zone_utc_map.go:95
-msgid "Galapagos"
-msgstr "加拉帕戈斯"
-
-#: ../../datetime/zone_utc_map.go:96
-msgid "USA Central"
-msgstr "美国中部"
-
-#: ../../datetime/zone_utc_map.go:97
-msgid "Indiana Starke"
-msgstr "印第安纳斯塔克"
-
-#: ../../datetime/zone_utc_map.go:98
-msgid "Atikokan"
-msgstr "阿提库"
-
-#: ../../datetime/zone_utc_map.go:99
-msgid "Bogota"
-msgstr "波哥大"
-
-#: ../../datetime/zone_utc_map.go:100
-msgid "Cayman"
-msgstr "开曼"
-
-#: ../../datetime/zone_utc_map.go:101
-msgid "Coral Harbour"
-msgstr "珊瑚港"
-
-#: ../../datetime/zone_utc_map.go:102
-msgid "Detroit"
-msgstr "底特律"
-
-#: ../../datetime/zone_utc_map.go:103
-msgid "Fort Wayne"
-msgstr "韦恩堡"
-
-#: ../../datetime/zone_utc_map.go:104
-msgid "Grand Turk"
-msgstr "大特克"
-
-#: ../../datetime/zone_utc_map.go:105
-msgid "Guayaquil"
-msgstr "瓜亚基尔"
-
-#: ../../datetime/zone_utc_map.go:106
-msgid "Havana"
-msgstr "哈瓦那"
-
-#: ../../datetime/zone_utc_map.go:107
-msgid "Marengo"
-msgstr "马伦哥"
-
-#: ../../datetime/zone_utc_map.go:108
-msgid "Petersburg"
-msgstr "圣彼得堡"
-
-#: ../../datetime/zone_utc_map.go:109
-msgid "Vevay"
-msgstr "韦韦"
-
-#: ../../datetime/zone_utc_map.go:110
-msgid "Vincennes"
-msgstr "文森斯"
-
-#: ../../datetime/zone_utc_map.go:111
-msgid "Winamac"
-msgstr "威纳马克"
-
-#: ../../datetime/zone_utc_map.go:112
-msgid "Indianapolis"
-msgstr "印第安纳波利斯"
-
-#: ../../datetime/zone_utc_map.go:113
-msgid "Iqaluit"
-msgstr "伊魁特"
-
-#: ../../datetime/zone_utc_map.go:114
-msgid "Jamaica"
-msgstr "牙买加"
-
-#: ../../datetime/zone_utc_map.go:115
-msgid "Lima"
-msgstr "利马"
-
-#: ../../datetime/zone_utc_map.go:116
-msgid "Louisville"
-msgstr "路易斯维尔"
-
-#: ../../datetime/zone_utc_map.go:117
-msgid "Monticello"
-msgstr "蒙蒂塞洛"
-
-#: ../../datetime/zone_utc_map.go:118
-msgid "Montreal"
-msgstr "蒙特利尔"
-
-#: ../../datetime/zone_utc_map.go:119
-msgid "Nassau"
-msgstr "拿骚"
-
-#: ../../datetime/zone_utc_map.go:120
-msgid "New York"
-msgstr "纽约"
-
-#: ../../datetime/zone_utc_map.go:121
-msgid "Nipigon"
-msgstr "尼皮贡"
-
-#: ../../datetime/zone_utc_map.go:122
-msgid "Panama"
-msgstr "巴拿马"
-
-#: ../../datetime/zone_utc_map.go:123
-msgid "Port au Prince"
-msgstr "太子港"
-
-#: ../../datetime/zone_utc_map.go:124
-msgid "Porto Acre"
-msgstr "阿克雷港"
-
-#: ../../datetime/zone_utc_map.go:125
-msgid "Rio Branco"
-msgstr "里奥布朗库"
-
-#: ../../datetime/zone_utc_map.go:126
-msgid "Thunder Bay"
-msgstr "雷湾"
-
-#: ../../datetime/zone_utc_map.go:127
-msgid "Toronto"
-msgstr "多伦多"
-
-#: ../../datetime/zone_utc_map.go:128
-msgid "Yancowinna"
-msgstr "盐科温拿"
-
-#: ../../datetime/zone_utc_map.go:129
-msgid "Canada Eastern"
-msgstr "加拿大东部"
-
-#: ../../datetime/zone_utc_map.go:130
-msgid "Cuba"
-msgstr "古巴"
-
-#: ../../datetime/zone_utc_map.go:131
-msgid "EST"
-msgstr "东部标准时间"
-
-#: ../../datetime/zone_utc_map.go:132
-msgid "USA Eastern"
-msgstr "美国东部"
-
-#: ../../datetime/zone_utc_map.go:133
-msgid "East Indiana"
-msgstr "东印第安纳州"
-
-#: ../../datetime/zone_utc_map.go:134
-msgid "Michigan"
-msgstr "密歇根"
-
-#: ../../datetime/zone_utc_map.go:135
-msgid "Anguilla"
-msgstr "安圭拉"
-
-#: ../../datetime/zone_utc_map.go:136
-msgid "Antigua"
-msgstr "安地卡"
-
-#: ../../datetime/zone_utc_map.go:137
-msgid "Aruba"
-msgstr "阿鲁巴"
-
-#: ../../datetime/zone_utc_map.go:138
-msgid "Asuncion"
-msgstr "亚松森"
-
-#: ../../datetime/zone_utc_map.go:139
-msgid "Barbados"
-msgstr "巴巴多斯"
-
-#: ../../datetime/zone_utc_map.go:140
-msgid "Boa Vista"
-msgstr "博阿维斯塔"
-
-#: ../../datetime/zone_utc_map.go:141
-msgid "Campo Grande"
-msgstr "大坎普"
-
-#: ../../datetime/zone_utc_map.go:142
-msgid "Cuiaba"
-msgstr "库亚巴"
-
-#: ../../datetime/zone_utc_map.go:143
-msgid "Curacao"
-msgstr "库拉索"
-
-#: ../../datetime/zone_utc_map.go:144
-msgid "Dominica"
-msgstr "多米尼加"
-
-#: ../../datetime/zone_utc_map.go:145
-msgid "Eirunepe"
-msgstr "艾鲁内佩"
-
-#: ../../datetime/zone_utc_map.go:146
-msgid "Glace Bay"
-msgstr "格莱斯湾"
-
-#: ../../datetime/zone_utc_map.go:147
-msgid "Goose Bay"
-msgstr "古斯湾"
-
-#: ../../datetime/zone_utc_map.go:148
-msgid "Grenada"
-msgstr "格林纳达"
-
-#: ../../datetime/zone_utc_map.go:149
-msgid "Guadeloupe"
-msgstr "瓜德罗普"
-
-#: ../../datetime/zone_utc_map.go:150
-msgid "Guyana"
-msgstr "圭亚那"
-
-#: ../../datetime/zone_utc_map.go:151
-msgid "Halifax"
-msgstr "哈利法克斯"
-
-#: ../../datetime/zone_utc_map.go:152
-msgid "Kralendijk"
-msgstr "克拉伦代克"
-
-#: ../../datetime/zone_utc_map.go:153
-msgid "La Paz"
-msgstr "拉巴斯"
-
-#: ../../datetime/zone_utc_map.go:154
-msgid "Lower Princes"
-msgstr "下王子"
-
-#: ../../datetime/zone_utc_map.go:155
-msgid "Manaus"
-msgstr "马瑙斯"
-
-#: ../../datetime/zone_utc_map.go:156
-msgid "Marigot"
-msgstr "马里戈特"
-
-#: ../../datetime/zone_utc_map.go:157
-msgid "Martinique"
-msgstr "马提尼克"
-
-#: ../../datetime/zone_utc_map.go:158
-msgid "Moncton"
-msgstr "蒙克顿"
-
-#: ../../datetime/zone_utc_map.go:159
-msgid "Montserrat"
-msgstr "蒙特塞拉特"
-
-#: ../../datetime/zone_utc_map.go:160
-msgid "Port of Spain"
-msgstr "西班牙港"
-
-#: ../../datetime/zone_utc_map.go:161
-msgid "Porto Velho"
-msgstr "韦柳港"
-
-#: ../../datetime/zone_utc_map.go:162
-msgid "Puerto Rico"
-msgstr "波多黎各"
-
-#: ../../datetime/zone_utc_map.go:163
-msgid "Santiago"
-msgstr "圣地亚哥"
-
-#: ../../datetime/zone_utc_map.go:164
-msgid "Santo Domingo"
-msgstr "圣多明各"
-
-#: ../../datetime/zone_utc_map.go:165
-msgid "St Barthelemy"
-msgstr "圣巴夫林米"
-
-#: ../../datetime/zone_utc_map.go:166
-msgid "St Johns"
-msgstr "圣琼斯"
-
-#: ../../datetime/zone_utc_map.go:167
-msgid "St Lucia"
-msgstr "圣露西亚"
-
-#: ../../datetime/zone_utc_map.go:168
-msgid "St Thomas"
-msgstr "圣托马斯"
-
-#: ../../datetime/zone_utc_map.go:169
-msgid "St Vincent"
-msgstr "圣文森特"
-
-#: ../../datetime/zone_utc_map.go:170
-msgid "Thule"
-msgstr "图勒"
-
-#: ../../datetime/zone_utc_map.go:171
-msgid "Tortola"
-msgstr "托尔托拉"
-
-#: ../../datetime/zone_utc_map.go:172
-msgid "Virgin"
-msgstr "维尔京"
-
-#: ../../datetime/zone_utc_map.go:173
-msgid "Palmer"
-msgstr "帕尔默"
-
-#: ../../datetime/zone_utc_map.go:174
-msgid "Bermuda"
-msgstr "百慕大"
-
-#: ../../datetime/zone_utc_map.go:175
-msgid "Brazil West"
-msgstr "巴西西部"
-
-#: ../../datetime/zone_utc_map.go:176
-msgid "Atlantic"
-msgstr "大西洋"
-
-#: ../../datetime/zone_utc_map.go:177
-msgid "Continental"
-msgstr "大陆"
-
-#: ../../datetime/zone_utc_map.go:178
-msgid "Araguaina"
-msgstr "阿拉瓜伊纳"
-
-#: ../../datetime/zone_utc_map.go:179
-msgid "Catamarca"
-msgstr "卡塔马卡"
-
-#: ../../datetime/zone_utc_map.go:180
-msgid "ComodRivadavia"
-msgstr "里瓦达维亚海军准将城"
-
-#: ../../datetime/zone_utc_map.go:181
-msgid "Jujuy"
-msgstr "胡胡伊"
-
-#: ../../datetime/zone_utc_map.go:182
-msgid "La Rioja"
-msgstr "拉里奥哈"
-
-#: ../../datetime/zone_utc_map.go:183
-msgid "Rio Gallegos"
-msgstr "里奥加耶戈斯"
-
-#: ../../datetime/zone_utc_map.go:184
-msgid "Salta"
-msgstr "萨尔塔"
-
-#: ../../datetime/zone_utc_map.go:185
-msgid "San Juan"
-msgstr "圣胡安"
-
-#: ../../datetime/zone_utc_map.go:186
-msgid "San Luis"
-msgstr "圣路易斯"
-
-#: ../../datetime/zone_utc_map.go:187
-msgid "Tucuman"
-msgstr "图库曼"
-
-#: ../../datetime/zone_utc_map.go:188
-msgid "Ushuaia"
-msgstr "乌斯怀亚"
-
-#: ../../datetime/zone_utc_map.go:189
-msgid "Bahia"
-msgstr "巴伊亚"
-
-#: ../../datetime/zone_utc_map.go:190
-msgid "Belem"
-msgstr "贝伦"
-
-#: ../../datetime/zone_utc_map.go:191
-msgid "Caracas"
-msgstr "加拉加斯"
-
-#: ../../datetime/zone_utc_map.go:192
-msgid "Cayenne"
-msgstr "卡宴"
-
-#: ../../datetime/zone_utc_map.go:193
-msgid "Cordoba"
-msgstr "科尔多瓦"
-
-#: ../../datetime/zone_utc_map.go:194
-msgid "Fortaleza"
-msgstr "福塔雷萨"
-
-#: ../../datetime/zone_utc_map.go:195
-msgid "Godthab"
-msgstr "戈特霍布"
-
-#: ../../datetime/zone_utc_map.go:196
-msgid "Maceio"
-msgstr "马塞约"
-
-#: ../../datetime/zone_utc_map.go:197
-msgid "Mendoza"
-msgstr "门多萨"
-
-#: ../../datetime/zone_utc_map.go:198
-msgid "Miquelon"
-msgstr "密克隆"
-
-#: ../../datetime/zone_utc_map.go:199
-msgid "Montevideo"
-msgstr "蒙得维的亚"
-
-#: ../../datetime/zone_utc_map.go:200
-msgid "Paramaribo"
-msgstr "帕拉马里博"
-
-#: ../../datetime/zone_utc_map.go:201
-msgid "Recife"
-msgstr "累西腓"
-
-#: ../../datetime/zone_utc_map.go:202
-msgid "Rosario"
-msgstr "罗萨里奥"
-
-#: ../../datetime/zone_utc_map.go:203
-msgid "Santarem"
-msgstr "圣塔伦"
-
-#: ../../datetime/zone_utc_map.go:204
-msgid "Sao Paulo"
-msgstr "圣保罗"
-
-#: ../../datetime/zone_utc_map.go:205
-msgid "Rothera"
-msgstr "罗西拉"
-
-#: ../../datetime/zone_utc_map.go:206
-msgid "Stanley"
-msgstr "斯坦利"
-
-#: ../../datetime/zone_utc_map.go:207
-msgid "Brazil East"
-msgstr "巴西东部"
-
-#: ../../datetime/zone_utc_map.go:208
-msgid "Noronha"
-msgstr "迪诺罗尼亚"
-
-#: ../../datetime/zone_utc_map.go:209
-msgid "South Georgia"
-msgstr "南乔治亚"
-
-#: ../../datetime/zone_utc_map.go:210
-msgid "Cape Verde"
-msgstr "佛得角"
-
-#: ../../datetime/zone_utc_map.go:211
-msgid "Abidjan"
-msgstr "阿比让"
-
-#: ../../datetime/zone_utc_map.go:212
-msgid "Accra"
-msgstr "阿克拉"
-
-#: ../../datetime/zone_utc_map.go:213
-msgid "Bamako"
-msgstr "巴马科"
-
-#: ../../datetime/zone_utc_map.go:214
-msgid "Banjul"
-msgstr "班珠尔"
-
-#: ../../datetime/zone_utc_map.go:215
-msgid "Bissau"
-msgstr "比绍"
-
-#: ../../datetime/zone_utc_map.go:216
-msgid "Casablanca"
-msgstr "卡萨布兰卡"
-
-#: ../../datetime/zone_utc_map.go:217
-msgid "Conakry"
-msgstr "科纳克里"
-
-#: ../../datetime/zone_utc_map.go:218
-msgid "Dakar"
-msgstr "达喀尔"
-
-#: ../../datetime/zone_utc_map.go:219
-msgid "El Aaiun"
-msgstr "阿尤恩"
-
-#: ../../datetime/zone_utc_map.go:220
-msgid "Freetown"
-msgstr "弗里敦"
-
-#: ../../datetime/zone_utc_map.go:221
-msgid "Lome"
-msgstr "洛美"
-
-#: ../../datetime/zone_utc_map.go:222
-msgid "Monrovia"
-msgstr "蒙罗维亚"
-
-#: ../../datetime/zone_utc_map.go:223
-msgid "Nouakchott"
-msgstr "努瓦克肖特"
-
-#: ../../datetime/zone_utc_map.go:224
-msgid "Ouagadougou"
-msgstr "瓦加杜古"
-
-#: ../../datetime/zone_utc_map.go:225
-msgid "Sao Tome"
-msgstr "圣多美"
-
-#: ../../datetime/zone_utc_map.go:226
-msgid "Timbuktu"
-msgstr "廷巴克图"
-
-#: ../../datetime/zone_utc_map.go:227
-msgid "Canary"
-msgstr "加那利"
-
-#: ../../datetime/zone_utc_map.go:228
-msgid "Madeira"
-msgstr "马德拉"
-
-#: ../../datetime/zone_utc_map.go:229
-msgid "Reykjavik"
-msgstr "雷克雅未克"
-
-#: ../../datetime/zone_utc_map.go:230
-msgid "St Helena"
-msgstr "圣赫勒拿岛"
-
-#: ../../datetime/zone_utc_map.go:231
-msgid "Eire"
-msgstr "爱尔兰"
-
-#: ../../datetime/zone_utc_map.go:232
-msgid "Belfast"
-msgstr "贝尔法斯特"
-
-#: ../../datetime/zone_utc_map.go:233
-msgid "Dublin"
-msgstr "都柏林"
-
-#: ../../datetime/zone_utc_map.go:234
-msgid "Guernsey"
-msgstr "根西岛"
-
-#: ../../datetime/zone_utc_map.go:235
-msgid "Isle of Man"
-msgstr "马恩岛"
-
-#: ../../datetime/zone_utc_map.go:236
-msgid "Jersey"
-msgstr "泽西岛"
-
-#: ../../datetime/zone_utc_map.go:237
-msgid "Lisbon"
-msgstr "里斯本"
-
-#: ../../datetime/zone_utc_map.go:238
-msgid "London"
-msgstr "伦敦"
-
-#: ../../datetime/zone_utc_map.go:239
-msgid "GB"
-msgstr "GB"
-
-#: ../../datetime/zone_utc_map.go:240
-msgid "GB Eire"
-msgstr "爱尔兰时间"
-
-#: ../../datetime/zone_utc_map.go:241
-msgid "USA GMT"
-msgstr "美国格林尼治平时"
-
-#: ../../datetime/zone_utc_map.go:242
-msgid "Brazil GMT"
-msgstr "巴西格林尼治平时"
-
-#: ../../datetime/zone_utc_map.go:243
-msgid "Greenwich"
-msgstr "英国格林尼治"
-
-#: ../../datetime/zone_utc_map.go:244
-msgid "Iceland"
-msgstr "冰岛"
-
-#: ../../datetime/zone_utc_map.go:245
-msgid "Portugal"
-msgstr "葡萄牙"
-
-#: ../../datetime/zone_utc_map.go:246
-msgid "UCT"
-msgstr "UCT"
-
-#: ../../datetime/zone_utc_map.go:247
-msgid "Universal"
-msgstr "世界时"
-
-#: ../../datetime/zone_utc_map.go:248
-msgid "UTC"
-msgstr "UTC"
-
-#: ../../datetime/zone_utc_map.go:249
-msgid "WET"
-msgstr "WET"
-
-#: ../../datetime/zone_utc_map.go:250
-msgid "Zulu"
-msgstr "祖鲁"
-
-#: ../../datetime/zone_utc_map.go:251
-msgid "Algiers"
-msgstr "阿尔及尔"
-
-#: ../../datetime/zone_utc_map.go:252
-msgid "Bangui"
-msgstr "班吉"
-
-#: ../../datetime/zone_utc_map.go:253
-msgid "Brazzaville"
-msgstr "布拉柴维尔"
-
-#: ../../datetime/zone_utc_map.go:254
-msgid "Ceuta"
-msgstr "休达"
-
-#: ../../datetime/zone_utc_map.go:255
-msgid "Douala"
-msgstr "杜阿拉"
-
-#: ../../datetime/zone_utc_map.go:256
-msgid "Kinshasa"
-msgstr "金沙萨"
-
-#: ../../datetime/zone_utc_map.go:257
-msgid "Lagos"
-msgstr "拉各斯"
-
-#: ../../datetime/zone_utc_map.go:258
-msgid "Libreville"
-msgstr "利伯维尔"
-
-#: ../../datetime/zone_utc_map.go:259
-msgid "Luanda"
-msgstr "罗安达"
-
-#: ../../datetime/zone_utc_map.go:260
-msgid "Malabo"
-msgstr "马拉博"
-
-#: ../../datetime/zone_utc_map.go:261
-msgid "Ndjamena"
-msgstr "恩贾梅纳"
-
-#: ../../datetime/zone_utc_map.go:262
-msgid "Niamey"
-msgstr "尼亚美"
-
-#: ../../datetime/zone_utc_map.go:263
-msgid "Porto Novo"
-msgstr "波多诺伏"
-
-#: ../../datetime/zone_utc_map.go:264
-msgid "Tunis"
-msgstr "突尼斯"
-
-#: ../../datetime/zone_utc_map.go:265
-msgid "Windhoek"
-msgstr "温得和克"
-
-#: ../../datetime/zone_utc_map.go:266
-msgid "Longyearbyen"
-msgstr "朗伊尔城"
-
-#: ../../datetime/zone_utc_map.go:267
-msgid "CET"
-msgstr "中欧标准时间"
-
-#: ../../datetime/zone_utc_map.go:268
-msgid "Amsterdam"
-msgstr "阿姆斯特丹"
-
-#: ../../datetime/zone_utc_map.go:269
-msgid "Andorra"
-msgstr "安道尔"
-
-#: ../../datetime/zone_utc_map.go:270
-msgid "Belgrade"
-msgstr "贝尔格莱德"
-
-#: ../../datetime/zone_utc_map.go:271
-msgid "Berlin"
-msgstr "柏林"
-
-#: ../../datetime/zone_utc_map.go:272
-msgid "Bratislava"
-msgstr "布拉迪斯拉发"
-
-#: ../../datetime/zone_utc_map.go:273
-msgid "Brussels"
-msgstr "布鲁塞尔"
-
-#: ../../datetime/zone_utc_map.go:274
-msgid "Budapest"
-msgstr "布达佩斯"
-
-#: ../../datetime/zone_utc_map.go:275
-msgid "Copenhagen"
-msgstr "哥本哈根"
-
-#: ../../datetime/zone_utc_map.go:276
-msgid "Gibraltar"
-msgstr "直布罗陀"
-
-#: ../../datetime/zone_utc_map.go:277
-msgid "Ljubljana"
-msgstr "卢布尔雅那"
-
-#: ../../datetime/zone_utc_map.go:278
-msgid "Luxembourg"
-msgstr "卢森堡"
-
-#: ../../datetime/zone_utc_map.go:279
-msgid "Madrid"
-msgstr "马德里"
-
-#: ../../datetime/zone_utc_map.go:280
-msgid "Malta"
-msgstr "马耳他"
-
-#: ../../datetime/zone_utc_map.go:281
-msgid "Monaco"
-msgstr "摩纳哥"
-
-#: ../../datetime/zone_utc_map.go:282
-msgid "Oslo"
-msgstr "奥斯陆"
-
-#: ../../datetime/zone_utc_map.go:283
-msgid "Paris"
-msgstr "巴黎"
-
-#: ../../datetime/zone_utc_map.go:284
-msgid "Podgorica"
-msgstr "波德戈里察"
-
-#: ../../datetime/zone_utc_map.go:285
-msgid "Prague"
-msgstr "布拉格"
-
-#: ../../datetime/zone_utc_map.go:286
-msgid "Rome"
-msgstr "罗马"
-
-#: ../../datetime/zone_utc_map.go:287
-msgid "San Marino"
-msgstr "圣马力诺"
-
-#: ../../datetime/zone_utc_map.go:288
-msgid "Sarajevo"
-msgstr "萨拉热窝"
-
-#: ../../datetime/zone_utc_map.go:289
-msgid "Skopje"
-msgstr "斯科普里"
-
-#: ../../datetime/zone_utc_map.go:290
-msgid "Stockholm"
-msgstr "斯德哥尔摩"
-
-#: ../../datetime/zone_utc_map.go:291
-msgid "Tirane"
-msgstr "Tirane"
-
-#: ../../datetime/zone_utc_map.go:292
-msgid "Vaduz"
-msgstr "瓦杜兹"
-
-#: ../../datetime/zone_utc_map.go:293
-msgid "Vatican"
-msgstr "梵蒂冈"
-
-#: ../../datetime/zone_utc_map.go:294
-msgid "Vienna"
-msgstr "维也纳"
-
-#: ../../datetime/zone_utc_map.go:295
-msgid "Warsaw"
-msgstr "华沙"
-
-#: ../../datetime/zone_utc_map.go:296
-msgid "Zagreb"
-msgstr "萨格勒布"
-
-#: ../../datetime/zone_utc_map.go:297
-msgid "Zurich"
-msgstr "苏黎世"
-
-#: ../../datetime/zone_utc_map.go:298
-msgid "MET"
-msgstr "中欧时间"
-
-#: ../../datetime/zone_utc_map.go:299
-msgid "Blantyre"
-msgstr "布兰太尔"
-
-#: ../../datetime/zone_utc_map.go:300
-msgid "Bujumbura"
-msgstr "布琼布拉"
-
-#: ../../datetime/zone_utc_map.go:301
-msgid "Cairo"
-msgstr "开罗"
-
-#: ../../datetime/zone_utc_map.go:302
-msgid "Gaborone"
-msgstr "哈博罗内"
-
-#: ../../datetime/zone_utc_map.go:303
-msgid "Harare"
-msgstr "哈拉雷"
-
-#: ../../datetime/zone_utc_map.go:304
-msgid "Johannesburg"
-msgstr "约翰内斯堡"
-
-#: ../../datetime/zone_utc_map.go:305
-msgid "Kigali"
-msgstr "基加利"
-
-#: ../../datetime/zone_utc_map.go:306
-msgid "Lubumbashi"
-msgstr "卢本巴希"
-
-#: ../../datetime/zone_utc_map.go:307
-msgid "Lusaka"
-msgstr "卢萨卡"
-
-#: ../../datetime/zone_utc_map.go:308
-msgid "Maputo"
-msgstr "马普托"
-
-#: ../../datetime/zone_utc_map.go:309
-msgid "Maseru"
-msgstr "马塞卢"
-
-#: ../../datetime/zone_utc_map.go:310
-msgid "Mbabane"
-msgstr "姆巴巴内"
-
-#: ../../datetime/zone_utc_map.go:311
-msgid "Tripoli"
-msgstr "的黎波里"
-
-#: ../../datetime/zone_utc_map.go:312
-msgid "Amman"
-msgstr "安曼"
-
-#: ../../datetime/zone_utc_map.go:313
-msgid "Beirut"
-msgstr "贝鲁特"
-
-#: ../../datetime/zone_utc_map.go:314
-msgid "Damascus"
-msgstr "大马士革"
-
-#: ../../datetime/zone_utc_map.go:315
-msgid "Gaza"
-msgstr "加沙"
-
-#: ../../datetime/zone_utc_map.go:316
-msgid "Hebron"
-msgstr "希伯伦"
-
-#: ../../datetime/zone_utc_map.go:317
-msgid "Jerusalem"
-msgstr "耶路撒冷"
-
-#: ../../datetime/zone_utc_map.go:318
-msgid "Tehran"
-msgstr "德黑兰"
-
-#: ../../datetime/zone_utc_map.go:319
-msgid "EET"
-msgstr "欧洲东部时间"
-
-#: ../../datetime/zone_utc_map.go:320
-msgid "Egypt"
-msgstr "埃及"
-
-#: ../../datetime/zone_utc_map.go:321
-msgid "Athens"
-msgstr "雅典"
-
-#: ../../datetime/zone_utc_map.go:322
-msgid "Bucharest"
-msgstr "布加勒斯特"
-
-#: ../../datetime/zone_utc_map.go:323
-msgid "Chisinau"
-msgstr "基希讷乌"
-
-#: ../../datetime/zone_utc_map.go:324
-msgid "Helsinki"
-msgstr "赫尔辛基"
-
-#: ../../datetime/zone_utc_map.go:325
-msgid "Istanbul"
-msgstr "伊斯坦布尔"
-
-#: ../../datetime/zone_utc_map.go:326
-msgid "Kiev"
-msgstr "基辅"
-
-#: ../../datetime/zone_utc_map.go:327
-msgid "Mariehamn"
-msgstr "玛丽汉姆"
-
-#: ../../datetime/zone_utc_map.go:328
-msgid "Nicosia"
-msgstr "尼科西亚"
-
-#: ../../datetime/zone_utc_map.go:329
-msgid "Riga"
-msgstr "里加"
-
-#: ../../datetime/zone_utc_map.go:330
-msgid "Simferopol"
-msgstr "辛菲罗波尔"
-
-#: ../../datetime/zone_utc_map.go:331
-msgid "Sofia"
-msgstr "索菲亚"
-
-#: ../../datetime/zone_utc_map.go:332
-msgid "Tallinn"
-msgstr "塔林"
-
-#: ../../datetime/zone_utc_map.go:333
-msgid "Uzhgorod"
-msgstr "乌日哥罗德"
-
-#: ../../datetime/zone_utc_map.go:334
-msgid "Vilnius"
-msgstr "维尔纽斯"
-
-#: ../../datetime/zone_utc_map.go:335
-msgid "Zaporozhye"
-msgstr "扎波罗热"
-
-#: ../../datetime/zone_utc_map.go:336
-msgid "Iran"
-msgstr "伊朗"
-
-#: ../../datetime/zone_utc_map.go:337
-msgid "Libya"
-msgstr "利比亚"
-
-#: ../../datetime/zone_utc_map.go:338
-msgid "Turkey"
-msgstr "土耳其"
-
-#: ../../datetime/zone_utc_map.go:339
-msgid "Addis Ababa"
-msgstr "亚的斯亚贝巴"
-
-#: ../../datetime/zone_utc_map.go:340
-msgid "Asmara"
-msgstr "阿斯马拉"
-
-#: ../../datetime/zone_utc_map.go:341
-msgid "Dar es Salaam"
-msgstr "达累斯萨拉姆"
-
-#: ../../datetime/zone_utc_map.go:342
-msgid "Djibouti"
-msgstr "吉布提"
-
-#: ../../datetime/zone_utc_map.go:343
-msgid "Juba"
-msgstr "朱巴"
-
-#: ../../datetime/zone_utc_map.go:344
-msgid "Kampala"
-msgstr "坎帕拉"
-
-#: ../../datetime/zone_utc_map.go:345
-msgid "Khartoum"
-msgstr "喀土穆"
-
-#: ../../datetime/zone_utc_map.go:346
-msgid "Mogadishu"
-msgstr "摩加迪沙"
-
-#: ../../datetime/zone_utc_map.go:347
-msgid "Nairobi"
-msgstr "内罗毕"
-
-#: ../../datetime/zone_utc_map.go:348
-msgid "Aden"
-msgstr "亚丁"
-
-#: ../../datetime/zone_utc_map.go:349
-msgid "Baghdad"
-msgstr "巴格达"
-
-#: ../../datetime/zone_utc_map.go:350
-msgid "Bahrain"
-msgstr "巴林"
-
-#: ../../datetime/zone_utc_map.go:351
-msgid "Kuwait"
-msgstr "科威特"
-
-#: ../../datetime/zone_utc_map.go:352
-msgid "Rangoon"
-msgstr "仰光"
-
-#: ../../datetime/zone_utc_map.go:353
-msgid "Qatar"
-msgstr "卡塔尔"
-
-#: ../../datetime/zone_utc_map.go:354
-msgid "Kaliningrad"
-msgstr "加里宁格勒"
-
-#: ../../datetime/zone_utc_map.go:355
-msgid "Minsk"
-msgstr "明斯克"
-
-#: ../../datetime/zone_utc_map.go:356
-msgid "Antananarivo"
-msgstr "塔那那利佛"
-
-#: ../../datetime/zone_utc_map.go:357
-msgid "Baku"
-msgstr "巴库"
-
-#: ../../datetime/zone_utc_map.go:358
-msgid "Dubai"
-msgstr "迪拜"
-
-#: ../../datetime/zone_utc_map.go:359
-msgid "Muscat"
-msgstr "马斯喀特"
-
-#: ../../datetime/zone_utc_map.go:360
-msgid "Tbilisi"
-msgstr "第比利斯"
-
-#: ../../datetime/zone_utc_map.go:361
-msgid "Yerevan"
-msgstr "埃里温"
-
-#: ../../datetime/zone_utc_map.go:362
-msgid "Moscow"
-msgstr "莫斯科"
-
-#: ../../datetime/zone_utc_map.go:363
-msgid "Samara"
-msgstr "萨马拉"
-
-#: ../../datetime/zone_utc_map.go:364
-msgid "Volgograd"
-msgstr "伏尔加格勒"
-
-#: ../../datetime/zone_utc_map.go:365
-msgid "Mahe"
-msgstr "马埃"
-
-#: ../../datetime/zone_utc_map.go:366
-msgid "Mauritius"
-msgstr "毛里求斯"
-
-#: ../../datetime/zone_utc_map.go:367
-msgid "Reunion"
-msgstr "留尼旺岛"
-
-#: ../../datetime/zone_utc_map.go:368
-msgid "Davis"
-msgstr "戴维斯"
-
-#: ../../datetime/zone_utc_map.go:369
-msgid "Mawson"
-msgstr "莫森"
-
-#: ../../datetime/zone_utc_map.go:370
-msgid "Aqtau"
-msgstr "阿克陶"
-
-#: ../../datetime/zone_utc_map.go:371
-msgid "Aqtobe"
-msgstr "阿克托别"
-
-#: ../../datetime/zone_utc_map.go:372
-msgid "Ashkhabad"
-msgstr "阿什哈巴德"
-
-#: ../../datetime/zone_utc_map.go:373
-msgid "Dushanbe"
-msgstr "杜尚别"
-
-#: ../../datetime/zone_utc_map.go:374
-msgid "Karachi"
-msgstr "卡拉奇"
-
-#: ../../datetime/zone_utc_map.go:375
-msgid "Oral"
-msgstr "乌拉尔"
-
-#: ../../datetime/zone_utc_map.go:376
-msgid "Samarkand"
-msgstr "撒马尔罕"
-
-#: ../../datetime/zone_utc_map.go:377
-msgid "Tashkent"
-msgstr "塔什干"
-
-#: ../../datetime/zone_utc_map.go:378
-msgid "Kerguelen"
-msgstr "凯尔盖朗"
-
-#: ../../datetime/zone_utc_map.go:379
-msgid "Maldives"
-msgstr "马尔代夫"
-
-#: ../../datetime/zone_utc_map.go:380
-msgid "Vostok"
-msgstr "沃斯托克"
-
-#: ../../datetime/zone_utc_map.go:381
-msgid "Almaty"
-msgstr "阿拉木图"
-
-#: ../../datetime/zone_utc_map.go:382
-msgid "Bishkek"
-msgstr "比什凯克"
-
-#: ../../datetime/zone_utc_map.go:383
-msgid "Colombo"
-msgstr "科伦坡"
-
-#: ../../datetime/zone_utc_map.go:384
-msgid "Dhaka"
-msgstr "达卡"
-
-#: ../../datetime/zone_utc_map.go:385
-msgid "Qyzylorda"
-msgstr "克孜勒奥尔达"
-
-#: ../../datetime/zone_utc_map.go:386
-msgid "Thimphu"
-msgstr "廷布"
-
-#: ../../datetime/zone_utc_map.go:387
-msgid "Yekaterinburg"
-msgstr "叶卡捷琳堡"
-
-#: ../../datetime/zone_utc_map.go:388
-msgid "Chagos"
-msgstr "查戈斯"
-
-#: ../../datetime/zone_utc_map.go:389
-msgid "Bangkok"
-msgstr "曼谷"
-
-#: ../../datetime/zone_utc_map.go:390
-msgid "Ho Chi Minh"
-msgstr "胡志明市"
-
-#: ../../datetime/zone_utc_map.go:391
-msgid "Hovd"
-msgstr "科布多"
-
-#: ../../datetime/zone_utc_map.go:392
-msgid "Jakarta"
-msgstr "雅加达"
-
-#: ../../datetime/zone_utc_map.go:393
-msgid "Novokuznetsk"
-msgstr "新库兹涅茨克"
-
-#: ../../datetime/zone_utc_map.go:394
-msgid "Novosibirsk"
-msgstr "新西伯利亚"
-
-#: ../../datetime/zone_utc_map.go:395
-msgid "Omsk"
-msgstr "鄂木斯克"
-
-#: ../../datetime/zone_utc_map.go:396
-msgid "Phnom Penh"
-msgstr "金边"
-
-#: ../../datetime/zone_utc_map.go:397
-msgid "Pontianak"
-msgstr "坤甸"
-
-#: ../../datetime/zone_utc_map.go:398
-msgid "Saigon"
-msgstr "西贡"
-
-#: ../../datetime/zone_utc_map.go:399
-msgid "Vientiane"
-msgstr "万象"
-
-#: ../../datetime/zone_utc_map.go:400
-msgid "Christmas"
-msgstr "圣诞岛"
-
-#: ../../datetime/zone_utc_map.go:401
-msgid "Brunei"
-msgstr "文莱"
-
-#: ../../datetime/zone_utc_map.go:402
-msgid "Calcutta"
-msgstr "加尔各答"
-
-#: ../../datetime/zone_utc_map.go:403
-msgid "Chongqing"
-msgstr "重庆"
-
-#: ../../datetime/zone_utc_map.go:404
-msgid "Harbin"
-msgstr "哈尔滨"
-
-#: ../../datetime/zone_utc_map.go:405
-msgid "Hong Kong"
-msgstr "香港"
-
-#: ../../datetime/zone_utc_map.go:406
-msgid "Kashgar"
-msgstr "喀什"
-
-#: ../../datetime/zone_utc_map.go:407
-msgid "Kathmandu"
-msgstr "加德满都"
-
-#: ../../datetime/zone_utc_map.go:408
-msgid "Kuala Lumpur"
-msgstr "吉隆坡"
-
-#: ../../datetime/zone_utc_map.go:409
-msgid "Kuching"
-msgstr "古晋"
-
-#: ../../datetime/zone_utc_map.go:410
-msgid "Macao"
-msgstr "澳门"
-
-#: ../../datetime/zone_utc_map.go:411
-msgid "Makassar"
-msgstr "望加锡"
-
-#: ../../datetime/zone_utc_map.go:412
-msgid "Manila"
-msgstr "马尼拉"
-
-#: ../../datetime/zone_utc_map.go:413
-msgid "Shanghai"
-msgstr "上海"
-
-#: ../../datetime/zone_utc_map.go:414
-msgid "Beijing"
-msgstr "北京"
-
-#: ../../datetime/zone_utc_map.go:415
-msgid "Singapore"
-msgstr "新加坡城"
-
-#: ../../datetime/zone_utc_map.go:416
-msgid "Taipei"
-msgstr "台北"
-
-#: ../../datetime/zone_utc_map.go:417
-msgid "Ujung Pandang"
-msgstr "乌戎潘当"
-
-#: ../../datetime/zone_utc_map.go:418
-msgid "Ulan Bator"
-msgstr "乌兰巴托"
-
-#: ../../datetime/zone_utc_map.go:419
-msgid "Urumqi"
-msgstr "乌鲁木齐"
-
-#: ../../datetime/zone_utc_map.go:420
-msgid "Perth"
-msgstr "珀斯"
-
-#: ../../datetime/zone_utc_map.go:421
-msgid "Australia West"
-msgstr "澳大利亚西部"
-
-#: ../../datetime/zone_utc_map.go:422
-msgid "Dili"
-msgstr "帝力"
-
-#: ../../datetime/zone_utc_map.go:423
-msgid "Irkutsk"
-msgstr "伊尔库茨克"
-
-#: ../../datetime/zone_utc_map.go:424
-msgid "Jayapura"
-msgstr "查亚普拉"
-
-#: ../../datetime/zone_utc_map.go:425
-msgid "Pyongyang"
-msgstr "平壤"
-
-#: ../../datetime/zone_utc_map.go:426
-msgid "Seoul"
-msgstr "首尔"
-
-#: ../../datetime/zone_utc_map.go:427
-msgid "Tokyo"
-msgstr "东京"
-
-#: ../../datetime/zone_utc_map.go:428
-msgid "Palau"
-msgstr "帕劳"
-
-#: ../../datetime/zone_utc_map.go:429
-msgid "ROK"
-msgstr "ROK"
-
-#: ../../datetime/zone_utc_map.go:430
-msgid "DumontDUrville"
-msgstr "迪蒙·迪维尔"
-
-#: ../../datetime/zone_utc_map.go:431
-msgid "Yakutsk"
-msgstr "雅库茨克"
-
-#: ../../datetime/zone_utc_map.go:432
-msgid "ACT"
-msgstr "澳大利亚首都特区"
-
-#: ../../datetime/zone_utc_map.go:433
-msgid "Adelaide"
-msgstr "阿德莱德"
-
-#: ../../datetime/zone_utc_map.go:434
-msgid "Broken Hill"
-msgstr "布罗肯希尔"
-
-#: ../../datetime/zone_utc_map.go:435
-msgid "Currie"
-msgstr "柯里"
-
-#: ../../datetime/zone_utc_map.go:436
-msgid "Darwin"
-msgstr "达尔文"
-
-#: ../../datetime/zone_utc_map.go:437
-msgid "Lindeman"
-msgstr "林德曼"
-
-#: ../../datetime/zone_utc_map.go:438
-msgid "Melbourne"
-msgstr "墨尔本"
-
-#: ../../datetime/zone_utc_map.go:439
-msgid "Australia North"
-msgstr "澳大利亚北部"
-
-#: ../../datetime/zone_utc_map.go:440
-msgid "Queensland"
-msgstr "昆士兰"
-
-#: ../../datetime/zone_utc_map.go:441
-msgid "Australia South"
-msgstr "澳大利亚南部"
-
-#: ../../datetime/zone_utc_map.go:442
-msgid "Tasmania"
-msgstr "塔斯马尼亚"
-
-#: ../../datetime/zone_utc_map.go:443
-msgid "Victoria"
-msgstr "维多利亚"
-
-#: ../../datetime/zone_utc_map.go:444
-msgid "Chatham"
-msgstr "查塔姆"
-
-#: ../../datetime/zone_utc_map.go:445
-msgid "Guam"
-msgstr "关岛"
-
-#: ../../datetime/zone_utc_map.go:446
-msgid "Port Moresby"
-msgstr "莫尔兹比港"
-
-#: ../../datetime/zone_utc_map.go:447
-msgid "Saipan"
-msgstr "塞班岛"
-
-#: ../../datetime/zone_utc_map.go:448
-msgid "Truk"
-msgstr "特鲁克"
-
-#: ../../datetime/zone_utc_map.go:449
-msgid "Casey"
-msgstr "凯西"
-
-#: ../../datetime/zone_utc_map.go:450
-msgid "Sakhalin"
-msgstr "库页岛"
-
-#: ../../datetime/zone_utc_map.go:451
-msgid "Vladivostok"
-msgstr "符拉迪沃斯托克"
-
-#: ../../datetime/zone_utc_map.go:452
-msgid "Lord Howe"
-msgstr "豪勋爵"
-
-#: ../../datetime/zone_utc_map.go:453
-msgid "Efate"
-msgstr "埃法特"
-
-#: ../../datetime/zone_utc_map.go:454
-msgid "Nouméa"
-msgstr "努美阿"
-
-#: ../../datetime/zone_utc_map.go:455
-msgid "Guadalcanal"
-msgstr "瓜达尔卡纳尔"
-
-#: ../../datetime/zone_utc_map.go:456
-msgid "Kosrae"
-msgstr "科斯雷"
-
-#: ../../datetime/zone_utc_map.go:457
-msgid "Norfolk"
-msgstr "诺福克"
-
-#: ../../datetime/zone_utc_map.go:458
-msgid "Ponape"
-msgstr "波纳佩"
-
-#: ../../datetime/zone_utc_map.go:459
-msgid "McMurdo"
-msgstr "麦克默多"
-
-#: ../../datetime/zone_utc_map.go:460
-msgid "South Pole"
-msgstr "南极"
-
-#: ../../datetime/zone_utc_map.go:461
-msgid "Anadyr"
-msgstr "阿纳德尔"
-
-#: ../../datetime/zone_utc_map.go:462
-msgid "Kabul"
-msgstr "喀布尔"
-
-#: ../../datetime/zone_utc_map.go:463
-msgid "Magadan"
-msgstr "马加丹"
-
-#: ../../datetime/zone_utc_map.go:464
-msgid "Wellington"
-msgstr "惠灵顿"
-
-#: ../../datetime/zone_utc_map.go:465
-msgid "Auckland"
-msgstr "奥克兰"
-
-#: ../../datetime/zone_utc_map.go:466
-msgid "Fiji"
-msgstr "斐济"
-
-#: ../../datetime/zone_utc_map.go:467
-msgid "Funafuti"
-msgstr "富纳富提"
-
-#: ../../datetime/zone_utc_map.go:468
-msgid "Kwajalein"
-msgstr "夸贾林"
-
-#: ../../datetime/zone_utc_map.go:469
-msgid "Nauru"
-msgstr "诺鲁"
-
-#: ../../datetime/zone_utc_map.go:470
-msgid "Tarawa"
-msgstr "塔拉瓦"
-
-#: ../../datetime/zone_utc_map.go:471
-msgid "Wake"
-msgstr "维克"
-
-#: ../../datetime/zone_utc_map.go:472
-msgid "Wallis"
-msgstr "瓦利斯"
-
-#: ../../datetime/zone_utc_map.go:473
-msgid "Enderbury"
-msgstr "恩德伯里"
-
-#: ../../datetime/zone_utc_map.go:474
-msgid "Fakaofo"
-msgstr "法考福"
-
-#: ../../datetime/zone_utc_map.go:475
-msgid "Tongatapu"
-msgstr "汤加塔布"
-
-#: ../../dock/normal_apps.go:79
-msgid "_Run"
-msgstr "运行(_R)"
-
-#: ../../dock/normal_apps.go:111
-msgid "_Undock"
-msgstr "移除驻留(_U)"
-
-#: ../../dock/runtime_apps.go:194
-msgid "_Close All"
-msgstr "关闭所有(_C)"
-
-#: ../../dock/runtime_apps.go:221
-msgid "_Dock"
-msgstr "驻留(_D)"
-
-#: ../../keybinding/id_desc_map.go:72
-msgid "Launcher"
-msgstr "启动器"
-
-#: ../../keybinding/id_desc_map.go:73
-msgid "Show desktop"
-msgstr "显示桌面"
-
-#: ../../keybinding/id_desc_map.go:74
-msgid "Lock screen"
-msgstr "锁屏界面"
-
-#: ../../keybinding/id_desc_map.go:75
-msgid "File manager"
-msgstr "文件管理器"
-
-#: ../../keybinding/id_desc_map.go:76
-msgid "Switch applications"
-msgstr "切换程序"
-
-#: ../../keybinding/id_desc_map.go:77
-msgid "Reverse switch applications"
-msgstr "反向切换程序"
-
-#: ../../keybinding/id_desc_map.go:78
-msgid "3D switch applications"
-msgstr "3D切换程序"
-
-#: ../../keybinding/id_desc_map.go:79
-msgid "3D reverse switch applications"
-msgstr "3D反向切换程序"
-
-#: ../../keybinding/id_desc_map.go:80
-msgid "Show/Hide the dock"
-msgstr "显示/隐藏任务栏"
-
-#: ../../keybinding/id_desc_map.go:81
-msgid "Screenshot"
-msgstr "屏幕截图"
-
-#: ../../keybinding/id_desc_map.go:82
-msgid "Full screenshot"
-msgstr "全屏截图"
-
-#: ../../keybinding/id_desc_map.go:83
-msgid "Window screenshot"
-msgstr "窗口截图"
-
-#: ../../keybinding/id_desc_map.go:84
-msgid "Delay screenshot"
-msgstr "延时截图"
-
-#: ../../keybinding/id_desc_map.go:85
-msgid "Terminal"
-msgstr "终端"
-
-#: ../../keybinding/id_desc_map.go:86
-msgid "Terminal Quake Window"
-msgstr "终端雷神模式"
-
-#: ../../keybinding/id_desc_map.go:87
-msgid "Logout"
-msgstr "注销"
-
-#: ../../keybinding/id_desc_map.go:88
-msgid "Disable Touchpad"
-msgstr "禁用触摸板"
-
-#: ../../keybinding/id_desc_map.go:89
-msgid "Deepin Translator"
-msgstr "深度翻译"
-
-#: ../../keybinding/id_desc_map.go:129
-msgid "Calculator"
-msgstr "计算器"
-
-#: ../../keybinding/id_desc_map.go:130
-msgid "Email client"
-msgstr "邮件客户端"
-
-#: ../../keybinding/id_desc_map.go:131
-msgid "Web browser"
-msgstr "网页浏览器"
-
-#: ../../keybinding/id_desc_map.go:132
-msgid "Media player"
-msgstr "多媒体播放器"
-
-#: ../../keybinding/id_desc_map.go:133
-msgid "Play/Pause"
-msgstr "播放/暂停"
-
-#: ../../keybinding/id_desc_map.go:134
-msgid "Pause"
-msgstr "暂停播放"
-
-#: ../../keybinding/id_desc_map.go:135
-msgid "Stop"
-msgstr "停止播放"
-
-#: ../../keybinding/id_desc_map.go:136
-msgid "Mute"
-msgstr "静音"
-
-#: ../../keybinding/id_desc_map.go:137
-msgid "Volume down"
-msgstr "减小音量"
-
-#: ../../keybinding/id_desc_map.go:138
-msgid "Volume up"
-msgstr "增大音量"
-
-#: ../../keybinding/id_desc_map.go:139
-msgid "Previous"
-msgstr "上一个"
-
-#: ../../keybinding/id_desc_map.go:140
-msgid "Next"
-msgstr "下一个"
-
-#: ../../keybinding/id_desc_map.go:141
-msgid "Eject"
-msgstr "弹出"
-
-#: ../../keybinding/id_desc_map.go:171
-msgid "Close window"
-msgstr "关闭窗口"
-
-#: ../../keybinding/id_desc_map.go:172
-msgid "Maximize window"
-msgstr "最大化窗口"
-
-#: ../../keybinding/id_desc_map.go:173
-msgid "Restore window"
-msgstr "恢复窗口"
-
-#: ../../keybinding/id_desc_map.go:174
-msgid "Minimize window"
-msgstr "最小化窗口"
-
-#: ../../keybinding/id_desc_map.go:175
-msgid "Move window"
-msgstr "移动窗口"
-
-#: ../../keybinding/id_desc_map.go:176
-msgid "Resize window"
-msgstr "改变窗口大小"
-
-#: ../../keybinding/id_desc_map.go:177
-msgid "Switch furl state"
-msgstr "切换卷起状态"
-
-#: ../../keybinding/id_desc_map.go:178
-msgid "Activate window menu"
-msgstr "激活窗口菜单"
-
-#: ../../keybinding/id_desc_map.go:224
-msgid "Switch to workspace 1"
-msgstr "切换到工作区1"
-
-#: ../../keybinding/id_desc_map.go:225
-msgid "Switch to workspace 2"
-msgstr "切换到工作区2"
-
-#: ../../keybinding/id_desc_map.go:226
-msgid "Switch to workspace 3"
-msgstr "切换到工作区3"
-
-#: ../../keybinding/id_desc_map.go:227
-msgid "Switch to workspace 4"
-msgstr "切换到工作区4"
-
-#: ../../keybinding/id_desc_map.go:228
-msgid "Switch to left workspace"
-msgstr "切换到左边工作区"
-
-#: ../../keybinding/id_desc_map.go:229
-msgid "Switch to right workspace"
-msgstr "切换到右边工作区"
-
-#: ../../keybinding/id_desc_map.go:230
-msgid "Switch to upper workspace"
-msgstr "切换到上方工作区"
-
-#: ../../keybinding/id_desc_map.go:231
-msgid "Switch to lower workspace"
-msgstr "切换到下方工作区"
-
-#: ../../keybinding/id_desc_map.go:232
-msgid "Move to workspace 1"
-msgstr "移动到工作区1"
-
-#: ../../keybinding/id_desc_map.go:233
-msgid "Move to workspace 2"
-msgstr "移动到工作区2"
-
-#: ../../keybinding/id_desc_map.go:234
-msgid "Move to workspace 3"
-msgstr "移动到工作区3"
-
-#: ../../keybinding/id_desc_map.go:235
-msgid "Move to workspace 4"
-msgstr "移动到工作区4"
-
-#: ../../keybinding/id_desc_map.go:236
-msgid "Move to left workspace"
-msgstr "移动到左边工作区"
-
-#: ../../keybinding/id_desc_map.go:237
-msgid "Move to right workspace"
-msgstr "移动到右边工作区"
-
-#: ../../keybinding/id_desc_map.go:238
-msgid "Move to upper workspace"
-msgstr "移动到上方工作区"
-
-#: ../../keybinding/id_desc_map.go:239
-msgid "Move to lower workspace"
-msgstr "移动到下方工作区"
-
-#: ../../mime/default_media.go:72 ../../mime/default_media.go:89
-msgid "Nothing"
-msgstr "无操作"
-
-#: ../../mime/default_media.go:75 ../../mime/default_media.go:90
-msgid "Open Folder"
-msgstr "打开文件夹"
-
-#: ../../mime/default_media.go:79
-msgid "Run Soft"
-msgstr "运行软件"
-
-#: ../../network/manager_connections.go:183
-#: ../../network/nm_custom_type.go:133
-msgid "Wired Connection"
-msgstr "有线连接"
-
-#: ../../network/nm_constant.go:296 ../../network/nm_setting_vpn_l2tp.go:116
-#: ../../network/nm_setting_vpn_openvpn.go:171
-#: ../../network/nm_setting_vpn_pptp.go:106
-#: ../../network/nm_setting_vpn_vpnc.go:145
-msgid "Saved"
-msgstr "已保存的"
-
-#: ../../network/nm_constant.go:298 ../../network/nm_setting_vpn_l2tp.go:117
-#: ../../network/nm_setting_vpn_openvpn.go:172
-#: ../../network/nm_setting_vpn_pptp.go:107
-#: ../../network/nm_setting_vpn_vpnc.go:147
-msgid "Always Ask"
-msgstr "总是询问"
-
-#: ../../network/nm_constant.go:299 ../../network/nm_setting_vpn_l2tp.go:118
-#: ../../network/nm_setting_vpn_openvpn.go:173
-#: ../../network/nm_setting_vpn_openvpn.go:479
-#: ../../network/nm_setting_vpn_pptp.go:108
-#: ../../network/nm_setting_vpn_vpnc.go:148
-msgid "Not Required"
-msgstr "不要求"
-
-#: ../../network/nm_custom_type.go:131
-msgid "Connection"
-msgstr "连接"
-
-#: ../../network/nm_custom_type.go:135
-msgid "Wireless Connection"
-msgstr "无线连接"
-
-#: ../../network/nm_custom_type.go:137
-msgid "Wireless Ad-Hoc"
-msgstr "无线临时网络"
-
-#: ../../network/nm_custom_type.go:139
-msgid "Wireless Ap-Hotspot"
-msgstr "无线Ap热点"
-
-#: ../../network/nm_custom_type.go:141
-msgid "PPPoE Connection"
-msgstr "PPPoE连接"
-
-#: ../../network/nm_custom_type.go:143
-msgid "Mobile Connection"
-msgstr "移动连接"
-
-#: ../../network/nm_custom_type.go:145
-msgid "Mobile GSM Connection"
-msgstr "移动GSM连接"
-
-#: ../../network/nm_custom_type.go:147
-msgid "Mobile CDMA Connection"
-msgstr "移动CDMA连接"
-
-#: ../../network/nm_custom_type.go:149
-msgid "VPN Connection"
-msgstr "VPN连接"
-
-#: ../../network/nm_custom_type.go:151
-msgid "VPN L2TP"
-msgstr "VPN L2TP"
-
-#: ../../network/nm_custom_type.go:153
-msgid "VPN OpenConnect"
-msgstr "VPN OpenConnect"
-
-#: ../../network/nm_custom_type.go:155
-msgid "VPN OpenVPN"
-msgstr "VPN OpenVPN"
-
-#: ../../network/nm_custom_type.go:157
-msgid "VPN PPTP"
-msgstr "VPN PPTP"
-
-#: ../../network/nm_custom_type.go:159
-msgid "VPN VPNC"
-msgstr "VPN VPNC"
-
-#: ../../network/nm_setting_802_1x.go:73
-msgid "PAP"
-msgstr "PAP"
-
-#: ../../network/nm_setting_802_1x.go:74
-msgid "CHAP"
-msgstr "CHAP"
-
-#: ../../network/nm_setting_802_1x.go:75
-msgid "MSCHAP"
-msgstr "MSCHAP"
-
-#: ../../network/nm_setting_802_1x.go:76
-msgid "MSCHAPV2"
-msgstr "MSCHAPV2"
-
-#: ../../network/nm_setting_802_1x.go:77
-msgid "GTC"
-msgstr "GTC"
-
-#: ../../network/nm_setting_802_1x.go:78
-msgid "OTP"
-msgstr "OTP"
-
-#: ../../network/nm_setting_802_1x.go:79
-#: ../../network/nm_setting_802_1x.go:162
-msgid "MD5"
-msgstr "MD5"
-
-#: ../../network/nm_setting_802_1x.go:80
-#: ../../network/nm_setting_802_1x.go:161
-#: ../../network/nm_setting_802_1x.go:169
-msgid "TLS"
-msgstr "TLS"
-
-#: ../../network/nm_setting_802_1x.go:163
-#: ../../network/nm_setting_802_1x.go:171
-msgid "FAST"
-msgstr "FAST"
-
-#: ../../network/nm_setting_802_1x.go:164
-#: ../../network/nm_setting_802_1x.go:172
-msgid "Tunneled TLS"
-msgstr "隧道TLS"
-
-#: ../../network/nm_setting_802_1x.go:165
-#: ../../network/nm_setting_802_1x.go:173
-msgid "Protected EAP"
-msgstr "受保护的EAP"
-
-#: ../../network/nm_setting_802_1x.go:170
-#: ../../network/nm_setting_wireless_security.go:206
-msgid "LEAP"
-msgstr "LEAP"
-
-#: ../../network/nm_setting_802_1x.go:178
-#: ../../network/nm_setting_ip4_config.go:178
-#: ../../network/nm_setting_vpn_vpnc.go:261
-msgid "Disabled"
-msgstr "已禁用"
-
-#: ../../network/nm_setting_802_1x.go:179
-msgid "Anonymous"
-msgstr "匿名"
-
-#: ../../network/nm_setting_802_1x.go:180
-msgid "Authenticated"
-msgstr "已认证"
-
-#: ../../network/nm_setting_802_1x.go:181
-msgid "Both"
-msgstr "都是"
-
-#: ../../network/nm_setting_802_1x.go:185
-#: ../../network/nm_setting_wireless.go:295
-msgid "Automatic"
-msgstr "自动"
-
-#: ../../network/nm_setting_802_1x.go:186
-msgid "Version 0"
-msgstr "第0版"
-
-#: ../../network/nm_setting_802_1x.go:187
-msgid "Version 1"
-msgstr "第1版"
-
-#: ../../network/nm_setting_gsm.go:125
-msgid "China Unicom Internet"
-msgstr "中国联通互联网"
-
-#: ../../network/nm_setting_gsm.go:126
-msgid "China Unicom MMS"
-msgstr "中国联通彩信"
-
-#: ../../network/nm_setting_gsm.go:127
-msgid "China Mobile WAP"
-msgstr "中国移动WAP"
-
-#: ../../network/nm_setting_gsm.go:128
-msgid "China Mobile Internet"
-msgstr "中国移动互联网"
-
-#: ../../network/nm_setting_gsm.go:129
-msgid "China Mobile MMS"
-msgstr "中国移动彩信"
-
-#: ../../network/nm_setting_gsm.go:133
-msgid "Any"
-msgstr "任一"
-
-#: ../../network/nm_setting_gsm.go:134
-msgid "3G (UMTS/HSPA)"
-msgstr "3G（UMTS / HSPA）"
-
-#: ../../network/nm_setting_gsm.go:135
-msgid "2G (GPRS/EDGE)"
-msgstr "2G（GPRS / EDGE）"
-
-#: ../../network/nm_setting_gsm.go:136
-msgid "Prefer 3G (UMTS/HSPA)"
-msgstr "首选3G（UMTS / HSPA）"
-
-#: ../../network/nm_setting_gsm.go:137
-msgid "Prefer 2G (GPRS/EDGE)"
-msgstr "首选2G（GPRS / EDGE）"
-
-#: ../../network/nm_setting_gsm.go:138
-msgid "Prefer 4G (LTE)"
-msgstr "首选4G（LTE）"
-
-#: ../../network/nm_setting_gsm.go:139
-msgid "Use Only 4G (LTE)"
-msgstr "仅使用4G（LTE）"
-
-#: ../../network/nm_setting_ip4_config.go:174
-#: ../../network/nm_setting_ip6_config.go:66
-msgid "Auto"
-msgstr "自动"
-
-#: ../../network/nm_setting_ip4_config.go:175
-#: ../../network/nm_setting_ip6_config.go:68
-msgid "Link-Local Only"
-msgstr "仅本地连接"
-
-#: ../../network/nm_setting_ip4_config.go:176
-#: ../../network/nm_setting_ip6_config.go:69
-msgid "Manual"
-msgstr "手动"
-
-#: ../../network/nm_setting_ip4_config.go:177
-#: ../../network/nm_setting_ip6_config.go:70
-#: ../../network/nm_setting_wireless_security.go:205
-msgid "Shared"
-msgstr "共享"
-
-#: ../../network/nm_setting_ip6_config.go:65
-msgid "Ignore"
-msgstr "忽略"
-
-#: ../../network/nm_setting_ip6_config.go:67
-msgid "DHCP"
-msgstr "DHCP"
-
-#: ../../network/nm_setting_virtual_key.go:116
-msgid "GSM (GPRS, EDGE, UMTS, HSPA)"
-msgstr "GSM（GPRS，EDGE，UMTS，HSPA）"
-
-#: ../../network/nm_setting_virtual_key.go:117
-msgid "CDMA (1xRTT, EVDO)"
-msgstr "CDMA（1xRTT，EVDO）"
-
-#: ../../network/nm_setting_virtual_key.go:124
-msgid "L2TP"
-msgstr "L2TP"
-
-#: ../../network/nm_setting_virtual_key.go:125
-msgid "PPTP"
-msgstr "PPTP"
-
-#: ../../network/nm_setting_virtual_key.go:126
-msgid "OpenConnect"
-msgstr "OpenConnect"
-
-#: ../../network/nm_setting_virtual_key.go:127
-msgid "OpenVPN"
-msgstr "OpenVPN"
-
-#: ../../network/nm_setting_virtual_key.go:128
-msgid "VPNC"
-msgstr "VPNC"
-
-#: ../../network/nm_setting_virtual_key.go:141
-#: ../../network/nm_setting_virtual_key.go:148
-#: ../../network/nm_setting_virtual_key.go:178
-#: ../../network/nm_setting_vpn_openvpn.go:398
-#: ../../network/nm_setting_vpn_vpnc.go:272
-msgid "None"
-msgstr "无"
-
-#: ../../network/nm_setting_virtual_key.go:142
-#: ../../network/nm_setting_virtual_key.go:149
-msgid "WEP 40/128-bit Key"
-msgstr "WEP 40/128位 密钥"
-
-#: ../../network/nm_setting_virtual_key.go:143
-#: ../../network/nm_setting_virtual_key.go:150
-msgid "WPA/WPA2 Personal"
-msgstr "WPA/WPA2 个人版"
-
-#: ../../network/nm_setting_virtual_key.go:144
-msgid "WPA/WPA2 Enterprise"
-msgstr "WPA/WPA2企业版"
-
-#: ../../network/nm_setting_virtual_key.go:158
-#: ../../network/nm_setting_virtual_key.go:167
-msgid "All Available (default)"
-msgstr "都可用（默认）"
-
-#: ../../network/nm_setting_virtual_key.go:159
-#: ../../network/nm_setting_virtual_key.go:168
-msgid "128-bit (most secure)"
-msgstr "128位 （最安全）"
-
-#: ../../network/nm_setting_virtual_key.go:160
-#: ../../network/nm_setting_virtual_key.go:169
-msgid "40-bit (less secure)"
-msgstr "40位 （较安全）"
-
-#: ../../network/nm_setting_virtual_key.go:176
-msgid "Secure (default)"
-msgstr "安全（默认）"
-
-#: ../../network/nm_setting_virtual_key.go:177
-msgid "Weak"
-msgstr "弱"
-
-#: ../../network/nm_setting_vpn_openvpn.go:251
-msgid "Certificates (TLS)"
-msgstr "证书（TLS）"
-
-#: ../../network/nm_setting_vpn_openvpn.go:252
-msgid "Password"
-msgstr "密码"
-
-#: ../../network/nm_setting_vpn_openvpn.go:253
-msgid "Password with Certificates (TLS)"
-msgstr "证书密码（TLS）"
-
-#: ../../network/nm_setting_vpn_openvpn.go:254
-msgid "Static Key"
-msgstr "静态密钥"
-
-#: ../../network/nm_setting_vpn_openvpn.go:258
-#: ../../network/nm_setting_vpn_openvpn.go:434
+#: network/nm_setting_vpn_openvpn.go:258 network/nm_setting_vpn_openvpn.go:434
 msgid "0"
 msgstr "0"
 
-#: ../../network/nm_setting_vpn_openvpn.go:259
-#: ../../network/nm_setting_vpn_openvpn.go:435
+#: network/nm_setting_vpn_openvpn.go:259 network/nm_setting_vpn_openvpn.go:435
 msgid "1"
 msgstr "1"
 
-#: ../../network/nm_setting_vpn_openvpn.go:377
-#: ../../network/nm_setting_vpn_openvpn.go:397
-#: ../../network/nm_setting_vpn_openvpn.go:428
-#: ../../network/nm_setting_wireless.go:139
-#: ../../network/nm_setting_wireless.go:188
-msgid "Default"
-msgstr "默认"
+#: network/nm_setting_virtual_key.go:159 network/nm_setting_virtual_key.go:168
+msgid "128-bit (most secure)"
+msgstr "128位 （最安全）"
 
-#: ../../network/nm_setting_vpn_openvpn.go:378
-msgid "DES-CBC"
-msgstr "DES-CBC"
+#: network/nm_setting_gsm.go:135
+msgid "2G (GPRS/EDGE)"
+msgstr "2G（GPRS / EDGE）"
 
-#: ../../network/nm_setting_vpn_openvpn.go:379
-msgid "RC2-CBC"
-msgstr "RC2-CBC"
+#: keybinding/id_desc_map.go:79
+msgid "3D reverse switch applications"
+msgstr "3D反向切换程序"
 
-#: ../../network/nm_setting_vpn_openvpn.go:380
-msgid "DES-EDE-CBC"
-msgstr "DES-EDE-CBC"
+#: keybinding/id_desc_map.go:78
+msgid "3D switch applications"
+msgstr "3D切换程序"
 
-#: ../../network/nm_setting_vpn_openvpn.go:381
-msgid "DES-EDE3-CBC"
-msgstr "DES-EDE3-CBC"
+#: network/nm_setting_gsm.go:134
+msgid "3G (UMTS/HSPA)"
+msgstr "3G（UMTS / HSPA）"
 
-#: ../../network/nm_setting_vpn_openvpn.go:382
-msgid "DESX-CBC"
-msgstr "DESX-CBC"
+#: network/nm_setting_virtual_key.go:160 network/nm_setting_virtual_key.go:169
+msgid "40-bit (less secure)"
+msgstr "40位 （较安全）"
 
-#: ../../network/nm_setting_vpn_openvpn.go:383
-msgid "BF-CBC"
-msgstr "BF-CBC"
-
-#: ../../network/nm_setting_vpn_openvpn.go:384
-msgid "RC2-40-CBC"
-msgstr "RC2-40-CBC"
-
-#: ../../network/nm_setting_vpn_openvpn.go:385
-msgid "CAST5-CBC"
-msgstr "CAST5-CBC"
-
-#: ../../network/nm_setting_vpn_openvpn.go:386
-msgid "RC2-64-CBC"
-msgstr "RC2-64-CBC"
-
-#: ../../network/nm_setting_vpn_openvpn.go:387
-msgid "AES-128-CBC"
-msgstr "AES-128-CBC"
-
-#: ../../network/nm_setting_vpn_openvpn.go:388
-msgid "AES-192-CBC"
-msgstr "AES-192-CBC"
-
-#: ../../network/nm_setting_vpn_openvpn.go:389
-msgid "AES-256-CBC"
-msgstr "AES-256-CBC"
-
-#: ../../network/nm_setting_vpn_openvpn.go:390
-msgid "CAMELLIA-128-CBC"
-msgstr "CAMELLIA-128-CBC"
-
-#: ../../network/nm_setting_vpn_openvpn.go:391
-msgid "CAMELLIA-192-CBC"
-msgstr "CAMELLIA-192-CBC"
-
-#: ../../network/nm_setting_vpn_openvpn.go:392
-msgid "CAMELLIA-256-CBC"
-msgstr "CAMELLIA-256-CBC"
-
-#: ../../network/nm_setting_vpn_openvpn.go:393
-msgid "SEED-CBC"
-msgstr "SEED-CBC"
-
-#: ../../network/nm_setting_vpn_openvpn.go:399
-msgid "RSA MD-4"
-msgstr "RSA MD-4"
-
-#: ../../network/nm_setting_vpn_openvpn.go:400
-msgid "MD-5"
-msgstr "MD-5"
-
-#: ../../network/nm_setting_vpn_openvpn.go:401
-msgid "SHA-1"
-msgstr "SHA-1"
-
-#: ../../network/nm_setting_vpn_openvpn.go:402
-msgid "SHA-224"
-msgstr "SHA-224"
-
-#: ../../network/nm_setting_vpn_openvpn.go:403
-msgid "SHA-256"
-msgstr "SHA-256"
-
-#: ../../network/nm_setting_vpn_openvpn.go:404
-msgid "SHA-384"
-msgstr "SHA-384"
-
-#: ../../network/nm_setting_vpn_openvpn.go:405
-msgid "SHA-512"
-msgstr "SHA-512"
-
-#: ../../network/nm_setting_vpn_openvpn.go:406
-msgid "RIPEMD-160"
-msgstr "RIPEMD-160"
-
-#: ../../network/nm_setting_vpn_openvpn.go:429
-msgid "Client"
-msgstr "客户端"
-
-#: ../../network/nm_setting_vpn_openvpn.go:430
-msgid "Server"
-msgstr "服务器"
-
-#: ../../network/nm_setting_vpn_openvpn.go:480
-msgid "HTTP"
-msgstr "HTTP"
-
-#: ../../network/nm_setting_vpn_openvpn.go:481
-msgid "SOCKS"
-msgstr "SOCKS"
-
-#: ../../network/nm_setting_vpn_vpnc.go:253
-msgid "Cisco (default)"
-msgstr "思科（默认）"
-
-#: ../../network/nm_setting_vpn_vpnc.go:254
-msgid "Netscreen"
-msgstr "网屏"
-
-#: ../../network/nm_setting_vpn_vpnc.go:258
-msgid "NAT-T When Available (default)"
-msgstr "NAT-T可用时（默认）"
-
-#: ../../network/nm_setting_vpn_vpnc.go:259
-msgid "NAT-T Always"
-msgstr "NAT-T总是"
-
-#: ../../network/nm_setting_vpn_vpnc.go:260
-msgid "Cisco UDP"
-msgstr "思科UDP"
-
-#: ../../network/nm_setting_vpn_vpnc.go:265
-#: ../../network/nm_setting_vpn_vpnc.go:273
-msgid "DH Group 1"
-msgstr "DH Group 1"
-
-#: ../../network/nm_setting_vpn_vpnc.go:266
-msgid "DH Group 2 (default)"
-msgstr "DH Group 2（默认）"
-
-#: ../../network/nm_setting_vpn_vpnc.go:267
-#: ../../network/nm_setting_vpn_vpnc.go:275
-msgid "DH Group 5"
-msgstr "DH Group 5"
-
-#: ../../network/nm_setting_vpn_vpnc.go:271
-msgid "Server (default)"
-msgstr "服务器（默认）"
-
-#: ../../network/nm_setting_vpn_vpnc.go:274
-msgid "DH Group 2"
-msgstr "DH Group 2"
-
-#: ../../network/nm_setting_wireless.go:289
-msgid "Infrastructure"
-msgstr "基础架构"
-
-#: ../../network/nm_setting_wireless.go:290
-msgid "Ad-Hoc"
-msgstr "临时网络"
-
-#: ../../network/nm_setting_wireless.go:291
-msgid "AP-Hotspot"
-msgstr "AP热点"
-
-#: ../../network/nm_setting_wireless.go:296
+#: network/nm_setting_wireless.go:296
 msgid "A (5 GHz)"
 msgstr "A（5 GHz）"
 
-#: ../../network/nm_setting_wireless.go:297
-msgid "BG (2.4 GHz)"
-msgstr "BG（2.4 GHz）"
+#: network/state_handler.go:82
+msgid "A connection dependency failed."
+msgstr "连接依赖失败。"
 
-#: ../../network/nm_setting_wireless_security.go:189
-msgid "WEP"
-msgstr "WEP"
+#: network/state_handler.go:86
+msgid "A secondary connection of the base connection failed."
+msgstr "底座连接的二次连接失败。"
 
-#: ../../network/nm_setting_wireless_security.go:190
-msgid "Dynamic WEP"
-msgstr "动态WEP"
+#: network/state_handler.go:71
+msgid "A user or client requested to disconnect."
+msgstr "用户或客户端请求断开连接。"
 
-#: ../../network/nm_setting_wireless_security.go:191
+#: datetime/zone_utc_list.go:542
+msgid "ACT"
+msgstr "澳大利亚首都特区"
+
+#: network/nm_setting_vpn_openvpn.go:387
+msgid "AES-128-CBC"
+msgstr "AES-128-CBC"
+
+#: network/nm_setting_vpn_openvpn.go:388
+msgid "AES-192-CBC"
+msgstr "AES-192-CBC"
+
+#: network/nm_setting_vpn_openvpn.go:389
+msgid "AES-256-CBC"
+msgstr "AES-256-CBC"
+
+#: network/nm_setting_wireless.go:291
+msgid "AP-Hotspot"
+msgstr "AP热点"
+
+#: datetime/zone_utc_list.go:256
+msgid "Abidjan"
+msgstr "阿比让"
+
+#: network/state_handler.go:241
+msgid "Access Point mode is not supported by this device."
+msgstr "此设备不支持热点模式"
+
+#: datetime/zone_utc_list.go:257
+msgid "Accra"
+msgstr "阿克拉"
+
+#: datetime/zone_utc_list.go:155
+msgid "Acre"
+msgstr ""
+
+#: keybinding/id_desc_map.go:178
+msgid "Activate window menu"
+msgstr "激活窗口菜单"
+
+#: network/nm_setting_wireless.go:290
+msgid "Ad-Hoc"
+msgstr "临时网络"
+
+#: network/nm_setting_wireless_security.go:191
 msgid "Ad-Hoc WPA-PSK"
 msgstr "临时网络"
 
-#: ../../network/nm_setting_wireless_security.go:192
-msgid "WPA-PSK Infrastructure"
-msgstr "WPA-PSK基础架构"
+#: datetime/zone_utc_list.go:30
+msgid "Adak"
+msgstr "埃达克"
 
-#: ../../network/nm_setting_wireless_security.go:193
-msgid "WPA Enterprise"
-msgstr "WPA企业版"
+#: datetime/zone_utc_list.go:399
+msgid "Addis Ababa"
+msgstr "亚的斯亚贝巴"
 
-#: ../../network/nm_setting_wireless_security.go:197
-msgid "WEP40"
-msgstr "WEP40"
+#: datetime/zone_utc_list.go:532
+msgid "Adelaide"
+msgstr "阿德莱德"
 
-#: ../../network/nm_setting_wireless_security.go:198
-msgid "WEP104"
-msgstr "WEP104"
+#: datetime/zone_utc_list.go:410
+msgid "Aden"
+msgstr "亚丁"
 
-#: ../../network/nm_setting_wireless_security.go:199
-msgid "TKIP"
-msgstr "TKIP"
+#: datetime/zone_utc_list.go:47
+msgid "Alaska"
+msgstr "阿拉斯加"
 
-#: ../../network/nm_setting_wireless_security.go:200
+#: datetime/zone_utc_list.go:36
+msgid "Aleutian"
+msgstr "阿留申"
+
+#: datetime/zone_utc_list.go:307
+msgid "Algiers"
+msgstr "阿尔及尔"
+
+#: network/nm_setting_virtual_key.go:158 network/nm_setting_virtual_key.go:167
+msgid "All Available (default)"
+msgstr "都可用（默认）"
+
+#: datetime/zone_utc_list.go:465
+msgid "Almaty"
+msgstr "阿拉木图"
+
+#: network/nm_setting_vpn_openvpn.go:172 network/nm_setting_vpn_pptp.go:107
+#: network/nm_constant.go:298 network/nm_setting_vpn_l2tp.go:117
+#: network/nm_setting_vpn_vpnc.go:147
+msgid "Always Ask"
+msgstr "总是询问"
+
+#: datetime/zone_utc_list.go:248
+#, fuzzy
+msgid "Americaoronha"
+msgstr "迪诺罗尼亚"
+
+#: datetime/zone_utc_list.go:370
+msgid "Amman"
+msgstr "安曼"
+
+#: datetime/zone_utc_list.go:324
+msgid "Amsterdam"
+msgstr "阿姆斯特丹"
+
+#: datetime/zone_utc_list.go:580
+msgid "Anadyr"
+msgstr "阿纳德尔"
+
+#: datetime/zone_utc_list.go:41
+msgid "Anchorage"
+msgstr "安克雷奇"
+
+#: datetime/zone_utc_list.go:325
+msgid "Andorra"
+msgstr "安道尔"
+
+#: datetime/zone_utc_list.go:165
+msgid "Anguilla"
+msgstr "安圭拉"
+
+#: network/nm_setting_802_1x.go:179
+msgid "Anonymous"
+msgstr "匿名"
+
+#: datetime/zone_utc_list.go:418
+msgid "Antananarivo"
+msgstr "塔那那利佛"
+
+#: datetime/zone_utc_list.go:244
+msgid "Antarctica/Rothera"
+msgstr ""
+
+#: datetime/zone_utc_list.go:166
+msgid "Antigua"
+msgstr "安地卡"
+
+#: network/nm_setting_gsm.go:133
+msgid "Any"
+msgstr "任一"
+
+#: datetime/zone_utc_list.go:598
+msgid "Apia"
+msgstr ""
+
+#: datetime/zone_utc_list.go:445
+msgid "Aqtau"
+msgstr "阿克陶"
+
+#: datetime/zone_utc_list.go:446
+msgid "Aqtobe"
+msgstr "阿克托别"
+
+#: datetime/zone_utc_list.go:212
+msgid "Araguaina"
+msgstr "阿拉瓜伊纳"
+
+#: datetime/zone_utc_list.go:213
+#, fuzzy
+msgid "Argentina/Buenos Aires"
+msgstr "贝伦"
+
+#: datetime/zone_utc_list.go:214
+#, fuzzy
+msgid "Argentina/Catamarca"
+msgstr "卡塔马卡"
+
+#: datetime/zone_utc_list.go:215
+#, fuzzy
+msgid "Argentina/ComodRivadavia"
+msgstr "里瓦达维亚海军准将城"
+
+#: datetime/zone_utc_list.go:216
+msgid "Argentina/Cordoba"
+msgstr ""
+
+#: datetime/zone_utc_list.go:217
+msgid "Argentina/Jujuy"
+msgstr ""
+
+#: datetime/zone_utc_list.go:218
+#, fuzzy
+msgid "Argentina/La Rioja"
+msgstr "拉里奥哈"
+
+#: datetime/zone_utc_list.go:219
+msgid "Argentina/Mendoza"
+msgstr ""
+
+#: datetime/zone_utc_list.go:220
+#, fuzzy
+msgid "Argentina/Rio Gallegos"
+msgstr "里奥加耶戈斯"
+
+#: datetime/zone_utc_list.go:221
+msgid "Argentina/Salta"
+msgstr ""
+
+#: datetime/zone_utc_list.go:222
+#, fuzzy
+msgid "Argentina/San Juan"
+msgstr "圣胡安"
+
+#: datetime/zone_utc_list.go:223
+#, fuzzy
+msgid "Argentina/San Luis"
+msgstr "圣路易斯"
+
+#: datetime/zone_utc_list.go:224
+msgid "Argentina/Tucuman"
+msgstr ""
+
+#: datetime/zone_utc_list.go:225
+msgid "Argentina/Ushuaia"
+msgstr ""
+
+#: datetime/zone_utc_list.go:81
+msgid "Arizona"
+msgstr "亚利桑那"
+
+#: datetime/zone_utc_list.go:167
+msgid "Aruba"
+msgstr "阿鲁巴"
+
+#: datetime/zone_utc_list.go:447
+msgid "Ashgabat"
+msgstr ""
+
+#: datetime/zone_utc_list.go:448
+msgid "Ashkhabad"
+msgstr "阿什哈巴德"
+
+#: datetime/zone_utc_list.go:400
+msgid "Asmara"
+msgstr "阿斯马拉"
+
+#: datetime/zone_utc_list.go:401
+msgid "Asmera"
+msgstr ""
+
+#: datetime/zone_utc_list.go:168
+msgid "Asuncion"
+msgstr "亚松森"
+
+#: datetime/zone_utc_list.go:380
+msgid "Athens"
+msgstr "雅典"
+
+#: datetime/zone_utc_list.go:121
+msgid "Atikokan"
+msgstr "阿提库"
+
+#: datetime/zone_utc_list.go:31
+msgid "Atka"
+msgstr "阿特卡"
+
+#: datetime/zone_utc_list.go:206
+msgid "Atlantic"
+msgstr "大西洋"
+
+#: datetime/zone_utc_list.go:585
+msgid "Auckland"
+msgstr "奥克兰"
+
+#: datetime/zone_utc_list.go:514
+#, fuzzy
+msgid "Australia/West"
+msgstr "澳大利亚西部"
+
+#: network/nm_setting_802_1x.go:180
+msgid "Authenticated"
+msgstr "已认证"
+
+#: network/state_handler.go:96
+msgid "Authentication to VPN server failed."
+msgstr "验证到VPN服务器失败。"
+
+#: network/nm_setting_ip6_config.go:66 network/nm_setting_ip4_config.go:174
+msgid "Auto"
+msgstr "自动"
+
+#: network/nm_setting_802_1x.go:185 network/nm_setting_wireless.go:295
+msgid "Automatic"
+msgstr "自动"
+
+#: datetime/zone_utc_list.go:253
+msgid "Azores"
+msgstr ""
+
+#: network/nm_setting_vpn_openvpn.go:383
+msgid "BF-CBC"
+msgstr "BF-CBC"
+
+#: network/nm_setting_wireless.go:297
+msgid "BG (2.4 GHz)"
+msgstr "BG（2.4 GHz）"
+
+#: datetime/zone_utc_list.go:411
+msgid "Baghdad"
+msgstr "巴格达"
+
+#: datetime/zone_utc_list.go:226
+msgid "Bahia"
+msgstr "巴伊亚"
+
+#: datetime/zone_utc_list.go:84
+msgid "Bahia Banderas"
+msgstr "巴伊亚班德拉斯"
+
+#: datetime/zone_utc_list.go:412
+msgid "Bahrain"
+msgstr "巴林"
+
+#: datetime/zone_utc_list.go:59
+msgid "BajaNorte"
+msgstr "下加利福尼亚"
+
+#: datetime/zone_utc_list.go:79
+msgid "BajaSur"
+msgstr "南下加里福尼亚"
+
+#: datetime/zone_utc_list.go:425
+msgid "Baku"
+msgstr "巴库"
+
+#: datetime/zone_utc_list.go:258
+msgid "Bamako"
+msgstr "巴马科"
+
+#: datetime/zone_utc_list.go:478
+msgid "Bangkok"
+msgstr "曼谷"
+
+#: datetime/zone_utc_list.go:308
+msgid "Bangui"
+msgstr "班吉"
+
+#: datetime/zone_utc_list.go:259
+msgid "Banjul"
+msgstr "班珠尔"
+
+#: datetime/zone_utc_list.go:169
+msgid "Barbados"
+msgstr "巴巴多斯"
+
+#: power/upower.go:86 power/upower.go:101
+msgid "Battery Critical Low"
+msgstr "电池电量耗尽"
+
+#: power/upower.go:114
+msgid "Battery Low"
+msgstr "电池电量低"
+
+#: datetime/zone_utc_list.go:506
+msgid "Beijing"
+msgstr "北京"
+
+#: datetime/zone_utc_list.go:371
+msgid "Beirut"
+msgstr "贝鲁特"
+
+#: datetime/zone_utc_list.go:227
+msgid "Belem"
+msgstr "贝伦"
+
+#: datetime/zone_utc_list.go:287
+msgid "Belfast"
+msgstr "贝尔法斯特"
+
+#: datetime/zone_utc_list.go:326
+msgid "Belgrade"
+msgstr "贝尔格莱德"
+
+#: datetime/zone_utc_list.go:85
+msgid "Belize"
+msgstr "伯利兹"
+
+#: datetime/zone_utc_list.go:327
+msgid "Berlin"
+msgstr "柏林"
+
+#: datetime/zone_utc_list.go:204
+msgid "Bermuda"
+msgstr "百慕大"
+
+#: datetime/zone_utc_list.go:466
+msgid "Bishkek"
+msgstr "比什凯克"
+
+#: datetime/zone_utc_list.go:260
+msgid "Bissau"
+msgstr "比绍"
+
+#: datetime/zone_utc_list.go:170
+msgid "Blanc-Sablon"
+msgstr ""
+
+#: datetime/zone_utc_list.go:357
+msgid "Blantyre"
+msgstr "布兰太尔"
+
+#: datetime/zone_utc_list.go:171
+msgid "Boa Vista"
+msgstr "博阿维斯塔"
+
+#: datetime/zone_utc_list.go:122
+msgid "Bogota"
+msgstr "波哥大"
+
+#: datetime/zone_utc_list.go:63
+msgid "Boise"
+msgstr "博伊西"
+
+#: network/nm_setting_802_1x.go:181
+msgid "Both"
+msgstr "都是"
+
+#: datetime/zone_utc_list.go:328
+msgid "Bratislava"
+msgstr "布拉迪斯拉发"
+
+#: datetime/zone_utc_list.go:205
+#, fuzzy
+msgid "Brazil/West"
+msgstr "巴西西部"
+
+#: datetime/zone_utc_list.go:309
+msgid "Brazzaville"
+msgstr "布拉柴维尔"
+
+#: datetime/zone_utc_list.go:543
+msgid "Brisbane"
+msgstr ""
+
+#: datetime/zone_utc_list.go:533
+#, fuzzy
+msgid "Broke Hill"
+msgstr "布罗肯希尔"
+
+#: datetime/zone_utc_list.go:491
+msgid "Brunei"
+msgstr "文莱"
+
+#: datetime/zone_utc_list.go:329
+msgid "Brussels"
+msgstr "布鲁塞尔"
+
+#: datetime/zone_utc_list.go:381
+msgid "Bucharest"
+msgstr "布加勒斯特"
+
+#: datetime/zone_utc_list.go:330
+msgid "Budapest"
+msgstr "布达佩斯"
+
+#: datetime/zone_utc_list.go:228
+msgid "Buenos Aires"
+msgstr "贝伦"
+
+#: datetime/zone_utc_list.go:358
+msgid "Bujumbura"
+msgstr "布琼布拉"
+
+#: datetime/zone_utc_list.go:331
+msgid "Busingen"
+msgstr ""
+
+#: network/nm_setting_vpn_openvpn.go:390
+msgid "CAMELLIA-128-CBC"
+msgstr "CAMELLIA-128-CBC"
+
+#: network/nm_setting_vpn_openvpn.go:391
+msgid "CAMELLIA-192-CBC"
+msgstr "CAMELLIA-192-CBC"
+
+#: network/nm_setting_vpn_openvpn.go:392
+msgid "CAMELLIA-256-CBC"
+msgstr "CAMELLIA-256-CBC"
+
+#: network/nm_setting_vpn_openvpn.go:385
+msgid "CAST5-CBC"
+msgstr "CAST5-CBC"
+
+#: network/nm_setting_wireless_security.go:200
 msgid "CCMP"
 msgstr "CCMP"
 
-# 此处Open为加密方式
-# NM_SETTING_WIRELESS_SECURITY_AUTH_ALG: open/shared/leap
-#: ../../network/nm_setting_wireless_security.go:204
-msgid "Open"
-msgstr "Open"
+#: network/nm_setting_virtual_key.go:117
+msgid "CDMA (1xRTT, EVDO)"
+msgstr "CDMA（1xRTT，EVDO）"
 
-#: ../../network/state_handler.go:34
-msgid "The device is now managed."
-msgstr "设备正在托管。"
+#: network/nm_setting_802_1x.go:74
+msgid "CHAP"
+msgstr "CHAP"
 
-#: ../../network/state_handler.go:35
-msgid "The device is no longer managed."
-msgstr "设备不再托管。"
+#: datetime/zone_utc_list.go:359
+msgid "Cairo"
+msgstr "开罗"
 
-#: ../../network/state_handler.go:36
-msgid "The device have not been ready for configuration."
-msgstr "设备配置未就绪。"
+#: keybinding/id_desc_map.go:129
+msgid "Calculator"
+msgstr "计算器"
 
-#: ../../network/state_handler.go:37
+#: datetime/zone_utc_list.go:457
+msgid "Calcutta"
+msgstr "加尔各答"
+
+#: datetime/zone_utc_list.go:64
+msgid "Cambridge Bay"
+msgstr "剑桥湾"
+
+#: datetime/zone_utc_list.go:172
+msgid "Campo Grande"
+msgstr "大坎普"
+
+#: datetime/zone_utc_list.go:111
+#, fuzzy
+msgid "Canada/Central"
+msgstr "加拿大山区"
+
+#: datetime/zone_utc_list.go:156
+#, fuzzy
+msgid "Canada/Eastern"
+msgstr "加拿大东部"
+
+#: datetime/zone_utc_list.go:78
+#, fuzzy
+msgid "Canada/Mountain"
+msgstr "加拿大山区"
+
+#: datetime/zone_utc_list.go:57
+#, fuzzy
+msgid "Canada/Pacific"
+msgstr "太平洋"
+
+#: datetime/zone_utc_list.go:274
+msgid "Canary"
+msgstr "加那利"
+
+#: datetime/zone_utc_list.go:544
+msgid "Canberra"
+msgstr ""
+
+#: datetime/zone_utc_list.go:86
+msgid "Cancun"
+msgstr "坎昆"
+
+#: datetime/zone_utc_list.go:254
+msgid "Cape Verde"
+msgstr "佛得角"
+
+#: datetime/zone_utc_list.go:163
+msgid "Caracas"
+msgstr "加拉加斯"
+
+#: datetime/zone_utc_list.go:261
+msgid "Casablanca"
+msgstr "卡萨布兰卡"
+
+#: datetime/zone_utc_list.go:564
+msgid "Casey"
+msgstr "凯西"
+
+#: datetime/zone_utc_list.go:229
+msgid "Catamarca"
+msgstr "卡塔马卡"
+
+#: datetime/zone_utc_list.go:230
+msgid "Cayenne"
+msgstr "卡宴"
+
+#: datetime/zone_utc_list.go:123
+msgid "Cayman"
+msgstr "开曼"
+
+#: network/nm_setting_vpn_openvpn.go:251
+msgid "Certificates (TLS)"
+msgstr "证书（TLS）"
+
+#: datetime/zone_utc_list.go:310
+msgid "Ceuta"
+msgstr "休达"
+
+#: datetime/zone_utc_list.go:473
+msgid "Chagos"
+msgstr "查戈斯"
+
+#: datetime/zone_utc_list.go:596
+msgid "Chatham"
+msgstr "查塔姆"
+
+#: datetime/zone_utc_list.go:87
+msgid "Chicago"
+msgstr "芝加哥"
+
+#: datetime/zone_utc_list.go:65
+msgid "Chihuahua"
+msgstr "奇瓦瓦"
+
+#: network/nm_setting_gsm.go:128
+msgid "China Mobile Internet"
+msgstr "中国移动互联网"
+
+#: network/nm_setting_gsm.go:129
+msgid "China Mobile MMS"
+msgstr "中国移动彩信"
+
+#: network/nm_setting_gsm.go:127
+msgid "China Mobile WAP"
+msgstr "中国移动WAP"
+
+#: network/nm_setting_gsm.go:125
+msgid "China Unicom Internet"
+msgstr "中国联通互联网"
+
+#: network/nm_setting_gsm.go:126
+msgid "China Unicom MMS"
+msgstr "中国联通彩信"
+
+#: datetime/zone_utc_list.go:382
+msgid "Chisinau"
+msgstr "基希讷乌"
+
+#: datetime/zone_utc_list.go:492
+msgid "Choibalsan"
+msgstr ""
+
+#: datetime/zone_utc_list.go:493
+msgid "Chongqing"
+msgstr "重庆"
+
+#: datetime/zone_utc_list.go:489
+msgid "Christmas"
+msgstr "圣诞岛"
+
+#: datetime/zone_utc_list.go:494
+msgid "Chungking"
+msgstr "重庆"
+
+#: datetime/zone_utc_list.go:554
+msgid "Chuuk"
+msgstr ""
+
+#: network/nm_setting_vpn_vpnc.go:253
+msgid "Cisco (default)"
+msgstr "思科（默认）"
+
+#: network/nm_setting_vpn_vpnc.go:260
+msgid "Cisco UDP"
+msgstr "思科UDP"
+
+#: network/nm_setting_vpn_openvpn.go:429
+msgid "Client"
+msgstr "客户端"
+
+#: keybinding/id_desc_map.go:171
+msgid "Close window"
+msgstr "关闭窗口"
+
+#: datetime/zone_utc_list.go:476
+msgid "Cocos"
+msgstr ""
+
+#: datetime/zone_utc_list.go:458
+msgid "Colombo"
+msgstr "科伦坡"
+
+#: datetime/zone_utc_list.go:419
+msgid "Comoro"
+msgstr ""
+
+#: power/upower.go:86
+msgid "Computer has been in suspend mode, please plug in."
+msgstr "计算机进入待机状态，请连接电源。"
+
+#: power/upower.go:114
+msgid "Computer will be in suspend mode, please plug in."
+msgstr "计算机将要进入待机状态，请连接电源。"
+
+#: power/upower.go:101
+msgid "Computer will being in suspend mode, please plug in."
+msgstr "计算机即将进入待机状态，请连接电源。"
+
+#: datetime/zone_utc_list.go:262
+msgid "Conakry"
+msgstr "科纳克里"
+
+#: network/state_handler.go:41
+msgid "Configuration of the 802.1X supplication failed."
+msgstr "802.1X客户端配置失败。"
+
+#: network/state_handler.go:155 network/state_handler.go:227
+msgid "Connected"
+msgstr "已连接"
+
+#: network/nm_custom_type.go:131
+msgid "Connection"
+msgstr "连接"
+
+#: datetime/zone_utc_list.go:207
+msgid "Continental"
+msgstr "大陆"
+
+#: datetime/zone_utc_list.go:332
+msgid "Copenhagen"
+msgstr "哥本哈根"
+
+#: datetime/zone_utc_list.go:124
+msgid "Coral Harbour"
+msgstr "珊瑚港"
+
+#: datetime/zone_utc_list.go:231
+msgid "Cordoba"
+msgstr "科尔多瓦"
+
+#: datetime/zone_utc_list.go:88
+msgid "Costa Rica"
+msgstr "哥斯达黎加"
+
+#: datetime/zone_utc_list.go:66
+msgid "Creston"
+msgstr "克雷斯顿"
+
+#: datetime/zone_utc_list.go:157
+msgid "Cuba"
+msgstr "古巴"
+
+#: datetime/zone_utc_list.go:173
+msgid "Cuiaba"
+msgstr "库亚巴"
+
+#: datetime/zone_utc_list.go:174
+msgid "Curacao"
+msgstr "库拉索"
+
+#: datetime/zone_utc_list.go:545
+msgid "Currie"
+msgstr "柯里"
+
+#: network/nm_setting_vpn_openvpn.go:378
+msgid "DES-CBC"
+msgstr "DES-CBC"
+
+#: network/nm_setting_vpn_openvpn.go:380
+msgid "DES-EDE-CBC"
+msgstr "DES-EDE-CBC"
+
+#: network/nm_setting_vpn_openvpn.go:381
+msgid "DES-EDE3-CBC"
+msgstr "DES-EDE3-CBC"
+
+#: network/nm_setting_vpn_openvpn.go:382
+msgid "DESX-CBC"
+msgstr "DESX-CBC"
+
+#: network/nm_setting_vpn_vpnc.go:265 network/nm_setting_vpn_vpnc.go:273
+msgid "DH Group 1"
+msgstr "DH Group 1"
+
+#: network/nm_setting_vpn_vpnc.go:274
+msgid "DH Group 2"
+msgstr "DH Group 2"
+
+#: network/nm_setting_vpn_vpnc.go:266
+msgid "DH Group 2 (default)"
+msgstr "DH Group 2（默认）"
+
+#: network/nm_setting_vpn_vpnc.go:267 network/nm_setting_vpn_vpnc.go:275
+msgid "DH Group 5"
+msgstr "DH Group 5"
+
+#: network/nm_setting_ip6_config.go:67
+msgid "DHCP"
+msgstr "DHCP"
+
+#: datetime/zone_utc_list.go:467
+msgid "Dacca"
+msgstr ""
+
+#: datetime/zone_utc_list.go:263
+msgid "Dakar"
+msgstr "达喀尔"
+
+#: datetime/zone_utc_list.go:372
+msgid "Damascus"
+msgstr "大马士革"
+
+#: datetime/zone_utc_list.go:272
+#, fuzzy
+msgid "Danmarkshavn"
+msgstr "撒马尔罕"
+
+#: datetime/zone_utc_list.go:402
+msgid "Dar es Salaam"
+msgstr "达累斯萨拉姆"
+
+#: datetime/zone_utc_list.go:534
+msgid "Darwin"
+msgstr "达尔文"
+
+#: datetime/zone_utc_list.go:443
+msgid "Davis"
+msgstr "戴维斯"
+
+#: datetime/zone_utc_list.go:49
+msgid "Dawson"
+msgstr "道森"
+
+#: datetime/zone_utc_list.go:67
+msgid "Dawson Creek"
+msgstr "道森克里克"
+
+#: datetime/zone_utc_list.go:250
+#, fuzzy
+msgid "DeNoronha"
+msgstr "迪诺罗尼亚"
+
+#: keybinding/id_desc_map.go:89
+msgid "Deepin Translator"
+msgstr "深度翻译"
+
+#: network/nm_setting_wireless.go:139 network/nm_setting_wireless.go:188
+#: network/nm_setting_vpn_openvpn.go:377 network/nm_setting_vpn_openvpn.go:397
+#: network/nm_setting_vpn_openvpn.go:428
+msgid "Default"
+msgstr "默认"
+
+#: keybinding/id_desc_map.go:84
+msgid "Delay screenshot"
+msgstr "延时截图"
+
+#: datetime/zone_utc_list.go:68
+msgid "Denver"
+msgstr "丹佛"
+
+#: datetime/zone_utc_list.go:125
+msgid "Detroit"
+msgstr "底特律"
+
+#: datetime/zone_utc_list.go:468
+msgid "Dhaka"
+msgstr "达卡"
+
+#: bluetooth/bluez_profile.go:32
+msgid "Dial-Up networking"
+msgstr "拨号网络"
+
+#: network/state_handler.go:55
+msgid "Dialing failed due to busy lines."
+msgstr "线路繁忙致使拨号失败。"
+
+#: network/state_handler.go:56
+msgid "Dialing failed due to no dial tone."
+msgstr "无拨号音致使拨号失败。"
+
+#: network/state_handler.go:57
+msgid "Dialing failed due to the carrier."
+msgstr "载体故障致使拨号失败。"
+
+#: network/state_handler.go:59
+msgid "Dialing failed."
+msgstr "拨号失败。"
+
+#: network/state_handler.go:58
+msgid "Dialing timed out."
+msgstr "拨号超时。"
+
+#: datetime/zone_utc_list.go:522
+msgid "Dili"
+msgstr "帝力"
+
+#: keybinding/id_desc_map.go:88
+msgid "Disable Touchpad"
+msgstr "禁用触摸板"
+
+#: network/nm_setting_802_1x.go:178 network/nm_setting_ip4_config.go:178
+#: network/nm_setting_vpn_vpnc.go:261
+msgid "Disabled"
+msgstr "已禁用"
+
+#: network/state_handler.go:180 network/state_handler.go:231
+#: network/state_handler.go:236 network/state_handler.go:241
+msgid "Disconnected"
+msgstr "断开"
+
+#: network/state_handler.go:209
+msgid "Disconnected,  you are now offline."
+msgstr "断开连接，当前已离线"
+
+#: datetime/zone_utc_list.go:403
+msgid "Djibouti"
+msgstr "吉布提"
+
+#: datetime/zone_utc_list.go:175
+msgid "Dominica"
+msgstr "多米尼加"
+
+#: datetime/zone_utc_list.go:311
+msgid "Douala"
+msgstr "杜阿拉"
+
+#: datetime/zone_utc_list.go:426
+msgid "Dubai"
+msgstr "迪拜"
+
+#: datetime/zone_utc_list.go:288
+msgid "Dublin"
+msgstr "都柏林"
+
+#: datetime/zone_utc_list.go:539
+msgid "DumontDUrville"
+msgstr "迪蒙·迪维尔"
+
+#: datetime/zone_utc_list.go:449
+msgid "Dushanbe"
+msgstr "杜尚别"
+
+#: network/nm_setting_wireless_security.go:190
+msgid "Dynamic WEP"
+msgstr "动态WEP"
+
+#: datetime/zone_utc_list.go:246
+msgid "East"
+msgstr ""
+
+#: datetime/zone_utc_list.go:160
+#, fuzzy
+msgid "East-Indiana"
+msgstr "东印第安纳州"
+
+#: datetime/zone_utc_list.go:112
+#, fuzzy
+msgid "East-Saskatchewan"
+msgstr "东萨斯喀彻温"
+
+#: datetime/zone_utc_list.go:116
+#, fuzzy
+msgid "Easter"
+msgstr "美国东部"
+
+#: datetime/zone_utc_list.go:114
+msgid "EasterIsland"
+msgstr "复活节岛"
+
+#: datetime/zone_utc_list.go:69
+msgid "Edmonton"
+msgstr "埃德蒙顿"
+
+#: datetime/zone_utc_list.go:569
+msgid "Efate"
+msgstr "埃法特"
+
+#: datetime/zone_utc_list.go:379
+msgid "Egypt"
+msgstr "埃及"
+
+#: datetime/zone_utc_list.go:280
+msgid "Eire"
+msgstr "爱尔兰"
+
+#: datetime/zone_utc_list.go:126
+msgid "Eirunepe"
+msgstr "艾鲁内佩"
+
+#: keybinding/id_desc_map.go:141
+msgid "Eject"
+msgstr "弹出"
+
+#: datetime/zone_utc_list.go:264
+msgid "El Aaiun"
+msgstr "阿尤恩"
+
+#: datetime/zone_utc_list.go:89
+msgid "El Salvador"
+msgstr "萨尔瓦多"
+
+#: keybinding/id_desc_map.go:130
+msgid "Email client"
+msgstr "邮件客户端"
+
+#: datetime/zone_utc_list.go:599
+msgid "Enderbury"
+msgstr "恩德伯里"
+
+#: datetime/zone_utc_list.go:50
+msgid "Ensenada"
+msgstr "加拿大"
+
+#: datetime/zone_utc_list.go:281
+msgid "Etc/GMT"
+msgstr ""
+
+#: datetime/zone_utc_list.go:282
+msgid "Etc/GMT+0"
+msgstr ""
+
+#: datetime/zone_utc_list.go:283
+msgid "Etc/UCT"
+msgstr ""
+
+#: datetime/zone_utc_list.go:285
+msgid "Etc/UTC"
+msgstr ""
+
+#: datetime/zone_utc_list.go:284
+#, fuzzy
+msgid "Etc/Universal"
+msgstr "世界时"
+
+#: datetime/zone_utc_list.go:286
+#, fuzzy
+msgid "Etc/Zulu"
+msgstr "祖鲁"
+
+#: datetime/zone_utc_list.go:520
+msgid "Eucla"
+msgstr ""
+
+#: network/nm_setting_802_1x.go:163 network/nm_setting_802_1x.go:171
+msgid "FAST"
+msgstr "FAST"
+
+#: datetime/zone_utc_list.go:275
+msgid "Faeroe"
+msgstr ""
+
+#: network/state_handler.go:61
+msgid "Failed to select the specified GSM APN."
+msgstr "无法选择指定的GSM APN。"
+
+#: datetime/zone_utc_list.go:600
+msgid "Fakaofo"
+msgstr "法考福"
+
+#: datetime/zone_utc_list.go:276
+msgid "Faroe"
+msgstr ""
+
+#: datetime/zone_utc_list.go:586
+msgid "Fiji"
+msgstr "斐济"
+
+#: keybinding/id_desc_map.go:75
+msgid "File manager"
+msgstr "文件管理器"
+
+#: bluetooth/bluez_profile.go:37
+msgid "File transfer"
+msgstr "文件传输"
+
+#: datetime/zone_utc_list.go:127
+msgid "Fort Wayne"
+msgstr "韦恩堡"
+
+#: datetime/zone_utc_list.go:232
+msgid "Fortaleza"
+msgstr "福塔雷萨"
+
+#: datetime/zone_utc_list.go:265
+msgid "Freetown"
+msgstr "弗里敦"
+
+#: keybinding/id_desc_map.go:82
+msgid "Full screenshot"
+msgstr "全屏截图"
+
+#: datetime/zone_utc_list.go:587
+msgid "Funafuti"
+msgstr "富纳富提"
+
+#: datetime/zone_utc_list.go:293
+msgid "GB"
+msgstr "GB"
+
+#: datetime/zone_utc_list.go:294
+#, fuzzy
+msgid "GB-Eire"
+msgstr "爱尔兰时间"
+
+#: datetime/zone_utc_list.go:295
+#, fuzzy
+msgid "GMT"
+msgstr "山区标准时间"
+
+#: datetime/zone_utc_list.go:296
+msgid "GMT+0"
+msgstr ""
+
+#: datetime/zone_utc_list.go:298
+msgid "GMT-0"
+msgstr ""
+
+#: datetime/zone_utc_list.go:297
+msgid "GMT0"
+msgstr ""
+
+#: network/nm_setting_virtual_key.go:116
+msgid "GSM (GPRS, EDGE, UMTS, HSPA)"
+msgstr "GSM（GPRS，EDGE，UMTS，HSPA）"
+
+#: network/state_handler.go:77
+msgid "GSM Modem's SIM Card not inserted."
+msgstr "未插入GSM调制解调器的SIM卡。"
+
+#: network/state_handler.go:78
+msgid "GSM Modem's SIM PIN required."
+msgstr "需要GSM调制解调器的SIM卡PIN码。"
+
+#: network/state_handler.go:79
+msgid "GSM Modem's SIM PUK required."
+msgstr "需要GSM调制解调器SIM卡PUK码。"
+
+#: network/nm_setting_802_1x.go:77
+msgid "GTC"
+msgstr "GTC"
+
+#: datetime/zone_utc_list.go:360
+msgid "Gaborone"
+msgstr "哈博罗内"
+
+#: datetime/zone_utc_list.go:117
+msgid "Galapagos"
+msgstr "加拉帕戈斯"
+
+#: datetime/zone_utc_list.go:46
+msgid "Gambier"
+msgstr "甘比尔"
+
+#: datetime/zone_utc_list.go:373
+msgid "Gaza"
+msgstr "加沙"
+
+#: datetime/zone_utc_list.go:115
+msgid "General"
+msgstr "通用"
+
+#: datetime/zone_utc_list.go:333
+msgid "Gibraltar"
+msgstr "直布罗陀"
+
+#: datetime/zone_utc_list.go:176
+msgid "Glace Bay"
+msgstr "格莱斯湾"
+
+#: datetime/zone_utc_list.go:233
+msgid "Godthab"
+msgstr "戈特霍布"
+
+#: datetime/zone_utc_list.go:177
+msgid "Goose Bay"
+msgstr "古斯湾"
+
+#: datetime/zone_utc_list.go:128
+msgid "Grand Turk"
+msgstr "大特克"
+
+#: datetime/zone_utc_list.go:299
+msgid "Greenwich"
+msgstr "英国格林尼治"
+
+#: datetime/zone_utc_list.go:178
+msgid "Grenada"
+msgstr "格林纳达"
+
+#: datetime/zone_utc_list.go:570
+msgid "Guadalcanal"
+msgstr "瓜达尔卡纳尔"
+
+#: datetime/zone_utc_list.go:179
+msgid "Guadeloupe"
+msgstr "瓜德罗普"
+
+#: datetime/zone_utc_list.go:555
+msgid "Guam"
+msgstr "关岛"
+
+#: datetime/zone_utc_list.go:90
+msgid "Guatemala"
+msgstr "危地马拉"
+
+#: datetime/zone_utc_list.go:129
+msgid "Guayaquil"
+msgstr "瓜亚基尔"
+
+#: datetime/zone_utc_list.go:289
+msgid "Guernsey"
+msgstr "根西岛"
+
+#: datetime/zone_utc_list.go:180
+msgid "Guyana"
+msgstr "圭亚那"
+
+#: network/nm_setting_vpn_openvpn.go:480
+msgid "HTTP"
+msgstr "HTTP"
+
+#: datetime/zone_utc_list.go:181
+msgid "Halifax"
+msgstr "哈利法克斯"
+
+#: bluetooth/bluez_profile.go:33
+msgid "Hands-Free device"
+msgstr "免提装置"
+
+#: bluetooth/bluez_profile.go:34
+msgid "Hands-Free voice gateway"
+msgstr "免提语音网关"
+
+#: datetime/zone_utc_list.go:361
+msgid "Harare"
+msgstr "哈拉雷"
+
+#: datetime/zone_utc_list.go:495
+msgid "Harbin"
+msgstr "哈尔滨"
+
+#: datetime/zone_utc_list.go:130
+msgid "Havana"
+msgstr "哈瓦那"
+
+#: datetime/zone_utc_list.go:37
+msgid "Hawaii"
+msgstr "夏威夷"
+
+#: bluetooth/bluez_profile.go:35
+msgid "Headset voice gateway"
+msgstr "耳机语音网关"
+
+#: datetime/zone_utc_list.go:374
+msgid "Hebron"
+msgstr "希伯伦"
+
+#: datetime/zone_utc_list.go:383
+msgid "Helsinki"
+msgstr "赫尔辛基"
+
+#: datetime/zone_utc_list.go:70
+msgid "Hermosillo"
+msgstr "埃莫西约"
+
+#: datetime/zone_utc_list.go:479
+msgid "Ho Chi Minh"
+msgstr "胡志明市"
+
+#: datetime/zone_utc_list.go:546
+msgid "Hobart"
+msgstr ""
+
+#: datetime/zone_utc_list.go:496
+msgid "Hong Kong"
+msgstr "香港"
+
+#: datetime/zone_utc_list.go:515
+#, fuzzy
+msgid "Hongkong"
+msgstr "香港"
+
+#: datetime/zone_utc_list.go:32
+msgid "Honolulu"
+msgstr "檀香山"
+
+#: datetime/zone_utc_list.go:480
+msgid "Hovd"
+msgstr "科布多"
+
+#: network/state_handler.go:37
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)."
 msgstr "IP配置无法保存（无可用地址、连接超时等）。"
 
-#: ../../network/state_handler.go:38
-msgid "The IP configuration is no longer valid."
-msgstr "IP配置不再有效。"
+#: datetime/zone_utc_list.go:300
+msgid "Iceland"
+msgstr "冰岛"
 
-#: ../../network/state_handler.go:39
+#: network/nm_setting_ip6_config.go:65
+msgid "Ignore"
+msgstr "忽略"
+
+#: datetime/zone_utc_list.go:119
+#, fuzzy
+msgid "Indiana-Starke"
+msgstr "印第安纳斯塔克"
+
+#: datetime/zone_utc_list.go:131
+#, fuzzy
+msgid "Indiana/Indianapolis"
+msgstr "印第安纳波利斯"
+
+#: datetime/zone_utc_list.go:91
+#, fuzzy
+msgid "Indiana/Knox"
+msgstr "印第安纳波利斯"
+
+#: datetime/zone_utc_list.go:132
+#, fuzzy
+msgid "Indiana/Marengo"
+msgstr "印第安纳斯塔克"
+
+#: datetime/zone_utc_list.go:133
+#, fuzzy
+msgid "Indiana/Petersburg"
+msgstr "圣彼得堡"
+
+#: datetime/zone_utc_list.go:92
+#, fuzzy
+msgid "Indiana/Tell City"
+msgstr "特尔城"
+
+#: datetime/zone_utc_list.go:93
+#, fuzzy
+msgid "Indiana/Valparaiso"
+msgstr "印第安纳波利斯"
+
+#: datetime/zone_utc_list.go:134
+msgid "Indiana/Vevay"
+msgstr ""
+
+#: datetime/zone_utc_list.go:135
+#, fuzzy
+msgid "Indiana/Vincennes"
+msgstr "文森斯"
+
+#: datetime/zone_utc_list.go:136
+#, fuzzy
+msgid "Indiana/Winamac"
+msgstr "威纳马克"
+
+#: datetime/zone_utc_list.go:137
+msgid "Indianapolis"
+msgstr "印第安纳波利斯"
+
+#: network/state_handler.go:81
+msgid "InfiniBand device does not support connected mode."
+msgstr "InfiniBand设备不支持此连接模式。"
+
+#: network/nm_setting_wireless.go:289
+msgid "Infrastructure"
+msgstr "基础架构"
+
+#: datetime/zone_utc_list.go:71
+msgid "Inuvik"
+msgstr "伊努维克"
+
+#: datetime/zone_utc_list.go:138
+msgid "Iqaluit"
+msgstr "伊魁特"
+
+#: datetime/zone_utc_list.go:423
+msgid "Iran"
+msgstr "伊朗"
+
+#: datetime/zone_utc_list.go:523
+msgid "Irkutsk"
+msgstr "伊尔库茨克"
+
+#: datetime/zone_utc_list.go:290
+msgid "Isle of Man"
+msgstr "马恩岛"
+
+#: datetime/zone_utc_list.go:395
+#, fuzzy
+msgid "Israel"
+msgstr "科斯雷"
+
+#: datetime/zone_utc_list.go:375
+msgid "Istanbul"
+msgstr "伊斯坦布尔"
+
+#: datetime/zone_utc_list.go:481
+msgid "Jakarta"
+msgstr "雅加达"
+
+#: datetime/zone_utc_list.go:139
+msgid "Jamaica"
+msgstr "牙买加"
+
+#: datetime/zone_utc_list.go:323
+#, fuzzy
+msgid "Jan Mayen"
+msgstr "圣马力诺"
+
+#: datetime/zone_utc_list.go:528
+msgid "Japan"
+msgstr ""
+
+#: datetime/zone_utc_list.go:524
+msgid "Jayapura"
+msgstr "查亚普拉"
+
+#: datetime/zone_utc_list.go:291
+msgid "Jersey"
+msgstr "泽西岛"
+
+#: datetime/zone_utc_list.go:376
+msgid "Jerusalem"
+msgstr "耶路撒冷"
+
+#: datetime/zone_utc_list.go:362
+msgid "Johannesburg"
+msgstr "约翰内斯堡"
+
+#: datetime/zone_utc_list.go:33
+msgid "Johnston"
+msgstr "约翰斯顿"
+
+#: datetime/zone_utc_list.go:404
+msgid "Juba"
+msgstr "朱巴"
+
+#: datetime/zone_utc_list.go:234
+msgid "Jujuy"
+msgstr "胡胡伊"
+
+#: datetime/zone_utc_list.go:42
+msgid "Juneau"
+msgstr "朱诺"
+
+#: datetime/zone_utc_list.go:439
+msgid "Kabul"
+msgstr "喀布尔"
+
+#: datetime/zone_utc_list.go:416
+msgid "Kaliningrad"
+msgstr "加里宁格勒"
+
+#: datetime/zone_utc_list.go:581
+msgid "Kamchatka"
+msgstr ""
+
+#: datetime/zone_utc_list.go:405
+msgid "Kampala"
+msgstr "坎帕拉"
+
+#: datetime/zone_utc_list.go:450
+msgid "Karachi"
+msgstr "卡拉奇"
+
+#: datetime/zone_utc_list.go:497
+msgid "Kashgar"
+msgstr "喀什"
+
+#: datetime/zone_utc_list.go:461
+msgid "Kathmandu"
+msgstr "加德满都"
+
+#: datetime/zone_utc_list.go:462
+#, fuzzy
+msgid "Katmandu"
+msgstr "加德满都"
+
+#: datetime/zone_utc_list.go:140
+#, fuzzy
+msgid "Kentucky/Louisville"
+msgstr "路易斯维尔"
+
+#: datetime/zone_utc_list.go:141
+#, fuzzy
+msgid "Kentucky/Monticello"
+msgstr "蒙蒂塞洛"
+
+#: datetime/zone_utc_list.go:454
+msgid "Kerguelen"
+msgstr "凯尔盖朗"
+
+#: datetime/zone_utc_list.go:540
+msgid "Khandyga"
+msgstr ""
+
+#: datetime/zone_utc_list.go:406
+msgid "Khartoum"
+msgstr "喀土穆"
+
+#: datetime/zone_utc_list.go:385
+msgid "Kiev"
+msgstr "基辅"
+
+#: datetime/zone_utc_list.go:363
+msgid "Kigali"
+msgstr "基加利"
+
+#: datetime/zone_utc_list.go:312
+msgid "Kinshasa"
+msgstr "金沙萨"
+
+#: datetime/zone_utc_list.go:441
+msgid "Kiritimati"
+msgstr ""
+
+#: datetime/zone_utc_list.go:94
+#, fuzzy
+msgid "Knox IN"
+msgstr "诺克斯"
+
+#: datetime/zone_utc_list.go:459
+msgid "Kolkata"
+msgstr ""
+
+#: datetime/zone_utc_list.go:571
+msgid "Kosrae"
+msgstr "科斯雷"
+
+#: datetime/zone_utc_list.go:182
+msgid "Kralendijk"
+msgstr "克拉伦代克"
+
+#: datetime/zone_utc_list.go:498
+msgid "Krasnoyarsk"
+msgstr ""
+
+#: datetime/zone_utc_list.go:499
+msgid "Kuala Lumpur"
+msgstr "吉隆坡"
+
+#: datetime/zone_utc_list.go:500
+msgid "Kuching"
+msgstr "古晋"
+
+#: datetime/zone_utc_list.go:413
+msgid "Kuwait"
+msgstr "科威特"
+
+#: datetime/zone_utc_list.go:588
+msgid "Kwajalein"
+msgstr "夸贾林"
+
+#: network/nm_setting_virtual_key.go:124
+msgid "L2TP"
+msgstr "L2TP"
+
+#: network/nm_setting_wireless_security.go:206
+#: network/nm_setting_802_1x.go:170
+msgid "LEAP"
+msgstr "LEAP"
+
+#: datetime/zone_utc_list.go:561
+msgid "LHI"
+msgstr ""
+
+#: datetime/zone_utc_list.go:183
+msgid "La Paz"
+msgstr "拉巴斯"
+
+#: datetime/zone_utc_list.go:313
+msgid "Lagos"
+msgstr "拉各斯"
+
+#: datetime/set_locale.go:58
+msgid "Language changed successfully and effective after logout."
+msgstr "系统语言更改成功，注销后生效。"
+
+#: datetime/datetime.go:127
+msgid "Language changing, please wait"
+msgstr "正在更改系统语言，请稍后。"
+
+#: datetime/set_locale.go:60
+msgid "Language failed to change, please try later."
+msgstr "系统语言更改失败，请稍后重试。"
+
+#: keybinding/id_desc_map.go:72
+msgid "Launcher"
+msgstr "启动器"
+
+#: datetime/zone_utc_list.go:314
+msgid "Libreville"
+msgstr "利伯维尔"
+
+#: datetime/zone_utc_list.go:396
+msgid "Libya"
+msgstr "利比亚"
+
+#: datetime/zone_utc_list.go:142
+msgid "Lima"
+msgstr "利马"
+
+#: datetime/zone_utc_list.go:547
+msgid "Lindeman"
+msgstr "林德曼"
+
+#: network/nm_setting_ip6_config.go:68 network/nm_setting_ip4_config.go:175
+msgid "Link-Local Only"
+msgstr "仅本地连接"
+
+#: datetime/zone_utc_list.go:292
+msgid "Lisbon"
+msgstr "里斯本"
+
+#: datetime/zone_utc_list.go:334
+msgid "Ljubljana"
+msgstr "卢布尔雅那"
+
+#: keybinding/id_desc_map.go:74
+msgid "Lock screen"
+msgstr "锁屏界面"
+
+#: keybinding/id_desc_map.go:87
+msgid "Logout"
+msgstr "注销"
+
+#: datetime/zone_utc_list.go:266
+msgid "Lome"
+msgstr "洛美"
+
+#: datetime/zone_utc_list.go:322
+msgid "Longyearbyen"
+msgstr "朗伊尔城"
+
+#: datetime/zone_utc_list.go:562
+msgid "Lord Howe"
+msgstr "豪勋爵"
+
+#: datetime/zone_utc_list.go:51
+msgid "Los Angeles"
+msgstr "洛杉矶"
+
+#: datetime/zone_utc_list.go:143
+msgid "Louisville"
+msgstr "路易斯维尔"
+
+#: datetime/zone_utc_list.go:184
+msgid "Lower Princes"
+msgstr "下王子"
+
+#: datetime/zone_utc_list.go:315
+msgid "Luanda"
+msgstr "罗安达"
+
+#: datetime/zone_utc_list.go:364
+msgid "Lubumbashi"
+msgstr "卢本巴希"
+
+#: datetime/zone_utc_list.go:365
+msgid "Lusaka"
+msgstr "卢萨卡"
+
+#: datetime/zone_utc_list.go:335
+msgid "Luxembourg"
+msgstr "卢森堡"
+
+#: network/nm_setting_vpn_openvpn.go:400
+msgid "MD-5"
+msgstr "MD-5"
+
+#: network/nm_setting_802_1x.go:79 network/nm_setting_802_1x.go:162
+msgid "MD5"
+msgstr "MD5"
+
+#: network/nm_setting_802_1x.go:75
+msgid "MSCHAP"
+msgstr "MSCHAP"
+
+#: network/nm_setting_802_1x.go:76
+msgid "MSCHAPV2"
+msgstr "MSCHAPV2"
+
+#: datetime/zone_utc_list.go:501
+msgid "Macao"
+msgstr "澳门"
+
+#: datetime/zone_utc_list.go:502
+#, fuzzy
+msgid "Macau"
+msgstr "澳门"
+
+#: datetime/zone_utc_list.go:235
+msgid "Maceio"
+msgstr "马塞约"
+
+#: datetime/zone_utc_list.go:565
+msgid "Macquarie"
+msgstr ""
+
+#: datetime/zone_utc_list.go:277
+msgid "Madeira"
+msgstr "马德拉"
+
+#: datetime/zone_utc_list.go:336
+msgid "Madrid"
+msgstr "马德里"
+
+#: datetime/zone_utc_list.go:582
+msgid "Magadan"
+msgstr "马加丹"
+
+#: datetime/zone_utc_list.go:434
+msgid "Mahe"
+msgstr "马埃"
+
+#: datetime/zone_utc_list.go:589
+msgid "Majuro"
+msgstr ""
+
+#: datetime/zone_utc_list.go:503
+msgid "Makassar"
+msgstr "望加锡"
+
+#: datetime/zone_utc_list.go:316
+msgid "Malabo"
+msgstr "马拉博"
+
+#: datetime/zone_utc_list.go:455
+msgid "Maldives"
+msgstr "马尔代夫"
+
+#: datetime/zone_utc_list.go:337
+msgid "Malta"
+msgstr "马耳他"
+
+#: datetime/zone_utc_list.go:95
+msgid "Managua"
+msgstr "马那瓜"
+
+#: datetime/zone_utc_list.go:185
+msgid "Manaus"
+msgstr "马瑙斯"
+
+#: datetime/zone_utc_list.go:504
+msgid "Manila"
+msgstr "马尼拉"
+
+#: network/nm_setting_ip6_config.go:69 network/nm_setting_ip4_config.go:176
+msgid "Manual"
+msgstr "手动"
+
+#: datetime/zone_utc_list.go:366
+msgid "Maputo"
+msgstr "马普托"
+
+#: datetime/zone_utc_list.go:386
+msgid "Mariehamn"
+msgstr "玛丽汉姆"
+
+#: datetime/zone_utc_list.go:186
+msgid "Marigot"
+msgstr "马里戈特"
+
+#: datetime/zone_utc_list.go:39
+msgid "Marquesas"
+msgstr "马克萨斯"
+
+#: datetime/zone_utc_list.go:187
+msgid "Martinique"
+msgstr "马提尼克"
+
+#: datetime/zone_utc_list.go:367
+msgid "Maseru"
+msgstr "马塞卢"
+
+#: datetime/zone_utc_list.go:96
+msgid "Matamoros"
+msgstr "马塔莫罗斯"
+
+#: datetime/zone_utc_list.go:435
+msgid "Mauritius"
+msgstr "毛里求斯"
+
+#: datetime/zone_utc_list.go:444
+msgid "Mawson"
+msgstr "莫森"
+
+#: keybinding/id_desc_map.go:172
+msgid "Maximize window"
+msgstr "最大化窗口"
+
+#: datetime/zone_utc_list.go:420
+msgid "Mayotte"
+msgstr ""
+
+#: datetime/zone_utc_list.go:72
+msgid "Mazatlan"
+msgstr "马萨特兰"
+
+#: datetime/zone_utc_list.go:368
+msgid "Mbabane"
+msgstr "姆巴巴内"
+
+#: datetime/zone_utc_list.go:578
+msgid "McMurdo"
+msgstr "麦克默多"
+
+#: keybinding/id_desc_map.go:132
+msgid "Media player"
+msgstr "多媒体播放器"
+
+#: datetime/zone_utc_list.go:548
+msgid "Melbourne"
+msgstr "墨尔本"
+
+#: datetime/zone_utc_list.go:236
+msgid "Mendoza"
+msgstr "门多萨"
+
+#: datetime/zone_utc_list.go:97
+msgid "Menominee"
+msgstr "梅诺米尼"
+
+#: datetime/zone_utc_list.go:98
+msgid "Merida"
+msgstr "梅里达"
+
+#: bluetooth/bluez_profile.go:41
+msgid "Message access"
+msgstr "消息访问"
+
+#: bluetooth/bluez_profile.go:42
+msgid "Message notification"
+msgstr "消息通知"
+
+#: datetime/zone_utc_list.go:52
+msgid "Metlakatla"
+msgstr "梅特拉卡特拉"
+
+#: datetime/zone_utc_list.go:99
+msgid "Mexico City"
+msgstr "墨西哥城"
+
+#: datetime/zone_utc_list.go:161
+msgid "Michigan"
+msgstr "密歇根"
+
+#: datetime/zone_utc_list.go:24
+msgid "Midway"
+msgstr ""
+
+#: keybinding/id_desc_map.go:174
+msgid "Minimize window"
+msgstr "最小化窗口"
+
+#: datetime/zone_utc_list.go:417
+msgid "Minsk"
+msgstr "明斯克"
+
+#: datetime/zone_utc_list.go:237
+msgid "Miquelon"
+msgstr "密克隆"
+
+#: network/nm_custom_type.go:147
+msgid "Mobile CDMA Connection"
+msgstr "移动CDMA连接"
+
+#: network/nm_custom_type.go:143
+msgid "Mobile Connection"
+msgstr "移动连接"
+
+#: network/nm_custom_type.go:145
+msgid "Mobile GSM Connection"
+msgstr "移动GSM连接"
+
+#: network/state_handler.go:60
+msgid "Modem initialization failed."
+msgstr "调制解调器初始化失败。"
+
+#: network/state_handler.go:84
+msgid "ModemManager was not running or quitted unexpectedly."
+msgstr "ModemManager未运行或异常退出。"
+
+#: datetime/zone_utc_list.go:407
+msgid "Mogadishu"
+msgstr "摩加迪沙"
+
+#: datetime/zone_utc_list.go:338
+msgid "Monaco"
+msgstr "摩纳哥"
+
+#: datetime/zone_utc_list.go:188
+msgid "Moncton"
+msgstr "蒙克顿"
+
+#: datetime/zone_utc_list.go:267
+msgid "Monrovia"
+msgstr "蒙罗维亚"
+
+#: datetime/zone_utc_list.go:100
+msgid "Monterrey"
+msgstr "蒙特雷"
+
+#: datetime/zone_utc_list.go:238
+msgid "Montevideo"
+msgstr "蒙得维的亚"
+
+#: datetime/zone_utc_list.go:144
+msgid "Montreal"
+msgstr "蒙特利尔"
+
+#: datetime/zone_utc_list.go:189
+msgid "Montserrat"
+msgstr "蒙特塞拉特"
+
+#: datetime/zone_utc_list.go:430
+msgid "Moscow"
+msgstr "莫斯科"
+
+#: keybinding/id_desc_map.go:236
+msgid "Move to left workspace"
+msgstr "移动到左边工作区"
+
+#: keybinding/id_desc_map.go:239
+msgid "Move to lower workspace"
+msgstr "移动到下方工作区"
+
+#: keybinding/id_desc_map.go:237
+msgid "Move to right workspace"
+msgstr "移动到右边工作区"
+
+#: keybinding/id_desc_map.go:238
+msgid "Move to upper workspace"
+msgstr "移动到上方工作区"
+
+#: keybinding/id_desc_map.go:232
+msgid "Move to workspace 1"
+msgstr "移动到工作区1"
+
+#: keybinding/id_desc_map.go:233
+msgid "Move to workspace 2"
+msgstr "移动到工作区2"
+
+#: keybinding/id_desc_map.go:234
+msgid "Move to workspace 3"
+msgstr "移动到工作区3"
+
+#: keybinding/id_desc_map.go:235
+msgid "Move to workspace 4"
+msgstr "移动到工作区4"
+
+#: keybinding/id_desc_map.go:175
+msgid "Move window"
+msgstr "移动窗口"
+
+#: datetime/zone_utc_list.go:427
+msgid "Muscat"
+msgstr "马斯喀特"
+
+#: keybinding/id_desc_map.go:136
+msgid "Mute"
+msgstr "静音"
+
+#: network/nm_setting_vpn_vpnc.go:259
+msgid "NAT-T Always"
+msgstr "NAT-T总是"
+
+#: network/nm_setting_vpn_vpnc.go:258
+msgid "NAT-T When Available (default)"
+msgstr "NAT-T可用时（默认）"
+
+#: datetime/zone_utc_list.go:549
+msgid "NSW"
+msgstr ""
+
+#: datetime/zone_utc_list.go:584
+msgid "NZ"
+msgstr ""
+
+#: datetime/zone_utc_list.go:595
+msgid "NZ-CHAT"
+msgstr ""
+
+#: datetime/zone_utc_list.go:408
+msgid "Nairobi"
+msgstr "内罗毕"
+
+#: datetime/zone_utc_list.go:145
+msgid "Nassau"
+msgstr "拿骚"
+
+#: datetime/zone_utc_list.go:590
+msgid "Nauru"
+msgstr "诺鲁"
+
+#: datetime/zone_utc_list.go:80
+msgid "Navajo"
+msgstr "纳瓦霍"
+
+#: datetime/zone_utc_list.go:317
+msgid "Ndjamena"
+msgstr "恩贾梅纳"
+
+#: network/state_handler.go:67
+msgid "Necessary firmware for the device may be missed."
+msgstr "设备必要固件可能丢失了。"
+
+#: network/state_handler.go:95
+msgid "Necessary password for the VPN connection was not provided."
+msgstr "未提供VPN连接所需的密码。"
+
+#: network/nm_setting_vpn_vpnc.go:254
+msgid "Netscreen"
+msgstr "网屏"
+
+#: network/state_handler.go:64
+msgid "Network registration timed out."
+msgstr "网络注册超时。"
+
+#: network/state_handler.go:63
+msgid "Network registration was denied."
+msgstr "网络注册被拒绝。"
+
+#: network/state_handler.go:69
+msgid "NetworkManager went to sleep."
+msgstr "NetworkManager进入待机状态。"
+
+#: datetime/zone_utc_list.go:146
+msgid "New York"
+msgstr "纽约"
+
+#: datetime/zone_utc_list.go:210
+msgid "Newfoundland"
+msgstr "纽芬兰"
+
+#: keybinding/id_desc_map.go:140
+msgid "Next"
+msgstr "下一个"
+
+#: datetime/zone_utc_list.go:318
+msgid "Niamey"
+msgstr "尼亚美"
+
+#: datetime/zone_utc_list.go:377
+msgid "Nicosia"
+msgstr "尼科西亚"
+
+#: datetime/zone_utc_list.go:147
+msgid "Nipigon"
+msgstr "尼皮贡"
+
+#: datetime/zone_utc_list.go:25
+msgid "Niue"
+msgstr "纽埃"
+
+#: network/state_handler.go:62
+msgid "No networks searched."
+msgstr "未找到网络。"
+
+#: datetime/zone_utc_list.go:43
+msgid "Nome"
+msgstr "诺姆"
+
+#: network/nm_setting_virtual_key.go:141 network/nm_setting_virtual_key.go:148
+#: network/nm_setting_virtual_key.go:178 network/nm_setting_vpn_openvpn.go:398
+#: network/nm_setting_vpn_vpnc.go:272
+msgid "None"
+msgstr "无"
+
+#: datetime/zone_utc_list.go:576
+msgid "Norfolk"
+msgstr "诺福克"
+
+#: datetime/zone_utc_list.go:535
+msgid "North"
+msgstr ""
+
+#: datetime/zone_utc_list.go:101
+msgid "North Dakota/Beulah"
+msgstr ""
+
+#: datetime/zone_utc_list.go:102
+msgid "North Dakota/Center"
+msgstr ""
+
+#: datetime/zone_utc_list.go:103
+msgid "North Dakota/New Salem"
+msgstr ""
+
+#: network/nm_setting_vpn_openvpn.go:173 network/nm_setting_vpn_openvpn.go:479
+#: network/nm_setting_vpn_pptp.go:108 network/nm_constant.go:299
+#: network/nm_setting_vpn_l2tp.go:118 network/nm_setting_vpn_vpnc.go:148
+msgid "Not Required"
+msgstr "不要求"
+
+#: mime/default_media.go:72 mime/default_media.go:89
+msgid "Nothing"
+msgstr "无操作"
+
+#: datetime/zone_utc_list.go:268
+msgid "Nouakchott"
+msgstr "努瓦克肖特"
+
+#: datetime/zone_utc_list.go:572
+#, fuzzy
+msgid "Noumea"
+msgstr "努美阿"
+
+#: datetime/zone_utc_list.go:482
+msgid "Novokuznetsk"
+msgstr "新库兹涅茨克"
+
+#: datetime/zone_utc_list.go:483
+msgid "Novosibirsk"
+msgstr "新西伯利亚"
+
+#: network/nm_setting_802_1x.go:78
+msgid "OTP"
+msgstr "OTP"
+
+#: bluetooth/bluez_profile.go:36
+msgid "Object push"
+msgstr "对象交换"
+
+#: network/state_handler.go:209
+msgid "Offline"
+msgstr "离线"
+
+#: datetime/zone_utc_list.go:73
+msgid "Ojinaga"
+msgstr "奥希纳加"
+
+#: datetime/zone_utc_list.go:484
+msgid "Omsk"
+msgstr "鄂木斯克"
+
+# 此处Open为加密方式
+# NM_SETTING_WIRELESS_SECURITY_AUTH_ALG: open/shared/leap
+#: network/nm_setting_wireless_security.go:204
+msgid "Open"
+msgstr "Open"
+
+#: mime/default_media.go:75 mime/default_media.go:90
+msgid "Open Folder"
+msgstr "打开文件夹"
+
+#: network/nm_setting_virtual_key.go:126
+msgid "OpenConnect"
+msgstr "OpenConnect"
+
+#: network/nm_setting_virtual_key.go:127
+msgid "OpenVPN"
+msgstr "OpenVPN"
+
+#: datetime/zone_utc_list.go:451
+msgid "Oral"
+msgstr "乌拉尔"
+
+#: datetime/zone_utc_list.go:339
+msgid "Oslo"
+msgstr "奥斯陆"
+
+#: datetime/zone_utc_list.go:269
+msgid "Ouagadougou"
+msgstr "瓦加杜古"
+
+#: network/nm_setting_802_1x.go:73
+msgid "PAP"
+msgstr "PAP"
+
+#: network/state_handler.go:66
+msgid "PIN check failed."
+msgstr "PIN码检查失败。"
+
+#: network/nm_custom_type.go:141
+msgid "PPPoE Connection"
+msgstr "PPPoE连接"
+
+#: network/nm_setting_virtual_key.go:125
+msgid "PPTP"
+msgstr "PPTP"
+
+#: datetime/zone_utc_list.go:516
+msgid "PRC"
+msgstr "PRC"
+
+#: datetime/zone_utc_list.go:26
+#, fuzzy
+msgid "Pago Pago"
+msgstr "圣保罗"
+
+#: datetime/zone_utc_list.go:529
+msgid "Palau"
+msgstr "帕劳"
+
+#: datetime/zone_utc_list.go:203
+msgid "Palmer"
+msgstr "帕尔默"
+
+#: datetime/zone_utc_list.go:148
+msgid "Panama"
+msgstr "巴拿马"
+
+#: datetime/zone_utc_list.go:149
+msgid "Pangnirtung"
+msgstr ""
+
+#: datetime/zone_utc_list.go:239
+msgid "Paramaribo"
+msgstr "帕拉马里博"
+
+#: datetime/zone_utc_list.go:340
+msgid "Paris"
+msgstr "巴黎"
+
+#: network/nm_setting_vpn_openvpn.go:252
+msgid "Password"
+msgstr "密码"
+
+#: network/nm_setting_vpn_openvpn.go:253
+msgid "Password with Certificates (TLS)"
+msgstr "证书密码（TLS）"
+
+#: network/state_handler.go:39
 msgid "Passwords were required but not provided."
 msgstr "需要密码，但未提供。"
 
-#: ../../network/state_handler.go:40
+#: keybinding/id_desc_map.go:134
+msgid "Pause"
+msgstr "暂停播放"
+
+#: datetime/zone_utc_list.go:513
+msgid "Perth"
+msgstr "珀斯"
+
+#: datetime/zone_utc_list.go:485
+msgid "Phnom Penh"
+msgstr "金边"
+
+#: datetime/zone_utc_list.go:74
+msgid "Phoenix"
+msgstr "凤凰"
+
+#: bluetooth/bluez_profile.go:39
+msgid "Phone book access"
+msgstr "电话簿访问"
+
+#: bluetooth/bluez_profile.go:40
+msgid "Phone book access client"
+msgstr "电话簿访问客户端"
+
+#: datetime/zone_utc_list.go:60
+msgid "Pitcairn"
+msgstr "皮特凯恩"
+
+#: keybinding/id_desc_map.go:133
+msgid "Play/Pause"
+msgstr "播放/暂停"
+
+#: datetime/zone_utc_list.go:341
+msgid "Podgorica"
+msgstr "波德戈里察"
+
+#: datetime/zone_utc_list.go:573
+msgid "Pohnpei"
+msgstr ""
+
+#: datetime/zone_utc_list.go:355
+#, fuzzy
+msgid "Poland"
+msgstr "冰岛"
+
+#: datetime/zone_utc_list.go:574
+msgid "Ponape"
+msgstr "波纳佩"
+
+#: datetime/zone_utc_list.go:486
+msgid "Pontianak"
+msgstr "坤甸"
+
+#: datetime/zone_utc_list.go:556
+msgid "Port Moresby"
+msgstr "莫尔兹比港"
+
+#: datetime/zone_utc_list.go:190
+msgid "Port of Spain"
+msgstr "西班牙港"
+
+#: datetime/zone_utc_list.go:150
+#, fuzzy
+msgid "Port-au-Prince"
+msgstr "太子港"
+
+#: datetime/zone_utc_list.go:151
+msgid "Porto Acre"
+msgstr "阿克雷港"
+
+#: datetime/zone_utc_list.go:191
+msgid "Porto Velho"
+msgstr "韦柳港"
+
+#: datetime/zone_utc_list.go:319
+#, fuzzy
+msgid "Porto-Novo"
+msgstr "波多诺伏"
+
+#: datetime/zone_utc_list.go:301
+msgid "Portugal"
+msgstr "葡萄牙"
+
+#: datetime/zone_utc_list.go:342
+msgid "Prague"
+msgstr "布拉格"
+
+#: network/nm_setting_gsm.go:137
+msgid "Prefer 2G (GPRS/EDGE)"
+msgstr "首选2G（GPRS / EDGE）"
+
+#: network/nm_setting_gsm.go:136
+msgid "Prefer 3G (UMTS/HSPA)"
+msgstr "首选3G（UMTS / HSPA）"
+
+#: network/nm_setting_gsm.go:138
+msgid "Prefer 4G (LTE)"
+msgstr "首选4G（LTE）"
+
+#: keybinding/id_desc_map.go:139
+msgid "Previous"
+msgstr "上一个"
+
+#: network/state_handler.go:83
+msgid "Problem with the RFC 2684 Ethernet over ADSL bridge."
+msgstr "RFC 2684以太网桥接到ADSL上错误。"
+
+#: network/nm_setting_802_1x.go:165 network/nm_setting_802_1x.go:173
+msgid "Protected EAP"
+msgstr "受保护的EAP"
+
+#: datetime/zone_utc_list.go:192
+msgid "Puerto Rico"
+msgstr "波多黎各"
+
+#: datetime/zone_utc_list.go:525
+msgid "Pyongyang"
+msgstr "平壤"
+
+#: datetime/zone_utc_list.go:414
+msgid "Qatar"
+msgstr "卡塔尔"
+
+#: datetime/zone_utc_list.go:550
+msgid "Queensland"
+msgstr "昆士兰"
+
+#: datetime/zone_utc_list.go:469
+msgid "Qyzylorda"
+msgstr "克孜勒奥尔达"
+
+#: network/nm_setting_vpn_openvpn.go:384
+msgid "RC2-40-CBC"
+msgstr "RC2-40-CBC"
+
+#: network/nm_setting_vpn_openvpn.go:386
+msgid "RC2-64-CBC"
+msgstr "RC2-64-CBC"
+
+#: network/nm_setting_vpn_openvpn.go:379
+msgid "RC2-CBC"
+msgstr "RC2-CBC"
+
+#: network/nm_setting_vpn_openvpn.go:406
+msgid "RIPEMD-160"
+msgstr "RIPEMD-160"
+
+#: datetime/zone_utc_list.go:517
+#, fuzzy
+msgid "ROC"
+msgstr "ROK"
+
+#: datetime/zone_utc_list.go:530
+msgid "ROK"
+msgstr "ROK"
+
+#: network/nm_setting_vpn_openvpn.go:399
+msgid "RSA MD-4"
+msgstr "RSA MD-4"
+
+#: datetime/zone_utc_list.go:104
+msgid "Rainy River"
+msgstr "瑞尼河区"
+
+#: datetime/zone_utc_list.go:475
+msgid "Rangoon"
+msgstr "仰光"
+
+#: datetime/zone_utc_list.go:105
+msgid "Rankin Inlet"
+msgstr ""
+
+#: datetime/zone_utc_list.go:34
+msgid "Rarotonga"
+msgstr "拉罗汤加岛"
+
+#: datetime/zone_utc_list.go:240
+msgid "Recife"
+msgstr "累西腓"
+
+#: datetime/zone_utc_list.go:106
+msgid "Regina"
+msgstr "里贾纳"
+
+#: network/state_handler.go:65
+msgid "Register to the requested GSM network failed."
+msgstr "注册GSM网络失败。"
+
+#: keybinding/id_desc_map.go:176
+msgid "Resize window"
+msgstr "改变窗口大小"
+
+#: datetime/zone_utc_list.go:107
+msgid "Resolute"
+msgstr "雷索卢特"
+
+#: keybinding/id_desc_map.go:173
+msgid "Restore window"
+msgstr "恢复窗口"
+
+#: datetime/zone_utc_list.go:436
+msgid "Reunion"
+msgstr "留尼旺岛"
+
+#: keybinding/id_desc_map.go:77
+msgid "Reverse switch applications"
+msgstr "反向切换程序"
+
+#: datetime/zone_utc_list.go:278
+msgid "Reykjavik"
+msgstr "雷克雅未克"
+
+#: datetime/zone_utc_list.go:388
+msgid "Riga"
+msgstr "里加"
+
+#: datetime/zone_utc_list.go:152
+msgid "Rio Branco"
+msgstr "里奥布朗库"
+
+#: datetime/zone_utc_list.go:415
+msgid "Riyadh"
+msgstr ""
+
+#: datetime/zone_utc_list.go:343
+msgid "Rome"
+msgstr "罗马"
+
+#: datetime/zone_utc_list.go:241
+msgid "Rosario"
+msgstr "罗萨里奥"
+
+#: mime/default_media.go:79
+msgid "Run Soft"
+msgstr "运行软件"
+
+#: network/nm_setting_vpn_openvpn.go:393
+msgid "SEED-CBC"
+msgstr "SEED-CBC"
+
+#: network/nm_setting_vpn_openvpn.go:401
+msgid "SHA-1"
+msgstr "SHA-1"
+
+#: network/nm_setting_vpn_openvpn.go:402
+msgid "SHA-224"
+msgstr "SHA-224"
+
+#: network/nm_setting_vpn_openvpn.go:403
+msgid "SHA-256"
+msgstr "SHA-256"
+
+#: network/nm_setting_vpn_openvpn.go:404
+msgid "SHA-384"
+msgstr "SHA-384"
+
+#: network/nm_setting_vpn_openvpn.go:405
+msgid "SHA-512"
+msgstr "SHA-512"
+
+#: network/nm_setting_vpn_openvpn.go:481
+msgid "SOCKS"
+msgstr "SOCKS"
+
+#: datetime/zone_utc_list.go:487
+msgid "Saigon"
+msgstr "西贡"
+
+#: datetime/zone_utc_list.go:557
+msgid "Saipan"
+msgstr "塞班岛"
+
+#: datetime/zone_utc_list.go:566
+msgid "Sakhalin"
+msgstr "库页岛"
+
+#: datetime/zone_utc_list.go:431
+msgid "Samara"
+msgstr "萨马拉"
+
+#: datetime/zone_utc_list.go:452
+msgid "Samarkand"
+msgstr "撒马尔罕"
+
+#: datetime/zone_utc_list.go:344
+msgid "San Marino"
+msgstr "圣马力诺"
+
+#: datetime/zone_utc_list.go:53
+msgid "Santa Isabel"
+msgstr "圣伊莎贝尔"
+
+#: datetime/zone_utc_list.go:242
+msgid "Santarem"
+msgstr "圣塔伦"
+
+#: datetime/zone_utc_list.go:193
+msgid "Santiago"
+msgstr "圣地亚哥"
+
+#: datetime/zone_utc_list.go:194
+msgid "Santo Domingo"
+msgstr "圣多明各"
+
+#: datetime/zone_utc_list.go:243
+msgid "Sao Paulo"
+msgstr "圣保罗"
+
+#: datetime/zone_utc_list.go:270
+msgid "Sao Tome"
+msgstr "圣多美"
+
+#: datetime/zone_utc_list.go:345
+msgid "Sarajevo"
+msgstr "萨拉热窝"
+
+#: datetime/zone_utc_list.go:113
+msgid "Saskatchewan"
+msgstr "萨斯喀彻温"
+
+#: network/nm_setting_vpn_openvpn.go:171 network/nm_setting_vpn_pptp.go:106
+#: network/nm_constant.go:296 network/nm_setting_vpn_l2tp.go:116
+#: network/nm_setting_vpn_vpnc.go:145
+msgid "Saved"
+msgstr "已保存的"
+
+#: datetime/zone_utc_list.go:252
+msgid "Scoresbysund"
+msgstr ""
+
+#: keybinding/id_desc_map.go:81
+msgid "Screenshot"
+msgstr "屏幕截图"
+
+#: network/nm_setting_virtual_key.go:176
+msgid "Secure (default)"
+msgstr "安全（默认）"
+
+#: datetime/zone_utc_list.go:526
+msgid "Seoul"
+msgstr "首尔"
+
+#: bluetooth/bluez_profile.go:31
+msgid "Serial port"
+msgstr "串行端口"
+
+#: network/nm_setting_vpn_openvpn.go:430
+msgid "Server"
+msgstr "服务器"
+
+#: network/nm_setting_vpn_vpnc.go:271
+msgid "Server (default)"
+msgstr "服务器（默认）"
+
+#: datetime/zone_utc_list.go:505
+msgid "Shanghai"
+msgstr "上海"
+
+#: network/nm_setting_wireless_security.go:205
+#: network/nm_setting_ip6_config.go:70 network/nm_setting_ip4_config.go:177
+msgid "Shared"
+msgstr "共享"
+
+#: datetime/zone_utc_list.go:75
+msgid "Shiprock"
+msgstr "希普罗克"
+
+#: keybinding/id_desc_map.go:73
+msgid "Show desktop"
+msgstr "显示桌面"
+
+#: keybinding/id_desc_map.go:80
+msgid "Show/Hide the dock"
+msgstr "显示/隐藏任务栏"
+
+#: datetime/zone_utc_list.go:432
+msgid "Simferopol"
+msgstr "辛菲罗波尔"
+
+#: datetime/zone_utc_list.go:507
+msgid "Singapore"
+msgstr "新加坡城"
+
+#: datetime/zone_utc_list.go:44
+msgid "Sitka"
+msgstr "锡特卡"
+
+#: datetime/zone_utc_list.go:346
+msgid "Skopje"
+msgstr "斯科普里"
+
+#: datetime/zone_utc_list.go:389
+msgid "Sofia"
+msgstr "索菲亚"
+
+#: datetime/zone_utc_list.go:536
+#, fuzzy
+msgid "South"
+msgstr "南极"
+
+#: datetime/zone_utc_list.go:249
+msgid "South Georgia"
+msgstr "南乔治亚"
+
+#: datetime/zone_utc_list.go:579
+msgid "South Pole"
+msgstr "南极"
+
+#: datetime/zone_utc_list.go:195
+msgid "St Barthelemy"
+msgstr "圣巴夫林米"
+
+#: datetime/zone_utc_list.go:279
+msgid "St Helena"
+msgstr "圣赫勒拿岛"
+
+#: datetime/zone_utc_list.go:209
+msgid "St Johns"
+msgstr "圣琼斯"
+
+#: datetime/zone_utc_list.go:196
+msgid "St Kitts"
+msgstr ""
+
+#: datetime/zone_utc_list.go:197
+msgid "St Lucia"
+msgstr "圣露西亚"
+
+#: datetime/zone_utc_list.go:198
+msgid "St Thomas"
+msgstr "圣托马斯"
+
+#: datetime/zone_utc_list.go:199
+msgid "St Vincent"
+msgstr "圣文森特"
+
+#: datetime/zone_utc_list.go:245
+msgid "Stanley"
+msgstr "斯坦利"
+
+#: network/nm_setting_vpn_openvpn.go:254
+msgid "Static Key"
+msgstr "静态密钥"
+
+#: datetime/zone_utc_list.go:347
+msgid "Stockholm"
+msgstr "斯德哥尔摩"
+
+#: keybinding/id_desc_map.go:135
+msgid "Stop"
+msgstr "停止播放"
+
+#: datetime/zone_utc_list.go:108
+msgid "Swift Current"
+msgstr "斯威夫特卡伦特"
+
+#: keybinding/id_desc_map.go:76
+msgid "Switch applications"
+msgstr "切换程序"
+
+#: keybinding/id_desc_map.go:177
+msgid "Switch furl state"
+msgstr "切换卷起状态"
+
+#: keybinding/id_desc_map.go:228
+msgid "Switch to left workspace"
+msgstr "切换到左边工作区"
+
+#: keybinding/id_desc_map.go:231
+msgid "Switch to lower workspace"
+msgstr "切换到下方工作区"
+
+#: keybinding/id_desc_map.go:229
+msgid "Switch to right workspace"
+msgstr "切换到右边工作区"
+
+#: keybinding/id_desc_map.go:230
+msgid "Switch to upper workspace"
+msgstr "切换到上方工作区"
+
+#: keybinding/id_desc_map.go:224
+msgid "Switch to workspace 1"
+msgstr "切换到工作区1"
+
+#: keybinding/id_desc_map.go:225
+msgid "Switch to workspace 2"
+msgstr "切换到工作区2"
+
+#: keybinding/id_desc_map.go:226
+msgid "Switch to workspace 3"
+msgstr "切换到工作区3"
+
+#: keybinding/id_desc_map.go:227
+msgid "Switch to workspace 4"
+msgstr "切换到工作区4"
+
+#: datetime/zone_utc_list.go:551
+msgid "Sydney"
+msgstr ""
+
+#: bluetooth/bluez_profile.go:38
+msgid "Synchronization"
+msgstr "同步"
+
+#: datetime/zone_utc_list.go:409
+msgid "Syowa"
+msgstr ""
+
+#: network/nm_setting_wireless_security.go:199
+msgid "TKIP"
+msgstr "TKIP"
+
+#: network/nm_setting_802_1x.go:80 network/nm_setting_802_1x.go:161
+#: network/nm_setting_802_1x.go:169
+msgid "TLS"
+msgstr "TLS"
+
+#: datetime/zone_utc_list.go:35
+msgid "Tahiti"
+msgstr "大溪地"
+
+#: datetime/zone_utc_list.go:508
+msgid "Taipei"
+msgstr "台北"
+
+#: datetime/zone_utc_list.go:390
+msgid "Tallinn"
+msgstr "塔林"
+
+#: datetime/zone_utc_list.go:591
+msgid "Tarawa"
+msgstr "塔拉瓦"
+
+#: datetime/zone_utc_list.go:453
+msgid "Tashkent"
+msgstr "塔什干"
+
+#: datetime/zone_utc_list.go:552
+msgid "Tasmania"
+msgstr "塔斯马尼亚"
+
+#: datetime/zone_utc_list.go:428
+msgid "Tbilisi"
+msgstr "第比利斯"
+
+#: datetime/zone_utc_list.go:109
+msgid "Tegucigalpa"
+msgstr "特古西加尔巴"
+
+#: datetime/zone_utc_list.go:422
+msgid "Tehran"
+msgstr "德黑兰"
+
+#: datetime/zone_utc_list.go:378
+msgid "Tel Aviv"
+msgstr ""
+
+#: keybinding/id_desc_map.go:85
+msgid "Terminal"
+msgstr "终端"
+
+#: keybinding/id_desc_map.go:86
+msgid "Terminal Quake Window"
+msgstr "终端雷神模式"
+
+#: network/state_handler.go:85
+msgid "The 802.11 Wi-Fi network could not be found."
+msgstr "802.11 Wi-Fi网络无法找到。"
+
+#: network/state_handler.go:42
+msgid "The 802.1X supplicant quitted or failed unexpectedly."
+msgstr "802.1X客户端异常退出或失败。"
+
+#: network/state_handler.go:43
+msgid "The 802.1X supplicant took too long time to authenticate."
+msgstr "802.1X客户端验证时间过长。"
+
+#: network/state_handler.go:40
 msgid ""
 "The 802.1X supplication disconnected from the access point or authentication "
 "server."
 msgstr "802.1X客户端从接入点或认证服务器断开连接。"
 
-#: ../../network/state_handler.go:41
-msgid "Configuration of the 802.1X supplication failed."
-msgstr "802.1X客户端配置失败。"
-
-#: ../../network/state_handler.go:42
-msgid "The 802.1X supplicant quitted or failed unexpectedly."
-msgstr "802.1X客户端异常退出或失败。"
-
-#: ../../network/state_handler.go:43
-msgid "The 802.1X supplicant took too long time to authenticate."
-msgstr "802.1X客户端验证时间过长。"
-
-#: ../../network/state_handler.go:44
-msgid "The PPP service failed to start within the allowed time."
-msgstr "PPP服务无法在限定时间内启动。"
-
-#: ../../network/state_handler.go:45
-msgid "The PPP service disconnected unexpectedly."
-msgstr "PPP服务异常中断。"
-
-#: ../../network/state_handler.go:46
-msgid "The PPP service quitted or failed unexpectedly."
-msgstr "PPP服务异常退出或失败。"
-
-#: ../../network/state_handler.go:47
-msgid "The DHCP service failed to start within the allowed time."
-msgstr "DHCP服务无法在限定时间内启动。"
-
-#: ../../network/state_handler.go:48
-msgid "The DHCP service reported an unexpected error."
-msgstr "DHCP服务报告了一个异常错误。"
-
-#: ../../network/state_handler.go:49
-msgid "The DHCP service quitted or failed unexpectedly."
-msgstr "DHCP服务异常退出或失败。"
-
-#: ../../network/state_handler.go:50
-msgid "The shared connection service failed to start."
-msgstr "共享连接服务启动失败。"
-
-#: ../../network/state_handler.go:51
-msgid "The shared connection service quitted or failed unexpectedly."
-msgstr "共享连接服务异常退出或失败。"
-
-#: ../../network/state_handler.go:52
-msgid "The AutoIP service failed to start."
-msgstr "自动IP服务启动失败。"
-
-#: ../../network/state_handler.go:53
-msgid "The AutoIP service reported an unexpected error."
-msgstr "自动IP服务报告了一个异常错误。"
-
-#: ../../network/state_handler.go:54
-msgid "The AutoIP service quitted or failed unexpectedly."
-msgstr "自动IP服务异常退出或失败。"
-
-#: ../../network/state_handler.go:55
-msgid "Dialing failed due to busy lines."
-msgstr "线路繁忙致使拨号失败。"
-
-#: ../../network/state_handler.go:56
-msgid "Dialing failed due to no dial tone."
-msgstr "无拨号音致使拨号失败。"
-
-#: ../../network/state_handler.go:57
-msgid "Dialing failed due to the carrier."
-msgstr "载体故障致使拨号失败。"
-
-#: ../../network/state_handler.go:58
-msgid "Dialing timed out."
-msgstr "拨号超时。"
-
-#: ../../network/state_handler.go:59
-msgid "Dialing failed."
-msgstr "拨号失败。"
-
-#: ../../network/state_handler.go:60
-msgid "Modem initialization failed."
-msgstr "调制解调器初始化失败。"
-
-#: ../../network/state_handler.go:61
-msgid "Failed to select the specified GSM APN."
-msgstr "无法选择指定的GSM APN。"
-
-#: ../../network/state_handler.go:62
-msgid "No networks searched."
-msgstr "未找到网络。"
-
-#: ../../network/state_handler.go:63
-msgid "Network registration was denied."
-msgstr "网络注册被拒绝。"
-
-#: ../../network/state_handler.go:64
-msgid "Network registration timed out."
-msgstr "网络注册超时。"
-
-#: ../../network/state_handler.go:65
-msgid "Register to the requested GSM network failed."
-msgstr "注册GSM网络失败。"
-
-#: ../../network/state_handler.go:66
-msgid "PIN check failed."
-msgstr "PIN码检查失败。"
-
-#: ../../network/state_handler.go:67
-msgid "Necessary firmware for the device may be missed."
-msgstr "设备必要固件可能丢失了。"
-
-#: ../../network/state_handler.go:68
-msgid "The device was removed."
-msgstr "该设备已被删除。"
-
-#: ../../network/state_handler.go:69
-msgid "NetworkManager went to sleep."
-msgstr "NetworkManager进入待机状态。"
-
-#: ../../network/state_handler.go:70
-msgid "The device's active connection was removed or disappeared."
-msgstr "设备当前连接被删除或消失。"
-
-#: ../../network/state_handler.go:71
-msgid "A user or client requested to disconnect."
-msgstr "用户或客户端请求断开连接。"
-
-#: ../../network/state_handler.go:72
-msgid "The device's carrier/link changed."
-msgstr "设备载体/链接更改。"
-
-#: ../../network/state_handler.go:73
-msgid "The device's existing connection was assumed."
-msgstr "假定该设备的现有连接。"
-
-#: ../../network/state_handler.go:74
+#: network/state_handler.go:74
 msgid "The 802.1x supplication is now available."
 msgstr "802.1x客户端现在可用"
 
-#: ../../network/state_handler.go:75
-msgid "The modem could not be found."
-msgstr "未找到调制解调器。"
+#: network/state_handler.go:52
+msgid "The AutoIP service failed to start."
+msgstr "自动IP服务启动失败。"
 
-#: ../../network/state_handler.go:76
+#: network/state_handler.go:54
+msgid "The AutoIP service quitted or failed unexpectedly."
+msgstr "自动IP服务异常退出或失败。"
+
+#: network/state_handler.go:53
+msgid "The AutoIP service reported an unexpected error."
+msgstr "自动IP服务报告了一个异常错误。"
+
+#: network/state_handler.go:76
 msgid "The Bluetooth connection timed out or failed."
 msgstr "蓝牙连接超时或失败。"
 
-#: ../../network/state_handler.go:77
-msgid "GSM Modem's SIM Card not inserted."
-msgstr "未插入GSM调制解调器的SIM卡。"
+#: network/state_handler.go:47
+msgid "The DHCP service failed to start within the allowed time."
+msgstr "DHCP服务无法在限定时间内启动。"
 
-#: ../../network/state_handler.go:78
-msgid "GSM Modem's SIM PIN required."
-msgstr "需要GSM调制解调器的SIM卡PIN码。"
+#: network/state_handler.go:49
+msgid "The DHCP service quitted or failed unexpectedly."
+msgstr "DHCP服务异常退出或失败。"
 
-#: ../../network/state_handler.go:79
-msgid "GSM Modem's SIM PUK required."
-msgstr "需要GSM调制解调器SIM卡PUK码。"
+#: network/state_handler.go:48
+msgid "The DHCP service reported an unexpected error."
+msgstr "DHCP服务报告了一个异常错误。"
 
-#: ../../network/state_handler.go:80
-msgid "Wrong GSM Modem's SIM"
-msgstr "GSM调制解调器SIM卡错误 "
-
-#: ../../network/state_handler.go:81
-msgid "InfiniBand device does not support connected mode."
-msgstr "InfiniBand设备不支持此连接模式。"
-
-#: ../../network/state_handler.go:82
-msgid "A connection dependency failed."
-msgstr "连接依赖失败。"
-
-#: ../../network/state_handler.go:83
-msgid "Problem with the RFC 2684 Ethernet over ADSL bridge."
-msgstr "RFC 2684以太网桥接到ADSL上错误。"
-
-#: ../../network/state_handler.go:84
-msgid "ModemManager was not running or quitted unexpectedly."
-msgstr "ModemManager未运行或异常退出。"
-
-#: ../../network/state_handler.go:85
-msgid "The 802.11 Wi-Fi network could not be found."
-msgstr "802.11 Wi-Fi网络无法找到。"
-
-#: ../../network/state_handler.go:86
-msgid "A secondary connection of the base connection failed."
-msgstr "底座连接的二次连接失败。"
-
-#: ../../network/state_handler.go:88
-msgid "The VPN connection changed state due to disconnection from users."
-msgstr "用户断开致使VPN连接状态改变。"
-
-#: ../../network/state_handler.go:89
-msgid "The VPN connection changed state due to disconnection from devices."
-msgstr "用户断开致使VPN连接状态改变。"
-
-#: ../../network/state_handler.go:90
-msgid "VPN service stopped."
-msgstr "VPN服务已停止。"
-
-#: ../../network/state_handler.go:91
+#: network/state_handler.go:91
 msgid "The IP config of VPN connection was invalid."
 msgstr "VPN连接的IP配置无效。"
 
-#: ../../network/state_handler.go:92
-msgid "The connection attempt to VPN service timed out."
-msgstr "VPN服务连接尝试超时。"
+#: network/state_handler.go:38
+msgid "The IP configuration is no longer valid."
+msgstr "IP配置不再有效。"
 
-#: ../../network/state_handler.go:93
-msgid "The VPN service start timed out."
-msgstr "VPN服务启动超时。"
+#: network/state_handler.go:45
+msgid "The PPP service disconnected unexpectedly."
+msgstr "PPP服务异常中断。"
 
-#: ../../network/state_handler.go:94
+#: network/state_handler.go:44
+msgid "The PPP service failed to start within the allowed time."
+msgstr "PPP服务无法在限定时间内启动。"
+
+#: network/state_handler.go:46
+msgid "The PPP service quitted or failed unexpectedly."
+msgstr "PPP服务异常退出或失败。"
+
+#: network/state_handler.go:89
+msgid "The VPN connection changed state due to disconnection from devices."
+msgstr "用户断开致使VPN连接状态改变。"
+
+#: network/state_handler.go:88
+msgid "The VPN connection changed state due to disconnection from users."
+msgstr "用户断开致使VPN连接状态改变。"
+
+#: network/state_handler.go:94
 msgid "The VPN service failed to start."
 msgstr "VPN服务启动失败。"
 
-#: ../../network/state_handler.go:95
-msgid "Necessary password for the VPN connection was not provided."
-msgstr "未提供VPN连接所需的密码。"
+#: network/state_handler.go:93
+msgid "The VPN service start timed out."
+msgstr "VPN服务启动超时。"
 
-#: ../../network/state_handler.go:96
-msgid "Authentication to VPN server failed."
-msgstr "验证到VPN服务器失败。"
+#: network/state_handler.go:92
+msgid "The connection attempt to VPN service timed out."
+msgstr "VPN服务连接尝试超时。"
 
-#: ../../network/state_handler.go:97
+#: network/state_handler.go:97
 msgid "The connection was deleted from settings."
 msgstr "该连接已从设置中删除。"
 
-#: ../../network/state_handler.go:155 ../../network/state_handler.go:227
-msgid "Connected"
-msgstr "已连接"
+#: network/state_handler.go:36
+msgid "The device have not been ready for configuration."
+msgstr "设备配置未就绪。"
 
-#: ../../network/state_handler.go:180 ../../network/state_handler.go:231
-#: ../../network/state_handler.go:236 ../../network/state_handler.go:241
-msgid "Disconnected"
-msgstr "断开"
+#: network/state_handler.go:35
+msgid "The device is no longer managed."
+msgstr "设备不再托管。"
 
-#: ../../network/state_handler.go:209
-msgid "Offline"
-msgstr "离线"
+#: network/state_handler.go:34
+msgid "The device is now managed."
+msgstr "设备正在托管。"
 
-#: ../../network/state_handler.go:209
-msgid "Disconnected,  you are now offline."
-msgstr "断开连接，当前已离线"
+#: network/state_handler.go:68
+msgid "The device was removed."
+msgstr "该设备已被删除。"
 
-#: ../../network/state_handler.go:241
-msgid "Access Point mode is not supported by this device."
-msgstr "此设备不支持热点模式"
+#: network/state_handler.go:70
+msgid "The device's active connection was removed or disappeared."
+msgstr "设备当前连接被删除或消失。"
 
-#: ../../power/upower.go:86 ../../power/upower.go:101
-msgid "Battery Critical Low"
-msgstr "电池电量耗尽"
+#: network/state_handler.go:72
+msgid "The device's carrier/link changed."
+msgstr "设备载体/链接更改。"
 
-#: ../../power/upower.go:86
-msgid "Computer has been in suspend mode, please plug in."
-msgstr "计算机进入待机状态，请连接电源。"
+#: network/state_handler.go:73
+msgid "The device's existing connection was assumed."
+msgstr "假定该设备的现有连接。"
 
-#: ../../power/upower.go:101
-msgid "Computer will being in suspend mode, please plug in."
-msgstr "计算机即将进入待机状态，请连接电源。"
+#: network/state_handler.go:75
+msgid "The modem could not be found."
+msgstr "未找到调制解调器。"
 
-#: ../../power/upower.go:114
-msgid "Battery Low"
-msgstr "电池电量低"
+#: network/state_handler.go:50
+msgid "The shared connection service failed to start."
+msgstr "共享连接服务启动失败。"
 
-#: ../../power/upower.go:114
-msgid "Computer will be in suspend mode, please plug in."
-msgstr "计算机将要进入待机状态，请连接电源。"
+#: network/state_handler.go:51
+msgid "The shared connection service quitted or failed unexpectedly."
+msgstr "共享连接服务异常退出或失败。"
 
-#~ msgid "Buenos Aires"
-#~ msgstr "贝伦"
+#: datetime/zone_utc_list.go:470
+msgid "Thimbu"
+msgstr "廷布"
 
-#~ msgid "Thimbu"
-#~ msgstr "廷布"
+#: datetime/zone_utc_list.go:471
+msgid "Thimphu"
+msgstr "廷布"
 
-#~ msgid "Chungking"
-#~ msgstr "重庆"
+#: datetime/zone_utc_list.go:200
+msgid "Thule"
+msgstr "图勒"
+
+#: datetime/zone_utc_list.go:153
+msgid "Thunder Bay"
+msgstr "雷湾"
+
+#: datetime/zone_utc_list.go:54
+msgid "Tijuana"
+msgstr "蒂华纳"
+
+#: datetime/zone_utc_list.go:271
+msgid "Timbuktu"
+msgstr "廷巴克图"
+
+#: datetime/zone_utc_list.go:348
+msgid "Tirane"
+msgstr "Tirane"
+
+#: datetime/zone_utc_list.go:391
+msgid "Tiraspol"
+msgstr ""
+
+#: datetime/zone_utc_list.go:527
+msgid "Tokyo"
+msgstr "东京"
+
+#: datetime/zone_utc_list.go:602
+msgid "Tongatapu"
+msgstr "汤加塔布"
+
+#: datetime/zone_utc_list.go:154
+msgid "Toronto"
+msgstr "多伦多"
+
+#: datetime/zone_utc_list.go:201
+msgid "Tortola"
+msgstr "托尔托拉"
+
+#: datetime/zone_utc_list.go:369
+msgid "Tripoli"
+msgstr "的黎波里"
+
+#: datetime/zone_utc_list.go:273
+msgid "Troll"
+msgstr ""
+
+#: datetime/zone_utc_list.go:558
+msgid "Truk"
+msgstr "特鲁克"
+
+#: datetime/zone_utc_list.go:320
+msgid "Tunis"
+msgstr "突尼斯"
+
+#: network/nm_setting_802_1x.go:164 network/nm_setting_802_1x.go:172
+msgid "Tunneled TLS"
+msgstr "隧道TLS"
+
+#: datetime/zone_utc_list.go:397
+msgid "Turkey"
+msgstr "土耳其"
+
+#: datetime/zone_utc_list.go:302
+msgid "UCT"
+msgstr "UCT"
+
+#: datetime/zone_utc_list.go:118
+#, fuzzy
+msgid "US/Central"
+msgstr "美国中部"
+
+#: datetime/zone_utc_list.go:159
+#, fuzzy
+msgid "US/Eastern"
+msgstr "美国东部"
+
+#: datetime/zone_utc_list.go:82
+#, fuzzy
+msgid "US/Mountain"
+msgstr "美国山区"
+
+#: datetime/zone_utc_list.go:61
+#, fuzzy
+msgid "US/Pacific"
+msgstr "太平洋"
+
+#: datetime/zone_utc_list.go:304
+msgid "UTC"
+msgstr "UTC"
+
+#: datetime/zone_utc_list.go:509
+msgid "Ujung Pandang"
+msgstr "乌戎潘当"
+
+#: datetime/zone_utc_list.go:510
+msgid "Ulaanbaatar"
+msgstr ""
+
+#: datetime/zone_utc_list.go:511
+msgid "Ulan Bator"
+msgstr "乌兰巴托"
+
+#: datetime/zone_utc_list.go:303
+msgid "Universal"
+msgstr "世界时"
+
+#: datetime/zone_utc_list.go:512
+msgid "Urumqi"
+msgstr "乌鲁木齐"
+
+#: network/nm_setting_gsm.go:139
+msgid "Use Only 4G (LTE)"
+msgstr "仅使用4G（LTE）"
+
+#: datetime/zone_utc_list.go:567
+msgid "Ust-Nera"
+msgstr ""
+
+#: datetime/zone_utc_list.go:392
+msgid "Uzhgorod"
+msgstr "乌日哥罗德"
+
+#: network/nm_custom_type.go:149
+msgid "VPN Connection"
+msgstr "VPN连接"
+
+#: network/nm_custom_type.go:151
+msgid "VPN L2TP"
+msgstr "VPN L2TP"
+
+#: network/nm_custom_type.go:153
+msgid "VPN OpenConnect"
+msgstr "VPN OpenConnect"
+
+#: network/nm_custom_type.go:155
+msgid "VPN OpenVPN"
+msgstr "VPN OpenVPN"
+
+#: network/nm_custom_type.go:157
+msgid "VPN PPTP"
+msgstr "VPN PPTP"
+
+#: network/nm_custom_type.go:159
+msgid "VPN VPNC"
+msgstr "VPN VPNC"
+
+#: network/state_handler.go:90
+msgid "VPN service stopped."
+msgstr "VPN服务已停止。"
+
+#: network/nm_setting_virtual_key.go:128
+msgid "VPNC"
+msgstr "VPNC"
+
+#: datetime/zone_utc_list.go:349
+msgid "Vaduz"
+msgstr "瓦杜兹"
+
+#: datetime/zone_utc_list.go:55
+msgid "Vancouver"
+msgstr "温哥华"
+
+#: datetime/zone_utc_list.go:350
+msgid "Vatican"
+msgstr "梵蒂冈"
+
+#: network/nm_setting_802_1x.go:186
+msgid "Version 0"
+msgstr "第0版"
+
+#: network/nm_setting_802_1x.go:187
+msgid "Version 1"
+msgstr "第1版"
+
+#: datetime/zone_utc_list.go:553
+msgid "Victoria"
+msgstr "维多利亚"
+
+#: datetime/zone_utc_list.go:351
+msgid "Vienna"
+msgstr "维也纳"
+
+#: datetime/zone_utc_list.go:488
+msgid "Vientiane"
+msgstr "万象"
+
+#: datetime/zone_utc_list.go:393
+msgid "Vilnius"
+msgstr "维尔纽斯"
+
+#: datetime/zone_utc_list.go:202
+msgid "Virgin"
+msgstr "维尔京"
+
+#: datetime/zone_utc_list.go:568
+msgid "Vladivostok"
+msgstr "符拉迪沃斯托克"
+
+#: datetime/zone_utc_list.go:433
+msgid "Volgograd"
+msgstr "伏尔加格勒"
+
+#: keybinding/id_desc_map.go:137
+msgid "Volume down"
+msgstr "减小音量"
+
+#: keybinding/id_desc_map.go:138
+msgid "Volume up"
+msgstr "增大音量"
+
+#: datetime/zone_utc_list.go:464
+msgid "Vostok"
+msgstr "沃斯托克"
+
+#: datetime/zone_utc_list.go:437
+msgid "W-SU"
+msgstr ""
+
+#: network/nm_setting_wireless_security.go:189
+msgid "WEP"
+msgstr "WEP"
+
+#: network/nm_setting_virtual_key.go:142 network/nm_setting_virtual_key.go:149
+msgid "WEP 40/128-bit Key"
+msgstr "WEP 40/128位 密钥"
+
+#: network/nm_setting_wireless_security.go:198
+msgid "WEP104"
+msgstr "WEP104"
+
+#: network/nm_setting_wireless_security.go:197
+msgid "WEP40"
+msgstr "WEP40"
+
+#: network/nm_setting_wireless_security.go:193
+msgid "WPA Enterprise"
+msgstr "WPA企业版"
+
+#: network/nm_setting_wireless_security.go:192
+msgid "WPA-PSK Infrastructure"
+msgstr "WPA-PSK基础架构"
+
+#: network/nm_setting_virtual_key.go:144
+msgid "WPA/WPA2 Enterprise"
+msgstr "WPA/WPA2企业版"
+
+#: network/nm_setting_virtual_key.go:143 network/nm_setting_virtual_key.go:150
+msgid "WPA/WPA2 Personal"
+msgstr "WPA/WPA2 个人版"
+
+#: datetime/zone_utc_list.go:592
+msgid "Wake"
+msgstr "维克"
+
+#: datetime/zone_utc_list.go:593
+msgid "Wallis"
+msgstr "瓦利斯"
+
+#: datetime/zone_utc_list.go:352
+msgid "Warsaw"
+msgstr "华沙"
+
+#: network/nm_setting_virtual_key.go:177
+msgid "Weak"
+msgstr "弱"
+
+#: keybinding/id_desc_map.go:131
+msgid "Web browser"
+msgstr "网页浏览器"
+
+#: datetime/zone_utc_list.go:56
+msgid "Whitehorse"
+msgstr "怀特霍斯"
+
+#: datetime/zone_utc_list.go:321
+msgid "Windhoek"
+msgstr "温得和克"
+
+#: keybinding/id_desc_map.go:83
+msgid "Window screenshot"
+msgstr "窗口截图"
+
+#: datetime/zone_utc_list.go:110
+msgid "Winnipeg"
+msgstr "温尼伯"
+
+#: network/nm_custom_type.go:133 network/manager_connections.go:183
+msgid "Wired Connection"
+msgstr "有线连接"
+
+#: network/nm_custom_type.go:137
+msgid "Wireless Ad-Hoc"
+msgstr "无线临时网络"
+
+#: network/nm_custom_type.go:139
+msgid "Wireless Ap-Hotspot"
+msgstr "无线Ap热点"
+
+#: network/nm_custom_type.go:135
+msgid "Wireless Connection"
+msgstr "无线连接"
+
+#: network/state_handler.go:80
+msgid "Wrong GSM Modem's SIM"
+msgstr "GSM调制解调器SIM卡错误 "
+
+#: datetime/zone_utc_list.go:45
+msgid "Yakutat"
+msgstr "亚库塔特"
+
+#: datetime/zone_utc_list.go:541
+msgid "Yakutsk"
+msgstr "雅库茨克"
+
+#: datetime/zone_utc_list.go:537
+msgid "Yancowinna"
+msgstr "盐科温拿"
+
+#: datetime/zone_utc_list.go:559
+msgid "Yap"
+msgstr ""
+
+#: datetime/zone_utc_list.go:472
+msgid "Yekaterinburg"
+msgstr "叶卡捷琳堡"
+
+#: datetime/zone_utc_list.go:76
+msgid "Yellowknife"
+msgstr "耶洛奈夫"
+
+#: datetime/zone_utc_list.go:429
+msgid "Yerevan"
+msgstr "埃里温"
+
+#: datetime/zone_utc_list.go:58
+msgid "Yukon"
+msgstr "育空"
+
+#: datetime/zone_utc_list.go:353
+msgid "Zagreb"
+msgstr "萨格勒布"
+
+#: datetime/zone_utc_list.go:394
+msgid "Zaporozhye"
+msgstr "扎波罗热"
+
+#: datetime/zone_utc_list.go:305
+msgid "Zulu"
+msgstr "祖鲁"
+
+#: datetime/zone_utc_list.go:354
+msgid "Zurich"
+msgstr "苏黎世"
+
+#: dock/runtime_apps.go:194
+msgid "_Close All"
+msgstr "关闭所有(_C)"
+
+#: dock/runtime_apps.go:221
+msgid "_Dock"
+msgstr "驻留(_D)"
+
+#: dock/normal_apps.go:79
+msgid "_Run"
+msgstr "运行(_R)"
+
+#: dock/normal_apps.go:111
+msgid "_Undock"
+msgstr "移除驻留(_U)"
+
+#~ msgid "Australia North"
+#~ msgstr "澳大利亚北部"
+
+#~ msgid "Australia South"
+#~ msgstr "澳大利亚南部"
+
+#~ msgid "Beulah"
+#~ msgstr "比尤拉"
+
+#~ msgid "Brazil East"
+#~ msgstr "巴西东部"
+
+#~ msgid "Brazil GMT"
+#~ msgstr "巴西格林尼治平时"
+
+#~ msgid "CET"
+#~ msgstr "中欧标准时间"
+
+#~ msgid "EET"
+#~ msgstr "欧洲东部时间"
+
+#~ msgid "EST"
+#~ msgstr "东部标准时间"
+
+#~ msgid "HST"
+#~ msgstr "夏威夷-阿留申标准时间"
+
+#~ msgid "London"
+#~ msgstr "伦敦"
+
+#~ msgid "MET"
+#~ msgstr "中欧时间"
+
+#~ msgid "Marengo"
+#~ msgstr "马伦哥"
+
+#~ msgid "New Salem"
+#~ msgstr "新塞勒姆"
+
+#~ msgid "Pacific East"
+#~ msgstr "东太平洋"
+
+#~ msgid "Pacific New"
+#~ msgstr "新太平洋"
+
+#~ msgid "Rothera"
+#~ msgstr "罗西拉"
+
+#~ msgid "Salta"
+#~ msgstr "萨尔塔"
+
+#~ msgid "Samoa"
+#~ msgstr "萨摩亚"
+
+#~ msgid "Tucuman"
+#~ msgstr "图库曼"
+
+#~ msgid "USA GMT"
+#~ msgstr "美国格林尼治平时"
+
+#~ msgid "Ushuaia"
+#~ msgstr "乌斯怀亚"
+
+#~ msgid "Vevay"
+#~ msgstr "韦韦"
 
 #~ msgid "W SU"
 #~ msgstr "W SU"
 
-#~ msgid "PRC"
-#~ msgstr "PRC"
+#~ msgid "WET"
+#~ msgstr "WET"
+
+#~ msgid "Wellington"
+#~ msgstr "惠灵顿"
