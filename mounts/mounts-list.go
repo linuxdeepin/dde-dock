@@ -22,14 +22,11 @@
 package mounts
 
 import (
-	"fmt"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
-	"pkg.linuxdeepin.com/lib/gobject-2.0"
 	"pkg.linuxdeepin.com/lib/logger"
 	"regexp"
 	"strings"
-	"sync"
 )
 
 type DiskInfo struct {
@@ -64,120 +61,8 @@ const (
 var (
 	monitor   = gio.VolumeMonitorGet()
 	objectMap = make(map[string]*ObjectInfo)
-	Logger    = logger.NewLogger("daemon/mounts")
-	mutex     = new(sync.Mutex)
+	Logger    = logger.NewLogger(DISK_INFO_DEST)
 )
-
-func (m *Manager) DeviceEject(uuid string) (bool, string) {
-	mutex.Lock()
-	defer mutex.Unlock()
-	info, ok := objectMap[uuid]
-	if !ok {
-		Logger.Warning("Eject id - %s not in objectMap.", uuid)
-		return false, fmt.Sprintf("Invalid Id: %s\n", uuid)
-	}
-
-	Logger.Infof("Eject type: %s", info.Type)
-	switch info.Type {
-	case "drive":
-		op := info.Object.(*gio.Drive)
-		op.Eject(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
-			_, err := op.EjectFinish(res)
-			if err != nil {
-				m.Error(uuid, err.Error())
-				Logger.Warningf("drive eject failed: %s, %s", uuid, err)
-			}
-		}))
-	case "volume":
-		op := info.Object.(*gio.Volume)
-		op.Eject(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
-			_, err := op.EjectFinish(res)
-			if err != nil {
-				m.Error(uuid, err.Error())
-				Logger.Warningf("volume eject failed: %s, %s", uuid, err)
-			}
-		}))
-	case "mount":
-		op := info.Object.(*gio.Mount)
-		op.Eject(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
-			_, err := op.EjectFinish(res)
-			if err != nil {
-				m.Error(uuid, err.Error())
-				Logger.Warningf("mount eject failed: %s, %s", uuid, err)
-			}
-		}))
-	default:
-		Logger.Errorf("'%s' invalid type", info.Type)
-		return false, fmt.Sprintf("Invalid type: '%s'\n", info.Type)
-	}
-
-	return true, ""
-}
-
-func (m *Manager) DeviceMount(uuid string) (bool, string) {
-	mutex.Lock()
-	defer mutex.Unlock()
-	info, ok := objectMap[uuid]
-	if !ok {
-		Logger.Warning("Mount id - %s not in objectMap.", uuid)
-		return false, fmt.Sprintf("Invalid Id: %s\n", uuid)
-	}
-
-	Logger.Infof("Mount type: %s", info.Type)
-	switch info.Type {
-	case "volume":
-		op := info.Object.(*gio.Volume)
-		op.Mount(gio.MountMountFlagsNone, nil, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
-			_, err := op.MountFinish(res)
-			if err != nil {
-				m.Error(uuid, err.Error())
-				Logger.Warningf("volume mount failed: %s, %s", uuid, err)
-			}
-		}))
-	case "mount":
-		op := info.Object.(*gio.Mount)
-		op.Remount(gio.MountMountFlagsNone, nil, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
-			_, err := op.RemountFinish(res)
-			if err != nil {
-				m.Error(uuid, err.Error())
-				Logger.Warningf("mount remount failed: %s, %s", uuid, err)
-			}
-		}))
-	default:
-		Logger.Errorf("'%s' invalid type", info.Type)
-		return false, fmt.Sprintf("Invalid type: '%s'\n", info.Type)
-	}
-
-	return true, ""
-}
-
-func (m *Manager) DeviceUnmount(uuid string) (bool, string) {
-	mutex.Lock()
-	defer mutex.Unlock()
-	info, ok := objectMap[uuid]
-	if !ok {
-		Logger.Warningf("Unmount id - %s not in objectMap.", uuid)
-		return false, fmt.Sprintf("Invalid Id: %s\n", uuid)
-	}
-
-	Logger.Infof("Unmount type: %s", info.Type)
-	switch info.Type {
-	case "mount":
-		op := info.Object.(*gio.Mount)
-		op.Unmount(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
-			_, err := op.UnmountFinish(res)
-			if err != nil {
-				m.Error(uuid, err.Error())
-				Logger.Warningf("mount unmount failed: %s, %s", uuid, err)
-			}
-		}))
-	default:
-		Logger.Errorf("'%s' invalid type", info.Type)
-		return false, fmt.Sprintf("Invalid type: '%s'\n", info.Type)
-	}
-
-	return true, ""
-}
 
 func newDiskInfo(value interface{}, t string) DiskInfo {
 	defer func() {
@@ -197,6 +82,12 @@ func newDiskInfo(value interface{}, t string) DiskInfo {
 		//info.TotalCap, info.UsableCap = getDiskCap(id)
 		info.Path = v.GetIdentifier(gio.VolumeIdentifierKindUnixDevice)
 		info.UUID = v.GetIdentifier(gio.VolumeIdentifierKindUuid)
+		Logger.Infof("VOLUME Name: %s, UUID: %v", info.Name, info.UUID)
+		if len(info.UUID) < 1 {
+			info.UUID = generateUUID()
+			Logger.Infof("VOLUME Name: %s, Generate UUID: %v", info.Name, info.UUID)
+		}
+
 		if mount := v.GetMount(); mount != nil {
 			info.CanUnmount = mount.CanUnmount()
 		}
@@ -223,6 +114,12 @@ func newDiskInfo(value interface{}, t string) DiskInfo {
 		//info.TotalCap, info.UsableCap = getDiskCap(id)
 		info.Path = v.GetIdentifier(gio.VolumeIdentifierKindUnixDevice)
 		info.UUID = v.GetIdentifier(gio.VolumeIdentifierKindUuid)
+		Logger.Infof("DRIVE Name: %s, UUID: %v", info.Name, info.UUID)
+		if len(info.UUID) < 1 {
+			info.UUID = generateUUID()
+			Logger.Infof("DRIVE Name: %s, Generate UUID: %v", info.Name, info.UUID)
+		}
+
 		icons := v.GetIcon().ToString()
 		as := strings.Split(icons, " ")
 		if len(as) > 2 {
@@ -262,6 +159,12 @@ func newDiskInfo(value interface{}, t string) DiskInfo {
 		if volume := v.GetVolume(); volume != nil {
 			info.Path = volume.GetIdentifier(gio.VolumeIdentifierKindUnixDevice)
 			info.UUID = volume.GetIdentifier(gio.VolumeIdentifierKindUuid)
+
+		}
+		Logger.Infof("MOUNT Name: %s, UUID: %v", info.Name, info.UUID)
+		if len(info.UUID) < 1 {
+			info.UUID = generateUUID()
+			Logger.Infof("MOUNT Name: %s, Generate UUID: %v", info.Name, info.UUID)
 		}
 
 		if ok, _ := regexp.MatchString(`^mtp://`, info.MountURI); ok {
