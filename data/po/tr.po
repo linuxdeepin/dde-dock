@@ -1,0 +1,3318 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# yakup <mutouk@yandex.ru>, 2014
+msgid ""
+msgstr ""
+"Project-Id-Version: dde-daemon\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-07-03 14:33+0800\n"
+"PO-Revision-Date: 2014-07-03 06:27+0000\n"
+"Last-Translator: electricface <songwentai@linuxdeepin.com>\n"
+"Language-Team: Turkish (http://www.transifex.com/projects/p/dde-daemon/language/tr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: tr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../../bluetooth/bluez_profile.go:31
+msgid "Serial port"
+msgstr "Seri port"
+
+#: ../../bluetooth/bluez_profile.go:32
+msgid "Dial-Up networking"
+msgstr "Çevirmeli bağlantı"
+
+#: ../../bluetooth/bluez_profile.go:33
+msgid "Hands-Free device"
+msgstr "El cihazı"
+
+#: ../../bluetooth/bluez_profile.go:34
+msgid "Hands-Free voice gateway"
+msgstr "El cihazı ses ağ geçidi"
+
+#: ../../bluetooth/bluez_profile.go:35
+msgid "Headset voice gateway"
+msgstr "Kulaklık seti ses ağ geçidi"
+
+#: ../../bluetooth/bluez_profile.go:36
+msgid "Object push"
+msgstr "Nesne itme"
+
+#: ../../bluetooth/bluez_profile.go:37
+msgid "File transfer"
+msgstr "Dosya transferi"
+
+#: ../../bluetooth/bluez_profile.go:38
+msgid "Synchronization"
+msgstr "Senkronizasyon"
+
+#: ../../bluetooth/bluez_profile.go:39
+msgid "Phone book access"
+msgstr "Telefon defteri erişimi"
+
+#: ../../bluetooth/bluez_profile.go:40
+msgid "Phone book access client"
+msgstr "Telefon defteri erişim istemcisi"
+
+#: ../../bluetooth/bluez_profile.go:41
+msgid "Message access"
+msgstr "Mesaj erişimi"
+
+#: ../../bluetooth/bluez_profile.go:42
+msgid "Message notification"
+msgstr "Sistem bildirimi"
+
+#: ../../datetime/datetime.go:127
+msgid "Language changing, please wait"
+msgstr "Dil değiştiriliyor, lütfen bekleyin"
+
+#: ../../datetime/set_locale.go:58
+msgid "Language changed successfully and effective after logout."
+msgstr "Dil değişimi başarılı ve çıkış yapıldıktan sonra etkin olacak."
+
+#: ../../datetime/set_locale.go:60
+msgid "Language failed to change, please try later."
+msgstr "Dil değişimi başarısız oldu, lütfen daha sonra tekrar deneyin."
+
+#: ../../datetime/zone_utc_list.go:24
+msgid "Midway"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:25
+msgid "Niue"
+msgstr "Niue"
+
+#: ../../datetime/zone_utc_list.go:26
+msgid "Pago Pago"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:30
+msgid "Adak"
+msgstr "Adak"
+
+#: ../../datetime/zone_utc_list.go:31
+msgid "Atka"
+msgstr "Atka"
+
+#: ../../datetime/zone_utc_list.go:32
+msgid "Honolulu"
+msgstr "Honolulu"
+
+#: ../../datetime/zone_utc_list.go:33
+msgid "Johnston"
+msgstr "Johnston"
+
+#: ../../datetime/zone_utc_list.go:34
+msgid "Rarotonga"
+msgstr "Rarotonga"
+
+#: ../../datetime/zone_utc_list.go:35
+msgid "Tahiti"
+msgstr "Tahiti"
+
+#: ../../datetime/zone_utc_list.go:36
+msgid "Aleutian"
+msgstr "Aleutian"
+
+#: ../../datetime/zone_utc_list.go:37
+msgid "Hawaii"
+msgstr "Hawaii"
+
+#: ../../datetime/zone_utc_list.go:39
+msgid "Marquesas"
+msgstr "Marquesas"
+
+#: ../../datetime/zone_utc_list.go:41
+msgid "Anchorage"
+msgstr "Anchorage"
+
+#: ../../datetime/zone_utc_list.go:42
+msgid "Juneau"
+msgstr "Juneau"
+
+#: ../../datetime/zone_utc_list.go:43
+msgid "Nome"
+msgstr "Nome"
+
+#: ../../datetime/zone_utc_list.go:44
+msgid "Sitka"
+msgstr "Sitka"
+
+#: ../../datetime/zone_utc_list.go:45
+msgid "Yakutat"
+msgstr "Yakutat"
+
+#: ../../datetime/zone_utc_list.go:46
+msgid "Gambier"
+msgstr "Gambier"
+
+#: ../../datetime/zone_utc_list.go:47
+msgid "Alaska"
+msgstr "Alaska"
+
+#: ../../datetime/zone_utc_list.go:49
+msgid "Dawson"
+msgstr "Dawson"
+
+#: ../../datetime/zone_utc_list.go:50
+msgid "Ensenada"
+msgstr "Ensenada"
+
+#: ../../datetime/zone_utc_list.go:51
+msgid "Los Angeles"
+msgstr "Los Angeles"
+
+#: ../../datetime/zone_utc_list.go:52
+msgid "Metlakatla"
+msgstr "Metlakatla"
+
+#: ../../datetime/zone_utc_list.go:53
+msgid "Santa Isabel"
+msgstr "Santa Isabel"
+
+#: ../../datetime/zone_utc_list.go:54
+msgid "Tijuana"
+msgstr "Tijuana"
+
+#: ../../datetime/zone_utc_list.go:55
+msgid "Vancouver"
+msgstr "Vancouver"
+
+#: ../../datetime/zone_utc_list.go:56
+msgid "Whitehorse"
+msgstr "Whitehorse"
+
+#: ../../datetime/zone_utc_list.go:57
+msgid "Canada/Pacific"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:58
+msgid "Yukon"
+msgstr "Yukon"
+
+#: ../../datetime/zone_utc_list.go:59
+msgid "BajaNorte"
+msgstr "BajaNorte"
+
+#: ../../datetime/zone_utc_list.go:60
+msgid "Pitcairn"
+msgstr "Pitcairn"
+
+#: ../../datetime/zone_utc_list.go:61
+msgid "US/Pacific"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:63
+msgid "Boise"
+msgstr "Boise"
+
+#: ../../datetime/zone_utc_list.go:64
+msgid "Cambridge Bay"
+msgstr "Cambridge Bay"
+
+#: ../../datetime/zone_utc_list.go:65
+msgid "Chihuahua"
+msgstr "Chihuahua"
+
+#: ../../datetime/zone_utc_list.go:66
+msgid "Creston"
+msgstr "Creston"
+
+#: ../../datetime/zone_utc_list.go:67
+msgid "Dawson Creek"
+msgstr "Dawson Creek"
+
+#: ../../datetime/zone_utc_list.go:68
+msgid "Denver"
+msgstr "Denver"
+
+#: ../../datetime/zone_utc_list.go:69
+msgid "Edmonton"
+msgstr "Edmonton"
+
+#: ../../datetime/zone_utc_list.go:70
+msgid "Hermosillo"
+msgstr "Hermosillo"
+
+#: ../../datetime/zone_utc_list.go:71
+msgid "Inuvik"
+msgstr "Inuvik"
+
+#: ../../datetime/zone_utc_list.go:72
+msgid "Mazatlan"
+msgstr "Mazatlan"
+
+#: ../../datetime/zone_utc_list.go:73
+msgid "Ojinaga"
+msgstr "Ojinaga"
+
+#: ../../datetime/zone_utc_list.go:74
+msgid "Phoenix"
+msgstr "Phoenix"
+
+#: ../../datetime/zone_utc_list.go:75
+msgid "Shiprock"
+msgstr "Shiprock"
+
+#: ../../datetime/zone_utc_list.go:76
+msgid "Yellowknife"
+msgstr "Yellowknife"
+
+#: ../../datetime/zone_utc_list.go:78
+msgid "Canada/Mountain"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:79
+msgid "BajaSur"
+msgstr "BajaSur"
+
+#: ../../datetime/zone_utc_list.go:80
+msgid "Navajo"
+msgstr "Navajo"
+
+#: ../../datetime/zone_utc_list.go:81
+msgid "Arizona"
+msgstr "Arizona"
+
+#: ../../datetime/zone_utc_list.go:82
+msgid "US/Mountain"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:84
+msgid "Bahia Banderas"
+msgstr "Bahia Banderas"
+
+#: ../../datetime/zone_utc_list.go:85
+msgid "Belize"
+msgstr "Belize"
+
+#: ../../datetime/zone_utc_list.go:86
+msgid "Cancun"
+msgstr "Cancun"
+
+#: ../../datetime/zone_utc_list.go:87
+msgid "Chicago"
+msgstr "Chicago"
+
+#: ../../datetime/zone_utc_list.go:88
+msgid "Costa Rica"
+msgstr "Costa Rica"
+
+#: ../../datetime/zone_utc_list.go:89
+msgid "El Salvador"
+msgstr "El Salvador"
+
+#: ../../datetime/zone_utc_list.go:90
+msgid "Guatemala"
+msgstr "Guatemala"
+
+#: ../../datetime/zone_utc_list.go:91
+msgid "Indiana/Knox"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:92
+msgid "Indiana/Tell City"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:93
+msgid "Indiana/Valparaiso"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:94
+msgid "Knox IN"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:95
+msgid "Managua"
+msgstr "Managua"
+
+#: ../../datetime/zone_utc_list.go:96
+msgid "Matamoros"
+msgstr "Matamoros"
+
+#: ../../datetime/zone_utc_list.go:97
+msgid "Menominee"
+msgstr "Menominee"
+
+#: ../../datetime/zone_utc_list.go:98
+msgid "Merida"
+msgstr "Merida"
+
+#: ../../datetime/zone_utc_list.go:99
+msgid "Mexico City"
+msgstr "Mexico City"
+
+#: ../../datetime/zone_utc_list.go:100
+msgid "Monterrey"
+msgstr "Monterrey"
+
+#: ../../datetime/zone_utc_list.go:101
+msgid "North Dakota/Beulah"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:102
+msgid "North Dakota/Center"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:103
+msgid "North Dakota/New Salem"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:104
+msgid "Rainy River"
+msgstr "Rainy River"
+
+#: ../../datetime/zone_utc_list.go:105
+msgid "Rankin Inlet"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:106
+msgid "Regina"
+msgstr "Regina"
+
+#: ../../datetime/zone_utc_list.go:107
+msgid "Resolute"
+msgstr "Resolute"
+
+#: ../../datetime/zone_utc_list.go:108
+msgid "Swift Current"
+msgstr "Hızlı akıntı"
+
+#: ../../datetime/zone_utc_list.go:109
+msgid "Tegucigalpa"
+msgstr "Tegucigalpa"
+
+#: ../../datetime/zone_utc_list.go:110
+msgid "Winnipeg"
+msgstr "Winnipeg"
+
+#: ../../datetime/zone_utc_list.go:111
+msgid "Canada/Central"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:112
+msgid "East-Saskatchewan"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:113
+msgid "Saskatchewan"
+msgstr "Saskatchewan"
+
+#: ../../datetime/zone_utc_list.go:114
+msgid "EasterIsland"
+msgstr "EasterIsland"
+
+#: ../../datetime/zone_utc_list.go:115
+msgid "General"
+msgstr "Genel"
+
+#: ../../datetime/zone_utc_list.go:116
+msgid "Easter"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:117
+msgid "Galapagos"
+msgstr "Galapagos"
+
+#: ../../datetime/zone_utc_list.go:118
+msgid "US/Central"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:119
+msgid "Indiana-Starke"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:121
+msgid "Atikokan"
+msgstr "Atikokan"
+
+#: ../../datetime/zone_utc_list.go:122
+msgid "Bogota"
+msgstr "Bogota"
+
+#: ../../datetime/zone_utc_list.go:123
+msgid "Cayman"
+msgstr "Cayman"
+
+#: ../../datetime/zone_utc_list.go:124
+msgid "Coral Harbour"
+msgstr "Coral Harbour"
+
+#: ../../datetime/zone_utc_list.go:125
+msgid "Detroit"
+msgstr "Detroit"
+
+#: ../../datetime/zone_utc_list.go:126
+msgid "Eirunepe"
+msgstr "Eirunepe"
+
+#: ../../datetime/zone_utc_list.go:127
+msgid "Fort Wayne"
+msgstr "Fort Wayne"
+
+#: ../../datetime/zone_utc_list.go:128
+msgid "Grand Turk"
+msgstr "Grand Turk"
+
+#: ../../datetime/zone_utc_list.go:129
+msgid "Guayaquil"
+msgstr "Guayaquil"
+
+#: ../../datetime/zone_utc_list.go:130
+msgid "Havana"
+msgstr "Havana"
+
+#: ../../datetime/zone_utc_list.go:131
+msgid "Indiana/Indianapolis"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:132
+msgid "Indiana/Marengo"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:133
+msgid "Indiana/Petersburg"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:134
+msgid "Indiana/Vevay"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:135
+msgid "Indiana/Vincennes"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:136
+msgid "Indiana/Winamac"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:137
+msgid "Indianapolis"
+msgstr "Indianapolis"
+
+#: ../../datetime/zone_utc_list.go:138
+msgid "Iqaluit"
+msgstr "Iqaluit"
+
+#: ../../datetime/zone_utc_list.go:139
+msgid "Jamaica"
+msgstr "Jamaica"
+
+#: ../../datetime/zone_utc_list.go:140
+msgid "Kentucky/Louisville"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:141
+msgid "Kentucky/Monticello"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:142
+msgid "Lima"
+msgstr "Lima"
+
+#: ../../datetime/zone_utc_list.go:143
+msgid "Louisville"
+msgstr "Louisville"
+
+#: ../../datetime/zone_utc_list.go:144
+msgid "Montreal"
+msgstr "Montreal"
+
+#: ../../datetime/zone_utc_list.go:145
+msgid "Nassau"
+msgstr "Nassau"
+
+#: ../../datetime/zone_utc_list.go:146
+msgid "New York"
+msgstr "New York"
+
+#: ../../datetime/zone_utc_list.go:147
+msgid "Nipigon"
+msgstr "Nipigon"
+
+#: ../../datetime/zone_utc_list.go:148
+msgid "Panama"
+msgstr "Panama"
+
+#: ../../datetime/zone_utc_list.go:149
+msgid "Pangnirtung"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:150
+msgid "Port-au-Prince"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:151
+msgid "Porto Acre"
+msgstr "Porto Acre"
+
+#: ../../datetime/zone_utc_list.go:152
+msgid "Rio Branco"
+msgstr "Rio Branco"
+
+#: ../../datetime/zone_utc_list.go:153
+msgid "Thunder Bay"
+msgstr "Thunder Bay"
+
+#: ../../datetime/zone_utc_list.go:154
+msgid "Toronto"
+msgstr "Toronto"
+
+#: ../../datetime/zone_utc_list.go:155
+msgid "Acre"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:156
+msgid "Canada/Eastern"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:157
+msgid "Cuba"
+msgstr "Küba"
+
+#: ../../datetime/zone_utc_list.go:159
+msgid "US/Eastern"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:160
+msgid "East-Indiana"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:161
+msgid "Michigan"
+msgstr "Michigan"
+
+#: ../../datetime/zone_utc_list.go:163
+msgid "Caracas"
+msgstr "Caracas"
+
+#: ../../datetime/zone_utc_list.go:165
+msgid "Anguilla"
+msgstr "Anguilla"
+
+#: ../../datetime/zone_utc_list.go:166
+msgid "Antigua"
+msgstr "Antigua"
+
+#: ../../datetime/zone_utc_list.go:167
+msgid "Aruba"
+msgstr "Aruba"
+
+#: ../../datetime/zone_utc_list.go:168
+msgid "Asuncion"
+msgstr "Asuncion"
+
+#: ../../datetime/zone_utc_list.go:169
+msgid "Barbados"
+msgstr "Barbados"
+
+#: ../../datetime/zone_utc_list.go:170
+msgid "Blanc-Sablon"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:171
+msgid "Boa Vista"
+msgstr "Boa Vista"
+
+#: ../../datetime/zone_utc_list.go:172
+msgid "Campo Grande"
+msgstr "Campo Grande"
+
+#: ../../datetime/zone_utc_list.go:173
+msgid "Cuiaba"
+msgstr "Cuiaba"
+
+#: ../../datetime/zone_utc_list.go:174
+msgid "Curacao"
+msgstr "Curacao"
+
+#: ../../datetime/zone_utc_list.go:175
+msgid "Dominica"
+msgstr "Dominika"
+
+#: ../../datetime/zone_utc_list.go:176
+msgid "Glace Bay"
+msgstr "Glace Bay"
+
+#: ../../datetime/zone_utc_list.go:177
+msgid "Goose Bay"
+msgstr "Goose Bay"
+
+#: ../../datetime/zone_utc_list.go:178
+msgid "Grenada"
+msgstr "Grenada"
+
+#: ../../datetime/zone_utc_list.go:179
+msgid "Guadeloupe"
+msgstr "Guadeloupe"
+
+#: ../../datetime/zone_utc_list.go:180
+msgid "Guyana"
+msgstr "Guyana"
+
+#: ../../datetime/zone_utc_list.go:181
+msgid "Halifax"
+msgstr "Halifax"
+
+#: ../../datetime/zone_utc_list.go:182
+msgid "Kralendijk"
+msgstr "Kralendijk"
+
+#: ../../datetime/zone_utc_list.go:183
+msgid "La Paz"
+msgstr "La Paz"
+
+#: ../../datetime/zone_utc_list.go:184
+msgid "Lower Princes"
+msgstr "Lower Princes"
+
+#: ../../datetime/zone_utc_list.go:185
+msgid "Manaus"
+msgstr "Manaus"
+
+#: ../../datetime/zone_utc_list.go:186
+msgid "Marigot"
+msgstr "Marigot"
+
+#: ../../datetime/zone_utc_list.go:187
+msgid "Martinique"
+msgstr "Martinique"
+
+#: ../../datetime/zone_utc_list.go:188
+msgid "Moncton"
+msgstr "Moncton"
+
+#: ../../datetime/zone_utc_list.go:189
+msgid "Montserrat"
+msgstr "Montserrat"
+
+#: ../../datetime/zone_utc_list.go:190
+msgid "Port of Spain"
+msgstr "Port of Spain"
+
+#: ../../datetime/zone_utc_list.go:191
+msgid "Porto Velho"
+msgstr "Porto Velho"
+
+#: ../../datetime/zone_utc_list.go:192
+msgid "Puerto Rico"
+msgstr "Puerto Rico"
+
+#: ../../datetime/zone_utc_list.go:193
+msgid "Santiago"
+msgstr "Santiago"
+
+#: ../../datetime/zone_utc_list.go:194
+msgid "Santo Domingo"
+msgstr "Santo Domingo"
+
+#: ../../datetime/zone_utc_list.go:195
+msgid "St Barthelemy"
+msgstr "St Barthelemy"
+
+#: ../../datetime/zone_utc_list.go:196
+msgid "St Kitts"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:197
+msgid "St Lucia"
+msgstr "St Lucia"
+
+#: ../../datetime/zone_utc_list.go:198
+msgid "St Thomas"
+msgstr "St Thomas"
+
+#: ../../datetime/zone_utc_list.go:199
+msgid "St Vincent"
+msgstr "St Vincent"
+
+#: ../../datetime/zone_utc_list.go:200
+msgid "Thule"
+msgstr "Thule"
+
+#: ../../datetime/zone_utc_list.go:201
+msgid "Tortola"
+msgstr "Tortola"
+
+#: ../../datetime/zone_utc_list.go:202
+msgid "Virgin"
+msgstr "Virgin"
+
+#: ../../datetime/zone_utc_list.go:203
+msgid "Palmer"
+msgstr "Palmer"
+
+#: ../../datetime/zone_utc_list.go:204
+msgid "Bermuda"
+msgstr "Bermuda"
+
+#: ../../datetime/zone_utc_list.go:205
+msgid "Brazil/West"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:206
+msgid "Atlantic"
+msgstr "Atlantik"
+
+#: ../../datetime/zone_utc_list.go:207
+msgid "Continental"
+msgstr "Continental"
+
+#: ../../datetime/zone_utc_list.go:209
+msgid "St Johns"
+msgstr "St Johns"
+
+#: ../../datetime/zone_utc_list.go:210
+msgid "Newfoundland"
+msgstr "Newfoundland"
+
+#: ../../datetime/zone_utc_list.go:212
+msgid "Araguaina"
+msgstr "Araguaina"
+
+#: ../../datetime/zone_utc_list.go:213
+msgid "Argentina/Buenos Aires"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:214
+msgid "Argentina/Catamarca"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:215
+msgid "Argentina/ComodRivadavia"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:216
+msgid "Argentina/Cordoba"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:217
+msgid "Argentina/Jujuy"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:218
+msgid "Argentina/La Rioja"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:219
+msgid "Argentina/Mendoza"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:220
+msgid "Argentina/Rio Gallegos"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:221
+msgid "Argentina/Salta"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:222
+msgid "Argentina/San Juan"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:223
+msgid "Argentina/San Luis"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:224
+msgid "Argentina/Tucuman"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:225
+msgid "Argentina/Ushuaia"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:226
+msgid "Bahia"
+msgstr "Bahia"
+
+#: ../../datetime/zone_utc_list.go:227
+msgid "Belem"
+msgstr "Belem"
+
+#: ../../datetime/zone_utc_list.go:228
+msgid "Buenos Aires"
+msgstr "Buenos Aires"
+
+#: ../../datetime/zone_utc_list.go:229
+msgid "Catamarca"
+msgstr "Catamarca"
+
+#: ../../datetime/zone_utc_list.go:230
+msgid "Cayenne"
+msgstr "Cayenne"
+
+#: ../../datetime/zone_utc_list.go:231
+msgid "Cordoba"
+msgstr "Cordoba"
+
+#: ../../datetime/zone_utc_list.go:232
+msgid "Fortaleza"
+msgstr "Fortaleza"
+
+#: ../../datetime/zone_utc_list.go:233
+msgid "Godthab"
+msgstr "Godthab"
+
+#: ../../datetime/zone_utc_list.go:234
+msgid "Jujuy"
+msgstr "Jujuy"
+
+#: ../../datetime/zone_utc_list.go:235
+msgid "Maceio"
+msgstr "Maceio"
+
+#: ../../datetime/zone_utc_list.go:236
+msgid "Mendoza"
+msgstr "Mendoza"
+
+#: ../../datetime/zone_utc_list.go:237
+msgid "Miquelon"
+msgstr "Miquelon"
+
+#: ../../datetime/zone_utc_list.go:238
+msgid "Montevideo"
+msgstr "Montevideo"
+
+#: ../../datetime/zone_utc_list.go:239
+msgid "Paramaribo"
+msgstr "Paramaribo"
+
+#: ../../datetime/zone_utc_list.go:240
+msgid "Recife"
+msgstr "Recife"
+
+#: ../../datetime/zone_utc_list.go:241
+msgid "Rosario"
+msgstr "Rosario"
+
+#: ../../datetime/zone_utc_list.go:242
+msgid "Santarem"
+msgstr "Santarem"
+
+#: ../../datetime/zone_utc_list.go:243
+msgid "Sao Paulo"
+msgstr "Sao Paulo"
+
+#: ../../datetime/zone_utc_list.go:244
+msgid "Antarctica/Rothera"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:245
+msgid "Stanley"
+msgstr "Stanley"
+
+#: ../../datetime/zone_utc_list.go:246
+msgid "East"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:248
+msgid "Americaoronha"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:249
+msgid "South Georgia"
+msgstr "South Georgia"
+
+#: ../../datetime/zone_utc_list.go:250
+msgid "DeNoronha"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:252
+msgid "Scoresbysund"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:253
+msgid "Azores"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:254
+msgid "Cape Verde"
+msgstr "Cape Verde"
+
+#: ../../datetime/zone_utc_list.go:256
+msgid "Abidjan"
+msgstr "Abidjan"
+
+#: ../../datetime/zone_utc_list.go:257
+msgid "Accra"
+msgstr "Accra"
+
+#: ../../datetime/zone_utc_list.go:258
+msgid "Bamako"
+msgstr "Bamako"
+
+#: ../../datetime/zone_utc_list.go:259
+msgid "Banjul"
+msgstr "Banjul"
+
+#: ../../datetime/zone_utc_list.go:260
+msgid "Bissau"
+msgstr "Bissau"
+
+#: ../../datetime/zone_utc_list.go:261
+msgid "Casablanca"
+msgstr "Kazablanka"
+
+#: ../../datetime/zone_utc_list.go:262
+msgid "Conakry"
+msgstr "Conakry"
+
+#: ../../datetime/zone_utc_list.go:263
+msgid "Dakar"
+msgstr "Dakar"
+
+#: ../../datetime/zone_utc_list.go:264
+msgid "El Aaiun"
+msgstr "El Aaiun"
+
+#: ../../datetime/zone_utc_list.go:265
+msgid "Freetown"
+msgstr "Freetown"
+
+#: ../../datetime/zone_utc_list.go:266
+msgid "Lome"
+msgstr "Lome"
+
+#: ../../datetime/zone_utc_list.go:267
+msgid "Monrovia"
+msgstr "Monrovia"
+
+#: ../../datetime/zone_utc_list.go:268
+msgid "Nouakchott"
+msgstr "Nouakchott"
+
+#: ../../datetime/zone_utc_list.go:269
+msgid "Ouagadougou"
+msgstr "Ouagadougou"
+
+#: ../../datetime/zone_utc_list.go:270
+msgid "Sao Tome"
+msgstr "Sao Tome"
+
+#: ../../datetime/zone_utc_list.go:271
+msgid "Timbuktu"
+msgstr "Timbuktu"
+
+#: ../../datetime/zone_utc_list.go:272
+msgid "Danmarkshavn"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:273
+msgid "Troll"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:274
+msgid "Canary"
+msgstr "Canary"
+
+#: ../../datetime/zone_utc_list.go:275
+msgid "Faeroe"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:276
+msgid "Faroe"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:277
+msgid "Madeira"
+msgstr "Madeira"
+
+#: ../../datetime/zone_utc_list.go:278
+msgid "Reykjavik"
+msgstr "Reykjavik"
+
+#: ../../datetime/zone_utc_list.go:279
+msgid "St Helena"
+msgstr "St Helena"
+
+#: ../../datetime/zone_utc_list.go:280
+msgid "Eire"
+msgstr "Eire"
+
+#: ../../datetime/zone_utc_list.go:281
+msgid "Etc/GMT"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:282
+msgid "Etc/GMT+0"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:283
+msgid "Etc/UCT"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:284
+msgid "Etc/Universal"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:285
+msgid "Etc/UTC"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:286
+msgid "Etc/Zulu"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:287
+msgid "Belfast"
+msgstr "Belfast"
+
+#: ../../datetime/zone_utc_list.go:288
+msgid "Dublin"
+msgstr "Dublin"
+
+#: ../../datetime/zone_utc_list.go:289
+msgid "Guernsey"
+msgstr "Guernsey"
+
+#: ../../datetime/zone_utc_list.go:290
+msgid "Isle of Man"
+msgstr "Isle of Man"
+
+#: ../../datetime/zone_utc_list.go:291
+msgid "Jersey"
+msgstr "Jersey"
+
+#: ../../datetime/zone_utc_list.go:292
+msgid "Lisbon"
+msgstr "Lizbon"
+
+#: ../../datetime/zone_utc_list.go:293
+msgid "GB"
+msgstr "GB"
+
+#: ../../datetime/zone_utc_list.go:294
+msgid "GB-Eire"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:295
+msgid "GMT"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:296
+msgid "GMT+0"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:297
+msgid "GMT0"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:298
+msgid "GMT-0"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:299
+msgid "Greenwich"
+msgstr "Greenwich"
+
+#: ../../datetime/zone_utc_list.go:300
+msgid "Iceland"
+msgstr "İzlanda"
+
+#: ../../datetime/zone_utc_list.go:301
+msgid "Portugal"
+msgstr "Portekiz"
+
+#: ../../datetime/zone_utc_list.go:302
+msgid "UCT"
+msgstr "UCT"
+
+#: ../../datetime/zone_utc_list.go:303
+msgid "Universal"
+msgstr "Evrensel"
+
+#: ../../datetime/zone_utc_list.go:304
+msgid "UTC"
+msgstr "UTC"
+
+#: ../../datetime/zone_utc_list.go:305
+msgid "Zulu"
+msgstr "Zulu"
+
+#: ../../datetime/zone_utc_list.go:307
+msgid "Algiers"
+msgstr "Algiers"
+
+#: ../../datetime/zone_utc_list.go:308
+msgid "Bangui"
+msgstr "Bangui"
+
+#: ../../datetime/zone_utc_list.go:309
+msgid "Brazzaville"
+msgstr "Brazzaville"
+
+#: ../../datetime/zone_utc_list.go:310
+msgid "Ceuta"
+msgstr "Ceuta"
+
+#: ../../datetime/zone_utc_list.go:311
+msgid "Douala"
+msgstr "Douala"
+
+#: ../../datetime/zone_utc_list.go:312
+msgid "Kinshasa"
+msgstr "Kinshasa"
+
+#: ../../datetime/zone_utc_list.go:313
+msgid "Lagos"
+msgstr "Lagos"
+
+#: ../../datetime/zone_utc_list.go:314
+msgid "Libreville"
+msgstr "Libreville"
+
+#: ../../datetime/zone_utc_list.go:315
+msgid "Luanda"
+msgstr "Luanda"
+
+#: ../../datetime/zone_utc_list.go:316
+msgid "Malabo"
+msgstr "Malabo"
+
+#: ../../datetime/zone_utc_list.go:317
+msgid "Ndjamena"
+msgstr "Ndjamena"
+
+#: ../../datetime/zone_utc_list.go:318
+msgid "Niamey"
+msgstr "Niamey"
+
+#: ../../datetime/zone_utc_list.go:319
+msgid "Porto-Novo"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:320
+msgid "Tunis"
+msgstr "Tunus"
+
+#: ../../datetime/zone_utc_list.go:321
+msgid "Windhoek"
+msgstr "Windhoek"
+
+#: ../../datetime/zone_utc_list.go:322
+msgid "Longyearbyen"
+msgstr "Longyearbyen"
+
+#: ../../datetime/zone_utc_list.go:323
+msgid "Jan Mayen"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:324
+msgid "Amsterdam"
+msgstr "Amsterdam"
+
+#: ../../datetime/zone_utc_list.go:325
+msgid "Andorra"
+msgstr "Andorra"
+
+#: ../../datetime/zone_utc_list.go:326
+msgid "Belgrade"
+msgstr "Belgrad"
+
+#: ../../datetime/zone_utc_list.go:327
+msgid "Berlin"
+msgstr "Berlin"
+
+#: ../../datetime/zone_utc_list.go:328
+msgid "Bratislava"
+msgstr "Bratislava"
+
+#: ../../datetime/zone_utc_list.go:329
+msgid "Brussels"
+msgstr "Brussels"
+
+#: ../../datetime/zone_utc_list.go:330
+msgid "Budapest"
+msgstr "Budapeşte"
+
+#: ../../datetime/zone_utc_list.go:331
+msgid "Busingen"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:332
+msgid "Copenhagen"
+msgstr "Copenhagen"
+
+#: ../../datetime/zone_utc_list.go:333
+msgid "Gibraltar"
+msgstr "Gibraltar"
+
+#: ../../datetime/zone_utc_list.go:334
+msgid "Ljubljana"
+msgstr "Ljubljana"
+
+#: ../../datetime/zone_utc_list.go:335
+msgid "Luxembourg"
+msgstr "Luxembourg"
+
+#: ../../datetime/zone_utc_list.go:336
+msgid "Madrid"
+msgstr "Madrid"
+
+#: ../../datetime/zone_utc_list.go:337
+msgid "Malta"
+msgstr "Malta"
+
+#: ../../datetime/zone_utc_list.go:338
+msgid "Monaco"
+msgstr "Monako"
+
+#: ../../datetime/zone_utc_list.go:339
+msgid "Oslo"
+msgstr "Oslo"
+
+#: ../../datetime/zone_utc_list.go:340
+msgid "Paris"
+msgstr "Paris"
+
+#: ../../datetime/zone_utc_list.go:341
+msgid "Podgorica"
+msgstr "Podgorica"
+
+#: ../../datetime/zone_utc_list.go:342
+msgid "Prague"
+msgstr "Prag"
+
+#: ../../datetime/zone_utc_list.go:343
+msgid "Rome"
+msgstr "Roma"
+
+#: ../../datetime/zone_utc_list.go:344
+msgid "San Marino"
+msgstr "San Marino"
+
+#: ../../datetime/zone_utc_list.go:345
+msgid "Sarajevo"
+msgstr "Saraybosna"
+
+#: ../../datetime/zone_utc_list.go:346
+msgid "Skopje"
+msgstr "Üsküp"
+
+#: ../../datetime/zone_utc_list.go:347
+msgid "Stockholm"
+msgstr "Stockholm"
+
+#: ../../datetime/zone_utc_list.go:348
+msgid "Tirane"
+msgstr "Tiran"
+
+#: ../../datetime/zone_utc_list.go:349
+msgid "Vaduz"
+msgstr "Vaduz"
+
+#: ../../datetime/zone_utc_list.go:350
+msgid "Vatican"
+msgstr "Vatikan"
+
+#: ../../datetime/zone_utc_list.go:351
+msgid "Vienna"
+msgstr "Viyana"
+
+#: ../../datetime/zone_utc_list.go:352
+msgid "Warsaw"
+msgstr "Warsaw"
+
+#: ../../datetime/zone_utc_list.go:353
+msgid "Zagreb"
+msgstr "Zagreb"
+
+#: ../../datetime/zone_utc_list.go:354
+msgid "Zurich"
+msgstr "Zürih"
+
+#: ../../datetime/zone_utc_list.go:355
+msgid "Poland"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:357
+msgid "Blantyre"
+msgstr "Blantyre"
+
+#: ../../datetime/zone_utc_list.go:358
+msgid "Bujumbura"
+msgstr "Bujumbura"
+
+#: ../../datetime/zone_utc_list.go:359
+msgid "Cairo"
+msgstr "Kahire"
+
+#: ../../datetime/zone_utc_list.go:360
+msgid "Gaborone"
+msgstr "Gaborone"
+
+#: ../../datetime/zone_utc_list.go:361
+msgid "Harare"
+msgstr "Harare"
+
+#: ../../datetime/zone_utc_list.go:362
+msgid "Johannesburg"
+msgstr "Johannesburg"
+
+#: ../../datetime/zone_utc_list.go:363
+msgid "Kigali"
+msgstr "Kigali"
+
+#: ../../datetime/zone_utc_list.go:364
+msgid "Lubumbashi"
+msgstr "Lubumbashi"
+
+#: ../../datetime/zone_utc_list.go:365
+msgid "Lusaka"
+msgstr "Lusaka"
+
+#: ../../datetime/zone_utc_list.go:366
+msgid "Maputo"
+msgstr "Maputo"
+
+#: ../../datetime/zone_utc_list.go:367
+msgid "Maseru"
+msgstr "Maseru"
+
+#: ../../datetime/zone_utc_list.go:368
+msgid "Mbabane"
+msgstr "Mbabane"
+
+#: ../../datetime/zone_utc_list.go:369
+msgid "Tripoli"
+msgstr "Tripoli"
+
+#: ../../datetime/zone_utc_list.go:370
+msgid "Amman"
+msgstr "Amman"
+
+#: ../../datetime/zone_utc_list.go:371
+msgid "Beirut"
+msgstr "Beyrut"
+
+#: ../../datetime/zone_utc_list.go:372
+msgid "Damascus"
+msgstr "Damascus"
+
+#: ../../datetime/zone_utc_list.go:373
+msgid "Gaza"
+msgstr "Gazze"
+
+#: ../../datetime/zone_utc_list.go:374
+msgid "Hebron"
+msgstr "Hebron"
+
+#: ../../datetime/zone_utc_list.go:375
+msgid "Istanbul"
+msgstr "Istanbul"
+
+#: ../../datetime/zone_utc_list.go:376
+msgid "Jerusalem"
+msgstr "Jerusalem"
+
+#: ../../datetime/zone_utc_list.go:377
+msgid "Nicosia"
+msgstr "Lefkoşa"
+
+#: ../../datetime/zone_utc_list.go:378
+msgid "Tel Aviv"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:379
+msgid "Egypt"
+msgstr "Mısır"
+
+#: ../../datetime/zone_utc_list.go:380
+msgid "Athens"
+msgstr "Atina"
+
+#: ../../datetime/zone_utc_list.go:381
+msgid "Bucharest"
+msgstr "Bucharest"
+
+#: ../../datetime/zone_utc_list.go:382
+msgid "Chisinau"
+msgstr "Chisinau"
+
+#: ../../datetime/zone_utc_list.go:383
+msgid "Helsinki"
+msgstr "Helsinki"
+
+#: ../../datetime/zone_utc_list.go:385
+msgid "Kiev"
+msgstr "Kiev"
+
+#: ../../datetime/zone_utc_list.go:386
+msgid "Mariehamn"
+msgstr "Mariehamn"
+
+#: ../../datetime/zone_utc_list.go:388
+msgid "Riga"
+msgstr "Riga"
+
+#: ../../datetime/zone_utc_list.go:389
+msgid "Sofia"
+msgstr "Sofya"
+
+#: ../../datetime/zone_utc_list.go:390
+msgid "Tallinn"
+msgstr "Tallinn"
+
+#: ../../datetime/zone_utc_list.go:391
+msgid "Tiraspol"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:392
+msgid "Uzhgorod"
+msgstr "Uzhgorod"
+
+#: ../../datetime/zone_utc_list.go:393
+msgid "Vilnius"
+msgstr "Vilnius"
+
+#: ../../datetime/zone_utc_list.go:394
+msgid "Zaporozhye"
+msgstr "Zaporozhye"
+
+#: ../../datetime/zone_utc_list.go:395
+msgid "Israel"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:396
+msgid "Libya"
+msgstr "Libya"
+
+#: ../../datetime/zone_utc_list.go:397
+msgid "Turkey"
+msgstr "Türkiye"
+
+#: ../../datetime/zone_utc_list.go:399
+msgid "Addis Ababa"
+msgstr "Addis Ababa"
+
+#: ../../datetime/zone_utc_list.go:400
+msgid "Asmara"
+msgstr "Asmara"
+
+#: ../../datetime/zone_utc_list.go:401
+msgid "Asmera"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:402
+msgid "Dar es Salaam"
+msgstr "Dar es Salaam"
+
+#: ../../datetime/zone_utc_list.go:403
+msgid "Djibouti"
+msgstr "Djibouti"
+
+#: ../../datetime/zone_utc_list.go:404
+msgid "Juba"
+msgstr "Juba"
+
+#: ../../datetime/zone_utc_list.go:405
+msgid "Kampala"
+msgstr "Kampala"
+
+#: ../../datetime/zone_utc_list.go:406
+msgid "Khartoum"
+msgstr "Khartoum"
+
+#: ../../datetime/zone_utc_list.go:407
+msgid "Mogadishu"
+msgstr "Mogadishu"
+
+#: ../../datetime/zone_utc_list.go:408
+msgid "Nairobi"
+msgstr "Nairobi"
+
+#: ../../datetime/zone_utc_list.go:409
+msgid "Syowa"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:410
+msgid "Aden"
+msgstr "Aden"
+
+#: ../../datetime/zone_utc_list.go:411
+msgid "Baghdad"
+msgstr "Bağdat"
+
+#: ../../datetime/zone_utc_list.go:412
+msgid "Bahrain"
+msgstr "Bahreyn"
+
+#: ../../datetime/zone_utc_list.go:413
+msgid "Kuwait"
+msgstr "Kuveyt"
+
+#: ../../datetime/zone_utc_list.go:414
+msgid "Qatar"
+msgstr "Katar"
+
+#: ../../datetime/zone_utc_list.go:415
+msgid "Riyadh"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:416
+msgid "Kaliningrad"
+msgstr "Kaliningrad"
+
+#: ../../datetime/zone_utc_list.go:417
+msgid "Minsk"
+msgstr "Minsk"
+
+#: ../../datetime/zone_utc_list.go:418
+msgid "Antananarivo"
+msgstr "Antananarivo"
+
+#: ../../datetime/zone_utc_list.go:419
+msgid "Comoro"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:420
+msgid "Mayotte"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:422
+msgid "Tehran"
+msgstr "Tahran"
+
+#: ../../datetime/zone_utc_list.go:423
+msgid "Iran"
+msgstr "Iran"
+
+#: ../../datetime/zone_utc_list.go:425
+msgid "Baku"
+msgstr "Bakü"
+
+#: ../../datetime/zone_utc_list.go:426
+msgid "Dubai"
+msgstr "Dubai"
+
+#: ../../datetime/zone_utc_list.go:427
+msgid "Muscat"
+msgstr "Maskat"
+
+#: ../../datetime/zone_utc_list.go:428
+msgid "Tbilisi"
+msgstr "Tiflis"
+
+#: ../../datetime/zone_utc_list.go:429
+msgid "Yerevan"
+msgstr "Erivan"
+
+#: ../../datetime/zone_utc_list.go:430
+msgid "Moscow"
+msgstr "Moskova"
+
+#: ../../datetime/zone_utc_list.go:431
+msgid "Samara"
+msgstr "Samara"
+
+#: ../../datetime/zone_utc_list.go:432
+msgid "Simferopol"
+msgstr "Simferopol"
+
+#: ../../datetime/zone_utc_list.go:433
+msgid "Volgograd"
+msgstr "Volgograd"
+
+#: ../../datetime/zone_utc_list.go:434
+msgid "Mahe"
+msgstr "Mahe"
+
+#: ../../datetime/zone_utc_list.go:435
+msgid "Mauritius"
+msgstr "Mauritius"
+
+#: ../../datetime/zone_utc_list.go:436
+msgid "Reunion"
+msgstr "Reunion"
+
+#: ../../datetime/zone_utc_list.go:437
+msgid "W-SU"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:439
+msgid "Kabul"
+msgstr "Kabil"
+
+#: ../../datetime/zone_utc_list.go:441
+msgid "Kiritimati"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:443
+msgid "Davis"
+msgstr "Davis"
+
+#: ../../datetime/zone_utc_list.go:444
+msgid "Mawson"
+msgstr "Mawson"
+
+#: ../../datetime/zone_utc_list.go:445
+msgid "Aqtau"
+msgstr "Aqtau"
+
+#: ../../datetime/zone_utc_list.go:446
+msgid "Aqtobe"
+msgstr "Aqtobe"
+
+#: ../../datetime/zone_utc_list.go:447
+msgid "Ashgabat"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:448
+msgid "Ashkhabad"
+msgstr "Aşkabat"
+
+#: ../../datetime/zone_utc_list.go:449
+msgid "Dushanbe"
+msgstr "Duşambe"
+
+#: ../../datetime/zone_utc_list.go:450
+msgid "Karachi"
+msgstr "Karaçi"
+
+#: ../../datetime/zone_utc_list.go:451
+msgid "Oral"
+msgstr "Ural"
+
+#: ../../datetime/zone_utc_list.go:452
+msgid "Samarkand"
+msgstr "Semerkand"
+
+#: ../../datetime/zone_utc_list.go:453
+msgid "Tashkent"
+msgstr "Taşkent"
+
+#: ../../datetime/zone_utc_list.go:454
+msgid "Kerguelen"
+msgstr "Kerguelen"
+
+#: ../../datetime/zone_utc_list.go:455
+msgid "Maldives"
+msgstr "Maldives"
+
+#: ../../datetime/zone_utc_list.go:457
+msgid "Calcutta"
+msgstr "Calcutta"
+
+#: ../../datetime/zone_utc_list.go:458
+msgid "Colombo"
+msgstr "Colombo"
+
+#: ../../datetime/zone_utc_list.go:459
+msgid "Kolkata"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:461
+msgid "Kathmandu"
+msgstr "Kathmandu"
+
+#: ../../datetime/zone_utc_list.go:462
+msgid "Katmandu"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:464
+msgid "Vostok"
+msgstr "Vostok"
+
+#: ../../datetime/zone_utc_list.go:465
+msgid "Almaty"
+msgstr "Almatı"
+
+#: ../../datetime/zone_utc_list.go:466
+msgid "Bishkek"
+msgstr "Bişkek"
+
+#: ../../datetime/zone_utc_list.go:467
+msgid "Dacca"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:468
+msgid "Dhaka"
+msgstr "Dhaka"
+
+#: ../../datetime/zone_utc_list.go:469
+msgid "Qyzylorda"
+msgstr "Qyzylorda"
+
+#: ../../datetime/zone_utc_list.go:470
+msgid "Thimbu"
+msgstr "Thimbu"
+
+#: ../../datetime/zone_utc_list.go:471
+msgid "Thimphu"
+msgstr "Thimphu"
+
+#: ../../datetime/zone_utc_list.go:472
+msgid "Yekaterinburg"
+msgstr "Yekaterinburg"
+
+#: ../../datetime/zone_utc_list.go:473
+msgid "Chagos"
+msgstr "Chagos"
+
+#: ../../datetime/zone_utc_list.go:475
+msgid "Rangoon"
+msgstr "Rangoon"
+
+#: ../../datetime/zone_utc_list.go:476
+msgid "Cocos"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:478
+msgid "Bangkok"
+msgstr "Bangkok"
+
+#: ../../datetime/zone_utc_list.go:479
+msgid "Ho Chi Minh"
+msgstr "Ho Chi Minh"
+
+#: ../../datetime/zone_utc_list.go:480
+msgid "Hovd"
+msgstr "Hovd"
+
+#: ../../datetime/zone_utc_list.go:481
+msgid "Jakarta"
+msgstr "Jakarta"
+
+#: ../../datetime/zone_utc_list.go:482
+msgid "Novokuznetsk"
+msgstr "Novokuznetsk"
+
+#: ../../datetime/zone_utc_list.go:483
+msgid "Novosibirsk"
+msgstr "Novosibirsk"
+
+#: ../../datetime/zone_utc_list.go:484
+msgid "Omsk"
+msgstr "Omsk"
+
+#: ../../datetime/zone_utc_list.go:485
+msgid "Phnom Penh"
+msgstr "Phnom Penh"
+
+#: ../../datetime/zone_utc_list.go:486
+msgid "Pontianak"
+msgstr "Pontianak"
+
+#: ../../datetime/zone_utc_list.go:487
+msgid "Saigon"
+msgstr "Saigon"
+
+#: ../../datetime/zone_utc_list.go:488
+msgid "Vientiane"
+msgstr "Vientiane"
+
+#: ../../datetime/zone_utc_list.go:489
+msgid "Christmas"
+msgstr "Christmas"
+
+#: ../../datetime/zone_utc_list.go:491
+msgid "Brunei"
+msgstr "Brunei"
+
+#: ../../datetime/zone_utc_list.go:492
+msgid "Choibalsan"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:493
+msgid "Chongqing"
+msgstr "Chongqing"
+
+#: ../../datetime/zone_utc_list.go:494
+msgid "Chungking"
+msgstr "Chungking"
+
+#: ../../datetime/zone_utc_list.go:495
+msgid "Harbin"
+msgstr "Harbin"
+
+#: ../../datetime/zone_utc_list.go:496
+msgid "Hong Kong"
+msgstr "Hong Kong"
+
+#: ../../datetime/zone_utc_list.go:497
+msgid "Kashgar"
+msgstr "Kaşgar"
+
+#: ../../datetime/zone_utc_list.go:498
+msgid "Krasnoyarsk"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:499
+msgid "Kuala Lumpur"
+msgstr "Kuala Lumpur"
+
+#: ../../datetime/zone_utc_list.go:500
+msgid "Kuching"
+msgstr "Kuching"
+
+#: ../../datetime/zone_utc_list.go:501
+msgid "Macao"
+msgstr "Macao"
+
+#: ../../datetime/zone_utc_list.go:502
+msgid "Macau"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:503
+msgid "Makassar"
+msgstr "Makassar"
+
+#: ../../datetime/zone_utc_list.go:504
+msgid "Manila"
+msgstr "Manila"
+
+#: ../../datetime/zone_utc_list.go:505
+msgid "Shanghai"
+msgstr "Shanghai"
+
+#: ../../datetime/zone_utc_list.go:506
+msgid "Beijing"
+msgstr "Pekin"
+
+#: ../../datetime/zone_utc_list.go:507
+msgid "Singapore"
+msgstr "Singapur"
+
+#: ../../datetime/zone_utc_list.go:508
+msgid "Taipei"
+msgstr "Taipei"
+
+#: ../../datetime/zone_utc_list.go:509
+msgid "Ujung Pandang"
+msgstr "Ujung Pandang"
+
+#: ../../datetime/zone_utc_list.go:510
+msgid "Ulaanbaatar"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:511
+msgid "Ulan Bator"
+msgstr "Ulan Bator"
+
+#: ../../datetime/zone_utc_list.go:512
+msgid "Urumqi"
+msgstr "Urumqi"
+
+#: ../../datetime/zone_utc_list.go:513
+msgid "Perth"
+msgstr "Perth"
+
+#: ../../datetime/zone_utc_list.go:514
+msgid "Australia/West"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:515
+msgid "Hongkong"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:516
+msgid "PRC"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:517
+msgid "ROC"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:520
+msgid "Eucla"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:522
+msgid "Dili"
+msgstr "Dili"
+
+#: ../../datetime/zone_utc_list.go:523
+msgid "Irkutsk"
+msgstr "Irkutsk"
+
+#: ../../datetime/zone_utc_list.go:524
+msgid "Jayapura"
+msgstr "Jayapura"
+
+#: ../../datetime/zone_utc_list.go:525
+msgid "Pyongyang"
+msgstr "Pyongyang"
+
+#: ../../datetime/zone_utc_list.go:526
+msgid "Seoul"
+msgstr "Seul"
+
+#: ../../datetime/zone_utc_list.go:527
+msgid "Tokyo"
+msgstr "Tokyo"
+
+#: ../../datetime/zone_utc_list.go:528
+msgid "Japan"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:529
+msgid "Palau"
+msgstr "Palau"
+
+#: ../../datetime/zone_utc_list.go:530
+msgid "ROK"
+msgstr "ROK"
+
+#: ../../datetime/zone_utc_list.go:532
+msgid "Adelaide"
+msgstr "Adelaide"
+
+#: ../../datetime/zone_utc_list.go:533
+msgid "Broke Hill"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:534
+msgid "Darwin"
+msgstr "Darwin"
+
+#: ../../datetime/zone_utc_list.go:535
+msgid "North"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:536
+msgid "South"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:537
+msgid "Yancowinna"
+msgstr "Yancowinna"
+
+#: ../../datetime/zone_utc_list.go:539
+msgid "DumontDUrville"
+msgstr "DumontDUrville"
+
+#: ../../datetime/zone_utc_list.go:540
+msgid "Khandyga"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:541
+msgid "Yakutsk"
+msgstr "Yakutsk"
+
+#: ../../datetime/zone_utc_list.go:542
+msgid "ACT"
+msgstr "ACT"
+
+#: ../../datetime/zone_utc_list.go:543
+msgid "Brisbane"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:544
+msgid "Canberra"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:545
+msgid "Currie"
+msgstr "Currie"
+
+#: ../../datetime/zone_utc_list.go:546
+msgid "Hobart"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:547
+msgid "Lindeman"
+msgstr "Lindeman"
+
+#: ../../datetime/zone_utc_list.go:548
+msgid "Melbourne"
+msgstr "Melbourne"
+
+#: ../../datetime/zone_utc_list.go:549
+msgid "NSW"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:550
+msgid "Queensland"
+msgstr "Queensland"
+
+#: ../../datetime/zone_utc_list.go:551
+msgid "Sydney"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:552
+msgid "Tasmania"
+msgstr "Tasmania"
+
+#: ../../datetime/zone_utc_list.go:553
+msgid "Victoria"
+msgstr "Victoria"
+
+#: ../../datetime/zone_utc_list.go:554
+msgid "Chuuk"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:555
+msgid "Guam"
+msgstr "Guam"
+
+#: ../../datetime/zone_utc_list.go:556
+msgid "Port Moresby"
+msgstr "Port Moresby"
+
+#: ../../datetime/zone_utc_list.go:557
+msgid "Saipan"
+msgstr "Saipan"
+
+#: ../../datetime/zone_utc_list.go:558
+msgid "Truk"
+msgstr "Truk"
+
+#: ../../datetime/zone_utc_list.go:559
+msgid "Yap"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:561
+msgid "LHI"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:562
+msgid "Lord Howe"
+msgstr "Lord Howe"
+
+#: ../../datetime/zone_utc_list.go:564
+msgid "Casey"
+msgstr "Casey"
+
+#: ../../datetime/zone_utc_list.go:565
+msgid "Macquarie"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:566
+msgid "Sakhalin"
+msgstr "Sakhalin"
+
+#: ../../datetime/zone_utc_list.go:567
+msgid "Ust-Nera"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:568
+msgid "Vladivostok"
+msgstr "Vladivostok"
+
+#: ../../datetime/zone_utc_list.go:569
+msgid "Efate"
+msgstr "Efate"
+
+#: ../../datetime/zone_utc_list.go:570
+msgid "Guadalcanal"
+msgstr "Guadalcanal"
+
+#: ../../datetime/zone_utc_list.go:571
+msgid "Kosrae"
+msgstr "Kosrae"
+
+#: ../../datetime/zone_utc_list.go:572
+msgid "Noumea"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:573
+msgid "Pohnpei"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:574
+msgid "Ponape"
+msgstr "Ponape"
+
+#: ../../datetime/zone_utc_list.go:576
+msgid "Norfolk"
+msgstr "Norfolk"
+
+#: ../../datetime/zone_utc_list.go:578
+msgid "McMurdo"
+msgstr "McMurdo"
+
+#: ../../datetime/zone_utc_list.go:579
+msgid "South Pole"
+msgstr "Güney Kutbu"
+
+#: ../../datetime/zone_utc_list.go:580
+msgid "Anadyr"
+msgstr "Anadyr"
+
+#: ../../datetime/zone_utc_list.go:581
+msgid "Kamchatka"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:582
+msgid "Magadan"
+msgstr "Magadan"
+
+#: ../../datetime/zone_utc_list.go:584
+msgid "NZ"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:585
+msgid "Auckland"
+msgstr "Auckland"
+
+#: ../../datetime/zone_utc_list.go:586
+msgid "Fiji"
+msgstr "Fiji"
+
+#: ../../datetime/zone_utc_list.go:587
+msgid "Funafuti"
+msgstr "Funafuti"
+
+#: ../../datetime/zone_utc_list.go:588
+msgid "Kwajalein"
+msgstr "Kwajalein"
+
+#: ../../datetime/zone_utc_list.go:589
+msgid "Majuro"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:590
+msgid "Nauru"
+msgstr "Nauru"
+
+#: ../../datetime/zone_utc_list.go:591
+msgid "Tarawa"
+msgstr "Tarawa"
+
+#: ../../datetime/zone_utc_list.go:592
+msgid "Wake"
+msgstr "Wake"
+
+#: ../../datetime/zone_utc_list.go:593
+msgid "Wallis"
+msgstr "Wallis"
+
+#: ../../datetime/zone_utc_list.go:595
+msgid "NZ-CHAT"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:596
+msgid "Chatham"
+msgstr "Chatham"
+
+#: ../../datetime/zone_utc_list.go:598
+msgid "Apia"
+msgstr ""
+
+#: ../../datetime/zone_utc_list.go:599
+msgid "Enderbury"
+msgstr "Enderbury"
+
+#: ../../datetime/zone_utc_list.go:600
+msgid "Fakaofo"
+msgstr "Fakaofo"
+
+#: ../../datetime/zone_utc_list.go:602
+msgid "Tongatapu"
+msgstr "Tongatapu"
+
+#: ../../dock/normal_apps.go:79
+msgid "_Run"
+msgstr "_Çalıştır"
+
+#: ../../dock/normal_apps.go:111
+msgid "_Undock"
+msgstr "_Dock panelden kaldır"
+
+#: ../../dock/runtime_apps.go:194
+msgid "_Close All"
+msgstr "_Hepsini Kapat"
+
+#: ../../dock/runtime_apps.go:221
+msgid "_Dock"
+msgstr "_Panel"
+
+#: ../../keybinding/id_desc_map.go:72
+msgid "Launcher"
+msgstr "Başlatıcı"
+
+#: ../../keybinding/id_desc_map.go:73
+msgid "Show desktop"
+msgstr "Masaüstünü göster"
+
+#: ../../keybinding/id_desc_map.go:74
+msgid "Lock screen"
+msgstr "Ekranı kilitle"
+
+#: ../../keybinding/id_desc_map.go:75
+msgid "File manager"
+msgstr "Dosya yöneticisi"
+
+#: ../../keybinding/id_desc_map.go:76
+msgid "Switch applications"
+msgstr "Uygulamaları değiştir"
+
+#: ../../keybinding/id_desc_map.go:77
+msgid "Reverse switch applications"
+msgstr "Ters anahtarı uygulamaları"
+
+#: ../../keybinding/id_desc_map.go:78
+msgid "3D switch applications"
+msgstr "Uygulamaları 3D değiştir"
+
+#: ../../keybinding/id_desc_map.go:79
+msgid "3D reverse switch applications"
+msgstr "Uygulamaları 3D geri değiştir"
+
+#: ../../keybinding/id_desc_map.go:80
+msgid "Show/Hide the dock"
+msgstr "Paneli Göster/Gizle"
+
+#: ../../keybinding/id_desc_map.go:81
+msgid "Screenshot"
+msgstr "Ekran görüntüsü"
+
+#: ../../keybinding/id_desc_map.go:82
+msgid "Full screenshot"
+msgstr "Tam ekran görüntüsü"
+
+#: ../../keybinding/id_desc_map.go:83
+msgid "Window screenshot"
+msgstr "Pencere ekran görüntüsü"
+
+#: ../../keybinding/id_desc_map.go:84
+msgid "Delay screenshot"
+msgstr "Ekran görüntüsü gecikmesi"
+
+#: ../../keybinding/id_desc_map.go:85
+msgid "Terminal"
+msgstr "Uçbirim"
+
+#: ../../keybinding/id_desc_map.go:86
+msgid "Terminal Quake Window"
+msgstr "Terminal Quake Pencere"
+
+#: ../../keybinding/id_desc_map.go:87
+msgid "Logout"
+msgstr "Çıkış yap"
+
+#: ../../keybinding/id_desc_map.go:88
+msgid "Disable Touchpad"
+msgstr "Dokunmatik yüzey Devre dışı"
+
+#: ../../keybinding/id_desc_map.go:89
+msgid "Deepin Translator"
+msgstr "Deepin Çevirici"
+
+#: ../../keybinding/id_desc_map.go:129
+msgid "Calculator"
+msgstr "Hesap makinesini"
+
+#: ../../keybinding/id_desc_map.go:130
+msgid "Email client"
+msgstr "Eposta istemcisi"
+
+#: ../../keybinding/id_desc_map.go:131
+msgid "Web browser"
+msgstr "İnternet tarayıcısı"
+
+#: ../../keybinding/id_desc_map.go:132
+msgid "Media player"
+msgstr "Medya oynatıcı"
+
+#: ../../keybinding/id_desc_map.go:133
+msgid "Play/Pause"
+msgstr "Oynat/Duraklat"
+
+#: ../../keybinding/id_desc_map.go:134
+msgid "Pause"
+msgstr "Duraklat"
+
+#: ../../keybinding/id_desc_map.go:135
+msgid "Stop"
+msgstr "Durdur"
+
+#: ../../keybinding/id_desc_map.go:136
+msgid "Mute"
+msgstr "Sessiz"
+
+#: ../../keybinding/id_desc_map.go:137
+msgid "Volume down"
+msgstr "Sesi kıs"
+
+#: ../../keybinding/id_desc_map.go:138
+msgid "Volume up"
+msgstr "Sesi yükselt"
+
+#: ../../keybinding/id_desc_map.go:139
+msgid "Previous"
+msgstr "Önceki"
+
+#: ../../keybinding/id_desc_map.go:140
+msgid "Next"
+msgstr "Sonraki"
+
+#: ../../keybinding/id_desc_map.go:141
+msgid "Eject"
+msgstr "Çıkar"
+
+#: ../../keybinding/id_desc_map.go:171
+msgid "Close window"
+msgstr "Pencereyi kapat"
+
+#: ../../keybinding/id_desc_map.go:172
+msgid "Maximize window"
+msgstr "Pencereyi büyült"
+
+#: ../../keybinding/id_desc_map.go:173
+msgid "Restore window"
+msgstr "Pencereyi geri yüklemek"
+
+#: ../../keybinding/id_desc_map.go:174
+msgid "Minimize window"
+msgstr "Pencereyi küçült"
+
+#: ../../keybinding/id_desc_map.go:175
+msgid "Move window"
+msgstr "Pencereyi taşı"
+
+#: ../../keybinding/id_desc_map.go:176
+msgid "Resize window"
+msgstr "Pencereyi yeniden boyutlandır"
+
+#: ../../keybinding/id_desc_map.go:177
+msgid "Switch furl state"
+msgstr "Furl durumunu değiştir"
+
+#: ../../keybinding/id_desc_map.go:178
+msgid "Activate window menu"
+msgstr "Aktif pencere menüsü"
+
+#: ../../keybinding/id_desc_map.go:224
+msgid "Switch to workspace 1"
+msgstr "Çalışma alanı 1 e geç"
+
+#: ../../keybinding/id_desc_map.go:225
+msgid "Switch to workspace 2"
+msgstr "Çalışma alanı 2 ye geç"
+
+#: ../../keybinding/id_desc_map.go:226
+msgid "Switch to workspace 3"
+msgstr "Çalışma alanı 3 e geç"
+
+#: ../../keybinding/id_desc_map.go:227
+msgid "Switch to workspace 4"
+msgstr "Çalışma alanı 4 e geç"
+
+#: ../../keybinding/id_desc_map.go:228
+msgid "Switch to left workspace"
+msgstr "Sol çalışma alanına geç"
+
+#: ../../keybinding/id_desc_map.go:229
+msgid "Switch to right workspace"
+msgstr "Sağ çalışma alanına geç"
+
+#: ../../keybinding/id_desc_map.go:230
+msgid "Switch to upper workspace"
+msgstr "Üst çalışma alanına geç"
+
+#: ../../keybinding/id_desc_map.go:231
+msgid "Switch to lower workspace"
+msgstr "Alt çalışma alanına geç"
+
+#: ../../keybinding/id_desc_map.go:232
+msgid "Move to workspace 1"
+msgstr "Pencereyi çalışma alanı 1 e taşı"
+
+#: ../../keybinding/id_desc_map.go:233
+msgid "Move to workspace 2"
+msgstr "Pencereyi çalışma alanı 2 ye taşı"
+
+#: ../../keybinding/id_desc_map.go:234
+msgid "Move to workspace 3"
+msgstr "Pencereyi çalışma alanı 3 e taşı"
+
+#: ../../keybinding/id_desc_map.go:235
+msgid "Move to workspace 4"
+msgstr "Pencereyi çalışma alanı 4 e taşı"
+
+#: ../../keybinding/id_desc_map.go:236
+msgid "Move to left workspace"
+msgstr "Sol çalışma alanına taşı"
+
+#: ../../keybinding/id_desc_map.go:237
+msgid "Move to right workspace"
+msgstr "Sağ çalışma alanına taşı"
+
+#: ../../keybinding/id_desc_map.go:238
+msgid "Move to upper workspace"
+msgstr "Üst çalışma alanına taşı"
+
+#: ../../keybinding/id_desc_map.go:239
+msgid "Move to lower workspace"
+msgstr "Alt çalışma alanına taşı"
+
+#: ../../mime/default_media.go:72 ../../mime/default_media.go:89
+msgid "Nothing"
+msgstr "Hiçbir şey"
+
+#: ../../mime/default_media.go:75 ../../mime/default_media.go:90
+msgid "Open Folder"
+msgstr "Klasörü Aç"
+
+#: ../../mime/default_media.go:79
+msgid "Run Soft"
+msgstr "Yazılım Çalıştır"
+
+#: ../../network/manager_connections.go:183
+#: ../../network/nm_custom_type.go:133
+msgid "Wired Connection"
+msgstr "Kablolu Bağlantı"
+
+#: ../../network/nm_constant.go:296 ../../network/nm_setting_vpn_l2tp.go:116
+#: ../../network/nm_setting_vpn_openvpn.go:171
+#: ../../network/nm_setting_vpn_pptp.go:106
+#: ../../network/nm_setting_vpn_vpnc.go:145
+msgid "Saved"
+msgstr "Kaydedildi"
+
+#: ../../network/nm_constant.go:298 ../../network/nm_setting_vpn_l2tp.go:117
+#: ../../network/nm_setting_vpn_openvpn.go:172
+#: ../../network/nm_setting_vpn_pptp.go:107
+#: ../../network/nm_setting_vpn_vpnc.go:147
+msgid "Always Ask"
+msgstr "Her zaman Sor"
+
+#: ../../network/nm_constant.go:299 ../../network/nm_setting_vpn_l2tp.go:118
+#: ../../network/nm_setting_vpn_openvpn.go:173
+#: ../../network/nm_setting_vpn_openvpn.go:479
+#: ../../network/nm_setting_vpn_pptp.go:108
+#: ../../network/nm_setting_vpn_vpnc.go:148
+msgid "Not Required"
+msgstr "Gerekli Değil"
+
+#: ../../network/nm_custom_type.go:131
+msgid "Connection"
+msgstr "Bağlantı"
+
+#: ../../network/nm_custom_type.go:135
+msgid "Wireless Connection"
+msgstr "Kablosuz Bağlantı"
+
+#: ../../network/nm_custom_type.go:137
+msgid "Wireless Ad-Hoc"
+msgstr "Wireless Ad-Hoc"
+
+#: ../../network/nm_custom_type.go:139
+msgid "Wireless Ap-Hotspot"
+msgstr "Wireless Ap-Hotspot"
+
+#: ../../network/nm_custom_type.go:141
+msgid "PPPoE Connection"
+msgstr "PPPoE Bağlantı"
+
+#: ../../network/nm_custom_type.go:143
+msgid "Mobile Connection"
+msgstr "Mobil Bağlantı"
+
+#: ../../network/nm_custom_type.go:145
+msgid "Mobile GSM Connection"
+msgstr "Mobil GSM Bağlantı"
+
+#: ../../network/nm_custom_type.go:147
+msgid "Mobile CDMA Connection"
+msgstr "Mobil CDMA Bağlantı"
+
+#: ../../network/nm_custom_type.go:149
+msgid "VPN Connection"
+msgstr "VPN Connection"
+
+#: ../../network/nm_custom_type.go:151
+msgid "VPN L2TP"
+msgstr "VPN L2TP"
+
+#: ../../network/nm_custom_type.go:153
+msgid "VPN OpenConnect"
+msgstr "VPN OpenConnect"
+
+#: ../../network/nm_custom_type.go:155
+msgid "VPN OpenVPN"
+msgstr "VPN OpenVPN"
+
+#: ../../network/nm_custom_type.go:157
+msgid "VPN PPTP"
+msgstr "VPN PPTP"
+
+#: ../../network/nm_custom_type.go:159
+msgid "VPN VPNC"
+msgstr "VPN VPNC"
+
+#: ../../network/nm_setting_802_1x.go:73
+msgid "PAP"
+msgstr "PAP"
+
+#: ../../network/nm_setting_802_1x.go:74
+msgid "CHAP"
+msgstr "CHAP"
+
+#: ../../network/nm_setting_802_1x.go:75
+msgid "MSCHAP"
+msgstr "MSCHAP"
+
+#: ../../network/nm_setting_802_1x.go:76
+msgid "MSCHAPV2"
+msgstr "MSCHAPV2"
+
+#: ../../network/nm_setting_802_1x.go:77
+msgid "GTC"
+msgstr "GTC"
+
+#: ../../network/nm_setting_802_1x.go:78
+msgid "OTP"
+msgstr "OTP"
+
+#: ../../network/nm_setting_802_1x.go:79
+#: ../../network/nm_setting_802_1x.go:162
+msgid "MD5"
+msgstr "MD5"
+
+#: ../../network/nm_setting_802_1x.go:80
+#: ../../network/nm_setting_802_1x.go:161
+#: ../../network/nm_setting_802_1x.go:169
+msgid "TLS"
+msgstr "TLS"
+
+#: ../../network/nm_setting_802_1x.go:163
+#: ../../network/nm_setting_802_1x.go:171
+msgid "FAST"
+msgstr "FAST"
+
+#: ../../network/nm_setting_802_1x.go:164
+#: ../../network/nm_setting_802_1x.go:172
+msgid "Tunneled TLS"
+msgstr "Tunneled TLS"
+
+#: ../../network/nm_setting_802_1x.go:165
+#: ../../network/nm_setting_802_1x.go:173
+msgid "Protected EAP"
+msgstr "Korumalı EAP"
+
+#: ../../network/nm_setting_802_1x.go:170
+#: ../../network/nm_setting_wireless_security.go:206
+msgid "LEAP"
+msgstr "LEAP"
+
+#: ../../network/nm_setting_802_1x.go:178
+#: ../../network/nm_setting_ip4_config.go:178
+#: ../../network/nm_setting_vpn_vpnc.go:261
+msgid "Disabled"
+msgstr "Devre dışı"
+
+#: ../../network/nm_setting_802_1x.go:179
+msgid "Anonymous"
+msgstr "Anonim"
+
+#: ../../network/nm_setting_802_1x.go:180
+msgid "Authenticated"
+msgstr "Kimlik Doğrulandı"
+
+#: ../../network/nm_setting_802_1x.go:181
+msgid "Both"
+msgstr "İkisi de"
+
+#: ../../network/nm_setting_802_1x.go:185
+#: ../../network/nm_setting_wireless.go:295
+msgid "Automatic"
+msgstr "Otomatik"
+
+#: ../../network/nm_setting_802_1x.go:186
+msgid "Version 0"
+msgstr "Versiyon 0"
+
+#: ../../network/nm_setting_802_1x.go:187
+msgid "Version 1"
+msgstr "Versiyon 1"
+
+#: ../../network/nm_setting_gsm.go:125
+msgid "China Unicom Internet"
+msgstr "China Unicom Internet"
+
+#: ../../network/nm_setting_gsm.go:126
+msgid "China Unicom MMS"
+msgstr "China Unicom MMS"
+
+#: ../../network/nm_setting_gsm.go:127
+msgid "China Mobile WAP"
+msgstr "China Mobile WAP"
+
+#: ../../network/nm_setting_gsm.go:128
+msgid "China Mobile Internet"
+msgstr "China Mobile Internet"
+
+#: ../../network/nm_setting_gsm.go:129
+msgid "China Mobile MMS"
+msgstr "China Mobile MMS"
+
+#: ../../network/nm_setting_gsm.go:133
+msgid "Any"
+msgstr "Herhangi bir"
+
+#: ../../network/nm_setting_gsm.go:134
+msgid "3G (UMTS/HSPA)"
+msgstr "3G (UMTS/HSPA)"
+
+#: ../../network/nm_setting_gsm.go:135
+msgid "2G (GPRS/EDGE)"
+msgstr "2G (GPRS/EDGE)"
+
+#: ../../network/nm_setting_gsm.go:136
+msgid "Prefer 3G (UMTS/HSPA)"
+msgstr "Tercih 3G (UMTS/HSPA)"
+
+#: ../../network/nm_setting_gsm.go:137
+msgid "Prefer 2G (GPRS/EDGE)"
+msgstr "Tercih 2G (GPRS/EDGE)"
+
+#: ../../network/nm_setting_gsm.go:138
+msgid "Prefer 4G (LTE)"
+msgstr "Tercih 4G (LTE)"
+
+#: ../../network/nm_setting_gsm.go:139
+msgid "Use Only 4G (LTE)"
+msgstr "Yanlız 4G (LTE) kullan"
+
+#: ../../network/nm_setting_ip4_config.go:174
+#: ../../network/nm_setting_ip6_config.go:66
+msgid "Auto"
+msgstr "Otomatik"
+
+#: ../../network/nm_setting_ip4_config.go:175
+#: ../../network/nm_setting_ip6_config.go:68
+msgid "Link-Local Only"
+msgstr "Link-Yerel Yanlız"
+
+#: ../../network/nm_setting_ip4_config.go:176
+#: ../../network/nm_setting_ip6_config.go:69
+msgid "Manual"
+msgstr "Elle"
+
+#: ../../network/nm_setting_ip4_config.go:177
+#: ../../network/nm_setting_ip6_config.go:70
+#: ../../network/nm_setting_wireless_security.go:205
+msgid "Shared"
+msgstr "Paylaşımlı"
+
+#: ../../network/nm_setting_ip6_config.go:65
+msgid "Ignore"
+msgstr "Yoksay"
+
+#: ../../network/nm_setting_ip6_config.go:67
+msgid "DHCP"
+msgstr "DHCP"
+
+#: ../../network/nm_setting_virtual_key.go:116
+msgid "GSM (GPRS, EDGE, UMTS, HSPA)"
+msgstr "GSM (GPRS, EDGE, UMTS, HSPA)"
+
+#: ../../network/nm_setting_virtual_key.go:117
+msgid "CDMA (1xRTT, EVDO)"
+msgstr "CDMA (1xRTT, EVDO)"
+
+#: ../../network/nm_setting_virtual_key.go:124
+msgid "L2TP"
+msgstr "L2TP"
+
+#: ../../network/nm_setting_virtual_key.go:125
+msgid "PPTP"
+msgstr "PPTP"
+
+#: ../../network/nm_setting_virtual_key.go:126
+msgid "OpenConnect"
+msgstr "OpenConnect"
+
+#: ../../network/nm_setting_virtual_key.go:127
+msgid "OpenVPN"
+msgstr "OpenVPN"
+
+#: ../../network/nm_setting_virtual_key.go:128
+msgid "VPNC"
+msgstr "VPNC"
+
+#: ../../network/nm_setting_virtual_key.go:141
+#: ../../network/nm_setting_virtual_key.go:148
+#: ../../network/nm_setting_virtual_key.go:178
+#: ../../network/nm_setting_vpn_openvpn.go:398
+#: ../../network/nm_setting_vpn_vpnc.go:272
+msgid "None"
+msgstr "Yok"
+
+#: ../../network/nm_setting_virtual_key.go:142
+#: ../../network/nm_setting_virtual_key.go:149
+msgid "WEP 40/128-bit Key"
+msgstr "WEP 40/128-bit Anahtar"
+
+#: ../../network/nm_setting_virtual_key.go:143
+#: ../../network/nm_setting_virtual_key.go:150
+msgid "WPA/WPA2 Personal"
+msgstr "WPA/WPA2 Kişisel"
+
+#: ../../network/nm_setting_virtual_key.go:144
+msgid "WPA/WPA2 Enterprise"
+msgstr "WPA/WPA2 Kurumsal"
+
+#: ../../network/nm_setting_virtual_key.go:158
+#: ../../network/nm_setting_virtual_key.go:167
+msgid "All Available (default)"
+msgstr "Tüm Kullanılabilir (varsayılan)"
+
+#: ../../network/nm_setting_virtual_key.go:159
+#: ../../network/nm_setting_virtual_key.go:168
+msgid "128-bit (most secure)"
+msgstr "128-bit (yüksek güvenlik)"
+
+#: ../../network/nm_setting_virtual_key.go:160
+#: ../../network/nm_setting_virtual_key.go:169
+msgid "40-bit (less secure)"
+msgstr "40-bit (düşük güvenlik)"
+
+#: ../../network/nm_setting_virtual_key.go:176
+msgid "Secure (default)"
+msgstr "Güvenli (varsayılan)"
+
+#: ../../network/nm_setting_virtual_key.go:177
+msgid "Weak"
+msgstr "Zayıf"
+
+#: ../../network/nm_setting_vpn_openvpn.go:251
+msgid "Certificates (TLS)"
+msgstr "Sertifikalar (TLS)"
+
+#: ../../network/nm_setting_vpn_openvpn.go:252
+msgid "Password"
+msgstr "Şifre"
+
+#: ../../network/nm_setting_vpn_openvpn.go:253
+msgid "Password with Certificates (TLS)"
+msgstr "Sertifikalı Şifre (TLS)"
+
+#: ../../network/nm_setting_vpn_openvpn.go:254
+msgid "Static Key"
+msgstr "Statik Anahtar"
+
+#: ../../network/nm_setting_vpn_openvpn.go:258
+#: ../../network/nm_setting_vpn_openvpn.go:434
+msgid "0"
+msgstr "0"
+
+#: ../../network/nm_setting_vpn_openvpn.go:259
+#: ../../network/nm_setting_vpn_openvpn.go:435
+msgid "1"
+msgstr "1"
+
+#: ../../network/nm_setting_vpn_openvpn.go:377
+#: ../../network/nm_setting_vpn_openvpn.go:397
+#: ../../network/nm_setting_vpn_openvpn.go:428
+#: ../../network/nm_setting_wireless.go:139
+#: ../../network/nm_setting_wireless.go:188
+msgid "Default"
+msgstr "Varsayılan"
+
+#: ../../network/nm_setting_vpn_openvpn.go:378
+msgid "DES-CBC"
+msgstr "DES-CBC"
+
+#: ../../network/nm_setting_vpn_openvpn.go:379
+msgid "RC2-CBC"
+msgstr "RC2-CBC"
+
+#: ../../network/nm_setting_vpn_openvpn.go:380
+msgid "DES-EDE-CBC"
+msgstr "DES-EDE-CBC"
+
+#: ../../network/nm_setting_vpn_openvpn.go:381
+msgid "DES-EDE3-CBC"
+msgstr "DES-EDE3-CBC"
+
+#: ../../network/nm_setting_vpn_openvpn.go:382
+msgid "DESX-CBC"
+msgstr "DESX-CBC"
+
+#: ../../network/nm_setting_vpn_openvpn.go:383
+msgid "BF-CBC"
+msgstr "BF-CBC"
+
+#: ../../network/nm_setting_vpn_openvpn.go:384
+msgid "RC2-40-CBC"
+msgstr "RC2-40-CBC"
+
+#: ../../network/nm_setting_vpn_openvpn.go:385
+msgid "CAST5-CBC"
+msgstr "CAST5-CBC"
+
+#: ../../network/nm_setting_vpn_openvpn.go:386
+msgid "RC2-64-CBC"
+msgstr "RC2-64-CBC"
+
+#: ../../network/nm_setting_vpn_openvpn.go:387
+msgid "AES-128-CBC"
+msgstr "AES-128-CBC"
+
+#: ../../network/nm_setting_vpn_openvpn.go:388
+msgid "AES-192-CBC"
+msgstr "AES-192-CBC"
+
+#: ../../network/nm_setting_vpn_openvpn.go:389
+msgid "AES-256-CBC"
+msgstr "AES-256-CBC"
+
+#: ../../network/nm_setting_vpn_openvpn.go:390
+msgid "CAMELLIA-128-CBC"
+msgstr "CAMELLIA-128-CBC"
+
+#: ../../network/nm_setting_vpn_openvpn.go:391
+msgid "CAMELLIA-192-CBC"
+msgstr "CAMELLIA-192-CBC"
+
+#: ../../network/nm_setting_vpn_openvpn.go:392
+msgid "CAMELLIA-256-CBC"
+msgstr "CAMELLIA-256-CBC"
+
+#: ../../network/nm_setting_vpn_openvpn.go:393
+msgid "SEED-CBC"
+msgstr "SEED-CBC"
+
+#: ../../network/nm_setting_vpn_openvpn.go:399
+msgid "RSA MD-4"
+msgstr "RSA MD-4"
+
+#: ../../network/nm_setting_vpn_openvpn.go:400
+msgid "MD-5"
+msgstr "MD-5"
+
+#: ../../network/nm_setting_vpn_openvpn.go:401
+msgid "SHA-1"
+msgstr "SHA-1"
+
+#: ../../network/nm_setting_vpn_openvpn.go:402
+msgid "SHA-224"
+msgstr "SHA-224"
+
+#: ../../network/nm_setting_vpn_openvpn.go:403
+msgid "SHA-256"
+msgstr "SHA-256"
+
+#: ../../network/nm_setting_vpn_openvpn.go:404
+msgid "SHA-384"
+msgstr "SHA-384"
+
+#: ../../network/nm_setting_vpn_openvpn.go:405
+msgid "SHA-512"
+msgstr "SHA-512"
+
+#: ../../network/nm_setting_vpn_openvpn.go:406
+msgid "RIPEMD-160"
+msgstr "RIPEMD-160"
+
+#: ../../network/nm_setting_vpn_openvpn.go:429
+msgid "Client"
+msgstr "İstemci"
+
+#: ../../network/nm_setting_vpn_openvpn.go:430
+msgid "Server"
+msgstr "Sunucu"
+
+#: ../../network/nm_setting_vpn_openvpn.go:480
+msgid "HTTP"
+msgstr "HTTP"
+
+#: ../../network/nm_setting_vpn_openvpn.go:481
+msgid "SOCKS"
+msgstr "SOCKS"
+
+#: ../../network/nm_setting_vpn_vpnc.go:253
+msgid "Cisco (default)"
+msgstr "Cisco (varsayılan)"
+
+#: ../../network/nm_setting_vpn_vpnc.go:254
+msgid "Netscreen"
+msgstr "Netscreen"
+
+#: ../../network/nm_setting_vpn_vpnc.go:258
+msgid "NAT-T When Available (default)"
+msgstr "NAT-T Olduğunda Kullanılabilir (varsayılan)"
+
+#: ../../network/nm_setting_vpn_vpnc.go:259
+msgid "NAT-T Always"
+msgstr "NAT-T Her zaman"
+
+#: ../../network/nm_setting_vpn_vpnc.go:260
+msgid "Cisco UDP"
+msgstr "Cisco UDP"
+
+#: ../../network/nm_setting_vpn_vpnc.go:265
+#: ../../network/nm_setting_vpn_vpnc.go:273
+msgid "DH Group 1"
+msgstr "DH Grup 1"
+
+#: ../../network/nm_setting_vpn_vpnc.go:266
+msgid "DH Group 2 (default)"
+msgstr "DH Grup 2 (varsayılan)"
+
+#: ../../network/nm_setting_vpn_vpnc.go:267
+#: ../../network/nm_setting_vpn_vpnc.go:275
+msgid "DH Group 5"
+msgstr "DH Grup 5"
+
+#: ../../network/nm_setting_vpn_vpnc.go:271
+msgid "Server (default)"
+msgstr "Sunucu (varsayılan)"
+
+#: ../../network/nm_setting_vpn_vpnc.go:274
+msgid "DH Group 2"
+msgstr "DH Grup 2"
+
+#: ../../network/nm_setting_wireless.go:289
+msgid "Infrastructure"
+msgstr "Altyapı"
+
+#: ../../network/nm_setting_wireless.go:290
+msgid "Ad-Hoc"
+msgstr "Ad-Hoc"
+
+#: ../../network/nm_setting_wireless.go:291
+msgid "AP-Hotspot"
+msgstr "AP-Hotspot"
+
+#: ../../network/nm_setting_wireless.go:296
+msgid "A (5 GHz)"
+msgstr "A (5 GHz)"
+
+#: ../../network/nm_setting_wireless.go:297
+msgid "BG (2.4 GHz)"
+msgstr "BG (2.4 GHz)"
+
+#: ../../network/nm_setting_wireless_security.go:189
+msgid "WEP"
+msgstr "WEP"
+
+#: ../../network/nm_setting_wireless_security.go:190
+msgid "Dynamic WEP"
+msgstr "Dinamik WEP"
+
+#: ../../network/nm_setting_wireless_security.go:191
+msgid "Ad-Hoc WPA-PSK"
+msgstr "Ad-Hoc WPA-PSK"
+
+#: ../../network/nm_setting_wireless_security.go:192
+msgid "WPA-PSK Infrastructure"
+msgstr "WPA-PSK Altyapı"
+
+#: ../../network/nm_setting_wireless_security.go:193
+msgid "WPA Enterprise"
+msgstr "WPA Kurumsal"
+
+#: ../../network/nm_setting_wireless_security.go:197
+msgid "WEP40"
+msgstr "WEP40"
+
+#: ../../network/nm_setting_wireless_security.go:198
+msgid "WEP104"
+msgstr "WEP104"
+
+#: ../../network/nm_setting_wireless_security.go:199
+msgid "TKIP"
+msgstr "TKIP"
+
+#: ../../network/nm_setting_wireless_security.go:200
+msgid "CCMP"
+msgstr "CCMP"
+
+#: ../../network/nm_setting_wireless_security.go:204
+msgid "Open"
+msgstr "Aç"
+
+#: ../../network/state_handler.go:34
+msgid "The device is now managed."
+msgstr "Bu cihaz şimdi yönetildi."
+
+#: ../../network/state_handler.go:35
+msgid "The device is no longer managed."
+msgstr "Bu cihaz artık yönetilmektedir."
+
+#: ../../network/state_handler.go:36
+msgid "The device have not been ready for configuration."
+msgstr "Bu cihaz yapılandırma için hazır değil."
+
+#: ../../network/state_handler.go:37
+msgid ""
+"IP configuration could not be reserved (no available address, timeout, etc)."
+msgstr "IP yapılandırma ayrılmamış (adres kullananılabilir değil, zaman aşımı, vs)."
+
+#: ../../network/state_handler.go:38
+msgid "The IP configuration is no longer valid."
+msgstr "Bu IP yapılandırması artık geçerli."
+
+#: ../../network/state_handler.go:39
+msgid "Passwords were required but not provided."
+msgstr "Şifre gerekli ama sağlanmamıştır."
+
+#: ../../network/state_handler.go:40
+msgid ""
+"The 802.1X supplication disconnected from the access point or authentication"
+" server."
+msgstr "802.1X erişim noktası veya kimlik doğrulama sunucusundan bağlantı kesildi."
+
+#: ../../network/state_handler.go:41
+msgid "Configuration of the 802.1X supplication failed."
+msgstr "802.1X yapılandırması başarısız oldu."
+
+#: ../../network/state_handler.go:42
+msgid "The 802.1X supplicant quitted or failed unexpectedly."
+msgstr "Bu 802.1X 'den çıkış yapıldı veya beklenmedik şekilde başarısız oldu."
+
+#: ../../network/state_handler.go:43
+msgid "The 802.1X supplicant took too long time to authenticate."
+msgstr "Bu 802.1X kimlik doğrulaması çok uzun zaman aldı."
+
+#: ../../network/state_handler.go:44
+msgid "The PPP service failed to start within the allowed time."
+msgstr "PPP servisinin izin verilen süre içinde başlatılamadı."
+
+#: ../../network/state_handler.go:45
+msgid "The PPP service disconnected unexpectedly."
+msgstr "PPP hizmeti beklenmedik şekilde kesildi."
+
+#: ../../network/state_handler.go:46
+msgid "The PPP service quitted or failed unexpectedly."
+msgstr "Bu PPP hizmetinden çıkış yapıldı veya beklenmedik şekilde başarısız oldu."
+
+#: ../../network/state_handler.go:47
+msgid "The DHCP service failed to start within the allowed time."
+msgstr "DHCP hizmeti izin verilen süre içinde başlatılamadı."
+
+#: ../../network/state_handler.go:48
+msgid "The DHCP service reported an unexpected error."
+msgstr "DHCP hizmeti beklenmeyen bir hata bildirdi."
+
+#: ../../network/state_handler.go:49
+msgid "The DHCP service quitted or failed unexpectedly."
+msgstr "Bu DHCP hizmetinden çıkış yapıldı veya beklenmedik şekilde başarısız oldu."
+
+#: ../../network/state_handler.go:50
+msgid "The shared connection service failed to start."
+msgstr "Bu paylaşım bağlantı servisi başlatması başarısız oldu."
+
+#: ../../network/state_handler.go:51
+msgid "The shared connection service quitted or failed unexpectedly."
+msgstr "Bu paylaşılan bağlantı hizmetinden çıkış yapıldı veya beklenmedik şekilde başarısız oldu."
+
+#: ../../network/state_handler.go:52
+msgid "The AutoIP service failed to start."
+msgstr "Bu AutoIP servisi başlatması başarısız oldu."
+
+#: ../../network/state_handler.go:53
+msgid "The AutoIP service reported an unexpected error."
+msgstr "AutoIP hizmeti beklenmeyen bir hata bildirdi."
+
+#: ../../network/state_handler.go:54
+msgid "The AutoIP service quitted or failed unexpectedly."
+msgstr "Bu AutoIP hizmetinden çıkış yapıldı veya beklenmedik şekilde başarısız oldu."
+
+#: ../../network/state_handler.go:55
+msgid "Dialing failed due to busy lines."
+msgstr "Çevirme hatların meşgul olması nedeniyle başarısız oldu."
+
+#: ../../network/state_handler.go:56
+msgid "Dialing failed due to no dial tone."
+msgstr "Çevirme çevir sesi olmaması nedeniyle başarısız oldu."
+
+#: ../../network/state_handler.go:57
+msgid "Dialing failed due to the carrier."
+msgstr "Çevirme taşıyıcı nedeniyle başarısız oldu."
+
+#: ../../network/state_handler.go:58
+msgid "Dialing timed out."
+msgstr "Çevirme zaman aşımına uğradı."
+
+#: ../../network/state_handler.go:59
+msgid "Dialing failed."
+msgstr "Çevirme başarısız oldu."
+
+#: ../../network/state_handler.go:60
+msgid "Modem initialization failed."
+msgstr "Modem başlatma başarısız oldu."
+
+#: ../../network/state_handler.go:61
+msgid "Failed to select the specified GSM APN."
+msgstr "Belirtilen GSM APN seçmek başarısız oldu."
+
+#: ../../network/state_handler.go:62
+msgid "No networks searched."
+msgstr "Aranan bağlantılar yok."
+
+#: ../../network/state_handler.go:63
+msgid "Network registration was denied."
+msgstr "Ağ kayıt reddedildi."
+
+#: ../../network/state_handler.go:64
+msgid "Network registration timed out."
+msgstr "Ağ kaydı zaman aşımına uğradı."
+
+#: ../../network/state_handler.go:65
+msgid "Register to the requested GSM network failed."
+msgstr "İstenen GSM şebekesine kayıt başarısız oldu."
+
+#: ../../network/state_handler.go:66
+msgid "PIN check failed."
+msgstr "PIN kontrol başarısız."
+
+#: ../../network/state_handler.go:67
+msgid "Necessary firmware for the device may be missed."
+msgstr "Cihaz için gerekli ürün yazılımı kayıp olabilir."
+
+#: ../../network/state_handler.go:68
+msgid "The device was removed."
+msgstr "Bu cihaz kaldırıldı."
+
+#: ../../network/state_handler.go:69
+msgid "NetworkManager went to sleep."
+msgstr "NetworkManager uyudu."
+
+#: ../../network/state_handler.go:70
+msgid "The device's active connection was removed or disappeared."
+msgstr "Cihazın aktif bağlantısı kaldırıldı veya kayboldu."
+
+#: ../../network/state_handler.go:71
+msgid "A user or client requested to disconnect."
+msgstr "Bir kullanıcı veya istemci bağlantıyı kesmek istedi."
+
+#: ../../network/state_handler.go:72
+msgid "The device's carrier/link changed."
+msgstr "Cihazın taşıyıcı/link değişti."
+
+#: ../../network/state_handler.go:73
+msgid "The device's existing connection was assumed."
+msgstr "Cihazın mevcut bağlantı kabul edildi."
+
+#: ../../network/state_handler.go:74
+msgid "The 802.1x supplication is now available."
+msgstr "Bu 802.1x şimdi kullanılabilir."
+
+#: ../../network/state_handler.go:75
+msgid "The modem could not be found."
+msgstr "Bu modem bulunamadı."
+
+#: ../../network/state_handler.go:76
+msgid "The Bluetooth connection timed out or failed."
+msgstr "Bu Bluetooth bağlantısı zaman aşımına uğradı veya başarısız oldu."
+
+#: ../../network/state_handler.go:77
+msgid "GSM Modem's SIM Card not inserted."
+msgstr "GSM Modem'in SIM Kartı takılı değil."
+
+#: ../../network/state_handler.go:78
+msgid "GSM Modem's SIM PIN required."
+msgstr "GSM Modem'in SIM PIN'i gerekli."
+
+#: ../../network/state_handler.go:79
+msgid "GSM Modem's SIM PUK required."
+msgstr "GSM Modem'in SIM PUK'u gerekli."
+
+#: ../../network/state_handler.go:80
+msgid "Wrong GSM Modem's SIM"
+msgstr "GSM Modem'in SIM'i hatalı"
+
+#: ../../network/state_handler.go:81
+msgid "InfiniBand device does not support connected mode."
+msgstr "InfiniBand cihazı bağlantı modunu desteklemiyor."
+
+#: ../../network/state_handler.go:82
+msgid "A connection dependency failed."
+msgstr "Bağlantı bağımlılığı başarısız oldu."
+
+#: ../../network/state_handler.go:83
+msgid "Problem with the RFC 2684 Ethernet over ADSL bridge."
+msgstr "ADSL köprüsünde RFC 2684 Ethernet ile sorun var."
+
+#: ../../network/state_handler.go:84
+msgid "ModemManager was not running or quitted unexpectedly."
+msgstr "ModemManager çalışmıyor ya da beklenmedik bir şekilde çıktı.."
+
+#: ../../network/state_handler.go:85
+msgid "The 802.11 Wi-Fi network could not be found."
+msgstr "Bu 802.11 Wi-Fi ağı bulunamadı."
+
+#: ../../network/state_handler.go:86
+msgid "A secondary connection of the base connection failed."
+msgstr "Temel bağlantının ikinci bağlantısı başarısız oldu."
+
+#: ../../network/state_handler.go:88
+msgid "The VPN connection changed state due to disconnection from users."
+msgstr "The VPN connection changed state due to disconnection from users."
+
+#: ../../network/state_handler.go:89
+msgid "The VPN connection changed state due to disconnection from devices."
+msgstr "The VPN connection changed state due to disconnection from devices."
+
+#: ../../network/state_handler.go:90
+msgid "VPN service stopped."
+msgstr "VPN service stopped."
+
+#: ../../network/state_handler.go:91
+msgid "The IP config of VPN connection was invalid."
+msgstr "The IP config of VPN connection was invalid."
+
+#: ../../network/state_handler.go:92
+msgid "The connection attempt to VPN service timed out."
+msgstr "The connection attempt to VPN service timed out."
+
+#: ../../network/state_handler.go:93
+msgid "The VPN service start timed out."
+msgstr "The VPN service start timed out."
+
+#: ../../network/state_handler.go:94
+msgid "The VPN service failed to start."
+msgstr "The VPN service failed to start."
+
+#: ../../network/state_handler.go:95
+msgid "Necessary password for the VPN connection was not provided."
+msgstr "Necessary password for the VPN connection was not provided."
+
+#: ../../network/state_handler.go:96
+msgid "Authentication to VPN server failed."
+msgstr "Authentication to VPN server failed."
+
+#: ../../network/state_handler.go:97
+msgid "The connection was deleted from settings."
+msgstr "Bu bağlantı ayarlardan silindi."
+
+#: ../../network/state_handler.go:155 ../../network/state_handler.go:227
+msgid "Connected"
+msgstr "Bağlandı"
+
+#: ../../network/state_handler.go:180 ../../network/state_handler.go:231
+#: ../../network/state_handler.go:236 ../../network/state_handler.go:241
+msgid "Disconnected"
+msgstr ""
+
+#: ../../network/state_handler.go:209
+msgid "Offline"
+msgstr "Çevrimdışı"
+
+#: ../../network/state_handler.go:209
+msgid "Disconnected,  you are now offline."
+msgstr "Bağlantı kesildi, şimdi çevrimdışısınız."
+
+#: ../../network/state_handler.go:241
+msgid "Access Point mode is not supported by this device."
+msgstr "Erişim Noktası modu cihaz tarafından desteklenmiyor."
+
+#: ../../power/upower.go:86 ../../power/upower.go:101
+msgid "Battery Critical Low"
+msgstr "Batarya Kritik Seviyede"
+
+#: ../../power/upower.go:86
+msgid "Computer has been in suspend mode, please plug in."
+msgstr "Bilgisayar bekleme moduna geçecek, lütfen fişe takın."
+
+#: ../../power/upower.go:101
+msgid "Computer will being in suspend mode, please plug in."
+msgstr "Bilgisayar bekleme moduna geçecek, lütfen fişe takın."
+
+#: ../../power/upower.go:114
+msgid "Battery Low"
+msgstr "Batarya Düşük"
+
+#: ../../power/upower.go:114
+msgid "Computer will be in suspend mode, please plug in."
+msgstr "Bilgisayar bekleme moduna geçecek, lütfen fişe takın."
