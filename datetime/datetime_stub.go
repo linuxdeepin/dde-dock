@@ -54,6 +54,7 @@ func (op *Manager) setPropName(name string) {
 			op.CurrentTimezone = tz
 		} else {
 			op.CurrentTimezone = DEFAULT_ZONE
+			op.SetTimeZone(DEFAULT_ZONE)
 		}
 		dbus.NotifyChange(op, name)
 	case "UserTimezoneList":
@@ -83,6 +84,7 @@ func (op *Manager) setPropName(name string) {
 			if !checkLocaleValid(op.CurrentLocale) {
 				op.CurrentLocale = DEFAULT_LOCALE
 			}
+			op.SetLocale(op.CurrentLocale)
 		}
 		dbus.NotifyChange(op, name)
 	}

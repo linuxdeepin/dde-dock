@@ -122,7 +122,6 @@ func setLayout(key string) {
 		username := dutils.GetUserName()
 		if len(username) > 0 {
 			greeterObj.SetKbdLayout(username, key)
-			greeterObj.SetKbdLayoutList(username, list)
 		}
 	}
 }
@@ -303,6 +302,12 @@ func listenDevsSettings() {
 			setLayoutOptions()
 			layout := kbdSettings.GetString(KBD_KEY_LAYOUT)
 			setLayout(layout)
+		case KBD_KEY_USER_LAYOUT_LIST:
+			list := kbdSettings.GetStrv(KBD_KEY_USER_LAYOUT_LIST)
+			username := dutils.GetUserName()
+			if len(username) > 0 {
+				greeterObj.SetKbdLayoutList(username, list)
+			}
 		}
 	})
 }
