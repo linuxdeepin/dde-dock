@@ -1719,11 +1719,6 @@ msgstr "MSCHAPV2"
 msgid "Macao"
 msgstr "澳门"
 
-#: datetime/zone_utc_list.go:502
-#, fuzzy
-msgid "Macau"
-msgstr "澳门"
-
 #: datetime/zone_utc_list.go:235
 msgid "Maceio"
 msgstr "马塞约"
