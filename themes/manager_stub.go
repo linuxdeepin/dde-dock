@@ -34,11 +34,11 @@ func (obj *Manager) GetDBusInfo() dbus.DBusInfo {
 }
 
 func (obj *Manager) setPropCurrentTheme(theme string) {
-	if obj.CurrentTheme.GetValue().(string) != theme {
-		//obj.CurrentTheme = theme
-		//dbus.NotifyChange(obj, "CurrentTheme")
-		themeSettings.SetString(GS_KEY_CURRENT_THEME, theme)
-	}
+	//if obj.CurrentTheme.GetValue().(string) != theme {
+	//obj.CurrentTheme = theme
+	//dbus.NotifyChange(obj, "CurrentTheme")
+	themeSettings.SetString(GS_KEY_CURRENT_THEME, theme)
+	//}
 }
 
 func (obj *Manager) setPropThemeList(list []string) {
