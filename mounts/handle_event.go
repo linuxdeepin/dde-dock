@@ -46,7 +46,7 @@ func (m *Manager) refrashDiskInfoList() {
 		case <-time.NewTimer(time.Second * TIME_DURATION).C:
 			Logger.Info("Refrash Disk Info List")
 			m.setPropName("DiskList")
-			Logger.Infof("Disk List: %v", m.DiskList)
+			//Logger.Infof("Disk List: %v", m.DiskList)
 		case <-m.quitFlag:
 			return
 		}
