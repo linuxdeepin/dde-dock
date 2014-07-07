@@ -1,23 +1,23 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
-# samson <sambelet@yahoo.com>, 2014
+# Benjamin Perez Carrillo <benperezc@gmail.com>, 2014
+# Victor Rojas Hernandez <vitorohe@gmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-07 18:06+0800\n"
-"PO-Revision-Date: 2014-07-07 10:00+0000\n"
+"POT-Creation-Date: 2014-07-07 17:55+0800\n"
+"PO-Revision-Date: 2014-07-07 09:55+0000\n"
 "Last-Translator: electricface <songwentai@linuxdeepin.com>\n"
-"Language-Team: Amharic (http://www.transifex.com/projects/p/dde-daemon/"
-"language/am/)\n"
-"Language: am\n"
+"Language-Team: Spanish (Chile) (http://www.transifex.com/projects/p/dde-daemon/language/es_CL/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: es_CL\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: network/nm_setting_vpn_openvpn.go:258 network/nm_setting_vpn_openvpn.go:434
 msgid "0"
@@ -29,7 +29,7 @@ msgstr "1"
 
 #: network/nm_setting_virtual_key.go:159 network/nm_setting_virtual_key.go:168
 msgid "128-bit (most secure)"
-msgstr "128-ቢት (በጣም አስተማማኝ)"
+msgstr "128-bit (mayor seguridad)"
 
 #: network/nm_setting_gsm.go:135
 msgid "2G (GPRS/EDGE)"
@@ -37,11 +37,11 @@ msgstr "2G (GPRS/EDGE)"
 
 #: keybinding/id_desc_map.go:79
 msgid "3D reverse switch applications"
-msgstr "3ዲ መተግበሪያዎች መቀየሪያ እንደ ነበር መመለሻ"
+msgstr ""
 
 #: keybinding/id_desc_map.go:78
 msgid "3D switch applications"
-msgstr "3ዲ መተግበሪያዎች መቀየሪያ"
+msgstr ""
 
 #: network/nm_setting_gsm.go:134
 msgid "3G (UMTS/HSPA)"
@@ -49,7 +49,7 @@ msgstr "3G (UMTS/HSPA)"
 
 #: network/nm_setting_virtual_key.go:160 network/nm_setting_virtual_key.go:169
 msgid "40-bit (less secure)"
-msgstr "40-ቢት (ደህና አስተማማኝ)"
+msgstr "40-bit (menor seguridad)"
 
 #: network/nm_setting_wireless.go:296
 msgid "A (5 GHz)"
@@ -61,7 +61,7 @@ msgstr ""
 
 #: network/state_handler.go:86
 msgid "A secondary connection of the base connection failed."
-msgstr ""
+msgstr "Una conexión secundaria de la conexión de base falló."
 
 #: network/state_handler.go:71
 msgid "A user or client requested to disconnect."
@@ -69,7 +69,7 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:544
 msgid "ACT"
-msgstr "ACT"
+msgstr ""
 
 #: network/nm_setting_vpn_openvpn.go:387
 msgid "AES-128-CBC"
@@ -85,11 +85,11 @@ msgstr "AES-256-CBC"
 
 #: network/nm_setting_wireless.go:291
 msgid "AP-Hotspot"
-msgstr "AP-Hotspot"
+msgstr "Zona Ap inalámbrica "
 
 #: datetime/zone_utc_list.go:258
 msgid "Abidjan"
-msgstr "Abidjan"
+msgstr ""
 
 #: network/state_handler.go:241
 msgid "Access Point mode is not supported by this device."
@@ -97,7 +97,7 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:259
 msgid "Accra"
-msgstr "Accra"
+msgstr ""
 
 #: datetime/zone_utc_list.go:157
 msgid "Acre"
@@ -105,7 +105,7 @@ msgstr ""
 
 #: keybinding/id_desc_map.go:178
 msgid "Activate window menu"
-msgstr "የመስኮት ዝርዝር ማስነሻ"
+msgstr "Activar el menu de la ventana"
 
 #: network/nm_setting_wireless.go:290
 msgid "Ad-Hoc"
@@ -113,7 +113,7 @@ msgstr "Ad-Hoc"
 
 #: network/nm_setting_wireless_security.go:191
 msgid "Ad-Hoc WPA-PSK"
-msgstr "Ad-Hoc WPA-PSK"
+msgstr ""
 
 #: datetime/zone_utc_list.go:30
 msgid "Adak"
@@ -121,19 +121,19 @@ msgstr "Adak"
 
 #: datetime/zone_utc_list.go:401
 msgid "Addis Ababa"
-msgstr "Addis Ababa"
+msgstr ""
 
 #: datetime/zone_utc_list.go:534
 msgid "Adelaide"
-msgstr "Adelaide"
+msgstr ""
 
 #: datetime/zone_utc_list.go:412
 msgid "Aden"
-msgstr "Aden"
+msgstr ""
 
 #: datetime/zone_utc_list.go:47
 msgid "Alaska"
-msgstr "Alaska"
+msgstr ""
 
 #: datetime/zone_utc_list.go:36
 msgid "Aleutian"
@@ -141,33 +141,33 @@ msgstr "Aleutian"
 
 #: datetime/zone_utc_list.go:309
 msgid "Algiers"
-msgstr "Algiers"
+msgstr ""
 
 #: network/nm_setting_virtual_key.go:158 network/nm_setting_virtual_key.go:167
 msgid "All Available (default)"
-msgstr "ዝግጁ የሆኑ ሁሉ (ነባር)"
+msgstr "Todos disponibles(por defecto)"
 
 #: datetime/zone_utc_list.go:467
 msgid "Almaty"
-msgstr "Almaty"
+msgstr ""
 
 #: network/nm_setting_vpn_openvpn.go:172 network/nm_setting_vpn_pptp.go:107
 #: network/nm_constant.go:298 network/nm_setting_vpn_l2tp.go:117
 #: network/nm_setting_vpn_vpnc.go:147
 msgid "Always Ask"
-msgstr "ሁልጊዜ ጠይቀኝ"
+msgstr "Siempre Preguntar"
 
 #: datetime/zone_utc_list.go:372
 msgid "Amman"
-msgstr "Amman"
+msgstr ""
 
 #: datetime/zone_utc_list.go:326
 msgid "Amsterdam"
-msgstr "Amsterdam"
+msgstr ""
 
 #: datetime/zone_utc_list.go:582
 msgid "Anadyr"
-msgstr "Anadyr"
+msgstr ""
 
 #: datetime/zone_utc_list.go:41
 msgid "Anchorage"
@@ -175,27 +175,27 @@ msgstr "Anchorage"
 
 #: datetime/zone_utc_list.go:327
 msgid "Andorra"
-msgstr "Andorra"
+msgstr ""
 
 #: datetime/zone_utc_list.go:167
 msgid "Anguilla"
-msgstr "Anguilla"
+msgstr ""
 
 #: network/nm_setting_802_1x.go:179
 msgid "Anonymous"
-msgstr "ያልታወቀ"
+msgstr "Anónimo"
 
 #: datetime/zone_utc_list.go:420
 msgid "Antananarivo"
-msgstr "Antananarivo"
+msgstr ""
 
 #: datetime/zone_utc_list.go:168
 msgid "Antigua"
-msgstr "Antigua"
+msgstr ""
 
 #: network/nm_setting_gsm.go:133
 msgid "Any"
-msgstr "ማንኛውም"
+msgstr "Cualquiera"
 
 #: datetime/zone_utc_list.go:600
 msgid "Apia"
@@ -203,23 +203,23 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:447
 msgid "Aqtau"
-msgstr "Aqtau"
+msgstr ""
 
 #: datetime/zone_utc_list.go:448
 msgid "Aqtobe"
-msgstr "Aqtobe"
+msgstr ""
 
 #: datetime/zone_utc_list.go:214
 msgid "Araguaina"
-msgstr "Araguaina"
+msgstr ""
 
 #: datetime/zone_utc_list.go:81
 msgid "Arizona"
-msgstr "Arizona"
+msgstr ""
 
 #: datetime/zone_utc_list.go:169
 msgid "Aruba"
-msgstr "Aruba"
+msgstr ""
 
 #: datetime/zone_utc_list.go:449
 msgid "Ashgabat"
@@ -227,11 +227,11 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:450
 msgid "Ashkhabad"
-msgstr "Ashkhabad"
+msgstr ""
 
 #: datetime/zone_utc_list.go:402
 msgid "Asmara"
-msgstr "Asmara"
+msgstr ""
 
 #: datetime/zone_utc_list.go:403
 msgid "Asmera"
@@ -239,15 +239,15 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:170
 msgid "Asuncion"
-msgstr "Asuncion"
+msgstr ""
 
 #: datetime/zone_utc_list.go:382
 msgid "Athens"
-msgstr "Athens"
+msgstr ""
 
 #: datetime/zone_utc_list.go:123
 msgid "Atikokan"
-msgstr "Atikokan"
+msgstr ""
 
 #: datetime/zone_utc_list.go:31
 msgid "Atka"
@@ -255,11 +255,11 @@ msgstr "Atka"
 
 #: datetime/zone_utc_list.go:208
 msgid "Atlantic"
-msgstr "Atlantic"
+msgstr ""
 
 #: datetime/zone_utc_list.go:587
 msgid "Auckland"
-msgstr "Auckland"
+msgstr ""
 
 #: datetime/zone_utc_list.go:537
 msgid "Australia/North"
@@ -275,7 +275,7 @@ msgstr ""
 
 #: network/nm_setting_802_1x.go:180
 msgid "Authenticated"
-msgstr "ተረጋግጧል"
+msgstr "Autenticado"
 
 #: network/state_handler.go:96
 msgid "Authentication to VPN server failed."
@@ -283,11 +283,11 @@ msgstr ""
 
 #: network/nm_setting_ip6_config.go:66 network/nm_setting_ip4_config.go:174
 msgid "Auto"
-msgstr "በራሱ"
+msgstr "Automático"
 
 #: network/nm_setting_802_1x.go:185 network/nm_setting_wireless.go:295
 msgid "Automatic"
-msgstr "ራሱ በራሱ"
+msgstr "Automatica"
 
 #: datetime/zone_utc_list.go:255
 msgid "Azores"
@@ -303,51 +303,51 @@ msgstr "BG (2.4 GHz)"
 
 #: datetime/zone_utc_list.go:413
 msgid "Baghdad"
-msgstr "Baghdad"
+msgstr ""
 
 #: datetime/zone_utc_list.go:228
 msgid "Bahia"
-msgstr "Bahia"
+msgstr ""
 
 #: datetime/zone_utc_list.go:84
 msgid "Bahia Banderas"
-msgstr "Bahia Banderas"
+msgstr ""
 
 #: datetime/zone_utc_list.go:414
 msgid "Bahrain"
-msgstr "Bahrain"
+msgstr ""
 
 #: datetime/zone_utc_list.go:59
 msgid "BajaNorte"
-msgstr "BajaNorte"
+msgstr ""
 
 #: datetime/zone_utc_list.go:79
 msgid "BajaSur"
-msgstr "BajaSur"
+msgstr ""
 
 #: datetime/zone_utc_list.go:427
 msgid "Baku"
-msgstr "Baku"
+msgstr ""
 
 #: datetime/zone_utc_list.go:260
 msgid "Bamako"
-msgstr "Bamako"
+msgstr ""
 
 #: datetime/zone_utc_list.go:480
 msgid "Bangkok"
-msgstr "Bangkok"
+msgstr ""
 
 #: datetime/zone_utc_list.go:310
 msgid "Bangui"
-msgstr "Bangui"
+msgstr ""
 
 #: datetime/zone_utc_list.go:261
 msgid "Banjul"
-msgstr "Banjul"
+msgstr ""
 
 #: datetime/zone_utc_list.go:171
 msgid "Barbados"
-msgstr "Barbados"
+msgstr ""
 
 #: power/upower.go:86 power/upower.go:101
 msgid "Battery Critical Low"
@@ -355,51 +355,51 @@ msgstr ""
 
 #: power/upower.go:114
 msgid "Battery Low"
-msgstr "ዝቅተኛ ባትሪ"
+msgstr "Batería Baja"
 
 #: datetime/zone_utc_list.go:508
 msgid "Beijing"
-msgstr "Beijing"
+msgstr ""
 
 #: datetime/zone_utc_list.go:373
 msgid "Beirut"
-msgstr "Beirut"
+msgstr ""
 
 #: datetime/zone_utc_list.go:229
 msgid "Belem"
-msgstr "Belem"
+msgstr ""
 
 #: datetime/zone_utc_list.go:289
 msgid "Belfast"
-msgstr "Belfast"
+msgstr ""
 
 #: datetime/zone_utc_list.go:328
 msgid "Belgrade"
-msgstr "Belgrade"
+msgstr ""
 
 #: datetime/zone_utc_list.go:85
 msgid "Belize"
-msgstr "Belize"
+msgstr ""
 
 #: datetime/zone_utc_list.go:329
 msgid "Berlin"
-msgstr "Berlin"
+msgstr ""
 
 #: datetime/zone_utc_list.go:206
 msgid "Bermuda"
-msgstr "Bermuda"
+msgstr ""
 
 #: datetime/zone_utc_list.go:103
 msgid "Beulah"
-msgstr "Beulah"
+msgstr ""
 
 #: datetime/zone_utc_list.go:468
 msgid "Bishkek"
-msgstr "Bishkek"
+msgstr ""
 
 #: datetime/zone_utc_list.go:262
 msgid "Bissau"
-msgstr "Bissau"
+msgstr ""
 
 #: datetime/zone_utc_list.go:172
 msgid "Blanc-Sablon"
@@ -407,27 +407,27 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:359
 msgid "Blantyre"
-msgstr "Blantyre"
+msgstr ""
 
 #: datetime/zone_utc_list.go:173
 msgid "Boa Vista"
-msgstr "Boa Vista"
+msgstr ""
 
 #: datetime/zone_utc_list.go:124
 msgid "Bogota"
-msgstr "Bogota"
+msgstr ""
 
 #: datetime/zone_utc_list.go:63
 msgid "Boise"
-msgstr "Boise"
+msgstr ""
 
 #: network/nm_setting_802_1x.go:181
 msgid "Both"
-msgstr "ሁለቱንም"
+msgstr "Ambos"
 
 #: datetime/zone_utc_list.go:330
 msgid "Bratislava"
-msgstr "Bratislava"
+msgstr ""
 
 #: datetime/zone_utc_list.go:207
 msgid "Brazil/West"
@@ -435,7 +435,7 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:311
 msgid "Brazzaville"
-msgstr "Brazzaville"
+msgstr ""
 
 #: datetime/zone_utc_list.go:545
 msgid "Brisbane"
@@ -447,27 +447,27 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:493
 msgid "Brunei"
-msgstr "Brunei"
+msgstr ""
 
 #: datetime/zone_utc_list.go:331
 msgid "Brussels"
-msgstr "Brussels"
+msgstr ""
 
 #: datetime/zone_utc_list.go:383
 msgid "Bucharest"
-msgstr "Bucharest"
+msgstr ""
 
 #: datetime/zone_utc_list.go:332
 msgid "Budapest"
-msgstr "Budapest"
+msgstr ""
 
 #: datetime/zone_utc_list.go:230
 msgid "Buenos Aires"
-msgstr "Buenos Aires"
+msgstr ""
 
 #: datetime/zone_utc_list.go:360
 msgid "Bujumbura"
-msgstr "Bujumbura"
+msgstr ""
 
 #: datetime/zone_utc_list.go:333
 msgid "Busingen"
@@ -491,7 +491,7 @@ msgstr "CAST5-CBC"
 
 #: network/nm_setting_wireless_security.go:200
 msgid "CCMP"
-msgstr "CCMP"
+msgstr ""
 
 #: network/nm_setting_virtual_key.go:117
 msgid "CDMA (1xRTT, EVDO)"
@@ -503,23 +503,23 @@ msgstr "CHAP"
 
 #: datetime/zone_utc_list.go:361
 msgid "Cairo"
-msgstr "Cairo"
+msgstr ""
 
 #: keybinding/id_desc_map.go:129
 msgid "Calculator"
-msgstr "መደመሪያ"
+msgstr "Calculadora"
 
 #: datetime/zone_utc_list.go:459
 msgid "Calcutta"
-msgstr "Calcutta"
+msgstr ""
 
 #: datetime/zone_utc_list.go:64
 msgid "Cambridge Bay"
-msgstr "Cambridge Bay"
+msgstr ""
 
 #: datetime/zone_utc_list.go:174
 msgid "Campo Grande"
-msgstr "Campo Grande"
+msgstr ""
 
 #: datetime/zone_utc_list.go:158
 msgid "Canada/Eastern"
@@ -531,7 +531,7 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:276
 msgid "Canary"
-msgstr "Canary"
+msgstr ""
 
 #: datetime/zone_utc_list.go:546
 msgid "Canberra"
@@ -539,83 +539,83 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:86
 msgid "Cancun"
-msgstr "Cancun"
+msgstr ""
 
 #: datetime/zone_utc_list.go:256
 msgid "Cape Verde"
-msgstr "Cape Verde"
+msgstr ""
 
 #: datetime/zone_utc_list.go:165
 msgid "Caracas"
-msgstr "Caracas"
+msgstr ""
 
 #: datetime/zone_utc_list.go:263
 msgid "Casablanca"
-msgstr "Casablanca"
+msgstr ""
 
 #: datetime/zone_utc_list.go:566
 msgid "Casey"
-msgstr "Casey"
+msgstr ""
 
 #: datetime/zone_utc_list.go:231
 msgid "Catamarca"
-msgstr "Catamarca"
+msgstr ""
 
 #: datetime/zone_utc_list.go:232
 msgid "Cayenne"
-msgstr "Cayenne"
+msgstr ""
 
 #: datetime/zone_utc_list.go:125
 msgid "Cayman"
-msgstr "Cayman"
+msgstr ""
 
 #: network/nm_setting_vpn_openvpn.go:251
 msgid "Certificates (TLS)"
-msgstr "ሰርቲፊኬት (TLS)"
+msgstr "Certificados (TLS)"
 
 #: datetime/zone_utc_list.go:312
 msgid "Ceuta"
-msgstr "Ceuta"
+msgstr ""
 
 #: datetime/zone_utc_list.go:475
 msgid "Chagos"
-msgstr "Chagos"
+msgstr ""
 
 #: datetime/zone_utc_list.go:598
 msgid "Chatham"
-msgstr "Chatham"
+msgstr ""
 
 #: datetime/zone_utc_list.go:87
 msgid "Chicago"
-msgstr "Chicago"
+msgstr ""
 
 #: datetime/zone_utc_list.go:65
 msgid "Chihuahua"
-msgstr "Chihuahua"
+msgstr ""
 
 #: network/nm_setting_gsm.go:128
 msgid "China Mobile Internet"
-msgstr "China Mobile Internet"
+msgstr "Internet móvil de China"
 
 #: network/nm_setting_gsm.go:129
 msgid "China Mobile MMS"
-msgstr "China Mobile MMS"
+msgstr "MMS Móvil de China"
 
 #: network/nm_setting_gsm.go:127
 msgid "China Mobile WAP"
-msgstr "China Mobile WAP"
+msgstr "Acceso móvil WAP de China"
 
 #: network/nm_setting_gsm.go:125
 msgid "China Unicom Internet"
-msgstr "China Unicom Internet"
+msgstr "Internet de China Unicom"
 
 #: network/nm_setting_gsm.go:126
 msgid "China Unicom MMS"
-msgstr "China Unicom MMS"
+msgstr "MMS de China Unicom"
 
 #: datetime/zone_utc_list.go:384
 msgid "Chisinau"
-msgstr "Chisinau"
+msgstr ""
 
 #: datetime/zone_utc_list.go:494
 msgid "Choibalsan"
@@ -623,15 +623,15 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:495
 msgid "Chongqing"
-msgstr "Chongqing"
+msgstr ""
 
 #: datetime/zone_utc_list.go:491
 msgid "Christmas"
-msgstr "Christmas"
+msgstr ""
 
 #: datetime/zone_utc_list.go:496
 msgid "Chungking"
-msgstr "Chungking"
+msgstr ""
 
 #: datetime/zone_utc_list.go:556
 msgid "Chuuk"
@@ -639,7 +639,7 @@ msgstr ""
 
 #: network/nm_setting_vpn_vpnc.go:253
 msgid "Cisco (default)"
-msgstr "Cisco (default)"
+msgstr "Cisco (por defecto)"
 
 #: network/nm_setting_vpn_vpnc.go:260
 msgid "Cisco UDP"
@@ -647,11 +647,11 @@ msgstr "Cisco UDP"
 
 #: network/nm_setting_vpn_openvpn.go:429
 msgid "Client"
-msgstr "ደንበኛ"
+msgstr "Cliente"
 
 #: keybinding/id_desc_map.go:171
 msgid "Close window"
-msgstr "መስኮቶች መዝጊያ"
+msgstr "Cerrar la ventana"
 
 #: datetime/zone_utc_list.go:478
 msgid "Cocos"
@@ -659,12 +659,11 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:460
 msgid "Colombo"
-msgstr "Colombo"
+msgstr ""
 
 #: datetime/zone_utc_list.go:217
-#, fuzzy
 msgid "ComodRivadavia"
-msgstr "ComodRivadavia"
+msgstr ""
 
 #: datetime/zone_utc_list.go:421
 msgid "Comoro"
@@ -684,59 +683,59 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:264
 msgid "Conakry"
-msgstr "Conakry"
+msgstr ""
 
 #: network/state_handler.go:41
 msgid "Configuration of the 802.1X supplication failed."
-msgstr ""
+msgstr "La configuración de la solicitud 802.1X falló."
 
 #: network/state_handler.go:155 network/state_handler.go:227
 msgid "Connected"
-msgstr "ተገናኝቷል"
+msgstr "Conectado"
 
 #: network/nm_custom_type.go:131
 msgid "Connection"
-msgstr "ግንኙነት"
+msgstr "Conexión"
 
 #: datetime/zone_utc_list.go:209
 msgid "Continental"
-msgstr "Continental"
+msgstr ""
 
 #: datetime/zone_utc_list.go:334
 msgid "Copenhagen"
-msgstr "Copenhagen"
+msgstr ""
 
 #: datetime/zone_utc_list.go:126
 msgid "Coral Harbour"
-msgstr "Coral Harbour"
+msgstr ""
 
 #: datetime/zone_utc_list.go:233
 msgid "Cordoba"
-msgstr "Cordoba"
+msgstr ""
 
 #: datetime/zone_utc_list.go:88
 msgid "Costa Rica"
-msgstr "Costa Rica"
+msgstr ""
 
 #: datetime/zone_utc_list.go:66
 msgid "Creston"
-msgstr "Creston"
+msgstr ""
 
 #: datetime/zone_utc_list.go:159
 msgid "Cuba"
-msgstr "Cuba"
+msgstr ""
 
 #: datetime/zone_utc_list.go:175
 msgid "Cuiaba"
-msgstr "Cuiaba"
+msgstr ""
 
 #: datetime/zone_utc_list.go:176
 msgid "Curacao"
-msgstr "Curacao"
+msgstr ""
 
 #: datetime/zone_utc_list.go:547
 msgid "Currie"
-msgstr "Currie"
+msgstr ""
 
 #: network/nm_setting_vpn_openvpn.go:378
 msgid "DES-CBC"
@@ -756,19 +755,19 @@ msgstr "DESX-CBC"
 
 #: network/nm_setting_vpn_vpnc.go:265 network/nm_setting_vpn_vpnc.go:273
 msgid "DH Group 1"
-msgstr "DH Group 1"
+msgstr "DH Grupo 1"
 
 #: network/nm_setting_vpn_vpnc.go:274
 msgid "DH Group 2"
-msgstr "DH Group 2"
+msgstr "DH Grupo 2"
 
 #: network/nm_setting_vpn_vpnc.go:266
 msgid "DH Group 2 (default)"
-msgstr "DH Group 2 (default)"
+msgstr "DH Grupo 2 (por defecto)"
 
 #: network/nm_setting_vpn_vpnc.go:267 network/nm_setting_vpn_vpnc.go:275
 msgid "DH Group 5"
-msgstr "DH Group 5"
+msgstr "DH Grupo 5"
 
 #: network/nm_setting_ip6_config.go:67
 msgid "DHCP"
@@ -780,11 +779,11 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:265
 msgid "Dakar"
-msgstr "Dakar"
+msgstr ""
 
 #: datetime/zone_utc_list.go:374
 msgid "Damascus"
-msgstr "Damascus"
+msgstr ""
 
 #: datetime/zone_utc_list.go:274
 msgid "Danmarkshavn"
@@ -792,23 +791,23 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:404
 msgid "Dar es Salaam"
-msgstr "Dar es Salaam"
+msgstr ""
 
 #: datetime/zone_utc_list.go:536
 msgid "Darwin"
-msgstr "Darwin"
+msgstr ""
 
 #: datetime/zone_utc_list.go:445
 msgid "Davis"
-msgstr "Davis"
+msgstr ""
 
 #: datetime/zone_utc_list.go:49
 msgid "Dawson"
-msgstr "Dawson"
+msgstr ""
 
 #: datetime/zone_utc_list.go:67
 msgid "Dawson Creek"
-msgstr "Dawson Creek"
+msgstr ""
 
 #: datetime/zone_utc_list.go:252
 msgid "DeNoronha"
@@ -816,33 +815,33 @@ msgstr ""
 
 #: keybinding/id_desc_map.go:89
 msgid "Deepin Translator"
-msgstr "ተርጓሚዎች"
+msgstr "Deepin Traductor"
 
 #: network/nm_setting_wireless.go:139 network/nm_setting_wireless.go:188
 #: network/nm_setting_vpn_openvpn.go:377 network/nm_setting_vpn_openvpn.go:397
 #: network/nm_setting_vpn_openvpn.go:428
 msgid "Default"
-msgstr "ነባር"
+msgstr "Predeterminado"
 
 #: keybinding/id_desc_map.go:84
 msgid "Delay screenshot"
-msgstr "መመልከቻውን ፎቶ ማንሻ ማዘግያ"
+msgstr ""
 
 #: datetime/zone_utc_list.go:68
 msgid "Denver"
-msgstr "Denver"
+msgstr ""
 
 #: datetime/zone_utc_list.go:127
 msgid "Detroit"
-msgstr "Detroit"
+msgstr ""
 
 #: datetime/zone_utc_list.go:470
 msgid "Dhaka"
-msgstr "Dhaka"
+msgstr ""
 
 #: bluetooth/bluez_profile.go:32
 msgid "Dial-Up networking"
-msgstr ""
+msgstr "Red de discado"
 
 #: network/state_handler.go:55
 msgid "Dialing failed due to busy lines."
@@ -858,24 +857,24 @@ msgstr ""
 
 #: network/state_handler.go:59
 msgid "Dialing failed."
-msgstr "መደወል አልተቻለም"
+msgstr "El discado falló"
 
 #: network/state_handler.go:58
 msgid "Dialing timed out."
-msgstr "መደወያ ጊዜው አልፏል"
+msgstr "Se terminó la llamada"
 
 #: datetime/zone_utc_list.go:524
 msgid "Dili"
-msgstr "Dili"
+msgstr ""
 
 #: keybinding/id_desc_map.go:88
 msgid "Disable Touchpad"
-msgstr "ተችፓድ ማሰናከያ"
+msgstr "Inhabilitar almohadilla tactíl"
 
 #: network/nm_setting_802_1x.go:178 network/nm_setting_ip4_config.go:178
 #: network/nm_setting_vpn_vpnc.go:261
 msgid "Disabled"
-msgstr "ተሰናክሏል"
+msgstr "Deshabilitado"
 
 #: network/state_handler.go:180 network/state_handler.go:231
 #: network/state_handler.go:236 network/state_handler.go:241
@@ -888,35 +887,35 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:405
 msgid "Djibouti"
-msgstr "Djibouti"
+msgstr ""
 
 #: datetime/zone_utc_list.go:177
 msgid "Dominica"
-msgstr "Dominica"
+msgstr ""
 
 #: datetime/zone_utc_list.go:313
 msgid "Douala"
-msgstr "Douala"
+msgstr ""
 
 #: datetime/zone_utc_list.go:428
 msgid "Dubai"
-msgstr "Dubai"
+msgstr ""
 
 #: datetime/zone_utc_list.go:290
 msgid "Dublin"
-msgstr "Dublin"
+msgstr ""
 
 #: datetime/zone_utc_list.go:541
 msgid "DumontDUrville"
-msgstr "DumontDUrville"
+msgstr ""
 
 #: datetime/zone_utc_list.go:451
 msgid "Dushanbe"
-msgstr "Dushanbe"
+msgstr ""
 
 #: network/nm_setting_wireless_security.go:190
 msgid "Dynamic WEP"
-msgstr "Dynamic WEP"
+msgstr ""
 
 #: datetime/zone_utc_list.go:248
 msgid "East"
@@ -931,53 +930,52 @@ msgid "East-Saskatchewan"
 msgstr ""
 
 #: datetime/zone_utc_list.go:118
-#, fuzzy
 msgid "Easter Island"
-msgstr "EasterIsland"
+msgstr ""
 
 #: datetime/zone_utc_list.go:69
 msgid "Edmonton"
-msgstr "Edmonton"
+msgstr ""
 
 #: datetime/zone_utc_list.go:571
 msgid "Efate"
-msgstr "Efate"
+msgstr ""
 
 #: datetime/zone_utc_list.go:381
 msgid "Egypt"
-msgstr "Egypt"
+msgstr ""
 
 #: datetime/zone_utc_list.go:282
 msgid "Eire"
-msgstr "Eire"
+msgstr ""
 
 #: datetime/zone_utc_list.go:128
 msgid "Eirunepe"
-msgstr "Eirunepe"
+msgstr ""
 
 #: keybinding/id_desc_map.go:141
 msgid "Eject"
-msgstr "ማውጫ"
+msgstr "Ejectar"
 
 #: datetime/zone_utc_list.go:266
 msgid "El Aaiun"
-msgstr "El Aaiun"
+msgstr ""
 
 #: datetime/zone_utc_list.go:89
 msgid "El Salvador"
-msgstr "El Salvador"
+msgstr ""
 
 #: keybinding/id_desc_map.go:130
 msgid "Email client"
-msgstr "የ ኢሜይል ደንበኛ"
+msgstr ""
 
 #: datetime/zone_utc_list.go:601
 msgid "Enderbury"
-msgstr "Enderbury"
+msgstr ""
 
 #: datetime/zone_utc_list.go:50
 msgid "Ensenada"
-msgstr "Ensenada"
+msgstr ""
 
 #: datetime/zone_utc_list.go:522
 msgid "Eucla"
@@ -985,7 +983,7 @@ msgstr ""
 
 #: network/nm_setting_802_1x.go:163 network/nm_setting_802_1x.go:171
 msgid "FAST"
-msgstr "FAST"
+msgstr "Veloz"
 
 #: datetime/zone_utc_list.go:277
 msgid "Faeroe"
@@ -993,11 +991,11 @@ msgstr ""
 
 #: network/state_handler.go:61
 msgid "Failed to select the specified GSM APN."
-msgstr ""
+msgstr "La opción de GSM APN falló."
 
 #: datetime/zone_utc_list.go:602
 msgid "Fakaofo"
-msgstr "Fakaofo"
+msgstr ""
 
 #: datetime/zone_utc_list.go:278
 msgid "Faroe"
@@ -1005,39 +1003,39 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:588
 msgid "Fiji"
-msgstr "Fiji"
+msgstr ""
 
 #: keybinding/id_desc_map.go:75
 msgid "File manager"
-msgstr "የፋይል አስተዳዳሪ"
+msgstr "Administrador de archivos"
 
 #: bluetooth/bluez_profile.go:37
 msgid "File transfer"
-msgstr "ፋይል ማስተላለፊያ"
+msgstr "Transferencia de archivos"
 
 #: datetime/zone_utc_list.go:129
 msgid "Fort Wayne"
-msgstr "Fort Wayne"
+msgstr ""
 
 #: datetime/zone_utc_list.go:234
 msgid "Fortaleza"
-msgstr "Fortaleza"
+msgstr ""
 
 #: datetime/zone_utc_list.go:267
 msgid "Freetown"
-msgstr "Freetown"
+msgstr ""
 
 #: keybinding/id_desc_map.go:82
 msgid "Full screenshot"
-msgstr "ሙሉ መመልከቻውን ፎቶ ማንሻ"
+msgstr ""
 
 #: datetime/zone_utc_list.go:589
 msgid "Funafuti"
-msgstr "Funafuti"
+msgstr ""
 
 #: datetime/zone_utc_list.go:295
 msgid "GB"
-msgstr "GB"
+msgstr ""
 
 #: datetime/zone_utc_list.go:296
 msgid "GB-Eire"
@@ -1065,7 +1063,7 @@ msgstr "GSM (GPRS, EDGE, UMTS, HSPA)"
 
 #: network/state_handler.go:77
 msgid "GSM Modem's SIM Card not inserted."
-msgstr ""
+msgstr "Tarjeta SIM del modem GSM no insertada"
 
 #: network/state_handler.go:78
 msgid "GSM Modem's SIM PIN required."
@@ -1081,79 +1079,79 @@ msgstr "GTC"
 
 #: datetime/zone_utc_list.go:362
 msgid "Gaborone"
-msgstr "Gaborone"
+msgstr ""
 
 #: datetime/zone_utc_list.go:119
 msgid "Galapagos"
-msgstr "Galapagos"
+msgstr ""
 
 #: datetime/zone_utc_list.go:46
 msgid "Gambier"
-msgstr "Gambier"
+msgstr ""
 
 #: datetime/zone_utc_list.go:375
 msgid "Gaza"
-msgstr "Gaza"
+msgstr ""
 
 #: datetime/zone_utc_list.go:117
 msgid "General"
-msgstr "ባጠቃላይ"
+msgstr "General"
 
 #: datetime/zone_utc_list.go:335
 msgid "Gibraltar"
-msgstr "Gibraltar"
+msgstr ""
 
 #: datetime/zone_utc_list.go:178
 msgid "Glace Bay"
-msgstr "Glace Bay"
+msgstr ""
 
 #: datetime/zone_utc_list.go:235
 msgid "Godthab"
-msgstr "Godthab"
+msgstr ""
 
 #: datetime/zone_utc_list.go:179
 msgid "Goose Bay"
-msgstr "Goose Bay"
+msgstr ""
 
 #: datetime/zone_utc_list.go:130
 msgid "Grand Turk"
-msgstr "Grand Turk"
+msgstr ""
 
 #: datetime/zone_utc_list.go:301
 msgid "Greenwich"
-msgstr "Greenwich"
+msgstr ""
 
 #: datetime/zone_utc_list.go:180
 msgid "Grenada"
-msgstr "Grenada"
+msgstr ""
 
 #: datetime/zone_utc_list.go:572
 msgid "Guadalcanal"
-msgstr "Guadalcanal"
+msgstr ""
 
 #: datetime/zone_utc_list.go:181
 msgid "Guadeloupe"
-msgstr "Guadeloupe"
+msgstr ""
 
 #: datetime/zone_utc_list.go:557
 msgid "Guam"
-msgstr "Guam"
+msgstr ""
 
 #: datetime/zone_utc_list.go:90
 msgid "Guatemala"
-msgstr "Guatemala"
+msgstr ""
 
 #: datetime/zone_utc_list.go:131
 msgid "Guayaquil"
-msgstr "Guayaquil"
+msgstr ""
 
 #: datetime/zone_utc_list.go:291
 msgid "Guernsey"
-msgstr "Guernsey"
+msgstr ""
 
 #: datetime/zone_utc_list.go:182
 msgid "Guyana"
-msgstr "Guyana"
+msgstr ""
 
 #: network/nm_setting_vpn_openvpn.go:480
 msgid "HTTP"
@@ -1161,27 +1159,27 @@ msgstr "HTTP"
 
 #: datetime/zone_utc_list.go:183
 msgid "Halifax"
-msgstr "Halifax"
+msgstr ""
 
 #: bluetooth/bluez_profile.go:33
 msgid "Hands-Free device"
-msgstr ""
+msgstr "Dispositivo de manos libres"
 
 #: bluetooth/bluez_profile.go:34
 msgid "Hands-Free voice gateway"
-msgstr ""
+msgstr "Entrada de voz  a manos libres"
 
 #: datetime/zone_utc_list.go:363
 msgid "Harare"
-msgstr "Harare"
+msgstr ""
 
 #: datetime/zone_utc_list.go:497
 msgid "Harbin"
-msgstr "Harbin"
+msgstr ""
 
 #: datetime/zone_utc_list.go:132
 msgid "Havana"
-msgstr "Havana"
+msgstr ""
 
 #: datetime/zone_utc_list.go:37
 msgid "Hawaii"
@@ -1189,23 +1187,23 @@ msgstr "Hawaii"
 
 #: bluetooth/bluez_profile.go:35
 msgid "Headset voice gateway"
-msgstr ""
+msgstr "Entrada de voz para set audífonos"
 
 #: datetime/zone_utc_list.go:376
 msgid "Hebron"
-msgstr "Hebron"
+msgstr ""
 
 #: datetime/zone_utc_list.go:385
 msgid "Helsinki"
-msgstr "Helsinki"
+msgstr ""
 
 #: datetime/zone_utc_list.go:70
 msgid "Hermosillo"
-msgstr "Hermosillo"
+msgstr ""
 
 #: datetime/zone_utc_list.go:481
 msgid "Ho Chi Minh"
-msgstr "Ho Chi Minh"
+msgstr ""
 
 #: datetime/zone_utc_list.go:548
 msgid "Hobart"
@@ -1213,7 +1211,7 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:498
 msgid "Hong Kong"
-msgstr "Hong Kong"
+msgstr ""
 
 #: datetime/zone_utc_list.go:32
 msgid "Honolulu"
@@ -1221,7 +1219,7 @@ msgstr "Honolulu"
 
 #: datetime/zone_utc_list.go:482
 msgid "Hovd"
-msgstr "Hovd"
+msgstr ""
 
 #: network/state_handler.go:37
 msgid ""
@@ -1230,11 +1228,11 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:302
 msgid "Iceland"
-msgstr "Iceland"
+msgstr ""
 
 #: network/nm_setting_ip6_config.go:65
 msgid "Ignore"
-msgstr "መተው"
+msgstr "Ignorar"
 
 #: datetime/zone_utc_list.go:121
 msgid "Indiana-Starke"
@@ -1242,35 +1240,35 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:139
 msgid "Indianapolis"
-msgstr "Indianapolis"
+msgstr ""
 
 #: network/state_handler.go:81
 msgid "InfiniBand device does not support connected mode."
-msgstr ""
+msgstr "El dispositivo InfiniBand no soporta el modo conectado."
 
 #: network/nm_setting_wireless.go:289
 msgid "Infrastructure"
-msgstr "Infrastructure"
+msgstr "Infraestructura"
 
 #: datetime/zone_utc_list.go:71
 msgid "Inuvik"
-msgstr "Inuvik"
+msgstr ""
 
 #: datetime/zone_utc_list.go:140
 msgid "Iqaluit"
-msgstr "Iqaluit"
+msgstr ""
 
 #: datetime/zone_utc_list.go:425
 msgid "Iran"
-msgstr "Iran"
+msgstr ""
 
 #: datetime/zone_utc_list.go:525
 msgid "Irkutsk"
-msgstr "Irkutsk"
+msgstr ""
 
 #: datetime/zone_utc_list.go:292
 msgid "Isle of Man"
-msgstr "Isle of Man"
+msgstr ""
 
 #: datetime/zone_utc_list.go:397
 msgid "Israel"
@@ -1278,15 +1276,15 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:377
 msgid "Istanbul"
-msgstr "Istanbul"
+msgstr ""
 
 #: datetime/zone_utc_list.go:483
 msgid "Jakarta"
-msgstr "Jakarta"
+msgstr ""
 
 #: datetime/zone_utc_list.go:141
 msgid "Jamaica"
-msgstr "Jamaica"
+msgstr ""
 
 #: datetime/zone_utc_list.go:325
 msgid "Jan Mayen"
@@ -1298,19 +1296,19 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:526
 msgid "Jayapura"
-msgstr "Jayapura"
+msgstr ""
 
 #: datetime/zone_utc_list.go:293
 msgid "Jersey"
-msgstr "Jersey"
+msgstr ""
 
 #: datetime/zone_utc_list.go:378
 msgid "Jerusalem"
-msgstr "Jerusalem"
+msgstr ""
 
 #: datetime/zone_utc_list.go:364
 msgid "Johannesburg"
-msgstr "Johannesburg"
+msgstr ""
 
 #: datetime/zone_utc_list.go:33
 msgid "Johnston"
@@ -1318,11 +1316,11 @@ msgstr "Johnston"
 
 #: datetime/zone_utc_list.go:406
 msgid "Juba"
-msgstr "Juba"
+msgstr ""
 
 #: datetime/zone_utc_list.go:236
 msgid "Jujuy"
-msgstr "Jujuy"
+msgstr ""
 
 #: datetime/zone_utc_list.go:42
 msgid "Juneau"
@@ -1330,11 +1328,11 @@ msgstr "Juneau"
 
 #: datetime/zone_utc_list.go:441
 msgid "Kabul"
-msgstr "Kabul"
+msgstr ""
 
 #: datetime/zone_utc_list.go:418
 msgid "Kaliningrad"
-msgstr "Kaliningrad"
+msgstr ""
 
 #: datetime/zone_utc_list.go:583
 msgid "Kamchatka"
@@ -1342,19 +1340,19 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:407
 msgid "Kampala"
-msgstr "Kampala"
+msgstr ""
 
 #: datetime/zone_utc_list.go:452
 msgid "Karachi"
-msgstr "Karachi"
+msgstr ""
 
 #: datetime/zone_utc_list.go:499
 msgid "Kashgar"
-msgstr "Kashgar"
+msgstr ""
 
 #: datetime/zone_utc_list.go:463
 msgid "Kathmandu"
-msgstr "Kathmandu"
+msgstr ""
 
 #: datetime/zone_utc_list.go:464
 msgid "Katmandu"
@@ -1362,7 +1360,7 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:456
 msgid "Kerguelen"
-msgstr "Kerguelen"
+msgstr ""
 
 #: datetime/zone_utc_list.go:542
 msgid "Khandyga"
@@ -1370,19 +1368,19 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:408
 msgid "Khartoum"
-msgstr "Khartoum"
+msgstr ""
 
 #: datetime/zone_utc_list.go:387
 msgid "Kiev"
-msgstr "Kiev"
+msgstr ""
 
 #: datetime/zone_utc_list.go:365
 msgid "Kigali"
-msgstr "Kigali"
+msgstr ""
 
 #: datetime/zone_utc_list.go:314
 msgid "Kinshasa"
-msgstr "Kinshasa"
+msgstr ""
 
 #: datetime/zone_utc_list.go:443
 msgid "Kiritimati"
@@ -1398,11 +1396,11 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:573
 msgid "Kosrae"
-msgstr "Kosrae"
+msgstr ""
 
 #: datetime/zone_utc_list.go:184
 msgid "Kralendijk"
-msgstr "Kralendijk"
+msgstr ""
 
 #: datetime/zone_utc_list.go:500
 msgid "Krasnoyarsk"
@@ -1410,19 +1408,19 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:501
 msgid "Kuala Lumpur"
-msgstr "Kuala Lumpur"
+msgstr ""
 
 #: datetime/zone_utc_list.go:502
 msgid "Kuching"
-msgstr "Kuching"
+msgstr ""
 
 #: datetime/zone_utc_list.go:415
 msgid "Kuwait"
-msgstr "Kuwait"
+msgstr ""
 
 #: datetime/zone_utc_list.go:590
 msgid "Kwajalein"
-msgstr "Kwajalein"
+msgstr ""
 
 #: network/nm_setting_virtual_key.go:124
 msgid "L2TP"
@@ -1431,7 +1429,7 @@ msgstr "L2TP"
 #: network/nm_setting_wireless_security.go:206
 #: network/nm_setting_802_1x.go:170
 msgid "LEAP"
-msgstr "LEAP"
+msgstr "Salto"
 
 #: datetime/zone_utc_list.go:563
 msgid "LHI"
@@ -1439,108 +1437,107 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:185
 msgid "La Paz"
-msgstr "La Paz"
+msgstr ""
 
 #: datetime/zone_utc_list.go:220
-#, fuzzy
 msgid "La Rioja"
-msgstr "La Rioja"
+msgstr ""
 
 #: datetime/zone_utc_list.go:315
 msgid "Lagos"
-msgstr "Lagos"
+msgstr ""
 
 #: datetime/set_locale.go:58
 msgid "Language changed successfully and effective after logout."
-msgstr "ቋንቋው ተሳክቶ ተቀይሯል እና ተግባራዊ የሚሆነው ወጥተው ሲገቡ ነው"
+msgstr "El idioma se cambio satisfactoriamente y tomará efecto al reiniciar."
 
 #: datetime/datetime.go:127
 msgid "Language changing, please wait"
-msgstr "እባክዎን ይቆዩ ቋንቋ በመቀየር ላይ "
+msgstr "El idioma esta cambiando, espere por favor"
 
 #: datetime/set_locale.go:60
 msgid "Language failed to change, please try later."
-msgstr "እባክዎን እንደገና ይሞክሩ ቋንቋ መቀየሩ አልተሳካም "
+msgstr "El idioma no cambio, por favor intente mas tarde."
 
 #: keybinding/id_desc_map.go:72
 msgid "Launcher"
-msgstr "ማስጀመሪያ"
+msgstr "Lanzador"
 
 #: datetime/zone_utc_list.go:316
 msgid "Libreville"
-msgstr "Libreville"
+msgstr ""
 
 #: datetime/zone_utc_list.go:398
 msgid "Libya"
-msgstr "Libya"
+msgstr ""
 
 #: datetime/zone_utc_list.go:144
 msgid "Lima"
-msgstr "Lima"
+msgstr ""
 
 #: datetime/zone_utc_list.go:549
 msgid "Lindeman"
-msgstr "Lindeman"
+msgstr ""
 
 #: network/nm_setting_ip6_config.go:68 network/nm_setting_ip4_config.go:175
 msgid "Link-Local Only"
-msgstr ""
+msgstr "Vinculo local solamente"
 
 #: datetime/zone_utc_list.go:294
 msgid "Lisbon"
-msgstr "Lisbon"
+msgstr ""
 
 #: datetime/zone_utc_list.go:336
 msgid "Ljubljana"
-msgstr "Ljubljana"
+msgstr ""
 
 #: keybinding/id_desc_map.go:74
 msgid "Lock screen"
-msgstr "መመልከቻውን መቆለፊያ"
+msgstr "Bloquear la pantalla"
 
 #: keybinding/id_desc_map.go:87
 msgid "Logout"
-msgstr "መውጫ"
+msgstr "Cerrar sesión"
 
 #: datetime/zone_utc_list.go:268
 msgid "Lome"
-msgstr "Lome"
+msgstr ""
 
 #: datetime/zone_utc_list.go:324
 msgid "Longyearbyen"
-msgstr "Longyearbyen"
+msgstr ""
 
 #: datetime/zone_utc_list.go:564
 msgid "Lord Howe"
-msgstr "Lord Howe"
+msgstr ""
 
 #: datetime/zone_utc_list.go:51
 msgid "Los Angeles"
-msgstr "Los Angeles"
+msgstr ""
 
 #: datetime/zone_utc_list.go:145
 msgid "Louisville"
-msgstr "Louisville"
+msgstr ""
 
 #: datetime/zone_utc_list.go:186
 msgid "Lower Princes"
-msgstr "Lower Princes"
+msgstr ""
 
 #: datetime/zone_utc_list.go:317
 msgid "Luanda"
-msgstr "Luanda"
+msgstr ""
 
 #: datetime/zone_utc_list.go:366
 msgid "Lubumbashi"
-msgstr "Lubumbashi"
+msgstr ""
 
 #: datetime/zone_utc_list.go:367
 msgid "Lusaka"
-msgstr "Lusaka"
+msgstr ""
 
 #: datetime/zone_utc_list.go:337
 msgid "Luxembourg"
-msgstr "Luxembourg"
+msgstr ""
 
 #: network/nm_setting_vpn_openvpn.go:400
 msgid "MD-5"
@@ -1560,11 +1557,11 @@ msgstr "MSCHAPV2"
 
 #: datetime/zone_utc_list.go:503
 msgid "Macao"
-msgstr "Macao"
+msgstr ""
 
 #: datetime/zone_utc_list.go:237
 msgid "Maceio"
-msgstr "Maceio"
+msgstr ""
 
 #: datetime/zone_utc_list.go:567
 msgid "Macquarie"
@@ -1572,19 +1569,19 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:279
 msgid "Madeira"
-msgstr "Madeira"
+msgstr ""
 
 #: datetime/zone_utc_list.go:338
 msgid "Madrid"
-msgstr "Madrid"
+msgstr ""
 
 #: datetime/zone_utc_list.go:584
 msgid "Magadan"
-msgstr "Magadan"
+msgstr ""
 
 #: datetime/zone_utc_list.go:436
 msgid "Mahe"
-msgstr "Mahe"
+msgstr ""
 
 #: datetime/zone_utc_list.go:591
 msgid "Majuro"
@@ -1592,52 +1589,51 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:505
 msgid "Makassar"
-msgstr "Makassar"
+msgstr ""
 
 #: datetime/zone_utc_list.go:318
 msgid "Malabo"
-msgstr "Malabo"
+msgstr ""
 
 #: datetime/zone_utc_list.go:457
 msgid "Maldives"
-msgstr "Maldives"
+msgstr ""
 
 #: datetime/zone_utc_list.go:339
 msgid "Malta"
-msgstr "Malta"
+msgstr ""
 
 #: datetime/zone_utc_list.go:97
 msgid "Managua"
-msgstr "Managua"
+msgstr ""
 
 #: datetime/zone_utc_list.go:187
 msgid "Manaus"
-msgstr "Manaus"
+msgstr ""
 
 #: datetime/zone_utc_list.go:506
 msgid "Manila"
-msgstr "Manila"
+msgstr ""
 
 #: network/nm_setting_ip6_config.go:69 network/nm_setting_ip4_config.go:176
 msgid "Manual"
-msgstr "በእጅ"
+msgstr "Manual"
 
 #: datetime/zone_utc_list.go:368
 msgid "Maputo"
-msgstr "Maputo"
+msgstr ""
 
 #: datetime/zone_utc_list.go:134
-#, fuzzy
 msgid "Marengo"
-msgstr "Marengo"
+msgstr ""
 
 #: datetime/zone_utc_list.go:388
 msgid "Mariehamn"
-msgstr "Mariehamn"
+msgstr ""
 
 #: datetime/zone_utc_list.go:188
 msgid "Marigot"
-msgstr "Marigot"
+msgstr ""
 
 #: datetime/zone_utc_list.go:39
 msgid "Marquesas"
@@ -1645,27 +1641,27 @@ msgstr "Marquesas"
 
 #: datetime/zone_utc_list.go:189
 msgid "Martinique"
-msgstr "Martinique"
+msgstr ""
 
 #: datetime/zone_utc_list.go:369
 msgid "Maseru"
-msgstr "Maseru"
+msgstr ""
 
 #: datetime/zone_utc_list.go:98
 msgid "Matamoros"
-msgstr "Matamoros"
+msgstr ""
 
 #: datetime/zone_utc_list.go:437
 msgid "Mauritius"
-msgstr "Mauritius"
+msgstr ""
 
 #: datetime/zone_utc_list.go:446
 msgid "Mawson"
-msgstr "Mawson"
+msgstr ""
 
 #: keybinding/id_desc_map.go:172
 msgid "Maximize window"
-msgstr "መስኮት ማሳደጊያ"
+msgstr "Maximizar la ventana"
 
 #: datetime/zone_utc_list.go:422
 msgid "Mayotte"
@@ -1673,55 +1669,55 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:72
 msgid "Mazatlan"
-msgstr "Mazatlan"
+msgstr ""
 
 #: datetime/zone_utc_list.go:370
 msgid "Mbabane"
-msgstr "Mbabane"
+msgstr ""
 
 #: datetime/zone_utc_list.go:580
 msgid "McMurdo"
-msgstr "McMurdo"
+msgstr ""
 
 #: keybinding/id_desc_map.go:132
 msgid "Media player"
-msgstr "መገናኛ ማጫወቻ"
+msgstr ""
 
 #: datetime/zone_utc_list.go:550
 msgid "Melbourne"
-msgstr "Melbourne"
+msgstr ""
 
 #: datetime/zone_utc_list.go:238
 msgid "Mendoza"
-msgstr "Mendoza"
+msgstr ""
 
 #: datetime/zone_utc_list.go:99
 msgid "Menominee"
-msgstr "Menominee"
+msgstr ""
 
 #: datetime/zone_utc_list.go:100
 msgid "Merida"
-msgstr "Merida"
+msgstr ""
 
 #: bluetooth/bluez_profile.go:41
 msgid "Message access"
-msgstr ""
+msgstr "Acceso de mensaje"
 
 #: bluetooth/bluez_profile.go:42
 msgid "Message notification"
-msgstr "የ መልእክት ማስታወቂያ"
+msgstr "Aviso de mensaje"
 
 #: datetime/zone_utc_list.go:52
 msgid "Metlakatla"
-msgstr "Metlakatla"
+msgstr ""
 
 #: datetime/zone_utc_list.go:101
 msgid "Mexico City"
-msgstr "Mexico City"
+msgstr ""
 
 #: datetime/zone_utc_list.go:163
 msgid "Michigan"
-msgstr "Michigan"
+msgstr ""
 
 #: datetime/zone_utc_list.go:24
 msgid "Midway"
@@ -1729,31 +1725,31 @@ msgstr ""
 
 #: keybinding/id_desc_map.go:174
 msgid "Minimize window"
-msgstr "መስኮት ማሳነሽ"
+msgstr "Minimizar la ventana"
 
 #: datetime/zone_utc_list.go:419
 msgid "Minsk"
-msgstr "Minsk"
+msgstr ""
 
 #: datetime/zone_utc_list.go:239
 msgid "Miquelon"
-msgstr "Miquelon"
+msgstr ""
 
 #: network/nm_custom_type.go:147
 msgid "Mobile CDMA Connection"
-msgstr ""
+msgstr "Conexión móvil CDMA"
 
 #: network/nm_custom_type.go:143
 msgid "Mobile Connection"
-msgstr "ተንቀሳቃሽ ግንኙነት"
+msgstr "Conexión Móvil"
 
 #: network/nm_custom_type.go:145
 msgid "Mobile GSM Connection"
-msgstr "ተንቀሳቃሽ GSM ግንኙነት"
+msgstr "Conexión móvil GSM"
 
 #: network/state_handler.go:60
 msgid "Modem initialization failed."
-msgstr ""
+msgstr "El inicio del modem falló."
 
 #: network/state_handler.go:84
 msgid "ModemManager was not running or quitted unexpectedly."
@@ -1761,96 +1757,95 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:409
 msgid "Mogadishu"
-msgstr "Mogadishu"
+msgstr ""
 
 #: datetime/zone_utc_list.go:340
 msgid "Monaco"
-msgstr "Monaco"
+msgstr ""
 
 #: datetime/zone_utc_list.go:190
 msgid "Moncton"
-msgstr "Moncton"
+msgstr ""
 
 #: datetime/zone_utc_list.go:269
 msgid "Monrovia"
-msgstr "Monrovia"
+msgstr ""
 
 #: datetime/zone_utc_list.go:102
 msgid "Monterrey"
-msgstr "Monterrey"
+msgstr ""
 
 #: datetime/zone_utc_list.go:240
 msgid "Montevideo"
-msgstr "Montevideo"
+msgstr ""
 
 #: datetime/zone_utc_list.go:143
-#, fuzzy
 msgid "Monticello"
-msgstr "Montevideo"
+msgstr ""
 
 #: datetime/zone_utc_list.go:146
 msgid "Montreal"
-msgstr "Montreal"
+msgstr ""
 
 #: datetime/zone_utc_list.go:191
 msgid "Montserrat"
-msgstr "Montserrat"
+msgstr ""
 
 #: datetime/zone_utc_list.go:432
 msgid "Moscow"
-msgstr "Moscow"
+msgstr ""
 
 #: keybinding/id_desc_map.go:236
 msgid "Move to left workspace"
-msgstr "ወደ ግራ የስራ ቦታ ማንቀሳቀሻ"
+msgstr "Mover a área de trabajo izquierda"
 
 #: keybinding/id_desc_map.go:239
 msgid "Move to lower workspace"
-msgstr "ወደ ታች የስራ ቦታ ማንቀሳቀሻ"
+msgstr "Mover a área de trabajo inferior"
 
 #: keybinding/id_desc_map.go:237
 msgid "Move to right workspace"
-msgstr "ወደ ቀኝ የስራ ቦታ ማንቀሳቀሻ"
+msgstr "Mover a área de trabajo derecha"
 
 #: keybinding/id_desc_map.go:238
 msgid "Move to upper workspace"
-msgstr "ወደ ላይ የስራ ቦታ ማንቀሳቀሻ"
+msgstr "Mover a área de trabajo superior"
 
 #: keybinding/id_desc_map.go:232
 msgid "Move to workspace 1"
-msgstr "ወደ ስራ ቦታ 1 ማንቀሳቀሻ"
+msgstr "Mover a área de trabajo 1"
 
 #: keybinding/id_desc_map.go:233
 msgid "Move to workspace 2"
-msgstr "ወደ ስራ ቦታ 2 ማንቀሳቀሻ"
+msgstr "Mover a área de trabajo 2"
 
 #: keybinding/id_desc_map.go:234
 msgid "Move to workspace 3"
-msgstr "ወደ ስራ ቦታ 3 ማንቀሳቀሻ"
+msgstr "Mover a área de trabajo 3"
 
 #: keybinding/id_desc_map.go:235
 msgid "Move to workspace 4"
-msgstr "ወደ ስራ ቦታ 4 ማንቀሳቀሻ"
+msgstr "Mover a área de trabajo 4"
 
 #: keybinding/id_desc_map.go:175
 msgid "Move window"
-msgstr "መስኮት ማንቀሳቀሻ"
+msgstr "Mover la ventana"
 
 #: datetime/zone_utc_list.go:429
 msgid "Muscat"
-msgstr "Muscat"
+msgstr ""
 
 #: keybinding/id_desc_map.go:136
 msgid "Mute"
-msgstr "መቀነሻ"
+msgstr "Silenciar"
 
 #: network/nm_setting_vpn_vpnc.go:259
 msgid "NAT-T Always"
-msgstr "NAT-T Always"
+msgstr "NAT-T Siempre"
 
 #: network/nm_setting_vpn_vpnc.go:258
 msgid "NAT-T When Available (default)"
-msgstr "NAT-T When Available (default)"
+msgstr "NAT-T Cuando esta dsiponible (por defecto)"
 
 #: datetime/zone_utc_list.go:551
 msgid "NSW"
@@ -1866,23 +1861,23 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:410
 msgid "Nairobi"
-msgstr "Nairobi"
+msgstr ""
 
 #: datetime/zone_utc_list.go:147
 msgid "Nassau"
-msgstr "Nassau"
+msgstr ""
 
 #: datetime/zone_utc_list.go:592
 msgid "Nauru"
-msgstr "Nauru"
+msgstr ""
 
 #: datetime/zone_utc_list.go:80
 msgid "Navajo"
-msgstr "Navajo"
+msgstr ""
 
 #: datetime/zone_utc_list.go:319
 msgid "Ndjamena"
-msgstr "Ndjamena"
+msgstr ""
 
 #: network/state_handler.go:67
 msgid "Necessary firmware for the device may be missed."
@@ -1898,39 +1893,39 @@ msgstr "Netscreen"
 
 #: network/state_handler.go:64
 msgid "Network registration timed out."
-msgstr ""
+msgstr "Terminó el tiempo de registro en la red."
 
 #: network/state_handler.go:63
 msgid "Network registration was denied."
-msgstr ""
+msgstr "Se ha denegado su registro en la red."
 
 #: network/state_handler.go:69
 msgid "NetworkManager went to sleep."
-msgstr ""
+msgstr "El administrador de red se ha dormido."
 
 #: datetime/zone_utc_list.go:148
 msgid "New York"
-msgstr "New York"
+msgstr ""
 
 #: datetime/zone_utc_list.go:212
 msgid "Newfoundland"
-msgstr "Newfoundland"
+msgstr ""
 
 #: keybinding/id_desc_map.go:140
 msgid "Next"
-msgstr "ይቀጥሉ"
+msgstr "Siguiente"
 
 #: datetime/zone_utc_list.go:320
 msgid "Niamey"
-msgstr "Niamey"
+msgstr ""
 
 #: datetime/zone_utc_list.go:379
 msgid "Nicosia"
-msgstr "Nicosia"
+msgstr ""
 
 #: datetime/zone_utc_list.go:149
 msgid "Nipigon"
-msgstr "Nipigon"
+msgstr ""
 
 #: datetime/zone_utc_list.go:25
 msgid "Niue"
@@ -1948,11 +1943,11 @@ msgstr "Nome"
 #: network/nm_setting_virtual_key.go:178 network/nm_setting_vpn_openvpn.go:398
 #: network/nm_setting_vpn_vpnc.go:272
 msgid "None"
-msgstr "ምንም"
+msgstr "Ninguno"
 
 #: datetime/zone_utc_list.go:578
 msgid "Norfolk"
-msgstr "Norfolk"
+msgstr ""
 
 #: datetime/zone_utc_list.go:104
 msgid "North Dakota/Center"
@@ -1966,15 +1961,15 @@ msgstr ""
 #: network/nm_setting_vpn_pptp.go:108 network/nm_constant.go:299
 #: network/nm_setting_vpn_l2tp.go:118 network/nm_setting_vpn_vpnc.go:148
 msgid "Not Required"
-msgstr "አያስፈልግም"
+msgstr "No es necesario"
 
 #: mime/default_media.go:72 mime/default_media.go:89
 msgid "Nothing"
-msgstr "ምንም"
+msgstr "Nada"
 
 #: datetime/zone_utc_list.go:270
 msgid "Nouakchott"
-msgstr "Nouakchott"
+msgstr ""
 
 #: datetime/zone_utc_list.go:574
 msgid "Noumea"
@@ -1982,11 +1977,11 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:484
 msgid "Novokuznetsk"
-msgstr "Novokuznetsk"
+msgstr ""
 
 #: datetime/zone_utc_list.go:485
 msgid "Novosibirsk"
-msgstr "Novosibirsk"
+msgstr ""
 
 #: network/nm_setting_802_1x.go:78
 msgid "OTP"
@@ -1994,31 +1989,31 @@ msgstr "OTP"
 
 #: bluetooth/bluez_profile.go:36
 msgid "Object push"
-msgstr ""
+msgstr "Empujar"
 
 #: network/state_handler.go:209
 msgid "Offline"
-msgstr "ከመስመር ውጪ"
+msgstr "Desconectado"
 
 #: datetime/zone_utc_list.go:73
 msgid "Ojinaga"
-msgstr "Ojinaga"
+msgstr ""
 
 #: datetime/zone_utc_list.go:486
 msgid "Omsk"
-msgstr "Omsk"
+msgstr ""
 
 #: network/nm_setting_wireless_security.go:204
 msgid "Open"
-msgstr "መክፈቻ"
+msgstr "Abrir"
 
 #: mime/default_media.go:75 mime/default_media.go:90
 msgid "Open Folder"
-msgstr "ፎልደር መክፋቻ"
+msgstr ""
 
 #: network/nm_setting_virtual_key.go:126
 msgid "OpenConnect"
-msgstr "መገናኛ መክፈቻ"
+msgstr "OpenConnect"
 
 #: network/nm_setting_virtual_key.go:127
 msgid "OpenVPN"
@@ -2026,15 +2021,15 @@ msgstr "OpenVPN"
 
 #: datetime/zone_utc_list.go:453
 msgid "Oral"
-msgstr "Oral"
+msgstr ""
 
 #: datetime/zone_utc_list.go:341
 msgid "Oslo"
-msgstr "Oslo"
+msgstr ""
 
 #: datetime/zone_utc_list.go:271
 msgid "Ouagadougou"
-msgstr "Ouagadougou"
+msgstr ""
 
 #: network/nm_setting_802_1x.go:73
 msgid "PAP"
@@ -2042,11 +2037,11 @@ msgstr "PAP"
 
 #: network/state_handler.go:66
 msgid "PIN check failed."
-msgstr ""
+msgstr "Falló la revisión PIN"
 
 #: network/nm_custom_type.go:141
 msgid "PPPoE Connection"
-msgstr "PPPoE ግንኙነት"
+msgstr "Conexión PPPoE"
 
 #: network/nm_setting_virtual_key.go:125
 msgid "PPTP"
@@ -2062,15 +2057,15 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:531
 msgid "Palau"
-msgstr "Palau"
+msgstr ""
 
 #: datetime/zone_utc_list.go:205
 msgid "Palmer"
-msgstr "Palmer"
+msgstr ""
 
 #: datetime/zone_utc_list.go:150
 msgid "Panama"
-msgstr "Panama"
+msgstr ""
 
 #: datetime/zone_utc_list.go:151
 msgid "Pangnirtung"
@@ -2078,19 +2073,19 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:241
 msgid "Paramaribo"
-msgstr "Paramaribo"
+msgstr ""
 
 #: datetime/zone_utc_list.go:342
 msgid "Paris"
-msgstr "Paris"
+msgstr ""
 
 #: network/nm_setting_vpn_openvpn.go:252
 msgid "Password"
-msgstr "የመግቢያ ቃል"
+msgstr "Contraseña"
 
 #: network/nm_setting_vpn_openvpn.go:253
 msgid "Password with Certificates (TLS)"
-msgstr "የመግቢያ ቃል ከ ሰርቲፊኬቶች ጋር (TLS)"
+msgstr "Contraseña con Certificados (TLS)"
 
 #: network/state_handler.go:39
 msgid "Passwords were required but not provided."
@@ -2098,44 +2093,43 @@ msgstr ""
 
 #: keybinding/id_desc_map.go:134
 msgid "Pause"
-msgstr "ማስቆሚያ"
+msgstr "Pausa"
 
 #: datetime/zone_utc_list.go:515
 msgid "Perth"
-msgstr "Perth"
+msgstr ""
 
 #: datetime/zone_utc_list.go:135
-#, fuzzy
 msgid "Petersburg"
-msgstr "Petersburg"
+msgstr ""
 
 #: datetime/zone_utc_list.go:487
 msgid "Phnom Penh"
-msgstr "Phnom Penh"
+msgstr ""
 
 #: datetime/zone_utc_list.go:74
 msgid "Phoenix"
-msgstr "Phoenix"
+msgstr ""
 
 #: bluetooth/bluez_profile.go:39
 msgid "Phone book access"
-msgstr ""
+msgstr "Acceso a registro telefónico"
 
 #: bluetooth/bluez_profile.go:40
 msgid "Phone book access client"
-msgstr ""
+msgstr "Acceso de cliente a registro telefónico"
 
 #: datetime/zone_utc_list.go:60
 msgid "Pitcairn"
-msgstr "Pitcairn"
+msgstr ""
 
 #: keybinding/id_desc_map.go:133
 msgid "Play/Pause"
-msgstr "ማጫወቻ/ማስቆሚያ"
+msgstr "Reproducir/Pausa"
 
 #: datetime/zone_utc_list.go:343
 msgid "Podgorica"
-msgstr "Podgorica"
+msgstr ""
 
 #: datetime/zone_utc_list.go:575
 msgid "Pohnpei"
@@ -2147,19 +2141,19 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:576
 msgid "Ponape"
-msgstr "Ponape"
+msgstr ""
 
 #: datetime/zone_utc_list.go:488
 msgid "Pontianak"
-msgstr "Pontianak"
+msgstr ""
 
 #: datetime/zone_utc_list.go:558
 msgid "Port Moresby"
-msgstr "Port Moresby"
+msgstr ""
 
 #: datetime/zone_utc_list.go:192
 msgid "Port of Spain"
-msgstr "Port of Spain"
+msgstr ""
 
 #: datetime/zone_utc_list.go:152
 msgid "Port-au-Prince"
@@ -2167,11 +2161,11 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:153
 msgid "Porto Acre"
-msgstr "Porto Acre"
+msgstr ""
 
 #: datetime/zone_utc_list.go:193
 msgid "Porto Velho"
-msgstr "Porto Velho"
+msgstr ""
 
 #: datetime/zone_utc_list.go:321
 msgid "Porto-Novo"
@@ -2179,55 +2173,55 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:303
 msgid "Portugal"
-msgstr "Portugal"
+msgstr ""
 
 #: datetime/zone_utc_list.go:344
 msgid "Prague"
-msgstr "Prague"
+msgstr ""
 
 #: network/nm_setting_gsm.go:137
 msgid "Prefer 2G (GPRS/EDGE)"
-msgstr "Prefer 2G (GPRS/EDGE)"
+msgstr "Prefiero 2G (GPRS/EDGE)"
 
 #: network/nm_setting_gsm.go:136
 msgid "Prefer 3G (UMTS/HSPA)"
-msgstr "Prefer 3G (UMTS/HSPA)"
+msgstr "Prefiero 3G (UMTS/HSPA)"
 
 #: network/nm_setting_gsm.go:138
 msgid "Prefer 4G (LTE)"
-msgstr "Prefer 4G (LTE)"
+msgstr "Prefiero 4G (LTE)"
 
 #: keybinding/id_desc_map.go:139
 msgid "Previous"
-msgstr "ቀደም ያለው"
+msgstr "Anterior"
 
 #: network/state_handler.go:83
 msgid "Problem with the RFC 2684 Ethernet over ADSL bridge."
-msgstr ""
+msgstr "Problema con la red RFC 2684 en el puente ADSL"
 
 #: network/nm_setting_802_1x.go:165 network/nm_setting_802_1x.go:173
 msgid "Protected EAP"
-msgstr "Protected EAP"
+msgstr "Protegido EAP"
 
 #: datetime/zone_utc_list.go:194
 msgid "Puerto Rico"
-msgstr "Puerto Rico"
+msgstr ""
 
 #: datetime/zone_utc_list.go:527
 msgid "Pyongyang"
-msgstr "Pyongyang"
+msgstr ""
 
 #: datetime/zone_utc_list.go:416
 msgid "Qatar"
-msgstr "Qatar"
+msgstr ""
 
 #: datetime/zone_utc_list.go:552
 msgid "Queensland"
-msgstr "Queensland"
+msgstr ""
 
 #: datetime/zone_utc_list.go:471
 msgid "Qyzylorda"
-msgstr "Qyzylorda"
+msgstr ""
 
 #: network/nm_setting_vpn_openvpn.go:384
 msgid "RC2-40-CBC"
@@ -2251,7 +2245,7 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:532
 msgid "ROK"
-msgstr "ROK"
+msgstr ""
 
 #: network/nm_setting_vpn_openvpn.go:399
 msgid "RSA MD-4"
@@ -2259,11 +2253,11 @@ msgstr "RSA MD-4"
 
 #: datetime/zone_utc_list.go:106
 msgid "Rainy River"
-msgstr "Rainy River"
+msgstr ""
 
 #: datetime/zone_utc_list.go:477
 msgid "Rangoon"
-msgstr "Rangoon"
+msgstr ""
 
 #: datetime/zone_utc_list.go:107
 msgid "Rankin Inlet"
@@ -2275,11 +2269,11 @@ msgstr "Rarotonga"
 
 #: datetime/zone_utc_list.go:242
 msgid "Recife"
-msgstr "Recife"
+msgstr ""
 
 #: datetime/zone_utc_list.go:108
 msgid "Regina"
-msgstr "Regina"
+msgstr ""
 
 #: network/state_handler.go:65
 msgid "Register to the requested GSM network failed."
@@ -2287,40 +2281,39 @@ msgstr ""
 
 #: keybinding/id_desc_map.go:176
 msgid "Resize window"
-msgstr "መስኮት እንደ ነበር መመለሻ"
+msgstr "Ajustar la ventana"
 
 #: datetime/zone_utc_list.go:109
 msgid "Resolute"
-msgstr "Resolute"
+msgstr ""
 
 #: keybinding/id_desc_map.go:173
 msgid "Restore window"
-msgstr "መስኮት እንደ ነበር መመለሻ"
+msgstr "Restaurar la ventana"
 
 #: datetime/zone_utc_list.go:438
 msgid "Reunion"
-msgstr "Reunion"
+msgstr ""
 
 #: keybinding/id_desc_map.go:77
 msgid "Reverse switch applications"
-msgstr ""
+msgstr "Regresar el cambio de aplicacion"
 
 #: datetime/zone_utc_list.go:280
 msgid "Reykjavik"
-msgstr "Reykjavik"
+msgstr ""
 
 #: datetime/zone_utc_list.go:390
 msgid "Riga"
-msgstr "Riga"
+msgstr ""
 
 #: datetime/zone_utc_list.go:154
 msgid "Rio Branco"
-msgstr "Rio Branco"
+msgstr ""
 
 #: datetime/zone_utc_list.go:222
-#, fuzzy
 msgid "Rio Gallegos"
-msgstr "Rio Gallegos"
+msgstr ""
 
 #: datetime/zone_utc_list.go:417
 msgid "Riyadh"
@@ -2328,15 +2321,15 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:345
 msgid "Rome"
-msgstr "Rome"
+msgstr ""
 
 #: datetime/zone_utc_list.go:243
 msgid "Rosario"
-msgstr "Rosario"
+msgstr ""
 
 #: datetime/zone_utc_list.go:246
 msgid "Rothera"
-msgstr "Rothera"
+msgstr ""
 
 #: mime/default_media.go:79
 msgid "Run Soft"
@@ -2372,79 +2365,77 @@ msgstr "SOCKS"
 
 #: datetime/zone_utc_list.go:489
 msgid "Saigon"
-msgstr "Saigon"
+msgstr ""
 
 #: datetime/zone_utc_list.go:559
 msgid "Saipan"
-msgstr "Saipan"
+msgstr ""
 
 #: datetime/zone_utc_list.go:568
 msgid "Sakhalin"
-msgstr "Sakhalin"
+msgstr ""
 
 #: datetime/zone_utc_list.go:223
 msgid "Salta"
-msgstr "Salta"
+msgstr ""
 
 #: datetime/zone_utc_list.go:433
 msgid "Samara"
-msgstr "Samara"
+msgstr ""
 
 #: datetime/zone_utc_list.go:454
 msgid "Samarkand"
-msgstr "Samarkand"
+msgstr ""
 
 #: datetime/zone_utc_list.go:224
-#, fuzzy
 msgid "San Juan"
-msgstr "San Marino"
+msgstr ""
 
 #: datetime/zone_utc_list.go:225
-#, fuzzy
 msgid "San Luis"
-msgstr "San Luis"
+msgstr ""
 
 #: datetime/zone_utc_list.go:346
 msgid "San Marino"
-msgstr "San Marino"
+msgstr ""
 
 #: datetime/zone_utc_list.go:53
 msgid "Santa Isabel"
-msgstr "Santa Isabel"
+msgstr ""
 
 #: datetime/zone_utc_list.go:244
 msgid "Santarem"
-msgstr "Santarem"
+msgstr ""
 
 #: datetime/zone_utc_list.go:195
 msgid "Santiago"
-msgstr "Santiago"
+msgstr ""
 
 #: datetime/zone_utc_list.go:196
 msgid "Santo Domingo"
-msgstr "Santo Domingo"
+msgstr ""
 
 #: datetime/zone_utc_list.go:245
 msgid "Sao Paulo"
-msgstr "Sao Paulo"
+msgstr ""
 
 #: datetime/zone_utc_list.go:272
 msgid "Sao Tome"
-msgstr "Sao Tome"
+msgstr ""
 
 #: datetime/zone_utc_list.go:347
 msgid "Sarajevo"
-msgstr "Sarajevo"
+msgstr ""
 
 #: datetime/zone_utc_list.go:115
 msgid "Saskatchewan"
-msgstr "Saskatchewan"
+msgstr ""
 
 #: network/nm_setting_vpn_openvpn.go:171 network/nm_setting_vpn_pptp.go:106
 #: network/nm_constant.go:296 network/nm_setting_vpn_l2tp.go:116
 #: network/nm_setting_vpn_vpnc.go:145
 msgid "Saved"
-msgstr "ተቀምጧል"
+msgstr "Guardado"
 
 #: datetime/zone_utc_list.go:254
 msgid "Scoresbysund"
@@ -2452,56 +2443,56 @@ msgstr ""
 
 #: keybinding/id_desc_map.go:81
 msgid "Screenshot"
-msgstr "መመልከቻውን ፎቶ ማንሻ"
+msgstr "Capturar pantalla"
 
 #: network/nm_setting_virtual_key.go:176
 msgid "Secure (default)"
-msgstr "አስተማማኝ (ነባር)"
+msgstr "Seguro (por defecto)"
 
 #: datetime/zone_utc_list.go:528
 msgid "Seoul"
-msgstr "Seoul"
+msgstr ""
 
 #: bluetooth/bluez_profile.go:31
 msgid "Serial port"
-msgstr ""
+msgstr "Puerto serial"
 
 #: network/nm_setting_vpn_openvpn.go:430
 msgid "Server"
-msgstr "ሰርቨር"
+msgstr "Servidor"
 
 #: network/nm_setting_vpn_vpnc.go:271
 msgid "Server (default)"
-msgstr "ሰርቨር (ነባር)"
+msgstr "Servidor (por defecto)"
 
 #: datetime/zone_utc_list.go:507
 msgid "Shanghai"
-msgstr "Shanghai"
+msgstr ""
 
 #: network/nm_setting_wireless_security.go:205
 #: network/nm_setting_ip6_config.go:70 network/nm_setting_ip4_config.go:177
 msgid "Shared"
-msgstr "የተካፈሉት"
+msgstr "Compartido"
 
 #: datetime/zone_utc_list.go:75
 msgid "Shiprock"
-msgstr "Shiprock"
+msgstr ""
 
 #: keybinding/id_desc_map.go:73
 msgid "Show desktop"
-msgstr "ዴስክቶፕ ማሳያ"
+msgstr "Mostrar el escritorio"
 
 #: keybinding/id_desc_map.go:80
 msgid "Show/Hide the dock"
-msgstr "ዶክ ማሳያ/መደበቂያ"
+msgstr "Mostrar/Esconder anclaje"
 
 #: datetime/zone_utc_list.go:434
 msgid "Simferopol"
-msgstr "Simferopol"
+msgstr ""
 
 #: datetime/zone_utc_list.go:509
 msgid "Singapore"
-msgstr "Singapore"
+msgstr ""
 
 #: datetime/zone_utc_list.go:44
 msgid "Sitka"
@@ -2509,31 +2500,31 @@ msgstr "Sitka"
 
 #: datetime/zone_utc_list.go:348
 msgid "Skopje"
-msgstr "Skopje"
+msgstr ""
 
 #: datetime/zone_utc_list.go:391
 msgid "Sofia"
-msgstr "Sofia"
+msgstr ""
 
 #: datetime/zone_utc_list.go:251
 msgid "South Georgia"
-msgstr "South Georgia"
+msgstr ""
 
 #: datetime/zone_utc_list.go:581
 msgid "South Pole"
-msgstr "South Pole"
+msgstr ""
 
 #: datetime/zone_utc_list.go:197
 msgid "St Barthelemy"
-msgstr "St Barthelemy"
+msgstr ""
 
 #: datetime/zone_utc_list.go:281
 msgid "St Helena"
-msgstr "St Helena"
+msgstr ""
 
 #: datetime/zone_utc_list.go:211
 msgid "St Johns"
-msgstr "St Johns"
+msgstr ""
 
 #: datetime/zone_utc_list.go:198
 msgid "St Kitts"
@@ -2541,75 +2532,75 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:199
 msgid "St Lucia"
-msgstr "St Lucia"
+msgstr ""
 
 #: datetime/zone_utc_list.go:200
 msgid "St Thomas"
-msgstr "St Thomas"
+msgstr ""
 
 #: datetime/zone_utc_list.go:201
 msgid "St Vincent"
-msgstr "St Vincent"
+msgstr ""
 
 #: datetime/zone_utc_list.go:247
 msgid "Stanley"
-msgstr "Stanley"
+msgstr ""
 
 #: network/nm_setting_vpn_openvpn.go:254
 msgid "Static Key"
-msgstr ""
+msgstr "Clave estática"
 
 #: datetime/zone_utc_list.go:349
 msgid "Stockholm"
-msgstr "Stockholm"
+msgstr ""
 
 #: keybinding/id_desc_map.go:135
 msgid "Stop"
-msgstr "ማስቆሚያ"
+msgstr "Detener"
 
 #: datetime/zone_utc_list.go:110
 msgid "Swift Current"
-msgstr "Swift Current"
+msgstr ""
 
 #: keybinding/id_desc_map.go:76
 msgid "Switch applications"
-msgstr "መተግበሪያዎች መቀየሪያ"
+msgstr "Cambiar de aplicacion"
 
 #: keybinding/id_desc_map.go:177
 msgid "Switch furl state"
-msgstr ""
+msgstr "Cambiar a estado furl"
 
 #: keybinding/id_desc_map.go:228
 msgid "Switch to left workspace"
-msgstr "ወደ ግራ የስራ ቦታ መቀየሪያ"
+msgstr "Cambiar a modo de escritorio de la izquierda"
 
 #: keybinding/id_desc_map.go:231
 msgid "Switch to lower workspace"
-msgstr "ወደ ታች የስራ ቦታ መቀየሪያ"
+msgstr "Cambiar a modo de escritorio inferior"
 
 #: keybinding/id_desc_map.go:229
 msgid "Switch to right workspace"
-msgstr "ወደ ቀኝ የስራ ቦታ መቀየሪያ"
+msgstr "Cambiar a modo de escritorio de la derecha"
 
 #: keybinding/id_desc_map.go:230
 msgid "Switch to upper workspace"
-msgstr "ወደ ላይ የስራ ቦታ መቀየሪያ"
+msgstr "Cambiar a modo de escritorio superior"
 
 #: keybinding/id_desc_map.go:224
 msgid "Switch to workspace 1"
-msgstr "ወደ ስራ 1 መቀየሪያ"
+msgstr "Cambiar a Modo de escritorio 1"
 
 #: keybinding/id_desc_map.go:225
 msgid "Switch to workspace 2"
-msgstr "ወደ ስራ 2 መቀየሪያ"
+msgstr "Cambiar a  Modo de escritorio 2"
 
 #: keybinding/id_desc_map.go:226
 msgid "Switch to workspace 3"
-msgstr "ወደ ስራ 3 መቀየሪያ"
+msgstr "Cambiar a Modo de escritorio 3"
 
 #: keybinding/id_desc_map.go:227
 msgid "Switch to workspace 4"
-msgstr "ወደ ስራ 4 መቀየሪያ"
+msgstr "Cambiar a Modo de escritorio 4"
 
 #: datetime/zone_utc_list.go:553
 msgid "Sydney"
@@ -2617,7 +2608,7 @@ msgstr ""
 
 #: bluetooth/bluez_profile.go:38
 msgid "Synchronization"
-msgstr ""
+msgstr "Sincronización"
 
 #: datetime/zone_utc_list.go:411
 msgid "Syowa"
@@ -2625,7 +2616,7 @@ msgstr ""
 
 #: network/nm_setting_wireless_security.go:199
 msgid "TKIP"
-msgstr "TKIP"
+msgstr ""
 
 #: network/nm_setting_802_1x.go:80 network/nm_setting_802_1x.go:161
 #: network/nm_setting_802_1x.go:169
@@ -2638,56 +2629,55 @@ msgstr "Tahiti"
 
 #: datetime/zone_utc_list.go:510
 msgid "Taipei"
-msgstr "Taipei"
+msgstr ""
 
 #: datetime/zone_utc_list.go:392
 msgid "Tallinn"
-msgstr "Tallinn"
+msgstr ""
 
 #: datetime/zone_utc_list.go:593
 msgid "Tarawa"
-msgstr "Tarawa"
+msgstr ""
 
 #: datetime/zone_utc_list.go:455
 msgid "Tashkent"
-msgstr "Tashkent"
+msgstr ""
 
 #: datetime/zone_utc_list.go:554
 msgid "Tasmania"
-msgstr "Tasmania"
+msgstr ""
 
 #: datetime/zone_utc_list.go:430
 msgid "Tbilisi"
-msgstr "Tbilisi"
+msgstr ""
 
 #: datetime/zone_utc_list.go:111
 msgid "Tegucigalpa"
-msgstr "Tegucigalpa"
+msgstr ""
 
 #: datetime/zone_utc_list.go:424
 msgid "Tehran"
-msgstr "Tehran"
+msgstr ""
 
 #: datetime/zone_utc_list.go:380
 msgid "Tel Aviv"
 msgstr ""
 
 #: datetime/zone_utc_list.go:93
-#, fuzzy
 msgid "Tell City"
-msgstr "Tell City"
+msgstr ""
 
 #: keybinding/id_desc_map.go:85
 msgid "Terminal"
-msgstr "ተርሚናል"
+msgstr "Terminal"
 
 #: keybinding/id_desc_map.go:86
 msgid "Terminal Quake Window"
-msgstr ""
+msgstr "Ventana terminal de Quake"
 
 #: network/state_handler.go:85
 msgid "The 802.11 Wi-Fi network could not be found."
-msgstr ""
+msgstr "La red wifi 802.11 no se ha encontrado."
 
 #: network/state_handler.go:42
 msgid "The 802.1X supplicant quitted or failed unexpectedly."
@@ -2699,17 +2689,17 @@ msgstr ""
 
 #: network/state_handler.go:40
 msgid ""
-"The 802.1X supplication disconnected from the access point or authentication "
-"server."
-msgstr ""
+"The 802.1X supplication disconnected from the access point or authentication"
+" server."
+msgstr "La solicitud de 802.1X se desconectó del servidor"
 
 #: network/state_handler.go:74
 msgid "The 802.1x supplication is now available."
-msgstr ""
+msgstr "La solicitud 802.1x esta disponible."
 
 #: network/state_handler.go:52
 msgid "The AutoIP service failed to start."
-msgstr ""
+msgstr "El servicio AutoIP falló al iniciar."
 
 #: network/state_handler.go:54
 msgid "The AutoIP service quitted or failed unexpectedly."
@@ -2717,15 +2707,15 @@ msgstr ""
 
 #: network/state_handler.go:53
 msgid "The AutoIP service reported an unexpected error."
-msgstr ""
+msgstr "El servicio AutoIP reportó un error inesperado."
 
 #: network/state_handler.go:76
 msgid "The Bluetooth connection timed out or failed."
-msgstr ""
+msgstr "La conexión de Bluetooth falló."
 
 #: network/state_handler.go:47
 msgid "The DHCP service failed to start within the allowed time."
-msgstr ""
+msgstr "El servicio DHCP falló al iniciar dentro del tiempo permitido."
 
 #: network/state_handler.go:49
 msgid "The DHCP service quitted or failed unexpectedly."
@@ -2733,7 +2723,7 @@ msgstr ""
 
 #: network/state_handler.go:48
 msgid "The DHCP service reported an unexpected error."
-msgstr ""
+msgstr "El servicio DHCP reportó un error inesperado."
 
 #: network/state_handler.go:91
 msgid "The IP config of VPN connection was invalid."
@@ -2741,15 +2731,15 @@ msgstr ""
 
 #: network/state_handler.go:38
 msgid "The IP configuration is no longer valid."
-msgstr ""
+msgstr "La configuración IP ya no es válida"
 
 #: network/state_handler.go:45
 msgid "The PPP service disconnected unexpectedly."
-msgstr "የ PPP ግልጋሎት በድንገት ተቋርጧል "
+msgstr "El servicio PPP se desconectó inesperadamente."
 
 #: network/state_handler.go:44
 msgid "The PPP service failed to start within the allowed time."
-msgstr ""
+msgstr "El servicio PPP falló al iniciar dentro del tiempo permitido."
 
 #: network/state_handler.go:46
 msgid "The PPP service quitted or failed unexpectedly."
@@ -2777,43 +2767,43 @@ msgstr ""
 
 #: network/state_handler.go:97
 msgid "The connection was deleted from settings."
-msgstr ""
+msgstr "Esta conexiión se eliminó de la configuración."
 
 #: network/state_handler.go:36
 msgid "The device have not been ready for configuration."
-msgstr "ለማዋቀር አካሉ ዝግጁ አይደለም"
+msgstr ""
 
 #: network/state_handler.go:35
 msgid "The device is no longer managed."
-msgstr "አካሉን እያስተዳድርም"
+msgstr "El dispositivo ya no esta operando"
 
 #: network/state_handler.go:34
 msgid "The device is now managed."
-msgstr "አካሉን እያስተዳደረ ነው"
+msgstr "El dispositivo es operando"
 
 #: network/state_handler.go:68
 msgid "The device was removed."
-msgstr ""
+msgstr "El dispositivo fue extraído."
 
 #: network/state_handler.go:70
 msgid "The device's active connection was removed or disappeared."
-msgstr ""
+msgstr "La conexión activa de este dispositivo ha desaparecido."
 
 #: network/state_handler.go:72
 msgid "The device's carrier/link changed."
-msgstr ""
+msgstr "El proveedor del dispositivo cambió."
 
 #: network/state_handler.go:73
 msgid "The device's existing connection was assumed."
-msgstr ""
+msgstr "La conexión activa con el dispositivo  se realizó."
 
 #: network/state_handler.go:75
 msgid "The modem could not be found."
-msgstr ""
+msgstr "No se ha encontrado el modem."
 
 #: network/state_handler.go:50
 msgid "The shared connection service failed to start."
-msgstr ""
+msgstr "El servicio de conexión compartida falló al iniciar."
 
 #: network/state_handler.go:51
 msgid "The shared connection service quitted or failed unexpectedly."
@@ -2821,31 +2811,31 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:472
 msgid "Thimbu"
-msgstr "Thimbu"
+msgstr ""
 
 #: datetime/zone_utc_list.go:473
 msgid "Thimphu"
-msgstr "Thimphu"
+msgstr ""
 
 #: datetime/zone_utc_list.go:202
 msgid "Thule"
-msgstr "Thule"
+msgstr ""
 
 #: datetime/zone_utc_list.go:155
 msgid "Thunder Bay"
-msgstr "Thunder Bay"
+msgstr ""
 
 #: datetime/zone_utc_list.go:54
 msgid "Tijuana"
-msgstr "Tijuana"
+msgstr ""
 
 #: datetime/zone_utc_list.go:273
 msgid "Timbuktu"
-msgstr "Timbuktu"
+msgstr ""
 
 #: datetime/zone_utc_list.go:350
 msgid "Tirane"
-msgstr "Tirane"
+msgstr ""
 
 #: datetime/zone_utc_list.go:393
 msgid "Tiraspol"
@@ -2853,23 +2843,23 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:529
 msgid "Tokyo"
-msgstr "Tokyo"
+msgstr ""
 
 #: datetime/zone_utc_list.go:604
 msgid "Tongatapu"
-msgstr "Tongatapu"
+msgstr ""
 
 #: datetime/zone_utc_list.go:156
 msgid "Toronto"
-msgstr "Toronto"
+msgstr ""
 
 #: datetime/zone_utc_list.go:203
 msgid "Tortola"
-msgstr "Tortola"
+msgstr ""
 
 #: datetime/zone_utc_list.go:371
 msgid "Tripoli"
-msgstr "Tripoli"
+msgstr ""
 
 #: datetime/zone_utc_list.go:275
 msgid "Troll"
@@ -2877,27 +2867,27 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:560
 msgid "Truk"
-msgstr "Truk"
+msgstr ""
 
 #: datetime/zone_utc_list.go:226
 msgid "Tucuman"
-msgstr "Tucuman"
+msgstr ""
 
 #: datetime/zone_utc_list.go:322
 msgid "Tunis"
-msgstr "Tunis"
+msgstr ""
 
 #: network/nm_setting_802_1x.go:164 network/nm_setting_802_1x.go:172
 msgid "Tunneled TLS"
-msgstr "Tunneled TLS"
+msgstr "Encubierto TLS"
 
 #: datetime/zone_utc_list.go:399
 msgid "Turkey"
-msgstr "Turkey"
+msgstr ""
 
 #: datetime/zone_utc_list.go:285 datetime/zone_utc_list.go:304
 msgid "UCT"
-msgstr "UCT"
+msgstr ""
 
 #: datetime/zone_utc_list.go:161
 msgid "US/Eastern"
@@ -2909,11 +2899,11 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:287 datetime/zone_utc_list.go:306
 msgid "UTC"
-msgstr "UTC"
+msgstr ""
 
 #: datetime/zone_utc_list.go:511
 msgid "Ujung Pandang"
-msgstr "Ujung Pandang"
+msgstr ""
 
 #: datetime/zone_utc_list.go:512
 msgid "Ulaanbaatar"
@@ -2921,23 +2911,23 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:513
 msgid "Ulan Bator"
-msgstr "Ulan Bator"
+msgstr ""
 
 #: datetime/zone_utc_list.go:286 datetime/zone_utc_list.go:305
 msgid "Universal"
-msgstr "Universal"
+msgstr ""
 
 #: datetime/zone_utc_list.go:514
 msgid "Urumqi"
-msgstr "Urumqi"
+msgstr ""
 
 #: network/nm_setting_gsm.go:139
 msgid "Use Only 4G (LTE)"
-msgstr "Use Only 4G (LTE)"
+msgstr "Uso solamente 4G (LTE)"
 
 #: datetime/zone_utc_list.go:227
 msgid "Ushuaia"
-msgstr "Ushuaia"
+msgstr ""
 
 #: datetime/zone_utc_list.go:569
 msgid "Ust-Nera"
@@ -2945,23 +2935,23 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:394
 msgid "Uzhgorod"
-msgstr "Uzhgorod"
+msgstr ""
 
 #: network/nm_custom_type.go:149
 msgid "VPN Connection"
-msgstr ""
+msgstr "Conexión VPN"
 
 #: network/nm_custom_type.go:151
 msgid "VPN L2TP"
-msgstr "VPN L2TP"
+msgstr "Ruta VPN L2TP"
 
 #: network/nm_custom_type.go:153
 msgid "VPN OpenConnect"
-msgstr "VPN OpenConnect"
+msgstr "Conexión de acceso a VPN"
 
 #: network/nm_custom_type.go:155
 msgid "VPN OpenVPN"
-msgstr "VPN OpenVPN"
+msgstr "VPN activada"
 
 #: network/nm_custom_type.go:157
 msgid "VPN PPTP"
@@ -2969,7 +2959,7 @@ msgstr "VPN PPTP"
 
 #: network/nm_custom_type.go:159
 msgid "VPN VPNC"
-msgstr "VPN VPNC"
+msgstr "Ruta VPN VPNC"
 
 #: network/state_handler.go:90
 msgid "VPN service stopped."
@@ -2981,77 +2971,75 @@ msgstr "VPNC"
 
 #: datetime/zone_utc_list.go:351
 msgid "Vaduz"
-msgstr "Vaduz"
+msgstr ""
 
 #: datetime/zone_utc_list.go:94
-#, fuzzy
 msgid "Valparaiso"
-msgstr "Indianapolis"
+msgstr ""
 
 #: datetime/zone_utc_list.go:55
 msgid "Vancouver"
-msgstr "Vancouver"
+msgstr ""
 
 #: datetime/zone_utc_list.go:352
 msgid "Vatican"
-msgstr "Vatican"
+msgstr ""
 
 #: network/nm_setting_802_1x.go:186
 msgid "Version 0"
-msgstr "እትም 0"
+msgstr "Versión 0"
 
 #: network/nm_setting_802_1x.go:187
 msgid "Version 1"
-msgstr "እትም 1"
+msgstr "Versión 1"
 
 #: datetime/zone_utc_list.go:136
 msgid "Vevay"
-msgstr "Vevay"
+msgstr ""
 
 #: datetime/zone_utc_list.go:555
 msgid "Victoria"
-msgstr "Victoria"
+msgstr ""
 
 #: datetime/zone_utc_list.go:353
 msgid "Vienna"
-msgstr "Vienna"
+msgstr ""
 
 #: datetime/zone_utc_list.go:490
 msgid "Vientiane"
-msgstr "Vientiane"
+msgstr ""
 
 #: datetime/zone_utc_list.go:395
 msgid "Vilnius"
-msgstr "Vilnius"
+msgstr ""
 
 #: datetime/zone_utc_list.go:137
-#, fuzzy
 msgid "Vincennes"
-msgstr "Vincennes"
+msgstr ""
 
 #: datetime/zone_utc_list.go:204
 msgid "Virgin"
-msgstr "Virgin"
+msgstr ""
 
 #: datetime/zone_utc_list.go:570
 msgid "Vladivostok"
-msgstr "Vladivostok"
+msgstr ""
 
 #: datetime/zone_utc_list.go:435
 msgid "Volgograd"
-msgstr "Volgograd"
+msgstr ""
 
 #: keybinding/id_desc_map.go:137
 msgid "Volume down"
-msgstr "መጠን መቀነሻ"
+msgstr "Bajar el volumen"
 
 #: keybinding/id_desc_map.go:138
 msgid "Volume up"
-msgstr "መጠን መጨመሪያ"
+msgstr "Subir el volumen"
 
 #: datetime/zone_utc_list.go:466
 msgid "Vostok"
-msgstr "Vostok"
+msgstr ""
 
 #: datetime/zone_utc_list.go:439
 msgid "W-SU"
@@ -3059,92 +3047,91 @@ msgstr ""
 
 #: network/nm_setting_wireless_security.go:189
 msgid "WEP"
-msgstr "WEP"
+msgstr ""
 
 #: network/nm_setting_virtual_key.go:142 network/nm_setting_virtual_key.go:149
 msgid "WEP 40/128-bit Key"
-msgstr "WEP 40/128-bit Key"
+msgstr "clave WEP 40/128-bit "
 
 #: network/nm_setting_wireless_security.go:198
 msgid "WEP104"
-msgstr "WEP104"
+msgstr ""
 
 #: network/nm_setting_wireless_security.go:197
 msgid "WEP40"
-msgstr "WEP40"
+msgstr ""
 
 #: network/nm_setting_wireless_security.go:193
 msgid "WPA Enterprise"
-msgstr "WPA Enterprise"
+msgstr ""
 
 #: network/nm_setting_wireless_security.go:192
 msgid "WPA-PSK Infrastructure"
-msgstr "WPA-PSK Infrastructure"
+msgstr ""
 
 #: network/nm_setting_virtual_key.go:144
 msgid "WPA/WPA2 Enterprise"
-msgstr "WPA/WPA2 የድርጅት"
+msgstr ""
 
 #: network/nm_setting_virtual_key.go:143 network/nm_setting_virtual_key.go:150
 msgid "WPA/WPA2 Personal"
-msgstr "WPA/WPA2 የግል"
+msgstr ""
 
 #: datetime/zone_utc_list.go:594
 msgid "Wake"
-msgstr "Wake"
+msgstr ""
 
 #: datetime/zone_utc_list.go:595
 msgid "Wallis"
-msgstr "Wallis"
+msgstr ""
 
 #: datetime/zone_utc_list.go:354
 msgid "Warsaw"
-msgstr "Warsaw"
+msgstr ""
 
 #: network/nm_setting_virtual_key.go:177
 msgid "Weak"
-msgstr "ደካማ"
+msgstr "Débil"
 
 #: keybinding/id_desc_map.go:131
 msgid "Web browser"
-msgstr "ዌብ መቃኛ"
+msgstr ""
 
 #: datetime/zone_utc_list.go:56
 msgid "Whitehorse"
-msgstr "Whitehorse"
+msgstr ""
 
 #: datetime/zone_utc_list.go:138
-#, fuzzy
 msgid "Winamac"
-msgstr "Winamac"
+msgstr ""
 
 #: datetime/zone_utc_list.go:323
 msgid "Windhoek"
-msgstr "Windhoek"
+msgstr ""
 
 #: keybinding/id_desc_map.go:83
 msgid "Window screenshot"
-msgstr "የ መስኮት መመልከቻውን ፎቶ ማንሻ"
+msgstr ""
 
 #: datetime/zone_utc_list.go:112
 msgid "Winnipeg"
-msgstr "Winnipeg"
+msgstr ""
 
 #: network/nm_custom_type.go:133 network/manager_connections.go:183
 msgid "Wired Connection"
-msgstr "በሽቦ ግንኙነት"
+msgstr "Conexión cableada"
 
 #: network/nm_custom_type.go:137
 msgid "Wireless Ad-Hoc"
-msgstr "ሽቦ አልባ Ad-Hoc"
+msgstr "Inalámbrica Ad-Hoc"
 
 #: network/nm_custom_type.go:139
 msgid "Wireless Ap-Hotspot"
-msgstr "ሽቦ አልባ Ap-Hotspot"
+msgstr "Zona Ap inalámbrica "
 
 #: network/nm_custom_type.go:135
 msgid "Wireless Connection"
-msgstr "ሽቦ አልባ ግንኙነት"
+msgstr "Conexión Inalámbrica"
 
 #: network/state_handler.go:80
 msgid "Wrong GSM Modem's SIM"
@@ -3156,11 +3143,11 @@ msgstr "Yakutat"
 
 #: datetime/zone_utc_list.go:543
 msgid "Yakutsk"
-msgstr "Yakutsk"
+msgstr ""
 
 #: datetime/zone_utc_list.go:539
 msgid "Yancowinna"
-msgstr "Yancowinna"
+msgstr ""
 
 #: datetime/zone_utc_list.go:561
 msgid "Yap"
@@ -3168,96 +3155,48 @@ msgstr ""
 
 #: datetime/zone_utc_list.go:474
 msgid "Yekaterinburg"
-msgstr "Yekaterinburg"
+msgstr ""
 
 #: datetime/zone_utc_list.go:76
 msgid "Yellowknife"
-msgstr "Yellowknife"
+msgstr ""
 
 #: datetime/zone_utc_list.go:431
 msgid "Yerevan"
-msgstr "Yerevan"
+msgstr ""
 
 #: datetime/zone_utc_list.go:58
 msgid "Yukon"
-msgstr "Yukon"
+msgstr ""
 
 #: datetime/zone_utc_list.go:355
 msgid "Zagreb"
-msgstr "Zagreb"
+msgstr ""
 
 #: datetime/zone_utc_list.go:396
 msgid "Zaporozhye"
-msgstr "Zaporozhye"
+msgstr ""
 
 #: datetime/zone_utc_list.go:307
 msgid "Zulu"
-msgstr "Zulu"
+msgstr ""
 
 #: datetime/zone_utc_list.go:356
 msgid "Zurich"
-msgstr "Zurich"
+msgstr ""
 
 #: dock/runtime_apps.go:194
 msgid "_Close All"
-msgstr "_ሁሉንም መዝጊያ"
+msgstr "Cerrar todo"
 
 #: dock/runtime_apps.go:221
 msgid "_Dock"
-msgstr ""
+msgstr "Anclaje"
 
 #: dock/normal_apps.go:79
 msgid "_Run"
-msgstr "_ማስኬጃ"
+msgstr "_Ejecutar"
 
 #: dock/normal_apps.go:111
 msgid "_Undock"
-msgstr ""
-
-#, fuzzy
-#~ msgid "Argentina/Buenos Aires"
-#~ msgstr "Buenos Aires"
-
-#, fuzzy
-#~ msgid "Argentina/Catamarca"
-#~ msgstr "Catamarca"
-
-#, fuzzy
-#~ msgid "Argentina/San Juan"
-#~ msgstr "San Juan"
-
-#, fuzzy
-#~ msgid "Etc/Universal"
-#~ msgstr "Universal"
-
-#, fuzzy
-#~ msgid "Etc/Zulu"
-#~ msgstr "Zulu"
-
-#, fuzzy
-#~ msgid "Hongkong"
-#~ msgstr "Hong Kong"
-
-#, fuzzy
-#~ msgid "Indiana/Indianapolis"
-#~ msgstr "Indianapolis"
-
-#, fuzzy
-#~ msgid "Indiana/Knox"
-#~ msgstr "Indianapolis"
-
-#, fuzzy
-#~ msgid "Kentucky/Louisville"
-#~ msgstr "Louisville"
-
-#, fuzzy
-#~ msgid "Kentucky/Monticello"
-#~ msgstr "Monticello"
-
-#, fuzzy
-#~ msgid "Macau"
-#~ msgstr "Macao"
-
-#, fuzzy
-#~ msgid "South"
-#~ msgstr "South Pole"
+msgstr "_Desanclar"
