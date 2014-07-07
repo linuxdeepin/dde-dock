@@ -98,6 +98,7 @@ func Start() {
 				panic(err)
 			}
 			managerObj.kbdObj = kbd
+			//setLayoutOptions()
 			setLayout(kbd.CurrentLayout.GetValue().(string))
 		}
 	}

@@ -100,6 +100,9 @@ func setLayout(key string) {
 			option = strs[1]
 		}
 	}
+
+	setLayoutOptions()
+
 	args := []string{}
 	args = append(args, "-layout")
 	args = append(args, layout)
