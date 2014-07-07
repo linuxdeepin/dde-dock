@@ -211,7 +211,7 @@
 	    {"Name":"NM_SETTING_VPN_L2TP_KEY_IPSEC_ENABLE", "Value":"ipsec-enabled", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":true, "DisplayName":"Enable IPsec", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_L2TP_KEY_IPSEC_GROUP_NAME", "Value":"ipsec-group-name", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Group Name", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID", "Value":"ipsec-gateway-id", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Group ID", "FrontEndWidget":"<default>"},
-	    {"Name":"NM_SETTING_VPN_L2TP_KEY_IPSEC_PSK", "Value":"ipsec-psk", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Password", "FrontEndWidget":"EditLinePasswordInput"}
+	    {"Name":"NM_SETTING_VPN_L2TP_KEY_IPSEC_PSK", "Value":"ipsec-psk", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Pre-Shared Key", "FrontEndWidget":"EditLinePasswordInput"}
     ]
 },
 {

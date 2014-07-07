@@ -2521,7 +2521,7 @@ msgstr "已认证"
 
 #: ../../network/nm_setting_802_1x.go:181
 msgid "Both"
-msgstr "都是"
+msgstr "兼有"
 
 #: ../../network/nm_setting_802_1x.go:185
 #: ../../network/nm_setting_wireless.go:295
@@ -2530,11 +2530,11 @@ msgstr "自动"
 
 #: ../../network/nm_setting_802_1x.go:186
 msgid "Version 0"
-msgstr "第0版"
+msgstr "版本0"
 
 #: ../../network/nm_setting_802_1x.go:187
 msgid "Version 1"
-msgstr "第1版"
+msgstr "版本1"
 
 #: ../../network/nm_setting_gsm.go:125
 msgid "China Unicom Internet"
@@ -2652,12 +2652,12 @@ msgstr "无"
 #: ../../network/nm_setting_virtual_key.go:142
 #: ../../network/nm_setting_virtual_key.go:149
 msgid "WEP 40/128-bit Key"
-msgstr "WEP 40/128位 密钥"
+msgstr "WEP40/128位密钥"
 
 #: ../../network/nm_setting_virtual_key.go:143
 #: ../../network/nm_setting_virtual_key.go:150
 msgid "WPA/WPA2 Personal"
-msgstr "WPA/WPA2 个人版"
+msgstr "WPA/WPA2个人版"
 
 #: ../../network/nm_setting_virtual_key.go:144
 msgid "WPA/WPA2 Enterprise"
@@ -2671,12 +2671,12 @@ msgstr "都可用（默认）"
 #: ../../network/nm_setting_virtual_key.go:159
 #: ../../network/nm_setting_virtual_key.go:168
 msgid "128-bit (most secure)"
-msgstr "128位 （最安全）"
+msgstr "128位（最安全）"
 
 #: ../../network/nm_setting_virtual_key.go:160
 #: ../../network/nm_setting_virtual_key.go:169
 msgid "40-bit (less secure)"
-msgstr "40位 （较安全）"
+msgstr "40位（较安全）"
 
 #: ../../network/nm_setting_virtual_key.go:176
 msgid "Secure (default)"
@@ -2696,7 +2696,7 @@ msgstr "密码"
 
 #: ../../network/nm_setting_vpn_openvpn.go:253
 msgid "Password with Certificates (TLS)"
-msgstr "证书密码（TLS）"
+msgstr "证书和密码（TLS）"
 
 #: ../../network/nm_setting_vpn_openvpn.go:254
 msgid "Static Key"
@@ -2842,11 +2842,11 @@ msgstr "网屏"
 
 #: ../../network/nm_setting_vpn_vpnc.go:258
 msgid "NAT-T When Available (default)"
-msgstr "NAT-T可用时（默认）"
+msgstr "NAT-T若可用（默认）"
 
 #: ../../network/nm_setting_vpn_vpnc.go:259
 msgid "NAT-T Always"
-msgstr "NAT-T总是"
+msgstr "总是NAT-T"
 
 #: ../../network/nm_setting_vpn_vpnc.go:260
 msgid "Cisco UDP"
