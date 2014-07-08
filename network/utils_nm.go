@@ -52,7 +52,8 @@ func nmGeneralGetAllDeviceHwAddr(devType uint32) (allHwAddr map[string]string) {
 	}
 	return
 }
-func nmGeneralGetDeviceHwAddr(devPath dbus.ObjectPath) (hwAddr string, err error) {
+func nmGeneralGetDeviceHwAddr(devPath dbus.ObjectPath) (hwAddr string) {
+	hwAddr = "00:00:00:00:00:00"
 	dev, err := nmNewDevice(devPath)
 	if err != nil {
 		return
@@ -176,7 +177,8 @@ func nmGeneralGetDeviceSpeed(devPath dbus.ObjectPath) (speed string) {
 		devWireless, _ := nmNewDeviceWireless(devPath)
 		speed = fmt.Sprintf("%d", devWireless.Bitrate.Get()/1024)
 	default:
-		logger.Error("not support to get device speed for device type", t)
+		err = fmt.Errorf("not support to get device speed for device type %i", t)
+		logger.Error(err)
 	}
 	return
 }
@@ -301,6 +303,14 @@ func nmNewAgentManager() (manager *nm.AgentManager, err error) {
 }
 func nmNewDHCP4Config(path dbus.ObjectPath) (dhcp4 *nm.DHCP4Config, err error) {
 	dhcp4, err = nm.NewDHCP4Config(dbusNmDest, path)
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+	return
+}
+func nmNewDHCP6Config(path dbus.ObjectPath) (dhcp6 *nm.DHCP6Config, err error) {
+	dhcp6, err = nm.NewDHCP6Config(dbusNmDest, path)
 	if err != nil {
 		logger.Error(err)
 		return
@@ -701,7 +711,7 @@ func nmAddConnection(data connectionData) (cpath dbus.ObjectPath, err error) {
 	return
 }
 
-func nmGetDHCP4Info(path dbus.ObjectPath) (ip, mask, route, dns string) {
+func nmGetDhcp4Info(path dbus.ObjectPath) (ip, mask, route, dns string) {
 	ip = "0.0.0.0"
 	mask = "0.0.0.0"
 	route = "0.0.0.0"
@@ -726,19 +736,44 @@ func nmGetDHCP4Info(path dbus.ObjectPath) (ip, mask, route, dns string) {
 	return
 }
 
-func nmGetDeviceState(devPath dbus.ObjectPath) (state uint32, err error) {
-	dev, err := nmNewDevice(devPath)
+func nmGetDhcp6Info(path dbus.ObjectPath) (ip string, prefix uint32, route, dns string) {
+	ip = "0::0"
+	prefix = 0
+	route = "0::0"
+	dns = "0::0"
+	dhcp6, err := nmNewDHCP6Config(path)
 	if err != nil {
 		return
+	}
+	options := dhcp6.Options.Get()
+	if ipData, ok := options["ip_address"]; ok {
+		ip, _ = ipData.Value().(string)
+	}
+	if prefixData, ok := options["subnet_mask"]; ok {
+		prefix, _ = prefixData.Value().(uint32)
+	}
+	if routeData, ok := options["routers"]; ok {
+		route, _ = routeData.Value().(string)
+	}
+	if dnsData, ok := options["domain_name_servers"]; ok {
+		dns, _ = dnsData.Value().(string)
+	}
+	return
+}
+
+func nmGetDeviceState(devPath dbus.ObjectPath) (state uint32) {
+	dev, err := nmNewDevice(devPath)
+	if err != nil {
+		return NM_DEVICE_STATE_UNKNOWN
 	}
 	state = dev.State.Get()
 	return
 }
 
-func nmGetDeviceType(devPath dbus.ObjectPath) (devType uint32, err error) {
+func nmGetDeviceType(devPath dbus.ObjectPath) (devType uint32) {
 	dev, err := nmNewDevice(devPath)
 	if err != nil {
-		return
+		return NM_DEVICE_TYPE_UNKNOWN
 	}
 	devType = dev.DeviceType.Get()
 	return

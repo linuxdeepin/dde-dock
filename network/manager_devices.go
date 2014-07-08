@@ -168,8 +168,8 @@ func (m *Manager) handleDeviceChanged(operation int32, devPath dbus.ObjectPath) 
 
 func (m *Manager) addDevice(devPath dbus.ObjectPath) {
 	dev := m.newDevice(devPath)
-	devName := getDeviceName(dev.nmDevType)
-	m.devices[devName] = m.doAddDevice(m.devices[devName], dev)
+	devType := getCustomDeviceType(dev.nmDevType)
+	m.devices[devType] = m.doAddDevice(m.devices[devType], dev)
 	m.updatePropDevices()
 }
 func (m *Manager) doAddDevice(devs []*device, dev *device) []*device {

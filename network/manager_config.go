@@ -237,7 +237,7 @@ func (c *config) updateDeviceConfig(devPath dbus.ObjectPath) {
 	if err != nil {
 		return
 	}
-	devState, _ := nmGetDeviceState(devPath)
+	devState := nmGetDeviceState(devPath)
 	// if manager.generalGetGlobalDeviceEnabled(devPath) && devConfig.Enabled {
 	if devConfig.Enabled {
 		if isDeviceStateInActivating(devState) {
@@ -252,7 +252,7 @@ func (c *config) syncDeviceState(devPath dbus.ObjectPath) {
 	if err != nil {
 		return
 	}
-	devState, _ := nmGetDeviceState(devPath)
+	devState := nmGetDeviceState(devPath)
 	if isDeviceStateInActivating(devState) {
 		// sync device state
 		if !devConfig.Enabled {
@@ -456,8 +456,7 @@ func (m *Manager) trunOnGlobalDeviceSwitchIfNeed(devPath dbus.ObjectPath) (need 
 }
 
 func (m *Manager) generalGetGlobalDeviceEnabled(devPath dbus.ObjectPath) (enabled bool) {
-	devType, _ := nmGetDeviceType(devPath)
-	switch devType {
+	switch devType := nmGetDeviceType(devPath); devType {
 	case NM_DEVICE_TYPE_ETHERNET:
 		enabled = m.WiredEnabled
 	case NM_DEVICE_TYPE_WIFI:
@@ -468,8 +467,7 @@ func (m *Manager) generalGetGlobalDeviceEnabled(devPath dbus.ObjectPath) (enable
 	return
 }
 func (m *Manager) generalSetGlobalDeviceEnabled(devPath dbus.ObjectPath, enabled bool) {
-	devType, _ := nmGetDeviceType(devPath)
-	switch devType {
+	switch devType := nmGetDeviceType(devPath); devType {
 	case NM_DEVICE_TYPE_ETHERNET:
 		m.setWiredEnabled(enabled)
 	case NM_DEVICE_TYPE_WIFI:
