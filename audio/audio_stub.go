@@ -3,9 +3,6 @@ package audio
 import "pkg.linuxdeepin.com/lib/dbus"
 import "pkg.linuxdeepin.com/lib/pulse"
 import "fmt"
-import "io/ioutil"
-import "path"
-import "strings"
 
 const (
 	baseBusName = "com.deepin.daemon.Audio"
@@ -350,25 +347,8 @@ func (s *SinkInput) update() {
 	s.Name = s.core.PropList[PropAppName]
 	s.Icon = s.core.PropList[PropAppIconName]
 
-	pid := s.core.PropList[PropAppPID]
-	filePath := path.Join("/proc", pid, "cmdline")
-	contents, err := ioutil.ReadFile(filePath)
-	if err == nil {
-		if strings.Contains(string(contents), "deepin-movie") {
-			s.Name = "Deepin Movie"
-			s.Icon = "deepin-movie"
-		} else if strings.Contains(string(contents), "firefox") {
-			s.Name = "Firefox"
-			s.Icon = "firefox"
-		} else if strings.Contains(string(contents), "maxthon") {
-			s.Name = "Maxthon"
-			s.Icon = "maxthon-browser"
-		} else if strings.Contains(string(contents), "chrome") &&
-			strings.Contains(string(contents), "google") {
-			s.Name = "Google Chrome"
-			s.Icon = "google-chrome"
-		}
-	}
+	// Correct app name and icon
+	s.correctAppName()
 
 	s.setPropVolume(s.core.Volume.Avg())
 	s.setPropMute(s.core.Mute)
