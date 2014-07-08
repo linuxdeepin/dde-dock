@@ -76,6 +76,7 @@ func main() {
 		Logger.Fatal("Search Install DBus Failed:", err)
 		return
 	}
+	dbus.DealWithUnhandledMessage()
 
 	dbus.SetAutoDestroyHandler(time.Second*5, func() bool {
 		if GetManager().writeStart {
