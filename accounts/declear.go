@@ -76,7 +76,6 @@ const (
 	ACCOUNT_TYPE_STANDARD      = 0
 	ACCOUNT_TYPE_ADMINISTACTOR = 1
 
-	GUEST_ACCOUNT_NAME  = "Guest"
 	GUEST_USER_ICON     = "/var/lib/AccountsService/icons/guest.jpg"
 	ACCOUNT_CONFIG_FILE = "/var/lib/AccountsService/accounts.ini"
 	ACCOUNT_GROUP_KEY   = "Accounts"
