@@ -24,6 +24,7 @@ package themes
 import (
 	"dbus/com/deepin/api/greeterutils"
 	"dbus/com/deepin/sessionmanager"
+	"path"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
 	"pkg.linuxdeepin.com/lib/logger"
@@ -60,9 +61,12 @@ func Start() {
 	}
 
 	username := dutils.GetUserName()
-	if len(username) > 0 {
-		greeterTheme := GetManager().GreeterTheme.GetValue().(string)
-		greeterObj.SetGreeterTheme(username, greeterTheme)
+	homeDir := dutils.GetHomeDir()
+	if homeDir != path.Join("/tmp", username) {
+		if len(username) > 0 {
+			greeterTheme := GetManager().GreeterTheme.GetValue().(string)
+			greeterObj.SetGreeterTheme(username, greeterTheme)
+		}
 	}
 }
 
