@@ -30,6 +30,7 @@ import "C"
 
 import (
 	"os/exec"
+	"path"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
 	dutils "pkg.linuxdeepin.com/lib/utils"
 	"strings"
@@ -123,8 +124,11 @@ func setLayout(key string) {
 		}
 
 		username := dutils.GetUserName()
-		if len(username) > 0 {
-			greeterObj.SetKbdLayout(username, key)
+		homeDir := dutils.GetHomeDir()
+		if homeDir != path.Join("/tmp", username) {
+			if len(username) > 0 {
+				greeterObj.SetKbdLayout(username, key)
+			}
 		}
 	}
 }
@@ -308,8 +312,11 @@ func listenDevsSettings() {
 		case KBD_KEY_USER_LAYOUT_LIST:
 			list := kbdSettings.GetStrv(KBD_KEY_USER_LAYOUT_LIST)
 			username := dutils.GetUserName()
-			if len(username) > 0 {
-				greeterObj.SetKbdLayoutList(username, list)
+			homeDir := dutils.GetHomeDir()
+			if homeDir != path.Join("/tmp", username) {
+				if len(username) > 0 {
+					greeterObj.SetKbdLayoutList(username, list)
+				}
 			}
 		}
 	})
