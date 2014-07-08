@@ -47,7 +47,7 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device) {
 		Path:      nmDev.Path,
 		State:     nmDev.State.Get(),
 	}
-	dev.id, _ = nmGetDeviceIdentifier(devPath)
+	dev.id, _ = nmGeneralGetDeviceIdentifier(devPath)
 
 	// add device config
 	m.config.addDeviceConfig(devPath)

@@ -196,7 +196,7 @@ func (c *config) isDeviceConfigExists(devId string) (ok bool) {
 	return
 }
 func (c *config) getDeviceConfigByPath(devPath dbus.ObjectPath) (d *deviceConfig, err error) {
-	devId, err := nmGetDeviceIdentifier(devPath)
+	devId, err := nmGeneralGetDeviceIdentifier(devPath)
 	if err != nil {
 		return
 	}
@@ -212,7 +212,7 @@ func (c *config) getDeviceConfig(devId string) (d *deviceConfig, err error) {
 	return
 }
 func (c *config) addDeviceConfig(devPath dbus.ObjectPath) {
-	devId, err := nmGetDeviceIdentifier(devPath)
+	devId, err := nmGeneralGetDeviceIdentifier(devPath)
 	if err != nil {
 		return
 	}
