@@ -61,14 +61,14 @@ func (m *HideStateManager) SetState(s int32) int32 {
 }
 
 func (m *HideStateManager) UpdateState() {
-	logger.Debug("UpdateState, HideState:", HideStateMap[m.state])
+	state := m.state
 	switch setting.GetHideMode() {
 	case HideModeKeepShowing:
 		logger.Debug("KeepShowing Mode")
-		m.state = HideStateShowing
+		state = HideStateShowing
 	case HideModeAutoHide:
 		logger.Debug("AutoHide Mode")
-		m.state = HideStateShowing
+		state = HideStateShowing
 
 		<-time.After(time.Millisecond * 100)
 		if region.mouseInRegion() {
@@ -78,21 +78,24 @@ func (m *HideStateManager) UpdateState() {
 
 		if hasMaximizeClient() {
 			logger.Debug("has maximized client")
-			m.state = HideStateHidding
+			state = HideStateHidding
 		}
 	case HideModeKeepHidden:
 		logger.Debug("KeepHidden Mode")
 		<-time.After(time.Millisecond * 100)
 		if region.mouseInRegion() {
 			logger.Debug("MouseInDockRegion")
-			m.state = HideStateShowing
+			state = HideStateShowing
 			break
 		}
 
-		m.state = HideStateHidding
+		state = HideStateHidding
 	}
 
-	logger.Debug("UpdateState emit StateChanged signal",
-		HideStateMap[m.state])
-	m.StateChanged(m.state)
+	if lastActive == DDELauncher {
+		logger.Info(lastActive)
+		state = HideStateHidding
+	}
+
+	m.SetState(state)
 }

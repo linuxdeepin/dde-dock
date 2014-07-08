@@ -28,29 +28,12 @@ const (
 )
 
 type ClientManager struct {
-	RequireDockHide func()
-	RequireDockShow func()
-
-	RequireDockHideWithAnimation func()
-	RequireDockShowWithAnimation func()
-
-	RequireDockHideWithoutChangeWorkarea func()
-	RequireDockShowWithoutChangeWorkarea func()
-
 	ActiveWindowChanged   func(xid uint32)
 	ShowingDesktopChanged func()
 }
 
 func NewClientManager() *ClientManager {
 	return &ClientManager{}
-}
-
-func (m *ClientManager) ShowDockWithAnimation() {
-	m.RequireDockShowWithAnimation()
-}
-
-func (m *ClientManager) HideDockWithAnimation() {
-	m.RequireDockHideWithAnimation()
 }
 
 func (m *ClientManager) CurrentActiveWindow() uint32 {
@@ -169,29 +152,21 @@ func (m *ClientManager) listenRootWindow() {
 				if rApp, ok := ENTRY_MANAGER.runtimeApps[appId]; ok {
 					rApp.setLeader(activeWindow)
 				}
+
 				if appId == DDELauncher {
-					logger.Info("active window is launcher")
-					// TODO: hide dock
-					// if m.RequireDockHide != nil {
-					// 	m.RequireDockHide()
-					// }
+					logger.Debug("active window is launcher")
 				} else {
 					logger.Debug("active window is not launcher")
 					LAUNCHER, err :=
 						launcher.NewLauncher("com.deepin.dde.launcher",
 							"/com/deepin/dde/launcher")
 					if err != nil {
-						logger.Warning(err)
+						logger.Debug(err)
 					} else {
 						LAUNCHER.Hide()
 					}
-
-					// TODO: show dock
-					// if m.RequireDockShow != nil &&
-					// 	lastActive == DDELauncher {
-					// 	m.RequireDockShow()
-					// }
 				}
+
 				lastActive = appId
 				m.ActiveWindowChanged(uint32(activeWindow))
 			}
@@ -204,6 +179,5 @@ func (m *ClientManager) listenRootWindow() {
 	}).Connect(XU, XU.RootWin())
 
 	update()
-	hideModemanager.UpdateState()
 	xevent.Main(XU)
 }
