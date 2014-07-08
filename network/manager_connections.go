@@ -191,7 +191,18 @@ func (m *Manager) GetWiredConnectionUuid(wiredDevPath dbus.ObjectPath) (uuid str
 	return
 }
 
-func (m *Manager) GetActiveConnectionInfo(devPath dbus.ObjectPath) (acinfoJSON string, err error) {
+func (m *Manager) GetActiveConnectionInfo() (acinfoJSON string, err error) {
+	// get activated devices' connection info
+	var acinfos []activeConnectionInfo
+	for _, devPath := range nmGetDevices() {
+		if info, err := m.doGetActiveConnectionInfo(devPath); err == nil {
+			acinfos = append(acinfos, info)
+		}
+	}
+	acinfoJSON, err = marshalJSON(acinfos)
+	return
+}
+func (m *Manager) doGetActiveConnectionInfo(devPath dbus.ObjectPath) (acinfo activeConnectionInfo, err error) {
 	// get connection data
 	nmDev, err := nmNewDevice(devPath)
 	if err != nil {
@@ -201,7 +212,7 @@ func (m *Manager) GetActiveConnectionInfo(devPath dbus.ObjectPath) (acinfoJSON s
 
 	aconn := nmDev.ActiveConnection.Get()
 	if aconn == "/" {
-		acinfoJSON = ""
+		err = fmt.Errorf("device is not activated", devPath)
 		return
 	}
 	nmAConn, err := nmNewActiveConnection(aconn)
@@ -222,6 +233,7 @@ func (m *Manager) GetActiveConnectionInfo(devPath dbus.ObjectPath) (acinfoJSON s
 		dns2 = getSettingVkIp4ConfigDns(cdata)
 	}
 
+	// TODO fix static ip address
 	// query dhcp4
 	ip, mask, route, dns1 := nmGetDHCP4Info(nmDev.Dhcp4Config.Get())
 
@@ -242,7 +254,7 @@ func (m *Manager) GetActiveConnectionInfo(devPath dbus.ObjectPath) (acinfoJSON s
 		speed = fmt.Sprintf("%d", devWireless.Bitrate.Get()/1024)
 	}
 
-	acinfo := &activeConnectionInfo{
+	acinfo = activeConnectionInfo{
 		DeviceType:   devName,
 		Interface:    name,
 		HwAddress:    hwAddress,
@@ -253,7 +265,6 @@ func (m *Manager) GetActiveConnectionInfo(devPath dbus.ObjectPath) (acinfoJSON s
 		Dns2:         dns2,
 		Speed:        speed,
 	}
-	acinfoJSON, _ = marshalJSON(acinfo)
 	return
 }
 
