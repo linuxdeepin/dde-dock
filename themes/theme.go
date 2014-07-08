@@ -22,11 +22,11 @@
 package themes
 
 import (
-	"pkg.linuxdeepin.com/lib/gio-2.0"
-	dutils "pkg.linuxdeepin.com/lib/utils"
 	"github.com/howeyc/fsnotify"
 	"os/exec"
 	"path"
+	"pkg.linuxdeepin.com/lib/gio-2.0"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 	"strconv"
 )
 
@@ -52,7 +52,7 @@ const (
 	DEFAULT_FONT_SIZE = " 11"
 
 	QT_KEY_GROUP   = "Qt"
-	QT_KEY_STYLE   = "stype"
+	QT_KEY_STYLE   = "style"
 	QT_STYLE_VALUE = "GTK+"
 	QT_KEY_FONT    = "font"
 	QT_FONT_ARGS   = ",-1,5,50,0,0,0,0,0"
