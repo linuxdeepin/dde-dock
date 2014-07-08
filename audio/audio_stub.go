@@ -355,7 +355,18 @@ func (s *SinkInput) update() {
 	contents, err := ioutil.ReadFile(filePath)
 	if err == nil {
 		if strings.Contains(string(contents), "deepin-movie") {
-			s.Name = "deepin-movie"
+			s.Name = "Deepin Movie"
+			s.Icon = "deepin-movie"
+		} else if strings.Contains(string(contents), "firefox") {
+			s.Name = "Firefox"
+			s.Icon = "firefox"
+		} else if strings.Contains(string(contents), "maxthon") {
+			s.Name = "Maxthon"
+			s.Icon = "maxthon-browser"
+		} else if strings.Contains(string(contents), "chrome") &&
+			strings.Contains(string(contents), "google") {
+			s.Name = "Google Chrome"
+			s.Icon = "google-chrome"
 		}
 	}
 
