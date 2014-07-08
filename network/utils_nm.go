@@ -124,6 +124,14 @@ func nmGeneralGetDeviceHwAddr(devPath dbus.ObjectPath) (hwAddr string, err error
 	hwAddr = strings.ToUpper(hwAddr)
 	return
 }
+
+func nmGetDeviceIdentifiers() (devIds []string) {
+	for _, devPath := range nmGetDevices() {
+		id, _ := nmGeneralGetDeviceIdentifier(devPath)
+		devIds = append(devIds, id)
+	}
+	return
+}
 func nmGeneralGetDeviceIdentifier(devPath dbus.ObjectPath) (devId string, err error) {
 	// get device unique identifier, use hardware address if exists
 	hwAddr, err := nmGeneralGetDeviceHwAddr(devPath)
@@ -152,10 +160,23 @@ func nmGeneralGetDeviceIdentifier(devPath dbus.ObjectPath) (devId string, err er
 	}
 	return
 }
-func nmGetDeviceIdentifiers() (devIds []string) {
-	for _, devPath := range nmGetDevices() {
-		id, _ := nmGeneralGetDeviceIdentifier(devPath)
-		devIds = append(devIds, id)
+
+// get device network speed (Mb/s)
+func nmGeneralGetDeviceSpeed(devPath dbus.ObjectPath) (speed string) {
+	speed = "-"
+	nmDev, err := nmNewDevice(devPath)
+	if err != nil {
+		return
+	}
+	switch t := nmDev.DeviceType.Get(); t {
+	case NM_DEVICE_TYPE_ETHERNET:
+		devWired, _ := nmNewDeviceWired(devPath)
+		speed = fmt.Sprintf("%d", devWired.Speed.Get())
+	case NM_DEVICE_TYPE_WIFI:
+		devWireless, _ := nmNewDeviceWireless(devPath)
+		speed = fmt.Sprintf("%d", devWireless.Bitrate.Get()/1024)
+	default:
+		logger.Error("not support to get device speed for device type", t)
 	}
 	return
 }
