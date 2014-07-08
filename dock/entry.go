@@ -1,8 +1,8 @@
 package dock
 
 import (
-	"pkg.linuxdeepin.com/lib/gio-2.0"
 	"encoding/json"
+	"pkg.linuxdeepin.com/lib/gio-2.0"
 	"strings"
 	"sync"
 )
