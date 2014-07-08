@@ -55,15 +55,26 @@ type activeConnection struct {
 }
 
 type activeConnectionInfo struct {
-	DeviceType   string
-	Interface    string
-	HwAddress    string
-	IpAddress    string
-	SubnetMask   string
-	RouteAddress string
-	Dns1         string
-	Dns2         string
-	Speed        string
+	DeviceType string
+	Interface  string
+	HwAddress  string
+	Speed      string
+	Ip4        ip4ConnectionInfo
+	Ip6        ip6ConnectionInfo
+}
+type ip4ConnectionInfo struct {
+	Address string
+	Mask    string
+	Router  string
+	Dns1    string
+	Dns2    string
+}
+type ip6ConnectionInfo struct {
+	Address string
+	Prefix  uint32
+	Router  string
+	Dns1    string
+	Dns2    string
 }
 
 func (m *Manager) initConnectionManage() {
@@ -227,15 +238,15 @@ func (m *Manager) doGetActiveConnectionInfo(devPath dbus.ObjectPath) (acinfo act
 	// query connection data
 	cdata, err := nmConn.GetSettings()
 	name := ""
-	dns2 := ""
+	ip4Dns2 := ""
 	if err == nil {
 		name = getSettingConnectionId(cdata)
-		dns2 = getSettingVkIp4ConfigDns(cdata)
+		ip4Dns2 = getSettingVkIp4ConfigDns(cdata)
 	}
 
-	// TODO fix static ip address
+	// TODO fix static ip4Address address
 	// query dhcp4
-	ip, mask, route, dns1 := nmGetDHCP4Info(nmDev.Dhcp4Config.Get())
+	ip4Address, ip4Mask, ip4Router, ip4Dns1 := nmGetDHCP4Info(nmDev.Dhcp4Config.Get())
 
 	// get hardware address
 	hwAddress, err := nmGeneralGetDeviceHwAddr(devPath)
@@ -244,26 +255,21 @@ func (m *Manager) doGetActiveConnectionInfo(devPath dbus.ObjectPath) (acinfo act
 	}
 
 	// get network speed (Mb/s)
-	var speed = "-"
-	switch nmDev.DeviceType.Get() {
-	case NM_DEVICE_TYPE_ETHERNET:
-		devWired, _ := nmNewDeviceWired(devPath)
-		speed = fmt.Sprintf("%d", devWired.Speed.Get())
-	case NM_DEVICE_TYPE_WIFI:
-		devWireless, _ := nmNewDeviceWireless(devPath)
-		speed = fmt.Sprintf("%d", devWireless.Bitrate.Get()/1024)
-	}
+	speed := nmGeneralGetDeviceSpeed(devPath)
 
 	acinfo = activeConnectionInfo{
-		DeviceType:   devName,
-		Interface:    name,
-		HwAddress:    hwAddress,
-		IpAddress:    ip,
-		SubnetMask:   mask,
-		RouteAddress: route,
-		Dns1:         dns1,
-		Dns2:         dns2,
-		Speed:        speed,
+		DeviceType: devName,
+		Interface:  name,
+		HwAddress:  hwAddress,
+		Speed:      speed,
+		Ip4: ip4ConnectionInfo{
+			Address: ip4Address,
+			Mask:    ip4Mask,
+			Router:  ip4Router,
+			Dns1:    ip4Dns1,
+			Dns2:    ip4Dns2,
+		},
+		Ip6: ip6ConnectionInfo{}, // TODO
 	}
 	return
 }
