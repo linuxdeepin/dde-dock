@@ -7,11 +7,8 @@ import (
 	"strings"
 	"sync"
 	"time"
-
-	pinyin "dbus/com/deepin/daemon/search"
 )
 
-var tree *pinyin.Search = nil
 var treeId string
 
 type SearchFunc func(key string, res chan<- SearchResult, end chan<- bool)
@@ -76,9 +73,9 @@ func search(key string) []ItemId {
 
 	keys := []string{key}
 	var tkeys []string
-	if tree != nil && treeId != "" {
+	if treeId != "" {
 		var err error
-		tkeys, err = tree.SearchKeys(key, treeId)
+		tkeys, err = searchObj.SearchString(key, treeId)
 		if err != nil {
 			logger.Warning("Search Keys failed:", err)
 		}

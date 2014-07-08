@@ -45,6 +45,7 @@ type ItemInfo struct {
 // type ItemTable map[ItemId]*ItemId
 
 var itemTable = map[ItemId]*ItemInfo{}
+var searchObj *pinyin.Search
 
 func (i *ItemInfo) init(app *gio.DesktopAppInfo) {
 	i.Id = getId(app)
@@ -169,10 +170,10 @@ func getId(app *gio.DesktopAppInfo) ItemId {
 }
 
 func initItems() {
-	if tree != nil {
-		defer tree.DestroyTrie(treeId)
+	if searchObj == nil {
+		searchObj, _ = pinyin.NewSearch("com.deepin.daemon.Search",
+			"/com/deepin/daemon/Search")
 	}
-
 	allApps := gio.AppInfoGetAll()
 
 	for _, app := range allApps {
@@ -186,17 +187,12 @@ func initItems() {
 	}
 
 	var err error
-	tree, err = pinyin.NewSearch("com.deepin.daemon.Search",
-		"/com/deepin/daemon/Search")
-	if err != nil {
-		return
-	}
-	names := make(map[string]string, 0)
+	names := make([]string, 0)
 	for _, v := range itemTable {
-		names[v.Name] = v.Name
+		names = append(names, v.Name)
 	}
 	logger.Debug("Names:", names)
-	treeId, err = tree.NewTrieWithString(names, "DDELauncherDaemon")
+	treeId, _, err = searchObj.NewSearchWithStrList(names)
 	if err != nil {
 		logger.Warning("build Trie tree failed:", err)
 	}
