@@ -19,10 +19,11 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package search
+package main
 
 import (
 	"os"
+	"pkg.linuxdeepin.com/lib"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/logger"
 	"time"
@@ -61,12 +62,18 @@ func GetManager() *Manager {
 	return _manager
 }
 
-func Start() {
+func main() {
+	if !lib.UniqueOnSession(DBUS_DEST) {
+		Logger.Warning("There is an Search running")
+		return
+	}
+
 	Logger.BeginTracing()
-	Logger.SetRestartCommand("/usr/lib/deepin-daemon/dde-session-daemon")
+	defer Logger.EndTracing()
+	Logger.SetRestartCommand("/usr/lib/deepin-daemon/search")
 
 	if err := dbus.InstallOnSession(GetManager()); err != nil {
-		Logger.Fatal("SearchReg Install DBus Failed:", err)
+		Logger.Fatal("Search Install DBus Failed:", err)
 		return
 	}
 
@@ -82,13 +89,9 @@ func Start() {
 	})
 
 	if err := dbus.Wait(); err != nil {
-		Logger.Warning("SearchReg lost dbus:", err)
+		Logger.Warning("Search lost dbus:", err)
 		os.Exit(-1)
 	} else {
 		os.Exit(0)
 	}
-}
-
-func Stop() {
-	Logger.EndTracing()
 }

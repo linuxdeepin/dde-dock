@@ -19,7 +19,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package search
+package main
 
 import (
 	"pkg.linuxdeepin.com/lib/dbus"
