@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2011 ~ 2013 Deepin, Inc.
- *               2011 ~ 2013 jouyouyun
+ * Copyright (c) 2011 ~ 2014 Deepin, Inc.
+ *               2013 ~ 2014 jouyouyun
  *
  * Author:      jouyouyun <jouyouwen717@gmail.com>
  * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
@@ -22,101 +22,169 @@
 package search
 
 import (
-	dpinyin "pkg.linuxdeepin.com/lib/pinyin"
-	"strings"
+	"fmt"
+	"os"
+	"path"
+	dutils "pkg.linuxdeepin.com/lib/utils"
+	"regexp"
 )
 
-type Search struct {
-	trieMD5Map map[string]*Trie
-	strsMD5Map map[string][]*TrieInfo
-	nameMD5Map map[string]string
+type dataInfo struct {
+	Key   string
+	Value string
 }
 
-type TrieInfo struct {
-	Pinyins []string
-	Key     string
-	Value   string
+type matchResInfo struct {
+	highestList   []string
+	excellentList []string
+	veryGoodList  []string
+	goodList      []string
+	aboveAvgList  []string
+	avgList       []string
+	belowAvgList  []string
+	poorList      []string
 }
 
-var _search *Search
+const (
+	_CACHE_DIR = "deepin-search"
+)
 
-func GetManager() *Search {
-	if _search == nil {
-		_search = newSearch()
+func getCachePath() (string, bool) {
+	userCache := dutils.GetCacheDir()
+	if len(userCache) < 1 {
+		return "", false
 	}
 
-	return _search
-}
-
-func newSearch() *Search {
-	s := &Search{}
-
-	s.trieMD5Map = make(map[string]*Trie)
-	s.strsMD5Map = make(map[string][]*TrieInfo)
-	s.nameMD5Map = make(map[string]string)
-
-	return s
-}
-
-func getStringFromArray(strs map[string]string) string {
-	str := ""
-
-	for _, v := range strs {
-		str += v
-	}
-
-	return str
-}
-
-func getPinyinArray(strs map[string]string) []*TrieInfo {
-	rets := []*TrieInfo{}
-	for k, v := range strs {
-		array := dpinyin.HansToPinyin(v)
-		v = strings.ToLower(v)
-		tmp := &TrieInfo{Pinyins: array, Key: k, Value: v}
-		rets = append(rets, tmp)
-	}
-
-	return rets
-}
-
-func searchKeyFromString(key, md5Str string) []string {
-	rets := []string{}
-
-	infos := GetManager().strsMD5Map[md5Str]
-	for _, v := range infos {
-		if strings.Contains(v.Value, key) {
-			rets = append(rets, v.Key)
+	cachePath := path.Join(userCache, _CACHE_DIR)
+	if !dutils.IsFileExist(cachePath) {
+		if err := os.MkdirAll(cachePath, 0755); err != nil {
+			Logger.Warningf("MkdirAll '%s' failed: %v",
+				cachePath, err)
+			return "", false
 		}
 	}
 
-	return rets
+	return cachePath, true
 }
 
-func isIdExist(id string, list []string) bool {
-	for _, v := range list {
-		if v == id {
-			return true
+func sortMatchResult(res *matchResInfo) []string {
+	ret := []string{}
+	if res == nil {
+		return ret
+	}
+
+	ret = append(ret, res.highestList...)
+	ret = append(ret, res.excellentList...)
+	ret = append(ret, res.veryGoodList...)
+	ret = append(ret, res.goodList...)
+	ret = append(ret, res.aboveAvgList...)
+	ret = append(ret, res.avgList...)
+	ret = append(ret, res.belowAvgList...)
+	ret = append(ret, res.poorList...)
+
+	return ret
+}
+
+func getMatchReuslt(info *dataInfo, matchers map[*regexp.Regexp]uint32,
+	res *matchResInfo) {
+	if info == nil || matchers == nil || res == nil {
+		return
+	}
+
+	curScore := uint32(0)
+	for matcher, score := range matchers {
+		if matcher == nil {
+			continue
+		}
+
+		if matcher.MatchString(info.Key) {
+			if score > curScore {
+				curScore = score
+			}
 		}
 	}
 
-	return false
+	switch curScore {
+	case POOR:
+		res.poorList = append(res.poorList,
+			info.Value)
+	case BELOW_AVERAGE:
+		res.belowAvgList = append(res.belowAvgList,
+			info.Value)
+	case AVERAGE:
+		res.avgList = append(res.avgList,
+			info.Value)
+	case ABOVE_AVERAGE:
+		res.aboveAvgList = append(res.aboveAvgList,
+			info.Value)
+	case GOOD:
+		res.goodList = append(res.goodList,
+			info.Value)
+	case VERY_GOOD:
+		res.veryGoodList = append(res.veryGoodList,
+			info.Value)
+	case EXCELLENT:
+		res.excellentList = append(res.excellentList,
+			info.Value)
+	case HIGHEST:
+		res.highestList = append(res.highestList,
+			info.Value)
+	}
 }
 
-func isMd5Exist(md5Str string) bool {
-	_, ok := GetManager().strsMD5Map[md5Str]
-	if ok {
-		return true
+func searchString(key, md5 string) []string {
+	list := []string{}
+	cachePath, ok := getCachePath()
+	if !ok {
+		return list
 	}
 
-	return false
+	filename := path.Join(cachePath, md5)
+	if !dutils.IsFileExist(filename) {
+		Logger.Warningf("'%s' not exist", filename)
+		return list
+	}
+
+	datas := []dataInfo{}
+	if !readDatasFromFile(&datas, filename) {
+		return list
+	}
+
+	matchers := getMatchers(key)
+	var matchRes = matchResInfo{}
+	for _, v := range datas {
+		getMatchReuslt(&v, matchers, &matchRes)
+	}
+
+	list = sortMatchResult(&matchRes)
+
+	return list
 }
 
-func isNameExist(name string) bool {
-	_, ok := GetManager().nameMD5Map[name]
-	if ok {
-		return true
+func searchStartWithString(key, md5 string) []string {
+	list := []string{}
+	cachePath, ok := getCachePath()
+	if !ok {
+		return list
 	}
 
-	return false
+	filename := path.Join(cachePath, md5)
+	if !dutils.IsFileExist(filename) {
+		Logger.Warningf("'%s' not exist", filename)
+		return list
+	}
+
+	datas := []dataInfo{}
+	if !readDatasFromFile(&datas, filename) {
+		return list
+	}
+
+	match := regexp.MustCompile(fmt.Sprintf(`(?i)^(%s)`, key))
+	for _, v := range datas {
+		if match.MatchString(v.Key) {
+			list = append(list, v.Value)
+		}
+	}
+
+	return list
 }

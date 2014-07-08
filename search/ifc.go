@@ -22,98 +22,140 @@
 package search
 
 import (
-	"pkg.linuxdeepin.com/lib/dbus"
+	"path"
+	"pkg.linuxdeepin.com/lib/pinyin"
 	dutils "pkg.linuxdeepin.com/lib/utils"
-	"strings"
 )
 
-const (
-	SEARCH_DEST = "com.deepin.daemon.Search"
-	SEARCH_PATH = "/com/deepin/daemon/Search"
-	SEARCH_IFC  = "com.deepin.daemon.Search"
-)
+func (m *Manager) NewSearchWithStrList(list []string) (string, bool) {
+	datas := []dataInfo{}
+	strs := ""
 
-func (s *Search) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		SEARCH_DEST,
-		SEARCH_PATH,
-		SEARCH_IFC,
+	for _, v := range list {
+		strs += v + "+"
+		pyList := pinyin.HansToPinyin(v)
+		if len(pyList) == 1 && pyList[0] == v {
+			info := dataInfo{v, v}
+			datas = append(datas, info)
+			continue
+		}
+		for _, k := range pyList {
+			info := dataInfo{k, v}
+			datas = append(datas, info)
+		}
+		info := dataInfo{v, v}
+		datas = append(datas, info)
 	}
-}
 
-func (s *Search) NewTrieWithString(values map[string]string, name string) string {
-	md5Str, ok := dutils.SumStrMd5(getStringFromArray(values))
+	md5Str, ok := dutils.SumStrMd5(strs)
 	if !ok {
-		return ""
-	}
-	if isMd5Exist(md5Str) {
-		return md5Str
+		Logger.Warning("Sum MD5 Failed")
+		return "", false
 	}
 
-	if isNameExist(name) {
-		str, _ := s.nameMD5Map[name]
-		s.DestroyTrie(str)
+	cachePath, ok1 := getCachePath()
+	if !ok1 {
+		Logger.Warning("Get Cache Path Failed")
+		return "", false
 	}
-	s.nameMD5Map[name] = md5Str
 
-	root := newTrie()
-	if values == nil {
-		return ""
-	}
+	filename := path.Join(cachePath, md5Str)
+	m.writeStart = true
+	m.writeEnd = make(chan bool)
 	go func() {
-		infos := getPinyinArray(values)
-		s.strsMD5Map[md5Str] = infos
-		root.insertTrieInfo(infos)
-		s.trieMD5Map[md5Str] = root
+		writeDatasToFile(&datas, filename)
+		m.writeEnd <- true
+		m.writeStart = false
 	}()
-	return md5Str
+
+	return md5Str, true
 }
 
-/*
-func (s *Search) TraversalTrie(str string) {
-	root := s.trieMD5Map[str]
-	root.traversalTrie()
-}
-*/
+func (m *Manager) NewSearchWithDict(dict map[string]string) (string, bool) {
+	datas := []dataInfo{}
+	strs := ""
 
-func (s *Search) SearchKeys(keys string, str string) []string {
-	root, ok := s.trieMD5Map[str]
-	if !ok {
-		return nil
+	for k, v := range dict {
+		strs += k + "+"
+		pyList := pinyin.HansToPinyin(v)
+		if len(pyList) == 1 && pyList[0] == v {
+			info := dataInfo{v, k}
+			datas = append(datas, info)
+			continue
+		}
+
+		for _, l := range pyList {
+			info := dataInfo{l, k}
+			datas = append(datas, info)
+		}
+		info := dataInfo{v, k}
+		datas = append(datas, info)
 	}
-	keys = strings.ToLower(keys)
-	rets := root.searchTrie(keys)
-	Logger.Debug("trie rets:", rets)
-	tmp := searchKeyFromString(keys, str)
-	Logger.Debug("array rets:", tmp)
-	for _, v := range tmp {
-		if !isIdExist(v, rets) {
-			rets = append(rets, v)
+
+	md5Str, ok := dutils.SumStrMd5(strs)
+	if !ok {
+		Logger.Warning("Sum MD5 Failed")
+		return "", false
+	}
+
+	cachePath, ok1 := getCachePath()
+	if !ok1 {
+		Logger.Warning("Get Cache Path Failed")
+		return "", false
+	}
+
+	filename := path.Join(cachePath, md5Str)
+	m.writeStart = true
+	m.writeEnd = make(chan bool)
+	go func() {
+		writeDatasToFile(&datas, filename)
+		m.writeEnd <- true
+		m.writeStart = false
+	}()
+
+	return md5Str, true
+}
+
+func (m *Manager) SearchString(str, md5 string) []string {
+	list := []string{}
+	if len(str) < 1 || len(md5) < 1 {
+		return list
+	}
+
+	list = searchString(str, md5)
+	tmp := []string{}
+	for _, v := range list {
+		if !strIsInList(v, tmp) {
+			tmp = append(tmp, v)
 		}
 	}
 
-	return rets
+	return tmp
 }
 
-func (s *Search) SearchKeysByFirstLetter(keys string, md5Str string) []string {
-	root, ok := s.trieMD5Map[md5Str]
-	if !ok {
-		return nil
+func (m *Manager) SearchStartWithString(str, md5 string) []string {
+	list := []string{}
+	if len(str) < 1 || len(md5) < 1 {
+		return list
 	}
 
-	keys = strings.ToLower(keys)
-	rets := root.searchTrie(keys)
+	list = searchStartWithString(str, md5)
+	tmp := []string{}
+	for _, v := range list {
+		if !strIsInList(v, tmp) {
+			tmp = append(tmp, v)
+		}
+	}
 
-	return rets
+	return tmp
 }
 
-func (s *Search) DestroyTrie(md5Str string) {
-	/*
-		root, ok := s.trieMD5Map[md5Str]
-		if !ok {
-			return
+func strIsInList(str string, list []string) bool {
+	for _, l := range list {
+		if str == l {
+			return true
 		}
-	*/
-	delete(s.trieMD5Map, md5Str)
-	delete(s.strsMD5Map, md5Str)
+	}
+
+	return false
 }
