@@ -29,19 +29,20 @@ import (
 func (obj *Manager) CreateGuestAccount() string {
 	args := []string{}
 
+	username := getGuestName()
 	passwd := encodePasswd("")
 	args = append(args, "-m")
 	args = append(args, "-d")
-	args = append(args, "/tmp/"+GUEST_ACCOUNT_NAME)
+	args = append(args, "/tmp/"+username)
 	args = append(args, "-s")
 	args = append(args, "/bin/bash")
 	args = append(args, "-l")
 	args = append(args, "-p")
 	args = append(args, passwd)
-	args = append(args, GUEST_ACCOUNT_NAME)
+	args = append(args, username)
 	execCommand(CMD_USERADD, args)
 
-	info, _ := getUserInfoByName(GUEST_ACCOUNT_NAME)
+	info, _ := getUserInfoByName(username)
 
 	return info.Path
 }

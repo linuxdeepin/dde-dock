@@ -30,11 +30,13 @@ import "C"
 import (
 	libpolkit1 "dbus/org/freedesktop/policykit1"
 	"io/ioutil"
+	"math/rand"
 	"os"
 	"os/exec"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"strings"
 	"sync"
+	"time"
 	"unsafe"
 )
 
@@ -43,6 +45,20 @@ const (
 	POLKIT_PATH = "/org/freedesktop/PolicyKit1/Authority"
 	POLKIT_IFC  = "org.freedesktop.PolicyKit1.Authority"
 )
+
+func getGuestName() string {
+	seedStr := "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+
+	l := len(seedStr)
+	name := "guest-"
+	for i := 0; i < 6; i++ {
+		rand.Seed(time.Now().Unix() * int64((i+2)*(i+3)))
+		index := rand.Intn(l)
+		name += string(seedStr[index])
+	}
+
+	return name
+}
 
 func execCommand(cmd string, args []string) {
 	if err := exec.Command(cmd, args...).Run(); err != nil {
