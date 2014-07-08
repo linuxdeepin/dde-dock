@@ -124,7 +124,7 @@ func nmGeneralGetDeviceHwAddr(devPath dbus.ObjectPath) (hwAddr string, err error
 	hwAddr = strings.ToUpper(hwAddr)
 	return
 }
-func nmGetDeviceIdentifier(devPath dbus.ObjectPath) (devId string, err error) {
+func nmGeneralGetDeviceIdentifier(devPath dbus.ObjectPath) (devId string, err error) {
 	// get device unique identifier, use hardware address if exists
 	hwAddr, err := nmGeneralGetDeviceHwAddr(devPath)
 	if err == nil {
@@ -154,7 +154,7 @@ func nmGetDeviceIdentifier(devPath dbus.ObjectPath) (devId string, err error) {
 }
 func nmGetDeviceIdentifiers() (devIds []string) {
 	for _, devPath := range nmGetDevices() {
-		id, _ := nmGetDeviceIdentifier(devPath)
+		id, _ := nmGeneralGetDeviceIdentifier(devPath)
 		devIds = append(devIds, id)
 	}
 	return
