@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2011 ~ 2013 Deepin, Inc.
- *               2011 ~ 2013 jouyouyun
+ * Copyright (c) 2011 ~ 2014 Deepin, Inc.
+ *               2013 ~ 2014 jouyouyun
  *
  * Author:      jouyouyun <jouyouwen717@gmail.com>
  * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
@@ -22,18 +22,70 @@
 package search
 
 import (
+	"os"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/logger"
+	"time"
 )
 
-var Logger = logger.NewLogger("com.deepin.daemon.Search")
+type Manager struct {
+	writeStart bool
+	writeEnd   chan bool
+}
+
+const (
+	DBUS_DEST = "com.deepin.daemon.Search"
+	DBUS_PATH = "/com/deepin/daemon/Search"
+	DBUS_IFC  = "com.deepin.daemon.Search"
+)
+
+var (
+	Logger = logger.NewLogger(DBUS_DEST)
+)
+
+func newManager() *Manager {
+	m := Manager{}
+
+	m.writeStart = false
+
+	return &m
+}
+
+var _manager *Manager
+
+func GetManager() *Manager {
+	if _manager == nil {
+		_manager = newManager()
+	}
+
+	return _manager
+}
 
 func Start() {
 	Logger.BeginTracing()
+	Logger.SetRestartCommand("/usr/lib/deepin-daemon/dde-session-daemon")
 
-	err := dbus.InstallOnSession(GetManager())
-	if err != nil {
-		Logger.Fatal("Install Search DBus Session Failed:", err)
+	if err := dbus.InstallOnSession(GetManager()); err != nil {
+		Logger.Fatal("SearchReg Install DBus Failed:", err)
+		return
+	}
+
+	dbus.SetAutoDestroyHandler(time.Second*5, func() bool {
+		if GetManager().writeStart {
+			select {
+			case <-GetManager().writeEnd:
+				return true
+			}
+		}
+
+		return true
+	})
+
+	if err := dbus.Wait(); err != nil {
+		Logger.Warning("SearchReg lost dbus:", err)
+		os.Exit(-1)
+	} else {
+		os.Exit(0)
 	}
 }
 

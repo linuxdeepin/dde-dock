@@ -46,7 +46,7 @@ func Stop() {
 }
 func Start() {
 	logObj.BeginTracing()
-	logObj.SetRestartCommand("/usr/lib/deepin-daemon/inputdevices")
+	logObj.SetRestartCommand("/usr/lib/deepin-daemon/dde-session-daemon")
 
 	var err error
 	xsObj, err = libsession.NewXSettings("com.deepin.SessionManager",
