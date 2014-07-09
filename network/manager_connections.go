@@ -21,10 +21,12 @@
 
 package network
 
-import nm "dbus/org/freedesktop/networkmanager"
-import "pkg.linuxdeepin.com/lib/dbus"
-import "fmt"
-import . "pkg.linuxdeepin.com/lib/gettext"
+import (
+	nm "dbus/org/freedesktop/networkmanager"
+	"fmt"
+	"pkg.linuxdeepin.com/lib/dbus"
+	. "pkg.linuxdeepin.com/lib/gettext"
+)
 
 // TODO different connection structures for different types
 type connection struct {
@@ -55,26 +57,32 @@ type activeConnection struct {
 }
 
 type activeConnectionInfo struct {
-	DeviceType string
-	Interface  string
-	HwAddress  string
-	Speed      string
-	Ip4        ip4ConnectionInfo
-	Ip6        ip6ConnectionInfo
+	IsPrimaryConnection bool
+	ConnectionType      string
+	ConnectionName      string
+	Security            string
+	DeviceType          string
+	DeviceInterface     string
+	HwAddress           string
+	Speed               string
+	Ip4                 ip4ConnectionInfo
+	Ip6                 ip6ConnectionInfo
 }
 type ip4ConnectionInfo struct {
 	Address string
 	Mask    string
-	Router  string
+	Route   string
 	Dns1    string
 	Dns2    string
+	Dns3    string
 }
 type ip6ConnectionInfo struct {
 	Address string
-	Prefix  uint32
-	Router  string
+	Prefix  string
+	Route   string
 	Dns1    string
 	Dns2    string
+	Dns3    string
 }
 
 func (m *Manager) initConnectionManage() {
@@ -89,6 +97,7 @@ func (m *Manager) initConnectionManage() {
 	nmSettings.ConnectNewConnection(func(path dbus.ObjectPath) {
 		m.handleConnectionChanged(opAdded, path)
 	})
+	// TODO
 	// nmSettings.ConnectPropertiesChanged(func(path dbus.ObjectPath) {
 	// }
 }
@@ -202,31 +211,39 @@ func (m *Manager) GetWiredConnectionUuid(wiredDevPath dbus.ObjectPath) (uuid str
 	return
 }
 
-func (m *Manager) GetActiveConnectionInfo() (acinfoJSON string, err error) {
-	// get activated devices' connection info
+func (m *Manager) GetActiveConnectionInfo() (acinfosJSON string, err error) {
 	var acinfos []activeConnectionInfo
+	// get activated devices' connection information
 	for _, devPath := range nmGetDevices() {
-		if info, err := m.doGetActiveConnectionInfo(devPath); err == nil {
-			acinfos = append(acinfos, info)
+		if isDeviceStateActivated(nmGetDeviceState(devPath)) {
+			if info, err := m.doGetActiveConnectionInfo(nmGetDeviceActiveConnection(devPath), devPath); err == nil {
+				acinfos = append(acinfos, info)
+			}
 		}
 	}
-	acinfoJSON, err = marshalJSON(acinfos)
+	// get activated vpn connection information
+	for _, apath := range nmGetVpnActiveConnections() {
+		if nmAConn, err := nmNewActiveConnection(apath); err == nil {
+			if devs := nmAConn.Devices.Get(); len(devs) > 0 {
+				devPath := devs[0]
+				if info, err := m.doGetActiveConnectionInfo(apath, devPath); err == nil {
+					acinfos = append(acinfos, info)
+				}
+			}
+		}
+	}
+	acinfosJSON, err = marshalJSON(acinfos)
 	return
 }
-func (m *Manager) doGetActiveConnectionInfo(devPath dbus.ObjectPath) (acinfo activeConnectionInfo, err error) {
-	// get connection data
-	nmDev, err := nmNewDevice(devPath)
-	if err != nil {
-		return
-	}
-	devName := getDeviceName(nmDev.DeviceType.Get())
+func (m *Manager) doGetActiveConnectionInfo(apath, devPath dbus.ObjectPath) (acinfo activeConnectionInfo, err error) {
+	var connType, connName, security, devType, devIfc, hwAddress, speed string
+	var ip4Address, ip4Mask, ip4Route, ip4Dns1, ip4Dns2, ip4Dns3 string
+	var ip6Address, ip6Route, ip6Dns1, ip6Dns2, ip6Dns3 string
+	var ip4Info ip4ConnectionInfo
+	var ip6Info ip6ConnectionInfo
 
-	aconn := nmDev.ActiveConnection.Get()
-	if aconn == "/" {
-		err = fmt.Errorf("device is not activated", devPath)
-		return
-	}
-	nmAConn, err := nmNewActiveConnection(aconn)
+	// active connection
+	nmAConn, err := nmNewActiveConnection(apath)
 	if err != nil {
 		return
 	}
@@ -235,41 +252,126 @@ func (m *Manager) doGetActiveConnectionInfo(devPath dbus.ObjectPath) (acinfo act
 		return
 	}
 
-	// query connection data
-	cdata, err := nmConn.GetSettings()
-	name := ""
-	ip4Dns2 := ""
-	if err == nil {
-		name = getSettingConnectionId(cdata)
-		ip4Dns2 = getSettingVkIp4ConfigDns(cdata)
-	}
-
-	// TODO fix static ip4Address address
-	// query dhcp4
-	ip4Address, ip4Mask, ip4Router, ip4Dns1 := nmGetDHCP4Info(nmDev.Dhcp4Config.Get())
-
-	// get hardware address
-	hwAddress, err := nmGeneralGetDeviceHwAddr(devPath)
+	// device
+	nmDev, err := nmNewDevice(devPath)
 	if err != nil {
-		hwAddress = "00:00:00:00:00:00"
+		return
+	}
+	devType = getCustomDeviceType(nmDev.DeviceType.Get())
+	devIfc = nmDev.Interface.Get()
+
+	// connection data
+	hwAddress, _ = nmGeneralGetDeviceHwAddr(devPath)
+	speed = nmGeneralGetDeviceSpeed(devPath)
+
+	cdata, err := nmConn.GetSettings()
+	if err != nil {
+		return
+	}
+	connName = getSettingConnectionId(cdata)
+	connType = getCustomConnectionType(cdata)
+
+	// security
+	use8021xSecurity := false
+	switch getSettingConnectionType(cdata) {
+	case NM_SETTING_WIRED_SETTING_NAME:
+		if getSettingVk8021xEnable(cdata) {
+			use8021xSecurity = true
+		} else {
+			security = Tr("None")
+		}
+	case NM_SETTING_WIRELESS_SETTING_NAME:
+		switch getSettingVkWirelessSecurityKeyMgmt(cdata) {
+		case "none":
+			security = Tr("None")
+		case "wep":
+			security = Tr("WEP 40/128-bit Key")
+		case "wpa-psk":
+			security = Tr("WPA/WPA2 Personal")
+		case "wpa-eap":
+			use8021xSecurity = true
+		}
+	}
+	if use8021xSecurity {
+		switch getSettingVk8021xEap(cdata) {
+		case "tls":
+			security = "EAP/" + Tr("TLS")
+		case "md5":
+			security = "EAP/" + Tr("MD5")
+		case "leap":
+			security = "EAP/" + Tr("LEAP")
+		case "fast":
+			security = "EAP/" + Tr("FAST")
+		case "ttls":
+			security = "EAP/" + Tr("Tunneled TLS")
+		case "peap":
+			security = "EAP/" + Tr("Protected EAP")
+		}
 	}
 
-	// get network speed (Mb/s)
-	speed := nmGeneralGetDeviceSpeed(devPath)
+	// ipv4
+	switch getSettingIp4ConfigMethod(cdata) {
+	case NM_SETTING_IP4_CONFIG_METHOD_AUTO:
+		ip4Address, ip4Mask, ip4Route, ip4Dns1 = nmGetDhcp4Info(nmDev.Dhcp4Config.Get())
+		ip4Dns2 = getSettingVkIp4ConfigDns(cdata)
+		// ip4Dns2 = getSettingVkIp4ConfigDns2(cdata)
+	case NM_SETTING_IP4_CONFIG_METHOD_MANUAL:
+		ip4Address = getSettingVkIp4ConfigAddressesAddress(cdata)
+		ip4Mask = getSettingVkIp4ConfigAddressesMask(cdata)
+		ip4Route = getSettingVkIp4ConfigAddressesGateway(cdata)
+		ip4Dns1 = getSettingVkIp4ConfigDns(cdata)
+	}
+	ip4Info = ip4ConnectionInfo{
+		Address: ip4Address,
+		Mask:    ip4Mask,
+		Route:   ip4Route,
+		Dns1:    ip4Dns1,
+		Dns2:    ip4Dns2,
+		Dns3:    ip4Dns3,
+	}
+
+	// ipv6
+	if isSettingSectionExists(cdata, sectionIpv6) {
+		switch getSettingIp6ConfigMethod(cdata) {
+		case NM_SETTING_IP6_CONFIG_METHOD_AUTO, NM_SETTING_IP6_CONFIG_METHOD_DHCP:
+			dhcp6Path := nmDev.Dhcp6Config.Get()
+			if len(dhcp6Path) > 0 && string(dhcp6Path) != "/" {
+				ip6Address, ip6Route, ip6Dns1 = nmGetDhcp6Info(dhcp6Path)
+				ip6Dns2 = getSettingVkIp6ConfigDns(cdata)
+				ip6Info = ip6ConnectionInfo{
+					Address: ip6Address,
+					Route:   ip6Route,
+					Dns1:    ip6Dns1,
+					Dns2:    ip6Dns2,
+					Dns3:    ip6Dns3,
+				}
+			}
+		case NM_SETTING_IP6_CONFIG_METHOD_MANUAL:
+			ip6Address = getSettingVkIp6ConfigAddressesAddress(cdata)
+			ip6Prefix := getSettingVkIp6ConfigAddressesPrefix(cdata)
+			ip6Route = getSettingVkIp6ConfigAddressesGateway(cdata)
+			ip6Dns1 = getSettingVkIp6ConfigDns(cdata)
+			ip6Info = ip6ConnectionInfo{
+				Address: fmt.Sprintf("%s/%d", ip6Address, ip6Prefix),
+				Route:   ip6Route,
+				Dns1:    ip6Dns1,
+				Dns2:    ip6Dns2,
+				Dns3:    ip6Dns3,
+			}
+		}
+	}
 
 	acinfo = activeConnectionInfo{
-		DeviceType: devName,
-		Interface:  name,
-		HwAddress:  hwAddress,
-		Speed:      speed,
-		Ip4: ip4ConnectionInfo{
-			Address: ip4Address,
-			Mask:    ip4Mask,
-			Router:  ip4Router,
-			Dns1:    ip4Dns1,
-			Dns2:    ip4Dns2,
-		},
-		Ip6: ip6ConnectionInfo{}, // TODO
+		IsPrimaryConnection: nmGetPrimaryConnection() == apath,
+		ConnectionType:      connType,
+		ConnectionName:      connName,
+		Security:            security,
+		DeviceType:          devType,
+		DeviceInterface:     devIfc,
+		HwAddress:           hwAddress,
+		Speed:               speed,
+		Ip4:                 ip4Info,
+		Ip6:                 ip6Info,
 	}
 	return
 }
