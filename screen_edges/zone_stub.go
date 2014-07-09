@@ -52,6 +52,12 @@ func (op *Manager) listenSignal() {
 			return
 		}
 
+		if pid, ok := isActiveWindowFullscreen(); ok {
+			if !isAppInWhiteList(pid) {
+				return
+			}
+		}
+
 		if isInArea(x, y, topLeftArea) {
 			execEdgeAction(EDGE_TOPLEFT)
 		} else if isInArea(x, y, bottomLeftArea) {
