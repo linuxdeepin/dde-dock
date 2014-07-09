@@ -1,8 +1,6 @@
 package launcher
 
 import (
-	"fmt"
-
 	pinyin "dbus/com/deepin/daemon/search"
 )
 
