@@ -10,7 +10,6 @@ import (
 
 	_ "github.com/mattn/go-sqlite3"
 
-	pinyin "dbus/com/deepin/daemon/search"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
 )
 
@@ -45,7 +44,6 @@ type ItemInfo struct {
 // type ItemTable map[ItemId]*ItemId
 
 var itemTable = map[ItemId]*ItemInfo{}
-var searchObj *pinyin.Search
 
 func (i *ItemInfo) init(app *gio.DesktopAppInfo) {
 	i.Id = getId(app)
@@ -170,10 +168,6 @@ func getId(app *gio.DesktopAppInfo) ItemId {
 }
 
 func initItems() {
-	if searchObj == nil {
-		searchObj, _ = pinyin.NewSearch("com.deepin.daemon.Search",
-			"/com/deepin/daemon/Search")
-	}
 	allApps := gio.AppInfoGetAll()
 
 	for _, app := range allApps {
@@ -192,11 +186,10 @@ func initItems() {
 		names = append(names, v.Name)
 	}
 	logger.Debug("Names:", names)
-	treeId, _, err = searchObj.NewSearchWithStrList(names)
+	pinyinSearchObj, err = NewPinYinSearch(names)
 	if err != nil {
-		logger.Warning("build Trie tree failed:", err)
+		logger.Warning("build pinyin search object failed:", err)
 	}
-	logger.Debug("trie tree id:", treeId)
 }
 
 func getItemInfos(id CategoryId) []ItemInfo {

@@ -9,8 +9,6 @@ import (
 	"time"
 )
 
-var treeId string
-
 type SearchFunc func(key string, res chan<- SearchResult, end chan<- bool)
 
 // func registerSearchFunc(searchFunc SearchFunc) {
@@ -73,13 +71,13 @@ func search(key string) []ItemId {
 
 	keys := []string{key}
 	var tkeys []string
-	if treeId != "" {
+	if pinyinSearchObj.IsValid() {
 		var err error
-		tkeys, err = searchObj.SearchString(key, treeId)
+		tkeys, err = pinyinSearchObj.Search(key)
 		if err != nil {
 			logger.Warning("Search Keys failed:", err)
 		}
-		logger.Debug("get tree searchKeys:", tkeys)
+		logger.Debug("get searchKeys:", tkeys)
 	}
 
 	for _, v := range tkeys {
