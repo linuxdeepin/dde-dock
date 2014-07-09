@@ -39,6 +39,15 @@ var (
 	nmSettings, _ = nm.NewSettings(dbusNmDest, dbusNmSettingPath)
 )
 
+// Helper function
+func isNmObjectPathValid(p dbus.ObjectPath) bool {
+	str := string(p)
+	if len(str) == 0 || str == "/" {
+		return false
+	}
+	return true
+}
+
 // General function wrappers for network manager
 func nmGeneralGetAllDeviceHwAddr(devType uint32) (allHwAddr map[string]string) {
 	allHwAddr = make(map[string]string)
@@ -52,7 +61,7 @@ func nmGeneralGetAllDeviceHwAddr(devType uint32) (allHwAddr map[string]string) {
 	}
 	return
 }
-func nmGeneralGetDeviceHwAddr(devPath dbus.ObjectPath) (hwAddr string) {
+func nmGeneralGetDeviceHwAddr(devPath dbus.ObjectPath) (hwAddr string, err error) {
 	hwAddr = "00:00:00:00:00:00"
 	dev, err := nmNewDevice(devPath)
 	if err != nil {
@@ -492,6 +501,17 @@ func nmGetActiveConnections() (apaths []dbus.ObjectPath) {
 	return
 }
 
+func nmGetVpnActiveConnections() (apaths []dbus.ObjectPath) {
+	for _, p := range nmGetActiveConnections() {
+		if aconn, err := nmNewActiveConnection(p); err == nil {
+			if aconn.Vpn.Get() {
+				apaths = append(apaths, p)
+			}
+		}
+	}
+	return
+}
+
 func nmGetVpnConnectionState(apath dbus.ObjectPath) (state uint32) {
 	vpnConn, err := nmNewVpnConnection(apath)
 	if err != nil {
@@ -736,26 +756,23 @@ func nmGetDhcp4Info(path dbus.ObjectPath) (ip, mask, route, dns string) {
 	return
 }
 
-func nmGetDhcp6Info(path dbus.ObjectPath) (ip string, prefix uint32, route, dns string) {
+func nmGetDhcp6Info(path dbus.ObjectPath) (ip, route, dns string) {
 	ip = "0::0"
-	prefix = 0
-	route = "0::0"
+	route = ""
 	dns = "0::0"
 	dhcp6, err := nmNewDHCP6Config(path)
 	if err != nil {
 		return
 	}
 	options := dhcp6.Options.Get()
-	if ipData, ok := options["ip_address"]; ok {
+	if ipData, ok := options["ip6_address"]; ok {
 		ip, _ = ipData.Value().(string)
 	}
-	if prefixData, ok := options["subnet_mask"]; ok {
-		prefix, _ = prefixData.Value().(uint32)
-	}
+	// FIXME how
 	if routeData, ok := options["routers"]; ok {
 		route, _ = routeData.Value().(string)
 	}
-	if dnsData, ok := options["domain_name_servers"]; ok {
+	if dnsData, ok := options["dhcp6_name_servers"]; ok {
 		dns, _ = dnsData.Value().(string)
 	}
 	return
@@ -779,25 +796,17 @@ func nmGetDeviceType(devPath dbus.ObjectPath) (devType uint32) {
 	return
 }
 
-func nmGetDeviceActiveConnection(devPath dbus.ObjectPath) (acPath dbus.ObjectPath, err error) {
+func nmGetDeviceActiveConnection(devPath dbus.ObjectPath) (acPath dbus.ObjectPath) {
 	dev, err := nmNewDevice(devPath)
 	if err != nil {
 		return
 	}
 	acPath = dev.ActiveConnection.Get()
-	if len(acPath) == 0 || acPath == "/" {
-		// don't need logger error here
-		err = fmt.Errorf("there is no active connection for device", devPath)
-		return
-	}
 	return
 }
 
 func nmGetDeviceActiveConnectionUuid(devPath dbus.ObjectPath) (uuid string, err error) {
-	acPath, err := nmGetDeviceActiveConnection(devPath)
-	if err != nil {
-		return
-	}
+	acPath := nmGetDeviceActiveConnection(devPath)
 	aconn, err := nmNewActiveConnection(acPath)
 	if err != nil {
 		return
@@ -807,10 +816,7 @@ func nmGetDeviceActiveConnectionUuid(devPath dbus.ObjectPath) (uuid string, err 
 }
 
 func nmGetDeviceActiveConnectionData(devPath dbus.ObjectPath) (data connectionData, err error) {
-	acPath, err := nmGetDeviceActiveConnection(devPath)
-	if err != nil {
-		return
-	}
+	acPath := nmGetDeviceActiveConnection(devPath)
 	aconn, err := nmNewActiveConnection(acPath)
 	if err != nil {
 		return
@@ -832,6 +838,13 @@ func nmManagerEnable(enable bool) (err error) {
 	if err != nil {
 		logger.Error(err)
 	}
+	return
+}
+
+func nmGetPrimaryConnection() (cpath dbus.ObjectPath) {
+	// TODO need update dbus-factory
+	// cpath = nmManager.PrimaryConnection.Get()
+	cpath = ""
 	return
 }
 

@@ -123,6 +123,51 @@ var supportedConnectionTypes = []string{
 	connectionVpnVpnc,
 }
 
+// return custom connection type, and the wrapper type will be ignored
+func getCustomConnectionType(data connectionData) (connType string) {
+	t := getSettingConnectionType(data)
+	switch t {
+	case NM_SETTING_WIRED_SETTING_NAME:
+		connType = connectionWired
+	case NM_SETTING_WIRELESS_SETTING_NAME:
+		if isSettingWirelessModeExists(data) {
+			switch getSettingWirelessMode(data) {
+			case NM_SETTING_WIRELESS_MODE_INFRA:
+				connType = connectionWireless
+			case NM_SETTING_WIRELESS_MODE_ADHOC:
+				connType = connectionWirelessAdhoc
+			case NM_SETTING_WIRELESS_MODE_AP:
+				connType = connectionWirelessHotspot
+			}
+		} else {
+			connType = connectionWireless
+		}
+	case NM_SETTING_PPPOE_SETTING_NAME:
+		connType = connectionPppoe
+	case NM_SETTING_GSM_SETTING_NAME:
+		connType = connectionMobileGsm
+	case NM_SETTING_CDMA_SETTING_NAME:
+		connType = connectionMobileCdma
+	case NM_SETTING_VPN_SETTING_NAME:
+		switch getSettingVpnServiceType(data) {
+		case NM_DBUS_SERVICE_L2TP:
+			connType = connectionVpnL2tp
+		case NM_DBUS_SERVICE_OPENCONNECT:
+			connType = connectionVpnOpenconnect
+		case NM_DBUS_SERVICE_OPENVPN:
+			connType = connectionVpnOpenvpn
+		case NM_DBUS_SERVICE_PPTP:
+			connType = connectionVpnPptp
+		case NM_DBUS_SERVICE_VPNC:
+			connType = connectionVpnVpnc
+		}
+	}
+	if len(connType) == 0 {
+		connType = connectionUnknown
+	}
+	return
+}
+
 // generate connection id when creating a new connection
 func genConnectionId(connType string) (id string) {
 	var idPrefix string
