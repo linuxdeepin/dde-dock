@@ -3,9 +3,6 @@ package dock
 import (
 	"bytes"
 	"dbus/com/deepin/daemon/dock"
-	. "pkg.linuxdeepin.com/lib/gettext"
-	"pkg.linuxdeepin.com/lib/gio-2.0"
-	"pkg.linuxdeepin.com/lib/glib-2.0"
 	"encoding/base64"
 	"fmt"
 	"github.com/BurntSushi/xgb/xproto"
@@ -18,6 +15,9 @@ import (
 	"github.com/BurntSushi/xgbutil/xwindow"
 	"io/ioutil"
 	"path/filepath"
+	. "pkg.linuxdeepin.com/lib/gettext"
+	"pkg.linuxdeepin.com/lib/gio-2.0"
+	"pkg.linuxdeepin.com/lib/glib-2.0"
 	"strings"
 )
 
@@ -217,9 +217,16 @@ func (app *RuntimeApp) buildMenu() {
 		logger.Warning("get docked status failed:", err)
 	}
 	logger.Debug(app.Id, "Item is docked:", isDocked)
-	dockItem := NewMenuItem(
-		Tr("_Dock"),
-		func() {
+	var message string
+	var action func()
+	if isDocked {
+		message = Tr("_Undock")
+		action = func() {
+			DOCKED_APP_MANAGER.Undock(app.Id)
+		}
+	} else {
+		message = Tr("_Dock")
+		action = func() {
 			logger.Warning("dock item")
 			logger.Info("appid:", app.Id)
 
@@ -254,9 +261,9 @@ func (app *RuntimeApp) buildMenu() {
 				logger.Warning("Docked failed: ", err)
 			}
 			app.buildMenu()
-		},
-		!isDocked,
-	)
+		}
+	}
+	dockItem := NewMenuItem(message, action, true)
 	app.coreMenu.AppendItem(dockItem)
 
 	app.Menu = app.coreMenu.GenerateJSON()
