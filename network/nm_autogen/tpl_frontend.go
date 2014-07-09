@@ -50,7 +50,6 @@ BaseEditPage {
         connectionSession: editPage.connectionSession
         availableSections: editPage.availableSections
         availableKeys: editPage.availableKeys
-        connectionData: editPage.connectionData
         errors: editPage.errors
         section: "connection"
         key: "id"
@@ -61,7 +60,6 @@ BaseEditPage {
         connectionSession: editPage.connectionSession
         availableSections: editPage.availableSections
         availableKeys: editPage.availableKeys
-        connectionData: editPage.connectionData
         errors: editPage.errors
         section: "connection"
         key: "autoconnect"
@@ -75,7 +73,6 @@ BaseEditPage {
         connectionSession: editPage.connectionSession
         availableSections: editPage.availableSections
         availableKeys: editPage.availableKeys
-        connectionData: editPage.connectionData
         errors: editPage.errors
     }
     EditSectionSeparator {relatedSection: {{$id}}}
@@ -102,7 +99,6 @@ BaseEditSection { {{$sectionId := .Name | ToVsClassName | printf "section%s"}}
             connectionSession: {{$sectionId}}.connectionSession
             availableSections: {{$sectionId}}.availableSections
             availableKeys: {{$sectionId}}.availableKeys
-            connectionData: {{$sectionId}}.connectionData
             errors: {{$sectionId}}.errors
             section: "{{$sectionValue}}"
             key: "{{$value}}"
