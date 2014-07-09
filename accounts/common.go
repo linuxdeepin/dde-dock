@@ -229,6 +229,7 @@ func changePasswd(username, password string) {
 		}
 		f.Sync()
 		os.Rename(ETC_SHADOW_BAK, ETC_SHADOW)
+		os.Chmod(ETC_SHADOW, 0600)
 		mutex.Unlock()
 	}
 }
