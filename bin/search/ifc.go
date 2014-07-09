@@ -71,7 +71,7 @@ func (m *Manager) NewSearchWithStrList(list []string) (string, bool) {
 	return md5Str, true
 }
 
-func (m *Manager) NewSearchWithDict(dict map[string]string) (string, bool) {
+func (m *Manager) NewSearchWithStrDict(dict map[string]string) (string, bool) {
 	datas := []dataInfo{}
 	strs := ""
 
