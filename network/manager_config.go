@@ -23,18 +23,13 @@ package network
 
 import (
 	"fmt"
-	"io/ioutil"
-	"os"
-	"path"
 	"pkg.linuxdeepin.com/lib/dbus"
-	"sync"
+	"pkg.linuxdeepin.com/lib/utils"
 )
 
-var networkConfigFile = os.Getenv("HOME") + "/.config/deepin_network.json"
-
+// config structure wrapper
 type config struct {
-	configFile string
-	saveLock   sync.Mutex
+	core utils.Config
 
 	WiredEnabled        bool
 	VpnEnabled          bool
@@ -63,7 +58,8 @@ type vpnConfig struct {
 
 func newConfig() (c *config) {
 	c = &config{}
-	c.setConfigFile(networkConfigFile)
+	c.core.SetConfigName("network")
+	logger.Info("config file:", c.core.GetConfigFile())
 	c.Devices = make(map[string]*deviceConfig)
 	c.VpnConnections = make(map[string]*vpnConfig)
 	c.WiredEnabled = true
@@ -75,6 +71,12 @@ func newConfig() (c *config) {
 	c.load()
 	c.clearSpareConfig()
 	return
+}
+func (c *config) save() {
+	c.core.Save(c)
+}
+func (c *config) load() {
+	c.core.Load(c)
 }
 
 func newDeviceConfig() (d *deviceConfig) {
@@ -90,33 +92,6 @@ func newVpnConfig() (v *vpnConfig) {
 	v.activated = false
 	v.lastActivated = v.activated
 	return
-}
-
-func (c *config) setConfigFile(file string) {
-	c.configFile = file
-}
-
-func (c *config) load() {
-	if isFileExists(c.configFile) {
-		fileContent, err := ioutil.ReadFile(c.configFile)
-		if err != nil {
-			logger.Error(err)
-			return
-		}
-		unmarshalJSON(string(fileContent), c)
-	} else {
-		c.save()
-	}
-}
-func (c *config) save() {
-	c.saveLock.Lock()
-	defer c.saveLock.Unlock()
-	ensureDirExists(path.Dir(c.configFile))
-	fileContent, _ := marshalJSON(c)
-	err := ioutil.WriteFile(c.configFile, []byte(fileContent), 0644)
-	if err != nil {
-		logger.Error(err)
-	}
 }
 
 func (c *config) clearSpareConfig() {

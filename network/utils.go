@@ -184,8 +184,14 @@ func isFileExists(file string) bool {
 	return false
 }
 
-func ensureDirExists(dir string) {
-	os.MkdirAll(dir, 0755)
+func ensureDirExists(dir string, perm ...os.FileMode) error {
+	var p os.FileMode
+	if len(perm) > 0 {
+		p = perm[0]
+	} else {
+		p = 0755
+	}
+	return os.MkdirAll(dir, p)
 }
 
 func notify(icon, summary, body string) (err error) {
