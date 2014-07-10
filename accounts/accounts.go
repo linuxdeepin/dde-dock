@@ -22,9 +22,9 @@
 package accounts
 
 import (
-	dutils "pkg.linuxdeepin.com/lib/utils"
 	"github.com/howeyc/fsnotify"
 	"io/ioutil"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 	"strconv"
 	"strings"
 )
@@ -42,6 +42,7 @@ type Manager struct {
 
 	UserAdded   func(string)
 	UserDeleted func(string)
+	Error       func(string)
 }
 
 var _manager *Manager
