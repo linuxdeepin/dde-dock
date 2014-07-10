@@ -28,6 +28,7 @@ import (
 	"pkg.linuxdeepin.com/lib/gio-2.0"
 	dutils "pkg.linuxdeepin.com/lib/utils"
 	"regexp"
+	"time"
 )
 
 func (obj *Manager) listenGSettings() {
@@ -276,6 +277,7 @@ func (obj *Manager) endBgWatch() {
 }
 
 func (obj *Manager) handleBgEvent() {
+	preTimestamp := int64(0)
 	for {
 		select {
 		case <-obj.bgQuitFlag:
@@ -294,10 +296,19 @@ func (obj *Manager) handleBgEvent() {
 			}
 
 			Logger.Debugf("Bg Event: %v", ev)
+			curTimestamp := time.Now().Unix()
+			if curTimestamp-preTimestamp <= 1 {
+				preTimestamp = curTimestamp
+				break
+			}
 			if ok, _ := regexp.MatchString(`autogen`, ev.Name); ok {
-				obj.setPropGtkThemeList(obj.getGtkStrList())
-				obj.setPropIconThemeList(obj.getIconStrList())
-				obj.setPropBackgroundList(obj.getBgStrList())
+				go func() {
+					<-time.NewTimer(time.Second * 8).C
+					obj.setPropGtkThemeList(obj.getGtkStrList())
+					obj.setPropIconThemeList(obj.getIconStrList())
+					obj.setPropBackgroundList(obj.getBgStrList())
+					return
+				}()
 				break
 			}
 

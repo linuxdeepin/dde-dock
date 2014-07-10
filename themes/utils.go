@@ -200,12 +200,12 @@ func genThemeThumb() {
 		m := GetManager()
 		exec.Command(cmd, "--background").Run()
 		m.setPropBackgroundList(m.getBgStrList())
-		exec.Command(cmd, "--gtk").Run()
-		m.setPropGtkThemeList(m.getGtkStrList())
-		exec.Command(cmd, "--icon").Run()
-		m.setPropIconThemeList(m.getIconStrList())
-		exec.Command(cmd, "--cursor").Run()
-		m.setPropCursorThemeList(m.getCursorStrList())
+		//exec.Command(cmd, "--gtk").Run()
+		//m.setPropGtkThemeList(m.getGtkStrList())
+		//exec.Command(cmd, "--icon").Run()
+		//m.setPropIconThemeList(m.getIconStrList())
+		//exec.Command(cmd, "--cursor").Run()
+		//m.setPropCursorThemeList(m.getCursorStrList())
 		thumbTool = false
 	}()
 }
