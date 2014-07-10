@@ -55,31 +55,31 @@ func (grub *Grub2) OnPropertiesChanged(name string, oldv interface{}) {
 		if grub.DefaultEntry == oldvStr {
 			return
 		}
-		grub.updatePropDefaultEntry(grub.DefaultEntry)
+		grub.setPropDefaultEntry(grub.DefaultEntry)
 	case "Timeout":
 		oldvInt, _ := oldv.(int32)
 		if grub.Timeout == oldvInt {
 			return
 		}
-		grub.updatePropTimeout(grub.Timeout)
+		grub.setPropTimeout(grub.Timeout)
 	}
 	grub.writeSettings()
 	grub.notifyUpdate()
 }
 
-func (grub *Grub2) updatePropDefaultEntry(value string) {
+func (grub *Grub2) setPropDefaultEntry(value string) {
 	grub.DefaultEntry = value
 	grub.setSettingDefaultEntry(grub.DefaultEntry)
 	dbus.NotifyChange(grub, "DefaultEntry")
 }
 
-func (grub *Grub2) updatePropTimeout(value int32) {
+func (grub *Grub2) setPropTimeout(value int32) {
 	grub.Timeout = value
 	grub.setSettingTimeout(grub.Timeout)
 	dbus.NotifyChange(grub, "Timeout")
 }
 
-func (grub *Grub2) updatePropUpdating(value bool) {
+func (grub *Grub2) setPropUpdating(value bool) {
 	grub.Updating = value
 	dbus.NotifyChange(grub, "Updating")
 }
@@ -106,7 +106,7 @@ func (grub *Grub2) Reset() {
 	if len(simpleEntryTitles) > 0 {
 		firstEntry = simpleEntryTitles[0]
 	}
-	grub.updatePropDefaultEntry(firstEntry)
-	grub.updatePropTimeout(int32(10))
+	grub.setPropDefaultEntry(firstEntry)
+	grub.setPropTimeout(int32(10))
 	grub.theme.reset()
 }

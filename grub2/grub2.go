@@ -112,8 +112,8 @@ func (grub *Grub2) doInitGrub2() {
 		grub.writeSettings()
 		grub.notifyUpdate()
 	}
-	grub.updatePropDefaultEntry(grub.getSettingDefaultEntry())
-	grub.updatePropTimeout(grub.getSettingTimeout())
+	grub.setPropDefaultEntry(grub.getSettingDefaultEntry())
+	grub.setPropTimeout(grub.getSettingTimeout())
 
 	if isFileExists(grubCacheFile) {
 		err = grub.readCacheConfig()
@@ -153,7 +153,7 @@ func (grub *Grub2) startUpdateLoop() {
 				grub.needUpdateLock.Unlock()
 
 				if grub.config.NeedUpdate {
-					grub.updatePropUpdating(true)
+					grub.setPropUpdating(true)
 
 					grub.writeCacheConfig()
 
@@ -168,7 +168,7 @@ func (grub *Grub2) startUpdateLoop() {
 					// need update any more
 					grub.needUpdateLock.Lock()
 					if !grub.needUpdate {
-						grub.updatePropUpdating(false)
+						grub.setPropUpdating(false)
 					}
 					grub.needUpdateLock.Unlock()
 				}
@@ -188,7 +188,7 @@ func (grub *Grub2) resetGfxmodeIfNeed() {
 		// regenerate theme background
 		screenWidth, screenHeight := getPrimaryScreenBestResolution()
 		grub2extDoGenerateThemeBackground(screenWidth, screenHeight)
-		grub.theme.updatePropBackground(grub.theme.background)
+		grub.theme.setPropBackground(grub.theme.background)
 	}
 }
 

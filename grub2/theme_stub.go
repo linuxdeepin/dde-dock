@@ -47,23 +47,23 @@ func (theme *Theme) OnPropertiesChanged(name string, oldv interface{}) {
 		if theme.ItemColor == oldv.(string) {
 			return
 		}
-		theme.updatePropItemColor(theme.ItemColor)
+		theme.setPropItemColor(theme.ItemColor)
 		theme.customTheme()
 	case "SelectedItemColor":
 		if theme.SelectedItemColor == oldv.(string) {
 			return
 		}
-		theme.updatePropSelectedItemColor(theme.SelectedItemColor)
+		theme.setPropSelectedItemColor(theme.SelectedItemColor)
 		theme.customTheme()
 	}
 }
 
-func (theme *Theme) updatePropUpdating(value bool) {
+func (theme *Theme) setPropUpdating(value bool) {
 	theme.Updating = value
 	dbus.NotifyChange(theme, "Updating")
 }
 
-func (theme *Theme) updatePropBackground(value string) {
+func (theme *Theme) setPropBackground(value string) {
 	theme.background = value
 	// generate background thumbnail
 	theme.Background = graphic.GenerateCacheFilePath("grub background" + theme.background)
@@ -71,7 +71,7 @@ func (theme *Theme) updatePropBackground(value string) {
 	dbus.NotifyChange(theme, "Background")
 }
 
-func (theme *Theme) updatePropItemColor(value string) {
+func (theme *Theme) setPropItemColor(value string) {
 	itemColor := value
 	if len(itemColor) == 0 {
 		// set a default value to avoid empty string
@@ -82,7 +82,7 @@ func (theme *Theme) updatePropItemColor(value string) {
 	dbus.NotifyChange(theme, "ItemColor")
 }
 
-func (theme *Theme) updatePropSelectedItemColor(value string) {
+func (theme *Theme) setPropSelectedItemColor(value string) {
 	selectedItemColor := value
 	if len(selectedItemColor) == 0 {
 		// set a default value to avoid empty string
@@ -109,11 +109,11 @@ func (theme *Theme) SetBackgroundSourceFile(imageFile string) (ok bool, err erro
 func (theme *Theme) doSetBackgroundSourceFile(imageFile string) bool {
 	theme.updateLock.Lock()
 	defer theme.updateLock.Unlock()
-	theme.updatePropUpdating(true)
+	theme.setPropUpdating(true)
 	screenWidth, screenHeight := getPrimaryScreenBestResolution()
 	grub2extDoSetThemeBackgroundSourceFile(imageFile, screenWidth, screenHeight)
-	theme.updatePropBackground(theme.background)
-	theme.updatePropUpdating(false)
+	theme.setPropBackground(theme.background)
+	theme.setPropUpdating(false)
 
 	// set item color through background's dominant color
 	_, _, v, _ := graphic.GetDominantColorOfImage(theme.bgSrcFile)
@@ -126,8 +126,8 @@ func (theme *Theme) doSetBackgroundSourceFile(imageFile string) bool {
 		theme.tplJSONData.CurrentScheme = theme.tplJSONData.BrightScheme
 		logger.Info("background is bright, so use the bright theme scheme")
 	}
-	theme.updatePropItemColor(theme.tplJSONData.CurrentScheme.ItemColor)
-	theme.updatePropSelectedItemColor(theme.tplJSONData.CurrentScheme.SelectedItemColor)
+	theme.setPropItemColor(theme.tplJSONData.CurrentScheme.ItemColor)
+	theme.setPropSelectedItemColor(theme.tplJSONData.CurrentScheme.SelectedItemColor)
 	theme.customTheme()
 
 	logger.Info("update background sucess")

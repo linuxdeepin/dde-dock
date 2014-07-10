@@ -103,28 +103,28 @@ func (theme *Theme) initTheme() {
 	}
 
 	// init properties
-	theme.updatePropBackground(theme.bgFile)
-	theme.updatePropItemColor(theme.tplJSONData.CurrentScheme.ItemColor)
-	theme.updatePropSelectedItemColor(theme.tplJSONData.CurrentScheme.SelectedItemColor)
+	theme.setPropBackground(theme.bgFile)
+	theme.setPropItemColor(theme.tplJSONData.CurrentScheme.ItemColor)
+	theme.setPropSelectedItemColor(theme.tplJSONData.CurrentScheme.SelectedItemColor)
 }
 
 // reset to default configuration
 func (theme *Theme) reset() {
 	theme.tplJSONData.CurrentScheme = theme.tplJSONData.DarkScheme
-	theme.updatePropItemColor(theme.tplJSONData.CurrentScheme.ItemColor)
-	theme.updatePropSelectedItemColor(theme.tplJSONData.CurrentScheme.SelectedItemColor)
+	theme.setPropItemColor(theme.tplJSONData.CurrentScheme.ItemColor)
+	theme.setPropSelectedItemColor(theme.tplJSONData.CurrentScheme.SelectedItemColor)
 	theme.customTheme()
 
 	// reset theme background
 	go func() {
 		theme.updateLock.Lock()
 		defer theme.updateLock.Unlock()
-		theme.updatePropUpdating(true)
+		theme.setPropUpdating(true)
 		grub2extDoResetThemeBackground()
 		screenWidth, screenHeight := getPrimaryScreenBestResolution()
 		grub2extDoGenerateThemeBackground(screenWidth, screenHeight)
-		theme.updatePropBackground(theme.background)
-		theme.updatePropUpdating(false)
+		theme.setPropBackground(theme.background)
+		theme.setPropUpdating(false)
 	}()
 }
 
@@ -157,7 +157,7 @@ func (theme *Theme) regenerateBackgroundIfNeed() {
 
 	if needGenerate {
 		grub2extDoGenerateThemeBackground(screenWidth, screenHeight)
-		theme.updatePropBackground(theme.background)
+		theme.setPropBackground(theme.background)
 		logger.Info("update background sucess")
 	}
 }
