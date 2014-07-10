@@ -40,7 +40,9 @@ func (obj *Manager) CreateGuestAccount() string {
 	args = append(args, "-p")
 	args = append(args, passwd)
 	args = append(args, username)
-	execCommand(CMD_USERADD, args)
+	if !execCommand(CMD_USERADD, args) {
+		return ""
+	}
 
 	info, _ := getUserInfoByName(username)
 
@@ -83,7 +85,9 @@ func (obj *Manager) CreateUser(dbusMsg dbus.DMessage, name, fullname string, acc
 	args = append(args, "-c")
 	args = append(args, fullname)
 	args = append(args, name)
-	execCommand(CMD_USERADD, args)
+	if !execCommand(CMD_USERADD, args) {
+		return "", false
+	}
 
 	info, _ := getUserInfoByName(name)
 	if u, ok := obj.pathUserMap[info.Path]; ok {
@@ -122,7 +126,9 @@ func (obj *Manager) DeleteUser(dbusMsg dbus.DMessage, name string, removeFiles b
 	}
 	args = append(args, name)
 
-	execCommand(CMD_USERDEL, args)
+	if !execCommand(CMD_USERDEL, args) {
+		return false
+	}
 
 	return true
 }

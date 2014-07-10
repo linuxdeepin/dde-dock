@@ -60,10 +60,14 @@ func getGuestName() string {
 	return name
 }
 
-func execCommand(cmd string, args []string) {
-	if err := exec.Command(cmd, args...).Run(); err != nil {
-		logger.Errorf("Exec '%s %v' failed: %v", cmd, args, err)
+func execCommand(cmd string, args []string) bool {
+	if out, err := exec.Command(cmd, args...).CombinedOutput(); err != nil {
+		GetManager().Error(string(out))
+		logger.Warningf("Exec '%s %v' failed: %v", cmd, args, err)
+		return false
 	}
+
+	return true
 }
 
 func strIsInList(str string, list []string) bool {
