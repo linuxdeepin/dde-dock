@@ -93,7 +93,8 @@ func (m *HideStateManager) UpdateState() {
 	}
 
 	if lastActive == DDELauncher {
-		logger.Info(lastActive)
+		logger.Infof("the current actived window is %s, hide dock",
+			lastActive)
 		state = HideStateHidding
 	}
 

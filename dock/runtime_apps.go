@@ -285,6 +285,7 @@ func (app *RuntimeApp) buildMenu() {
 	app.coreMenu.AppendItem(dockItem)
 
 	app.Menu = app.coreMenu.GenerateJSON()
+	app.notifyChanged()
 }
 
 func (app *RuntimeApp) setChangedCB(cb func()) {
