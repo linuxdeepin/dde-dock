@@ -89,7 +89,7 @@ func (m *Manager) initConnectionManage() {
 	m.connections = make(map[string][]*connection)
 
 	// TODO create special wired connection if need
-	// m.updatePropWiredConnections()
+	// m.setPropWiredConnections()
 
 	for _, c := range nmGetConnectionList() {
 		m.handleConnectionChanged(opAdded, c)
@@ -147,14 +147,14 @@ func (m *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPath)
 		case NM_SETTING_VPN_SETTING_NAME:
 			m.connections[connectionVpn] = m.addConnection(m.connections[connectionVpn], conn)
 		}
-		m.updatePropConnections()
+		m.setPropConnections()
 	case opRemoved:
 		for k, conns := range m.connections {
 			if m.isConnectionExists(conns, conn) {
 				m.connections[k] = m.removeConnection(conns, conn)
 			}
 		}
-		m.updatePropConnections()
+		m.setPropConnections()
 	}
 }
 func (m *Manager) addConnection(conns []*connection, conn *connection) []*connection {

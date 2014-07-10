@@ -109,7 +109,7 @@ func newConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 		s.data = newVpnOpenvpnConnectionData(id, s.Uuid)
 	}
 
-	s.updateProps()
+	s.setProps()
 	logger.Infof("newConnectionSessionByCreate(): %#v", s.data)
 	return
 }
@@ -143,7 +143,7 @@ func newConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 	case <-chSecret:
 	}
 
-	s.updateProps()
+	s.setProps()
 	logger.Infof("NewConnectionSessionByOpen(): %#v", s.data)
 	return
 }
@@ -307,7 +307,7 @@ func (s *ConnectionSession) SetKey(section, key, valueJSON string) {
 	logger.Debugf("SetKey(), section=%s, key=%s, valueJSON=%s", section, key, valueJSON) // TODO test
 	err := generalSetSettingKeyJSON(s.data, section, key, valueJSON)
 	s.updateErrorsWhenSettingKey(section, key, err)
-	s.updateProps()
+	s.setProps()
 	return
 }
 

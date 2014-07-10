@@ -119,17 +119,17 @@ func (m *Manager) initManager() {
 	// setup global switches
 	m.initPropNetworkingEnabled()
 	nmManager.NetworkingEnabled.ConnectChanged(func() {
-		m.updatePropNetworkingEnabled()
+		m.setPropNetworkingEnabled()
 	})
 
 	m.initPropWirelessEnabled()
 	nmManager.WirelessEnabled.ConnectChanged(func() {
-		m.updatePropWirelessEnabled()
+		m.setPropWirelessEnabled()
 	})
 
 	m.initPropWwanEnabled()
 	nmManager.WwanEnabled.ConnectChanged(func() {
-		m.updatePropWwanEnabled()
+		m.setPropWwanEnabled()
 	})
 
 	// load virtual global switches information from configuration file
@@ -143,9 +143,9 @@ func (m *Manager) initManager() {
 	})
 
 	// update property "State"
-	m.updatePropState()
+	m.setPropState()
 	nmManager.State.ConnectChanged(func() {
-		m.updatePropState()
+		m.setPropState()
 	})
 
 	m.agent = newAgent()
@@ -181,7 +181,7 @@ func (m *Manager) updateActiveConnections() {
 				// TODO fix dbus property issue
 				aconn.State = nmAConn.State.Get()
 				logger.Debug("active connection state changed:", aconn.State, nmAConn.State.Get())
-				m.updatePropActiveConnections()
+				m.setPropActiveConnections()
 			})
 
 			// dispatch vpn connection
@@ -206,7 +206,7 @@ func (m *Manager) updateActiveConnections() {
 			m.activeConnections = append(m.activeConnections, aconn)
 		}
 	}
-	m.updatePropActiveConnections()
+	m.setPropActiveConnections()
 	// logger.Debug("active connections changed:", m.ActiveConnections) // TODO test
 }
 

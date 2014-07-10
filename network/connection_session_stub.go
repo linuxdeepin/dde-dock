@@ -34,12 +34,12 @@ func (s *ConnectionSession) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (s *ConnectionSession) updateProps() {
-	s.updatePropType()
-	s.updatePropAvailableVirtualSections()
-	s.updatePropAvailableSections()
-	s.updatePropAvailableKeys()
-	s.updatePropErrors()
+func (s *ConnectionSession) setProps() {
+	s.setPropType()
+	s.setPropAvailableVirtualSections()
+	s.setPropAvailableSections()
+	s.setPropAvailableKeys()
+	s.setPropErrors()
 
 	// notify connection data changed at end, for that this was used
 	// by font-end to update widget value that with proeprty
@@ -50,22 +50,22 @@ func (s *ConnectionSession) updateProps() {
 	}
 }
 
-func (s *ConnectionSession) updatePropType() {
+func (s *ConnectionSession) setPropType() {
 	s.Type = getCustomConnectionType(s.data)
 	dbus.NotifyChange(s, "Type")
 }
 
-func (s *ConnectionSession) updatePropAvailableVirtualSections() {
+func (s *ConnectionSession) setPropAvailableVirtualSections() {
 	s.AvailableVirtualSections = getAvailableVsections(s.data)
 	dbus.NotifyChange(s, "AvailableVirtualSections")
 }
 
-func (s *ConnectionSession) updatePropAvailableSections() {
+func (s *ConnectionSession) setPropAvailableSections() {
 	s.AvailableSections = getAvailableSections(s.data)
 	dbus.NotifyChange(s, "AvailableSections")
 }
 
-func (s *ConnectionSession) updatePropAvailableKeys() {
+func (s *ConnectionSession) setPropAvailableKeys() {
 	s.AvailableKeys = make(map[string][]string) // clear structure
 	for _, section := range getAvailableSections(s.data) {
 		s.AvailableKeys[section] = generalGetSettingAvailableKeys(s.data, section)
@@ -73,7 +73,7 @@ func (s *ConnectionSession) updatePropAvailableKeys() {
 	dbus.NotifyChange(s, "AvailableKeys")
 }
 
-func (s *ConnectionSession) updatePropErrors() {
+func (s *ConnectionSession) setPropErrors() {
 	s.Errors = make(sessionErrors)
 	for _, section := range getAvailableSections(s.data) {
 		s.Errors[section] = make(sectionErrors)

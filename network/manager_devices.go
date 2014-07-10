@@ -59,7 +59,7 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device) {
 		m.config.syncDeviceState(dev.Path)
 		if m.DeviceStateChanged != nil { // TODO
 			m.DeviceStateChanged(string(dev.Path), dev.State)
-			m.updatePropDevices()
+			m.setPropDevices()
 		}
 	})
 
@@ -78,7 +78,7 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device) {
 			dev.ActiveAp = nmDevWireless.ActiveAccessPoint.Get()
 			dev.nmDevWireless.ActiveAccessPoint.ConnectChanged(func() {
 				dev.ActiveAp = nmDevWireless.ActiveAccessPoint.Get()
-				m.updatePropDevices()
+				m.setPropDevices()
 			})
 
 			// connect signal AccessPointAdded() and AccessPointRemoved()
@@ -170,7 +170,7 @@ func (m *Manager) addDevice(devPath dbus.ObjectPath) {
 	dev := m.newDevice(devPath)
 	devType := getCustomDeviceType(dev.nmDevType)
 	m.devices[devType] = m.doAddDevice(m.devices[devType], dev)
-	m.updatePropDevices()
+	m.setPropDevices()
 }
 func (m *Manager) doAddDevice(devs []*device, dev *device) []*device {
 	if m.isDeviceExists(devs, dev.Path) {
@@ -188,7 +188,7 @@ func (m *Manager) removeDevice(path dbus.ObjectPath) {
 			break
 		}
 	}
-	m.updatePropDevices()
+	m.setPropDevices()
 }
 func (m *Manager) doRemoveDevice(devs []*device, path dbus.ObjectPath) []*device {
 	i := m.getDeviceIndex(devs, path)

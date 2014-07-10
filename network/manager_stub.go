@@ -99,7 +99,7 @@ func (m *Manager) setWwanEnabled(enabled bool) {
 }
 func (m *Manager) setWiredEnabled(enabled bool) {
 	if m.NetworkingEnabled {
-		m.updatePropWiredEnabled(enabled)
+		m.setPropWiredEnabled(enabled)
 	} else {
 		// if NetworkingEnabled is off, turn it on, and only keep
 		// current global device switch alive
@@ -110,7 +110,7 @@ func (m *Manager) setWiredEnabled(enabled bool) {
 }
 func (m *Manager) setVpnEnabled(enabled bool) {
 	if m.NetworkingEnabled {
-		m.updatePropVpnEnabled(enabled)
+		m.setPropVpnEnabled(enabled)
 	} else {
 		// if NetworkingEnabled is off, turn it on, and only keep
 		// current global device switch alive
@@ -127,7 +127,7 @@ func (m *Manager) initPropNetworkingEnabled() {
 	}
 	m.doUpdatePropNetworkingEnabled()
 }
-func (m *Manager) updatePropNetworkingEnabled() {
+func (m *Manager) setPropNetworkingEnabled() {
 	if m.NetworkingEnabled == nmManager.NetworkingEnabled.Get() {
 		return
 	}
@@ -147,8 +147,8 @@ func (m *Manager) doUpdatePropNetworkingEnabled() {
 func (m *Manager) restoreGlobalDeviceSwitches() {
 	nmSetWirelessEnabled(m.config.LastWirelessEnabled)
 	nmSetWwanEnabled(m.config.LastWwanEnabled)
-	m.updatePropWiredEnabled(m.config.LastWiredEnabled)
-	m.updatePropVpnEnabled(m.config.LastVpnEnabled)
+	m.setPropWiredEnabled(m.config.LastWiredEnabled)
+	m.setPropVpnEnabled(m.config.LastVpnEnabled)
 }
 func (m *Manager) saveAndTurnOffGlobalDeviceSwitches() {
 	m.config.setLastWirelessEnabled(m.WirelessEnabled)
@@ -160,8 +160,8 @@ func (m *Manager) saveAndTurnOffGlobalDeviceSwitches() {
 func (m *Manager) doTurnOffGlobalDeviceSwitches() {
 	nmSetWirelessEnabled(false)
 	nmSetWwanEnabled(false)
-	m.updatePropWiredEnabled(false)
-	m.updatePropVpnEnabled(false)
+	m.setPropWiredEnabled(false)
+	m.setPropVpnEnabled(false)
 }
 
 func (m *Manager) initPropWirelessEnabled() {
@@ -175,12 +175,12 @@ func (m *Manager) initPropWirelessEnabled() {
 	}
 	m.doUpdatePropWirelessEnabled()
 }
-func (m *Manager) updatePropWirelessEnabled() {
+func (m *Manager) setPropWirelessEnabled() {
 	if m.WirelessEnabled == nmManager.WirelessEnabled.Get() {
 		return
 	}
 	m.WirelessEnabled = nmManager.WirelessEnabled.Get()
-	logger.Debug("updatePropWirelessEnabled", m.WirelessEnabled)
+	logger.Debug("setPropWirelessEnabled", m.WirelessEnabled)
 	// setup wireless devices switches
 	for _, devPath := range nmGetSpecialDevices(NM_DEVICE_TYPE_WIFI) {
 		if m.WirelessEnabled {
@@ -207,7 +207,7 @@ func (m *Manager) initPropWwanEnabled() {
 	}
 	m.doUpdatePropWwanEnabled()
 }
-func (m *Manager) updatePropWwanEnabled() {
+func (m *Manager) setPropWwanEnabled() {
 	if m.WwanEnabled == nmManager.WwanEnabled.Get() {
 		return
 	}
@@ -238,11 +238,11 @@ func (m *Manager) initPropWiredEnabled() {
 	}
 	m.doUpdatePropWiredEnabled()
 }
-func (m *Manager) updatePropWiredEnabled(enabled bool) {
+func (m *Manager) setPropWiredEnabled(enabled bool) {
 	if m.config.WiredEnabled == enabled {
 		return
 	}
-	logger.Debug("updatePropWiredEnabled", enabled)
+	logger.Debug("setPropWiredEnabled", enabled)
 	m.WiredEnabled = enabled
 	m.config.setWiredEnabled(enabled)
 	// setup wired devices switches
@@ -272,7 +272,7 @@ func (m *Manager) initPropVpnEnabled() {
 	// }
 	m.doUpdatePropVpnEnabled()
 }
-func (m *Manager) updatePropVpnEnabled(enabled bool) {
+func (m *Manager) setPropVpnEnabled(enabled bool) {
 	if m.config.VpnEnabled == enabled {
 		return
 	}
@@ -292,38 +292,38 @@ func (m *Manager) doUpdatePropVpnEnabled() {
 	dbus.NotifyChange(m, "VpnEnabled")
 }
 
-func (m *Manager) updatePropActiveConnections() {
+func (m *Manager) setPropActiveConnections() {
 	m.ActiveConnections, _ = marshalJSON(m.activeConnections)
 	dbus.NotifyChange(m, "ActiveConnections")
 	// logger.Debug("ActiveConnections:", m.ActiveConnections) // TODO test
 }
 
-func (m *Manager) updatePropState() {
+func (m *Manager) setPropState() {
 	m.State = nmGetManagerState()
 	dbus.NotifyChange(m, "State")
 }
 
-func (m *Manager) updatePropWiredDevices() {
+func (m *Manager) setPropWiredDevices() {
 	dbus.NotifyChange(m, "WiredDevices")
 }
-func (m *Manager) updatePropWirelessDevices() {
+func (m *Manager) setPropWirelessDevices() {
 	dbus.NotifyChange(m, "WirelessDevices")
 }
-func (m *Manager) updatePropDevices() {
+func (m *Manager) setPropDevices() {
 	m.Devices, _ = marshalJSON(m.devices)
 	dbus.NotifyChange(m, "Devices")
-	// logger.Debug("updatePropDevices", m.Devices) // TODO test
+	// logger.Debug("setPropDevices", m.Devices) // TODO test
 }
 
 // TODO
-func (m *Manager) updatePropAccessPoints() {
+func (m *Manager) setPropAccessPoints() {
 	// m.AccessPoints, _ = marshalJSON(m.accessPoints)
 	// dbus.NotifyChange(m, "AccessPoints")
 	// testJSON, _ := marshalJSON(m.accessPoints)
-	// logger.Debug("updatePropAccessPoints", testJSON) // TODO test
+	// logger.Debug("setPropAccessPoints", testJSON) // TODO test
 }
 
-func (m *Manager) updatePropConnections() {
+func (m *Manager) setPropConnections() {
 	m.Connections, _ = marshalJSON(m.connections)
 	// logger.Debug(m.Connections) // TODO test
 	dbus.NotifyChange(m, "Connections")

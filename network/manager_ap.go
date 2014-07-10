@@ -55,11 +55,11 @@ func newAccessPoint(apPath dbus.ObjectPath) (ap accessPoint, err error) {
 		nmAp: nmAp,
 		Path: apPath,
 	}
-	ap.updateProperties()
+	ap.setProperties()
 	return
 }
 
-func (a *accessPoint) updateProperties() {
+func (a *accessPoint) setProperties() {
 	a.Ssid = string(a.nmAp.Ssid.Get())
 	a.Secured = getApSecType(a.nmAp) != apSecNone
 	a.SecuredInEap = getApSecType(a.nmAp) == apSecEap
@@ -119,13 +119,13 @@ func (m *Manager) addAccessPoint(devPath, apPath dbus.ObjectPath) {
 
 	// connect properties changed
 	ap.nmAp.ConnectPropertiesChanged(func(properties map[string]dbus.Variant) {
-		ap.updateProperties()
+		ap.setProperties()
 		if m.AccessPointPropertiesChanged != nil {
 			apJSON, _ := marshalJSON(ap)
 			// logger.Debug(string(devPath), apJSON) // TODO test
 			m.AccessPointPropertiesChanged(string(devPath), apJSON)
 		}
-		m.updatePropAccessPoints()
+		m.setPropAccessPoints()
 	})
 
 	// emit signal
@@ -135,7 +135,7 @@ func (m *Manager) addAccessPoint(devPath, apPath dbus.ObjectPath) {
 		m.AccessPointAdded(string(devPath), apJSON)
 	}
 	m.accessPoints[devPath] = append(m.accessPoints[devPath], &ap)
-	m.updatePropAccessPoints()
+	m.setPropAccessPoints()
 }
 func (m *Manager) removeAccessPoint(devPath, apPath dbus.ObjectPath) {
 	// emit signal
@@ -151,7 +151,7 @@ func (m *Manager) removeAccessPoint(devPath, apPath dbus.ObjectPath) {
 		m.AccessPointRemoved(string(devPath), apJSON)
 	}
 	m.doRemoveAccessPoint(devPath, apPath)
-	m.updatePropAccessPoints()
+	m.setPropAccessPoints()
 }
 func (m *Manager) doRemoveAccessPoint(devPath, apPath dbus.ObjectPath) {
 	i := m.getAccessPointIndex(devPath, apPath)
@@ -271,7 +271,7 @@ func (m *Manager) CreateConnectionForAccessPoint(apPath, devPath dbus.ObjectPath
 	case apSecEap:
 		logicSetSettingVkWirelessSecurityKeyMgmt(session.data, "wpa-eap")
 	}
-	session.updateProps()
+	session.setProps()
 
 	// install dbus session
 	m.addConnectionSession(session)
