@@ -188,10 +188,8 @@ func (m *ClientManager) listenRootWindow() {
 					rApp.setLeader(activeWindow)
 				}
 
-				if appId == DDELauncher {
-					logger.Debug("active window is launcher")
-				} else {
-					logger.Debug("active window is not launcher")
+				logger.Info("active window is", appId)
+				if appId != DDELauncher {
 					LAUNCHER, err := launcher.NewLauncher(
 						"com.deepin.dde.launcher",
 						"/com/deepin/dde/launcher",

@@ -235,6 +235,10 @@ func (d *LauncherDBus) SendToDesktop(name string) {
 	sendToDesktop(name)
 }
 
+func (d *LauncherDBus) RemoveFromDesktop(name string) {
+	removeFromDesktop(name)
+}
+
 func (d *LauncherDBus) GetFavors() FavorItemList {
 	return getFavors()
 }

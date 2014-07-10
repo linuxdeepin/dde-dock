@@ -142,6 +142,10 @@ func (m *DockedAppManager) Dock(id, title, icon, cmd string) bool {
 		}
 	}
 	m.Docked(id)
+	app := ENTRY_MANAGER.runtimeApps[id]
+	if app != nil {
+		app.buildMenu()
+	}
 	return true
 }
 
@@ -155,6 +159,10 @@ func (m *DockedAppManager) Undock(id string) bool {
 		os.Remove(filepath.Join(scratchDir, id+".desktop"))
 		os.Remove(filepath.Join(scratchDir, id+".sh"))
 		m.Undocked(id)
+		app := ENTRY_MANAGER.runtimeApps[id]
+		if app != nil {
+			app.buildMenu()
+		}
 		return true
 	} else {
 		return false
