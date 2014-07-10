@@ -22,47 +22,24 @@
 package bluetooth
 
 import (
-	"io/ioutil"
-	"os"
-	"path"
-	"sync"
-)
-
-var (
-	bluetoothConfigFile = os.Getenv("HOME") + "/.config/deepin_bluetooth.json"
+	"pkg.linuxdeepin.com/lib/utils"
 )
 
 type config struct {
-	saveLock sync.Mutex
-	Powered  bool
+	core    utils.Config
+	Powered bool
 }
 
 func newConfig() (c *config) {
 	c = &config{}
+	c.core.SetConfigName("bluetooth")
+	logger.Info("config file:", c.core.GetConfigFile())
 	c.load()
 	return
 }
-
 func (c *config) load() {
-	if isFileExists(bluetoothConfigFile) {
-		fileContent, err := ioutil.ReadFile(bluetoothConfigFile)
-		if err != nil {
-			logger.Error(err)
-			return
-		}
-		unmarshalJSON(string(fileContent), c)
-	} else {
-		c.save()
-	}
+	c.core.Load(c)
 }
-
 func (c *config) save() {
-	c.saveLock.Lock()
-	defer c.saveLock.Unlock()
-	ensureDirExists(path.Dir(bluetoothConfigFile))
-	fileContent := marshalJSON(c)
-	err := ioutil.WriteFile(bluetoothConfigFile, []byte(fileContent), 0644)
-	if err != nil {
-		logger.Error(err)
-	}
+	c.core.Save(c)
 }
