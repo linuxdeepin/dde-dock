@@ -22,8 +22,9 @@
 package grub2
 
 import (
-	"pkg.linuxdeepin.com/lib/dbus"
 	"fmt"
+	"pkg.linuxdeepin.com/lib/dbus"
+	"strings"
 )
 
 const (
@@ -89,7 +90,10 @@ func (grub *Grub2) GetSimpleEntryTitles() ([]string, error) {
 	entryTitles := make([]string, 0)
 	for _, entry := range grub.entries {
 		if entry.parentSubMenu == nil && entry.entryType == MENUENTRY {
-			entryTitles = append(entryTitles, entry.getFullTitle())
+			title := entry.getFullTitle()
+			if !strings.Contains(title, "memtest86+") {
+				entryTitles = append(entryTitles, title)
+			}
 		}
 	}
 	if len(entryTitles) == 0 {
