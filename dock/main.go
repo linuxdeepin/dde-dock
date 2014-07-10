@@ -1,9 +1,9 @@
 package dock
 
 import (
+	"os"
 	"pkg.linuxdeepin.com/lib/dbus"
 	liblogger "pkg.linuxdeepin.com/lib/logger"
-	"os"
 )
 
 var (
