@@ -3,9 +3,6 @@ package dock
 import (
 	"bytes"
 	"dbus/com/deepin/daemon/dock"
-	. "pkg.linuxdeepin.com/lib/gettext"
-	"pkg.linuxdeepin.com/lib/gio-2.0"
-	"pkg.linuxdeepin.com/lib/glib-2.0"
 	"encoding/base64"
 	"fmt"
 	"github.com/BurntSushi/xgb/xproto"
@@ -18,6 +15,9 @@ import (
 	"github.com/BurntSushi/xgbutil/xwindow"
 	"io/ioutil"
 	"path/filepath"
+	. "pkg.linuxdeepin.com/lib/gettext"
+	"pkg.linuxdeepin.com/lib/gio-2.0"
+	"pkg.linuxdeepin.com/lib/glib-2.0"
 	"strings"
 )
 
@@ -212,54 +212,80 @@ func (app *RuntimeApp) buildMenu() {
 			return
 		}
 	}
-	isDocked, err := DOCKED_APP_MANAGER.IsDocked(app.Id) // TODO: status
+	isDocked, err := DOCKED_APP_MANAGER.IsDocked(app.Id)
 	if err != nil {
+		isDocked = false
 		logger.Warning("get docked status failed:", err)
 	}
-	logger.Debug(app.Id, "Item is docked:", isDocked)
-	dockItem := NewMenuItem(
-		Tr("_Dock"),
-		func() {
-			logger.Warning("dock item")
-			logger.Info("appid:", app.Id)
+	logger.Info(app.Id, "Item is docked:", isDocked)
+	var message string = ""
+	var action func() = nil
+	if isDocked {
+		logger.Info(app.Id, "change to undock")
+		message = Tr("_Undock")
+		action = func(id string) func() {
+			return func() {
+				app, ok := ENTRY_MANAGER.runtimeApps[id]
+				if !ok {
+					return
+				}
+				DOCKED_APP_MANAGER.Undock(app.Id)
+				app.buildMenu()
+			}
+		}(app.Id)
+	} else {
+		logger.Info(app.Id, "change to dock")
+		message = Tr("_Dock")
+		action = func(id string) func() {
+			return func() {
+				app, ok := ENTRY_MANAGER.runtimeApps[id]
+				if !ok {
+					return
+				}
+				logger.Warning("dock item")
+				logger.Info("appid:", app.Id)
 
-			var title, icon, exec string
-			core := app.createDesktopAppInfo()
-			if core == nil {
-				title = app.Id
-				// TODO:
-				icon = "application-default-icon"
-				execFile := filepath.Join(
-					scratchDir,
-					app.Id+".sh",
+				var title, icon, exec string
+				core := app.createDesktopAppInfo()
+				if core == nil {
+					title = app.Id
+					// TODO:
+					icon = "application-default-icon"
+					execFile := filepath.Join(
+						scratchDir,
+						app.Id+".sh",
+					)
+					ioutil.WriteFile(execFile, []byte(app.exec), 0744)
+					exec = execFile
+				} else {
+					defer core.Unref()
+					title = core.GetDisplayName()
+					icon = get_theme_icon(core.GetIcon().ToString(), 48)
+					exec = core.GetString(glib.KeyFileDesktopKeyExec)
+				}
+
+				logger.Info("id", app.Id, "title", title, "icon", icon,
+					"exec", exec)
+				_, err = DOCKED_APP_MANAGER.Dock(
+					app.Id,
+					title,
+					icon,
+					exec,
 				)
-				ioutil.WriteFile(execFile, []byte(app.exec), 0744)
-				exec = execFile
-			} else {
-				defer core.Unref()
-				title = core.GetDisplayName()
-				icon = get_theme_icon(core.GetIcon().ToString(), 48)
-				exec = core.GetString(glib.KeyFileDesktopKeyExec)
+				if err != nil {
+					logger.Warning("Docked failed: ", err)
+				}
+				app.buildMenu()
 			}
+		}(app.Id)
+	}
 
-			logger.Info("id", app.Id, "title", title, "icon", icon,
-				"exec", exec)
-			_, err = DOCKED_APP_MANAGER.Dock(
-				app.Id,
-				title,
-				icon,
-				exec,
-			)
-			if err != nil {
-				logger.Warning("Docked failed: ", err)
-			}
-			app.buildMenu()
-		},
-		!isDocked,
-	)
+	logger.Info(app.Id, "New Menu Item:", message)
+	dockItem := NewMenuItem(message, action, true)
 	app.coreMenu.AppendItem(dockItem)
 
 	app.Menu = app.coreMenu.GenerateJSON()
+	app.notifyChanged()
 }
 
 func (app *RuntimeApp) setChangedCB(cb func()) {

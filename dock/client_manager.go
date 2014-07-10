@@ -5,7 +5,7 @@ import (
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/ewmh"
-	// "github.com/BurntSushi/xgbutil/icccm"
+	"github.com/BurntSushi/xgbutil/icccm"
 	"github.com/BurntSushi/xgbutil/xevent"
 	"github.com/BurntSushi/xgbutil/xprop"
 	"github.com/BurntSushi/xgbutil/xwindow"
@@ -19,8 +19,13 @@ var (
 	DEEPIN_SCREEN_VIEWPORT, _               = xprop.Atm(XU, "DEEPIN_SCREEN_VIEWPORT")
 	lastActive                string        = ""
 	activeWindow              xproto.Window = 0
-	currentViewport, _                      = xprop.PropValNums(xprop.GetProperty(XU, XU.RootWin(),
-		"DEEPIN_SCREEN_VIEWPORT"))
+	currentViewport, _                      = xprop.PropValNums(
+		xprop.GetProperty(
+			XU,
+			XU.RootWin(),
+			"DEEPIN_SCREEN_VIEWPORT",
+		))
+	isLauncherShown bool = false
 )
 
 const (
@@ -62,6 +67,10 @@ func (m *ClientManager) CloseWindow(xid uint32) bool {
 
 func (m *ClientManager) ToggleShowDesktop() {
 	exec.Command("/usr/lib/deepin-daemon/desktop-toggle").Run()
+}
+
+func (m *ClientManager) IsLauncherShown() bool {
+	return isLauncherShown
 }
 
 func walkClientList(pre func(xproto.Window) bool) bool {
@@ -130,11 +139,37 @@ func hasMaximizeClient() bool {
 	return walkClientList(hasMaximizeClientPre)
 }
 
+func isDeepinLauncher(xid xproto.Window) bool {
+	res, err := icccm.WmClassGet(XU, xid)
+	if err != nil {
+		return false
+	}
+
+	return res.Instance == "dde-launcher"
+}
+
 func (m *ClientManager) listenRootWindow() {
 	var update = func() {
 		list, err := ewmh.ClientListGet(XU)
 		if err != nil {
 			logger.Warning("Can't Get _NET_CLIENT_LIST", err)
+		}
+		isLauncherShown = false
+		for _, xid := range list {
+			if !isDeepinLauncher(xid) {
+				continue
+			}
+
+			winProps, err :=
+				xproto.GetWindowAttributes(XU.Conn(),
+					xid).Reply()
+			if err != nil {
+				break
+			}
+			if winProps.MapState == xproto.MapStateViewable {
+				isLauncherShown = true
+			}
+			break
 		}
 		ENTRY_MANAGER.runtimeAppChangged(list)
 	}
@@ -157,9 +192,10 @@ func (m *ClientManager) listenRootWindow() {
 					logger.Debug("active window is launcher")
 				} else {
 					logger.Debug("active window is not launcher")
-					LAUNCHER, err :=
-						launcher.NewLauncher("com.deepin.dde.launcher",
-							"/com/deepin/dde/launcher")
+					LAUNCHER, err := launcher.NewLauncher(
+						"com.deepin.dde.launcher",
+						"/com/deepin/dde/launcher",
+					)
 					if err != nil {
 						logger.Debug(err)
 					} else {

@@ -22,12 +22,12 @@
 package accounts
 
 import (
-	dutils "pkg.linuxdeepin.com/lib/utils"
 	"github.com/howeyc/fsnotify"
 	"io/ioutil"
 	"math/rand"
 	"os"
 	"path"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 	"regexp"
 	"strings"
 )
@@ -81,7 +81,7 @@ func getRandUserIcon() string {
 func getIconList(dir string) []string {
 	iconfd, err := os.Open(dir)
 	if err != nil {
-		logger.Errorf("Open '%s' failed: %v",
+		logger.Warningf("Open '%s' failed: %v",
 			dir, err)
 		return []string{}
 	}
@@ -109,7 +109,7 @@ func getIconList(dir string) []string {
 func getAdministratorList() []string {
 	contents, err := ioutil.ReadFile(ETC_GROUP)
 	if err != nil {
-		logger.Errorf("ReadFile '%s' failed: %s", ETC_PASSWD, err)
+		logger.Warningf("ReadFile '%s' failed: %s", ETC_PASSWD, err)
 		panic(err)
 	}
 
@@ -169,7 +169,7 @@ func setAutomaticLogin(name string) {
 				name)
 		}
 	default:
-		logger.Error("No support display manager")
+		logger.Warning("No support display manager")
 	}
 }
 
@@ -226,7 +226,7 @@ func isAutoLogin(username string) bool {
 func getDefaultDisplayManager() string {
 	contents, err := ioutil.ReadFile(ETC_DISPLAY_MANAGER)
 	if err != nil {
-		logger.Errorf("ReadFile '%s' failed: %s",
+		logger.Warningf("ReadFile '%s' failed: %s",
 			ETC_DISPLAY_MANAGER, err)
 		panic(err)
 	}
@@ -270,7 +270,7 @@ func newUser(path string) *User {
 
 	var err error
 	if obj.watcher, err = fsnotify.NewWatcher(); err != nil {
-		logger.Error("New watcher in newUser failed:", err)
+		logger.Warning("New watcher in newUser failed:", err)
 		panic(err)
 	}
 	obj.quitFlag = make(chan bool)

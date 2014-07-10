@@ -28,7 +28,7 @@
 #define MOUSE_NAME_KEY "mouse"
 #define KEYBOARD_KEY_NAME "keyboard"
 
-void listen_device_changed ();
+int listen_device_changed ();
 
 // TouchPad Set Func
 void set_tpad_enable(int enable);
@@ -38,13 +38,14 @@ void set_two_finger_scroll(int enable_vert, int enable_horiz);
 void set_tab_to_click (int state, int left_handed);
 
 // Mouse Set Func
-void set_motion (char *dev_name, 
+void set_motion (char *dev_name,
         double motion_acceleration, int motion_threshold);
 void set_middle_button (int enable);
 void set_left_handed (int left_handed);
 
 // Keyboard Set Func
-void set_keyboard_repeat(int repeat, 
+void set_keyboard_repeat(int repeat,
         unsigned int interval, unsigned int delay);
 
 #endif
+

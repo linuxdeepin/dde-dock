@@ -92,9 +92,9 @@ func (m *HideStateManager) UpdateState() {
 		state = HideStateHidding
 	}
 
-	if lastActive == DDELauncher {
-		logger.Info(lastActive)
-		state = HideStateHidding
+	if isLauncherShown {
+		logger.Infof("launcher is opend, show dock")
+		state = HideStateShowing
 	}
 
 	m.SetState(state)
