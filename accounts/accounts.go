@@ -164,13 +164,18 @@ func detectedViaShadowFile(info *UserInfo) bool {
 			continue
 		}
 		pw := strs[1]
-		//加盐密码最短为13
-		if len(pw) < 13 {
+
+		if pw[0] == '*' {
 			break
 		}
 
 		if pw[0] == '!' {
 			info.Locked = true
+		}
+
+		//加盐密码最短为13
+		if len(pw) < 13 {
+			break
 		}
 
 		isHuman = true
