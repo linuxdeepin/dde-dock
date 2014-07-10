@@ -230,7 +230,6 @@ func (app *RuntimeApp) buildMenu() {
 					return
 				}
 				DOCKED_APP_MANAGER.Undock(app.Id)
-				app.buildMenu()
 			}
 		}(app.Id)
 	} else {
@@ -275,7 +274,6 @@ func (app *RuntimeApp) buildMenu() {
 				if err != nil {
 					logger.Warning("Docked failed: ", err)
 				}
-				app.buildMenu()
 			}
 		}(app.Id)
 	}

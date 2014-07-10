@@ -79,7 +79,8 @@ func isUsernameValid(username string) bool {
 	groupList := getGroupnameList()
 
 	if strIsInList(username, userList) ||
-		strIsInList(username, groupList) {
+		strIsInList(username, groupList) ||
+		strings.ToLower(username) == "guest" {
 		return false
 	}
 
