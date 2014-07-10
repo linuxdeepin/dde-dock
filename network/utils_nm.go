@@ -816,6 +816,10 @@ func nmGetDeviceActiveConnectionUuid(devPath dbus.ObjectPath) (uuid string, err 
 }
 
 func nmGetDeviceActiveConnectionData(devPath dbus.ObjectPath) (data connectionData, err error) {
+	if !isDeviceStateInActivating(nmGetDeviceState(devPath)) {
+		err = fmt.Errorf("device is inactivated %s", devPath)
+		return
+	}
 	acPath := nmGetDeviceActiveConnection(devPath)
 	aconn, err := nmNewActiveConnection(acPath)
 	if err != nil {
