@@ -37,7 +37,7 @@ func (b *Bluetooth) OnPropertiesChanged(name string, oldv interface{}) {
 	case "PrimaryAdapter":
 		oldPrimaryAdapter, _ := oldv.(string)
 		if b.PrimaryAdapter != oldPrimaryAdapter {
-			b.updatePropPrimaryAdapter(dbus.ObjectPath(b.PrimaryAdapter))
+			b.setPropPrimaryAdapter(dbus.ObjectPath(b.PrimaryAdapter))
 			b.syncConfigPowered()
 		}
 	case "Powered":
@@ -46,12 +46,12 @@ func (b *Bluetooth) OnPropertiesChanged(name string, oldv interface{}) {
 		}
 		// else {
 		// 	b.Powered.SetValue(false)
-		// 	b.updatePropPowered()
+		// 	b.setPropPowered()
 		// }
 	}
 }
 
-func (b *Bluetooth) updatePropPrimaryAdapter(apath dbus.ObjectPath) {
+func (b *Bluetooth) setPropPrimaryAdapter(apath dbus.ObjectPath) {
 	b.PrimaryAdapter = string(apath)
 
 	// power on primary adapter and power off other adapters
@@ -86,7 +86,7 @@ func (b *Bluetooth) updateAdapterScanState(apath dbus.ObjectPath) {
 	}
 }
 
-func (b *Bluetooth) updatePropAdapters() {
+func (b *Bluetooth) setPropAdapters() {
 	b.Adapters = marshalJSON(b.adapters)
 	dbus.NotifyChange(b, "Adapters")
 	logger.Debug(b.Adapters) // TODO test
@@ -94,25 +94,25 @@ func (b *Bluetooth) updatePropAdapters() {
 	// TODO update alias properties for primary adapter
 }
 
-func (b *Bluetooth) updatePropDevices() {
+func (b *Bluetooth) setPropDevices() {
 	devices := b.devices[dbus.ObjectPath(b.PrimaryAdapter)]
 	b.Devices = marshalJSON(devices)
 	dbus.NotifyChange(b, "Devices")
 	logger.Debug(b.Devices) // TODO test
 }
 
-func (b *Bluetooth) updatePropAlias() {
+func (b *Bluetooth) setPropAlias() {
 	dbus.NotifyChange(b, "Alias")
 }
 
-func (b *Bluetooth) updatePropPowered() {
+func (b *Bluetooth) setPropPowered() {
 	dbus.NotifyChange(b, "Powered")
 }
 
-func (b *Bluetooth) updatePropDiscoverable() {
+func (b *Bluetooth) setPropDiscoverable() {
 	dbus.NotifyChange(b, "Discoverable")
 }
 
-func (b *Bluetooth) updatePropDiscoverableTimeout() {
+func (b *Bluetooth) setPropDiscoverableTimeout() {
 	dbus.NotifyChange(b, "DiscoverableTimeout")
 }

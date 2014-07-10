@@ -67,28 +67,28 @@ func (b *Bluetooth) newDevice(dpath dbus.ObjectPath, data map[string]dbus.Varian
 func (d *device) connectProeprties() {
 	d.bluezDevice.Connected.ConnectChanged(func() {
 		d.Connected = d.bluezDevice.Connected.Get()
-		bluetooth.updatePropDevices()
+		bluetooth.setPropDevices()
 	})
 	d.bluezDevice.Alias.ConnectChanged(func() {
 		d.Alias = d.bluezDevice.Alias.Get()
-		bluetooth.updatePropDevices()
+		bluetooth.setPropDevices()
 	})
 	d.bluezDevice.Trusted.ConnectChanged(func() {
 		d.Trusted = d.bluezDevice.Trusted.Get()
-		bluetooth.updatePropDevices()
+		bluetooth.setPropDevices()
 	})
 	d.bluezDevice.Paired.ConnectChanged(func() {
 		d.Paired = d.bluezDevice.Paired.Get()
-		bluetooth.updatePropDevices()
+		bluetooth.setPropDevices()
 	})
 	d.bluezDevice.Icon.ConnectChanged(func() {
 		d.Icon = d.bluezDevice.Icon.Get()
-		bluetooth.updatePropDevices()
+		bluetooth.setPropDevices()
 	})
 	d.bluezDevice.RSSI.ConnectChanged(func() {
 		d.RSSI = d.bluezDevice.RSSI.Get()
 		d.fixRssi()
-		bluetooth.updatePropDevices()
+		bluetooth.setPropDevices()
 	})
 }
 func (d *device) resetConnect() {
@@ -116,7 +116,7 @@ func (b *Bluetooth) addDevice(dpath dbus.ObjectPath, data map[string]dbus.Varian
 		return
 	}
 	b.devices[d.adapter] = append(b.devices[d.adapter], d)
-	b.updatePropDevices()
+	b.setPropDevices()
 
 	// send signal DeviceAdded() if device is managed by primary adapter
 	if dbus.ObjectPath(b.PrimaryAdapter) == d.adapter {
@@ -130,7 +130,7 @@ func (b *Bluetooth) removeDevice(dpath dbus.ObjectPath) {
 	for apath, devices := range b.devices {
 		if b.isDeviceExists(devices, dpath) {
 			b.devices[apath] = b.doRemoveDevice(devices, dpath)
-			b.updatePropDevices()
+			b.setPropDevices()
 
 			// send signal DeviceRemoved() if device is managed by primary adapter
 			if dbus.ObjectPath(b.PrimaryAdapter) == apath {

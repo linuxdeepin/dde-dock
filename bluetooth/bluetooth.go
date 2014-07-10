@@ -119,7 +119,7 @@ func (b *Bluetooth) initBluetooth() {
 
 	// b.PrimaryAdapter.ConnectChanged(func() {
 	// 	b.Powered =
-	// 		b.updatePropPowered()
+	// 		b.setPropPowered()
 	// }
 	// )
 
@@ -127,7 +127,7 @@ func (b *Bluetooth) initBluetooth() {
 	// TODO adapter not exists, and add a new adapter temporary
 	if b.Powered != nil {
 		b.Powered.SetValue(b.config.Powered)
-		b.updatePropPowered()
+		b.setPropPowered()
 		b.syncConfigPowered()
 	}
 }
@@ -143,7 +143,7 @@ func (b *Bluetooth) handleInterfacesAdded(path dbus.ObjectPath, data map[string]
 	if _, ok := data[dbusBluezIfsAdapter]; ok {
 		b.addAdapter(path)
 		if !b.isPrimaryAdapterExists() {
-			b.updatePropPrimaryAdapter(path)
+			b.setPropPrimaryAdapter(path)
 		}
 	}
 	if _, ok := data[dbusBluezIfsDevice]; ok {
@@ -155,9 +155,9 @@ func (b *Bluetooth) handleInterfacesRemoved(path dbus.ObjectPath, interfaces []s
 		b.removeAdapter(path)
 		if dbus.ObjectPath(b.PrimaryAdapter) == path {
 			if len(b.adapters) > 0 {
-				b.updatePropPrimaryAdapter(b.adapters[0].Path)
+				b.setPropPrimaryAdapter(b.adapters[0].Path)
 			} else {
-				b.updatePropPrimaryAdapter("")
+				b.setPropPrimaryAdapter("")
 			}
 		}
 	}
