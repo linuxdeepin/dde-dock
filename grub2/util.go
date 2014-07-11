@@ -78,6 +78,11 @@ func isFileExists(file string) bool {
 
 // Get all screen's best resolution and choose a smaller one for there
 // is no screen is primary.
+func getPrimaryScreenBestResolutionStr() (r string) {
+	w, h := getPrimaryScreenBestResolution()
+	r = fmt.Sprintf("%dx%d", w, h)
+	return
+}
 func getPrimaryScreenBestResolution() (w uint16, h uint16) {
 	w, h = 1024, 768 // default value
 

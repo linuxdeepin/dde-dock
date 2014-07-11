@@ -103,7 +103,6 @@ func (grub *Grub2) doInitGrub2() {
 		logger.Error(err)
 	}
 	if needUpdate := grub.fixSettings(); needUpdate {
-		grub.writeSettings()
 		grub.notifyUpdate()
 	}
 	grub.setPropDefaultEntry(grub.getSettingDefaultEntry())
@@ -173,7 +172,6 @@ func (grub *Grub2) stopUpdateLoop() {
 
 func (grub *Grub2) resetGfxmodeIfNeed() {
 	if needUpdate := grub.resetGfxmode(); needUpdate {
-		grub.writeSettings()
 		grub.notifyUpdate()
 
 		// regenerate theme background
@@ -262,7 +260,6 @@ func (grub *Grub2) fixSettings() (needUpdate bool) {
 
 func (grub *Grub2) writeSettings() {
 	fileContent := grub.getSettingContentToSave()
-
 	grub2extDoWriteSettings(fileContent)
 }
 
@@ -453,6 +450,7 @@ func (grub *Grub2) getSettingTheme() string {
 
 func (grub *Grub2) setSettingDefaultEntry(title string) {
 	grub.settings["GRUB_DEFAULT"] = title
+	grub.writeSettings()
 }
 
 func (grub *Grub2) setSettingTimeout(timeout int32) {
@@ -462,14 +460,17 @@ func (grub *Grub2) setSettingTimeout(timeout int32) {
 		timeoutStr := strconv.FormatInt(int64(timeout), 10)
 		grub.settings["GRUB_TIMEOUT"] = timeoutStr
 	}
+	grub.writeSettings()
 }
 
 func (grub *Grub2) setSettingGfxmode(gfxmode string) {
 	grub.settings["GRUB_GFXMODE"] = gfxmode
+	grub.writeSettings()
 }
 
 func (grub *Grub2) setSettingTheme(themeFile string) {
 	grub.settings["GRUB_THEME"] = themeFile
+	grub.writeSettings()
 }
 
 func (grub *Grub2) getSettingContentToSave() string {

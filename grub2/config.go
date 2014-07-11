@@ -36,6 +36,7 @@ type config struct {
 func newConfig() (c *config) {
 	c = &config{}
 	c.NeedUpdate = true
+	c.Resolution = getPrimaryScreenBestResolutionStr()
 	c.core.SetConfigFile(configFile)
 	logger.Info("config file:", c.core.GetConfigFile())
 	return

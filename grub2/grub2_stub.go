@@ -72,7 +72,6 @@ func (grub *Grub2) OnPropertiesChanged(name string, oldv interface{}) {
 		}
 		grub.setPropResolution(grub.Resolution)
 	}
-	grub.writeSettings()
 	grub.notifyUpdate()
 }
 
@@ -119,8 +118,7 @@ func (grub *Grub2) GetSimpleEntryTitles() ([]string, error) {
 
 func (grub *Grub2) GetAvailableResolutions() (modesJSON string, err error) {
 	type mode struct{ Text, Value string }
-	w, h := getPrimaryScreenBestResolution()
-	currentResolution := fmt.Sprintf("%dx%d", w, h)
+	currentResolution := getPrimaryScreenBestResolutionStr()
 	appendModeUniq := func(modes []mode, r string) []mode {
 		if r != currentResolution {
 			modes = append(modes, mode{Text: r, Value: r})
