@@ -63,6 +63,12 @@ func (grub *Grub2) OnPropertiesChanged(name string, oldv interface{}) {
 			return
 		}
 		grub.setPropTimeout(grub.Timeout)
+	case "Resolution":
+		oldvStr, _ := oldv.(string)
+		if grub.Resolution == oldvStr {
+			return
+		}
+		grub.setPropResolution(grub.Resolution)
 	}
 	grub.writeSettings()
 	grub.notifyUpdate()
@@ -70,14 +76,20 @@ func (grub *Grub2) OnPropertiesChanged(name string, oldv interface{}) {
 
 func (grub *Grub2) setPropDefaultEntry(value string) {
 	grub.DefaultEntry = value
-	grub.setSettingDefaultEntry(grub.DefaultEntry)
+	grub.setSettingDefaultEntry(value)
 	dbus.NotifyChange(grub, "DefaultEntry")
 }
 
 func (grub *Grub2) setPropTimeout(value int32) {
 	grub.Timeout = value
-	grub.setSettingTimeout(grub.Timeout)
+	grub.setSettingTimeout(value)
 	dbus.NotifyChange(grub, "Timeout")
+}
+
+func (grub *Grub2) setPropResolution(value string) {
+	grub.Resolution = value
+	grub.setSettingGfxmode(value)
+	dbus.NotifyChange(grub, "Resolution")
 }
 
 func (grub *Grub2) setPropUpdating(value bool) {
@@ -101,6 +113,19 @@ func (grub *Grub2) GetSimpleEntryTitles() ([]string, error) {
 		return entryTitles, err
 	}
 	return entryTitles, nil
+}
+
+func (grub *Grub2) GetAvailableResolutions() (modes []string) {
+	w, h := getPrimaryScreenBestResolution()
+	modes = appendStrArrayUnique(modes, fmt.Sprintf("%dx%d", w, h))
+	modes = appendStrArrayUnique(modes, "1440x900")
+	modes = appendStrArrayUnique(modes, "1400x1050")
+	modes = appendStrArrayUnique(modes, "1280x800")
+	modes = appendStrArrayUnique(modes, "1280x720")
+	modes = appendStrArrayUnique(modes, "1366x768")
+	modes = appendStrArrayUnique(modes, "1024x768")
+	modes = appendStrArrayUnique(modes, "800x600")
+	return
 }
 
 // Reset reset all configuretion.

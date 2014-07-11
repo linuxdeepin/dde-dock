@@ -23,10 +23,10 @@ package grub2
 
 import (
 	"bufio"
-	"pkg.linuxdeepin.com/lib/dbus"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"pkg.linuxdeepin.com/lib/dbus"
 	"regexp"
 	"strconv"
 	"strings"
@@ -72,6 +72,7 @@ type Grub2 struct {
 
 	DefaultEntry string `access:"readwrite"`
 	Timeout      int32  `access:"readwrite"`
+	Resolution   string `access:"readwrite"`
 	Updating     bool
 }
 
@@ -440,12 +441,12 @@ func (grub *Grub2) getSettingDefaultEntry() string {
 	}
 
 	// if GRUB_DEFAULE exist and is a valid entry name, just return it
-	if stringInSlice(value, simpleEntryTitles) {
+	if isStringInArray(value, simpleEntryTitles) {
 		return value
 	}
 
 	// if GRUB_DEFAULE exist and is a entry in submenu, return the first entry's title
-	if stringInSlice(value, entryTitles) {
+	if isStringInArray(value, entryTitles) {
 		return firstEntry
 	}
 

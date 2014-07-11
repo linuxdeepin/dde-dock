@@ -50,13 +50,23 @@ func unquoteString(str string) string {
 	return str
 }
 
-func stringInSlice(a string, list []string) bool {
+func isStringInArray(a string, list []string) bool {
 	for _, b := range list {
 		if b == a {
 			return true
 		}
 	}
 	return false
+}
+
+func appendStrArrayUnique(a1 []string, a2 ...string) (a []string) {
+	a = a1
+	for _, s := range a2 {
+		if !isStringInArray(s, a) {
+			a = append(a, s)
+		}
+	}
+	return
 }
 
 func isFileExists(file string) bool {
