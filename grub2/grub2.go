@@ -23,7 +23,6 @@ package grub2
 
 import (
 	"bufio"
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"pkg.linuxdeepin.com/lib/dbus"
@@ -44,7 +43,6 @@ const (
 	grubMenuFile       = "/boot/grub/grub.cfg"
 	grubUpdateExe      = "/usr/sbin/update-grub"
 	grubTimeoutDisable = -2
-	grubCacheFile      = "/var/cache/dde-daemon/grub2.json"
 )
 
 var (
@@ -52,18 +50,13 @@ var (
 	entryRegexpDoubleQuote = regexp.MustCompile(`^ *(menuentry|submenu) +"(.*?)".*$`)
 )
 
-// CacheConfig store the key-values in cache file "/var/cache/dde-daemon/grub2.json".
-type CacheConfig struct {
-	NeedUpdate bool // mark to generate grub configuration
-}
-
 // Grub2 is a dbus object, and provide properties and methods to setup
 // grub2 and deepin grub2 theme.
 type Grub2 struct {
 	entries  []Entry
 	settings map[string]string
 	theme    *Theme
-	config   CacheConfig
+	config   *config
 
 	needUpdateLock     sync.Mutex
 	needUpdate         bool
@@ -80,7 +73,7 @@ type Grub2 struct {
 func NewGrub2() *Grub2 {
 	grub := &Grub2{}
 	grub.theme = NewTheme()
-	grub.config = CacheConfig{true} // default value
+	grub.config = newConfig()
 	grub.chanUpdate = make(chan int)
 	grub.chanStopUpdateLoop = make(chan int)
 	return grub
@@ -116,13 +109,10 @@ func (grub *Grub2) doInitGrub2() {
 	grub.setPropDefaultEntry(grub.getSettingDefaultEntry())
 	grub.setPropTimeout(grub.getSettingTimeout())
 
-	if isFileExists(grubCacheFile) {
-		err = grub.readCacheConfig()
-		if err != nil {
-			logger.Error(err)
-		}
+	if grub.config.core.IsConfigFileExists() {
+		grub.config.load()
 	} else {
-		grub.writeCacheConfig()
+		grub.config.save()
 	}
 	if grub.config.NeedUpdate {
 		grub.notifyUpdate()
@@ -156,14 +146,14 @@ func (grub *Grub2) startUpdateLoop() {
 				if grub.config.NeedUpdate {
 					grub.setPropUpdating(true)
 
-					grub.writeCacheConfig()
+					grub.config.save()
 
 					logger.Info("notify to generate a new grub configuration file")
 					grub2extDoGenerateGrubConfig()
 					logger.Info("generate grub configuration finished")
 
 					grub.config.NeedUpdate = false
-					grub.writeCacheConfig()
+					grub.config.save()
 
 					// set property "Updating" to false only if don't
 					// need update any more
@@ -274,32 +264,6 @@ func (grub *Grub2) writeSettings() {
 	fileContent := grub.getSettingContentToSave()
 
 	grub2extDoWriteSettings(fileContent)
-}
-
-func (grub *Grub2) readCacheConfig() (err error) {
-	fileContent, err := ioutil.ReadFile(grubCacheFile)
-	if err != nil {
-		logger.Error(err.Error())
-		return
-	}
-	err = json.Unmarshal(fileContent, &grub.config)
-	if err != nil {
-		logger.Error(err.Error())
-		return
-	}
-	return
-}
-
-func (grub *Grub2) writeCacheConfig() (err error) {
-	fileContent, err := json.Marshal(grub.config)
-	if err != nil {
-		logger.Error(err.Error())
-		return
-	}
-
-	grub2extDoWriteCacheConfig(string(fileContent))
-
-	return
 }
 
 func (grub *Grub2) parseEntries(fileContent string) (err error) {
