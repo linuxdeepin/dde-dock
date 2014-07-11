@@ -160,6 +160,197 @@ void _init()
 
 
 static
+char* _find_app_id_by_filter(const char* name, const char* keys_str, GKeyFile* filter)
+{
+    if (filter == NULL) return NULL;
+    g_assert(name != NULL && keys_str != NULL);
+    if (g_key_file_has_group(filter, name)) {
+        gsize size = 0;
+        char** keys = g_key_file_get_keys(filter, name, &size, NULL);
+        gsize i=0;
+        for (; i<size; i++) {
+            if (g_strstr_len(keys_str , -1, keys[i])) {
+                char* value = g_key_file_get_string(filter, name, keys[i], NULL);
+                g_strfreev(keys);
+                return value;
+            }
+        }
+        g_strfreev(keys);
+        /*g_debug("find \"%s\" in filter.ini but can't find the really desktop file\n", name);*/
+    }
+    return NULL;
+}
+
+
+char* find_app_id(const char* exec_name, const char* key, int filter)
+{
+    if (_is_init == FALSE) {
+        _init();
+    }
+    g_assert(exec_name != NULL && key != NULL);
+    g_debug("[%s] exec_name: %s, key: %s", __func__, exec_name, key);
+    switch (filter) {
+        case APPID_FILTER_WMCLASS:
+            return _find_app_id_by_filter(exec_name, key, filter_wmclass);
+        case APPID_FILTER_WMNAME:
+            return _find_app_id_by_filter(exec_name, key, filter_wmname);
+        case APPID_FILTER_ARGS:
+            return _find_app_id_by_filter(exec_name, key, filter_args);
+        case APPID_FILTER_WMINSTANCE:
+            return _find_app_id_by_filter(exec_name, key, filter_wminstance);
+        case APPID_FILTER_ICON_NAME:
+            return _find_app_id_by_filter(exec_name, key, filter_icon_name);
+        case APPID_FILTER_EXEC_NAME: {
+            char* id = _find_app_id_by_filter(exec_name, key, filter_exec_name);
+            if (id == NULL)
+                id = g_strdup(exec_name);
+            return id;
+        }
+        default:
+            g_error("filter %d is not support !", filter);
+    }
+    return NULL;
+}
+
+
+gboolean is_app_in_white_list(const char* name)
+{
+    if (!_is_init) {
+        _init();
+    }
+    return is_chrome_app(name) || g_hash_table_contains(white_apps, name);
+}
+
+
+gboolean is_deepin_app_id(const char* app_id)
+{
+    if (deepin_icons == NULL) {
+        deepin_icons = g_key_file_new();
+        if (!g_key_file_load_from_file(deepin_icons, DEEPIN_ICONS_PATH, G_KEY_FILE_NONE, NULL)) {
+            g_key_file_free(deepin_icons);
+            deepin_icons = NULL;
+            return FALSE;
+        }
+    }
+    return g_key_file_has_group(deepin_icons, app_id);
+
+}
+
+
+int get_deepin_app_id_operator(const char* app_id)
+{
+    g_assert(deepin_icons != NULL);
+    return g_key_file_get_integer(deepin_icons, app_id, "operator", NULL);
+}
+
+
+char* get_deepin_app_id_value(const char* app_id)
+{
+    g_assert(deepin_icons != NULL);
+    return g_key_file_get_string(deepin_icons, app_id, "value", NULL);
+}
+
+
+gboolean is_chrome_app(char const* name)
+{
+    return g_str_has_prefix(name, "chrome-");
+}
+
+
+char* guess_app_id(long s_pid, const char* instance_name, const char* wmname, const char* wmclass, const char* icon_name)
+{
+    // g_setenv("G_MESSAGES_DEBUG", "all", FALSE);
+    if (s_pid == 0) return g_strdup(wmclass);
+    char* app_id = NULL;
+
+    char* exec_fullname = NULL;
+    char* exec_name = NULL;
+    char* exec_args = NULL;
+    get_pid_info(s_pid, &exec_fullname, &exec_args);
+    exec_name = g_path_get_basename(exec_fullname);
+    g_debug("[%s] exec_fullname: %s, exec_args: %s", __func__, exec_fullname, exec_args);
+    if (exec_name != NULL) {
+        if (g_strcmp0(exec_name,  "firefox") == 0 && g_strstr_len(exec_args, -1, "--app")) {
+            g_free(exec_fullname);
+            g_free(exec_name);
+            g_free(exec_args);
+            int ppid = get_parent_pid(s_pid);
+            if (ppid != 0) {
+                return guess_app_id(ppid, instance_name, wmname, wmclass, icon_name);
+            }
+        }
+
+        if (g_str_has_prefix(exec_name, "google-chrome-") || g_strcmp0(exec_name, "chrome") == 0) {
+            g_free(exec_name);
+            exec_name = g_strdup("google-chrome");
+        }
+
+        if (app_id == NULL) {
+            GKeyFile* f = load_app_config(FILTER_FILE);
+            if (f != NULL && wmname != NULL) {
+                app_id = g_key_file_get_string(f, wmname, "appid", NULL);
+            }
+            g_key_file_unref(f);
+            g_debug("[%s] get app id from StartupWMClass filter: %s", __func__, app_id);
+        }
+        if (app_id == NULL) {
+            app_id = find_app_id(exec_name, wmname, APPID_FILTER_WMNAME);
+            g_debug("[%s] get from wmname %s", __func__, app_id);
+        }
+        if (app_id == NULL && wmname != NULL) {
+            app_id = find_app_id(exec_name, wmname, APPID_FILTER_WMINSTANCE);
+            g_debug("[%s] get from wmname %s", __func__, app_id);
+        }
+        if (app_id == NULL && wmclass != NULL) {
+            app_id = find_app_id(exec_name, wmclass, APPID_FILTER_WMCLASS);
+            g_debug("[%s] get from wmclass %s", __func__, app_id);
+        }
+        if (app_id == NULL && exec_args != NULL && exec_args[0] != '\0') {
+            app_id = find_app_id(exec_name, exec_args, APPID_FILTER_ARGS);
+            g_debug("[%s] get app id from exec args(%s): %s", __func__, exec_args, app_id);
+        }
+        if (app_id == NULL && icon_name != NULL) {
+            if (icon_name != NULL) {
+                app_id = find_app_id(exec_name, icon_name, APPID_FILTER_ICON_NAME);
+                g_debug("[%s] get from icon name %s", __func__, app_id);
+            }
+        }
+        if (app_id == NULL && exec_name != NULL) {
+            app_id = find_app_id(exec_name, exec_name, APPID_FILTER_EXEC_NAME);
+            g_debug("[%s] get app id from exec name(%s): %s", __func__, exec_name, app_id);
+        }
+    } else {
+        g_warning("[%s] exec_name get failed", __func__);
+        app_id = g_strdup(wmclass);
+    }
+
+    g_free(exec_fullname);
+    g_free(exec_name);
+    g_free(exec_args);
+
+    return app_id;
+}
+
+
+char* get_exe(int pid)
+{
+#define BUF_LEN 8095
+    char buf[BUF_LEN] = {0};
+    char* path = g_strdup_printf("/proc/%d/exe", pid);
+    // header doesn't work, add this to avoid warning
+    extern ssize_t readlink(const char*, char*, size_t);
+    gsize len = readlink(path, buf, BUF_LEN);
+    g_free(path);
+    if (len > BUF_LEN) {
+        g_warning("PID:%d's exe is to long!", pid);
+        return NULL;
+    }
+#undef BUF_LEN
+    return g_strdup(buf);
+}
+
+
+static
 void _get_exec_name_args(char** cmdline, gsize length, char** name, char** args)
 {
     g_assert(length != 0);
@@ -192,14 +383,25 @@ void _get_exec_name_args(char** cmdline, gsize length, char** name, char** args)
 
     int diff = length - name_pos;
     if (diff == 0) {
-        *name = g_path_get_basename(cmdline[0]);
+        if (name != NULL) {
+            *name = g_strdup(cmdline[0]);
+        }
         if (length > 1) {
-            *args = g_strjoinv(" ", cmdline+1);
+            if (args != NULL) {
+                *args = g_strjoinv(" ", cmdline+1);
+            }
         }
     } else if (diff >= 1){
-        *name = g_path_get_basename(cmdline[name_pos]);
-        if (diff >= 2)
+        if (name != NULL) {
+            *name = g_strdup(cmdline[name_pos]);
+        }
+        if (args != NULL && diff >= 2) {
             *args = g_strjoinv(" ", cmdline + name_pos + 1);
+        }
+    }
+
+    if (name == NULL) {
+        return;
     }
 
     char* tmp = *name;
@@ -217,134 +419,7 @@ void _get_exec_name_args(char** cmdline, gsize length, char** name, char** args)
     }
 }
 
-static
-char* _find_app_id_by_filter(const char* name, const char* keys_str, GKeyFile* filter)
-{
-    if (filter == NULL) return NULL;
-    g_assert(name != NULL && keys_str != NULL);
-    if (g_key_file_has_group(filter, name)) {
-        gsize size = 0;
-        char** keys = g_key_file_get_keys(filter, name, &size, NULL);
-        gsize i=0;
-        for (; i<size; i++) {
-            if (g_strstr_len(keys_str , -1, keys[i])) {
-                char* value = g_key_file_get_string(filter, name, keys[i], NULL);
-                g_strfreev(keys);
-                return value;
-            }
-        }
-        g_strfreev(keys);
-        /*g_debug("find \"%s\" in filter.ini but can't find the really desktop file\n", name);*/
-    }
-    return NULL;
-}
 
-char* find_app_id(const char* exec_name, const char* key, int filter)
-{
-    if (_is_init == FALSE) {
-        _init();
-    }
-    g_assert(exec_name != NULL && key != NULL);
-    g_debug("exec_name: %s, key: %s", exec_name, key);
-    switch (filter) {
-        case APPID_FILTER_WMCLASS:
-            return _find_app_id_by_filter(exec_name, key, filter_wmclass);
-        case APPID_FILTER_WMNAME:
-            return _find_app_id_by_filter(exec_name, key, filter_wmname);
-        case APPID_FILTER_ARGS:
-            return _find_app_id_by_filter(exec_name, key, filter_args);
-        case APPID_FILTER_WMINSTANCE:
-            return _find_app_id_by_filter(exec_name, key, filter_wminstance);
-        case APPID_FILTER_ICON_NAME:
-            return _find_app_id_by_filter(exec_name, key, filter_icon_name);
-        case APPID_FILTER_EXEC_NAME: {
-            char* id = _find_app_id_by_filter(exec_name, key, filter_exec_name);
-            if (id == NULL)
-                id = g_strdup(exec_name);
-            return id;
-        }
-        default:
-            g_error("filter %d is not support !", filter);
-    }
-    return NULL;
-}
-
-char** get_exec_env(int pid)
-{
-    char** envs = NULL;
-    char* row_env = NULL;
-    char* path = g_strdup_printf("/proc/%d/environ", pid);
-
-    gsize size=0;
-    if (g_file_get_contents(path, &row_env, &size, NULL) && size > 0) {
-        envs = g_new(char*, 1024);
-        gsize j = 0;
-        gsize i=0;
-        envs[j] = g_strdup(row_env);
-        for (; i<size && j<1024; i++) {
-            if (row_env[i] == 0) {
-                envs[++j] = g_strdup(row_env + i + 1);
-            }
-        }
-
-        g_free(row_env);
-        envs[j] = NULL;
-    }
-
-    return envs;
-}
-
-char* get_exe_name(int pid)
-{
-    char* exec_name = NULL;
-    char* args = NULL;
-
-    get_pid_info(pid, &exec_name, &args);
-    g_warning("%s %s", exec_name, args);
-    char* exec = NULL;
-    if (g_strcmp0(exec_name, "java") == 0) {
-        char** envs = get_exec_env(pid);
-        char* env = NULL;
-        int i = 0;
-        for (; envs[i] != NULL; ++i) {
-            if (g_str_has_prefix(envs[i], "CLASSPATH")) {
-                env = g_strdup(envs[i]);
-                break;
-            }
-        }
-        for (i = 0; envs[i] != NULL; ++i) {
-            g_free(envs[i]);
-        }
-        if (env == NULL) {
-            exec = g_strconcat(exec_name, " ", args, NULL);
-        } else {
-            exec = g_strconcat(env, " ", exec_name, " ", args, NULL);
-        }
-        g_free(env);
-    } else {
-        exec = g_strconcat(exec_name, " ", args, NULL);
-    }
-    g_free(exec_name);
-    g_free(args);
-    return exec;
-}
-
-char* get_exe(int pid)
-{
-#define BUF_LEN 8095
-    char buf[BUF_LEN] = {0};
-    char* path = g_strdup_printf("/proc/%d/exe", pid);
-    // header doesn't work, add this to avoid warning
-    extern ssize_t readlink(const char*, char*, size_t);
-    gsize len = readlink(path, buf, BUF_LEN);
-    g_free(path);
-    if (len > BUF_LEN) {
-        g_warning("PID:%d's exe is to long!", pid);
-        return NULL;
-    }
-#undef BUF_LEN
-    return g_strdup(buf);
-}
 void get_pid_info(int pid, char** exec_name, char** exec_args)
 {
     if (_is_init == FALSE) {
@@ -366,114 +441,121 @@ void get_pid_info(int pid, char** exec_name, char** exec_args)
         }
         name_args[j ? : j+1] = NULL;
 
-        _get_exec_name_args(name_args, j+1, exec_name, exec_args);
+        _get_exec_name_args(name_args, j + 1, exec_name, exec_args);
 
         g_free(name_args);
-
     } else {
-        *exec_name = get_exe(pid);
-        *exec_args = NULL;
+        if (exec_name != NULL) {
+            *exec_name = get_exe(pid);
+        }
+
+        if (exec_args != NULL) {
+            *exec_args = NULL;
+        }
     }
     g_free(path);
     g_free(cmd_line);
 }
 
-gboolean is_app_in_white_list(const char* name)
-{
-    if (!_is_init) {
-        _init();
-    }
-    return is_chrome_app(name) || g_hash_table_contains(white_apps, name);
-}
 
-
-gboolean is_deepin_app_id(const char* app_id)
+char** get_exec_env(int pid)
 {
-    if (deepin_icons == NULL) {
-        deepin_icons = g_key_file_new();
-        if (!g_key_file_load_from_file(deepin_icons, DEEPIN_ICONS_PATH, G_KEY_FILE_NONE, NULL)) {
-            g_key_file_free(deepin_icons);
-            deepin_icons = NULL;
-            return FALSE;
+    char** envs = NULL;
+    char* row_env = NULL;
+    char* path = g_strdup_printf("/proc/%d/environ", pid);
+
+    gsize size=0;
+    if (g_file_get_contents(path, &row_env, &size, NULL) && size > 0) {
+        envs = g_new(char*, 1024);
+        gsize j = 0;
+        gsize i=0;
+        envs[j] = g_strdup(row_env);
+        for (; i+1<size && j<1024; i++) {
+            if (row_env[i++] == 0) {
+                envs[++j] = g_strdup(row_env + i);
+            }
         }
+
+        g_free(row_env);
+        envs[j] = NULL;
     }
-    return g_key_file_has_group(deepin_icons, app_id);
 
-}
-
-int get_deepin_app_id_operator(const char* app_id)
-{
-    g_assert(deepin_icons != NULL);
-    return g_key_file_get_integer(deepin_icons, app_id, "operator", NULL);
-}
-
-char* get_deepin_app_id_value(const char* app_id)
-{
-    g_assert(deepin_icons != NULL);
-    return g_key_file_get_string(deepin_icons, app_id, "value", NULL);
+    return envs;
 }
 
 
-
-
-
-char* guess_app_id(long s_pid, const char* instance_name, const char* wmname, const char* wmclass, const char* icon_name)
+int get_parent_pid(int pid)
 {
-    // g_setenv("G_MESSAGES_DEBUG", "all", FALSE);
-    if (s_pid == 0) return g_strdup(wmclass);
-    char* app_id = NULL;
+    int ppid = 0;
+    char* path = g_strdup_printf("/proc/%d/stat", pid);
+    char* stat = NULL;
+    gsize size = 0;
+    if (g_file_get_contents(path, &stat, &size, NULL) && size <= 0) {
+        goto out;
+    }
 
+    char** stats = g_strsplit(stat, " ", 0);
+    char* strppid = g_strdup(stats[3]);
+    g_strfreev(states);
+
+    ppid = atoi(strppid);
+    if (ppid == 1) {
+        // if init is parent, it is meanless
+        ppid = 0;
+    }
+
+out:
+    g_free(stat);
+    g_free(path);
+    return ppid;
+}
+
+
+char* get_exec(int pid)
+{
+    char* exec_fullname = NULL;
     char* exec_name = NULL;
-    char* exec_args = NULL;
-    get_pid_info(s_pid, &exec_name, &exec_args);
-    if (exec_name != NULL) {
-        if (g_str_has_prefix(exec_name, "google-chrome-") || g_strcmp0(exec_name, "chrome") == 0) {
-            g_free(exec_name);
-            exec_name = g_strdup("google-chrome");
-        }
-        if (app_id == NULL) {
-            GKeyFile* f = load_app_config(FILTER_FILE);
-            if (f != NULL && wmname != NULL) {
-                app_id = g_key_file_get_string(f, wmname, "appid", NULL);
-            }
-            g_key_file_unref(f);
-            g_debug("[%s] get app id from StartupWMClass filter: %s", __func__, app_id);
-        }
-        if (app_id == NULL) {
-            app_id = find_app_id(exec_name, wmname, APPID_FILTER_WMNAME);
-            g_debug("[%s] get from wmname %s", __func__, app_id);
-        }
-        g_debug("exec_name:%s wmname:%s", exec_name, wmname);
-        if (app_id == NULL && wmname != NULL) {
-            app_id = find_app_id(exec_name, wmname, APPID_FILTER_WMINSTANCE);
-            g_debug("[%s] get from wmname %s", __func__, app_id);
-        }
-        if (app_id == NULL && wmclass != NULL) {
-            app_id = find_app_id(exec_name, wmclass, APPID_FILTER_WMCLASS);
-            g_debug("[%s] get from wmclass %s", __func__, app_id);
-        }
-        if (app_id == NULL && exec_args != NULL && exec_args[0] != '\0') {
-            app_id = find_app_id(exec_name, exec_args, APPID_FILTER_ARGS);
-            g_debug("[%s] get app id from exec args(%s): %s", __func__, exec_args, app_id);
-        }
-        if (app_id == NULL && icon_name != NULL) {
-            if (icon_name != NULL) {
-                app_id = find_app_id(exec_name, icon_name, APPID_FILTER_ICON_NAME);
-                g_debug("[%s] get from icon name %s", __func__, app_id);
-            }
-        }
-        if (app_id == NULL && exec_name != NULL) {
-            app_id = find_app_id(exec_name, exec_name, APPID_FILTER_EXEC_NAME);
-            g_debug("[%s] get app id from exec name(%s): %s", __func__, exec_name, app_id);
-        }
-    } else {
-        g_warning("[%s] exec_name get failed", __func__);
-        app_id = g_strdup(wmclass);
+    char* args = NULL;
+
+    get_pid_info(pid, &exec_fullname, &args);
+    g_warning("[%s] exec_fullname: %s exec_args: %s", __func__, exec_fullname, args);
+    exec_name = g_path_get_basename(exec_fullname);
+    char* exec = NULL;
+    if (g_strcmp0(exec_name, "java") != 0) {
+        exec = g_strconcat(exec_fullname, " ", args, NULL);
+        goto out;
     }
+
+    int ppid = get_parent_pid(pid);
+    if (ppid == 0 || (exec = get_exec(ppid)) == NULL) {
+        g_free(exec);
+        exec = NULL;
+        char** envs = get_exec_env(pid);
+        char* env = NULL;
+        int i = 0;
+        for (; envs[i] != NULL; ++i) {
+            if (g_str_has_prefix(envs[i], "CLASSPATH")) {
+                env = g_strdup(envs[i]);
+                break;
+            }
+        }
+        g_strfreev(envs);
+        if (env == NULL) {
+            exec = g_strconcat(exec_fullname, " ", args, NULL);
+        } else {
+            exec = g_strconcat(env, " ", exec_fullname, " ", args, NULL);
+        }
+        g_free(env);
+    }
+
+out:
+    g_free(exec_fullname);
     g_free(exec_name);
-    g_free(exec_args);
-    return app_id;
+    g_free(args);
+
+    return exec;
 }
+
 
 char* get_name_by_pid(int pid)
 {
@@ -498,7 +580,6 @@ char* get_name_by_pid(int pid)
         }
     }
 
-
     return g_path_get_basename(content);
 }
 
@@ -512,6 +593,7 @@ GKeyFile* load_app_config(const char* name)
     /* no need to test file exitstly */
     return key;
 }
+
 
 char* get_basename_without_extend_name(char const* path)
 {
@@ -533,6 +615,7 @@ gboolean is_deepin_icon(char const* icon_path)
     return g_str_has_prefix(icon_path, "/usr/share/icons/Deepin/");
 }
 
+
 char* icon_name_to_path(const char* name, int size)
 {
     if (g_path_is_absolute(name))
@@ -542,7 +625,9 @@ char* icon_name_to_path(const char* name, int size)
     int pic_name_len = strlen(name);
     char* ext = strrchr(name, '.');
     if (ext != NULL) {
-        if (g_ascii_strcasecmp(ext+1, "png") == 0 || g_ascii_strcasecmp(ext+1, "svg") == 0 || g_ascii_strcasecmp(ext+1, "jpg") == 0) {
+        if (g_ascii_strcasecmp(ext+1, "png") == 0
+            || g_ascii_strcasecmp(ext+1, "svg") == 0
+            || g_ascii_strcasecmp(ext+1, "jpg") == 0) {
             pic_name_len = ext - name;
             g_debug("desktop's Icon name should an absoulte path or an basename without extension");
         }
@@ -566,6 +651,7 @@ char* icon_name_to_path(const char* name, int size)
         return NULL;
     }
 }
+
 
 static char* _check(char const* app_id)
 {
@@ -600,16 +686,12 @@ char* check_absolute_path_icon(char const* app_id, char const* icon_path)
 }
 
 
-gboolean is_chrome_app(char const* name)
-{
-    return g_str_has_prefix(name, "chrome-");
-}
-
 void set_default_theme(const char* theme)
 {
     GtkSettings* setting = gtk_settings_get_default();
     g_object_set(setting, "gtk-icon-theme-name", theme, NULL);
 }
+
 
 static char DE_NAME[100] = "DEEPIN";
 
@@ -619,6 +701,7 @@ void set_desktop_env_name(const char* name)
     memcpy(DE_NAME, name, max_len > 100 ? max_len : 100);
     g_desktop_app_info_set_desktop_env(name);
 }
+
 
 void init_deepin()
 {

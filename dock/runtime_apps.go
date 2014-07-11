@@ -107,9 +107,9 @@ func NewRuntimeApp(xid xproto.Window, appId string) *RuntimeApp {
 	return app
 }
 
-func find_exec_name_by_xid(xid xproto.Window) string {
+func find_exec_by_xid(xid xproto.Window) string {
 	pid, _ := ewmh.WmPidGet(XU, xid)
-	return find_exec_name_by_pid(pid)
+	return find_exec_by_pid(pid)
 }
 func (app *RuntimeApp) getExec(xid xproto.Window) {
 	core := app.createDesktopAppInfo()
@@ -122,7 +122,7 @@ func (app *RuntimeApp) getExec(xid xproto.Window) {
 		return
 	}
 	logger.Debug(app.Id, " Get Exec from pid")
-	app.exec = find_exec_name_by_xid(xid)
+	app.exec = find_exec_by_xid(xid)
 	logger.Warning("app get exec:", app.exec)
 }
 func (app *RuntimeApp) buildMenu() {
@@ -254,7 +254,8 @@ func (app *RuntimeApp) buildMenu() {
 						scratchDir,
 						app.Id+".sh",
 					)
-					ioutil.WriteFile(execFile, []byte(app.exec), 0744)
+					shExec := "#!/usr/bin/env bash\n\n" + app.exec
+					ioutil.WriteFile(execFile, []byte(shExec), 0744)
 					exec = execFile
 				} else {
 					defer core.Unref()
