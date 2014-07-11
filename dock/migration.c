@@ -496,7 +496,7 @@ int get_parent_pid(int pid)
 
     char** stats = g_strsplit(stat, " ", 0);
     char* strppid = g_strdup(stats[3]);
-    g_strfreev(states);
+    g_strfreev(stats);
 
     ppid = atoi(strppid);
     if (ppid == 1) {
