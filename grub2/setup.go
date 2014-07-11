@@ -22,10 +22,10 @@
 package grub2
 
 import (
-	"pkg.linuxdeepin.com/lib/graphic"
 	"io/ioutil"
 	"os"
 	"path"
+	"pkg.linuxdeepin.com/lib/graphic"
 	"strconv"
 	"strings"
 )
@@ -108,10 +108,10 @@ func (setup *SetupWrapper) DoWriteSettings(fileContent string) (ok bool, err err
 // DoWriteCacheConfig write file content to "/var/cache/dde-daemon/grub2.json".
 func (setup *SetupWrapper) DoWriteCacheConfig(fileContent string) (ok bool, err error) {
 	// ensure parent directory exists
-	if !isFileExists(grubCacheFile) {
-		os.MkdirAll(path.Dir(grubCacheFile), 0755)
+	if !isFileExists(configFile) {
+		os.MkdirAll(path.Dir(configFile), 0755)
 	}
-	err = ioutil.WriteFile(grubCacheFile, []byte(fileContent), 0644)
+	err = ioutil.WriteFile(configFile, []byte(fileContent), 0644)
 	if err != nil {
 		logger.Error(err.Error())
 		return false, err

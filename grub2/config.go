@@ -30,6 +30,7 @@ const configFile = "/var/cache/deepin/grub2.json"
 type config struct {
 	core       utils.Config
 	NeedUpdate bool // mark to generate grub configuration
+	Resolution string
 }
 
 func newConfig() (c *config) {

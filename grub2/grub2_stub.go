@@ -22,8 +22,10 @@
 package grub2
 
 import (
+	"encoding/json"
 	"fmt"
 	"pkg.linuxdeepin.com/lib/dbus"
+	. "pkg.linuxdeepin.com/lib/gettext"
 	"strings"
 )
 
@@ -115,16 +117,28 @@ func (grub *Grub2) GetSimpleEntryTitles() ([]string, error) {
 	return entryTitles, nil
 }
 
-func (grub *Grub2) GetAvailableResolutions() (modes []string) {
+func (grub *Grub2) GetAvailableResolutions() (modesJSON string, err error) {
+	type mode struct{ Text, Value string }
 	w, h := getPrimaryScreenBestResolution()
-	modes = appendStrArrayUnique(modes, fmt.Sprintf("%dx%d", w, h))
-	modes = appendStrArrayUnique(modes, "1440x900")
-	modes = appendStrArrayUnique(modes, "1400x1050")
-	modes = appendStrArrayUnique(modes, "1280x800")
-	modes = appendStrArrayUnique(modes, "1280x720")
-	modes = appendStrArrayUnique(modes, "1366x768")
-	modes = appendStrArrayUnique(modes, "1024x768")
-	modes = appendStrArrayUnique(modes, "800x600")
+	currentResolution := fmt.Sprintf("%dx%d", w, h)
+	appendModeUniq := func(modes []mode, r string) []mode {
+		if r != currentResolution {
+			modes = append(modes, mode{Text: r, Value: r})
+		}
+		return modes
+	}
+	var modes []mode
+	modes = append(modes, mode{Text: Tr("Auto"), Value: "auto"})
+	modes = append(modes, mode{Text: currentResolution, Value: currentResolution})
+	modes = appendModeUniq(modes, "1440x900")
+	modes = appendModeUniq(modes, "1400x1050")
+	modes = appendModeUniq(modes, "1280x800")
+	modes = appendModeUniq(modes, "1280x720")
+	modes = appendModeUniq(modes, "1366x768")
+	modes = appendModeUniq(modes, "1024x768")
+	modes = appendModeUniq(modes, "800x600")
+	tmpByteArray, err := json.Marshal(modes)
+	modesJSON = string(tmpByteArray)
 	return
 }
 
