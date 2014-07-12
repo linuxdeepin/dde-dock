@@ -56,11 +56,26 @@ func (c *config) load() {
 	}
 }
 func (c *config) save() {
+	if runWithoutDBus {
+		c.doSaveWithoutDBus()
+	} else {
+		c.doSave()
+	}
+}
+func (c *config) doSave() {
 	fileContent, err := c.core.GetFileContentToSave(c)
 	if err != nil {
 		logger.Error(err)
 	}
 	grub2extDoWriteCacheConfig(string(fileContent))
+}
+func (c *config) doSaveWithoutDBus() {
+	fileContent, err := c.core.GetFileContentToSave(c)
+	if err != nil {
+		logger.Error(err)
+	}
+	setup := &SetupWrapper{}
+	setup.DoWriteCacheConfig(string(fileContent))
 }
 
 func (c *config) setFixSettingsAlways(value bool) {

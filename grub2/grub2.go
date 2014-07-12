@@ -46,6 +46,7 @@ const (
 )
 
 var (
+	runWithoutDBus         = false
 	entryRegexpSingleQuote = regexp.MustCompile(`^ *(menuentry|submenu) +'(.*?)'.*$`)
 	entryRegexpDoubleQuote = regexp.MustCompile(`^ *(menuentry|submenu) +"(.*?)".*$`)
 )
@@ -292,7 +293,11 @@ func (grub *Grub2) fixSettings() (needUpdate bool) {
 
 func (grub *Grub2) writeSettings() {
 	fileContent := grub.getSettingContentToSave()
-	grub2extDoWriteSettings(fileContent)
+	if runWithoutDBus {
+		writeSettingsWithoutDBus(fileContent)
+	} else {
+		grub2extDoWriteSettings(fileContent)
+	}
 }
 
 func (grub *Grub2) parseEntries(fileContent string) (err error) {

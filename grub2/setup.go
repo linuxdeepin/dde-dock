@@ -37,6 +37,7 @@ type SetupWrapper struct{}
 // setup grub2 environment, regenerate configure and theme if need, don't depends on dbus
 func (grub *Grub2) Setup(gfxmode string) {
 	setup := &SetupWrapper{}
+	runWithoutDBus = true
 	grub.loadConfig()
 
 	// do not call grub.readEntries() here, for /boot/grub/grub.cfg file maybe
@@ -59,12 +60,18 @@ func (grub *Grub2) Setup(gfxmode string) {
 
 func (grub *Grub2) SetupTheme(gfxmode string) {
 	setup := &SetupWrapper{}
+	runWithoutDBus = true
 	grub.loadConfig()
 	if len(gfxmode) == 0 {
 		gfxmode = grub.config.Resolution
 	}
 	w, h := parseGfxmode(gfxmode)
 	setup.DoGenerateThemeBackground(w, h)
+}
+
+func writeSettingsWithoutDBus(fileContent string) {
+	setup := &SetupWrapper{}
+	setup.DoWriteSettings(fileContent)
 }
 
 func parseGfxmode(gfxmode string) (w, h uint16) {
