@@ -28,20 +28,20 @@ import (
 const configFile = "/var/cache/deepin/grub2.json"
 
 type config struct {
-	core       utils.Config
-	NeedUpdate bool // mark to generate grub configuration
-	// EnableTheme  bool
-	// FixSettingsAlways bool
-	DefaultEntry string
-	Timeout      int32
-	Resolution   string
+	core              utils.Config
+	NeedUpdate        bool // mark to generate grub configuration
+	FixSettingsAlways bool
+	EnableTheme       bool
+	DefaultEntry      string
+	Timeout           int32
+	Resolution        string
 }
 
 func newConfig() (c *config) {
 	c = &config{}
 	c.NeedUpdate = true
-	// TODO
-	// c.EnableTheme = true
+	c.FixSettingsAlways = true
+	c.EnableTheme = true
 	c.DefaultEntry = "0"
 	c.Timeout = 10
 	c.Resolution = getPrimaryScreenBestResolutionStr()
@@ -63,6 +63,14 @@ func (c *config) save() {
 	grub2extDoWriteCacheConfig(string(fileContent))
 }
 
+func (c *config) setFixSettingsAlways(value bool) {
+	c.FixSettingsAlways = value
+	c.save()
+}
+func (c *config) setEnableTheme(value bool) {
+	c.EnableTheme = value
+	c.save()
+}
 func (c *config) setDefaultEntry(value string) {
 	c.DefaultEntry = value
 	c.save()

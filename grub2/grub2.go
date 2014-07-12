@@ -63,10 +63,12 @@ type Grub2 struct {
 	chanUpdate         chan int
 	chanStopUpdateLoop chan int
 
-	DefaultEntry string `access:"readwrite"`
-	Timeout      int32  `access:"readwrite"`
-	Resolution   string `access:"readwrite"`
-	Updating     bool
+	FixSettingsAlways bool   `access:"readwrite"`
+	EnableTheme       bool   `access:"readwrite"`
+	DefaultEntry      string `access:"readwrite"`
+	Timeout           int32  `access:"readwrite"`
+	Resolution        string `access:"readwrite"`
+	Updating          bool
 }
 
 // NewGrub2 create a Grub2 object.
@@ -86,6 +88,7 @@ func DestroyGrub2(grub *Grub2) {
 }
 
 func (grub *Grub2) initGrub2() {
+	grub.loadConfig()
 	grub.doInitGrub2()
 	grub.theme.initTheme()
 	go grub.resetGfxmodeIfNeed()
@@ -93,13 +96,15 @@ func (grub *Grub2) initGrub2() {
 	grub.startUpdateLoop()
 }
 
-func (grub *Grub2) doInitGrub2() {
+func (grub *Grub2) loadConfig() {
 	if grub.config.core.IsConfigFileExists() {
 		grub.config.load()
 	} else {
 		grub.config.save()
 	}
+}
 
+func (grub *Grub2) doInitGrub2() {
 	err := grub.readEntries()
 	if err != nil {
 		logger.Error(err)
@@ -108,10 +113,17 @@ func (grub *Grub2) doInitGrub2() {
 	if err != nil {
 		logger.Error(err)
 	}
-	if needUpdate := grub.fixSettings(); needUpdate || grub.config.NeedUpdate {
+
+	needUpdate := false
+	if grub.config.FixSettingsAlways {
+		needUpdate = grub.fixSettings()
+	}
+	if needUpdate || grub.config.NeedUpdate {
 		grub.notifyUpdate()
 	}
 
+	grub.setPropFixSettingsAlways(grub.config.FixSettingsAlways)
+	grub.setPropEnableTheme(grub.config.EnableTheme)
 	grub.setPropDefaultEntry(grub.getSettingDefaultEntry())
 	grub.setPropTimeout(grub.getSettingTimeout())
 	grub.setPropResolution(grub.getSettingGfxmode())
@@ -182,8 +194,7 @@ func (grub *Grub2) resetGfxmodeIfNeed() {
 
 func (grub *Grub2) resetGfxmode() (needUpdate bool) {
 	needUpdate = false
-	w, h := getPrimaryScreenBestResolution()
-	expectedGfxmode := fmt.Sprintf("%dx%d", w, h)
+	expectedGfxmode := getPrimaryScreenBestResolutionStr()
 	if expectedGfxmode != grub.getSettingGfxmode() {
 		grub.setSettingGfxmode(expectedGfxmode)
 		needUpdate = true
@@ -263,10 +274,17 @@ func (grub *Grub2) fixSettings() (needUpdate bool) {
 		needUpdate = true
 	}
 
-	// enable deepin grub2 theme default
-	if grub.getSettingTheme() != themeMainFile {
-		grub.setSettingTheme(themeMainFile)
-		needUpdate = true
+	// setup deepin grub2 theme
+	if grub.config.EnableTheme {
+		if grub.getSettingTheme() != themeMainFile {
+			grub.setSettingTheme(themeMainFile)
+			needUpdate = true
+		}
+	} else {
+		if grub.getSettingTheme() != "" {
+			grub.setSettingTheme("")
+			needUpdate = true
+		}
 	}
 
 	return
@@ -401,6 +419,8 @@ func (grub *Grub2) getEntryTitles() (entryTitles []string, err error) {
 	return
 }
 
+// return setting's value or related entry(such as "Deepin 2014
+// GNU/Linux") if grub.cfg exists
 func (grub *Grub2) getSettingDefaultEntry() string {
 	entryTitles, _ := grub.getEntryTitles()
 	simpleEntryTitles, _ := grub.GetSimpleEntryTitles()

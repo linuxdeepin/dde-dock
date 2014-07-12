@@ -37,6 +37,7 @@ type SetupWrapper struct{}
 // setup grub2 environment, regenerate configure and theme if need, don't depends on dbus
 func (grub *Grub2) Setup(gfxmode string) {
 	setup := &SetupWrapper{}
+	grub.loadConfig()
 
 	// do not call grub.readEntries() here, for /boot/grub/grub.cfg file maybe
 	// not exists
@@ -44,7 +45,7 @@ func (grub *Grub2) Setup(gfxmode string) {
 	grub.fixSettings()
 
 	if len(gfxmode) == 0 {
-		grub.resetGfxmode()
+		grub.setSettingGfxmode(grub.config.Resolution)
 	} else {
 		grub.setSettingGfxmode(gfxmode)
 	}
@@ -58,18 +59,19 @@ func (grub *Grub2) Setup(gfxmode string) {
 
 func (grub *Grub2) SetupTheme(gfxmode string) {
 	setup := &SetupWrapper{}
-
-	var screenWidth, screenHeight uint16
+	grub.loadConfig()
 	if len(gfxmode) == 0 {
-		screenWidth, screenHeight = getPrimaryScreenBestResolution()
-	} else {
-		screenWidth, screenHeight = parseGfxmode(gfxmode)
+		gfxmode = grub.config.Resolution
 	}
-	setup.DoGenerateThemeBackground(screenWidth, screenHeight)
+	w, h := parseGfxmode(gfxmode)
+	setup.DoGenerateThemeBackground(w, h)
 }
 
 func parseGfxmode(gfxmode string) (w, h uint16) {
 	w, h = getPrimaryScreenBestResolution() // default value
+	if gfxmode == "auto" {
+		return
+	}
 	a := strings.Split(gfxmode, "x")
 	if len(a) != 2 {
 		logger.Error("gfxmode format error", gfxmode)
@@ -105,7 +107,7 @@ func (setup *SetupWrapper) DoWriteSettings(fileContent string) (ok bool, err err
 	return true, nil
 }
 
-// DoWriteCacheConfig write file content to "/var/cache/dde-daemon/grub2.json".
+// DoWriteCacheConfig write file content to "/var/cache/deepin/grub2.json".
 func (setup *SetupWrapper) DoWriteCacheConfig(fileContent string) (ok bool, err error) {
 	// ensure parent directory exists
 	if !isFileExists(configFile) {

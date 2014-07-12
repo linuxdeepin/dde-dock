@@ -53,26 +53,61 @@ func (grub *Grub2) OnPropertiesChanged(name string, oldv interface{}) {
 	}()
 	logger.Debug("OnPropertiesChanged: " + name)
 	switch name {
+	case "FixSettingsAlways":
+		oldvBool, _ := oldv.(bool)
+		if oldvBool == grub.FixSettingsAlways {
+			return
+		}
+		grub.setPropFixSettingsAlways(grub.FixSettingsAlways)
+	case "EnableTheme":
+		oldvBool, _ := oldv.(bool)
+		if oldvBool == grub.EnableTheme {
+			return
+		}
+		grub.setPropEnableTheme(grub.EnableTheme)
+		grub.notifyUpdate()
 	case "DefaultEntry":
 		oldvStr, _ := oldv.(string)
-		if grub.DefaultEntry == oldvStr {
+		if oldvStr == grub.DefaultEntry {
 			return
 		}
 		grub.setPropDefaultEntry(grub.DefaultEntry)
+		grub.notifyUpdate()
 	case "Timeout":
 		oldvInt, _ := oldv.(int32)
-		if grub.Timeout == oldvInt {
+		if oldvInt == grub.Timeout {
 			return
 		}
 		grub.setPropTimeout(grub.Timeout)
+		grub.notifyUpdate()
 	case "Resolution":
 		oldvStr, _ := oldv.(string)
-		if grub.Resolution == oldvStr {
+		if oldvStr == grub.Resolution {
 			return
 		}
 		grub.setPropResolution(grub.Resolution)
+		grub.notifyUpdate()
 	}
-	grub.notifyUpdate()
+}
+
+func (grub *Grub2) setPropFixSettingsAlways(value bool) {
+	grub.FixSettingsAlways = value
+	grub.config.setFixSettingsAlways(value)
+	dbus.NotifyChange(grub, "FixSettingsAlways")
+}
+
+func (grub *Grub2) setPropEnableTheme(value bool) {
+	grub.EnableTheme = value
+	if grub.config.EnableTheme != value {
+		grub.config.setEnableTheme(value)
+		if value {
+			grub.setSettingTheme("")
+		} else {
+			grub.setSettingTheme(themeMainFile)
+		}
+		grub.notifyUpdate()
+	}
+	dbus.NotifyChange(grub, "EnableTheme")
 }
 
 func (grub *Grub2) setPropDefaultEntry(value string) {
@@ -118,16 +153,16 @@ func (grub *Grub2) GetSimpleEntryTitles() ([]string, error) {
 
 func (grub *Grub2) GetAvailableResolutions() (modesJSON string, err error) {
 	type mode struct{ Text, Value string }
-	currentResolution := getPrimaryScreenBestResolutionStr()
+	primaryResolution := getPrimaryScreenBestResolutionStr()
 	appendModeUniq := func(modes []mode, r string) []mode {
-		if r != currentResolution {
+		if r != primaryResolution {
 			modes = append(modes, mode{Text: r, Value: r})
 		}
 		return modes
 	}
 	var modes []mode
 	modes = append(modes, mode{Text: Tr("Auto"), Value: "auto"})
-	modes = append(modes, mode{Text: currentResolution, Value: currentResolution})
+	modes = append(modes, mode{Text: primaryResolution, Value: primaryResolution})
 	modes = appendModeUniq(modes, "1440x900")
 	modes = appendModeUniq(modes, "1400x1050")
 	modes = appendModeUniq(modes, "1280x800")
@@ -147,6 +182,9 @@ func (grub *Grub2) Reset() {
 	if len(simpleEntryTitles) > 0 {
 		firstEntry = simpleEntryTitles[0]
 	}
+	grub.setPropFixSettingsAlways(true)
+	grub.setPropEnableTheme(true)
+	grub.setPropResolution(getPrimaryScreenBestResolutionStr())
 	grub.setPropDefaultEntry(firstEntry)
 	grub.setPropTimeout(int32(10))
 	grub.theme.reset()
