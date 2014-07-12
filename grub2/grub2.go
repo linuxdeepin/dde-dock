@@ -94,6 +94,12 @@ func (grub *Grub2) initGrub2() {
 }
 
 func (grub *Grub2) doInitGrub2() {
+	if grub.config.core.IsConfigFileExists() {
+		grub.config.load()
+	} else {
+		grub.config.save()
+	}
+
 	err := grub.readEntries()
 	if err != nil {
 		logger.Error(err)
@@ -102,20 +108,13 @@ func (grub *Grub2) doInitGrub2() {
 	if err != nil {
 		logger.Error(err)
 	}
-	if needUpdate := grub.fixSettings(); needUpdate {
+	if needUpdate := grub.fixSettings(); needUpdate || grub.config.NeedUpdate {
 		grub.notifyUpdate()
 	}
+
 	grub.setPropDefaultEntry(grub.getSettingDefaultEntry())
 	grub.setPropTimeout(grub.getSettingTimeout())
-
-	if grub.config.core.IsConfigFileExists() {
-		grub.config.load()
-	} else {
-		grub.config.save()
-	}
-	if grub.config.NeedUpdate {
-		grub.notifyUpdate()
-	}
+	grub.setPropResolution(grub.getSettingGfxmode())
 }
 
 func (grub *Grub2) notifyUpdate() {
@@ -231,10 +230,25 @@ func (grub *Grub2) fixSettings() (needUpdate bool) {
 	needUpdate = false
 
 	// reset properties, return default value for the missing property
-	grub.setSettingDefaultEntry(grub.getSettingDefaultEntry())
-	grub.setSettingTimeout(grub.getSettingTimeout())
+	// default entry
+	if grub.config.DefaultEntry != grub.getSettingDefaultEntry() {
+		needUpdate = true
+	}
+	grub.setSettingDefaultEntry(grub.config.DefaultEntry)
 
-	// just disable GRUB_HIDDEN_TIMEOUT and GRUB_HIDDEN_TIMEOUT_QUIET for will conflicts with GRUB_TIMEOUT
+	// timeout
+	if grub.config.Timeout != grub.getSettingTimeout() {
+		needUpdate = true
+	}
+	grub.setSettingTimeout(grub.config.Timeout)
+
+	// gfxmode
+	if grub.config.Resolution != grub.getSettingGfxmode() {
+		needUpdate = true
+	}
+	grub.setSettingGfxmode(grub.config.Resolution)
+
+	// disable GRUB_HIDDEN_TIMEOUT and GRUB_HIDDEN_TIMEOUT_QUIET which will conflicts with GRUB_TIMEOUT
 	if len(grub.settings["GRUB_HIDDEN_TIMEOUT"]) != 0 ||
 		len(grub.settings["GRUB_HIDDEN_TIMEOUT_QUIET"]) != 0 {
 		grub.settings["GRUB_HIDDEN_TIMEOUT"] = ""
@@ -440,7 +454,6 @@ func (grub *Grub2) getSettingGfxmode() string {
 	if len(grub.settings["GRUB_GFXMODE"]) == 0 {
 		return "auto"
 	}
-
 	return grub.settings["GRUB_GFXMODE"]
 }
 
