@@ -38,7 +38,7 @@ type SetupWrapper struct{}
 func (grub *Grub2) Setup(gfxmode string) {
 	setup := &SetupWrapper{}
 
-	// do not call grub.readEntries() here, for grub.cfg file maybe
+	// do not call grub.readEntries() here, for /boot/grub/grub.cfg file maybe
 	// not exists
 	grub.readSettings()
 	grub.fixSettings()

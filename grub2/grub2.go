@@ -450,26 +450,32 @@ func (grub *Grub2) getSettingTheme() string {
 
 func (grub *Grub2) setSettingDefaultEntry(title string) {
 	grub.settings["GRUB_DEFAULT"] = title
+	grub.config.setDefaultEntry(title)
 	grub.writeSettings()
 }
 
 func (grub *Grub2) setSettingTimeout(timeout int32) {
 	if timeout == grubTimeoutDisable {
 		grub.settings["GRUB_TIMEOUT"] = ""
+		grub.config.setTimeout(grubTimeoutDisable)
 	} else {
 		timeoutStr := strconv.FormatInt(int64(timeout), 10)
 		grub.settings["GRUB_TIMEOUT"] = timeoutStr
+		grub.config.setTimeout(timeout)
 	}
 	grub.writeSettings()
 }
 
 func (grub *Grub2) setSettingGfxmode(gfxmode string) {
 	grub.settings["GRUB_GFXMODE"] = gfxmode
+	grub.config.setResolution(gfxmode)
 	grub.writeSettings()
 }
 
 func (grub *Grub2) setSettingTheme(themeFile string) {
 	grub.settings["GRUB_THEME"] = themeFile
+	// TODO
+	// grub.config.setTheme(themeFile)
 	grub.writeSettings()
 }
 

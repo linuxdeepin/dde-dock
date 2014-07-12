@@ -30,12 +30,20 @@ const configFile = "/var/cache/deepin/grub2.json"
 type config struct {
 	core       utils.Config
 	NeedUpdate bool // mark to generate grub configuration
-	Resolution string
+	// EnableTheme  bool
+	// FixSettingsAlways bool
+	DefaultEntry string
+	Timeout      int32
+	Resolution   string
 }
 
 func newConfig() (c *config) {
 	c = &config{}
 	c.NeedUpdate = true
+	// TODO
+	// c.EnableTheme = true
+	c.DefaultEntry = "0"
+	c.Timeout = 10
 	c.Resolution = getPrimaryScreenBestResolutionStr()
 	c.core.SetConfigFile(configFile)
 	logger.Info("config file:", c.core.GetConfigFile())
@@ -53,4 +61,17 @@ func (c *config) save() {
 		logger.Error(err)
 	}
 	grub2extDoWriteCacheConfig(string(fileContent))
+}
+
+func (c *config) setDefaultEntry(value string) {
+	c.DefaultEntry = value
+	c.save()
+}
+func (c *config) setTimeout(value int32) {
+	c.Timeout = value
+	c.save()
+}
+func (c *config) setResolution(value string) {
+	c.Resolution = value
+	c.save()
 }
