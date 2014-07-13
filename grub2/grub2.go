@@ -265,6 +265,7 @@ func (grub *Grub2) fixSettings() (needUpdate bool) {
 		len(grub.settings["GRUB_HIDDEN_TIMEOUT_QUIET"]) != 0 {
 		grub.settings["GRUB_HIDDEN_TIMEOUT"] = ""
 		grub.settings["GRUB_HIDDEN_TIMEOUT_QUIET"] = ""
+		grub.writeSettings()
 		needUpdate = true
 	}
 
@@ -272,6 +273,14 @@ func (grub *Grub2) fixSettings() (needUpdate bool) {
 	grubDistroCmd := "`lsb_release -d -s 2> /dev/null || echo Debian`"
 	if grub.settings["GRUB_DISTRIBUTOR"] != grubDistroCmd {
 		grub.settings["GRUB_DISTRIBUTOR"] = grubDistroCmd
+		grub.writeSettings()
+		needUpdate = true
+	}
+
+	// disable GRUB_BACKGROUND
+	if grub.settings["GRUB_BACKGROUND"] != "<none>" {
+		grub.settings["GRUB_BACKGROUND"] = "<none>"
+		grub.writeSettings()
 		needUpdate = true
 	}
 
