@@ -23,9 +23,9 @@ package grub2
 
 import (
 	"bytes"
-	"pkg.linuxdeepin.com/lib/graphic"
 	"encoding/json"
 	"io/ioutil"
+	"pkg.linuxdeepin.com/lib/graphic"
 	"sync"
 	"text/template"
 )
@@ -50,16 +50,16 @@ func SetDefaultThemePath(path string) {
 	themeBgFile = themePath + "/background.png"
 }
 
-// ThemeScheme stores scheme data which be used when customing deepin grub2 theme.
-type ThemeScheme struct {
-	ItemColor, SelectedItemColor, TerminalBox, MenuPixmapStyle, ScrollbarThumb string
-}
-
 // TplJSONData read JSON data from
 // "/boot/grub/themes/deepin/theme_tpl.json" which stores the
 // key-values for template file.
 type TplJSONData struct {
 	BrightScheme, DarkScheme, CurrentScheme ThemeScheme
+}
+
+// ThemeScheme stores scheme data which be used when customing deepin grub2 theme.
+type ThemeScheme struct {
+	ItemColor, SelectedItemColor, TerminalBox, MenuPixmapStyle, ScrollbarThumb string
 }
 
 // Theme is a dbus object which provide properties and methods to
@@ -95,11 +95,17 @@ func NewTheme() *Theme {
 	return theme
 }
 
+func newTplJSONData() (d *TplJSONData) {
+	d = &TplJSONData{}
+	return
+}
+
 func (theme *Theme) initTheme() {
 	var err error
 	theme.tplJSONData, err = theme.getThemeTplJSON()
 	if err != nil {
-		panic(err)
+		logger.Error(err)
+		theme.tplJSONData = newTplJSONData()
 	}
 
 	// init properties
