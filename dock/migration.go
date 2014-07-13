@@ -7,9 +7,8 @@ package dock
 //#cgo pkg-config: glib-2.0 gio-unix-2.0 gtk+-3.0
 //#include <stdlib.h>
 // char* guess_app_id(long s_pid, const char* instance_name, const char* wmname, const char* wmclass, const char* icon_name);
-// char* get_exe_name(int pid);
+// char* get_exec(int pid);
 // char* get_exe(int pid);
-// void get_pid_info(int pid, char** exec_name, char** exec_args);
 //char* icon_name_to_path(const char* name, int size);
 // void init_deepin();
 // char* get_data_uri_by_path(const char* path);
@@ -33,8 +32,8 @@ func find_app_id(pid uint, instanceName, wmName, wmClass, iconName string) strin
 	return strings.ToLower(C.GoString(id))
 }
 
-func find_exec_name_by_pid(pid uint) string {
-	e := C.GoString(C.get_exe_name(C.int(pid)))
+func find_exec_by_pid(pid uint) string {
+	e := C.GoString(C.get_exec(C.int(pid)))
 	if e != "" {
 		return e
 	}
