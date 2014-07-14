@@ -111,6 +111,7 @@ func find_exec_by_xid(xid xproto.Window) string {
 	pid, _ := ewmh.WmPidGet(XU, xid)
 	return find_exec_by_pid(pid)
 }
+
 func (app *RuntimeApp) getExec(xid xproto.Window) {
 	core := app.createDesktopAppInfo()
 	if core != nil {
@@ -125,6 +126,70 @@ func (app *RuntimeApp) getExec(xid xproto.Window) {
 	app.exec = find_exec_by_xid(xid)
 	logger.Warning("app get exec:", app.exec)
 }
+
+func actionGenarator(id string) func() {
+	return func() {
+		app, ok := ENTRY_MANAGER.runtimeApps[id]
+		if !ok {
+			return
+		}
+		logger.Warning("dock item")
+		logger.Info("appid:", app.Id)
+
+		var title, icon, exec string
+		core := app.createDesktopAppInfo()
+		if core == nil {
+			icon = "application-default-icon"
+			title = app.Id
+			for _, v := range app.xids {
+				if v.Icon == "" {
+					continue
+				}
+
+				if strings.HasPrefix(v.Icon, "data:image") {
+					path, err := dataUriToFile(
+						v.Icon,
+						filepath.Join(scratchDir,
+							app.Id+".png"),
+					)
+					if err != nil {
+						logger.Debug("dock", app.Id, "dataUriToFile failed", err)
+						break
+					}
+					icon = path
+				} else {
+					icon = v.Icon
+				}
+				break
+			}
+			execFile := filepath.Join(
+				scratchDir,
+				app.Id+".sh",
+			)
+			shExec := "#!/usr/bin/env bash\n\n" + app.exec
+			ioutil.WriteFile(execFile, []byte(shExec), 0744)
+			exec = execFile
+		} else {
+			defer core.Unref()
+			title = core.GetDisplayName()
+			icon = get_theme_icon(core.GetIcon().ToString(), 48)
+			exec = core.GetString(glib.KeyFileDesktopKeyExec)
+		}
+
+		logger.Info("id", app.Id, "title", title, "icon", icon,
+			"exec", exec)
+		_, err := DOCKED_APP_MANAGER.Dock(
+			app.Id,
+			title,
+			icon,
+			exec,
+		)
+		if err != nil {
+			logger.Warning("Docked failed: ", err)
+		}
+	}
+}
+
 func (app *RuntimeApp) buildMenu() {
 	app.coreMenu = NewMenu()
 	itemName := strings.Title(app.Id)
@@ -235,48 +300,7 @@ func (app *RuntimeApp) buildMenu() {
 	} else {
 		logger.Info(app.Id, "change to dock")
 		message = Tr("_Dock")
-		action = func(id string) func() {
-			return func() {
-				app, ok := ENTRY_MANAGER.runtimeApps[id]
-				if !ok {
-					return
-				}
-				logger.Warning("dock item")
-				logger.Info("appid:", app.Id)
-
-				var title, icon, exec string
-				core := app.createDesktopAppInfo()
-				if core == nil {
-					title = app.Id
-					// TODO:
-					icon = "application-default-icon"
-					execFile := filepath.Join(
-						scratchDir,
-						app.Id+".sh",
-					)
-					shExec := "#!/usr/bin/env bash\n\n" + app.exec
-					ioutil.WriteFile(execFile, []byte(shExec), 0744)
-					exec = execFile
-				} else {
-					defer core.Unref()
-					title = core.GetDisplayName()
-					icon = get_theme_icon(core.GetIcon().ToString(), 48)
-					exec = core.GetString(glib.KeyFileDesktopKeyExec)
-				}
-
-				logger.Info("id", app.Id, "title", title, "icon", icon,
-					"exec", exec)
-				_, err = DOCKED_APP_MANAGER.Dock(
-					app.Id,
-					title,
-					icon,
-					exec,
-				)
-				if err != nil {
-					logger.Warning("Docked failed: ", err)
-				}
-			}
-		}(app.Id)
+		action = actionGenarator(app.Id)
 	}
 
 	logger.Info(app.Id, "New Menu Item:", message)

@@ -1,8 +1,10 @@
 package dock
 
 import (
-	"pkg.linuxdeepin.com/lib/gio-2.0"
+	"encoding/base64"
+	"io/ioutil"
 	"path/filepath"
+	"pkg.linuxdeepin.com/lib/gio-2.0"
 	"strings"
 )
 
@@ -66,4 +68,14 @@ func getAppIcon(core *gio.DesktopAppInfo) string {
 	}
 
 	return icon
+}
+
+func dataUriToFile(dataUri, path string) (string, error) {
+	commaIndex := strings.Index(dataUri, ",")
+	img, err := base64.StdEncoding.DecodeString(dataUri[commaIndex+1:])
+	if err != nil {
+		return path, err
+	}
+
+	return path, ioutil.WriteFile(path, img, 0744)
 }

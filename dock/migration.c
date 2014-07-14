@@ -19,7 +19,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-char* guess_app_id(long s_pid, const char* instance_name, const char* wmname, const char* wmclass, const char* icon_name);
+char* guess_app_id(long s_pid, const char* wmname, const char* wminstance, const char* wmclass, const char* icon_name);
 
 #include <glib.h>
 #include <stdlib.h>
@@ -257,7 +257,7 @@ gboolean is_chrome_app(char const* name)
 }
 
 
-char* guess_app_id(long s_pid, const char* instance_name, const char* wmname, const char* wmclass, const char* icon_name)
+char* guess_app_id(long s_pid, const char* wmname, const char* wminstance, const char* wmclass, const char* icon_name)
 {
     // g_setenv("G_MESSAGES_DEBUG", "all", FALSE);
     if (s_pid == 0) return g_strdup(wmclass);
@@ -276,7 +276,7 @@ char* guess_app_id(long s_pid, const char* instance_name, const char* wmname, co
             g_free(exec_args);
             int ppid = get_parent_pid(s_pid);
             if (ppid != 0) {
-                return guess_app_id(ppid, instance_name, wmname, wmclass, icon_name);
+                return guess_app_id(ppid, wmname, wminstance, wmclass, icon_name);
             }
         }
 
@@ -287,8 +287,8 @@ char* guess_app_id(long s_pid, const char* instance_name, const char* wmname, co
 
         if (app_id == NULL) {
             GKeyFile* f = load_app_config(FILTER_FILE);
-            if (f != NULL && wmname != NULL) {
-                app_id = g_key_file_get_string(f, wmname, "appid", NULL);
+            if (f != NULL && wminstance != NULL) {
+                app_id = g_key_file_get_string(f, wminstance, "appid", NULL);
             }
             g_key_file_unref(f);
             g_debug("[%s] get app id from StartupWMClass filter: %s", __func__, app_id);
@@ -297,9 +297,9 @@ char* guess_app_id(long s_pid, const char* instance_name, const char* wmname, co
             app_id = find_app_id(exec_name, wmname, APPID_FILTER_WMNAME);
             g_debug("[%s] get from wmname %s", __func__, app_id);
         }
-        if (app_id == NULL && wmname != NULL) {
-            app_id = find_app_id(exec_name, wmname, APPID_FILTER_WMINSTANCE);
-            g_debug("[%s] get from wmname %s", __func__, app_id);
+        if (app_id == NULL && wminstance != NULL) {
+            app_id = find_app_id(exec_name, wminstance, APPID_FILTER_WMINSTANCE);
+            g_debug("[%s] get from instance name %s", __func__, app_id);
         }
         if (app_id == NULL && wmclass != NULL) {
             app_id = find_app_id(exec_name, wmclass, APPID_FILTER_WMCLASS);
@@ -518,7 +518,7 @@ char* get_exec(int pid)
     char* args = NULL;
 
     get_pid_info(pid, &exec_fullname, &args);
-    g_warning("[%s] exec_fullname: %s exec_args: %s", __func__, exec_fullname, args);
+    g_debug("[%s] exec_fullname: %s exec_args: %s", __func__, exec_fullname, args);
     exec_name = g_path_get_basename(exec_fullname);
     char* exec = NULL;
     if (g_strcmp0(exec_name, "java") != 0) {
@@ -528,6 +528,7 @@ char* get_exec(int pid)
 
     int ppid = get_parent_pid(pid);
     if (ppid == 0 || (exec = get_exec(ppid)) == NULL) {
+        g_debug("[%s] get exec from env and cmd", __func__);
         g_free(exec);
         exec = NULL;
         char** envs = get_exec_env(pid);

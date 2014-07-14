@@ -158,6 +158,7 @@ func (m *DockedAppManager) Undock(id string) bool {
 		gio.SettingsSync()
 		os.Remove(filepath.Join(scratchDir, id+".desktop"))
 		os.Remove(filepath.Join(scratchDir, id+".sh"))
+		os.Remove(filepath.Join(scratchDir, id+".png"))
 		m.Undocked(id)
 		app := ENTRY_MANAGER.runtimeApps[id]
 		if app != nil {
