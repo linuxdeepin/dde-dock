@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-03 15:21+0700\n"
+"POT-Creation-Date: 2014-07-14 16:13+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME &lt;EMAIL@ADDRESS&gt;\n"
 "Language-Team: LANGUAGE &lt;LL@li.org&gt;\n"
@@ -854,10 +854,6 @@ msgstr "斯坦利"
 #: ../../datetime/zone_utc_list.go:248
 msgid "East"
 msgstr ""
-
-#: ../../datetime/zone_utc_list.go:250
-msgid "Americaoronha"
-msgstr "迪诺罗尼亚"
 
 #: ../../datetime/zone_utc_list.go:251
 msgid "South Georgia"
@@ -2123,7 +2119,7 @@ msgstr "汤加塔布"
 msgid "_Run"
 msgstr "运行(_R)"
 
-#: ../../dock/normal_apps.go:111
+#: ../../dock/normal_apps.go:111 ../../dock/runtime_apps.go:225
 msgid "_Undock"
 msgstr "移除驻留(_U)"
 
@@ -2131,9 +2127,14 @@ msgstr "移除驻留(_U)"
 msgid "_Close All"
 msgstr "关闭所有(_C)"
 
-#: ../../dock/runtime_apps.go:221
+#: ../../dock/runtime_apps.go:237
 msgid "_Dock"
 msgstr "驻留(_D)"
+
+#: ../../grub2/grub2_stub.go:164 ../../network/nm_setting_ip4_config.go:174
+#: ../../network/nm_setting_ip6_config.go:66
+msgid "Auto"
+msgstr "自动"
 
 #: ../../keybinding/id_desc_map.go:72
 msgid "Launcher"
@@ -2367,10 +2368,69 @@ msgstr "打开文件夹"
 msgid "Run Soft"
 msgstr "运行软件"
 
-#: ../../network/manager_connections.go:183
-#: ../../network/nm_custom_type.go:133
+#: ../../network/manager_connections.go:203
+#: ../../network/nm_custom_type.go:178
 msgid "Wired Connection"
 msgstr "有线连接"
+
+#: ../../network/manager_connections.go:281
+#: ../../network/manager_connections.go:286
+#: ../../network/nm_setting_virtual_key.go:141
+#: ../../network/nm_setting_virtual_key.go:148
+#: ../../network/nm_setting_virtual_key.go:178
+#: ../../network/nm_setting_vpn_openvpn.go:398
+#: ../../network/nm_setting_vpn_vpnc.go:272
+msgid "None"
+msgstr "无"
+
+#: ../../network/manager_connections.go:288
+#: ../../network/nm_setting_virtual_key.go:142
+#: ../../network/nm_setting_virtual_key.go:149
+msgid "WEP 40/128-bit Key"
+msgstr "WEP40/128位密钥"
+
+#: ../../network/manager_connections.go:290
+#: ../../network/nm_setting_virtual_key.go:143
+#: ../../network/nm_setting_virtual_key.go:150
+msgid "WPA/WPA2 Personal"
+msgstr "WPA/WPA2个人版"
+
+#: ../../network/manager_connections.go:298
+#: ../../network/nm_setting_802_1x.go:80
+#: ../../network/nm_setting_802_1x.go:161
+#: ../../network/nm_setting_802_1x.go:169
+msgid "TLS"
+msgstr "TLS"
+
+#: ../../network/manager_connections.go:300
+#: ../../network/nm_setting_802_1x.go:79
+#: ../../network/nm_setting_802_1x.go:162
+msgid "MD5"
+msgstr "MD5"
+
+#: ../../network/manager_connections.go:302
+#: ../../network/nm_setting_802_1x.go:170
+#: ../../network/nm_setting_wireless_security.go:206
+msgid "LEAP"
+msgstr "LEAP"
+
+#: ../../network/manager_connections.go:304
+#: ../../network/nm_setting_802_1x.go:163
+#: ../../network/nm_setting_802_1x.go:171
+msgid "FAST"
+msgstr "FAST"
+
+#: ../../network/manager_connections.go:306
+#: ../../network/nm_setting_802_1x.go:164
+#: ../../network/nm_setting_802_1x.go:172
+msgid "Tunneled TLS"
+msgstr "隧道TLS"
+
+#: ../../network/manager_connections.go:308
+#: ../../network/nm_setting_802_1x.go:165
+#: ../../network/nm_setting_802_1x.go:173
+msgid "Protected EAP"
+msgstr "受保护的EAP"
 
 #: ../../network/nm_constant.go:296 ../../network/nm_setting_vpn_l2tp.go:116
 #: ../../network/nm_setting_vpn_openvpn.go:171
@@ -2394,59 +2454,59 @@ msgstr "总是询问"
 msgid "Not Required"
 msgstr "不要求"
 
-#: ../../network/nm_custom_type.go:131
+#: ../../network/nm_custom_type.go:176
 msgid "Connection"
 msgstr "连接"
 
-#: ../../network/nm_custom_type.go:135
+#: ../../network/nm_custom_type.go:180
 msgid "Wireless Connection"
 msgstr "无线连接"
 
-#: ../../network/nm_custom_type.go:137
+#: ../../network/nm_custom_type.go:182
 msgid "Wireless Ad-Hoc"
 msgstr "无线临时网络"
 
-#: ../../network/nm_custom_type.go:139
+#: ../../network/nm_custom_type.go:184
 msgid "Wireless Ap-Hotspot"
 msgstr "无线Ap热点"
 
-#: ../../network/nm_custom_type.go:141
+#: ../../network/nm_custom_type.go:186
 msgid "PPPoE Connection"
 msgstr "PPPoE连接"
 
-#: ../../network/nm_custom_type.go:143
+#: ../../network/nm_custom_type.go:188
 msgid "Mobile Connection"
 msgstr "移动连接"
 
-#: ../../network/nm_custom_type.go:145
+#: ../../network/nm_custom_type.go:190
 msgid "Mobile GSM Connection"
 msgstr "移动GSM连接"
 
-#: ../../network/nm_custom_type.go:147
+#: ../../network/nm_custom_type.go:192
 msgid "Mobile CDMA Connection"
 msgstr "移动CDMA连接"
 
-#: ../../network/nm_custom_type.go:149
+#: ../../network/nm_custom_type.go:194
 msgid "VPN Connection"
 msgstr "VPN连接"
 
-#: ../../network/nm_custom_type.go:151
+#: ../../network/nm_custom_type.go:196
 msgid "VPN L2TP"
 msgstr "VPN L2TP"
 
-#: ../../network/nm_custom_type.go:153
+#: ../../network/nm_custom_type.go:198
 msgid "VPN OpenConnect"
 msgstr "VPN OpenConnect"
 
-#: ../../network/nm_custom_type.go:155
+#: ../../network/nm_custom_type.go:200
 msgid "VPN OpenVPN"
 msgstr "VPN OpenVPN"
 
-#: ../../network/nm_custom_type.go:157
+#: ../../network/nm_custom_type.go:202
 msgid "VPN PPTP"
 msgstr "VPN PPTP"
 
-#: ../../network/nm_custom_type.go:159
+#: ../../network/nm_custom_type.go:204
 msgid "VPN VPNC"
 msgstr "VPN VPNC"
 
@@ -2473,37 +2533,6 @@ msgstr "GTC"
 #: ../../network/nm_setting_802_1x.go:78
 msgid "OTP"
 msgstr "OTP"
-
-#: ../../network/nm_setting_802_1x.go:79
-#: ../../network/nm_setting_802_1x.go:162
-msgid "MD5"
-msgstr "MD5"
-
-#: ../../network/nm_setting_802_1x.go:80
-#: ../../network/nm_setting_802_1x.go:161
-#: ../../network/nm_setting_802_1x.go:169
-msgid "TLS"
-msgstr "TLS"
-
-#: ../../network/nm_setting_802_1x.go:163
-#: ../../network/nm_setting_802_1x.go:171
-msgid "FAST"
-msgstr "FAST"
-
-#: ../../network/nm_setting_802_1x.go:164
-#: ../../network/nm_setting_802_1x.go:172
-msgid "Tunneled TLS"
-msgstr "隧道TLS"
-
-#: ../../network/nm_setting_802_1x.go:165
-#: ../../network/nm_setting_802_1x.go:173
-msgid "Protected EAP"
-msgstr "受保护的EAP"
-
-#: ../../network/nm_setting_802_1x.go:170
-#: ../../network/nm_setting_wireless_security.go:206
-msgid "LEAP"
-msgstr "LEAP"
 
 #: ../../network/nm_setting_802_1x.go:178
 #: ../../network/nm_setting_ip4_config.go:178
@@ -2584,11 +2613,6 @@ msgstr "首选4G（LTE）"
 msgid "Use Only 4G (LTE)"
 msgstr "仅使用4G（LTE）"
 
-#: ../../network/nm_setting_ip4_config.go:174
-#: ../../network/nm_setting_ip6_config.go:66
-msgid "Auto"
-msgstr "自动"
-
 #: ../../network/nm_setting_ip4_config.go:175
 #: ../../network/nm_setting_ip6_config.go:68
 msgid "Link-Local Only"
@@ -2640,24 +2664,6 @@ msgstr "OpenVPN"
 #: ../../network/nm_setting_virtual_key.go:128
 msgid "VPNC"
 msgstr "VPNC"
-
-#: ../../network/nm_setting_virtual_key.go:141
-#: ../../network/nm_setting_virtual_key.go:148
-#: ../../network/nm_setting_virtual_key.go:178
-#: ../../network/nm_setting_vpn_openvpn.go:398
-#: ../../network/nm_setting_vpn_vpnc.go:272
-msgid "None"
-msgstr "无"
-
-#: ../../network/nm_setting_virtual_key.go:142
-#: ../../network/nm_setting_virtual_key.go:149
-msgid "WEP 40/128-bit Key"
-msgstr "WEP40/128位密钥"
-
-#: ../../network/nm_setting_virtual_key.go:143
-#: ../../network/nm_setting_virtual_key.go:150
-msgid "WPA/WPA2 Personal"
-msgstr "WPA/WPA2个人版"
 
 #: ../../network/nm_setting_virtual_key.go:144
 msgid "WPA/WPA2 Enterprise"
@@ -2963,12 +2969,12 @@ msgstr "需要密码，但未提供。"
 
 #: ../../network/state_handler.go:40
 msgid ""
-"The 802.1X supplication disconnected from the access point or authentication "
+"The 802.1X supplicant disconnected from the access point or authentication "
 "server."
 msgstr "802.1X客户端从接入点或认证服务器断开连接。"
 
 #: ../../network/state_handler.go:41
-msgid "Configuration of the 802.1X supplication failed."
+msgid "Configuration of the 802.1X supplicant failed."
 msgstr "802.1X客户端配置失败。"
 
 #: ../../network/state_handler.go:42
@@ -3100,7 +3106,7 @@ msgid "The device's existing connection was assumed."
 msgstr "假定该设备的现有连接。"
 
 #: ../../network/state_handler.go:74
-msgid "The 802.1x supplication is now available."
+msgid "The 802.1x supplicant is now available."
 msgstr "802.1x客户端现在可用"
 
 #: ../../network/state_handler.go:75
@@ -3231,6 +3237,9 @@ msgstr "电池电量低"
 #: ../../power/upower.go:114
 msgid "Computer will be in suspend mode, please plug in."
 msgstr "计算机将要进入待机状态，请连接电源。"
+
+#~ msgid "Americaoronha"
+#~ msgstr "迪诺罗尼亚"
 
 #~ msgid "Argentina/Buenos Aires"
 #~ msgstr "贝伦"
