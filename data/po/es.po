@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-14 16:13+0800\n"
+"POT-Creation-Date: 2014-07-14 16:19+0800\n"
 "PO-Revision-Date: 2014-07-05 22:30+0000\n"
 "Last-Translator: jose manuel <josemdance@outlook.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/dde-daemon/"
@@ -2142,15 +2142,15 @@ msgstr "Tongatapu"
 msgid "_Run"
 msgstr "_Ejecutar"
 
-#: ../../dock/normal_apps.go:111 ../../dock/runtime_apps.go:225
+#: ../../dock/normal_apps.go:111 ../../dock/runtime_apps.go:290
 msgid "_Undock"
 msgstr "_Desacoplar"
 
-#: ../../dock/runtime_apps.go:194
+#: ../../dock/runtime_apps.go:259
 msgid "_Close All"
 msgstr "_Cerrar Todo"
 
-#: ../../dock/runtime_apps.go:237
+#: ../../dock/runtime_apps.go:302
 msgid "_Dock"
 msgstr "_Dock"
 
@@ -2972,7 +2972,8 @@ msgid "The device is no longer managed."
 msgstr "El dispositivo ya no es manejado."
 
 #: ../../network/state_handler.go:36
-msgid "The device have not been ready for configuration."
+#, fuzzy
+msgid "The device has not been ready for configuration."
 msgstr "El dispositivo no ha sido preparado para la configuración."
 
 #: ../../network/state_handler.go:37

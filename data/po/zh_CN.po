@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-14 16:13+0800\n"
+"POT-Creation-Date: 2014-07-14 16:19+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME &lt;EMAIL@ADDRESS&gt;\n"
 "Language-Team: LANGUAGE &lt;LL@li.org&gt;\n"
@@ -2119,15 +2119,15 @@ msgstr "汤加塔布"
 msgid "_Run"
 msgstr "运行(_R)"
 
-#: ../../dock/normal_apps.go:111 ../../dock/runtime_apps.go:225
+#: ../../dock/normal_apps.go:111 ../../dock/runtime_apps.go:290
 msgid "_Undock"
 msgstr "移除驻留(_U)"
 
-#: ../../dock/runtime_apps.go:194
+#: ../../dock/runtime_apps.go:259
 msgid "_Close All"
 msgstr "关闭所有(_C)"
 
-#: ../../dock/runtime_apps.go:237
+#: ../../dock/runtime_apps.go:302
 msgid "_Dock"
 msgstr "驻留(_D)"
 
@@ -2951,7 +2951,7 @@ msgid "The device is no longer managed."
 msgstr "设备不再托管。"
 
 #: ../../network/state_handler.go:36
-msgid "The device have not been ready for configuration."
+msgid "The device has not been ready for configuration."
 msgstr "设备配置未就绪。"
 
 #: ../../network/state_handler.go:37

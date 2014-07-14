@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-14 16:13+0800\n"
+"POT-Creation-Date: 2014-07-14 16:19+0800\n"
 "PO-Revision-Date: 2014-07-07 10:00+0000\n"
 "Last-Translator: electricface <songwentai@linuxdeepin.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/projects/p/dde-"
@@ -2127,15 +2127,15 @@ msgstr ""
 msgid "_Run"
 msgstr "_Executar"
 
-#: ../../dock/normal_apps.go:111 ../../dock/runtime_apps.go:225
+#: ../../dock/normal_apps.go:111 ../../dock/runtime_apps.go:290
 msgid "_Undock"
 msgstr "_Remover da barra"
 
-#: ../../dock/runtime_apps.go:194
+#: ../../dock/runtime_apps.go:259
 msgid "_Close All"
 msgstr "_Fechar todos"
 
-#: ../../dock/runtime_apps.go:237
+#: ../../dock/runtime_apps.go:302
 msgid "_Dock"
 msgstr "_Dock"
 
@@ -2957,7 +2957,7 @@ msgid "The device is no longer managed."
 msgstr "O dispositivo não mais é gerenciado."
 
 #: ../../network/state_handler.go:36
-msgid "The device have not been ready for configuration."
+msgid "The device has not been ready for configuration."
 msgstr ""
 
 #: ../../network/state_handler.go:37
