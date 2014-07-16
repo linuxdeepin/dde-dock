@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-16 16:58+0800\n"
+"POT-Creation-Date: 2014-07-16 17:10+0800\n"
 "PO-Revision-Date: 2014-07-05 22:30+0000\n"
 "Last-Translator: jose manuel <josemdance@outlook.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/dde-daemon/"
@@ -2159,223 +2159,228 @@ msgstr "_Dock"
 msgid "Auto"
 msgstr "Auto"
 
-#: ../../keybinding/id_desc_map.go:72
+#: ../../keybinding/id_desc_map.go:74
 msgid "Launcher"
 msgstr "Lanzador"
 
-#: ../../keybinding/id_desc_map.go:73
+#: ../../keybinding/id_desc_map.go:75
 msgid "Show desktop"
 msgstr "Mostrar escritorio"
 
-#: ../../keybinding/id_desc_map.go:74
+#: ../../keybinding/id_desc_map.go:76
 msgid "Lock screen"
 msgstr "Bloquear pantalla"
 
-#: ../../keybinding/id_desc_map.go:75
+#: ../../keybinding/id_desc_map.go:77
 msgid "File manager"
 msgstr "Gestores de ficheros"
 
-#: ../../keybinding/id_desc_map.go:76
+#: ../../keybinding/id_desc_map.go:78
 msgid "Switch applications"
 msgstr "Cambiar aplicaciones"
 
-#: ../../keybinding/id_desc_map.go:77
+#: ../../keybinding/id_desc_map.go:79
 msgid "Reverse switch applications"
 msgstr "Revertir cambio de aplicaciones"
 
-#: ../../keybinding/id_desc_map.go:78
+#: ../../keybinding/id_desc_map.go:80
 msgid "3D switch applications"
 msgstr "Cambio de aplicaciones 3D"
 
-#: ../../keybinding/id_desc_map.go:79
+#: ../../keybinding/id_desc_map.go:81
 msgid "3D reverse switch applications"
 msgstr "3D revertir cambiar aplicaciones"
 
-#: ../../keybinding/id_desc_map.go:80
+#: ../../keybinding/id_desc_map.go:82
 msgid "Show/Hide the dock"
 msgstr "Mostrar/Ocultar el Dock"
 
-#: ../../keybinding/id_desc_map.go:81
+#: ../../keybinding/id_desc_map.go:83
 msgid "Screenshot"
 msgstr "Captura de Pantalla"
 
-#: ../../keybinding/id_desc_map.go:82
+#: ../../keybinding/id_desc_map.go:84
 msgid "Full screenshot"
 msgstr "pantalla completa de captura de pantalla"
 
-#: ../../keybinding/id_desc_map.go:83
+#: ../../keybinding/id_desc_map.go:85
 msgid "Window screenshot"
 msgstr "captura de ventana"
 
-#: ../../keybinding/id_desc_map.go:84
+#: ../../keybinding/id_desc_map.go:86
 msgid "Delay screenshot"
 msgstr "Retraso de pantalla"
 
-#: ../../keybinding/id_desc_map.go:85
+#: ../../keybinding/id_desc_map.go:87
 msgid "Terminal"
 msgstr "Terminal "
 
-#: ../../keybinding/id_desc_map.go:86
+#: ../../keybinding/id_desc_map.go:88
 msgid "Terminal Quake Window"
 msgstr "Ventana de terminal Quake"
 
-#: ../../keybinding/id_desc_map.go:87
+#: ../../keybinding/id_desc_map.go:89
 msgid "Logout"
 msgstr "Cerrar sesión"
 
-#: ../../keybinding/id_desc_map.go:88
+#: ../../keybinding/id_desc_map.go:90
 msgid "Disable Touchpad"
 msgstr "Desactivar el Touchpad"
 
-#: ../../keybinding/id_desc_map.go:89
+#: ../../keybinding/id_desc_map.go:91
 msgid "Deepin Translator"
 msgstr "Traductor Deepin"
 
-#: ../../keybinding/id_desc_map.go:129
+#: ../../keybinding/id_desc_map.go:92
+#, fuzzy
+msgid "Switch Layout"
+msgstr "Interruptor furl estado"
+
+#: ../../keybinding/id_desc_map.go:132
 msgid "Calculator"
 msgstr "Calculadora"
 
-#: ../../keybinding/id_desc_map.go:130
+#: ../../keybinding/id_desc_map.go:133
 msgid "Email client"
 msgstr "cliente de correo electrónico"
 
-#: ../../keybinding/id_desc_map.go:131
+#: ../../keybinding/id_desc_map.go:134
 msgid "Web browser"
 msgstr "navegador Web"
 
-#: ../../keybinding/id_desc_map.go:132
+#: ../../keybinding/id_desc_map.go:135
 msgid "Media player"
 msgstr "reproductor de medios"
 
-#: ../../keybinding/id_desc_map.go:133
+#: ../../keybinding/id_desc_map.go:136
 msgid "Play/Pause"
 msgstr "Reproducir/Pausar "
 
-#: ../../keybinding/id_desc_map.go:134
+#: ../../keybinding/id_desc_map.go:137
 msgid "Pause"
 msgstr "Pausa"
 
-#: ../../keybinding/id_desc_map.go:135
+#: ../../keybinding/id_desc_map.go:138
 msgid "Stop"
 msgstr "Detener"
 
-#: ../../keybinding/id_desc_map.go:136
+#: ../../keybinding/id_desc_map.go:139
 msgid "Mute"
 msgstr "Silenciar"
 
-#: ../../keybinding/id_desc_map.go:137
+#: ../../keybinding/id_desc_map.go:140
 msgid "Volume down"
 msgstr "Bajar volumen"
 
-#: ../../keybinding/id_desc_map.go:138
+#: ../../keybinding/id_desc_map.go:141
 msgid "Volume up"
 msgstr "Subir volumen"
 
-#: ../../keybinding/id_desc_map.go:139
+#: ../../keybinding/id_desc_map.go:142
 msgid "Previous"
 msgstr "Previo"
 
-#: ../../keybinding/id_desc_map.go:140
+#: ../../keybinding/id_desc_map.go:143
 msgid "Next"
 msgstr "Siguiente"
 
-#: ../../keybinding/id_desc_map.go:141
+#: ../../keybinding/id_desc_map.go:144
 msgid "Eject"
 msgstr "Expulsar"
 
-#: ../../keybinding/id_desc_map.go:171
+#: ../../keybinding/id_desc_map.go:174
 msgid "Close window"
 msgstr "Cerrar ventana"
 
-#: ../../keybinding/id_desc_map.go:172
+#: ../../keybinding/id_desc_map.go:175
 msgid "Maximize window"
 msgstr "Maximizar ventana "
 
-#: ../../keybinding/id_desc_map.go:173
+#: ../../keybinding/id_desc_map.go:176
 msgid "Restore window"
 msgstr "Restaurar ventana"
 
-#: ../../keybinding/id_desc_map.go:174
+#: ../../keybinding/id_desc_map.go:177
 msgid "Minimize window"
 msgstr "Minimizar ventana"
 
-#: ../../keybinding/id_desc_map.go:175
+#: ../../keybinding/id_desc_map.go:178
 msgid "Move window"
 msgstr "Mover ventana"
 
-#: ../../keybinding/id_desc_map.go:176
+#: ../../keybinding/id_desc_map.go:179
 msgid "Resize window"
 msgstr "Cambiar tamaño de ventana"
 
-#: ../../keybinding/id_desc_map.go:177
+#: ../../keybinding/id_desc_map.go:180
 msgid "Switch furl state"
 msgstr "Interruptor furl estado"
 
-#: ../../keybinding/id_desc_map.go:178
+#: ../../keybinding/id_desc_map.go:181
 msgid "Activate window menu"
 msgstr "Activar el menú de la ventana"
 
-#: ../../keybinding/id_desc_map.go:224
+#: ../../keybinding/id_desc_map.go:227
 msgid "Switch to workspace 1"
 msgstr "Cambiar a espacio de trabajo 1"
 
-#: ../../keybinding/id_desc_map.go:225
+#: ../../keybinding/id_desc_map.go:228
 msgid "Switch to workspace 2"
 msgstr "Cambiar a espacio de trabajo 2"
 
-#: ../../keybinding/id_desc_map.go:226
+#: ../../keybinding/id_desc_map.go:229
 msgid "Switch to workspace 3"
 msgstr "Cambiar a espacio de trabajo 3"
 
-#: ../../keybinding/id_desc_map.go:227
+#: ../../keybinding/id_desc_map.go:230
 msgid "Switch to workspace 4"
 msgstr "Cambiar a espacio de trabajo 4"
 
-#: ../../keybinding/id_desc_map.go:228
+#: ../../keybinding/id_desc_map.go:231
 msgid "Switch to left workspace"
 msgstr "Cambiar al espacio de trabajo izquierdo"
 
-#: ../../keybinding/id_desc_map.go:229
+#: ../../keybinding/id_desc_map.go:232
 msgid "Switch to right workspace"
 msgstr "Cambiar al espacio de trabajo adecuado"
 
-#: ../../keybinding/id_desc_map.go:230
+#: ../../keybinding/id_desc_map.go:233
 msgid "Switch to upper workspace"
 msgstr "Cambiar al espacio de trabajo superior"
 
-#: ../../keybinding/id_desc_map.go:231
+#: ../../keybinding/id_desc_map.go:234
 msgid "Switch to lower workspace"
 msgstr "cambiar para reducir el espacio de trabajo"
 
-#: ../../keybinding/id_desc_map.go:232
+#: ../../keybinding/id_desc_map.go:235
 msgid "Move to workspace 1"
 msgstr "Mover al área de trabajo 1"
 
-#: ../../keybinding/id_desc_map.go:233
+#: ../../keybinding/id_desc_map.go:236
 msgid "Move to workspace 2"
 msgstr "Mover al área de trabajo 2"
 
-#: ../../keybinding/id_desc_map.go:234
+#: ../../keybinding/id_desc_map.go:237
 msgid "Move to workspace 3"
 msgstr "Mover al área de trabajo 3"
 
-#: ../../keybinding/id_desc_map.go:235
+#: ../../keybinding/id_desc_map.go:238
 msgid "Move to workspace 4"
 msgstr "Mover al área de trabajo 4"
 
-#: ../../keybinding/id_desc_map.go:236
+#: ../../keybinding/id_desc_map.go:239
 msgid "Move to left workspace"
 msgstr "Mover a la izquierda de espacio de trabajo"
 
-#: ../../keybinding/id_desc_map.go:237
+#: ../../keybinding/id_desc_map.go:240
 msgid "Move to right workspace"
 msgstr "Mover al área de trabajo izquierda"
 
-#: ../../keybinding/id_desc_map.go:238
+#: ../../keybinding/id_desc_map.go:241
 msgid "Move to upper workspace"
 msgstr "Mover al espacio de trabajo superior"
 
-#: ../../keybinding/id_desc_map.go:239
+#: ../../keybinding/id_desc_map.go:242
 msgid "Move to lower workspace"
 msgstr "Mover reducir el espacio de trabajo"
 
