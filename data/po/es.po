@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-14 16:13+0800\n"
+"POT-Creation-Date: 2014-07-16 16:58+0800\n"
 "PO-Revision-Date: 2014-07-05 22:30+0000\n"
 "Last-Translator: jose manuel <josemdance@outlook.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/dde-daemon/"
@@ -2138,19 +2138,19 @@ msgstr "Fakaofo"
 msgid "Tongatapu"
 msgstr "Tongatapu"
 
-#: ../../dock/normal_apps.go:79
+#: ../../dock/normal_apps.go:80
 msgid "_Run"
 msgstr "_Ejecutar"
 
-#: ../../dock/normal_apps.go:111 ../../dock/runtime_apps.go:225
+#: ../../dock/normal_apps.go:112 ../../dock/runtime_apps.go:290
 msgid "_Undock"
 msgstr "_Desacoplar"
 
-#: ../../dock/runtime_apps.go:194
+#: ../../dock/runtime_apps.go:259
 msgid "_Close All"
 msgstr "_Cerrar Todo"
 
-#: ../../dock/runtime_apps.go:237
+#: ../../dock/runtime_apps.go:302
 msgid "_Dock"
 msgstr "_Dock"
 
@@ -3259,16 +3259,21 @@ msgid "Computer has been in suspend mode, please plug in."
 msgstr "Ordenador ha sido en modo de suspensión, por favor enchufela"
 
 #: ../../power/upower.go:101
-msgid "Computer will being in suspend mode, please plug in."
-msgstr "La computadora está en modo de suspender, por favor enchufela"
+#, fuzzy
+msgid "Please plug in, or computer will be in suspend mode."
+msgstr "Computer será en modo de suspensión, por favor enchufela"
 
 #: ../../power/upower.go:114
 msgid "Battery Low"
 msgstr "Batería baja"
 
 #: ../../power/upower.go:114
-msgid "Computer will be in suspend mode, please plug in."
+#, fuzzy
+msgid "Computer will be in suspend mode, please plug in now."
 msgstr "Computer será en modo de suspensión, por favor enchufela"
+
+#~ msgid "Computer will being in suspend mode, please plug in."
+#~ msgstr "La computadora está en modo de suspender, por favor enchufela"
 
 #~ msgid "Americaoronha"
 #~ msgstr "Americaoronha"

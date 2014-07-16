@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-14 16:13+0800\n"
+"POT-Creation-Date: 2014-07-16 16:58+0800\n"
 "PO-Revision-Date: 2014-07-07 10:00+0000\n"
 "Last-Translator: electricface <songwentai@linuxdeepin.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/dde-"
@@ -2118,19 +2118,19 @@ msgstr "法考福"
 msgid "Tongatapu"
 msgstr "湯加塔布"
 
-#: ../../dock/normal_apps.go:79
+#: ../../dock/normal_apps.go:80
 msgid "_Run"
 msgstr "運行(_R)"
 
-#: ../../dock/normal_apps.go:111 ../../dock/runtime_apps.go:225
+#: ../../dock/normal_apps.go:112 ../../dock/runtime_apps.go:290
 msgid "_Undock"
 msgstr "移除駐留(_U)"
 
-#: ../../dock/runtime_apps.go:194
+#: ../../dock/runtime_apps.go:259
 msgid "_Close All"
 msgstr "關閉所有(_C)"
 
-#: ../../dock/runtime_apps.go:237
+#: ../../dock/runtime_apps.go:302
 msgid "_Dock"
 msgstr "駐留(_D)"
 
@@ -3228,13 +3228,18 @@ msgid "Computer has been in suspend mode, please plug in."
 msgstr "電腦進入待機狀態，請連接電源。"
 
 #: ../../power/upower.go:101
-msgid "Computer will being in suspend mode, please plug in."
-msgstr "電腦即將進入待機狀態，請連接電源。"
+#, fuzzy
+msgid "Please plug in, or computer will be in suspend mode."
+msgstr "電腦將要進入待機狀態，請連接電源。"
 
 #: ../../power/upower.go:114
 msgid "Battery Low"
 msgstr "電池電量低"
 
 #: ../../power/upower.go:114
-msgid "Computer will be in suspend mode, please plug in."
+#, fuzzy
+msgid "Computer will be in suspend mode, please plug in now."
 msgstr "電腦將要進入待機狀態，請連接電源。"
+
+#~ msgid "Computer will being in suspend mode, please plug in."
+#~ msgstr "電腦即將進入待機狀態，請連接電源。"

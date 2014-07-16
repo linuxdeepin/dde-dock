@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-14 16:13+0800\n"
+"POT-Creation-Date: 2014-07-16 16:58+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2117,19 +2117,19 @@ msgstr ""
 msgid "Tongatapu"
 msgstr ""
 
-#: ../../dock/normal_apps.go:79
+#: ../../dock/normal_apps.go:80
 msgid "_Run"
 msgstr ""
 
-#: ../../dock/normal_apps.go:111 ../../dock/runtime_apps.go:225
+#: ../../dock/normal_apps.go:112 ../../dock/runtime_apps.go:290
 msgid "_Undock"
 msgstr ""
 
-#: ../../dock/runtime_apps.go:194
+#: ../../dock/runtime_apps.go:259
 msgid "_Close All"
 msgstr ""
 
-#: ../../dock/runtime_apps.go:237
+#: ../../dock/runtime_apps.go:302
 msgid "_Dock"
 msgstr ""
 
@@ -3227,7 +3227,7 @@ msgid "Computer has been in suspend mode, please plug in."
 msgstr ""
 
 #: ../../power/upower.go:101
-msgid "Computer will being in suspend mode, please plug in."
+msgid "Please plug in, or computer will be in suspend mode."
 msgstr ""
 
 #: ../../power/upower.go:114
@@ -3235,5 +3235,5 @@ msgid "Battery Low"
 msgstr ""
 
 #: ../../power/upower.go:114
-msgid "Computer will be in suspend mode, please plug in."
+msgid "Computer will be in suspend mode, please plug in now."
 msgstr ""
