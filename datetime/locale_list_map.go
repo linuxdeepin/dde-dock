@@ -27,7 +27,7 @@ var (
 		"de":          "de_DE.UTF-8",
 		"dz":          "dz_BT",
 		"el":          "el_GR.UTF-8",
-		"en":          "en_GB.UTF-8",
+		//"en":          "en_GB.UTF-8",
 		"en_GB":       "en_GB.UTF-8",
 		"en_US":       "en_US.UTF-8",
 		"eo":          "eo_US.UTF-8",
