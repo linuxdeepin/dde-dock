@@ -31,6 +31,10 @@ import (
 	"time"
 )
 
+var (
+	gnomeIfcSettings = gio.NewSettings("org.gnome.desktop.interface")
+)
+
 func (obj *Manager) listenGSettings() {
 	themeSettings.Connect("changed", func(s *gio.Settings, key string) {
 		switch key {
@@ -65,6 +69,12 @@ func (obj *Manager) listenGSettings() {
 			value = encodeURI(value)
 			themeSettings.SetString(GS_KEY_CURRENT_BG, value)
 		}
+	})
+
+	gnomeIfcSettings.Connect("changed::font-name", func(s *gio.Settings, key string) {
+		value := gnomeIfcSettings.GetString("font-name")
+		setGtkFont(value)
+		setQtFont(value)
 	})
 }
 

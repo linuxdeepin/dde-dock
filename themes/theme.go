@@ -28,6 +28,7 @@ import (
 	"pkg.linuxdeepin.com/lib/gio-2.0"
 	dutils "pkg.linuxdeepin.com/lib/utils"
 	"strconv"
+	"strings"
 )
 
 type Theme struct {
@@ -84,7 +85,7 @@ func (obj *Theme) setGtkTheme() {
 	wmPreSettings.SetString("theme", obj.GtkTheme)
 	if ok := dutils.WriteKeyToKeyFile(path.Join(homeDir, QT_CONFIG_FILE),
 		QT_KEY_GROUP, QT_KEY_STYLE, QT_STYLE_VALUE); !ok {
-		Logger.Error("Set QT Style Failed")
+		Logger.Warning("Set QT Style Failed")
 		return
 	}
 }
@@ -104,34 +105,71 @@ func (obj *Theme) setFontName() {
 	} else {
 		size = strconv.FormatInt(int64(obj.FontSize), 10)
 	}
-	objXS.SetString("Gtk/FontName", DEFAULT_FONT+" "+size)
-	wmPreSettings.SetString("titlebar-font", DEFAULT_FONT+" Bold "+size)
-	if ok := dutils.WriteKeyToKeyFile(path.Join(homeDir, QT_CONFIG_FILE),
-		QT_KEY_GROUP, QT_KEY_FONT,
-		"\""+DEFAULT_FONT+","+size+QT_FONT_ARGS+"\""); !ok {
-		Logger.Error("Set QT Font Failed")
-		return
-	}
-	setMonoFont(DEFAULT_FONT_MONO, size)
+
+	fontStr := DEFAULT_FONT + " " + size
+	setGtkFont(fontStr)
+	setQtFont(fontStr)
+	setTitleFont(DEFAULT_FONT + " Bold " + size)
+	setMonoFont(DEFAULT_FONT_MONO + " " + size)
 }
 
-func setMonoFont(name, size string) {
-	if len(name) <= 0 {
+func setGtkFont(fontStr string) {
+	if objXS != nil {
+		objXS.SetString("Gtk/FontName", fontStr)
+	}
+}
+
+func setTitleFont(fontStr string) {
+	wmPreSettings.SetString("titlebar-font", fontStr)
+}
+
+func setQtFont(fontStr string) {
+	homeDir := dutils.GetHomeDir()
+	if len(homeDir) < 1 {
 		return
 	}
 
-	if len(size) <= 0 {
-		size = "10"
+	strs := strings.Split(fontStr, " ")
+	l := len(strs)
+	if l < 2 {
+		return
 	}
 
-	args := []string{}
-	args = append(args, "-t")
-	args = append(args, "string")
-	args = append(args, "-s")
-	args = append(args, "/desktop/gnome/interface/monospace_font_name")
-	args = append(args, name+" "+size)
+	fontName := ""
+	fontSize := ""
+	for i, v := range strs {
+		if len(v) < 1 {
+			continue
+		}
 
-	exec.Command("/usr/bin/gconftool", args...).Run()
+		if i == l-1 {
+			fontSize = v
+			continue
+		}
+		fontName += v + " "
+	}
+
+	filename := path.Join(homeDir, QT_CONFIG_FILE)
+	value := "\"" + fontName + "," + fontSize + QT_FONT_ARGS + "\""
+	if ok := dutils.WriteKeyToKeyFile(filename, QT_KEY_GROUP,
+		QT_KEY_FONT, value); !ok {
+		Logger.Warning("Set Qt Font Failed")
+		return
+	}
+}
+
+func setMonoFont(fontStr string) {
+	if len(fontStr) <= 0 {
+		return
+	}
+
+	if out, err := exec.Command("/usr/bin/gconftool",
+		"-t", "string",
+		"-s", "/desktop/gnome/interface/monospace_font_name",
+		fontStr).CombinedOutput(); err != nil {
+		Logger.Warning("Set mono font failed:", string(out))
+		return
+	}
 }
 
 func newTheme(info ThemeInfo) *Theme {
@@ -148,7 +186,7 @@ func newTheme(info ThemeInfo) *Theme {
 		var err error
 		t.watcher, err = fsnotify.NewWatcher()
 		if err != nil {
-			Logger.Errorf("New Watcher Failed: %v", err)
+			Logger.Warningf("New Watcher Failed: %v", err)
 			panic(err)
 		}
 

@@ -64,14 +64,14 @@ func getThemeList(dirs []pathInfo, conditions []string) []ThemeInfo {
 		var err error
 
 		if f, err = os.Open(dir.Path); err != nil {
-			Logger.Errorf("Open '%s' failed: %v", dir.Path, err)
+			Logger.Warningf("Open '%s' failed: %v", dir.Path, err)
 			continue
 		}
 		defer f.Close()
 
 		var infos []os.FileInfo
 		if infos, err = f.Readdir(0); err != nil {
-			Logger.Errorf("Readdir '%s' failed: %v", dir.Path, err)
+			Logger.Warningf("Readdir '%s' failed: %v", dir.Path, err)
 			continue
 		}
 
@@ -99,14 +99,14 @@ func filterTheme(dir string, conditions []string) bool {
 
 	var f *os.File
 	if f, err = os.Open(dir); err != nil {
-		Logger.Errorf("Open '%s' failed: %v", dir, err)
+		Logger.Warningf("Open '%s' failed: %v", dir, err)
 		return false
 	}
 	defer f.Close()
 
 	names := []string{}
 	if names, err = f.Readdirnames(0); err != nil {
-		Logger.Errorf("Readdirnames '%s' failed: %v", dir, err)
+		Logger.Warningf("Readdirnames '%s' failed: %v", dir, err)
 		return false
 	}
 
@@ -216,13 +216,13 @@ func getBackgroundDir(dir string) ([]string, bool) {
 
 	f, err := os.Open(dir)
 	if err != nil {
-		Logger.Errorf("Open '%s' failed: %v", dir, err)
+		Logger.Warningf("Open '%s' failed: %v", dir, err)
 		return list, false
 	}
 	defer f.Close()
 
 	if infos, err := f.Readdir(0); err != nil {
-		Logger.Errorf("Readdir '%s' failed: %v", dir, err)
+		Logger.Warningf("Readdir '%s' failed: %v", dir, err)
 		return list, false
 	} else {
 		conditions := []string{THEME_BG_NAME}
@@ -248,13 +248,13 @@ func getImageList(dir string) ([]string, bool) {
 
 	f, err := os.Open(dir)
 	if err != nil {
-		Logger.Errorf("Open '%s' failed: %v", dir, err)
+		Logger.Warningf("Open '%s' failed: %v", dir, err)
 		return list, false
 	}
 	defer f.Close()
 
 	if infos, err := f.Readdir(0); err != nil {
-		Logger.Errorf("Readdir '%s' failed: %v", dir, err)
+		Logger.Warningf("Readdir '%s' failed: %v", dir, err)
 		return list, false
 	} else {
 		for _, i := range infos {
@@ -386,13 +386,13 @@ func getDThemeByDir(dir string, t int32) []ThemeInfo {
 	list := []ThemeInfo{}
 	f, err := os.Open(dir)
 	if err != nil {
-		Logger.Errorf("Open '%s' failed: %v", dir, err)
+		Logger.Warningf("Open '%s' failed: %v", dir, err)
 		return list
 	}
 	defer f.Close()
 
 	if infos, err := f.Readdir(0); err != nil {
-		Logger.Errorf("Readdir '%s' failed: %v", dir, err)
+		Logger.Warningf("Readdir '%s' failed: %v", dir, err)
 		return list
 	} else {
 		conditions := []string{"theme.ini"}
