@@ -30,12 +30,11 @@ type mapKey struct {
 }
 type Agent struct {
 	pendingKeys map[mapKey]chan string
-
-	savedKeys map[mapKey]map[string]map[string]dbus.Variant
+	savedKeys   map[mapKey]map[string]map[string]dbus.Variant
 }
 
 var (
-	invalidKey = make(map[string]map[string]dbus.Variant)
+	invalidKeyData = make(map[string]map[string]dbus.Variant)
 )
 
 func (a *Agent) GetDBusInfo() dbus.DBusInfo {
@@ -46,58 +45,89 @@ func (a *Agent) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func fillSecret(settingName string, key string) map[string]map[string]dbus.Variant {
-	r := make(map[string]map[string]dbus.Variant)
-	r[settingName] = make(map[string]dbus.Variant)
+func fillSecret(connectionData map[string]map[string]dbus.Variant, settingName, key string) (keyData map[string]map[string]dbus.Variant) {
+	keyData = make(map[string]map[string]dbus.Variant)
+	keyData[settingName] = make(map[string]dbus.Variant)
 	switch settingName {
-	case "802-11-wireless-security":
-		r[settingName]["psk"] = dbus.MakeVariant(key) // TODO
+	case sectionWired: // TODO 8021x
+	case sectionWirelessSecurity:
+		switch getSettingVkWirelessSecurityKeyMgmt(connectionData) {
+		case "none": // ignore
+		case "wep":
+			setSettingWirelessSecurityWepKey0(keyData, key)
+		case "wpa-psk":
+			setSettingWirelessSecurityPsk(keyData, key)
+		case "wpa-eap":
+			// If the user chose an 802.1x-based auth method, return
+			// 802.1x secrets, not wireless secrets.
+			delete(keyData, settingName)
+			keyData[section8021x] = make(map[string]dbus.Variant)
+			switch getSettingVk8021xEap(connectionData) {
+			case "tls":
+				setSetting8021xPrivateKeyPassword(keyData, key)
+			case "md5":
+				setSetting8021xPassword(keyData, key)
+			case "leap":
+				// LEAP secrets aren't in the 802.1x setting, just ignore
+			case "fast":
+				setSetting8021xPassword(keyData, key)
+			case "ttls":
+				setSetting8021xPassword(keyData, key)
+			case "peap":
+				setSetting8021xPassword(keyData, key)
+			}
+		}
+	case sectionVpn: // TODO
 	default:
-		logger.Warning("Unknow secrety setting name", settingName, ",please report it to linuxdeepin")
+		logger.Error("Unknown secretly setting name", settingName, ", please report it to linuxdeepin")
 	}
-	return r
+	return keyData
 }
 
-func (a *Agent) GetSecrets(connection map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath, settingName string, hints []string, flags uint32) map[string]map[string]dbus.Variant {
+func (a *Agent) GetSecrets(connectionData map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath, settingName string, hints []string, flags uint32) (keyData map[string]map[string]dbus.Variant) {
 	logger.Info("GetSecrets:", connectionPath, settingName, hints, flags)
 	keyId := mapKey{connectionPath, settingName}
 
 	// TODO fixme
-	// if keyValue, ok := a.savedKeys[keyId]; ok && (flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_REQUEST_NEW == 0) {
-	// logger.Debug("GetSecrets return ", keyValue) // TODO test
-	// return keyValue
+	// if key, ok := a.savedKeys[keyId]; ok && (flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_REQUEST_NEW == 0) {
+	// logger.Debug("GetSecrets return ", key) // TODO test
+	// return key
 	// }
 	// if flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_USER_REQUESTED == 0 {
 	// logger.Debug("GetSecrets return") // TODO test
-	// return invalidKey
+	// return invalidKeyData
 	// }
 
 	if flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_ALLOW_INTERACTION == 0 &&
 		flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_USER_REQUESTED == 0 {
-		logger.Info("GetSecrets: invalid key", flags)
-		return invalidKey
+		logger.Info("GetSecrets, invalid key flag", flags)
+		keyData = invalidKeyData
+		return
 	}
 
-	// if _, ok := a.pendingKeys[keyId]; ok {
-	// 	//only wait the key when there is no other GetSecrtes runing with this uuid
-	// 	logger.Info("Repeat GetSecrets", keyId)
-	// } else {
+	if _, ok := a.pendingKeys[keyId]; ok {
+		// only wait the key when there is no other GetSecrtes runing with this uuid
+		logger.Info("GetSecrets repeatly, cancel last one", keyId)
+		a.CancelGetSecrtes(connectionPath, settingName)
+	}
 	select {
-	case keyValue, ok := <-a.createPendingKey(keyId, getSettingConnectionId(connection)):
+	case key, ok := <-a.createPendingKey(keyId, getSettingConnectionId(connectionData)):
 		if ok {
-			keyValue := fillSecret(settingName, keyValue)
-			a.SaveSecrets(keyValue, connectionPath)
-			return keyValue
+			keyData = fillSecret(connectionData, settingName, key)
+			a.SaveSecrets(keyData, connectionPath)
+		} else {
+			logger.Info("failed to get secretes,", keyId)
 		}
-		logger.Info("failed getsecrtes...", keyId)
 	case <-time.After(120 * time.Second):
 		a.CancelGetSecrtes(connectionPath, settingName)
-		logger.Info("get secrets timeout:", keyId)
+		logger.Info("get secrets timeout,", keyId)
 	}
-	// }
-	return invalidKey
+	return
 }
 func (a *Agent) createPendingKey(keyId mapKey, connectionId string) chan string {
+	// TODO vpn
+	// /usr/lib/NetworkManager/nm-pptp-auth-dialog -u fec2a72f-db65-4e76-be37-995932b64bb7 -n pptp -s org.freedesktop.NetworkManager.pptp -i
+
 	logger.Debug("createPendingKey:", keyId, connectionId) // TODO test
 	if manager.NeedSecrets != nil {
 		logger.Debug("OnNeedSecrets:", string(keyId.path), keyId.name, connectionId)
@@ -117,13 +147,13 @@ func (a *Agent) CancelGetSecrtes(connectionPath dbus.ObjectPath, settingName str
 		close(pendingChan)
 		delete(a.pendingKeys, keyId)
 	} else {
-		logger.Warning("CancelGetSecrtes an unknow PendingKey:", keyId)
+		logger.Warning("CancelGetSecrtes unknown PendingKey", keyId)
 	}
 }
 
 func (a *Agent) SaveSecrets(connection map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath) {
 	logger.Debug("SaveSecretes:", connectionPath)
-	// TODO fixme
+	// TODO
 	// if _, ok := connection["802-11-wireless-security"]; ok {
 	// keyId := mapKey{connectionPath, "802-11-wireless-security"}
 	// a.savedKeys[keyId] = connection
@@ -144,6 +174,8 @@ func (a *Agent) feedSecret(path string, name string, key string) {
 	if ch, ok := a.pendingKeys[keyId]; ok {
 		ch <- key
 		delete(a.pendingKeys, keyId)
+	} else {
+		logger.Warning("feedSecret, unknown PendingKey", keyId)
 	}
 }
 

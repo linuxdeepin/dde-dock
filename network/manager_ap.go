@@ -35,6 +35,19 @@ const (
 	apSecEap
 )
 
+// TODO
+const (
+	NMU_SEC_INVALID apSecType = 0
+	NMU_SEC_NONE
+	NMU_SEC_STATIC_WEP
+	NMU_SEC_LEAP
+	NMU_SEC_DYNAMIC_WEP
+	NMU_SEC_WPA_PSK
+	NMU_SEC_WPA_ENTERPRISE
+	NMU_SEC_WPA2_PSK
+	NMU_SEC_WPA2_ENTERPRIS
+)
+
 type accessPoint struct {
 	nmAp *nm.AccessPoint
 

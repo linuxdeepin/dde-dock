@@ -217,7 +217,7 @@ func (c *config) updateDeviceConfig(devPath dbus.ObjectPath) {
 	if devConfig.Enabled {
 		if isDeviceStateInActivating(devState) {
 			devConfig.LastConnectionUuid, _ = nmGetDeviceActiveConnectionUuid(devPath)
-			logger.Debugf("updateDeviceConfig %s %#v", devPath, devConfig) // TODO test
+			// logger.Debugf("updateDeviceConfig %s %#v", devPath, devConfig) // TODO test
 			c.save()
 		}
 	}
