@@ -100,12 +100,12 @@ func (obj *Manager) modifyTheme(name, gtk, icon, sound, cursor, bg string, fontS
 
 	_, contents, err := kf.ToData()
 	if err != nil {
-		Logger.Error("Convert Keyfile ToData Failed:", err)
+		Logger.Warning("Convert Keyfile ToData Failed:", err)
 		return false
 	}
 
 	if !writeStringToKeyFile(filename, contents) {
-		Logger.Errorf("Write '%s' failed", filename)
+		Logger.Warningf("Write '%s' failed", filename)
 		return false
 	}
 
@@ -294,16 +294,16 @@ func newManager() *Manager {
 	var err error
 	m.watcher, err = fsnotify.NewWatcher()
 	if err != nil {
-		Logger.Errorf("New Watcher Failed: %v", err)
-		panic(err)
+		Logger.Warningf("New Watcher Failed: %v", err)
+		Logger.Fatal(err)
 	}
 
 	m.quitFlag = make(chan bool)
 
 	m.bgWatcher, err = fsnotify.NewWatcher()
 	if err != nil {
-		Logger.Errorf("New Watcher Failed: %v", err)
-		panic(err)
+		Logger.Warningf("New Watcher Failed: %v", err)
+		Logger.Fatal(err)
 	}
 	m.bgQuitFlag = make(chan bool)
 

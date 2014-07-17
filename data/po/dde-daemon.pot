@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-14 16:19+0800\n"
+"POT-Creation-Date: 2014-07-16 17:10+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2117,11 +2117,11 @@ msgstr ""
 msgid "Tongatapu"
 msgstr ""
 
-#: ../../dock/normal_apps.go:79
+#: ../../dock/normal_apps.go:80
 msgid "_Run"
 msgstr ""
 
-#: ../../dock/normal_apps.go:111 ../../dock/runtime_apps.go:290
+#: ../../dock/normal_apps.go:112 ../../dock/runtime_apps.go:290
 msgid "_Undock"
 msgstr ""
 
@@ -2138,223 +2138,227 @@ msgstr ""
 msgid "Auto"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:72
+#: ../../keybinding/id_desc_map.go:74
 msgid "Launcher"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:73
+#: ../../keybinding/id_desc_map.go:75
 msgid "Show desktop"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:74
+#: ../../keybinding/id_desc_map.go:76
 msgid "Lock screen"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:75
+#: ../../keybinding/id_desc_map.go:77
 msgid "File manager"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:76
+#: ../../keybinding/id_desc_map.go:78
 msgid "Switch applications"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:77
+#: ../../keybinding/id_desc_map.go:79
 msgid "Reverse switch applications"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:78
+#: ../../keybinding/id_desc_map.go:80
 msgid "3D switch applications"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:79
+#: ../../keybinding/id_desc_map.go:81
 msgid "3D reverse switch applications"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:80
+#: ../../keybinding/id_desc_map.go:82
 msgid "Show/Hide the dock"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:81
+#: ../../keybinding/id_desc_map.go:83
 msgid "Screenshot"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:82
+#: ../../keybinding/id_desc_map.go:84
 msgid "Full screenshot"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:83
+#: ../../keybinding/id_desc_map.go:85
 msgid "Window screenshot"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:84
+#: ../../keybinding/id_desc_map.go:86
 msgid "Delay screenshot"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:85
+#: ../../keybinding/id_desc_map.go:87
 msgid "Terminal"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:86
+#: ../../keybinding/id_desc_map.go:88
 msgid "Terminal Quake Window"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:87
+#: ../../keybinding/id_desc_map.go:89
 msgid "Logout"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:88
+#: ../../keybinding/id_desc_map.go:90
 msgid "Disable Touchpad"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:89
+#: ../../keybinding/id_desc_map.go:91
 msgid "Deepin Translator"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:129
-msgid "Calculator"
-msgstr ""
-
-#: ../../keybinding/id_desc_map.go:130
-msgid "Email client"
-msgstr ""
-
-#: ../../keybinding/id_desc_map.go:131
-msgid "Web browser"
+#: ../../keybinding/id_desc_map.go:92
+msgid "Switch Layout"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:132
-msgid "Media player"
+msgid "Calculator"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:133
-msgid "Play/Pause"
+msgid "Email client"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:134
-msgid "Pause"
+msgid "Web browser"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:135
-msgid "Stop"
+msgid "Media player"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:136
-msgid "Mute"
+msgid "Play/Pause"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:137
-msgid "Volume down"
+msgid "Pause"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:138
-msgid "Volume up"
+msgid "Stop"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:139
-msgid "Previous"
+msgid "Mute"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:140
-msgid "Next"
+msgid "Volume down"
 msgstr ""
 
 #: ../../keybinding/id_desc_map.go:141
+msgid "Volume up"
+msgstr ""
+
+#: ../../keybinding/id_desc_map.go:142
+msgid "Previous"
+msgstr ""
+
+#: ../../keybinding/id_desc_map.go:143
+msgid "Next"
+msgstr ""
+
+#: ../../keybinding/id_desc_map.go:144
 msgid "Eject"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:171
+#: ../../keybinding/id_desc_map.go:174
 msgid "Close window"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:172
+#: ../../keybinding/id_desc_map.go:175
 msgid "Maximize window"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:173
+#: ../../keybinding/id_desc_map.go:176
 msgid "Restore window"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:174
+#: ../../keybinding/id_desc_map.go:177
 msgid "Minimize window"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:175
+#: ../../keybinding/id_desc_map.go:178
 msgid "Move window"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:176
+#: ../../keybinding/id_desc_map.go:179
 msgid "Resize window"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:177
+#: ../../keybinding/id_desc_map.go:180
 msgid "Switch furl state"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:178
+#: ../../keybinding/id_desc_map.go:181
 msgid "Activate window menu"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:224
+#: ../../keybinding/id_desc_map.go:227
 msgid "Switch to workspace 1"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:225
+#: ../../keybinding/id_desc_map.go:228
 msgid "Switch to workspace 2"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:226
+#: ../../keybinding/id_desc_map.go:229
 msgid "Switch to workspace 3"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:227
+#: ../../keybinding/id_desc_map.go:230
 msgid "Switch to workspace 4"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:228
+#: ../../keybinding/id_desc_map.go:231
 msgid "Switch to left workspace"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:229
+#: ../../keybinding/id_desc_map.go:232
 msgid "Switch to right workspace"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:230
+#: ../../keybinding/id_desc_map.go:233
 msgid "Switch to upper workspace"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:231
+#: ../../keybinding/id_desc_map.go:234
 msgid "Switch to lower workspace"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:232
+#: ../../keybinding/id_desc_map.go:235
 msgid "Move to workspace 1"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:233
+#: ../../keybinding/id_desc_map.go:236
 msgid "Move to workspace 2"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:234
+#: ../../keybinding/id_desc_map.go:237
 msgid "Move to workspace 3"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:235
+#: ../../keybinding/id_desc_map.go:238
 msgid "Move to workspace 4"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:236
+#: ../../keybinding/id_desc_map.go:239
 msgid "Move to left workspace"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:237
+#: ../../keybinding/id_desc_map.go:240
 msgid "Move to right workspace"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:238
+#: ../../keybinding/id_desc_map.go:241
 msgid "Move to upper workspace"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:239
+#: ../../keybinding/id_desc_map.go:242
 msgid "Move to lower workspace"
 msgstr ""
 
@@ -2951,7 +2955,7 @@ msgid "The device is no longer managed."
 msgstr ""
 
 #: ../../network/state_handler.go:36
-msgid "The device has not been ready for configuration."
+msgid "The device have not been ready for configuration."
 msgstr ""
 
 #: ../../network/state_handler.go:37
@@ -3227,7 +3231,7 @@ msgid "Computer has been in suspend mode, please plug in."
 msgstr ""
 
 #: ../../power/upower.go:101
-msgid "Computer will being in suspend mode, please plug in."
+msgid "Please plug in, or computer will be in suspend mode."
 msgstr ""
 
 #: ../../power/upower.go:114
@@ -3235,5 +3239,5 @@ msgid "Battery Low"
 msgstr ""
 
 #: ../../power/upower.go:114
-msgid "Computer will be in suspend mode, please plug in."
+msgid "Computer will be in suspend mode, please plug in now."
 msgstr ""

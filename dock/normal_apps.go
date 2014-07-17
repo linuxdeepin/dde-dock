@@ -1,11 +1,11 @@
 package dock
 
 import (
+	"errors"
+	"path/filepath"
 	. "pkg.linuxdeepin.com/lib/gettext"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
 	"pkg.linuxdeepin.com/lib/utils"
-	"errors"
-	"path/filepath"
 	"strings"
 )
 
@@ -23,7 +23,8 @@ type NormalApp struct {
 }
 
 func NewNormalApp(id string) *NormalApp {
-	app := &NormalApp{Id: strings.ToLower(filepath.Base(id[:len(id)-8]))}
+	basename := strings.ToLower(filepath.Base(id[:len(id)-8]))
+	app := &NormalApp{Id: strings.Replace(basename, "_", "-", -1)}
 	logger.Debug("NewNormalApp:", id)
 	var core *gio.DesktopAppInfo
 	if filepath.IsAbs(id) {

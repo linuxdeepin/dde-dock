@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
 	<schema id="com.deepin.dde.keybinding.system" path="/com/deepin/dde/keybinding/system/">
+        <key type="as" name="switch-layout">
+            <default>['&lt;Super&gt;space']</default>
+            <summary>Switch Keyboard Layout</summary>
+            <description></description>
+        </key>
 	<key type="as" name="launcher">
 		<default>['Super','/usr/bin/dde-launcher']</default>
 		<summary>shortcut</summary>

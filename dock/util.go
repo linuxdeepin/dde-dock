@@ -36,7 +36,8 @@ func guess_desktop_id(oldId string) string {
 	allApp := gio.AppInfoGetAll()
 	for _, app := range allApp {
 		baseName := filepath.Base(gio.ToDesktopAppInfo(app).GetFilename())
-		if oldId == strings.ToLower(baseName) {
+		lowerBaseName := strings.ToLower(baseName)
+		if oldId == lowerBaseName || strings.Replace(oldId, "-", "_", -1) == lowerBaseName {
 			return baseName
 		}
 	}

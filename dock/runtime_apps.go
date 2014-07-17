@@ -331,7 +331,7 @@ func (app *RuntimeApp) HandleMenuItem(id string) {
 func find_app_id_by_xid(xid xproto.Window) string {
 	var appId string
 	if id, err := xprop.PropValStr(xprop.GetProperty(XU, xid, "_DDE_DOCK_APP_ID")); err == nil {
-		appId = strings.ToLower(id)
+		appId = strings.Replace(strings.ToLower(id), "_", "-", -1)
 		logger.Debug("get app id from _DDE_DOCK_APP_ID", appId)
 		return appId
 	}
@@ -343,20 +343,22 @@ func find_app_id_by_xid(xid xproto.Window) string {
 	}
 	pid, err := ewmh.WmPidGet(XU, xid)
 	if err != nil {
-		appId = strings.ToLower(wmClassName)
+		appId = strings.Replace(strings.ToLower(wmClassName), "_", "-",
+			-1)
 		logger.Debug("get app id from wm class name", appId)
 		return appId
 	}
 	iconName, _ := ewmh.WmIconNameGet(XU, xid)
 	name, _ := ewmh.WmNameGet(XU, xid)
 	if pid == 0 {
-		appId = strings.ToLower(wmClassName)
+		appId = strings.Replace(strings.ToLower(wmClassName), "_", "-",
+			-1)
 		logger.Debug("get app id from wm class name", appId)
 		return appId
 	} else {
 	}
 	appId = find_app_id(pid, name, wmInstance, wmClassName, iconName)
-	appId = strings.ToLower(appId)
+	appId = strings.Replace(strings.ToLower(appId), "_", "-", -1)
 	logger.Debug("get appid", appId)
 	return appId
 }
@@ -667,30 +669,3 @@ func (app *RuntimeApp) attachXid(xid xproto.Window) {
 	// app.updateViewports(xid)
 	app.notifyChanged()
 }
-
-// func listenRootWindow() {
-// 	var update = func() {
-// 		list, err := ewmh.ClientListGet(XU)
-// 		if err != nil {
-// 			logger.Warning("Can't Get _NET_CLIENT_LIST", err)
-// 		}
-// 		ENTRY_MANAGER.runtimeAppChangged(list)
-// 	}
-//
-// 	xwindow.New(XU, XU.RootWin()).Listen(xproto.EventMaskPropertyChange)
-// 	xevent.PropertyNotifyFun(func(XU *xgbutil.XUtil, ev xevent.PropertyNotifyEvent) {
-// 		switch ev.Atom {
-// 		case _NET_CLIENT_LIST:
-// 			update()
-// 		case _NET_ACTIVE_WINDOW:
-// 			if activedWindow, err := ewmh.ActiveWindowGet(XU); err == nil {
-// 				appId := find_app_id_by_xid(activedWindow)
-// 				if rApp, ok := ENTRY_MANAGER.runtimeApps[appId]; ok {
-// 					rApp.setLeader(activedWindow)
-// 				}
-// 			}
-// 		}
-// 	}).Connect(XU, XU.RootWin())
-// 	update()
-// 	xevent.Main(XU)
-// }

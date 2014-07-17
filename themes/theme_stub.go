@@ -22,10 +22,10 @@
 package themes
 
 import (
+	"path"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/glib-2.0"
 	dutils "pkg.linuxdeepin.com/lib/utils"
-	"path"
 	"regexp"
 )
 
@@ -101,7 +101,7 @@ func (obj *Theme) setAllProps() {
 	_, err = kf.LoadFromFile(path.Join(obj.filePath, "theme.ini"),
 		glib.KeyFileFlagsKeepComments)
 	if err != nil {
-		Logger.Errorf("Load KeyFile '%s' Failed: %v", obj.filePath, err)
+		Logger.Warningf("Load KeyFile '%s' Failed: %v", obj.filePath, err)
 		return
 	}
 
