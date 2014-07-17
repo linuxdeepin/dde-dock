@@ -8,7 +8,6 @@ import "dbus/org/freedesktop/login1"
 import "time"
 import "dbus/com/deepin/daemon/keybinding"
 import "dbus/com/deepin/daemon/display"
-import "fmt"
 
 const (
 	//sync with com.deepin.daemon.power.schemas
@@ -94,10 +93,10 @@ func (up *Power) handlePowerButton() {
 
 func (up *Power) handleLidSwitch(opend bool) {
 	if opend {
-		fmt.Println("LidOpend...")
+		Logger.Info("LidOpend...")
 		//TODO: DPMS ON
 	} else {
-		fmt.Println("LidClosed...")
+		Logger.Info("LidClosed...")
 		//TODO: DPMS OFF
 		switch up.LidClosedAction.Get() {
 		case ActionInteractive:
@@ -173,7 +172,7 @@ func (p *Power) initEventHandle() {
 		Logger.Error("Can't build org.freedesktop.login1:", err)
 	} else {
 		login.ConnectPrepareForSleep(func(before bool) {
-			fmt.Println("Sleep change...", before)
+			Logger.Info("Sleep change...", before)
 			if before {
 				if p.lowBatteryStatus == lowBatteryStatusAction {
 					doShowLowpower()
