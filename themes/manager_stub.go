@@ -44,48 +44,48 @@ func (obj *Manager) setPropCurrentTheme(theme string) {
 func (obj *Manager) setPropThemeList(list []string) {
 	if !isStrListEqual(obj.ThemeList, list) {
 		obj.ThemeList = list
-		dbus.NotifyChange(obj, "ThemeList")
 	}
+	dbus.NotifyChange(obj, "ThemeList")
 }
 
 func (obj *Manager) setPropGtkThemeList(list []string) {
 	if !isStrListEqual(obj.GtkThemeList, list) {
 		obj.GtkThemeList = list
-		dbus.NotifyChange(obj, "GtkThemeList")
 	}
+	dbus.NotifyChange(obj, "GtkThemeList")
 }
 
 func (obj *Manager) setPropIconThemeList(list []string) {
 	if !isStrListEqual(obj.IconThemeList, list) {
 		obj.IconThemeList = list
-		dbus.NotifyChange(obj, "IconThemeList")
 	}
+	dbus.NotifyChange(obj, "IconThemeList")
 }
 
 func (obj *Manager) setPropSoundThemeList(list []string) {
 	if !isStrListEqual(obj.SoundThemeList, list) {
 		obj.SoundThemeList = list
-		dbus.NotifyChange(obj, "SoundThemeList")
 	}
+	dbus.NotifyChange(obj, "SoundThemeList")
 }
 
 func (obj *Manager) setPropCursorThemeList(list []string) {
 	if !isStrListEqual(obj.CursorThemeList, list) {
 		obj.CursorThemeList = list
-		dbus.NotifyChange(obj, "CursorThemeList")
 	}
+	dbus.NotifyChange(obj, "CursorThemeList")
 }
 
 func (obj *Manager) setPropBackgroundList(list []string) {
 	if !isStrListEqual(obj.BackgroundList, list) {
 		obj.BackgroundList = list
-		dbus.NotifyChange(obj, "BackgroundList")
 	}
+	dbus.NotifyChange(obj, "BackgroundList")
 }
 
 func (obj *Manager) setPropGreeterList(list []string) {
 	if !isStrListEqual(obj.GreeterThemeList, list) {
 		obj.GreeterThemeList = list
-		dbus.NotifyChange(obj, "GreeterThemeList")
 	}
+	dbus.NotifyChange(obj, "GreeterThemeList")
 }

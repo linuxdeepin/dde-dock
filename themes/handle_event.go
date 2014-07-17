@@ -307,13 +307,13 @@ func (obj *Manager) handleBgEvent() {
 
 			Logger.Debugf("Bg Event: %v", ev)
 			curTimestamp := time.Now().Unix()
-			if curTimestamp-preTimestamp <= 1 {
-				preTimestamp = curTimestamp
+			if curTimestamp-preTimestamp <= 3 {
 				break
 			}
-			if ok, _ := regexp.MatchString(`autogen`, ev.Name); ok {
+			preTimestamp = curTimestamp
+			if ok, _ := regexp.MatchString(`(autogen)(\.png$)`, ev.Name); ok {
 				go func() {
-					<-time.NewTimer(time.Second * 8).C
+					<-time.After(time.Second * 3)
 					obj.setPropGtkThemeList(obj.getGtkStrList())
 					obj.setPropIconThemeList(obj.getIconStrList())
 					obj.setPropBackgroundList(obj.getBgStrList())
