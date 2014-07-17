@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-16 17:10+0800\n"
+"POT-Creation-Date: 2014-07-17 17:32+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME &lt;EMAIL@ADDRESS&gt;\n"
 "Language-Team: LANGUAGE &lt;LL@li.org&gt;\n"
@@ -2136,227 +2136,223 @@ msgstr "驻留(_D)"
 msgid "Auto"
 msgstr "自动"
 
-#: ../../keybinding/id_desc_map.go:74
+#: ../../keybinding/id_desc_map.go:72
 msgid "Launcher"
 msgstr "启动器"
 
-#: ../../keybinding/id_desc_map.go:75
+#: ../../keybinding/id_desc_map.go:73
 msgid "Show desktop"
 msgstr "显示桌面"
 
-#: ../../keybinding/id_desc_map.go:76
+#: ../../keybinding/id_desc_map.go:74
 msgid "Lock screen"
 msgstr "锁屏界面"
 
-#: ../../keybinding/id_desc_map.go:77
+#: ../../keybinding/id_desc_map.go:75
 msgid "File manager"
 msgstr "文件管理器"
 
-#: ../../keybinding/id_desc_map.go:78
+#: ../../keybinding/id_desc_map.go:76
 msgid "Switch applications"
 msgstr "切换程序"
 
-#: ../../keybinding/id_desc_map.go:79
+#: ../../keybinding/id_desc_map.go:77
 msgid "Reverse switch applications"
 msgstr "反向切换程序"
 
-#: ../../keybinding/id_desc_map.go:80
+#: ../../keybinding/id_desc_map.go:78
 msgid "3D switch applications"
 msgstr "3D切换程序"
 
-#: ../../keybinding/id_desc_map.go:81
+#: ../../keybinding/id_desc_map.go:79
 msgid "3D reverse switch applications"
 msgstr "3D反向切换程序"
 
-#: ../../keybinding/id_desc_map.go:82
+#: ../../keybinding/id_desc_map.go:80
 msgid "Show/Hide the dock"
 msgstr "显示/隐藏任务栏"
 
-#: ../../keybinding/id_desc_map.go:83
+#: ../../keybinding/id_desc_map.go:81
 msgid "Screenshot"
 msgstr "屏幕截图"
 
-#: ../../keybinding/id_desc_map.go:84
+#: ../../keybinding/id_desc_map.go:82
 msgid "Full screenshot"
 msgstr "全屏截图"
 
-#: ../../keybinding/id_desc_map.go:85
+#: ../../keybinding/id_desc_map.go:83
 msgid "Window screenshot"
 msgstr "窗口截图"
 
-#: ../../keybinding/id_desc_map.go:86
+#: ../../keybinding/id_desc_map.go:84
 msgid "Delay screenshot"
 msgstr "延时截图"
 
-#: ../../keybinding/id_desc_map.go:87
+#: ../../keybinding/id_desc_map.go:85
 msgid "Terminal"
 msgstr "终端"
 
-#: ../../keybinding/id_desc_map.go:88
+#: ../../keybinding/id_desc_map.go:86
 msgid "Terminal Quake Window"
 msgstr "终端雷神模式"
 
-#: ../../keybinding/id_desc_map.go:89
+#: ../../keybinding/id_desc_map.go:87
 msgid "Logout"
 msgstr "注销"
 
-#: ../../keybinding/id_desc_map.go:90
+#: ../../keybinding/id_desc_map.go:88
 msgid "Disable Touchpad"
 msgstr "禁用触摸板"
 
-#: ../../keybinding/id_desc_map.go:91
+#: ../../keybinding/id_desc_map.go:89
 msgid "Deepin Translator"
 msgstr "深度翻译"
 
-#: ../../keybinding/id_desc_map.go:92
-msgid "Switch Layout"
-msgstr "切换键盘布局"
-
-#: ../../keybinding/id_desc_map.go:132
+#: ../../keybinding/id_desc_map.go:129
 msgid "Calculator"
 msgstr "计算器"
 
-#: ../../keybinding/id_desc_map.go:133
+#: ../../keybinding/id_desc_map.go:130
 msgid "Email client"
 msgstr "邮件客户端"
 
-#: ../../keybinding/id_desc_map.go:134
+#: ../../keybinding/id_desc_map.go:131
 msgid "Web browser"
 msgstr "网页浏览器"
 
-#: ../../keybinding/id_desc_map.go:135
+#: ../../keybinding/id_desc_map.go:132
 msgid "Media player"
 msgstr "多媒体播放器"
 
-#: ../../keybinding/id_desc_map.go:136
+#: ../../keybinding/id_desc_map.go:133
 msgid "Play/Pause"
 msgstr "播放/暂停"
 
-#: ../../keybinding/id_desc_map.go:137
+#: ../../keybinding/id_desc_map.go:134
 msgid "Pause"
 msgstr "暂停播放"
 
-#: ../../keybinding/id_desc_map.go:138
+#: ../../keybinding/id_desc_map.go:135
 msgid "Stop"
 msgstr "停止播放"
 
-#: ../../keybinding/id_desc_map.go:139
+#: ../../keybinding/id_desc_map.go:136
 msgid "Mute"
 msgstr "静音"
 
-#: ../../keybinding/id_desc_map.go:140
+#: ../../keybinding/id_desc_map.go:137
 msgid "Volume down"
 msgstr "减小音量"
 
-#: ../../keybinding/id_desc_map.go:141
+#: ../../keybinding/id_desc_map.go:138
 msgid "Volume up"
 msgstr "增大音量"
 
-#: ../../keybinding/id_desc_map.go:142
+#: ../../keybinding/id_desc_map.go:139
 msgid "Previous"
 msgstr "上一个"
 
-#: ../../keybinding/id_desc_map.go:143
+#: ../../keybinding/id_desc_map.go:140
 msgid "Next"
 msgstr "下一个"
 
-#: ../../keybinding/id_desc_map.go:144
+#: ../../keybinding/id_desc_map.go:141
 msgid "Eject"
 msgstr "弹出"
 
-#: ../../keybinding/id_desc_map.go:174
+#: ../../keybinding/id_desc_map.go:171
 msgid "Close window"
 msgstr "关闭窗口"
 
-#: ../../keybinding/id_desc_map.go:175
+#: ../../keybinding/id_desc_map.go:172
 msgid "Maximize window"
 msgstr "最大化窗口"
 
-#: ../../keybinding/id_desc_map.go:176
+#: ../../keybinding/id_desc_map.go:173
 msgid "Restore window"
 msgstr "恢复窗口"
 
-#: ../../keybinding/id_desc_map.go:177
+#: ../../keybinding/id_desc_map.go:174
 msgid "Minimize window"
 msgstr "最小化窗口"
 
-#: ../../keybinding/id_desc_map.go:178
+#: ../../keybinding/id_desc_map.go:175
 msgid "Move window"
 msgstr "移动窗口"
 
-#: ../../keybinding/id_desc_map.go:179
+#: ../../keybinding/id_desc_map.go:176
 msgid "Resize window"
 msgstr "改变窗口大小"
 
-#: ../../keybinding/id_desc_map.go:180
+#: ../../keybinding/id_desc_map.go:177
 msgid "Switch furl state"
 msgstr "切换卷起状态"
 
-#: ../../keybinding/id_desc_map.go:181
+#: ../../keybinding/id_desc_map.go:178
 msgid "Activate window menu"
 msgstr "激活窗口菜单"
 
-#: ../../keybinding/id_desc_map.go:227
+#: ../../keybinding/id_desc_map.go:224
 msgid "Switch to workspace 1"
 msgstr "切换到工作区1"
 
-#: ../../keybinding/id_desc_map.go:228
+#: ../../keybinding/id_desc_map.go:225
 msgid "Switch to workspace 2"
 msgstr "切换到工作区2"
 
-#: ../../keybinding/id_desc_map.go:229
+#: ../../keybinding/id_desc_map.go:226
 msgid "Switch to workspace 3"
 msgstr "切换到工作区3"
 
-#: ../../keybinding/id_desc_map.go:230
+#: ../../keybinding/id_desc_map.go:227
 msgid "Switch to workspace 4"
 msgstr "切换到工作区4"
 
-#: ../../keybinding/id_desc_map.go:231
+#: ../../keybinding/id_desc_map.go:228
 msgid "Switch to left workspace"
 msgstr "切换到左边工作区"
 
-#: ../../keybinding/id_desc_map.go:232
+#: ../../keybinding/id_desc_map.go:229
 msgid "Switch to right workspace"
 msgstr "切换到右边工作区"
 
-#: ../../keybinding/id_desc_map.go:233
+#: ../../keybinding/id_desc_map.go:230
 msgid "Switch to upper workspace"
 msgstr "切换到上方工作区"
 
-#: ../../keybinding/id_desc_map.go:234
+#: ../../keybinding/id_desc_map.go:231
 msgid "Switch to lower workspace"
 msgstr "切换到下方工作区"
 
-#: ../../keybinding/id_desc_map.go:235
+#: ../../keybinding/id_desc_map.go:232
 msgid "Move to workspace 1"
 msgstr "移动到工作区1"
 
-#: ../../keybinding/id_desc_map.go:236
+#: ../../keybinding/id_desc_map.go:233
 msgid "Move to workspace 2"
 msgstr "移动到工作区2"
 
-#: ../../keybinding/id_desc_map.go:237
+#: ../../keybinding/id_desc_map.go:234
 msgid "Move to workspace 3"
 msgstr "移动到工作区3"
 
-#: ../../keybinding/id_desc_map.go:238
+#: ../../keybinding/id_desc_map.go:235
 msgid "Move to workspace 4"
 msgstr "移动到工作区4"
 
-#: ../../keybinding/id_desc_map.go:239
+#: ../../keybinding/id_desc_map.go:236
 msgid "Move to left workspace"
 msgstr "移动到左边工作区"
 
-#: ../../keybinding/id_desc_map.go:240
+#: ../../keybinding/id_desc_map.go:237
 msgid "Move to right workspace"
 msgstr "移动到右边工作区"
 
-#: ../../keybinding/id_desc_map.go:241
+#: ../../keybinding/id_desc_map.go:238
 msgid "Move to upper workspace"
 msgstr "移动到上方工作区"
 
-#: ../../keybinding/id_desc_map.go:242
+#: ../../keybinding/id_desc_map.go:239
 msgid "Move to lower workspace"
 msgstr "移动到下方工作区"
 
@@ -2947,278 +2943,294 @@ msgid "Open"
 msgstr "Open"
 
 #: ../../network/state_handler.go:34
+msgid "Device state changed, unknown reason."
+msgstr "设备状态改变，原因未知。"
+
+#: ../../network/state_handler.go:35
+msgid "Device state changed, none reason."
+msgstr "设备状态改变。"
+
+#: ../../network/state_handler.go:36
 msgid "The device is now managed."
 msgstr "设备正在托管。"
 
-#: ../../network/state_handler.go:35
+#: ../../network/state_handler.go:37
 msgid "The device is no longer managed."
 msgstr "设备不再托管。"
 
-#: ../../network/state_handler.go:36
-msgid "The device have not been ready for configuration."
+#: ../../network/state_handler.go:38
+msgid "The device has not been ready for configuration."
 msgstr "设备配置未就绪。"
 
-#: ../../network/state_handler.go:37
+#: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)."
 msgstr "IP配置无法保存（无可用地址、连接超时等）。"
 
-#: ../../network/state_handler.go:38
+#: ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid."
 msgstr "IP配置不再有效。"
 
-#: ../../network/state_handler.go:39
+#: ../../network/state_handler.go:41
 msgid "Passwords were required but not provided."
 msgstr "需要密码，但未提供。"
 
-#: ../../network/state_handler.go:40
+#: ../../network/state_handler.go:42
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server."
 msgstr "802.1X客户端从接入点或认证服务器断开连接。"
 
-#: ../../network/state_handler.go:41
+#: ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed."
 msgstr "802.1X客户端配置失败。"
 
-#: ../../network/state_handler.go:42
+#: ../../network/state_handler.go:44
 msgid "The 802.1X supplicant quitted or failed unexpectedly."
 msgstr "802.1X客户端异常退出或失败。"
 
-#: ../../network/state_handler.go:43
+#: ../../network/state_handler.go:45
 msgid "The 802.1X supplicant took too long time to authenticate."
 msgstr "802.1X客户端验证时间过长。"
 
-#: ../../network/state_handler.go:44
+#: ../../network/state_handler.go:46
 msgid "The PPP service failed to start within the allowed time."
 msgstr "PPP服务无法在限定时间内启动。"
 
-#: ../../network/state_handler.go:45
+#: ../../network/state_handler.go:47
 msgid "The PPP service disconnected unexpectedly."
 msgstr "PPP服务异常中断。"
 
-#: ../../network/state_handler.go:46
+#: ../../network/state_handler.go:48
 msgid "The PPP service quitted or failed unexpectedly."
 msgstr "PPP服务异常退出或失败。"
 
-#: ../../network/state_handler.go:47
+#: ../../network/state_handler.go:49
 msgid "The DHCP service failed to start within the allowed time."
 msgstr "DHCP服务无法在限定时间内启动。"
 
-#: ../../network/state_handler.go:48
+#: ../../network/state_handler.go:50
 msgid "The DHCP service reported an unexpected error."
 msgstr "DHCP服务报告了一个异常错误。"
 
-#: ../../network/state_handler.go:49
+#: ../../network/state_handler.go:51
 msgid "The DHCP service quitted or failed unexpectedly."
 msgstr "DHCP服务异常退出或失败。"
 
-#: ../../network/state_handler.go:50
+#: ../../network/state_handler.go:52
 msgid "The shared connection service failed to start."
 msgstr "共享连接服务启动失败。"
 
-#: ../../network/state_handler.go:51
+#: ../../network/state_handler.go:53
 msgid "The shared connection service quitted or failed unexpectedly."
 msgstr "共享连接服务异常退出或失败。"
 
-#: ../../network/state_handler.go:52
+#: ../../network/state_handler.go:54
 msgid "The AutoIP service failed to start."
 msgstr "自动IP服务启动失败。"
 
-#: ../../network/state_handler.go:53
+#: ../../network/state_handler.go:55
 msgid "The AutoIP service reported an unexpected error."
 msgstr "自动IP服务报告了一个异常错误。"
 
-#: ../../network/state_handler.go:54
+#: ../../network/state_handler.go:56
 msgid "The AutoIP service quitted or failed unexpectedly."
 msgstr "自动IP服务异常退出或失败。"
 
-#: ../../network/state_handler.go:55
+#: ../../network/state_handler.go:57
 msgid "Dialing failed due to busy lines."
 msgstr "线路繁忙致使拨号失败。"
 
-#: ../../network/state_handler.go:56
+#: ../../network/state_handler.go:58
 msgid "Dialing failed due to no dial tone."
 msgstr "无拨号音致使拨号失败。"
 
-#: ../../network/state_handler.go:57
+#: ../../network/state_handler.go:59
 msgid "Dialing failed due to the carrier."
 msgstr "载体故障致使拨号失败。"
 
-#: ../../network/state_handler.go:58
+#: ../../network/state_handler.go:60
 msgid "Dialing timed out."
 msgstr "拨号超时。"
 
-#: ../../network/state_handler.go:59
+#: ../../network/state_handler.go:61
 msgid "Dialing failed."
 msgstr "拨号失败。"
 
-#: ../../network/state_handler.go:60
+#: ../../network/state_handler.go:62
 msgid "Modem initialization failed."
 msgstr "调制解调器初始化失败。"
 
-#: ../../network/state_handler.go:61
+#: ../../network/state_handler.go:63
 msgid "Failed to select the specified GSM APN."
 msgstr "无法选择指定的GSM APN。"
 
-#: ../../network/state_handler.go:62
+#: ../../network/state_handler.go:64
 msgid "No networks searched."
 msgstr "未找到网络。"
 
-#: ../../network/state_handler.go:63
+#: ../../network/state_handler.go:65
 msgid "Network registration was denied."
 msgstr "网络注册被拒绝。"
 
-#: ../../network/state_handler.go:64
+#: ../../network/state_handler.go:66
 msgid "Network registration timed out."
 msgstr "网络注册超时。"
 
-#: ../../network/state_handler.go:65
+#: ../../network/state_handler.go:67
 msgid "Register to the requested GSM network failed."
 msgstr "注册GSM网络失败。"
 
-#: ../../network/state_handler.go:66
+#: ../../network/state_handler.go:68
 msgid "PIN check failed."
 msgstr "PIN码检查失败。"
 
-#: ../../network/state_handler.go:67
+#: ../../network/state_handler.go:69
 msgid "Necessary firmware for the device may be missed."
 msgstr "设备必要固件可能丢失了。"
 
-#: ../../network/state_handler.go:68
+#: ../../network/state_handler.go:70
 msgid "The device was removed."
 msgstr "该设备已被删除。"
 
-#: ../../network/state_handler.go:69
+#: ../../network/state_handler.go:71
 msgid "NetworkManager went to sleep."
 msgstr "NetworkManager进入待机状态。"
 
-#: ../../network/state_handler.go:70
+#: ../../network/state_handler.go:72
 msgid "The device's active connection was removed or disappeared."
 msgstr "设备当前连接被删除或消失。"
 
-#: ../../network/state_handler.go:71
+#: ../../network/state_handler.go:73
 msgid "A user or client requested to disconnect."
 msgstr "用户或客户端请求断开连接。"
 
-#: ../../network/state_handler.go:72
+#: ../../network/state_handler.go:74
 msgid "The device's carrier/link changed."
 msgstr "设备载体/链接更改。"
 
-#: ../../network/state_handler.go:73
+#: ../../network/state_handler.go:75
 msgid "The device's existing connection was assumed."
 msgstr "假定该设备的现有连接。"
 
-#: ../../network/state_handler.go:74
+#: ../../network/state_handler.go:76
 msgid "The 802.1x supplicant is now available."
 msgstr "802.1x客户端现在可用"
 
-#: ../../network/state_handler.go:75
+#: ../../network/state_handler.go:77
 msgid "The modem could not be found."
 msgstr "未找到调制解调器。"
 
-#: ../../network/state_handler.go:76
+#: ../../network/state_handler.go:78
 msgid "The Bluetooth connection timed out or failed."
 msgstr "蓝牙连接超时或失败。"
 
-#: ../../network/state_handler.go:77
+#: ../../network/state_handler.go:79
 msgid "GSM Modem's SIM Card not inserted."
 msgstr "未插入GSM调制解调器的SIM卡。"
 
-#: ../../network/state_handler.go:78
+#: ../../network/state_handler.go:80
 msgid "GSM Modem's SIM PIN required."
 msgstr "需要GSM调制解调器的SIM卡PIN码。"
 
-#: ../../network/state_handler.go:79
+#: ../../network/state_handler.go:81
 msgid "GSM Modem's SIM PUK required."
 msgstr "需要GSM调制解调器SIM卡PUK码。"
 
-#: ../../network/state_handler.go:80
+#: ../../network/state_handler.go:82
 msgid "Wrong GSM Modem's SIM"
 msgstr "GSM调制解调器SIM卡错误 "
 
-#: ../../network/state_handler.go:81
+#: ../../network/state_handler.go:83
 msgid "InfiniBand device does not support connected mode."
 msgstr "InfiniBand设备不支持此连接模式。"
 
-#: ../../network/state_handler.go:82
+#: ../../network/state_handler.go:84
 msgid "A connection dependency failed."
 msgstr "连接依赖失败。"
 
-#: ../../network/state_handler.go:83
+#: ../../network/state_handler.go:85
 msgid "Problem with the RFC 2684 Ethernet over ADSL bridge."
 msgstr "RFC 2684以太网桥接到ADSL上错误。"
 
-#: ../../network/state_handler.go:84
+#: ../../network/state_handler.go:86
 msgid "ModemManager was not running or quitted unexpectedly."
 msgstr "ModemManager未运行或异常退出。"
 
-#: ../../network/state_handler.go:85
+#: ../../network/state_handler.go:87
 msgid "The 802.11 Wi-Fi network could not be found."
 msgstr "802.11 Wi-Fi网络无法找到。"
 
-#: ../../network/state_handler.go:86
+#: ../../network/state_handler.go:88
 msgid "A secondary connection of the base connection failed."
 msgstr "底座连接的二次连接失败。"
 
-#: ../../network/state_handler.go:88
+#: ../../network/state_handler.go:90
+msgid "Activate VPN connection failed, unknown reason."
+msgstr "激活VPN连接失败，原因未知。"
+
+#: ../../network/state_handler.go:91
+msgid "Activate VPN connection failed."
+msgstr "激活VPN连接失败。"
+
+#: ../../network/state_handler.go:92
 msgid "The VPN connection changed state due to disconnection from users."
 msgstr "用户断开致使VPN连接状态改变。"
 
-#: ../../network/state_handler.go:89
+#: ../../network/state_handler.go:93
 msgid "The VPN connection changed state due to disconnection from devices."
 msgstr "用户断开致使VPN连接状态改变。"
 
-#: ../../network/state_handler.go:90
+#: ../../network/state_handler.go:94
 msgid "VPN service stopped."
 msgstr "VPN服务已停止。"
 
-#: ../../network/state_handler.go:91
+#: ../../network/state_handler.go:95
 msgid "The IP config of VPN connection was invalid."
 msgstr "VPN连接的IP配置无效。"
 
-#: ../../network/state_handler.go:92
+#: ../../network/state_handler.go:96
 msgid "The connection attempt to VPN service timed out."
 msgstr "VPN服务连接尝试超时。"
 
-#: ../../network/state_handler.go:93
+#: ../../network/state_handler.go:97
 msgid "The VPN service start timed out."
 msgstr "VPN服务启动超时。"
 
-#: ../../network/state_handler.go:94
+#: ../../network/state_handler.go:98
 msgid "The VPN service failed to start."
 msgstr "VPN服务启动失败。"
 
-#: ../../network/state_handler.go:95
+#: ../../network/state_handler.go:99
 msgid "Necessary password for the VPN connection was not provided."
 msgstr "未提供VPN连接所需的密码。"
 
-#: ../../network/state_handler.go:96
+#: ../../network/state_handler.go:100
 msgid "Authentication to VPN server failed."
 msgstr "验证到VPN服务器失败。"
 
-#: ../../network/state_handler.go:97
+#: ../../network/state_handler.go:101
 msgid "The connection was deleted from settings."
 msgstr "该连接已从设置中删除。"
 
-#: ../../network/state_handler.go:155 ../../network/state_handler.go:227
+#: ../../network/state_handler.go:156 ../../network/state_handler.go:219
 msgid "Connected"
 msgstr "已连接"
 
-#: ../../network/state_handler.go:180 ../../network/state_handler.go:231
-#: ../../network/state_handler.go:236 ../../network/state_handler.go:241
+#: ../../network/state_handler.go:174 ../../network/state_handler.go:223
+#: ../../network/state_handler.go:228 ../../network/state_handler.go:233
 msgid "Disconnected"
 msgstr "断开"
 
-#: ../../network/state_handler.go:209
+#: ../../network/state_handler.go:201
 msgid "Offline"
 msgstr "离线"
 
-#: ../../network/state_handler.go:209
+#: ../../network/state_handler.go:201
 msgid "Disconnected,  you are now offline."
 msgstr "断开连接，当前已离线"
 
-#: ../../network/state_handler.go:241
+#: ../../network/state_handler.go:233
 msgid "Access Point mode is not supported by this device."
 msgstr "此设备不支持热点模式"
 
@@ -3241,6 +3253,9 @@ msgstr "电池电量低"
 #: ../../power/upower.go:114
 msgid "Computer will be in suspend mode, please plug in now."
 msgstr "计算机将要进入待机状态，请连接电源。"
+
+#~ msgid "Switch Layout"
+#~ msgstr "切换键盘布局"
 
 #~ msgid "Americaoronha"
 #~ msgstr "迪诺罗尼亚"
