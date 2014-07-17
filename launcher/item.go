@@ -158,9 +158,9 @@ func getCategory(app *gio.DesktopAppInfo) CategoryId {
 }
 
 func genId(filename string) ItemId {
-	basename := path.Base(filename)
+	basename := path.Base(filename)[:len(basename)-8] // len(".desktop")
 	// return ItemId(fmt.Sprintf("%x", md5.Sum([]byte(basename))))
-	return ItemId(basename[:len(basename)-8]) // len(".desktop")
+	return ItemId(strings.Replace(basename), "_", "-", -1)
 }
 
 func getId(app *gio.DesktopAppInfo) ItemId {
