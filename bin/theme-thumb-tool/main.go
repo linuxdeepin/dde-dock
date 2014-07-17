@@ -223,8 +223,12 @@ func main() {
 		outDir = path.Join(homeDir, PERSON_LOCAL_THUMB_PATH)
 	}
 	if len(os.Args) == 3 {
-		forceFlag = true
 		outDir = os.Args[2]
+	}
+
+	if !isVersionSame() {
+		cleanThumbCache()
+		forceFlag = true
 	}
 
 	switch op {

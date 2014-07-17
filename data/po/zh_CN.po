@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-17 17:32+0800\n"
+"POT-Creation-Date: 2014-07-17 17:36+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME &lt;EMAIL@ADDRESS&gt;\n"
 "Language-Team: LANGUAGE &lt;LL@li.org&gt;\n"
@@ -2136,223 +2136,228 @@ msgstr "驻留(_D)"
 msgid "Auto"
 msgstr "自动"
 
-#: ../../keybinding/id_desc_map.go:72
+#: ../../keybinding/id_desc_map.go:74
 msgid "Launcher"
 msgstr "启动器"
 
-#: ../../keybinding/id_desc_map.go:73
+#: ../../keybinding/id_desc_map.go:75
 msgid "Show desktop"
 msgstr "显示桌面"
 
-#: ../../keybinding/id_desc_map.go:74
+#: ../../keybinding/id_desc_map.go:76
 msgid "Lock screen"
 msgstr "锁屏界面"
 
-#: ../../keybinding/id_desc_map.go:75
+#: ../../keybinding/id_desc_map.go:77
 msgid "File manager"
 msgstr "文件管理器"
 
-#: ../../keybinding/id_desc_map.go:76
+#: ../../keybinding/id_desc_map.go:78
 msgid "Switch applications"
 msgstr "切换程序"
 
-#: ../../keybinding/id_desc_map.go:77
+#: ../../keybinding/id_desc_map.go:79
 msgid "Reverse switch applications"
 msgstr "反向切换程序"
 
-#: ../../keybinding/id_desc_map.go:78
+#: ../../keybinding/id_desc_map.go:80
 msgid "3D switch applications"
 msgstr "3D切换程序"
 
-#: ../../keybinding/id_desc_map.go:79
+#: ../../keybinding/id_desc_map.go:81
 msgid "3D reverse switch applications"
 msgstr "3D反向切换程序"
 
-#: ../../keybinding/id_desc_map.go:80
+#: ../../keybinding/id_desc_map.go:82
 msgid "Show/Hide the dock"
 msgstr "显示/隐藏任务栏"
 
-#: ../../keybinding/id_desc_map.go:81
+#: ../../keybinding/id_desc_map.go:83
 msgid "Screenshot"
 msgstr "屏幕截图"
 
-#: ../../keybinding/id_desc_map.go:82
+#: ../../keybinding/id_desc_map.go:84
 msgid "Full screenshot"
 msgstr "全屏截图"
 
-#: ../../keybinding/id_desc_map.go:83
+#: ../../keybinding/id_desc_map.go:85
 msgid "Window screenshot"
 msgstr "窗口截图"
 
-#: ../../keybinding/id_desc_map.go:84
+#: ../../keybinding/id_desc_map.go:86
 msgid "Delay screenshot"
 msgstr "延时截图"
 
-#: ../../keybinding/id_desc_map.go:85
+#: ../../keybinding/id_desc_map.go:87
 msgid "Terminal"
 msgstr "终端"
 
-#: ../../keybinding/id_desc_map.go:86
+#: ../../keybinding/id_desc_map.go:88
 msgid "Terminal Quake Window"
 msgstr "终端雷神模式"
 
-#: ../../keybinding/id_desc_map.go:87
+#: ../../keybinding/id_desc_map.go:89
 msgid "Logout"
 msgstr "注销"
 
-#: ../../keybinding/id_desc_map.go:88
+#: ../../keybinding/id_desc_map.go:90
 msgid "Disable Touchpad"
 msgstr "禁用触摸板"
 
-#: ../../keybinding/id_desc_map.go:89
+#: ../../keybinding/id_desc_map.go:91
 msgid "Deepin Translator"
 msgstr "深度翻译"
 
-#: ../../keybinding/id_desc_map.go:129
+#: ../../keybinding/id_desc_map.go:92
+#, fuzzy
+msgid "Switch Layout"
+msgstr "切换卷起状态"
+
+#: ../../keybinding/id_desc_map.go:132
 msgid "Calculator"
 msgstr "计算器"
 
-#: ../../keybinding/id_desc_map.go:130
+#: ../../keybinding/id_desc_map.go:133
 msgid "Email client"
 msgstr "邮件客户端"
 
-#: ../../keybinding/id_desc_map.go:131
+#: ../../keybinding/id_desc_map.go:134
 msgid "Web browser"
 msgstr "网页浏览器"
 
-#: ../../keybinding/id_desc_map.go:132
+#: ../../keybinding/id_desc_map.go:135
 msgid "Media player"
 msgstr "多媒体播放器"
 
-#: ../../keybinding/id_desc_map.go:133
+#: ../../keybinding/id_desc_map.go:136
 msgid "Play/Pause"
 msgstr "播放/暂停"
 
-#: ../../keybinding/id_desc_map.go:134
+#: ../../keybinding/id_desc_map.go:137
 msgid "Pause"
 msgstr "暂停播放"
 
-#: ../../keybinding/id_desc_map.go:135
+#: ../../keybinding/id_desc_map.go:138
 msgid "Stop"
 msgstr "停止播放"
 
-#: ../../keybinding/id_desc_map.go:136
+#: ../../keybinding/id_desc_map.go:139
 msgid "Mute"
 msgstr "静音"
 
-#: ../../keybinding/id_desc_map.go:137
+#: ../../keybinding/id_desc_map.go:140
 msgid "Volume down"
 msgstr "减小音量"
 
-#: ../../keybinding/id_desc_map.go:138
+#: ../../keybinding/id_desc_map.go:141
 msgid "Volume up"
 msgstr "增大音量"
 
-#: ../../keybinding/id_desc_map.go:139
+#: ../../keybinding/id_desc_map.go:142
 msgid "Previous"
 msgstr "上一个"
 
-#: ../../keybinding/id_desc_map.go:140
+#: ../../keybinding/id_desc_map.go:143
 msgid "Next"
 msgstr "下一个"
 
-#: ../../keybinding/id_desc_map.go:141
+#: ../../keybinding/id_desc_map.go:144
 msgid "Eject"
 msgstr "弹出"
 
-#: ../../keybinding/id_desc_map.go:171
+#: ../../keybinding/id_desc_map.go:174
 msgid "Close window"
 msgstr "关闭窗口"
 
-#: ../../keybinding/id_desc_map.go:172
+#: ../../keybinding/id_desc_map.go:175
 msgid "Maximize window"
 msgstr "最大化窗口"
 
-#: ../../keybinding/id_desc_map.go:173
+#: ../../keybinding/id_desc_map.go:176
 msgid "Restore window"
 msgstr "恢复窗口"
 
-#: ../../keybinding/id_desc_map.go:174
+#: ../../keybinding/id_desc_map.go:177
 msgid "Minimize window"
 msgstr "最小化窗口"
 
-#: ../../keybinding/id_desc_map.go:175
+#: ../../keybinding/id_desc_map.go:178
 msgid "Move window"
 msgstr "移动窗口"
 
-#: ../../keybinding/id_desc_map.go:176
+#: ../../keybinding/id_desc_map.go:179
 msgid "Resize window"
 msgstr "改变窗口大小"
 
-#: ../../keybinding/id_desc_map.go:177
+#: ../../keybinding/id_desc_map.go:180
 msgid "Switch furl state"
 msgstr "切换卷起状态"
 
-#: ../../keybinding/id_desc_map.go:178
+#: ../../keybinding/id_desc_map.go:181
 msgid "Activate window menu"
 msgstr "激活窗口菜单"
 
-#: ../../keybinding/id_desc_map.go:224
+#: ../../keybinding/id_desc_map.go:227
 msgid "Switch to workspace 1"
 msgstr "切换到工作区1"
 
-#: ../../keybinding/id_desc_map.go:225
+#: ../../keybinding/id_desc_map.go:228
 msgid "Switch to workspace 2"
 msgstr "切换到工作区2"
 
-#: ../../keybinding/id_desc_map.go:226
+#: ../../keybinding/id_desc_map.go:229
 msgid "Switch to workspace 3"
 msgstr "切换到工作区3"
 
-#: ../../keybinding/id_desc_map.go:227
+#: ../../keybinding/id_desc_map.go:230
 msgid "Switch to workspace 4"
 msgstr "切换到工作区4"
 
-#: ../../keybinding/id_desc_map.go:228
+#: ../../keybinding/id_desc_map.go:231
 msgid "Switch to left workspace"
 msgstr "切换到左边工作区"
 
-#: ../../keybinding/id_desc_map.go:229
+#: ../../keybinding/id_desc_map.go:232
 msgid "Switch to right workspace"
 msgstr "切换到右边工作区"
 
-#: ../../keybinding/id_desc_map.go:230
+#: ../../keybinding/id_desc_map.go:233
 msgid "Switch to upper workspace"
 msgstr "切换到上方工作区"
 
-#: ../../keybinding/id_desc_map.go:231
+#: ../../keybinding/id_desc_map.go:234
 msgid "Switch to lower workspace"
 msgstr "切换到下方工作区"
 
-#: ../../keybinding/id_desc_map.go:232
+#: ../../keybinding/id_desc_map.go:235
 msgid "Move to workspace 1"
 msgstr "移动到工作区1"
 
-#: ../../keybinding/id_desc_map.go:233
+#: ../../keybinding/id_desc_map.go:236
 msgid "Move to workspace 2"
 msgstr "移动到工作区2"
 
-#: ../../keybinding/id_desc_map.go:234
+#: ../../keybinding/id_desc_map.go:237
 msgid "Move to workspace 3"
 msgstr "移动到工作区3"
 
-#: ../../keybinding/id_desc_map.go:235
+#: ../../keybinding/id_desc_map.go:238
 msgid "Move to workspace 4"
 msgstr "移动到工作区4"
 
-#: ../../keybinding/id_desc_map.go:236
+#: ../../keybinding/id_desc_map.go:239
 msgid "Move to left workspace"
 msgstr "移动到左边工作区"
 
-#: ../../keybinding/id_desc_map.go:237
+#: ../../keybinding/id_desc_map.go:240
 msgid "Move to right workspace"
 msgstr "移动到右边工作区"
 
-#: ../../keybinding/id_desc_map.go:238
+#: ../../keybinding/id_desc_map.go:241
 msgid "Move to upper workspace"
 msgstr "移动到上方工作区"
 
-#: ../../keybinding/id_desc_map.go:239
+#: ../../keybinding/id_desc_map.go:242
 msgid "Move to lower workspace"
 msgstr "移动到下方工作区"
 
@@ -2944,11 +2949,11 @@ msgstr "Open"
 
 #: ../../network/state_handler.go:34
 msgid "Device state changed, unknown reason."
-msgstr "设备状态改变，原因未知。"
+msgstr ""
 
 #: ../../network/state_handler.go:35
 msgid "Device state changed, none reason."
-msgstr "设备状态改变。"
+msgstr ""
 
 #: ../../network/state_handler.go:36
 msgid "The device is now managed."
@@ -2959,6 +2964,7 @@ msgid "The device is no longer managed."
 msgstr "设备不再托管。"
 
 #: ../../network/state_handler.go:38
+#, fuzzy
 msgid "The device has not been ready for configuration."
 msgstr "设备配置未就绪。"
 
@@ -3167,11 +3173,12 @@ msgstr "底座连接的二次连接失败。"
 
 #: ../../network/state_handler.go:90
 msgid "Activate VPN connection failed, unknown reason."
-msgstr "激活VPN连接失败，原因未知。"
+msgstr ""
 
 #: ../../network/state_handler.go:91
+#, fuzzy
 msgid "Activate VPN connection failed."
-msgstr "激活VPN连接失败。"
+msgstr "连接依赖失败。"
 
 #: ../../network/state_handler.go:92
 msgid "The VPN connection changed state due to disconnection from users."
@@ -3243,19 +3250,21 @@ msgid "Computer has been in suspend mode, please plug in."
 msgstr "计算机进入待机状态，请连接电源。"
 
 #: ../../power/upower.go:101
+#, fuzzy
 msgid "Please plug in, or computer will be in suspend mode."
-msgstr "计算机即将进入待机状态，请连接电源。"
+msgstr "计算机将要进入待机状态，请连接电源。"
 
 #: ../../power/upower.go:114
 msgid "Battery Low"
 msgstr "电池电量低"
 
 #: ../../power/upower.go:114
+#, fuzzy
 msgid "Computer will be in suspend mode, please plug in now."
 msgstr "计算机将要进入待机状态，请连接电源。"
 
-#~ msgid "Switch Layout"
-#~ msgstr "切换键盘布局"
+#~ msgid "Computer will being in suspend mode, please plug in."
+#~ msgstr "计算机即将进入待机状态，请连接电源。"
 
 #~ msgid "Americaoronha"
 #~ msgstr "迪诺罗尼亚"

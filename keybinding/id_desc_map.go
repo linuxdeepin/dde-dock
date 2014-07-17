@@ -42,6 +42,7 @@ var SystemIdNameMap = map[int32]string{
 	4:   "logout",
 	11:  "disable-touchpad",
 	12:  "deepin-translator",
+	13:  "switch-layout",
 }
 
 var SystemIdIndexMap = map[int32]int32{
@@ -62,7 +63,8 @@ var SystemIdIndexMap = map[int32]int32{
 	5:   14,
 	4:   15,
 	12:  16,
-	11:  17,
+	13:  17,
+	11:  18,
 }
 
 var SystemNameDescMap map[string]string
@@ -87,6 +89,7 @@ func initSystemNameDescMap() {
 		"logout":                       Tr("Logout"),
 		"disable-touchpad":             Tr("Disable Touchpad"),
 		"deepin-translator":            Tr("Deepin Translator"),
+		"switch-layout":                Tr("Switch Layout"),
 	}
 }
 
