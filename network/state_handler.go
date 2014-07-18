@@ -215,15 +215,15 @@ func destroyStateNotifier(n *StateNotifier) {
 }
 
 func notifyVpnConnected(id string) {
-	icon := "network-vpn"
+	icon := "notification-network-vpn-connected"
 	notify(icon, Tr("Connected"), id)
 }
 func notifyVpnDisconnected(id string) {
-	icon := "network-error" // TODO change vpn icon
+	icon := "notification-network-vpn-disconnected"
 	notify(icon, Tr("Disconnected"), id)
 }
 func notifyVpnFailed(id string, reason uint32) {
-	icon := "network-error" // TODO change vpn icon
+	icon := "notification-network-vpn-disconnected"
 	msg := VpnErrorTable[reason]
 	notify(icon, Tr("Disconnected"), msg)
 }
