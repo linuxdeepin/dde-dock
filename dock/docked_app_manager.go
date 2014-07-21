@@ -165,34 +165,38 @@ func (m *DockedAppManager) Dock(id, title, icon, cmd string) bool {
 	return true
 }
 
+func (m *DockedAppManager) doUndock(id string) {
+	m.core.SetStrv(DockedApps, m.toSlice())
+	gio.SettingsSync()
+	os.Remove(filepath.Join(scratchDir, id+".desktop"))
+	os.Remove(filepath.Join(scratchDir, id+".sh"))
+	os.Remove(filepath.Join(scratchDir, id+".png"))
+	m.Undocked(id)
+	app := ENTRY_MANAGER.runtimeApps[id]
+	if app != nil {
+		app.buildMenu()
+	}
+}
+
 func (m *DockedAppManager) Undock(id string) bool {
 	id = strings.ToLower(id)
 	removeItem := m.findItem(id)
 	if removeItem != nil {
 		logger.Info("undock", id)
 		logger.Info("Remove", m.items.Remove(removeItem))
-		m.core.SetStrv(DockedApps, m.toSlice())
-		gio.SettingsSync()
-		os.Remove(filepath.Join(scratchDir, id+".desktop"))
-		os.Remove(filepath.Join(scratchDir, id+".sh"))
-		os.Remove(filepath.Join(scratchDir, id+".png"))
-		m.Undocked(id)
-		app := ENTRY_MANAGER.runtimeApps[id]
-		if app != nil {
-			app.buildMenu()
-		}
+		m.doUndock(id)
 		return true
 	} else {
 		logger.Debug("not find docked app:", id)
 		tmpId := ""
 		if tmpId = guess_desktop_id(id); tmpId != "" {
-			m.Undocked(id)
+			m.doUndock(id)
 			return true
 		}
 
 		tmpId = strings.Replace(id, "-", "_", -1)
 		if removeItem = m.findItem(tmpId); removeItem != nil {
-			m.Undocked(id)
+			m.doUndock(id)
 			return true
 		}
 		return false
