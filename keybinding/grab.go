@@ -181,13 +181,13 @@ func deleteSpecialMod(modStr string) string {
 
 func getSystemKeyPairs() map[string]string {
 	systemPairs := make(map[string]string)
-	for i, k := range SystemIdNameMap {
-		if i >= 0 && i < 300 {
-			if isInvalidConflict(i) {
+	for _, info := range systemIdDescList {
+		if info.Id >= 0 && info.Id < 300 {
+			if isInvalidConflict(info.Id) {
 				continue
 			}
-			shortcut := getSystemKeyValue(k, false)
-			action := getSystemKeyValue(k, true)
+			shortcut := getSystemKeyValue(info.Name, false)
+			action := getSystemKeyValue(info.Name, true)
 			systemPairs[shortcut] = action
 		}
 	}
@@ -423,6 +423,7 @@ func parseKeyEnvent(X *xgbutil.XUtil, state uint16, detail xproto.Keycode) strin
 	keyStr := strings.ToLower(
 		keybind.LookupString(X,
 			state, detail))
+
 	if detail == 65 {
 		keyStr = "space"
 	}
@@ -435,13 +436,28 @@ func parseKeyEnvent(X *xgbutil.XUtil, state uint16, detail xproto.Keycode) strin
 		keyStr = "f12"
 	}
 
-	keyStr = parseModifierKey(modStr, keyStr)
-
 	value := ""
 	modStr = deleteSpecialMod(modStr)
+
+	keyStr = parseModifierKey(modStr, keyStr)
 	Logger.Infof("modStr: %s, keyStr: %s", modStr, keyStr)
+
 	if len(modStr) > 0 {
-		value = convertModsToKeys(modStr) + "-" + keyStr
+		if strings.ToLower(keyStr) == "super" &&
+			strings.ToLower(modStr) == "mod4" {
+			value = keyStr
+		} else if strings.ToLower(keyStr) == "alt" &&
+			strings.ToLower(modStr) == "mod1" {
+			value = "alt"
+		} else if strings.ToLower(keyStr) == "control" &&
+			strings.ToLower(modStr) == "control" {
+			value = "control"
+		} else if strings.ToLower(keyStr) == "shift" &&
+			strings.ToLower(modStr) == "shift" {
+			value = "shift"
+		} else {
+			value = convertModsToKeys(modStr) + "-" + keyStr
+		}
 	} else {
 		value = keyStr
 	}
@@ -450,15 +466,16 @@ func parseKeyEnvent(X *xgbutil.XUtil, state uint16, detail xproto.Keycode) strin
 }
 
 func parseModifierKey(mod, key string) string {
-	if strings.Contains(key, "control") {
-		key = "control"
-	} else if strings.Contains(key, "alt") {
-		key = "alt"
-	} else if strings.Contains(key, "shift") {
-		key = "shift"
-	} else if strings.Contains(key, "super") {
+	tmp := strings.ToLower(key)
+	if strings.Contains(tmp, "control") {
+		return "control"
+	} else if strings.Contains(tmp, "alt") {
+		return "alt"
+	} else if strings.Contains(tmp, "shift") {
+		return "shift"
+	} else if strings.Contains(tmp, "super") {
 		if len(mod) > 0 {
-			key = "super"
+			return "super"
 		}
 	}
 

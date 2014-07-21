@@ -22,11 +22,11 @@
 package keybinding
 
 import (
-	"pkg.linuxdeepin.com/lib/gio-2.0"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/keybind"
 	"github.com/BurntSushi/xgbutil/xevent"
 	"os/exec"
+	"pkg.linuxdeepin.com/lib/gio-2.0"
 	"strings"
 )
 
@@ -236,10 +236,8 @@ func (obj *Manager) listenKeyEvents() {
 }
 
 func isKeyNameExist(name string) bool {
-	for _, v := range IdNameMap {
-		if v == name {
-			return true
-		}
+	if _, ok := getAccelIdByName(name); ok {
+		return true
 	}
 
 	return false
@@ -331,11 +329,11 @@ func (obj *Manager) listenSettings() {
 				updatePutSettings(key, shortcut, invalidFlag)
 			}
 
-			if _, ok := SystemIdNameMap[id]; ok {
+			if isIdInSystemList(id) {
 				obj.setPropSystemList(getSystemListInfo())
-			} else if _, ok := WindowIdNameMap[id]; ok {
+			} else if isIdInWindowList(id) {
 				obj.setPropWindowList(getWindowListInfo())
-			} else if _, ok := WorkspaceIdNameMap[id]; ok {
+			} else if isIdInWorkspaceList(id) {
 				obj.setPropWorkspaceList(getWorkspaceListInfo())
 			}
 		}

@@ -150,7 +150,6 @@ func getCustomListInfo() []ShortcutInfo {
 	idList := getCustomIdList()
 	list := []ShortcutInfo{}
 
-	index := int32(0)
 	for _, k := range idList {
 		tmp := ShortcutInfo{}
 
@@ -158,8 +157,6 @@ func getCustomListInfo() []ShortcutInfo {
 		tmp.Desc = getCustomValue(k, CUSTOM_KEY_NAME)
 		shortcut := getCustomValue(k, CUSTOM_KEY_SHORTCUT)
 		tmp.Shortcut = formatShortcut(shortcut)
-		tmp.index = index
-		index += 1
 		list = append(list, tmp)
 	}
 

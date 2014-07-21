@@ -22,12 +22,12 @@
 package keybinding
 
 import (
-	"pkg.linuxdeepin.com/lib/dbus"
-	"pkg.linuxdeepin.com/lib/gio-2.0"
-	libLogger "pkg.linuxdeepin.com/lib/logger"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/keybind"
 	"github.com/BurntSushi/xgbutil/xevent"
+	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/gio-2.0"
+	libLogger "pkg.linuxdeepin.com/lib/logger"
 )
 
 var (
@@ -58,10 +58,10 @@ func StartKeyBinding() {
 	keybind.Initialize(X)
 	initXRecord()
 
-	initSystemNameDescMap()
-	initWindowNameDescMap()
-	initMediaNameDescMap()
-	initWorkspaceNameDescMap()
+	initSystemIdDescList()
+	//initMediaIdDescList()
+	initWindowIdDescList()
+	initWorkspaceIdDescList()
 
 	grabKeyPairs(getSystemKeyPairs(), true)
 	grabKeyPairs(getCustomKeyPairs(), true)

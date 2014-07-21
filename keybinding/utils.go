@@ -169,49 +169,40 @@ func conflictChecked(id int32, shortcut string) (bool, []int32) {
 func getSystemListInfo() []ShortcutInfo {
 	list := []ShortcutInfo{}
 
-	for i, n := range SystemIdNameMap {
-		if desc, ok := SystemNameDescMap[n]; ok {
-			shortcut := getSystemKeyValue(n, false)
-			tmp := newShortcutInfo(i, desc,
-				formatShortcut(shortcut))
-			tmp.index = SystemIdIndexMap[i]
-			list = append(list, tmp)
-		}
+	for _, info := range systemIdDescList {
+		shortcut := getSystemKeyValue(info.Name, false)
+		tmp := newShortcutInfo(info.Id, info.Desc,
+			formatShortcut(shortcut))
+		list = append(list, tmp)
 	}
 
-	return sortShortcutList(list)
+	return list
 }
 
 func getWindowListInfo() []ShortcutInfo {
 	list := []ShortcutInfo{}
 
-	for i, n := range WindowIdNameMap {
-		if desc, ok := WindowNameDescMap[n]; ok {
-			shortcut := getSystemKeyValue(n, false)
-			tmp := newShortcutInfo(i, desc,
-				formatShortcut(shortcut))
-			tmp.index = WindowIdIndexMap[i]
-			list = append(list, tmp)
-		}
+	for _, info := range windowIdDescList {
+		shortcut := getSystemKeyValue(info.Name, false)
+		tmp := newShortcutInfo(info.Id, info.Desc,
+			formatShortcut(shortcut))
+		list = append(list, tmp)
 	}
 
-	return sortShortcutList(list)
+	return list
 }
 
 func getWorkspaceListInfo() []ShortcutInfo {
 	list := []ShortcutInfo{}
 
-	for i, n := range WorkspaceIdNameMap {
-		if desc, ok := WorkspaceNameDescMap[n]; ok {
-			shortcut := getSystemKeyValue(n, false)
-			tmp := newShortcutInfo(i, desc,
-				formatShortcut(shortcut))
-			tmp.index = WorkspaceIdIndexMap[i]
-			list = append(list, tmp)
-		}
+	for _, info := range workspaceIdDescList {
+		shortcut := getSystemKeyValue(info.Name, false)
+		tmp := newShortcutInfo(info.Id, info.Desc,
+			formatShortcut(shortcut))
+		list = append(list, tmp)
 	}
 
-	return sortShortcutList(list)
+	return list
 }
 
 func getValidConflictList() []int32 {
@@ -246,13 +237,19 @@ func getInvalidConflictList() []int32 {
 
 func isValidShortcut(shortcut string) bool {
 	tmp := formatShortcut(shortcut)
-	if len(tmp) == 0 || strings.Contains(tmp, "-") {
+	if len(tmp) == 0 {
+		return false
+	}
+
+	if strings.Contains(tmp, "-") {
 		as := strings.Split(tmp, "-")
-		str := as[len(as)-1]
+		l := len(as)
+		str := as[l-1]
 		// 修饰键作为单按键的情况
 		if strings.Contains(str, "alt") ||
 			strings.Contains(str, "shift") ||
-			strings.Contains(str, "control") {
+			strings.Contains(str, "control") ||
+			(l-1 != 0 && strings.Contains(str, "super")) {
 			return false
 		} else {
 			return true
@@ -260,7 +257,7 @@ func isValidShortcut(shortcut string) bool {
 	}
 
 	switch tmp {
-	case "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9", "f10", "f11", "f12", "print", "super_l", "super_r":
+	case "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9", "f10", "f11", "f12", "print", "super_l", "super_r", "super":
 		return true
 	}
 
@@ -272,24 +269,71 @@ func getShortcutById(id int32) string {
 		return getCustomValue(id, CUSTOM_KEY_SHORTCUT)
 	}
 
-	if key, ok := IdNameMap[id]; ok {
-		return getSystemKeyValue(key, false)
+	for _, info := range systemIdDescList {
+		if info.Id == id {
+			return getSystemKeyValue(info.Name, false)
+		}
+	}
+
+	for _, info := range windowIdDescList {
+		if info.Id == id {
+			return getSystemKeyValue(info.Name, false)
+		}
+	}
+
+	for _, info := range workspaceIdDescList {
+		if info.Id == id {
+			return getSystemKeyValue(info.Name, false)
+		}
 	}
 
 	return ""
 }
 
 func setSystemValue(id int32, value string, action bool) {
-	if key, ok := IdNameMap[id]; ok {
-		list := sysGSettings.GetStrv(key)
-		Logger.Infof("Key: %v, Value: %v", key, list)
-		if len(list) > 1 && action {
-			list[1] = value
-		} else if len(list) > 0 && !action {
-			list[0] = value
+	for _, info := range systemIdDescList {
+		if info.Id == id {
+			list := sysGSettings.GetStrv(info.Name)
+			Logger.Infof("Key: %v, Value: %v", info.Name, list)
+			if len(list) > 1 && action {
+				list[1] = value
+			} else if len(list) > 0 && !action {
+				list[0] = value
+			}
+			Logger.Infof("Set Value: %v", info.Name, list)
+			sysGSettings.SetStrv(info.Name, list)
+			return
 		}
-		Logger.Infof("Set Value: %v", key, list)
-		sysGSettings.SetStrv(key, list)
+	}
+
+	for _, info := range windowIdDescList {
+		if info.Id == id {
+			list := sysGSettings.GetStrv(info.Name)
+			Logger.Infof("Key: %v, Value: %v", info.Name, list)
+			if len(list) > 1 && action {
+				list[1] = value
+			} else if len(list) > 0 && !action {
+				list[0] = value
+			}
+			Logger.Infof("Set Value: %v", info.Name, list)
+			sysGSettings.SetStrv(info.Name, list)
+			return
+		}
+	}
+
+	for _, info := range workspaceIdDescList {
+		if info.Id == id {
+			list := sysGSettings.GetStrv(info.Name)
+			Logger.Infof("Key: %v, Value: %v", info.Name, list)
+			if len(list) > 1 && action {
+				list[1] = value
+			} else if len(list) > 0 && !action {
+				list[0] = value
+			}
+			Logger.Infof("Set Value: %v", info.Name, list)
+			sysGSettings.SetStrv(info.Name, list)
+			return
+		}
 	}
 }
 
@@ -363,17 +407,28 @@ func getSystemKeyValue(key string, action bool) string {
 func getAllAccels() map[int32]string {
 	allMap := make(map[int32]string)
 
-	for i, n := range IdNameMap {
-		// Mediakey
-		if i >= 300 && i < 500 {
-			continue
-		}
-
-		shortcut := getSystemKeyValue(n, false)
+	for _, info := range systemIdDescList {
+		shortcut := getSystemKeyValue(info.Name, false)
 		if len(shortcut) < 1 {
 			continue
 		}
-		allMap[i] = strings.ToLower(shortcut)
+		allMap[info.Id] = strings.ToLower(shortcut)
+	}
+
+	for _, info := range windowIdDescList {
+		shortcut := getSystemKeyValue(info.Name, false)
+		if len(shortcut) < 1 {
+			continue
+		}
+		allMap[info.Id] = strings.ToLower(shortcut)
+	}
+
+	for _, info := range workspaceIdDescList {
+		shortcut := getSystemKeyValue(info.Name, false)
+		if len(shortcut) < 1 {
+			continue
+		}
+		allMap[info.Id] = strings.ToLower(shortcut)
 	}
 
 	customMap := getCustomKeyAccels()
@@ -389,9 +444,21 @@ func getAccelIdByName(name string) (int32, bool) {
 		return -1, false
 	}
 
-	for i, n := range IdNameMap {
-		if name == n {
-			return i, true
+	for _, info := range systemIdDescList {
+		if info.Name == name {
+			return info.Id, true
+		}
+	}
+
+	for _, info := range windowIdDescList {
+		if info.Name == name {
+			return info.Id, true
+		}
+	}
+
+	for _, info := range workspaceIdDescList {
+		if info.Name == name {
+			return info.Id, true
 		}
 	}
 
@@ -422,8 +489,7 @@ func compareShortcutInfo(info1, info2 *ShortcutInfo) bool {
 
 	if info1.Desc != info2.Desc ||
 		info1.Id != info2.Id ||
-		info1.Shortcut != info2.Shortcut ||
-		info1.index != info2.index {
+		info1.Shortcut != info2.Shortcut {
 		return false
 	}
 
@@ -447,20 +513,39 @@ func compareShortcutInfoList(l1, l2 []ShortcutInfo) bool {
 	return true
 }
 
-func sortShortcutList(list []ShortcutInfo) []ShortcutInfo {
-	l := len(list)
-	orderList := make([]ShortcutInfo, l)
-
-	for _, v := range list {
-		orderList[v.index] = v
-	}
-
-	return orderList
-}
-
 func isStringInList(str string, list []string) bool {
 	for _, v := range list {
 		if str == v {
+			return true
+		}
+	}
+
+	return false
+}
+
+func isIdInSystemList(id int32) bool {
+	for _, info := range systemIdDescList {
+		if id == info.Id {
+			return true
+		}
+	}
+
+	return false
+}
+
+func isIdInWindowList(id int32) bool {
+	for _, info := range windowIdDescList {
+		if id == info.Id {
+			return true
+		}
+	}
+
+	return false
+}
+
+func isIdInWorkspaceList(id int32) bool {
+	for _, info := range workspaceIdDescList {
+		if id == info.Id {
 			return true
 		}
 	}
