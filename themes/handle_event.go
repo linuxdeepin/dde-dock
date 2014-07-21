@@ -203,8 +203,7 @@ func (obj *Manager) handleEvent() {
 			ok1, _ = regexp.MatchString(ICON_SYS_PATH, ev.Name)
 			ok2, _ = regexp.MatchString(ICON_LOCAL_PATH, ev.Name)
 			if ok1 || ok2 {
-				Logger.Debugf("Update IconList")
-				<-time.After(time.Second * 1)
+				Logger.Info("Update IconList")
 				obj.setPropIconThemeList(obj.getIconStrList())
 				obj.setPropCursorThemeList(obj.getCursorStrList())
 				break
@@ -212,15 +211,13 @@ func (obj *Manager) handleEvent() {
 
 			ok1, _ = regexp.MatchString(SOUND_THEME_PATH, ev.Name)
 			if ok1 {
-				Logger.Debugf("Update SoundTheme")
-				<-time.After(time.Second * 1)
+				Logger.Info("Update SoundTheme")
 				obj.setPropSoundThemeList(obj.getSoundStrList())
 				break
 			}
 
 			ok1, _ = regexp.MatchString(`greeter-theme`, ev.Name)
 			if ok1 {
-				<-time.After(time.Second * 1)
 				obj.setPropGreeterList(obj.getGreeterStrList())
 				break
 			}
@@ -228,7 +225,6 @@ func (obj *Manager) handleEvent() {
 			ok1, _ = regexp.MatchString(PERSON_SYS_THEME_PATH, ev.Name)
 			ok2, _ = regexp.MatchString(PERSON_LOCAL_THEME_PATH, ev.Name)
 			if ok1 || ok2 {
-				<-time.After(time.Second * 1)
 				obj.rebuildThemes()
 				obj.setPropThemeList(obj.getDThemeStrList())
 				break
@@ -237,8 +233,7 @@ func (obj *Manager) handleEvent() {
 			ok1, _ = regexp.MatchString(THEME_SYS_PATH, ev.Name)
 			ok2, _ = regexp.MatchString(THEME_LOCAL_PATH, ev.Name)
 			if ok1 || ok2 {
-				Logger.Debugf("Update GtkList")
-				<-time.After(time.Second * 1)
+				Logger.Info("Update GtkList")
 				obj.setPropGtkThemeList(obj.getGtkStrList())
 				break
 			}
@@ -267,7 +262,7 @@ func (obj *Manager) startBgWatch() {
 
 	pict := getUserPictureDir()
 	userBG := path.Join(pict, "Wallpapers")
-	Logger.Debugf("User Special Bg: %v", userBG)
+	Logger.Debug("User Special Bg:", userBG)
 	if !dutils.IsFileExist(userBG) {
 		if err := os.MkdirAll(userBG, 0755); err != nil {
 			return
@@ -291,8 +286,9 @@ func (obj *Manager) endBgWatch() {
 	obj.bgWatcher.RemoveWatch("/usr/share/personalization/thumbnail/autogen")
 }
 
+var preTimestamp = int64(0)
+
 func (obj *Manager) handleBgEvent() {
-	preTimestamp := int64(0)
 	for {
 		select {
 		case <-obj.bgQuitFlag:
@@ -310,15 +306,16 @@ func (obj *Manager) handleBgEvent() {
 				break
 			}
 
-			Logger.Debugf("Bg Event: %v", ev)
+			Logger.Info("Bg Event:", ev)
 			curTimestamp := time.Now().Unix()
-			if curTimestamp-preTimestamp <= 3 {
+			if curTimestamp-preTimestamp < 3 {
 				break
 			}
 			preTimestamp = curTimestamp
-			if ok, _ := regexp.MatchString(`(autogen)(\.png$)`, ev.Name); ok {
+			if ok, _ := regexp.MatchString(`(autogen)(.*\.png$)`, ev.Name); ok {
 				go func() {
 					<-time.After(time.Second * 3)
+					Logger.Info("Update gtk.icon/bg theme list")
 					obj.setPropGtkThemeList(obj.getGtkStrList())
 					obj.setPropIconThemeList(obj.getIconStrList())
 					obj.setPropBackgroundList(obj.getBgStrList())
