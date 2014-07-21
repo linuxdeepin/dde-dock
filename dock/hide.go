@@ -76,8 +76,8 @@ func (m *HideStateManager) UpdateState() {
 			break
 		}
 
-		if hasMaximizeClient() {
-			logger.Debug("has maximized client")
+		if hasMaximizeClientPre(activeWindow) {
+			logger.Debug("active window is maximized client")
 			state = HideStateHidding
 		}
 	case HideModeKeepHidden:

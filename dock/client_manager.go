@@ -89,7 +89,7 @@ func walkClientList(pre func(xproto.Window) bool) bool {
 	return false
 }
 
-func isMaximizeClientPre(xid xproto.Window) bool {
+func isMaximizeVertClientPre(xid xproto.Window) bool {
 	state, _ := ewmh.WmStateGet(XU, xid)
 	return contains(state, "_NET_WM_STATE_MAXIMIZED_VERT")
 }
@@ -127,7 +127,7 @@ func onCurrentWorkspacePre(xid xproto.Window) bool {
 }
 
 func hasMaximizeClientPre(xid xproto.Window) bool {
-	isMax := isMaximizeClientPre(xid)
+	isMax := isMaximizeVertClientPre(xid)
 	isHidden := isHiddenPre(xid)
 	onCurrentWorkspace := onCurrentWorkspacePre(xid)
 	logger.Debug("isMax:", isMax, "isHidden:", isHidden,
