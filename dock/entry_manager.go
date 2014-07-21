@@ -9,6 +9,7 @@ import "pkg.linuxdeepin.com/lib/dbus"
 import "github.com/BurntSushi/xgb/xproto"
 import "os"
 import "path/filepath"
+import "strings"
 
 var (
 	ENTRY_MANAGER = initEntryManager()
@@ -53,7 +54,7 @@ func (m *EntryManager) listenDockedApp() {
 
 	DOCKED_APP_MANAGER.ConnectUndocked(func(id string) {
 		// undocked is operated on normal app
-		logger.Info("Undock", id)
+		logger.Info("ConnectUndocked: Undock", id)
 		if app, ok := m.normalApps[id]; ok {
 			logger.Info("destroy normal app")
 			m.destroyNormalApp(app)
@@ -197,6 +198,7 @@ func (m *EntryManager) destroyNormalApp(nApp *NormalApp) {
 
 func initialize() {
 	for _, id := range loadAll() {
+		id = strings.ToLower(strings.Replace(id, "_", "-", -1))
 		logger.Debug("load", id)
 		ENTRY_MANAGER.createNormalApp(id)
 	}

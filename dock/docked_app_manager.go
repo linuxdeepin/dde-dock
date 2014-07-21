@@ -51,7 +51,7 @@ func (m *DockedAppManager) init() {
 	// listen changed.
 	appList := m.core.GetStrv(DockedApps)
 	for _, id := range appList {
-		m.items.PushBack(id)
+		m.items.PushBack(strings.ToLower(strings.Replace(id, "_", "-", -1)))
 	}
 
 	conf := glib.NewKeyFile()
@@ -165,42 +165,50 @@ func (m *DockedAppManager) Dock(id, title, icon, cmd string) bool {
 	return true
 }
 
-func (m *DockedAppManager) doUndock(id string) {
+func (m *DockedAppManager) doUndock(id string) bool {
+	removeItem := m.findItem(id)
+	if removeItem == nil {
+		logger.Info("not find docked app:", id)
+		return false
+	}
+
+	logger.Info("Undock", id)
+	logger.Info("Remove", m.items.Remove(removeItem))
 	m.core.SetStrv(DockedApps, m.toSlice())
 	gio.SettingsSync()
 	os.Remove(filepath.Join(scratchDir, id+".desktop"))
 	os.Remove(filepath.Join(scratchDir, id+".sh"))
 	os.Remove(filepath.Join(scratchDir, id+".png"))
-	m.Undocked(id)
+	m.Undocked(removeItem.Value.(string))
 	app := ENTRY_MANAGER.runtimeApps[id]
 	if app != nil {
 		app.buildMenu()
 	}
+
+	return true
 }
 
 func (m *DockedAppManager) Undock(id string) bool {
 	id = strings.ToLower(id)
-	removeItem := m.findItem(id)
-	if removeItem != nil {
-		logger.Info("undock", id)
-		logger.Info("Remove", m.items.Remove(removeItem))
-		m.doUndock(id)
+	logger.Debug("undock lower id:", id)
+	if m.doUndock(id) {
 		return true
-	} else {
-		logger.Debug("not find docked app:", id)
-		tmpId := ""
-		if tmpId = guess_desktop_id(id); tmpId != "" {
-			m.doUndock(id)
-			return true
-		}
-
-		tmpId = strings.Replace(id, "-", "_", -1)
-		if removeItem = m.findItem(tmpId); removeItem != nil {
-			m.doUndock(id)
-			return true
-		}
-		return false
 	}
+
+	tmpId := ""
+	if tmpId = guess_desktop_id(id); tmpId != "" {
+		logger.Debug("undock guess desktop id:", tmpId)
+		m.doUndock(tmpId)
+		return true
+	}
+
+	tmpId = strings.Replace(id, "-", "_", -1)
+	if m.doUndock(tmpId) {
+		logger.Debug("undock replace - to _:", tmpId)
+		return true
+	}
+
+	return false
 }
 
 func (m *DockedAppManager) findItem(id string) *list.Element {
