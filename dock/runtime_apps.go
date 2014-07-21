@@ -18,6 +18,7 @@ import (
 	. "pkg.linuxdeepin.com/lib/gettext"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
 	"pkg.linuxdeepin.com/lib/glib-2.0"
+	"strconv"
 	"strings"
 )
 
@@ -109,6 +110,12 @@ func NewRuntimeApp(xid xproto.Window, appId string) *RuntimeApp {
 
 func find_exec_by_xid(xid xproto.Window) string {
 	pid, _ := ewmh.WmPidGet(XU, xid)
+	if pid == 0 {
+		name, _ := ewmh.WmNameGet(XU, xid)
+		if name != "" {
+			pid = lookthroughProc(name)
+		}
+	}
 	return find_exec_by_pid(pid)
 }
 
@@ -122,7 +129,7 @@ func (app *RuntimeApp) getExec(xid xproto.Window) {
 		core.Unref()
 		return
 	}
-	logger.Debug(app.Id, " Get Exec from pid")
+	logger.Debug(app.Id, "Get Exec from pid")
 	app.exec = find_exec_by_xid(xid)
 	logger.Warning("app get exec:", app.exec)
 }
@@ -328,6 +335,41 @@ func (app *RuntimeApp) HandleMenuItem(id string) {
 
 //func find_app_id(pid uint, instanceName, wmName, wmClass, iconName string) string { return "" }
 
+func lookthroughProc(name string) uint {
+	name = strings.ToLower(strings.Split(name, " ")[0])
+
+	dirs, err := ioutil.ReadDir("/proc")
+	if err != nil {
+		logger.Debug("read /proc dir failed:", err)
+		return 0
+	}
+
+	for _, dir := range dirs {
+		if !dir.IsDir() {
+			continue
+		}
+
+		content, err := ioutil.ReadFile(filepath.Join("/proc", dir.Name(), "cmdline"))
+		if err != nil {
+			logger.Debug("read cmdline failed:", err)
+			continue
+		}
+
+		if strings.Contains(strings.ToLower(string(content)), name) {
+			logger.Info("get it")
+			pid, err := strconv.Atoi(dir.Name())
+			if err != nil {
+				logger.Debug("change string to int failed:",
+					err)
+				return 0
+			}
+			return uint(pid)
+		}
+	}
+
+	return 0
+}
+
 func find_app_id_by_xid(xid xproto.Window) string {
 	var appId string
 	if id, err := xprop.PropValStr(xprop.GetProperty(XU, xid, "_DDE_DOCK_APP_ID")); err == nil {
@@ -341,19 +383,24 @@ func find_app_id_by_xid(xid xproto.Window) string {
 		wmInstance = wmClass.Instance
 		wmClassName = wmClass.Class
 	}
+	name, _ := ewmh.WmNameGet(XU, xid)
 	pid, err := ewmh.WmPidGet(XU, xid)
 	if err != nil {
-		appId = strings.Replace(strings.ToLower(wmClassName), "_", "-",
-			-1)
-		logger.Debug("get app id from wm class name", appId)
-		return appId
+		logger.Info("get pid failed, ", name)
+		if name != "" {
+			pid = lookthroughProc(name)
+		} else {
+			appId = strings.Replace(strings.ToLower(wmClassName), "_", "-",
+				-1)
+			logger.Debug("get Pid failed, using wm class name as app id", appId)
+			return appId
+		}
 	}
 	iconName, _ := ewmh.WmIconNameGet(XU, xid)
-	name, _ := ewmh.WmNameGet(XU, xid)
 	if pid == 0 {
 		appId = strings.Replace(strings.ToLower(wmClassName), "_", "-",
 			-1)
-		logger.Debug("get app id from wm class name", appId)
+		logger.Debug("get window name failed, using wm class name as app id", appId)
 		return appId
 	} else {
 	}
@@ -439,8 +486,10 @@ func isNormalWindow(xid xproto.Window) bool {
 	if err != nil {
 		logger.Debug("Get Window Type failed:", err)
 		if _, err := xprop.GetProperty(XU, xid, "_XEMBED_INFO"); err != nil {
+			logger.Debug("has _XEMBED_INFO")
 			return true
 		} else {
+			logger.Debug("Get _XEMBED_INFO failed:", err)
 			return false
 		}
 	}
@@ -470,8 +519,10 @@ func (app *RuntimeApp) updateIcon(xid xproto.Window) {
 		}
 	}
 
-	logger.Warning(app.Id, "using icon from X")
+	logger.Info(app.Id, "using icon from X")
 	icon, err := xgraphics.FindIcon(XU, xid, 48, 48)
+	// logger.Info(icon, err)
+	// FIXME: gets empty icon for minecraft
 	if err == nil {
 		buf := bytes.NewBuffer(nil)
 		icon.WritePng(buf)
@@ -479,8 +530,15 @@ func (app *RuntimeApp) updateIcon(xid xproto.Window) {
 		return
 	}
 
+	logger.Debug("get icon from X failed:", err)
+	logger.Debug("get icon name from _NET_WM_ICON_NAME")
 	name, _ := ewmh.WmIconNameGet(XU, xid)
-	app.xids[xid].Icon = name
+	if name != "" {
+		app.xids[xid].Icon = name
+	} else {
+		app.xids[xid].Icon = "application-default-icon"
+	}
+
 }
 func (app *RuntimeApp) updateWmClass(xid xproto.Window) {
 	if name, err := ewmh.WmNameGet(XU, xid); err == nil {

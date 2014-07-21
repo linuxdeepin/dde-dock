@@ -142,6 +142,11 @@ func (m *EntryManager) updateEntry(appId string, nApp *NormalApp, rApp *RuntimeA
 
 func (m *EntryManager) createRuntimeApp(xid xproto.Window) *RuntimeApp {
 	appId := find_app_id_by_xid(xid)
+	if appId == "" {
+		logger.Debug("get appid for", xid, "failed")
+		return nil
+	}
+
 	if v, ok := m.runtimeApps[appId]; ok {
 		return v
 	}
