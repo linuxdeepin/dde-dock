@@ -80,8 +80,7 @@ func parseDeviceAdd(devName *C.char) {
 		if managerObj.mouseObj == nil {
 			mouse := NewMouse()
 			if err := dbus.InstallOnSession(mouse); err != nil {
-				logObj.Warning("Mouse DBus Session Failed: ", err)
-				panic(err)
+				logObj.Fatal("Mouse DBus Session Failed: ", err)
 			}
 			managerObj.mouseObj = mouse
 			managerObj.setPropName("Infos")
@@ -91,8 +90,7 @@ func parseDeviceAdd(devName *C.char) {
 		if managerObj.tpadObj == nil {
 			tpad := NewTPad()
 			if err := dbus.InstallOnSession(tpad); err != nil {
-				logObj.Warning("TPad DBus Session Failed: ", err)
-				panic(err)
+				logObj.Fatal("TPad DBus Session Failed: ", err)
 			}
 			managerObj.tpadObj = tpad
 			managerObj.setPropName("Infos")
