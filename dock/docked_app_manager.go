@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
 	"pkg.linuxdeepin.com/lib/glib-2.0"
+	"strings"
 	"text/template"
 )
 
@@ -116,6 +117,13 @@ func (m *DockedAppManager) DockedAppList() []string {
 
 func (m *DockedAppManager) IsDocked(id string) bool {
 	item := m.findItem(id)
+	if item != nil {
+		return true
+	}
+
+	if id = guess_desktop_id(id); id != "" {
+		item = m.findItem(id)
+	}
 	// logger.Info("IsDocked:", item, item != nil)
 	return item != nil
 }
@@ -131,11 +139,19 @@ func (m *DockedAppManager) Dock(id, title, icon, cmd string) bool {
 		return false
 	}
 
+	id = strings.ToLower(id)
+	idElement = m.findItem(id)
+	if idElement != nil {
+		logger.Info(id, "is already docked.")
+		return false
+	}
+
 	logger.Info("id", id, "title", title, "cmd", cmd)
 	m.items.PushBack(id)
-	if app := gio.NewDesktopAppInfo(id + ".desktop"); app != nil {
-		app.Unref()
-	} else {
+	if guess_desktop_id(id) == "" {
+		// if app := gio.NewDesktopAppInfo(id + ".desktop"); app != nil {
+		// 	app.Unref()
+		// } else {
 		if e := createScratchFile(id, title, icon, cmd); e != nil {
 			logger.Warning(e)
 			return false
@@ -150,6 +166,7 @@ func (m *DockedAppManager) Dock(id, title, icon, cmd string) bool {
 }
 
 func (m *DockedAppManager) Undock(id string) bool {
+	id = strings.ToLower(id)
 	removeItem := m.findItem(id)
 	if removeItem != nil {
 		logger.Info("undock", id)
@@ -166,13 +183,25 @@ func (m *DockedAppManager) Undock(id string) bool {
 		}
 		return true
 	} else {
+		logger.Debug("not find docked app:", id)
+		tmpId := ""
+		if tmpId = guess_desktop_id(id); tmpId != "" {
+			m.Undocked(id)
+			return true
+		}
+
+		tmpId = strings.Replace(id, "-", "_", -1)
+		if removeItem = m.findItem(tmpId); removeItem != nil {
+			m.Undocked(id)
+			return true
+		}
 		return false
 	}
 }
 
 func (m *DockedAppManager) findItem(id string) *list.Element {
 	for e := m.items.Front(); e != nil; e = e.Next() {
-		if e.Value.(string) == id {
+		if strings.ToLower(e.Value.(string)) == strings.ToLower(id) {
 			return e
 		}
 	}
