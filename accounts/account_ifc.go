@@ -177,3 +177,7 @@ func (obj *Manager) RandUserIcon() (string, bool) {
 func (m *Manager) IsUsernameValid(username string) bool {
 	return isUsernameValid(username)
 }
+
+func (m *Manager) IsPasswordValid(passwd string) bool {
+	return isPasswordValid(passwd)
+}

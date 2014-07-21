@@ -86,3 +86,17 @@ func isUsernameValid(username string) bool {
 
 	return true
 }
+
+func isPasswordValid(passwd string) bool {
+	match, err := regexp.Compile(`^[!-~]+$`)
+	if err != nil {
+		logger.Warning("Check passwd.New match failed:", err)
+		return false
+	}
+
+	if !match.MatchString(passwd) {
+		return false
+	}
+
+	return true
+}
