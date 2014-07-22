@@ -113,20 +113,7 @@ func parseDeviceDelete(devName *C.char) {
 	tmp := C.GoString(devName)
 	s := strings.ToLower(tmp)
 	logObj.Infof("DEVICE CHANGED: %s removed", s)
-	if strings.Contains(s, "mouse") {
-		if managerObj.mouseObj != nil {
-			logObj.Info("DELETE mouse DBus")
-			dbus.UnInstallObject(managerObj.mouseObj)
-			managerObj.mouseObj = nil
-			logObj.Info("DELETE mouse DBus end...")
-			managerObj.setPropName("Infos")
-			for _, info := range managerObj.Infos {
-				if info.Id == "touchpad" {
-					tpadSettings.SetBoolean(TPAD_KEY_ENABLE, true)
-				}
-			}
-		}
-	} else if strings.Contains(s, "touchpad") {
+	if strings.Contains(s, "touchpad") {
 		if managerObj.tpadObj != nil {
 			managerObj.setPropName("Infos")
 			for _, info := range managerObj.Infos {
@@ -137,18 +124,45 @@ func parseDeviceDelete(devName *C.char) {
 			dbus.UnInstallObject(managerObj.tpadObj)
 			managerObj.tpadObj = nil
 		}
-	} else if strings.Contains(s, "keyboard") {
-		if managerObj.kbdObj != nil {
-			managerObj.setPropName("Infos")
-			for _, info := range managerObj.Infos {
-				if info.Id == "keyboard" {
-					return
+	}
+	/*
+		if strings.Contains(s, "mouse") {
+			if managerObj.mouseObj != nil {
+				logObj.Info("DELETE mouse DBus")
+				dbus.UnInstallObject(managerObj.mouseObj)
+				managerObj.mouseObj = nil
+				logObj.Info("DELETE mouse DBus end...")
+				managerObj.setPropName("Infos")
+				for _, info := range managerObj.Infos {
+					if info.Id == "touchpad" {
+						tpadSettings.SetBoolean(TPAD_KEY_ENABLE, true)
+					}
 				}
 			}
-			dbus.UnInstallObject(managerObj.kbdObj)
-			managerObj.kbdObj = nil
+		} else if strings.Contains(s, "touchpad") {
+			if managerObj.tpadObj != nil {
+				managerObj.setPropName("Infos")
+				for _, info := range managerObj.Infos {
+					if info.Id == "touchpad" {
+						return
+					}
+				}
+				dbus.UnInstallObject(managerObj.tpadObj)
+				managerObj.tpadObj = nil
+			}
+		} else if strings.Contains(s, "keyboard") {
+			if managerObj.kbdObj != nil {
+				managerObj.setPropName("Infos")
+				for _, info := range managerObj.Infos {
+					if info.Id == "keyboard" {
+						return
+					}
+				}
+				dbus.UnInstallObject(managerObj.kbdObj)
+				managerObj.kbdObj = nil
+			}
 		}
-	}
+	*/
 }
 
 func NewManager() *Manager {
