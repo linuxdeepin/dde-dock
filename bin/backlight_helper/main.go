@@ -31,13 +31,13 @@ func (*BacklightHelper) GetBrightness() float64 {
 }
 func (*BacklightHelper) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		"com.deepin.daemon.helper.BacklightHelper",
-		"/com/deepin/daemon/helper/BacklightHelper",
-		"com.deepin.daemon.helper.BacklightHelper",
+		"com.deepin.daemon.helper.Backlight",
+		"/com/deepin/daemon/helper/Backlight",
+		"com.deepin.daemon.helper.Backlight",
 	}
 }
 
-var logger = liblogger.NewLogger("com.deepin.daemon.helper.BacklightHelper")
+var logger = liblogger.NewLogger("com.deepin.daemon.helper.Backlight")
 
 func main() {
 	helper := NewBacklightHelper()
