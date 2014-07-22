@@ -47,7 +47,7 @@ func (obj *Manager) listenGSettings() {
 				t.setAllThemes()
 				//t.setAllProps()
 			} else {
-				obj.setPropCurrentTheme(DEFAULT_THEME)
+				obj.setPropCurrentTheme(DEFAULT_THEME_ID)
 			}
 		case GS_KEY_CURRENT_SOUND:
 			value := themeSettings.GetString(key)

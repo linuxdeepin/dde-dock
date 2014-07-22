@@ -228,3 +228,15 @@ func sortByDeepin(list []string) []string {
 
 	return deepinList
 }
+
+func getCurrentLang() (lang string) {
+	lang = os.Getenv("LANG")
+	if len(lang) < 1 {
+		lang = "en_GB"
+		return
+	}
+
+	strs := strings.Split(lang, ".")
+	lang = strs[0]
+	return
+}
