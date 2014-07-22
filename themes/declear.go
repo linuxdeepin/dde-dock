@@ -35,8 +35,8 @@ const (
 )
 
 const (
-	DEFAULT_THEME = "Deepin"
-	DEFAULT_BG    = "file:///usr/share/backgrounds/default_background.jpg"
+	DEFAULT_THEME_ID = "Deepin"
+	DEFAULT_BG       = "file:///usr/share/backgrounds/default_background.jpg"
 
 	THEME_SYS_PATH   = "/usr/share/themes"
 	THEME_LOCAL_PATH = ".themes"
@@ -61,8 +61,12 @@ var (
 )
 
 const (
+	THEME_CUSTOM_ID   = "Custom"
+	THEME_TEMP_CUSTOM = "/usr/share/dde-daemon/template/theme_custom"
+
 	THEME_GROUP_THEME     = "Theme"
 	THEME_GROUP_COMPONENT = "Component"
+	THEME_KEY_ID          = "Id"
 	THEME_KEY_NAME        = "Name"
 	THEME_KEY_GTK         = "GtkTheme"
 	THEME_KEY_ICON        = "IconTheme"

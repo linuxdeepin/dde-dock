@@ -1,0 +1,17 @@
+[Theme]
+Id=Custom
+Name=Custom
+Name[en_GB]=Custom
+Name[en_US]=Custom
+Name[zh_CN]=自定义
+Name[zh_HK]=自定義
+Name[zh_TW]=自定義
+
+[Component]
+GtkTheme=Deepin
+IconTheme=Deepin
+CursorTheme=Deepin-Cursor
+FontName=WenQuanYi Micro Hei
+FontSize=11
+BackgroundFile=file:///usr/share/backgrounds/1920x1080.jpg
+SoundTheme=LinuxDeepin

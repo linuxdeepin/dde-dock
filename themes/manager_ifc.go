@@ -175,7 +175,7 @@ func (obj *Manager) setGtkTheme(theme string) {
 		if theme == l {
 			t, ok := obj.themeObjMap[obj.CurrentTheme.GetValue().(string)]
 			if !ok {
-				obj.setPropCurrentTheme(DEFAULT_THEME)
+				obj.setPropCurrentTheme(DEFAULT_THEME_ID)
 				break
 			}
 			if t.GtkTheme == theme {
@@ -189,9 +189,9 @@ func (obj *Manager) setGtkTheme(theme string) {
 			}
 
 			Logger.Info("Theme: Custom,", theme, t.IconTheme, t.SoundTheme, t.CursorTheme, t.Background, t.FontSize)
-			obj.modifyTheme("Custom", theme, t.IconTheme, t.SoundTheme,
+			obj.modifyTheme(THEME_CUSTOM_ID, theme, t.IconTheme, t.SoundTheme,
 				t.CursorTheme, t.Background, t.FontSize)
-			obj.setPropCurrentTheme("Custom")
+			obj.setPropCurrentTheme(THEME_CUSTOM_ID)
 			break
 		}
 	}
@@ -206,7 +206,7 @@ func (obj *Manager) setIconTheme(theme string) {
 		if theme == l {
 			t, ok := obj.themeObjMap[obj.CurrentTheme.GetValue().(string)]
 			if !ok {
-				obj.setPropCurrentTheme(DEFAULT_THEME)
+				obj.setPropCurrentTheme(DEFAULT_THEME_ID)
 				break
 			}
 			if t.IconTheme == theme {
@@ -219,9 +219,9 @@ func (obj *Manager) setIconTheme(theme string) {
 				break
 			}
 
-			obj.modifyTheme("Custom", t.GtkTheme, theme, t.SoundTheme,
+			obj.modifyTheme(THEME_CUSTOM_ID, t.GtkTheme, theme, t.SoundTheme,
 				t.CursorTheme, t.Background, t.FontSize)
-			obj.setPropCurrentTheme("Custom")
+			obj.setPropCurrentTheme(THEME_CUSTOM_ID)
 			break
 		}
 	}
@@ -236,7 +236,7 @@ func (obj *Manager) setCursorTheme(theme string) {
 		if theme == l {
 			t, ok := obj.themeObjMap[obj.CurrentTheme.GetValue().(string)]
 			if !ok {
-				obj.setPropCurrentTheme(DEFAULT_THEME)
+				obj.setPropCurrentTheme(DEFAULT_THEME_ID)
 				break
 			}
 			if t.CursorTheme == theme {
@@ -249,9 +249,9 @@ func (obj *Manager) setCursorTheme(theme string) {
 				break
 			}
 
-			obj.modifyTheme("Custom", t.GtkTheme, t.IconTheme, t.SoundTheme,
+			obj.modifyTheme(THEME_CUSTOM_ID, t.GtkTheme, t.IconTheme, t.SoundTheme,
 				theme, t.Background, t.FontSize)
-			obj.setPropCurrentTheme("Custom")
+			obj.setPropCurrentTheme(THEME_CUSTOM_ID)
 			break
 		}
 	}
@@ -266,7 +266,7 @@ func (obj *Manager) setSoundTheme(theme string) {
 		if theme == l {
 			t, ok := obj.themeObjMap[obj.CurrentTheme.GetValue().(string)]
 			if !ok {
-				obj.setPropCurrentTheme(DEFAULT_THEME)
+				obj.setPropCurrentTheme(DEFAULT_THEME_ID)
 				break
 			}
 			if t.SoundTheme == theme {
@@ -279,9 +279,9 @@ func (obj *Manager) setSoundTheme(theme string) {
 				break
 			}
 
-			obj.modifyTheme("Custom", t.GtkTheme, t.IconTheme, theme,
+			obj.modifyTheme(THEME_CUSTOM_ID, t.GtkTheme, t.IconTheme, theme,
 				t.CursorTheme, t.Background, t.FontSize)
-			obj.setPropCurrentTheme("Custom")
+			obj.setPropCurrentTheme(THEME_CUSTOM_ID)
 			break
 		}
 	}
@@ -310,7 +310,7 @@ func (obj *Manager) setBackground(bg string) bool {
 
 	t, ok := obj.themeObjMap[obj.CurrentTheme.GetValue().(string)]
 	if !ok {
-		obj.setPropCurrentTheme(DEFAULT_THEME)
+		obj.setPropCurrentTheme(DEFAULT_THEME_ID)
 		return true
 	}
 	if t.Background == bg {
@@ -323,11 +323,11 @@ func (obj *Manager) setBackground(bg string) bool {
 		return true
 	}
 
-	if !obj.modifyTheme("Custom", t.GtkTheme, t.IconTheme, t.SoundTheme,
+	if !obj.modifyTheme(THEME_CUSTOM_ID, t.GtkTheme, t.IconTheme, t.SoundTheme,
 		t.CursorTheme, bg, t.FontSize) {
 		return false
 	}
-	obj.setPropCurrentTheme("Custom")
+	obj.setPropCurrentTheme(THEME_CUSTOM_ID)
 
 	return true
 }
@@ -339,7 +339,7 @@ func (obj *Manager) setFontSize(size int32) {
 
 	t, ok := obj.themeObjMap[obj.CurrentTheme.GetValue().(string)]
 	if !ok {
-		obj.setPropCurrentTheme(DEFAULT_THEME)
+		obj.setPropCurrentTheme(DEFAULT_THEME_ID)
 		return
 	}
 	if t.FontSize == size {
@@ -352,9 +352,9 @@ func (obj *Manager) setFontSize(size int32) {
 		return
 	}
 
-	obj.modifyTheme("Custom", t.GtkTheme, t.IconTheme, t.SoundTheme,
+	obj.modifyTheme(THEME_CUSTOM_ID, t.GtkTheme, t.IconTheme, t.SoundTheme,
 		t.CursorTheme, t.Background, size)
-	obj.setPropCurrentTheme("Custom")
+	obj.setPropCurrentTheme(THEME_CUSTOM_ID)
 }
 
 func (obj *Manager) deleteGtkTheme(theme string) {
@@ -456,7 +456,7 @@ func (obj *Manager) deleteDTheme(name string) {
 		if name == t.Name {
 			if t.T == int32(THEME_TYPE_LOCAL) {
 				if obj.CurrentTheme.GetValue().(string) == name {
-					obj.setPropCurrentTheme(DEFAULT_THEME)
+					obj.setPropCurrentTheme(DEFAULT_THEME_ID)
 				}
 				rmAllFile(t.Path)
 			}

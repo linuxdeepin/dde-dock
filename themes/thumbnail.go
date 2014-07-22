@@ -52,9 +52,9 @@ func getCachePath(t, src string) string {
 	return ""
 }
 
-func getDThemeThumb(name string) string {
-	if name == "Custom" {
-		if t, ok := GetManager().themeObjMap[name]; ok {
+func getDThemeThumb(id string) string {
+	if id == THEME_TEMP_CUSTOM {
+		if t, ok := GetManager().themeObjMap[id]; ok {
 			return GetManager().GetThumbnail("background", t.Background)
 		}
 		return ""
@@ -62,7 +62,7 @@ func getDThemeThumb(name string) string {
 
 	list := getDThemeList()
 	for _, l := range list {
-		if name == l.Name {
+		if id == l.Name {
 			thumb := path.Join(l.Path, "thumbnail.png")
 			if dutils.IsFileExist(thumb) {
 				return thumb

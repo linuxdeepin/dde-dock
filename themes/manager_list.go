@@ -45,6 +45,8 @@ type ThemeInfo struct {
 	T    int32
 }
 
+type backgroundInfo ThemeInfo
+
 const (
 	THEME_THUMB  = "/usr/share/personalization/themes/Deepin/thumbnail.png"
 	GTK_THUMB    = "/usr/share/personalization/thumbnail/WindowThemes/Deepin/thumbnail.png"
@@ -273,12 +275,15 @@ func getImageList(dir string) ([]string, bool) {
 	return list, true
 }
 
-func getBackgroundList() []ThemeInfo {
-	bgList := []ThemeInfo{}
+func getBackgroundList() []backgroundInfo {
+	bgList := []backgroundInfo{}
+
+	bgList = append(bgList,
+		backgroundInfo{path.Base(DEFAULT_BG), DEFAULT_BG, THEME_TYPE_SYSTEM})
 
 	if tmpList, ok := getImageList(DEFAULT_SYS_BG_DIR); ok {
 		for _, l := range tmpList {
-			tmp := ThemeInfo{}
+			tmp := backgroundInfo{}
 			tmp.Name = path.Base(l)
 			uri := dutils.PathToURI(l, dutils.SCHEME_FILE)
 			tmp.Path = uri
@@ -292,7 +297,7 @@ func getBackgroundList() []ThemeInfo {
 		for _, d := range dirs {
 			if list, ok := getImageList(d); ok {
 				for _, l := range list {
-					tmp := ThemeInfo{}
+					tmp := backgroundInfo{}
 					tmp.Name = path.Base(l)
 					uri := dutils.PathToURI(l, dutils.SCHEME_FILE)
 					tmp.Path = uri
@@ -310,7 +315,7 @@ func getBackgroundList() []ThemeInfo {
 		for _, d := range dirs {
 			if list, ok := getImageList(d); ok {
 				for _, l := range list {
-					tmp := ThemeInfo{}
+					tmp := backgroundInfo{}
 					tmp.Name = path.Base(l)
 					uri := dutils.PathToURI(l, dutils.SCHEME_FILE)
 					tmp.Path = uri
@@ -329,7 +334,7 @@ func getBackgroundList() []ThemeInfo {
 	}
 	if tmpList, ok := getImageList(userBG); ok {
 		for _, l := range tmpList {
-			tmp := ThemeInfo{}
+			tmp := backgroundInfo{}
 			tmp.Name = path.Base(l)
 			uri := dutils.PathToURI(l, dutils.SCHEME_FILE)
 			tmp.Path = uri
@@ -351,7 +356,7 @@ func isBackgroundSame(bg1, bg2 string) bool {
 	return false
 }
 
-func isBgInfoInList(bg ThemeInfo, list []ThemeInfo) bool {
+func isBgInfoInList(bg backgroundInfo, list []backgroundInfo) bool {
 	for _, l := range list {
 		if isBackgroundSame(bg.Path, l.Path) {
 			return true
@@ -361,7 +366,7 @@ func isBgInfoInList(bg ThemeInfo, list []ThemeInfo) bool {
 	return false
 }
 
-func isBgInfoListEqual(list1, list2 []ThemeInfo) bool {
+func isBgInfoListEqual(list1, list2 []backgroundInfo) bool {
 	l1 := len(list1)
 	l2 := len(list2)
 

@@ -28,6 +28,7 @@ import (
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/dbus/property"
 	"pkg.linuxdeepin.com/lib/glib-2.0"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 	"sort"
 )
 
@@ -64,33 +65,39 @@ func (obj *Manager) isThemeExit(gtk, icon, sound, cursor, bg string, fontSize in
 		if gtk == t.GtkTheme && icon == t.IconTheme &&
 			sound == t.SoundTheme && cursor == t.CursorTheme &&
 			bg == t.Background && fontSize == t.FontSize {
-			return t.Name, true
+			return t.Id, true
 		}
 	}
 
 	return "", false
 }
 
-func (obj *Manager) modifyTheme(name, gtk, icon, sound, cursor, bg string, fontSize int32) bool {
+func (obj *Manager) modifyTheme(id, gtk, icon, sound, cursor, bg string, fontSize int32) bool {
 	filename := ""
 	newFlag := false
-	t, ok := obj.themeObjMap[name]
+	t, ok := obj.themeObjMap[id]
 	if !ok {
-		if str, ok := obj.mkdirTheme(name); !ok {
+		if str, ok := obj.mkdirTheme(id); !ok {
 			return false
 		} else {
 			newFlag = true
 			filename = path.Join(str, "theme.ini")
+			if id == "Custom" && !dutils.IsFileExist(filename) {
+				if !dutils.CopyFile(THEME_CUSTOM_ID, filename) {
+					return false
+				}
+			}
 		}
 	} else {
 		filename = path.Join(t.filePath, "theme.ini")
 	}
 
-	Logger.Debug("Modify Theme:", filename, name, gtk, icon, sound, cursor, bg, fontSize)
+	Logger.Debug("Modify Theme:", filename, id, gtk, icon, sound, cursor, bg, fontSize)
 	kf := glib.NewKeyFile()
 	defer kf.Free()
-	_, err := kf.LoadFromFile(filename, glib.KeyFileFlagsKeepComments)
-	kf.SetString(THEME_GROUP_THEME, THEME_KEY_NAME, name)
+	_, err := kf.LoadFromFile(filename, glib.KeyFileFlagsKeepComments|
+		glib.KeyFileFlagsKeepTranslations)
+	kf.SetString(THEME_GROUP_THEME, THEME_KEY_ID, id)
 	kf.SetString(THEME_GROUP_COMPONENT, THEME_KEY_GTK, gtk)
 	kf.SetString(THEME_GROUP_COMPONENT, THEME_KEY_ICON, icon)
 	kf.SetString(THEME_GROUP_COMPONENT, THEME_KEY_SOUND, sound)
@@ -141,9 +148,9 @@ func (obj *Manager) rebuildThemes() {
 		for _, l := range tList {
 			if name == l.Name {
 				t := newTheme(l)
-				obj.themeObjMap[t.Name] = t
+				obj.themeObjMap[t.Id] = t
 				dbus.InstallOnSession(t)
-				if obj.CurrentTheme.GetValue().(string) == t.Name {
+				if obj.CurrentTheme.GetValue().(string) == t.Id {
 					flag = true
 					t.setAllThemes()
 				}
@@ -153,15 +160,15 @@ func (obj *Manager) rebuildThemes() {
 	}
 
 	if !flag {
-		if t, ok := obj.themeObjMap[DEFAULT_THEME]; ok {
+		if t, ok := obj.themeObjMap[DEFAULT_THEME_ID]; ok {
 			t.setAllThemes()
 		}
-		obj.setPropCurrentTheme(DEFAULT_THEME)
+		obj.setPropCurrentTheme(DEFAULT_THEME_ID)
 	}
 }
 
-func (obj *Manager) destroyTheme(theme string) {
-	if obj, ok := obj.themeObjMap[theme]; ok {
+func (obj *Manager) destroyTheme(id string) {
+	if obj, ok := obj.themeObjMap[id]; ok {
 		if obj.Type == THEME_TYPE_LOCAL {
 			obj.quitFlag <- true
 			obj.watcher = nil

@@ -37,6 +37,13 @@ func (obj *Theme) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
+func (t *Theme) setPropId(id string) {
+	if t.Id != id {
+		t.Id = id
+		dbus.NotifyChange(t, "Id")
+	}
+}
+
 func (obj *Theme) setPropName(name string) {
 	if obj.Name != name {
 		obj.Name = name
@@ -99,14 +106,23 @@ func (obj *Theme) setAllProps() {
 
 	var err error
 	_, err = kf.LoadFromFile(path.Join(obj.filePath, "theme.ini"),
-		glib.KeyFileFlagsKeepComments)
+		glib.KeyFileFlagsKeepComments|
+			glib.KeyFileFlagsKeepTranslations)
 	if err != nil {
 		Logger.Warningf("Load KeyFile '%s' Failed: %v", obj.filePath, err)
 		return
 	}
 
 	var str string
-	str, err = kf.GetString(THEME_GROUP_THEME, THEME_KEY_NAME)
+	str, err = kf.GetString(THEME_GROUP_THEME, THEME_KEY_ID)
+	if err != nil {
+		Logger.Warningf("Get '%s' failed: %v", THEME_KEY_ID, err)
+		return
+	}
+	obj.setPropId(str)
+
+	str, err = kf.GetLocaleString(THEME_GROUP_THEME,
+		THEME_KEY_NAME, getCurrentLang())
 	if err != nil {
 		Logger.Warningf("Get '%s' failed: %v", THEME_KEY_NAME, err)
 		return
