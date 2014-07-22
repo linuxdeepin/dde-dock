@@ -1,0 +1,143 @@
+aa:aa_DJ.UTF-8:Afar
+af:af_ZA.UTF-8:Afrikaans
+am:am_ET:አማርኛ
+ar:ar_EG.UTF-8:عربية
+as:as_IN:অসমীয়া
+ast:ast_ES.UTF-8:Asturianu
+be:be_BY.UTF-8:Беларуская
+be@latin:be_BY@latin:Biełaruskaja łacinka
+bg:bg_BG.UTF-8:Български
+bn:bn_BD:বাংলা
+bn_IN:bn_IN:বাংলা (ভারত)
+bo:bo_CN:বাংলা
+br:br_FR.UTF-8:Brezhoneg
+bs:bs_BA.UTF-8:Bosanski
+ca:ca_AD.UTF-8:Català
+ca@valencia:ca_ES.UTF-8@valencia:Català (Valencià)
+crh:crh_UA:Qırımtatarca
+cs:cs_CZ.UTF-8:Český
+csb:csb_PL:Kaszëbsczi
+cv:cv_RU:Чăвашла
+cy:cy_GB.UTF-8:Cymraeg
+da:da_DK.UTF-8:Dansk
+de:de_DE.UTF-8:Deutsch
+dz:dz_BT:ཇོང་ཁ
+el:el_GR.UTF-8:Ελληνικά
+en_GB:en_GB.UTF-8:British English
+en_US:en_US.UTF-8:American English
+eo:eo_US.UTF-8:Esperanto
+es:es_ES.UTF-8:Español
+et:et_EE.UTF-8:Eesti
+eu:eu_ES.UTF-8:Euskara
+fa:fa_IR:فارسی
+fi:fi_FI.UTF-8:Suomi
+fo:fo_FO.UTF-8:Føroyskt
+fr:fr_FR.UTF-8:Français
+fy:fy_DE:Frysk
+ga:ga_IE.UTF-8:Gaeilge
+gd:gd_GB.UTF-8:Gàidhlig
+gl:gl_ES.UTF-8:Galego
+gu:gu_IN:ગુજરાતી 
+gv:gv_GB.UTF-8:Gaelg
+ha:ha_NG:هَوُسَ
+he:he_IL.UTF-8:עברית
+hi:hi_IN:हिन्दी
+hne:hne_IN:Chhattisgarhi
+hr:hr_HR.UTF-8:Hrvatski
+hsb:hsb_DE.UTF-8:Hornjoserbsce
+hu:hu_HU.UTF-8:Magyar
+hy:hy_AM:Հայերեն
+ia:ia:Interlingua
+id:id_ID.UTF-8:Indonesia
+ik:ik_CA:Iñupiak
+is:is_IS.UTF-8:Íslenska
+it:it_IT.UTF-8:Italiano
+iu:iu_CA:ᐃᓄᒃᑎᑐᑦ
+ja:ja_JP.UTF-8:日本語
+ka:ka_GE.UTF-8:ქართული
+kk:kk_KZ.UTF-8:Қазақша
+kl:kl_GL.UTF-8:Kalaallisut
+km:km_KH:ខ្មែរ
+kn:kn_IN:ಕನ್ನಡ
+ko:ko_KR.UTF-8:한국어
+ks:ks_IN:कश्मीरी - (كشميري)	
+ku:ku_TR.UTF-8:Kurdî
+kw:kw_GB.UTF-8:Kernewek
+ky:ky_KG:Кыргызча
+lb:lb_LU:Lëtzebuergesch
+li:li_BE:Limburgs
+lo:lo_LA:ລາວ
+lt:lt_LT.UTF-8:Lietuvių
+lv:lv_LV.UTF-8:Latviešu
+mai:mai_IN:Maithili
+mg:mg_MG.UTF-8:Malagasy
+mh:mhr_RU:Ebon
+mi:mi_NZ.UTF-8:Māori
+mk:mk_MK.UTF-8:Македонски
+ml:ml_IN:മലയാളം
+mn:mn_MN:Монгол
+mr:mr_IN:मराठी
+ms:ms_MY.UTF-8:Bahasa Melayu
+mt:mt_MT.UTF-8:Malti
+my:my_MM:Myanmasa
+na:nan_TW@latin:Ekakairũ Naoero
+nb:nb_NO.UTF-8:Norsk (bokmål)
+nds:nds_DE:Plattdüütsch
+ne:ne_NP:नेपाली
+nl:nl_NL.UTF-8:Nederlands
+nn:nn_NO.UTF-8:Norsk (nynorsk)
+nr:nr_ZA:IsiNdebele
+nso:nso_ZA:Sesotho sa Leboa
+oc:oc_FR.UTF-8:Occitan
+om:om_KE.UTF-8:Oromoo
+or:or_IN:ଓଡ଼ିଆ
+os:os_RU:Иронау
+pa:pa_IN:ਪੰਜਾਬੀ
+pl:pl_PL.UTF-8:Polski
+ps:ps_AF:پښتو
+pt:pt_PT.UTF-8:Português
+pt_BR:pt_BR.UTF-8:Português do Brasil
+ro:ro_RO.UTF-8:Română
+ru:ru_RU.UTF-8:Русский
+rw:rw_RW:Kinyarwanda
+sa:sa_IN:संस्कृत
+sc:sc_IT:Sardu
+sd:sd_IN:سنڌي
+se:se_NO:Sámegiella
+si:si_LK:සිංහල
+sk:sk_SK.UTF-8:Slovenčina
+sl:sl_SI.UTF-8:Slovenščina
+so:so_SO.UTF-8:Soomaaliga
+sq:sq_AL.UTF-8:Shqip
+sr:sr_RS:Српски
+sr@latin:sr_RS@latin:srpski (latinica)
+ss:ss_ZA:SiSwati
+st:st_ZA.UTF-8:Sesotho
+sv:sv_SE.UTF-8:Svenska
+sw:sw_KE:Swahili
+ta:ta_IN:தமிழ்
+te:te_IN:తెలుగు
+tg:tg_TJ.UTF-8:Тоҷикӣ
+th:th_TH.UTF-8:ภาษาไทย
+ti:ti_ET:ትግርኛ
+tk:tk_TM:Türkmen
+tn:tn_ZA:Setswana
+tr:tr_TR.UTF-8:Türkçe
+ts:ts_ZA:Xitsonga
+tt:tt_RU:Татарский
+ug:ug_CN:ئۇيغۇرچە
+uk:uk_UA.UTF-8:Українська
+ur:ur_IN:اردو
+uz:uz_UZ.UTF-8:Oʻzbekcha
+uz@cyrillic:uz_UZ@cyrillic:Uzbek (Cyrillic)
+ven:ve_ZA:Venda
+vi:vi_VN:Tiếng Việt
+wa:wa_BE.UTF-8:Walon
+wo:wo_SN:Wolof
+xh:xh_ZA.UTF-8:isixhosa
+yi:yi_US.UTF-8:ייִדיש
+yo:yo_NG:Yorùbá
+zh_CN:zh_CN.UTF-8:简体中文
+zh_HK:zh_HK.UTF-8:繁體中文(香港)
+zh_TW:zh_TW.UTF-8:正體中文
+zu:zu_ZA.UTF-8:isiZulu

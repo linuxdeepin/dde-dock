@@ -271,19 +271,24 @@ func getLocaleInfo(keyFile *glib.KeyFile, l, locale string) (localeInfo, bool) {
 }
 
 func getLocaleInfoList() (list []localeInfo) {
-	keyFile := glib.NewKeyFile()
-	defer keyFile.Free()
-	if _, err := keyFile.LoadFromFile("/usr/share/dde-daemon/lang/all_languages",
-		glib.KeyFileFlagsKeepTranslations); err != nil {
-		return list
+	contents, err := ioutil.ReadFile("/usr/share/dde-daemon/lang/support_languages")
+	if err != nil {
+		Logger.Warning("Read support_languages failed:", err)
+		return
 	}
 
-	for n, v := range localeListMap {
-		info, ok := getLocaleInfo(keyFile, n, v)
-		if !ok {
+	lines := strings.Split(string(contents), "\n")
+	for _, line := range lines {
+		if len(line) < 1 {
 			continue
 		}
 
+		strs := strings.Split(line, ":")
+		if len(strs) != 3 {
+			continue
+		}
+
+		info := localeInfo{strs[1], strs[2]}
 		list = append(list, info)
 	}
 
