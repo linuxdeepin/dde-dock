@@ -70,13 +70,16 @@ double get_backlight()
     if (cached_dev == NULL) {
 	return -1;
     }
-    const char* str_v = udev_device_get_sysattr_value(cached_dev, "brightness");
-    const char* str_max  = udev_device_get_sysattr_value(cached_dev, "max_brightness");
+    struct udev* udev = udev_device_get_udev(cached_dev);
+    struct udev_device* dev = udev_device_new_from_syspath(udev, udev_device_get_syspath(cached_dev));
+    const char* str_v = udev_device_get_sysattr_value(dev, "brightness");
+    const char* str_max  = udev_device_get_sysattr_value(dev, "max_brightness");
     if (str_v == NULL || str_max == NULL) {
 	return -1;
     }
     int v = atoi(str_v);
     int max = atoi(str_max);
+    udev_device_unref(dev);
     if (max < v || max == 0) {
 	return -1;
     }
@@ -86,7 +89,6 @@ double get_backlight()
 
 void set_backlight(double v)
 {
-    printf("SetBBB: %lf\n", v);
     if (v > 1 || v < 0) {
 	fprintf(stderr, "set_backlight(%lf) failed\n", v);
 	return;
