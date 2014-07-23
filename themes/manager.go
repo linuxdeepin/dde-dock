@@ -72,32 +72,36 @@ func (obj *Manager) isThemeExit(gtk, icon, sound, cursor, bg string, fontSize in
 	return "", false
 }
 
-func (obj *Manager) modifyTheme(id, gtk, icon, sound, cursor, bg string, fontSize int32) bool {
+func (m *Manager) newCustomTheme(gtk, icon, sound, cursor, bg string, fontSize int32) bool {
 	filename := ""
-	newFlag := false
-	t, ok := obj.themeObjMap[id]
+
+	t, ok := m.themeObjMap[THEME_CUSTOM_ID]
 	if !ok {
-		if str, ok := obj.mkdirTheme(id); !ok {
+		if str, ok := m.mkdirTheme(THEME_CUSTOM_ID); !ok {
 			return false
 		} else {
-			newFlag = true
 			filename = path.Join(str, "theme.ini")
-			if id == "Custom" && !dutils.IsFileExist(filename) {
-				if !dutils.CopyFile(THEME_CUSTOM_ID, filename) {
-					return false
-				}
-			}
 		}
 	} else {
 		filename = path.Join(t.filePath, "theme.ini")
 	}
 
-	Logger.Debug("Modify Theme:", filename, id, gtk, icon, sound, cursor, bg, fontSize)
+	bakFile := filename + ".bak"
+	if !dutils.CopyFile(THEME_TEMP_CUSTOM, bakFile) {
+		return false
+	}
+	defer rmAllFile(bakFile)
+
+	Logger.Debug("Modify Theme:", bakFile, gtk, icon, sound, cursor, bg, fontSize)
 	kf := glib.NewKeyFile()
 	defer kf.Free()
-	_, err := kf.LoadFromFile(filename, glib.KeyFileFlagsKeepComments|
+	ok, err := kf.LoadFromFile(bakFile, glib.KeyFileFlagsKeepComments|
 		glib.KeyFileFlagsKeepTranslations)
-	kf.SetString(THEME_GROUP_THEME, THEME_KEY_ID, id)
+	if !ok {
+		Logger.Warning("New custom theme load file failed:", err)
+		return false
+	}
+
 	kf.SetString(THEME_GROUP_COMPONENT, THEME_KEY_GTK, gtk)
 	kf.SetString(THEME_GROUP_COMPONENT, THEME_KEY_ICON, icon)
 	kf.SetString(THEME_GROUP_COMPONENT, THEME_KEY_SOUND, sound)
@@ -116,10 +120,13 @@ func (obj *Manager) modifyTheme(id, gtk, icon, sound, cursor, bg string, fontSiz
 		return false
 	}
 
-	if newFlag {
-		obj.rebuildThemes()
-		obj.setPropThemeList(obj.getDThemeStrList())
+	if !dutils.CopyFile(bakFile, filename) {
+		Logger.Warning("Copy bakfile to filename failed")
+		return false
 	}
+
+	m.rebuildThemes()
+	m.setPropThemeList(m.getDThemeStrList())
 
 	return true
 }
