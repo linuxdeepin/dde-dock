@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-17 17:36+0800\n"
+"POT-Creation-Date: 2014-07-23 15:21+0800\n"
 "PO-Revision-Date: 2014-07-07 10:00+0000\n"
 "Last-Translator: electricface <songwentai@linuxdeepin.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/dde-"
@@ -855,7 +855,7 @@ msgid "Stanley"
 msgstr "斯坦利"
 
 #: ../../datetime/zone_utc_list.go:248
-msgid "East"
+msgid "Brazil East"
 msgstr ""
 
 #: ../../datetime/zone_utc_list.go:251
@@ -954,10 +954,6 @@ msgstr ""
 msgid "Canary"
 msgstr "加那利"
 
-#: ../../datetime/zone_utc_list.go:277
-msgid "Faeroe"
-msgstr ""
-
 #: ../../datetime/zone_utc_list.go:278
 msgid "Faroe"
 msgstr ""
@@ -977,22 +973,6 @@ msgstr "聖赫勒拿島"
 #: ../../datetime/zone_utc_list.go:282
 msgid "Eire"
 msgstr "愛爾蘭"
-
-#: ../../datetime/zone_utc_list.go:283 ../../datetime/zone_utc_list.go:297
-msgid "GMT"
-msgstr ""
-
-#: ../../datetime/zone_utc_list.go:285 ../../datetime/zone_utc_list.go:304
-msgid "UCT"
-msgstr "UCT"
-
-#: ../../datetime/zone_utc_list.go:286 ../../datetime/zone_utc_list.go:305
-msgid "Universal"
-msgstr "世界時"
-
-#: ../../datetime/zone_utc_list.go:287 ../../datetime/zone_utc_list.go:306
-msgid "UTC"
-msgstr "UTC"
 
 #: ../../datetime/zone_utc_list.go:289
 msgid "Belfast"
@@ -1026,16 +1006,8 @@ msgstr "GB"
 msgid "GB-Eire"
 msgstr ""
 
-#: ../../datetime/zone_utc_list.go:298
-msgid "GMT+0"
-msgstr ""
-
-#: ../../datetime/zone_utc_list.go:299
-msgid "GMT0"
-msgstr ""
-
-#: ../../datetime/zone_utc_list.go:300
-msgid "GMT-0"
+#: ../../datetime/zone_utc_list.go:297
+msgid "GMT"
 msgstr ""
 
 #: ../../datetime/zone_utc_list.go:301
@@ -1049,6 +1021,18 @@ msgstr "冰島"
 #: ../../datetime/zone_utc_list.go:303
 msgid "Portugal"
 msgstr "葡萄牙"
+
+#: ../../datetime/zone_utc_list.go:304
+msgid "UCT"
+msgstr "UCT"
+
+#: ../../datetime/zone_utc_list.go:305
+msgid "Universal"
+msgstr "世界時"
+
+#: ../../datetime/zone_utc_list.go:306
+msgid "UTC"
+msgstr "UTC"
 
 #: ../../datetime/zone_utc_list.go:307
 msgid "Zulu"
@@ -1414,10 +1398,6 @@ msgstr "亞的斯亞貝巴"
 msgid "Asmara"
 msgstr "阿斯馬拉"
 
-#: ../../datetime/zone_utc_list.go:403
-msgid "Asmera"
-msgstr ""
-
 #: ../../datetime/zone_utc_list.go:404
 msgid "Dar es Salaam"
 msgstr "達累斯薩拉姆"
@@ -1582,10 +1562,6 @@ msgstr "阿克托別"
 msgid "Ashgabat"
 msgstr ""
 
-#: ../../datetime/zone_utc_list.go:450
-msgid "Ashkhabad"
-msgstr "阿什哈巴德"
-
 #: ../../datetime/zone_utc_list.go:451
 msgid "Dushanbe"
 msgstr "杜尚別"
@@ -1630,10 +1606,6 @@ msgstr ""
 msgid "Kathmandu"
 msgstr "加德滿都"
 
-#: ../../datetime/zone_utc_list.go:464
-msgid "Katmandu"
-msgstr ""
-
 #: ../../datetime/zone_utc_list.go:466
 msgid "Vostok"
 msgstr "沃斯托克"
@@ -1646,10 +1618,6 @@ msgstr "阿拉木圖"
 msgid "Bishkek"
 msgstr "比什凱克"
 
-#: ../../datetime/zone_utc_list.go:469
-msgid "Dacca"
-msgstr ""
-
 #: ../../datetime/zone_utc_list.go:470
 msgid "Dhaka"
 msgstr "達卡"
@@ -1657,10 +1625,6 @@ msgstr "達卡"
 #: ../../datetime/zone_utc_list.go:471
 msgid "Qyzylorda"
 msgstr "克孜勒奧爾達"
-
-#: ../../datetime/zone_utc_list.go:472
-msgid "Thimbu"
-msgstr "廷布"
 
 #: ../../datetime/zone_utc_list.go:473
 msgid "Thimphu"
@@ -1742,10 +1706,6 @@ msgstr ""
 msgid "Chongqing"
 msgstr "重慶"
 
-#: ../../datetime/zone_utc_list.go:496
-msgid "Chungking"
-msgstr "重慶"
-
 #: ../../datetime/zone_utc_list.go:497
 msgid "Harbin"
 msgstr "哈爾濱"
@@ -1801,10 +1761,6 @@ msgstr "臺北"
 #: ../../datetime/zone_utc_list.go:511
 msgid "Ujung Pandang"
 msgstr "烏戎潘當"
-
-#: ../../datetime/zone_utc_list.go:512
-msgid "Ulaanbaatar"
-msgstr ""
 
 #: ../../datetime/zone_utc_list.go:513
 msgid "Ulan Bator"
@@ -2026,10 +1982,6 @@ msgstr ""
 msgid "Pohnpei"
 msgstr ""
 
-#: ../../datetime/zone_utc_list.go:576
-msgid "Ponape"
-msgstr "波納佩"
-
 #: ../../datetime/zone_utc_list.go:578
 msgid "Norfolk"
 msgstr "諾福克"
@@ -2122,15 +2074,15 @@ msgstr "湯加塔布"
 msgid "_Run"
 msgstr "運行(_R)"
 
-#: ../../dock/normal_apps.go:112 ../../dock/runtime_apps.go:290
+#: ../../dock/normal_apps.go:112 ../../dock/runtime_apps.go:297
 msgid "_Undock"
 msgstr "移除駐留(_U)"
 
-#: ../../dock/runtime_apps.go:259
+#: ../../dock/runtime_apps.go:266
 msgid "_Close All"
 msgstr "關閉所有(_C)"
 
-#: ../../dock/runtime_apps.go:302
+#: ../../dock/runtime_apps.go:309
 msgid "_Dock"
 msgstr "駐留(_D)"
 
@@ -2139,228 +2091,228 @@ msgstr "駐留(_D)"
 msgid "Auto"
 msgstr "自動"
 
-#: ../../keybinding/id_desc_map.go:74
+#: ../../keybinding/id_desc_list.go:36
 msgid "Launcher"
 msgstr "啟動器"
 
-#: ../../keybinding/id_desc_map.go:75
+#: ../../keybinding/id_desc_list.go:37
 msgid "Show desktop"
 msgstr "顯示桌面"
 
-#: ../../keybinding/id_desc_map.go:76
+#: ../../keybinding/id_desc_list.go:38
 msgid "Lock screen"
 msgstr "鎖屏介面"
 
-#: ../../keybinding/id_desc_map.go:77
+#: ../../keybinding/id_desc_list.go:39
 msgid "File manager"
 msgstr "檔管理器"
 
-#: ../../keybinding/id_desc_map.go:78
+#: ../../keybinding/id_desc_list.go:40
 msgid "Switch applications"
 msgstr "切換程式"
 
-#: ../../keybinding/id_desc_map.go:79
+#: ../../keybinding/id_desc_list.go:41
 msgid "Reverse switch applications"
 msgstr "反向切換程式"
 
-#: ../../keybinding/id_desc_map.go:80
+#: ../../keybinding/id_desc_list.go:42
 msgid "3D switch applications"
 msgstr "3D切換程式"
 
-#: ../../keybinding/id_desc_map.go:81
+#: ../../keybinding/id_desc_list.go:43
 msgid "3D reverse switch applications"
 msgstr "3D反向切換程式"
 
-#: ../../keybinding/id_desc_map.go:82
+#: ../../keybinding/id_desc_list.go:44
 msgid "Show/Hide the dock"
 msgstr "顯示/隱藏任務欄"
 
-#: ../../keybinding/id_desc_map.go:83
+#: ../../keybinding/id_desc_list.go:45
 msgid "Screenshot"
 msgstr "螢幕截圖"
 
-#: ../../keybinding/id_desc_map.go:84
+#: ../../keybinding/id_desc_list.go:46
 msgid "Full screenshot"
 msgstr "全屏截圖"
 
-#: ../../keybinding/id_desc_map.go:85
+#: ../../keybinding/id_desc_list.go:47
 msgid "Window screenshot"
 msgstr "窗口截圖"
 
-#: ../../keybinding/id_desc_map.go:86
+#: ../../keybinding/id_desc_list.go:48
 msgid "Delay screenshot"
 msgstr "延時截圖"
 
-#: ../../keybinding/id_desc_map.go:87
+#: ../../keybinding/id_desc_list.go:49
 msgid "Terminal"
 msgstr "終端"
 
-#: ../../keybinding/id_desc_map.go:88
+#: ../../keybinding/id_desc_list.go:50
 msgid "Terminal Quake Window"
 msgstr "終端雷神模式"
 
-#: ../../keybinding/id_desc_map.go:89
+#: ../../keybinding/id_desc_list.go:51
 msgid "Logout"
 msgstr "註銷"
 
-#: ../../keybinding/id_desc_map.go:90
+#: ../../keybinding/id_desc_list.go:52
 msgid "Disable Touchpad"
 msgstr "禁用觸摸板"
 
-#: ../../keybinding/id_desc_map.go:91
+#: ../../keybinding/id_desc_list.go:53
 msgid "Deepin Translator"
 msgstr "深度翻譯"
 
-#: ../../keybinding/id_desc_map.go:92
+#: ../../keybinding/id_desc_list.go:54
 #, fuzzy
 msgid "Switch Layout"
 msgstr "切換卷起狀態"
 
-#: ../../keybinding/id_desc_map.go:132
+#: ../../keybinding/id_desc_list.go:62
 msgid "Calculator"
 msgstr "計算器"
 
-#: ../../keybinding/id_desc_map.go:133
+#: ../../keybinding/id_desc_list.go:63
 msgid "Email client"
 msgstr "郵件客戶端"
 
-#: ../../keybinding/id_desc_map.go:134
+#: ../../keybinding/id_desc_list.go:64
 msgid "Web browser"
 msgstr "網頁流覽器"
 
-#: ../../keybinding/id_desc_map.go:135
+#: ../../keybinding/id_desc_list.go:65
 msgid "Media player"
 msgstr "多媒體播放器"
 
-#: ../../keybinding/id_desc_map.go:136
+#: ../../keybinding/id_desc_list.go:66
 msgid "Play/Pause"
 msgstr "播放/暫停"
 
-#: ../../keybinding/id_desc_map.go:137
+#: ../../keybinding/id_desc_list.go:67
 msgid "Pause"
 msgstr "暫停播放"
 
-#: ../../keybinding/id_desc_map.go:138
+#: ../../keybinding/id_desc_list.go:68
 msgid "Stop"
 msgstr "停止播放"
 
-#: ../../keybinding/id_desc_map.go:139
+#: ../../keybinding/id_desc_list.go:69
 msgid "Mute"
 msgstr "靜音"
 
-#: ../../keybinding/id_desc_map.go:140
+#: ../../keybinding/id_desc_list.go:70
 msgid "Volume down"
 msgstr "減小音量"
 
-#: ../../keybinding/id_desc_map.go:141
+#: ../../keybinding/id_desc_list.go:71
 msgid "Volume up"
 msgstr "增大音量"
 
-#: ../../keybinding/id_desc_map.go:142
+#: ../../keybinding/id_desc_list.go:72
 msgid "Previous"
 msgstr "上一個"
 
-#: ../../keybinding/id_desc_map.go:143
+#: ../../keybinding/id_desc_list.go:73
 msgid "Next"
 msgstr "下一個"
 
-#: ../../keybinding/id_desc_map.go:144
+#: ../../keybinding/id_desc_list.go:74
 msgid "Eject"
 msgstr "彈出"
 
-#: ../../keybinding/id_desc_map.go:174
+#: ../../keybinding/id_desc_list.go:82
 msgid "Close window"
 msgstr "關閉窗口"
 
-#: ../../keybinding/id_desc_map.go:175
+#: ../../keybinding/id_desc_list.go:83
 msgid "Maximize window"
 msgstr "最大化窗口"
 
-#: ../../keybinding/id_desc_map.go:176
+#: ../../keybinding/id_desc_list.go:84
 msgid "Restore window"
 msgstr "恢復窗口"
 
-#: ../../keybinding/id_desc_map.go:177
+#: ../../keybinding/id_desc_list.go:85
 msgid "Minimize window"
 msgstr "最小化窗口"
 
-#: ../../keybinding/id_desc_map.go:178
+#: ../../keybinding/id_desc_list.go:86
 msgid "Move window"
 msgstr "移動窗口"
 
-#: ../../keybinding/id_desc_map.go:179
+#: ../../keybinding/id_desc_list.go:87
 msgid "Resize window"
 msgstr "改變窗口大小"
 
-#: ../../keybinding/id_desc_map.go:180
+#: ../../keybinding/id_desc_list.go:88
 msgid "Switch furl state"
 msgstr "切換卷起狀態"
 
-#: ../../keybinding/id_desc_map.go:181
+#: ../../keybinding/id_desc_list.go:89
 msgid "Activate window menu"
 msgstr "啟動窗口菜單"
 
-#: ../../keybinding/id_desc_map.go:227
+#: ../../keybinding/id_desc_list.go:97
 msgid "Switch to workspace 1"
 msgstr "切換到工作區1"
 
-#: ../../keybinding/id_desc_map.go:228
+#: ../../keybinding/id_desc_list.go:98
 msgid "Switch to workspace 2"
 msgstr "切換到工作區2"
 
-#: ../../keybinding/id_desc_map.go:229
+#: ../../keybinding/id_desc_list.go:99
 msgid "Switch to workspace 3"
 msgstr "切換到工作區3"
 
-#: ../../keybinding/id_desc_map.go:230
+#: ../../keybinding/id_desc_list.go:100
 msgid "Switch to workspace 4"
 msgstr "切換到工作區4"
 
-#: ../../keybinding/id_desc_map.go:231
+#: ../../keybinding/id_desc_list.go:101
 msgid "Switch to left workspace"
 msgstr "切換到左邊工作區"
 
-#: ../../keybinding/id_desc_map.go:232
+#: ../../keybinding/id_desc_list.go:102
 msgid "Switch to right workspace"
 msgstr "切換到右邊工作區"
 
-#: ../../keybinding/id_desc_map.go:233
+#: ../../keybinding/id_desc_list.go:103
 msgid "Switch to upper workspace"
 msgstr "切換到上方工作區"
 
-#: ../../keybinding/id_desc_map.go:234
+#: ../../keybinding/id_desc_list.go:104
 msgid "Switch to lower workspace"
 msgstr "切換到下方工作區"
 
-#: ../../keybinding/id_desc_map.go:235
+#: ../../keybinding/id_desc_list.go:105
 msgid "Move to workspace 1"
 msgstr "移動到工作區1"
 
-#: ../../keybinding/id_desc_map.go:236
+#: ../../keybinding/id_desc_list.go:106
 msgid "Move to workspace 2"
 msgstr "移動到工作區2"
 
-#: ../../keybinding/id_desc_map.go:237
+#: ../../keybinding/id_desc_list.go:107
 msgid "Move to workspace 3"
 msgstr "移動到工作區3"
 
-#: ../../keybinding/id_desc_map.go:238
+#: ../../keybinding/id_desc_list.go:108
 msgid "Move to workspace 4"
 msgstr "移動到工作區4"
 
-#: ../../keybinding/id_desc_map.go:239
+#: ../../keybinding/id_desc_list.go:109
 msgid "Move to left workspace"
 msgstr "移動到左邊工作區"
 
-#: ../../keybinding/id_desc_map.go:240
+#: ../../keybinding/id_desc_list.go:110
 msgid "Move to right workspace"
 msgstr "移動到右邊工作區"
 
-#: ../../keybinding/id_desc_map.go:241
+#: ../../keybinding/id_desc_list.go:111
 msgid "Move to upper workspace"
 msgstr "移動到上方工作區"
 
-#: ../../keybinding/id_desc_map.go:242
+#: ../../keybinding/id_desc_list.go:112
 msgid "Move to lower workspace"
 msgstr "移動到下方工作區"
 
@@ -3263,6 +3215,18 @@ msgstr "電池電量低"
 #, fuzzy
 msgid "Computer will be in suspend mode, please plug in now."
 msgstr "電腦將要進入待機狀態，請連接電源。"
+
+#~ msgid "Ashkhabad"
+#~ msgstr "阿什哈巴德"
+
+#~ msgid "Thimbu"
+#~ msgstr "廷布"
+
+#~ msgid "Chungking"
+#~ msgstr "重慶"
+
+#~ msgid "Ponape"
+#~ msgstr "波納佩"
 
 #~ msgid "Computer will being in suspend mode, please plug in."
 #~ msgstr "電腦即將進入待機狀態，請連接電源。"
