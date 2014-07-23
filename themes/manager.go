@@ -65,7 +65,7 @@ func (obj *Manager) isThemeExit(gtk, icon, sound, cursor, bg string, fontSize in
 		if gtk == t.GtkTheme && icon == t.IconTheme &&
 			sound == t.SoundTheme && cursor == t.CursorTheme &&
 			bg == t.Background && fontSize == t.FontSize {
-			return t.Id, true
+			return t.Name, true
 		}
 	}
 
@@ -77,7 +77,9 @@ func (m *Manager) newCustomTheme(gtk, icon, sound, cursor, bg string, fontSize i
 
 	t, ok := m.themeObjMap[THEME_CUSTOM_ID]
 	if !ok {
+		Logger.Warning("Theme 'Custom' not exist")
 		if str, ok := m.mkdirTheme(THEME_CUSTOM_ID); !ok {
+			Logger.Warning("Create custom theme failed")
 			return false
 		} else {
 			filename = path.Join(str, "theme.ini")
@@ -88,11 +90,12 @@ func (m *Manager) newCustomTheme(gtk, icon, sound, cursor, bg string, fontSize i
 
 	bakFile := filename + ".bak"
 	if !dutils.CopyFile(THEME_TEMP_CUSTOM, bakFile) {
+		Logger.Warning("Copy temp custom failed:", bakFile)
 		return false
 	}
 	defer rmAllFile(bakFile)
 
-	Logger.Debug("Modify Theme:", bakFile, gtk, icon, sound, cursor, bg, fontSize)
+	Logger.Info("Modify Theme:", bakFile, gtk, icon, sound, cursor, bg, fontSize)
 	kf := glib.NewKeyFile()
 	defer kf.Free()
 	ok, err := kf.LoadFromFile(bakFile, glib.KeyFileFlagsKeepComments|
@@ -120,10 +123,10 @@ func (m *Manager) newCustomTheme(gtk, icon, sound, cursor, bg string, fontSize i
 		return false
 	}
 
-	if !dutils.CopyFile(bakFile, filename) {
-		Logger.Warning("Copy bakfile to filename failed")
-		return false
-	}
+	//if !dutils.CopyFile(bakFile, filename) {
+	//Logger.Warning("Copy bakfile to filename failed")
+	//return false
+	//}
 
 	m.rebuildThemes()
 	m.setPropThemeList(m.getDThemeStrList())
@@ -155,9 +158,9 @@ func (obj *Manager) rebuildThemes() {
 		for _, l := range tList {
 			if name == l.Name {
 				t := newTheme(l)
-				obj.themeObjMap[t.Id] = t
+				obj.themeObjMap[t.Name] = t
 				dbus.InstallOnSession(t)
-				if obj.CurrentTheme.GetValue().(string) == t.Id {
+				if obj.CurrentTheme.GetValue().(string) == t.Name {
 					flag = true
 					t.setAllThemes()
 				}

@@ -35,8 +35,11 @@ const (
 )
 
 const (
-	DEFAULT_THEME_ID = "Deepin"
-	DEFAULT_BG       = "file:///usr/share/backgrounds/default_background.jpg"
+	DEFAULT_THEME_ID     = "Deepin"
+	DEFAULT_GTK_THEME    = "Deepin"
+	DEFAULT_ICON_THEME   = "Deepin"
+	DEFAULT_CURSOR_THEME = "Deepin-Cursor"
+	DEFAULT_BG           = "file:///usr/share/backgrounds/default_background.jpg"
 
 	THEME_SYS_PATH   = "/usr/share/themes"
 	THEME_LOCAL_PATH = ".themes"

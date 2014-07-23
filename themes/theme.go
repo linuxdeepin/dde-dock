@@ -32,8 +32,8 @@ import (
 )
 
 type Theme struct {
-	Id          string
 	Name        string
+	DisplayName string
 	GtkTheme    string
 	IconTheme   string
 	SoundTheme  string

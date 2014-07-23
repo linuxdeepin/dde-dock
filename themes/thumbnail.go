@@ -53,7 +53,7 @@ func getCachePath(t, src string) string {
 }
 
 func getDThemeThumb(id string) string {
-	if id == THEME_TEMP_CUSTOM {
+	if id == THEME_CUSTOM_ID {
 		if t, ok := GetManager().themeObjMap[id]; ok {
 			return GetManager().GetThumbnail("background", t.Background)
 		}

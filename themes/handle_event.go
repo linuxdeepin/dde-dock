@@ -391,7 +391,7 @@ func (obj *Theme) handleEvent() {
 
 			if ev.IsModify() {
 				obj.setAllProps()
-				if GetManager().CurrentTheme.GetValue().(string) == obj.Name {
+				if GetManager().CurrentTheme.GetValue().(string) == obj.DisplayName {
 					obj.setAllThemes()
 				}
 			}

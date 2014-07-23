@@ -278,9 +278,6 @@ func getImageList(dir string) ([]string, bool) {
 func getBackgroundList() []backgroundInfo {
 	bgList := []backgroundInfo{}
 
-	bgList = append(bgList,
-		backgroundInfo{path.Base(DEFAULT_BG), DEFAULT_BG, THEME_TYPE_SYSTEM})
-
 	if tmpList, ok := getImageList(DEFAULT_SYS_BG_DIR); ok {
 		for _, l := range tmpList {
 			tmp := backgroundInfo{}
