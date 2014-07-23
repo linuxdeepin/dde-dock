@@ -37,17 +37,17 @@ func (obj *Theme) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (t *Theme) setPropId(id string) {
-	if t.Id != id {
-		t.Id = id
-		dbus.NotifyChange(t, "Id")
+func (t *Theme) setPropName(id string) {
+	if t.Name != id {
+		t.Name = id
+		dbus.NotifyChange(t, "Name")
 	}
 }
 
-func (obj *Theme) setPropName(name string) {
-	if obj.Name != name {
-		obj.Name = name
-		dbus.NotifyChange(obj, "Name")
+func (obj *Theme) setPropDisplayName(name string) {
+	if obj.DisplayName != name {
+		obj.DisplayName = name
+		dbus.NotifyChange(obj, "DisplayName")
 	}
 }
 
@@ -119,7 +119,7 @@ func (obj *Theme) setAllProps() {
 		Logger.Warningf("Get '%s' failed: %v", THEME_KEY_ID, err)
 		return
 	}
-	obj.setPropId(str)
+	obj.setPropName(str)
 
 	str, err = kf.GetLocaleString(THEME_GROUP_THEME,
 		THEME_KEY_NAME, getCurrentLang())
@@ -127,7 +127,7 @@ func (obj *Theme) setAllProps() {
 		Logger.Warningf("Get '%s' failed: %v", THEME_KEY_NAME, err)
 		return
 	}
-	obj.setPropName(str)
+	obj.setPropDisplayName(str)
 
 	str, err = kf.GetString(THEME_GROUP_COMPONENT, THEME_KEY_GTK)
 	if err != nil {
