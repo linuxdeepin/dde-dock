@@ -189,7 +189,7 @@ func (obj *Manager) setGtkTheme(theme string) {
 			}
 
 			Logger.Info("Theme: Custom,", theme, t.IconTheme, t.SoundTheme, t.CursorTheme, t.Background, t.FontSize)
-			obj.modifyTheme(THEME_CUSTOM_ID, theme, t.IconTheme, t.SoundTheme,
+			obj.newCustomTheme(theme, t.IconTheme, t.SoundTheme,
 				t.CursorTheme, t.Background, t.FontSize)
 			obj.setPropCurrentTheme(THEME_CUSTOM_ID)
 			break
@@ -219,7 +219,7 @@ func (obj *Manager) setIconTheme(theme string) {
 				break
 			}
 
-			obj.modifyTheme(THEME_CUSTOM_ID, t.GtkTheme, theme, t.SoundTheme,
+			obj.newCustomTheme(t.GtkTheme, theme, t.SoundTheme,
 				t.CursorTheme, t.Background, t.FontSize)
 			obj.setPropCurrentTheme(THEME_CUSTOM_ID)
 			break
@@ -249,7 +249,7 @@ func (obj *Manager) setCursorTheme(theme string) {
 				break
 			}
 
-			obj.modifyTheme(THEME_CUSTOM_ID, t.GtkTheme, t.IconTheme, t.SoundTheme,
+			obj.newCustomTheme(t.GtkTheme, t.IconTheme, t.SoundTheme,
 				theme, t.Background, t.FontSize)
 			obj.setPropCurrentTheme(THEME_CUSTOM_ID)
 			break
@@ -279,7 +279,7 @@ func (obj *Manager) setSoundTheme(theme string) {
 				break
 			}
 
-			obj.modifyTheme(THEME_CUSTOM_ID, t.GtkTheme, t.IconTheme, theme,
+			obj.newCustomTheme(t.GtkTheme, t.IconTheme, theme,
 				t.CursorTheme, t.Background, t.FontSize)
 			obj.setPropCurrentTheme(THEME_CUSTOM_ID)
 			break
@@ -323,7 +323,7 @@ func (obj *Manager) setBackground(bg string) bool {
 		return true
 	}
 
-	if !obj.modifyTheme(THEME_CUSTOM_ID, t.GtkTheme, t.IconTheme, t.SoundTheme,
+	if !obj.newCustomTheme(t.GtkTheme, t.IconTheme, t.SoundTheme,
 		t.CursorTheme, bg, t.FontSize) {
 		return false
 	}
@@ -352,7 +352,7 @@ func (obj *Manager) setFontSize(size int32) {
 		return
 	}
 
-	obj.modifyTheme(THEME_CUSTOM_ID, t.GtkTheme, t.IconTheme, t.SoundTheme,
+	obj.newCustomTheme(t.GtkTheme, t.IconTheme, t.SoundTheme,
 		t.CursorTheme, t.Background, size)
 	obj.setPropCurrentTheme(THEME_CUSTOM_ID)
 }
