@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-17 17:36+0800\n"
+"POT-Creation-Date: 2014-07-23 15:21+0800\n"
 "PO-Revision-Date: 2014-07-07 10:00+0000\n"
 "Last-Translator: electricface <songwentai@linuxdeepin.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/projects/p/dde-"
@@ -860,8 +860,8 @@ msgid "Stanley"
 msgstr "Stanley"
 
 #: ../../datetime/zone_utc_list.go:248
-msgid "East"
-msgstr ""
+msgid "Brazil East"
+msgstr "Sudeste Brasileiro"
 
 #: ../../datetime/zone_utc_list.go:251
 msgid "South Georgia"
@@ -959,10 +959,6 @@ msgstr ""
 msgid "Canary"
 msgstr "Canary"
 
-#: ../../datetime/zone_utc_list.go:277
-msgid "Faeroe"
-msgstr ""
-
 #: ../../datetime/zone_utc_list.go:278
 msgid "Faroe"
 msgstr ""
@@ -982,22 +978,6 @@ msgstr "Santa Helena"
 #: ../../datetime/zone_utc_list.go:282
 msgid "Eire"
 msgstr "Eire"
-
-#: ../../datetime/zone_utc_list.go:283 ../../datetime/zone_utc_list.go:297
-msgid "GMT"
-msgstr ""
-
-#: ../../datetime/zone_utc_list.go:285 ../../datetime/zone_utc_list.go:304
-msgid "UCT"
-msgstr "UCT"
-
-#: ../../datetime/zone_utc_list.go:286 ../../datetime/zone_utc_list.go:305
-msgid "Universal"
-msgstr "Universal"
-
-#: ../../datetime/zone_utc_list.go:287 ../../datetime/zone_utc_list.go:306
-msgid "UTC"
-msgstr "UTC"
 
 #: ../../datetime/zone_utc_list.go:289
 msgid "Belfast"
@@ -1031,16 +1011,8 @@ msgstr "GB"
 msgid "GB-Eire"
 msgstr ""
 
-#: ../../datetime/zone_utc_list.go:298
-msgid "GMT+0"
-msgstr ""
-
-#: ../../datetime/zone_utc_list.go:299
-msgid "GMT0"
-msgstr ""
-
-#: ../../datetime/zone_utc_list.go:300
-msgid "GMT-0"
+#: ../../datetime/zone_utc_list.go:297
+msgid "GMT"
 msgstr ""
 
 #: ../../datetime/zone_utc_list.go:301
@@ -1054,6 +1026,18 @@ msgstr "Iceland"
 #: ../../datetime/zone_utc_list.go:303
 msgid "Portugal"
 msgstr "Portugal"
+
+#: ../../datetime/zone_utc_list.go:304
+msgid "UCT"
+msgstr "UCT"
+
+#: ../../datetime/zone_utc_list.go:305
+msgid "Universal"
+msgstr "Universal"
+
+#: ../../datetime/zone_utc_list.go:306
+msgid "UTC"
+msgstr "UTC"
 
 #: ../../datetime/zone_utc_list.go:307
 msgid "Zulu"
@@ -1419,10 +1403,6 @@ msgstr "Addis Ababa"
 msgid "Asmara"
 msgstr "Asmara"
 
-#: ../../datetime/zone_utc_list.go:403
-msgid "Asmera"
-msgstr ""
-
 #: ../../datetime/zone_utc_list.go:404
 msgid "Dar es Salaam"
 msgstr "Dar es Sallam"
@@ -1587,10 +1567,6 @@ msgstr "Aqtobe"
 msgid "Ashgabat"
 msgstr ""
 
-#: ../../datetime/zone_utc_list.go:450
-msgid "Ashkhabad"
-msgstr "Ashkhabad"
-
 #: ../../datetime/zone_utc_list.go:451
 msgid "Dushanbe"
 msgstr "Dushanbe"
@@ -1635,10 +1611,6 @@ msgstr ""
 msgid "Kathmandu"
 msgstr "Kathmandu"
 
-#: ../../datetime/zone_utc_list.go:464
-msgid "Katmandu"
-msgstr ""
-
 #: ../../datetime/zone_utc_list.go:466
 msgid "Vostok"
 msgstr "Vostok"
@@ -1651,10 +1623,6 @@ msgstr "Almaty"
 msgid "Bishkek"
 msgstr "Bishkek"
 
-#: ../../datetime/zone_utc_list.go:469
-msgid "Dacca"
-msgstr ""
-
 #: ../../datetime/zone_utc_list.go:470
 msgid "Dhaka"
 msgstr "Dhaka"
@@ -1662,10 +1630,6 @@ msgstr "Dhaka"
 #: ../../datetime/zone_utc_list.go:471
 msgid "Qyzylorda"
 msgstr "Qyzylorda"
-
-#: ../../datetime/zone_utc_list.go:472
-msgid "Thimbu"
-msgstr "Thimbu"
 
 #: ../../datetime/zone_utc_list.go:473
 msgid "Thimphu"
@@ -1747,10 +1711,6 @@ msgstr ""
 msgid "Chongqing"
 msgstr "Chongqing"
 
-#: ../../datetime/zone_utc_list.go:496
-msgid "Chungking"
-msgstr "Chungking"
-
 #: ../../datetime/zone_utc_list.go:497
 msgid "Harbin"
 msgstr "Harbin"
@@ -1806,10 +1766,6 @@ msgstr "Taipei"
 #: ../../datetime/zone_utc_list.go:511
 msgid "Ujung Pandang"
 msgstr "Ujung Pandang"
-
-#: ../../datetime/zone_utc_list.go:512
-msgid "Ulaanbaatar"
-msgstr ""
 
 #: ../../datetime/zone_utc_list.go:513
 msgid "Ulan Bator"
@@ -2031,10 +1987,6 @@ msgstr ""
 msgid "Pohnpei"
 msgstr ""
 
-#: ../../datetime/zone_utc_list.go:576
-msgid "Ponape"
-msgstr ""
-
 #: ../../datetime/zone_utc_list.go:578
 msgid "Norfolk"
 msgstr ""
@@ -2127,15 +2079,15 @@ msgstr ""
 msgid "_Run"
 msgstr "_Executar"
 
-#: ../../dock/normal_apps.go:112 ../../dock/runtime_apps.go:290
+#: ../../dock/normal_apps.go:112 ../../dock/runtime_apps.go:297
 msgid "_Undock"
 msgstr "_Remover da barra"
 
-#: ../../dock/runtime_apps.go:259
+#: ../../dock/runtime_apps.go:266
 msgid "_Close All"
 msgstr "_Fechar todos"
 
-#: ../../dock/runtime_apps.go:302
+#: ../../dock/runtime_apps.go:309
 msgid "_Dock"
 msgstr "_Dock"
 
@@ -2144,227 +2096,227 @@ msgstr "_Dock"
 msgid "Auto"
 msgstr "Auto"
 
-#: ../../keybinding/id_desc_map.go:74
+#: ../../keybinding/id_desc_list.go:36
 msgid "Launcher"
 msgstr "Lançador"
 
-#: ../../keybinding/id_desc_map.go:75
+#: ../../keybinding/id_desc_list.go:37
 msgid "Show desktop"
 msgstr "Mostrar desktop"
 
-#: ../../keybinding/id_desc_map.go:76
+#: ../../keybinding/id_desc_list.go:38
 msgid "Lock screen"
 msgstr "Travar tela"
 
-#: ../../keybinding/id_desc_map.go:77
+#: ../../keybinding/id_desc_list.go:39
 msgid "File manager"
 msgstr "Gerenciador de arquivos"
 
-#: ../../keybinding/id_desc_map.go:78
+#: ../../keybinding/id_desc_list.go:40
 msgid "Switch applications"
 msgstr "Alternar aplicações"
 
-#: ../../keybinding/id_desc_map.go:79
+#: ../../keybinding/id_desc_list.go:41
 msgid "Reverse switch applications"
 msgstr "Reverter alternar aplicações"
 
-#: ../../keybinding/id_desc_map.go:80
+#: ../../keybinding/id_desc_list.go:42
 msgid "3D switch applications"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:81
+#: ../../keybinding/id_desc_list.go:43
 msgid "3D reverse switch applications"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:82
+#: ../../keybinding/id_desc_list.go:44
 msgid "Show/Hide the dock"
 msgstr "Mostrar/Ocultar dock"
 
-#: ../../keybinding/id_desc_map.go:83
+#: ../../keybinding/id_desc_list.go:45
 msgid "Screenshot"
 msgstr "Captura de Tela"
 
-#: ../../keybinding/id_desc_map.go:84
+#: ../../keybinding/id_desc_list.go:46
 msgid "Full screenshot"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:85
+#: ../../keybinding/id_desc_list.go:47
 msgid "Window screenshot"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:86
+#: ../../keybinding/id_desc_list.go:48
 msgid "Delay screenshot"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:87
+#: ../../keybinding/id_desc_list.go:49
 msgid "Terminal"
 msgstr "Terminal"
 
-#: ../../keybinding/id_desc_map.go:88
+#: ../../keybinding/id_desc_list.go:50
 msgid "Terminal Quake Window"
 msgstr "Janela do Terminal Quake"
 
-#: ../../keybinding/id_desc_map.go:89
+#: ../../keybinding/id_desc_list.go:51
 msgid "Logout"
 msgstr "Sair"
 
-#: ../../keybinding/id_desc_map.go:90
+#: ../../keybinding/id_desc_list.go:52
 msgid "Disable Touchpad"
 msgstr "Desabilitar Touchpad"
 
-#: ../../keybinding/id_desc_map.go:91
+#: ../../keybinding/id_desc_list.go:53
 msgid "Deepin Translator"
 msgstr "Tradutor Deepin"
 
-#: ../../keybinding/id_desc_map.go:92
+#: ../../keybinding/id_desc_list.go:54
 msgid "Switch Layout"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:132
+#: ../../keybinding/id_desc_list.go:62
 msgid "Calculator"
 msgstr "Calculadora"
 
-#: ../../keybinding/id_desc_map.go:133
+#: ../../keybinding/id_desc_list.go:63
 msgid "Email client"
 msgstr "Cliente de e-mail"
 
-#: ../../keybinding/id_desc_map.go:134
+#: ../../keybinding/id_desc_list.go:64
 msgid "Web browser"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:135
+#: ../../keybinding/id_desc_list.go:65
 msgid "Media player"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:136
+#: ../../keybinding/id_desc_list.go:66
 msgid "Play/Pause"
 msgstr "Reproduzir/Pausar"
 
-#: ../../keybinding/id_desc_map.go:137
+#: ../../keybinding/id_desc_list.go:67
 msgid "Pause"
 msgstr "Pausar"
 
-#: ../../keybinding/id_desc_map.go:138
+#: ../../keybinding/id_desc_list.go:68
 msgid "Stop"
 msgstr "Parar"
 
-#: ../../keybinding/id_desc_map.go:139
+#: ../../keybinding/id_desc_list.go:69
 msgid "Mute"
 msgstr "Mudo"
 
-#: ../../keybinding/id_desc_map.go:140
+#: ../../keybinding/id_desc_list.go:70
 msgid "Volume down"
 msgstr "Diminuir volume"
 
-#: ../../keybinding/id_desc_map.go:141
+#: ../../keybinding/id_desc_list.go:71
 msgid "Volume up"
 msgstr "Aumentar volume"
 
-#: ../../keybinding/id_desc_map.go:142
+#: ../../keybinding/id_desc_list.go:72
 msgid "Previous"
 msgstr "Anterior"
 
-#: ../../keybinding/id_desc_map.go:143
+#: ../../keybinding/id_desc_list.go:73
 msgid "Next"
 msgstr "Próximo"
 
-#: ../../keybinding/id_desc_map.go:144
+#: ../../keybinding/id_desc_list.go:74
 msgid "Eject"
 msgstr "Ejetar"
 
-#: ../../keybinding/id_desc_map.go:174
+#: ../../keybinding/id_desc_list.go:82
 msgid "Close window"
 msgstr "Fechar janela"
 
-#: ../../keybinding/id_desc_map.go:175
+#: ../../keybinding/id_desc_list.go:83
 msgid "Maximize window"
 msgstr "Maximizar janela"
 
-#: ../../keybinding/id_desc_map.go:176
+#: ../../keybinding/id_desc_list.go:84
 msgid "Restore window"
 msgstr "Restaurar janela"
 
-#: ../../keybinding/id_desc_map.go:177
+#: ../../keybinding/id_desc_list.go:85
 msgid "Minimize window"
 msgstr "Minimizar janela"
 
-#: ../../keybinding/id_desc_map.go:178
+#: ../../keybinding/id_desc_list.go:86
 msgid "Move window"
 msgstr "Mover janela"
 
-#: ../../keybinding/id_desc_map.go:179
+#: ../../keybinding/id_desc_list.go:87
 msgid "Resize window"
 msgstr "Redimensionar janela"
 
-#: ../../keybinding/id_desc_map.go:180
+#: ../../keybinding/id_desc_list.go:88
 msgid "Switch furl state"
 msgstr ""
 
-#: ../../keybinding/id_desc_map.go:181
+#: ../../keybinding/id_desc_list.go:89
 msgid "Activate window menu"
 msgstr "Ativar menu das janelas"
 
-#: ../../keybinding/id_desc_map.go:227
+#: ../../keybinding/id_desc_list.go:97
 msgid "Switch to workspace 1"
 msgstr "Alternar para espaço de trabalho 1"
 
-#: ../../keybinding/id_desc_map.go:228
+#: ../../keybinding/id_desc_list.go:98
 msgid "Switch to workspace 2"
 msgstr "Alternar para espaço de trabalho 2"
 
-#: ../../keybinding/id_desc_map.go:229
+#: ../../keybinding/id_desc_list.go:99
 msgid "Switch to workspace 3"
 msgstr "Alternar para espaço de trabalho 3"
 
-#: ../../keybinding/id_desc_map.go:230
+#: ../../keybinding/id_desc_list.go:100
 msgid "Switch to workspace 4"
 msgstr "Alternar para espaço de trabalho 4"
 
-#: ../../keybinding/id_desc_map.go:231
+#: ../../keybinding/id_desc_list.go:101
 msgid "Switch to left workspace"
 msgstr "Alternar para a área de trabalho à esquerda"
 
-#: ../../keybinding/id_desc_map.go:232
+#: ../../keybinding/id_desc_list.go:102
 msgid "Switch to right workspace"
 msgstr "Alternar para a área de trabalho à direita"
 
-#: ../../keybinding/id_desc_map.go:233
+#: ../../keybinding/id_desc_list.go:103
 msgid "Switch to upper workspace"
 msgstr "Alternar para a área de trabalho superior"
 
-#: ../../keybinding/id_desc_map.go:234
+#: ../../keybinding/id_desc_list.go:104
 msgid "Switch to lower workspace"
 msgstr "Alternar para a área de trabalho inferior"
 
-#: ../../keybinding/id_desc_map.go:235
+#: ../../keybinding/id_desc_list.go:105
 msgid "Move to workspace 1"
 msgstr "Mover para a área de trabalho 1"
 
-#: ../../keybinding/id_desc_map.go:236
+#: ../../keybinding/id_desc_list.go:106
 msgid "Move to workspace 2"
 msgstr "Mover para a área de trabalho 2"
 
-#: ../../keybinding/id_desc_map.go:237
+#: ../../keybinding/id_desc_list.go:107
 msgid "Move to workspace 3"
 msgstr "Mover para a área de trabalho 3"
 
-#: ../../keybinding/id_desc_map.go:238
+#: ../../keybinding/id_desc_list.go:108
 msgid "Move to workspace 4"
 msgstr "Mover para a área de trabalho 4"
 
-#: ../../keybinding/id_desc_map.go:239
+#: ../../keybinding/id_desc_list.go:109
 msgid "Move to left workspace"
 msgstr "Alternar para a área de trabalho à esquerda"
 
-#: ../../keybinding/id_desc_map.go:240
+#: ../../keybinding/id_desc_list.go:110
 msgid "Move to right workspace"
 msgstr "Alternar para a área de trabalho à direita"
 
-#: ../../keybinding/id_desc_map.go:241
+#: ../../keybinding/id_desc_list.go:111
 msgid "Move to upper workspace"
 msgstr "Alternar para a área de trabalho superior"
 
-#: ../../keybinding/id_desc_map.go:242
+#: ../../keybinding/id_desc_list.go:112
 msgid "Move to lower workspace"
 msgstr "Alternar para a área de trabalho inferior"
 
@@ -3265,6 +3217,15 @@ msgstr "Bateria fraca"
 msgid "Computer will be in suspend mode, please plug in now."
 msgstr ""
 
+#~ msgid "Ashkhabad"
+#~ msgstr "Ashkhabad"
+
+#~ msgid "Thimbu"
+#~ msgstr "Thimbu"
+
+#~ msgid "Chungking"
+#~ msgstr "Chungking"
+
 #, fuzzy
 #~ msgid "Americaoronha"
 #~ msgstr "Noronha"
@@ -3280,9 +3241,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Argentina/San Juan"
 #~ msgstr "São João"
-
-#~ msgid "Brazil East"
-#~ msgstr "Sudeste Brasileiro"
 
 #~ msgid "Brazil GMT"
 #~ msgstr "Brasil GMT"
