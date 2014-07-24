@@ -255,48 +255,6 @@ func updateSystemSettings(key, shortcut string) {
 	}
 }
 
-func updateWMSettings(key, shortcut string, invalid bool) {
-	if invalid {
-		wmGSettings.SetStrv(key, []string{})
-	} else {
-		values := wmGSettings.GetStrv(key)
-		if len(values) > 0 {
-			if values[0] == shortcut {
-				return
-			}
-		}
-		wmGSettings.SetStrv(key, []string{shortcut})
-	}
-}
-
-func updateShiftSettings(key, shortcut string, invalid bool) {
-	if invalid {
-		shiftGSettings.SetStrv(key, []string{})
-	} else {
-		values := shiftGSettings.GetStrv(key)
-		if len(values) > 0 {
-			if values[0] == shortcut {
-				return
-			}
-		}
-		shiftGSettings.SetStrv(key, []string{shortcut})
-	}
-}
-
-func updatePutSettings(key, shortcut string, invalid bool) {
-	if invalid {
-		putGSettings.SetStrv(key, []string{})
-	} else {
-		values := putGSettings.GetStrv(key)
-		if len(values) > 0 {
-			if values[0] == shortcut {
-				return
-			}
-		}
-		putGSettings.SetStrv(key, []string{shortcut})
-	}
-}
-
 func (obj *Manager) listenSettings() {
 	bindGSettings.Connect("changed", func(s *gio.Settings, key string) {
 		switch key {
@@ -321,12 +279,10 @@ func (obj *Manager) listenSettings() {
 			if id >= 0 && id < 300 {
 				grabKeyPairs(PrevSystemPairs, false)
 				grabKeyPairs(getSystemKeyPairs(), true)
-			} else if id >= 600 && id < 800 {
-				updateWMSettings(key, shortcut, invalidFlag)
-			} else if id >= 800 && id < 900 {
-				updateShiftSettings(key, shortcut, invalidFlag)
-			} else if id >= 900 && id < 1000 {
-				updatePutSettings(key, shortcut, invalidFlag)
+			} else if id >= 600 && id < 1000 {
+				if !invalidFlag {
+					obj.setCompizSettings(id, key, shortcut)
+				}
 			}
 
 			if isIdInSystemList(id) {
@@ -337,36 +293,6 @@ func (obj *Manager) listenSettings() {
 				obj.setPropWorkspaceList(getWorkspaceListInfo())
 			}
 		}
-	})
-
-	wmGSettings.Connect("changed", func(s *gio.Settings, key string) {
-		if !isKeyNameExist(key) {
-			return
-		}
-		values := wmGSettings.GetStrv(key)
-
-		shortcut := ""
-		if len(values) > 0 {
-			shortcut = values[0]
-		}
-
-		updateSystemSettings(key, shortcut)
-	})
-
-	shiftGSettings.Connect("changed", func(s *gio.Settings, key string) {
-		if !isKeyNameExist(key) {
-			return
-		}
-		shortcut := shiftGSettings.GetString(key)
-		updateSystemSettings(key, shortcut)
-	})
-
-	putGSettings.Connect("changed", func(s *gio.Settings, key string) {
-		if !isKeyNameExist(key) {
-			return
-		}
-		shortcut := putGSettings.GetString(key)
-		updateSystemSettings(key, shortcut)
 	})
 }
 

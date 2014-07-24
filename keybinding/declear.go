@@ -44,6 +44,16 @@ const (
 	MANAGER_IFC   = "com.deepin.daemon.KeyBinding"
 	MEDIAKEY_PATH = "/com/deepin/daemon/MediaKey"
 	MEDIAKEY_IFC  = "com.deepin.daemon.MediaKey"
+
+	COMPIZ_SETTINGS_CORE      = "org.compiz.core"
+	COMPIZ_SETTINGS_MOVE      = "org.compiz.move"
+	COMPIZ_SETTINGS_RESIZE    = "org.compiz.resize"
+	COMPIZ_SETTINGS_VPSWITCH  = "org.compiz.vpswitch"
+	COMPIZ_SETTINGS_PUT       = "org.compiz.put"
+	COMPIZ_SETTINGS_WALL      = "org.compiz.wall"
+	COMPIZ_SETTINGS_SHIFT     = "org.compiz.shift"
+	COMPIZ_SETTINGS_SWITCHER  = "org.compiz.switcher"
+	COMPIZ_SETTINGS_BASE_PATH = "/org/compiz/profiles/deepin/plugins/"
 )
 
 var (

@@ -41,11 +41,6 @@ var (
 	bindGSettings  = gio.NewSettings("com.deepin.dde.keybinding")
 	sysGSettings   = gio.NewSettings("com.deepin.dde.keybinding.system")
 	mediaGSettings = gio.NewSettings("com.deepin.dde.keybinding.mediakey")
-	wmGSettings    = gio.NewSettings("org.gnome.desktop.wm.keybindings")
-	putGSettings   = gio.NewSettingsWithPath("org.compiz.put",
-		"/org/compiz/profiles/put/")
-	shiftGSettings = gio.NewSettingsWithPath("org.compiz.shift",
-		"/org/compiz/profiles/shift/")
 )
 
 func StartKeyBinding() {
