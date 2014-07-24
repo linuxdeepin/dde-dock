@@ -41,11 +41,22 @@ var (
 	bindGSettings  = gio.NewSettings("com.deepin.dde.keybinding")
 	sysGSettings   = gio.NewSettings("com.deepin.dde.keybinding.system")
 	mediaGSettings = gio.NewSettings("com.deepin.dde.keybinding.mediakey")
-	wmGSettings    = gio.NewSettings("org.gnome.desktop.wm.keybindings")
-	putGSettings   = gio.NewSettingsWithPath("org.compiz.put",
-		"/org/compiz/profiles/put/")
-	shiftGSettings = gio.NewSettingsWithPath("org.compiz.shift",
-		"/org/compiz/profiles/shift/")
+	coreSettings   = gio.NewSettingsWithPath(COMPIZ_SETTINGS_CORE,
+		COMPIZ_SETTINGS_BASE_PATH+"core/")
+	moveSettings = gio.NewSettingsWithPath(COMPIZ_SETTINGS_MOVE,
+		COMPIZ_SETTINGS_BASE_PATH+"move/")
+	resizeSettings = gio.NewSettingsWithPath(COMPIZ_SETTINGS_RESIZE,
+		COMPIZ_SETTINGS_BASE_PATH+"resize/")
+	vpswitchSettings = gio.NewSettingsWithPath(COMPIZ_SETTINGS_VPSWITCH,
+		COMPIZ_SETTINGS_BASE_PATH+"vpswitch/")
+	putGSettings = gio.NewSettingsWithPath(COMPIZ_SETTINGS_PUT,
+		COMPIZ_SETTINGS_BASE_PATH+"put/")
+	wallSettings = gio.NewSettingsWithPath(COMPIZ_SETTINGS_WALL,
+		COMPIZ_SETTINGS_BASE_PATH+"wall/")
+	shiftGSettings = gio.NewSettingsWithPath(COMPIZ_SETTINGS_SHIFT,
+		COMPIZ_SETTINGS_BASE_PATH+"shift/")
+	switcherSettings = gio.NewSettingsWithPath(COMPIZ_SETTINGS_SWITCHER,
+		COMPIZ_SETTINGS_BASE_PATH+"switcher/")
 )
 
 func StartKeyBinding() {
