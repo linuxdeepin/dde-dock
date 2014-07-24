@@ -2161,9 +2161,8 @@ msgid "Deepin Translator"
 msgstr "深度翻译"
 
 #: ../../keybinding/id_desc_list.go:54
-#, fuzzy
 msgid "Switch Layout"
-msgstr "切换卷起状态"
+msgstr "切换键盘布局"
 
 #: ../../keybinding/id_desc_list.go:62
 msgid "Calculator"
@@ -2916,7 +2915,6 @@ msgid "The device is no longer managed."
 msgstr "设备不再托管。"
 
 #: ../../network/state_handler.go:38
-#, fuzzy
 msgid "The device has not been ready for configuration."
 msgstr "设备配置未就绪。"
 
@@ -3128,9 +3126,8 @@ msgid "Activate VPN connection failed, unknown reason."
 msgstr ""
 
 #: ../../network/state_handler.go:91
-#, fuzzy
 msgid "Activate VPN connection failed."
-msgstr "连接依赖失败。"
+msgstr "连接VPN失败。"
 
 #: ../../network/state_handler.go:92
 msgid "The VPN connection changed state due to disconnection from users."
@@ -3202,7 +3199,6 @@ msgid "Computer has been in suspend mode, please plug in."
 msgstr "计算机进入待机状态，请连接电源。"
 
 #: ../../power/upower.go:101
-#, fuzzy
 msgid "Please plug in, or computer will be in suspend mode."
 msgstr "计算机将要进入待机状态，请连接电源。"
 
@@ -3211,7 +3207,6 @@ msgid "Battery Low"
 msgstr "电池电量低"
 
 #: ../../power/upower.go:114
-#, fuzzy
 msgid "Computer will be in suspend mode, please plug in now."
 msgstr "计算机将要进入待机状态，请连接电源。"
 
