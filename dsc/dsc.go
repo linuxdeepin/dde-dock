@@ -22,11 +22,14 @@
 package dsc
 
 import (
-	dutils "pkg.linuxdeepin.com/lib/utils"
 	"os/exec"
 	"path"
+	"pkg.linuxdeepin.com/lib/logger"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 	"time"
 )
+
+var Logger = logger.NewLogger("dde-session-daemon/dsc")
 
 var quitFlag = make(chan bool)
 
@@ -35,47 +38,63 @@ const (
 )
 
 func setDSCAutoUpdate(interval time.Duration) {
+	Logger.Info("AutoUpgrade interval:", interval)
 	if interval <= 0 {
 		return
 	}
 
-	for {
-		timer := time.After(time.Hour * interval)
-		select {
-		case <-quitFlag:
-			return
-		case <-timer:
-			go exec.Command("/usr/bin/dsc-daemon", []string{"--no-daemon"}...).Run()
-		}
+	timer := time.After(interval)
+	select {
+	case <-quitFlag:
+		return
+	case <-timer:
+		go exec.Command("/usr/bin/dsc-daemon", []string{"--no-daemon"}...).Run()
+		Logger.Info("Running dsc-daemon.....")
+		return
 	}
 }
 
-func Start() {
+func getDscConfInfo() (isUpdate bool, duration int32) {
+	isUpdate = true
+	duration = 3
+
 	homeDir := dutils.GetHomeDir()
-	if len(homeDir) < 1 {
-		return
-	}
 	filename := path.Join(homeDir, DSC_CONFIG_PATH)
 	if !dutils.IsFileExist(filename) {
 		return
 	}
 
-	interval, ok1 := dutils.ReadKeyFromKeyFile(filename,
-		"update", "interval", int32(0))
-	if !ok1 {
-		interval = 3
-	}
-	isUpdate := true
 	str, _ := dutils.ReadKeyFromKeyFile(filename,
 		"update", "auto", "")
 	if v, ok := str.(string); ok && v == "False" {
 		isUpdate = false
 	}
-	if isUpdate {
+
+	interval, ok1 := dutils.ReadKeyFromKeyFile(filename,
+		"update", "interval", int32(0))
+	if ok1 {
 		if i, ok := interval.(int32); ok {
-			go setDSCAutoUpdate(time.Duration(i))
+			duration = int32(i)
 		}
 	}
+
+	return
+
+}
+
+func Start() {
+	go setDSCAutoUpdate(time.Duration(time.Minute * 5))
+
+	go func() {
+		for {
+			isUpdate, duration := getDscConfInfo()
+			if isUpdate {
+				setDSCAutoUpdate(time.Hour * time.Duration(duration))
+			} else {
+				return
+			}
+		}
+	}()
 }
 
 func Stop() {
