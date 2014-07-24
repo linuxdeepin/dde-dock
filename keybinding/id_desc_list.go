@@ -31,16 +31,27 @@ type idDescInfo struct {
 
 var systemIdDescList []idDescInfo
 
+/**
+ * Id Range
+ * 600 ~ 649: org.compiz.core.gschema.xml
+ * 650 ~ 699: org.compiz.move.gschema.xml
+ * 700 ~ 749: org.compiz.resize.gschema.xml
+ * 750 ~ 799: org.compiz.vpswitch.gschema.xml
+ * 800 ~ 849: org.compiz.put.gschema.xml
+ * 850 ~ 899: org.compiz.wall.gschema.xml
+ * 900 ~ 949: org.compiz.shift.gschema.xml
+ * 950 ~ 999: org.compiz.switcher.gschema.xml
+ **/
 func initSystemIdDescList() {
 	systemIdDescList = []idDescInfo{
 		idDescInfo{0, "launcher", Tr("Launcher")},
-		idDescInfo{620, "show-desktop", Tr("Show desktop")},
+		idDescInfo{600, "show-desktop", Tr("Show desktop")},
 		idDescInfo{2, "lock-screen", Tr("Lock screen")},
 		idDescInfo{10, "file-manager", Tr("File manager")},
-		idDescInfo{621, "switch-applications", Tr("Switch applications")},
-		idDescInfo{622, "switch-applications-backward", Tr("Reverse switch applications")},
-		idDescInfo{800, "prev-key", Tr("3D switch applications")},
-		idDescInfo{801, "next-key", Tr("3D reverse switch applications")},
+		idDescInfo{950, "switch-applications", Tr("Switch applications")},
+		idDescInfo{951, "switch-applications-backward", Tr("Reverse switch applications")},
+		idDescInfo{900, "prev-key", Tr("3D switch applications")},
+		idDescInfo{901, "next-key", Tr("3D reverse switch applications")},
 		idDescInfo{3, "show-dock", Tr("Show/Hide the dock")},
 		idDescInfo{6, "screenshot", Tr("Screenshot")},
 		idDescInfo{7, "screenshot-full-screen", Tr("Full screenshot")},
@@ -79,14 +90,14 @@ var windowIdDescList []idDescInfo
 
 func initWindowIdDescList() {
 	windowIdDescList = []idDescInfo{
-		idDescInfo{603, "close", Tr("Close window")},
-		idDescInfo{604, "maximize", Tr("Maximize window")},
-		idDescInfo{607, "unmaximize", Tr("Restore window")},
-		idDescInfo{605, "minimize", Tr("Minimize window")},
-		idDescInfo{601, "begin-move", Tr("Move window")},
-		idDescInfo{602, "begin-resize", Tr("Resize window")},
-		idDescInfo{606, "toggle-shaded", Tr("Switch furl state")},
-		idDescInfo{600, "activate-window-menu", Tr("Activate window menu")},
+		idDescInfo{601, "close", Tr("Close window")},
+		idDescInfo{602, "maximize", Tr("Maximize window")},
+		idDescInfo{603, "unmaximize", Tr("Restore window")},
+		idDescInfo{604, "minimize", Tr("Minimize window")},
+		idDescInfo{650, "begin-move", Tr("Move window")},
+		idDescInfo{700, "begin-resize", Tr("Resize window")},
+		idDescInfo{605, "toggle-shaded", Tr("Switch furl state")},
+		idDescInfo{606, "activate-window-menu", Tr("Activate window menu")},
 	}
 }
 
@@ -94,21 +105,21 @@ var workspaceIdDescList []idDescInfo
 
 func initWorkspaceIdDescList() {
 	workspaceIdDescList = []idDescInfo{
-		idDescInfo{608, "switch-to-workspace-1", Tr("Switch to workspace 1")},
-		idDescInfo{609, "switch-to-workspace-2", Tr("Switch to workspace 2")},
-		idDescInfo{610, "switch-to-workspace-3", Tr("Switch to workspace 3")},
-		idDescInfo{611, "switch-to-workspace-4", Tr("Switch to workspace 4")},
-		idDescInfo{613, "switch-to-workspace-left", Tr("Switch to left workspace")},
-		idDescInfo{614, "switch-to-workspace-right", Tr("Switch to right workspace")},
-		idDescInfo{615, "switch-to-workspace-up", Tr("Switch to upper workspace")},
-		idDescInfo{612, "switch-to-workspace-down", Tr("Switch to lower workspace")},
-		idDescInfo{900, "put-viewport-1-key", Tr("Move to workspace 1")},
-		idDescInfo{901, "put-viewport-2-key", Tr("Move to workspace 2")},
-		idDescInfo{902, "put-viewport-3-key", Tr("Move to workspace 3")},
-		idDescInfo{903, "put-viewport-4-key", Tr("Move to workspace 4")},
-		idDescInfo{617, "move-to-workspace-left", Tr("Move to left workspace")},
-		idDescInfo{618, "move-to-workspace-right", Tr("Move to right workspace")},
-		idDescInfo{619, "move-to-workspace-up", Tr("Move to upper workspace")},
-		idDescInfo{616, "move-to-workspace-down", Tr("Move to lower workspace")},
+		idDescInfo{750, "switch-to-workspace-1", Tr("Switch to workspace 1")},
+		idDescInfo{751, "switch-to-workspace-2", Tr("Switch to workspace 2")},
+		idDescInfo{752, "switch-to-workspace-3", Tr("Switch to workspace 3")},
+		idDescInfo{753, "switch-to-workspace-4", Tr("Switch to workspace 4")},
+		idDescInfo{850, "switch-to-workspace-left", Tr("Switch to left workspace")},
+		idDescInfo{851, "switch-to-workspace-right", Tr("Switch to right workspace")},
+		idDescInfo{852, "switch-to-workspace-up", Tr("Switch to upper workspace")},
+		idDescInfo{853, "switch-to-workspace-down", Tr("Switch to lower workspace")},
+		idDescInfo{800, "put-viewport-1-key", Tr("Move to workspace 1")},
+		idDescInfo{801, "put-viewport-2-key", Tr("Move to workspace 2")},
+		idDescInfo{802, "put-viewport-3-key", Tr("Move to workspace 3")},
+		idDescInfo{803, "put-viewport-4-key", Tr("Move to workspace 4")},
+		idDescInfo{854, "move-to-workspace-left", Tr("Move to left workspace")},
+		idDescInfo{855, "move-to-workspace-right", Tr("Move to right workspace")},
+		idDescInfo{856, "move-to-workspace-up", Tr("Move to upper workspace")},
+		idDescInfo{857, "move-to-workspace-down", Tr("Move to lower workspace")},
 	}
 }

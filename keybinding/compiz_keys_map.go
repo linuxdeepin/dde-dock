@@ -19,7 +19,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package main
+package keybinding
 
 var compizKeysMap = map[string]string{
 	//org.compiz.core.gschema.xml	(s)
@@ -30,21 +30,21 @@ var compizKeysMap = map[string]string{
 	"minimize":             "minimize-window-key",
 	"toggle-shaded":        "toggle-window-shaded-key",
 	"activate-window-menu": "window-menu-key",
-	//org.compiz.move.gschema.xml
+	//org.compiz.move.gschema.xml	(s)
 	"begin-move": "initiate-key",
-	//org.compiz.resize.gschema.xml
+	//org.compiz.resize.gschema.xml	(s)
 	"begin-resize": "initiate-key",
-	//org.compiz.vpswitch.gschema.xml
+	//org.compiz.vpswitch.gschema.xml	(s)
 	"switch-to-workspace-1": "switch-to-1-key",
 	"switch-to-workspace-2": "switch-to-2-key",
 	"switch-to-workspace-3": "switch-to-3-key",
 	"switch-to-workspace-4": "switch-to-4-key",
-	//org.compiz.put.gschema.xml
+	//org.compiz.put.gschema.xml	(s)
 	"put-viewport-1-key": "put-viewport-1-key",
 	"put-viewport-2-key": "put-viewport-2-key",
 	"put-viewport-3-key": "put-viewport-3-key",
 	"put-viewport-4-key": "put-viewport-4-key",
-	//org.compiz.wall.gschema.xml
+	//org.compiz.wall.gschema.xml	(s)
 	"switch-to-workspace-left":  "left-key",
 	"switch-to-workspace-right": "right-key",
 	"switch-to-workspace-up":    "up-key",
@@ -53,10 +53,10 @@ var compizKeysMap = map[string]string{
 	"move-to-workspace-right":   "right-window-key",
 	"move-to-workspace-up":      "up-window-key",
 	"move-to-workspace-down":    "down-window-key",
-	//org.compiz.shift.gschema.xml
+	//org.compiz.shift.gschema.xml	(s)
 	"next-key": "next-key",
 	"prev-key": "prev-key",
-	//org.compiz.switcher.gschema.xml
+	//org.compiz.switcher.gschema.xml	(s)
 	"switch-applications":          "next-key",
 	"switch-applications-backward": "prev-key",
 }
