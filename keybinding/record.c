@@ -99,6 +99,7 @@ grab_xrecord_init ()
         g_warning ("Unable to create thread...");
         grab_xrecord_finalize ();
     }
+    g_thread_unref(thrd);
 }
 
 void

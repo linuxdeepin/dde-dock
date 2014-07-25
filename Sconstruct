@@ -93,24 +93,37 @@ if languages:
     for language in languages:
         env.Install(ipackage_instdir_locale, 'data/po/%s' % language)
 
-cwd = os.getcwd()
-env.Install(os.path.join('$DESTDIR','etc/dbus-1/system.d/'), glob.glob(os.path.join(cwd,'data/conf','*.conf')))
-env.Install(os.path.join('$DESTDIR', 'usr/share/dbus-1/services/'), glob.glob(os.path.join(cwd,'data/services','*.service')))
-env.Install(os.path.join('$DESTDIR', 'usr/share/dbus-1/system-services/'), glob.glob(os.path.join(cwd,'data/system-services','*.service')))
-env.Install(os.path.join('$DESTDIR', 'usr/share/polikit-1/actions/'), glob.glob(os.path.join(cwd,'data/polikit-action','*.policy')))
-env.Install(os.path.join('$DESTDIR','usr/share/glib-2.0/schemas'), glob.glob(os.path.join(cwd,'data/schemas/','*.xml')))
+ipackage_instdir_conf = os.path.join('$DESTDIR', 'etc/dbus-1/systemd.d')
+for f in glob.glob(os.path.join(os.getcwd(),'data/conf','*.conf')):
+    env.Install(ipackage_instdir_conf, f)
 
-if os.path.exists(os.path.join(cwd,'data/lang')):
-    env.Install(os.path.join(ipackage_instdir,'share/dde-daemon'), os.path.join(cwd,'data/lang'))
-if os.path.exists(os.path.join(cwd,'data/template')):
-    env.Install(os.path.join(ipackage_instdir,'share/dde-daemon'), os.path.join(cwd,'data/template'))
+ipackage_instdir_service = os.path.join('$DESTDIR', 'usr/share/dbus-1/services/')
+for f in glob.glob(os.path.join(os.getcwd(),'data/services','*.service')):
+    env.Install(ipackage_instdir_service, f)
 
-for f in glob.glob(os.path.join(cwd,'data/tool/', 'wireless_script*')):
+ipackage_instdir_system_service = os.path.join('$DESTDIR', 'usr/share/dbus-1/system-services/')
+for f in glob.glob(os.path.join(os.getcwd(),'data/system-services','*.service')):
+    env.Install(ipackage_instdir_system_service, f)
+
+ipackage_instdir_polkit_action = os.path.join('$DESTDIR', 'usr/share/polikit-1/actions/')
+for f in glob.glob(os.path.join(os.getcwd(),'data/polikit-action','*.policy')):
+    env.Install(ipackage_instdir_polkit_action, f)
+
+ipackage_instdir_schemas = os.path.join('$DESTDIR', 'usr/share/glib-2.0/schemas')
+for f in glob.glob(os.path.join(os.getcwd(),'data/schemas/','*.xml')):
+    env.Install(ipackage_instdir_polkit_action, f)
+
+if os.path.exists(os.path.join(os.getcwd(),'data/lang')):
+    env.Install(os.path.join(ipackage_instdir,'share/dde-daemon'), os.path.join(os.getcwd(),'data/lang'))
+if os.path.exists(os.path.join(os.getcwd(),'data/template')):
+    env.Install(os.path.join(ipackage_instdir,'share/dde-daemon'), os.path.join(os.getcwd(),'data/template'))
+
+for f in glob.glob(os.path.join(os.getcwd(),'data/tool/', 'wireless_script*')):
     target = os.path.join(ipackage_instdir,'bin/wireless-script')
     env.InstallAs(target, f)
     #TODO:need fix prem
     break
 
-env.Alias('install', '$DESTDIR')
+env.Alias('install', ipackage_instdir)
 
 Help(opts.GenerateHelpText(env))

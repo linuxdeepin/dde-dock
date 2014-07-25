@@ -320,50 +320,50 @@ func grabMediaKeys() {
 }
 
 func grabKeyboardAndMouse() {
-	go func() {
-		X, err := xgbutil.NewConn()
-		if err != nil {
-			Logger.Info("Get New Connection Failed:", err)
-			return
-		}
-		keybind.Initialize(X)
-		mousebind.Initialize(X)
+	//go func() {
+	X, err := xgbutil.NewConn()
+	if err != nil {
+		Logger.Info("Get New Connection Failed:", err)
+		return
+	}
+	keybind.Initialize(X)
+	mousebind.Initialize(X)
 
-		err = keybind.GrabKeyboard(X, X.RootWin())
-		if err != nil {
-			Logger.Info("Grab Keyboard Failed:", err)
-			return
-		}
+	err = keybind.GrabKeyboard(X, X.RootWin())
+	if err != nil {
+		Logger.Info("Grab Keyboard Failed:", err)
+		return
+	}
 
-		grabAllMouseButton(X)
+	grabAllMouseButton(X)
 
-		xevent.ButtonPressFun(
-			func(X *xgbutil.XUtil, e xevent.ButtonPressEvent) {
-				GetManager().KeyReleaseEvent("")
-				ungrabAllMouseButton(X)
-				keybind.UngrabKeyboard(X)
-				Logger.Info("Button Press Event")
-				xevent.Quit(X)
-			}).Connect(X, X.RootWin())
+	xevent.ButtonPressFun(
+		func(X *xgbutil.XUtil, e xevent.ButtonPressEvent) {
+			GetManager().KeyReleaseEvent("")
+			ungrabAllMouseButton(X)
+			keybind.UngrabKeyboard(X)
+			Logger.Info("Button Press Event")
+			xevent.Quit(X)
+		}).Connect(X, X.RootWin())
 
-		xevent.KeyPressFun(
-			func(X *xgbutil.XUtil, e xevent.KeyPressEvent) {
-				value := parseKeyEnvent(X, e.State, e.Detail)
-				GetManager().KeyPressEvent(value)
-			}).Connect(X, X.RootWin())
+	xevent.KeyPressFun(
+		func(X *xgbutil.XUtil, e xevent.KeyPressEvent) {
+			value := parseKeyEnvent(X, e.State, e.Detail)
+			GetManager().KeyPressEvent(value)
+		}).Connect(X, X.RootWin())
 
-		xevent.KeyReleaseFun(
-			func(X *xgbutil.XUtil, e xevent.KeyReleaseEvent) {
-				value := parseKeyEnvent(X, e.State, e.Detail)
-				GetManager().KeyReleaseEvent(value)
-				ungrabAllMouseButton(X)
-				keybind.UngrabKeyboard(X)
-				Logger.Infof("Key: %s\n", value)
-				xevent.Quit(X)
-			}).Connect(X, X.RootWin())
+	xevent.KeyReleaseFun(
+		func(X *xgbutil.XUtil, e xevent.KeyReleaseEvent) {
+			value := parseKeyEnvent(X, e.State, e.Detail)
+			GetManager().KeyReleaseEvent(value)
+			ungrabAllMouseButton(X)
+			keybind.UngrabKeyboard(X)
+			Logger.Infof("Key: %s\n", value)
+			xevent.Quit(X)
+		}).Connect(X, X.RootWin())
 
-		xevent.Main(X)
-	}()
+	xevent.Main(X)
+	//}()
 }
 
 func grabAllMouseButton(X *xgbutil.XUtil) {
