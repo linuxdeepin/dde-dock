@@ -145,7 +145,7 @@ func isDeepinLauncher(xid xproto.Window) bool {
 		return false
 	}
 
-	return res.Instance == "dde-launcher"
+	return res.Instance == DDELauncher
 }
 
 func (m *ClientManager) listenRootWindow() {

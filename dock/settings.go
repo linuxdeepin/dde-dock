@@ -6,21 +6,33 @@ import (
 )
 
 const (
-	HideModeKey         string = "hide-mode"
-	HideModeKeepShowing        = "keep-showing"
-	HideModeKeepHidden         = "keep-hidden"
-	HideModeAutoHide           = "auto-hide"
+	HideModeKey    string = "hide-mode"
+	DisplayModeKey string = "display-mode"
+)
 
-	DisplayModeKey           string = "display-mode"
-	DisplayModeModernModeStr        = "legacy"
-	DisplayModeLegacyModeStr        = "modern"
+const (
+	HideModeKeepShowing int32 = iota
+	HideModeKeepHidden
+	HideModeAutoHide
+
+	HideModeKeepShowingStr = "keep-showing"
+	HideModeKeepHiddenStr  = "keep-hidden"
+	HideModeAutoHideStr    = "auto-hide"
+)
+
+const (
+	DisplayModeModernMode int32 = iota
+	DisplayModeLegacyMode
+
+	DisplayModeModernModeStr = "legacy"
+	DisplayModeLegacyModeStr = "modern"
 )
 
 type Setting struct {
 	core *gio.Settings
 
-	HideModeChanged    func(mode string)
-	DisplayModeChanged func(mode string)
+	HideModeChanged    func(mode int32)
+	DisplayModeChanged func(mode int32)
 }
 
 func NewSetting() *Setting {
@@ -36,42 +48,42 @@ func (s *Setting) init() {
 	}
 
 	s.listenGSettingChange(HideModeKey, func(g *gio.Settings, key string) {
-		value := g.GetString(key)
-		logger.Info(key, "changed to", value)
+		value := int32(g.GetEnum(key))
+		logger.Info(key, "changed to", g.GetString(key))
 		s.HideModeChanged(value)
 	})
 
 	s.listenGSettingChange(DisplayModeKey, func(g *gio.Settings, key string) {
-		value := g.GetString(key)
-		logger.Info(key, "changed to", value)
+		value := int32(g.GetEnum(key))
+		logger.Info(key, "changed to", g.GetString(key))
 		s.DisplayModeChanged(value)
 	})
 }
 
 func (s *Setting) listenGSettingChange(key string, handler func(*gio.Settings, string)) {
-	signalDetial := fmt.Sprintf("changed::%s", HideModeKey)
+	signalDetial := fmt.Sprintf("changed::%s", key)
 	logger.Debugf("connect to %s signal", signalDetial)
 	s.core.Connect(signalDetial, handler)
 }
 
-func (s *Setting) GetHideMode() string {
-	return s.core.GetString(HideModeKey)
+func (s *Setting) GetHideMode() int32 {
+	return int32(s.core.GetEnum(HideModeKey))
 }
 
-func (s *Setting) SetHideMode(mode string) bool {
-	ok := s.core.SetString(HideModeKey, mode)
+func (s *Setting) SetHideMode(mode int32) bool {
+	ok := s.core.SetEnum(HideModeKey, int(mode))
 	if ok {
 		s.HideModeChanged(mode)
 	}
 	return ok
 }
 
-func (s *Setting) GetDisplayMode() string {
-	return s.core.GetString(DisplayModeKey)
+func (s *Setting) GetDisplayMode() int32 {
+	return int32(s.core.GetEnum(DisplayModeKey))
 }
 
-func (s *Setting) SetDisplayMode(mode string) bool {
-	ok := s.core.SetString(DisplayModeKey, mode)
+func (s *Setting) SetDisplayMode(mode int32) bool {
+	ok := s.core.SetEnum(DisplayModeKey, int(mode))
 	if ok {
 		s.DisplayModeChanged(mode)
 	}

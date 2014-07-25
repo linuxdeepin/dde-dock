@@ -27,7 +27,7 @@ type HideStateManager struct {
 	StateChanged func(int32)
 }
 
-func NewHideStateManager(mode string) *HideStateManager {
+func NewHideStateManager(mode int32) *HideStateManager {
 	h := &HideStateManager{}
 
 	if mode == HideModeKeepHidden {
