@@ -114,9 +114,9 @@ func (obj *Theme) setAllProps() {
 	}
 
 	var str string
-	str, err = kf.GetString(THEME_GROUP_THEME, THEME_KEY_ID)
+	str, err = kf.GetString(THEME_GROUP_THEME, THEME_KEY_NAME)
 	if err != nil {
-		Logger.Warningf("Get '%s' failed: %v", THEME_KEY_ID, err)
+		Logger.Warningf("Get '%s' failed: %v", THEME_KEY_NAME, err)
 		return
 	}
 	obj.setPropName(str)
@@ -124,7 +124,7 @@ func (obj *Theme) setAllProps() {
 	str, err = kf.GetLocaleString(THEME_GROUP_THEME,
 		THEME_KEY_NAME, getCurrentLang())
 	if err != nil {
-		Logger.Warningf("Get '%s' failed: %v", THEME_KEY_NAME, err)
+		Logger.Warningf("Get locale '%s' failed: %v", THEME_KEY_NAME, err)
 		return
 	}
 	obj.setPropDisplayName(str)

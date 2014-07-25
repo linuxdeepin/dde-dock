@@ -159,7 +159,11 @@ func (obj *Manager) rebuildThemes() {
 			if name == l.Name {
 				t := newTheme(l)
 				obj.themeObjMap[t.Name] = t
-				dbus.InstallOnSession(t)
+				err := dbus.InstallOnSession(t)
+				if err != nil {
+					Logger.Warningf("'%s' install dbus failed: %v", name, err)
+					break
+				}
 				if obj.CurrentTheme.GetValue().(string) == t.Name {
 					flag = true
 					t.setAllThemes()
