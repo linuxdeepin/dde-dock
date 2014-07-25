@@ -150,7 +150,7 @@ func (obj *Manager) GrabSignalShortcut(shortcut, action string, isGrab bool) {
 }
 
 func (obj *Manager) GrabKbdAndMouse() {
-	grabKeyboardAndMouse()
+	go grabKeyboardAndMouse()
 }
 
 func newManager() *Manager {
