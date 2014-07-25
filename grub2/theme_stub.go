@@ -67,7 +67,7 @@ func (theme *Theme) setPropBackground(value string) {
 	theme.background = value
 	// generate background thumbnail
 	theme.Background = graphic.GenerateCacheFilePath("grub background" + theme.background)
-	graphic.ThumbnailImage(theme.background, theme.Background, 300, 300, graphic.PNG)
+	graphic.ThumbnailImage(theme.background, theme.Background, 300, 300, graphic.FormatPng)
 	dbus.NotifyChange(theme, "Background")
 }
 
