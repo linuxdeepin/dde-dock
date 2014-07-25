@@ -44,7 +44,7 @@ func (m *Manager) refrashDiskInfoList() {
 	for {
 		select {
 		case <-time.NewTimer(time.Second * TIME_DURATION).C:
-			Logger.Info("Refrash Disk Info List")
+			Logger.Debug("Refrash Disk Info List")
 			m.setPropName("DiskList")
 			//Logger.Infof("Disk List: %v", m.DiskList)
 		case <-m.quitFlag:

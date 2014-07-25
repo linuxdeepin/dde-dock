@@ -82,10 +82,10 @@ func newDiskInfo(value interface{}, t string) DiskInfo {
 		//info.TotalCap, info.UsableCap = getDiskCap(id)
 		info.Path = v.GetIdentifier(gio.VolumeIdentifierKindUnixDevice)
 		info.UUID = v.GetIdentifier(gio.VolumeIdentifierKindUuid)
-		Logger.Infof("VOLUME Name: %s, UUID: %v", info.Name, info.UUID)
+		Logger.Debugf("VOLUME Name: %s, UUID: %v", info.Name, info.UUID)
 		if len(info.UUID) < 1 {
 			info.UUID = generateUUID()
-			Logger.Infof("VOLUME Name: %s, Generate UUID: %v", info.Name, info.UUID)
+			Logger.Debugf("VOLUME Name: %s, Generate UUID: %v", info.Name, info.UUID)
 		}
 
 		if mount := v.GetMount(); mount != nil {
