@@ -238,7 +238,8 @@ func getInvalidConflictList() []int32 {
 func isValidShortcut(shortcut string) bool {
 	tmp := formatShortcut(shortcut)
 	if len(tmp) == 0 {
-		return false
+		// Disable shortcut
+		return true
 	}
 
 	if strings.Contains(tmp, "-") {
