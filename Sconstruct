@@ -111,7 +111,7 @@ for f in glob.glob(os.path.join(os.getcwd(),'data/polikit-action','*.policy')):
 
 ipackage_instdir_schemas = os.path.join('$DESTDIR', 'usr/share/glib-2.0/schemas')
 for f in glob.glob(os.path.join(os.getcwd(),'data/schemas/','*.xml')):
-    env.Install(ipackage_instdir_polkit_action, f)
+    env.Install(ipackage_instdir_schemas, f)
 
 if os.path.exists(os.path.join(os.getcwd(),'data/lang')):
     env.Install(os.path.join(ipackage_instdir,'share/dde-daemon'), os.path.join(os.getcwd(),'data/lang'))
