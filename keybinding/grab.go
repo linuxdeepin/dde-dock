@@ -161,6 +161,14 @@ func formatShortcut(shortcut string) string {
  * delete Num_Lock and Caps_Lock
  */
 func deleteSpecialMod(modStr string) string {
+	if !strings.Contains(modStr, "-") {
+		if modStr == "lock" || modStr == "mod2" {
+			return ""
+		}
+
+		return modStr
+	}
+
 	ret := ""
 	strs := strings.Split(modStr, "-")
 	l := len(strs)
@@ -174,6 +182,12 @@ func deleteSpecialMod(modStr string) string {
 			break
 		}
 		ret += s + "-"
+	}
+
+	if length := len(ret); length > 1 {
+		if ret[length-1] == '-' {
+			ret = ret[0 : length-1]
+		}
 	}
 
 	return ret
