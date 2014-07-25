@@ -281,7 +281,7 @@ func main() {
 			if len(dest) < 1 || (!forceFlag && dutils.IsFileExist(dest)) {
 				continue
 			}
-			err := graphic.ThumbnailImage(l.Path, dest, 128, 72, graphic.PNG)
+			err := graphic.ThumbnailImage(l.Path, dest, 128, 72, graphic.FormatPng)
 			if err != nil {
 				Logger.Debug("ERROR:", err)
 			}
