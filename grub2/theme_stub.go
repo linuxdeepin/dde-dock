@@ -24,6 +24,7 @@ package grub2
 import (
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/graphic"
+	"pkg.linuxdeepin.com/lib/utils"
 )
 
 // GetDBusInfo implements interface of dbus.DBusObject.
@@ -66,7 +67,7 @@ func (theme *Theme) setPropUpdating(value bool) {
 func (theme *Theme) setPropBackground(value string) {
 	theme.background = value
 	// generate background thumbnail
-	theme.Background = graphic.GenerateCacheFilePath("grub background" + theme.background)
+	theme.Background = utils.GenerateCacheFilePath("grub background" + theme.background)
 	graphic.ThumbnailImage(theme.background, theme.Background, 300, 300, graphic.FormatPng)
 	dbus.NotifyChange(theme, "Background")
 }

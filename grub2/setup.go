@@ -25,7 +25,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
-	"pkg.linuxdeepin.com/lib/graphic"
+	graphic "pkg.linuxdeepin.com/lib/gdkpixbuf"
 	"strconv"
 	"strings"
 )
@@ -171,8 +171,7 @@ func (setup *SetupWrapper) DoGenerateThemeBackground(screenWidth, screenHeight u
 	}
 	logger.Infof("source background size %dx%d", imgWidth, imgHeight)
 	logger.Infof("background size %dx%d", screenWidth, screenHeight)
-	err = graphic.FillImage(themeBgSrcFile, themeBgFile, int(screenWidth), int(screenHeight),
-		graphic.FillProportionCenterScale, graphic.FormatPng)
+	err = graphic.ScaleImagePrefer(themeBgSrcFile, themeBgFile, int(screenWidth), int(screenHeight), graphic.GDK_INTERP_HYPER, graphic.FormatPng)
 	if err != nil {
 		logger.Error(err.Error())
 		return false, err
