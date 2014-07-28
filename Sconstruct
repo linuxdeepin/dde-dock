@@ -97,7 +97,7 @@ cwd = os.getcwd()
 env.Install(os.path.join('$DESTDIR','etc/dbus-1/system.d/'), glob.glob(os.path.join(cwd,'data/conf','*.conf')))
 env.Install(os.path.join('$DESTDIR', 'usr/share/dbus-1/services/'), glob.glob(os.path.join(cwd,'data/services','*.service')))
 env.Install(os.path.join('$DESTDIR', 'usr/share/dbus-1/system-services/'), glob.glob(os.path.join(cwd,'data/system-services','*.service')))
-env.Install(os.path.join('$DESTDIR', 'usr/share/polikit-1/actions/'), glob.glob(os.path.join(cwd,'data/polikit-action','*.policy')))
+env.Install(os.path.join('$DESTDIR', 'usr/share/polkit-1/actions/'), glob.glob(os.path.join(cwd,'data/polkit-action','*.policy')))
 env.Install(os.path.join('$DESTDIR','usr/share/glib-2.0/schemas'), glob.glob(os.path.join(cwd,'data/schemas/','*.xml')))
 
 if os.path.exists(os.path.join(cwd,'data/lang')):
