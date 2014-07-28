@@ -1,6 +1,8 @@
 GOROOT = $(shell go env GOROOT)
 PREFIX = /usr
 TOPDIR = ${CURDIR}
+GOPKG_PREFIX = "pkg.linuxdeepin.com/dde-daemon"
+GOPATH_LOCAL = "${CURDIR}/gopath:${GOPATH}"
 
 BINARIES =  \
     backlight_helper \
@@ -17,7 +19,7 @@ LANGUAGES = $(basename $(notdir $(wildcard data/po/*.po)))
 all: build
 
 out/bin/%:
-	cd bin/${@F}; GOPATH=${GOPATH}:${TOPDIR} go build -o ${TOPDIR}/$@
+	env GOPATH=${GOPATH_LOCAL} go build -o $@  ${GOPKG_PREFIX}/bin/${@F}
 
 out/locale/%/LC_MESSAGES/dde-daemon.mo:data/po/%.po
 	mkdir -p $(@D)
