@@ -1,8 +1,7 @@
 GOROOT = $(shell go env GOROOT)
 PREFIX = /usr
-TOPDIR = ${CURDIR}
-GOPKG_PREFIX = "pkg.linuxdeepin.com/dde-daemon"
 GOPATH_LOCAL = "${CURDIR}/gopath:${GOPATH}"
+GOPKG_PREFIX = pkg.linuxdeepin.com/dde-daemon
 
 BINARIES =  \
     backlight_helper \
