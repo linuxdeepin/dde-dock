@@ -1,32 +1,32 @@
 package main
 
-import _ "dde-daemon/keybinding"
-import _ "dde-daemon/screensaver"
-import _ "dde-daemon/power"
+import _ "pkg.linuxdeepin.com/dde-daemon/keybinding"
+import _ "pkg.linuxdeepin.com/dde-daemon/screensaver"
+import _ "pkg.linuxdeepin.com/dde-daemon/power"
 import "pkg.linuxdeepin.com/lib/proxy"
 
-import _ "dde-daemon/audio"
+import _ "pkg.linuxdeepin.com/dde-daemon/audio"
 
-import _ "dde-daemon/themes"
+import _ "pkg.linuxdeepin.com/dde-daemon/themes"
 
-import _ "dde-daemon/clipboard"
-import _ "dde-daemon/datetime"
-import _ "dde-daemon/mime"
+import _ "pkg.linuxdeepin.com/dde-daemon/clipboard"
+import _ "pkg.linuxdeepin.com/dde-daemon/datetime"
+import _ "pkg.linuxdeepin.com/dde-daemon/mime"
 
-import _ "dde-daemon/screen_edges"
+import _ "pkg.linuxdeepin.com/dde-daemon/screen_edges"
 
-import _ "dde-daemon/bluetooth"
+import _ "pkg.linuxdeepin.com/dde-daemon/bluetooth"
 
-import _ "dde-daemon/network"
-import _ "dde-daemon/mounts"
-import _ "dde-daemon/inputdevices"
+import _ "pkg.linuxdeepin.com/dde-daemon/network"
+import _ "pkg.linuxdeepin.com/dde-daemon/mounts"
+import _ "pkg.linuxdeepin.com/dde-daemon/inputdevices"
 
-import _ "dde-daemon/dock"
-import _ "dde-daemon/launcher"
+import _ "pkg.linuxdeepin.com/dde-daemon/dock"
+import _ "pkg.linuxdeepin.com/dde-daemon/launcher"
 
-import _ "dde-daemon/dsc"
-import _ "dde-daemon/mpris"
-import _ "dde-daemon/systeminfo"
+import _ "pkg.linuxdeepin.com/dde-daemon/dsc"
+import _ "pkg.linuxdeepin.com/dde-daemon/mpris"
+import _ "pkg.linuxdeepin.com/dde-daemon/systeminfo"
 
 import "pkg.linuxdeepin.com/lib/glib-2.0"
 
@@ -39,7 +39,7 @@ import "pkg.linuxdeepin.com/lib"
 import "pkg.linuxdeepin.com/lib/log"
 import "os"
 import "pkg.linuxdeepin.com/lib/dbus"
-import "dde-daemon"
+import "pkg.linuxdeepin.com/dde-daemon"
 
 var logger = log.NewLogger("com.deepin.daemon")
 

@@ -21,7 +21,7 @@
 
 package accounts
 
-import "dde-daemon"
+import "pkg.linuxdeepin.com/dde-daemon"
 
 import (
 	"pkg.linuxdeepin.com/lib/dbus"

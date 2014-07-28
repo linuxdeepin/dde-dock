@@ -22,10 +22,10 @@
 package main
 
 import (
-	"dde-daemon/grub2"
 	"flag"
 	"fmt"
 	"os"
+	"pkg.linuxdeepin.com/dde-daemon/grub2"
 	"pkg.linuxdeepin.com/lib"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/log"

@@ -1,6 +1,6 @@
 package screen_edges
 
-import "dde-daemon"
+import "pkg.linuxdeepin.com/dde-daemon"
 
 func init() {
 	loader.Register(&loader.Module{"screen_edges", Start, Stop, true})

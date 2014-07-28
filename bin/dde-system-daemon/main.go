@@ -5,8 +5,8 @@ import "pkg.linuxdeepin.com/lib/log"
 import "pkg.linuxdeepin.com/lib"
 import "pkg.linuxdeepin.com/lib/dbus"
 import "os"
-import _ "dde-daemon/accounts"
-import "dde-daemon"
+import _ "pkg.linuxdeepin.com/dde-daemon/accounts"
+import "pkg.linuxdeepin.com/dde-daemon"
 
 var logger = log.NewLogger("com.deepin.daemon")
 
