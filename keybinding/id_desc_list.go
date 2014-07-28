@@ -60,9 +60,9 @@ func initSystemIdDescList() {
 		idDescInfo{1, "terminal", Tr("Terminal")},
 		idDescInfo{5, "terminal-quake", Tr("Terminal Quake Window")},
 		idDescInfo{4, "logout", Tr("Logout")},
-		idDescInfo{12, "deepin-translator", Tr("Disable Touchpad")},
-		idDescInfo{13, "switch-layout", Tr("Deepin Translator")},
-		idDescInfo{11, "disable-touchpad", Tr("Switch Layout")},
+		idDescInfo{12, "disable-touchpad", Tr("Disable Touchpad")},
+		idDescInfo{13, "deepin-translator", Tr("Deepin Translator")},
+		idDescInfo{11, "switch-layout", Tr("Switch Layout")},
 	}
 }
 
