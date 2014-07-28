@@ -3,7 +3,6 @@ package dock
 import (
 	"bytes"
 	"crypto/md5"
-	"pkg.linuxdeepin.com/lib/dbus"
 	"github.com/BurntSushi/xgb/composite"
 	"github.com/BurntSushi/xgb/damage"
 	"github.com/BurntSushi/xgb/xfixes"
@@ -14,6 +13,7 @@ import (
 	"github.com/BurntSushi/xgbutil/xgraphics"
 	"github.com/BurntSushi/xgbutil/xprop"
 	"github.com/BurntSushi/xgbutil/xwindow"
+	"pkg.linuxdeepin.com/lib/dbus"
 )
 
 var (
@@ -162,14 +162,14 @@ func (m *TrayManager) RequireManageTrayIcons() {
 		return
 	}
 
-	timeStamp, _ := ewmh.WmUserTimeGet(TrayXU, TRAYMANAGER.owner)
+	timeStamp, _ := ewmh.WmUserTimeGet(TrayXU, m.owner)
 	cm, err := xevent.NewClientMessage(
 		32,
 		TrayXU.RootWin(),
 		mstype,
 		int(timeStamp),
 		int(_NET_SYSTEM_TRAY_S0),
-		int(TRAYMANAGER.owner),
+		int(m.owner),
 	)
 
 	if err != nil {
@@ -182,15 +182,19 @@ func (m *TrayManager) RequireManageTrayIcons() {
 		uint32(xproto.EventMaskStructureNotify))
 }
 
+func (m *TrayManager) getSelectionOwner() (*xproto.GetSelectionOwnerReply, error) {
+	_trayInstance := xproto.GetSelectionOwner(TrayXU.Conn(), _NET_SYSTEM_TRAY_S0)
+	return _trayInstance.Reply()
+}
+
 func (m *TrayManager) tryOwner() bool {
 	// Make a check, the tray application MUST be 1.
-	_trayInstance := xproto.GetSelectionOwner(TrayXU.Conn(), _NET_SYSTEM_TRAY_S0)
-	reply, err := _trayInstance.Reply()
+	reply, err := m.getSelectionOwner()
 	if err != nil {
 		logger.Fatal(err)
 	}
 	if reply.Owner == 0 {
-		timeStamp, _ := ewmh.WmUserTimeGet(TrayXU, TRAYMANAGER.owner)
+		timeStamp, _ := ewmh.WmUserTimeGet(TrayXU, m.owner)
 		err := xproto.SetSelectionOwnerChecked(
 			TrayXU.Conn(),
 			m.owner,
@@ -210,32 +214,56 @@ func (m *TrayManager) tryOwner() bool {
 
 		xprop.ChangeProp32(
 			TrayXU,
-			TRAYMANAGER.owner,
+			m.owner,
 			"_NET_SYSTEM_TRAY_VISUAL",
 			"VISUALID",
 			uint(TRAYMANAGER.visual),
 		)
 		xprop.ChangeProp32(
 			TrayXU,
-			TRAYMANAGER.owner,
+			m.owner,
 			"_NET_SYSTEM_TRAY_ORIENTAION",
 			"CARDINAL",
 			0,
 		)
-		xfixes.SelectSelectionInput(TrayXU.Conn(), TrayXU.RootWin(), _NET_SYSTEM_TRAY_S0, xfixes.SelectionEventMaskSelectionClientClose)
-		return true
+		xfixes.SelectSelectionInput(
+			TrayXU.Conn(),
+			TrayXU.RootWin(),
+			_NET_SYSTEM_TRAY_S0,
+			xfixes.SelectionEventMaskSelectionClientClose,
+		)
+		reply, err := m.getSelectionOwner()
+		if err != nil {
+			logger.Warning(err)
+			return false
+		}
+		return reply.Owner != 0
 	} else {
 		logger.Info("Another System tray application is running")
 		return false
 	}
 }
 
-func (m *TrayManager) unmanage() {
-	timeStamp, _ := ewmh.WmUserTimeGet(TrayXU, TRAYMANAGER.owner)
+func (m *TrayManager) unmanage() bool {
+	reply, err := m.getSelectionOwner()
+	if err != nil {
+		logger.Info("get selection owner failed:", err)
+		return false
+	}
+	if reply.Owner != m.owner {
+		logger.Info("not selection owner")
+		return false
+	}
+
+	timeStamp, _ := ewmh.WmUserTimeGet(TrayXU, m.owner)
 	// FIXME:
 	// is 0 right?
-	xproto.SetSelectionOwner(TrayXU.Conn(), 0,
-		_NET_SYSTEM_TRAY_S0, xproto.Timestamp(timeStamp)).Check()
+	return xproto.SetSelectionOwnerChecked(
+		TrayXU.Conn(),
+		0,
+		_NET_SYSTEM_TRAY_S0,
+		xproto.Timestamp(timeStamp),
+	).Check() == nil
 }
 
 var isListened bool = false
@@ -271,6 +299,7 @@ func (m *TrayManager) startListener() {
 			case xproto.DestroyNotifyEvent:
 				m.removeTrayIcon(ev.Window)
 			case xproto.SelectionClearEvent:
+				// FIXME: is this work???
 				//clean up
 				m.unmanage()
 			case xfixes.SelectionNotifyEvent:
