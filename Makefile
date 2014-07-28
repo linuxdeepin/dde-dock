@@ -19,11 +19,11 @@ all: build
 out/bin/%:
 	cd bin/${@F}; GOPATH=${GOPATH}:${TOPDIR} go build -o ${TOPDIR}/$@
 
-out/locale/%/dde-daemon.mo:data/po/%.po
+out/locale/%/LC_MESSAGES/dde-daemon.mo:data/po/%.po
 	mkdir -p $(@D)
 	msgfmt -o $@ $<
 
-translate: $(addsuffix /dde-daemon.mo, $(addprefix out/locale/, ${LANGUAGES}))
+translate: $(addsuffix /LC_MESSAGES/dde-daemon.mo, $(addprefix out/locale/, ${LANGUAGES}))
 
 build: $(addprefix out/bin/, ${BINARIES})
 
