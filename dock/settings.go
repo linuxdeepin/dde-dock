@@ -22,10 +22,10 @@ const (
 
 const (
 	DisplayModeModernMode int32 = iota
-	DisplayModeLegacyMode
+	DisplayModeClassicMode
 
-	DisplayModeModernModeStr = "legacy"
-	DisplayModeLegacyModeStr = "modern"
+	DisplayModeModernModeStr  = "classic"
+	DisplayModeClassicModeStr = "modern"
 )
 
 type Setting struct {
