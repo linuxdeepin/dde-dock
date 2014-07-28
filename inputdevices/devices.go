@@ -58,7 +58,7 @@ func (op *KbdEntry) Reset() bool {
 func (op *KbdEntry) LayoutList() map[string]string {
 	defer func() {
 		if err := recover(); err != nil {
-			logObj.Warning("Receive Error: ", err)
+			logger.Warning("Receive Error: ", err)
 		}
 	}()
 
@@ -77,7 +77,7 @@ func (op *KbdEntry) GetLayoutLocale(layout string) string {
 	listMap := op.LayoutList()
 	desc, ok := listMap[layout]
 	if !ok {
-		logObj.Warningf("Invalid layout: '%s'", layout)
+		logger.Warningf("Invalid layout: '%s'", layout)
 		return ""
 	}
 
@@ -275,7 +275,7 @@ func getDefaultLayout() string {
 	option := ""
 	contents, err := ioutil.ReadFile(KBD_DEFAULT_FILE)
 	if err != nil {
-		logObj.Warning("ReadFile Failed:", err)
+		logger.Warning("ReadFile Failed:", err)
 		return layout + LAYOUT_DELIM + option
 	}
 

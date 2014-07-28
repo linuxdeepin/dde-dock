@@ -58,7 +58,7 @@ func getCachePath() (string, bool) {
 	cachePath := path.Join(userCache, _CACHE_DIR)
 	if !dutils.IsFileExist(cachePath) {
 		if err := os.MkdirAll(cachePath, 0755); err != nil {
-			Logger.Warningf("MkdirAll '%s' failed: %v",
+			logger.Warningf("MkdirAll '%s' failed: %v",
 				cachePath, err)
 			return "", false
 		}
@@ -141,7 +141,7 @@ func searchString(key, md5 string) []string {
 
 	filename := path.Join(cachePath, md5)
 	if !dutils.IsFileExist(filename) {
-		Logger.Warningf("'%s' not exist", filename)
+		logger.Warningf("'%s' not exist", filename)
 		return list
 	}
 
@@ -170,7 +170,7 @@ func searchStartWithString(key, md5 string) []string {
 
 	filename := path.Join(cachePath, md5)
 	if !dutils.IsFileExist(filename) {
-		Logger.Warningf("'%s' not exist", filename)
+		logger.Warningf("'%s' not exist", filename)
 		return list
 	}
 

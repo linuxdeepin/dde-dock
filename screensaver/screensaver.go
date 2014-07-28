@@ -6,7 +6,7 @@ import (
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
 	"pkg.linuxdeepin.com/lib/dbus"
-	log "pkg.linuxdeepin.com/lib/logger"
+	"pkg.linuxdeepin.com/lib/log"
 	"sync"
 )
 

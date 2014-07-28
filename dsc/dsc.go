@@ -24,12 +24,12 @@ package dsc
 import (
 	"os/exec"
 	"path"
-	"pkg.linuxdeepin.com/lib/logger"
+	"pkg.linuxdeepin.com/lib/log"
 	dutils "pkg.linuxdeepin.com/lib/utils"
 	"time"
 )
 
-var Logger = logger.NewLogger("dde-session-daemon/dsc")
+var logger = log.NewLogger("dde-session-daemon/dsc")
 
 var quitFlag = make(chan bool)
 
@@ -38,7 +38,7 @@ const (
 )
 
 func setDSCAutoUpdate(interval time.Duration) {
-	Logger.Info("AutoUpgrade interval:", interval)
+	logger.Info("AutoUpgrade interval:", interval)
 	if interval <= 0 {
 		return
 	}
@@ -49,7 +49,7 @@ func setDSCAutoUpdate(interval time.Duration) {
 		return
 	case <-timer:
 		go exec.Command("/usr/bin/dsc-daemon", []string{"--no-daemon"}...).Run()
-		Logger.Info("Running dsc-daemon.....")
+		logger.Info("Running dsc-daemon.....")
 		return
 	}
 }

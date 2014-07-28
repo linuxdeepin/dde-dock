@@ -2,11 +2,11 @@ package systeminfo
 
 import (
 	"dbus/org/freedesktop/udisks2"
-	"pkg.linuxdeepin.com/lib/dbus"
-	"pkg.linuxdeepin.com/lib/logger"
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/log"
 	"strconv"
 	"strings"
 )
@@ -31,7 +31,7 @@ const (
 )
 
 var (
-	logObject = logger.NewLogger("daemon/system-info")
+	logger = log.NewLogger("com.deepin.daemon.SystemInfo")
 )
 
 func IsFileNotExist(filename string) bool {
@@ -49,7 +49,7 @@ func GetVersion() int32 {
 	}
 	contents, err := ioutil.ReadFile(_VERSION_ETC)
 	if err != nil {
-		logObject.Infof("Read File Failed In Get Version: %s",
+		logger.Infof("Read File Failed In Get Version: %s",
 			err)
 		return 0
 	}
@@ -78,7 +78,7 @@ func GetCpuInfo() string {
 	}
 	contents, err := ioutil.ReadFile(_PROC_CPU_INFO)
 	if err != nil {
-		logObject.Infof("Read File Failed In Get CPU Info: %s",
+		logger.Infof("Read File Failed In Get CPU Info: %s",
 			err)
 		return ""
 	}
@@ -111,7 +111,7 @@ func GetMemoryCap() (memCap uint64) {
 	}
 	contents, err := ioutil.ReadFile(_PROC_MEM_INFO)
 	if err != nil {
-		logObject.Infof("Read File Failed In Get Memory Cap: %s",
+		logger.Infof("Read File Failed In Get Memory Cap: %s",
 			err)
 		return 0
 	}
@@ -136,7 +136,7 @@ func GetSystemType() (sysType int64) {
 	cmd := exec.Command("/bin/uname", "-m")
 	out, err := cmd.Output()
 	if err != nil {
-		logObject.Infof("Exec 'uname -m' Failed In Get System Type: %s",
+		logger.Infof("Exec 'uname -m' Failed In Get System Type: %s",
 			err)
 		return int64(0)
 	}
@@ -158,7 +158,7 @@ func GetDiskCap() (diskCap uint64) {
 	driList := []dbus.ObjectPath{}
 	obj, err := udisks2.NewObjectManager("org.freedesktop.UDisks2", "/org/freedesktop/UDisks2")
 	if err != nil {
-		logObject.Infof("udisks2: New ObjectManager Failed:%v", err)
+		logger.Infof("udisks2: New ObjectManager Failed:%v", err)
 		return 0
 	}
 	managers, _ := obj.GetManagedObjects()
@@ -208,7 +208,7 @@ func NewSystemInfo() *SystemInfo {
 }
 
 func Start() {
-	logObject.BeginTracing()
+	logger.BeginTracing()
 
 	sys := NewSystemInfo()
 	err := dbus.InstallOnSession(sys)
@@ -217,5 +217,5 @@ func Start() {
 	}
 }
 func Stop() {
-	logObject.EndTracing()
+	logger.EndTracing()
 }

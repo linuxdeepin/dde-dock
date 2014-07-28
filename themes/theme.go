@@ -86,7 +86,7 @@ func (obj *Theme) setGtkTheme() {
 	wmPreSettings.SetString("theme", obj.GtkTheme)
 	if ok := dutils.WriteKeyToKeyFile(path.Join(homeDir, QT_CONFIG_FILE),
 		QT_KEY_GROUP, QT_KEY_STYLE, QT_STYLE_VALUE); !ok {
-		Logger.Warning("Set QT Style Failed")
+		logger.Warning("Set QT Style Failed")
 		return
 	}
 }
@@ -154,7 +154,7 @@ func setQtFont(fontStr string) {
 	value := "\"" + fontName + "," + fontSize + QT_FONT_ARGS + "\""
 	if ok := dutils.WriteKeyToKeyFile(filename, QT_KEY_GROUP,
 		QT_KEY_FONT, value); !ok {
-		Logger.Warning("Set Qt Font Failed")
+		logger.Warning("Set Qt Font Failed")
 		return
 	}
 }
@@ -168,7 +168,7 @@ func setMonoFont(fontStr string) {
 		"-t", "string",
 		"-s", "/desktop/gnome/interface/monospace_font_name",
 		fontStr).CombinedOutput(); err != nil {
-		Logger.Warning("Set mono font failed:", string(out))
+		logger.Warning("Set mono font failed:", string(out))
 		return
 	}
 }
@@ -187,7 +187,7 @@ func newTheme(info ThemeInfo) *Theme {
 		var err error
 		t.watcher, err = fsnotify.NewWatcher()
 		if err != nil {
-			Logger.Warningf("New Watcher Failed: %v", err)
+			logger.Warningf("New Watcher Failed: %v", err)
 			panic(err)
 		}
 

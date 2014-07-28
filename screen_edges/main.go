@@ -27,7 +27,7 @@ import (
 	"dbus/com/deepin/dde/launcher"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
-	"pkg.linuxdeepin.com/lib/logger"
+	"pkg.linuxdeepin.com/lib/log"
 	"sync"
 )
 
@@ -35,7 +35,7 @@ var (
 	dspObj       *libdsp.Display
 	areaObj      *libarea.XMouseArea
 	launchObj    *launcher.Launcher
-	Logger       = logger.NewLogger("daemon/zone")
+	logger       = log.NewLogger(ZONE_DEST)
 	zoneSettings = gio.NewSettings("com.deepin.dde.zone")
 
 	mutex         = new(sync.Mutex)
@@ -92,34 +92,34 @@ func (op *Manager) BottomRightAction() string {
 }
 
 func Stop() {
-	Logger.EndTracing()
+	logger.EndTracing()
 }
 func Start() {
-	Logger.BeginTracing()
+	logger.BeginTracing()
 
 	var err error
 	dspObj, err = libdsp.NewDisplay("com.deepin.daemon.Display",
 		"/com/deepin/daemon/Display")
 	if err != nil {
-		Logger.Fatal("New Display Failed: ", err)
+		logger.Fatal("New Display Failed: ", err)
 	}
 
 	areaObj, err = libarea.NewXMouseArea("com.deepin.api.XMouseArea",
 		"/com/deepin/api/XMouseArea")
 	if err != nil {
-		Logger.Fatal("New XMouseArea Failed: ", err)
+		logger.Fatal("New XMouseArea Failed: ", err)
 	}
 
 	launchObj, err = launcher.NewLauncher("com.deepin.dde.launcher",
 		"/com/deepin/dde/launcher")
 	if err != nil {
-		Logger.Fatal("New DDE Launcher Failed: ", err)
+		logger.Fatal("New DDE Launcher Failed: ", err)
 	}
 
 	m := newManager()
 	err = dbus.InstallOnSession(m)
 	if err != nil {
-		Logger.Fatal("Install Zone Session Failed: ", err)
+		logger.Fatal("Install Zone Session Failed: ", err)
 	}
 
 	m.SetTopLeft(m.TopLeftAction())

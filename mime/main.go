@@ -1,10 +1,10 @@
 package mime
 
 import (
-	"pkg.linuxdeepin.com/lib/dbus"
-	"pkg.linuxdeepin.com/lib/logger"
-	dutils "pkg.linuxdeepin.com/lib/utils"
 	"os"
+	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/log"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 )
 
 const (
@@ -24,7 +24,7 @@ const (
 )
 
 var (
-	Logger = logger.NewLogger("daemon/mime")
+	logger = log.NewLogger(_DEFAULT_APPS_DEST)
 )
 
 func (dapp *DefaultApps) GetDBusInfo() dbus.DBusInfo {
@@ -46,11 +46,11 @@ func (media *MediaMount) GetDBusInfo() dbus.DBusInfo {
 func (dapp *DefaultApps) Reset() bool {
 	homeDir := dutils.GetHomeDir()
 	if len(homeDir) < 1 {
-		Logger.Warning("Get homeDir failed")
+		logger.Warning("Get homeDir failed")
 		return false
 	}
 	if err := os.Remove(homeDir + "/" + MIME_CACHE_FILE); err != nil {
-		Logger.Warning("Delete '%s' failed: %v",
+		logger.Warning("Delete '%s' failed: %v",
 			homeDir+"/"+MIME_CACHE_FILE, err)
 		return false
 	}
@@ -71,11 +71,11 @@ func (media *MediaMount) Reset() bool {
 }
 
 func Stop() {
-	Logger.EndTracing()
+	logger.EndTracing()
 }
 
 func Start() {
-	Logger.BeginTracing()
+	logger.BeginTracing()
 
 	var err error
 
@@ -85,12 +85,12 @@ func Start() {
 	}
 	err = dbus.InstallOnSession(dapp)
 	if err != nil {
-		Logger.Fatal("Install Session Failed:", err)
+		logger.Fatal("Install Session Failed:", err)
 	}
 
 	media := NewMediaMount()
 	err = dbus.InstallOnSession(media)
 	if err != nil {
-		Logger.Fatal("Install Session Failed:", err)
+		logger.Fatal("Install Session Failed:", err)
 	}
 }

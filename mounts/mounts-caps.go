@@ -38,7 +38,7 @@ func getDiskCap(path string) (int64, int64) {
 		bytes, err := exec.Command(CMD_DF).Output()
 		if err != nil || len(string(bytes)) < 1 {
 			if i == 9 {
-				Logger.Warning("Exec 'df -h' failed:", err)
+				logger.Warning("Exec 'df -h' failed:", err)
 				return 0, 0
 			}
 			<-time.After(time.Second * 1)

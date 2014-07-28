@@ -31,20 +31,20 @@ import (
 
 func writeDatasToFile(datas interface{}, filename string) {
 	if datas == nil {
-		Logger.Warning("writeDatasToFile args error")
+		logger.Warning("writeDatasToFile args error")
 		return
 	}
 
 	var w bytes.Buffer
 	enc := gob.NewEncoder(&w)
 	if err := enc.Encode(datas); err != nil {
-		Logger.Warning("Gob Encode Datas Failed:", err)
+		logger.Warning("Gob Encode Datas Failed:", err)
 		return
 	}
 
 	fp, err := os.Create(filename)
 	if err != nil {
-		Logger.Warning("Open '%s' failed:", err)
+		logger.Warning("Open '%s' failed:", err)
 		return
 	}
 	defer fp.Close()
@@ -55,20 +55,20 @@ func writeDatasToFile(datas interface{}, filename string) {
 
 func readDatasFromFile(datas interface{}, filename string) bool {
 	if !dutils.IsFileExist(filename) || datas == nil {
-		Logger.Warning("readDatasFromFile args error")
+		logger.Warning("readDatasFromFile args error")
 		return false
 	}
 
 	contents, err := ioutil.ReadFile(filename)
 	if err != nil {
-		Logger.Warning("ReadFile '%s' failed:", err)
+		logger.Warning("ReadFile '%s' failed:", err)
 		return false
 	}
 
 	r := bytes.NewBuffer(contents)
 	dec := gob.NewDecoder(r)
 	if err = dec.Decode(datas); err != nil {
-		Logger.Warning("Decode Datas Failed:", err)
+		logger.Warning("Decode Datas Failed:", err)
 		return false
 	}
 

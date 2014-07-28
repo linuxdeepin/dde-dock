@@ -65,7 +65,7 @@ func getFileMd5(file string) (string, bool) {
 
 	contents, err := ioutil.ReadFile(file)
 	if err != nil {
-		Logger.Debugf("ReadFile '%s' failed: %v", file, err)
+		logger.Debugf("ReadFile '%s' failed: %v", file, err)
 		return "", false
 	}
 

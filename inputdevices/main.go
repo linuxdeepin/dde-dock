@@ -26,11 +26,11 @@ import (
 	libsession "dbus/com/deepin/sessionmanager"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
-	Logger "pkg.linuxdeepin.com/lib/logger"
+	"pkg.linuxdeepin.com/lib/log"
 )
 
 var (
-	logObj     = Logger.NewLogger("input device")
+	logger     = log.NewLogger(DEVICE_DEST)
 	xsObj      *libsession.XSettings
 	greeterObj *greeterutils.GreeterUtils
 	managerObj *Manager
@@ -42,22 +42,22 @@ var (
 )
 
 func Stop() {
-	logObj.EndTracing()
+	logger.EndTracing()
 }
 func Start() {
-	logObj.BeginTracing()
-	logObj.SetRestartCommand("/usr/lib/deepin-daemon/dde-session-daemon")
+	logger.BeginTracing()
+	logger.SetRestartCommand("/usr/lib/deepin-daemon/dde-session-daemon")
 
 	var err error
 	xsObj, err = libsession.NewXSettings("com.deepin.SessionManager",
 		"/com/deepin/XSettings")
 	if err != nil {
-		logObj.Warning("New XSettings Object Failed: ", err)
+		logger.Warning("New XSettings Object Failed: ", err)
 		return
 	}
 
 	if greeterObj, err = greeterutils.NewGreeterUtils("com.deepin.api.GreeterUtils", "/com/deepin/api/GreeterUtils"); err != nil {
-		logObj.Warning("New GreeterUtils failed:", err)
+		logger.Warning("New GreeterUtils failed:", err)
 		return
 	}
 
@@ -65,7 +65,7 @@ func Start() {
 
 	managerObj = NewManager()
 	if err = dbus.InstallOnSession(managerObj); err != nil {
-		logObj.Fatal("Manager DBus Session Failed: ", err)
+		logger.Fatal("Manager DBus Session Failed: ", err)
 	}
 
 	datas := parseXML(_LAYOUT_XML_PATH)
@@ -77,21 +77,21 @@ func Start() {
 		if info.Id == "mouse" {
 			mouse := NewMouse()
 			if err := dbus.InstallOnSession(mouse); err != nil {
-				logObj.Fatal("Mouse DBus Session Failed: ", err)
+				logger.Fatal("Mouse DBus Session Failed: ", err)
 			}
 			managerObj.mouseObj = mouse
 			mouseFlag = true
 		} else if info.Id == "touchpad" {
 			tpad := NewTPad()
 			if err := dbus.InstallOnSession(tpad); err != nil {
-				logObj.Fatal("TPad DBus Session Failed: ", err)
+				logger.Fatal("TPad DBus Session Failed: ", err)
 			}
 			tpadFlag = true
 			managerObj.tpadObj = tpad
 		} else if info.Id == "keyboard" {
 			kbd := NewKeyboard()
 			if err := dbus.InstallOnSession(kbd); err != nil {
-				logObj.Fatal("Kbd DBus Session Failed: ", err)
+				logger.Fatal("Kbd DBus Session Failed: ", err)
 			}
 			managerObj.kbdObj = kbd
 			//setLayoutOptions()
@@ -108,7 +108,7 @@ func Start() {
 		dbus.NotifyChange(managerObj, "Infos")
 		mouse := NewMouse()
 		if err := dbus.InstallOnSession(mouse); err != nil {
-			logObj.Fatal("Mouse DBus Session Failed: ", err)
+			logger.Fatal("Mouse DBus Session Failed: ", err)
 		}
 		managerObj.mouseObj = mouse
 		tpadSettings.SetBoolean(TPAD_KEY_ENABLE, true)

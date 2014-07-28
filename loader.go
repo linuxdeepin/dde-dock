@@ -1,10 +1,10 @@
 package loader
 
 import (
-	"pkg.linuxdeepin.com/lib/logger"
+	"pkg.linuxdeepin.com/lib/log"
 )
 
-var Logger = logger.NewLogger("dde.daemon.loader")
+var logger = log.NewLogger("dde.daemon.loader")
 
 type Module struct {
 	Name   string
@@ -30,7 +30,7 @@ func Register(newModule *Module) {
 		}
 	}
 	if newModule.Start == nil || newModule.Stop == nil {
-		Logger.Fatal("can't register an incomplete module " + newModule.Name)
+		logger.Fatal("can't register an incomplete module " + newModule.Name)
 	}
 	modules = append([]*Module{newModule}, modules...)
 }
@@ -40,7 +40,7 @@ func Start() {
 		func() {
 			defer func() {
 				if err := recover(); err != nil {
-					Logger.Error("Start module", m.Name, "failed:", err)
+					logger.Error("Start module", m.Name, "failed:", err)
 				}
 			}()
 			m.Start()
@@ -52,7 +52,7 @@ func Stop() {
 		func() {
 			defer func() {
 				if err := recover(); err != nil {
-					Logger.Error("Stop module", m.Name, "failed:", err)
+					logger.Error("Stop module", m.Name, "failed:", err)
 				}
 			}()
 			m.Start()

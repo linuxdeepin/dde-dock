@@ -126,7 +126,7 @@ func conflictChecked(id int32, shortcut string) (bool, []int32) {
 		ok   bool
 	)
 
-	Logger.Info("Check Conflict:", shortcut)
+	logger.Info("Check Conflict:", shortcut)
 	if tmpKey == "super-super_l" || tmpKey == "super-super_r" ||
 		tmpKey == "super" {
 		info, ok = newKeycodeInfo("Super_L")
@@ -135,7 +135,7 @@ func conflictChecked(id int32, shortcut string) (bool, []int32) {
 	}
 
 	if !ok {
-		Logger.Warning("new keycode failed:", shortcut)
+		logger.Warning("new keycode failed:", shortcut)
 		return false, []int32{}
 	}
 
@@ -295,13 +295,13 @@ func setSystemValue(id int32, value string, action bool) {
 	for _, info := range systemIdDescList {
 		if info.Id == id {
 			list := sysGSettings.GetStrv(info.Name)
-			Logger.Infof("Key: %v, Value: %v", info.Name, list)
+			logger.Infof("Key: %v, Value: %v", info.Name, list)
 			if len(list) > 1 && action {
 				list[1] = value
 			} else if len(list) > 0 && !action {
 				list[0] = value
 			}
-			Logger.Infof("Set Value: %v", info.Name, list)
+			logger.Infof("Set Value: %v", info.Name, list)
 			sysGSettings.SetStrv(info.Name, list)
 			return
 		}
@@ -310,13 +310,13 @@ func setSystemValue(id int32, value string, action bool) {
 	for _, info := range windowIdDescList {
 		if info.Id == id {
 			list := sysGSettings.GetStrv(info.Name)
-			Logger.Infof("Key: %v, Value: %v", info.Name, list)
+			logger.Infof("Key: %v, Value: %v", info.Name, list)
 			if len(list) > 1 && action {
 				list[1] = value
 			} else if len(list) > 0 && !action {
 				list[0] = value
 			}
-			Logger.Infof("Set Value: %v", info.Name, list)
+			logger.Infof("Set Value: %v", info.Name, list)
 			sysGSettings.SetStrv(info.Name, list)
 			return
 		}
@@ -325,13 +325,13 @@ func setSystemValue(id int32, value string, action bool) {
 	for _, info := range workspaceIdDescList {
 		if info.Id == id {
 			list := sysGSettings.GetStrv(info.Name)
-			Logger.Infof("Key: %v, Value: %v", info.Name, list)
+			logger.Infof("Key: %v, Value: %v", info.Name, list)
 			if len(list) > 1 && action {
 				list[1] = value
 			} else if len(list) > 0 && !action {
 				list[0] = value
 			}
-			Logger.Infof("Set Value: %v", info.Name, list)
+			logger.Infof("Set Value: %v", info.Name, list)
 			sysGSettings.SetStrv(info.Name, list)
 			return
 		}
@@ -339,9 +339,9 @@ func setSystemValue(id int32, value string, action bool) {
 }
 
 func modifyShortcutById(id int32, shortcut string) {
-	Logger.Infof("Id: %d, shortcut: %s", id, shortcut)
+	logger.Infof("Id: %d, shortcut: %s", id, shortcut)
 	if id >= CUSTOM_KEY_ID_BASE {
-		Logger.Info("---Set Custom key")
+		logger.Info("---Set Custom key")
 		setCustomValue(id, CUSTOM_KEY_SHORTCUT, shortcut)
 		return
 	}
@@ -360,13 +360,13 @@ func newKeycodeInfo(shortcut string) (KeycodeInfo, bool) {
 
 	mod, keys, err := keybind.ParseString(X, shortcut)
 	if err != nil {
-		Logger.Warningf("newKeycodeInfo parse '%s' failed: %v",
+		logger.Warningf("newKeycodeInfo parse '%s' failed: %v",
 			shortcut, err)
 		return KeycodeInfo{}, false
 	}
 
 	if len(keys) < 1 {
-		Logger.Warningf("'%s' no details", shortcut)
+		logger.Warningf("'%s' no details", shortcut)
 		return KeycodeInfo{}, false
 	}
 
@@ -381,8 +381,8 @@ func isKeycodeInfoEqual(info1, info2 *KeycodeInfo) bool {
 	}
 
 	if (info1.Detail == info2.Detail) && (info1.State == info2.State) {
-		Logger.Infof("Info1: %v -- %v", info1.Detail, info1.State)
-		Logger.Infof("Info2: %v -- %v", info2.Detail, info2.State)
+		logger.Infof("Info1: %v -- %v", info1.Detail, info1.State)
+		logger.Infof("Info2: %v -- %v", info2.Detail, info2.State)
 		return true
 	}
 

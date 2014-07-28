@@ -78,7 +78,7 @@ func setLayoutOption(option string) bool {
 	args = append(args, "-option")
 	args = append(args, option)
 	if err := exec.Command("/usr/bin/setxkbmap", args...).Run(); err != nil {
-		logObj.Warningf("Set option '%s' failed: %v", option, err)
+		logger.Warningf("Set option '%s' failed: %v", option, err)
 		return false
 	}
 
@@ -110,7 +110,7 @@ func setLayout(key string) {
 	args = append(args, "-option")
 	args = append(args, option)
 	if err := exec.Command("/usr/bin/setxkbmap", args...).Run(); err != nil {
-		logObj.Warningf("Set Layout: %s - %s Failed: %v",
+		logger.Warningf("Set Layout: %s - %s Failed: %v",
 			layout, option, err)
 		return
 	}
@@ -164,7 +164,7 @@ func listenDevsSettings() {
 		println("TPad Settings Changed: ", key)
 		switch key {
 		case TPAD_KEY_ENABLE:
-			logObj.Infof("%s changed", key)
+			logger.Infof("%s changed", key)
 			if enable := tpadSettings.GetBoolean(key); enable {
 				C.set_tpad_enable(C.TRUE)
 				ok := tpadSettings.GetBoolean(TPAD_KEY_W_TYPING)
@@ -273,7 +273,7 @@ func listenDevsSettings() {
 		case MOUSE_KEY_ACCEL, MOUSE_KEY_THRES:
 			thres := int(mouseSettings.GetDouble(MOUSE_KEY_THRES))
 			accel := mouseSettings.GetDouble(MOUSE_KEY_ACCEL)
-			//logObj.Infof("accel: %v, thres: %v", accel, thres)
+			//logger.Infof("accel: %v, thres: %v", accel, thres)
 			mouseName := C.CString("mouse")
 			defer C.free(unsafe.Pointer(mouseName))
 			C.set_motion(mouseName, C.double(accel), C.int(thres))
@@ -323,7 +323,7 @@ func listenDevsSettings() {
 }
 
 func initGSettingsSet(tpadFlag bool) {
-	//logObj.Info("Init devices start...")
+	//logger.Info("Init devices start...")
 	// init keyyboard gsettings value
 	layout := kbdSettings.GetString(KBD_KEY_LAYOUT)
 	setLayout(layout)
@@ -418,7 +418,7 @@ func initGSettingsSet(tpadFlag bool) {
 	tpadName := C.CString("touchpad")
 	defer C.free(unsafe.Pointer(tpadName))
 	C.set_motion(tpadName, C.double(accel), C.int(thres))
-	//logObj.Info("Init devices end...")
+	//logger.Info("Init devices end...")
 }
 
 func disableTPadWhenMouse() {

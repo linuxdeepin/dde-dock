@@ -77,7 +77,7 @@ func getMatchers(key string) map[*regexp.Regexp]uint32 {
 
 	charSpliter, err := regexp.Compile(`\s*`)
 	if err != nil {
-		Logger.Warning("Get char spliter failed:", err)
+		logger.Warning("Get char spliter failed:", err)
 		return m
 	}
 

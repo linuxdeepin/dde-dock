@@ -41,14 +41,14 @@ func isVersionSame() bool {
 	if !dutils.IsFileExist(versionFile) {
 		err := writeVersionFile(versionFile)
 		if err != nil {
-			Logger.Warning("writeVersionFile failed:", err)
+			logger.Warning("writeVersionFile failed:", err)
 		}
 		return false
 	}
 
 	contents, err := ioutil.ReadFile(versionFile)
 	if err != nil {
-		Logger.Warning("Read version file failed:", err)
+		logger.Warning("Read version file failed:", err)
 		return false
 	}
 
@@ -68,7 +68,7 @@ func writeVersionFile(filename string) error {
 
 	file, err := os.Create(filename)
 	if err != nil {
-		Logger.Warning("Open version file failed:", err)
+		logger.Warning("Open version file failed:", err)
 		return err
 	}
 	defer file.Close()
@@ -93,7 +93,7 @@ func cleanThumbCache() error {
 
 	file, err = os.Open(THUMB_CACHE_SYS_PATH)
 	if err != nil {
-		Logger.Warning("Open thumbnail cache dir failed:", err)
+		logger.Warning("Open thumbnail cache dir failed:", err)
 		return err
 	}
 	defer file.Close()

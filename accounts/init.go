@@ -25,7 +25,7 @@ import "dde-daemon"
 
 import (
 	"pkg.linuxdeepin.com/lib/dbus"
-	Logger "pkg.linuxdeepin.com/lib/logger"
+	"pkg.linuxdeepin.com/lib/log"
 )
 
 func init() {
@@ -33,7 +33,7 @@ func init() {
 }
 
 var (
-	logger = Logger.NewLogger(ACCOUNT_DEST)
+	logger = log.NewLogger(ACCOUNT_DEST)
 )
 
 func Start() {

@@ -3,8 +3,6 @@ package dock
 import "dbus/com/deepin/daemon/dock"
 import "pkg.linuxdeepin.com/lib/dbus"
 
-// import "pkg.linuxdeepin.com/lib/logger"
-
 // import "flag"
 import "github.com/BurntSushi/xgb/xproto"
 import "os"
@@ -13,7 +11,6 @@ import "strings"
 
 var (
 	ENTRY_MANAGER = initEntryManager()
-	// logger  = logger.NewLogger("com.deepin.daemon.DockAppsBuilder")
 )
 
 type EntryManager struct {

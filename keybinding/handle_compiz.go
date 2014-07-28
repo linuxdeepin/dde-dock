@@ -46,7 +46,7 @@ var (
 )
 
 func formatCompizShortcut(shortcut string) string {
-	Logger.Info("formatCompizShortcut:", shortcut)
+	logger.Info("formatCompizShortcut:", shortcut)
 	strs := strings.Split(shortcut, "-")
 	l := len(strs)
 	if l < 2 {
@@ -58,7 +58,7 @@ func formatCompizShortcut(shortcut string) string {
 		tmp += "<" + strs[i] + ">"
 	}
 	tmp += strs[l-1]
-	Logger.Info("formatCompizShortcut RET:", tmp)
+	logger.Info("formatCompizShortcut RET:", tmp)
 
 	return tmp
 }
@@ -66,7 +66,7 @@ func formatCompizShortcut(shortcut string) string {
 func (m *Manager) setCompizSettings(id int32, key, value string) {
 	k, ok := compizKeysMap[key]
 	if !ok {
-		Logger.Warningf("'%s' not in compizKeysMap", key)
+		logger.Warningf("'%s' not in compizKeysMap", key)
 		return
 	}
 

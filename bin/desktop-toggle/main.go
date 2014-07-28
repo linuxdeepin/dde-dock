@@ -22,18 +22,19 @@
 package main
 
 import (
-	liblogger "pkg.linuxdeepin.com/lib/logger"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/ewmh"
+	"pkg.linuxdeepin.com/lib/log"
 )
 
 func main() {
-	logger := liblogger.NewLogger("Desktop Toggle")
+	logger := log.NewLogger("dde-daemon/desktop-toggle")
+	logger.BeginTracing()
 	defer logger.EndTracing()
 
 	X, err := xgbutil.NewConn()
 	if err != nil {
-		logger.Info("New xgbutil connection failed: ", err)
+		logger.Error("New xgbutil connection failed: ", err)
 		panic(err)
 	}
 

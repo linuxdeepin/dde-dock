@@ -41,7 +41,7 @@ func isAppInWhiteList(pid uint32) bool {
 
 	contents, err := ioutil.ReadFile(filename)
 	if err != nil {
-		Logger.Warningf("ReadFile '%s' failed: %v", filename, err)
+		logger.Warningf("ReadFile '%s' failed: %v", filename, err)
 		return false
 	}
 
@@ -58,7 +58,7 @@ func isAppInWhiteList(pid uint32) bool {
 func getActiveWindow(X *xgbutil.XUtil) uint32 {
 	xid, err := ewmh.ActiveWindowGet(X)
 	if err != nil {
-		Logger.Warning("Get active window failed:", err)
+		logger.Warning("Get active window failed:", err)
 		return 0
 	}
 
@@ -68,7 +68,7 @@ func getActiveWindow(X *xgbutil.XUtil) uint32 {
 func getWindowState(X *xgbutil.XUtil, xid uint32) []string {
 	list, err := ewmh.WmStateGet(X, xproto.Window(xid))
 	if err != nil {
-		Logger.Warning("Get window state failed:", err)
+		logger.Warning("Get window state failed:", err)
 	}
 
 	return list
@@ -77,7 +77,7 @@ func getWindowState(X *xgbutil.XUtil, xid uint32) []string {
 func getWindowPid(X *xgbutil.XUtil, xid uint32) uint32 {
 	pid, err := ewmh.WmPidGet(X, xproto.Window(xid))
 	if err != nil {
-		Logger.Warning("Get window pid failed:", err)
+		logger.Warning("Get window pid failed:", err)
 	}
 
 	return uint32(pid)
@@ -86,7 +86,7 @@ func getWindowPid(X *xgbutil.XUtil, xid uint32) uint32 {
 func isActiveWindowFullscreen() (uint32, bool) {
 	X, err := xgbutil.NewConn()
 	if err != nil {
-		Logger.Warning("New xgbutil failed:", err)
+		logger.Warning("New xgbutil failed:", err)
 		return 0, false
 	}
 

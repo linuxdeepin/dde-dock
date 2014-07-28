@@ -22,13 +22,13 @@
 package grub2
 
 import (
-	"pkg.linuxdeepin.com/lib/dbus"
-	liblogger "pkg.linuxdeepin.com/lib/logger"
 	"os"
+	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/log"
 )
 
 var (
-	logger = liblogger.NewLogger(dbusGrubDest)
+	logger = log.NewLogger(dbusGrubDest)
 	grub   *Grub2
 )
 
@@ -57,7 +57,7 @@ func Stop() {
 	logger.EndTracing()
 }
 
-func SetLoggerLevel(level liblogger.Priority) {
+func SetLoggerLevel(level log.Priority) {
 	logger.SetLogLevel(level)
 }
 

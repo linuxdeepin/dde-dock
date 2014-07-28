@@ -25,7 +25,7 @@ import (
 	"os"
 	"pkg.linuxdeepin.com/lib"
 	"pkg.linuxdeepin.com/lib/dbus"
-	"pkg.linuxdeepin.com/lib/logger"
+	"pkg.linuxdeepin.com/lib/log"
 	"time"
 )
 
@@ -41,7 +41,7 @@ const (
 )
 
 var (
-	Logger = logger.NewLogger(DBUS_DEST)
+	logger = log.NewLogger(DBUS_DEST)
 )
 
 func newManager() *Manager {
@@ -64,16 +64,16 @@ func GetManager() *Manager {
 
 func main() {
 	if !lib.UniqueOnSession(DBUS_DEST) {
-		Logger.Warning("There is an Search running")
+		logger.Warning("There is an Search running")
 		return
 	}
 
-	Logger.BeginTracing()
-	defer Logger.EndTracing()
-	Logger.SetRestartCommand("/usr/lib/deepin-daemon/search")
+	logger.BeginTracing()
+	defer logger.EndTracing()
+	logger.SetRestartCommand("/usr/lib/deepin-daemon/search")
 
 	if err := dbus.InstallOnSession(GetManager()); err != nil {
-		Logger.Fatal("Search Install DBus Failed:", err)
+		logger.Fatal("Search Install DBus Failed:", err)
 		return
 	}
 	dbus.DealWithUnhandledMessage()
@@ -90,7 +90,7 @@ func main() {
 	})
 
 	if err := dbus.Wait(); err != nil {
-		Logger.Warning("Search lost dbus:", err)
+		logger.Warning("Search lost dbus:", err)
 		os.Exit(-1)
 	} else {
 		os.Exit(0)

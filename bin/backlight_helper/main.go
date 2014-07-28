@@ -1,7 +1,7 @@
 package main
 
 import "pkg.linuxdeepin.com/lib/dbus"
-import liblogger "pkg.linuxdeepin.com/lib/logger"
+import "pkg.linuxdeepin.com/lib/log"
 
 //#cgo pkg-config: libudev
 //#include "backlight.h"
@@ -37,7 +37,7 @@ func (*BacklightHelper) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-var logger = liblogger.NewLogger("com.deepin.daemon.helper.Backlight")
+var logger = log.NewLogger("com.deepin.daemon.helper.Backlight")
 
 func main() {
 	helper := NewBacklightHelper()

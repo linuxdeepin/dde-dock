@@ -109,14 +109,14 @@ func (obj *Theme) setAllProps() {
 		glib.KeyFileFlagsKeepComments|
 			glib.KeyFileFlagsKeepTranslations)
 	if err != nil {
-		Logger.Warningf("Load KeyFile '%s' Failed: %v", obj.filePath, err)
+		logger.Warningf("Load KeyFile '%s' Failed: %v", obj.filePath, err)
 		return
 	}
 
 	var str string
 	str, err = kf.GetString(THEME_GROUP_THEME, THEME_KEY_NAME)
 	if err != nil {
-		Logger.Warningf("Get '%s' failed: %v", THEME_KEY_NAME, err)
+		logger.Warningf("Get '%s' failed: %v", THEME_KEY_NAME, err)
 		return
 	}
 	obj.setPropName(str)
@@ -124,42 +124,42 @@ func (obj *Theme) setAllProps() {
 	str, err = kf.GetLocaleString(THEME_GROUP_THEME,
 		THEME_KEY_NAME, getCurrentLang())
 	if err != nil {
-		Logger.Warningf("Get locale '%s' failed: %v", THEME_KEY_NAME, err)
+		logger.Warningf("Get locale '%s' failed: %v", THEME_KEY_NAME, err)
 		return
 	}
 	obj.setPropDisplayName(str)
 
 	str, err = kf.GetString(THEME_GROUP_COMPONENT, THEME_KEY_GTK)
 	if err != nil {
-		Logger.Warningf("Get '%s' failed: %v", THEME_KEY_GTK, err)
+		logger.Warningf("Get '%s' failed: %v", THEME_KEY_GTK, err)
 		return
 	}
 	obj.setPropGtkTheme(str)
 
 	str, err = kf.GetString(THEME_GROUP_COMPONENT, THEME_KEY_ICON)
 	if err != nil {
-		Logger.Warningf("Get '%s' failed: %v", THEME_KEY_ICON, err)
+		logger.Warningf("Get '%s' failed: %v", THEME_KEY_ICON, err)
 		return
 	}
 	obj.setPropIconTheme(str)
 
 	str, err = kf.GetString(THEME_GROUP_COMPONENT, THEME_KEY_SOUND)
 	if err != nil {
-		Logger.Warningf("Get '%s' failed: %v", THEME_KEY_SOUND, err)
+		logger.Warningf("Get '%s' failed: %v", THEME_KEY_SOUND, err)
 		return
 	}
 	obj.setPropSoundTheme(str)
 
 	str, err = kf.GetString(THEME_GROUP_COMPONENT, THEME_KEY_CURSOR)
 	if err != nil {
-		Logger.Warningf("Get '%s' failed: %v", THEME_KEY_CURSOR, err)
+		logger.Warningf("Get '%s' failed: %v", THEME_KEY_CURSOR, err)
 		return
 	}
 	obj.setPropCursorTheme(str)
 
 	str, err = kf.GetString(THEME_GROUP_COMPONENT, THEME_KEY_BACKGROUND)
 	if err != nil {
-		Logger.Warningf("Get '%s' failed: %v", THEME_KEY_BACKGROUND, err)
+		logger.Warningf("Get '%s' failed: %v", THEME_KEY_BACKGROUND, err)
 		return
 	}
 	if ok, _ := regexp.MatchString(`^/`, str); !ok {
@@ -175,7 +175,7 @@ func (obj *Theme) setAllProps() {
 	var interval int
 	interval, err = kf.GetInteger(THEME_GROUP_COMPONENT, THEME_KEY_FONT_SIZE)
 	if err != nil {
-		Logger.Warningf("Get '%s' failed: %v", THEME_KEY_FONT_SIZE, err)
+		logger.Warningf("Get '%s' failed: %v", THEME_KEY_FONT_SIZE, err)
 		return
 	}
 	obj.setPropFontSize(int32(interval))

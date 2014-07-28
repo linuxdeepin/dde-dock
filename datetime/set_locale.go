@@ -145,13 +145,13 @@ func setLocalePamEnv(locale string) {
 
 	fp, err := os.Create(filePath + "~")
 	if err != nil {
-		Logger.Errorf("Create '%s' failed: %v", filePath+"~", err)
+		logger.Errorf("Create '%s' failed: %v", filePath+"~", err)
 		return
 	}
 	defer fp.Close()
 
 	if _, err = fp.WriteString(genPamContents(locale)); err != nil {
-		Logger.Errorf("Write '%s' failed: %v", filePath+"~", err)
+		logger.Errorf("Write '%s' failed: %v", filePath+"~", err)
 		return
 	}
 	fp.Sync()
@@ -160,13 +160,13 @@ func setLocalePamEnv(locale string) {
 
 func getDefaultLocale() (string, bool) {
 	if !dutils.IsFileExist(DEFAULT_LOCALE_FILE) {
-		Logger.Errorf("'%s' not exist", DEFAULT_LOCALE_FILE)
+		logger.Errorf("'%s' not exist", DEFAULT_LOCALE_FILE)
 		return "", false
 	}
 
 	contents, err := ioutil.ReadFile(DEFAULT_LOCALE_FILE)
 	if err != nil {
-		Logger.Errorf("ReadFile '%s' failed: %v", DEFAULT_LOCALE_FILE, err)
+		logger.Errorf("ReadFile '%s' failed: %v", DEFAULT_LOCALE_FILE, err)
 		return "", false
 	}
 
@@ -195,13 +195,13 @@ func getUserLocale() (string, bool) {
 	homeDir := dutils.GetHomeDir()
 	filePath := path.Join(homeDir, PAM_ENV_FILE)
 	if !dutils.IsFileExist(filePath) {
-		Logger.Warningf("'%s' not exist", filePath)
+		logger.Warningf("'%s' not exist", filePath)
 		return "", false
 	}
 
 	contents, err := ioutil.ReadFile(filePath)
 	if err != nil {
-		Logger.Error("ReadFile '%s' failed: %v", filePath, err)
+		logger.Error("ReadFile '%s' failed: %v", filePath, err)
 		return "", false
 	}
 
@@ -229,7 +229,7 @@ func getUserLocale() (string, bool) {
 func sendNotify(icon, summary, body string) {
 	notifier, err := notifications.NewNotifier("org.freedesktop.Notifications", "/org/freedesktop/Notifications")
 	if err != nil {
-		Logger.Error("New Notifier Failed:", err)
+		logger.Error("New Notifier Failed:", err)
 		return
 	}
 

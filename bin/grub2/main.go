@@ -28,7 +28,7 @@ import (
 	"os"
 	"pkg.linuxdeepin.com/lib"
 	"pkg.linuxdeepin.com/lib/dbus"
-	liblogger "pkg.linuxdeepin.com/lib/logger"
+	"pkg.linuxdeepin.com/lib/log"
 	"time"
 )
 
@@ -54,7 +54,7 @@ func main() {
 	flag.Parse()
 
 	if argDebug {
-		grub2.SetLoggerLevel(liblogger.LEVEL_DEBUG)
+		grub2.SetLoggerLevel(log.LEVEL_DEBUG)
 	}
 
 	// dispatch optional arguments
@@ -83,7 +83,7 @@ func main() {
 }
 
 func runAsDaemon() {
-	logger := liblogger.NewLogger(dbusGrubDest + ".Wrapper")
+	logger := log.NewLogger(dbusGrubDest + ".Wrapper")
 	logger.BeginTracing()
 	defer logger.EndTracing()
 

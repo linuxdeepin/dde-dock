@@ -75,12 +75,12 @@ func getDeviceNames() []string {
 func parseDeviceAdd(devName *C.char) {
 	tmp := C.GoString(devName)
 	s := strings.ToLower(tmp)
-	logObj.Infof("DEVICE CHANGED: %s added", s)
+	logger.Infof("DEVICE CHANGED: %s added", s)
 	if strings.Contains(s, "mouse") {
 		if managerObj.mouseObj == nil {
 			mouse := NewMouse()
 			if err := dbus.InstallOnSession(mouse); err != nil {
-				logObj.Fatal("Mouse DBus Session Failed: ", err)
+				logger.Fatal("Mouse DBus Session Failed: ", err)
 			}
 			managerObj.mouseObj = mouse
 			managerObj.setPropName("Infos")
@@ -90,7 +90,7 @@ func parseDeviceAdd(devName *C.char) {
 		if managerObj.tpadObj == nil {
 			tpad := NewTPad()
 			if err := dbus.InstallOnSession(tpad); err != nil {
-				logObj.Fatal("TPad DBus Session Failed: ", err)
+				logger.Fatal("TPad DBus Session Failed: ", err)
 			}
 			managerObj.tpadObj = tpad
 			managerObj.setPropName("Infos")
@@ -99,7 +99,7 @@ func parseDeviceAdd(devName *C.char) {
 		if managerObj.kbdObj == nil {
 			kbd := NewKeyboard()
 			if err := dbus.InstallOnSession(kbd); err != nil {
-				logObj.Warning("Kbd DBus Session Failed: ", err)
+				logger.Warning("Kbd DBus Session Failed: ", err)
 				panic(err)
 			}
 			managerObj.kbdObj = kbd
@@ -112,7 +112,7 @@ func parseDeviceAdd(devName *C.char) {
 func parseDeviceDelete(devName *C.char) {
 	tmp := C.GoString(devName)
 	s := strings.ToLower(tmp)
-	logObj.Infof("DEVICE CHANGED: %s removed", s)
+	logger.Infof("DEVICE CHANGED: %s removed", s)
 	if strings.Contains(s, "touchpad") {
 		if managerObj.tpadObj != nil {
 			managerObj.setPropName("Infos")
@@ -128,10 +128,10 @@ func parseDeviceDelete(devName *C.char) {
 	/*
 		if strings.Contains(s, "mouse") {
 			if managerObj.mouseObj != nil {
-				logObj.Info("DELETE mouse DBus")
+				logger.Info("DELETE mouse DBus")
 				dbus.UnInstallObject(managerObj.mouseObj)
 				managerObj.mouseObj = nil
-				logObj.Info("DELETE mouse DBus end...")
+				logger.Info("DELETE mouse DBus end...")
 				managerObj.setPropName("Infos")
 				for _, info := range managerObj.Infos {
 					if info.Id == "touchpad" {

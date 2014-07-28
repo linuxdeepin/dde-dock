@@ -23,11 +23,11 @@ package bluetooth
 
 import (
 	"pkg.linuxdeepin.com/lib/dbus"
-	liblogger "pkg.linuxdeepin.com/lib/logger"
+	"pkg.linuxdeepin.com/lib/log"
 )
 
 var (
-	logger    = liblogger.NewLogger(dbusBluetoothDest)
+	logger    = log.NewLogger(dbusBluetoothDest)
 	bluetooth *Bluetooth
 )
 

@@ -49,13 +49,13 @@ func (m *Manager) NewSearchWithStrList(list []string) (string, bool) {
 
 	md5Str, ok := dutils.SumStrMd5(strs)
 	if !ok {
-		Logger.Warning("Sum MD5 Failed")
+		logger.Warning("Sum MD5 Failed")
 		return "", false
 	}
 
 	cachePath, ok1 := getCachePath()
 	if !ok1 {
-		Logger.Warning("Get Cache Path Failed")
+		logger.Warning("Get Cache Path Failed")
 		return "", false
 	}
 
@@ -94,13 +94,13 @@ func (m *Manager) NewSearchWithStrDict(dict map[string]string) (string, bool) {
 
 	md5Str, ok := dutils.SumStrMd5(strs)
 	if !ok {
-		Logger.Warning("Sum MD5 Failed")
+		logger.Warning("Sum MD5 Failed")
 		return "", false
 	}
 
 	cachePath, ok1 := getCachePath()
 	if !ok1 {
-		Logger.Warning("Get Cache Path Failed")
+		logger.Warning("Get Cache Path Failed")
 		return "", false
 	}
 

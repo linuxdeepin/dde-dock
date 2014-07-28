@@ -65,14 +65,14 @@ func parseXML(filename string) XKBConfigRegister {
 	var v XKBConfigRegister
 	xmlByte, err := ioutil.ReadFile(filename)
 	if err != nil {
-		logObj.Fatalf("Read File '%s' Failed: %s",
+		logger.Fatalf("Read File '%s' Failed: %s",
 			filename, err)
 		return v
 	}
 
 	err = xml.Unmarshal(xmlByte, &v)
 	if err != nil {
-		logObj.Fatalf("Unmarshal Failed: %s", err)
+		logger.Fatalf("Unmarshal Failed: %s", err)
 		return v
 	}
 

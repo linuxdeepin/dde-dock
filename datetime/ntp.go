@@ -36,7 +36,7 @@ func (obj *Manager) syncNtpTime() bool {
 		t, err := getNtpTime(obj.CurrentTimezone)
 		if err == nil && t != nil {
 			dStr, tStr := getDateTimeAny(t)
-			Logger.Infof("Date: %s, Time: %s", dStr, tStr)
+			logger.Infof("Date: %s, Time: %s", dStr, tStr)
 			setDate.SetCurrentDate(dStr)
 			setDate.SetCurrentTime(tStr)
 			return true
@@ -63,7 +63,7 @@ func (obj *Manager) enableNtp(enable bool) bool {
 	if enable {
 		if obj.ntpRunning {
 			go obj.syncNtpTime()
-			Logger.Debug("Ntp is running")
+			logger.Debug("Ntp is running")
 			return true
 		}
 
@@ -71,7 +71,7 @@ func (obj *Manager) enableNtp(enable bool) bool {
 		go obj.syncNtpThread()
 	} else {
 		if obj.ntpRunning {
-			Logger.Debug("Ntp will quit....")
+			logger.Debug("Ntp will quit....")
 			obj.quitChan <- true
 		}
 
@@ -94,11 +94,11 @@ func getNtpTime(locale string) (*time.Time, error) {
 	}
 
 	if !timezoneIsValid(locale) {
-		Logger.Warningf("'%s': invalid locale", locale)
+		logger.Warningf("'%s': invalid locale", locale)
 		locale = "UTC"
 	}
 
-	Logger.Info("Locale:", locale)
+	logger.Info("Locale:", locale)
 	raddr, err := net.ResolveUDPAddr("udp", _NTP_HOST+":123")
 	if err != nil {
 		return nil, err

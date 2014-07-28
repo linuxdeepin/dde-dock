@@ -3,11 +3,11 @@ package dock
 import (
 	"os"
 	"pkg.linuxdeepin.com/lib/dbus"
-	liblogger "pkg.linuxdeepin.com/lib/logger"
+	"pkg.linuxdeepin.com/lib/log"
 )
 
 var (
-	logger = liblogger.NewLogger("dde-daemon/dock")
+	logger = log.NewLogger("com.deepin.daemon.Dock")
 
 	region          *Region           = nil
 	setting         *Setting          = nil
@@ -22,9 +22,9 @@ func Start() {
 
 	initDeepin()
 
-	// configure logger
+	// TODO configure logger
 	if stringInSlice("-d", os.Args) || stringInSlice("--debug", os.Args) {
-		logger.SetLogLevel(liblogger.LEVEL_DEBUG)
+		logger.SetLogLevel(log.LEVEL_DEBUG)
 		os.Setenv("G_MESSAGES_DEBUG", "all")
 	}
 

@@ -45,6 +45,6 @@ func (m *Manager) setPropName(name string) {
 		m.DiskList = getDiskInfoList()
 		dbus.NotifyChange(m, name)
 	default:
-		Logger.Warningf("'%s': invalid mount property")
+		logger.Warningf("'%s': invalid mount property")
 	}
 }

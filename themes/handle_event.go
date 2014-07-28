@@ -83,7 +83,7 @@ func (obj *Manager) startWatch() {
 		var err error
 		obj.watcher, err = fsnotify.NewWatcher()
 		if err != nil {
-			Logger.Warningf("New Watcher Failed: %v", err)
+			logger.Warningf("New Watcher Failed: %v", err)
 			panic(err)
 		}
 	}
@@ -95,7 +95,7 @@ func (obj *Manager) startWatch() {
 	if !dutils.IsFileExist(dir) {
 		if err := os.MkdirAll(dir, 0755); err != nil {
 			errFlag = true
-			Logger.Warningf("Mkdir '%s' failed: %v", dir, err)
+			logger.Warningf("Mkdir '%s' failed: %v", dir, err)
 		}
 	}
 	if !errFlag {
@@ -109,7 +109,7 @@ func (obj *Manager) startWatch() {
 	if !dutils.IsFileExist(dir) {
 		if err := os.MkdirAll(dir, 0755); err != nil {
 			errFlag = true
-			Logger.Warningf("Mkdir '%s' failed: %v", dir, err)
+			logger.Warningf("Mkdir '%s' failed: %v", dir, err)
 		}
 	}
 	if !errFlag {
@@ -125,7 +125,7 @@ func (obj *Manager) startWatch() {
 	if !dutils.IsFileExist(dir) {
 		if err := os.MkdirAll(dir, 0755); err != nil {
 			errFlag = true
-			Logger.Warningf("Mkdir '%s' failed: %v", dir, err)
+			logger.Warningf("Mkdir '%s' failed: %v", dir, err)
 		}
 	}
 	if !errFlag {
@@ -138,7 +138,7 @@ func (obj *Manager) startWatch() {
 	if !dutils.IsFileExist(dir) {
 		if err := os.MkdirAll(dir, 0755); err != nil {
 			errFlag = true
-			Logger.Warningf("Mkdir '%s' failed: %v", dir, err)
+			logger.Warningf("Mkdir '%s' failed: %v", dir, err)
 		}
 	}
 	if !errFlag {
@@ -196,14 +196,14 @@ func (obj *Manager) handleEvent() {
 				break
 			}
 
-			Logger.Debugf("Manager Event: %v", ev)
+			logger.Debugf("Manager Event: %v", ev)
 			ok1 := false
 			ok2 := false
 
 			ok1, _ = regexp.MatchString(ICON_SYS_PATH, ev.Name)
 			ok2, _ = regexp.MatchString(ICON_LOCAL_PATH, ev.Name)
 			if ok1 || ok2 {
-				Logger.Info("Update IconList")
+				logger.Info("Update IconList")
 				obj.setPropIconThemeList(obj.getIconStrList())
 				obj.setPropCursorThemeList(obj.getCursorStrList())
 				break
@@ -211,7 +211,7 @@ func (obj *Manager) handleEvent() {
 
 			ok1, _ = regexp.MatchString(SOUND_THEME_PATH, ev.Name)
 			if ok1 {
-				Logger.Info("Update SoundTheme")
+				logger.Info("Update SoundTheme")
 				obj.setPropSoundThemeList(obj.getSoundStrList())
 				break
 			}
@@ -233,7 +233,7 @@ func (obj *Manager) handleEvent() {
 			ok1, _ = regexp.MatchString(THEME_SYS_PATH, ev.Name)
 			ok2, _ = regexp.MatchString(THEME_LOCAL_PATH, ev.Name)
 			if ok1 || ok2 {
-				Logger.Info("Update GtkList")
+				logger.Info("Update GtkList")
 				obj.setPropGtkThemeList(obj.getGtkStrList())
 				break
 			}
@@ -253,7 +253,7 @@ func (obj *Manager) startBgWatch() {
 		var err error
 		obj.bgWatcher, err = fsnotify.NewWatcher()
 		if err != nil {
-			Logger.Fatalf("New Watcher Failed: %v", err)
+			logger.Fatalf("New Watcher Failed: %v", err)
 		}
 	}
 
@@ -262,7 +262,7 @@ func (obj *Manager) startBgWatch() {
 
 	pict := getUserPictureDir()
 	userBG := path.Join(pict, "Wallpapers")
-	Logger.Debug("User Special Bg:", userBG)
+	logger.Debug("User Special Bg:", userBG)
 	if !dutils.IsFileExist(userBG) {
 		if err := os.MkdirAll(userBG, 0755); err != nil {
 			return
@@ -306,7 +306,7 @@ func (obj *Manager) handleBgEvent() {
 				break
 			}
 
-			Logger.Info("Bg Event:", ev)
+			logger.Info("Bg Event:", ev)
 			curTimestamp := time.Now().Unix()
 			if curTimestamp-preTimestamp < 3 {
 				break
@@ -315,7 +315,7 @@ func (obj *Manager) handleBgEvent() {
 			if ok, _ := regexp.MatchString(`(autogen)(.*\.png$)`, ev.Name); ok {
 				go func() {
 					<-time.After(time.Second * 3)
-					Logger.Info("Update gtk.icon/bg theme list")
+					logger.Info("Update gtk.icon/bg theme list")
 					obj.setPropGtkThemeList(obj.getGtkStrList())
 					obj.setPropIconThemeList(obj.getIconStrList())
 					obj.setPropBackgroundList(obj.getBgStrList())
@@ -345,7 +345,7 @@ func (obj *Theme) startWatch() {
 		var err error
 		obj.watcher, err = fsnotify.NewWatcher()
 		if err != nil {
-			Logger.Warningf("New Watcher Failed: %v", err)
+			logger.Warningf("New Watcher Failed: %v", err)
 			panic(err)
 		}
 	}

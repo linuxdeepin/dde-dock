@@ -175,24 +175,24 @@ func (obj *Manager) setGtkTheme(theme string) {
 		if theme == l {
 			t, ok := obj.themeObjMap[obj.CurrentTheme.GetValue().(string)]
 			if !ok {
-				Logger.Warning("Current Theme Invalid:", theme)
+				logger.Warning("Current Theme Invalid:", theme)
 				obj.setPropCurrentTheme(DEFAULT_THEME_ID)
 				break
 			}
 			if t.GtkTheme == theme {
-				Logger.Warning("Gtk Theme Same:", theme)
+				logger.Warning("Gtk Theme Same:", theme)
 				return
 			}
 			name, ok1 := obj.isThemeExit(theme, t.IconTheme,
 				t.SoundTheme, t.CursorTheme,
 				t.Background, t.FontSize)
 			if ok1 {
-				Logger.Warning("Exist Theme:", name)
+				logger.Warning("Exist Theme:", name)
 				obj.setPropCurrentTheme(name)
 				break
 			}
 
-			Logger.Info("Theme: ", theme, t.IconTheme, t.SoundTheme, t.CursorTheme, t.Background, t.FontSize)
+			logger.Info("Theme: ", theme, t.IconTheme, t.SoundTheme, t.CursorTheme, t.Background, t.FontSize)
 			obj.newCustomTheme(theme, t.IconTheme, t.SoundTheme,
 				t.CursorTheme, t.Background, t.FontSize)
 			obj.setPropCurrentTheme(THEME_CUSTOM_ID)

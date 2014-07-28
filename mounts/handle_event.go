@@ -44,9 +44,9 @@ func (m *Manager) refrashDiskInfoList() {
 	for {
 		select {
 		case <-time.NewTimer(time.Second * TIME_DURATION).C:
-			Logger.Debug("Refrash Disk Info List")
+			logger.Debug("Refrash Disk Info List")
 			m.setPropName("DiskList")
-			//Logger.Infof("Disk List: %v", m.DiskList)
+			//logger.Infof("Disk List: %v", m.DiskList)
 		case <-m.quitFlag:
 			return
 		}
@@ -57,7 +57,7 @@ func (m *Manager) listenSignalChanged() {
 	monitor.Connect("mount-added", func(volumeMonitor *gio.VolumeMonitor, mount *gio.Mount) {
 		// Judge whether the property 'mount_and_open' set true
 		// if true, open the device use exec.Command("xdg-open", "device").Run()
-		Logger.Info("EVENT: mount added")
+		logger.Info("EVENT: mount added")
 		if mount.CanUnmount() &&
 			mediaHandSetting.GetBoolean(MEDIA_HAND_AUTO_MOUNT) &&
 			mediaHandSetting.GetBoolean(MEDIA_HAND_AUTO_OPEN) {
@@ -67,7 +67,7 @@ func (m *Manager) listenSignalChanged() {
 		m.setPropName("DiskList")
 	})
 	monitor.Connect("mount-removed", func(volumeMonitor *gio.VolumeMonitor, mount *gio.Mount) {
-		Logger.Info("EVENT: mount removed")
+		logger.Info("EVENT: mount removed")
 		m.setPropName("DiskList")
 	})
 	monitor.Connect("mount-changed", func(volumeMonitor *gio.VolumeMonitor, mount *gio.Mount) {
@@ -86,7 +86,7 @@ func (m *Manager) listenSignalChanged() {
 			volume.Mount(gio.MountMountFlagsNone, nil, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
 				_, err := volume.MountFinish(res)
 				if err != nil {
-					Logger.Warningf("volume mount failed: %s", err)
+					logger.Warningf("volume mount failed: %s", err)
 					m.setPropName("DiskList")
 				}
 			}))

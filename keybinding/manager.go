@@ -107,7 +107,7 @@ func (obj *Manager) ModifyShortcut(id int32, shortcut string) (string, []int32) 
 		retStr = "Valid"
 	} else {
 		isConflict, idList := conflictChecked(id, shortcut)
-		Logger.Infof("'%s' isConflict: %v, idList: %v", shortcut, isConflict, idList)
+		logger.Infof("'%s' isConflict: %v, idList: %v", shortcut, isConflict, idList)
 		if isConflict {
 			addInvalidConflictId(id)
 			for _, k := range idList {

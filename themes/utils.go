@@ -56,7 +56,7 @@ func encodeURI(str string) string {
 func decodeURI(str string) string {
 	u, err := url.Parse(str)
 	if err != nil {
-		Logger.Warningf("Url parse '%s' failed: %v", str, err)
+		logger.Warningf("Url parse '%s' failed: %v", str, err)
 		return ""
 	}
 
@@ -84,7 +84,7 @@ func getUserPictureDir() string {
 
 	ret := C.GoString(str)
 
-	Logger.Debug("User Pictures Dir:", ret)
+	logger.Debug("User Pictures Dir:", ret)
 	return ret
 }
 
@@ -124,7 +124,7 @@ func getFileMd5(file string) (string, bool) {
 
 	contents, err := ioutil.ReadFile(file)
 	if err != nil {
-		Logger.Warningf("ReadFile '%s' failed: %v", file, err)
+		logger.Warningf("ReadFile '%s' failed: %v", file, err)
 		return "", false
 	}
 
@@ -171,14 +171,14 @@ func writeStringToKeyFile(filename, contents string) bool {
 
 	f, err := os.Create(filename + "~")
 	if err != nil {
-		Logger.Warningf("OpenFile '%s' failed: %v",
+		logger.Warningf("OpenFile '%s' failed: %v",
 			filename+"~", err)
 		return false
 	}
 	defer f.Close()
 
 	if _, err = f.WriteString(contents); err != nil {
-		Logger.Warningf("WriteString '%s' failed: %v",
+		logger.Warningf("WriteString '%s' failed: %v",
 			filename, err)
 		return false
 	}
@@ -190,7 +190,7 @@ func writeStringToKeyFile(filename, contents string) bool {
 
 func genThemeThumb() {
 	if thumbTool {
-		Logger.Infof("There has a theme-thumb-tool running")
+		logger.Infof("There has a theme-thumb-tool running")
 		return
 	}
 

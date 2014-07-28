@@ -1,11 +1,11 @@
 package audio
 
 import "pkg.linuxdeepin.com/lib/dbus"
-import "pkg.linuxdeepin.com/lib/logger"
+import "pkg.linuxdeepin.com/lib/log"
 import "pkg.linuxdeepin.com/lib/pulse"
 import libsound "dbus/com/deepin/api/sound"
 
-var Logger = logger.NewLogger("com.deepin.daemon.Audio")
+var logger = log.NewLogger("com.deepin.daemon.Audio")
 
 type Audio struct {
 	init bool
@@ -224,13 +224,13 @@ func (s *Source) SetPort(name string) {
 }
 
 func Start() {
-	Logger.BeginTracing()
+	logger.BeginTracing()
 
 	ctx := pulse.GetContext()
 	audio := NewAudio(ctx)
 
 	if err := dbus.InstallOnSession(audio); err != nil {
-		Logger.Error("Failed InstallOnSession:", err)
+		logger.Error("Failed InstallOnSession:", err)
 		return
 	}
 
@@ -238,13 +238,13 @@ func Start() {
 }
 
 func Stop() {
-	Logger.EndTracing()
+	logger.EndTracing()
 }
 
 var playFeedback = func() func() {
 	player, err := libsound.NewSound("com.deepin.api.Sound", "/com/deepin/api/Sound")
 	if err != nil {
-		Logger.Error("Can't create com.deepin.api.Sound! Sound feedback support will be disabled", err)
+		logger.Error("Can't create com.deepin.api.Sound! Sound feedback support will be disabled", err)
 	}
 	return func() {
 		player.PlaySystemSound("audio-volume-change")

@@ -33,7 +33,7 @@ import (
 	"os/exec"
 	"path"
 	"pkg.linuxdeepin.com/lib/graphic"
-	"pkg.linuxdeepin.com/lib/logger"
+	"pkg.linuxdeepin.com/lib/log"
 	dutils "pkg.linuxdeepin.com/lib/utils"
 	"strings"
 	"time"
@@ -42,7 +42,7 @@ import (
 
 var (
 	forceFlag = false
-	Logger    = logger.NewLogger("theme-thumb-tool")
+	logger    = log.NewLogger("theme-thumb-tool")
 )
 
 const (
@@ -72,7 +72,7 @@ func getThumbBg() string {
 
 func getThumbCachePath(t, src, outDir string) string {
 	if len(outDir) < 1 {
-		Logger.Debug("Output Dir Error")
+		logger.Debug("Output Dir Error")
 		return ""
 	}
 
@@ -132,7 +132,7 @@ func genCursorThumbnail(info pathInfo, dest, bg string) bool {
 
 	item1, item2, item3 := getCursorIcons(info)
 	if len(item1) < 1 || len(item2) < 1 || len(item3) < 1 {
-		Logger.Debug("getCursorIcons Failed")
+		logger.Debug("getCursorIcons Failed")
 		return false
 	}
 
@@ -149,7 +149,7 @@ func genCursorThumbnail(info pathInfo, dest, bg string) bool {
 
 	ret := C.gen_icon_preview(cBg, cDest, cItem1, cItem2, cItem3)
 	if int(ret) == -1 {
-		Logger.Debug("Generate Cursor Thumbnail Error")
+		logger.Debug("Generate Cursor Thumbnail Error")
 		return false
 	}
 
@@ -164,7 +164,7 @@ func genIconThumbnail(info pathInfo, dest, bg string) bool {
 	theme := path.Base(info.Path)
 	item1, item2, item3 := getIconFiles(theme)
 	if len(item1) < 1 || len(item2) < 1 || len(item3) < 1 {
-		Logger.Debug("getIconTypeFile Failed")
+		logger.Debug("getIconTypeFile Failed")
 		return false
 	}
 
@@ -181,7 +181,7 @@ func genIconThumbnail(info pathInfo, dest, bg string) bool {
 
 	ret := C.gen_icon_preview(cBg, cDest, cItem1, cItem2, cItem3)
 	if int(ret) == -1 {
-		Logger.Debug("Generate Icon Thumbnail Error")
+		logger.Debug("Generate Icon Thumbnail Error")
 		return false
 	}
 
@@ -189,25 +189,25 @@ func genIconThumbnail(info pathInfo, dest, bg string) bool {
 }
 
 func printHelper() {
-	Logger.Debugf("Name\n\t%s: Theme Thumbnail Tool\n", _CMD_)
-	Logger.Debugf("Usage\n\t%s [Option] [Output Dir]\n", _CMD_)
-	Logger.Debugf("Options:\n")
-	Logger.Debugf("\t--gtk:    Generate Gtk Theme Thumbnail\n")
-	Logger.Debugf("\t--icon:   Generate Icon Theme Thumbnail\n")
-	Logger.Debugf("\t--cursor: Generate Cursor Theme Thumbnail\n")
-	Logger.Debugf("\t--background: Generate Background Thumbnail\n")
+	logger.Debugf("Name\n\t%s: Theme Thumbnail Tool\n", _CMD_)
+	logger.Debugf("Usage\n\t%s [Option] [Output Dir]\n", _CMD_)
+	logger.Debugf("Options:\n")
+	logger.Debugf("\t--gtk:    Generate Gtk Theme Thumbnail\n")
+	logger.Debugf("\t--icon:   Generate Icon Theme Thumbnail\n")
+	logger.Debugf("\t--cursor: Generate Cursor Theme Thumbnail\n")
+	logger.Debugf("\t--background: Generate Background Thumbnail\n")
 }
 
 func main() {
 	defer func() {
 		if err := recover(); err != nil {
-			Logger.Debugf("Error: %v\n", err)
+			logger.Debugf("Error: %v\n", err)
 			os.Exit(0)
 		}
 	}()
 
 	if C.init_env() == 0 {
-		Logger.Debug("Can't generate thumbnails, try run this program under an X11 enviorment")
+		logger.Debug("Can't generate thumbnails, try run this program under an X11 enviorment")
 		return
 	}
 
@@ -244,7 +244,7 @@ func main() {
 			bg := getThumbBg()
 			out, err := exec.Command(_GTK_THUMB_CMD_, name, dest, bg).Output()
 			if err != nil || strings.Contains(string(out), "ERROR") {
-				Logger.Debugf("ERROR: Generate Gtk Thumbnail\n")
+				logger.Debugf("ERROR: Generate Gtk Thumbnail\n")
 			}
 		}
 	case "--icon":
@@ -256,7 +256,7 @@ func main() {
 			}
 			bg := getThumbBg()
 			if !genIconThumbnail(l, dest, bg) {
-				Logger.Debugf("ERROR: Generate Icon Thumbnail\n")
+				logger.Debugf("ERROR: Generate Icon Thumbnail\n")
 			}
 		}
 	case "--cursor":
@@ -268,7 +268,7 @@ func main() {
 			}
 			bg := getThumbBg()
 			if !genCursorThumbnail(l, dest, bg) {
-				Logger.Debugf("ERROR: Generate Cursor Thumbnail\n")
+				logger.Debugf("ERROR: Generate Cursor Thumbnail\n")
 			}
 		}
 		if dutils.IsFileExist(XCUR2PNG_OUTDIR) {
@@ -283,11 +283,11 @@ func main() {
 			}
 			err := graphic.ThumbnailImage(l.Path, dest, 128, 72, graphic.FormatPng)
 			if err != nil {
-				Logger.Debug("ERROR:", err)
+				logger.Debug("ERROR:", err)
 			}
 		}
 	default:
-		Logger.Debugf("Invalid option: %s\n\n", op)
+		logger.Debugf("Invalid option: %s\n\n", op)
 		printHelper()
 	}
 }

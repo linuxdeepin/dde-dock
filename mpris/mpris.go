@@ -26,9 +26,9 @@ import (
 	libdbus "dbus/org/freedesktop/dbus"
 	liblogin1 "dbus/org/freedesktop/login1"
 	libmpris "dbus/org/mpris/mediaplayer2"
-	"pkg.linuxdeepin.com/lib/gio-2.0"
-	"pkg.linuxdeepin.com/lib/logger"
 	"os/exec"
+	"pkg.linuxdeepin.com/lib/gio-2.0"
+	"pkg.linuxdeepin.com/lib/log"
 	"strings"
 )
 
@@ -43,7 +43,7 @@ const (
 )
 
 var (
-	Logger      = logger.NewLogger("mpris")
+	logger      = log.NewLogger("dde-daemon/mpris")
 	dbusObj     *libdbus.DBusDaemon
 	mediaKeyObj *libkeybind.MediaKey
 	loginObj    *liblogin1.Manager
@@ -62,7 +62,7 @@ func getMprisClients() ([]string, bool) {
 	list := []string{}
 	names, err := dbusObj.ListNames()
 	if err != nil {
-		Logger.Error("List DBus Sender Names: ", err)
+		logger.Error("List DBus Sender Names: ", err)
 		return list, false
 	}
 
@@ -84,7 +84,7 @@ func getActiveMprisClient() *libmpris.Player {
 	for _, dest := range list {
 		obj, err := libmpris.NewPlayer(dest, MPRIS_PATH)
 		if err != nil {
-			Logger.Warningf("New mpris player failed: '%v'' for sender: '%s'", err, dest)
+			logger.Warningf("New mpris player failed: '%v'' for sender: '%s'", err, dest)
 			continue
 		}
 		if len(list) == 1 {
@@ -95,10 +95,10 @@ func getActiveMprisClient() *libmpris.Player {
 		}
 		if obj.PlaybackStatus.GetValue().(string) == "Playing" {
 			prevSender = dest
-			Logger.Info("Current Media: ", dest)
+			logger.Info("Current Media: ", dest)
 			return obj
 		} else if dest == prevSender {
-			Logger.Info("Current Media: ", dest)
+			logger.Info("Current Media: ", dest)
 			return obj
 		}
 	}
@@ -106,7 +106,7 @@ func getActiveMprisClient() *libmpris.Player {
 	if len(list) > 1 {
 		obj, err := libmpris.NewPlayer(list[0], MPRIS_PATH)
 		if err != nil {
-			Logger.Warningf("New mpris player failed: '%v'' for sender: '%s'", err, list[0])
+			logger.Warningf("New mpris player failed: '%v'' for sender: '%s'", err, list[0])
 			return nil
 		}
 		return obj
@@ -121,10 +121,10 @@ func listenAudioSignal() {
 			return
 		}
 
-		Logger.Info("Received Play Signal")
+		logger.Info("Received Play Signal")
 		obj := getActiveMprisClient()
 		if obj == nil {
-			Logger.Error("Get Active Mpris Failed")
+			logger.Error("Get Active Mpris Failed")
 			return
 		}
 		//obj.Play()
@@ -135,7 +135,7 @@ func listenAudioSignal() {
 		if press {
 			return
 		}
-		Logger.Info("Received Pause Signal")
+		logger.Info("Received Pause Signal")
 
 		obj := getActiveMprisClient()
 		if obj == nil {
@@ -148,7 +148,7 @@ func listenAudioSignal() {
 		if press {
 			return
 		}
-		Logger.Info("Received Stop Signal")
+		logger.Info("Received Stop Signal")
 
 		obj := getActiveMprisClient()
 		if obj == nil {
@@ -161,7 +161,7 @@ func listenAudioSignal() {
 		if press {
 			return
 		}
-		Logger.Info("Received Previous Signal")
+		logger.Info("Received Previous Signal")
 
 		obj := getActiveMprisClient()
 		if obj == nil {
@@ -175,7 +175,7 @@ func listenAudioSignal() {
 		if press {
 			return
 		}
-		Logger.Info("Received Next Signal")
+		logger.Info("Received Next Signal")
 
 		obj := getActiveMprisClient()
 		if obj == nil {
@@ -189,7 +189,7 @@ func listenAudioSignal() {
 		if press {
 			return
 		}
-		Logger.Info("Received Rewind Signal")
+		logger.Info("Received Rewind Signal")
 
 		obj := getActiveMprisClient()
 		if obj == nil {
@@ -214,7 +214,7 @@ func listenAudioSignal() {
 		if press {
 			return
 		}
-		Logger.Info("Received Forward Signal")
+		logger.Info("Received Forward Signal")
 
 		obj := getActiveMprisClient()
 		if obj == nil {
@@ -234,7 +234,7 @@ func listenAudioSignal() {
 		if press {
 			return
 		}
-		Logger.Info("Received Repeat Signal")
+		logger.Info("Received Repeat Signal")
 
 		obj := getActiveMprisClient()
 		if obj == nil {
@@ -277,14 +277,14 @@ func listenAudioSignal() {
 		if active {
 			list, ok := getMprisClients()
 			if !ok {
-				Logger.Error("Get Mpris Clients Failed")
+				logger.Error("Get Mpris Clients Failed")
 				return
 			}
 
 			for _, l := range list {
 				obj, err := libmpris.NewPlayer(l, MPRIS_PATH)
 				if err != nil {
-					Logger.Warningf("New Mpris Player For '%s' Failed: %v",
+					logger.Warningf("New Mpris Player For '%s' Failed: %v",
 						l, err)
 					continue
 				}
@@ -296,31 +296,31 @@ func listenAudioSignal() {
 }
 
 func Start() {
-	Logger.BeginTracing()
+	logger.BeginTracing()
 	var err error
 
 	dbusObj, err = libdbus.NewDBusDaemon("org.freedesktop.DBus",
 		"/")
 	if err != nil {
-		Logger.Fatal("New DBusDaemon Failed: ", err)
+		logger.Fatal("New DBusDaemon Failed: ", err)
 	}
 
 	mediaKeyObj, err = libkeybind.NewMediaKey(
 		"com.deepin.daemon.KeyBinding",
 		"/com/deepin/daemon/MediaKey")
 	if err != nil {
-		Logger.Fatal("New MediaKey Object Failed: ", err)
+		logger.Fatal("New MediaKey Object Failed: ", err)
 	}
 
 	loginObj, err = liblogin1.NewManager("org.freedesktop.login1",
 		"/org/freedesktop/login1")
 	if err != nil {
-		Logger.Fatal("New Login1 Manager Failed: ", err)
+		logger.Fatal("New Login1 Manager Failed: ", err)
 	}
 
 	listenAudioSignal()
 }
 
 func Stop() {
-	Logger.EndTracing()
+	logger.EndTracing()
 }

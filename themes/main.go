@@ -27,14 +27,14 @@ import (
 	"path"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
-	"pkg.linuxdeepin.com/lib/logger"
+	"pkg.linuxdeepin.com/lib/log"
 	dutils "pkg.linuxdeepin.com/lib/utils"
 )
 
 var (
 	objXS      *sessionmanager.XSettings
 	greeterObj *greeterutils.GreeterUtils
-	Logger     = logger.NewLogger(MANAGER_DEST)
+	logger     = log.NewLogger(MANAGER_DEST)
 
 	themeSettings = gio.NewSettings("com.deepin.dde.personalization")
 	gnmSettings   = gio.NewSettings("org.gnome.desktop.background")
@@ -43,21 +43,21 @@ var (
 )
 
 func Start() {
-	Logger.BeginTracing()
+	logger.BeginTracing()
 
 	var err error
 	objXS, err = sessionmanager.NewXSettings("com.deepin.SessionManager",
 		"/com/deepin/XSettings")
 	if err != nil {
-		Logger.Fatal("New XSettings Failed:", err)
+		logger.Fatal("New XSettings Failed:", err)
 	}
 
 	if greeterObj, err = greeterutils.NewGreeterUtils("com.deepin.api.GreeterUtils", "/com/deepin/api/GreeterUtils"); err != nil {
-		Logger.Fatal("New GreeterUtils Failed:", err)
+		logger.Fatal("New GreeterUtils Failed:", err)
 	}
 
 	if err = dbus.InstallOnSession(GetManager()); err != nil {
-		Logger.Fatal("Install DBus Failed", err)
+		logger.Fatal("Install DBus Failed", err)
 	}
 
 	username := dutils.GetUserName()
@@ -79,5 +79,5 @@ func Stop() {
 	obj.bgWatcher.Close()
 	dbus.UnInstallObject(obj)
 
-	Logger.EndTracing()
+	logger.EndTracing()
 }

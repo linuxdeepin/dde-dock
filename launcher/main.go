@@ -5,10 +5,10 @@ import (
 
 	. "pkg.linuxdeepin.com/lib/gettext"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
-	l "pkg.linuxdeepin.com/lib/logger"
+	"pkg.linuxdeepin.com/lib/log"
 )
 
-var logger *l.Logger = l.NewLogger("dde-daemon/launcher-daemon")
+var logger = log.NewLogger("dde-daemon/launcher-daemon")
 var isDebug = false
 
 func Stop() {
@@ -21,7 +21,7 @@ func Start() {
 	flag.BoolVar(&isDebug, "d", false, "debug mode")
 	flag.Parse()
 	if isDebug {
-		logger.SetLogLevel(l.LEVEL_DEBUG)
+		logger.SetLogLevel(log.LEVEL_DEBUG)
 	}
 
 	InitI18n()

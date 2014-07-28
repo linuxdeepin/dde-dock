@@ -24,7 +24,7 @@ package mounts
 import (
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
-	"pkg.linuxdeepin.com/lib/logger"
+	"pkg.linuxdeepin.com/lib/log"
 	"regexp"
 	"strings"
 )
@@ -61,13 +61,13 @@ const (
 var (
 	monitor   = gio.VolumeMonitorGet()
 	objectMap = make(map[string]*ObjectInfo)
-	Logger    = logger.NewLogger(DISK_INFO_DEST)
+	logger    = log.NewLogger(DISK_INFO_DEST)
 )
 
 func newDiskInfo(value interface{}, t string) DiskInfo {
 	defer func() {
 		if err := recover(); err != nil {
-			Logger.Error("Received Error: ", err)
+			logger.Error("Received Error: ", err)
 		}
 	}()
 
@@ -82,10 +82,10 @@ func newDiskInfo(value interface{}, t string) DiskInfo {
 		//info.TotalCap, info.UsableCap = getDiskCap(id)
 		info.Path = v.GetIdentifier(gio.VolumeIdentifierKindUnixDevice)
 		info.UUID = v.GetIdentifier(gio.VolumeIdentifierKindUuid)
-		Logger.Debugf("VOLUME Name: %s, UUID: %v", info.Name, info.UUID)
+		logger.Debugf("VOLUME Name: %s, UUID: %v", info.Name, info.UUID)
 		if len(info.UUID) < 1 {
 			info.UUID = generateUUID()
-			Logger.Debugf("VOLUME Name: %s, Generate UUID: %v", info.Name, info.UUID)
+			logger.Debugf("VOLUME Name: %s, Generate UUID: %v", info.Name, info.UUID)
 		}
 
 		if mount := v.GetMount(); mount != nil {
@@ -114,10 +114,10 @@ func newDiskInfo(value interface{}, t string) DiskInfo {
 		//info.TotalCap, info.UsableCap = getDiskCap(id)
 		info.Path = v.GetIdentifier(gio.VolumeIdentifierKindUnixDevice)
 		info.UUID = v.GetIdentifier(gio.VolumeIdentifierKindUuid)
-		Logger.Infof("DRIVE Name: %s, UUID: %v", info.Name, info.UUID)
+		logger.Infof("DRIVE Name: %s, UUID: %v", info.Name, info.UUID)
 		if len(info.UUID) < 1 {
 			info.UUID = generateUUID()
-			Logger.Infof("DRIVE Name: %s, Generate UUID: %v", info.Name, info.UUID)
+			logger.Infof("DRIVE Name: %s, Generate UUID: %v", info.Name, info.UUID)
 		}
 
 		icons := v.GetIcon().ToString()
@@ -161,10 +161,10 @@ func newDiskInfo(value interface{}, t string) DiskInfo {
 			info.UUID = volume.GetIdentifier(gio.VolumeIdentifierKindUuid)
 
 		}
-		Logger.Infof("MOUNT Name: %s, UUID: %v", info.Name, info.UUID)
+		logger.Infof("MOUNT Name: %s, UUID: %v", info.Name, info.UUID)
 		if len(info.UUID) < 1 {
 			info.UUID = generateUUID()
-			Logger.Infof("MOUNT Name: %s, Generate UUID: %v", info.Name, info.UUID)
+			logger.Infof("MOUNT Name: %s, Generate UUID: %v", info.Name, info.UUID)
 		}
 
 		if ok, _ := regexp.MatchString(`^mtp://`, info.MountURI); ok {
@@ -176,7 +176,7 @@ func newDiskInfo(value interface{}, t string) DiskInfo {
 			info.TotalCap, info.UsableCap = getDiskCap(info.Path)
 		}
 	default:
-		Logger.Errorf("'%s' invalid type", t)
+		logger.Errorf("'%s' invalid type", t)
 	}
 
 	return info
@@ -320,12 +320,12 @@ func GetManager() *Manager {
 }
 
 func Start() {
-	Logger.BeginTracing()
+	logger.BeginTracing()
 
 	m := GetManager()
 	err := dbus.InstallOnSession(m)
 	if err != nil {
-		Logger.Fatal("Install DBus Session Failed:", err)
+		logger.Fatal("Install DBus Session Failed:", err)
 	}
 
 	go m.refrashDiskInfoList()
@@ -333,5 +333,5 @@ func Start() {
 
 func Stop() {
 	GetManager().quitFlag <- true
-	Logger.EndTracing()
+	logger.EndTracing()
 }

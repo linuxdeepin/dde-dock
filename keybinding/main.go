@@ -27,11 +27,11 @@ import (
 	"github.com/BurntSushi/xgbutil/xevent"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
-	libLogger "pkg.linuxdeepin.com/lib/logger"
+	"pkg.linuxdeepin.com/lib/log"
 )
 
 var (
-	Logger = libLogger.NewLogger("daemon/keybinding")
+	logger = log.NewLogger("daemon/keybinding")
 	X      *xgbutil.XUtil
 
 	grabKeyBindsMap = make(map[KeycodeInfo]string)
@@ -47,7 +47,7 @@ func StartKeyBinding() {
 	var err error
 
 	if X, err = xgbutil.NewConn(); err != nil {
-		Logger.Warning("New XGB Util Failed:", err)
+		logger.Warning("New XGB Util Failed:", err)
 		panic(err)
 	}
 	keybind.Initialize(X)
@@ -64,17 +64,17 @@ func StartKeyBinding() {
 }
 
 func Start() {
-	Logger.BeginTracing()
+	logger.BeginTracing()
 
 	StartKeyBinding()
 
 	if err := dbus.InstallOnSession(GetManager()); err != nil {
-		Logger.Error("Install DBus Failed:", err)
+		logger.Error("Install DBus Failed:", err)
 		panic(err)
 	}
 
 	if err := dbus.InstallOnSession(GetMediaManager()); err != nil {
-		Logger.Error("Install DBus Failed:", err)
+		logger.Error("Install DBus Failed:", err)
 		panic(err)
 	}
 
@@ -82,7 +82,7 @@ func Start() {
 }
 
 func Stop() {
-	Logger.EndTracing()
+	logger.EndTracing()
 
 	stopXRecord()
 	xevent.Quit(X)

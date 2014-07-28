@@ -65,9 +65,9 @@ func (wa *fullScreenWorkaround) inhibit(target, cmdline string) {
 			})
 		}
 		hit()
-		Logger.Debug("Inhibit Hight Performance :", "TARGET:", target, "CMDLINE:", cmdline)
+		logger.Debug("Inhibit Hight Performance :", "TARGET:", target, "CMDLINE:", cmdline)
 	} else {
-		Logger.Error("ERRRR:", err)
+		logger.Error("ERRRR:", err)
 	}
 }
 
@@ -83,7 +83,7 @@ func (wa *fullScreenWorkaround) isFullScreen(xid xproto.Window) bool {
 		}
 	}
 	if found == 2 {
-		Logger.Debug("HAHAH:::::", states)
+		logger.Debug("HAHAH:::::", states)
 	}
 	return found == 2
 }

@@ -36,16 +36,16 @@ import "pkg.linuxdeepin.com/lib/glib-2.0"
 import "C"
 import . "pkg.linuxdeepin.com/lib/gettext"
 import "pkg.linuxdeepin.com/lib"
-import "pkg.linuxdeepin.com/lib/logger"
+import "pkg.linuxdeepin.com/lib/log"
 import "os"
 import "pkg.linuxdeepin.com/lib/dbus"
 import "dde-daemon"
 
-var Logger = logger.NewLogger("com.deepin.daemon")
+var logger = log.NewLogger("com.deepin.daemon")
 
 func main() {
 	if !lib.UniqueOnSession("com.deepin.daemon") {
-		Logger.Warning("There already has an dde-daemon running.")
+		logger.Warning("There already has an dde-daemon running.")
 		return
 	}
 	if len(os.Args) >= 2 {
@@ -53,8 +53,8 @@ func main() {
 			loader.Enable(disabledModuleName, false)
 		}
 	}
-	Logger.BeginTracing()
-	defer Logger.EndTracing()
+	logger.BeginTracing()
+	defer logger.EndTracing()
 
 	InitI18n()
 	Textdomain("dde-daemon")
@@ -67,7 +67,7 @@ func main() {
 
 	go func() {
 		if err := dbus.Wait(); err != nil {
-			Logger.Errorf("Lost dbus: %v", err)
+			logger.Errorf("Lost dbus: %v", err)
 			os.Exit(-1)
 		} else {
 			os.Exit(0)

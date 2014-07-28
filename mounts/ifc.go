@@ -30,11 +30,11 @@ import (
 func (m *Manager) DeviceEject(uuid string) (bool, string) {
 	info, ok := objectMap[uuid]
 	if !ok {
-		Logger.Warning("Eject id - %s not in objectMap.", uuid)
+		logger.Warning("Eject id - %s not in objectMap.", uuid)
 		return false, fmt.Sprintf("Invalid Id: %s\n", uuid)
 	}
 
-	Logger.Infof("Eject type: %s", info.Type)
+	logger.Infof("Eject type: %s", info.Type)
 	switch info.Type {
 	case "drive":
 		op := info.Object.(*gio.Drive)
@@ -42,7 +42,7 @@ func (m *Manager) DeviceEject(uuid string) (bool, string) {
 			_, err := op.EjectFinish(res)
 			if err != nil {
 				m.Error(uuid, err.Error())
-				Logger.Warningf("drive eject failed: %s, %s", uuid, err)
+				logger.Warningf("drive eject failed: %s, %s", uuid, err)
 			}
 		}))
 	case "volume":
@@ -51,7 +51,7 @@ func (m *Manager) DeviceEject(uuid string) (bool, string) {
 			_, err := op.EjectFinish(res)
 			if err != nil {
 				m.Error(uuid, err.Error())
-				Logger.Warningf("volume eject failed: %s, %s", uuid, err)
+				logger.Warningf("volume eject failed: %s, %s", uuid, err)
 			}
 		}))
 	case "mount":
@@ -60,11 +60,11 @@ func (m *Manager) DeviceEject(uuid string) (bool, string) {
 			_, err := op.EjectFinish(res)
 			if err != nil {
 				m.Error(uuid, err.Error())
-				Logger.Warningf("mount eject failed: %s, %s", uuid, err)
+				logger.Warningf("mount eject failed: %s, %s", uuid, err)
 			}
 		}))
 	default:
-		Logger.Errorf("'%s' invalid type", info.Type)
+		logger.Errorf("'%s' invalid type", info.Type)
 		return false, fmt.Sprintf("Invalid type: '%s'\n", info.Type)
 	}
 
@@ -74,11 +74,11 @@ func (m *Manager) DeviceEject(uuid string) (bool, string) {
 func (m *Manager) DeviceMount(uuid string) (bool, string) {
 	info, ok := objectMap[uuid]
 	if !ok {
-		Logger.Warning("Mount id - %s not in objectMap.", uuid)
+		logger.Warning("Mount id - %s not in objectMap.", uuid)
 		return false, fmt.Sprintf("Invalid Id: %s\n", uuid)
 	}
 
-	Logger.Infof("Mount type: %s", info.Type)
+	logger.Infof("Mount type: %s", info.Type)
 	switch info.Type {
 	case "volume":
 		op := info.Object.(*gio.Volume)
@@ -86,7 +86,7 @@ func (m *Manager) DeviceMount(uuid string) (bool, string) {
 			_, err := op.MountFinish(res)
 			if err != nil {
 				m.Error(uuid, err.Error())
-				Logger.Warningf("volume mount failed: %s, %s", uuid, err)
+				logger.Warningf("volume mount failed: %s, %s", uuid, err)
 			}
 		}))
 	case "mount":
@@ -95,11 +95,11 @@ func (m *Manager) DeviceMount(uuid string) (bool, string) {
 			_, err := op.RemountFinish(res)
 			if err != nil {
 				m.Error(uuid, err.Error())
-				Logger.Warningf("mount remount failed: %s, %s", uuid, err)
+				logger.Warningf("mount remount failed: %s, %s", uuid, err)
 			}
 		}))
 	default:
-		Logger.Errorf("'%s' invalid type", info.Type)
+		logger.Errorf("'%s' invalid type", info.Type)
 		return false, fmt.Sprintf("Invalid type: '%s'\n", info.Type)
 	}
 
@@ -109,11 +109,11 @@ func (m *Manager) DeviceMount(uuid string) (bool, string) {
 func (m *Manager) DeviceUnmount(uuid string) (bool, string) {
 	info, ok := objectMap[uuid]
 	if !ok {
-		Logger.Warningf("Unmount id - %s not in objectMap.", uuid)
+		logger.Warningf("Unmount id - %s not in objectMap.", uuid)
 		return false, fmt.Sprintf("Invalid Id: %s\n", uuid)
 	}
 
-	Logger.Infof("Unmount type: %s", info.Type)
+	logger.Infof("Unmount type: %s", info.Type)
 	switch info.Type {
 	case "mount":
 		op := info.Object.(*gio.Mount)
@@ -121,11 +121,11 @@ func (m *Manager) DeviceUnmount(uuid string) (bool, string) {
 			_, err := op.UnmountFinish(res)
 			if err != nil {
 				m.Error(uuid, err.Error())
-				Logger.Warningf("mount unmount failed: %s, %s", uuid, err)
+				logger.Warningf("mount unmount failed: %s, %s", uuid, err)
 			}
 		}))
 	default:
-		Logger.Errorf("'%s' invalid type", info.Type)
+		logger.Errorf("'%s' invalid type", info.Type)
 		return false, fmt.Sprintf("Invalid type: '%s'\n", info.Type)
 	}
 
