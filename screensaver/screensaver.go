@@ -93,6 +93,14 @@ func (ss *ScreenSaver) SetTimeout(seconds, interval uint32, blank bool) {
 		logger.Info("Current is inhibit state, the value", ss.lastVals, "will apply when in unhibit state")
 	} else {
 		ss.setTimeout(seconds, interval, blank)
+
+		ss.idleTime = seconds
+		ss.idleInterval = interval
+		if blank {
+			ss.blank = 1
+		} else {
+			ss.blank = 0
+		}
 	}
 }
 
