@@ -64,6 +64,7 @@ func (p *Power) refreshUpower(up *upower.Upower) {
 		p.setPropBatteryIsPresent(dev.IsPresent.Get())
 		p.setPropBatteryState(dev.State.Get())
 		p.setPropBatteryPercentage(dev.Percentage.Get())
+		p.setPropBatteryPercentage(0.0)
 		p.handleBatteryPercentage()
 	} else {
 		p.setPropBatteryIsPresent(false)
@@ -86,7 +87,7 @@ func (p *Power) handleBatteryPercentage() {
 	case p.BatteryPercentage < abnormalBatteryPercentage:
 		//Battery state abnormal
 		if p.OnBattery && p.lowBatteryStatus != lowBatteryStatusAbnormal {
-			p.lowBatteryStatus == lowBatteryStatusAbnormal
+			p.lowBatteryStatus = lowBatteryStatusAbnormal
 			p.sendNotify("battery-0", Tr("Abnormal battery power"), Tr("Battery power can not be predicted, please save important documents properly and  not do important operations."))
 		}
 	case p.BatteryPercentage < float64(p.coreSettings.GetInt("percentage-action")):
