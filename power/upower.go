@@ -36,10 +36,13 @@ const (
 const (
 	//internal used
 	lowBatteryStatusNormal = iota
+	lowBatteryStatusAbnormal
 	lowBatteryStatusLow
 	lowBatteryStatusCritcal
 	lowBatteryStatusAction
 )
+
+const abnormalBatteryPercentage = float64(1.0)
 
 func (p *Power) refreshUpower(up *upower.Upower) {
 
@@ -80,6 +83,12 @@ func (p *Power) handleBatteryPercentage() {
 		return
 	}
 	switch {
+	case p.BatteryPercentage < abnormalBatteryPercentage:
+		//Battery state abnormal
+		if p.OnBattery && p.lowBatteryStatus != lowBatteryStatusAbnormal {
+			p.lowBatteryStatus == lowBatteryStatusAbnormal
+			p.sendNotify("icon", Tr("Abnormal battery power"), Tr("Battery power can not be predicted, please save important documents properly and  not do important operations."))
+		}
 	case p.BatteryPercentage < float64(p.coreSettings.GetInt("percentage-action")):
 		if p.lowBatteryStatus != lowBatteryStatusAction {
 			p.lowBatteryStatus = lowBatteryStatusAction
