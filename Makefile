@@ -55,7 +55,9 @@ install: build translate
 
 	mkdir -pv ${DESTDIR}${PREFIX}/share/dde-daemon
 	cp -r data/lang     ${DESTDIR}${PREFIX}/share/dde-daemon/
-	cp -r data/template ${DESTDIR}${PREFIX}/share/dde-daeman/
+
+	mkdir -pv ${DESTDIR}${PREFIX}/share/dde-daemon/template
+	cp -r data/template ${DESTDIR}${PREFIX}/share/dde-daemon/template/
 
 	mkdir -pv ${DESTDIR}${PREFIX}/bin
 	cp data/tool/wireless_script*.sh ${DESTDIR}${PREFIX}/bin/wireless-script
