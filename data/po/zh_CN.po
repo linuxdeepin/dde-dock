@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-23 15:21+0800\n"
+"POT-Creation-Date: 2014-07-29 15:05+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME &lt;EMAIL@ADDRESS&gt;\n"
 "Language-Team: LANGUAGE &lt;LL@li.org&gt;\n"
@@ -2088,227 +2088,227 @@ msgstr "驻留(_D)"
 msgid "Auto"
 msgstr "自动"
 
-#: ../../keybinding/id_desc_list.go:36
+#: ../../keybinding/id_desc_list.go:47
 msgid "Launcher"
 msgstr "启动器"
 
-#: ../../keybinding/id_desc_list.go:37
+#: ../../keybinding/id_desc_list.go:48
 msgid "Show desktop"
 msgstr "显示桌面"
 
-#: ../../keybinding/id_desc_list.go:38
+#: ../../keybinding/id_desc_list.go:49
 msgid "Lock screen"
 msgstr "锁屏界面"
 
-#: ../../keybinding/id_desc_list.go:39
+#: ../../keybinding/id_desc_list.go:50
 msgid "File manager"
 msgstr "文件管理器"
 
-#: ../../keybinding/id_desc_list.go:40
+#: ../../keybinding/id_desc_list.go:51
 msgid "Switch applications"
 msgstr "切换程序"
 
-#: ../../keybinding/id_desc_list.go:41
+#: ../../keybinding/id_desc_list.go:52
 msgid "Reverse switch applications"
 msgstr "反向切换程序"
 
-#: ../../keybinding/id_desc_list.go:42
+#: ../../keybinding/id_desc_list.go:53
 msgid "3D switch applications"
 msgstr "3D切换程序"
 
-#: ../../keybinding/id_desc_list.go:43
+#: ../../keybinding/id_desc_list.go:54
 msgid "3D reverse switch applications"
 msgstr "3D反向切换程序"
 
-#: ../../keybinding/id_desc_list.go:44
+#: ../../keybinding/id_desc_list.go:55
 msgid "Show/Hide the dock"
 msgstr "显示/隐藏任务栏"
 
-#: ../../keybinding/id_desc_list.go:45
+#: ../../keybinding/id_desc_list.go:56
 msgid "Screenshot"
 msgstr "屏幕截图"
 
-#: ../../keybinding/id_desc_list.go:46
+#: ../../keybinding/id_desc_list.go:57
 msgid "Full screenshot"
 msgstr "全屏截图"
 
-#: ../../keybinding/id_desc_list.go:47
+#: ../../keybinding/id_desc_list.go:58
 msgid "Window screenshot"
 msgstr "窗口截图"
 
-#: ../../keybinding/id_desc_list.go:48
+#: ../../keybinding/id_desc_list.go:59
 msgid "Delay screenshot"
 msgstr "延时截图"
 
-#: ../../keybinding/id_desc_list.go:49
+#: ../../keybinding/id_desc_list.go:60
 msgid "Terminal"
 msgstr "终端"
 
-#: ../../keybinding/id_desc_list.go:50
+#: ../../keybinding/id_desc_list.go:61
 msgid "Terminal Quake Window"
 msgstr "终端雷神模式"
 
-#: ../../keybinding/id_desc_list.go:51
+#: ../../keybinding/id_desc_list.go:62
 msgid "Logout"
 msgstr "注销"
 
-#: ../../keybinding/id_desc_list.go:52
+#: ../../keybinding/id_desc_list.go:63
 msgid "Disable Touchpad"
 msgstr "禁用触摸板"
 
-#: ../../keybinding/id_desc_list.go:53
+#: ../../keybinding/id_desc_list.go:64
 msgid "Deepin Translator"
 msgstr "深度翻译"
 
-#: ../../keybinding/id_desc_list.go:54
+#: ../../keybinding/id_desc_list.go:65
 msgid "Switch Layout"
 msgstr "切换键盘布局"
 
-#: ../../keybinding/id_desc_list.go:62
+#: ../../keybinding/id_desc_list.go:73
 msgid "Calculator"
 msgstr "计算器"
 
-#: ../../keybinding/id_desc_list.go:63
+#: ../../keybinding/id_desc_list.go:74
 msgid "Email client"
 msgstr "邮件客户端"
 
-#: ../../keybinding/id_desc_list.go:64
+#: ../../keybinding/id_desc_list.go:75
 msgid "Web browser"
 msgstr "网页浏览器"
 
-#: ../../keybinding/id_desc_list.go:65
+#: ../../keybinding/id_desc_list.go:76
 msgid "Media player"
 msgstr "多媒体播放器"
 
-#: ../../keybinding/id_desc_list.go:66
+#: ../../keybinding/id_desc_list.go:77
 msgid "Play/Pause"
 msgstr "播放/暂停"
 
-#: ../../keybinding/id_desc_list.go:67
+#: ../../keybinding/id_desc_list.go:78
 msgid "Pause"
 msgstr "暂停播放"
 
-#: ../../keybinding/id_desc_list.go:68
+#: ../../keybinding/id_desc_list.go:79
 msgid "Stop"
 msgstr "停止播放"
 
-#: ../../keybinding/id_desc_list.go:69
+#: ../../keybinding/id_desc_list.go:80
 msgid "Mute"
 msgstr "静音"
 
-#: ../../keybinding/id_desc_list.go:70
+#: ../../keybinding/id_desc_list.go:81
 msgid "Volume down"
 msgstr "减小音量"
 
-#: ../../keybinding/id_desc_list.go:71
+#: ../../keybinding/id_desc_list.go:82
 msgid "Volume up"
 msgstr "增大音量"
 
-#: ../../keybinding/id_desc_list.go:72
+#: ../../keybinding/id_desc_list.go:83
 msgid "Previous"
 msgstr "上一个"
 
-#: ../../keybinding/id_desc_list.go:73
+#: ../../keybinding/id_desc_list.go:84
 msgid "Next"
 msgstr "下一个"
 
-#: ../../keybinding/id_desc_list.go:74
+#: ../../keybinding/id_desc_list.go:85
 msgid "Eject"
 msgstr "弹出"
 
-#: ../../keybinding/id_desc_list.go:82
+#: ../../keybinding/id_desc_list.go:93
 msgid "Close window"
 msgstr "关闭窗口"
 
-#: ../../keybinding/id_desc_list.go:83
+#: ../../keybinding/id_desc_list.go:94
 msgid "Maximize window"
 msgstr "最大化窗口"
 
-#: ../../keybinding/id_desc_list.go:84
+#: ../../keybinding/id_desc_list.go:95
 msgid "Restore window"
 msgstr "恢复窗口"
 
-#: ../../keybinding/id_desc_list.go:85
+#: ../../keybinding/id_desc_list.go:96
 msgid "Minimize window"
 msgstr "最小化窗口"
 
-#: ../../keybinding/id_desc_list.go:86
+#: ../../keybinding/id_desc_list.go:97
 msgid "Move window"
 msgstr "移动窗口"
 
-#: ../../keybinding/id_desc_list.go:87
+#: ../../keybinding/id_desc_list.go:98
 msgid "Resize window"
 msgstr "改变窗口大小"
 
-#: ../../keybinding/id_desc_list.go:88
+#: ../../keybinding/id_desc_list.go:99
 msgid "Switch furl state"
 msgstr "切换卷起状态"
 
-#: ../../keybinding/id_desc_list.go:89
+#: ../../keybinding/id_desc_list.go:100
 msgid "Activate window menu"
 msgstr "激活窗口菜单"
 
-#: ../../keybinding/id_desc_list.go:97
+#: ../../keybinding/id_desc_list.go:108
 msgid "Switch to workspace 1"
 msgstr "切换到工作区1"
 
-#: ../../keybinding/id_desc_list.go:98
+#: ../../keybinding/id_desc_list.go:109
 msgid "Switch to workspace 2"
 msgstr "切换到工作区2"
 
-#: ../../keybinding/id_desc_list.go:99
+#: ../../keybinding/id_desc_list.go:110
 msgid "Switch to workspace 3"
 msgstr "切换到工作区3"
 
-#: ../../keybinding/id_desc_list.go:100
+#: ../../keybinding/id_desc_list.go:111
 msgid "Switch to workspace 4"
 msgstr "切换到工作区4"
 
-#: ../../keybinding/id_desc_list.go:101
+#: ../../keybinding/id_desc_list.go:112
 msgid "Switch to left workspace"
 msgstr "切换到左边工作区"
 
-#: ../../keybinding/id_desc_list.go:102
+#: ../../keybinding/id_desc_list.go:113
 msgid "Switch to right workspace"
 msgstr "切换到右边工作区"
 
-#: ../../keybinding/id_desc_list.go:103
+#: ../../keybinding/id_desc_list.go:114
 msgid "Switch to upper workspace"
 msgstr "切换到上方工作区"
 
-#: ../../keybinding/id_desc_list.go:104
+#: ../../keybinding/id_desc_list.go:115
 msgid "Switch to lower workspace"
 msgstr "切换到下方工作区"
 
-#: ../../keybinding/id_desc_list.go:105
+#: ../../keybinding/id_desc_list.go:116
 msgid "Move to workspace 1"
 msgstr "移动到工作区1"
 
-#: ../../keybinding/id_desc_list.go:106
+#: ../../keybinding/id_desc_list.go:117
 msgid "Move to workspace 2"
 msgstr "移动到工作区2"
 
-#: ../../keybinding/id_desc_list.go:107
+#: ../../keybinding/id_desc_list.go:118
 msgid "Move to workspace 3"
 msgstr "移动到工作区3"
 
-#: ../../keybinding/id_desc_list.go:108
+#: ../../keybinding/id_desc_list.go:119
 msgid "Move to workspace 4"
 msgstr "移动到工作区4"
 
-#: ../../keybinding/id_desc_list.go:109
+#: ../../keybinding/id_desc_list.go:120
 msgid "Move to left workspace"
 msgstr "移动到左边工作区"
 
-#: ../../keybinding/id_desc_list.go:110
+#: ../../keybinding/id_desc_list.go:121
 msgid "Move to right workspace"
 msgstr "移动到右边工作区"
 
-#: ../../keybinding/id_desc_list.go:111
+#: ../../keybinding/id_desc_list.go:122
 msgid "Move to upper workspace"
 msgstr "移动到上方工作区"
 
-#: ../../keybinding/id_desc_list.go:112
+#: ../../keybinding/id_desc_list.go:123
 msgid "Move to lower workspace"
 msgstr "移动到下方工作区"
 
@@ -3190,23 +3190,33 @@ msgstr "断开连接，当前已离线"
 msgid "Access Point mode is not supported by this device."
 msgstr "此设备不支持热点模式"
 
-#: ../../power/upower.go:86 ../../power/upower.go:101
+#: ../../power/upower.go:90
+msgid "Abnormal battery power"
+msgstr "电池电量异常"
+
+#: ../../power/upower.go:90
+msgid ""
+"Battery power can not be predicted, please save important documents properly "
+"and  not do important operations."
+msgstr "因为无法预知电池电量，请妥当保存重要文档，不要做重要操作。"
+
+#: ../../power/upower.go:95 ../../power/upower.go:110
 msgid "Battery Critical Low"
 msgstr "电池电量耗尽"
 
-#: ../../power/upower.go:86
+#: ../../power/upower.go:95
 msgid "Computer has been in suspend mode, please plug in."
 msgstr "计算机进入待机状态，请连接电源。"
 
-#: ../../power/upower.go:101
+#: ../../power/upower.go:110
 msgid "Please plug in, or computer will be in suspend mode."
 msgstr "计算机将要进入待机状态，请连接电源。"
 
-#: ../../power/upower.go:114
+#: ../../power/upower.go:123
 msgid "Battery Low"
 msgstr "电池电量低"
 
-#: ../../power/upower.go:114
+#: ../../power/upower.go:123
 msgid "Computer will be in suspend mode, please plug in now."
 msgstr "计算机将要进入待机状态，请连接电源。"
 

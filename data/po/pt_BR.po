@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-23 15:21+0800\n"
+"POT-Creation-Date: 2014-07-29 15:05+0800\n"
 "PO-Revision-Date: 2014-07-07 10:00+0000\n"
 "Last-Translator: electricface <songwentai@linuxdeepin.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/projects/p/dde-"
@@ -2096,227 +2096,227 @@ msgstr "_Dock"
 msgid "Auto"
 msgstr "Auto"
 
-#: ../../keybinding/id_desc_list.go:36
+#: ../../keybinding/id_desc_list.go:47
 msgid "Launcher"
 msgstr "Lançador"
 
-#: ../../keybinding/id_desc_list.go:37
+#: ../../keybinding/id_desc_list.go:48
 msgid "Show desktop"
 msgstr "Mostrar desktop"
 
-#: ../../keybinding/id_desc_list.go:38
+#: ../../keybinding/id_desc_list.go:49
 msgid "Lock screen"
 msgstr "Travar tela"
 
-#: ../../keybinding/id_desc_list.go:39
+#: ../../keybinding/id_desc_list.go:50
 msgid "File manager"
 msgstr "Gerenciador de arquivos"
 
-#: ../../keybinding/id_desc_list.go:40
+#: ../../keybinding/id_desc_list.go:51
 msgid "Switch applications"
 msgstr "Alternar aplicações"
 
-#: ../../keybinding/id_desc_list.go:41
+#: ../../keybinding/id_desc_list.go:52
 msgid "Reverse switch applications"
 msgstr "Reverter alternar aplicações"
 
-#: ../../keybinding/id_desc_list.go:42
+#: ../../keybinding/id_desc_list.go:53
 msgid "3D switch applications"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:43
+#: ../../keybinding/id_desc_list.go:54
 msgid "3D reverse switch applications"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:44
+#: ../../keybinding/id_desc_list.go:55
 msgid "Show/Hide the dock"
 msgstr "Mostrar/Ocultar dock"
 
-#: ../../keybinding/id_desc_list.go:45
+#: ../../keybinding/id_desc_list.go:56
 msgid "Screenshot"
 msgstr "Captura de Tela"
 
-#: ../../keybinding/id_desc_list.go:46
+#: ../../keybinding/id_desc_list.go:57
 msgid "Full screenshot"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:47
+#: ../../keybinding/id_desc_list.go:58
 msgid "Window screenshot"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:48
+#: ../../keybinding/id_desc_list.go:59
 msgid "Delay screenshot"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:49
+#: ../../keybinding/id_desc_list.go:60
 msgid "Terminal"
 msgstr "Terminal"
 
-#: ../../keybinding/id_desc_list.go:50
+#: ../../keybinding/id_desc_list.go:61
 msgid "Terminal Quake Window"
 msgstr "Janela do Terminal Quake"
 
-#: ../../keybinding/id_desc_list.go:51
+#: ../../keybinding/id_desc_list.go:62
 msgid "Logout"
 msgstr "Sair"
 
-#: ../../keybinding/id_desc_list.go:52
+#: ../../keybinding/id_desc_list.go:63
 msgid "Disable Touchpad"
 msgstr "Desabilitar Touchpad"
 
-#: ../../keybinding/id_desc_list.go:53
+#: ../../keybinding/id_desc_list.go:64
 msgid "Deepin Translator"
 msgstr "Tradutor Deepin"
 
-#: ../../keybinding/id_desc_list.go:54
+#: ../../keybinding/id_desc_list.go:65
 msgid "Switch Layout"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:62
+#: ../../keybinding/id_desc_list.go:73
 msgid "Calculator"
 msgstr "Calculadora"
 
-#: ../../keybinding/id_desc_list.go:63
+#: ../../keybinding/id_desc_list.go:74
 msgid "Email client"
 msgstr "Cliente de e-mail"
 
-#: ../../keybinding/id_desc_list.go:64
+#: ../../keybinding/id_desc_list.go:75
 msgid "Web browser"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:65
+#: ../../keybinding/id_desc_list.go:76
 msgid "Media player"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:66
+#: ../../keybinding/id_desc_list.go:77
 msgid "Play/Pause"
 msgstr "Reproduzir/Pausar"
 
-#: ../../keybinding/id_desc_list.go:67
+#: ../../keybinding/id_desc_list.go:78
 msgid "Pause"
 msgstr "Pausar"
 
-#: ../../keybinding/id_desc_list.go:68
+#: ../../keybinding/id_desc_list.go:79
 msgid "Stop"
 msgstr "Parar"
 
-#: ../../keybinding/id_desc_list.go:69
+#: ../../keybinding/id_desc_list.go:80
 msgid "Mute"
 msgstr "Mudo"
 
-#: ../../keybinding/id_desc_list.go:70
+#: ../../keybinding/id_desc_list.go:81
 msgid "Volume down"
 msgstr "Diminuir volume"
 
-#: ../../keybinding/id_desc_list.go:71
+#: ../../keybinding/id_desc_list.go:82
 msgid "Volume up"
 msgstr "Aumentar volume"
 
-#: ../../keybinding/id_desc_list.go:72
+#: ../../keybinding/id_desc_list.go:83
 msgid "Previous"
 msgstr "Anterior"
 
-#: ../../keybinding/id_desc_list.go:73
+#: ../../keybinding/id_desc_list.go:84
 msgid "Next"
 msgstr "Próximo"
 
-#: ../../keybinding/id_desc_list.go:74
+#: ../../keybinding/id_desc_list.go:85
 msgid "Eject"
 msgstr "Ejetar"
 
-#: ../../keybinding/id_desc_list.go:82
+#: ../../keybinding/id_desc_list.go:93
 msgid "Close window"
 msgstr "Fechar janela"
 
-#: ../../keybinding/id_desc_list.go:83
+#: ../../keybinding/id_desc_list.go:94
 msgid "Maximize window"
 msgstr "Maximizar janela"
 
-#: ../../keybinding/id_desc_list.go:84
+#: ../../keybinding/id_desc_list.go:95
 msgid "Restore window"
 msgstr "Restaurar janela"
 
-#: ../../keybinding/id_desc_list.go:85
+#: ../../keybinding/id_desc_list.go:96
 msgid "Minimize window"
 msgstr "Minimizar janela"
 
-#: ../../keybinding/id_desc_list.go:86
+#: ../../keybinding/id_desc_list.go:97
 msgid "Move window"
 msgstr "Mover janela"
 
-#: ../../keybinding/id_desc_list.go:87
+#: ../../keybinding/id_desc_list.go:98
 msgid "Resize window"
 msgstr "Redimensionar janela"
 
-#: ../../keybinding/id_desc_list.go:88
+#: ../../keybinding/id_desc_list.go:99
 msgid "Switch furl state"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:89
+#: ../../keybinding/id_desc_list.go:100
 msgid "Activate window menu"
 msgstr "Ativar menu das janelas"
 
-#: ../../keybinding/id_desc_list.go:97
+#: ../../keybinding/id_desc_list.go:108
 msgid "Switch to workspace 1"
 msgstr "Alternar para espaço de trabalho 1"
 
-#: ../../keybinding/id_desc_list.go:98
+#: ../../keybinding/id_desc_list.go:109
 msgid "Switch to workspace 2"
 msgstr "Alternar para espaço de trabalho 2"
 
-#: ../../keybinding/id_desc_list.go:99
+#: ../../keybinding/id_desc_list.go:110
 msgid "Switch to workspace 3"
 msgstr "Alternar para espaço de trabalho 3"
 
-#: ../../keybinding/id_desc_list.go:100
+#: ../../keybinding/id_desc_list.go:111
 msgid "Switch to workspace 4"
 msgstr "Alternar para espaço de trabalho 4"
 
-#: ../../keybinding/id_desc_list.go:101
+#: ../../keybinding/id_desc_list.go:112
 msgid "Switch to left workspace"
 msgstr "Alternar para a área de trabalho à esquerda"
 
-#: ../../keybinding/id_desc_list.go:102
+#: ../../keybinding/id_desc_list.go:113
 msgid "Switch to right workspace"
 msgstr "Alternar para a área de trabalho à direita"
 
-#: ../../keybinding/id_desc_list.go:103
+#: ../../keybinding/id_desc_list.go:114
 msgid "Switch to upper workspace"
 msgstr "Alternar para a área de trabalho superior"
 
-#: ../../keybinding/id_desc_list.go:104
+#: ../../keybinding/id_desc_list.go:115
 msgid "Switch to lower workspace"
 msgstr "Alternar para a área de trabalho inferior"
 
-#: ../../keybinding/id_desc_list.go:105
+#: ../../keybinding/id_desc_list.go:116
 msgid "Move to workspace 1"
 msgstr "Mover para a área de trabalho 1"
 
-#: ../../keybinding/id_desc_list.go:106
+#: ../../keybinding/id_desc_list.go:117
 msgid "Move to workspace 2"
 msgstr "Mover para a área de trabalho 2"
 
-#: ../../keybinding/id_desc_list.go:107
+#: ../../keybinding/id_desc_list.go:118
 msgid "Move to workspace 3"
 msgstr "Mover para a área de trabalho 3"
 
-#: ../../keybinding/id_desc_list.go:108
+#: ../../keybinding/id_desc_list.go:119
 msgid "Move to workspace 4"
 msgstr "Mover para a área de trabalho 4"
 
-#: ../../keybinding/id_desc_list.go:109
+#: ../../keybinding/id_desc_list.go:120
 msgid "Move to left workspace"
 msgstr "Alternar para a área de trabalho à esquerda"
 
-#: ../../keybinding/id_desc_list.go:110
+#: ../../keybinding/id_desc_list.go:121
 msgid "Move to right workspace"
 msgstr "Alternar para a área de trabalho à direita"
 
-#: ../../keybinding/id_desc_list.go:111
+#: ../../keybinding/id_desc_list.go:122
 msgid "Move to upper workspace"
 msgstr "Alternar para a área de trabalho superior"
 
-#: ../../keybinding/id_desc_list.go:112
+#: ../../keybinding/id_desc_list.go:123
 msgid "Move to lower workspace"
 msgstr "Alternar para a área de trabalho inferior"
 
@@ -3197,23 +3197,33 @@ msgstr "Desconectado, você agora está offline."
 msgid "Access Point mode is not supported by this device."
 msgstr "Modo Ponto de Acesso não é suportado por esse dispositivo."
 
-#: ../../power/upower.go:86 ../../power/upower.go:101
+#: ../../power/upower.go:90
+msgid "Abnormal battery power"
+msgstr ""
+
+#: ../../power/upower.go:90
+msgid ""
+"Battery power can not be predicted, please save important documents properly "
+"and  not do important operations."
+msgstr ""
+
+#: ../../power/upower.go:95 ../../power/upower.go:110
 msgid "Battery Critical Low"
 msgstr "Bateria criticamente baixa"
 
-#: ../../power/upower.go:86
+#: ../../power/upower.go:95
 msgid "Computer has been in suspend mode, please plug in."
 msgstr ""
 
-#: ../../power/upower.go:101
+#: ../../power/upower.go:110
 msgid "Please plug in, or computer will be in suspend mode."
 msgstr ""
 
-#: ../../power/upower.go:114
+#: ../../power/upower.go:123
 msgid "Battery Low"
 msgstr "Bateria fraca"
 
-#: ../../power/upower.go:114
+#: ../../power/upower.go:123
 msgid "Computer will be in suspend mode, please plug in now."
 msgstr ""
 
