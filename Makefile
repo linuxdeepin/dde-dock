@@ -64,3 +64,5 @@ clean:
 	rm -rf ${GOPATH_DIR}
 	rm -rf out/bin
 	rm -rf out/locale
+
+rebuild: clean build
