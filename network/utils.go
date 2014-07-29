@@ -22,28 +22,10 @@
 package network
 
 import (
-	"crypto/rand"
 	"dbus/org/freedesktop/notifications"
 	"encoding/json"
-	"fmt"
-	"io"
-	"os"
-	"reflect"
-	"strings"
+	"pkg.linuxdeepin.com/lib/utils"
 )
-
-func genUuid() string {
-	uuid := make([]byte, 16)
-	n, err := io.ReadFull(rand.Reader, uuid)
-	if n != len(uuid) || err != nil {
-		panic("This can failed?")
-	}
-	// variant bits; see section 4.1.1
-	uuid[8] = uuid[8]&^0xc0 | 0x80
-	// version 4 (pseudo-random); see section 4.1.3
-	uuid[6] = uuid[6]&^0xf0 | 0x40
-	return fmt.Sprintf("%x-%x-%x-%x-%x", uuid[0:4], uuid[4:6], uuid[6:8], uuid[8:10], uuid[10:])
-}
 
 func isStringInArray(s string, list []string) bool {
 	for _, i := range list {
@@ -73,19 +55,8 @@ func appendStrArrayUnique(a1 []string, a2 ...string) (a []string) {
 	return
 }
 
-func randString(n int) string {
-	const alphanum = "0123456789abcdef"
-	var bytes = make([]byte, n)
-	rand.Read(bytes)
-	for i, b := range bytes {
-		bytes[i] = alphanum[b%byte(len(alphanum))]
-	}
-	return string(bytes)
-}
-
 func isInterfaceNil(v interface{}) bool {
-	defer func() { recover() }()
-	return v == nil || reflect.ValueOf(v).IsNil()
+	return utils.IsInterfaceNil(v)
 }
 
 func isInterfaceEmpty(v interface{}) bool {
@@ -132,34 +103,14 @@ func isUint32ArrayEmpty(a []uint32) (empty bool) {
 	return
 }
 
-func isUriPath(path string) bool {
-	if strings.HasPrefix(path, "file://") {
-		return true
-	}
-	return false
-}
-
-func isLocalPath(path string) bool {
-	if isUriPath(path) {
-		return false
-	}
-	return true
-}
-
 // "/the/path" -> "file:///the/path", "file:///the/path" -> "file:///the/path"
 func toUriPath(path string) (uriPath string) {
-	if strings.HasPrefix(path, "file://") {
-		uriPath = path
-	} else {
-		uriPath = "file://" + path
-	}
-	return
+	return utils.EncodeURI(path, utils.SCHEME_FILE)
 }
 
 // "/the/path" -> "/the/path", "file:///the/path" -> "/the/path"
 func toLocalPath(path string) (localPath string) {
-	localPath = strings.TrimPrefix(path, "file://")
-	return
+	return utils.DecodeURI(path)
 }
 
 // byte array should end with null byte
@@ -174,24 +125,6 @@ func byteArrayToStrPath(bytePath []byte) (path string) {
 	}
 	path = string(bytePath[:len(bytePath)-1])
 	return
-}
-
-func isFileExists(file string) bool {
-	stat, err := os.Stat(file)
-	if err == nil && !stat.IsDir() {
-		return true
-	}
-	return false
-}
-
-func ensureDirExists(dir string, perm ...os.FileMode) error {
-	var p os.FileMode
-	if len(perm) > 0 {
-		p = perm[0]
-	} else {
-		p = 0755
-	}
-	return os.MkdirAll(dir, p)
 }
 
 func notify(icon, summary, body string) (err error) {

@@ -22,6 +22,7 @@
 package network
 
 import (
+	"pkg.linuxdeepin.com/lib/utils"
 	"strings"
 )
 
@@ -68,7 +69,7 @@ func doRememberError(errs sectionErrors, key, errMsg string) {
 // start with "file://", end with null byte
 func ensureByteArrayUriPathExists(errs sectionErrors, section, key string, bytePath []byte, limitedExts ...string) {
 	path := byteArrayToStrPath(bytePath)
-	if !isUriPath(path) {
+	if !utils.IsURI(path) {
 		rememberError(errs, section, key, NM_KEY_ERROR_INVALID_VALUE)
 		return
 	}
@@ -91,7 +92,7 @@ func ensureFileExists(errs sectionErrors, section, key, file string, limitedExts
 			// rememberError(errs, section, key, NM_KEY_ERROR_INVALID_VALUE)
 		}
 	}
-	if !isFileExists(file) {
+	if !utils.IsFileExist(file) {
 		rememberError(errs, section, key, NM_KEY_ERROR_INVALID_VALUE)
 	}
 }

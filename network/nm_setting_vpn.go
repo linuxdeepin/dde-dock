@@ -23,6 +23,7 @@ package network
 
 import (
 	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/utils"
 )
 
 const VPN_NAME_FILES_DIR = "/etc/NetworkManager/VPN/"
@@ -58,19 +59,19 @@ func initBasicSettingSectionVpn(data connectionData, service string) {
 }
 
 func getLocalSupportedVpnTypes() (vpnTypes []string) {
-	if isFileExists(nmVpnL2tpServiceFile) {
+	if utils.IsFileExist(nmVpnL2tpServiceFile) {
 		vpnTypes = append(vpnTypes, connectionVpnL2tp)
 	}
-	if isFileExists(nmVpnOpenconnectServiceFile) {
+	if utils.IsFileExist(nmVpnOpenconnectServiceFile) {
 		vpnTypes = append(vpnTypes, connectionVpnOpenconnect)
 	}
-	if isFileExists(nmVpnOpenvpnServiceFile) {
+	if utils.IsFileExist(nmVpnOpenvpnServiceFile) {
 		vpnTypes = append(vpnTypes, connectionVpnOpenvpn)
 	}
-	if isFileExists(nmVpnPptpServiceFile) {
+	if utils.IsFileExist(nmVpnPptpServiceFile) {
 		vpnTypes = append(vpnTypes, connectionVpnPptp)
 	}
-	if isFileExists(nmVpnVpncServiceFile) {
+	if utils.IsFileExist(nmVpnVpncServiceFile) {
 		vpnTypes = append(vpnTypes, connectionVpnVpnc)
 	}
 	return

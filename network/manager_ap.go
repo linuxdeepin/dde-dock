@@ -24,6 +24,7 @@ package network
 import (
 	nm "dbus/org/freedesktop/networkmanager"
 	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/utils"
 )
 
 type apSecType uint32
@@ -252,7 +253,7 @@ func (m *Manager) ActivateAccessPoint(uuid string, apPath, devPath dbus.ObjectPa
 		if err != nil {
 			return
 		}
-		uuid = genUuid()
+		uuid = utils.GenUuid()
 		data := newWirelessConnectionData(string(ap.Ssid.Get()), uuid, []byte(ap.Ssid.Get()), getApSecType(ap))
 		_, _, err = nmAddAndActivateConnection(data, devPath)
 	}

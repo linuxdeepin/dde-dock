@@ -24,6 +24,7 @@ package network
 import (
 	"fmt"
 	. "pkg.linuxdeepin.com/lib/gettext"
+	"pkg.linuxdeepin.com/lib/utils"
 )
 
 const NM_SETTING_WIRELESS_SETTING_NAME = "802-11-wireless"
@@ -206,7 +207,7 @@ func initAvailableValuesWirelessChannel() {
 // new connection data
 func newWirelessConnection(id string, ssid []byte, secType apSecType) (uuid string) {
 	logger.Debugf("new wireless connection, id=%s, ssid=%s, secType=%d", id, ssid, secType)
-	uuid = genUuid()
+	uuid = utils.GenUuid()
 	data := newWirelessConnectionData(id, uuid, ssid, secType)
 	nmAddConnection(data)
 	return

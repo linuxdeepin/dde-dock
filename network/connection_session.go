@@ -24,6 +24,7 @@ package network
 import (
 	"fmt"
 	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/utils"
 	"time"
 )
 
@@ -54,7 +55,7 @@ type ConnectionSession struct {
 
 func doNewConnectionSession(devPath dbus.ObjectPath, uuid string) (s *ConnectionSession) {
 	s = &ConnectionSession{}
-	s.sessionPath = dbus.ObjectPath(fmt.Sprintf("/com/deepin/daemon/ConnectionSession/%s", randString(8)))
+	s.sessionPath = dbus.ObjectPath(fmt.Sprintf("/com/deepin/daemon/ConnectionSession/%s", utils.RandString(8)))
 	s.devPath = devPath
 	s.Uuid = uuid
 	s.data = make(connectionData)
@@ -72,7 +73,7 @@ func newConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 		return
 	}
 
-	s = doNewConnectionSession(devPath, genUuid())
+	s = doNewConnectionSession(devPath, utils.GenUuid())
 
 	// expand wrapper connection type
 	id := genConnectionId(connectionType)

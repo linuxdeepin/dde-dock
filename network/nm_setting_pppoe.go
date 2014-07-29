@@ -21,6 +21,10 @@
 
 package network
 
+import (
+	"pkg.linuxdeepin.com/lib/utils"
+)
+
 const NM_SETTING_PPPOE_SETTING_NAME = "pppoe"
 
 const (
@@ -32,7 +36,7 @@ const (
 
 func newPppoeConnection(id, username string) (uuid string) {
 	logger.Debugf("new pppoe connection, id=%s", id)
-	uuid = genUuid()
+	uuid = utils.GenUuid()
 	data := newPppoeConnectionData(id, uuid)
 	setSettingPppoeUsername(data, username)
 	nmAddConnection(data)

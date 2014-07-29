@@ -22,8 +22,9 @@
 package network
 
 import (
-	. "pkg.linuxdeepin.com/lib/gettext"
 	"fmt"
+	. "pkg.linuxdeepin.com/lib/gettext"
+	"pkg.linuxdeepin.com/lib/utils"
 )
 
 // TODO doc
@@ -288,7 +289,7 @@ func checkSetting8021xPacFile(data connectionData, errs sectionErrors) {
 		return
 	}
 	value := getSetting8021xPacFile(data)
-	if !isLocalPath(value) {
+	if utils.IsURI(value) {
 		rememberError(errs, section8021x, NM_SETTING_802_1X_PAC_FILE, NM_KEY_ERROR_INVALID_VALUE)
 		return
 	}

@@ -21,6 +21,10 @@
 
 package network
 
+import (
+	"pkg.linuxdeepin.com/lib/utils"
+)
+
 // https://developer.gnome.org/libnm-util/0.9/NMSettingWired.html
 // https://developer.gnome.org/NetworkManager/unstable/ref-settings.html
 
@@ -95,7 +99,7 @@ const (
 
 func newWiredConnection(id string) (uuid string) {
 	logger.Debugf("new wired connection, id=%s", id)
-	uuid = genUuid()
+	uuid = utils.GenUuid()
 	data := newWiredConnectionData(id, uuid)
 	nmAddConnection(data)
 	return
