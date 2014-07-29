@@ -87,7 +87,7 @@ func (p *Power) handleBatteryPercentage() {
 		//Battery state abnormal
 		if p.OnBattery && p.lowBatteryStatus != lowBatteryStatusAbnormal {
 			p.lowBatteryStatus == lowBatteryStatusAbnormal
-			p.sendNotify("icon", Tr("Abnormal battery power"), Tr("Battery power can not be predicted, please save important documents properly and  not do important operations."))
+			p.sendNotify("battery-0", Tr("Abnormal battery power"), Tr("Battery power can not be predicted, please save important documents properly and  not do important operations."))
 		}
 	case p.BatteryPercentage < float64(p.coreSettings.GetInt("percentage-action")):
 		if p.lowBatteryStatus != lowBatteryStatusAction {
