@@ -64,7 +64,6 @@ func (p *Power) refreshUpower(up *upower.Upower) {
 		p.setPropBatteryIsPresent(dev.IsPresent.Get())
 		p.setPropBatteryState(dev.State.Get())
 		p.setPropBatteryPercentage(dev.Percentage.Get())
-		p.setPropBatteryPercentage(0.0)
 		p.handleBatteryPercentage()
 	} else {
 		p.setPropBatteryIsPresent(false)
