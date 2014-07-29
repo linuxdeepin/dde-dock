@@ -89,8 +89,8 @@ func (m *Manager) newCustomTheme(gtk, icon, sound, cursor, bg string, fontSize i
 	}
 
 	bakFile := filename + ".bak"
-	if !dutils.CopyFile(THEME_TEMP_CUSTOM, bakFile) {
-		logger.Warning("Copy temp custom failed:", bakFile)
+	if err := dutils.CopyFile(THEME_TEMP_CUSTOM, bakFile); err != nil {
+		logger.Warning("Copy temp custom failed:", bakFile, err)
 		return false
 	}
 	defer rmAllFile(bakFile)

@@ -436,7 +436,7 @@ func (obj *Manager) appendBackground(bg string) bool {
 		os.MkdirAll(pict, 0755)
 	}
 	destPath := path.Join(pict, path.Base(bg))
-	if !dutils.CopyFile(bg, destPath) {
+	if err := dutils.CopyFile(bg, destPath); err != nil {
 		return false
 	}
 

@@ -22,10 +22,10 @@
 package accounts
 
 import (
-	"pkg.linuxdeepin.com/lib/dbus"
-	dutils "pkg.linuxdeepin.com/lib/utils"
 	"os"
 	"path"
+	"pkg.linuxdeepin.com/lib/dbus"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 )
 
 func (obj *User) SetUserName(dbusMsg dbus.DMessage, username string) bool {
@@ -202,7 +202,7 @@ func (obj *User) SetIconFile(dbusMsg dbus.DMessage, icon string) bool {
 		}
 		name := path.Base(icon)
 		dest := path.Join(ICON_LOCAL_DIR, obj.UserName+"-"+name)
-		if ok := dutils.CopyFile(icon, dest); !ok {
+		if err := dutils.CopyFile(icon, dest); err != nil {
 			return false
 		}
 		icon = dest
