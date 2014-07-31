@@ -245,14 +245,12 @@ func grabKeyPress(wid xproto.Window, shortcut string) bool {
 		return false
 	}
 
-	if len(keys) < 1 {
-		logger.Warningf("'%s' no details", shortcut)
-		return false
-	}
-
-	if err = keybind.GrabChecked(X, wid, mod, keys[0]); err != nil {
-		logger.Warningf("Grab '%s' failed: %v", shortcut, err)
-		return false
+	for _, k := range keys {
+		if err = keybind.GrabChecked(X, wid, mod, k); err != nil {
+			logger.Warningf("Grab '%s' failed: %v", shortcut, err)
+			ungrabKey(wid, shortcut)
+			return false
+		}
 	}
 
 	return true
@@ -270,12 +268,9 @@ func ungrabKey(wid xproto.Window, shortcut string) bool {
 		return false
 	}
 
-	if len(keys) < 1 {
-		logger.Warningf("'%s' no details", shortcut)
-		return false
+	for _, k := range keys {
+		keybind.Ungrab(X, wid, mod, k)
 	}
-
-	keybind.Ungrab(X, wid, mod, keys[0])
 
 	return true
 }
@@ -319,6 +314,8 @@ func grabMediaKeys() {
 	}
 }
 
+var pressKeyStr string
+
 func grabKeyboardAndMouse() {
 	//go func() {
 	X, err := xgbutil.NewConn()
@@ -349,16 +346,17 @@ func grabKeyboardAndMouse() {
 	xevent.KeyPressFun(
 		func(X *xgbutil.XUtil, e xevent.KeyPressEvent) {
 			value := parseKeyEnvent(X, e.State, e.Detail)
+			pressKeyStr = value
 			GetManager().KeyPressEvent(value)
 		}).Connect(X, X.RootWin())
 
 	xevent.KeyReleaseFun(
 		func(X *xgbutil.XUtil, e xevent.KeyReleaseEvent) {
-			value := parseKeyEnvent(X, e.State, e.Detail)
-			GetManager().KeyReleaseEvent(value)
+			GetManager().KeyReleaseEvent(pressKeyStr)
+			pressKeyStr = ""
 			ungrabAllMouseButton(X)
 			keybind.UngrabKeyboard(X)
-			logger.Infof("Key: %s\n", value)
+			logger.Infof("Key: %s\n", pressKeyStr)
 			xevent.Quit(X)
 		}).Connect(X, X.RootWin())
 
@@ -434,44 +432,25 @@ func stopXRecord() {
 
 func parseKeyEnvent(X *xgbutil.XUtil, state uint16, detail xproto.Keycode) string {
 	modStr := keybind.ModifierString(state)
-	keyStr := strings.ToLower(
-		keybind.LookupString(X,
-			state, detail))
+	keyStr := keybind.LookupString(X, state, detail)
 
 	if detail == 65 {
-		keyStr = "space"
+		keyStr = "Space"
 	}
 
-	if keyStr == "l1" {
-		keyStr = "f11"
+	if keyStr == "L1" {
+		keyStr = "F11"
 	}
 
-	if keyStr == "l2" {
-		keyStr = "f12"
+	if keyStr == "L2" {
+		keyStr = "F12"
 	}
 
 	value := ""
 	modStr = deleteSpecialMod(modStr)
 
-	keyStr = parseModifierKey(modStr, keyStr)
-	logger.Infof("modStr: %s, keyStr: %s", modStr, keyStr)
-
 	if len(modStr) > 0 {
-		if strings.ToLower(keyStr) == "super" &&
-			strings.ToLower(modStr) == "mod4" {
-			value = keyStr
-		} else if strings.ToLower(keyStr) == "alt" &&
-			strings.ToLower(modStr) == "mod1" {
-			value = "alt"
-		} else if strings.ToLower(keyStr) == "control" &&
-			strings.ToLower(modStr) == "control" {
-			value = "control"
-		} else if strings.ToLower(keyStr) == "shift" &&
-			strings.ToLower(modStr) == "shift" {
-			value = "shift"
-		} else {
-			value = convertModsToKeys(modStr) + "-" + keyStr
-		}
+		value = convertModsToKeys(modStr) + "-" + keyStr
 	} else {
 		value = keyStr
 	}

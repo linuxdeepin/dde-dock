@@ -124,19 +124,6 @@ func (obj *MediaKeyManager) emitMediaSignal(modStr, keyStr string, press bool) b
 		} else {
 			return false
 		}
-	case "space":
-		modStr = deleteSpecialMod(modStr)
-		if strings.Contains(modStr, "-") {
-			return false
-		}
-		if strings.Contains(modStr, "mod4") {
-			if press {
-				go doAction(CMD_DDE_OSD + "--SwitchLayout")
-			}
-			obj.SwitchLayout(press)
-		} else {
-			return false
-		}
 	case "XF86AudioPlay":
 		obj.AudioPlay(press)
 	case "XF86AudioPause":
