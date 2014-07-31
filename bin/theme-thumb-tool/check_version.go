@@ -55,6 +55,9 @@ func isVersionSame() bool {
 	if string(contents) == VERSION {
 		return true
 	}
+	if err := writeVersionFile(versionFile); err != nil {
+		logger.Warning("writeVersionFile failed:", err)
+	}
 
 	return false
 }
