@@ -60,6 +60,9 @@ install: build translate
 	mkdir -pv ${DESTDIR}${PREFIX}/bin
 	cp data/tool/wireless_script*.sh ${DESTDIR}${PREFIX}/bin/wireless-script
 
+	mkdir -pv ${DESTDIR}${PREFIX}/share/personalization/thumbnail/autogen
+	cp -r data/thumb_bg ${DESTDIR}${PREFIX}/share/personalization/thumbnail/autogen
+
 clean:
 	rm -rf ${GOPATH_DIR}
 	rm -rf out/bin
