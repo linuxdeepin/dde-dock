@@ -4,11 +4,11 @@ import (
 	. "launchpad.net/gocheck"
 )
 
-type Util struct{}
+type GrubTester struct{}
 
-var _ = Suite(&Util{})
+var _ = Suite(&GrubTester{})
 
-func (u *Util) TestQuoteString(c *C) {
+func (*GrubTester) TestQuoteString(c *C) {
 	var tests = []struct {
 		s, want string
 	}{
@@ -23,7 +23,7 @@ func (u *Util) TestQuoteString(c *C) {
 	}
 }
 
-func (u *Util) TestUnquoteString(c *C) {
+func (*GrubTester) TestUnquoteString(c *C) {
 	var tests = []struct {
 		s, want string
 	}{

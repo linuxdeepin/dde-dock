@@ -27,6 +27,7 @@ import (
 	"io/ioutil"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 	"sync"
@@ -507,13 +508,19 @@ func (grub *Grub2) setSettingTheme(themeFile string) {
 	grub.writeSettings()
 }
 
-// TODO sort lines before saving
 func (grub *Grub2) getSettingContentToSave() string {
-	fileContent := ""
+	// sort lines before saving
+	lines := make(sort.StringSlice, 0)
 	for k, v := range grub.settings {
 		if len(v) > 0 {
-			fileContent += k + "=" + quoteString(v) + "\n"
+			l := k + "=" + quoteString(v)
+			lines = append(lines, l)
 		}
+	}
+	lines.Sort()
+	fileContent := ""
+	for _, l := range lines {
+		fileContent += l + "\n"
 	}
 	return fileContent
 }

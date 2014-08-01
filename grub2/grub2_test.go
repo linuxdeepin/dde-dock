@@ -7,6 +7,13 @@ import (
 
 func Test(t *testing.T) { TestingT(t) }
 
+func init() {
+	// grub = &Grub2{}
+	grub = NewGrub2()
+	grub.config.Resolution = "1024x768"
+	Suite(grub)
+}
+
 var (
 	testMenuContent = `
 menuentry 'LinuxDeepin GNU/Linux' --class linuxdeepin --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-simple' {
@@ -48,13 +55,6 @@ GRUB_GFXMODE="1024x768"
   GRUB_THEME="/boot/grub/themes/demo/theme.txt"
 `
 )
-
-var grub *Grub2
-
-func init() {
-	grub = &Grub2{}
-	Suite(grub)
-}
 
 func (grub *Grub2) TestParseTitle(c *C) {
 	var tests = []struct {
@@ -102,13 +102,13 @@ func (grub *Grub2) TestParseSettings(c *C) {
 	c.Check(grub.settings["GRUB_THEME"], Equals, wantTheme)
 
 	grub.fixSettings()
-	wantSettingCount = 8
-	wantDistro := "`lsb_release -d -s 2> /dev/null || echo Debian`"
-	wantDefaultEntry = "LinuxDeepin GNU/Linux"
+	// TODO
+	// wantDistro := "`lsb_release -d -s 2> /dev/null || echo Debian`"
+	// wantDefaultEntry = "LinuxDeepin GNU/Linux"
 	wantTimeout = "10"
 	wantTheme = "/boot/grub/themes/deepin/theme.txt"
 	c.Check(len(grub.settings), Equals, wantSettingCount)
-	c.Check(grub.settings["GRUB_DISTRIBUTOR"], Equals, wantDistro)
+	// c.Check(grub.settings["GRUB_DISTRIBUTOR"], Equals, wantDistro)
 	c.Check(grub.settings["GRUB_DEFAULT"], Equals, wantDefaultEntry)
 	c.Check(grub.settings["GRUB_TIMEOUT"], Equals, wantTimeout)
 	c.Check(grub.settings["GRUB_THEME"], Equals, wantTheme)
@@ -152,11 +152,19 @@ func (grub *Grub2) TestSetterAndGetter(c *C) {
 func (grub *Grub2) TestSaveDefaultSettings(c *C) {
 	testConfigContent := `GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
 `
-	wantConfigContent := `GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
-GRUB_DEFAULT="LinuxDeepin GNU/Linux"
-GRUB_DISTRIBUTOR="` + "`" + `lsb_release -d -s 2> /dev/null || echo Debian` + "`" + `"
+	wantConfigContent := `GRUB_BACKGROUND="<none>"
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
+GRUB_DEFAULT="0"
+GRUB_GFXMODE="1024x768"
 GRUB_THEME="/boot/grub/themes/deepin/theme.txt"
+GRUB_TIMEOUT="10"
 `
+	// TODO
+	// 	wantConfigContent := `GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
+	// GRUB_DEFAULT="LinuxDeepin GNU/Linux"
+	// GRUB_DISTRIBUTOR="` + "`" + `lsb_release -d -s 2> /dev/null || echo Debian` + "`" + `"
+	// GRUB_THEME="/boot/grub/themes/deepin/theme.txt"
+	// `
 	grub.parseEntries(testMenuContent)
 	grub.parseSettings(testConfigContent)
 	grub.fixSettings()
@@ -169,20 +177,19 @@ GRUB_TIMEOUT="10"
 GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
 GRUB_GFXMODE="1024x768"
 `
-	wantConfigContent := `GRUB_DEFAULT="LinuxDeepin GNU/Linux"
-GRUB_TIMEOUT="15"
-GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
+	wantConfigContent := `GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
+GRUB_DEFAULT="LinuxDeepin GNU/Linux"
 GRUB_GFXMODE="auto"
-GRUB_THEME="/boot/grub/themes/demo/theme.txt"
+GRUB_THEME="/boot/grub/themes/deepin/theme.txt"
+GRUB_TIMEOUT="15"
 `
-
 	grub.parseEntries(testMenuContent)
 	grub.parseSettings(testConfigContent)
 
 	grub.setSettingDefaultEntry(`LinuxDeepin GNU/Linux`)
 	grub.setSettingTimeout(15)
 	grub.setSettingGfxmode("auto")
-	grub.setSettingTheme("/boot/grub/themes/demo/theme.txt")
+	grub.setSettingTheme("/boot/grub/themes/deepin/theme.txt")
 	c.Check(grub.getSettingContentToSave(), Equals, wantConfigContent)
 }
 
