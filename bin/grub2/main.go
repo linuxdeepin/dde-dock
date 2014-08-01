@@ -49,6 +49,7 @@ func main() {
 	flag.BoolVar(&argSetup, "setup", false, "setup grub and exit")
 	flag.BoolVar(&argSetupTheme, "setup-theme", false, "setup grub theme only and exit")
 	flag.StringVar(&argConfig, "config", "", "specify an alternative configuration file when setup grub")
+	// TODO --grub-config, --backend, [grub, efi]
 	flag.StringVar(&argThemeDir, "theme-dir", "", "specify an alternative theme directory when setup grub")
 	flag.StringVar(&argGfxmode, "gfxmode", "", "specify gfxmode when setup grub")
 	flag.Parse()

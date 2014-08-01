@@ -92,7 +92,6 @@ func (grub *Grub2) initGrub2() {
 	grub.loadConfig()
 	grub.doInitGrub2()
 	grub.theme.initTheme()
-	go grub.resetGfxmodeIfNeed()
 	go grub.theme.regenerateBackgroundIfNeed()
 	grub.startUpdateLoop()
 }
@@ -182,27 +181,6 @@ func (grub *Grub2) stopUpdateLoop() {
 	grub.chanStopUpdateLoop <- 1
 }
 
-func (grub *Grub2) resetGfxmodeIfNeed() {
-	if needUpdate := grub.resetGfxmode(); needUpdate {
-		grub.notifyUpdate()
-
-		// regenerate theme background
-		screenWidth, screenHeight := getPrimaryScreenBestResolution()
-		grub2extDoGenerateThemeBackground(screenWidth, screenHeight)
-		grub.theme.setPropBackground(grub.theme.background)
-	}
-}
-
-func (grub *Grub2) resetGfxmode() (needUpdate bool) {
-	needUpdate = false
-	expectedGfxmode := getPrimaryScreenBestResolutionStr()
-	if expectedGfxmode != grub.getSettingGfxmode() {
-		grub.setSettingGfxmode(expectedGfxmode)
-		needUpdate = true
-	}
-	return
-}
-
 func (grub *Grub2) clearEntries() {
 	grub.entries = make([]Entry, 0)
 }
@@ -265,14 +243,6 @@ func (grub *Grub2) fixSettings() (needUpdate bool) {
 		len(grub.settings["GRUB_HIDDEN_TIMEOUT_QUIET"]) != 0 {
 		grub.settings["GRUB_HIDDEN_TIMEOUT"] = ""
 		grub.settings["GRUB_HIDDEN_TIMEOUT_QUIET"] = ""
-		grub.writeSettings()
-		needUpdate = true
-	}
-
-	// fix GRUB_DISTRIBUTOR
-	grubDistroCmd := "`lsb_release -d -s 2> /dev/null || echo Debian`"
-	if grub.settings["GRUB_DISTRIBUTOR"] != grubDistroCmd {
-		grub.settings["GRUB_DISTRIBUTOR"] = grubDistroCmd
 		grub.writeSettings()
 		needUpdate = true
 	}
