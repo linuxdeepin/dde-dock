@@ -46,10 +46,10 @@ func newConfig() (c *config) {
 	c.Timeout = 10
 	c.Resolution = getPrimaryScreenBestResolutionStr()
 	c.core.SetConfigFile(configFile)
-	logger.Info("config file:", c.core.GetConfigFile())
 	return
 }
 func (c *config) load() {
+	logger.Info("config file:", c.core.GetConfigFile())
 	err := c.core.Load(c)
 	if err != nil {
 		logger.Error(err)

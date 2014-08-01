@@ -387,10 +387,13 @@ func (grub *Grub2) parseSettings(fileContent string) error {
 		line := s.Text()
 		line = strings.TrimSpace(line)
 		if strings.HasPrefix(line, "GRUB_") {
-			kv := strings.SplitN(line, "=", 2)
-			key, value := kv[0], kv[1]
+			a := strings.SplitN(line, "=", 2)
+			if len(a) != 2 {
+				continue
+			}
+			key, value := a[0], a[1]
 			grub.settings[key] = unquoteString(value)
-			logger.Debugf("found setting: %s=%s", kv[0], kv[1])
+			logger.Debugf("found setting: %s=%s", a[0], a[1])
 		}
 	}
 	if err := s.Err(); err != nil {
@@ -426,7 +429,7 @@ func (grub *Grub2) getSettingDefaultEntry() string {
 	}
 	value := grub.settings["GRUB_DEFAULT"]
 
-	// if GRUB_DEFAULE is empty, return the first entry's title
+	// if GRUB_DEFAULT is empty, return the first entry's title
 	if len(value) == 0 {
 		return firstEntry
 	}
@@ -481,6 +484,7 @@ func (grub *Grub2) setSettingDefaultEntry(title string) {
 	grub.settings["GRUB_DEFAULT"] = title
 	grub.config.setDefaultEntry(title)
 	grub.writeSettings()
+	// TODO doSetSettingDefaultEntry
 }
 
 func (grub *Grub2) setSettingTimeout(timeout int32) {

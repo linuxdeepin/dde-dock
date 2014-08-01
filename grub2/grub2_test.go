@@ -8,13 +8,12 @@ import (
 func Test(t *testing.T) { TestingT(t) }
 
 func init() {
-	// grub = &Grub2{}
 	grub = NewGrub2()
 	grub.config.Resolution = "1024x768"
 	Suite(grub)
 }
 
-var (
+const (
 	testMenuContent = `
 menuentry 'LinuxDeepin GNU/Linux' --class linuxdeepin --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-simple' {
 recordfail
@@ -92,6 +91,7 @@ func (grub *Grub2) TestParseSettings(c *C) {
 	grub.parseEntries(testMenuContent)
 	grub.parseSettings(testConfigContent)
 
+	// TODO clean code
 	wantSettingCount := 7
 	wantDefaultEntry := "0"
 	wantTimeout := "10"
@@ -100,18 +100,40 @@ func (grub *Grub2) TestParseSettings(c *C) {
 	c.Check(grub.settings["GRUB_DEFAULT"], Equals, wantDefaultEntry)
 	c.Check(grub.settings["GRUB_TIMEOUT"], Equals, wantTimeout)
 	c.Check(grub.settings["GRUB_THEME"], Equals, wantTheme)
+}
+
+func (grub *Grub2) TestParseInvalidSettings(c *C) {
+	testConfigContent := `GRUB_DEFUALT=
+GRUB_TIMEOUT
+GRUB_THEME
+`
+	grub.parseSettings(testConfigContent)
+	c.Check(len(grub.settings), Equals, 1)
+	c.Check(grub.settings["GRUB_DEFAULT"], Equals, "")
+	c.Check(grub.settings["GRUB_TIMEOUT"], Equals, "")
+	c.Check(grub.settings["GRUB_THEME"], Equals, "")
+	c.Check(grub.getSettingContentToSave(), Equals, "")
+}
+
+func (grub *Grub2) TestFixSettings(c *C) {
+	grub.parseEntries(testMenuContent)
+	grub.parseSettings(testConfigContent)
 
 	grub.fixSettings()
-	// TODO
-	// wantDistro := "`lsb_release -d -s 2> /dev/null || echo Debian`"
+	grub.fixSettingDistro()
+	wantSettingCount := 8
+	wantDefaultEntry := "0"
+	wantDistro := "`lsb_release -d -s 2> /dev/null || echo Debian`"
 	// wantDefaultEntry = "LinuxDeepin GNU/Linux"
-	wantTimeout = "10"
-	wantTheme = "/boot/grub/themes/deepin/theme.txt"
+	wantTimeout := "10"
+	wantTheme := "/boot/grub/themes/deepin/theme.txt"
 	c.Check(len(grub.settings), Equals, wantSettingCount)
-	// c.Check(grub.settings["GRUB_DISTRIBUTOR"], Equals, wantDistro)
+	c.Check(grub.settings["GRUB_DISTRIBUTOR"], Equals, wantDistro)
 	c.Check(grub.settings["GRUB_DEFAULT"], Equals, wantDefaultEntry)
 	c.Check(grub.settings["GRUB_TIMEOUT"], Equals, wantTimeout)
 	c.Check(grub.settings["GRUB_THEME"], Equals, wantTheme)
+
+	// TODO fix default entry without load menu file
 }
 
 func (grub *Grub2) TestSetterAndGetter(c *C) {
@@ -147,6 +169,10 @@ func (grub *Grub2) TestSetterAndGetter(c *C) {
 	wantTheme = "another_theme.txt"
 	grub.setSettingTheme(wantTheme)
 	c.Check(grub.getSettingTheme(), Equals, wantTheme)
+}
+
+func (grub *Grub2) TestGetSettingDefaultEntry(c *C) {
+	// TODO
 }
 
 func (grub *Grub2) TestSaveDefaultSettings(c *C) {
