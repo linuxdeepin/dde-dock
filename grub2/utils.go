@@ -72,7 +72,8 @@ func getPrimaryScreenBestResolutionStr() (r string) {
 	return
 }
 func getPrimaryScreenBestResolution() (w uint16, h uint16) {
-	w, h = 1024, 768 // default value
+	// if connect to x failed, just return 1024x768
+	w, h = 1024, 768
 
 	XU, err := xgbutil.NewConn()
 	if err != nil {
