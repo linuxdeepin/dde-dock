@@ -48,6 +48,7 @@ func (grub *Grub2) Setup(gfxmode string) {
 	// "/boot/grub/grub.cfg" may not exists
 	grub.readSettings()
 	grub.fixSettings()
+	grub.fixSettingDistro()
 
 	// setup gfxmode
 	if len(gfxmode) == 0 {
@@ -56,13 +57,7 @@ func (grub *Grub2) Setup(gfxmode string) {
 		grub.setSettingGfxmode(gfxmode)
 	}
 
-	// fix GRUB_DISTRIBUTOR
-	wantGrubDistroCmd := "`lsb_release -d -s 2> /dev/null || echo Debian`"
-	if grub.settings["GRUB_DISTRIBUTOR"] != wantGrubDistroCmd {
-		grub.settings["GRUB_DISTRIBUTOR"] = wantGrubDistroCmd
-	}
-
-	// write settings
+	// write to setting file
 	settingFileContent := grub.getSettingContentToSave()
 	setup.DoWriteSettings(settingFileContent)
 

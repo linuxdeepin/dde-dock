@@ -270,6 +270,17 @@ func (grub *Grub2) fixSettings() (needUpdate bool) {
 	return
 }
 
+func (grub *Grub2) fixSettingDistro() (needUpdate bool) {
+	// fix GRUB_DISTRIBUTOR
+	wantGrubDistroCmd := "`lsb_release -d -s 2> /dev/null || echo Debian`"
+	if grub.settings["GRUB_DISTRIBUTOR"] != wantGrubDistroCmd {
+		needUpdate = true
+		grub.settings["GRUB_DISTRIBUTOR"] = wantGrubDistroCmd
+		grub.writeSettings()
+	}
+	return
+}
+
 func (grub *Grub2) writeSettings() {
 	fileContent := grub.getSettingContentToSave()
 	if runWithoutDBus {
@@ -496,6 +507,7 @@ func (grub *Grub2) setSettingTheme(themeFile string) {
 	grub.writeSettings()
 }
 
+// TODO sort lines before saving
 func (grub *Grub2) getSettingContentToSave() string {
 	fileContent := ""
 	for k, v := range grub.settings {
