@@ -274,9 +274,9 @@ func (grub *Grub2) fixSettings() (needUpdate bool) {
 func (grub *Grub2) fixSettingDistro() (needUpdate bool) {
 	// fix GRUB_DISTRIBUTOR
 	wantGrubDistroCmd := "`lsb_release -d -s 2> /dev/null || echo Debian`"
-	if grub.settings["GRUB_DISTRIBUTOR"] != wantGrubDistroCmd {
+	if grub.doGetSettingDistributor() != wantGrubDistroCmd {
 		needUpdate = true
-		grub.settings["GRUB_DISTRIBUTOR"] = wantGrubDistroCmd
+		grub.doSetSettingDistributor(wantGrubDistroCmd)
 		grub.writeSettings()
 	}
 	return
@@ -427,7 +427,7 @@ func (grub *Grub2) getSettingDefaultEntry() string {
 	if len(simpleEntryTitles) > 0 {
 		firstEntry = simpleEntryTitles[0]
 	}
-	value := grub.settings["GRUB_DEFAULT"]
+	value := grub.doGetSettingDefaultEntry()
 
 	// if GRUB_DEFAULT is empty, return the first entry's title
 	if len(value) == 0 {
@@ -455,61 +455,88 @@ func (grub *Grub2) getSettingDefaultEntry() string {
 	}
 	return firstEntry
 }
+func (grub *Grub2) setSettingDefaultEntry(title string) {
+	grub.doSetSettingDefaultEntry(title)
+	grub.config.setDefaultEntry(title)
+	grub.writeSettings()
+}
+func (grub *Grub2) doGetSettingDefaultEntry() string {
+	return grub.settings["GRUB_DEFAULT"]
+}
+func (grub *Grub2) doSetSettingDefaultEntry(value string) {
+	grub.settings["GRUB_DEFAULT"] = value
+}
 
 func (grub *Grub2) getSettingTimeout() int32 {
-	if len(grub.settings["GRUB_TIMEOUT"]) == 0 {
+	timeoutStr := grub.doGetSettingTimeout()
+	if len(timeoutStr) == 0 {
 		return grubTimeoutDisable
 	}
-
-	timeout, err := strconv.ParseInt(grub.settings["GRUB_TIMEOUT"], 10, 32)
+	timeout, err := strconv.ParseInt(timeoutStr, 10, 32)
 	if err != nil {
-		logger.Errorf(`valid value, settings["GRUB_TIMEOUT"]=%s`, grub.settings["GRUB_TIMEOUT"])
+		logger.Errorf(`valid value, settings["GRUB_TIMEOUT"]=%s`, timeoutStr)
 		return grubTimeoutDisable
 	}
 	return int32(timeout)
 }
-
-func (grub *Grub2) getSettingGfxmode() string {
-	if len(grub.settings["GRUB_GFXMODE"]) == 0 {
-		return "auto"
-	}
-	return grub.settings["GRUB_GFXMODE"]
-}
-
-func (grub *Grub2) getSettingTheme() string {
-	return grub.settings["GRUB_THEME"]
-}
-
-func (grub *Grub2) setSettingDefaultEntry(title string) {
-	grub.settings["GRUB_DEFAULT"] = title
-	grub.config.setDefaultEntry(title)
-	grub.writeSettings()
-	// TODO doSetSettingDefaultEntry
-}
-
 func (grub *Grub2) setSettingTimeout(timeout int32) {
 	if timeout == grubTimeoutDisable {
-		grub.settings["GRUB_TIMEOUT"] = ""
+		grub.doSetSettingTimeout("")
 		grub.config.setTimeout(grubTimeoutDisable)
 	} else {
 		timeoutStr := strconv.FormatInt(int64(timeout), 10)
-		grub.settings["GRUB_TIMEOUT"] = timeoutStr
+		grub.doSetSettingTimeout(timeoutStr)
 		grub.config.setTimeout(timeout)
 	}
 	grub.writeSettings()
 }
+func (grub *Grub2) doGetSettingTimeout() string {
+	return grub.settings["GRUB_TIMEOUT"]
+}
+func (grub *Grub2) doSetSettingTimeout(value string) {
+	grub.settings["GRUB_TIMEOUT"] = value
+}
 
+func (grub *Grub2) getSettingGfxmode() string {
+	gfxmode := grub.doGetSettingGfxmode()
+	if len(gfxmode) == 0 {
+		return "auto"
+	}
+	return gfxmode
+}
 func (grub *Grub2) setSettingGfxmode(gfxmode string) {
-	grub.settings["GRUB_GFXMODE"] = gfxmode
+	grub.doSetSettingGfxmode(gfxmode)
 	grub.config.setResolution(gfxmode)
 	grub.writeSettings()
 }
+func (grub *Grub2) doGetSettingGfxmode() string {
+	return grub.settings["GRUB_GFXMODE"]
+}
+func (grub *Grub2) doSetSettingGfxmode(value string) {
+	grub.settings["GRUB_GFXMODE"] = value
+}
 
+func (grub *Grub2) getSettingTheme() string {
+	return grub.doGetSettingTheme()
+}
 func (grub *Grub2) setSettingTheme(themeFile string) {
-	grub.settings["GRUB_THEME"] = themeFile
+	grub.doSetSettingTheme(themeFile)
 	// TODO
 	// grub.config.setTheme(themeFile)
 	grub.writeSettings()
+}
+func (grub *Grub2) doGetSettingTheme() string {
+	return grub.settings["GRUB_THEME"]
+}
+func (grub *Grub2) doSetSettingTheme(value string) {
+	grub.settings["GRUB_THEME"] = value
+}
+
+func (grub *Grub2) doGetSettingDistributor() string {
+	return grub.settings["GRUB_DISTRIBUTOR"]
+}
+func (grub *Grub2) doSetSettingDistributor(value string) {
+	grub.settings["GRUB_DISTRIBUTOR"] = value
 }
 
 func (grub *Grub2) getSettingContentToSave() string {
