@@ -4,10 +4,6 @@ import (
 	. "launchpad.net/gocheck"
 )
 
-type GrubTester struct{}
-
-var _ = Suite(&GrubTester{})
-
 func (*GrubTester) TestQuoteString(c *C) {
 	var tests = []struct {
 		s, want string

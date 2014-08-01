@@ -7,11 +7,9 @@ import (
 
 func Test(t *testing.T) { TestingT(t) }
 
-func init() {
-	grub = NewGrub2()
-	grub.config.Resolution = "1024x768"
-	Suite(grub)
-}
+type GrubTester struct{}
+
+var _ = Suite(&GrubTester{})
 
 const (
 	testMenuContent = `
@@ -55,7 +53,7 @@ GRUB_GFXMODE="1024x768"
 `
 )
 
-func (grub *Grub2) TestParseTitle(c *C) {
+func (*GrubTester) TestParseTitle(c *C) {
 	var tests = []struct {
 		s, want string
 	}{
@@ -64,13 +62,14 @@ func (grub *Grub2) TestParseTitle(c *C) {
 		{`submenu 'Advanced options for LinuxDeepin GNU/Linux'`, `Advanced options for LinuxDeepin GNU/Linux`},
 		{``, ``},
 	}
+	grub := NewGrub2()
 	for _, t := range tests {
 		got, _ := grub.parseTitle(t.s)
 		c.Check(got, Equals, t.want)
 	}
 }
 
-func (grub *Grub2) TestParseEntries(c *C) {
+func (*GrubTester) TestParseEntries(c *C) {
 	wantEntyTitles := []string{
 		`LinuxDeepin GNU/Linux`,
 		`Advanced options for LinuxDeepin GNU/Linux`,
@@ -80,6 +79,7 @@ func (grub *Grub2) TestParseEntries(c *C) {
 		`Other OS`,
 	}
 
+	grub := NewGrub2()
 	grub.parseEntries(testMenuContentLong)
 	c.Check(len(grub.entries), Equals, len(wantEntyTitles))
 	for i, entry := range grub.entries {
@@ -87,7 +87,8 @@ func (grub *Grub2) TestParseEntries(c *C) {
 	}
 }
 
-func (grub *Grub2) TestParseSettings(c *C) {
+func (*GrubTester) TestParseSettings(c *C) {
+	grub := NewGrub2()
 	grub.parseEntries(testMenuContent)
 	grub.parseSettings(testConfigContent)
 
@@ -101,11 +102,12 @@ func (grub *Grub2) TestParseSettings(c *C) {
 	c.Check(grub.doGetSettingTheme(), Equals, wantTheme)
 }
 
-func (grub *Grub2) TestParseInvalidSettings(c *C) {
+func (*GrubTester) TestParseInvalidSettings(c *C) {
 	testConfigContent := `GRUB_DEFUALT=
 GRUB_TIMEOUT
 GRUB_THEME
 `
+	grub := NewGrub2()
 	grub.parseSettings(testConfigContent)
 	c.Check(len(grub.settings), Equals, 1)
 	c.Check(grub.doGetSettingDefaultEntry(), Equals, "")
@@ -114,7 +116,8 @@ GRUB_THEME
 	c.Check(grub.getSettingContentToSave(), Equals, "")
 }
 
-func (grub *Grub2) TestFixSettings(c *C) {
+func (*GrubTester) TestFixSettings(c *C) {
+	grub := NewGrub2()
 	grub.parseEntries(testMenuContent)
 	grub.parseSettings(testConfigContent)
 
@@ -135,7 +138,8 @@ func (grub *Grub2) TestFixSettings(c *C) {
 	// TODO fix default entry without load menu file
 }
 
-func (grub *Grub2) TestSetterAndGetter(c *C) {
+func (*GrubTester) TestSetterAndGetter(c *C) {
+	grub := NewGrub2()
 	grub.parseEntries(testMenuContent)
 	grub.parseSettings(testConfigContent)
 
@@ -170,11 +174,12 @@ func (grub *Grub2) TestSetterAndGetter(c *C) {
 	c.Check(grub.getSettingTheme(), Equals, wantTheme)
 }
 
-func (grub *Grub2) TestGetSettingDefaultEntry(c *C) {
+func (*GrubTester) TestGetSettingDefaultEntry(c *C) {
+	// grub := NewGrub2()
 	// TODO
 }
 
-func (grub *Grub2) TestSaveDefaultSettings(c *C) {
+func (*GrubTester) TestSaveDefaultSettings(c *C) {
 	testConfigContent := `GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
 `
 	wantConfigContent := `GRUB_BACKGROUND="<none>"
@@ -190,13 +195,15 @@ GRUB_TIMEOUT="10"
 	// GRUB_DISTRIBUTOR="` + "`" + `lsb_release -d -s 2> /dev/null || echo Debian` + "`" + `"
 	// GRUB_THEME="/boot/grub/themes/deepin/theme.txt"
 	// `
+	grub := NewGrub2()
+	grub.config.Resolution = "1024x768"
 	grub.parseEntries(testMenuContent)
 	grub.parseSettings(testConfigContent)
 	grub.fixSettings()
 	c.Check(grub.getSettingContentToSave(), Equals, wantConfigContent)
 }
 
-func (grub *Grub2) TestSaveSettings(c *C) {
+func (*GrubTester) TestSaveSettings(c *C) {
 	testConfigContent := `GRUB_DEFAULT="0"
 GRUB_TIMEOUT="10"
 GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
@@ -208,6 +215,7 @@ GRUB_GFXMODE="auto"
 GRUB_THEME="/boot/grub/themes/deepin/theme.txt"
 GRUB_TIMEOUT="15"
 `
+	grub := NewGrub2()
 	grub.parseEntries(testMenuContent)
 	grub.parseSettings(testConfigContent)
 
@@ -218,12 +226,13 @@ GRUB_TIMEOUT="15"
 	c.Check(grub.getSettingContentToSave(), Equals, wantConfigContent)
 }
 
-func (grub *Grub2) TestGetEntryTitles(c *C) {
+func (*GrubTester) TestGetEntryTitles(c *C) {
 	wantEntyTitles := []string{
 		`LinuxDeepin GNU/Linux`,
 		`Other OS`,
 	}
 
+	grub := NewGrub2()
 	grub.parseEntries(testMenuContentLong)
 	entryTitles, _ := grub.GetSimpleEntryTitles()
 	c.Check(len(entryTitles), Equals, len(wantEntyTitles))
