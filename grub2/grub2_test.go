@@ -149,28 +149,29 @@ func (*GrubTester) TestSetterAndGetter(c *C) {
 	// default entry
 	wantDefaultEntry := `LinuxDeepin GNU/Linux`
 	c.Check(grub.getSettingDefaultEntry(), Equals, wantDefaultEntry)
-	grub.setSettingDefaultEntry(`Advanced options for LinuxDeepin GNU/Linux>LinuxDeepin GNU/Linux，Linux 3.11.0-15-generic`)
+	// TODO
+	grub.doSetSettingDefaultEntry(`Advanced options for LinuxDeepin GNU/Linux>LinuxDeepin GNU/Linux，Linux 3.11.0-15-generic`)
 	c.Check(grub.getSettingDefaultEntry(), Equals, wantDefaultEntry)
 
 	// timeout
 	wantTimeout := int32(10)
 	c.Check(grub.getSettingTimeout(), Equals, wantTimeout)
 	wantTimeout = int32(15)
-	grub.setSettingTimeout(wantTimeout)
+	grub.doSetSettingTimeoutLogic(wantTimeout)
 	c.Check(grub.getSettingTimeout(), Equals, wantTimeout)
 
 	// gfxmode
 	wantGfxmode := "1024x768"
 	c.Check(grub.getSettingGfxmode(), Equals, wantGfxmode)
 	wantGfxmode = "saved"
-	grub.setSettingGfxmode(wantGfxmode)
+	grub.doSetSettingGfxmode(wantGfxmode)
 	c.Check(grub.getSettingGfxmode(), Equals, wantGfxmode)
 
 	// theme
 	wantTheme := "/boot/grub/themes/demo/theme.txt"
 	c.Check(grub.getSettingTheme(), Equals, wantTheme)
 	wantTheme = "another_theme.txt"
-	grub.setSettingTheme(wantTheme)
+	grub.doSetSettingTheme(wantTheme)
 	c.Check(grub.getSettingTheme(), Equals, wantTheme)
 }
 
@@ -219,10 +220,10 @@ GRUB_TIMEOUT="15"
 	grub.parseEntries(testMenuContent)
 	grub.parseSettings(testConfigContent)
 
-	grub.setSettingDefaultEntry(`LinuxDeepin GNU/Linux`)
-	grub.setSettingTimeout(15)
-	grub.setSettingGfxmode("auto")
-	grub.setSettingTheme("/boot/grub/themes/deepin/theme.txt")
+	grub.doSetSettingDefaultEntry(`LinuxDeepin GNU/Linux`)
+	grub.doSetSettingTimeoutLogic(15)
+	grub.doSetSettingGfxmode("auto")
+	grub.doSetSettingTheme("/boot/grub/themes/deepin/theme.txt")
 	c.Check(grub.getSettingContentToSave(), Equals, wantConfigContent)
 }
 

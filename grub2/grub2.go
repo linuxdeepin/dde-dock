@@ -444,6 +444,7 @@ func (grub *Grub2) getSettingDefaultEntry() string {
 		return firstEntry
 	}
 
+	// TODO
 	// if GRUB_DEFAULE exist and is a index number, return its entry name
 	index, err := strconv.ParseInt(value, 10, 32)
 	if err != nil {
@@ -457,14 +458,15 @@ func (grub *Grub2) getSettingDefaultEntry() string {
 }
 func (grub *Grub2) setSettingDefaultEntry(title string) {
 	grub.doSetSettingDefaultEntry(title)
-	grub.config.setDefaultEntry(title)
 	grub.writeSettings()
+	grub.config.save()
 }
 func (grub *Grub2) doGetSettingDefaultEntry() string {
 	return grub.settings["GRUB_DEFAULT"]
 }
 func (grub *Grub2) doSetSettingDefaultEntry(value string) {
 	grub.settings["GRUB_DEFAULT"] = value
+	grub.config.doSetDefaultEntry(value)
 }
 
 func (grub *Grub2) getSettingTimeout() int32 {
@@ -480,15 +482,19 @@ func (grub *Grub2) getSettingTimeout() int32 {
 	return int32(timeout)
 }
 func (grub *Grub2) setSettingTimeout(timeout int32) {
+	grub.doSetSettingTimeoutLogic(timeout)
+	grub.writeSettings()
+	grub.config.save()
+}
+func (grub *Grub2) doSetSettingTimeoutLogic(timeout int32) {
 	if timeout == grubTimeoutDisable {
 		grub.doSetSettingTimeout("")
-		grub.config.setTimeout(grubTimeoutDisable)
+		grub.config.doSetTimeout(grubTimeoutDisable)
 	} else {
 		timeoutStr := strconv.FormatInt(int64(timeout), 10)
 		grub.doSetSettingTimeout(timeoutStr)
-		grub.config.setTimeout(timeout)
+		grub.config.doSetTimeout(timeout)
 	}
-	grub.writeSettings()
 }
 func (grub *Grub2) doGetSettingTimeout() string {
 	return grub.settings["GRUB_TIMEOUT"]
@@ -506,14 +512,15 @@ func (grub *Grub2) getSettingGfxmode() string {
 }
 func (grub *Grub2) setSettingGfxmode(gfxmode string) {
 	grub.doSetSettingGfxmode(gfxmode)
-	grub.config.setResolution(gfxmode)
 	grub.writeSettings()
+	grub.config.save()
 }
 func (grub *Grub2) doGetSettingGfxmode() string {
 	return grub.settings["GRUB_GFXMODE"]
 }
 func (grub *Grub2) doSetSettingGfxmode(value string) {
 	grub.settings["GRUB_GFXMODE"] = value
+	grub.config.doSetResolution(value)
 }
 
 func (grub *Grub2) getSettingTheme() string {
@@ -521,8 +528,6 @@ func (grub *Grub2) getSettingTheme() string {
 }
 func (grub *Grub2) setSettingTheme(themeFile string) {
 	grub.doSetSettingTheme(themeFile)
-	// TODO
-	// grub.config.setTheme(themeFile)
 	grub.writeSettings()
 }
 func (grub *Grub2) doGetSettingTheme() string {

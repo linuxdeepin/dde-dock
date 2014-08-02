@@ -27,6 +27,7 @@ import (
 
 const configFile = "/var/cache/deepin/grub2.json"
 
+// refactor code, split fields, grub, efi
 type config struct {
 	core              utils.Config
 	NeedUpdate        bool // mark to generate grub configuration
@@ -86,15 +87,13 @@ func (c *config) setEnableTheme(value bool) {
 	c.EnableTheme = value
 	c.save()
 }
-func (c *config) setDefaultEntry(value string) {
+
+func (c *config) doSetDefaultEntry(value string) {
 	c.DefaultEntry = value
-	c.save()
 }
-func (c *config) setTimeout(value int32) {
+func (c *config) doSetTimeout(value int32) {
 	c.Timeout = value
-	c.save()
 }
-func (c *config) setResolution(value string) {
+func (c *config) doSetResolution(value string) {
 	c.Resolution = value
-	c.save()
 }

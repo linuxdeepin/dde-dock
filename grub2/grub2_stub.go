@@ -65,6 +65,7 @@ func (grub *Grub2) OnPropertiesChanged(name string, oldv interface{}) {
 			return
 		}
 		grub.setPropEnableTheme(grub.EnableTheme)
+		// TODO
 		grub.notifyUpdate()
 	case "DefaultEntry":
 		oldvStr, _ := oldv.(string)
@@ -105,6 +106,7 @@ func (grub *Grub2) setPropEnableTheme(value bool) {
 		} else {
 			grub.setSettingTheme(themeMainFile)
 		}
+		// TODO
 		grub.notifyUpdate()
 	}
 	dbus.NotifyChange(grub, "EnableTheme")
