@@ -135,3 +135,49 @@ func delta(v1, v2 float64) float64 {
 	}
 	return v2 - v1
 }
+
+func parseGfxmode(gfxmode string) (w, h uint16) {
+	w, h, err := doParseGfxmode(gfxmode)
+	if err != nil {
+		logger.Error(err)
+		w, h = 1024, 768 // default value
+	}
+	return
+}
+
+func doParseGfxmode(gfxmode string) (w, h uint16, err error) {
+	// check if contains ',' or ';', if so, just split first field as gfxmode
+	if strings.Contains(gfxmode, ",") {
+		gfxmode = strings.Split(gfxmode, ",")[0]
+	} else if strings.Contains(gfxmode, ";") {
+		gfxmode = strings.Split(gfxmode, ";")[0]
+	}
+
+	if gfxmode == "auto" {
+		// just return screen resolution if gfxmode is "auto"
+		w, h = getPrimaryScreenBestResolution()
+		return
+	}
+
+	a := strings.Split(gfxmode, "x")
+	if len(a) < 2 {
+		err = fmt.Errorf("gfxmode format error, %s", gfxmode)
+		return
+	}
+
+	// parse width
+	tmpw, err := strconv.ParseUint(a[0], 10, 16)
+	if err != nil {
+		return
+	}
+
+	// parse height
+	tmph, err := strconv.ParseUint(a[1], 10, 16)
+	if err != nil {
+		return
+	}
+
+	w = uint16(tmpw)
+	h = uint16(tmph)
+	return
+}

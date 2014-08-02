@@ -27,8 +27,6 @@ import (
 	"path"
 	graphic "pkg.linuxdeepin.com/lib/gdkpixbuf"
 	"pkg.linuxdeepin.com/lib/utils"
-	"strconv"
-	"strings"
 )
 
 // SetupWrapper is a copy of dde-api/grub2ext, for to remove the dependency
@@ -79,36 +77,6 @@ func (grub *Grub2) SetupTheme(gfxmode string) {
 func writeSettingsWithoutDBus(fileContent string) {
 	setup := &SetupWrapper{}
 	setup.DoWriteSettings(fileContent)
-}
-
-func parseGfxmode(gfxmode string) (w, h uint16) {
-	w, h = getPrimaryScreenBestResolution() // default value
-	if gfxmode == "auto" {
-		return
-	}
-	a := strings.Split(gfxmode, "x")
-	if len(a) != 2 {
-		logger.Error("gfxmode format error", gfxmode)
-		return
-	}
-
-	// parse width
-	tmpw, err := strconv.ParseUint(a[0], 10, 16)
-	if err != nil {
-		logger.Error(err)
-		return
-	}
-
-	// parse height
-	tmph, err := strconv.ParseUint(a[1], 10, 16)
-	if err != nil {
-		logger.Error(err)
-		return
-	}
-
-	w = uint16(tmpw)
-	h = uint16(tmph)
-	return
 }
 
 // DoWriteSettings write file content to "/etc/default/grub".
