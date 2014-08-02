@@ -134,37 +134,37 @@ func (theme *Theme) reset() {
 	}()
 }
 
-// Fix issue that if update grub-themes-deepin pakcage lonely, but the
-// background of theme will keep default size as 1024x768.
+// Fix issue that the theme background will keep default size as
+// 1024x768 if updating grub-themes-deepin package lonely
 func (theme *Theme) regenerateBackgroundIfNeed() {
 	logger.Debug("check if need regenerate theme background")
-	screenWidth, screenHeight := getPrimaryScreenBestResolution()
+	wantWidth, wantHeight := parseGfxmode(grub.config.Resolution)
 	bgw, bgh, _ := graphic.GetImageSize(theme.background)
 	srcbgw, srcbgh, _ := graphic.GetImageSize(theme.bgSrcFile)
 	needGenerate := false
-	logger.Debugf("screen resolution: %dx%d, source background: %dx%d, background: %dx%d",
-		screenWidth, screenHeight, srcbgw, srcbgh, bgw, bgh)
-	if srcbgw >= int(screenWidth) && srcbgh >= int(screenHeight) {
-		// source background is bigger than screen resolution, so the
-		// background should equal with screen resolution
-		if delta(float64(bgw), float64(screenWidth)) > 5 ||
-			delta(float64(bgh), float64(screenHeight)) > 5 {
+	logger.Debugf("expected size: %dx%d, source background: %dx%d, background: %dx%d",
+		wantWidth, wantHeight, srcbgw, srcbgh, bgw, bgh)
+	if srcbgw >= int(wantWidth) && srcbgh >= int(wantHeight) {
+		// if source background is bigger than expected size, the size
+		// of background should equal with it
+		if delta(float64(bgw), float64(wantWidth)) > 5 ||
+			delta(float64(bgh), float64(wantHeight)) > 5 {
 			needGenerate = true
 		}
 	} else {
-		// source background is smaller than screen resolution, so the
-		// scale of backgound should equle with screen's
+		// if source background is smaller than expected size, the
+		// scale of backgound should equle with it
 		scalebg := float64(bgw) / float64(bgh)
-		scaleScreen := float64(screenWidth) / float64(screenHeight)
+		scaleScreen := float64(wantWidth) / float64(wantHeight)
 		if delta(scalebg, scaleScreen) > 0.1 {
 			needGenerate = true
 		}
 	}
 
 	if needGenerate {
-		grub2extDoGenerateThemeBackground(screenWidth, screenHeight)
+		grub2extDoGenerateThemeBackground(wantWidth, wantHeight)
 		theme.setPropBackground(theme.background)
-		logger.Info("update background sucess")
+		logger.Info("update theme background success")
 	}
 }
 
