@@ -34,7 +34,7 @@ type config struct {
 	FixSettingsAlways bool
 	EnableTheme       bool
 	DefaultEntry      string
-	Timeout           int32
+	Timeout           string
 	Resolution        string
 }
 
@@ -43,8 +43,8 @@ func newConfig() (c *config) {
 	c.NeedUpdate = true
 	c.FixSettingsAlways = true
 	c.EnableTheme = true
-	c.DefaultEntry = "0"
-	c.Timeout = 10
+	c.DefaultEntry = grubDefaultEntryDefault
+	c.Timeout = grubTimeoutDefault
 	c.Resolution = getPrimaryScreenBestResolutionStr()
 	c.core.SetConfigFile(configFile)
 	return
@@ -91,7 +91,7 @@ func (c *config) setEnableTheme(value bool) {
 func (c *config) doSetDefaultEntry(value string) {
 	c.DefaultEntry = value
 }
-func (c *config) doSetTimeout(value int32) {
+func (c *config) doSetTimeout(value string) {
 	c.Timeout = value
 }
 func (c *config) doSetResolution(value string) {

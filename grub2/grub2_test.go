@@ -116,18 +116,123 @@ GRUB_THEME
 	c.Check(grub.getSettingContentToSave(), Equals, "")
 }
 
+func (*GrubTester) TestSettingDefaultEntry(c *C) {
+	grub := NewGrub2()
+	grub.fixSettings()
+
+	// default entry
+	c.Check(grub.config.DefaultEntry, Equals, "0")
+	c.Check(grub.doGetSettingDefaultEntry(), Equals, "0")
+	c.Check(grub.getSettingDefaultEntry(), Equals, "0")
+
+	// default entry if GRUB_DEFAULT not defined
+	grub.doSetSettingDefaultEntry("")
+	c.Check(grub.config.DefaultEntry, Equals, "")
+	c.Check(grub.doGetSettingDefaultEntry(), Equals, "")
+	c.Check(grub.getSettingDefaultEntry(), Equals, "0")
+
+	// custom entry index value
+	grub.doSetSettingDefaultEntry("3")
+	c.Check(grub.config.DefaultEntry, Equals, "3")
+	c.Check(grub.doGetSettingDefaultEntry(), Equals, "3")
+	c.Check(grub.getSettingDefaultEntry(), Equals, "3")
+
+	// custom entry title value
+	grub.doSetSettingDefaultEntry("LinuxDeepin GNU/Linux")
+	c.Check(grub.config.DefaultEntry, Equals, "LinuxDeepin GNU/Linux")
+	c.Check(grub.doGetSettingDefaultEntry(), Equals, "LinuxDeepin GNU/Linux")
+	c.Check(grub.getSettingDefaultEntry(), Equals, "LinuxDeepin GNU/Linux")
+
+	// custom sub entry value
+	grub.doSetSettingDefaultEntry("3>1")
+	c.Check(grub.config.DefaultEntry, Equals, "3>1")
+	c.Check(grub.doGetSettingDefaultEntry(), Equals, "3>1")
+	c.Check(grub.getSettingDefaultEntry(), Equals, "3")
+
+	// load entry titles
+	grub.parseEntries(testMenuContent)
+
+	// get default entry after titles loaded
+	grub.doSetSettingDefaultEntry("0")
+	c.Check(grub.config.DefaultEntry, Equals, "0")
+	c.Check(grub.doGetSettingDefaultEntry(), Equals, "0")
+	c.Check(grub.getSettingDefaultEntry(), Equals, "LinuxDeepin GNU/Linux")
+
+	grub.doSetSettingDefaultEntry("1")
+	c.Check(grub.config.DefaultEntry, Equals, "1")
+	c.Check(grub.doGetSettingDefaultEntry(), Equals, "1")
+	c.Check(grub.getSettingDefaultEntry(), Equals, "Advanced options for LinuxDeepin GNU/Linux")
+
+	grub.doSetSettingDefaultEntry("1>0") // sub entry
+	c.Check(grub.config.DefaultEntry, Equals, "1>0")
+	c.Check(grub.doGetSettingDefaultEntry(), Equals, "1>0")
+	c.Check(grub.getSettingDefaultEntry(), Equals, "Advanced options for LinuxDeepin GNU/Linux")
+
+	grub.doSetSettingDefaultEntry("1>3") // entry title not exists
+	c.Check(grub.config.DefaultEntry, Equals, "1>3")
+	c.Check(grub.doGetSettingDefaultEntry(), Equals, "1>3")
+	c.Check(grub.getSettingDefaultEntry(), Equals, "Advanced options for LinuxDeepin GNU/Linux")
+
+	// custom entry title value after titles loaded
+	grub.doSetSettingDefaultEntry("LinuxDeepin GNU/Linux")
+	c.Check(grub.config.DefaultEntry, Equals, "LinuxDeepin GNU/Linux")
+	c.Check(grub.doGetSettingDefaultEntry(), Equals, "LinuxDeepin GNU/Linux")
+	c.Check(grub.getSettingDefaultEntry(), Equals, "LinuxDeepin GNU/Linux")
+
+	grub.doSetSettingDefaultEntry("Advanced options for LinuxDeepin GNU/Linux")
+	c.Check(grub.config.DefaultEntry, Equals, "Advanced options for LinuxDeepin GNU/Linux")
+	c.Check(grub.doGetSettingDefaultEntry(), Equals, "Advanced options for LinuxDeepin GNU/Linux")
+	c.Check(grub.getSettingDefaultEntry(), Equals, "Advanced options for LinuxDeepin GNU/Linux")
+
+	grub.doSetSettingDefaultEntry("Advanced options for LinuxDeepin GNU/Linux>LinuxDeepin GNU/Linux，Linux 3.11.0-15-generic")
+	c.Check(grub.config.DefaultEntry, Equals, "Advanced options for LinuxDeepin GNU/Linux>LinuxDeepin GNU/Linux，Linux 3.11.0-15-generic")
+	c.Check(grub.doGetSettingDefaultEntry(), Equals, "Advanced options for LinuxDeepin GNU/Linux>LinuxDeepin GNU/Linux，Linux 3.11.0-15-generic")
+	c.Check(grub.getSettingDefaultEntry(), Equals, "Advanced options for LinuxDeepin GNU/Linux")
+
+	grub.doSetSettingDefaultEntry("Advanced options for LinuxDeepin GNU/Linux>Child Title That Not Exists") // sub entry title not exists
+	c.Check(grub.config.DefaultEntry, Equals, "Advanced options for LinuxDeepin GNU/Linux>Child Title That Not Exists")
+	c.Check(grub.doGetSettingDefaultEntry(), Equals, "Advanced options for LinuxDeepin GNU/Linux>Child Title That Not Exists")
+	c.Check(grub.getSettingDefaultEntry(), Equals, "Advanced options for LinuxDeepin GNU/Linux")
+}
+
+func (*GrubTester) TestSettingTimeout(c *C) {
+	grub := NewGrub2()
+	grub.doFixSettings()
+
+	// default timeout
+	c.Check(grub.config.Timeout, Equals, "5")
+	c.Check(grub.doGetSettingTimeout(), Equals, "5")
+	c.Check(grub.getSettingTimeout(), Equals, int32(5))
+
+	// default timeout if GRUB_TIMEOUT not defined
+	grub.doSetSettingTimeout("")
+	c.Check(grub.config.Timeout, Equals, "")
+	c.Check(grub.doGetSettingTimeout(), Equals, "")
+	c.Check(grub.getSettingTimeout(), Equals, int32(5))
+
+	// custom timeout
+	grub.doSetSettingTimeoutLogic(10)
+	c.Check(grub.config.Timeout, Equals, "10")
+	c.Check(grub.doGetSettingTimeout(), Equals, "10")
+	c.Check(grub.getSettingTimeout(), Equals, int32(10))
+}
+
 func (*GrubTester) TestFixSettings(c *C) {
 	grub := NewGrub2()
 	grub.parseEntries(testMenuContent)
 	grub.parseSettings(testConfigContent)
 
-	grub.doFixSettings()
-	grub.doFixSettingDistro()
+	var needUpdate bool
+	needUpdate = grub.doFixSettings()
+	c.Check(needUpdate, Equals, true)
+
+	needUpdate = grub.doFixSettingDistro()
+	c.Check(needUpdate, Equals, true)
+
 	wantSettingCount := 8
 	wantDefaultEntry := "0"
 	wantDistro := "`lsb_release -d -s 2> /dev/null || echo Debian`"
-	// wantDefaultEntry = "LinuxDeepin GNU/Linux"
-	wantTimeout := "10"
+	wantTimeout := "5"
 	wantTheme := "/boot/grub/themes/deepin/theme.txt"
 	c.Check(len(grub.settings), Equals, wantSettingCount)
 	c.Check(grub.doGetSettingDistributor(), Equals, wantDistro)
@@ -135,30 +240,20 @@ func (*GrubTester) TestFixSettings(c *C) {
 	c.Check(grub.doGetSettingTimeout(), Equals, wantTimeout)
 	c.Check(grub.doGetSettingTheme(), Equals, wantTheme)
 
-	// TODO fix default entry without load menu file
+	needUpdate = grub.doFixSettings()
+	c.Check(needUpdate, Equals, false)
+
+	needUpdate = grub.doFixSettingDistro()
+	c.Check(needUpdate, Equals, false)
 }
 
-func (*GrubTester) TestSetterAndGetter(c *C) {
+func (*GrubTester) TestSettingsGeneral(c *C) {
 	grub := NewGrub2()
 	grub.parseEntries(testMenuContent)
 	grub.parseSettings(testConfigContent)
 
 	entryTitles, _ := grub.GetSimpleEntryTitles()
 	c.Check(len(entryTitles), Equals, 1)
-
-	// default entry
-	wantDefaultEntry := `LinuxDeepin GNU/Linux`
-	c.Check(grub.getSettingDefaultEntry(), Equals, wantDefaultEntry)
-	// TODO
-	grub.doSetSettingDefaultEntry(`Advanced options for LinuxDeepin GNU/Linux>LinuxDeepin GNU/Linux，Linux 3.11.0-15-generic`)
-	c.Check(grub.getSettingDefaultEntry(), Equals, wantDefaultEntry)
-
-	// timeout
-	wantTimeout := int32(10)
-	c.Check(grub.getSettingTimeout(), Equals, wantTimeout)
-	wantTimeout = int32(15)
-	grub.doSetSettingTimeoutLogic(wantTimeout)
-	c.Check(grub.getSettingTimeout(), Equals, wantTimeout)
 
 	// gfxmode
 	wantGfxmode := "1024x768"
@@ -175,11 +270,6 @@ func (*GrubTester) TestSetterAndGetter(c *C) {
 	c.Check(grub.getSettingTheme(), Equals, wantTheme)
 }
 
-func (*GrubTester) TestGetSettingDefaultEntry(c *C) {
-	// grub := NewGrub2()
-	// TODO
-}
-
 func (*GrubTester) TestSaveDefaultSettings(c *C) {
 	testConfigContent := `GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
 `
@@ -188,7 +278,7 @@ GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
 GRUB_DEFAULT="0"
 GRUB_GFXMODE="1024x768"
 GRUB_THEME="/boot/grub/themes/deepin/theme.txt"
-GRUB_TIMEOUT="10"
+GRUB_TIMEOUT="5"
 `
 	// TODO
 	// 	wantConfigContent := `GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"

@@ -41,9 +41,11 @@ func SetDefaultGrubConfigFile(file string) {
 }
 
 const (
-	grubMenuFile       = "/boot/grub/grub.cfg"
-	grubUpdateExe      = "/usr/sbin/update-grub"
-	grubTimeoutDisable = -2
+	grubMenuFile                  = "/boot/grub/grub.cfg"
+	grubUpdateExe                 = "/usr/sbin/update-grub"
+	grubTimeoutDefaultInt   int32 = 5
+	grubTimeoutDefault            = "5"
+	grubDefaultEntryDefault       = "0"
 )
 
 var (
@@ -80,6 +82,8 @@ func NewGrub2() *Grub2 {
 	grub.config = newConfig()
 	grub.chanUpdate = make(chan int)
 	grub.chanStopUpdateLoop = make(chan int)
+	grub.resetEntries()
+	grub.resetSettings()
 	return grub
 }
 
@@ -182,11 +186,11 @@ func (grub *Grub2) stopUpdateLoop() {
 	grub.chanStopUpdateLoop <- 1
 }
 
-func (grub *Grub2) clearEntries() {
+func (grub *Grub2) resetEntries() {
 	grub.entries = make([]Entry, 0)
 }
 
-func (grub *Grub2) clearSettings() {
+func (grub *Grub2) resetSettings() {
 	grub.settings = make(map[string]string)
 }
 
@@ -231,18 +235,18 @@ func (grub *Grub2) doFixSettings() (needUpdate bool) {
 
 	// reset properties, return default value for the missing property
 	// default entry
-	if grub.config.DefaultEntry != grub.getSettingDefaultEntry() {
+	if grub.config.DefaultEntry != grub.doGetSettingDefaultEntry() {
 		needUpdate = true
 	}
 	grub.doSetSettingDefaultEntry(grub.config.DefaultEntry)
 
 	// timeout
-	if grub.config.Timeout != grub.getSettingTimeout() {
+	if grub.config.Timeout != grub.doGetSettingTimeout() {
 		needUpdate = true
 	}
-	grub.doSetSettingTimeoutLogic(grub.config.Timeout)
+	grub.doSetSettingTimeout(grub.config.Timeout)
 
-	// gfxmode
+	// gfxmode TODO
 	if grub.config.Resolution != grub.getSettingGfxmode() {
 		needUpdate = true
 	}
@@ -305,7 +309,7 @@ func (grub *Grub2) writeSettings() {
 }
 
 func (grub *Grub2) parseEntries(fileContent string) (err error) {
-	grub.clearEntries()
+	grub.resetEntries()
 
 	inMenuEntry := false
 	level := 0
@@ -320,7 +324,7 @@ func (grub *Grub2) parseEntries(fileContent string) (err error) {
 		line = strings.TrimSpace(line)
 		if strings.HasPrefix(line, "menuentry ") {
 			if inMenuEntry {
-				grub.clearEntries()
+				grub.resetEntries()
 				err = fmt.Errorf("a 'menuentry' directive was detected inside the scope of a menuentry")
 				return
 			}
@@ -334,13 +338,13 @@ func (grub *Grub2) parseEntries(fileContent string) (err error) {
 				inMenuEntry = true
 				continue
 			} else {
-				grub.clearEntries()
+				grub.resetEntries()
 				err = fmt.Errorf("parse entry title failed from: %q", line)
 				return
 			}
 		} else if strings.HasPrefix(line, "submenu ") {
 			if inMenuEntry {
-				grub.clearEntries()
+				grub.resetEntries()
 				err = fmt.Errorf("a 'submenu' directive was detected inside the scope of a menuentry")
 				return
 			}
@@ -355,7 +359,7 @@ func (grub *Grub2) parseEntries(fileContent string) (err error) {
 				numCount[level] = 0
 				continue
 			} else {
-				grub.clearEntries()
+				grub.resetEntries()
 				err = fmt.Errorf("parse entry title failed from: %q", line)
 				return
 			}
@@ -392,7 +396,7 @@ func (grub *Grub2) parseTitle(line string) (string, bool) {
 }
 
 func (grub *Grub2) parseSettings(fileContent string) error {
-	grub.clearSettings()
+	grub.resetSettings()
 
 	s := bufio.NewScanner(strings.NewReader(fileContent))
 	s.Split(bufio.ScanLines)
@@ -431,44 +435,39 @@ func (grub *Grub2) getEntryTitles() (entryTitles []string, err error) {
 	return
 }
 
-// return setting's value or related entry(such as "Deepin 2014
-// GNU/Linux") if grub.cfg exists
-func (grub *Grub2) getSettingDefaultEntry() string {
+// return default entry or related entry title(such as "Deepin 2014
+// GNU/Linux") if possible
+func (grub *Grub2) getSettingDefaultEntry() (entry string) {
+	entry = grub.doGetSettingDefaultEntry()
+	if len(entry) == 0 {
+		entry = grubDefaultEntryDefault
+	}
+
+	// convert to simple stype
+	entry = convertToSimpleEntry(entry)
+
+	// if there is no entry titles, just return origin value
 	entryTitles, _ := grub.getEntryTitles()
-	simpleEntryTitles, _ := grub.GetSimpleEntryTitles()
-	firstEntry := ""
-	if len(simpleEntryTitles) > 0 {
-		firstEntry = simpleEntryTitles[0]
-	}
-	value := grub.doGetSettingDefaultEntry()
-
-	// if GRUB_DEFAULT is empty, return the first entry's title
-	if len(value) == 0 {
-		return firstEntry
+	if len(entryTitles) == 0 {
+		return
 	}
 
-	// if GRUB_DEFAULE exist and is a valid entry name, just return it
-	if isStringInArray(value, simpleEntryTitles) {
-		return value
+	// if entry titles exists and the origin value is a valid title,
+	// just return it
+	if isStringInArray(entry, entryTitles) {
+		return
 	}
 
-	// if GRUB_DEFAULE exist and is a entry in submenu, return the first entry's title
-	if isStringInArray(value, entryTitles) {
-		return firstEntry
+	// if entry titles exists and the origin value is an index number,
+	// return it related title
+	if i, err := strconv.ParseInt(entry, 10, 32); err == nil {
+		if i >= 0 && int(i) < len(entryTitles) {
+			entry = convertToSimpleEntry(entryTitles[i])
+		}
 	}
-
-	// TODO
-	// if GRUB_DEFAULE exist and is a index number, return its entry name
-	index, err := strconv.ParseInt(value, 10, 32)
-	if err != nil {
-		logger.Warningf(`invalid number, settings["GRUB_DEFAULT"]=%s`, grub.settings["GRUB_DEFAULT"])
-		index = 0
-	}
-	if index >= 0 && int(index) < len(simpleEntryTitles) {
-		return simpleEntryTitles[index]
-	}
-	return firstEntry
+	return
 }
+
 func (grub *Grub2) setSettingDefaultEntry(title string) {
 	grub.doSetSettingDefaultEntry(title)
 	grub.writeSettings()
@@ -482,17 +481,19 @@ func (grub *Grub2) doSetSettingDefaultEntry(value string) {
 	grub.config.doSetDefaultEntry(value)
 }
 
-func (grub *Grub2) getSettingTimeout() int32 {
+func (grub *Grub2) getSettingTimeout() (timeout int32) {
+	timeout = grubTimeoutDefaultInt // default timeout
 	timeoutStr := grub.doGetSettingTimeout()
 	if len(timeoutStr) == 0 {
-		return grubTimeoutDisable
+		return
 	}
-	timeout, err := strconv.ParseInt(timeoutStr, 10, 32)
+	timeout64, err := strconv.ParseInt(timeoutStr, 10, 32)
 	if err != nil {
 		logger.Errorf(`valid value, settings["GRUB_TIMEOUT"]=%s`, timeoutStr)
-		return grubTimeoutDisable
+		return
 	}
-	return int32(timeout)
+	timeout = int32(timeout64)
+	return
 }
 func (grub *Grub2) setSettingTimeout(timeout int32) {
 	grub.doSetSettingTimeoutLogic(timeout)
@@ -500,25 +501,21 @@ func (grub *Grub2) setSettingTimeout(timeout int32) {
 	grub.config.save()
 }
 func (grub *Grub2) doSetSettingTimeoutLogic(timeout int32) {
-	if timeout == grubTimeoutDisable {
-		grub.doSetSettingTimeout("")
-		grub.config.doSetTimeout(grubTimeoutDisable)
-	} else {
-		timeoutStr := strconv.FormatInt(int64(timeout), 10)
-		grub.doSetSettingTimeout(timeoutStr)
-		grub.config.doSetTimeout(timeout)
-	}
+	timeoutStr := strconv.FormatInt(int64(timeout), 10)
+	grub.doSetSettingTimeout(timeoutStr)
 }
 func (grub *Grub2) doGetSettingTimeout() string {
 	return grub.settings["GRUB_TIMEOUT"]
 }
 func (grub *Grub2) doSetSettingTimeout(value string) {
 	grub.settings["GRUB_TIMEOUT"] = value
+	grub.config.doSetTimeout(value)
 }
 
 func (grub *Grub2) getSettingGfxmode() string {
 	gfxmode := grub.doGetSettingGfxmode()
 	if len(gfxmode) == 0 {
+		// TODO
 		return "auto"
 	}
 	return gfxmode

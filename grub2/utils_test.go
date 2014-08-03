@@ -39,6 +39,22 @@ func (*GrubTester) TestUnquoteString(c *C) {
 	}
 }
 
+func (*GrubTester) TestConvertToSimpleEntry(c *C) {
+	data := []struct {
+		v, r string
+	}{
+		{"", ""},
+		{">", ""},
+		{"0", "0"},
+		{"0>1", "0"},
+		{"1>1>2", "1"},
+		{"Parent Title>Child Title", "Parent Title"},
+	}
+	for _, d := range data {
+		c.Check(convertToSimpleEntry(d.v), Equals, d.r)
+	}
+}
+
 func (*GrubTester) TestParseGfxmode(c *C) {
 	sw, sh := getPrimaryScreenBestResolution()
 	data := []struct {

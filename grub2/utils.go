@@ -136,6 +136,17 @@ func delta(v1, v2 float64) float64 {
 	return v2 - v1
 }
 
+// "0" -> "0", "1->2" -> "1", "Parent Tiltle>Child Title" -> "Parent Title"
+func convertToSimpleEntry(entry string) (simpleEntry string) {
+	i := strings.Index(entry, ">")
+	if i >= 0 {
+		simpleEntry = entry[0:i]
+	} else {
+		simpleEntry = entry
+	}
+	return
+}
+
 func parseGfxmode(gfxmode string) (w, h uint16) {
 	w, h, err := doParseGfxmode(gfxmode)
 	if err != nil {
