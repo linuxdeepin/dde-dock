@@ -218,6 +218,15 @@ func (grub *Grub2) readSettings() (err error) {
 }
 
 func (grub *Grub2) fixSettings() (needUpdate bool) {
+	needUpdate = grub.doFixSettings()
+	if needUpdate {
+		grub.writeSettings()
+		grub.config.save()
+	}
+	return
+}
+
+func (grub *Grub2) doFixSettings() (needUpdate bool) {
 	needUpdate = false
 
 	// reset properties, return default value for the missing property
@@ -225,45 +234,43 @@ func (grub *Grub2) fixSettings() (needUpdate bool) {
 	if grub.config.DefaultEntry != grub.getSettingDefaultEntry() {
 		needUpdate = true
 	}
-	grub.setSettingDefaultEntry(grub.config.DefaultEntry)
+	grub.doSetSettingDefaultEntry(grub.config.DefaultEntry)
 
 	// timeout
 	if grub.config.Timeout != grub.getSettingTimeout() {
 		needUpdate = true
 	}
-	grub.setSettingTimeout(grub.config.Timeout)
+	grub.doSetSettingTimeoutLogic(grub.config.Timeout)
 
 	// gfxmode
 	if grub.config.Resolution != grub.getSettingGfxmode() {
 		needUpdate = true
 	}
-	grub.setSettingGfxmode(grub.config.Resolution)
+	grub.doSetSettingGfxmode(grub.config.Resolution)
 
 	// disable GRUB_HIDDEN_TIMEOUT and GRUB_HIDDEN_TIMEOUT_QUIET which will conflicts with GRUB_TIMEOUT
 	if len(grub.settings["GRUB_HIDDEN_TIMEOUT"]) != 0 ||
 		len(grub.settings["GRUB_HIDDEN_TIMEOUT_QUIET"]) != 0 {
 		grub.settings["GRUB_HIDDEN_TIMEOUT"] = ""
 		grub.settings["GRUB_HIDDEN_TIMEOUT_QUIET"] = ""
-		grub.writeSettings()
 		needUpdate = true
 	}
 
 	// disable GRUB_BACKGROUND
 	if grub.settings["GRUB_BACKGROUND"] != "<none>" {
 		grub.settings["GRUB_BACKGROUND"] = "<none>"
-		grub.writeSettings()
 		needUpdate = true
 	}
 
 	// setup deepin grub2 theme
 	if grub.config.EnableTheme {
 		if grub.getSettingTheme() != themeMainFile {
-			grub.setSettingTheme(themeMainFile)
+			grub.doSetSettingTheme(themeMainFile)
 			needUpdate = true
 		}
 	} else {
 		if grub.getSettingTheme() != "" {
-			grub.setSettingTheme("")
+			grub.doSetSettingTheme("")
 			needUpdate = true
 		}
 	}
@@ -272,12 +279,18 @@ func (grub *Grub2) fixSettings() (needUpdate bool) {
 }
 
 func (grub *Grub2) fixSettingDistro() (needUpdate bool) {
+	needUpdate = grub.doFixSettingDistro()
+	if needUpdate {
+		grub.writeSettings()
+	}
+	return
+}
+func (grub *Grub2) doFixSettingDistro() (needUpdate bool) {
 	// fix GRUB_DISTRIBUTOR
 	wantGrubDistroCmd := "`lsb_release -d -s 2> /dev/null || echo Debian`"
 	if grub.doGetSettingDistributor() != wantGrubDistroCmd {
 		needUpdate = true
 		grub.doSetSettingDistributor(wantGrubDistroCmd)
-		grub.writeSettings()
 	}
 	return
 }

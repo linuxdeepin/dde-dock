@@ -121,8 +121,8 @@ func (*GrubTester) TestFixSettings(c *C) {
 	grub.parseEntries(testMenuContent)
 	grub.parseSettings(testConfigContent)
 
-	grub.fixSettings()
-	grub.fixSettingDistro()
+	grub.doFixSettings()
+	grub.doFixSettingDistro()
 	wantSettingCount := 8
 	wantDefaultEntry := "0"
 	wantDistro := "`lsb_release -d -s 2> /dev/null || echo Debian`"
@@ -198,9 +198,9 @@ GRUB_TIMEOUT="10"
 	// `
 	grub := NewGrub2()
 	grub.config.Resolution = "1024x768"
-	grub.parseEntries(testMenuContent)
+	// grub.parseEntries(testMenuContent)
 	grub.parseSettings(testConfigContent)
-	grub.fixSettings()
+	grub.doFixSettings()
 	c.Check(grub.getSettingContentToSave(), Equals, wantConfigContent)
 }
 
