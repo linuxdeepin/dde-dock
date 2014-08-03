@@ -31,16 +31,12 @@ import (
 
 // SetupWrapper is a copy of dde-api/grub2ext, for to remove the dependency
 // of dbus when setup grub.
-// TODO
+// TODO refactor code, merge dde-api/grub2ext
 type SetupWrapper struct{}
 
 // Setup grub2 environment, regenerate configure and theme if need, don't depends on dbus
 func (grub *Grub2) Setup(gfxmode string) {
-	setup := &SetupWrapper{}
 	runWithoutDBus = true
-
-	grub.config = newConfig()
-	grub.config.save()
 
 	// do not call grub.readEntries() here, for that
 	// "/boot/grub/grub.cfg" may not exists
@@ -55,9 +51,9 @@ func (grub *Grub2) Setup(gfxmode string) {
 		grub.setSettingGfxmode(gfxmode)
 	}
 
-	// write to setting file
-	settingFileContent := grub.getSettingContentToSave()
-	setup.DoWriteSettings(settingFileContent)
+	// write settings
+	grub.writeSettings()
+	grub.config.save()
 
 	// setup theme and generate theme background
 	grub.SetupTheme(gfxmode)
@@ -66,7 +62,7 @@ func (grub *Grub2) Setup(gfxmode string) {
 func (grub *Grub2) SetupTheme(gfxmode string) {
 	setup := &SetupWrapper{}
 	runWithoutDBus = true
-	grub.loadConfig()
+	grub.config.loadOrSaveConfig()
 	if len(gfxmode) == 0 {
 		gfxmode = grub.config.Resolution
 	}

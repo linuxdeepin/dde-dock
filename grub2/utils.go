@@ -151,7 +151,7 @@ func parseGfxmode(gfxmode string) (w, h uint16) {
 	w, h, err := doParseGfxmode(gfxmode)
 	if err != nil {
 		logger.Error(err)
-		w, h = 1024, 768 // default value
+		w, h = getPrimaryScreenBestResolution() // default value
 	}
 	return
 }

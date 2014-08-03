@@ -43,9 +43,10 @@ func SetDefaultGrubConfigFile(file string) {
 const (
 	grubMenuFile                  = "/boot/grub/grub.cfg"
 	grubUpdateExe                 = "/usr/sbin/update-grub"
-	grubTimeoutDefaultInt   int32 = 5
-	grubTimeoutDefault            = "5"
 	grubDefaultEntryDefault       = "0"
+	grubGfxmodeDefault            = "auto"
+	grubTimeoutDefault            = "5"
+	grubTimeoutDefaultInt   int32 = 5
 )
 
 var (
@@ -94,19 +95,11 @@ func DestroyGrub2(grub *Grub2) {
 }
 
 func (grub *Grub2) initGrub2() {
-	grub.loadConfig()
+	grub.config.loadOrSaveConfig()
 	grub.doInitGrub2()
 	grub.theme.initTheme()
 	go grub.theme.regenerateBackgroundIfNeed()
 	grub.startUpdateLoop()
-}
-
-func (grub *Grub2) loadConfig() {
-	if grub.config.core.IsConfigFileExists() {
-		grub.config.load()
-	} else {
-		grub.config.save()
-	}
 }
 
 func (grub *Grub2) doInitGrub2() {
@@ -246,8 +239,8 @@ func (grub *Grub2) doFixSettings() (needUpdate bool) {
 	}
 	grub.doSetSettingTimeout(grub.config.Timeout)
 
-	// gfxmode TODO
-	if grub.config.Resolution != grub.getSettingGfxmode() {
+	// gfxmode
+	if grub.config.Resolution != grub.doGetSettingGfxmode() {
 		needUpdate = true
 	}
 	grub.doSetSettingGfxmode(grub.config.Resolution)
@@ -268,12 +261,12 @@ func (grub *Grub2) doFixSettings() (needUpdate bool) {
 
 	// setup deepin grub2 theme
 	if grub.config.EnableTheme {
-		if grub.getSettingTheme() != themeMainFile {
+		if grub.doGetSettingTheme() != themeMainFile {
 			grub.doSetSettingTheme(themeMainFile)
 			needUpdate = true
 		}
 	} else {
-		if grub.getSettingTheme() != "" {
+		if grub.doGetSettingTheme() != "" {
 			grub.doSetSettingTheme("")
 			needUpdate = true
 		}
@@ -515,8 +508,7 @@ func (grub *Grub2) doSetSettingTimeout(value string) {
 func (grub *Grub2) getSettingGfxmode() string {
 	gfxmode := grub.doGetSettingGfxmode()
 	if len(gfxmode) == 0 {
-		// TODO
-		return "auto"
+		return grubGfxmodeDefault
 	}
 	return gfxmode
 }

@@ -25,7 +25,7 @@ import (
 	"pkg.linuxdeepin.com/lib/utils"
 )
 
-const configFile = "/var/cache/deepin/grub2.json"
+var configFile = "/var/cache/deepin/grub2.json"
 
 // refactor code, split fields, grub, efi
 type config struct {
@@ -49,6 +49,16 @@ func newConfig() (c *config) {
 	c.core.SetConfigFile(configFile)
 	return
 }
+
+func (c *config) loadOrSaveConfig() {
+	// do not merge this function to load() for permission issue
+	if c.core.IsConfigFileExists() {
+		c.load()
+	} else {
+		c.save()
+	}
+}
+
 func (c *config) load() {
 	logger.Info("config file:", c.core.GetConfigFile())
 	err := c.core.Load(c)

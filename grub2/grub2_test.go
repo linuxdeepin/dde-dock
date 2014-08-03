@@ -12,7 +12,7 @@ type GrubTester struct{}
 var _ = Suite(&GrubTester{})
 
 const (
-	testMenuContent = `
+	testGrubMenuContent = `
 menuentry 'LinuxDeepin GNU/Linux' --class linuxdeepin --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-simple' {
 recordfail
 }
@@ -22,7 +22,7 @@ submenu 'Advanced options for LinuxDeepin GNU/Linux' $menuentry_id_option 'gnuli
 		echo	'载入 Linux 3.11.0-15-generic ...'
 	}
 `
-	testMenuContentLong = `
+	testGrubMenuContentLong = `
 menuentry 'LinuxDeepin GNU/Linux' --class linuxdeepin --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-simple' {
 recordfail
 	load_video
@@ -40,7 +40,7 @@ submenu 'Advanced options for LinuxDeepin GNU/Linux' $menuentry_id_option 'gnuli
 menuentry 'Other OS' {
 }
 `
-	testConfigContent = `
+	testGrubSettingsContent = `
 # comment line
 GRUB_DEFAULT="0"
 GRUB_HIDDEN_TIMEOUT="0"
@@ -80,7 +80,7 @@ func (*GrubTester) TestParseEntries(c *C) {
 	}
 
 	grub := NewGrub2()
-	grub.parseEntries(testMenuContentLong)
+	grub.parseEntries(testGrubMenuContentLong)
 	c.Check(len(grub.entries), Equals, len(wantEntyTitles))
 	for i, entry := range grub.entries {
 		c.Check(entry.getFullTitle(), Equals, wantEntyTitles[i])
@@ -89,8 +89,8 @@ func (*GrubTester) TestParseEntries(c *C) {
 
 func (*GrubTester) TestParseSettings(c *C) {
 	grub := NewGrub2()
-	grub.parseEntries(testMenuContent)
-	grub.parseSettings(testConfigContent)
+	grub.parseEntries(testGrubMenuContent)
+	grub.parseSettings(testGrubSettingsContent)
 
 	wantSettingCount := 7
 	wantDefaultEntry := "0"
@@ -103,12 +103,12 @@ func (*GrubTester) TestParseSettings(c *C) {
 }
 
 func (*GrubTester) TestParseInvalidSettings(c *C) {
-	testConfigContent := `GRUB_DEFUALT=
+	testGrubSettingsContent := `GRUB_DEFUALT=
 GRUB_TIMEOUT
 GRUB_THEME
 `
 	grub := NewGrub2()
-	grub.parseSettings(testConfigContent)
+	grub.parseSettings(testGrubSettingsContent)
 	c.Check(len(grub.settings), Equals, 1)
 	c.Check(grub.doGetSettingDefaultEntry(), Equals, "")
 	c.Check(grub.doGetSettingTimeout(), Equals, "")
@@ -150,7 +150,7 @@ func (*GrubTester) TestSettingDefaultEntry(c *C) {
 	c.Check(grub.getSettingDefaultEntry(), Equals, "3")
 
 	// load entry titles
-	grub.parseEntries(testMenuContent)
+	grub.parseEntries(testGrubMenuContent)
 
 	// get default entry after titles loaded
 	grub.doSetSettingDefaultEntry("0")
@@ -219,8 +219,8 @@ func (*GrubTester) TestSettingTimeout(c *C) {
 
 func (*GrubTester) TestFixSettings(c *C) {
 	grub := NewGrub2()
-	grub.parseEntries(testMenuContent)
-	grub.parseSettings(testConfigContent)
+	grub.parseEntries(testGrubMenuContent)
+	grub.parseSettings(testGrubSettingsContent)
 
 	var needUpdate bool
 	needUpdate = grub.doFixSettings()
@@ -249,8 +249,8 @@ func (*GrubTester) TestFixSettings(c *C) {
 
 func (*GrubTester) TestSettingsGeneral(c *C) {
 	grub := NewGrub2()
-	grub.parseEntries(testMenuContent)
-	grub.parseSettings(testConfigContent)
+	grub.parseEntries(testGrubMenuContent)
+	grub.parseSettings(testGrubSettingsContent)
 
 	entryTitles, _ := grub.GetSimpleEntryTitles()
 	c.Check(len(entryTitles), Equals, 1)
@@ -271,7 +271,7 @@ func (*GrubTester) TestSettingsGeneral(c *C) {
 }
 
 func (*GrubTester) TestSaveDefaultSettings(c *C) {
-	testConfigContent := `GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
+	testGrubSettingsContent := `GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
 `
 	wantConfigContent := `GRUB_BACKGROUND="<none>"
 GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
@@ -280,22 +280,15 @@ GRUB_GFXMODE="1024x768"
 GRUB_THEME="/boot/grub/themes/deepin/theme.txt"
 GRUB_TIMEOUT="5"
 `
-	// TODO
-	// 	wantConfigContent := `GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
-	// GRUB_DEFAULT="LinuxDeepin GNU/Linux"
-	// GRUB_DISTRIBUTOR="` + "`" + `lsb_release -d -s 2> /dev/null || echo Debian` + "`" + `"
-	// GRUB_THEME="/boot/grub/themes/deepin/theme.txt"
-	// `
 	grub := NewGrub2()
 	grub.config.Resolution = "1024x768"
-	// grub.parseEntries(testMenuContent)
-	grub.parseSettings(testConfigContent)
+	grub.parseSettings(testGrubSettingsContent)
 	grub.doFixSettings()
 	c.Check(grub.getSettingContentToSave(), Equals, wantConfigContent)
 }
 
 func (*GrubTester) TestSaveSettings(c *C) {
-	testConfigContent := `GRUB_DEFAULT="0"
+	testGrubSettingsContent := `GRUB_DEFAULT="0"
 GRUB_TIMEOUT="10"
 GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
 GRUB_GFXMODE="1024x768"
@@ -307,8 +300,8 @@ GRUB_THEME="/boot/grub/themes/deepin/theme.txt"
 GRUB_TIMEOUT="15"
 `
 	grub := NewGrub2()
-	grub.parseEntries(testMenuContent)
-	grub.parseSettings(testConfigContent)
+	grub.parseEntries(testGrubMenuContent)
+	grub.parseSettings(testGrubSettingsContent)
 
 	grub.doSetSettingDefaultEntry(`LinuxDeepin GNU/Linux`)
 	grub.doSetSettingTimeoutLogic(15)
@@ -324,7 +317,7 @@ func (*GrubTester) TestGetEntryTitles(c *C) {
 	}
 
 	grub := NewGrub2()
-	grub.parseEntries(testMenuContentLong)
+	grub.parseEntries(testGrubMenuContentLong)
 	entryTitles, _ := grub.GetSimpleEntryTitles()
 	c.Check(len(entryTitles), Equals, len(wantEntyTitles))
 	for i, title := range entryTitles {
