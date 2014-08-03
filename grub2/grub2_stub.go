@@ -65,7 +65,6 @@ func (grub *Grub2) OnPropertiesChanged(name string, oldv interface{}) {
 			return
 		}
 		grub.setPropEnableTheme(grub.EnableTheme)
-		// TODO
 		grub.notifyUpdate()
 	case "DefaultEntry":
 		oldvStr, _ := oldv.(string)
@@ -99,15 +98,11 @@ func (grub *Grub2) setPropFixSettingsAlways(value bool) {
 
 func (grub *Grub2) setPropEnableTheme(value bool) {
 	grub.EnableTheme = value
-	if grub.config.EnableTheme != value {
-		grub.config.setEnableTheme(value)
-		if value {
-			grub.setSettingTheme("")
-		} else {
-			grub.setSettingTheme(themeMainFile)
-		}
-		// TODO
-		grub.notifyUpdate()
+	grub.config.setEnableTheme(value)
+	if value {
+		grub.setSettingTheme(themeMainFile)
+	} else {
+		grub.setSettingTheme("")
 	}
 	dbus.NotifyChange(grub, "EnableTheme")
 }
