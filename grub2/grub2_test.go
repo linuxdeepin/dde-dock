@@ -118,7 +118,7 @@ GRUB_THEME
 
 func (*GrubTester) TestSettingDefaultEntry(c *C) {
 	grub := NewGrub2()
-	grub.fixSettings()
+	grub.doFixSettings()
 
 	// default entry
 	c.Check(grub.config.DefaultEntry, Equals, "0")
@@ -215,6 +215,19 @@ func (*GrubTester) TestSettingTimeout(c *C) {
 	c.Check(grub.config.Timeout, Equals, "10")
 	c.Check(grub.doGetSettingTimeout(), Equals, "10")
 	c.Check(grub.getSettingTimeout(), Equals, int32(10))
+}
+
+func (*GrubTester) TestFixSettingDefaultEntry(c *C) {
+	grub := NewGrub2()
+	grub.parseEntries(testGrubMenuContent)
+	grub.parseSettings(testGrubSettingsContent)
+
+	var needUpdate bool
+	needUpdate = grub.doFixSettings()
+	c.Check(needUpdate, Equals, true)
+
+	c.Check(grub.config.DefaultEntry, Equals, "0")
+	c.Check(grub.doGetSettingDefaultEntry(), Equals, "0")
 }
 
 func (*GrubTester) TestFixSettings(c *C) {
