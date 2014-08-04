@@ -34,21 +34,24 @@ import (
 	"unicode"
 )
 
-const GrubConfigFileDefault = "/etc/default/grub"
+const (
+	DefaultGrubSettingFile = "/etc/default/grub"
+	DefaultGrubMenuFile    = "/boot/grub/grub.cfg"
+)
 
-var grubConfigFile = GrubConfigFileDefault
+var grubSettingFile = DefaultGrubSettingFile
 
-func SetDefaultGrubConfigFile(file string) {
-	grubConfigFile = file
+func SetDefaultGrubSettingFile(file string) {
+	grubSettingFile = file
 }
 
 const (
-	grubMenuFile                  = "/boot/grub/grub.cfg"
+	grubMenuFile                  = DefaultGrubMenuFile
 	grubUpdateCmd                 = "/usr/sbin/update-grub"
-	grubDefaultEntryDefault       = "0"
-	grubGfxmodeDefault            = "auto"
-	grubTimeoutDefault            = "5"
-	grubTimeoutDefaultInt   int32 = 5
+	defaultGrubDefaultEntry       = "0"
+	defaultGrubGfxmode            = "auto"
+	defaultGrubTimeout            = "5"
+	defaultGrubTimeoutInt   int32 = 5
 )
 
 var (
@@ -207,7 +210,7 @@ func (grub *Grub2) readEntries() (err error) {
 }
 
 func (grub *Grub2) readSettings() (err error) {
-	fileContent, err := ioutil.ReadFile(grubConfigFile)
+	fileContent, err := ioutil.ReadFile(grubSettingFile)
 	if err != nil {
 		logger.Error(err)
 	}
@@ -435,7 +438,7 @@ func (grub *Grub2) getEntryTitles() (entryTitles []string, err error) {
 func (grub *Grub2) getSettingDefaultEntry() (entry string) {
 	entry = grub.doGetSettingDefaultEntry()
 	if len(entry) == 0 {
-		entry = grubDefaultEntryDefault
+		entry = defaultGrubDefaultEntry
 	}
 
 	// convert to simple stype
@@ -477,7 +480,7 @@ func (grub *Grub2) doSetSettingDefaultEntry(value string) {
 }
 
 func (grub *Grub2) getSettingTimeout() (timeout int32) {
-	timeout = grubTimeoutDefaultInt // default timeout
+	timeout = defaultGrubTimeoutInt // default timeout
 	timeoutStr := grub.doGetSettingTimeout()
 	if len(timeoutStr) == 0 {
 		return
@@ -510,7 +513,7 @@ func (grub *Grub2) doSetSettingTimeout(value string) {
 func (grub *Grub2) getSettingGfxmode() string {
 	gfxmode := grub.doGetSettingGfxmode()
 	if len(gfxmode) == 0 {
-		return grubGfxmodeDefault
+		return defaultGrubGfxmode
 	}
 	return gfxmode
 }

@@ -33,12 +33,12 @@ import (
 )
 
 var (
-	argDebug      bool
-	argSetup      bool
-	argSetupTheme bool
-	argConfig     string
-	argThemeDir   string
-	argGfxmode    string
+	argDebug           bool
+	argSetup           bool
+	argSetupTheme      bool
+	argGrubSettingFile string
+	argThemeDir        string
+	argGfxmode         string
 )
 
 func main() {
@@ -46,9 +46,9 @@ func main() {
 	flag.BoolVar(&argDebug, "debug", false, "debug mode")
 	flag.BoolVar(&argSetup, "setup", false, "setup grub and exit")
 	flag.BoolVar(&argSetupTheme, "setup-theme", false, "setup grub theme only and exit")
-	flag.StringVar(&argConfig, "config", "", "specify an alternative configuration file when setup grub")
+	flag.StringVar(&argGrubSettingFile, "setting-file", "", "specify an alternative setting file instead of /etc/default/grub when setup grub")
 	// TODO --grub-config, --backend, [grub, efi]
-	flag.StringVar(&argThemeDir, "theme-dir", "", "specify an alternative theme directory when setup grub")
+	flag.StringVar(&argThemeDir, "theme-dir", "", "specify an alternative theme directory instead of /boot/grub/themes/deepin when setup grub")
 	flag.StringVar(&argGfxmode, "gfxmode", "", "specify gfxmode when setup grub")
 	flag.Parse()
 
@@ -57,13 +57,13 @@ func main() {
 	}
 
 	// dispatch optional arguments
-	if len(argConfig) != 0 {
-		fmt.Println("config:", argConfig)
-		grub2.SetDefaultGrubConfigFile(argConfig)
+	if len(argGrubSettingFile) != 0 {
+		fmt.Println("setting file:", argGrubSettingFile)
+		grub2.SetDefaultGrubSettingFile(argGrubSettingFile)
 	}
 	if len(argThemeDir) != 0 {
 		fmt.Println("theme dir:", argThemeDir)
-		grub2.SetDefaultThemePath(argThemeDir)
+		grub2.SetDefaultThemeDir(argThemeDir)
 	}
 	if len(argGfxmode) != 0 {
 		fmt.Println("gfxmode:", argGfxmode)

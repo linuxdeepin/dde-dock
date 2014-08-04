@@ -30,29 +30,28 @@ import (
 	"text/template"
 )
 
-// TODO rename to themeDir
-const ThemePathDefault = "/boot/grub/themes/deepin"
+const DefaultThemeDir = "/boot/grub/themes/deepin"
 
 var (
-	themePath          = ThemePathDefault
-	themeMainFile      = themePath + "/theme.txt"
-	themeTplFile       = themePath + "/theme.tpl"
-	themeJSONFile      = themePath + "/theme_tpl.json"
-	themeBgOrigSrcFile = themePath + "/background_origin_source"
-	themeBgSrcFile     = themePath + "/background_source"
-	themeBgFile        = themePath + "/background.png"
-	themeBgThumbFile   = themePath + "/background_thumb.png"
+	themeDir           = DefaultThemeDir
+	themeMainFile      = themeDir + "/theme.txt"
+	themeTplFile       = themeDir + "/theme.tpl"
+	themeJSONFile      = themeDir + "/theme_tpl.json"
+	themeBgOrigSrcFile = themeDir + "/background_origin_source"
+	themeBgSrcFile     = themeDir + "/background_source"
+	themeBgFile        = themeDir + "/background.png"
+	themeBgThumbFile   = themeDir + "/background_thumb.png"
 )
 
-func SetDefaultThemePath(path string) {
-	themePath = path
-	themeMainFile = themePath + "/theme.txt"
-	themeTplFile = themePath + "/theme.tpl"
-	themeJSONFile = themePath + "/theme_tpl.json"
-	themeBgOrigSrcFile = themePath + "/background_origin_source"
-	themeBgSrcFile = themePath + "/background_source"
-	themeBgFile = themePath + "/background.png"
-	themeBgThumbFile = themePath + "/background_thumb.png"
+func SetDefaultThemeDir(dir string) {
+	themeDir = dir
+	themeMainFile = themeDir + "/theme.txt"
+	themeTplFile = themeDir + "/theme.tpl"
+	themeJSONFile = themeDir + "/theme_tpl.json"
+	themeBgOrigSrcFile = themeDir + "/background_origin_source"
+	themeBgSrcFile = themeDir + "/background_source"
+	themeBgFile = themeDir + "/background.png"
+	themeBgThumbFile = themeDir + "/background_thumb.png"
 }
 
 // TplJSONData read JSON data from
@@ -70,7 +69,7 @@ type ThemeScheme struct {
 // Theme is a dbus object which provide properties and methods to
 // setup deepin grub2 theme.
 type Theme struct {
-	themePath   string
+	themeDir    string
 	mainFile    string
 	tplFile     string
 	jsonFile    string
@@ -90,7 +89,7 @@ type Theme struct {
 // NewTheme create Theme object.
 func NewTheme() *Theme {
 	theme := &Theme{}
-	theme.themePath = themePath
+	theme.themeDir = themeDir
 	theme.mainFile = themeMainFile
 	theme.tplFile = themeTplFile
 	theme.jsonFile = themeJSONFile

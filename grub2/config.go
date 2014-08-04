@@ -45,8 +45,8 @@ func newConfig() (c *config) {
 	c.NeedUpdate = true
 	c.FixSettingsAlways = true
 	c.EnableTheme = true
-	c.DefaultEntry = grubDefaultEntryDefault
-	c.Timeout = grubTimeoutDefault
+	c.DefaultEntry = defaultGrubDefaultEntry
+	c.Timeout = defaultGrubTimeout
 	c.Resolution = getPrimaryScreenBestResolutionStr()
 	c.core.SetConfigFile(configFile)
 	return

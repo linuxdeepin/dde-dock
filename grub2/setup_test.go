@@ -22,16 +22,16 @@ var (
 func (*GrubTester) TestCustomArguments(c *C) {
 	// prepare
 	configFile = tmpBaseDir + "/grub2.json"
-	SetDefaultGrubConfigFile(tmpConfigFile)
-	SetDefaultThemePath(tmpThemeDir)
+	SetDefaultGrubSettingFile(tmpConfigFile)
+	SetDefaultThemeDir(tmpThemeDir)
 	defer func() {
 		configFile = ConfigFileDefault
-		SetDefaultGrubConfigFile(GrubConfigFileDefault)
-		SetDefaultThemePath(ThemePathDefault)
+		SetDefaultGrubSettingFile(DefaultGrubSettingFile)
+		SetDefaultThemeDir(DefaultThemeDir)
 	}()
 
-	c.Check(grubConfigFile, Equals, tmpConfigFile)
-	c.Check(themePath, Equals, tmpThemeDir)
+	c.Check(grubSettingFile, Equals, tmpConfigFile)
+	c.Check(themeDir, Equals, tmpThemeDir)
 	c.Check(themeMainFile, Equals, tmpThemeDir+"/theme.txt")
 	c.Check(themeTplFile, Equals, tmpThemeDir+"/theme.tpl")
 	c.Check(themeJSONFile, Equals, tmpThemeDir+"/theme_tpl.json")
@@ -41,7 +41,7 @@ func (*GrubTester) TestCustomArguments(c *C) {
 	c.Check(themeBgThumbFile, Equals, tmpThemeDir+"/background_thumb.png")
 
 	theme := NewTheme()
-	c.Check(theme.themePath, Equals, themePath)
+	c.Check(theme.themeDir, Equals, themeDir)
 	c.Check(theme.mainFile, Equals, themeMainFile)
 	c.Check(theme.tplFile, Equals, themeTplFile)
 	c.Check(theme.jsonFile, Equals, themeJSONFile)
@@ -65,12 +65,12 @@ GRUB_TIMEOUT="5"
 	configFile = tmpBaseDir + "/grub2.json"
 	utils.EnsureDirExist(tmpThemeDir)
 	utils.CopyFile(testGrubThemeBackgroundSourceFile, tmpThemeDir+"/background_source")
-	SetDefaultGrubConfigFile(tmpConfigFile)
-	SetDefaultThemePath(tmpThemeDir)
+	SetDefaultGrubSettingFile(tmpConfigFile)
+	SetDefaultThemeDir(tmpThemeDir)
 	defer func() {
 		configFile = ConfigFileDefault
-		SetDefaultGrubConfigFile(GrubConfigFileDefault)
-		SetDefaultThemePath(ThemePathDefault)
+		SetDefaultGrubSettingFile(DefaultGrubSettingFile)
+		SetDefaultThemeDir(DefaultThemeDir)
 	}()
 
 	g := NewGrub2()
@@ -96,12 +96,12 @@ func (*GrubTester) TestSetupGfxmode(c *C) {
 	configFile = tmpBaseDir + "/grub2.json"
 	utils.EnsureDirExist(tmpThemeDir)
 	utils.CopyFile(testGrubThemeBackgroundSourceFile, tmpThemeDir+"/background_source")
-	SetDefaultGrubConfigFile(tmpConfigFile)
-	SetDefaultThemePath(tmpThemeDir)
+	SetDefaultGrubSettingFile(tmpConfigFile)
+	SetDefaultThemeDir(tmpThemeDir)
 	defer func() {
 		configFile = ConfigFileDefault
-		SetDefaultGrubConfigFile(GrubConfigFileDefault)
-		SetDefaultThemePath(ThemePathDefault)
+		SetDefaultGrubSettingFile(DefaultGrubSettingFile)
+		SetDefaultThemeDir(DefaultThemeDir)
 	}()
 
 	g := NewGrub2()
@@ -153,12 +153,12 @@ func (*GrubTester) TestDoSetThemeBackgroundSourceFile(c *C) {
 	// configFile = tmpBaseDir + "/grub2.json"
 	// utils.EnsureDirExist(tmpThemeDir)
 	// utils.CopyFile(testGrubThemeBackgroundSourceFile, tmpThemeDir+"/background_source")
-	// SetDefaultGrubConfigFile(tmpConfigFile)
-	// SetDefaultThemePath(tmpThemeDir)
+	// SetDefaultGrubSettingFile(tmpConfigFile)
+	// SetDefaultThemeDir(tmpThemeDir)
 	// 	defer func() {
 	// 	configFile = ConfigFileDefault
-	// 	SetDefaultGrubConfigFile(GrubConfigFileDefault)
-	// 	SetDefaultThemePath(ThemePathDefault)
+	// 	SetDefaultGrubSettingFile(DefaultGrubSettingFile)
+	// 	SetDefaultThemeDir(DefaultThemeDir)
 	// }()
 
 	// g := NewGrub2()

@@ -78,7 +78,7 @@ func (ge *Grub2Ext) DoWriteConfig(fileContent string) (ok bool, err error) {
 
 // DoWriteGrubSettings write file content to "/etc/default/grub".
 func (ge *Grub2Ext) DoWriteGrubSettings(fileContent string) (ok bool, err error) {
-	err = ioutil.WriteFile(grubConfigFile, []byte(fileContent), 0664)
+	err = ioutil.WriteFile(grubSettingFile, []byte(fileContent), 0664)
 	if err != nil {
 		logger.Error(err)
 		return false, err
