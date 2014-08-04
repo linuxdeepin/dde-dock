@@ -34,7 +34,9 @@ import (
 	"unicode"
 )
 
-var grubConfigFile = "/etc/default/grub"
+const grubConfigFileDefault = "/etc/default/grub"
+
+var grubConfigFile = grubConfigFileDefault
 
 func SetDefaultGrubConfigFile(file string) {
 	grubConfigFile = file

@@ -137,7 +137,7 @@ func (setup *SetupWrapper) DoSetThemeBackgroundSourceFile(imageFile string, scre
 func (setup *SetupWrapper) DoGenerateThemeBackground(screenWidth, screenHeight uint16) (ok bool, err error) {
 	imgWidth, imgHeight, err := graphic.GetImageSize(themeBgSrcFile)
 	if err != nil {
-		logger.Error(err.Error())
+		logger.Error(err.Error()) // TODO
 		return false, err
 	}
 	logger.Infof("source background size %dx%d", imgWidth, imgHeight)
