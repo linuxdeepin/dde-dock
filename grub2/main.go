@@ -48,7 +48,7 @@ func Start() {
 	}
 
 	// initialize grub2 after dbus service installed to ensure
-	// property changed signal send success
+	// property changing signal send successful
 	grub.initGrub2()
 }
 

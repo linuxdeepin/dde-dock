@@ -44,7 +44,7 @@ func (grub *Grub2) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-// GetSimpleEntryTitles return entry titles in level one.
+// GetSimpleEntryTitles return entry titles only in level one.
 func (grub *Grub2) GetSimpleEntryTitles() ([]string, error) {
 	entryTitles := make([]string, 0)
 	for _, entry := range grub.entries {
