@@ -132,7 +132,7 @@ func (theme *Theme) reset() {
 		defer theme.updateLock.Unlock()
 		theme.setPropUpdating(true)
 		grub2extDoResetThemeBackground()
-		screenWidth, screenHeight := getPrimaryScreenBestResolution() // TODO
+		screenWidth, screenHeight := parseCurrentGfxmode()
 		grub2extDoGenerateThemeBackground(screenWidth, screenHeight)
 		theme.setPropBackground(theme.bgFile)
 		theme.setPropUpdating(false)
@@ -143,7 +143,7 @@ func (theme *Theme) reset() {
 // 1024x768 if updating grub-themes-deepin package lonely
 func (theme *Theme) regenerateBackgroundIfNeed() {
 	logger.Debug("check if need regenerate theme background")
-	wantWidth, wantHeight := parseGfxmode(grub.config.Resolution)
+	wantWidth, wantHeight := parseCurrentGfxmode()
 	bgw, bgh, _ := graphic.GetImageSize(theme.bgFile)
 	srcbgw, srcbgh, _ := graphic.GetImageSize(theme.bgSrcFile)
 	needGenerate := false

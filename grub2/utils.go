@@ -64,6 +64,10 @@ func appendStrArrayUnique(a1 []string, a2 ...string) (a []string) {
 	return
 }
 
+func getDefaultGfxmode() (gfxmode string) {
+	return getPrimaryScreenBestResolutionStr()
+}
+
 // Get all screen's best resolution and choose a smaller one for there
 // is no screen is primary.
 func getPrimaryScreenBestResolutionStr() (r string) {
@@ -145,6 +149,10 @@ func convertToSimpleEntry(entry string) (simpleEntry string) {
 		simpleEntry = entry
 	}
 	return
+}
+
+func parseCurrentGfxmode() (w, h uint16) {
+	return parseGfxmode(grub.config.Resolution)
 }
 
 func parseGfxmode(gfxmode string) (w, h uint16) {

@@ -47,7 +47,7 @@ func newConfig() (c *config) {
 	c.EnableTheme = true
 	c.DefaultEntry = defaultGrubDefaultEntry
 	c.Timeout = defaultGrubTimeout
-	c.Resolution = getPrimaryScreenBestResolutionStr()
+	c.Resolution = getDefaultGfxmode()
 	c.core.SetConfigFile(configFile)
 	return
 }

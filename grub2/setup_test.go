@@ -116,7 +116,7 @@ func (*GrubTester) TestSetupGfxmode(c *C) {
 	g.readSettings()
 	c.Check(g.getSettingDefaultEntry(), Equals, "0")
 	c.Check(g.getSettingTimeout(), Equals, int32(5))
-	c.Check(g.getSettingGfxmode(), Equals, getPrimaryScreenBestResolutionStr())
+	c.Check(g.getSettingGfxmode(), Equals, getDefaultGfxmode())
 	c.Check(g.getSettingTheme(), Equals, tmpThemeDir+"/theme.txt")
 	w, h, _ = graphic.GetImageSize(tmpThemeDir + "/background.png")
 	c.Check(w, Equals, sw)

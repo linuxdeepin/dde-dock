@@ -95,7 +95,7 @@ func (grub *Grub2) Reset() {
 	}
 	grub.setPropFixSettingsAlways(true)
 	grub.setPropEnableTheme(true)
-	grub.setPropResolution(getPrimaryScreenBestResolutionStr()) // TODO
+	grub.setPropResolution(getDefaultGfxmode())
 	grub.setPropDefaultEntry(firstEntry)
 	grub.setPropTimeout(defaultGrubTimeoutInt)
 	grub.theme.reset()

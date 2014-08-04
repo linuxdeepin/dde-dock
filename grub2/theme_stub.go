@@ -113,7 +113,7 @@ func (theme *Theme) doSetBackgroundSourceFile(imageFile string) bool {
 	theme.updateLock.Lock()
 	defer theme.updateLock.Unlock()
 	theme.setPropUpdating(true)
-	screenWidth, screenHeight := getPrimaryScreenBestResolution() // TODO
+	screenWidth, screenHeight := parseCurrentGfxmode()
 	grub2extDoSetThemeBackgroundSourceFile(imageFile, screenWidth, screenHeight)
 	theme.setPropBackground(theme.bgFile)
 	theme.setPropUpdating(false)
