@@ -22,6 +22,7 @@
 package accounts
 
 import (
+	"path"
 	"pkg.linuxdeepin.com/lib/dbus"
 	dutils "pkg.linuxdeepin.com/lib/utils"
 	"strings"
@@ -119,14 +120,17 @@ func (obj *User) updatePropHistoryIcons(iconList []string) {
 }
 
 func (obj *User) updatePropIconList(iconList []string) {
+	logger.Info("^^^^^^^START update IconList")
 	if !isStrListEqual(obj.IconList, iconList) {
+		logger.Info("----------Set IconList")
 		obj.IconList = iconList
-		dbus.NotifyChange(obj, "IconFile")
+		dbus.NotifyChange(obj, "IconList")
+		logger.Info("----------Set IconList over")
 	}
 }
 
 func (obj *User) getPropIconFile() string {
-	file := USER_CONFIG_FILE + obj.UserName
+	file := path.Join(USER_CONFIG_DIR, obj.UserName)
 	icon := ""
 	wFlag := false
 	if !dutils.IsFileExist(file) {
@@ -151,7 +155,7 @@ func (obj *User) getPropIconFile() string {
 }
 
 func (obj *User) getPropBackgroundFile() string {
-	file := USER_CONFIG_FILE + obj.UserName
+	file := path.Join(USER_CONFIG_DIR, obj.UserName)
 	bg := ""
 	wFlag := false
 	if !dutils.IsFileExist(file) {
@@ -189,7 +193,7 @@ func (obj *User) getPropAccountType() int32 {
 
 func (obj *User) getPropHistoryIcons() []string {
 	list := []string{}
-	file := USER_CONFIG_FILE + obj.UserName
+	file := path.Join(USER_CONFIG_DIR, obj.UserName)
 
 	if !dutils.IsFileExist(file) {
 		list = append(list, obj.IconFile)
@@ -201,6 +205,15 @@ func (obj *User) getPropHistoryIcons() []string {
 			list = append(list, v.([]string)...)
 		}
 	}
+
+	tmp := []string{}
+	for _, v := range list {
+		if v == obj.IconFile {
+			continue
+		}
+		tmp = append(tmp, v)
+	}
+	list = tmp
 
 	return list
 }
@@ -221,7 +234,7 @@ func (obj *User) getPropIconList() []string {
 }
 
 func (obj *User) addHistoryIcon(iconPath string) {
-	file := USER_CONFIG_FILE + obj.UserName
+	file := path.Join(USER_CONFIG_DIR, obj.UserName)
 	if !dutils.IsFileExist(file) || !dutils.IsFileExist(iconPath) {
 		return
 	}
@@ -236,7 +249,7 @@ func (obj *User) addHistoryIcon(iconPath string) {
 		strs := list.([]string)
 		as := deleteStrFromList(iconPath, strs)
 		for _, l := range as {
-			if cnt >= 9 {
+			if cnt >= 10 {
 				break
 			}
 
@@ -253,10 +266,11 @@ func (obj *User) addHistoryIcon(iconPath string) {
 }
 
 func (obj *User) deleteHistoryIcon(iconPath string) {
-	file := USER_CONFIG_FILE + obj.UserName
+	file := path.Join(USER_CONFIG_DIR, obj.UserName)
 	if !dutils.IsFileExist(file) {
 		return
 	}
+	rmAllFile(iconPath)
 
 	list, ok := dutils.ReadKeyFromKeyFile(file, "User",
 		"HistoryIcons", []string{})
@@ -313,7 +327,7 @@ func (obj *User) setPropIconFile(icon string) {
 	}
 
 	logger.Info("Icon File:", icon)
-	file := USER_CONFIG_FILE + obj.UserName
+	file := path.Join(USER_CONFIG_DIR, obj.UserName)
 	dutils.WriteKeyToKeyFile(file, "User", "Icon", icon)
 	obj.addHistoryIcon(icon)
 }
@@ -323,7 +337,7 @@ func (obj *User) setPropBackgroundFile(bg string) {
 		return
 	}
 
-	file := USER_CONFIG_FILE + obj.UserName
+	file := path.Join(USER_CONFIG_DIR, obj.UserName)
 	dutils.WriteKeyToKeyFile(file, "User", "Background", bg)
 }
 

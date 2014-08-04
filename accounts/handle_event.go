@@ -22,8 +22,9 @@
 package accounts
 
 import (
-	dutils "pkg.linuxdeepin.com/lib/utils"
 	"github.com/howeyc/fsnotify"
+	"path"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 	"regexp"
 	"sync"
 )
@@ -124,34 +125,35 @@ func (obj *Manager) handleUserListChanged() {
 			if ev.IsDelete() {
 				obj.removeUserListFileWatch()
 				obj.watchUserListFile()
-			} else if ev.IsModify() {
-				ok1, _ := regexp.MatchString(ACCOUNT_CONFIG_FILE, ev.Name)
-				if ok1 {
-					obj.updatePropAllowGuest(isAllowGuest())
-					break
-				}
-				if !_handleFlag {
-					var mutex sync.Mutex
-					mutex.Lock()
-					_handleFlag = true
-					list, ret := compareStrList(obj.UserList, getUserList())
-					switch ret {
-					case 1:
-						obj.updatePropUserList(getUserList())
-						obj.updateAllUserInfo()
-						for _, v := range list {
-							obj.UserAdded(v)
-						}
-					case -1:
-						obj.updatePropUserList(getUserList())
-						obj.updateAllUserInfo()
-						for _, v := range list {
-							obj.UserDeleted(v)
-						}
+				break
+			}
+
+			ok1, _ := regexp.MatchString(ACCOUNT_CONFIG_FILE, ev.Name)
+			if ok1 {
+				obj.updatePropAllowGuest(isAllowGuest())
+				break
+			}
+			if !_handleFlag {
+				var mutex sync.Mutex
+				mutex.Lock()
+				_handleFlag = true
+				list, ret := compareStrList(obj.UserList, getUserList())
+				switch ret {
+				case 1:
+					obj.updatePropUserList(getUserList())
+					obj.updateAllUserInfo()
+					for _, v := range list {
+						obj.UserAdded(v)
 					}
-					_handleFlag = false
-					mutex.Unlock()
+				case -1:
+					obj.updatePropUserList(getUserList())
+					obj.updateAllUserInfo()
+					for _, v := range list {
+						obj.UserDeleted(v)
+					}
 				}
+				_handleFlag = false
+				mutex.Unlock()
 			}
 		case err, ok := <-obj.listWatcher.Error:
 			if !ok || err != nil {
@@ -190,15 +192,9 @@ func (obj *Manager) handleUserInfoChanged() {
 			ok3, _ := regexp.MatchString(ICON_SYSTEM_DIR, ev.Name)
 			ok4, _ := regexp.MatchString(ICON_LOCAL_DIR, ev.Name)
 			if ok3 || ok4 {
-				if !_handleFlag {
-					var mutex sync.Mutex
-					mutex.Lock()
-					_handleFlag = true
-					obj.updateAllUserInfo()
-					_handleFlag = false
-					mutex.Unlock()
+				for _, u := range obj.pathUserMap {
+					u.updatePropIconList(u.getPropIconList())
 				}
-				break
 			}
 
 			if ev.IsDelete() {
@@ -258,7 +254,7 @@ func (obj *User) watchUserConfig() {
 		}
 	}
 
-	obj.watcher.Watch(USER_CONFIG_FILE + obj.UserName)
+	obj.watcher.Watch(path.Join(USER_CONFIG_DIR, obj.UserName))
 }
 
 func (obj *User) removeUserConfigWatch() {
@@ -266,7 +262,7 @@ func (obj *User) removeUserConfigWatch() {
 		return
 	}
 
-	obj.watcher.RemoveWatch(USER_CONFIG_FILE + obj.UserName)
+	obj.watcher.RemoveWatch(path.Join(USER_CONFIG_DIR, obj.UserName))
 }
 
 func (obj *User) handUserConfigChanged() {
@@ -294,12 +290,13 @@ func (obj *User) handUserConfigChanged() {
 			if ev.IsDelete() {
 				obj.removeUserConfigWatch()
 				obj.watchUserConfig()
-			} else if ev.IsModify() {
-				obj.updatePropIconList(obj.getPropIconList())
-				obj.updatePropIconFile(obj.getPropIconFile())
-				obj.updatePropBackgroundFile(obj.getPropBackgroundFile())
-				obj.updatePropHistoryIcons(obj.getPropHistoryIcons())
+				break
 			}
+
+			obj.updatePropIconList(obj.getPropIconList())
+			obj.updatePropIconFile(obj.getPropIconFile())
+			obj.updatePropBackgroundFile(obj.getPropBackgroundFile())
+			obj.updatePropHistoryIcons(obj.getPropHistoryIcons())
 		case err, ok := <-obj.watcher.Error:
 			if !ok || err != nil {
 				if obj.watcher != nil {

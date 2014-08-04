@@ -83,7 +83,7 @@ const (
 
 	USER_ICON_DIR     = "/var/lib/AccountsService/icons/"
 	USER_DEFAULT_ICON = USER_ICON_DIR + "1.png"
-	USER_CONFIG_FILE  = "/var/lib/AccountsService/users/"
+	USER_CONFIG_DIR   = "/var/lib/AccountsService/users"
 	ICON_SYSTEM_DIR   = "/var/lib/AccountsService/icons"
 	ICON_LOCAL_DIR    = "/var/lib/AccountsService/icons/local"
 	USER_DEFAULT_BG   = "file:///usr/share/backgrounds/default_background.jpg"

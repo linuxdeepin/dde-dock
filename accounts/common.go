@@ -29,11 +29,13 @@ import "C"
 
 import (
 	libpolkit1 "dbus/org/freedesktop/policykit1"
+	"errors"
 	"io/ioutil"
 	"math/rand"
 	"os"
 	"os/exec"
 	"pkg.linuxdeepin.com/lib/dbus"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 	"strings"
 	"sync"
 	"time"
@@ -284,4 +286,12 @@ func polkitAuthWithPid(actionId string, pid uint32) bool {
 	}
 
 	return true
+}
+
+func rmAllFile(filename string) error {
+	if !dutils.IsFileExist(filename) {
+		return errors.New("File not exist")
+	}
+
+	return os.RemoveAll(filename)
 }
