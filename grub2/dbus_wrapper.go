@@ -22,17 +22,13 @@
 package grub2
 
 import (
-	// TODO
-	// dbusGrub2ext "dbus/com/deepin/daemon/grub2ext"
-	dbusGrub2ext "dbus/com/deepin/api/grub2"
+	dbusGrub2ext "dbus/com/deepin/daemon/grub2ext"
 )
 
 // dbus api wrapper for grub2ext
 
 func newDbusGrub2Ext() (grub2ext *dbusGrub2ext.Grub2Ext, err error) {
-	// TODO
-	// grub2ext, err = dbusGrub2ext.NewGrub2Ext("com.deepin.daemon.Grub2Ext", "/com/deepin/daemon/Grub2Ext")
-	grub2ext, err = dbusGrub2ext.NewGrub2Ext("com.deepin.api.Grub2", "/com/deepin/api/Grub2")
+	grub2ext, err = dbusGrub2ext.NewGrub2Ext("com.deepin.daemon.Grub2Ext", "/com/deepin/daemon/Grub2Ext")
 	if err != nil {
 		logger.Error(err)
 	}
