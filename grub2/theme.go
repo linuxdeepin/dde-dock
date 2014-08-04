@@ -30,14 +30,18 @@ import (
 	"text/template"
 )
 
+// TODO rename to themeDir
+const ThemePathDefault = "/boot/grub/themes/deepin"
+
 var (
-	themePath          = "/boot/grub/themes/deepin"
+	themePath          = ThemePathDefault
 	themeMainFile      = themePath + "/theme.txt"
 	themeTplFile       = themePath + "/theme.tpl"
 	themeJSONFile      = themePath + "/theme_tpl.json"
 	themeBgOrigSrcFile = themePath + "/background_origin_source"
 	themeBgSrcFile     = themePath + "/background_source"
 	themeBgFile        = themePath + "/background.png"
+	themeBgThumbFile   = themePath + "/background_thumb.png"
 )
 
 func SetDefaultThemePath(path string) {
@@ -48,6 +52,7 @@ func SetDefaultThemePath(path string) {
 	themeBgOrigSrcFile = themePath + "/background_origin_source"
 	themeBgSrcFile = themePath + "/background_source"
 	themeBgFile = themePath + "/background.png"
+	themeBgThumbFile = themePath + "/background_thumb.png"
 }
 
 // TplJSONData read JSON data from
@@ -71,13 +76,13 @@ type Theme struct {
 	jsonFile    string
 	bgSrcFile   string
 	bgFile      string
+	bgThumbFile string
 	tplJSONData *TplJSONData
 
 	Updating   bool
 	updateLock sync.Mutex
 
-	background        string // absolute background file path
-	Background        string // background thumbnail, used by front-end
+	Background        string // background thumbnail, always equal with bgThumbFile, used by front-end
 	ItemColor         string `access:"readwrite"`
 	SelectedItemColor string `access:"readwrite"`
 }
@@ -91,6 +96,7 @@ func NewTheme() *Theme {
 	theme.jsonFile = themeJSONFile
 	theme.bgSrcFile = themeBgSrcFile
 	theme.bgFile = themeBgFile
+	theme.bgThumbFile = themeBgThumbFile
 
 	return theme
 }
@@ -109,7 +115,7 @@ func (theme *Theme) initTheme() {
 	}
 
 	// init properties
-	theme.setPropBackground(theme.bgFile)
+	theme.setPropBackground(theme.bgThumbFile)
 	theme.setPropItemColor(theme.tplJSONData.CurrentScheme.ItemColor)
 	theme.setPropSelectedItemColor(theme.tplJSONData.CurrentScheme.SelectedItemColor)
 }
@@ -127,9 +133,9 @@ func (theme *Theme) reset() {
 		defer theme.updateLock.Unlock()
 		theme.setPropUpdating(true)
 		grub2extDoResetThemeBackground()
-		screenWidth, screenHeight := getPrimaryScreenBestResolution()
+		screenWidth, screenHeight := getPrimaryScreenBestResolution() // TODO
 		grub2extDoGenerateThemeBackground(screenWidth, screenHeight)
-		theme.setPropBackground(theme.background)
+		theme.setPropBackground(theme.bgFile)
 		theme.setPropUpdating(false)
 	}()
 }
@@ -139,7 +145,7 @@ func (theme *Theme) reset() {
 func (theme *Theme) regenerateBackgroundIfNeed() {
 	logger.Debug("check if need regenerate theme background")
 	wantWidth, wantHeight := parseGfxmode(grub.config.Resolution)
-	bgw, bgh, _ := graphic.GetImageSize(theme.background)
+	bgw, bgh, _ := graphic.GetImageSize(theme.bgFile)
 	srcbgw, srcbgh, _ := graphic.GetImageSize(theme.bgSrcFile)
 	needGenerate := false
 	logger.Debugf("expected size: %dx%d, source background: %dx%d, background: %dx%d",
@@ -163,7 +169,7 @@ func (theme *Theme) regenerateBackgroundIfNeed() {
 
 	if needGenerate {
 		grub2extDoGenerateThemeBackground(wantWidth, wantHeight)
-		theme.setPropBackground(theme.background)
+		theme.setPropBackground(theme.bgFile)
 		logger.Info("update theme background success")
 	}
 }
@@ -171,7 +177,7 @@ func (theme *Theme) regenerateBackgroundIfNeed() {
 func (theme *Theme) getThemeTplJSON() (*TplJSONData, error) {
 	fileContent, err := ioutil.ReadFile(theme.jsonFile)
 	if err != nil {
-		logger.Error(err.Error())
+		logger.Error(err)
 		return nil, err
 	}
 
@@ -187,7 +193,7 @@ func (theme *Theme) getTplJSONData(fileContent []byte) (*TplJSONData, error) {
 	tplJSONData := &TplJSONData{}
 	err := json.Unmarshal(fileContent, tplJSONData)
 	if err != nil {
-		logger.Error(err.Error())
+		logger.Error(err)
 		return nil, err
 	}
 	return tplJSONData, nil
@@ -199,12 +205,12 @@ func (theme *Theme) customTheme() {
 	// generate a new theme.txt from template
 	tplFileContent, err := ioutil.ReadFile(theme.tplFile)
 	if err != nil {
-		logger.Error(err.Error())
+		logger.Error(err)
 		return
 	}
 	themeFileContent, err := theme.getCustomizedThemeContent(tplFileContent, theme.tplJSONData.CurrentScheme)
 	if err != nil {
-		logger.Error(err.Error())
+		logger.Error(err)
 		return
 	}
 	if len(themeFileContent) == 0 {

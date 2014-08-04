@@ -22,11 +22,13 @@
 package grub2
 
 import (
-	apigrub2ext "dbus/com/deepin/api/grub2"
+	dbusGrub2ext "dbus/com/deepin/daemon/grub2ext"
 )
 
-func newGrub2Ext() (grub2ext *apigrub2ext.Grub2Ext, err error) {
-	grub2ext, err = apigrub2ext.NewGrub2Ext("com.deepin.api.Grub2", "/com/deepin/api/Grub2")
+// dbus api wrapper for grub2ext
+
+func newDbusGrub2Ext() (grub2ext *dbusGrub2ext.Grub2Ext, err error) {
+	grub2ext, err = dbusGrub2ext.NewGrub2Ext("com.deepin.daemon.Grub2Ext", "/com/deepin/daemon/Grub2Ext")
 	if err != nil {
 		logger.Error(err)
 	}
@@ -34,7 +36,7 @@ func newGrub2Ext() (grub2ext *apigrub2ext.Grub2Ext, err error) {
 }
 
 func grub2extDoCustomTheme(themeFileContent string) {
-	grub2ext, err := newGrub2Ext()
+	grub2ext, err := newDbusGrub2Ext()
 	if err != nil {
 		return
 	}
@@ -42,7 +44,7 @@ func grub2extDoCustomTheme(themeFileContent string) {
 }
 
 func grub2extDoGenerateGrubConfig() {
-	grub2ext, err := newGrub2Ext()
+	grub2ext, err := newDbusGrub2Ext()
 	if err != nil {
 		return
 	}
@@ -50,7 +52,7 @@ func grub2extDoGenerateGrubConfig() {
 }
 
 func grub2extDoGenerateThemeBackground(screenWidth, screenHeight uint16) {
-	grub2ext, err := newGrub2Ext()
+	grub2ext, err := newDbusGrub2Ext()
 	if err != nil {
 		return
 	}
@@ -58,7 +60,7 @@ func grub2extDoGenerateThemeBackground(screenWidth, screenHeight uint16) {
 }
 
 func grub2extDoResetThemeBackground() {
-	grub2ext, err := newGrub2Ext()
+	grub2ext, err := newDbusGrub2Ext()
 	if err != nil {
 		return
 	}
@@ -66,7 +68,7 @@ func grub2extDoResetThemeBackground() {
 }
 
 func grub2extDoSetThemeBackgroundSourceFile(imageFile string, screenWidth, screenHeight uint16) {
-	grub2ext, err := newGrub2Ext()
+	grub2ext, err := newDbusGrub2Ext()
 	if err != nil {
 		return
 	}
@@ -74,7 +76,7 @@ func grub2extDoSetThemeBackgroundSourceFile(imageFile string, screenWidth, scree
 }
 
 func grub2extDoWriteCacheConfig(fileContent string) {
-	grub2ext, err := newGrub2Ext()
+	grub2ext, err := newDbusGrub2Ext()
 	if err != nil {
 		return
 	}
@@ -82,7 +84,7 @@ func grub2extDoWriteCacheConfig(fileContent string) {
 }
 
 func grub2extDoWriteSettings(fileContent string) {
-	grub2ext, err := newGrub2Ext()
+	grub2ext, err := newDbusGrub2Ext()
 	if err != nil {
 		return
 	}
@@ -90,7 +92,7 @@ func grub2extDoWriteSettings(fileContent string) {
 }
 
 func grub2extDoWriteThemeJSON(jsonContent string) {
-	grub2ext, err := newGrub2Ext()
+	grub2ext, err := newDbusGrub2Ext()
 	if err != nil {
 		return
 	}

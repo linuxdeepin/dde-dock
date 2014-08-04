@@ -25,7 +25,9 @@ import (
 	"pkg.linuxdeepin.com/lib/utils"
 )
 
-var configFile = "/var/cache/deepin/grub2.json"
+const ConfigFileDefault = "/var/cache/deepin/grub2.json"
+
+var configFile = ConfigFileDefault
 
 // refactor code, split fields, grub, efi
 type config struct {
@@ -67,8 +69,8 @@ func (c *config) load() {
 	}
 }
 func (c *config) save() {
-	if runWithoutDBus {
-		c.doSaveWithoutDBus()
+	if runWithoutDbus {
+		c.doSaveWithoutDbus()
 	} else {
 		c.doSave()
 	}
@@ -80,13 +82,13 @@ func (c *config) doSave() {
 	}
 	grub2extDoWriteCacheConfig(string(fileContent))
 }
-func (c *config) doSaveWithoutDBus() {
+func (c *config) doSaveWithoutDbus() {
 	fileContent, err := c.core.GetFileContentToSave(c)
 	if err != nil {
 		logger.Error(err)
 	}
-	setup := &SetupWrapper{}
-	setup.DoWriteCacheConfig(string(fileContent))
+	ge := NewGrub2Ext()
+	ge.DoWriteCacheConfig(string(fileContent))
 }
 
 func (c *config) setFixSettingsAlways(value bool) {

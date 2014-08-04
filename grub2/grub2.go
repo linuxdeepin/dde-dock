@@ -34,7 +34,9 @@ import (
 	"unicode"
 )
 
-var grubConfigFile = "/etc/default/grub"
+const GrubConfigFileDefault = "/etc/default/grub"
+
+var grubConfigFile = GrubConfigFileDefault
 
 func SetDefaultGrubConfigFile(file string) {
 	grubConfigFile = file
@@ -50,7 +52,7 @@ const (
 )
 
 var (
-	runWithoutDBus         = false
+	runWithoutDbus         = false
 	entryRegexpSingleQuote = regexp.MustCompile(`^ *(menuentry|submenu) +'(.*?)'.*$`)
 	entryRegexpDoubleQuote = regexp.MustCompile(`^ *(menuentry|submenu) +"(.*?)".*$`)
 )
@@ -207,7 +209,7 @@ func (grub *Grub2) readEntries() (err error) {
 func (grub *Grub2) readSettings() (err error) {
 	fileContent, err := ioutil.ReadFile(grubConfigFile)
 	if err != nil {
-		logger.Error(err.Error())
+		logger.Error(err)
 	}
 	err = grub.parseSettings(string(fileContent))
 
@@ -294,8 +296,8 @@ func (grub *Grub2) doFixSettingDistro() (needUpdate bool) {
 
 func (grub *Grub2) writeSettings() {
 	fileContent := grub.getSettingContentToSave()
-	if runWithoutDBus {
-		writeSettingsWithoutDBus(fileContent)
+	if runWithoutDbus {
+		doWriteSettings(fileContent)
 	} else {
 		grub2extDoWriteSettings(fileContent)
 	}
@@ -407,7 +409,7 @@ func (grub *Grub2) parseSettings(fileContent string) error {
 		}
 	}
 	if err := s.Err(); err != nil {
-		logger.Error(err.Error())
+		logger.Error(err)
 		return err
 	}
 
