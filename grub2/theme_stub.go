@@ -24,6 +24,7 @@ package grub2
 import (
 	"pkg.linuxdeepin.com/lib/dbus"
 	graphic "pkg.linuxdeepin.com/lib/gdkpixbuf"
+	"pkg.linuxdeepin.com/lib/utils"
 )
 
 // GetDBusInfo implements interface of dbus.DBusObject.
@@ -94,6 +95,7 @@ func (theme *Theme) setPropSelectedItemColor(value string) {
 // generate the background to fit the screen resolution, support png
 // and jpeg image format.
 func (theme *Theme) SetBackgroundSourceFile(imageFile string) (ok bool, err error) {
+	imageFile = utils.DecodeURI(imageFile)
 	ok = graphic.IsSupportedImage(imageFile)
 	if ok {
 		go func() {
