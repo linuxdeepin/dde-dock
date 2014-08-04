@@ -24,6 +24,8 @@ func (*GrubTester) TestCustomArguments(c *C) {
 	configFile = tmpBaseDir + "/grub2.json"
 	SetDefaultGrubConfigFile(tmpConfigFile)
 	SetDefaultThemePath(tmpThemeDir)
+	defer SetDefaultGrubConfigFile(grubConfigFileDefault)
+	defer SetDefaultThemePath(themePathDefault)
 
 	c.Check(grubConfigFile, Equals, tmpConfigFile)
 
@@ -63,6 +65,8 @@ GRUB_TIMEOUT="5"
 	utils.CopyFile(testGrubThemeBackgroundSourceFile, tmpThemeDir+"/background_source")
 	SetDefaultGrubConfigFile(tmpConfigFile)
 	SetDefaultThemePath(tmpThemeDir)
+	defer SetDefaultGrubConfigFile(grubConfigFileDefault)
+	defer SetDefaultThemePath(themePathDefault)
 	g := NewGrub2()
 	var w, h int
 
@@ -88,6 +92,8 @@ func (*GrubTester) TestSetupGfxmode(c *C) {
 	utils.CopyFile(testGrubThemeBackgroundSourceFile, tmpThemeDir+"/background_source")
 	SetDefaultGrubConfigFile(tmpConfigFile)
 	SetDefaultThemePath(tmpThemeDir)
+	defer SetDefaultGrubConfigFile(grubConfigFileDefault)
+	defer SetDefaultThemePath(themePathDefault)
 	g := NewGrub2()
 	var w, h int
 	var sw, sh int
@@ -129,4 +135,25 @@ func (*GrubTester) TestSetupGfxmode(c *C) {
 	w, h, _ = graphic.GetImageSize(tmpThemeDir + "/background.png")
 	c.Check(w, Equals, sw)
 	c.Check(h, Equals, sh)
+}
+
+func (*GrubTester) TestDoSetThemeBackgroundSourceFile(c *C) {
+	// TODO
+	// // prepare
+	// configFile = tmpBaseDir + "/grub2.json"
+	// utils.EnsureDirExist(tmpThemeDir)
+	// utils.CopyFile(testGrubThemeBackgroundSourceFile, tmpThemeDir+"/background_source")
+	// SetDefaultGrubConfigFile(tmpConfigFile)
+	// SetDefaultThemePath(tmpThemeDir)
+	// defer SetDefaultGrubConfigFile(grubConfigFileDefault)
+	// defer SetDefaultThemePath(themePathDefault)
+	// g := NewGrub2()
+	// var w, h int
+	// var sw, sh int
+	// tmpsw, tmpsh := getPrimaryScreenBestResolution()
+	// sw, sh = int(tmpsw), int(tmpsh)
+
+	// setup := &SetupWrapper{}
+	// setup.DoGenerateThemeBackground(w, h)
+	// g.SetupTheme()
 }
