@@ -65,7 +65,7 @@ func (ge *Grub2Ext) GetDBusInfo() dbus.DBusInfo {
 func (ge *Grub2Ext) DoWriteSettings(fileContent string) (ok bool, err error) {
 	err = ioutil.WriteFile(grubConfigFile, []byte(fileContent), 0664)
 	if err != nil {
-		logger.Error(err.Error())
+		logger.Error(err)
 		return false, err
 	}
 	return true, nil
@@ -80,7 +80,7 @@ func (ge *Grub2Ext) DoWriteCacheConfig(fileContent string) (ok bool, err error) 
 	}
 	err = ioutil.WriteFile(configFile, []byte(fileContent), 0644)
 	if err != nil {
-		logger.Error(err.Error())
+		logger.Error(err)
 		return false, err
 	}
 	return true, nil
@@ -124,14 +124,14 @@ func (ge *Grub2Ext) DoSetThemeBackgroundSourceFile(imageFile string, screenWidth
 func (ge *Grub2Ext) DoGenerateThemeBackground(screenWidth, screenHeight uint16) (ok bool, err error) {
 	imgWidth, imgHeight, err := graphic.GetImageSize(themeBgSrcFile)
 	if err != nil {
-		logger.Error(err.Error())
+		logger.Error(err)
 		return false, err
 	}
 	logger.Infof("source background size %dx%d", imgWidth, imgHeight)
 	logger.Infof("background size %dx%d", screenWidth, screenHeight)
 	err = graphic.ScaleImagePrefer(themeBgSrcFile, themeBgFile, int(screenWidth), int(screenHeight), graphic.GDK_INTERP_HYPER, graphic.FormatPng)
 	if err != nil {
-		logger.Error(err.Error())
+		logger.Error(err)
 		return false, err
 	}
 	return true, nil
@@ -141,7 +141,7 @@ func (ge *Grub2Ext) DoGenerateThemeBackground(screenWidth, screenHeight uint16) 
 func (ge *Grub2Ext) DoCustomTheme(fileContent string) (ok bool, err error) {
 	err = ioutil.WriteFile(themeMainFile, []byte(fileContent), 0664)
 	if err != nil {
-		logger.Error(err.Error())
+		logger.Error(err)
 		return false, err
 	}
 	return true, nil
@@ -151,7 +151,7 @@ func (ge *Grub2Ext) DoCustomTheme(fileContent string) (ok bool, err error) {
 func (ge *Grub2Ext) DoWriteThemeJSON(fileContent string) (ok bool, err error) {
 	err = ioutil.WriteFile(themeJSONFile, []byte(fileContent), 0664)
 	if err != nil {
-		logger.Error(err.Error())
+		logger.Error(err)
 		return false, err
 	}
 	return true, nil
@@ -162,7 +162,7 @@ func (ge *Grub2Ext) DoResetThemeBackground() (ok bool, err error) {
 	os.Remove(themeBgSrcFile)
 	err = os.Symlink(themeBgOrigSrcFile, themeBgSrcFile)
 	if err != nil {
-		logger.Error(err.Error()) // TODO
+		logger.Error(err) // TODO
 		return false, err
 	}
 	return true, nil

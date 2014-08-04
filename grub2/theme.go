@@ -177,7 +177,7 @@ func (theme *Theme) regenerateBackgroundIfNeed() {
 func (theme *Theme) getThemeTplJSON() (*TplJSONData, error) {
 	fileContent, err := ioutil.ReadFile(theme.jsonFile)
 	if err != nil {
-		logger.Error(err.Error())
+		logger.Error(err)
 		return nil, err
 	}
 
@@ -193,7 +193,7 @@ func (theme *Theme) getTplJSONData(fileContent []byte) (*TplJSONData, error) {
 	tplJSONData := &TplJSONData{}
 	err := json.Unmarshal(fileContent, tplJSONData)
 	if err != nil {
-		logger.Error(err.Error())
+		logger.Error(err)
 		return nil, err
 	}
 	return tplJSONData, nil
@@ -205,12 +205,12 @@ func (theme *Theme) customTheme() {
 	// generate a new theme.txt from template
 	tplFileContent, err := ioutil.ReadFile(theme.tplFile)
 	if err != nil {
-		logger.Error(err.Error())
+		logger.Error(err)
 		return
 	}
 	themeFileContent, err := theme.getCustomizedThemeContent(tplFileContent, theme.tplJSONData.CurrentScheme)
 	if err != nil {
-		logger.Error(err.Error())
+		logger.Error(err)
 		return
 	}
 	if len(themeFileContent) == 0 {

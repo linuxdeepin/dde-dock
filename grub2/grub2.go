@@ -209,7 +209,7 @@ func (grub *Grub2) readEntries() (err error) {
 func (grub *Grub2) readSettings() (err error) {
 	fileContent, err := ioutil.ReadFile(grubConfigFile)
 	if err != nil {
-		logger.Error(err.Error())
+		logger.Error(err)
 	}
 	err = grub.parseSettings(string(fileContent))
 
@@ -409,7 +409,7 @@ func (grub *Grub2) parseSettings(fileContent string) error {
 		}
 	}
 	if err := s.Err(); err != nil {
-		logger.Error(err.Error())
+		logger.Error(err)
 		return err
 	}
 
