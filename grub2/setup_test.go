@@ -19,6 +19,33 @@ var (
 	tmpGfxmode    = "1200x900"
 )
 
+func (*GrubTester) TestCustomArguments(c *C) {
+	// prepare
+	configFile = tmpBaseDir + "/grub2.json"
+	SetDefaultGrubConfigFile(tmpConfigFile)
+	SetDefaultThemePath(tmpThemeDir)
+
+	c.Check(grubConfigFile, Equals, tmpConfigFile)
+
+	c.Check(themePath, Equals, tmpThemeDir)
+	c.Check(themeMainFile, Equals, tmpThemeDir+"/theme.txt")
+	c.Check(themeTplFile, Equals, tmpThemeDir+"/theme.tpl")
+	c.Check(themeJSONFile, Equals, tmpThemeDir+"/theme_tpl.json")
+	c.Check(themeBgOrigSrcFile, Equals, tmpThemeDir+"/background_origin_source")
+	c.Check(themeBgSrcFile, Equals, tmpThemeDir+"/background_source")
+	c.Check(themeBgFile, Equals, tmpThemeDir+"/background.png")
+	c.Check(themeBgThumbFile, Equals, tmpThemeDir+"/background_thumb.png")
+
+	theme := NewTheme()
+	c.Check(theme.themePath, Equals, themePath)
+	c.Check(theme.mainFile, Equals, themeMainFile)
+	c.Check(theme.tplFile, Equals, themeTplFile)
+	c.Check(theme.jsonFile, Equals, themeJSONFile)
+	c.Check(theme.bgSrcFile, Equals, themeBgSrcFile)
+	c.Check(theme.bgFile, Equals, themeBgFile)
+	c.Check(theme.bgThumbFile, Equals, themeBgThumbFile)
+}
+
 func (*GrubTester) TestSetup(c *C) {
 	wantSettingsContent := `GRUB_BACKGROUND="<none>"
 GRUB_CMDLINE_LINUX="locale=zh_CN.UTF-8 url=http://cdimage/nfsroot/deepin-2014/desktop/current/amd64/preseed/deepin.seed initrd=http://cdimage/nfsroot/deepin-2014/desktop/current/amd64/casper/initrd.lz"
