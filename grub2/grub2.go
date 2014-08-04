@@ -44,7 +44,7 @@ func SetDefaultGrubConfigFile(file string) {
 
 const (
 	grubMenuFile                  = "/boot/grub/grub.cfg"
-	grubUpdateExe                 = "/usr/sbin/update-grub"
+	grubUpdateCmd                 = "/usr/sbin/update-grub"
 	grubDefaultEntryDefault       = "0"
 	grubGfxmodeDefault            = "auto"
 	grubTimeoutDefault            = "5"
@@ -159,7 +159,7 @@ func (grub *Grub2) startUpdateLoop() {
 					grub.config.save()
 
 					logger.Info("notify to generate a new grub configuration file")
-					grub2extDoGenerateGrubConfig()
+					grub2extDoGenerateGrubMenu()
 					logger.Info("generate grub configuration finished")
 
 					grub.config.NeedUpdate = false
@@ -297,9 +297,9 @@ func (grub *Grub2) doFixSettingDistro() (needUpdate bool) {
 func (grub *Grub2) writeSettings() {
 	fileContent := grub.getSettingContentToSave()
 	if runWithoutDbus {
-		doWriteSettings(fileContent)
+		doWriteGrubSettings(fileContent)
 	} else {
-		grub2extDoWriteSettings(fileContent)
+		grub2extDoWriteGrubSettings(fileContent)
 	}
 }
 

@@ -217,7 +217,7 @@ func (theme *Theme) customTheme() {
 		logger.Error("theme content is empty")
 	}
 
-	grub2extDoCustomTheme(string(themeFileContent))
+	grub2extDoWriteThemeMainFile(string(themeFileContent))
 
 	// store the customized key-values to json file
 	jsonContent, err := json.Marshal(theme.tplJSONData)
@@ -225,7 +225,7 @@ func (theme *Theme) customTheme() {
 		return
 	}
 
-	grub2extDoWriteThemeJSON(string(jsonContent))
+	grub2extDoWriteThemeTplFile(string(jsonContent))
 }
 
 func (theme *Theme) getCustomizedThemeContent(fileContent []byte, tplData interface{}) ([]byte, error) {

@@ -56,9 +56,9 @@ func (grub *Grub2) SetupTheme(gfxmode string) {
 	doGenerateThemeBackground(w, h)
 }
 
-func doWriteSettings(fileContent string) {
+func doWriteGrubSettings(fileContent string) {
 	ge := NewGrub2Ext()
-	ge.DoWriteSettings(fileContent)
+	ge.DoWriteGrubSettings(fileContent)
 }
 
 func doGenerateThemeBackground(w, h uint16) {

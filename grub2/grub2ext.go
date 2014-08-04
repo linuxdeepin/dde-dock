@@ -62,20 +62,8 @@ func (ge *Grub2Ext) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-// TODO rename to DoWriteGrubSettings
-// DoWriteSettings write file content to "/etc/default/grub".
-func (ge *Grub2Ext) DoWriteSettings(fileContent string) (ok bool, err error) {
-	err = ioutil.WriteFile(grubConfigFile, []byte(fileContent), 0664)
-	if err != nil {
-		logger.Error(err)
-		return false, err
-	}
-	return true, nil
-}
-
-// TODO rename to DoWriteConfig
-// DoWriteCacheConfig write file content to "/var/cache/deepin/grub2.json".
-func (ge *Grub2Ext) DoWriteCacheConfig(fileContent string) (ok bool, err error) {
+// DoWriteConfig write file content to "/var/cache/deepin/grub2.json".
+func (ge *Grub2Ext) DoWriteConfig(fileContent string) (ok bool, err error) {
 	// ensure parent directory exists
 	if !utils.IsFileExist(configFile) {
 		os.MkdirAll(path.Dir(configFile), 0755)
@@ -88,9 +76,19 @@ func (ge *Grub2Ext) DoWriteCacheConfig(fileContent string) (ok bool, err error) 
 	return true, nil
 }
 
-// DoGenerateGrubConfig execute command "/usr/sbin/update-grub" to
+// DoWriteGrubSettings write file content to "/etc/default/grub".
+func (ge *Grub2Ext) DoWriteGrubSettings(fileContent string) (ok bool, err error) {
+	err = ioutil.WriteFile(grubConfigFile, []byte(fileContent), 0664)
+	if err != nil {
+		logger.Error(err)
+		return false, err
+	}
+	return true, nil
+}
+
+// DoGenerateGrubMenu execute command "/usr/sbin/update-grub" to
 // generate a new grub configuration.
-func (ge *Grub2Ext) DoGenerateGrubConfig() (ok bool, err error) {
+func (ge *Grub2Ext) DoGenerateGrubMenu() (ok bool, err error) {
 	logger.Info("start to generate a new grub configuration file")
 	cmd := exec.Command(grubUpdateCmd)
 	var stderr bytes.Buffer
@@ -142,8 +140,8 @@ func (ge *Grub2Ext) DoGenerateThemeBackground(screenWidth, screenHeight uint16) 
 	return true, nil
 }
 
-// DoCustomTheme write file content to "/boot/grub/themes/deepin/theme.txt".
-func (ge *Grub2Ext) DoCustomTheme(fileContent string) (ok bool, err error) {
+// DoWriteThemeMainFile write file content to "/boot/grub/themes/deepin/theme.txt".
+func (ge *Grub2Ext) DoWriteThemeMainFile(fileContent string) (ok bool, err error) {
 	err = ioutil.WriteFile(themeMainFile, []byte(fileContent), 0664)
 	if err != nil {
 		logger.Error(err)
@@ -152,8 +150,8 @@ func (ge *Grub2Ext) DoCustomTheme(fileContent string) (ok bool, err error) {
 	return true, nil
 }
 
-// DoWriteThemeJSON write file content to "/boot/grub/themes/deepin/theme_tpl.json".
-func (ge *Grub2Ext) DoWriteThemeJSON(fileContent string) (ok bool, err error) {
+// DoWriteThemeTplFile write file content to "/boot/grub/themes/deepin/theme_tpl.json".
+func (ge *Grub2Ext) DoWriteThemeTplFile(fileContent string) (ok bool, err error) {
 	err = ioutil.WriteFile(themeJSONFile, []byte(fileContent), 0664)
 	if err != nil {
 		logger.Error(err)

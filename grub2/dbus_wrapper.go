@@ -35,20 +35,20 @@ func newDbusGrub2Ext() (grub2ext *dbusGrub2ext.Grub2Ext, err error) {
 	return
 }
 
-func grub2extDoCustomTheme(themeFileContent string) {
+func grub2extDoWriteThemeMainFile(themeFileContent string) {
 	grub2ext, err := newDbusGrub2Ext()
 	if err != nil {
 		return
 	}
-	grub2ext.DoCustomTheme(themeFileContent)
+	grub2ext.DoWriteThemeMainFile(themeFileContent)
 }
 
-func grub2extDoGenerateGrubConfig() {
+func grub2extDoGenerateGrubMenu() {
 	grub2ext, err := newDbusGrub2Ext()
 	if err != nil {
 		return
 	}
-	grub2ext.DoGenerateGrubConfig()
+	grub2ext.DoGenerateGrubMenu()
 }
 
 func grub2extDoGenerateThemeBackground(screenWidth, screenHeight uint16) {
@@ -75,26 +75,26 @@ func grub2extDoSetThemeBackgroundSourceFile(imageFile string, screenWidth, scree
 	grub2ext.DoSetThemeBackgroundSourceFile(imageFile, screenWidth, screenHeight)
 }
 
-func grub2extDoWriteCacheConfig(fileContent string) {
+func grub2extDoWriteConfig(fileContent string) {
 	grub2ext, err := newDbusGrub2Ext()
 	if err != nil {
 		return
 	}
-	grub2ext.DoWriteCacheConfig(fileContent)
+	grub2ext.DoWriteConfig(fileContent)
 }
 
-func grub2extDoWriteSettings(fileContent string) {
+func grub2extDoWriteGrubSettings(fileContent string) {
 	grub2ext, err := newDbusGrub2Ext()
 	if err != nil {
 		return
 	}
-	grub2ext.DoWriteSettings(fileContent)
+	grub2ext.DoWriteGrubSettings(fileContent)
 }
 
-func grub2extDoWriteThemeJSON(jsonContent string) {
+func grub2extDoWriteThemeTplFile(jsonContent string) {
 	grub2ext, err := newDbusGrub2Ext()
 	if err != nil {
 		return
 	}
-	grub2ext.DoWriteThemeJSON(jsonContent)
+	grub2ext.DoWriteThemeTplFile(jsonContent)
 }

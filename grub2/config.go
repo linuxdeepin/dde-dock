@@ -80,7 +80,7 @@ func (c *config) doSave() {
 	if err != nil {
 		logger.Error(err)
 	}
-	grub2extDoWriteCacheConfig(string(fileContent))
+	grub2extDoWriteConfig(string(fileContent))
 }
 func (c *config) doSaveWithoutDbus() {
 	fileContent, err := c.core.GetFileContentToSave(c)
@@ -88,7 +88,7 @@ func (c *config) doSaveWithoutDbus() {
 		logger.Error(err)
 	}
 	ge := NewGrub2Ext()
-	ge.DoWriteCacheConfig(string(fileContent))
+	ge.DoWriteConfig(string(fileContent))
 }
 
 func (c *config) setFixSettingsAlways(value bool) {
