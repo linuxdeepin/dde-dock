@@ -162,7 +162,7 @@ func (ge *Grub2Ext) DoResetThemeBackground() (ok bool, err error) {
 	os.Remove(themeBgSrcFile)
 	err = os.Symlink(themeBgOrigSrcFile, themeBgSrcFile)
 	if err != nil {
-		logger.Error(err) // TODO
+		logger.Error(err)
 		return false, err
 	}
 	return true, nil
