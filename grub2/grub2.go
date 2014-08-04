@@ -34,9 +34,9 @@ import (
 	"unicode"
 )
 
-const grubConfigFileDefault = "/etc/default/grub"
+const GrubConfigFileDefault = "/etc/default/grub"
 
-var grubConfigFile = grubConfigFileDefault
+var grubConfigFile = GrubConfigFileDefault
 
 func SetDefaultGrubConfigFile(file string) {
 	grubConfigFile = file
@@ -52,7 +52,7 @@ const (
 )
 
 var (
-	runWithoutDBus         = false
+	runWithoutDbus         = false
 	entryRegexpSingleQuote = regexp.MustCompile(`^ *(menuentry|submenu) +'(.*?)'.*$`)
 	entryRegexpDoubleQuote = regexp.MustCompile(`^ *(menuentry|submenu) +"(.*?)".*$`)
 )
@@ -296,8 +296,8 @@ func (grub *Grub2) doFixSettingDistro() (needUpdate bool) {
 
 func (grub *Grub2) writeSettings() {
 	fileContent := grub.getSettingContentToSave()
-	if runWithoutDBus {
-		writeSettingsWithoutDBus(fileContent)
+	if runWithoutDbus {
+		doWriteSettings(fileContent)
 	} else {
 		grub2extDoWriteSettings(fileContent)
 	}

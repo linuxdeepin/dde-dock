@@ -8,6 +8,7 @@ BINARIES =  \
     dde-system-daemon \
     desktop-toggle \
     grub2 \
+    grub2ext \
     gtk-thumb-tool \
     search \
     theme-thumb-tool

@@ -31,10 +31,10 @@ import (
 )
 
 // TODO rename to themeDir
-const themePathDefault = "/boot/grub/themes/deepin"
+const ThemePathDefault = "/boot/grub/themes/deepin"
 
 var (
-	themePath          = themePathDefault
+	themePath          = ThemePathDefault
 	themeMainFile      = themePath + "/theme.txt"
 	themeTplFile       = themePath + "/theme.tpl"
 	themeJSONFile      = themePath + "/theme_tpl.json"

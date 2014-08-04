@@ -24,11 +24,13 @@ func (*GrubTester) TestCustomArguments(c *C) {
 	configFile = tmpBaseDir + "/grub2.json"
 	SetDefaultGrubConfigFile(tmpConfigFile)
 	SetDefaultThemePath(tmpThemeDir)
-	defer SetDefaultGrubConfigFile(grubConfigFileDefault)
-	defer SetDefaultThemePath(themePathDefault)
+	defer func() {
+		configFile = ConfigFileDefault
+		SetDefaultGrubConfigFile(GrubConfigFileDefault)
+		SetDefaultThemePath(ThemePathDefault)
+	}()
 
 	c.Check(grubConfigFile, Equals, tmpConfigFile)
-
 	c.Check(themePath, Equals, tmpThemeDir)
 	c.Check(themeMainFile, Equals, tmpThemeDir+"/theme.txt")
 	c.Check(themeTplFile, Equals, tmpThemeDir+"/theme.tpl")
@@ -65,8 +67,12 @@ GRUB_TIMEOUT="5"
 	utils.CopyFile(testGrubThemeBackgroundSourceFile, tmpThemeDir+"/background_source")
 	SetDefaultGrubConfigFile(tmpConfigFile)
 	SetDefaultThemePath(tmpThemeDir)
-	defer SetDefaultGrubConfigFile(grubConfigFileDefault)
-	defer SetDefaultThemePath(themePathDefault)
+	defer func() {
+		configFile = ConfigFileDefault
+		SetDefaultGrubConfigFile(GrubConfigFileDefault)
+		SetDefaultThemePath(ThemePathDefault)
+	}()
+
 	g := NewGrub2()
 	var w, h int
 
@@ -92,8 +98,12 @@ func (*GrubTester) TestSetupGfxmode(c *C) {
 	utils.CopyFile(testGrubThemeBackgroundSourceFile, tmpThemeDir+"/background_source")
 	SetDefaultGrubConfigFile(tmpConfigFile)
 	SetDefaultThemePath(tmpThemeDir)
-	defer SetDefaultGrubConfigFile(grubConfigFileDefault)
-	defer SetDefaultThemePath(themePathDefault)
+	defer func() {
+		configFile = ConfigFileDefault
+		SetDefaultGrubConfigFile(GrubConfigFileDefault)
+		SetDefaultThemePath(ThemePathDefault)
+	}()
+
 	g := NewGrub2()
 	var w, h int
 	var sw, sh int
@@ -145,8 +155,12 @@ func (*GrubTester) TestDoSetThemeBackgroundSourceFile(c *C) {
 	// utils.CopyFile(testGrubThemeBackgroundSourceFile, tmpThemeDir+"/background_source")
 	// SetDefaultGrubConfigFile(tmpConfigFile)
 	// SetDefaultThemePath(tmpThemeDir)
-	// defer SetDefaultGrubConfigFile(grubConfigFileDefault)
-	// defer SetDefaultThemePath(themePathDefault)
+	// 	defer func() {
+	// 	configFile = ConfigFileDefault
+	// 	SetDefaultGrubConfigFile(GrubConfigFileDefault)
+	// 	SetDefaultThemePath(ThemePathDefault)
+	// }()
+
 	// g := NewGrub2()
 	// var w, h int
 	// var sw, sh int

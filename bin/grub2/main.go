@@ -32,8 +32,6 @@ import (
 	"time"
 )
 
-const dbusGrubDest = "com.deepin.daemon.Grub2"
-
 var (
 	argDebug      bool
 	argSetup      bool
@@ -55,7 +53,7 @@ func main() {
 	flag.Parse()
 
 	if argDebug {
-		grub2.SetLoggerLevel(log.LEVEL_DEBUG)
+		grub2.SetLogLevel(log.LEVEL_DEBUG)
 	}
 
 	// dispatch optional arguments
@@ -84,12 +82,12 @@ func main() {
 }
 
 func runAsDaemon() {
-	logger := log.NewLogger(dbusGrubDest + ".Wrapper")
+	logger := log.NewLogger(grub2.DbusGrubDest + ".Runner")
 	logger.BeginTracing()
 	defer logger.EndTracing()
 
-	if !lib.UniqueOnSession(dbusGrubDest) {
-		logger.Error("dbus unique:", dbusGrubDest)
+	if !lib.UniqueOnSession(grub2.DbusGrubDest) {
+		logger.Error("dbus unique:", grub2.DbusGrubDest)
 		return
 	}
 	grub2.Start()
