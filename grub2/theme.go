@@ -26,6 +26,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	graphic "pkg.linuxdeepin.com/lib/gdkpixbuf"
+	"pkg.linuxdeepin.com/lib/utils"
 	"sync"
 	"text/template"
 )
@@ -134,7 +135,7 @@ func (theme *Theme) reset() {
 		grub2extDoResetThemeBackground()
 		screenWidth, screenHeight := parseCurrentGfxmode()
 		grub2extDoGenerateThemeBackground(screenWidth, screenHeight)
-		theme.setPropBackground(theme.bgFile)
+		theme.setPropBackground(theme.bgThumbFile)
 		theme.setPropUpdating(false)
 	}()
 }
@@ -166,9 +167,14 @@ func (theme *Theme) regenerateBackgroundIfNeed() {
 		}
 	}
 
+	// regenerate theme background if thumbnail not exists
+	if !utils.IsFileExist(theme.bgThumbFile) {
+		needGenerate = true
+	}
+
 	if needGenerate {
 		grub2extDoGenerateThemeBackground(wantWidth, wantHeight)
-		theme.setPropBackground(theme.bgFile)
+		theme.setPropBackground(theme.bgThumbFile)
 		logger.Info("update theme background success")
 	}
 }

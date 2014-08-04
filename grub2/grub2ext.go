@@ -137,6 +137,14 @@ func (ge *Grub2Ext) DoGenerateThemeBackground(screenWidth, screenHeight uint16) 
 		logger.Error(err)
 		return false, err
 	}
+
+	// generate background thumbnail
+	err = graphic.ThumbnailImage(themeBgFile, themeBgThumbFile, 300, 300, graphic.GDK_INTERP_BILINEAR, graphic.FormatPng)
+	if err != nil {
+		logger.Error(err)
+		return false, err
+	}
+
 	return true, nil
 }
 

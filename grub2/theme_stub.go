@@ -23,8 +23,7 @@ package grub2
 
 import (
 	"pkg.linuxdeepin.com/lib/dbus"
-	"pkg.linuxdeepin.com/lib/graphic"
-	// "pkg.linuxdeepin.com/lib/utils"
+	graphic "pkg.linuxdeepin.com/lib/gdkpixbuf"
 )
 
 // GetDBusInfo implements interface of dbus.DBusObject.
@@ -65,11 +64,6 @@ func (theme *Theme) setPropUpdating(value bool) {
 }
 
 func (theme *Theme) setPropBackground(value string) {
-	// TODO
-	// theme.realBackground = value
-	// generate background thumbnail
-	// theme.Background = utils.GenerateCacheFilePath("grub background" + theme.realBackground)
-	// graphic.ThumbnailImage(theme.realBackground, theme.Background, 300, 300, graphic.FormatPng)
 	theme.Background = value
 	dbus.NotifyChange(theme, "Background")
 }
@@ -115,7 +109,7 @@ func (theme *Theme) doSetBackgroundSourceFile(imageFile string) bool {
 	theme.setPropUpdating(true)
 	screenWidth, screenHeight := parseCurrentGfxmode()
 	grub2extDoSetThemeBackgroundSourceFile(imageFile, screenWidth, screenHeight)
-	theme.setPropBackground(theme.bgFile)
+	theme.setPropBackground(theme.bgThumbFile)
 	theme.setPropUpdating(false)
 
 	// set item color through background's dominant color
