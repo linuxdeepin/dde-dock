@@ -26,8 +26,10 @@
 package grub2
 
 import (
+	"bytes"
 	"io/ioutil"
 	"os"
+	"os/exec"
 	"path"
 	"pkg.linuxdeepin.com/lib/dbus"
 	graphic "pkg.linuxdeepin.com/lib/gdkpixbuf"
@@ -90,8 +92,11 @@ func (ge *Grub2Ext) DoWriteCacheConfig(fileContent string) (ok bool, err error) 
 // generate a new grub configuration.
 func (ge *Grub2Ext) DoGenerateGrubConfig() (ok bool, err error) {
 	logger.Info("start to generate a new grub configuration file")
-	_, stderr, err := utils.ExecAndWait(30, grubUpdateExe)
-	logger.Infof("process output: %s", stderr)
+	cmd := exec.Command(grubUpdateCmd)
+	var stderr bytes.Buffer
+	cmd.Stderr = &stderr
+	err = cmd.Run()
+	logger.Infof("process error output: %s", stderr)
 	if err != nil {
 		logger.Errorf("generate grub configuration failed: %v", err)
 		return false, err
