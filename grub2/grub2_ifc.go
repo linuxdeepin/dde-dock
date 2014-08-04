@@ -89,14 +89,15 @@ func (grub *Grub2) GetAvailableResolutions() (modesJSON string, err error) {
 // Reset reset all configuretion.
 func (grub *Grub2) Reset() {
 	simpleEntryTitles, _ := grub.GetSimpleEntryTitles()
-	firstEntry := ""
+	defaultEntry := defaultGrubDefaultEntry
 	if len(simpleEntryTitles) > 0 {
-		firstEntry = simpleEntryTitles[0]
+		defaultEntry = simpleEntryTitles[0]
 	}
 	grub.setPropFixSettingsAlways(true)
 	grub.setPropEnableTheme(true)
 	grub.setPropResolution(getDefaultGfxmode())
-	grub.setPropDefaultEntry(firstEntry)
+	grub.setPropDefaultEntry(defaultEntry)
 	grub.setPropTimeout(defaultGrubTimeoutInt)
 	grub.theme.reset()
+	grub.notifyUpdate()
 }
