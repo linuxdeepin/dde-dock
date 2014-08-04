@@ -10,7 +10,8 @@ BINARIES =  \
     grub2 \
     gtk-thumb-tool \
     search \
-    theme-thumb-tool
+    theme-thumb-tool \
+    personalization
 
 LANGUAGES = $(basename $(notdir $(wildcard data/po/*.po)))
 
