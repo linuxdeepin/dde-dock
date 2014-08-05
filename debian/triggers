@@ -1,0 +1,5 @@
+interest /usr/share/fcitx/addon/fcitx-xkb.conf
+interest /usr/share/themes
+interest /usr/share/icons
+interest /usr/share/backgrounds
+interest /usr/share/personalization/themes

@@ -1,0 +1,10 @@
+#!/bin/sh
+set -e
+
+if [ "$1" = "purge" ];then
+    rm -f /var/log/deepin.log || true
+fi
+
+#DEBHELPER#
+
+exit 0

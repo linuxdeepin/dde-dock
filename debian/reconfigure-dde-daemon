@@ -1,0 +1,9 @@
+#!/bin/sh
+
+set -e
+
+if [ -f /etc/systemd/logind.conf ];then
+	echo "fix systemd/logind config"
+	sed -i 's/^#\?HandlePowerKey=.*$/HandlePowerKey=ignore/g' /etc/systemd/logind.conf || true
+        sed -i 's/^#\?HandleLidSwitch=.*$/HandleLidSwitch=ignore/g' /etc/systemd/logind.conf || true
+fi
