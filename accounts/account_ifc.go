@@ -174,8 +174,16 @@ func (obj *Manager) RandUserIcon() (string, bool) {
 	return "", false
 }
 
-func (m *Manager) IsUsernameValid(username string) bool {
-	return isUsernameValid(username)
+func (m *Manager) IsUsernameValid(username string) (bool, string) {
+	if !isUsernameValid(username) {
+		return false, "The user name is not valid."
+	}
+
+	if !isUserExist(username) {
+		return false, "The user name already exists."
+	}
+
+	return true, ""
 }
 
 func (m *Manager) IsPasswordValid(passwd string) bool {

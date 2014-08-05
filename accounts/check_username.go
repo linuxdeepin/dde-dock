@@ -76,6 +76,10 @@ func isUsernameValid(username string) bool {
 		return false
 	}
 
+	return true
+}
+
+func isUserExist(username string) bool {
 	userList := getUsernameList()
 	groupList := getGroupnameList()
 
