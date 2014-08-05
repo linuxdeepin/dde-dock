@@ -26,6 +26,7 @@ import (
 	"path"
 	"pkg.linuxdeepin.com/lib/dbus"
 	dutils "pkg.linuxdeepin.com/lib/utils"
+	"strings"
 )
 
 func (obj *User) SetUserName(dbusMsg dbus.DMessage, username string) bool {
@@ -250,4 +251,38 @@ func (obj *User) DeleteHistoryIcon(dbusMsg dbus.DMessage, icon string) bool {
 	obj.deleteHistoryIcon(icon)
 
 	return true
+}
+
+func (u *User) DeleteIconFile(dbusMsg dbus.DMessage, icon string) (success bool) {
+	defer func() {
+		if err := recover(); err != nil {
+			logger.Errorf("Recover Error In DeleteHistoryIcon:%v",
+				err)
+		}
+	}()
+
+	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
+		dbusMsg.GetSenderPID()); !ok {
+		return false
+	}
+
+	if err := rmAllFile(icon); err != nil {
+		return false
+	}
+
+	u.deleteHistoryIcon(icon)
+
+	return true
+}
+
+func (u *User) IsIconDeletable(icon string) bool {
+	if icon == u.IconFile {
+		return false
+	}
+
+	if strings.Contains(icon, path.Join(ICON_LOCAL_DIR, u.UserName)) {
+		return true
+	}
+
+	return false
 }

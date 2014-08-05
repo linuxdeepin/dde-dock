@@ -120,12 +120,9 @@ func (obj *User) updatePropHistoryIcons(iconList []string) {
 }
 
 func (obj *User) updatePropIconList(iconList []string) {
-	logger.Info("^^^^^^^START update IconList")
 	if !isStrListEqual(obj.IconList, iconList) {
-		logger.Info("----------Set IconList")
 		obj.IconList = iconList
 		dbus.NotifyChange(obj, "IconList")
-		logger.Info("----------Set IconList over")
 	}
 }
 
@@ -146,7 +143,6 @@ func (obj *User) getPropIconFile() string {
 		}
 	}
 
-	logger.Infof("%s ICON: %s", obj.UserName, icon)
 	if wFlag {
 		dutils.WriteKeyToKeyFile(file, "User", "Icon", icon)
 	}
@@ -270,7 +266,6 @@ func (obj *User) deleteHistoryIcon(iconPath string) {
 	if !dutils.IsFileExist(file) {
 		return
 	}
-	rmAllFile(iconPath)
 
 	list, ok := dutils.ReadKeyFromKeyFile(file, "User",
 		"HistoryIcons", []string{})
@@ -326,7 +321,6 @@ func (obj *User) setPropIconFile(icon string) {
 		return
 	}
 
-	logger.Info("Icon File:", icon)
 	file := path.Join(USER_CONFIG_DIR, obj.UserName)
 	dutils.WriteKeyToKeyFile(file, "User", "Icon", icon)
 	obj.addHistoryIcon(icon)
