@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-29 15:05+0800\n"
+"POT-Creation-Date: 2014-08-06 10:47+0800\n"
 "PO-Revision-Date: 2014-07-05 22:30+0000\n"
 "Last-Translator: jose manuel <josemdance@outlook.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/dde-daemon/"
@@ -19,6 +19,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ../../accounts/account_ifc.go:180
+msgid "The user name is invalid."
+msgstr ""
+
+#: ../../accounts/account_ifc.go:184
+msgid "The user name exists."
+msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:31
 msgid "Serial port"
@@ -68,15 +76,15 @@ msgstr "Acceso de mensaje"
 msgid "Message notification"
 msgstr "Notificación de mensaje"
 
-#: ../../datetime/datetime.go:127
+#: ../../datetime/datetime.go:127 ../../langselect/ifc.go:39
 msgid "Language changing, please wait"
 msgstr "Cambiando idioma, por favor espere"
 
-#: ../../datetime/set_locale.go:58
+#: ../../datetime/set_locale.go:58 ../../langselect/locale.go:245
 msgid "Language changed successfully and effective after logout."
 msgstr "Idioma cambiado exitosamente y eficaz después de cerrar la sesión."
 
-#: ../../datetime/set_locale.go:60
+#: ../../datetime/set_locale.go:60 ../../langselect/locale.go:247
 msgid "Language failed to change, please try later."
 msgstr "idioma  no se pudo cambiar, inténtalo más tarde."
 
@@ -2107,7 +2115,7 @@ msgstr "_Cerrar Todo"
 msgid "_Dock"
 msgstr "_Dock"
 
-#: ../../grub2/grub2_stub.go:164 ../../network/nm_setting_ip4_config.go:174
+#: ../../grub2/grub2_ifc.go:75 ../../network/nm_setting_ip4_config.go:174
 #: ../../network/nm_setting_ip6_config.go:66
 msgid "Auto"
 msgstr "Auto"
@@ -2377,39 +2385,39 @@ msgid "WPA/WPA2 Personal"
 msgstr "WPA/WPA2 Personal"
 
 #: ../../network/manager_connections.go:298
-#: ../../network/nm_setting_802_1x.go:80
-#: ../../network/nm_setting_802_1x.go:161
-#: ../../network/nm_setting_802_1x.go:169
+#: ../../network/nm_setting_802_1x.go:81
+#: ../../network/nm_setting_802_1x.go:162
+#: ../../network/nm_setting_802_1x.go:170
 msgid "TLS"
 msgstr "TLS"
 
 #: ../../network/manager_connections.go:300
-#: ../../network/nm_setting_802_1x.go:79
-#: ../../network/nm_setting_802_1x.go:162
+#: ../../network/nm_setting_802_1x.go:80
+#: ../../network/nm_setting_802_1x.go:163
 msgid "MD5"
 msgstr "MD5"
 
 #: ../../network/manager_connections.go:302
-#: ../../network/nm_setting_802_1x.go:170
+#: ../../network/nm_setting_802_1x.go:171
 #: ../../network/nm_setting_wireless_security.go:206
 msgid "LEAP"
 msgstr "LEAP"
 
 #: ../../network/manager_connections.go:304
-#: ../../network/nm_setting_802_1x.go:163
-#: ../../network/nm_setting_802_1x.go:171
+#: ../../network/nm_setting_802_1x.go:164
+#: ../../network/nm_setting_802_1x.go:172
 msgid "FAST"
 msgstr "FAST"
 
 #: ../../network/manager_connections.go:306
-#: ../../network/nm_setting_802_1x.go:164
-#: ../../network/nm_setting_802_1x.go:172
+#: ../../network/nm_setting_802_1x.go:165
+#: ../../network/nm_setting_802_1x.go:173
 msgid "Tunneled TLS"
 msgstr "Tunneled TLS"
 
 #: ../../network/manager_connections.go:308
-#: ../../network/nm_setting_802_1x.go:165
-#: ../../network/nm_setting_802_1x.go:173
+#: ../../network/nm_setting_802_1x.go:166
+#: ../../network/nm_setting_802_1x.go:174
 msgid "Protected EAP"
 msgstr "EAP protegido"
 
@@ -2491,58 +2499,58 @@ msgstr "VPN PPTP"
 msgid "VPN VPNC"
 msgstr "VPN VPNC"
 
-#: ../../network/nm_setting_802_1x.go:73
+#: ../../network/nm_setting_802_1x.go:74
 msgid "PAP"
 msgstr "PAP"
 
-#: ../../network/nm_setting_802_1x.go:74
+#: ../../network/nm_setting_802_1x.go:75
 msgid "CHAP"
 msgstr "CHAP"
 
-#: ../../network/nm_setting_802_1x.go:75
+#: ../../network/nm_setting_802_1x.go:76
 msgid "MSCHAP"
 msgstr "MSCHAP"
 
-#: ../../network/nm_setting_802_1x.go:76
+#: ../../network/nm_setting_802_1x.go:77
 msgid "MSCHAPV2"
 msgstr "MSCHAPV2"
 
-#: ../../network/nm_setting_802_1x.go:77
+#: ../../network/nm_setting_802_1x.go:78
 msgid "GTC"
 msgstr "GTC"
 
-#: ../../network/nm_setting_802_1x.go:78
+#: ../../network/nm_setting_802_1x.go:79
 msgid "OTP"
 msgstr "OTP"
 
-#: ../../network/nm_setting_802_1x.go:178
+#: ../../network/nm_setting_802_1x.go:179
 #: ../../network/nm_setting_ip4_config.go:178
 #: ../../network/nm_setting_vpn_vpnc.go:261
 msgid "Disabled"
 msgstr "Deshabilitar"
 
-#: ../../network/nm_setting_802_1x.go:179
+#: ../../network/nm_setting_802_1x.go:180
 msgid "Anonymous"
 msgstr "Anónimo"
 
-#: ../../network/nm_setting_802_1x.go:180
+#: ../../network/nm_setting_802_1x.go:181
 msgid "Authenticated"
 msgstr "Autenticado"
 
-#: ../../network/nm_setting_802_1x.go:181
+#: ../../network/nm_setting_802_1x.go:182
 msgid "Both"
 msgstr "Ambos"
 
-#: ../../network/nm_setting_802_1x.go:185
-#: ../../network/nm_setting_wireless.go:295
+#: ../../network/nm_setting_802_1x.go:186
+#: ../../network/nm_setting_wireless.go:296
 msgid "Automatic"
 msgstr "Automatico "
 
-#: ../../network/nm_setting_802_1x.go:186
+#: ../../network/nm_setting_802_1x.go:187
 msgid "Version 0"
 msgstr "Version 0"
 
-#: ../../network/nm_setting_802_1x.go:187
+#: ../../network/nm_setting_802_1x.go:188
 msgid "Version 1"
 msgstr "Version 1"
 
@@ -2702,8 +2710,8 @@ msgstr "1"
 #: ../../network/nm_setting_vpn_openvpn.go:377
 #: ../../network/nm_setting_vpn_openvpn.go:397
 #: ../../network/nm_setting_vpn_openvpn.go:428
-#: ../../network/nm_setting_wireless.go:139
-#: ../../network/nm_setting_wireless.go:188
+#: ../../network/nm_setting_wireless.go:140
+#: ../../network/nm_setting_wireless.go:189
 msgid "Default"
 msgstr "Por Defecto"
 
@@ -2861,23 +2869,23 @@ msgstr "Servidor (por defecto)"
 msgid "DH Group 2"
 msgstr "DH Grupo 2"
 
-#: ../../network/nm_setting_wireless.go:289
+#: ../../network/nm_setting_wireless.go:290
 msgid "Infrastructure"
 msgstr "Infraestructura"
 
-#: ../../network/nm_setting_wireless.go:290
+#: ../../network/nm_setting_wireless.go:291
 msgid "Ad-Hoc"
 msgstr "Ad-Hoc"
 
-#: ../../network/nm_setting_wireless.go:291
+#: ../../network/nm_setting_wireless.go:292
 msgid "AP-Hotspot"
 msgstr "AP-Hotspot"
 
-#: ../../network/nm_setting_wireless.go:296
+#: ../../network/nm_setting_wireless.go:297
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/nm_setting_wireless.go:297
+#: ../../network/nm_setting_wireless.go:298
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 

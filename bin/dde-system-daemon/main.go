@@ -7,6 +7,7 @@ import "pkg.linuxdeepin.com/lib/dbus"
 import "os"
 import _ "pkg.linuxdeepin.com/dde-daemon/accounts"
 import "pkg.linuxdeepin.com/dde-daemon"
+import . "pkg.linuxdeepin.com/lib/gettext"
 
 var logger = log.NewLogger("com.deepin.daemon")
 
@@ -18,6 +19,9 @@ func main() {
 		logger.Warning("There already has an dde-daemon running.")
 		return
 	}
+
+	InitI18n()
+	Textdomain("dde-daemon")
 
 	logger.SetRestartCommand("/usr/lib/deepin-daemon/dde-system-daemon")
 

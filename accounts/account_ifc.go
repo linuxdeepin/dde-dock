@@ -23,6 +23,7 @@ package accounts
 
 import (
 	"pkg.linuxdeepin.com/lib/dbus"
+	. "pkg.linuxdeepin.com/lib/gettext"
 	dutils "pkg.linuxdeepin.com/lib/utils"
 )
 
@@ -176,11 +177,11 @@ func (obj *Manager) RandUserIcon() (string, bool) {
 
 func (m *Manager) IsUsernameValid(username string) (bool, string) {
 	if !isUsernameValid(username) {
-		return false, "The user name is not valid."
+		return false, Tr("The user name is invalid.")
 	}
 
 	if !isUserExist(username) {
-		return false, "The user name already exists."
+		return false, Tr("The user name exists.")
 	}
 
 	return true, ""
