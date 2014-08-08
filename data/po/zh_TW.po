@@ -3195,7 +3195,6 @@ msgid "Offline"
 msgstr "離線"
 
 #: ../../network/state_handler.go:209
-#, fuzzy
 msgid "Disconnected, you are now offline."
 msgstr "斷開連接，當前已離線"
 
