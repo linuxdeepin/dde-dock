@@ -22,8 +22,8 @@
 package network
 
 import (
-	"pkg.linuxdeepin.com/lib/dbus"
 	"fmt"
+	"pkg.linuxdeepin.com/lib/dbus"
 )
 
 func (s *ConnectionSession) GetDBusInfo() dbus.DBusInfo {

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-06 10:47+0800\n"
+"POT-Creation-Date: 2014-08-08 16:53+0800\n"
 "PO-Revision-Date: 2014-07-07 10:00+0000\n"
 "Last-Translator: electricface <songwentai@linuxdeepin.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/dde-"
@@ -2908,297 +2908,298 @@ msgstr "CCMP"
 msgid "Open"
 msgstr "Open"
 
-#: ../../network/state_handler.go:34
+#: ../../network/state_handler.go:45
 msgid "Device state changed, unknown reason."
 msgstr ""
 
-#: ../../network/state_handler.go:35
+#: ../../network/state_handler.go:46
 msgid "Device state changed, none reason."
 msgstr ""
 
-#: ../../network/state_handler.go:36
+#: ../../network/state_handler.go:47
 msgid "The device is now managed."
 msgstr "設備正在託管。"
 
-#: ../../network/state_handler.go:37
+#: ../../network/state_handler.go:48
 msgid "The device is no longer managed."
 msgstr "設備不再託管。"
 
-#: ../../network/state_handler.go:38
+#: ../../network/state_handler.go:49
 #, fuzzy
 msgid "The device has not been ready for configuration."
 msgstr "設備配置未就緒。"
 
-#: ../../network/state_handler.go:39
+#: ../../network/state_handler.go:50
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)."
 msgstr "IP配置無法保存（無可用地址、連接超時等）。"
 
-#: ../../network/state_handler.go:40
+#: ../../network/state_handler.go:51
 msgid "The IP configuration is no longer valid."
 msgstr "IP配置不再有效。"
 
-#: ../../network/state_handler.go:41
+#: ../../network/state_handler.go:52
 msgid "Passwords were required but not provided."
 msgstr "需要密碼，但未提供。"
 
-#: ../../network/state_handler.go:42
+#: ../../network/state_handler.go:53
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server."
 msgstr "802.1X客戶端從接入點或認證伺服器斷開連接。"
 
-#: ../../network/state_handler.go:43
+#: ../../network/state_handler.go:54
 msgid "Configuration of the 802.1X supplicant failed."
 msgstr "802.1X客戶端配置失敗。"
 
-#: ../../network/state_handler.go:44
+#: ../../network/state_handler.go:55
 msgid "The 802.1X supplicant quitted or failed unexpectedly."
 msgstr "802.1X客戶端異常退出或失敗。"
 
-#: ../../network/state_handler.go:45
+#: ../../network/state_handler.go:56
 msgid "The 802.1X supplicant took too long time to authenticate."
 msgstr "802.1X客戶端驗證時間過長。"
 
-#: ../../network/state_handler.go:46
+#: ../../network/state_handler.go:57
 msgid "The PPP service failed to start within the allowed time."
 msgstr "PPP服務無法在限定時間內啟動。"
 
-#: ../../network/state_handler.go:47
+#: ../../network/state_handler.go:58
 msgid "The PPP service disconnected unexpectedly."
 msgstr "PPP服務異常中斷。"
 
-#: ../../network/state_handler.go:48
+#: ../../network/state_handler.go:59
 msgid "The PPP service quitted or failed unexpectedly."
 msgstr "PPP服務異常退出或失敗。"
 
-#: ../../network/state_handler.go:49
+#: ../../network/state_handler.go:60
 msgid "The DHCP service failed to start within the allowed time."
 msgstr "DHCP服務無法在限定時間內啟動。"
 
-#: ../../network/state_handler.go:50
+#: ../../network/state_handler.go:61
 msgid "The DHCP service reported an unexpected error."
 msgstr "DHCP服務報告了一個異常錯誤。"
 
-#: ../../network/state_handler.go:51
+#: ../../network/state_handler.go:62
 msgid "The DHCP service quitted or failed unexpectedly."
 msgstr "DHCP服務異常退出或失敗。"
 
-#: ../../network/state_handler.go:52
+#: ../../network/state_handler.go:63
 msgid "The shared connection service failed to start."
 msgstr "共用連接服務啟動失敗。"
 
-#: ../../network/state_handler.go:53
+#: ../../network/state_handler.go:64
 msgid "The shared connection service quitted or failed unexpectedly."
 msgstr "共用連接服務異常退出或失敗。"
 
-#: ../../network/state_handler.go:54
+#: ../../network/state_handler.go:65
 msgid "The AutoIP service failed to start."
 msgstr "自動IP服務啟動失敗。"
 
-#: ../../network/state_handler.go:55
+#: ../../network/state_handler.go:66
 msgid "The AutoIP service reported an unexpected error."
 msgstr "自動IP服務報告了一個異常錯誤。"
 
-#: ../../network/state_handler.go:56
+#: ../../network/state_handler.go:67
 msgid "The AutoIP service quitted or failed unexpectedly."
 msgstr "自動IP服務異常退出或失敗。"
 
-#: ../../network/state_handler.go:57
+#: ../../network/state_handler.go:68
 msgid "Dialing failed due to busy lines."
 msgstr "線路繁忙致使撥號失敗。"
 
-#: ../../network/state_handler.go:58
+#: ../../network/state_handler.go:69
 msgid "Dialing failed due to no dial tone."
 msgstr "無撥號音致使撥號失敗。"
 
-#: ../../network/state_handler.go:59
+#: ../../network/state_handler.go:70
 msgid "Dialing failed due to the carrier."
 msgstr "載體故障致使撥號失敗。"
 
-#: ../../network/state_handler.go:60
+#: ../../network/state_handler.go:71
 msgid "Dialing timed out."
 msgstr "撥號超時。"
 
-#: ../../network/state_handler.go:61
+#: ../../network/state_handler.go:72
 msgid "Dialing failed."
 msgstr "撥號失敗。"
 
-#: ../../network/state_handler.go:62
+#: ../../network/state_handler.go:73
 msgid "Modem initialization failed."
 msgstr "數據機初始化失敗。"
 
-#: ../../network/state_handler.go:63
+#: ../../network/state_handler.go:74
 msgid "Failed to select the specified GSM APN."
 msgstr "無法選擇指定的GSM APN。"
 
-#: ../../network/state_handler.go:64
+#: ../../network/state_handler.go:75
 msgid "No networks searched."
 msgstr "未找到網路。"
 
-#: ../../network/state_handler.go:65
+#: ../../network/state_handler.go:76
 msgid "Network registration was denied."
 msgstr "網路註冊被拒絕。"
 
-#: ../../network/state_handler.go:66
+#: ../../network/state_handler.go:77
 msgid "Network registration timed out."
 msgstr "網路註冊超時。"
 
-#: ../../network/state_handler.go:67
+#: ../../network/state_handler.go:78
 msgid "Register to the requested GSM network failed."
 msgstr "註冊GSM網路失敗。"
 
-#: ../../network/state_handler.go:68
+#: ../../network/state_handler.go:79
 msgid "PIN check failed."
 msgstr "PIN碼檢查失敗。"
 
-#: ../../network/state_handler.go:69
+#: ../../network/state_handler.go:80
 msgid "Necessary firmware for the device may be missed."
 msgstr "設備必要固件可能丟失了。"
 
-#: ../../network/state_handler.go:70
+#: ../../network/state_handler.go:81
 msgid "The device was removed."
 msgstr "該設備已被刪除。"
 
-#: ../../network/state_handler.go:71
+#: ../../network/state_handler.go:82
 msgid "NetworkManager went to sleep."
 msgstr "NetworkManager進入休眠狀態。"
 
-#: ../../network/state_handler.go:72
+#: ../../network/state_handler.go:83
 msgid "The device's active connection was removed or disappeared."
 msgstr "設備當前連接被刪除或消失。"
 
-#: ../../network/state_handler.go:73
+#: ../../network/state_handler.go:84
 msgid "A user or client requested to disconnect."
 msgstr "用戶或客戶端請求斷開連接。"
 
-#: ../../network/state_handler.go:74
+#: ../../network/state_handler.go:85
 msgid "The device's carrier/link changed."
 msgstr "設備載體/鏈接更改。"
 
-#: ../../network/state_handler.go:75
+#: ../../network/state_handler.go:86
 msgid "The device's existing connection was assumed."
 msgstr "假定該設備的現有連接。"
 
-#: ../../network/state_handler.go:76
+#: ../../network/state_handler.go:87
 msgid "The 802.1x supplicant is now available."
 msgstr "802.1x客戶端現在可用"
 
-#: ../../network/state_handler.go:77
+#: ../../network/state_handler.go:88
 msgid "The modem could not be found."
 msgstr "未找到數據機。"
 
-#: ../../network/state_handler.go:78
+#: ../../network/state_handler.go:89
 msgid "The Bluetooth connection timed out or failed."
 msgstr "藍牙連接超時或失敗。"
 
-#: ../../network/state_handler.go:79
-msgid "GSM Modem's SIM Card not inserted."
+#: ../../network/state_handler.go:90
+msgid "GSM Modem's SIM Card was not inserted."
 msgstr "未插入GSM數據機的SIM卡。"
 
-#: ../../network/state_handler.go:80
+#: ../../network/state_handler.go:91
 msgid "GSM Modem's SIM PIN required."
 msgstr "需要GSM數據機的SIM卡PIN碼。"
 
-#: ../../network/state_handler.go:81
+#: ../../network/state_handler.go:92
 msgid "GSM Modem's SIM PUK required."
 msgstr "需要GSM數據機SIM卡PUK碼。"
 
-#: ../../network/state_handler.go:82
+#: ../../network/state_handler.go:93
 msgid "Wrong GSM Modem's SIM"
 msgstr "GSM數據機SIM卡錯誤 "
 
-#: ../../network/state_handler.go:83
+#: ../../network/state_handler.go:94
 msgid "InfiniBand device does not support connected mode."
 msgstr "InfiniBand設備不支持此連接模式。"
 
-#: ../../network/state_handler.go:84
+#: ../../network/state_handler.go:95
 msgid "A connection dependency failed."
 msgstr "連接依賴失敗。"
 
-#: ../../network/state_handler.go:85
+#: ../../network/state_handler.go:96
 msgid "Problem with the RFC 2684 Ethernet over ADSL bridge."
 msgstr "RFC 2684以太網橋接到ADSL上錯誤。"
 
-#: ../../network/state_handler.go:86
+#: ../../network/state_handler.go:97
 msgid "ModemManager was not running or quitted unexpectedly."
 msgstr "ModemManager未運行或異常退出。"
 
-#: ../../network/state_handler.go:87
+#: ../../network/state_handler.go:98
 msgid "The 802.11 Wi-Fi network could not be found."
 msgstr "802.11 Wi-Fi網路無法找到。"
 
-#: ../../network/state_handler.go:88
+#: ../../network/state_handler.go:99
 msgid "A secondary connection of the base connection failed."
 msgstr "底座連接的二次連接失敗。"
 
-#: ../../network/state_handler.go:90
+#: ../../network/state_handler.go:101
 msgid "Activate VPN connection failed, unknown reason."
 msgstr ""
 
-#: ../../network/state_handler.go:91
+#: ../../network/state_handler.go:102
 #, fuzzy
 msgid "Activate VPN connection failed."
 msgstr "連接依賴失敗。"
 
-#: ../../network/state_handler.go:92
+#: ../../network/state_handler.go:103
 msgid "The VPN connection changed state due to disconnection from users."
 msgstr "用戶斷開致使VPN連接狀態改變。"
 
-#: ../../network/state_handler.go:93
+#: ../../network/state_handler.go:104
 msgid "The VPN connection changed state due to disconnection from devices."
 msgstr "用戶斷開致使VPN連接狀態改變。"
 
-#: ../../network/state_handler.go:94
+#: ../../network/state_handler.go:105
 msgid "VPN service stopped."
 msgstr "VPN服務已停止。"
 
-#: ../../network/state_handler.go:95
+#: ../../network/state_handler.go:106
 msgid "The IP config of VPN connection was invalid."
 msgstr "VPN連接的IP配置無效。"
 
-#: ../../network/state_handler.go:96
+#: ../../network/state_handler.go:107
 msgid "The connection attempt to VPN service timed out."
 msgstr "VPN服務連接嘗試超時。"
 
-#: ../../network/state_handler.go:97
+#: ../../network/state_handler.go:108
 msgid "The VPN service start timed out."
 msgstr "VPN服務啟動超時。"
 
-#: ../../network/state_handler.go:98
+#: ../../network/state_handler.go:109
 msgid "The VPN service failed to start."
 msgstr "VPN服務啟動失敗。"
 
-#: ../../network/state_handler.go:99
+#: ../../network/state_handler.go:110
 msgid "Necessary password for the VPN connection was not provided."
 msgstr "未提供VPN連接所需的密碼。"
 
-#: ../../network/state_handler.go:100
+#: ../../network/state_handler.go:111
 msgid "Authentication to VPN server failed."
 msgstr "驗證到VPN伺服器失敗。"
 
-#: ../../network/state_handler.go:101
+#: ../../network/state_handler.go:112
 msgid "The connection was deleted from settings."
 msgstr "該連接已從設置中刪除。"
 
-#: ../../network/state_handler.go:156 ../../network/state_handler.go:219
+#: ../../network/state_handler.go:164 ../../network/state_handler.go:227
 msgid "Connected"
 msgstr "已連接"
 
-#: ../../network/state_handler.go:174 ../../network/state_handler.go:223
-#: ../../network/state_handler.go:228 ../../network/state_handler.go:233
+#: ../../network/state_handler.go:182 ../../network/state_handler.go:231
+#: ../../network/state_handler.go:236 ../../network/state_handler.go:241
 msgid "Disconnected"
 msgstr ""
 
-#: ../../network/state_handler.go:201
+#: ../../network/state_handler.go:209
 msgid "Offline"
 msgstr "離線"
 
-#: ../../network/state_handler.go:201
-msgid "Disconnected,  you are now offline."
+#: ../../network/state_handler.go:209
+#, fuzzy
+msgid "Disconnected, you are now offline."
 msgstr "斷開連接，當前已離線"
 
-#: ../../network/state_handler.go:233
+#: ../../network/state_handler.go:241
 msgid "Access Point mode is not supported by this device."
 msgstr "此設備不支持熱點模式"
 

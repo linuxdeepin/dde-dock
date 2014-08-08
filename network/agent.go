@@ -24,20 +24,38 @@ package network
 import "pkg.linuxdeepin.com/lib/dbus"
 import "time"
 
+var invalidKeyData = make(map[string]map[string]dbus.Variant)
+
 type mapKey struct {
 	path dbus.ObjectPath
 	name string
 }
-type Agent struct {
+type agent struct {
 	pendingKeys map[mapKey]chan string
 	savedKeys   map[mapKey]map[string]map[string]dbus.Variant
 }
 
-var (
-	invalidKeyData = make(map[string]map[string]dbus.Variant)
-)
+func newAgent() (a *agent) {
+	a = &agent{}
+	a.pendingKeys = make(map[mapKey]chan string)
+	a.savedKeys = make(map[mapKey]map[string]map[string]dbus.Variant)
 
-func (a *Agent) GetDBusInfo() dbus.DBusInfo {
+	err := dbus.InstallOnSystem(a)
+	if err != nil {
+		logger.Error("install network agent failed:", err)
+		return
+	}
+
+	nmAgentRegister("com.deepin.daemon.Network.agent")
+	return
+}
+
+func destroyAgent(a *agent) {
+	nmAgentUnregister()
+	dbus.UnInstallObject(a)
+}
+
+func (a *agent) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		".",
 		"/org/freedesktop/NetworkManager/SecretAgent",
@@ -84,7 +102,7 @@ func fillSecret(connectionData map[string]map[string]dbus.Variant, settingName, 
 	return keyData
 }
 
-func (a *Agent) GetSecrets(connectionData map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath, settingName string, hints []string, flags uint32) (keyData map[string]map[string]dbus.Variant) {
+func (a *agent) GetSecrets(connectionData map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath, settingName string, hints []string, flags uint32) (keyData map[string]map[string]dbus.Variant) {
 	logger.Info("GetSecrets:", connectionPath, settingName, hints, flags)
 	keyId := mapKey{connectionPath, settingName}
 
@@ -124,7 +142,7 @@ func (a *Agent) GetSecrets(connectionData map[string]map[string]dbus.Variant, co
 	}
 	return
 }
-func (a *Agent) createPendingKey(keyId mapKey, connectionId string) chan string {
+func (a *agent) createPendingKey(keyId mapKey, connectionId string) chan string {
 	// TODO vpn
 	// /usr/lib/NetworkManager/nm-pptp-auth-dialog -u fec2a72f-db65-4e76-be37-995932b64bb7 -n pptp -s org.freedesktop.NetworkManager.pptp -i
 
@@ -139,7 +157,7 @@ func (a *Agent) createPendingKey(keyId mapKey, connectionId string) chan string 
 	return a.pendingKeys[keyId]
 }
 
-func (a *Agent) CancelGetSecrtes(connectionPath dbus.ObjectPath, settingName string) {
+func (a *agent) CancelGetSecrtes(connectionPath dbus.ObjectPath, settingName string) {
 	logger.Debug("CancelGetSecrtes:", connectionPath, settingName)
 	keyId := mapKey{connectionPath, settingName}
 
@@ -151,7 +169,7 @@ func (a *Agent) CancelGetSecrtes(connectionPath dbus.ObjectPath, settingName str
 	}
 }
 
-func (a *Agent) SaveSecrets(connection map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath) {
+func (a *agent) SaveSecrets(connection map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath) {
 	logger.Debug("SaveSecretes:", connectionPath)
 	// TODO
 	// if _, ok := connection["802-11-wireless-security"]; ok {
@@ -161,7 +179,7 @@ func (a *Agent) SaveSecrets(connection map[string]map[string]dbus.Variant, conne
 	// }
 }
 
-func (a *Agent) DeleteSecrets(connection map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath) {
+func (a *agent) DeleteSecrets(connection map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath) {
 	logger.Debug("DeleteSecrets:", connectionPath) // TODO test
 	if _, ok := connection["802-11-wireless-security"]; ok {
 		keyId := mapKey{connectionPath, "802-11-wireless-security"}
@@ -169,7 +187,7 @@ func (a *Agent) DeleteSecrets(connection map[string]map[string]dbus.Variant, con
 	}
 }
 
-func (a *Agent) feedSecret(path string, name string, key string) {
+func (a *agent) feedSecret(path string, name string, key string) {
 	keyId := mapKey{dbus.ObjectPath(path), name}
 	if ch, ok := a.pendingKeys[keyId]; ok {
 		ch <- key
@@ -177,26 +195,6 @@ func (a *Agent) feedSecret(path string, name string, key string) {
 	} else {
 		logger.Warning("feedSecret, unknown PendingKey", keyId)
 	}
-}
-
-func newAgent() (a *Agent) {
-	a = &Agent{}
-	a.pendingKeys = make(map[mapKey]chan string)
-	a.savedKeys = make(map[mapKey]map[string]map[string]dbus.Variant)
-
-	err := dbus.InstallOnSystem(a)
-	if err != nil {
-		logger.Error("install network agent failed:", err)
-		return
-	}
-
-	nmAgentRegister("com.deepin.daemon.Network.Agent")
-	return
-}
-
-func destroyAgent(a *Agent) {
-	nmAgentUnregister()
-	dbus.UnInstallObject(a)
 }
 
 func (m *Manager) FeedSecret(path string, name, key string) {

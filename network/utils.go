@@ -27,6 +27,13 @@ import (
 	"pkg.linuxdeepin.com/lib/utils"
 )
 
+const (
+	dbusNotifyDest = "org.freedesktop.Notifications"
+	dbusNotifyPath = "/org/freedesktop/Notifications"
+)
+
+var notifier, _ = notifications.NewNotifier(dbusNotifyDest, dbusNotifyPath)
+
 func isStringInArray(s string, list []string) bool {
 	for _, i := range list {
 		if i == s {
@@ -128,14 +135,11 @@ func byteArrayToStrPath(bytePath []byte) (path string) {
 }
 
 func notify(icon, summary, body string) (err error) {
-	var notify *notifications.Notifier
-	notify, err = notifications.NewNotifier("org.freedesktop.Notifications", "/org/freedesktop/Notifications")
-	if err != nil {
-		logger.Error(err)
+	if notifier == nil {
+		logger.Error("connect to org.freedesktop.Notifications failed")
 		return
 	}
-	appName := "Network"
-	_, err = notify.Notify(appName, 0, icon, summary, body, nil, nil, 0)
+	_, err = notifier.Notify("Network", 0, icon, summary, body, nil, nil, 0)
 	if err != nil {
 		logger.Error(err)
 		return

@@ -72,8 +72,8 @@ type Manager struct {
 	AccessPointPropertiesChanged func(devPath, apJSON string)
 	DeviceEnabled                func(devPath string, enabled bool)
 
-	agent         *Agent
-	stateNotifier *StateNotifier
+	agent         *agent
+	stateNotifier *stateNotifier
 }
 
 func (m *Manager) GetDBusInfo() dbus.DBusInfo {

@@ -29,11 +29,10 @@ import (
 
 func Test(t *testing.T) { TestingT(t) }
 
-type Utils struct{}
+type testWrapper struct{}
 
 func init() {
-	utils := &Utils{}
-	Suite(utils)
+	Suite(&testWrapper{})
 }
 
 const (
@@ -72,7 +71,7 @@ const (
 	testJSONKtypeWrapperIpv6Routes    = `[{"Address":"1111:2222:3333:4444:5555:6666:AAAA:FFFF","Prefix":64,"NextHop":"1111:2222:3333:4444:5555:6666:AAAA:1111","Metric":32}]`
 )
 
-func (*Utils) TestGetSetConnectionData(c *C) {
+func (*testWrapper) TestGetSetConnectionData(c *C) {
 	data := make(connectionData)
 
 	addSettingSection(data, sectionConnection)
@@ -85,7 +84,7 @@ func (*Utils) TestGetSetConnectionData(c *C) {
 	c.Check(getSettingConnectionType(data), Equals, testConnectionType)
 }
 
-func (*Utils) TestGetSetConnectionDataJSON(c *C) {
+func (*testWrapper) TestGetSetConnectionDataJSON(c *C) {
 	data := make(connectionData)
 	addSettingSection(data, sectionConnection)
 	setSettingConnectionIdJSON(data, testConnectionIdJSON)
@@ -100,7 +99,7 @@ func (*Utils) TestGetSetConnectionDataJSON(c *C) {
 	// set empty string to delete key
 }
 
-func (*Utils) TestConnectionDataDefaultValue(c *C) {
+func (*testWrapper) TestConnectionDataDefaultValue(c *C) {
 	data := make(connectionData)
 	var defaultValueJSON string
 	var setValueJSON string
@@ -187,7 +186,7 @@ func (*Utils) TestConnectionDataDefaultValue(c *C) {
 	c.Check(isSettingIp6ConfigRoutesExists(data), Equals, false)
 }
 
-func (*Utils) TestConvertMacAddressToString(c *C) {
+func (*testWrapper) TestConvertMacAddressToString(c *C) {
 	tests := []struct {
 		test   []byte
 		result string
@@ -200,7 +199,7 @@ func (*Utils) TestConvertMacAddressToString(c *C) {
 	}
 }
 
-func (*Utils) TestConvertMacAddressToArrayByte(c *C) {
+func (*testWrapper) TestConvertMacAddressToArrayByte(c *C) {
 	tests := []struct {
 		test   string
 		result []byte
@@ -213,7 +212,7 @@ func (*Utils) TestConvertMacAddressToArrayByte(c *C) {
 	}
 }
 
-func (*Utils) TestConvertIpv4AddressToString(c *C) {
+func (*testWrapper) TestConvertIpv4AddressToString(c *C) {
 	tests := []struct {
 		test   uint32
 		result string
@@ -226,7 +225,7 @@ func (*Utils) TestConvertIpv4AddressToString(c *C) {
 	}
 }
 
-func (*Utils) TestConvertIpv4AddressToUint32(c *C) {
+func (*testWrapper) TestConvertIpv4AddressToUint32(c *C) {
 	tests := []struct {
 		test   string
 		result uint32
@@ -239,7 +238,7 @@ func (*Utils) TestConvertIpv4AddressToUint32(c *C) {
 	}
 }
 
-func (*Utils) TestConvertIpv4PrefixToNetMask(c *C) {
+func (*testWrapper) TestConvertIpv4PrefixToNetMask(c *C) {
 	tests := []struct {
 		test   uint32
 		result string
@@ -283,7 +282,7 @@ func (*Utils) TestConvertIpv4PrefixToNetMask(c *C) {
 	}
 }
 
-func (*Utils) TestConvertIpv4NetMaskToPrefix(c *C) {
+func (*testWrapper) TestConvertIpv4NetMaskToPrefix(c *C) {
 	tests := []struct {
 		test   string
 		result uint32
@@ -337,7 +336,7 @@ func (*Utils) TestConvertIpv4NetMaskToPrefix(c *C) {
 	c.Check(err, NotNil)
 }
 
-func (*Utils) TestReverseOrderUint32(c *C) {
+func (*testWrapper) TestReverseOrderUint32(c *C) {
 	tests := []struct {
 		test   uint32
 		result uint32
@@ -350,7 +349,7 @@ func (*Utils) TestReverseOrderUint32(c *C) {
 	}
 }
 
-func (*Utils) TestConvertIpv6AddressToString(c *C) {
+func (*testWrapper) TestConvertIpv6AddressToString(c *C) {
 	tests := []struct {
 		test   []byte
 		result string
@@ -363,7 +362,7 @@ func (*Utils) TestConvertIpv6AddressToString(c *C) {
 	}
 }
 
-func (*Utils) TestConvertIpv6AddressToArrayByte(c *C) {
+func (*testWrapper) TestConvertIpv6AddressToArrayByte(c *C) {
 	tests := []struct {
 		test   string
 		result []byte
@@ -382,7 +381,7 @@ func (*Utils) TestConvertIpv6AddressToArrayByte(c *C) {
 	c.Check(err, NotNil)
 }
 
-func (*Utils) TestExpandIpv6Address(c *C) {
+func (*testWrapper) TestExpandIpv6Address(c *C) {
 	tests := []struct {
 		test   string
 		result string
@@ -403,7 +402,7 @@ func (*Utils) TestExpandIpv6Address(c *C) {
 	c.Check(err, NotNil)
 }
 
-func (*Utils) TestJSONWrapper(c *C) {
+func (*testWrapper) TestJSONWrapper(c *C) {
 	var v interface{}
 	var s string
 
@@ -504,7 +503,7 @@ func (*Utils) TestJSONWrapper(c *C) {
 	c.Check(s, Equals, testJSONKtypeWrapperIpv6Routes)
 }
 
-func (*Utils) TestGetterAndSetterForVirtualKey(c *C) {
+func (*testWrapper) TestGetterAndSetterForVirtualKey(c *C) {
 	// TODO
 	data := newWirelessConnectionData("", "", nil, apSecNone)
 
@@ -521,7 +520,7 @@ func (*Utils) TestGetterAndSetterForVirtualKey(c *C) {
 	c.Check("wpa-eap", Equals, getSettingVkWirelessSecurityKeyMgmt(data))
 }
 
-func (*Utils) TestToUriPath(c *C) {
+func (*testWrapper) TestToUriPath(c *C) {
 	tests := []struct {
 		test   string
 		result string
@@ -533,7 +532,7 @@ func (*Utils) TestToUriPath(c *C) {
 		c.Check(t.result, Equals, toUriPath(t.test))
 	}
 }
-func (*Utils) TestToLocalPath(c *C) {
+func (*testWrapper) TestToLocalPath(c *C) {
 	tests := []struct {
 		test   string
 		result string
@@ -546,7 +545,7 @@ func (*Utils) TestToLocalPath(c *C) {
 	}
 }
 
-func (*Utils) TestStrToByteArrayPath(c *C) {
+func (*testWrapper) TestStrToByteArrayPath(c *C) {
 	tests := []struct {
 		test   string
 		result []byte
@@ -557,7 +556,7 @@ func (*Utils) TestStrToByteArrayPath(c *C) {
 		c.Check(t.result, DeepEquals, strToByteArrayPath(t.test))
 	}
 }
-func (*Utils) TestbyteArrayToStrPath(c *C) {
+func (*testWrapper) TestbyteArrayToStrPath(c *C) {
 	tests := []struct {
 		test   []byte
 		result string
@@ -571,7 +570,7 @@ func (*Utils) TestbyteArrayToStrPath(c *C) {
 	}
 }
 
-func (*Utils) TestMarshalVpnPluginKey(c *C) {
+func (*testWrapper) TestMarshalVpnPluginKey(c *C) {
 	tests := []struct {
 		t      ktype
 		test   interface{}
@@ -587,7 +586,7 @@ func (*Utils) TestMarshalVpnPluginKey(c *C) {
 		c.Check(t.result, Equals, marshalVpnPluginKey(t.test, t.t))
 	}
 }
-func (*Utils) TestUnmarshalVpnPluginKey(c *C) {
+func (*testWrapper) TestUnmarshalVpnPluginKey(c *C) {
 	tests := []struct {
 		t      ktype
 		test   string
