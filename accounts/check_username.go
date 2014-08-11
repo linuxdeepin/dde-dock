@@ -66,7 +66,7 @@ func isUsernameValid(username string) bool {
 	 * and is composed of letters and numbers
 	 */
 	//match, err := regexp.Compile(`^[A-Za-z][A-Za-z0-9]+$`)
-	match, err := regexp.Compile(`^[a-z][a-z0-9_-]+$`)
+	match, err := regexp.Compile(`^[a-z][a-z0-9_-]*$`)
 	if err != nil {
 		logger.Warning("New Compile Failed:", err)
 		return false
