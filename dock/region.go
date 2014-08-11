@@ -1,13 +1,13 @@
 package dock
 
 import (
-	"pkg.linuxdeepin.com/lib/dbus"
 	"errors"
 	"github.com/BurntSushi/xgb"
 	"github.com/BurntSushi/xgb/shape"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil/ewmh"
 	"github.com/BurntSushi/xgbutil/icccm"
+	"pkg.linuxdeepin.com/lib/dbus"
 )
 
 var (
@@ -108,8 +108,8 @@ func (r *Region) mouseInRegion() bool {
 		return false
 	}
 
-	mouseX := int32(reply.RootX)
-	mouseY := int32(reply.RootY)
+	mouseX := int32(reply.RootX - displayRect.X)
+	mouseY := int32(reply.RootY - displayRect.Y)
 
 	logger.Debugf("mouse position: (%d, %d)", mouseX, mouseY)
 
