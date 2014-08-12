@@ -1,15 +1,13 @@
 package dock
 
 import (
-	"flag"
 	"os"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/log"
 )
 
 var (
-	logger          = log.NewLogger("com.deepin.daemon.Dock")
-	argDebug        bool
+	logger                            = log.NewLogger("com.deepin.daemon.Dock")
 	region          *Region           = nil
 	setting         *Setting          = nil
 	hideModemanager *HideStateManager = nil
@@ -23,12 +21,7 @@ func Start() {
 
 	initDeepin()
 
-	// configure logger
-	flag.BoolVar(&argDebug, "d", false, "debug mode")
-	flag.BoolVar(&argDebug, "debug", false, "debug mode")
-	flag.Parse()
-	if argDebug {
-		logger.SetLogLevel(log.LevelDebug)
+	if logger.GetLogLevel() == log.LevelDebug {
 		os.Setenv("G_MESSAGES_DEBUG", "all")
 	}
 
