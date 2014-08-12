@@ -2,7 +2,7 @@
 <schemalist>
 	<schema id="com.deepin.dde.keybinding.system" path="/com/deepin/dde/keybinding/system/">
         <key type="as" name="switch-layout">
-		<default>['&lt;Super&gt;Space', '/usr/lib/deepin-daemon/dde-osd --SwitchLayout']</default>
+		<default>['&lt;Super&gt;Space']</default>
             <summary>Switch Keyboard Layout</summary>
             <description></description>
         </key>

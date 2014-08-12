@@ -147,6 +147,26 @@ func (obj *MediaKeyManager) emitMediaSignal(modStr, keyStr string, press bool) b
 	case "XF86Calculator":
 		obj.LaunchCalculator(press)
 	default:
+		shortcut := ""
+		if len(modStr) > 1 {
+			shortcut = modStr + "-" + keyStr
+		} else {
+			shortcut = keyStr
+		}
+		sLayoutList := sysGSettings.GetStrv("switch-layout")
+		if len(sLayoutList) < 1 {
+			return false
+		}
+		sLayout := sLayoutList[0]
+		sLayout = formatXGBShortcut(sLayout)
+		if strings.ToLower(shortcut) == sLayout {
+			if press {
+				go doAction(CMD_DDE_OSD + "--SwitchLayout")
+
+			}
+			obj.SwitchLayout(press)
+			return true
+		}
 		return false
 	}
 
