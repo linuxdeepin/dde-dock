@@ -84,8 +84,8 @@ func parseDeviceAdd(devName *C.char) {
 			}
 			managerObj.mouseObj = mouse
 			managerObj.setPropName("Infos")
-			disableTPadWhenMouse()
 		}
+		disableTPadWhenMouse()
 	} else if strings.Contains(s, "touchpad") {
 		if managerObj.tpadObj == nil {
 			tpad := NewTPad()
@@ -123,6 +123,12 @@ func parseDeviceDelete(devName *C.char) {
 			}
 			dbus.UnInstallObject(managerObj.tpadObj)
 			managerObj.tpadObj = nil
+		}
+	} else if strings.Contains(s, "mouse") {
+		for _, info := range managerObj.Infos {
+			if info.Id == "touchpad" {
+				tpadSettings.SetBoolean(TPAD_KEY_ENABLE, true)
+			}
 		}
 	}
 	/*
