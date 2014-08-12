@@ -25,7 +25,7 @@ prepare:
 	fi
 
 out/bin/%:
-	env GOPATH="${CURDIR}/${GOPATH_DIR}:${GOPATH}" go build -o $@  ${GOPKG_PREFIX}/bin/${@F}
+	env GOPATH="${GOPATH}:${CURDIR}/${GOPATH_DIR}" go build -o $@  ${GOPKG_PREFIX}/bin/${@F}
 
 out/locale/%/LC_MESSAGES/dde-daemon.mo:data/po/%.po
 	mkdir -p $(@D)
