@@ -46,12 +46,9 @@ func main() {
 	flag.BoolVar(&argDebug, "d", false, "debug mode")
 	flag.BoolVar(&argDebug, "debug", false, "debug mode")
 	flag.Parse()
-
-	// TODO configure logger
-	logger.SetRestartCommand("/usr/lib/deepin-daemon/grub2ext", "--debug") // TODO: is still need?
 	if argDebug {
 		logger.Info("debug mode")
-		logger.SetLogLevel(log.LEVEL_DEBUG)
+		logger.SetLogLevel(log.LevelDebug)
 	}
 
 	ge := grub2.NewGrub2Ext()

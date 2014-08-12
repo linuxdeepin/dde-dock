@@ -51,9 +51,8 @@ func main() {
 	flag.StringVar(&argThemeDir, "theme-dir", "", "specify an alternative theme directory instead of /boot/grub/themes/deepin when setup grub")
 	flag.StringVar(&argGfxmode, "gfxmode", "", "specify gfxmode when setup grub")
 	flag.Parse()
-
 	if argDebug {
-		grub2.SetLogLevel(log.LEVEL_DEBUG)
+		grub2.SetLogLevel(log.LevelDebug)
 	}
 
 	// dispatch optional arguments

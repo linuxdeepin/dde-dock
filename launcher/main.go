@@ -21,7 +21,7 @@ func Start() {
 	flag.BoolVar(&isDebug, "d", false, "debug mode")
 	flag.Parse()
 	if isDebug {
-		logger.SetLogLevel(log.LEVEL_DEBUG)
+		logger.SetLogLevel(log.LevelDebug)
 	}
 
 	InitI18n()
