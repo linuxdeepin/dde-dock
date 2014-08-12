@@ -48,6 +48,13 @@ func (obj *Manager) updatePropAllowGuest(isAllow bool) {
 	}
 }
 
+func (m *Manager) updatePropGuestIcon(icon string) {
+	if m.GuestIcon != icon {
+		m.GuestIcon = icon
+		dbus.NotifyChange(m, "GuestIcon")
+	}
+}
+
 func (obj *Manager) updateUserInfo(path string) {
 	if len(path) < 1 {
 		return
