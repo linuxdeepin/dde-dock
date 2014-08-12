@@ -22,8 +22,8 @@
 package inputdevices
 
 import (
-	"pkg.linuxdeepin.com/lib/dbus/property"
 	"io/ioutil"
+	"pkg.linuxdeepin.com/lib/dbus/property"
 	"regexp"
 	"strings"
 )

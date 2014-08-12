@@ -322,25 +322,7 @@ func listenDevsSettings() {
 	})
 }
 
-func initGSettingsSet(tpadFlag bool) {
-	//logger.Info("Init devices start...")
-	// init keyyboard gsettings value
-	layout := kbdSettings.GetString(KBD_KEY_LAYOUT)
-	setLayout(layout)
-
-	blinkTime := kbdSettings.GetInt(KBD_CURSOR_BLINK_TIME)
-	xsObj.SetInterger("Net/CursorBlinkTime", uint32(blinkTime))
-	setQtCursorBlink(uint32(blinkTime))
-
-	enable := kbdSettings.GetBoolean(KBD_KEY_REPEAT_ENABLE)
-	delay := kbdSettings.GetUint(KBD_KEY_DELAY)
-	interval := kbdSettings.GetUint(KBD_KEY_REPEAT_INTERVAL)
-	if enable {
-		C.set_keyboard_repeat(C.int(1), C.uint(interval), C.uint(delay))
-	} else {
-		C.set_keyboard_repeat(C.int(0), C.uint(interval), C.uint(delay))
-	}
-
+func initMouseSettings() {
 	// init mouse gsettings value
 	if ok := mouseSettings.GetBoolean(MOUSE_KEY_LEFT_HAND); ok {
 		C.set_left_handed(C.TRUE)
@@ -365,7 +347,9 @@ func initGSettingsSet(tpadFlag bool) {
 
 	value = mouseSettings.GetInt(MOUSE_KEY_DRAG_THRES)
 	xsObj.SetInterger("Net/DndDragThreshold", uint32(value))
+}
 
+func initTPadSettings(tpadFlag bool) {
 	// init touchpad gsettings value
 	if !tpadFlag {
 		return
@@ -413,11 +397,39 @@ func initGSettingsSet(tpadFlag bool) {
 	}
 	C.set_two_finger_scroll(vert, horiz)
 
-	thres = int(tpadSettings.GetDouble(TPAD_KEY_THRES))
-	accel = tpadSettings.GetDouble(TPAD_KEY_ACCEL)
+	thres := int(tpadSettings.GetDouble(TPAD_KEY_THRES))
+	accel := tpadSettings.GetDouble(TPAD_KEY_ACCEL)
 	tpadName := C.CString("touchpad")
 	defer C.free(unsafe.Pointer(tpadName))
 	C.set_motion(tpadName, C.double(accel), C.int(thres))
+}
+
+func initKbdSettings() {
+	// init keyyboard gsettings value
+	layout := kbdSettings.GetString(KBD_KEY_LAYOUT)
+	setLayout(layout)
+
+	blinkTime := kbdSettings.GetInt(KBD_CURSOR_BLINK_TIME)
+	xsObj.SetInterger("Net/CursorBlinkTime", uint32(blinkTime))
+	setQtCursorBlink(uint32(blinkTime))
+
+	enable := kbdSettings.GetBoolean(KBD_KEY_REPEAT_ENABLE)
+	delay := kbdSettings.GetUint(KBD_KEY_DELAY)
+	interval := kbdSettings.GetUint(KBD_KEY_REPEAT_INTERVAL)
+	if enable {
+		C.set_keyboard_repeat(C.int(1), C.uint(interval), C.uint(delay))
+	} else {
+		C.set_keyboard_repeat(C.int(0), C.uint(interval), C.uint(delay))
+	}
+}
+
+func initGSettingsSet(tpadFlag bool) {
+	//logger.Info("Init devices start...")
+
+	initMouseSettings()
+	initTPadSettings(tpadFlag)
+	initKbdSettings()
+
 	//logger.Info("Init devices end...")
 }
 

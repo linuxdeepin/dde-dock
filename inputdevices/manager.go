@@ -85,6 +85,7 @@ func parseDeviceAdd(devName *C.char) {
 			managerObj.mouseObj = mouse
 			managerObj.setPropName("Infos")
 		}
+		initMouseSettings()
 		disableTPadWhenMouse()
 	} else if strings.Contains(s, "touchpad") {
 		if managerObj.tpadObj == nil {
@@ -95,6 +96,7 @@ func parseDeviceAdd(devName *C.char) {
 			managerObj.tpadObj = tpad
 			managerObj.setPropName("Infos")
 		}
+		initTPadSettings(true)
 	} else if strings.Contains(s, "keyboard") {
 		if managerObj.kbdObj == nil {
 			kbd := NewKeyboard()
@@ -105,6 +107,7 @@ func parseDeviceAdd(devName *C.char) {
 			managerObj.kbdObj = kbd
 			managerObj.setPropName("Infos")
 		}
+		initKbdSettings()
 	}
 }
 
