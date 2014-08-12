@@ -25,6 +25,7 @@ import (
 	"pkg.linuxdeepin.com/lib/dbus"
 	. "pkg.linuxdeepin.com/lib/gettext"
 	dutils "pkg.linuxdeepin.com/lib/utils"
+	"strings"
 )
 
 func (obj *Manager) CreateGuestAccount() string {
@@ -131,6 +132,10 @@ func (obj *Manager) DeleteUser(dbusMsg dbus.DMessage, name string, removeFiles b
 		return false
 	}
 
+	if removeFiles {
+		obj.rmAllIconFileByName(name)
+	}
+
 	return true
 }
 
@@ -189,4 +194,22 @@ func (m *Manager) IsUsernameValid(username string) (bool, string) {
 
 func (m *Manager) IsPasswordValid(passwd string) bool {
 	return isPasswordValid(passwd)
+}
+
+func (m *Manager) rmAllIconFileByName(username string) {
+	if len(username) < 1 {
+		return
+	}
+
+	list := []string{}
+	localList := getIconList(ICON_LOCAL_DIR)
+	for _, l := range localList {
+		if strings.Contains(l, username+"-") {
+			list = append(list, l)
+		}
+	}
+
+	for _, v := range list {
+		rmAllFile(v)
+	}
 }
