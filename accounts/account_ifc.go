@@ -93,7 +93,7 @@ func (obj *Manager) CreateUser(dbusMsg dbus.DMessage, name, fullname string, acc
 
 	info, _ := getUserInfoByName(name)
 	if u, ok := obj.pathUserMap[info.Path]; ok {
-		u.setPropAccountType(accountTyte)
+		u.setAccountType(accountTyte)
 	}
 
 	changeFileOwner(name, name, "/home/"+name)

@@ -243,18 +243,18 @@ func getDefaultDisplayManager() string {
 	return path.Base(tmp)
 }
 
-func (user *User) updateProps() {
+func (user *User) setProps() {
 	info, _ := getUserInfoByPath(user.objectPath)
-	user.updatePropUserName(info.Name)
-	user.updatePropHomeDir(info.Home)
-	user.updatePropShell(info.Shell)
-	user.updatePropLocked(info.Locked)
-	user.updatePropAutomaticLogin(user.getPropAutomaticLogin())
-	user.updatePropAccountType(user.getPropAccountType())
-	user.updatePropIconList(user.getPropIconList())
-	user.updatePropIconFile(user.getPropIconFile())
-	user.updatePropBackgroundFile(user.getPropBackgroundFile())
-	user.updatePropHistoryIcons(user.getPropHistoryIcons())
+	user.setPropUserName(info.Name)
+	user.setPropHomeDir(info.Home)
+	user.setPropShell(info.Shell)
+	user.setPropLocked(info.Locked)
+	user.setPropAutomaticLogin(user.getPropAutomaticLogin())
+	user.setPropAccountType(user.getPropAccountType())
+	user.setPropIconList(user.getPropIconList())
+	user.setPropIconFile(user.getPropIconFile())
+	user.setPropBackgroundFile(user.getPropBackgroundFile())
+	user.setPropHistoryIcons(user.getPropHistoryIcons())
 }
 
 func newUser(path string) *User {

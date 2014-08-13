@@ -44,7 +44,7 @@ func (obj *User) SetUserName(dbusMsg dbus.DMessage, username string) bool {
 	}
 
 	if obj.UserName != username {
-		obj.setPropUserName(username)
+		obj.setUserName(username)
 	}
 
 	return true
@@ -65,7 +65,7 @@ func (obj *User) SetHomeDir(dbusMsg dbus.DMessage, dir string) bool {
 	}
 
 	if obj.HomeDir != dir {
-		obj.setPropHomeDir(dir)
+		obj.setHomeDir(dir)
 	}
 
 	return true
@@ -86,7 +86,7 @@ func (obj *User) SetShell(dbusMsg dbus.DMessage, shell string) bool {
 	}
 
 	if obj.Shell != shell {
-		obj.setPropShell(shell)
+		obj.setShell(shell)
 	}
 
 	return true
@@ -109,7 +109,7 @@ func (obj *User) SetPassword(dbusMsg dbus.DMessage, words string) bool {
 	passwd := encodePasswd(words)
 	changePasswd(obj.UserName, passwd)
 
-	obj.setPropLocked(false)
+	obj.setLocked(false)
 
 	return true
 }
@@ -129,7 +129,7 @@ func (obj *User) SetAutomaticLogin(dbusMsg dbus.DMessage, auto bool) bool {
 	}
 
 	if obj.AutomaticLogin != auto {
-		obj.setPropAutomaticLogin(auto)
+		obj.setAutomaticLogin(auto)
 	}
 
 	return true
@@ -150,7 +150,7 @@ func (obj *User) SetAccountType(dbusMsg dbus.DMessage, t int32) bool {
 	}
 
 	if obj.AccountType != t {
-		obj.setPropAccountType(t)
+		obj.setAccountType(t)
 	}
 
 	return true
@@ -171,7 +171,7 @@ func (obj *User) SetLocked(dbusMsg dbus.DMessage, locked bool) bool {
 	}
 
 	if obj.Locked != locked {
-		obj.setPropLocked(locked)
+		obj.setLocked(locked)
 	}
 
 	return true
@@ -208,7 +208,7 @@ func (obj *User) SetIconFile(dbusMsg dbus.DMessage, icon string) bool {
 		}
 		icon = dest
 	}
-	obj.setPropIconFile(icon)
+	obj.setIconFile(icon)
 
 	return true
 }
@@ -228,7 +228,7 @@ func (obj *User) SetBackgroundFile(dbusMsg dbus.DMessage, bg string) bool {
 	}
 
 	if obj.BackgroundFile != bg {
-		obj.setPropBackgroundFile(bg)
+		obj.setBackgroundFile(bg)
 	}
 
 	return true

@@ -36,7 +36,7 @@ func (obj *User) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (obj *User) updatePropUserName(name string) {
+func (obj *User) setPropUserName(name string) {
 	if len(name) < 1 {
 		return
 	}
@@ -47,7 +47,7 @@ func (obj *User) updatePropUserName(name string) {
 	}
 }
 
-func (obj *User) updatePropHomeDir(homeDir string) {
+func (obj *User) setPropHomeDir(homeDir string) {
 	if len(homeDir) < 1 {
 		return
 	}
@@ -58,7 +58,7 @@ func (obj *User) updatePropHomeDir(homeDir string) {
 	}
 }
 
-func (obj *User) updatePropShell(shell string) {
+func (obj *User) setPropShell(shell string) {
 	if len(shell) < 1 {
 		return
 	}
@@ -69,7 +69,7 @@ func (obj *User) updatePropShell(shell string) {
 	}
 }
 
-func (obj *User) updatePropIconFile(icon string) {
+func (obj *User) setPropIconFile(icon string) {
 	if len(icon) < 1 {
 		return
 	}
@@ -80,7 +80,7 @@ func (obj *User) updatePropIconFile(icon string) {
 	}
 }
 
-func (obj *User) updatePropBackgroundFile(bg string) {
+func (obj *User) setPropBackgroundFile(bg string) {
 	if len(bg) < 1 {
 		return
 	}
@@ -91,35 +91,35 @@ func (obj *User) updatePropBackgroundFile(bg string) {
 	}
 }
 
-func (obj *User) updatePropAutomaticLogin(enable bool) {
+func (obj *User) setPropAutomaticLogin(enable bool) {
 	//if obj.AutomaticLogin != enable {
 	obj.AutomaticLogin = enable
 	dbus.NotifyChange(obj, "AutomaticLogin")
 	//}
 }
 
-func (obj *User) updatePropAccountType(acctype int32) {
+func (obj *User) setPropAccountType(acctype int32) {
 	//if obj.AccountType != acctype {
 	obj.AccountType = acctype
 	dbus.NotifyChange(obj, "AccountType")
 	//}
 }
 
-func (obj *User) updatePropLocked(locked bool) {
+func (obj *User) setPropLocked(locked bool) {
 	//if obj.Locked != locked {
 	obj.Locked = locked
 	dbus.NotifyChange(obj, "Locked")
 	//}
 }
 
-func (obj *User) updatePropHistoryIcons(iconList []string) {
+func (obj *User) setPropHistoryIcons(iconList []string) {
 	if !isStrListEqual(obj.HistoryIcons, iconList) {
 		obj.HistoryIcons = iconList
 		dbus.NotifyChange(obj, "HistoryIcons")
 	}
 }
 
-func (obj *User) updatePropIconList(iconList []string) {
+func (obj *User) setPropIconList(iconList []string) {
 	if !isStrListEqual(obj.IconList, iconList) {
 		obj.IconList = iconList
 		dbus.NotifyChange(obj, "IconList")
@@ -279,7 +279,7 @@ func (obj *User) deleteHistoryIcon(iconPath string) {
 	return
 }
 
-func (obj *User) setPropUserName(name string) {
+func (obj *User) setUserName(name string) {
 	if len(name) < 1 {
 		return
 	}
@@ -291,7 +291,7 @@ func (obj *User) setPropUserName(name string) {
 	execCommand(CMD_USERMOD, args)
 }
 
-func (obj *User) setPropHomeDir(homeDir string) {
+func (obj *User) setHomeDir(homeDir string) {
 	if len(homeDir) < 1 {
 		return
 	}
@@ -304,7 +304,7 @@ func (obj *User) setPropHomeDir(homeDir string) {
 	execCommand(CMD_USERMOD, args)
 }
 
-func (obj *User) setPropShell(shell string) {
+func (obj *User) setShell(shell string) {
 	if len(shell) < 1 {
 		return
 	}
@@ -316,7 +316,7 @@ func (obj *User) setPropShell(shell string) {
 	execCommand(CMD_USERMOD, args)
 }
 
-func (obj *User) setPropIconFile(icon string) {
+func (obj *User) setIconFile(icon string) {
 	if len(icon) < 1 {
 		return
 	}
@@ -326,7 +326,7 @@ func (obj *User) setPropIconFile(icon string) {
 	obj.addHistoryIcon(icon)
 }
 
-func (obj *User) setPropBackgroundFile(bg string) {
+func (obj *User) setBackgroundFile(bg string) {
 	if len(bg) < 1 {
 		return
 	}
@@ -335,7 +335,7 @@ func (obj *User) setPropBackgroundFile(bg string) {
 	dutils.WriteKeyToKeyFile(file, "User", "Background", bg)
 }
 
-func (obj *User) setPropAutomaticLogin(auto bool) {
+func (obj *User) setAutomaticLogin(auto bool) {
 	if auto {
 		setAutomaticLogin(obj.UserName)
 	} else {
@@ -343,7 +343,7 @@ func (obj *User) setPropAutomaticLogin(auto bool) {
 	}
 }
 
-func (obj *User) setPropAccountType(acctype int32) {
+func (obj *User) setAccountType(acctype int32) {
 	t := obj.getPropAccountType()
 	switch acctype {
 	case ACCOUNT_TYPE_ADMINISTACTOR:
@@ -357,7 +357,7 @@ func (obj *User) setPropAccountType(acctype int32) {
 	}
 }
 
-func (obj *User) setPropLocked(locked bool) {
+func (obj *User) setLocked(locked bool) {
 	args := []string{}
 
 	if locked {

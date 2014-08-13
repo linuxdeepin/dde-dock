@@ -130,7 +130,7 @@ func (obj *Manager) handleUserListChanged() {
 
 			ok1, _ := regexp.MatchString(ACCOUNT_CONFIG_FILE, ev.Name)
 			if ok1 {
-				obj.updatePropAllowGuest(isAllowGuest())
+				obj.setPropAllowGuest(isAllowGuest())
 				break
 			}
 			if !_handleFlag {
@@ -140,13 +140,13 @@ func (obj *Manager) handleUserListChanged() {
 				list, ret := compareStrList(obj.UserList, getUserList())
 				switch ret {
 				case 1:
-					obj.updatePropUserList(getUserList())
+					obj.setPropUserList(getUserList())
 					obj.updateAllUserInfo()
 					for _, v := range list {
 						obj.UserAdded(v)
 					}
 				case -1:
-					obj.updatePropUserList(getUserList())
+					obj.setPropUserList(getUserList())
 					obj.updateAllUserInfo()
 					for _, v := range list {
 						obj.UserDeleted(v)
@@ -193,7 +193,7 @@ func (obj *Manager) handleUserInfoChanged() {
 			ok4, _ := regexp.MatchString(ICON_LOCAL_DIR, ev.Name)
 			if ok3 || ok4 {
 				for _, u := range obj.pathUserMap {
-					u.updatePropIconList(u.getPropIconList())
+					u.setPropIconList(u.getPropIconList())
 				}
 			}
 
@@ -206,7 +206,7 @@ func (obj *Manager) handleUserInfoChanged() {
 			ok1, _ := regexp.MatchString(ETC_GROUP, ev.Name)
 			if ok1 {
 				for _, u := range obj.pathUserMap {
-					u.updatePropAccountType(u.getPropAccountType())
+					u.setPropAccountType(u.getPropAccountType())
 				}
 				break
 			}
@@ -219,7 +219,7 @@ func (obj *Manager) handleUserInfoChanged() {
 					if !ok {
 						continue
 					}
-					u.updatePropLocked(info.Locked)
+					u.setPropLocked(info.Locked)
 				}
 				break
 			}
@@ -229,7 +229,7 @@ func (obj *Manager) handleUserInfoChanged() {
 			ok7, _ := regexp.MatchString(ETC_KDM_CONFIG, ev.Name)
 			if ok5 || ok6 || ok7 {
 				for _, u := range obj.pathUserMap {
-					u.updatePropAutomaticLogin(u.getPropAutomaticLogin())
+					u.setPropAutomaticLogin(u.getPropAutomaticLogin())
 				}
 				break
 			}
@@ -293,10 +293,10 @@ func (obj *User) handUserConfigChanged() {
 				break
 			}
 
-			obj.updatePropIconList(obj.getPropIconList())
-			obj.updatePropIconFile(obj.getPropIconFile())
-			obj.updatePropBackgroundFile(obj.getPropBackgroundFile())
-			obj.updatePropHistoryIcons(obj.getPropHistoryIcons())
+			obj.setPropIconList(obj.getPropIconList())
+			obj.setPropIconFile(obj.getPropIconFile())
+			obj.setPropBackgroundFile(obj.getPropBackgroundFile())
+			obj.setPropHistoryIcons(obj.getPropHistoryIcons())
 		case err, ok := <-obj.watcher.Error:
 			if !ok || err != nil {
 				if obj.watcher != nil {

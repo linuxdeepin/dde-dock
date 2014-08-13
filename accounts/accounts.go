@@ -71,9 +71,9 @@ func newManager() *Manager {
 	obj.listQuit = make(chan bool)
 	obj.infoQuit = make(chan bool)
 	obj.pathUserMap = make(map[string]*User)
-	obj.updatePropUserList(getUserList())
-	obj.updatePropAllowGuest(isAllowGuest())
-	obj.updatePropGuestIcon(GUEST_USER_ICON)
+	obj.setPropUserList(getUserList())
+	obj.setPropAllowGuest(isAllowGuest())
+	obj.setPropGuestIcon(GUEST_USER_ICON)
 
 	obj.watchUserListFile()
 	obj.watchUserInfoFile()

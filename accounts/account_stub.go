@@ -34,21 +34,21 @@ func (obj *Manager) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (obj *Manager) updatePropUserList(list []string) {
+func (obj *Manager) setPropUserList(list []string) {
 	if !isStrListEqual(obj.UserList, list) {
 		obj.UserList = list
 		dbus.NotifyChange(obj, "UserList")
 	}
 }
 
-func (obj *Manager) updatePropAllowGuest(isAllow bool) {
+func (obj *Manager) setPropAllowGuest(isAllow bool) {
 	if obj.AllowGuest != isAllow {
 		obj.AllowGuest = isAllow
 		dbus.NotifyChange(obj, "AllowGuest")
 	}
 }
 
-func (m *Manager) updatePropGuestIcon(icon string) {
+func (m *Manager) setPropGuestIcon(icon string) {
 	if m.GuestIcon != icon {
 		m.GuestIcon = icon
 		dbus.NotifyChange(m, "GuestIcon")
@@ -68,7 +68,7 @@ func (obj *Manager) updateUserInfo(path string) {
 		logger.Errorf("Install DBus For %s Failed: %v", path, err)
 		panic(err)
 	}
-	u.updateProps()
+	u.setProps()
 
 	obj.pathUserMap[path] = u
 }
