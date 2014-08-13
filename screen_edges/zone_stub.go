@@ -52,6 +52,10 @@ func (op *Manager) listenSignal() {
 			return
 		}
 
+		if isAppInBlackList() {
+			return
+		}
+
 		if pid, ok := isActiveWindowFullscreen(); ok {
 			if !isAppInWhiteList(pid) {
 				return

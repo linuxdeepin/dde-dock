@@ -55,6 +55,38 @@ func isAppInWhiteList(pid uint32) bool {
 	return false
 }
 
+func isAppInBlackList() bool {
+	X := getXUtil()
+	if X == nil {
+		return false
+	}
+
+	xid := getActiveWindow(X)
+	name := getWindowName(X, xid)
+
+	blackList := zoneSettings.GetStrv("black-list")
+	if strIsInInList(name, blackList) {
+		return true
+	}
+
+	return false
+}
+
+var _X *xgbutil.XUtil
+
+func getXUtil() *xgbutil.XUtil {
+	if _X == nil {
+		if X, err := xgbutil.NewConn(); err != nil {
+			logger.Warning("New xgbutil failed:", err)
+			return nil
+		} else {
+			_X = X
+		}
+	}
+
+	return _X
+}
+
 func getActiveWindow(X *xgbutil.XUtil) uint32 {
 	xid, err := ewmh.ActiveWindowGet(X)
 	if err != nil {
@@ -74,6 +106,16 @@ func getWindowState(X *xgbutil.XUtil, xid uint32) []string {
 	return list
 }
 
+func getWindowName(X *xgbutil.XUtil, xid uint32) string {
+	name, err := ewmh.WmNameGet(X, xproto.Window(xid))
+	if err != nil {
+		logger.Warning("Get window name failed:", err)
+		return ""
+	}
+
+	return name
+}
+
 func getWindowPid(X *xgbutil.XUtil, xid uint32) uint32 {
 	pid, err := ewmh.WmPidGet(X, xproto.Window(xid))
 	if err != nil {
@@ -84,9 +126,8 @@ func getWindowPid(X *xgbutil.XUtil, xid uint32) uint32 {
 }
 
 func isActiveWindowFullscreen() (uint32, bool) {
-	X, err := xgbutil.NewConn()
-	if err != nil {
-		logger.Warning("New xgbutil failed:", err)
+	X := getXUtil()
+	if X == nil {
 		return 0, false
 	}
 
