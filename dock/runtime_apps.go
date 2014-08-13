@@ -62,21 +62,21 @@ type RuntimeApp struct {
 	changedCB func()
 }
 
-func (app *RuntimeApp) createDesktopAppInfo() *gio.DesktopAppInfo {
-	core := gio.NewDesktopAppInfo(app.Id)
+func (app *RuntimeApp) createDesktopAppInfo() *DesktopAppInfo {
+	core := NewDesktopAppInfo(app.Id)
 
 	if core != nil {
 		return core
 	}
 
 	if newId := guess_desktop_id(app.Id + ".desktop"); newId != "" {
-		core = gio.NewDesktopAppInfo(newId)
+		core = NewDesktopAppInfo(newId)
 		if core != nil {
 			return core
 		}
 	}
 
-	return gio.NewDesktopAppInfoFromFilename(app.path)
+	return NewDesktopAppInfoFromFilename(app.path)
 }
 
 func NewRuntimeApp(xid xproto.Window, appId string) *RuntimeApp {
@@ -87,10 +87,10 @@ func NewRuntimeApp(xid xproto.Window, appId string) *RuntimeApp {
 		Id:   strings.ToLower(appId),
 		xids: make(map[xproto.Window]*WindowInfo),
 	}
-	core := gio.NewDesktopAppInfo(appId + ".desktop")
+	core := NewDesktopAppInfo(appId + ".desktop")
 	if core == nil {
 		if newId := guess_desktop_id(appId + ".desktop"); newId != "" {
-			core = gio.NewDesktopAppInfo(newId)
+			core = NewDesktopAppInfo(newId)
 		}
 	}
 	if core != nil {
@@ -125,7 +125,7 @@ func (app *RuntimeApp) getExec(xid xproto.Window) {
 		logger.Debug(app.Id, " Get Exec from desktop file")
 		// should NOT use GetExecuable, get wrong result, like skype
 		// which gets 'env'.
-		app.exec = core.GetString(glib.KeyFileDesktopKeyExec)
+		app.exec = core.DesktopAppInfo.GetString(glib.KeyFileDesktopKeyExec)
 		core.Unref()
 		return
 	}
@@ -180,7 +180,7 @@ func actionGenarator(id string) func() {
 			defer core.Unref()
 			title = core.GetDisplayName()
 			icon = get_theme_icon(core.GetIcon().ToString(), 48)
-			exec = core.GetString(glib.KeyFileDesktopKeyExec)
+			exec = core.DesktopAppInfo.GetString(glib.KeyFileDesktopKeyExec)
 		}
 
 		logger.Info("id", app.Id, "title", title, "icon", icon,
@@ -213,7 +213,7 @@ func (app *RuntimeApp) buildMenu() {
 			core := app.createDesktopAppInfo()
 			if core != nil {
 				logger.Info("DesktopAppInfo")
-				a = (*gio.AppInfo)(core)
+				a = (*gio.AppInfo)(core.DesktopAppInfo)
 				defer core.Unref()
 			} else {
 				logger.Info("Non-DesktopAppInfo", app.exec)
@@ -512,7 +512,7 @@ func (app *RuntimeApp) updateIcon(xid xproto.Window) {
 	core := app.createDesktopAppInfo()
 	if core != nil {
 		defer core.Unref()
-		icon := getAppIcon(core)
+		icon := getAppIcon(core.DesktopAppInfo)
 		if icon != "" {
 			app.xids[xid].Icon = icon
 			return

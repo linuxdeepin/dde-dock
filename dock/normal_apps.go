@@ -26,15 +26,15 @@ func NewNormalApp(id string) *NormalApp {
 	basename := strings.ToLower(filepath.Base(id[:len(id)-8]))
 	app := &NormalApp{Id: strings.Replace(basename, "_", "-", -1)}
 	logger.Debug("NewNormalApp:", id)
-	var core *gio.DesktopAppInfo
+	var core *DesktopAppInfo
 	if filepath.IsAbs(id) {
-		core = gio.NewDesktopAppInfoFromFilename(id)
+		core = NewDesktopAppInfoFromFilename(id)
 	} else {
-		core = gio.NewDesktopAppInfo(id)
+		core = NewDesktopAppInfo(id)
 		if core == nil {
 			logger.Info("guess desktop")
 			if newId := guess_desktop_id(app.Id + ".desktop"); newId != "" {
-				core = gio.NewDesktopAppInfo(newId)
+				core = NewDesktopAppInfo(newId)
 			}
 		}
 	}
@@ -43,7 +43,7 @@ func NewNormalApp(id string) *NormalApp {
 	}
 	defer core.Unref()
 	app.path = core.GetFilename()
-	app.Icon = getAppIcon(core)
+	app.Icon = getAppIcon(core.DesktopAppInfo)
 	logger.Debug("app icon:", app.Icon)
 	app.Name = core.GetDisplayName()
 	logger.Debug("Name", app.Name)
@@ -51,21 +51,21 @@ func NewNormalApp(id string) *NormalApp {
 	return app
 }
 
-func (app *NormalApp) createDesktopAppInfo() *gio.DesktopAppInfo {
-	core := gio.NewDesktopAppInfo(app.Id)
+func (app *NormalApp) createDesktopAppInfo() *DesktopAppInfo {
+	core := NewDesktopAppInfo(app.Id)
 
 	if core != nil {
 		return core
 	}
 
 	if newId := guess_desktop_id(app.Id + ".desktop"); newId != "" {
-		core = gio.NewDesktopAppInfo(newId)
+		core = NewDesktopAppInfo(newId)
 		if core != nil {
 			return core
 		}
 	}
 
-	return gio.NewDesktopAppInfoFromFilename(app.path)
+	return NewDesktopAppInfoFromFilename(app.path)
 }
 
 func (app *NormalApp) buildMenu() {
@@ -128,7 +128,7 @@ func (app *NormalApp) HandleMenuItem(id string) {
 
 func NewNormalAppFromFilename(name string) *NormalApp {
 	app := &NormalApp{}
-	core := gio.NewDesktopAppInfoFromFilename(name)
+	core := NewDesktopAppInfoFromFilename(name)
 	if core == nil {
 		return nil
 	}

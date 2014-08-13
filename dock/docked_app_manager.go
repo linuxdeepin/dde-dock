@@ -75,7 +75,7 @@ func (m *DockedAppManager) init() {
 		return
 	}
 	for _, id := range ids {
-		if a := gio.NewDesktopAppInfo(id + ".desktop"); a != nil {
+		if a := NewDesktopAppInfo(id + ".desktop"); a != nil {
 			a.Unref()
 			continue
 		}
@@ -149,7 +149,7 @@ func (m *DockedAppManager) Dock(id, title, icon, cmd string) bool {
 	logger.Info("id", id, "title", title, "cmd", cmd)
 	m.items.PushBack(id)
 	if guess_desktop_id(id) == "" {
-		// if app := gio.NewDesktopAppInfo(id + ".desktop"); app != nil {
+		// if app := NewDesktopAppInfo(id + ".desktop"); app != nil {
 		// 	app.Unref()
 		// } else {
 		if e := createScratchFile(id, title, icon, cmd); e != nil {
