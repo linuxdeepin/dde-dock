@@ -22,19 +22,17 @@
 package screen_edges
 
 import (
+	"fmt"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/ewmh"
 	"io/ioutil"
-	"path"
 	dutils "pkg.linuxdeepin.com/lib/utils"
-	"strconv"
 	"strings"
 )
 
 func isAppInWhiteList(pid uint32) bool {
-	pidStr := strconv.FormatUint(uint64(pid), 10)
-	filename := path.Join("/proc", pidStr, "cmdline")
+	filename := fmt.Sprintf("/proc/%v/cmdline", pid)
 	if !dutils.IsFileExist(filename) {
 		return false
 	}
@@ -62,11 +60,24 @@ func isAppInBlackList() bool {
 	}
 
 	xid := getActiveWindow(X)
-	name := getWindowName(X, xid)
+	pid := getWindowPid(X, xid)
+
+	filename := fmt.Sprintf("/proc/%v/cmdline", pid)
+	if !dutils.IsFileExist(filename) {
+		return false
+	}
+
+	contents, err := ioutil.ReadFile(filename)
+	if err != nil {
+		logger.Warningf("ReadFile '%s' failed: %v", filename, err)
+		return false
+	}
 
 	blackList := zoneSettings.GetStrv("black-list")
-	if strIsInInList(name, blackList) {
-		return true
+	for _, target := range blackList {
+		if strings.Contains(string(contents), target) {
+			return true
+		}
 	}
 
 	return false
