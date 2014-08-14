@@ -31,6 +31,18 @@ const (
 	dbusNotifyPath = "/org/freedesktop/Notifications"
 )
 
+const (
+	notifyIconNetworkConnected     = "network-transmit-receive"
+	notifyIconNetworkDisconnected  = "network-error"
+	notifyIconNetworkOffline       = "network-offline"
+	notifyIconEthernetConnected    = "notification-network-ethernet-connected"
+	notifyIconEthernetDisconnected = "notification-network-ethernet-disconnected"
+	notifyIconWirelessConnected    = "notification-network-wireless-full"
+	notifyIconWirelessDisconnected = "notification-network-wireless-disconnected"
+	notifyIconVpnConnected         = "notification-network-vpn-connected"
+	notifyIconVpnDisconnected      = "notification-network-vpn-disconnected"
+)
+
 var notifier, _ = notifications.NewNotifier(dbusNotifyDest, dbusNotifyPath)
 
 func notify(icon, summary, body string) (err error) {

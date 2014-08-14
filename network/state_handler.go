@@ -26,18 +26,6 @@ import "sync"
 import . "pkg.linuxdeepin.com/lib/gettext"
 import nm "dbus/org/freedesktop/networkmanager"
 
-const (
-	notifyIconNetworkConnected     = "network-transmit-receive"
-	notifyIconNetworkDisconnected  = "network-error"
-	notifyIconNetworkOffline       = "network-offline"
-	notifyIconEthernetConnected    = "notification-network-ethernet-connected"
-	notifyIconEthernetDisconnected = "notification-network-ethernet-disconnected"
-	notifyIconWirelessConnected    = "notification-network-wireless-full"
-	notifyIconWirelessDisconnected = "notification-network-wireless-disconnected"
-	notifyIconVpnConnected         = "notification-network-vpn-connected"
-	notifyIconVpnDisconnected      = "notification-network-vpn-disconnected"
-)
-
 var vpnErrorTable = make(map[uint32]string)
 var deviceErrorTable = make(map[uint32]string)
 
@@ -165,21 +153,23 @@ func newStateNotifier() (sn *stateNotifier) {
 					}
 				case NM_DEVICE_STATE_FAILED, NM_DEVICE_STATE_DISCONNECTED,
 					NM_DEVICE_STATE_UNMANAGED, NM_DEVICE_STATE_UNAVAILABLE:
-					var icon, msg string
-					switch dev.DeviceType.Get() {
-					case NM_DEVICE_TYPE_ETHERNET:
-						icon = notifyIconEthernetDisconnected
-					case NM_DEVICE_TYPE_WIFI:
-						icon = notifyIconWirelessDisconnected
-					default:
-						icon = notifyIconWirelessDisconnected
+					if isDeviceStateInActivating(oldState) {
+						var icon, msg string
+						switch dev.DeviceType.Get() {
+						case NM_DEVICE_TYPE_ETHERNET:
+							icon = notifyIconEthernetDisconnected
+						case NM_DEVICE_TYPE_WIFI:
+							icon = notifyIconWirelessDisconnected
+						default:
+							icon = notifyIconNetworkDisconnected
+						}
+						if newState == NM_DEVICE_STATE_DISCONNECTED {
+							msg = sn.devices[path].aconnId
+						} else {
+							msg = deviceErrorTable[reason]
+						}
+						notify(icon, Tr("Disconnected"), msg)
 					}
-					if newState == NM_DEVICE_STATE_DISCONNECTED {
-						msg = sn.devices[path].aconnId
-					} else {
-						msg = deviceErrorTable[reason]
-					}
-					notify(icon, Tr("Disconnected"), msg)
 				}
 			})
 		}
