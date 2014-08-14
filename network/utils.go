@@ -22,17 +22,9 @@
 package network
 
 import (
-	"dbus/org/freedesktop/notifications"
 	"encoding/json"
 	"pkg.linuxdeepin.com/lib/utils"
 )
-
-const (
-	dbusNotifyDest = "org.freedesktop.Notifications"
-	dbusNotifyPath = "/org/freedesktop/Notifications"
-)
-
-var notifier, _ = notifications.NewNotifier(dbusNotifyDest, dbusNotifyPath)
 
 func isStringInArray(s string, list []string) bool {
 	for _, i := range list {
@@ -131,18 +123,5 @@ func byteArrayToStrPath(bytePath []byte) (path string) {
 		return
 	}
 	path = string(bytePath[:len(bytePath)-1])
-	return
-}
-
-func notify(icon, summary, body string) (err error) {
-	if notifier == nil {
-		logger.Error("connect to org.freedesktop.Notifications failed")
-		return
-	}
-	_, err = notifier.Notify("Network", 0, icon, summary, body, nil, nil, 0)
-	if err != nil {
-		logger.Error(err)
-		return
-	}
 	return
 }

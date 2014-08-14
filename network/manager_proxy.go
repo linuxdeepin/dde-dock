@@ -30,7 +30,8 @@ import "regexp"
 // http_proxy="http://127.0.0.1:0/"
 // https_proxy="https://127.0.0.1:0/"
 // ftp_proxy="ftp://127.0.0.1:0/"
-// socks_proxy="socks://127.0.0.1:0/"
+// SOCKS_SERVER=socks://127.0.0.1:8000/
+// no_proxy="localhost,127.0.0.1"
 
 const (
 	proxyAuto  = "auto"
@@ -73,6 +74,13 @@ func (m *Manager) SetProxyMethod(proxyMethod string) (err error) {
 	ok := proxySettings.SetString(gkeyProxyMethod, proxyMethod)
 	if !ok {
 		err = fmt.Errorf("set proxy method through gsettings failed")
+		return
+	}
+	switch proxyMethod {
+	case proxyMethodNone:
+		notifyProxyDisabled()
+	default:
+		notifyProxyEnabled()
 	}
 	return
 }
@@ -80,7 +88,7 @@ func checkProxyMethod(proxyMethod string) (err error) {
 	switch proxyMethod {
 	case proxyMethodNone, proxyMethodManual, proxyMethodAuto:
 	default:
-		err = fmt.Errorf("invalid proxy method", proxyMethod)
+		err = fmt.Errorf("invalid proxy method %s", proxyMethod)
 		logger.Error(err)
 	}
 	return
@@ -94,7 +102,7 @@ func (m *Manager) SetAutoProxy(proxyAuto string) (err error) {
 	logger.Info("SetAutoProxy", proxyAuto)
 	ok := proxySettings.SetString(gkeyAutoProxy, proxyAuto)
 	if !ok {
-		err = fmt.Errorf("set automatic proxy through gsettings failed", proxyAuto)
+		err = fmt.Errorf("set automatic proxy through gsettings failed %s", proxyAuto)
 	}
 	return
 }

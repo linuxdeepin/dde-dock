@@ -221,22 +221,3 @@ func destroyStateNotifier(n *stateNotifier) {
 	}
 	n.devices = nil
 }
-
-func notifyVpnConnected(id string) {
-	icon := notifyIconVpnConnected
-	notify(icon, Tr("Connected"), id)
-}
-func notifyVpnDisconnected(id string) {
-	icon := notifyIconVpnDisconnected
-	notify(icon, Tr("Disconnected"), id)
-}
-func notifyVpnFailed(id string, reason uint32) {
-	icon := notifyIconVpnDisconnected
-	msg := vpnErrorTable[reason]
-	notify(icon, Tr("Disconnected"), msg)
-}
-
-func notifyApModeNotSupport() {
-	icon := notifyIconWirelessDisconnected
-	notify(icon, Tr("Disconnected"), Tr("Access Point mode is not supported by this device."))
-}
