@@ -28,7 +28,7 @@ func newFullScreenWorkaround() *fullScreenWorkaround {
 	XU, _ := xgbutil.NewConn()
 	ACTIVE_WINDOW, _ := xprop.Atm(XU, "_NET_ACTIVE_WINDOW")
 	w := &fullScreenWorkaround{
-		XU, []string{"libflash", "chrome", "mplayer", "operaplugin", "soffice", "wpp", "evince", "vlc", "totem", "banshee", "bangarang"}, ACTIVE_WINDOW, false,
+		XU, []string{"libflash", "chrome", "mplayer", "operaplugin", "soffice", "wpp", "evince", "vlc", "totem"}, ACTIVE_WINDOW, false,
 	}
 	return w
 }
