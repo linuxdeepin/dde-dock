@@ -74,6 +74,7 @@ func (m *TrayManager) addTrayIcon(xid xproto.Window) {
 	if m.Added != nil {
 		m.Added(uint32(xid))
 	}
+	logger.Infof("Added try icon: \"%s\"", name)
 }
 func (m *TrayManager) removeTrayIcon(xid xproto.Window) {
 	delete(m.dmageInfo, xid)
@@ -128,6 +129,35 @@ func findRGBAVisualID() xproto.Visualid {
 	return TrayXU.Screen().RootVisual
 }
 
+func (m *TrayManager) destroyOwnerWindow() {
+	if m.owner != 0 {
+		xproto.DestroyWindow(TrayXU.Conn(), m.owner)
+	}
+	m.owner = 0
+}
+func (m *TrayManager) Manage() bool {
+	m.destroyOwnerWindow()
+
+	win, _ := xwindow.Generate(TrayXU)
+	m.owner = win.Id
+
+	xproto.CreateWindowChecked(TrayXU.Conn(), 0, m.owner, TrayXU.RootWin(), 0, 0, 1, 1, 0, xproto.WindowClassInputOnly, m.visual, 0, nil)
+	TrayXU.Sync()
+	win.Listen(xproto.EventMaskStructureNotify)
+	return m.tryOwner()
+}
+
+func (m *TrayManager) RetryManager() {
+	m.Unmanage()
+	m.Manage()
+
+	if m.Added != nil {
+		for _, icon := range m.TrayIcons {
+			m.Added(icon)
+		}
+	}
+}
+
 func initTrayManager() {
 	composite.Init(TrayXU.Conn())
 	composite.QueryVersion(TrayXU.Conn(), 0, 4)
@@ -137,22 +167,26 @@ func initTrayManager() {
 	xfixes.QueryVersion(TrayXU.Conn(), 5, 0)
 
 	visualId := findRGBAVisualID()
-	win, _ := xwindow.Generate(TrayXU)
-	xproto.CreateWindowChecked(TrayXU.Conn(), 0, win.Id, TrayXU.RootWin(), 0, 0, 1, 1, 0, xproto.WindowClassInputOnly, visualId, 0, nil)
-	TrayXU.Sync()
-	win.Listen(xproto.EventMaskStructureNotify)
 
 	TRAYMANAGER = &TrayManager{
-		owner:      win.Id,
+		owner:      0,
 		visual:     visualId,
 		nameInfo:   make(map[xproto.Window]string),
 		notifyInfo: make(map[xproto.Window]bool),
 		md5Info:    make(map[xproto.Window][]byte),
 		dmageInfo:  make(map[xproto.Window]damage.Damage),
 	}
+	TRAYMANAGER.Manage()
 
 	dbus.InstallOnSession(TRAYMANAGER)
-	TRAYMANAGER.tryOwner()
+
+	xfixes.SelectSelectionInput(
+		TrayXU.Conn(),
+		TrayXU.RootWin(),
+		_NET_SYSTEM_TRAY_S0,
+		xfixes.SelectionEventMaskSelectionClientClose,
+	)
+	go TRAYMANAGER.startListener()
 }
 
 func (m *TrayManager) RequireManageTrayIcons() {
@@ -191,60 +225,54 @@ func (m *TrayManager) tryOwner() bool {
 	// Make a check, the tray application MUST be 1.
 	reply, err := m.getSelectionOwner()
 	if err != nil {
-		logger.Fatal(err)
-	}
-	if reply.Owner == 0 {
-		timeStamp, _ := ewmh.WmUserTimeGet(TrayXU, m.owner)
-		err := xproto.SetSelectionOwnerChecked(
-			TrayXU.Conn(),
-			m.owner,
-			_NET_SYSTEM_TRAY_S0,
-			xproto.Timestamp(timeStamp),
-		).Check()
-		if err != nil {
-			logger.Info("Set Selection Owner failed: ", err)
-			return false
-		}
-		go TRAYMANAGER.startListener()
-
-		//owner the _NET_SYSTEM_TRAY_Sn
-		logger.Info("Required _NET_SYSTEM_TRAY_S0")
-
-		m.RequireManageTrayIcons()
-
-		xprop.ChangeProp32(
-			TrayXU,
-			m.owner,
-			"_NET_SYSTEM_TRAY_VISUAL",
-			"VISUALID",
-			uint(TRAYMANAGER.visual),
-		)
-		xprop.ChangeProp32(
-			TrayXU,
-			m.owner,
-			"_NET_SYSTEM_TRAY_ORIENTAION",
-			"CARDINAL",
-			0,
-		)
-		xfixes.SelectSelectionInput(
-			TrayXU.Conn(),
-			TrayXU.RootWin(),
-			_NET_SYSTEM_TRAY_S0,
-			xfixes.SelectionEventMaskSelectionClientClose,
-		)
-		reply, err := m.getSelectionOwner()
-		if err != nil {
-			logger.Warning(err)
-			return false
-		}
-		return reply.Owner != 0
-	} else {
-		logger.Info("Another System tray application is running")
+		logger.Error(err)
 		return false
 	}
+	if reply.Owner != 0 {
+		logger.Warning("Another System tray application is running")
+		return false
+	}
+
+	timeStamp, _ := ewmh.WmUserTimeGet(TrayXU, m.owner)
+	err = xproto.SetSelectionOwnerChecked(
+		TrayXU.Conn(),
+		m.owner,
+		_NET_SYSTEM_TRAY_S0,
+		xproto.Timestamp(timeStamp),
+	).Check()
+	if err != nil {
+		logger.Warning("Set Selection Owner failed: ", err)
+		return false
+	}
+
+	//owner the _NET_SYSTEM_TRAY_Sn
+	logger.Info("Required _NET_SYSTEM_TRAY_S0 successful")
+
+	m.RequireManageTrayIcons()
+
+	xprop.ChangeProp32(
+		TrayXU,
+		m.owner,
+		"_NET_SYSTEM_TRAY_VISUAL",
+		"VISUALID",
+		uint(TRAYMANAGER.visual),
+	)
+	xprop.ChangeProp32(
+		TrayXU,
+		m.owner,
+		"_NET_SYSTEM_TRAY_ORIENTAION",
+		"CARDINAL",
+		0,
+	)
+	reply, err = m.getSelectionOwner()
+	if err != nil {
+		logger.Warning(err)
+		return false
+	}
+	return reply.Owner != 0
 }
 
-func (m *TrayManager) unmanage() bool {
+func (m *TrayManager) Unmanage() bool {
 	reply, err := m.getSelectionOwner()
 	if err != nil {
 		logger.Info("get selection owner failed:", err)
@@ -255,9 +283,8 @@ func (m *TrayManager) unmanage() bool {
 		return false
 	}
 
+	m.destroyOwnerWindow()
 	timeStamp, _ := ewmh.WmUserTimeGet(TrayXU, m.owner)
-	// FIXME:
-	// is 0 right?
 	return xproto.SetSelectionOwnerChecked(
 		TrayXU.Conn(),
 		0,
@@ -288,7 +315,6 @@ func (m *TrayManager) startListener() {
 					switch opCode {
 					case OpCodeSystemTrayRequestDock:
 						xid := xproto.Window(ev.Data.Data32[2])
-						logger.Info("Tray Get Request Dock: ", xid)
 						m.addTrayIcon(xid)
 					case OpCodeSystemTrayBeginMessage:
 					case OpCodeSystemTrayCancelMessage:
@@ -299,11 +325,9 @@ func (m *TrayManager) startListener() {
 			case xproto.DestroyNotifyEvent:
 				m.removeTrayIcon(ev.Window)
 			case xproto.SelectionClearEvent:
-				// FIXME: is this work???
-				//clean up
-				m.unmanage()
+				m.Unmanage()
 			case xfixes.SelectionNotifyEvent:
-				m.tryOwner()
+				m.Manage()
 			}
 		}
 	}
