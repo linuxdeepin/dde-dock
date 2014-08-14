@@ -54,19 +54,22 @@ func (obj *Manager) listenGSettings() {
 			obj.setSoundTheme(value)
 		case GS_KEY_CURRENT_BG:
 			value := themeSettings.GetString(key)
-			if !obj.setBackground(decodeURI(value)) {
-				obj.setBackground(DEFAULT_BG)
+			logger.Info("PERSON GSettings bg changed:", value)
+			if !obj.setBackground(value) {
+				value = DEFAULT_BG_URI
+				obj.setBackground(DEFAULT_BG_URI)
 			}
 		}
 	})
 
 	gnmSettings.Connect("changed::picture-uri", func(s *gio.Settings, key string) {
 		value := gnmSettings.GetString("picture-uri")
-		value = decodeURI(value)
+		value = dutils.DecodeURI(value)
 		bg := themeSettings.GetString(GS_KEY_CURRENT_BG)
-		bg = decodeURI(bg)
+		bg = dutils.DecodeURI(bg)
+		logger.Info("GNOME GSettings bg changed:", value, bg)
 		if bg != value {
-			value = encodeURI(value)
+			value = dutils.EncodeURI(value, dutils.SCHEME_FILE)
 			themeSettings.SetString(GS_KEY_CURRENT_BG, value)
 		}
 	})

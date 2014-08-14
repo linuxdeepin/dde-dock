@@ -36,7 +36,7 @@ var (
 )
 
 func getCachePath(t, src string) string {
-	src = dutils.URIToPath(src)
+	src = dutils.DecodeURI(src)
 	bgDir := path.Join(PERSON_LOCAL_THUMB_PATH, THUMB_CACHE_DIR)
 	md5Str, _ := getStrMd5(t + src)
 	filename := path.Join(bgDir, md5Str+".png")
@@ -53,7 +53,7 @@ func getCachePath(t, src string) string {
 }
 
 func getDThemeThumb(id string) string {
-	if id == THEME_CUSTOM_ID {
+	if id == CUSTOM_THEME_ID {
 		if t, ok := GetManager().themeObjMap[id]; ok {
 			return GetManager().GetThumbnail("background", t.Background)
 		}
@@ -165,7 +165,7 @@ func getBgThumb(bg string) string {
 	}
 
 	genThemeThumb()
-	bg = dutils.PathToURI(bg, dutils.SCHEME_FILE)
+	bg = dutils.EncodeURI(bg, dutils.SCHEME_FILE)
 	return bg
 }
 

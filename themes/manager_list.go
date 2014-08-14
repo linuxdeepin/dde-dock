@@ -282,7 +282,7 @@ func getBackgroundList() []backgroundInfo {
 		for _, l := range tmpList {
 			tmp := backgroundInfo{}
 			tmp.Name = path.Base(l)
-			uri := dutils.PathToURI(l, dutils.SCHEME_FILE)
+			uri := dutils.EncodeURI(l, dutils.SCHEME_FILE)
 			tmp.Path = uri
 			tmp.T = THEME_TYPE_SYSTEM
 			bgList = append(bgList, tmp)
@@ -296,7 +296,7 @@ func getBackgroundList() []backgroundInfo {
 				for _, l := range list {
 					tmp := backgroundInfo{}
 					tmp.Name = path.Base(l)
-					uri := dutils.PathToURI(l, dutils.SCHEME_FILE)
+					uri := dutils.EncodeURI(l, dutils.SCHEME_FILE)
 					tmp.Path = uri
 					tmp.T = THEME_TYPE_SYSTEM
 					//if !isBgInfoInList(tmp, list) {
@@ -314,7 +314,7 @@ func getBackgroundList() []backgroundInfo {
 				for _, l := range list {
 					tmp := backgroundInfo{}
 					tmp.Name = path.Base(l)
-					uri := dutils.PathToURI(l, dutils.SCHEME_FILE)
+					uri := dutils.EncodeURI(l, dutils.SCHEME_FILE)
 					tmp.Path = uri
 					tmp.T = THEME_TYPE_LOCAL
 					//if !isBgInfoInList(tmp, list) {
@@ -333,7 +333,7 @@ func getBackgroundList() []backgroundInfo {
 		for _, l := range tmpList {
 			tmp := backgroundInfo{}
 			tmp.Name = path.Base(l)
-			uri := dutils.PathToURI(l, dutils.SCHEME_FILE)
+			uri := dutils.EncodeURI(l, dutils.SCHEME_FILE)
 			tmp.Path = uri
 			tmp.T = THEME_TYPE_LOCAL
 			bgList = append(bgList, tmp)
@@ -344,8 +344,6 @@ func getBackgroundList() []backgroundInfo {
 }
 
 func isBackgroundSame(bg1, bg2 string) bool {
-	bg1 = dutils.URIToPath(bg1)
-	bg2 = dutils.URIToPath(bg2)
 	if bg1 == bg2 {
 		return true
 	}

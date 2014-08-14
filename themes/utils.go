@@ -30,7 +30,6 @@ import "C"
 import (
 	"crypto/md5"
 	"io/ioutil"
-	"net/url"
 	"os"
 	"os/exec"
 	"path"
@@ -40,29 +39,6 @@ import (
 )
 
 var thumbTool = false
-
-func encodeURI(str string) string {
-	filepath := dutils.URIToPath(str)
-	if len(filepath) < 1 {
-		return ""
-	}
-
-	u := url.URL{}
-	u.Path = filepath
-	v := dutils.PathToURI(u.String(), dutils.SCHEME_FILE)
-	return v
-}
-
-func decodeURI(str string) string {
-	u, err := url.Parse(str)
-	if err != nil {
-		logger.Warningf("Url parse '%s' failed: %v", str, err)
-		return ""
-	}
-
-	v := u.Scheme + "://" + u.Path
-	return v
-}
 
 func changeUserThemeDir() {
 	filename := path.Join(homeDir, PERSON_LOCAL_THEME_PATH, "test-dir")
@@ -74,7 +50,7 @@ func changeUserThemeDir() {
 }
 
 func rmAllFile(name string) {
-	name = dutils.URIToPath(name)
+	name = dutils.DecodeURI(name)
 	os.RemoveAll(name)
 }
 

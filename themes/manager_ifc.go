@@ -103,6 +103,7 @@ func (obj *Manager) Set(t, value string) {
 		s, _ := strconv.ParseInt(value, 10, 64)
 		obj.setFontSize(int32(s))
 	case "background":
+		logger.Info("SET - set bg:", value)
 		obj.setBackground(value)
 	case "greeter":
 		if value == obj.GreeterTheme.GetValue().(string) {
@@ -195,7 +196,7 @@ func (obj *Manager) setGtkTheme(theme string) {
 			logger.Info("Theme: ", theme, t.IconTheme, t.SoundTheme, t.CursorTheme, t.Background, t.FontSize)
 			obj.newCustomTheme(theme, t.IconTheme, t.SoundTheme,
 				t.CursorTheme, t.Background, t.FontSize)
-			obj.setPropCurrentTheme(THEME_CUSTOM_ID)
+			obj.setPropCurrentTheme(CUSTOM_THEME_ID)
 			break
 		}
 	}
@@ -225,7 +226,7 @@ func (obj *Manager) setIconTheme(theme string) {
 
 			obj.newCustomTheme(t.GtkTheme, theme, t.SoundTheme,
 				t.CursorTheme, t.Background, t.FontSize)
-			obj.setPropCurrentTheme(THEME_CUSTOM_ID)
+			obj.setPropCurrentTheme(CUSTOM_THEME_ID)
 			break
 		}
 	}
@@ -255,7 +256,7 @@ func (obj *Manager) setCursorTheme(theme string) {
 
 			obj.newCustomTheme(t.GtkTheme, t.IconTheme, t.SoundTheme,
 				theme, t.Background, t.FontSize)
-			obj.setPropCurrentTheme(THEME_CUSTOM_ID)
+			obj.setPropCurrentTheme(CUSTOM_THEME_ID)
 			break
 		}
 	}
@@ -285,7 +286,7 @@ func (obj *Manager) setSoundTheme(theme string) {
 
 			obj.newCustomTheme(t.GtkTheme, t.IconTheme, theme,
 				t.CursorTheme, t.Background, t.FontSize)
-			obj.setPropCurrentTheme(THEME_CUSTOM_ID)
+			obj.setPropCurrentTheme(CUSTOM_THEME_ID)
 			break
 		}
 	}
@@ -293,10 +294,11 @@ func (obj *Manager) setSoundTheme(theme string) {
 
 func (obj *Manager) setBackground(bg string) bool {
 	if len(bg) < 1 {
+		logger.Warning("setBackground invalid bg:", bg)
 		return false
 	}
 	flag := false
-	uri := dutils.PathToURI(bg, dutils.SCHEME_FILE)
+	uri := dutils.EncodeURI(bg, dutils.SCHEME_FILE)
 	for _, l := range obj.BackgroundList {
 		if uri == l {
 			flag = true
@@ -305,9 +307,10 @@ func (obj *Manager) setBackground(bg string) bool {
 	}
 
 	// bg not in list
-	if !flag && bg != DEFAULT_BG {
-		bg = dutils.URIToPath(bg)
+	if !flag && uri != DEFAULT_BG_URI {
+		bg = dutils.DecodeURI(bg)
 		if !obj.appendBackground(bg) {
+			logger.Warning("Append bg failed:", bg)
 			return false
 		}
 	}
@@ -315,9 +318,11 @@ func (obj *Manager) setBackground(bg string) bool {
 	t, ok := obj.themeObjMap[obj.CurrentTheme.GetValue().(string)]
 	if !ok {
 		obj.setPropCurrentTheme(DEFAULT_THEME_ID)
+		logger.Warning("Get current themObj failed. Set current themObj to default")
 		return true
 	}
-	if t.Background == bg {
+	if t.Background == uri {
+		logger.Warning("Bg is same:", bg)
 		return true
 	}
 	name, ok1 := obj.isThemeExit(t.GtkTheme, t.IconTheme, t.SoundTheme,
@@ -329,9 +334,10 @@ func (obj *Manager) setBackground(bg string) bool {
 
 	if !obj.newCustomTheme(t.GtkTheme, t.IconTheme, t.SoundTheme,
 		t.CursorTheme, bg, t.FontSize) {
+		logger.Warning("New custom theme failed")
 		return false
 	}
-	obj.setPropCurrentTheme(THEME_CUSTOM_ID)
+	obj.setPropCurrentTheme(CUSTOM_THEME_ID)
 
 	return true
 }
@@ -358,7 +364,7 @@ func (obj *Manager) setFontSize(size int32) {
 
 	obj.newCustomTheme(t.GtkTheme, t.IconTheme, t.SoundTheme,
 		t.CursorTheme, t.Background, size)
-	obj.setPropCurrentTheme(THEME_CUSTOM_ID)
+	obj.setPropCurrentTheme(CUSTOM_THEME_ID)
 }
 
 func (obj *Manager) deleteGtkTheme(theme string) {
@@ -449,8 +455,7 @@ func (obj *Manager) deleteBackground(bg string) {
 	}
 
 	if obj.GetFlag("background", bg) == int32(THEME_TYPE_LOCAL) {
-		filename := dutils.URIToPath(bg)
-		os.RemoveAll(filename)
+		rmAllFile(bg)
 	}
 }
 

@@ -75,10 +75,10 @@ func (obj *Manager) isThemeExit(gtk, icon, sound, cursor, bg string, fontSize in
 func (m *Manager) newCustomTheme(gtk, icon, sound, cursor, bg string, fontSize int32) bool {
 	filename := ""
 
-	t, ok := m.themeObjMap[THEME_CUSTOM_ID]
+	t, ok := m.themeObjMap[CUSTOM_THEME_ID]
 	if !ok {
 		logger.Warning("Theme 'Custom' not exist")
-		if str, ok := m.mkdirTheme(THEME_CUSTOM_ID); !ok {
+		if str, ok := m.mkdirTheme(CUSTOM_THEME_ID); !ok {
 			logger.Warning("Create custom theme failed")
 			return false
 		} else {

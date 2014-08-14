@@ -23,6 +23,7 @@ package themes
 
 import (
 	"path"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 )
 
 const (
@@ -39,7 +40,7 @@ const (
 	DEFAULT_GTK_THEME    = "Deepin"
 	DEFAULT_ICON_THEME   = "Deepin"
 	DEFAULT_CURSOR_THEME = "Deepin-Cursor"
-	DEFAULT_BG           = "file:///usr/share/backgrounds/default_background.jpg"
+	DEFAULT_BG           = "/usr/share/backgrounds/default_background.jpg"
 
 	THEME_SYS_PATH   = "/usr/share/themes"
 	THEME_LOCAL_PATH = ".themes"
@@ -61,10 +62,12 @@ var (
 	PERSON_LOCAL_THEME_PATH   = path.Join(PERSON_LOCAL_BASE_PATH, "themes")
 	PERSON_SYS_GREETER_PATH   = path.Join(PERSON_SYS_BASE_PATH, "greeter-theme")
 	PERSON_LOCAL_GREETER_PATH = path.Join(PERSON_LOCAL_BASE_PATH, "greeter-theme")
+
+	DEFAULT_BG_URI = dutils.EncodeURI(DEFAULT_BG, dutils.SCHEME_FILE)
 )
 
 const (
-	THEME_CUSTOM_ID   = "Custom"
+	CUSTOM_THEME_ID   = "Custom"
 	THEME_TEMP_CUSTOM = "/usr/share/dde-daemon/template/theme_custom"
 
 	THEME_GROUP_THEME     = "Theme"

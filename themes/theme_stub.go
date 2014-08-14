@@ -26,7 +26,6 @@ import (
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/glib-2.0"
 	dutils "pkg.linuxdeepin.com/lib/utils"
-	"regexp"
 )
 
 func (obj *Theme) GetDBusInfo() dbus.DBusInfo {
@@ -162,14 +161,7 @@ func (obj *Theme) setAllProps() {
 		logger.Warningf("Get '%s' failed: %v", THEME_KEY_BACKGROUND, err)
 		return
 	}
-	if ok, _ := regexp.MatchString(`^/`, str); !ok {
-		if ok, _ = regexp.MatchString(`^file://`, str); !ok {
-			str = path.Join(obj.filePath, THEME_BG_NAME, str)
-			str = dutils.PathToURI(str, dutils.SCHEME_FILE)
-		}
-	} else {
-		str = dutils.PathToURI(str, dutils.SCHEME_FILE)
-	}
+	str = dutils.EncodeURI(str, dutils.SCHEME_FILE)
 	obj.setPropBackground(str)
 
 	var interval int

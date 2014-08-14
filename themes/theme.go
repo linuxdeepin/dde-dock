@@ -74,10 +74,9 @@ func (obj *Theme) setAllThemes() {
 	obj.setFontName()
 
 	bg := themeSettings.GetString(GS_KEY_CURRENT_BG)
-	bg = decodeURI(bg)
-	if obj.Background != bg {
-		themeSettings.SetString(GS_KEY_CURRENT_BG,
-			encodeURI(obj.Background))
+	srcBg := dutils.EncodeURI(obj.Background, dutils.SCHEME_FILE)
+	if srcBg != bg {
+		themeSettings.SetString(GS_KEY_CURRENT_BG, srcBg)
 	}
 }
 
