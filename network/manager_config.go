@@ -361,6 +361,12 @@ func (m *Manager) saveAndDisconnectDevice(devPath dbus.ObjectPath) (err error) {
 }
 
 func (m *Manager) EnableDevice(devPath dbus.ObjectPath, enabled bool) (err error) {
+	if nmGetDeviceType(devPath) == NM_DEVICE_TYPE_WIFI {
+		if !nmGetWirelessHardwareEnabled() {
+			notifyWirelessHardSwitchOff()
+			return
+		}
+	}
 	return m.doEnableDevice(devPath, enabled)
 }
 func (m *Manager) doEnableDevice(devPath dbus.ObjectPath, enabled bool) (err error) {

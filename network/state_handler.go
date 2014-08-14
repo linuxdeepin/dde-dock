@@ -30,7 +30,7 @@ var vpnErrorTable = make(map[uint32]string)
 var deviceErrorTable = make(map[uint32]string)
 
 func initNmStateReasons() {
-	deviceErrorTable[NM_DEVICE_STATE_REASON_UNKNOWN] = Tr("Device state changed, unknown reason.")
+	deviceErrorTable[NM_DEVICE_STATE_REASON_UNKNOWN] = Tr("Device state changed, unknown reason.") // TODO
 	deviceErrorTable[NM_DEVICE_STATE_REASON_NONE] = Tr("Device state changed, none reason.")
 	deviceErrorTable[NM_DEVICE_STATE_REASON_NOW_MANAGED] = Tr("The device is now managed.")
 	deviceErrorTable[NM_DEVICE_STATE_REASON_NOW_UNMANAGED] = Tr("The device is no longer managed.")
@@ -70,7 +70,7 @@ func initNmStateReasons() {
 	deviceErrorTable[NM_DEVICE_STATE_REASON_SLEEPING] = Tr("NetworkManager went to sleep.")
 	deviceErrorTable[NM_DEVICE_STATE_REASON_CONNECTION_REMOVED] = Tr("The device's active connection was removed or disappeared.")
 	deviceErrorTable[NM_DEVICE_STATE_REASON_USER_REQUESTED] = Tr("A user or client requested to disconnect.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_CARRIER] = Tr("The device's carrier/link changed.")
+	deviceErrorTable[NM_DEVICE_STATE_REASON_CARRIER] = Tr("The device's carrier/link changed.") // TODO
 	deviceErrorTable[NM_DEVICE_STATE_REASON_CONNECTION_ASSUMED] = Tr("The device's existing connection was assumed.")
 	deviceErrorTable[NM_DEVICE_STATE_REASON_SUPPLICANT_AVAILABLE] = Tr("The 802.1x supplicant is now available.")
 	deviceErrorTable[NM_DEVICE_STATE_REASON_MODEM_NOT_FOUND] = Tr("The modem could not be found.")
@@ -197,6 +197,12 @@ func newStateNotifier() (sn *stateNotifier) {
 		switch state {
 		case NM_STATE_DISCONNECTED, NM_STATE_ASLEEP:
 			notify(notifyIconNetworkOffline, Tr("Offline"), Tr("Disconnected, you are now offline."))
+		}
+	})
+
+	nmManager.WirelessHardwareEnabled.ConnectChanged(func() {
+		if !nmGetWirelessHardwareEnabled() {
+			notifyWirelessHardSwitchOff()
 		}
 	})
 

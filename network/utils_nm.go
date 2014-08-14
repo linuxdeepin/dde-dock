@@ -74,13 +74,13 @@ func nmGeneralGetDeviceHwAddr(devPath dbus.ObjectPath) (hwAddr string, err error
 		var devWired *nm.DeviceWired
 		devWired, err = nmNewDeviceWired(devPath)
 		if err == nil {
-			hwAddr = devWired.HwAddress.Get()
+			hwAddr = devWired.PermHwAddress.Get()
 		}
 	case NM_DEVICE_TYPE_WIFI:
 		var devWireless *nm.DeviceWireless
 		devWireless, err = nmNewDeviceWireless(devPath)
 		if err == nil {
-			hwAddr = devWireless.HwAddress.Get()
+			hwAddr = devWireless.PermHwAddress.Get()
 		}
 	case NM_DEVICE_TYPE_BT:
 		var devBluetooth *nm.DeviceBluetooth
@@ -850,6 +850,10 @@ func nmGetPrimaryConnection() (cpath dbus.ObjectPath) {
 	// cpath = nmManager.PrimaryConnection.Get()
 	cpath = ""
 	return
+}
+
+func nmGetWirelessHardwareEnabled() bool {
+	return nmManager.WirelessHardwareEnabled.Get()
 }
 
 func nmSetNetworkingEnabled(enabled bool) {
