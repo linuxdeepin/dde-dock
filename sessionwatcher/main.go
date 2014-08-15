@@ -24,12 +24,28 @@ package sessionwatcher
 import (
 	"dbus/org/freedesktop/dbus"
 	"pkg.linuxdeepin.com/lib/log"
+	"time"
 )
 
 var (
 	Logger     = log.NewLogger("dde-daemon/sessionwatcher")
 	dbusDaemon *dbus.DBusDaemon
+
+	exitTimer chan bool
 )
+
+func startTimer() {
+	for {
+		timer := time.NewTimer(time.Second * 5)
+		select {
+		case <-timer.C:
+			go GetDockApplet_T().restartDockApplet()
+			go GetDDeDock_T().restartDock()
+		case <-exitTimer:
+			return
+		}
+	}
+}
 
 func Start() {
 	Logger.BeginTracing()
@@ -40,11 +56,11 @@ func Start() {
 		return
 	}
 
-	da := GetDockApplet()
-	go da.listenDockApplets()
+	exitTimer = make(chan bool)
+	go startTimer()
 }
 
 func Stop() {
 	Logger.EndTracing()
-	GetDockApplet().exitChan <- true
+	exitTimer <- true
 }
