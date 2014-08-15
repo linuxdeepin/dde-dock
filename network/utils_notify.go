@@ -34,7 +34,7 @@ const (
 const (
 	notifyIconNetworkConnected     = "network-transmit-receive"
 	notifyIconNetworkDisconnected  = "network-error"
-	notifyIconNetworkOffline       = "network-offline"
+	notifyIconNetworkOffline       = "network-error"
 	notifyIconEthernetConnected    = "notification-network-ethernet-connected"
 	notifyIconEthernetDisconnected = "notification-network-ethernet-disconnected"
 	notifyIconWirelessConnected    = "notification-network-wireless-full"
@@ -50,6 +50,7 @@ func notify(icon, summary, body string) (err error) {
 		logger.Error("connect to org.freedesktop.Notifications failed")
 		return
 	}
+	logger.Info("notify", icon, summary, body)
 	_, err = notifier.Notify("Network", 0, icon, summary, body, nil, nil, 0)
 	if err != nil {
 		logger.Error(err)
@@ -58,23 +59,27 @@ func notify(icon, summary, body string) (err error) {
 	return
 }
 
+func notifyNetworkOffline() {
+	notify(notifyIconNetworkOffline, "", Tr("Disconnected, you are now offline."))
+}
+
+func notifyAirplanModeEnabled() {
+	// TODO: icon
+	notify(notifyIconNetworkOffline, "", Tr("Airplan mode enabled."))
+}
+
 func notifyVpnConnected(id string) {
-	icon := notifyIconVpnConnected
-	notify(icon, Tr("Connected"), id)
+	notify(notifyIconVpnConnected, Tr("Connected"), id)
 }
 func notifyVpnDisconnected(id string) {
-	icon := notifyIconVpnDisconnected
-	notify(icon, Tr("Disconnected"), id)
+	notify(notifyIconVpnDisconnected, Tr("Disconnected"), id)
 }
 func notifyVpnFailed(id string, reason uint32) {
-	icon := notifyIconVpnDisconnected
-	msg := vpnErrorTable[reason]
-	notify(icon, Tr("Disconnected"), msg)
+	notify(notifyIconVpnDisconnected, Tr("Disconnected"), vpnErrorTable[reason])
 }
 
 func notifyApModeNotSupport() {
-	icon := notifyIconWirelessDisconnected
-	notify(icon, Tr("Disconnected"), Tr("Access Point mode is not supported by this device."))
+	notify(notifyIconWirelessDisconnected, Tr("Disconnected"), Tr("Access Point mode is not supported by this device."))
 }
 
 func notifyProxyEnabled() {
@@ -87,6 +92,5 @@ func notifyProxyDisabled() {
 }
 
 func notifyWirelessHardSwitchOff() {
-	icon := notifyIconWirelessDisconnected
-	notify(icon, "", Tr("The hardware switch of WLAN Card is off, please switch on as necessary."))
+	notify(notifyIconWirelessDisconnected, "", Tr("The hardware switch of WLAN Card is off, please switch on as necessary."))
 }

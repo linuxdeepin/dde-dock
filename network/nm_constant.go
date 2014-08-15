@@ -138,6 +138,14 @@ const (
 	NM_DEVICE_STATE_REASON_SECONDARY_CONNECTION_FAILED    = 54
 )
 
+func isDeviceStateReasonInvalid(reason uint32) bool {
+	switch reason {
+	case NM_DEVICE_STATE_REASON_UNKNOWN, NM_DEVICE_STATE_REASON_NONE:
+		return true
+	}
+	return false
+}
+
 // custom device state reasons
 const (
 	GUESS_NM_DEVICE_STATE_REASON_CABLE_UNPLUGGED = iota + NM_DEVICE_STATE_REASON_SECONDARY_CONNECTION_FAILED + 1

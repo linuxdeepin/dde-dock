@@ -68,7 +68,7 @@ func initNmStateReasons() {
 	deviceErrorTable[NM_DEVICE_STATE_REASON_GSM_PIN_CHECK_FAILED] = Tr("PIN check failed.")
 	deviceErrorTable[NM_DEVICE_STATE_REASON_FIRMWARE_MISSING] = Tr("Necessary firmware for the device may be missed.")
 	deviceErrorTable[NM_DEVICE_STATE_REASON_REMOVED] = Tr("The device was removed.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_SLEEPING] = Tr("NetworkManager went to sleep.")
+	deviceErrorTable[NM_DEVICE_STATE_REASON_SLEEPING] = Tr("NetworkManager went to sleep.") // TODO
 	deviceErrorTable[NM_DEVICE_STATE_REASON_CONNECTION_REMOVED] = Tr("The device's active connection was removed or disappeared.")
 	deviceErrorTable[NM_DEVICE_STATE_REASON_USER_REQUESTED] = Tr("A user or client requested to disconnect.")
 	deviceErrorTable[NM_DEVICE_STATE_REASON_CARRIER] = Tr("The device's carrier/link changed.") // TODO
@@ -158,35 +158,37 @@ func newStateNotifier() (sn *stateNotifier) {
 					}
 				case NM_DEVICE_STATE_FAILED, NM_DEVICE_STATE_DISCONNECTED,
 					NM_DEVICE_STATE_UNMANAGED, NM_DEVICE_STATE_UNAVAILABLE:
-					if isDeviceStateInActivating(oldState) {
-						var icon, msg string
-						devType := dev.DeviceType.Get()
-						switch devType {
-						case NM_DEVICE_TYPE_ETHERNET:
-							icon = notifyIconEthernetDisconnected
-							if reason == NM_DEVICE_STATE_REASON_CARRIER {
-								reason = GUESS_NM_DEVICE_STATE_REASON_CABLE_UNPLUGGED
-							}
-						case NM_DEVICE_TYPE_WIFI:
-							icon = notifyIconWirelessDisconnected
-							if reason == NM_DEVICE_STATE_REASON_UNKNOWN {
-								if !nmGetWirelessEnabled() {
-									reason = GUESS_NM_DEVICE_STATE_REASON_WIRELESS_DISABLED
-									msg = sn.devices[path].aconnId
-								}
-							}
-						default:
-							icon = notifyIconNetworkDisconnected
-						}
-						if len(msg) == 0 {
-							if newState == NM_DEVICE_STATE_DISCONNECTED {
-								msg = sn.devices[path].aconnId
-							} else {
-								msg = deviceErrorTable[reason]
-							}
-						}
-						notify(icon, Tr("Disconnected"), msg)
+					logger.Info("device state", oldState, newState, reason, deviceErrorTable[reason])
+					// notify only when network enabled and the device activated before
+					if !nmGetNetworkEnabled() || !isDeviceStateInActivating(oldState) || isDeviceStateReasonInvalid(reason) {
+						return
 					}
+					if nmIsNetworkOffline() {
+						notifyNetworkOffline()
+						return
+					}
+
+					var icon, msg string
+					devType := dev.DeviceType.Get()
+					switch devType {
+					case NM_DEVICE_TYPE_ETHERNET:
+						icon = notifyIconEthernetDisconnected
+						if reason == NM_DEVICE_STATE_REASON_CARRIER {
+							reason = GUESS_NM_DEVICE_STATE_REASON_CABLE_UNPLUGGED
+						}
+					case NM_DEVICE_TYPE_WIFI:
+						icon = notifyIconWirelessDisconnected
+					default:
+						icon = notifyIconNetworkDisconnected
+					}
+					if len(msg) == 0 {
+						if newState == NM_DEVICE_STATE_DISCONNECTED && reason == NM_DEVICE_STATE_REASON_USER_REQUESTED {
+							msg = sn.devices[path].aconnId
+						} else {
+							msg = deviceErrorTable[reason]
+						}
+					}
+					notify(icon, Tr("Disconnected"), msg)
 				}
 			})
 		}
@@ -205,18 +207,15 @@ func newStateNotifier() (sn *stateNotifier) {
 	nmManager.ConnectDeviceAdded(func(path dbus.ObjectPath) {
 		watch(path)
 	})
-
 	for _, path := range nmGetDevices() {
 		watch(path)
 	}
 
-	nmManager.ConnectStateChanged(func(state uint32) {
-		switch state {
-		case NM_STATE_DISCONNECTED, NM_STATE_ASLEEP:
-			notify(notifyIconNetworkOffline, Tr("Offline"), Tr("Disconnected, you are now offline."))
+	nmManager.NetworkingEnabled.ConnectChanged(func() {
+		if !nmGetNetworkEnabled() {
+			notifyAirplanModeEnabled()
 		}
 	})
-
 	nmManager.WirelessHardwareEnabled.ConnectChanged(func() {
 		if !nmGetWirelessHardwareEnabled() {
 			notifyWirelessHardSwitchOff()

@@ -852,6 +852,20 @@ func nmGetPrimaryConnection() (cpath dbus.ObjectPath) {
 	return
 }
 
+func nmGetNetworkState() uint32 {
+	return nmManager.State.Get()
+}
+func nmIsNetworkOffline() bool {
+	state := nmManager.State.Get()
+	if state == NM_STATE_DISCONNECTED || state == NM_STATE_ASLEEP {
+		return true
+	}
+	return false
+}
+
+func nmGetNetworkEnabled() bool {
+	return nmManager.NetworkingEnabled.Get()
+}
 func nmGetWirelessHardwareEnabled() bool {
 	return nmManager.WirelessHardwareEnabled.Get()
 }
