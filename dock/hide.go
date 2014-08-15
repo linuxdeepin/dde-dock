@@ -22,13 +22,17 @@ var (
 )
 
 type HideStateManager struct {
-	state int32
+	state               int32
+	toggleShowTimer     <-chan time.Time
+	cleanToggleShowChan chan bool
 
 	StateChanged func(int32)
 }
 
 func NewHideStateManager(mode int32) *HideStateManager {
 	h := &HideStateManager{}
+	h.toggleShowTimer = nil
+	h.cleanToggleShowChan = make(chan bool, 1)
 
 	if mode == HideModeKeepHidden {
 		h.state = HideStateHidden
@@ -61,6 +65,10 @@ func (m *HideStateManager) SetState(s int32) int32 {
 }
 
 func (m *HideStateManager) UpdateState() {
+	if m.toggleShowTimer != nil {
+		logger.Info("in ToggleShow")
+		return
+	}
 	state := m.state
 	switch setting.GetHideMode() {
 	case HideModeKeepShowing:
@@ -98,4 +106,36 @@ func (m *HideStateManager) UpdateState() {
 	}
 
 	m.SetState(state)
+}
+
+func (m *HideStateManager) CancelToggleShow() {
+	if m.toggleShowTimer != nil {
+		logger.Info("Cancel ToggleShow")
+		m.cleanToggleShowChan <- true
+		m.toggleShowTimer = nil
+	}
+}
+
+func (m *HideStateManager) ToggleShow() {
+	logger.Info("cancel ToggleShow on ToggleShow")
+	m.CancelToggleShow()
+
+	if m.state == HideStateHidden || m.state == HideStateHidding {
+		m.SetState(HideStateShowing)
+	} else if m.state == HideStateShown || m.state == HideModeKeepShowing {
+		m.SetState(HideStateHidding)
+	}
+
+	m.toggleShowTimer = time.After(time.Second * 3)
+	go func() {
+		select {
+		case <-m.toggleShowTimer:
+			logger.Info("ToggleShow is done")
+			m.toggleShowTimer = nil
+			m.UpdateState()
+		case <-m.cleanToggleShowChan:
+			logger.Info("ToggleShow is cancelled")
+			return
+		}
+	}()
 }
