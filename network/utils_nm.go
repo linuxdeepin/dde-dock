@@ -855,6 +855,9 @@ func nmGetPrimaryConnection() (cpath dbus.ObjectPath) {
 func nmGetWirelessHardwareEnabled() bool {
 	return nmManager.WirelessHardwareEnabled.Get()
 }
+func nmGetWirelessEnabled() bool {
+	return nmManager.WirelessEnabled.Get()
+}
 
 func nmSetNetworkingEnabled(enabled bool) {
 	if nmManager.NetworkingEnabled.Get() != enabled {
@@ -864,7 +867,6 @@ func nmSetNetworkingEnabled(enabled bool) {
 	}
 	return
 }
-
 func nmSetWirelessEnabled(enabled bool) {
 	if nmManager.WirelessEnabled.Get() != enabled {
 		nmManager.WirelessEnabled.Set(enabled)
@@ -873,7 +875,6 @@ func nmSetWirelessEnabled(enabled bool) {
 	}
 	return
 }
-
 func nmSetWwanEnabled(enabled bool) {
 	if nmManager.WwanEnabled.Get() != enabled {
 		nmManager.WwanEnabled.Set(enabled)

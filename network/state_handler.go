@@ -30,8 +30,9 @@ var vpnErrorTable = make(map[uint32]string)
 var deviceErrorTable = make(map[uint32]string)
 
 func initNmStateReasons() {
-	deviceErrorTable[NM_DEVICE_STATE_REASON_UNKNOWN] = Tr("Device state changed, unknown reason.") // TODO
-	deviceErrorTable[NM_DEVICE_STATE_REASON_NONE] = Tr("Device state changed, none reason.")
+	// device error table
+	deviceErrorTable[NM_DEVICE_STATE_REASON_UNKNOWN] = Tr("Device state changed, unknown reason.")
+	deviceErrorTable[NM_DEVICE_STATE_REASON_NONE] = Tr("Device state changed.") // TODO
 	deviceErrorTable[NM_DEVICE_STATE_REASON_NOW_MANAGED] = Tr("The device is now managed.")
 	deviceErrorTable[NM_DEVICE_STATE_REASON_NOW_UNMANAGED] = Tr("The device is no longer managed.")
 	deviceErrorTable[NM_DEVICE_STATE_REASON_CONFIG_FAILED] = Tr("The device has not been ready for configuration.")
@@ -86,8 +87,12 @@ func initNmStateReasons() {
 	deviceErrorTable[NM_DEVICE_STATE_REASON_SSID_NOT_FOUND] = Tr("The 802.11 Wi-Fi network could not be found.")
 	deviceErrorTable[NM_DEVICE_STATE_REASON_SECONDARY_CONNECTION_FAILED] = Tr("A secondary connection of the base connection failed.")
 
+	// device error table for custom state reasons
+	deviceErrorTable[GUESS_NM_DEVICE_STATE_REASON_CABLE_UNPLUGGED] = Tr("Network cable is unplugged.")
+
+	// vpn error table
 	vpnErrorTable[NM_VPN_CONNECTION_STATE_REASON_UNKNOWN] = Tr("Activate VPN connection failed, unknown reason.")
-	vpnErrorTable[NM_VPN_CONNECTION_STATE_REASON_NONE] = Tr("Activate VPN connection failed.")
+	vpnErrorTable[NM_VPN_CONNECTION_STATE_REASON_NONE] = Tr("Activate VPN connection failed.") // TODO
 	vpnErrorTable[NM_VPN_CONNECTION_STATE_REASON_USER_DISCONNECTED] = Tr("The VPN connection changed state due to disconnection from users.")
 	vpnErrorTable[NM_VPN_CONNECTION_STATE_REASON_DEVICE_DISCONNECTED] = Tr("The VPN connection changed state due to disconnection from devices.")
 	vpnErrorTable[NM_VPN_CONNECTION_STATE_REASON_SERVICE_STOPPED] = Tr("VPN service stopped.")
@@ -155,18 +160,30 @@ func newStateNotifier() (sn *stateNotifier) {
 					NM_DEVICE_STATE_UNMANAGED, NM_DEVICE_STATE_UNAVAILABLE:
 					if isDeviceStateInActivating(oldState) {
 						var icon, msg string
-						switch dev.DeviceType.Get() {
+						devType := dev.DeviceType.Get()
+						switch devType {
 						case NM_DEVICE_TYPE_ETHERNET:
 							icon = notifyIconEthernetDisconnected
+							if reason == NM_DEVICE_STATE_REASON_CARRIER {
+								reason = GUESS_NM_DEVICE_STATE_REASON_CABLE_UNPLUGGED
+							}
 						case NM_DEVICE_TYPE_WIFI:
 							icon = notifyIconWirelessDisconnected
+							if reason == NM_DEVICE_STATE_REASON_UNKNOWN {
+								if !nmGetWirelessEnabled() {
+									reason = GUESS_NM_DEVICE_STATE_REASON_WIRELESS_DISABLED
+									msg = sn.devices[path].aconnId
+								}
+							}
 						default:
 							icon = notifyIconNetworkDisconnected
 						}
-						if newState == NM_DEVICE_STATE_DISCONNECTED {
-							msg = sn.devices[path].aconnId
-						} else {
-							msg = deviceErrorTable[reason]
+						if len(msg) == 0 {
+							if newState == NM_DEVICE_STATE_DISCONNECTED {
+								msg = sn.devices[path].aconnId
+							} else {
+								msg = deviceErrorTable[reason]
+							}
 						}
 						notify(icon, Tr("Disconnected"), msg)
 					}

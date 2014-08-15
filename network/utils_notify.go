@@ -79,14 +79,14 @@ func notifyApModeNotSupport() {
 
 func notifyProxyEnabled() {
 	// TODO: icon
-	notify("", Tr("Network"), Tr("System proxy is set successfully."))
+	notify("", "", Tr("System proxy is set successfully."))
 }
 func notifyProxyDisabled() {
 	// TODO: icon
-	notify("", Tr("Network"), Tr("System proxy has been cancelled."))
+	notify("", "", Tr("System proxy has been cancelled."))
 }
 
 func notifyWirelessHardSwitchOff() {
 	icon := notifyIconWirelessDisconnected
-	notify(icon, Tr("Disconnected"), Tr("The hardware switch of WLAN Card is off, please switch on as necessary."))
+	notify(icon, "", Tr("The hardware switch of WLAN Card is off, please switch on as necessary."))
 }
