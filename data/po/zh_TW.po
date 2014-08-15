@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-15 16:48+0800\n"
+"POT-Creation-Date: 2014-08-15 17:57+0800\n"
 "PO-Revision-Date: 2014-07-07 10:00+0000\n"
 "Last-Translator: electricface <songwentai@linuxdeepin.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/dde-"
@@ -75,11 +75,15 @@ msgid "Message notification"
 msgstr "消息通知"
 
 #: ../../datetime/datetime.go:127 ../../langselect/ifc.go:39
-msgid "Language changing, please wait"
+#, fuzzy
+msgid "Language is changing, please wait"
 msgstr "正在更改系統語言，請稍後。"
 
 #: ../../datetime/set_locale.go:58 ../../langselect/locale.go:245
-msgid "Language changed successfully and effective after logout."
+#, fuzzy
+msgid ""
+"Language has been changed successfully and will be effective after logged "
+"out."
 msgstr "系統語言更改成功，註銷後生效。"
 
 #: ../../datetime/set_locale.go:60 ../../langselect/locale.go:247
@@ -2333,7 +2337,8 @@ msgid "Open Folder"
 msgstr "打開檔夾"
 
 #: ../../mime/default_media.go:79
-msgid "Run Soft"
+#, fuzzy
+msgid "Run Software"
 msgstr "運行軟體"
 
 #: ../../network/manager_connections.go:203
@@ -2669,8 +2674,9 @@ msgid "Password"
 msgstr "密碼"
 
 #: ../../network/nm_setting_vpn_openvpn.go:253
-msgid "Password with Certificates (TLS)"
-msgstr "證書密碼（TLS）"
+#, fuzzy
+msgid "Certificates with Password (TLS)"
+msgstr "證書（TLS）"
 
 #: ../../network/nm_setting_vpn_openvpn.go:254
 msgid "Static Key"
@@ -3122,7 +3128,8 @@ msgid "Problem with the RFC 2684 Ethernet over ADSL bridge."
 msgstr "RFC 2684以太網橋接到ADSL上錯誤。"
 
 #: ../../network/state_handler.go:86
-msgid "ModemManager was not running or quitted unexpectedly."
+#, fuzzy
+msgid "ModemManager did not run or quitted unexpectedly."
 msgstr "ModemManager未運行或異常退出。"
 
 #: ../../network/state_handler.go:87
@@ -3257,6 +3264,9 @@ msgstr "電池電量低"
 #, fuzzy
 msgid "Computer will be in suspend mode, please plug in now."
 msgstr "電腦將要進入待機狀態，請連接電源。"
+
+#~ msgid "Password with Certificates (TLS)"
+#~ msgstr "證書密碼（TLS）"
 
 #~ msgid "Offline"
 #~ msgstr "離線"

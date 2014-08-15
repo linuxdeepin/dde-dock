@@ -250,7 +250,7 @@ func getSettingVpnOpenvpnAvailableValues(data connectionData, key string) (value
 		values = []kvalue{
 			kvalue{NM_OPENVPN_CONTYPE_TLS, Tr("Certificates (TLS)")},
 			kvalue{NM_OPENVPN_CONTYPE_PASSWORD, Tr("Password")},
-			kvalue{NM_OPENVPN_CONTYPE_PASSWORD_TLS, Tr("Password with Certificates (TLS)")},
+			kvalue{NM_OPENVPN_CONTYPE_PASSWORD_TLS, Tr("Certificates with Password (TLS)")},
 			kvalue{NM_OPENVPN_CONTYPE_STATIC_KEY, Tr("Static Key")},
 		}
 	case NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY_DIRECTION:

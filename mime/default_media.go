@@ -76,7 +76,7 @@ func getActionByMime(mime string) AppInfo {
 	}
 
 	if isMimeExist(mime, runSoftList) {
-		return AppInfo{ID: "Run Soft", Name: Tr("Run Soft"), Exec: ""}
+		return AppInfo{ID: "Run Soft", Name: Tr("Run Software"), Exec: ""}
 	}
 
 	m := DefaultApps{}

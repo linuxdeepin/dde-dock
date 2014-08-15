@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-15 16:48+0800\n"
+"POT-Creation-Date: 2014-08-15 17:57+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME &lt;EMAIL@ADDRESS&gt;\n"
 "Language-Team: LANGUAGE &lt;LL@li.org&gt;\n"
@@ -17,11 +17,11 @@ msgstr ""
 
 #: ../../accounts/account_ifc.go:185
 msgid "The user name is invalid."
-msgstr "此用户名不合法"
+msgstr "此用户名不合法。"
 
 #: ../../accounts/account_ifc.go:189
 msgid "The user name exists."
-msgstr "此用户名已存在"
+msgstr "此用户名已存在。"
 
 #: ../../bluetooth/bluez_profile.go:31
 msgid "Serial port"
@@ -72,11 +72,13 @@ msgid "Message notification"
 msgstr "消息通知"
 
 #: ../../datetime/datetime.go:127 ../../langselect/ifc.go:39
-msgid "Language changing, please wait"
+msgid "Language is changing, please wait"
 msgstr "正在更改系统语言，请稍后。"
 
 #: ../../datetime/set_locale.go:58 ../../langselect/locale.go:245
-msgid "Language changed successfully and effective after logout."
+msgid ""
+"Language has been changed successfully and will be effective after logged "
+"out."
 msgstr "系统语言更改成功，注销后生效。"
 
 #: ../../datetime/set_locale.go:60 ../../langselect/locale.go:247
@@ -2329,7 +2331,7 @@ msgid "Open Folder"
 msgstr "打开文件夹"
 
 #: ../../mime/default_media.go:79
-msgid "Run Soft"
+msgid "Run Software"
 msgstr "运行软件"
 
 #: ../../network/manager_connections.go:203
@@ -2665,7 +2667,7 @@ msgid "Password"
 msgstr "密码"
 
 #: ../../network/nm_setting_vpn_openvpn.go:253
-msgid "Password with Certificates (TLS)"
+msgid "Certificates with Password (TLS)"
 msgstr "证书和密码（TLS）"
 
 #: ../../network/nm_setting_vpn_openvpn.go:254
@@ -3118,7 +3120,7 @@ msgid "Problem with the RFC 2684 Ethernet over ADSL bridge."
 msgstr "RFC 2684以太网桥接到ADSL上错误。"
 
 #: ../../network/state_handler.go:86
-msgid "ModemManager was not running or quitted unexpectedly."
+msgid "ModemManager did not run or quitted unexpectedly."
 msgstr "ModemManager未运行或异常退出。"
 
 #: ../../network/state_handler.go:87

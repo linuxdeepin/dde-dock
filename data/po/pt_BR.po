@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-15 16:48+0800\n"
+"POT-Creation-Date: 2014-08-15 17:57+0800\n"
 "PO-Revision-Date: 2014-07-07 10:00+0000\n"
 "Last-Translator: electricface <songwentai@linuxdeepin.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/projects/p/dde-"
@@ -79,11 +79,15 @@ msgid "Message notification"
 msgstr "Notificação de mensagens"
 
 #: ../../datetime/datetime.go:127 ../../langselect/ifc.go:39
-msgid "Language changing, please wait"
+#, fuzzy
+msgid "Language is changing, please wait"
 msgstr "Mudando linguagem, aguarde"
 
 #: ../../datetime/set_locale.go:58 ../../langselect/locale.go:245
-msgid "Language changed successfully and effective after logout."
+#, fuzzy
+msgid ""
+"Language has been changed successfully and will be effective after logged "
+"out."
 msgstr ""
 "Linguagem alterada com sucesso. Terá efeito somente após desconectar-se."
 
@@ -2337,7 +2341,7 @@ msgid "Open Folder"
 msgstr "Abrir pasta "
 
 #: ../../mime/default_media.go:79
-msgid "Run Soft"
+msgid "Run Software"
 msgstr ""
 
 #: ../../network/manager_connections.go:203
@@ -2673,8 +2677,9 @@ msgid "Password"
 msgstr "Senha"
 
 #: ../../network/nm_setting_vpn_openvpn.go:253
-msgid "Password with Certificates (TLS)"
-msgstr "Senha com Certificados (TLS)"
+#, fuzzy
+msgid "Certificates with Password (TLS)"
+msgstr "Certificados (TLS)"
 
 #: ../../network/nm_setting_vpn_openvpn.go:254
 msgid "Static Key"
@@ -3125,7 +3130,7 @@ msgid "Problem with the RFC 2684 Ethernet over ADSL bridge."
 msgstr "Problema com o RFC 2684 Ethernet sobre a ponte ADSL."
 
 #: ../../network/state_handler.go:86
-msgid "ModemManager was not running or quitted unexpectedly."
+msgid "ModemManager did not run or quitted unexpectedly."
 msgstr ""
 
 #: ../../network/state_handler.go:87
@@ -3258,6 +3263,9 @@ msgstr "Bateria fraca"
 #: ../../power/upower.go:123
 msgid "Computer will be in suspend mode, please plug in now."
 msgstr ""
+
+#~ msgid "Password with Certificates (TLS)"
+#~ msgstr "Senha com Certificados (TLS)"
 
 #~ msgid "Offline"
 #~ msgstr "Offline"

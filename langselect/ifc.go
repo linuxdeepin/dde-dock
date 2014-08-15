@@ -36,7 +36,7 @@ func (ls *LangSelect) SetLocale(locale string) error {
 		return nil
 	}
 
-	ls.sendNotify("", "", Tr("Language changing, please wait"))
+	ls.sendNotify("", "", Tr("Language is changing, please wait"))
 	setDate.GenLocale(locale)
 	ls.changeLocaleFlag = true
 	ls.CurrentLocale = locale

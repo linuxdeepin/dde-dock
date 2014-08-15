@@ -242,7 +242,7 @@ func (ls *LangSelect) listenLocaleChange() {
 		ls.setPropCurrentLocale(ls.getCurrentLocale())
 		ls.LocaleStatus(ok, locale)
 		if ok {
-			ls.sendNotify("", "", Tr("Language changed successfully and effective after logout."))
+			ls.sendNotify("", "", Tr("Language has been changed successfully and will be effective after logged out."))
 		} else {
 			ls.sendNotify("", "", Tr("Language failed to change, please try later."))
 		}

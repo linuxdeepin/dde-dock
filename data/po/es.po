@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-15 16:48+0800\n"
+"POT-Creation-Date: 2014-08-15 17:57+0800\n"
 "PO-Revision-Date: 2014-07-05 22:30+0000\n"
 "Last-Translator: jose manuel <josemdance@outlook.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/dde-daemon/"
@@ -77,11 +77,15 @@ msgid "Message notification"
 msgstr "Notificación de mensaje"
 
 #: ../../datetime/datetime.go:127 ../../langselect/ifc.go:39
-msgid "Language changing, please wait"
+#, fuzzy
+msgid "Language is changing, please wait"
 msgstr "Cambiando idioma, por favor espere"
 
 #: ../../datetime/set_locale.go:58 ../../langselect/locale.go:245
-msgid "Language changed successfully and effective after logout."
+#, fuzzy
+msgid ""
+"Language has been changed successfully and will be effective after logged "
+"out."
 msgstr "Idioma cambiado exitosamente y eficaz después de cerrar la sesión."
 
 #: ../../datetime/set_locale.go:60 ../../langselect/locale.go:247
@@ -2354,7 +2358,8 @@ msgid "Open Folder"
 msgstr "Abrir carpeta"
 
 #: ../../mime/default_media.go:79
-msgid "Run Soft"
+#, fuzzy
+msgid "Run Software"
 msgstr "Ejecute Soft"
 
 #: ../../network/manager_connections.go:203
@@ -2690,8 +2695,9 @@ msgid "Password"
 msgstr "Contraseña:"
 
 #: ../../network/nm_setting_vpn_openvpn.go:253
-msgid "Password with Certificates (TLS)"
-msgstr "Contraseña con certificados (TLS)"
+#, fuzzy
+msgid "Certificates with Password (TLS)"
+msgstr "Certificados (TLS)"
 
 #: ../../network/nm_setting_vpn_openvpn.go:254
 msgid "Static Key"
@@ -3151,7 +3157,8 @@ msgid "Problem with the RFC 2684 Ethernet over ADSL bridge."
 msgstr "Problema con el RFC 2684 Ethernet sobre puente de ADSL."
 
 #: ../../network/state_handler.go:86
-msgid "ModemManager was not running or quitted unexpectedly."
+#, fuzzy
+msgid "ModemManager did not run or quitted unexpectedly."
 msgstr "ModemManager no estaba funcionando o Fallo inesperadamente."
 
 #: ../../network/state_handler.go:87
@@ -3290,6 +3297,9 @@ msgstr "Batería baja"
 #, fuzzy
 msgid "Computer will be in suspend mode, please plug in now."
 msgstr "Computer será en modo de suspensión, por favor enchufela"
+
+#~ msgid "Password with Certificates (TLS)"
+#~ msgstr "Contraseña con certificados (TLS)"
 
 #~ msgid "Offline"
 #~ msgstr "Desconectado"

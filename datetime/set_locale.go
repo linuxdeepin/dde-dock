@@ -55,7 +55,7 @@ func (obj *Manager) listenLocaleChange() {
 		obj.setPropName("CurrentLocale")
 		obj.LocaleStatus(ok, locale)
 		if ok {
-			sendNotify("", "", Tr("Language changed successfully and effective after logout."))
+			sendNotify("", "", Tr("Language has been changed successfully and will be effective after logged out."))
 		} else {
 			sendNotify("", "", Tr("Language failed to change, please try later."))
 		}

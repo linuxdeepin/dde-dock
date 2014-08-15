@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-15 16:48+0800\n"
+"POT-Creation-Date: 2014-08-15 17:57+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -74,11 +74,13 @@ msgid "Message notification"
 msgstr ""
 
 #: ../../datetime/datetime.go:127 ../../langselect/ifc.go:39
-msgid "Language changing, please wait"
+msgid "Language is changing, please wait"
 msgstr ""
 
 #: ../../datetime/set_locale.go:58 ../../langselect/locale.go:245
-msgid "Language changed successfully and effective after logout."
+msgid ""
+"Language has been changed successfully and will be effective after logged "
+"out."
 msgstr ""
 
 #: ../../datetime/set_locale.go:60 ../../langselect/locale.go:247
@@ -2331,7 +2333,7 @@ msgid "Open Folder"
 msgstr ""
 
 #: ../../mime/default_media.go:79
-msgid "Run Soft"
+msgid "Run Software"
 msgstr ""
 
 #: ../../network/manager_connections.go:203
@@ -2667,7 +2669,7 @@ msgid "Password"
 msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:253
-msgid "Password with Certificates (TLS)"
+msgid "Certificates with Password (TLS)"
 msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:254
@@ -3118,7 +3120,7 @@ msgid "Problem with the RFC 2684 Ethernet over ADSL bridge."
 msgstr ""
 
 #: ../../network/state_handler.go:86
-msgid "ModemManager was not running or quitted unexpectedly."
+msgid "ModemManager did not run or quitted unexpectedly."
 msgstr ""
 
 #: ../../network/state_handler.go:87
