@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-15 09:55+0800\n"
+"POT-Creation-Date: 2014-08-15 15:55+0800\n"
 "PO-Revision-Date: 2014-07-07 10:00+0000\n"
 "Last-Translator: electricface <songwentai@linuxdeepin.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/dde-"
@@ -2400,21 +2400,21 @@ msgstr "隧道TLS"
 msgid "Protected EAP"
 msgstr "受保護的EAP"
 
-#: ../../network/nm_constant.go:302 ../../network/nm_setting_vpn_l2tp.go:116
+#: ../../network/nm_constant.go:310 ../../network/nm_setting_vpn_l2tp.go:116
 #: ../../network/nm_setting_vpn_openvpn.go:171
 #: ../../network/nm_setting_vpn_pptp.go:106
 #: ../../network/nm_setting_vpn_vpnc.go:145
 msgid "Saved"
 msgstr "已保存的"
 
-#: ../../network/nm_constant.go:304 ../../network/nm_setting_vpn_l2tp.go:117
+#: ../../network/nm_constant.go:312 ../../network/nm_setting_vpn_l2tp.go:117
 #: ../../network/nm_setting_vpn_openvpn.go:172
 #: ../../network/nm_setting_vpn_pptp.go:107
 #: ../../network/nm_setting_vpn_vpnc.go:147
 msgid "Always Ask"
 msgstr "總是詢問"
 
-#: ../../network/nm_constant.go:305 ../../network/nm_setting_vpn_l2tp.go:118
+#: ../../network/nm_constant.go:313 ../../network/nm_setting_vpn_l2tp.go:118
 #: ../../network/nm_setting_vpn_openvpn.go:173
 #: ../../network/nm_setting_vpn_openvpn.go:479
 #: ../../network/nm_setting_vpn_pptp.go:108
@@ -3186,36 +3186,36 @@ msgstr "驗證到VPN伺服器失敗。"
 msgid "The connection was deleted from settings."
 msgstr "該連接已從設置中刪除。"
 
-#: ../../network/state_handler.go:157 ../../network/utils_notify.go:63
+#: ../../network/state_handler.go:157 ../../network/utils_notify.go:72
 msgid "Connected"
 msgstr "已連接"
 
-#: ../../network/state_handler.go:188 ../../network/utils_notify.go:67
-#: ../../network/utils_notify.go:72 ../../network/utils_notify.go:77
+#: ../../network/state_handler.go:191 ../../network/utils_notify.go:75
+#: ../../network/utils_notify.go:78 ../../network/utils_notify.go:82
 msgid "Disconnected"
 msgstr ""
 
-#: ../../network/state_handler.go:216
-msgid "Offline"
-msgstr "離線"
-
-#: ../../network/state_handler.go:216
+#: ../../network/utils_notify.go:63
 msgid "Disconnected, you are now offline."
 msgstr "斷開連接，當前已離線"
 
-#: ../../network/utils_notify.go:77
+#: ../../network/utils_notify.go:68
+msgid "Airplan mode enabled."
+msgstr ""
+
+#: ../../network/utils_notify.go:82
 msgid "Access Point mode is not supported by this device."
 msgstr "此設備不支持熱點模式"
 
-#: ../../network/utils_notify.go:82
+#: ../../network/utils_notify.go:87
 msgid "System proxy is set successfully."
 msgstr ""
 
-#: ../../network/utils_notify.go:86
+#: ../../network/utils_notify.go:91
 msgid "System proxy has been cancelled."
 msgstr ""
 
-#: ../../network/utils_notify.go:91
+#: ../../network/utils_notify.go:95
 msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr ""
 
@@ -3250,6 +3250,9 @@ msgstr "電池電量低"
 #, fuzzy
 msgid "Computer will be in suspend mode, please plug in now."
 msgstr "電腦將要進入待機狀態，請連接電源。"
+
+#~ msgid "Offline"
+#~ msgstr "離線"
 
 #~ msgid "Ashkhabad"
 #~ msgstr "阿什哈巴德"

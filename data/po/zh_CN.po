@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-15 09:55+0800\n"
+"POT-Creation-Date: 2014-08-15 15:55+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME &lt;EMAIL@ADDRESS&gt;\n"
 "Language-Team: LANGUAGE &lt;LL@li.org&gt;\n"
@@ -2396,21 +2396,21 @@ msgstr "隧道TLS"
 msgid "Protected EAP"
 msgstr "受保护的EAP"
 
-#: ../../network/nm_constant.go:302 ../../network/nm_setting_vpn_l2tp.go:116
+#: ../../network/nm_constant.go:310 ../../network/nm_setting_vpn_l2tp.go:116
 #: ../../network/nm_setting_vpn_openvpn.go:171
 #: ../../network/nm_setting_vpn_pptp.go:106
 #: ../../network/nm_setting_vpn_vpnc.go:145
 msgid "Saved"
 msgstr "已保存的"
 
-#: ../../network/nm_constant.go:304 ../../network/nm_setting_vpn_l2tp.go:117
+#: ../../network/nm_constant.go:312 ../../network/nm_setting_vpn_l2tp.go:117
 #: ../../network/nm_setting_vpn_openvpn.go:172
 #: ../../network/nm_setting_vpn_pptp.go:107
 #: ../../network/nm_setting_vpn_vpnc.go:147
 msgid "Always Ask"
 msgstr "总是询问"
 
-#: ../../network/nm_constant.go:305 ../../network/nm_setting_vpn_l2tp.go:118
+#: ../../network/nm_constant.go:313 ../../network/nm_setting_vpn_l2tp.go:118
 #: ../../network/nm_setting_vpn_openvpn.go:173
 #: ../../network/nm_setting_vpn_openvpn.go:479
 #: ../../network/nm_setting_vpn_pptp.go:108
@@ -3181,36 +3181,36 @@ msgstr "验证到VPN服务器失败。"
 msgid "The connection was deleted from settings."
 msgstr "该连接已从设置中删除。"
 
-#: ../../network/state_handler.go:157 ../../network/utils_notify.go:63
+#: ../../network/state_handler.go:157 ../../network/utils_notify.go:72
 msgid "Connected"
 msgstr "已连接"
 
-#: ../../network/state_handler.go:188 ../../network/utils_notify.go:67
-#: ../../network/utils_notify.go:72 ../../network/utils_notify.go:77
+#: ../../network/state_handler.go:191 ../../network/utils_notify.go:75
+#: ../../network/utils_notify.go:78 ../../network/utils_notify.go:82
 msgid "Disconnected"
 msgstr "断开"
 
-#: ../../network/state_handler.go:216
-msgid "Offline"
-msgstr "离线"
-
-#: ../../network/state_handler.go:216
+#: ../../network/utils_notify.go:63
 msgid "Disconnected, you are now offline."
 msgstr "断开连接，当前已离线。"
 
-#: ../../network/utils_notify.go:77
+#: ../../network/utils_notify.go:68
+msgid "Airplan mode enabled."
+msgstr "飞行模式已启用。"
+
+#: ../../network/utils_notify.go:82
 msgid "Access Point mode is not supported by this device."
 msgstr "此设备不支持热点模式。"
 
-#: ../../network/utils_notify.go:82
+#: ../../network/utils_notify.go:87
 msgid "System proxy is set successfully."
 msgstr "设置系统代理成功。"
 
-#: ../../network/utils_notify.go:86
+#: ../../network/utils_notify.go:91
 msgid "System proxy has been cancelled."
 msgstr "系统代理已取消。"
 
-#: ../../network/utils_notify.go:91
+#: ../../network/utils_notify.go:95
 msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "无线网卡的硬件开关已关闭，如需使用无线请先打开开关。"
 
@@ -3243,6 +3243,9 @@ msgstr "电池电量低"
 #: ../../power/upower.go:123
 msgid "Computer will be in suspend mode, please plug in now."
 msgstr "计算机将要进入待机状态，请连接电源。"
+
+#~ msgid "Offline"
+#~ msgstr "离线"
 
 #~ msgid "Ashkhabad"
 #~ msgstr "阿什哈巴德"
