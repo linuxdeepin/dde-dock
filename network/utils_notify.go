@@ -59,13 +59,30 @@ func notify(icon, summary, body string) (err error) {
 	return
 }
 
-func notifyNetworkOffline() {
-	notify(notifyIconNetworkOffline, "", Tr("Disconnected, you are now offline."))
-}
-
 func notifyAirplanModeEnabled() {
 	// TODO: icon
-	notify(notifyIconNetworkOffline, "", Tr("Airplan mode enabled."))
+	notify(notifyIconNetworkOffline, Tr("Disconnected"), Tr("Airplan mode enabled."))
+}
+
+func notifyNetworkOffline() {
+	notify(notifyIconNetworkOffline, Tr("Disconnected"), Tr("You are now offline."))
+}
+
+func notifyApModeNotSupport() {
+	notify(notifyIconWirelessDisconnected, Tr("Disconnected"), Tr("Access Point mode is not supported by this device."))
+}
+
+func notifyWirelessHardSwitchOff() {
+	notify(notifyIconWirelessDisconnected, Tr("Network"), Tr("The hardware switch of WLAN Card is off, please switch on as necessary."))
+}
+
+func notifyProxyEnabled() {
+	// TODO: icon
+	notify("", Tr("Network"), Tr("System proxy is set successfully."))
+}
+func notifyProxyDisabled() {
+	// TODO: icon
+	notify("", Tr("Network"), Tr("System proxy has been cancelled."))
 }
 
 func notifyVpnConnected(id string) {
@@ -76,21 +93,4 @@ func notifyVpnDisconnected(id string) {
 }
 func notifyVpnFailed(id string, reason uint32) {
 	notify(notifyIconVpnDisconnected, Tr("Disconnected"), vpnErrorTable[reason])
-}
-
-func notifyApModeNotSupport() {
-	notify(notifyIconWirelessDisconnected, Tr("Disconnected"), Tr("Access Point mode is not supported by this device."))
-}
-
-func notifyProxyEnabled() {
-	// TODO: icon
-	notify("", "", Tr("System proxy is set successfully."))
-}
-func notifyProxyDisabled() {
-	// TODO: icon
-	notify("", "", Tr("System proxy has been cancelled."))
-}
-
-func notifyWirelessHardSwitchOff() {
-	notify(notifyIconWirelessDisconnected, "", Tr("The hardware switch of WLAN Card is off, please switch on as necessary."))
 }

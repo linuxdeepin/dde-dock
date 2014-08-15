@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-15 15:55+0800\n"
+"POT-Creation-Date: 2014-08-15 16:48+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME &lt;EMAIL@ADDRESS&gt;\n"
 "Language-Team: LANGUAGE &lt;LL@li.org&gt;\n"
@@ -3181,38 +3181,44 @@ msgstr "验证到VPN服务器失败。"
 msgid "The connection was deleted from settings."
 msgstr "该连接已从设置中删除。"
 
-#: ../../network/state_handler.go:157 ../../network/utils_notify.go:72
+#: ../../network/state_handler.go:157 ../../network/utils_notify.go:89
 msgid "Connected"
 msgstr "已连接"
 
-#: ../../network/state_handler.go:191 ../../network/utils_notify.go:75
-#: ../../network/utils_notify.go:78 ../../network/utils_notify.go:82
+#: ../../network/state_handler.go:191 ../../network/utils_notify.go:64
+#: ../../network/utils_notify.go:68 ../../network/utils_notify.go:72
+#: ../../network/utils_notify.go:92 ../../network/utils_notify.go:95
 msgid "Disconnected"
 msgstr "断开"
 
-#: ../../network/utils_notify.go:63
-msgid "Disconnected, you are now offline."
-msgstr "断开连接，当前已离线。"
-
-#: ../../network/utils_notify.go:68
+#: ../../network/utils_notify.go:64
 msgid "Airplan mode enabled."
 msgstr "飞行模式已启用。"
 
-#: ../../network/utils_notify.go:82
+#: ../../network/utils_notify.go:68
+msgid "You are now offline."
+msgstr "当前已离线。"
+
+#: ../../network/utils_notify.go:72
 msgid "Access Point mode is not supported by this device."
 msgstr "此设备不支持热点模式。"
 
-#: ../../network/utils_notify.go:87
+#: ../../network/utils_notify.go:76 ../../network/utils_notify.go:81
+#: ../../network/utils_notify.go:85
+msgid "Network"
+msgstr "网络"
+
+#: ../../network/utils_notify.go:76
+msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
+msgstr "无线网卡的硬件开关已关闭，如需使用无线请先打开开关。"
+
+#: ../../network/utils_notify.go:81
 msgid "System proxy is set successfully."
 msgstr "设置系统代理成功。"
 
-#: ../../network/utils_notify.go:91
+#: ../../network/utils_notify.go:85
 msgid "System proxy has been cancelled."
 msgstr "系统代理已取消。"
-
-#: ../../network/utils_notify.go:95
-msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr "无线网卡的硬件开关已关闭，如需使用无线请先打开开关。"
 
 #: ../../power/upower.go:90
 msgid "Abnormal battery power"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-15 15:55+0800\n"
+"POT-Creation-Date: 2014-08-15 16:48+0800\n"
 "PO-Revision-Date: 2014-07-05 22:30+0000\n"
 "Last-Translator: jose manuel <josemdance@outlook.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/dde-daemon/"
@@ -3219,38 +3219,44 @@ msgstr "Autenticación con el servidor VPN falló."
 msgid "The connection was deleted from settings."
 msgstr "La conexión fue borrada de ajustes."
 
-#: ../../network/state_handler.go:157 ../../network/utils_notify.go:72
+#: ../../network/state_handler.go:157 ../../network/utils_notify.go:89
 msgid "Connected"
 msgstr "Conectado"
 
-#: ../../network/state_handler.go:191 ../../network/utils_notify.go:75
-#: ../../network/utils_notify.go:78 ../../network/utils_notify.go:82
+#: ../../network/state_handler.go:191 ../../network/utils_notify.go:64
+#: ../../network/utils_notify.go:68 ../../network/utils_notify.go:72
+#: ../../network/utils_notify.go:92 ../../network/utils_notify.go:95
 msgid "Disconnected"
 msgstr "desconectado"
 
-#: ../../network/utils_notify.go:63
-#, fuzzy
-msgid "Disconnected, you are now offline."
-msgstr "Desconectado, ahora está fuera de línea."
-
-#: ../../network/utils_notify.go:68
+#: ../../network/utils_notify.go:64
 msgid "Airplan mode enabled."
 msgstr ""
 
-#: ../../network/utils_notify.go:82
+#: ../../network/utils_notify.go:68
+#, fuzzy
+msgid "You are now offline."
+msgstr "Desconectado, ahora está fuera de línea."
+
+#: ../../network/utils_notify.go:72
 msgid "Access Point mode is not supported by this device."
 msgstr "Modo de punto de acceso no es compatible con este dispositivo."
 
-#: ../../network/utils_notify.go:87
+#: ../../network/utils_notify.go:76 ../../network/utils_notify.go:81
+#: ../../network/utils_notify.go:85
+msgid "Network"
+msgstr ""
+
+#: ../../network/utils_notify.go:76
+msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
+msgstr ""
+
+#: ../../network/utils_notify.go:81
 msgid "System proxy is set successfully."
 msgstr ""
 
-#: ../../network/utils_notify.go:91
+#: ../../network/utils_notify.go:85
 msgid "System proxy has been cancelled."
-msgstr ""
-
-#: ../../network/utils_notify.go:95
-msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr ""
 
 #: ../../power/upower.go:90
