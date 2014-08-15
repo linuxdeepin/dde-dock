@@ -78,11 +78,11 @@ func notifyWirelessHardSwitchOff() {
 
 func notifyProxyEnabled() {
 	// TODO: icon
-	notify("", Tr("Network"), Tr("System proxy is set successfully."))
+	notify(notifyIconNetworkConnected, Tr("Network"), Tr("System proxy is set successfully."))
 }
 func notifyProxyDisabled() {
 	// TODO: icon
-	notify("", Tr("Network"), Tr("System proxy has been cancelled."))
+	notify(notifyIconNetworkConnected, Tr("Network"), Tr("System proxy has been cancelled."))
 }
 
 func notifyVpnConnected(id string) {

@@ -24,7 +24,11 @@ package network
 import (
 	"fmt"
 	. "launchpad.net/gocheck"
+	"os"
+	"pkg.linuxdeepin.com/lib/gdkpixbuf"
+	. "pkg.linuxdeepin.com/lib/gettext"
 	"testing"
+	"time"
 )
 
 func Test(t *testing.T) { TestingT(t) }
@@ -32,6 +36,7 @@ func Test(t *testing.T) { TestingT(t) }
 type testWrapper struct{}
 
 func init() {
+	gdkpixbuf.InitGdk()
 	Suite(&testWrapper{})
 }
 
@@ -601,4 +606,53 @@ func (*testWrapper) TestUnmarshalVpnPluginKey(c *C) {
 	for _, t := range tests {
 		c.Check(t.result, Equals, unmarshalVpnPluginKey(t.test, t.t))
 	}
+}
+
+func (*testWrapper) ManualTestNotify(c *C) {
+	InitI18n()
+	Textdomain("dde-daemon")
+	initNmStateReasons()
+
+	notify(notifyIconEthernetConnected, Tr("Connected"), "有线网络")
+	time.Sleep(1 * time.Second) // more time to wait for the first notification
+	snapshotNotify("wired_connected")
+	notify(notifyIconEthernetDisconnected, Tr("Disconnected"), "有线网络")
+	snapshotNotify("wired_disconnected")
+	notify(notifyIconEthernetDisconnected, Tr("Disconnected"), deviceErrorTable[NM_DEVICE_STATE_REASON_CONFIG_FAILED])
+	snapshotNotify("wired_error")
+	notify(notifyIconWirelessConnected, Tr("Disconnected"), "linuxdeepin-1")
+	snapshotNotify("wireless_connected")
+	notify(notifyIconWirelessDisconnected, Tr("Disconnected"), "linuxdeepin-1")
+	snapshotNotify("wireless_disconnected")
+	notify(notifyIconWirelessDisconnected, Tr("Disconnected"), deviceErrorTable[NM_DEVICE_STATE_REASON_NO_SECRETS])
+	snapshotNotify("wireless_error")
+	notifyVpnConnected("vpn-pptp")
+	snapshotNotify("vpn_connected")
+	notifyVpnDisconnected("vpn-pptp")
+	snapshotNotify("vpn_disconnected")
+	notifyVpnFailed("vpn-pptp", NM_VPN_CONNECTION_STATE_REASON_LOGIN_FAILED)
+	snapshotNotify("vpn_error")
+	notifyAirplanModeEnabled()
+	snapshotNotify("airplanmode")
+	notifyNetworkOffline()
+	snapshotNotify("offline")
+	notifyApModeNotSupport()
+	snapshotNotify("apmode_error")
+	notifyWirelessHardSwitchOff()
+	snapshotNotify("wireless_hard_switch_off")
+	notifyProxyEnabled()
+	snapshotNotify("proxy_enabled")
+	notifyProxyDisabled()
+	snapshotNotify("proxy_disabled")
+}
+func snapshotNotify(suffix string) {
+	time.Sleep(1 * time.Second)
+	os.MkdirAll("testdata", 0755)
+	resultScreenFile := "testdata/test_network_screen.png"
+	resultClipFile := "testdata/test_network_" + suffix + ".png"
+	gdkpixbuf.ScreenshotImage(resultScreenFile, gdkpixbuf.FormatPng)
+	sw, _, _ := gdkpixbuf.GetImageSize(resultScreenFile)
+	pading := 35
+	w, h := 300-2, 70-2
+	gdkpixbuf.ClipImage(resultScreenFile, resultClipFile, sw-pading-w, pading, w, h, gdkpixbuf.FormatPng)
 }
