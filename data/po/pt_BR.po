@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-08 16:53+0800\n"
+"POT-Creation-Date: 2014-08-15 09:55+0800\n"
 "PO-Revision-Date: 2014-07-07 10:00+0000\n"
 "Last-Translator: electricface <songwentai@linuxdeepin.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/projects/p/dde-"
@@ -22,11 +22,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: ../../accounts/account_ifc.go:180
+#: ../../accounts/account_ifc.go:185
 msgid "The user name is invalid."
 msgstr ""
 
-#: ../../accounts/account_ifc.go:184
+#: ../../accounts/account_ifc.go:189
 msgid "The user name exists."
 msgstr ""
 
@@ -2404,21 +2404,21 @@ msgstr "Tunneled TLS"
 msgid "Protected EAP"
 msgstr "EAP Protegido"
 
-#: ../../network/nm_constant.go:296 ../../network/nm_setting_vpn_l2tp.go:116
+#: ../../network/nm_constant.go:302 ../../network/nm_setting_vpn_l2tp.go:116
 #: ../../network/nm_setting_vpn_openvpn.go:171
 #: ../../network/nm_setting_vpn_pptp.go:106
 #: ../../network/nm_setting_vpn_vpnc.go:145
 msgid "Saved"
 msgstr "Salvo"
 
-#: ../../network/nm_constant.go:298 ../../network/nm_setting_vpn_l2tp.go:117
+#: ../../network/nm_constant.go:304 ../../network/nm_setting_vpn_l2tp.go:117
 #: ../../network/nm_setting_vpn_openvpn.go:172
 #: ../../network/nm_setting_vpn_pptp.go:107
 #: ../../network/nm_setting_vpn_vpnc.go:147
 msgid "Always Ask"
 msgstr "Sempre perguntar"
 
-#: ../../network/nm_constant.go:299 ../../network/nm_setting_vpn_l2tp.go:118
+#: ../../network/nm_constant.go:305 ../../network/nm_setting_vpn_l2tp.go:118
 #: ../../network/nm_setting_vpn_openvpn.go:173
 #: ../../network/nm_setting_vpn_openvpn.go:479
 #: ../../network/nm_setting_vpn_pptp.go:108
@@ -2912,300 +2912,316 @@ msgstr "CCMP"
 msgid "Open"
 msgstr "Abrir"
 
-#: ../../network/state_handler.go:45
+#: ../../network/state_handler.go:34
 msgid "Device state changed, unknown reason."
 msgstr ""
 
-#: ../../network/state_handler.go:46
-msgid "Device state changed, none reason."
+#: ../../network/state_handler.go:35
+msgid "Device state changed."
 msgstr ""
 
-#: ../../network/state_handler.go:47
+#: ../../network/state_handler.go:36
 msgid "The device is now managed."
 msgstr "O dispositivo agora é gerenciado."
 
-#: ../../network/state_handler.go:48
+#: ../../network/state_handler.go:37
 msgid "The device is no longer managed."
 msgstr "O dispositivo não mais é gerenciado."
 
-#: ../../network/state_handler.go:49
+#: ../../network/state_handler.go:38
 msgid "The device has not been ready for configuration."
 msgstr ""
 
-#: ../../network/state_handler.go:50
+#: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)."
 msgstr ""
 
-#: ../../network/state_handler.go:51
+#: ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid."
 msgstr "A configuração de ip não é mais válida."
 
-#: ../../network/state_handler.go:52
+#: ../../network/state_handler.go:41
 msgid "Passwords were required but not provided."
 msgstr ""
 
-#: ../../network/state_handler.go:53
+#: ../../network/state_handler.go:42
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server."
 msgstr ""
 
-#: ../../network/state_handler.go:54
+#: ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed."
 msgstr ""
 
-#: ../../network/state_handler.go:55
+#: ../../network/state_handler.go:44
 msgid "The 802.1X supplicant quitted or failed unexpectedly."
 msgstr ""
 
-#: ../../network/state_handler.go:56
+#: ../../network/state_handler.go:45
 msgid "The 802.1X supplicant took too long time to authenticate."
 msgstr ""
 
-#: ../../network/state_handler.go:57
+#: ../../network/state_handler.go:46
 msgid "The PPP service failed to start within the allowed time."
 msgstr "O serviço PPP falhou em iniciar no tempo permitido."
 
-#: ../../network/state_handler.go:58
+#: ../../network/state_handler.go:47
 msgid "The PPP service disconnected unexpectedly."
 msgstr "O serviço PPP desconectou inesperadamente ."
 
-#: ../../network/state_handler.go:59
+#: ../../network/state_handler.go:48
 msgid "The PPP service quitted or failed unexpectedly."
 msgstr ""
 
-#: ../../network/state_handler.go:60
+#: ../../network/state_handler.go:49
 msgid "The DHCP service failed to start within the allowed time."
 msgstr "O serviço de DHCP falhou em iniciar no tempo permitido."
 
-#: ../../network/state_handler.go:61
+#: ../../network/state_handler.go:50
 msgid "The DHCP service reported an unexpected error."
 msgstr "O serviço de DHCP reportou um erro inesperado."
 
-#: ../../network/state_handler.go:62
+#: ../../network/state_handler.go:51
 msgid "The DHCP service quitted or failed unexpectedly."
 msgstr ""
 
-#: ../../network/state_handler.go:63
+#: ../../network/state_handler.go:52
 msgid "The shared connection service failed to start."
 msgstr "A conexão compartilhada falhou em iniciar."
 
-#: ../../network/state_handler.go:64
+#: ../../network/state_handler.go:53
 msgid "The shared connection service quitted or failed unexpectedly."
 msgstr ""
 
-#: ../../network/state_handler.go:65
+#: ../../network/state_handler.go:54
 msgid "The AutoIP service failed to start."
 msgstr "O serviço de AutoIP falhou em iniciar."
 
-#: ../../network/state_handler.go:66
+#: ../../network/state_handler.go:55
 msgid "The AutoIP service reported an unexpected error."
 msgstr "O serviço de AutoIP reportou um erro inesperado."
 
-#: ../../network/state_handler.go:67
+#: ../../network/state_handler.go:56
 msgid "The AutoIP service quitted or failed unexpectedly."
 msgstr ""
 
-#: ../../network/state_handler.go:68
+#: ../../network/state_handler.go:57
 msgid "Dialing failed due to busy lines."
 msgstr ""
 
-#: ../../network/state_handler.go:69
+#: ../../network/state_handler.go:58
 msgid "Dialing failed due to no dial tone."
 msgstr ""
 
-#: ../../network/state_handler.go:70
+#: ../../network/state_handler.go:59
 msgid "Dialing failed due to the carrier."
 msgstr ""
 
-#: ../../network/state_handler.go:71
+#: ../../network/state_handler.go:60
 msgid "Dialing timed out."
 msgstr "Tempo de discagem esgotado."
 
-#: ../../network/state_handler.go:72
+#: ../../network/state_handler.go:61
 msgid "Dialing failed."
 msgstr "Falha na discagem."
 
-#: ../../network/state_handler.go:73
+#: ../../network/state_handler.go:62
 msgid "Modem initialization failed."
 msgstr "Inicialização do modem falhou."
 
-#: ../../network/state_handler.go:74
+#: ../../network/state_handler.go:63
 msgid "Failed to select the specified GSM APN."
 msgstr "Falha ao selecionar a APN GSM especificada."
 
-#: ../../network/state_handler.go:75
+#: ../../network/state_handler.go:64
 msgid "No networks searched."
 msgstr ""
 
-#: ../../network/state_handler.go:76
+#: ../../network/state_handler.go:65
 msgid "Network registration was denied."
 msgstr "Registro na rede foi negado."
 
-#: ../../network/state_handler.go:77
+#: ../../network/state_handler.go:66
 msgid "Network registration timed out."
 msgstr "Tempo esgotado para registro na rede."
 
-#: ../../network/state_handler.go:78
+#: ../../network/state_handler.go:67
 msgid "Register to the requested GSM network failed."
 msgstr ""
 
-#: ../../network/state_handler.go:79
+#: ../../network/state_handler.go:68
 msgid "PIN check failed."
 msgstr "Falha na autenticação do PIN"
 
-#: ../../network/state_handler.go:80
+#: ../../network/state_handler.go:69
 msgid "Necessary firmware for the device may be missed."
 msgstr ""
 
-#: ../../network/state_handler.go:81
+#: ../../network/state_handler.go:70
 msgid "The device was removed."
 msgstr "O dispositivo foi removido"
 
-#: ../../network/state_handler.go:82
+#: ../../network/state_handler.go:71
 msgid "NetworkManager went to sleep."
 msgstr ""
 
-#: ../../network/state_handler.go:83
+#: ../../network/state_handler.go:72
 msgid "The device's active connection was removed or disappeared."
 msgstr "A conexão ativa do dispositivo foi removida ou desapareceu."
 
-#: ../../network/state_handler.go:84
+#: ../../network/state_handler.go:73
 msgid "A user or client requested to disconnect."
 msgstr ""
 
-#: ../../network/state_handler.go:85
+#: ../../network/state_handler.go:74
 msgid "The device's carrier/link changed."
 msgstr ""
 
-#: ../../network/state_handler.go:86
+#: ../../network/state_handler.go:75
 msgid "The device's existing connection was assumed."
 msgstr ""
 
-#: ../../network/state_handler.go:87
+#: ../../network/state_handler.go:76
 msgid "The 802.1x supplicant is now available."
 msgstr ""
 
-#: ../../network/state_handler.go:88
+#: ../../network/state_handler.go:77
 msgid "The modem could not be found."
 msgstr "O modem não foi encontrado."
 
-#: ../../network/state_handler.go:89
+#: ../../network/state_handler.go:78
 msgid "The Bluetooth connection timed out or failed."
 msgstr "A conexão bluetooth expirou ou falhou."
 
-#: ../../network/state_handler.go:90
+#: ../../network/state_handler.go:79
 #, fuzzy
 msgid "GSM Modem's SIM Card was not inserted."
 msgstr "Cartão SIM do Modem GSM não foi inserido."
 
-#: ../../network/state_handler.go:91
+#: ../../network/state_handler.go:80
 msgid "GSM Modem's SIM PIN required."
 msgstr ""
 
-#: ../../network/state_handler.go:92
+#: ../../network/state_handler.go:81
 msgid "GSM Modem's SIM PUK required."
 msgstr ""
 
-#: ../../network/state_handler.go:93
+#: ../../network/state_handler.go:82
 msgid "Wrong GSM Modem's SIM"
 msgstr ""
 
-#: ../../network/state_handler.go:94
+#: ../../network/state_handler.go:83
 msgid "InfiniBand device does not support connected mode."
 msgstr "Dispositivo InifiniBand não suporta modo conectado."
 
-#: ../../network/state_handler.go:95
+#: ../../network/state_handler.go:84
 msgid "A connection dependency failed."
 msgstr ""
 
-#: ../../network/state_handler.go:96
+#: ../../network/state_handler.go:85
 msgid "Problem with the RFC 2684 Ethernet over ADSL bridge."
 msgstr "Problema com o RFC 2684 Ethernet sobre a ponte ADSL."
 
-#: ../../network/state_handler.go:97
+#: ../../network/state_handler.go:86
 msgid "ModemManager was not running or quitted unexpectedly."
 msgstr ""
 
-#: ../../network/state_handler.go:98
+#: ../../network/state_handler.go:87
 msgid "The 802.11 Wi-Fi network could not be found."
 msgstr "A conexão Wi-Fi 802.11 não pode ser encontrada."
 
-#: ../../network/state_handler.go:99
+#: ../../network/state_handler.go:88
 msgid "A secondary connection of the base connection failed."
 msgstr "Uma conexão secundária da conexão de base falhou."
 
-#: ../../network/state_handler.go:101
+#: ../../network/state_handler.go:91
+msgid "Network cable is unplugged."
+msgstr ""
+
+#: ../../network/state_handler.go:94
 msgid "Activate VPN connection failed, unknown reason."
 msgstr ""
 
-#: ../../network/state_handler.go:102
+#: ../../network/state_handler.go:95
 #, fuzzy
 msgid "Activate VPN connection failed."
 msgstr "Uma conexão secundária da conexão de base falhou."
 
-#: ../../network/state_handler.go:103
+#: ../../network/state_handler.go:96
 msgid "The VPN connection changed state due to disconnection from users."
 msgstr ""
 
-#: ../../network/state_handler.go:104
+#: ../../network/state_handler.go:97
 msgid "The VPN connection changed state due to disconnection from devices."
 msgstr ""
 
-#: ../../network/state_handler.go:105
+#: ../../network/state_handler.go:98
 msgid "VPN service stopped."
 msgstr "Serviço VPN parou. "
 
-#: ../../network/state_handler.go:106
+#: ../../network/state_handler.go:99
 msgid "The IP config of VPN connection was invalid."
 msgstr ""
 
-#: ../../network/state_handler.go:107
+#: ../../network/state_handler.go:100
 msgid "The connection attempt to VPN service timed out."
 msgstr ""
 
-#: ../../network/state_handler.go:108
+#: ../../network/state_handler.go:101
 msgid "The VPN service start timed out."
 msgstr "A inicialização do serviço VPN expirou."
 
-#: ../../network/state_handler.go:109
+#: ../../network/state_handler.go:102
 msgid "The VPN service failed to start."
 msgstr "Serviço VPN falhou em iniciar."
 
-#: ../../network/state_handler.go:110
+#: ../../network/state_handler.go:103
 msgid "Necessary password for the VPN connection was not provided."
 msgstr ""
 
-#: ../../network/state_handler.go:111
+#: ../../network/state_handler.go:104
 msgid "Authentication to VPN server failed."
 msgstr "Autenticação na VPN falhou."
 
-#: ../../network/state_handler.go:112
+#: ../../network/state_handler.go:105
 msgid "The connection was deleted from settings."
 msgstr "A conexão foi deletada das configurações"
 
-#: ../../network/state_handler.go:164 ../../network/state_handler.go:227
+#: ../../network/state_handler.go:157 ../../network/utils_notify.go:63
 msgid "Connected"
 msgstr "Conectado"
 
-#: ../../network/state_handler.go:182 ../../network/state_handler.go:231
-#: ../../network/state_handler.go:236 ../../network/state_handler.go:241
+#: ../../network/state_handler.go:188 ../../network/utils_notify.go:67
+#: ../../network/utils_notify.go:72 ../../network/utils_notify.go:77
 msgid "Disconnected"
 msgstr ""
 
-#: ../../network/state_handler.go:209
+#: ../../network/state_handler.go:216
 msgid "Offline"
 msgstr "Offline"
 
-#: ../../network/state_handler.go:209
+#: ../../network/state_handler.go:216
 #, fuzzy
 msgid "Disconnected, you are now offline."
 msgstr "Desconectado, você agora está offline."
 
-#: ../../network/state_handler.go:241
+#: ../../network/utils_notify.go:77
 msgid "Access Point mode is not supported by this device."
 msgstr "Modo Ponto de Acesso não é suportado por esse dispositivo."
+
+#: ../../network/utils_notify.go:82
+msgid "System proxy is set successfully."
+msgstr ""
+
+#: ../../network/utils_notify.go:86
+msgid "System proxy has been cancelled."
+msgstr ""
+
+#: ../../network/utils_notify.go:91
+msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
+msgstr ""
 
 #: ../../power/upower.go:90
 msgid "Abnormal battery power"
