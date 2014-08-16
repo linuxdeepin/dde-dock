@@ -11,7 +11,7 @@ struct udev_device* filter_by_type(struct udev* udev, struct udev_list_entry* en
     udev_list_entry_foreach(current, entries) {
 	const char* name = udev_list_entry_get_name(current);
 	struct udev_device* dev = udev_device_new_from_syspath(udev, name);
-	if (strcmp(udev_device_get_sysattr_value(dev, "type"), "firmware") == 0) {
+	if (strcmp(udev_device_get_sysattr_value(dev, "type"), type) == 0) {
 	    return dev;
 	}
 	udev_device_unref(dev);
