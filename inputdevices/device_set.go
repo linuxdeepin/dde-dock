@@ -170,6 +170,10 @@ func listenDevsSettings() {
 				ok := tpadSettings.GetBoolean(TPAD_KEY_W_TYPING)
 				disableTPadWhileTyping(ok)
 			} else {
+				if !isDeviceExist("mouse") {
+					tpadSettings.SetBoolean(TPAD_KEY_ENABLE, true)
+					return
+				}
 				C.set_tpad_enable(C.FALSE)
 				disableTPadWhileTyping(false)
 			}
@@ -260,7 +264,7 @@ func listenDevsSettings() {
 			}
 		case MOUSE_KEY_DISABLE_TPAD:
 			if mouseSettings.GetBoolean(MOUSE_KEY_DISABLE_TPAD) {
-				tpadSettings.SetBoolean(TPAD_KEY_ENABLE, false)
+				disableTPadWhenMouse()
 			} else {
 				tpadSettings.SetBoolean(TPAD_KEY_ENABLE, true)
 			}
@@ -433,8 +437,25 @@ func initGSettingsSet(tpadFlag bool) {
 	//logger.Info("Init devices end...")
 }
 
+func isDeviceExist(device string) bool {
+	names := getDeviceNames()
+
+	for _, name := range names {
+		if strings.Contains(name, device) {
+			return true
+		}
+	}
+
+	return false
+}
+
 func disableTPadWhenMouse() {
 	if mouseSettings.GetBoolean(MOUSE_KEY_DISABLE_TPAD) {
+		if !isDeviceExist("mouse") {
+			mouseSettings.SetBoolean(MOUSE_KEY_DISABLE_TPAD, false)
+			return
+		}
+
 		//C.set_tpad_enable(C.FALSE)
 		tpadSettings.SetBoolean(TPAD_KEY_ENABLE, false)
 	}
