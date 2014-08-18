@@ -85,6 +85,8 @@ func parseDeviceAdd(devName *C.char) {
 			managerObj.mouseObj = mouse
 			managerObj.setPropName("Infos")
 		}
+
+		managerObj.mouseObj.setPropExist(isDeviceExist("mouse"))
 		initMouseSettings()
 		disableTPadWhenMouse()
 	} else if strings.Contains(s, "touchpad") {
@@ -133,6 +135,7 @@ func parseDeviceDelete(devName *C.char) {
 				tpadSettings.SetBoolean(TPAD_KEY_ENABLE, true)
 			}
 		}
+		managerObj.mouseObj.setPropExist(isDeviceExist("mouse"))
 	}
 	/*
 		if strings.Contains(s, "mouse") {

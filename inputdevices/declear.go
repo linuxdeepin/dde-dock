@@ -70,6 +70,7 @@ type MouseEntry struct {
 	MotionThreshold    *property.GSettingsFloatProperty `access:"readwrite"`
 	DoubleClick        *property.GSettingsIntProperty   `access:"readwrite"`
 	DragThreshold      *property.GSettingsIntProperty   `access:"readwrite"`
+	Exist              bool
 	deviceId           string
 }
 

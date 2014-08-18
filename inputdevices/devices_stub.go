@@ -48,6 +48,13 @@ func (op *MouseEntry) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
+func (mouse *MouseEntry) setPropExist(exist bool) {
+	if mouse.Exist != exist {
+		mouse.Exist = exist
+		dbus.NotifyChange(mouse, "Exist")
+	}
+}
+
 func (op *TPadEntry) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		DEVICE_DEST,

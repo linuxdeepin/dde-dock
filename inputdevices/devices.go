@@ -178,6 +178,8 @@ func NewMouse() *MouseEntry {
 		mouseSettings, MOUSE_KEY_DRAG_THRES)
 	m.deviceId = "Mouse"
 
+	m.setPropExist(isDeviceExist("mouse"))
+
 	return m
 }
 
