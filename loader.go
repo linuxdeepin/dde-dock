@@ -15,6 +15,29 @@ type Module struct {
 
 var modules = make([]*Module, 0)
 
+func StartPlugin(plugin string) {
+	logger.Info("^^^^Enable plugin:", plugin)
+	for _, m := range modules {
+		if m.Name == plugin {
+			logger.Info("^^^^Start plugin:", plugin)
+			m.Stop()
+			m.Start()
+			return
+		}
+	}
+}
+
+func StopPlugin(plugin string) {
+	logger.Info("^^^^Disable plugin:", plugin)
+	for _, m := range modules {
+		if m.Name == plugin {
+			logger.Info("^^^^Stop plugin:", plugin)
+			m.Stop()
+			return
+		}
+	}
+}
+
 func Enable(name string, enable bool) {
 	for _, m := range modules {
 		if m.Name == name {
@@ -37,6 +60,10 @@ func Register(newModule *Module) {
 
 func Start() {
 	for _, m := range modules {
+		if !m.Enable {
+			continue
+		}
+
 		func() {
 			defer func() {
 				if err := recover(); err != nil {

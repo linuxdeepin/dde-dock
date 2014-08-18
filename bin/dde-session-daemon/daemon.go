@@ -15,7 +15,7 @@ import _ "pkg.linuxdeepin.com/dde-daemon/mime"
 
 //import _ "pkg.linuxdeepin.com/dde-daemon/langselect"
 
-import _ "pkg.linuxdeepin.com/dde-daemon/screen_edges"
+import _ "pkg.linuxdeepin.com/dde-daemon/screenedge"
 
 import _ "pkg.linuxdeepin.com/dde-daemon/bluetooth"
 
@@ -65,6 +65,9 @@ func main() {
 
 	C.init()
 	proxy.SetupProxy()
+
+	initPlugins()
+	listenDaemonSettings()
 
 	loader.Start()
 	defer loader.Stop()

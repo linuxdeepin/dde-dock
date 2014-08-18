@@ -42,9 +42,11 @@ func startTimer() {
 			go GetDockApplet_T().restartDockApplet()
 			go GetDDeDock_T().restartDock()
 		case <-exitTimer:
+			close(exitTimer)
 			return
 		}
 	}
+	Logger.Debug("Exit Timer...")
 }
 
 func Start() {
@@ -62,5 +64,9 @@ func Start() {
 
 func Stop() {
 	Logger.EndTracing()
-	exitTimer <- true
+	if exitTimer != nil {
+		exitTimer <- true
+	}
+	dbus.DestroyDBusDaemon(dbusDaemon)
+	Logger.Debug("Exit sessionwatcher...")
 }
