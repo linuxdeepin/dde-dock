@@ -48,7 +48,8 @@ func Start() {
 		os.Exit(1)
 	}
 
-	hideModemanager = NewHideStateManager(setting.GetHideMode())
+	hideModemanager =
+		NewHideStateManager(HideModeType(setting.GetHideMode()))
 	err = dbus.InstallOnSession(hideModemanager)
 	if err != nil {
 		logger.Errorf("register dbus interface failed: %v", err)

@@ -5,31 +5,39 @@ import (
 	"time"
 )
 
+type HideStateType int32
+
 const (
-	HideStateShowing int32 = iota
+	HideStateShowing HideStateType = iota
 	HideStateShown
 	HideStateHidding
 	HideStateHidden
 )
 
-var (
-	HideStateMap map[int32]string = map[int32]string{
-		HideStateShowing: "HideStateShowing",
-		HideStateShown:   "HideStateShown",
-		HideStateHidding: "HideStateHidding",
-		HideStateHidden:  "HideStateHidden",
+func (s HideStateType) String() string {
+	switch s {
+	case HideStateShowing:
+		return "HideStateShowing"
+	case HideStateShown:
+		return "HideStateShown"
+	case HideStateHidding:
+		return "HideStateHidding"
+	case HideStateHidden:
+		return "HideStateHidden"
+	default:
+		return "Unknown state"
 	}
-)
+}
 
 type HideStateManager struct {
-	state               int32
+	state               HideStateType
 	toggleShowTimer     <-chan time.Time
 	cleanToggleShowChan chan bool
 
-	StateChanged func(int32)
+	StateChanged func(HideStateType)
 }
 
-func NewHideStateManager(mode int32) *HideStateManager {
+func NewHideStateManager(mode HideModeType) *HideStateManager {
 	h := &HideStateManager{}
 	h.toggleShowTimer = nil
 	h.cleanToggleShowChan = make(chan bool, 1)
@@ -51,14 +59,14 @@ func (e *HideStateManager) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (m *HideStateManager) SetState(s int32) int32 {
+func (m *HideStateManager) SetState(s HideStateType) HideStateType {
 	if m.state == s {
 		return s
 	}
 
-	logger.Debug("SetState m.state:", HideStateMap[m.state], "new state:", HideStateMap[s])
+	logger.Debug("SetState m.state:", m.state, "new state:", s)
 	m.state = s
-	logger.Debug("SetState emit StateChanged signal", HideStateMap[m.state])
+	logger.Debug("SetState emit StateChanged signal", m.state)
 	m.StateChanged(s)
 
 	return s
@@ -70,7 +78,7 @@ func (m *HideStateManager) UpdateState() {
 		return
 	}
 	state := m.state
-	switch setting.GetHideMode() {
+	switch HideModeType(setting.GetHideMode()) {
 	case HideModeKeepShowing:
 		logger.Debug("KeepShowing Mode")
 		state = HideStateShowing
@@ -122,7 +130,7 @@ func (m *HideStateManager) ToggleShow() {
 
 	if m.state == HideStateHidden || m.state == HideStateHidding {
 		m.SetState(HideStateShowing)
-	} else if m.state == HideStateShown || m.state == HideModeKeepShowing {
+	} else if m.state == HideStateShown || m.state == HideStateShowing {
 		m.SetState(HideStateHidding)
 	}
 
