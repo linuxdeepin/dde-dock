@@ -85,3 +85,7 @@ func (*GrubTester) TestParseGfxmode(c *C) {
 	_, _, err = doParseGfxmode("autox24")
 	c.Check(err, NotNil)
 }
+
+func (*GrubTester) TestGetPrimaryScreenBestResolution(c *C) {
+	logger.Info("getPrimaryScreenBestResolution:", getPrimaryScreenBestResolutionStr())
+}

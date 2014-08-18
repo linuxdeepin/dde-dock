@@ -135,6 +135,7 @@ func (*GrubTester) TestSetupGfxmode(c *C) {
 	c.Check(h, Equals, sh)
 
 	// setup with wrong gfxmode format
+	logger.Info("testing gfxmode with wrong format, will follows an error message")
 	utils.CopyFile(testGrubSettingsFile, tmpConfigFile)
 	g.Setup("1024x")
 	g.readSettings()
