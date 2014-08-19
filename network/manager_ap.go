@@ -120,6 +120,7 @@ func doParseApSecType(flags, wpaFlags, rsnFlags uint32) apSecType {
 
 func (m *Manager) addAccessPoint(devPath, apPath dbus.ObjectPath) {
 	if m.isAccessPointExists(devPath, apPath) {
+		logger.Debug("access point already exists:", devPath, apPath) // TODO
 		return
 	}
 	ap, err := newAccessPoint(apPath)

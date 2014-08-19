@@ -192,6 +192,24 @@ func nmGeneralGetDeviceSpeed(devPath dbus.ObjectPath) (speed string) {
 	return
 }
 
+func nmGeneralIsDeviceManaged(devPath dbus.ObjectPath) bool {
+	dev, err := nmNewDevice(devPath)
+	if err != nil {
+		return false
+	}
+	if !isDeviceStateManaged(dev.State.Get()) {
+		return false
+	}
+	devType := dev.DeviceType.Get()
+	switch devType {
+	case NM_DEVICE_TYPE_WIFI:
+		if !nmGetWirelessHardwareEnabled() {
+			return false
+		}
+	}
+	return true
+}
+
 // New network manager objects
 func nmNewManager() (m *nm.Manager, err error) {
 	m, err = nm.NewManager(dbusNmDest, dbusNmPath)

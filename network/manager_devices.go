@@ -33,6 +33,7 @@ type device struct {
 	Path      dbus.ObjectPath
 	State     uint32
 	HwAddress string
+	Managed   bool
 	ActiveAp  dbus.ObjectPath // used for wireless device
 }
 
@@ -47,6 +48,7 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device) {
 		Path:      nmDev.Path,
 		State:     nmDev.State.Get(),
 	}
+	dev.Managed = nmGeneralIsDeviceManaged(devPath)
 	dev.id, _ = nmGeneralGetDeviceIdentifier(devPath)
 
 	// add device config
@@ -54,7 +56,9 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device) {
 
 	// connect signal, about device state
 	dev.nmDev.ConnectStateChanged(func(newState, oldState, reason uint32) {
+		// TODO fix issue if device removed
 		dev.State = newState
+		dev.Managed = nmGeneralIsDeviceManaged(dev.Path)
 		m.config.updateDeviceConfig(dev.Path)
 		m.config.syncDeviceState(dev.Path)
 		if m.DeviceStateChanged != nil { // TODO
@@ -70,6 +74,7 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device) {
 			dev.HwAddress = nmDevWired.HwAddress.Get()
 		}
 	case NM_DEVICE_TYPE_WIFI:
+		logger.Debug("add wireless device:", dev.Path)
 		if nmDevWireless, err := nmNewDeviceWireless(dev.Path); err == nil {
 			dev.HwAddress = nmDevWireless.HwAddress.Get()
 			dev.nmDevWireless = nmDevWireless

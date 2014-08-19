@@ -58,14 +58,18 @@ const (
 	NM_DEVICE_STATE_FAILED       = 120 // The device is in a failure state following an attempt to activate it.
 )
 
+func isDeviceStateManaged(state uint32) bool {
+	if state > NM_DEVICE_STATE_UNMANAGED {
+		return true
+	}
+	return false
+}
 func isDeviceStateAvailable(state uint32) bool {
 	if state > NM_DEVICE_STATE_UNAVAILABLE {
 		return true
 	}
 	return false
 }
-
-// check if device is activating or activated
 func isDeviceStateActivated(state uint32) bool {
 	if state == NM_DEVICE_STATE_ACTIVATED {
 		return true
