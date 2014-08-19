@@ -112,21 +112,15 @@ func DestroyManager(m *Manager) {
 }
 
 func (m *Manager) initManager() {
-	// update devices and connections
-	m.initDeviceManage()
-	m.initConnectionManage()
-
 	// setup global switches
 	m.initPropNetworkingEnabled()
 	nmManager.NetworkingEnabled.ConnectChanged(func() {
 		m.setPropNetworkingEnabled()
 	})
-
 	m.initPropWirelessEnabled()
 	nmManager.WirelessEnabled.ConnectChanged(func() {
 		m.setPropWirelessEnabled()
 	})
-
 	m.initPropWwanEnabled()
 	nmManager.WwanEnabled.ConnectChanged(func() {
 		m.setPropWwanEnabled()
@@ -135,6 +129,10 @@ func (m *Manager) initManager() {
 	// load virtual global switches information from configuration file
 	m.initPropWiredEnabled()
 	m.initPropVpnEnabled()
+
+	// initialize device and connection managers
+	m.initDeviceManage()
+	m.initConnectionManage()
 
 	// update property "ActiveConnections" after devices initialized
 	m.updateActiveConnections()

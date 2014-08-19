@@ -217,7 +217,7 @@ func (c *config) updateDeviceConfig(devPath dbus.ObjectPath) {
 	if devConfig.Enabled {
 		if isDeviceStateInActivating(devState) {
 			devConfig.LastConnectionUuid, _ = nmGetDeviceActiveConnectionUuid(devPath)
-			// logger.Debugf("updateDeviceConfig %s %#v", devPath, devConfig) // TODO test
+			logger.Debugf("updateDeviceConfig %s %#v", devPath, devConfig)
 			c.save()
 		}
 	}
@@ -377,7 +377,7 @@ func (m *Manager) doEnableDevice(devPath dbus.ObjectPath, enabled bool) (err err
 	if err != nil {
 		return
 	}
-	logger.Debugf("doEnableDevice %s %v %#v", devPath, enabled, devConfig) // TODO test
+	logger.Debugf("doEnableDevice %s %v %#v", devPath, enabled, devConfig)
 
 	m.config.setDeviceEnabled(devPath, enabled)
 	if enabled {
