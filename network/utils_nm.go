@@ -814,6 +814,15 @@ func nmGetDeviceType(devPath dbus.ObjectPath) (devType uint32) {
 	return
 }
 
+func nmGetDeviceUdi(devPath dbus.ObjectPath) (udi string) {
+	dev, err := nmNewDevice(devPath)
+	if err != nil {
+		return
+	}
+	udi = dev.Udi.Get()
+	return
+}
+
 func nmGetDeviceActiveConnection(devPath dbus.ObjectPath) (acPath dbus.ObjectPath) {
 	dev, err := nmNewDevice(devPath)
 	if err != nil {

@@ -34,6 +34,8 @@ type device struct {
 	State     uint32
 	HwAddress string
 	Managed   bool
+	Vendor    string
+	UsbDevice bool
 	ActiveAp  dbus.ObjectPath // used for wireless device
 }
 
@@ -49,6 +51,8 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device) {
 		State:     nmDev.State.Get(),
 	}
 	dev.Managed = nmGeneralIsDeviceManaged(devPath)
+	dev.Vendor = udevGetDeviceVendor(nmDev.Udi.Get())
+	dev.UsbDevice = udevIsUsbDevice(nmDev.Udi.Get())
 	dev.id, _ = nmGeneralGetDeviceIdentifier(devPath)
 
 	// add device config

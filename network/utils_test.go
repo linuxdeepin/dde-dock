@@ -620,7 +620,7 @@ func (*testWrapper) ManualTestNotify(c *C) {
 	snapshotNotify("wired_disconnected")
 	notify(notifyIconEthernetDisconnected, Tr("Disconnected"), deviceErrorTable[NM_DEVICE_STATE_REASON_CONFIG_FAILED])
 	snapshotNotify("wired_error")
-	notify(notifyIconWirelessConnected, Tr("Disconnected"), "linuxdeepin-1")
+	notify(notifyIconWirelessConnected, Tr("Connected"), "linuxdeepin-1")
 	snapshotNotify("wireless_connected")
 	notify(notifyIconWirelessDisconnected, Tr("Disconnected"), "linuxdeepin-1")
 	snapshotNotify("wireless_disconnected")
@@ -655,4 +655,23 @@ func snapshotNotify(suffix string) {
 	pading := 35
 	w, h := 300-2, 70-2
 	gdkpixbuf.ClipImage(resultScreenFile, resultClipFile, sw-pading-w, pading, w, h, gdkpixbuf.FormatPng)
+}
+
+func (*testWrapper) TestGetUdevDeviceVendor(c *C) {
+	var syspaths []string
+	syspaths = append(syspaths, "/sys/devices/pci0000:00/0000:00:01.0")
+	for _, p := range nmGetDevices() {
+		syspaths = append(syspaths, nmGetDeviceUdi(p))
+	}
+	syspaths = append(syspaths, "/sys/devices/wrong_format")
+	for _, p := range syspaths {
+		doPrintDeviceVendor(p)
+	}
+}
+func doPrintDeviceVendor(syspath string) {
+	vendor := udevGetDeviceVendor(syspath)
+	fmt.Println("device syspath:", syspath)
+	fmt.Println("device vendor:", vendor)
+	fmt.Println("is usb device:", udevIsUsbDevice(syspath))
+	fmt.Println("")
 }
