@@ -73,7 +73,7 @@ func (m *HideStateManager) SetState(s HideStateType) HideStateType {
 }
 
 func (m *HideStateManager) UpdateState() {
-	if m.toggleShowTimer != nil {
+	if m.toggleShowTimer != nil && !isLauncherShown {
 		logger.Info("in ToggleShow")
 		return
 	}
@@ -109,7 +109,8 @@ func (m *HideStateManager) UpdateState() {
 	}
 
 	if isLauncherShown {
-		logger.Infof("launcher is opend, show dock")
+		m.CancelToggleShow()
+		logger.Info("launcher is opend, show dock")
 		state = HideStateShowing
 	}
 
