@@ -87,7 +87,7 @@ msgstr "系统语言更改失败，请稍后重试。"
 
 #: ../../datetime/zone_utc_list.go:24
 msgid "Midway"
-msgstr ""
+msgstr "中途岛"
 
 #: ../../datetime/zone_utc_list.go:25
 msgid "Niue"
@@ -351,11 +351,11 @@ msgstr "比尤拉"
 
 #: ../../datetime/zone_utc_list.go:104
 msgid "North Dakota/Center"
-msgstr ""
+msgstr "北达科他州/中部"
 
 #: ../../datetime/zone_utc_list.go:105
 msgid "North Dakota/New Salem"
-msgstr ""
+msgstr "北达科他州/新塞勒姆"
 
 #: ../../datetime/zone_utc_list.go:106
 msgid "Rainy River"
@@ -515,7 +515,7 @@ msgstr "巴拿马"
 
 #: ../../datetime/zone_utc_list.go:151
 msgid "Pangnirtung"
-msgstr ""
+msgstr "庞纳唐"
 
 #: ../../datetime/zone_utc_list.go:152
 msgid "Port-au-Prince"
@@ -539,7 +539,7 @@ msgstr "多伦多"
 
 #: ../../datetime/zone_utc_list.go:157
 msgid "Acre"
-msgstr ""
+msgstr "阿克里"
 
 #: ../../datetime/zone_utc_list.go:158
 msgid "Canada/Eastern"
@@ -587,7 +587,7 @@ msgstr "巴巴多斯"
 
 #: ../../datetime/zone_utc_list.go:172
 msgid "Blanc-Sablon"
-msgstr ""
+msgstr "布朗萨布隆"
 
 #: ../../datetime/zone_utc_list.go:173
 msgid "Boa Vista"
@@ -691,7 +691,7 @@ msgstr "圣巴夫林米"
 
 #: ../../datetime/zone_utc_list.go:198
 msgid "St Kitts"
-msgstr ""
+msgstr "圣基茨岛"
 
 #: ../../datetime/zone_utc_list.go:199
 msgid "St Lucia"
@@ -875,7 +875,7 @@ msgstr "迪诺罗尼亚"
 
 #: ../../datetime/zone_utc_list.go:254
 msgid "Scoresbysund"
-msgstr ""
+msgstr "斯科斯比松"
 
 #: ../../datetime/zone_utc_list.go:255
 msgid "Azores"
@@ -955,7 +955,7 @@ msgstr "丹马沙"
 
 #: ../../datetime/zone_utc_list.go:275
 msgid "Troll"
-msgstr ""
+msgstr "特罗尔"
 
 #: ../../datetime/zone_utc_list.go:276
 msgid "Canary"
@@ -1007,7 +1007,7 @@ msgstr "里斯本"
 
 #: ../../datetime/zone_utc_list.go:295
 msgid "GB"
-msgstr "GB"
+msgstr "英国"
 
 #: ../../datetime/zone_utc_list.go:296
 msgid "GB-Eire"
@@ -1143,7 +1143,7 @@ msgstr "布达佩斯"
 
 #: ../../datetime/zone_utc_list.go:333
 msgid "Busingen"
-msgstr ""
+msgstr "布辛根"
 
 #: ../../datetime/zone_utc_list.go:334
 msgid "Copenhagen"
@@ -1371,7 +1371,7 @@ msgstr "塔林"
 
 #: ../../datetime/zone_utc_list.go:393
 msgid "Tiraspol"
-msgstr ""
+msgstr "蒂拉斯波尔"
 
 #: ../../datetime/zone_utc_list.go:394
 msgid "Uzhgorod"
@@ -1435,7 +1435,7 @@ msgstr "内罗毕"
 
 #: ../../datetime/zone_utc_list.go:411
 msgid "Syowa"
-msgstr ""
+msgstr "昭和"
 
 #: ../../datetime/zone_utc_list.go:412
 msgid "Aden"
@@ -1651,7 +1651,7 @@ msgstr "仰光"
 
 #: ../../datetime/zone_utc_list.go:478
 msgid "Cocos"
-msgstr ""
+msgstr "科库斯"
 
 #: ../../datetime/zone_utc_list.go:480
 msgid "Bangkok"
@@ -1707,7 +1707,7 @@ msgstr "文莱"
 
 #: ../../datetime/zone_utc_list.go:494
 msgid "Choibalsan"
-msgstr ""
+msgstr "乔巴山"
 
 #: ../../datetime/zone_utc_list.go:495
 msgid "Chongqing"
@@ -1863,7 +1863,7 @@ msgstr "迪蒙·迪维尔"
 
 #: ../../datetime/zone_utc_list.go:542
 msgid "Khandyga"
-msgstr ""
+msgstr "汉德加"
 
 #: ../../datetime/zone_utc_list.go:543
 msgid "Yakutsk"
@@ -1899,7 +1899,7 @@ msgstr "墨尔本"
 
 #: ../../datetime/zone_utc_list.go:551
 msgid "NSW"
-msgstr ""
+msgstr "新南威尔士"
 
 #: ../../datetime/zone_utc_list.go:552
 msgid "Queensland"
@@ -1919,7 +1919,7 @@ msgstr "维多利亚"
 
 #: ../../datetime/zone_utc_list.go:556
 msgid "Chuuk"
-msgstr ""
+msgstr "楚克"
 
 #: ../../datetime/zone_utc_list.go:557
 msgid "Guam"
@@ -1939,11 +1939,11 @@ msgstr "特鲁克"
 
 #: ../../datetime/zone_utc_list.go:561
 msgid "Yap"
-msgstr ""
+msgstr "雅蒲岛"
 
 #: ../../datetime/zone_utc_list.go:563
 msgid "LHI"
-msgstr ""
+msgstr "朗廷"
 
 #: ../../datetime/zone_utc_list.go:564
 msgid "Lord Howe"
@@ -1955,7 +1955,7 @@ msgstr "凯西"
 
 #: ../../datetime/zone_utc_list.go:567
 msgid "Macquarie"
-msgstr ""
+msgstr "麦夸里河"
 
 #: ../../datetime/zone_utc_list.go:568
 msgid "Sakhalin"
@@ -1963,7 +1963,7 @@ msgstr "库页岛"
 
 #: ../../datetime/zone_utc_list.go:569
 msgid "Ust-Nera"
-msgstr ""
+msgstr "乌斯季涅拉"
 
 #: ../../datetime/zone_utc_list.go:570
 msgid "Vladivostok"
@@ -2015,7 +2015,7 @@ msgstr "马加丹"
 
 #: ../../datetime/zone_utc_list.go:586
 msgid "NZ"
-msgstr ""
+msgstr "新西兰"
 
 #: ../../datetime/zone_utc_list.go:587
 msgid "Auckland"
