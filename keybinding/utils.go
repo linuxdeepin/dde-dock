@@ -396,9 +396,11 @@ func getSystemKeyValue(key string, action bool) string {
 		return ""
 	}
 
-	if l == 2 {
-		if action {
+	if action {
+		if l == 2 {
 			return values[1]
+		} else {
+			return ""
 		}
 	}
 

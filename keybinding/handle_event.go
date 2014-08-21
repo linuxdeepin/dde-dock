@@ -148,6 +148,7 @@ func (obj *MediaKeyManager) emitMediaSignal(modStr, keyStr string, press bool) b
 		obj.LaunchCalculator(press)
 	default:
 		shortcut := ""
+		modStr = deleteSpecialMod(modStr)
 		if len(modStr) > 1 {
 			shortcut = modStr + "-" + keyStr
 		} else {
@@ -159,6 +160,8 @@ func (obj *MediaKeyManager) emitMediaSignal(modStr, keyStr string, press bool) b
 		}
 		sLayout := sLayoutList[0]
 		sLayout = formatXGBShortcut(sLayout)
+		logger.Debugf("GSettings slayout: %v, input shortcut: %v",
+			sLayout, shortcut)
 		if strings.ToLower(shortcut) == sLayout {
 			if press {
 				go doAction(CMD_DDE_OSD + "--SwitchLayout")
