@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-15 17:57+0800\n"
+"POT-Creation-Date: 2014-08-21 11:42+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME &lt;EMAIL@ADDRESS&gt;\n"
 "Language-Team: LANGUAGE &lt;LL@li.org&gt;\n"
@@ -16,11 +16,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../../accounts/account_ifc.go:185
-msgid "The user name is invalid."
+msgid "The username is invalid."
 msgstr "此用户名不合法。"
 
 #: ../../accounts/account_ifc.go:189
-msgid "The user name exists."
+msgid "The username exists."
 msgstr "此用户名已存在。"
 
 #: ../../bluetooth/bluez_profile.go:31
@@ -2398,21 +2398,21 @@ msgstr "隧道TLS"
 msgid "Protected EAP"
 msgstr "受保护的EAP"
 
-#: ../../network/nm_constant.go:310 ../../network/nm_setting_vpn_l2tp.go:116
+#: ../../network/nm_constant.go:314 ../../network/nm_setting_vpn_l2tp.go:116
 #: ../../network/nm_setting_vpn_openvpn.go:171
 #: ../../network/nm_setting_vpn_pptp.go:106
 #: ../../network/nm_setting_vpn_vpnc.go:145
 msgid "Saved"
 msgstr "已保存的"
 
-#: ../../network/nm_constant.go:312 ../../network/nm_setting_vpn_l2tp.go:117
+#: ../../network/nm_constant.go:316 ../../network/nm_setting_vpn_l2tp.go:117
 #: ../../network/nm_setting_vpn_openvpn.go:172
 #: ../../network/nm_setting_vpn_pptp.go:107
 #: ../../network/nm_setting_vpn_vpnc.go:147
 msgid "Always Ask"
 msgstr "总是询问"
 
-#: ../../network/nm_constant.go:313 ../../network/nm_setting_vpn_l2tp.go:118
+#: ../../network/nm_constant.go:317 ../../network/nm_setting_vpn_l2tp.go:118
 #: ../../network/nm_setting_vpn_openvpn.go:173
 #: ../../network/nm_setting_vpn_openvpn.go:479
 #: ../../network/nm_setting_vpn_pptp.go:108
@@ -2519,7 +2519,7 @@ msgid "Both"
 msgstr "兼有"
 
 #: ../../network/nm_setting_802_1x.go:186
-#: ../../network/nm_setting_wireless.go:296
+#: ../../network/nm_setting_wireless.go:297
 msgid "Automatic"
 msgstr "自动"
 
@@ -2846,23 +2846,23 @@ msgstr "服务器（默认）"
 msgid "DH Group 2"
 msgstr "DH Group 2"
 
-#: ../../network/nm_setting_wireless.go:290
+#: ../../network/nm_setting_wireless.go:291
 msgid "Infrastructure"
 msgstr "基础架构"
 
-#: ../../network/nm_setting_wireless.go:291
+#: ../../network/nm_setting_wireless.go:292
 msgid "Ad-Hoc"
 msgstr "临时网络"
 
-#: ../../network/nm_setting_wireless.go:292
+#: ../../network/nm_setting_wireless.go:293
 msgid "AP-Hotspot"
 msgstr "AP热点"
 
-#: ../../network/nm_setting_wireless.go:297
+#: ../../network/nm_setting_wireless.go:298
 msgid "A (5 GHz)"
 msgstr "A（5 GHz）"
 
-#: ../../network/nm_setting_wireless.go:298
+#: ../../network/nm_setting_wireless.go:299
 msgid "BG (2.4 GHz)"
 msgstr "BG（2.4 GHz）"
 
@@ -3184,12 +3184,15 @@ msgid "The connection was deleted from settings."
 msgstr "该连接已从设置中删除。"
 
 #: ../../network/state_handler.go:157 ../../network/utils_notify.go:89
+#: ../../network/utils_test.go:616 ../../network/utils_test.go:623
 msgid "Connected"
 msgstr "已连接"
 
 #: ../../network/state_handler.go:191 ../../network/utils_notify.go:64
 #: ../../network/utils_notify.go:68 ../../network/utils_notify.go:72
 #: ../../network/utils_notify.go:92 ../../network/utils_notify.go:95
+#: ../../network/utils_test.go:619 ../../network/utils_test.go:621
+#: ../../network/utils_test.go:625 ../../network/utils_test.go:627
 msgid "Disconnected"
 msgstr "断开"
 

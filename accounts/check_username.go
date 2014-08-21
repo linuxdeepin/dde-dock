@@ -62,7 +62,7 @@ func getGroupnameList() []string {
 
 func isUsernameValid(username string) bool {
 	/**
-	 * The user name is allowed only started with a letter,
+	 * The username is allowed only started with a letter,
 	 * and is composed of letters and numbers
 	 */
 	//match, err := regexp.Compile(`^[A-Za-z][A-Za-z0-9]+$`)
