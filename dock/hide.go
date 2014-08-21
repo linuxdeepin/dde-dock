@@ -34,7 +34,7 @@ type HideStateManager struct {
 	toggleShowTimer     <-chan time.Time
 	cleanToggleShowChan chan bool
 
-	StateChanged func(HideStateType)
+	StateChanged func(int32)
 }
 
 func NewHideStateManager(mode HideModeType) *HideStateManager {
@@ -59,13 +59,14 @@ func (e *HideStateManager) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (m *HideStateManager) SetState(s HideStateType) HideStateType {
-	if m.state == s {
+func (m *HideStateManager) SetState(s int32) int32 {
+	state := HideStateType(s)
+	if m.state == state {
 		return s
 	}
 
-	logger.Debug("SetState m.state:", m.state, "new state:", s)
-	m.state = s
+	logger.Debug("SetState m.state:", m.state, "new state:", state)
+	m.state = state
 	logger.Debug("SetState emit StateChanged signal", m.state)
 	m.StateChanged(s)
 
@@ -114,7 +115,7 @@ func (m *HideStateManager) UpdateState() {
 		state = HideStateShowing
 	}
 
-	m.SetState(state)
+	m.SetState(int32(state))
 }
 
 func (m *HideStateManager) CancelToggleShow() {
@@ -130,9 +131,9 @@ func (m *HideStateManager) ToggleShow() {
 	m.CancelToggleShow()
 
 	if m.state == HideStateHidden || m.state == HideStateHidding {
-		m.SetState(HideStateShowing)
+		m.SetState(int32(HideStateShowing))
 	} else if m.state == HideStateShown || m.state == HideStateShowing {
-		m.SetState(HideStateHidding)
+		m.SetState(int32(HideStateHidding))
 	}
 
 	m.toggleShowTimer = time.After(time.Second * 3)
