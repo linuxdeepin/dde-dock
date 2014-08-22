@@ -41,7 +41,24 @@ type TrayManager struct {
 	dmageInfo  map[xproto.Window]damage.Damage
 }
 
+func (m *TrayManager) isValidWindow(xid xproto.Window) bool {
+	r, err := xproto.GetWindowAttributes(TrayXU.Conn(), xid).Reply()
+	return r != nil && err == nil
+}
+
+func (m *TrayManager) checkValid() {
+	for _, id := range m.TrayIcons {
+		xid := xproto.Window(id)
+		if m.isValidWindow(xid) {
+			continue
+		}
+
+		m.removeTrayIcon(xid)
+	}
+}
+
 func (m *TrayManager) addTrayIcon(xid xproto.Window) {
+	m.checkValid()
 	for _, id := range m.TrayIcons {
 		if xproto.Window(id) == xid {
 			return
@@ -73,7 +90,7 @@ func (m *TrayManager) addTrayIcon(xid xproto.Window) {
 	if m.Added != nil {
 		m.Added(uint32(xid))
 	}
-	logger.Infof("Added try icon: \"%s\"", name)
+	logger.Infof("Added try icon: \"%s\"(%d)", name, uint32(xid))
 }
 func (m *TrayManager) removeTrayIcon(xid xproto.Window) {
 	delete(m.dmageInfo, xid)
