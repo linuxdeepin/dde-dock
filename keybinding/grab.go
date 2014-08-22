@@ -352,6 +352,11 @@ func grabKeyboardAndMouse() {
 
 	xevent.KeyReleaseFun(
 		func(X *xgbutil.XUtil, e xevent.KeyReleaseEvent) {
+			if strings.ToLower(pressKeyStr) == "super_l" ||
+				strings.ToLower(pressKeyStr) == "super_r" {
+				pressKeyStr = "Super"
+			}
+
 			GetManager().KeyReleaseEvent(pressKeyStr)
 			pressKeyStr = ""
 			ungrabAllMouseButton(X)
