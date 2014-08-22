@@ -22,9 +22,9 @@
 package main
 
 import (
-	dutils "pkg.linuxdeepin.com/lib/utils"
 	"os"
 	"path"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 	"regexp"
 	"strings"
 )
@@ -331,7 +331,7 @@ func getImageList(dir string) ([]string, bool) {
 		return list, false
 	} else {
 		for _, i := range infos {
-			if !i.Mode().IsRegular() {
+			if i.IsDir() {
 				continue
 			}
 			name := strings.ToLower(i.Name())
