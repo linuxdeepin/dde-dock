@@ -17,7 +17,7 @@ msgstr ""
 
 #: ../../accounts/account_ifc.go:185
 msgid "The username is invalid."
-msgstr "此用户名不合法。"
+msgstr "此用户名无效。"
 
 #: ../../accounts/account_ifc.go:189
 msgid "The username exists."
