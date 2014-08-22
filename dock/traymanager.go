@@ -7,7 +7,6 @@ import (
 	"github.com/BurntSushi/xgb/damage"
 	"github.com/BurntSushi/xgb/xfixes"
 	"github.com/BurntSushi/xgb/xproto"
-	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/ewmh"
 	"github.com/BurntSushi/xgbutil/xevent"
 	"github.com/BurntSushi/xgbutil/xgraphics"
@@ -17,7 +16,7 @@ import (
 )
 
 var (
-	TrayXU, _ = xgbutil.NewConn()
+	TRAYMANAGER *TrayManager
 )
 
 const (
@@ -112,11 +111,6 @@ func (m *TrayManager) handleTrayDamage(xid xproto.Window) {
 		}
 	}
 }
-
-var TRAYMANAGER *TrayManager
-
-var _NET_SYSTEM_TRAY_S0, _ = xprop.Atm(TrayXU, "_NET_SYSTEM_TRAY_S0")
-var _NET_SYSTEM_TRAY_OPCODE, _ = xprop.Atm(TrayXU, "_NET_SYSTEM_TRAY_OPCODE")
 
 func findRGBAVisualID() xproto.Visualid {
 	for _, dinfo := range TrayXU.Screen().AllowedDepths {

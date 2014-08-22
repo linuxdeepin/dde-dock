@@ -13,19 +13,10 @@ import (
 )
 
 var (
-	// XU, _                                 = xgbutil.NewConn()
-	// _NET_ACTIVE_WINDOW, _                 = xprop.Atm(XU, "_NET_ACTIVE_WINDOW")
-	_NET_SHOWING_DESKTOP, _                 = xprop.Atm(XU, "_NET_SHOWING_DESKTOP")
-	DEEPIN_SCREEN_VIEWPORT, _               = xprop.Atm(XU, "DEEPIN_SCREEN_VIEWPORT")
-	lastActive                string        = ""
-	activeWindow              xproto.Window = 0
-	currentViewport, _                      = xprop.PropValNums(
-		xprop.GetProperty(
-			XU,
-			XU.RootWin(),
-			"DEEPIN_SCREEN_VIEWPORT",
-		))
-	isLauncherShown bool = false
+	lastActive      string        = ""
+	activeWindow    xproto.Window = 0
+	isLauncherShown bool          = false
+	currentViewport []uint        = nil
 )
 
 const (
@@ -108,6 +99,15 @@ func isCoverWorkspace(workspaces [][]uint, workspace []uint) bool {
 	return false
 }
 
+func updateCurrentViewport() {
+	currentViewport, _ = xprop.PropValNums(
+		xprop.GetProperty(
+			XU,
+			XU.RootWin(),
+			"DEEPIN_SCREEN_VIEWPORT",
+		))
+}
+
 func onCurrentWorkspacePre(xid xproto.Window) bool {
 	viewports, err := xprop.PropValNums(xprop.GetProperty(XU, xid,
 		"DEEPIN_WINDOW_VIEWPORTS"))
@@ -122,6 +122,9 @@ func onCurrentWorkspacePre(xid xproto.Window) bool {
 		viewport[0] = viewports[i*2+1]
 		viewport[1] = viewports[i*2+2]
 		workspaces = append(workspaces, viewport)
+	}
+	if currentViewport == nil {
+		updateCurrentViewport()
 	}
 	return isCoverWorkspace(workspaces, currentViewport)
 }
@@ -207,8 +210,7 @@ func (m *ClientManager) listenRootWindow() {
 		case _NET_SHOWING_DESKTOP:
 			m.ShowingDesktopChanged()
 		case DEEPIN_SCREEN_VIEWPORT:
-			currentViewport, _ = xprop.PropValNums(xprop.GetProperty(XU, XU.RootWin(),
-				"DEEPIN_SCREEN_VIEWPORT"))
+			updateCurrentViewport()
 		}
 	}).Connect(XU, XU.RootWin())
 

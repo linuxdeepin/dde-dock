@@ -22,18 +22,6 @@ import (
 	"strings"
 )
 
-var (
-	XU, _                 = xgbutil.NewConn()
-	_NET_CLIENT_LIST, _   = xprop.Atm(XU, "_NET_CLIENT_LIST")
-	_NET_ACTIVE_WINDOW, _ = xprop.Atm(XU, "_NET_ACTIVE_WINDOW")
-	ATOM_WINDOW_ICON, _   = xprop.Atm(XU, "_NET_WM_ICON")
-	ATOM_WINDOW_NAME, _   = xprop.Atm(XU, "_NET_WM_NAME")
-	ATOM_WINDOW_STATE, _  = xprop.Atm(XU, "_NET_WM_STATE")
-	ATOM_WINDOW_TYPE, _   = xprop.Atm(XU, "_NET_WM_WINDOW_TYPE")
-	ATOM_DOCK_APP_ID, _   = xprop.Atm(XU, "_DDE_DOCK_APP_ID")
-	// ATOM_DEEPIN_WINDOW_VIEWPORTS, _ = xprop.Atm(XU, "DEEPIN_WINDOW_VIEWPORTS")
-)
-
 var DOCKED_APP_MANAGER *dock.DockedAppManager
 
 type WindowInfo struct {
