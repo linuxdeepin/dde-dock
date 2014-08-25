@@ -31,20 +31,27 @@ func (s *SinkInput) correctAppName() {
 	pid := s.core.PropList[PropAppPID]
 	filePath := path.Join("/proc", pid, "cmdline")
 	contents, err := ioutil.ReadFile(filePath)
-	if err == nil {
-		if strings.Contains(string(contents), "deepin-movie") {
-			s.Name = "Deepin Movie"
-			s.Icon = "deepin-movie"
-		} else if strings.Contains(string(contents), "firefox") {
-			s.Name = "Firefox"
-			s.Icon = "firefox"
-		} else if strings.Contains(string(contents), "maxthon") {
-			s.Name = "Maxthon"
-			s.Icon = "maxthon-browser"
-		} else if strings.Contains(string(contents), "chrome") &&
-			strings.Contains(string(contents), "google") {
-			s.Name = "Google Chrome"
-			s.Icon = "google-chrome"
-		}
+	if err != nil {
+		logger.Debugf("ReadFile '%s' failed: %v", filePath, err)
+		return
+	}
+
+	ctx := string(contents)
+	if strings.Contains(ctx, "deepin-movie") {
+		s.Name = "Deepin Movie"
+		s.Icon = "deepin-movie"
+	} else if strings.Contains(ctx, "firefox") {
+		s.Name = "Firefox"
+		s.Icon = "firefox"
+	} else if strings.Contains(ctx, "maxthon") {
+		s.Name = "Maxthon"
+		s.Icon = "maxthon-browser"
+	} else if strings.Contains(ctx, "chrome") &&
+		strings.Contains(ctx, "google") {
+		s.Name = "Google Chrome"
+		s.Icon = "google-chrome"
+	} else if strings.Contains(ctx, "deepin-music-player") {
+		s.Name = "Deepin Music"
+		s.Icon = "deepin-music-player"
 	}
 }
