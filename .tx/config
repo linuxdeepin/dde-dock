@@ -1,0 +1,10 @@
+[main]
+host = https://www.transifex.com
+minimum_perc = 80
+mode = developer
+
+[dde-daemon.dde-daemon-20140620]
+file_filter = data/po/<lang>.po
+source_lang = en
+type = PO
+
