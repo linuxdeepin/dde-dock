@@ -1,19 +1,21 @@
+# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR &lt;EMAIL@ADDRESS&gt;, YEAR.
-#
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-08-21 11:42+0800\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME &lt;EMAIL@ADDRESS&gt;\n"
-"Language-Team: LANGUAGE &lt;LL@li.org&gt;\n"
-"Language: \n"
+"PO-Revision-Date: 2014-08-22 06:30+0000\n"
+"Last-Translator: szd_liufei <liufei@linuxdeepin.com>\n"
+"Language-Team: Chinese (China) (http://www.transifex.com/projects/p/dde-daemon/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: zh_CN\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../../accounts/account_ifc.go:185
 msgid "The username is invalid."
@@ -2902,8 +2904,6 @@ msgstr "TKIP"
 msgid "CCMP"
 msgstr "CCMP"
 
-# 此处Open为加密方式
-# NM_SETTING_WIRELESS_SECURITY_AUTH_ALG: open/shared/leap
 #: ../../network/nm_setting_wireless_security.go:204
 msgid "Open"
 msgstr "Open"
@@ -3214,7 +3214,8 @@ msgid "Network"
 msgstr "网络"
 
 #: ../../network/utils_notify.go:76
-msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
+msgid ""
+"The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "无线网卡的硬件开关已关闭，如需使用无线请先打开开关。"
 
 #: ../../network/utils_notify.go:81
@@ -3231,8 +3232,8 @@ msgstr "电池电量异常"
 
 #: ../../power/upower.go:90
 msgid ""
-"Battery power can not be predicted, please save important documents properly "
-"and  not do important operations."
+"Battery power can not be predicted, please save important documents properly"
+" and  not do important operations."
 msgstr "因为无法预知电池电量，请妥当保存重要文档，不要做重要操作。"
 
 #: ../../power/upower.go:95 ../../power/upower.go:110
@@ -3254,120 +3255,3 @@ msgstr "电池电量低"
 #: ../../power/upower.go:123
 msgid "Computer will be in suspend mode, please plug in now."
 msgstr "计算机将要进入待机状态，请连接电源。"
-
-#~ msgid "Offline"
-#~ msgstr "离线"
-
-#~ msgid "Ashkhabad"
-#~ msgstr "阿什哈巴德"
-
-#~ msgid "Katmandu"
-#~ msgstr "加德满都"
-
-#~ msgid "Thimbu"
-#~ msgstr "廷布"
-
-#~ msgid "Chungking"
-#~ msgstr "重庆"
-
-#~ msgid "Ponape"
-#~ msgstr "波纳佩"
-
-#~ msgid "Computer will being in suspend mode, please plug in."
-#~ msgstr "计算机即将进入待机状态，请连接电源。"
-
-#~ msgid "Americaoronha"
-#~ msgstr "迪诺罗尼亚"
-
-#~ msgid "Argentina/Buenos Aires"
-#~ msgstr "贝伦"
-
-#~ msgid "Argentina/Catamarca"
-#~ msgstr "卡塔马卡"
-
-#~ msgid "Argentina/San Juan"
-#~ msgstr "圣胡安"
-
-#~ msgid "Canada/Central"
-#~ msgstr "加拿大山区"
-
-#~ msgid "Canada/Pacific"
-#~ msgstr "太平洋"
-
-#~ msgid "Easter"
-#~ msgstr "美国东部"
-
-#~ msgid "Etc/Universal"
-#~ msgstr "世界时"
-
-#~ msgid "Etc/Zulu"
-#~ msgstr "祖鲁"
-
-#~ msgid "Hongkong"
-#~ msgstr "香港"
-
-#~ msgid "Indiana/Indianapolis"
-#~ msgstr "印第安纳波利斯"
-
-#~ msgid "Indiana/Knox"
-#~ msgstr "印第安纳波利斯"
-
-#~ msgid "Indiana/Marengo"
-#~ msgstr "印第安纳斯塔克"
-
-#~ msgid "Kentucky/Louisville"
-#~ msgstr "路易斯维尔"
-
-#~ msgid "Kentucky/Monticello"
-#~ msgstr "蒙蒂塞洛"
-
-#~ msgid "US/Central"
-#~ msgstr "美国中部"
-
-#~ msgid "US/Pacific"
-#~ msgstr "太平洋"
-
-#~ msgid "Brazil GMT"
-#~ msgstr "巴西格林尼治平时"
-
-#~ msgid "CET"
-#~ msgstr "中欧标准时间"
-
-#~ msgid "EET"
-#~ msgstr "欧洲东部时间"
-
-#~ msgid "EST"
-#~ msgstr "东部标准时间"
-
-#~ msgid "HST"
-#~ msgstr "夏威夷-阿留申标准时间"
-
-#~ msgid "London"
-#~ msgstr "伦敦"
-
-#~ msgid "MET"
-#~ msgstr "中欧时间"
-
-#~ msgid "New Salem"
-#~ msgstr "新塞勒姆"
-
-#~ msgid "Pacific East"
-#~ msgstr "东太平洋"
-
-#~ msgid "Pacific New"
-#~ msgstr "新太平洋"
-
-#~ msgid "Samoa"
-#~ msgstr "萨摩亚"
-
-#~ msgid "USA GMT"
-#~ msgstr "美国格林尼治平时"
-
-#~ msgid "W SU"
-#~ msgstr "W SU"
-
-#~ msgid "WET"
-#~ msgstr "WET"
-
-#~ msgid "Wellington"
-#~ msgstr "惠灵顿"

@@ -1,8 +1,9 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
+# ICesarI <icesari@msn.com>, 2014
 # jose manuel <josemdance@outlook.com>, 2014
 # Luis Castillo <castilloluis2005@gmail.com>, 2014
 msgid ""
@@ -10,14 +11,13 @@ msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-08-21 11:42+0800\n"
-"PO-Revision-Date: 2014-07-05 22:30+0000\n"
-"Last-Translator: jose manuel <josemdance@outlook.com>\n"
-"Language-Team: Spanish (http://www.transifex.com/projects/p/dde-daemon/"
-"language/es/)\n"
-"Language: es\n"
+"PO-Revision-Date: 2014-08-22 04:41+0000\n"
+"Last-Translator: szd_liufei <liufei@linuxdeepin.com>\n"
+"Language-Team: Spanish (http://www.transifex.com/projects/p/dde-daemon/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../accounts/account_ifc.go:185
@@ -77,16 +77,14 @@ msgid "Message notification"
 msgstr "Notificación de mensaje"
 
 #: ../../datetime/datetime.go:127 ../../langselect/ifc.go:39
-#, fuzzy
 msgid "Language is changing, please wait"
-msgstr "Cambiando idioma, por favor espere"
+msgstr ""
 
 #: ../../datetime/set_locale.go:58 ../../langselect/locale.go:245
-#, fuzzy
 msgid ""
 "Language has been changed successfully and will be effective after logged "
 "out."
-msgstr "Idioma cambiado exitosamente y eficaz después de cerrar la sesión."
+msgstr ""
 
 #: ../../datetime/set_locale.go:60 ../../langselect/locale.go:247
 msgid "Language failed to change, please try later."
@@ -317,14 +315,12 @@ msgid "Guatemala"
 msgstr "Guatemala"
 
 #: ../../datetime/zone_utc_list.go:93
-#, fuzzy
 msgid "Tell City"
-msgstr "Indiana/Tell City"
+msgstr "Tell City"
 
 #: ../../datetime/zone_utc_list.go:94
-#, fuzzy
 msgid "Valparaiso"
-msgstr "Indiana/Valparaiso"
+msgstr "Valparaiso"
 
 #: ../../datetime/zone_utc_list.go:96
 msgid "Knox IN"
@@ -356,7 +352,7 @@ msgstr "Monterrey"
 
 #: ../../datetime/zone_utc_list.go:103
 msgid "Beulah"
-msgstr ""
+msgstr "Beulah"
 
 #: ../../datetime/zone_utc_list.go:104
 msgid "North Dakota/Center"
@@ -407,9 +403,8 @@ msgid "General"
 msgstr "General"
 
 #: ../../datetime/zone_utc_list.go:118
-#, fuzzy
 msgid "Easter Island"
-msgstr "EasterIsland"
+msgstr "Isla de Pascua"
 
 #: ../../datetime/zone_utc_list.go:119
 msgid "Galapagos"
@@ -460,28 +455,24 @@ msgid "Havana"
 msgstr "Havana"
 
 #: ../../datetime/zone_utc_list.go:134
-#, fuzzy
 msgid "Marengo"
-msgstr "Indiana/Marengo"
+msgstr "Marengo"
 
 #: ../../datetime/zone_utc_list.go:135
-#, fuzzy
 msgid "Petersburg"
-msgstr "Indiana/Petersburg"
+msgstr "Petersburg"
 
 #: ../../datetime/zone_utc_list.go:136
 msgid "Vevay"
-msgstr ""
+msgstr "Vevay"
 
 #: ../../datetime/zone_utc_list.go:137
-#, fuzzy
 msgid "Vincennes"
-msgstr "Indiana / Vincennes"
+msgstr "Vincennes"
 
 #: ../../datetime/zone_utc_list.go:138
-#, fuzzy
 msgid "Winamac"
-msgstr "Indiana/Winamac"
+msgstr "Winamac"
 
 #: ../../datetime/zone_utc_list.go:139
 msgid "Indianapolis"
@@ -496,9 +487,8 @@ msgid "Jamaica"
 msgstr "Jamaica"
 
 #: ../../datetime/zone_utc_list.go:143
-#, fuzzy
 msgid "Monticello"
-msgstr "Montevideo"
+msgstr "Monticello"
 
 #: ../../datetime/zone_utc_list.go:144
 msgid "Lima"
@@ -765,42 +755,36 @@ msgid "Araguaina"
 msgstr "Araguaina"
 
 #: ../../datetime/zone_utc_list.go:217
-#, fuzzy
 msgid "ComodRivadavia"
-msgstr "Argentina/ComodRivadavia"
+msgstr "ComodRivadavia"
 
 #: ../../datetime/zone_utc_list.go:220
-#, fuzzy
 msgid "La Rioja"
-msgstr "Argentina/La Rioja"
+msgstr "La Rioja"
 
 #: ../../datetime/zone_utc_list.go:222
-#, fuzzy
 msgid "Rio Gallegos"
-msgstr "Argentina/Rio Gallegos"
+msgstr "Río Gallegos"
 
 #: ../../datetime/zone_utc_list.go:223
-#, fuzzy
 msgid "Salta"
-msgstr "Malta"
+msgstr "Provincia de Salta"
 
 #: ../../datetime/zone_utc_list.go:224
-#, fuzzy
 msgid "San Juan"
-msgstr "San Marino"
+msgstr "San Juan"
 
 #: ../../datetime/zone_utc_list.go:225
-#, fuzzy
 msgid "San Luis"
-msgstr "Argentina/San Luis"
+msgstr "San Luis"
 
 #: ../../datetime/zone_utc_list.go:226
 msgid "Tucuman"
-msgstr ""
+msgstr "Tucumán"
 
 #: ../../datetime/zone_utc_list.go:227
 msgid "Ushuaia"
-msgstr ""
+msgstr "Ushuaia"
 
 #: ../../datetime/zone_utc_list.go:228
 msgid "Bahia"
@@ -876,16 +860,15 @@ msgstr "Sao Paulo"
 
 #: ../../datetime/zone_utc_list.go:246
 msgid "Rothera"
-msgstr ""
+msgstr "Punta Rothera"
 
 #: ../../datetime/zone_utc_list.go:247
 msgid "Stanley"
 msgstr "Stanley"
 
 #: ../../datetime/zone_utc_list.go:248
-#, fuzzy
 msgid "Brazil East"
-msgstr "Brazil/oeste"
+msgstr ""
 
 #: ../../datetime/zone_utc_list.go:251
 msgid "South Georgia"
@@ -1525,9 +1508,7 @@ msgstr "Muscat"
 
 #: ../../datetime/zone_utc_list.go:430
 msgid "Tbilisi"
-msgstr ""
-"Tbilisi\n"
-"  "
+msgstr "Tbilisi\n  "
 
 #: ../../datetime/zone_utc_list.go:431
 msgid "Yerevan"
@@ -1870,14 +1851,12 @@ msgid "Darwin"
 msgstr "Darwin"
 
 #: ../../datetime/zone_utc_list.go:537
-#, fuzzy
 msgid "Australia/North"
-msgstr "Australia/oeste"
+msgstr "Australia/Norte"
 
 #: ../../datetime/zone_utc_list.go:538
-#, fuzzy
 msgid "Australia/South"
-msgstr "Australia/oeste"
+msgstr "Australia/Sur"
 
 #: ../../datetime/zone_utc_list.go:539
 msgid "Yancowinna"
@@ -2197,9 +2176,8 @@ msgid "Deepin Translator"
 msgstr "Traductor Deepin"
 
 #: ../../keybinding/id_desc_list.go:65
-#, fuzzy
 msgid "Switch Layout"
-msgstr "Interruptor furl estado"
+msgstr ""
 
 #: ../../keybinding/id_desc_list.go:73
 msgid "Calculator"
@@ -2358,9 +2336,8 @@ msgid "Open Folder"
 msgstr "Abrir carpeta"
 
 #: ../../mime/default_media.go:79
-#, fuzzy
 msgid "Run Software"
-msgstr "Ejecute Soft"
+msgstr ""
 
 #: ../../network/manager_connections.go:203
 #: ../../network/nm_custom_type.go:178
@@ -2695,9 +2672,8 @@ msgid "Password"
 msgstr "Contraseña:"
 
 #: ../../network/nm_setting_vpn_openvpn.go:253
-#, fuzzy
 msgid "Certificates with Password (TLS)"
-msgstr "Certificados (TLS)"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:254
 msgid "Static Key"
@@ -2940,9 +2916,8 @@ msgid "Device state changed, unknown reason."
 msgstr ""
 
 #: ../../network/state_handler.go:35
-#, fuzzy
 msgid "Device state changed."
-msgstr "Enlace del dispositivo/portador cambiado."
+msgstr ""
 
 #: ../../network/state_handler.go:36
 msgid "The device is now managed."
@@ -2953,16 +2928,13 @@ msgid "The device is no longer managed."
 msgstr "El dispositivo ya no es manejado."
 
 #: ../../network/state_handler.go:38
-#, fuzzy
 msgid "The device has not been ready for configuration."
 msgstr "El dispositivo no ha sido preparado para la configuración."
 
 #: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)."
-msgstr ""
-"Configuración de IP no puede reservarse (sin dirección disponible, tiempo de "
-"espera, etc.)"
+msgstr "Configuración de IP no puede reservarse (sin dirección disponible, tiempo de espera, etc.)"
 
 #: ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid."
@@ -2973,22 +2945,18 @@ msgid "Passwords were required but not provided."
 msgstr "Se necesitan contraseñas, pero no siempre."
 
 #: ../../network/state_handler.go:42
-#, fuzzy
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server."
-msgstr ""
-"La súplica X 802.1 desconectado del servidor de autenticación o punto de "
-"acceso."
+msgstr "El suplicante 802.1X fue desconectado del punto de acceso o servidor de autenticación."
 
 #: ../../network/state_handler.go:43
-#, fuzzy
 msgid "Configuration of the 802.1X supplicant failed."
-msgstr "Configuración de la súplica X 802.1 falló."
+msgstr "Falló la configuración de el suplicante 802.1X."
 
 #: ../../network/state_handler.go:44
 msgid "The 802.1X supplicant quitted or failed unexpectedly."
-msgstr "El suplicante 802.1X Fallo o error inesperado."
+msgstr "El suplicante 802.1X fue desactivado o falló inesperadamente."
 
 #: ../../network/state_handler.go:45
 msgid "The 802.1X supplicant took too long time to authenticate."
@@ -3115,9 +3083,8 @@ msgid "The device's existing connection was assumed."
 msgstr "Conexión del dispositivo fue asumido."
 
 #: ../../network/state_handler.go:76
-#, fuzzy
 msgid "The 802.1x supplicant is now available."
-msgstr "La súplica de 802.1x está disponible ahora."
+msgstr "El suplicante 802.1X está ahora disponible."
 
 #: ../../network/state_handler.go:77
 msgid "The modem could not be found."
@@ -3128,9 +3095,8 @@ msgid "The Bluetooth connection timed out or failed."
 msgstr "La conexión Bluetooth agotado o no."
 
 #: ../../network/state_handler.go:79
-#, fuzzy
 msgid "GSM Modem's SIM Card was not inserted."
-msgstr "SIM tarjeta del módem GSM insertada no."
+msgstr ""
 
 #: ../../network/state_handler.go:80
 msgid "GSM Modem's SIM PIN required."
@@ -3157,9 +3123,8 @@ msgid "Problem with the RFC 2684 Ethernet over ADSL bridge."
 msgstr "Problema con el RFC 2684 Ethernet sobre puente de ADSL."
 
 #: ../../network/state_handler.go:86
-#, fuzzy
 msgid "ModemManager did not run or quitted unexpectedly."
-msgstr "ModemManager no estaba funcionando o Fallo inesperadamente."
+msgstr ""
 
 #: ../../network/state_handler.go:87
 msgid "The 802.11 Wi-Fi network could not be found."
@@ -3178,21 +3143,16 @@ msgid "Activate VPN connection failed, unknown reason."
 msgstr ""
 
 #: ../../network/state_handler.go:95
-#, fuzzy
 msgid "Activate VPN connection failed."
-msgstr "Una dependencia conexión ha fallado."
+msgstr ""
 
 #: ../../network/state_handler.go:96
 msgid "The VPN connection changed state due to disconnection from users."
-msgstr ""
-"La conexión VPN ha cambiado el estado debido a la desconexión de los "
-"usuarios."
+msgstr "La conexión VPN ha cambiado el estado debido a la desconexión de los usuarios."
 
 #: ../../network/state_handler.go:97
 msgid "The VPN connection changed state due to disconnection from devices."
-msgstr ""
-"La conexión VPN ha cambiado el estado debido a la desconexión de los "
-"dispositivos."
+msgstr "La conexión VPN ha cambiado el estado debido a la desconexión de los dispositivos."
 
 #: ../../network/state_handler.go:98
 msgid "VPN service stopped."
@@ -3244,9 +3204,8 @@ msgid "Airplan mode enabled."
 msgstr ""
 
 #: ../../network/utils_notify.go:68
-#, fuzzy
 msgid "You are now offline."
-msgstr "Desconectado, ahora está fuera de línea."
+msgstr ""
 
 #: ../../network/utils_notify.go:72
 msgid "Access Point mode is not supported by this device."
@@ -3255,10 +3214,11 @@ msgstr "Modo de punto de acceso no es compatible con este dispositivo."
 #: ../../network/utils_notify.go:76 ../../network/utils_notify.go:81
 #: ../../network/utils_notify.go:85
 msgid "Network"
-msgstr ""
+msgstr "Redes e Internet"
 
 #: ../../network/utils_notify.go:76
-msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
+msgid ""
+"The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr ""
 
 #: ../../network/utils_notify.go:81
@@ -3275,8 +3235,8 @@ msgstr ""
 
 #: ../../power/upower.go:90
 msgid ""
-"Battery power can not be predicted, please save important documents properly "
-"and  not do important operations."
+"Battery power can not be predicted, please save important documents properly"
+" and  not do important operations."
 msgstr ""
 
 #: ../../power/upower.go:95 ../../power/upower.go:110
@@ -3288,159 +3248,13 @@ msgid "Computer has been in suspend mode, please plug in."
 msgstr "Ordenador ha sido en modo de suspensión, por favor enchufela"
 
 #: ../../power/upower.go:110
-#, fuzzy
 msgid "Please plug in, or computer will be in suspend mode."
-msgstr "Computer será en modo de suspensión, por favor enchufela"
+msgstr ""
 
 #: ../../power/upower.go:123
 msgid "Battery Low"
 msgstr "Batería baja"
 
 #: ../../power/upower.go:123
-#, fuzzy
 msgid "Computer will be in suspend mode, please plug in now."
-msgstr "Computer será en modo de suspensión, por favor enchufela"
-
-#~ msgid "Password with Certificates (TLS)"
-#~ msgstr "Contraseña con certificados (TLS)"
-
-#~ msgid "Offline"
-#~ msgstr "Desconectado"
-
-#~ msgid "East"
-#~ msgstr "Oriente"
-
-#~ msgid "Faeroe"
-#~ msgstr "Faeroe"
-
-#~ msgid "Asmera"
-#~ msgstr "Asmera"
-
-#~ msgid "Ashkhabad"
-#~ msgstr "Ashkhabad"
-
-#~ msgid "Katmandu"
-#~ msgstr "Katmandu"
-
-#~ msgid "Dacca"
-#~ msgstr "Dacca"
-
-#~ msgid "Thimbu"
-#~ msgstr "Thimbu"
-
-#~ msgid "Chungking"
-#~ msgstr "Chungking"
-
-#~ msgid "Ulaanbaatar"
-#~ msgstr "Ulaanbaatar"
-
-#~ msgid "Ponape"
-#~ msgstr "Ponape"
-
-#~ msgid "GMT+0"
-#~ msgstr "GMT+0"
-
-#~ msgid "GMT0"
-#~ msgstr "GMT0"
-
-#~ msgid "GMT-0"
-#~ msgstr "GMT-0"
-
-#~ msgid "Computer will being in suspend mode, please plug in."
-#~ msgstr "La computadora está en modo de suspender, por favor enchufela"
-
-#~ msgid "Americaoronha"
-#~ msgstr "Americaoronha"
-
-#~ msgid "Antarctica/Rothera"
-#~ msgstr "Antarctica/Rothera"
-
-#~ msgid "Argentina/Buenos Aires"
-#~ msgstr "Argentina/Buenos Aires"
-
-#~ msgid "Argentina/Catamarca"
-#~ msgstr "Argentina/Catamarca"
-
-#~ msgid "Argentina/Cordoba"
-#~ msgstr "Argentina/Cordoba"
-
-#~ msgid "Argentina/Jujuy"
-#~ msgstr "Argentina/Jujuy"
-
-#~ msgid "Argentina/Mendoza"
-#~ msgstr "Argentina/Mendoza"
-
-#~ msgid "Argentina/Salta"
-#~ msgstr "Argentina/Salta"
-
-#~ msgid "Argentina/San Juan"
-#~ msgstr "Argentina/San Juan"
-
-#~ msgid "Argentina/Tucuman"
-#~ msgstr "Argentina/Tucuman"
-
-#~ msgid "Argentina/Ushuaia"
-#~ msgstr "Argentina/Ushuaia"
-
-#~ msgid "Canada/Central"
-#~ msgstr "Canada/Central"
-
-#~ msgid "Canada/Pacific"
-#~ msgstr "Canada/Pacifico"
-
-#~ msgid "Easter"
-#~ msgstr "oriente"
-
-#~ msgid "Etc/GMT"
-#~ msgstr "Etc/GMT"
-
-#~ msgid "Etc/GMT+0"
-#~ msgstr "Etc/GMT+0"
-
-#~ msgid "Etc/UCT"
-#~ msgstr "Etc/UCT"
-
-#~ msgid "Etc/UTC"
-#~ msgstr "Etc/UTC"
-
-#~ msgid "Etc/Universal"
-#~ msgstr "Etc/Universal"
-
-#~ msgid "Etc/Zulu"
-#~ msgstr "Etc/Zulu"
-
-#~ msgid "Hongkong"
-#~ msgstr "Hongkong"
-
-#~ msgid "Indiana/Indianapolis"
-#~ msgstr "Indiana/Indianapolis"
-
-#~ msgid "Indiana/Knox"
-#~ msgstr "Indiana/Knox"
-
-#~ msgid "Indiana/Vevay"
-#~ msgstr "Indiana/Vevay"
-
-#~ msgid "Kentucky/Louisville"
-#~ msgstr "Kentucky/Louisville"
-
-#~ msgid "Kentucky/Monticello"
-#~ msgstr "Kentucky/Monticello"
-
-#~ msgid "Macau"
-#~ msgstr "Macau"
-
-#~ msgid "North"
-#~ msgstr "norte"
-
-#~ msgid "North Dakota/Beulah"
-#~ msgstr "Dakota del Norte / Beulah"
-
-#~ msgid "South"
-#~ msgstr "sur"
-
-#~ msgid "US/Central"
-#~ msgstr "EE.UU. / central"
-
-#~ msgid "US/Pacific"
-#~ msgstr "EE.UU. /Pacifico"
+msgstr "La computadora estará en modo suspendido, por favor enchúfela ahora."

@@ -1,21 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
+# freddy4212 <freddy4212@gmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-08-21 11:42+0800\n"
-"PO-Revision-Date: 2014-07-07 10:00+0000\n"
-"Last-Translator: electricface <songwentai@linuxdeepin.com>\n"
-"Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/dde-"
-"daemon/language/zh_TW/)\n"
-"Language: zh_TW\n"
+"PO-Revision-Date: 2014-08-25 03:50+0000\n"
+"Last-Translator: szd_liufei <liufei@linuxdeepin.com>\n"
+"Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/dde-daemon/language/zh_TW/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: zh_TW\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../../accounts/account_ifc.go:185
@@ -75,16 +75,14 @@ msgid "Message notification"
 msgstr "消息通知"
 
 #: ../../datetime/datetime.go:127 ../../langselect/ifc.go:39
-#, fuzzy
 msgid "Language is changing, please wait"
-msgstr "正在更改系統語言，請稍後。"
+msgstr ""
 
 #: ../../datetime/set_locale.go:58 ../../langselect/locale.go:245
-#, fuzzy
 msgid ""
 "Language has been changed successfully and will be effective after logged "
 "out."
-msgstr "系統語言更改成功，註銷後生效。"
+msgstr ""
 
 #: ../../datetime/set_locale.go:60 ../../langselect/locale.go:247
 msgid "Language failed to change, please try later."
@@ -868,7 +866,7 @@ msgstr "斯坦利"
 
 #: ../../datetime/zone_utc_list.go:248
 msgid "Brazil East"
-msgstr ""
+msgstr "巴西東部"
 
 #: ../../datetime/zone_utc_list.go:251
 msgid "South Georgia"
@@ -2176,9 +2174,8 @@ msgid "Deepin Translator"
 msgstr "深度翻譯"
 
 #: ../../keybinding/id_desc_list.go:65
-#, fuzzy
 msgid "Switch Layout"
-msgstr "切換卷起狀態"
+msgstr ""
 
 #: ../../keybinding/id_desc_list.go:73
 msgid "Calculator"
@@ -2337,9 +2334,8 @@ msgid "Open Folder"
 msgstr "打開檔夾"
 
 #: ../../mime/default_media.go:79
-#, fuzzy
 msgid "Run Software"
-msgstr "運行軟體"
+msgstr ""
 
 #: ../../network/manager_connections.go:203
 #: ../../network/nm_custom_type.go:178
@@ -2674,9 +2670,8 @@ msgid "Password"
 msgstr "密碼"
 
 #: ../../network/nm_setting_vpn_openvpn.go:253
-#, fuzzy
 msgid "Certificates with Password (TLS)"
-msgstr "證書（TLS）"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:254
 msgid "Static Key"
@@ -2919,9 +2914,8 @@ msgid "Device state changed, unknown reason."
 msgstr ""
 
 #: ../../network/state_handler.go:35
-#, fuzzy
 msgid "Device state changed."
-msgstr "設備載體/鏈接更改。"
+msgstr ""
 
 #: ../../network/state_handler.go:36
 msgid "The device is now managed."
@@ -2932,9 +2926,8 @@ msgid "The device is no longer managed."
 msgstr "設備不再託管。"
 
 #: ../../network/state_handler.go:38
-#, fuzzy
 msgid "The device has not been ready for configuration."
-msgstr "設備配置未就緒。"
+msgstr ""
 
 #: ../../network/state_handler.go:39
 msgid ""
@@ -3128,9 +3121,8 @@ msgid "Problem with the RFC 2684 Ethernet over ADSL bridge."
 msgstr "RFC 2684以太網橋接到ADSL上錯誤。"
 
 #: ../../network/state_handler.go:86
-#, fuzzy
 msgid "ModemManager did not run or quitted unexpectedly."
-msgstr "ModemManager未運行或異常退出。"
+msgstr ""
 
 #: ../../network/state_handler.go:87
 msgid "The 802.11 Wi-Fi network could not be found."
@@ -3149,9 +3141,8 @@ msgid "Activate VPN connection failed, unknown reason."
 msgstr ""
 
 #: ../../network/state_handler.go:95
-#, fuzzy
 msgid "Activate VPN connection failed."
-msgstr "連接依賴失敗。"
+msgstr ""
 
 #: ../../network/state_handler.go:96
 msgid "The VPN connection changed state due to disconnection from users."
@@ -3211,9 +3202,8 @@ msgid "Airplan mode enabled."
 msgstr ""
 
 #: ../../network/utils_notify.go:68
-#, fuzzy
 msgid "You are now offline."
-msgstr "斷開連接，當前已離線"
+msgstr ""
 
 #: ../../network/utils_notify.go:72
 msgid "Access Point mode is not supported by this device."
@@ -3222,10 +3212,11 @@ msgstr "此設備不支持熱點模式"
 #: ../../network/utils_notify.go:76 ../../network/utils_notify.go:81
 #: ../../network/utils_notify.go:85
 msgid "Network"
-msgstr ""
+msgstr "網絡"
 
 #: ../../network/utils_notify.go:76
-msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
+msgid ""
+"The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr ""
 
 #: ../../network/utils_notify.go:81
@@ -3242,8 +3233,8 @@ msgstr ""
 
 #: ../../power/upower.go:90
 msgid ""
-"Battery power can not be predicted, please save important documents properly "
-"and  not do important operations."
+"Battery power can not be predicted, please save important documents properly"
+" and  not do important operations."
 msgstr ""
 
 #: ../../power/upower.go:95 ../../power/upower.go:110
@@ -3252,39 +3243,16 @@ msgstr "電池電量耗盡"
 
 #: ../../power/upower.go:95
 msgid "Computer has been in suspend mode, please plug in."
-msgstr "電腦進入待機狀態，請連接電源。"
+msgstr "電腦進入待命狀態，請連接電源。"
 
 #: ../../power/upower.go:110
-#, fuzzy
 msgid "Please plug in, or computer will be in suspend mode."
-msgstr "電腦將要進入待機狀態，請連接電源。"
+msgstr ""
 
 #: ../../power/upower.go:123
 msgid "Battery Low"
 msgstr "電池電量低"
 
 #: ../../power/upower.go:123
-#, fuzzy
 msgid "Computer will be in suspend mode, please plug in now."
-msgstr "電腦將要進入待機狀態，請連接電源。"
-
-#~ msgid "Password with Certificates (TLS)"
-#~ msgstr "證書密碼（TLS）"
-
-#~ msgid "Offline"
-#~ msgstr "離線"
-
-#~ msgid "Ashkhabad"
-#~ msgstr "阿什哈巴德"
-
-#~ msgid "Thimbu"
-#~ msgstr "廷布"
-
-#~ msgid "Chungking"
-#~ msgstr "重慶"
-
-#~ msgid "Ponape"
-#~ msgstr "波納佩"
-
-#~ msgid "Computer will being in suspend mode, please plug in."
-#~ msgstr "電腦即將進入待機狀態，請連接電源。"
+msgstr ""
