@@ -29,12 +29,17 @@ func (s HideStateType) String() string {
 	}
 }
 
+const (
+	TriggerShow int32 = iota
+	TriggerHide
+)
+
 type HideStateManager struct {
 	state               HideStateType
 	toggleShowTimer     <-chan time.Time
 	cleanToggleShowChan chan bool
 
-	StateChanged func(int32)
+	ChangeState func(int32)
 }
 
 func NewHideStateManager(mode HideModeType) *HideStateManager {
@@ -61,14 +66,13 @@ func (e *HideStateManager) GetDBusInfo() dbus.DBusInfo {
 
 func (m *HideStateManager) SetState(s int32) int32 {
 	state := HideStateType(s)
+	logger.Debug("SetState m.state:", m.state, "new state:", state)
 	if m.state == state {
+		logger.Info("New HideState is the same as the old:", state)
 		return s
 	}
 
-	logger.Debug("SetState m.state:", m.state, "new state:", state)
 	m.state = state
-	logger.Debug("SetState emit StateChanged signal", m.state)
-	m.StateChanged(s)
 
 	return s
 }
@@ -78,14 +82,14 @@ func (m *HideStateManager) UpdateState() {
 		logger.Info("in ToggleShow")
 		return
 	}
-	state := m.state
+	var trigger int32
 	switch HideModeType(setting.GetHideMode()) {
 	case HideModeKeepShowing:
 		logger.Debug("KeepShowing Mode")
-		state = HideStateShowing
+		trigger = TriggerShow
 	case HideModeAutoHide:
 		logger.Debug("AutoHide Mode")
-		state = HideStateShowing
+		trigger = TriggerShow
 
 		<-time.After(time.Millisecond * 100)
 		if region.mouseInRegion() {
@@ -95,27 +99,29 @@ func (m *HideStateManager) UpdateState() {
 
 		if hasMaximizeClientPre(activeWindow) {
 			logger.Debug("active window is maximized client")
-			state = HideStateHidding
+			trigger = TriggerHide
 		}
 	case HideModeKeepHidden:
 		logger.Debug("KeepHidden Mode")
 		<-time.After(time.Millisecond * 100)
 		if region.mouseInRegion() {
 			logger.Debug("MouseInDockRegion")
-			state = HideStateShowing
+			trigger = TriggerShow
 			break
 		}
 
-		state = HideStateHidding
+		trigger = TriggerHide
 	}
 
 	if isLauncherShown {
 		m.CancelToggleShow()
 		logger.Info("launcher is opend, show dock")
-		state = HideStateShowing
+		trigger = TriggerShow
 	}
 
-	m.SetState(int32(state))
+	if m.ChangeState != nil {
+		m.ChangeState(trigger)
+	}
 }
 
 func (m *HideStateManager) CancelToggleShow() {
@@ -131,9 +137,9 @@ func (m *HideStateManager) ToggleShow() {
 	m.CancelToggleShow()
 
 	if m.state == HideStateHidden || m.state == HideStateHidding {
-		m.SetState(int32(HideStateShowing))
+		m.ChangeState(TriggerShow)
 	} else if m.state == HideStateShown || m.state == HideStateShowing {
-		m.SetState(int32(HideStateHidding))
+		m.ChangeState(TriggerHide)
 	}
 
 	m.toggleShowTimer = time.After(time.Second * 3)
