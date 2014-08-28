@@ -42,8 +42,16 @@ func GetDDeDock_T() *DDEDock_T {
 	return _dock
 }
 
+func (dock *DDEDock_T) fixSwitchMode() {
+	_, err := exec.Command("/usr/bin/xdotool", "search", "--onlyvisible", "dde-dock", "windowmove", "%1", "x", "y").Output()
+	if err != nil {
+		Logger.Warning("fixSwitchMode failed:", err)
+	}
+}
+
 func (dock *DDEDock_T) restartDock() {
 	if isDBusSenderExist(_DDE_DOCK_SENDER) {
+		dock.fixSwitchMode()
 		return
 	}
 
