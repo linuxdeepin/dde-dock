@@ -76,7 +76,7 @@ gen_cursor_preview(char *bg, char *dest)
 	g_debug("Bg width: %d, height: %d", width, height);
 
 	cairo_surface_t *bg_surface = gdk_cairo_surface_create_from_pixbuf(
-			bg_pixbuf, 0, NULL);
+			bg_pixbuf, 1, NULL);
 	g_object_unref(bg_pixbuf);
 	if (!bg_surface) {
 		g_warning("Create Bg Cairo Surface Failed");

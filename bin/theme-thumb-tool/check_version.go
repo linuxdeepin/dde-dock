@@ -31,7 +31,7 @@ import (
 )
 
 const (
-	VERSION              = "0.1"
+	VERSION              = "0.2"
 	VERSION_FILE         = "version"
 	THUMB_CACHE_SYS_PATH = "/usr/share/personalization/thumbnail/autogen"
 )

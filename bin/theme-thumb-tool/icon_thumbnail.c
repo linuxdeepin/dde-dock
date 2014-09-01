@@ -72,7 +72,7 @@ gen_icon_preview(char *bg, char *dest, char *item1, char *item2, char *item3)
 	int height = gdk_pixbuf_get_height(bg_pixbuf);
 
 	cairo_surface_t *bg_surface = gdk_cairo_surface_create_from_pixbuf(
-	                                  bg_pixbuf, 0, NULL);
+	                                  bg_pixbuf, 1, NULL);
 	g_object_unref(bg_pixbuf);
 	if (!bg_surface) {
 		g_warning("Create Bg Surface Failed");
