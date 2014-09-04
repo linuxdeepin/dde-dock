@@ -23,17 +23,9 @@ def get_files():
 POT_FILE = "dde-daemon.pot"
 def scan():
     global go_files, lang
-    os.system("rm %s" % POT_FILE)
-    for l in lang:
-        os.system("touch %s" %POT_FILE)
-        os.system("touch %s.po" % l)
-
-        cmd = "xgettext --from-code=utf-8 -C -kTr -j -o %s " % POT_FILE + " ".join(go_files)
-        os.system(cmd)
-
-        os.system("msgmerge %s.po %s > new_%s.po" % (l, POT_FILE, l))
-
-        os.system("mv new_%s.po %s.po" % (l, l))
+    #os.system("rm %s" % POT_FILE)
+    cmd = "xgettext --from-code=utf-8 -C -kTr -o %s " % POT_FILE + " ".join(go_files)
+    os.system(cmd)
 
 if __name__ == '__main__':
     get_files()
