@@ -1,13 +1,1 @@
-/usr
-/etc
-#data/etc/* /etc/
-#data/system-services/*.service /usr/share/dbus-1/system-services/
-#data/services/*.service /usr/share/dbus-1/services/
-#data/conf/*.conf /etc/dbus-1/system.d/
-#data/polkit-action/*.policy /usr/share/polkit-1/actions/
-#data/schemas/*.xml /usr/share/glib-2.0/schemas/
-#data/thumb_bg /usr/share/personalization/thumbnail/autogen/
-#data/lang /usr/share/dde-daemon/
-#data/template /usr/share/dde-daemon/
-#data/autostart/*.desktop /usr/share/deepin/gnome/autostart
 debian/reconfigure-dde-daemon /etc/kernel/postinst.d/

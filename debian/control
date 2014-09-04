@@ -2,32 +2,24 @@ Source: dde-daemon
 Section: devel
 Priority: extra
 Maintainer: Deepin Packages Builder <packages@linuxdeepin.com>
-Build-Depends: debhelper (>= 8.0.0),
- dde-go-dbus-factory (>= 0.0.2+20140723102903),
- go-dlib,
- go-xgb,
- go-xgbutil,
- golang,
- golang-fsnotify,
- golang-jamslam-freetype-go,
- golang-sqlite3,
- libcanberra-gtk3-dev,
+Build-Depends: debhelper (>= 9),
+ dde-go-dbus-factory (>= 0.0.2+20140904143716~60198a4a49),
+ golang-dlib-dev,
+ golang-xgb-dev,
+ golang-xgbutil-dev,
+ golang-go,
+ golang-fsnotify-dev,
+ golang-go-sqlite3-dev,
+ libmetacity-dev,
+ libudev-dev,
  libglib2.0-dev,
- libgnome-desktop-3-dev,
  libgtk-3-dev,
  libgtk2.0-dev,
- libgudev-1.0-dev,
- libmetacity-dev,
- libnotify-dev,
- libpulse-dev,
- libudev-dev,
- libupower-glib-dev,
- libx11-dev,
  libxi-dev,
+ libx11-dev,
  libxkbfile-dev,
  libxtst-dev,
- scons,
-Standards-Version: 3.9.4
+Standards-Version: 3.9.5
 Homepage: http://www.linuxdeepin.com
 
 Package: dde-daemon
@@ -36,13 +28,11 @@ Depends: ${shlibs:Depends},
  ${misc:Depends},
  acpid,
  bluez5 | bluez (>=5.4),
- dde-api (>= 0.0.2+20140804142734),
- dde-go-dbus-factory,
- go-dlib,
  grub-themes-deepin,
- libgnomekbd-common,
  startdde (>= 0.1+20140729232616),
  xcur2png,
 Conflicts: dde-daemon-gsd-input
-Description: Go-lang bingdings for dde-daemon
- Go-lang bindings for dde-daemon
+Description: daemon handling the DDE session settings
+    This package contains the daemon which is responsible for setting the
+    various parameters of a DDE session and the applications that run
+    under it. 

@@ -1,4 +1,4 @@
-/*This file is auto generate by pkg.linuxdeepin.com/lib/dbus/proxyer. Don't edit it*/
+/*This file is auto generate by pkg.linuxdeepin.com/dbus-generator. Don't edit it*/
 package dock
 
 import "pkg.linuxdeepin.com/lib/dbus"
@@ -8,14 +8,6 @@ import "sync"
 import "runtime"
 import "fmt"
 import "errors"
-import "strings"
-
-/*prevent compile error*/
-var _ = fmt.Println
-var _ = runtime.SetFinalizer
-var _ = sync.NewCond
-var _ = reflect.TypeOf
-var _ = property.BaseObserver{}
 
 var __conn *dbus.Conn = nil
 
@@ -30,12 +22,19 @@ func getBus() *dbus.Conn {
 	return __conn
 }
 
+/*prevent compile error*/
+var _ = fmt.Println
+var _ = runtime.SetFinalizer
+var _ = sync.NewCond
+var _ = reflect.TypeOf
+var _ = property.BaseObserver{}
+
 type RemoteEntry struct {
 	Path     dbus.ObjectPath
 	DestName string
 	core     *dbus.Object
 
-	signals       map[chan *dbus.Signal]bool
+	signals       map[<-chan *dbus.Signal]struct{}
 	signalsLocker sync.Mutex
 
 	Id   *dbusPropertyRemoteEntryId
@@ -43,28 +42,24 @@ type RemoteEntry struct {
 	Data *dbusPropertyRemoteEntryData
 }
 
-func (obj RemoteEntry) _createSignalChan() chan *dbus.Signal {
+func (obj *RemoteEntry) _createSignalChan() <-chan *dbus.Signal {
 	obj.signalsLocker.Lock()
-	ch := make(chan *dbus.Signal, 30)
-	getBus().Signal(ch)
-	obj.signals[ch] = false
+	ch := getBus().Signal()
+	obj.signals[ch] = struct{}{}
 	obj.signalsLocker.Unlock()
 	return ch
 }
-func (obj RemoteEntry) _deleteSignalChan(ch chan *dbus.Signal) {
+func (obj *RemoteEntry) _deleteSignalChan(ch <-chan *dbus.Signal) {
 	obj.signalsLocker.Lock()
 	delete(obj.signals, ch)
 	getBus().DetachSignal(ch)
-	close(ch)
 	obj.signalsLocker.Unlock()
 }
 func DestroyRemoteEntry(obj *RemoteEntry) {
 	obj.signalsLocker.Lock()
 	for ch, _ := range obj.signals {
 		getBus().DetachSignal(ch)
-		close(ch)
 	}
-	obj.signals = make(map[chan *dbus.Signal]bool)
 	obj.signalsLocker.Unlock()
 
 	obj.Id.Reset()
@@ -72,7 +67,7 @@ func DestroyRemoteEntry(obj *RemoteEntry) {
 	obj.Data.Reset()
 }
 
-func (obj RemoteEntry) Activate(arg1 int32, arg2 int32) (arg0 bool, _err error) {
+func (obj *RemoteEntry) Activate(arg1 int32, arg2 int32) (arg0 bool, _err error) {
 	_err = obj.core.Call("dde.dock.Entry.Activate", 0, arg1, arg2).Store(&arg0)
 	if _err != nil {
 		fmt.Println(_err)
@@ -80,7 +75,7 @@ func (obj RemoteEntry) Activate(arg1 int32, arg2 int32) (arg0 bool, _err error) 
 	return
 }
 
-func (obj RemoteEntry) ContextMenu(arg0 int32, arg1 int32) (_err error) {
+func (obj *RemoteEntry) ContextMenu(arg0 int32, arg1 int32) (_err error) {
 	_err = obj.core.Call("dde.dock.Entry.ContextMenu", 0, arg0, arg1).Store()
 	if _err != nil {
 		fmt.Println(_err)
@@ -88,7 +83,7 @@ func (obj RemoteEntry) ContextMenu(arg0 int32, arg1 int32) (_err error) {
 	return
 }
 
-func (obj RemoteEntry) HandleMenuItem(arg0 string) (_err error) {
+func (obj *RemoteEntry) HandleMenuItem(arg0 string) (_err error) {
 	_err = obj.core.Call("dde.dock.Entry.HandleMenuItem", 0, arg0).Store()
 	if _err != nil {
 		fmt.Println(_err)
@@ -96,7 +91,7 @@ func (obj RemoteEntry) HandleMenuItem(arg0 string) (_err error) {
 	return
 }
 
-func (obj RemoteEntry) HandleDragDrop(arg0 int32, arg1 int32, arg2 string) (_err error) {
+func (obj *RemoteEntry) HandleDragDrop(arg0 int32, arg1 int32, arg2 string) (_err error) {
 	_err = obj.core.Call("dde.dock.Entry.HandleDragDrop", 0, arg0, arg1, arg2).Store()
 	if _err != nil {
 		fmt.Println(_err)
@@ -104,7 +99,7 @@ func (obj RemoteEntry) HandleDragDrop(arg0 int32, arg1 int32, arg2 string) (_err
 	return
 }
 
-func (obj RemoteEntry) HandleDragEnter(arg0 int32, arg1 int32, arg2 string) (_err error) {
+func (obj *RemoteEntry) HandleDragEnter(arg0 int32, arg1 int32, arg2 string) (_err error) {
 	_err = obj.core.Call("dde.dock.Entry.HandleDragEnter", 0, arg0, arg1, arg2).Store()
 	if _err != nil {
 		fmt.Println(_err)
@@ -112,7 +107,7 @@ func (obj RemoteEntry) HandleDragEnter(arg0 int32, arg1 int32, arg2 string) (_er
 	return
 }
 
-func (obj RemoteEntry) HandleDragLeave(arg0 int32, arg1 int32, arg2 string) (_err error) {
+func (obj *RemoteEntry) HandleDragLeave(arg0 int32, arg1 int32, arg2 string) (_err error) {
 	_err = obj.core.Call("dde.dock.Entry.HandleDragLeave", 0, arg0, arg1, arg2).Store()
 	if _err != nil {
 		fmt.Println(_err)
@@ -120,7 +115,7 @@ func (obj RemoteEntry) HandleDragLeave(arg0 int32, arg1 int32, arg2 string) (_er
 	return
 }
 
-func (obj RemoteEntry) HandleDragOver(arg0 int32, arg1 int32, arg2 string) (_err error) {
+func (obj *RemoteEntry) HandleDragOver(arg0 int32, arg1 int32, arg2 string) (_err error) {
 	_err = obj.core.Call("dde.dock.Entry.HandleDragOver", 0, arg0, arg1, arg2).Store()
 	if _err != nil {
 		fmt.Println(_err)
@@ -128,7 +123,7 @@ func (obj RemoteEntry) HandleDragOver(arg0 int32, arg1 int32, arg2 string) (_err
 	return
 }
 
-func (obj RemoteEntry) HandleMouseWheel(arg0 int32, arg1 int32, arg2 int32) (_err error) {
+func (obj *RemoteEntry) HandleMouseWheel(arg0 int32, arg1 int32, arg2 int32) (_err error) {
 	_err = obj.core.Call("dde.dock.Entry.HandleMouseWheel", 0, arg0, arg1, arg2).Store()
 	if _err != nil {
 		fmt.Println(_err)
@@ -136,7 +131,7 @@ func (obj RemoteEntry) HandleMouseWheel(arg0 int32, arg1 int32, arg2 int32) (_er
 	return
 }
 
-func (obj RemoteEntry) SecondaryActivate(arg0 int32, arg1 int32) (_err error) {
+func (obj *RemoteEntry) SecondaryActivate(arg0 int32, arg1 int32) (_err error) {
 	_err = obj.core.Call("dde.dock.Entry.SecondaryActivate", 0, arg0, arg1).Store()
 	if _err != nil {
 		fmt.Println(_err)
@@ -144,7 +139,7 @@ func (obj RemoteEntry) SecondaryActivate(arg0 int32, arg1 int32) (_err error) {
 	return
 }
 
-func (obj RemoteEntry) ShowQuickWindow() (_err error) {
+func (obj *RemoteEntry) ShowQuickWindow() (_err error) {
 	_err = obj.core.Call("dde.dock.Entry.ShowQuickWindow", 0).Store()
 	if _err != nil {
 		fmt.Println(_err)
@@ -152,7 +147,7 @@ func (obj RemoteEntry) ShowQuickWindow() (_err error) {
 	return
 }
 
-func (obj RemoteEntry) ConnectDataChanged(callback func(arg0 string, arg1 string)) func() {
+func (obj *RemoteEntry) ConnectDataChanged(callback func(arg0 string, arg1 string)) func() {
 	__conn.BusObject().Call("org.freedesktop.DBus.AddMatch", 0,
 		"type='signal',path='"+string(obj.Path)+"', interface='dde.dock.Entry',sender='"+obj.DestName+"',member='DataChanged'")
 	sigChan := obj._createSignalChan()
@@ -260,13 +255,8 @@ func NewRemoteEntry(destName string, path dbus.ObjectPath) (*RemoteEntry, error)
 	}
 
 	core := getBus().Object(destName, path)
-	var v string
-	core.Call("org.freedesktop.DBus.Introspectable.Introspect", 0).Store(&v)
-	if strings.Index(v, "dde.dock.Entry") == -1 {
-		return nil, errors.New("'" + string(path) + "' hasn't interface 'dde.dock.Entry'.")
-	}
 
-	obj := &RemoteEntry{Path: path, DestName: destName, core: core, signals: make(map[chan *dbus.Signal]bool)}
+	obj := &RemoteEntry{Path: path, DestName: destName, core: core, signals: make(map[<-chan *dbus.Signal]struct{})}
 
 	obj.Id = &dbusPropertyRemoteEntryId{&property.BaseObserver{}, core}
 	obj.Type = &dbusPropertyRemoteEntryType{&property.BaseObserver{}, core}
