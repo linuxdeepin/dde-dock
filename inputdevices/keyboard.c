@@ -19,48 +19,43 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-#include "utils.h"
-#include "devices.h"
-#include <gdk/gdk.h>
-#include <gdk/gdkx.h>
+#include <stdio.h>
+#include <X11/Xlib.h>
 #include <X11/XKBlib.h>
-/*#include <X11/extensions/XKBrules.h>*/
 
-static gboolean xkb_set_keyboard_autorepeat_rate (guint delay,
-        guint interval);
+#include "devices.h"
 
-/*
- * repeat: set repeat if true
- */
-void
-set_keyboard_repeat(int repeat, unsigned int interval, unsigned int delay)
+/**
+ * repear: set repeat if true
+ **/
+int
+set_keyboard_repeat(int repeat,
+                    unsigned int delay, unsigned int interval)
 {
-    gdk_error_trap_push ();
+	Display *disp = XOpenDisplay(0);
+	if (!disp) {
+		fprintf(stderr, "Open Display Failed\n");
+		return -1;
+	}
 
-    if (repeat) {
-        gboolean rate_set = FALSE;
-        XAutoRepeatOn(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()));
-        /* Use XKB in preference */
-        rate_set = xkb_set_keyboard_autorepeat_rate(interval, delay);
+	if (repeat) {
+		XAutoRepeatOn(disp);
 
-        if (!rate_set) {
-            g_warning("Neither XKeyboard not Xfree86's keyboard extensions \
-                    are available,\nno way to support keyboard \
-                    autorepeat rate settings");
-        }
-    } else {
-        XAutoRepeatOff(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()));
-    }
+		// Use XKB in preference
+		int rate_set = XkbSetAutoRepeatRate(disp, XkbUseCoreKbd,
+		                                    delay, interval);
+		if (!rate_set) {
+			fprintf(stderr, "Neither XKeyboard not Xfree86's\
+				       	keyboard extensions are available,\
+					\n no way to support keyboard\
+				       	autorepeat rate settings\n");
+		}
+	} else {
+		XAutoRepeatOff(disp);
+	}
 
-    XSync (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()), FALSE);
-    gdk_error_trap_pop_ignored ();
-}
+	XSync(disp, False);
+	XCloseDisplay(disp);
 
-static gboolean
-xkb_set_keyboard_autorepeat_rate (guint delay, guint interval)
-{
-    return XkbSetAutoRepeatRate (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()),
-                                 XkbUseCoreKbd,
-                                 delay,
-                                 interval);
+	return 0;
 }

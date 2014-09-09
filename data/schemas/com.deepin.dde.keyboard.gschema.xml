@@ -23,12 +23,12 @@
       <default>true</default>
     </key>
     <key type="u" name="repeat-interval">
-      <default>250</default>
+      <default>50</default>
       <summary>Key Repeat Interval</summary>
       <description>Delay between repeats in milliseconds.</description>
     </key>
     <key type="u" name="delay">
-      <default>100</default>
+      <default>250</default>
       <summary>Initial Key Repeat Delay</summary>
       <description>Initial key repeat delay in milliseconds.</description>
     </key>

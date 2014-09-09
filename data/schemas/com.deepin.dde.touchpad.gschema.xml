@@ -2,7 +2,7 @@
 <schemalist>
   <schema path="/com/deepin/dde/touchpad/" id="com.deepin.dde.touchpad">
     <key type="b" name="disable-while-typing">
-      <default>false</default>
+      <default>true</default>
       <summary>Disable touchpad while typing</summary>
       <description>Set this to TRUE if you have problems with accidentally hitting the touchpad while typing.</description>
     </key>
@@ -32,7 +32,7 @@
       <description>Swap left and right mouse buttons for left-handed mice with 'left', 'right' for right-handed, 'mouse' to follow the mouse setting.</description>
     </key>
     <key type="d" name="motion-acceleration">
-      <default>1</default>
+      <default>1.5</default>
       <summary>Single Click</summary>
       <description>Acceleration multiplier for mouse motion. A value of -1 is the system default.</description>
     </key>
@@ -45,6 +45,11 @@
       <default>false</default>
       <summary>Natural scrolling</summary>
       <description>Set this to TRUE to enable natural (reverse) scrolling for touchpads.</description>
+    </key>
+    <key type="i" name="delta-scroll">
+      <default>30</default>
+      <summary>Natural scrolling delta</summary>
+      <description></description>
     </key>
     <key type="b" name="edge-scroll-enabled">
       <default>true</default>

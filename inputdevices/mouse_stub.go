@@ -21,47 +21,31 @@
 
 package inputdevices
 
-import "pkg.linuxdeepin.com/lib/dbus"
+import (
+	"pkg.linuxdeepin.com/lib/dbus"
+)
 
-// TODO: delete this struct && rm this file
-type Manager struct {
-	Infos []devicePathInfo
-}
+const (
+	DBUS_PATH_MOUSE = "/com/deepin/daemon/InputDevice/Mouse"
+	DBUS_IFC_MOUSE  = "com.deepin.daemon.InputDevice.Mouse"
+)
 
-type devicePathInfo struct {
-	Path string
-	Type string
-}
-
-var _manager *Manager
-
-func GetManager() *Manager {
-	if _manager == nil {
-		_manager = newManager()
-	}
-
-	return _manager
-}
-
-func newManager() *Manager {
-	m := &Manager{}
-
-	m.Infos = []devicePathInfo{
-		devicePathInfo{"com.deepin.daemon.InputDevice.Keyboard",
-			"keyboard"},
-		devicePathInfo{"com.deepin.daemon.InputDevice.Mouse",
-			"mouse"},
-		devicePathInfo{"com.deepin.daemon.InputDevice.TouchPad",
-			"touchpad"},
-	}
-
-	return m
-}
-
-func (m *Manager) GetDBusInfo() dbus.DBusInfo {
+func (mManager *MouseManager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		DBUS_SENDER,
-		"/com/deepin/daemon/InputDevices",
-		DBUS_SENDER,
+		DBUS_PATH_MOUSE,
+		DBUS_IFC_MOUSE,
+	}
+}
+
+func (mManager *MouseManager) setPropDeviceList(devList []PointerDeviceInfo) {
+	mManager.DeviceList = devList
+	dbus.NotifyChange(mManager, "DeviceList")
+}
+
+func (mManager *MouseManager) setPropExist(exist bool) {
+	if mManager.Exist != exist {
+		mManager.Exist = exist
+		dbus.NotifyChange(mManager, "Exist")
 	}
 }

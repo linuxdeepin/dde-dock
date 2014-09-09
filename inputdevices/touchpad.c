@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2011 ~ 2013 Deepin, Inc.
- *               2011 ~ 2013 jouyouyun
+ * Copyright (c) 2011 ~ 2014 Deepin, Inc.
+ *               2013 ~ 2014 jouyouyun
  *
  * Author:      jouyouyun <jouyouwen717@gmail.com>
  * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
@@ -19,305 +19,321 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-#include "devices.h"
-#include "utils.h"
+#include <stdio.h>
 #include <stdlib.h>
+#include <X11/Xlib.h>
+#include <X11/Xatom.h>
+#include <X11/extensions/XInput2.h>
 
-#define DEVICE_PROP_ID "device-id"
+#include "utils.h"
+#include "devices.h"
 
-void
-set_tpad_enable(int enable)
+/**
+ * Detailed description of the touch panel properties,
+ * see here: http://www.x.org/archive/X11R7.5/doc/man/man4/synaptics.4.html
+ **/
+
+int
+is_tpad_device(int deviceid)
 {
-    int id = xi_device_exist(TPAD_NAME_KEY);
+	Display *disp = XOpenDisplay(0);
+	if (!disp) {
+		fprintf(stderr, "Open Display Failed: %d\n", deviceid);
+		return -1;
+	}
 
-    if (id == -1) {
-        g_warning("Get Touchpad Device Id Failed");
-        return;
-    }
+	int ret = is_device_property_exist(disp, deviceid, "Synaptics Off");
 
-    g_debug("Trying to set %s, id: %d\n",
-            enable ? "Enable TouchPad" : "Disable TouchPad", id);
+	XCloseDisplay(disp);
 
-    if (set_device_enabled (id, enable) == FALSE) {
-        g_warning ("Set %s Failed: id (%d)",
-                   enable ? "Enable TouchPad" : "Disable TouchPad", id);
-    } else {
-        g_debug ("Set %s Success: id (%d)\n",
-                 enable ? "Enable TouchPad" : "Disable TouchPad", id);
-    }
+	if (ret == 1) {
+		return 1;
+	}
+
+	return 0;
 }
 
-void
-set_natural_scroll(int enable)
+int
+set_touchpad_enabled (int deviceid, int enabled)
 {
-    GdkDevice *tpad = device_is_exist(TPAD_NAME_KEY);
+	Display *disp = XOpenDisplay(0);
+	if (!disp) {
+		fprintf(stderr, "Open Display Failed: %d\n", deviceid);
+		return -1;
+	}
 
-    if (tpad == NULL) {
-        g_warning("TouchPad not exist\n");
-        return;
-    }
+	if (set_device_enabled(disp, deviceid, enabled) != 0) {
+		fprintf(stderr, "Enable touchpad failed\n");
+		XCloseDisplay(disp);
+		return -1;
+	}
 
-    XDevice *xdev = NULL;
-    xdev = open_gdk_device(tpad);
+	if (enabled) {
+		/**
+		 * Property 'Synaptics Off' 8 bit, valid values (0, 1, 2):
+		 *	Value 0: Touchpad is enabled
+		 *	Value 1: Touchpad is switched off
+		 *	Value 2: Only tapping and scrolling is switched off
+		 **/
+		Atom prop = XInternAtom(
+		                disp,
+		                "Synaptics Off",
+		                True);
+		if (prop != None) {
+			unsigned char data = 0;
+			XIChangeProperty(disp, deviceid, prop, XA_INTEGER, 8,
+			                 XIPropModeReplace, &data, 1);
+		}
+	}
 
-    if (xdev == NULL) {
-        g_warning("Get XDevice From TouchPad");
-        return;
-    }
-
-    g_debug("Trying to set %s for \"%s\"\n",
-            enable ? "natural (reverse) scrollroll" : "normal scroll",
-            gdk_device_get_name(tpad));
-
-    Atom scrolling_distance = XInternAtom(
-                                  GDK_DISPLAY_XDISPLAY(gdk_display_get_default()),
-                                  "Synaptics Scrolling Distance", FALSE);
-    g_debug("Error Trap Push\n");
-    gdk_error_trap_push();
-    /*gdk_error_trap_pop_ignored();*/
-    g_debug("Get Device Property\n");
-    Atom act_type;
-    int act_format;
-    unsigned long nitems, bytes_after;
-    unsigned char *data = NULL;
-    glong *ptr = NULL;
-    int rc = XGetDeviceProperty (
-                 GDK_DISPLAY_XDISPLAY(gdk_display_get_default()),
-                 xdev, scrolling_distance, 0, 2, FALSE,
-                 XA_INTEGER, &act_type, &act_format, &nitems,
-                 &bytes_after, &data);
-
-    if (rc == Success && act_type == XA_INTEGER &&
-            act_format == 32 && nitems >= 2) {
-        ptr = (glong *)data;
-
-        if (enable) {
-            ptr[0] = -abs(ptr[0]);
-            ptr[1] = -abs(ptr[1]);
-        } else {
-            ptr[0] = abs(ptr[0]);
-            ptr[1] = abs(ptr[1]);
-        }
-
-        XChangeDeviceProperty (GDK_DISPLAY_XDISPLAY(gdk_display_get_default()),
-                               xdev, scrolling_distance, XA_INTEGER, act_format,
-                               PropModeReplace, data, nitems);
-    }
-
-    if (rc == Success) {
-        XFree(data);
-    }
-
-    if (gdk_error_trap_pop()) {
-        g_warning("Error settings touchpad %s for \"%s\"\n",
-                  enable ? "natural (reverse) scrollroll" : "normal scroll",
-                  gdk_device_get_name(tpad));
-    }
-
-    XCloseDevice(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()), xdev);
+	XCloseDisplay(disp);
+	return 0;
 }
 
-void
-set_edge_scroll(int enable)
+/**
+ * Property "Synaptics Scrolling Distance" 32 bit, 2 values, vert, horiz.
+ *	Option "VertScrollDelta" "integer":
+ *		Move distance of the finger for a scroll event.
+ *	Option "HorizScrollDelta" "integer" :
+ *		Move distance of the finger for a scroll event.
+ *
+ * if delta = 0, use value from property getting
+ **/
+int
+set_touchpad_natural_scroll(int deviceid, int enabled, int delta)
 {
-    Atom prop_edge = XInternAtom(
-                         GDK_DISPLAY_XDISPLAY(gdk_display_get_default()),
-                         "Synaptics Edge Scrolling", FALSE);
+	Display *disp = XOpenDisplay(0);
+	if (!disp) {
+		fprintf(stderr, "Open Display Failed: %d\n", deviceid);
+		return -1;
+	}
 
-    if (!prop_edge) {
-        g_warning("Get Edge Prop Atom Failed");
-        return;
-    }
+	Atom prop = XInternAtom(disp,
+	                        "Synaptics Scrolling Distance",
+	                        True);
+	if (prop == None) {
+		fprintf(stderr, "Get 'Synaptics Scrolling Distance' Atom Failed\n");
+		XCloseDisplay(disp);
+		return -1;
+	}
 
-    GdkDevice *tpad = device_is_exist(TPAD_NAME_KEY);
+	Atom act_type;
+	int act_format;
+	unsigned long nitems, bytes_after;
+	unsigned char *data = NULL;
+	int rc = XIGetProperty(disp, deviceid, prop, 0, 2, False,
+	                       XA_INTEGER, &act_type, &act_format,
+	                       &nitems, &bytes_after, &data);
+	if (rc != Success) {
+		fprintf(stderr, "Get 'Synaptics Scrolling Distance' Property Failed\n");
+		XCloseDisplay(disp);
+		return -1;
+	}
 
-    if (tpad == NULL) {
-        g_warning("TouchPad not exist\n");
-        return;
-    }
+	if (act_type == XA_INTEGER && act_format == 32 && nitems >= 2) {
+		int *ptr = (int*)data;
+		if (enabled) {
+			if (delta > 0) {
+				ptr[0] = -abs(delta);
+				ptr[1] = -abs(delta);
+			} else {
+				ptr[0] = -abs(ptr[0]);
+				ptr[1] = -abs(ptr[1]);
+			}
+		} else {
+			if (delta > 0) {
+				ptr[0] = abs(delta);
+				ptr[1] = abs(delta);
+			} else {
+				ptr[0] = abs(ptr[0]);
+				ptr[1] = abs(ptr[1]);
+			}
+		}
 
-    XDevice *xdev = NULL;
-    xdev = open_gdk_device(tpad);
+		XIChangeProperty(disp, deviceid, prop, act_type, act_format,
+		                 XIPropModeReplace, data, nitems);
+	}
+	XFree(data);
+	XCloseDisplay(disp);
 
-    if (xdev == NULL) {
-        g_warning("Get XDevice From TouchPad");
-        return;
-    }
-
-    g_debug("Trying to set %s\n",
-            enable ? "enable edge scroll" : "disable edge scroll");
-    gdk_error_trap_push();
-    Atom act_type;
-    int act_format;
-    unsigned long nitems, bytes_after;
-    unsigned char *data = NULL;
-    int rc = XGetDeviceProperty(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()),
-                                xdev, prop_edge, 0, 1, False,
-                                XA_INTEGER, &act_type, &act_format, &nitems,
-                                &bytes_after, &data);
-
-    if (rc == Success && act_type == XA_INTEGER &&
-            act_format == 8 && nitems >= 2) {
-        data[0] = enable ? 1 : 0;
-        XChangeDeviceProperty(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()),
-                              xdev, prop_edge, XA_INTEGER, 8,
-                              PropModeReplace, data, nitems);
-    }
-
-    if (rc == Success) {
-        XFree(data);
-    }
-
-    if (gdk_error_trap_pop()) {
-        g_warning("Error settings touchpad %s\n",
-                  enable ? "enable edge scroll" : "disable edge scroll");
-    }
-
-    XCloseDevice (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()), xdev);
+	return 0;
 }
 
-void
-set_two_finger_scroll(int enable_vert, int enable_horiz)
+/**
+ * Property "Synaptics Edge Scrolling" 8 bit (BOOL), 3 values, vertical,
+ * horizontal, corner. :
+ *	Option "VertEdgeScroll" "boolean":
+ *		Enable vertical scrolling when dragging along the right edge.
+ *	Option "HorizEdgeScroll" "boolean" :
+ *		Enable horizontal scrolling when dragging along
+ *		the bottom edge.
+ *	Option "CornerCoasting" "boolean":
+ *		Enable edge scrolling to continue while the finger stays
+ *		in an edge corner.
+ **/
+int
+set_edge_scroll(int deviceid, int enabled)
 {
-    Atom prop_twofinger = XInternAtom(
-                              GDK_DISPLAY_XDISPLAY(gdk_display_get_default()),
-                              "Synaptics Two-Finger Scrolling", FALSE);
+	Display *disp = XOpenDisplay(0);
+	if (!disp) {
+		fprintf(stderr, "Open Display Failed: %d\n", deviceid);
+		return -1;
+	}
 
-    if (!prop_twofinger) {
-        g_warning("Get Edge Prop Atom Failed");
-        return;
-    }
+	Atom prop = XInternAtom(disp,
+	                        "Synaptics Edge Scrolling",
+	                        True);
+	if (prop == None) {
+		fprintf(stderr, "Get 'Synaptics Edge Scrolling' Atom Failed\n");
+		XCloseDisplay(disp);
+		return -1;
+	}
 
-    GdkDevice *tpad = device_is_exist(TPAD_NAME_KEY);
+	Atom act_type;
+	int act_format;
+	unsigned long nitems, bytes_after;
+	unsigned char *data = NULL;
+	int rc = XIGetProperty(disp, deviceid, prop, 0, 1, False,
+	                       XA_INTEGER, &act_type, &act_format,
+	                       &nitems, &bytes_after, &data);
+	if (rc != Success) {
+		fprintf(stderr, "Get 'Synaptics Edge Scrolling' Property Failed\n");
+		XCloseDisplay(disp);
+		return -1;
+	}
 
-    if (tpad == NULL) {
-        g_warning("TouchPad not exist\n");
-        return;
-    }
+	if (act_type == XA_INTEGER && act_format == 8 && nitems >= 3) {
+		data[0] = enabled ? 1 : 0;
+		data[1] = enabled ? 1 : 0;
+		data[2] = enabled ? 1 : 0;
 
-    XDevice *xdev = NULL;
-    xdev = open_gdk_device(tpad);
+		XIChangeProperty(disp, deviceid, prop, act_type, act_format,
+		                 XIPropModeReplace, data, nitems);
+	}
 
-    if (xdev == NULL) {
-        g_warning("Get XDevice From TouchPad");
-        return;
-    }
+	XFree(data);
+	XCloseDisplay(disp);
 
-    g_debug("Trying to set %s, %s\n",
-            enable_vert ? "enable two finger vert scroll" : "disable two finger vert scroll",
-            enable_horiz ? "enable two finger horiz scroll" : "disable two finger horiz scroll");
-    gdk_error_trap_push();
-    Atom act_type;
-    int act_format;
-    unsigned long nitems, bytes_after;
-    unsigned char *data = NULL;
-    int rc = XGetDeviceProperty(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()),
-                                xdev, prop_twofinger, 0, 1, False,
-                                XA_INTEGER, &act_type, &act_format, &nitems,
-                                &bytes_after, &data);
-
-    if (rc == Success && act_type == XA_INTEGER &&
-            act_format == 8 && nitems >= 2) {
-        data[0] = enable_vert ? 1 : 0; // set vertical(垂直) scroll
-        data[1] = enable_horiz ? 1 : 0; // set horizon(水平) scroll
-        XChangeDeviceProperty(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()),
-                              xdev, prop_twofinger, XA_INTEGER, 8,
-                              PropModeReplace, data, nitems);
-    }
-
-    if (rc == Success) {
-        XFree(data);
-    }
-
-    if (gdk_error_trap_pop()) {
-        g_warning("Error settings touchpad %s, %s\n",
-                  enable_vert ? "enable two finger vert scroll" : "disable two finger vert scroll",
-                  enable_horiz ? "enable two finger horiz scroll" : "disable two finger horiz scroll");
-    }
-
-    XCloseDevice (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()), xdev);
+	return 0;
 }
 
-/*
- * state: touchpad is enable
- * left_handed: true/false
- */
-void
-set_tab_to_click (int state, int left_handed)
+/**
+ * Property 'Synaptics Two-Finger Scrolling' 8 bit (BOOL),
+ * 2 values, vertical, horizontal.
+ *	Option "VertTwoFingerScroll" "boolean":
+ *		Enable vertical scrolling when dragging with
+ *		two fingers anywhere on the touchpad.
+ *	Option "HorizTwoFingerScroll" "boolean" :
+ *		Enable horizontal scrolling when dragging with
+ *		two fingers anywhere on the touchpad.
+ **/
+int
+set_two_finger_scroll(int deviceid, int vert_enabled, int horiz_enabled)
 {
-    GdkDevice *tpad = device_is_exist(TPAD_NAME_KEY);
+	Display *disp = XOpenDisplay(0);
+	if (!disp) {
+		fprintf(stderr, "Open Display Failed: %d\n", deviceid);
+		return -1;
+	}
 
-    if (tpad == NULL) {
-        g_debug("TouchPad not exist\n");
-        return;
-    }
+	Atom prop = XInternAtom(disp,
+	                        "Synaptics Two-Finger Scrolling",
+	                        True);
+	if (prop == None) {
+		fprintf(stderr, "Get 'Synaptics Two-Finger Scrolling' Atom Failed\n");
+		XCloseDisplay(disp);
+		return -1;
+	}
 
-    XDevice *xdev = NULL;
-    xdev = open_gdk_device(tpad);
+	Atom act_type;
+	int act_format;
+	unsigned long nitems, bytes_after;
+	unsigned char *data = NULL;
+	int rc = XIGetProperty(disp, deviceid, prop, 0, 1, False,
+	                       XA_INTEGER, &act_type, &act_format,
+	                       &nitems, &bytes_after, &data);
+	if (rc != Success) {
+		fprintf(stderr, "Get 'Synaptics Two-Finger Scrolling' Property Failed\n");
+		XCloseDisplay(disp);
+		return -1;
+	}
 
-    if (xdev == NULL) {
-        g_warning("Get XDevice From TouchPad");
-        return;
-    }
+	if (act_type == XA_INTEGER && act_format == 8 && nitems >= 2) {
+		data[0] = vert_enabled ? 1 : 0;  // set vertical(垂直) scroll
+		data[1] = horiz_enabled ? 1 : 0; // set horizon(水平) scroll
 
-    Atom prop = XInternAtom (GDK_DISPLAY_XDISPLAY(gdk_display_get_default()),
-                             "Synaptics Tap Action", FALSE);
+		XIChangeProperty(disp, deviceid, prop, act_type, act_format,
+		                 XIPropModeReplace, data, nitems);
+	}
 
-    if (!prop) {
-        g_warning("Get Prop 'Synaptics Tap Action' Failed");
-        return;
-    }
+	XFree(data);
+	XCloseDisplay(disp);
 
-    g_debug("Settings tap to click on %s\n",
-            left_handed ? "Use Left Hand" : "Use Right Hand");
-    gdk_error_trap_push();
-    Atom act_type;
-    int act_format;
-    unsigned long nitems, bytes_after;
-    unsigned char *data = NULL;
-    int rc = XGetDeviceProperty(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()),
-                                xdev, prop, 0, 2, False, XA_INTEGER, &act_type,
-                                &act_format, &nitems, &bytes_after, &data);
-
-    if (rc == Success && act_type == XA_INTEGER &&
-            act_format == 8 && nitems >= 7) {
-        /* Set RLM mapping for 1/2/3 fingers*/
-        data[4] = (state) ? ((left_handed) ? 3 : 1) : 0;
-        data[5] = (state) ? ((left_handed) ? 1 : 3) : 0;
-        data[6] = (state) ? 2 : 0;
-        XChangeDeviceProperty (
-            GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()),
-            xdev, prop, XA_INTEGER, 8,
-            PropModeReplace, data, nitems);
-    }
-
-    if (rc == Success) {
-        XFree(data);
-    }
-
-    if (gdk_error_trap_pop()) {
-        g_warning("Error settings touchpad %s\n",
-                  left_handed ? "Use Left Hand" : "Use Right Hand");
-    }
-
-    XCloseDevice (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()), xdev);
+	return 0;
 }
 
-/*
- * Disable TouchPad when typing
- */
-// Has been implemented in GoLang
-/*void*/
-/*set_disable_w_typing(int enable_w)*/
-/*{*/
-/*}*/
+/**
+ * Property 'Synaptics Tap Action' 8 bit,
+ * up to MAX_TAP values (see synaptics.h), 0 disables an element.
+ * order: RT, RB, LT, LB, F1, F2, F3.
+ *	Option "RTCornerButton" "integer":
+ *		Which mouse button is reported on a right top corner tap.
+ *	Option "RBCornerButton" "integer":
+ *		Which mouse button is reported on a right bottom corner tap.
+ *	Option "LTCornerButton" "integer":
+ *		Which mouse button is reported on a left top corner tap.
+ *	Option "LBCornerButton" "integer":
+ *		Which mouse button is reported on a left bottom corner tap.
+ *	Option "TapButton1" "integer":
+ *		Which mouse button is reported on a non-corner one-finger tap.
+ *	Option "TapButton2" "integer":
+ *		Which mouse button is reported on a non-corner two-finger tap.
+ *	Option "TapButton3" "integer":
+ *		Which mouse button is reported on a non-corner
+ *		three-finger tap.
+ **/
+int
+set_tab_to_click(int deviceid, int enabled, int left_handed)
+{
+	Display *disp = XOpenDisplay(0);
+	if (!disp) {
+		fprintf(stderr, "Open Display Failed: %d\n", deviceid);
+		return -1;
+	}
 
-/*
- * Re-enable touchpad when any other pointing device isn't present
- * 当没有鼠标设备被设置时，重新启用触摸板
- */
-// Has been implemented in dde-daemon/deepin-daemon
-/*void*/
-/*ensure_tpad_active()*/
-/*{*/
-/*}*/
+	Atom prop = XInternAtom(disp,
+	                        "Synaptics Tap Action",
+	                        True);
+	if (prop == None) {
+		fprintf(stderr, "Get 'Synaptics Tap Action' Atom Failed\n");
+		XCloseDisplay(disp);
+		return -1;
+	}
+
+	Atom act_type;
+	int act_format;
+	unsigned long nitems, bytes_after;
+	unsigned char *data = NULL;
+	int rc = XIGetProperty(disp, deviceid, prop, 0, 2, False,
+	                       XA_INTEGER, &act_type, &act_format,
+	                       &nitems, &bytes_after, &data);
+	if (rc != Success) {
+		fprintf(stderr, "Get 'Synaptics Tap Action' Property Failed\n");
+		XCloseDisplay(disp);
+		return -1;
+	}
+
+	if (act_type == XA_INTEGER && act_format == 8 && nitems >= 7) {
+		data[4] = enabled ? (left_handed ? 3 : 1) : 0; // left button
+		data[5] = enabled ? (left_handed ? 1 : 3) :0; // right button
+		data[6] = enabled ? 2 : 0; // middle button
+
+		XIChangeProperty(disp, deviceid, prop, act_type, act_format,
+		                 XIPropModeReplace, data, nitems);
+	}
+
+	XFree(data);
+	XCloseDisplay(disp);
+
+	return 0;
+}

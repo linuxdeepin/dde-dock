@@ -23,35 +23,17 @@ package inputdevices
 
 import (
 	"pkg.linuxdeepin.com/lib/dbus"
-	"strings"
 )
 
-func (op *Manager) setPropName(name string) {
-	switch name {
-	case "Infos":
-		names := getDeviceNames()
-		tmps := []deviceInfo{}
-		for _, name := range names {
-			if strings.Contains(name, "mouse") {
-				info := deviceInfo{DEVICE_PATH + "Mouse", "mouse"}
-				tmps = append(tmps, info)
-			} else if strings.Contains(name, "touchpad") {
-				info := deviceInfo{DEVICE_PATH + "TouchPad", "touchpad"}
-				tmps = append(tmps, info)
-			}
-		}
+const (
+	DBUS_PATH_KBD = "/com/deepin/daemon/InputDevice/Keyboard"
+	DBUS_IFC_KBD  = "com.deepin.daemon.InputDevice.Keyboard"
+)
 
-		info := deviceInfo{DEVICE_PATH + "Keyboard", "keyboard"}
-		tmps = append(tmps, info)
-		op.Infos = tmps
-		dbus.NotifyChange(op, name)
-	}
-}
-
-func (op *Manager) GetDBusInfo() dbus.DBusInfo {
+func (kbdManager *KeyboardManager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		DEVICE_DEST,
-		MANAGER_PATH,
-		MANAGER_IFC,
+		DBUS_SENDER,
+		DBUS_PATH_KBD,
+		DBUS_IFC_KBD,
 	}
 }

@@ -10,6 +10,11 @@
       <summary>Mouse button orientation</summary>
       <description>Swap left and right mouse buttons for left-handed mice.</description>
     </key>
+    <key type="b" name="natural-scroll">
+      <default>false</default>
+      <summary>Natural scrolling</summary>
+      <description>Set this to TRUE to enable natural (reverse) scrolling for mouses.</description>
+    </key>
     <key type="b" name="disable-touchpad">
       <default>false</default>
       <summary>Disable touchpad when has mouse</summary>

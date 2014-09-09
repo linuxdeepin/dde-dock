@@ -22,86 +22,63 @@
 package inputdevices
 
 import (
-	"dbus/com/deepin/api/greeterutils"
 	libsession "dbus/com/deepin/sessionmanager"
 	"pkg.linuxdeepin.com/lib/dbus"
-	"pkg.linuxdeepin.com/lib/gio-2.0"
 	"pkg.linuxdeepin.com/lib/log"
 )
 
-var (
-	logger     = log.NewLogger(DEVICE_DEST)
-	xsObj      *libsession.XSettings
-	greeterObj *greeterutils.GreeterUtils
-	managerObj *Manager
-
-	tpadSettings  = gio.NewSettings("com.deepin.dde.touchpad")
-	mouseSettings = gio.NewSettings("com.deepin.dde.mouse")
-	kbdSettings   = gio.NewSettings("com.deepin.dde.keyboard")
-	layoutDescMap = make(map[string]string)
+const (
+	DBUS_SENDER = "com.deepin.daemon.InputDevices"
 )
 
-func Stop() {
-	logger.EndTracing()
-}
+var (
+	logger = log.NewLogger("com.deepin.daemon.InputDevices")
+
+	xsObj *libsession.XSettings
+)
+
 func Start() {
 	logger.BeginTracing()
-	logger.SetRestartCommand("/usr/lib/deepin-daemon/dde-session-daemon")
 
 	var err error
 	xsObj, err = libsession.NewXSettings("com.deepin.SessionManager",
 		"/com/deepin/XSettings")
 	if err != nil {
 		logger.Warning("New XSettings Object Failed: ", err)
+		xsObj = nil
+	}
+
+	if !initDeviceChangedWatcher() {
+		logger.Fatal("Init device changed wacher failed")
 		return
 	}
 
-	if greeterObj, err = greeterutils.NewGreeterUtils("com.deepin.api.GreeterUtils", "/com/deepin/api/GreeterUtils"); err != nil {
-		logger.Warning("New GreeterUtils failed:", err)
-		return
+	if err := dbus.InstallOnSession(GetManager()); err != nil {
+		logger.Fatal("Install Manager DBus Failed:", err)
 	}
 
-	listenDevsSettings()
-
-	managerObj = NewManager()
-	if err = dbus.InstallOnSession(managerObj); err != nil {
-		logger.Fatal("Manager DBus Session Failed: ", err)
+	if err := dbus.InstallOnSession(GetMouseManager()); err != nil {
+		logger.Fatal("Install Mouse DBus Failed:", err)
 	}
 
-	datas := parseXML(_LAYOUT_XML_PATH)
-	layoutDescMap = getLayoutList(datas)
-
-	mouse := NewMouse()
-	if err := dbus.InstallOnSession(mouse); err != nil {
-		logger.Fatal("Mouse DBus Session Failed: ", err)
+	if err := dbus.InstallOnSession(GetTouchpadManager()); err != nil {
+		logger.Fatal("Install Touchpad DBus Failed:", err)
 	}
-	managerObj.mouseObj = mouse
 
-	kbd := NewKeyboard()
-	if err := dbus.InstallOnSession(kbd); err != nil {
-		logger.Fatal("Kbd DBus Session Failed: ", err)
+	if err := dbus.InstallOnSession(GetKeyboardManager()); err != nil {
+		logger.Fatal("Install Keyboard DBus Failed:", err)
 	}
-	managerObj.kbdObj = kbd
-	//setLayoutOptions()
-	setLayout(kbd.CurrentLayout.GetValue().(string))
+}
 
-	tpadFlag := false
-	for _, info := range managerObj.Infos {
-		if info.Id == "touchpad" {
-			tpad := NewTPad()
-			if err := dbus.InstallOnSession(tpad); err != nil {
-				logger.Fatal("TPad DBus Session Failed: ", err)
-			}
-			tpadFlag = true
-			managerObj.tpadObj = tpad
-			break
-		}
-	}
-	initGSettingsSet(tpadFlag)
+func Stop() {
+	logger.EndTracing()
 
-	if managerObj.mouseObj.Exist {
-		disableTPadWhenMouse()
-	} else {
-		tpadSettings.SetBoolean(TPAD_KEY_ENABLE, true)
-	}
+	endDeviceListenThread()
+
+	GetTouchpadManager().typingExitChan <- true
+
+	dbus.UnInstallObject(GetKeyboardManager())
+	dbus.UnInstallObject(GetTouchpadManager())
+	dbus.UnInstallObject(GetMouseManager())
+	dbus.UnInstallObject(GetManager())
 }

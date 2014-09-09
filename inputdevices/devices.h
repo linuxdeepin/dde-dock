@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2011 ~ 2013 Deepin, Inc.
- *               2011 ~ 2013 jouyouyun
+ * Copyright (c) 2011 ~ 2014 Deepin, Inc.
+ *               2013 ~ 2014 jouyouyun
  *
  * Author:      jouyouyun <jouyouwen717@gmail.com>
  * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
@@ -19,33 +19,36 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-#ifndef __TOUCHPAD_H__
-#define __TOUCHPAD_H__
+#ifndef __DEVICES_H__
+#define __DEVICES_H__
 
-#include <glib.h>
+typedef struct _DeviceInfo {
+	char *name;
+	int deviceid;
+	int enabled;
+} DeviceInfo;
 
-#define TPAD_NAME_KEY "touchpad"
-#define MOUSE_NAME_KEY "mouse"
-#define KEYBOARD_KEY_NAME "keyboard"
+DeviceInfo *get_device_info_list(int *n_devices);
+void free_device_info(DeviceInfo *infos, int n_devices);
 
-int listen_device_changed ();
+int is_mouse_device(int deviceid);
+int set_motion_acceleration(int deviceid, double acceleration);
+int set_motion_threshold(int deviceid, double threshold);
+int set_left_handed(unsigned long xid, const char *name, int enabled);
 
-// TouchPad Set Func
-void set_tpad_enable(int enable);
-void set_natural_scroll(int enable);
-void set_edge_scroll(int enable);
-void set_two_finger_scroll(int enable_vert, int enable_horiz);
-void set_tab_to_click (int state, int left_handed);
+int set_mouse_natural_scroll(unsigned long xid, const char *name, int enabled);
 
-// Mouse Set Func
-void set_motion (char *dev_name,
-        double motion_acceleration, int motion_threshold);
-void set_middle_button (int enable);
-void set_left_handed (int left_handed);
+int is_tpad_device(int deviceid);
+int set_touchpad_enabled(int deviceid, int enabled);
+int set_touchpad_natural_scroll(int deviceid, int enabled, int delta);
+int set_edge_scroll(int deviceid, int enabled);
+int set_two_finger_scroll(int deviceid, int vert_enabled, int horiz_enabled);
+int set_tab_to_click(int deviceid, int enabled, int left_handed);
 
-// Keyboard Set Func
-void set_keyboard_repeat(int repeat,
-        unsigned int interval, unsigned int delay);
+int set_keyboard_repeat(int repeat,
+                        unsigned int delay, unsigned int interval);
+
+int listen_device_changed();
+void end_device_listen_thread();
 
 #endif
-

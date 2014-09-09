@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2011 ~ 2013 Deepin, Inc.
- *               2011 ~ 2013 jouyouyun
+ * Copyright (c) 2011 ~ 2014 Deepin, Inc.
+ *               2013 ~ 2014 jouyouyun
  *
  * Author:      jouyouyun <jouyouwen717@gmail.com>
  * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
@@ -19,233 +19,166 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-#include "utils.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <X11/Xlib.h>
+#include <X11/Xatom.h>
 #include <X11/extensions/XInput2.h>
 
-DeviceInfo *get_device_info_list (int *num)
+#include "utils.h"
+#include "devices.h"
+
+DeviceInfo*
+get_device_info_list(int *n_devices)
 {
-	int n_devices;
-	XDeviceInfo *infos = XListInputDevices(
-	                         GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()),
-	                         &n_devices);
+	if (!n_devices) {
+		return NULL;
+	}
+
+	Display *disp = XOpenDisplay(0);
+	if (!disp) {
+		fprintf(stderr, "Open Display Failed\n");
+		return NULL;
+	}
+
+	int num;
+	XIDeviceInfo *infos = XIQueryDevice(disp, XIAllDevices, &num);
+	if (!infos) {
+		fprintf(stderr, "List Input Device Failed\n");
+		XCloseDisplay(disp);
+		return NULL;
+	}
+
 	int i;
 	int j = 0;
 	DeviceInfo *list = NULL;
-	for (i = 0; i < n_devices; i++) {
-		if (infos[i].use != IsXExtensionPointer ||
-		        infos[i].type < 1) {
+	for (i = 0; i < num; i++) {
+		if ((infos[i].use != XISlavePointer &&
+		        infos[i].use != XISlaveKeyboard)) {
 			continue;
 		}
 
 		DeviceInfo *tmp = calloc(j+1, sizeof(DeviceInfo));
-		if (tmp == NULL) {
-			free(list);
-			list = NULL;
-			break;
+		if (!tmp) {
+			fprintf(stderr, "Alloc memory failed\n");
+			continue;
 		}
 
 		if (j != 0) {
 			memcpy(tmp, list, j * sizeof(DeviceInfo));
+		}
+
+		unsigned long size = strlen(infos[i].name);
+		tmp[j].name = calloc(size+1, sizeof(char));
+		if (!tmp[j].name) {
+			fprintf(stderr, "Alloc memory for name failed\n");
+			continue;
+		}
+		memcpy(tmp[j].name, infos[i].name, size);
+		/*tmp[j].name = infos[i].name;*/
+		tmp[j].deviceid = infos[i].deviceid;
+		tmp[j].enabled = (int)infos[i].enabled;
+
+		if (j != 0) {
 			free(list);
 			list = NULL;
 		}
-
-		tmp[j].name = infos[i].name;
-		tmp[j].atom_name = (char*)gdk_x11_get_xatom_name(infos[i].type);
-		tmp[j].xid = infos[i].id;
-		tmp[j].atom = infos[i].type;
-
 		list = tmp;
+		tmp = NULL;
 		j++;
 	}
-
-	*num = j;
-	XFreeDeviceList(infos);
+	XIFreeDeviceInfo(infos);
+	XCloseDisplay(disp);
+	*n_devices = j;
 
 	return list;
 }
 
-int
-xi_device_exist (const char *name)
+void
+free_device_info(DeviceInfo *infos, int n_devices)
 {
-	if (name == NULL) {
+	if (!infos) {
+		return ;
+	}
+
+	int i;
+	for (i = 0; i < n_devices; i++) {
+		free(infos[i].name);
+		infos[i].name = NULL;
+	}
+
+	free(infos);
+	infos = NULL;
+}
+
+/**
+ * return:
+ *	-1: error or not exist
+ *	0: success
+ */
+int
+set_device_enabled (Display *disp, int deviceid, int enabled)
+{
+	if (!disp) {
+		fprintf(stderr, "Display NULL\n");
 		return -1;
 	}
 
-	int n_devices;
-	XDeviceInfo *infos = XListInputDevices(
-	                         GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()),
-	                         &n_devices);
-	int i;
-	int dev_id = -1;
+	Atom prop = XInternAtom(
+	                disp,
+	                "Device Enabled",
+	                True);
+	if (prop == None) {
+		fprintf(stderr, "Get 'Device Enabled' Atom Failed\n");
+		return -1;
+	}
 
-	for (i = 0; i < n_devices; i++) {
-		if (infos[i].use != IsXExtensionPointer ||
-		        infos[i].type < 1) {
-			continue;
+	unsigned char data = enabled ? 1 : 0;
 
-		}
+	XIChangeProperty(disp, deviceid, prop, XA_INTEGER, 8,
+	                 XIPropModeReplace, &data, 1);
 
-		const char *atom_name = gdk_x11_get_xatom_name(infos[i].type);
-		if ( str_is_contain (atom_name, name) ||
-		        str_is_contain(infos[i].name, name) ) {
-			dev_id = infos[i].id;
+	return 0;
+}
+
+/**
+ * return:
+ *	-1: error
+ *	0: not exist
+ *	1: exist
+ */
+int
+is_device_property_exist(Display *disp, int deviceid, const char *prop_name)
+{
+	if (!disp || !prop_name) {
+		fprintf(stderr, "Args error\n");
+		return -1;
+	}
+
+	int nprops;
+	Atom *props = XIListProperties(disp, deviceid, &nprops);
+	if (!props) {
+		fprintf(stderr, "List Device '%s' Properties Failed\n",
+		        prop_name);
+		return -1;
+	}
+
+	int flags = 0;
+	while (nprops--) {
+		char *name = XGetAtomName(disp, props[nprops]);
+		if (strcmp(name, prop_name) == 0 ) {
+			flags = 1;
+			XFree(name);
 			break;
 		}
+		XFree(name);
+	}
+	XFree(props);
+
+	if (flags) {
+		return 1;
 	}
 
-	XFreeDeviceList(infos);
-
-	return dev_id;
-}
-
-
-GdkDevice *
-device_is_exist (const char *deviceName)
-{
-	g_debug("Check Device Exisr: %s\n", deviceName);
-	GList *devList, *l;
-	GdkDisplay *display = gdk_display_get_default ();
-
-	if (display == NULL) {
-		g_warning("Get Default Display Failed: %s", deviceName);
-		return NULL;
-	}
-
-	g_debug("Get Device Manager\n");
-	GdkDeviceManager *devManager = gdk_display_get_device_manager(display);
-
-	if (devManager == NULL) {
-		g_warning("Get Device Manager Failed: %s", deviceName);
-		return NULL;
-	}
-
-	g_debug("Get Device List\n");
-	devList = gdk_device_manager_list_devices(devManager,
-	          GDK_DEVICE_TYPE_SLAVE);
-
-	if (devList == NULL) {
-		g_warning("Get Device List Failed: %s", deviceName);
-		return NULL;
-	}
-
-	g_debug("Get Device List End\n");
-	GdkDevice *device = NULL;
-
-	gboolean flag = FALSE;
-
-	for ( l = devList; l != NULL; l = l->next ) {
-		device = l->data;
-
-		const gchar *name = gdk_device_get_name(device);
-
-		g_debug("Device Name: %s\n", name);
-
-		if ( str_is_contain (name, deviceName) ) {
-			flag = TRUE;
-			break;
-		}
-	}
-
-	g_list_free (devList);
-
-	if (flag) {
-		flag = FALSE;
-		return device;
-	}
-
-	return NULL;
-}
-
-gboolean
-str_is_contain (const gchar *src, const gchar *sub)
-{
-	if ( src == NULL || sub == NULL ) {
-		return FALSE;
-	}
-
-	gchar *tmp1 = str_to_letter(src);
-	gchar *tmp2 = str_to_letter(sub);
-
-	gchar *ret = g_strrstr (tmp1, tmp2);
-	g_free(tmp1);
-	g_free(tmp2);
-
-	if ( ret == NULL ) {
-		return FALSE;
-	}
-
-	return TRUE;
-}
-
-gchar *
-str_to_upper(const gchar *src)
-{
-	if (src == NULL) {
-		return NULL;
-	}
-
-	/*g_debug("To Upper: %s\n", src);*/
-	return g_utf8_strup(src, -1);
-}
-
-gchar *
-str_to_letter(const gchar *src)
-{
-	if (src == NULL) {
-		return NULL;
-	}
-
-	/*g_debug("To Letter: %s\n", src);*/
-	return g_utf8_strdown(src, -1);
-}
-
-gboolean
-set_device_enabled (int device_id,
-                    gboolean enabled)
-{
-	Atom prop;
-	guchar value;
-
-	prop = XInternAtom (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()), "Device Enabled", False);
-
-	if (!prop) {
-		return FALSE;
-	}
-
-	gdk_error_trap_push ();
-	g_debug("Start Set device\n");
-
-	value = enabled ? 1 : 0;
-	XIChangeProperty (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()),
-	                  device_id, prop, XA_INTEGER, 8, PropModeReplace, &value, 1);
-
-	g_debug("Has Set end\n");
-
-	if (gdk_error_trap_pop ()) {
-		return FALSE;
-	}
-
-	return TRUE;
-}
-
-XDevice *
-open_gdk_device (GdkDevice *device)
-{
-	XDevice *xdevice;
-	int id;
-
-	g_object_get (G_OBJECT (device), "device-id", &id, NULL);
-
-	gdk_error_trap_push ();
-
-	xdevice = XOpenDevice (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()), id);
-
-	if (gdk_error_trap_pop () != 0) {
-		return NULL;
-	}
-
-	return xdevice;
+	return 0;
 }
