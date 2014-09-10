@@ -1,6 +1,7 @@
 package dock
 
 import (
+	"errors"
 	"pkg.linuxdeepin.com/lib/dbus"
 )
 
@@ -21,10 +22,14 @@ func NewEntryProxyer(entryId string) (*EntryProxyer, error) {
 	if core, err := NewRemoteEntry(entryDestPrefix+entryId, dbus.ObjectPath(entryPathPrefix+entryId)); err != nil {
 		return nil, err
 	} else {
+		remoteEntryId := core.Id.Get()
+		if "" == remoteEntryId {
+			return nil, errors.New("Empty remote entry id")
+		}
 		e := &EntryProxyer{
 			core:    core,
 			entryId: entryId,
-			Id:      core.Id.Get(),
+			Id:      remoteEntryId,
 			Type:    core.Type.Get(),
 			Data:    core.Data.Get(),
 		}
