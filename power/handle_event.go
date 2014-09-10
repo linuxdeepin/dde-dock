@@ -5,6 +5,7 @@ import "os/exec"
 import "dbus/com/deepin/sessionmanager"
 import "time"
 import "dbus/com/deepin/daemon/display"
+import "syscall"
 
 const (
 	//sync with com.deepin.daemon.power.schemas
@@ -155,18 +156,47 @@ func (p *Power) initEventHandle() {
 	}
 
 	if login1 != nil {
+		var blockSleep, unblockSleep = func() (func(), func()) {
+			var blockFD = -1
+			return func() {
+					if blockFD == -1 {
+						fd, err := login1.Inhibit("sleep", "lock screen", "run screenlock..", "delay")
+						blockFD = int(fd)
+						if err != nil {
+							logger.Warning("inbhibit login1.sleep failed", err)
+						}
+					}
+				}, func() {
+					if blockFD >= 0 {
+						err := syscall.Close(blockFD)
+						if err != nil {
+							logger.Warning("error when close fd:", err)
+						}
+						blockFD = -1
+					}
+				}
+		}()
+
+		blockSleep()
+
 		login1.ConnectPrepareForSleep(func(before bool) {
 			if before {
 				if p.lowBatteryStatus == lowBatteryStatusAction {
 					doShowLowpower()
 				} else {
 					if p.coreSettings.GetBoolean("lock-enabled") {
+						now := time.Now()
 						doLock()
+						logger.Debug("screenlock ready time:", time.Now().Sub(now))
 					}
 				}
+
+				unblockSleep()
 			} else {
 				time.AfterFunc(time.Second*1, func() { p.screensaver.SimulateUserActivity() })
 				p.handleBatteryPercentage()
+
+				blockSleep()
 			}
 		})
 	}
