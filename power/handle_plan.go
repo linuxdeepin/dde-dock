@@ -170,28 +170,31 @@ var stopAnimation []chan bool
 
 func doIdleAction() {
 	dp, _ := display.NewDisplay("com.deepin.daemon.Display", "/com/deepin/daemon/Display")
-	defer display.DestroyDisplay(dp)
 
 	stoper := make(chan bool)
 	stopAnimation = append(stopAnimation, stoper)
 	for _, p := range dp.Monitors.Get() {
 		go func() {
-			m, _ := display.NewMonitor("com.deepin.daemon.Display", p)
-			defer display.DestroyMonitor(m)
+			m, err := display.NewMonitor("com.deepin.daemon.Display", p)
+			if err != nil {
+				logger.Warningf("create monitor %v failed:%v", p, err)
+				return
+			}
 
+			outputs := m.Outputs.Get()
 			for v := 0.8; v > 0.1; v -= 0.05 {
 				<-time.After(time.Millisecond * time.Duration(float64(400)*(v)))
 
 				select {
 				case <-stoper:
-					for _, name := range m.Outputs.Get() {
+					for _, name := range outputs {
 						dp.ResetBrightness(name)
 					}
 					dpmsOn()
 					return
 
 				default:
-					for _, name := range m.Outputs.Get() {
+					for _, name := range outputs {
 						dp.ChangeBrightness(name, v)
 					}
 				}

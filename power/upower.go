@@ -1,9 +1,9 @@
 package power
 
-import "dbus/org/freedesktop/upower"
 import "pkg.linuxdeepin.com/lib/gio-2.0"
 import "time"
 import . "pkg.linuxdeepin.com/lib/gettext"
+import libupower "dbus/org/freedesktop/upower"
 
 const (
 	UPOWER_BUS_NAME = "org.freedesktop.UPower"
@@ -44,26 +44,27 @@ const (
 
 const abnormalBatteryPercentage = float64(1.0)
 
-func (p *Power) refreshUpower(up *upower.Upower) {
+func (p *Power) refreshUpower() {
 
-	if up.OnBattery.Get() != p.OnBattery {
-		p.setPropOnBattery(up.OnBattery.Get())
+	if upower != nil && upower.OnBattery.Get() != p.OnBattery {
+		p.setPropOnBattery(upower.OnBattery.Get())
 
 		if p.OnBattery {
-			p.player.PlaySystemSound("power-unplug")
+			playSound("power-unplug")
 		} else {
-			p.player.PlaySystemSound("power-plug")
+			playSound("power-plug")
 		}
 		//OnBattery will effect current PowerPlan idle value
 		p.updateIdletimer()
 	}
 
-	p.setPropLidIsPresent(up.LidIsPresent.Get())
+	p.setPropLidIsPresent(upower.LidIsPresent.Get())
 
-	if dev := getBattery(); dev != nil {
-		p.setPropBatteryIsPresent(dev.IsPresent.Get())
-		p.setPropBatteryState(dev.State.Get())
-		p.setPropBatteryPercentage(dev.Percentage.Get())
+	present, state, percentage, err := getBatteryInfo()
+	if err != nil {
+		p.setPropBatteryIsPresent(present)
+		p.setPropBatteryState(state)
+		p.setPropBatteryPercentage(percentage)
 		p.handleBatteryPercentage()
 	} else {
 		p.setPropBatteryIsPresent(false)
@@ -87,12 +88,12 @@ func (p *Power) handleBatteryPercentage() {
 		//Battery state abnormal
 		if p.OnBattery && p.lowBatteryStatus != lowBatteryStatusAbnormal {
 			p.lowBatteryStatus = lowBatteryStatusAbnormal
-			p.sendNotify("battery-0", Tr("Abnormal battery power"), Tr("Battery power can not be predicted, please save important documents properly and  not do important operations."))
+			sendNotify("battery-0", Tr("Abnormal battery power"), Tr("Battery power can not be predicted, please save important documents properly and  not do important operations."))
 		}
 	case p.BatteryPercentage < float64(p.coreSettings.GetInt("percentage-action")):
 		if p.lowBatteryStatus != lowBatteryStatusAction {
 			p.lowBatteryStatus = lowBatteryStatusAction
-			p.sendNotify("battery-0", Tr("Battery Critical Low"), Tr("Computer has been in suspend mode, please plug in."))
+			sendNotify("battery-0", Tr("Battery Critical Low"), Tr("Computer has been in suspend mode, please plug in."))
 			doSuspend()
 			go func() {
 				for p.lowBatteryStatus == lowBatteryStatusAction {
@@ -107,21 +108,21 @@ func (p *Power) handleBatteryPercentage() {
 	case p.BatteryPercentage < float64(p.coreSettings.GetInt("percentage-critical")):
 		if p.lowBatteryStatus != lowBatteryStatusCritcal {
 			p.lowBatteryStatus = lowBatteryStatusCritcal
-			p.sendNotify("battery-10", Tr("Battery Critical Low"), Tr("Please plug in, or computer will be in suspend mode."))
+			sendNotify("battery-10", Tr("Battery Critical Low"), Tr("Please plug in, or computer will be in suspend mode."))
 
-			p.player.PlaySystemSound("power-caution")
+			playSound("power-caution")
 			go func() {
 				for p.lowBatteryStatus == lowBatteryStatusCritcal {
 					<-time.After(time.Second * 10)
-					p.player.PlaySystemSound("power-caution")
+					playSound("power-caution")
 				}
 			}()
 		}
 	case p.BatteryPercentage < float64(p.coreSettings.GetInt("percentage-low")):
 		if p.lowBatteryStatus != lowBatteryStatusLow {
 			p.lowBatteryStatus = lowBatteryStatusLow
-			p.sendNotify("battery-25", Tr("Battery Low"), Tr("Computer will be in suspend mode, please plug in now."))
-			p.player.PlaySystemSound("power-low")
+			sendNotify("battery-25", Tr("Battery Low"), Tr("Computer will be in suspend mode, please plug in now."))
+			playSound("power-low")
 		}
 	default:
 		if p.lowBatteryStatus == lowBatteryStatusAction {
@@ -135,19 +136,16 @@ func (p *Power) handleBatteryPercentage() {
 }
 
 func (p *Power) initUpower() {
-	up, err := upower.NewUpower(UPOWER_BUS_NAME, "/org/freedesktop/UPower")
-	if err != nil {
-		logger.Error("Can't build org.freedesktop.UPower:", err)
-	} else {
-		up.ConnectChanged(func() {
-			p.refreshUpower(up)
+	if upower != nil {
+		upower.ConnectChanged(func() {
+			p.refreshUpower()
 		})
-		up.ConnectDeviceChanged(func(path string) {
-			p.refreshUpower(up)
+		upower.ConnectDeviceChanged(func(path string) {
+			p.refreshUpower()
 		})
+		p.setPropOnBattery(upower.OnBattery.Get())
+		p.refreshUpower()
 	}
-	p.setPropOnBattery(up.OnBattery.Get())
-	p.refreshUpower(up)
 
 	p.coreSettings.Connect("changed::percentage-action", func(s *gio.Settings, name string) {
 		p.handleBatteryPercentage()
@@ -159,20 +157,21 @@ func (p *Power) initUpower() {
 		p.handleBatteryPercentage()
 	})
 }
-func getBattery() *upower.Device {
-	up, err := upower.NewUpower(UPOWER_BUS_NAME, "/org/freedesktop/UPower")
-	if err != nil {
-		logger.Error("Can't build org.freedesktop.UPower:", err)
-	}
-	devs, err := up.EnumerateDevices()
+
+func getBatteryInfo() (bool, uint32, float64, error) {
+	devs, err := upower.EnumerateDevices()
 	if err != nil {
 		logger.Error("Can't EnumerateDevices", err)
+		return false, 0, 0, nil
 	}
 	for _, path := range devs {
-		dev, err := upower.NewDevice(UPOWER_BUS_NAME, path)
+		dev, err := libupower.NewDevice(UPOWER_BUS_NAME, path)
 		if err == nil && dev.Type.Get() == DeviceTypeBattery {
-			return dev
+			return dev.IsPresent.Get(),
+				dev.State.Get(),
+				dev.Percentage.Get(),
+				nil
 		}
 	}
-	return nil
+	return false, 0, 0, nil
 }

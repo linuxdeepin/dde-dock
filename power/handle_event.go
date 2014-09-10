@@ -3,10 +3,7 @@ package power
 
 import "os/exec"
 import "dbus/com/deepin/sessionmanager"
-import "dbus/org/freedesktop/upower"
-import "dbus/org/freedesktop/login1"
 import "time"
-import "dbus/com/deepin/daemon/keybinding"
 import "dbus/com/deepin/daemon/display"
 
 const (
@@ -138,41 +135,27 @@ func isMultihead() bool {
 }
 
 func (p *Power) initEventHandle() {
-	up, err := upower.NewUpower(UPOWER_BUS_NAME, "/org/freedesktop/UPower")
-	if err != nil {
-		logger.Error("Can't build org.freedesktop.UPower:", err)
-	} else {
-		up.ConnectChanged(func() {
-			currentLidClosed := up.LidIsClosed.Get()
+	if upower != nil {
+		upower.ConnectChanged(func() {
+			currentLidClosed := upower.LidIsClosed.Get()
 			if p.lidIsClosed != currentLidClosed {
 				p.lidIsClosed = currentLidClosed
 				p.handleLidSwitch(!currentLidClosed)
 			}
 			p.lidIsClosed = currentLidClosed
-
 		})
 	}
 
-	mediaKey, err := keybinding.NewMediaKey("com.deepin.daemon.KeyBinding", "/com/deepin/daemon/MediaKey")
-	if err != nil {
-		logger.Error("Can't build com.deepin.daemon.KeyBinding:", err)
-	} else {
+	if mediaKey != nil {
 		mediaKey.ConnectPowerOff(func(press bool) {
-			//prevent mediaKey be destroyed
-			mediaKey.DestName = mediaKey.DestName
-
 			if !press {
 				p.handlePowerButton()
 			}
 		})
 	}
 
-	login, err := login1.NewManager("org.freedesktop.login1", "/org/freedesktop/login1")
-	if err != nil {
-		logger.Error("Can't build org.freedesktop.login1:", err)
-	} else {
-		login.ConnectPrepareForSleep(func(before bool) {
-			logger.Info("Sleep change...", before)
+	if login1 != nil {
+		login1.ConnectPrepareForSleep(func(before bool) {
 			if before {
 				if p.lowBatteryStatus == lowBatteryStatusAction {
 					doShowLowpower()

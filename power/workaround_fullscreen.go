@@ -107,3 +107,6 @@ func (wa *fullScreenWorkaround) start() {
 	}).Connect(wa.xu, root.Id)
 	xevent.Main(wa.xu)
 }
+func (wa *fullScreenWorkaround) stop() {
+	xevent.Quit(wa.xu)
+}
