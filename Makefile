@@ -14,7 +14,7 @@ BINARIES =  \
     theme-thumb-tool \
     personalization
 
-LANGUAGES = $(basename $(notdir $(wildcard data/po/*.po)))
+LANGUAGES = $(basename $(notdir $(wildcard misc/po/*.po)))
 
 all: build
 
@@ -27,7 +27,7 @@ prepare:
 out/bin/%:
 	env GOPATH="${GOPATH}:${CURDIR}/${GOPATH_DIR}" go build -o $@  ${GOPKG_PREFIX}/bin/${@F}
 
-out/locale/%/LC_MESSAGES/dde-daemon.mo:data/po/%.po
+out/locale/%/LC_MESSAGES/dde-daemon.mo:misc/po/%.po
 	mkdir -p $(@D)
 	msgfmt -o $@ $<
 
@@ -43,27 +43,27 @@ install: build translate
 	cp -r out/locale/* ${DESTDIR}${PREFIX}/share/locale
 
 	mkdir -pv ${DESTDIR}/etc/dbus-1/system.d
-	cp data/conf/*.conf ${DESTDIR}/etc/dbus-1/system.d/
+	cp misc/conf/*.conf ${DESTDIR}/etc/dbus-1/system.d/
 
 	mkdir -pv ${DESTDIR}${PREFIX}/share/dbus-1
-	cp -r data/services ${DESTDIR}${PREFIX}/share/dbus-1/
-	cp -r data/system-services ${DESTDIR}${PREFIX}/share/dbus-1/
+	cp -r misc/services ${DESTDIR}${PREFIX}/share/dbus-1/
+	cp -r misc/system-services ${DESTDIR}${PREFIX}/share/dbus-1/
 
 	mkdir -pv ${DESTDIR}${PREFIX}/share/polkit-1/actions
-	cp data/polkit-action/* ${DESTDIR}${PREFIX}/share/polkit-1/actions/
+	cp misc/polkit-action/* ${DESTDIR}${PREFIX}/share/polkit-1/actions/
 
 	mkdir -pv ${DESTDIR}${PREFIX}/share/glib-2.0/schemas
-	cp data/schemas/* ${DESTDIR}${PREFIX}/share/glib-2.0/schemas
+	cp misc/schemas/* ${DESTDIR}${PREFIX}/share/glib-2.0/schemas
 
 	mkdir -pv ${DESTDIR}${PREFIX}/share/dde-daemon
-	cp -r data/lang     ${DESTDIR}${PREFIX}/share/dde-daemon/
-	cp -r data/template ${DESTDIR}${PREFIX}/share/dde-daemon/
+	cp -r misc/lang     ${DESTDIR}${PREFIX}/share/dde-daemon/
+	cp -r misc/template ${DESTDIR}${PREFIX}/share/dde-daemon/
 
 	mkdir -pv ${DESTDIR}${PREFIX}/bin
-	cp data/tool/wireless_script*.sh ${DESTDIR}${PREFIX}/bin/wireless-script
+	cp misc/tool/wireless_script*.sh ${DESTDIR}${PREFIX}/bin/wireless-script
 
 	mkdir -pv ${DESTDIR}${PREFIX}/share/personalization/thumbnail/autogen
-	cp -r data/thumb_bg ${DESTDIR}${PREFIX}/share/personalization/thumbnail/autogen
+	cp -r misc/thumb_bg ${DESTDIR}${PREFIX}/share/personalization/thumbnail/autogen
 
 clean:
 	rm -rf ${GOPATH_DIR}
