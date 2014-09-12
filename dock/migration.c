@@ -133,14 +133,14 @@ void _init()
     if (prefix_regex == NULL) {
         g_warning("Can't build prefix_regex, use fallback config!");
         prefix_regex = g_regex_new(
-                "(^gksu(do)?$)|(^sudo$)|(^mono$)|(^ruby$)|(^padsp$)|(^aoss$)|(^python(\\d.\\d)?$)|(^(ba)?sh$)",
+                "(^gksu(do)?$)|(^sudo$)|(^mono$)|(^ruby$)|(^padsp$)|(^aoss$)|(^python(\\d\\.\\d)?$)|(^(ba)?sh$)",
                 G_REGEX_OPTIMIZE, 0, NULL
                 );
 
     }
     if (suffix_regex == NULL) {
         g_warning("Can't build suffix_regex, use fallback config!");
-        suffix_regex = g_regex_new( "((-|.)bin$)|(.py$)", G_REGEX_OPTIMIZE, 0, NULL);
+        suffix_regex = g_regex_new( "((-|\\.)?bin$)|(\\.py$)", G_REGEX_OPTIMIZE, 0, NULL);
     }
     g_key_file_free(process_regex);
 
@@ -268,7 +268,7 @@ char* guess_app_id(long s_pid, const char* wmname, const char* wminstance, const
     char* exec_args = NULL;
     get_pid_info(s_pid, &exec_fullname, &exec_args);
     exec_name = g_path_get_basename(exec_fullname);
-    g_debug("[%s] exec_fullname: %s, exec_args: %s", __func__, exec_fullname, exec_args);
+    g_debug("[%s] pid: %ld, exec_fullname: %s, exec_args: %s", __func__, s_pid, exec_fullname, exec_args);
     if (exec_name != NULL) {
         if (g_strcmp0(exec_name,  "firefox") == 0 && g_strstr_len(exec_args, -1, "--app")) {
             g_free(exec_fullname);
