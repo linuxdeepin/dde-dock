@@ -22,22 +22,16 @@
 package network
 
 import (
-	"fmt"
-	. "launchpad.net/gocheck"
-	"os"
-	"pkg.linuxdeepin.com/lib/gdkpixbuf"
-	. "pkg.linuxdeepin.com/lib/gettext"
+	C "launchpad.net/gocheck"
 	"testing"
-	"time"
 )
 
-func Test(t *testing.T) { TestingT(t) }
+func Test(t *testing.T) { C.TestingT(t) }
 
 type testWrapper struct{}
 
 func init() {
-	gdkpixbuf.InitGdk()
-	Suite(&testWrapper{})
+	C.Suite(&testWrapper{})
 }
 
 const (
@@ -76,7 +70,7 @@ const (
 	testJSONKtypeWrapperIpv6Routes    = `[{"Address":"1111:2222:3333:4444:5555:6666:AAAA:FFFF","Prefix":64,"NextHop":"1111:2222:3333:4444:5555:6666:AAAA:1111","Metric":32}]`
 )
 
-func (*testWrapper) TestGetSetConnectionData(c *C) {
+func (*testWrapper) TestGetSetConnectionData(c *C.C) {
 	data := make(connectionData)
 
 	addSettingSection(data, sectionConnection)
@@ -84,27 +78,24 @@ func (*testWrapper) TestGetSetConnectionData(c *C) {
 	setSettingConnectionUuid(data, testConnectionUuid)
 	setSettingConnectionType(data, testConnectionType)
 
-	c.Check(getSettingConnectionId(data), Equals, testConnectionId)
-	c.Check(getSettingConnectionUuid(data), Equals, testConnectionUuid)
-	c.Check(getSettingConnectionType(data), Equals, testConnectionType)
+	c.Check(getSettingConnectionId(data), C.Equals, testConnectionId)
+	c.Check(getSettingConnectionUuid(data), C.Equals, testConnectionUuid)
+	c.Check(getSettingConnectionType(data), C.Equals, testConnectionType)
 }
 
-func (*testWrapper) TestGetSetConnectionDataJSON(c *C) {
+func (*testWrapper) TestGetSetConnectionDataJSON(c *C.C) {
 	data := make(connectionData)
 	addSettingSection(data, sectionConnection)
 	setSettingConnectionIdJSON(data, testConnectionIdJSON)
 	setSettingConnectionUuidJSON(data, testConnectionUuidJSON)
 	setSettingConnectionTypeJSON(data, testConnectionTypeJSON)
 
-	c.Check(getSettingConnectionIdJSON(data), Equals, testConnectionIdJSON)
-	c.Check(getSettingConnectionUuidJSON(data), Equals, testConnectionUuidJSON)
-	c.Check(getSettingConnectionTypeJSON(data), Equals, testConnectionTypeJSON)
-
-	// TODO more tests
-	// set empty string to delete key
+	c.Check(getSettingConnectionIdJSON(data), C.Equals, testConnectionIdJSON)
+	c.Check(getSettingConnectionUuidJSON(data), C.Equals, testConnectionUuidJSON)
+	c.Check(getSettingConnectionTypeJSON(data), C.Equals, testConnectionTypeJSON)
 }
 
-func (*testWrapper) TestConnectionDataDefaultValue(c *C) {
+func (*testWrapper) TestConnectionDataDefaultValue(c *C.C) {
 	data := make(connectionData)
 	var defaultValueJSON string
 	var setValueJSON string
@@ -116,82 +107,82 @@ func (*testWrapper) TestConnectionDataDefaultValue(c *C) {
 
 	// ktypeBoolean
 	defaultValueJSON = `true`
-	c.Check(getSettingConnectionAutoconnectJSON(data), Equals, defaultValueJSON)
+	c.Check(getSettingConnectionAutoconnectJSON(data), C.Equals, defaultValueJSON)
 	setSettingConnectionAutoconnectJSON(data, defaultValueJSON)
-	c.Check(isSettingKeyExists(data, sectionConnection, NM_SETTING_CONNECTION_AUTOCONNECT), Equals, true)
+	c.Check(isSettingKeyExists(data, sectionConnection, NM_SETTING_CONNECTION_AUTOCONNECT), C.Equals, true)
 
 	// ktypeArrayByte
 	defaultValueJSON = `""`
 	setValueJSON = `""`
-	c.Check(getSetting8021xPasswordRawJSON(data), Equals, defaultValueJSON)
+	c.Check(getSetting8021xPasswordRawJSON(data), C.Equals, defaultValueJSON)
 	setSetting8021xPasswordRawJSON(data, setValueJSON)
-	c.Check(isSettingKeyExists(data, section8021x, NM_SETTING_802_1X_PASSWORD_RAW), Equals, false)
+	c.Check(isSettingKeyExists(data, section8021x, NM_SETTING_802_1X_PASSWORD_RAW), C.Equals, false)
 
 	// ktypeString
 	defaultValueJSON = `""`
 	setValueJSON = `""`
-	c.Check(getSettingConnectionIdJSON(data), Equals, defaultValueJSON)
+	c.Check(getSettingConnectionIdJSON(data), C.Equals, defaultValueJSON)
 	setSettingConnectionIdJSON(data, setValueJSON)
-	c.Check(isSettingKeyExists(data, sectionConnection, NM_SETTING_CONNECTION_ID), Equals, false)
+	c.Check(isSettingKeyExists(data, sectionConnection, NM_SETTING_CONNECTION_ID), C.Equals, false)
 
 	// ktypeWrapperMacAddress
 	defaultValueJSON = `""`
 	setValueJSON = `""`
-	c.Check(getSettingWiredMacAddressJSON(data), Equals, defaultValueJSON)
+	c.Check(getSettingWiredMacAddressJSON(data), C.Equals, defaultValueJSON)
 	setSettingWiredMacAddressJSON(data, setValueJSON)
-	c.Check(isSettingKeyExists(data, sectionWired, NM_SETTING_WIRED_MAC_ADDRESS), Equals, false)
+	c.Check(isSettingKeyExists(data, sectionWired, NM_SETTING_WIRED_MAC_ADDRESS), C.Equals, false)
 
 	// ktypeWrapperString
 	defaultValueJSON = `""`
 	setValueJSON = `""`
-	c.Check(getSetting8021xCaCertJSON(data), Equals, defaultValueJSON)
+	c.Check(getSetting8021xCaCertJSON(data), C.Equals, defaultValueJSON)
 	setSetting8021xCaCertJSON(data, setValueJSON)
-	c.Check(isSettingKeyExists(data, section8021x, NM_SETTING_802_1X_CA_CERT), Equals, false)
+	c.Check(isSettingKeyExists(data, section8021x, NM_SETTING_802_1X_CA_CERT), C.Equals, false)
 
 	// ktypeWrapperIpv4Dns
 	defaultValueJSON = `[]`
 	setValueJSON = `[""]`
-	c.Check(getSettingIp4ConfigDnsJSON(data), Equals, defaultValueJSON)
+	c.Check(getSettingIp4ConfigDnsJSON(data), C.Equals, defaultValueJSON)
 	setSettingIp4ConfigDnsJSON(data, setValueJSON)
-	c.Check(isSettingKeyExists(data, sectionIpv4, NM_SETTING_IP4_CONFIG_DNS), Equals, false)
+	c.Check(isSettingKeyExists(data, sectionIpv4, NM_SETTING_IP4_CONFIG_DNS), C.Equals, false)
 
 	// ktypeWrapperIpv4Addresses
 	defaultValueJSON = `[]`
 	setValueJSON = `[{"Address":"","Mask":"","Gateway":""}]`
-	c.Check(getSettingIp4ConfigAddressesJSON(data), Equals, defaultValueJSON)
+	c.Check(getSettingIp4ConfigAddressesJSON(data), C.Equals, defaultValueJSON)
 	setSettingIp4ConfigAddressesJSON(data, setValueJSON)
-	c.Check(isSettingKeyExists(data, sectionIpv4, NM_SETTING_IP4_CONFIG_ADDRESSES), Equals, false)
+	c.Check(isSettingKeyExists(data, sectionIpv4, NM_SETTING_IP4_CONFIG_ADDRESSES), C.Equals, false)
 
 	// ktypeWrapperIpv4Routes
 	defaultValueJSON = `[]`
 	setValueJSON = `[{"Address":"","Mask":"","NextHop":"","Metric":0}]`
-	c.Check(getSettingIp4ConfigRoutesJSON(data), Equals, defaultValueJSON)
+	c.Check(getSettingIp4ConfigRoutesJSON(data), C.Equals, defaultValueJSON)
 	setSettingIp4ConfigRoutesJSON(data, setValueJSON)
-	c.Check(isSettingKeyExists(data, sectionIpv4, NM_SETTING_IP4_CONFIG_ROUTES), Equals, false)
+	c.Check(isSettingKeyExists(data, sectionIpv4, NM_SETTING_IP4_CONFIG_ROUTES), C.Equals, false)
 
 	// ktypeWrapperIpv6Dns
 	defaultValueJSON = `[]`
 	setValueJSON = `[""]`
-	c.Check(getSettingIp6ConfigDnsJSON(data), Equals, defaultValueJSON)
+	c.Check(getSettingIp6ConfigDnsJSON(data), C.Equals, defaultValueJSON)
 	setSettingIp6ConfigDnsJSON(data, setValueJSON)
-	c.Check(isSettingIp6ConfigDnsExists(data), Equals, false)
+	c.Check(isSettingIp6ConfigDnsExists(data), C.Equals, false)
 
 	// ktypeWrapperIpv6Addresses
 	defaultValueJSON = `[]`
 	setValueJSON = `[{"Address":"","Prefix":0,"Gateway":""}]`
-	c.Check(getSettingIp6ConfigAddressesJSON(data), Equals, defaultValueJSON)
+	c.Check(getSettingIp6ConfigAddressesJSON(data), C.Equals, defaultValueJSON)
 	setSettingIp6ConfigAddressesJSON(data, setValueJSON)
-	c.Check(isSettingIp6ConfigAddressesExists(data), Equals, false)
+	c.Check(isSettingIp6ConfigAddressesExists(data), C.Equals, false)
 
 	// ktypeWrapperIpv6
 	defaultValueJSON = `[]`
 	setValueJSON = `[{"Address":"","Prefix":0,"NextHop":"","Metric":0}]`
-	c.Check(getSettingIp6ConfigRoutesJSON(data), Equals, defaultValueJSON)
+	c.Check(getSettingIp6ConfigRoutesJSON(data), C.Equals, defaultValueJSON)
 	setSettingIp6ConfigRoutesJSON(data, setValueJSON)
-	c.Check(isSettingIp6ConfigRoutesExists(data), Equals, false)
+	c.Check(isSettingIp6ConfigRoutesExists(data), C.Equals, false)
 }
 
-func (*testWrapper) TestConvertMacAddressToString(c *C) {
+func (*testWrapper) TestConvertMacAddressToString(c *C.C) {
 	tests := []struct {
 		test   []byte
 		result string
@@ -200,11 +191,11 @@ func (*testWrapper) TestConvertMacAddressToString(c *C) {
 		{[]byte{0, 18, 52, 86, 120, 171}, "00:12:34:56:78:AB"},
 	}
 	for _, t := range tests {
-		c.Check(t.result, Equals, convertMacAddressToString(t.test))
+		c.Check(t.result, C.Equals, convertMacAddressToString(t.test))
 	}
 }
 
-func (*testWrapper) TestConvertMacAddressToArrayByte(c *C) {
+func (*testWrapper) TestConvertMacAddressToArrayByte(c *C.C) {
 	tests := []struct {
 		test   string
 		result []byte
@@ -213,11 +204,11 @@ func (*testWrapper) TestConvertMacAddressToArrayByte(c *C) {
 		{"00:12:34:56:78:AB", []byte{0, 18, 52, 86, 120, 171}},
 	}
 	for _, t := range tests {
-		c.Check(t.result, DeepEquals, convertMacAddressToArrayByte(t.test))
+		c.Check(t.result, C.DeepEquals, convertMacAddressToArrayByte(t.test))
 	}
 }
 
-func (*testWrapper) TestConvertIpv4AddressToString(c *C) {
+func (*testWrapper) TestConvertIpv4AddressToString(c *C.C) {
 	tests := []struct {
 		test   uint32
 		result string
@@ -226,11 +217,11 @@ func (*testWrapper) TestConvertIpv4AddressToString(c *C) {
 		{0x0101a8c0, "192.168.1.1"},
 	}
 	for _, t := range tests {
-		c.Check(t.result, Equals, convertIpv4AddressToString(t.test))
+		c.Check(t.result, C.Equals, convertIpv4AddressToString(t.test))
 	}
 }
 
-func (*testWrapper) TestConvertIpv4AddressToUint32(c *C) {
+func (*testWrapper) TestConvertIpv4AddressToUint32(c *C.C) {
 	tests := []struct {
 		test   string
 		result uint32
@@ -239,11 +230,11 @@ func (*testWrapper) TestConvertIpv4AddressToUint32(c *C) {
 		{"192.168.1.1", 0x0101a8c0},
 	}
 	for _, t := range tests {
-		c.Check(t.result, Equals, convertIpv4AddressToUint32(t.test))
+		c.Check(t.result, C.Equals, convertIpv4AddressToUint32(t.test))
 	}
 }
 
-func (*testWrapper) TestConvertIpv4PrefixToNetMask(c *C) {
+func (*testWrapper) TestConvertIpv4PrefixToNetMask(c *C.C) {
 	tests := []struct {
 		test   uint32
 		result string
@@ -283,11 +274,11 @@ func (*testWrapper) TestConvertIpv4PrefixToNetMask(c *C) {
 		{32, "255.255.255.255"},
 	}
 	for _, t := range tests {
-		c.Check(t.result, Equals, convertIpv4PrefixToNetMask(t.test))
+		c.Check(t.result, C.Equals, convertIpv4PrefixToNetMask(t.test))
 	}
 }
 
-func (*testWrapper) TestConvertIpv4NetMaskToPrefix(c *C) {
+func (*testWrapper) TestConvertIpv4NetMaskToPrefix(c *C.C) {
 	tests := []struct {
 		test   string
 		result uint32
@@ -327,21 +318,21 @@ func (*testWrapper) TestConvertIpv4NetMaskToPrefix(c *C) {
 		{"255.255.255.255", 32},
 	}
 	for _, t := range tests {
-		c.Check(t.result, Equals, convertIpv4NetMaskToPrefix(t.test))
+		c.Check(t.result, C.Equals, convertIpv4NetMaskToPrefix(t.test))
 	}
 
 	// test error mask address
 	_, err := convertIpv4NetMaskToPrefixCheck("255.255.255.250")
-	c.Check(err, NotNil)
+	c.Check(err, C.NotNil)
 	_, err = convertIpv4NetMaskToPrefixCheck("255.255.100.2")
-	c.Check(err, NotNil)
+	c.Check(err, C.NotNil)
 	_, err = convertIpv4NetMaskToPrefixCheck("255.100.0.0")
-	c.Check(err, NotNil)
+	c.Check(err, C.NotNil)
 	_, err = convertIpv4NetMaskToPrefixCheck("191.0.0.0")
-	c.Check(err, NotNil)
+	c.Check(err, C.NotNil)
 }
 
-func (*testWrapper) TestReverseOrderUint32(c *C) {
+func (*testWrapper) TestReverseOrderUint32(c *C.C) {
 	tests := []struct {
 		test   uint32
 		result uint32
@@ -350,11 +341,11 @@ func (*testWrapper) TestReverseOrderUint32(c *C) {
 		{0x12345678, 0x78563412},
 	}
 	for _, t := range tests {
-		c.Check(t.result, Equals, reverseOrderUint32(t.test))
+		c.Check(t.result, C.Equals, reverseOrderUint32(t.test))
 	}
 }
 
-func (*testWrapper) TestConvertIpv6AddressToString(c *C) {
+func (*testWrapper) TestConvertIpv6AddressToString(c *C.C) {
 	tests := []struct {
 		test   []byte
 		result string
@@ -363,11 +354,11 @@ func (*testWrapper) TestConvertIpv6AddressToString(c *C) {
 		{[]byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, "0000:0000:0000:0000:0000:0000:0000:0000"},
 	}
 	for _, t := range tests {
-		c.Check(t.result, Equals, convertIpv6AddressToString(t.test))
+		c.Check(t.result, C.Equals, convertIpv6AddressToString(t.test))
 	}
 }
 
-func (*testWrapper) TestConvertIpv6AddressToArrayByte(c *C) {
+func (*testWrapper) TestConvertIpv6AddressToArrayByte(c *C.C) {
 	tests := []struct {
 		test   string
 		result []byte
@@ -376,17 +367,17 @@ func (*testWrapper) TestConvertIpv6AddressToArrayByte(c *C) {
 		{"0000:0000:0000:0000:0000:0000:0000:0000", []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},
 	}
 	for _, t := range tests {
-		c.Check(t.result, DeepEquals, convertIpv6AddressToArrayByte(t.test))
+		c.Check(t.result, C.DeepEquals, convertIpv6AddressToArrayByte(t.test))
 	}
 
 	// check error ipv6 format
 	_, err := convertIpv6AddressToArrayByteCheck("-1234:2345:3456:4444:5555:6666:aaAA:ffFF")
-	c.Check(err, NotNil)
+	c.Check(err, C.NotNil)
 	_, err = convertIpv6AddressToArrayByteCheck("1234:2345:3456:4444:5555:6666:aaAA:ffFh")
-	c.Check(err, NotNil)
+	c.Check(err, C.NotNil)
 }
 
-func (*testWrapper) TestExpandIpv6Address(c *C) {
+func (*testWrapper) TestExpandIpv6Address(c *C.C) {
 	tests := []struct {
 		test   string
 		result string
@@ -399,133 +390,125 @@ func (*testWrapper) TestExpandIpv6Address(c *C) {
 	}
 	for _, t := range tests {
 		r, _ := expandIpv6Address(t.test)
-		c.Check(t.result, Equals, r)
+		c.Check(t.result, C.Equals, r)
 	}
 
 	// check error ipv6 format
 	_, err := expandIpv6Address("2001::25de::cade")
-	c.Check(err, NotNil)
+	c.Check(err, C.NotNil)
 }
 
-func (*testWrapper) TestJSONWrapper(c *C) {
+func (*testWrapper) TestJSONWrapper(c *C.C) {
 	var v interface{}
 	var s string
 
 	v, _ = jsonToKeyValue(testJSONKtypeString, ktypeString)
 	s, _ = keyValueToJSON(v, ktypeString)
-	c.Check(s, Equals, testJSONKtypeString)
+	c.Check(s, C.Equals, testJSONKtypeString)
 
 	v, _ = jsonToKeyValue(testJSONKtypeByte, ktypeByte)
 	s, _ = keyValueToJSON(v, ktypeByte)
-	c.Check(s, Equals, testJSONKtypeByte)
+	c.Check(s, C.Equals, testJSONKtypeByte)
 
 	v, _ = jsonToKeyValue(testJSONKtypeInt32, ktypeInt32)
 	s, _ = keyValueToJSON(v, ktypeInt32)
-	c.Check(s, Equals, testJSONKtypeInt32)
+	c.Check(s, C.Equals, testJSONKtypeInt32)
 
 	v, _ = jsonToKeyValue(testJSONKtypeUint32, ktypeUint32)
 	s, _ = keyValueToJSON(v, ktypeUint32)
-	c.Check(s, Equals, testJSONKtypeUint32)
+	c.Check(s, C.Equals, testJSONKtypeUint32)
 
 	v, _ = jsonToKeyValue(testJSONKtypeUint64, ktypeUint64)
 	s, _ = keyValueToJSON(v, ktypeUint64)
-	c.Check(s, Equals, testJSONKtypeUint64)
+	c.Check(s, C.Equals, testJSONKtypeUint64)
 
 	v, _ = jsonToKeyValue(testJSONKtypeBoolean, ktypeBoolean)
 	s, _ = keyValueToJSON(v, ktypeBoolean)
-	c.Check(s, Equals, testJSONKtypeBoolean)
+	c.Check(s, C.Equals, testJSONKtypeBoolean)
 
 	v, _ = jsonToKeyValue(testJSONKtypeArrayByte, ktypeArrayByte)
 	s, _ = keyValueToJSON(v, ktypeArrayByte)
-	c.Check(s, Equals, testJSONKtypeArrayByte)
+	c.Check(s, C.Equals, testJSONKtypeArrayByte)
 
 	v, _ = jsonToKeyValue(testJSONKtypeArrayString, ktypeArrayString)
 	s, _ = keyValueToJSON(v, ktypeArrayString)
-	c.Check(s, Equals, testJSONKtypeArrayString)
+	c.Check(s, C.Equals, testJSONKtypeArrayString)
 
 	v, _ = jsonToKeyValue(testJSONKtypeArrayUint32, ktypeArrayUint32)
 	s, _ = keyValueToJSON(v, ktypeArrayUint32)
-	c.Check(s, Equals, testJSONKtypeArrayUint32)
+	c.Check(s, C.Equals, testJSONKtypeArrayUint32)
 
 	v, _ = jsonToKeyValue(testJSONKtypeArrayArrayByte, ktypeArrayArrayByte)
 	s, _ = keyValueToJSON(v, ktypeArrayArrayByte)
-	c.Check(s, Equals, testJSONKtypeArrayArrayByte)
+	c.Check(s, C.Equals, testJSONKtypeArrayArrayByte)
 
 	v, _ = jsonToKeyValue(testJSONKtypeArrayArrayUint32, ktypeArrayArrayUint32)
 	s, _ = keyValueToJSON(v, ktypeArrayArrayUint32)
-	c.Check(s, Equals, testJSONKtypeArrayArrayUint32)
+	c.Check(s, C.Equals, testJSONKtypeArrayArrayUint32)
 
 	v, _ = jsonToKeyValue(testJSONKtypeDictStringString, ktypeDictStringString)
 	s, _ = keyValueToJSON(v, ktypeDictStringString)
-	c.Check(s, Equals, testJSONKtypeDictStringString)
+	c.Check(s, C.Equals, testJSONKtypeDictStringString)
 
 	v, _ = jsonToKeyValue(testJSONKtypeIpv6Addresses, ktypeIpv6Addresses)
 	s, _ = keyValueToJSON(v, ktypeIpv6Addresses)
-	c.Check(s, Equals, testJSONKtypeIpv6Addresses)
+	c.Check(s, C.Equals, testJSONKtypeIpv6Addresses)
 
 	v, _ = jsonToKeyValue(testJSONKtypeIpv6Routes, ktypeIpv6Routes)
 	s, _ = keyValueToJSON(v, ktypeIpv6Routes)
-	c.Check(s, Equals, testJSONKtypeIpv6Routes)
+	c.Check(s, C.Equals, testJSONKtypeIpv6Routes)
 
 	// key value wrapper
 	v, _ = jsonToKeyValue(testJSONKtypeWrapperString, ktypeWrapperString)
 	s, _ = keyValueToJSON(v, ktypeWrapperString)
-	c.Check(s, Equals, testJSONKtypeWrapperString)
+	c.Check(s, C.Equals, testJSONKtypeWrapperString)
 
 	v, _ = jsonToKeyValue(testJSONKtypeWrapperMacAddress, ktypeWrapperMacAddress)
-	fmt.Println("mac address:", v)
 	s, _ = keyValueToJSON(v, ktypeWrapperMacAddress)
-	c.Check(s, Equals, testJSONKtypeWrapperMacAddress)
+	c.Check(s, C.Equals, testJSONKtypeWrapperMacAddress)
 
 	v, _ = jsonToKeyValue(testJSONKtypeWrapperIpv4Dns, ktypeWrapperIpv4Dns)
-	fmt.Printf("ipv4 dns: %x\n", v)
 	s, _ = keyValueToJSON(v, ktypeWrapperIpv4Dns)
-	c.Check(s, Equals, testJSONKtypeWrapperIpv4Dns)
+	c.Check(s, C.Equals, testJSONKtypeWrapperIpv4Dns)
 
 	v, _ = jsonToKeyValue(testJSONKtypeWrapperIpv4Addresses, ktypeWrapperIpv4Addresses)
-	fmt.Println("ipv4 addresses:", v)
 	s, _ = keyValueToJSON(v, ktypeWrapperIpv4Addresses)
-	c.Check(s, Equals, testJSONKtypeWrapperIpv4Addresses)
+	c.Check(s, C.Equals, testJSONKtypeWrapperIpv4Addresses)
 
 	v, _ = jsonToKeyValue(testJSONKtypeWrapperIpv4Routes, ktypeWrapperIpv4Routes)
-	fmt.Println("ipv4 routes:", v)
 	s, _ = keyValueToJSON(v, ktypeWrapperIpv4Routes)
-	c.Check(s, Equals, testJSONKtypeWrapperIpv4Routes)
+	c.Check(s, C.Equals, testJSONKtypeWrapperIpv4Routes)
 
 	v, _ = jsonToKeyValue(testJSONKtypeWrapperIpv6Dns, ktypeWrapperIpv6Dns)
-	fmt.Println("ipv6 dns:", v)
 	s, _ = keyValueToJSON(v, ktypeWrapperIpv6Dns)
-	c.Check(s, Equals, testJSONKtypeWrapperIpv6Dns)
+	c.Check(s, C.Equals, testJSONKtypeWrapperIpv6Dns)
 
 	v, _ = jsonToKeyValue(testJSONKtypeWrapperIpv6Addresses, ktypeWrapperIpv6Addresses)
-	fmt.Println("ipv6 address:", v)
 	s, _ = keyValueToJSON(v, ktypeWrapperIpv6Addresses)
-	c.Check(s, Equals, testJSONKtypeWrapperIpv6Addresses)
+	c.Check(s, C.Equals, testJSONKtypeWrapperIpv6Addresses)
 
 	v, _ = jsonToKeyValue(testJSONKtypeWrapperIpv6Routes, ktypeWrapperIpv6Routes)
-	fmt.Println("ipv6 route:", v)
 	s, _ = keyValueToJSON(v, ktypeWrapperIpv6Routes)
-	c.Check(s, Equals, testJSONKtypeWrapperIpv6Routes)
+	c.Check(s, C.Equals, testJSONKtypeWrapperIpv6Routes)
 }
 
-func (*testWrapper) TestGetterAndSetterForVirtualKey(c *C) {
-	// TODO
+func (*testWrapper) TestGetterAndSetterForVirtualKey(c *C.C) {
 	data := newWirelessConnectionData("", "", nil, apSecNone)
 
 	logicSetSettingVkWirelessSecurityKeyMgmt(data, "none")
-	c.Check("none", Equals, getSettingVkWirelessSecurityKeyMgmt(data))
+	c.Check("none", C.Equals, getSettingVkWirelessSecurityKeyMgmt(data))
 
 	logicSetSettingVkWirelessSecurityKeyMgmt(data, "wep")
-	c.Check("wep", Equals, getSettingVkWirelessSecurityKeyMgmt(data))
+	c.Check("wep", C.Equals, getSettingVkWirelessSecurityKeyMgmt(data))
 
 	logicSetSettingVkWirelessSecurityKeyMgmt(data, "wpa-psk")
-	c.Check("wpa-psk", Equals, getSettingVkWirelessSecurityKeyMgmt(data))
+	c.Check("wpa-psk", C.Equals, getSettingVkWirelessSecurityKeyMgmt(data))
 
 	logicSetSettingVkWirelessSecurityKeyMgmt(data, "wpa-eap")
-	c.Check("wpa-eap", Equals, getSettingVkWirelessSecurityKeyMgmt(data))
+	c.Check("wpa-eap", C.Equals, getSettingVkWirelessSecurityKeyMgmt(data))
 }
 
-func (*testWrapper) TestToUriPath(c *C) {
+func (*testWrapper) TestToUriPath(c *C.C) {
 	tests := []struct {
 		test   string
 		result string
@@ -534,10 +517,10 @@ func (*testWrapper) TestToUriPath(c *C) {
 		{"file:///the/path", "file:///the/path"},
 	}
 	for _, t := range tests {
-		c.Check(t.result, Equals, toUriPath(t.test))
+		c.Check(t.result, C.Equals, toUriPath(t.test))
 	}
 }
-func (*testWrapper) TestToLocalPath(c *C) {
+func (*testWrapper) TestToLocalPath(c *C.C) {
 	tests := []struct {
 		test   string
 		result string
@@ -546,11 +529,11 @@ func (*testWrapper) TestToLocalPath(c *C) {
 		{"file:///the/path", "/the/path"},
 	}
 	for _, t := range tests {
-		c.Check(t.result, Equals, toLocalPath(t.test))
+		c.Check(t.result, C.Equals, toLocalPath(t.test))
 	}
 }
 
-func (*testWrapper) TestStrToByteArrayPath(c *C) {
+func (*testWrapper) TestStrToByteArrayPath(c *C.C) {
 	tests := []struct {
 		test   string
 		result []byte
@@ -558,10 +541,10 @@ func (*testWrapper) TestStrToByteArrayPath(c *C) {
 		{"/the/path", []byte{0x2f, 0x74, 0x68, 0x65, 0x2f, 0x70, 0x61, 0x74, 0x68, 0x0}},
 	}
 	for _, t := range tests {
-		c.Check(t.result, DeepEquals, strToByteArrayPath(t.test))
+		c.Check(t.result, C.DeepEquals, strToByteArrayPath(t.test))
 	}
 }
-func (*testWrapper) TestbyteArrayToStrPath(c *C) {
+func (*testWrapper) TestbyteArrayToStrPath(c *C.C) {
 	tests := []struct {
 		test   []byte
 		result string
@@ -571,11 +554,11 @@ func (*testWrapper) TestbyteArrayToStrPath(c *C) {
 		{[]byte{}, ""},
 	}
 	for _, t := range tests {
-		c.Check(t.result, Equals, byteArrayToStrPath(t.test))
+		c.Check(t.result, C.Equals, byteArrayToStrPath(t.test))
 	}
 }
 
-func (*testWrapper) TestMarshalVpnPluginKey(c *C) {
+func (*testWrapper) TestMarshalVpnPluginKey(c *C.C) {
 	tests := []struct {
 		t      ktype
 		test   interface{}
@@ -588,10 +571,10 @@ func (*testWrapper) TestMarshalVpnPluginKey(c *C) {
 		{ktypeUint32, 1000, "1000"},
 	}
 	for _, t := range tests {
-		c.Check(t.result, Equals, marshalVpnPluginKey(t.test, t.t))
+		c.Check(t.result, C.Equals, marshalVpnPluginKey(t.test, t.t))
 	}
 }
-func (*testWrapper) TestUnmarshalVpnPluginKey(c *C) {
+func (*testWrapper) TestUnmarshalVpnPluginKey(c *C.C) {
 	tests := []struct {
 		t      ktype
 		test   string
@@ -604,74 +587,6 @@ func (*testWrapper) TestUnmarshalVpnPluginKey(c *C) {
 		{ktypeUint32, "1000", uint32(1000)},
 	}
 	for _, t := range tests {
-		c.Check(t.result, Equals, unmarshalVpnPluginKey(t.test, t.t))
+		c.Check(t.result, C.Equals, unmarshalVpnPluginKey(t.test, t.t))
 	}
-}
-
-func (*testWrapper) ManualTestNotify(c *C) {
-	InitI18n()
-	Textdomain("dde-daemon")
-	initNmStateReasons()
-
-	notify(notifyIconEthernetConnected, Tr("Connected"), "有线网络")
-	time.Sleep(1 * time.Second) // more time to wait for the first notification
-	snapshotNotify("wired_connected")
-	notify(notifyIconEthernetDisconnected, Tr("Disconnected"), "有线网络")
-	snapshotNotify("wired_disconnected")
-	notify(notifyIconEthernetDisconnected, Tr("Disconnected"), deviceErrorTable[NM_DEVICE_STATE_REASON_CONFIG_FAILED])
-	snapshotNotify("wired_error")
-	notify(notifyIconWirelessConnected, Tr("Connected"), "linuxdeepin-1")
-	snapshotNotify("wireless_connected")
-	notify(notifyIconWirelessDisconnected, Tr("Disconnected"), "linuxdeepin-1")
-	snapshotNotify("wireless_disconnected")
-	notify(notifyIconWirelessDisconnected, Tr("Disconnected"), deviceErrorTable[NM_DEVICE_STATE_REASON_NO_SECRETS])
-	snapshotNotify("wireless_error")
-	notifyVpnConnected("vpn-pptp")
-	snapshotNotify("vpn_connected")
-	notifyVpnDisconnected("vpn-pptp")
-	snapshotNotify("vpn_disconnected")
-	notifyVpnFailed("vpn-pptp", NM_VPN_CONNECTION_STATE_REASON_LOGIN_FAILED)
-	snapshotNotify("vpn_error")
-	notifyAirplanModeEnabled()
-	snapshotNotify("airplanmode")
-	notifyNetworkOffline()
-	snapshotNotify("offline")
-	notifyApModeNotSupport()
-	snapshotNotify("apmode_error")
-	notifyWirelessHardSwitchOff()
-	snapshotNotify("wireless_hard_switch_off")
-	notifyProxyEnabled()
-	snapshotNotify("proxy_enabled")
-	notifyProxyDisabled()
-	snapshotNotify("proxy_disabled")
-}
-func snapshotNotify(suffix string) {
-	time.Sleep(1 * time.Second)
-	os.MkdirAll("testdata", 0755)
-	resultScreenFile := "testdata/test_network_screen.png"
-	resultClipFile := "testdata/test_network_" + suffix + ".png"
-	gdkpixbuf.ScreenshotImage(resultScreenFile, gdkpixbuf.FormatPng)
-	sw, _, _ := gdkpixbuf.GetImageSize(resultScreenFile)
-	pading := 35
-	w, h := 300-2, 70-2
-	gdkpixbuf.ClipImage(resultScreenFile, resultClipFile, sw-pading-w, pading, w, h, gdkpixbuf.FormatPng)
-}
-
-func (*testWrapper) TestGetUdevDeviceVendor(c *C) {
-	var syspaths []string
-	syspaths = append(syspaths, "/sys/devices/pci0000:00/0000:00:01.0")
-	for _, p := range nmGetDevices() {
-		syspaths = append(syspaths, nmGetDeviceUdi(p))
-	}
-	syspaths = append(syspaths, "/sys/devices/wrong_format")
-	for _, p := range syspaths {
-		doPrintDeviceVendor(p)
-	}
-}
-func doPrintDeviceVendor(syspath string) {
-	vendor := udevGetDeviceVendor(syspath)
-	fmt.Println("device syspath:", syspath)
-	fmt.Println("device vendor:", vendor)
-	fmt.Println("is usb device:", udevIsUsbDevice(syspath))
-	fmt.Println("")
 }

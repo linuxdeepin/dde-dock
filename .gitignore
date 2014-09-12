@@ -13,6 +13,7 @@ _*
 grub2/grub2
 themes/themes
 network/network
+network/dev_test.go
 accounts/accounts
 audio/audio
 datetime/datetime
