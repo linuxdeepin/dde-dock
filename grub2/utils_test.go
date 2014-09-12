@@ -1,10 +1,10 @@
 package grub2
 
 import (
-	. "launchpad.net/gocheck"
+	C "launchpad.net/gocheck"
 )
 
-func (*GrubTester) TestQuoteString(c *C) {
+func (*GrubTester) TestQuoteString(c *C.C) {
 	var tests = []struct {
 		s, want string
 	}{
@@ -15,11 +15,11 @@ func (*GrubTester) TestQuoteString(c *C) {
 		{``, `""`},
 	}
 	for _, t := range tests {
-		c.Check(quoteString(t.s), Equals, t.want)
+		c.Check(quoteString(t.s), C.Equals, t.want)
 	}
 }
 
-func (*GrubTester) TestUnquoteString(c *C) {
+func (*GrubTester) TestUnquoteString(c *C.C) {
 	var tests = []struct {
 		s, want string
 	}{
@@ -35,11 +35,11 @@ func (*GrubTester) TestUnquoteString(c *C) {
 		{``, ``},
 	}
 	for _, t := range tests {
-		c.Check(unquoteString(t.s), Equals, t.want)
+		c.Check(unquoteString(t.s), C.Equals, t.want)
 	}
 }
 
-func (*GrubTester) TestConvertToSimpleEntry(c *C) {
+func (*GrubTester) TestConvertToSimpleEntry(c *C.C) {
 	data := []struct {
 		v, r string
 	}{
@@ -51,11 +51,11 @@ func (*GrubTester) TestConvertToSimpleEntry(c *C) {
 		{"Parent Title>Child Title", "Parent Title"},
 	}
 	for _, d := range data {
-		c.Check(convertToSimpleEntry(d.v), Equals, d.r)
+		c.Check(convertToSimpleEntry(d.v), C.Equals, d.r)
 	}
 }
 
-func (*GrubTester) TestParseGfxmode(c *C) {
+func (*GrubTester) TestParseGfxmode(c *C.C) {
 	sw, sh := getPrimaryScreenBestResolution()
 	data := []struct {
 		v    string
@@ -71,21 +71,17 @@ func (*GrubTester) TestParseGfxmode(c *C) {
 	}
 	for _, d := range data {
 		w, h, _ := doParseGfxmode(d.v)
-		c.Check(w, Equals, d.w)
-		c.Check(h, Equals, d.h)
+		c.Check(w, C.Equals, d.w)
+		c.Check(h, C.Equals, d.h)
 	}
 
 	// test wrong format
 	_, _, err := doParseGfxmode("")
-	c.Check(err, NotNil)
+	c.Check(err, C.NotNil)
 	_, _, err = doParseGfxmode("1024")
-	c.Check(err, NotNil)
+	c.Check(err, C.NotNil)
 	_, _, err = doParseGfxmode("1024x")
-	c.Check(err, NotNil)
+	c.Check(err, C.NotNil)
 	_, _, err = doParseGfxmode("autox24")
-	c.Check(err, NotNil)
-}
-
-func (*GrubTester) TestGetPrimaryScreenBestResolution(c *C) {
-	logger.Info("getPrimaryScreenBestResolution:", getPrimaryScreenBestResolutionStr())
+	c.Check(err, C.NotNil)
 }

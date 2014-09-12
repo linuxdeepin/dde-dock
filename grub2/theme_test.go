@@ -1,10 +1,10 @@
 package grub2
 
 import (
-	. "launchpad.net/gocheck"
+	C "launchpad.net/gocheck"
 )
 
-func (*GrubTester) TestGetplJsonData(c *C) {
+func (*GrubTester) TestGetplJsonData(c *C.C) {
 	testJSONContent := `{
     "BrightScheme":{"ItemColor":"#a6a6a6","SelectedItemColor":"#05abcf", "TerminalBox":"terminal_box_bright_*.png", "MenuPixmapStyle":"menu_box_bright_*.png", "ScrollbarThumb":"scrollbar_bright_*.png"},
     "DarkScheme":{"ItemColor":"#a6a6a6","SelectedItemColor":"#05abcf", "TerminalBox":"terminal_box_dark_*.png", "MenuPixmapStyle":"menu_box_dark_*.png", "ScrollbarThumb":"scrollbar_dark_*.png"},
@@ -21,10 +21,10 @@ func (*GrubTester) TestGetplJsonData(c *C) {
 	if err != nil {
 		c.Error(err)
 	}
-	c.Check(*jsonData, Equals, *wantJSONData)
+	c.Check(*jsonData, C.Equals, *wantJSONData)
 }
 
-func (*GrubTester) TestGetCustomizedThemeContent(c *C) {
+func (*GrubTester) TestGetCustomizedThemeContent(c *C.C) {
 	testThemeTplContent := `# GRUB2 gfxmenu Linux Deepin theme
 # Designed for 1024x768 resolution
 # Global Property
@@ -81,5 +81,5 @@ terminal-font: "Fixed Regular 13"
 	tplValues := ThemeScheme{"#a6a6a6", "#05abcf", "terminal_box_bright_*.png", "menu_box_bright_*.png", "scrollbar_bright_*.png"}
 
 	s, _ := theme.getCustomizedThemeContent([]byte(testThemeTplContent), tplValues)
-	c.Check(string(s), Equals, wantThemeTxtContent)
+	c.Check(string(s), C.Equals, wantThemeTxtContent)
 }
