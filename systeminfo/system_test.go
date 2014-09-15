@@ -1,41 +1,41 @@
 package systeminfo
 
 import (
-	"fmt"
+	C "launchpad.net/gocheck"
 	"testing"
 )
 
-func TestSystem(t *testing.T) {
-	sys := SystemInfo{}
+func Test(t *testing.T) {
+	C.TestingT(t)
+}
 
-	sys.Version = GetVersion()
-	if sys.Version == int32(0) {
-		t.Error("get version failed")
+func init() {
+	C.Suite(NewSystemInfo())
+}
+
+func (si *SystemInfo) TestSystem(c *C.C) {
+	if ret := GetVersion(); ret == 0 {
+		c.Error("GetVersion failed")
+		return
 	}
 
-	sys.Processor = GetCpuInfo()
-	if sys.Processor == "" {
-		t.Error("get cpu info failed")
+	if ret := GetCpuInfo(); len(ret) < 1 {
+		c.Error("GetCpuInfo failed")
+		return
 	}
 
-	sys.MemoryCap = GetMemoryCap()
-	if sys.MemoryCap == uint64(0) {
-		t.Error("get memory info failed")
+	if ret := GetMemoryCap(); ret == 0 {
+		c.Error("GetMemoryCap failed")
+		return
 	}
 
-	sys.SystemType = GetSystemType()
-	if sys.SystemType == int64(0) {
-		t.Error("get system type failed")
+	if ret := GetSystemType(); ret == 0 {
+		c.Error("GetSystemType failed")
+		return
 	}
 
-	sys.DiskCap = GetDiskCap()
-	if sys.DiskCap == uint64(0) {
-		t.Error("get disk info failed")
+	if ret := GetDiskCap(); ret == 0 {
+		c.Error("GetDiskCap failed")
+		return
 	}
-
-	fmt.Println("Version:", sys.Version)
-	fmt.Println("CPU:", sys.Processor)
-	fmt.Println("Memory:", sys.MemoryCap)
-	fmt.Println("System Type:", sys.SystemType)
-	fmt.Println("Disk:", sys.DiskCap)
 }

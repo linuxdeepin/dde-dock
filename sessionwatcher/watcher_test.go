@@ -19,9 +19,11 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package accounts
+package sessionwatcher
 
+/*
 import (
+	"dbus/org/freedesktop/dbus"
 	C "launchpad.net/gocheck"
 	"testing"
 )
@@ -33,27 +35,17 @@ func Test(t *testing.T) {
 }
 
 func init() {
+	var err error
+	if dbusDaemon, err = dbus.NewDBusDaemon("org.freedesktop.DBus", "/"); err != nil {
+		dbusDaemon = nil
+		return
+	}
+
 	C.Suite(&testWrap{})
 }
 
-func (t *testWrap) TestUtils(c *C.C) {
-	c.Check(isUserExist("root"), C.Equals, true)
-	c.Check(isUserExist("root1224325346456742342"), C.Equals, false)
-
-	c.Check(isUsernameValid("deepin"), C.Equals, true)
-	c.Check(isUsernameValid("Deepin"), C.Equals, false)
-	c.Check(isUsernameValid("123deepin"), C.Equals, false)
-	c.Check(isUsernameValid("deepin123"), C.Equals, true)
-	c.Check(isUsernameValid("deepin_123"), C.Equals, true)
-	c.Check(isUsernameValid("deepin-123"), C.Equals, true)
-	c.Check(isUsernameValid(".deepin"), C.Equals, false)
-	c.Check(isUsernameValid("-deepin"), C.Equals, false)
-	c.Check(isUsernameValid("_deepin"), C.Equals, false)
-	c.Check(isUsernameValid("$deepin"), C.Equals, false)
-
-	c.Check(isPasswordValid(""), C.Equals, true)
-	c.Check(isPasswordValid("Deepin"), C.Equals, true)
-	c.Check(isPasswordValid("deepin"), C.Equals, true)
-	c.Check(isPasswordValid("123"), C.Equals, true)
-	c.Check(isPasswordValid("./#$%$"), C.Equals, true)
+func (t *testWrap) TestDBusExist(c *C.C) {
+	c.Check(isDBusSenderExist("org.freedesktop.DBus"), C.Equals, true)
+	c.Check(isDBusSenderExist("1234235425346464564/32"), C.Equals, false)
 }
+*/

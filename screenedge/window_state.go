@@ -59,8 +59,8 @@ func isAppInBlackList() bool {
 		return false
 	}
 
-	xid := getActiveWindow(X)
-	pid := getWindowPid(X, xid)
+	xid, _ := getActiveWindow(X)
+	pid, _ := getWindowPid(X, xid)
 
 	filename := fmt.Sprintf("/proc/%v/cmdline", pid)
 	if !dutils.IsFileExist(filename) {
@@ -98,42 +98,44 @@ func getXUtil() *xgbutil.XUtil {
 	return _X
 }
 
-func getActiveWindow(X *xgbutil.XUtil) uint32 {
+func getActiveWindow(X *xgbutil.XUtil) (uint32, error) {
 	xid, err := ewmh.ActiveWindowGet(X)
 	if err != nil {
 		logger.Warning("Get active window failed:", err)
-		return 0
+		return 0, err
 	}
 
-	return uint32(xid)
+	return uint32(xid), nil
 }
 
-func getWindowState(X *xgbutil.XUtil, xid uint32) []string {
+func getWindowState(X *xgbutil.XUtil, xid uint32) ([]string, error) {
 	list, err := ewmh.WmStateGet(X, xproto.Window(xid))
 	if err != nil {
 		logger.Warning("Get window state failed:", err)
+		return []string{}, err
 	}
 
-	return list
+	return list, nil
 }
 
-func getWindowName(X *xgbutil.XUtil, xid uint32) string {
+func getWindowName(X *xgbutil.XUtil, xid uint32) (string, error) {
 	name, err := ewmh.WmNameGet(X, xproto.Window(xid))
 	if err != nil {
 		logger.Warning("Get window name failed:", err)
-		return ""
+		return "", err
 	}
 
-	return name
+	return name, nil
 }
 
-func getWindowPid(X *xgbutil.XUtil, xid uint32) uint32 {
+func getWindowPid(X *xgbutil.XUtil, xid uint32) (uint32, error) {
 	pid, err := ewmh.WmPidGet(X, xproto.Window(xid))
 	if err != nil {
 		logger.Warning("Get window pid failed:", err)
+		return 0, err
 	}
 
-	return uint32(pid)
+	return uint32(pid), nil
 }
 
 func isActiveWindowFullscreen() (uint32, bool) {
@@ -142,11 +144,11 @@ func isActiveWindowFullscreen() (uint32, bool) {
 		return 0, false
 	}
 
-	xid := getActiveWindow(X)
-	list := getWindowState(X, xid)
+	xid, _ := getActiveWindow(X)
+	list, _ := getWindowState(X, xid)
 
 	if strIsInInList("_NET_WM_STATE_FULLSCREEN", list) {
-		pid := getWindowPid(X, xid)
+		pid, _ := getWindowPid(X, xid)
 		return pid, true
 	}
 

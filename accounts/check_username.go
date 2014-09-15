@@ -86,10 +86,10 @@ func isUserExist(username string) bool {
 	if strIsInList(username, userList) ||
 		strIsInList(username, groupList) ||
 		strings.ToLower(username) == "guest" {
-		return false
+		return true
 	}
 
-	return true
+	return false
 }
 
 func isPasswordValid(passwd string) bool {
