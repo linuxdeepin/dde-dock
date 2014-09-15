@@ -62,13 +62,14 @@ func (p *Power) refreshUpower() {
 
 	present, state, percentage, err := getBatteryInfo()
 	if err != nil {
-		p.setPropBatteryIsPresent(present)
-		p.setPropBatteryState(state)
-		p.setPropBatteryPercentage(percentage)
-		p.handleBatteryPercentage()
-	} else {
-		p.setPropBatteryIsPresent(false)
+		logger.Warning("can't get batteryinfo:", err)
+		return
 	}
+
+	p.setPropBatteryIsPresent(present)
+	p.setPropBatteryState(state)
+	p.setPropBatteryPercentage(percentage)
+	p.handleBatteryPercentage()
 	//TODO: handle lowe battery
 }
 
@@ -162,7 +163,7 @@ func getBatteryInfo() (bool, uint32, float64, error) {
 	devs, err := upower.EnumerateDevices()
 	if err != nil {
 		logger.Error("Can't EnumerateDevices", err)
-		return false, 0, 0, nil
+		return false, 0, 0, err
 	}
 	for _, path := range devs {
 		dev, err := libupower.NewDevice(UPOWER_BUS_NAME, path)
@@ -173,5 +174,5 @@ func getBatteryInfo() (bool, uint32, float64, error) {
 				nil
 		}
 	}
-	return false, 0, 0, nil
+	return false, BatteryStateUnknown, 0, nil
 }
