@@ -528,11 +528,16 @@ func (app *RuntimeApp) updateIcon(xid xproto.Window) {
 	}
 
 }
-func (app *RuntimeApp) updateWmClass(xid xproto.Window) {
-	if name, err := ewmh.WmNameGet(XU, xid); err == nil {
+func (app *RuntimeApp) updateWmName(xid xproto.Window) {
+	if name, err := ewmh.WmNameGet(XU, xid); err == nil && name != "" {
 		app.xids[xid].Title = name
+		return
 	}
 
+	if name, err := xprop.PropValStr(xprop.GetProperty(XU, xid,
+		"WM_NAME")); err == nil {
+		app.xids[xid].Title = name
+	}
 }
 func (app *RuntimeApp) updateState(xid xproto.Window) {
 	//TODO: handle state
@@ -677,7 +682,6 @@ func (app *RuntimeApp) attachXid(xid xproto.Window) {
 	xwin := xwindow.New(XU, xid)
 	xwin.Listen(xproto.EventMaskPropertyChange | xproto.EventMaskStructureNotify | xproto.EventMaskVisibilityChange)
 	winfo := &WindowInfo{Xid: xid}
-	winfo.Title, _ = ewmh.WmNameGet(XU, xid)
 	xevent.UnmapNotifyFun(func(XU *xgbutil.XUtil, ev xevent.UnmapNotifyEvent) {
 		app.detachXid(xid)
 	}).Connect(XU, xid)
@@ -691,7 +695,7 @@ func (app *RuntimeApp) attachXid(xid xproto.Window) {
 			app.updateAppid(xid)
 			app.notifyChanged()
 		case ATOM_WINDOW_NAME:
-			app.updateWmClass(xid)
+			app.updateWmName(xid)
 			app.updateAppid(xid)
 			app.notifyChanged()
 		case ATOM_WINDOW_STATE:
@@ -710,7 +714,7 @@ func (app *RuntimeApp) attachXid(xid xproto.Window) {
 	}).Connect(XU, xid)
 	app.xids[xid] = winfo
 	app.updateIcon(xid)
-	app.updateWmClass(xid)
+	app.updateWmName(xid)
 	app.updateState(xid)
 	// app.updateViewports(xid)
 	app.notifyChanged()
