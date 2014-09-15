@@ -113,23 +113,23 @@ func (s *Sink) SetVolume(v float64, isPlay bool) {
 	}
 	s.core.SetVolume(s.core.Volume.SetAvg(v))
 	if isPlay {
-		playFeedback()
+		playFeedbackWithDevice(s.Name)
 	}
 }
 func (s *Sink) SetBalance(v float64, isPlay bool) {
 	s.core.SetVolume(s.core.Volume.SetBalance(s.core.ChannelMap, v))
 	if isPlay {
-		playFeedback()
+		playFeedbackWithDevice(s.Name)
 	}
 }
 func (s *Sink) SetFade(v float64) {
 	s.core.SetVolume(s.core.Volume.SetFade(s.core.ChannelMap, v))
-	playFeedback()
+	playFeedbackWithDevice(s.Name)
 }
 func (s *Sink) SetMute(v bool) {
 	s.core.SetMute(v)
 	if !v {
-		playFeedback()
+		playFeedbackWithDevice(s.Name)
 	}
 }
 func (s *Sink) SetPort(name string) {
@@ -245,8 +245,22 @@ var playFeedback = func() func() {
 	player, err := libsound.NewSound("com.deepin.api.Sound", "/com/deepin/api/Sound")
 	if err != nil {
 		logger.Error("Can't create com.deepin.api.Sound! Sound feedback support will be disabled", err)
+		return nil
 	}
+
 	return func() {
 		player.PlaySystemSound("audio-volume-change")
+	}
+}()
+
+var playFeedbackWithDevice = func() func(string) {
+	player, err := libsound.NewSound("com.deepin.api.Sound", "/com/deepin/api/Sound")
+	if err != nil {
+		logger.Error("Can't create com.deepin.api.Sound! Sound feedback support will be disabled", err)
+		return nil
+	}
+
+	return func(device string) {
+		player.PlaySystemSoundWithDevice("audio-volume-change", device)
 	}
 }()

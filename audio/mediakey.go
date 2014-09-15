@@ -32,7 +32,7 @@ func (audio *Audio) setupMediaKeyMonitor() {
 				logger.Warning("ignore add volume bigger than 100% when use MediaKey")
 				return
 			}
-			playFeedback()
+			playFeedbackWithDevice(sink.Name)
 
 			if sink.Mute {
 				sink.SetMute(false)
@@ -60,7 +60,7 @@ func (audio *Audio) setupMediaKeyMonitor() {
 				nv = 0
 			}
 			sink.SetVolume(nv, true)
-			playFeedback()
+			playFeedbackWithDevice(sink.Name)
 		}
 	})
 }
