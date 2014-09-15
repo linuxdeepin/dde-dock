@@ -126,7 +126,12 @@ func (obj *Manager) DeleteUser(dbusMsg dbus.DMessage, name string, removeFiles b
 	if removeFiles {
 		args = append(args, "-r")
 	}
+	args = append(args, "-f")
 	args = append(args, name)
+
+	if !execCommand("/bin/rm", []string{"-rf", "/etc/subuid"}) {
+		return false
+	}
 
 	if !execCommand(CMD_USERDEL, args) {
 		return false
@@ -185,7 +190,7 @@ func (m *Manager) IsUsernameValid(username string) (bool, string) {
 		return false, Tr("The username is invalid.")
 	}
 
-	if !isUserExist(username) {
+	if isUserExist(username) {
 		return false, Tr("The username exists.")
 	}
 
