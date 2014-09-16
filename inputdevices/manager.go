@@ -25,7 +25,8 @@ import "pkg.linuxdeepin.com/lib/dbus"
 
 // TODO: delete this struct && rm this file
 type Manager struct {
-	Infos []devicePathInfo
+	Infos        []devicePathInfo
+	versionRight bool
 }
 
 type devicePathInfo struct {
@@ -54,6 +55,8 @@ func newManager() *Manager {
 		devicePathInfo{"com.deepin.daemon.InputDevice.TouchPad",
 			"touchpad"},
 	}
+
+	m.versionRight = m.isVersionRight()
 
 	return m
 }
