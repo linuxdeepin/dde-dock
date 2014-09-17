@@ -148,7 +148,10 @@ func (e *AppEntry) update() {
 		}
 		b, _ := json.Marshal(xids)
 		e.setData(FieldAppXids, string(b))
-		hideModemanager.UpdateState()
+		if hideModemanager.state == HideStateShown &&
+			region.mouseInRegion() {
+			hideModemanager.UpdateState()
+		}
 	} else if e.nApp != nil {
 		e.setData(FieldStatus, NormalStatus)
 	} else {

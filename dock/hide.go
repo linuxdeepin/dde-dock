@@ -150,7 +150,9 @@ func (m *HideStateManager) UpdateState() {
 		trigger = TriggerShow
 	}
 
-	if m.ChangeState != nil {
+	if m.ChangeState != nil &&
+		(m.state != HideStateShown && trigger == TriggerShow) ||
+		(m.state != HideStateHidden && trigger == TriggerHide) {
 		m.ChangeState(trigger)
 	}
 }

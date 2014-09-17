@@ -1,8 +1,11 @@
 package dock
 
-import "pkg.linuxdeepin.com/dde-daemon"
-import "github.com/BurntSushi/xgbutil/xprop"
-import "github.com/BurntSushi/xgbutil"
+import (
+	"github.com/BurntSushi/xgbutil"
+	"github.com/BurntSushi/xgbutil/xprop"
+	"pkg.linuxdeepin.com/dde-daemon"
+	"time"
+)
 
 func init() {
 	loader.Register(&loader.Module{"dock", Start, Stop, true})
@@ -28,4 +31,7 @@ var (
 	_NET_SYSTEM_TRAY_OPCODE, _ = xprop.Atm(TrayXU, "_NET_SYSTEM_TRAY_OPCODE")
 
 	// ATOM_DEEPIN_WINDOW_VIEWPORTS, _ = xprop.Atm(XU, "DEEPIN_WINDOW_VIEWPORTS")
+
+	mouseAreaTimer   *time.Timer
+	TOGGLE_HIDE_TIME = time.Millisecond * 400
 )

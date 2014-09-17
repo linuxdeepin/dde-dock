@@ -740,6 +740,7 @@ func (app *RuntimeApp) attachXid(xid xproto.Window) {
 				app.updateState(xid)
 			}
 			app.notifyChanged()
+
 			if HideModeType(setting.GetHideMode()) != HideModeSmartHide {
 				break
 			}

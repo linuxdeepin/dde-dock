@@ -1,10 +1,12 @@
 package dock
 
 import (
+	"dbus/com/deepin/api/xmousearea"
 	"dbus/com/deepin/daemon/display"
 	"os"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/log"
+	"time"
 )
 
 var (
@@ -96,6 +98,41 @@ func Start() {
 		Stop()
 		return
 	}
+
+	area, err := NewXMouseAreaProxyer(xmousearea.NewXMouseArea(
+		"com.deepin.api.XMouseArea",
+		"/com/deepin/api/XMouseArea",
+	))
+
+	if err != nil {
+		logger.Errorf("register xmouse area failed:", err)
+		Stop()
+		return
+	}
+
+	dbus.InstallOnSession(area)
+
+	area.connectMotionInto(func(_, _ int32, id string) {
+		logger.Info("MouseIn:", id)
+		if mouseAreaTimer != nil {
+			mouseAreaTimer.Stop()
+			mouseAreaTimer = nil
+		}
+		mouseAreaTimer = time.AfterFunc(TOGGLE_HIDE_TIME, func() {
+			logger.Info("MouseIn:", id)
+			mouseAreaTimer = nil
+			hideModemanager.UpdateState()
+		})
+	})
+
+	area.connectMotionOut(func(_, _ int32, id string) {
+		if mouseAreaTimer != nil {
+			mouseAreaTimer.Stop()
+			mouseAreaTimer = nil
+		}
+		logger.Info("MouseOut:", id)
+		hideModemanager.UpdateState()
+	})
 
 	initialize()
 }

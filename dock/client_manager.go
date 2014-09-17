@@ -264,6 +264,7 @@ func (m *ClientManager) listenRootWindow() {
 
 				lastActive = appId
 				m.ActiveWindowChanged(uint32(activeWindow))
+				hideModemanager.UpdateState()
 			}
 
 			if HideModeType(setting.GetHideMode()) == HideModeSmartHide {

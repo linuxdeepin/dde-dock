@@ -97,7 +97,7 @@ func (m *Menu) GenerateJSON() string {
 	for i, item := range m.items {
 		for id, _item := range m.ids {
 			if _item == item {
-				ret += fmt.Sprintf(`{ "itemId":"%s", "itemText": "%s", "isActive": %v, "isCheckable":%v, "checked":%v, "itemIcon":"%s", "itemIconHover":"%s", "itemIconInactive":"%s", "showCheckMark":%v, "itemSubMenu":`,
+				ret += fmt.Sprintf(`{"itemId":"%s", "itemText": "%s", "isActive": %v, "isCheckable":%v, "checked":%v, "itemIcon":"%s", "itemIconHover":"%s", "itemIconInactive":"%s", "showCheckMark":%v, "itemSubMenu":`,
 					id,
 					item.itemText,
 					item.isActive,
