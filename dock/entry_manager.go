@@ -92,7 +92,10 @@ func (m *EntryManager) mustGetEntry(nApp *NormalApp, rApp *RuntimeApp) *AppEntry
 		} else {
 			e := NewAppEntryWithRuntimeApp(rApp)
 			m.appEntries[rApp.Id] = e
-			dbus.InstallOnSession(e)
+			err := dbus.InstallOnSession(e)
+			if err != nil {
+				logger.Warning(err)
+			}
 			return e
 		}
 	} else if nApp != nil {
@@ -101,7 +104,10 @@ func (m *EntryManager) mustGetEntry(nApp *NormalApp, rApp *RuntimeApp) *AppEntry
 		} else {
 			e := NewAppEntryWithNormalApp(nApp)
 			m.appEntries[nApp.Id] = e
-			dbus.InstallOnSession(e)
+			err := dbus.InstallOnSession(e)
+			if err != nil {
+				logger.Warning(err)
+			}
 			return e
 		}
 	}
