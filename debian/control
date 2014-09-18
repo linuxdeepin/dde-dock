@@ -31,6 +31,7 @@ Depends: ${shlibs:Depends},
  grub-themes-deepin,
  startdde (>= 0.1+20140729232616),
  xcur2png,
+ xserver-xorg-input-wacom,
 Conflicts: dde-daemon-gsd-input
 Description: daemon handling the DDE session settings
     This package contains the daemon which is responsible for setting the

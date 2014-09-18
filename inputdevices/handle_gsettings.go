@@ -207,3 +207,33 @@ func (kbdManager *KeyboardManager) listenGSettings() {
 		}
 	})
 }
+
+func (wManager *WacomManager) listenGSettings() {
+	if wManager.listenFlag {
+		return
+	}
+	wManager.listenFlag = true
+
+	wManager.settings.Connect("changed", func(s *gio.Settings, key string) {
+		switch key {
+		case WACOM_KEY_LEFT_HANDED:
+			value := wManager.settings.GetBoolean(key)
+			wManager.setRotate(value)
+		case WACOM_KEY_CURSOR_MODE:
+			value := wManager.settings.GetBoolean(key)
+			wManager.setCursorMode(value)
+		case WACOM_KEY_UP_ACTION:
+			value := wManager.settings.GetString(key)
+			wManager.setKeyUp(value)
+		case WACOM_KEY_DOWN_ACTION:
+			value := wManager.settings.GetString(key)
+			wManager.setKeyDown(value)
+		case WACOM_KEY_DOUBLE_DELTA:
+			value := wManager.settings.GetUint(key)
+			wManager.setDoubleDelta(uint32(value))
+		case WACOM_KEY_PRESSURE_SENSITIVE:
+			value := wManager.settings.GetUint(key)
+			wManager.setPressureSensitive(uint32(value))
+		}
+	})
+}

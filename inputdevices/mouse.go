@@ -93,7 +93,7 @@ func newMouseManager() *MouseManager {
 		mManager, "DragThreshold",
 		mouseSettings, MOUSE_KEY_DRAG_THRES)
 
-	mouseList, _ := getPointerDeviceList()
+	mouseList, _, _ := getPointerDeviceList()
 	mManager.setPropDeviceList(mouseList)
 	if len(mouseList) > 0 {
 		mManager.setPropExist(true)

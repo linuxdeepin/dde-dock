@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+    <schema path="/com/deepin/dde/wacom/" id="com.deepin.dde.wacom">
+    <key type="b" name="left-handed">
+      <default>false</default>
+      <summary>Wacom Rotate</summary>
+      <description></description>
+    </key>
+    <key type="b" name="cursor-mode">
+      <default>true</default>
+      <summary>Set Wacom Mode</summary>
+      <description>Set this to TRUE to enable wacom relative mode</description>
+    </key>
+    <key type="s" name="keyup-action">
+      <default>"RightClick"</default>
+      <summary>Set Button 3</summary>
+      <description></description>
+    </key>
+    <key type="s" name="keydown-action">
+      <default>"MiddleClick"</default>
+      <summary>Set Button 2</summary>
+      <description></description>
+    </key>
+    <key type="u" name="double-delta">
+      <default>2</default>
+      <summary>Double click distance</summary>
+      <description></description>
+    </key>
+    <key type="u" name="pressure-sensitive">
+      <default>27</default>
+      <summary>Pressure sensitive</summary>
+      <description></description>
+    </key>
+  </schema>
+</schemalist>

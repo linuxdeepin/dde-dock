@@ -124,7 +124,7 @@ func newTouchpadManager() *TouchpadManager {
 		tManager, "DragThreshold",
 		mouseSettings, MOUSE_KEY_DRAG_THRES)
 
-	_, tpadList := getPointerDeviceList()
+	_, tpadList, _ := getPointerDeviceList()
 	tManager.setPropDeviceList(tpadList)
 
 	if len(tManager.DeviceList) > 0 {

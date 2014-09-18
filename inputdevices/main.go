@@ -68,6 +68,10 @@ func Start() {
 	if err := dbus.InstallOnSession(GetKeyboardManager()); err != nil {
 		logger.Fatal("Install Keyboard DBus Failed:", err)
 	}
+
+	if err := dbus.InstallOnSession(GetWacomManager()); err != nil {
+		logger.Fatal("Install Wacom DBus Failed:", err)
+	}
 }
 
 func Stop() {
@@ -80,5 +84,6 @@ func Stop() {
 	dbus.UnInstallObject(GetKeyboardManager())
 	dbus.UnInstallObject(GetTouchpadManager())
 	dbus.UnInstallObject(GetMouseManager())
+	dbus.UnInstallObject(GetWacomManager())
 	dbus.UnInstallObject(GetManager())
 }

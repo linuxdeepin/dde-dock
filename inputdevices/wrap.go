@@ -38,7 +38,7 @@ type PointerDeviceInfo struct {
 	Enabled  bool
 }
 
-func getPointerDeviceList() (mouseList, tpadList []PointerDeviceInfo) {
+func getPointerDeviceList() (mouseList, tpadList, wacomList []PointerDeviceInfo) {
 	n_devices := C.int(0)
 	devices := C.get_device_info_list(&n_devices)
 	if n_devices < 1 {
@@ -74,6 +74,18 @@ func getPointerDeviceList() (mouseList, tpadList []PointerDeviceInfo) {
 			}
 
 			tpadList = append(tpadList, info)
+		} else if C.is_wacom_device(devInfo.deviceid) == 1 {
+			info := PointerDeviceInfo{
+				C.GoString(devInfo.name),
+				int32(devInfo.deviceid),
+				false,
+			}
+
+			if devInfo.enabled == 1 {
+				info.Enabled = true
+			}
+
+			wacomList = append(wacomList, info)
 		}
 	}
 	C.free_device_info(devices, n_devices)
@@ -264,7 +276,7 @@ func endDeviceListenThread() {
 func handleDeviceAdded(deviceid C.int) {
 	logger.Debugf("Device '%v' added", int32(deviceid))
 
-	mouseList, tpadList := getPointerDeviceList()
+	mouseList, tpadList, wacomList := getPointerDeviceList()
 
 	mouseObj := GetMouseManager()
 	if len(mouseList) != len(mouseObj.DeviceList) {
@@ -286,6 +298,17 @@ func handleDeviceAdded(deviceid C.int) {
 			tpadObj.setPropExist(false)
 		}
 		tpadObj.init()
+	}
+
+	wacomObj := GetWacomManager()
+	if len(wacomList) != len(wacomObj.DeviceList) {
+		wacomObj.setPropDeviceList(wacomList)
+		if len(wacomObj.DeviceList) > 0 {
+			wacomObj.setPropExist(true)
+		} else {
+			wacomObj.setPropExist(false)
+		}
+		wacomObj.init()
 	}
 }
 
@@ -293,7 +316,7 @@ func handleDeviceAdded(deviceid C.int) {
 func handleDeviceRemoved(deviceid C.int) {
 	logger.Debugf("Device '%v' removed", int32(deviceid))
 
-	mouseList, tpadList := getPointerDeviceList()
+	mouseList, tpadList, wacomList := getPointerDeviceList()
 
 	mouseObj := GetMouseManager()
 	if len(mouseList) != len(mouseObj.DeviceList) {
@@ -315,5 +338,16 @@ func handleDeviceRemoved(deviceid C.int) {
 			tpadObj.setPropExist(false)
 		}
 		tpadObj.init()
+	}
+
+	wacomObj := GetWacomManager()
+	if len(wacomList) != len(wacomObj.DeviceList) {
+		wacomObj.setPropDeviceList(wacomList)
+		if len(wacomObj.DeviceList) > 0 {
+			wacomObj.setPropExist(true)
+		} else {
+			wacomObj.setPropExist(false)
+		}
+		wacomObj.init()
 	}
 }

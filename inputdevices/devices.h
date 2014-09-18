@@ -48,6 +48,8 @@ int set_tab_to_click(int deviceid, int enabled, int left_handed);
 int set_keyboard_repeat(int repeat,
                         unsigned int delay, unsigned int interval);
 
+int is_wacom_device(int deviceid);
+
 int listen_device_changed();
 void end_device_listen_thread();
 

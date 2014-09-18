@@ -182,3 +182,23 @@ is_device_property_exist(Display *disp, int deviceid, const char *prop_name)
 
 	return 0;
 }
+
+int
+is_wacom_device(int deviceid)
+{
+	Display *disp = XOpenDisplay(0);
+	if (!disp) {
+		fprintf(stderr, "Open Display Failed: %d\n", deviceid);
+		return -1;
+	}
+
+	int ret = is_device_property_exist(disp, deviceid, "Wacom Tool Type");
+
+	XCloseDisplay(disp);
+
+	if (ret == 1) {
+		return 1;
+	}
+
+	return 0;
+}
