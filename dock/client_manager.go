@@ -151,6 +151,31 @@ func isDeepinLauncher(xid xproto.Window) bool {
 	return res.Instance == DDELauncher
 }
 
+func isWindowOnPrimaryScreen(xid xproto.Window) bool {
+	var err error
+
+	win := xwindow.New(XU, xid)
+	gemo, err := win.DecorGeometry()
+	if err != nil {
+		return false
+	}
+
+	displayRectX := (int)(displayRect.X)
+	displayRectY := (int)(displayRect.Y)
+	displayRectWidth := (int)(displayRect.Width)
+	displayRectHeight := (int)(displayRect.Height)
+
+	isOnPrimary := gemo.X() >= displayRectX &&
+		gemo.X() < displayRectX+displayRectWidth &&
+		gemo.Y() >= displayRectY &&
+		gemo.Y() < displayRectY+displayRectHeight
+
+	logger.Debugf("isWindowOnPrimaryScreen: %dx%d, %dx%d, %v", gemo.X(),
+		gemo.Y(), displayRect.X, displayRect.Y, isOnPrimary)
+
+	return isOnPrimary
+}
+
 func (m *ClientManager) listenRootWindow() {
 	var update = func() {
 		list, err := ewmh.ClientListGet(XU)

@@ -1,6 +1,7 @@
 package dock
 
 import (
+	"dbus/com/deepin/daemon/display"
 	"os"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/log"
@@ -11,10 +12,12 @@ var (
 	region          *Region           = nil
 	setting         *Setting          = nil
 	hideModemanager *HideStateManager = nil
+	dpy             *display.Display  = nil
 )
 
 func Stop() {
 	logger.EndTracing()
+	display.DestroyDisplay(dpy)
 }
 func Start() {
 	logger.BeginTracing()
@@ -25,11 +28,19 @@ func Start() {
 		os.Setenv("G_MESSAGES_DEBUG", "all")
 	}
 
+	if !initDisplay() {
+		Stop()
+		return
+	}
+
+	var err error
+
 	m := NewEntryProxyerManager()
-	err := dbus.InstallOnSession(m)
+	err = dbus.InstallOnSession(m)
 	if err != nil {
 		logger.Errorf("register dbus interface failed: %v", err)
-		os.Exit(1)
+		Stop()
+		return
 	}
 
 	m.watchEntries()
@@ -38,14 +49,16 @@ func Start() {
 	err = dbus.InstallOnSession(d)
 	if err != nil {
 		logger.Errorf("register dbus interface failed: %v", err)
-		os.Exit(1)
+		Stop()
+		return
 	}
 
 	setting = NewSetting()
 	err = dbus.InstallOnSession(setting)
 	if err != nil {
 		logger.Errorf("register dbus interface failed: %v", err)
-		os.Exit(1)
+		Stop()
+		return
 	}
 
 	hideModemanager =
@@ -53,7 +66,8 @@ func Start() {
 	err = dbus.InstallOnSession(hideModemanager)
 	if err != nil {
 		logger.Errorf("register dbus interface failed: %v", err)
-		os.Exit(1)
+		Stop()
+		return
 	}
 	hideModemanager.UpdateState()
 
@@ -61,11 +75,18 @@ func Start() {
 	err = dbus.InstallOnSession(cm)
 	if err != nil {
 		logger.Errorf("register dbus interface failed: %v", err)
+		Stop()
+		return
 	}
 	go cm.listenRootWindow()
 
 	region = NewRegion()
-	dbus.InstallOnSession(region)
+	err = dbus.InstallOnSession(region)
+	if err != nil {
+		logger.Errorf("register dbus interface failed: %v", err)
+		Stop()
+		return
+	}
 
 	initialize()
 }

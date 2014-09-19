@@ -2,6 +2,7 @@ package dock
 
 import (
 	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/log"
 	"time"
 )
 
@@ -97,7 +98,15 @@ func (m *HideStateManager) UpdateState() {
 			break
 		}
 
-		if hasMaximizeClientPre(activeWindow) {
+		if logger.GetLogLevel() == log.LevelDebug {
+			hasMax := hasMaximizeClientPre(activeWindow)
+			isOnPrimary := isWindowOnPrimaryScreen(activeWindow)
+			logger.Infof("hasMax: %v, isOnPrimary: %v", hasMax,
+				isOnPrimary)
+		}
+
+		if isWindowOnPrimaryScreen(activeWindow) &&
+			hasMaximizeClientPre(activeWindow) {
 			logger.Debug("active window is maximized client")
 			trigger = TriggerHide
 		}

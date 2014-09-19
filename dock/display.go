@@ -7,20 +7,32 @@ import (
 
 var displayRect xproto.Rectangle = xproto.Rectangle{0, 0, 0, 0}
 
-func init() {
-	display, err := display.NewDisplay("com.deepin.daemon.Display",
-		"/com/deepin/daemon/Display")
+func initDisplay() bool {
+	dpy, err := display.NewDisplay(
+		"com.deepin.daemon.Display",
+		"/com/deepin/daemon/Display",
+	)
 	if err != nil {
-		logger.Error("connect failed:", err)
-		return
+		logger.Error("connect to display failed:", err)
+		return false
 	}
-	setDisplayRect(display.PrimaryRect.Get())
-	display.ConnectPrimaryChanged(setDisplayRect)
+	// to avoid get PrimaryRect failed
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Warning("Recovered in initDisplay", r)
+		}
+	}()
+	setDisplayRect(dpy.PrimaryRect.Get())
+	dpy.ConnectPrimaryChanged(setDisplayRect)
+	return true
 }
 
 func setDisplayRect(rect []interface{}) {
-	displayRect.X = rect[0].(int16)
-	displayRect.Y = rect[1].(int16)
-	displayRect.Width = rect[2].(uint16)
-	displayRect.Height = rect[3].(uint16)
+	if len(rect) != 4 {
+		return
+	}
+	displayRect.X, _ = rect[0].(int16)
+	displayRect.Y, _ = rect[1].(int16)
+	displayRect.Width, _ = rect[2].(uint16)
+	displayRect.Height, _ = rect[3].(uint16)
 }
