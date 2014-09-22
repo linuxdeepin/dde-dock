@@ -140,7 +140,7 @@ void _init()
     }
     if (suffix_regex == NULL) {
         g_warning("Can't build suffix_regex, use fallback config!");
-        suffix_regex = g_regex_new( "((-|\\.)?bin$)|(\\.py$)", G_REGEX_OPTIMIZE, 0, NULL);
+        suffix_regex = g_regex_new( "((?:-|\\.)?bin$)|(\\.py$)|(_)", G_REGEX_OPTIMIZE, 0, NULL);
     }
     g_key_file_free(process_regex);
 
