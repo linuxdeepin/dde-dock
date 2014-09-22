@@ -285,11 +285,8 @@ func (kbdManager *KeyboardManager) setGreeterLayoutList(list []string) {
 
 func (kbdManager *KeyboardManager) init() {
 	if !GetManager().versionRight {
-		delay := kbdManager.RepeatDelay.Get()
-		interval := kbdManager.RepeatInterval.Get()
-
-		kbdSettings.SetUint(KBD_KEY_DELAY, int(interval))
-		kbdSettings.SetUint(KBD_KEY_REPEAT_INTERVAL, int(delay))
+		kbdSettings.Reset(KBD_KEY_DELAY)
+		kbdSettings.Reset(KBD_KEY_REPEAT_INTERVAL)
 	}
 
 	setKeyboardRepeat(kbdManager.RepeatEnabled.Get(),
