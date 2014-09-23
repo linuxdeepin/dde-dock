@@ -34,7 +34,7 @@ func NewEntryProxyer(entryId string) (*EntryProxyer, error) {
 			Data:    core.Data.Get(),
 		}
 		e.core.ConnectDataChanged(func(key, value string) {
-			if e.DataChanged != nil {
+			if e.DataChanged != nil && e.Data != nil {
 				e.Data[key] = value
 				e.DataChanged(key, value)
 			}

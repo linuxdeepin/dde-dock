@@ -199,7 +199,7 @@ func (m *ClientManager) listenRootWindow() {
 			}
 			break
 		}
-		ENTRY_MANAGER.runtimeAppChangged(list)
+		ENTRY_MANAGER.runtimeAppChanged(list)
 	}
 
 	xwindow.New(XU, XU.RootWin()).Listen(xproto.EventMaskPropertyChange)
@@ -210,7 +210,8 @@ func (m *ClientManager) listenRootWindow() {
 		case _NET_ACTIVE_WINDOW:
 			var err error
 			if activeWindow, err = ewmh.ActiveWindowGet(XU); err == nil {
-				appId := find_app_id_by_xid(activeWindow)
+				appId := find_app_id_by_xid(activeWindow,
+					DisplayModeType(setting.GetDisplayMode()))
 				logger.Debug("current active window:", appId)
 				if rApp, ok := ENTRY_MANAGER.runtimeApps[appId]; ok {
 					rApp.setLeader(activeWindow)

@@ -358,12 +358,14 @@ func lookthroughProc(name string) uint {
 	return 0
 }
 
-func find_app_id_by_xid(xid xproto.Window) string {
+func find_app_id_by_xid(xid xproto.Window, displayMode DisplayModeType) string {
 	var appId string
-	if id, err := xprop.PropValStr(xprop.GetProperty(XU, xid, "_DDE_DOCK_APP_ID")); err == nil {
-		appId = strings.Replace(strings.ToLower(id), "_", "-", -1)
-		logger.Debug("get app id from _DDE_DOCK_APP_ID", appId)
-		return appId
+	if displayMode == DisplayModeModernMode {
+		if id, err := xprop.PropValStr(xprop.GetProperty(XU, xid, "_DDE_DOCK_APP_ID")); err == nil {
+			appId = strings.Replace(strings.ToLower(id), "_", "-", -1)
+			logger.Debug("get app id from _DDE_DOCK_APP_ID", appId)
+			return appId
+		}
 	}
 	wmClass, _ := icccm.WmClassGet(XU, xid)
 	var wmInstance, wmClassName string
@@ -566,12 +568,16 @@ func (app *RuntimeApp) updateState(xid xproto.Window) {
 // }
 
 func (app *RuntimeApp) updateAppid(xid xproto.Window) {
-	if app.Id != find_app_id_by_xid(xid) {
+	newAppId := find_app_id_by_xid(
+		xid,
+		DisplayModeType(setting.GetDisplayMode()),
+	)
+	if app.Id != newAppId {
 		app.detachXid(xid)
 		if newApp := ENTRY_MANAGER.createRuntimeApp(xid); newApp != nil {
 			newApp.attachXid(xid)
 		}
-		fmt.Println("APP:", app.Id, "Changed to..", find_app_id_by_xid(xid))
+		fmt.Println("APP:", app.Id, "Changed to..", newAppId)
 		//TODO: Destroy
 	}
 }
@@ -597,9 +603,9 @@ func (app *RuntimeApp) Activate(x, y int32) error {
 				s.State = icccm.StateIconic
 				iconifyWindow(app.CurrentInfo.Xid)
 			} else {
+				logger.Warningf("activeXid is 0x%x, current is 0x%x", activeXid,
+					app.CurrentInfo.Xid)
 				if activeXid == app.CurrentInfo.Xid {
-					//ewmh.ActiveWindowReq(XU, app.findNextLeader())
-
 					x := app.findNextLeader()
 					ewmh.ActiveWindowReq(XU, x)
 				}
@@ -659,6 +665,7 @@ func (app *RuntimeApp) detachXid(xid xproto.Window) {
 				for _, nextInfo := range app.xids {
 					if nextInfo != nil {
 						app.CurrentInfo = nextInfo
+						app.updateState(app.CurrentInfo.Xid)
 						app.notifyChanged()
 					} else {
 						ENTRY_MANAGER.destroyRuntimeApp(app)

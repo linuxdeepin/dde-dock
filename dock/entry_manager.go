@@ -59,7 +59,7 @@ func (m *EntryManager) listenDockedApp() {
 	})
 }
 
-func (m *EntryManager) runtimeAppChangged(xids []xproto.Window) {
+func (m *EntryManager) runtimeAppChanged(xids []xproto.Window) {
 	willBeDestroied := make(map[string]*RuntimeApp)
 	for _, app := range m.runtimeApps {
 		willBeDestroied[app.Id] = app
@@ -68,7 +68,8 @@ func (m *EntryManager) runtimeAppChangged(xids []xproto.Window) {
 	// 1. create newfound RuntimeApps
 	for _, xid := range xids {
 		if isNormalWindow(xid) {
-			appId := find_app_id_by_xid(xid)
+			appId := find_app_id_by_xid(xid,
+				DisplayModeType(setting.GetDisplayMode()))
 			if rApp, ok := m.runtimeApps[appId]; ok {
 				willBeDestroied[appId] = nil
 				rApp.attachXid(xid)
@@ -145,7 +146,8 @@ func (m *EntryManager) updateEntry(appId string, nApp *NormalApp, rApp *RuntimeA
 }
 
 func (m *EntryManager) createRuntimeApp(xid xproto.Window) *RuntimeApp {
-	appId := find_app_id_by_xid(xid)
+	appId := find_app_id_by_xid(xid,
+		DisplayModeType(setting.GetDisplayMode()))
 	if appId == "" {
 		logger.Debug("get appid for", xid, "failed")
 		return nil
