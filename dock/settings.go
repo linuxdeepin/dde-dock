@@ -20,6 +20,7 @@ const (
 	HideModeKeepShowing HideModeType = iota
 	HideModeKeepHidden
 	HideModeAutoHide
+	HideModeSmartHide
 )
 
 func (t HideModeType) String() string {
@@ -30,6 +31,8 @@ func (t HideModeType) String() string {
 		return "Keep hidden mode"
 	case HideModeAutoHide:
 		return "Auto hide mode"
+	case HideModeSmartHide:
+		return "Smart hide mode"
 	default:
 		return "Unknown mode"
 	}
@@ -90,7 +93,7 @@ func (s *Setting) init() {
 
 		value := HideModeType(g.GetEnum(key))
 		s.hideMode = value
-		logger.Info(key, "changed to", key)
+		logger.Debug(key, "changed to", key)
 		s.HideModeChanged(int32(value))
 	})
 
@@ -99,7 +102,7 @@ func (s *Setting) init() {
 		defer s.displayModeLock.Unlock()
 
 		value := DisplayModeType(g.GetEnum(key))
-		logger.Info(key, "changed to", value)
+		logger.Debug(key, "changed to", value)
 
 		s.displayMode = value
 
@@ -140,9 +143,9 @@ func (s *Setting) init() {
 			}
 
 			for xid, _ := range newApp.xids {
-				logger.Warningf("through new app xids")
+				logger.Debugf("through new app xids")
 				if activeXid == xid {
-					logger.Warningf("0x%x(a), 0x%x(x)",
+					logger.Debugf("0x%x(a), 0x%x(x)",
 						activeXid, xid)
 					newApp.setLeader(xid)
 					newApp.updateState(xid)
@@ -151,6 +154,8 @@ func (s *Setting) init() {
 				}
 			}
 		}
+
+		dockProperty.updateDockHeight(value)
 		s.DisplayModeChanged(int32(value))
 	})
 }

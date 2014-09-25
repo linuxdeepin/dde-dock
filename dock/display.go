@@ -23,7 +23,16 @@ func initDisplay() bool {
 		}
 	}()
 	setDisplayRect(dpy.PrimaryRect.Get())
-	dpy.ConnectPrimaryChanged(setDisplayRect)
+	dpy.ConnectPrimaryChanged(func(rect []interface{}) {
+		setDisplayRect(rect)
+
+		for _, app := range ENTRY_MANAGER.runtimeApps {
+			for _, winInfo := range app.xids {
+				winInfo.OverlapDock = isWindowOverlapDock(winInfo.Xid)
+			}
+		}
+		hideModemanager.UpdateState()
+	})
 	return true
 }
 

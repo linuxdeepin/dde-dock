@@ -10,7 +10,7 @@ import "path/filepath"
 import "strings"
 
 var (
-	ENTRY_MANAGER = initEntryManager()
+	ENTRY_MANAGER = NewEntryManager()
 )
 
 type EntryManager struct {
@@ -19,12 +19,11 @@ type EntryManager struct {
 	appEntries  map[string]*AppEntry
 }
 
-func initEntryManager() *EntryManager {
+func NewEntryManager() *EntryManager {
 	m := &EntryManager{}
 	m.runtimeApps = make(map[string]*RuntimeApp)
 	m.normalApps = make(map[string]*NormalApp)
 	m.appEntries = make(map[string]*AppEntry)
-	m.listenDockedApp()
 	return m
 }
 
@@ -204,6 +203,7 @@ func (m *EntryManager) destroyNormalApp(nApp *NormalApp) {
 }
 
 func initialize() {
+	ENTRY_MANAGER.listenDockedApp()
 	for _, id := range loadAll() {
 		id = strings.ToLower(strings.Replace(id, "_", "-", -1))
 		logger.Debug("load", id)

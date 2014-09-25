@@ -20,18 +20,24 @@ import (
 	"pkg.linuxdeepin.com/lib/glib-2.0"
 	"strconv"
 	"strings"
+	"sync"
+	"time"
 )
 
 var DOCKED_APP_MANAGER *dock.DockedAppManager
+var updateConfigureTimer *time.Timer
+var updateSmartHideTimer *time.Timer
 
 type WindowInfo struct {
-	Xid   xproto.Window
-	Title string
-	Icon  string
+	Xid         xproto.Window
+	Title       string
+	Icon        string
+	OverlapDock bool
 }
 
 type RuntimeApp struct {
-	Id string
+	Id   string
+	lock sync.RWMutex
 	//TODO: multiple xid window
 	xids map[xproto.Window]*WindowInfo
 
@@ -690,6 +696,16 @@ func (app *RuntimeApp) detachXid(xid xproto.Window) {
 	}
 }
 
+func (app *RuntimeApp) updateOverlap(xid xproto.Window) {
+	if _, ok := app.xids[xid]; ok {
+		overlap := !isHiddenPre(xid) && onCurrentWorkspacePre(xid) && isWindowOverlapDock(xid)
+		if overlap != app.xids[xid].OverlapDock {
+			app.xids[xid].OverlapDock = overlap
+			hideModemanager.UpdateState()
+		}
+	}
+}
+
 func (app *RuntimeApp) attachXid(xid xproto.Window) {
 	logger.Debugf("attach 0x%x to %s", xid, app.Id)
 	if _, ok := app.xids[xid]; ok {
@@ -706,6 +722,8 @@ func (app *RuntimeApp) attachXid(xid xproto.Window) {
 		app.detachXid(xid)
 	}).Connect(XU, xid)
 	xevent.PropertyNotifyFun(func(XU *xgbutil.XUtil, ev xevent.PropertyNotifyEvent) {
+		app.lock.Lock()
+		defer app.lock.Unlock()
 		switch ev.Atom {
 		case ATOM_WINDOW_ICON:
 			app.updateIcon(xid)
@@ -722,6 +740,18 @@ func (app *RuntimeApp) attachXid(xid xproto.Window) {
 				app.updateState(xid)
 			}
 			app.notifyChanged()
+			if HideModeType(setting.GetHideMode()) != HideModeSmartHide {
+				break
+			}
+
+			if updateSmartHideTimer != nil {
+				updateSmartHideTimer.Stop()
+				updateSmartHideTimer = nil
+			}
+			updateSmartHideTimer = time.AfterFunc(time.Millisecond*20, func() {
+				app.updateOverlap(xid)
+				updateSmartHideTimer = nil
+			})
 		// case ATOM_DEEPIN_WINDOW_VIEWPORTS:
 		// 	app.updateViewports(xid)
 		case ATOM_WINDOW_TYPE:
@@ -733,7 +763,24 @@ func (app *RuntimeApp) attachXid(xid xproto.Window) {
 			app.notifyChanged()
 		}
 	}).Connect(XU, xid)
+	update := func(xid xproto.Window) {
+		app.lock.Lock()
+		defer app.lock.Unlock()
+		app.updateOverlap(xid)
+	}
+	xevent.ConfigureNotifyFun(func(XU *xgbutil.XUtil, ev xevent.ConfigureNotifyEvent) {
+		app.lock.Lock()
+		defer app.lock.Unlock()
+		if updateConfigureTimer != nil {
+			updateConfigureTimer.Stop()
+			updateConfigureTimer = nil
+		}
+		updateConfigureTimer = time.AfterFunc(time.Millisecond*20, func() {
+			update(ev.Window)
+		})
+	}).Connect(XU, xid)
 	app.xids[xid] = winfo
+	update(xid)
 	app.updateIcon(xid)
 	app.updateWmName(xid)
 	app.updateState(xid)

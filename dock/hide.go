@@ -83,14 +83,12 @@ func (m *HideStateManager) UpdateState() {
 		logger.Info("in ToggleShow")
 		return
 	}
-	var trigger int32
+	trigger := TriggerShow
 	switch HideModeType(setting.GetHideMode()) {
 	case HideModeKeepShowing:
 		logger.Debug("KeepShowing Mode")
-		trigger = TriggerShow
 	case HideModeAutoHide:
 		logger.Debug("AutoHide Mode")
-		trigger = TriggerShow
 
 		<-time.After(time.Millisecond * 100)
 		if region.mouseInRegion() {
@@ -115,11 +113,35 @@ func (m *HideStateManager) UpdateState() {
 		<-time.After(time.Millisecond * 100)
 		if region.mouseInRegion() {
 			logger.Debug("MouseInDockRegion")
-			trigger = TriggerShow
 			break
 		}
 
 		trigger = TriggerHide
+	case HideModeSmartHide:
+		logger.Debug("SmartHide Mode")
+
+		<-time.After(time.Millisecond * 100)
+		if region.mouseInRegion() {
+			logger.Debug("mouse in region")
+			break
+		}
+
+		if isWindowOnPrimaryScreen(activeWindow) &&
+			hasMaximizeClientPre(activeWindow) {
+			logger.Debug("active window is maximized client")
+			trigger = TriggerHide
+			break
+		}
+
+		for _, app := range ENTRY_MANAGER.runtimeApps {
+			for _, winInfo := range app.xids {
+				if winInfo.OverlapDock {
+					logger.Warning("overlap dock")
+					trigger = TriggerHide
+					break
+				}
+			}
+		}
 	}
 
 	if isLauncherShown {

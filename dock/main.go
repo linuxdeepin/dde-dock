@@ -13,6 +13,7 @@ var (
 	setting         *Setting          = nil
 	hideModemanager *HideStateManager = nil
 	dpy             *display.Display  = nil
+	dockProperty    *DockProperty     = nil
 )
 
 func Stop() {
@@ -34,6 +35,12 @@ func Start() {
 	}
 
 	var err error
+	dockProperty = NewDockProperty()
+	dbus.InstallOnSession(dockProperty)
+	if err != nil {
+		logger.Errorf("register dbus interface failed: %v", err)
+		os.Exit(1)
+	}
 
 	m := NewEntryProxyerManager()
 	err = dbus.InstallOnSession(m)
@@ -60,6 +67,8 @@ func Start() {
 		Stop()
 		return
 	}
+
+	dockProperty.updateDockHeight(DisplayModeType(setting.GetDisplayMode()))
 
 	hideModemanager =
 		NewHideStateManager(HideModeType(setting.GetHideMode()))

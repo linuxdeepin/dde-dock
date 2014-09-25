@@ -176,6 +176,32 @@ func isWindowOnPrimaryScreen(xid xproto.Window) bool {
 	return isOnPrimary
 }
 
+func isWindowOverlapDock(xid xproto.Window) bool {
+	win := xwindow.New(XU, xid)
+	rect, err := win.DecorGeometry()
+	if err != nil {
+		logger.Warning(err)
+	}
+
+	winX := int32(rect.X())
+	winY := int32(rect.Y())
+	winWidth := int32(rect.Width())
+	winHeight := int32(rect.Height())
+
+	dockX := int32(displayRect.X) + (int32(displayRect.Width)-
+		dockProperty.PanelWidth)/2
+	dockY := int32(displayRect.Y) + int32(displayRect.Height) -
+		dockProperty.Height
+	dockWidth := int32(displayRect.Width)
+	if DisplayModeType(setting.GetDisplayMode()) == DisplayModeModernMode {
+		dockWidth = dockProperty.PanelWidth
+	}
+
+	// TODO: dock on the other side like top, left.
+	return dockY < winY+winHeight &&
+		dockX < winX+winWidth && dockX+dockWidth > winX
+}
+
 func (m *ClientManager) listenRootWindow() {
 	var update = func() {
 		list, err := ewmh.ClientListGet(XU)
@@ -234,6 +260,10 @@ func (m *ClientManager) listenRootWindow() {
 
 				lastActive = appId
 				m.ActiveWindowChanged(uint32(activeWindow))
+			}
+
+			if HideModeType(setting.GetHideMode()) == HideModeSmartHide {
+				hideModemanager.UpdateState()
 			}
 		case _NET_SHOWING_DESKTOP:
 			m.ShowingDesktopChanged()
