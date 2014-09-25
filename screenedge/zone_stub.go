@@ -47,7 +47,7 @@ func (op *Manager) listenSignal() {
 		registerZoneArea()
 	})
 
-	areaObj.ConnectMotionInto(func(x, y, id int32) {
+	areaObj.ConnectCursorInto(func(x, y int32, id string) {
 		if id != areaId {
 			return
 		}

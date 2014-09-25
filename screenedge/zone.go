@@ -43,7 +43,7 @@ const (
 )
 
 var (
-	areaId int32
+	areaId string
 
 	topLeftArea     areaRange
 	bottomLeftArea  areaRange
