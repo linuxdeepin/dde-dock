@@ -12,7 +12,7 @@ import (
 )
 
 type SystemInfo struct {
-	Version    int32
+	Version    string
 	Processor  string
 	MemoryCap  uint64
 	SystemType int64
@@ -43,19 +43,18 @@ func IsFileNotExist(filename string) bool {
 	return false
 }
 
-func GetVersion() int32 {
+func GetVersion() (version string) {
 	if IsFileNotExist(_VERSION_ETC) {
-		return 0
+		return ""
 	}
 	contents, err := ioutil.ReadFile(_VERSION_ETC)
 	if err != nil {
 		logger.Infof("Read File Failed In Get Version: %s",
 			err)
-		return 0
+		return ""
 	}
 
 	lines := strings.Split(string(contents), "\n")
-	version := int32(0)
 	for _, line := range lines {
 		if strings.Contains(line, _VERSION_KEY) {
 			vars := strings.Split(line, "=")
@@ -63,13 +62,12 @@ func GetVersion() int32 {
 			if l < 2 {
 				break
 			}
-			num, _ := strconv.ParseUint(vars[1], 10, 64)
-			version = int32(num)
+			version = vars[1]
 			break
 		}
 	}
 
-	return version
+	return
 }
 
 func GetCpuInfo() string {
