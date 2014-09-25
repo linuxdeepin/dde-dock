@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# lexross <its4moi@gmail.com>, 2014
 # ZereoX <jay_123_1@hotmail.com>, 2014
 # Tristan Denni <tristan.denni@viacesi.fr>, 2014
 msgid ""
@@ -10,8 +11,8 @@ msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-08-21 11:42+0800\n"
-"PO-Revision-Date: 2014-08-22 04:41+0000\n"
-"Last-Translator: szd_liufei <liufei@linuxdeepin.com>\n"
+"PO-Revision-Date: 2014-09-03 08:49+0000\n"
+"Last-Translator: lexross <its4moi@gmail.com>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/dde-daemon/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,11 +22,11 @@ msgstr ""
 
 #: ../../accounts/account_ifc.go:185
 msgid "The username is invalid."
-msgstr ""
+msgstr "Le nom d'utilisateur est incorrect."
 
 #: ../../accounts/account_ifc.go:189
 msgid "The username exists."
-msgstr ""
+msgstr "Le nom d'utilisateur existe déjà."
 
 #: ../../bluetooth/bluez_profile.go:31
 msgid "Serial port"
@@ -77,13 +78,13 @@ msgstr "Message de notification"
 
 #: ../../datetime/datetime.go:127 ../../langselect/ifc.go:39
 msgid "Language is changing, please wait"
-msgstr ""
+msgstr "Changement de langue, veuillez patienter"
 
 #: ../../datetime/set_locale.go:58 ../../langselect/locale.go:245
 msgid ""
 "Language has been changed successfully and will be effective after logged "
 "out."
-msgstr ""
+msgstr "Le changement de langue s'est déroulé avec succès et sera effectif après déconnexion."
 
 #: ../../datetime/set_locale.go:60 ../../langselect/locale.go:247
 msgid "Language failed to change, please try later."
@@ -867,7 +868,7 @@ msgstr "Stanley"
 
 #: ../../datetime/zone_utc_list.go:248
 msgid "Brazil East"
-msgstr ""
+msgstr "Bresil Est"
 
 #: ../../datetime/zone_utc_list.go:251
 msgid "South Georgia"
@@ -2176,7 +2177,7 @@ msgstr "Traducteur de Deepin"
 
 #: ../../keybinding/id_desc_list.go:65
 msgid "Switch Layout"
-msgstr ""
+msgstr "Changer de périphérique "
 
 #: ../../keybinding/id_desc_list.go:73
 msgid "Calculator"
@@ -2336,7 +2337,7 @@ msgstr "Ouvrir le dossier"
 
 #: ../../mime/default_media.go:79
 msgid "Run Software"
-msgstr ""
+msgstr "Lancer l'application"
 
 #: ../../network/manager_connections.go:203
 #: ../../network/nm_custom_type.go:178
@@ -2672,7 +2673,7 @@ msgstr "Mot de passe"
 
 #: ../../network/nm_setting_vpn_openvpn.go:253
 msgid "Certificates with Password (TLS)"
-msgstr ""
+msgstr "Certificats avec mot de passe (TLS)"
 
 #: ../../network/nm_setting_vpn_openvpn.go:254
 msgid "Static Key"
@@ -2912,11 +2913,11 @@ msgstr "Ouvrir"
 
 #: ../../network/state_handler.go:34
 msgid "Device state changed, unknown reason."
-msgstr ""
+msgstr "L'état du périphérique a changé pour une raison inconnue."
 
 #: ../../network/state_handler.go:35
 msgid "Device state changed."
-msgstr ""
+msgstr "L'état du périphérique a changé."
 
 #: ../../network/state_handler.go:36
 msgid "The device is now managed."
@@ -3095,7 +3096,7 @@ msgstr "Le délai de la connexion Bluetooth est dépassé ou la connexion a éch
 
 #: ../../network/state_handler.go:79
 msgid "GSM Modem's SIM Card was not inserted."
-msgstr ""
+msgstr "La carte SIM du Modem GSM n'est pas insérée."
 
 #: ../../network/state_handler.go:80
 msgid "GSM Modem's SIM PIN required."
@@ -3123,7 +3124,7 @@ msgstr "Problème avec la RFC 2684 Ethernet sur pont ADSL."
 
 #: ../../network/state_handler.go:86
 msgid "ModemManager did not run or quitted unexpectedly."
-msgstr ""
+msgstr "ModemManager n'est pas en cours d'exécution ou a quitté de manière inattendue."
 
 #: ../../network/state_handler.go:87
 msgid "The 802.11 Wi-Fi network could not be found."
@@ -3135,15 +3136,15 @@ msgstr "Une seconde connexion sur la connexion principale a échoué."
 
 #: ../../network/state_handler.go:91
 msgid "Network cable is unplugged."
-msgstr ""
+msgstr "Le cable réseau n'est pas branché."
 
 #: ../../network/state_handler.go:94
 msgid "Activate VPN connection failed, unknown reason."
-msgstr ""
+msgstr "L'activation de la connection VPN a échoué pour une raison inconnue."
 
 #: ../../network/state_handler.go:95
 msgid "Activate VPN connection failed."
-msgstr ""
+msgstr "La connection VPN a échoué."
 
 #: ../../network/state_handler.go:96
 msgid "The VPN connection changed state due to disconnection from users."
@@ -3200,11 +3201,11 @@ msgstr "Déconnecté"
 
 #: ../../network/utils_notify.go:64
 msgid "Airplan mode enabled."
-msgstr ""
+msgstr "Mode avion activé."
 
 #: ../../network/utils_notify.go:68
 msgid "You are now offline."
-msgstr ""
+msgstr "Vous êtes maintenant hors connection."
 
 #: ../../network/utils_notify.go:72
 msgid "Access Point mode is not supported by this device."
@@ -3218,25 +3219,25 @@ msgstr "Réseau"
 #: ../../network/utils_notify.go:76
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr ""
+msgstr "Le connecteur de la carte WIFI est désactivé, veuillez l'activer lorsque nécessaire."
 
 #: ../../network/utils_notify.go:81
 msgid "System proxy is set successfully."
-msgstr ""
+msgstr "Le proxy a été réglé avec succès."
 
 #: ../../network/utils_notify.go:85
 msgid "System proxy has been cancelled."
-msgstr ""
+msgstr "Le proxy a été annulé."
 
 #: ../../power/upower.go:90
 msgid "Abnormal battery power"
-msgstr ""
+msgstr "Puissance de batterie anormale"
 
 #: ../../power/upower.go:90
 msgid ""
 "Battery power can not be predicted, please save important documents properly"
 " and  not do important operations."
-msgstr ""
+msgstr "La puissance de la batterie ne peut être lue,veuillez sauvegarder vos documents et ne pas faire d'operations importantes."
 
 #: ../../power/upower.go:95 ../../power/upower.go:110
 msgid "Battery Critical Low"
@@ -3248,7 +3249,7 @@ msgstr "L'ordinateur était en veuille, veuillez le brancher."
 
 #: ../../power/upower.go:110
 msgid "Please plug in, or computer will be in suspend mode."
-msgstr ""
+msgstr "Veuillez brancher votre ordinateur svp, sinon il va se mettre en veille."
 
 #: ../../power/upower.go:123
 msgid "Battery Low"

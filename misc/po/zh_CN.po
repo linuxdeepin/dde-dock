@@ -3,12 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# szd_liufei <liufei@linuxdeepin.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-08-21 11:42+0800\n"
-"PO-Revision-Date: 2014-08-22 06:30+0000\n"
+"PO-Revision-Date: 2014-09-04 08:01+0000\n"
 "Last-Translator: szd_liufei <liufei@linuxdeepin.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/projects/p/dde-daemon/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -1541,7 +1542,7 @@ msgstr "留尼旺岛"
 
 #: ../../datetime/zone_utc_list.go:439
 msgid "W-SU"
-msgstr ""
+msgstr "W-SU"
 
 #: ../../datetime/zone_utc_list.go:441
 msgid "Kabul"
@@ -1549,7 +1550,7 @@ msgstr "喀布尔"
 
 #: ../../datetime/zone_utc_list.go:443
 msgid "Kiritimati"
-msgstr ""
+msgstr "Kiritimati"
 
 #: ../../datetime/zone_utc_list.go:445
 msgid "Davis"
@@ -2057,7 +2058,7 @@ msgstr "瓦利斯"
 
 #: ../../datetime/zone_utc_list.go:597
 msgid "NZ-CHAT"
-msgstr ""
+msgstr "NZ-CHAT"
 
 #: ../../datetime/zone_utc_list.go:598
 msgid "Chatham"

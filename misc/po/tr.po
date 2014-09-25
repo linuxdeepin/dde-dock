@@ -3,14 +3,16 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Sinan Eldem, 2014
 # yakup <mutouk@yandex.ru>, 2014
+# iron_man <yunus_bakir92@hotmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-08-21 11:42+0800\n"
-"PO-Revision-Date: 2014-08-22 21:10+0000\n"
-"Last-Translator: yakup <mutouk@yandex.ru>\n"
+"PO-Revision-Date: 2014-09-13 22:27+0000\n"
+"Last-Translator: iron_man <yunus_bakir92@hotmail.com>\n"
 "Language-Team: Turkish (http://www.transifex.com/projects/p/dde-daemon/language/tr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -82,7 +84,7 @@ msgstr "Dil değiştiriliyor, lütfen bekleyin"
 msgid ""
 "Language has been changed successfully and will be effective after logged "
 "out."
-msgstr "Dil değişimi başarılı ve çıkış yapıldıktan sonra etkin olacak."
+msgstr "Dil başarıyla değiştirildi ve çıkış yapıldıktan sonra geçerli olacak."
 
 #: ../../datetime/set_locale.go:60 ../../langselect/locale.go:247
 msgid "Language failed to change, please try later."
@@ -2911,11 +2913,11 @@ msgstr "Aç"
 
 #: ../../network/state_handler.go:34
 msgid "Device state changed, unknown reason."
-msgstr "Bilinmeyen bir nedenle, cihaz durumu değişti."
+msgstr "Bilinmeyen bir nedenle, aygıt durumu değişti."
 
 #: ../../network/state_handler.go:35
 msgid "Device state changed."
-msgstr "Cihaz durumu değişti."
+msgstr "Aygıt durumu değişti."
 
 #: ../../network/state_handler.go:36
 msgid "The device is now managed."
@@ -3138,11 +3140,11 @@ msgstr "Ağ kablosu takılı değil."
 
 #: ../../network/state_handler.go:94
 msgid "Activate VPN connection failed, unknown reason."
-msgstr "Activate VPN connection failed, unknown reason."
+msgstr "Bilinmeyen bir sebepte ötürü, VPN bağlantısı kurulamadı."
 
 #: ../../network/state_handler.go:95
 msgid "Activate VPN connection failed."
-msgstr "Activate VPN connection failed."
+msgstr "VPN bağlantısı kurulamadı."
 
 #: ../../network/state_handler.go:96
 msgid "The VPN connection changed state due to disconnection from users."
@@ -3203,7 +3205,7 @@ msgstr "Uçak modu etkin."
 
 #: ../../network/utils_notify.go:68
 msgid "You are now offline."
-msgstr "Şimdi çevrimdışısınız."
+msgstr "Şu anda çevrimdışısınız."
 
 #: ../../network/utils_notify.go:72
 msgid "Access Point mode is not supported by this device."

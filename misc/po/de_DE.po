@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-08-21 11:42+0800\n"
-"PO-Revision-Date: 2014-08-25 10:20+0000\n"
+"PO-Revision-Date: 2014-09-04 11:17+0000\n"
 "Last-Translator: webcrush <chris.plescher@yahoo.de>\n"
 "Language-Team: German (Germany) (http://www.transifex.com/projects/p/dde-daemon/language/de_DE/)\n"
 "MIME-Version: 1.0\n"
@@ -87,7 +87,7 @@ msgstr "Sprache wird geändert, bitte warten"
 msgid ""
 "Language has been changed successfully and will be effective after logged "
 "out."
-msgstr ""
+msgstr "Die Sprache wurde erfolgreich geändert und wird nach dem nächsten Abmelden angewandt."
 
 #: ../../datetime/set_locale.go:60 ../../langselect/locale.go:247
 msgid "Language failed to change, please try later."
@@ -3222,15 +3222,15 @@ msgstr "Netzwerk"
 #: ../../network/utils_notify.go:76
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr ""
+msgstr "Der Hardware-Schalter der WLAN-Karte ist aus, bitte anschalten, wenn benötigt."
 
 #: ../../network/utils_notify.go:81
 msgid "System proxy is set successfully."
-msgstr ""
+msgstr "System-Proxy wurde erfolgreich eingestellt."
 
 #: ../../network/utils_notify.go:85
 msgid "System proxy has been cancelled."
-msgstr ""
+msgstr "System-Proxy wurde entfernt."
 
 #: ../../power/upower.go:90
 msgid "Abnormal battery power"
@@ -3240,7 +3240,7 @@ msgstr "Fehlerhafter Batteriestrom"
 msgid ""
 "Battery power can not be predicted, please save important documents properly"
 " and  not do important operations."
-msgstr ""
+msgstr "Akkuladestand kann nicht vorhergesagt werden, bitte wichtige Dokumente speichern und keine wichtigen Aktionen durchführen."
 
 #: ../../power/upower.go:95 ../../power/upower.go:110
 msgid "Battery Critical Low"
@@ -3252,7 +3252,7 @@ msgstr "Der Computer war gesperrt, bitte erneut verbinden."
 
 #: ../../power/upower.go:110
 msgid "Please plug in, or computer will be in suspend mode."
-msgstr ""
+msgstr "Bitte Netzteil anschließen, sonst wird der Rechner in Bereitschaft versetzt."
 
 #: ../../power/upower.go:123
 msgid "Battery Low"
