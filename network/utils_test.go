@@ -608,3 +608,43 @@ supports-external-ui-mode=true
 	c.Check(authdialog, C.Equals, "/usr/lib/NetworkManager/nm-l2tp-auth-dialog")
 	c.Check(properties, C.Equals, "/usr/lib/libnm-l2tp-properties")
 }
+
+func (*testWrapper) TestStrToUuid(c *C.C) {
+	data := []struct {
+		addr, uuid string
+	}{
+		{"", "d41d8cd9-8f00-b204-e980-0998ecf8427e"},
+		{"你好", "7eca689f-0d33-89d9-dea6-6ae112e5cfd7"},
+		{"12:34:56:ab:cd:ef", "fdeaa9e5-b0a9-d05a-4c5a-624d6375bc0b"},
+		{"fe:dc:ba:65:43:21", "9d9bc082-cc1b-ddbb-c502-46d7499954d8"},
+		{"12:34:56:AB:CD:EF", "e2667717-e697-702d-7167-4bb2c5b9f58a"},
+		{"123456abcdef", "6f3b8ded-65bd-7a4d-b116-25ac84e579bb"},
+		{"12:34:56:ab:cd:xy", "c3701a18-6af4-aa02-7c54-53c09ea75e62"},
+		{":34:56:ab:cd:ef", "2f2aab1d-d983-2df8-fe91-8598e79fc009"},
+		{"123456abcdef1234abcd123456abcdef", "2fc8f109-cc40-de78-b0c4-1744b9ea62f0"},
+		{"123456abcdef1234abcd123456abcdef1234", "18a1eaac-9a1e-3828-8191-511317dc2921"},
+	}
+	for _, d := range data {
+		c.Check(d.uuid, C.Equals, strToUuid(d.addr))
+	}
+}
+
+func (*testWrapper) TestDoStrToUuid(c *C.C) {
+	data := []struct {
+		addr, uuid string
+	}{
+		{"", "00000000-0000-0000-0000-000000000000"},
+		{"你好", "00000000-0000-0000-0000-000000000000"},
+		{"12:34:56:ab:cd:ef", "00000000-0000-0000-0000-123456abcdef"},
+		{"fe:dc:ba:65:43:21", "00000000-0000-0000-0000-fedcba654321"},
+		{"12:34:56:AB:CD:EF", "00000000-0000-0000-0000-123456abcdef"},
+		{"123456abcdef", "00000000-0000-0000-0000-123456abcdef"},
+		{"12:34:56:ab:cd:xy", "00000000-0000-0000-0000-00123456abcd"},
+		{":34:56:ab:cd:ef", "00000000-0000-0000-0000-003456abcdef"},
+		{"123456abcdef1234abcd123456abcdef", "123456ab-cdef-1234-abcd-123456abcdef"},
+		{"123456abcdef1234abcd123456abcdef1234", "123456ab-cdef-1234-abcd-123456abcdef"},
+	}
+	for _, d := range data {
+		c.Check(d.uuid, C.Equals, doStrToUuid(d.addr))
+	}
+}

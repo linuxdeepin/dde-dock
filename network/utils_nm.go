@@ -25,6 +25,7 @@ import (
 	nm "dbus/org/freedesktop/networkmanager"
 	"fmt"
 	"pkg.linuxdeepin.com/lib/dbus"
+	. "pkg.linuxdeepin.com/lib/gettext"
 	"strings"
 )
 
@@ -132,6 +133,7 @@ func nmGeneralGetDeviceHwAddr(devPath dbus.ObjectPath) (hwAddr string, err error
 	case NM_DEVICE_TYPE_MODEM, NM_DEVICE_TYPE_ADSL:
 		// there is no hardware address for such devices
 		err = fmt.Errorf("there is no hardware address for device modem and adsl")
+		logger.Error(err)
 	default:
 		err = fmt.Errorf("unknown device type %d", devType)
 		logger.Error(err)
@@ -149,36 +151,28 @@ func nmGetDeviceIdentifiers() (devIds []string) {
 }
 func nmGeneralGetDeviceIdentifier(devPath dbus.ObjectPath) (devId string, err error) {
 	// get device unique identifier, use hardware address if exists
-	hwAddr, err := nmGeneralGetDeviceHwAddr(devPath)
-	if err == nil {
-		devId = hwAddr
-		return
-	}
-
 	dev, err := nmNewDevice(devPath)
 	if err != nil {
 		return
 	}
-
 	devType := dev.DeviceType.Get()
 	switch devType {
 	case NM_DEVICE_TYPE_MODEM:
 		modemPath := dev.Udi.Get()
 		devId, err = mmGetModemDeviceIdentifier(dbus.ObjectPath(modemPath))
 	case NM_DEVICE_TYPE_ADSL:
-		// TODO
 		err = fmt.Errorf("could not get adsl device identifier now")
 		logger.Error(err)
 	default:
-		err = fmt.Errorf("unknown device type %d", devType)
-		logger.Error(err)
+		devId, err = nmGeneralGetDeviceHwAddr(devPath)
 	}
 	return
 }
 
 // get device network speed (Mb/s)
-func nmGeneralGetDeviceSpeed(devPath dbus.ObjectPath) (speed string) {
-	speed = "-"
+func nmGeneralGetDeviceSpeed(devPath dbus.ObjectPath) (speedStr string) {
+	speed := uint32(0)
+	speedStr = Tr("Unknown")
 	nmDev, err := nmNewDevice(devPath)
 	if err != nil {
 		return
@@ -186,13 +180,16 @@ func nmGeneralGetDeviceSpeed(devPath dbus.ObjectPath) (speed string) {
 	switch t := nmDev.DeviceType.Get(); t {
 	case NM_DEVICE_TYPE_ETHERNET:
 		devWired, _ := nmNewDeviceWired(devPath)
-		speed = fmt.Sprintf("%d", devWired.Speed.Get())
+		speed = devWired.Speed.Get()
 	case NM_DEVICE_TYPE_WIFI:
 		devWireless, _ := nmNewDeviceWireless(devPath)
-		speed = fmt.Sprintf("%d", devWireless.Bitrate.Get()/1024)
+		speed = devWireless.Bitrate.Get() / 1024
 	default:
-		err = fmt.Errorf("not support to get device speed for device type %d", t)
+		err = fmt.Errorf("not support to get device speedStr for device type %d", t)
 		logger.Error(err)
+	}
+	if speed != 0 {
+		speedStr = fmt.Sprintf("%d Mb/s", speed)
 	}
 	return
 }
@@ -213,6 +210,37 @@ func nmGeneralIsDeviceManaged(devPath dbus.ObjectPath) bool {
 		}
 	}
 	return true
+}
+
+func nmGeneralGetDeviveSysPath(devPath dbus.ObjectPath) (sysPath string, err error) {
+	dev, err := nmNewDevice(devPath)
+	if err != nil {
+		return
+	}
+	switch dev.DeviceType.Get() {
+	case NM_DEVICE_TYPE_MODEM:
+		sysPath, _ = mmGetModemDeviceSysPath(dbus.ObjectPath(dev.Udi.Get()))
+	default:
+		sysPath = dev.Udi.Get()
+	}
+	return
+}
+
+func nmGeneralGetDeviceVendor(devPath dbus.ObjectPath) (vendor string) {
+	sysPath, err := nmGeneralGetDeviveSysPath(devPath)
+	if err != nil {
+		return
+	}
+	vendor = udevGetDeviceVendor(sysPath)
+	return
+}
+
+func nmGeneralIsUsbDevice(devPath dbus.ObjectPath) bool {
+	sysPath, err := nmGeneralGetDeviveSysPath(devPath)
+	if err != nil {
+		return false
+	}
+	return udevIsUsbDevice(sysPath)
 }
 
 // New network manager objects
@@ -561,16 +589,15 @@ func nmGetManagerState() (state uint32) {
 	return
 }
 
-func nmGetActiveConnectionByUuid(uuid string) (apath dbus.ObjectPath, ok bool) {
+func nmGetActiveConnectionByUuid(uuid string) (apath dbus.ObjectPath, err error) {
 	for _, apath = range nmGetActiveConnections() {
-		if ac, err := nmNewActiveConnection(apath); err == nil {
+		if ac, tmperr := nmNewActiveConnection(apath); tmperr == nil {
 			if ac.Uuid.Get() == uuid {
-				ok = true
 				return
 			}
 		}
 	}
-	ok = false
+	err = fmt.Errorf("active connection with uuid %s not found", uuid)
 	return
 }
 
@@ -680,31 +707,27 @@ func nmGetConnectionIds() (ids []string) {
 	return
 }
 
-func nmGetConnectionById(id string) (cpath dbus.ObjectPath, ok bool) {
+func nmGetConnectionById(id string) (cpath dbus.ObjectPath, err error) {
 	for _, cpath = range nmGetConnectionList() {
-		data, err := nmGetConnectionData(cpath)
-		if err != nil {
+		data, tmperr := nmGetConnectionData(cpath)
+		if tmperr != nil {
 			continue
 		}
 		if getSettingConnectionId(data) == id {
-			ok = true
 			return
 		}
 	}
-	ok = false
+	err = fmt.Errorf("connection with id %s not found", id)
 	return
 }
 
 func nmGetConnectionByUuid(uuid string) (cpath dbus.ObjectPath, err error) {
 	cpath, err = nmSettings.GetConnectionByUuid(uuid)
-	if err != nil {
-		logger.Error(err)
-		return
-	}
 	return
 }
 
 // get wireless connection by ssid, the connection with special hardware address is priority
+// TODO: use available connections instead
 func nmGetWirelessConnection(ssid []byte, devPath dbus.ObjectPath) (cpath dbus.ObjectPath, ok bool) {
 	var hwAddr string
 	if len(devPath) != 0 {

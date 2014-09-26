@@ -35,7 +35,7 @@ type device struct {
 	HwAddress string
 	Managed   bool
 	Vendor    string
-	UsbDevice bool
+	UsbDevice bool            // not works for modem
 	ActiveAp  dbus.ObjectPath // used for wireless device
 }
 
@@ -68,8 +68,8 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device) {
 		State:     nmDev.State.Get(),
 	}
 	dev.Managed = nmGeneralIsDeviceManaged(devPath)
-	dev.Vendor = udevGetDeviceVendor(nmDev.Udi.Get())
-	dev.UsbDevice = udevIsUsbDevice(nmDev.Udi.Get())
+	dev.Vendor = nmGeneralGetDeviceVendor(devPath)
+	dev.UsbDevice = nmGeneralIsUsbDevice(devPath)
 	dev.id, _ = nmGeneralGetDeviceIdentifier(devPath)
 
 	// add device config
@@ -98,6 +98,7 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device) {
 	case NM_DEVICE_TYPE_ETHERNET:
 		if nmDevWired, err := nmNewDeviceWired(dev.Path); err == nil {
 			dev.HwAddress = nmDevWired.HwAddress.Get()
+			m.ensureWiredConnectionExists(dev.Path)
 		}
 	case NM_DEVICE_TYPE_WIFI:
 		logger.Debug("add wireless device:", dev.Path)

@@ -44,3 +44,12 @@ func mmGetModemDeviceIdentifier(modemPath dbus.ObjectPath) (devId string, err er
 	devId = modem.DeviceIdentifier.Get()
 	return
 }
+
+func mmGetModemDeviceSysPath(modemPath dbus.ObjectPath) (sysPath string, err error) {
+	modem, err := mmNewModem(modemPath)
+	if err != nil {
+		return
+	}
+	sysPath = modem.Device.Get()
+	return
+}

@@ -222,19 +222,38 @@ func (m *Manager) GetSupportedConnectionTypes() (types []string) {
 	return supportedConnectionTypes
 }
 
-// TODO GetWiredConnectionUuid return connection uuid for target wired device.
+// GetWiredConnectionUuid return connection uuid for target wired device.
 func (m *Manager) GetWiredConnectionUuid(wiredDevPath dbus.ObjectPath) (uuid string) {
-	// check if target wired connection exists, if not, create one
-	id := Tr("Wired Connection") + " " + nmGetDeviceInterface(wiredDevPath)
-	// TODO check connection type, read only
-	cpath, ok := nmGetConnectionById(id)
-	if ok {
-		uuid, _ = nmGetConnectionUuid(cpath)
-	} else {
-		uuid = newWiredConnection(id)
+	// this interface will be called by front-end always if user try
+	// to connect or edit the wired connection, so ensure the
+	// connection exists here is a good choice
+	return m.ensureWiredConnectionExists(wiredDevPath)
+}
+
+func (m *Manager) ensureWiredConnectionExists(wiredDevPath dbus.ObjectPath) (uuid string) {
+	// check if wired connection for target device exists, if not, create one
+	hwAddr, err := nmGeneralGetDeviceHwAddr(wiredDevPath)
+	if err != nil {
+		return
+	}
+	uuid = strToUuid(hwAddr)
+	if _, err := nmGetConnectionByUuid(uuid); err != nil {
+		var id string
+		if nmGeneralIsUsbDevice(wiredDevPath) {
+			id = nmGeneralGetDeviceVendor(wiredDevPath)
+		} else {
+			id = Tr("Wired Connection")
+		}
+		newWiredConnectionForDevice(id, uuid, hwAddr)
 	}
 	return
 }
+
+//
+// func (m *Manager) getWiredConnectionId(wiredDevPath dbus.ObjectPath) (id string) {
+// TODO:
+// if is a usb device and is not the first
+// }
 
 func (m *Manager) GetActiveConnectionInfo() (acinfosJSON string, err error) {
 	var acinfos []activeConnectionInfo
@@ -497,8 +516,8 @@ func (m *Manager) ActivateConnection(uuid string, devPath dbus.ObjectPath) (err 
 
 // TODO
 func (m *Manager) DeactivateConnection(uuid string) (err error) {
-	apath, ok := nmGetActiveConnectionByUuid(uuid)
-	if !ok {
+	apath, err := nmGetActiveConnectionByUuid(uuid)
+	if err != nil {
 		// not found active connection with uuid
 		return
 	}

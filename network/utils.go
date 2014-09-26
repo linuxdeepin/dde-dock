@@ -23,7 +23,9 @@ package network
 
 import (
 	"encoding/json"
+	"fmt"
 	"pkg.linuxdeepin.com/lib/utils"
+	"strings"
 )
 
 func isStringInArray(s string, list []string) bool {
@@ -123,5 +125,28 @@ func byteArrayToStrPath(bytePath []byte) (path string) {
 		return
 	}
 	path = string(bytePath[:len(bytePath)-1])
+	return
+}
+
+// strToUuid convert any given string to md5, and then to uuid, for
+// example, a device address string "00:12:34:56:ab:cd" will be
+// converted to "1d417dad-8a98-fb90-e9df-016bd616d7dd"
+func strToUuid(str string) (uuid string) {
+	md5, _ := utils.SumStrMd5(str)
+	return doStrToUuid(md5)
+}
+func doStrToUuid(str string) (uuid string) {
+	str = strings.ToLower(str)
+	for i := 0; i < len(str); i++ {
+		if (str[i] >= '0' && str[i] <= '9') ||
+			(str[i] >= 'a' && str[i] <= 'f') {
+			uuid = uuid + string(str[i])
+		}
+	}
+	if len(uuid) < 32 {
+		misslen := 32 - len(uuid)
+		uuid = strings.Repeat("0", misslen) + uuid
+	}
+	uuid = fmt.Sprintf("%s-%s-%s-%s-%s", uuid[0:8], uuid[8:12], uuid[12:16], uuid[16:20], uuid[20:32])
 	return
 }

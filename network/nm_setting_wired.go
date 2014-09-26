@@ -22,6 +22,7 @@
 package network
 
 import (
+	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/utils"
 )
 
@@ -97,11 +98,19 @@ const (
 	NM_SETTING_WIRED_S390_OPTIONS = "s390-options"
 )
 
-func newWiredConnection(id string) (uuid string) {
-	logger.Debugf("new wired connection, id=%s", id)
+func newWiredConnection(id string) (uuid string, cpath dbus.ObjectPath, err error) {
+	logger.Debugf("new wired connection, id=%s, uuid=%s", id, uuid)
 	uuid = utils.GenUuid()
 	data := newWiredConnectionData(id, uuid)
-	nmAddConnection(data)
+	cpath, err = nmAddConnection(data)
+	return
+}
+
+func newWiredConnectionForDevice(id, uuid, hwAddr string) (cpath dbus.ObjectPath, err error) {
+	logger.Debugf("new wired connection, id=%s, uuid=%s, hwAddr=%s", id, uuid, hwAddr)
+	data := newWiredConnectionData(id, uuid)
+	setSettingWiredMacAddress(data, convertMacAddressToArrayByte(hwAddr))
+	cpath, err = nmAddConnection(data)
 	return
 }
 
