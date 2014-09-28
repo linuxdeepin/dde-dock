@@ -155,6 +155,7 @@ func isWindowOnPrimaryScreen(xid xproto.Window) bool {
 	var err error
 
 	win := xwindow.New(XU, xid)
+	// include shadow
 	gemo, err := win.DecorGeometry()
 	if err != nil {
 		return false
@@ -165,10 +166,13 @@ func isWindowOnPrimaryScreen(xid xproto.Window) bool {
 	displayRectWidth := (int)(displayRect.Width)
 	displayRectHeight := (int)(displayRect.Height)
 
-	isOnPrimary := gemo.X() >= displayRectX &&
-		gemo.X() < displayRectX+displayRectWidth &&
-		gemo.Y() >= displayRectY &&
-		gemo.Y() < displayRectY+displayRectHeight
+	SHADOW_OFFSET := 10
+	gemoX := gemo.X() + SHADOW_OFFSET
+	gemoY := gemo.Y() + SHADOW_OFFSET
+	isOnPrimary := gemoX+SHADOW_OFFSET >= displayRectX &&
+		gemoX < displayRectX+displayRectWidth &&
+		gemoY >= displayRectY &&
+		gemoY < displayRectY+displayRectHeight
 
 	logger.Debugf("isWindowOnPrimaryScreen: %dx%d, %dx%d, %v", gemo.X(),
 		gemo.Y(), displayRect.X, displayRect.Y, isOnPrimary)
