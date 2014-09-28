@@ -254,7 +254,7 @@ func (kbdManager *KeyboardManager) setQtCursorBlink(rate uint32) {
 
 func (kbdManager *KeyboardManager) setCursorBlink(value uint32) {
 	if xsObj != nil {
-		xsObj.SetInterger("Net/CursorBlinkTime", value)
+		xsObj.SetInteger("Net/CursorBlinkTime", value)
 	}
 	kbdManager.setQtCursorBlink(value)
 }

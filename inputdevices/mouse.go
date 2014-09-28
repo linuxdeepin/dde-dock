@@ -134,13 +134,13 @@ func (mManager *MouseManager) naturalScroll(enabled bool) {
 
 func (mManager *MouseManager) doubleClick(value uint32) {
 	if xsObj != nil {
-		xsObj.SetInterger("Net/DoubleClickTime", value)
+		xsObj.SetInteger("Net/DoubleClickTime", value)
 	}
 }
 
 func (mManager *MouseManager) dragThreshold(value uint32) {
 	if xsObj != nil {
-		xsObj.SetInterger("Net/DndDragThreshold", value)
+		xsObj.SetInteger("Net/DndDragThreshold", value)
 	}
 }
 
