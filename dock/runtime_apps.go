@@ -542,8 +542,14 @@ func (app *RuntimeApp) updateWmName(xid xproto.Window) {
 	}
 }
 func (app *RuntimeApp) updateState(xid xproto.Window) {
+	logger.Debugf("get state of %s(0x%x)", app.Id, xid)
 	//TODO: handle state
-	app.state, _ = ewmh.WmStateGet(XU, xid)
+	var err error
+	app.state, err = ewmh.WmStateGet(XU, xid)
+	if err != nil {
+		logger.Warningf("get state of %s(0x%x) failed: %s", app.Id, xid, err)
+	}
+	logger.Infof("state of %s(0x%x) is %v", app.Id, xid, app.state)
 	app.isHidden = contains(app.state, "_NET_WM_STATE_HIDDEN")
 	app.isMaximized = contains(app.state, "_NET_WM_STATE_MAXIMIZED_VERT")
 }
@@ -599,6 +605,8 @@ func (app *RuntimeApp) Activate(x, y int32) error {
 			icccm.WmStateSet(XU, app.CurrentInfo.Xid, s)
 		case icccm.StateNormal:
 			activeXid, _ := ewmh.ActiveWindowGet(XU)
+			logger.Debugf("%s, 0x%x(c), 0x%x(a), %v", app.Id,
+				app.CurrentInfo.Xid, activeXid, app.state)
 			if len(app.xids) == 1 {
 				s.State = icccm.StateIconic
 				iconifyWindow(app.CurrentInfo.Xid)
@@ -683,7 +691,9 @@ func (app *RuntimeApp) detachXid(xid xproto.Window) {
 }
 
 func (app *RuntimeApp) attachXid(xid xproto.Window) {
+	logger.Debugf("attach 0x%x to %s", xid, app.Id)
 	if _, ok := app.xids[xid]; ok {
+		logger.Debugf("0x%x is already on %s", xid, app.Id)
 		return
 	}
 	xwin := xwindow.New(XU, xid)
@@ -706,7 +716,11 @@ func (app *RuntimeApp) attachXid(xid xproto.Window) {
 			app.updateAppid(xid)
 			app.notifyChanged()
 		case ATOM_WINDOW_STATE:
-			app.updateState(xid)
+			logger.Debugf("%s(0x%x) WM_STATE is changed", app.Id, xid)
+			if app.CurrentInfo.Xid == xid {
+				logger.Debug("is current window info changed")
+				app.updateState(xid)
+			}
 			app.notifyChanged()
 		// case ATOM_DEEPIN_WINDOW_VIEWPORTS:
 		// 	app.updateViewports(xid)

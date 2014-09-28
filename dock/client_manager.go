@@ -214,7 +214,9 @@ func (m *ClientManager) listenRootWindow() {
 					DisplayModeType(setting.GetDisplayMode()))
 				logger.Debug("current active window:", appId)
 				if rApp, ok := ENTRY_MANAGER.runtimeApps[appId]; ok {
+					logger.Debug("find runtime app")
 					rApp.setLeader(activeWindow)
+					rApp.updateState(activeWindow)
 				}
 
 				logger.Info("active window is", appId)
