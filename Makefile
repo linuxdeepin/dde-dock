@@ -2,6 +2,13 @@ PREFIX = /usr
 GOPATH_DIR = gopath
 GOPKG_PREFIX = pkg.linuxdeepin.com/dde-daemon
 
+ifndef USE_GCCGO
+    GOBUILD = go build
+else
+   LDFLAGS = $(shell pkg-config --libs gio-2.0 x11 xi xtst libpulse libudev gdk-3.0 gdk-pixbuf-xlib-2.0 gtk+-2.0 libmetacity-private)
+   GOBUILD = go build -compiler gccgo -gccgoflags "${LDFLAGS}"
+endif
+
 BINARIES =  \
     backlight_helper \
     dde-session-daemon \
@@ -25,7 +32,7 @@ prepare:
 	fi
 
 out/bin/%:
-	env GOPATH="${GOPATH}:${CURDIR}/${GOPATH_DIR}" go build -o $@  ${GOPKG_PREFIX}/bin/${@F}
+	env GOPATH="${GOPATH}:${CURDIR}/${GOPATH_DIR}" ${GOBUILD} -o $@  ${GOPKG_PREFIX}/bin/${@F}
 
 out/locale/%/LC_MESSAGES/dde-daemon.mo:misc/po/%.po
 	mkdir -p $(@D)
