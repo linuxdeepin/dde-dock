@@ -3,90 +3,91 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Massimo Antonio Carofano <real.massimo@hotmail.it>, 2014
+# Ivica  Kolić <ikoli@yahoo.com>, 2014
+# gogo <trebelnik2@gmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-08-21 11:42+0800\n"
-"PO-Revision-Date: 2014-10-01 20:50+0000\n"
-"Last-Translator: Massimo Antonio Carofano <real.massimo@hotmail.it>\n"
-"Language-Team: Italian (http://www.transifex.com/projects/p/dde-daemon/language/it/)\n"
+"PO-Revision-Date: 2014-10-23 13:51+0000\n"
+"Last-Translator: Ivica  Kolić <ikoli@yahoo.com>\n"
+"Language-Team: Croatian (http://www.transifex.com/projects/p/dde-daemon/language/hr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: it\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: hr\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: ../../accounts/account_ifc.go:185
 msgid "The username is invalid."
-msgstr "L'username è invalida."
+msgstr "Korisnikovo ime je pogrešno."
 
 #: ../../accounts/account_ifc.go:189
 msgid "The username exists."
-msgstr "L'username esiste già."
+msgstr "Korisnikovo ime postoji."
 
 #: ../../bluetooth/bluez_profile.go:31
 msgid "Serial port"
-msgstr "Porta seriale"
+msgstr "Serijski ulaz"
 
 #: ../../bluetooth/bluez_profile.go:32
 msgid "Dial-Up networking"
-msgstr "Dial-Up networking"
+msgstr "Dial-Up umrežavanje"
 
 #: ../../bluetooth/bluez_profile.go:33
 msgid "Hands-Free device"
-msgstr "Dispositivo Hands-Free"
+msgstr "Hands-free uređaj"
 
 #: ../../bluetooth/bluez_profile.go:34
 msgid "Hands-Free voice gateway"
-msgstr "Hands-Free voice gateway"
+msgstr "Hands-free glasovni pristupnik"
 
 #: ../../bluetooth/bluez_profile.go:35
 msgid "Headset voice gateway"
-msgstr "Headset voice gateway"
+msgstr "Glasovni pristupnik slušalica"
 
 #: ../../bluetooth/bluez_profile.go:36
 msgid "Object push"
-msgstr "Object push"
+msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:37
 msgid "File transfer"
-msgstr "Trasferimento file"
+msgstr "Prijenos datoteka"
 
 #: ../../bluetooth/bluez_profile.go:38
 msgid "Synchronization"
-msgstr "Sincronizzazione"
+msgstr "Usklađivanje"
 
 #: ../../bluetooth/bluez_profile.go:39
 msgid "Phone book access"
-msgstr "Accesso alla Rubrica"
+msgstr "Pristup telefonskom imeniku"
 
 #: ../../bluetooth/bluez_profile.go:40
 msgid "Phone book access client"
-msgstr "Client d'accesso Rubrica"
+msgstr "Klijent pristupa telefonskog imenika"
 
 #: ../../bluetooth/bluez_profile.go:41
 msgid "Message access"
-msgstr "Messaggio d'accesso"
+msgstr "Pristup poruke"
 
 #: ../../bluetooth/bluez_profile.go:42
 msgid "Message notification"
-msgstr "Messaggio di notifica"
+msgstr "Obavijest poruke"
 
 #: ../../datetime/datetime.go:127 ../../langselect/ifc.go:39
 msgid "Language is changing, please wait"
-msgstr "Cambio della lingua in corso, attendi.."
+msgstr "Promjena jezika, molim pričekajte"
 
 #: ../../datetime/set_locale.go:58 ../../langselect/locale.go:245
 msgid ""
 "Language has been changed successfully and will be effective after logged "
 "out."
-msgstr "La lingua è stata impostata con successo e sarà attivata dopo il logout."
+msgstr "Jezik je primijenjen uspješno i biti će dostupan nakon ponovne prijave."
 
 #: ../../datetime/set_locale.go:60 ../../langselect/locale.go:247
 msgid "Language failed to change, please try later."
-msgstr "Cambio lingua fallito, riprova."
+msgstr "Jezik je neuspješno primijenjen, pokušajte ponovno kasnije."
 
 #: ../../datetime/zone_utc_list.go:24
 msgid "Midway"
@@ -126,11 +127,11 @@ msgstr "Tahiti"
 
 #: ../../datetime/zone_utc_list.go:36
 msgid "Aleutian"
-msgstr "Aleutian"
+msgstr "Aleuti"
 
 #: ../../datetime/zone_utc_list.go:37
 msgid "Hawaii"
-msgstr "Hawaii"
+msgstr "Havaji"
 
 #: ../../datetime/zone_utc_list.go:39
 msgid "Marquesas"
@@ -162,7 +163,7 @@ msgstr "Gambier"
 
 #: ../../datetime/zone_utc_list.go:47
 msgid "Alaska"
-msgstr "Alaska"
+msgstr "Aljaska"
 
 #: ../../datetime/zone_utc_list.go:49
 msgid "Dawson"
@@ -266,7 +267,7 @@ msgstr "Yellowknife"
 
 #: ../../datetime/zone_utc_list.go:78
 msgid "Canada/Mountain"
-msgstr "Canada/Mountain"
+msgstr "Kanada/planina"
 
 #: ../../datetime/zone_utc_list.go:79
 msgid "BajaSur"
@@ -354,11 +355,11 @@ msgstr "Beulah"
 
 #: ../../datetime/zone_utc_list.go:104
 msgid "North Dakota/Center"
-msgstr "North Dakota/Center"
+msgstr "Sjeverna Dakota/centar"
 
 #: ../../datetime/zone_utc_list.go:105
 msgid "North Dakota/New Salem"
-msgstr "North Dakota/New Salem"
+msgstr "Sjeverna Dakota/ Novi Salem"
 
 #: ../../datetime/zone_utc_list.go:106
 msgid "Rainy River"
@@ -398,11 +399,11 @@ msgstr "Saskatchewan"
 
 #: ../../datetime/zone_utc_list.go:117
 msgid "General"
-msgstr "Generali"
+msgstr "Općenito"
 
 #: ../../datetime/zone_utc_list.go:118
 msgid "Easter Island"
-msgstr "Easter Island"
+msgstr "Uskršnji otok"
 
 #: ../../datetime/zone_utc_list.go:119
 msgid "Galapagos"
@@ -422,7 +423,7 @@ msgstr "Bogota"
 
 #: ../../datetime/zone_utc_list.go:125
 msgid "Cayman"
-msgstr "Cayman"
+msgstr "Kajman"
 
 #: ../../datetime/zone_utc_list.go:126
 msgid "Coral Harbour"
@@ -482,7 +483,7 @@ msgstr "Iqaluit"
 
 #: ../../datetime/zone_utc_list.go:141
 msgid "Jamaica"
-msgstr "Jamaica"
+msgstr "Jamajka"
 
 #: ../../datetime/zone_utc_list.go:143
 msgid "Monticello"
@@ -546,19 +547,19 @@ msgstr "Acre"
 
 #: ../../datetime/zone_utc_list.go:158
 msgid "Canada/Eastern"
-msgstr "Canada/Eastern"
+msgstr "Kanada/istočno"
 
 #: ../../datetime/zone_utc_list.go:159
 msgid "Cuba"
-msgstr "Cuba"
+msgstr "Kuba"
 
 #: ../../datetime/zone_utc_list.go:161
 msgid "US/Eastern"
-msgstr "US/Eastern"
+msgstr "US/istočno"
 
 #: ../../datetime/zone_utc_list.go:162
 msgid "East-Indiana"
-msgstr "East-Indiana"
+msgstr "Istočna Indiana"
 
 #: ../../datetime/zone_utc_list.go:163
 msgid "Michigan"
@@ -678,7 +679,7 @@ msgstr "Porto Velho"
 
 #: ../../datetime/zone_utc_list.go:194
 msgid "Puerto Rico"
-msgstr "Puerto Rico"
+msgstr "Portoriko"
 
 #: ../../datetime/zone_utc_list.go:195
 msgid "Santiago"
@@ -730,11 +731,11 @@ msgstr "Bermuda"
 
 #: ../../datetime/zone_utc_list.go:207
 msgid "Brazil/West"
-msgstr "Brazil/West"
+msgstr "Brazil/zapad"
 
 #: ../../datetime/zone_utc_list.go:208
 msgid "Atlantic"
-msgstr "Atlantic"
+msgstr "Atlantik"
 
 #: ../../datetime/zone_utc_list.go:209
 msgid "Continental"
@@ -806,7 +807,7 @@ msgstr "Cayenne"
 
 #: ../../datetime/zone_utc_list.go:233
 msgid "Cordoba"
-msgstr "Cordoba"
+msgstr "Kordoba"
 
 #: ../../datetime/zone_utc_list.go:234
 msgid "Fortaleza"
@@ -866,11 +867,11 @@ msgstr "Stanley"
 
 #: ../../datetime/zone_utc_list.go:248
 msgid "Brazil East"
-msgstr "Brazil East"
+msgstr "Brazil istok"
 
 #: ../../datetime/zone_utc_list.go:251
 msgid "South Georgia"
-msgstr "South Georgia"
+msgstr "Južna "
 
 #: ../../datetime/zone_utc_list.go:252
 msgid "DeNoronha"
@@ -882,7 +883,7 @@ msgstr "Scoresbysund"
 
 #: ../../datetime/zone_utc_list.go:255
 msgid "Azores"
-msgstr "Azores"
+msgstr "Azori"
 
 #: ../../datetime/zone_utc_list.go:256
 msgid "Cape Verde"
@@ -990,7 +991,7 @@ msgstr "Belfast"
 
 #: ../../datetime/zone_utc_list.go:290
 msgid "Dublin"
-msgstr "Dublin"
+msgstr "Dablin"
 
 #: ../../datetime/zone_utc_list.go:291
 msgid "Guernsey"
@@ -1026,7 +1027,7 @@ msgstr "Greenwich"
 
 #: ../../datetime/zone_utc_list.go:302
 msgid "Iceland"
-msgstr "Iceland"
+msgstr "Island"
 
 #: ../../datetime/zone_utc_list.go:303
 msgid "Portugal"
@@ -1038,7 +1039,7 @@ msgstr "UCT"
 
 #: ../../datetime/zone_utc_list.go:305
 msgid "Universal"
-msgstr "Universal"
+msgstr "Univerzalno"
 
 #: ../../datetime/zone_utc_list.go:306
 msgid "UTC"
@@ -1050,7 +1051,7 @@ msgstr "Zulu"
 
 #: ../../datetime/zone_utc_list.go:309
 msgid "Algiers"
-msgstr "Algiers"
+msgstr "Alžir"
 
 #: ../../datetime/zone_utc_list.go:310
 msgid "Bangui"
@@ -1070,7 +1071,7 @@ msgstr "Douala"
 
 #: ../../datetime/zone_utc_list.go:314
 msgid "Kinshasa"
-msgstr "Kinshasa"
+msgstr "Kinšasa"
 
 #: ../../datetime/zone_utc_list.go:315
 msgid "Lagos"
@@ -1122,11 +1123,11 @@ msgstr "Amsterdam"
 
 #: ../../datetime/zone_utc_list.go:327
 msgid "Andorra"
-msgstr "Andorra"
+msgstr "Andora"
 
 #: ../../datetime/zone_utc_list.go:328
 msgid "Belgrade"
-msgstr "Belgrade"
+msgstr "Beograd"
 
 #: ../../datetime/zone_utc_list.go:329
 msgid "Berlin"
@@ -1138,11 +1139,11 @@ msgstr "Bratislava"
 
 #: ../../datetime/zone_utc_list.go:331
 msgid "Brussels"
-msgstr "Brussels"
+msgstr "Brisel"
 
 #: ../../datetime/zone_utc_list.go:332
 msgid "Budapest"
-msgstr "Budapest"
+msgstr "Budimpešta"
 
 #: ../../datetime/zone_utc_list.go:333
 msgid "Busingen"
@@ -1150,7 +1151,7 @@ msgstr "Busingen"
 
 #: ../../datetime/zone_utc_list.go:334
 msgid "Copenhagen"
-msgstr "Copenhagen"
+msgstr "Kopenhagen"
 
 #: ../../datetime/zone_utc_list.go:335
 msgid "Gibraltar"
@@ -1162,7 +1163,7 @@ msgstr "Ljubljana"
 
 #: ../../datetime/zone_utc_list.go:337
 msgid "Luxembourg"
-msgstr "Luxembourg"
+msgstr "Luksemburg"
 
 #: ../../datetime/zone_utc_list.go:338
 msgid "Madrid"
@@ -1174,7 +1175,7 @@ msgstr "Malta"
 
 #: ../../datetime/zone_utc_list.go:340
 msgid "Monaco"
-msgstr "Monaco"
+msgstr "Monako"
 
 #: ../../datetime/zone_utc_list.go:341
 msgid "Oslo"
@@ -1182,7 +1183,7 @@ msgstr "Oslo"
 
 #: ../../datetime/zone_utc_list.go:342
 msgid "Paris"
-msgstr "Paris"
+msgstr "Pariz"
 
 #: ../../datetime/zone_utc_list.go:343
 msgid "Podgorica"
@@ -1190,11 +1191,11 @@ msgstr "Podgorica"
 
 #: ../../datetime/zone_utc_list.go:344
 msgid "Prague"
-msgstr "Prague"
+msgstr "Prag"
 
 #: ../../datetime/zone_utc_list.go:345
 msgid "Rome"
-msgstr "Roma"
+msgstr "Rim"
 
 #: ../../datetime/zone_utc_list.go:346
 msgid "San Marino"
@@ -1210,11 +1211,11 @@ msgstr "Skopje"
 
 #: ../../datetime/zone_utc_list.go:349
 msgid "Stockholm"
-msgstr "Stockholm"
+msgstr "Štokholm"
 
 #: ../../datetime/zone_utc_list.go:350
 msgid "Tirane"
-msgstr "Tirane"
+msgstr "Tirana"
 
 #: ../../datetime/zone_utc_list.go:351
 msgid "Vaduz"
@@ -1222,15 +1223,15 @@ msgstr "Vaduz"
 
 #: ../../datetime/zone_utc_list.go:352
 msgid "Vatican"
-msgstr "Vaticano"
+msgstr "Vatikan"
 
 #: ../../datetime/zone_utc_list.go:353
 msgid "Vienna"
-msgstr "Vienna"
+msgstr "Beč"
 
 #: ../../datetime/zone_utc_list.go:354
 msgid "Warsaw"
-msgstr "Warsaw"
+msgstr "Varšava"
 
 #: ../../datetime/zone_utc_list.go:355
 msgid "Zagreb"
@@ -1242,7 +1243,7 @@ msgstr "Zurich"
 
 #: ../../datetime/zone_utc_list.go:357
 msgid "Poland"
-msgstr "Poland"
+msgstr "Poljska"
 
 #: ../../datetime/zone_utc_list.go:359
 msgid "Blantyre"
@@ -1254,7 +1255,7 @@ msgstr "Bujumbura"
 
 #: ../../datetime/zone_utc_list.go:361
 msgid "Cairo"
-msgstr "Cairo"
+msgstr "Kairo"
 
 #: ../../datetime/zone_utc_list.go:362
 msgid "Gaborone"
@@ -1306,7 +1307,7 @@ msgstr "Beirut"
 
 #: ../../datetime/zone_utc_list.go:374
 msgid "Damascus"
-msgstr "Damascus"
+msgstr "Damask"
 
 #: ../../datetime/zone_utc_list.go:375
 msgid "Gaza"
@@ -1322,11 +1323,11 @@ msgstr "Istanbul"
 
 #: ../../datetime/zone_utc_list.go:378
 msgid "Jerusalem"
-msgstr "Jerusalem"
+msgstr "Jeruzalem"
 
 #: ../../datetime/zone_utc_list.go:379
 msgid "Nicosia"
-msgstr "Nicosia"
+msgstr "Nikozija"
 
 #: ../../datetime/zone_utc_list.go:380
 msgid "Tel Aviv"
@@ -1334,15 +1335,15 @@ msgstr "Tel Aviv"
 
 #: ../../datetime/zone_utc_list.go:381
 msgid "Egypt"
-msgstr "Egypt"
+msgstr "Egipat"
 
 #: ../../datetime/zone_utc_list.go:382
 msgid "Athens"
-msgstr "Athens"
+msgstr "Atena"
 
 #: ../../datetime/zone_utc_list.go:383
 msgid "Bucharest"
-msgstr "Bucharest"
+msgstr "Bukurešt"
 
 #: ../../datetime/zone_utc_list.go:384
 msgid "Chisinau"
@@ -1354,7 +1355,7 @@ msgstr "Helsinki"
 
 #: ../../datetime/zone_utc_list.go:387
 msgid "Kiev"
-msgstr "Kiev"
+msgstr "Kijev"
 
 #: ../../datetime/zone_utc_list.go:388
 msgid "Mariehamn"
@@ -1366,7 +1367,7 @@ msgstr "Riga"
 
 #: ../../datetime/zone_utc_list.go:391
 msgid "Sofia"
-msgstr "Sofia"
+msgstr "Sofija"
 
 #: ../../datetime/zone_utc_list.go:392
 msgid "Tallinn"
@@ -1386,19 +1387,19 @@ msgstr "Vilnius"
 
 #: ../../datetime/zone_utc_list.go:396
 msgid "Zaporozhye"
-msgstr "Zaporozhye"
+msgstr "Zaporožje"
 
 #: ../../datetime/zone_utc_list.go:397
 msgid "Israel"
-msgstr "Israel"
+msgstr "Izrael"
 
 #: ../../datetime/zone_utc_list.go:398
 msgid "Libya"
-msgstr "Libya"
+msgstr "Libija"
 
 #: ../../datetime/zone_utc_list.go:399
 msgid "Turkey"
-msgstr "Turkey"
+msgstr "Turska"
 
 #: ../../datetime/zone_utc_list.go:401
 msgid "Addis Ababa"
@@ -1414,7 +1415,7 @@ msgstr "Dar es Salaam"
 
 #: ../../datetime/zone_utc_list.go:405
 msgid "Djibouti"
-msgstr "Djibouti"
+msgstr "Džibuti"
 
 #: ../../datetime/zone_utc_list.go:406
 msgid "Juba"
@@ -1426,7 +1427,7 @@ msgstr "Kampala"
 
 #: ../../datetime/zone_utc_list.go:408
 msgid "Khartoum"
-msgstr "Khartoum"
+msgstr "Kartum"
 
 #: ../../datetime/zone_utc_list.go:409
 msgid "Mogadishu"
@@ -1446,23 +1447,23 @@ msgstr "Aden"
 
 #: ../../datetime/zone_utc_list.go:413
 msgid "Baghdad"
-msgstr "Baghdad"
+msgstr "Bagdad"
 
 #: ../../datetime/zone_utc_list.go:414
 msgid "Bahrain"
-msgstr "Bahrain"
+msgstr "Bahrein"
 
 #: ../../datetime/zone_utc_list.go:415
 msgid "Kuwait"
-msgstr "Kuwait"
+msgstr "Kuvajt"
 
 #: ../../datetime/zone_utc_list.go:416
 msgid "Qatar"
-msgstr "Qatar"
+msgstr "Katar"
 
 #: ../../datetime/zone_utc_list.go:417
 msgid "Riyadh"
-msgstr "Riyadh"
+msgstr "Rijad"
 
 #: ../../datetime/zone_utc_list.go:418
 msgid "Kaliningrad"
@@ -1514,7 +1515,7 @@ msgstr "Yerevan"
 
 #: ../../datetime/zone_utc_list.go:432
 msgid "Moscow"
-msgstr "Moscow"
+msgstr "Moskva"
 
 #: ../../datetime/zone_utc_list.go:433
 msgid "Samara"
@@ -1534,7 +1535,7 @@ msgstr "Mahe"
 
 #: ../../datetime/zone_utc_list.go:437
 msgid "Mauritius"
-msgstr "Mauritius"
+msgstr "Mauricijus"
 
 #: ../../datetime/zone_utc_list.go:438
 msgid "Reunion"
@@ -1574,11 +1575,11 @@ msgstr "Ashgabat"
 
 #: ../../datetime/zone_utc_list.go:451
 msgid "Dushanbe"
-msgstr "Dushanbe"
+msgstr "Dušanbe"
 
 #: ../../datetime/zone_utc_list.go:452
 msgid "Karachi"
-msgstr "Karachi"
+msgstr "Karači"
 
 #: ../../datetime/zone_utc_list.go:453
 msgid "Oral"
@@ -1590,7 +1591,7 @@ msgstr "Samarkand"
 
 #: ../../datetime/zone_utc_list.go:455
 msgid "Tashkent"
-msgstr "Tashkent"
+msgstr "Taškent"
 
 #: ../../datetime/zone_utc_list.go:456
 msgid "Kerguelen"
@@ -1598,11 +1599,11 @@ msgstr "Kerguelen"
 
 #: ../../datetime/zone_utc_list.go:457
 msgid "Maldives"
-msgstr "Maldives"
+msgstr "Maldivi"
 
 #: ../../datetime/zone_utc_list.go:459
 msgid "Calcutta"
-msgstr "Calcutta"
+msgstr "Kalkuta"
 
 #: ../../datetime/zone_utc_list.go:460
 msgid "Colombo"
@@ -1614,7 +1615,7 @@ msgstr "Kolkata"
 
 #: ../../datetime/zone_utc_list.go:463
 msgid "Kathmandu"
-msgstr "Kathmandu"
+msgstr "Katmandu"
 
 #: ../../datetime/zone_utc_list.go:466
 msgid "Vostok"
@@ -1630,7 +1631,7 @@ msgstr "Bishkek"
 
 #: ../../datetime/zone_utc_list.go:470
 msgid "Dhaka"
-msgstr "Dhaka"
+msgstr "Daka"
 
 #: ../../datetime/zone_utc_list.go:471
 msgid "Qyzylorda"
@@ -1650,7 +1651,7 @@ msgstr "Chagos"
 
 #: ../../datetime/zone_utc_list.go:477
 msgid "Rangoon"
-msgstr "Rangoon"
+msgstr "Rangun"
 
 #: ../../datetime/zone_utc_list.go:478
 msgid "Cocos"
@@ -1662,7 +1663,7 @@ msgstr "Bangkok"
 
 #: ../../datetime/zone_utc_list.go:481
 msgid "Ho Chi Minh"
-msgstr "Ho Chi Minh"
+msgstr "Ho Ši Min"
 
 #: ../../datetime/zone_utc_list.go:482
 msgid "Hovd"
@@ -1670,7 +1671,7 @@ msgstr "Hovd"
 
 #: ../../datetime/zone_utc_list.go:483
 msgid "Jakarta"
-msgstr "Jakarta"
+msgstr "Džakarta"
 
 #: ../../datetime/zone_utc_list.go:484
 msgid "Novokuznetsk"
@@ -1686,7 +1687,7 @@ msgstr "Omsk"
 
 #: ../../datetime/zone_utc_list.go:487
 msgid "Phnom Penh"
-msgstr "Phnom Penh"
+msgstr "Pnom Pen"
 
 #: ../../datetime/zone_utc_list.go:488
 msgid "Pontianak"
@@ -1694,7 +1695,7 @@ msgstr "Pontianak"
 
 #: ../../datetime/zone_utc_list.go:489
 msgid "Saigon"
-msgstr "Saigon"
+msgstr "Sajgon"
 
 #: ../../datetime/zone_utc_list.go:490
 msgid "Vientiane"
@@ -1742,7 +1743,7 @@ msgstr "Kuching"
 
 #: ../../datetime/zone_utc_list.go:503
 msgid "Macao"
-msgstr "Macao"
+msgstr "Makao"
 
 #: ../../datetime/zone_utc_list.go:505
 msgid "Makassar"
@@ -1754,15 +1755,15 @@ msgstr "Manila"
 
 #: ../../datetime/zone_utc_list.go:507
 msgid "Shanghai"
-msgstr "Shanghai"
+msgstr "Šangaj"
 
 #: ../../datetime/zone_utc_list.go:508
 msgid "Beijing"
-msgstr "Beijing"
+msgstr "Peking"
 
 #: ../../datetime/zone_utc_list.go:509
 msgid "Singapore"
-msgstr "Singapore"
+msgstr "Singapur"
 
 #: ../../datetime/zone_utc_list.go:510
 msgid "Taipei"
@@ -1786,7 +1787,7 @@ msgstr "Perth"
 
 #: ../../datetime/zone_utc_list.go:516
 msgid "Australia/West"
-msgstr "Australia/West"
+msgstr "Australia/zapad"
 
 #: ../../datetime/zone_utc_list.go:518
 msgid "PRC"
@@ -1818,11 +1819,11 @@ msgstr "Pyongyang"
 
 #: ../../datetime/zone_utc_list.go:528
 msgid "Seoul"
-msgstr "Seoul"
+msgstr "Seul"
 
 #: ../../datetime/zone_utc_list.go:529
 msgid "Tokyo"
-msgstr "Tokyo"
+msgstr "Tokio"
 
 #: ../../datetime/zone_utc_list.go:530
 msgid "Japan"
@@ -1850,11 +1851,11 @@ msgstr "Darwin"
 
 #: ../../datetime/zone_utc_list.go:537
 msgid "Australia/North"
-msgstr "Australia/North"
+msgstr "Australia/sjever"
 
 #: ../../datetime/zone_utc_list.go:538
 msgid "Australia/South"
-msgstr "Australia/South"
+msgstr "Australia/jug"
 
 #: ../../datetime/zone_utc_list.go:539
 msgid "Yancowinna"
@@ -1914,7 +1915,7 @@ msgstr "Sydney"
 
 #: ../../datetime/zone_utc_list.go:554
 msgid "Tasmania"
-msgstr "Tasmania"
+msgstr "Tasmanija"
 
 #: ../../datetime/zone_utc_list.go:555
 msgid "Victoria"
@@ -1962,7 +1963,7 @@ msgstr "Macquarie"
 
 #: ../../datetime/zone_utc_list.go:568
 msgid "Sakhalin"
-msgstr "Sakhalin"
+msgstr "Sahalin"
 
 #: ../../datetime/zone_utc_list.go:569
 msgid "Ust-Nera"
@@ -2002,7 +2003,7 @@ msgstr "McMurdo"
 
 #: ../../datetime/zone_utc_list.go:581
 msgid "South Pole"
-msgstr "South Pole"
+msgstr "Južni pol"
 
 #: ../../datetime/zone_utc_list.go:582
 msgid "Anadyr"
@@ -2010,7 +2011,7 @@ msgstr "Anadyr"
 
 #: ../../datetime/zone_utc_list.go:583
 msgid "Kamchatka"
-msgstr "Kamchatka"
+msgstr "Kamčatka"
 
 #: ../../datetime/zone_utc_list.go:584
 msgid "Magadan"
@@ -2026,7 +2027,7 @@ msgstr "Auckland"
 
 #: ../../datetime/zone_utc_list.go:588
 msgid "Fiji"
-msgstr "Fiji"
+msgstr "Fidži"
 
 #: ../../datetime/zone_utc_list.go:589
 msgid "Funafuti"
@@ -2082,265 +2083,265 @@ msgstr "Tongatapu"
 
 #: ../../dock/normal_apps.go:80
 msgid "_Run"
-msgstr "_Avvia"
+msgstr "_Pokreni"
 
 #: ../../dock/normal_apps.go:112 ../../dock/runtime_apps.go:297
 msgid "_Undock"
-msgstr "_Sblocca"
+msgstr "_Ukloni"
 
 #: ../../dock/runtime_apps.go:266
 msgid "_Close All"
-msgstr "_Chiudi Tutti"
+msgstr "_Zatvori sve"
 
 #: ../../dock/runtime_apps.go:309
 msgid "_Dock"
-msgstr "_Dock"
+msgstr "_Pričvrsti"
 
 #: ../../grub2/grub2_ifc.go:75 ../../network/nm_setting_ip4_config.go:174
 #: ../../network/nm_setting_ip6_config.go:66
 msgid "Auto"
-msgstr "Auto"
+msgstr "Automatski"
 
 #: ../../keybinding/id_desc_list.go:47
 msgid "Launcher"
-msgstr "Launcher"
+msgstr "Pokretač"
 
 #: ../../keybinding/id_desc_list.go:48
 msgid "Show desktop"
-msgstr "Mostra desktop"
+msgstr "Prikaži radnu površinu"
 
 #: ../../keybinding/id_desc_list.go:49
 msgid "Lock screen"
-msgstr "Lock screen"
+msgstr "Zaključaj zaslon"
 
 #: ../../keybinding/id_desc_list.go:50
 msgid "File manager"
-msgstr "File manager"
+msgstr "Upravitelj datoteka"
 
 #: ../../keybinding/id_desc_list.go:51
 msgid "Switch applications"
-msgstr "Cambio applicazioni"
+msgstr "Prebaci aplikacije"
 
 #: ../../keybinding/id_desc_list.go:52
 msgid "Reverse switch applications"
-msgstr "Cambio applicazioni invertito"
+msgstr "Obrni prebacivanje aplikacija"
 
 #: ../../keybinding/id_desc_list.go:53
 msgid "3D switch applications"
-msgstr "Switch 3D delle applicazioni"
+msgstr "3D prebacivanje aplikacija"
 
 #: ../../keybinding/id_desc_list.go:54
 msgid "3D reverse switch applications"
-msgstr "Reverse switch 3D delle applicazioni"
+msgstr "3D obrnuto prebacivanje aplikacija"
 
 #: ../../keybinding/id_desc_list.go:55
 msgid "Show/Hide the dock"
-msgstr "Mostra/Nascondi la Dock"
+msgstr "Prikaži/Sakrij dok"
 
 #: ../../keybinding/id_desc_list.go:56
 msgid "Screenshot"
-msgstr "Screenshot"
+msgstr "Snimak zaslona"
 
 #: ../../keybinding/id_desc_list.go:57
 msgid "Full screenshot"
-msgstr "Screenshot intero"
+msgstr "Cjelozaslonski snimak zaslona"
 
 #: ../../keybinding/id_desc_list.go:58
 msgid "Window screenshot"
-msgstr "Screenshot finestra"
+msgstr "Prozorski snimak zaslona"
 
 #: ../../keybinding/id_desc_list.go:59
 msgid "Delay screenshot"
-msgstr "Screenshot ritardato"
+msgstr "Odgoda snimke zaslona"
 
 #: ../../keybinding/id_desc_list.go:60
 msgid "Terminal"
-msgstr "Terminale"
+msgstr "Terminal"
 
 #: ../../keybinding/id_desc_list.go:61
 msgid "Terminal Quake Window"
-msgstr "Finestra Terminale con Root"
+msgstr "Terminal Quake prozor"
 
 #: ../../keybinding/id_desc_list.go:62
 msgid "Logout"
-msgstr "Logout"
+msgstr "Odjava"
 
 #: ../../keybinding/id_desc_list.go:63
 msgid "Disable Touchpad"
-msgstr "Disabilita Touchpad"
+msgstr "Onemogući Touchpad"
 
 #: ../../keybinding/id_desc_list.go:64
 msgid "Deepin Translator"
-msgstr "Deepin Translator"
+msgstr "Deepin prevoditelj"
 
 #: ../../keybinding/id_desc_list.go:65
 msgid "Switch Layout"
-msgstr "Cambia layout"
+msgstr "Promjeni raspored"
 
 #: ../../keybinding/id_desc_list.go:73
 msgid "Calculator"
-msgstr "Calcolatrice"
+msgstr "Kalkulator"
 
 #: ../../keybinding/id_desc_list.go:74
 msgid "Email client"
-msgstr "Client Email"
+msgstr "Klijent e-pošte"
 
 #: ../../keybinding/id_desc_list.go:75
 msgid "Web browser"
-msgstr "Web browser"
+msgstr "Web preglednik"
 
 #: ../../keybinding/id_desc_list.go:76
 msgid "Media player"
-msgstr "Media player"
+msgstr "Medijski reproduktor"
 
 #: ../../keybinding/id_desc_list.go:77
 msgid "Play/Pause"
-msgstr "Play/Pausa"
+msgstr "Reprodukcija/Pauza"
 
 #: ../../keybinding/id_desc_list.go:78
 msgid "Pause"
-msgstr "Pausa"
+msgstr "Pauza"
 
 #: ../../keybinding/id_desc_list.go:79
 msgid "Stop"
-msgstr "Stop"
+msgstr "Zaustavi"
 
 #: ../../keybinding/id_desc_list.go:80
 msgid "Mute"
-msgstr "Muto"
+msgstr "Utišaj"
 
 #: ../../keybinding/id_desc_list.go:81
 msgid "Volume down"
-msgstr "Volume meno"
+msgstr "Smanji glasnoću zvuka"
 
 #: ../../keybinding/id_desc_list.go:82
 msgid "Volume up"
-msgstr "Volume più"
+msgstr "Pojačaj glasnoću zvuka"
 
 #: ../../keybinding/id_desc_list.go:83
 msgid "Previous"
-msgstr "Precedente"
+msgstr "Prijašnje"
 
 #: ../../keybinding/id_desc_list.go:84
 msgid "Next"
-msgstr "Avanti"
+msgstr "Sljedeće"
 
 #: ../../keybinding/id_desc_list.go:85
 msgid "Eject"
-msgstr "Espelli"
+msgstr "Izbaci"
 
 #: ../../keybinding/id_desc_list.go:93
 msgid "Close window"
-msgstr "Chiudi finestra"
+msgstr "Zatvori prozor"
 
 #: ../../keybinding/id_desc_list.go:94
 msgid "Maximize window"
-msgstr "Massimizza finestra"
+msgstr "Uvećaj prozor"
 
 #: ../../keybinding/id_desc_list.go:95
 msgid "Restore window"
-msgstr "Ripristina finestra"
+msgstr "Vrati prozor"
 
 #: ../../keybinding/id_desc_list.go:96
 msgid "Minimize window"
-msgstr "Minimizza finestra"
+msgstr "Smanji prozor"
 
 #: ../../keybinding/id_desc_list.go:97
 msgid "Move window"
-msgstr "Muovi finestra"
+msgstr "Pomakni prozor"
 
 #: ../../keybinding/id_desc_list.go:98
 msgid "Resize window"
-msgstr "Ridimensiona la finestra"
+msgstr "Promjeni veličinu prozora"
 
 #: ../../keybinding/id_desc_list.go:99
 msgid "Switch furl state"
-msgstr "Cambia furl state"
+msgstr ""
 
 #: ../../keybinding/id_desc_list.go:100
 msgid "Activate window menu"
-msgstr "Attiva menu finestra"
+msgstr "Aktiviraj izbornik prozora"
 
 #: ../../keybinding/id_desc_list.go:108
 msgid "Switch to workspace 1"
-msgstr "Passa allo spazio di lavoro 1"
+msgstr "Prebaci na radni prostor 1"
 
 #: ../../keybinding/id_desc_list.go:109
 msgid "Switch to workspace 2"
-msgstr "Passa allo spazio di lavoro 2"
+msgstr "Prebaci na radni prostor 2"
 
 #: ../../keybinding/id_desc_list.go:110
 msgid "Switch to workspace 3"
-msgstr "Passa allo spazio di lavoro 3"
+msgstr "Prebaci na radni prostor 3"
 
 #: ../../keybinding/id_desc_list.go:111
 msgid "Switch to workspace 4"
-msgstr "Passa allo spazio di lavoro 4"
+msgstr "Prebaci na radni prostor 4"
 
 #: ../../keybinding/id_desc_list.go:112
 msgid "Switch to left workspace"
-msgstr "Passa allo spazio di lavoro a sinsitra"
+msgstr "Prebaci na lijevi radni prostor "
 
 #: ../../keybinding/id_desc_list.go:113
 msgid "Switch to right workspace"
-msgstr "Passa allo spazio di lavoro destro"
+msgstr "Prebaci na desni radni prostor "
 
 #: ../../keybinding/id_desc_list.go:114
 msgid "Switch to upper workspace"
-msgstr "Passa allo spazio di lavoro superiore"
+msgstr "Prebaci na gornji radni prostor "
 
 #: ../../keybinding/id_desc_list.go:115
 msgid "Switch to lower workspace"
-msgstr "Passa allo spazio di lavoro inferiore"
+msgstr "Prebaci na donji radni prostor "
 
 #: ../../keybinding/id_desc_list.go:116
 msgid "Move to workspace 1"
-msgstr "Muoviti sullo spazio di lavoro 1"
+msgstr "Premjesti na radni prostor 1"
 
 #: ../../keybinding/id_desc_list.go:117
 msgid "Move to workspace 2"
-msgstr "Muoviti sullo spazio di lavoro 2"
+msgstr "Premjesti na radni prostor 2"
 
 #: ../../keybinding/id_desc_list.go:118
 msgid "Move to workspace 3"
-msgstr "Muoviti sullo spazio di lavoro 3"
+msgstr "Premjesti na radni prostor 3"
 
 #: ../../keybinding/id_desc_list.go:119
 msgid "Move to workspace 4"
-msgstr "Muoviti sullo spazio di lavoro 4"
+msgstr "Premjesti na radni prostor 4"
 
 #: ../../keybinding/id_desc_list.go:120
 msgid "Move to left workspace"
-msgstr "Muoviti sullo spazio di lavoro sinistro"
+msgstr "Premjesti na lijevi radni prostor "
 
 #: ../../keybinding/id_desc_list.go:121
 msgid "Move to right workspace"
-msgstr "Muoviti sullo spazio di lavoro destro"
+msgstr "Premjesti na desni radni prostor "
 
 #: ../../keybinding/id_desc_list.go:122
 msgid "Move to upper workspace"
-msgstr "Muoviti sullo spazio di lavoro superiore"
+msgstr "Premjesti na gornji radni prostor "
 
 #: ../../keybinding/id_desc_list.go:123
 msgid "Move to lower workspace"
-msgstr "Muoviti sullo spazio di lavoro inferiore"
+msgstr "Premjesti na donji radni prostor "
 
 #: ../../mime/default_media.go:72 ../../mime/default_media.go:89
 msgid "Nothing"
-msgstr "Niente"
+msgstr "Ništa"
 
 #: ../../mime/default_media.go:75 ../../mime/default_media.go:90
 msgid "Open Folder"
-msgstr "Apri cartella"
+msgstr "Otvori mapu"
 
 #: ../../mime/default_media.go:79
 msgid "Run Software"
-msgstr "Esegui software"
+msgstr "Pokreni softver"
 
 #: ../../network/manager_connections.go:203
 #: ../../network/nm_custom_type.go:178
 msgid "Wired Connection"
-msgstr "Connessione cablata"
+msgstr "Žično povezivanje"
 
 #: ../../network/manager_connections.go:281
 #: ../../network/manager_connections.go:286
@@ -2350,19 +2351,19 @@ msgstr "Connessione cablata"
 #: ../../network/nm_setting_vpn_openvpn.go:398
 #: ../../network/nm_setting_vpn_vpnc.go:272
 msgid "None"
-msgstr "No"
+msgstr "Nepoznato"
 
 #: ../../network/manager_connections.go:288
 #: ../../network/nm_setting_virtual_key.go:142
 #: ../../network/nm_setting_virtual_key.go:149
 msgid "WEP 40/128-bit Key"
-msgstr "WEP 40/128-bit Key"
+msgstr "WEP 40/128-bit ključ"
 
 #: ../../network/manager_connections.go:290
 #: ../../network/nm_setting_virtual_key.go:143
 #: ../../network/nm_setting_virtual_key.go:150
 msgid "WPA/WPA2 Personal"
-msgstr "WPA/WPA2 Personal"
+msgstr "WPA/WPA2 osobni"
 
 #: ../../network/manager_connections.go:298
 #: ../../network/nm_setting_802_1x.go:81
@@ -2387,33 +2388,33 @@ msgstr "LEAP"
 #: ../../network/nm_setting_802_1x.go:164
 #: ../../network/nm_setting_802_1x.go:172
 msgid "FAST"
-msgstr "FAST"
+msgstr "BRZO"
 
 #: ../../network/manager_connections.go:306
 #: ../../network/nm_setting_802_1x.go:165
 #: ../../network/nm_setting_802_1x.go:173
 msgid "Tunneled TLS"
-msgstr "Tunneled TLS"
+msgstr "Tunelirani TLS"
 
 #: ../../network/manager_connections.go:308
 #: ../../network/nm_setting_802_1x.go:166
 #: ../../network/nm_setting_802_1x.go:174
 msgid "Protected EAP"
-msgstr "Protected EAP"
+msgstr "Zaštićeni EAP"
 
 #: ../../network/nm_constant.go:314 ../../network/nm_setting_vpn_l2tp.go:116
 #: ../../network/nm_setting_vpn_openvpn.go:171
 #: ../../network/nm_setting_vpn_pptp.go:106
 #: ../../network/nm_setting_vpn_vpnc.go:145
 msgid "Saved"
-msgstr "Salvato"
+msgstr "Spremljeno"
 
 #: ../../network/nm_constant.go:316 ../../network/nm_setting_vpn_l2tp.go:117
 #: ../../network/nm_setting_vpn_openvpn.go:172
 #: ../../network/nm_setting_vpn_pptp.go:107
 #: ../../network/nm_setting_vpn_vpnc.go:147
 msgid "Always Ask"
-msgstr "Chiedi sempre"
+msgstr "Uvijek pitaj"
 
 #: ../../network/nm_constant.go:317 ../../network/nm_setting_vpn_l2tp.go:118
 #: ../../network/nm_setting_vpn_openvpn.go:173
@@ -2421,43 +2422,43 @@ msgstr "Chiedi sempre"
 #: ../../network/nm_setting_vpn_pptp.go:108
 #: ../../network/nm_setting_vpn_vpnc.go:148
 msgid "Not Required"
-msgstr "Non richiesto"
+msgstr "Nije potrebno"
 
 #: ../../network/nm_custom_type.go:176
 msgid "Connection"
-msgstr "Connessione"
+msgstr "Povezivanje"
 
 #: ../../network/nm_custom_type.go:180
 msgid "Wireless Connection"
-msgstr "Connessione WiFi"
+msgstr "Bežično povezivanje"
 
 #: ../../network/nm_custom_type.go:182
 msgid "Wireless Ad-Hoc"
-msgstr "Wireless Ad-Hoc"
+msgstr "Bežično ad-hoc"
 
 #: ../../network/nm_custom_type.go:184
 msgid "Wireless Ap-Hotspot"
-msgstr "Wireless Ap-Hotspot"
+msgstr ""
 
 #: ../../network/nm_custom_type.go:186
 msgid "PPPoE Connection"
-msgstr "Connessione PPPoE"
+msgstr "PPPoE povezivanje"
 
 #: ../../network/nm_custom_type.go:188
 msgid "Mobile Connection"
-msgstr "Connessione Mobile"
+msgstr "Mobilno povezivanje"
 
 #: ../../network/nm_custom_type.go:190
 msgid "Mobile GSM Connection"
-msgstr "Connessione Mobile GSM"
+msgstr "Mobilno GSM povezivanje"
 
 #: ../../network/nm_custom_type.go:192
 msgid "Mobile CDMA Connection"
-msgstr "Connessione Mobile CDMA"
+msgstr "Mobilno CDMA povezivanje"
 
 #: ../../network/nm_custom_type.go:194
 msgid "VPN Connection"
-msgstr "Connessione VPN"
+msgstr "VPN povezivanje"
 
 #: ../../network/nm_custom_type.go:196
 msgid "VPN L2TP"
@@ -2465,11 +2466,11 @@ msgstr "VPN L2TP"
 
 #: ../../network/nm_custom_type.go:198
 msgid "VPN OpenConnect"
-msgstr "VPN OpenConnect"
+msgstr ""
 
 #: ../../network/nm_custom_type.go:200
 msgid "VPN OpenVPN"
-msgstr "VPN OpenVPN"
+msgstr "VPN OtvoreniVPN"
 
 #: ../../network/nm_custom_type.go:202
 msgid "VPN PPTP"
@@ -2507,32 +2508,32 @@ msgstr "OTP"
 #: ../../network/nm_setting_ip4_config.go:178
 #: ../../network/nm_setting_vpn_vpnc.go:261
 msgid "Disabled"
-msgstr "Disabilitato"
+msgstr "Onemogućeno"
 
 #: ../../network/nm_setting_802_1x.go:180
 msgid "Anonymous"
-msgstr "Anonima"
+msgstr "Anonimno"
 
 #: ../../network/nm_setting_802_1x.go:181
 msgid "Authenticated"
-msgstr "Autenticata"
+msgstr "Autentificirano"
 
 #: ../../network/nm_setting_802_1x.go:182
 msgid "Both"
-msgstr "Entrambi"
+msgstr "Oboje"
 
 #: ../../network/nm_setting_802_1x.go:186
 #: ../../network/nm_setting_wireless.go:297
 msgid "Automatic"
-msgstr "Automatico"
+msgstr "Automatski"
 
 #: ../../network/nm_setting_802_1x.go:187
 msgid "Version 0"
-msgstr "Versione 0"
+msgstr "Inačica 0"
 
 #: ../../network/nm_setting_802_1x.go:188
 msgid "Version 1"
-msgstr "Versione 1"
+msgstr "Inačica 1"
 
 #: ../../network/nm_setting_gsm.go:125
 msgid "China Unicom Internet"
@@ -2556,7 +2557,7 @@ msgstr "China Mobile MMS"
 
 #: ../../network/nm_setting_gsm.go:133
 msgid "Any"
-msgstr "Qualsiasi"
+msgstr "Bilo koji"
 
 #: ../../network/nm_setting_gsm.go:134
 msgid "3G (UMTS/HSPA)"
@@ -2568,39 +2569,39 @@ msgstr "2G (GPRS/EDGE)"
 
 #: ../../network/nm_setting_gsm.go:136
 msgid "Prefer 3G (UMTS/HSPA)"
-msgstr "Preferisci 3G (UMTS/HSPA)"
+msgstr "Preferiraj 3G (UMTS/HSPA)"
 
 #: ../../network/nm_setting_gsm.go:137
 msgid "Prefer 2G (GPRS/EDGE)"
-msgstr "Preferisci 2G (GPRS/EDGE)"
+msgstr "Preferiraj 2G (GPRS/EDGE)"
 
 #: ../../network/nm_setting_gsm.go:138
 msgid "Prefer 4G (LTE)"
-msgstr "Preferisci 4G (LTE)"
+msgstr "Preferiraj 4G (LTE)"
 
 #: ../../network/nm_setting_gsm.go:139
 msgid "Use Only 4G (LTE)"
-msgstr "Usa solo 4G (LTE)"
+msgstr "Koristi samo 4G (LTE)"
 
 #: ../../network/nm_setting_ip4_config.go:175
 #: ../../network/nm_setting_ip6_config.go:68
 msgid "Link-Local Only"
-msgstr "Solo Link locale"
+msgstr "Poveži-Lokalno samo"
 
 #: ../../network/nm_setting_ip4_config.go:176
 #: ../../network/nm_setting_ip6_config.go:69
 msgid "Manual"
-msgstr "Manuale"
+msgstr "Ručno"
 
 #: ../../network/nm_setting_ip4_config.go:177
 #: ../../network/nm_setting_ip6_config.go:70
 #: ../../network/nm_setting_wireless_security.go:205
 msgid "Shared"
-msgstr "Condivisa"
+msgstr "Dijeljeno"
 
 #: ../../network/nm_setting_ip6_config.go:65
 msgid "Ignore"
-msgstr "Ignora"
+msgstr "Zanemari"
 
 #: ../../network/nm_setting_ip6_config.go:67
 msgid "DHCP"
@@ -2636,46 +2637,46 @@ msgstr "VPNC"
 
 #: ../../network/nm_setting_virtual_key.go:144
 msgid "WPA/WPA2 Enterprise"
-msgstr "WPA/WPA2 Enterprise"
+msgstr ""
 
 #: ../../network/nm_setting_virtual_key.go:158
 #: ../../network/nm_setting_virtual_key.go:167
 msgid "All Available (default)"
-msgstr "Tutte disponibili (default)"
+msgstr "Sve dostupno (uobičajeno)"
 
 #: ../../network/nm_setting_virtual_key.go:159
 #: ../../network/nm_setting_virtual_key.go:168
 msgid "128-bit (most secure)"
-msgstr "128-bit (più sicura)"
+msgstr "128-bit (najsigurnije)"
 
 #: ../../network/nm_setting_virtual_key.go:160
 #: ../../network/nm_setting_virtual_key.go:169
 msgid "40-bit (less secure)"
-msgstr "40-bit (meno sicura)"
+msgstr "40-bit (manje sigurno)"
 
 #: ../../network/nm_setting_virtual_key.go:176
 msgid "Secure (default)"
-msgstr "Sicura (default)"
+msgstr "Osigurano (uobičajeno)"
 
 #: ../../network/nm_setting_virtual_key.go:177
 msgid "Weak"
-msgstr "Scarsa"
+msgstr "Slabo"
 
 #: ../../network/nm_setting_vpn_openvpn.go:251
 msgid "Certificates (TLS)"
-msgstr "Certificato (TLS)"
+msgstr "Certifikati (TLS)"
 
 #: ../../network/nm_setting_vpn_openvpn.go:252
 msgid "Password"
-msgstr "Password"
+msgstr "Lozinka"
 
 #: ../../network/nm_setting_vpn_openvpn.go:253
 msgid "Certificates with Password (TLS)"
-msgstr "Certificazione con password (TLS)"
+msgstr "Certifikati s lozinkom (TLS)"
 
 #: ../../network/nm_setting_vpn_openvpn.go:254
 msgid "Static Key"
-msgstr "Chiave statica"
+msgstr "Nepromjenjiv ključ"
 
 #: ../../network/nm_setting_vpn_openvpn.go:258
 #: ../../network/nm_setting_vpn_openvpn.go:434
@@ -2693,7 +2694,7 @@ msgstr "1"
 #: ../../network/nm_setting_wireless.go:140
 #: ../../network/nm_setting_wireless.go:189
 msgid "Default"
-msgstr "Default"
+msgstr "Uobičajeno"
 
 #: ../../network/nm_setting_vpn_openvpn.go:378
 msgid "DES-CBC"
@@ -2793,11 +2794,11 @@ msgstr "RIPEMD-160"
 
 #: ../../network/nm_setting_vpn_openvpn.go:429
 msgid "Client"
-msgstr "Client"
+msgstr "Klijent"
 
 #: ../../network/nm_setting_vpn_openvpn.go:430
 msgid "Server"
-msgstr "Server"
+msgstr "Poslužitelj"
 
 #: ../../network/nm_setting_vpn_openvpn.go:480
 msgid "HTTP"
@@ -2809,19 +2810,19 @@ msgstr "SOCKS"
 
 #: ../../network/nm_setting_vpn_vpnc.go:253
 msgid "Cisco (default)"
-msgstr "Cisco (default)"
+msgstr "Cisco (uobičajeno)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:254
 msgid "Netscreen"
-msgstr "Netscreen"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_vpnc.go:258
 msgid "NAT-T When Available (default)"
-msgstr "NAT-T quando disponibile (default)"
+msgstr "NAT-T kada je dostupno (uobičajeno)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:259
 msgid "NAT-T Always"
-msgstr "NAT-T Always"
+msgstr "NAT-T uvijek"
 
 #: ../../network/nm_setting_vpn_vpnc.go:260
 msgid "Cisco UDP"
@@ -2830,28 +2831,28 @@ msgstr "Cisco UDP"
 #: ../../network/nm_setting_vpn_vpnc.go:265
 #: ../../network/nm_setting_vpn_vpnc.go:273
 msgid "DH Group 1"
-msgstr "DH Group 1"
+msgstr "DH Grupa 1"
 
 #: ../../network/nm_setting_vpn_vpnc.go:266
 msgid "DH Group 2 (default)"
-msgstr "DH Group 2 (default)"
+msgstr "DH Grupa 2 (uobičajeno)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:267
 #: ../../network/nm_setting_vpn_vpnc.go:275
 msgid "DH Group 5"
-msgstr "DH Group 5"
+msgstr "DH Grupa 5"
 
 #: ../../network/nm_setting_vpn_vpnc.go:271
 msgid "Server (default)"
-msgstr "Server (default)"
+msgstr "Poslužitelj (uobičajeno)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:274
 msgid "DH Group 2"
-msgstr "DH Group 2"
+msgstr "DH Grupa 2"
 
 #: ../../network/nm_setting_wireless.go:291
 msgid "Infrastructure"
-msgstr "Infrastruttura"
+msgstr "Infrastruktura"
 
 #: ../../network/nm_setting_wireless.go:292
 msgid "Ad-Hoc"
@@ -2859,7 +2860,7 @@ msgstr "Ad-Hoc"
 
 #: ../../network/nm_setting_wireless.go:293
 msgid "AP-Hotspot"
-msgstr "AP-Hotspot"
+msgstr "AP-Pristupna točka"
 
 #: ../../network/nm_setting_wireless.go:298
 msgid "A (5 GHz)"
@@ -2875,7 +2876,7 @@ msgstr "WEP"
 
 #: ../../network/nm_setting_wireless_security.go:190
 msgid "Dynamic WEP"
-msgstr "Dynamic WEP"
+msgstr "Promjenjiv WEP"
 
 #: ../../network/nm_setting_wireless_security.go:191
 msgid "Ad-Hoc WPA-PSK"
@@ -2883,11 +2884,11 @@ msgstr "Ad-Hoc WPA-PSK"
 
 #: ../../network/nm_setting_wireless_security.go:192
 msgid "WPA-PSK Infrastructure"
-msgstr "Infrastruttura WPA-PSK"
+msgstr "WPA-PSK Infrastruktura"
 
 #: ../../network/nm_setting_wireless_security.go:193
 msgid "WPA Enterprise"
-msgstr "WPA Enterprise"
+msgstr ""
 
 #: ../../network/nm_setting_wireless_security.go:197
 msgid "WEP40"
@@ -2907,287 +2908,287 @@ msgstr "CCMP"
 
 #: ../../network/nm_setting_wireless_security.go:204
 msgid "Open"
-msgstr "Apri"
+msgstr "Otvoreno"
 
 #: ../../network/state_handler.go:34
 msgid "Device state changed, unknown reason."
-msgstr "Stato del dispositivo modificato, non si conosce la causa."
+msgstr "Stanje uređaja promjenjeno, nepoznat razlog."
 
 #: ../../network/state_handler.go:35
 msgid "Device state changed."
-msgstr "Stato del dispositivo modificato."
+msgstr "Stanje uređaja promjenjeno."
 
 #: ../../network/state_handler.go:36
 msgid "The device is now managed."
-msgstr "Il dispositivo è ora utilizzato."
+msgstr "Uređajem se sada upravlja."
 
 #: ../../network/state_handler.go:37
 msgid "The device is no longer managed."
-msgstr "Il dispositivo non è più utilizzato."
+msgstr "Uređajem se više ne upravlja."
 
 #: ../../network/state_handler.go:38
 msgid "The device has not been ready for configuration."
-msgstr "Il dispositivo non è pronto per la configurazione."
+msgstr "Uređaj nije spreman za podešavanje."
 
 #: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)."
-msgstr "La configurazione IP non può esser riservata (nessun indirizzo disponibile, timeout, ecc)."
+msgstr "IP podešavanje ne može biti rezervirano (nema dostupne adrese, istek vremena, itd.)."
 
 #: ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid."
-msgstr "La configurazione IP non è valida."
+msgstr "IP podešavanje više nije valjano."
 
 #: ../../network/state_handler.go:41
 msgid "Passwords were required but not provided."
-msgstr "Password richieste ma non fornite."
+msgstr "Potrebna je lozinka ali nije omogućena."
 
 #: ../../network/state_handler.go:42
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server."
-msgstr "La connessione 802.1X si è disconnessa dall'access point o dal server di autentificazione."
+msgstr "The 802.1X suplikant je odspojen s pristupne točke ili poslužitelja autentifikacije."
 
 #: ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed."
-msgstr "Configurazione della connessione 802.1X fallita."
+msgstr "Neuspjelo podešavanje 802.1X suplikanta."
 
 #: ../../network/state_handler.go:44
 msgid "The 802.1X supplicant quitted or failed unexpectedly."
-msgstr "Il controllo 802.1X si è chiuso o ha fallito inaspettatamente."
+msgstr "802.1X suplikant je isključen ili se neočekivano srušio."
 
 #: ../../network/state_handler.go:45
 msgid "The 802.1X supplicant took too long time to authenticate."
-msgstr "Il controllo 802.1X ci ha messo troppo tempo per autenticarsi."
+msgstr "802.1X suplikant predugo trajanje autentifikacije."
 
 #: ../../network/state_handler.go:46
 msgid "The PPP service failed to start within the allowed time."
-msgstr "Il servizio PPP non è riuscito a partire nel tempo prestabilito."
+msgstr "PPP usluga se nije uspjela pokrenuti u zadanom vremenu."
 
 #: ../../network/state_handler.go:47
 msgid "The PPP service disconnected unexpectedly."
-msgstr "Il servizio PPP si è disconnesso inaspettatamente."
+msgstr "PPP usluga se neočekivano odspojila."
 
 #: ../../network/state_handler.go:48
 msgid "The PPP service quitted or failed unexpectedly."
-msgstr "Il servizio PPP è terminato o ha fallito inaspettatamente."
+msgstr "PPP usluga je isključena ili se neočekivano srušila."
 
 #: ../../network/state_handler.go:49
 msgid "The DHCP service failed to start within the allowed time."
-msgstr "Il servizio DHCP non è riuscito a partire nel tempo prestabilito."
+msgstr "DHCP usluga se nije uspjela pokrenuti u zadanom vremenu."
 
 #: ../../network/state_handler.go:50
 msgid "The DHCP service reported an unexpected error."
-msgstr "Il servizio DHCP ha riportato un errore inaspettato."
+msgstr "DHCP usluga je prijavila neočekivanu grešku."
 
 #: ../../network/state_handler.go:51
 msgid "The DHCP service quitted or failed unexpectedly."
-msgstr "Il servizio DHCP si è chiuso o ha fallito inaspettatamente."
+msgstr "DHCP usluga je isključena ili se neočekivano srušila."
 
 #: ../../network/state_handler.go:52
 msgid "The shared connection service failed to start."
-msgstr "Il servizio di condivisione della connessione non è riuscito a partire."
+msgstr "Usluga dijeljenja povezivanja nije se pokrenula."
 
 #: ../../network/state_handler.go:53
 msgid "The shared connection service quitted or failed unexpectedly."
-msgstr "Il servizio di condivisione della connessione non è riuscito a partire o è fallito inaspettatamente."
+msgstr "Usluga dijeljenja povezivanja je isključena ili se neočekivano srušila."
 
 #: ../../network/state_handler.go:54
 msgid "The AutoIP service failed to start."
-msgstr "Il servizio AutoIP non è riuscito a partire."
+msgstr "AutoIP usluga nije se pokrenula."
 
 #: ../../network/state_handler.go:55
 msgid "The AutoIP service reported an unexpected error."
-msgstr "Il servizio AutoIP ha riportato un errore inaspettato."
+msgstr "AutoIP usluga prijavila je neočekivanu grešku."
 
 #: ../../network/state_handler.go:56
 msgid "The AutoIP service quitted or failed unexpectedly."
-msgstr "Il servizio AutoIP si è chiuso o fallito inaspettatamente."
+msgstr "The AutoIP usluga je isključena ili se neočekivano srušila."
 
 #: ../../network/state_handler.go:57
 msgid "Dialing failed due to busy lines."
-msgstr "Dialing fallito per via della linea occupata."
+msgstr "Neuspjelo biranje zbog zauzete linije."
 
 #: ../../network/state_handler.go:58
 msgid "Dialing failed due to no dial tone."
-msgstr "Dialing fallito per via dell'assenza dial tone."
+msgstr "Neuspjelo biranje zbog tonskog biranja."
 
 #: ../../network/state_handler.go:59
 msgid "Dialing failed due to the carrier."
-msgstr "Dialing fallito per via del carrier."
+msgstr "Neuspjelo biranje zbog nositelja."
 
 #: ../../network/state_handler.go:60
 msgid "Dialing timed out."
-msgstr "Dialing timed out."
+msgstr "Vrijeme biranja isteklo."
 
 #: ../../network/state_handler.go:61
 msgid "Dialing failed."
-msgstr "Dialing failed."
+msgstr "Neuspjelo biranje."
 
 #: ../../network/state_handler.go:62
 msgid "Modem initialization failed."
-msgstr "Inizializzazione Modem fallita."
+msgstr "Neuspjelo pokretanje modema."
 
 #: ../../network/state_handler.go:63
 msgid "Failed to select the specified GSM APN."
-msgstr "Impossibile selezionare l'APN GSM specificato."
+msgstr "Neuspjeli odabir određenog GSM APN-a."
 
 #: ../../network/state_handler.go:64
 msgid "No networks searched."
-msgstr "Nessuna rete cercata."
+msgstr "Nema pretraženih mreža"
 
 #: ../../network/state_handler.go:65
 msgid "Network registration was denied."
-msgstr "Registrazione alla rete negata."
+msgstr "Registracije na mrežu je odbijena."
 
 #: ../../network/state_handler.go:66
 msgid "Network registration timed out."
-msgstr "Registrazione alla rete fuori scaduta."
+msgstr "Istek vremena mrežne registracije."
 
 #: ../../network/state_handler.go:67
 msgid "Register to the requested GSM network failed."
-msgstr "Registrazione alla rete GSM fallita."
+msgstr "Registracija na zahtjevanu GSM mrežu neuspjela."
 
 #: ../../network/state_handler.go:68
 msgid "PIN check failed."
-msgstr "Controllo PIN fallito."
+msgstr "Neuspjela provjera PIN-a."
 
 #: ../../network/state_handler.go:69
 msgid "Necessary firmware for the device may be missed."
-msgstr "Il firmware necessario del dispositivo potrebbe mancare."
+msgstr "Potreban firmware za uređaj možda nedostaje."
 
 #: ../../network/state_handler.go:70
 msgid "The device was removed."
-msgstr "Il dispositivo è stato rimosso."
+msgstr "Uređaj je uklonjen."
 
 #: ../../network/state_handler.go:71
 msgid "NetworkManager went to sleep."
-msgstr "NetworkManager in standby."
+msgstr "Mrežni upravitelj je zaspao."
 
 #: ../../network/state_handler.go:72
 msgid "The device's active connection was removed or disappeared."
-msgstr "La connessione attiva del dispositivo è stata rimossa o è scomparsa."
+msgstr "Aktivno povezivanje uređaja je uklonjeno ili je nestalo."
 
 #: ../../network/state_handler.go:73
 msgid "A user or client requested to disconnect."
-msgstr "Un user o client ha richiesto la disconnessione."
+msgstr "Korisnik ili klijent zahtjeva odspajanje."
 
 #: ../../network/state_handler.go:74
 msgid "The device's carrier/link changed."
-msgstr "Il vettore/link del device è cambiato."
+msgstr "Nositelj/Poveznica uređaja je promjenjena."
 
 #: ../../network/state_handler.go:75
 msgid "The device's existing connection was assumed."
-msgstr "La connessione attiva del dispositivo è stata assunta."
+msgstr ""
 
 #: ../../network/state_handler.go:76
 msgid "The 802.1x supplicant is now available."
-msgstr "Connessione 802.1X disponibile."
+msgstr "802.1x suplikant je sada dostupan."
 
 #: ../../network/state_handler.go:77
 msgid "The modem could not be found."
-msgstr "Il modem non può esser rilevato."
+msgstr "Modem ne može biti pronađen."
 
 #: ../../network/state_handler.go:78
 msgid "The Bluetooth connection timed out or failed."
-msgstr "La connessione Bluetooth è scaduta o fallita."
+msgstr "Bluetooth povezivanje, istek vremena ili nije uspjelo."
 
 #: ../../network/state_handler.go:79
 msgid "GSM Modem's SIM Card was not inserted."
-msgstr "SIM Card del modem GSM non inserita."
+msgstr "SIM kartica GSM modema nije umetnuta."
 
 #: ../../network/state_handler.go:80
 msgid "GSM Modem's SIM PIN required."
-msgstr "Richiesto il codice PIN della SIM inserita nel Modem GSM."
+msgstr "SIM PIN GSM modema je potreban."
 
 #: ../../network/state_handler.go:81
 msgid "GSM Modem's SIM PUK required."
-msgstr "Richiesto il codice PUK della SIM inserita nel Modem GSM."
+msgstr "SIM PUK GSM modema je potreban."
 
 #: ../../network/state_handler.go:82
 msgid "Wrong GSM Modem's SIM"
-msgstr "SIM del modem GSM errata"
+msgstr "Pogrešan SIM GSM modema"
 
 #: ../../network/state_handler.go:83
 msgid "InfiniBand device does not support connected mode."
-msgstr "Il dispositivo InfiBand non supporta la modalità di connessione."
+msgstr ""
 
 #: ../../network/state_handler.go:84
 msgid "A connection dependency failed."
-msgstr "Una dipendenza di connessione fallita."
+msgstr ""
 
 #: ../../network/state_handler.go:85
 msgid "Problem with the RFC 2684 Ethernet over ADSL bridge."
-msgstr "Problema col RFC 2684 Ethernet sul Bridge ADSL."
+msgstr ""
 
 #: ../../network/state_handler.go:86
 msgid "ModemManager did not run or quitted unexpectedly."
-msgstr "ModemManager non è stato eseguito o si è interrotto inaspettatamente."
+msgstr ""
 
 #: ../../network/state_handler.go:87
 msgid "The 802.11 Wi-Fi network could not be found."
-msgstr "La connessione 802.11 WiFi non può esser trovata."
+msgstr "802.11 Wi-Fi mrežu nije moguće naći."
 
 #: ../../network/state_handler.go:88
 msgid "A secondary connection of the base connection failed."
-msgstr "La seconda connessione è fallita."
+msgstr ""
 
 #: ../../network/state_handler.go:91
 msgid "Network cable is unplugged."
-msgstr "Cavo ethernet staccato."
+msgstr "Mrežni kabel je isključen."
 
 #: ../../network/state_handler.go:94
 msgid "Activate VPN connection failed, unknown reason."
-msgstr "Attivazione delle connessione VPN fallita, causa sconosciuta."
+msgstr "Neuspjela aktivacija VPN veze, nepoznati razlog."
 
 #: ../../network/state_handler.go:95
 msgid "Activate VPN connection failed."
-msgstr "Attivazione della connessione VPN fallita."
+msgstr "Neuspjela aktivacija VPN veze."
 
 #: ../../network/state_handler.go:96
 msgid "The VPN connection changed state due to disconnection from users."
-msgstr "La connessione VPN è cambiata per via della disconnessione dagli utenti."
+msgstr ""
 
 #: ../../network/state_handler.go:97
 msgid "The VPN connection changed state due to disconnection from devices."
-msgstr "La connessione VPN è cambiata per via di una disconnessione dai dispositivi."
+msgstr ""
 
 #: ../../network/state_handler.go:98
 msgid "VPN service stopped."
-msgstr "Il servizio VPN si è interrotto."
+msgstr "VPN usluga zaustavljena."
 
 #: ../../network/state_handler.go:99
 msgid "The IP config of VPN connection was invalid."
-msgstr "La configurazione IP della connessione VPN è invalida."
+msgstr ""
 
 #: ../../network/state_handler.go:100
 msgid "The connection attempt to VPN service timed out."
-msgstr "La connessione VPN è scaduta."
+msgstr ""
 
 #: ../../network/state_handler.go:101
 msgid "The VPN service start timed out."
-msgstr "L'avvio del servizio VPN è scaduto."
+msgstr ""
 
 #: ../../network/state_handler.go:102
 msgid "The VPN service failed to start."
-msgstr "Il servizio VPN non è riuscito a partire."
+msgstr "Neuspjelo pokretanje VPN usluge."
 
 #: ../../network/state_handler.go:103
 msgid "Necessary password for the VPN connection was not provided."
-msgstr "Password necessaria per la connessione VPN non fornita."
+msgstr ""
 
 #: ../../network/state_handler.go:104
 msgid "Authentication to VPN server failed."
-msgstr "Autentificazione server VPN fallita. "
+msgstr ""
 
 #: ../../network/state_handler.go:105
 msgid "The connection was deleted from settings."
-msgstr "La connessione è stata eliminata dalle impostazioni."
+msgstr "Veza je izbrisana iz postavki."
 
 #: ../../network/state_handler.go:157 ../../network/utils_notify.go:89
 #: ../../network/utils_test.go:616 ../../network/utils_test.go:623
 msgid "Connected"
-msgstr "Connesso"
+msgstr "Spojeno"
 
 #: ../../network/state_handler.go:191 ../../network/utils_notify.go:64
 #: ../../network/utils_notify.go:68 ../../network/utils_notify.go:72
@@ -3195,64 +3196,64 @@ msgstr "Connesso"
 #: ../../network/utils_test.go:619 ../../network/utils_test.go:621
 #: ../../network/utils_test.go:625 ../../network/utils_test.go:627
 msgid "Disconnected"
-msgstr "Disconnected"
+msgstr "Odspojeno"
 
 #: ../../network/utils_notify.go:64
 msgid "Airplan mode enabled."
-msgstr "Modalità aeroplano attivata."
+msgstr ""
 
 #: ../../network/utils_notify.go:68
 msgid "You are now offline."
-msgstr "Sei ora offline."
+msgstr "Sada ste izvan mreže."
 
 #: ../../network/utils_notify.go:72
 msgid "Access Point mode is not supported by this device."
-msgstr "Modalità Access Point non è supportata da questo dispositivo."
+msgstr "Ovaj uređaj ne podržava način pristupne točke."
 
 #: ../../network/utils_notify.go:76 ../../network/utils_notify.go:81
 #: ../../network/utils_notify.go:85
 msgid "Network"
-msgstr "Rete"
+msgstr "Mreža"
 
 #: ../../network/utils_notify.go:76
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr "Lo switch hardware della scheda WLAN è spento, attivalo se necessario."
+msgstr ""
 
 #: ../../network/utils_notify.go:81
 msgid "System proxy is set successfully."
-msgstr "Il proxy di sistema è stato impostato con successo."
+msgstr "Proxy sustava je uspješno postavljen."
 
 #: ../../network/utils_notify.go:85
 msgid "System proxy has been cancelled."
-msgstr "Il proxy di sistema è stato eliminato."
+msgstr "Proxy sustava je otkazan."
 
 #: ../../power/upower.go:90
 msgid "Abnormal battery power"
-msgstr "Potenza della batteria anomala."
+msgstr ""
 
 #: ../../power/upower.go:90
 msgid ""
 "Battery power can not be predicted, please save important documents properly"
 " and  not do important operations."
-msgstr "L'autonomia della batteria non può esser individuata, ti consigliamo di salvare i tuoi documenti e non eseguire operazioni delicate."
+msgstr ""
 
 #: ../../power/upower.go:95 ../../power/upower.go:110
 msgid "Battery Critical Low"
-msgstr "Livello di carica della batteria critico"
+msgstr "Baterija je kritično nisko"
 
 #: ../../power/upower.go:95
 msgid "Computer has been in suspend mode, please plug in."
-msgstr "Il computer è stato in modalità di sospensione, connettilo all'alimentatore."
+msgstr ""
 
 #: ../../power/upower.go:110
 msgid "Please plug in, or computer will be in suspend mode."
-msgstr "Collega il PC all'alimentatore, altrimenti il PC entrerà in modalità sospensione."
+msgstr ""
 
 #: ../../power/upower.go:123
 msgid "Battery Low"
-msgstr "Batteria scarica"
+msgstr "Baterija je nisko"
 
 #: ../../power/upower.go:123
 msgid "Computer will be in suspend mode, please plug in now."
-msgstr "Il computer entrerà in modalità sospensione, collegalo al caricabatteria."
+msgstr ""

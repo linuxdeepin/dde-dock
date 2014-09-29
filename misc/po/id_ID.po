@@ -5,13 +5,14 @@
 # Translators:
 # Aril Apria Susanto <awriel@gmail.com>, 2014
 # Yugo Purwanto <dedy.yugo.purwanto@gmail.com>, 2014
+# eko ikhyar <ikhyar.com@gmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-08-21 11:42+0800\n"
-"PO-Revision-Date: 2014-09-03 08:49+0000\n"
-"Last-Translator: szd_liufei <liufei@linuxdeepin.com>\n"
+"PO-Revision-Date: 2014-10-17 11:41+0000\n"
+"Last-Translator: eko ikhyar <ikhyar.com@gmail.com>\n"
 "Language-Team: Indonesian (Indonesia) (http://www.transifex.com/projects/p/dde-daemon/language/id_ID/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,11 +22,11 @@ msgstr ""
 
 #: ../../accounts/account_ifc.go:185
 msgid "The username is invalid."
-msgstr ""
+msgstr "Nama pengguna tidak valid"
 
 #: ../../accounts/account_ifc.go:189
 msgid "The username exists."
-msgstr ""
+msgstr "Nama pengguna sudah ada"
 
 #: ../../bluetooth/bluez_profile.go:31
 msgid "Serial port"
@@ -41,15 +42,15 @@ msgstr "Perangkat Hands-Free"
 
 #: ../../bluetooth/bluez_profile.go:34
 msgid "Hands-Free voice gateway"
-msgstr ""
+msgstr "Gerbang suara Hands-Free"
 
 #: ../../bluetooth/bluez_profile.go:35
 msgid "Headset voice gateway"
-msgstr ""
+msgstr "Gerbang suara Headset"
 
 #: ../../bluetooth/bluez_profile.go:36
 msgid "Object push"
-msgstr ""
+msgstr "Push Objek"
 
 #: ../../bluetooth/bluez_profile.go:37
 msgid "File transfer"
@@ -77,13 +78,13 @@ msgstr "Notifikasi pesan"
 
 #: ../../datetime/datetime.go:127 ../../langselect/ifc.go:39
 msgid "Language is changing, please wait"
-msgstr ""
+msgstr "Bahasa diubah, silahkan tunggu"
 
 #: ../../datetime/set_locale.go:58 ../../langselect/locale.go:245
 msgid ""
 "Language has been changed successfully and will be effective after logged "
 "out."
-msgstr ""
+msgstr "Bahasa telah berhasil diubah dan akan efektif setelah keluar."
 
 #: ../../datetime/set_locale.go:60 ../../langselect/locale.go:247
 msgid "Language failed to change, please try later."
@@ -2124,7 +2125,7 @@ msgstr "Beralih aplikasi"
 
 #: ../../keybinding/id_desc_list.go:52
 msgid "Reverse switch applications"
-msgstr ""
+msgstr "Aplikasi alih terbalik"
 
 #: ../../keybinding/id_desc_list.go:53
 msgid "3D switch applications"
@@ -2176,7 +2177,7 @@ msgstr "Penerjemah Deepin"
 
 #: ../../keybinding/id_desc_list.go:65
 msgid "Switch Layout"
-msgstr ""
+msgstr "Beralih layout"
 
 #: ../../keybinding/id_desc_list.go:73
 msgid "Calculator"
@@ -2336,7 +2337,7 @@ msgstr "Buka Folder"
 
 #: ../../mime/default_media.go:79
 msgid "Run Software"
-msgstr ""
+msgstr "Jalankan Perangkat lunak"
 
 #: ../../network/manager_connections.go:203
 #: ../../network/nm_custom_type.go:178
@@ -2672,7 +2673,7 @@ msgstr "Kata Sandi"
 
 #: ../../network/nm_setting_vpn_openvpn.go:253
 msgid "Certificates with Password (TLS)"
-msgstr ""
+msgstr "Sertifikat dengan Kata sandi (TLS)"
 
 #: ../../network/nm_setting_vpn_openvpn.go:254
 msgid "Static Key"
@@ -2912,11 +2913,11 @@ msgstr "Terbuka"
 
 #: ../../network/state_handler.go:34
 msgid "Device state changed, unknown reason."
-msgstr ""
+msgstr "Keadaan perangkat berubah, alasan yang tidak diketahui."
 
 #: ../../network/state_handler.go:35
 msgid "Device state changed."
-msgstr ""
+msgstr "Keadaan perangkat berubah."
 
 #: ../../network/state_handler.go:36
 msgid "The device is now managed."
@@ -2947,11 +2948,11 @@ msgstr "Kata kunci yang dibutuhkan tidak tidak tersedia."
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server."
-msgstr ""
+msgstr "Supplicant 802.1X terputus dari titik akses atau server otentikasi."
 
 #: ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed."
-msgstr ""
+msgstr "Konfigurasi supplicant 802.1X gagal. "
 
 #: ../../network/state_handler.go:44
 msgid "The 802.1X supplicant quitted or failed unexpectedly."
@@ -3015,11 +3016,11 @@ msgstr "Panggilan gagal karena tidak ada nada panggil."
 
 #: ../../network/state_handler.go:59
 msgid "Dialing failed due to the carrier."
-msgstr ""
+msgstr "Pemanggilan gagal karena carrier."
 
 #: ../../network/state_handler.go:60
 msgid "Dialing timed out."
-msgstr ""
+msgstr "Panggilan kehabisan waktu."
 
 #: ../../network/state_handler.go:61
 msgid "Dialing failed."
@@ -3047,7 +3048,7 @@ msgstr "Pendaftaran jaringan timed out."
 
 #: ../../network/state_handler.go:67
 msgid "Register to the requested GSM network failed."
-msgstr ""
+msgstr "Registrasi ke jaringan GSM yang diminta gagal."
 
 #: ../../network/state_handler.go:68
 msgid "PIN check failed."
@@ -3055,7 +3056,7 @@ msgstr "Gagal mengecek PIN."
 
 #: ../../network/state_handler.go:69
 msgid "Necessary firmware for the device may be missed."
-msgstr ""
+msgstr "Firmware yang diperlukan untuk perangkat mungkin terlewatkan."
 
 #: ../../network/state_handler.go:70
 msgid "The device was removed."
@@ -3063,7 +3064,7 @@ msgstr "Perangkat telah dilepas."
 
 #: ../../network/state_handler.go:71
 msgid "NetworkManager went to sleep."
-msgstr ""
+msgstr "NetworkManager tertidur"
 
 #: ../../network/state_handler.go:72
 msgid "The device's active connection was removed or disappeared."
@@ -3071,7 +3072,7 @@ msgstr "Sambungan aktif perangkat telah dihapus atau hilang."
 
 #: ../../network/state_handler.go:73
 msgid "A user or client requested to disconnect."
-msgstr ""
+msgstr "Pengguna atau klien meminta untuk diputuskan."
 
 #: ../../network/state_handler.go:74
 msgid "The device's carrier/link changed."
@@ -3083,7 +3084,7 @@ msgstr "Permohonan 082.X1 sekarang tersedia"
 
 #: ../../network/state_handler.go:76
 msgid "The 802.1x supplicant is now available."
-msgstr ""
+msgstr "supplicant 802.1x saat ini tersedia."
 
 #: ../../network/state_handler.go:77
 msgid "The modem could not be found."
@@ -3095,7 +3096,7 @@ msgstr "Gagal mengkoneksikan Bluetooth."
 
 #: ../../network/state_handler.go:79
 msgid "GSM Modem's SIM Card was not inserted."
-msgstr ""
+msgstr "Kartu SIM Modem GSM tidak disisipkan."
 
 #: ../../network/state_handler.go:80
 msgid "GSM Modem's SIM PIN required."
@@ -3119,7 +3120,7 @@ msgstr "Ketergantungan koneksi gagal."
 
 #: ../../network/state_handler.go:85
 msgid "Problem with the RFC 2684 Ethernet over ADSL bridge."
-msgstr ""
+msgstr "Masalah dengan RFC 2684 Ethernet jembatan ADSL."
 
 #: ../../network/state_handler.go:86
 msgid "ModemManager did not run or quitted unexpectedly."
