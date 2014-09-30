@@ -47,7 +47,7 @@ var (
 
 func formatCompizShortcut(shortcut string) string {
 	logger.Info("formatCompizShortcut:", shortcut)
-	strs := strings.Split(shortcut, "-")
+	strs := strings.Split(shortcut, ACCEL_DELIM)
 	l := len(strs)
 	if l < 2 {
 		return shortcut

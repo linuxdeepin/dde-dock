@@ -36,6 +36,10 @@ import (
 	"unsafe"
 )
 
+const (
+	ACCEL_DELIM = "-"
+)
+
 func convertKeyToMod(key string) string {
 	if v, ok := keyToModMap[key]; ok {
 		return v
@@ -53,11 +57,11 @@ func convertModToKey(mod string) string {
 }
 
 func convertKeysToMods(keys string) string {
-	array := strings.Split(keys, "-")
+	array := strings.Split(keys, ACCEL_DELIM)
 	ret := ""
 	for i, v := range array {
 		if i != 0 {
-			ret += "-"
+			ret += ACCEL_DELIM
 		}
 		tmp := convertKeyToMod(v)
 		ret += tmp
@@ -67,11 +71,11 @@ func convertKeysToMods(keys string) string {
 }
 
 func convertModsToKeys(mods string) string {
-	array := strings.Split(mods, "-")
+	array := strings.Split(mods, ACCEL_DELIM)
 	ret := ""
 	for i, v := range array {
 		if i != 0 {
-			ret += "-"
+			ret += ACCEL_DELIM
 		}
 		tmp := convertModToKey(v)
 		ret += tmp
@@ -100,7 +104,7 @@ func formatXGBShortcut(shortcut string) string {
 func formatShortcut(shortcut string) string {
 	l := len(shortcut)
 	if l < 1 {
-		logger.Warning("formatShortcut args error")
+		logger.Debug("formatShortcut args error")
 		return ""
 	}
 
@@ -124,7 +128,7 @@ func formatShortcut(shortcut string) string {
 			for j := start + 1; j < end; j++ {
 				ret += string(str[j])
 			}
-			ret += "-"
+			ret += ACCEL_DELIM
 			continue
 		}
 
@@ -134,14 +138,14 @@ func formatShortcut(shortcut string) string {
 	}
 
 	// parse 'primary' to 'control'
-	array := strings.Split(ret, "-")
+	array := strings.Split(ret, ACCEL_DELIM)
 	ret = ""
 	for i, v := range array {
 		if v == "primary" || v == "control" {
 			// multi control
 			if !strings.Contains(ret, "control") {
 				if i != 0 {
-					ret += "-"
+					ret += ACCEL_DELIM
 				}
 				ret += "control"
 			}
@@ -149,7 +153,7 @@ func formatShortcut(shortcut string) string {
 		}
 
 		if i != 0 {
-			ret += "-"
+			ret += ACCEL_DELIM
 		}
 		ret += v
 	}
@@ -161,7 +165,7 @@ func formatShortcut(shortcut string) string {
  * delete Num_Lock and Caps_Lock
  */
 func deleteSpecialMod(modStr string) string {
-	if !strings.Contains(modStr, "-") {
+	if !strings.Contains(modStr, ACCEL_DELIM) {
 		if modStr == "lock" || modStr == "mod2" {
 			return ""
 		}
@@ -170,7 +174,7 @@ func deleteSpecialMod(modStr string) string {
 	}
 
 	ret := ""
-	strs := strings.Split(modStr, "-")
+	strs := strings.Split(modStr, ACCEL_DELIM)
 	l := len(strs)
 	for i, s := range strs {
 		if s == "lock" || s == "mod2" {
@@ -181,7 +185,7 @@ func deleteSpecialMod(modStr string) string {
 			ret += s
 			break
 		}
-		ret += s + "-"
+		ret += s + ACCEL_DELIM
 	}
 
 	if length := len(ret); length > 1 {
@@ -239,6 +243,7 @@ func grabKeyPress(wid xproto.Window, shortcut string) bool {
 		return false
 	}
 
+	shortcut = convertKeysym2Weird(shortcut)
 	mod, keys, err := keybind.ParseString(X, shortcut)
 	if err != nil {
 		logger.Warning("In GrabKey Parse shortcut failed:", err)
@@ -262,6 +267,7 @@ func ungrabKey(wid xproto.Window, shortcut string) bool {
 		return false
 	}
 
+	shortcut = convertKeysym2Weird(shortcut)
 	mod, keys, err := keybind.ParseString(X, shortcut)
 	if err != nil {
 		logger.Warning("In UngrabKey Parse shortcut failed:", err)
@@ -387,6 +393,7 @@ func grabSignalShortcut(shortcut, action string, isGrab bool) {
 		return
 	}
 
+	shortcut = convertKeysym2Weird(shortcut)
 	mod, keys, err := keybind.ParseString(X, shortcut)
 	if err != nil {
 		logger.Errorf("ParseString error: %v", err)
@@ -414,6 +421,7 @@ func ungrabSignalShortcut(shortcut string) {
 		return
 	}
 
+	shortcut = convertKeysym2Weird(shortcut)
 	mod, keys, err := keybind.ParseString(X, shortcut)
 	if err != nil {
 		logger.Errorf("ParseString error: %v", err)
@@ -455,7 +463,7 @@ func parseKeyEnvent(X *xgbutil.XUtil, state uint16, detail xproto.Keycode) strin
 	modStr = deleteSpecialMod(modStr)
 
 	if len(modStr) > 0 {
-		value = convertModsToKeys(modStr) + "-" + keyStr
+		value = convertModsToKeys(modStr) + ACCEL_DELIM + keyStr
 	} else {
 		value = keyStr
 	}

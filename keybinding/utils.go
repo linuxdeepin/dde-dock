@@ -242,8 +242,8 @@ func isValidShortcut(shortcut string) bool {
 		return true
 	}
 
-	if strings.Contains(tmp, "-") {
-		as := strings.Split(tmp, "-")
+	if strings.Contains(tmp, ACCEL_DELIM) {
+		as := strings.Split(tmp, ACCEL_DELIM)
 		l := len(as)
 		str := as[l-1]
 		// 修饰键作为单按键的情况
@@ -358,6 +358,7 @@ func newKeycodeInfo(shortcut string) (KeycodeInfo, bool) {
 		return KeycodeInfo{}, false
 	}
 
+	shortcut = convertKeysym2Weird(shortcut)
 	mod, keys, err := keybind.ParseString(X, shortcut)
 	if err != nil {
 		logger.Warningf("newKeycodeInfo parse '%s' failed: %v",
