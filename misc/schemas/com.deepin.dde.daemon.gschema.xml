@@ -91,7 +91,7 @@
       <summary></summary>
       <description></description>
     </key>
-    <key type="b"  name="themes">
+    <key type="b"  name="appearance">
       <default>true</default>
       <summary></summary>
       <description></description>

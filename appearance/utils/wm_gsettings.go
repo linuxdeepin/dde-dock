@@ -19,57 +19,46 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package main
+package utils
 
 import (
-	"pkg.linuxdeepin.com/dde-daemon"
+	"fmt"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
+	dutils "pkg.linuxdeepin.com/lib/utils"
+)
+
+const (
+	WMThemeName    = "theme"
+	WMTitlebarFont = "titlebar-font"
+)
+
+const (
+	wmGSettingsSchema = "org.gnome.desktop.wm.preferences"
 )
 
 var (
-	_pluginList = []string{
-		"keybinding",
-		"screensaver",
-		"power",
-		"audio",
-		"appearance",
-		"clipboard",
-		"datetime",
-		"mime",
-		"screenedge",
-		"bluetooth",
-		"network",
-		"mounts",
-		"inputdevices",
-		"dock",
-		"launcher",
-		"dsc",
-		"mpris",
-		"systeminfo",
-		"sessionwatcher",
-	}
-
-	_daemonSettings = gio.NewSettings("com.deepin.dde.daemon")
+	errSchemaNotExist = fmt.Errorf("GSettings schema not exist")
 )
 
-func initPlugins() {
-	for _, plugin := range _pluginList {
-		enable := _daemonSettings.GetBoolean(plugin)
-		if !enable {
-			loader.Enable(plugin, false)
-		}
+var _wmSettings *gio.Settings
+
+func InitWMSettings() error {
+	if _wmSettings != nil {
+		return nil
 	}
+
+	if !dutils.IsGSchemaExist(wmGSettingsSchema) {
+		return errSchemaNotExist
+	}
+
+	_wmSettings = gio.NewSettings(wmGSettingsSchema)
+	return nil
 }
 
-func listenDaemonSettings() {
-	_daemonSettings.Connect("changed", func(s *gio.Settings, key string) {
-		enable := _daemonSettings.GetBoolean(key)
-		if enable {
-			logger.Info("Enable plugin:", key)
-			loader.StartPlugin(key)
-		} else {
-			logger.Info("Disable plugin:", key)
-			loader.StopPlugin(key)
-		}
-	})
+func WMSetString(key, value string) bool {
+	if _wmSettings == nil {
+		return false
+	}
+
+	return _wmSettings.SetString(key, value)
 }

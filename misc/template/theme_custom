@@ -12,6 +12,7 @@ GtkTheme=Deepin
 IconTheme=Deepin
 CursorTheme=Deepin-Cursor
 FontName=WenQuanYi Micro Hei
+FontMono=WenQuanYi Micro Hei Mono
 FontSize=11
 BackgroundFile=file:///usr/share/backgrounds/1920x1080.jpg
 SoundTheme=LinuxDeepin

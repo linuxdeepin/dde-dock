@@ -7,7 +7,7 @@ import "pkg.linuxdeepin.com/lib/proxy"
 
 import _ "pkg.linuxdeepin.com/dde-daemon/audio"
 
-import _ "pkg.linuxdeepin.com/dde-daemon/themes"
+import _ "pkg.linuxdeepin.com/dde-daemon/appearance"
 
 import _ "pkg.linuxdeepin.com/dde-daemon/clipboard"
 import _ "pkg.linuxdeepin.com/dde-daemon/datetime"
