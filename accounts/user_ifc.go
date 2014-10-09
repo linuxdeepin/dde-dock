@@ -25,11 +25,12 @@ import (
 	"os"
 	"path"
 	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/graphic"
 	dutils "pkg.linuxdeepin.com/lib/utils"
 	"strings"
 )
 
-func (obj *User) SetUserName(dbusMsg dbus.DMessage, username string) bool {
+func (u *User) SetUserName(dbusMsg dbus.DMessage, username string) bool {
 	defer func() {
 		if err := recover(); err != nil {
 			logger.Errorf("Recover Error In SetUserName:%v",
@@ -43,14 +44,14 @@ func (obj *User) SetUserName(dbusMsg dbus.DMessage, username string) bool {
 		return false
 	}
 
-	if obj.UserName != username {
-		obj.setUserName(username)
+	if u.UserName != username {
+		u.setUserName(username)
 	}
 
 	return true
 }
 
-func (obj *User) SetHomeDir(dbusMsg dbus.DMessage, dir string) bool {
+func (u *User) SetHomeDir(dbusMsg dbus.DMessage, dir string) bool {
 	defer func() {
 		if err := recover(); err != nil {
 			logger.Errorf("Recover Error In SetHomeDir:%v",
@@ -64,14 +65,14 @@ func (obj *User) SetHomeDir(dbusMsg dbus.DMessage, dir string) bool {
 		return false
 	}
 
-	if obj.HomeDir != dir {
-		obj.setHomeDir(dir)
+	if u.HomeDir != dir {
+		u.setHomeDir(dir)
 	}
 
 	return true
 }
 
-func (obj *User) SetShell(dbusMsg dbus.DMessage, shell string) bool {
+func (u *User) SetShell(dbusMsg dbus.DMessage, shell string) bool {
 	defer func() {
 		if err := recover(); err != nil {
 			logger.Errorf("Recover Error In SetShell:%v",
@@ -85,14 +86,14 @@ func (obj *User) SetShell(dbusMsg dbus.DMessage, shell string) bool {
 		return false
 	}
 
-	if obj.Shell != shell {
-		obj.setShell(shell)
+	if u.Shell != shell {
+		u.setShell(shell)
 	}
 
 	return true
 }
 
-func (obj *User) SetPassword(dbusMsg dbus.DMessage, words string) bool {
+func (u *User) SetPassword(dbusMsg dbus.DMessage, words string) bool {
 	defer func() {
 		if err := recover(); err != nil {
 			logger.Errorf("Recover Error In SetPassword:%v",
@@ -107,14 +108,14 @@ func (obj *User) SetPassword(dbusMsg dbus.DMessage, words string) bool {
 	}
 
 	passwd := encodePasswd(words)
-	changePasswd(obj.UserName, passwd)
+	changePasswd(u.UserName, passwd)
 
-	obj.setLocked(false)
+	u.setLocked(false)
 
 	return true
 }
 
-func (obj *User) SetAutomaticLogin(dbusMsg dbus.DMessage, auto bool) bool {
+func (u *User) SetAutomaticLogin(dbusMsg dbus.DMessage, auto bool) bool {
 	defer func() {
 		if err := recover(); err != nil {
 			logger.Errorf("Recover Error In SetAutomaticLogin:%v",
@@ -128,14 +129,14 @@ func (obj *User) SetAutomaticLogin(dbusMsg dbus.DMessage, auto bool) bool {
 		return false
 	}
 
-	if obj.AutomaticLogin != auto {
-		obj.setAutomaticLogin(auto)
+	if u.AutomaticLogin != auto {
+		u.setAutomaticLogin(auto)
 	}
 
 	return true
 }
 
-func (obj *User) SetAccountType(dbusMsg dbus.DMessage, t int32) bool {
+func (u *User) SetAccountType(dbusMsg dbus.DMessage, t int32) bool {
 	defer func() {
 		if err := recover(); err != nil {
 			logger.Errorf("Recover Error In SetAccountType:%v",
@@ -149,14 +150,14 @@ func (obj *User) SetAccountType(dbusMsg dbus.DMessage, t int32) bool {
 		return false
 	}
 
-	if obj.AccountType != t {
-		obj.setAccountType(t)
+	if u.AccountType != t {
+		u.setAccountType(t)
 	}
 
 	return true
 }
 
-func (obj *User) SetLocked(dbusMsg dbus.DMessage, locked bool) bool {
+func (u *User) SetLocked(dbusMsg dbus.DMessage, locked bool) bool {
 	defer func() {
 		if err := recover(); err != nil {
 			logger.Errorf("Recover Error In SetLocked:%v",
@@ -170,14 +171,14 @@ func (obj *User) SetLocked(dbusMsg dbus.DMessage, locked bool) bool {
 		return false
 	}
 
-	if obj.Locked != locked {
-		obj.setLocked(locked)
+	if u.Locked != locked {
+		u.setLocked(locked)
 	}
 
 	return true
 }
 
-func (obj *User) SetIconFile(dbusMsg dbus.DMessage, icon string) bool {
+func (u *User) SetIconFile(dbusMsg dbus.DMessage, icon string) bool {
 	defer func() {
 		if err := recover(); err != nil {
 			logger.Errorf("Recover Error In SetIconFile:%v",
@@ -191,29 +192,34 @@ func (obj *User) SetIconFile(dbusMsg dbus.DMessage, icon string) bool {
 		return false
 	}
 
-	if ok := dutils.IsFileExist(icon); !ok || obj.IconFile == icon {
+	if !dutils.IsFileExist(icon) ||
+		!graphic.IsSupportedImage(icon) {
 		return false
 	}
 
-	if !strIsInList(icon, obj.IconList) {
+	if u.IconFile == icon {
+		return true
+	}
+
+	if !strIsInList(icon, u.IconList) {
 		if ok := dutils.IsFileExist(ICON_LOCAL_DIR); !ok {
 			if err := os.MkdirAll(ICON_LOCAL_DIR, 0755); err != nil {
 				return false
 			}
 		}
 		name := path.Base(icon)
-		dest := path.Join(ICON_LOCAL_DIR, obj.UserName+"-"+name)
+		dest := path.Join(ICON_LOCAL_DIR, u.UserName+"-"+name)
 		if err := dutils.CopyFile(icon, dest); err != nil {
 			return false
 		}
 		icon = dest
 	}
-	obj.setIconFile(icon)
+	u.setIconFile(icon)
 
 	return true
 }
 
-func (obj *User) SetBackgroundFile(dbusMsg dbus.DMessage, bg string) bool {
+func (u *User) SetBackgroundFile(dbusMsg dbus.DMessage, bg string) bool {
 	defer func() {
 		if err := recover(); err != nil {
 			logger.Errorf("Recover Error In SetBackgroundFile:%v",
@@ -227,14 +233,14 @@ func (obj *User) SetBackgroundFile(dbusMsg dbus.DMessage, bg string) bool {
 		return false
 	}
 
-	if obj.BackgroundFile != bg {
-		obj.setBackgroundFile(bg)
+	if u.BackgroundFile != bg {
+		u.setBackgroundFile(bg)
 	}
 
 	return true
 }
 
-func (obj *User) DeleteHistoryIcon(dbusMsg dbus.DMessage, icon string) bool {
+func (u *User) DeleteHistoryIcon(dbusMsg dbus.DMessage, icon string) bool {
 	defer func() {
 		if err := recover(); err != nil {
 			logger.Errorf("Recover Error In DeleteHistoryIcon:%v",
@@ -248,7 +254,7 @@ func (obj *User) DeleteHistoryIcon(dbusMsg dbus.DMessage, icon string) bool {
 		return false
 	}
 
-	obj.deleteHistoryIcon(icon)
+	u.deleteHistoryIcon(icon)
 
 	return true
 }
