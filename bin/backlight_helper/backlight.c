@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "backlight.h"
 
+struct udev* udev = NULL;
 static struct udev_device* cached_dev = NULL;
 
 struct udev_device* filter_by_type(struct udev* udev, struct udev_list_entry* entries, const char* type)
@@ -28,9 +29,9 @@ void set_cached_dev(struct udev_device* dev)
     printf("Found backlight device: %s\n", udev_device_get_syspath(dev));
 }
 
-void update_backlight_device()
+void init_backlight_device()
 {
-    struct udev* udev = udev_new();
+    udev = udev_new();
     struct udev_enumerate* enumerate = udev_enumerate_new(udev);
 
     udev_enumerate_add_match_subsystem(enumerate, "backlight");
@@ -45,8 +46,7 @@ void update_backlight_device()
     } else {
 	set_cached_dev(dev);
 
-	udev_enumerate_unref(enumerate);
-	udev_unref(udev);
+        udev_enumerate_unref(enumerate);
 	return;
     }
 
@@ -55,17 +55,15 @@ void update_backlight_device()
     } else {
 	set_cached_dev(dev);
 
-	udev_enumerate_unref(enumerate);
-	udev_unref(udev);
+        udev_enumerate_unref(enumerate);
 	return;
     }
 
     set_cached_dev(dev);
     udev_enumerate_unref(enumerate);
-    udev_unref(udev);
 }
 
-double get_backlight() 
+double get_backlight()
 {
     if (cached_dev == NULL) {
 	return -1;

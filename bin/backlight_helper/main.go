@@ -8,25 +8,31 @@ import "pkg.linuxdeepin.com/lib/log"
 //#include <stdlib.h>
 import "C"
 import "os"
+import "sync"
 import "time"
 
 type BacklightHelper struct {
 	SysPath string
+	lock    sync.Mutex
 }
 
 func NewBacklightHelper() *BacklightHelper {
-	C.update_backlight_device()
+	C.init_backlight_device()
 	return &BacklightHelper{}
 }
 
-func (*BacklightHelper) SetBrightness(v float64) {
+func (h *BacklightHelper) SetBrightness(v float64) {
+	h.lock.Lock()
+	defer h.lock.Unlock()
 	if v > 1 || v < 0 {
 		logger.Warningf("SetBacklight %v failed\n", v)
 		return
 	}
 	C.set_backlight(C.double(v))
 }
-func (*BacklightHelper) GetBrightness() float64 {
+func (h *BacklightHelper) GetBrightness() float64 {
+	h.lock.Lock()
+	defer h.lock.Unlock()
 	return (float64)(C.get_backlight())
 }
 func (*BacklightHelper) GetDBusInfo() dbus.DBusInfo {
