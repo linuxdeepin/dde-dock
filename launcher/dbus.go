@@ -39,7 +39,7 @@ type LauncherDBus struct {
 		itemInfo ItemInfo,
 		categoryId CategoryId,
 	)
-	PackageNameGet func(packagename string)
+	PackageNameGet func(id, packagename string)
 	UpdateSignal   func([]Action)
 }
 
@@ -251,14 +251,7 @@ func (d *LauncherDBus) GetAppId(path string) string {
 	return string(genId(path))
 }
 
-func (d *LauncherDBus) GetPackageName(path string) {
-	var err error
-	d.soft, err = NewSoftwareCenter()
-	if err != nil {
-		logger.Warning("get softwarecenter dbus failed:", err)
-		return
-	}
-
+func (d *LauncherDBus) GetPackageName(id, path string) {
 	go func(d *LauncherDBus) {
 		name := ""
 
@@ -269,18 +262,26 @@ func (d *LauncherDBus) GetPackageName(path string) {
 				err)
 			name = ""
 		}
-		d.PackageNameGet(name)
+		d.PackageNameGet(id, name)
 	}(d)
 }
 
 func (d *LauncherDBus) Uninstall(pkgName string, purge bool) {
 	var err error
+
+	logger.Info("Uninstall", pkgName)
+	err = d.soft.UninstallPkg(pkgName, purge)
+	if err != nil {
+		logger.Warning("call UninstallPkg method failed:", err)
+	}
+}
+func (d *LauncherDBus) listenUninstall() {
+	var err error
 	d.soft, err = NewSoftwareCenter()
 	if err != nil {
-		logger.Warning("get softwarecenter dbus failed:", err)
+		logger.Warning(err)
 		return
 	}
-
 	d.soft.Connectupdate_signal(func(message [][]interface{}) {
 		switch message[0][0].(string) {
 		case ActionStart, ActionUpdate, ActionFinish,
@@ -293,15 +294,11 @@ func (d *LauncherDBus) Uninstall(pkgName string, purge bool) {
 		d.UpdateSignal(msg)
 		logger.Warning("update signal", message)
 	})
-
-	err = d.soft.UninstallPkg(pkgName, purge)
-	if err != nil {
-		logger.Warning("call UninstallPkg method failed:", err)
-	}
 }
 
 func initDBus() {
 	launcherDbus := LauncherDBus{}
 	dbus.InstallOnSession(&launcherDbus)
 	launcherDbus.listenItemChanged()
+	launcherDbus.listenUninstall()
 }
