@@ -182,6 +182,13 @@ func (d *LauncherDBus) eventHandler(watcher *fsnotify.Watcher) {
 			name := path.Clean(ev.Name)
 			basename := path.Base(name)
 			matched, _ := path.Match(`[^#.]*.desktop`, basename)
+			if basename == "kde4" {
+				if ev.IsCreate() {
+					watcher.Watch(name)
+				} else if ev.IsDelete() {
+					watcher.RemoveWatch(name)
+				}
+			}
 			if matched {
 				d.itemChangedHandler(ev, name, info)
 			}
@@ -198,12 +205,20 @@ func getApplicationsDirs() []string {
 		if exist(applicationsDir) {
 			dirs = append(dirs, applicationsDir)
 		}
+		applicationsDirForKde := path.Join(applicationsDir, "kde4")
+		if exist(applicationsDirForKde) {
+			dirs = append(dirs, applicationsDirForKde)
+		}
 	}
 
 	userDataDir := path.Join(glib.GetUserDataDir(), AppDirName)
 	dirs = append(dirs, userDataDir)
 	if !exist(userDataDir) {
 		os.MkdirAll(userDataDir, DirDefaultPerm)
+	}
+	userDataDirForKde := path.Join(userDataDir, "kde4")
+	if exist(userDataDirForKde) {
+		dirs = append(dirs, userDataDirForKde)
 	}
 	return dirs
 }
