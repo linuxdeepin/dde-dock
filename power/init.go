@@ -19,6 +19,8 @@ var (
 	login1   *liblogin1.Manager
 	mediaKey *libkeybinding.MediaKey
 	player   *libsound.Sound
+
+	power *Power
 )
 
 func initializeLibs() {
@@ -43,9 +45,17 @@ func initializeLibs() {
 	if err != nil {
 		logger.Warning("Can't build com.deepin.api.Sound:", err)
 	}
+
+	power = NewPower()
 }
 
 func finalizeLibs() {
+	if power != nil {
+		power.batGroup.Destroy()
+		power.batGroup = nil
+		dbus.UnInstallObject(power)
+		power = nil
+	}
 	if upower != nil {
 		libupower.DestroyUpower(upower)
 		upower = nil
@@ -66,14 +76,12 @@ func finalizeLibs() {
 	player = nil
 }
 
-var power *Power
 var workaround *fullScreenWorkaround
 
 func Start() {
 	logger.BeginTracing()
 
 	initializeLibs()
-	power := NewPower()
 
 	if err := dbus.InstallOnSession(power); err != nil {
 		logger.Error("Failed InstallOnSession:", err)
@@ -86,9 +94,6 @@ func Start() {
 func Stop() {
 	if workaround != nil {
 		workaround.stop()
-	}
-	if power != nil {
-		dbus.UnInstallObject(power)
 	}
 	finalizeLibs()
 	logger.EndTracing()

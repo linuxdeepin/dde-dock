@@ -3,7 +3,6 @@ package power
 import "pkg.linuxdeepin.com/lib/gio-2.0"
 import "time"
 import . "pkg.linuxdeepin.com/lib/gettext"
-import libupower "dbus/org/freedesktop/upower"
 
 const (
 	UPOWER_BUS_NAME = "org.freedesktop.UPower"
@@ -59,18 +58,7 @@ func (p *Power) refreshUpower() {
 	}
 
 	p.setPropLidIsPresent(upower.LidIsPresent.Get())
-
-	present, state, percentage, err := getBatteryInfo()
-	if err != nil {
-		logger.Warning("can't get batteryinfo:", err)
-		return
-	}
-
-	p.setPropBatteryIsPresent(present)
-	p.setPropBatteryState(state)
-	p.setPropBatteryPercentage(percentage)
-	p.handleBatteryPercentage()
-	//TODO: handle lowe battery
+	p.updateBatteryInfo()
 }
 
 func (p *Power) handleBatteryPercentage() {
@@ -138,12 +126,22 @@ func (p *Power) handleBatteryPercentage() {
 
 func (p *Power) initUpower() {
 	if upower != nil {
-		upower.ConnectChanged(func() {
+		upower.OnBattery.ConnectChanged(func() {
 			p.refreshUpower()
 		})
-		upower.ConnectDeviceChanged(func(path string) {
+		upower.ConnectDeviceAdded(func(path string) {
+			if p.batGroup != nil {
+				p.batGroup.AddBatteryDevice(path)
+			}
 			p.refreshUpower()
 		})
+		upower.ConnectDeviceRemoved(func(path string) {
+			if p.batGroup != nil {
+				p.batGroup.RemoveBatteryDevice(path)
+			}
+			p.refreshUpower()
+		})
+		p.batGroup = NewBatteryGroup(p.updateBatteryInfo)
 		p.setPropOnBattery(upower.OnBattery.Get())
 		p.refreshUpower()
 	}
@@ -159,20 +157,20 @@ func (p *Power) initUpower() {
 	})
 }
 
-func getBatteryInfo() (bool, uint32, float64, error) {
-	devs, err := upower.EnumerateDevices()
+func (p *Power) updateBatteryInfo() {
+	if p.batGroup == nil {
+		logger.Debug("No battery device")
+		return
+	}
+
+	present, state, percentage, err := p.batGroup.GetBatteryInfo()
 	if err != nil {
-		logger.Error("Can't EnumerateDevices", err)
-		return false, 0, 0, err
+		logger.Warning(err)
+		return
 	}
-	for _, path := range devs {
-		dev, err := libupower.NewDevice(UPOWER_BUS_NAME, path)
-		if err == nil && dev.Type.Get() == DeviceTypeBattery {
-			return dev.IsPresent.Get(),
-				dev.State.Get(),
-				dev.Percentage.Get(),
-				nil
-		}
-	}
-	return false, BatteryStateUnknown, 0, nil
+	p.setPropBatteryIsPresent(present)
+	p.setPropBatteryState(state)
+	p.setPropBatteryPercentage(percentage)
+	p.handleBatteryPercentage()
+	//TODO: handle lower battery
 }

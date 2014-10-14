@@ -10,6 +10,7 @@ var logger = log.NewLogger("com.deepin.daemon.Power")
 type Power struct {
 	coreSettings     *gio.Settings
 	screensaver      *ss.ScreenSaver
+	batGroup         *batteryGroup
 	lidIsClosed      bool
 	lowBatteryStatus uint32
 

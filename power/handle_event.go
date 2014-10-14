@@ -55,7 +55,7 @@ func doSuspend() {
 		if err = m.RequestSuspend(); err != nil {
 			logger.Warning("Suspend failed:", err)
 		}
-		logger.Info("RequestSuspend...", err)
+		logger.Debug("RequestSuspend...", err)
 		sessionmanager.DestroySessionManager(m)
 	}
 }
