@@ -2,7 +2,7 @@ package dock
 
 import (
 	"errors"
-	"testing"
+	C "launchpad.net/gocheck"
 	"time"
 )
 
@@ -49,57 +49,53 @@ func (m *MockXMouseArea) RegisterFullScreen() (string, error) {
 	return "0", nil
 }
 
-var mockXMouseArea, err = NewMockXMouseArea()
-var xmouseArea, _ = NewXMouseArea(mockXMouseArea, err)
+type XMouseAreaTestSuite struct{}
 
-func TestNewXMouseArea(t *testing.T) {
-	_, err := NewXMouseArea(NewMockXMouseArea())
-	if err != nil {
-		t.FailNow()
-	}
-	_, err = NewXMouseArea(&MockXMouseArea{}, errors.New("create MockXMouseArea failed"))
-	if err == nil {
-		t.FailNow()
-	}
+var _ = C.Suite(&XMouseAreaTestSuite{})
+
+var mockXMouseArea, err = NewMockXMouseArea()
+var xmouseArea, _ = NewXMouseAreaProxyer(mockXMouseArea, err)
+
+func (s *XMouseAreaTestSuite) TestNewXMouseArea(c *C.C) {
+	_, err := NewXMouseAreaProxyer(NewMockXMouseArea())
+	c.Check(err, C.IsNil)
+	_, err = NewXMouseAreaProxyer(&MockXMouseArea{}, errors.New("create MockXMouseArea failed"))
+	c.Check(err, C.NotNil)
 }
 
-func Test_unregister(t *testing.T) {
+func (s *XMouseAreaTestSuite) Test_unregister(c *C.C) {
 	xmouseArea.unregister()
-	if xmouseArea.idValid != false {
-		t.FailNow()
-	}
+	c.Check(xmouseArea.idValid, C.Equals, false)
 
 	xmouseArea.RegisterFullScreen()
 	xmouseArea.unregister()
-	if xmouseArea.idValid != false {
-		t.FailNow()
-	}
+	c.Check(xmouseArea.idValid, C.Equals, false)
 }
 
-func Test_connectMotionInto(t *testing.T) {
-	c := make(chan struct{})
+func (s *XMouseAreaTestSuite) Test_connectMotionInto(c *C.C) {
+	ch := make(chan struct{})
 	xmouseArea.connectMotionInto(func(_, _ int32, id string) {
-		close(c)
+		close(ch)
 	})
 	xmouseArea.RegisterFullScreen()
 	mockXMouseArea.emitMotionInto(0, 0, "0")
 	select {
-	case <-c:
+	case <-ch:
 	case <-time.After(time.Second):
-		t.FailNow()
+		c.FailNow()
 	}
 }
 
-func Test_connectMotionOut(t *testing.T) {
-	c := make(chan struct{})
+func (s *XMouseAreaTestSuite) Test_connectMotionOut(c *C.C) {
+	ch := make(chan struct{})
 	xmouseArea.connectMotionOut(func(_, _ int32, id string) {
-		close(c)
+		close(ch)
 	})
 	xmouseArea.RegisterFullScreen()
 	mockXMouseArea.emitMotionOut(0, 0, "0")
 	select {
-	case <-c:
+	case <-ch:
 	case <-time.After(time.Second):
-		t.FailNow()
+		c.FailNow()
 	}
 }
