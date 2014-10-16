@@ -19,32 +19,28 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package langselect
+package langselector
 
 import (
-	"errors"
 	"pkg.linuxdeepin.com/lib/dbus"
-	. "pkg.linuxdeepin.com/lib/gettext"
 )
 
-func (ls *LangSelect) SetLocale(locale string) error {
-	if len(locale) < 1 {
-		return errors.New("SetLocale args error")
+const (
+	dbusPath      = "/com/deepin/daemon/LangSelector"
+	dbusInterface = "com.deepin.daemon.LangSelector"
+)
+
+func (lang *LangSelector) GetDBusInfo() dbus.DBusInfo {
+	return dbus.DBusInfo{
+		Dest:       dbusSender,
+		ObjectPath: dbusPath,
+		Interface:  dbusInterface,
 	}
-
-	if ls.CurrentLocale == locale {
-		return nil
-	}
-
-	ls.sendNotify("", "", Tr("Language is changing, please wait"))
-	setDate.GenLocale(locale)
-	ls.changeLocaleFlag = true
-	ls.CurrentLocale = locale
-	dbus.NotifyChange(ls, "CurrentLocale")
-
-	return nil
 }
 
-func (ls *LangSelect) GetLocaleList() (list []localeInfo) {
-	return ls.getLocaleInfoList()
+func (lang *LangSelector) setPropCurrentLocale(locale string) {
+	if lang.CurrentLocale != locale {
+		lang.CurrentLocale = locale
+		dbus.NotifyChange(lang, "CurrentLocale")
+	}
 }

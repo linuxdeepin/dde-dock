@@ -41,11 +41,6 @@
       <summary></summary>
       <description></description>
     </key>
-    <key type="b"  name="langselect">
-      <default>true</default>
-      <summary></summary>
-      <description></description>
-    </key>
     <key type="b"  name="launcher">
       <default>true</default>
       <summary></summary>

@@ -19,15 +19,38 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package langselect
+package main
 
-import "pkg.linuxdeepin.com/dde-daemon"
+import "os"
+import . "pkg.linuxdeepin.com/dde-daemon/langselector"
+import "pkg.linuxdeepin.com/lib/gettext"
+import "pkg.linuxdeepin.com/lib/dbus"
+import "time"
 
-func init() {
-	loader.Register(&loader.Module{
-		Name:   "langselect",
-		Start:  Start,
-		Stop:   Stop,
-		Enable: true,
+func main() {
+	gettext.InitI18n()
+	gettext.Textdomain("dde-daemon")
+
+	lang := Start()
+	if lang == nil {
+		return
+	}
+
+	dbus.DealWithUnhandledMessage()
+
+	dbus.SetAutoDestroyHandler(time.Second*5, func() bool {
+		if lang.LocaleState == LocaleStateChanging {
+			return false
+		} else {
+			return true
+		}
 	})
+
+	if err := dbus.Wait(); err != nil {
+		Stop()
+		os.Exit(-1)
+	}
+
+	Stop()
+	os.Exit(0)
 }

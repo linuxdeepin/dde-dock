@@ -13,8 +13,6 @@ import _ "pkg.linuxdeepin.com/dde-daemon/clipboard"
 import _ "pkg.linuxdeepin.com/dde-daemon/datetime"
 import _ "pkg.linuxdeepin.com/dde-daemon/mime"
 
-//import _ "pkg.linuxdeepin.com/dde-daemon/langselect"
-
 import _ "pkg.linuxdeepin.com/dde-daemon/screenedge"
 
 import _ "pkg.linuxdeepin.com/dde-daemon/bluetooth"

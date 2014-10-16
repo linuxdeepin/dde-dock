@@ -19,39 +19,38 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package langselect
+package i18n_dependency
 
-import (
-	"pkg.linuxdeepin.com/lib/dbus"
-)
+import "encoding/json"
+import "io/ioutil"
 
-func (ls *LangSelect) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       DEST,
-		ObjectPath: PATH,
-		Interface:  IFC,
-	}
+type dependentPkgInfo struct {
+	LangCode   string `json:"LangCode"`
+	FormatType int32  `json:"FormatType"`
+	DependPkg  string `json:"DependentPkg"`
+	PkgPull    string `json:"PkgPull"`
 }
 
-func (ls *LangSelect) getCurrentLocale() (locale string) {
-	tmp, ok := ls.getUserLocale()
-	if !ok {
-		tmp, ok = ls.getDefaultLocale()
-		if !ok {
-			locale = DEFAULT_LOCALE
-			return
-		}
-		locale = tmp
-	} else {
-		locale = tmp
-	}
-
-	return
+type dependentPkgGroup struct {
+	Category string             `json:"Category"`
+	PkgInfos []dependentPkgInfo `json:"PkgInfos"`
 }
 
-func (ls *LangSelect) setPropCurrentLocale(locale string) {
-	if ls.CurrentLocale != locale {
-		ls.CurrentLocale = locale
-		dbus.NotifyChange(ls, "CurrentLocale")
+type dependentPkgList struct {
+	PkgDepends []dependentPkgGroup `json:"PkgDepends"`
+}
+
+func getPkgDependList(filename string) (*dependentPkgList, error) {
+	contents, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return nil, err
 	}
+
+	var list dependentPkgList
+	err = json.Unmarshal(contents, &list)
+	if err != nil {
+		return nil, err
+	}
+
+	return &list, nil
 }

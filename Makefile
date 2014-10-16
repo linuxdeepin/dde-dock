@@ -19,7 +19,7 @@ BINARIES =  \
     gtk-thumb-tool \
     search \
     theme-thumb-tool \
-    personalization
+    langselector
 
 LANGUAGES = $(basename $(notdir $(wildcard misc/po/*.po)))
 

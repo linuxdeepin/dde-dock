@@ -36,7 +36,6 @@ var (
 		"clipboard",
 		"datetime",
 		"mime",
-		//"langselect",
 		"screenedge",
 		"bluetooth",
 		"network",

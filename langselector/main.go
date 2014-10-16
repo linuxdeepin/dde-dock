@@ -19,20 +19,51 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package langselect
+package langselector
 
-type LangSelect struct {
-	CurrentLocale    string
-	changeLocaleFlag bool
-	LocaleStatus     func(bool, string)
+import (
+	"pkg.linuxdeepin.com/lib"
+	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/log"
+)
+
+const (
+	dbusSender = "com.deepin.daemon.LangSelector"
+)
+
+var _lang *LangSelector
+
+func Start() *LangSelector {
+	var logger = log.NewLogger(dbusSender)
+
+	if !lib.UniqueOnSession(dbusSender) {
+		logger.Warning("There is a LangSelector running...")
+		return nil
+	}
+
+	logger.BeginTracing()
+
+	_lang = newLangSelect(logger)
+	if _lang == nil {
+		logger.Fatal("Create LangSelector Failed")
+	}
+
+	err := dbus.InstallOnSession(_lang)
+	if err != nil {
+		logger.Fatal("Install Session DBus Failed:", err)
+	}
+
+	_lang.onGenLocaleStatus()
+
+	return _lang
 }
 
-const (
-	DEST = "com.deepin.daemon.LangSelect"
-	PATH = "/com/deepin/daemon/LangSelect"
-	IFC  = "com.deepin.daemon.LangSelect"
-)
+func Stop() {
+	if _lang == nil {
+		return
+	}
 
-const (
-	DEFAULT_LOCALE = "en_US.UTF-8"
-)
+	_lang.Destroy()
+	_lang.logger.EndTracing()
+	_lang = nil
+}

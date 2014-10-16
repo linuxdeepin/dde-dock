@@ -1,0 +1,862 @@
+{
+	"LanguageList":[
+		{
+			"Locale": "aa_DJ.UTF-8",
+			"Description": "Afar",
+			"LanguageCode": "aa",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "af_ZA.UTF-8",
+			"Description": "Afrikaans",
+			"LanguageCode": "af",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "am_ET",
+			"Description": "አማርኛ",
+			"LanguageCode": "am",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "ar_EG.UTF-8",
+			"Description": "عربية",
+			"LanguageCode": "ar",
+			"CountryCode": "EG"
+		},
+		{
+			"Locale": "as_IN",
+			"Description": "অসমীয়া",
+			"LanguageCode": "as",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "ast_ES.UTF-8",
+			"Description": "Asturianu",
+			"LanguageCode": "ast",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "be_BY.UTF-8",
+			"Description": "Беларуская",
+			"LanguageCode": "be",
+			"CountryCode": "BY"
+		},
+		{
+			"Locale": "be_BY@latin",
+			"Description": "Biełaruskaja łacinka",
+			"LanguageCode": "be",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "bg_BG.UTF-8",
+			"Description": "Български",
+			"LanguageCode": "bg",
+			"CountryCode": "BG"
+		},
+		{
+			"Locale": "bn_BD",
+			"Description": "বাংলা",
+			"LanguageCode": "bn",
+			"CountryCode": "BD"
+		},
+		{
+			"Locale": "bn_IN",
+			"Description": "বাংলা (ভারত)",
+			"LanguageCode": "bn",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "bo_CN",
+			"Description": "বাংলা",
+			"LanguageCode": "bo",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "br_FR.UTF-8",
+			"Description": "Brezhoneg",
+			"LanguageCode": "br",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "bs_BA.UTF-8",
+			"Description": "Bosanski",
+			"LanguageCode": "bs",
+			"CountryCode": "BA"
+		},
+		{
+			"Locale": "ca_AD.UTF-8",
+			"Description": "Català",
+			"LanguageCode": "ca",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "ca_ES.UTF-8@valencia",
+			"Description": "Català (Valencià)",
+			"LanguageCode": "ca",
+			"CountryCode": "ES"
+		},
+		{
+			"Locale": "crh_UA",
+			"Description": "Qırımtatarca",
+			"LanguageCode": "crh",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "cs_CZ.UTF-8",
+			"Description": "Český",
+			"LanguageCode": "cs",
+			"CountryCode": "CZ"
+		},
+		{
+			"Locale": "csb_PL",
+			"Description": "Kaszëbsczi",
+			"LanguageCode": "csb",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "cv_RU",
+			"Description": "Чăвашла",
+			"LanguageCode": "",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "cy_GB.UTF-8",
+			"Description": "Cymraeg",
+			"LanguageCode": "cy",
+			"CountryCode": "GB"
+		},
+		{
+			"Locale": "da_DK.UTF-8",
+			"Description": "Dansk",
+			"LanguageCode": "da",
+			"CountryCode": "DK"
+		},
+		{
+			"Locale": "de_DE.UTF-8",
+			"Description": "Deutsch",
+			"LanguageCode": "de",
+			"CountryCode": "DE"
+		},
+		{
+			"Locale": "dz_BT",
+			"Description": "ཇོང་ཁ",
+			"LanguageCode": "dz",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "el_GR.UTF-8",
+			"Description": "Ελληνικά",
+			"LanguageCode": "el",
+			"CountryCode": "GR"
+		},
+		{
+			"Locale": "en_GB.UTF-8",
+			"Description": "British English",
+			"LanguageCode": "en",
+			"CountryCode": "GB"
+		},
+		{
+			"Locale": "en_US.UTF-8",
+			"Description": "American English",
+			"LanguageCode": "en",
+			"CountryCode": "US"
+		},
+		{
+			"Locale": "eo_US.UTF-8",
+			"Description": "Esperanto",
+			"LanguageCode": "eo",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "es_ES.UTF-8",
+			"Description": "Español",
+			"LanguageCode": "es",
+			"CountryCode": "ES"
+		},
+		{
+			"Locale": "et_EE.UTF-8",
+			"Description": "Eesti",
+			"LanguageCode": "et",
+			"CountryCode": "EE"
+		},
+		{
+			"Locale": "eu_ES.UTF-8",
+			"Description": "Euskara",
+			"LanguageCode": "eu",
+			"CountryCode": "ES"
+		},
+		{
+			"Locale": "fa_IR",
+			"Description": "فارسی",
+			"LanguageCode": "fa",
+			"CountryCode": "IR"
+		},
+		{
+			"Locale": "fi_FI.UTF-8",
+			"Description": "Suomi",
+			"LanguageCode": "fi",
+			"CountryCode": "FI"
+		},
+		{
+			"Locale": "fo_FO.UTF-8",
+			"Description": "Føroyskt",
+			"LanguageCode": "fo",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "fr_FR.UTF-8",
+			"Description": "Français",
+			"LanguageCode": "fr",
+			"CountryCode": "FR"
+		},
+		{
+			"Locale": "fy_DE",
+			"Description": "Frysk",
+			"LanguageCode": "fy",
+			"CountryCode": "DE"
+		},
+		{
+			"Locale": "ga_IE.UTF-8",
+			"Description": "Gaeilge",
+			"LanguageCode": "ga",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "gd_GB.UTF-8",
+			"Description": "Gàidhlig",
+			"LanguageCode": "gd",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "gl_ES.UTF-8",
+			"Description": "Galego",
+			"LanguageCode": "gl",
+			"CountryCode": "ES"
+		},
+		{
+			"Locale": "gu_IN",
+			"Description": "ગુજરાતી ",
+			"LanguageCode": "gu",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "gv_GB.UTF-8",
+			"Description": "Gaelg",
+			"LanguageCode": "gv",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "ha_NG",
+			"Description": "هَوُسَ",
+			"LanguageCode": "ha",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "he_IL.UTF-8",
+			"Description": "עברית",
+			"LanguageCode": "he",
+			"CountryCode": "IL"
+		},
+		{
+			"Locale": "hi_IN",
+			"Description": "हिन्दी",
+			"LanguageCode": "hi",
+			"CountryCode": "IN"
+		},
+		{
+			"Locale": "hne_IN",
+			"Description": "Chhattisgarhi",
+			"LanguageCode": "hne",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "hr_HR.UTF-8",
+			"Description": "Hrvatski",
+			"LanguageCode": "hr",
+			"CountryCode": "HR"
+		},
+		{
+			"Locale": "hsb_DE.UTF-8",
+			"Description": "Hornjoserbsce",
+			"LanguageCode": "hsb",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "hu_HU.UTF-8",
+			"Description": "Magyar",
+			"LanguageCode": "hu",
+			"CountryCode": "HU"
+		},
+		{
+			"Locale": "hy_AM",
+			"Description": "Հայերեն",
+			"LanguageCode": "hy",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "ia",
+			"Description": "Interlingua",
+			"LanguageCode": "",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "id_ID.UTF-8",
+			"Description": "Indonesia",
+			"LanguageCode": "id",
+			"CountryCode": "ID"
+		},
+		{
+			"Locale": "ik_CA",
+			"Description": "Iñupiak",
+			"LanguageCode": "ik",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "is_IS.UTF-8",
+			"Description": "Íslenska",
+			"LanguageCode": "is",
+			"CountryCode": "IS"
+		},
+		{
+			"Locale": "it_IT.UTF-8",
+			"Description": "Italiano",
+			"LanguageCode": "it",
+			"CountryCode": "IT"
+		},
+		{
+			"Locale": "iu_CA",
+			"Description": "ᐃᓄᒃᑎᑐᑦ",
+			"LanguageCode": "iu",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "ja_JP.UTF-8",
+			"Description": "日本語",
+			"LanguageCode": "ja",
+			"CountryCode": "JP"
+		},
+		{
+			"Locale": "ka_GE.UTF-8",
+			"Description": "ქართული",
+			"LanguageCode": "ka",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "kk_KZ.UTF-8",
+			"Description": "Қазақша",
+			"LanguageCode": "kk",
+			"CountryCode": "KZ"
+		},
+		{
+			"Locale": "kl_GL.UTF-8",
+			"Description": "Kalaallisut",
+			"LanguageCode": "kl",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "km_KH",
+			"Description": "ខ្មែរ",
+			"LanguageCode": "km",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "kn_IN",
+			"Description": "ಕನ್ನಡ",
+			"LanguageCode": "kn",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "ko_KR.UTF-8",
+			"Description": "한국어",
+			"LanguageCode": "ko",
+			"CountryCode": "KR"
+		},
+		{
+			"Locale": "ks_IN",
+			"Description": "कश्मीरी - (كشميري)\t",
+			"LanguageCode": "ks",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "ku_TR.UTF-8",
+			"Description": "Kurdî",
+			"LanguageCode": "ku",
+			"CountryCode": "TR"
+		},
+		{
+			"Locale": "kw_GB.UTF-8",
+			"Description": "Kernewek",
+			"LanguageCode": "kw",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "ky_KG",
+			"Description": "Кыргызча",
+			"LanguageCode": "ky",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "lb_LU",
+			"Description": "Lëtzebuergesch",
+			"LanguageCode": "",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "li_BE",
+			"Description": "Limburgs",
+			"LanguageCode": "li",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "lo_LA",
+			"Description": "ລາວ",
+			"LanguageCode": "lo",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "lt_LT.UTF-8",
+			"Description": "Lietuvių",
+			"LanguageCode": "lt",
+			"CountryCode": "LT"
+		},
+		{
+			"Locale": "lv_LV.UTF-8",
+			"Description": "Latviešu",
+			"LanguageCode": "lv",
+			"CountryCode": "LV"
+		},
+		{
+			"Locale": "mai_IN",
+			"Description": "Maithili",
+			"LanguageCode": "mai",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "mg_MG.UTF-8",
+			"Description": "Malagasy",
+			"LanguageCode": "mg",
+			"CountryCode": "MG"
+		},
+		{
+			"Locale": "mhr_RU",
+			"Description": "Ebon",
+			"LanguageCode": "",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "mi_NZ.UTF-8",
+			"Description": "Māori",
+			"LanguageCode": "mi",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "mk_MK.UTF-8",
+			"Description": "Македонски",
+			"LanguageCode": "mk",
+			"CountryCode": "MK"
+		},
+		{
+			"Locale": "ml_IN",
+			"Description": "മലയാളം",
+			"LanguageCode": "ml",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "mn_MN",
+			"Description": "Монгол",
+			"LanguageCode": "mn",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "mr_IN",
+			"Description": "मराठी",
+			"LanguageCode": "mr",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "ms_MY.UTF-8",
+			"Description": "Bahasa Melayu",
+			"LanguageCode": "ms",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "mt_MT.UTF-8",
+			"Description": "Malti",
+			"LanguageCode": "mt",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "my_MM",
+			"Description": "Myanmasa",
+			"LanguageCode": "",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "nan_TW@latin",
+			"Description": "Ekakairũ Naoero",
+			"LanguageCode": "nan",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "nb_NO.UTF-8",
+			"Description": "Norsk (bokmål)",
+			"LanguageCode": "nb",
+			"CountryCode": "NO"
+		},
+		{
+			"Locale": "nds_DE",
+			"Description": "Plattdüütsch",
+			"LanguageCode": "nds",
+			"CountryCode": "DE"
+		},
+		{
+			"Locale": "ne_NP",
+			"Description": "नेपाली",
+			"LanguageCode": "ne",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "nl_NL.UTF-8",
+			"Description": "Nederlands",
+			"LanguageCode": "nl",
+			"CountryCode": "NL"
+		},
+		{
+			"Locale": "nn_NO.UTF-8",
+			"Description": "Norsk (nynorsk)",
+			"LanguageCode": "nn",
+			"CountryCode": "NO"
+		},
+		{
+			"Locale": "nr_ZA",
+			"Description": "IsiNdebele",
+			"LanguageCode": "nr",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "nso_ZA",
+			"Description": "Sesotho sa Leboa",
+			"LanguageCode": "nso",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "oc_FR.UTF-8",
+			"Description": "Occitan",
+			"LanguageCode": "oc",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "om_KE.UTF-8",
+			"Description": "Oromoo",
+			"LanguageCode": "om",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "or_IN",
+			"Description": "ଓଡ଼ିଆ",
+			"LanguageCode": "or",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "os_RU",
+			"Description": "Иронау",
+			"LanguageCode": "",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "pa_IN",
+			"Description": "ਪੰਜਾਬੀ",
+			"LanguageCode": "pa",
+			"CountryCode": "IN"
+		},
+		{
+			"Locale": "pl_PL.UTF-8",
+			"Description": "Polski",
+			"LanguageCode": "pl",
+			"CountryCode": "PL"
+		},
+		{
+			"Locale": "ps_AF",
+			"Description": "پښتو",
+			"LanguageCode": "",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "pt_PT.UTF-8",
+			"Description": "Português",
+			"LanguageCode": "pt",
+			"CountryCode": "PT"
+		},
+		{
+			"Locale": "pt_BR.UTF-8",
+			"Description": "Português do Brasil",
+			"LanguageCode": "pt",
+			"CountryCode": "BR"
+		},
+		{
+			"Locale": "ro_RO.UTF-8",
+			"Description": "Română",
+			"LanguageCode": "ro",
+			"CountryCode": "RO"
+		},
+		{
+			"Locale": "ru_RU.UTF-8",
+			"Description": "Русский",
+			"LanguageCode": "ru",
+			"CountryCode": "RU"
+		},
+		{
+			"Locale": "rw_RW",
+			"Description": "Kinyarwanda",
+			"LanguageCode": "rw",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "sa_IN",
+			"Description": "संस्कृत",
+			"LanguageCode": "sa",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "sc_IT",
+			"Description": "Sardu",
+			"LanguageCode": "sc",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "sd_IN",
+			"Description": "سنڌي",
+			"LanguageCode": "sd",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "se_NO",
+			"Description": "Sámegiella",
+			"LanguageCode": "se",
+			"CountryCode": "NO"
+		},
+		{
+			"Locale": "si_LK",
+			"Description": "සිංහල",
+			"LanguageCode": "si",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "sk_SK.UTF-8",
+			"Description": "Slovenčina",
+			"LanguageCode": "sk",
+			"CountryCode": "SK"
+		},
+		{
+			"Locale": "sl_SI.UTF-8",
+			"Description": "Slovenščina",
+			"LanguageCode": "sl",
+			"CountryCode": "SI"
+		},
+		{
+			"Locale": "so_SO.UTF-8",
+			"Description": "Soomaaliga",
+			"LanguageCode": "so",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "sq_AL.UTF-8",
+			"Description": "Shqip",
+			"LanguageCode": "sq",
+			"CountryCode": "AL"
+		},
+		{
+			"Locale": "sr_RS",
+			"Description": "Српски",
+			"LanguageCode": "sr",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "sr_RS@latin",
+			"Description": "srpski (latinica)",
+			"LanguageCode": "sr",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "ss_ZA",
+			"Description": "SiSwati",
+			"LanguageCode": "ss",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "st_ZA.UTF-8",
+			"Description": "Sesotho",
+			"LanguageCode": "st",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "sv_SE.UTF-8",
+			"Description": "Svenska",
+			"LanguageCode": "sv",
+			"CountryCode": "SE"
+		},
+		{
+			"Locale": "sw_KE",
+			"Description": "Swahili",
+			"LanguageCode": "",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "ta_IN",
+			"Description": "தமிழ்",
+			"LanguageCode": "ta",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "te_IN",
+			"Description": "తెలుగు",
+			"LanguageCode": "te",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "tg_TJ.UTF-8",
+			"Description": "Тоҷикӣ",
+			"LanguageCode": "tg",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "th_TH.UTF-8",
+			"Description": "ภาษาไทย",
+			"LanguageCode": "th",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "ti_ET",
+			"Description": "ትግርኛ",
+			"LanguageCode": "ti",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "tk_TM",
+			"Description": "Türkmen",
+			"LanguageCode": "tk",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "tn_ZA",
+			"Description": "Setswana",
+			"LanguageCode": "tn",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "tr_TR.UTF-8",
+			"Description": "Türkçe",
+			"LanguageCode": "tr",
+			"CountryCode": "TR"
+		},
+		{
+			"Locale": "ts_ZA",
+			"Description": "Xitsonga",
+			"LanguageCode": "ts",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "tt_RU",
+			"Description": "Татарский",
+			"LanguageCode": "tt",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "ug_CN",
+			"Description": "ئۇيغۇرچە",
+			"LanguageCode": "ug",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "uk_UA.UTF-8",
+			"Description": "Українська",
+			"LanguageCode": "uk",
+			"CountryCode": "UA"
+		},
+		{
+			"Locale": "ur_IN",
+			"Description": "اردو",
+			"LanguageCode": "",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "uz_UZ.UTF-8",
+			"Description": "Oʻzbekcha",
+			"LanguageCode": "uz",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "uz_UZ@cyrillic",
+			"Description": "Uzbek (Cyrillic)",
+			"LanguageCode": "uz",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "ve_ZA",
+			"Description": "Venda",
+			"LanguageCode": "ve",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "vi_VN",
+			"Description": "Tiếng Việt",
+			"LanguageCode": "vi",
+			"CountryCode": "VN"
+		},
+		{
+			"Locale": "wa_BE.UTF-8",
+			"Description": "Walon",
+			"LanguageCode": "wa",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "wo_SN",
+			"Description": "Wolof",
+			"LanguageCode": "wo",
+			"CountryCode": "SN"
+		},
+		{
+			"Locale": "xh_ZA.UTF-8",
+			"Description": "isixhosa",
+			"LanguageCode": "xh",
+			"CountryCode": "ZA"
+		},
+		{
+			"Locale": "yi_US.UTF-8",
+			"Description": "ייִדיש",
+			"LanguageCode": "yi",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "yo_NG",
+			"Description": "Yorùbá",
+			"LanguageCode": "yo",
+			"CountryCode": ""
+		},
+		{
+			"Locale": "zh_CN.UTF-8",
+			"Description": "简体中文",
+			"LanguageCode": "zh-hans",
+			"CountryCode": "CN"
+		},
+		{
+			"Locale": "zh_HK.UTF-8",
+			"Description": "繁體中文(香港)",
+			"LanguageCode": "zh-hant",
+			"CountryCode": "HK"
+		},
+		{
+			"Locale": "zh_TW.UTF-8",
+			"Description": "正體中文",
+			"LanguageCode": "zh-hant",
+			"CountryCode": "TW"
+		},
+		{
+			"Locale": "zu_ZA.UTF-8",
+			"Description": "isiZulu",
+			"LanguageCode": "zu",
+			"CountryCode": ""
+		}
+	]
+}
