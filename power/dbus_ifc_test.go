@@ -40,6 +40,13 @@ func init() {
 	C.Suite(&DBusInterfaceTest{})
 }
 
+func (dbusIfc *DBusInterfaceTest) SetUpSuite(c *C.C) {
+	_, err := dbus.SystemBus()
+	if err != nil {
+		c.Skip(err.Error())
+        }
+}
+
 func Test(t *testing.T) {
 	C.TestingT(t)
 }

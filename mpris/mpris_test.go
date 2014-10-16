@@ -23,6 +23,7 @@ package mpris
 
 import (
 	C "launchpad.net/gocheck"
+	"os"
 	"testing"
 )
 
@@ -37,6 +38,7 @@ func init() {
 }
 
 func (t *testWrap) TestMpris(c *C.C) {
+	os.Setenv("XDG_DATA_DIRS", "testdata/share")
 	if _, ok := getCommandByMimeType("text/plain"); ok == false {
 		c.Error("getCommandByMimeType failed")
 		return

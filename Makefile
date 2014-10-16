@@ -35,6 +35,9 @@ translate: $(addsuffix /LC_MESSAGES/dde-daemon.mo, $(addprefix out/locale/, ${LA
 
 build: prepare $(addprefix out/bin/, ${BINARIES})
 
+test: prepare
+	env GOPATH="${GOPATH}:${CURDIR}/${GOPATH_DIR}" go test -v ./...
+
 install: build translate
 	mkdir -pv ${DESTDIR}${PREFIX}/lib/deepin-daemon
 	cp out/bin/* ${DESTDIR}${PREFIX}/lib/deepin-daemon/

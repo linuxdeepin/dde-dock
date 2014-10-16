@@ -1,3 +1,5 @@
+// +build integration
+
 package systeminfo
 
 import (
@@ -14,7 +16,7 @@ func init() {
 }
 
 func (si *SystemInfo) TestSystem(c *C.C) {
-	if ret := GetVersion(); ret == 0 {
+	if ret := GetVersion(); ret == "" {
 		c.Error("GetVersion failed")
 		return
 	}

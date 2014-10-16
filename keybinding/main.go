@@ -38,10 +38,17 @@ var (
 	PrevSystemPairs = make(map[string]string)
 	PrevCustomPairs = make(map[string]string)
 
+	bindGSettings  *gio.Settings
+	sysGSettings   *gio.Settings
+	mediaGSettings *gio.Settings
+)
+
+
+func initGSettings() {
 	bindGSettings  = gio.NewSettings("com.deepin.dde.keybinding")
 	sysGSettings   = gio.NewSettings("com.deepin.dde.keybinding.system")
 	mediaGSettings = gio.NewSettings("com.deepin.dde.keybinding.mediakey")
-)
+}
 
 func StartKeyBinding() {
 	var err error
@@ -65,6 +72,7 @@ func StartKeyBinding() {
 
 func Start() {
 	logger.BeginTracing()
+	initGSettings()
 
 	StartKeyBinding()
 

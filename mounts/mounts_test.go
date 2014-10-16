@@ -22,54 +22,23 @@
 package mounts
 
 import (
-	"launchpad.net/gocheck"
+	C "launchpad.net/gocheck"
 	"testing"
 )
 
-func Test(t *testing.T) {
-	gocheck.TestingT(t)
-}
+type TestWrapper struct{}
 
-var op *Manager
+func Test(t *testing.T) {
+	C.TestingT(t)
+}
 
 func init() {
-	objectMap = make(map[int32]*ObjectInfo)
-
-	op = &Manager{}
-	op.setPropName("DiskList")
-	op.listenSignalChanged()
-	gocheck.Suite(op)
+	C.Suite(&TestWrapper{})
 }
 
-func (op *Manager) TestMount(c *gocheck.C) {
-	for _, info := range op.DiskList {
-		if !info.CanUnmount {
-			op.DeviceMount(info.Id)
-		}
-	}
-	if c.Failed() {
-		c.Error("Test Mount Failed")
-	}
-}
-
-func (op *Manager) TestUnmount(c *gocheck.C) {
-	for _, info := range op.DiskList {
-		if info.CanUnmount {
-			op.DeviceUnmount(info.Id)
-		}
-	}
-	if c.Failed() {
-		c.Error("Test Mount Failed")
-	}
-}
-
-func (op *Manager) TestEject(c *gocheck.C) {
-	for _, info := range op.DiskList {
-		if info.CanEject {
-			op.DeviceEject(info.Id)
-		}
-	}
-	if c.Failed() {
-		c.Error("Test Mount Failed")
+func (t *TestWrapper) TestUUidGenerate(c *C.C) {
+	uuid := generateUUID()
+	if uuid == "" {
+		c.Errorf("Generate UUID Failed")
 	}
 }
