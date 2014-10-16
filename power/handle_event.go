@@ -137,7 +137,7 @@ func isMultihead() bool {
 
 func (p *Power) initEventHandle() {
 	if upower != nil {
-		upower.ConnectChanged(func() {
+		upower.LidIsClosed.ConnectChanged(func() {
 			currentLidClosed := upower.LidIsClosed.Get()
 			if p.lidIsClosed != currentLidClosed {
 				p.lidIsClosed = currentLidClosed

@@ -3,6 +3,7 @@ package power
 import "pkg.linuxdeepin.com/lib/gio-2.0"
 import "time"
 import . "pkg.linuxdeepin.com/lib/gettext"
+import "pkg.linuxdeepin.com/lib/dbus"
 
 const (
 	UPOWER_BUS_NAME = "org.freedesktop.UPower"
@@ -129,13 +130,13 @@ func (p *Power) initUpower() {
 		upower.OnBattery.ConnectChanged(func() {
 			p.refreshUpower()
 		})
-		upower.ConnectDeviceAdded(func(path string) {
+		upower.ConnectDeviceAdded(func(path dbus.ObjectPath) {
 			if p.batGroup != nil {
 				p.batGroup.AddBatteryDevice(path)
 			}
 			p.refreshUpower()
 		})
-		upower.ConnectDeviceRemoved(func(path string) {
+		upower.ConnectDeviceRemoved(func(path dbus.ObjectPath) {
 			if p.batGroup != nil {
 				p.batGroup.RemoveBatteryDevice(path)
 			}

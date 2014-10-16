@@ -46,7 +46,7 @@ func NewBatteryGroup(handler func()) *batteryGroup {
 	return &batGroup
 }
 
-func (batGroup *batteryGroup) AddBatteryDevice(path string) {
+func (batGroup *batteryGroup) AddBatteryDevice(path dbus.ObjectPath) {
 	batGroup.changeLock.Lock()
 	defer batGroup.changeLock.Unlock()
 	if batGroup.isBatteryPathExist(path) {
@@ -67,13 +67,13 @@ func (batGroup *batteryGroup) AddBatteryDevice(path string) {
 		newBatteryDevice(dev, batGroup.propChangedHandler))
 }
 
-func (batGroup *batteryGroup) RemoveBatteryDevice(path string) {
+func (batGroup *batteryGroup) RemoveBatteryDevice(path dbus.ObjectPath) {
 	batGroup.changeLock.Lock()
 	defer batGroup.changeLock.Unlock()
 
 	var tmpList []*batteryDevice
 	for _, battery := range batGroup.BatList {
-		if string(battery.Path) == path {
+		if battery.Path == path {
 			battery.Destroy()
 			continue
 		}
@@ -151,9 +151,9 @@ func (batGroup *batteryGroup) setDeviceLsit() {
 	batGroup.BatList = tmpList
 }
 
-func (batGroup *batteryGroup) isBatteryPathExist(path string) bool {
+func (batGroup *batteryGroup) isBatteryPathExist(path dbus.ObjectPath) bool {
 	for _, battery := range batGroup.BatList {
-		if string(battery.Path) == path {
+		if battery.Path == path {
 			return true
 		}
 	}

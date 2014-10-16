@@ -103,6 +103,7 @@ func (dbusIfc *DBusInterfaceTest) TestDeviceInterfaceExist(c *C.C) {
 		interfaceInfo{"Percentage", "property", true},
 		interfaceInfo{"State", "property", true},
 		interfaceInfo{"IsPresent", "property", true},
+		interfaceInfo{"Type", "property", true},
 		interfaceInfo{"Changed", "signal", false},
 	}
 
