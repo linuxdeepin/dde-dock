@@ -86,6 +86,8 @@ func (m *Manager) GetDBusInfo() dbus.DBusInfo {
 
 // initialize slice code
 func initSlices() {
+	initNmDbusObjects()
+	initProxyGsettings()
 	initAvailableValuesSecretFlags()
 	initAvailableValuesNmPptpSecretFlags()
 	initAvailableValuesNmL2tpSecretFlags()

@@ -35,9 +35,14 @@ const (
 )
 
 var (
-	nmManager, _  = nm.NewManager(dbusNmDest, dbusNmPath)
-	nmSettings, _ = nm.NewSettings(dbusNmDest, dbusNmSettingPath)
+	nmManager  *nm.Manager
+	nmSettings *nm.Settings
 )
+
+func initNmDbusObjects() {
+	nmManager, _ = nm.NewManager(dbusNmDest, dbusNmPath)
+	nmSettings, _ = nm.NewSettings(dbusNmDest, dbusNmSettingPath)
+}
 
 // Helper function
 func isNmObjectPathValid(p dbus.ObjectPath) bool {

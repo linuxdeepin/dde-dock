@@ -56,9 +56,13 @@ const (
 )
 
 var (
-	proxySettings  = gio.NewSettings(gsettingsIdProxy)
+	proxySettings  *gio.Settings
 	proxyPrefixReg = regexp.MustCompile(`^.*?://(.*)$`)
 )
+
+func initProxyGsettings() {
+	proxySettings = gio.NewSettings(gsettingsIdProxy)
+}
 
 func (m *Manager) GetProxyMethod() (proxyMethod string, err error) {
 	proxyMethod = proxySettings.GetString(gkeyProxyMethod)
