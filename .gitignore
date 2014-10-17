@@ -32,3 +32,4 @@ system-info/system-info
 zone-settings/zone-settings
 bluetooth/bluetooth
 main_network.go
+bin/dde-session-daemon/dde-session-daemon

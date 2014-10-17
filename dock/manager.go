@@ -42,6 +42,13 @@ func NewEntryProxyerManager() *EntryProxyerManager {
 	return m
 }
 
+func (m *EntryProxyerManager) destroy() {
+	for _, entry := range m.Entries {
+		dbus.UnInstallObject(entry)
+	}
+	dbus.UnInstallObject(m)
+}
+
 func (m *EntryProxyerManager) watchEntries() {
 	var err error
 	busdaemon, err = pkgbus.NewDBusDaemon("org.freedesktop.DBus", "/org/freedesktop/DBus")

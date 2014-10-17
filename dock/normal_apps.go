@@ -32,7 +32,7 @@ func NewNormalApp(id string) *NormalApp {
 	} else {
 		core = NewDesktopAppInfo(id)
 		if core == nil {
-			logger.Info("guess desktop")
+			logger.Debug("guess desktop")
 			if newId := guess_desktop_id(app.Id + ".desktop"); newId != "" {
 				core = NewDesktopAppInfo(newId)
 			}

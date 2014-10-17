@@ -47,7 +47,7 @@ func getAppIcon(core *gio.DesktopAppInfo) string {
 	logger.Debug("GetIcon:", gioIcon.ToString())
 	icon := get_theme_icon(gioIcon.ToString(), 48)
 	if icon == "" {
-		logger.Warning("get icon from theme failed")
+		logger.Debug("get icon from theme failed")
 		return ""
 	}
 

@@ -57,6 +57,10 @@ func NewHideStateManager(mode HideModeType) *HideStateManager {
 	return h
 }
 
+func (e *HideStateManager) destroy() {
+	dbus.UnInstallObject(e)
+}
+
 func (e *HideStateManager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		"com.deepin.daemon.Dock",

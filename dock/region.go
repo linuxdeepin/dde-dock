@@ -2,7 +2,6 @@ package dock
 
 import (
 	"errors"
-	"github.com/BurntSushi/xgb"
 	"github.com/BurntSushi/xgb/shape"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil/ewmh"
@@ -10,15 +9,11 @@ import (
 	"pkg.linuxdeepin.com/lib/dbus"
 )
 
-var (
-	conn, _ = xgb.NewConn()
-)
-
 type Region struct {
 }
 
 func NewRegion() *Region {
-	shape.Init(conn)
+	shape.Init(XU.Conn())
 	r := Region{}
 
 	return &r
@@ -30,6 +25,10 @@ func (r *Region) GetDBusInfo() dbus.DBusInfo {
 		"/dde/dock/DockRegion",
 		"dde.dock.DockRegion",
 	}
+}
+
+func (r *Region) destroy() {
+	dbus.UnInstallObject(r)
 }
 
 func (r *Region) getDockWindow() (xproto.Window, error) {
@@ -56,7 +55,7 @@ func (r *Region) GetDockRegion() xproto.Rectangle {
 		logger.Warning(err)
 		return dockRegion
 	}
-	cookie := shape.GetRectangles(conn, dockWindow, shape.SkInput)
+	cookie := shape.GetRectangles(XU.Conn(), dockWindow, shape.SkInput)
 	rep, err := cookie.Reply()
 	if err != nil {
 		logger.Warning("get rectangles failed:", err)
@@ -102,7 +101,7 @@ func (r *Region) GetDockRegion() xproto.Rectangle {
 
 func (r *Region) mouseInRegion() bool {
 	region := r.GetDockRegion()
-	cookie := xproto.QueryPointer(conn, XU.RootWin())
+	cookie := xproto.QueryPointer(XU.Conn(), XU.RootWin())
 	reply, err := cookie.Reply()
 	if err != nil {
 		return false

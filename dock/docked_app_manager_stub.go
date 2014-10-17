@@ -11,3 +11,7 @@ func (m *DockedAppManager) GetDBusInfo() dbus.DBusInfo {
 		"dde.dock.DockedAppManager",
 	}
 }
+
+func (m *DockedAppManager) destroy() {
+	dbus.UnInstallObject(m)
+}

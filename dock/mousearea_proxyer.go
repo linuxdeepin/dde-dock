@@ -99,3 +99,7 @@ func (a *XMouseAreaProxyer) RegisterAreas(areas []coordinateRange, eventMask int
 func (a *XMouseAreaProxyer) RegisterFullScreen() {
 	a.registerArea(a.area.RegisterFullScreen)
 }
+
+func (a *XMouseAreaProxyer) destroy() {
+	dbus.UnInstallObject(a)
+}

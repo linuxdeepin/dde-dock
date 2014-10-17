@@ -51,3 +51,7 @@ func (p *DockProperty) SetPanelWidth(width int32) int32 {
 	}
 	return p.PanelWidth
 }
+
+func (p *DockProperty) destroy() {
+	dbus.UnInstallObject(p)
+}

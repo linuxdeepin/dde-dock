@@ -5,6 +5,7 @@ import (
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil/ewmh"
 	"github.com/BurntSushi/xgbutil/xprop"
+	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
 	"sync"
 )
@@ -74,14 +75,16 @@ type Setting struct {
 
 func NewSetting() *Setting {
 	s := &Setting{}
-	s.init()
-	return s
+	if s.init() {
+		return s
+	}
+	return nil
 }
 
-func (s *Setting) init() {
+func (s *Setting) init() bool {
 	s.core = gio.NewSettings(SchemaId)
 	if s.core == nil {
-		return
+		return false
 	}
 
 	s.displayMode = DisplayModeType(s.core.GetEnum(DisplayModeKey))
@@ -158,6 +161,7 @@ func (s *Setting) init() {
 		dockProperty.updateDockHeight(value)
 		s.DisplayModeChanged(int32(value))
 	})
+	return true
 }
 
 func (s *Setting) listenSettingChange(key string, handler func(*gio.Settings, string)) {
@@ -192,4 +196,12 @@ func (s *Setting) SetDisplayMode(_mode int32) bool {
 		s.DisplayModeChanged(_mode)
 	}
 	return ok
+}
+
+func (s *Setting) destroy() {
+	if s.core != nil {
+		s.core.Unref()
+		s.core = nil
+	}
+	dbus.UnInstallObject(s)
 }
