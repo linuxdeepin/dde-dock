@@ -77,7 +77,7 @@ func Stop() {
 					logger.Error("Stop module", m.Name, "failed:", err)
 				}
 			}()
-			m.Start()
+			m.Stop()
 		}()
 	}
 }
