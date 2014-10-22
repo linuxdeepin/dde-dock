@@ -55,6 +55,13 @@ type WacomManager struct {
 	_descActionMap map[string]string
 }
 
+func (wacom *WacomManager) Reset() {
+	keys := wacom.settings.ListKeys()
+	for _, key := range keys {
+		wacom.settings.Reset(key)
+	}
+}
+
 /**
  * xsetwacom set deviceName Rotate half/none
  * default: none
