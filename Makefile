@@ -5,7 +5,7 @@ GOPKG_PREFIX = pkg.linuxdeepin.com/dde-daemon
 ifndef USE_GCCGO
     GOBUILD = go build
 else
-   LDFLAGS = $(shell pkg-config --libs gio-2.0 x11 xi xtst libpulse libudev gdk-3.0 gdk-pixbuf-xlib-2.0 gtk+-2.0 libmetacity-private)
+   LDFLAGS = $(shell pkg-config --libs gio-2.0 x11 xi xtst libpulse libudev gdk-3.0 gdk-pixbuf-xlib-2.0 gtk+-3.0 sqlite3)
    GOBUILD = go build -compiler gccgo -gccgoflags "${LDFLAGS}"
 endif
 
@@ -33,6 +33,14 @@ prepare:
 
 out/bin/%:
 	env GOPATH="${GOPATH}:${CURDIR}/${GOPATH_DIR}" ${GOBUILD} -o $@  ${GOPKG_PREFIX}/bin/${@F}
+
+ifdef USE_GCCGO
+out/bin/gtk-thumb-tool:
+	env GOPATH="${GOPATH}:${CURDIR}/${GOPATH_DIR}" \
+            go build -compiler gccgo -gccgoflags \
+            "$(shell pkg-config --libs gtk+-2.0 libmetacity-private)" \
+            -o $@  ${GOPKG_PREFIX}/bin/${@F}
+endif
 
 out/locale/%/LC_MESSAGES/dde-daemon.mo:misc/po/%.po
 	mkdir -p $(@D)
