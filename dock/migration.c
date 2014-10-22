@@ -642,12 +642,15 @@ char* icon_name_to_path(const char* name, int size)
         return NULL;
     }
 
-    // This info must not unref, owned by gtk !!!!!!!!!!!!!!!!!!!!!
     GtkIconInfo* info = gtk_icon_theme_lookup_icon(them, pic_name, size, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
     g_free(pic_name);
     if (info) {
         char* path = g_strdup(gtk_icon_info_get_filename(info));
+#if GTK_MAJOR_VERSION >= 3
         g_object_unref(info);
+#elif GTK_MAJOR_VERSION == 2
+        gtk_icon_info_free(info);
+#endif
         return path;
     } else {
         return NULL;
