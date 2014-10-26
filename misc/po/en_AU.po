@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Mogi Fu <twen84@hotmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-08-21 11:42+0800\n"
-"PO-Revision-Date: 2014-10-17 06:02+0000\n"
-"Last-Translator: szd_liufei <liufei@linuxdeepin.com>\n"
+"PO-Revision-Date: 2014-10-31 15:21+0000\n"
+"Last-Translator: Mogi Fu <twen84@hotmail.com>\n"
 "Language-Team: English (Australia) (http://www.transifex.com/projects/p/dde-daemon/language/en_AU/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,11 +20,11 @@ msgstr ""
 
 #: ../../accounts/account_ifc.go:185
 msgid "The username is invalid."
-msgstr ""
+msgstr "The username is invalid."
 
 #: ../../accounts/account_ifc.go:189
 msgid "The username exists."
-msgstr ""
+msgstr "The username exists."
 
 #: ../../bluetooth/bluez_profile.go:31
 msgid "Serial port"
@@ -75,13 +76,13 @@ msgstr "Message notification"
 
 #: ../../datetime/datetime.go:127 ../../langselect/ifc.go:39
 msgid "Language is changing, please wait"
-msgstr ""
+msgstr "Changing language, please wait"
 
 #: ../../datetime/set_locale.go:58 ../../langselect/locale.go:245
 msgid ""
 "Language has been changed successfully and will be effective after logged "
 "out."
-msgstr ""
+msgstr "Language has been changed successfully and will take effect after logged out."
 
 #: ../../datetime/set_locale.go:60 ../../langselect/locale.go:247
 msgid "Language failed to change, please try later."
@@ -865,7 +866,7 @@ msgstr "Stanley"
 
 #: ../../datetime/zone_utc_list.go:248
 msgid "Brazil East"
-msgstr ""
+msgstr "Brazil East"
 
 #: ../../datetime/zone_utc_list.go:251
 msgid "South Georgia"
@@ -2174,7 +2175,7 @@ msgstr "Deepin Translator"
 
 #: ../../keybinding/id_desc_list.go:65
 msgid "Switch Layout"
-msgstr ""
+msgstr "Switch Layout"
 
 #: ../../keybinding/id_desc_list.go:73
 msgid "Calculator"
@@ -2334,7 +2335,7 @@ msgstr "Open Folder"
 
 #: ../../mime/default_media.go:79
 msgid "Run Software"
-msgstr ""
+msgstr "Run Software"
 
 #: ../../network/manager_connections.go:203
 #: ../../network/nm_custom_type.go:178
@@ -2670,7 +2671,7 @@ msgstr "Password"
 
 #: ../../network/nm_setting_vpn_openvpn.go:253
 msgid "Certificates with Password (TLS)"
-msgstr ""
+msgstr "Certificates with Password (TLS)"
 
 #: ../../network/nm_setting_vpn_openvpn.go:254
 msgid "Static Key"
@@ -2910,11 +2911,11 @@ msgstr "Open"
 
 #: ../../network/state_handler.go:34
 msgid "Device state changed, unknown reason."
-msgstr ""
+msgstr "Device state changed, reason unknown."
 
 #: ../../network/state_handler.go:35
 msgid "Device state changed."
-msgstr ""
+msgstr "Device state changed."
 
 #: ../../network/state_handler.go:36
 msgid "The device is now managed."
@@ -2926,7 +2927,7 @@ msgstr "The device is no longer managed."
 
 #: ../../network/state_handler.go:38
 msgid "The device has not been ready for configuration."
-msgstr ""
+msgstr "The device is not ready for configuration."
 
 #: ../../network/state_handler.go:39
 msgid ""
@@ -2945,11 +2946,11 @@ msgstr "Passwords were required but not provided."
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server."
-msgstr ""
+msgstr "802.1X supplicant disconnected from access point or authentication server."
 
 #: ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed."
-msgstr ""
+msgstr "Configuration of 802.1X supplicant failed."
 
 #: ../../network/state_handler.go:44
 msgid "The 802.1X supplicant quitted or failed unexpectedly."
@@ -3081,7 +3082,7 @@ msgstr "The device's existing connection was assumed."
 
 #: ../../network/state_handler.go:76
 msgid "The 802.1x supplicant is now available."
-msgstr ""
+msgstr "802.1x supplicant is now available."
 
 #: ../../network/state_handler.go:77
 msgid "The modem could not be found."
@@ -3093,7 +3094,7 @@ msgstr "The Bluetooth connection timed out or failed."
 
 #: ../../network/state_handler.go:79
 msgid "GSM Modem's SIM Card was not inserted."
-msgstr ""
+msgstr "3G/LTE SIM Card not inserted."
 
 #: ../../network/state_handler.go:80
 msgid "GSM Modem's SIM PIN required."
@@ -3121,7 +3122,7 @@ msgstr "Problem with the RFC 2684 Ethernet over ADSL bridge."
 
 #: ../../network/state_handler.go:86
 msgid "ModemManager did not run or quitted unexpectedly."
-msgstr ""
+msgstr "Modem Manager was not running or quitted unexpectedly."
 
 #: ../../network/state_handler.go:87
 msgid "The 802.11 Wi-Fi network could not be found."
@@ -3133,15 +3134,15 @@ msgstr "A secondary connection of the base connection failed."
 
 #: ../../network/state_handler.go:91
 msgid "Network cable is unplugged."
-msgstr ""
+msgstr "Network cable is unplugged."
 
 #: ../../network/state_handler.go:94
 msgid "Activate VPN connection failed, unknown reason."
-msgstr ""
+msgstr "VPN connection activation failed, reason unknown."
 
 #: ../../network/state_handler.go:95
 msgid "Activate VPN connection failed."
-msgstr ""
+msgstr "VPN connection activation failed."
 
 #: ../../network/state_handler.go:96
 msgid "The VPN connection changed state due to disconnection from users."
@@ -3198,11 +3199,11 @@ msgstr "Disconnected"
 
 #: ../../network/utils_notify.go:64
 msgid "Airplan mode enabled."
-msgstr ""
+msgstr "Airplane mode enabled."
 
 #: ../../network/utils_notify.go:68
 msgid "You are now offline."
-msgstr ""
+msgstr "You are now offline."
 
 #: ../../network/utils_notify.go:72
 msgid "Access Point mode is not supported by this device."
@@ -3211,30 +3212,30 @@ msgstr "Access Point mode is not supported by this device."
 #: ../../network/utils_notify.go:76 ../../network/utils_notify.go:81
 #: ../../network/utils_notify.go:85
 msgid "Network"
-msgstr ""
+msgstr "Network"
 
 #: ../../network/utils_notify.go:76
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr ""
+msgstr "The WLAN is turned off, please turned on."
 
 #: ../../network/utils_notify.go:81
 msgid "System proxy is set successfully."
-msgstr ""
+msgstr "Successfully setup System proxy."
 
 #: ../../network/utils_notify.go:85
 msgid "System proxy has been cancelled."
-msgstr ""
+msgstr "System proxy setup has been cancelled."
 
 #: ../../power/upower.go:90
 msgid "Abnormal battery power"
-msgstr ""
+msgstr "Abnormal battery level"
 
 #: ../../power/upower.go:90
 msgid ""
 "Battery power can not be predicted, please save important documents properly"
 " and  not do important operations."
-msgstr ""
+msgstr "Battery level can not be determined, please save all important documents and exit all applications."
 
 #: ../../power/upower.go:95 ../../power/upower.go:110
 msgid "Battery Critical Low"
@@ -3246,7 +3247,7 @@ msgstr "Computer has been in suspend mode, please plug in."
 
 #: ../../power/upower.go:110
 msgid "Please plug in, or computer will be in suspend mode."
-msgstr ""
+msgstr "Please plug in the power cable, before the computer entered suspend mode."
 
 #: ../../power/upower.go:123
 msgid "Battery Low"
@@ -3254,4 +3255,4 @@ msgstr "Battery Low"
 
 #: ../../power/upower.go:123
 msgid "Computer will be in suspend mode, please plug in now."
-msgstr ""
+msgstr "Computer will be entering suspend mode soon, please plug in the power cable now."

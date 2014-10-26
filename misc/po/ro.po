@@ -3,90 +3,91 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Massimo Antonio Carofano <real.massimo@hotmail.it>, 2014
+# cricri8o <inactive+cricri8o@transifex.com>, 2014
+# Vasilii Rusu <basil_russu@hotmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-08-21 11:42+0800\n"
-"PO-Revision-Date: 2014-10-27 21:13+0000\n"
-"Last-Translator: Massimo Antonio Carofano <real.massimo@hotmail.it>\n"
-"Language-Team: Italian (http://www.transifex.com/projects/p/dde-daemon/language/it/)\n"
+"PO-Revision-Date: 2014-10-27 21:11+0000\n"
+"Last-Translator: Vasilii Rusu <basil_russu@hotmail.com>\n"
+"Language-Team: Romanian (http://www.transifex.com/projects/p/dde-daemon/language/ro/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: it\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: ro\n"
+"Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
 
 #: ../../accounts/account_ifc.go:185
 msgid "The username is invalid."
-msgstr "L'username è invalida."
+msgstr "Nume utilizator incorect."
 
 #: ../../accounts/account_ifc.go:189
 msgid "The username exists."
-msgstr "L'username esiste già."
+msgstr "Acest nume utilizator există"
 
 #: ../../bluetooth/bluez_profile.go:31
 msgid "Serial port"
-msgstr "Porta seriale"
+msgstr "port serial"
 
 #: ../../bluetooth/bluez_profile.go:32
 msgid "Dial-Up networking"
-msgstr "Dial-Up networking"
+msgstr "Reţea Dial-Up"
 
 #: ../../bluetooth/bluez_profile.go:33
 msgid "Hands-Free device"
-msgstr "Dispositivo Hands-Free"
+msgstr "Dispozitivul Hands-Free"
 
 #: ../../bluetooth/bluez_profile.go:34
 msgid "Hands-Free voice gateway"
-msgstr "Hands-Free voice gateway"
+msgstr "Portalul Hands-Free voice "
 
 #: ../../bluetooth/bluez_profile.go:35
 msgid "Headset voice gateway"
-msgstr "Headset voice gateway"
+msgstr "Portalul Headset voice "
 
 #: ../../bluetooth/bluez_profile.go:36
 msgid "Object push"
-msgstr "Object push"
+msgstr "Transmitere obiect"
 
 #: ../../bluetooth/bluez_profile.go:37
 msgid "File transfer"
-msgstr "Trasferimento file"
+msgstr "Transfer de fişier"
 
 #: ../../bluetooth/bluez_profile.go:38
 msgid "Synchronization"
-msgstr "Sincronizzazione"
+msgstr "Sincronizare"
 
 #: ../../bluetooth/bluez_profile.go:39
 msgid "Phone book access"
-msgstr "Accesso alla Rubrica"
+msgstr "Accesare cartea de telefoane"
 
 #: ../../bluetooth/bluez_profile.go:40
 msgid "Phone book access client"
-msgstr "Client d'accesso Rubrica"
+msgstr "Client de accesare cartea de telefoane"
 
 #: ../../bluetooth/bluez_profile.go:41
 msgid "Message access"
-msgstr "Messaggio d'accesso"
+msgstr "Acces mesaj"
 
 #: ../../bluetooth/bluez_profile.go:42
 msgid "Message notification"
-msgstr "Messaggio di notifica"
+msgstr "Notificare mesaj"
 
 #: ../../datetime/datetime.go:127 ../../langselect/ifc.go:39
 msgid "Language is changing, please wait"
-msgstr "Cambio della lingua in corso, attendi.."
+msgstr "Aşteptaţi, are loc schimbarea limbii"
 
 #: ../../datetime/set_locale.go:58 ../../langselect/locale.go:245
 msgid ""
 "Language has been changed successfully and will be effective after logged "
 "out."
-msgstr "La lingua è stata impostata con successo e sarà attivata dopo il logout."
+msgstr "Schimbarea limbii a avut loc cu succes şi va avea efect doar după logout."
 
 #: ../../datetime/set_locale.go:60 ../../langselect/locale.go:247
 msgid "Language failed to change, please try later."
-msgstr "Cambio lingua fallito, riprova."
+msgstr "Schimbarea limbii a eşuat, încercaţi mai tîrziu."
 
 #: ../../datetime/zone_utc_list.go:24
 msgid "Midway"
@@ -126,7 +127,7 @@ msgstr "Tahiti"
 
 #: ../../datetime/zone_utc_list.go:36
 msgid "Aleutian"
-msgstr "Aleutian"
+msgstr "Aleutine"
 
 #: ../../datetime/zone_utc_list.go:37
 msgid "Hawaii"
@@ -182,7 +183,7 @@ msgstr "Metlakatla"
 
 #: ../../datetime/zone_utc_list.go:53
 msgid "Santa Isabel"
-msgstr "Santa Isabel"
+msgstr "Santa Isabel, Insule Solomon"
 
 #: ../../datetime/zone_utc_list.go:54
 msgid "Tijuana"
@@ -246,11 +247,11 @@ msgstr "Inuvik"
 
 #: ../../datetime/zone_utc_list.go:72
 msgid "Mazatlan"
-msgstr "Mazatlan"
+msgstr "Mazatlán "
 
 #: ../../datetime/zone_utc_list.go:73
 msgid "Ojinaga"
-msgstr "Ojinaga"
+msgstr "Ojinaga "
 
 #: ../../datetime/zone_utc_list.go:74
 msgid "Phoenix"
@@ -266,7 +267,7 @@ msgstr "Yellowknife"
 
 #: ../../datetime/zone_utc_list.go:78
 msgid "Canada/Mountain"
-msgstr "Canada/Mountain"
+msgstr "Canada / Regiunea montană"
 
 #: ../../datetime/zone_utc_list.go:79
 msgid "BajaSur"
@@ -282,11 +283,11 @@ msgstr "Arizona"
 
 #: ../../datetime/zone_utc_list.go:82
 msgid "US/Mountain"
-msgstr "US/Mountain"
+msgstr "SUA/Regiunea montană"
 
 #: ../../datetime/zone_utc_list.go:84
 msgid "Bahia Banderas"
-msgstr "Bahia Banderas"
+msgstr "Bahia Banderas "
 
 #: ../../datetime/zone_utc_list.go:85
 msgid "Belize"
@@ -322,7 +323,7 @@ msgstr "Valparaiso"
 
 #: ../../datetime/zone_utc_list.go:96
 msgid "Knox IN"
-msgstr "Knox IN"
+msgstr "Knox, Indiana"
 
 #: ../../datetime/zone_utc_list.go:97
 msgid "Managua"
@@ -342,7 +343,7 @@ msgstr "Merida"
 
 #: ../../datetime/zone_utc_list.go:101
 msgid "Mexico City"
-msgstr "Mexico City"
+msgstr "Ciudad de México"
 
 #: ../../datetime/zone_utc_list.go:102
 msgid "Monterrey"
@@ -354,19 +355,19 @@ msgstr "Beulah"
 
 #: ../../datetime/zone_utc_list.go:104
 msgid "North Dakota/Center"
-msgstr "North Dakota/Center"
+msgstr "Dacota de Nord/Centru"
 
 #: ../../datetime/zone_utc_list.go:105
 msgid "North Dakota/New Salem"
-msgstr "North Dakota/New Salem"
+msgstr "Dacota  de Nord/New Salem"
 
 #: ../../datetime/zone_utc_list.go:106
 msgid "Rainy River"
-msgstr "Rainy River"
+msgstr "Rainy River "
 
 #: ../../datetime/zone_utc_list.go:107
 msgid "Rankin Inlet"
-msgstr "Rankin Inlet"
+msgstr "Rankin Inlet "
 
 #: ../../datetime/zone_utc_list.go:108
 msgid "Regina"
@@ -378,7 +379,7 @@ msgstr "Resolute"
 
 #: ../../datetime/zone_utc_list.go:110
 msgid "Swift Current"
-msgstr "Swift Current"
+msgstr "Swift Current "
 
 #: ../../datetime/zone_utc_list.go:111
 msgid "Tegucigalpa"
@@ -390,7 +391,7 @@ msgstr "Winnipeg"
 
 #: ../../datetime/zone_utc_list.go:114
 msgid "East-Saskatchewan"
-msgstr "East-Saskatchewan"
+msgstr "Saskatchewan de Est"
 
 #: ../../datetime/zone_utc_list.go:115
 msgid "Saskatchewan"
@@ -398,15 +399,15 @@ msgstr "Saskatchewan"
 
 #: ../../datetime/zone_utc_list.go:117
 msgid "General"
-msgstr "Generali"
+msgstr "General"
 
 #: ../../datetime/zone_utc_list.go:118
 msgid "Easter Island"
-msgstr "Easter Island"
+msgstr "Insula Paştelui"
 
 #: ../../datetime/zone_utc_list.go:119
 msgid "Galapagos"
-msgstr "Galapagos"
+msgstr "Insulele Galápagos"
 
 #: ../../datetime/zone_utc_list.go:121
 msgid "Indiana-Starke"
@@ -422,7 +423,7 @@ msgstr "Bogota"
 
 #: ../../datetime/zone_utc_list.go:125
 msgid "Cayman"
-msgstr "Cayman"
+msgstr "Insulele Cayman"
 
 #: ../../datetime/zone_utc_list.go:126
 msgid "Coral Harbour"
@@ -442,7 +443,7 @@ msgstr "Fort Wayne"
 
 #: ../../datetime/zone_utc_list.go:130
 msgid "Grand Turk"
-msgstr "Grand Turk"
+msgstr "Insula Grand Turk"
 
 #: ../../datetime/zone_utc_list.go:131
 msgid "Guayaquil"
@@ -458,7 +459,7 @@ msgstr "Marengo"
 
 #: ../../datetime/zone_utc_list.go:135
 msgid "Petersburg"
-msgstr "Petersburg"
+msgstr "Petersburg "
 
 #: ../../datetime/zone_utc_list.go:136
 msgid "Vevay"
@@ -502,7 +503,7 @@ msgstr "Montreal"
 
 #: ../../datetime/zone_utc_list.go:147
 msgid "Nassau"
-msgstr "Nassau"
+msgstr "Nassau, Insulele Bahama"
 
 #: ../../datetime/zone_utc_list.go:148
 msgid "New York"
@@ -522,7 +523,7 @@ msgstr "Pangnirtung"
 
 #: ../../datetime/zone_utc_list.go:152
 msgid "Port-au-Prince"
-msgstr "Port-au-Prince"
+msgstr "Port-au-Prince "
 
 #: ../../datetime/zone_utc_list.go:153
 msgid "Porto Acre"
@@ -546,7 +547,7 @@ msgstr "Acre"
 
 #: ../../datetime/zone_utc_list.go:158
 msgid "Canada/Eastern"
-msgstr "Canada/Eastern"
+msgstr "Canada/Regiunea de Est"
 
 #: ../../datetime/zone_utc_list.go:159
 msgid "Cuba"
@@ -554,7 +555,7 @@ msgstr "Cuba"
 
 #: ../../datetime/zone_utc_list.go:161
 msgid "US/Eastern"
-msgstr "US/Eastern"
+msgstr "SUA/Regiunea de Est"
 
 #: ../../datetime/zone_utc_list.go:162
 msgid "East-Indiana"
@@ -570,11 +571,11 @@ msgstr "Caracas"
 
 #: ../../datetime/zone_utc_list.go:167
 msgid "Anguilla"
-msgstr "Anguilla"
+msgstr "Insula Anguilla"
 
 #: ../../datetime/zone_utc_list.go:168
 msgid "Antigua"
-msgstr "Antigua"
+msgstr "Insula Antigua"
 
 #: ../../datetime/zone_utc_list.go:169
 msgid "Aruba"
@@ -586,7 +587,7 @@ msgstr "Asuncion"
 
 #: ../../datetime/zone_utc_list.go:171
 msgid "Barbados"
-msgstr "Barbados"
+msgstr "Insula Barbados"
 
 #: ../../datetime/zone_utc_list.go:172
 msgid "Blanc-Sablon"
@@ -594,7 +595,7 @@ msgstr "Blanc-Sablon"
 
 #: ../../datetime/zone_utc_list.go:173
 msgid "Boa Vista"
-msgstr "Boa Vista"
+msgstr "Insula Boa Vista"
 
 #: ../../datetime/zone_utc_list.go:174
 msgid "Campo Grande"
@@ -606,7 +607,7 @@ msgstr "Cuiaba"
 
 #: ../../datetime/zone_utc_list.go:176
 msgid "Curacao"
-msgstr "Curacao"
+msgstr "Curaçao"
 
 #: ../../datetime/zone_utc_list.go:177
 msgid "Dominica"
@@ -626,7 +627,7 @@ msgstr "Grenada"
 
 #: ../../datetime/zone_utc_list.go:181
 msgid "Guadeloupe"
-msgstr "Guadeloupe"
+msgstr "Guadelupa"
 
 #: ../../datetime/zone_utc_list.go:182
 msgid "Guyana"
@@ -658,7 +659,7 @@ msgstr "Marigot"
 
 #: ../../datetime/zone_utc_list.go:189
 msgid "Martinique"
-msgstr "Martinique"
+msgstr "Martinica"
 
 #: ../../datetime/zone_utc_list.go:190
 msgid "Moncton"
@@ -682,7 +683,7 @@ msgstr "Puerto Rico"
 
 #: ../../datetime/zone_utc_list.go:195
 msgid "Santiago"
-msgstr "Santiago"
+msgstr "Santiago de Chile"
 
 #: ../../datetime/zone_utc_list.go:196
 msgid "Santo Domingo"
@@ -718,11 +719,11 @@ msgstr "Tortola"
 
 #: ../../datetime/zone_utc_list.go:204
 msgid "Virgin"
-msgstr "Virgin"
+msgstr ""
 
 #: ../../datetime/zone_utc_list.go:205
 msgid "Palmer"
-msgstr "Palmer"
+msgstr ""
 
 #: ../../datetime/zone_utc_list.go:206
 msgid "Bermuda"
@@ -730,7 +731,7 @@ msgstr "Bermuda"
 
 #: ../../datetime/zone_utc_list.go:207
 msgid "Brazil/West"
-msgstr "Brazil/West"
+msgstr "Brazilia/Regiunea de Vest"
 
 #: ../../datetime/zone_utc_list.go:208
 msgid "Atlantic"
@@ -866,7 +867,7 @@ msgstr "Stanley"
 
 #: ../../datetime/zone_utc_list.go:248
 msgid "Brazil East"
-msgstr "Brazil East"
+msgstr "Brazilia/Regiunea de Est"
 
 #: ../../datetime/zone_utc_list.go:251
 msgid "South Georgia"
@@ -882,11 +883,11 @@ msgstr "Scoresbysund"
 
 #: ../../datetime/zone_utc_list.go:255
 msgid "Azores"
-msgstr "Azores"
+msgstr "Insulele Azore"
 
 #: ../../datetime/zone_utc_list.go:256
 msgid "Cape Verde"
-msgstr "Cape Verde"
+msgstr "Cabo Verde"
 
 #: ../../datetime/zone_utc_list.go:258
 msgid "Abidjan"
@@ -962,11 +963,11 @@ msgstr "Troll"
 
 #: ../../datetime/zone_utc_list.go:276
 msgid "Canary"
-msgstr "Canary"
+msgstr "Insulele Canare"
 
 #: ../../datetime/zone_utc_list.go:278
 msgid "Faroe"
-msgstr "Faroe"
+msgstr "Insulele Feroe"
 
 #: ../../datetime/zone_utc_list.go:279
 msgid "Madeira"
@@ -978,11 +979,11 @@ msgstr "Reykjavik"
 
 #: ../../datetime/zone_utc_list.go:281
 msgid "St Helena"
-msgstr "St Helena"
+msgstr "Insula Sf Elena"
 
 #: ../../datetime/zone_utc_list.go:282
 msgid "Eire"
-msgstr "Eire"
+msgstr "Irlanda"
 
 #: ../../datetime/zone_utc_list.go:289
 msgid "Belfast"
@@ -994,11 +995,11 @@ msgstr "Dublin"
 
 #: ../../datetime/zone_utc_list.go:291
 msgid "Guernsey"
-msgstr "Guernsey"
+msgstr "Insula Guernsey"
 
 #: ../../datetime/zone_utc_list.go:292
 msgid "Isle of Man"
-msgstr "Isle of Man"
+msgstr "Insula Man"
 
 #: ../../datetime/zone_utc_list.go:293
 msgid "Jersey"
@@ -1006,19 +1007,19 @@ msgstr "Jersey"
 
 #: ../../datetime/zone_utc_list.go:294
 msgid "Lisbon"
-msgstr "Lisbon"
+msgstr "Lisabona"
 
 #: ../../datetime/zone_utc_list.go:295
 msgid "GB"
-msgstr "GB"
+msgstr "Marea Britanie"
 
 #: ../../datetime/zone_utc_list.go:296
 msgid "GB-Eire"
-msgstr "GB-Eire"
+msgstr "Marea Britanie-Irlanda"
 
 #: ../../datetime/zone_utc_list.go:297
 msgid "GMT"
-msgstr "GMT"
+msgstr "Ora de Greenwich"
 
 #: ../../datetime/zone_utc_list.go:301
 msgid "Greenwich"
@@ -1026,11 +1027,11 @@ msgstr "Greenwich"
 
 #: ../../datetime/zone_utc_list.go:302
 msgid "Iceland"
-msgstr "Iceland"
+msgstr "Islanda"
 
 #: ../../datetime/zone_utc_list.go:303
 msgid "Portugal"
-msgstr "Portugal"
+msgstr "Portugalia"
 
 #: ../../datetime/zone_utc_list.go:304
 msgid "UCT"
@@ -1038,7 +1039,7 @@ msgstr "UCT"
 
 #: ../../datetime/zone_utc_list.go:305
 msgid "Universal"
-msgstr "Universal"
+msgstr "Timp Universal"
 
 #: ../../datetime/zone_utc_list.go:306
 msgid "UTC"
@@ -1050,7 +1051,7 @@ msgstr "Zulu"
 
 #: ../../datetime/zone_utc_list.go:309
 msgid "Algiers"
-msgstr "Algiers"
+msgstr "Algeria"
 
 #: ../../datetime/zone_utc_list.go:310
 msgid "Bangui"
@@ -1126,7 +1127,7 @@ msgstr "Andorra"
 
 #: ../../datetime/zone_utc_list.go:328
 msgid "Belgrade"
-msgstr "Belgrade"
+msgstr "Belgrad"
 
 #: ../../datetime/zone_utc_list.go:329
 msgid "Berlin"
@@ -1138,11 +1139,11 @@ msgstr "Bratislava"
 
 #: ../../datetime/zone_utc_list.go:331
 msgid "Brussels"
-msgstr "Brussels"
+msgstr "Bruxelles"
 
 #: ../../datetime/zone_utc_list.go:332
 msgid "Budapest"
-msgstr "Budapest"
+msgstr "Budapesta"
 
 #: ../../datetime/zone_utc_list.go:333
 msgid "Busingen"
@@ -1150,7 +1151,7 @@ msgstr "Busingen"
 
 #: ../../datetime/zone_utc_list.go:334
 msgid "Copenhagen"
-msgstr "Copenhagen"
+msgstr "Copenhaga"
 
 #: ../../datetime/zone_utc_list.go:335
 msgid "Gibraltar"
@@ -1158,11 +1159,11 @@ msgstr "Gibraltar"
 
 #: ../../datetime/zone_utc_list.go:336
 msgid "Ljubljana"
-msgstr "Ljubljana"
+msgstr "Lubliana"
 
 #: ../../datetime/zone_utc_list.go:337
 msgid "Luxembourg"
-msgstr "Luxembourg"
+msgstr "Luxemburg"
 
 #: ../../datetime/zone_utc_list.go:338
 msgid "Madrid"
@@ -1186,11 +1187,11 @@ msgstr "Paris"
 
 #: ../../datetime/zone_utc_list.go:343
 msgid "Podgorica"
-msgstr "Podgorica"
+msgstr "Podgorica "
 
 #: ../../datetime/zone_utc_list.go:344
 msgid "Prague"
-msgstr "Prague"
+msgstr "Praga"
 
 #: ../../datetime/zone_utc_list.go:345
 msgid "Rome"
@@ -1202,7 +1203,7 @@ msgstr "San Marino"
 
 #: ../../datetime/zone_utc_list.go:347
 msgid "Sarajevo"
-msgstr "Sarajevo"
+msgstr "Saraevo"
 
 #: ../../datetime/zone_utc_list.go:348
 msgid "Skopje"
@@ -1214,7 +1215,7 @@ msgstr "Stockholm"
 
 #: ../../datetime/zone_utc_list.go:350
 msgid "Tirane"
-msgstr "Tirane"
+msgstr "Tirana"
 
 #: ../../datetime/zone_utc_list.go:351
 msgid "Vaduz"
@@ -1222,15 +1223,15 @@ msgstr "Vaduz"
 
 #: ../../datetime/zone_utc_list.go:352
 msgid "Vatican"
-msgstr "Vaticano"
+msgstr "Vatican"
 
 #: ../../datetime/zone_utc_list.go:353
 msgid "Vienna"
-msgstr "Vienna"
+msgstr "Viena"
 
 #: ../../datetime/zone_utc_list.go:354
 msgid "Warsaw"
-msgstr "Warsaw"
+msgstr "Varşovia"
 
 #: ../../datetime/zone_utc_list.go:355
 msgid "Zagreb"
@@ -1242,7 +1243,7 @@ msgstr "Zurich"
 
 #: ../../datetime/zone_utc_list.go:357
 msgid "Poland"
-msgstr "Poland"
+msgstr "Polonia"
 
 #: ../../datetime/zone_utc_list.go:359
 msgid "Blantyre"
@@ -1306,11 +1307,11 @@ msgstr "Beirut"
 
 #: ../../datetime/zone_utc_list.go:374
 msgid "Damascus"
-msgstr "Damascus"
+msgstr "Damasc"
 
 #: ../../datetime/zone_utc_list.go:375
 msgid "Gaza"
-msgstr "Gaza"
+msgstr "Fâșia Gaza"
 
 #: ../../datetime/zone_utc_list.go:376
 msgid "Hebron"
@@ -1322,7 +1323,7 @@ msgstr "Istanbul"
 
 #: ../../datetime/zone_utc_list.go:378
 msgid "Jerusalem"
-msgstr "Jerusalem"
+msgstr "Ierusalim"
 
 #: ../../datetime/zone_utc_list.go:379
 msgid "Nicosia"
@@ -1334,19 +1335,19 @@ msgstr "Tel Aviv"
 
 #: ../../datetime/zone_utc_list.go:381
 msgid "Egypt"
-msgstr "Egypt"
+msgstr "Egipt"
 
 #: ../../datetime/zone_utc_list.go:382
 msgid "Athens"
-msgstr "Athens"
+msgstr "Atena"
 
 #: ../../datetime/zone_utc_list.go:383
 msgid "Bucharest"
-msgstr "Bucharest"
+msgstr "Bucureşti"
 
 #: ../../datetime/zone_utc_list.go:384
 msgid "Chisinau"
-msgstr "Chisinau"
+msgstr "Chişinău"
 
 #: ../../datetime/zone_utc_list.go:385
 msgid "Helsinki"
@@ -1370,7 +1371,7 @@ msgstr "Sofia"
 
 #: ../../datetime/zone_utc_list.go:392
 msgid "Tallinn"
-msgstr "Tallinn"
+msgstr "Tallin"
 
 #: ../../datetime/zone_utc_list.go:393
 msgid "Tiraspol"
@@ -1378,7 +1379,7 @@ msgstr "Tiraspol"
 
 #: ../../datetime/zone_utc_list.go:394
 msgid "Uzhgorod"
-msgstr "Uzhgorod"
+msgstr "Ujgorod"
 
 #: ../../datetime/zone_utc_list.go:395
 msgid "Vilnius"
@@ -1386,7 +1387,7 @@ msgstr "Vilnius"
 
 #: ../../datetime/zone_utc_list.go:396
 msgid "Zaporozhye"
-msgstr "Zaporozhye"
+msgstr "Zaporoje"
 
 #: ../../datetime/zone_utc_list.go:397
 msgid "Israel"
@@ -1394,15 +1395,15 @@ msgstr "Israel"
 
 #: ../../datetime/zone_utc_list.go:398
 msgid "Libya"
-msgstr "Libya"
+msgstr "Libia"
 
 #: ../../datetime/zone_utc_list.go:399
 msgid "Turkey"
-msgstr "Turkey"
+msgstr "Turcia"
 
 #: ../../datetime/zone_utc_list.go:401
 msgid "Addis Ababa"
-msgstr "Addis Ababa"
+msgstr "Adis -Abeba"
 
 #: ../../datetime/zone_utc_list.go:402
 msgid "Asmara"
@@ -1410,7 +1411,7 @@ msgstr "Asmara"
 
 #: ../../datetime/zone_utc_list.go:404
 msgid "Dar es Salaam"
-msgstr "Dar es Salaam"
+msgstr "Dar es Salaam "
 
 #: ../../datetime/zone_utc_list.go:405
 msgid "Djibouti"
@@ -1486,7 +1487,7 @@ msgstr "Mayotte"
 
 #: ../../datetime/zone_utc_list.go:424
 msgid "Tehran"
-msgstr "Tehran"
+msgstr "Tegheran"
 
 #: ../../datetime/zone_utc_list.go:425
 msgid "Iran"
@@ -1510,11 +1511,11 @@ msgstr "Tbilisi"
 
 #: ../../datetime/zone_utc_list.go:431
 msgid "Yerevan"
-msgstr "Yerevan"
+msgstr "Erevan"
 
 #: ../../datetime/zone_utc_list.go:432
 msgid "Moscow"
-msgstr "Moscow"
+msgstr "Moscova"
 
 #: ../../datetime/zone_utc_list.go:433
 msgid "Samara"
@@ -1562,19 +1563,19 @@ msgstr "Mawson"
 
 #: ../../datetime/zone_utc_list.go:447
 msgid "Aqtau"
-msgstr "Aqtau"
+msgstr "Aktau"
 
 #: ../../datetime/zone_utc_list.go:448
 msgid "Aqtobe"
-msgstr "Aqtobe"
+msgstr "Aktobe"
 
 #: ../../datetime/zone_utc_list.go:449
 msgid "Ashgabat"
-msgstr "Ashgabat"
+msgstr "Aşhabad"
 
 #: ../../datetime/zone_utc_list.go:451
 msgid "Dushanbe"
-msgstr "Dushanbe"
+msgstr "Duşanbe"
 
 #: ../../datetime/zone_utc_list.go:452
 msgid "Karachi"
@@ -1590,15 +1591,15 @@ msgstr "Samarkand"
 
 #: ../../datetime/zone_utc_list.go:455
 msgid "Tashkent"
-msgstr "Tashkent"
+msgstr "Taşkent"
 
 #: ../../datetime/zone_utc_list.go:456
 msgid "Kerguelen"
-msgstr "Kerguelen"
+msgstr "Insulele Kerguelen"
 
 #: ../../datetime/zone_utc_list.go:457
 msgid "Maldives"
-msgstr "Maldives"
+msgstr "Insulele Maldive"
 
 #: ../../datetime/zone_utc_list.go:459
 msgid "Calcutta"
@@ -1622,11 +1623,11 @@ msgstr "Vostok"
 
 #: ../../datetime/zone_utc_list.go:467
 msgid "Almaty"
-msgstr "Almaty"
+msgstr "Almatî"
 
 #: ../../datetime/zone_utc_list.go:468
 msgid "Bishkek"
-msgstr "Bishkek"
+msgstr "Bişkek"
 
 #: ../../datetime/zone_utc_list.go:470
 msgid "Dhaka"
@@ -1642,7 +1643,7 @@ msgstr "Thimphu"
 
 #: ../../datetime/zone_utc_list.go:474
 msgid "Yekaterinburg"
-msgstr "Yekaterinburg"
+msgstr "Ecaterinburg"
 
 #: ../../datetime/zone_utc_list.go:475
 msgid "Chagos"
@@ -1650,11 +1651,11 @@ msgstr "Chagos"
 
 #: ../../datetime/zone_utc_list.go:477
 msgid "Rangoon"
-msgstr "Rangoon"
+msgstr "Yangon"
 
 #: ../../datetime/zone_utc_list.go:478
 msgid "Cocos"
-msgstr "Cocos"
+msgstr "Insulele Cocos"
 
 #: ../../datetime/zone_utc_list.go:480
 msgid "Bangkok"
@@ -1662,7 +1663,7 @@ msgstr "Bangkok"
 
 #: ../../datetime/zone_utc_list.go:481
 msgid "Ho Chi Minh"
-msgstr "Ho Chi Minh"
+msgstr "Ho Și Min"
 
 #: ../../datetime/zone_utc_list.go:482
 msgid "Hovd"
@@ -1674,7 +1675,7 @@ msgstr "Jakarta"
 
 #: ../../datetime/zone_utc_list.go:484
 msgid "Novokuznetsk"
-msgstr "Novokuznetsk"
+msgstr "Novokuzneţk"
 
 #: ../../datetime/zone_utc_list.go:485
 msgid "Novosibirsk"
@@ -1702,7 +1703,7 @@ msgstr "Vientiane"
 
 #: ../../datetime/zone_utc_list.go:491
 msgid "Christmas"
-msgstr "Christmas"
+msgstr "Insula Crăciunului"
 
 #: ../../datetime/zone_utc_list.go:493
 msgid "Brunei"
@@ -1722,7 +1723,7 @@ msgstr "Harbin"
 
 #: ../../datetime/zone_utc_list.go:498
 msgid "Hong Kong"
-msgstr "Hong Kong"
+msgstr "Hong-Kong"
 
 #: ../../datetime/zone_utc_list.go:499
 msgid "Kashgar"
@@ -1730,11 +1731,11 @@ msgstr "Kashgar"
 
 #: ../../datetime/zone_utc_list.go:500
 msgid "Krasnoyarsk"
-msgstr "Krasnoyarsk"
+msgstr "Krasnoiarsk"
 
 #: ../../datetime/zone_utc_list.go:501
 msgid "Kuala Lumpur"
-msgstr "Kuala Lumpur"
+msgstr "Kuala-Lumpur"
 
 #: ../../datetime/zone_utc_list.go:502
 msgid "Kuching"
@@ -1774,11 +1775,11 @@ msgstr "Ujung Pandang"
 
 #: ../../datetime/zone_utc_list.go:513
 msgid "Ulan Bator"
-msgstr "Ulan Bator"
+msgstr "Ulan-Bator"
 
 #: ../../datetime/zone_utc_list.go:514
 msgid "Urumqi"
-msgstr "Urumqi"
+msgstr "Urumci"
 
 #: ../../datetime/zone_utc_list.go:515
 msgid "Perth"
@@ -1786,15 +1787,15 @@ msgstr "Perth"
 
 #: ../../datetime/zone_utc_list.go:516
 msgid "Australia/West"
-msgstr "Australia/West"
+msgstr "Australia/Regiunea de Vest"
 
 #: ../../datetime/zone_utc_list.go:518
 msgid "PRC"
-msgstr "PRC"
+msgstr "Republica Populară Chineză"
 
 #: ../../datetime/zone_utc_list.go:519
 msgid "ROC"
-msgstr "ROC"
+msgstr "Republica Chineză"
 
 #: ../../datetime/zone_utc_list.go:522
 msgid "Eucla"
@@ -1814,11 +1815,11 @@ msgstr "Jayapura"
 
 #: ../../datetime/zone_utc_list.go:527
 msgid "Pyongyang"
-msgstr "Pyongyang"
+msgstr "Phenian"
 
 #: ../../datetime/zone_utc_list.go:528
 msgid "Seoul"
-msgstr "Seoul"
+msgstr "Seul"
 
 #: ../../datetime/zone_utc_list.go:529
 msgid "Tokyo"
@@ -1826,19 +1827,19 @@ msgstr "Tokyo"
 
 #: ../../datetime/zone_utc_list.go:530
 msgid "Japan"
-msgstr "Japan"
+msgstr "Japonia"
 
 #: ../../datetime/zone_utc_list.go:531
 msgid "Palau"
-msgstr "Palau"
+msgstr "Insulele Palau"
 
 #: ../../datetime/zone_utc_list.go:532
 msgid "ROK"
-msgstr "ROK"
+msgstr "Republica Coreea"
 
 #: ../../datetime/zone_utc_list.go:534
 msgid "Adelaide"
-msgstr "Adelaide"
+msgstr "Adelaida"
 
 #: ../../datetime/zone_utc_list.go:535
 msgid "Broke Hill"
@@ -1846,15 +1847,15 @@ msgstr "Broke Hill"
 
 #: ../../datetime/zone_utc_list.go:536
 msgid "Darwin"
-msgstr "Darwin"
+msgstr "Darvin"
 
 #: ../../datetime/zone_utc_list.go:537
 msgid "Australia/North"
-msgstr "Australia/North"
+msgstr "Australia/Regiunea de Nord"
 
 #: ../../datetime/zone_utc_list.go:538
 msgid "Australia/South"
-msgstr "Australia/South"
+msgstr "Australia/Regiunea de Sud"
 
 #: ../../datetime/zone_utc_list.go:539
 msgid "Yancowinna"
@@ -1870,7 +1871,7 @@ msgstr "Khandyga"
 
 #: ../../datetime/zone_utc_list.go:543
 msgid "Yakutsk"
-msgstr "Yakutsk"
+msgstr "Iakutsk"
 
 #: ../../datetime/zone_utc_list.go:544
 msgid "ACT"
@@ -1906,7 +1907,7 @@ msgstr "NSW"
 
 #: ../../datetime/zone_utc_list.go:552
 msgid "Queensland"
-msgstr "Queensland"
+msgstr ""
 
 #: ../../datetime/zone_utc_list.go:553
 msgid "Sydney"
@@ -1926,7 +1927,7 @@ msgstr "Chuuk"
 
 #: ../../datetime/zone_utc_list.go:557
 msgid "Guam"
-msgstr "Guam"
+msgstr "Insula Guam"
 
 #: ../../datetime/zone_utc_list.go:558
 msgid "Port Moresby"
@@ -1958,11 +1959,11 @@ msgstr "Casey"
 
 #: ../../datetime/zone_utc_list.go:567
 msgid "Macquarie"
-msgstr "Macquarie"
+msgstr ""
 
 #: ../../datetime/zone_utc_list.go:568
 msgid "Sakhalin"
-msgstr "Sakhalin"
+msgstr "Insula Sahalin"
 
 #: ../../datetime/zone_utc_list.go:569
 msgid "Ust-Nera"
@@ -1986,7 +1987,7 @@ msgstr "Kosrae"
 
 #: ../../datetime/zone_utc_list.go:574
 msgid "Noumea"
-msgstr "Noumea"
+msgstr "Nouméa"
 
 #: ../../datetime/zone_utc_list.go:575
 msgid "Pohnpei"
@@ -1998,19 +1999,19 @@ msgstr "Norfolk"
 
 #: ../../datetime/zone_utc_list.go:580
 msgid "McMurdo"
-msgstr "McMurdo"
+msgstr "McMurdo/Antarctida"
 
 #: ../../datetime/zone_utc_list.go:581
 msgid "South Pole"
-msgstr "South Pole"
+msgstr "Polul Sud"
 
 #: ../../datetime/zone_utc_list.go:582
 msgid "Anadyr"
-msgstr "Anadyr"
+msgstr "Anadîr"
 
 #: ../../datetime/zone_utc_list.go:583
 msgid "Kamchatka"
-msgstr "Kamchatka"
+msgstr "Kamceatka"
 
 #: ../../datetime/zone_utc_list.go:584
 msgid "Magadan"
@@ -2018,11 +2019,11 @@ msgstr "Magadan"
 
 #: ../../datetime/zone_utc_list.go:586
 msgid "NZ"
-msgstr "NZ"
+msgstr "Noua Zelanda"
 
 #: ../../datetime/zone_utc_list.go:587
 msgid "Auckland"
-msgstr "Auckland"
+msgstr "Aukland"
 
 #: ../../datetime/zone_utc_list.go:588
 msgid "Fiji"
@@ -2054,15 +2055,15 @@ msgstr "Wake"
 
 #: ../../datetime/zone_utc_list.go:595
 msgid "Wallis"
-msgstr "Wallis"
+msgstr "Insula Wallis"
 
 #: ../../datetime/zone_utc_list.go:597
 msgid "NZ-CHAT"
-msgstr "NZ-CHAT"
+msgstr "Noua Zelanda -CHAT"
 
 #: ../../datetime/zone_utc_list.go:598
 msgid "Chatham"
-msgstr "Chatham"
+msgstr "Chatham "
 
 #: ../../datetime/zone_utc_list.go:600
 msgid "Apia"
@@ -2082,19 +2083,19 @@ msgstr "Tongatapu"
 
 #: ../../dock/normal_apps.go:80
 msgid "_Run"
-msgstr "_Avvia"
+msgstr "_Rulează"
 
 #: ../../dock/normal_apps.go:112 ../../dock/runtime_apps.go:297
 msgid "_Undock"
-msgstr "_Sblocca"
+msgstr "_Elimină de pe bară"
 
 #: ../../dock/runtime_apps.go:266
 msgid "_Close All"
-msgstr "_Chiudi Tutti"
+msgstr "_Închide tot"
 
 #: ../../dock/runtime_apps.go:309
 msgid "_Dock"
-msgstr "_Dock"
+msgstr "_ Bară"
 
 #: ../../grub2/grub2_ifc.go:75 ../../network/nm_setting_ip4_config.go:174
 #: ../../network/nm_setting_ip6_config.go:66
@@ -2103,103 +2104,103 @@ msgstr "Auto"
 
 #: ../../keybinding/id_desc_list.go:47
 msgid "Launcher"
-msgstr "Launcher"
+msgstr "Lansator"
 
 #: ../../keybinding/id_desc_list.go:48
 msgid "Show desktop"
-msgstr "Mostra desktop"
+msgstr "Afişarea desktop"
 
 #: ../../keybinding/id_desc_list.go:49
 msgid "Lock screen"
-msgstr "Lock screen"
+msgstr "Blocarea ecran"
 
 #: ../../keybinding/id_desc_list.go:50
 msgid "File manager"
-msgstr "File manager"
+msgstr "Managerul de fişiere"
 
 #: ../../keybinding/id_desc_list.go:51
 msgid "Switch applications"
-msgstr "Cambio applicazioni"
+msgstr "Switch-ul de aplicaţii"
 
 #: ../../keybinding/id_desc_list.go:52
 msgid "Reverse switch applications"
-msgstr "Cambio applicazioni invertito"
+msgstr "Switch-ul reversiv de aplicaţii"
 
 #: ../../keybinding/id_desc_list.go:53
 msgid "3D switch applications"
-msgstr "Switch 3D delle applicazioni"
+msgstr "Comutare 3D a aplicaţiilor"
 
 #: ../../keybinding/id_desc_list.go:54
 msgid "3D reverse switch applications"
-msgstr "Reverse switch 3D delle applicazioni"
+msgstr "Comutare 3D reversibilă a aplicaţiilor"
 
 #: ../../keybinding/id_desc_list.go:55
 msgid "Show/Hide the dock"
-msgstr "Mostra/Nascondi la Dock"
+msgstr "Afișare/Ascundere bară"
 
 #: ../../keybinding/id_desc_list.go:56
 msgid "Screenshot"
-msgstr "Screenshot"
+msgstr "Captură  ecran"
 
 #: ../../keybinding/id_desc_list.go:57
 msgid "Full screenshot"
-msgstr "Screenshot intero"
+msgstr "Captură completă a ecranului"
 
 #: ../../keybinding/id_desc_list.go:58
 msgid "Window screenshot"
-msgstr "Screenshot finestra"
+msgstr "Captură fereastra"
 
 #: ../../keybinding/id_desc_list.go:59
 msgid "Delay screenshot"
-msgstr "Screenshot ritardato"
+msgstr "Amânare captura ecran"
 
 #: ../../keybinding/id_desc_list.go:60
 msgid "Terminal"
-msgstr "Terminale"
+msgstr "Terminal"
 
 #: ../../keybinding/id_desc_list.go:61
 msgid "Terminal Quake Window"
-msgstr "Finestra Terminale con Root"
+msgstr "Fereastra Quake a Terminalului"
 
 #: ../../keybinding/id_desc_list.go:62
 msgid "Logout"
-msgstr "Logout"
+msgstr "Deconectare"
 
 #: ../../keybinding/id_desc_list.go:63
 msgid "Disable Touchpad"
-msgstr "Disabilita Touchpad"
+msgstr "Dezactivare Touchpad"
 
 #: ../../keybinding/id_desc_list.go:64
 msgid "Deepin Translator"
-msgstr "Deepin Translator"
+msgstr "Traducator Deepin"
 
 #: ../../keybinding/id_desc_list.go:65
 msgid "Switch Layout"
-msgstr "Cambia layout"
+msgstr "Schimbare dispunere tastatura"
 
 #: ../../keybinding/id_desc_list.go:73
 msgid "Calculator"
-msgstr "Calcolatrice"
+msgstr "Calculator"
 
 #: ../../keybinding/id_desc_list.go:74
 msgid "Email client"
-msgstr "Client Email"
+msgstr "Clientul Email"
 
 #: ../../keybinding/id_desc_list.go:75
 msgid "Web browser"
-msgstr "Web browser"
+msgstr "browser-ul web"
 
 #: ../../keybinding/id_desc_list.go:76
 msgid "Media player"
-msgstr "Media player"
+msgstr "Media Player"
 
 #: ../../keybinding/id_desc_list.go:77
 msgid "Play/Pause"
-msgstr "Play/Pausa"
+msgstr "Redare/Pauză"
 
 #: ../../keybinding/id_desc_list.go:78
 msgid "Pause"
-msgstr "Pausa"
+msgstr "Pauză"
 
 #: ../../keybinding/id_desc_list.go:79
 msgid "Stop"
@@ -2207,140 +2208,140 @@ msgstr "Stop"
 
 #: ../../keybinding/id_desc_list.go:80
 msgid "Mute"
-msgstr "Muto"
+msgstr "Mut"
 
 #: ../../keybinding/id_desc_list.go:81
 msgid "Volume down"
-msgstr "Volume meno"
+msgstr "Micşorarea volumului"
 
 #: ../../keybinding/id_desc_list.go:82
 msgid "Volume up"
-msgstr "Volume più"
+msgstr "Mărirea volumului"
 
 #: ../../keybinding/id_desc_list.go:83
 msgid "Previous"
-msgstr "Precedente"
+msgstr "Precedent"
 
 #: ../../keybinding/id_desc_list.go:84
 msgid "Next"
-msgstr "Avanti"
+msgstr "Urmatorul"
 
 #: ../../keybinding/id_desc_list.go:85
 msgid "Eject"
-msgstr "Espelli"
+msgstr "Evacuare"
 
 #: ../../keybinding/id_desc_list.go:93
 msgid "Close window"
-msgstr "Chiudi finestra"
+msgstr "Închidere fereastră"
 
 #: ../../keybinding/id_desc_list.go:94
 msgid "Maximize window"
-msgstr "Massimizza finestra"
+msgstr "Maximizare fereastră"
 
 #: ../../keybinding/id_desc_list.go:95
 msgid "Restore window"
-msgstr "Ripristina finestra"
+msgstr "Restabilire fereastră"
 
 #: ../../keybinding/id_desc_list.go:96
 msgid "Minimize window"
-msgstr "Minimizza finestra"
+msgstr "Minimizare fereastră"
 
 #: ../../keybinding/id_desc_list.go:97
 msgid "Move window"
-msgstr "Muovi finestra"
+msgstr "Mutare fereastră"
 
 #: ../../keybinding/id_desc_list.go:98
 msgid "Resize window"
-msgstr "Ridimensiona la finestra"
+msgstr "Redimensionare fereastră"
 
 #: ../../keybinding/id_desc_list.go:99
 msgid "Switch furl state"
-msgstr "Cambia furl state"
+msgstr "Minimizare"
 
 #: ../../keybinding/id_desc_list.go:100
 msgid "Activate window menu"
-msgstr "Attiva menu finestra"
+msgstr "Activare meniu fereastră"
 
 #: ../../keybinding/id_desc_list.go:108
 msgid "Switch to workspace 1"
-msgstr "Passa allo spazio di lavoro 1"
+msgstr "Comutare la spațiul de lucru 1"
 
 #: ../../keybinding/id_desc_list.go:109
 msgid "Switch to workspace 2"
-msgstr "Passa allo spazio di lavoro 2"
+msgstr "Comutare la spațiul de lucru 2"
 
 #: ../../keybinding/id_desc_list.go:110
 msgid "Switch to workspace 3"
-msgstr "Passa allo spazio di lavoro 3"
+msgstr "Comutare la spațiul de lucru 3"
 
 #: ../../keybinding/id_desc_list.go:111
 msgid "Switch to workspace 4"
-msgstr "Passa allo spazio di lavoro 4"
+msgstr "Comutare la spațiul de lucru 4"
 
 #: ../../keybinding/id_desc_list.go:112
 msgid "Switch to left workspace"
-msgstr "Passa allo spazio di lavoro a sinsitra"
+msgstr "Comutare la spațiul de lucru din stânga"
 
 #: ../../keybinding/id_desc_list.go:113
 msgid "Switch to right workspace"
-msgstr "Passa allo spazio di lavoro destro"
+msgstr "Comutare la spațiul de lucru din dreapta"
 
 #: ../../keybinding/id_desc_list.go:114
 msgid "Switch to upper workspace"
-msgstr "Passa allo spazio di lavoro superiore"
+msgstr "Comutare la spațiul de lucru de deasupra"
 
 #: ../../keybinding/id_desc_list.go:115
 msgid "Switch to lower workspace"
-msgstr "Passa allo spazio di lavoro inferiore"
+msgstr "Comutare la spațiul de lucru de dedesubt"
 
 #: ../../keybinding/id_desc_list.go:116
 msgid "Move to workspace 1"
-msgstr "Muoviti sullo spazio di lavoro 1"
+msgstr "Mutare pe spațiul de lucru 1"
 
 #: ../../keybinding/id_desc_list.go:117
 msgid "Move to workspace 2"
-msgstr "Muoviti sullo spazio di lavoro 2"
+msgstr "Mutare pe spațiul de lucru 2"
 
 #: ../../keybinding/id_desc_list.go:118
 msgid "Move to workspace 3"
-msgstr "Muoviti sullo spazio di lavoro 3"
+msgstr "Mutare pe spațiul de lucru 3"
 
 #: ../../keybinding/id_desc_list.go:119
 msgid "Move to workspace 4"
-msgstr "Muoviti sullo spazio di lavoro 4"
+msgstr "Mutare pe spațiul de lucru 4"
 
 #: ../../keybinding/id_desc_list.go:120
 msgid "Move to left workspace"
-msgstr "Muoviti sullo spazio di lavoro sinistro"
+msgstr "Mutare pe spațiul de lucru din stânga"
 
 #: ../../keybinding/id_desc_list.go:121
 msgid "Move to right workspace"
-msgstr "Muoviti sullo spazio di lavoro destro"
+msgstr "Mutare pe spațiul de lucru din dreapta"
 
 #: ../../keybinding/id_desc_list.go:122
 msgid "Move to upper workspace"
-msgstr "Muoviti sullo spazio di lavoro superiore"
+msgstr "Mutare pe spațiul de lucru de deasupra"
 
 #: ../../keybinding/id_desc_list.go:123
 msgid "Move to lower workspace"
-msgstr "Muoviti sullo spazio di lavoro inferiore"
+msgstr "Mutare pe spațiul de lucru de dedesubt"
 
 #: ../../mime/default_media.go:72 ../../mime/default_media.go:89
 msgid "Nothing"
-msgstr "Niente"
+msgstr "Nimic"
 
 #: ../../mime/default_media.go:75 ../../mime/default_media.go:90
 msgid "Open Folder"
-msgstr "Apri cartella"
+msgstr "Deschidere Fişier"
 
 #: ../../mime/default_media.go:79
 msgid "Run Software"
-msgstr "Esegui software"
+msgstr "Rulare program"
 
 #: ../../network/manager_connections.go:203
 #: ../../network/nm_custom_type.go:178
 msgid "Wired Connection"
-msgstr "Connessione cablata"
+msgstr "Conexiune prin cablu"
 
 #: ../../network/manager_connections.go:281
 #: ../../network/manager_connections.go:286
@@ -2350,13 +2351,13 @@ msgstr "Connessione cablata"
 #: ../../network/nm_setting_vpn_openvpn.go:398
 #: ../../network/nm_setting_vpn_vpnc.go:272
 msgid "None"
-msgstr "No"
+msgstr "Nici un"
 
 #: ../../network/manager_connections.go:288
 #: ../../network/nm_setting_virtual_key.go:142
 #: ../../network/nm_setting_virtual_key.go:149
 msgid "WEP 40/128-bit Key"
-msgstr "WEP 40/128-bit Key"
+msgstr "Cheie WEP 40/128-bit"
 
 #: ../../network/manager_connections.go:290
 #: ../../network/nm_setting_virtual_key.go:143
@@ -2393,27 +2394,27 @@ msgstr "FAST"
 #: ../../network/nm_setting_802_1x.go:165
 #: ../../network/nm_setting_802_1x.go:173
 msgid "Tunneled TLS"
-msgstr "Tunneled TLS"
+msgstr "TLS"
 
 #: ../../network/manager_connections.go:308
 #: ../../network/nm_setting_802_1x.go:166
 #: ../../network/nm_setting_802_1x.go:174
 msgid "Protected EAP"
-msgstr "Protected EAP"
+msgstr "EAP Protejat"
 
 #: ../../network/nm_constant.go:314 ../../network/nm_setting_vpn_l2tp.go:116
 #: ../../network/nm_setting_vpn_openvpn.go:171
 #: ../../network/nm_setting_vpn_pptp.go:106
 #: ../../network/nm_setting_vpn_vpnc.go:145
 msgid "Saved"
-msgstr "Salvato"
+msgstr "Salvat"
 
 #: ../../network/nm_constant.go:316 ../../network/nm_setting_vpn_l2tp.go:117
 #: ../../network/nm_setting_vpn_openvpn.go:172
 #: ../../network/nm_setting_vpn_pptp.go:107
 #: ../../network/nm_setting_vpn_vpnc.go:147
 msgid "Always Ask"
-msgstr "Chiedi sempre"
+msgstr "Întreabă Întotdeauna"
 
 #: ../../network/nm_constant.go:317 ../../network/nm_setting_vpn_l2tp.go:118
 #: ../../network/nm_setting_vpn_openvpn.go:173
@@ -2421,43 +2422,43 @@ msgstr "Chiedi sempre"
 #: ../../network/nm_setting_vpn_pptp.go:108
 #: ../../network/nm_setting_vpn_vpnc.go:148
 msgid "Not Required"
-msgstr "Non richiesto"
+msgstr "Nu este necesar"
 
 #: ../../network/nm_custom_type.go:176
 msgid "Connection"
-msgstr "Connessione"
+msgstr "Conexiune"
 
 #: ../../network/nm_custom_type.go:180
 msgid "Wireless Connection"
-msgstr "Connessione WiFi"
+msgstr "Conexiune fără fir"
 
 #: ../../network/nm_custom_type.go:182
 msgid "Wireless Ad-Hoc"
-msgstr "Wireless Ad-Hoc"
+msgstr "Conexiune fără fir Ad-Hoc"
 
 #: ../../network/nm_custom_type.go:184
 msgid "Wireless Ap-Hotspot"
-msgstr "Wireless Ap-Hotspot"
+msgstr "Conexiune fără fir Ap-Hotspot"
 
 #: ../../network/nm_custom_type.go:186
 msgid "PPPoE Connection"
-msgstr "Connessione PPPoE"
+msgstr "Conexiune PPPoE"
 
 #: ../../network/nm_custom_type.go:188
 msgid "Mobile Connection"
-msgstr "Connessione Mobile"
+msgstr "Conexiune Mobilă"
 
 #: ../../network/nm_custom_type.go:190
 msgid "Mobile GSM Connection"
-msgstr "Connessione Mobile GSM"
+msgstr "Conexiune Mobilă GSM"
 
 #: ../../network/nm_custom_type.go:192
 msgid "Mobile CDMA Connection"
-msgstr "Connessione Mobile CDMA"
+msgstr "Conexiune Mobilă CDMA"
 
 #: ../../network/nm_custom_type.go:194
 msgid "VPN Connection"
-msgstr "Connessione VPN"
+msgstr "Conexiune VPN"
 
 #: ../../network/nm_custom_type.go:196
 msgid "VPN L2TP"
@@ -2465,7 +2466,7 @@ msgstr "VPN L2TP"
 
 #: ../../network/nm_custom_type.go:198
 msgid "VPN OpenConnect"
-msgstr "VPN OpenConnect"
+msgstr "VPN Conexiune deschisă"
 
 #: ../../network/nm_custom_type.go:200
 msgid "VPN OpenVPN"
@@ -2507,32 +2508,32 @@ msgstr "OTP"
 #: ../../network/nm_setting_ip4_config.go:178
 #: ../../network/nm_setting_vpn_vpnc.go:261
 msgid "Disabled"
-msgstr "Disabilitato"
+msgstr "Dezactivat"
 
 #: ../../network/nm_setting_802_1x.go:180
 msgid "Anonymous"
-msgstr "Anonima"
+msgstr "Anonim"
 
 #: ../../network/nm_setting_802_1x.go:181
 msgid "Authenticated"
-msgstr "Autenticata"
+msgstr "Autentificat"
 
 #: ../../network/nm_setting_802_1x.go:182
 msgid "Both"
-msgstr "Entrambi"
+msgstr "Ambele"
 
 #: ../../network/nm_setting_802_1x.go:186
 #: ../../network/nm_setting_wireless.go:297
 msgid "Automatic"
-msgstr "Automatico"
+msgstr "Automat"
 
 #: ../../network/nm_setting_802_1x.go:187
 msgid "Version 0"
-msgstr "Versione 0"
+msgstr "Versiune 0"
 
 #: ../../network/nm_setting_802_1x.go:188
 msgid "Version 1"
-msgstr "Versione 1"
+msgstr "Versiune 1"
 
 #: ../../network/nm_setting_gsm.go:125
 msgid "China Unicom Internet"
@@ -2540,7 +2541,7 @@ msgstr "China Unicom Internet"
 
 #: ../../network/nm_setting_gsm.go:126
 msgid "China Unicom MMS"
-msgstr "China Unicom MMS"
+msgstr "China Unicom Internet"
 
 #: ../../network/nm_setting_gsm.go:127
 msgid "China Mobile WAP"
@@ -2556,7 +2557,7 @@ msgstr "China Mobile MMS"
 
 #: ../../network/nm_setting_gsm.go:133
 msgid "Any"
-msgstr "Qualsiasi"
+msgstr "Orice"
 
 #: ../../network/nm_setting_gsm.go:134
 msgid "3G (UMTS/HSPA)"
@@ -2568,39 +2569,39 @@ msgstr "2G (GPRS/EDGE)"
 
 #: ../../network/nm_setting_gsm.go:136
 msgid "Prefer 3G (UMTS/HSPA)"
-msgstr "Preferisci 3G (UMTS/HSPA)"
+msgstr "Preferă 3G (UMTS/HSPA)"
 
 #: ../../network/nm_setting_gsm.go:137
 msgid "Prefer 2G (GPRS/EDGE)"
-msgstr "Preferisci 2G (GPRS/EDGE)"
+msgstr "Preferă 2G (GPRS/EDGE)"
 
 #: ../../network/nm_setting_gsm.go:138
 msgid "Prefer 4G (LTE)"
-msgstr "Preferisci 4G (LTE)"
+msgstr "Preferă  4G (LTE)"
 
 #: ../../network/nm_setting_gsm.go:139
 msgid "Use Only 4G (LTE)"
-msgstr "Usa solo 4G (LTE)"
+msgstr "Folosire Doar  4G (LTE)"
 
 #: ../../network/nm_setting_ip4_config.go:175
 #: ../../network/nm_setting_ip6_config.go:68
 msgid "Link-Local Only"
-msgstr "Solo Link locale"
+msgstr "Numai Conexiune Locală "
 
 #: ../../network/nm_setting_ip4_config.go:176
 #: ../../network/nm_setting_ip6_config.go:69
 msgid "Manual"
-msgstr "Manuale"
+msgstr "Manual"
 
 #: ../../network/nm_setting_ip4_config.go:177
 #: ../../network/nm_setting_ip6_config.go:70
 #: ../../network/nm_setting_wireless_security.go:205
 msgid "Shared"
-msgstr "Condivisa"
+msgstr "Partajat"
 
 #: ../../network/nm_setting_ip6_config.go:65
 msgid "Ignore"
-msgstr "Ignora"
+msgstr "Ignorare"
 
 #: ../../network/nm_setting_ip6_config.go:67
 msgid "DHCP"
@@ -2641,41 +2642,41 @@ msgstr "WPA/WPA2 Enterprise"
 #: ../../network/nm_setting_virtual_key.go:158
 #: ../../network/nm_setting_virtual_key.go:167
 msgid "All Available (default)"
-msgstr "Tutte disponibili (default)"
+msgstr "Toate Disponibile (implicit)"
 
 #: ../../network/nm_setting_virtual_key.go:159
 #: ../../network/nm_setting_virtual_key.go:168
 msgid "128-bit (most secure)"
-msgstr "128-bit (più sicura)"
+msgstr "128 octeţi (cel mai securizat)"
 
 #: ../../network/nm_setting_virtual_key.go:160
 #: ../../network/nm_setting_virtual_key.go:169
 msgid "40-bit (less secure)"
-msgstr "40-bit (meno sicura)"
+msgstr "40 octeţi (mai puţin securizat)"
 
 #: ../../network/nm_setting_virtual_key.go:176
 msgid "Secure (default)"
-msgstr "Sicura (default)"
+msgstr "Securizat (implicit)"
 
 #: ../../network/nm_setting_virtual_key.go:177
 msgid "Weak"
-msgstr "Scarsa"
+msgstr "Slab"
 
 #: ../../network/nm_setting_vpn_openvpn.go:251
 msgid "Certificates (TLS)"
-msgstr "Certificato (TLS)"
+msgstr "Certificate (TLS)"
 
 #: ../../network/nm_setting_vpn_openvpn.go:252
 msgid "Password"
-msgstr "Password"
+msgstr "Parolă"
 
 #: ../../network/nm_setting_vpn_openvpn.go:253
 msgid "Certificates with Password (TLS)"
-msgstr "Certificazione con password (TLS)"
+msgstr "Certificatele cu Parola (TLS)"
 
 #: ../../network/nm_setting_vpn_openvpn.go:254
 msgid "Static Key"
-msgstr "Chiave statica"
+msgstr "Cheie tip Static"
 
 #: ../../network/nm_setting_vpn_openvpn.go:258
 #: ../../network/nm_setting_vpn_openvpn.go:434
@@ -2693,7 +2694,7 @@ msgstr "1"
 #: ../../network/nm_setting_wireless.go:140
 #: ../../network/nm_setting_wireless.go:189
 msgid "Default"
-msgstr "Default"
+msgstr "Prestabilit"
 
 #: ../../network/nm_setting_vpn_openvpn.go:378
 msgid "DES-CBC"
@@ -2809,7 +2810,7 @@ msgstr "SOCKS"
 
 #: ../../network/nm_setting_vpn_vpnc.go:253
 msgid "Cisco (default)"
-msgstr "Cisco (default)"
+msgstr "Cisco (implicit)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:254
 msgid "Netscreen"
@@ -2817,11 +2818,11 @@ msgstr "Netscreen"
 
 #: ../../network/nm_setting_vpn_vpnc.go:258
 msgid "NAT-T When Available (default)"
-msgstr "NAT-T quando disponibile (default)"
+msgstr "NAT-T Cînd este disponibil (implicit)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:259
 msgid "NAT-T Always"
-msgstr "NAT-T Always"
+msgstr ""
 
 #: ../../network/nm_setting_vpn_vpnc.go:260
 msgid "Cisco UDP"
@@ -2830,28 +2831,28 @@ msgstr "Cisco UDP"
 #: ../../network/nm_setting_vpn_vpnc.go:265
 #: ../../network/nm_setting_vpn_vpnc.go:273
 msgid "DH Group 1"
-msgstr "DH Group 1"
+msgstr "DH Grupul 1"
 
 #: ../../network/nm_setting_vpn_vpnc.go:266
 msgid "DH Group 2 (default)"
-msgstr "DH Group 2 (default)"
+msgstr "DH Grupul 2 (implicit)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:267
 #: ../../network/nm_setting_vpn_vpnc.go:275
 msgid "DH Group 5"
-msgstr "DH Group 5"
+msgstr "DH Grupul 5"
 
 #: ../../network/nm_setting_vpn_vpnc.go:271
 msgid "Server (default)"
-msgstr "Server (default)"
+msgstr "Server (implicit)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:274
 msgid "DH Group 2"
-msgstr "DH Group 2"
+msgstr "DH Grupul 2"
 
 #: ../../network/nm_setting_wireless.go:291
 msgid "Infrastructure"
-msgstr "Infrastruttura"
+msgstr "Infrastructură"
 
 #: ../../network/nm_setting_wireless.go:292
 msgid "Ad-Hoc"
@@ -2875,7 +2876,7 @@ msgstr "WEP"
 
 #: ../../network/nm_setting_wireless_security.go:190
 msgid "Dynamic WEP"
-msgstr "Dynamic WEP"
+msgstr "WEP Dinamic"
 
 #: ../../network/nm_setting_wireless_security.go:191
 msgid "Ad-Hoc WPA-PSK"
@@ -2883,11 +2884,11 @@ msgstr "Ad-Hoc WPA-PSK"
 
 #: ../../network/nm_setting_wireless_security.go:192
 msgid "WPA-PSK Infrastructure"
-msgstr "Infrastruttura WPA-PSK"
+msgstr "WPA-PSK Infrastructura"
 
 #: ../../network/nm_setting_wireless_security.go:193
 msgid "WPA Enterprise"
-msgstr "WPA Enterprise"
+msgstr "WPA Întreprindere"
 
 #: ../../network/nm_setting_wireless_security.go:197
 msgid "WEP40"
@@ -2907,287 +2908,287 @@ msgstr "CCMP"
 
 #: ../../network/nm_setting_wireless_security.go:204
 msgid "Open"
-msgstr "Apri"
+msgstr "Deshide"
 
 #: ../../network/state_handler.go:34
 msgid "Device state changed, unknown reason."
-msgstr "Stato del dispositivo modificato, non si conosce la causa."
+msgstr "Starea dispozitivului a fost schimbată, motiv necunoscut"
 
 #: ../../network/state_handler.go:35
 msgid "Device state changed."
-msgstr "Stato del dispositivo modificato."
+msgstr "Starea dispozitivului a fost schimbată"
 
 #: ../../network/state_handler.go:36
 msgid "The device is now managed."
-msgstr "Il dispositivo è ora utilizzato."
+msgstr "Dispozitivul  este gestionat"
 
 #: ../../network/state_handler.go:37
 msgid "The device is no longer managed."
-msgstr "Il dispositivo non è più utilizzato."
+msgstr "Dispozitivul nu mai este gestionat"
 
 #: ../../network/state_handler.go:38
 msgid "The device has not been ready for configuration."
-msgstr "Il dispositivo non è pronto per la configurazione."
+msgstr "Dispozitivul nu a fost pregătit pentru configurare."
 
 #: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)."
-msgstr "La configurazione IP non può esser riservata (nessun indirizzo disponibile, timeout, ecc)."
+msgstr "Configurarea IP nu poate fi rezervată ( adresa nedisponibilă, timp experat, etc.)"
 
 #: ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid."
-msgstr "La configurazione IP non è valida."
+msgstr "IP configuraţie nu mai este validă"
 
 #: ../../network/state_handler.go:41
 msgid "Passwords were required but not provided."
-msgstr "Password richieste ma non fornite."
+msgstr "Parolă este necesară,  nu a fost introdusă"
 
 #: ../../network/state_handler.go:42
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server."
-msgstr "La connessione 802.1X si è disconnessa dall'access point o dal server di autentificazione."
+msgstr ""
 
 #: ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed."
-msgstr "Configurazione della connessione 802.1X fallita."
+msgstr ""
 
 #: ../../network/state_handler.go:44
 msgid "The 802.1X supplicant quitted or failed unexpectedly."
-msgstr "Il controllo 802.1X si è chiuso o ha fallito inaspettatamente."
+msgstr ""
 
 #: ../../network/state_handler.go:45
 msgid "The 802.1X supplicant took too long time to authenticate."
-msgstr "Il controllo 802.1X ci ha messo troppo tempo per autenticarsi."
+msgstr ""
 
 #: ../../network/state_handler.go:46
 msgid "The PPP service failed to start within the allowed time."
-msgstr "Il servizio PPP non è riuscito a partire nel tempo prestabilito."
+msgstr ""
 
 #: ../../network/state_handler.go:47
 msgid "The PPP service disconnected unexpectedly."
-msgstr "Il servizio PPP si è disconnesso inaspettatamente."
+msgstr "Serviciul PPP s-a deconectat din motive neaşteptate"
 
 #: ../../network/state_handler.go:48
 msgid "The PPP service quitted or failed unexpectedly."
-msgstr "Il servizio PPP è terminato o ha fallito inaspettatamente."
+msgstr ""
 
 #: ../../network/state_handler.go:49
 msgid "The DHCP service failed to start within the allowed time."
-msgstr "Il servizio DHCP non è riuscito a partire nel tempo prestabilito."
+msgstr ""
 
 #: ../../network/state_handler.go:50
 msgid "The DHCP service reported an unexpected error."
-msgstr "Il servizio DHCP ha riportato un errore inaspettato."
+msgstr ""
 
 #: ../../network/state_handler.go:51
 msgid "The DHCP service quitted or failed unexpectedly."
-msgstr "Il servizio DHCP si è chiuso o ha fallito inaspettatamente."
+msgstr ""
 
 #: ../../network/state_handler.go:52
 msgid "The shared connection service failed to start."
-msgstr "Il servizio di condivisione della connessione non è riuscito a partire."
+msgstr "Serviciul conexiunii de partajare: start eşuat"
 
 #: ../../network/state_handler.go:53
 msgid "The shared connection service quitted or failed unexpectedly."
-msgstr "Il servizio di condivisione della connessione non è riuscito a partire o è fallito inaspettatamente."
+msgstr ""
 
 #: ../../network/state_handler.go:54
 msgid "The AutoIP service failed to start."
-msgstr "Il servizio AutoIP non è riuscito a partire."
+msgstr "Serviciul AutoIP: start eşuat"
 
 #: ../../network/state_handler.go:55
 msgid "The AutoIP service reported an unexpected error."
-msgstr "Il servizio AutoIP ha riportato un errore inaspettato."
+msgstr ""
 
 #: ../../network/state_handler.go:56
 msgid "The AutoIP service quitted or failed unexpectedly."
-msgstr "Il servizio AutoIP si è chiuso o fallito inaspettatamente."
+msgstr ""
 
 #: ../../network/state_handler.go:57
 msgid "Dialing failed due to busy lines."
-msgstr "Dialing fallito per via della linea occupata."
+msgstr "Apel eşuat - liniile sunt ocupate"
 
 #: ../../network/state_handler.go:58
 msgid "Dialing failed due to no dial tone."
-msgstr "Dialing fallito per via dell'assenza dial tone."
+msgstr "Apel eşuat - lipseşte tonul de apel"
 
 #: ../../network/state_handler.go:59
 msgid "Dialing failed due to the carrier."
-msgstr "Dialing fallito per via del carrier."
+msgstr ""
 
 #: ../../network/state_handler.go:60
 msgid "Dialing timed out."
-msgstr "Dialing timed out."
+msgstr ""
 
 #: ../../network/state_handler.go:61
 msgid "Dialing failed."
-msgstr "Dialing failed."
+msgstr ""
 
 #: ../../network/state_handler.go:62
 msgid "Modem initialization failed."
-msgstr "Inizializzazione Modem fallita."
+msgstr "Iniţializare modem: eşuat"
 
 #: ../../network/state_handler.go:63
 msgid "Failed to select the specified GSM APN."
-msgstr "Impossibile selezionare l'APN GSM specificato."
+msgstr ""
 
 #: ../../network/state_handler.go:64
 msgid "No networks searched."
-msgstr "Nessuna rete cercata."
+msgstr "Reţelele nu au fost căutate"
 
 #: ../../network/state_handler.go:65
 msgid "Network registration was denied."
-msgstr "Registrazione alla rete negata."
+msgstr "Registrare reţea: respins"
 
 #: ../../network/state_handler.go:66
 msgid "Network registration timed out."
-msgstr "Registrazione alla rete fuori scaduta."
+msgstr "Registrare reţea: timp a expirat"
 
 #: ../../network/state_handler.go:67
 msgid "Register to the requested GSM network failed."
-msgstr "Registrazione alla rete GSM fallita."
+msgstr ""
 
 #: ../../network/state_handler.go:68
 msgid "PIN check failed."
-msgstr "Controllo PIN fallito."
+msgstr "Verificarea PIN eşuată"
 
 #: ../../network/state_handler.go:69
 msgid "Necessary firmware for the device may be missed."
-msgstr "Il firmware necessario del dispositivo potrebbe mancare."
+msgstr ""
 
 #: ../../network/state_handler.go:70
 msgid "The device was removed."
-msgstr "Il dispositivo è stato rimosso."
+msgstr "Dispozitivul eliminat"
 
 #: ../../network/state_handler.go:71
 msgid "NetworkManager went to sleep."
-msgstr "NetworkManager in standby."
+msgstr ""
 
 #: ../../network/state_handler.go:72
 msgid "The device's active connection was removed or disappeared."
-msgstr "La connessione attiva del dispositivo è stata rimossa o è scomparsa."
+msgstr ""
 
 #: ../../network/state_handler.go:73
 msgid "A user or client requested to disconnect."
-msgstr "Un user o client ha richiesto la disconnessione."
+msgstr ""
 
 #: ../../network/state_handler.go:74
 msgid "The device's carrier/link changed."
-msgstr "Il vettore/link del device è cambiato."
+msgstr ""
 
 #: ../../network/state_handler.go:75
 msgid "The device's existing connection was assumed."
-msgstr "La connessione attiva del dispositivo è stata assunta."
+msgstr ""
 
 #: ../../network/state_handler.go:76
 msgid "The 802.1x supplicant is now available."
-msgstr "Connessione 802.1X disponibile."
+msgstr ""
 
 #: ../../network/state_handler.go:77
 msgid "The modem could not be found."
-msgstr "Il modem non può esser rilevato."
+msgstr ""
 
 #: ../../network/state_handler.go:78
 msgid "The Bluetooth connection timed out or failed."
-msgstr "La connessione Bluetooth è scaduta o fallita."
+msgstr ""
 
 #: ../../network/state_handler.go:79
 msgid "GSM Modem's SIM Card was not inserted."
-msgstr "SIM Card del modem GSM non inserita."
+msgstr ""
 
 #: ../../network/state_handler.go:80
 msgid "GSM Modem's SIM PIN required."
-msgstr "Richiesto il codice PIN della SIM inserita nel Modem GSM."
+msgstr ""
 
 #: ../../network/state_handler.go:81
 msgid "GSM Modem's SIM PUK required."
-msgstr "Richiesto il codice PUK della SIM inserita nel Modem GSM."
+msgstr ""
 
 #: ../../network/state_handler.go:82
 msgid "Wrong GSM Modem's SIM"
-msgstr "SIM del modem GSM errata"
+msgstr ""
 
 #: ../../network/state_handler.go:83
 msgid "InfiniBand device does not support connected mode."
-msgstr "Il dispositivo InfiBand non supporta la modalità di connessione."
+msgstr ""
 
 #: ../../network/state_handler.go:84
 msgid "A connection dependency failed."
-msgstr "Una dipendenza di connessione fallita."
+msgstr ""
 
 #: ../../network/state_handler.go:85
 msgid "Problem with the RFC 2684 Ethernet over ADSL bridge."
-msgstr "Problema col RFC 2684 Ethernet sul Bridge ADSL."
+msgstr ""
 
 #: ../../network/state_handler.go:86
 msgid "ModemManager did not run or quitted unexpectedly."
-msgstr "ModemManager non è stato eseguito o si è interrotto inaspettatamente."
+msgstr ""
 
 #: ../../network/state_handler.go:87
 msgid "The 802.11 Wi-Fi network could not be found."
-msgstr "La connessione 802.11 WiFi non può esser trovata."
+msgstr ""
 
 #: ../../network/state_handler.go:88
 msgid "A secondary connection of the base connection failed."
-msgstr "La seconda connessione è fallita."
+msgstr ""
 
 #: ../../network/state_handler.go:91
 msgid "Network cable is unplugged."
-msgstr "Cavo ethernet staccato."
+msgstr ""
 
 #: ../../network/state_handler.go:94
 msgid "Activate VPN connection failed, unknown reason."
-msgstr "Attivazione delle connessione VPN fallita, causa sconosciuta."
+msgstr ""
 
 #: ../../network/state_handler.go:95
 msgid "Activate VPN connection failed."
-msgstr "Attivazione della connessione VPN fallita."
+msgstr ""
 
 #: ../../network/state_handler.go:96
 msgid "The VPN connection changed state due to disconnection from users."
-msgstr "La connessione VPN è cambiata per via della disconnessione dagli utenti."
+msgstr ""
 
 #: ../../network/state_handler.go:97
 msgid "The VPN connection changed state due to disconnection from devices."
-msgstr "La connessione VPN è cambiata per via di una disconnessione dai dispositivi."
+msgstr ""
 
 #: ../../network/state_handler.go:98
 msgid "VPN service stopped."
-msgstr "Il servizio VPN si è interrotto."
+msgstr ""
 
 #: ../../network/state_handler.go:99
 msgid "The IP config of VPN connection was invalid."
-msgstr "La configurazione IP della connessione VPN è invalida."
+msgstr ""
 
 #: ../../network/state_handler.go:100
 msgid "The connection attempt to VPN service timed out."
-msgstr "La connessione VPN è scaduta."
+msgstr ""
 
 #: ../../network/state_handler.go:101
 msgid "The VPN service start timed out."
-msgstr "L'avvio del servizio VPN è scaduto."
+msgstr ""
 
 #: ../../network/state_handler.go:102
 msgid "The VPN service failed to start."
-msgstr "Il servizio VPN non è riuscito a partire."
+msgstr ""
 
 #: ../../network/state_handler.go:103
 msgid "Necessary password for the VPN connection was not provided."
-msgstr "Password necessaria per la connessione VPN non fornita."
+msgstr ""
 
 #: ../../network/state_handler.go:104
 msgid "Authentication to VPN server failed."
-msgstr "Autentificazione server VPN fallita. "
+msgstr ""
 
 #: ../../network/state_handler.go:105
 msgid "The connection was deleted from settings."
-msgstr "La connessione è stata eliminata dalle impostazioni."
+msgstr ""
 
 #: ../../network/state_handler.go:157 ../../network/utils_notify.go:89
 #: ../../network/utils_test.go:616 ../../network/utils_test.go:623
 msgid "Connected"
-msgstr "Connesso"
+msgstr ""
 
 #: ../../network/state_handler.go:191 ../../network/utils_notify.go:64
 #: ../../network/utils_notify.go:68 ../../network/utils_notify.go:72
@@ -3195,64 +3196,64 @@ msgstr "Connesso"
 #: ../../network/utils_test.go:619 ../../network/utils_test.go:621
 #: ../../network/utils_test.go:625 ../../network/utils_test.go:627
 msgid "Disconnected"
-msgstr "Disconnected"
+msgstr ""
 
 #: ../../network/utils_notify.go:64
 msgid "Airplan mode enabled."
-msgstr "Modalità aeroplano attivata."
+msgstr ""
 
 #: ../../network/utils_notify.go:68
 msgid "You are now offline."
-msgstr "Sei ora offline."
+msgstr ""
 
 #: ../../network/utils_notify.go:72
 msgid "Access Point mode is not supported by this device."
-msgstr "Modalità Access Point non è supportata da questo dispositivo."
+msgstr ""
 
 #: ../../network/utils_notify.go:76 ../../network/utils_notify.go:81
 #: ../../network/utils_notify.go:85
 msgid "Network"
-msgstr "Rete"
+msgstr "Reţea"
 
 #: ../../network/utils_notify.go:76
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr "Lo switch hardware della scheda WLAN è spento, attivalo se necessario."
+msgstr ""
 
 #: ../../network/utils_notify.go:81
 msgid "System proxy is set successfully."
-msgstr "Il proxy di sistema è stato impostato con successo."
+msgstr ""
 
 #: ../../network/utils_notify.go:85
 msgid "System proxy has been cancelled."
-msgstr "Il proxy di sistema è stato eliminato."
+msgstr ""
 
 #: ../../power/upower.go:90
 msgid "Abnormal battery power"
-msgstr "Potenza della batteria anomala."
+msgstr ""
 
 #: ../../power/upower.go:90
 msgid ""
 "Battery power can not be predicted, please save important documents properly"
 " and  not do important operations."
-msgstr "L'autonomia della batteria non può esser individuata, ti consigliamo di salvare i tuoi documenti e non eseguire operazioni delicate."
+msgstr ""
 
 #: ../../power/upower.go:95 ../../power/upower.go:110
 msgid "Battery Critical Low"
-msgstr "Livello di carica della batteria critico"
+msgstr ""
 
 #: ../../power/upower.go:95
 msgid "Computer has been in suspend mode, please plug in."
-msgstr "Il computer è stato in modalità di sospensione, connettilo all'alimentatore."
+msgstr ""
 
 #: ../../power/upower.go:110
 msgid "Please plug in, or computer will be in suspend mode."
-msgstr "Collega il PC all'alimentatore, altrimenti il PC entrerà in modalità sospensione."
+msgstr ""
 
 #: ../../power/upower.go:123
 msgid "Battery Low"
-msgstr "Batteria scarica"
+msgstr "Baterie  descărcată"
 
 #: ../../power/upower.go:123
 msgid "Computer will be in suspend mode, please plug in now."
-msgstr "Il computer entrerà in modalità sospensione, collegalo al caricabatteria."
+msgstr ""

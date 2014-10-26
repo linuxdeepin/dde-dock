@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-08-21 11:42+0800\n"
-"PO-Revision-Date: 2014-10-23 13:51+0000\n"
+"PO-Revision-Date: 2014-10-25 07:51+0000\n"
 "Last-Translator: Ivica  Kolić <ikoli@yahoo.com>\n"
 "Language-Team: Croatian (http://www.transifex.com/projects/p/dde-daemon/language/hr/)\n"
 "MIME-Version: 1.0\n"
@@ -2466,7 +2466,7 @@ msgstr "VPN L2TP"
 
 #: ../../network/nm_custom_type.go:198
 msgid "VPN OpenConnect"
-msgstr ""
+msgstr "VPN otvorena veza"
 
 #: ../../network/nm_custom_type.go:200
 msgid "VPN OpenVPN"
@@ -2625,7 +2625,7 @@ msgstr "PPTP"
 
 #: ../../network/nm_setting_virtual_key.go:126
 msgid "OpenConnect"
-msgstr "OpenConnect"
+msgstr "Otvorenaveza"
 
 #: ../../network/nm_setting_virtual_key.go:127
 msgid "OpenVPN"
@@ -2814,7 +2814,7 @@ msgstr "Cisco (uobičajeno)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:254
 msgid "Netscreen"
-msgstr ""
+msgstr "Mrežni zaslon"
 
 #: ../../network/nm_setting_vpn_vpnc.go:258
 msgid "NAT-T When Available (default)"
@@ -3123,7 +3123,7 @@ msgstr ""
 
 #: ../../network/state_handler.go:86
 msgid "ModemManager did not run or quitted unexpectedly."
-msgstr ""
+msgstr "ModemManager nije radio ili je neočekivano prestao raditi."
 
 #: ../../network/state_handler.go:87
 msgid "The 802.11 Wi-Fi network could not be found."
@@ -3236,7 +3236,7 @@ msgstr ""
 msgid ""
 "Battery power can not be predicted, please save important documents properly"
 " and  not do important operations."
-msgstr ""
+msgstr "Snaga baterije se ne može predvidjeti, molim spremite važne dokumente i ne radite važne operacije."
 
 #: ../../power/upower.go:95 ../../power/upower.go:110
 msgid "Battery Critical Low"

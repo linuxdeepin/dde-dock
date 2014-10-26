@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-08-21 11:42+0800\n"
-"PO-Revision-Date: 2014-09-03 08:49+0000\n"
-"Last-Translator: szd_liufei <liufei@linuxdeepin.com>\n"
+"PO-Revision-Date: 2014-11-02 00:50+0000\n"
+"Last-Translator: samson <sambelet@yahoo.com>\n"
 "Language-Team: Amharic (http://www.transifex.com/projects/p/dde-daemon/language/am/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,11 +20,11 @@ msgstr ""
 
 #: ../../accounts/account_ifc.go:185
 msgid "The username is invalid."
-msgstr ""
+msgstr "የ ተጠቃሚው ስም ዋጋ የሌለው ነው"
 
 #: ../../accounts/account_ifc.go:189
 msgid "The username exists."
-msgstr ""
+msgstr "የ ተጠቃሚው ስም ቀደም ሲል ነበር"
 
 #: ../../bluetooth/bluez_profile.go:31
 msgid "Serial port"
@@ -76,13 +76,13 @@ msgstr "የ መልእክት ማስታወቂያ"
 
 #: ../../datetime/datetime.go:127 ../../langselect/ifc.go:39
 msgid "Language is changing, please wait"
-msgstr ""
+msgstr "እባክዎን ይቆዩ ቋንቋ እይተቀየረ ነው"
 
 #: ../../datetime/set_locale.go:58 ../../langselect/locale.go:245
 msgid ""
 "Language has been changed successfully and will be effective after logged "
 "out."
-msgstr ""
+msgstr "ቋንቋው ተሳክቶ ተቀይሯል እና ተግባራዊ የሚሆነው ወጥተው ሲገቡ ነው"
 
 #: ../../datetime/set_locale.go:60 ../../langselect/locale.go:247
 msgid "Language failed to change, please try later."
@@ -3203,7 +3203,7 @@ msgstr ""
 
 #: ../../network/utils_notify.go:68
 msgid "You are now offline."
-msgstr ""
+msgstr "አሁን ከ መስመር ውጪ ነዎት"
 
 #: ../../network/utils_notify.go:72
 msgid "Access Point mode is not supported by this device."

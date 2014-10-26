@@ -3,32 +3,35 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Massimo Antonio Carofano <real.massimo@hotmail.it>, 2014
+# Aril Apria Susanto <awriel@gmail.com>, 2014
+# eko ikhyar <ikhyar.com@gmail.com>, 2014
+# Herwono W Wijaya <root@linuxcoding.org>, 2014
+# Yugo Purwanto <dedy.yugo.purwanto@gmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-08-21 11:42+0800\n"
-"PO-Revision-Date: 2014-10-27 21:13+0000\n"
-"Last-Translator: Massimo Antonio Carofano <real.massimo@hotmail.it>\n"
-"Language-Team: Italian (http://www.transifex.com/projects/p/dde-daemon/language/it/)\n"
+"PO-Revision-Date: 2014-11-02 03:50+0000\n"
+"Last-Translator: Herwono W Wijaya <root@linuxcoding.org>\n"
+"Language-Team: Indonesian (http://www.transifex.com/projects/p/dde-daemon/language/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: it\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: id\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../../accounts/account_ifc.go:185
 msgid "The username is invalid."
-msgstr "L'username è invalida."
+msgstr "Nama pengguna tidak valid"
 
 #: ../../accounts/account_ifc.go:189
 msgid "The username exists."
-msgstr "L'username esiste già."
+msgstr "Nama pengguna sudah ada"
 
 #: ../../bluetooth/bluez_profile.go:31
 msgid "Serial port"
-msgstr "Porta seriale"
+msgstr "Port Serial"
 
 #: ../../bluetooth/bluez_profile.go:32
 msgid "Dial-Up networking"
@@ -36,57 +39,57 @@ msgstr "Dial-Up networking"
 
 #: ../../bluetooth/bluez_profile.go:33
 msgid "Hands-Free device"
-msgstr "Dispositivo Hands-Free"
+msgstr "Perangkat Hands-Free"
 
 #: ../../bluetooth/bluez_profile.go:34
 msgid "Hands-Free voice gateway"
-msgstr "Hands-Free voice gateway"
+msgstr "Gerbang suara Hands-Free"
 
 #: ../../bluetooth/bluez_profile.go:35
 msgid "Headset voice gateway"
-msgstr "Headset voice gateway"
+msgstr "Gerbang suara Headset"
 
 #: ../../bluetooth/bluez_profile.go:36
 msgid "Object push"
-msgstr "Object push"
+msgstr "Push Objek"
 
 #: ../../bluetooth/bluez_profile.go:37
 msgid "File transfer"
-msgstr "Trasferimento file"
+msgstr "Transfer berkas"
 
 #: ../../bluetooth/bluez_profile.go:38
 msgid "Synchronization"
-msgstr "Sincronizzazione"
+msgstr "Sinkronisasi"
 
 #: ../../bluetooth/bluez_profile.go:39
 msgid "Phone book access"
-msgstr "Accesso alla Rubrica"
+msgstr "Akses buku telepon"
 
 #: ../../bluetooth/bluez_profile.go:40
 msgid "Phone book access client"
-msgstr "Client d'accesso Rubrica"
+msgstr "Klien akses Buku Telepon"
 
 #: ../../bluetooth/bluez_profile.go:41
 msgid "Message access"
-msgstr "Messaggio d'accesso"
+msgstr "Akses Pesan"
 
 #: ../../bluetooth/bluez_profile.go:42
 msgid "Message notification"
-msgstr "Messaggio di notifica"
+msgstr "Notifikasi pesan"
 
 #: ../../datetime/datetime.go:127 ../../langselect/ifc.go:39
 msgid "Language is changing, please wait"
-msgstr "Cambio della lingua in corso, attendi.."
+msgstr "Sedang merubah bahasa, silahkan tunggu"
 
 #: ../../datetime/set_locale.go:58 ../../langselect/locale.go:245
 msgid ""
 "Language has been changed successfully and will be effective after logged "
 "out."
-msgstr "La lingua è stata impostata con successo e sarà attivata dopo il logout."
+msgstr "Bahasa telah berhasil diubah dan akan efektif setelah keluar."
 
 #: ../../datetime/set_locale.go:60 ../../langselect/locale.go:247
 msgid "Language failed to change, please try later."
-msgstr "Cambio lingua fallito, riprova."
+msgstr "Gagal merubah bahasa, silakan coba lagi."
 
 #: ../../datetime/zone_utc_list.go:24
 msgid "Midway"
@@ -178,7 +181,7 @@ msgstr "Los Angeles"
 
 #: ../../datetime/zone_utc_list.go:52
 msgid "Metlakatla"
-msgstr "Metlakatla"
+msgstr "Metiakatia"
 
 #: ../../datetime/zone_utc_list.go:53
 msgid "Santa Isabel"
@@ -266,7 +269,7 @@ msgstr "Yellowknife"
 
 #: ../../datetime/zone_utc_list.go:78
 msgid "Canada/Mountain"
-msgstr "Canada/Mountain"
+msgstr "Kanada/Moutain"
 
 #: ../../datetime/zone_utc_list.go:79
 msgid "BajaSur"
@@ -390,7 +393,7 @@ msgstr "Winnipeg"
 
 #: ../../datetime/zone_utc_list.go:114
 msgid "East-Saskatchewan"
-msgstr "East-Saskatchewan"
+msgstr "Saskatchewan Timur"
 
 #: ../../datetime/zone_utc_list.go:115
 msgid "Saskatchewan"
@@ -398,11 +401,11 @@ msgstr "Saskatchewan"
 
 #: ../../datetime/zone_utc_list.go:117
 msgid "General"
-msgstr "Generali"
+msgstr "Umum"
 
 #: ../../datetime/zone_utc_list.go:118
 msgid "Easter Island"
-msgstr "Easter Island"
+msgstr "Pulau Paskah"
 
 #: ../../datetime/zone_utc_list.go:119
 msgid "Galapagos"
@@ -478,7 +481,7 @@ msgstr "Indianapolis"
 
 #: ../../datetime/zone_utc_list.go:140
 msgid "Iqaluit"
-msgstr "Iqaluit"
+msgstr "Iqlaluit"
 
 #: ../../datetime/zone_utc_list.go:141
 msgid "Jamaica"
@@ -546,11 +549,11 @@ msgstr "Acre"
 
 #: ../../datetime/zone_utc_list.go:158
 msgid "Canada/Eastern"
-msgstr "Canada/Eastern"
+msgstr "Kanada/Eastern"
 
 #: ../../datetime/zone_utc_list.go:159
 msgid "Cuba"
-msgstr "Cuba"
+msgstr "Kuba"
 
 #: ../../datetime/zone_utc_list.go:161
 msgid "US/Eastern"
@@ -558,7 +561,7 @@ msgstr "US/Eastern"
 
 #: ../../datetime/zone_utc_list.go:162
 msgid "East-Indiana"
-msgstr "East-Indiana"
+msgstr "Indiana Timur"
 
 #: ../../datetime/zone_utc_list.go:163
 msgid "Michigan"
@@ -610,7 +613,7 @@ msgstr "Curacao"
 
 #: ../../datetime/zone_utc_list.go:177
 msgid "Dominica"
-msgstr "Dominica"
+msgstr "Dominika"
 
 #: ../../datetime/zone_utc_list.go:178
 msgid "Glace Bay"
@@ -690,7 +693,7 @@ msgstr "Santo Domingo"
 
 #: ../../datetime/zone_utc_list.go:197
 msgid "St Barthelemy"
-msgstr "St Barthelemy"
+msgstr "St Barthemy"
 
 #: ../../datetime/zone_utc_list.go:198
 msgid "St Kitts"
@@ -730,11 +733,11 @@ msgstr "Bermuda"
 
 #: ../../datetime/zone_utc_list.go:207
 msgid "Brazil/West"
-msgstr "Brazil/West"
+msgstr "Brazil/Barat"
 
 #: ../../datetime/zone_utc_list.go:208
 msgid "Atlantic"
-msgstr "Atlantic"
+msgstr "Atlantik"
 
 #: ../../datetime/zone_utc_list.go:209
 msgid "Continental"
@@ -822,7 +825,7 @@ msgstr "Jujuy"
 
 #: ../../datetime/zone_utc_list.go:237
 msgid "Maceio"
-msgstr "Maceio"
+msgstr "Meceio"
 
 #: ../../datetime/zone_utc_list.go:238
 msgid "Mendoza"
@@ -866,7 +869,7 @@ msgstr "Stanley"
 
 #: ../../datetime/zone_utc_list.go:248
 msgid "Brazil East"
-msgstr "Brazil East"
+msgstr "Brazil Timur"
 
 #: ../../datetime/zone_utc_list.go:251
 msgid "South Georgia"
@@ -970,7 +973,7 @@ msgstr "Faroe"
 
 #: ../../datetime/zone_utc_list.go:279
 msgid "Madeira"
-msgstr "Madeira"
+msgstr "Medeira"
 
 #: ../../datetime/zone_utc_list.go:280
 msgid "Reykjavik"
@@ -1026,7 +1029,7 @@ msgstr "Greenwich"
 
 #: ../../datetime/zone_utc_list.go:302
 msgid "Iceland"
-msgstr "Iceland"
+msgstr "Islandia"
 
 #: ../../datetime/zone_utc_list.go:303
 msgid "Portugal"
@@ -1050,7 +1053,7 @@ msgstr "Zulu"
 
 #: ../../datetime/zone_utc_list.go:309
 msgid "Algiers"
-msgstr "Algiers"
+msgstr "Aljazair"
 
 #: ../../datetime/zone_utc_list.go:310
 msgid "Bangui"
@@ -1102,7 +1105,7 @@ msgstr "Porto-Novo"
 
 #: ../../datetime/zone_utc_list.go:322
 msgid "Tunis"
-msgstr "Tunis"
+msgstr "Tunisia"
 
 #: ../../datetime/zone_utc_list.go:323
 msgid "Windhoek"
@@ -1158,7 +1161,7 @@ msgstr "Gibraltar"
 
 #: ../../datetime/zone_utc_list.go:336
 msgid "Ljubljana"
-msgstr "Ljubljana"
+msgstr "Ljubijana"
 
 #: ../../datetime/zone_utc_list.go:337
 msgid "Luxembourg"
@@ -1174,7 +1177,7 @@ msgstr "Malta"
 
 #: ../../datetime/zone_utc_list.go:340
 msgid "Monaco"
-msgstr "Monaco"
+msgstr "Monako"
 
 #: ../../datetime/zone_utc_list.go:341
 msgid "Oslo"
@@ -1190,7 +1193,7 @@ msgstr "Podgorica"
 
 #: ../../datetime/zone_utc_list.go:344
 msgid "Prague"
-msgstr "Prague"
+msgstr "Praha"
 
 #: ../../datetime/zone_utc_list.go:345
 msgid "Rome"
@@ -1222,7 +1225,7 @@ msgstr "Vaduz"
 
 #: ../../datetime/zone_utc_list.go:352
 msgid "Vatican"
-msgstr "Vaticano"
+msgstr "Vatikan"
 
 #: ../../datetime/zone_utc_list.go:353
 msgid "Vienna"
@@ -1230,7 +1233,7 @@ msgstr "Vienna"
 
 #: ../../datetime/zone_utc_list.go:354
 msgid "Warsaw"
-msgstr "Warsaw"
+msgstr "Warsawa"
 
 #: ../../datetime/zone_utc_list.go:355
 msgid "Zagreb"
@@ -1242,7 +1245,7 @@ msgstr "Zurich"
 
 #: ../../datetime/zone_utc_list.go:357
 msgid "Poland"
-msgstr "Poland"
+msgstr "Polandia"
 
 #: ../../datetime/zone_utc_list.go:359
 msgid "Blantyre"
@@ -1254,7 +1257,7 @@ msgstr "Bujumbura"
 
 #: ../../datetime/zone_utc_list.go:361
 msgid "Cairo"
-msgstr "Cairo"
+msgstr "Kairo"
 
 #: ../../datetime/zone_utc_list.go:362
 msgid "Gaborone"
@@ -1306,7 +1309,7 @@ msgstr "Beirut"
 
 #: ../../datetime/zone_utc_list.go:374
 msgid "Damascus"
-msgstr "Damascus"
+msgstr "Damaskus"
 
 #: ../../datetime/zone_utc_list.go:375
 msgid "Gaza"
@@ -1322,7 +1325,7 @@ msgstr "Istanbul"
 
 #: ../../datetime/zone_utc_list.go:378
 msgid "Jerusalem"
-msgstr "Jerusalem"
+msgstr "Yerussalem"
 
 #: ../../datetime/zone_utc_list.go:379
 msgid "Nicosia"
@@ -1334,15 +1337,15 @@ msgstr "Tel Aviv"
 
 #: ../../datetime/zone_utc_list.go:381
 msgid "Egypt"
-msgstr "Egypt"
+msgstr "Mesir"
 
 #: ../../datetime/zone_utc_list.go:382
 msgid "Athens"
-msgstr "Athens"
+msgstr "Athena"
 
 #: ../../datetime/zone_utc_list.go:383
 msgid "Bucharest"
-msgstr "Bucharest"
+msgstr "Bukarest"
 
 #: ../../datetime/zone_utc_list.go:384
 msgid "Chisinau"
@@ -1398,7 +1401,7 @@ msgstr "Libya"
 
 #: ../../datetime/zone_utc_list.go:399
 msgid "Turkey"
-msgstr "Turkey"
+msgstr "Turki"
 
 #: ../../datetime/zone_utc_list.go:401
 msgid "Addis Ababa"
@@ -1478,7 +1481,7 @@ msgstr "Antananarivo"
 
 #: ../../datetime/zone_utc_list.go:421
 msgid "Comoro"
-msgstr "Comoro"
+msgstr "Komoro"
 
 #: ../../datetime/zone_utc_list.go:422
 msgid "Mayotte"
@@ -1486,7 +1489,7 @@ msgstr "Mayotte"
 
 #: ../../datetime/zone_utc_list.go:424
 msgid "Tehran"
-msgstr "Tehran"
+msgstr "Teheran"
 
 #: ../../datetime/zone_utc_list.go:425
 msgid "Iran"
@@ -1502,7 +1505,7 @@ msgstr "Dubai"
 
 #: ../../datetime/zone_utc_list.go:429
 msgid "Muscat"
-msgstr "Muscat"
+msgstr "Maskate"
 
 #: ../../datetime/zone_utc_list.go:430
 msgid "Tbilisi"
@@ -1514,7 +1517,7 @@ msgstr "Yerevan"
 
 #: ../../datetime/zone_utc_list.go:432
 msgid "Moscow"
-msgstr "Moscow"
+msgstr "Moskow"
 
 #: ../../datetime/zone_utc_list.go:433
 msgid "Samara"
@@ -1582,7 +1585,7 @@ msgstr "Karachi"
 
 #: ../../datetime/zone_utc_list.go:453
 msgid "Oral"
-msgstr "Oral"
+msgstr "Orai"
 
 #: ../../datetime/zone_utc_list.go:454
 msgid "Samarkand"
@@ -1602,11 +1605,11 @@ msgstr "Maldives"
 
 #: ../../datetime/zone_utc_list.go:459
 msgid "Calcutta"
-msgstr "Calcutta"
+msgstr "Kalkuta"
 
 #: ../../datetime/zone_utc_list.go:460
 msgid "Colombo"
-msgstr "Colombo"
+msgstr "Kolombo"
 
 #: ../../datetime/zone_utc_list.go:461
 msgid "Kolkata"
@@ -1710,7 +1713,7 @@ msgstr "Brunei"
 
 #: ../../datetime/zone_utc_list.go:494
 msgid "Choibalsan"
-msgstr "Choibalsan"
+msgstr "Cholbalsan"
 
 #: ../../datetime/zone_utc_list.go:495
 msgid "Chongqing"
@@ -1762,7 +1765,7 @@ msgstr "Beijing"
 
 #: ../../datetime/zone_utc_list.go:509
 msgid "Singapore"
-msgstr "Singapore"
+msgstr "Singapura"
 
 #: ../../datetime/zone_utc_list.go:510
 msgid "Taipei"
@@ -1786,7 +1789,7 @@ msgstr "Perth"
 
 #: ../../datetime/zone_utc_list.go:516
 msgid "Australia/West"
-msgstr "Australia/West"
+msgstr "Australia/Barat"
 
 #: ../../datetime/zone_utc_list.go:518
 msgid "PRC"
@@ -1798,7 +1801,7 @@ msgstr "ROC"
 
 #: ../../datetime/zone_utc_list.go:522
 msgid "Eucla"
-msgstr "Eucla"
+msgstr "Eucia"
 
 #: ../../datetime/zone_utc_list.go:524
 msgid "Dili"
@@ -1826,7 +1829,7 @@ msgstr "Tokyo"
 
 #: ../../datetime/zone_utc_list.go:530
 msgid "Japan"
-msgstr "Japan"
+msgstr "Jepang"
 
 #: ../../datetime/zone_utc_list.go:531
 msgid "Palau"
@@ -1850,11 +1853,11 @@ msgstr "Darwin"
 
 #: ../../datetime/zone_utc_list.go:537
 msgid "Australia/North"
-msgstr "Australia/North"
+msgstr "Australia/Utara"
 
 #: ../../datetime/zone_utc_list.go:538
 msgid "Australia/South"
-msgstr "Australia/South"
+msgstr "Australia/Selatan"
 
 #: ../../datetime/zone_utc_list.go:539
 msgid "Yancowinna"
@@ -1862,7 +1865,7 @@ msgstr "Yancowinna"
 
 #: ../../datetime/zone_utc_list.go:541
 msgid "DumontDUrville"
-msgstr "DumontDUrville"
+msgstr "DumentDUrville"
 
 #: ../../datetime/zone_utc_list.go:542
 msgid "Khandyga"
@@ -1962,7 +1965,7 @@ msgstr "Macquarie"
 
 #: ../../datetime/zone_utc_list.go:568
 msgid "Sakhalin"
-msgstr "Sakhalin"
+msgstr "Skhalin"
 
 #: ../../datetime/zone_utc_list.go:569
 msgid "Ust-Nera"
@@ -2002,7 +2005,7 @@ msgstr "McMurdo"
 
 #: ../../datetime/zone_utc_list.go:581
 msgid "South Pole"
-msgstr "South Pole"
+msgstr "Kutub Selatan"
 
 #: ../../datetime/zone_utc_list.go:582
 msgid "Anadyr"
@@ -2074,7 +2077,7 @@ msgstr "Enderbury"
 
 #: ../../datetime/zone_utc_list.go:602
 msgid "Fakaofo"
-msgstr "Fakaofo"
+msgstr "Fakaoto"
 
 #: ../../datetime/zone_utc_list.go:604
 msgid "Tongatapu"
@@ -2082,15 +2085,15 @@ msgstr "Tongatapu"
 
 #: ../../dock/normal_apps.go:80
 msgid "_Run"
-msgstr "_Avvia"
+msgstr "_Jalankan"
 
 #: ../../dock/normal_apps.go:112 ../../dock/runtime_apps.go:297
 msgid "_Undock"
-msgstr "_Sblocca"
+msgstr "_Undock"
 
 #: ../../dock/runtime_apps.go:266
 msgid "_Close All"
-msgstr "_Chiudi Tutti"
+msgstr "_Tutup Semua"
 
 #: ../../dock/runtime_apps.go:309
 msgid "_Dock"
@@ -2099,248 +2102,248 @@ msgstr "_Dock"
 #: ../../grub2/grub2_ifc.go:75 ../../network/nm_setting_ip4_config.go:174
 #: ../../network/nm_setting_ip6_config.go:66
 msgid "Auto"
-msgstr "Auto"
+msgstr "Otomatis"
 
 #: ../../keybinding/id_desc_list.go:47
 msgid "Launcher"
-msgstr "Launcher"
+msgstr "Peluncur"
 
 #: ../../keybinding/id_desc_list.go:48
 msgid "Show desktop"
-msgstr "Mostra desktop"
+msgstr "Tampilkan Desktop"
 
 #: ../../keybinding/id_desc_list.go:49
 msgid "Lock screen"
-msgstr "Lock screen"
+msgstr "Kunci Layar"
 
 #: ../../keybinding/id_desc_list.go:50
 msgid "File manager"
-msgstr "File manager"
+msgstr "Manajer Berkas"
 
 #: ../../keybinding/id_desc_list.go:51
 msgid "Switch applications"
-msgstr "Cambio applicazioni"
+msgstr "Beralih aplikasi"
 
 #: ../../keybinding/id_desc_list.go:52
 msgid "Reverse switch applications"
-msgstr "Cambio applicazioni invertito"
+msgstr "Aplikasi alih terbalik"
 
 #: ../../keybinding/id_desc_list.go:53
 msgid "3D switch applications"
-msgstr "Switch 3D delle applicazioni"
+msgstr "Beralih aplikasi 3D"
 
 #: ../../keybinding/id_desc_list.go:54
 msgid "3D reverse switch applications"
-msgstr "Reverse switch 3D delle applicazioni"
+msgstr "Beralih balik aplikasi 3D"
 
 #: ../../keybinding/id_desc_list.go:55
 msgid "Show/Hide the dock"
-msgstr "Mostra/Nascondi la Dock"
+msgstr "Sembunyikan/Tampilkan dock"
 
 #: ../../keybinding/id_desc_list.go:56
 msgid "Screenshot"
-msgstr "Screenshot"
+msgstr "Tangkapan Layar"
 
 #: ../../keybinding/id_desc_list.go:57
 msgid "Full screenshot"
-msgstr "Screenshot intero"
+msgstr "Tangkapan layar penuh"
 
 #: ../../keybinding/id_desc_list.go:58
 msgid "Window screenshot"
-msgstr "Screenshot finestra"
+msgstr "Tangkapan layar jendela"
 
 #: ../../keybinding/id_desc_list.go:59
 msgid "Delay screenshot"
-msgstr "Screenshot ritardato"
+msgstr "Jeda tangkapan layar"
 
 #: ../../keybinding/id_desc_list.go:60
 msgid "Terminal"
-msgstr "Terminale"
+msgstr "Terminal"
 
 #: ../../keybinding/id_desc_list.go:61
 msgid "Terminal Quake Window"
-msgstr "Finestra Terminale con Root"
+msgstr "Terminal layar penuh"
 
 #: ../../keybinding/id_desc_list.go:62
 msgid "Logout"
-msgstr "Logout"
+msgstr "Keluar"
 
 #: ../../keybinding/id_desc_list.go:63
 msgid "Disable Touchpad"
-msgstr "Disabilita Touchpad"
+msgstr "Matikan Touchpad"
 
 #: ../../keybinding/id_desc_list.go:64
 msgid "Deepin Translator"
-msgstr "Deepin Translator"
+msgstr "Penerjemah Deepin"
 
 #: ../../keybinding/id_desc_list.go:65
 msgid "Switch Layout"
-msgstr "Cambia layout"
+msgstr "Beralih layout"
 
 #: ../../keybinding/id_desc_list.go:73
 msgid "Calculator"
-msgstr "Calcolatrice"
+msgstr "Kalkulator"
 
 #: ../../keybinding/id_desc_list.go:74
 msgid "Email client"
-msgstr "Client Email"
+msgstr "Klien Email"
 
 #: ../../keybinding/id_desc_list.go:75
 msgid "Web browser"
-msgstr "Web browser"
+msgstr "Peramban Web"
 
 #: ../../keybinding/id_desc_list.go:76
 msgid "Media player"
-msgstr "Media player"
+msgstr "Pemutar Media"
 
 #: ../../keybinding/id_desc_list.go:77
 msgid "Play/Pause"
-msgstr "Play/Pausa"
+msgstr "Mainkan/Jeda"
 
 #: ../../keybinding/id_desc_list.go:78
 msgid "Pause"
-msgstr "Pausa"
+msgstr "Jeda"
 
 #: ../../keybinding/id_desc_list.go:79
 msgid "Stop"
-msgstr "Stop"
+msgstr "Hentikan"
 
 #: ../../keybinding/id_desc_list.go:80
 msgid "Mute"
-msgstr "Muto"
+msgstr "Senyap"
 
 #: ../../keybinding/id_desc_list.go:81
 msgid "Volume down"
-msgstr "Volume meno"
+msgstr "Turunkan Volume"
 
 #: ../../keybinding/id_desc_list.go:82
 msgid "Volume up"
-msgstr "Volume più"
+msgstr "Naikkan Volume"
 
 #: ../../keybinding/id_desc_list.go:83
 msgid "Previous"
-msgstr "Precedente"
+msgstr "Sebelumnya"
 
 #: ../../keybinding/id_desc_list.go:84
 msgid "Next"
-msgstr "Avanti"
+msgstr "Selanjutnya"
 
 #: ../../keybinding/id_desc_list.go:85
 msgid "Eject"
-msgstr "Espelli"
+msgstr "Lepas"
 
 #: ../../keybinding/id_desc_list.go:93
 msgid "Close window"
-msgstr "Chiudi finestra"
+msgstr "Tutup jendela"
 
 #: ../../keybinding/id_desc_list.go:94
 msgid "Maximize window"
-msgstr "Massimizza finestra"
+msgstr "Maksimalkan jendela"
 
 #: ../../keybinding/id_desc_list.go:95
 msgid "Restore window"
-msgstr "Ripristina finestra"
+msgstr "Kembalikan jendela"
 
 #: ../../keybinding/id_desc_list.go:96
 msgid "Minimize window"
-msgstr "Minimizza finestra"
+msgstr "Minimalkan jendela"
 
 #: ../../keybinding/id_desc_list.go:97
 msgid "Move window"
-msgstr "Muovi finestra"
+msgstr "Pindah jendela"
 
 #: ../../keybinding/id_desc_list.go:98
 msgid "Resize window"
-msgstr "Ridimensiona la finestra"
+msgstr "Ubah ukuran jendela"
 
 #: ../../keybinding/id_desc_list.go:99
 msgid "Switch furl state"
-msgstr "Cambia furl state"
+msgstr "Beralih status furl"
 
 #: ../../keybinding/id_desc_list.go:100
 msgid "Activate window menu"
-msgstr "Attiva menu finestra"
+msgstr "Aktifkan menu jendela"
 
 #: ../../keybinding/id_desc_list.go:108
 msgid "Switch to workspace 1"
-msgstr "Passa allo spazio di lavoro 1"
+msgstr "Beralih ke ruang kerja 1"
 
 #: ../../keybinding/id_desc_list.go:109
 msgid "Switch to workspace 2"
-msgstr "Passa allo spazio di lavoro 2"
+msgstr "Beralih ke ruang kerja 2"
 
 #: ../../keybinding/id_desc_list.go:110
 msgid "Switch to workspace 3"
-msgstr "Passa allo spazio di lavoro 3"
+msgstr "Beralih ke ruang kerja 3"
 
 #: ../../keybinding/id_desc_list.go:111
 msgid "Switch to workspace 4"
-msgstr "Passa allo spazio di lavoro 4"
+msgstr "Beralih ke ruang kerja 4"
 
 #: ../../keybinding/id_desc_list.go:112
 msgid "Switch to left workspace"
-msgstr "Passa allo spazio di lavoro a sinsitra"
+msgstr "Beralih ke ruang kerja kiri"
 
 #: ../../keybinding/id_desc_list.go:113
 msgid "Switch to right workspace"
-msgstr "Passa allo spazio di lavoro destro"
+msgstr "Beralih ke ruang kerja kanan"
 
 #: ../../keybinding/id_desc_list.go:114
 msgid "Switch to upper workspace"
-msgstr "Passa allo spazio di lavoro superiore"
+msgstr "Beralih ke ruang kerja atas"
 
 #: ../../keybinding/id_desc_list.go:115
 msgid "Switch to lower workspace"
-msgstr "Passa allo spazio di lavoro inferiore"
+msgstr "Beralih ke ruang kerja bawah"
 
 #: ../../keybinding/id_desc_list.go:116
 msgid "Move to workspace 1"
-msgstr "Muoviti sullo spazio di lavoro 1"
+msgstr "Pindah ke ruang kerja 1"
 
 #: ../../keybinding/id_desc_list.go:117
 msgid "Move to workspace 2"
-msgstr "Muoviti sullo spazio di lavoro 2"
+msgstr "Pindah ke ruang kerja 2"
 
 #: ../../keybinding/id_desc_list.go:118
 msgid "Move to workspace 3"
-msgstr "Muoviti sullo spazio di lavoro 3"
+msgstr "Pindah ke ruang kerja 3"
 
 #: ../../keybinding/id_desc_list.go:119
 msgid "Move to workspace 4"
-msgstr "Muoviti sullo spazio di lavoro 4"
+msgstr "Pindah ke ruang kerja 4"
 
 #: ../../keybinding/id_desc_list.go:120
 msgid "Move to left workspace"
-msgstr "Muoviti sullo spazio di lavoro sinistro"
+msgstr "Pindah ke ruang kerja kiri"
 
 #: ../../keybinding/id_desc_list.go:121
 msgid "Move to right workspace"
-msgstr "Muoviti sullo spazio di lavoro destro"
+msgstr "Pindah ke ruang kerja kanan"
 
 #: ../../keybinding/id_desc_list.go:122
 msgid "Move to upper workspace"
-msgstr "Muoviti sullo spazio di lavoro superiore"
+msgstr "Pindah ke ruang kerja atas"
 
 #: ../../keybinding/id_desc_list.go:123
 msgid "Move to lower workspace"
-msgstr "Muoviti sullo spazio di lavoro inferiore"
+msgstr "Pindah ke ruang kerja bawah"
 
 #: ../../mime/default_media.go:72 ../../mime/default_media.go:89
 msgid "Nothing"
-msgstr "Niente"
+msgstr "Tidak ada apa-apa"
 
 #: ../../mime/default_media.go:75 ../../mime/default_media.go:90
 msgid "Open Folder"
-msgstr "Apri cartella"
+msgstr "Buka Folder"
 
 #: ../../mime/default_media.go:79
 msgid "Run Software"
-msgstr "Esegui software"
+msgstr "Jalankan Perangkat lunak"
 
 #: ../../network/manager_connections.go:203
 #: ../../network/nm_custom_type.go:178
 msgid "Wired Connection"
-msgstr "Connessione cablata"
+msgstr "Koneksi Kabel"
 
 #: ../../network/manager_connections.go:281
 #: ../../network/manager_connections.go:286
@@ -2350,7 +2353,7 @@ msgstr "Connessione cablata"
 #: ../../network/nm_setting_vpn_openvpn.go:398
 #: ../../network/nm_setting_vpn_vpnc.go:272
 msgid "None"
-msgstr "No"
+msgstr "None"
 
 #: ../../network/manager_connections.go:288
 #: ../../network/nm_setting_virtual_key.go:142
@@ -2406,14 +2409,14 @@ msgstr "Protected EAP"
 #: ../../network/nm_setting_vpn_pptp.go:106
 #: ../../network/nm_setting_vpn_vpnc.go:145
 msgid "Saved"
-msgstr "Salvato"
+msgstr "Tersimpan"
 
 #: ../../network/nm_constant.go:316 ../../network/nm_setting_vpn_l2tp.go:117
 #: ../../network/nm_setting_vpn_openvpn.go:172
 #: ../../network/nm_setting_vpn_pptp.go:107
 #: ../../network/nm_setting_vpn_vpnc.go:147
 msgid "Always Ask"
-msgstr "Chiedi sempre"
+msgstr "Selalu Tanyakan"
 
 #: ../../network/nm_constant.go:317 ../../network/nm_setting_vpn_l2tp.go:118
 #: ../../network/nm_setting_vpn_openvpn.go:173
@@ -2421,15 +2424,15 @@ msgstr "Chiedi sempre"
 #: ../../network/nm_setting_vpn_pptp.go:108
 #: ../../network/nm_setting_vpn_vpnc.go:148
 msgid "Not Required"
-msgstr "Non richiesto"
+msgstr "Tidak Diperlukan"
 
 #: ../../network/nm_custom_type.go:176
 msgid "Connection"
-msgstr "Connessione"
+msgstr "Koneksi"
 
 #: ../../network/nm_custom_type.go:180
 msgid "Wireless Connection"
-msgstr "Connessione WiFi"
+msgstr "Koneksi Wireless"
 
 #: ../../network/nm_custom_type.go:182
 msgid "Wireless Ad-Hoc"
@@ -2441,23 +2444,23 @@ msgstr "Wireless Ap-Hotspot"
 
 #: ../../network/nm_custom_type.go:186
 msgid "PPPoE Connection"
-msgstr "Connessione PPPoE"
+msgstr "Koneksi PPPoE"
 
 #: ../../network/nm_custom_type.go:188
 msgid "Mobile Connection"
-msgstr "Connessione Mobile"
+msgstr "Koneksi Mobile"
 
 #: ../../network/nm_custom_type.go:190
 msgid "Mobile GSM Connection"
-msgstr "Connessione Mobile GSM"
+msgstr "Koneksi Mobile GSM"
 
 #: ../../network/nm_custom_type.go:192
 msgid "Mobile CDMA Connection"
-msgstr "Connessione Mobile CDMA"
+msgstr "Koneksi Mobile CDMA"
 
 #: ../../network/nm_custom_type.go:194
 msgid "VPN Connection"
-msgstr "Connessione VPN"
+msgstr "Koneksi VPN"
 
 #: ../../network/nm_custom_type.go:196
 msgid "VPN L2TP"
@@ -2507,32 +2510,32 @@ msgstr "OTP"
 #: ../../network/nm_setting_ip4_config.go:178
 #: ../../network/nm_setting_vpn_vpnc.go:261
 msgid "Disabled"
-msgstr "Disabilitato"
+msgstr "Nonaktif"
 
 #: ../../network/nm_setting_802_1x.go:180
 msgid "Anonymous"
-msgstr "Anonima"
+msgstr "Anonim"
 
 #: ../../network/nm_setting_802_1x.go:181
 msgid "Authenticated"
-msgstr "Autenticata"
+msgstr "Terotentifikasi"
 
 #: ../../network/nm_setting_802_1x.go:182
 msgid "Both"
-msgstr "Entrambi"
+msgstr "Keduanya"
 
 #: ../../network/nm_setting_802_1x.go:186
 #: ../../network/nm_setting_wireless.go:297
 msgid "Automatic"
-msgstr "Automatico"
+msgstr "Otomatis"
 
 #: ../../network/nm_setting_802_1x.go:187
 msgid "Version 0"
-msgstr "Versione 0"
+msgstr "Versi 0"
 
 #: ../../network/nm_setting_802_1x.go:188
 msgid "Version 1"
-msgstr "Versione 1"
+msgstr "Versi 1"
 
 #: ../../network/nm_setting_gsm.go:125
 msgid "China Unicom Internet"
@@ -2556,7 +2559,7 @@ msgstr "China Mobile MMS"
 
 #: ../../network/nm_setting_gsm.go:133
 msgid "Any"
-msgstr "Qualsiasi"
+msgstr "Apa pun"
 
 #: ../../network/nm_setting_gsm.go:134
 msgid "3G (UMTS/HSPA)"
@@ -2568,39 +2571,39 @@ msgstr "2G (GPRS/EDGE)"
 
 #: ../../network/nm_setting_gsm.go:136
 msgid "Prefer 3G (UMTS/HSPA)"
-msgstr "Preferisci 3G (UMTS/HSPA)"
+msgstr "Diutamakan 3G (UMTS/HSPA)"
 
 #: ../../network/nm_setting_gsm.go:137
 msgid "Prefer 2G (GPRS/EDGE)"
-msgstr "Preferisci 2G (GPRS/EDGE)"
+msgstr "Diutamakan 2G (GPRS/EDGE)"
 
 #: ../../network/nm_setting_gsm.go:138
 msgid "Prefer 4G (LTE)"
-msgstr "Preferisci 4G (LTE)"
+msgstr "Diutamakan 4G (LTE)"
 
 #: ../../network/nm_setting_gsm.go:139
 msgid "Use Only 4G (LTE)"
-msgstr "Usa solo 4G (LTE)"
+msgstr "Hanya gunakan 4G (LTE)"
 
 #: ../../network/nm_setting_ip4_config.go:175
 #: ../../network/nm_setting_ip6_config.go:68
 msgid "Link-Local Only"
-msgstr "Solo Link locale"
+msgstr "Hanya Link-Local"
 
 #: ../../network/nm_setting_ip4_config.go:176
 #: ../../network/nm_setting_ip6_config.go:69
 msgid "Manual"
-msgstr "Manuale"
+msgstr "Manual"
 
 #: ../../network/nm_setting_ip4_config.go:177
 #: ../../network/nm_setting_ip6_config.go:70
 #: ../../network/nm_setting_wireless_security.go:205
 msgid "Shared"
-msgstr "Condivisa"
+msgstr "Bagikan"
 
 #: ../../network/nm_setting_ip6_config.go:65
 msgid "Ignore"
-msgstr "Ignora"
+msgstr "Abaikan"
 
 #: ../../network/nm_setting_ip6_config.go:67
 msgid "DHCP"
@@ -2641,41 +2644,41 @@ msgstr "WPA/WPA2 Enterprise"
 #: ../../network/nm_setting_virtual_key.go:158
 #: ../../network/nm_setting_virtual_key.go:167
 msgid "All Available (default)"
-msgstr "Tutte disponibili (default)"
+msgstr "Semua Tersedia (baku)"
 
 #: ../../network/nm_setting_virtual_key.go:159
 #: ../../network/nm_setting_virtual_key.go:168
 msgid "128-bit (most secure)"
-msgstr "128-bit (più sicura)"
+msgstr "128-bit (lebih aman)"
 
 #: ../../network/nm_setting_virtual_key.go:160
 #: ../../network/nm_setting_virtual_key.go:169
 msgid "40-bit (less secure)"
-msgstr "40-bit (meno sicura)"
+msgstr "40-bit (kurang aman)"
 
 #: ../../network/nm_setting_virtual_key.go:176
 msgid "Secure (default)"
-msgstr "Sicura (default)"
+msgstr "Aman (baku)"
 
 #: ../../network/nm_setting_virtual_key.go:177
 msgid "Weak"
-msgstr "Scarsa"
+msgstr "Lemah"
 
 #: ../../network/nm_setting_vpn_openvpn.go:251
 msgid "Certificates (TLS)"
-msgstr "Certificato (TLS)"
+msgstr "Sertifikat (TLS)"
 
 #: ../../network/nm_setting_vpn_openvpn.go:252
 msgid "Password"
-msgstr "Password"
+msgstr "Kata Sandi"
 
 #: ../../network/nm_setting_vpn_openvpn.go:253
 msgid "Certificates with Password (TLS)"
-msgstr "Certificazione con password (TLS)"
+msgstr "Sertifikat dengan Kata sandi (TLS)"
 
 #: ../../network/nm_setting_vpn_openvpn.go:254
 msgid "Static Key"
-msgstr "Chiave statica"
+msgstr "Kunci Statis"
 
 #: ../../network/nm_setting_vpn_openvpn.go:258
 #: ../../network/nm_setting_vpn_openvpn.go:434
@@ -2693,7 +2696,7 @@ msgstr "1"
 #: ../../network/nm_setting_wireless.go:140
 #: ../../network/nm_setting_wireless.go:189
 msgid "Default"
-msgstr "Default"
+msgstr "Baku"
 
 #: ../../network/nm_setting_vpn_openvpn.go:378
 msgid "DES-CBC"
@@ -2793,11 +2796,11 @@ msgstr "RIPEMD-160"
 
 #: ../../network/nm_setting_vpn_openvpn.go:429
 msgid "Client"
-msgstr "Client"
+msgstr "Klient"
 
 #: ../../network/nm_setting_vpn_openvpn.go:430
 msgid "Server"
-msgstr "Server"
+msgstr "Peladen"
 
 #: ../../network/nm_setting_vpn_openvpn.go:480
 msgid "HTTP"
@@ -2809,7 +2812,7 @@ msgstr "SOCKS"
 
 #: ../../network/nm_setting_vpn_vpnc.go:253
 msgid "Cisco (default)"
-msgstr "Cisco (default)"
+msgstr "Cisco (baku)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:254
 msgid "Netscreen"
@@ -2817,11 +2820,11 @@ msgstr "Netscreen"
 
 #: ../../network/nm_setting_vpn_vpnc.go:258
 msgid "NAT-T When Available (default)"
-msgstr "NAT-T quando disponibile (default)"
+msgstr "NAT-T Ketika Tersedia (baku)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:259
 msgid "NAT-T Always"
-msgstr "NAT-T Always"
+msgstr "Selalu NAT-T"
 
 #: ../../network/nm_setting_vpn_vpnc.go:260
 msgid "Cisco UDP"
@@ -2834,7 +2837,7 @@ msgstr "DH Group 1"
 
 #: ../../network/nm_setting_vpn_vpnc.go:266
 msgid "DH Group 2 (default)"
-msgstr "DH Group 2 (default)"
+msgstr "DH Group 2 (baku)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:267
 #: ../../network/nm_setting_vpn_vpnc.go:275
@@ -2843,7 +2846,7 @@ msgstr "DH Group 5"
 
 #: ../../network/nm_setting_vpn_vpnc.go:271
 msgid "Server (default)"
-msgstr "Server (default)"
+msgstr "Peladen (baku)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:274
 msgid "DH Group 2"
@@ -2851,7 +2854,7 @@ msgstr "DH Group 2"
 
 #: ../../network/nm_setting_wireless.go:291
 msgid "Infrastructure"
-msgstr "Infrastruttura"
+msgstr "Infrastruktur"
 
 #: ../../network/nm_setting_wireless.go:292
 msgid "Ad-Hoc"
@@ -2883,7 +2886,7 @@ msgstr "Ad-Hoc WPA-PSK"
 
 #: ../../network/nm_setting_wireless_security.go:192
 msgid "WPA-PSK Infrastructure"
-msgstr "Infrastruttura WPA-PSK"
+msgstr "WPA-PSK Infrastruktur"
 
 #: ../../network/nm_setting_wireless_security.go:193
 msgid "WPA Enterprise"
@@ -2907,287 +2910,287 @@ msgstr "CCMP"
 
 #: ../../network/nm_setting_wireless_security.go:204
 msgid "Open"
-msgstr "Apri"
+msgstr "Terbuka"
 
 #: ../../network/state_handler.go:34
 msgid "Device state changed, unknown reason."
-msgstr "Stato del dispositivo modificato, non si conosce la causa."
+msgstr "Keadaan perangkat berubah, alasan yang tidak diketahui."
 
 #: ../../network/state_handler.go:35
 msgid "Device state changed."
-msgstr "Stato del dispositivo modificato."
+msgstr "Keadaan perangkat berubah."
 
 #: ../../network/state_handler.go:36
 msgid "The device is now managed."
-msgstr "Il dispositivo è ora utilizzato."
+msgstr "Perangkat sekarang telah dikelola"
 
 #: ../../network/state_handler.go:37
 msgid "The device is no longer managed."
-msgstr "Il dispositivo non è più utilizzato."
+msgstr "Perangkat tidak lagi dikelola"
 
 #: ../../network/state_handler.go:38
 msgid "The device has not been ready for configuration."
-msgstr "Il dispositivo non è pronto per la configurazione."
+msgstr "Pengaturan perangkat belum siap."
 
 #: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)."
-msgstr "La configurazione IP non può esser riservata (nessun indirizzo disponibile, timeout, ecc)."
+msgstr "Pengaturan IP tidak dapat terbalik (no available address, timeout, etc)."
 
 #: ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid."
-msgstr "La configurazione IP non è valida."
+msgstr "Konfigurasi IP tidak lagi valid."
 
 #: ../../network/state_handler.go:41
 msgid "Passwords were required but not provided."
-msgstr "Password richieste ma non fornite."
+msgstr "Kata kunci yang dibutuhkan tidak tidak tersedia."
 
 #: ../../network/state_handler.go:42
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server."
-msgstr "La connessione 802.1X si è disconnessa dall'access point o dal server di autentificazione."
+msgstr "Supplicant 802.1X terputus dari titik akses atau server otentikasi."
 
 #: ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed."
-msgstr "Configurazione della connessione 802.1X fallita."
+msgstr "Konfigurasi supplicant 802.1X gagal. "
 
 #: ../../network/state_handler.go:44
 msgid "The 802.1X supplicant quitted or failed unexpectedly."
-msgstr "Il controllo 802.1X si è chiuso o ha fallito inaspettatamente."
+msgstr "Permohonan 802.1X keluar atau tiba-tiba gagal."
 
 #: ../../network/state_handler.go:45
 msgid "The 802.1X supplicant took too long time to authenticate."
-msgstr "Il controllo 802.1X ci ha messo troppo tempo per autenticarsi."
+msgstr "Permohonan 802.1X kelihatannya terlalu lama melakukan otentifikasi."
 
 #: ../../network/state_handler.go:46
 msgid "The PPP service failed to start within the allowed time."
-msgstr "Il servizio PPP non è riuscito a partire nel tempo prestabilito."
+msgstr "Layanan koneksi PPP gagal dimulai dalam waktu yang diijinkan."
 
 #: ../../network/state_handler.go:47
 msgid "The PPP service disconnected unexpectedly."
-msgstr "Il servizio PPP si è disconnesso inaspettatamente."
+msgstr "Layanan PPP tiba-tiba terputus."
 
 #: ../../network/state_handler.go:48
 msgid "The PPP service quitted or failed unexpectedly."
-msgstr "Il servizio PPP è terminato o ha fallito inaspettatamente."
+msgstr "Layanan PPP keluar atau tiba-tiba gagal."
 
 #: ../../network/state_handler.go:49
 msgid "The DHCP service failed to start within the allowed time."
-msgstr "Il servizio DHCP non è riuscito a partire nel tempo prestabilito."
+msgstr "Layanan DHCP gagal dimulai dalam waktu yang diijinkan."
 
 #: ../../network/state_handler.go:50
 msgid "The DHCP service reported an unexpected error."
-msgstr "Il servizio DHCP ha riportato un errore inaspettato."
+msgstr "Layanan DHCP melaporkan kesalahan yang tidak terduga."
 
 #: ../../network/state_handler.go:51
 msgid "The DHCP service quitted or failed unexpectedly."
-msgstr "Il servizio DHCP si è chiuso o ha fallito inaspettatamente."
+msgstr "Layanan DHCP keluar atau tiba-tiba gagal."
 
 #: ../../network/state_handler.go:52
 msgid "The shared connection service failed to start."
-msgstr "Il servizio di condivisione della connessione non è riuscito a partire."
+msgstr "Gagal memulai layanan berbagi koneksi."
 
 #: ../../network/state_handler.go:53
 msgid "The shared connection service quitted or failed unexpectedly."
-msgstr "Il servizio di condivisione della connessione non è riuscito a partire o è fallito inaspettatamente."
+msgstr "Layanan berbagi koneksi keluar atau tiba-tiba gagal."
 
 #: ../../network/state_handler.go:54
 msgid "The AutoIP service failed to start."
-msgstr "Il servizio AutoIP non è riuscito a partire."
+msgstr "Gagal memulai layanan AutoIP."
 
 #: ../../network/state_handler.go:55
 msgid "The AutoIP service reported an unexpected error."
-msgstr "Il servizio AutoIP ha riportato un errore inaspettato."
+msgstr "Galat tak terduga terjadi pada pada layanan AutoIP"
 
 #: ../../network/state_handler.go:56
 msgid "The AutoIP service quitted or failed unexpectedly."
-msgstr "Il servizio AutoIP si è chiuso o fallito inaspettatamente."
+msgstr "Layanan AutoIP keluar atau tiba-tiba gagal."
 
 #: ../../network/state_handler.go:57
 msgid "Dialing failed due to busy lines."
-msgstr "Dialing fallito per via della linea occupata."
+msgstr "Panggilan gagal karena jalur sibuk."
 
 #: ../../network/state_handler.go:58
 msgid "Dialing failed due to no dial tone."
-msgstr "Dialing fallito per via dell'assenza dial tone."
+msgstr "Panggilan gagal karena tidak ada nada panggil."
 
 #: ../../network/state_handler.go:59
 msgid "Dialing failed due to the carrier."
-msgstr "Dialing fallito per via del carrier."
+msgstr "Pemanggilan gagal karena carrier."
 
 #: ../../network/state_handler.go:60
 msgid "Dialing timed out."
-msgstr "Dialing timed out."
+msgstr "Panggilan kehabisan waktu."
 
 #: ../../network/state_handler.go:61
 msgid "Dialing failed."
-msgstr "Dialing failed."
+msgstr "Panggilan gagal"
 
 #: ../../network/state_handler.go:62
 msgid "Modem initialization failed."
-msgstr "Inizializzazione Modem fallita."
+msgstr "Inisialisasi modem gagal."
 
 #: ../../network/state_handler.go:63
 msgid "Failed to select the specified GSM APN."
-msgstr "Impossibile selezionare l'APN GSM specificato."
+msgstr "Gagal untuk memilih GSM APN yang ditentukan."
 
 #: ../../network/state_handler.go:64
 msgid "No networks searched."
-msgstr "Nessuna rete cercata."
+msgstr "Jaringan tidak terjangkau."
 
 #: ../../network/state_handler.go:65
 msgid "Network registration was denied."
-msgstr "Registrazione alla rete negata."
+msgstr "Pendaftaran jaringan ditolak"
 
 #: ../../network/state_handler.go:66
 msgid "Network registration timed out."
-msgstr "Registrazione alla rete fuori scaduta."
+msgstr "Pendaftaran jaringan timed out."
 
 #: ../../network/state_handler.go:67
 msgid "Register to the requested GSM network failed."
-msgstr "Registrazione alla rete GSM fallita."
+msgstr "Registrasi ke jaringan GSM yang diminta gagal."
 
 #: ../../network/state_handler.go:68
 msgid "PIN check failed."
-msgstr "Controllo PIN fallito."
+msgstr "Gagal mengecek PIN."
 
 #: ../../network/state_handler.go:69
 msgid "Necessary firmware for the device may be missed."
-msgstr "Il firmware necessario del dispositivo potrebbe mancare."
+msgstr "Firmware yang diperlukan untuk perangkat mungkin terlewatkan."
 
 #: ../../network/state_handler.go:70
 msgid "The device was removed."
-msgstr "Il dispositivo è stato rimosso."
+msgstr "Perangkat telah dilepas."
 
 #: ../../network/state_handler.go:71
 msgid "NetworkManager went to sleep."
-msgstr "NetworkManager in standby."
+msgstr "NetworkManager tertidur"
 
 #: ../../network/state_handler.go:72
 msgid "The device's active connection was removed or disappeared."
-msgstr "La connessione attiva del dispositivo è stata rimossa o è scomparsa."
+msgstr "Sambungan aktif perangkat telah dihapus atau hilang."
 
 #: ../../network/state_handler.go:73
 msgid "A user or client requested to disconnect."
-msgstr "Un user o client ha richiesto la disconnessione."
+msgstr "Pengguna atau klien meminta untuk diputuskan."
 
 #: ../../network/state_handler.go:74
 msgid "The device's carrier/link changed."
-msgstr "Il vettore/link del device è cambiato."
+msgstr "Perangkat pembawa/tautan berubah."
 
 #: ../../network/state_handler.go:75
 msgid "The device's existing connection was assumed."
-msgstr "La connessione attiva del dispositivo è stata assunta."
+msgstr "Permohonan 082.X1 sekarang tersedia"
 
 #: ../../network/state_handler.go:76
 msgid "The 802.1x supplicant is now available."
-msgstr "Connessione 802.1X disponibile."
+msgstr "supplicant 802.1x saat ini tersedia."
 
 #: ../../network/state_handler.go:77
 msgid "The modem could not be found."
-msgstr "Il modem non può esser rilevato."
+msgstr "Modem tidak ditemukan."
 
 #: ../../network/state_handler.go:78
 msgid "The Bluetooth connection timed out or failed."
-msgstr "La connessione Bluetooth è scaduta o fallita."
+msgstr "Gagal mengkoneksikan Bluetooth."
 
 #: ../../network/state_handler.go:79
 msgid "GSM Modem's SIM Card was not inserted."
-msgstr "SIM Card del modem GSM non inserita."
+msgstr "Kartu SIM Modem GSM tidak disisipkan."
 
 #: ../../network/state_handler.go:80
 msgid "GSM Modem's SIM PIN required."
-msgstr "Richiesto il codice PIN della SIM inserita nel Modem GSM."
+msgstr "PIN SIM Modem GSM diperlukan."
 
 #: ../../network/state_handler.go:81
 msgid "GSM Modem's SIM PUK required."
-msgstr "Richiesto il codice PUK della SIM inserita nel Modem GSM."
+msgstr "PUK SIM Modem GSM diperlukan."
 
 #: ../../network/state_handler.go:82
 msgid "Wrong GSM Modem's SIM"
-msgstr "SIM del modem GSM errata"
+msgstr "SIM Modem GSM salah"
 
 #: ../../network/state_handler.go:83
 msgid "InfiniBand device does not support connected mode."
-msgstr "Il dispositivo InfiBand non supporta la modalità di connessione."
+msgstr "Perangkat InfiniBand tidak mendukung modus terhubung."
 
 #: ../../network/state_handler.go:84
 msgid "A connection dependency failed."
-msgstr "Una dipendenza di connessione fallita."
+msgstr "Ketergantungan koneksi gagal."
 
 #: ../../network/state_handler.go:85
 msgid "Problem with the RFC 2684 Ethernet over ADSL bridge."
-msgstr "Problema col RFC 2684 Ethernet sul Bridge ADSL."
+msgstr "Masalah dengan RFC 2684 Ethernet jembatan ADSL."
 
 #: ../../network/state_handler.go:86
 msgid "ModemManager did not run or quitted unexpectedly."
-msgstr "ModemManager non è stato eseguito o si è interrotto inaspettatamente."
+msgstr "ModemManager tidak berjalan atau keluar tidak diketahui"
 
 #: ../../network/state_handler.go:87
 msgid "The 802.11 Wi-Fi network could not be found."
-msgstr "La connessione 802.11 WiFi non può esser trovata."
+msgstr "Jaringan 802.11 Wi-Fi tidak dapat ditemukan."
 
 #: ../../network/state_handler.go:88
 msgid "A secondary connection of the base connection failed."
-msgstr "La seconda connessione è fallita."
+msgstr "Sambungan sekunder koneksi dasar gagal"
 
 #: ../../network/state_handler.go:91
 msgid "Network cable is unplugged."
-msgstr "Cavo ethernet staccato."
+msgstr "Kabel jaringan tidak terpasang."
 
 #: ../../network/state_handler.go:94
 msgid "Activate VPN connection failed, unknown reason."
-msgstr "Attivazione delle connessione VPN fallita, causa sconosciuta."
+msgstr "Aktifan koneksi VPN gagal, alasan tidak diketahui."
 
 #: ../../network/state_handler.go:95
 msgid "Activate VPN connection failed."
-msgstr "Attivazione della connessione VPN fallita."
+msgstr "Aktifkan koneksi VPN gagal. "
 
 #: ../../network/state_handler.go:96
 msgid "The VPN connection changed state due to disconnection from users."
-msgstr "La connessione VPN è cambiata per via della disconnessione dagli utenti."
+msgstr "Koneksi VPN berubah status karena pemutusan dari pengguna."
 
 #: ../../network/state_handler.go:97
 msgid "The VPN connection changed state due to disconnection from devices."
-msgstr "La connessione VPN è cambiata per via di una disconnessione dai dispositivi."
+msgstr "Koneksi VPN berubah status karena pemutusan dari perangkat."
 
 #: ../../network/state_handler.go:98
 msgid "VPN service stopped."
-msgstr "Il servizio VPN si è interrotto."
+msgstr "Layanan VPN berhenti."
 
 #: ../../network/state_handler.go:99
 msgid "The IP config of VPN connection was invalid."
-msgstr "La configurazione IP della connessione VPN è invalida."
+msgstr "Konfig IP VPN tidak sah"
 
 #: ../../network/state_handler.go:100
 msgid "The connection attempt to VPN service timed out."
-msgstr "La connessione VPN è scaduta."
+msgstr "Menyambungkan layanan VPN waktu habis."
 
 #: ../../network/state_handler.go:101
 msgid "The VPN service start timed out."
-msgstr "L'avvio del servizio VPN è scaduto."
+msgstr "Mulai layanan VPN waktu habis."
 
 #: ../../network/state_handler.go:102
 msgid "The VPN service failed to start."
-msgstr "Il servizio VPN non è riuscito a partire."
+msgstr "Gagal memulai Layanan VPN"
 
 #: ../../network/state_handler.go:103
 msgid "Necessary password for the VPN connection was not provided."
-msgstr "Password necessaria per la connessione VPN non fornita."
+msgstr ""
 
 #: ../../network/state_handler.go:104
 msgid "Authentication to VPN server failed."
-msgstr "Autentificazione server VPN fallita. "
+msgstr "Otentikasi ke Peladen VPN gagal."
 
 #: ../../network/state_handler.go:105
 msgid "The connection was deleted from settings."
-msgstr "La connessione è stata eliminata dalle impostazioni."
+msgstr "Koneksi dihapus dari pengaturan."
 
 #: ../../network/state_handler.go:157 ../../network/utils_notify.go:89
 #: ../../network/utils_test.go:616 ../../network/utils_test.go:623
 msgid "Connected"
-msgstr "Connesso"
+msgstr "Tersambung"
 
 #: ../../network/state_handler.go:191 ../../network/utils_notify.go:64
 #: ../../network/utils_notify.go:68 ../../network/utils_notify.go:72
@@ -3195,64 +3198,64 @@ msgstr "Connesso"
 #: ../../network/utils_test.go:619 ../../network/utils_test.go:621
 #: ../../network/utils_test.go:625 ../../network/utils_test.go:627
 msgid "Disconnected"
-msgstr "Disconnected"
+msgstr "Terputus"
 
 #: ../../network/utils_notify.go:64
 msgid "Airplan mode enabled."
-msgstr "Modalità aeroplano attivata."
+msgstr ""
 
 #: ../../network/utils_notify.go:68
 msgid "You are now offline."
-msgstr "Sei ora offline."
+msgstr ""
 
 #: ../../network/utils_notify.go:72
 msgid "Access Point mode is not supported by this device."
-msgstr "Modalità Access Point non è supportata da questo dispositivo."
+msgstr "Mode Akses Point tidak didukung perangkat ini."
 
 #: ../../network/utils_notify.go:76 ../../network/utils_notify.go:81
 #: ../../network/utils_notify.go:85
 msgid "Network"
-msgstr "Rete"
+msgstr "Jaringan"
 
 #: ../../network/utils_notify.go:76
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr "Lo switch hardware della scheda WLAN è spento, attivalo se necessario."
+msgstr ""
 
 #: ../../network/utils_notify.go:81
 msgid "System proxy is set successfully."
-msgstr "Il proxy di sistema è stato impostato con successo."
+msgstr ""
 
 #: ../../network/utils_notify.go:85
 msgid "System proxy has been cancelled."
-msgstr "Il proxy di sistema è stato eliminato."
+msgstr ""
 
 #: ../../power/upower.go:90
 msgid "Abnormal battery power"
-msgstr "Potenza della batteria anomala."
+msgstr ""
 
 #: ../../power/upower.go:90
 msgid ""
 "Battery power can not be predicted, please save important documents properly"
 " and  not do important operations."
-msgstr "L'autonomia della batteria non può esser individuata, ti consigliamo di salvare i tuoi documenti e non eseguire operazioni delicate."
+msgstr ""
 
 #: ../../power/upower.go:95 ../../power/upower.go:110
 msgid "Battery Critical Low"
-msgstr "Livello di carica della batteria critico"
+msgstr ""
 
 #: ../../power/upower.go:95
 msgid "Computer has been in suspend mode, please plug in."
-msgstr "Il computer è stato in modalità di sospensione, connettilo all'alimentatore."
+msgstr ""
 
 #: ../../power/upower.go:110
 msgid "Please plug in, or computer will be in suspend mode."
-msgstr "Collega il PC all'alimentatore, altrimenti il PC entrerà in modalità sospensione."
+msgstr ""
 
 #: ../../power/upower.go:123
 msgid "Battery Low"
-msgstr "Batteria scarica"
+msgstr "Baterai Lemah"
 
 #: ../../power/upower.go:123
 msgid "Computer will be in suspend mode, please plug in now."
-msgstr "Il computer entrerà in modalità sospensione, collegalo al caricabatteria."
+msgstr ""
