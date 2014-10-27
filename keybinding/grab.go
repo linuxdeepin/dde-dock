@@ -32,6 +32,7 @@ import (
 	"github.com/BurntSushi/xgbutil/keybind"
 	"github.com/BurntSushi/xgbutil/mousebind"
 	"github.com/BurntSushi/xgbutil/xevent"
+	"pkg.linuxdeepin.com/lib/dbus"
 	"strings"
 	"unsafe"
 )
@@ -342,7 +343,7 @@ func grabKeyboardAndMouse() {
 
 	xevent.ButtonPressFun(
 		func(X *xgbutil.XUtil, e xevent.ButtonPressEvent) {
-			GetManager().KeyReleaseEvent("")
+			dbus.Emit(GetManager(), "KeyReleaseEvent", "")
 			ungrabAllMouseButton(X)
 			keybind.UngrabKeyboard(X)
 			logger.Info("Button Press Event")
@@ -353,7 +354,7 @@ func grabKeyboardAndMouse() {
 		func(X *xgbutil.XUtil, e xevent.KeyPressEvent) {
 			value := parseKeyEnvent(X, e.State, e.Detail)
 			pressKeyStr = value
-			GetManager().KeyPressEvent(value)
+			dbus.Emit(GetManager(), "KeyPressEvent", value)
 		}).Connect(X, X.RootWin())
 
 	xevent.KeyReleaseFun(
@@ -363,7 +364,7 @@ func grabKeyboardAndMouse() {
 				pressKeyStr = "Super"
 			}
 
-			GetManager().KeyReleaseEvent(pressKeyStr)
+			dbus.Emit(GetManager(), "KeyReleaseEvent", pressKeyStr)
 			pressKeyStr = ""
 			ungrabAllMouseButton(X)
 			keybind.UngrabKeyboard(X)

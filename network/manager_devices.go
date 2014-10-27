@@ -65,10 +65,9 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device) {
 		dev.Managed = nmGeneralIsDeviceManaged(dev.Path)
 		m.config.updateDeviceConfig(dev.Path)
 		m.config.syncDeviceState(dev.Path)
-		if m.DeviceStateChanged != nil { // TODO
-			m.DeviceStateChanged(string(dev.Path), dev.State)
-			m.setPropDevices()
-		}
+
+		dbus.Emit(m, "DeviceStateChanged", string(dev.Path), dev.State)
+		m.setPropDevices()
 	})
 
 	// dispatch for different device types

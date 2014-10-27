@@ -120,9 +120,7 @@ func (b *Bluetooth) addDevice(dpath dbus.ObjectPath, data map[string]dbus.Varian
 
 	// send signal DeviceAdded() if device is managed by primary adapter
 	if dbus.ObjectPath(b.PrimaryAdapter) == d.adapter {
-		if b.DeviceAdded != nil {
-			b.DeviceAdded(marshalJSON(d))
-		}
+		dbus.Emit(b, "DeviceAdded", marshalJSON(d))
 	}
 }
 func (b *Bluetooth) removeDevice(dpath dbus.ObjectPath) {
@@ -134,10 +132,8 @@ func (b *Bluetooth) removeDevice(dpath dbus.ObjectPath) {
 
 			// send signal DeviceRemoved() if device is managed by primary adapter
 			if dbus.ObjectPath(b.PrimaryAdapter) == apath {
-				if b.DeviceRemoved != nil {
-					d := &device{Path: dpath}
-					b.DeviceRemoved(marshalJSON(d))
-				}
+				d := &device{Path: dpath}
+				dbus.Emit(b, "DeviceRemoved", marshalJSON(d))
 			}
 			return
 		}

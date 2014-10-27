@@ -147,13 +147,8 @@ func (a *agent) createPendingKey(keyId mapKey, connectionId string) chan string 
 	// /usr/lib/NetworkManager/nm-pptp-auth-dialog -u fec2a72f-db65-4e76-be37-995932b64bb7 -n pptp -s org.freedesktop.NetworkManager.pptp -i
 
 	logger.Debug("createPendingKey:", keyId, connectionId) // TODO test
-	if manager.NeedSecrets != nil {
-		logger.Debug("OnNeedSecrets:", string(keyId.path), keyId.name, connectionId)
-		defer manager.NeedSecrets(string(keyId.path), keyId.name, connectionId)
-	} else {
-		logger.Warning("createPendingKey when DNetworkManager hasn't init")
-	}
 	a.pendingKeys[keyId] = make(chan string)
+	dbus.Emit(manager, "NeedSecrets", string(keyId.path), keyId.name, connectionId)
 	return a.pendingKeys[keyId]
 }
 

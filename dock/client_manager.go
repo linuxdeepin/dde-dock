@@ -10,6 +10,7 @@ import (
 	"github.com/BurntSushi/xgbutil/xprop"
 	"github.com/BurntSushi/xgbutil/xwindow"
 	"os/exec"
+	"pkg.linuxdeepin.com/lib/dbus"
 )
 
 var (
@@ -263,7 +264,7 @@ func (m *ClientManager) listenRootWindow() {
 				}
 
 				lastActive = appId
-				m.ActiveWindowChanged(uint32(activeWindow))
+				dbus.Emit(m, "ActiveWindowChanged", uint32(activeWindow))
 				hideModemanager.UpdateState()
 			}
 
@@ -271,7 +272,7 @@ func (m *ClientManager) listenRootWindow() {
 				hideModemanager.UpdateState()
 			}
 		case _NET_SHOWING_DESKTOP:
-			m.ShowingDesktopChanged()
+			dbus.Emit(m, "ShowingDesktopChanged")
 		case DEEPIN_SCREEN_VIEWPORT:
 			updateCurrentViewport()
 		}

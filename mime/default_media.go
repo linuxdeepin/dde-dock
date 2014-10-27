@@ -1,6 +1,7 @@
 package mime
 
 import (
+	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/dbus/property"
 	. "pkg.linuxdeepin.com/lib/gettext"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
@@ -49,17 +50,17 @@ func (op *MediaMount) MediaAppListByMime(mime string) []AppInfo {
 func (op *MediaMount) listenGSettings() {
 	mediaGSettings.Connect("changed::autorun-x-content-ignore",
 		func(s *gio.Settings, key string) {
-			op.MediaActionChanged()
+			dbus.Emit(op, "MediaActionChanged")
 		})
 
 	mediaGSettings.Connect("changed::autorun-x-content-open-folder",
 		func(s *gio.Settings, key string) {
-			op.MediaActionChanged()
+			dbus.Emit(op, "MediaActionChanged")
 		})
 
 	mediaGSettings.Connect("changed::autorun-x-content-start-app",
 		func(s *gio.Settings, key string) {
-			op.MediaActionChanged()
+			dbus.Emit(op, "MediaActionChanged")
 		})
 }
 

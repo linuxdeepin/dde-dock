@@ -23,6 +23,7 @@ package mounts
 
 import (
 	"fmt"
+	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
 	"pkg.linuxdeepin.com/lib/gobject-2.0"
 )
@@ -41,7 +42,7 @@ func (m *Manager) DeviceEject(uuid string) (bool, string) {
 		op.Eject(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
 			_, err := op.EjectFinish(res)
 			if err != nil {
-				m.Error(uuid, err.Error())
+				dbus.Emit(m, "Error", uuid, err.Error())
 				logger.Warningf("drive eject failed: %s, %s", uuid, err)
 			}
 		}))
@@ -50,7 +51,7 @@ func (m *Manager) DeviceEject(uuid string) (bool, string) {
 		op.Eject(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
 			_, err := op.EjectFinish(res)
 			if err != nil {
-				m.Error(uuid, err.Error())
+				dbus.Emit(m, "Error", uuid, err.Error())
 				logger.Warningf("volume eject failed: %s, %s", uuid, err)
 			}
 		}))
@@ -59,7 +60,7 @@ func (m *Manager) DeviceEject(uuid string) (bool, string) {
 		op.Eject(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
 			_, err := op.EjectFinish(res)
 			if err != nil {
-				m.Error(uuid, err.Error())
+				dbus.Emit(m, "Error", uuid, err.Error())
 				logger.Warningf("mount eject failed: %s, %s", uuid, err)
 			}
 		}))
@@ -85,7 +86,7 @@ func (m *Manager) DeviceMount(uuid string) (bool, string) {
 		op.Mount(gio.MountMountFlagsNone, nil, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
 			_, err := op.MountFinish(res)
 			if err != nil {
-				m.Error(uuid, err.Error())
+				dbus.Emit(m, "Error", uuid, err.Error())
 				logger.Warningf("volume mount failed: %s, %s", uuid, err)
 			}
 		}))
@@ -94,7 +95,7 @@ func (m *Manager) DeviceMount(uuid string) (bool, string) {
 		op.Remount(gio.MountMountFlagsNone, nil, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
 			_, err := op.RemountFinish(res)
 			if err != nil {
-				m.Error(uuid, err.Error())
+				dbus.Emit(m, "Error", uuid, err.Error())
 				logger.Warningf("mount remount failed: %s, %s", uuid, err)
 			}
 		}))
@@ -120,7 +121,7 @@ func (m *Manager) DeviceUnmount(uuid string) (bool, string) {
 		op.Unmount(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(func(o *gobject.Object, res *gio.AsyncResult) {
 			_, err := op.UnmountFinish(res)
 			if err != nil {
-				m.Error(uuid, err.Error())
+				dbus.Emit(m, "Error", uuid, err.Error())
 				logger.Warningf("mount unmount failed: %s, %s", uuid, err)
 			}
 		}))

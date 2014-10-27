@@ -88,7 +88,7 @@ func (d *LauncherDBus) emitItemChanged(name, status string, info map[string]Item
 		logger.Info("get item from itemTable failed")
 		return
 	}
-	d.ItemChanged(status, *itemTable[id], itemTable[id].getCategoryId())
+	dbus.Emit(d, "ItemChanged", status, *itemTable[id], itemTable[id].getCategoryId())
 
 	if status == SOFTWARE_STATUS_DELETED {
 		itemTable[id].destroy()
@@ -277,7 +277,7 @@ func (d *LauncherDBus) GetPackageName(id, path string) {
 				err)
 			name = ""
 		}
-		d.PackageNameGet(id, name)
+		dbus.Emit(d, "PackageNameGet", id, name)
 	}(d)
 }
 
@@ -306,7 +306,7 @@ func (d *LauncherDBus) listenUninstall() {
 			return
 		}
 		msg := UpdateSignalTranslator(message)
-		d.UpdateSignal(msg)
+		dbus.Emit(d, "UpdateSignal", msg)
 		logger.Warning("update signal", message)
 	})
 }

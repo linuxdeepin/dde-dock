@@ -1,13 +1,14 @@
 package mime
 
 import (
-	"pkg.linuxdeepin.com/lib/gio-2.0"
-	"pkg.linuxdeepin.com/lib/glib-2.0"
-	dutils "pkg.linuxdeepin.com/lib/utils"
 	"github.com/howeyc/fsnotify"
 	"io/ioutil"
 	"os"
 	"os/user"
+	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/gio-2.0"
+	"pkg.linuxdeepin.com/lib/glib-2.0"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 	"strings"
 )
 
@@ -187,7 +188,7 @@ func (dapp *DefaultApps) listenMimeCacheFile() {
 				if ev.IsDelete() {
 					mimeWatcher.Watch(mimeFile)
 				} else {
-					dapp.DefaultAppChanged()
+					dbus.Emit(dapp, "DefaultAppChanged")
 				}
 			case err, ok := <-mimeWatcher.Error:
 				logger.Debug("Watch Error: %v", err)

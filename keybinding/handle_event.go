@@ -26,6 +26,7 @@ import (
 	"github.com/BurntSushi/xgbutil/keybind"
 	"github.com/BurntSushi/xgbutil/xevent"
 	"os/exec"
+	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
 	"strings"
 )
@@ -50,67 +51,67 @@ func (obj *MediaKeyManager) emitMediaSignal(modStr, keyStr string, press bool) b
 		if press {
 			go doAction(CMD_DDE_OSD + "--BrightnessUp")
 		}
-		obj.BrightnessUp(press)
+		dbus.Emit(obj, "BrightnessUp", press)
 	case "XF86MonBrightnessDown":
 		if press {
 			go doAction(CMD_DDE_OSD + "--BrightnessDown")
 		}
-		obj.BrightnessDown(press)
+		dbus.Emit(obj, "BrightnessDown", press)
 	case "XF86AudioMute":
 		if press {
 			go doAction(CMD_DDE_OSD + "--AudioMute")
 		}
-		obj.AudioMute(press)
+		dbus.Emit(obj, "AudioMute", press)
 	case "XF86AudioLowerVolume":
 		if press {
 			go doAction(CMD_DDE_OSD + "--AudioDown")
 		}
-		obj.AudioDown(press)
+		dbus.Emit(obj, "AudioDown", press)
 	case "XF86AudioRaiseVolume":
 		if press {
 			go doAction(CMD_DDE_OSD + "--AudioUp")
 		}
-		obj.AudioUp(press)
+		dbus.Emit(obj, "AudioUp", press)
 	case "Num_Lock":
 		if strings.Contains(modStr, "mod2") {
 			if press {
 				go doAction(CMD_DDE_OSD + "--NumLockOff")
 			}
-			obj.NumLockOff(press)
+			dbus.Emit(obj, "NumLockOff", press)
 		} else {
 			if press {
 				go doAction(CMD_DDE_OSD + "--NumLockOn")
 			}
-			obj.NumLockOn(press)
+			dbus.Emit(obj, "NumLockOn", press)
 		}
 	case "Caps_Lock":
 		if strings.Contains(modStr, "lock") {
 			if press {
 				go doAction(CMD_DDE_OSD + "--CapsLockOff")
 			}
-			obj.CapsLockOff(press)
+			dbus.Emit(obj, "CapsLockOff", press)
 		} else {
 			if press {
 				go doAction(CMD_DDE_OSD + "--CapsLockOn")
 			}
-			obj.CapsLockOn(press)
+			dbus.Emit(obj, "CapsLockOn", press)
 		}
 	case "XF86TouchPadOn":
 		if press {
 			go doAction(CMD_DDE_OSD + "--TouchPadOn")
 		}
-		obj.TouchPadOn(press)
+		dbus.Emit(obj, "TouchPadOn", press)
 	case "XF86TouchPadOff":
 		if press {
 			go doAction(CMD_DDE_OSD + "--TouchPadOff")
 		}
-		obj.TouchPadOff(press)
+		dbus.Emit(obj, "TouchPadOff", press)
 	case "XF86Display":
-		obj.SwitchMonitors(press)
+		dbus.Emit(obj, "SwitchMonitors", press)
 	case "XF86PowerOff":
-		obj.PowerOff(press)
+		dbus.Emit(obj, "PowerOff", press)
 	case "XF86Sleep":
-		obj.PowerSleep(press)
+		dbus.Emit(obj, "PowerSleep", press)
 	case "p", "P":
 		modStr = deleteSpecialMod(modStr)
 		if strings.Contains(modStr, "-") {
@@ -120,32 +121,32 @@ func (obj *MediaKeyManager) emitMediaSignal(modStr, keyStr string, press bool) b
 			if press {
 				go doAction(CMD_DDE_OSD + "--SwitchMonitors")
 			}
-			obj.SwitchMonitors(press)
+			dbus.Emit(obj, "SwitchMonitors", press)
 		} else {
 			return false
 		}
 	case "XF86AudioPlay":
-		obj.AudioPlay(press)
+		dbus.Emit(obj, "AudioPlay", press)
 	case "XF86AudioPause":
-		obj.AudioPause(press)
+		dbus.Emit(obj, "AudioPause", press)
 	case "XF86AudioStop":
-		obj.AudioStop(press)
+		dbus.Emit(obj, "AudioStop", press)
 	case "XF86AudioPrev":
-		obj.AudioPrevious(press)
+		dbus.Emit(obj, "AudioPrevious", press)
 	case "XF86AudioNext":
-		obj.AudioNext(press)
+		dbus.Emit(obj, "AudioNext", press)
 	case "XF86AudioRewind":
-		obj.AudioRewind(press)
+		dbus.Emit(obj, "AudioRewind", press)
 	case "XF86AudioForward":
-		obj.AudioForward(press)
+		dbus.Emit(obj, "AudioForward", press)
 	case "XF86AudioRepeat":
-		obj.AudioRepeat(press)
+		dbus.Emit(obj, "AudioRepeat", press)
 	case "XF86WWW":
-		obj.LaunchBrowser(press)
+		dbus.Emit(obj, "LaunchBrowser", press)
 	case "XF86Mail":
-		obj.LaunchEmail(press)
+		dbus.Emit(obj, "LaunchEmail", press)
 	case "XF86Calculator":
-		obj.LaunchCalculator(press)
+		dbus.Emit(obj, "LaunchCalculator", press)
 	default:
 		shortcut := ""
 		modStr = deleteSpecialMod(modStr)
@@ -167,7 +168,7 @@ func (obj *MediaKeyManager) emitMediaSignal(modStr, keyStr string, press bool) b
 				go doAction(CMD_DDE_OSD + "--SwitchLayout")
 
 			}
-			obj.SwitchLayout(press)
+			dbus.Emit(obj, "SwitchLayout", press)
 			return true
 		}
 		return false

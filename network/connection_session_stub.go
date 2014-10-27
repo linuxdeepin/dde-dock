@@ -45,9 +45,7 @@ func (s *ConnectionSession) setProps() {
 	// by font-end to update widget value that with proeprty
 	// "alwaysUpdate", which should only update value when visible, so
 	// it depends on "AvailableSections" and "AvailableKeys"
-	if s.ConnectionDataChanged != nil {
-		s.ConnectionDataChanged()
-	}
+	dbus.Emit(s, "ConnectionDataChanged")
 }
 
 func (s *ConnectionSession) setPropType() {

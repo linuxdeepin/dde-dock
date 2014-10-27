@@ -64,7 +64,7 @@ func getGuestName() string {
 
 func execCommand(cmd string, args []string) bool {
 	if out, err := exec.Command(cmd, args...).CombinedOutput(); err != nil {
-		GetManager().Error(string(out))
+		dbus.Emit(GetManager(), "Error", string(out))
 		logger.Warningf("Exec '%s %v' failed: %v", cmd, args, err)
 		return false
 	}

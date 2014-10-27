@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
 	"pkg.linuxdeepin.com/lib/glib-2.0"
 	"strings"
@@ -157,7 +158,7 @@ func (m *DockedAppManager) Dock(id, title, icon, cmd string) bool {
 			return false
 		}
 	}
-	m.Docked(id)
+	dbus.Emit(m, "Docked", id)
 	app := ENTRY_MANAGER.runtimeApps[id]
 	if app != nil {
 		app.buildMenu()
@@ -179,7 +180,7 @@ func (m *DockedAppManager) doUndock(id string) bool {
 	os.Remove(filepath.Join(scratchDir, id+".desktop"))
 	os.Remove(filepath.Join(scratchDir, id+".sh"))
 	os.Remove(filepath.Join(scratchDir, id+".png"))
-	m.Undocked(removeItem.Value.(string))
+	dbus.Emit(m, "Undocked", removeItem.Value.(string))
 	app := ENTRY_MANAGER.runtimeApps[id]
 	if app != nil {
 		app.buildMenu()

@@ -250,11 +250,7 @@ func (c *config) setDeviceEnabled(devPath dbus.ObjectPath, enabled bool) {
 		return
 	}
 	devConfig.Enabled = enabled
-	// send signal
-	if manager.DeviceEnabled != nil {
-		logger.Debug("signal DeviceEnabled", devPath, enabled) //  TODO test
-		manager.DeviceEnabled(string(devPath), enabled)
-	}
+	dbus.Emit(manager, "DeviceEnabled", string(devPath), enabled)
 	c.save()
 }
 func (c *config) setDeviceLastConnectionUuid(devPath dbus.ObjectPath, uuid string) {

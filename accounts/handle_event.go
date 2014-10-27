@@ -24,6 +24,7 @@ package accounts
 import (
 	"github.com/howeyc/fsnotify"
 	"path"
+	"pkg.linuxdeepin.com/lib/dbus"
 	dutils "pkg.linuxdeepin.com/lib/utils"
 	"regexp"
 	"sync"
@@ -143,13 +144,13 @@ func (obj *Manager) handleUserListChanged() {
 					obj.setPropUserList(getUserList())
 					obj.updateAllUserInfo()
 					for _, v := range list {
-						obj.UserAdded(v)
+						dbus.Emit(obj, "UserAdded", v)
 					}
 				case -1:
 					obj.setPropUserList(getUserList())
 					obj.updateAllUserInfo()
 					for _, v := range list {
-						obj.UserDeleted(v)
+						dbus.Emit(obj, "UserDeleted", v)
 					}
 				}
 				_handleFlag = false

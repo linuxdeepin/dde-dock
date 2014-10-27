@@ -87,9 +87,7 @@ func (m *TrayManager) addTrayIcon(xid xproto.Window) {
 	}
 	m.nameInfo[xid] = name
 	m.notifyInfo[xid] = true
-	if m.Added != nil {
-		m.Added(uint32(xid))
-	}
+	dbus.Emit(m, "Added", uint32(xid))
 	logger.Infof("Added try icon: \"%s\"(%d)", name, uint32(xid))
 }
 func (m *TrayManager) removeTrayIcon(xid xproto.Window) {
@@ -97,9 +95,7 @@ func (m *TrayManager) removeTrayIcon(xid xproto.Window) {
 	delete(m.nameInfo, xid)
 	delete(m.notifyInfo, xid)
 	delete(m.md5Info, xid)
-	if m.Removed != nil {
-		m.Removed(uint32(xid))
-	}
+	dbus.Emit(m, "Removed", uint32(xid))
 	var newIcons []uint32
 	for _, id := range m.TrayIcons {
 		if id != uint32(xid) {
@@ -118,12 +114,10 @@ func (m *TrayManager) EnableNotification(xid uint32, enable bool) {
 }
 
 func (m *TrayManager) handleTrayDamage(xid xproto.Window) {
-	if m.notifyInfo[xid] && m.Changed != nil {
+	if m.notifyInfo[xid] {
 		if md5 := icon2md5(xid); !md5Equal(m.md5Info[xid], md5) {
 			m.md5Info[xid] = md5
-			if m.Changed != nil {
-				m.Changed(uint32(xid))
-			}
+			dbus.Emit(m, "Changed", uint32(xid))
 			logger.Infof("handleTrayDamage: %s(%d) changed (%v)", m.nameInfo[xid], xid, md5)
 		}
 	}
@@ -162,10 +156,8 @@ func (m *TrayManager) RetryManager() {
 	m.Unmanage()
 	m.Manage()
 
-	if m.Added != nil {
-		for _, icon := range m.TrayIcons {
-			m.Added(icon)
-		}
+	for _, icon := range m.TrayIcons {
+		dbus.Emit(m, "Added", icon)
 	}
 }
 

@@ -154,17 +154,11 @@ func (ss *ScreenSaver) loop() {
 		case screensaver.NotifyEvent:
 			switch ee.State {
 			case screensaver.StateCycle:
-				if ss.CycleActive != nil {
-					ss.CycleActive()
-				}
+				dbus.Emit(ss, "CycleActive")
 			case screensaver.StateOn:
-				if ss.IdleOn != nil {
-					ss.IdleOn()
-				}
+				dbus.Emit(ss, "IdleOn")
 			case screensaver.StateOff:
-				if ss.IdleOff != nil {
-					ss.IdleOff()
-				}
+				dbus.Emit(ss, "IdleOff")
 			}
 		}
 	}

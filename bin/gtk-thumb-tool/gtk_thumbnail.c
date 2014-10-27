@@ -23,6 +23,7 @@
 
 
 #include <gdk/gdk.h>
+#include "fix_old_gtk_version.h"
 #include <gtk/gtk.h>
 #include <metacity-private/common.h>
 #include <metacity-private/util.h>
@@ -87,7 +88,7 @@ void capture(GtkOffscreenWindow* w, GdkEvent* event, gpointer user_data)
 
 void padding_thumbnail(GtkFixed* thumb)
 {
-    //TODO: Should handle gtk2/gtk3 themes. 
+    //TODO: Should handle gtk2/gtk3 themes.
     /*GtkWidget *btn = gtk_button_new_with_label("      ");*/
 
     /*gtk_fixed_put(thumb, btn, 72, 5);*/
@@ -123,7 +124,7 @@ int gen_gtk_thumbnail(char *theme, char *dest, char *bg)
 	UserData user_data;
 	user_data.dest = dest;
 	user_data.bg = bg;
-	g_signal_connect(G_OBJECT(w), "damage-event", 
+	g_signal_connect(G_OBJECT(w), "damage-event",
 			G_CALLBACK(capture), &user_data);
 	gtk_widget_show_all(w);
 	gtk_main();

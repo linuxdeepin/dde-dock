@@ -97,7 +97,7 @@ func (s *Setting) init() bool {
 		value := HideModeType(g.GetEnum(key))
 		s.hideMode = value
 		logger.Debug(key, "changed to", key)
-		s.HideModeChanged(int32(value))
+		dbus.Emit(s, "HideModeChanged", int32(value))
 	})
 
 	s.listenSettingChange(DisplayModeKey, func(g *gio.Settings, key string) {
@@ -159,7 +159,7 @@ func (s *Setting) init() bool {
 		}
 
 		dockProperty.updateDockHeight(value)
-		s.DisplayModeChanged(int32(value))
+		dbus.Emit(s, "DisplayModeChanged", int32(value))
 	})
 	return true
 }
@@ -179,7 +179,7 @@ func (s *Setting) SetHideMode(_mode int32) bool {
 	logger.Debug("[Setting.SetHideMode]:", mode)
 	ok := s.core.SetEnum(HideModeKey, int(mode))
 	if ok {
-		s.HideModeChanged(_mode)
+		dbus.Emit(s, "HideModeChanged", _mode)
 	}
 	return ok
 }
@@ -193,7 +193,7 @@ func (s *Setting) SetDisplayMode(_mode int32) bool {
 	logger.Info("[Setting.SetDisplayMode]:", mode)
 	ok := s.core.SetEnum(DisplayModeKey, int(mode))
 	if ok {
-		s.DisplayModeChanged(_mode)
+		dbus.Emit(s, "DisplayModeChanged", _mode)
 	}
 	return ok
 }

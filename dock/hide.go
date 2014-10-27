@@ -154,10 +154,9 @@ func (m *HideStateManager) UpdateState() {
 		trigger = TriggerShow
 	}
 
-	if m.ChangeState != nil &&
-		(m.state != HideStateShown && trigger == TriggerShow) ||
+	if (m.state != HideStateShown && trigger == TriggerShow) ||
 		(m.state != HideStateHidden && trigger == TriggerHide) {
-		m.ChangeState(trigger)
+		dbus.Emit(m, "ChangeState", trigger)
 	}
 }
 
@@ -174,9 +173,9 @@ func (m *HideStateManager) ToggleShow() {
 	m.CancelToggleShow()
 
 	if m.state == HideStateHidden || m.state == HideStateHidding {
-		m.ChangeState(TriggerShow)
+		dbus.Emit(m, "ChangeState", TriggerShow)
 	} else if m.state == HideStateShown || m.state == HideStateShowing {
-		m.ChangeState(TriggerHide)
+		dbus.Emit(m, "ChangeState", TriggerHide)
 	}
 
 	m.toggleShowTimer = time.After(time.Second * 3)

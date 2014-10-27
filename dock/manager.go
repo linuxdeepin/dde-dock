@@ -23,8 +23,7 @@ type EntryProxyerManager struct {
 	Entries       []*EntryProxyer
 	entrireLocker sync.Mutex
 
-	Added func(dbus.ObjectPath)
-	// Removed func(dbus.ObjectPath)
+	Added      func(dbus.ObjectPath)
 	Removed    func(string)
 	TrayInited func()
 }
@@ -72,7 +71,7 @@ func (m *EntryProxyerManager) watchEntries() {
 		// name and oldOwner will be not empty
 		if len(newOwner) != 0 {
 			if name == "com.deepin.dde.TrayManager" {
-				m.TrayInited()
+				dbus.Emit(m, "TrayInited")
 			}
 			go func() {
 				// FIXME: how long time should to wait for
@@ -111,10 +110,7 @@ func (m *EntryProxyerManager) registerEntry(name string) {
 	}
 	m.Entries = append(m.Entries, entry)
 
-	// send signal
-	if m.Added != nil {
-		m.Added(dbus.ObjectPath(entry.GetDBusInfo().ObjectPath))
-	}
+	dbus.Emit(m, "Added", dbus.ObjectPath(entry.GetDBusInfo().ObjectPath))
 
 	logger.Infof("register entry success: %s", name)
 }
@@ -156,11 +152,7 @@ func (m *EntryProxyerManager) unregisterEntry(name string) {
 	m.Entries[len(m.Entries)-1] = nil
 	m.Entries = m.Entries[:len(m.Entries)-1]
 
-	// send signal
-	if m.Removed != nil {
-		m.Removed(entry.Id)
-		// m.Removed(dbus.ObjectPath(entry.GetDBusInfo().ObjectPath))
-	}
+	dbus.Emit(m, "Removed", entry.Id)
 
 	logger.Infof("unregister entry success: %s", name)
 }

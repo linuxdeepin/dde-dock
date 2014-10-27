@@ -26,6 +26,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
+	"pkg.linuxdeepin.com/lib/dbus"
 	. "pkg.linuxdeepin.com/lib/gettext"
 	"pkg.linuxdeepin.com/lib/glib-2.0"
 	dutils "pkg.linuxdeepin.com/lib/utils"
@@ -53,7 +54,7 @@ func (obj *Manager) listenLocaleChange() {
 			changeLocaleFlag = false
 		}
 		obj.setPropName("CurrentLocale")
-		obj.LocaleStatus(ok, locale)
+		dbus.Emit(obj, "LocaleStatus", ok, locale)
 		if ok {
 			sendNotify("", "", Tr("Language has been changed successfully and will be effective after logged out."))
 		} else {

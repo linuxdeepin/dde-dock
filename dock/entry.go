@@ -2,6 +2,7 @@ package dock
 
 import (
 	"encoding/json"
+	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
 	"strings"
 	"sync"
@@ -125,9 +126,7 @@ func (e *AppEntry) HandleMouseWheel(x, y, delta int32) {}
 func (e *AppEntry) setData(key, value string) {
 	if e.Data[key] != value {
 		e.Data[key] = value
-		if e.DataChanged != nil {
-			e.DataChanged(key, value)
-		}
+		dbus.Emit(e, "DataChanged", key, value)
 	}
 }
 func (e *AppEntry) getData(key string) string {

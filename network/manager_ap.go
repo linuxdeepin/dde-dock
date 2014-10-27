@@ -135,36 +135,29 @@ func (m *Manager) addAccessPoint(devPath, apPath dbus.ObjectPath) {
 	// connect properties changed
 	ap.nmAp.ConnectPropertiesChanged(func(properties map[string]dbus.Variant) {
 		ap.setProperties()
-		if m.AccessPointPropertiesChanged != nil {
-			apJSON, _ := marshalJSON(ap)
-			// logger.Debug(string(devPath), apJSON) // TODO test
-			m.AccessPointPropertiesChanged(string(devPath), apJSON)
-		}
+		apJSON, _ := marshalJSON(ap)
+		dbus.Emit(m, "AccessPointPropertiesChanged", string(devPath), apJSON)
 		m.setPropAccessPoints()
 	})
 
-	// emit signal
-	if m.AccessPointAdded != nil {
-		apJSON, _ := marshalJSON(ap)
-		// logger.Debug("AccessPointAdded:", apJSON) // TODO test
-		m.AccessPointAdded(string(devPath), apJSON)
-	}
+	apJSON, _ := marshalJSON(ap)
+	dbus.Emit(m, "AccessPointAdded", string(devPath), apJSON)
+
 	m.accessPoints[devPath] = append(m.accessPoints[devPath], &ap)
 	m.setPropAccessPoints()
 }
 func (m *Manager) removeAccessPoint(devPath, apPath dbus.ObjectPath) {
 	// emit signal
-	if m.AccessPointRemoved != nil {
-		// get access point information
-		var apJSON string
-		if ap := m.getAccessPoint(devPath, apPath); ap != nil {
-			apJSON, _ = marshalJSON(ap)
-		} else {
-			apJSON, _ = marshalJSON(accessPoint{Path: apPath})
-		}
-		// logger.Debug("AccessPointRemoved:", apJSON) // TODO test
-		m.AccessPointRemoved(string(devPath), apJSON)
+	// get access point information
+	var apJSON string
+	if ap := m.getAccessPoint(devPath, apPath); ap != nil {
+		apJSON, _ = marshalJSON(ap)
+	} else {
+		apJSON, _ = marshalJSON(accessPoint{Path: apPath})
 	}
+	// logger.Debug("AccessPointRemoved:", apJSON) // TODO test
+	dbus.Emit(m, "AccessPointRemoved", string(devPath), apJSON)
+
 	m.doRemoveAccessPoint(devPath, apPath)
 	m.setPropAccessPoints()
 }

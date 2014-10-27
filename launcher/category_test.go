@@ -16,16 +16,14 @@ type CategoryTestSuite struct {
 	testDataDir string
 }
 
-var _ = C.Suite(&CategoryTestSuite{})
+var _ = C.Suite(NewCategoryTestSuite())
 
-func (s *CategoryTestSuite) SetupSuite(c *C.C) {
+func NewCategoryTestSuite() *CategoryTestSuite {
 	initCategory()
-	f, err := filepath.Abs(".")
-	if err != nil {
-		c.Skip("get test data dir failed")
-		return
+	s := &CategoryTestSuite{
+		testDataDir: "testdata",
 	}
-	s.testDataDir = filepath.Join(f, "testdata")
+	return s
 }
 
 func (s *CategoryTestSuite) TestGetCategoryInfos(c *C.C) {
