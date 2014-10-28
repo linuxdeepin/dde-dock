@@ -19,33 +19,27 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package inputdevices
+package libwacom
 
 import (
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/gio-2.0"
 )
 
-const (
-	DBUS_PATH_TPAD = "/com/deepin/daemon/InputDevice/TouchPad"
-	DBUS_IFC_TPAD  = "com.deepin.daemon.InputDevice.TouchPad"
-)
-
-func (tManager *TouchpadManager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		DBUS_SENDER,
-		DBUS_PATH_TPAD,
-		DBUS_IFC_TPAD,
-	}
-}
-
-func (tManager *TouchpadManager) setPropDeviceList(devList []PointerDeviceInfo) {
-	tManager.DeviceList = devList
-	dbus.NotifyChange(tManager, "DeviceList")
-}
-
-func (tManager *TouchpadManager) setPropExist(exist bool) {
-	if tManager.Exist != exist {
-		tManager.Exist = exist
-		dbus.NotifyChange(tManager, "Exist")
-	}
+func (wacom *Wacom) handleGSettings() {
+	wacom.settings.Connect("changed", func(s *gio.Settings, key string) {
+		switch key {
+		case wacomKeyLeftHanded:
+			wacom.rotationAngle(wacom.LeftHanded.Get())
+		case wacomKeyCursorMode:
+			wacom.cursorMode(wacom.CursorMode.Get())
+		case wacomKeyUpAction:
+			wacom.keyUpAction(wacom.KeyUpAction.Get())
+		case wacomKeyDownAction:
+			wacom.keyDownAction(wacom.KeyDownAction.Get())
+		case wacomKeyDoubleDelta:
+			wacom.doubleDelta(wacom.DoubleDelta.Get())
+		case wacomKeyPressureSensitive:
+			wacom.pressureSensitive(wacom.PressureSensitive.Get())
+		}
+	})
 }

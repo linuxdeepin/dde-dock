@@ -118,7 +118,7 @@ free_device_info(DeviceInfo *infos, int n_devices)
  *	0: success
  */
 int
-set_device_enabled (Display *disp, int deviceid, int enabled)
+enabled_device (Display *disp, int deviceid, int enabled)
 {
 	if (!disp) {
 		fprintf(stderr, "Display NULL\n");
@@ -149,18 +149,24 @@ set_device_enabled (Display *disp, int deviceid, int enabled)
  *	1: exist
  */
 int
-is_device_property_exist(Display *disp, int deviceid, const char *prop_name)
+is_device_property_exist(int deviceid, const char *prop_name)
 {
-	if (!disp || !prop_name) {
-		fprintf(stderr, "Args error\n");
+	if (!prop_name) {
+		fprintf(stderr, "Args error: prop_name NULL\n");
+		return -1;
+	}
+
+	Display *disp = XOpenDisplay(0);
+	if (!disp) {
+		fprintf(stderr, "Open Display Failed\n");
 		return -1;
 	}
 
 	int nprops;
 	Atom *props = XIListProperties(disp, deviceid, &nprops);
 	if (!props) {
-		fprintf(stderr, "List Device '%s' Properties Failed\n",
-		        prop_name);
+		fprintf(stderr, "List Device '%s' Properties Failed\n", prop_name);
+		XCloseDisplay(disp);
 		return -1;
 	}
 
@@ -175,6 +181,7 @@ is_device_property_exist(Display *disp, int deviceid, const char *prop_name)
 		XFree(name);
 	}
 	XFree(props);
+	XCloseDisplay(disp);
 
 	if (flags) {
 		return 1;
@@ -186,16 +193,7 @@ is_device_property_exist(Display *disp, int deviceid, const char *prop_name)
 int
 is_wacom_device(int deviceid)
 {
-	Display *disp = XOpenDisplay(0);
-	if (!disp) {
-		fprintf(stderr, "Open Display Failed: %d\n", deviceid);
-		return -1;
-	}
-
-	int ret = is_device_property_exist(disp, deviceid, "Wacom Tool Type");
-
-	XCloseDisplay(disp);
-
+	int ret = is_device_property_exist(deviceid, "Wacom Tool Type");
 	if (ret == 1) {
 		return 1;
 	}

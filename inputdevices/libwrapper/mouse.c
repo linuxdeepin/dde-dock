@@ -32,16 +32,7 @@ static int set_prop_float (Display *disp, int deviceid,
 int
 is_mouse_device(int deviceid)
 {
-	Display *disp = XOpenDisplay(0);
-	if (!disp) {
-		fprintf(stderr, "Open Display Failed: %d\n", deviceid);
-		return -1;
-	}
-
-	int ret = is_device_property_exist(disp, deviceid, "Button Labels");
-
-	XCloseDisplay(disp);
-
+	int ret = is_device_property_exist(deviceid, "Button Labels");
 	if (ret == 1) {
 		return 1;
 	}

@@ -22,68 +22,67 @@
 package inputdevices
 
 import (
-	libsession "dbus/com/deepin/sessionmanager"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/log"
 )
 
 const (
-	DBUS_SENDER = "com.deepin.daemon.InputDevices"
+	dbusSender = "com.deepin.daemon.InputDevices"
 )
 
-var (
-	logger = log.NewLogger("com.deepin.daemon.InputDevices")
-
-	xsObj *libsession.XSettings
-)
+var _m *Manager
 
 func Start() {
+	var logger = log.NewLogger("com.deepin.daemon.InputDevices")
 	logger.BeginTracing()
-
-	var err error
-	xsObj, err = libsession.NewXSettings("com.deepin.SessionManager",
-		"/com/deepin/XSettings")
-	if err != nil {
-		logger.Warning("New XSettings Object Failed: ", err)
-		xsObj = nil
-	}
 
 	if !initDeviceChangedWatcher() {
 		logger.Fatal("Init device changed wacher failed")
 		return
 	}
 
-	if err := dbus.InstallOnSession(GetManager()); err != nil {
+	_m := NewManager(logger)
+	err := dbus.InstallOnSession(_m)
+	if err != nil {
 		logger.Fatal("Install Manager DBus Failed:", err)
 	}
 
-	if err := dbus.InstallOnSession(GetMouseManager()); err != nil {
+	err = dbus.InstallOnSession(_m.mouse)
+	if err != nil {
 		logger.Fatal("Install Mouse DBus Failed:", err)
 	}
 
-	if err := dbus.InstallOnSession(GetTouchpadManager()); err != nil {
+	err = dbus.InstallOnSession(_m.touchpad)
+	if err != nil {
 		logger.Fatal("Install Touchpad DBus Failed:", err)
 	}
 
-	if err := dbus.InstallOnSession(GetKeyboardManager()); err != nil {
+	err = dbus.InstallOnSession(_m.kbd)
+	if err != nil {
 		logger.Fatal("Install Keyboard DBus Failed:", err)
 	}
 
-	if err := dbus.InstallOnSession(GetWacomManager()); err != nil {
+	err = dbus.InstallOnSession(_m.wacom)
+	if err != nil {
 		logger.Fatal("Install Wacom DBus Failed:", err)
 	}
 }
 
 func Stop() {
-	logger.EndTracing()
+	if _m == nil {
+		return
+	}
+
+	if _m.logger != nil {
+		_m.logger.EndTracing()
+	}
 
 	endDeviceListenThread()
 
-	GetTouchpadManager().typingExitChan <- true
-
-	dbus.UnInstallObject(GetKeyboardManager())
-	dbus.UnInstallObject(GetTouchpadManager())
-	dbus.UnInstallObject(GetMouseManager())
-	dbus.UnInstallObject(GetWacomManager())
-	dbus.UnInstallObject(GetManager())
+	dbus.UnInstallObject(_m.mouse)
+	dbus.UnInstallObject(_m.touchpad)
+	dbus.UnInstallObject(_m.kbd)
+	dbus.UnInstallObject(_m.wacom)
+	dbus.UnInstallObject(_m)
+	_m = nil
 }

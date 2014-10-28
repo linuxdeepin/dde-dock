@@ -19,48 +19,29 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package inputdevices
+package libmouse
 
 import (
-	"os"
-	"path"
-	dutils "pkg.linuxdeepin.com/lib/utils"
+	"pkg.linuxdeepin.com/lib/gio-2.0"
 )
 
-const (
-	_VERSION     = "0.1"
-	_VERSION_DIR = ".config/dde-daemon/inputdevices"
-)
-
-func (m *Manager) isVersionRight() bool {
-	versionFile := path.Join(os.Getenv("HOME"), _VERSION_DIR, "version")
-	if !dutils.IsFileExist(versionFile) {
-		m.newVersionFile()
-		return false
-	}
-
-	return true
-}
-
-func (m *Manager) newVersionFile() {
-	vDir := path.Join(os.Getenv("HOME"), _VERSION_DIR)
-	if !dutils.IsFileExist(vDir) {
-		if err := os.MkdirAll(vDir, 0755); err != nil {
-			m.warningInfo("MkdirAll '%s' failed: %v", vDir, err)
-			return
+func (mouse *Mouse) handleGSettings() {
+	mouse.settings.Connect("changed", func(s *gio.Settings, key string) {
+		switch key {
+		case mouseKeyLeftHanded:
+			mouse.leftHanded(mouse.LeftHanded.Get())
+		case mouseKeyDisableTouchpad:
+			mouse.disableTouchpad(mouse.DisableTpad.Get())
+		case mouseKeyNaturalScroll:
+			mouse.naturalScroll(mouse.NaturalScroll.Get())
+		case mouseKeyAcceleration:
+			mouse.motionAcceleration(mouse.MotionAcceleration.Get())
+		case mouseKeyThreshold:
+			mouse.motionThreshold(mouse.MotionThreshold.Get())
+		case mouseKeyDoubleClick:
+			mouse.doubleClick(uint32(mouse.DoubleClick.Get()))
+		case mouseKeyDragThreshold:
+			mouse.dragThreshold(uint32(mouse.DragThreshold.Get()))
 		}
-	}
-
-	vFile := path.Join(vDir, "version")
-	fp, err := os.Create(vFile)
-	if err != nil {
-		m.warningInfo("Create '%s' failed: %v", vFile, err)
-		return
-	}
-	defer fp.Close()
-
-	fp.WriteString(_VERSION)
-	fp.Sync()
-
-	return
+	})
 }

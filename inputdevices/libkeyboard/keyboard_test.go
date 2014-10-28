@@ -19,21 +19,42 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package inputdevices
+package libkeyboard
 
 import (
-	"pkg.linuxdeepin.com/lib/dbus"
+	C "launchpad.net/gocheck"
+	"testing"
 )
 
-const (
-	DBUS_PATH_KBD = "/com/deepin/daemon/InputDevice/Keyboard"
-	DBUS_IFC_KBD  = "com.deepin.daemon.InputDevice.Keyboard"
-)
+type testWrapper struct{}
 
-func (kbdManager *KeyboardManager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		DBUS_SENDER,
-		DBUS_PATH_KBD,
-		DBUS_IFC_KBD,
-	}
+func Test(t *testing.T) {
+	C.TestingT(t)
+}
+
+func init() {
+	C.Suite(&testWrapper{})
+}
+
+func (*testWrapper) TestGetLayout(c *C.C) {
+	layout := getLayoutFromFile("testdata/keyboard")
+	c.Check(layout, C.Equals, "us;")
+
+	layout = getLayoutFromFile("testdata/xxxxxx")
+	c.Check(layout, C.Equals, "us;")
+}
+
+func (*testWrapper) TestQTCursorBlink(c *C.C) {
+	c.Check(setQtCursorBlink(1200, "testdata/Trolltech.conf"),
+		C.Not(C.NotNil))
+}
+
+func (*testWrapper) TestLayoutList(c *C.C) {
+	v, err := getLayoutListByFile("testdata/base.xml")
+	c.Check(err, C.Not(C.NotNil))
+	c.Check(v, C.NotNil)
+
+	v, err = getLayoutListByFile("testdata/xxxxxx.xml")
+	c.Check(err, C.NotNil)
+	c.Check(v, C.Not(C.NotNil))
 }

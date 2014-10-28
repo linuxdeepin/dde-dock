@@ -22,34 +22,6 @@
 #ifndef __DEVICES_H__
 #define __DEVICES_H__
 
-typedef struct _DeviceInfo {
-	char *name;
-	int deviceid;
-	int enabled;
-} DeviceInfo;
-
-DeviceInfo *get_device_info_list(int *n_devices);
-void free_device_info(DeviceInfo *infos, int n_devices);
-
-int is_mouse_device(int deviceid);
-int set_motion_acceleration(int deviceid, double acceleration);
-int set_motion_threshold(int deviceid, double threshold);
-int set_left_handed(unsigned long xid, const char *name, int enabled);
-
-int set_mouse_natural_scroll(unsigned long xid, const char *name, int enabled);
-
-int is_tpad_device(int deviceid);
-int set_touchpad_enabled(int deviceid, int enabled);
-int set_touchpad_natural_scroll(int deviceid, int enabled, int delta);
-int set_edge_scroll(int deviceid, int enabled);
-int set_two_finger_scroll(int deviceid, int vert_enabled, int horiz_enabled);
-int set_tab_to_click(int deviceid, int enabled, int left_handed);
-
-int set_keyboard_repeat(int repeat,
-                        unsigned int delay, unsigned int interval);
-
-int is_wacom_device(int deviceid);
-
 int listen_device_changed();
 void end_device_listen_thread();
 

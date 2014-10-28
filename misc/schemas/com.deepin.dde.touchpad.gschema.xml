@@ -51,6 +51,16 @@
       <summary>Natural scrolling delta</summary>
       <description></description>
     </key>
+    <key type="i" name="double-click">
+      <default>400</default>
+      <summary>Touchpad Double Click</summary>
+      <description>Length of a double click in milliseconds.</description>
+    </key>
+    <key type="i" name="drag-threshold">
+      <default>8</default>
+      <summary>Touchpad Drag Threshold</summary>
+      <description>Distance before a drag is started.</description>
+    </key>
     <key type="b" name="edge-scroll-enabled">
       <default>true</default>
       <summary>Edge scroll scrolling.</summary>

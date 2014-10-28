@@ -19,35 +19,36 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package inputdevices
+package libtouchpad
 
-import (
-	"pkg.linuxdeepin.com/lib/dbus"
-)
-
-const (
-	DBUS_PATH_WACOM = "/com/deepin/daemon/InputDevice/Wacom"
-	DBUS_IFC_WACOM  = "com.deepin.daemon.InputDevice.Wacom"
-)
-
-func (wManager *WacomManager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		DBUS_SENDER,
-		DBUS_PATH_WACOM,
-		DBUS_IFC_WACOM,
+func (touchpad *Touchpad) printInfo(format string, v ...interface{}) {
+	if touchpad.logger == nil {
+		return
 	}
+
+	touchpad.logger.Infof(format, v...)
 }
 
-func (wManager *WacomManager) setPropDeviceList(list []PointerDeviceInfo) {
-	if len(wManager.DeviceList) != len(list) {
-		wManager.DeviceList = list
-		dbus.NotifyChange(wManager, "DeviceList")
+func (touchpad *Touchpad) debugInfo(format string, v ...interface{}) {
+	if touchpad.logger == nil {
+		return
 	}
+
+	touchpad.logger.Debugf(format, v...)
 }
 
-func (wManager *WacomManager) setPropExist(exist bool) {
-	if wManager.Exist != exist {
-		wManager.Exist = exist
-		dbus.NotifyChange(wManager, "Exist")
+func (touchpad *Touchpad) warningInfo(format string, v ...interface{}) {
+	if touchpad.logger == nil {
+		return
 	}
+
+	touchpad.logger.Warningf(format, v...)
+}
+
+func (touchpad *Touchpad) errorInfo(format string, v ...interface{}) {
+	if touchpad.logger == nil {
+		return
+	}
+
+	touchpad.logger.Errorf(format, v...)
 }

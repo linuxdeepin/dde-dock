@@ -21,11 +21,24 @@
 
 package inputdevices
 
-import "pkg.linuxdeepin.com/lib/dbus"
+import (
+	"pkg.linuxdeepin.com/dde-daemon/inputdevices/libkeyboard"
+	"pkg.linuxdeepin.com/dde-daemon/inputdevices/libmouse"
+	"pkg.linuxdeepin.com/dde-daemon/inputdevices/libtouchpad"
+	"pkg.linuxdeepin.com/dde-daemon/inputdevices/libwacom"
+	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/log"
+)
 
 // TODO: delete this struct && rm this file
 type Manager struct {
-	Infos        []devicePathInfo
+	Infos []devicePathInfo
+
+	mouse        *libmouse.Mouse
+	touchpad     *libtouchpad.Touchpad
+	kbd          *libkeyboard.Keyboard
+	wacom        *libwacom.Wacom
+	logger       *log.Logger
 	versionRight bool
 }
 
@@ -34,17 +47,7 @@ type devicePathInfo struct {
 	Type string
 }
 
-var _manager *Manager
-
-func GetManager() *Manager {
-	if _manager == nil {
-		_manager = newManager()
-	}
-
-	return _manager
-}
-
-func newManager() *Manager {
+func NewManager(l *log.Logger) *Manager {
 	m := &Manager{}
 
 	m.Infos = []devicePathInfo{
@@ -56,6 +59,11 @@ func newManager() *Manager {
 			"touchpad"},
 	}
 
+	m.logger = l
+	m.mouse = libmouse.NewMouse(l)
+	m.touchpad = libtouchpad.NewTouchpad(l)
+	m.kbd = libkeyboard.NewKeyboard(l)
+	m.wacom = libwacom.NewWacom(l)
 	m.versionRight = m.isVersionRight()
 
 	return m
@@ -63,8 +71,8 @@ func newManager() *Manager {
 
 func (m *Manager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		DBUS_SENDER,
+		dbusSender,
 		"/com/deepin/daemon/InputDevices",
-		DBUS_SENDER,
+		dbusSender,
 	}
 }

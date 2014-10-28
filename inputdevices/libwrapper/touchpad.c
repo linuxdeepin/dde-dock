@@ -36,16 +36,7 @@
 int
 is_tpad_device(int deviceid)
 {
-	Display *disp = XOpenDisplay(0);
-	if (!disp) {
-		fprintf(stderr, "Open Display Failed: %d\n", deviceid);
-		return -1;
-	}
-
-	int ret = is_device_property_exist(disp, deviceid, "Synaptics Off");
-
-	XCloseDisplay(disp);
-
+	int ret = is_device_property_exist(deviceid, "Synaptics Off");
 	if (ret == 1) {
 		return 1;
 	}
@@ -54,7 +45,7 @@ is_tpad_device(int deviceid)
 }
 
 int
-set_touchpad_enabled (int deviceid, int enabled)
+enabled_touchpad (int deviceid, int enabled)
 {
 	Display *disp = XOpenDisplay(0);
 	if (!disp) {
@@ -62,7 +53,7 @@ set_touchpad_enabled (int deviceid, int enabled)
 		return -1;
 	}
 
-	if (set_device_enabled(disp, deviceid, enabled) != 0) {
+	if (enabled_device(disp, deviceid, enabled) != 0) {
 		fprintf(stderr, "Enable touchpad failed\n");
 		XCloseDisplay(disp);
 		return -1;

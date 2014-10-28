@@ -19,7 +19,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package inputdevices
+package libkeyboard
 
 import (
 	"encoding/xml"
@@ -28,7 +28,7 @@ import (
 )
 
 const (
-	LAYOUT_DELIM = ";"
+	kbdKeyLayoutDelim = ";"
 )
 
 type XKBConfigRegister struct {
@@ -58,43 +58,43 @@ type XVariant struct {
 }
 
 const (
-	_LAYOUT_XML_PATH = "/usr/share/X11/xkb/rules/base.xml"
+	kbdKeyLayoutXml = "/usr/share/X11/xkb/rules/base.xml"
 )
 
-func (kbdManager *KeyboardManager) parseXML(filename string) XKBConfigRegister {
+func parseXML(filename string) (XKBConfigRegister, error) {
 	var v XKBConfigRegister
 	xmlByte, err := ioutil.ReadFile(filename)
 	if err != nil {
-		logger.Debugf("Read File '%s' Failed: %s",
-			filename, err)
-		return v
+		return v, err
 	}
 
 	err = xml.Unmarshal(xmlByte, &v)
 	if err != nil {
-		logger.Warning("Unmarshal Failed:", err)
-		return v
+		return v, err
 	}
 
-	return v
+	return v, nil
 }
 
-func (kbdManager *KeyboardManager) getLayoutList() map[string]string {
-	layouts := make(map[string]string)
+func getLayoutListByFile(filename string) (map[string]string, error) {
+	xmlData, err := parseXML(filename)
+	if err != nil {
+		return nil, err
+	}
 
-	xmlData := kbdManager.parseXML(_LAYOUT_XML_PATH)
+	layouts := make(map[string]string)
 	for _, layout := range xmlData.LayoutList.Layout {
 		firstName := layout.ConfigItem.Name
 		desc := layout.ConfigItem.Description
-		layouts[firstName+LAYOUT_DELIM] = DGettext("xkeyboard-config", desc)
+		layouts[firstName+kbdKeyLayoutDelim] = DGettext("xkeyboard-config", desc)
 
 		variants := layout.VariantList.Variant
 		for _, v := range variants {
 			lastName := v.ConfigItem.Name
 			descTmp := v.ConfigItem.Description
-			layouts[firstName+LAYOUT_DELIM+lastName] = Tr(descTmp)
+			layouts[firstName+kbdKeyLayoutDelim+lastName] = Tr(descTmp)
 		}
 	}
 
-	return layouts
+	return layouts, nil
 }

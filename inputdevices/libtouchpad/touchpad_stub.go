@@ -19,17 +19,35 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
+package libtouchpad
 
-#ifndef __UTILS_H__
-#define __UTILS_H__
+import (
+	"pkg.linuxdeepin.com/dde-daemon/inputdevices/libwrapper"
+	"pkg.linuxdeepin.com/lib/dbus"
+)
 
-#include <X11/Xlib.h>
+const (
+	DBUS_SENDER    = "com.deepin.daemon.InputDevices"
+	DBUS_PATH_TPAD = "/com/deepin/daemon/InputDevice/TouchPad"
+	DBUS_IFC_TPAD  = "com.deepin.daemon.InputDevice.TouchPad"
+)
 
-int set_device_enabled(Display *disp, int deviceid, int enabled);
+func (touchpad *Touchpad) GetDBusInfo() dbus.DBusInfo {
+	return dbus.DBusInfo{
+		DBUS_SENDER,
+		DBUS_PATH_TPAD,
+		DBUS_IFC_TPAD,
+	}
+}
 
-int is_device_property_exist(
-    Display *disp,
-    int deviceid,
-    const char *prop_name);
+func (touchpad *Touchpad) setPropDeviceList(devList []libwrapper.XIDeviceInfo) {
+	touchpad.DeviceList = devList
+	dbus.NotifyChange(touchpad, "DeviceList")
+}
 
-#endif
+func (touchpad *Touchpad) setPropExist(exist bool) {
+	if touchpad.Exist != exist {
+		touchpad.Exist = exist
+		dbus.NotifyChange(touchpad, "Exist")
+	}
+}

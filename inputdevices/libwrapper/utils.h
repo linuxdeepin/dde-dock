@@ -19,33 +19,14 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package inputdevices
 
-import (
-	"pkg.linuxdeepin.com/lib/dbus"
-)
+#ifndef __UTILS_H__
+#define __UTILS_H__
 
-const (
-	DBUS_PATH_MOUSE = "/com/deepin/daemon/InputDevice/Mouse"
-	DBUS_IFC_MOUSE  = "com.deepin.daemon.InputDevice.Mouse"
-)
+#include <X11/Xlib.h>
 
-func (mManager *MouseManager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		DBUS_SENDER,
-		DBUS_PATH_MOUSE,
-		DBUS_IFC_MOUSE,
-	}
-}
+int enabled_device(Display *disp, int deviceid, int enabled);
 
-func (mManager *MouseManager) setPropDeviceList(devList []PointerDeviceInfo) {
-	mManager.DeviceList = devList
-	dbus.NotifyChange(mManager, "DeviceList")
-}
+int is_device_property_exist( int deviceid, const char *prop_name);
 
-func (mManager *MouseManager) setPropExist(exist bool) {
-	if mManager.Exist != exist {
-		mManager.Exist = exist
-		dbus.NotifyChange(mManager, "Exist")
-	}
-}
+#endif

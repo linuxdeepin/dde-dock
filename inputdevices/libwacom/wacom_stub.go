@@ -19,48 +19,37 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package inputdevices
+package libwacom
 
 import (
-	"os"
-	"path"
-	dutils "pkg.linuxdeepin.com/lib/utils"
+	"pkg.linuxdeepin.com/dde-daemon/inputdevices/libwrapper"
+	"pkg.linuxdeepin.com/lib/dbus"
 )
 
 const (
-	_VERSION     = "0.1"
-	_VERSION_DIR = ".config/dde-daemon/inputdevices"
+	DBUS_SENDER     = "com.deepin.daemon.InputDevices"
+	DBUS_PATH_WACOM = "/com/deepin/daemon/InputDevice/Wacom"
+	DBUS_IFC_WACOM  = "com.deepin.daemon.InputDevice.Wacom"
 )
 
-func (m *Manager) isVersionRight() bool {
-	versionFile := path.Join(os.Getenv("HOME"), _VERSION_DIR, "version")
-	if !dutils.IsFileExist(versionFile) {
-		m.newVersionFile()
-		return false
+func (wacom *Wacom) GetDBusInfo() dbus.DBusInfo {
+	return dbus.DBusInfo{
+		DBUS_SENDER,
+		DBUS_PATH_WACOM,
+		DBUS_IFC_WACOM,
 	}
-
-	return true
 }
 
-func (m *Manager) newVersionFile() {
-	vDir := path.Join(os.Getenv("HOME"), _VERSION_DIR)
-	if !dutils.IsFileExist(vDir) {
-		if err := os.MkdirAll(vDir, 0755); err != nil {
-			m.warningInfo("MkdirAll '%s' failed: %v", vDir, err)
-			return
-		}
+func (wacom *Wacom) setPropDeviceList(list []libwrapper.XIDeviceInfo) {
+	if len(wacom.DeviceList) != len(list) {
+		wacom.DeviceList = list
+		dbus.NotifyChange(wacom, "DeviceList")
 	}
+}
 
-	vFile := path.Join(vDir, "version")
-	fp, err := os.Create(vFile)
-	if err != nil {
-		m.warningInfo("Create '%s' failed: %v", vFile, err)
-		return
+func (wacom *Wacom) setPropExist(exist bool) {
+	if wacom.Exist != exist {
+		wacom.Exist = exist
+		dbus.NotifyChange(wacom, "Exist")
 	}
-	defer fp.Close()
-
-	fp.WriteString(_VERSION)
-	fp.Sync()
-
-	return
 }

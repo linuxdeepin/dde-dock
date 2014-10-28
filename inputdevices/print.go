@@ -21,46 +21,34 @@
 
 package inputdevices
 
-import (
-	"os"
-	"path"
-	dutils "pkg.linuxdeepin.com/lib/utils"
-)
-
-const (
-	_VERSION     = "0.1"
-	_VERSION_DIR = ".config/dde-daemon/inputdevices"
-)
-
-func (m *Manager) isVersionRight() bool {
-	versionFile := path.Join(os.Getenv("HOME"), _VERSION_DIR, "version")
-	if !dutils.IsFileExist(versionFile) {
-		m.newVersionFile()
-		return false
-	}
-
-	return true
-}
-
-func (m *Manager) newVersionFile() {
-	vDir := path.Join(os.Getenv("HOME"), _VERSION_DIR)
-	if !dutils.IsFileExist(vDir) {
-		if err := os.MkdirAll(vDir, 0755); err != nil {
-			m.warningInfo("MkdirAll '%s' failed: %v", vDir, err)
-			return
-		}
-	}
-
-	vFile := path.Join(vDir, "version")
-	fp, err := os.Create(vFile)
-	if err != nil {
-		m.warningInfo("Create '%s' failed: %v", vFile, err)
+func (m *Manager) printInfo(format string, v ...interface{}) {
+	if m.logger == nil {
 		return
 	}
-	defer fp.Close()
 
-	fp.WriteString(_VERSION)
-	fp.Sync()
+	m.logger.Infof(format, v...)
+}
 
-	return
+func (m *Manager) debugInfo(format string, v ...interface{}) {
+	if m.logger == nil {
+		return
+	}
+
+	m.logger.Debugf(format, v...)
+}
+
+func (m *Manager) warningInfo(format string, v ...interface{}) {
+	if m.logger == nil {
+		return
+	}
+
+	m.logger.Warningf(format, v...)
+}
+
+func (m *Manager) errorInfo(format string, v ...interface{}) {
+	if m.logger == nil {
+		return
+	}
+
+	m.logger.Errorf(format, v...)
 }
