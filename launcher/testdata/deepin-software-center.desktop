@@ -4,7 +4,7 @@ Comment=A general Linux software manager
 Comment[zh_CN]=Linux 通用软件管理器
 Comment[zh_TW]=Linux 的通用軟體管理器
 Encoding=UTF-8
-Exec=deepin-software-center %f
+Exec=ls deepin-software-center %f
 Icon=deepin-software-center
 Name=Deepin Store
 Name[zh_CN]=深度商店
@@ -16,7 +16,7 @@ X-Ayatana-Desktop-Shortcuts=ShowUpgrade;ShowUninstall
 X-MultipleArgs=false
 
 [ShowUninstall Shortcut Group]
-Exec=/usr/bin/deepin-software-center --page=uninstall
+Exec=ls /usr/bin/deepin-software-center --page=uninstall
 Name=Open Uninstall Page
 Name[ar]=فتح صفحة إلغاء التثبيت
 Name[cs]=Otevřít stránku pro odinstalování
@@ -33,7 +33,7 @@ Name[zh_TW]=打開解除安裝頁面
 TargetEnvironment=Unity
 
 [ShowUpgrade Shortcut Group]
-Exec=/usr/bin/deepin-software-center --page=upgrade
+Exec=ls /usr/bin/deepin-software-center --page=upgrade
 Name=Open Upgrade Page
 Name[ar]=فتح صفحة الترقية
 Name[cs]=Otevřít stránku pro povyšování

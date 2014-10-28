@@ -33,3 +33,4 @@ zone-settings/zone-settings
 bluetooth/bluetooth
 main_network.go
 bin/dde-session-daemon/dde-session-daemon
+!launcher/testdata/.config/launcher/*

@@ -1,0 +1,24 @@
+[Desktop Entry]
+X-Desktop-File-Install-Version=0.15
+Name=Open cue album in Qmmp
+Name[cs]=Otevřít album cue v Qmmp
+Name[ru]=Открыть альбом cue в Qmmp
+Name[uk]=Відкрити альбом cue
+Name[zh_CN]=打开 CUE
+Name[zh_TW]=打開 CUE
+Name[he]=פתח אלבום cue בתוך Qmmp
+Comment=Open cue file(s) in the directory
+Comment[cs]=Otevřít cue soubor(y) v adresáři
+Comment[ru]=Открыть cue-файл(ы) в директории
+Comment[uk]=Відкрити cue-файл(и) в теці
+Comment[zh_CN]=在本目录打开 CUE 文件
+Comment[zh_TW]=在本目錄打開 CUE 檔案
+Comment[he]=פתח קבצי cue המצויים בתוך המדור
+Exec=ls sh -c "qmmp '%F'/*.cue"
+Icon=qmmp
+Categories=AudioVideo;Player;Audio;Qt;
+MimeType=inode/directory;
+Type=Application
+X-KDE-StartupNotify=false
+NoDisplay=true
+Terminal=false

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+    <enum id="com.deepin.dde.launcher.CategoryDisplayMode">
+        <value value="0" nick="icon"/>
+        <value value="1" nick="text"/>
+    </enum>
+    <enum id="com.deepin.dde.launcher.SortMethod">
+        <value value="0" nick="name" />
+        <value value="1" nick="category" />
+        <value value="2" nick="installation-time" />
+        <value value="3" nick="frequency" />
+    </enum>
+
+    <schema path="/com/deepin/dde/launcher/" id="com.deepin.dde.launcher">
+        <key name="category-display-mode" enum="com.deepin.dde.launcher.CategoryDisplayMode">
+            <default>'icon'</default>
+            <summary>The category bar display mode.</summary>
+            <description>Display icon or text on launcher's category bar.</description>
+        </key>
+        <key name="sort-method" enum="com.deepin.dde.launcher.SortMethod">
+            <default>'name'</default>
+            <summary>change the clock view.</summary>
+            <description>The dock clock plugin has two types of view, one is digit, the other is analog.</description>
+        </key>
+    </schema>
+</schemalist>
