@@ -84,7 +84,7 @@ const (
 
 const (
 	GS_KEY_CURRENT_THEME   = "current-theme"
-	GS_KEY_CURRENT_BG      = "current-picture"
+	GS_KEY_CURRENT_BG      = "picture-uri"
 	GS_KEY_CURRENT_SOUND   = "current-sound-theme"
 	GS_KEY_CURRENT_GREETER = "greeter-theme"
 )
