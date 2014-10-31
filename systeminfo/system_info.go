@@ -2,165 +2,185 @@ package systeminfo
 
 import (
 	"dbus/org/freedesktop/udisks2"
+	"fmt"
 	"io/ioutil"
-	"os"
 	"os/exec"
 	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/glib-2.0"
 	"pkg.linuxdeepin.com/lib/log"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 	"strconv"
 	"strings"
 )
 
+// TODO: as a separate program, nonresident memory
+
 type SystemInfo struct {
 	Version    string
 	Processor  string
+	DiskCap    uint64
 	MemoryCap  uint64
 	SystemType int64
-	DiskCap    uint64
+
+	logger *log.Logger
 }
-
-const (
-	_VERSION_ETC = "/etc/lsb-release"
-	_VERSION_KEY = "DISTRIB_RELEASE"
-
-	_PROC_CPU_INFO = "/proc/cpuinfo"
-	_PROC_CPU_KEY  = "model name"
-
-	_PROC_MEM_INFO = "/proc/meminfo"
-	_PROC_MEM_KEY  = "MemTotal"
-)
 
 var (
-	logger = log.NewLogger("com.deepin.daemon.SystemInfo")
+	errFileNotExist = fmt.Errorf("No such file or directory")
+	errValueNull    = fmt.Errorf("Value is null")
 )
 
-func IsFileNotExist(filename string) bool {
-	_, err := os.Stat(filename)
-	if os.IsNotExist(err) {
-		return true
+func getCPUInfoFromFile(config string) (string, error) {
+	if !dutils.IsFileExist(config) {
+		return "", errFileNotExist
 	}
 
-	return false
-}
-
-func GetVersion() (version string) {
-	if IsFileNotExist(_VERSION_ETC) {
-		return ""
-	}
-	contents, err := ioutil.ReadFile(_VERSION_ETC)
+	contents, err := ioutil.ReadFile(config)
 	if err != nil {
-		logger.Infof("Read File Failed In Get Version: %s",
-			err)
-		return ""
+		return "", err
 	}
 
+	var (
+		info string
+		cnt  int
+	)
 	lines := strings.Split(string(contents), "\n")
 	for _, line := range lines {
-		if strings.Contains(line, _VERSION_KEY) {
-			vars := strings.Split(line, "=")
-			l := len(vars)
-			if l < 2 {
-				break
-			}
-			version = vars[1]
-			break
-		}
-	}
-
-	return
-}
-
-func GetCpuInfo() string {
-	if IsFileNotExist(_PROC_CPU_INFO) {
-		return "Unknown"
-	}
-	contents, err := ioutil.ReadFile(_PROC_CPU_INFO)
-	if err != nil {
-		logger.Infof("Read File Failed In Get CPU Info: %s",
-			err)
-		return ""
-	}
-
-	info := ""
-	cnt := 0
-	lines := strings.Split(string(contents), "\n")
-	for _, line := range lines {
-		if strings.Contains(line, _PROC_CPU_KEY) {
+		if strings.Contains(line, "model name") {
 			vars := strings.Split(line, ":")
-			l := len(vars)
-			if l < 2 {
+			if len(vars) != 2 {
 				break
 			}
 			cnt++
-			if info == "" {
+			if len(info) == 0 {
 				info += vars[1]
 			}
 		}
 	}
-	info += " x "
-	info += strconv.FormatInt(int64(cnt), 10)
+	if cnt > 1 {
+		info = fmt.Sprintf("%s x %v", info, cnt)
+	}
 
-	return strings.TrimSpace(info)
+	return strings.TrimSpace(info), nil
 }
 
-func GetMemoryCap() (memCap uint64) {
-	if IsFileNotExist(_PROC_MEM_INFO) {
-		return 0
-	}
-	contents, err := ioutil.ReadFile(_PROC_MEM_INFO)
-	if err != nil {
-		logger.Infof("Read File Failed In Get Memory Cap: %s",
-			err)
-		return 0
+func getVersionFromDeepin(config string) (string, error) {
+	if !dutils.IsFileExist(config) {
+		return "", errFileNotExist
 	}
 
+	kFile := glib.NewKeyFile()
+	defer kFile.Free()
+	_, err := kFile.LoadFromFile(config,
+		glib.KeyFileFlagsKeepTranslations)
+	if err != nil {
+		return "", err
+	}
+
+	version, err := kFile.GetString("Release", "Version")
+	if err != nil {
+		return "", err
+	}
+	t, err := kFile.GetLocaleString("Release", "Type", "\x00")
+	if err != nil {
+		return "", err
+	}
+	version = version + " " + t
+	return version, nil
+}
+
+func getVersionFromLsb(lsbfile string) (string, error) {
+	if !dutils.IsFileExist(lsbfile) {
+		return "", errFileNotExist
+	}
+
+	value, err := getValueByKeyFromFile(lsbfile, "DISTRIB_RELEASE", "=")
+	if err != nil {
+		return "", err
+	}
+
+	return value, nil
+}
+
+func getMemoryCapFromFile(config string) (uint64, error) {
+	if !dutils.IsFileExist(config) {
+		return 0, errFileNotExist
+	}
+
+	value, err := getValueByKeyFromFile(config, "MemTotal", ":")
+	if err != nil {
+		return 0, err
+	}
+	value = strings.TrimSpace(value)
+	if len(value) == 0 {
+		return 0, errValueNull
+	}
+
+	vars := strings.Split(value, " ")
+	value = vars[0]
+	caps, err := strconv.ParseUint(value, 10, 64)
+	if err != nil {
+		return 0, err
+	}
+
+	return (caps * 1024), nil
+}
+
+func getValueByKeyFromFile(filename, key, delim string) (string, error) {
+	contents, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return "", err
+	}
+
+	var value string
 	lines := strings.Split(string(contents), "\n")
 	for _, line := range lines {
-		if strings.Contains(line, _PROC_MEM_KEY) {
-			fields := strings.Fields(line)
-			l := len(fields)
-			if l < 2 {
+		if strings.Contains(line, key) {
+			fields := strings.Split(line, delim)
+			if len(fields) != 2 {
 				break
 			}
-			memCap, _ = strconv.ParseUint(fields[1], 10, 64)
+			value = fields[1]
 			break
 		}
 	}
 
-	return (memCap * 1024)
+	return value, nil
 }
 
-func GetSystemType() (sysType int64) {
-	cmd := exec.Command("/bin/uname", "-m")
+func getSystemType() (int64, error) {
+	cmd := exec.Command("/bin/sh", "-c", "/bin/uname -m")
 	out, err := cmd.Output()
 	if err != nil {
-		logger.Infof("Exec 'uname -m' Failed In Get System Type: %s",
-			err)
-		return int64(0)
+		return 0, err
 	}
 
-	if strings.Contains(string(out), "i386") ||
-		strings.Contains(string(out), "i586") ||
-		strings.Contains(string(out), "i686") {
+	var sysType int64
+	str := strings.ToLower(string(out))
+	if strings.Contains(str, "i386") ||
+		strings.Contains(str, "i586") ||
+		strings.Contains(str, "i686") {
 		sysType = 32
-	} else if strings.Contains(string(out), "x86_64") {
+	} else if strings.Contains(str, "x86_64") {
 		sysType = 64
-	} else {
-		sysType = 0
 	}
 
-	return sysType
+	return sysType, nil
 }
 
-func GetDiskCap() (diskCap uint64) {
-	driList := []dbus.ObjectPath{}
-	obj, err := udisks2.NewObjectManager("org.freedesktop.UDisks2", "/org/freedesktop/UDisks2")
+func getDiskCap() (uint64, error) {
+	udisk, err := udisks2.NewObjectManager(
+		"org.freedesktop.UDisks2",
+		"/org/freedesktop/UDisks2")
 	if err != nil {
-		logger.Infof("udisks2: New ObjectManager Failed:%v", err)
-		return 0
+		return 0, err
 	}
-	managers, _ := obj.GetManagedObjects()
 
+	var (
+		diskCap uint64
+		driList []dbus.ObjectPath
+	)
+	managers, _ := udisk.GetManagedObjects()
 	for _, value := range managers {
 		if _, ok := value["org.freedesktop.UDisks2.Block"]; ok {
 			v := value["org.freedesktop.UDisks2.Block"]["Drive"]
@@ -190,30 +210,73 @@ func GetDiskCap() (diskCap uint64) {
 		}
 	}
 
-	return diskCap
+	udisks2.DestroyObjectManager(udisk)
+	return diskCap, nil
 }
 
-func NewSystemInfo() *SystemInfo {
+var _sys *SystemInfo
+
+func NewSystemInfo(l *log.Logger) *SystemInfo {
 	sys := &SystemInfo{}
 
-	sys.Version = GetVersion()
-	sys.Processor = GetCpuInfo()
-	sys.MemoryCap = GetMemoryCap()
-	sys.SystemType = GetSystemType()
-	sys.DiskCap = GetDiskCap()
+	if l == nil {
+		l = log.NewLogger("com.deepin.daemon.SystemInfo")
+	}
+	sys.logger = l
+
+	var err error
+	sys.Version, err = getVersionFromDeepin("/etc/deepin-version")
+	if err != nil {
+		sys.logger.Warning(err)
+		sys.Version, err = getVersionFromLsb("/etc/lsb-release")
+		if err != nil {
+			sys.logger.Error(err)
+			return nil
+		}
+	}
+
+	sys.Processor, err = getCPUInfoFromFile("/proc/cpuinfo")
+	if err != nil {
+		sys.logger.Error(err)
+		return nil
+	}
+
+	sys.MemoryCap, err = getMemoryCapFromFile("/proc/meminfo")
+	if err != nil {
+		sys.logger.Error(err)
+		return nil
+	}
+
+	sys.SystemType, err = getSystemType()
+	if err != nil {
+		sys.logger.Error(err)
+		return nil
+	}
+
+	sys.DiskCap, err = getDiskCap()
+	if err != nil {
+		sys.logger.Error(err)
+		return nil
+	}
 
 	return sys
 }
 
 func Start() {
+	logger := log.NewLogger("com.deepin.daemon.SystemInfo")
 	logger.BeginTracing()
 
-	sys := NewSystemInfo()
+	sys := NewSystemInfo(logger)
 	err := dbus.InstallOnSession(sys)
 	if err != nil {
-		panic(err)
+		logger.Error(err)
 	}
 }
 func Stop() {
-	logger.EndTracing()
+	if _sys == nil {
+		return
+	}
+
+	_sys.logger.EndTracing()
+	_sys = nil
 }

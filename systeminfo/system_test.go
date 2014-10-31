@@ -7,37 +7,54 @@ import (
 	"testing"
 )
 
+type testWrapper struct{}
+
 func Test(t *testing.T) {
 	C.TestingT(t)
 }
 
 func init() {
-	C.Suite(NewSystemInfo())
+	C.Suite(&testWrapper{})
 }
 
-func (si *SystemInfo) TestSystem(c *C.C) {
-	if ret := GetVersion(); ret == "" {
-		c.Error("GetVersion failed")
-		return
-	}
+func (*testWrapper) TestSystemVersion(c *C.C) {
+	version, err := getVersionFromDeepin("/etc/deepin-version")
+	c.Check(err, C.Not(C.NotNil))
+	c.Check(len(version), C.Not(C.Equals), 0)
+	version, err = getVersionFromLsb("/etc/lsb-release")
+	c.Check(err, C.Not(C.NotNil))
+	c.Check(len(version), C.Not(C.Equals), 0)
+	version, err = getVersionFromDeepin("xxxxxxxxxx")
+	c.Check(err, C.NotNil)
+	c.Check(len(version), C.Equals, 0)
+}
 
-	if ret := GetCpuInfo(); len(ret) < 1 {
-		c.Error("GetCpuInfo failed")
-		return
-	}
+func (*testWrapper) TestSystemCPU(c *C.C) {
+	cpu, err := getCPUInfoFromFile("/proc/cpuinfo")
+	c.Check(err, C.Not(C.NotNil))
+	c.Check(len(cpu), C.Not(C.Equals), 0)
+	cpu, err = getCPUInfoFromFile("xxxxxxxxxxx")
+	c.Check(err, C.NotNil)
+	c.Check(cpu, C.Equals, "")
+}
 
-	if ret := GetMemoryCap(); ret == 0 {
-		c.Error("GetMemoryCap failed")
-		return
-	}
+func (*testWrapper) TestSystemMemory(c *C.C) {
+	mem, err := getMemoryCapFromFile("/proc/meminfo")
+	c.Check(err, C.Not(C.NotNil))
+	c.Check(mem, C.Not(C.Equals), uint64(0))
+	mem, err = getMemoryCapFromFile("xxxxxxxxx")
+	c.Check(err, C.NotNil)
+	c.Check(mem, C.Equals, uint64(0))
+}
 
-	if ret := GetSystemType(); ret == 0 {
-		c.Error("GetSystemType failed")
-		return
-	}
+func (*testWrapper) TestSystemType(c *C.C) {
+	t, err := getSystemType()
+	c.Check(err, C.Not(C.NotNil))
+	c.Check(t, C.Not(C.Equals), 0)
+}
 
-	if ret := GetDiskCap(); ret == 0 {
-		c.Error("GetDiskCap failed")
-		return
-	}
+func (*testWrapper) TestSystemDisk(c *C.C) {
+	caps, err := getDiskCap()
+	c.Check(err, C.Not(C.NotNil))
+	c.Check(caps, C.Not(C.Equals), 0)
 }
