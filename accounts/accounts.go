@@ -22,9 +22,12 @@
 package accounts
 
 import (
+	"bufio"
 	"github.com/howeyc/fsnotify"
 	"io/ioutil"
+	"os"
 	dutils "pkg.linuxdeepin.com/lib/utils"
+	"regexp"
 	"strconv"
 	"strings"
 )
@@ -234,4 +237,26 @@ func getUserInfoByName(name string) (UserInfo, bool) {
 	}
 
 	return UserInfo{}, false
+}
+
+func getNewUserDefaultShell(filename string) (string, error) {
+	fp, err := os.Open(filename)
+	if err != nil {
+		return "", err
+	}
+
+	var shell string
+	match := regexp.MustCompile(`^DSHELL=(.*)`)
+	scanner := bufio.NewScanner(fp)
+	for scanner.Scan() {
+		line := scanner.Text()
+		fields := match.FindStringSubmatch(line)
+		if len(fields) > 1 {
+			shell = fields[1]
+			break
+		}
+	}
+	fp.Close()
+
+	return shell, nil
 }

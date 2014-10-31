@@ -57,3 +57,17 @@ func (t *testWrap) TestUtils(c *C.C) {
 	c.Check(isPasswordValid("123"), C.Equals, true)
 	c.Check(isPasswordValid("./#$%$"), C.Equals, true)
 }
+
+func (*testWrap) TestNewUserShell(c *C.C) {
+	shell, err := getNewUserDefaultShell("testdata/adduser.conf")
+	c.Check(err, C.Not(C.NotNil))
+	c.Check(shell, C.Equals, "/bin/zsh")
+
+	shell, err = getNewUserDefaultShell("testdata/adduser1.conf")
+	c.Check(err, C.Not(C.NotNil))
+	c.Check(shell, C.Equals, "")
+
+	shell, err = getNewUserDefaultShell("testdata/xxxxxxx")
+	c.Check(err, C.NotNil)
+	c.Check(shell, C.Equals, "")
+}

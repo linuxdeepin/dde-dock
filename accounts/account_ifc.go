@@ -28,16 +28,25 @@ import (
 	"strings"
 )
 
+const newUserConfigFile = "/etc/adduser.conf"
+
 func (obj *Manager) CreateGuestAccount() string {
 	args := []string{}
+
+	shell, err := getNewUserDefaultShell(newUserConfigFile)
+	if err != nil {
+		logger.Warning(err)
+	}
 
 	username := getGuestName()
 	passwd := encodePasswd("")
 	args = append(args, "-m")
+	if len(shell) != 0 {
+		args = append(args, "-s")
+		args = append(args, shell)
+	}
 	args = append(args, "-d")
 	args = append(args, "/tmp/"+username)
-	args = append(args, "-s")
-	args = append(args, "/bin/bash")
 	args = append(args, "-l")
 	args = append(args, "-p")
 	args = append(args, passwd)
@@ -81,9 +90,16 @@ func (obj *Manager) CreateUser(dbusMsg dbus.DMessage, name, fullname string, acc
 
 	args := []string{}
 
+	shell, err := getNewUserDefaultShell(newUserConfigFile)
+	if err != nil {
+		logger.Warning(err)
+	}
+
 	args = append(args, "-m")
-	args = append(args, "-s")
-	args = append(args, "/bin/bash")
+	if len(shell) != 0 {
+		args = append(args, "-s")
+		args = append(args, shell)
+	}
 	args = append(args, "-c")
 	args = append(args, fullname)
 	args = append(args, name)
