@@ -3,7 +3,7 @@ Section: devel
 Priority: extra
 Maintainer: Deepin Packages Builder <packages@linuxdeepin.com>
 Build-Depends: debhelper (>= 9),
- dde-go-dbus-factory (>= 0.0.2+20140904143716~60198a4a49),
+ dde-go-dbus-factory,
  golang-dlib-dev,
  golang-xgb-dev,
  golang-xgbutil-dev,
@@ -33,7 +33,6 @@ Depends: ${shlibs:Depends},
  grub-themes-deepin,
  xcur2png,
  xserver-xorg-input-wacom,
-Conflicts: dde-daemon-gsd-input, dde-workspace (<= 2.1+20140930145128)
 Description: daemon handling the DDE session settings
     This package contains the daemon which is responsible for setting the
     various parameters of a DDE session and the applications that run
