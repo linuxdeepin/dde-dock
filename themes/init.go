@@ -3,5 +3,10 @@ package themes
 import "pkg.linuxdeepin.com/dde-daemon"
 
 func init() {
-	loader.Register(&loader.Module{"themes", Start, Stop, true})
+	loader.Register(&loader.Module{
+		Name:   "themes",
+		Start:  Start,
+		Stop:   Stop,
+		Enable: true,
+	})
 }

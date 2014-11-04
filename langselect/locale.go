@@ -200,14 +200,13 @@ func (ls *LangSelect) getLocaleInfo(kf *glib.KeyFile, l, locale string) (info lo
 		}
 	}
 
-	if v, err := kf.GetLocaleString(l, "Name", lang); err != nil {
-		return
-	} else {
-		info.Locale = locale
-		info.Desc = v
-		ok = true
+	v, err := kf.GetLocaleString(l, "Name", lang)
+	if err != nil {
 		return
 	}
+	info.Locale = locale
+	info.Desc = v
+	ok = true
 
 	return
 }

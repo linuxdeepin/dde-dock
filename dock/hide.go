@@ -63,9 +63,9 @@ func (e *HideStateManager) destroy() {
 
 func (e *HideStateManager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		"com.deepin.daemon.Dock",
-		"/dde/dock/HideStateManager",
-		"dde.dock.HideStateManager",
+		Dest:       "com.deepin.daemon.Dock",
+		ObjectPath: "/dde/dock/HideStateManager",
+		Interface:  "dde.dock.HideStateManager",
 	}
 }
 

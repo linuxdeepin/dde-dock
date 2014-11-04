@@ -5,7 +5,7 @@ import (
 	"github.com/BurntSushi/xgb/xproto"
 )
 
-var displayRect xproto.Rectangle = xproto.Rectangle{0, 0, 0, 0}
+var displayRect xproto.Rectangle
 
 func initDisplay() bool {
 	dpy, err := display.NewDisplay(

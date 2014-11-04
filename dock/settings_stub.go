@@ -6,8 +6,8 @@ import (
 
 func (s *Setting) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		"com.deepin.daemon.Dock",
-		"/dde/dock/DockSetting",
-		"dde.dock.DockSetting",
+		Dest:       "com.deepin.daemon.Dock",
+		ObjectPath: "/dde/dock/DockSetting",
+		Interface:  "dde.dock.DockSetting",
 	}
 }

@@ -12,8 +12,8 @@ func (e *AppEntry) GetDBusInfo() dbus.DBusInfo {
 	var id string
 	id = "d" + hex.EncodeToString(hasher.Sum(nil))
 	return dbus.DBusInfo{
-		"dde.dock.entry." + id,
-		"/dde/dock/entry/v1/" + id,
-		"dde.dock.Entry",
+		Dest:       "dde.dock.entry." + id,
+		ObjectPath: "/dde/dock/entry/v1/" + id,
+		Interface:  "dde.dock.Entry",
 	}
 }

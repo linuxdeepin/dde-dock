@@ -18,17 +18,17 @@ const (
 
 func (*Audio) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		baseBusName,
-		baseBusPath,
-		baseBusIfc,
+		Dest:       baseBusName,
+		ObjectPath: baseBusPath,
+		Interface:  baseBusIfc,
 	}
 }
 
 func (m *Meter) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		baseBusName,
-		baseBusPath + "/Meter" + m.id,
-		baseBusIfc + ".Meter",
+		Dest:       baseBusName,
+		ObjectPath: baseBusPath + "/Meter" + m.id,
+		Interface:  baseBusIfc + ".Meter",
 	}
 }
 func (m *Meter) setPropVolume(v float64) {
@@ -40,25 +40,25 @@ func (m *Meter) setPropVolume(v float64) {
 
 func (s *Sink) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		baseBusName,
-		fmt.Sprintf("%s/Sink%d", baseBusPath, s.core.Index),
-		baseBusIfc + ".Sink",
+		Dest:       baseBusName,
+		ObjectPath: fmt.Sprintf("%s/Sink%d", baseBusPath, s.core.Index),
+		Interface:  baseBusIfc + ".Sink",
 	}
 }
 
 func (s *Source) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		baseBusName,
-		fmt.Sprintf("%s/Source%d", baseBusPath, s.core.Index),
-		baseBusIfc + ".Source",
+		Dest:       baseBusName,
+		ObjectPath: fmt.Sprintf("%s/Source%d", baseBusPath, s.core.Index),
+		Interface:  baseBusIfc + ".Source",
 	}
 }
 
 func (s *SinkInput) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		baseBusName,
-		fmt.Sprintf("%s/SinkInput%d", baseBusPath, s.core.Index),
-		baseBusIfc + ".SinkInput",
+		Dest:       baseBusName,
+		ObjectPath: fmt.Sprintf("%s/SinkInput%d", baseBusPath, s.core.Index),
+		Interface:  baseBusIfc + ".SinkInput",
 	}
 }
 

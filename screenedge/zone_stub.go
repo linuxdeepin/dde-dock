@@ -35,9 +35,9 @@ const (
 
 func (op *Manager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		ZONE_DEST,
-		ZONE_PATH,
-		ZONE_IFC,
+		Dest:       ZONE_DEST,
+		ObjectPath: ZONE_PATH,
+		Interface:  ZONE_IFC,
 	}
 }
 

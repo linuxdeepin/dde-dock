@@ -61,8 +61,8 @@ func (e *EntryProxyer) ShowQuickWindow() { e.core.ShowQuickWindow() }
 
 func (e *EntryProxyer) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		"com.deepin.daemon.Dock",
-		entryPathPrefix + e.entryId,
-		"dde.dock.EntryProxyer",
+		Dest:       "com.deepin.daemon.Dock",
+		ObjectPath: entryPathPrefix + e.entryId,
+		Interface:  "dde.dock.EntryProxyer",
 	}
 }

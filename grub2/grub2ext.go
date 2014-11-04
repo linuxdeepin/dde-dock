@@ -56,9 +56,9 @@ func NewGrub2Ext() *Grub2Ext {
 // GetDBusInfo implement interface of dbus.DBusObject
 func (ge *Grub2Ext) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		DbusGrub2ExtDest,
-		DbusGrub2ExtPath,
-		DbusGrub2ExtIfs,
+		Dest:       DbusGrub2ExtDest,
+		ObjectPath: DbusGrub2ExtPath,
+		Interface:  DbusGrub2ExtIfs,
 	}
 }
 

@@ -27,8 +27,8 @@ import (
 
 func (sys *SystemInfo) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		"com.deepin.daemon.SystemInfo",
-		"/com/deepin/daemon/SystemInfo",
-		"com.deepin.daemon.SystemInfo",
+		Dest:       "com.deepin.daemon.SystemInfo",
+		ObjectPath: "/com/deepin/daemon/SystemInfo",
+		Interface:  "com.deepin.daemon.SystemInfo",
 	}
 }

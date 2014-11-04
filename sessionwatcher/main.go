@@ -46,7 +46,6 @@ func startTimer() {
 			return
 		}
 	}
-	Logger.Debug("Exit Timer...")
 }
 
 func Start() {

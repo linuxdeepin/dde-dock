@@ -78,9 +78,9 @@ func NewBluetooth() (b *Bluetooth) {
 
 func (b *Bluetooth) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		dbusBluetoothDest,
-		dbusBluetoothPath,
-		dbusBluetoothIfs,
+		Dest:       dbusBluetoothDest,
+		ObjectPath: dbusBluetoothPath,
+		Interface:  dbusBluetoothIfs,
 	}
 }
 

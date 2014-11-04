@@ -6,9 +6,9 @@ import (
 
 func (m *DockedAppManager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		"com.deepin.daemon.Dock",
-		"/dde/dock/DockedAppManager",
-		"dde.dock.DockedAppManager",
+		Dest:       "com.deepin.daemon.Dock",
+		ObjectPath: "/dde/dock/DockedAppManager",
+		Interface:  "dde.dock.DockedAppManager",
 	}
 }
 

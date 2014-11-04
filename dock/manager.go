@@ -30,9 +30,9 @@ type EntryProxyerManager struct {
 
 func (m *EntryProxyerManager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		"com.deepin.daemon.Dock",
-		"/dde/dock/EntryManager",
-		"dde.dock.EntryManager",
+		Dest:       "com.deepin.daemon.Dock",
+		ObjectPath: "/dde/dock/EntryManager",
+		Interface:  "dde.dock.EntryManager",
 	}
 }
 

@@ -10,7 +10,12 @@ import libnotifications "dbus/org/freedesktop/notifications"
 import libsound "dbus/com/deepin/api/sound"
 
 func init() {
-	loader.Register(&loader.Module{"power", Start, Stop, true})
+	loader.Register(&loader.Module{
+		Name:   "power",
+		Start:  Start,
+		Stop:   Stop,
+		Enable: true,
+	})
 }
 
 var (

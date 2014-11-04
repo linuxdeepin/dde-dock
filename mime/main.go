@@ -29,17 +29,17 @@ var (
 
 func (dapp *DefaultApps) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		_DEFAULT_APPS_DEST,
-		_DEFAULT_APPS_PATH,
-		_DEFAULT_APPS_IFC,
+		Dest:       _DEFAULT_APPS_DEST,
+		ObjectPath: _DEFAULT_APPS_PATH,
+		Interface:  _DEFAULT_APPS_IFC,
 	}
 }
 
 func (media *MediaMount) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		_DEFAULT_APPS_DEST,
-		_MEDIA_MOUNT_PATH,
-		_MEDIA_MOUNT_IFC,
+		Dest:       _DEFAULT_APPS_DEST,
+		ObjectPath: _MEDIA_MOUNT_PATH,
+		Interface:  _MEDIA_MOUNT_IFC,
 	}
 }
 

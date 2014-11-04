@@ -4,9 +4,9 @@ import "pkg.linuxdeepin.com/lib/dbus"
 
 func (*Power) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		"com.deepin.daemon.Power",
-		"/com/deepin/daemon/Power",
-		"com.deepin.daemon.Power",
+		Dest:       "com.deepin.daemon.Power",
+		ObjectPath: "/com/deepin/daemon/Power",
+		Interface:  "com.deepin.daemon.Power",
 	}
 }
 

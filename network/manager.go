@@ -78,9 +78,9 @@ type Manager struct {
 
 func (m *Manager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		dbusNetworkDest,
-		dbusNetworkPath,
-		dbusNetworkIfs,
+		Dest:       dbusNetworkDest,
+		ObjectPath: dbusNetworkPath,
+		Interface:  dbusNetworkIfs,
 	}
 }
 

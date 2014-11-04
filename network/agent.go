@@ -57,9 +57,9 @@ func destroyAgent(a *agent) {
 
 func (a *agent) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		".",
-		"/org/freedesktop/NetworkManager/SecretAgent",
-		"org.freedesktop.NetworkManager.SecretAgent",
+		Dest:       ".",
+		ObjectPath: "/org/freedesktop/NetworkManager/SecretAgent",
+		Interface:  "org.freedesktop.NetworkManager.SecretAgent",
 	}
 }
 

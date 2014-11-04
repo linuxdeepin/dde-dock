@@ -28,9 +28,9 @@ import (
 
 func (s *ConnectionSession) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		"com.deepin.daemon.Network",
-		string(s.sessionPath),
-		"com.deepin.daemon.ConnectionSession",
+		Dest:       "com.deepin.daemon.Network",
+		ObjectPath: string(s.sessionPath),
+		Interface:  "com.deepin.daemon.ConnectionSession",
 	}
 }
 

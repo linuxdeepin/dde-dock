@@ -70,7 +70,7 @@ func keyValueToJSON(v interface{}, t ktype) (jsonStr string, err error) {
 func jsonToKeyValue(jsonStr string, t ktype) (v interface{}, err error) {
 	switch t {
 	default:
-		err = fmt.Errorf("invalid variant type, %jsonStr", jsonStr)
+		err = fmt.Errorf("invalid variant type, %s", jsonStr)
 	case ktypeString:
 		v, err = jsonToKeyValueString(jsonStr)
 	case ktypeByte:

@@ -19,9 +19,9 @@ func NewDockProperty() *DockProperty {
 
 func (e *DockProperty) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		"dde.dock.Property",
-		"/dde/dock/Property",
-		"dde.dock.Property",
+		Dest:       "dde.dock.Property",
+		ObjectPath: "/dde/dock/Property",
+		Interface:  "dde.dock.Property",
 	}
 }
 

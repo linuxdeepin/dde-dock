@@ -27,9 +27,9 @@ import (
 
 func (ls *LangSelect) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		DEST,
-		PATH,
-		IFC,
+		Dest:       DEST,
+		ObjectPath: PATH,
+		Interface:  IFC,
 	}
 }
 

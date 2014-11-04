@@ -34,9 +34,9 @@ const (
 
 func (touchpad *Touchpad) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		DBUS_SENDER,
-		DBUS_PATH_TPAD,
-		DBUS_IFC_TPAD,
+		Dest:       DBUS_SENDER,
+		ObjectPath: DBUS_PATH_TPAD,
+		Interface:  DBUS_IFC_TPAD,
 	}
 }
 

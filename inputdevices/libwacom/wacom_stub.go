@@ -34,9 +34,9 @@ const (
 
 func (wacom *Wacom) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		DBUS_SENDER,
-		DBUS_PATH_WACOM,
-		DBUS_IFC_WACOM,
+		Dest:       DBUS_SENDER,
+		ObjectPath: DBUS_PATH_WACOM,
+		Interface:  DBUS_IFC_WACOM,
 	}
 }
 

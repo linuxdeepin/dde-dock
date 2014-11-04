@@ -208,7 +208,7 @@ func (dapp *DefaultApps) listenMimeCacheFile() {
 func NewDefaultApps() *DefaultApps {
 	defer func() {
 		if err := recover(); err != nil {
-			logger.Error("Recover Error in NewDefaultApps: %v",
+			logger.Errorf("Recover Error in NewDefaultApps: %v",
 				err)
 		}
 	}()

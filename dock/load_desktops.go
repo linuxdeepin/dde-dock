@@ -16,15 +16,4 @@ func loadAll() []string {
 
 	l, _ := DOCKED_APP_MANAGER.DockedAppList()
 	return l
-
-	return []string{"firefox"}
-	// return []string{
-	// 	"libreoffice-impress",
-	// 	"gnome-system-monitor",
-	// 	"google-chrome",
-	// 	"d-feet",
-	// 	"nautilus",
-	// 	"deepin-music-player",
-	// 	"deepin-terminal",
-	// }
 }

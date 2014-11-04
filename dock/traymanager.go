@@ -367,8 +367,8 @@ func md5Equal(a []byte, b []byte) bool {
 }
 func (*TrayManager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		"com.deepin.dde.TrayManager",
-		"/com/deepin/dde/TrayManager",
-		"com.deepin.dde.TrayManager",
+		Dest:       "com.deepin.dde.TrayManager",
+		ObjectPath: "/com/deepin/dde/TrayManager",
+		Interface:  "com.deepin.dde.TrayManager",
 	}
 }

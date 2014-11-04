@@ -45,9 +45,9 @@ type LauncherDBus struct {
 
 func (d *LauncherDBus) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		launcherObject,
-		launcherPath,
-		launcherInterface,
+		Dest:       launcherObject,
+		ObjectPath: launcherPath,
+		Interface:  launcherInterface,
 	}
 }
 

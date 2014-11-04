@@ -29,7 +29,12 @@ import (
 )
 
 func init() {
-	loader.Register(&loader.Module{"accounts", Start, Stop, true})
+	loader.Register(&loader.Module{
+		Name:   "accounts",
+		Start:  Start,
+		Stop:   Stop,
+		Enable: true,
+	})
 }
 
 var (

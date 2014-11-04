@@ -202,7 +202,7 @@ func getUserLocale() (string, bool) {
 
 	contents, err := ioutil.ReadFile(filePath)
 	if err != nil {
-		logger.Error("ReadFile '%s' failed: %v", filePath, err)
+		logger.Errorf("ReadFile '%s' failed: %v", filePath, err)
 		return "", false
 	}
 
@@ -260,15 +260,14 @@ func getLocaleInfo(keyFile *glib.KeyFile, l, locale string) (localeInfo, bool) {
 	}
 
 	info := localeInfo{}
-	if v, err := keyFile.GetLocaleString(l, "Name", lang); err != nil {
+	v, err := keyFile.GetLocaleString(l, "Name", lang)
+	if err != nil {
 		return info, false
-	} else {
-		info.Locale = locale
-		info.Desc = v
-		return info, true
 	}
+	info.Locale = locale
+	info.Desc = v
 
-	return info, false
+	return info, true
 }
 
 func getLocaleInfoList() (list []localeInfo) {

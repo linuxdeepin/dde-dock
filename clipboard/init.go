@@ -29,7 +29,12 @@ import "C"
 import "pkg.linuxdeepin.com/dde-daemon"
 
 func init() {
-	loader.Register(&loader.Module{"clipboard", Start, Stop, true})
+	loader.Register(&loader.Module{
+		Name:   "clipboard",
+		Start:  Start,
+		Stop:   Stop,
+		Enable: true,
+	})
 }
 
 func Start() {

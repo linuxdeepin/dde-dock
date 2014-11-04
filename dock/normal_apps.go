@@ -27,7 +27,7 @@ func NewNormalApp(id string) *NormalApp {
 	app := &NormalApp{Id: strings.Replace(basename, "_", "-", -1)}
 	logger.Debug("NewNormalApp:", id)
 	var core *DesktopAppInfo
-	if filepath.IsAbs(id) {
+	if strings.ContainsRune(id, filepath.Separator) {
 		core = NewDesktopAppInfoFromFilename(id)
 	} else {
 		core = NewDesktopAppInfo(id)
@@ -47,7 +47,7 @@ func NewNormalApp(id string) *NormalApp {
 	logger.Debug("app icon:", app.Icon)
 	app.Name = core.GetDisplayName()
 	logger.Debug("Name", app.Name)
-	app.buildMenu()
+	app.buildMenu(core)
 	return app
 }
 
@@ -68,14 +68,7 @@ func (app *NormalApp) createDesktopAppInfo() *DesktopAppInfo {
 	return NewDesktopAppInfoFromFilename(app.path)
 }
 
-func (app *NormalApp) buildMenu() {
-	core := app.createDesktopAppInfo()
-	if core == nil {
-		logger.Warning("buildMenu: create desktop app info failed")
-		return
-	}
-	defer core.Unref()
-
+func (app *NormalApp) buildMenu(core *DesktopAppInfo) {
 	app.coreMenu = NewMenu()
 	app.coreMenu.AppendItem(NewMenuItem(Tr("_Run"), func() {
 		core := app.createDesktopAppInfo()
@@ -136,7 +129,7 @@ func NewNormalAppFromFilename(name string) *NormalApp {
 	app.path = core.GetFilename()
 	app.Icon = core.GetIcon().ToString()
 	app.Name = core.GetDisplayName()
-	app.buildMenu()
+	app.buildMenu(core)
 	return app
 }
 

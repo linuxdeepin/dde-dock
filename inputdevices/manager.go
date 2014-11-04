@@ -71,8 +71,8 @@ func NewManager(l *log.Logger) *Manager {
 
 func (m *Manager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		dbusSender,
-		"/com/deepin/daemon/InputDevices",
-		dbusSender,
+		Dest:       dbusSender,
+		ObjectPath: "/com/deepin/daemon/InputDevices",
+		Interface:  dbusSender,
 	}
 }

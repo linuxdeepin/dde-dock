@@ -30,9 +30,9 @@ import (
 
 func (obj *User) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		ACCOUNT_DEST,
-		obj.objectPath,
-		USER_MANAGER_IFC,
+		Dest:       ACCOUNT_DEST,
+		ObjectPath: obj.objectPath,
+		Interface:  USER_MANAGER_IFC,
 	}
 }
 

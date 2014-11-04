@@ -27,9 +27,9 @@ import (
 
 func (obj *Manager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		MANAGER_DEST,
-		MANAGER_PATH,
-		MANAGER_IFC,
+		Dest:       MANAGER_DEST,
+		ObjectPath: MANAGER_PATH,
+		Interface:  MANAGER_IFC,
 	}
 }
 

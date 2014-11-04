@@ -30,9 +30,9 @@ import (
 
 func (obj *Theme) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		MANAGER_DEST,
-		obj.objectPath,
-		THEME_IFC,
+		Dest:       MANAGER_DEST,
+		ObjectPath: obj.objectPath,
+		Interface:  THEME_IFC,
 	}
 }
 

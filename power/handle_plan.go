@@ -174,13 +174,13 @@ func doIdleAction() {
 	stoper := make(chan bool)
 	stopAnimation = append(stopAnimation, stoper)
 	for _, p := range dp.Monitors.Get() {
-		go func() {
-			m, err := display.NewMonitor("com.deepin.daemon.Display", p)
-			if err != nil {
-				logger.Warningf("create monitor %v failed:%v", p, err)
-				return
-			}
+		m, err := display.NewMonitor("com.deepin.daemon.Display", p)
+		if err != nil {
+			logger.Warningf("create monitor %v failed:%v", p, err)
+			continue
+		}
 
+		go func() {
 			outputs := m.Outputs.Get()
 			for v := 0.8; v > 0.1; v -= 0.05 {
 				<-time.After(time.Millisecond * time.Duration(float64(400)*(v)))

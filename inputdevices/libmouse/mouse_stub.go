@@ -34,9 +34,9 @@ const (
 
 func (mouse *Mouse) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		DBUS_SENDER,
-		DBUS_PATH_MOUSE,
-		DBUS_IFC_MOUSE,
+		Dest:       DBUS_SENDER,
+		ObjectPath: DBUS_PATH_MOUSE,
+		Interface:  DBUS_IFC_MOUSE,
 	}
 }
 

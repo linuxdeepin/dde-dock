@@ -33,9 +33,9 @@ const (
 
 func (m *Manager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		DISK_INFO_DEST,
-		DISK_INFO_PATH,
-		DISK_INFO_IFC,
+		Dest:       DISK_INFO_DEST,
+		ObjectPath: DISK_INFO_PATH,
+		Interface:  DISK_INFO_IFC,
 	}
 }
 

@@ -38,9 +38,9 @@ const (
 // GetDBusInfo implements interface of dbus.DBusObject.
 func (grub *Grub2) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		DbusGrubDest,
-		DbusGrubPath,
-		DbusGrubIfs,
+		Dest:       DbusGrubDest,
+		ObjectPath: DbusGrubPath,
+		Interface:  DbusGrubIfs,
 	}
 }
 

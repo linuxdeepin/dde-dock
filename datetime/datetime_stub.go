@@ -35,7 +35,11 @@ const (
 )
 
 func (m *Manager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{_DATE_TIME_DEST, _DATE_TIME_PATH, _DATA_TIME_IFC}
+	return dbus.DBusInfo{
+		Dest:       _DATE_TIME_DEST,
+		ObjectPath: _DATE_TIME_PATH,
+		Interface:  _DATA_TIME_IFC,
+	}
 }
 
 func (op *Manager) setAutoSetTime(auto bool) bool {
@@ -47,7 +51,7 @@ func (op *Manager) setPropName(name string) {
 	case "CurrentTimezone":
 		tz, _, err := setDate.GetTimezone()
 		if err != nil {
-			logger.Error("Get Time Zone Failed: %s\n", err)
+			logger.Errorf("Get Time Zone Failed: %v\n", err)
 			return
 		}
 		if timezoneIsValid(tz) {
@@ -103,7 +107,7 @@ func (op *Manager) listenZone() {
 	if ok := dutils.IsFileExist(_TIME_ZONE_FILE); !ok {
 		f, err := os.Create(_TIME_ZONE_FILE)
 		if err != nil {
-			logger.Error("Create '%s' Failed: %v\n",
+			logger.Errorf("Create '%s' Failed: %v\n",
 				_TIME_ZONE_FILE, err)
 			return
 		}
@@ -111,7 +115,7 @@ func (op *Manager) listenZone() {
 	}
 	err := zoneWatcher.Watch(_TIME_ZONE_FILE)
 	if err != nil {
-		logger.Error("Watch '%s' Failed: %s\n", _TIME_ZONE_FILE, err)
+		logger.Errorf("Watch '%s' Failed: %s\n", _TIME_ZONE_FILE, err)
 		return
 	}
 

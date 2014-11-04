@@ -8,7 +8,12 @@ import (
 )
 
 func init() {
-	loader.Register(&loader.Module{"dock", Start, Stop, true})
+	loader.Register(&loader.Module{
+		Name:   "dock",
+		Start:  Start,
+		Stop:   Stop,
+		Enable: true,
+	})
 }
 
 var (

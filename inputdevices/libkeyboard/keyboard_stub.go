@@ -33,8 +33,8 @@ const (
 
 func (kbd *Keyboard) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		DBUS_SENDER,
-		DBUS_PATH_KBD,
-		DBUS_IFC_KBD,
+		Dest:       DBUS_SENDER,
+		ObjectPath: DBUS_PATH_KBD,
+		Interface:  DBUS_IFC_KBD,
 	}
 }

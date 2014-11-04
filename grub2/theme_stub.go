@@ -30,9 +30,9 @@ import (
 // GetDBusInfo implements interface of dbus.DBusObject.
 func (theme *Theme) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		"com.deepin.daemon.Grub2",
-		"/com/deepin/daemon/Grub2/Theme",
-		"com.deepin.daemon.Grub2.Theme",
+		Dest:       "com.deepin.daemon.Grub2",
+		ObjectPath: "/com/deepin/daemon/Grub2/Theme",
+		Interface:  "com.deepin.daemon.Grub2.Theme",
 	}
 }
 

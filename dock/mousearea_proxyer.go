@@ -29,9 +29,9 @@ type XMouseAreaProxyer struct {
 
 func (a *XMouseAreaProxyer) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		"com.deepin.daemon.Dock",
-		"/dde/dock/XMouseAreaProxyer",
-		"dde.dock.XMouseAreaProxyer",
+		Dest:       "com.deepin.daemon.Dock",
+		ObjectPath: "/dde/dock/XMouseAreaProxyer",
+		Interface:  "dde.dock.XMouseAreaProxyer",
 	}
 }
 

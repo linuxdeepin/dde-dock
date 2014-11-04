@@ -3,5 +3,10 @@ package mounts
 import "pkg.linuxdeepin.com/dde-daemon"
 
 func init() {
-	loader.Register(&loader.Module{"mounts", Start, Stop, true})
+	loader.Register(&loader.Module{
+		Name:   "mounts",
+		Start:  Start,
+		Stop:   Stop,
+		Enable: true,
+	})
 }

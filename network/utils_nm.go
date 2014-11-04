@@ -191,7 +191,7 @@ func nmGeneralGetDeviceSpeed(devPath dbus.ObjectPath) (speed string) {
 		devWireless, _ := nmNewDeviceWireless(devPath)
 		speed = fmt.Sprintf("%d", devWireless.Bitrate.Get()/1024)
 	default:
-		err = fmt.Errorf("not support to get device speed for device type %i", t)
+		err = fmt.Errorf("not support to get device speed for device type %d", t)
 		logger.Error(err)
 	}
 	return

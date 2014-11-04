@@ -329,7 +329,7 @@ func logicSetSettingVkMobileServiceType(data connectionData, serviceType string)
 		removeSettingSection(data, sectionGsm)
 		initSettingSectionCdma(data)
 	default:
-		err = fmt.Errorf("invalid mobile service type", serviceType)
+		err = fmt.Errorf("invalid mobile service type %s", serviceType)
 	}
 	return
 }
@@ -355,7 +355,7 @@ func logicSetSettingVkVpnType(data connectionData, vpnType string) (err error) {
 	case connectionVpnVpnc:
 		initSettingSectionVpnVpnc(data)
 	default:
-		err = fmt.Errorf("invalid vpn type", vpnType)
+		err = fmt.Errorf("invalid vpn type %s", vpnType)
 	}
 	return
 }
@@ -375,7 +375,7 @@ func getSettingVkVpnMissingPlugin(data connectionData) (missingPlugin string) {
 		case connectionVpnVpnc:
 			missingPlugin = "network-manager-vpnc"
 		default:
-			fmt.Errorf("invalid vpn type", vpnType)
+			fmt.Errorf("invalid vpn type %s", vpnType)
 		}
 	}
 	return

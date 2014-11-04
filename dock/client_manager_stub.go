@@ -6,8 +6,8 @@ import (
 
 func (m *ClientManager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		"com.deepin.daemon.Dock",
-		"/dde/dock/ClientManager",
-		"dde.dock.ClientManager",
+		Dest:       "com.deepin.daemon.Dock",
+		ObjectPath: "/dde/dock/ClientManager",
+		Interface:  "dde.dock.ClientManager",
 	}
 }

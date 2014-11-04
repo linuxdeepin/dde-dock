@@ -117,9 +117,9 @@ func (ss *ScreenSaver) setTimeout(seconds, interval uint32, blank bool) {
 
 func (*ScreenSaver) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		"org.freedesktop.ScreenSaver",
-		"/org/freedesktop/ScreenSaver",
-		"org.freedesktop.ScreenSaver",
+		Dest:       "org.freedesktop.ScreenSaver",
+		ObjectPath: "/org/freedesktop/ScreenSaver",
+		Interface:  "org.freedesktop.ScreenSaver",
 	}
 }
 

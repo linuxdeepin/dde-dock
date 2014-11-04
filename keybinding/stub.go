@@ -27,17 +27,17 @@ import (
 
 func (obj *Manager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		KEYBIND_DEST,
-		MANAGER_PATH,
-		MANAGER_IFC,
+		Dest:       KEYBIND_DEST,
+		ObjectPath: MANAGER_PATH,
+		Interface:  MANAGER_IFC,
 	}
 }
 
 func (obj *MediaKeyManager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		KEYBIND_DEST,
-		MEDIAKEY_PATH,
-		MEDIAKEY_IFC,
+		Dest:       KEYBIND_DEST,
+		ObjectPath: MEDIAKEY_PATH,
+		Interface:  MEDIAKEY_IFC,
 	}
 }
 

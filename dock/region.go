@@ -21,9 +21,9 @@ func NewRegion() *Region {
 
 func (r *Region) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		"com.deepin.daemon.Dock",
-		"/dde/dock/DockRegion",
-		"dde.dock.DockRegion",
+		Dest:       "com.deepin.daemon.Dock",
+		ObjectPath: "/dde/dock/DockRegion",
+		Interface:  "dde.dock.DockRegion",
 	}
 }
 
@@ -49,7 +49,7 @@ func (r *Region) GetDockRegion() xproto.Rectangle {
 		}
 	}()
 
-	dockRegion := xproto.Rectangle{0, 0, 0, 0}
+	var dockRegion xproto.Rectangle
 	dockWindow, err := r.getDockWindow()
 	if err != nil {
 		logger.Warning(err)
