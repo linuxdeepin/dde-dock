@@ -26,6 +26,7 @@ import (
 	"encoding/xml"
 	C "launchpad.net/gocheck"
 	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/dbus/introspect"
 	"pkg.linuxdeepin.com/lib/log"
 	"testing"
 )
@@ -44,7 +45,7 @@ func (dbusIfc *DBusInterfaceTest) SetUpSuite(c *C.C) {
 	_, err := dbus.SystemBus()
 	if err != nil {
 		c.Skip(err.Error())
-        }
+	}
 }
 
 func Test(t *testing.T) {
@@ -120,7 +121,7 @@ func (dbusIfc *DBusInterfaceTest) TestDeviceInterfaceExist(c *C.C) {
 	}
 }
 
-func getNodeInfo(dest string, path dbus.ObjectPath) (*dbus.NodeInfo, error) {
+func getNodeInfo(dest string, path dbus.ObjectPath) (*introspect.NodeInfo, error) {
 	conn, err := dbus.SystemBus()
 	if err != nil {
 		return nil, err
@@ -131,7 +132,7 @@ func getNodeInfo(dest string, path dbus.ObjectPath) (*dbus.NodeInfo, error) {
 	dbusObj.Call("org.freedesktop.DBus.Introspectable.Introspect",
 		dbus.FlagNoAutoStart).Store(&xmlString)
 
-	var node dbus.NodeInfo
+	var node introspect.NodeInfo
 	err = xml.Unmarshal([]byte(xmlString), &node)
 	if err != nil {
 		return nil, err
@@ -140,7 +141,7 @@ func getNodeInfo(dest string, path dbus.ObjectPath) (*dbus.NodeInfo, error) {
 	return &node, nil
 }
 
-func isInterfaceNameFound(name, t string, root *dbus.NodeInfo) bool {
+func isInterfaceNameFound(name, t string, root *introspect.NodeInfo) bool {
 	if isInterfaceNameFoundNoChild(name, t, root) {
 		return true
 	}
@@ -154,7 +155,7 @@ func isInterfaceNameFound(name, t string, root *dbus.NodeInfo) bool {
 	return false
 }
 
-func isInterfaceNameFoundNoChild(name, t string, node *dbus.NodeInfo) bool {
+func isInterfaceNameFoundNoChild(name, t string, node *introspect.NodeInfo) bool {
 	for _, ifcInfo := range node.Interfaces {
 		switch t {
 		case "property":
