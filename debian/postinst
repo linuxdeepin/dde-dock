@@ -10,7 +10,6 @@ if [ "$1" = configure ];then
         --no-create-home \
         --disabled-password \
         --group "$USER"
-    touch /var/log/deepin.log && chown "$USER":"$USER" /var/log/deepin.log
 
     if [ -f /etc/systemd/logind.conf ];then
         sed -i 's/^#\?HandlePowerKey=.*$/HandlePowerKey=ignore/g' /etc/systemd/logind.conf || true

@@ -2,7 +2,7 @@
 set -e
 
 if [ "$1" = "purge" ];then
-    rm -f /var/log/deepin.log || true
+    rm -f /var/log/deepin.log 
 fi
 
 #DEBHELPER#
