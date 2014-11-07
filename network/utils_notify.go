@@ -45,17 +45,14 @@ const (
 
 var notifier, _ = notifications.NewNotifier(dbusNotifyDest, dbusNotifyPath)
 
-func notify(icon, summary, body string) (err error) {
+func notify(icon, summary, body string) {
 	if notifier == nil {
 		logger.Error("connect to org.freedesktop.Notifications failed")
 		return
 	}
 	logger.Info("notify", icon, summary, body)
-	_, err = notifier.Notify("Network", 0, icon, summary, body, nil, nil, 0)
-	if err != nil {
-		logger.Error(err)
-		return
-	}
+	// use goroutine to fix dbus cycle call issue
+	go notifier.Notify("Network", 0, icon, summary, body, nil, nil, 0)
 	return
 }
 
