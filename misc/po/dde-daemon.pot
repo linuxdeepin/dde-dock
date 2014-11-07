@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-10 17:02+0800\n"
+"POT-Creation-Date: 2014-11-12 12:45+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2355,25 +2355,25 @@ msgid "Run Software"
 msgstr ""
 
 #: ../../network/_dev_test.go:42 ../../network/_dev_test.go:49
-#: ../../network/state_handler.go:157 ../../network/utils_notify.go:86
+#: ../../network/state_handler.go:188 ../../network/utils_notify.go:86
 msgid "Connected"
 msgstr ""
 
 #: ../../network/_dev_test.go:45 ../../network/_dev_test.go:47
 #: ../../network/_dev_test.go:51 ../../network/_dev_test.go:53
-#: ../../network/state_handler.go:191 ../../network/utils_notify.go:61
+#: ../../network/state_handler.go:222 ../../network/utils_notify.go:61
 #: ../../network/utils_notify.go:65 ../../network/utils_notify.go:69
 #: ../../network/utils_notify.go:89 ../../network/utils_notify.go:92
 msgid "Disconnected"
 msgstr ""
 
-#: ../../network/manager_connections.go:250
+#: ../../network/manager_connections.go:245
 #: ../../network/nm_custom_type.go:178
 msgid "Wired Connection"
 msgstr ""
 
+#: ../../network/manager_connections.go:325
 #: ../../network/manager_connections.go:330
-#: ../../network/manager_connections.go:335
 #: ../../network/nm_setting_virtual_key.go:141
 #: ../../network/nm_setting_virtual_key.go:148
 #: ../../network/nm_setting_virtual_key.go:178
@@ -2382,50 +2382,50 @@ msgstr ""
 msgid "None"
 msgstr ""
 
-#: ../../network/manager_connections.go:337
+#: ../../network/manager_connections.go:332
 #: ../../network/nm_setting_virtual_key.go:142
 #: ../../network/nm_setting_virtual_key.go:149
 msgid "WEP 40/128-bit Key"
 msgstr ""
 
-#: ../../network/manager_connections.go:339
+#: ../../network/manager_connections.go:334
 #: ../../network/nm_setting_virtual_key.go:143
 #: ../../network/nm_setting_virtual_key.go:150
 msgid "WPA/WPA2 Personal"
 msgstr ""
 
-#: ../../network/manager_connections.go:347
+#: ../../network/manager_connections.go:342
 #: ../../network/nm_setting_802_1x.go:81
 #: ../../network/nm_setting_802_1x.go:162
 #: ../../network/nm_setting_802_1x.go:170
 msgid "TLS"
 msgstr ""
 
-#: ../../network/manager_connections.go:349
+#: ../../network/manager_connections.go:344
 #: ../../network/nm_setting_802_1x.go:80
 #: ../../network/nm_setting_802_1x.go:163
 msgid "MD5"
 msgstr ""
 
-#: ../../network/manager_connections.go:351
+#: ../../network/manager_connections.go:346
 #: ../../network/nm_setting_802_1x.go:171
 #: ../../network/nm_setting_wireless_security.go:206
 msgid "LEAP"
 msgstr ""
 
-#: ../../network/manager_connections.go:353
+#: ../../network/manager_connections.go:348
 #: ../../network/nm_setting_802_1x.go:164
 #: ../../network/nm_setting_802_1x.go:172
 msgid "FAST"
 msgstr ""
 
-#: ../../network/manager_connections.go:355
+#: ../../network/manager_connections.go:350
 #: ../../network/nm_setting_802_1x.go:165
 #: ../../network/nm_setting_802_1x.go:173
 msgid "Tunneled TLS"
 msgstr ""
 
-#: ../../network/manager_connections.go:357
+#: ../../network/manager_connections.go:352
 #: ../../network/nm_setting_802_1x.go:166
 #: ../../network/nm_setting_802_1x.go:174
 msgid "Protected EAP"

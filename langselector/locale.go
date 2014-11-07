@@ -64,7 +64,7 @@ type LangSelector struct {
 	lock        sync.Mutex
 }
 
-func newLangSelect(l *log.Logger) *LangSelector {
+func newLangSelector(l *log.Logger) *LangSelector {
 	lang := LangSelector{}
 
 	if l != nil {

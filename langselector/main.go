@@ -43,7 +43,7 @@ func Start() *LangSelector {
 
 	logger.BeginTracing()
 
-	_lang = newLangSelect(logger)
+	_lang = newLangSelector(logger)
 	if _lang == nil {
 		logger.Fatal("Create LangSelector Failed")
 	}

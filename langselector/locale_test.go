@@ -93,10 +93,3 @@ func (t *TestWrapper) TestNotify(c *C.C) {
 		c.Skip(err.Error())
 	}
 }
-
-func (t *TestWrapper) TestNewLangSelector(c *C.C) {
-	lang := newLangSelect(nil)
-	c.Check(lang, C.NotNil)
-	lang.Destroy()
-	c.Check(lang.setDate, C.Not(C.NotNil))
-}
