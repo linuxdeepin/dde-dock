@@ -103,8 +103,6 @@ func (m *Manager) initConnectionManage() {
 }
 
 func (m *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPath) {
-	// logger.Debugf("handleConnectionChanged: operation %d, path %s", operation, path) // TODO test
-	conn := &connection{Path: path}
 	switch operation {
 	case opAdded:
 		nmConn, _ := nmNewSettingsConnection(path)
@@ -112,26 +110,19 @@ func (m *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPath)
 			m.handleConnectionChanged(opRemoved, path)
 			nmDestroySettingsConnection(nmConn)
 		})
+		nmConn.ConnectUpdated(func() {
+			m.handleConnectionChanged(opUpdated, path)
+		})
 
+		conn := m.newConnection(path)
 		cdata, err := nmConn.GetSettings()
 		if err != nil {
 			return
 		}
-		uuid := getSettingConnectionUuid(cdata)
-		conn.Uuid = uuid
-		conn.Id = getSettingConnectionId(cdata)
-
 		switch getSettingConnectionType(cdata) {
 		case NM_SETTING_WIRED_SETTING_NAME:
 			// wired connection will be treatment specially
-			// TODO
-			// m.WiredConnections = append(m.WiredConnections, uuid)
-			// dbus.NotifyChange(m, "WiredConnections")
 		case NM_SETTING_WIRELESS_SETTING_NAME:
-			conn.Ssid = string(getSettingWirelessSsid(cdata))
-			if isSettingWirelessMacAddressExists(cdata) {
-				conn.HwAddress = convertMacAddressToString(getSettingWirelessMacAddress(cdata))
-			}
 			switch getCustomConnectionType(cdata) {
 			case connectionWireless:
 				m.connections[connectionWireless] = m.addConnection(m.connections[connectionWireless], conn)
@@ -147,15 +138,46 @@ func (m *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPath)
 		case NM_SETTING_VPN_SETTING_NAME:
 			m.connections[connectionVpn] = m.addConnection(m.connections[connectionVpn], conn)
 		}
-		m.setPropConnections()
 	case opRemoved:
+		conn := &connection{Path: path}
 		for k, conns := range m.connections {
 			if m.isConnectionExists(conns, conn) {
 				m.connections[k] = m.removeConnection(conns, conn)
 			}
 		}
-		m.setPropConnections()
+	case opUpdated:
+		conn := m.newConnection(path)
+		for k, conns := range m.connections {
+			if m.isConnectionExists(conns, conn) {
+				m.connections[k] = m.updateConnection(conns, conn)
+			}
+		}
 	}
+	m.setPropConnections()
+}
+func (m *Manager) newConnection(path dbus.ObjectPath) (conn *connection) {
+	conn = &connection{Path: path}
+
+	cdata, err := nmGetConnectionData(path)
+	if err != nil {
+		return
+	}
+
+	conn.Uuid = getSettingConnectionUuid(cdata)
+	conn.Id = getSettingConnectionId(cdata)
+
+	switch getSettingConnectionType(cdata) {
+	case NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_PPPOE_SETTING_NAME:
+		if isSettingWiredMacAddressExists(cdata) {
+			conn.HwAddress = convertMacAddressToString(getSettingWiredMacAddress(cdata))
+		}
+	case NM_SETTING_WIRELESS_SETTING_NAME:
+		conn.Ssid = string(getSettingWirelessSsid(cdata))
+		if isSettingWirelessMacAddressExists(cdata) {
+			conn.HwAddress = convertMacAddressToString(getSettingWirelessMacAddress(cdata))
+		}
+	}
+	return
 }
 func (m *Manager) addConnection(conns []*connection, conn *connection) []*connection {
 	if m.isConnectionExists(conns, conn) {
@@ -175,6 +197,14 @@ func (m *Manager) removeConnection(conns []*connection, conn *connection) []*con
 	m.config.removeConnection(conns[i].Uuid)
 	copy(conns[i:], conns[i+1:])
 	conns = conns[:len(conns)-1]
+	return conns
+}
+func (m *Manager) updateConnection(conns []*connection, conn *connection) []*connection {
+	i := m.getConnectionIndex(conns, conn)
+	if i < 0 {
+		return conns
+	}
+	conns[i] = conn
 	return conns
 }
 func (m *Manager) isConnectionExists(conns []*connection, conn *connection) bool {

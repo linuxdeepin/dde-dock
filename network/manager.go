@@ -31,10 +31,10 @@ const (
 	dbusNetworkIfs  = "com.deepin.daemon.Network"
 )
 
-// TODO refactor code
 const (
 	opAdded = iota
 	opRemoved
+	opUpdated
 )
 
 type connectionData map[string]map[string]dbus.Variant
