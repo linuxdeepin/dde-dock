@@ -22,13 +22,14 @@
 package network
 
 import (
+	"io/ioutil"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/utils"
+	"regexp"
 )
 
 const VPN_NAME_FILES_DIR = "/etc/NetworkManager/VPN/"
 
-// TODO doc
 const NM_SETTING_VPN_SETTING_NAME = "vpn"
 
 const (
@@ -59,21 +60,60 @@ func initBasicSettingSectionVpn(data connectionData, service string) {
 }
 
 func getLocalSupportedVpnTypes() (vpnTypes []string) {
-	if utils.IsFileExist(nmVpnL2tpServiceFile) {
-		vpnTypes = append(vpnTypes, connectionVpnL2tp)
+	for _, vpnType := range []string{
+		connectionVpnL2tp,
+		connectionVpnOpenconnect,
+		connectionVpnOpenvpn,
+		connectionVpnPptp,
+		connectionVpnVpnc,
+	} {
+		_, program, _, _ := parseVncNameFile(getVpnNameFile(vpnType))
+		if utils.IsFileExist(program) {
+			vpnTypes = append(vpnTypes, vpnType)
+		}
 	}
-	if utils.IsFileExist(nmVpnOpenconnectServiceFile) {
-		vpnTypes = append(vpnTypes, connectionVpnOpenconnect)
+	return
+}
+func getVpnProgramFile(vpnType string) (program string) {
+	_, program, _, _ = parseVncNameFile(getVpnNameFile(vpnType))
+	return
+}
+func getVpnAuthDialogFile(vpnType string) (authdialog string) {
+	_, _, authdialog, _ = parseVncNameFile(getVpnNameFile(vpnType))
+	return
+}
+func getVpnNameFile(vpnType string) (nameFile string) {
+	switch vpnType {
+	case connectionVpnL2tp:
+		nameFile = nmVpnL2tpNameFile
+	case connectionVpnOpenconnect:
+		nameFile = nmVpnOpenconnectNameFile
+	case connectionVpnOpenvpn:
+		nameFile = nmVpnOpenvpnNameFile
+	case connectionVpnPptp:
+		nameFile = nmVpnPptpNameFile
+	case connectionVpnVpnc:
+		nameFile = nmVpnVpncNameFile
 	}
-	if utils.IsFileExist(nmVpnOpenvpnServiceFile) {
-		vpnTypes = append(vpnTypes, connectionVpnOpenvpn)
+	return
+}
+func parseVncNameFile(nameFile string) (service, program, authdialog, properties string) {
+	fileContent, err := ioutil.ReadFile(nameFile)
+	if err != nil {
+		// service file not exists
+		return
 	}
-	if utils.IsFileExist(nmVpnPptpServiceFile) {
-		vpnTypes = append(vpnTypes, connectionVpnPptp)
-	}
-	if utils.IsFileExist(nmVpnVpncServiceFile) {
-		vpnTypes = append(vpnTypes, connectionVpnVpnc)
-	}
+	return doParseVncNameFile(string(fileContent))
+}
+func doParseVncNameFile(fileContent string) (service, program, authdialog, properties string) {
+	serviceReg := regexp.MustCompile("\nservice=(.*)\n")
+	programReg := regexp.MustCompile("\nprogram=(.*)\n")
+	authdialogReg := regexp.MustCompile("\nauth-dialog=(.*)\n")
+	propertiesReg := regexp.MustCompile("\nproperties=(.*)\n")
+	service = serviceReg.FindStringSubmatch(fileContent)[1]
+	program = programReg.FindStringSubmatch(fileContent)[1]
+	authdialog = authdialogReg.FindStringSubmatch(fileContent)[1]
+	properties = propertiesReg.FindStringSubmatch(fileContent)[1]
 	return
 }
 

@@ -63,11 +63,11 @@ func (a *agent) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
+// FIXME: some section support multiple secret keys like 8021x and vpn
 func fillSecret(connectionData map[string]map[string]dbus.Variant, settingName, key string) (keyData map[string]map[string]dbus.Variant) {
 	keyData = make(map[string]map[string]dbus.Variant)
 	keyData[settingName] = make(map[string]dbus.Variant)
 	switch settingName {
-	case sectionWired: // TODO 8021x
 	case sectionWirelessSecurity:
 		switch getSettingVkWirelessSecurityKeyMgmt(connectionData) {
 		case "none": // ignore
@@ -77,44 +77,56 @@ func fillSecret(connectionData map[string]map[string]dbus.Variant, settingName, 
 			setSettingWirelessSecurityPsk(keyData, key)
 		case "wpa-eap":
 			// If the user chose an 802.1x-based auth method, return
-			// 802.1x secrets, not wireless secrets.
-			delete(keyData, settingName)
+			// 802.1x secrets together.
 			keyData[section8021x] = make(map[string]dbus.Variant)
-			switch getSettingVk8021xEap(connectionData) {
-			case "tls":
-				setSetting8021xPrivateKeyPassword(keyData, key)
-			case "md5":
-				setSetting8021xPassword(keyData, key)
-			case "leap":
-				// LEAP secrets aren't in the 802.1x setting, just ignore
-			case "fast":
-				setSetting8021xPassword(keyData, key)
-			case "ttls":
-				setSetting8021xPassword(keyData, key)
-			case "peap":
-				setSetting8021xPassword(keyData, key)
-			}
+			doFillSecret8021x(connectionData, keyData, key)
 		}
-	case sectionVpn: // TODO
+	case section8021x:
+		// wired 8021x
+		doFillSecret8021x(connectionData, keyData, key)
+	case sectionPppoe:
+		setSettingPppoePassword(keyData, key)
+	case sectionVpn:
+		setSettingVpnSecrets(keyData, make(map[string]string))
+		switch getCustomConnectionType(connectionData) {
+		case connectionVpnL2tp:
+			setSettingVpnL2tpKeyPassword(keyData, key)
+		case connectionVpnOpenconnect: // ignore
+		case connectionVpnOpenvpn:
+			setSettingVpnOpenvpnKeyPassword(keyData, key)
+			// setSettingVpnOpenvpnKeyCertpass
+			// setSettingVpnOpenvpnKeyHttpProxyPassword
+		case connectionVpnPptp:
+			setSettingVpnPptpKeyPassword(keyData, key)
+		case connectionVpnVpnc:
+			setSettingVpnVpncKeySecret(keyData, key)
+			// setSettingVpnVpncKeyXauthPassword(keyData, key)
+		}
 	default:
 		logger.Error("Unknown secretly setting name", settingName, ", please report it to linuxdeepin")
 	}
 	return keyData
 }
+func doFillSecret8021x(connectionData, keyData map[string]map[string]dbus.Variant, key string) {
+	switch getSettingVk8021xEap(connectionData) {
+	case "tls":
+		setSetting8021xPrivateKeyPassword(keyData, key)
+	case "md5":
+		setSetting8021xPassword(keyData, key)
+	case "leap":
+		// LEAP secrets aren't in the 802.1x setting, just ignore
+	case "fast":
+		setSetting8021xPassword(keyData, key)
+	case "ttls":
+		setSetting8021xPassword(keyData, key)
+	case "peap":
+		setSetting8021xPassword(keyData, key)
+	}
+}
 
 func (a *agent) GetSecrets(connectionData map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath, settingName string, hints []string, flags uint32) (keyData map[string]map[string]dbus.Variant) {
 	logger.Info("GetSecrets:", connectionPath, settingName, hints, flags)
 	keyId := mapKey{connectionPath, settingName}
-
-	// TODO fixme
-	// if key, ok := a.savedKeys[keyId]; ok && (flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_REQUEST_NEW == 0) {
-	// logger.Debug("GetSecrets return ", key) // TODO test
-	// return key
-	// }
-	// if flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_USER_REQUESTED == 0 {
-	// logger.Debug("GetSecrets return") // TODO test
-	// return invalidKeyData
-	// }
 
 	if flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_ALLOW_INTERACTION == 0 &&
 		flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_USER_REQUESTED == 0 {
@@ -124,7 +136,6 @@ func (a *agent) GetSecrets(connectionData map[string]map[string]dbus.Variant, co
 	}
 
 	if _, ok := a.pendingKeys[keyId]; ok {
-		// only wait the key when there is no other GetSecrtes runing with this uuid
 		logger.Info("GetSecrets repeatly, cancel last one", keyId)
 		a.CancelGetSecrtes(connectionPath, settingName)
 	}
@@ -134,18 +145,15 @@ func (a *agent) GetSecrets(connectionData map[string]map[string]dbus.Variant, co
 			keyData = fillSecret(connectionData, settingName, key)
 			a.SaveSecrets(keyData, connectionPath)
 		} else {
-			logger.Info("failed to get secretes,", keyId)
+			logger.Info("failed to get secretes", keyId)
 		}
 	case <-time.After(120 * time.Second):
 		a.CancelGetSecrtes(connectionPath, settingName)
-		logger.Info("get secrets timeout,", keyId)
+		logger.Info("get secrets timeout", keyId)
 	}
 	return
 }
 func (a *agent) createPendingKey(keyId mapKey, connectionId string) chan string {
-	// TODO vpn
-	// /usr/lib/NetworkManager/nm-pptp-auth-dialog -u fec2a72f-db65-4e76-be37-995932b64bb7 -n pptp -s org.freedesktop.NetworkManager.pptp -i
-
 	logger.Debug("createPendingKey:", keyId, connectionId) // TODO test
 	a.pendingKeys[keyId] = make(chan string)
 	dbus.Emit(manager, "NeedSecrets", string(keyId.path), keyId.name, connectionId)
@@ -166,16 +174,9 @@ func (a *agent) CancelGetSecrtes(connectionPath dbus.ObjectPath, settingName str
 
 func (a *agent) SaveSecrets(connection map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath) {
 	logger.Debug("SaveSecretes:", connectionPath)
-	// TODO
-	// if _, ok := connection["802-11-wireless-security"]; ok {
-	// keyId := mapKey{connectionPath, "802-11-wireless-security"}
-	// a.savedKeys[keyId] = connection
-	// logger.Debug("SaveSecrets:", connection, connectionPath) // TODO test
-	// }
 }
 
 func (a *agent) DeleteSecrets(connection map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath) {
-	logger.Debug("DeleteSecrets:", connectionPath) // TODO test
 	if _, ok := connection["802-11-wireless-security"]; ok {
 		keyId := mapKey{connectionPath, "802-11-wireless-security"}
 		delete(a.savedKeys, keyId)
@@ -193,7 +194,7 @@ func (a *agent) feedSecret(path string, name string, key string) {
 }
 
 func (m *Manager) FeedSecret(path string, name, key string) {
-	logger.Debug("FeedSecret:", path, name, key)
+	logger.Debug("FeedSecret:", path, name, "xxx")
 	m.agent.feedSecret(path, name, key)
 }
 func (m *Manager) CancelSecret(path string, name string) {

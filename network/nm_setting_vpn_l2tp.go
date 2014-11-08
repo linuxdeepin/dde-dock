@@ -40,9 +40,7 @@ const (
 )
 
 const (
-	nmVpnL2tpServiceFile = VPN_NAME_FILES_DIR + "nm-l2tp-service.name"
-	nmVpnL2tpServiceBin  = "/usr/lib/NetworkManager/nm-l2tp-service"
-	nmVpnL2tpAuthDlgBin  = "/usr/lib/NetworkManager/nm-l2tp-auth-dialog"
+	nmVpnL2tpNameFile = VPN_NAME_FILES_DIR + "nm-l2tp-service.name"
 )
 
 const (

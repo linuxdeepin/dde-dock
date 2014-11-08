@@ -590,3 +590,21 @@ func (*testWrapper) TestUnmarshalVpnPluginKey(c *C.C) {
 		c.Check(t.result, C.Equals, unmarshalVpnPluginKey(t.test, t.t))
 	}
 }
+
+func (*testWrapper) TestParseVpnServiceFile(c *C.C) {
+	fileContent := `[VPN Connection]
+name=l2tp
+service=org.freedesktop.NetworkManager.l2tp
+program=/usr/lib/NetworkManager/nm-l2tp-service
+
+[GNOME]
+auth-dialog=/usr/lib/NetworkManager/nm-l2tp-auth-dialog
+properties=/usr/lib/libnm-l2tp-properties
+supports-external-ui-mode=true
+`
+	service, program, authdialog, properties := doParseVncNameFile(fileContent)
+	c.Check(service, C.Equals, "org.freedesktop.NetworkManager.l2tp")
+	c.Check(program, C.Equals, "/usr/lib/NetworkManager/nm-l2tp-service")
+	c.Check(authdialog, C.Equals, "/usr/lib/NetworkManager/nm-l2tp-auth-dialog")
+	c.Check(properties, C.Equals, "/usr/lib/libnm-l2tp-properties")
+}

@@ -30,10 +30,7 @@ const (
 )
 
 const (
-	nmVpnVpncServiceFile = VPN_NAME_FILES_DIR + "nm-vpnc-service.name"
-	nmVpnVpncServiceBin  = "/usr/lib/NetworkManager/nm-vpnc-service"
-	nmVpnVpncHelperBin   = "/usr/lib/NetworkManager/nm-vpnc-service-vpnc-helper"
-	nmVpnVpncAuthDlgBin  = "/usr/lib/NetworkManager/nm-vpnc-auth-dialog"
+	nmVpnVpncNameFile = VPN_NAME_FILES_DIR + "nm-vpnc-service.name"
 )
 
 const (

@@ -22,11 +22,11 @@
 package network
 
 import (
+	"fmt"
 	C "launchpad.net/gocheck"
 	"os"
 	"pkg.linuxdeepin.com/lib/gdkpixbuf"
 	. "pkg.linuxdeepin.com/lib/gettext"
-	"testing"
 	"time"
 )
 
@@ -100,4 +100,8 @@ func doPrintDeviceVendor(syspath string) {
 	fmt.Println("device vendor:", vendor)
 	fmt.Println("is usb device:", udevIsUsbDevice(syspath))
 	fmt.Println("")
+}
+
+func (*testWrapper) TestLocalSupportedVpnTypes(c *C.C) {
+	fmt.Println(getLocalSupportedVpnTypes())
 }

@@ -28,10 +28,7 @@ const (
 )
 
 const (
-	nmVpnOpenconnectServiceFile = VPN_NAME_FILES_DIR + "nm-openconnect-service.name"
-	nmVpnOpenconnectServiceBin  = "/usr/lib/NetworkManager/nm-openconnect-service"
-	nmVpnOpenconnectHelperBin   = "/usr/lib/NetworkManager/nm-openconnect-service-openconnect-helper"
-	nmVpnOpenconnectAuthDlgBin  = "/usr/lib/NetworkManager/nm-openconnect-auth-dialog"
+	nmVpnOpenconnectNameFile = VPN_NAME_FILES_DIR + "nm-openconnect-service.name"
 )
 
 const (

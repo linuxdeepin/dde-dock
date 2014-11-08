@@ -30,10 +30,7 @@ const (
 )
 
 const (
-	nmVpnOpenvpnServiceFile = VPN_NAME_FILES_DIR + "nm-openvpn-service.name"
-	nmVpnOpenvpnServiceBin  = "/usr/lib/NetworkManager/nm-openvpn-service"
-	nmVpnOpenvpnHelperBin   = "/usr/lib/NetworkManager/nm-openvpn-service-openvpn-helper"
-	nmVpnOpenvpnAuthDlgBin  = "/usr/lib/NetworkManager/nm-openvpn-auth-dialog"
+	nmVpnOpenvpnNameFile = VPN_NAME_FILES_DIR + "nm-openvpn-service.name"
 )
 
 const (

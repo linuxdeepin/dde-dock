@@ -33,9 +33,7 @@ const (
 )
 
 const (
-	nmVpnPptpServiceFile = VPN_NAME_FILES_DIR + "nm-pptp-service.name"
-	nmVpnPptpServiceBin  = "/usr/lib/NetworkManager/nm-pptp-service"
-	nmVpnPptpAuthDlgBin  = "/usr/lib/NetworkManager/nm-pptp-auth-dialog"
+	nmVpnPptpNameFile = VPN_NAME_FILES_DIR + "nm-pptp-service.name"
 )
 
 const (
