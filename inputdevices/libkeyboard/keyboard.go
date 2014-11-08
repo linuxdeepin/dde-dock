@@ -22,10 +22,11 @@
 package libkeyboard
 
 import (
+	"bufio"
 	"dbus/com/deepin/api/greeterutils"
 	"dbus/com/deepin/sessionmanager"
 	"fmt"
-	"io/ioutil"
+	"os"
 	"os/exec"
 	"path"
 	"pkg.linuxdeepin.com/dde-daemon/inputdevices/libwrapper"
@@ -140,7 +141,6 @@ func (kbd *Keyboard) setLayout() {
 		return
 	}
 
-	kbd.setLayoutOptions()
 	err := setUserLayout(kbd.CurrentLayout.Get())
 	if err != nil {
 		kbd.debugInfo("Set Layout '%s' Failed: %v",
@@ -148,6 +148,7 @@ func (kbd *Keyboard) setLayout() {
 		kbd.CurrentLayout.Set(getLayoutFromFile(kbdDefaultConfig))
 		return
 	}
+	//kbd.setLayoutOptions()
 
 	value := kbd.CurrentLayout.Get()
 	kbd.addUserLayoutToList(value)
@@ -229,55 +230,65 @@ func setKbdRepeat(enable bool, delay, interval uint32) {
 
 func getLayoutFromFile(config string) string {
 	layout := "us"
-	option := ""
-	contents, err := ioutil.ReadFile(config)
+	variant := ""
+	fp, err := os.Open(config)
 	if err != nil {
-		return layout + kbdKeyLayoutDelim + option
+		return layout + kbdKeyLayoutDelim + variant
 	}
 
-	lines := strings.Split(string(contents), "\n")
-	for _, line := range lines {
-		if ok, _ := regexp.MatchString(`^XKBLAYOUT`, line); ok {
+	scanner := bufio.NewScanner(fp)
+	var found int
+	for scanner.Scan() {
+		if found == 2 {
+			break
+		}
+
+		line := scanner.Text()
+		ok, _ := regexp.MatchString(`^XKBLAYOUT=`, line)
+		if ok {
+			found += 1
 			strs := strings.Split(line, "=")
-			if len(strs) > 1 {
-				layout = strs[1]
-			}
-		} else if ok, _ := regexp.MatchString(`^XKBOPTIONS`, line); ok {
+			layout = strs[1]
+			continue
+		}
+
+		ok, _ = regexp.MatchString(`^XKBVARIANT=`, line)
+		if ok {
+			found += 1
 			strs := strings.Split(line, "=")
-			if len(strs) > 1 {
-				option = strs[1]
-			}
+			variant = strs[1]
 		}
 	}
+	fp.Close()
 
 	layout = strings.Trim(layout, "\"")
-	option = strings.Trim(option, "\"")
+	variant = strings.Trim(variant, "\"")
 	if len(layout) == 0 {
 		layout = "us"
-		option = ""
+		variant = ""
 	}
 
-	return layout + kbdKeyLayoutDelim + option
+	return layout + kbdKeyLayoutDelim + variant
 }
 
 func setUserLayout(value string) error {
 	var (
-		layout string
-		option string
+		layout  string
+		variant string
 	)
 
 	strs := strings.Split(value, kbdKeyLayoutDelim)
 	if len(strs[0]) == 0 {
 		layout = "us"
-		option = ""
+		variant = ""
 	} else {
 		layout = strs[0]
-		option = strs[1]
+		variant = strs[1]
 	}
 
 	err := exec.Command("/bin/sh", "-c",
 		kbdSetCommand+" -layout \""+layout+
-			"\" -option \""+option+"\"").Run()
+			"\" -variant \""+variant+"\"").Run()
 	return err
 }
 

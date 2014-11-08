@@ -35,9 +35,11 @@ func (kbd *Keyboard) handleGSettings() {
 				kbd.RepeatDelay.Get(),
 				kbd.RepeatInterval.Get())
 		case kbdKeyLayout:
-			kbd.setCursorBlink(uint32(kbd.CursorBlink.Get()))
-		case kbdKeyCursorBlink:
 			kbd.setLayout()
+		case kbdKeyCursorBlink:
+			kbd.setCursorBlink(uint32(kbd.CursorBlink.Get()))
+		case kbdKeyLayoutOptions:
+			kbd.setLayoutOptions()
 		}
 	})
 }
