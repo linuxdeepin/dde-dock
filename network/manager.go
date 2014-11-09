@@ -23,6 +23,7 @@ package network
 
 import (
 	"pkg.linuxdeepin.com/lib/dbus"
+	"sync"
 )
 
 const (
@@ -43,9 +44,11 @@ type Manager struct {
 	config *config
 
 	// update by manager.go
-	State             uint32 // networking state
-	activeConnections []*activeConnection
-	ActiveConnections string // array of connections that activated and marshaled by json
+	State uint32 // networking state
+
+	activeConnectionsLocker sync.Mutex
+	activeConnections       []*activeConnection
+	ActiveConnections       string // array of connections that activated and marshaled by json
 
 	NetworkingEnabled bool `access:"readwrite"` // airplane mode for NetworkManager
 	WirelessEnabled   bool `access:"readwrite"`
@@ -54,15 +57,20 @@ type Manager struct {
 	VpnEnabled        bool `access:"readwrite"`
 
 	// update by manager_devices.go
-	devices      map[string][]*device
-	Devices      string // array of device objects and marshaled by json
-	accessPoints map[dbus.ObjectPath][]*accessPoint
-	// AccessPoints    string // TODO array of access point objects and marshaled by json
+	devicesLocker sync.Mutex
+	devices       map[string][]*device
+	Devices       string // array of device objects and marshaled by json
+
+	accessPointsLocker sync.Mutex
+	accessPoints       map[dbus.ObjectPath][]*accessPoint
 
 	// update by manager_connections.go
-	connectionSessions []*ConnectionSession
-	connections        map[string][]*connection
-	Connections        string // array of connection information and marshaled by json
+	connectionsLocker sync.Mutex
+	connections       map[string][]*connection
+	Connections       string // array of connection information and marshaled by json
+
+	connectionSessionsLocker sync.Mutex
+	connectionSessions       []*ConnectionSession
 
 	// signals
 	NeedSecrets                  func(string, string, string)
@@ -137,22 +145,25 @@ func (m *Manager) initManager() {
 	m.initConnectionManage()
 
 	// update property "ActiveConnections" after devices initialized
-	m.updateActiveConnections()
 	nmManager.ActiveConnections.ConnectChanged(func() {
 		m.updateActiveConnections()
 	})
+	m.updateActiveConnections()
 
 	// update property "State"
-	m.setPropState()
 	nmManager.State.ConnectChanged(func() {
 		m.setPropState()
 	})
+	m.setPropState()
 
 	m.agent = newAgent()
 	m.stateNotifier = newStateNotifier()
 }
 
 func (m *Manager) updateActiveConnections() {
+	m.activeConnectionsLocker.Lock()
+	defer m.activeConnectionsLocker.Unlock()
+
 	// reset all exists active connection objects
 	for i, _ := range m.activeConnections {
 		// destroy object to reset all property connects
@@ -178,11 +189,13 @@ func (m *Manager) updateActiveConnections() {
 			}
 
 			nmAConn.State.ConnectChanged(func() {
-				// TODO fix dbus property issue
+				m.activeConnectionsLocker.Lock()
+				defer m.activeConnectionsLocker.Unlock()
+
 				aconn.State = nmAConn.State.Get()
-				logger.Debug("active connection state changed:", aconn.State, nmAConn.State.Get())
 				m.setPropActiveConnections()
 			})
+			aconn.State = nmAConn.State.Get()
 
 			// dispatch vpn connection
 			if aconn.Vpn {
@@ -203,22 +216,9 @@ func (m *Manager) updateActiveConnections() {
 					})
 				}
 			}
+
 			m.activeConnections = append(m.activeConnections, aconn)
 		}
 	}
 	m.setPropActiveConnections()
-	// logger.Debug("active connections changed:", m.ActiveConnections) // TODO test
-}
-
-// TODO remove
-func (m *Manager) isActiveConnectionExists(aconn *activeConnection) bool {
-	if aconn == nil {
-		return false
-	}
-	for _, a := range m.activeConnections {
-		if &a == &aconn {
-			return true
-		}
-	}
-	return false
 }

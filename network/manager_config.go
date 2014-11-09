@@ -213,11 +213,11 @@ func (c *config) updateDeviceConfig(devPath dbus.ObjectPath) {
 		return
 	}
 	devState := nmGetDeviceState(devPath)
-	// if manager.generalGetGlobalDeviceEnabled(devPath) && devConfig.Enabled {
+	// if manager.generalGetGlobalDeviceEnabled(devPath) && devConfig.Enabled { // TODO
 	if devConfig.Enabled {
 		if isDeviceStateInActivating(devState) {
 			devConfig.LastConnectionUuid, _ = nmGetDeviceActiveConnectionUuid(devPath)
-			logger.Debugf("updateDeviceConfig %s %#v", devPath, devConfig)
+			// logger.Debugf("updateDeviceConfig %s %#v", devPath, devConfig) // TODO
 			c.save()
 		}
 	}

@@ -295,7 +295,6 @@ func (m *Manager) doUpdatePropVpnEnabled() {
 func (m *Manager) setPropActiveConnections() {
 	m.ActiveConnections, _ = marshalJSON(m.activeConnections)
 	dbus.NotifyChange(m, "ActiveConnections")
-	// logger.Debug("ActiveConnections:", m.ActiveConnections) // TODO test
 }
 
 func (m *Manager) setPropState() {
@@ -303,28 +302,12 @@ func (m *Manager) setPropState() {
 	dbus.NotifyChange(m, "State")
 }
 
-func (m *Manager) setPropWiredDevices() {
-	dbus.NotifyChange(m, "WiredDevices")
-}
-func (m *Manager) setPropWirelessDevices() {
-	dbus.NotifyChange(m, "WirelessDevices")
-}
 func (m *Manager) setPropDevices() {
 	m.Devices, _ = marshalJSON(m.devices)
 	dbus.NotifyChange(m, "Devices")
-	// logger.Debug("setPropDevices", m.Devices) // TODO test
-}
-
-// TODO
-func (m *Manager) setPropAccessPoints() {
-	// m.AccessPoints, _ = marshalJSON(m.accessPoints)
-	// dbus.NotifyChange(m, "AccessPoints")
-	// testJSON, _ := marshalJSON(m.accessPoints)
-	// logger.Debug("setPropAccessPoints", testJSON) // TODO test
 }
 
 func (m *Manager) setPropConnections() {
 	m.Connections, _ = marshalJSON(m.connections)
-	// logger.Debug(m.Connections) // TODO test
 	dbus.NotifyChange(m, "Connections")
 }

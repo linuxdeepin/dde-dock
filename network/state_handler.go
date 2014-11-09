@@ -198,6 +198,7 @@ func newStateNotifier() (sn *stateNotifier) {
 		defer sn.locker.Unlock()
 		if dev, ok := sn.devices[path]; ok {
 			nmDestroyDevice(dev.nmDev)
+			delete(sn.devices, path)
 		}
 	}
 

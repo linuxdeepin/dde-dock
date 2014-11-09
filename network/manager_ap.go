@@ -36,7 +36,7 @@ const (
 	apSecEap
 )
 
-// TODO
+// TODO refactor code, use accesspoint's secret types defined in network-manager
 const (
 	NMU_SEC_INVALID apSecType = 0
 	NMU_SEC_NONE
@@ -69,17 +69,18 @@ func newAccessPoint(apPath dbus.ObjectPath) (ap accessPoint, err error) {
 		nmAp: nmAp,
 		Path: apPath,
 	}
-	ap.setProperties()
+	ap.updateProperties()
 	return
 }
 
-func (a *accessPoint) setProperties() {
+func (a *accessPoint) updateProperties() {
 	a.Ssid = string(a.nmAp.Ssid.Get())
 	a.Secured = getApSecType(a.nmAp) != apSecNone
 	a.SecuredInEap = getApSecType(a.nmAp) == apSecEap
 	a.Strength = a.nmAp.Strength.Get()
 }
 
+// TODO: remove
 func calcApStrength(s uint8) uint8 {
 	switch {
 	case s <= 10:
@@ -119,8 +120,10 @@ func doParseApSecType(flags, wpaFlags, rsnFlags uint32) apSecType {
 }
 
 func (m *Manager) addAccessPoint(devPath, apPath dbus.ObjectPath) {
+	m.accessPointsLocker.Lock()
+	defer m.accessPointsLocker.Unlock()
+
 	if m.isAccessPointExists(devPath, apPath) {
-		logger.Debug("access point already exists:", devPath, apPath) // TODO
 		return
 	}
 	ap, err := newAccessPoint(apPath)
@@ -134,20 +137,23 @@ func (m *Manager) addAccessPoint(devPath, apPath dbus.ObjectPath) {
 
 	// connect properties changed
 	ap.nmAp.ConnectPropertiesChanged(func(properties map[string]dbus.Variant) {
-		ap.setProperties()
+		m.accessPointsLocker.Lock()
+		defer m.accessPointsLocker.Unlock()
+
+		ap.updateProperties()
 		apJSON, _ := marshalJSON(ap)
 		dbus.Emit(m, "AccessPointPropertiesChanged", string(devPath), apJSON)
-		m.setPropAccessPoints()
 	})
 
 	apJSON, _ := marshalJSON(ap)
 	dbus.Emit(m, "AccessPointAdded", string(devPath), apJSON)
 
 	m.accessPoints[devPath] = append(m.accessPoints[devPath], &ap)
-	m.setPropAccessPoints()
 }
 func (m *Manager) removeAccessPoint(devPath, apPath dbus.ObjectPath) {
-	// emit signal
+	m.accessPointsLocker.Lock()
+	defer m.accessPointsLocker.Unlock()
+
 	// get access point information
 	var apJSON string
 	if ap := m.getAccessPoint(devPath, apPath); ap != nil {
@@ -155,11 +161,8 @@ func (m *Manager) removeAccessPoint(devPath, apPath dbus.ObjectPath) {
 	} else {
 		apJSON, _ = marshalJSON(accessPoint{Path: apPath})
 	}
-	// logger.Debug("AccessPointRemoved:", apJSON) // TODO test
-	dbus.Emit(m, "AccessPointRemoved", string(devPath), apJSON)
-
 	m.doRemoveAccessPoint(devPath, apPath)
-	m.setPropAccessPoints()
+	dbus.Emit(m, "AccessPointRemoved", string(devPath), apJSON)
 }
 func (m *Manager) doRemoveAccessPoint(devPath, apPath dbus.ObjectPath) {
 	i := m.getAccessPointIndex(devPath, apPath)
@@ -203,6 +206,9 @@ func (m *Manager) getAccessPointIndex(devPath, apPath dbus.ObjectPath) int {
 
 // GetAccessPoints return all access points object which marshaled by json.
 func (m *Manager) GetAccessPoints(path dbus.ObjectPath) (apsJSON string, err error) {
+	m.accessPointsLocker.Lock()
+	defer m.accessPointsLocker.Unlock()
+
 	apsJSON, err = marshalJSON(m.accessPoints[path])
 	return
 }
@@ -219,17 +225,6 @@ func (m *Manager) doGetAccessPoints(devPath dbus.ObjectPath) (aps []accessPoint,
 		}
 		aps = append(aps, ap)
 	}
-	return
-}
-
-// TODO remove
-// GetAccessPointProperty return access point object which marshaled by json.
-func (m *Manager) getAccessPointProperty(apPath dbus.ObjectPath) (apJSON string, err error) {
-	ap, err := newAccessPoint(apPath)
-	if err != nil {
-		return
-	}
-	apJSON, err = marshalJSON(ap)
 	return
 }
 

@@ -48,12 +48,10 @@ type activeConnection struct {
 	path      dbus.ObjectPath
 
 	Devices []dbus.ObjectPath
-	// SpecificObject dbus.ObjectPath // TODO
-	Id    string
-	Uuid  string
-	State uint32
-	Vpn   bool
-	// VpnState uint32 // TODO
+	Id      string
+	Uuid    string
+	State   uint32
+	Vpn     bool
 }
 
 type activeConnectionInfo struct {
@@ -88,21 +86,18 @@ type ip6ConnectionInfo struct {
 func (m *Manager) initConnectionManage() {
 	m.connections = make(map[string][]*connection)
 
-	// TODO create special wired connection if need
-	// m.setPropWiredConnections()
-
-	for _, c := range nmGetConnectionList() {
-		m.handleConnectionChanged(opAdded, c)
-	}
 	nmSettings.ConnectNewConnection(func(path dbus.ObjectPath) {
 		m.handleConnectionChanged(opAdded, path)
 	})
-	// TODO
-	// nmSettings.ConnectPropertiesChanged(func(path dbus.ObjectPath) {
-	// }
+	for _, c := range nmGetConnectionList() {
+		m.handleConnectionChanged(opAdded, c)
+	}
 }
 
 func (m *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPath) {
+	m.connectionsLocker.Lock()
+	defer m.connectionsLocker.Unlock()
+
 	switch operation {
 	case opAdded:
 		nmConn, _ := nmNewSettingsConnection(path)
@@ -430,6 +425,9 @@ func (m *Manager) EditConnection(uuid string, devPath dbus.ObjectPath) (session 
 }
 
 func (m *Manager) addConnectionSession(session *ConnectionSession) {
+	m.connectionSessionsLocker.Lock()
+	defer m.connectionSessionsLocker.Unlock()
+
 	// install dbus session
 	err := dbus.InstallOnSession(session)
 	if err != nil {
@@ -439,6 +437,9 @@ func (m *Manager) addConnectionSession(session *ConnectionSession) {
 	m.connectionSessions = append(m.connectionSessions, session)
 }
 func (m *Manager) removeConnectionSession(session *ConnectionSession) {
+	m.connectionSessionsLocker.Lock()
+	defer m.connectionSessionsLocker.Unlock()
+
 	dbus.UnInstallObject(session)
 
 	i := m.getConnectionSessionIndex(session)
@@ -461,6 +462,9 @@ func (m *Manager) getConnectionSessionIndex(session *ConnectionSession) int {
 	return -1
 }
 func (m *Manager) clearConnectionSessions() {
+	m.connectionSessionsLocker.Lock()
+	defer m.connectionSessionsLocker.Unlock()
+
 	for _, session := range m.connectionSessions {
 		dbus.UnInstallObject(session)
 	}
